@@ -234,16 +234,23 @@ int main(int argc, char *argv[])
     for (row = 0; row < nrows; row += 1) {
 <<<<<<< HEAD
 <<<<<<< HEAD
-        if (fread(rast, Rast_cell_size(data_type), ncols, ft) != (size_t)ncols)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         if (fread(rast, Rast_cell_size(data_type), ncols, ft) != (size_t)ncols)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (fread(rast, Rast_cell_size(data_type), ncols, ft) != (size_t)ncols)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (fread(rast, Rast_cell_size(data_type), ncols, ft) != (size_t)ncols)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         if (fread(rast, Rast_cell_size(data_type), ncols, ft) != (size_t)ncols)
@@ -264,6 +271,9 @@ int main(int argc, char *argv[])
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

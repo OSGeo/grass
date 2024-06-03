@@ -1,6 +1,7 @@
 /* element.c */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void list_elements(void);
 int check_element(const char *);
 =======
@@ -8,6 +9,8 @@ int check_element(const char *);
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 void list_elements(void);
 /* int check_element(const char *); */
@@ -28,6 +31,9 @@ int check_element(const char *);
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

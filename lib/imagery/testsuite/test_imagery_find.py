@@ -10,6 +10,7 @@ for details
 """
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import os
 import shutil
 =======
@@ -17,6 +18,8 @@ import shutil
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 
 import os
 import shutil
@@ -31,6 +34,9 @@ import os
 import shutil
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -48,17 +54,23 @@ from grass.lib.imagery import (
     I_SIGFILE_TYPE_SIGSET,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     I_SIGFILE_TYPE_LIBSVM,
 =======
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -74,15 +86,21 @@ class FindSignatureTestCase(TestCase):
         cls.mapset_name = Mapset().name
 <<<<<<< HEAD
 <<<<<<< HEAD
-        cls.sigdirs = []
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         cls.sigdirs = []
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        cls.sigdirs = []
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+        cls.sigdirs = []
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
         cls.sigdirs = []
 =======
@@ -95,6 +113,9 @@ class FindSignatureTestCase(TestCase):
         cls.sigdirs = []
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -104,11 +125,14 @@ class FindSignatureTestCase(TestCase):
         os.makedirs(f"{cls.mpath}/signatures/sigset/", exist_ok=True)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         os.makedirs(f"{cls.mpath}/signatures/libsvm/", exist_ok=True)
         cls.sig_name1 = tempname(10)
         cls.sig_dir1 = f"{cls.mpath}/signatures/sigset/{cls.sig_name1}"
@@ -134,6 +158,9 @@ class FindSignatureTestCase(TestCase):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -152,6 +179,7 @@ class FindSignatureTestCase(TestCase):
     def tearDownClass(cls):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         for d in cls.sigdirs:
             shutil.rmtree(d, ignore_errors=True)
 =======
@@ -159,6 +187,8 @@ class FindSignatureTestCase(TestCase):
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         try:
             os.remove(cls.sigfile_name1)
             os.remove(cls.sigfile_name2)
@@ -174,6 +204,9 @@ class FindSignatureTestCase(TestCase):
             shutil.rmtree(d, ignore_errors=True)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -228,11 +261,14 @@ class FindSignatureTestCase(TestCase):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     def test_find_libsvm(self):
         # Non existing without a mapset
         ret = I_find_signature(I_SIGFILE_TYPE_LIBSVM, tempname(10), None)
@@ -262,6 +298,9 @@ class FindSignatureTestCase(TestCase):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -315,11 +354,14 @@ class FindSignatureTestCase(TestCase):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     def test_find2_libsvm(self):
         # Non existing without a mapset
         ret = I_find_signature2(I_SIGFILE_TYPE_LIBSVM, tempname(10), None)
@@ -349,6 +391,9 @@ class FindSignatureTestCase(TestCase):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

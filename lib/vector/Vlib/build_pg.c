@@ -216,6 +216,7 @@ int build_topo(struct Map_info *Map, int build)
     Vect_build_nat(Map, build);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     if (n_nodes != Map->plus.n_nodes)
         G_warning(
@@ -229,6 +230,10 @@ int build_topo(struct Map_info *Map, int build)
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+=======
+=======
+>>>>>>> osgeo-main
+=======
 =======
 =======
 >>>>>>> osgeo-main

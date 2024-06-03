@@ -166,12 +166,15 @@ int thin_streams(void)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     G_verbose_message(_("%d of %" PRI_OFF_T " stream segments were thinned"),
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     G_verbose_message(_("%d of %" PRId64 " stream segments were thinned"),
 =======
     G_verbose_message(_("%d of %" PRI_OFF_T " stream segments were thinned"),
@@ -180,6 +183,9 @@ int thin_streams(void)
     G_verbose_message(_("%d of %" PRI_OFF_T " stream segments were thinned"),
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

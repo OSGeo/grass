@@ -26,6 +26,7 @@ int I_find_subgroup2(const char *, const char *, const char *);
 int I_find_subgroup_file(const char *, const char *, const char *);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int I_find_subgroup_file2(const char *, const char *, const char *,
                           const char *);
 =======
@@ -42,6 +43,12 @@ int I_find_subgroup_file2(const char *, const char *, const char *,
                           const char *);
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+int I_find_subgroup_file2(const char *, const char *, const char *,
+                          const char *);
+=======
+>>>>>>> osgeo-main
 int I_find_subgroup_file2(const char *, const char *, const char *, const char *);
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
@@ -53,6 +60,9 @@ int I_find_subgroup_file2(const char *, const char *, const char *,
                           const char *);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -185,11 +195,14 @@ int I_rasterize(double *, int, unsigned char, struct Cell_head *,
                 unsigned char *);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 
 /* manage_signatures.c */
 void I_get_signatures_dir(char *, I_SIGFILE_TYPE);
@@ -204,6 +217,9 @@ void I_free_signatures_list(int, char ***);
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -226,6 +242,7 @@ int I_read_signatures(FILE *, struct Signature *);
 int I_write_signatures(FILE *, struct Signature *);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 char **I_sort_signatures_by_semantic_label(struct Signature *,
                                            const struct Ref *);
 =======
@@ -242,6 +259,12 @@ char **I_sort_signatures_by_semantic_label(struct Signature *,
                                            const struct Ref *);
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+char **I_sort_signatures_by_semantic_label(struct Signature *,
+                                           const struct Ref *);
+=======
+>>>>>>> osgeo-main
 char **I_sort_signatures_by_bandref(struct Signature *, const struct Ref *);
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
@@ -253,6 +276,9 @@ char **I_sort_signatures_by_semantic_label(struct Signature *,
                                            const struct Ref *);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -275,6 +301,7 @@ const char *I_GetClassTitle(const struct ClassSig *);
 int I_WriteSigSet(FILE *, const struct SigSet *);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 char **I_SortSigSetBySemanticLabel(struct SigSet *, const struct Ref *);
 =======
 <<<<<<< HEAD
@@ -288,6 +315,11 @@ char **I_SortSigSetBySemanticLabel(struct SigSet *, const struct Ref *);
 char **I_SortSigSetBySemanticLabel(struct SigSet *, const struct Ref *);
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+char **I_SortSigSetBySemanticLabel(struct SigSet *, const struct Ref *);
+=======
+>>>>>>> osgeo-main
 char **I_SortSigSetByBandref(struct SigSet *, const struct Ref *);
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
@@ -297,6 +329,9 @@ char **I_SortSigSetBySemanticLabel(struct SigSet *, const struct Ref *);
 char **I_SortSigSetBySemanticLabel(struct SigSet *, const struct Ref *);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

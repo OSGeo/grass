@@ -52,6 +52,7 @@ int G_make_mapset_element(const char *p_element)
 /*!
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -63,6 +64,11 @@ int G_make_mapset_element(const char *p_element)
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 =======
+>>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
    \brief Create directory for group of elements of a given type.
 
@@ -88,7 +94,10 @@ int G_make_mapset_element(const char *p_element)
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     \brief Create directory for group of elements of a given type.
@@ -123,6 +132,9 @@ int G_make_mapset_element(const char *p_element)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -138,6 +150,7 @@ int G_make_mapset_object_group(const char *type)
 /*!
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -149,6 +162,11 @@ int G_make_mapset_object_group(const char *type)
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 =======
+>>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
    \brief Create directory for an object of a given type.
 
@@ -178,7 +196,10 @@ int G_make_mapset_object_group(const char *type)
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     \brief Create directory for an object of a given type.
@@ -216,6 +237,9 @@ int G_make_mapset_object_group(const char *type)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -254,6 +278,7 @@ int G_make_mapset_element_tmp(const char *p_element)
 /*!
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -265,6 +290,11 @@ int G_make_mapset_element_tmp(const char *p_element)
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 =======
+>>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
    \brief Create directory for type of objects in the temporary directory.
 
@@ -280,6 +310,7 @@ int G_make_mapset_element_tmp(const char *p_element)
    \return 1 on success
  */
 int G_make_mapset_object_group_tmp(const char *type)
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 {
@@ -318,6 +349,8 @@ int make_mapset_element_impl(const char *p_path, const char *p_element,
 =======
 >>>>>>> osgeo-main
 =======
+>>>>>>> osgeo-main
+=======
     \brief Create directory for type of objects in the temporary directory.
 =======
    \brief Create directory for type of objects in the temporary directory.
@@ -326,6 +359,9 @@ int make_mapset_element_impl(const char *p_path, const char *p_element,
    See G_file_name_tmp() for details.
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -461,6 +497,7 @@ int make_mapset_element_impl(const char *p_path, const char *p_element,
     while (1) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -473,6 +510,11 @@ int make_mapset_element_impl(const char *p_path, const char *p_element,
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         if (*element == '/' || *element == 0) {
             *p = 0;
             char *msg = NULL;
@@ -481,7 +523,10 @@ int make_mapset_element_impl(const char *p_path, const char *p_element,
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 	if (*element == '/' || *element == 0) {
@@ -497,6 +542,9 @@ int make_mapset_element_impl(const char *p_path, const char *p_element,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -507,6 +555,7 @@ int make_mapset_element_impl(const char *p_path, const char *p_element,
                 }
             }
             if (access(path, 0) != 0 || (msg && !race_ok)) {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -520,6 +569,11 @@ int make_mapset_element_impl(const char *p_path, const char *p_element,
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 =======
+>>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
                 /* Directory is not accessible even after attempt to create it.
                  */
@@ -544,7 +598,10 @@ int make_mapset_element_impl(const char *p_path, const char *p_element,
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
                 /* Directory is not accessible even after attempt to create it. */
@@ -580,6 +637,9 @@ int make_mapset_element_impl(const char *p_path, const char *p_element,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -593,17 +653,24 @@ int make_mapset_element(const char *p_path, const char *p_element)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-int make_mapset_element_no_fail_on_race(const char *p_path,
-                                        const char *p_element)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 int make_mapset_element_no_fail_on_race(const char *p_path,
                                         const char *p_element)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+int make_mapset_element_no_fail_on_race(const char *p_path,
+                                        const char *p_element)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+int make_mapset_element_no_fail_on_race(const char *p_path,
+                                        const char *p_element)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 int make_mapset_element_no_fail_on_race(const char *p_path,
                                         const char *p_element)
@@ -620,6 +687,9 @@ int make_mapset_element_no_fail_on_race(const char *p_path,
                                         const char *p_element)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -629,11 +699,14 @@ int make_mapset_element_no_fail_on_race(const char *p_path,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 
@@ -643,6 +716,9 @@ int make_mapset_element_no_fail_on_race(const char *p_path,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -659,6 +735,7 @@ int G__make_mapset_element_misc(const char *dir, const char *name)
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     return G_make_mapset_dir_object(dir, name);
 =======
 <<<<<<< HEAD
@@ -672,6 +749,11 @@ int G__make_mapset_element_misc(const char *dir, const char *name)
     return G_make_mapset_dir_object(dir, name);
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+    return G_make_mapset_dir_object(dir, name);
+=======
+>>>>>>> osgeo-main
     G_make_mapset_dir_object(dir, name);
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -681,6 +763,9 @@ int G__make_mapset_element_misc(const char *dir, const char *name)
     return G_make_mapset_dir_object(dir, name);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

@@ -17,18 +17,26 @@ int Rast3d_write_doubles(int fd, int useXdr, const double *i, int nofNum)
     if (useXdr == RASTER3D_NO_XDR) {
 <<<<<<< HEAD
 <<<<<<< HEAD
-        if (write(fd, i, sizeof(double) * nofNum) !=
-            (int)sizeof(double) * nofNum) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         if (write(fd, i, sizeof(double) * nofNum) !=
             (int)sizeof(double) * nofNum) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (write(fd, i, sizeof(double) * nofNum) !=
+            (int)sizeof(double) * nofNum) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (write(fd, i, sizeof(double) * nofNum) !=
+            (int)sizeof(double) * nofNum) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         if (write(fd, i, sizeof(double) * nofNum) !=
@@ -52,6 +60,9 @@ int Rast3d_write_doubles(int fd, int useXdr, const double *i, int nofNum)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -66,16 +77,23 @@ int Rast3d_write_doubles(int fd, int useXdr, const double *i, int nofNum)
     do {
 <<<<<<< HEAD
 <<<<<<< HEAD
-        unsigned int j;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         unsigned int j;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        unsigned int j;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        unsigned int j;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         unsigned int j;
@@ -96,6 +114,9 @@ int Rast3d_write_doubles(int fd, int useXdr, const double *i, int nofNum)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -133,18 +154,26 @@ int Rast3d_read_doubles(int fd, int useXdr, double *i, int nofNum)
     if (useXdr == RASTER3D_NO_XDR) {
 <<<<<<< HEAD
 <<<<<<< HEAD
-        if (read(fd, i, sizeof(double) * nofNum) !=
-            (int)sizeof(double) * nofNum) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         if (read(fd, i, sizeof(double) * nofNum) !=
             (int)sizeof(double) * nofNum) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (read(fd, i, sizeof(double) * nofNum) !=
+            (int)sizeof(double) * nofNum) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (read(fd, i, sizeof(double) * nofNum) !=
+            (int)sizeof(double) * nofNum) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         if (read(fd, i, sizeof(double) * nofNum) !=
@@ -168,6 +197,9 @@ int Rast3d_read_doubles(int fd, int useXdr, double *i, int nofNum)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -182,16 +214,23 @@ int Rast3d_read_doubles(int fd, int useXdr, double *i, int nofNum)
     do {
 <<<<<<< HEAD
 <<<<<<< HEAD
-        unsigned int j;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         unsigned int j;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        unsigned int j;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        unsigned int j;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         unsigned int j;
@@ -212,6 +251,9 @@ int Rast3d_read_doubles(int fd, int useXdr, double *i, int nofNum)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

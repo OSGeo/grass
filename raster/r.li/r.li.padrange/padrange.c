@@ -76,8 +76,14 @@ int patchAreaDistributionRANGE(int fd, char **par UNUSED, struct area_entry *ad,
 int patchAreaDistributionRANGE(int fd, char **par, struct area_entry *ad,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -126,16 +132,23 @@ int calculate(int fd, struct area_entry *ad, double *result)
     CELL corrCell, precCell, supCell;
 <<<<<<< HEAD
 <<<<<<< HEAD
-    long npatch;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     long npatch;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    long npatch;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    long npatch;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     long npatch;
@@ -156,6 +169,9 @@ int calculate(int fd, struct area_entry *ad, double *result)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -260,8 +276,11 @@ int calculate(int fd, struct area_entry *ad, double *result)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -270,6 +289,9 @@ int calculate(int fd, struct area_entry *ad, double *result)
             area++;
 
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             supCell = buf_sup[j + ad->x];
             if (masked && (mask_sup[j] == 0)) {
@@ -323,6 +345,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 =======
@@ -377,6 +400,8 @@ int calculate(int fd, struct area_entry *ad, double *result)
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
             area++;
@@ -473,6 +498,9 @@ int calculate(int fd, struct area_entry *ad, double *result)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -533,18 +561,26 @@ int calculate(int fd, struct area_entry *ad, double *result)
         /* get min and max patch size */
 <<<<<<< HEAD
 <<<<<<< HEAD
-        min = INFINITY;
-        max = -INFINITY;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         min = INFINITY;
         max = -INFINITY;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        min = INFINITY;
+        max = -INFINITY;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        min = INFINITY;
+        max = -INFINITY;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         min = INFINITY;
@@ -571,6 +607,9 @@ int calculate(int fd, struct area_entry *ad, double *result)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -607,16 +646,23 @@ int calculateD(int fd, struct area_entry *ad, double *result)
     DCELL corrCell, precCell, supCell;
 <<<<<<< HEAD
 <<<<<<< HEAD
-    long npatch;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     long npatch;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    long npatch;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    long npatch;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     long npatch;
@@ -637,6 +683,9 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -741,8 +790,11 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -751,6 +803,9 @@ int calculateD(int fd, struct area_entry *ad, double *result)
             area++;
 
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             supCell = buf_sup[j + ad->x];
             if (masked && (mask_sup[j] == 0)) {
@@ -804,6 +859,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 =======
@@ -858,6 +914,8 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
             area++;
@@ -954,6 +1012,9 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1014,18 +1075,26 @@ int calculateD(int fd, struct area_entry *ad, double *result)
         /* get min and max patch size */
 <<<<<<< HEAD
 <<<<<<< HEAD
-        min = INFINITY;
-        max = -INFINITY;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         min = INFINITY;
         max = -INFINITY;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        min = INFINITY;
+        max = -INFINITY;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        min = INFINITY;
+        max = -INFINITY;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         min = INFINITY;
@@ -1052,6 +1121,9 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1088,16 +1160,23 @@ int calculateF(int fd, struct area_entry *ad, double *result)
     FCELL corrCell, precCell, supCell;
 <<<<<<< HEAD
 <<<<<<< HEAD
-    long npatch;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     long npatch;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    long npatch;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    long npatch;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     long npatch;
@@ -1118,6 +1197,9 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1222,8 +1304,11 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -1232,6 +1317,9 @@ int calculateF(int fd, struct area_entry *ad, double *result)
             area++;
 
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             supCell = buf_sup[j + ad->x];
             if (masked && (mask_sup[j] == 0)) {
@@ -1285,6 +1373,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 =======
@@ -1339,6 +1428,8 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
             area++;
@@ -1435,6 +1526,9 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1495,18 +1589,26 @@ int calculateF(int fd, struct area_entry *ad, double *result)
         /* get min and max patch size */
 <<<<<<< HEAD
 <<<<<<< HEAD
-        min = INFINITY;
-        max = -INFINITY;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         min = INFINITY;
         max = -INFINITY;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        min = INFINITY;
+        max = -INFINITY;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        min = INFINITY;
+        max = -INFINITY;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         min = INFINITY;
@@ -1533,6 +1635,9 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

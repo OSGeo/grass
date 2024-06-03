@@ -3,12 +3,15 @@
  *
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * \brief Types, definitions and primitives for interprocess comunication
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
  * \brief Types, definitions and primitives for interprocess communication
 =======
  * \brief Types, definitions and primitives for interprocess comunication
@@ -17,6 +20,9 @@
  * \brief Types, definitions and primitives for interprocess comunication
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

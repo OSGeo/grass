@@ -7,16 +7,23 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-DCELL aspect_fly(DCELL *, DCELL *, DCELL *, double /* n, c, s, d */);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 DCELL aspect_fly(DCELL *, DCELL *, DCELL *, double /* n, c, s, d */);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+DCELL aspect_fly(DCELL *, DCELL *, DCELL *, double /* n, c, s, d */);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+DCELL aspect_fly(DCELL *, DCELL *, DCELL *, double /* n, c, s, d */);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 DCELL aspect_fly(DCELL *, DCELL *, DCELL *, double /* n, c, s, d */);
@@ -37,6 +44,9 @@ DCELL aspect_fly(DCELL *, DCELL *, DCELL *, double /* n, c, s, d */);
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

@@ -37,16 +37,23 @@ int f_rand(int argc, const int *argt, void **args)
             }
 <<<<<<< HEAD
 <<<<<<< HEAD
-            res[i] = (lo == hi) ? lo : (int)(lo + x % (unsigned int)(hi - lo));
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             res[i] = (lo == hi) ? lo : (int)(lo + x % (unsigned int)(hi - lo));
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            res[i] = (lo == hi) ? lo : (int)(lo + x % (unsigned int)(hi - lo));
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            res[i] = (lo == hi) ? lo : (int)(lo + x % (unsigned int)(hi - lo));
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
             res[i] = (lo == hi) ? lo : (int)(lo + x % (unsigned int)(hi - lo));
@@ -67,6 +74,9 @@ int f_rand(int argc, const int *argt, void **args)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

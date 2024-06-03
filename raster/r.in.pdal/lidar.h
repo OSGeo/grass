@@ -1,10 +1,13 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 
@@ -14,6 +17,9 @@
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -33,6 +39,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -45,6 +52,11 @@
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 #ifndef GRASS_LIDAR_H
 #define GRASS_LIDAR_H
 
@@ -56,7 +68,10 @@
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 
@@ -78,6 +93,9 @@
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -95,15 +113,21 @@ typedef unsigned long gpoint_count;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-struct GLidarLayers {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 struct GLidarLayers {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+struct GLidarLayers {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+struct GLidarLayers {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 struct GLidarLayers {
 =======
@@ -118,6 +142,9 @@ struct GLidarLayers {
 struct GLidarLayers {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -167,15 +194,21 @@ void GLidarLayers_set_no_layers(struct GLidarLayers *layers);
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-struct class_table {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 struct class_table {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+struct class_table {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+struct class_table {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 struct class_table {
 =======
@@ -190,6 +223,9 @@ struct class_table {
 struct class_table {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

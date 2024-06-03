@@ -1089,6 +1089,7 @@ int gsd_surf_const(geosurf *surf, float k)
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int gsd_surf_func(geosurf *gs, int (*user_func)(void))
 =======
 <<<<<<< HEAD
@@ -1096,6 +1097,9 @@ int gsd_surf_func(geosurf *gs, int (*user_func)(void))
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 int gsd_surf_func(geosurf *gs UNUSED, int (*user_func)(void) UNUSED)
 =======
@@ -1114,6 +1118,9 @@ int gsd_surf_func(geosurf *gs, int (*user_func)(void))
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2293,6 +2300,7 @@ int gsd_surf_map(geosurf *surf)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -2301,6 +2309,10 @@ int gsd_surf_map(geosurf *surf)
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -2394,7 +2406,10 @@ int gsd_surf_map(geosurf *surf)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
@@ -2490,6 +2505,9 @@ int gsd_surf_map(geosurf *surf)
 
 <<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 gsd_litvert_func(n, ktrans | curcolor, pt);
 
@@ -2497,6 +2515,7 @@ int gsd_surf_map(geosurf *surf)
             gsd_endtfan();
 <<<<<<< HEAD
 =======
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
@@ -2600,6 +2619,8 @@ int gsd_surf_map(geosurf *surf)
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
             cnt2++;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -2717,6 +2738,9 @@ int gsd_surf_map(geosurf *surf)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

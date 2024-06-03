@@ -520,16 +520,23 @@ static int compute_scatts_from_chunk_row(struct scCats *scatt_conds,
                 }
 <<<<<<< HEAD
 <<<<<<< HEAD
-                if (n_pixs != (row_size) / (int)sizeof(unsigned char)) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                 if (n_pixs != (row_size) / (int)sizeof(unsigned char)) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                if (n_pixs != (row_size) / (int)sizeof(unsigned char)) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                if (n_pixs != (row_size) / (int)sizeof(unsigned char)) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                 if (n_pixs != (row_size) / (int)sizeof(unsigned char)) {
@@ -550,6 +557,9 @@ static int compute_scatts_from_chunk_row(struct scCats *scatt_conds,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -606,12 +616,15 @@ static int compute_scatts_from_chunk_row(struct scCats *scatt_conds,
                     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     /* pixels meets condtion defined in scatter plot ->
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                     /* pixels meets condition defined in scatter plot ->
 =======
                     /* pixels meets condtion defined in scatter plot ->
@@ -620,6 +633,9 @@ static int compute_scatts_from_chunk_row(struct scCats *scatt_conds,
                     /* pixels meets condtion defined in scatter plot ->
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -682,11 +698,14 @@ static void free_compute_scatts_data(int *fd_bands, struct rast_row *bands_rows,
                                      int n_a_bands, int *bands_ids,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                                      int *b_needed_bands, int *fd_cats_rasts,
                                      FILE **f_cats_rasts_conds, int n_a_cats)
 {
@@ -696,6 +715,9 @@ static void free_compute_scatts_data(int *fd_bands, struct rast_row *bands_rows,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -708,8 +730,14 @@ static void free_compute_scatts_data(int *fd_bands, struct rast_row *bands_rows,
         band_id = bands_ids[i];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -753,8 +781,14 @@ static void free_compute_scatts_data(int *fd_bands, struct rast_row *bands_rows,
                 Rast_close(fd_cats_rasts[i]);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -828,11 +862,14 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     for (i_cat = 0; i_cat < scatts->n_a_cats; i_cat++)
         fd_cats_rasts[i_cat] = -1;
 
@@ -841,6 +878,9 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -860,6 +900,7 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
             if ((mapset = G_find_raster2(bands[band_id], "")) == NULL) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 free_compute_scatts_data(fd_bands, bands_rows, n_a_bands,
                                          bands_ids, NULL, NULL,
                                          scatt_conds->n_a_cats);
@@ -868,6 +909,8 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                 free_compute_scatts_data(
                     fd_bands, bands_rows, n_a_bands, bands_ids, b_needed_bands,
                     fd_cats_rasts, f_cats_rasts_conds, scatt_conds->n_a_cats);
@@ -882,6 +925,9 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
                                          scatt_conds->n_a_cats);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -893,6 +939,7 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
                 0) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 free_compute_scatts_data(fd_bands, bands_rows, n_a_bands,
                                          bands_ids, NULL, NULL,
                                          scatt_conds->n_a_cats);
@@ -901,6 +948,8 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                 free_compute_scatts_data(
                     fd_bands, bands_rows, n_a_bands, bands_ids, b_needed_bands,
                     fd_cats_rasts, f_cats_rasts_conds, scatt_conds->n_a_cats);
@@ -915,6 +964,9 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
                                          scatt_conds->n_a_cats);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -936,6 +988,7 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
                                 &bands_rows[band_id].rast_range) != 1) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 free_compute_scatts_data(fd_bands, bands_rows, n_a_bands,
                                          bands_ids, NULL, NULL,
                                          scatt_conds->n_a_cats);
@@ -944,6 +997,8 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                 free_compute_scatts_data(
                     fd_bands, bands_rows, n_a_bands, bands_ids, b_needed_bands,
                     fd_cats_rasts, f_cats_rasts_conds, scatt_conds->n_a_cats);
@@ -958,6 +1013,9 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
                                          scatt_conds->n_a_cats);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -979,6 +1037,7 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
         }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         else
             fd_cats_rasts[i_cat] = -1;
 =======
@@ -986,6 +1045,8 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
         else
             fd_cats_rasts[i_cat] = -1;
@@ -995,6 +1056,9 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
             fd_cats_rasts[i_cat] = -1;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1005,6 +1069,7 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
                 free_compute_scatts_data(
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     fd_bands, bands_rows, n_a_bands, bands_ids, fd_cats_rasts,
                     f_cats_rasts_conds, scatt_conds->n_a_cats);
 =======
@@ -1012,6 +1077,8 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                     fd_bands, bands_rows, n_a_bands, bands_ids, b_needed_bands,
                     fd_cats_rasts, f_cats_rasts_conds, scatt_conds->n_a_cats);
 =======
@@ -1023,6 +1090,9 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
                     f_cats_rasts_conds, scatt_conds->n_a_cats);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1061,6 +1131,7 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
             free_compute_scatts_data(fd_bands, bands_rows, n_a_bands, bands_ids,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                                      fd_cats_rasts, f_cats_rasts_conds,
                                      scatt_conds->n_a_cats);
 =======
@@ -1068,6 +1139,8 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                                      b_needed_bands, fd_cats_rasts,
                                      f_cats_rasts_conds, scatt_conds->n_a_cats);
 =======
@@ -1079,6 +1152,9 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
                                      scatt_conds->n_a_cats);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1088,12 +1164,15 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
     free_compute_scatts_data(fd_bands, bands_rows, n_a_bands, bands_ids,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                              fd_cats_rasts, f_cats_rasts_conds,
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                              b_needed_bands, fd_cats_rasts, f_cats_rasts_conds,
 =======
                              fd_cats_rasts, f_cats_rasts_conds,
@@ -1102,6 +1181,9 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
                              fd_cats_rasts, f_cats_rasts_conds,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

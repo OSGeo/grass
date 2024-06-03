@@ -904,18 +904,26 @@ static FILE *create_temp_file(const char *name, char **tmpname)
     for (i = 0; i < n_rows; i++) {
 <<<<<<< HEAD
 <<<<<<< HEAD
-        if (fwrite(zero_array_cell, sizeof(FCELL), n_cols, fp) !=
-            (size_t)n_cols) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         if (fwrite(zero_array_cell, sizeof(FCELL), n_cols, fp) !=
             (size_t)n_cols) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (fwrite(zero_array_cell, sizeof(FCELL), n_cols, fp) !=
+            (size_t)n_cols) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (fwrite(zero_array_cell, sizeof(FCELL), n_cols, fp) !=
+            (size_t)n_cols) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         if (fwrite(zero_array_cell, sizeof(FCELL), n_cols, fp) !=
@@ -939,6 +947,9 @@ static FILE *create_temp_file(const char *name, char **tmpname)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

@@ -230,6 +230,7 @@ dfs_error:
 int DGL_SPAN_MINIMUM_SPANNING_FUNC(dglGraph_s *pgraphIn, dglGraph_s *pgraphOut,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                                    dglInt32_t nVertex, dglSpanClip_fn fnClip,
                                    void *pvClipArg)
 =======
@@ -237,6 +238,8 @@ int DGL_SPAN_MINIMUM_SPANNING_FUNC(dglGraph_s *pgraphIn, dglGraph_s *pgraphOut,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                                    dglInt32_t nVertex,
                                    dglSpanClip_fn fnClip UNUSED,
                                    void *pvClipArg UNUSED)
@@ -249,6 +252,9 @@ int DGL_SPAN_MINIMUM_SPANNING_FUNC(dglGraph_s *pgraphIn, dglGraph_s *pgraphOut,
                                    void *pvClipArg)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

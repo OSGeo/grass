@@ -56,6 +56,7 @@ int db__driver_open_database(dbHandle *handle)
         connection = mysql_init(NULL);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         res = mysql_real_connect(connection, host, user, password,
                                  connpar.dbname, port, NULL, 0);
 =======
@@ -63,6 +64,8 @@ int db__driver_open_database(dbHandle *handle)
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         res =
             mysql_real_connect(connection, host, user, password, connpar.dbname,
                                port != NULL ? atoi(port) : 0, NULL, 0);
@@ -75,6 +78,9 @@ int db__driver_open_database(dbHandle *handle)
                                  connpar.dbname, port, NULL, 0);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -87,11 +93,14 @@ int db__driver_open_database(dbHandle *handle)
         }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 
         db_init_string(&sql);
         db_set_string(&sql, "SET SQL_MODE=ANSI_QUOTES;");
@@ -116,6 +125,9 @@ int db__driver_open_database(dbHandle *handle)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

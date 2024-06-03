@@ -21,17 +21,23 @@
 /* Point binning methods: */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -49,10 +55,13 @@
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 #define METHOD_NONE        0
 #define METHOD_N           1
 #define METHOD_MIN         2
@@ -69,6 +78,9 @@
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -85,15 +97,21 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-struct z_node {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 struct z_node {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+struct z_node {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+struct z_node {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 struct z_node {
 =======
@@ -109,6 +127,9 @@ struct z_node {
 struct z_node {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -118,15 +139,21 @@ struct z_node {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-struct cnt_node {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 struct cnt_node {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+struct cnt_node {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+struct cnt_node {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 struct cnt_node {
 =======
@@ -141,6 +168,9 @@ struct cnt_node {
 struct cnt_node {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -151,15 +181,21 @@ struct cnt_node {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-struct com_node {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 struct com_node {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+struct com_node {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+struct com_node {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 struct com_node {
 =======
@@ -174,6 +210,9 @@ struct com_node {
 struct com_node {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -185,15 +224,21 @@ struct com_node {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-struct BinIndex {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 struct BinIndex {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+struct BinIndex {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+struct BinIndex {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 struct BinIndex {
 =======
@@ -208,6 +253,9 @@ struct BinIndex {
 struct BinIndex {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -218,15 +266,21 @@ struct BinIndex {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-struct PointBinning {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 struct PointBinning {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+struct PointBinning {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+struct PointBinning {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 struct PointBinning {
 =======
@@ -241,6 +295,9 @@ struct PointBinning {
 struct PointBinning {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -280,17 +337,23 @@ void point_binning_free(struct PointBinning *, struct BinIndex *);
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -302,10 +365,13 @@ void update_value(struct PointBinning *, struct BinIndex *, int, int, int,
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 
 void write_values(struct PointBinning *,
                   struct BinIndex *, void *, int, int, RASTER_MAP_TYPE);
@@ -319,6 +385,9 @@ void update_value(struct PointBinning *,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

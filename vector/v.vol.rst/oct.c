@@ -36,16 +36,22 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -62,7 +68,10 @@ OT_functions_new(int (*compare)(struct quadruple *, struct octdata *),
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 struct octfunc *OT_functions_new(int (*compare)(), VOID_T **(*divide_data)(),
@@ -93,6 +102,9 @@ OT_functions_new(int (*compare)(struct quadruple *, struct octdata *),
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -114,16 +126,23 @@ OT_functions_new(int (*compare)(struct quadruple *, struct octdata *),
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-struct octtree *OT_tree_new(struct octdata *data, struct octtree **leafs,
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 struct octtree *OT_tree_new(struct octdata *data, struct octtree **leafs,
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+struct octtree *OT_tree_new(struct octdata *data, struct octtree **leafs,
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+struct octtree *OT_tree_new(struct octdata *data, struct octtree **leafs,
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 struct octtree *OT_tree_new(struct octdata *data, struct octtree **leafs,
@@ -144,6 +163,9 @@ struct octtree *OT_tree_new(struct octdata *data, struct octtree **leafs,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

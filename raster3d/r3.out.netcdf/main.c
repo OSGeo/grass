@@ -33,11 +33,14 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 // Constant to string conversion
 #define STR_HELPER(x)   #x
 #define STR(x)          STR_HELPER(x)
@@ -47,6 +50,9 @@
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -69,11 +75,14 @@
 #define Z_STANDARD_NAME "projection_z_coordinate"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 #define UNITS           "units"
 #define DEGREES_EAST    "degrees_east"
@@ -94,6 +103,9 @@
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -104,8 +116,14 @@
 #define CF_SUPPORT      "CF-1.5"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -537,15 +555,21 @@ static void write_netcdf_header(int ncid, RASTER3D_Region *region, int *varid,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    for (i = 0; i < (unsigned int)region->cols; i++) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     for (i = 0; i < (unsigned int)region->cols; i++) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (i = 0; i < (unsigned int)region->cols; i++) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    for (i = 0; i < (unsigned int)region->cols; i++) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     for (i = 0; i < (unsigned int)region->cols; i++) {
 =======
@@ -565,6 +589,9 @@ static void write_netcdf_header(int ncid, RASTER3D_Region *region, int *varid,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -574,15 +601,21 @@ static void write_netcdf_header(int ncid, RASTER3D_Region *region, int *varid,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    for (i = 0; i < (unsigned int)region->rows; i++) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     for (i = 0; i < (unsigned int)region->rows; i++) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (i = 0; i < (unsigned int)region->rows; i++) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    for (i = 0; i < (unsigned int)region->rows; i++) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     for (i = 0; i < (unsigned int)region->rows; i++) {
 =======
@@ -602,6 +635,9 @@ static void write_netcdf_header(int ncid, RASTER3D_Region *region, int *varid,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -612,15 +648,21 @@ static void write_netcdf_header(int ncid, RASTER3D_Region *region, int *varid,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    for (i = 0; i < (unsigned int)region->depths; i++) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     for (i = 0; i < (unsigned int)region->depths; i++) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (i = 0; i < (unsigned int)region->depths; i++) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    for (i = 0; i < (unsigned int)region->depths; i++) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     for (i = 0; i < (unsigned int)region->depths; i++) {
 =======
@@ -640,6 +682,9 @@ static void write_netcdf_header(int ncid, RASTER3D_Region *region, int *varid,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

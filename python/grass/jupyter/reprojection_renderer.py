@@ -106,12 +106,15 @@ class ReprojectionRenderer:
             mapset=mapset,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             location=env_info["LOCATION_NAME"],
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             project=env_info["LOCATION_NAME"],
 =======
             location=env_info["LOCATION_NAME"],
@@ -120,6 +123,9 @@ class ReprojectionRenderer:
             location=env_info["LOCATION_NAME"],
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -173,12 +179,15 @@ class ReprojectionRenderer:
             mapset=mapset,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             location=env_info["LOCATION_NAME"],
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             project=env_info["LOCATION_NAME"],
 =======
             location=env_info["LOCATION_NAME"],
@@ -187,6 +196,9 @@ class ReprojectionRenderer:
             location=env_info["LOCATION_NAME"],
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

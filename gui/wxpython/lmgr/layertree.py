@@ -95,6 +95,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         giface,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         createNewMapDisplay,
 =======
 <<<<<<< HEAD
@@ -110,6 +111,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         createNewMapDisplay,
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        createNewMapDisplay,
+=======
+>>>>>>> osgeo-main
 >>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
 =======
 >>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
@@ -120,6 +127,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         createNewMapDisplay,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -136,11 +146,14 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     ):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         if "style" in kwargs:
             ctstyle |= kwargs["style"]
             del kwargs["style"]
@@ -148,6 +161,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 =======
 >>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -157,11 +173,14 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             del kwargs["style"]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         self.displayIndex = kwargs["idx"]
         del kwargs["idx"]
 <<<<<<< HEAD
@@ -173,6 +192,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -183,11 +205,14 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         del kwargs["notebook"]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -203,6 +228,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -233,6 +261,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if globalvar.hasAgw:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             super(LayerTree, self).__init__(parent, id, agwStyle=ctstyle, **kwargs)
         else:
             super(LayerTree, self).__init__(parent, id, style=ctstyle, **kwargs)
@@ -241,6 +270,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             super().__init__(parent, id, agwStyle=ctstyle, **kwargs)
         else:
             super().__init__(parent, id, style=ctstyle, **kwargs)
@@ -255,6 +286,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             super(LayerTree, self).__init__(parent, id, style=ctstyle, **kwargs)
 >>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -272,6 +306,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # init associated map display
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.mapdisplay = createNewMapDisplay(layertree=self)
 =======
 <<<<<<< HEAD
@@ -279,6 +314,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         # create instance of Map Display interface
         self._gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(giface, self)
@@ -316,6 +354,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.mapdisplay = createNewMapDisplay(layertree=self)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -600,6 +641,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 "pack",
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 "check",
                 "uncheck",
 =======
@@ -618,6 +660,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 "uncheck",
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                "check",
+                "uncheck",
+=======
+>>>>>>> osgeo-main
 >>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
 =======
 >>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
@@ -630,6 +679,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 "uncheck",
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -653,12 +705,15 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.Bind(wx.EVT_MENU, self.OnRenameLayer, id=self.popupID["rename"])
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
         if numSelected > 1:
@@ -686,7 +741,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             )
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -694,7 +752,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 =======
 >>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 
         if numSelected > 1:
             item = wx.MenuItem(
@@ -719,6 +780,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.OnCheckUncheckSelectedLayer,
                 id=self.popupID["uncheck"],
             )
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
         if numSelected > 1:
@@ -785,16 +849,23 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.popupMenu.AppendSeparator()
 <<<<<<< HEAD
 <<<<<<< HEAD
-                if not (ltype == "raster_3d" or self.mapdisplay.IsPaneShown("3d")):
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                 if not (ltype == "raster_3d" or self.mapdisplay.IsPaneShown("3d")):
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                if not (ltype == "raster_3d" or self.mapdisplay.IsPaneShown("3d")):
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                if not (ltype == "raster_3d" or self.mapdisplay.IsPaneShown("3d")):
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                 if not (ltype == "raster_3d" or self.mapdisplay.IsPaneShown("3d")):
@@ -812,6 +883,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 if not (ltype == "raster_3d" or self.mapdisplay.IsPaneShown("3d")):
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -840,11 +914,14 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -852,6 +929,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -864,10 +944,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
                 if (
@@ -888,6 +971,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -948,11 +1034,14 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     )
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         elif ltype == "group":
             # Dynamically add Change opacity level menu item according
             # if any layer inside group layer is map layer
@@ -985,6 +1074,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 =======
 >>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1548,11 +1640,14 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self._giface.RunCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -1560,6 +1655,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 =======
 >>>>>>> 1dffc5dfd4 (r.report: add default units, change to full unit names (#1666))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1572,10 +1670,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
                 ["r.report", "map=%s" % ",".join(rasters), "units=h,c,p"]
 >>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
 =======
@@ -1586,6 +1687,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 =======
 >>>>>>> 1dffc5dfd4 (r.report: add default units, change to full unit names (#1666))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1755,6 +1859,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if not UserSettings.Get(
             group="general",
 =======
@@ -1763,6 +1868,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         if not UserSettings.Get(
             group="appearance",
@@ -1775,6 +1883,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             group="general",
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1786,10 +1897,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
         self.lmgr.notebook.SetSelectionByName("nviz")
 >>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
 =======
@@ -1800,6 +1914,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1886,11 +2003,14 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -1898,6 +2018,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1914,10 +2037,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 >>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
 =======
 >>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
@@ -1926,6 +2052,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

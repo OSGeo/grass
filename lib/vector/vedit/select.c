@@ -36,12 +36,15 @@ static int merge_lists(struct ilist *alist, struct ilist *blist);
    \param type feature type
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
    \param layer layer number
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
    \param layer layer number (unused)
 =======
    \param layer layer number
@@ -50,6 +53,9 @@ static int merge_lists(struct ilist *alist, struct ilist *blist);
    \param layer layer number
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -61,12 +67,15 @@ static int merge_lists(struct ilist *alist, struct ilist *blist);
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int Vedit_select_by_query(struct Map_info *Map, int type, int layer,
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 int Vedit_select_by_query(struct Map_info *Map, int type, int layer UNUSED,
 =======
 int Vedit_select_by_query(struct Map_info *Map, int type, int layer,
@@ -75,6 +84,9 @@ int Vedit_select_by_query(struct Map_info *Map, int type, int layer,
 int Vedit_select_by_query(struct Map_info *Map, int type, int layer,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

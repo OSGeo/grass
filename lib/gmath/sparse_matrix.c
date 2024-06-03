@@ -41,12 +41,15 @@ int G_math_add_spvector(G_math_spvector **Asp, G_math_spvector *spvector,
                 "row %i\n",
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 spvector, row);
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                 (void *)spvector, row);
 =======
                 spvector, row);
@@ -55,6 +58,9 @@ int G_math_add_spvector(G_math_spvector **Asp, G_math_spvector *spvector,
                 spvector, row);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -173,16 +179,23 @@ void G_math_print_spmatrix(G_math_spvector **Asp, int rows)
             for (k = 0; k < Asp[i]->cols; k++) {
 <<<<<<< HEAD
 <<<<<<< HEAD
-                if (Asp[i]->index[k] == (unsigned int)j) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                 if (Asp[i]->index[k] == (unsigned int)j) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                if (Asp[i]->index[k] == (unsigned int)j) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                if (Asp[i]->index[k] == (unsigned int)j) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                 if (Asp[i]->index[k] == (unsigned int)j) {
@@ -203,6 +216,9 @@ void G_math_print_spmatrix(G_math_spvector **Asp, int rows)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -286,15 +302,21 @@ double **G_math_Asp_to_sband_matrix(G_math_spvector **Asp, int rows,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    for (i = 0; i < (unsigned int)rows; i++) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     for (i = 0; i < (unsigned int)rows; i++) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (i = 0; i < (unsigned int)rows; i++) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    for (i = 0; i < (unsigned int)rows; i++) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     for (i = 0; i < (unsigned int)rows; i++) {
 =======
@@ -314,6 +336,9 @@ double **G_math_Asp_to_sband_matrix(G_math_spvector **Asp, int rows,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

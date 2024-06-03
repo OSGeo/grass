@@ -75,15 +75,21 @@ def is_location_valid(path, location=None):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    :param path: Path to a Location or to a GRASS GIS database directory
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     :param path: Path to a Location or to a GRASS GIS database directory
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    :param path: Path to a Location or to a GRASS GIS database directory
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    :param path: Path to a Location or to a GRASS GIS database directory
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     :param path: Path to a Location or to a GRASS GIS database directory
 =======
@@ -97,6 +103,9 @@ def is_location_valid(path, location=None):
     :param path: Path to a Location or to a GRASS GIS database directory
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -109,15 +118,21 @@ def is_location_valid(path, location=None):
     if location:
 <<<<<<< HEAD
 <<<<<<< HEAD
-        path = os.path.join(path, location)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         path = os.path.join(path, location)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        path = os.path.join(path, location)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+        path = os.path.join(path, location)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
         path = os.path.join(path, location)
 =======
@@ -131,6 +146,9 @@ def is_location_valid(path, location=None):
         path = os.path.join(path, location)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

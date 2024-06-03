@@ -20,12 +20,15 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int db__driver_list_tables(dbString **tlist, int *tcount, int system)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 int db__driver_list_tables(dbString **tlist, int *tcount, int system UNUSED)
 =======
 int db__driver_list_tables(dbString **tlist, int *tcount, int system)
@@ -34,6 +37,9 @@ int db__driver_list_tables(dbString **tlist, int *tcount, int system)
 int db__driver_list_tables(dbString **tlist, int *tcount, int system)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -52,12 +58,15 @@ int db__driver_list_tables(dbString **tlist, int *tcount, int system)
     if (res == NULL) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         db_d_append_error("%s\%s", _("Unable get list of tables:"),
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         db_d_append_error("%s\n%s", _("Unable get list of tables:"),
 =======
         db_d_append_error("%s\%s", _("Unable get list of tables:"),
@@ -66,6 +75,9 @@ int db__driver_list_tables(dbString **tlist, int *tcount, int system)
         db_d_append_error("%s\%s", _("Unable get list of tables:"),
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

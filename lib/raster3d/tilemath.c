@@ -346,16 +346,23 @@ void Rast3d_compute_optimal_tile_dimension(RASTER3D_Region *region, int type,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-        if (maxSize < 0 || tileSize <= (unsigned int)maxSize * 1024)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         if (maxSize < 0 || tileSize <= (unsigned int)maxSize * 1024)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (maxSize < 0 || tileSize <= (unsigned int)maxSize * 1024)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (maxSize < 0 || tileSize <= (unsigned int)maxSize * 1024)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         if (maxSize < 0 || tileSize <= (unsigned int)maxSize * 1024)
@@ -376,6 +383,9 @@ void Rast3d_compute_optimal_tile_dimension(RASTER3D_Region *region, int type,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

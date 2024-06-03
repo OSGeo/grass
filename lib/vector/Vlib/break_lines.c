@@ -215,12 +215,15 @@ int break_lines(struct Map_info *Map, struct ilist *List_break,
      * lines are connected by end points, and touch by MBR. This function checks
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * and occasionaly skips such cases. This is currently done for 2D only
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
      * and occasionally skips such cases. This is currently done for 2D only
 =======
      * and occasionaly skips such cases. This is currently done for 2D only
@@ -229,6 +232,9 @@ int break_lines(struct Map_info *Map, struct ilist *List_break,
      * and occasionaly skips such cases. This is currently done for 2D only
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

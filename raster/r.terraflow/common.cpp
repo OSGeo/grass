@@ -95,18 +95,26 @@ void *LargeMemory::alloc(size_t leng)
         char buf[BUFSIZ], buf2[32];
 <<<<<<< HEAD
 <<<<<<< HEAD
-        snprintf(buf, BUFSIZ, "allocated large memory: %s 0x%lX",
-                 formatNumber(buf2, leng), (unsigned long)p);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(buf, BUFSIZ, "allocated large memory: %s 0x%lX",
                  formatNumber(buf2, leng), (unsigned long)p);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, BUFSIZ, "allocated large memory: %s 0x%lX",
+                 formatNumber(buf2, leng), (unsigned long)p);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, BUFSIZ, "allocated large memory: %s 0x%lX",
+                 formatNumber(buf2, leng), (unsigned long)p);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(buf, BUFSIZ, "allocated large memory: %s 0x%lX",
@@ -133,6 +141,9 @@ void *LargeMemory::alloc(size_t leng)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -164,18 +175,26 @@ void LargeMemory::free(void *p)
         char buf[BUFSIZ], buf2[32];
 <<<<<<< HEAD
 <<<<<<< HEAD
-        snprintf(buf, BUFSIZ, "freed large memory: %s 0x%lX",
-                 formatNumber(buf2, len[i]), (unsigned long)p);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(buf, BUFSIZ, "freed large memory: %s 0x%lX",
                  formatNumber(buf2, len[i]), (unsigned long)p);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, BUFSIZ, "freed large memory: %s 0x%lX",
+                 formatNumber(buf2, len[i]), (unsigned long)p);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, BUFSIZ, "freed large memory: %s 0x%lX",
+                 formatNumber(buf2, len[i]), (unsigned long)p);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(buf, BUFSIZ, "freed large memory: %s 0x%lX",
@@ -202,6 +221,9 @@ void LargeMemory::free(void *p)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

@@ -11,6 +11,7 @@
 #		configuration variables for compilation and installation.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # COPYRIGHT:    (C) 2000-2023 by the GRASS Development Team
 =======
 <<<<<<< HEAD
@@ -18,6 +19,9 @@
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 # COPYRIGHT:    (C) 2000-2024 by the GRASS Development Team
 =======
@@ -33,6 +37,9 @@
 # COPYRIGHT:    (C) 2000-2023 by the GRASS Development Team
 >>>>>>> 6104ec7096 (i.maxlik: fix crash when classification result is NULL (#2724))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -59,6 +66,7 @@ AC_INIT
 AC_CONFIG_SRCDIR([configure.ac])
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 AC_PREREQ([2.69])
 AC_CONFIG_HEADER(include/grass/config.h)
 =======
@@ -66,6 +74,8 @@ AC_CONFIG_HEADER(include/grass/config.h)
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 AC_PREREQ([2.71])
 AC_CONFIG_HEADERS([include/grass/config.h])
 =======
@@ -77,6 +87,9 @@ AC_PREREQ([2.69])
 AC_CONFIG_HEADER(include/grass/config.h)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -193,17 +206,23 @@ AC_SUBST(GRASS_BIN)
 GRASS_VERSION_FILE=include/VERSION
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 GRASS_VERSION_GIT_FILE=include/VERSION_GIT
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -225,11 +244,14 @@ GRASS_HEADERS_GIT_DATE=`date -u +%FT%T%z | sed 's/\(..\)$/:\1/'`
 AC_PATH_PROG(GIT, git, no)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 AC_CHECK_FILE([$GRASS_VERSION_GIT_FILE])
 AC_MSG_CHECKING(for GRASS GIS headers commit date)
 =======
@@ -237,6 +259,9 @@ AC_MSG_CHECKING(for GRASS GIS headers commit date)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -251,12 +276,15 @@ if test "$GIT" != "no" ; then
    fi
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
    GRASS_HEADERS_GIT_DATE=`date -d $($GIT log -1 --pretty=format:"%cI" -- "${SRCDIR}/include") -u +%FT%T%z | sed 's/\(..\)$/:\1/'` 2>/dev/null
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
    gitdate_utc_local=$(TZ=UTC0 git log -1 --date=iso-local --pretty=format:"%cd" -- include)
    GRASS_HEADERS_GIT_DATE=$(echo "$gitdate_utc_local" | sed 's/ /T/' | sed 's/ //' | sed 's/\(..\)$/:\1/')
 =======
@@ -266,6 +294,9 @@ if test "$GIT" != "no" ; then
    GRASS_HEADERS_GIT_DATE=`date -d $($GIT log -1 --pretty=format:"%cI" -- "${SRCDIR}/include") -u +%FT%T%z | sed 's/\(..\)$/:\1/'` 2>/dev/null
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -275,11 +306,14 @@ if test "$GIT" != "no" ; then
 fi
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 if test $GRASS_VERSION_GIT == "exported" && \
    test "$ac_cv_file_include_VERSION_GIT" == "yes"; then
       GRASS_HEADERS_GIT_HASH=$(sed -n 1p "${GRASS_VERSION_GIT_FILE}")
@@ -292,6 +326,9 @@ AC_MSG_RESULT($GRASS_HEADERS_GIT_DATE)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -419,17 +456,23 @@ LOC_ARG_WITH(blas, BLAS, no)
 LOC_ARG_WITH(lapack, LAPACK, no)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 LOC_ARG_WITH(libsvm, LIBSVM, no)
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -446,17 +489,23 @@ LOC_ARG_WITH(bzlib, BZIP2, no)
 LOC_ARG_WITH(zstd, Zstandard)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 LOC_ARG_WITH(pdal, PDAL)
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -481,6 +530,7 @@ AC_ARG_WITH(liblas,
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
@@ -491,6 +541,10 @@ AC_ARG_WITH(liblas,
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 AC_ARG_WITH(pdal,
 [  --with-pdal[=path/pdal-config]
                           enable PDAL support (pdal-config with path,
@@ -499,8 +553,14 @@ AC_ARG_WITH(pdal,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -572,11 +632,14 @@ LOC_ARG_WITH_LIB(lapack, LAPACK)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 LOC_ARG_WITH_INC(libsvm, LIBSVM)
 LOC_ARG_WITH_LIB(libsvm, LIBSVM)
 
@@ -585,6 +648,9 @@ LOC_ARG_WITH_LIB(libsvm, LIBSVM)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -671,11 +737,14 @@ AC_PROG_INSTALL
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 AC_PROG_LEX(noyywrap)
 if test "x$LEX" = "x:"; then
     AC_MSG_ERROR([*** Unable to locate lex.])
@@ -687,6 +756,9 @@ elif test "$LEX" = "lex"; then
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -697,8 +769,14 @@ if test "$LEX" = "lex"; then
 	AC_MSG_ERROR([*** Unable to locate lex.])
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -725,12 +803,15 @@ AC_CHECK_PROGS(ENV, env)
 AC_PATH_PROG(PERL, perl, no)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 AC_HEADER_STDC
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 
 =======
 AC_HEADER_STDC
@@ -739,6 +820,9 @@ AC_HEADER_STDC
 AC_HEADER_STDC
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -750,12 +834,15 @@ AC_CHECK_HEADERS(libintl.h iconv.h)
 AC_CHECK_HEADERS(langinfo.h)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 AC_HEADER_TIME
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 
 =======
 AC_HEADER_TIME
@@ -764,6 +851,9 @@ AC_HEADER_TIME
 AC_HEADER_TIME
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -793,12 +883,15 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[long long int x;]])],[
 AC_MSG_RESULT(yes)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 AC_DEFINE(HAVE_LONG_LONG_INT, 1, [define if "long long int" is available])
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 AC_DEFINE(HAVE_LONG_LONG_INT, 1, [Define to 1 if "long long int" is available.])
 =======
 AC_DEFINE(HAVE_LONG_LONG_INT, 1, [define if "long long int" is available])
@@ -807,6 +900,9 @@ AC_DEFINE(HAVE_LONG_LONG_INT, 1, [define if "long long int" is available])
 AC_DEFINE(HAVE_LONG_LONG_INT, 1, [define if "long long int" is available])
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -819,12 +915,15 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/types.h>]], [[int64_t x;]])],
 AC_MSG_RESULT(yes)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 AC_DEFINE(HAVE_INT64_T, 1, [define if "int64_t" is available])
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 AC_DEFINE(HAVE_INT64_T, 1, [Define to 1 if "int64_t" is available.])
 =======
 AC_DEFINE(HAVE_INT64_T, 1, [define if "int64_t" is available])
@@ -833,6 +932,9 @@ AC_DEFINE(HAVE_INT64_T, 1, [define if "int64_t" is available])
 AC_DEFINE(HAVE_INT64_T, 1, [define if "int64_t" is available])
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1065,12 +1167,15 @@ else
     AC_MSG_RESULT([using old PROJ version 4 API])
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     AC_DEFINE(USE_PROJ4API, 1, [define if using old PROJ version 4 API])
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     AC_DEFINE(USE_PROJ4API, 1, [Define to 1 if using old PROJ version 4 API.])
 =======
     AC_DEFINE(USE_PROJ4API, 1, [define if using old PROJ version 4 API])
@@ -1079,6 +1184,9 @@ else
     AC_DEFINE(USE_PROJ4API, 1, [define if using old PROJ version 4 API])
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1233,12 +1341,15 @@ else
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <png.h>]], [[png_read_image(NULL, NULL);]])],[],[
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   AC_TRY_LINK([#include <png.h>],[png_read_image(NULL, NULL);],PNGLIB="$PNGLIB",[
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <png.h>]], [[png_read_image(NULL, NULL);]])],[PNGLIB="$PNGLIB"],[
 =======
   AC_TRY_LINK([#include <png.h>],[png_read_image(NULL, NULL);],PNGLIB="$PNGLIB",[
@@ -1247,6 +1358,9 @@ else
   AC_TRY_LINK([#include <png.h>],[png_read_image(NULL, NULL);],PNGLIB="$PNGLIB",[
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1294,12 +1408,15 @@ else
     if test `"$GDAL_CONFIG" --ogr-enabled` = "yes" ; then
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       AC_DEFINE(HAVE_OGR, 1, [define if OGR is to be used])
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
       AC_DEFINE(HAVE_OGR, 1, [Define to 1 if OGR is to be used.])
 =======
       AC_DEFINE(HAVE_OGR, 1, [define if OGR is to be used])
@@ -1308,6 +1425,9 @@ else
       AC_DEFINE(HAVE_OGR, 1, [define if OGR is to be used])
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1324,12 +1444,15 @@ else
   LIBS="$LIBS $GDAL_DEP_LIBS"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   AC_TRY_LINK([#include <gdal.h>],[GDALOpen("foo", GA_ReadOnly);],GDAL_LIBS="$GDAL_LIBS $GDAL_DEP_LIBS",[
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <gdal.h>]], [[GDALOpen("foo", GA_ReadOnly);]])],[GDAL_LIBS="$GDAL_LIBS $GDAL_DEP_LIBS"],[
 =======
   AC_TRY_LINK([#include <gdal.h>],[GDALOpen("foo", GA_ReadOnly);],GDAL_LIBS="$GDAL_LIBS $GDAL_DEP_LIBS",[
@@ -1338,6 +1461,9 @@ else
   AC_TRY_LINK([#include <gdal.h>],[GDALOpen("foo", GA_ReadOnly);],GDAL_LIBS="$GDAL_LIBS $GDAL_DEP_LIBS",[
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1349,12 +1475,15 @@ else
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   AC_DEFINE(HAVE_GDAL, 1, [define if GDAL is to be used])
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
   AC_DEFINE(HAVE_GDAL, 1, [Define to 1 if GDAL is to be used.])
 =======
   AC_DEFINE(HAVE_GDAL, 1, [define if GDAL is to be used])
@@ -1363,6 +1492,9 @@ else
   AC_DEFINE(HAVE_GDAL, 1, [define if GDAL is to be used])
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1413,12 +1545,15 @@ else
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <liblas/capi/liblas.h>]], [[LASReader_Create("foo");]])],[],[
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   AC_TRY_LINK([#include <liblas/capi/liblas.h>],[LASReader_Create("foo");],LAS_LIBS="$LAS_LIBS",[
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <liblas/capi/liblas.h>]], [[LASReader_Create("foo");]])],[LAS_LIBS="$LAS_LIBS"],[
 =======
   AC_TRY_LINK([#include <liblas/capi/liblas.h>],[LASReader_Create("foo");],LAS_LIBS="$LAS_LIBS",[
@@ -1427,6 +1562,9 @@ else
   AC_TRY_LINK([#include <liblas/capi/liblas.h>],[LASReader_Create("foo");],LAS_LIBS="$LAS_LIBS",[
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1439,12 +1577,15 @@ else
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   AC_DEFINE(HAVE_LIBLAS, 1, [define if liblas exists])
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
   AC_DEFINE(HAVE_LIBLAS, 1, [Define to 1 if liblas exists.])
 =======
   AC_DEFINE(HAVE_LIBLAS, 1, [define if liblas exists])
@@ -1453,6 +1594,9 @@ else
   AC_DEFINE(HAVE_LIBLAS, 1, [define if liblas exists])
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1474,16 +1618,22 @@ PDAL_CPPFLAGS=
 USE_PDAL=
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 pdal="pdal"
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1493,8 +1643,14 @@ if test "`basename xx/$with_pdal`" = "pdal-config" ; then
 fi
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1511,11 +1667,14 @@ else
   AC_MSG_RESULT(yes)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 
   if test -s "${PKG_CONFIG} --exists ${pdal}" ; then
     AC_MSG_ERROR([*** Unable to locate PDAL package.])
@@ -1528,6 +1687,9 @@ else
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1541,11 +1703,14 @@ else
     PDAL_LIBS=`"$PDAL_CONFIG" --libs`
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     PDAL_INC=`"$PDAL_CONFIG" --includes`
     USE_PDAL=1
   fi
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -1562,6 +1727,9 @@ else
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1571,13 +1739,17 @@ else
   ac_save_cflags="$CFLAGS"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
   ac_save_cppflags="$CPPFLAGS"
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
 >>>>>>> osgeo-main
   LIBS="$LIBS $PDAL_LIBS"
   CFLAGS="$CFLAGS $PDAL_CFLAGS"
@@ -1596,6 +1768,11 @@ else
   LIBS="$LIBS $PDAL_LIBS"
   CFLAGS="$CFLAGS $PDAL_CFLAGS"
 <<<<<<< HEAD:configure.ac
+=======
+  LIBS="$LIBS $PDAL_LIBS"
+  CFLAGS="$CFLAGS $PDAL_CFLAGS"
+<<<<<<< HEAD:configure.ac
+>>>>>>> osgeo-main
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <pdal/PointTable.hpp>
   #include <pdal/Streamable.hpp>
   class St:public pdal::Streamable {};]], [[pdal::PointTable table;]])],
@@ -1603,6 +1780,7 @@ else
   AC_MSG_ERROR([*** Unable to locate suitable (>=1.7.1) PDAL library.])
 =======
   CPPFLAGS="$CPPFLAGS $PDAL_CPPFLAGS $PDAL_INC"
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<<< HEAD:configure.in
   AC_TRY_LINK([#include <pdal/PointTable.hpp>
@@ -1612,6 +1790,8 @@ else
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
   AC_TRY_LINK([#include <pdal/PointTable.hpp>
   #include <pdal/Streamable.hpp>
   class St:public pdal::Streamable {};],[pdal::PointTable table;],,[
@@ -1637,7 +1817,10 @@ else
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>>> osgeo-main:configure.ac
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1646,6 +1829,7 @@ else
   class St:public pdal::Streamable {};],[pdal::PointTable table;],PDAL_LIBS="$PDAL_LIBS",[
   AC_MSG_ERROR([*** Unable to locate suitable (>=1.7.1) PDAL library.])
   ])
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
   ])
@@ -1658,6 +1842,8 @@ else
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697)):configure.in
   ])
 
@@ -1695,6 +1881,9 @@ else
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1743,12 +1932,15 @@ else
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <netcdf.h>]], [[nc_create("foo", NC_CLOBBER, NULL);]])],[],[
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   AC_TRY_LINK([#include <netcdf.h>],[nc_create("foo", NC_CLOBBER, NULL);],NETCDF_LIBS="$NETCDF_LIBS",[
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <netcdf.h>]], [[nc_create("foo", NC_CLOBBER, NULL);]])],[NETCDF_LIBS="$NETCDF_LIBS"],[
 =======
   AC_TRY_LINK([#include <netcdf.h>],[nc_create("foo", NC_CLOBBER, NULL);],NETCDF_LIBS="$NETCDF_LIBS",[
@@ -1757,6 +1949,9 @@ else
   AC_TRY_LINK([#include <netcdf.h>],[nc_create("foo", NC_CLOBBER, NULL);],NETCDF_LIBS="$NETCDF_LIBS",[
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1768,12 +1963,15 @@ else
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   AC_DEFINE(HAVE_NETCDF, 1, [define if NetCDF exists])
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
   AC_DEFINE(HAVE_NETCDF, 1, [Define to 1 if NetCDF exists.])
 =======
   AC_DEFINE(HAVE_NETCDF, 1, [define if NetCDF exists])
@@ -1782,6 +1980,9 @@ else
   AC_DEFINE(HAVE_NETCDF, 1, [define if NetCDF exists])
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1829,12 +2030,15 @@ else
 #  fi
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   AC_DEFINE(HAVE_GEOS, 1, [define if GEOS is to be used])
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
   AC_DEFINE(HAVE_GEOS, 1, [Define to 1 if GEOS is to be used.])
 =======
   AC_DEFINE(HAVE_GEOS, 1, [define if GEOS is to be used])
@@ -1843,6 +2047,9 @@ else
   AC_DEFINE(HAVE_GEOS, 1, [define if GEOS is to be used])
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1889,12 +2096,15 @@ LOC_CHECK_USE(postgres,PostgreSQL,USE_POSTGRES)
 if test -n "$USE_POSTGRES"; then
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 AC_DEFINE(HAVE_POSTGRES, 1, [define if PostgreSQL is to be used])
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 AC_DEFINE(HAVE_POSTGRES, 1, [Define to 1 if PostgreSQL is to be used.])
 =======
 AC_DEFINE(HAVE_POSTGRES, 1, [define if PostgreSQL is to be used])
@@ -1903,6 +2113,9 @@ AC_DEFINE(HAVE_POSTGRES, 1, [define if PostgreSQL is to be used])
 AC_DEFINE(HAVE_POSTGRES, 1, [define if PostgreSQL is to be used])
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1934,6 +2147,7 @@ ac_save_ldflags="$LDFLAGS"
 LDFLAGS="$LDFLAGS $PQLIBPATH"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 AC_CHECK_LIB(pq,PQcmdTuples, [AC_DEFINE(HAVE_PQCMDTUPLES, 1, [define if PQcmdTuples in lpq])], [
 AC_CHECK_LIB(pq,PQcmdTuples, [AC_DEFINE(HAVE_PQCMDTUPLES, 1, [define if PQcmdTuples in lpq])], [
 =======
@@ -1941,6 +2155,8 @@ AC_CHECK_LIB(pq,PQcmdTuples, [AC_DEFINE(HAVE_PQCMDTUPLES, 1, [define if PQcmdTup
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 AC_CHECK_LIB(pq,PQcmdTuples, [AC_DEFINE(HAVE_PQCMDTUPLES, 1, [Define to 1 if PQcmdTuples in lpq.])], [
 AC_CHECK_LIB(pq,PQcmdTuples, [AC_DEFINE(HAVE_PQCMDTUPLES, 1, [Define to 1 if PQcmdTuples in lpq.])], [
 =======
@@ -1952,6 +2168,9 @@ AC_CHECK_LIB(pq,PQcmdTuples, [AC_DEFINE(HAVE_PQCMDTUPLES, 1, [define if PQcmdTup
 AC_CHECK_LIB(pq,PQcmdTuples, [AC_DEFINE(HAVE_PQCMDTUPLES, 1, [define if PQcmdTuples in lpq])], [
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2004,11 +2223,14 @@ if test -n "$USE_MYSQL"; then
   if test "$MYSQLD_CONFIG" != "" ; then
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     mysql_version=`"$MYSQLD_CONFIG" --version`
     AC_MSG_RESULT([using MySQL/MariaDB version "$mysql_version"])
 =======
@@ -2016,6 +2238,9 @@ if test -n "$USE_MYSQL"; then
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2026,6 +2251,7 @@ if test -n "$USE_MYSQL"; then
     LIBS="$MYSQLDLIB $LIBS"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     AC_CHECK_FUNC(mysql_server_init,,[MYSQLDLIB="";
                   AC_MSG_WARN([libmysqld not found])] )
 =======
@@ -2033,6 +2259,8 @@ if test -n "$USE_MYSQL"; then
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     AC_CHECK_FUNC(mysql_server_init,
                   AC_MSG_RESULT([libmysqld found]),
                   [MYSQLDLIB=""; AC_MSG_WARN([libmysqld not found])])
@@ -2045,6 +2273,9 @@ if test -n "$USE_MYSQL"; then
                   AC_MSG_WARN([libmysqld not found])] )
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2081,12 +2312,15 @@ LOC_CHECK_INCLUDES(sqlite3.h,SQLite,$SQLITEINCPATH)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 AC_DEFINE(HAVE_SQLITE, 1, [define if SQLite is to be used])
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 AC_DEFINE(HAVE_SQLITE, 1, [Define to 1 if SQLite is to be used.])
 =======
 AC_DEFINE(HAVE_SQLITE, 1, [define if SQLite is to be used])
@@ -2095,6 +2329,9 @@ AC_DEFINE(HAVE_SQLITE, 1, [define if SQLite is to be used])
 AC_DEFINE(HAVE_SQLITE, 1, [define if SQLite is to be used])
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2178,11 +2415,14 @@ OPENGLULIB="$OPENGL_LIB_PATH $OPENGLULIB"
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 LOC_CHECK_FUNC(glXCreatePbuffer,,,,,$OPENGLLIB,[AC_DEFINE(HAVE_PBUFFERS, 1, [Define to 1 if glXCreatePbuffer exists.])])
 LOC_CHECK_FUNC(glXCreateGLXPixmap,,,,,$OPENGLLIB,[AC_DEFINE(HAVE_PIXMAPS, 1, [Define to 1 if glXCreateGLXPixmap exists.])])
 
@@ -2191,6 +2431,9 @@ AC_DEFINE(OPENGL_X11, 1, [Define to 1 if OpenGL uses X11.])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2200,8 +2443,14 @@ LOC_CHECK_FUNC(glXCreateGLXPixmap,,,,,$OPENGLLIB,[AC_DEFINE(HAVE_PIXMAPS, 1, [de
 AC_DEFINE(OPENGL_X11, 1, [define if OpenGL uses X11])
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -2228,12 +2477,15 @@ OPENGLLIBPATH="$OPENGLPATH"
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 AC_DEFINE(OPENGL_AQUA, 1, [define if OpenGL uses Aqua (MacOS X)])
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 AC_DEFINE(OPENGL_AQUA, 1, [Define to 1 if OpenGL uses Aqua (MacOS X).])
 =======
 AC_DEFINE(OPENGL_AQUA, 1, [define if OpenGL uses Aqua (MacOS X)])
@@ -2242,6 +2494,9 @@ AC_DEFINE(OPENGL_AQUA, 1, [define if OpenGL uses Aqua (MacOS X)])
 AC_DEFINE(OPENGL_AQUA, 1, [define if OpenGL uses Aqua (MacOS X)])
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2271,12 +2526,15 @@ OPENGLULIB="$OPENGL_LIB_PATH $OPENGLULIB"
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 AC_DEFINE(OPENGL_WINDOWS, 1, [define if OpenGL uses Windows])
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 AC_DEFINE(OPENGL_WINDOWS, 1, [Define to 1 if OpenGL uses Windows.])
 =======
 AC_DEFINE(OPENGL_WINDOWS, 1, [define if OpenGL uses Windows])
@@ -2285,6 +2543,9 @@ AC_DEFINE(OPENGL_WINDOWS, 1, [define if OpenGL uses Windows])
 AC_DEFINE(OPENGL_WINDOWS, 1, [define if OpenGL uses Windows])
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2429,12 +2690,15 @@ LDFLAGS="$save_LDFLAGS"
 if test $blas_ok = yes; then
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	AC_DEFINE(HAVE_LIBATLAS, 1, [define if ATLAS exists])
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 	AC_DEFINE(HAVE_LIBATLAS, 1, [Define to 1 if ATLAS exists.])
 =======
 	AC_DEFINE(HAVE_LIBATLAS, 1, [define if ATLAS exists])
@@ -2443,6 +2707,9 @@ if test $blas_ok = yes; then
 	AC_DEFINE(HAVE_LIBATLAS, 1, [define if ATLAS exists])
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2492,12 +2759,15 @@ fi
 if test $blas_ok = yes; then
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 AC_DEFINE(HAVE_LIBBLAS, 1, [define if BLAS exists])
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 AC_DEFINE(HAVE_LIBBLAS, 1, [Define to 1 if BLAS exists.])
 =======
 AC_DEFINE(HAVE_LIBBLAS, 1, [define if BLAS exists])
@@ -2506,6 +2776,9 @@ AC_DEFINE(HAVE_LIBBLAS, 1, [define if BLAS exists])
 AC_DEFINE(HAVE_LIBBLAS, 1, [define if BLAS exists])
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2569,12 +2842,15 @@ fi
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 AC_DEFINE(HAVE_LIBLAPACK, 1, [define if LAPACK exists])
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 AC_DEFINE(HAVE_LIBLAPACK, 1, [Define to 1 if LAPACK exists.])
 =======
 AC_DEFINE(HAVE_LIBLAPACK, 1, [define if LAPACK exists])
@@ -2583,6 +2859,9 @@ AC_DEFINE(HAVE_LIBLAPACK, 1, [define if LAPACK exists])
 AC_DEFINE(HAVE_LIBLAPACK, 1, [define if LAPACK exists])
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2597,11 +2876,14 @@ AC_SUBST(LAPACKINC)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 # libsvm option
 LIBSVM_INC=
 LIBSVM_LIB=
@@ -2629,6 +2911,9 @@ AC_SUBST(USE_LIBSVM)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2727,12 +3012,15 @@ HAVE_NLS=
 if test -n "${USE_NLS}" ; then
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     AC_DEFINE(USE_NLS, 1, [define if NLS requested])
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     AC_DEFINE(USE_NLS, 1, [Define to 1 if NLS requested.])
 =======
     AC_DEFINE(USE_NLS, 1, [define if NLS requested])
@@ -2741,6 +3029,9 @@ if test -n "${USE_NLS}" ; then
     AC_DEFINE(USE_NLS, 1, [define if NLS requested])
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2833,6 +3124,7 @@ LOC_CHECK_USE(openmp,OpenMP,USE_OPENMP)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -2841,6 +3133,10 @@ LOC_CHECK_USE(openmp,OpenMP,USE_OPENMP)
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -2883,7 +3179,10 @@ fi  # enable_openmp
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -2990,6 +3289,9 @@ fi  # enable_openmp
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3103,17 +3405,23 @@ LOC_MSG_USE(Large File support (LFS), USE_LARGEFILES)
 LOC_MSG_USE(libLAS support,USE_LIBLAS)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 LOC_MSG_USE(LIBSVM support,USE_LIBSVM)
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

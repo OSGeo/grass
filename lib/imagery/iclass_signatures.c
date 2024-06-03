@@ -50,17 +50,24 @@ int I_iclass_init_signatures(struct Signature *sigs, struct Ref *refer)
     for (unsigned int i = refer->nfiles; i--;) {
 <<<<<<< HEAD
 <<<<<<< HEAD
-        sigs->semantic_labels[i] = Rast_get_semantic_label_or_name(
-            refer->file[i].name, refer->file[i].mapset);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         sigs->semantic_labels[i] = Rast_get_semantic_label_or_name(
             refer->file[i].name, refer->file[i].mapset);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        sigs->semantic_labels[i] = Rast_get_semantic_label_or_name(
+            refer->file[i].name, refer->file[i].mapset);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+        sigs->semantic_labels[i] = Rast_get_semantic_label_or_name(
+            refer->file[i].name, refer->file[i].mapset);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
         sigs->semantic_labels[i] = Rast_get_semantic_label_or_name(
             refer->file[i].name, refer->file[i].mapset);
@@ -82,6 +89,9 @@ int I_iclass_init_signatures(struct Signature *sigs, struct Ref *refer)
             refer->file[i].name, refer->file[i].mapset);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -148,8 +158,12 @@ int I_iclass_write_signatures(struct Signature *sigs, const char *file_name)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 >>>>>>> osgeo-main
     if (!(outsig_fd = I_fopen_signature_file_new(file_name))) {
@@ -160,10 +174,13 @@ int I_iclass_write_signatures(struct Signature *sigs, const char *file_name)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (!(outsig_fd = I_fopen_signature_file_new(file_name))) {
         G_warning(_("Unable to open output signature file '%s'"), file_name);
         return 0;
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     if (!
@@ -183,6 +200,9 @@ int I_iclass_write_signatures(struct Signature *sigs, const char *file_name)
         return 0;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

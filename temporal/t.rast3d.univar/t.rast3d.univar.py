@@ -38,6 +38,7 @@
 # % key: zones
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # % label: Raster map withh zones to compute statistics for
 # % description: Raster map withh zones to compute statistics for (needs to be CELL)
 =======
@@ -45,6 +46,8 @@
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 # % label: Raster map with zones to compute statistics for
 # % description: Raster map with zones to compute statistics for (needs to be CELL)
 =======
@@ -56,6 +59,9 @@
 # % description: Raster map withh zones to compute statistics for (needs to be CELL)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

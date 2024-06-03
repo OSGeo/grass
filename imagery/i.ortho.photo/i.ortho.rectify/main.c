@@ -127,6 +127,7 @@ int main(int argc, char *argv[])
     c->key = 'c';
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     c->description = _("Use current region settings in target location "
                        "(def.=calculate smallest area)");
 =======
@@ -134,6 +135,8 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     c->description =
         _("Use current region settings in target project (location) "
           "(def.=calculate smallest area)");
@@ -146,6 +149,9 @@ int main(int argc, char *argv[])
                        "(def.=calculate smallest area)");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -203,12 +209,15 @@ int main(int argc, char *argv[])
     if (!I_get_group_ref(group.name, &group.group_ref)) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_warning(_("Location: %s"), G_location());
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         G_warning(_("Project (location): %s"), G_location());
 =======
         G_warning(_("Location: %s"), G_location());
@@ -217,6 +226,9 @@ int main(int argc, char *argv[])
         G_warning(_("Location: %s"), G_location());
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -330,6 +342,7 @@ int main(int argc, char *argv[])
                 G_warning(_("The following raster map already exists in"));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 G_warning(_("target LOCATION %s, MAPSET %s:"), G_location(),
                           G_mapset());
 =======
@@ -337,6 +350,8 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                 G_warning(_("target project (location) %s, mapset %s:"),
                           G_location(), G_mapset());
 =======
@@ -348,6 +363,9 @@ int main(int argc, char *argv[])
                           G_mapset());
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -360,6 +378,7 @@ int main(int argc, char *argv[])
                 G_warning(_("The following raster map already exists in"));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 G_warning(_("target LOCATION %s, MAPSET %s:"), G_location(),
                           G_mapset());
 =======
@@ -367,6 +386,8 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                 G_warning(_("target project (location) %s, mapset %s:"),
                           G_location(), G_mapset());
 =======
@@ -378,6 +399,9 @@ int main(int argc, char *argv[])
                           G_mapset());
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

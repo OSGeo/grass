@@ -40,6 +40,7 @@ char *subgroup;
 struct Ref ref;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 char **semantic_labels;
 =======
 <<<<<<< HEAD
@@ -53,6 +54,11 @@ char **semantic_labels;
 char **semantic_labels;
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+char **semantic_labels;
+=======
+>>>>>>> osgeo-main
 char **bandrefs;
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
@@ -62,6 +68,9 @@ char **semantic_labels;
 char **semantic_labels;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -118,6 +127,7 @@ int main(int argc, char *argv[])
     parm.out_sig->gisprompt = "new,signatures/sig,sigfile";
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     parm.out_sig->description =
         _("Name for output file containing result signatures");
 =======
@@ -134,6 +144,12 @@ int main(int argc, char *argv[])
         _("Name for output file containing result signatures");
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+    parm.out_sig->description =
+        _("Name for output file containing result signatures");
+=======
+>>>>>>> osgeo-main
     parm.out_sig->description = _("Name for output file containing result signatures");
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
@@ -145,6 +161,9 @@ int main(int argc, char *argv[])
         _("Name for output file containing result signatures");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -165,6 +184,7 @@ int main(int argc, char *argv[])
     parm.seed_sig->gisprompt = "old,signatures/sig,sigfile";
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     parm.seed_sig->description =
         _("Name of file containing initial signatures");
 =======
@@ -181,6 +201,12 @@ int main(int argc, char *argv[])
         _("Name of file containing initial signatures");
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+    parm.seed_sig->description =
+        _("Name of file containing initial signatures");
+=======
+>>>>>>> osgeo-main
     parm.seed_sig->description = _("Name of file containing initial signatures");
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
@@ -192,6 +218,9 @@ int main(int argc, char *argv[])
         _("Name of file containing initial signatures");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -245,8 +274,11 @@ int main(int argc, char *argv[])
         _("Name for output file containing final report");
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     if (G_parser(argc, argv))
@@ -259,6 +291,7 @@ int main(int argc, char *argv[])
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -270,6 +303,8 @@ int main(int argc, char *argv[])
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
     group = parm.group_name->answer;	/* a required parameter */
     subgroup = parm.subgroup_name->answer;	/* required */
     
@@ -293,6 +328,9 @@ int main(int argc, char *argv[])
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -303,11 +341,14 @@ int main(int argc, char *argv[])
     if (!I_find_subgroup(group, subgroup)) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         G_fatal_error(_("Subgroup <%s> in group <%s> not found"), subgroup,
                       group);
@@ -336,6 +377,9 @@ int main(int argc, char *argv[])
         G_fatal_error(_("<%s> is an illegal file name"), outsigfile);
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -344,6 +388,7 @@ int main(int argc, char *argv[])
     }
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     if (G_unqualified_name(parm.out_sig->answer, G_mapset(), outsigfile,
                            xmapset) < 0)
@@ -351,6 +396,8 @@ int main(int argc, char *argv[])
 
     if (G_legal_filename(outsigfile) < 0)
         G_fatal_error(_("<%s> is an illegal file name"), outsigfile);
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 
@@ -521,6 +568,7 @@ int main(int argc, char *argv[])
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -533,6 +581,11 @@ int main(int argc, char *argv[])
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     if ((fd = I_fopen_signature_file_new(outsigfile)) != NULL) {
         for (unsigned int i = C.S.nbands; i--;)
             C.S.semantic_labels[i] = semantic_labels[i];
@@ -542,7 +595,10 @@ int main(int argc, char *argv[])
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     if ((fd =
@@ -562,6 +618,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

@@ -86,16 +86,22 @@ void Rast3d_cache_dispose(RASTER3D_cache *c)
 void *Rast3d_cache_new(int nofElts, int sizeOfElts, int nofNames,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -107,7 +113,10 @@ void *Rast3d_cache_new(int nofElts, int sizeOfElts, int nofNames,
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
                        int (*eltRemoveFun)(), void *eltRemoveFunData,
@@ -130,6 +139,9 @@ void *Rast3d_cache_new(int nofElts, int sizeOfElts, int nofNames,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -185,18 +197,26 @@ void *Rast3d_cache_new(int nofElts, int sizeOfElts, int nofNames,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-void Rast3d_cache_set_remove_fun(RASTER3D_cache *c,
-                                 int (*eltRemoveFun)(int, const void *, void *),
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 void Rast3d_cache_set_remove_fun(RASTER3D_cache *c,
                                  int (*eltRemoveFun)(int, const void *, void *),
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+void Rast3d_cache_set_remove_fun(RASTER3D_cache *c,
+                                 int (*eltRemoveFun)(int, const void *, void *),
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+void Rast3d_cache_set_remove_fun(RASTER3D_cache *c,
+                                 int (*eltRemoveFun)(int, const void *, void *),
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 void Rast3d_cache_set_remove_fun(RASTER3D_cache *c,
@@ -220,6 +240,9 @@ void Rast3d_cache_set_remove_fun(RASTER3D_cache *c,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -233,18 +256,26 @@ void Rast3d_cache_set_remove_fun(RASTER3D_cache *c,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-void Rast3d_cache_set_load_fun(RASTER3D_cache *c,
-                               int (*eltLoadFun)(int, void *, void *),
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 void Rast3d_cache_set_load_fun(RASTER3D_cache *c,
                                int (*eltLoadFun)(int, void *, void *),
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+void Rast3d_cache_set_load_fun(RASTER3D_cache *c,
+                               int (*eltLoadFun)(int, void *, void *),
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+void Rast3d_cache_set_load_fun(RASTER3D_cache *c,
+                               int (*eltLoadFun)(int, void *, void *),
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 void Rast3d_cache_set_load_fun(RASTER3D_cache *c,
@@ -268,6 +299,9 @@ void Rast3d_cache_set_load_fun(RASTER3D_cache *c,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

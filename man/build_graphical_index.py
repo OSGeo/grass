@@ -7,6 +7,7 @@
 # PURPOSE:   Build graphical index
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # COPYRIGHT: (C) 2015-2023 by Vaclav Petras and the GRASS Development Team
 =======
 <<<<<<< HEAD
@@ -14,6 +15,9 @@
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 # COPYRIGHT: (C) 2015-2024 by Vaclav Petras and the GRASS Development Team
 =======
@@ -29,6 +33,9 @@
 # COPYRIGHT: (C) 2015-2023 by Vaclav Petras and the GRASS Development Team
 >>>>>>> 6104ec7096 (i.maxlik: fix crash when classification result is NULL (#2724))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -128,16 +135,23 @@ index_items = [
     (
 <<<<<<< HEAD
 <<<<<<< HEAD
-        "https://grass.osgeo.org/grass-devel/manuals/libpython/index.html",
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         "https://grass.osgeo.org/grass-devel/manuals/libpython/index.html",
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        "https://grass.osgeo.org/grass-devel/manuals/libpython/index.html",
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        "https://grass.osgeo.org/grass-devel/manuals/libpython/index.html",
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         "https://grass.osgeo.org/grass-devel/manuals/libpython/index.html",
@@ -155,6 +169,9 @@ index_items = [
         "https://grass.osgeo.org/grass-devel/manuals/libpython/index.html",
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

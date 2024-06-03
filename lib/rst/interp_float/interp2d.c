@@ -68,12 +68,15 @@ int IL_grid_calc_2d(
     double *c2min, double *c2max,   /*!< min and max interp. curv. val. */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     double *ertot,                  /*!< total interpolating func. error */
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     double *ertot UNUSED,           /*!< total interpolating func. error */
 =======
     double *ertot,                  /*!< total interpolating func. error */
@@ -82,6 +85,9 @@ int IL_grid_calc_2d(
     double *ertot,                  /*!< total interpolating func. error */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

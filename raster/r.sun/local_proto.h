@@ -20,16 +20,23 @@ int searching_parallel(double *length, double *sunVarGeom_z_orig,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-int useCivilTime(void);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 int useCivilTime(void);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+int useCivilTime(void);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+int useCivilTime(void);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 int useCivilTime(void);
@@ -49,6 +56,9 @@ int useCivilTime(void);
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -65,15 +75,21 @@ double getHorizonInterval(void);
 void setHorizonInterval(double val);
 <<<<<<< HEAD
 <<<<<<< HEAD
-void setAngularLossDenominator(void);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 void setAngularLossDenominator(void);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+void setAngularLossDenominator(void);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+void setAngularLossDenominator(void);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 void setAngularLossDenominator(void);
 =======
@@ -93,6 +109,9 @@ void setAngularLossDenominator(void);
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

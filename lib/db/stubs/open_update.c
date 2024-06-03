@@ -3,6 +3,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int db__driver_open_update_cursor(dbString *name, dbString *select,
                                   dbCursor *cursor, int mode)
 =======
@@ -10,6 +11,8 @@ int db__driver_open_update_cursor(dbString *name, dbString *select,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 int db__driver_open_update_cursor(dbString *name UNUSED,
                                   dbString *select UNUSED,
                                   dbCursor *cursor UNUSED, int mode UNUSED)
@@ -22,6 +25,9 @@ int db__driver_open_update_cursor(dbString *name, dbString *select,
                                   dbCursor *cursor, int mode)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

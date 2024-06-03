@@ -126,12 +126,15 @@ int Rast__quant_organize_fp_lookup(struct Quant *q)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* now find the rule to apply inbetween each 2 values in a list */
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         /* now find the rule to apply in between each 2 values in a list */
 =======
         /* now find the rule to apply inbetween each 2 values in a list */
@@ -140,6 +143,9 @@ int Rast__quant_organize_fp_lookup(struct Quant *q)
         /* now find the rule to apply inbetween each 2 values in a list */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -615,16 +621,23 @@ CELL Rast_quant_get_cell_value(struct Quant *q, DCELL dcellVal)
     struct Quant_table *p;
 <<<<<<< HEAD
 <<<<<<< HEAD
-    int (*lower)(double, double);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     int (*lower)(double, double);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    int (*lower)(double, double);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    int (*lower)(double, double);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     int (*lower)(double, double);
@@ -645,6 +658,9 @@ CELL Rast_quant_get_cell_value(struct Quant *q, DCELL dcellVal)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

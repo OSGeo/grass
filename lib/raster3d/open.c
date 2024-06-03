@@ -142,16 +142,23 @@ void *Rast3d_open_cell_old(const char *name, const char *mapset,
         /* if our long is to short to store offsets we can't read the file */
 <<<<<<< HEAD
 <<<<<<< HEAD
-        if (map->indexNbytesUsed > (int)sizeof(long))
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         if (map->indexNbytesUsed > (int)sizeof(long))
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (map->indexNbytesUsed > (int)sizeof(long))
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (map->indexNbytesUsed > (int)sizeof(long))
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         if (map->indexNbytesUsed > (int)sizeof(long))
@@ -172,6 +179,9 @@ void *Rast3d_open_cell_old(const char *name, const char *mapset,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

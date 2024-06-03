@@ -165,12 +165,15 @@ out_sep = """1076,366545504,324050.96875,1077,1076,Zwe,366545512.376,324050.9723
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 out_json = """{"records":[
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 out_json = """\
 {"info":
 {"columns":[
@@ -191,6 +194,9 @@ out_json = """{"records":[
 out_json = """{"records":[
 >>>>>>> 4d944b87c5 (WMS: replace broken URLs with alternative WMS (#1635))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

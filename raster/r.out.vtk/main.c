@@ -46,12 +46,15 @@ int main(int argc, char *argv[])
     int out_type;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int fd; /*Normale maps ;) */
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     int fd; /*Normal maps ;) */
 =======
     int fd; /*Normale maps ;) */
@@ -60,6 +63,9 @@ int main(int argc, char *argv[])
     int fd; /*Normale maps ;) */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -110,12 +116,15 @@ int main(int argc, char *argv[])
     if (param.coorcorr->answer) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         /*Get the default region for coordiante correction */
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         /*Get the default region for coordinate correction */
 =======
         /*Get the default region for coordiante correction */
@@ -124,6 +133,9 @@ int main(int argc, char *argv[])
         /*Get the default region for coordiante correction */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

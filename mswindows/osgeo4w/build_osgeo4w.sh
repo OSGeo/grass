@@ -20,12 +20,15 @@ export PATH=${OSGEO4W_ROOT_MSYS}/bin:/usr/bin:/mingw64/bin
 export C_INCLUDE_PATH=".:${OSGEO4W_ROOT_MSYS}/include:${SRC}/dist.${ARCH}/include:/c/msys64/mingw64/include"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 export PYTHONHOME=${OSGEO4W_ROOT_MSYS}/apps/Python39
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 export PYTHONHOME=${OSGEO4W_ROOT_MSYS}/apps/Python312
 =======
 export PYTHONHOME=${OSGEO4W_ROOT_MSYS}/apps/Python39
@@ -34,6 +37,9 @@ export PYTHONHOME=${OSGEO4W_ROOT_MSYS}/apps/Python39
 export PYTHONHOME=${OSGEO4W_ROOT_MSYS}/apps/Python39
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -83,12 +89,15 @@ export ARCH=x86_64-w64-mingw32
     --with-liblas=${SRC}/mswindows/osgeo4w/liblas-config \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     --with-netcdf=${OSGEO4W_ROOT_MSYS}/bin/nc-config
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     --with-netcdf=${OSGEO4W_ROOT_MSYS}/bin/nc-config \
     --without-pdal
 =======
@@ -98,6 +107,9 @@ export ARCH=x86_64-w64-mingw32
     --with-netcdf=${OSGEO4W_ROOT_MSYS}/bin/nc-config
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

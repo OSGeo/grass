@@ -3,6 +3,7 @@
     "extends": [
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "config:base",
 =======
 <<<<<<< HEAD
@@ -19,6 +20,22 @@
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 =======
+>>>>>>> osgeo-main
+=======
+        "config:best-practices",
+<<<<<<< HEAD
+        ":semanticCommits",
+=======
+=======
+        "config:base",
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> 28bb012175 (r.horizon manual - fix typo (#2794))
+=======
+=======
+        "config:base",
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> 33ce576706 (r.horizon manual - fix typo (#2794))
 >>>>>>> osgeo-main
         ":semanticCommitTypeAll(CI)"
     ]

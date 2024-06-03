@@ -10,22 +10,39 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 "POT-Creation-Date: 2022-04-20 07:10-0400\n"
 =======
 <<<<<<< HEAD
 =======
+>>>>>>> osgeo-main
+=======
+"POT-Creation-Date: 2024-05-23 03:37-0600\n"
+=======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 "POT-Creation-Date: 2024-02-09 06:51-0700\n"
 =======
 "POT-Creation-Date: 2022-04-20 07:10-0400\n"
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 =======
 "POT-Creation-Date: 2022-04-20 07:10-0400\n"
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 =======
+>>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+>>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+"POT-Creation-Date: 2022-04-20 07:10-0400\n"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -38,11 +55,14 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/nviz/render.c:43
 #, c-format
 msgid "Unable to get function address for %s"
@@ -136,6 +156,9 @@ msgstr ""
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -753,8 +776,14 @@ msgstr ""
 #: ../lib/driver/parse_ftcap.c:84
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -770,12 +799,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/driver/parse_ftcap.c:90
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/driver/parse_ftcap.c:91
 =======
 #: ../lib/driver/parse_ftcap.c:90
@@ -784,6 +816,9 @@ msgstr ""
 #: ../lib/driver/parse_ftcap.c:90
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -793,12 +828,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/rst/interp_float/vinput2d.c:94
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/cluster/c_exec.c:43
 #, c-format
 msgid "Not enough data points (%d) in cluster"
@@ -1550,6 +1588,9 @@ msgstr ""
 #: ../lib/rst/interp_float/vinput2d.c:94
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1559,11 +1600,14 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/rst/interp_float/vinput2d.c:95
 msgid "Loading data from attribute table ..."
 msgstr ""
@@ -1580,6 +1624,9 @@ msgstr ""
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1597,8 +1644,14 @@ msgstr ""
 #: ../lib/ogsf/gp3.c:202
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1614,11 +1667,14 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/rst/interp_float/vinput2d.c:107 ../lib/db/dbmi_client/db.c:45
 #: ../lib/db/dbmi_client/copy_tab.c:114 ../lib/db/dbmi_client/copy_tab.c:135
 #: ../lib/ogsf/gp3.c:208 ../lib/ogsf/gv3.c:356
@@ -1633,6 +1689,9 @@ msgstr ""
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1648,8 +1707,14 @@ msgstr ""
 #: ../lib/ogsf/gv3.c:350 ../lib/ogsf/gp3.c:208
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1665,6 +1730,7 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/rst/interp_float/vinput2d.c:115
 #: ../lib/rst/interp_float/vinput2d.c:129 ../lib/db/dbmi_client/copy_tab.c:291
 =======
@@ -1672,6 +1738,8 @@ msgstr ""
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/rst/interp_float/vinput2d.c:113
 #: ../lib/rst/interp_float/vinput2d.c:126 ../lib/db/dbmi_client/copy_tab.c:293
 =======
@@ -1683,6 +1751,9 @@ msgstr ""
 #: ../lib/rst/interp_float/vinput2d.c:129 ../lib/db/dbmi_client/copy_tab.c:291
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1692,6 +1763,7 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/rst/interp_float/vinput2d.c:118
 #: ../lib/rst/interp_float/vinput2d.c:131
 =======
@@ -1699,6 +1771,8 @@ msgstr ""
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/rst/interp_float/vinput2d.c:115
 #: ../lib/rst/interp_float/vinput2d.c:128
 =======
@@ -1710,6 +1784,9 @@ msgstr ""
 #: ../lib/rst/interp_float/vinput2d.c:131
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1719,11 +1796,14 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/rst/interp_float/vinput2d.c:140
 msgid "Reading features from vector map ..."
 msgstr ""
@@ -1733,6 +1813,9 @@ msgstr ""
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1743,8 +1826,14 @@ msgstr ""
 #: ../lib/rst/interp_float/vinput2d.c:174
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1760,11 +1849,14 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/rst/interp_float/vinput2d.c:188
 msgid "Negative value of smoothing detected: sm must be >= 0"
 msgstr ""
@@ -1778,6 +1870,9 @@ msgstr ""
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1792,8 +1887,14 @@ msgstr ""
 #: ../lib/rst/interp_float/vinput2d.c:270
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1809,12 +1910,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/rst/interp_float/vinput2d.c:273
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/rst/interp_float/vinput2d.c:269
 =======
 #: ../lib/rst/interp_float/vinput2d.c:273
@@ -1823,6 +1927,9 @@ msgstr ""
 #: ../lib/rst/interp_float/vinput2d.c:273
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1832,12 +1939,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/rst/interp_float/vinput2d.c:277
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/rst/interp_float/vinput2d.c:273
 =======
 #: ../lib/rst/interp_float/vinput2d.c:277
@@ -1846,15 +1956,19 @@ msgstr ""
 #: ../lib/rst/interp_float/vinput2d.c:277
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 #, c-format
 msgid ""
-"%d points given for interpolation (after thinning) is less than given NPMIN="
-"%d"
+"%d points given for interpolation (after thinning) is less than given "
+"NPMIN=%d"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -1862,6 +1976,8 @@ msgstr ""
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/rst/interp_float/vinput2d.c:279
 msgid "Zero points in the given region"
 msgstr ""
@@ -1871,6 +1987,9 @@ msgstr ""
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1881,8 +2000,14 @@ msgstr ""
 #: ../lib/rst/interp_float/vinput2d.c:287
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1900,12 +2025,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/rst/interp_float/vinput2d.c:293
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/rst/interp_float/vinput2d.c:292
 =======
 #: ../lib/rst/interp_float/vinput2d.c:293
@@ -1914,6 +2042,9 @@ msgstr ""
 #: ../lib/rst/interp_float/vinput2d.c:293
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1940,11 +2071,14 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/rst/interp_float/vinput2d.c:329
 msgid "Some points outside of region (ignored)"
 msgstr ""
@@ -1958,6 +2092,9 @@ msgstr ""
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1972,8 +2109,14 @@ msgstr ""
 #: ../lib/rst/interp_float/vinput2d.c:347
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1989,16 +2132,22 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/rst/interp_float/interp2d.c:234
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2057,8 +2206,14 @@ msgstr ""
 #: ../lib/rst/interp_float/interp2d.c:232
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -2076,11 +2231,14 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/proj/ellipse.c:97
 #, c-format
 msgid "Invalid ellipsoid <%s> in file"
@@ -2351,7 +2509,7 @@ msgstr ""
 #: ../lib/vector/Vlib/read_ogr.c:157 ../lib/vector/Vlib/read_ogr.c:239
 #: ../lib/vector/Vlib/write_ogr.c:70 ../lib/vector/Vlib/write_ogr.c:105
 #: ../lib/vector/Vlib/write_ogr.c:146 ../lib/vector/Vlib/rewind_ogr.c:47
-#: ../lib/vector/Vlib/rewind_ogr.c:71 ../lib/vector/Vlib/field.c:732
+#: ../lib/vector/Vlib/rewind_ogr.c:71 ../lib/vector/Vlib/field.c:751
 #: ../lib/vector/Vlib/build_sfa.c:720
 msgid "GRASS is not compiled with OGR support"
 msgstr ""
@@ -2512,6 +2670,9 @@ msgstr ""
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2560,8 +2721,14 @@ msgstr ""
 #: ../lib/gis/open_misc.c:49
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -2577,12 +2744,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/open_misc.c:74
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/open_misc.c:73
 =======
 #: ../lib/gis/open_misc.c:74
@@ -2591,6 +2761,9 @@ msgstr ""
 #: ../lib/gis/open_misc.c:74
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2600,11 +2773,14 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/legal_name.c:40
 #, c-format
 msgid "Illegal filename <%s>. Cannot start with '.' or be 'NULL'."
@@ -2965,6 +3141,9 @@ msgstr ""
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2988,8 +3167,14 @@ msgstr ""
 #: ../lib/gis/parser.c:361
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -3005,12 +3190,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/parser.c:363
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/parser.c:366
 =======
 #: ../lib/gis/parser.c:363
@@ -3019,6 +3207,9 @@ msgstr ""
 #: ../lib/gis/parser.c:363
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3028,12 +3219,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/parser.c:415
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/parser.c:419
 =======
 #: ../lib/gis/parser.c:415
@@ -3042,6 +3236,9 @@ msgstr ""
 #: ../lib/gis/parser.c:415
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3051,11 +3248,14 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/parser.c:551
 msgid "Use either --quiet or --verbose flag, not both. Assuming --verbose."
 msgstr ""
@@ -3073,6 +3273,9 @@ msgstr ""
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3091,8 +3294,14 @@ msgstr ""
 #: ../lib/gis/parser.c:599
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -3108,11 +3317,14 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/parser.c:625
 msgid "Your installation doesn't include GUI, exiting."
 msgstr ""
@@ -3130,6 +3342,9 @@ msgstr ""
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3144,8 +3359,14 @@ msgstr ""
 #: ../lib/gis/parser.c:985 ../lib/gis/parser.c:1004
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -3161,12 +3382,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/parser.c:1138
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/parser.c:1040 ../lib/gis/parser.c:1050 ../lib/gis/parser.c:1060
 #, c-format
 msgid "Please update the usage of <%s>: flag <%c> has been renamed to <%s>"
@@ -3186,6 +3410,9 @@ msgstr ""
 #: ../lib/gis/parser.c:1138
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3195,12 +3422,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/parser.c:1141
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/parser.c:1230
 =======
 #: ../lib/gis/parser.c:1141
@@ -3209,6 +3439,9 @@ msgstr ""
 #: ../lib/gis/parser.c:1141
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3218,12 +3451,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/parser.c:1159
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/parser.c:1250
 #, c-format
 msgid ""
@@ -3244,6 +3480,9 @@ msgstr ""
 #: ../lib/gis/parser.c:1159
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3253,12 +3492,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/parser.c:1172
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/parser.c:1279
 =======
 #: ../lib/gis/parser.c:1172
@@ -3267,6 +3509,9 @@ msgstr ""
 #: ../lib/gis/parser.c:1172
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3276,12 +3521,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/parser.c:1178 ../lib/gis/parser.c:1437
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/parser.c:1286 ../lib/gis/parser.c:1547
 =======
 #: ../lib/gis/parser.c:1178 ../lib/gis/parser.c:1437
@@ -3290,6 +3538,9 @@ msgstr ""
 #: ../lib/gis/parser.c:1178 ../lib/gis/parser.c:1437
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3299,12 +3550,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/parser.c:1183
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/parser.c:1291
 =======
 #: ../lib/gis/parser.c:1183
@@ -3313,6 +3567,9 @@ msgstr ""
 #: ../lib/gis/parser.c:1183
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3322,12 +3579,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/parser.c:1255
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/parser.c:1364
 =======
 #: ../lib/gis/parser.c:1255
@@ -3336,6 +3596,9 @@ msgstr ""
 #: ../lib/gis/parser.c:1255
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3347,12 +3610,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/parser.c:1261
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/parser.c:1371
 =======
 #: ../lib/gis/parser.c:1261
@@ -3361,6 +3627,9 @@ msgstr ""
 #: ../lib/gis/parser.c:1261
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3372,12 +3641,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/parser.c:1267
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/parser.c:1377
 =======
 #: ../lib/gis/parser.c:1267
@@ -3386,6 +3658,9 @@ msgstr ""
 #: ../lib/gis/parser.c:1267
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3395,12 +3670,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/parser.c:1273
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/parser.c:1381
 =======
 #: ../lib/gis/parser.c:1273
@@ -3409,6 +3687,9 @@ msgstr ""
 #: ../lib/gis/parser.c:1273
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3418,12 +3699,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/parser.c:1279
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/parser.c:1387
 =======
 #: ../lib/gis/parser.c:1279
@@ -3432,6 +3716,9 @@ msgstr ""
 #: ../lib/gis/parser.c:1279
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3443,12 +3730,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/parser.c:1459
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/parser.c:1573
 =======
 #: ../lib/gis/parser.c:1459
@@ -3457,6 +3747,9 @@ msgstr ""
 #: ../lib/gis/parser.c:1459
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3468,12 +3761,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/parser.c:1551
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/parser.c:1666
 =======
 #: ../lib/gis/parser.c:1551
@@ -3482,6 +3778,9 @@ msgstr ""
 #: ../lib/gis/parser.c:1551
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3493,12 +3792,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/parser.c:1625 ../lib/gis/error.c:363
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/parser.c:1739 ../lib/gis/error.c:367
 =======
 #: ../lib/gis/parser.c:1625 ../lib/gis/error.c:363
@@ -3507,6 +3809,9 @@ msgstr ""
 #: ../lib/gis/parser.c:1625 ../lib/gis/error.c:363
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3516,12 +3821,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/parser.c:1627 ../lib/gis/parser.c:1634
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/parser.c:1741 ../lib/gis/parser.c:1751
 =======
 #: ../lib/gis/parser.c:1627 ../lib/gis/parser.c:1634
@@ -3530,6 +3838,9 @@ msgstr ""
 #: ../lib/gis/parser.c:1627 ../lib/gis/parser.c:1634
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3539,12 +3850,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/parser.c:1744
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/parser.c:1863
 =======
 #: ../lib/gis/parser.c:1744
@@ -3553,6 +3867,9 @@ msgstr ""
 #: ../lib/gis/parser.c:1744
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3562,12 +3879,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/parser.c:1747
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/parser.c:1866
 =======
 #: ../lib/gis/parser.c:1747
@@ -3576,6 +3896,9 @@ msgstr ""
 #: ../lib/gis/parser.c:1747
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3585,12 +3908,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/parser.c:1809 ../lib/gis/parser.c:1826
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/parser.c:1928 ../lib/gis/parser.c:1947
 =======
 #: ../lib/gis/parser.c:1809 ../lib/gis/parser.c:1826
@@ -3599,6 +3925,9 @@ msgstr ""
 #: ../lib/gis/parser.c:1809 ../lib/gis/parser.c:1826
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3608,12 +3937,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/parser.c:1811
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/parser.c:1930
 =======
 #: ../lib/gis/parser.c:1811
@@ -3622,6 +3954,9 @@ msgstr ""
 #: ../lib/gis/parser.c:1811
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3631,12 +3966,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/parser.c:1817
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/parser.c:1936
 =======
 #: ../lib/gis/parser.c:1817
@@ -3645,6 +3983,9 @@ msgstr ""
 #: ../lib/gis/parser.c:1817
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3654,12 +3995,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/parser.c:1823
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/parser.c:1943
 =======
 #: ../lib/gis/parser.c:1823
@@ -3668,6 +4012,9 @@ msgstr ""
 #: ../lib/gis/parser.c:1823
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3677,11 +4024,14 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/open.c:69
 #, c-format
 msgid "G__open(read): mapset <%s> doesn't match xmapset <%s>"
@@ -4098,7 +4448,7 @@ msgid "SYNOPSIS"
 msgstr ""
 
 #: ../lib/gis/parser_html.c:159 ../lib/gis/parser_rest_md.c:215
-#: ../lib/init/grass.py:364
+#: ../lib/init/grass.py:366
 msgid "Flags"
 msgstr ""
 
@@ -4108,7 +4458,7 @@ msgid "Force launching GUI dialog"
 msgstr ""
 
 #: ../lib/gis/parser_html.c:207 ../lib/gis/parser_rest_md.c:255
-#: ../lib/init/grass.py:385
+#: ../lib/init/grass.py:386
 msgid "Parameters"
 msgstr ""
 
@@ -4465,11 +4815,11 @@ msgid "'.' for current mapset"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:701
-msgid "Location name"
+msgid "Project (location) name"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:702
-msgid "Location name (not location path)"
+msgid "Project name (not path to project)"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:712
@@ -4603,6 +4953,9 @@ msgstr ""
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -4674,8 +5027,14 @@ msgstr ""
 #: ../lib/gis/distance.c:154
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -4691,11 +5050,14 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/seek.c:54 ../lib/gis/seek.c:61
 #, c-format
 msgid "Unable to seek: %s"
@@ -5042,6 +5404,9 @@ msgstr ""
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -5067,11 +5432,14 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/parser_help.c:227
 msgid "Super quiet module output"
 msgstr ""
@@ -5085,6 +5453,9 @@ msgstr ""
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -5123,8 +5494,14 @@ msgstr ""
 #: ../lib/gis/parser_help.c:261
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -5140,12 +5517,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/parser_help.c:287
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/parser_help.c:284
 =======
 #: ../lib/gis/parser_help.c:287
@@ -5154,6 +5534,9 @@ msgstr ""
 #: ../lib/gis/parser_help.c:287
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -5163,11 +5546,14 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/env.c:129
 msgid "No active GRASS session: GISRC environment variable not set"
 msgstr ""
@@ -5186,11 +5572,17 @@ msgstr ""
 msgid "Unrecognised access mode: %o"
 msgstr ""
 
+<<<<<<< HEAD
+#: ../lib/gis/mapset_msc.c:223
+=======
 #: ../lib/gis/mapset_msc.c:222
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -5249,6 +5641,7 @@ msgstr ""
 #: ../lib/gis/mapset_msc.c:196
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -5259,6 +5652,15 @@ msgstr ""
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
 #, c-format
 msgid "Unable to make mapset element %s (%s): %s"
@@ -5266,22 +5668,39 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/mapset_msc.c:201
 =======
 <<<<<<< HEAD
 =======
+>>>>>>> osgeo-main
+=======
+#: ../lib/gis/mapset_msc.c:229
+=======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 #: ../lib/gis/mapset_msc.c:228
 =======
 #: ../lib/gis/mapset_msc.c:201
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 =======
 #: ../lib/gis/mapset_msc.c:201
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 =======
+>>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+>>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+#: ../lib/gis/mapset_msc.c:201
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
 #, c-format
 msgid "Unable to access mapset element %s (%s): %s"
@@ -5289,16 +5708,22 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/cmprzlib.c:140
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -5907,8 +6332,14 @@ msgstr ""
 #: ../lib/gis/cmprzlib.c:142
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -5924,12 +6355,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/cmprzlib.c:204
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/cmprzlib.c:199
 =======
 #: ../lib/gis/cmprzlib.c:204
@@ -5938,6 +6372,9 @@ msgstr ""
 #: ../lib/gis/cmprzlib.c:204
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -5949,6 +6386,7 @@ msgstr ""
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
@@ -5958,6 +6396,10 @@ msgstr ""
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 =======
+>>>>>>> osgeo-main
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
 #: ../lib/gis/make_mapset.c:66
 #, c-format
@@ -6264,8 +6706,14 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -6286,11 +6734,14 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/make_mapset.c:67
 #, c-format
 msgid "Location <%s> doesn't exist"
@@ -6633,8 +7084,8 @@ msgstr ""
 #: ../lib/raster/open.c:192
 #, c-format
 msgid ""
-"Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@"
-"%s> which does not exist"
+"Unable to open raster map <%s@%s> since it is a reclass of raster map "
+"<%s@%s> which does not exist"
 msgstr ""
 
 #: ../lib/raster/open.c:197
@@ -6896,6 +7347,9 @@ msgstr ""
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -10961,8 +11415,14 @@ msgstr ""
 #: ../lib/vector/Vlib/color_write.c:71 ../lib/raster/color_write.c:81
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -10978,12 +11438,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/vector/Vlib/color_write.c:91 ../lib/raster/color_write.c:96
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/raster/color_write.c:96 ../lib/vector/Vlib/color_write.c:91
 =======
 #: ../lib/vector/Vlib/color_write.c:91 ../lib/raster/color_write.c:96
@@ -10992,6 +11455,9 @@ msgstr ""
 #: ../lib/vector/Vlib/color_write.c:91 ../lib/raster/color_write.c:96
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -11001,11 +11467,14 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/raster/quant_rw.c:88
 #, c-format
 msgid "Unable to read fp range for raster map <%s>"
@@ -11243,28 +11712,28 @@ msgstr ""
 msgid "WARNING"
 msgstr ""
 
-#: ../lib/init/grass.py:210 ../lib/init/grass.py:2671
+#: ../lib/init/grass.py:210 ../lib/init/grass.py:2687
 msgid "Exiting..."
 msgstr ""
 
-#: ../lib/init/grass.py:363
+#: ../lib/init/grass.py:365
 msgid "Usage"
 msgstr ""
 
-#: ../lib/init/grass.py:365
+#: ../lib/init/grass.py:367
 msgid "print this help message"
 msgstr ""
 
-#: ../lib/init/grass.py:366
+#: ../lib/init/grass.py:368
 msgid "show version information and exit"
 msgstr ""
 
-#: ../lib/init/grass.py:367
-msgid "create given database, location or mapset if it doesn't exist"
+#: ../lib/init/grass.py:369
+msgid "create given database, project or mapset if it doesn't exist"
 msgstr ""
 
-#: ../lib/init/grass.py:369
-msgid "exit after creation of location or mapset. Only with -c flag"
+#: ../lib/init/grass.py:370
+msgid "exit after creation of project or mapset. Only with -c flag"
 msgstr ""
 
 #: ../lib/init/grass.py:372
@@ -11298,143 +11767,151 @@ msgid ""
 "version"
 msgstr ""
 
-#: ../lib/init/grass.py:386
+#: ../lib/init/grass.py:387
 msgid "initial GRASS database directory"
 msgstr ""
 
-#: ../lib/init/grass.py:387
-msgid "directory containing Locations"
-msgstr ""
-
 #: ../lib/init/grass.py:388
-msgid "initial GRASS Location"
+msgid "directory containing GRASS projects"
 msgstr ""
 
-#: ../lib/init/grass.py:390
+#: ../lib/init/grass.py:389
+msgid "initial GRASS project (location)"
+msgstr ""
+
+#: ../lib/init/grass.py:391
 msgid ""
-"directory containing Mapsets with one common coordinate system (projection)"
-msgstr ""
-
-#: ../lib/init/grass.py:393
-msgid "initial GRASS Mapset"
+"directory containing mapsets with one common coordinate reference system"
 msgstr ""
 
 #: ../lib/init/grass.py:394
-msgid "fully qualified initial Mapset directory"
+msgid "initial GRASS mapset"
 msgstr ""
 
 #: ../lib/init/grass.py:395
-msgid "Environment variables relevant for startup"
+msgid "fully qualified initial mapset directory"
 msgstr ""
 
 #: ../lib/init/grass.py:396
-msgid "select GUI (text, gui, gtext)"
+msgid "Environment variables relevant for startup"
 msgstr ""
 
 #: ../lib/init/grass.py:397
+msgid "select GUI (text, gui, gtext)"
+msgstr ""
+
+#: ../lib/init/grass.py:398
 msgid "set html web browser for help pages"
 msgstr ""
 
-#: ../lib/init/grass.py:399
+#: ../lib/init/grass.py:400
 msgid "set additional path(s) to local GRASS modules or user scripts"
 msgstr ""
 
-#: ../lib/init/grass.py:402
+#: ../lib/init/grass.py:403
 msgid "set additional GISBASE for locally installed GRASS Addons"
 msgstr ""
 
-#: ../lib/init/grass.py:404
+#: ../lib/init/grass.py:405
 msgid "set Python interpreter name to override 'python'"
 msgstr ""
 
-#: ../lib/init/grass.py:405
+#: ../lib/init/grass.py:406
 msgid "execute GRASS module or script"
 msgstr ""
 
-#: ../lib/init/grass.py:406
+#: ../lib/init/grass.py:407
 msgid "provided executable will be executed in GRASS session"
 msgstr ""
 
-#: ../lib/init/grass.py:407
+#: ../lib/init/grass.py:408
 msgid "GRASS module, script or any other executable"
 msgstr ""
 
-#: ../lib/init/grass.py:408
+#: ../lib/init/grass.py:409
 msgid "parameters of the executable"
 msgstr ""
 
-#: ../lib/init/grass.py:409
+#: ../lib/init/grass.py:410
 msgid "standard flags"
 msgstr ""
 
-#: ../lib/init/grass.py:410
-msgid "create temporary location (use with the --exec flag)"
+#: ../lib/init/grass.py:411 ../lib/init/grass.py:2313
+msgid "deprecated, use --tmp-project instead"
 msgstr ""
 
 #: ../lib/init/grass.py:412
+msgid "location was renamed to project"
+msgstr ""
+
+#: ../lib/init/grass.py:413
+msgid "create temporary project (use with the --exec flag)"
+msgstr ""
+
+#: ../lib/init/grass.py:415
 msgid "created in a temporary directory and deleted at exit"
 msgstr ""
 
-#: ../lib/init/grass.py:414
+#: ../lib/init/grass.py:417
 msgid "create temporary mapset (use with the --exec flag)"
 msgstr ""
 
-#: ../lib/init/grass.py:416
-msgid "created in the specified location and deleted at exit"
+#: ../lib/init/grass.py:418
+msgid "created in the specified project and deleted at exit"
 msgstr ""
 
-#: ../lib/init/grass.py:442
+#: ../lib/init/grass.py:443
 msgid "The APPDATA variable is not set, ask your operating system support"
 msgstr ""
 
-#: ../lib/init/grass.py:449
+#: ../lib/init/grass.py:450
 msgid ""
 "The APPDATA variable points to directory which does not exist, ask your "
 "operating system support"
 msgstr ""
 
-#: ../lib/init/grass.py:464
+#: ../lib/init/grass.py:465
 #, python-format
 msgid "Failed to create configuration directory '%s' with error: %s"
 msgstr ""
 
-#: ../lib/init/grass.py:506
+#: ../lib/init/grass.py:507
 #, python-brace-format
 msgid "Unable to create temporary directory <{tmpdir_name}>! Exiting."
 msgstr ""
 
-#: ../lib/init/grass.py:566
+#: ../lib/init/grass.py:567
 #, python-brace-format
 msgid "Invalid line in RC file ({file}): '{line}' ({error})\n"
 msgstr ""
 
-#: ../lib/init/grass.py:573
+#: ../lib/init/grass.py:574
 #, python-brace-format
 msgid "Empty RC file ({file})"
 msgstr ""
 
-#: ../lib/init/grass.py:668
+#: ../lib/init/grass.py:669
 #, python-format
 msgid "GUI <%s> not supported in this version"
 msgstr ""
 
-#: ../lib/init/grass.py:897
+#: ../lib/init/grass.py:898
 msgid ""
 "The python command does not work as expected.\n"
 "Please check your installation or set the GRASS_PYTHON environment variable."
 msgstr ""
 
-#: ../lib/init/grass.py:902
+#: ../lib/init/grass.py:903
 msgid "GRASS GUI not found. Please check your installation."
 msgstr ""
 
-#: ../lib/init/grass.py:904
+#: ../lib/init/grass.py:905
 msgid ""
 "{}\n"
 "Switching to text based interface mode."
 msgstr ""
 
-#: ../lib/init/grass.py:913
+#: ../lib/init/grass.py:914
 msgid ""
 "It appears that the X Windows system is not active.\n"
 "A graphical based user interface is not supported.\n"
@@ -11442,87 +11919,85 @@ msgid ""
 "Switching to text based interface mode."
 msgstr ""
 
-#: ../lib/init/grass.py:988
+#: ../lib/init/grass.py:989
 #, python-brace-format
 msgid ""
-"Unable to create new location because the location <{location}> already "
-"exists."
+"Unable to create new project because the project <{location}> already exists."
 msgstr ""
 
-#: ../lib/init/grass.py:994
+#: ../lib/init/grass.py:995
 #, python-brace-format
-msgid "Unable to create new location <{location}> because <{path}> is a file."
+msgid "Unable to create new project <{location}> because <{path}> is a file."
 msgstr ""
 
-#: ../lib/init/grass.py:998
+#: ../lib/init/grass.py:999
 #, python-brace-format
 msgid ""
-"Unable to create new location <{location}> because the directory <{path}> "
+"Unable to create new project <{location}> because the directory <{path}> "
 "already exists."
 msgstr ""
 
-#: ../lib/init/grass.py:1004
+#: ../lib/init/grass.py:1005
 #, python-brace-format
 msgid ""
-"Unable to create new location in the directory <{path}> for an unknown "
-"reason."
+"Unable to create new project in the directory <{path}> for an unknown reason."
 msgstr ""
 
-#: ../lib/init/grass.py:1088
+#: ../lib/init/grass.py:1089
 msgid ""
 "Mapset <{}> already exists. Unable to create a new temporary mapset of that "
 "name."
 msgstr ""
 
-#: ../lib/init/grass.py:1093
+#: ../lib/init/grass.py:1094
 msgid "Mapset <{}> already exists."
 msgstr ""
 
-#: ../lib/init/grass.py:1101
+#: ../lib/init/grass.py:1102
 msgid "A new mapset can be created using '-c' flag."
 msgstr ""
 
-#: ../lib/init/grass.py:1103
+#: ../lib/init/grass.py:1104
 msgid "Maybe you meant a different directory."
 msgstr ""
 
-#: ../lib/init/grass.py:1132
-msgid "Provide CRS to create a location"
+#: ../lib/init/grass.py:1133
+msgid "Provide CRS to create a project"
 msgstr ""
 
-#: ../lib/init/grass.py:1136
-msgid "Creating new GRASS GIS location <{}>..."
+#: ../lib/init/grass.py:1137
+msgid "Creating new GRASS GIS project <{}>..."
 msgstr ""
 
-#: ../lib/init/grass.py:1149
+#: ../lib/init/grass.py:1150
 #, python-brace-format
 msgid "Unable to create new mapset <{mapset}> because <{path}> is a file."
 msgstr ""
 
-#: ../lib/init/grass.py:1158
+#: ../lib/init/grass.py:1159
 msgid ""
 "The mapset <{}> is missing the WIND file (computational region). It will be "
 "fixed now. Note that this warning may become an error in future versions."
 msgstr ""
 
-#: ../lib/init/grass.py:1168
+#: ../lib/init/grass.py:1169
 #, python-brace-format
 msgid ""
 "No CRS is needed for creating mapset <{mapset}>, but <{geofile}> was "
-"provided as CRS. Did you mean to create a new location?"
+"provided as CRS. Did you mean to create a new project?"
 msgstr ""
 
-#: ../lib/init/grass.py:1175
+#: ../lib/init/grass.py:1176
 msgid "Creating new GRASS GIS mapset <{}>..."
 msgstr ""
 
-#: ../lib/init/grass.py:1206
+#: ../lib/init/grass.py:1207
 msgid ""
-"GRASS GIS database directory, location and mapset not set properly. Use GUI "
+"GRASS GIS database directory, project and mapset not set properly. Use GUI "
 "or command line to set them."
 msgstr ""
 
-#: ../lib/init/grass.py:1266
+#: ../lib/init/grass.py:1267
 #, python-brace-format
 msgid ""
 "Error reading data path information from g.gisenv.\n"
@@ -11533,22 +12008,22 @@ msgid ""
 "Check the <{file}> file."
 msgstr ""
 
-#: ../lib/init/grass.py:1566
+#: ../lib/init/grass.py:1569
 #, python-format
 msgid "Path '%s' doesn't exist"
 msgstr ""
 
-#: ../lib/init/grass.py:1568
+#: ../lib/init/grass.py:1571
 #, python-format
 msgid "Path '%s' not accessible."
 msgstr ""
 
-#: ../lib/init/grass.py:1575
+#: ../lib/init/grass.py:1578
 #, python-format
 msgid "You are not the owner of '%s'."
 msgstr ""
 
-#: ../lib/init/grass.py:1585
+#: ../lib/init/grass.py:1588
 #, python-format
 msgid ""
 "%(user)s is currently running GRASS in selected mapset (file %(file)s "
@@ -11558,214 +12033,218 @@ msgid ""
 "sure..."
 msgstr ""
 
-#: ../lib/init/grass.py:1596
+#: ../lib/init/grass.py:1599
 #, python-format
 msgid ""
 "%(user)s is currently running GRASS in selected mapset (file %(file)s "
 "found). Forcing to launch GRASS..."
 msgstr ""
 
-#: ../lib/init/grass.py:1603
+#: ../lib/init/grass.py:1606
 #, python-format
 msgid ""
 "Unable to properly access '%s'.\n"
 "Please notify system personnel."
 msgstr ""
 
-#: ../lib/init/grass.py:1632
+#: ../lib/init/grass.py:1635
 msgid "Building user fontcap..."
 msgstr ""
 
-#: ../lib/init/grass.py:1701
+#: ../lib/init/grass.py:1704
 msgid "The SHELL variable is not set"
 msgstr ""
 
-#: ../lib/init/grass.py:1718
+#: ../lib/init/grass.py:1721
 #, python-brace-format
 msgid "Unsupported shell <{sh}>: {env_file}"
 msgstr ""
 
-#: ../lib/init/grass.py:1738
+#: ../lib/init/grass.py:1741
 #, python-format
 msgid "Executing <%s> ..."
 msgstr ""
 
-#: ../lib/init/grass.py:1762
+#: ../lib/init/grass.py:1765
 #, python-brace-format
 msgid ""
 "Execution of <{cmd}> failed:\n"
 "{error}"
 msgstr ""
 
-#: ../lib/init/grass.py:1775
+#: ../lib/init/grass.py:1778
 #, python-format
 msgid "Execution of <%s> finished."
 msgstr ""
 
-#: ../lib/init/grass.py:1819
+#: ../lib/init/grass.py:1822
 #, python-brace-format
 msgid "Unable to close GUI. {0}"
 msgstr ""
 
-#: ../lib/init/grass.py:1838
+#: ../lib/init/grass.py:1841
 #, python-format
 msgid "Welcome to GRASS GIS %s"
 msgstr ""
 
-#: ../lib/init/grass.py:1865
+#: ../lib/init/grass.py:1868
 msgid "GRASS GIS homepage:"
 msgstr ""
 
 #. GTC Running through: SHELL NAME
-#: ../lib/init/grass.py:1867
+#: ../lib/init/grass.py:1870
 msgid "This version running through:"
 msgstr ""
 
-#: ../lib/init/grass.py:1870
+#: ../lib/init/grass.py:1873
 msgid "Help is available with the command:"
 msgstr ""
 
-#: ../lib/init/grass.py:1871
+#: ../lib/init/grass.py:1874
 msgid "See the licence terms with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1872
+#: ../lib/init/grass.py:1875
 msgid "See citation options with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1877
+#: ../lib/init/grass.py:1880
 msgid "If required, restart the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1879
+#: ../lib/init/grass.py:1882
 msgid "Start the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1881
+#: ../lib/init/grass.py:1884
 msgid "When ready to quit enter:"
 msgstr ""
 
-#: ../lib/init/grass.py:2071
+#: ../lib/init/grass.py:2074
 msgid "2D and 3D raster MASKs present"
 msgstr ""
 
-#: ../lib/init/grass.py:2072
+#: ../lib/init/grass.py:2075
 msgid "Raster MASK present"
 msgstr ""
 
-#: ../lib/init/grass.py:2073
+#: ../lib/init/grass.py:2076
 msgid "3D raster MASK present"
 msgstr ""
 
-#: ../lib/init/grass.py:2118
+#: ../lib/init/grass.py:2121
 msgid "Done."
 msgstr ""
 
-#: ../lib/init/grass.py:2120
+#: ../lib/init/grass.py:2123
 msgid "Goodbye from GRASS GIS"
 msgstr ""
 
-#: ../lib/init/grass.py:2181
+#: ../lib/init/grass.py:2184
 msgid "Please install the GRASS GIS development package"
 msgstr ""
 
-#: ../lib/init/grass.py:2230
+#: ../lib/init/grass.py:2233
 #, python-format
 msgid "Parameter <%s> not supported"
 msgstr ""
 
-#: ../lib/init/grass.py:2279
+#: ../lib/init/grass.py:2282
 #, python-format
 msgid "use mapset %(metavar)s"
 msgstr ""
 
-#: ../lib/init/grass.py:2285
+#: ../lib/init/grass.py:2288
 #, python-format
-msgid "use temporary mapset in location %(metavar)s"
-msgstr ""
-
-#: ../lib/init/grass.py:2293
-msgid "path to mapset (or location if creating one)"
+msgid "use temporary mapset in project %(metavar)s"
 msgstr ""
 
 #: ../lib/init/grass.py:2296
+msgid "path to mapset (or project if creating one)"
+msgstr ""
+
+#: ../lib/init/grass.py:2299
 msgid "use temporary mapset"
 msgstr ""
 
-#: ../lib/init/grass.py:2303
+#: ../lib/init/grass.py:2306
 #, python-format
-msgid "use temporary location with %(metavar)s (EPSG, georeferenced file, ...)"
+msgid "use temporary project with %(metavar)s (EPSG, georeferenced file, ...)"
 msgstr ""
 
-#: ../lib/init/grass.py:2310
+#: ../lib/init/grass.py:2319
 msgid "remove lock if present"
 msgstr ""
 
-#: ../lib/init/grass.py:2359
+#: ../lib/init/grass.py:2331
+msgid "Option --tmp-location is deprecated, use --tmp-project instead\n"
+msgstr ""
+
+#: ../lib/init/grass.py:2375
 msgid "execute module or script (followed by executable with arguments)"
 msgstr ""
 
-#: ../lib/init/grass.py:2415
+#: ../lib/init/grass.py:2431
 msgid "Flag -e requires also flag -c"
 msgstr ""
 
-#: ../lib/init/grass.py:2417
-msgid "Flag -c requires name of location or mapset"
+#: ../lib/init/grass.py:2433
+msgid "Flag -c requires name of project or mapset"
 msgstr ""
 
-#: ../lib/init/grass.py:2420
-msgid "Either --tmp-location or --tmp-mapset can be used, not both"
+#: ../lib/init/grass.py:2436
+msgid "Either --tmp-project or --tmp-mapset can be used, not both"
 msgstr ""
 
-#: ../lib/init/grass.py:2427
+#: ../lib/init/grass.py:2443
 msgid ""
-"Coordinate reference system argument (e.g. EPSG) is needed for --tmp-location"
+"Coordinate reference system argument (e.g. EPSG) is needed for --tmp-project"
 msgstr ""
 
-#: ../lib/init/grass.py:2434
+#: ../lib/init/grass.py:2450
 msgid ""
-"Only one argument (e.g. EPSG) is needed for --tmp-location, mapset name <{}> "
+"Only one argument (e.g. EPSG) is needed for --tmp-project, mapset name <{}> "
 "provided"
 msgstr ""
 
-#: ../lib/init/grass.py:2528
+#: ../lib/init/grass.py:2544
 #, python-brace-format
 msgid ""
 "Unable to start GRASS GIS. You have the choice to:\n"
 " - Launch the graphical user interface with the '--gui' switch\n"
 "     {cmd_name} --gui\n"
-" - Launch with path to the location/mapset as an argument\n"
-"     {cmd_name} /path/to/location/mapset`\n"
-" - Create a location with '-c' and launch in its PERMANENT mapset\n"
-"     {cmd_name} -c EPSG:number /path/to/location\n"
-"     {cmd_name} -c geofile /path/to/location\n"
+" - Launch with path to the project/mapset as an argument\n"
+"     {cmd_name} /path/to/project/mapset`\n"
+" - Create a project with '-c' and launch in its PERMANENT mapset\n"
+"     {cmd_name} -c EPSG:number /path/to/project\n"
+"     {cmd_name} -c geofile /path/to/project\n"
 " - Create manually the GISRC file ({gisrcrc})\n"
 " - Use '--help' for further options\n"
 "     {cmd_name} --help\n"
 "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 msgstr ""
 
-#: ../lib/init/grass.py:2549
+#: ../lib/init/grass.py:2565
 msgid "Starting GRASS GIS..."
 msgstr ""
 
-#: ../lib/init/grass.py:2598
+#: ../lib/init/grass.py:2614
 msgid ""
 "Failed to start GRASS GIS, grassdata directory cannot be found or created."
 msgstr ""
 
-#: ../lib/init/grass.py:2605
+#: ../lib/init/grass.py:2621
 msgid ""
-"Failed to start GRASS GIS, no default location to copy in the installation "
-"or copying failed."
+"Failed to start GRASS GIS, no default project to copy in the installation or "
+"copying failed."
 msgstr ""
 
-#: ../lib/init/grass.py:2708
+#: ../lib/init/grass.py:2724
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr ""
 
-#: ../lib/init/grass.py:2746
+#: ../lib/init/grass.py:2762
 #, python-format
 msgid "Failed to start shell '%s'"
 msgstr ""
@@ -11825,6 +12304,9 @@ msgstr ""
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -12368,8 +12850,14 @@ msgstr ""
 #: ../lib/cairodriver/write_xid.c:14 ../lib/pngdriver/read_png.c:71
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -12385,12 +12873,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/cairodriver/write_xid.c:19
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/pngdriver/read_png.c:80
 msgid "Input PNG file is not 8-bit"
 msgstr ""
@@ -12448,7 +12939,7 @@ msgid "Unable to position file"
 msgstr ""
 
 #: ../lib/raster3d/close.c:101 ../lib/raster3d/close.c:108
-#: ../lib/raster3d/close.c:190 ../lib/raster3d/header.c:208
+#: ../lib/raster3d/close.c:190 ../lib/raster3d/header.c:282
 #, c-format
 msgid "Unable to write header for 3D raster map <%s>"
 msgstr ""
@@ -12469,7 +12960,6 @@ msgid "Error in cache"
 msgstr ""
 
 #: ../lib/raster3d/maskfn.c:76
-#, c-format
 msgid "Adding rule: %lf - %lf"
 msgstr ""
 
@@ -12665,6 +13155,9 @@ msgstr ""
 #: ../lib/cairodriver/write_xid.c:19
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -12676,6 +13169,7 @@ msgstr ""
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
@@ -12685,6 +13179,10 @@ msgstr ""
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 =======
+>>>>>>> osgeo-main
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
 #: ../lib/cairodriver/graph.c:67
 msgid "Unable to open display"
@@ -12724,8 +13222,14 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -12752,11 +13256,14 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/cairodriver/read_bmp.c:89 ../lib/cairodriver/read_ppm.c:28
 #, c-format
 msgid "Cairo: unable to open input file <%s>"
@@ -12851,6 +13358,9 @@ msgid "Cairo: unable to open mask file <%s>"
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -12862,8 +13372,14 @@ msgstr ""
 msgid "Cairo_Bitmap: Failed to create source"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -12882,11 +13398,14 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/cairodriver/text.c:60
 msgid "Some characters could not be converted to UTF-8"
 msgstr ""
@@ -13270,6 +13789,9 @@ msgid ""
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -13285,8 +13807,14 @@ msgstr ""
 msgid "db_convert_value_into_string(): unrecongized sqltype-type"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -13312,11 +13840,14 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/db/dbmi_base/error.c:135
 msgid "dbmi: Out of Memory"
 msgstr ""
@@ -13326,6 +13857,9 @@ msgstr ""
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -13336,8 +13870,14 @@ msgstr ""
 #: ../lib/db/dbmi_base/error.c:149
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -13353,12 +13893,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/db/dbmi_base/error.c:163
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/db/dbmi_base/error.c:162
 =======
 #: ../lib/db/dbmi_base/error.c:163
@@ -13367,6 +13910,9 @@ msgstr ""
 #: ../lib/db/dbmi_base/error.c:163
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -13376,11 +13922,14 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/db/dbmi_base/xdrvalue.c:82
 msgid "send data: invalid C-type"
 msgstr ""
@@ -13398,6 +13947,9 @@ msgstr ""
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -13407,11 +13959,14 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/db/dbmi_base/index.c:180
 msgid "db_set_index_column_name(): invalid column number"
 msgstr ""
@@ -13446,6 +14001,9 @@ msgstr ""
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -13486,8 +14044,14 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -13529,16 +14093,22 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/db/dbmi_client/table.c:47 ../lib/db/dbmi_client/delete_tab.c:41
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -13586,8 +14156,14 @@ msgstr ""
 #: ../lib/db/dbmi_client/delete_tab.c:40 ../lib/db/dbmi_client/table.c:46
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -13603,12 +14179,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/db/dbmi_client/delete_tab.c:53
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/db/dbmi_client/table.c:111 ../lib/db/dbmi_client/copy_tab.c:246
 #: ../lib/db/dbmi_client/copy_tab.c:320 ../lib/vector/Vlib/write_ogr.c:209
 #, c-format
@@ -13695,6 +14274,9 @@ msgstr ""
 #: ../lib/db/dbmi_client/delete_tab.c:53
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -13704,16 +14286,22 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/psdriver/graph_set.c:195
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -14022,8 +14610,14 @@ msgstr ""
 #: ../lib/psdriver/graph_set.c:198
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -14039,16 +14633,22 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/psdriver/graph_set.c:214
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -14063,8 +14663,14 @@ msgstr ""
 #: ../lib/psdriver/graph_set.c:217
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -14080,12 +14686,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/psdriver/graph_set.c:218
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/psdriver/graph_set.c:215
 =======
 #: ../lib/psdriver/graph_set.c:218
@@ -14094,6 +14703,9 @@ msgstr ""
 #: ../lib/psdriver/graph_set.c:218
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -14103,11 +14715,14 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/htmldriver/graph_set.c:95
 #, c-format
 msgid "html: collecting to file '%s'"
@@ -14140,6 +14755,9 @@ msgid "Unable to read vector map <%s>"
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -14335,8 +14953,14 @@ msgstr ""
 msgid "Maximum number of datasets exceeded"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -14365,12 +14989,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/ogsf/gp3.c:288
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/ogsf/gp3.c:236 ../lib/ogsf/gv3.c:384
 #, c-format
 msgid "No color rule defined for category %d"
@@ -14389,6 +15016,9 @@ msgstr ""
 #: ../lib/ogsf/gp3.c:288
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -14400,11 +15030,14 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/ogsf/gsd_img_ppm.c:50 ../lib/ogsf/gsd_img_tif.c:63
 msgid "Unable to get image of current GL screen"
 msgstr ""
@@ -14436,6 +15069,9 @@ msgstr ""
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -14445,12 +15081,15 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/ogsf/gvl_file.c:442
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/ogsf/gvl_file.c:441
 =======
 #: ../lib/ogsf/gvl_file.c:442
@@ -14459,6 +15098,9 @@ msgstr ""
 #: ../lib/ogsf/gvl_file.c:442
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -14468,11 +15110,14 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/ogsf/gsd_surf.c:1737
 msgid "Cut-plane points mis-match between surfaces. Check resolution(s)."
 msgstr ""
@@ -15031,8 +15676,8 @@ msgstr ""
 #: ../lib/vector/Vlib/net_build.c:359
 #, c-format
 msgid ""
-"There exists more than one point of node <%d> with unique category field  <"
-"%d>.\n"
+"There exists more than one point of node <%d> with unique category field  "
+"<%d>.\n"
 "The unique categories layer is not valid therefore you will probably get "
 "incorrect results."
 msgstr ""
@@ -15733,7 +16378,7 @@ msgstr ""
 msgid "OGR layer not defined"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_ogr.c:77 ../lib/vector/Vlib/field.c:746
+#: ../lib/vector/Vlib/open_ogr.c:77 ../lib/vector/Vlib/field.c:765
 #, c-format
 msgid "Unable to open OGR data source '%s'"
 msgstr ""
@@ -16690,36 +17335,36 @@ msgstr ""
 msgid "Requested dblink %d, maximum link number %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/field.c:670 ../lib/vector/Vlib/field.c:678
+#: ../lib/vector/Vlib/field.c:689 ../lib/vector/Vlib/field.c:697
 #, c-format
 msgid "Error in rule on row %d in <%s>"
 msgstr ""
 
-#: ../lib/vector/Vlib/field.c:765
+#: ../lib/vector/Vlib/field.c:784
 #, c-format
 msgid "Unable to open OGR layer <%s>"
 msgstr ""
 
-#: ../lib/vector/Vlib/field.c:793
+#: ../lib/vector/Vlib/field.c:812
 #, c-format
 msgid ""
 "Feature table <%s> has no primary key defined. Unable to define DB links."
 msgstr ""
 
-#: ../lib/vector/Vlib/field.c:812
+#: ../lib/vector/Vlib/field.c:831
 msgid "GRASS not compiled with PostgreSQL support"
 msgstr ""
 
-#: ../lib/vector/Vlib/field.c:845
+#: ../lib/vector/Vlib/field.c:864
 msgid "Unknown vector map format"
 msgstr ""
 
-#: ../lib/vector/Vlib/field.c:879
+#: ../lib/vector/Vlib/field.c:898
 #, c-format
 msgid "Unable to create database definition file for vector map <%s>"
 msgstr ""
 
-#: ../lib/vector/Vlib/field.c:976
+#: ../lib/vector/Vlib/field.c:995
 msgid "Bug: attempt to update map which is not in current mapset"
 msgstr ""
 
@@ -17241,30 +17886,30 @@ msgid ""
 msgstr ""
 
 #: ../lib/vector/diglib/portable.c:210 ../lib/vector/diglib/portable.c:243
-#: ../lib/vector/diglib/portable.c:684 ../lib/vector/diglib/plus_struct.c:576
+#: ../lib/vector/diglib/portable.c:684 ../lib/vector/diglib/plus_struct.c:614
 msgid "Vector exceeds supported file size limit"
 msgstr ""
 
-#: ../lib/vector/diglib/spindex.c:449
+#: ../lib/vector/diglib/spindex.c:457
 #, c-format
 msgid "Unable to delete node %d from spatial index"
 msgstr ""
 
-#: ../lib/vector/diglib/spindex.c:492
+#: ../lib/vector/diglib/spindex.c:500
 #, c-format
 msgid "Unable to delete line %d from spatial index"
 msgstr ""
 
-#: ../lib/vector/diglib/spindex.c:528
+#: ../lib/vector/diglib/spindex.c:536
 msgid "Attempt to delete sidx for dead area"
 msgstr ""
 
-#: ../lib/vector/diglib/spindex.c:545
+#: ../lib/vector/diglib/spindex.c:553
 #, c-format
 msgid "Unable to delete area %d from spatial index"
 msgstr ""
 
-#: ../lib/vector/diglib/spindex.c:594
+#: ../lib/vector/diglib/spindex.c:602
 #, c-format
 msgid "Unable to delete isle %d from spatial index"
 msgstr ""
@@ -17281,21 +17926,21 @@ msgstr ""
 msgid "Vector memory mode not supported, using 'AUTO'"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_struct.c:529
+#: ../lib/vector/diglib/plus_struct.c:567
 #, c-format
 msgid ""
 "This version of GRASS (%d.%d) is too old to read this topology format. Try "
 "to rebuild topology or upgrade GRASS to at least version %d."
 msgstr ""
 
-#: ../lib/vector/diglib/plus_struct.c:538
+#: ../lib/vector/diglib/plus_struct.c:576
 #, c-format
 msgid ""
 "Your GRASS version does not fully support topology format %d.%d of the "
 "vector. Consider to rebuild topology or upgrade GRASS."
 msgstr ""
 
-#: ../lib/vector/diglib/plus_struct.c:551
+#: ../lib/vector/diglib/plus_struct.c:589
 #, c-format
 msgid ""
 "Old topology format version %d.%d is not supported by this release. Try to "
@@ -17385,44 +18030,44 @@ msgstr ""
 msgid "Format definition is not correct: %s"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:221 ../lib/vector/diglib/plus_area.c:735
+#: ../lib/vector/diglib/plus_area.c:223 ../lib/vector/diglib/plus_area.c:741
 #, c-format
 msgid "Line %d already has area/isle %d to left"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:231 ../lib/vector/diglib/plus_area.c:743
+#: ../lib/vector/diglib/plus_area.c:234 ../lib/vector/diglib/plus_area.c:750
 #, c-format
 msgid "Line %d already has area/isle %d to right"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:285
+#: ../lib/vector/diglib/plus_area.c:289
 msgid "Isle already registered in area"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:319
+#: ../lib/vector/diglib/plus_area.c:323
 msgid "Attempt to delete isle from dead area"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:328
+#: ../lib/vector/diglib/plus_area.c:332
 #, c-format
 msgid "Attempt to delete not registered isle %d from area %d"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:375
+#: ../lib/vector/diglib/plus_area.c:379
 msgid "Attempt to delete dead area"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:415
+#: ../lib/vector/diglib/plus_area.c:419
 #, c-format
 msgid "Dead centroid %d registered for area (bug in the vector library)"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:439
+#: ../lib/vector/diglib/plus_area.c:443
 #, c-format
 msgid "Attempt to delete area %d info from dead isle %d"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:801
+#: ../lib/vector/diglib/plus_area.c:809
 #, c-format
 msgid "Attempt to delete isle %d info from dead area %d"
 msgstr ""
@@ -17466,6 +18111,9 @@ msgid "[%s]: No such color"
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -18588,8 +19236,14 @@ msgstr ""
 msgid "No ellipsoid info given in file"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

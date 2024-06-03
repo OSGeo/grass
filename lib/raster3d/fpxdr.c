@@ -14,6 +14,7 @@ int Rast3d_is_xdr_null_num(const void *num, int isFloat)
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     static const char null_bytes[8] = {0xFF, 0xFF, 0xFF, 0xFF,
                                        0xFF, 0xFF, 0xFF, 0xFF};
 =======
@@ -21,6 +22,8 @@ int Rast3d_is_xdr_null_num(const void *num, int isFloat)
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     static const char null_bytes[8] = {(char)0xFF, (char)0xFF, (char)0xFF,
                                        (char)0xFF, (char)0xFF, (char)0xFF,
                                        (char)0xFF, (char)0xFF};
@@ -33,6 +36,9 @@ int Rast3d_is_xdr_null_num(const void *num, int isFloat)
                                        0xFF, 0xFF, 0xFF, 0xFF};
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -60,6 +66,7 @@ void Rast3d_set_xdr_null_num(void *num, int isFloat)
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     static const char null_bytes[8] = {0xFF, 0xFF, 0xFF, 0xFF,
                                        0xFF, 0xFF, 0xFF, 0xFF};
 =======
@@ -67,6 +74,8 @@ void Rast3d_set_xdr_null_num(void *num, int isFloat)
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     static const char null_bytes[8] = {(char)0xFF, (char)0xFF, (char)0xFF,
                                        (char)0xFF, (char)0xFF, (char)0xFF,
                                        (char)0xFF, (char)0xFF};
@@ -79,6 +88,9 @@ void Rast3d_set_xdr_null_num(void *num, int isFloat)
                                        0xFF, 0xFF, 0xFF, 0xFF};
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -166,16 +178,23 @@ static int xdr_put(const void *src)
     if (isFloat) {
 <<<<<<< HEAD
 <<<<<<< HEAD
-        if (xdr_off + RASTER3D_XDR_FLOAT_LENGTH > (size_t)xdrLength)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         if (xdr_off + RASTER3D_XDR_FLOAT_LENGTH > (size_t)xdrLength)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (xdr_off + RASTER3D_XDR_FLOAT_LENGTH > (size_t)xdrLength)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (xdr_off + RASTER3D_XDR_FLOAT_LENGTH > (size_t)xdrLength)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         if (xdr_off + RASTER3D_XDR_FLOAT_LENGTH > (size_t)xdrLength)
@@ -196,6 +215,9 @@ static int xdr_put(const void *src)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -206,16 +228,23 @@ static int xdr_put(const void *src)
     else {
 <<<<<<< HEAD
 <<<<<<< HEAD
-        if (xdr_off + RASTER3D_XDR_DOUBLE_LENGTH > (size_t)xdrLength)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         if (xdr_off + RASTER3D_XDR_DOUBLE_LENGTH > (size_t)xdrLength)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (xdr_off + RASTER3D_XDR_DOUBLE_LENGTH > (size_t)xdrLength)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (xdr_off + RASTER3D_XDR_DOUBLE_LENGTH > (size_t)xdrLength)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         if (xdr_off + RASTER3D_XDR_DOUBLE_LENGTH > (size_t)xdrLength)
@@ -236,6 +265,9 @@ static int xdr_put(const void *src)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -316,16 +348,23 @@ static int xdr_get(void *src)
     if (isFloat) {
 <<<<<<< HEAD
 <<<<<<< HEAD
-        if (xdr_off + RASTER3D_XDR_FLOAT_LENGTH > (size_t)xdrLength)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         if (xdr_off + RASTER3D_XDR_FLOAT_LENGTH > (size_t)xdrLength)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (xdr_off + RASTER3D_XDR_FLOAT_LENGTH > (size_t)xdrLength)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (xdr_off + RASTER3D_XDR_FLOAT_LENGTH > (size_t)xdrLength)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         if (xdr_off + RASTER3D_XDR_FLOAT_LENGTH > (size_t)xdrLength)
@@ -346,6 +385,9 @@ static int xdr_get(void *src)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -356,16 +398,23 @@ static int xdr_get(void *src)
     else {
 <<<<<<< HEAD
 <<<<<<< HEAD
-        if (xdr_off + RASTER3D_XDR_DOUBLE_LENGTH > (size_t)xdrLength)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         if (xdr_off + RASTER3D_XDR_DOUBLE_LENGTH > (size_t)xdrLength)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (xdr_off + RASTER3D_XDR_DOUBLE_LENGTH > (size_t)xdrLength)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (xdr_off + RASTER3D_XDR_DOUBLE_LENGTH > (size_t)xdrLength)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         if (xdr_off + RASTER3D_XDR_DOUBLE_LENGTH > (size_t)xdrLength)
@@ -386,6 +435,9 @@ static int xdr_get(void *src)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

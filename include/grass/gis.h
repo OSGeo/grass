@@ -8,6 +8,7 @@
  *              usually included in every Grass program.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * COPYRIGHT:   (C) 2000-2023 by the GRASS Development Team
 =======
 <<<<<<< HEAD
@@ -15,6 +16,9 @@
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -38,6 +42,9 @@
  * COPYRIGHT:   (C) 2000-2023 by the GRASS Development Team
 >>>>>>> 6104ec7096 (i.maxlik: fix crash when classification result is NULL (#2724))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -72,6 +79,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static const char *GRASS_copyright __attribute__((unused)) =
     "GRASS GNU GPL licensed Software";
 =======
@@ -79,6 +87,8 @@ static const char *GRASS_copyright __attribute__((unused)) =
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 /*!
     \def UNUSED
     \brief A macro for an attribute, if attached to a variable,
@@ -111,6 +121,9 @@ static const char *GRASS_copyright __attribute__((unused)) =
     "GRASS GNU GPL licensed Software";
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -142,6 +155,7 @@ static const char *GRASS_copyright __attribute__((unused)) =
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
@@ -151,6 +165,10 @@ static const char *GRASS_copyright __attribute__((unused)) =
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 =======
+>>>>>>> osgeo-main
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
 #if (defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64) || \
     (__APPLE__ && __LP64__)
@@ -192,11 +210,14 @@ static const char *GRASS_copyright __attribute__((unused)) =
 /* Temporal units from the datetime library */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -204,6 +225,9 @@ static const char *GRASS_copyright __attribute__((unused)) =
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -217,10 +241,13 @@ static const char *GRASS_copyright __attribute__((unused)) =
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> 270077e68a (wxGUI/map display: manage wx.StatusBar widget by AUI (#1646))
 #define U_YEARS         DATETIME_YEAR
@@ -238,6 +265,9 @@ static const char *GRASS_copyright __attribute__((unused)) =
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -443,17 +473,23 @@ typedef enum {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -472,10 +508,13 @@ typedef enum {
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
     G_OPT_M_UNITS,              /*!< units */
     G_OPT_M_DATATYPE,           /*!< datatype */
     G_OPT_M_MAPSET,             /*!< mapset */
@@ -514,6 +553,9 @@ typedef enum {
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -539,7 +581,9 @@ typedef enum {
     G_OPT_MAP_TYPE,  /*!< The type of an input map: raster, vect, rast3d */
     G_OPT_T_TYPE,    /*!< The temporal type of a space time dataset */
     G_OPT_T_WHERE,   /*!< A temporal GIS framework SQL WHERE statement */
-    G_OPT_T_SAMPLE   /*!< Temporal sample methods */
+    G_OPT_T_SAMPLE,  /*!< Temporal sample methods */
+
+    G_OPT_F_FORMAT, /*!< set output format to plain text or JSON */
 } STD_OPT;
 
 /*!

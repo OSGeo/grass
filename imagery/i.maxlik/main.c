@@ -103,6 +103,7 @@ int main(int argc, char *argv[])
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (G_unqualified_name(parm.class->answer, G_mapset(), class_name,
                            xmapset) < 0)
 =======
@@ -119,6 +120,12 @@ int main(int argc, char *argv[])
                            xmapset) < 0)
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+    if (G_unqualified_name(parm.class->answer, G_mapset(), class_name,
+                           xmapset) < 0)
+=======
+>>>>>>> osgeo-main
     if (G_unqualified_name(parm.class->answer, G_mapset(), class_name, xmapset) < 0)
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
@@ -130,6 +137,9 @@ int main(int argc, char *argv[])
                            xmapset) < 0)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -156,18 +166,26 @@ int main(int argc, char *argv[])
                  */
 <<<<<<< HEAD
 <<<<<<< HEAD
-                if (Rast_is_c_null_value(&class_cell[col]) == 0)
-                    class_cell[col] = S.sig[class_cell[col] - 1].oclass;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                 if (Rast_is_c_null_value(&class_cell[col]) == 0)
                     class_cell[col] = S.sig[class_cell[col] - 1].oclass;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                if (Rast_is_c_null_value(&class_cell[col]) == 0)
+                    class_cell[col] = S.sig[class_cell[col] - 1].oclass;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                if (Rast_is_c_null_value(&class_cell[col]) == 0)
+                    class_cell[col] = S.sig[class_cell[col] - 1].oclass;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                 if (Rast_is_c_null_value(&class_cell[col]) == 0)
@@ -188,6 +206,9 @@ int main(int argc, char *argv[])
                     class_cell[col] = S.sig[class_cell[col] - 1].oclass;
 >>>>>>> 6104ec7096 (i.maxlik: fix crash when classification result is NULL (#2724))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

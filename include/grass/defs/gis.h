@@ -180,15 +180,21 @@ size_t G_get_num_decimals(const char *);
 char *G_double_to_basename_format(double, size_t, size_t);
 <<<<<<< HEAD
 <<<<<<< HEAD
-char *G_get_basename_separator(void);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 char *G_get_basename_separator(void);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+char *G_get_basename_separator(void);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+char *G_get_basename_separator(void);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 char *G_get_basename_separator(void);
 =======
@@ -208,6 +214,9 @@ char *G_get_basename_separator(void);
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -455,16 +464,23 @@ void G_init_ilist(struct ilist *);
 void G_free_ilist(struct ilist *);
 <<<<<<< HEAD
 <<<<<<< HEAD
-struct ilist *G_new_ilist(void);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 struct ilist *G_new_ilist(void);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+struct ilist *G_new_ilist(void);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+struct ilist *G_new_ilist(void);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 struct ilist *G_new_ilist(void);
@@ -485,6 +501,9 @@ struct ilist *G_new_ilist(void);
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -531,16 +550,23 @@ double G_distance2_point_to_line(double, double, double, double, double,
 void G_list_element(const char *, const char *, const char *,
 <<<<<<< HEAD
 <<<<<<< HEAD
-                    int (*)(const char *, const char *, char *));
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                     int (*)(const char *, const char *, char *));
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    int (*)(const char *, const char *, char *));
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    int (*)(const char *, const char *, char *));
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                     int (*)(const char *, const char *, char *));
@@ -561,6 +587,9 @@ void G_list_element(const char *, const char *, const char *,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -640,6 +669,7 @@ int G_make_mapset_dir_object(const char *, const char *);
 int G_make_mapset_object_group_tmp(const char *);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int G_make_mapset_object_group_basedir(const char *, const char *);
 =======
 <<<<<<< HEAD
@@ -653,6 +683,11 @@ int G_make_mapset_object_group_basedir(const char *, const char *);
 int G_make_mapset_object_group_basedir(const char *, const char *);
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+int G_make_mapset_object_group_basedir(const char *, const char *);
+=======
+>>>>>>> osgeo-main
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
 int G_make_mapset_object_group_basedir(const char *, const char *);
@@ -661,6 +696,9 @@ int G_make_mapset_object_group_basedir(const char *, const char *);
 int G_make_mapset_object_group_basedir(const char *, const char *);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -952,8 +990,14 @@ int G_put_3dview(const char *, const struct G_3dview *,
 int G_put_3dview(const char *, const char *, const struct G_3dview *,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

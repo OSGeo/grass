@@ -1,12 +1,15 @@
 cvs_id,name,email,country,osgeo_id,rfc2_agreed,orcid
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 -,Ivan Shmakov,<ivan theory.asu.ru>,Russia,1gray,yes,-
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 -,Ivan Shmakov,<ivan siamics.net>,Russia,1gray,yes,-
 =======
 -,Ivan Shmakov,<ivan theory.asu.ru>,Russia,1gray,yes,-
@@ -15,6 +18,9 @@ cvs_id,name,email,country,osgeo_id,rfc2_agreed,orcid
 -,Ivan Shmakov,<ivan theory.asu.ru>,Russia,1gray,yes,-
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -25,12 +31,15 @@ cvs_id,name,email,country,osgeo_id,rfc2_agreed,orcid
 -,Marco Pasetti,<marco.pasetti alice.it>,Italy,marcopx,yes,-
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 -,Yann Chemin,<yann.chemin gmail.com>,Philippines,ychemin,yes,0000-0001-9232-5512
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 -,Yann Chemin,<dr.yann.chemin gmail.com>,France,ychemin,yes,0000-0001-9232-5512
 =======
 -,Yann Chemin,<yann.chemin gmail.com>,Philippines,ychemin,yes,0000-0001-9232-5512
@@ -39,6 +48,9 @@ cvs_id,name,email,country,osgeo_id,rfc2_agreed,orcid
 -,Yann Chemin,<yann.chemin gmail.com>,Philippines,ychemin,yes,0000-0001-9232-5512
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -55,12 +67,15 @@ cvs_id,name,email,country,osgeo_id,rfc2_agreed,orcid
 -,Stefan Blumentrath,<stefan.blumentrath nina.no>,Norway,sbl,yes,0000-0001-6675-1331
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 -,Ondřej Pešek,<pesej.ondrek gmail.com>,Czech Republic,pesekon2,yes,-
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 -,Ondřej Pešek,<pesej.ondrek gmail.com>,Czech Republic,pesekon2,yes,0000-0002-2363-8002
 =======
 -,Ondřej Pešek,<pesej.ondrek gmail.com>,Czech Republic,pesekon2,yes,-
@@ -69,6 +84,9 @@ cvs_id,name,email,country,osgeo_id,rfc2_agreed,orcid
 -,Ondřej Pešek,<pesej.ondrek gmail.com>,Czech Republic,pesekon2,yes,-
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

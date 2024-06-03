@@ -85,12 +85,15 @@ static void getParams(char **input, char **output, int *convertNull,
 void convert(char *openFile, RASTER3D_Region *region, int convertNull,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
              double nullValue)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
              double nullValue UNUSED)
 =======
              double nullValue)
@@ -99,6 +102,9 @@ void convert(char *openFile, RASTER3D_Region *region, int convertNull,
              double nullValue)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -158,16 +164,23 @@ void convert(char *openFile, RASTER3D_Region *region, int convertNull,
                         value = data1[cnt++];
 <<<<<<< HEAD
 <<<<<<< HEAD
-                        if (convertNull && IS_MISSING(value))
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                         if (convertNull && IS_MISSING(value))
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                        if (convertNull && IS_MISSING(value))
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                        if (convertNull && IS_MISSING(value))
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                         if (convertNull && IS_MISSING(value))
@@ -188,6 +201,9 @@ void convert(char *openFile, RASTER3D_Region *region, int convertNull,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

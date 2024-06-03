@@ -1,10 +1,13 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 
@@ -14,6 +17,9 @@
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -44,11 +50,14 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 
@@ -58,6 +67,9 @@
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -71,8 +83,12 @@ static int string_list_add_item(struct StringList *string_list, char *item)
         string_list->max_items += SIZE_INCREMENT;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 >>>>>>> osgeo-main
         string_list->items =
@@ -83,10 +99,13 @@ static int string_list_add_item(struct StringList *string_list, char *item)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         string_list->items =
             G_realloc(string_list->items,
                       (size_t)string_list->max_items * sizeof(char *));
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
         string_list->items = G_realloc(string_list->items,
@@ -104,6 +123,9 @@ static int string_list_add_item(struct StringList *string_list, char *item)
                       (size_t)string_list->max_items * sizeof(char *));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -120,6 +142,7 @@ void string_list_from_file(struct StringList *string_list, char *filename)
     string_list->items = NULL;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     FILE *file = fopen(filename, "r"); /* should check the result */
 =======
 <<<<<<< HEAD
@@ -133,6 +156,11 @@ void string_list_from_file(struct StringList *string_list, char *filename)
     FILE *file = fopen(filename, "r"); /* should check the result */
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+    FILE *file = fopen(filename, "r"); /* should check the result */
+=======
+>>>>>>> osgeo-main
     FILE *file = fopen(filename, "r");  /* should check the result */
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -142,6 +170,9 @@ void string_list_from_file(struct StringList *string_list, char *filename)
     FILE *file = fopen(filename, "r"); /* should check the result */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

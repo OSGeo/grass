@@ -51,16 +51,23 @@ void Rast3d_long_decode(unsigned char *source, long *dst, int nofNums,
         *dest = *source--;
 <<<<<<< HEAD
 <<<<<<< HEAD
-        if ((eltLength >= (int)RASTER3D_LONG_LENGTH) && (*dest != 0))
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         if ((eltLength >= (int)RASTER3D_LONG_LENGTH) && (*dest != 0))
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if ((eltLength >= (int)RASTER3D_LONG_LENGTH) && (*dest != 0))
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if ((eltLength >= (int)RASTER3D_LONG_LENGTH) && (*dest != 0))
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         if ((eltLength >= (int)RASTER3D_LONG_LENGTH) && (*dest != 0))
@@ -81,6 +88,9 @@ void Rast3d_long_decode(unsigned char *source, long *dst, int nofNums,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -97,16 +107,23 @@ void Rast3d_long_decode(unsigned char *source, long *dst, int nofNums,
             *dest += *source--;
 <<<<<<< HEAD
 <<<<<<< HEAD
-            if ((eltLength >= (int)RASTER3D_LONG_LENGTH) && (*dest != 0))
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             if ((eltLength >= (int)RASTER3D_LONG_LENGTH) && (*dest != 0))
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if ((eltLength >= (int)RASTER3D_LONG_LENGTH) && (*dest != 0))
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if ((eltLength >= (int)RASTER3D_LONG_LENGTH) && (*dest != 0))
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
             if ((eltLength >= (int)RASTER3D_LONG_LENGTH) && (*dest != 0))
@@ -127,6 +144,9 @@ void Rast3d_long_decode(unsigned char *source, long *dst, int nofNums,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

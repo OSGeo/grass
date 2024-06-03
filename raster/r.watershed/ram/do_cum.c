@@ -286,16 +286,22 @@ int do_cum_mfd(void)
     int asp_c[9] = {0, 1, 0, -1, -1, -1, 0, 1, 1};
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     size_t this_index, down_index, nbr_index;
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -526,6 +532,7 @@ int do_cum_mfd(void)
         G_warning(n_("MFD: A * path already processed when distributing flow: "
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                      "%d of %d cell",
                      "MFD: A * path already processed when distributing flow: "
                      "%d of %d cells",
@@ -534,6 +541,8 @@ int do_cum_mfd(void)
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                      "%d of %zu cell",
                      "MFD: A * path already processed when distributing flow: "
                      "%d of %zu cells",
@@ -548,6 +557,9 @@ int do_cum_mfd(void)
                      "%d of %d cells",
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -651,6 +663,7 @@ int do_cum_mfd(void)
             }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (mfd_cells == 1)
                 /* mfdir = (1 << nextmfd[max_side]); */
 
@@ -660,6 +673,8 @@ int do_cum_mfd(void)
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             /*
             if (mfd_cells == 1)
                 mfdir = (1 << nextmfd[max_side]);
@@ -679,6 +694,9 @@ int do_cum_mfd(void)
                 is_swale = FLAG_GET(swale, r, c);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

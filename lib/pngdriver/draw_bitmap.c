@@ -51,16 +51,23 @@ void PNG_draw_bitmap(int ncols, int nrows, int threshold,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-                if (k > (unsigned int)threshold)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                 if (k > (unsigned int)threshold)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                if (k > (unsigned int)threshold)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                if (k > (unsigned int)threshold)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                 if (k > (unsigned int)threshold)
@@ -81,6 +88,9 @@ void PNG_draw_bitmap(int ncols, int nrows, int threshold,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

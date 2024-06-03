@@ -12,12 +12,15 @@
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 double p_vi(double redchan, double nirchan)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 double p_vi(double redchan, double nirchan, double soil_line_slope)
 =======
 double p_vi(double redchan, double nirchan)
@@ -26,6 +29,9 @@ double p_vi(double redchan, double nirchan)
 double p_vi(double redchan, double nirchan)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -40,12 +46,15 @@ double p_vi(double redchan, double nirchan)
     else {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         result = (sin(1) * nirchan) - (cos(1) * redchan);
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         result = (sin(a) * nirchan) - (cos(a) * redchan);
 =======
         result = (sin(1) * nirchan) - (cos(1) * redchan);
@@ -54,6 +63,9 @@ double p_vi(double redchan, double nirchan)
         result = (sin(1) * nirchan) - (cos(1) * redchan);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

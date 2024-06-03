@@ -165,6 +165,7 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     bufsize = (size_t)n * fcb->cellhd.cols;
     if (fcb->cellhd.compressed < 0 || (size_t)readamount < bufsize) {
 =======
@@ -180,6 +181,15 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    bufsize = (size_t)n * fcb->cellhd.cols;
+    if (fcb->cellhd.compressed < 0 || (size_t)readamount < bufsize) {
+=======
+    bufsize = n * fcb->cellhd.cols;
+    if (fcb->cellhd.compressed < 0 || readamount < bufsize) {
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     bufsize = (size_t)n * fcb->cellhd.cols;
     if (fcb->cellhd.compressed < 0 || (size_t)readamount < bufsize) {
@@ -202,8 +212,11 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             }
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     bufsize = n * fcb->cellhd.cols;
@@ -240,6 +253,9 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -335,8 +351,14 @@ static void cell_values_int(int fd, const unsigned char *data,
                             int n)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -396,8 +418,14 @@ static void cell_values_float(int fd, const unsigned char *data,
                               const COLUMN_MAPPING *cmap, int nbytes,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -432,8 +460,14 @@ static void cell_values_double(int fd, const unsigned char *data,
                                const COLUMN_MAPPING *cmap, int nbytes,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -464,16 +498,23 @@ static void cell_values_double(int fd, const unsigned char *data,
 static void gdal_values_int(int fd, const unsigned char *data,
 <<<<<<< HEAD
 <<<<<<< HEAD
-                            const COLUMN_MAPPING *cmap, int nbytes, void *cell,
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                             const COLUMN_MAPPING *cmap, int nbytes, void *cell,
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                            const COLUMN_MAPPING *cmap, int nbytes, void *cell,
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                            const COLUMN_MAPPING *cmap, int nbytes, void *cell,
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                             const COLUMN_MAPPING *cmap, int nbytes, void *cell,
@@ -494,6 +535,9 @@ static void gdal_values_int(int fd, const unsigned char *data,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -509,16 +553,23 @@ static void gdal_values_int(int fd, const unsigned char *data,
         if (!cmap[i]) {
 <<<<<<< HEAD
 <<<<<<< HEAD
-            c[i] = 0;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             c[i] = 0;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            c[i] = 0;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            c[i] = 0;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
             c[i] = 0;
@@ -539,6 +590,9 @@ static void gdal_values_int(int fd, const unsigned char *data,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -548,16 +602,23 @@ static void gdal_values_int(int fd, const unsigned char *data,
         if (cmap[i] == cmapold) {
 <<<<<<< HEAD
 <<<<<<< HEAD
-            c[i] = c[i - 1];
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             c[i] = c[i - 1];
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            c[i] = c[i - 1];
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            c[i] = c[i - 1];
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
             c[i] = c[i - 1];
@@ -578,6 +639,9 @@ static void gdal_values_int(int fd, const unsigned char *data,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -590,11 +654,14 @@ static void gdal_values_int(int fd, const unsigned char *data,
         case GDT_Byte:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
             c[i] = *(GByte *)d;
@@ -652,6 +719,9 @@ static void gdal_values_int(int fd, const unsigned char *data,
 =======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -674,6 +744,11 @@ static void gdal_values_int(int fd, const unsigned char *data,
             Rast_set_c_null_value(&c[i], 1);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 =======
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
@@ -691,6 +766,7 @@ static void gdal_values_int(int fd, const unsigned char *data,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static void gdal_values_float(int fd, const unsigned char *data,
                               const COLUMN_MAPPING *cmap, int nbytes,
                               void *cell, int n)
@@ -699,6 +775,8 @@ static void gdal_values_float(int fd, const unsigned char *data,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 static void gdal_values_float(int fd UNUSED, const unsigned char *data,
                               const COLUMN_MAPPING *cmap, int nbytes UNUSED,
@@ -726,6 +804,9 @@ static void gdal_values_float(int fd, const unsigned char *data,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -739,16 +820,23 @@ static void gdal_values_float(int fd, const unsigned char *data,
         if (!cmap[i]) {
 <<<<<<< HEAD
 <<<<<<< HEAD
-            c[i] = 0;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             c[i] = 0;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            c[i] = 0;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            c[i] = 0;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
             c[i] = 0;
@@ -769,6 +857,9 @@ static void gdal_values_float(int fd, const unsigned char *data,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -778,6 +869,7 @@ static void gdal_values_float(int fd, const unsigned char *data,
         if (cmap[i] == cmapold) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -786,6 +878,10 @@ static void gdal_values_float(int fd, const unsigned char *data,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -794,6 +890,7 @@ static void gdal_values_float(int fd, const unsigned char *data,
         }
 
         c[i] = d[cmap[i] - 1];
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 
@@ -805,6 +902,15 @@ static void gdal_values_float(int fd, const unsigned char *data,
             continue;
         }
 
+=======
+=======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+            cell[i] = cell[i - 1];
+            continue;
+        }
+
+>>>>>>> osgeo-main
 =======
 =======
 =======
@@ -839,6 +945,9 @@ static void gdal_values_float(int fd, const unsigned char *data,
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -846,6 +955,7 @@ static void gdal_values_float(int fd, const unsigned char *data,
     }
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 static void gdal_values_double(int fd, const unsigned char *data,
@@ -856,6 +966,8 @@ static void gdal_values_double(int fd, const unsigned char *data,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 static void gdal_values_double(int fd UNUSED, const unsigned char *data,
                                const COLUMN_MAPPING *cmap, int nbytes UNUSED,
@@ -883,6 +995,9 @@ static void gdal_values_double(int fd, const unsigned char *data,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -896,16 +1011,23 @@ static void gdal_values_double(int fd, const unsigned char *data,
         if (!cmap[i]) {
 <<<<<<< HEAD
 <<<<<<< HEAD
-            c[i] = 0;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             c[i] = 0;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            c[i] = 0;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            c[i] = 0;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
             c[i] = 0;
@@ -926,6 +1048,9 @@ static void gdal_values_double(int fd, const unsigned char *data,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -935,6 +1060,7 @@ static void gdal_values_double(int fd, const unsigned char *data,
         if (cmap[i] == cmapold) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -943,6 +1069,10 @@ static void gdal_values_double(int fd, const unsigned char *data,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -951,6 +1081,7 @@ static void gdal_values_double(int fd, const unsigned char *data,
         }
 
         c[i] = d[cmap[i] - 1];
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 
@@ -962,6 +1093,15 @@ static void gdal_values_double(int fd, const unsigned char *data,
             continue;
         }
 
+=======
+=======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+            cell[i] = cell[i - 1];
+            continue;
+        }
+
+>>>>>>> osgeo-main
 =======
 =======
 =======
@@ -996,6 +1136,9 @@ static void gdal_values_double(int fd, const unsigned char *data,
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1017,6 +1160,7 @@ static void transfer_to_cell_XX(int fd, void *cell)
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1025,6 +1169,10 @@ static void transfer_to_cell_XX(int fd, void *cell)
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -1037,7 +1185,10 @@ static void transfer_to_cell_XX(int fd, void *cell)
         int) = {gdal_values_int, gdal_values_float, gdal_values_double};
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -1073,6 +1224,9 @@ static void transfer_to_cell_XX(int fd, void *cell)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1186,16 +1340,23 @@ static int get_map_row_nomask(int fd, void *rast, int row,
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
-    static void (*transfer_to_cell_FtypeOtype[3][3])(int, void *) = {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     static void (*transfer_to_cell_FtypeOtype[3][3])(int, void *) = {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    static void (*transfer_to_cell_FtypeOtype[3][3])(int, void *) = {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    static void (*transfer_to_cell_FtypeOtype[3][3])(int, void *) = {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     static void (*transfer_to_cell_FtypeOtype[3][3])(int, void *) = {
@@ -1216,6 +1377,9 @@ static int get_map_row_nomask(int fd, void *rast, int row,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1504,18 +1668,26 @@ static int read_null_bits_compressed(int null_fd, unsigned char *flags, int row,
     if (readamount == size) {
 <<<<<<< HEAD
 <<<<<<< HEAD
-        if ((res = read(null_fd, flags, size)) < 0 ||
-            (unsigned int)res != size) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         if ((res = read(null_fd, flags, size)) < 0 ||
             (unsigned int)res != size) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if ((res = read(null_fd, flags, size)) < 0 ||
+            (unsigned int)res != size) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if ((res = read(null_fd, flags, size)) < 0 ||
+            (unsigned int)res != size) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         if ((res = read(null_fd, flags, size)) < 0 ||
@@ -1539,6 +1711,9 @@ static int read_null_bits_compressed(int null_fd, unsigned char *flags, int row,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1553,17 +1728,24 @@ static int read_null_bits_compressed(int null_fd, unsigned char *flags, int row,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    if ((res = read(null_fd, compressed_buf, readamount)) < 0 ||
-        (unsigned int)res != readamount) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if ((res = read(null_fd, compressed_buf, readamount)) < 0 ||
         (unsigned int)res != readamount) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if ((res = read(null_fd, compressed_buf, readamount)) < 0 ||
+        (unsigned int)res != readamount) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    if ((res = read(null_fd, compressed_buf, readamount)) < 0 ||
+        (unsigned int)res != readamount) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     if ((res = read(null_fd, compressed_buf, readamount)) < 0 ||
         (unsigned int)res != readamount) {
@@ -1586,6 +1768,9 @@ static int read_null_bits_compressed(int null_fd, unsigned char *flags, int row,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

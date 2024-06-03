@@ -321,6 +321,7 @@ int main(int argc, char *argv[])
     over_flag->label =
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         _("Override projection check (use current location's projection)");
     over_flag->description = _(
         "Assume that the dataset has same projection as the current location");
@@ -335,6 +336,8 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         _("Override projection check (use current project's CRS)");
     over_flag->description =
         _("Assume that the dataset has the same coordinate reference system as "
@@ -368,6 +371,9 @@ int main(int argc, char *argv[])
         " Do not import the vector data.");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -557,6 +563,7 @@ int main(int argc, char *argv[])
             0) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             G_fatal_error(_("Unable to convert input map projection to GRASS "
                             "format; cannot create new location."));
 =======
@@ -564,6 +571,8 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             G_fatal_error(_("Unable to convert input map CRS to GRASS "
                             "format; cannot create new project."));
 =======
@@ -575,6 +584,9 @@ int main(int argc, char *argv[])
                             "format; cannot create new location."));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -584,11 +596,14 @@ int main(int argc, char *argv[])
                                      proj_units)) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                 G_fatal_error(_("Unable to create new project <%s>"),
                               outloc_opt->answer);
             }
@@ -597,6 +612,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -606,8 +624,14 @@ int main(int argc, char *argv[])
             G_message(_("Location <%s> created"), outloc_opt->answer);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -626,12 +650,15 @@ int main(int argc, char *argv[])
         /*  TODO: */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_warning("Import into new location not yet implemented");
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         G_warning("Import into new project not yet implemented");
 =======
         G_warning("Import into new location not yet implemented");
@@ -640,6 +667,9 @@ int main(int argc, char *argv[])
         G_warning("Import into new location not yet implemented");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

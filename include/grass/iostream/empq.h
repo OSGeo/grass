@@ -64,12 +64,15 @@ class ExtendedEltMergeType;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 // enables priting inserts
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 // enables printing inserts
 =======
 // enables priting inserts
@@ -78,6 +81,9 @@ class ExtendedEltMergeType;
 // enables priting inserts
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -91,12 +97,15 @@ class ExtendedEltMergeType;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 // enable priting the size of the EMPQ and nb of active streams
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 // enable printing the size of the EMPQ and nb of active streams
 =======
 // enable priting the size of the EMPQ and nb of active streams
@@ -105,6 +114,9 @@ class ExtendedEltMergeType;
 // enable priting the size of the EMPQ and nb of active streams
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -199,12 +211,15 @@ public:
     em_pqueue();
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     em_pqueue(long N) { em_pqueue(); }; // N not used
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     em_pqueue(long N UNUSED) { em_pqueue(); }; // N not used
 =======
     em_pqueue(long N) { em_pqueue(); }; // N not used
@@ -213,6 +228,9 @@ public:
     em_pqueue(long N) { em_pqueue(); }; // N not used
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

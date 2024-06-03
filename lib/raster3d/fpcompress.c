@@ -165,16 +165,23 @@ static void G_fpcompress_rearrangeEncodeFloats(unsigned char *src, int size,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-            if (8 - nBits < (unsigned int)precision) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             if (8 - nBits < (unsigned int)precision) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (8 - nBits < (unsigned int)precision) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (8 - nBits < (unsigned int)precision) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
             if (8 - nBits < (unsigned int)precision) {
@@ -195,6 +202,9 @@ static void G_fpcompress_rearrangeEncodeFloats(unsigned char *src, int size,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -373,16 +383,23 @@ static void G_fpcompress_rearrangeEncodeDoubles(unsigned char *src, int size,
             *cp1 |= (unsigned char)((unsigned char)(*src & mask) >> nBits);
 <<<<<<< HEAD
 <<<<<<< HEAD
-            if (8 - nBits < (unsigned int)precision) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             if (8 - nBits < (unsigned int)precision) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (8 - nBits < (unsigned int)precision) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (8 - nBits < (unsigned int)precision) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
             if (8 - nBits < (unsigned int)precision) {
@@ -403,6 +420,9 @@ static void G_fpcompress_rearrangeEncodeDoubles(unsigned char *src, int size,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -561,16 +581,23 @@ static void G_fpcompress_rearrangeDecodeFloats(unsigned char *src, int size,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-            if (8 - nBits < (unsigned int)precision) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             if (8 - nBits < (unsigned int)precision) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (8 - nBits < (unsigned int)precision) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (8 - nBits < (unsigned int)precision) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
             if (8 - nBits < (unsigned int)precision) {
@@ -591,6 +618,9 @@ static void G_fpcompress_rearrangeDecodeFloats(unsigned char *src, int size,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -762,16 +792,23 @@ static void G_fpcompress_rearrangeDecodeDoubles(unsigned char *src, int size,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-            if (8 - nBits < (unsigned int)precision) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             if (8 - nBits < (unsigned int)precision) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (8 - nBits < (unsigned int)precision) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (8 - nBits < (unsigned int)precision) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
             if (8 - nBits < (unsigned int)precision) {
@@ -792,6 +829,9 @@ static void G_fpcompress_rearrangeDecodeDoubles(unsigned char *src, int size,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

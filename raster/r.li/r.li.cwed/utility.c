@@ -37,18 +37,26 @@ char **split_arg(char *linea, char separatore, long *numerotoken)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    long i;    /* find token number */
-    size_t it; /* iterator */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     long i;    /* find token number */
     size_t it; /* iterator */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    long i;    /* find token number */
+    size_t it; /* iterator */
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    long i;    /* find token number */
+    size_t it; /* iterator */
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     long i;    /* find token number */
@@ -75,6 +83,9 @@ char **split_arg(char *linea, char separatore, long *numerotoken)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

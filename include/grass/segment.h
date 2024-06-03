@@ -18,16 +18,23 @@ struct aq {                     /* age queue */
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-typedef struct SEGMENT {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 typedef struct SEGMENT {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+typedef struct SEGMENT {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+typedef struct SEGMENT {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 typedef struct SEGMENT {
@@ -48,6 +55,9 @@ typedef struct SEGMENT {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -72,18 +82,26 @@ typedef struct SEGMENT {
     int sizebits;   /* segment size bitshift */
 <<<<<<< HEAD
 <<<<<<< HEAD
-    int (*address)(const struct SEGMENT *, off_t, off_t, int *, int *);
-    int (*seek)(const struct SEGMENT *S, int, int);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     int (*address)(const struct SEGMENT *, off_t, off_t, int *, int *);
     int (*seek)(const struct SEGMENT *S, int, int);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    int (*address)(const struct SEGMENT *, off_t, off_t, int *, int *);
+    int (*seek)(const struct SEGMENT *S, int, int);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    int (*address)(const struct SEGMENT *, off_t, off_t, int *, int *);
+    int (*seek)(const struct SEGMENT *S, int, int);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     int (*address)(const struct SEGMENT *, off_t, off_t, int *, int *);
@@ -110,6 +128,9 @@ typedef struct SEGMENT {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

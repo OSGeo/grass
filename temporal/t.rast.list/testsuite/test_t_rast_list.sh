@@ -19,16 +19,23 @@ r.mapcalc expr="prec_6 = rand(0, 650)" -s
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-n1=`g.tempfile pid=1 -d`
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 n1=`g.tempfile pid=1 -d`
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+n1=`g.tempfile pid=1 -d`
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+n1=`g.tempfile pid=1 -d`
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 n1=`g.tempfile pid=1 -d`
@@ -49,6 +56,9 @@ n1=`g.tempfile pid=1 -d`
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

@@ -246,12 +246,15 @@ void gsd_cplane_settrans(int num, float tx, float ty, float tz)
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void gsd_draw_cplane_fence(geosurf *surf1, geosurf *surf2, int cpnum)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 void gsd_draw_cplane_fence(geosurf *surf1, geosurf *surf2 UNUSED, int cpnum)
 =======
 void gsd_draw_cplane_fence(geosurf *surf1, geosurf *surf2, int cpnum)
@@ -260,6 +263,9 @@ void gsd_draw_cplane_fence(geosurf *surf1, geosurf *surf2, int cpnum)
 void gsd_draw_cplane_fence(geosurf *surf1, geosurf *surf2, int cpnum)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -274,12 +280,15 @@ void gsd_draw_cplane_fence(geosurf *surf1, geosurf *surf2, int cpnum)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     /* line on surface (asuming NO TILT) is (-A,B)->(A,-B),
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     /* line on surface (assuming NO TILT) is (-A,B)->(A,-B),
 =======
     /* line on surface (asuming NO TILT) is (-A,B)->(A,-B),
@@ -288,6 +297,9 @@ void gsd_draw_cplane_fence(geosurf *surf1, geosurf *surf2, int cpnum)
     /* line on surface (asuming NO TILT) is (-A,B)->(A,-B),
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

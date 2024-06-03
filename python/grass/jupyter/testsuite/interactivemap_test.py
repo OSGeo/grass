@@ -20,6 +20,7 @@
 import os
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -32,6 +33,11 @@ import os
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 import sys
 import unittest
 from pathlib import Path
@@ -40,7 +46,10 @@ from pathlib import Path
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 import unittest
@@ -57,6 +66,9 @@ from pathlib import Path
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -70,6 +82,7 @@ def can_import_folium():
     try:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         import folium  # noqa
 =======
 <<<<<<< HEAD
@@ -83,6 +96,11 @@ def can_import_folium():
         import folium  # noqa
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+        import folium  # noqa
+=======
+>>>>>>> osgeo-main
         import folium
 >>>>>>> 920471e340 (libraster: fix Rast_legal_bandref() (#1796))
 =======
@@ -92,6 +110,9 @@ def can_import_folium():
         import folium  # noqa
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

@@ -185,16 +185,23 @@ void G_ls_format(char **list, int num_items, int perline, FILE *stream)
     if (perline == 0) {
 <<<<<<< HEAD
 <<<<<<< HEAD
-        unsigned int max_len = 0;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         unsigned int max_len = 0;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        unsigned int max_len = 0;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        unsigned int max_len = 0;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         unsigned int max_len = 0;
@@ -215,6 +222,9 @@ void G_ls_format(char **list, int num_items, int perline, FILE *stream)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

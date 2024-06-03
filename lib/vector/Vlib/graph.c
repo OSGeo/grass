@@ -27,12 +27,15 @@ static int
 static int clipper(dglGraph_s *pgraph, dglSPClipInput_s *pargIn,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                    dglSPClipOutput_s *pargOut, void *pvarg)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                    dglSPClipOutput_s *pargOut, void *pvarg UNUSED)
 =======
                    dglSPClipOutput_s *pargOut, void *pvarg)
@@ -41,6 +44,9 @@ static int clipper(dglGraph_s *pgraph, dglSPClipInput_s *pargIn,
                    dglSPClipOutput_s *pargOut, void *pvarg)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -216,12 +222,15 @@ int Vect_graph_shortest_path(dglGraph_s *graph, int from, int to,
     /* Check if from and to are identical, otherwise dglib returns path to
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * neares node and back! */
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
      * nearest node and back! */
 =======
      * neares node and back! */
@@ -230,6 +239,9 @@ int Vect_graph_shortest_path(dglGraph_s *graph, int from, int to,
      * neares node and back! */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

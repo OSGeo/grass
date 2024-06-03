@@ -163,6 +163,10 @@ import xml.etree.ElementTree as etree
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> osgeo-main
 =======
 =======
 >>>>>>> osgeo-main
@@ -174,6 +178,7 @@ else:
 
     copy_tree = partial(shutil.copytree, dirs_exist_ok=True)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -187,6 +192,8 @@ else:
     from functools import partial
 
     copy_tree = partial(shutil.copytree, dirs_exist_ok=True)
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -218,8 +225,14 @@ from six.moves.urllib.error import HTTPError, URLError
 from six.moves.urllib.parse import urlparse
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 27faeed049 (r.in.pdal: use fabs for double values (#1752))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 27faeed049 (r.in.pdal: use fabs for double values (#1752))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -572,8 +585,14 @@ HTTP_STATUS_CODES = list(http.HTTPStatus)
 GIT_URL = "https://github.com/OSGeo/grass-addons"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 27faeed049 (r.in.pdal: use fabs for double values (#1752))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 27faeed049 (r.in.pdal: use fabs for double values (#1752))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -617,7 +636,10 @@ def replace_shebang_win(python_file):
     os.rename(tmp_name, python_file)  # rename temp to original name
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 
@@ -644,6 +666,9 @@ def replace_shebang_win(python_file):
     os.remove(python_file)  # remove original
     os.rename(tmp_name, python_file)  # rename temp to original name
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -674,11 +699,14 @@ def get_version_branch(major_version):
     version_branch = f"grass{major_version}"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     if sys.platform == "win32":
         return version_branch
     else:
@@ -690,6 +718,9 @@ def get_version_branch(major_version):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -892,12 +923,15 @@ def etree_fromurl(url):
     except URLError:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         gscript.fatal(
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         gs.fatal(
 =======
         gscript.fatal(
@@ -906,6 +940,9 @@ def etree_fromurl(url):
         gscript.fatal(
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -925,11 +962,14 @@ def check_progs():
     # git to be tested once supported instead of `svn`
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     for prog in (MAKE, "gcc", "git"):
         if not gs.find_program(prog, "--help"):
             gs.fatal(_("'%s' required. Please install '%s' first.") % (prog, prog))
@@ -937,6 +977,9 @@ def check_progs():
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1810,11 +1853,14 @@ def get_multi_addon_addons_which_install_only_html_man_page():
     """
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     all_addon_dirs = []
     addon_paths = re.findall(
         rf".*{options['extension']}*.",
@@ -1835,6 +1881,9 @@ def get_multi_addon_addons_which_install_only_html_man_page():
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1869,8 +1918,14 @@ def get_multi_addon_addons_which_install_only_html_man_page():
     return addons
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1887,12 +1942,15 @@ def filter_multi_addon_addons(mlist):
     and installs only *.html manual page, without source/binary
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     excutable module and doesn't need to check metadata.
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     executable module and doesn't need to check metadata.
 =======
     excutable module and doesn't need to check metadata.
@@ -1901,6 +1959,9 @@ def filter_multi_addon_addons(mlist):
     excutable module and doesn't need to check metadata.
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1941,11 +2002,14 @@ def install_module_xml(mlist):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     if sys.platform != "win32":
         # Filter multi-addon addons
         if len(mlist) > 1:
@@ -1956,6 +2020,9 @@ def install_module_xml(mlist):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1966,8 +2033,14 @@ def install_module_xml(mlist):
         )  # mlist.copy() keep the original list of add-ons
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -2061,8 +2134,14 @@ def install_extension_win(name):
     grass.message(
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -2080,17 +2159,23 @@ def install_extension_win(name):
         "http://wingrass.fsv.cvut.cz/"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         f"grass{VERSION[0]}{VERSION[1]}/addons/"
         f"grass-{VERSION[0]}.{VERSION[1]}.{VERSION[2]}"
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2100,8 +2185,14 @@ def install_extension_win(name):
         )
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -2144,12 +2235,15 @@ def install_extension_win(name):
             # Filter GRASS module name patterns
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             if re.search(r"^[d,db,g,i,m,p,ps,r,r3,s,t,v,wx]\..*[\.py,\.exe]$", file):
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             if re.search(module_name_pattern, file):
 =======
             if re.search(r"^[d,db,g,i,m,p,ps,r,r3,s,t,v,wx]\..*[\.py,\.exe]$", file):
@@ -2158,6 +2252,9 @@ def install_extension_win(name):
             if re.search(r"^[d,db,g,i,m,p,ps,r,r3,s,t,v,wx]\..*[\.py,\.exe]$", file):
 >>>>>>> 7c10386e82 (g.proj: fix reading input WKT (#1582))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2497,12 +2594,16 @@ def install_extension_std_platforms(name, source, url, branch):
     gisbase = os.getenv("GISBASE")
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     path_to_src_code_message = _("Path to the source code:")
 =======
@@ -2516,6 +2617,9 @@ def install_extension_std_platforms(name, source, url, branch):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2985,11 +3089,14 @@ def update_manual_page(module):
     addons = get_installed_extensions(force=True)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     if sys.platform != "win32":
         # Multi-addon
         if len(addons) > 1:
@@ -3000,6 +3107,9 @@ def update_manual_page(module):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3010,8 +3120,14 @@ def update_manual_page(module):
             addons.append(a)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -3098,6 +3214,7 @@ def resolve_xmlurl_prefix(url, source=None):
     gscript.debug("resolve_xmlurl_prefix(url={0}, source={1})".format(url, source))
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if source in ("official", "official_fork"):
         # use pregenerated modules XML file
         # Define branch to fetch from (latest or current version)
@@ -3108,6 +3225,12 @@ def resolve_xmlurl_prefix(url, source=None):
     if source in ("official", "official_fork"):
         # use pregenerated modules XML file
         # Define branch to fetch from (latest or current version)
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+    if source in ("official", "official_fork"):
+        # use pregenerated modules XML file
+        # Define branch to fetch from (latest or current version)
+>>>>>>> osgeo-main
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     if source in ("official", "official_fork"):
@@ -3126,6 +3249,9 @@ def resolve_xmlurl_prefix(url, source=None):
         version_branch = get_version_branch(version[0])
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3371,8 +3497,14 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
             return "official_fork", git_url
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 27faeed049 (r.in.pdal: use fabs for double values (#1752))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 27faeed049 (r.in.pdal: use fabs for double values (#1752))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -3412,11 +3544,14 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
                 url_validated = True
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             except URLError:
                 pass
 >>>>>>> 27faeed049 (r.in.pdal: use fabs for double values (#1752))
@@ -3428,6 +3563,9 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3439,8 +3577,14 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
             )
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -3480,6 +3624,7 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
 def get_addons_paths(gg_addons_base_dir):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     """Get and save addons paths from GRASS GIS Addons GitHub repo API
     as 'addons_paths.json' file in the gg_addons_base_dir. The file
     serves as a list of all addons, and their paths (required for
@@ -3492,6 +3637,8 @@ def get_addons_paths(gg_addons_base_dir):
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     """Make or update list of the official addons source code paths
     prefix parameter plus /grass-addons directory using Git repository
 
@@ -3542,6 +3689,9 @@ def get_addons_paths(gg_addons_base_dir):
     """
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3575,9 +3725,12 @@ get_addons_paths.json_file = "addons_paths.json"
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 get_addons_paths.json_file = "addons_paths.json"
 
 
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 def main():

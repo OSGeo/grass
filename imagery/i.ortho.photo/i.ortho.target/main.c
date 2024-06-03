@@ -59,12 +59,15 @@ int main(int argc, char *argv[])
     location_opt->description =
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         _("Name of target location for ortho-rectification");
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         _("Name of target project (location) for ortho-rectification");
 =======
         _("Name of target location for ortho-rectification");
@@ -73,6 +76,9 @@ int main(int argc, char *argv[])
         _("Name of target location for ortho-rectification");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -97,12 +103,15 @@ int main(int argc, char *argv[])
     if (stat != 1) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_fatal_error(_("Unable to access target location/mapset %s/%s"),
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         G_fatal_error(_("Unable to access target project/mapset %s/%s"),
 =======
         G_fatal_error(_("Unable to access target location/mapset %s/%s"),
@@ -111,6 +120,9 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Unable to access target location/mapset %s/%s"),
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -122,6 +134,7 @@ int main(int argc, char *argv[])
     if (target_window.proj == PROJECTION_XY)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_fatal_error(
             _("Target locations with XY (unreferenced) are not supported"));
     else if (target_window.proj == PROJECTION_LL)
@@ -131,6 +144,8 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         G_fatal_error(_("Target projects (locations) with XY (unreferenced) "
                         "are not supported"));
     else if (target_window.proj == PROJECTION_LL)
@@ -149,6 +164,9 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Target locations with lon/lat are not supported"));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -158,6 +176,7 @@ int main(int argc, char *argv[])
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     G_message(_("Group [%s] targeted for location [%s], mapset [%s]"), group,
               target_location, target_mapset);
 =======
@@ -165,6 +184,8 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     G_message(_("Group [%s] targeted for project (location) [%s], mapset [%s]"),
               group, target_location, target_mapset);
 =======
@@ -176,6 +197,9 @@ int main(int argc, char *argv[])
               target_location, target_mapset);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

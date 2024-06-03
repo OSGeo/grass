@@ -201,12 +201,15 @@ class DatabasePage(TitledPage):
         self.tgisdbase = self.MakeLabel(grassdatabase)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.tlocation = self.MakeTextCtrl("newLocation")
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         self.tlocation = self.MakeTextCtrl("newProject")
 =======
         self.tlocation = self.MakeTextCtrl("newLocation")
@@ -215,6 +218,9 @@ class DatabasePage(TitledPage):
         self.tlocation = self.MakeTextCtrl("newLocation")
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

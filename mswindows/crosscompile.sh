@@ -63,16 +63,23 @@ Usage: crosscompile.sh [OPTIONS]
     --package                package the cross-compiled build as
 <<<<<<< HEAD
 <<<<<<< HEAD
-                             grassVV-x86_64-w64-mingw32-YYYYMMDD.zip
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                              grassVV-x86_64-w64-mingw32-YYYYMMDD.zip
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                             grassVV-x86_64-w64-mingw32-YYYYMMDD.zip
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                             grassVV-x86_64-w64-mingw32-YYYYMMDD.zip
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                              grassVV-x86_64-w64-mingw32-YYYYMMDD.zip
@@ -90,6 +97,9 @@ Usage: crosscompile.sh [OPTIONS]
                              grassVV-x86_64-w64-mingw32-YYYYMMDD.zip
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -383,6 +393,7 @@ if defined GRASS_PYTHON (
 	rem PATH
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	set GRASS_PYTHON=C:\Python39\python.exe
 
 	rem For portable installation, use %~d0 for the changing drive letter
@@ -392,6 +403,8 @@ if defined GRASS_PYTHON (
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 	set GRASS_PYTHON=C:\Python312\python.exe
 
 	rem For portable installation, use %~d0 for the changing drive letter
@@ -409,6 +422,9 @@ if defined GRASS_PYTHON (
 	rem set GRASS_PYTHON=%~d0\Python39\python.exe
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -431,11 +447,14 @@ rem for %%i in (%GRASS_PYTHON%) do set PYTHONHOME=%%~dpi
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -443,6 +462,9 @@ rem for %%i in (%GRASS_PYTHON%) do set PYTHONHOME=%%~dpi
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -488,10 +510,13 @@ if not exist "%GISBASE%\etc\fontcap" (
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 "%GRASS_PYTHON%" "%GISBASE%\etc\grass80.py" %*
 >>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 =======
@@ -502,6 +527,9 @@ if not exist "%GISBASE%\etc\fontcap" (
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

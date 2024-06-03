@@ -113,11 +113,14 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Unknown imagery group."));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 
     if (!I_find_subgroup(grp_opt->answer, subgrp_opt->answer))
         G_fatal_error(_("Subgroup <%s> in group <%s> not found"),
@@ -127,6 +130,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -141,17 +147,24 @@ int main(int argc, char *argv[])
     /* open and input the signatures file */
 <<<<<<< HEAD
 <<<<<<< HEAD
-    if ((sigfp = I_fopen_signature_file_old(sig_opt->answer)) == NULL)
-        G_fatal_error(_("Unable to open the signature file"));
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if ((sigfp = I_fopen_signature_file_old(sig_opt->answer)) == NULL)
         G_fatal_error(_("Unable to open the signature file"));
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if ((sigfp = I_fopen_signature_file_old(sig_opt->answer)) == NULL)
+        G_fatal_error(_("Unable to open the signature file"));
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    if ((sigfp = I_fopen_signature_file_old(sig_opt->answer)) == NULL)
+        G_fatal_error(_("Unable to open the signature file"));
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     if ((sigfp = I_fopen_signature_file_old(sig_opt->answer)) == NULL)
         G_fatal_error(_("Unable to open the signature file"));
@@ -170,6 +183,9 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Unable to open the signature file"));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -183,11 +199,14 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Need at least two signatures in signature file."));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 
     err = I_sort_signatures_by_semantic_label(&sigs, &refs);
     if (err)
@@ -200,6 +219,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

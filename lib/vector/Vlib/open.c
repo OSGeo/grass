@@ -46,12 +46,15 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int open_old_dummy(struct Map_info *Map, int update)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 static int open_old_dummy(struct Map_info *Map UNUSED, int update UNUSED)
 =======
 static int open_old_dummy(struct Map_info *Map, int update)
@@ -60,6 +63,9 @@ static int open_old_dummy(struct Map_info *Map, int update)
 static int open_old_dummy(struct Map_info *Map, int update)
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -69,12 +75,15 @@ static int open_old_dummy(struct Map_info *Map, int update)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int open_new_dummy(struct Map_info *Map, const char *name, int with_z)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 static int open_new_dummy(struct Map_info *Map UNUSED, const char *name UNUSED,
                           int with_z UNUSED)
 =======
@@ -84,6 +93,9 @@ static int open_new_dummy(struct Map_info *Map, const char *name, int with_z)
 static int open_new_dummy(struct Map_info *Map, const char *name, int with_z)
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -94,12 +106,15 @@ static int open_new_dummy(struct Map_info *Map, const char *name, int with_z)
 #if !defined HAVE_OGR || !defined HAVE_POSTGRES
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int format_old(struct Map_info *Map, int update)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 static int format_old(struct Map_info *Map UNUSED, int update UNUSED)
 =======
 static int format_old(struct Map_info *Map, int update)
@@ -108,6 +123,9 @@ static int format_old(struct Map_info *Map, int update)
 static int format_old(struct Map_info *Map, int update)
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -118,12 +136,15 @@ static int format_old(struct Map_info *Map, int update)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int format_new(struct Map_info *Map, const char *name, int with_z)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 static int format_new(struct Map_info *Map UNUSED, const char *name UNUSED,
                       int with_z UNUSED)
 =======
@@ -133,6 +154,9 @@ static int format_new(struct Map_info *Map, const char *name, int with_z)
 static int format_new(struct Map_info *Map, const char *name, int with_z)
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -146,6 +170,7 @@ static int Open_level = 0;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -154,6 +179,10 @@ static int Open_level = 0;
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -197,7 +226,10 @@ static int (*Open_new_array[][2])(struct Map_info *Map, const char *name,
     {open_new_dummy, format_new}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -331,6 +363,9 @@ static int (*Open_new_array[][2])(struct Map_info *Map, const char *name,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1232,16 +1267,22 @@ int Vect_open_tmp_new(struct Map_info *Map, const char *name, int with_z)
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 int Vect_coor_info(struct Map_info *Map, struct Coor_info *Info)
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1306,16 +1347,22 @@ int Vect_coor_info(const struct Map_info *Map, struct Coor_info *Info)
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 const char *Vect_maptype_info(struct Map_info *Map)
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1356,8 +1403,14 @@ const char *Vect_maptype_info(const struct Map_info *Map)
    - PostGIS fomat                    (GV_FORMAT_POSTGIS)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1374,16 +1427,22 @@ const char *Vect_maptype_info(const struct Map_info *Map)
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 int Vect_maptype(struct Map_info *Map)
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1779,16 +1838,22 @@ int map_format(struct Map_info *Map)
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 char *Vect__get_path(char *path, struct Map_info *Map)
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1820,12 +1885,15 @@ char *Vect__get_path(char *path, const struct Map_info *Map)
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 char *Vect__get_element_path(char *file_path, const struct Map_info *Map,
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 char *Vect__get_element_path(char *file_path, struct Map_info *Map,
 =======
 char *Vect__get_element_path(char *file_path, const struct Map_info *Map,
@@ -1834,6 +1902,9 @@ char *Vect__get_element_path(char *file_path, const struct Map_info *Map,
 char *Vect__get_element_path(char *file_path, const struct Map_info *Map,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

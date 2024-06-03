@@ -101,6 +101,7 @@ int main(int argc, char *argv[])
     parm.units->description =
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         _("If units are not specified, current location units are used. "
           "Meters are used by default in geographic (latlon) locations.");
 =======
@@ -108,6 +109,8 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         _("If units are not specified, current project units are used. "
           "Meters are used by default in geographic (latlon) projects.");
 =======
@@ -119,6 +122,9 @@ int main(int argc, char *argv[])
           "Meters are used by default in geographic (latlon) locations.");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

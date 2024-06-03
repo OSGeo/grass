@@ -46,12 +46,15 @@ int is_int_only(const char *buffer)
  *
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * This catches the cases when option is readble as integer,
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
  * This catches the cases when option is readable as integer,
 =======
  * This catches the cases when option is readble as integer,
@@ -60,6 +63,9 @@ int is_int_only(const char *buffer)
  * This catches the cases when option is readble as integer,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -91,11 +97,14 @@ int main(int argc, char *argv[])
     double max_value;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     long seed_value;
     char *seedptr;
 =======
@@ -103,6 +112,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -153,11 +165,14 @@ int main(int argc, char *argv[])
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     if (seed->answer) {
         seed_value = strtol(seed->answer, &seedptr, 10);
         G_srand48(seed_value);
@@ -176,6 +191,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -192,12 +210,15 @@ int main(int argc, char *argv[])
         /* showing the not parsed numbers to show exactly what user
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
          * provided and to avoid any issues with formating %f vs %d */
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
          * provided and to avoid any issues with formatting %f vs %d */
 =======
          * provided and to avoid any issues with formating %f vs %d */
@@ -206,6 +227,9 @@ int main(int argc, char *argv[])
          * provided and to avoid any issues with formating %f vs %d */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

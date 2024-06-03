@@ -8,12 +8,15 @@
    See read_ogr.c (OGR interface) and read_pg.c (PostGIS interface)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
    for imlementation issues.
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
    for implementation issues.
 =======
    for imlementation issues.
@@ -22,6 +25,9 @@
    for imlementation issues.
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

@@ -3,6 +3,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int db__driver_list_databases(dbString *path, int npaths, dbHandle **handles,
                               int *num)
 =======
@@ -10,6 +11,8 @@ int db__driver_list_databases(dbString *path, int npaths, dbHandle **handles,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 int db__driver_list_databases(dbString *path UNUSED, int npaths UNUSED,
                               dbHandle **handles UNUSED, int *num UNUSED)
 =======
@@ -21,6 +24,9 @@ int db__driver_list_databases(dbString *path, int npaths, dbHandle **handles,
                               int *num)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

@@ -161,6 +161,7 @@ def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
@@ -170,6 +171,10 @@ def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 =======
+>>>>>>> osgeo-main
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
 class CurrentMapsetWatch(FileSystemEventHandler):
     """Monitors rc file to check if mapset has been changed.
@@ -437,6 +442,7 @@ class DataCatalogTree(TreeView):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
@@ -446,6 +452,10 @@ class DataCatalogTree(TreeView):
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 =======
+>>>>>>> osgeo-main
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
         self.observer = None
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -1067,11 +1077,14 @@ class DataCatalogTree(TreeView):
                         message=_(
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                             "Map <{map_name}@{map_mapset}> is not in the current "
                             "project. To be able to display it you need to switch to "
                             "<{map_location}> project. Note that if you switch there "
@@ -1080,6 +1093,9 @@ class DataCatalogTree(TreeView):
 =======
 >>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1089,8 +1105,14 @@ class DataCatalogTree(TreeView):
                             "Map Displays will be closed.\n\n"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+>>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 =======
 >>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
@@ -1108,12 +1130,15 @@ class DataCatalogTree(TreeView):
                         ),
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                         caption=_("Map in a different location"),
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                         caption=_("Map in a different project"),
 =======
                         caption=_("Map in a different location"),
@@ -1122,6 +1147,9 @@ class DataCatalogTree(TreeView):
                         caption=_("Map in a different location"),
 >>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1581,9 +1609,13 @@ class DataCatalogTree(TreeView):
                 if pasted == 0:
                     Debug.msg(1, "COPIED TO: " + new_name)
                     if self.copy_mode:
-                        self.showNotification.emit(message=_("g.copy completed"))
+                        self.showNotification.emit(message=_("Copying completed"))
                     else:
-                        self.showNotification.emit(message=_("g.copy completed"))
+                        # remove old
+                        self._removeMapAfterCopy(
+                            self.copy_layer[i], self.copy_mapset[i], env2
+                        )
+                        self.showNotification.emit(message=_("Moving completed"))
                     self._giface.grassdbChanged.emit(
                         grassdb=self.selected_grassdb[0].data["name"],
                         location=self.selected_location[0].data["name"],
@@ -1592,11 +1624,6 @@ class DataCatalogTree(TreeView):
                         element=node,
                         action="new",
                     )
-                    # remove old
-                    if not self.copy_mode:
-                        self._removeMapAfterCopy(
-                            self.copy_layer[i], self.copy_mapset[i], env2
-                        )
 
                 gscript.try_remove(gisrc)
                 gscript.try_remove(gisrc2)

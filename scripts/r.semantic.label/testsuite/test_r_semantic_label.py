@@ -2,12 +2,15 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 from grass.gunittest.gmodules import SimpleModule, call_module
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 from grass.gunittest.gmodules import SimpleModule
 =======
 from grass.gunittest.gmodules import SimpleModule, call_module
@@ -16,6 +19,9 @@ from grass.gunittest.gmodules import SimpleModule, call_module
 from grass.gunittest.gmodules import SimpleModule, call_module
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -66,11 +72,14 @@ class TestSemanticLabelsSystemDefined(TestCase):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     def test_semantic_label_print(self):
         semantic_label = "S2_1"
         semantic_label_desc = "S2 Visible (Coastal/Aerosol)"
@@ -91,6 +100,9 @@ class TestSemanticLabelsSystemDefined(TestCase):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

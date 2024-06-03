@@ -33,11 +33,14 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 =======
@@ -63,6 +66,9 @@ extern dir_entry *readdir();
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -117,17 +123,24 @@ dbDirent *db_dirent(const char *dirname, int *n)
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
-    db_dirent = db_alloc_dirent_array(count);
-    if (db_dirent == NULL) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     db_dirent = db_alloc_dirent_array(count);
     if (db_dirent == NULL) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    db_dirent = db_alloc_dirent_array(count);
+    if (db_dirent == NULL) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    db_dirent = db_alloc_dirent_array(count);
+    if (db_dirent == NULL) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     db_dirent = db_alloc_dirent_array(count);
     if (db_dirent == NULL) {
@@ -152,6 +165,9 @@ dbDirent *db_dirent(const char *dirname, int *n)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -166,6 +182,7 @@ dbDirent *db_dirent(const char *dirname, int *n)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -174,6 +191,10 @@ dbDirent *db_dirent(const char *dirname, int *n)
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -184,7 +205,10 @@ dbDirent *db_dirent(const char *dirname, int *n)
         db_dirent[i].isdir = (db_isdir(path) == DB_OK);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -216,6 +240,9 @@ dbDirent *db_dirent(const char *dirname, int *n)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -233,12 +260,15 @@ dbDirent *db_dirent(const char *dirname, int *n)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
    \param db_dirent pointer to dbDirent
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
    \param db_dirent pointer to dbDirent
@@ -246,6 +276,9 @@ dbDirent *db_dirent(const char *dirname, int *n)
    \param dirent pointer to dbDirent
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -261,7 +294,10 @@ void db_free_dirent_array(dbDirent *db_dirent, int count)
         db_free(db_dirent);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -307,6 +343,9 @@ void db_free_dirent_array(dbDirent *db_dirent, int count)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -358,6 +397,7 @@ dbDirent *db_alloc_dirent_array(int count)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -366,6 +406,10 @@ dbDirent *db_alloc_dirent_array(int count)
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -377,8 +421,11 @@ dbDirent *db_alloc_dirent_array(int count)
         db_init_string(&db_dirent[i].name);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -422,6 +469,9 @@ dbDirent *db_alloc_dirent_array(int count)
 
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

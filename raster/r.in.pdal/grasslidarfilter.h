@@ -1,14 +1,20 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
-/****************************************************************************
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 /****************************************************************************
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+/****************************************************************************
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+/****************************************************************************
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 /****************************************************************************
 =======
@@ -23,6 +29,9 @@
 /****************************************************************************
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -44,6 +53,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -56,6 +66,11 @@
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 #ifndef GRASSLIDARFILTER_H
 #define GRASSLIDARFILTER_H
 
@@ -64,7 +79,10 @@ extern "C" {
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 
@@ -83,6 +101,9 @@ extern "C" {
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -93,11 +114,14 @@ extern "C" {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-parameter"
@@ -113,6 +137,9 @@ extern "C" {
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -120,6 +147,7 @@ extern "C" {
 #include <pdal/Streamable.hpp>
 #include <pdal/Dimension.hpp>
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 /* All GRASS GIS filters which are similar across multiple modules
@@ -130,6 +158,8 @@ extern "C" {
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 
 /* All GRASS GIS filters which are similar across multiple modules
@@ -147,6 +177,9 @@ extern "C" {
  */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -163,8 +196,11 @@ public:
           base_segment_(nullptr)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     {
     }
@@ -173,10 +209,13 @@ public:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {
     }
     std::string getName() const { return "filters.grasslidar"; }
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 class GrassLidarFilter:public pdal::Filter, public pdal::Streamable
@@ -229,6 +268,9 @@ class GrassLidarFilter:public pdal::Filter, public pdal::Streamable
     std::string getName() const { return "filters.grasslidar"; }
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -240,15 +282,21 @@ class GrassLidarFilter:public pdal::Filter, public pdal::Streamable
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    void set_spatial_filter(double xmin, double xmax, double ymin, double ymax)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     void set_spatial_filter(double xmin, double xmax, double ymin, double ymax)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    void set_spatial_filter(double xmin, double xmax, double ymin, double ymax)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    void set_spatial_filter(double xmin, double xmax, double ymin, double ymax)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     void set_spatial_filter(double xmin, double xmax, double ymin, double ymax)
 =======
@@ -263,6 +311,9 @@ class GrassLidarFilter:public pdal::Filter, public pdal::Streamable
     void set_spatial_filter(double xmin, double xmax, double ymin, double ymax)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -309,17 +360,24 @@ class GrassLidarFilter:public pdal::Filter, public pdal::Streamable
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
-    void set_base_raster(SEGMENT *base_segment, struct Cell_head *region,
-                         RASTER_MAP_TYPE rtype)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     void set_base_raster(SEGMENT *base_segment, struct Cell_head *region,
                          RASTER_MAP_TYPE rtype)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    void set_base_raster(SEGMENT *base_segment, struct Cell_head *region,
+                         RASTER_MAP_TYPE rtype)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    void set_base_raster(SEGMENT *base_segment, struct Cell_head *region,
+                         RASTER_MAP_TYPE rtype)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     void set_base_raster(SEGMENT *base_segment, struct Cell_head *region,
                          RASTER_MAP_TYPE rtype)
@@ -337,6 +395,9 @@ class GrassLidarFilter:public pdal::Filter, public pdal::Streamable
                          RASTER_MAP_TYPE rtype)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -345,6 +406,7 @@ class GrassLidarFilter:public pdal::Filter, public pdal::Streamable
         input_region_ = region;
         base_raster_data_type_ = rtype;
     }
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -358,6 +420,11 @@ class GrassLidarFilter:public pdal::Filter, public pdal::Streamable
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 =======
+>>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
     void set_z_scale(double scale) { zscale_ = scale; }
     void set_intensity_scale(double scale) { iscale_ = scale; }
@@ -378,7 +445,10 @@ private:
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     void set_z_scale(double scale)
@@ -419,6 +489,9 @@ private:
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -431,15 +504,21 @@ private:
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
-    virtual bool processOne(pdal::PointRef &point);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     virtual bool processOne(pdal::PointRef &point);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    virtual bool processOne(pdal::PointRef &point);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    virtual bool processOne(pdal::PointRef &point);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     virtual bool processOne(pdal::PointRef &point);
 =======
@@ -453,6 +532,9 @@ private:
     virtual bool processOne(pdal::PointRef &point);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -498,6 +580,7 @@ private:
     // not implemented
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -510,6 +593,11 @@ private:
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     GrassLidarFilter &operator=(const GrassLidarFilter &);
     GrassLidarFilter(const GrassLidarFilter &);
 };
@@ -518,7 +606,10 @@ private:
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     GrassLidarFilter & operator=(const GrassLidarFilter &);
@@ -536,6 +627,9 @@ private:
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

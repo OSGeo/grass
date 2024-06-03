@@ -264,12 +264,15 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
         /* center really tiny legends */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (opt_at->answer == NULL) { /* if defualt scaling */
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         if (opt_at->answer == NULL) { /* if default scaling */
 =======
         if (opt_at->answer == NULL) { /* if defualt scaling */
@@ -278,6 +281,9 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
         if (opt_at->answer == NULL) { /* if defualt scaling */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -303,16 +309,23 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                 int log_maxCat = (int)(log10(fabs(maxCat))) + 1;
 <<<<<<< HEAD
 <<<<<<< HEAD
-                if (snprintf(DispFormat, b_s, "%%%dd", log_maxCat) >= (int)b_s)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                 if (snprintf(DispFormat, b_s, "%%%dd", log_maxCat) >= (int)b_s)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                if (snprintf(DispFormat, b_s, "%%%dd", log_maxCat) >= (int)b_s)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                if (snprintf(DispFormat, b_s, "%%%dd", log_maxCat) >= (int)b_s)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                 if (snprintf(DispFormat, b_s, "%%%dd", log_maxCat) >= (int)b_s)
@@ -333,6 +346,9 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1140,12 +1156,15 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
         /* scale text to fit in window if position not manually set */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (opt_at->answer == NULL) { /* ie defualt scaling */
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         if (opt_at->answer == NULL) { /* ie default scaling */
 =======
         if (opt_at->answer == NULL) { /* ie defualt scaling */
@@ -1154,6 +1173,9 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
         if (opt_at->answer == NULL) { /* ie defualt scaling */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

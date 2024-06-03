@@ -26,6 +26,7 @@ Usage::
     # needs to be edited by the user
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -34,6 +35,10 @@ Usage::
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -54,7 +59,10 @@ Usage::
     process = subprocess.run(grass_cmd, check=True, text=True, stdout=subprocess.PIPE)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -111,6 +119,9 @@ Usage::
     process = subprocess.run(grass_cmd, check=True, text=True, stdout=subprocess.PIPE)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -127,16 +138,23 @@ Usage::
     # example calls
 <<<<<<< HEAD
 <<<<<<< HEAD
-    gs.message("Current GRASS GIS 8 environment:")
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     gs.message("Current GRASS GIS 8 environment:")
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    gs.message("Current GRASS GIS 8 environment:")
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    gs.message("Current GRASS GIS 8 environment:")
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     gs.message("Current GRASS GIS 8 environment:")
@@ -154,6 +172,9 @@ Usage::
     gs.message("Current GRASS GIS 8 environment:")
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -173,6 +194,7 @@ Usage::
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 (C) 2010-2023 by the GRASS Development Team
 =======
 <<<<<<< HEAD
@@ -180,6 +202,9 @@ Usage::
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -203,6 +228,9 @@ Usage::
 (C) 2010-2023 by the GRASS Development Team
 >>>>>>> 6104ec7096 (i.maxlik: fix crash when classification result is NULL (#2724))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -254,6 +282,7 @@ def set_gui_path():
 
 def get_install_path(path=None):
     """Get path to GRASS installation usable for setup of environmental variables.
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 
@@ -377,6 +406,8 @@ def setup_runtime_env(gisbase):
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 
     The function tries to determine path tp GRASS GIS installation so that the
     returned path can be used for setup of environmental variable for GRASS runtime.
@@ -658,6 +689,9 @@ def init(path, location=None, mapset=None, *, grass_path=None):
     executable, the executable is queried for the path.
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1040,6 +1074,7 @@ def init(path, location=None, mapset=None, grass_path=None):
     of the object is called explicitly. Using methods of the session object is
     preferred over calling the function :func:`finish`.
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     Basic usage::
 
@@ -1147,6 +1182,8 @@ def init(path, location=None, mapset=None, grass_path=None):
     preferred over calling the function :func:`finish`.
 =======
 >>>>>>> osgeo-main
+=======
+>>>>>>> osgeo-main
 
     Basic usage::
 
@@ -1221,10 +1258,14 @@ class SessionHandle:
     """Object used to manage GRASS sessions.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 class SessionHandle:
     """Object used to manage GRASS sessions.
 
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
 =======
@@ -1268,11 +1309,14 @@ class SessionHandle:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     @property
     def env(self):
         return os.environ
@@ -1282,6 +1326,9 @@ class SessionHandle:
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

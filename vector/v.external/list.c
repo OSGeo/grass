@@ -294,11 +294,15 @@ int list_layers_ogr(FILE *fd, const char *dsn, char **layer, int print_types)
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
@@ -308,8 +312,11 @@ int list_layers_ogr(FILE *fd, const char *dsn, char **layer, int print_types)
         Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
         layer_name = (char *)OGR_FD_GetName(Ogr_featuredefn);
@@ -322,6 +329,9 @@ int list_layers_ogr(FILE *fd, const char *dsn, char **layer, int print_types)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -332,8 +342,14 @@ int list_layers_ogr(FILE *fd, const char *dsn, char **layer, int print_types)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -350,12 +366,16 @@ int list_layers_ogr(FILE *fd, const char *dsn, char **layer, int print_types)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if GDAL_VERSION_NUM >= 1110000
                 OGRGeomFieldDefnH Ogr_geomdefn;
 #endif
 =======
 <<<<<<< HEAD
                 OGRGeomFieldDefnH Ogr_geomdefn;
+=======
+                OGRGeomFieldDefnH Ogr_geomdefn;
+>>>>>>> osgeo-main
 =======
 #if GDAL_VERSION_NUM >= 1110000
                 OGRGeomFieldDefnH Ogr_geomdefn;
@@ -366,6 +386,9 @@ int list_layers_ogr(FILE *fd, const char *dsn, char **layer, int print_types)
                 OGRGeomFieldDefnH Ogr_geomdefn;
 #endif
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 /* projection check */
                 Ogr_projection = OGR_L_GetSpatialRef(Ogr_layer);
@@ -389,6 +412,7 @@ int list_layers_ogr(FILE *fd, const char *dsn, char **layer, int print_types)
                 }
                 G_suppress_warnings(FALSE);
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if GDAL_VERSION_NUM >= 1110000
 =======
 <<<<<<< HEAD
@@ -428,6 +452,8 @@ int list_layers_ogr(FILE *fd, const char *dsn, char **layer, int print_types)
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 #if GDAL_VERSION_NUM >= 1110000
@@ -436,6 +462,9 @@ int list_layers_ogr(FILE *fd, const char *dsn, char **layer, int print_types)
 #if GDAL_VERSION_NUM >= 1110000
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -463,8 +492,14 @@ int list_layers_ogr(FILE *fd, const char *dsn, char **layer, int print_types)
 #endif
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

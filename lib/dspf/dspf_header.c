@@ -43,17 +43,24 @@ int dfwrite_header(file_info *headp)
     /* write the array of thresholds out */
 <<<<<<< HEAD
 <<<<<<< HEAD
-    if ((fwrite(linep->tvalue, flsize, linep->nthres, fp)) !=
-        (size_t)linep->nthres) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if ((fwrite(linep->tvalue, flsize, linep->nthres, fp)) !=
         (size_t)linep->nthres) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if ((fwrite(linep->tvalue, flsize, linep->nthres, fp)) !=
+        (size_t)linep->nthres) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    if ((fwrite(linep->tvalue, flsize, linep->nthres, fp)) !=
+        (size_t)linep->nthres) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     if ((fwrite(linep->tvalue, flsize, linep->nthres, fp)) !=
         (size_t)linep->nthres) {
@@ -76,6 +83,9 @@ int dfwrite_header(file_info *headp)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

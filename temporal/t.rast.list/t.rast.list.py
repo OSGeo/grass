@@ -157,12 +157,15 @@ def main():
                     reason=_(
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                         "A standard CSV separator (delimiter) is only one character long"
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                         "A standard CSV separator (delimiter) is only one character "
                         "long"
 =======
@@ -172,6 +175,9 @@ def main():
                         "A standard CSV separator (delimiter) is only one character long"
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -183,12 +189,15 @@ def main():
             # This does not allow for users to generate CSV with pipe, but unlike
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             # the C API, the Python interface specs does not allow reseting the default
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             # the C API, the Python interface specs does not allow resetting the default
 =======
             # the C API, the Python interface specs does not allow reseting the default
@@ -197,6 +206,9 @@ def main():
             # the C API, the Python interface specs does not allow reseting the default
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -260,12 +272,15 @@ def main():
                             reason=_(
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                                 "Column '{name}' is not available with the method '{method}'"
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                                 "Column '{name}' is not available with the method "
                                 "'{method}'"
 =======
@@ -275,6 +290,9 @@ def main():
                                 "Column '{name}' is not available with the method '{method}'"
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -294,12 +312,15 @@ def main():
                         reason=_(
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                             "Column '{name}' is not available with the method '{method}'"
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                             "Column '{name}' is not available with the method "
                             "'{method}'"
 =======
@@ -309,6 +330,9 @@ def main():
                             "Column '{name}' is not available with the method '{method}'"
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

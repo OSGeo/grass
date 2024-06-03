@@ -3,12 +3,15 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int db__driver_execute_immediate(dbString *SQLstatement)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 int db__driver_execute_immediate(dbString *SQLstatement UNUSED)
 =======
 int db__driver_execute_immediate(dbString *SQLstatement)
@@ -17,6 +20,9 @@ int db__driver_execute_immediate(dbString *SQLstatement)
 int db__driver_execute_immediate(dbString *SQLstatement)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

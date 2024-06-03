@@ -91,17 +91,24 @@ int do_grid_cross(void)
     g_east = floor(PS.w.east / PS.grid) * PS.grid;
 <<<<<<< HEAD
 <<<<<<< HEAD
-    for (; g_north >= PS.w.south; g_north -= PS.grid) {
-        for (; g_east > PS.w.west; g_east -= PS.grid) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     for (; g_north >= PS.w.south; g_north -= PS.grid) {
         for (; g_east > PS.w.west; g_east -= PS.grid) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (; g_north >= PS.w.south; g_north -= PS.grid) {
+        for (; g_east > PS.w.west; g_east -= PS.grid) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    for (; g_north >= PS.w.south; g_north -= PS.grid) {
+        for (; g_east > PS.w.west; g_east -= PS.grid) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     for (; g_north >= PS.w.south; g_north -= PS.grid) {
         for (; g_east > PS.w.west; g_east -= PS.grid) {
@@ -126,6 +133,9 @@ int do_grid_cross(void)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

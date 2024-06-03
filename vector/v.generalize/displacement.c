@@ -202,6 +202,7 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
     for (iter = 0; iter < iterations; iter++) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -210,6 +211,10 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -280,10 +285,13 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         matrix_mult(&kinv, &fx, &dx);
         matrix_mult(&kinv, &fy, &dy);
 
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -506,6 +514,9 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

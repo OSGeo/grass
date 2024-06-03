@@ -14,9 +14,12 @@
 import os
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import shutil
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 from pathlib import Path
@@ -28,6 +31,9 @@ from IPython.display import Image
 =======
 >>>>>>> 920471e340 (libraster: fix Rast_legal_bandref() (#1796))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -36,6 +42,7 @@ import grass.script as gs
 
 
 class GrassRenderer:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     """GrassRenderer creates and displays GRASS maps in
@@ -66,6 +73,10 @@ class GrassRenderer:
     """The grassRenderer class creates and displays GRASS maps in
     Jupyter Notebooks."""
 >>>>>>> osgeo-main
+=======
+    """The grassRenderer class creates and displays GRASS maps in
+    Jupyter Notebooks."""
+>>>>>>> osgeo-main
 
     def __init__(
         self,
@@ -78,8 +89,13 @@ class GrassRenderer:
     ):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+        """Initiates an instance of the GrassRenderer class."""
+=======
+>>>>>>> osgeo-main
+=======
         """Initiates an instance of the GrassRenderer class."""
 =======
 >>>>>>> osgeo-main
@@ -99,6 +115,10 @@ class GrassRenderer:
         """
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
+>>>>>>> osgeo-main
 =======
 >>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
 >>>>>>> osgeo-main
@@ -116,10 +136,13 @@ class GrassRenderer:
         self._env["GRASS_RENDER_HEIGHT"] = str(height)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         self._env["GRASS_RENDER_TEXT_SIZE"] = str(text_size)
         self._env["GRASS_RENDER_IMMEDIATE"] = renderer
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
         self._env["GRASS_TEXT_SIZE"] = str(text_size)
@@ -130,6 +153,9 @@ class GrassRenderer:
         self._env["GRASS_RENDER_IMMEDIATE"] = renderer
 >>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -164,6 +190,7 @@ class GrassRenderer:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     def __getattr__(self, name):
         """Parse attribute to GRASS display module. Attribute should be in
         the form 'd_module_name'. For example, 'd.rast' is called with 'd_rast'.
@@ -191,6 +218,8 @@ class GrassRenderer:
 =======
 =======
 >>>>>>> osgeo-main
+=======
+>>>>>>> osgeo-main
     def show(self):
 <<<<<<< HEAD
         """Displays a PNG image of the map (non-interactive)"""
@@ -200,6 +229,9 @@ class GrassRenderer:
 
 >>>>>>> 920471e340 (libraster: fix Rast_legal_bandref() (#1796))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

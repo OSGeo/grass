@@ -10,12 +10,15 @@
  *     applying it once gets an UNIFORM distribution in the range of 0-max_num;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  *     doing it twice gets a SIMPLE INVERSE distribuion in that range;
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
  *     doing it twice gets a SIMPLE INVERSE distribution in that range;
 =======
  *     doing it twice gets a SIMPLE INVERSE distribuion in that range;
@@ -24,6 +27,9 @@
  *     doing it twice gets a SIMPLE INVERSE distribuion in that range;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

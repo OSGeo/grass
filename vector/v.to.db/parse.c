@@ -26,12 +26,15 @@ int parse_command_line(int argc, char *argv[])
     struct {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         struct Flag *p, *s, *t;
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         struct Flag *h, *p, *s, *t;
 =======
         struct Flag *p, *s, *t;
@@ -40,6 +43,9 @@ int parse_command_line(int argc, char *argv[])
         struct Flag *p, *s, *t;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -90,11 +96,14 @@ int parse_command_line(int argc, char *argv[])
         _("area size"),
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         _("compactness of an area, calculated as compactness = perimeter / (2 "
           "* sqrt(PI * area))"),
         _("fractal dimension of boundary defining a polygon, calculated as fd "
@@ -103,6 +112,9 @@ int parse_command_line(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -112,8 +124,14 @@ int parse_command_line(int argc, char *argv[])
           "              fd = 2 * (log(perimeter) / log(area))"),
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -132,12 +150,15 @@ int parse_command_line(int argc, char *argv[])
           "'query_layer' is used for area category"),
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         _("result of a database query for all records of the geometry"
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         _("result of a database query for all records of the geometry "
 =======
         _("result of a database query for all records of the geometry"
@@ -146,6 +167,9 @@ int parse_command_line(int argc, char *argv[])
         _("result of a database query for all records of the geometry"
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -191,11 +215,14 @@ int parse_command_line(int argc, char *argv[])
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     flags.h = G_define_flag();
     flags.h->key = 'h';
     flags.h->description = _("Print header");
@@ -206,6 +233,9 @@ int parse_command_line(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

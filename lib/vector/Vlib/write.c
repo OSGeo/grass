@@ -28,6 +28,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static off_t write_dummy(struct Map_info *Map, int type,
                          const struct line_pnts *points,
                          const struct line_cats *cats)
@@ -38,6 +39,8 @@ static off_t write_dummy(struct Map_info *Map, int type,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 static off_t write_dummy(struct Map_info *Map UNUSED, int type UNUSED,
                          const struct line_pnts *points UNUSED,
                          const struct line_cats *cats UNUSED)
@@ -61,6 +64,9 @@ static off_t write_dummy(struct Map_info *Map, int type,
 <<<<<<< HEAD
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -82,11 +88,14 @@ static int delete_dummy(struct Map_info *Map, off_t line)
               _("for this format/level not supported"));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     return -1;
 }
 
 static int restore_dummy(struct Map_info *Map, off_t offset, off_t line)
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -151,6 +160,9 @@ static int restore_dummy(struct Map_info *Map, off_t offset, off_t line)
 static int restore_dummy(struct Map_info *Map, off_t offset, off_t line)
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -163,12 +175,15 @@ static int restore_dummy(struct Map_info *Map, off_t offset, off_t line)
 #if !defined HAVE_OGR || !defined HAVE_POSTGRES
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int format(struct Map_info *Map, off_t line)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 static int format(struct Map_info *Map UNUSED, off_t line UNUSED)
 =======
 static int format(struct Map_info *Map, off_t line)
@@ -177,6 +192,9 @@ static int format(struct Map_info *Map, off_t line)
 static int format(struct Map_info *Map, off_t line)
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -187,12 +205,15 @@ static int format(struct Map_info *Map, off_t line)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int format2(struct Map_info *Map, off_t offset, off_t line)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 static int format2(struct Map_info *Map UNUSED, off_t offset UNUSED,
                    off_t line UNUSED)
 =======
@@ -202,6 +223,9 @@ static int format2(struct Map_info *Map, off_t offset, off_t line)
 static int format2(struct Map_info *Map, off_t offset, off_t line)
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -210,6 +234,7 @@ static int format2(struct Map_info *Map, off_t offset, off_t line)
     return 0;
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 static off_t format_l(struct Map_info *Map, int type,
@@ -220,6 +245,8 @@ static off_t format_l(struct Map_info *Map, int type,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 static off_t format_l(struct Map_info *Map UNUSED, int type UNUSED,
                       const struct line_pnts *points UNUSED,
                       const struct line_cats *cats UNUSED)
@@ -234,6 +261,9 @@ static off_t format_l(struct Map_info *Map, int type,
                       const struct line_cats *cats)
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -244,6 +274,7 @@ static off_t format_l(struct Map_info *Map, int type,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static off_t format_l2(struct Map_info *Map, off_t line, int type,
                        const struct line_pnts *points,
                        const struct line_cats *cats)
@@ -252,6 +283,8 @@ static off_t format_l2(struct Map_info *Map, off_t line, int type,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 static off_t format_l2(struct Map_info *Map UNUSED, off_t line UNUSED,
                        int type UNUSED, const struct line_pnts *points UNUSED,
                        const struct line_cats *cats UNUSED)
@@ -266,6 +299,9 @@ static off_t format_l2(struct Map_info *Map, off_t line, int type,
                        const struct line_cats *cats)
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -277,8 +313,13 @@ static off_t format_l2(struct Map_info *Map, off_t line, int type,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -291,10 +332,13 @@ static off_t (*Vect_write_line_array[][3])(struct Map_info *, int,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static off_t (*Vect_write_line_array[][3])(struct Map_info *, int,
                                            const struct line_pnts *,
                                            const struct line_cats *) = {
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 static off_t (*Vect_write_line_array[][3])() = {
@@ -315,6 +359,9 @@ static off_t (*Vect_write_line_array[][3])(struct Map_info *, int,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -339,8 +386,13 @@ static off_t (*Vect_write_line_array[][3])(struct Map_info *, int,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -353,10 +405,13 @@ static off_t (*Vect_rewrite_line_array[][3])(struct Map_info *, off_t, int,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static off_t (*Vect_rewrite_line_array[][3])(struct Map_info *, off_t, int,
                                              const struct line_pnts *,
                                              const struct line_cats *) = {
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 static off_t (*Vect_rewrite_line_array[][3])() = {
@@ -377,6 +432,9 @@ static off_t (*Vect_rewrite_line_array[][3])(struct Map_info *, off_t, int,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -389,18 +447,26 @@ static off_t (*Vect_rewrite_line_array[][3])(struct Map_info *, off_t, int,
     ,
 <<<<<<< HEAD
 <<<<<<< HEAD
-    {rewrite_dummy, format_l2, format_l2},
-    {rewrite_dummy, format_l2, format_l2}
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     {rewrite_dummy, format_l2, format_l2},
     {rewrite_dummy, format_l2, format_l2}
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    {rewrite_dummy, format_l2, format_l2},
+    {rewrite_dummy, format_l2, format_l2}
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    {rewrite_dummy, format_l2, format_l2},
+    {rewrite_dummy, format_l2, format_l2}
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     {rewrite_dummy, format_l2, format_l2},
@@ -427,6 +493,9 @@ static off_t (*Vect_rewrite_line_array[][3])(struct Map_info *, off_t, int,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -438,6 +507,7 @@ static off_t (*Vect_rewrite_line_array[][3])(struct Map_info *, off_t, int,
     ,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -446,6 +516,10 @@ static off_t (*Vect_rewrite_line_array[][3])(struct Map_info *, off_t, int,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -456,7 +530,10 @@ static off_t (*Vect_rewrite_line_array[][3])(struct Map_info *, off_t, int,
 static int (*Vect_delete_line_array[][3])(struct Map_info *, off_t) = {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
@@ -500,6 +577,9 @@ static int (*Vect_delete_line_array[][3])(struct Map_info *, off_t) = {
 =======
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     {delete_dummy, V1_delete_line_nat, V2_delete_line_nat}
 #ifdef HAVE_OGR
@@ -561,6 +641,7 @@ static int (*Vect_restore_line_array[][3])(struct Map_info *, off_t, off_t) = {
 =======
     {restore_dummy, format2, format2}
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 =======
@@ -665,6 +746,8 @@ static int (*Vect_restore_line_array[][3])(struct Map_info *, off_t, off_t) = {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 =======
     {restore_dummy, format2, format2}
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
@@ -780,12 +863,15 @@ off_t Vect_rewrite_line(struct Map_info *Map, off_t line, int type,
             "Vect_rewrite_line(): name = %s, format = %d, level = %d, "
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             "line/offset = %" PRI_OFF_T,
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             "line/offset = %" PRId64,
 =======
             "line/offset = %" PRI_OFF_T,
@@ -794,6 +880,9 @@ off_t Vect_rewrite_line(struct Map_info *Map, off_t line, int type,
             "line/offset = %" PRI_OFF_T,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -807,12 +896,15 @@ off_t Vect_rewrite_line(struct Map_info *Map, off_t line, int type,
     if (ret == -1)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_warning(_("Unable to rewrite feature/offset %" PRI_OFF_T
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         G_warning(_("Unable to rewrite feature/offset %" PRId64
 =======
         G_warning(_("Unable to rewrite feature/offset %" PRI_OFF_T
@@ -821,6 +913,9 @@ off_t Vect_rewrite_line(struct Map_info *Map, off_t line, int type,
         G_warning(_("Unable to rewrite feature/offset %" PRI_OFF_T
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -858,12 +953,15 @@ int Vect_delete_line(struct Map_info *Map, off_t line)
     if (ret == -1)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_warning(_("Unable to delete feature/offset %" PRI_OFF_T
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         G_warning(_("Unable to delete feature/offset %" PRId64
 =======
         G_warning(_("Unable to delete feature/offset %" PRI_OFF_T
@@ -872,6 +970,9 @@ int Vect_delete_line(struct Map_info *Map, off_t line)
         G_warning(_("Unable to delete feature/offset %" PRI_OFF_T
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -902,6 +1003,7 @@ int Vect_restore_line(struct Map_info *Map, off_t offset, off_t line)
     G_debug(3,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             "Vect_restore_line(): name = %s, level = %d, offset = %" PRI_OFF_T
             ", line = %" PRI_OFF_T,
 =======
@@ -909,6 +1011,8 @@ int Vect_restore_line(struct Map_info *Map, off_t offset, off_t line)
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             "Vect_restore_line(): name = %s, level = %d, offset = %" PRId64
             ", line = %" PRId64,
 =======
@@ -920,6 +1024,9 @@ int Vect_restore_line(struct Map_info *Map, off_t offset, off_t line)
             ", line = %" PRI_OFF_T,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -934,12 +1041,15 @@ int Vect_restore_line(struct Map_info *Map, off_t offset, off_t line)
     if (ret == -1)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_warning(_("Unable to restore feature/offset %" PRI_OFF_T
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         G_warning(_("Unable to restore feature/offset %" PRId64
 =======
         G_warning(_("Unable to restore feature/offset %" PRI_OFF_T
@@ -948,6 +1058,9 @@ int Vect_restore_line(struct Map_info *Map, off_t offset, off_t line)
         G_warning(_("Unable to restore feature/offset %" PRI_OFF_T
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

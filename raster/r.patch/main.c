@@ -9,6 +9,7 @@
  *               Jan-Oliver Wagner <jan intevation.de>,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -21,6 +22,11 @@
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
  *               Huidae Cho <grass4u gmail.com>,
  *               Aaron Saw Min Sern (OpenMP parallelization)
  * PURPOSE:
@@ -29,7 +35,10 @@
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
  *               Huidae Cho <grass4u gmail.com>
@@ -45,6 +54,9 @@
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -140,11 +152,14 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 
     sscanf(threads->answer, "%d", &nprocs);
     if (nprocs < 1)
@@ -166,6 +181,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -200,11 +218,14 @@ int main(int argc, char *argv[])
         infd[t] = G_malloc(nfiles * sizeof(int));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     thread_statf = G_malloc(nprocs * (nfiles * sizeof(struct Cell_stats)));
     for (t = 0; t < nprocs; t++) {
         thread_statf[t] = G_malloc(nfiles * sizeof(struct Cell_stats));
@@ -213,6 +234,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -226,6 +250,7 @@ int main(int argc, char *argv[])
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -238,6 +263,11 @@ int main(int argc, char *argv[])
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         for (t = 0; t < nprocs; t++) {
             infd[t][i] = Rast_open_old(name, "");
         }
@@ -245,7 +275,10 @@ int main(int argc, char *argv[])
         fd = infd[0][i];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
         fd = Rast_open_old(name, "");
 
@@ -258,6 +291,9 @@ int main(int argc, char *argv[])
 
         fd = infd[0][i];
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
         map_type = Rast_get_map_type(fd);
@@ -266,6 +302,7 @@ int main(int argc, char *argv[])
         else if (map_type == DCELL_TYPE)
             out_type = DCELL_TYPE;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         Rast_init_cell_stats(&statf[i]);
 
@@ -314,6 +351,17 @@ int main(int argc, char *argv[])
         Rast_get_cellhd(name, "", &cellhd[i]);
     }
 >>>>>>> osgeo-main
+=======
+        for (t = 0; t < nprocs; t++) {
+            Rast_init_cell_stats(&thread_statf[t][i]);
+        }
+=======
+        Rast_init_cell_stats(&statf[i]);
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
+
+        Rast_get_cellhd(name, "", &cellhd[i]);
+    }
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 =======
@@ -330,6 +378,9 @@ int main(int argc, char *argv[])
     }
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -360,12 +411,15 @@ int main(int argc, char *argv[])
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     bufrows = atoi(memory->answer) * (((1 << 20) / out_cell_size) / ncols);
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     /* memory reserved for presult and patch */
     in_buf_size = out_cell_size * ncols * nprocs * 2;
@@ -385,6 +439,9 @@ int main(int argc, char *argv[])
     bufrows = atoi(memory->answer) * (((1 << 20) / out_cell_size) / ncols);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -399,10 +456,13 @@ int main(int argc, char *argv[])
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
     G_verbose_message(_("Percent complete..."));
     for (row = 0; row < nrows; row++) {
         double north_edge, south_edge;
@@ -435,6 +495,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -477,6 +540,7 @@ int main(int argc, char *argv[])
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 if (out_type == CELL_TYPE && !no_support)
                     Rast_update_cell_stats((CELL *)local_presult, ncols,
                                            &statf[0]);
@@ -485,6 +549,8 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                 if (out_type == CELL_TYPE && !no_support) {
                     Rast_update_cell_stats((CELL *)local_presult, ncols,
                                            &thread_statf[t_id][0]);
@@ -500,6 +566,9 @@ int main(int argc, char *argv[])
                                            &statf[0]);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -514,6 +583,7 @@ int main(int argc, char *argv[])
                     Rast_get_row(local_infd[i], local_patch, row, out_type);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     if (!do_patch(local_presult, local_patch, &statf[i], ncols,
                                   out_type, out_cell_size, use_zero,
                                   no_support))
@@ -522,6 +592,8 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                     if (!do_patch(local_presult, local_patch,
                                   &(thread_statf[t_id][i]), ncols, out_type,
                                   out_cell_size, use_zero, no_support))
@@ -536,6 +608,9 @@ int main(int argc, char *argv[])
                                   no_support))
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -570,17 +645,23 @@ int main(int argc, char *argv[])
     G_free(presult);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -594,11 +675,14 @@ int main(int argc, char *argv[])
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 =======
 <<<<<<< HEAD
 
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     for (i = 0; i < nfiles; i++)
@@ -611,6 +695,9 @@ int main(int argc, char *argv[])
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -623,6 +710,7 @@ int main(int argc, char *argv[])
                           new_name);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         support(names, statf, nfiles, &cats, &cats_ok, &colr, &colr_ok,
                 out_type);
 =======
@@ -630,6 +718,8 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 
         if (out_type == CELL_TYPE) {
             merge_threads(thread_statf, nprocs, nfiles);
@@ -646,6 +736,9 @@ int main(int argc, char *argv[])
                 out_type);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

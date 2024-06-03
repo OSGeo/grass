@@ -1,14 +1,20 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
-/****************************************************************************
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 /****************************************************************************
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+/****************************************************************************
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+/****************************************************************************
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 /****************************************************************************
 =======
@@ -23,6 +29,9 @@
 /****************************************************************************
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -46,11 +55,14 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-parameter"
@@ -61,6 +73,9 @@
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -75,6 +90,7 @@
 #include <pdal/filters/StreamCallbackFilter.hpp>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 extern "C" {
 =======
@@ -82,6 +98,8 @@ extern "C" {
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #if defined(__clang__)
 #pragma clang diagnostic pop
 #endif
@@ -101,6 +119,9 @@ extern "C" {
 extern "C" {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -116,15 +137,21 @@ extern "C" {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-extern "C" {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 extern "C" {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+extern "C" {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+extern "C" {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 extern "C" {
 =======
@@ -139,6 +166,9 @@ extern "C" {
 extern "C" {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -153,11 +183,14 @@ extern "C" {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 
@@ -167,6 +200,9 @@ extern "C" {
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -185,6 +221,7 @@ int main(int argc, char *argv[])
     struct Cell_head input_region;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int rows, cols; /* scan box size */
 =======
 <<<<<<< HEAD
@@ -198,6 +235,11 @@ int main(int argc, char *argv[])
     int rows, cols; /* scan box size */
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+    int rows, cols; /* scan box size */
+=======
+>>>>>>> osgeo-main
     int rows, cols;             /* scan box size */
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -207,6 +249,9 @@ int main(int argc, char *argv[])
     int rows, cols; /* scan box size */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -234,17 +279,24 @@ int main(int argc, char *argv[])
     G_add_keyword(_("binning"));
 <<<<<<< HEAD
 <<<<<<< HEAD
-    module->description = _("Creates a raster map from LAS LiDAR points using "
-                            "univariate statistics.");
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     module->description = _("Creates a raster map from LAS LiDAR points using "
                             "univariate statistics.");
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    module->description = _("Creates a raster map from LAS LiDAR points using "
+                            "univariate statistics.");
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    module->description = _("Creates a raster map from LAS LiDAR points using "
+                            "univariate statistics.");
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     module->description = _("Creates a raster map from LAS LiDAR points using "
                             "univariate statistics.");
@@ -262,6 +314,9 @@ int main(int argc, char *argv[])
                             "univariate statistics.");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -299,6 +354,7 @@ int main(int argc, char *argv[])
         "percentile,skewness,trimmean,sidnmax,sidnmin,ev1,ev2,ev3";
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     method_opt->answer = const_cast<char *>("mean");
 =======
 <<<<<<< HEAD
@@ -312,6 +368,11 @@ int main(int argc, char *argv[])
     method_opt->answer = const_cast<char *>("mean");
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+    method_opt->answer = const_cast<char *>("mean");
+=======
+>>>>>>> osgeo-main
     method_opt->answer = const_cast < char *>("mean");
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -321,6 +382,9 @@ int main(int argc, char *argv[])
     method_opt->answer = const_cast<char *>("mean");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -371,15 +435,21 @@ int main(int argc, char *argv[])
     type_opt->required = NO;
 <<<<<<< HEAD
 <<<<<<< HEAD
-    type_opt->answer = const_cast<char *>("FCELL");
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     type_opt->answer = const_cast<char *>("FCELL");
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    type_opt->answer = const_cast<char *>("FCELL");
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    type_opt->answer = const_cast<char *>("FCELL");
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     type_opt->answer = const_cast<char *>("FCELL");
 =======
@@ -393,6 +463,9 @@ int main(int argc, char *argv[])
     type_opt->answer = const_cast<char *>("FCELL");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -403,15 +476,21 @@ int main(int argc, char *argv[])
     base_raster_opt->required = NO;
 <<<<<<< HEAD
 <<<<<<< HEAD
-    base_raster_opt->label = _("Subtract raster values from the Z coordinates");
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     base_raster_opt->label = _("Subtract raster values from the Z coordinates");
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    base_raster_opt->label = _("Subtract raster values from the Z coordinates");
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    base_raster_opt->label = _("Subtract raster values from the Z coordinates");
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     base_raster_opt->label = _("Subtract raster values from the Z coordinates");
 =======
@@ -426,6 +505,9 @@ int main(int argc, char *argv[])
     base_raster_opt->label = _("Subtract raster values from the Z coordinates");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -452,6 +534,7 @@ int main(int argc, char *argv[])
     zscale_opt->required = NO;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     zscale_opt->answer = const_cast<char *>("1.0");
 =======
 <<<<<<< HEAD
@@ -465,6 +548,11 @@ int main(int argc, char *argv[])
     zscale_opt->answer = const_cast<char *>("1.0");
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+    zscale_opt->answer = const_cast<char *>("1.0");
+=======
+>>>>>>> osgeo-main
     zscale_opt->answer = const_cast < char *>("1.0");
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -474,6 +562,9 @@ int main(int argc, char *argv[])
     zscale_opt->answer = const_cast<char *>("1.0");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -489,15 +580,21 @@ int main(int argc, char *argv[])
     irange_opt->key_desc = "min,max";
 <<<<<<< HEAD
 <<<<<<< HEAD
-    irange_opt->description = _("Filter range for intensity values (min,max)");
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     irange_opt->description = _("Filter range for intensity values (min,max)");
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    irange_opt->description = _("Filter range for intensity values (min,max)");
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    irange_opt->description = _("Filter range for intensity values (min,max)");
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     irange_opt->description = _("Filter range for intensity values (min,max)");
 =======
@@ -512,6 +609,9 @@ int main(int argc, char *argv[])
     irange_opt->description = _("Filter range for intensity values (min,max)");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -524,15 +624,21 @@ int main(int argc, char *argv[])
     iscale_opt->required = NO;
 <<<<<<< HEAD
 <<<<<<< HEAD
-    iscale_opt->answer = const_cast<char *>("1.0");
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     iscale_opt->answer = const_cast<char *>("1.0");
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    iscale_opt->answer = const_cast<char *>("1.0");
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    iscale_opt->answer = const_cast<char *>("1.0");
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     iscale_opt->answer = const_cast<char *>("1.0");
 =======
@@ -546,6 +652,9 @@ int main(int argc, char *argv[])
     iscale_opt->answer = const_cast<char *>("1.0");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -579,11 +688,14 @@ int main(int argc, char *argv[])
     reproject_flag->label =
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         _("Reproject to project's coordinate system if needed");
     reproject_flag->description =
         _("Reprojects input dataset to the coordinate system of"
@@ -597,6 +709,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -609,6 +724,7 @@ int main(int argc, char *argv[])
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     // TODO: from the API it seems that also prj file path and proj string will
     // work
 =======
@@ -616,6 +732,8 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     // TODO: from the API it seems that also prj file path and proj string will work
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -627,6 +745,9 @@ int main(int argc, char *argv[])
     // work
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -663,17 +784,24 @@ int main(int argc, char *argv[])
         _("Discard given percentage of the smallest and largest values");
 <<<<<<< HEAD
 <<<<<<< HEAD
-    trim_opt->description = _("Discard <trim> percent of the smallest and "
-                              "<trim> percent of the largest observations");
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     trim_opt->description = _("Discard <trim> percent of the smallest and "
                               "<trim> percent of the largest observations");
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    trim_opt->description = _("Discard <trim> percent of the smallest and "
+                              "<trim> percent of the largest observations");
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    trim_opt->description = _("Discard <trim> percent of the smallest and "
+                              "<trim> percent of the largest observations");
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     trim_opt->description = _("Discard <trim> percent of the smallest and "
                               "<trim> percent of the largest observations");
@@ -691,6 +819,9 @@ int main(int argc, char *argv[])
                               "<trim> percent of the largest observations");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -711,15 +842,21 @@ int main(int argc, char *argv[])
     return_filter_opt->required = NO;
 <<<<<<< HEAD
 <<<<<<< HEAD
-    return_filter_opt->label = _("Only import points of selected return type");
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     return_filter_opt->label = _("Only import points of selected return type");
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    return_filter_opt->label = _("Only import points of selected return type");
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    return_filter_opt->label = _("Only import points of selected return type");
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     return_filter_opt->label = _("Only import points of selected return type");
 =======
@@ -734,6 +871,9 @@ int main(int argc, char *argv[])
     return_filter_opt->label = _("Only import points of selected return type");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -751,8 +891,12 @@ int main(int argc, char *argv[])
     class_filter_opt->label = _("Only import points of selected class(es)");
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 >>>>>>> osgeo-main
     class_filter_opt->description =
@@ -763,10 +907,13 @@ int main(int argc, char *argv[])
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     class_filter_opt->description =
         _("Input is comma separated integers. "
           "If not specified, all points are imported.");
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     class_filter_opt->description = _("Input is comma separated integers. "
@@ -783,6 +930,9 @@ int main(int argc, char *argv[])
           "If not specified, all points are imported.");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -798,15 +948,21 @@ int main(int argc, char *argv[])
         "z,intensity,number,returns,direction,angle,class,source";
 <<<<<<< HEAD
 <<<<<<< HEAD
-    dimension_opt->answer = const_cast<char *>("z");
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     dimension_opt->answer = const_cast<char *>("z");
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    dimension_opt->answer = const_cast<char *>("z");
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    dimension_opt->answer = const_cast<char *>("z");
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     dimension_opt->answer = const_cast<char *>("z");
 =======
@@ -820,6 +976,9 @@ int main(int argc, char *argv[])
     dimension_opt->answer = const_cast<char *>("z");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -833,17 +992,23 @@ int main(int argc, char *argv[])
                "direction;%s;"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -855,10 +1020,13 @@ int main(int argc, char *argv[])
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
                "angle;%s;" "class;%s;" "source;%s", _("Z coordinate"),
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -866,6 +1034,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -920,6 +1091,7 @@ int main(int argc, char *argv[])
     over_flag->label =
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         _("Override projection check (use current location's projection)");
     over_flag->description = _(
         "Assume that the dataset has same projection as the current location");
@@ -928,6 +1100,8 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         _("Override projection check (use current project's CRS)");
     over_flag->description =
         _("Assume that the dataset has the same coordinate reference system as "
@@ -948,6 +1122,9 @@ int main(int argc, char *argv[])
         "Assume that the dataset has same projection as the current location");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -976,11 +1153,14 @@ int main(int argc, char *argv[])
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 
@@ -990,6 +1170,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1002,11 +1185,14 @@ int main(int argc, char *argv[])
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 
@@ -1016,6 +1202,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1029,15 +1218,21 @@ int main(int argc, char *argv[])
         if (access(file_list_opt->answer, F_OK) != 0)
 <<<<<<< HEAD
 <<<<<<< HEAD
-            G_fatal_error(_("File <%s> does not exist"), file_list_opt->answer);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             G_fatal_error(_("File <%s> does not exist"), file_list_opt->answer);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            G_fatal_error(_("File <%s> does not exist"), file_list_opt->answer);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+            G_fatal_error(_("File <%s> does not exist"), file_list_opt->answer);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
             G_fatal_error(_("File <%s> does not exist"), file_list_opt->answer);
 =======
@@ -1052,6 +1247,9 @@ int main(int argc, char *argv[])
             G_fatal_error(_("File <%s> does not exist"), file_list_opt->answer);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1075,17 +1273,23 @@ int main(int argc, char *argv[])
     /* we could use rules but this gives more info and allows continuing */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1097,10 +1301,13 @@ int main(int argc, char *argv[])
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
     if (set_region_flag->answer &&
         !(extents_flag->answer || res_opt->answer ||
           base_rast_res_flag->answer)) {
@@ -1111,6 +1318,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1155,6 +1365,7 @@ int main(int argc, char *argv[])
     /* G_get_window seems to be unreliable if the location has been changed */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -1167,6 +1378,11 @@ int main(int argc, char *argv[])
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     G_get_set_window(
         &loc_wind); /* TODO: v.in.lidar uses G_get_default_window() */
 
@@ -1176,7 +1392,10 @@ int main(int argc, char *argv[])
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     G_get_set_window(&loc_wind);        /* TODO: v.in.lidar uses G_get_default_window() */
@@ -1193,6 +1412,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1213,6 +1435,7 @@ int main(int argc, char *argv[])
     if (!extents_flag->answer) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -1224,6 +1447,11 @@ int main(int argc, char *argv[])
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 =======
+>>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
         use_spatial_filter =
             spatial_filter_from_current_region(&xmin, &ymin, &xmax, &ymax);
@@ -1248,7 +1476,10 @@ int main(int argc, char *argv[])
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
         use_spatial_filter = spatial_filter_from_current_region(&xmin,
@@ -1285,6 +1516,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1433,6 +1667,7 @@ int main(int argc, char *argv[])
             /* TODO: make it only as small as the output is or points are */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             Rast_set_input_window(&input_region); /* we have split window */
 =======
 <<<<<<< HEAD
@@ -1446,6 +1681,11 @@ int main(int argc, char *argv[])
             Rast_set_input_window(&input_region); /* we have split window */
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+            Rast_set_input_window(&input_region); /* we have split window */
+=======
+>>>>>>> osgeo-main
             Rast_set_input_window(&input_region);       /* we have split window */
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -1455,6 +1695,9 @@ int main(int argc, char *argv[])
             Rast_set_input_window(&input_region); /* we have split window */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1480,6 +1723,7 @@ int main(int argc, char *argv[])
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     std::vector<pdal::Stage *> readers;
 =======
 <<<<<<< HEAD
@@ -1493,6 +1737,11 @@ int main(int argc, char *argv[])
     std::vector<pdal::Stage *> readers;
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+    std::vector<pdal::Stage *> readers;
+=======
+>>>>>>> osgeo-main
     std::vector < pdal::Stage * >readers;
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -1502,6 +1751,9 @@ int main(int argc, char *argv[])
     std::vector<pdal::Stage *> readers;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1521,6 +1773,7 @@ int main(int argc, char *argv[])
         // stages created by factory are destroyed with the factory
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -1533,6 +1786,11 @@ int main(int argc, char *argv[])
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         pdal::Stage *reader = factory.createStage(pdal_read_driver);
         if (!reader)
             G_fatal_error("PDAL reader creation failed, a wrong format of <%s>",
@@ -1541,7 +1799,10 @@ int main(int argc, char *argv[])
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
         pdal::Stage * reader = factory.createStage(pdal_read_driver);
@@ -1559,6 +1820,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1572,15 +1836,21 @@ int main(int argc, char *argv[])
     // so we don't have to worry about the list of stages later
 <<<<<<< HEAD
 <<<<<<< HEAD
-    pdal::Stage *last_stage = &merge_filter;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     pdal::Stage *last_stage = &merge_filter;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    pdal::Stage *last_stage = &merge_filter;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    pdal::Stage *last_stage = &merge_filter;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     pdal::Stage *last_stage = &merge_filter;
 =======
@@ -1594,6 +1864,9 @@ int main(int argc, char *argv[])
     pdal::Stage *last_stage = &merge_filter;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1603,12 +1876,15 @@ int main(int argc, char *argv[])
     if (reproject_flag->answer) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_message(_("Reprojecting the input to the location projection"));
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         G_message(_("Reprojecting the input to the project's CRS"));
 =======
         G_message(_("Reprojecting the input to the location projection"));
@@ -1617,6 +1893,9 @@ int main(int argc, char *argv[])
         G_message(_("Reprojecting the input to the location projection"));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1627,17 +1906,24 @@ int main(int argc, char *argv[])
         if (input_srs_opt->answer)
 <<<<<<< HEAD
 <<<<<<< HEAD
-            o4.add<std::string>("in_srs", input_srs_opt->answer);
-        o4.add<std::string>("out_srs", proj_wkt);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             o4.add<std::string>("in_srs", input_srs_opt->answer);
         o4.add<std::string>("out_srs", proj_wkt);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            o4.add<std::string>("in_srs", input_srs_opt->answer);
+        o4.add<std::string>("out_srs", proj_wkt);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+            o4.add<std::string>("in_srs", input_srs_opt->answer);
+        o4.add<std::string>("out_srs", proj_wkt);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
             o4.add<std::string>("in_srs", input_srs_opt->answer);
         o4.add<std::string>("out_srs", proj_wkt);
@@ -1655,6 +1941,9 @@ int main(int argc, char *argv[])
         o4.add<std::string>("out_srs", proj_wkt);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1683,15 +1972,21 @@ int main(int argc, char *argv[])
         grass_filter.set_class_filter(class_filter);
 <<<<<<< HEAD
 <<<<<<< HEAD
-    grass_filter.set_z_scale(zscale); // Default is 1 == no scale
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     grass_filter.set_z_scale(zscale); // Default is 1 == no scale
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    grass_filter.set_z_scale(zscale); // Default is 1 == no scale
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    grass_filter.set_z_scale(zscale); // Default is 1 == no scale
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     grass_filter.set_z_scale(zscale); // Default is 1 == no scale
 =======
@@ -1705,6 +2000,9 @@ int main(int argc, char *argv[])
     grass_filter.set_z_scale(zscale); // Default is 1 == no scale
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1718,8 +2016,12 @@ int main(int argc, char *argv[])
     binning_writer.setInput(grass_filter);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 >>>>>>> osgeo-main
     // stream_filter.setInput(*last_stage);
@@ -1730,10 +2032,13 @@ int main(int argc, char *argv[])
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     // stream_filter.setInput(*last_stage);
     //  there is no difference between 1 and 10k points in memory
     //  consumption, so using 10k in case it is faster for some cases
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     //stream_filter.setInput(*last_stage);
@@ -1751,6 +2056,9 @@ int main(int argc, char *argv[])
     //  consumption, so using 10k in case it is faster for some cases
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1763,6 +2071,7 @@ int main(int argc, char *argv[])
         G_important_message(_("Overriding projection check and assuming"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                               " that the projection of input matches"
                               " the location projection"));
 =======
@@ -1770,6 +2079,8 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                               " that the CRS of input matches"
                               " the project's CRS"));
 =======
@@ -1781,6 +2092,9 @@ int main(int argc, char *argv[])
                               " the location projection"));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1831,17 +2145,23 @@ int main(int argc, char *argv[])
         if (!(strcmp(dimension_opt->answer, "z") == 0))
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1853,10 +2173,13 @@ int main(int argc, char *argv[])
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
             G_warning(_("Both dimension and user dimension parameters are specified. "
                        "Using '%s' as the dimension to import."),
                       user_dimension_opt->answer);
@@ -1866,6 +2189,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1881,17 +2207,24 @@ int main(int argc, char *argv[])
     // TODO: add percentage printing to one of the filters
 <<<<<<< HEAD
 <<<<<<< HEAD
-    binning_writer.set_binning(&region, &point_binning, &bin_index_nodes, rtype,
-                               cols);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     binning_writer.set_binning(&region, &point_binning, &bin_index_nodes, rtype,
                                cols);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    binning_writer.set_binning(&region, &point_binning, &bin_index_nodes, rtype,
+                               cols);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    binning_writer.set_binning(&region, &point_binning, &bin_index_nodes, rtype,
+                               cols);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     binning_writer.set_binning(&region, &point_binning, &bin_index_nodes, rtype,
                                cols);
@@ -1909,6 +2242,9 @@ int main(int argc, char *argv[])
                                cols);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1927,17 +2263,24 @@ int main(int argc, char *argv[])
         /* assemble final values into a row */
 <<<<<<< HEAD
 <<<<<<< HEAD
-        write_values(&point_binning, &bin_index_nodes, raster_row, row, cols,
-                     rtype);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         write_values(&point_binning, &bin_index_nodes, raster_row, row, cols,
                      rtype);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        write_values(&point_binning, &bin_index_nodes, raster_row, row, cols,
+                     rtype);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+        write_values(&point_binning, &bin_index_nodes, raster_row, row, cols,
+                     rtype);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
         write_values(&point_binning, &bin_index_nodes, raster_row, row, cols,
                      rtype);
@@ -1955,6 +2298,9 @@ int main(int argc, char *argv[])
                      rtype);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1970,15 +2316,21 @@ int main(int argc, char *argv[])
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    G_percent(1, 1, 1); /* flush */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     G_percent(1, 1, 1); /* flush */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    G_percent(1, 1, 1); /* flush */
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    G_percent(1, 1, 1); /* flush */
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     G_percent(1, 1, 1); /* flush */
 =======
@@ -1992,6 +2344,9 @@ int main(int argc, char *argv[])
     G_percent(1, 1, 1); /* flush */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2005,16 +2360,22 @@ int main(int argc, char *argv[])
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2026,7 +2387,10 @@ int main(int argc, char *argv[])
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     sprintf(title, "Raw X,Y,Z data binned into a raster grid by cell %s",
@@ -2049,6 +2413,9 @@ int main(int argc, char *argv[])
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2076,17 +2443,23 @@ int main(int argc, char *argv[])
     if (infiles.num_items > 1) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+<<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
 =======
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2097,8 +2470,11 @@ int main(int argc, char *argv[])
                  outmap, grass_filter.num_passed(), infiles.num_items);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2110,7 +2486,10 @@ int main(int argc, char *argv[])
                  outmap, grass_filter.num_passed());
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -2164,6 +2543,9 @@ int main(int argc, char *argv[])
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

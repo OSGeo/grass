@@ -10,17 +10,23 @@ for details
 """
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 
 =======
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -37,6 +43,7 @@ from grass.pygrass import utils
 from grass.lib.gis import G_remove_misc
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -49,6 +56,11 @@ from grass.lib.gis import G_remove_misc
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 from grass.lib.raster import Rast_read_semantic_label
 
 
@@ -57,7 +69,10 @@ class RSupportSemanticLabelHandlingTestCase(TestCase):
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 from grass.lib.raster import Rast_read_bandref
@@ -74,6 +89,9 @@ class RSupportSemanticLabelHandlingTestCase(TestCase):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -83,15 +101,21 @@ class RSupportSemanticLabelHandlingTestCase(TestCase):
         cls.mapset = Mapset().name
 <<<<<<< HEAD
 <<<<<<< HEAD
-        cls.semantic_label = "The_Doors"
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         cls.semantic_label = "The_Doors"
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        cls.semantic_label = "The_Doors"
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+        cls.semantic_label = "The_Doors"
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
         cls.semantic_label = "The_Doors"
 =======
@@ -105,6 +129,9 @@ class RSupportSemanticLabelHandlingTestCase(TestCase):
         cls.semantic_label = "The_Doors"
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -120,6 +147,7 @@ class RSupportSemanticLabelHandlingTestCase(TestCase):
     def test_exclusitivity(self):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -131,6 +159,11 @@ class RSupportSemanticLabelHandlingTestCase(TestCase):
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 =======
+>>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
         self.assertModuleFail(
             "r.support", map=self.map, semantic_label=self.semantic_label, b=True
@@ -159,7 +192,10 @@ class RSupportSemanticLabelHandlingTestCase(TestCase):
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
         self.assertModuleFail("r.support", map=self.map, bandref=self.bandref, b=True)
@@ -196,6 +232,9 @@ class RSupportSemanticLabelHandlingTestCase(TestCase):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

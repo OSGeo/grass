@@ -110,12 +110,15 @@ tokens = reserved_keyword_tokens + reserved_keyword_tokens_new + (
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     # Delimeters
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     # Delimiters
 =======
     # Delimeters
@@ -124,6 +127,9 @@ tokens = reserved_keyword_tokens + reserved_keyword_tokens_new + (
     # Delimeters
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

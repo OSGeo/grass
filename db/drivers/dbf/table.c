@@ -60,16 +60,23 @@ int add_table(char *table, char *name)
 #endif
 <<<<<<< HEAD
 <<<<<<< HEAD
-    if (res < 0 || (size_t)res >= buf_s) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if (res < 0 || (size_t)res >= buf_s) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (res < 0 || (size_t)res >= buf_s) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (res < 0 || (size_t)res >= buf_s) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     if (res < 0 || (size_t)res >= buf_s) {
@@ -90,6 +97,9 @@ int add_table(char *table, char *name)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

@@ -267,12 +267,15 @@ def _write_table(rows, column_names, output_format, separator, file):
     elif output_format == "plain":
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         # No particular reason for this separator expect that this is the original behavior.
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         # No particular reason for this separator except that this is the original
         # behavior.
 =======
@@ -282,6 +285,9 @@ def _write_table(rows, column_names, output_format, separator, file):
         # No particular reason for this separator expect that this is the original behavior.
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -338,6 +344,7 @@ def _get_get_registered_maps_as_objects_delta_gran(
     for map_object in maps:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 <<<<<<< HEAD
@@ -345,12 +352,17 @@ def _get_get_registered_maps_as_objects_delta_gran(
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+>>>>>>> osgeo-main
+=======
 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -498,11 +510,14 @@ def _get_list_of_maps_stds(
                     element_type=element_type,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                     detail=(
                         _(
                             "Dataset is empty or where clause is too constrained or "
@@ -515,6 +530,9 @@ def _get_list_of_maps_stds(
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -525,8 +543,14 @@ def _get_list_of_maps_stds(
                     else _("Dataset is empty"),
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

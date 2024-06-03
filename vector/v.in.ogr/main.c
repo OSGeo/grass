@@ -88,6 +88,7 @@ struct OGR_iterator {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void OGR_iterator_init(struct OGR_iterator *OGR_iter, ds_t Ogr_ds, char *dsn,
                        int nlayers, int ogr_interleaved_reading);
 =======
@@ -95,6 +96,8 @@ void OGR_iterator_init(struct OGR_iterator *OGR_iter, ds_t Ogr_ds, char *dsn,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 void OGR_iterator_init(struct OGR_iterator *OGR_iter, GDALDatasetH Ogr_ds,
                        char *dsn, int nlayers, int ogr_interleaved_reading);
 =======
@@ -106,6 +109,9 @@ void OGR_iterator_init(struct OGR_iterator *OGR_iter, ds_t Ogr_ds, char *dsn,
                        int nlayers, int ogr_interleaved_reading);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -254,8 +260,14 @@ int main(int argc, char *argv[])
     G_add_keyword(_("create location"));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -430,6 +442,7 @@ int main(int argc, char *argv[])
     flag.over->label =
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         _("Override projection check (use current location's projection)");
     flag.over->description = _("Assume that the dataset has the same "
                                "projection as the current location");
@@ -438,6 +451,8 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         _("Override projection check (use current project's CRS)");
     flag.over->description =
         _("Assume that the dataset has the same "
@@ -453,6 +468,9 @@ int main(int argc, char *argv[])
                                "projection as the current location");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -484,6 +502,7 @@ int main(int argc, char *argv[])
     flag.no_import->key = 'i';
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     flag.no_import->description = _(
         "Create the location specified by the \"location\" parameter and exit."
         " Do not import the vector data.");
@@ -492,6 +511,8 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     flag.no_import->description =
         _("Create the project specified by the \"project\" parameter and exit."
           " Do not import the vector data.");
@@ -506,6 +527,9 @@ int main(int argc, char *argv[])
         " Do not import the vector data.");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -534,8 +558,14 @@ int main(int argc, char *argv[])
 #if GDAL_VERSION_NUM >= 2000000
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -566,6 +596,7 @@ int main(int argc, char *argv[])
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
@@ -575,6 +606,10 @@ int main(int argc, char *argv[])
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 =======
+>>>>>>> osgeo-main
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
 
 #else
@@ -593,8 +628,14 @@ int main(int argc, char *argv[])
 #endif
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -718,16 +759,22 @@ int main(int argc, char *argv[])
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     /* driver name */
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -747,6 +794,7 @@ int main(int argc, char *argv[])
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
@@ -757,6 +805,10 @@ int main(int argc, char *argv[])
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 #if GDAL_VERSION_NUM < 2020000
         CPLSetConfigOption("OGR_INTERLEAVED_READING", "YES");
         OGR_DS_Destroy(Ogr_ds);
@@ -764,8 +816,14 @@ int main(int argc, char *argv[])
 #endif
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -789,8 +847,14 @@ int main(int argc, char *argv[])
 #if GDAL_VERSION_NUM >= 2020000
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -851,6 +915,7 @@ int main(int argc, char *argv[])
     for (i = 0; i < navailable_layers; i++) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         Ogr_layer = ds_getlayerbyindex(Ogr_ds, i);
 
         available_layer_names[i] = G_store((char *)OGR_L_GetName(Ogr_layer));
@@ -859,6 +924,8 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         Ogr_layer = GDALDatasetGetLayer(Ogr_ds, i);
 
         available_layer_names[i] = G_store((char *)OGR_L_GetName(Ogr_layer));
@@ -888,6 +955,9 @@ int main(int argc, char *argv[])
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -899,12 +969,15 @@ int main(int argc, char *argv[])
         fflush(stdout);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         ds_close(Ogr_ds);
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         GDALClose(Ogr_ds);
 =======
         ds_close(Ogr_ds);
@@ -913,6 +986,9 @@ int main(int argc, char *argv[])
         ds_close(Ogr_ds);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -955,12 +1031,15 @@ int main(int argc, char *argv[])
                       param.geom->answer)) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         ds_close(Ogr_ds);
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         GDALClose(Ogr_ds);
 =======
         ds_close(Ogr_ds);
@@ -969,6 +1048,9 @@ int main(int argc, char *argv[])
         ds_close(Ogr_ds);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1012,12 +1094,15 @@ int main(int argc, char *argv[])
     if (Vect_legal_filename(output) != 1) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         ds_close(Ogr_ds);
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         GDALClose(Ogr_ds);
 =======
         ds_close(Ogr_ds);
@@ -1026,6 +1111,9 @@ int main(int argc, char *argv[])
         ds_close(Ogr_ds);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1036,12 +1124,15 @@ int main(int argc, char *argv[])
     if (G_find_vector2(output, G_mapset()) && !overwrite) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         ds_close(Ogr_ds);
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         GDALClose(Ogr_ds);
 =======
         ds_close(Ogr_ds);
@@ -1050,6 +1141,9 @@ int main(int argc, char *argv[])
         ds_close(Ogr_ds);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1079,12 +1173,15 @@ int main(int argc, char *argv[])
     if (param.outloc->answer && flag.region->answer) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_warning(_("When creating a new location, the current region "
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         G_warning(_("When creating a new project, the current region "
 =======
         G_warning(_("When creating a new location, the current region "
@@ -1093,6 +1190,9 @@ int main(int argc, char *argv[])
         G_warning(_("When creating a new location, the current region "
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1112,6 +1212,7 @@ int main(int argc, char *argv[])
         for (layer = 0; layer < nlayers; layer++) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             Ogr_layer = ds_getlayerbyindex(Ogr_ds, layers[layer]);
 #if GDAL_VERSION_NUM >= 1110000
 =======
@@ -1119,6 +1220,8 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layers[layer]);
 =======
             Ogr_layer = ds_getlayerbyindex(Ogr_ds, layers[layer]);
@@ -1129,6 +1232,9 @@ int main(int argc, char *argv[])
 #if GDAL_VERSION_NUM >= 1110000
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1149,6 +1255,7 @@ int main(int argc, char *argv[])
             }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #else
             OGR_L_SetSpatialFilter(Ogr_layer, poSpatialFilter[layer]);
 #endif
@@ -1157,6 +1264,8 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 #else
             OGR_L_SetSpatialFilter(Ogr_layer, poSpatialFilter[layer]);
@@ -1168,6 +1277,9 @@ int main(int argc, char *argv[])
 #endif
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1207,12 +1319,15 @@ int main(int argc, char *argv[])
         layer_id = layers[layer];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         Ogr_layer = ds_getlayerbyindex(Ogr_ds, layer_id);
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layer_id);
 =======
         Ogr_layer = ds_getlayerbyindex(Ogr_ds, layer_id);
@@ -1221,6 +1336,9 @@ int main(int argc, char *argv[])
         Ogr_layer = ds_getlayerbyindex(Ogr_ds, layer_id);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1239,8 +1357,14 @@ int main(int argc, char *argv[])
 #endif
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1273,16 +1397,22 @@ int main(int argc, char *argv[])
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             /* Geometry */
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1305,8 +1435,14 @@ int main(int argc, char *argv[])
 #if GDAL_VERSION_NUM >= 2000000
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1335,8 +1471,14 @@ int main(int argc, char *argv[])
 #if GDAL_VERSION_NUM >= 1110000
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1426,12 +1568,15 @@ int main(int argc, char *argv[])
         layer_id = layers[layer];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         Ogr_layer = ds_getlayerbyindex(Ogr_ds, layer_id);
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layer_id);
 =======
         Ogr_layer = ds_getlayerbyindex(Ogr_ds, layer_id);
@@ -1440,6 +1585,9 @@ int main(int argc, char *argv[])
         Ogr_layer = ds_getlayerbyindex(Ogr_ds, layer_id);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1478,8 +1626,14 @@ int main(int argc, char *argv[])
                       )) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1597,6 +1751,7 @@ int main(int argc, char *argv[])
                 }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if GDAL_VERSION_NUM >= 2000000
 =======
 <<<<<<< HEAD
@@ -1604,12 +1759,17 @@ int main(int argc, char *argv[])
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+>>>>>>> osgeo-main
+=======
 #if GDAL_VERSION_NUM >= 2000000
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 #if GDAL_VERSION_NUM >= 2000000
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1636,8 +1796,14 @@ int main(int argc, char *argv[])
                 ) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1658,6 +1824,7 @@ int main(int argc, char *argv[])
                     col_info[i_out].type = "double precision";
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if GDAL_VERSION_NUM >= 1320
 =======
 <<<<<<< HEAD
@@ -1665,12 +1832,17 @@ int main(int argc, char *argv[])
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+>>>>>>> osgeo-main
+=======
 #if GDAL_VERSION_NUM >= 1320
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 #if GDAL_VERSION_NUM >= 1320
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1686,6 +1858,7 @@ int main(int argc, char *argv[])
                     col_info[i_out].type = G_store(buf);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #endif
 =======
 <<<<<<< HEAD
@@ -1693,12 +1866,17 @@ int main(int argc, char *argv[])
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+>>>>>>> osgeo-main
+=======
 #endif
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 #endif
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1775,6 +1953,7 @@ int main(int argc, char *argv[])
             i = 0;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             sprintf(buf, "create table %s (%s %s", Fi->table, col_info[i].name,
                     col_info[i].type);
             db_set_string(&sql, buf);
@@ -1783,6 +1962,8 @@ int main(int argc, char *argv[])
                 sprintf(buf, ", %s %s", col_info[i].name, col_info[i].type);
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             sprintf(buf, "create table %s (\"%s\" %s", Fi->table,
                     col_info[i].name, col_info[i].type);
             db_set_string(&sql, buf);
@@ -1797,6 +1978,9 @@ int main(int argc, char *argv[])
             for (i = 1; i < ncols_out; i++) {
                 sprintf(buf, ", %s %s", col_info[i].name, col_info[i].type);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 db_append_string(&sql, buf);
             }
@@ -1827,6 +2011,7 @@ int main(int argc, char *argv[])
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             sprintf(buf, "create table %s (\"%s\" %s", Fi->table,
                     col_info[i].name, col_info[i].type);
             db_set_string(&sql, buf);
@@ -1867,6 +2052,8 @@ int main(int argc, char *argv[])
                               Fi->table);
 
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
             sprintf(buf, "create table %s (%s %s", Fi->table, col_info[i].name,
@@ -1902,6 +2089,9 @@ int main(int argc, char *argv[])
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1946,12 +2136,15 @@ int main(int argc, char *argv[])
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         Ogr_layer = ds_getlayerbyindex(Ogr_ds, layer_id);
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layer_id);
 =======
         Ogr_layer = ds_getlayerbyindex(Ogr_ds, layer_id);
@@ -1960,6 +2153,9 @@ int main(int argc, char *argv[])
         Ogr_layer = ds_getlayerbyindex(Ogr_ds, layer_id);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1973,6 +2169,7 @@ int main(int argc, char *argv[])
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
@@ -1982,6 +2179,10 @@ int main(int argc, char *argv[])
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 =======
+>>>>>>> osgeo-main
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
 #endif
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -2034,6 +2235,7 @@ int main(int argc, char *argv[])
                 }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if GDAL_VERSION_NUM >= 1110000
             }
 #endif
@@ -2043,6 +2245,9 @@ int main(int argc, char *argv[])
             }
 =======
 <<<<<<< HEAD
+            }
+>>>>>>> osgeo-main
+=======
             }
 >>>>>>> osgeo-main
 =======
@@ -2056,6 +2261,9 @@ int main(int argc, char *argv[])
 #endif
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2079,11 +2287,14 @@ int main(int argc, char *argv[])
                         if (Ogr_ftype == OFTInteger ||
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                             Ogr_ftype == OFTInteger64 || Ogr_ftype == OFTReal) {
                             G_rasprintf(&sqlbuf, &sqlbufsize, ", %s",
                                         Ogr_fstring);
@@ -2092,6 +2303,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2105,8 +2319,14 @@ int main(int argc, char *argv[])
 #if GDAL_VERSION_NUM >= 1320
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -2133,11 +2353,14 @@ int main(int argc, char *argv[])
                         }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                         else if (Ogr_ftype == OFTString ||
                                  Ogr_ftype == OFTStringList ||
                                  Ogr_ftype == OFTIntegerList ||
@@ -2146,6 +2369,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2159,8 +2385,14 @@ int main(int argc, char *argv[])
                         ) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -2186,11 +2418,14 @@ int main(int argc, char *argv[])
                         if (Ogr_ftype == OFTInteger ||
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                             Ogr_ftype == OFTInteger64 || Ogr_ftype == OFTReal) {
                             G_rasprintf(&sqlbuf, &sqlbufsize, ", NULL");
                         }
@@ -2198,6 +2433,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2210,8 +2448,14 @@ int main(int argc, char *argv[])
 #if GDAL_VERSION_NUM >= 1320
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -2227,11 +2471,14 @@ int main(int argc, char *argv[])
                         }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                         else if (Ogr_ftype == OFTString ||
                                  Ogr_ftype == OFTStringList ||
                                  Ogr_ftype == OFTIntegerList ||
@@ -2240,6 +2487,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2253,8 +2503,14 @@ int main(int argc, char *argv[])
                         ) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -2490,6 +2746,7 @@ int main(int argc, char *argv[])
             layer_id = layers[layer];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             Ogr_layer = ds_getlayerbyindex(Ogr_ds, layer_id);
             Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
 
@@ -2499,6 +2756,8 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layer_id);
             Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
 
@@ -2518,6 +2777,9 @@ int main(int argc, char *argv[])
             igeom = -1;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2568,6 +2830,7 @@ int main(int argc, char *argv[])
                 /* Geometry */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if GDAL_VERSION_NUM >= 1110000
 =======
 <<<<<<< HEAD
@@ -2575,12 +2838,17 @@ int main(int argc, char *argv[])
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+>>>>>>> osgeo-main
+=======
 #if GDAL_VERSION_NUM >= 1110000
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 #if GDAL_VERSION_NUM >= 1110000
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2591,11 +2859,14 @@ int main(int argc, char *argv[])
                         continue; /* use only geometry defined via param.geom */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 
                     Ogr_geometry = OGR_F_GetGeomFieldRef(Ogr_feature, i);
                     if (Ogr_geometry != NULL) {
@@ -2666,6 +2937,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2742,8 +3016,14 @@ int main(int argc, char *argv[])
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -3057,12 +3337,15 @@ int main(int argc, char *argv[])
             G_put_element_window(&cur_wind, "", "DEFAULT_WIND");
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             G_message(_("Default region for this location updated"));
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             G_message(_("Default region for this project updated"));
 =======
             G_message(_("Default region for this location updated"));
@@ -3071,6 +3354,9 @@ int main(int argc, char *argv[])
             G_message(_("Default region for this location updated"));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3089,6 +3375,7 @@ int main(int argc, char *argv[])
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void OGR_iterator_init(struct OGR_iterator *OGR_iter, ds_t Ogr_ds, char *dsn,
                        int nlayers, int ogr_interleaved_reading)
 =======
@@ -3096,6 +3383,8 @@ void OGR_iterator_init(struct OGR_iterator *OGR_iter, ds_t Ogr_ds, char *dsn,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 void OGR_iterator_init(struct OGR_iterator *OGR_iter, GDALDatasetH Ogr_ds,
                        char *dsn, int nlayers, int ogr_interleaved_reading)
 =======
@@ -3107,6 +3396,9 @@ void OGR_iterator_init(struct OGR_iterator *OGR_iter, ds_t Ogr_ds, char *dsn,
                        int nlayers, int ogr_interleaved_reading)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3127,8 +3419,14 @@ void OGR_iterator_init(struct OGR_iterator *OGR_iter, ds_t Ogr_ds, char *dsn,
 #if GDAL_VERSION_NUM >= 2020000
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -3146,6 +3444,7 @@ void OGR_iterator_init(struct OGR_iterator *OGR_iter, ds_t Ogr_ds, char *dsn,
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
@@ -3155,6 +3454,10 @@ void OGR_iterator_init(struct OGR_iterator *OGR_iter, ds_t Ogr_ds, char *dsn,
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 =======
+>>>>>>> osgeo-main
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
 #else
         G_verbose_message(_("Using GDAL 1.x style interleaved reading for GDAL "
@@ -3188,12 +3491,15 @@ OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter, int layer,
             OGR_iter->Ogr_layer =
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 ds_getlayerbyindex(OGR_iter->Ogr_ds, OGR_iter->curr_layer);
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                 GDALDatasetGetLayer(OGR_iter->Ogr_ds, OGR_iter->curr_layer);
 =======
                 ds_getlayerbyindex(OGR_iter->Ogr_ds, OGR_iter->curr_layer);
@@ -3202,6 +3508,9 @@ OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter, int layer,
                 ds_getlayerbyindex(OGR_iter->Ogr_ds, OGR_iter->curr_layer);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3215,12 +3524,15 @@ OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter, int layer,
             for (i = 0; i < OGR_iter->nlayers; i++) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 OGR_iter->Ogr_layer = ds_getlayerbyindex(OGR_iter->Ogr_ds, i);
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                 OGR_iter->Ogr_layer = GDALDatasetGetLayer(OGR_iter->Ogr_ds, i);
 =======
                 OGR_iter->Ogr_layer = ds_getlayerbyindex(OGR_iter->Ogr_ds, i);
@@ -3229,6 +3541,9 @@ OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter, int layer,
                 OGR_iter->Ogr_layer = ds_getlayerbyindex(OGR_iter->Ogr_ds, i);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3257,8 +3572,14 @@ OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter, int layer,
             OGR_iter->Ogr_layer = ds_getlayerbyindex(OGR_iter->Ogr_ds, layer);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -3278,6 +3599,7 @@ OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter, int layer,
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
@@ -3288,14 +3610,24 @@ OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter, int layer,
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 #if GDAL_VERSION_NUM < 2020000
             OGR_iter->Ogr_layer =
                 OGR_DS_GetLayer(OGR_iter->Ogr_ds, OGR_iter->curr_layer);
 #endif
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -3330,6 +3662,7 @@ OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter, int layer,
         /* fetch next feature */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if GDAL_VERSION_NUM >= 2020000
 =======
 <<<<<<< HEAD
@@ -3337,12 +3670,17 @@ OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter, int layer,
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+>>>>>>> osgeo-main
+=======
 #if GDAL_VERSION_NUM >= 2020000
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 #if GDAL_VERSION_NUM >= 2020000
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3363,11 +3701,14 @@ OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter, int layer,
                 if (ln && *ln && strcmp(ln, layer_name) == 0) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 
                     return Ogr_feature;
                 }
@@ -3379,6 +3720,9 @@ OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter, int layer,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3451,12 +3795,15 @@ int create_spatial_filter(GDALDatasetH Ogr_ds, OGRGeometryH *poSpatialFilter,
     for (layer = 0; layer < nlayers; layer++) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         Ogr_layer = ds_getlayerbyindex(Ogr_ds, layers[layer]);
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layers[layer]);
 =======
         Ogr_layer = ds_getlayerbyindex(Ogr_ds, layers[layer]);
@@ -3465,6 +3812,9 @@ int create_spatial_filter(GDALDatasetH Ogr_ds, OGRGeometryH *poSpatialFilter,
         Ogr_layer = ds_getlayerbyindex(Ogr_ds, layers[layer]);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3504,16 +3854,22 @@ int create_spatial_filter(GDALDatasetH Ogr_ds, OGRGeometryH *poSpatialFilter,
          * the read cursor of the layer. */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         GDALDatasetResetReading(Ogr_ds);
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

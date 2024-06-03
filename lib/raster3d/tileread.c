@@ -100,17 +100,24 @@ static int Rast3d_readTileUncompressed(RASTER3D_Map *map, int tileIndex,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    if ((res = read(map->data_fd, xdr, nofBytes)) < 0 ||
-        (size_t)res != nofBytes) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if ((res = read(map->data_fd, xdr, nofBytes)) < 0 ||
         (size_t)res != nofBytes) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if ((res = read(map->data_fd, xdr, nofBytes)) < 0 ||
+        (size_t)res != nofBytes) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    if ((res = read(map->data_fd, xdr, nofBytes)) < 0 ||
+        (size_t)res != nofBytes) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     if ((res = read(map->data_fd, xdr, nofBytes)) < 0 ||
         (size_t)res != nofBytes) {
@@ -133,6 +140,9 @@ static int Rast3d_readTileUncompressed(RASTER3D_Map *map, int tileIndex,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

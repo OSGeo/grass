@@ -95,18 +95,26 @@ public:
         char str[100];
 <<<<<<< HEAD
 <<<<<<< HEAD
-        snprintf(str, sizeof(str), "BasicMinMaxHeap: allocate %ld\n",
-                 (long)((size + 1) * sizeof(T)));
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(str, sizeof(str), "BasicMinMaxHeap: allocate %ld\n",
                  (long)((size + 1) * sizeof(T)));
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(str, sizeof(str), "BasicMinMaxHeap: allocate %ld\n",
+                 (long)((size + 1) * sizeof(T)));
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(str, sizeof(str), "BasicMinMaxHeap: allocate %ld\n",
+                 (long)((size + 1) * sizeof(T)));
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(str, sizeof(str), "BasicMinMaxHeap: allocate %ld\n",
@@ -133,6 +141,9 @@ public:
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

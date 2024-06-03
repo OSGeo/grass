@@ -31,16 +31,23 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-enum OutputFormat { PLAIN, JSON, CSV, VERTICAL };
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 enum OutputFormat { PLAIN, JSON, CSV, VERTICAL };
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+enum OutputFormat { PLAIN, JSON, CSV, VERTICAL };
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+enum OutputFormat { PLAIN, JSON, CSV, VERTICAL };
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 enum OutputFormat { PLAIN, JSON, CSV, VERTICAL };
@@ -65,6 +72,9 @@ enum OutputFormat { PLAIN, JSON, CSV, VERTICAL };
 enum OutputFormat { PLAIN, JSON, CSV, VERTICAL };
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -157,18 +167,13 @@ int main(int argc, char **argv)
         _("GROUP BY conditions of SQL statement without 'group by' keyword");
     options.group->guisection = _("Selection");
 
-    options.format = G_define_option();
-    options.format->key = "format";
-    options.format->type = TYPE_STRING;
-    options.format->required = YES;
-    options.format->label = _("Output format");
+    options.format = G_define_standard_option(G_OPT_F_FORMAT);
     options.format->options = "plain,csv,json,vertical";
     options.format->descriptions =
         "plain;Configurable plain text output;"
         "csv;CSV (Comma Separated Values);"
         "json;JSON (JavaScript Object Notation);"
         "vertical;Plain text vertical output (instead of horizontal)";
-    options.format->answer = "plain";
     options.format->guisection = _("Format");
 
     options.fsep = G_define_standard_option(G_OPT_F_SEP);
@@ -236,11 +241,14 @@ int main(int argc, char **argv)
     if (format == JSON) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -248,6 +256,9 @@ int main(int argc, char **argv)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -263,12 +274,15 @@ int main(int argc, char **argv)
             _("Null value is part of the format"));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     }
     if (format != VERTICAL) {
@@ -277,7 +291,10 @@ int main(int argc, char **argv)
             _("Only vertical output can use vertical separator"));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -314,6 +331,9 @@ int main(int argc, char **argv)
             _("Only vertical output can use vertical separator"));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -345,16 +365,22 @@ int main(int argc, char **argv)
             if (flags.region->answer)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -368,7 +394,10 @@ int main(int argc, char **argv)
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -393,6 +422,9 @@ int main(int argc, char **argv)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -475,18 +507,26 @@ int main(int argc, char **argv)
     /* column names if horizontal output (ignore for -r, -c, JSON, vertical) */
 <<<<<<< HEAD
 <<<<<<< HEAD
-    if (!flags.region->answer && !flags.colnames->answer && format != JSON &&
-        format != VERTICAL) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if (!flags.region->answer && !flags.colnames->answer && format != JSON &&
         format != VERTICAL) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (!flags.region->answer && !flags.colnames->answer && format != JSON &&
+        format != VERTICAL) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (!flags.region->answer && !flags.colnames->answer && format != JSON &&
+        format != VERTICAL) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     if (!flags.region->answer && !flags.colnames->answer && format != JSON &&
@@ -509,6 +549,9 @@ int main(int argc, char **argv)
         format != VERTICAL) {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -529,6 +572,7 @@ int main(int argc, char **argv)
             fprintf(stdout, "{\"extent\":\n");
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         else
             fprintf(stdout, "{\"records\":[\n");
 =======
@@ -536,6 +580,8 @@ int main(int argc, char **argv)
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         else {
             fprintf(stdout, "{\"info\":\n{\"columns\":[\n");
             for (col = 0; col < ncols; col++) {
@@ -571,6 +617,9 @@ int main(int argc, char **argv)
             fprintf(stdout, "{\"records\":[\n");
 >>>>>>> 4d944b87c5 (WMS: replace broken URLs with alternative WMS (#1635))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -637,12 +686,15 @@ int main(int argc, char **argv)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 /* Escaped charcters in different formats
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                 /* Escaped characters in different formats
 =======
                 /* Escaped charcters in different formats
@@ -651,6 +703,9 @@ int main(int argc, char **argv)
                 /* Escaped charcters in different formats
 >>>>>>> 4d944b87c5 (WMS: replace broken URLs with alternative WMS (#1635))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -671,16 +726,22 @@ int main(int argc, char **argv)
                         str = G_str_replace(str, "\"", "\\\"");
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -696,7 +757,10 @@ int main(int argc, char **argv)
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -724,6 +788,9 @@ int main(int argc, char **argv)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

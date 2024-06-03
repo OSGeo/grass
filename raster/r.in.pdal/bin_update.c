@@ -14,15 +14,21 @@
 #include <stdlib.h>
 <<<<<<< HEAD
 <<<<<<< HEAD
-#include <math.h>
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 #include <math.h>
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+#include <math.h>
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+#include <math.h>
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 #include <math.h>
 =======
@@ -35,6 +41,9 @@
 #include <math.h>
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -47,11 +56,14 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 
@@ -61,6 +73,9 @@
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -72,17 +87,24 @@ static int new_node(struct BinIndex *bin_index, size_t size)
         bin_index->max_nodes += SIZE_INCREMENT;
 <<<<<<< HEAD
 <<<<<<< HEAD
-        bin_index->nodes =
-            G_realloc(bin_index->nodes, (size_t)bin_index->max_nodes * size);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         bin_index->nodes =
             G_realloc(bin_index->nodes, (size_t)bin_index->max_nodes * size);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        bin_index->nodes =
+            G_realloc(bin_index->nodes, (size_t)bin_index->max_nodes * size);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+        bin_index->nodes =
+            G_realloc(bin_index->nodes, (size_t)bin_index->max_nodes * size);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
         bin_index->nodes =
             G_realloc(bin_index->nodes, (size_t)bin_index->max_nodes * size);
@@ -100,6 +122,9 @@ static int new_node(struct BinIndex *bin_index, size_t size)
             G_realloc(bin_index->nodes, (size_t)bin_index->max_nodes * size);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -110,11 +135,14 @@ static int new_node(struct BinIndex *bin_index, size_t size)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 
@@ -124,6 +152,9 @@ static int new_node(struct BinIndex *bin_index, size_t size)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -138,11 +169,14 @@ void update_val(void *array, int cols, int row, int col,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 
@@ -152,6 +186,9 @@ void update_val(void *array, int cols, int row, int col,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -168,11 +205,14 @@ void update_n(void *array, int cols, int row, int col)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 
@@ -182,6 +222,9 @@ void update_n(void *array, int cols, int row, int col)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -194,6 +237,7 @@ void update_min(void *array, int cols, int row, int col,
     if (Rast_is_null_value(ptr, map_type))
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -206,6 +250,11 @@ void update_min(void *array, int cols, int row, int col,
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         Rast_set_d_value(ptr, (DCELL)value, map_type);
     else {
         old_val = Rast_get_d_value(ptr, map_type);
@@ -215,7 +264,10 @@ void update_min(void *array, int cols, int row, int col,
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
         Rast_set_d_value(ptr, (DCELL) value, map_type);
@@ -234,6 +286,9 @@ void update_min(void *array, int cols, int row, int col,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -243,11 +298,14 @@ void update_min(void *array, int cols, int row, int col,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 
@@ -257,6 +315,9 @@ void update_min(void *array, int cols, int row, int col,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -269,6 +330,7 @@ void update_max(void *array, int cols, int row, int col,
     if (Rast_is_null_value(ptr, map_type))
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -281,6 +343,11 @@ void update_max(void *array, int cols, int row, int col,
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         Rast_set_d_value(ptr, (DCELL)value, map_type);
     else {
         old_val = Rast_get_d_value(ptr, map_type);
@@ -290,7 +357,10 @@ void update_max(void *array, int cols, int row, int col,
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
         Rast_set_d_value(ptr, (DCELL) value, map_type);
@@ -309,6 +379,9 @@ void update_max(void *array, int cols, int row, int col,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -331,6 +404,7 @@ void update_sum(void *sum_array, void *c_array, int cols, int row, int col,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (fabs(old_sum) >= fabs(value))
 =======
 <<<<<<< HEAD
@@ -344,6 +418,11 @@ void update_sum(void *sum_array, void *c_array, int cols, int row, int col,
     if (fabs(old_sum) >= fabs(value))
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+    if (fabs(old_sum) >= fabs(value))
+=======
+>>>>>>> osgeo-main
     if (abs(old_sum) >= abs(value))
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -353,6 +432,9 @@ void update_sum(void *sum_array, void *c_array, int cols, int row, int col,
     if (fabs(old_sum) >= fabs(value))
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -367,11 +449,14 @@ void update_sum(void *sum_array, void *c_array, int cols, int row, int col,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 
@@ -381,6 +466,9 @@ void update_sum(void *sum_array, void *c_array, int cols, int row, int col,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -419,11 +507,14 @@ void update_m2(void *n_array, void *mean_array, void *m2_array, int cols,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 
@@ -433,6 +524,9 @@ void update_m2(void *n_array, void *mean_array, void *m2_array, int cols,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -453,11 +547,14 @@ void update_moving_mean(void *array, int cols, int row, int col,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 
@@ -467,6 +564,9 @@ void update_moving_mean(void *array, int cols, int row, int col,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -496,15 +596,21 @@ int add_z_node(struct BinIndex *bin_index, int head, double z)
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
-    else if (node_id == head_id) { /* pole position, insert as head */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     else if (node_id == head_id) { /* pole position, insert as head */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    else if (node_id == head_id) { /* pole position, insert as head */
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    else if (node_id == head_id) { /* pole position, insert as head */
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     else if (node_id == head_id) { /* pole position, insert as head */
 =======
@@ -518,6 +624,9 @@ int add_z_node(struct BinIndex *bin_index, int head, double z)
     else if (node_id == head_id) { /* pole position, insert as head */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -529,15 +638,21 @@ int add_z_node(struct BinIndex *bin_index, int head, double z)
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
-    else { /* somewhere in the middle, insert */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     else { /* somewhere in the middle, insert */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    else { /* somewhere in the middle, insert */
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    else { /* somewhere in the middle, insert */
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     else { /* somewhere in the middle, insert */
 =======
@@ -551,6 +666,9 @@ int add_z_node(struct BinIndex *bin_index, int head, double z)
     else { /* somewhere in the middle, insert */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -564,11 +682,14 @@ int add_z_node(struct BinIndex *bin_index, int head, double z)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 
@@ -578,6 +699,9 @@ int add_z_node(struct BinIndex *bin_index, int head, double z)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -608,6 +732,7 @@ void add_cnt_node(struct BinIndex *bin_index, int head, int value)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -620,6 +745,11 @@ void add_cnt_node(struct BinIndex *bin_index, int head, int value)
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 /* Unlike the other functions, this one is not using map_type (RASTER_MAP_TYPE)
  * because the values (z) are always doubles and the index is integer. */
 void update_bin_z_index(struct BinIndex *bin_index, void *index_array, int cols,
@@ -628,7 +758,10 @@ void update_bin_z_index(struct BinIndex *bin_index, void *index_array, int cols,
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 
@@ -646,6 +779,9 @@ void update_bin_z_index(struct BinIndex *bin_index, void *index_array, int cols,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -655,17 +791,24 @@ void update_bin_z_index(struct BinIndex *bin_index, void *index_array, int cols,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    ptr = G_incr_void_ptr(ptr, (((size_t)row * cols) + col) *
-                                   Rast_cell_size(CELL_TYPE));
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     ptr = G_incr_void_ptr(ptr, (((size_t)row * cols) + col) *
                                    Rast_cell_size(CELL_TYPE));
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    ptr = G_incr_void_ptr(ptr, (((size_t)row * cols) + col) *
+                                   Rast_cell_size(CELL_TYPE));
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    ptr = G_incr_void_ptr(ptr, (((size_t)row * cols) + col) *
+                                   Rast_cell_size(CELL_TYPE));
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     ptr = G_incr_void_ptr(ptr, (((size_t)row * cols) + col) *
                                    Rast_cell_size(CELL_TYPE));
@@ -685,6 +828,9 @@ void update_bin_z_index(struct BinIndex *bin_index, void *index_array, int cols,
                                    Rast_cell_size(CELL_TYPE));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -713,11 +859,14 @@ void update_bin_z_index(struct BinIndex *bin_index, void *index_array, int cols,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 
@@ -727,6 +876,9 @@ void update_bin_z_index(struct BinIndex *bin_index, void *index_array, int cols,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -738,17 +890,24 @@ void update_bin_cnt_index(struct BinIndex *bin_index, void *index_array,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    ptr = G_incr_void_ptr(ptr, (((size_t)row * cols) + col) *
-                                   Rast_cell_size(CELL_TYPE));
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     ptr = G_incr_void_ptr(ptr, (((size_t)row * cols) + col) *
                                    Rast_cell_size(CELL_TYPE));
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    ptr = G_incr_void_ptr(ptr, (((size_t)row * cols) + col) *
+                                   Rast_cell_size(CELL_TYPE));
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    ptr = G_incr_void_ptr(ptr, (((size_t)row * cols) + col) *
+                                   Rast_cell_size(CELL_TYPE));
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     ptr = G_incr_void_ptr(ptr, (((size_t)row * cols) + col) *
                                    Rast_cell_size(CELL_TYPE));
@@ -768,6 +927,9 @@ void update_bin_cnt_index(struct BinIndex *bin_index, void *index_array,
                                    Rast_cell_size(CELL_TYPE));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -792,11 +954,14 @@ void update_bin_cnt_index(struct BinIndex *bin_index, void *index_array,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 
@@ -806,6 +971,9 @@ void update_bin_cnt_index(struct BinIndex *bin_index, void *index_array,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -822,8 +990,12 @@ void update_com_node(struct com_node *cn, int item, double x, double y)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 void update_bin_com_index(struct BinIndex *bin_index, void *index_array,
@@ -834,10 +1006,13 @@ void update_bin_com_index(struct BinIndex *bin_index, void *index_array,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void update_bin_com_index(struct BinIndex *bin_index, void *index_array,
                           int cols, int row, int col, double x, double y,
                           double z)
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 
@@ -856,6 +1031,9 @@ void update_bin_com_index(struct BinIndex *bin_index, void *index_array,
                           double z)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -865,17 +1043,24 @@ void update_bin_com_index(struct BinIndex *bin_index, void *index_array,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    ptr = G_incr_void_ptr(ptr, (((size_t)row * cols) + col) *
-                                   Rast_cell_size(CELL_TYPE));
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     ptr = G_incr_void_ptr(ptr, (((size_t)row * cols) + col) *
                                    Rast_cell_size(CELL_TYPE));
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    ptr = G_incr_void_ptr(ptr, (((size_t)row * cols) + col) *
+                                   Rast_cell_size(CELL_TYPE));
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    ptr = G_incr_void_ptr(ptr, (((size_t)row * cols) + col) *
+                                   Rast_cell_size(CELL_TYPE));
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     ptr = G_incr_void_ptr(ptr, (((size_t)row * cols) + col) *
                                    Rast_cell_size(CELL_TYPE));
@@ -895,6 +1080,9 @@ void update_bin_com_index(struct BinIndex *bin_index, void *index_array,
                                    Rast_cell_size(CELL_TYPE));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -922,17 +1110,23 @@ void update_bin_com_index(struct BinIndex *bin_index, void *index_array,
     ((struct com_node *)bin_index->nodes)[node_id].n++;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -946,10 +1140,13 @@ void update_bin_com_index(struct BinIndex *bin_index, void *index_array,
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
     update_com_node(&(((struct com_node *)bin_index->nodes)[node_id]),
                     0, x, x);
     update_com_node(&(((struct com_node *)bin_index->nodes)[node_id]),
@@ -968,6 +1165,9 @@ void update_bin_com_index(struct BinIndex *bin_index, void *index_array,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -975,6 +1175,7 @@ void update_bin_com_index(struct BinIndex *bin_index, void *index_array,
     return;
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -988,6 +1189,11 @@ void update_bin_com_index(struct BinIndex *bin_index, void *index_array,
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 =======
+>>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
 /* 0 on NULL, 1 on success */
 int row_array_get_value_row_col(void *array, int arr_row, int arr_col, int cols,
@@ -1009,7 +1215,10 @@ int row_array_get_value_row_col(void *array, int arr_row, int arr_col, int cols,
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 
@@ -1039,6 +1248,9 @@ int row_array_get_value_row_col(void *array, int arr_row, int arr_col, int cols,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

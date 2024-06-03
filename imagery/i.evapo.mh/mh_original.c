@@ -3,6 +3,7 @@
 #include <stdlib.h>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 /*Hargreaves et al, 1985. */
 =======
@@ -10,6 +11,8 @@
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #include <grass/gis.h>
 
 /*Hargreaves et al, 1985. */
@@ -23,6 +26,9 @@ double mh_original(double ra, double tavg, double tmax, double tmin,
 /*Hargreaves et al, 1985. */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

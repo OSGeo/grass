@@ -86,17 +86,24 @@ static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
-    if ((res = read(map->cacheFD, tileBuf, nBytes)) < 0 ||
-        (size_t)res != nBytes) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if ((res = read(map->cacheFD, tileBuf, nBytes)) < 0 ||
         (size_t)res != nBytes) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if ((res = read(map->cacheFD, tileBuf, nBytes)) < 0 ||
+        (size_t)res != nBytes) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    if ((res = read(map->cacheFD, tileBuf, nBytes)) < 0 ||
+        (size_t)res != nBytes) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     if ((res = read(map->cacheFD, tileBuf, nBytes)) < 0 ||
         (size_t)res != nBytes) {
@@ -119,6 +126,9 @@ static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -149,17 +159,24 @@ static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
-    if ((res = read(map->cacheFD, xdr, nBytes + sizeof(int))) < 0 ||
-        (size_t)res != nBytes + sizeof(int)) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if ((res = read(map->cacheFD, xdr, nBytes + sizeof(int))) < 0 ||
         (size_t)res != nBytes + sizeof(int)) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if ((res = read(map->cacheFD, xdr, nBytes + sizeof(int))) < 0 ||
+        (size_t)res != nBytes + sizeof(int)) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    if ((res = read(map->cacheFD, xdr, nBytes + sizeof(int))) < 0 ||
+        (size_t)res != nBytes + sizeof(int)) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     if ((res = read(map->cacheFD, xdr, nBytes + sizeof(int))) < 0 ||
         (size_t)res != nBytes + sizeof(int)) {
@@ -182,6 +199,9 @@ static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -195,17 +215,24 @@ static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
-    if ((res = write(map->cacheFD, xdr, nBytes + sizeof(int))) < 0 ||
-        (size_t)res != nBytes + sizeof(int)) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if ((res = write(map->cacheFD, xdr, nBytes + sizeof(int))) < 0 ||
         (size_t)res != nBytes + sizeof(int)) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if ((res = write(map->cacheFD, xdr, nBytes + sizeof(int))) < 0 ||
+        (size_t)res != nBytes + sizeof(int)) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    if ((res = write(map->cacheFD, xdr, nBytes + sizeof(int))) < 0 ||
+        (size_t)res != nBytes + sizeof(int)) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     if ((res = write(map->cacheFD, xdr, nBytes + sizeof(int))) < 0 ||
         (size_t)res != nBytes + sizeof(int)) {
@@ -230,6 +257,9 @@ static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -268,17 +298,24 @@ static int cacheWrite_writeFun(int tileIndex, const void *tileBuf,
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
-    if ((res = write(map->cacheFD, tileBuf, nBytes)) < 0 ||
-        (size_t)res != nBytes) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if ((res = write(map->cacheFD, tileBuf, nBytes)) < 0 ||
         (size_t)res != nBytes) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if ((res = write(map->cacheFD, tileBuf, nBytes)) < 0 ||
+        (size_t)res != nBytes) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    if ((res = write(map->cacheFD, tileBuf, nBytes)) < 0 ||
+        (size_t)res != nBytes) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     if ((res = write(map->cacheFD, tileBuf, nBytes)) < 0 ||
         (size_t)res != nBytes) {
@@ -301,6 +338,9 @@ static int cacheWrite_writeFun(int tileIndex, const void *tileBuf,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

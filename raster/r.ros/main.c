@@ -100,12 +100,15 @@ float SIGMA[4][14] = {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 /*fuel particale surface-area-to-volume ratio, 1/ft. */
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 /*fuel particle surface-area-to-volume ratio, 1/ft. */
 =======
 /*fuel particale surface-area-to-volume ratio, 1/ft. */
@@ -114,6 +117,9 @@ float SIGMA[4][14] = {
 /*fuel particale surface-area-to-volume ratio, 1/ft. */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

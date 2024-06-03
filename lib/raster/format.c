@@ -109,16 +109,23 @@ static int read_row_ptrs(int nrows, int old, off_t *row_ptr, int fd)
     if (old) {
 <<<<<<< HEAD
 <<<<<<< HEAD
-        n = ((unsigned int)nrows + 1) * sizeof(off_t);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         n = ((unsigned int)nrows + 1) * sizeof(off_t);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        n = ((unsigned int)nrows + 1) * sizeof(off_t);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        n = ((unsigned int)nrows + 1) * sizeof(off_t);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         n = ((unsigned int)nrows + 1) * sizeof(off_t);
@@ -139,6 +146,9 @@ static int read_row_ptrs(int nrows, int old, off_t *row_ptr, int fd)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -166,8 +176,12 @@ static int read_row_ptrs(int nrows, int old, off_t *row_ptr, int fd)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 >>>>>>> osgeo-main
     for (row = 0, b = buf; row <= (unsigned int)nrows; row++) {

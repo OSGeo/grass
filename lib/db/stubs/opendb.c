@@ -3,12 +3,15 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int db__driver_open_database(dbHandle *handle)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 int db__driver_open_database(dbHandle *handle UNUSED)
 =======
 int db__driver_open_database(dbHandle *handle)
@@ -17,6 +20,9 @@ int db__driver_open_database(dbHandle *handle)
 int db__driver_open_database(dbHandle *handle)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

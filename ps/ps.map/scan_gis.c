@@ -20,16 +20,23 @@ int scan_gis(char *element, char *desc, char *key, char *data, char *name,
         if (isatty(0))
 <<<<<<< HEAD
 <<<<<<< HEAD
-            G_list_element(element, desc, mapset, NULL);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             G_list_element(element, desc, mapset, NULL);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            G_list_element(element, desc, mapset, NULL);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            G_list_element(element, desc, mapset, NULL);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
             G_list_element(element, desc, mapset, NULL);
@@ -50,6 +57,9 @@ int scan_gis(char *element, char *desc, char *key, char *data, char *name,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

@@ -77,16 +77,23 @@ void db_d_append_error(const char *fmt, ...)
             rewind(fp);
 <<<<<<< HEAD
 <<<<<<< HEAD
-            if (fread(work, 1, count, fp) != (size_t)count) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             if (fread(work, 1, count, fp) != (size_t)count) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (fread(work, 1, count, fp) != (size_t)count) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (fread(work, 1, count, fp) != (size_t)count) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
             if (fread(work, 1, count, fp) != (size_t)count) {
@@ -107,6 +114,9 @@ void db_d_append_error(const char *fmt, ...)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

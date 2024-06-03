@@ -2,6 +2,7 @@
  * r.in.pdal Functions printing out various information on input LAS files
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  *
 =======
 <<<<<<< HEAD
@@ -15,6 +16,11 @@
  *
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+ *
+=======
+>>>>>>> osgeo-main
  *  
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -24,6 +30,9 @@
  *
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -41,11 +50,14 @@
 #include <pdal/pdal_config.hpp>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-parameter"
@@ -56,6 +68,9 @@
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -66,6 +81,7 @@
 #include <pdal/io/LasHeader.hpp>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 extern "C" {
 =======
@@ -73,6 +89,8 @@ extern "C" {
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #if defined(__clang__)
 #pragma clang diagnostic pop
 #endif
@@ -92,6 +110,9 @@ extern "C" {
 extern "C" {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -102,17 +123,24 @@ extern "C" {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-void get_extent(struct StringList *, double *, double *, double *, double *,
-                double *, double *);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 void get_extent(struct StringList *, double *, double *, double *, double *,
                 double *, double *);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+void get_extent(struct StringList *, double *, double *, double *, double *,
+                double *, double *);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+void get_extent(struct StringList *, double *, double *, double *, double *,
+                double *, double *);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 void get_extent(struct StringList *, double *, double *, double *, double *,
                 double *, double *);
@@ -130,6 +158,9 @@ void get_extent(struct StringList *, double *, double *, double *, double *,
                 double *, double *);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

@@ -38,16 +38,23 @@ int main(int argc, char **argv)
     double p1, p2, numbers[1000], numbers2[1000];
 <<<<<<< HEAD
 <<<<<<< HEAD
-    int (*rng)(int, double *);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     int (*rng)(int, double *);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    int (*rng)(int, double *);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    int (*rng)(int, double *);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     int (*rng)(int, double *);
@@ -68,6 +75,9 @@ int main(int argc, char **argv)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

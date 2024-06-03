@@ -150,8 +150,14 @@ static void convert_float(float *work_buf, int size, char *null_buf,
                           const FCELL *rast, int row, int n)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -187,8 +193,14 @@ static void convert_double(double *work_buf, int size, char *null_buf,
                            const DCELL *rast, int row, int n)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -239,6 +251,7 @@ static void put_fp_data(int fd, char *null_buf, const void *rast, int row,
     if (data_type == FCELL_TYPE)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         convert_float(work_buf, size, null_buf, rast, row, n);
     else
         convert_double(work_buf, size, null_buf, rast, row, n);
@@ -247,6 +260,8 @@ static void put_fp_data(int fd, char *null_buf, const void *rast, int row,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         convert_float(work_buf, null_buf, rast, n);
     else
         convert_double(work_buf, null_buf, rast, n);
@@ -261,6 +276,9 @@ static void put_fp_data(int fd, char *null_buf, const void *rast, int row,
         convert_double(work_buf, size, null_buf, rast, row, n);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -582,8 +600,12 @@ static void write_null_bits_compressed(const unsigned char *flags, int row,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 >>>>>>> osgeo-main
     if (nwrite > 0 && (size_t)nwrite < size) {
@@ -594,10 +616,13 @@ static void write_null_bits_compressed(const unsigned char *flags, int row,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (nwrite > 0 && (size_t)nwrite < size) {
         if ((res = write(fcb->null_fd, compressed_buf, nwrite)) < 0 ||
             (unsigned int)res != nwrite)
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     if (nwrite > 0 && nwrite < size) {
@@ -620,6 +645,9 @@ static void write_null_bits_compressed(const unsigned char *flags, int row,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -630,18 +658,26 @@ static void write_null_bits_compressed(const unsigned char *flags, int row,
     else {
 <<<<<<< HEAD
 <<<<<<< HEAD
-        if ((res = write(fcb->null_fd, flags, size)) < 0 ||
-            (unsigned int)res != size)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         if ((res = write(fcb->null_fd, flags, size)) < 0 ||
             (unsigned int)res != size)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if ((res = write(fcb->null_fd, flags, size)) < 0 ||
+            (unsigned int)res != size)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if ((res = write(fcb->null_fd, flags, size)) < 0 ||
+            (unsigned int)res != size)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         if ((res = write(fcb->null_fd, flags, size)) < 0 ||
@@ -665,6 +701,9 @@ static void write_null_bits_compressed(const unsigned char *flags, int row,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -708,17 +747,24 @@ void Rast__write_null_bits(int fd, const unsigned char *flags)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    if ((res = write(fcb->null_fd, flags, size)) < 0 ||
-        (unsigned int)res != size)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if ((res = write(fcb->null_fd, flags, size)) < 0 ||
         (unsigned int)res != size)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if ((res = write(fcb->null_fd, flags, size)) < 0 ||
+        (unsigned int)res != size)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    if ((res = write(fcb->null_fd, flags, size)) < 0 ||
+        (unsigned int)res != size)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     if ((res = write(fcb->null_fd, flags, size)) < 0 ||
         (unsigned int)res != size)
@@ -741,6 +787,9 @@ void Rast__write_null_bits(int fd, const unsigned char *flags)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

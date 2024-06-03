@@ -135,11 +135,14 @@ class NotebookController:
     def AddPage(self, *args, **kwargs):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         """Add a new page
 
         :param str name: use this param if notebooks has ability to
@@ -155,6 +158,9 @@ class NotebookController:
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -169,11 +175,14 @@ class NotebookController:
     def InsertPage(self, *args, **kwargs):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         """Insert a new page
 
         :param str name: use this param if notebooks has ability to
@@ -189,6 +198,9 @@ class NotebookController:
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -202,11 +214,14 @@ class NotebookController:
             self.classObject.InsertPage(self.widget, *args, **kwargs)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         except (
             TypeError
         ) as e:  # documentation says 'index', but certain versions of wx require 'n'
@@ -214,6 +229,9 @@ class NotebookController:
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1301,12 +1319,15 @@ class SearchModuleWidget(wx.Panel):
             self._searchTip = StaticWrapText(
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 parent=self, id=wx.ID_ANY, label="Choose a tool", size=(-1, 35)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                 parent=self, id=wx.ID_ANY, label="Choose a tool", size=(-1, 40)
 =======
                 parent=self, id=wx.ID_ANY, label="Choose a tool", size=(-1, 35)
@@ -1315,6 +1336,9 @@ class SearchModuleWidget(wx.Panel):
                 parent=self, id=wx.ID_ANY, label="Choose a tool", size=(-1, 35)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1384,12 +1408,15 @@ class SearchModuleWidget(wx.Panel):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         label = _("%d tools match") % len(commands)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         label = _("{} tools matched").format(len(commands))
 =======
         label = _("%d tools match") % len(commands)
@@ -1398,6 +1425,9 @@ class SearchModuleWidget(wx.Panel):
         label = _("%d tools match") % len(commands)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

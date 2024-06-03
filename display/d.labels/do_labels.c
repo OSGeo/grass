@@ -458,6 +458,7 @@ int scan_ref(char *buf)
             return 0;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     case 1:
         if (xmatch(word1) || ymatch(word1))
             return 1;
@@ -466,6 +467,8 @@ int scan_ref(char *buf)
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         FALLTHROUGH;
     case 1:
         if (xmatch(word1) || ymatch(word1))
@@ -482,6 +485,9 @@ int scan_ref(char *buf)
             return 1;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

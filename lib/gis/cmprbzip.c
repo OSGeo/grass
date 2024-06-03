@@ -214,15 +214,21 @@ int G_bz2_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    if (dst_sz < 0 || nbytes != (unsigned int)dst_sz) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if (dst_sz < 0 || nbytes != (unsigned int)dst_sz) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (dst_sz < 0 || nbytes != (unsigned int)dst_sz) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    if (dst_sz < 0 || nbytes != (unsigned int)dst_sz) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     if (dst_sz < 0 || nbytes != (unsigned int)dst_sz) {
 =======
@@ -242,6 +248,9 @@ int G_bz2_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

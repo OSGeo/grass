@@ -3,15 +3,21 @@
 #include <math.h>
 <<<<<<< HEAD
 <<<<<<< HEAD
-double **matrix(int, int, int, int), *vector(int, int);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 double **matrix(int, int, int, int), *vector(int, int);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+double **matrix(int, int, int, int), *vector(int, int);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+double **matrix(int, int, int, int), *vector(int, int);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 double **matrix(int, int, int, int), *vector(int, int);
 =======
@@ -31,6 +37,9 @@ double **matrix(int, int, int, int), *vector(int, int);
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

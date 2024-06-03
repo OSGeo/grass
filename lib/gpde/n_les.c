@@ -264,18 +264,26 @@ void N_print_les(N_les *les)
                 out = 0;
 <<<<<<< HEAD
 <<<<<<< HEAD
-                for (k = 0; (unsigned int)k < les->Asp[i]->cols; k++) {
-                    if (les->Asp[i]->index[k] == (unsigned int)j) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                 for (k = 0; (unsigned int)k < les->Asp[i]->cols; k++) {
                     if (les->Asp[i]->index[k] == (unsigned int)j) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                for (k = 0; (unsigned int)k < les->Asp[i]->cols; k++) {
+                    if (les->Asp[i]->index[k] == (unsigned int)j) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                for (k = 0; (unsigned int)k < les->Asp[i]->cols; k++) {
+                    if (les->Asp[i]->index[k] == (unsigned int)j) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                 for (k = 0; (unsigned int)k < les->Asp[i]->cols; k++) {
@@ -302,6 +310,9 @@ void N_print_les(N_les *les)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

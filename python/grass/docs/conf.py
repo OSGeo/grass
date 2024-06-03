@@ -130,6 +130,7 @@ master_doc = "index"
 project = "Python library documentation"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 copyright = "2023, GRASS Development Team"
 =======
 <<<<<<< HEAD
@@ -137,6 +138,9 @@ copyright = "2023, GRASS Development Team"
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 copyright = "2024, GRASS Development Team"
 =======
@@ -152,6 +156,9 @@ copyright = "2023, GRASS Development Team"
 copyright = "2023, GRASS Development Team"
 >>>>>>> 6104ec7096 (i.maxlik: fix crash when classification result is NULL (#2724))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -394,12 +401,15 @@ epub_copyright = copyright
 epub_publisher = "GRASS Development Team"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 epub_copyright = "2023, GRASS Development Team"
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 epub_copyright = "2022, GRASS Development Team"
 <<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -412,6 +422,9 @@ epub_copyright = "2023, GRASS Development Team"
 epub_copyright = "2023, GRASS Development Team"
 >>>>>>> 6104ec7096 (i.maxlik: fix crash when classification result is NULL (#2724))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

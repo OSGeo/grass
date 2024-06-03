@@ -421,12 +421,15 @@ void iso_calc_cube(geovol_isosurf *isosurf, int x, int y, int z,
             else {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 /* set egdes verts */
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                 /* set edges verts */
 =======
                 /* set egdes verts */
@@ -435,6 +438,9 @@ void iso_calc_cube(geovol_isosurf *isosurf, int x, int y, int z,
                 /* set egdes verts */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -471,12 +477,15 @@ void iso_calc_cube(geovol_isosurf *isosurf, int x, int y, int z,
             else {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 /* set egdes verts */
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                 /* set edges verts */
 =======
                 /* set egdes verts */
@@ -485,6 +494,9 @@ void iso_calc_cube(geovol_isosurf *isosurf, int x, int y, int z,
                 /* set egdes verts */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

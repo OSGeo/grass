@@ -91,15 +91,21 @@ int read_rules(const char *filename)
     Rast_quant_init(&quant_struct);
 <<<<<<< HEAD
 <<<<<<< HEAD
-    for (;;) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     for (;;) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (;;) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    for (;;) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     for (;;) {
 =======
@@ -119,6 +125,9 @@ int read_rules(const char *filename)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

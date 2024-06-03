@@ -38,12 +38,15 @@ int main(int argc, char **argv)
     if ((G_projection() == PROJECTION_LL))
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_fatal_error(_("Lat/Long locations are not supported by this module"));
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         G_fatal_error(_("Lat/Long projects are not supported by this module"));
 =======
         G_fatal_error(_("Lat/Long locations are not supported by this module"));
@@ -52,6 +55,9 @@ int main(int argc, char **argv)
         G_fatal_error(_("Lat/Long locations are not supported by this module"));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

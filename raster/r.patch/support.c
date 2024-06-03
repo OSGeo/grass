@@ -3,11 +3,14 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 /**
  * Merges the statf[] arrays for each thread into
  * Thread 0 for use in the support computation.
@@ -46,6 +49,9 @@ void merge_threads(struct Cell_stats **thread_statf, int nprocs, int nfiles)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -100,15 +106,21 @@ int support(char **names, struct Cell_stats *statf, int nfiles,
                         Rast_set_c_cat(
 <<<<<<< HEAD
 <<<<<<< HEAD
-                            &n, &n, Rast_get_c_cat((CELL *)&n, &pcats), cats);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                             &n, &n, Rast_get_c_cat((CELL *)&n, &pcats), cats);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                            &n, &n, Rast_get_c_cat((CELL *)&n, &pcats), cats);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+                            &n, &n, Rast_get_c_cat((CELL *)&n, &pcats), cats);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
                             &n, &n, Rast_get_c_cat((CELL *)&n, &pcats), cats);
 =======
@@ -122,6 +134,9 @@ int support(char **names, struct Cell_stats *statf, int nfiles,
                             &n, &n, Rast_get_c_cat((CELL *)&n, &pcats), cats);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -133,17 +148,24 @@ int support(char **names, struct Cell_stats *statf, int nfiles,
                 }
 <<<<<<< HEAD
 <<<<<<< HEAD
-        }
-        else {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         }
         else {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        }
+        else {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+        }
+        else {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
         }
         else {
@@ -160,6 +182,9 @@ int support(char **names, struct Cell_stats *statf, int nfiles,
         else {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

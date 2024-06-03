@@ -209,6 +209,7 @@ class GifWriter:
         if loops == 0 or loops == float("inf"):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             loops = 2**16 - 1
 =======
 <<<<<<< HEAD
@@ -225,6 +226,12 @@ class GifWriter:
 =======
 >>>>>>> osgeo-main
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+            loops = 2**16 - 1
+=======
+>>>>>>> osgeo-main
+=======
 >>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
             loops = 2 ** 16 - 1
 >>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
@@ -235,6 +242,9 @@ class GifWriter:
             loops = 2**16 - 1
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -677,12 +687,15 @@ def readGif(filename, asNumpy=True):
     if not os.path.isfile(filename):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         raise IOError("File not found: " + str(filename))
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         raise OSError("File not found: " + str(filename))
 =======
         raise IOError("File not found: " + str(filename))
@@ -691,6 +704,9 @@ def readGif(filename, asNumpy=True):
         raise IOError("File not found: " + str(filename))
 >>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

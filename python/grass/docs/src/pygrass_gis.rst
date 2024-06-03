@@ -16,16 +16,23 @@ database management (locations and mapsets) can be found in the `GRASS
 GIS 7 User's Manual: GRASS GIS Quickstart
 <<<<<<< HEAD
 <<<<<<< HEAD
-<https://grass.osgeo.org/grass-devel/manuals/helptext.html>`_.
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 <https://grass.osgeo.org/grass-devel/manuals/helptext.html>`_.
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<https://grass.osgeo.org/grass-devel/manuals/helptext.html>`_.
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<https://grass.osgeo.org/grass-devel/manuals/helptext.html>`_.
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <https://grass.osgeo.org/grass-devel/manuals/helptext.html>`_.
@@ -43,6 +50,9 @@ GIS 7 User's Manual: GRASS GIS Quickstart
 <https://grass.osgeo.org/grass-devel/manuals/helptext.html>`_.
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

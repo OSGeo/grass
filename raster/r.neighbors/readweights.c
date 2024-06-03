@@ -67,6 +67,7 @@ void compute_weights(const char *function_type, double factor)
         weight = exponential;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 {
     double sigma2 = factor * factor;
@@ -113,6 +114,11 @@ void compute_weights(const char *function_type, double factor)
 
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 =======
 

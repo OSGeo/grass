@@ -341,8 +341,13 @@ N_data_star *N_create_27star(double C, double W, double E, double N, double S,
 void N_set_les_callback_3d_func(N_les_callback_3d *data,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -355,10 +360,13 @@ void N_set_les_callback_3d_func(N_les_callback_3d *data,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                                 N_data_star *(*callback_func_3d)(void *,
                                                                  N_geom_data *,
                                                                  int, int, int))
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
                                 N_data_star *(*callback_func_3d)())
@@ -379,6 +387,9 @@ void N_set_les_callback_3d_func(N_les_callback_3d *data,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -400,8 +411,13 @@ void N_set_les_callback_3d_func(N_les_callback_3d *data,
 void N_set_les_callback_2d_func(N_les_callback_2d *data,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -414,10 +430,13 @@ void N_set_les_callback_2d_func(N_les_callback_2d *data,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                                 N_data_star *(*callback_func_2d)(void *,
                                                                  N_geom_data *,
                                                                  int, int))
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
                                 N_data_star *(*callback_func_2d)())
@@ -438,6 +457,9 @@ void N_set_les_callback_2d_func(N_les_callback_2d *data,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -506,6 +528,7 @@ N_les_callback_2d *N_alloc_les_callback_2d(void)
  * */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 N_data_star *N_callback_template_3d(void *data, N_geom_data *geom, int col,
                                     int row, int depth)
 =======
@@ -513,6 +536,8 @@ N_data_star *N_callback_template_3d(void *data, N_geom_data *geom, int col,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 N_data_star *N_callback_template_3d(void *data UNUSED, N_geom_data *geom,
                                     int col UNUSED, int row UNUSED,
                                     int depth UNUSED)
@@ -525,6 +550,9 @@ N_data_star *N_callback_template_3d(void *data, N_geom_data *geom, int col,
                                     int row, int depth)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -565,6 +593,7 @@ N_data_star *N_callback_template_3d(void *data, N_geom_data *geom, int col,
  * */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 N_data_star *N_callback_template_2d(void *data, N_geom_data *geom, int col,
                                     int row)
 =======
@@ -572,6 +601,8 @@ N_data_star *N_callback_template_2d(void *data, N_geom_data *geom, int col,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 N_data_star *N_callback_template_2d(void *data UNUSED, N_geom_data *geom,
                                     int col UNUSED, int row UNUSED)
 =======
@@ -583,6 +614,9 @@ N_data_star *N_callback_template_2d(void *data, N_geom_data *geom, int col,
                                     int row)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -970,6 +1004,7 @@ int N_les_integrate_dirichlet_2d(N_les *les, N_geom_data *geom,
                     /*set the rows to zero */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -978,6 +1013,10 @@ int N_les_integrate_dirichlet_2d(N_les *les, N_geom_data *geom,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -989,7 +1028,10 @@ int N_les_integrate_dirichlet_2d(N_les *les, N_geom_data *geom,
                             if (les->Asp[i]->index[j] == (unsigned int)count)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -1023,6 +1065,9 @@ int N_les_integrate_dirichlet_2d(N_les *les, N_geom_data *geom,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1483,6 +1528,7 @@ int N_les_integrate_dirichlet_3d(N_les *les, N_geom_data *geom,
                         /*set the rows to zero */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1491,6 +1537,10 @@ int N_les_integrate_dirichlet_3d(N_les *les, N_geom_data *geom,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -1505,7 +1555,10 @@ int N_les_integrate_dirichlet_3d(N_les *les, N_geom_data *geom,
                                     (unsigned int)count)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -1542,6 +1595,9 @@ int N_les_integrate_dirichlet_3d(N_les *les, N_geom_data *geom,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

@@ -64,12 +64,15 @@ typedef struct {
     double xscale; /* scale in y dimension */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int count, alloc; /* numer of parts */
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     int count, alloc; /* number of parts */
 =======
     int count, alloc; /* numer of parts */
@@ -78,6 +81,9 @@ typedef struct {
     int count, alloc; /* numer of parts */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

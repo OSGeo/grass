@@ -137,6 +137,7 @@ class VDigitWindow(BufferedMapWindow):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         tools = {
             ord("P"): {
                 "event": wx.CommandEvent(id=self.toolbar.addPoint),
@@ -222,6 +223,8 @@ class VDigitWindow(BufferedMapWindow):
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         default_tools = {
             "addPoint": {
                 "evt": True,
@@ -501,6 +504,9 @@ class VDigitWindow(BufferedMapWindow):
             tool = tools.get(kc)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

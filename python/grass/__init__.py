@@ -15,12 +15,15 @@
 Importing the package (or any subpackage) initializes translation functions
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 so that the function ``_`` appears in the global namespace (as an additional build-in).
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 so that the function ``_`` appears in the global namespace (as an additional built-in).
 =======
 so that the function ``_`` appears in the global namespace (as an additional build-in).
@@ -29,6 +32,9 @@ so that the function ``_`` appears in the global namespace (as an additional bui
 so that the function ``_`` appears in the global namespace (as an additional build-in).
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -78,12 +84,15 @@ def _translate(text):
     The first call to this function initializes translations, i.e., simply importing
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     the package does not require the translations to be availabe. However, a first
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     the package does not require the translations to be available. However, a first
 =======
     the package does not require the translations to be availabe. However, a first
@@ -92,6 +101,9 @@ def _translate(text):
     the package does not require the translations to be availabe. However, a first
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

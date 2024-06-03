@@ -142,18 +142,26 @@ int db_get_table_number_of_columns(dbTable *table)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-static void set_all_column_privs(dbTable *table,
-                                 void (*set_column_priv)(dbColumn *))
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 static void set_all_column_privs(dbTable *table,
                                  void (*set_column_priv)(dbColumn *))
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+static void set_all_column_privs(dbTable *table,
+                                 void (*set_column_priv)(dbColumn *))
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+static void set_all_column_privs(dbTable *table,
+                                 void (*set_column_priv)(dbColumn *))
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 static void set_all_column_privs(dbTable *table,
@@ -177,6 +185,9 @@ static void set_all_column_privs(dbTable *table,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -193,18 +204,26 @@ static void set_all_column_privs(dbTable *table,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-static int get_all_column_privs(dbTable *table,
-                                int (*get_column_priv)(dbColumn *))
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 static int get_all_column_privs(dbTable *table,
                                 int (*get_column_priv)(dbColumn *))
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+static int get_all_column_privs(dbTable *table,
+                                int (*get_column_priv)(dbColumn *))
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+static int get_all_column_privs(dbTable *table,
+                                int (*get_column_priv)(dbColumn *))
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 static int get_all_column_privs(dbTable *table,
@@ -228,6 +247,9 @@ static int get_all_column_privs(dbTable *table,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -499,8 +521,14 @@ dbTable *db_clone_table(dbTable *src)
    \brief Create SQL CREATE sring from table definition
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

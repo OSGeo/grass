@@ -184,12 +184,15 @@ int solver_pcg(double **A, G_math_spvector **Asp, double *x, double *b,
         G_math_d_ax_by(b, v, r, 1.0, -1.0, rows);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         /*performe the preconditioning */
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         /*perform the preconditioning */
 =======
         /*performe the preconditioning */
@@ -198,6 +201,9 @@ int solver_pcg(double **A, G_math_spvector **Asp, double *x, double *b,
         /*performe the preconditioning */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -258,12 +264,15 @@ int solver_pcg(double **A, G_math_spvector **Asp, double *x, double *b,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             /*performe the preconditioning */
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             /*perform the preconditioning */
 =======
             /*performe the preconditioning */
@@ -272,6 +281,9 @@ int solver_pcg(double **A, G_math_spvector **Asp, double *x, double *b,
             /*performe the preconditioning */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -797,16 +809,23 @@ G_math_spvector **create_diag_precond_matrix(double **A, G_math_spvector **Asp,
     shared(A, Msp, rows, cols, prec)
 <<<<<<< HEAD
 <<<<<<< HEAD
-        for (i = 0; i < (unsigned int)rows; i++) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         for (i = 0; i < (unsigned int)rows; i++) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        for (i = 0; i < (unsigned int)rows; i++) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        for (i = 0; i < (unsigned int)rows; i++) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         for (i = 0; i < (unsigned int)rows; i++) {
@@ -827,6 +846,9 @@ G_math_spvector **create_diag_precond_matrix(double **A, G_math_spvector **Asp,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -862,16 +884,23 @@ G_math_spvector **create_diag_precond_matrix(double **A, G_math_spvector **Asp,
     shared(Asp, Msp, rows, cols, prec)
 <<<<<<< HEAD
 <<<<<<< HEAD
-        for (i = 0; i < (unsigned int)rows; i++) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         for (i = 0; i < (unsigned int)rows; i++) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        for (i = 0; i < (unsigned int)rows; i++) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        for (i = 0; i < (unsigned int)rows; i++) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         for (i = 0; i < (unsigned int)rows; i++) {
@@ -892,6 +921,9 @@ G_math_spvector **create_diag_precond_matrix(double **A, G_math_spvector **Asp,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

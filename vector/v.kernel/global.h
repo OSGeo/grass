@@ -27,16 +27,23 @@ double invGaussian2d(double sigma, double prob);
 double gaussian2dByTerms(double d, double term1, double term2);
 <<<<<<< HEAD
 <<<<<<< HEAD
-double brent_iterate(double (*f)(double), double x_lower, double x_upper,
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 double brent_iterate(double (*f)(double), double x_lower, double x_upper,
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+double brent_iterate(double (*f)(double), double x_lower, double x_upper,
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+double brent_iterate(double (*f)(double), double x_lower, double x_upper,
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 double brent_iterate(double (*f)(double), double x_lower, double x_upper,
@@ -57,6 +64,9 @@ double brent_iterate(double (*f)(double), double x_lower, double x_upper,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

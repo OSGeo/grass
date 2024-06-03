@@ -55,11 +55,14 @@ int com_line_Gwater(INPUT *input, OUTPUT *output)
         prog_name = G_store(RAM_NAME);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(input->com_line_ram, (400 * sizeof(char)),
@@ -110,6 +113,9 @@ int com_line_Gwater(INPUT *input, OUTPUT *output)
 =======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -127,6 +133,11 @@ int com_line_Gwater(INPUT *input, OUTPUT *output)
                      "\"%s/etc/water/%s\"", G_gisbase(), SEG_NAME);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 =======
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
@@ -143,18 +154,26 @@ int com_line_Gwater(INPUT *input, OUTPUT *output)
         input->com_line_seg = (char *)G_calloc(400, sizeof(char));
 <<<<<<< HEAD
 <<<<<<< HEAD
-        snprintf(input->com_line_seg, (400, sizeof(char)),
-                 "\"%s/etc/water/%s\"", G_gisbase(), SEG_NAME);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(input->com_line_seg, (400, sizeof(char)),
                  "\"%s/etc/water/%s\"", G_gisbase(), SEG_NAME);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(input->com_line_seg, (400, sizeof(char)),
+                 "\"%s/etc/water/%s\"", G_gisbase(), SEG_NAME);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(input->com_line_seg, (400, sizeof(char)),
+                 "\"%s/etc/water/%s\"", G_gisbase(), SEG_NAME);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(input->com_line_seg, (400, sizeof(char)),
@@ -181,6 +200,9 @@ int com_line_Gwater(INPUT *input, OUTPUT *output)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -384,12 +406,15 @@ int com_line_Gwater(INPUT *input, OUTPUT *output)
        statistics about the watershed basin. GRASS users don't need this (w/
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
        r.stats), but the format is suppossed to be "user-friendly" to
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
        r.stats), but the format is supposed to be "user-friendly" to
 =======
        r.stats), but the format is suppossed to be "user-friendly" to
@@ -398,6 +423,9 @@ int com_line_Gwater(INPUT *input, OUTPUT *output)
        r.stats), but the format is suppossed to be "user-friendly" to
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -613,16 +641,23 @@ int basin_com_add(char **com_line, double d, double modifier,
         i = 1;
 <<<<<<< HEAD
 <<<<<<< HEAD
-    snprintf(buf, sizeof(buf), " t=%d", i);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     snprintf(buf, sizeof(buf), " t=%d", i);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(buf, sizeof(buf), " t=%d", i);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(buf, sizeof(buf), " t=%d", i);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     snprintf(buf, sizeof(buf), " t=%d", i);
@@ -642,6 +677,9 @@ int basin_com_add(char **com_line, double d, double modifier,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

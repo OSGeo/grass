@@ -441,6 +441,7 @@ int gsd_wire_surf_const(geosurf *surf, float k)
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int gsd_wire_surf_func(geosurf *gs, int (*user_func)(void))
 =======
 <<<<<<< HEAD
@@ -448,6 +449,9 @@ int gsd_wire_surf_func(geosurf *gs, int (*user_func)(void))
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 int gsd_wire_surf_func(geosurf *gs UNUSED, int (*user_func)(void) UNUSED)
 =======
@@ -466,6 +470,9 @@ int gsd_wire_surf_func(geosurf *gs, int (*user_func)(void))
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

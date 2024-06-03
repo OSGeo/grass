@@ -61,12 +61,15 @@ static void seq_MAP_routine(
     double diff2;    /* change in log likelihood */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     struct Region *regionary; /* array of region stuctures */
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     struct Region *regionary; /* array of region structures */
 =======
     struct Region *regionary; /* array of region stuctures */
@@ -75,6 +78,9 @@ static void seq_MAP_routine(
     struct Region *regionary; /* array of region stuctures */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -232,12 +238,15 @@ static void interp(
     double *pdf; /* propability density function of class selections */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     double Z;    /* normalizing costant for pdf */
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     double Z;    /* normalizing constant for pdf */
 =======
     double Z;    /* normalizing costant for pdf */
@@ -246,6 +255,9 @@ static void interp(
     double Z;    /* normalizing costant for pdf */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

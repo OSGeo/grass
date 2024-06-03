@@ -73,6 +73,7 @@ GLOBAL double flat_threshold, flat_threshold_height;
 GLOBAL struct Cell_head window;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 <<<<<<< HEAD
@@ -88,6 +89,12 @@ GLOBAL struct Cell_head window;
 
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+=======
+>>>>>>> osgeo-main
 >>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
 =======
 >>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
@@ -98,6 +105,9 @@ GLOBAL struct Cell_head window;
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

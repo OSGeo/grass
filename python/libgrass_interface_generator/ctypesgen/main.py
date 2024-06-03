@@ -37,12 +37,15 @@ def option_callback_W(option, opt, value, parser):
     if opt not in ["-L", "-R", "--rpath"]:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         raise optparse.BadOptionError("-Wl option must be -L, -R" " or --rpath, not " + value[2:])
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         raise optparse.BadOptionError(
             "-Wl option must be -L, -R" " or --rpath, not " + value[2:]
         )
@@ -53,6 +56,9 @@ def option_callback_W(option, opt, value, parser):
         raise optparse.BadOptionError("-Wl option must be -L, -R" " or --rpath, not " + value[2:])
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -335,17 +341,23 @@ def main(givenargs=None):
         default="py",
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         choices=("py", "json"),
         help="Choose output language (`py'[default], or `json').",
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -358,8 +370,14 @@ def main(givenargs=None):
         "version of Python that runs this script.",
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -441,12 +459,15 @@ def main(givenargs=None):
     else:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         msgs.error_message("No such output language `" + options.output_language + "'", cls="usage")
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         msgs.error_message(
             "No such output language `" + options.output_language + "'", cls="usage"
         )
@@ -457,6 +478,9 @@ def main(givenargs=None):
         msgs.error_message("No such output language `" + options.output_language + "'", cls="usage")
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

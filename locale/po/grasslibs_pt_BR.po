@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-09 06:51-0700\n"
+"POT-Creation-Date: 2024-05-23 03:37-0600\n"
 "PO-Revision-Date: 2023-04-29 23:52+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.osgeo.org/projects/grass-"
@@ -1545,8 +1545,8 @@ msgstr "Ignorando %d pontos (muito denso)"
 #: ../lib/rst/interp_float/vinput2d.c:273
 #, c-format
 msgid ""
-"%d points given for interpolation (after thinning) is less than given NPMIN="
-"%d"
+"%d points given for interpolation (after thinning) is less than given "
+"NPMIN=%d"
 msgstr ""
 "%d pontos dados para a interpolação (após afinamento) é menor que o NPMIN=%d "
 "definido."
@@ -1886,7 +1886,7 @@ msgstr "proj_trans() falhou: %d"
 #: ../lib/vector/Vlib/read_ogr.c:157 ../lib/vector/Vlib/read_ogr.c:239
 #: ../lib/vector/Vlib/write_ogr.c:70 ../lib/vector/Vlib/write_ogr.c:105
 #: ../lib/vector/Vlib/write_ogr.c:146 ../lib/vector/Vlib/rewind_ogr.c:47
-#: ../lib/vector/Vlib/rewind_ogr.c:71 ../lib/vector/Vlib/field.c:732
+#: ../lib/vector/Vlib/rewind_ogr.c:71 ../lib/vector/Vlib/field.c:751
 #: ../lib/vector/Vlib/build_sfa.c:720
 msgid "GRASS is not compiled with OGR support"
 msgstr "GRASS não é compilado com suporte OGR"
@@ -2888,8 +2888,14 @@ msgstr ""
 #: ../lib/gis/adj_cellhd.c:62 ../lib/gis/adj_cellhd.c:180
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -2909,8 +2915,14 @@ msgstr ""
 #: ../lib/gis/adj_cellhd.c:68 ../lib/gis/adj_cellhd.c:190
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -2935,8 +2947,14 @@ msgstr ""
 #: ../lib/gis/adj_cellhd.c:81 ../lib/gis/adj_cellhd.c:219
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -2956,8 +2974,14 @@ msgstr ""
 #: ../lib/gis/adj_cellhd.c:85 ../lib/gis/adj_cellhd.c:223
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -2977,8 +3001,14 @@ msgstr ""
 #: ../lib/gis/adj_cellhd.c:93 ../lib/gis/adj_cellhd.c:231
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -3002,8 +3032,14 @@ msgstr ""
 #: ../lib/gis/adj_cellhd.c:117 ../lib/gis/adj_cellhd.c:280
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -3034,8 +3070,14 @@ msgstr "As resoluções para NS e EW são diferentes"
 #: ../lib/gis/adj_cellhd.c:175
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -3060,8 +3102,14 @@ msgstr ""
 #: ../lib/gis/adj_cellhd.c:193
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -3086,8 +3134,14 @@ msgstr ""
 #: ../lib/gis/adj_cellhd.c:208
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -3107,8 +3161,14 @@ msgstr ""
 #: ../lib/gis/adj_cellhd.c:213
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -3128,8 +3188,14 @@ msgstr ""
 #: ../lib/gis/adj_cellhd.c:236
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -3317,7 +3383,7 @@ msgid "SYNOPSIS"
 msgstr "SINOPSE"
 
 #: ../lib/gis/parser_html.c:159 ../lib/gis/parser_rest_md.c:215
-#: ../lib/init/grass.py:364
+#: ../lib/init/grass.py:366
 msgid "Flags"
 msgstr "Flags"
 
@@ -3327,7 +3393,7 @@ msgid "Force launching GUI dialog"
 msgstr "Forçando abertura da caixa de diálogo"
 
 #: ../lib/gis/parser_html.c:207 ../lib/gis/parser_rest_md.c:255
-#: ../lib/init/grass.py:385
+#: ../lib/init/grass.py:386
 msgid "Parameters"
 msgstr "Parâmetros"
 
@@ -4090,8 +4156,14 @@ msgid "The dimensions of the tiles used in the output raster3d map (XxYxZ or def
 msgstr "As dimensões dos mosaicos usados ​​no mapa raster3d de saída (XxYxZ ou padrão: 16x16x8)"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -4236,11 +4308,13 @@ msgid "'.' for current mapset"
 msgstr "'.' para mapset atual"
 
 #: ../lib/gis/parser_standard_options.c:701
-msgid "Location name"
+#, fuzzy
+msgid "Project (location) name"
 msgstr "Nome de Location"
 
 #: ../lib/gis/parser_standard_options.c:702
-msgid "Location name (not location path)"
+#, fuzzy
+msgid "Project name (not path to project)"
 msgstr "Nome de Location (não o caminho da location)"
 
 #: ../lib/gis/parser_standard_options.c:712
@@ -6211,6 +6285,10 @@ msgid "Invalid offset (%"
 msgstr ""
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
@@ -7173,7 +7251,7 @@ msgid "Unrecognised access mode: %o"
 msgstr "Modo de acesso não reconhecido: %o"
 >>>>>>> osgeo-main
 
-#: ../lib/gis/mapset_msc.c:222
+#: ../lib/gis/mapset_msc.c:223
 #, c-format
 <<<<<<< HEAD
 msgid "One isle built"
@@ -7185,7 +7263,7 @@ msgid "Unable to make mapset element %s (%s): %s"
 msgstr "Não foi possível fazer elemento do mapset %s (%s): %s"
 >>>>>>> osgeo-main
 
-#: ../lib/gis/mapset_msc.c:228
+#: ../lib/gis/mapset_msc.c:229
 #, c-format
 msgid "Unable to access mapset element %s (%s): %s"
 msgstr "Não foi possível acessar elemento do mapset %s (%s): %s"
@@ -7798,8 +7876,8 @@ msgstr "gerado por %s"
 #: ../lib/raster/open.c:192
 #, c-format
 msgid ""
-"Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@"
-"%s> which does not exist"
+"Unable to open raster map <%s@%s> since it is a reclass of raster map "
+"<%s@%s> which does not exist"
 msgstr ""
 "Não foi possível abrir o mapa raster <%s@%s> uma vez que é uma "
 "reclassificaçãao do mapa raster <%s@%s> que não existe"
@@ -7830,8 +7908,8 @@ msgid ""
 "Raster map <%s> is in different projection than current region. Found <%s>, "
 "should be <%s>."
 msgstr ""
-"Mapa raster <%s> está em uma projeção diferente da região atual. Encontrado <"
-"%s>, deveria ser <%s>."
+"Mapa raster <%s> está em uma projeção diferente da região atual. Encontrado "
+"<%s>, deveria ser <%s>."
 
 #: ../lib/raster/open.c:250
 #, c-format
@@ -8166,8 +8244,11 @@ msgid "Could not delete line from coor"
 msgstr "Não foi possível excluir linha de coor"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
@@ -8402,28 +8483,30 @@ msgstr "O arquivo de quantização para o mapa raster <%s> está vazio"
 msgid "WARNING"
 msgstr "ATENÇÃO: "
 
-#: ../lib/init/grass.py:210 ../lib/init/grass.py:2671
+#: ../lib/init/grass.py:210 ../lib/init/grass.py:2687
 msgid "Exiting..."
 msgstr "Saindo..."
 
-#: ../lib/init/grass.py:363
+#: ../lib/init/grass.py:365
 msgid "Usage"
 msgstr "Uso"
 
-#: ../lib/init/grass.py:365
+#: ../lib/init/grass.py:367
 msgid "print this help message"
 msgstr "imprime esta mensagem de ajuda"
 
-#: ../lib/init/grass.py:366
+#: ../lib/init/grass.py:368
 msgid "show version information and exit"
 msgstr "mostrar informações de versão e sair"
 
-#: ../lib/init/grass.py:367
-msgid "create given database, location or mapset if it doesn't exist"
+#: ../lib/init/grass.py:369
+#, fuzzy
+msgid "create given database, project or mapset if it doesn't exist"
 msgstr "cria determinado banco de dados, location ou mapset se não existir"
 
-#: ../lib/init/grass.py:369
-msgid "exit after creation of location or mapset. Only with -c flag"
+#: ../lib/init/grass.py:370
+#, fuzzy
+msgid "exit after creation of project or mapset. Only with -c flag"
 msgstr "sair após a criação da location ou mapset. Apenas com a flag -c"
 
 #: ../lib/init/grass.py:372
@@ -8466,6 +8549,7 @@ msgstr "opções: arch,build,compiler,date,path,revision,svn_revision,version"
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 msgid "Unable to rewrite feature/offset %"
 msgstr ""
+<<<<<<< HEAD
 
 =======
 <<<<<<< HEAD
@@ -8683,23 +8767,233 @@ msgstr ""
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
+=======
+>>>>>>> osgeo-main
 
-#: ../lib/init/grass.py:386
+=======
+
+#: ../lib/vector/Vlib/remove_areas.c:458
+msgid "dissolve_neighbour > 0, failed to build new area"
+msgstr "dissolve_neighbour> 0, falha ao construir uma nova área"
+
+#: ../lib/vector/Vlib/remove_areas.c:463 ../lib/vector/Vlib/remove_areas.c:501
+msgid "Dissolve with neighbour area: corrupt topology"
+msgstr "Dissolver com área vizinha: topologia corrompida"
+
+#: ../lib/vector/Vlib/remove_areas.c:497
+msgid "Failed to build new area"
+msgstr "Falha ao construir nova área"
+
+#: ../lib/vector/Vlib/remove_areas.c:544 ../lib/vector/Vlib/remove_areas.c:571
+msgid "Failed to build new isle"
+msgstr "Falha ao construir nova ilha"
+
+#: ../lib/vector/Vlib/remove_areas.c:549 ../lib/vector/Vlib/remove_areas.c:576
+msgid "Dissolve with outer isle: corrupt topology"
+msgstr "Dissolver com a ilha externa: topologia corrompida"
+
+#: ../lib/vector/Vlib/remove_areas.c:581
+msgid "Area merging failed"
+msgstr "Falha ao mesclar áreas"
+
+#: ../lib/vector/Vlib/copy.c:81
+#, c-format
+msgid "Unable to copy features. Input vector map <%s> is not open"
+msgstr "Não foi possível copiar feições. O mapa vetorial de entrada <%s> não está aberto"
+
+#: ../lib/vector/Vlib/copy.c:102
+#, c-format
+msgid "Unable to create PostGIS layer <%s>"
+msgstr "Não foi possível criar camada PostGIS <%s>"
+
+#: ../lib/vector/Vlib/copy.c:134
+#, c-format
+msgid "Vector map <%s> not open on topological level. Areas will be skipped!"
+msgstr "Mapa vetorial <%s> não está aberto no nível topológico. As áreas serão ignoradas!"
+
+#: ../lib/vector/Vlib/copy.c:169 ../lib/vector/Vlib/copy.c:246
+#: ../lib/ogsf/gp3.c:92
+#, c-format
+msgid "Unable to read vector map <%s>"
+msgstr "Não foi possível ler mapa vetorial <%s>"
+
+#: ../lib/vector/Vlib/copy.c:230 ../lib/vector/Vlib/copy.c:235
+msgid "Copying features..."
+msgstr "Copiando feições..."
+
+#: ../lib/vector/Vlib/copy.c:232
+#, c-format
+msgid "Copying features (%s)..."
+msgstr "Copiando feições (%s)..."
+
+#: ../lib/vector/Vlib/copy.c:358
+msgid "Writing new feature failed"
+msgstr "Falha ao escrever nova feição"
+
+#: ../lib/vector/Vlib/copy.c:364
+#, c-format
+msgid "%d features without category or from different layer skipped"
+msgstr "%d feições sem categoria ou de camada diferente ignoradas"
+
+#: ../lib/vector/Vlib/copy.c:396
+msgid "Exporting nodes..."
+msgstr "Exportando nós..."
+
+#: ../lib/vector/Vlib/copy.c:424
+#, c-format
+msgid "Writing node %d failed"
+msgstr "Falha ao escrever o nó %d"
+
+#: ../lib/vector/Vlib/copy.c:502
+msgid "Exporting areas..."
+msgstr "Exportando áreas..."
+
+#: ../lib/vector/Vlib/copy.c:560 ../lib/vector/Vlib/copy.c:568
+#, c-format
+msgid "Writing area %d failed"
+msgstr "Falha ao escrever a área %d"
+
+#: ../lib/vector/Vlib/copy.c:576
+#, c-format
+msgid "%d areas without category or from different layer skipped"
+msgstr "%d áreas sem categoria ou de camada diferente ignoradas"
+
+#: ../lib/vector/Vlib/copy.c:630
+#, c-format
+msgid "Unable to copy table <%s> for layer %d from <%s> to <%s>"
+msgstr "Não é possível copiar a tabela <%s> para a camada %d de <%s> para <%s>"
+
+#: ../lib/vector/Vlib/copy.c:749
+#, c-format
+msgid "Unable to add database link for vector map <%s>"
+msgstr "Não foi possível adicionar link do banco de dados para o mapa vetorial <%s>"
+
+#: ../lib/vector/Vlib/copy.c:773
+#, c-format
+msgid "Unable to open database <%s> with driver <%s>"
+msgstr "Não foi possível abrir banco de dados <%s> com driver <%s>"
+
+#: ../lib/vector/Vlib/copy.c:780
+msgid "Unable to create index"
+msgstr "Não foi possível criar índice"
+
+#: ../lib/vector/Vlib/copy.c:786
+#, c-format
+msgid "Unable to grant privileges on table <%s>"
+msgstr "Não é possível dar privilégios na tabela <%s>"
+
+#: ../lib/vector/Vlib/write.c:194
+#, c-format
+msgid "Unable to write feature in vector map <%s>"
+msgstr "Não foi possível escrever feição no mapa vetorial <%s>"
+
+#: ../lib/vector/Vlib/write.c:234
+msgid "Unable to rewrite feature/offset %"
+msgstr ""
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+#: ../lib/vector/Vlib/write.c:266
+msgid "Unable to delete feature/offset %"
+msgstr ""
+
+#: ../lib/vector/Vlib/write.c:299
+msgid "Unable to restore feature/offset %"
+msgstr "Não foi possível restaurar feição/offset %"
+
+#: ../lib/vector/Vlib/write.c:308
+#, c-format
+msgid "Vector map <%s> is not opened"
+msgstr "Mapa vetorial <%s> não está aberto"
+
+#: ../lib/vector/Vlib/write.c:313
+#, c-format
+msgid "Vector map <%s> is not opened in write mode"
+msgstr "Mapa vetorial <%s> não está aberto em modo de escrita"
+
+#: ../lib/vector/Vlib/line.c:184 ../lib/vector/Vlib/line.c:217
+#: ../lib/vector/Vlib/line.c:250
+msgid "Index out of range in"
+msgstr "Índice fora do intervalo em"
+
+#: ../lib/vector/Vlib/line.c:550
+msgid "Segment outside line, no segment created"
+msgstr "Segmento fora da linha, nenhum segmento criado"
+
+#: ../lib/vector/Vlib/net_build.c:101 ../lib/vector/Vlib/net_build.c:727
+msgid "Building graph..."
+msgstr "Construindo gráfico..."
+
+#: ../lib/vector/Vlib/net_build.c:143 ../lib/vector/Vlib/net_build.c:775
+msgid "Unable to build network graph"
+msgstr ""
+
+#: ../lib/vector/Vlib/net_build.c:149 ../lib/vector/Vlib/net_build.c:781
+msgid "Forward costs column not specified"
+msgstr ""
+
+#: ../lib/vector/Vlib/net_build.c:156
+msgid "Turntable field < 1"
+msgstr ""
+
+#: ../lib/vector/Vlib/net_build.c:172
+#, c-format
+msgid "Turntable column <%s> not found in table <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/net_build.c:182 ../lib/vector/Vlib/net_build.c:223
+#: ../lib/vector/Vlib/net_build.c:508 ../lib/vector/Vlib/net_build.c:526
+#: ../lib/vector/Vlib/net_build.c:809 ../lib/vector/Vlib/net_build.c:827
+#: ../lib/vector/Vlib/net_build.c:988
+#, c-format
+msgid "Data type of column <%s> not supported (must be numeric)"
+msgstr "Tipo de dados da coluna <%s> não suportado (deve ser numérico)"
+
+#: ../lib/vector/Vlib/net_build.c:202 ../lib/vector/Vlib/net_build.c:967
+msgid "Setting node costs..."
+msgstr "Definindo custos de nó..."
+
+#: ../lib/vector/Vlib/net_build.c:277 ../lib/vector/Vlib/net_build.c:1032
+#, c-format
+msgid "Database record for node %d (cat = %d) not found (cost set to 0)"
+msgstr "Registro do banco de dados para o nó %d (cat = %d) não encontrado (cost set to 0)"
+
+#: ../lib/vector/Vlib/net_build.c:332 ../lib/vector/Vlib/net_build.c:352
+msgid "Cannot add network arc for virtual node connection."
+msgstr "Não é possível adicionar arco de rede para conexão de nó virtual."
+
+#: ../lib/vector/Vlib/net_build.c:364
+#, c-format
+msgid ""
+"There exists more than one point of node <%d> with unique category field  <%d>.\n"
+"The unique categories layer is not valid therefore you will probably get incorrect results."
+msgstr ""
+"Existe mais de um ponto de nó <%d> com campo de categoria exclusivo <%d>.\n"
+"A camada de categorias exclusivas não é válida, portanto, você provavelmente obterá resultados incorretos."
+<<<<<<< HEAD
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+
+#: ../lib/init/grass.py:387
 msgid "initial GRASS database directory"
 msgstr "Diretório do banco de dados GRASS inicial"
 
-#: ../lib/init/grass.py:387
-msgid "directory containing Locations"
+#: ../lib/init/grass.py:388
+#, fuzzy
+msgid "directory containing GRASS projects"
 msgstr "diretório contendo Locations"
 
-#: ../lib/init/grass.py:388
-msgid "initial GRASS Location"
+#: ../lib/init/grass.py:389
+#, fuzzy
+msgid "initial GRASS project (location)"
 msgstr "Location GRASS inicial"
 
-#: ../lib/init/grass.py:390
+#: ../lib/init/grass.py:391
+#, fuzzy
 msgid ""
-"directory containing Mapsets with one common coordinate system (projection)"
+"directory containing mapsets with one common coordinate reference system"
 msgstr ""
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -8739,82 +9033,120 @@ msgstr ""
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
 
+=======
+"diretório contendo Mapsets com um sistema de coordenadas comum (projeção)"
+
+>>>>>>> osgeo-main
 #: ../lib/init/grass.py:394
-msgid "fully qualified initial Mapset directory"
-msgstr "diretório Mapset inicial totalmente qualificado"
+#, fuzzy
+msgid "initial GRASS mapset"
+msgstr "Mapset GRASS inicial"
+=======
+"Não foi possível encontrar o ponto que representa a interseção <%d> no campo de categorias exclusivas <%d>.\n"
+"O custo da interseção foi definido como 0.\n"
+"A camada de categorias exclusivas não é válida, portanto, você provavelmente obterá resultados incorretos."
+
+#: ../lib/vector/Vlib/net_build.c:407
+#, c-format
+msgid ""
+"Unable to find node for point representing intersection <%d> in unique categories field <%d>.\n"
+"Cost for the intersection was set to 0.\n"
+"The unique categories layer is not valid therefore you will probably get incorrect results."
+msgstr ""
+"Não foi possível encontrar o nó para o ponto que representa a interseção <%d> no campo de categorias exclusivas <%d>.\n"
+"O custo da interseção foi definido como 0.\n"
+"A camada de categorias exclusivas não é válida, portanto, você provavelmente obterá resultados incorretos."
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../lib/init/grass.py:395
+#, fuzzy
+msgid "fully qualified initial mapset directory"
+msgstr "diretório Mapset inicial totalmente qualificado"
+
+#: ../lib/init/grass.py:396
 msgid "Environment variables relevant for startup"
 msgstr "Variáveis ​​de ambiente relevantes para a inicialização"
 
-#: ../lib/init/grass.py:396
+#: ../lib/init/grass.py:397
 msgid "select GUI (text, gui, gtext)"
 msgstr "seleciona GUI (text, gui, gtext)"
 
-#: ../lib/init/grass.py:397
+#: ../lib/init/grass.py:398
 msgid "set html web browser for help pages"
 msgstr "define navegador web html para páginas de ajuda"
 
-#: ../lib/init/grass.py:399
+#: ../lib/init/grass.py:400
 msgid "set additional path(s) to local GRASS modules or user scripts"
 msgstr ""
 "define caminho(s) adicional(is) para módulos GRASS locais ou scripts de "
 "usuário"
 
-#: ../lib/init/grass.py:402
+#: ../lib/init/grass.py:403
 msgid "set additional GISBASE for locally installed GRASS Addons"
 msgstr "define GISBASE adicional para complementos GRASS instalados localmente"
 
-#: ../lib/init/grass.py:404
+#: ../lib/init/grass.py:405
 msgid "set Python interpreter name to override 'python'"
 msgstr "define o nome do interpretador Python para substituir 'python'"
 
-#: ../lib/init/grass.py:405
+#: ../lib/init/grass.py:406
 msgid "execute GRASS module or script"
 msgstr "execute o módulo GRASS ou script"
 
-#: ../lib/init/grass.py:406
+#: ../lib/init/grass.py:407
 msgid "provided executable will be executed in GRASS session"
 msgstr "executável fornecido será executado na sessão GRASS"
 
-#: ../lib/init/grass.py:407
+#: ../lib/init/grass.py:408
 msgid "GRASS module, script or any other executable"
 msgstr "Módulo GRASS, script ou qualquer outro executável"
 
-#: ../lib/init/grass.py:408
+#: ../lib/init/grass.py:409
 msgid "parameters of the executable"
 msgstr "parâmetros do executável"
 
-#: ../lib/init/grass.py:409
+#: ../lib/init/grass.py:410
 msgid "standard flags"
 msgstr "flags padrão"
 
-#: ../lib/init/grass.py:410
-msgid "create temporary location (use with the --exec flag)"
-msgstr "cria location temporário (use com a flag --exec)"
+#: ../lib/init/grass.py:411 ../lib/init/grass.py:2313
+msgid "deprecated, use --tmp-project instead"
+msgstr ""
+"Não foi possível encontrar o ponto que representa a interseção <%d> no campo de categorias exclusivas <%d>.\n"
+"O custo da interseção foi definido como 0.\n"
+"A camada de categorias exclusivas não é válida, portanto, você provavelmente obterá resultados incorretos."
 
 #: ../lib/init/grass.py:412
+msgid "location was renamed to project"
+msgstr ""
+
+#: ../lib/init/grass.py:413
+#, fuzzy
+msgid "create temporary project (use with the --exec flag)"
+msgstr "cria location temporário (use com a flag --exec)"
+
+#: ../lib/init/grass.py:415
 msgid "created in a temporary directory and deleted at exit"
 msgstr ""
 "Não foi possível encontrar o ponto que representa a interseção <%d> no campo de categorias exclusivas <%d>.\n"
 "O custo da interseção foi definido como 0.\n"
 "A camada de categorias exclusivas não é válida, portanto, você provavelmente obterá resultados incorretos."
 
-#: ../lib/init/grass.py:414
+#: ../lib/init/grass.py:417
 msgid "create temporary mapset (use with the --exec flag)"
 msgstr ""
 
-#: ../lib/init/grass.py:416
-msgid "created in the specified location and deleted at exit"
+#: ../lib/init/grass.py:418
+msgid "created in the specified project and deleted at exit"
 msgstr ""
 
-#: ../lib/init/grass.py:442
+#: ../lib/init/grass.py:443
 msgid "The APPDATA variable is not set, ask your operating system support"
 msgstr ""
 "A variável APPDATA não está definida, pergunte ao suporte do seu sistema "
 "operacional"
 
-#: ../lib/init/grass.py:449
+#: ../lib/init/grass.py:450
 msgid ""
 "The APPDATA variable points to directory which does not exist, ask your "
 "operating system support"
@@ -8822,12 +9154,12 @@ msgstr ""
 "A variável APPDATA aponta para um diretório que não existe, pergunte ao seu "
 "suporte de sistema operacional"
 
-#: ../lib/init/grass.py:464
+#: ../lib/init/grass.py:465
 #, python-format
 msgid "Failed to create configuration directory '%s' with error: %s"
 msgstr "Falhou na criação do diretório de configuração '%s' com erro: %s"
 
-#: ../lib/init/grass.py:506
+#: ../lib/init/grass.py:507
 #, python-brace-format
 msgid "Unable to create temporary directory <{tmpdir_name}>! Exiting."
 msgstr ""
@@ -8835,38 +9167,38 @@ msgstr ""
 "O custo da interseção foi definido como 0.\n"
 "A camada de categorias exclusivas não é válida, portanto, você provavelmente obterá resultados incorretos."
 
-#: ../lib/init/grass.py:566
+#: ../lib/init/grass.py:567
 #, python-brace-format
 msgid "Invalid line in RC file ({file}): '{line}' ({error})\n"
 msgstr "Linha inválida no arquivo RC ({arquivo}): '{linha}' ({erro})\n"
 
-#: ../lib/init/grass.py:573
+#: ../lib/init/grass.py:574
 #, python-brace-format
 msgid "Empty RC file ({file})"
 msgstr "Arquivo RC vazio ({file})"
 
-#: ../lib/init/grass.py:668
+#: ../lib/init/grass.py:669
 #, python-format
 msgid "GUI <%s> not supported in this version"
 msgstr "GUI <%s> não suportado nesta versão"
 
-#: ../lib/init/grass.py:897
+#: ../lib/init/grass.py:898
 msgid ""
 "The python command does not work as expected.\n"
 "Please check your installation or set the GRASS_PYTHON environment variable."
 msgstr ""
 
-#: ../lib/init/grass.py:902
+#: ../lib/init/grass.py:903
 msgid "GRASS GUI not found. Please check your installation."
 msgstr "GRASS GUI não encontrado. Por favor verifique sua instalação."
 
-#: ../lib/init/grass.py:904
+#: ../lib/init/grass.py:905
 msgid ""
 "{}\n"
 "Switching to text based interface mode."
 msgstr ""
 
-#: ../lib/init/grass.py:913
+#: ../lib/init/grass.py:914
 msgid ""
 "It appears that the X Windows system is not active.\n"
 "A graphical based user interface is not supported.\n"
@@ -8874,62 +9206,62 @@ msgid ""
 "Switching to text based interface mode."
 msgstr ""
 
-#: ../lib/init/grass.py:988
-#, python-brace-format
+#: ../lib/init/grass.py:989
+#, fuzzy, python-brace-format
 msgid ""
-"Unable to create new location because the location <{location}> already "
-"exists."
+"Unable to create new project because the project <{location}> already exists."
 msgstr ""
 "Não foi possível criar um novo location porque o location <{location}> já "
 "existe."
 
-#: ../lib/init/grass.py:994
-#, python-brace-format
-msgid "Unable to create new location <{location}> because <{path}> is a file."
+#: ../lib/init/grass.py:995
+#, fuzzy, python-brace-format
+msgid "Unable to create new project <{location}> because <{path}> is a file."
 msgstr ""
 "Não foi possível criar um novo location <(location)> porque <{path}> é um "
 "arquivo."
 
-#: ../lib/init/grass.py:998
-#, python-brace-format
+#: ../lib/init/grass.py:999
+#, fuzzy, python-brace-format
 msgid ""
-"Unable to create new location <{location}> because the directory <{path}> "
+"Unable to create new project <{location}> because the directory <{path}> "
 "already exists."
 msgstr ""
 "Não foi possível criar um novo location <{location}> porque o diretório "
 "<{path}> já existe."
 
-#: ../lib/init/grass.py:1004
-#, python-brace-format
+#: ../lib/init/grass.py:1005
+#, fuzzy, python-brace-format
 msgid ""
-"Unable to create new location in the directory <{path}> for an unknown "
-"reason."
+"Unable to create new project in the directory <{path}> for an unknown reason."
 msgstr ""
 "Não foi possível criar um novo location no diretório <{path}> por um motivo "
 "desconhecido."
 
-#: ../lib/init/grass.py:1088
+#: ../lib/init/grass.py:1089
 msgid ""
 "Mapset <{}> already exists. Unable to create a new temporary mapset of that "
 "name."
 msgstr ""
 
-#: ../lib/init/grass.py:1093
+#: ../lib/init/grass.py:1094
 msgid "Mapset <{}> already exists."
 msgstr ""
 
-#: ../lib/init/grass.py:1101
+#: ../lib/init/grass.py:1102
 msgid "A new mapset can be created using '-c' flag."
 msgstr ""
 
-#: ../lib/init/grass.py:1103
+#: ../lib/init/grass.py:1104
 msgid "Maybe you meant a different directory."
 msgstr ""
 
-#: ../lib/init/grass.py:1132
-msgid "Provide CRS to create a location"
-msgstr ""
+#: ../lib/init/grass.py:1133
+#, fuzzy
+msgid "Provide CRS to create a project"
+msgstr "Não é possível criar objeto PROJ"
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../lib/vector/Vlib/snap.c:527 ../lib/vector/Vlib/snap.c:890
 #, c-format
@@ -8939,15 +9271,21 @@ msgstr "Novos vértices: %d"
 #: ../lib/init/grass.py:1136
 msgid "Creating new GRASS GIS location <{}>..."
 msgstr "Criando novo location GRASS GIS <{}>..."
+=======
+#: ../lib/init/grass.py:1137
+#, fuzzy
+msgid "Creating new GRASS GIS project <{}>..."
+msgstr "Criando novo mapset GRASS GIS <{}>..."
+>>>>>>> osgeo-main
 
-#: ../lib/init/grass.py:1149
+#: ../lib/init/grass.py:1150
 #, python-brace-format
 msgid "Unable to create new mapset <{mapset}> because <{path}> is a file."
 msgstr ""
 "Não foi possível criar um novo mapset <{mapset}> porque <{path}> é um "
 "arquivo."
 
-#: ../lib/init/grass.py:1158
+#: ../lib/init/grass.py:1159
 msgid ""
 "The mapset <{}> is missing the WIND file (computational region). It will be "
 "fixed now. Note that this warning may become an error in future versions."
@@ -8956,27 +9294,28 @@ msgstr ""
 "consertado agora. Observe que este aviso pode se tornar um erro em versões "
 "futuras."
 
-#: ../lib/init/grass.py:1168
+#: ../lib/init/grass.py:1169
 #, python-brace-format
 msgid ""
 "No CRS is needed for creating mapset <{mapset}>, but <{geofile}> was "
-"provided as CRS. Did you mean to create a new location?"
+"provided as CRS. Did you mean to create a new project?"
 msgstr ""
 >>>>>>> osgeo-main
 
-#: ../lib/init/grass.py:1175
+#: ../lib/init/grass.py:1176
 msgid "Creating new GRASS GIS mapset <{}>..."
 msgstr "Criando novo mapset GRASS GIS <{}>..."
 
-#: ../lib/init/grass.py:1206
+#: ../lib/init/grass.py:1207
+#, fuzzy
 msgid ""
-"GRASS GIS database directory, location and mapset not set properly. Use GUI "
+"GRASS GIS database directory, project and mapset not set properly. Use GUI "
 "or command line to set them."
 msgstr ""
 "Diretório do banco de dados GRASS GIS, location e mapset não definidos de "
 "modo apropriado. Use GUI ou a linha de comando para defini-los."
 
-#: ../lib/init/grass.py:1266
+#: ../lib/init/grass.py:1267
 #, python-brace-format
 msgid ""
 "Error reading data path information from g.gisenv.\n"
@@ -8993,22 +9332,22 @@ msgstr ""
 "\n"
 "Verifique o arquivo <{file}>."
 
-#: ../lib/init/grass.py:1566
+#: ../lib/init/grass.py:1569
 #, python-format
 msgid "Path '%s' doesn't exist"
 msgstr "Caminho '%s' não existe"
 
-#: ../lib/init/grass.py:1568
+#: ../lib/init/grass.py:1571
 #, python-format
 msgid "Path '%s' not accessible."
 msgstr "Caminho '%s' não acessível."
 
-#: ../lib/init/grass.py:1575
+#: ../lib/init/grass.py:1578
 #, python-format
 msgid "You are not the owner of '%s'."
 msgstr "Você não é o proprietário de '%s'."
 
-#: ../lib/init/grass.py:1585
+#: ../lib/init/grass.py:1588
 #, python-format
 msgid ""
 "%(user)s is currently running GRASS in selected mapset (file %(file)s "
@@ -9023,7 +9362,7 @@ msgstr ""
 "precisa de permissão para esta operação). Dê uma outra olhada no gerenciador "
 "do processador para ter certeza..."
 
-#: ../lib/init/grass.py:1596
+#: ../lib/init/grass.py:1599
 #, python-format
 msgid ""
 "%(user)s is currently running GRASS in selected mapset (file %(file)s "
@@ -9032,7 +9371,7 @@ msgstr ""
 "%(user)sestá atualmente executando GRASS no mapset selecionado (arquivo "
 "%(file)sencontrado). Forçando o lançamento do GRASS..."
 
-#: ../lib/init/grass.py:1603
+#: ../lib/init/grass.py:1606
 #, python-format
 msgid ""
 "Unable to properly access '%s'.\n"
@@ -9041,25 +9380,25 @@ msgstr ""
 "Não foi possível acessar '%s' corretamente.\n"
 "Notifique o pessoal do sistema."
 
-#: ../lib/init/grass.py:1632
+#: ../lib/init/grass.py:1635
 msgid "Building user fontcap..."
 msgstr "Construindo o fontcap do usuário..."
 
-#: ../lib/init/grass.py:1701
+#: ../lib/init/grass.py:1704
 msgid "The SHELL variable is not set"
 msgstr "A variável SHELL não está definida"
 
-#: ../lib/init/grass.py:1718
+#: ../lib/init/grass.py:1721
 #, python-brace-format
 msgid "Unsupported shell <{sh}>: {env_file}"
 msgstr "Shell não suportado <{sh}>: {env_file}"
 
-#: ../lib/init/grass.py:1738
+#: ../lib/init/grass.py:1741
 #, python-format
 msgid "Executing <%s> ..."
 msgstr "Executando <%s> ..."
 
-#: ../lib/init/grass.py:1762
+#: ../lib/init/grass.py:1765
 #, python-brace-format
 msgid ""
 "Execution of <{cmd}> failed:\n"
@@ -9068,21 +9407,22 @@ msgstr ""
 "A execução de <{cmd}> falhou:\n"
 "{error}"
 
-#: ../lib/init/grass.py:1775
+#: ../lib/init/grass.py:1778
 #, python-format
 msgid "Execution of <%s> finished."
 msgstr "Execução de <%s> terminou."
 
-#: ../lib/init/grass.py:1819
+#: ../lib/init/grass.py:1822
 #, python-brace-format
 msgid "Unable to close GUI. {0}"
 msgstr "Não foi possível fechar a GUI. {0}"
 
-#: ../lib/init/grass.py:1838
+#: ../lib/init/grass.py:1841
 #, python-format
 msgid "Welcome to GRASS GIS %s"
 msgstr "Bem-vindo ao GRASS GIS %s"
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../lib/vector/Vlib/build_pg.c:464
 #, c-format
@@ -9149,137 +9489,146 @@ msgstr "Quebras: %d"
 msgid "Point not in search tree!"
 =======
 #: ../lib/init/grass.py:1865
+=======
+#: ../lib/init/grass.py:1868
+>>>>>>> osgeo-main
 msgid "GRASS GIS homepage:"
 msgstr "GRASS GIS homepage:"
 
 #. GTC Running through: SHELL NAME
-#: ../lib/init/grass.py:1867
+#: ../lib/init/grass.py:1870
 msgid "This version running through:"
 msgstr "Esta versão em execução através de:"
 
-#: ../lib/init/grass.py:1870
+#: ../lib/init/grass.py:1873
 msgid "Help is available with the command:"
 msgstr "A ajuda está disponível com o comando:"
 
-#: ../lib/init/grass.py:1871
+#: ../lib/init/grass.py:1874
 msgid "See the licence terms with:"
 msgstr "Veja os termos de licença com:"
 
-#: ../lib/init/grass.py:1872
+#: ../lib/init/grass.py:1875
 msgid "See citation options with:"
 msgstr "Veja opções de citação com:"
 
-#: ../lib/init/grass.py:1877
+#: ../lib/init/grass.py:1880
 msgid "If required, restart the GUI with:"
 msgstr "Caso necessário, reinicie o GUI com:"
 
-#: ../lib/init/grass.py:1879
+#: ../lib/init/grass.py:1882
 msgid "Start the GUI with:"
 msgstr "Inicie o GUI com:"
 
-#: ../lib/init/grass.py:1881
+#: ../lib/init/grass.py:1884
 msgid "When ready to quit enter:"
 msgstr "Quando estiver pronto para sair, digite:"
 
-#: ../lib/init/grass.py:2071
+#: ../lib/init/grass.py:2074
 msgid "2D and 3D raster MASKs present"
 msgstr ""
 
-#: ../lib/init/grass.py:2072
+#: ../lib/init/grass.py:2075
 msgid "Raster MASK present"
 msgstr ""
 
-#: ../lib/init/grass.py:2073
+#: ../lib/init/grass.py:2076
 msgid "3D raster MASK present"
 >>>>>>> osgeo-main
 msgstr ""
 
-#: ../lib/init/grass.py:2118
+#: ../lib/init/grass.py:2121
 msgid "Done."
 msgstr "Feito."
 
-#: ../lib/init/grass.py:2120
+#: ../lib/init/grass.py:2123
 msgid "Goodbye from GRASS GIS"
 msgstr ""
 
-#: ../lib/init/grass.py:2181
+#: ../lib/init/grass.py:2184
 msgid "Please install the GRASS GIS development package"
 msgstr "Por favor instale o pacote de desenvolvimento GRASS GIS"
 
-#: ../lib/init/grass.py:2230
+#: ../lib/init/grass.py:2233
 #, python-format
 msgid "Parameter <%s> not supported"
 msgstr "Parâmetro <%s> não suportado"
 
-#: ../lib/init/grass.py:2279
+#: ../lib/init/grass.py:2282
 #, python-format
 msgid "use mapset %(metavar)s"
 msgstr ""
 
-#: ../lib/init/grass.py:2285
-#, python-format
-msgid "use temporary mapset in location %(metavar)s"
-msgstr ""
-
-#: ../lib/init/grass.py:2293
-msgid "path to mapset (or location if creating one)"
-msgstr ""
+#: ../lib/init/grass.py:2288
+#, fuzzy, python-format
+msgid "use temporary mapset in project %(metavar)s"
+msgstr "usar mapset temporário"
 
 #: ../lib/init/grass.py:2296
+msgid "path to mapset (or project if creating one)"
+msgstr ""
+
+#: ../lib/init/grass.py:2299
 msgid "use temporary mapset"
 msgstr "usar mapset temporário"
 
-#: ../lib/init/grass.py:2303
+#: ../lib/init/grass.py:2306
 #, python-format
-msgid "use temporary location with %(metavar)s (EPSG, georeferenced file, ...)"
+msgid "use temporary project with %(metavar)s (EPSG, georeferenced file, ...)"
 msgstr ""
 
-#: ../lib/init/grass.py:2310
+#: ../lib/init/grass.py:2319
 msgid "remove lock if present"
 msgstr ""
 
-#: ../lib/init/grass.py:2359
+#: ../lib/init/grass.py:2331
+msgid "Option --tmp-location is deprecated, use --tmp-project instead\n"
+msgstr ""
+
+#: ../lib/init/grass.py:2375
 msgid "execute module or script (followed by executable with arguments)"
 msgstr ""
 
-#: ../lib/init/grass.py:2415
+#: ../lib/init/grass.py:2431
 msgid "Flag -e requires also flag -c"
 msgstr "Flag -e também requer flag -c"
 
-#: ../lib/init/grass.py:2417
-msgid "Flag -c requires name of location or mapset"
+#: ../lib/init/grass.py:2433
+msgid "Flag -c requires name of project or mapset"
 msgstr ""
 
-#: ../lib/init/grass.py:2420
-msgid "Either --tmp-location or --tmp-mapset can be used, not both"
+#: ../lib/init/grass.py:2436
+msgid "Either --tmp-project or --tmp-mapset can be used, not both"
 msgstr ""
 
-#: ../lib/init/grass.py:2427
+#: ../lib/init/grass.py:2443
+#, fuzzy
 msgid ""
-"Coordinate reference system argument (e.g. EPSG) is needed for --tmp-location"
+"Coordinate reference system argument (e.g. EPSG) is needed for --tmp-project"
 msgstr ""
 "O argumento do sistema de referência de coordenadas (por exemplo, EPSG) é "
 "necessário para --tmp-location"
 
-#: ../lib/init/grass.py:2434
+#: ../lib/init/grass.py:2450
+#, fuzzy
 msgid ""
-"Only one argument (e.g. EPSG) is needed for --tmp-location, mapset name <{}> "
+"Only one argument (e.g. EPSG) is needed for --tmp-project, mapset name <{}> "
 "provided"
 msgstr ""
 "Apenas um argumento (por exemplo, EPSG) é necessário para --tmp-location, "
 "mapset name <{}> fornecido"
 
-#: ../lib/init/grass.py:2528
-#, python-brace-format
+#: ../lib/init/grass.py:2544
+#, fuzzy, python-brace-format
 msgid ""
 "Unable to start GRASS GIS. You have the choice to:\n"
 " - Launch the graphical user interface with the '--gui' switch\n"
 "     {cmd_name} --gui\n"
-" - Launch with path to the location/mapset as an argument\n"
-"     {cmd_name} /path/to/location/mapset`\n"
-" - Create a location with '-c' and launch in its PERMANENT mapset\n"
-"     {cmd_name} -c EPSG:number /path/to/location\n"
-"     {cmd_name} -c geofile /path/to/location\n"
+" - Launch with path to the project/mapset as an argument\n"
+"     {cmd_name} /path/to/project/mapset`\n"
+" - Create a project with '-c' and launch in its PERMANENT mapset\n"
+"     {cmd_name} -c EPSG:number /path/to/project\n"
+"     {cmd_name} -c geofile /path/to/project\n"
 " - Create manually the GISRC file ({gisrcrc})\n"
 " - Use '--help' for further options\n"
 "     {cmd_name} --help\n"
@@ -9298,27 +9647,27 @@ msgstr ""
 "{cmd_name} --help\n"
 "Veja também: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 
-#: ../lib/init/grass.py:2549
+#: ../lib/init/grass.py:2565
 msgid "Starting GRASS GIS..."
 msgstr "Iniciando GRASS GIS..."
 
-#: ../lib/init/grass.py:2598
+#: ../lib/init/grass.py:2614
 msgid ""
 "Failed to start GRASS GIS, grassdata directory cannot be found or created."
 msgstr ""
 
-#: ../lib/init/grass.py:2605
+#: ../lib/init/grass.py:2621
 msgid ""
-"Failed to start GRASS GIS, no default location to copy in the installation "
-"or copying failed."
+"Failed to start GRASS GIS, no default project to copy in the installation or "
+"copying failed."
 msgstr ""
 
-#: ../lib/init/grass.py:2708
+#: ../lib/init/grass.py:2724
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr "Iniciando <%s> GUI em segundo plano, por favor aguarde..."
 
-#: ../lib/init/grass.py:2746
+#: ../lib/init/grass.py:2762
 #, python-format
 msgid "Failed to start shell '%s'"
 msgstr "Falha ao iniciar o shell '%s'"
@@ -9423,8 +9772,8 @@ msgstr "Não foi possível escrever o histórico para o mapa raster 3D <%s>"
 #, c-format
 msgid "Unable to move temp raster map <%s> to 3D raster map <%s>"
 msgstr ""
-"Não foi possível mover o mapa raster temporário <%s> para o mapa raster 3D <"
-"%s>"
+"Não foi possível mover o mapa raster temporário <%s> para o mapa raster 3D "
+"<%s>"
 
 #: ../lib/raster3d/close.c:81
 msgid "Unable to flush all tiles"
@@ -9439,7 +9788,7 @@ msgid "Unable to position file"
 msgstr "Não foi possível posicionar o arquivo"
 
 #: ../lib/raster3d/close.c:101 ../lib/raster3d/close.c:108
-#: ../lib/raster3d/close.c:190 ../lib/raster3d/header.c:208
+#: ../lib/raster3d/close.c:190 ../lib/raster3d/header.c:282
 #, c-format
 msgid "Unable to write header for 3D raster map <%s>"
 msgstr "Não foi possível escrever o cabeçalho para o mapa raster 3D <%s>"
@@ -9460,7 +9809,6 @@ msgid "Error in cache"
 msgstr "Erro de cache"
 
 #: ../lib/raster3d/maskfn.c:76
-#, c-format
 msgid "Adding rule: %lf - %lf"
 msgstr "Adicionando regra: %lf - %lf"
 
@@ -12598,8 +12946,11 @@ msgid "Unable to flush file %s for raster map %s: %s"
 msgstr "Não foi possível limpar o arquivo %s para o mapa raster %s: %s"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
@@ -12628,6 +12979,9 @@ msgstr ""
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -12803,8 +13157,8 @@ msgstr "Carregando mapa raster <%s>..."
 #, c-format
 msgid "Color table range doesn't match data (mincol=%d, maxcol=%d"
 msgstr ""
-"O intervalo da tabela de cores não corresponde aos dados (mincol=%d, maxcol="
-"%d"
+"O intervalo da tabela de cores não corresponde aos dados (mincol=%d, "
+"maxcol=%d"
 
 #: ../lib/ogsf/gs3.c:654 ../lib/ogsf/gs3.c:725
 #, c-format
@@ -13194,8 +13548,8 @@ msgstr "Misturando IDs de áreas e primitivas"
 #, c-format
 msgid "Unable to create category index file for vector map <%s>"
 msgstr ""
-"Não foi possível criar arquivo de índice de categoria para o mapa vetorial <"
-"%s>"
+"Não foi possível criar arquivo de índice de categoria para o mapa vetorial "
+"<%s>"
 
 #: ../lib/vector/Vlib/cindex.c:503
 msgid "Error writing out category index file"
@@ -13205,8 +13559,8 @@ msgstr "Erro ao gravar arquivo de índice ce categoria"
 #, c-format
 msgid "Unable to open category index file for vector map <%s>"
 msgstr ""
-"Não foi possível abrir arquivo de índice de categoria para o mapa vetorial <"
-"%s>"
+"Não foi possível abrir arquivo de índice de categoria para o mapa vetorial "
+"<%s>"
 
 #: ../lib/vector/Vlib/simple_features.c:228
 #, c-format
@@ -13329,8 +13683,8 @@ msgstr "Não é possível adicionar arco de rede para conexão de nó virtual."
 #: ../lib/vector/Vlib/net_build.c:359
 #, c-format
 msgid ""
-"There exists more than one point of node <%d> with unique category field  <"
-"%d>.\n"
+"There exists more than one point of node <%d> with unique category field  "
+"<%d>.\n"
 "The unique categories layer is not valid therefore you will probably get "
 "incorrect results."
 msgstr ""
@@ -13362,8 +13716,8 @@ msgid ""
 "The unique categories layer is not valid therefore you will probably get "
 "incorrect results."
 msgstr ""
-"Não foi possível encontrar o nó para o ponto que representa a interseção <"
-"%d> no campo de categorias exclusivas <%d>.\n"
+"Não foi possível encontrar o nó para o ponto que representa a interseção "
+"<%d> no campo de categorias exclusivas <%d>.\n"
 "O custo da interseção foi definido como 0.\n"
 "A camada de categorias exclusivas não é válida, portanto, você provavelmente "
 "obterá resultados incorretos."
@@ -13557,8 +13911,8 @@ msgid ""
 "The unique categories layer is not valid therefore you will probably get "
 "incorrect results."
 msgstr ""
-"A linha com id <%d> possui mais categorias exclusivas definidas no campo <"
-"%d>.\n"
+"A linha com id <%d> possui mais categorias exclusivas definidas no campo "
+"<%d>.\n"
 "A camada de categorias exclusivas não é válida, portanto, você provavelmente "
 "obterá resultados incorretos."
 
@@ -13647,8 +14001,8 @@ msgstr "Não foi possível abrir o arquivo fidx para escrita <%s>"
 #, c-format
 msgid "Unable to save feature index file for vector map <%s>"
 msgstr ""
-"Não foi possível salvar o arquivo de índice de feição para o mapa vetorial <"
-"%s>"
+"Não foi possível salvar o arquivo de índice de feição para o mapa vetorial "
+"<%s>"
 
 #: ../lib/vector/Vlib/level.c:34
 msgid "Map structure was never initialized"
@@ -14271,7 +14625,7 @@ msgstr "Fonte de dados OGR não definida"
 msgid "OGR layer not defined"
 msgstr "Camada OGR não definida"
 
-#: ../lib/vector/Vlib/open_ogr.c:77 ../lib/vector/Vlib/field.c:746
+#: ../lib/vector/Vlib/open_ogr.c:77 ../lib/vector/Vlib/field.c:765
 #, c-format
 msgid "Unable to open OGR data source '%s'"
 msgstr "Não foi possível abrir a fonte de dados OGR '%s'"
@@ -14290,8 +14644,8 @@ msgstr ""
 #, c-format
 msgid "Unable to open feature index file for vector map <%s>"
 msgstr ""
-"Não foi possível abrir o arquivo de índice de feição para o mapa vetorial <"
-"%s>"
+"Não foi possível abrir o arquivo de índice de feição para o mapa vetorial "
+"<%s>"
 
 #: ../lib/vector/Vlib/open_ogr.c:199
 #, c-format
@@ -15267,17 +15621,17 @@ msgstr "Banco de dados padrão não foi especificado"
 msgid "Requested dblink %d, maximum link number %d"
 msgstr "dblink %d solicitado, %d links no máximo"
 
-#: ../lib/vector/Vlib/field.c:670 ../lib/vector/Vlib/field.c:678
+#: ../lib/vector/Vlib/field.c:689 ../lib/vector/Vlib/field.c:697
 #, c-format
 msgid "Error in rule on row %d in <%s>"
 msgstr "Erro na regra na linha %d em <%s>"
 
-#: ../lib/vector/Vlib/field.c:765
+#: ../lib/vector/Vlib/field.c:784
 #, c-format
 msgid "Unable to open OGR layer <%s>"
 msgstr "Não foi possível abrir a camada OGR <%s>"
 
-#: ../lib/vector/Vlib/field.c:793
+#: ../lib/vector/Vlib/field.c:812
 #, c-format
 msgid ""
 "Feature table <%s> has no primary key defined. Unable to define DB links."
@@ -15285,22 +15639,22 @@ msgstr ""
 "A tabela de feição <%s> não possui uma chave primária definida. Não foi "
 "possível definir links de banco de dados."
 
-#: ../lib/vector/Vlib/field.c:812
+#: ../lib/vector/Vlib/field.c:831
 msgid "GRASS not compiled with PostgreSQL support"
 msgstr "GRASS não compilado com suporte PostgreSQL"
 
-#: ../lib/vector/Vlib/field.c:845
+#: ../lib/vector/Vlib/field.c:864
 msgid "Unknown vector map format"
 msgstr "Formato de mapa vetorial desconhecido"
 
-#: ../lib/vector/Vlib/field.c:879
+#: ../lib/vector/Vlib/field.c:898
 #, c-format
 msgid "Unable to create database definition file for vector map <%s>"
 msgstr ""
 "Não foi possível criar arquivo para definição de banco de dados para mapa "
 "vetorial <%s>"
 
-#: ../lib/vector/Vlib/field.c:976
+#: ../lib/vector/Vlib/field.c:995
 msgid "Bug: attempt to update map which is not in current mapset"
 msgstr "Bug: tentativa de atualizar o mapa que não está no mapset atual"
 
@@ -15848,30 +16202,30 @@ msgstr ""
 "Por favor, reconstrua a topologia."
 
 #: ../lib/vector/diglib/portable.c:210 ../lib/vector/diglib/portable.c:243
-#: ../lib/vector/diglib/portable.c:684 ../lib/vector/diglib/plus_struct.c:576
+#: ../lib/vector/diglib/portable.c:684 ../lib/vector/diglib/plus_struct.c:614
 msgid "Vector exceeds supported file size limit"
 msgstr "O vetor excede o limite de tamanho de arquivo suportado"
 
-#: ../lib/vector/diglib/spindex.c:449
+#: ../lib/vector/diglib/spindex.c:457
 #, c-format
 msgid "Unable to delete node %d from spatial index"
 msgstr "Não foi possível excluir o nó %d do índice espacial"
 
-#: ../lib/vector/diglib/spindex.c:492
+#: ../lib/vector/diglib/spindex.c:500
 #, c-format
 msgid "Unable to delete line %d from spatial index"
 msgstr "Não foi possível excluir a linha %d do índice espacial"
 
-#: ../lib/vector/diglib/spindex.c:528
+#: ../lib/vector/diglib/spindex.c:536
 msgid "Attempt to delete sidx for dead area"
 msgstr ""
 
-#: ../lib/vector/diglib/spindex.c:545
+#: ../lib/vector/diglib/spindex.c:553
 #, c-format
 msgid "Unable to delete area %d from spatial index"
 msgstr "Não foi possível excluir a área %d do índice espacial"
 
-#: ../lib/vector/diglib/spindex.c:594
+#: ../lib/vector/diglib/spindex.c:602
 #, c-format
 msgid "Unable to delete isle %d from spatial index"
 msgstr "Não foi possível excluir ilha %d do índice espacial"
@@ -15889,7 +16243,7 @@ msgstr ""
 msgid "Vector memory mode not supported, using 'AUTO'"
 msgstr "Modo de memória vetorial não suportado, usando 'AUTO'"
 
-#: ../lib/vector/diglib/plus_struct.c:529
+#: ../lib/vector/diglib/plus_struct.c:567
 #, c-format
 msgid ""
 "This version of GRASS (%d.%d) is too old to read this topology format. Try "
@@ -15899,7 +16253,7 @@ msgstr ""
 "topologia. Tente reconstruir a topologia ou atualizar o GRASS para pelo "
 "menos a versão %d. "
 
-#: ../lib/vector/diglib/plus_struct.c:538
+#: ../lib/vector/diglib/plus_struct.c:576
 #, c-format
 msgid ""
 "Your GRASS version does not fully support topology format %d.%d of the "
@@ -15908,7 +16262,7 @@ msgstr ""
 "Sua versão GRASS não suporta totalmente o formato de topologia %d.%d do "
 "vetor. Considere reconstruir a topologia ou atualizar o GRASS."
 
-#: ../lib/vector/diglib/plus_struct.c:551
+#: ../lib/vector/diglib/plus_struct.c:589
 #, c-format
 msgid ""
 "Old topology format version %d.%d is not supported by this release. Try to "
@@ -16002,44 +16356,44 @@ msgstr "Formato vetorial '%s' não suportado"
 msgid "Format definition is not correct: %s"
 msgstr "A definição do formato não está correta: %s"
 
-#: ../lib/vector/diglib/plus_area.c:221 ../lib/vector/diglib/plus_area.c:735
+#: ../lib/vector/diglib/plus_area.c:223 ../lib/vector/diglib/plus_area.c:741
 #, c-format
 msgid "Line %d already has area/isle %d to left"
 msgstr "A linha %d já tem área/ilha %d para a esquerda"
 
-#: ../lib/vector/diglib/plus_area.c:231 ../lib/vector/diglib/plus_area.c:743
+#: ../lib/vector/diglib/plus_area.c:234 ../lib/vector/diglib/plus_area.c:750
 #, c-format
 msgid "Line %d already has area/isle %d to right"
 msgstr "A linha %d já tem área/ilha %d para a direita"
 
-#: ../lib/vector/diglib/plus_area.c:285
+#: ../lib/vector/diglib/plus_area.c:289
 msgid "Isle already registered in area"
 msgstr "Ilha já registrada na área"
 
-#: ../lib/vector/diglib/plus_area.c:319
+#: ../lib/vector/diglib/plus_area.c:323
 msgid "Attempt to delete isle from dead area"
 msgstr "Tentativa de excluir ilha da área morta"
 
-#: ../lib/vector/diglib/plus_area.c:328
+#: ../lib/vector/diglib/plus_area.c:332
 #, c-format
 msgid "Attempt to delete not registered isle %d from area %d"
 msgstr "Tentativa de excluir a ilha não registrada %d da área %d"
 
-#: ../lib/vector/diglib/plus_area.c:375
+#: ../lib/vector/diglib/plus_area.c:379
 msgid "Attempt to delete dead area"
 msgstr "Tentativa de excluir a área morta"
 
-#: ../lib/vector/diglib/plus_area.c:415
+#: ../lib/vector/diglib/plus_area.c:419
 #, c-format
 msgid "Dead centroid %d registered for area (bug in the vector library)"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:439
+#: ../lib/vector/diglib/plus_area.c:443
 #, c-format
 msgid "Attempt to delete area %d info from dead isle %d"
 msgstr "Tentativa de excluir informações de área %d da ilha morta %d"
 
-#: ../lib/vector/diglib/plus_area.c:801
+#: ../lib/vector/diglib/plus_area.c:809
 #, c-format
 msgid "Attempt to delete isle %d info from dead area %d"
 msgstr "Tentativa de excluir informações da ilha%d da área morta %d"
@@ -16082,6 +16436,9 @@ msgstr "Ícone não suportado %d"
 #, c-format
 msgid "[%s]: No such color"
 msgstr "[%s]: cor não existe"
+
+#~ msgid "Creating new GRASS GIS location <{}>..."
+#~ msgstr "Criando novo location GRASS GIS <{}>..."
 
 #, python-format
 #~ msgid ""
@@ -16406,14 +16763,14 @@ msgstr "[%s]: cor não existe"
 #~ "Unsupported relative time unit type for %(type)s map <%(id)s> with layer "
 #~ "%(l)s: %(u)s"
 #~ msgstr ""
-#~ "Tipo de unidade de tempo relativo não suportado para mapa %(type)s<"
-#~ "%(id)s> com camada %(l)s:%(u)s"
+#~ "Tipo de unidade de tempo relativo não suportado para mapa "
+#~ "%(type)s<%(id)s> com camada %(l)s:%(u)s"
 
 #, python-format
 #~ msgid "Unsupported relative time unit type for %(type)s map <%(id)s>: %(u)s"
 #~ msgstr ""
-#~ "Tipo de unidade de tempo relativo não suportado para mapa %(type)s<"
-#~ "%(id)s>:%(u)s"
+#~ "Tipo de unidade de tempo relativo não suportado para mapa "
+#~ "%(type)s<%(id)s>:%(u)s"
 
 #, python-format
 #~ msgid ""
@@ -16679,8 +17036,8 @@ msgstr "[%s]: cor não existe"
 #, python-format
 #~ msgid "Created register table <%s> for space time %s  dataset <%s>"
 #~ msgstr ""
-#~ "Criada tabela de registro <%s> para conjunto de dados <%s> tempo espacial"
-#~ "%s"
+#~ "Criada tabela de registro <%s> para conjunto de dados <%s> tempo "
+#~ "espacial%s"
 
 #~ msgid "The space time datasets must be of the same temporal type"
 #~ msgstr "Os conjuntos de dados espaço-tempo devem ser do mesmo tipo temporal"
@@ -16767,16 +17124,16 @@ msgstr "[%s]: cor não existe"
 #~ "Temporal type of space time dataset <%(id)s> and map <%(map)s> with layer "
 #~ "%(l)s are different"
 #~ msgstr ""
-#~ "O tipo temporal do conjunto de dados espaço-tempo <%(id)s> e o mapa <"
-#~ "%(map)s> com camada %(l)s são diferentes"
+#~ "O tipo temporal do conjunto de dados espaço-tempo <%(id)s> e o mapa "
+#~ "<%(map)s> com camada %(l)s são diferentes"
 
 #, python-format
 #~ msgid ""
 #~ "Temporal type of space time dataset <%(id)s> and map <%(map)s> are "
 #~ "different"
 #~ msgstr ""
-#~ "O tipo temporal do conjunto de dados espaço-tempo <%(id)s> e mapa <"
-#~ "%(map)s> são diferentes"
+#~ "O tipo temporal do conjunto de dados espaço-tempo <%(id)s> e mapa "
+#~ "<%(map)s> são diferentes"
 
 #, python-format
 #~ msgid "Set temporal unit for space time %s dataset <%s> to %s"
@@ -16789,16 +17146,16 @@ msgstr "[%s]: cor não existe"
 #~ "Relative time units of space time dataset <%(id)s> and map <%(map)s> with "
 #~ "layer %(l)s are different"
 #~ msgstr ""
-#~ "As unidades de tempo relativo do conjunto de dados de espaço-tempo <"
-#~ "%(id)s> e mapa <%(map)s> com camada %(l)s são diferentes"
+#~ "As unidades de tempo relativo do conjunto de dados de espaço-tempo "
+#~ "<%(id)s> e mapa <%(map)s> com camada %(l)s são diferentes"
 
 #, python-format
 #~ msgid ""
 #~ "Relative time units of space time dataset <%(id)s> and map <%(map)s> are "
 #~ "different"
 #~ msgstr ""
-#~ "As unidades de tempo relativo do conjunto de dados de espaço-tempo <"
-#~ "%(id)s> e mapa <%(map)s> são diferentes"
+#~ "As unidades de tempo relativo do conjunto de dados de espaço-tempo "
+#~ "<%(id)s> e mapa <%(map)s> são diferentes"
 
 #~ msgid "Only maps from the same mapset can be registered"
 #~ msgstr "Apenas mapas do mesmo mapset podem ser registrados"
@@ -16817,14 +17174,14 @@ msgstr "[%s]: cor não existe"
 #~ "temporal database. The mapset of the dataset does not match the current "
 #~ "mapset"
 #~ msgstr ""
-#~ "Não foi possível desfazer o registro do mapa do conjunto de dados <"
-#~ "%(ds)s> do tipo %(type)sno banco de dados temporal. O mapset do conjunto "
+#~ "Não foi possível desfazer o registro do mapa do conjunto de dados "
+#~ "<%(ds)s> do tipo %(type)sno banco de dados temporal. O mapset do conjunto "
 #~ "de dados não corresponde ao mapset atual"
 
 #, python-format
 #~ msgid ""
-#~ "Map <%(map)s> with layer %(l)s is not registered in space time dataset <"
-#~ "%(base)s>"
+#~ "Map <%(map)s> with layer %(l)s is not registered in space time dataset "
+#~ "<%(base)s>"
 #~ msgstr ""
 #~ "Mapa <%(map)s> com camada %(l)snão está registrado no conjunto de dados "
 #~ "espaço-tempo <%(base)s>"
@@ -16832,13 +17189,13 @@ msgstr "[%s]: cor não existe"
 #, python-format
 #~ msgid "Map <%(map)s> is not registered in space time dataset <%(base)s>"
 #~ msgstr ""
-#~ "Mapa <%(map)s> não está registrado no conjunto de dados espaço-tempo <"
-#~ "%(base)s>"
+#~ "Mapa <%(map)s> não está registrado no conjunto de dados espaço-tempo "
+#~ "<%(base)s>"
 
 #, python-format
 #~ msgid ""
-#~ "Update metadata, spatial and temporal extent from all registered maps of <"
-#~ "%s>"
+#~ "Update metadata, spatial and temporal extent from all registered maps of "
+#~ "<%s>"
 #~ msgstr ""
 #~ "Atualizar metadados, extensão espacial e temporal de todos os mapas "
 #~ "registrados de <%s>"
@@ -16941,11 +17298,11 @@ msgstr "[%s]: cor não existe"
 
 #, python-format
 #~ msgid ""
-#~ "Wrong temporal type of space time dataset <"
-#~ "%s>                                       <%s> time is required"
+#~ "Wrong temporal type of space time dataset "
+#~ "<%s>                                       <%s> time is required"
 #~ msgstr ""
-#~ "Tipo incorreto de conjunto de dados de espaço-tempo <"
-#~ "%s>                                        <%s> tempo é necessário"
+#~ "Tipo incorreto de conjunto de dados de espaço-tempo "
+#~ "<%s>                                        <%s> tempo é necessário"
 
 #~ msgid "Wrong type of input "
 #~ msgstr "Tipo errado de entrada"
@@ -17598,8 +17955,8 @@ msgstr "[%s]: cor não existe"
 #~ "Unable to write history for <%(map)s>. Raster map <%(map)s> not found in "
 #~ "current mapset."
 #~ msgstr ""
-#~ "Não foi possivel escrever o histórico para <%(map)s>. Mapa raster <"
-#~ "%(map)s> não encontrado no mapset atual."
+#~ "Não foi possivel escrever o histórico para <%(map)s>. Mapa raster "
+#~ "<%(map)s> não encontrado no mapset atual."
 
 #, python-format
 #~ msgid "An error occurred while running r.mapcalc with expression: %s"
@@ -17750,6 +18107,7 @@ msgstr "[%s]: cor não existe"
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 msgid "whose header file can't be opened."
 msgstr "cujo cabeçalho de arquivo não pode ser aberto."
 
@@ -17806,6 +18164,8 @@ msgstr "script de shell a ser processado como trabalho em lote"
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 #, fuzzy
@@ -17931,6 +18291,9 @@ msgstr "script de shell a ser processado como trabalho em lote"
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -17970,6 +18333,7 @@ msgstr ""
 "\n"
 "Pressione RETURN para continuar.\n"
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 msgid "Mapset <{mapset}> doesn't exist in GRASS Location <{loc}>. A new mapset can be created by '-c' switch."
 msgstr "Mapset <{mapset}> não existe em Location GRASS <{loc}>. Um novo mapset pode ser criado pelo switch '-c'."
@@ -18053,6 +18417,8 @@ msgstr ""
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #~ msgid ""
 #~ "Mapset <{mapset}> doesn't exist in GRASS Location <{loc}>. A new mapset "
 #~ "can be created by '-c' switch."
@@ -18244,6 +18610,9 @@ msgstr "Para executar o módulo <%s>, adicione underscore no final da opção <%
 #~ msgstr "Valor inválido <%s> para o parâmetro <%s>"
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

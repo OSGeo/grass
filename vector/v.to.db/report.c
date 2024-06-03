@@ -19,12 +19,15 @@ int report(void)
     case O_CAT:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (G_verbose() > G_verbose_min())
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         if (print_header)
 =======
         if (G_verbose() > G_verbose_min())
@@ -33,6 +36,9 @@ int report(void)
         if (G_verbose() > G_verbose_min())
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -82,12 +88,15 @@ int report(void)
          *   perimeter of equivalent circle: 2.0 * sqrt(M_PI * area) */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (G_verbose() > G_verbose_min())
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         if (print_header)
 =======
         if (G_verbose() > G_verbose_min())
@@ -96,6 +105,9 @@ int report(void)
         if (G_verbose() > G_verbose_min())
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -120,12 +132,15 @@ int report(void)
          * 2.0 * log(1 + perimeter) / log(1 + area) */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (G_verbose() > G_verbose_min())
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         if (print_header)
 =======
         if (G_verbose() > G_verbose_min())
@@ -134,6 +149,9 @@ int report(void)
         if (G_verbose() > G_verbose_min())
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -150,12 +168,15 @@ int report(void)
     case O_PERIMETER:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (G_verbose() > G_verbose_min())
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         if (print_header)
 =======
         if (G_verbose() > G_verbose_min())
@@ -164,6 +185,9 @@ int report(void)
         if (G_verbose() > G_verbose_min())
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -176,12 +200,15 @@ int report(void)
     case O_BBOX:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (G_verbose() > G_verbose_min())
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         if (print_header)
 =======
         if (G_verbose() > G_verbose_min())
@@ -190,6 +217,9 @@ int report(void)
         if (G_verbose() > G_verbose_min())
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -222,12 +252,15 @@ int report(void)
     case O_SLOPE:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (G_verbose() > G_verbose_min())
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         if (print_header)
 =======
         if (G_verbose() > G_verbose_min())
@@ -236,6 +269,9 @@ int report(void)
         if (G_verbose() > G_verbose_min())
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -248,12 +284,15 @@ int report(void)
     case O_SINUOUS:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (G_verbose() > G_verbose_min())
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         if (print_header)
 =======
         if (G_verbose() > G_verbose_min())
@@ -262,6 +301,9 @@ int report(void)
         if (G_verbose() > G_verbose_min())
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -275,12 +317,15 @@ int report(void)
     case O_END:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (G_verbose() > G_verbose_min())
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         if (print_header)
 =======
         if (G_verbose() > G_verbose_min())
@@ -289,6 +334,9 @@ int report(void)
         if (G_verbose() > G_verbose_min())
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -305,12 +353,15 @@ int report(void)
     case O_SIDES:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (G_verbose() > G_verbose_min())
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         if (print_header)
 =======
         if (G_verbose() > G_verbose_min())
@@ -319,6 +370,9 @@ int report(void)
         if (G_verbose() > G_verbose_min())
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -361,12 +415,15 @@ int report(void)
     case O_QUERY:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (G_verbose() > G_verbose_min())
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         if (print_header)
 =======
         if (G_verbose() > G_verbose_min())
@@ -375,6 +432,9 @@ int report(void)
         if (G_verbose() > G_verbose_min())
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -404,12 +464,15 @@ int report(void)
     case O_AZIMUTH:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (G_verbose() > G_verbose_min())
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         if (print_header)
 =======
         if (G_verbose() > G_verbose_min())
@@ -418,6 +481,9 @@ int report(void)
         if (G_verbose() > G_verbose_min())
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

@@ -238,11 +238,14 @@ int COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
     int /* NGST, */ LSIZE, ngstc, nszc, ngstr, nszr, ngstl, nszl;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -258,6 +261,9 @@ int COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

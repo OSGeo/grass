@@ -210,12 +210,15 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (sscanf(buff, "%u%u", &catn, &cat) != 2) {
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             if (sscanf(buff, "%d%d", &catn, &cat) != 2) {
 =======
             if (sscanf(buff, "%u%u", &catn, &cat) != 2) {
@@ -224,6 +227,9 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
             if (sscanf(buff, "%u%u", &catn, &cat) != 2) {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -906,12 +912,15 @@ int Vect_write_ascii(FILE *ascii, FILE *att, struct Map_info *Map, int ver,
             fprintf(ascii, "POLYGON(");
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             /* write outter ring */
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             /* write outer ring */
 =======
             /* write outter ring */
@@ -920,6 +929,9 @@ int Vect_write_ascii(FILE *ascii, FILE *att, struct Map_info *Map, int ver,
             /* write outter ring */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

@@ -196,12 +196,15 @@ int main(int argc, char *argv[])
       | Each original region will be divided into several subregions.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       | Each one will be overlaped by its neighbouring subregions.
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
       | Each one will be overlapped by its neighbouring subregions.
 =======
       | Each one will be overlaped by its neighbouring subregions.
@@ -210,6 +213,9 @@ int main(int argc, char *argv[])
       | Each one will be overlaped by its neighbouring subregions.
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -738,11 +744,14 @@ int main(int argc, char *argv[])
                     G_free(observ);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                 if (observ_marked)
                     G_free(observ_marked);
 =======
@@ -750,6 +759,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

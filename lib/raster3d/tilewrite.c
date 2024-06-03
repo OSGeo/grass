@@ -13,6 +13,7 @@ static int Rast3d_tile2xdrTile(RASTER3D_Map *map, const void *tile, int rows,
                                int cols, int depths, int xRedundant,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                                int yRedundant, int zRedundant, int nofNum,
                                int type)
 =======
@@ -20,6 +21,8 @@ static int Rast3d_tile2xdrTile(RASTER3D_Map *map, const void *tile, int rows,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                                int yRedundant, int zRedundant UNUSED,
                                int nofNum, int type)
 =======
@@ -31,6 +34,9 @@ static int Rast3d_tile2xdrTile(RASTER3D_Map *map, const void *tile, int rows,
                                int type)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -265,12 +271,15 @@ int Rast3d_write_tile_double(RASTER3D_Map *map, int tileIndex, const void *tile)
  * write request is ignored. If the tile was never referred to before the
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * invokation of Rast3d_flush_tile, a tile filled with NULL-values is written.
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
  * invocation of Rast3d_flush_tile, a tile filled with NULL-values is written.
 =======
  * invokation of Rast3d_flush_tile, a tile filled with NULL-values is written.
@@ -279,6 +288,9 @@ int Rast3d_write_tile_double(RASTER3D_Map *map, int tileIndex, const void *tile)
  * invokation of Rast3d_flush_tile, a tile filled with NULL-values is written.
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

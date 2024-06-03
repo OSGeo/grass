@@ -803,6 +803,7 @@ int main(int argc, char *argv[])
         if ((in_proj_info = G_get_projinfo()) == NULL)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             G_fatal_error(_("Can't get projection info of current location"));
 
         if ((in_unit_info = G_get_projunits()) == NULL)
@@ -823,6 +824,8 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             G_fatal_error(_("Can't get projection info of current project"));
 
         if ((in_unit_info = G_get_projunits()) == NULL)
@@ -866,6 +869,9 @@ int main(int argc, char *argv[])
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -877,12 +883,15 @@ int main(int argc, char *argv[])
         G_warning(_("latin and longin raster maps have no effect when in a "
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "Lat/Lon location"));
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                     "Lat/Lon project"));
 =======
                     "Lat/Lon location"));
@@ -891,6 +900,9 @@ int main(int argc, char *argv[])
                     "Lat/Lon location"));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1767,11 +1779,14 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
     double coslat = 0.0;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     bool shouldBeBestAM = false;
     bool isBestAM = false;
 =======
@@ -1779,6 +1794,9 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1911,12 +1929,15 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
     coefbh, coefdh, incidout, longin, horizon, beam_rad, insol_time, diff_rad, \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     refl_rad, glob_rad, mapset, per, decimals, str_step)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     refl_rad, glob_rad, mapset, per, decimals, str_step, shouldBeBestAM,       \
     isBestAM)
 =======
@@ -1926,6 +1947,9 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
     refl_rad, glob_rad, mapset, per, decimals, str_step)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2050,6 +2074,7 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
                          gridGeom.coslat * sin_u;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     tan_lam_l = -cos_u * cos_v / q1;
                     sunSlopeGeom.longit_l = atan(tan_lam_l);
                     sunSlopeGeom.lum_C31_l = cos(latid_l) * sunGeom.cosdecl;
@@ -2105,6 +2130,8 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 
                     if (q1 != 0.0) {
                         tan_lam_l = -cos_u * cos_v / q1;
@@ -2273,6 +2300,9 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

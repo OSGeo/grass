@@ -280,12 +280,15 @@ void print_wkt(int esristyle, int dontprettify)
         fprintf(stdout, "%s\n", outwkt);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_free(outwkt);
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         CPLFree(outwkt);
 =======
         G_free(outwkt);
@@ -294,6 +297,9 @@ void print_wkt(int esristyle, int dontprettify)
         G_free(outwkt);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

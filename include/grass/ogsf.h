@@ -245,16 +245,22 @@ typedef struct {
 typedef struct {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -266,7 +272,10 @@ typedef struct {
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -293,6 +302,9 @@ typedef struct {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -387,16 +399,23 @@ typedef struct g_vect {
     geoline *fastlines;
 <<<<<<< HEAD
 <<<<<<< HEAD
-    int (*bgn_read)(void), (*end_read)(void), (*nxt_line)(void);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     int (*bgn_read)(void), (*end_read)(void), (*nxt_line)(void);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    int (*bgn_read)(void), (*end_read)(void), (*nxt_line)(void);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    int (*bgn_read)(void), (*end_read)(void), (*nxt_line)(void);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     int (*bgn_read)(void), (*end_read)(void), (*nxt_line)(void);
@@ -417,6 +436,9 @@ typedef struct g_vect {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -455,16 +477,23 @@ typedef struct g_site {
     geopoint *points;
 <<<<<<< HEAD
 <<<<<<< HEAD
-    int (*bgn_read)(void), (*end_read)(void), (*nxt_site)(void);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     int (*bgn_read)(void), (*end_read)(void), (*nxt_site)(void);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    int (*bgn_read)(void), (*end_read)(void), (*nxt_site)(void);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    int (*bgn_read)(void), (*end_read)(void), (*nxt_site)(void);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     int (*bgn_read)(void), (*end_read)(void), (*nxt_site)(void);
@@ -485,6 +514,9 @@ typedef struct g_site {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -518,16 +550,23 @@ typedef struct {
     int hfile;
 <<<<<<< HEAD
 <<<<<<< HEAD
-    int (*user_func)(void); /* unused */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     int (*user_func)(void); /* unused */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    int (*user_func)(void); /* unused */
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    int (*user_func)(void); /* unused */
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     int (*user_func)(void); /* unused */
@@ -548,6 +587,9 @@ typedef struct {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -635,18 +677,26 @@ typedef struct { /* need to add elements here for off_screen drawing */
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-extern void (*Cxl_func)(void);
-extern void (*Swap_func)(void); /* unused */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 extern void (*Cxl_func)(void);
 extern void (*Swap_func)(void); /* unused */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+extern void (*Cxl_func)(void);
+extern void (*Swap_func)(void); /* unused */
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+extern void (*Cxl_func)(void);
+extern void (*Swap_func)(void); /* unused */
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 extern void (*Cxl_func)(void);
@@ -673,6 +723,9 @@ extern void (*Swap_func)(void); /* unused */
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

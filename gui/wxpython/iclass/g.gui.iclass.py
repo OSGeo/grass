@@ -66,6 +66,7 @@ def main():
     from core.settings import UserSettings
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     from core import globalvar
     from iclass.frame import IClassMapDisplay
 =======
@@ -82,6 +83,12 @@ def main():
     from iclass.frame import IClassMapDisplay
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+    from core import globalvar
+    from iclass.frame import IClassMapDisplay
+=======
+>>>>>>> osgeo-main
     from iclass.frame import IClassMapFrame
 >>>>>>> 953489b535 (wxGUI: fix layout flag assert in wms dialog (#1764))
 =======
@@ -93,6 +100,9 @@ def main():
     from iclass.frame import IClassMapDisplay
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -137,8 +147,12 @@ def main():
     # show main frame
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 >>>>>>> osgeo-main
     frame = wx.Frame(
@@ -149,10 +163,13 @@ def main():
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     frame = wx.Frame(
         parent=None,
         size=globalvar.MAP_WINDOW_SIZE,
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     frame = IClassMapFrame(
@@ -170,6 +187,9 @@ def main():
         size=globalvar.MAP_WINDOW_SIZE,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

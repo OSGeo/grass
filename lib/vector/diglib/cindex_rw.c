@@ -16,17 +16,23 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #include <inttypes.h>
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -84,12 +90,15 @@ int dig_write_cidx_head(struct gvfile *fp, struct Plus_head *plus)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_debug(3, "cidx %d head offset: %" PRI_OFF_T, i, dig_ftell(fp));
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         G_debug(3, "cidx %d head offset: %" PRId64, i, dig_ftell(fp));
 =======
         G_debug(3, "cidx %d head offset: %" PRI_OFF_T, i, dig_ftell(fp));
@@ -98,6 +107,9 @@ int dig_write_cidx_head(struct gvfile *fp, struct Plus_head *plus)
         G_debug(3, "cidx %d head offset: %" PRI_OFF_T, i, dig_ftell(fp));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -137,6 +149,7 @@ int dig_write_cidx_head(struct gvfile *fp, struct Plus_head *plus)
             return (0);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_debug(3, "cidx %d offset: %" PRI_OFF_T, i, ci->offset);
     }
 
@@ -146,6 +159,8 @@ int dig_write_cidx_head(struct gvfile *fp, struct Plus_head *plus)
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         G_debug(3, "cidx %d offset: %" PRId64, i, ci->offset);
     }
 
@@ -163,6 +178,9 @@ int dig_write_cidx_head(struct gvfile *fp, struct Plus_head *plus)
     G_debug(3, "cidx body offset %" PRI_OFF_T, dig_ftell(fp));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -176,12 +194,15 @@ int dig_write_cidx_head(struct gvfile *fp, struct Plus_head *plus)
    \param fp pointer to gvfile structure
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
    \param plus pointer to Plus_head strcuture
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
    \param plus pointer to Plus_head structure
 =======
    \param plus pointer to Plus_head strcuture
@@ -190,6 +211,9 @@ int dig_write_cidx_head(struct gvfile *fp, struct Plus_head *plus)
    \param plus pointer to Plus_head strcuture
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

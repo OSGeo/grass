@@ -66,11 +66,14 @@ def split_to_categories(changes, categories):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 def print_section_heading_2(text, file=None):
     print(f"### {text}\n", file=file)
 
@@ -84,6 +87,9 @@ def print_section_heading_3(text, file=None):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -97,12 +103,15 @@ def print_category(category, changes, file=None):
         return
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     print(f"### {category}", file=file)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     print_section_heading_3(category, file=file)
 =======
     print(f"### {category}", file=file)
@@ -111,6 +120,9 @@ def print_category(category, changes, file=None):
     print(f"### {category}", file=file)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -152,12 +164,15 @@ def print_notes(
         print(before)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     print("## What's Changed", file=file)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     print_section_heading_2("What's Changed", file=file)
 =======
     print("## What's Changed", file=file)
@@ -166,6 +181,9 @@ def print_notes(
     print("## What's Changed", file=file)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

@@ -63,15 +63,21 @@ int read_rules(FILE *fp)
     Rast_fpreclass_init(&rcl_struct);
 <<<<<<< HEAD
 <<<<<<< HEAD
-    for (;;) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     for (;;) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (;;) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    for (;;) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     for (;;) {
 =======
@@ -91,6 +97,9 @@ int read_rules(FILE *fp)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

@@ -498,6 +498,7 @@ int G_parser(int argc, char **argv)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* If first arg is "--wps-process-description" then print out
          * the wps process description of the task */
         if (strcmp(argv[1], "--wps-process-description") == 0) {
@@ -558,6 +559,8 @@ int G_parser(int argc, char **argv)
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         /* If first arg is "--md-description" then print out
          * a Markdown description of the task */
         if (strcmp(argv[1], "--md-description") == 0) {
@@ -735,6 +738,9 @@ int G_parser(int argc, char **argv)
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1104,11 +1110,14 @@ int G__uses_new_gisprompt(void)
    \param format pointer to print function
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
    \param newline TRUE to include newline
  */
 void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *),
@@ -1117,6 +1126,9 @@ void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *),
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1135,6 +1147,7 @@ void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *))
         }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (i < st->n_keys - 1)
             fprintf(fd, ", ");
 =======
@@ -1142,6 +1155,8 @@ void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *))
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         if (i < st->n_keys - 1) {
             fprintf(fd, ",");
             if (!newline)
@@ -1158,6 +1173,9 @@ void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *))
             fprintf(fd, ", ");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1174,16 +1192,23 @@ void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *))
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
-int G_get_overwrite(void)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 int G_get_overwrite(void)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+int G_get_overwrite(void)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+int G_get_overwrite(void)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 int G_get_overwrite(void)
@@ -1203,6 +1228,9 @@ int G_get_overwrite(void)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1278,11 +1306,14 @@ void set_flag(int f)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     /* First, check if key has been renamed */
     G_asprintf(&key, "-%c", f);
     renamed_key = get_renamed_option(key);
@@ -1349,6 +1380,9 @@ void set_flag(int f)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1510,11 +1544,14 @@ void set_option(const char *string)
         if (renamed_key) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             /* if renamed to a new flag (option value given but will be lost),
              * fatal error */
             if (*renamed_key == '-') {
@@ -1538,6 +1575,9 @@ void set_option(const char *string)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

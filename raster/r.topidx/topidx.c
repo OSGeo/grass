@@ -43,15 +43,21 @@ void calculate_atanb(void)
     nsink = 0;
 <<<<<<< HEAD
 <<<<<<< HEAD
-    for (; natb < ncells;) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     for (; natb < ncells;) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (; natb < ncells;) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    for (; natb < ncells;) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     for (; natb < ncells;) {
 =======
@@ -71,6 +77,9 @@ void calculate_atanb(void)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

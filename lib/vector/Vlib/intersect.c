@@ -47,8 +47,14 @@
    return  point1 breakes: point2 breaks:    distance1 on:   distance2 on:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -679,12 +685,15 @@ int Vect_line_intersection(struct line_pnts *APoints, struct line_pnts *BPoints,
                            struct line_pnts ***BLines, int *nalines,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                            int *nblines, int with_z)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                            int *nblines, int with_z UNUSED)
 =======
                            int *nblines, int with_z)
@@ -693,6 +702,9 @@ int Vect_line_intersection(struct line_pnts *APoints, struct line_pnts *BPoints,
                            int *nblines, int with_z)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -782,12 +794,15 @@ int Vect_line_intersection(struct line_pnts *APoints, struct line_pnts *BPoints,
      *  Note: once we snap breaks to vertices, we have to do that for both lines
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * A and B in the same way and because we cannot be sure that A childrens
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
      * A and B in the same way and because we cannot be sure that A children
 =======
      * A and B in the same way and because we cannot be sure that A childrens
@@ -796,6 +811,9 @@ int Vect_line_intersection(struct line_pnts *APoints, struct line_pnts *BPoints,
      * A and B in the same way and because we cannot be sure that A childrens
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1055,12 +1073,15 @@ int Vect_line_intersection(struct line_pnts *APoints, struct line_pnts *BPoints,
          *                B
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
          *  This should not inluence that break is always on first segment, see
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
          *  This should not influence that break is always on first segment, see
 =======
          *  This should not inluence that break is always on first segment, see
@@ -1069,6 +1090,9 @@ int Vect_line_intersection(struct line_pnts *APoints, struct line_pnts *BPoints,
          *  This should not inluence that break is always on first segment, see
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1229,12 +1253,15 @@ int Vect_line_intersection(struct line_pnts *APoints, struct line_pnts *BPoints,
                     G_debug(2, "  segment j = %d", j);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     /* skipp vertex identical to last break */
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                     /* skip vertex identical to last break */
 =======
                     /* skipp vertex identical to last break */
@@ -1243,6 +1270,9 @@ int Vect_line_intersection(struct line_pnts *APoints, struct line_pnts *BPoints,
                     /* skipp vertex identical to last break */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

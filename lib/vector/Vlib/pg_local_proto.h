@@ -59,12 +59,15 @@ struct feat_parts {
 /* area_pg.c */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int Vect__get_area_points_pg(const struct Map_info *, const plus_t *, int,
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 int Vect__get_area_points_pg(struct Map_info *, const plus_t *, int,
 =======
 int Vect__get_area_points_pg(const struct Map_info *, const plus_t *, int,
@@ -73,6 +76,9 @@ int Vect__get_area_points_pg(const struct Map_info *, const plus_t *, int,
 int Vect__get_area_points_pg(const struct Map_info *, const plus_t *, int,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

@@ -117,15 +117,21 @@ int G_zlib_compress(unsigned char *src, int src_sz, unsigned char *dst,
     buf_sz = G_zlib_compress_bound(src_sz);
 <<<<<<< HEAD
 <<<<<<< HEAD
-    if (dst_sz < 0 || buf_sz > (unsigned int)dst_sz) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if (dst_sz < 0 || buf_sz > (unsigned int)dst_sz) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (dst_sz < 0 || buf_sz > (unsigned int)dst_sz) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    if (dst_sz < 0 || buf_sz > (unsigned int)dst_sz) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     if (dst_sz < 0 || buf_sz > (unsigned int)dst_sz) {
 =======
@@ -145,6 +151,9 @@ int G_zlib_compress(unsigned char *src, int src_sz, unsigned char *dst,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -178,15 +187,21 @@ int G_zlib_compress(unsigned char *src, int src_sz, unsigned char *dst,
     /* updated buf_sz is bytes of compressed data */
 <<<<<<< HEAD
 <<<<<<< HEAD
-    if (src_sz < 0 || nbytes >= (unsigned int)src_sz) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if (src_sz < 0 || nbytes >= (unsigned int)src_sz) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (src_sz < 0 || nbytes >= (unsigned int)src_sz) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    if (src_sz < 0 || nbytes >= (unsigned int)src_sz) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     if (src_sz < 0 || nbytes >= (unsigned int)src_sz) {
 =======
@@ -206,6 +221,9 @@ int G_zlib_compress(unsigned char *src, int src_sz, unsigned char *dst,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -270,15 +288,21 @@ int G_zlib_expand(unsigned char *src, int src_sz, unsigned char *dst,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    if (dst_sz < 0 || nbytes != (unsigned int)dst_sz) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if (dst_sz < 0 || nbytes != (unsigned int)dst_sz) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (dst_sz < 0 || nbytes != (unsigned int)dst_sz) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    if (dst_sz < 0 || nbytes != (unsigned int)dst_sz) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     if (dst_sz < 0 || nbytes != (unsigned int)dst_sz) {
 =======
@@ -298,6 +322,9 @@ int G_zlib_expand(unsigned char *src, int src_sz, unsigned char *dst,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

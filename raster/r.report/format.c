@@ -26,16 +26,23 @@ int format_parms(double v, int *n, int *dp, int *eformat, int e_option)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-        if ((int)strlen(buf) <= *n)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         if ((int)strlen(buf) <= *n)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if ((int)strlen(buf) <= *n)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if ((int)strlen(buf) <= *n)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         if ((int)strlen(buf) <= *n)
@@ -56,6 +63,9 @@ int format_parms(double v, int *n, int *dp, int *eformat, int e_option)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

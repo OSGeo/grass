@@ -123,11 +123,14 @@ git checkout -b new-feature
 You can use your favorite tools to change source code or other files
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 in the local copy of the code. When making changes, please follow the
 [Submitting Guidelines](./doc/development/submitting/submitting.md).
 
@@ -155,6 +158,9 @@ to your code.
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -205,6 +211,7 @@ For Python, run `black .` to apply standardized formatting. You can
 also run linter tools such as Pylint which will suggest different improvements
 to your code.
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 ### Testing changes
 
@@ -226,6 +233,8 @@ Note that there are some steps you can do locally to improve your code.
 For Python, run `black .` to apply standardized formatting. You can
 also run linter tools such as Pylint which will suggest different improvements
 to your code.
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 

@@ -5,16 +5,23 @@ space time raster datasets (STRDS) using the temporal raster algebra.
 <p>
 <<<<<<< HEAD
 <<<<<<< HEAD
-The module expects an <b>expression</b> as input parameter in the
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 The module expects an <b>expression</b> as input parameter in the
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+The module expects an <b>expression</b> as input parameter in the
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+The module expects an <b>expression</b> as input parameter in the
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 The module expects an <b>expression</b> as input parameter in the
@@ -34,6 +41,9 @@ The module expects an <b>expression</b> as input parameter in the
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -485,17 +495,23 @@ raster algebra with the temporal dimension. The format is strds[t,r,c],
 where t is the temporal offset, r is the row offset and c is the column
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 offset. A single neighborhood modifier is interpreted as temporal offset [t],
 while two neighborhood modifiers are interpreted as row and column offsets [r,c].
 =======
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -617,11 +633,14 @@ C = if({equal}, B {#,contain} A > 1, (B {+,contain,l} A {-,equal,l} B) {equal,=/
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <h3>Compute DOY for spatio-temporal conditions</h3>
 Compute the DOY for all maps from STRDS A where conditions are met at three
 consecutive time intervals (e.g. temperature > 0):
@@ -635,6 +654,9 @@ B = if(A > 0.0 && A[-1] > 0.0 && A[-2] > 0.0, start_doy(A, -1), 0)"
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

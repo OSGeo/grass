@@ -3,6 +3,7 @@ required-version = '24'
 line-length = 88
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 target-version = ['py37', 'py38', 'py39', 'py310']
 =======
 <<<<<<< HEAD
@@ -10,6 +11,9 @@ target-version = ['py37', 'py38', 'py39', 'py310']
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
 # 'extend-exclude' excludes files or directories in addition to the defaults
@@ -27,6 +31,9 @@ target-version = ['py37', 'py38', 'py39', 'py310']
 target-version = ['py37', 'py38', 'py39', 'py310']
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -49,12 +56,15 @@ exclude = '''
     )/
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     | python/libgrass_interface_generator/
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     | python/grass/ctypes/
     # Bug in Black related to r-string prefix capitalization reformats
     # a line in this file unnecessarily. File is however fully Black-formatted
@@ -72,6 +82,9 @@ exclude = '''
     | python/libgrass_interface_generator/
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -92,11 +105,14 @@ addopts = """
 timeout = 300
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 
 
 [tool.bandit]
@@ -107,6 +123,9 @@ skips = ["B324","B110", "B101", "B112", "B311", "B404"]
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

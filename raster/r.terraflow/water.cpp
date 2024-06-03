@@ -34,16 +34,23 @@ char *labelElevType::printLabel(const labelElevType &p)
     static char buf[8];
 <<<<<<< HEAD
 <<<<<<< HEAD
-    snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
@@ -64,6 +71,9 @@ char *labelElevType::printLabel(const labelElevType &p)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -211,16 +221,23 @@ char *waterType::printLabel(const waterType &p)
     static char buf[8];
 <<<<<<< HEAD
 <<<<<<< HEAD
-    snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
@@ -241,6 +258,9 @@ char *waterType::printLabel(const waterType &p)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -317,12 +337,15 @@ void generateWatersheds(AMI_STREAM<waterWindowType> **waterWindows,
                         AMI_STREAM<labelElevType> *labeledWater,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                         AMI_STREAM<boundaryType> *boundaryStr)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                         AMI_STREAM<boundaryType> *boundaryStr UNUSED)
 =======
                         AMI_STREAM<boundaryType> *boundaryStr)
@@ -331,6 +354,9 @@ void generateWatersheds(AMI_STREAM<waterWindowType> **waterWindows,
                         AMI_STREAM<boundaryType> *boundaryStr)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

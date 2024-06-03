@@ -207,12 +207,15 @@ int close_streamvect(char *stream_vect)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         sprintf(buf, "insert into %s values ( %" PRI_OFF_T ", \'%s\', %d, %d )",
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         sprintf(buf, "insert into %s values ( %" PRId64 ", \'%s\', %d, %d )",
 =======
         sprintf(buf, "insert into %s values ( %" PRI_OFF_T ", \'%s\', %d, %d )",
@@ -221,6 +224,9 @@ int close_streamvect(char *stream_vect)
         sprintf(buf, "insert into %s values ( %" PRI_OFF_T ", \'%s\', %d, %d )",
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

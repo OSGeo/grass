@@ -142,18 +142,26 @@ int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
             /* write row */
 <<<<<<< HEAD
 <<<<<<< HEAD
-            if (write(out[id], cellp, buflen) < 0)
-                G_fatal_error("Error writing temporary file");
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             if (write(out[id], cellp, buflen) < 0)
                 G_fatal_error("Error writing temporary file");
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (write(out[id], cellp, buflen) < 0)
+                G_fatal_error("Error writing temporary file");
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (write(out[id], cellp, buflen) < 0)
+                G_fatal_error("Error writing temporary file");
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
             if (write(out[id], cellp, buflen) < 0)
@@ -177,6 +185,9 @@ int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

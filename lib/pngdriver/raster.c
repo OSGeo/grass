@@ -110,12 +110,15 @@ void PNG_begin_raster(int mask, int s[2][2], double fd[2][2])
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int PNG_raster(int n, int row, const unsigned char *red,
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 int PNG_raster(UNUSED int n, int row, const unsigned char *red,
 =======
 int PNG_raster(int n, int row, const unsigned char *red,
@@ -124,6 +127,9 @@ int PNG_raster(int n, int row, const unsigned char *red,
 int PNG_raster(int n, int row, const unsigned char *red,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

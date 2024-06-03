@@ -9,6 +9,7 @@
 # PURPOSE:      Create HTML manual page snippets
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # COPYRIGHT:    (C) 2007-2023 by Glynn Clements
 =======
 <<<<<<< HEAD
@@ -16,6 +17,9 @@
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 # COPYRIGHT:    (C) 2007-2024 by Glynn Clements
 =======
@@ -31,6 +35,9 @@
 # COPYRIGHT:    (C) 2007-2023 by Glynn Clements
 >>>>>>> 6104ec7096 (i.maxlik: fix crash when classification result is NULL (#2724))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -75,11 +82,14 @@ HTTP_STATUS_CODES = list(http.HTTPStatus)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 def get_version_branch(major_version, addons_git_repo_url):
     """Check if version branch for the current GRASS version exists,
     if not, take branch for the previous version
@@ -124,6 +134,9 @@ def get_version_branch(major_version, addons_git_repo_url):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -133,11 +146,14 @@ addons_url = ""
 grass_git_branch = "main"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 major, minor, patch = None, None, None
 if grass_version != "unknown":
     major, minor, patch = grass_version.split(".")
@@ -162,6 +178,9 @@ if grass_version != "unknown":
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -175,8 +194,14 @@ if grass_version != "unknown":
         base_url=base_url, major=major
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -283,12 +308,15 @@ def get_default_git_log(src_dir, datetime_format="%A %b %d %H:%M:%S %Y"):
     local Git, local JSON file and remote GitHub REST API server wasn't
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     successfull.
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     successful.
 =======
     successfull.
@@ -297,6 +325,9 @@ def get_default_git_log(src_dir, datetime_format="%A %b %d %H:%M:%S %Y"):
     successfull.
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -352,12 +383,15 @@ def get_git_commit_from_file(
     """
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     # Accessed date time if getting commit from JSON file wasn't successfull
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     # Accessed date time if getting commit from JSON file wasn't successful
 =======
     # Accessed date time if getting commit from JSON file wasn't successfull
@@ -366,6 +400,9 @@ def get_git_commit_from_file(
     # Accessed date time if getting commit from JSON file wasn't successfull
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -402,11 +439,14 @@ def get_git_commit_from_rest_api_for_addon_repo(
     """
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     # Accessed date time if getting commit from GitHub REST API wasn't successful
     if not git_log:
         git_log = get_default_git_log(src_dir=src_dir)
@@ -434,6 +474,9 @@ def get_git_commit_from_rest_api_for_addon_repo(
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -461,8 +504,14 @@ def get_git_commit_from_rest_api_for_addon_repo(
             )
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -535,6 +584,7 @@ def has_src_code_git(src_dir, is_addon):
     try:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 <<<<<<< HEAD
@@ -542,12 +592,17 @@ def has_src_code_git(src_dir, is_addon):
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+>>>>>>> osgeo-main
+=======
 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -702,16 +757,22 @@ def read_file(name):
         return s
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     except OSError:
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -886,12 +947,15 @@ def get_addon_path():
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     return: pgm path if pgm is addon else None
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     Make or update list of the official addons source
     code paths g.extension prefix parameter plus /grass-addons directory
     using Git repository
@@ -904,6 +968,9 @@ def get_addon_path():
     return: pgm path if pgm is addon else None
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -980,11 +1047,14 @@ def get_addon_path():
     if addon_base:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         """'addons_paths.json' is file created during install extension
         check get_addons_paths() function in the g.extension.py file
         """
@@ -1003,6 +1073,9 @@ def get_addon_path():
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1029,8 +1102,14 @@ def get_addon_path():
                 return addon["path"]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1197,6 +1276,7 @@ if sys.platform == "win32":
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 if index_name:
     branches = "branches"
     tree = "tree"
@@ -1207,6 +1287,8 @@ if index_name:
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 # Process Source code section
 branches = "branches"
 tree = "tree"
@@ -1242,6 +1324,9 @@ if index_name:
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

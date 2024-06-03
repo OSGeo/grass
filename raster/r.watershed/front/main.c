@@ -263,18 +263,26 @@ int main(int argc, char *argv[])
     /* Build command line */
 <<<<<<< HEAD
 <<<<<<< HEAD
-    snprintf(command, GPATH_MAX, "%s/etc/r.watershed/%s", G_gisbase(),
-             flag_seg->answer ? "seg" : "ram");
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     snprintf(command, GPATH_MAX, "%s/etc/r.watershed/%s", G_gisbase(),
              flag_seg->answer ? "seg" : "ram");
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(command, GPATH_MAX, "%s/etc/r.watershed/%s", G_gisbase(),
+             flag_seg->answer ? "seg" : "ram");
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(command, GPATH_MAX, "%s/etc/r.watershed/%s", G_gisbase(),
+             flag_seg->answer ? "seg" : "ram");
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     snprintf(command, GPATH_MAX, "%s/etc/r.watershed/%s", G_gisbase(),
@@ -301,6 +309,9 @@ int main(int argc, char *argv[])
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

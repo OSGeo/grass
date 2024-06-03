@@ -76,12 +76,15 @@ int main(int argc, char *argv[])
     desc = NULL;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     G_asprintf(&desc, "attr;%s;cat;%s;val;%s;z;%s;dir;%s",
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     G_asprintf(&desc, "attr;%s;cat;%s;value;%s;z;%s;dir;%s",
 =======
     G_asprintf(&desc, "attr;%s;cat;%s;val;%s;z;%s;dir;%s",
@@ -90,6 +93,9 @@ int main(int argc, char *argv[])
     G_asprintf(&desc, "attr;%s;cat;%s;val;%s;z;%s;dir;%s",
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -128,8 +134,14 @@ int main(int argc, char *argv[])
     val_opt->description = _("Raster value (for use=val)");
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

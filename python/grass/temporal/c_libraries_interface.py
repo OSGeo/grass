@@ -16,17 +16,25 @@ from multiprocessing import Process, Lock, Pipe
 import logging
 <<<<<<< HEAD
 <<<<<<< HEAD
-from ctypes import byref, cast, c_int, c_void_p, CFUNCTYPE, POINTER
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 from ctypes import byref, cast, c_int, c_void_p, CFUNCTYPE, POINTER
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+from ctypes import byref, cast, c_int, c_void_p, CFUNCTYPE, POINTER
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+from ctypes import byref, cast, c_int, c_void_p, CFUNCTYPE, POINTER
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -51,6 +59,9 @@ from ctypes import byref, cast, c_char_p, c_int, c_void_p, CFUNCTYPE, POINTER
 >>>>>>> 7e8f036e2d (pythonlib: Remove star imports (#1546))
 >>>>>>> 57aff3a06a (pythonlib: Remove star imports (#1546))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -92,17 +103,23 @@ class RPCDefs:
     REMOVE_SEMANTIC_LABEL = 17
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     READ_MAP_HISTORY = 18
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -587,15 +604,21 @@ def _read_semantic_label(lock, conn, data):
     The result to be sent via pipe is the return value of
 <<<<<<< HEAD
 <<<<<<< HEAD
-    Rast_read_semantic_label: either a semantic label string or None.
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     Rast_read_semantic_label: either a semantic label string or None.
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    Rast_read_semantic_label: either a semantic label string or None.
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    Rast_read_semantic_label: either a semantic label string or None.
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     Rast_read_semantic_label: either a semantic label string or None.
 =======
@@ -609,6 +632,9 @@ def _read_semantic_label(lock, conn, data):
     Rast_read_semantic_label: either a semantic label string or None.
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -621,15 +647,21 @@ def _read_semantic_label(lock, conn, data):
     """
 <<<<<<< HEAD
 <<<<<<< HEAD
-    semantic_label = None
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     semantic_label = None
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    semantic_label = None
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    semantic_label = None
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     semantic_label = None
 =======
@@ -643,6 +675,9 @@ def _read_semantic_label(lock, conn, data):
     semantic_label = None
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -657,8 +692,12 @@ def _read_semantic_label(lock, conn, data):
             # ValueError: ctypes objects containing pointers cannot be pickled
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 >>>>>>> osgeo-main
             ret = libraster.Rast_read_semantic_label(name, mapset)
@@ -669,10 +708,13 @@ def _read_semantic_label(lock, conn, data):
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             ret = libraster.Rast_read_semantic_label(name, mapset)
             if ret:
                 semantic_label = decode(ret)
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
             ret = libraster.Rast_read_bandref(name, mapset)
@@ -690,6 +732,9 @@ def _read_semantic_label(lock, conn, data):
                 semantic_label = decode(ret)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -703,15 +748,21 @@ def _read_semantic_label(lock, conn, data):
     finally:
 <<<<<<< HEAD
 <<<<<<< HEAD
-        conn.send(semantic_label)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         conn.send(semantic_label)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        conn.send(semantic_label)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+        conn.send(semantic_label)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
         conn.send(semantic_label)
 =======
@@ -725,6 +776,9 @@ def _read_semantic_label(lock, conn, data):
         conn.send(semantic_label)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -735,8 +789,12 @@ def _read_semantic_label(lock, conn, data):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 def _write_semantic_label(lock, conn, data):
@@ -748,11 +806,14 @@ def _write_semantic_label(lock, conn, data):
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 def _write_semantic_label(lock, conn, data):
     """Write the file based GRASS band identifier.
 
     Rises ValueError on invalid semantic label.
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 def _write_band_reference(lock, conn, data):
@@ -773,6 +834,9 @@ def _write_semantic_label(lock, conn, data):
     Rises ValueError on invalid semantic label.
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -791,6 +855,7 @@ def _write_semantic_label(lock, conn, data):
         # layer = data[4]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -803,6 +868,11 @@ def _write_semantic_label(lock, conn, data):
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         semantic_label = data[5]
 
         if maptype == RPCDefs.TYPE_RASTER:
@@ -813,7 +883,10 @@ def _write_semantic_label(lock, conn, data):
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
         bandref = data[5]
@@ -834,6 +907,9 @@ def _write_semantic_label(lock, conn, data):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -853,6 +929,7 @@ def _write_semantic_label(lock, conn, data):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 def _remove_semantic_label(lock, conn, data):
 =======
 <<<<<<< HEAD
@@ -866,6 +943,11 @@ def _remove_semantic_label(lock, conn, data):
 def _remove_semantic_label(lock, conn, data):
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+def _remove_semantic_label(lock, conn, data):
+=======
+>>>>>>> osgeo-main
 def _remove_band_reference(lock, conn, data):
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 =======
@@ -875,6 +957,9 @@ def _remove_semantic_label(lock, conn, data):
 def _remove_semantic_label(lock, conn, data):
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -898,6 +983,7 @@ def _remove_semantic_label(lock, conn, data):
         if maptype == RPCDefs.TYPE_RASTER:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             check = libgis.G_remove_misc("cell_misc", "semantic_label", name)
 =======
 <<<<<<< HEAD
@@ -911,6 +997,11 @@ def _remove_semantic_label(lock, conn, data):
             check = libgis.G_remove_misc("cell_misc", "semantic_label", name)
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+            check = libgis.G_remove_misc("cell_misc", "semantic_label", name)
+=======
+>>>>>>> osgeo-main
             check = libgis.G_remove_misc("cell_misc", "bandref", name)
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 =======
@@ -920,6 +1011,9 @@ def _remove_semantic_label(lock, conn, data):
             check = libgis.G_remove_misc("cell_misc", "semantic_label", name)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1051,12 +1145,15 @@ def _read_raster_info(name, mapset):
         elif ret == 2:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             logging.warning(_("Raster range file is empty"))
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             logging.info(_("Raster range file is empty"))
 =======
             logging.warning(_("Raster range file is empty"))
@@ -1065,6 +1162,9 @@ def _read_raster_info(name, mapset):
             logging.warning(_("Raster range file is empty"))
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1087,12 +1187,15 @@ def _read_raster_info(name, mapset):
         elif ret == 2:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             logging.warning(_("Raster range file is empty"))
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             logging.info(_("Raster range file is empty"))
 =======
             logging.warning(_("Raster range file is empty"))
@@ -1101,6 +1204,9 @@ def _read_raster_info(name, mapset):
             logging.warning(_("Raster range file is empty"))
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1599,17 +1705,23 @@ def c_library_server(lock, conn):
     functions[RPCDefs.REMOVE_SEMANTIC_LABEL] = _remove_semantic_label
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     functions[RPCDefs.READ_MAP_HISTORY] = _read_map_history
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2001,17 +2113,24 @@ class CLibrariesInterface(RPCServerBase):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    def remove_raster_semantic_label(self, name, mapset):
-        """Remove a file based raster semantic label
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     def remove_raster_semantic_label(self, name, mapset):
         """Remove a file based raster semantic label
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    def remove_raster_semantic_label(self, name, mapset):
+        """Remove a file based raster semantic label
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    def remove_raster_semantic_label(self, name, mapset):
+        """Remove a file based raster semantic label
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     def remove_raster_semantic_label(self, name, mapset):
         """Remove a file based raster semantic label
@@ -2029,6 +2148,9 @@ class CLibrariesInterface(RPCServerBase):
         """Remove a file based raster semantic label
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2048,6 +2170,7 @@ class CLibrariesInterface(RPCServerBase):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -2060,6 +2183,11 @@ class CLibrariesInterface(RPCServerBase):
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         Returns semantic label or None
 
         :param name: The name of the map
@@ -2069,7 +2197,10 @@ class CLibrariesInterface(RPCServerBase):
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
         Returns band reference or None
@@ -2088,6 +2219,9 @@ class CLibrariesInterface(RPCServerBase):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2098,6 +2232,7 @@ class CLibrariesInterface(RPCServerBase):
         )
         return self.safe_receive("read_raster_semantic_label")
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -2112,6 +2247,11 @@ class CLibrariesInterface(RPCServerBase):
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     def write_raster_semantic_label(self, name, mapset, semantic_label):
         """Write a file based raster semantic label
 
@@ -2125,7 +2265,10 @@ class CLibrariesInterface(RPCServerBase):
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     def write_raster_band_reference(self, name, mapset, band_reference):
@@ -2149,6 +2292,9 @@ class CLibrariesInterface(RPCServerBase):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

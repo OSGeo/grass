@@ -25,6 +25,7 @@ int parse(int argc, char *argv[], struct parms *parms)
     sigfile->gisprompt = "new,signatures/sig,sigfile";
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     sigfile->description =
         _("Name for output file containing result signatures");
 =======
@@ -41,6 +42,12 @@ int parse(int argc, char *argv[], struct parms *parms)
         _("Name for output file containing result signatures");
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+    sigfile->description =
+        _("Name for output file containing result signatures");
+=======
+>>>>>>> osgeo-main
     sigfile->description = _("Name for output file containing result signatures");
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
@@ -52,6 +59,9 @@ int parse(int argc, char *argv[], struct parms *parms)
         _("Name for output file containing result signatures");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -74,6 +84,7 @@ int parse(int argc, char *argv[], struct parms *parms)
     if (!I_find_subgroup(parms->group, parms->subgroup))
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -86,6 +97,11 @@ int parse(int argc, char *argv[], struct parms *parms)
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         G_fatal_error(_("Subgroup <%s> in group <%s> not found"),
                       parms->subgroup, parms->group);
 
@@ -95,7 +111,10 @@ int parse(int argc, char *argv[], struct parms *parms)
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 	G_fatal_error(_("Subgroup <%s> in group <%s> not found"), parms->subgroup, parms->group);
@@ -112,6 +131,9 @@ int parse(int argc, char *argv[], struct parms *parms)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -121,15 +143,21 @@ int parse(int argc, char *argv[], struct parms *parms)
         G_fatal_error(_("<%s> is an illegal file name"), parms->sigfile);
 <<<<<<< HEAD
 <<<<<<< HEAD
-
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 
 =======
@@ -143,6 +171,9 @@ int parse(int argc, char *argv[], struct parms *parms)
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

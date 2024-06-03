@@ -3,12 +3,15 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int db__driver_describe_table(dbString *name, dbTable **table)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 int db__driver_describe_table(dbString *name UNUSED, dbTable **table UNUSED)
 =======
 int db__driver_describe_table(dbString *name, dbTable **table)
@@ -17,6 +20,9 @@ int db__driver_describe_table(dbString *name, dbTable **table)
 int db__driver_describe_table(dbString *name, dbTable **table)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

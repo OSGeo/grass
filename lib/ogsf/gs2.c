@@ -3284,15 +3284,21 @@ int GS_get_distance_alongsurf(int hs, float x1, float y1, float x2, float y2,
     geosurf *gs;
 <<<<<<< HEAD
 <<<<<<< HEAD
-    Point3 p1, p2;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     Point3 p1, p2;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    Point3 p1, p2;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    Point3 p1, p2;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     Point3 p1, p2;
 =======
@@ -3312,6 +3318,9 @@ int GS_get_distance_alongsurf(int hs, float x1, float y1, float x2, float y2,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

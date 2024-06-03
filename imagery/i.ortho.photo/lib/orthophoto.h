@@ -119,18 +119,26 @@ int I_convert_con_points(char *, struct Ortho_Control_Points *,
 /* georef.c */
 <<<<<<< HEAD
 <<<<<<< HEAD
-int I_compute_ref_equations(struct Ortho_Photo_Points *, double[3], double[3],
-                            double[3], double[3]);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 int I_compute_ref_equations(struct Ortho_Photo_Points *, double[3], double[3],
                             double[3], double[3]);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+int I_compute_ref_equations(struct Ortho_Photo_Points *, double[3], double[3],
+                            double[3], double[3]);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+int I_compute_ref_equations(struct Ortho_Photo_Points *, double[3], double[3],
+                            double[3], double[3]);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 int I_compute_ref_equations(struct Ortho_Photo_Points *, double[3], double[3],
@@ -157,6 +165,9 @@ int I_compute_ref_equations(struct Ortho_Photo_Points *, double[3], double[3],
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

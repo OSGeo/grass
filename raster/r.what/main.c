@@ -52,11 +52,14 @@ static int tty = 0;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 enum OutputFormat { PLAIN, JSON };
 
 =======
@@ -64,6 +67,9 @@ enum OutputFormat { PLAIN, JSON };
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -114,11 +120,14 @@ int main(int argc, char *argv[])
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     JSON_Value *root_value = NULL, *point_value, *layer_value;
     JSON_Array *root_array;
     JSON_Object *point_object, *layer_object;
@@ -130,6 +139,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -170,15 +182,7 @@ int main(int argc, char *argv[])
     opt.fs = G_define_standard_option(G_OPT_F_SEP);
     opt.fs->guisection = _("Print");
 
-    opt.format = G_define_option();
-    opt.format->key = "format";
-    opt.format->type = TYPE_STRING;
-    opt.format->required = NO;
-    opt.format->label = _("Output format");
-    opt.format->options = "plain,json";
-    opt.format->descriptions = "plain;Plain text output;"
-                               "json;JSON (JavaScript Object Notation);";
-    opt.format->answer = "plain";
+    opt.format = G_define_standard_option(G_OPT_F_FORMAT);
     opt.format->guisection = _("Print");
 
     opt.cache = G_define_option();
@@ -322,12 +326,15 @@ int main(int argc, char *argv[])
     /* print header row */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (flg.header->answer) {
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     if (format == PLAIN && flg.header->answer) {
 =======
     if (flg.header->answer) {
@@ -336,6 +343,9 @@ int main(int argc, char *argv[])
     if (flg.header->answer) {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -550,6 +560,7 @@ int main(int argc, char *argv[])
         /* report data from re-ordered cache */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 <<<<<<< HEAD
@@ -557,12 +568,17 @@ int main(int argc, char *argv[])
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+>>>>>>> osgeo-main
+=======
 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -573,11 +589,14 @@ int main(int argc, char *argv[])
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             if (format == PLAIN) {
 
                 if (flg.cat->answer) {
@@ -683,6 +702,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -732,8 +754,14 @@ int main(int argc, char *argv[])
             fprintf(stdout, "\n");
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -754,11 +782,14 @@ int main(int argc, char *argv[])
         cache_hit = cache_miss = 0;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     }
 
     if (format == JSON) {
@@ -775,6 +806,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

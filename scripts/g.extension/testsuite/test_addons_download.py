@@ -14,17 +14,23 @@ COPYRIGHT: (C) 2022 Stefan Blumentrath and by the GRASS Development Team
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 import re
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -34,6 +40,7 @@ import unittest
 from pathlib import Path
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 from grass.gunittest.case import TestCase
 =======
@@ -41,6 +48,8 @@ from grass.gunittest.case import TestCase
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 from urllib import request as urlrequest
 
 from grass.gunittest.case import TestCase
@@ -54,6 +63,9 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.case import TestCase
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -80,11 +92,14 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     request_headers = {
         "User-Agent": "Mozilla/5.0",
     }
@@ -94,6 +109,9 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -215,11 +233,14 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     def test_github_install_official_non_exists_module(self):
         """Test installing non exists extension from official addons repository"""
         extension = "non_exists_extension"
@@ -297,6 +318,9 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

@@ -104,6 +104,7 @@ class MapWindowProperties:
         return self._useDefinedProjection
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     @useDefinedProjection.setter
     def useDefinedProjection(self, value):
@@ -133,6 +134,10 @@ class MapWindowProperties:
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+=======
+=======
+>>>>>>> osgeo-main
+=======
 =======
 =======
 >>>>>>> osgeo-main
@@ -473,12 +478,15 @@ class MapWindowBase:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         @deprecated This method is deprecated. Use Signal with coordinates as parameters.
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         @deprecated This method is deprecated. Use Signal with coordinates as
         parameters.
 =======
@@ -488,6 +496,9 @@ class MapWindowBase:
         @deprecated This method is deprecated. Use Signal with coordinates as parameters.
 >>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

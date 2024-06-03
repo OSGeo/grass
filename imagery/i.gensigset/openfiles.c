@@ -11,17 +11,24 @@ int openfiles(struct parms *parms, struct files *files, struct SigSet *S)
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
-    struct Ref Ref; /* subgroup reference list */
-    const char *mapset, *semantic_label;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     struct Ref Ref; /* subgroup reference list */
     const char *mapset, *semantic_label;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    struct Ref Ref; /* subgroup reference list */
+    const char *mapset, *semantic_label;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    struct Ref Ref; /* subgroup reference list */
+    const char *mapset, *semantic_label;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     struct Ref Ref; /* subgroup reference list */
     const char *mapset, *semantic_label;
@@ -39,6 +46,9 @@ int openfiles(struct parms *parms, struct files *files, struct SigSet *S)
     const char *mapset, *semantic_label;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -60,11 +70,14 @@ int openfiles(struct parms *parms, struct files *files, struct SigSet *S)
     files->band_cell = (DCELL **)G_calloc(Ref.nfiles, sizeof(DCELL *));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 
     /* Prepare SigSet structure */
     I_InitSigSet(S, files->nbands);
@@ -73,6 +86,9 @@ int openfiles(struct parms *parms, struct files *files, struct SigSet *S)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -89,17 +105,23 @@ int openfiles(struct parms *parms, struct files *files, struct SigSet *S)
     for (n = 0; n < Ref.nfiles; n++) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -112,10 +134,13 @@ int openfiles(struct parms *parms, struct files *files, struct SigSet *S)
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 	files->band_fd[n] =
 	    Rast_open_old(Ref.file[n].name, Ref.file[n].mapset);
 	files->band_cell[n] = Rast_allocate_d_buf();
@@ -130,6 +155,9 @@ int openfiles(struct parms *parms, struct files *files, struct SigSet *S)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

@@ -453,12 +453,15 @@ int read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
    \param offset given offset
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
    \param[out] Points container used to store line pointes within
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
    \param[out] Points container used to store line points within
 =======
    \param[out] Points container used to store line pointes within
@@ -467,6 +470,9 @@ int read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
    \param[out] Points container used to store line pointes within
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -476,12 +482,15 @@ int read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int read_line(const struct Map_info *Map, OGRGeometryH hGeom, long offset,
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 int read_line(struct Map_info *Map, OGRGeometryH hGeom, long offset,
 =======
 int read_line(const struct Map_info *Map, OGRGeometryH hGeom, long offset,
@@ -490,6 +499,9 @@ int read_line(const struct Map_info *Map, OGRGeometryH hGeom, long offset,
 int read_line(const struct Map_info *Map, OGRGeometryH hGeom, long offset,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -567,12 +579,15 @@ int read_line(const struct Map_info *Map, OGRGeometryH hGeom, long offset,
    \param offset given offset
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
    \param[out] Points container used to store line pointes within
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
    \param[out] Points container used to store line points within
 =======
    \param[out] Points container used to store line pointes within
@@ -581,6 +596,9 @@ int read_line(const struct Map_info *Map, OGRGeometryH hGeom, long offset,
    \param[out] Points container used to store line pointes within
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -590,16 +608,22 @@ int read_line(const struct Map_info *Map, OGRGeometryH hGeom, long offset,
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 int get_line_type(struct Map_info *Map, long fid)
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

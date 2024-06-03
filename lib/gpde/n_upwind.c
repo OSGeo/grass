@@ -24,12 +24,15 @@
  *
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * \param sprod double -- the scalar produkt between the velocity vector and the
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
  * \param sprod double -- the scalar product between the velocity vector and the
 =======
  * \param sprod double -- the scalar produkt between the velocity vector and the
@@ -38,6 +41,9 @@
  * \param sprod double -- the scalar produkt between the velocity vector and the
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -73,12 +79,15 @@ double N_full_upwinding(double sprod, double distance, double D)
  *
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * \param sprod double -- the scalar produkt between the velocity vector and the
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
  * \param sprod double -- the scalar product between the velocity vector and the
 =======
  * \param sprod double -- the scalar produkt between the velocity vector and the
@@ -87,6 +96,9 @@ double N_full_upwinding(double sprod, double distance, double D)
  * \param sprod double -- the scalar produkt between the velocity vector and the
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

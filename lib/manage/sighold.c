@@ -25,16 +25,23 @@ int M__hold_signals(int hold)
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
-    void (*sig)(int) = hold ? SIG_IGN : SIG_DFL;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     void (*sig)(int) = hold ? SIG_IGN : SIG_DFL;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    void (*sig)(int) = hold ? SIG_IGN : SIG_DFL;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    void (*sig)(int) = hold ? SIG_IGN : SIG_DFL;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     void (*sig)(int) = hold ? SIG_IGN : SIG_DFL;
@@ -55,6 +62,9 @@ int M__hold_signals(int hold)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

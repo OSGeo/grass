@@ -51,15 +51,21 @@ int G_snprintf(char *str, size_t size, const char *fmt, ...)
     /* Windows' vsnprintf() doesn't always NUL-terminate the buffer */
 <<<<<<< HEAD
 <<<<<<< HEAD
-    if (count >= 0 && (unsigned int)count == size)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if (count >= 0 && (unsigned int)count == size)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (count >= 0 && (unsigned int)count == size)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    if (count >= 0 && (unsigned int)count == size)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     if (count >= 0 && (unsigned int)count == size)
 =======
@@ -79,6 +85,9 @@ int G_snprintf(char *str, size_t size, const char *fmt, ...)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

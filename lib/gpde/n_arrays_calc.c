@@ -455,12 +455,15 @@ int N_convert_array_2d_null_to_zero(N_array_2d *a)
         G_debug(2,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 "N_convert_array_2d_null_to_zero: %i valuess of type "
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                 "N_convert_array_2d_null_to_zero: %i values of type "
 =======
                 "N_convert_array_2d_null_to_zero: %i valuess of type "
@@ -469,6 +472,9 @@ int N_convert_array_2d_null_to_zero(N_array_2d *a)
                 "N_convert_array_2d_null_to_zero: %i valuess of type "
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -478,12 +484,15 @@ int N_convert_array_2d_null_to_zero(N_array_2d *a)
         G_debug(2,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 "N_convert_array_2d_null_to_zero: %i valuess of type "
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                 "N_convert_array_2d_null_to_zero: %i values of type "
 =======
                 "N_convert_array_2d_null_to_zero: %i valuess of type "
@@ -492,6 +501,9 @@ int N_convert_array_2d_null_to_zero(N_array_2d *a)
                 "N_convert_array_2d_null_to_zero: %i valuess of type "
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

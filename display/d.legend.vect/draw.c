@@ -3,12 +3,15 @@
  * With do_bg=1 compute position of all legend graphic item and draw only
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * background. Eith do_bg=0 compute position of all legend graphic item and draw
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
  * background. With do_bg=0 compute position of all legend graphic item and draw
 =======
  * background. Eith do_bg=0 compute position of all legend graphic item and draw
@@ -17,6 +20,9 @@
  * background. Eith do_bg=0 compute position of all legend graphic item and draw
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

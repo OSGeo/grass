@@ -67,16 +67,22 @@ static int update_next_edge(struct Map_info *, int, int);
 #if 0 /* unused */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 static int delete_face(struct Map_info *, int);
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -98,11 +104,14 @@ static struct line_pnts *Points;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #define NOPG_UNUSED
 #else
 #define NOPG_UNUSED UNUSED
@@ -111,6 +120,9 @@ static struct line_pnts *Points;
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -220,6 +232,7 @@ off_t V2_write_line_pg(struct Map_info *Map NOPG_UNUSED, int type NOPG_UNUSED,
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 off_t V1_rewrite_line_pg(struct Map_info *Map, off_t offset, int type,
                          const struct line_pnts *points,
                          const struct line_cats *cats)
@@ -231,6 +244,8 @@ off_t V1_rewrite_line_pg(struct Map_info *Map, off_t offset, int type,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 off_t V1_rewrite_line_pg(struct Map_info *Map NOPG_UNUSED, off_t offset,
                          int type, const struct line_pnts *points NOPG_UNUSED,
                          const struct line_cats *cats NOPG_UNUSED)
@@ -253,6 +268,9 @@ off_t V1_rewrite_line_pg(struct Map_info *Map, off_t offset, int type,
             offset);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -287,12 +305,15 @@ off_t V1_rewrite_line_pg(struct Map_info *Map, off_t offset, int type,
    \param points feature geometry
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
    \param cats feature categories
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
    \param cats feature categories (unused)
 =======
    \param cats feature categories
@@ -301,6 +322,9 @@ off_t V1_rewrite_line_pg(struct Map_info *Map, off_t offset, int type,
    \param cats feature categories
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -308,6 +332,7 @@ off_t V1_rewrite_line_pg(struct Map_info *Map, off_t offset, int type,
    \return offset where feature was rewritten
    \return -1 on error
  */
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 off_t V2_rewrite_line_pg(struct Map_info *Map, off_t line, int type,
@@ -318,6 +343,8 @@ off_t V2_rewrite_line_pg(struct Map_info *Map, off_t line, int type,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 off_t V2_rewrite_line_pg(struct Map_info *Map NOPG_UNUSED, off_t line, int type,
                          const struct line_pnts *points NOPG_UNUSED,
                          const struct line_cats *cats UNUSED)
@@ -332,6 +359,9 @@ off_t V2_rewrite_line_pg(struct Map_info *Map, off_t line, int type,
                          const struct line_cats *cats)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -399,12 +429,15 @@ off_t V2_rewrite_line_pg(struct Map_info *Map, off_t line, int type,
                "UPDATE \"%s\".\"%s\" SET geom = '%s'::GEOMETRY WHERE %s_id = "
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                "%" PRI_OFF_T,
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                "%" PRId64,
 =======
                "%" PRI_OFF_T,
@@ -413,6 +446,9 @@ off_t V2_rewrite_line_pg(struct Map_info *Map, off_t line, int type,
                "%" PRI_OFF_T,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -510,16 +546,22 @@ int V1_delete_line_pg(struct Map_info *Map NOPG_UNUSED,
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 int V2_delete_line_pg(struct Map_info *Map NOPG_UNUSED, off_t line NOPG_UNUSED)
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2754,16 +2796,22 @@ int Vect__insert_face_pg(struct Map_info *Map, int area)
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 int delete_face(struct Map_info *Map, int area)
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2821,16 +2869,23 @@ int delete_face(const struct Map_info *Map, int area)
    - isolated edges
 <<<<<<< HEAD
 <<<<<<< HEAD
-   next left  edge: -edge
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
    next left  edge: -edge
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+   next left  edge: -edge
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+   next left  edge: -edge
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
    next left  edge: -edge
@@ -2851,6 +2906,9 @@ int delete_face(const struct Map_info *Map, int area)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2863,16 +2921,23 @@ int delete_face(const struct Map_info *Map, int area)
    \param Map pointer to Map_info struct
 <<<<<<< HEAD
 <<<<<<< HEAD
-   \param line feature id
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
    \param line feature id
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+   \param line feature id
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+   \param line feature id
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
    \param line feature id
@@ -2893,6 +2958,9 @@ int delete_face(const struct Map_info *Map, int area)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3225,12 +3293,15 @@ int set_constraint_to_deferrable(struct Format_info_pg *pg_info,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
    \return pointer to dbDriver on succes
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
    \return pointer to dbDriver on success
 =======
    \return pointer to dbDriver on succes
@@ -3239,6 +3310,9 @@ int set_constraint_to_deferrable(struct Format_info_pg *pg_info,
    \return pointer to dbDriver on succes
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

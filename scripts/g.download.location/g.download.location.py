@@ -124,12 +124,15 @@ def main(options, unused_flags):
             # loose it on the way. (We should use parent directory to get the
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             # full relative path, but the directory name is diffrent now.
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             # full relative path, but the directory name is different now.
 =======
             # full relative path, but the directory name is diffrent now.
@@ -138,6 +141,9 @@ def main(options, unused_flags):
             # full relative path, but the directory name is diffrent now.
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -157,12 +163,15 @@ def main(options, unused_flags):
                 _(
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "The dowloaded file is not a valid GRASS Location."
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                     "The downloaded file is not a valid GRASS Location."
 =======
                     "The dowloaded file is not a valid GRASS Location."
@@ -171,6 +180,9 @@ def main(options, unused_flags):
                     "The dowloaded file is not a valid GRASS Location."
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

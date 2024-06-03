@@ -101,11 +101,14 @@ flake8 --config lib/python/.flake8 lib/python/temporal/register.py
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 :exclamation:
 It is very convenient and recommended to [use pre-commit](./submitting.md#use-pre-commit)
 to do both Black formatting and Flake8 file validation.
@@ -115,6 +118,9 @@ to do both Black formatting and Flake8 file validation.
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -125,12 +131,15 @@ The correct editor settings for Python indentation
 - [​Geany](https://www.geany.org/) editor:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   - Edit > Preferences > Editor > Intentation tab > Type: Spaces
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
   - Edit > Preferences > Editor > Indentation tab > Type: Spaces
 =======
   - Edit > Preferences > Editor > Intentation tab > Type: Spaces
@@ -139,6 +148,9 @@ The correct editor settings for Python indentation
   - Edit > Preferences > Editor > Intentation tab > Type: Spaces
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -336,12 +348,15 @@ output. This is reserved for standard module output if it has one.
 To enable translating of messages to other languages (than English), use full
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 strings, e.g.
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 strings, e.g. (good example):
 =======
 strings, e.g.
@@ -350,6 +365,9 @@ strings, e.g.
 strings, e.g.
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -363,12 +381,15 @@ else:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 instead of constructing string from several parts:
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 instead of constructing string from several parts (bad example):
 =======
 instead of constructing string from several parts:
@@ -377,6 +398,9 @@ instead of constructing string from several parts:
 instead of constructing string from several parts:
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

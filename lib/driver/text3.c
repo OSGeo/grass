@@ -38,12 +38,15 @@ static void set_matrix(FT_Matrix *);
 static void draw_text(FT_Face, FT_Vector *, FT_Matrix *, const unsigned char *,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                       int, int, struct rectangle *);
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                       int, struct rectangle *);
 =======
                       int, int, struct rectangle *);
@@ -52,6 +55,9 @@ static void draw_text(FT_Face, FT_Vector *, FT_Matrix *, const unsigned char *,
                       int, int, struct rectangle *);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -192,6 +198,7 @@ static void release_convert_str(unsigned char *out)
 static void draw_text(FT_Face face, FT_Vector *pen, FT_Matrix *matrix,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                       const unsigned char *out, int len, int color,
                       struct rectangle *box)
 =======
@@ -199,6 +206,8 @@ static void draw_text(FT_Face face, FT_Vector *pen, FT_Matrix *matrix,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                       const unsigned char *out, int len, struct rectangle *box)
 =======
                       const unsigned char *out, int len, int color,
@@ -209,6 +218,9 @@ static void draw_text(FT_Face face, FT_Vector *pen, FT_Matrix *matrix,
                       struct rectangle *box)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

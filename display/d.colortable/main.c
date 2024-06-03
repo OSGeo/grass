@@ -255,12 +255,15 @@ int main(int argc, char **argv)
         /* get separate color for each pixel */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* fisrt 5 pixels draw null color */
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         /* first 5 pixels draw null color */
 =======
         /* fisrt 5 pixels draw null color */
@@ -269,6 +272,9 @@ int main(int argc, char **argv)
         /* fisrt 5 pixels draw null color */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

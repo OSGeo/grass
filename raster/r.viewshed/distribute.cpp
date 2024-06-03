@@ -19,12 +19,15 @@
  * line-of-sight that connects their centers does not intersect the
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * terrain. The terrain is NOT viewed as a tesselation of flat cells,
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
  * terrain. The terrain is NOT viewed as a tessellation of flat cells,
 =======
  * terrain. The terrain is NOT viewed as a tesselation of flat cells,
@@ -33,6 +36,9 @@
  * terrain. The terrain is NOT viewed as a tesselation of flat cells,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -522,12 +528,15 @@ unsigned long solve_in_memory(AMI_STREAM<AEvent> *eventList,
                               AMI_STREAM<AEvent> *enterBndEvents,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                               double start_angle, double end_angle,
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                               double start_angle UNUSED,
                               double end_angle UNUSED,
 =======
@@ -537,6 +546,9 @@ unsigned long solve_in_memory(AMI_STREAM<AEvent> *eventList,
                               double start_angle, double end_angle,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

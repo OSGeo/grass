@@ -50,16 +50,23 @@ public:
         static char buf[8];
 <<<<<<< HEAD
 <<<<<<< HEAD
-        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.cclabel);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(buf, sizeof(buf), CCLABEL_FMT, p.cclabel);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.cclabel);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.cclabel);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(buf, sizeof(buf), CCLABEL_FMT, p.cclabel);
@@ -80,6 +87,9 @@ public:
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

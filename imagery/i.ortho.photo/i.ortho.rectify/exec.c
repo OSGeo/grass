@@ -82,12 +82,15 @@ int exec_rectify(struct Ortho_Image_Group *group, int *ref_list,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* Initialze History */
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         /* Initialize History */
 =======
         /* Initialze History */
@@ -96,6 +99,9 @@ int exec_rectify(struct Ortho_Image_Group *group, int *ref_list,
         /* Initialze History */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

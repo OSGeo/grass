@@ -209,11 +209,14 @@ static void append_error(const char *msg)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
    The last item of the list must be NULL.
 
 =======
@@ -221,6 +224,9 @@ static void append_error(const char *msg)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -252,11 +258,14 @@ static void check_exclusive(const struct rule *rule)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
    The last item of the list must be NULL.
 
 =======
@@ -264,6 +273,9 @@ static void check_exclusive(const struct rule *rule)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -298,6 +310,7 @@ static void check_required(const struct rule *rule)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
    If you want all options to be provided use G_option_requires_all()
    function.
    If you want more than one option to be present but not all,
@@ -308,6 +321,8 @@ static void check_required(const struct rule *rule)
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
    The last item of the list must be NULL.
 
    If you want all options to be provided use G_option_requires_all()
@@ -330,6 +345,9 @@ static void check_required(const struct rule *rule)
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -368,6 +386,7 @@ static void check_requires(const struct rule *rule)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
    If it is enough if only one option from a set is present,
    use G_option_requires() function.
 
@@ -378,6 +397,8 @@ static void check_requires(const struct rule *rule)
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
    The last item of the list must be NULL.
 
    If it is enough if only one option from a set is present,
@@ -400,6 +421,9 @@ static void check_requires(const struct rule *rule)
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -434,11 +458,14 @@ static void check_requires_all(const struct rule *rule)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
    The last item of the list must be NULL.
 
 =======
@@ -446,6 +473,9 @@ static void check_requires_all(const struct rule *rule)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -480,11 +510,14 @@ static void check_excludes(const struct rule *rule)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
    The last item of the list must be NULL.
 
 =======
@@ -492,6 +525,9 @@ static void check_excludes(const struct rule *rule)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -632,6 +668,7 @@ void G__describe_option_rules_xml(FILE *fp)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -640,6 +677,10 @@ void G__describe_option_rules_xml(FILE *fp)
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -650,7 +691,10 @@ void G__describe_option_rules_xml(FILE *fp)
         for (j = 0; j < (unsigned int)rule->count; j++) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -677,6 +721,9 @@ void G__describe_option_rules_xml(FILE *fp)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

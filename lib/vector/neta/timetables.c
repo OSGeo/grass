@@ -343,12 +343,15 @@ static neta_heap_data *new_heap_data(int conns, int v)
 void NetA_update_dijkstra(int old_conns, int new_conns, int to, int new_dst,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                           int v, int route, int rows, int update,
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                           int v, int route, int rows UNUSED, int update,
 =======
                           int v, int route, int rows, int update,
@@ -357,6 +360,9 @@ void NetA_update_dijkstra(int old_conns, int new_conns, int to, int new_dst,
                           int v, int route, int rows, int update,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

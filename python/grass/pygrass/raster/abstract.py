@@ -156,17 +156,24 @@ class Info:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    def _get_semantic_label(self):
-        """Get semantic label identifier.
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     def _get_semantic_label(self):
         """Get semantic label identifier.
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    def _get_semantic_label(self):
+        """Get semantic label identifier.
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    def _get_semantic_label(self):
+        """Get semantic label identifier.
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     def _get_semantic_label(self):
         """Get semantic label identifier.
@@ -184,6 +191,9 @@ class Info:
         """Get semantic label identifier.
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -191,6 +201,7 @@ class Info:
         :return str: semantic label (eg. S2_1) or None
         """
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -204,6 +215,11 @@ class Info:
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 =======
+>>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
         semantic_label = libraster.Rast_read_semantic_label(self.name, self.mapset)
         if semantic_label:
@@ -228,7 +244,10 @@ class Info:
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
         bandref = libraster.Rast_read_bandref(self.name, self.mapset)
@@ -263,6 +282,9 @@ class Info:
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

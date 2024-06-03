@@ -275,12 +275,15 @@ int main(int argc, char *argv[])
                  * until g.setproj has been changed to run
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                  * recurively, to allow input of options for
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                  * recursively, to allow input of options for
 =======
                  * recurively, to allow input of options for
@@ -289,6 +292,9 @@ int main(int argc, char *argv[])
                  * recurively, to allow input of options for
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -304,12 +310,15 @@ int main(int argc, char *argv[])
                     if (G_get_spheroid_by_name(spheroid, &aa, &e2, &f)) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                         /* if legal ellips. exist, ask wether or not to change
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                         /* if legal ellips. exist, ask whether or not to change
 =======
                         /* if legal ellips. exist, ask wether or not to change
@@ -318,6 +327,9 @@ int main(int argc, char *argv[])
                         /* if legal ellips. exist, ask wether or not to change
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

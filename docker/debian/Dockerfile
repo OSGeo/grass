@@ -1,11 +1,14 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 FROM debian:stable@sha256:82f8da149d6d567c74564cccd6f355fb5ade42a958e4cde10a1100eaeb24d42e
@@ -16,6 +19,9 @@ FROM debian:stable@sha256:82f8da149d6d567c74564cccd6f355fb5ade42a958e4cde10a1100
 >>>>>>> e77ca8abf8 (r.horizon manual - fix typo (#2794))
 =======
 >>>>>>> 5d3bd35e0a (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 FROM debian:stable@sha256:84725fb1debbf461f54a23030be0bcde8449f2fa4eba8adf857b1a4c707fec8d
@@ -35,6 +41,9 @@ FROM debian:10.1
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -45,8 +54,11 @@ FROM debian:stable
 # apt-get update && apt-get install lsb-release -y && lsb_release -a
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
@@ -54,6 +66,9 @@ FROM debian:stable
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -65,6 +80,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # define versions to be used (PDAL is not available on Debian, so we compile it here)
 # https://github.com/PDAL/PDAL/releases
 ARG PDAL_VERSION=2.4.3
@@ -74,6 +90,9 @@ ARG PDAL_VERSION=2.4.3
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 # define versions to be used (PDAL is not available on Debian, so we compile it here)
 # https://github.com/PDAL/PDAL/releases
@@ -105,6 +124,9 @@ ARG PDAL_VERSION=2.4.3
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -133,12 +155,15 @@ RUN apt-get update && apt-get upgrade -y && \
     libfftw3-dev \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     libfreetype6-dev \
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     libfreetype-dev \
 =======
     libfreetype6-dev \
@@ -147,6 +172,9 @@ RUN apt-get update && apt-get upgrade -y && \
     libfreetype6-dev \
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -158,6 +186,7 @@ RUN apt-get update && apt-get upgrade -y && \
     libnetcdf-dev \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     libncurses5-dev \
     libopenblas-base \
 =======
@@ -165,6 +194,8 @@ RUN apt-get update && apt-get upgrade -y && \
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     libncurses-dev \
 =======
     libncurses5-dev \
@@ -175,6 +206,9 @@ RUN apt-get update && apt-get upgrade -y && \
     libopenblas-base \
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -185,16 +219,23 @@ RUN apt-get update && apt-get upgrade -y && \
     libpq-dev \
 <<<<<<< HEAD
 <<<<<<< HEAD
-    libproj-dev \
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     libproj-dev \
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    libproj-dev \
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    libproj-dev \
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     libproj-dev \
@@ -212,6 +253,9 @@ RUN apt-get update && apt-get upgrade -y && \
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -227,18 +271,26 @@ RUN apt-get update && apt-get upgrade -y && \
     netcdf-bin \
 <<<<<<< HEAD
 <<<<<<< HEAD
-    proj-bin \
-    proj-data \
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     proj-bin \
     proj-data \
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    proj-bin \
+    proj-data \
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    proj-bin \
+    proj-data \
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     proj-bin \
@@ -259,6 +311,9 @@ RUN apt-get update && apt-get upgrade -y && \
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -281,12 +336,15 @@ RUN apt-get update && apt-get upgrade -y && \
     zip \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     zlib1g-dev
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     zlib1g-dev \
     && apt-get clean all && rm -rf /var/lib/apt/lists/*
 =======
@@ -296,6 +354,9 @@ RUN apt-get update && apt-get upgrade -y && \
     zlib1g-dev
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -305,11 +366,14 @@ RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen && locale-gen
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -354,6 +418,9 @@ RUN wget -q https://github.com/hobu/laz-perf/archive/${LAZ_PERF_VERSION}.tar.gz 
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -375,16 +442,23 @@ RUN mkdir vdatum && \
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-## compile and install PDAL (not available on Debian/Ubuntu) with laz-perf enabled
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 ## compile and install PDAL (not available on Debian/Ubuntu) with laz-perf enabled
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+## compile and install PDAL (not available on Debian/Ubuntu) with laz-perf enabled
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+## compile and install PDAL (not available on Debian/Ubuntu) with laz-perf enabled
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 ## compile and install PDAL (not available on Debian/Ubuntu) with laz-perf enabled
@@ -405,6 +479,9 @@ RUN mkdir vdatum && \
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -432,6 +509,7 @@ RUN wget -q \
       -DBUILD_PLUGIN_ICEBRIDGE=ON \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -440,6 +518,10 @@ RUN wget -q \
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -449,7 +531,10 @@ RUN wget -q \
       -DWITH_LASZIP=OFF \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -479,6 +564,9 @@ RUN wget -q \
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -493,18 +581,26 @@ COPY . /src/grass_build/
 WORKDIR /src/grass_build
 <<<<<<< HEAD
 <<<<<<< HEAD
-# Cleanup potentially leftover GISRC file with wrong path to "demolocation"
-RUN rm -f /src/grass_build/dist.*/demolocation/.grassrc*
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 # Cleanup potentially leftover GISRC file with wrong path to "demolocation"
 RUN rm -f /src/grass_build/dist.*/demolocation/.grassrc*
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+# Cleanup potentially leftover GISRC file with wrong path to "demolocation"
+RUN rm -f /src/grass_build/dist.*/demolocation/.grassrc*
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+# Cleanup potentially leftover GISRC file with wrong path to "demolocation"
+RUN rm -f /src/grass_build/dist.*/demolocation/.grassrc*
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 # Cleanup potentially leftover GISRC file with wrong path to "demolocation"
@@ -525,6 +621,9 @@ RUN rm -f /src/grass_build/dist.*/demolocation/.grassrc*
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -582,6 +681,7 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK 1
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Create generic GRASS GIS lib name regardless of version number
 RUN ln -sf /usr/local/grass83 /usr/local/grass
 =======
@@ -589,6 +689,8 @@ RUN ln -sf /usr/local/grass83 /usr/local/grass
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD:docker/debian/Dockerfile
 <<<<<<< HEAD:docker/debian/Dockerfile
 # https://proj.org/usage/environmentvars.html#envvar-PROJ_NETWORK
@@ -625,6 +727,9 @@ RUN ln -sf /usr/local/grass83 /usr/local/grass
 RUN ln -sf /usr/local/grass83 /usr/local/grass
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -644,6 +749,7 @@ WORKDIR /scripts
 # install external GRASS GIS session Python API
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 RUN pip3 install grass-session
 
 =======
@@ -657,6 +763,14 @@ RUN pip3 install grass-session
 
 =======
 <<<<<<< HEAD
+RUN pip3 install grass-session --break-system-packages
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+RUN pip3 install grass-session
+
+>>>>>>> osgeo-main
+=======
 RUN pip3 install grass-session --break-system-packages
 =======
 =======
@@ -679,6 +793,9 @@ RUN grass --tmp-location EPSG:4326 --exec g.extension extension=r.in.pdal
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -695,6 +812,7 @@ COPY docker/testdata/test_grass_session.py .
 ## just scan the LAZ file
 # Not yet ready for GRASS GIS 8:
 #RUN /usr/bin/python3 /scripts/test_grass_session.py
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 # test LAZ file
@@ -714,6 +832,18 @@ RUN grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" out
 =======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD:docker/debian/Dockerfile
+<<<<<<< HEAD:docker/debian/Dockerfile
+=======
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+# test LAZ file
+RUN grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -747,6 +877,9 @@ RUN grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" out
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

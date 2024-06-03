@@ -22,12 +22,15 @@ void write_into_legend_file(const char *legfile, const char *icon,
                             struct color_rgb *colors, int default_width,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                             int *frequencies, const char *topo)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                             int *frequencies, int c_type, const char *topo)
 =======
                             int *frequencies, const char *topo)
@@ -36,6 +39,9 @@ void write_into_legend_file(const char *legfile, const char *icon,
                             int *frequencies, const char *topo)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -58,16 +64,22 @@ void write_into_legend_file(const char *legfile, const char *icon,
     if (stats_min > breakpoints[0]) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         fprintf(fd, "< %.*f|", n_places, breakpoints[0]);
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -98,11 +110,14 @@ void write_into_legend_file(const char *legfile, const char *icon,
     fprintf(fd, "%s|%d|ps|%d:%d:%d|%d:%d:%d|%d|%s|%d\n", icon, size,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             colors[0].r, colors[0].g, colors[0].b, bcolor.r, bcolor.g, bcolor.b,
             default_width, topo, frequencies[0]);
     /* Middle lines */
@@ -126,6 +141,9 @@ void write_into_legend_file(const char *legfile, const char *icon,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

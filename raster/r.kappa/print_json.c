@@ -6,12 +6,15 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void print_json()
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 void print_json(void)
 =======
 void print_json()
@@ -20,6 +23,9 @@ void print_json()
 void print_json()
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -137,12 +143,15 @@ void print_json()
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     fprintf(fd, "]\n");
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     fprintf(fd, "],\n");
     if (metrics->mcc == na_value)
         fprintf(fd, "    \"mcc\": null\n");
@@ -155,6 +164,9 @@ void print_json()
     fprintf(fd, "]\n");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

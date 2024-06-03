@@ -331,15 +331,21 @@ int Rast_read_rstats(const char *name, const char *mapset,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    if (nbytes < 1 || (unsigned char)nbytes > sizeof(grass_int64)) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if (nbytes < 1 || (unsigned char)nbytes > sizeof(grass_int64)) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (nbytes < 1 || (unsigned char)nbytes > sizeof(grass_int64)) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    if (nbytes < 1 || (unsigned char)nbytes > sizeof(grass_int64)) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     if (nbytes < 1 || (unsigned char)nbytes > sizeof(grass_int64)) {
 =======
@@ -359,6 +365,9 @@ int Rast_read_rstats(const char *name, const char *mapset,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

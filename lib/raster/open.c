@@ -468,16 +468,23 @@ void Rast_set_cell_format(int n)
         R__.nbytes = 1;
 <<<<<<< HEAD
 <<<<<<< HEAD
-    if (R__.nbytes > (int)sizeof(CELL))
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if (R__.nbytes > (int)sizeof(CELL))
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (R__.nbytes > (int)sizeof(CELL))
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (R__.nbytes > (int)sizeof(CELL))
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     if (R__.nbytes > (int)sizeof(CELL))
@@ -498,6 +505,9 @@ void Rast_set_cell_format(int n)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

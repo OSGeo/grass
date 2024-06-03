@@ -18,12 +18,15 @@ int dareatheme(struct Map_info *Map, struct cat_list *Clist,
                const struct color_rgb *colors, const struct color_rgb *bcolor,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                int chcat, struct Cell_head *window, int default_width)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                int chcat, struct Cell_head *window, int default_width UNUSED)
 =======
                int chcat, struct Cell_head *window, int default_width)
@@ -32,6 +35,9 @@ int dareatheme(struct Map_info *Map, struct cat_list *Clist,
                int chcat, struct Cell_head *window, int default_width)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

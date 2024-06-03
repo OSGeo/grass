@@ -152,12 +152,15 @@ int Vedit_extend_lines(struct Map_info *Map, struct ilist *List, int nodes,
 int extend_lines(struct Map_info *Map, int first, int line_from, int line_to,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                  int parallel, double thresh, struct ilist *List)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                  int parallel, double thresh, struct ilist *List UNUSED)
 =======
                  int parallel, double thresh, struct ilist *List)
@@ -166,6 +169,9 @@ int extend_lines(struct Map_info *Map, int first, int line_from, int line_to,
                  int parallel, double thresh, struct ilist *List)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

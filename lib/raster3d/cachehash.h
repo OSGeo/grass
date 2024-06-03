@@ -1,15 +1,22 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
-extern void *Rast3d_cache_hash_new(int /* nofElts */);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 extern void *Rast3d_cache_hash_new(int /* nofElts */);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+extern void *Rast3d_cache_hash_new(int /* nofElts */);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+extern void *Rast3d_cache_hash_new(int /* nofElts */);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 extern void *Rast3d_cache_hash_new(int /* nofElts */);
@@ -30,6 +37,9 @@ extern void *Rast3d_cache_hash_new(int /* nofElts */);
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

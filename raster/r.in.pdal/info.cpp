@@ -2,6 +2,7 @@
  * r.in.pdal Functions printing out various information on input LAS files
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  *
 =======
 <<<<<<< HEAD
@@ -15,6 +16,11 @@
  *
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+ *
+=======
+>>>>>>> osgeo-main
  *  
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -24,6 +30,9 @@
  *
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -38,8 +47,13 @@
 #include "info.h"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -55,6 +69,7 @@
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -74,6 +89,8 @@
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 
 =======
@@ -82,6 +99,9 @@
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -93,16 +113,23 @@ void get_extent(struct StringList *infiles, double *min_x, double *max_x,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    *min_x = *max_x = *min_y = *max_y = *min_z = *max_z = NAN;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     *min_x = *max_x = *min_y = *max_y = *min_z = *max_z = NAN;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    *min_x = *max_x = *min_y = *max_y = *min_z = *max_z = NAN;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    *min_x = *max_x = *min_y = *max_y = *min_z = *max_z = NAN;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     *min_x = *max_x = *min_y = *max_y = *min_z = *max_z = NAN;
@@ -123,6 +150,9 @@ void get_extent(struct StringList *infiles, double *min_x, double *max_x,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -143,6 +173,7 @@ void get_extent(struct StringList *infiles, double *min_x, double *max_x,
         las_reader.prepare(table);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         const pdal::LasHeader &las_header = las_reader.header();
 =======
 <<<<<<< HEAD
@@ -156,6 +187,11 @@ void get_extent(struct StringList *infiles, double *min_x, double *max_x,
         const pdal::LasHeader &las_header = las_reader.header();
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+        const pdal::LasHeader &las_header = las_reader.header();
+=======
+>>>>>>> osgeo-main
         pdal::LasHeader las_header = las_reader.header();
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -165,6 +201,9 @@ void get_extent(struct StringList *infiles, double *min_x, double *max_x,
         const pdal::LasHeader &las_header = las_reader.header();
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -197,11 +236,14 @@ void get_extent(struct StringList *infiles, double *min_x, double *max_x,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 
@@ -211,6 +253,9 @@ void get_extent(struct StringList *infiles, double *min_x, double *max_x,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -221,6 +266,7 @@ void print_extent(struct StringList *infiles)
     get_extent(infiles, &min_x, &max_x, &min_y, &max_y, &min_z, &max_z);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -233,6 +279,11 @@ void print_extent(struct StringList *infiles)
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     fprintf(stdout, "n=%f s=%f e=%f w=%f b=%f t=%f\n", max_y, min_y, max_x,
             min_x, min_z, max_z);
 }
@@ -241,7 +292,10 @@ void print_extent(struct StringList *infiles)
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     fprintf(stdout, "n=%f s=%f e=%f w=%f b=%f t=%f\n",
@@ -259,6 +313,9 @@ void print_extent(struct StringList *infiles)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -269,17 +326,23 @@ void print_lasinfo(struct StringList *infiles)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -291,10 +354,13 @@ void print_lasinfo(struct StringList *infiles)
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
     std::cout << std::endl << "Using PDAL library version '" <<
         pdal::Config::fullVersionString() << "'" << std::endl << std::endl;
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
@@ -303,6 +369,9 @@ void print_lasinfo(struct StringList *infiles)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -323,6 +392,7 @@ void print_lasinfo(struct StringList *infiles)
         las_reader.prepare(table);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -334,6 +404,11 @@ void print_lasinfo(struct StringList *infiles)
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 =======
+>>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
         const pdal::LasHeader &h = las_reader.header();
         pdal::PointLayoutPtr point_layout = table.layout();
@@ -377,7 +452,10 @@ void print_lasinfo(struct StringList *infiles)
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
         pdal::LasHeader las_header = las_reader.header();
@@ -429,6 +507,9 @@ void print_lasinfo(struct StringList *infiles)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

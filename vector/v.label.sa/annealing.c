@@ -50,12 +50,15 @@ static unsigned int overlaps_removed = 0;
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void simulate_annealing(label_t *labels, int n_labels, struct params *p)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 void simulate_annealing(label_t *labels, int n_labels, struct params *p UNUSED)
 =======
 void simulate_annealing(label_t *labels, int n_labels, struct params *p)
@@ -64,6 +67,9 @@ void simulate_annealing(label_t *labels, int n_labels, struct params *p)
 void simulate_annealing(label_t *labels, int n_labels, struct params *p)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -116,11 +122,14 @@ void simulate_annealing(label_t *labels, int n_labels, struct params *p)
                 consec_successes++;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -137,6 +146,9 @@ void simulate_annealing(label_t *labels, int n_labels, struct params *p)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -155,18 +167,26 @@ void simulate_annealing(label_t *labels, int n_labels, struct params *p)
                     consec_successes++;
 <<<<<<< HEAD
 <<<<<<< HEAD
-                }
-                else {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                 }
                 else {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                }
+                else {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                }
+                else {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                 }
@@ -197,6 +217,9 @@ void simulate_annealing(label_t *labels, int n_labels, struct params *p)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -206,16 +229,23 @@ void simulate_annealing(label_t *labels, int n_labels, struct params *p)
             /* decrease immediately */
 <<<<<<< HEAD
 <<<<<<< HEAD
-            if (consec_successes > (unsigned int)(5 * n_labels)) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             if (consec_successes > (unsigned int)(5 * n_labels)) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (consec_successes > (unsigned int)(5 * n_labels)) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (consec_successes > (unsigned int)(5 * n_labels)) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
             if (consec_successes > (unsigned int)(5 * n_labels)) {
@@ -236,6 +266,9 @@ void simulate_annealing(label_t *labels, int n_labels, struct params *p)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

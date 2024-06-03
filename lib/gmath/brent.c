@@ -46,16 +46,23 @@ typedef struct {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-static int brent(void *vstate, double (*f)(double), double *x_minimum,
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 static int brent(void *vstate, double (*f)(double), double *x_minimum,
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+static int brent(void *vstate, double (*f)(double), double *x_minimum,
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+static int brent(void *vstate, double (*f)(double), double *x_minimum,
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 static int brent(void *vstate, double (*f)(double), double *x_minimum,
@@ -76,6 +83,9 @@ static int brent(void *vstate, double (*f)(double), double *x_minimum,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -206,18 +216,26 @@ static int brent(void *vstate, double (*f)(double), double *x_minimum,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-double brent_iterate(double (*f)(double), double x_lower, double x_upper,
-                     int maxiter)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 double brent_iterate(double (*f)(double), double x_lower, double x_upper,
                      int maxiter)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+double brent_iterate(double (*f)(double), double x_lower, double x_upper,
+                     int maxiter)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+double brent_iterate(double (*f)(double), double x_lower, double x_upper,
+                     int maxiter)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 double brent_iterate(double (*f)(double), double x_lower, double x_upper,
@@ -241,6 +259,9 @@ double brent_iterate(double (*f)(double), double x_lower, double x_upper,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

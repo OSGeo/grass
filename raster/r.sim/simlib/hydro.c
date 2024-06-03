@@ -122,16 +122,23 @@ void main_loop(void)
     int i, ii, l, k;
 <<<<<<< HEAD
 <<<<<<< HEAD
-    /* int icoub, nmult */;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     /* int icoub, nmult */;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    /* int icoub, nmult */;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    /* int icoub, nmult */;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     /* int icoub, nmult */;
@@ -152,6 +159,9 @@ void main_loop(void)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -177,15 +187,21 @@ void main_loop(void)
     nblock = 1;
 <<<<<<< HEAD
 <<<<<<< HEAD
-    /* icoub = 0; */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     /* icoub = 0; */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    /* icoub = 0; */
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    /* icoub = 0; */
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     /* icoub = 0; */
 =======
@@ -205,6 +221,9 @@ void main_loop(void)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -225,16 +244,23 @@ void main_loop(void)
     for (iblock = 1; iblock <= nblock; iblock++) {
 <<<<<<< HEAD
 <<<<<<< HEAD
-        /* ++icoub; */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         /* ++icoub; */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        /* ++icoub; */
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        /* ++icoub; */
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         /* ++icoub; */
@@ -255,6 +281,9 @@ void main_loop(void)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -407,12 +436,15 @@ void main_loop(void)
                         if (zz[k][l] != UNDEF) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                             if (infil != NULL) { /* infiltration part */
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                             if (inf[k][l] != UNDEF) { /* infiltration part */
 =======
                             if (infil != NULL) { /* infiltration part */
@@ -421,6 +453,9 @@ void main_loop(void)
                             if (infil != NULL) { /* infiltration part */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

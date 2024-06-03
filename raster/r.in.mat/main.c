@@ -214,6 +214,7 @@ int main(int argc, char *argv[])
             if (data_format == 5) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -222,6 +223,10 @@ int main(int argc, char *argv[])
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -233,7 +238,10 @@ int main(int argc, char *argv[])
                     (size_t)ncols)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -266,6 +274,9 @@ int main(int argc, char *argv[])
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -325,18 +336,26 @@ int main(int argc, char *argv[])
             if (data_format == 5) {
 <<<<<<< HEAD
 <<<<<<< HEAD
-                if (fread(&map_title, sizeof(char), ncols, fp1) !=
-                    (size_t)ncols)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                 if (fread(&map_title, sizeof(char), ncols, fp1) !=
                     (size_t)ncols)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                if (fread(&map_title, sizeof(char), ncols, fp1) !=
+                    (size_t)ncols)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                if (fread(&map_title, sizeof(char), ncols, fp1) !=
+                    (size_t)ncols)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                 if (fread(&map_title, sizeof(char), ncols, fp1) !=
@@ -360,6 +379,9 @@ int main(int argc, char *argv[])
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -369,16 +391,23 @@ int main(int argc, char *argv[])
                 if (fread(&map_name_d, sizeof(double), ncols, fp1) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
-                    (size_t)ncols) /* note reusing variable */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                     (size_t)ncols) /* note reusing variable */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    (size_t)ncols) /* note reusing variable */
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    (size_t)ncols) /* note reusing variable */
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                     (size_t)ncols) /* note reusing variable */
@@ -399,6 +428,9 @@ int main(int argc, char *argv[])
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -433,16 +465,23 @@ int main(int argc, char *argv[])
                 if (fread(array_data, sizeof(double), (size_t)mrows * ncols,
 <<<<<<< HEAD
 <<<<<<< HEAD
-                          fp1) != (size_t)(mrows * ncols))
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                           fp1) != (size_t)(mrows * ncols))
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                          fp1) != (size_t)(mrows * ncols))
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                          fp1) != (size_t)(mrows * ncols))
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                           fp1) != (size_t)(mrows * ncols))
@@ -463,6 +502,9 @@ int main(int argc, char *argv[])
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -476,16 +518,23 @@ int main(int argc, char *argv[])
                 if (fread(array_data, sizeof(float), (size_t)mrows * ncols,
 <<<<<<< HEAD
 <<<<<<< HEAD
-                          fp1) != (size_t)(mrows * ncols))
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                           fp1) != (size_t)(mrows * ncols))
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                          fp1) != (size_t)(mrows * ncols))
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                          fp1) != (size_t)(mrows * ncols))
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                           fp1) != (size_t)(mrows * ncols))
@@ -506,6 +555,9 @@ int main(int argc, char *argv[])
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -519,16 +571,23 @@ int main(int argc, char *argv[])
                 if (fread(array_data, sizeof(int), (size_t)mrows * ncols,
 <<<<<<< HEAD
 <<<<<<< HEAD
-                          fp1) != (size_t)(mrows * ncols))
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                           fp1) != (size_t)(mrows * ncols))
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                          fp1) != (size_t)(mrows * ncols))
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                          fp1) != (size_t)(mrows * ncols))
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                           fp1) != (size_t)(mrows * ncols))
@@ -549,6 +608,9 @@ int main(int argc, char *argv[])
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

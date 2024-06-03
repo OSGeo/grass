@@ -2,17 +2,23 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #include <stdio.h>
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -412,6 +418,7 @@ int mean_shift(struct globals *globals)
         G_percent(1, 1, 1);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_message(_("Changes > threshold: %" PRI_LONG ", largest change: %g"),
                   n_changes, sqrt(maxdiff2));
 =======
@@ -419,6 +426,8 @@ int mean_shift(struct globals *globals)
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         char buf[100];
         snprintf(buf, sizeof(buf), "%" PRI_LONG, n_changes);
         G_message(_("Changes > threshold: %s, largest change: %g"), buf,
@@ -432,6 +441,9 @@ int mean_shift(struct globals *globals)
                   n_changes, sqrt(maxdiff2));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

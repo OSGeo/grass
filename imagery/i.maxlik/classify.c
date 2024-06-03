@@ -45,11 +45,14 @@ int classify(CELL *class, CELL *reject, int ncols)
                The test only works if  the  covariance  matrix  is  non-negative
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                definite (sometimes  called positive semi-definite), and this is
                a requirement of the maximum-likelihood estimator.  This
                assumption is  theoretically  true  for random samples of
@@ -63,6 +66,9 @@ int classify(CELL *class, CELL *reject, int ncols)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -77,8 +83,14 @@ int classify(CELL *class, CELL *reject, int ncols)
                also have non-negative determinants.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

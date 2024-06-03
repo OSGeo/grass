@@ -112,17 +112,24 @@ int db_set_default_connection(void)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-        sprintf(buf, "%s/%s/dbf", G_location_path(), G_mapset());
-        G_make_mapset_object_group("dbf");
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         sprintf(buf, "%s/%s/dbf", G_location_path(), G_mapset());
         G_make_mapset_object_group("dbf");
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        sprintf(buf, "%s/%s/dbf", G_location_path(), G_mapset());
+        G_make_mapset_object_group("dbf");
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+        sprintf(buf, "%s/%s/dbf", G_location_path(), G_mapset());
+        G_make_mapset_object_group("dbf");
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
         sprintf(buf, "%s/%s/dbf", G_location_path(), G_mapset());
         G_make_mapset_object_group("dbf");
@@ -140,6 +147,9 @@ int db_set_default_connection(void)
         G_make_mapset_object_group("dbf");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -149,17 +159,23 @@ int db_set_default_connection(void)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -185,10 +201,13 @@ int db_set_default_connection(void)
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 	connection.driverName = "sqlite";
 	/*
 	 * TODO: Use one DB for entire mapset (LFS problems?)
@@ -213,6 +232,9 @@ int db_set_default_connection(void)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

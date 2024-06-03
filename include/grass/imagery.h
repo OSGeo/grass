@@ -46,17 +46,23 @@ struct Control_Points {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -71,10 +77,13 @@ struct One_Sig {
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 struct One_Sig
 {
     char desc[100];     /* name of target class */
@@ -89,6 +98,9 @@ struct One_Sig
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -98,17 +110,23 @@ struct One_Sig
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -122,10 +140,13 @@ struct Signature {
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 struct Signature
 {
     int nbands;         /* band (imagery group member) count */
@@ -138,6 +159,9 @@ struct Signature
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -163,8 +187,12 @@ struct ClassData {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 struct ClassSig {
@@ -178,6 +206,7 @@ struct ClassSig {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 struct ClassSig {
     long classnum; /* c_cat */
     char *title;   /* from Rast_get_c_cat */
@@ -185,6 +214,8 @@ struct ClassSig {
     int type;        /* always is SIGNATURE_TYPE_MIXED ? */
     int nsubclasses; /* SubSig item count */
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 struct ClassSig
@@ -212,6 +243,9 @@ struct ClassSig {
     int nsubclasses; /* SubSig item count */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -223,17 +257,24 @@ struct SigSet {
     int nbands;
 <<<<<<< HEAD
 <<<<<<< HEAD
-    char **semantic_labels; /* list of semantic labels [nbands]char* */
-    int nclasses;           /* ClassSig item count */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     char **semantic_labels; /* list of semantic labels [nbands]char* */
     int nclasses;           /* ClassSig item count */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    char **semantic_labels; /* list of semantic labels [nbands]char* */
+    int nclasses;           /* ClassSig item count */
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    char **semantic_labels; /* list of semantic labels [nbands]char* */
+    int nclasses;           /* ClassSig item count */
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     char **semantic_labels; /* list of semantic labels [nbands]char* */
     int nclasses;           /* ClassSig item count */
@@ -251,6 +292,9 @@ struct SigSet {
     int nclasses;           /* ClassSig item count */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -351,6 +395,7 @@ struct scdScattData {
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef enum {
     I_SIGFILE_TYPE_SIG,    /*! Signature files used by i.maxlik */
     I_SIGFILE_TYPE_SIGSET, /*! Signature files used by i.smap */
@@ -359,6 +404,8 @@ typedef enum {
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 typedef enum {
     I_SIGFILE_TYPE_SIG,    /*! Signature files used by i.maxlik */
@@ -381,6 +428,9 @@ typedef enum {
     I_SIGFILE_TYPE_SIGSET, /*! Signature files used by i.smap */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -393,11 +443,14 @@ typedef enum {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 
 #define SIGNATURE_TYPE_MIXED 1 /* Unused? */
@@ -409,6 +462,9 @@ typedef enum {
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

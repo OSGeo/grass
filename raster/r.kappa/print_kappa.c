@@ -18,6 +18,7 @@ void print_kappa(void)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     /* print out the comission and omission accuracy, and conditional kappa */
     fprintf(fd, "\nCats\t%% Comission\t%% Omission\tEstimated Kappa\n");
 =======
@@ -25,6 +26,8 @@ void print_kappa(void)
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     /* print out the commission and omission accuracy, and conditional kappa */
     fprintf(fd, "\nCats\t%% Commission\t%% Omission\tEstimated Kappa\n");
 =======
@@ -36,6 +39,9 @@ void print_kappa(void)
     fprintf(fd, "\nCats\t%% Comission\t%% Omission\tEstimated Kappa\n");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -57,12 +63,15 @@ void print_kappa(void)
     fprintf(fd, "\n");
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     fprintf(fd, "Kappa\t\tKappa Variance\n");
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     fprintf(fd, "Kappa\t\tKappa Variance\tMCC\n");
 =======
     fprintf(fd, "Kappa\t\tKappa Variance\n");
@@ -71,6 +80,9 @@ void print_kappa(void)
     fprintf(fd, "Kappa\t\tKappa Variance\n");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -81,11 +93,14 @@ void print_kappa(void)
     if (metrics->kappa_variance == na_value)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         fprintf(fd, "\tNA");
     else
         fprintf(fd, "\t%f", metrics->kappa_variance);
@@ -97,6 +112,9 @@ void print_kappa(void)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -106,8 +124,14 @@ void print_kappa(void)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

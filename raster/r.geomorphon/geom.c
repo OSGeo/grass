@@ -221,16 +221,23 @@ float variance(float *elevation, int pattern_size)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-void radial2cartesian(PATTERN *pattern)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 void radial2cartesian(PATTERN *pattern)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+void radial2cartesian(PATTERN *pattern)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+void radial2cartesian(PATTERN *pattern)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 void radial2cartesian(PATTERN *pattern)
@@ -251,6 +258,9 @@ void radial2cartesian(PATTERN *pattern)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

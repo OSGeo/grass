@@ -378,16 +378,23 @@ int main(int argc, char **argv)
             if (write(val_fd, map_buf, ncols * sizeof(DCELL)) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
-                ncols * (int)sizeof(DCELL)) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                 ncols * (int)sizeof(DCELL)) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                ncols * (int)sizeof(DCELL)) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                ncols * (int)sizeof(DCELL)) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                 ncols * (int)sizeof(DCELL)) {
@@ -408,6 +415,9 @@ int main(int argc, char **argv)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -483,16 +493,23 @@ int main(int argc, char **argv)
             if (write(dir_fd, dir_buf, ncols * sizeof(CELL)) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
-                ncols * (int)sizeof(CELL)) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                 ncols * (int)sizeof(CELL)) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                ncols * (int)sizeof(CELL)) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                ncols * (int)sizeof(CELL)) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                 ncols * (int)sizeof(CELL)) {
@@ -513,6 +530,9 @@ int main(int argc, char **argv)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -534,16 +554,23 @@ int main(int argc, char **argv)
             if (write(dir_fd, dir_buf, ncols * sizeof(DCELL)) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
-                ncols * (int)sizeof(DCELL)) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                 ncols * (int)sizeof(DCELL)) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                ncols * (int)sizeof(DCELL)) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                ncols * (int)sizeof(DCELL)) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                 ncols * (int)sizeof(DCELL)) {
@@ -564,6 +591,9 @@ int main(int argc, char **argv)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -847,16 +877,23 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
                 if (read(val_fd, val_buf, window->cols * sizeof(DCELL)) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
-                    window->cols * (int)sizeof(DCELL)) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                     window->cols * (int)sizeof(DCELL)) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    window->cols * (int)sizeof(DCELL)) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    window->cols * (int)sizeof(DCELL)) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                     window->cols * (int)sizeof(DCELL)) {
@@ -877,6 +914,9 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -912,16 +952,23 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
                 if (read(dir_fd, dir_buf, window->cols * sizeof(CELL)) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
-                    window->cols * (int)sizeof(CELL)) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                     window->cols * (int)sizeof(CELL)) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    window->cols * (int)sizeof(CELL)) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    window->cols * (int)sizeof(CELL)) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                     window->cols * (int)sizeof(CELL)) {
@@ -942,6 +989,9 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1075,16 +1125,23 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
                                      window->cols * sizeof(DCELL)) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
-                                window->cols * (int)sizeof(DCELL)) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                                 window->cols * (int)sizeof(DCELL)) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                                window->cols * (int)sizeof(DCELL)) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                                window->cols * (int)sizeof(DCELL)) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                                 window->cols * (int)sizeof(DCELL)) {
@@ -1105,6 +1162,9 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1220,16 +1280,23 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
                 if (read(val_fd, val_buf, window->cols * sizeof(DCELL)) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
-                    window->cols * (int)sizeof(DCELL)) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                     window->cols * (int)sizeof(DCELL)) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    window->cols * (int)sizeof(DCELL)) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    window->cols * (int)sizeof(DCELL)) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                     window->cols * (int)sizeof(DCELL)) {
@@ -1250,6 +1317,9 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1280,16 +1350,23 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
             if (read(dir_fd, dir_buf, window->cols * sizeof(DCELL)) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
-                window->cols * (int)sizeof(DCELL)) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                 window->cols * (int)sizeof(DCELL)) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                window->cols * (int)sizeof(DCELL)) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                window->cols * (int)sizeof(DCELL)) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                 window->cols * (int)sizeof(DCELL)) {
@@ -1310,6 +1387,9 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1413,16 +1493,23 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
                                  window->cols * sizeof(DCELL)) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
-                            window->cols * (int)sizeof(DCELL)) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                             window->cols * (int)sizeof(DCELL)) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                            window->cols * (int)sizeof(DCELL)) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                            window->cols * (int)sizeof(DCELL)) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                             window->cols * (int)sizeof(DCELL)) {
@@ -1443,6 +1530,9 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

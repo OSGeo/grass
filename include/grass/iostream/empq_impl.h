@@ -165,8 +165,13 @@ em_pqueue<T, Key>::em_pqueue(long pq_sz, long buf_sz, unsigned short nb_buf,
     char str[200];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -179,10 +184,13 @@ em_pqueue<T, Key>::em_pqueue(long pq_sz, long buf_sz, unsigned short nb_buf,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     snprintf(str, sizeof(str),
              "em_pqueue: allocating array of %ld buff pointers\n",
              (long)max_nbuf);
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     sprintf(str, "em_pqueue: allocating array of %ld buff pointers\n",
@@ -206,6 +214,9 @@ em_pqueue<T, Key>::em_pqueue(long pq_sz, long buf_sz, unsigned short nb_buf,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -257,12 +268,15 @@ em_pqueue<T, Key>::em_pqueue(long pq_sz, long buf_sz, unsigned short nb_buf,
     if (buf_arity * sz_stream > mm_avail) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         cout << "sorry - empq excedes memory limits\n";
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         cout << "sorry - empq exceeds memory limits\n";
 =======
         cout << "sorry - empq excedes memory limits\n";
@@ -271,6 +285,9 @@ em_pqueue<T, Key>::em_pqueue(long pq_sz, long buf_sz, unsigned short nb_buf,
         cout << "sorry - empq excedes memory limits\n";
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -381,8 +398,13 @@ em_pqueue<T, Key>::em_pqueue()
     char str[200];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -395,10 +417,13 @@ em_pqueue<T, Key>::em_pqueue()
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     snprintf(str, sizeof(str),
              "em_pqueue: allocating array of %ld buff pointers\n",
              (long)max_nbuf);
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     sprintf(str, "em_pqueue: allocating array of %ld buff pointers\n",
@@ -422,6 +447,9 @@ em_pqueue<T, Key>::em_pqueue()
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -553,8 +581,13 @@ em_pqueue<T, Key>::em_pqueue(MinMaxHeap<T> *im, AMI_STREAM<T> *amis)
     char str[200];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -567,10 +600,13 @@ em_pqueue<T, Key>::em_pqueue(MinMaxHeap<T> *im, AMI_STREAM<T> *amis)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     snprintf(str, sizeof(str),
              "em_pqueue: allocating array of %ld buff pointers\n",
              (long)max_nbuf);
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     sprintf(str, "em_pqueue: allocating array of %ld buff pointers\n",
@@ -594,6 +630,9 @@ em_pqueue<T, Key>::em_pqueue(MinMaxHeap<T> *im, AMI_STREAM<T> *amis)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -746,8 +785,13 @@ bool em_pqueue<T, Key>::fillpq()
         char str[200];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -760,10 +804,13 @@ bool em_pqueue<T, Key>::fillpq()
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         snprintf(str, sizeof(str),
                  "em_pqueue::fillpq: allocate array of %hd AMI_STREAMs\n",
                  crt_buf);
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
         sprintf(str, "em_pqueue::fillpq: allocate array of %hd AMI_STREAMs\n",
@@ -787,6 +834,9 @@ bool em_pqueue<T, Key>::fillpq()
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1374,18 +1424,26 @@ void em_pqueue<T, Key>::empty_buff(unsigned short i)
         char str[200];
 <<<<<<< HEAD
 <<<<<<< HEAD
-        snprintf(str, sizeof(str),
-                 "em_pqueue::empty_buff( %hd ) allocate new em_buffer\n", i);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(str, sizeof(str),
                  "em_pqueue::empty_buff( %hd ) allocate new em_buffer\n", i);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(str, sizeof(str),
+                 "em_pqueue::empty_buff( %hd ) allocate new em_buffer\n", i);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(str, sizeof(str),
+                 "em_pqueue::empty_buff( %hd ) allocate new em_buffer\n", i);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(str, sizeof(str),
@@ -1412,6 +1470,9 @@ void em_pqueue<T, Key>::empty_buff(unsigned short i)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1590,12 +1651,15 @@ AMI_err em_pqueue<T, Key>::merge_buffer(em_buffer<T, Key> *buf,
     // DESTRUCTOR OF MERGEHEAP (CALLED AUUTOMATICALLY ON FUNCTION EXIT)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     // IF I DELETE KEYS EXPLICITELY, THEY WILL BE DELETED AGAIN BY
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     // IF I DELETE KEYS EXPLICITLY, THEY WILL BE DELETED AGAIN BY
 =======
     // IF I DELETE KEYS EXPLICITELY, THEY WILL BE DELETED AGAIN BY
@@ -1604,6 +1668,9 @@ AMI_err em_pqueue<T, Key>::merge_buffer(em_buffer<T, Key> *buf,
     // IF I DELETE KEYS EXPLICITELY, THEY WILL BE DELETED AGAIN BY
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1721,12 +1788,15 @@ AMI_err em_pqueue<T, Key>::merge_streams(ExtendedMergeStream **instreams,
     // DESTRUCTOR OF MERGEHEAP (CALLED AUUTOMATICALLY ON FUNCTION EXIT)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     // IF I DELETE KEYS EXPLICITELY, THEY WILL BE DELETED AGAIN BY
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     // IF I DELETE KEYS EXPLICITLY, THEY WILL BE DELETED AGAIN BY
 =======
     // IF I DELETE KEYS EXPLICITELY, THEY WILL BE DELETED AGAIN BY
@@ -1735,6 +1805,9 @@ AMI_err em_pqueue<T, Key>::merge_streams(ExtendedMergeStream **instreams,
     // IF I DELETE KEYS EXPLICITELY, THEY WILL BE DELETED AGAIN BY
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

@@ -35,15 +35,21 @@ static struct _state {
 static struct robject *draw_line(struct Map_info *, int, int);
 <<<<<<< HEAD
 <<<<<<< HEAD
-static struct robject *draw_line_vertices(void);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 static struct robject *draw_line_vertices(void);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+static struct robject *draw_line_vertices(void);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+static struct robject *draw_line_vertices(void);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 static struct robject *draw_line_vertices(void);
 =======
@@ -63,6 +69,9 @@ static struct robject *draw_line_vertices(void);
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

@@ -1,6 +1,7 @@
 #
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # GRASS GIS 8.3 Documentation documentation build configuration file, created by
 =======
 <<<<<<< HEAD
@@ -8,6 +9,9 @@
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 # GRASS GIS Python documentation build configuration file
 # originally created by sphinx-quickstart.
@@ -22,6 +26,9 @@
 # GRASS GIS 8.3 Documentation documentation build configuration file, created by
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -65,6 +72,7 @@ master_doc = "index"
 # General information about the project.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 project = "GRASS GIS 8.3 Documentation"
 copyright = "2023, GRASS Development Team"
 =======
@@ -73,6 +81,9 @@ copyright = "2023, GRASS Development Team"
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 project = "GRASS GIS"
 copyright = "2024, GRASS Development Team"
@@ -101,6 +112,9 @@ copyright = "2023, GRASS Development Team"
 copyright = "2023, GRASS Development Team"
 >>>>>>> 6104ec7096 (i.maxlik: fix crash when classification result is NULL (#2724))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -112,6 +126,7 @@ copyright = "2023, GRASS Development Team"
 # The short X.Y version.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 version = "8.3"
 =======
 <<<<<<< HEAD
@@ -119,6 +134,9 @@ version = "8.3"
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 version = "8.4"
 =======
@@ -134,6 +152,9 @@ version = "8.3"
 version = "8.3"
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -254,6 +275,7 @@ html_use_index = False
 # Output file base name for HTML help builder.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 htmlhelp_basename = "grass83Documentationdoc"
 =======
 <<<<<<< HEAD
@@ -261,6 +283,9 @@ htmlhelp_basename = "grass83Documentationdoc"
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 htmlhelp_basename = "grass_gis"
 =======
@@ -276,6 +301,9 @@ htmlhelp_basename = "grass83Documentationdoc"
 htmlhelp_basename = "grass83Documentationdoc"
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -299,6 +327,7 @@ latex_documents = [
         "content",
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "grass83Documentation.tex",
         "GRASS GIS 8.3 Documentation",
 =======
@@ -307,6 +336,9 @@ latex_documents = [
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         "grass_gis.tex",
         project,
@@ -327,6 +359,9 @@ latex_documents = [
         "GRASS GIS 8.3 Documentation",
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -365,6 +400,7 @@ man_pages = [
         "content",
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "grass83documentation",
         "GRASS GIS 8.3 Documentation",
 =======
@@ -373,6 +409,9 @@ man_pages = [
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         "grass_gis",
         project,
@@ -393,6 +432,9 @@ man_pages = [
         "GRASS GIS 8.3 Documentation",
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -415,6 +457,7 @@ texinfo_documents = [
         "content",
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "grass83Documentation",
         "GRASS GIS 8.3 Documentation",
         "GRASS Development Team",
@@ -425,6 +468,9 @@ texinfo_documents = [
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         "grass_gis",
         project,
@@ -454,6 +500,9 @@ texinfo_documents = [
         "grass83Documentation",
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -478,6 +527,7 @@ texinfo_documents = [
 # Bibliographic Dublin Core info.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 epub_title = "GRASS GIS 8.3 Documentation"
 epub_author = "GRASS Development Team"
 epub_publisher = "GRASS Development Team"
@@ -488,6 +538,9 @@ epub_copyright = "2023, GRASS Development Team"
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 epub_title = project
 epub_author = "GRASS Development Team"
@@ -525,6 +578,9 @@ epub_copyright = "2023, GRASS Development Team"
 epub_copyright = "2023, GRASS Development Team"
 >>>>>>> 6104ec7096 (i.maxlik: fix crash when classification result is NULL (#2724))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

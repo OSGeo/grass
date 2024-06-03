@@ -332,12 +332,15 @@ int main(int argc, char *argv[])
         /* Cloud/Snow histogram higher bound */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         for (i = 100; i > i_peak3; i--) {
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         for (i = 99; i > i_peak3; i--) {
 =======
         for (i = 100; i > i_peak3; i--) {
@@ -346,6 +349,9 @@ int main(int argc, char *argv[])
         for (i = 100; i > i_peak3; i--) {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

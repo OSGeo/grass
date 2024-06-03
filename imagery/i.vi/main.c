@@ -181,12 +181,15 @@ int main(int argc, char *argv[])
     opt.sl_slope->description =
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         _("Value of the slope of the soil line (MSAVI only)");
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         _("Value of the slope of the soil line (MSAVI and PVI only)");
 =======
         _("Value of the slope of the soil line (MSAVI only)");
@@ -195,6 +198,9 @@ int main(int argc, char *argv[])
         _("Value of the slope of the soil line (MSAVI only)");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -240,11 +246,14 @@ int main(int argc, char *argv[])
     if (opt.sl_slope->answer)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         soil_slope = atof(opt.sl_slope->answer);
     if (opt.sl_int->answer)
         soil_inter = atof(opt.sl_int->answer);
@@ -254,6 +263,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -264,8 +276,14 @@ int main(int argc, char *argv[])
         msavip3 = atof(opt.sl_red->answer);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -306,6 +324,7 @@ int main(int argc, char *argv[])
     if (!strcasecmp(viflag, "pvi") &&
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         (!(opt.red->answer) || !(opt.nir->answer)))
         G_fatal_error(_("pvi index requires red and nir maps"));
 =======
@@ -313,6 +332,8 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         (!(opt.red->answer) || !(opt.nir->answer) || !(opt.sl_slope->answer)))
         G_fatal_error(
             _("pvi index requires red and nir maps and soil line slope"));
@@ -325,6 +346,9 @@ int main(int argc, char *argv[])
         G_fatal_error(_("pvi index requires red and nir maps"));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -591,12 +615,15 @@ int main(int argc, char *argv[])
                 if (!strcasecmp(viflag, "pvi"))
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     outrast[col] = p_vi(d_redchan, d_nirchan);
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                     outrast[col] = p_vi(d_redchan, d_nirchan, soil_slope);
 =======
                     outrast[col] = p_vi(d_redchan, d_nirchan);
@@ -605,6 +632,9 @@ int main(int argc, char *argv[])
                     outrast[col] = p_vi(d_redchan, d_nirchan);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -618,6 +648,7 @@ int main(int argc, char *argv[])
                 if (!strcasecmp(viflag, "msavi"))
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     outrast[col] =
                         msa_vi(d_redchan, d_nirchan, msavip1, msavip2, msavip3);
 =======
@@ -625,6 +656,8 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                     outrast[col] = msa_vi(d_redchan, d_nirchan, soil_slope,
                                           soil_inter, soil_noise);
 =======
@@ -636,6 +669,9 @@ int main(int argc, char *argv[])
                         msa_vi(d_redchan, d_nirchan, msavip1, msavip2, msavip3);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

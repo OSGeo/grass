@@ -10,12 +10,15 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
    \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
    \author Lars Ahlzen <lars ahlzen.com> (original contributor)
 =======
    \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
@@ -24,6 +27,9 @@
    \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -66,15 +72,21 @@ static int read_bmp_header(const unsigned char *p)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    if (get_4(&p) != (unsigned int)HEADER_SIZE + ca.width * ca.height * 4)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if (get_4(&p) != (unsigned int)HEADER_SIZE + ca.width * ca.height * 4)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (get_4(&p) != (unsigned int)HEADER_SIZE + ca.width * ca.height * 4)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    if (get_4(&p) != (unsigned int)HEADER_SIZE + ca.width * ca.height * 4)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     if (get_4(&p) != (unsigned int)HEADER_SIZE + ca.width * ca.height * 4)
 =======
@@ -94,6 +106,9 @@ static int read_bmp_header(const unsigned char *p)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -109,8 +124,12 @@ static int read_bmp_header(const unsigned char *p)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 >>>>>>> osgeo-main
     if (get_4(&p) != (unsigned int)ca.width)
@@ -121,10 +140,13 @@ static int read_bmp_header(const unsigned char *p)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (get_4(&p) != (unsigned int)ca.width)
         return 0;
     if (get_4(&p) != (unsigned int)-ca.height)
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     if (get_4(&p) != ca.width)
@@ -149,6 +171,9 @@ static int read_bmp_header(const unsigned char *p)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -162,16 +187,23 @@ static int read_bmp_header(const unsigned char *p)
         return 0;
 <<<<<<< HEAD
 <<<<<<< HEAD
-    if (get_4(&p) != (unsigned int)ca.width * ca.height * 4)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if (get_4(&p) != (unsigned int)ca.width * ca.height * 4)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (get_4(&p) != (unsigned int)ca.width * ca.height * 4)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (get_4(&p) != (unsigned int)ca.width * ca.height * 4)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     if (get_4(&p) != (unsigned int)ca.width * ca.height * 4)
@@ -192,6 +224,9 @@ static int read_bmp_header(const unsigned char *p)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -222,18 +257,26 @@ void cairo_read_bmp(void)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    if (fread(ca.grid, ca.stride, ca.height, input) !=
-        (unsigned int)ca.height) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if (fread(ca.grid, ca.stride, ca.height, input) !=
         (unsigned int)ca.height) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (fread(ca.grid, ca.stride, ca.height, input) !=
+        (unsigned int)ca.height) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (fread(ca.grid, ca.stride, ca.height, input) !=
+        (unsigned int)ca.height) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     if (fread(ca.grid, ca.stride, ca.height, input) !=
@@ -257,6 +300,9 @@ void cairo_read_bmp(void)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

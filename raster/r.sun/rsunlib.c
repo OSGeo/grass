@@ -180,12 +180,15 @@ void com_par(struct SunGeometryConstDay *sungeom,
              struct SunGeometryVarDay *sunVarGeom,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
              struct GridGeometry *gridGeom, double latitude, double longitude)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
              struct GridGeometry *gridGeom, double latitude,
              double longitude UNUSED)
 =======
@@ -195,6 +198,9 @@ void com_par(struct SunGeometryConstDay *sungeom,
              struct GridGeometry *gridGeom, double latitude, double longitude)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -390,12 +396,15 @@ double lumcline2(struct SunGeometryConstDay *sungeom,
                 s = sunSlopeGeom->lum_C31_l *
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                         cos(-sungeom->timeAngle - sunSlopeGeom->longit_l) +
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                         cos(-sungeom->timeAngle - sunSlopeGeom->longit_l +
                             timeOffset) +
 =======
@@ -405,6 +414,9 @@ double lumcline2(struct SunGeometryConstDay *sungeom,
                         cos(-sungeom->timeAngle - sunSlopeGeom->longit_l) +
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -434,12 +446,15 @@ double lumcline2(struct SunGeometryConstDay *sungeom,
                 s = sunSlopeGeom->lum_C31_l *
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                         cos(-sungeom->timeAngle - sunSlopeGeom->longit_l) +
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                         cos(-sungeom->timeAngle - sunSlopeGeom->longit_l +
                             timeOffset) +
 =======
@@ -449,6 +464,9 @@ double lumcline2(struct SunGeometryConstDay *sungeom,
                         cos(-sungeom->timeAngle - sunSlopeGeom->longit_l) +
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -468,12 +486,15 @@ double lumcline2(struct SunGeometryConstDay *sungeom,
         s = sunSlopeGeom->lum_C31_l *
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 cos(-sungeom->timeAngle - sunSlopeGeom->longit_l) +
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                 cos(-sungeom->timeAngle - sunSlopeGeom->longit_l + timeOffset) +
 =======
                 cos(-sungeom->timeAngle - sunSlopeGeom->longit_l) +
@@ -482,6 +503,9 @@ double lumcline2(struct SunGeometryConstDay *sungeom,
                 cos(-sungeom->timeAngle - sunSlopeGeom->longit_l) +
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

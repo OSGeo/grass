@@ -10,16 +10,22 @@
  * PURPOSE:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
  * COPYRIGHT:    (C) 2002-2024 by the GRASS Development Team
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -434,12 +440,15 @@ int main(int argc, char *argv[])
         if (do_table) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             add_cat = maxcat + 1;
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             add_cat = maxcat;
 =======
             add_cat = maxcat + 1;
@@ -448,6 +457,9 @@ int main(int argc, char *argv[])
             add_cat = maxcat + 1;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

@@ -191,12 +191,15 @@ int test_solute_transport_3d(void)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     /*GUASS*/ les = N_assemble_les_3d(N_NORMAL_LES, geom, data->status,
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     /*GAUSS*/ les = N_assemble_les_3d(N_NORMAL_LES, geom, data->status,
 =======
     /*GUASS*/ les = N_assemble_les_3d(N_NORMAL_LES, geom, data->status,
@@ -205,6 +208,9 @@ int test_solute_transport_3d(void)
     /*GUASS*/ les = N_assemble_les_3d(N_NORMAL_LES, geom, data->status,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -295,12 +301,15 @@ int test_solute_transport_2d(void)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     /*GUASS*/ les = N_assemble_les_2d(N_NORMAL_LES, geom, data->status,
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     /*GAUSS*/ les = N_assemble_les_2d(N_NORMAL_LES, geom, data->status,
 =======
     /*GUASS*/ les = N_assemble_les_2d(N_NORMAL_LES, geom, data->status,
@@ -309,6 +318,9 @@ int test_solute_transport_2d(void)
     /*GUASS*/ les = N_assemble_les_2d(N_NORMAL_LES, geom, data->status,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

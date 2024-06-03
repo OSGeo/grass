@@ -115,16 +115,23 @@ int G_rasprintf(char **out, size_t *size, const char *fmt, ...)
         va_end(ap);
 <<<<<<< HEAD
 <<<<<<< HEAD
-        if (count >= 0 && (size_t)count < osize)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         if (count >= 0 && (size_t)count < osize)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (count >= 0 && (size_t)count < osize)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (count >= 0 && (size_t)count < osize)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         if (count >= 0 && (size_t)count < osize)
@@ -145,6 +152,9 @@ int G_rasprintf(char **out, size_t *size, const char *fmt, ...)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

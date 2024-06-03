@@ -4,16 +4,23 @@ For more information on the test suite and unit tests, visit:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-<https://grass.osgeo.org/grass-devel/manuals/libpython/gunittest_testing.html>
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 <https://grass.osgeo.org/grass-devel/manuals/libpython/gunittest_testing.html>
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<https://grass.osgeo.org/grass-devel/manuals/libpython/gunittest_testing.html>
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<https://grass.osgeo.org/grass-devel/manuals/libpython/gunittest_testing.html>
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <https://grass.osgeo.org/grass-devel/manuals/libpython/gunittest_testing.html>
@@ -31,6 +38,9 @@ https://grass.osgeo.org/grass80/manuals/libpython/gunittest_testing.html
 <https://grass.osgeo.org/grass-devel/manuals/libpython/gunittest_testing.html>
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

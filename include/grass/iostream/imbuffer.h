@@ -93,18 +93,26 @@ public:
         char str[100];
 <<<<<<< HEAD
 <<<<<<< HEAD
-        snprintf(str, sizeof(str), "im_buffer: allocate %ld\n",
-                 (long)(maxsize * sizeof(T)));
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(str, sizeof(str), "im_buffer: allocate %ld\n",
                  (long)(maxsize * sizeof(T)));
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(str, sizeof(str), "im_buffer: allocate %ld\n",
+                 (long)(maxsize * sizeof(T)));
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(str, sizeof(str), "im_buffer: allocate %ld\n",
+                 (long)(maxsize * sizeof(T)));
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(str, sizeof(str), "im_buffer: allocate %ld\n",
@@ -128,6 +136,9 @@ public:
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -152,12 +163,15 @@ public:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     // insert n items in buffer; return the number of items acually inserted
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     // insert n items in buffer; return the number of items actually inserted
 =======
     // insert n items in buffer; return the number of items acually inserted
@@ -166,6 +180,9 @@ public:
     // insert n items in buffer; return the number of items acually inserted
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -192,12 +209,15 @@ public:
     {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         assert((i >= 0) && (i < size));
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         assert(i < size);
 =======
         assert((i >= 0) && (i < size));
@@ -206,6 +226,9 @@ public:
         assert((i >= 0) && (i < size));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -316,12 +339,15 @@ bool im_buffer<T>::insert(T &x)
 /************************************************************/
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 // insert n items in buffer; return the number of items acually inserted
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 // insert n items in buffer; return the number of items actually inserted
 =======
 // insert n items in buffer; return the number of items acually inserted
@@ -330,6 +356,9 @@ bool im_buffer<T>::insert(T &x)
 // insert n items in buffer; return the number of items acually inserted
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -428,12 +457,15 @@ void im_buffer<T>::reset(unsigned long start, unsigned long n)
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     assert((start >= 0) && (start + n <= size));
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     assert(start + n <= size);
 =======
     assert((start >= 0) && (start + n <= size));
@@ -442,6 +474,9 @@ void im_buffer<T>::reset(unsigned long start, unsigned long n)
     assert((start >= 0) && (start + n <= size));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -484,12 +519,15 @@ void im_buffer<T>::print_range() const
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         // determin min and  max
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         // determine min and  max
 =======
         // determin min and  max
@@ -498,6 +536,9 @@ void im_buffer<T>::print_range() const
         // determin min and  max
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

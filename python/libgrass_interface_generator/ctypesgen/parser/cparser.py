@@ -128,12 +128,15 @@ class CParser(object):
     def handle_error(self, message, filename, lineno):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         """A parse error occured.
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         """A parse error occurred.
 =======
         """A parse error occured.
@@ -142,6 +145,9 @@ class CParser(object):
         """A parse error occured.
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

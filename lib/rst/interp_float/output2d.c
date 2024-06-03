@@ -61,12 +61,15 @@ int IL_output_2d(struct interp_params *params,
                  double c1max, /*!< min,max interpolated values */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                  double c2min, double c2max, double gmin, double gmax,
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                  double c2min, double c2max, double gmin UNUSED,
                  double gmax UNUSED,
 =======
@@ -76,6 +79,9 @@ int IL_output_2d(struct interp_params *params,
                  double c2min, double c2max, double gmin, double gmax,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -152,16 +158,23 @@ int IL_output_2d(struct interp_params *params,
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_z) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
-                (size_t)params->nsizc)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                 (size_t)params->nsizc)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                (size_t)params->nsizc)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                (size_t)params->nsizc)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                 (size_t)params->nsizc)
@@ -182,6 +195,9 @@ int IL_output_2d(struct interp_params *params,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -202,16 +218,23 @@ int IL_output_2d(struct interp_params *params,
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dx) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
-                (size_t)params->nsizc)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                 (size_t)params->nsizc)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                (size_t)params->nsizc)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                (size_t)params->nsizc)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                 (size_t)params->nsizc)
@@ -232,6 +255,9 @@ int IL_output_2d(struct interp_params *params,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -252,16 +278,23 @@ int IL_output_2d(struct interp_params *params,
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dy) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
-                (size_t)params->nsizc)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                 (size_t)params->nsizc)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                (size_t)params->nsizc)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                (size_t)params->nsizc)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                 (size_t)params->nsizc)
@@ -282,6 +315,9 @@ int IL_output_2d(struct interp_params *params,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -302,16 +338,23 @@ int IL_output_2d(struct interp_params *params,
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xx) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
-                (size_t)params->nsizc)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                 (size_t)params->nsizc)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                (size_t)params->nsizc)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                (size_t)params->nsizc)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                 (size_t)params->nsizc)
@@ -332,6 +375,9 @@ int IL_output_2d(struct interp_params *params,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -352,16 +398,23 @@ int IL_output_2d(struct interp_params *params,
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_yy) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
-                (size_t)params->nsizc)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                 (size_t)params->nsizc)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                (size_t)params->nsizc)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                (size_t)params->nsizc)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                 (size_t)params->nsizc)
@@ -382,6 +435,9 @@ int IL_output_2d(struct interp_params *params,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -402,16 +458,23 @@ int IL_output_2d(struct interp_params *params,
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xy) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
-                (size_t)params->nsizc)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                 (size_t)params->nsizc)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                (size_t)params->nsizc)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                (size_t)params->nsizc)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                 (size_t)params->nsizc)
@@ -432,6 +495,9 @@ int IL_output_2d(struct interp_params *params,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

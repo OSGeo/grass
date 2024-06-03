@@ -1773,6 +1773,7 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../gui/wxpython/datacatalog/g.gui.datacatalog.py:49
 msgid "Data Catalog - GRASS GIS"
 msgstr ""
@@ -1781,6 +1782,8 @@ msgstr ""
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../gui/wxpython/iclass/frame.py:1169
 #, python-format
 msgid "No area in category %s. Category skipped."
@@ -2038,6 +2041,9 @@ msgid "Data Catalog - GRASS GIS"
 msgstr ""
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2452,6 +2458,7 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../gui/wxpython/datacatalog/toolbars.py:49
 msgid "Import raster data  [r.import]"
 =======
@@ -2459,6 +2466,8 @@ msgid "Import raster data  [r.import]"
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../gui/wxpython/datacatalog/toolbars.py:45
 msgid "Import raster data  [r.import]"
 =======
@@ -2469,6 +2478,9 @@ msgid "Import raster data  [r.import]"
 msgid "Import raster data  [r.import]"
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2901,8 +2913,14 @@ msgstr ""
 #: ../gui/wxpython/datacatalog/frame.py:31 ../gui/wxpython/menustrings.py:1999
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -4284,8 +4302,14 @@ msgid "Animation Tool"
 msgstr ""
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -9128,8 +9152,8 @@ msgstr "SIMWE Oberflächenabflussmodellierung"
 #: ../gui/wxpython/menustrings.py:428 ../gui/wxpython/menustrings.py:1391
 msgid "Overland flow hydrologic simulation using path sampling method (SIMWE)."
 msgstr ""
-"Hydrologische Simulation des Oberflächenabfluss mittels \"path sampling"
-"\" (SIMWE)."
+"Hydrologische Simulation des Oberflächenabfluss mittels \"path "
+"sampling\" (SIMWE)."
 
 #: ../gui/wxpython/menustrings.py:429 ../gui/wxpython/menustrings.py:1392
 msgid "SIMWE Sediment flux modeling"
@@ -9140,8 +9164,8 @@ msgid ""
 "Sediment transport and erosion/deposition simulation using path sampling "
 "method (SIMWE)."
 msgstr ""
-"Sedimenttransport und Erosions-/Deposition-Simulation mittels \"path sampling"
-"\" (SIMWE)."
+"Sedimenttransport und Erosions-/Deposition-Simulation mittels \"path "
+"sampling\" (SIMWE)."
 
 #: ../gui/wxpython/menustrings.py:431 ../gui/wxpython/menustrings.py:1394
 msgid "Topographic index map"
@@ -9758,8 +9782,14 @@ msgid "Show simple linear regression line"
 msgstr ""
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -15920,13 +15950,13 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:811
 #, python-format
 msgid ""
-"Do you want to continue with deleting mapset <%(mapset)s> from location <"
-"%(location)s>?\n"
+"Do you want to continue with deleting mapset <%(mapset)s> from location "
+"<%(location)s>?\n"
 "\n"
 "ALL MAPS included in this mapset will be PERMANENTLY DELETED!"
 msgstr ""
-"Wollen Sie mit dem Löschen des Mapsets <%(mapset)s> der Location <"
-"%(location)s> fortfahren?\n"
+"Wollen Sie mit dem Löschen des Mapsets <%(mapset)s> der Location "
+"<%(location)s> fortfahren?\n"
 "\n"
 "ALLE KARTEN in diesem Mapset werden UNWIDERRUFLICH GELÖSCHT!"
 
@@ -16542,8 +16572,14 @@ msgstr ""
 msgid "Base raster map <{}> not found in current mapset."
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -17185,6 +17221,9 @@ msgid "Map Display {number}"
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -18203,8 +18242,14 @@ msgstr ""
 #: ../gui/wxpython/modules/histogram.py:296
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -18584,8 +18629,14 @@ msgid "3D Raster Map Calculator"
 msgstr ""
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -18847,8 +18898,8 @@ msgstr ""
 #, python-format
 msgid ""
 "Scatter plot cannot be added.\n"
-"Multiple of bands ranges <%s:%d * %s:%d = %d> is higher than maximum limit <"
-"%d>.\n"
+"Multiple of bands ranges <%s:%d * %s:%d = %d> is higher than maximum limit "
+"<%d>.\n"
 msgstr ""
 
 #: ../gui/wxpython/iscatt/controllers.py:351
@@ -19596,8 +19647,14 @@ msgstr ""
 #: ../gui/wxpython/rlisetup/frame.py:114
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -19700,10 +19757,13 @@ msgstr ""
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../gui/wxpython/mapwin/decorations.py:203
 msgid "Text properties"
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 #: ../gui/wxpython/main_window/frame.py:900 ../gui/wxpython/lmgr/frame.py:797
@@ -19716,6 +19776,9 @@ msgid "Text properties"
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -25032,8 +25095,14 @@ msgstr "Vektorkarte <%s> hinzugefügt"
 #, python-format
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -25049,11 +25118,14 @@ msgid ""
 msgstr ""
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 "Aktuelles Projekt ist nicht leer. Wollen Sie die aktuellen Einstellungen in "
 "einer Projektdatei speichern?"
 =======
@@ -25061,6 +25133,9 @@ msgstr ""
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -25664,8 +25739,8 @@ msgstr ""
 #: ../gui/wxpython/dbmgr/base.py:2629
 #, python-format
 msgid ""
-"Unable to rename column. Column <%(column)s> doesn't exist in the table <"
-"%(table)s>."
+"Unable to rename column. Column <%(column)s> doesn't exist in the table "
+"<%(table)s>."
 msgstr ""
 "Kann die Spalte nicht umbenennen. Die Spalte <%(column)s> existiert nicht in "
 "der Tabelle <%(table)s>."
@@ -29723,6 +29798,9 @@ msgid "Cartographic Composer - GRASS GIS"
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -30381,6 +30459,11 @@ msgid "GRASS GIS Raster Map Calculator"
 msgstr "GRASS GIS Rasterkartenrechner"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 #: ../gui/wxpython/gmodeler/dialogs.py:318
 #, fuzzy, python-format
 msgid ""
@@ -30393,6 +30476,7 @@ msgstr ""
 "\n"
 "Kann keine neue Aktion zum Modell hinzufügen."
 
+>>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
 #~ msgid "GRASS GIS 3D Raster Map Calculator"
 #~ msgstr "GRASS GIS 3D Raster Map Calculator"
 =======
@@ -30552,6 +30636,10 @@ msgid "GRASS GIS 3D Raster Map Calculator"
 msgstr "GRASS GIS 3D Raster Map Calculator"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
@@ -30577,6 +30665,7 @@ msgstr "Location-Titel (optional, Sie können dieses Feld leer lassen)."
 msgid "Choose method for creating a new location"
 msgstr "Wählen Sie eine Methode, um die neue Location zu erzeugen"
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 msgid "Read projection and datum terms from a Well Known Text (WKT) .prj file"
 msgstr "Lese Projektions- und Datumsinformationen aus Well Known Text (WKT) .prj-Datei"
@@ -30625,6 +30714,8 @@ msgstr "Wählen Sie eine Methode, um die neue Location zu erzeugen"
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #~ msgid ""
 #~ "Read projection and datum terms from a Well Known Text (WKT) .prj file"
 #~ msgstr ""
@@ -30703,6 +30794,9 @@ msgid "Choose method of specifying georeferencing parameters"
 msgstr "Wählen Sie eine Methode, um die Parameter der Georeferenzierung zuwählen"
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -30710,6 +30804,7 @@ msgstr "Wählen Sie eine Methode, um die Parameter der Georeferenzierung zuwähl
 msgid "Location Title:"
 msgstr "Location-Titel:"
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 msgid "Location wizard canceled. Location not created."
@@ -30806,6 +30901,8 @@ msgstr "Einlesen von Projektions- und Datumsinformationen aus georeferenzierter 
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #~ msgid "Location wizard canceled. Location not created."
 #~ msgstr ""
 #~ "Location-Assistent wurde abgebrochen. Die Location wurde nicht erzeugt."
@@ -30982,6 +31079,9 @@ msgid "Read projection and datum terms from a georeferenced data file"
 msgstr "Einlesen von Projektions- und Datumsinformationen aus georeferenzierter Datei"
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -30997,6 +31097,7 @@ msgstr "Neue Location erzeugen?"
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 msgid "GRASS GIS SQL Query Utility"
 msgstr "GRASS GIS SQL Abfragewerkzeug"
 =======
@@ -31004,6 +31105,8 @@ msgstr "GRASS GIS SQL Abfragewerkzeug"
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #~ msgid "GRASS GIS SQL Query Utility"
 #~ msgstr "GRASS GIS SQL Abfragewerkzeug"
 
@@ -31026,6 +31129,9 @@ msgid "GRASS GIS SQL Query Utility"
 msgstr "GRASS GIS SQL Abfragewerkzeug"
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

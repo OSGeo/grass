@@ -43,12 +43,15 @@ struct _label {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     struct line_pnts *skyline; /**< The skyline of the text, as an offest
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     struct line_pnts *skyline; /**< The skyline of the text, as an offset
 =======
     struct line_pnts *skyline; /**< The skyline of the text, as an offest
@@ -57,6 +60,9 @@ struct _label {
     struct line_pnts *skyline; /**< The skyline of the text, as an offest
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -79,12 +85,15 @@ struct _label {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int type; /**< The feture type (point, line, area) */
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     int type; /**< The feature type (point, line, area) */
 =======
     int type; /**< The feture type (point, line, area) */
@@ -93,6 +102,9 @@ struct _label {
     int type; /**< The feture type (point, line, area) */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

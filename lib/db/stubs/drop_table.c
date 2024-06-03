@@ -3,12 +3,15 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int db__driver_drop_table(dbString *name)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 int db__driver_drop_table(dbString *name UNUSED)
 =======
 int db__driver_drop_table(dbString *name)
@@ -17,6 +20,9 @@ int db__driver_drop_table(dbString *name)
 int db__driver_drop_table(dbString *name)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

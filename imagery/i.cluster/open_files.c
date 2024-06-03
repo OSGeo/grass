@@ -8,15 +8,21 @@ int open_files(void)
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
-    char *name, *mapset, **err, *semantic_label;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     char *name, *mapset, **err, *semantic_label;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    char *name, *mapset, **err, *semantic_label;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    char *name, *mapset, **err, *semantic_label;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     char *name, *mapset, **err, *semantic_label;
 =======
@@ -30,6 +36,9 @@ int open_files(void)
     char *name, *mapset, **err, *semantic_label;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -40,6 +49,7 @@ int open_files(void)
     I_free_group_ref(&ref);
     I_get_subgroup_ref(group, subgroup, &ref);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -53,6 +63,11 @@ int open_files(void)
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 =======
+>>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
     semantic_labels = (char **)G_malloc(ref.nfiles * sizeof(char **));
     missing = 0;
@@ -71,7 +86,10 @@ int open_files(void)
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     bandrefs = (char **)G_malloc(ref.nfiles * sizeof(char **));
@@ -102,6 +120,9 @@ int open_files(void)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -131,17 +152,23 @@ int open_files(void)
     if (insigfile) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -153,10 +180,13 @@ int open_files(void)
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 	fd = I_fopen_signature_file_old(insigfile);
 	if (fd == NULL)
 	    G_fatal_error(_("Unable to open seed signature file <%s>"),
@@ -167,6 +197,9 @@ int open_files(void)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -182,6 +215,7 @@ int open_files(void)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -193,6 +227,11 @@ int open_files(void)
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 =======
+>>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
         err = I_sort_signatures_by_semantic_label(&in_sig, &ref);
         if (err)
@@ -207,7 +246,10 @@ int open_files(void)
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
         err = I_sort_signatures_by_bandref(&in_sig, &ref);
@@ -230,6 +272,9 @@ int open_files(void)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

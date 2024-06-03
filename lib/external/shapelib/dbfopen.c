@@ -9,16 +9,23 @@
  * Copyright (c) 1999, Frank Warmerdam
 <<<<<<< HEAD
 <<<<<<< HEAD
- * Copyright (c) 2012-2019, Even Rouault <even dot rouault at spatialys.com>
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
  * Copyright (c) 2012-2019, Even Rouault <even dot rouault at spatialys.com>
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+ * Copyright (c) 2012-2019, Even Rouault <even dot rouault at spatialys.com>
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+ * Copyright (c) 2012-2019, Even Rouault <even dot rouault at spatialys.com>
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
  * Copyright (c) 2012-2019, Even Rouault <even dot rouault at spatialys.com>
@@ -42,6 +49,9 @@
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -87,11 +97,14 @@
 #if defined(WIN32) || defined(_WIN32)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -114,6 +127,9 @@
 #endif
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -137,7 +153,10 @@
 #define CPLsnprintf snprintf
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
@@ -159,6 +178,9 @@
 =======
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -171,6 +193,7 @@ SHP_CVSID("$Id$")
 #define TRUE  1
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -178,6 +201,9 @@ SHP_CVSID("$Id$")
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 #endif
@@ -210,7 +236,10 @@ CPL_INLINE static void CPL_IGNORE_RET_VAL_INT(CPL_UNUSED int unused)
 #define SHPLIB_NULLPTR            NULL
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -253,6 +282,9 @@ CPL_INLINE static void CPL_IGNORE_RET_VAL_INT(CPL_UNUSED int unused)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -277,7 +309,10 @@ static void *SfRealloc(void *pMem, int nNewSize)
         return realloc(pMem, nNewSize);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -318,6 +353,9 @@ static void *SfRealloc(void *pMem, int nNewSize)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -336,16 +374,23 @@ static void DBFWriteHeader(DBFHandle psDBF)
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
-    unsigned char abyHeader[XBASE_FILEHDR_SZ] = {0};
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     unsigned char abyHeader[XBASE_FILEHDR_SZ] = {0};
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    unsigned char abyHeader[XBASE_FILEHDR_SZ] = {0};
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    unsigned char abyHeader[XBASE_FILEHDR_SZ] = {0};
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     unsigned char abyHeader[XBASE_FILEHDR_SZ] = {0};
@@ -369,6 +414,9 @@ static void DBFWriteHeader(DBFHandle psDBF)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -381,6 +429,7 @@ static void DBFWriteHeader(DBFHandle psDBF)
     /* -------------------------------------------------------------------- */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -389,6 +438,10 @@ static void DBFWriteHeader(DBFHandle psDBF)
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -419,6 +472,7 @@ static void DBFWriteHeader(DBFHandle psDBF)
     psDBF->sHooks.FWrite(abyHeader, XBASE_FILEHDR_SZ, 1, psDBF->fp);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     psDBF->sHooks.FWrite(psDBF->pszHeader, XBASE_FLDHDR_SZ, psDBF->nFields,
                          psDBF->fp);
 
@@ -426,6 +480,8 @@ static void DBFWriteHeader(DBFHandle psDBF)
     /*      Write out the newline character if there is room for it.        */
     /* -------------------------------------------------------------------- */
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -499,6 +555,9 @@ static void DBFWriteHeader(DBFHandle psDBF)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -509,8 +568,11 @@ static void DBFWriteHeader(DBFHandle psDBF)
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 
@@ -597,6 +659,11 @@ static void DBFWriteHeader(DBFHandle psDBF)
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 =======
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
@@ -616,6 +683,7 @@ static void DBFWriteHeader(DBFHandle psDBF)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -624,6 +692,10 @@ static void DBFWriteHeader(DBFHandle psDBF)
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -679,7 +751,10 @@ static bool DBFFlushRecord(DBFHandle psDBF)
             }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -804,6 +879,9 @@ static bool DBFFlushRecord(DBFHandle psDBF)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -819,12 +897,15 @@ static bool DBFFlushRecord(DBFHandle psDBF)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static bool DBFLoadRecord(DBFHandle psDBF, int iRecord)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 static bool DBFLoadRecord(DBFHandle psDBF, int iRecord)
@@ -832,6 +913,9 @@ static bool DBFLoadRecord(DBFHandle psDBF, int iRecord)
 static int DBFLoadRecord(DBFHandle psDBF, int iRecord)
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -841,12 +925,15 @@ static int DBFLoadRecord(DBFHandle psDBF, int iRecord)
             return false;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         const SAOffset nRecordOffset =
             psDBF->nRecordLength * STATIC_CAST(SAOffset, iRecord) +
             psDBF->nHeaderLength;
 
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 
@@ -885,6 +972,9 @@ static bool DBFLoadRecord(DBFHandle psDBF, int iRecord)
             psDBF->nHeaderLength;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -894,6 +984,7 @@ static bool DBFLoadRecord(DBFHandle psDBF, int iRecord)
                      "fseek(%ld) failed on DBF file.",
                      STATIC_CAST(long, nRecordOffset));
             psDBF->sHooks.Error(szMessage);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
             return false;
@@ -914,6 +1005,8 @@ static bool DBFLoadRecord(DBFHandle psDBF, int iRecord)
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             return FALSE;
 <<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -999,6 +1092,9 @@ static bool DBFLoadRecord(DBFHandle psDBF, int iRecord)
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1011,8 +1107,11 @@ static bool DBFLoadRecord(DBFHandle psDBF, int iRecord)
         psDBF->bRequireNextWriteSeek = TRUE;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
@@ -1020,6 +1119,9 @@ static bool DBFLoadRecord(DBFHandle psDBF, int iRecord)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1036,8 +1138,13 @@ void SHPAPI_CALL DBFUpdateHeader(DBFHandle psDBF)
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -1050,10 +1157,13 @@ void SHPAPI_CALL DBFUpdateHeader(DBFHandle psDBF)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (psDBF->bNoHeader)
         DBFWriteHeader(psDBF);
 
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     unsigned char abyFileHeader[32];
@@ -1082,6 +1192,9 @@ void SHPAPI_CALL DBFUpdateHeader(DBFHandle psDBF)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1091,6 +1204,7 @@ void SHPAPI_CALL DBFUpdateHeader(DBFHandle psDBF)
     psDBF->sHooks.FSeek(psDBF->fp, 0, 0);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1099,6 +1213,10 @@ void SHPAPI_CALL DBFUpdateHeader(DBFHandle psDBF)
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -1122,7 +1240,10 @@ void SHPAPI_CALL DBFUpdateHeader(DBFHandle psDBF)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -1190,6 +1311,9 @@ void SHPAPI_CALL DBFUpdateHeader(DBFHandle psDBF)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1217,6 +1341,7 @@ void SHPAPI_CALL DBFSetLastModifiedDate(DBFHandle psDBF, int nYYSince1900,
 DBFHandle SHPAPI_CALL DBFOpen(const char *pszFilename, const char *pszAccess)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1225,6 +1350,10 @@ DBFHandle SHPAPI_CALL DBFOpen(const char *pszFilename, const char *pszAccess)
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -1249,6 +1378,7 @@ DBFHandle SHPAPI_CALL DBFOpen(const char *pszFilename, const char *pszAccess)
     return DBFOpenLL(pszFilename, pszAccess, &sHooks);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1256,6 +1386,9 @@ DBFHandle SHPAPI_CALL DBFOpen(const char *pszFilename, const char *pszAccess)
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 }
@@ -1276,7 +1409,10 @@ static int DBFGetLenWithoutExtension(const char *pszBasename)
     return nLen;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -1307,6 +1443,9 @@ static int DBFGetLenWithoutExtension(const char *pszBasename)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1323,6 +1462,7 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1331,6 +1471,10 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -1344,7 +1488,10 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -1401,6 +1548,9 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1413,6 +1563,7 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
     /* -------------------------------------------------------------------- */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1535,6 +1686,10 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
     /*    Compute the base (layer) name.  If there is any extension    */
     /*    on the passed in filename we will strip it off.            */
     /* -------------------------------------------------------------------- */
@@ -1567,10 +1722,13 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
             psHooks->FClose(pfCPG);
         return SHPLIB_NULLPTR;
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 >>>>>>> osgeo-main
 =======
+=======
+>>>>>>> osgeo-main
 =======
     /*      Compute the base (layer) name.  If there is any extension       */
     /*      on the passed in filename we will strip it off.                 */
@@ -1677,6 +1835,9 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
         return SHPLIB_NULLPTR;
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     }
 
@@ -1689,8 +1850,13 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
     /* -------------------------------------------------------------------- */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -1703,10 +1869,13 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     const int nBufSize = 500;
     unsigned char *pabyBuf = STATIC_CAST(unsigned char *, malloc(nBufSize));
     if (psDBF->sHooks.FRead(pabyBuf, XBASE_FILEHDR_SZ, 1, psDBF->fp) != 1) {
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     pabyBuf = (unsigned char *)malloc(nBufSize);
@@ -1730,6 +1899,9 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1740,16 +1912,23 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
         free(psDBF);
 <<<<<<< HEAD
 <<<<<<< HEAD
-        return SHPLIB_NULLPTR;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         return SHPLIB_NULLPTR;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        return SHPLIB_NULLPTR;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        return SHPLIB_NULLPTR;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         return SHPLIB_NULLPTR;
@@ -1769,6 +1948,9 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1778,6 +1960,7 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1786,6 +1969,10 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -1800,7 +1987,10 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
     if (psDBF->nRecordLength == 0 || nHeadLen < XBASE_FILEHDR_SZ) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -1849,6 +2039,9 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1859,16 +2052,23 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
         free(psDBF);
 <<<<<<< HEAD
 <<<<<<< HEAD
-        return SHPLIB_NULLPTR;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         return SHPLIB_NULLPTR;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        return SHPLIB_NULLPTR;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        return SHPLIB_NULLPTR;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         return SHPLIB_NULLPTR;
@@ -1888,6 +2088,9 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1898,18 +2101,26 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    /* coverity[tainted_data] */
-    psDBF->pszCurrentRecord = STATIC_CAST(char *, malloc(psDBF->nRecordLength));
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     /* coverity[tainted_data] */
     psDBF->pszCurrentRecord = STATIC_CAST(char *, malloc(psDBF->nRecordLength));
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    /* coverity[tainted_data] */
+    psDBF->pszCurrentRecord = STATIC_CAST(char *, malloc(psDBF->nRecordLength));
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    /* coverity[tainted_data] */
+    psDBF->pszCurrentRecord = STATIC_CAST(char *, malloc(psDBF->nRecordLength));
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     /* coverity[tainted_data] */
@@ -1933,6 +2144,9 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1942,12 +2156,15 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
     /* -------------------------------------------------------------------- */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     psDBF->pszCodePage = SHPLIB_NULLPTR;
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
     psDBF->pszCodePage = SHPLIB_NULLPTR;
@@ -1956,6 +2173,9 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
     psDBF->pszCodePage = NULL;
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1968,7 +2188,10 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
             psDBF->pszCodePage = STATIC_CAST(char *, malloc(n + 1));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -2008,6 +2231,9 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2017,16 +2243,22 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2040,7 +2272,10 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -2069,6 +2304,9 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2079,6 +2317,7 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
     /* -------------------------------------------------------------------- */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     pabyBuf = STATIC_CAST(unsigned char *, SfRealloc(pabyBuf, nHeadLen));
     psDBF->pszHeader = REINTERPRET_CAST(char *, pabyBuf);
 =======
@@ -2086,6 +2325,8 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
     pabyBuf = STATIC_CAST(unsigned char *, SfRealloc(pabyBuf, nHeadLen));
@@ -2093,6 +2334,9 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2144,6 +2388,7 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
         psDBF->pachFieldType[iField] = STATIC_CAST(char, pabyFInfo[11]);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (iField == 0)
             psDBF->panFieldOffset[iField] = 1;
         else
@@ -2152,6 +2397,8 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
     }
 
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -2295,6 +2542,9 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2314,10 +2564,13 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -2327,6 +2580,9 @@ DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszFilename, const char *pszAccess,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2341,16 +2597,23 @@ void SHPAPI_CALL DBFClose(DBFHandle psDBF)
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
-    if (psDBF == SHPLIB_NULLPTR)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if (psDBF == SHPLIB_NULLPTR)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (psDBF == SHPLIB_NULLPTR)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (psDBF == SHPLIB_NULLPTR)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     if (psDBF == SHPLIB_NULLPTR)
@@ -2371,6 +2634,9 @@ void SHPAPI_CALL DBFClose(DBFHandle psDBF)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2384,6 +2650,7 @@ void SHPAPI_CALL DBFClose(DBFHandle psDBF)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -2392,6 +2659,10 @@ void SHPAPI_CALL DBFClose(DBFHandle psDBF)
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -2400,6 +2671,7 @@ void SHPAPI_CALL DBFClose(DBFHandle psDBF)
     /* -------------------------------------------------------------------- */
     /*      Update last access date, and number of records if we have    */
     /*    write access.                                    */
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     /* -------------------------------------------------------------------- */
@@ -2413,6 +2685,8 @@ void SHPAPI_CALL DBFClose(DBFHandle psDBF)
 
     if (psDBF->panFieldOffset != SHPLIB_NULLPTR) {
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -2480,6 +2754,9 @@ void SHPAPI_CALL DBFClose(DBFHandle psDBF)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2491,16 +2768,23 @@ void SHPAPI_CALL DBFClose(DBFHandle psDBF)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    if (psDBF->pszWorkField != SHPLIB_NULLPTR)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if (psDBF->pszWorkField != SHPLIB_NULLPTR)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (psDBF->pszWorkField != SHPLIB_NULLPTR)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (psDBF->pszWorkField != SHPLIB_NULLPTR)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     if (psDBF->pszWorkField != SHPLIB_NULLPTR)
@@ -2521,6 +2805,9 @@ void SHPAPI_CALL DBFClose(DBFHandle psDBF)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2571,6 +2858,7 @@ DBFHandle SHPAPI_CALL DBFCreateLL(const char *pszFilename,
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -2713,6 +3001,10 @@ DBFHandle SHPAPI_CALL DBFCreateLL(const char *pszFilename,
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
     /* -------------------------------------------------------------------- */
     /*    Compute the base (layer) name.  If there is any extension    */
     /*    on the passed in filename we will strip it off.            */
@@ -2745,10 +3037,13 @@ DBFHandle SHPAPI_CALL DBFCreateLL(const char *pszFilename,
     int ldid = -1;
     if (pszCodePage != SHPLIB_NULLPTR) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 >>>>>>> osgeo-main
 =======
+=======
+>>>>>>> osgeo-main
 =======
     DBFHandle psDBF;
     SAFile fp;
@@ -2875,6 +3170,9 @@ DBFHandle SHPAPI_CALL DBFCreateLL(const char *pszFilename,
     if (pszCodePage != SHPLIB_NULLPTR) {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         if (strncmp(pszCodePage, "LDID/", 5) == 0) {
             ldid = atoi(pszCodePage + 5);
@@ -2886,6 +3184,7 @@ DBFHandle SHPAPI_CALL DBFCreateLL(const char *pszFilename,
             SAFile fpCPG = psHooks->FOpen(pszFullname, "w");
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -2894,6 +3193,10 @@ DBFHandle SHPAPI_CALL DBFCreateLL(const char *pszFilename,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -2915,12 +3218,19 @@ DBFHandle SHPAPI_CALL DBFCreateLL(const char *pszFilename,
     DBFHandle psDBF = STATIC_CAST(DBFHandle, calloc(1, sizeof(DBFInfo)));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 =======
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 
+=======
+=======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+
+>>>>>>> osgeo-main
 =======
 =======
 =======
@@ -2989,6 +3299,9 @@ DBFHandle SHPAPI_CALL DBFCreateLL(const char *pszFilename,
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3015,6 +3328,7 @@ DBFHandle SHPAPI_CALL DBFCreateLL(const char *pszFilename,
     psDBF->iLanguageDriver = ldid > 0 ? ldid : 0;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -3022,6 +3336,9 @@ DBFHandle SHPAPI_CALL DBFCreateLL(const char *pszFilename,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 >>>>>>> osgeo-main
     psDBF->pszCodePage = SHPLIB_NULLPTR;
@@ -3030,7 +3347,10 @@ DBFHandle SHPAPI_CALL DBFCreateLL(const char *pszFilename,
             STATIC_CAST(char *, malloc(strlen(pszCodePage) + 1));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -3057,6 +3377,9 @@ DBFHandle SHPAPI_CALL DBFCreateLL(const char *pszFilename,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3066,11 +3389,14 @@ DBFHandle SHPAPI_CALL DBFCreateLL(const char *pszFilename,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -3079,6 +3405,9 @@ DBFHandle SHPAPI_CALL DBFCreateLL(const char *pszFilename,
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3090,10 +3419,13 @@ DBFHandle SHPAPI_CALL DBFCreateLL(const char *pszFilename,
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -3103,6 +3435,9 @@ DBFHandle SHPAPI_CALL DBFCreateLL(const char *pszFilename,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3124,18 +3459,26 @@ int SHPAPI_CALL DBFAddField(DBFHandle psDBF, const char *pszFieldName,
         chNativeType = 'L';
 <<<<<<< HEAD
 <<<<<<< HEAD
-    else if (eType == FTDate)
-        chNativeType = 'D';
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     else if (eType == FTDate)
         chNativeType = 'D';
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    else if (eType == FTDate)
+        chNativeType = 'D';
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    else if (eType == FTDate)
+        chNativeType = 'D';
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     else if (eType == FTDate)
@@ -3156,6 +3499,9 @@ int SHPAPI_CALL DBFAddField(DBFHandle psDBF, const char *pszFieldName,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3199,11 +3545,14 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -3227,6 +3576,9 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3236,11 +3588,14 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -3249,6 +3604,9 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3266,10 +3624,13 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -3279,6 +3640,9 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3290,18 +3654,26 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    if (nWidth > XBASE_FLD_MAX_WIDTH)
-        nWidth = XBASE_FLD_MAX_WIDTH;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if (nWidth > XBASE_FLD_MAX_WIDTH)
         nWidth = XBASE_FLD_MAX_WIDTH;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (nWidth > XBASE_FLD_MAX_WIDTH)
+        nWidth = XBASE_FLD_MAX_WIDTH;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (nWidth > XBASE_FLD_MAX_WIDTH)
+        nWidth = XBASE_FLD_MAX_WIDTH;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     if (nWidth > XBASE_FLD_MAX_WIDTH)
@@ -3326,6 +3698,9 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3343,6 +3718,9 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 
@@ -3351,6 +3729,7 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -3363,6 +3742,8 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     const int nOldRecordLength = psDBF->nRecordLength;
     const int nOldHeaderLength = psDBF->nHeaderLength;
@@ -3381,6 +3762,9 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3392,6 +3776,7 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -3400,6 +3785,10 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -3417,6 +3806,7 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
         char *, SfRealloc(psDBF->pachFieldType, sizeof(char) * psDBF->nFields));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 =======
@@ -3425,6 +3815,14 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
     psDBF->panFieldOffset =
         (int *)SfRealloc(psDBF->panFieldOffset, sizeof(int) * psDBF->nFields);
 
+=======
+=======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+    psDBF->panFieldOffset =
+        (int *)SfRealloc(psDBF->panFieldOffset, sizeof(int) * psDBF->nFields);
+
+>>>>>>> osgeo-main
 =======
 =======
 =======
@@ -3480,6 +3878,9 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3497,12 +3898,15 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
     /* -------------------------------------------------------------------- */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     psDBF->nHeaderLength += XBASE_FLDHDR_SZ;
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
     psDBF->nHeaderLength += XBASE_FLDHDR_SZ;
@@ -3510,6 +3914,9 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
     psDBF->nHeaderLength += 32;
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3526,11 +3933,14 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
     strncpy(pszFInfo, pszFieldName, XBASE_FLDNAME_LEN_WRITE);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     pszFInfo[11] = psDBF->pachFieldType[psDBF->nFields - 1];
 
     if (chType == 'C') {
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -3588,6 +3998,9 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3599,7 +4012,10 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
         pszFInfo[17] = STATIC_CAST(unsigned char, nDecimals);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -3636,6 +4052,9 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3646,18 +4065,26 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
     /* -------------------------------------------------------------------- */
 <<<<<<< HEAD
 <<<<<<< HEAD
-    psDBF->pszCurrentRecord = STATIC_CAST(
-        char *, SfRealloc(psDBF->pszCurrentRecord, psDBF->nRecordLength));
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     psDBF->pszCurrentRecord = STATIC_CAST(
         char *, SfRealloc(psDBF->pszCurrentRecord, psDBF->nRecordLength));
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    psDBF->pszCurrentRecord = STATIC_CAST(
+        char *, SfRealloc(psDBF->pszCurrentRecord, psDBF->nRecordLength));
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    psDBF->pszCurrentRecord = STATIC_CAST(
+        char *, SfRealloc(psDBF->pszCurrentRecord, psDBF->nRecordLength));
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     psDBF->pszCurrentRecord = STATIC_CAST(
@@ -3684,6 +4111,9 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3699,8 +4129,11 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
     /* alloc record */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
     char *pszRecord =
@@ -3724,6 +4157,9 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     char *pszRecord =
@@ -3732,6 +4168,7 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
     const char chFieldFill = DBFGetNullCharacter(chType);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -3764,6 +4201,9 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
 
     const char chFieldFill = DBFGetNullCharacter(chType);
 
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 >>>>>>> osgeo-main
 =======
@@ -3775,8 +4215,11 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
             nOldRecordLength * STATIC_CAST(SAOffset, i) + nOldHeaderLength;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3790,7 +4233,10 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
         }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -3834,6 +4280,9 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3843,6 +4292,7 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -3851,6 +4301,10 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -3873,7 +4327,10 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
         psDBF->sHooks.FWrite(&ch, 1, 1, psDBF->fp);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -3924,6 +4381,9 @@ int SHPAPI_CALL DBFAddNativeFieldType(DBFHandle psDBF, const char *pszFieldName,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3954,6 +4414,7 @@ static void *DBFReadAttribute(DBFHandle psDBF, int hEntity, int iField,
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -3962,6 +4423,10 @@ static void *DBFReadAttribute(DBFHandle psDBF, int hEntity, int iField,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -3985,7 +4450,10 @@ static void *DBFReadAttribute(DBFHandle psDBF, int hEntity, int iField,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -4056,6 +4524,9 @@ static void *DBFReadAttribute(DBFHandle psDBF, int hEntity, int iField,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -4066,6 +4537,7 @@ static void *DBFReadAttribute(DBFHandle psDBF, int hEntity, int iField,
         psDBF->nWorkFieldLength = psDBF->panFieldSize[iField] + 100;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -4074,6 +4546,10 @@ static void *DBFReadAttribute(DBFHandle psDBF, int hEntity, int iField,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -4093,7 +4569,10 @@ static void *DBFReadAttribute(DBFHandle psDBF, int hEntity, int iField,
                psDBF->panFieldOffset[iField],
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -4157,6 +4636,9 @@ static void *DBFReadAttribute(DBFHandle psDBF, int hEntity, int iField,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -4187,8 +4669,13 @@ static void *DBFReadAttribute(DBFHandle psDBF, int hEntity, int iField,
     else {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -4201,10 +4688,13 @@ static void *DBFReadAttribute(DBFHandle psDBF, int hEntity, int iField,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         char *pchSrc = psDBF->pszWorkField;
         char *pchDst = pchSrc;
 
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
         char *pchSrc, *pchDst;
@@ -4231,6 +4721,9 @@ static void *DBFReadAttribute(DBFHandle psDBF, int hEntity, int iField,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -4248,16 +4741,23 @@ static void *DBFReadAttribute(DBFHandle psDBF, int hEntity, int iField,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    return pReturnField;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     return pReturnField;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    return pReturnField;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    return pReturnField;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     return pReturnField;
@@ -4278,6 +4778,9 @@ static void *DBFReadAttribute(DBFHandle psDBF, int hEntity, int iField,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -4294,6 +4797,7 @@ int SHPAPI_CALL DBFReadIntegerAttribute(DBFHandle psDBF, int iRecord,
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -4302,6 +4806,10 @@ int SHPAPI_CALL DBFReadIntegerAttribute(DBFHandle psDBF, int iRecord,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -4314,7 +4822,10 @@ int SHPAPI_CALL DBFReadIntegerAttribute(DBFHandle psDBF, int iRecord,
         return *pnValue;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -4358,6 +4869,9 @@ int SHPAPI_CALL DBFReadIntegerAttribute(DBFHandle psDBF, int iRecord,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -4374,6 +4888,7 @@ double SHPAPI_CALL DBFReadDoubleAttribute(DBFHandle psDBF, int iRecord,
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -4382,6 +4897,10 @@ double SHPAPI_CALL DBFReadDoubleAttribute(DBFHandle psDBF, int iRecord,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -4394,7 +4913,10 @@ double SHPAPI_CALL DBFReadDoubleAttribute(DBFHandle psDBF, int iRecord,
         return *pdValue;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -4438,6 +4960,9 @@ double SHPAPI_CALL DBFReadDoubleAttribute(DBFHandle psDBF, int iRecord,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -4453,6 +4978,7 @@ const char SHPAPI_CALL1(*)
     DBFReadStringAttribute(DBFHandle psDBF, int iRecord, int iField)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -4461,6 +4987,10 @@ const char SHPAPI_CALL1(*)
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -4470,7 +5000,10 @@ const char SHPAPI_CALL1(*)
                        DBFReadAttribute(psDBF, iRecord, iField, 'C'));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -4496,6 +5029,9 @@ const char SHPAPI_CALL1(*)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -4511,6 +5047,7 @@ const char SHPAPI_CALL1(*)
     DBFReadLogicalAttribute(DBFHandle psDBF, int iRecord, int iField)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -4519,6 +5056,10 @@ const char SHPAPI_CALL1(*)
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -4528,7 +5069,10 @@ const char SHPAPI_CALL1(*)
                        DBFReadAttribute(psDBF, iRecord, iField, 'L'));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 {
     return ((const char *)DBFReadAttribute(psDBF, iRecord, iField, 'L'));
@@ -4551,6 +5095,9 @@ const char SHPAPI_CALL1(*)
 =======
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 }
 
@@ -4588,16 +5135,23 @@ const char SHPAPI_CALL1(*)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-static bool DBFIsValueNULL(char chType, const char *pszValue)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 static bool DBFIsValueNULL(char chType, const char *pszValue)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+static bool DBFIsValueNULL(char chType, const char *pszValue)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+static bool DBFIsValueNULL(char chType, const char *pszValue)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 static bool DBFIsValueNULL(char chType, const char *pszValue)
@@ -4615,6 +5169,9 @@ static bool DBFIsValueNULL(char chType, const char *pszValue)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -4624,11 +5181,14 @@ static bool DBFIsValueNULL(char chType, const char *pszValue)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
     if (pszValue == NULL)
@@ -4654,6 +5214,9 @@ static bool DBFIsValueNULL(char chType, const char *pszValue)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -4673,8 +5236,11 @@ static bool DBFIsValueNULL(char chType, const char *pszValue)
         */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -4686,7 +5252,10 @@ static bool DBFIsValueNULL(char chType, const char *pszValue)
                 return false;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -4727,6 +5296,9 @@ static bool DBFIsValueNULL(char chType, const char *pszValue)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -4759,8 +5331,13 @@ int SHPAPI_CALL DBFIsAttributeNULL(DBFHandle psDBF, int iRecord, int iField)
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -4773,10 +5350,13 @@ int SHPAPI_CALL DBFIsAttributeNULL(DBFHandle psDBF, int iRecord, int iField)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     const char *pszValue = DBFReadStringAttribute(psDBF, iRecord, iField);
 
     if (pszValue == SHPLIB_NULLPTR)
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -4807,6 +5387,9 @@ int SHPAPI_CALL DBFIsAttributeNULL(DBFHandle psDBF, int iRecord, int iField)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -4824,6 +5407,7 @@ int SHPAPI_CALL DBFIsAttributeNULL(DBFHandle psDBF, int iRecord, int iField)
 int SHPAPI_CALL DBFGetFieldCount(DBFHandle psDBF)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -4832,6 +5416,10 @@ int SHPAPI_CALL DBFGetFieldCount(DBFHandle psDBF)
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -4861,6 +5449,7 @@ int SHPAPI_CALL DBFGetFieldCount(DBFHandle psDBF)
 int SHPAPI_CALL DBFGetRecordCount(DBFHandle psDBF)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -4869,6 +5458,10 @@ int SHPAPI_CALL DBFGetRecordCount(DBFHandle psDBF)
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -4895,18 +5488,26 @@ int SHPAPI_CALL DBFGetRecordCount(DBFHandle psDBF)
 /*      Return any requested information about the field.               */
 <<<<<<< HEAD
 <<<<<<< HEAD
-/*      pszFieldName must be at least XBASE_FLDNAME_LEN_READ+1 (=12)    */
-/*      bytes long.                                                     */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 /*      pszFieldName must be at least XBASE_FLDNAME_LEN_READ+1 (=12)    */
 /*      bytes long.                                                     */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+/*      pszFieldName must be at least XBASE_FLDNAME_LEN_READ+1 (=12)    */
+/*      bytes long.                                                     */
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+/*      pszFieldName must be at least XBASE_FLDNAME_LEN_READ+1 (=12)    */
+/*      bytes long.                                                     */
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 /*      pszFieldName must be at least XBASE_FLDNAME_LEN_READ+1 (=12)    */
@@ -4930,6 +5531,9 @@ int SHPAPI_CALL DBFGetRecordCount(DBFHandle psDBF)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -4940,6 +5544,7 @@ DBFFieldType SHPAPI_CALL DBFGetFieldInfo(DBFHandle psDBF, int iField,
                                          int *pnDecimals)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -4948,6 +5553,10 @@ DBFFieldType SHPAPI_CALL DBFGetFieldInfo(DBFHandle psDBF, int iField,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -4970,6 +5579,7 @@ DBFFieldType SHPAPI_CALL DBFGetFieldInfo(DBFHandle psDBF, int iField,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -4978,6 +5588,10 @@ DBFFieldType SHPAPI_CALL DBFGetFieldInfo(DBFHandle psDBF, int iField,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -4997,7 +5611,10 @@ DBFFieldType SHPAPI_CALL DBFGetFieldInfo(DBFHandle psDBF, int iField,
              i > 0 && pszFieldName[i] == ' '; i--)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -5059,6 +5676,9 @@ DBFFieldType SHPAPI_CALL DBFGetFieldInfo(DBFHandle psDBF, int iField,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -5070,8 +5690,13 @@ DBFFieldType SHPAPI_CALL DBFGetFieldInfo(DBFHandle psDBF, int iField,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -5084,9 +5709,13 @@ DBFFieldType SHPAPI_CALL DBFGetFieldInfo(DBFHandle psDBF, int iField,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     else if (psDBF->pachFieldType[iField] == 'D')
         return (FTDate);
 
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 >>>>>>> osgeo-main
@@ -5103,8 +5732,11 @@ DBFFieldType SHPAPI_CALL DBFGetFieldInfo(DBFHandle psDBF, int iField,
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         }
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -5138,6 +5770,9 @@ DBFFieldType SHPAPI_CALL DBFGetFieldInfo(DBFHandle psDBF, int iField,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -5153,6 +5788,7 @@ DBFFieldType SHPAPI_CALL DBFGetFieldInfo(DBFHandle psDBF, int iField,
 /*                         DBFWriteAttribute()                          */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -5161,6 +5797,10 @@ DBFFieldType SHPAPI_CALL DBFGetFieldInfo(DBFHandle psDBF, int iField,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -5179,7 +5819,10 @@ static bool DBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -5228,6 +5871,9 @@ static bool DBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -5241,8 +5887,13 @@ static bool DBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField,
         if (!DBFFlushRecord(psDBF))
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -5326,8 +5977,13 @@ static bool DBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField,
     if (!DBFLoadRecord(psDBF, hEntity))
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -5341,11 +5997,14 @@ static bool DBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         return false;
 
     unsigned char *pabyRec =
         REINTERPRET_CAST(unsigned char *, psDBF->pszCurrentRecord);
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
         return FALSE;
@@ -5373,6 +6032,9 @@ static bool DBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -5387,6 +6049,7 @@ static bool DBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField,
     /* -------------------------------------------------------------------- */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -5395,6 +6058,10 @@ static bool DBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -5405,7 +6072,10 @@ static bool DBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField,
         return true;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -5434,6 +6104,9 @@ static bool DBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -5444,6 +6117,7 @@ static bool DBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField,
     /* -------------------------------------------------------------------- */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -5452,6 +6126,10 @@ static bool DBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -5474,6 +6152,108 @@ static bool DBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField,
                     *STATIC_CAST(double *, pValue));
         szSField[sizeof(szSField) - 1] = '\0';
         if (STATIC_CAST(int, strlen(szSField)) > psDBF->panFieldSize[iField]) {
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> osgeo-main
+=======
+=======
+    bool nRetResult = true;
+
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+    switch (psDBF->pachFieldType[iField]) {
+    case 'D':
+    case 'N':
+    case 'F': {
+        int nWidth = psDBF->panFieldSize[iField];
+
+        char szSField[XBASE_FLD_MAX_WIDTH + 1];
+        if (STATIC_CAST(int, sizeof(szSField)) - 2 < nWidth)
+            nWidth = sizeof(szSField) - 2;
+
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+    switch (psDBF->pachFieldType[iField]) {
+    case 'D':
+    case 'N':
+    case 'F': {
+        int nWidth = psDBF->panFieldSize[iField];
+
+        if ((int)sizeof(szSField) - 2 < nWidth)
+            nWidth = sizeof(szSField) - 2;
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+        snprintf(szFormat, sizeof(szFormat), "%%%d.%df", nWidth,
+                 psDBF->panFieldDecimals[iField]);
+        snprintf(szSField, sizeof(szSField), szFormat, *((double *)pValue));
+        if ((int)strlen(szSField) > psDBF->panFieldSize[iField]) {
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+    bool nRetResult = true;
+
+    switch (psDBF->pachFieldType[iField]) {
+    case 'D':
+    case 'N':
+    case 'F': {
+        int nWidth = psDBF->panFieldSize[iField];
+
+        char szSField[XBASE_FLD_MAX_WIDTH + 1];
+        if (STATIC_CAST(int, sizeof(szSField)) - 2 < nWidth)
+            nWidth = sizeof(szSField) - 2;
+
+        char szFormat[20];
+        snprintf(szFormat, sizeof(szFormat), "%%%d.%df", nWidth,
+                 psDBF->panFieldDecimals[iField]);
+        CPLsnprintf(szSField, sizeof(szSField), szFormat,
+                    *STATIC_CAST(double *, pValue));
+        szSField[sizeof(szSField) - 1] = '\0';
+        if (STATIC_CAST(int, strlen(szSField)) > psDBF->panFieldSize[iField]) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+            szSField[psDBF->panFieldSize[iField]] = '\0';
+            nRetResult = false;
+        }
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        memcpy(
+            REINTERPRET_CAST(char *, pabyRec + psDBF->panFieldOffset[iField]),
+            szSField, strlen(szSField));
+=======
+        strncpy((char *)(pabyRec + psDBF->panFieldOffset[iField]), szSField,
+                strlen(szSField));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        strncpy((char *)(pabyRec + psDBF->panFieldOffset[iField]), szSField,
+                strlen(szSField));
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        char szFormat[20];
+        snprintf(szFormat, sizeof(szFormat), "%%%d.%df", nWidth,
+                 psDBF->panFieldDecimals[iField]);
+        CPLsnprintf(szSField, sizeof(szSField), szFormat,
+                    *STATIC_CAST(double *, pValue));
+        szSField[sizeof(szSField) - 1] = '\0';
+        if (STATIC_CAST(int, strlen(szSField)) > psDBF->panFieldSize[iField]) {
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
+>>>>>>> osgeo-main
+            szSField[psDBF->panFieldSize[iField]] = '\0';
+            nRetResult = false;
+        }
+        memcpy(
+            REINTERPRET_CAST(char *, pabyRec + psDBF->panFieldOffset[iField]),
+            szSField, strlen(szSField));
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -5563,107 +6343,14 @@ static bool DBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField,
                     *STATIC_CAST(double *, pValue));
         szSField[sizeof(szSField) - 1] = '\0';
         if (STATIC_CAST(int, strlen(szSField)) > psDBF->panFieldSize[iField]) {
+            szSField[psDBF->panFieldSize[iField]] = '\0';
+            nRetResult = false;
+        }
+        memcpy(
+            REINTERPRET_CAST(char *, pabyRec + psDBF->panFieldOffset[iField]),
+            szSField, strlen(szSField));
+=======
 >>>>>>> osgeo-main
-            szSField[psDBF->panFieldSize[iField]] = '\0';
-            nRetResult = false;
-        }
-        memcpy(
-            REINTERPRET_CAST(char *, pabyRec + psDBF->panFieldOffset[iField]),
-            szSField, strlen(szSField));
-<<<<<<< HEAD
-=======
-=======
-=======
-    bool nRetResult = true;
-
->>>>>>> 498a331298 (Fix missing function prototypes (#2727))
-    switch (psDBF->pachFieldType[iField]) {
-    case 'D':
-    case 'N':
-    case 'F': {
-        int nWidth = psDBF->panFieldSize[iField];
-
-        char szSField[XBASE_FLD_MAX_WIDTH + 1];
-        if (STATIC_CAST(int, sizeof(szSField)) - 2 < nWidth)
-            nWidth = sizeof(szSField) - 2;
-
-<<<<<<< HEAD
-=======
-=======
->>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
-    switch (psDBF->pachFieldType[iField]) {
-    case 'D':
-    case 'N':
-    case 'F': {
-        int nWidth = psDBF->panFieldSize[iField];
-
-        if ((int)sizeof(szSField) - 2 < nWidth)
-            nWidth = sizeof(szSField) - 2;
-
->>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
-        snprintf(szFormat, sizeof(szFormat), "%%%d.%df", nWidth,
-                 psDBF->panFieldDecimals[iField]);
-        snprintf(szSField, sizeof(szSField), szFormat, *((double *)pValue));
-        if ((int)strlen(szSField) > psDBF->panFieldSize[iField]) {
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
-=======
->>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
-=======
-=======
-    bool nRetResult = true;
-
-    switch (psDBF->pachFieldType[iField]) {
-    case 'D':
-    case 'N':
-    case 'F': {
-        int nWidth = psDBF->panFieldSize[iField];
-
-        char szSField[XBASE_FLD_MAX_WIDTH + 1];
-        if (STATIC_CAST(int, sizeof(szSField)) - 2 < nWidth)
-            nWidth = sizeof(szSField) - 2;
-
-        char szFormat[20];
-        snprintf(szFormat, sizeof(szFormat), "%%%d.%df", nWidth,
-                 psDBF->panFieldDecimals[iField]);
-        CPLsnprintf(szSField, sizeof(szSField), szFormat,
-                    *STATIC_CAST(double *, pValue));
-        szSField[sizeof(szSField) - 1] = '\0';
-        if (STATIC_CAST(int, strlen(szSField)) > psDBF->panFieldSize[iField]) {
->>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
->>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
-            szSField[psDBF->panFieldSize[iField]] = '\0';
-            nRetResult = false;
-        }
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-        memcpy(
-            REINTERPRET_CAST(char *, pabyRec + psDBF->panFieldOffset[iField]),
-            szSField, strlen(szSField));
-=======
-        strncpy((char *)(pabyRec + psDBF->panFieldOffset[iField]), szSField,
-                strlen(szSField));
->>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
-=======
-        strncpy((char *)(pabyRec + psDBF->panFieldOffset[iField]), szSField,
-                strlen(szSField));
->>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
-=======
-        char szFormat[20];
-        snprintf(szFormat, sizeof(szFormat), "%%%d.%df", nWidth,
-                 psDBF->panFieldDecimals[iField]);
-        CPLsnprintf(szSField, sizeof(szSField), szFormat,
-                    *STATIC_CAST(double *, pValue));
-        szSField[sizeof(szSField) - 1] = '\0';
-        if (STATIC_CAST(int, strlen(szSField)) > psDBF->panFieldSize[iField]) {
-            szSField[psDBF->panFieldSize[iField]] = '\0';
-            nRetResult = false;
-        }
-        memcpy(
-            REINTERPRET_CAST(char *, pabyRec + psDBF->panFieldOffset[iField]),
-            szSField, strlen(szSField));
 =======
 >>>>>>> osgeo-main
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
@@ -5677,6 +6364,9 @@ static bool DBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -5687,11 +6377,14 @@ static bool DBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField,
         if (psDBF->panFieldSize[iField] >= 1 &&
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -5740,6 +6433,9 @@ static bool DBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField,
 =======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -5757,6 +6453,11 @@ static bool DBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField,
             nRetResult = false;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 =======
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
@@ -5771,11 +6472,14 @@ static bool DBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField,
                    psDBF->panFieldSize[iField]);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
             j = STATIC_CAST(int, strlen(STATIC_CAST(char *, pValue)));
@@ -5821,6 +6525,9 @@ static bool DBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField,
 =======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -5837,6 +6544,11 @@ static bool DBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField,
     return nRetResult;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 =======
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
@@ -5860,6 +6572,7 @@ int SHPAPI_CALL DBFWriteAttributeDirectly(DBFHandle psDBF, int hEntity,
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -5868,6 +6581,10 @@ int SHPAPI_CALL DBFWriteAttributeDirectly(DBFHandle psDBF, int hEntity,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -5879,7 +6596,10 @@ int SHPAPI_CALL DBFWriteAttributeDirectly(DBFHandle psDBF, int hEntity,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -5920,6 +6640,9 @@ int SHPAPI_CALL DBFWriteAttributeDirectly(DBFHandle psDBF, int hEntity,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -5936,16 +6659,23 @@ int SHPAPI_CALL DBFWriteAttributeDirectly(DBFHandle psDBF, int hEntity,
         psDBF->nRecords++;
 <<<<<<< HEAD
 <<<<<<< HEAD
-        for (int i = 0; i < psDBF->nRecordLength; i++)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         for (int i = 0; i < psDBF->nRecordLength; i++)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        for (int i = 0; i < psDBF->nRecordLength; i++)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        for (int i = 0; i < psDBF->nRecordLength; i++)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         for (int i = 0; i < psDBF->nRecordLength; i++)
@@ -5966,6 +6696,9 @@ int SHPAPI_CALL DBFWriteAttributeDirectly(DBFHandle psDBF, int hEntity,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -5983,18 +6716,26 @@ int SHPAPI_CALL DBFWriteAttributeDirectly(DBFHandle psDBF, int hEntity,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    unsigned char *pabyRec =
-        REINTERPRET_CAST(unsigned char *, psDBF->pszCurrentRecord);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     unsigned char *pabyRec =
         REINTERPRET_CAST(unsigned char *, psDBF->pszCurrentRecord);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    unsigned char *pabyRec =
+        REINTERPRET_CAST(unsigned char *, psDBF->pszCurrentRecord);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    unsigned char *pabyRec =
+        REINTERPRET_CAST(unsigned char *, psDBF->pszCurrentRecord);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     unsigned char *pabyRec =
@@ -6018,6 +6759,9 @@ int SHPAPI_CALL DBFWriteAttributeDirectly(DBFHandle psDBF, int hEntity,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -6027,8 +6771,13 @@ int SHPAPI_CALL DBFWriteAttributeDirectly(DBFHandle psDBF, int hEntity,
     /* -------------------------------------------------------------------- */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -6041,10 +6790,13 @@ int SHPAPI_CALL DBFWriteAttributeDirectly(DBFHandle psDBF, int hEntity,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int j;
     if (STATIC_CAST(int, strlen(STATIC_CAST(char *, pValue))) >
         psDBF->panFieldSize[iField])
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     if ((int)strlen((char *)pValue) > psDBF->panFieldSize[iField])
@@ -6065,6 +6817,9 @@ int SHPAPI_CALL DBFWriteAttributeDirectly(DBFHandle psDBF, int hEntity,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -6074,6 +6829,7 @@ int SHPAPI_CALL DBFWriteAttributeDirectly(DBFHandle psDBF, int hEntity,
                psDBF->panFieldSize[iField]);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -6082,6 +6838,10 @@ int SHPAPI_CALL DBFWriteAttributeDirectly(DBFHandle psDBF, int hEntity,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -6092,7 +6852,10 @@ int SHPAPI_CALL DBFWriteAttributeDirectly(DBFHandle psDBF, int hEntity,
             STATIC_CAST(const char *, pValue), j);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -6126,6 +6889,9 @@ int SHPAPI_CALL DBFWriteAttributeDirectly(DBFHandle psDBF, int hEntity,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -6147,18 +6913,26 @@ int SHPAPI_CALL DBFWriteDoubleAttribute(DBFHandle psDBF, int iRecord,
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
-    return (DBFWriteAttribute(psDBF, iRecord, iField,
-                              STATIC_CAST(void *, &dValue)));
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     return (DBFWriteAttribute(psDBF, iRecord, iField,
                               STATIC_CAST(void *, &dValue)));
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    return (DBFWriteAttribute(psDBF, iRecord, iField,
+                              STATIC_CAST(void *, &dValue)));
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    return (DBFWriteAttribute(psDBF, iRecord, iField,
+                              STATIC_CAST(void *, &dValue)));
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     return (DBFWriteAttribute(psDBF, iRecord, iField,
@@ -6182,6 +6956,9 @@ int SHPAPI_CALL DBFWriteDoubleAttribute(DBFHandle psDBF, int iRecord,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -6200,18 +6977,26 @@ int SHPAPI_CALL DBFWriteIntegerAttribute(DBFHandle psDBF, int iRecord,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    return (DBFWriteAttribute(psDBF, iRecord, iField,
-                              STATIC_CAST(void *, &dValue)));
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     return (DBFWriteAttribute(psDBF, iRecord, iField,
                               STATIC_CAST(void *, &dValue)));
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    return (DBFWriteAttribute(psDBF, iRecord, iField,
+                              STATIC_CAST(void *, &dValue)));
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    return (DBFWriteAttribute(psDBF, iRecord, iField,
+                              STATIC_CAST(void *, &dValue)));
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     return (DBFWriteAttribute(psDBF, iRecord, iField,
@@ -6235,6 +7020,9 @@ int SHPAPI_CALL DBFWriteIntegerAttribute(DBFHandle psDBF, int iRecord,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -6250,6 +7038,7 @@ int SHPAPI_CALL DBFWriteStringAttribute(DBFHandle psDBF, int iRecord,
                                         int iField, const char *pszValue)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -6258,6 +7047,10 @@ int SHPAPI_CALL DBFWriteStringAttribute(DBFHandle psDBF, int iRecord,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -6268,7 +7061,10 @@ int SHPAPI_CALL DBFWriteStringAttribute(DBFHandle psDBF, int iRecord,
                           STATIC_CAST(void *, CONST_CAST(char *, pszValue))));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -6295,6 +7091,9 @@ int SHPAPI_CALL DBFWriteStringAttribute(DBFHandle psDBF, int iRecord,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -6309,8 +7108,13 @@ int SHPAPI_CALL DBFWriteStringAttribute(DBFHandle psDBF, int iRecord,
 int SHPAPI_CALL DBFWriteNULLAttribute(DBFHandle psDBF, int iRecord, int iField)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -6323,10 +7127,13 @@ int SHPAPI_CALL DBFWriteNULLAttribute(DBFHandle psDBF, int iRecord, int iField)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 {
     return (DBFWriteAttribute(psDBF, iRecord, iField, SHPLIB_NULLPTR));
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 {
@@ -6350,6 +7157,9 @@ int SHPAPI_CALL DBFWriteNULLAttribute(DBFHandle psDBF, int iRecord, int iField)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -6365,6 +7175,7 @@ int SHPAPI_CALL DBFWriteLogicalAttribute(DBFHandle psDBF, int iRecord,
                                          int iField, const char lValue)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -6373,6 +7184,10 @@ int SHPAPI_CALL DBFWriteLogicalAttribute(DBFHandle psDBF, int iRecord,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -6383,7 +7198,10 @@ int SHPAPI_CALL DBFWriteLogicalAttribute(DBFHandle psDBF, int iRecord,
                           STATIC_CAST(void *, CONST_CAST(char *, &lValue))));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -6410,6 +7228,9 @@ int SHPAPI_CALL DBFWriteLogicalAttribute(DBFHandle psDBF, int iRecord,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -6419,18 +7240,26 @@ int SHPAPI_CALL DBFWriteLogicalAttribute(DBFHandle psDBF, int iRecord,
 /*                         DBFWriteTuple()                              */
 <<<<<<< HEAD
 <<<<<<< HEAD
-/*                                    */
-/*    Write an attribute record to the file.                */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 /*                                    */
 /*    Write an attribute record to the file.                */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+/*                                    */
+/*    Write an attribute record to the file.                */
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+/*                                    */
+/*    Write an attribute record to the file.                */
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 /*                                    */
@@ -6460,6 +7289,9 @@ int SHPAPI_CALL DBFWriteLogicalAttribute(DBFHandle psDBF, int iRecord,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -6469,6 +7301,7 @@ int SHPAPI_CALL DBFWriteTuple(DBFHandle psDBF, int hEntity, void *pRawTuple)
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -6477,6 +7310,10 @@ int SHPAPI_CALL DBFWriteTuple(DBFHandle psDBF, int hEntity, void *pRawTuple)
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -6488,7 +7325,10 @@ int SHPAPI_CALL DBFWriteTuple(DBFHandle psDBF, int hEntity, void *pRawTuple)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -6529,6 +7369,9 @@ int SHPAPI_CALL DBFWriteTuple(DBFHandle psDBF, int hEntity, void *pRawTuple)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -6545,16 +7388,23 @@ int SHPAPI_CALL DBFWriteTuple(DBFHandle psDBF, int hEntity, void *pRawTuple)
         psDBF->nRecords++;
 <<<<<<< HEAD
 <<<<<<< HEAD
-        for (int i = 0; i < psDBF->nRecordLength; i++)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         for (int i = 0; i < psDBF->nRecordLength; i++)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        for (int i = 0; i < psDBF->nRecordLength; i++)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        for (int i = 0; i < psDBF->nRecordLength; i++)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         for (int i = 0; i < psDBF->nRecordLength; i++)
@@ -6575,6 +7425,9 @@ int SHPAPI_CALL DBFWriteTuple(DBFHandle psDBF, int hEntity, void *pRawTuple)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -6592,18 +7445,26 @@ int SHPAPI_CALL DBFWriteTuple(DBFHandle psDBF, int hEntity, void *pRawTuple)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    unsigned char *pabyRec =
-        REINTERPRET_CAST(unsigned char *, psDBF->pszCurrentRecord);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     unsigned char *pabyRec =
         REINTERPRET_CAST(unsigned char *, psDBF->pszCurrentRecord);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    unsigned char *pabyRec =
+        REINTERPRET_CAST(unsigned char *, psDBF->pszCurrentRecord);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    unsigned char *pabyRec =
+        REINTERPRET_CAST(unsigned char *, psDBF->pszCurrentRecord);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     unsigned char *pabyRec =
@@ -6627,6 +7488,9 @@ int SHPAPI_CALL DBFWriteTuple(DBFHandle psDBF, int hEntity, void *pRawTuple)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -6649,6 +7513,7 @@ int SHPAPI_CALL DBFWriteTuple(DBFHandle psDBF, int hEntity, void *pRawTuple)
 const char SHPAPI_CALL1(*) DBFReadTuple(DBFHandle psDBF, int hEntity)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -6705,6 +7570,10 @@ const char SHPAPI_CALL1(*) DBFReadTuple(DBFHandle psDBF, int hEntity)
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 
 {
     if (hEntity < 0 || hEntity >= psDBF->nRecords)
@@ -6715,10 +7584,13 @@ const char SHPAPI_CALL1(*) DBFReadTuple(DBFHandle psDBF, int hEntity)
 
     return STATIC_CAST(const char *, psDBF->pszCurrentRecord);
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 >>>>>>> osgeo-main
 =======
+=======
+>>>>>>> osgeo-main
 =======
 =======
 
@@ -6762,6 +7634,9 @@ const char SHPAPI_CALL1(*) DBFReadTuple(DBFHandle psDBF, int hEntity)
     return STATIC_CAST(const char *, psDBF->pszCurrentRecord);
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 }
 
@@ -6775,6 +7650,7 @@ DBFHandle SHPAPI_CALL DBFCloneEmpty(DBFHandle psDBF, const char *pszFilename)
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -6783,6 +7659,10 @@ DBFHandle SHPAPI_CALL DBFCloneEmpty(DBFHandle psDBF, const char *pszFilename)
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -6830,7 +7710,10 @@ DBFHandle SHPAPI_CALL DBFCloneEmpty(DBFHandle psDBF, const char *pszFilename)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -6973,6 +7856,9 @@ DBFHandle SHPAPI_CALL DBFCloneEmpty(DBFHandle psDBF, const char *pszFilename)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -6993,6 +7879,7 @@ DBFHandle SHPAPI_CALL DBFCloneEmpty(DBFHandle psDBF, const char *pszFilename)
 char SHPAPI_CALL DBFGetNativeFieldType(DBFHandle psDBF, int iField)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -7001,6 +7888,10 @@ char SHPAPI_CALL DBFGetNativeFieldType(DBFHandle psDBF, int iField)
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -7024,11 +7915,14 @@ char SHPAPI_CALL DBFGetNativeFieldType(DBFHandle psDBF, int iField)
     return ' ';
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 =======
@@ -7063,6 +7957,9 @@ static void str_to_upper(char *string)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -7082,6 +7979,7 @@ int SHPAPI_CALL DBFGetFieldIndex(DBFHandle psDBF, const char *pszFieldName)
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -7090,6 +7988,10 @@ int SHPAPI_CALL DBFGetFieldIndex(DBFHandle psDBF, const char *pszFieldName)
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -7100,7 +8002,10 @@ int SHPAPI_CALL DBFGetFieldIndex(DBFHandle psDBF, const char *pszFieldName)
         if (!STRCASECMP(pszFieldName, name))
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -7143,6 +8048,9 @@ int SHPAPI_CALL DBFGetFieldIndex(DBFHandle psDBF, const char *pszFieldName)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -7169,16 +8077,23 @@ int SHPAPI_CALL DBFIsRecordDeleted(DBFHandle psDBF, int iShape)
     /* -------------------------------------------------------------------- */
 <<<<<<< HEAD
 <<<<<<< HEAD
-    /*    Have we read the record?                    */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     /*    Have we read the record?                    */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    /*    Have we read the record?                    */
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    /*    Have we read the record?                    */
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     /*    Have we read the record?                    */
@@ -7199,6 +8114,9 @@ int SHPAPI_CALL DBFIsRecordDeleted(DBFHandle psDBF, int iShape)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -7224,10 +8142,13 @@ int SHPAPI_CALL DBFMarkRecordDeleted(DBFHandle psDBF, int iShape,
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     /* -------------------------------------------------------------------- */
@@ -7249,8 +8170,11 @@ int SHPAPI_CALL DBFMarkRecordDeleted(DBFHandle psDBF, int iShape,
     char chNewFlag;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 
@@ -7307,6 +8231,9 @@ int SHPAPI_CALL DBFMarkRecordDeleted(DBFHandle psDBF, int iShape,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -7332,18 +8259,26 @@ const char SHPAPI_CALL1(*) DBFGetCodePage(DBFHandle psDBF)
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
-    if (psDBF == SHPLIB_NULLPTR)
-        return SHPLIB_NULLPTR;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if (psDBF == SHPLIB_NULLPTR)
         return SHPLIB_NULLPTR;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (psDBF == SHPLIB_NULLPTR)
+        return SHPLIB_NULLPTR;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (psDBF == SHPLIB_NULLPTR)
+        return SHPLIB_NULLPTR;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     if (psDBF == SHPLIB_NULLPTR)
@@ -7368,6 +8303,9 @@ const char SHPAPI_CALL1(*) DBFGetCodePage(DBFHandle psDBF)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -7384,11 +8322,14 @@ int SHPAPI_CALL DBFDeleteField(DBFHandle psDBF, int iField)
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 =======
@@ -7408,6 +8349,9 @@ int SHPAPI_CALL DBFDeleteField(DBFHandle psDBF, int iField)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -7427,16 +8371,23 @@ int SHPAPI_CALL DBFDeleteField(DBFHandle psDBF, int iField)
     /* update fields info */
 <<<<<<< HEAD
 <<<<<<< HEAD
-    for (int i = iField + 1; i < psDBF->nFields; i++) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     for (int i = iField + 1; i < psDBF->nFields; i++) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (int i = iField + 1; i < psDBF->nFields; i++) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (int i = iField + 1; i < psDBF->nFields; i++) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     for (int i = iField + 1; i < psDBF->nFields; i++) {
@@ -7457,6 +8408,9 @@ int SHPAPI_CALL DBFDeleteField(DBFHandle psDBF, int iField)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -7472,6 +8426,7 @@ int SHPAPI_CALL DBFDeleteField(DBFHandle psDBF, int iField)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -7480,6 +8435,10 @@ int SHPAPI_CALL DBFDeleteField(DBFHandle psDBF, int iField)
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -7497,7 +8456,10 @@ int SHPAPI_CALL DBFDeleteField(DBFHandle psDBF, int iField)
         char *, SfRealloc(psDBF->pachFieldType, sizeof(char) * psDBF->nFields));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -7556,6 +8518,9 @@ int SHPAPI_CALL DBFDeleteField(DBFHandle psDBF, int iField)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -7567,6 +8532,7 @@ int SHPAPI_CALL DBFDeleteField(DBFHandle psDBF, int iField)
     /* overwrite field information in header */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -7575,6 +8541,10 @@ int SHPAPI_CALL DBFDeleteField(DBFHandle psDBF, int iField)
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -7590,7 +8560,10 @@ int SHPAPI_CALL DBFDeleteField(DBFHandle psDBF, int iField)
         char *, SfRealloc(psDBF->pszCurrentRecord, psDBF->nRecordLength));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -7644,6 +8617,9 @@ int SHPAPI_CALL DBFDeleteField(DBFHandle psDBF, int iField)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -7659,6 +8635,7 @@ int SHPAPI_CALL DBFDeleteField(DBFHandle psDBF, int iField)
     /* alloc record */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -7667,6 +8644,10 @@ int SHPAPI_CALL DBFDeleteField(DBFHandle psDBF, int iField)
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -7692,10 +8673,13 @@ int SHPAPI_CALL DBFDeleteField(DBFHandle psDBF, int iField)
                         psDBF->nHeaderLength;
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         nRecordOffset = psDBF->nRecordLength * STATIC_CAST(SAOffset, iRecord) +
                         psDBF->nHeaderLength;
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     pszRecord = (char *)malloc(sizeof(char) * nOldRecordLength);
@@ -7763,6 +8747,9 @@ int SHPAPI_CALL DBFDeleteField(DBFHandle psDBF, int iField)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -7776,6 +8763,7 @@ int SHPAPI_CALL DBFDeleteField(DBFHandle psDBF, int iField)
             psDBF->fp);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -7783,6 +8771,9 @@ int SHPAPI_CALL DBFDeleteField(DBFHandle psDBF, int iField)
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 >>>>>>> osgeo-main
     }
@@ -7797,7 +8788,10 @@ int SHPAPI_CALL DBFDeleteField(DBFHandle psDBF, int iField)
         psDBF->sHooks.FWrite(&ch, 1, 1, psDBF->fp);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -7822,6 +8816,9 @@ int SHPAPI_CALL DBFDeleteField(DBFHandle psDBF, int iField)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -7853,11 +8850,14 @@ int SHPAPI_CALL DBFReorderFields(DBFHandle psDBF, int *panMap)
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 =======
@@ -7884,6 +8884,9 @@ int SHPAPI_CALL DBFReorderFields(DBFHandle psDBF, int *panMap)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -7898,16 +8901,22 @@ int SHPAPI_CALL DBFReorderFields(DBFHandle psDBF, int *panMap)
      * analyzer */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -7923,8 +8932,11 @@ int SHPAPI_CALL DBFReorderFields(DBFHandle psDBF, int *panMap)
         char *, malloc(sizeof(char) * XBASE_FLDHDR_SZ * psDBF->nFields));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -7941,7 +8953,10 @@ int SHPAPI_CALL DBFReorderFields(DBFHandle psDBF, int *panMap)
     for (int i = 1; i < psDBF->nFields; i++) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -8014,6 +9029,9 @@ int SHPAPI_CALL DBFReorderFields(DBFHandle psDBF, int *panMap)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -8035,16 +9053,22 @@ int SHPAPI_CALL DBFReorderFields(DBFHandle psDBF, int *panMap)
         /* alloc record */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -8054,8 +9078,11 @@ int SHPAPI_CALL DBFReorderFields(DBFHandle psDBF, int *panMap)
             STATIC_CAST(char *, malloc(sizeof(char) * psDBF->nRecordLength));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -8079,7 +9106,10 @@ int SHPAPI_CALL DBFReorderFields(DBFHandle psDBF, int *panMap)
             for (int i = 0; i < psDBF->nFields; i++) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -8157,6 +9187,9 @@ int SHPAPI_CALL DBFReorderFields(DBFHandle psDBF, int *panMap)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -8216,11 +9249,14 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -8248,6 +9284,9 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -8273,18 +9312,26 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    if (nWidth > XBASE_FLD_MAX_WIDTH)
-        nWidth = XBASE_FLD_MAX_WIDTH;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if (nWidth > XBASE_FLD_MAX_WIDTH)
         nWidth = XBASE_FLD_MAX_WIDTH;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (nWidth > XBASE_FLD_MAX_WIDTH)
+        nWidth = XBASE_FLD_MAX_WIDTH;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (nWidth > XBASE_FLD_MAX_WIDTH)
+        nWidth = XBASE_FLD_MAX_WIDTH;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     if (nWidth > XBASE_FLD_MAX_WIDTH)
@@ -8309,6 +9356,9 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -8325,6 +9375,7 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
     /* -------------------------------------------------------------------- */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -8333,6 +9384,10 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -8344,7 +9399,10 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
     strncpy(pszFInfo, pszFieldName, XBASE_FLDNAME_LEN_WRITE);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -8389,6 +9447,9 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -8398,6 +9459,7 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
     if (chType == 'C') {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -8406,6 +9468,10 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -8417,7 +9483,10 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
         pszFInfo[17] = STATIC_CAST(unsigned char, nDecimals);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -8454,6 +9523,9 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -8465,6 +9537,7 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
     if (nWidth != nOldWidth) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -8473,6 +9546,10 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -8484,7 +9561,10 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
             char *, SfRealloc(psDBF->pszCurrentRecord, psDBF->nRecordLength));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -8521,6 +9601,9 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -8536,16 +9619,23 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    bool errorAbort = false;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     bool errorAbort = false;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    bool errorAbort = false;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    bool errorAbort = false;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     bool errorAbort = false;
@@ -8572,6 +9662,9 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -8588,16 +9681,22 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
         /* move records to their new positions */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -8607,8 +9706,11 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
                 psDBF->nHeaderLength;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -8629,7 +9731,10 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
                      chOldType == 'D') &&
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -8700,6 +9805,9 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -8723,18 +9831,26 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
             nRecordOffset =
 <<<<<<< HEAD
 <<<<<<< HEAD
-                psDBF->nRecordLength * STATIC_CAST(SAOffset, iRecord) +
-                psDBF->nHeaderLength;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                 psDBF->nRecordLength * STATIC_CAST(SAOffset, iRecord) +
                 psDBF->nHeaderLength;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                psDBF->nRecordLength * STATIC_CAST(SAOffset, iRecord) +
+                psDBF->nHeaderLength;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                psDBF->nRecordLength * STATIC_CAST(SAOffset, iRecord) +
+                psDBF->nHeaderLength;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                 psDBF->nRecordLength * STATIC_CAST(SAOffset, iRecord) +
@@ -8758,6 +9874,9 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -8785,16 +9904,22 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
     else if (nWidth > nOldWidth) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -8806,7 +9931,10 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
         char *pszRecord = (char *)malloc(sizeof(char) * psDBF->nRecordLength);
@@ -8829,6 +9957,9 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -8839,16 +9970,22 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
         /* move records to their new positions */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -8858,8 +9995,11 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
                 psDBF->nHeaderLength;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -8876,8 +10016,11 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
             const bool bIsNULL = DBFIsValueNULL(chOldType, pszOldField);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -8935,6 +10078,9 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -8965,18 +10111,26 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
             nRecordOffset =
 <<<<<<< HEAD
 <<<<<<< HEAD
-                psDBF->nRecordLength * STATIC_CAST(SAOffset, iRecord) +
-                psDBF->nHeaderLength;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                 psDBF->nRecordLength * STATIC_CAST(SAOffset, iRecord) +
                 psDBF->nHeaderLength;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                psDBF->nRecordLength * STATIC_CAST(SAOffset, iRecord) +
+                psDBF->nHeaderLength;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                psDBF->nRecordLength * STATIC_CAST(SAOffset, iRecord) +
+                psDBF->nHeaderLength;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                 psDBF->nRecordLength * STATIC_CAST(SAOffset, iRecord) +
@@ -9000,6 +10154,9 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -9009,6 +10166,7 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
             psDBF->sHooks.FWrite(pszRecord, psDBF->nRecordLength, 1, psDBF->fp);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -9016,6 +10174,9 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 >>>>>>> osgeo-main
         }
@@ -9031,7 +10192,10 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
             psDBF->sHooks.FWrite(&ch, 1, 1, psDBF->fp);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -9057,6 +10221,9 @@ int SHPAPI_CALL DBFAlterFieldDefn(DBFHandle psDBF, int iField,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

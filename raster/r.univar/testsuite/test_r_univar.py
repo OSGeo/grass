@@ -142,11 +142,14 @@ class TestRasterUnivar(TestCase):
             precision=6,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             sep="=",
         )
 
@@ -209,6 +212,9 @@ class TestRasterUnivar(TestCase):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -311,11 +317,14 @@ class TestRasterUnivar(TestCase):
             precision=6,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             sep="=",
         )
 
@@ -359,6 +368,9 @@ class TestRasterUnivar(TestCase):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -439,12 +451,15 @@ class TestRasterUnivar(TestCase):
                         null_cells=0
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                         cells=3420
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                         cells=12780
 =======
                         cells=3420
@@ -453,6 +468,9 @@ class TestRasterUnivar(TestCase):
                         cells=3420
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -515,12 +533,15 @@ class TestRasterUnivar(TestCase):
                         null_cells=0
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                         cells=3420
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                         cells=12780
 =======
                         cells=3420
@@ -529,6 +550,9 @@ class TestRasterUnivar(TestCase):
                         cells=3420
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -565,11 +589,14 @@ class TestRasterUnivar(TestCase):
             precision=6,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             sep="=",
         )
 
@@ -637,6 +664,9 @@ class TestRasterUnivar(TestCase):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

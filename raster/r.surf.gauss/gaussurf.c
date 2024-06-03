@@ -33,6 +33,7 @@ int gaussurf(char *out, /* Name of raster maps to be opened.    */
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
@@ -43,6 +44,10 @@ int gaussurf(char *out, /* Name of raster maps to be opened.    */
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     /****** INITIALISE RANDOM NUMBER GENERATOR ******/
 
     /* You can set GRASS_RANDOM_SEED for repeatability */
@@ -50,8 +55,14 @@ int gaussurf(char *out, /* Name of raster maps to be opened.    */
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

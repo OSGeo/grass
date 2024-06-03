@@ -93,12 +93,15 @@ int split_lines(struct Map_info *Map, int otype, struct Map_info *Err)
 int split_line(struct Map_info *Map, int otype, struct line_pnts *Points,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                struct line_cats *Cats, struct Map_info *Err,
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                struct line_cats *Cats, struct Map_info *Err UNUSED,
 =======
                struct line_cats *Cats, struct Map_info *Err,
@@ -107,6 +110,9 @@ int split_line(struct Map_info *Map, int otype, struct line_pnts *Points,
                struct line_cats *Cats, struct Map_info *Err,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

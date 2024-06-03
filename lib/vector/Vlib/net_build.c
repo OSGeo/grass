@@ -39,6 +39,7 @@
    \param abcol column with backward costs for arc (if NULL, back costs =
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
    forward costs), \param ncol column with costs for nodes (if NULL, do not use
    node costs), \param geo use geodesic calculation for length (LL), \param
    algorithm not used (in future code for algorithm)
@@ -47,6 +48,8 @@
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
           forward costs)
    \param ncol column with costs for nodes (if NULL, do not use
           node costs)
@@ -63,6 +66,9 @@
    algorithm not used (in future code for algorithm)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -75,12 +81,15 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
                              const char *afcol, const char *abcol,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                              const char *ncol, int geo, int algorithm)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                              const char *ncol, int geo, int algorithm UNUSED)
 =======
                              const char *ncol, int geo, int algorithm)
@@ -89,6 +98,9 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
                              const char *ncol, int geo, int algorithm)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -475,12 +487,15 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
                 G_warning(
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     _("Database record for turn with cat = %d in not found. "
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                     _("Database record for turn with cat = %d is not found. "
 =======
                     _("Database record for turn with cat = %d in not found. "
@@ -489,6 +504,9 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
                     _("Database record for turn with cat = %d in not found. "
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

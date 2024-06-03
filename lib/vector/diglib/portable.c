@@ -174,16 +174,23 @@ int dig__fread_port_O(off_t *buf, size_t cnt, struct gvfile *fp,
     if (Cur_Head->off_t_quick) {
 <<<<<<< HEAD
 <<<<<<< HEAD
-        if ((size_t)nat_off_t == port_off_t_size) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         if ((size_t)nat_off_t == port_off_t_size) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if ((size_t)nat_off_t == port_off_t_size) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if ((size_t)nat_off_t == port_off_t_size) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         if ((size_t)nat_off_t == port_off_t_size) {
@@ -204,6 +211,9 @@ int dig__fread_port_O(off_t *buf, size_t cnt, struct gvfile *fp,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -213,16 +223,23 @@ int dig__fread_port_O(off_t *buf, size_t cnt, struct gvfile *fp,
         }
 <<<<<<< HEAD
 <<<<<<< HEAD
-        else if ((size_t)nat_off_t > port_off_t_size) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         else if ((size_t)nat_off_t > port_off_t_size) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        else if ((size_t)nat_off_t > port_off_t_size) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        else if ((size_t)nat_off_t > port_off_t_size) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         else if ((size_t)nat_off_t > port_off_t_size) {
@@ -243,6 +260,9 @@ int dig__fread_port_O(off_t *buf, size_t cnt, struct gvfile *fp,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -275,16 +295,23 @@ int dig__fread_port_O(off_t *buf, size_t cnt, struct gvfile *fp,
         }
 <<<<<<< HEAD
 <<<<<<< HEAD
-        else if ((size_t)nat_off_t < port_off_t_size) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         else if ((size_t)nat_off_t < port_off_t_size) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        else if ((size_t)nat_off_t < port_off_t_size) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        else if ((size_t)nat_off_t < port_off_t_size) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         else if ((size_t)nat_off_t < port_off_t_size) {
@@ -305,6 +332,9 @@ int dig__fread_port_O(off_t *buf, size_t cnt, struct gvfile *fp,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -315,16 +345,23 @@ int dig__fread_port_O(off_t *buf, size_t cnt, struct gvfile *fp,
     else {
 <<<<<<< HEAD
 <<<<<<< HEAD
-        if ((size_t)nat_off_t >= port_off_t_size) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         if ((size_t)nat_off_t >= port_off_t_size) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if ((size_t)nat_off_t >= port_off_t_size) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if ((size_t)nat_off_t >= port_off_t_size) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         if ((size_t)nat_off_t >= port_off_t_size) {
@@ -345,6 +382,9 @@ int dig__fread_port_O(off_t *buf, size_t cnt, struct gvfile *fp,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -376,16 +416,23 @@ int dig__fread_port_O(off_t *buf, size_t cnt, struct gvfile *fp,
         }
 <<<<<<< HEAD
 <<<<<<< HEAD
-        else if ((size_t)nat_off_t < port_off_t_size) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         else if ((size_t)nat_off_t < port_off_t_size) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        else if ((size_t)nat_off_t < port_off_t_size) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        else if ((size_t)nat_off_t < port_off_t_size) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         else if ((size_t)nat_off_t < port_off_t_size) {
@@ -406,6 +453,9 @@ int dig__fread_port_O(off_t *buf, size_t cnt, struct gvfile *fp,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -812,6 +862,7 @@ int dig__fwrite_port_O(const off_t *buf, size_t cnt, struct gvfile *fp,
     if (Cur_Head->off_t_quick) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -820,6 +871,10 @@ int dig__fwrite_port_O(const off_t *buf, size_t cnt, struct gvfile *fp,
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -830,7 +885,10 @@ int dig__fwrite_port_O(const off_t *buf, size_t cnt, struct gvfile *fp,
         else if ((size_t)nat_off_t > port_off_t_size) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -862,6 +920,9 @@ int dig__fwrite_port_O(const off_t *buf, size_t cnt, struct gvfile *fp,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -882,16 +943,23 @@ int dig__fwrite_port_O(const off_t *buf, size_t cnt, struct gvfile *fp,
         }
 <<<<<<< HEAD
 <<<<<<< HEAD
-        else if ((size_t)nat_off_t < port_off_t_size) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         else if ((size_t)nat_off_t < port_off_t_size) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        else if ((size_t)nat_off_t < port_off_t_size) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        else if ((size_t)nat_off_t < port_off_t_size) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         else if ((size_t)nat_off_t < port_off_t_size) {
@@ -912,6 +980,9 @@ int dig__fwrite_port_O(const off_t *buf, size_t cnt, struct gvfile *fp,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -922,16 +993,23 @@ int dig__fwrite_port_O(const off_t *buf, size_t cnt, struct gvfile *fp,
     else {
 <<<<<<< HEAD
 <<<<<<< HEAD
-        if ((size_t)nat_off_t >= port_off_t_size) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         if ((size_t)nat_off_t >= port_off_t_size) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if ((size_t)nat_off_t >= port_off_t_size) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if ((size_t)nat_off_t >= port_off_t_size) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         if ((size_t)nat_off_t >= port_off_t_size) {
@@ -952,6 +1030,9 @@ int dig__fwrite_port_O(const off_t *buf, size_t cnt, struct gvfile *fp,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -969,16 +1050,23 @@ int dig__fwrite_port_O(const off_t *buf, size_t cnt, struct gvfile *fp,
         }
 <<<<<<< HEAD
 <<<<<<< HEAD
-        else if ((size_t)nat_off_t < port_off_t_size) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         else if ((size_t)nat_off_t < port_off_t_size) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        else if ((size_t)nat_off_t < port_off_t_size) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        else if ((size_t)nat_off_t < port_off_t_size) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         else if ((size_t)nat_off_t < port_off_t_size) {
@@ -999,6 +1087,9 @@ int dig__fwrite_port_O(const off_t *buf, size_t cnt, struct gvfile *fp,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1300,15 +1391,21 @@ void dig_init_portable(struct Port_info *port, int byte_order)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    for (i = 0; i < (size_t)nat_off_t; i++) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     for (i = 0; i < (size_t)nat_off_t; i++) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (i = 0; i < (size_t)nat_off_t; i++) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    for (i = 0; i < (size_t)nat_off_t; i++) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     for (i = 0; i < (size_t)nat_off_t; i++) {
 =======
@@ -1328,6 +1425,9 @@ void dig_init_portable(struct Port_info *port, int byte_order)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1361,16 +1461,23 @@ int dig_set_cur_port(struct Port_info *port)
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
-int dig__byte_order_out(void)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 int dig__byte_order_out(void)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+int dig__byte_order_out(void)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+int dig__byte_order_out(void)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 int dig__byte_order_out(void)
@@ -1390,6 +1497,9 @@ int dig__byte_order_out(void)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

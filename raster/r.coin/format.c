@@ -29,15 +29,21 @@ int format_double(double v, char *buf, int n)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-    for (k = n; (ssize_t)strlen(buf) > n; k--) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     for (k = n; (ssize_t)strlen(buf) > n; k--) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (k = n; (ssize_t)strlen(buf) > n; k--) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+    for (k = n; (ssize_t)strlen(buf) > n; k--) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
     for (k = n; (ssize_t)strlen(buf) > n; k--) {
 =======
@@ -57,6 +63,9 @@ int format_double(double v, char *buf, int n)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

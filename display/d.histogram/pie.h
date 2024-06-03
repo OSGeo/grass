@@ -41,16 +41,23 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-float rem(long int, long int); /* remainder function */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 float rem(long int, long int); /* remainder function */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+float rem(long int, long int); /* remainder function */
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+float rem(long int, long int); /* remainder function */
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 float rem(long int, long int); /* remainder function */
@@ -71,6 +78,9 @@ float rem(long int, long int); /* remainder function */
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

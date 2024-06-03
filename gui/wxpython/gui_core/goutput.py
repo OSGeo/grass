@@ -45,12 +45,15 @@ from core.globalvar import CheckWxVersion, wxPythonPhoenix
 from gui_core.prompt import GPromptSTC
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 from gui_core.wrap import Button, ClearButton, StaticText, StaticBox
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 from gui_core.wrap import Button, ClearButton, StaticText
 =======
 from gui_core.wrap import Button, ClearButton, StaticText, StaticBox
@@ -59,6 +62,9 @@ from gui_core.wrap import Button, ClearButton, StaticText, StaticBox
 from gui_core.wrap import Button, ClearButton, StaticText, StaticBox
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -163,11 +169,14 @@ class GConsoleWindow(wx.SplitterWindow):
         self.btnCmdAbort.SetToolTip(_("Abort running command"))
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 
         self.btnClear.Bind(wx.EVT_BUTTON, self.OnClear)
         self.btnOutputSave.Bind(wx.EVT_BUTTON, self.OnOutputSave)
@@ -176,6 +185,9 @@ class GConsoleWindow(wx.SplitterWindow):
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -196,8 +208,14 @@ class GConsoleWindow(wx.SplitterWindow):
         self.btnCmdExportHistory.Bind(wx.EVT_BUTTON, self.OnCmdExportHistory)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 021dfb5d52 (r.terrafow: explicit use of default constructors (#2660))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 021dfb5d52 (r.terrafow: explicit use of default constructors (#2660))
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
@@ -499,6 +517,7 @@ class GConsoleWindow(wx.SplitterWindow):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
@@ -508,6 +527,10 @@ class GConsoleWindow(wx.SplitterWindow):
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 =======
+>>>>>>> osgeo-main
+=======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 >>>>>>> osgeo-main
     def OnCmdExportHistory(self, event):
         """Export the history of executed commands stored

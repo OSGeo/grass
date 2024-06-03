@@ -10,16 +10,22 @@ Status: Adopted (6 April 2007)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -31,7 +37,10 @@ as low as possible.
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 A GRASS Project Steering Committee ([PSC](https://trac.osgeo.org/grass/wiki/PSC)) is proposed to formalize control
@@ -57,6 +66,9 @@ as low as possible.
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -92,18 +104,26 @@ currently include:
 * Granting write access to the source code repository for new developers.
 <<<<<<< HEAD
 <<<<<<< HEAD
-* Enforcing the submitter guidelines, with the ultimate sanction against
-  non-compliance being removal of write access to the source code repository.
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 * Enforcing the submitter guidelines, with the ultimate sanction against
   non-compliance being removal of write access to the source code repository.
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+* Enforcing the submitter guidelines, with the ultimate sanction against
+  non-compliance being removal of write access to the source code repository.
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+* Enforcing the submitter guidelines, with the ultimate sanction against
+  non-compliance being removal of write access to the source code repository.
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 * Enforcing the submitter guidelines, with the ultimate sanction against
@@ -127,6 +147,9 @@ currently include:
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -149,18 +172,26 @@ quality of the GRASS project.
 Removal of write access to the source code repository is handled as a
 <<<<<<< HEAD
 <<<<<<< HEAD
-proposal to the committee as described below in the
-[Operation of the PSC](#operation-of-the-psc) section.
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 proposal to the committee as described below in the
 [Operation of the PSC](#operation-of-the-psc) section.
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+proposal to the committee as described below in the
+[Operation of the PSC](#operation-of-the-psc) section.
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+proposal to the committee as described below in the
+[Operation of the PSC](#operation-of-the-psc) section.
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 proposal to the committee as described below in the
@@ -184,6 +215,9 @@ proposal to the committee as described below in the
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -222,12 +256,15 @@ mailing list in the form of a proposal. A decision will then be achieved
 by discussion of the proposal on the mailing list until a consensus is
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 reached. Voting on issues is also permissable and may be used as a means
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 reached. Voting on issues is also permissible and may be used as a means
 =======
 reached. Voting on issues is also permissable and may be used as a means
@@ -236,6 +273,9 @@ reached. Voting on issues is also permissable and may be used as a means
 reached. Voting on issues is also permissable and may be used as a means
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

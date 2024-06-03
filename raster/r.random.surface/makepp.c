@@ -4,6 +4,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 double MakePP(int Row, int Col, int OutRows, int OutCols, double **Randoms,
               BIGF BigF)
 =======
@@ -11,6 +12,8 @@ double MakePP(int Row, int Col, int OutRows, int OutCols, double **Randoms,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 double MakePP(int Row, int Col, int OutRows UNUSED, int OutCols UNUSED,
               double **Randoms, BIGF BigF)
 =======
@@ -22,6 +25,9 @@ double MakePP(int Row, int Col, int OutRows, int OutCols, double **Randoms,
               BIGF BigF)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

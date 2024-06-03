@@ -75,16 +75,23 @@ public:
         static char buf[20];
 <<<<<<< HEAD
 <<<<<<< HEAD
-        snprintf(buf, sizeof(buf), "%.1f", (float)p);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(buf, sizeof(buf), "%.1f", (float)p);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, sizeof(buf), "%.1f", (float)p);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, sizeof(buf), "%.1f", (float)p);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(buf, sizeof(buf), "%.1f", (float)p);
@@ -105,6 +112,9 @@ public:
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -119,16 +129,23 @@ public:
         static char buf[20];
 <<<<<<< HEAD
 <<<<<<< HEAD
-        snprintf(buf, sizeof(buf), "%3d", p);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(buf, sizeof(buf), "%3d", p);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, sizeof(buf), "%3d", p);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, sizeof(buf), "%3d", p);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(buf, sizeof(buf), "%3d", p);
@@ -149,6 +166,9 @@ public:
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -159,16 +179,23 @@ public:
         static char buf[20];
 <<<<<<< HEAD
 <<<<<<< HEAD
-        snprintf(buf, sizeof(buf), "%3d", p.dir);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(buf, sizeof(buf), "%3d", p.dir);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, sizeof(buf), "%3d", p.dir);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, sizeof(buf), "%3d", p.dir);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(buf, sizeof(buf), "%3d", p.dir);
@@ -189,6 +216,9 @@ public:
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -212,16 +242,23 @@ public:
         static char buf[8];
 <<<<<<< HEAD
 <<<<<<< HEAD
-        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
@@ -242,6 +279,9 @@ public:
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -252,16 +292,23 @@ public:
         static char buf[8];
 <<<<<<< HEAD
 <<<<<<< HEAD
-        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
@@ -282,6 +329,9 @@ public:
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -292,16 +342,23 @@ public:
         static char buf[8];
 <<<<<<< HEAD
 <<<<<<< HEAD
-        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
@@ -322,6 +379,9 @@ public:
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -336,16 +396,23 @@ public:
         static char buf[3];
 <<<<<<< HEAD
 <<<<<<< HEAD
-        snprintf(buf, sizeof(buf), "%1u", p.depth);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(buf, sizeof(buf), "%1u", p.depth);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, sizeof(buf), "%1u", p.depth);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, sizeof(buf), "%1u", p.depth);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(buf, sizeof(buf), "%1u", p.depth);
@@ -366,6 +433,9 @@ public:
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -378,16 +448,23 @@ char *verbosedir(const std::string &s)
     static char buf[BUFSIZ];
 <<<<<<< HEAD
 <<<<<<< HEAD
-    snprintf(buf, BUFSIZ, "dump/%s", s.c_str());
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     snprintf(buf, BUFSIZ, "dump/%s", s.c_str());
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(buf, BUFSIZ, "dump/%s", s.c_str());
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(buf, BUFSIZ, "dump/%s", s.c_str());
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     snprintf(buf, BUFSIZ, "dump/%s", s.c_str());
@@ -408,6 +485,9 @@ char *verbosedir(const std::string &s)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -639,16 +719,23 @@ computeFlowDirections(AMI_STREAM<elevation_type> *&elstr,
     assert(base_dir);
 <<<<<<< HEAD
 <<<<<<< HEAD
-    snprintf(path, BUFSIZ, "%s/flowStream", base_dir);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     snprintf(path, BUFSIZ, "%s/flowStream", base_dir);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(path, BUFSIZ, "%s/flowStream", base_dir);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(path, BUFSIZ, "%s/flowStream", base_dir);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     snprintf(path, BUFSIZ, "%s/flowStream", base_dir);
@@ -669,6 +756,9 @@ computeFlowDirections(AMI_STREAM<elevation_type> *&elstr,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -831,12 +921,15 @@ class directionElevationMerger {
 public:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     waterGridType operator()(elevation_type el, direction_type dir,
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     waterGridType operator()(elevation_type el, direction_type dir UNUSED,
 =======
     waterGridType operator()(elevation_type el, direction_type dir,
@@ -845,6 +938,9 @@ public:
     waterGridType operator()(elevation_type el, direction_type dir,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

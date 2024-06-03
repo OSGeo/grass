@@ -6,12 +6,15 @@
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int db__driver_add_column(dbString *tableName, dbColumn *column)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 int db__driver_add_column(dbString *tableName UNUSED, dbColumn *column UNUSED)
 =======
 int db__driver_add_column(dbString *tableName, dbColumn *column)
@@ -20,6 +23,9 @@ int db__driver_add_column(dbString *tableName, dbColumn *column)
 int db__driver_add_column(dbString *tableName, dbColumn *column)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

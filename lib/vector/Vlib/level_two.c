@@ -273,6 +273,7 @@ int Vect_get_line_type(struct Map_info *Map, int line)
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int Vect_get_node_coor(const struct Map_info *Map, int num, double *x,
                        double *y, double *z)
 =======
@@ -280,6 +281,8 @@ int Vect_get_node_coor(const struct Map_info *Map, int num, double *x,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 int Vect_get_node_coor(struct Map_info *Map, int num, double *x, double *y,
                        double *z)
 =======
@@ -291,6 +294,9 @@ int Vect_get_node_coor(const struct Map_info *Map, int num, double *x,
                        double *y, double *z)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -366,6 +372,7 @@ int Vect_get_line_nodes(struct Map_info *Map, int line, int *n1, int *n2)
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int Vect_get_line_areas(const struct Map_info *Map, int line, int *left,
                         int *right)
 =======
@@ -373,6 +380,8 @@ int Vect_get_line_areas(const struct Map_info *Map, int line, int *left,
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 int Vect_get_line_areas(struct Map_info *Map, int line, int *left, int *right)
 =======
 int Vect_get_line_areas(const struct Map_info *Map, int line, int *left,
@@ -383,6 +392,9 @@ int Vect_get_line_areas(const struct Map_info *Map, int line, int *left,
                         int *right)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -488,12 +500,15 @@ int Vect_get_centroid_area(struct Map_info *Map, int centroid)
 /*!
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
    \brief Enable/disable maintanance of list of updated lines/nodes
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
    \brief Enable/disable maintenance of list of updated lines/nodes
 =======
    \brief Enable/disable maintanance of list of updated lines/nodes
@@ -502,6 +517,9 @@ int Vect_get_centroid_area(struct Map_info *Map, int centroid)
    \brief Enable/disable maintanance of list of updated lines/nodes
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

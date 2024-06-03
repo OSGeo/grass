@@ -42,16 +42,23 @@ void G_free_ilist(struct ilist *list)
  * */
 <<<<<<< HEAD
 <<<<<<< HEAD
-struct ilist *G_new_ilist(void)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 struct ilist *G_new_ilist(void)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+struct ilist *G_new_ilist(void)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+struct ilist *G_new_ilist(void)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 struct ilist *G_new_ilist(void)
@@ -72,6 +79,9 @@ struct ilist *G_new_ilist(void)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

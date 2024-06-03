@@ -48,16 +48,23 @@ static int Rast3d_readIndex(RASTER3D_Map *map)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-            if (indexLength > (int)sizeof(long) * map->nTiles) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             if (indexLength > (int)sizeof(long) * map->nTiles) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (indexLength > (int)sizeof(long) * map->nTiles) {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (indexLength > (int)sizeof(long) * map->nTiles) {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
             if (indexLength > (int)sizeof(long) * map->nTiles) {
@@ -78,6 +85,9 @@ static int Rast3d_readIndex(RASTER3D_Map *map)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -103,16 +113,23 @@ static int Rast3d_readIndex(RASTER3D_Map *map)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-            if (indexLength > (int)sizeof(long) * map->nTiles)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             if (indexLength > (int)sizeof(long) * map->nTiles)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (indexLength > (int)sizeof(long) * map->nTiles)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (indexLength > (int)sizeof(long) * map->nTiles)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
             if (indexLength > (int)sizeof(long) * map->nTiles)
@@ -133,6 +150,9 @@ static int Rast3d_readIndex(RASTER3D_Map *map)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

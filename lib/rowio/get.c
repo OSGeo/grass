@@ -85,12 +85,15 @@ void *Rowio_get(ROWIO *R, int row)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
    \param R pointer to ROWIO strcuture
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
    \param R pointer to ROWIO structure
 =======
    \param R pointer to ROWIO strcuture
@@ -99,6 +102,9 @@ void *Rowio_get(ROWIO *R, int row)
    \param R pointer to ROWIO strcuture
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

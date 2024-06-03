@@ -25,6 +25,7 @@ int parse(int argc, char *argv[], struct parms *parms)
     sigfile->gisprompt = "new,signatures/sigset,sigfile";
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     sigfile->description =
         _("Name for output file containing result signatures");
 =======
@@ -41,6 +42,12 @@ int parse(int argc, char *argv[], struct parms *parms)
         _("Name for output file containing result signatures");
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+    sigfile->description =
+        _("Name for output file containing result signatures");
+=======
+>>>>>>> osgeo-main
     sigfile->description = _("Name for output file containing result signatures");
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
@@ -52,6 +59,9 @@ int parse(int argc, char *argv[], struct parms *parms)
         _("Name for output file containing result signatures");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -84,8 +94,12 @@ int parse(int argc, char *argv[], struct parms *parms)
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 >>>>>>> osgeo-main
 
@@ -96,10 +110,13 @@ int parse(int argc, char *argv[], struct parms *parms)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     if (G_unqualified_name(sigfile->answer, G_mapset(), parms->sigfile,
                            xmapset) < 0)
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
     
@@ -116,6 +133,9 @@ int parse(int argc, char *argv[], struct parms *parms)
                            xmapset) < 0)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -125,15 +145,21 @@ int parse(int argc, char *argv[], struct parms *parms)
         G_fatal_error(_("<%s> is an illegal file name"), parms->sigfile);
 <<<<<<< HEAD
 <<<<<<< HEAD
-
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 
 =======
@@ -147,6 +173,9 @@ int parse(int argc, char *argv[], struct parms *parms)
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

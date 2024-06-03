@@ -27,16 +27,22 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com> (MapPanelBase)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 """  # noqa: E501
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -475,8 +481,11 @@ class StandaloneMapDisplayGrassInterface(StandaloneGrassInterface):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 <<<<<<< HEAD
@@ -485,6 +494,7 @@ class StandaloneMapDisplayGrassInterface(StandaloneGrassInterface):
 class DMonGrassInterface(StandaloneMapDisplayGrassInterface):
     """@implements GrassInterface"""
 =======
+<<<<<<< HEAD
 class DMonGrassInterface(StandaloneMapDisplayGrassInterface):
     """@implements GrassInterface"""
 
@@ -500,6 +510,8 @@ class DMonGrassInterface(StandaloneMapDisplayGrassInterface):
 class DMonGrassInterface(StandaloneMapDisplayGrassInterface):
     """@implements GrassInterface"""
 =======
+=======
+>>>>>>> osgeo-main
 class DMonGrassInterface(StandaloneMapDisplayGrassInterface):
     """@implements GrassInterface"""
 
@@ -547,6 +559,9 @@ class DMonFrame(MapFrame):
 >>>>>>> fbc5f37844 (WMS: replace broken URLs with alternative WMS (#1635))
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -554,6 +569,7 @@ class DMonFrame(MapFrame):
 class DMonGrassInterface(StandaloneMapDisplayGrassInterface):
     """@implements GrassInterface"""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 class DMonDisplay(FrameMixin, MapPanel):
@@ -570,6 +586,18 @@ class DMonDisplay(FrameMixin, MapPanel):
 class DMonDisplay(FrameMixin, MapPanel):
     """Map display for wrapping map panel with d.mon mathods and frame methods"""
 
+=======
+    def __init__(self, mapframe):
+        StandaloneMapDisplayGrassInterface.__init__(self, mapframe)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+
+=======
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+
+class DMonDisplay(FrameMixin, MapPanel):
+    """Map display for wrapping map panel with d.mon mathods and frame methods"""
+
+>>>>>>> osgeo-main
 =======
     def __init__(self, mapframe):
         StandaloneMapDisplayGrassInterface.__init__(self, mapframe)
@@ -591,6 +619,9 @@ class DMonDisplay(FrameMixin, MapPanel):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

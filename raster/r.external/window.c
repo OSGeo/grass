@@ -93,12 +93,15 @@ void update_default_window(struct Cell_head *cellhd)
         G_put_element_window(&cur_wind, "", "DEFAULT_WIND");
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_message(_("Default region for this location updated"));
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         G_message(_("Default region for this project updated"));
 =======
         G_message(_("Default region for this location updated"));
@@ -107,6 +110,9 @@ void update_default_window(struct Cell_head *cellhd)
         G_message(_("Default region for this location updated"));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

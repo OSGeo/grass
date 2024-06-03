@@ -8,15 +8,21 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-static void make_incr(DateTime *, int, int, DateTime *);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 static void make_incr(DateTime *, int, int, DateTime *);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+static void make_incr(DateTime *, int, int, DateTime *);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+static void make_incr(DateTime *, int, int, DateTime *);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 static void make_incr(DateTime *, int, int, DateTime *);
 =======
@@ -36,6 +42,9 @@ static void make_incr(DateTime *, int, int, DateTime *);
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

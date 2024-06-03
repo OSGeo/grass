@@ -76,6 +76,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("import"));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     module->description = _(
         "Re-projects a vector map from one location to the current location.");
 =======
@@ -83,6 +84,8 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     module->description =
         _("Re-projects a vector map from one project to the current project.");
 =======
@@ -94,6 +97,9 @@ int main(int argc, char *argv[])
         "Re-projects a vector map from one location to the current location.");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -199,12 +205,15 @@ int main(int argc, char *argv[])
     if (!ibaseopt->answer && strcmp(iloc_name, G_location()) == 0)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_fatal_error(_("Input and output locations can not be the same"));
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         G_fatal_error(_("Input and output projects can not be the same"));
 =======
         G_fatal_error(_("Input and output locations can not be the same"));
@@ -213,6 +222,9 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Input and output locations can not be the same"));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -269,6 +281,7 @@ int main(int argc, char *argv[])
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             G_verbose_message(_("Checking location <%s> mapset <%s>"),
                               iloc_name, iset_name);
 =======
@@ -276,6 +289,8 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             G_verbose_message(_("Checking project <%s> mapset <%s>"), iloc_name,
                               iset_name);
 =======
@@ -287,6 +302,9 @@ int main(int argc, char *argv[])
                               iloc_name, iset_name);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -315,12 +333,15 @@ int main(int argc, char *argv[])
             G_fatal_error(
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 _("Vector map <%s> in location <%s> mapset <%s> not found"),
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                 _("Vector map <%s> in project <%s> mapset <%s> not found"),
 =======
                 _("Vector map <%s> in location <%s> mapset <%s> not found"),
@@ -329,6 +350,9 @@ int main(int argc, char *argv[])
                 _("Vector map <%s> in location <%s> mapset <%s> not found"),
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -445,11 +469,14 @@ int main(int argc, char *argv[])
             G_fatal_error(
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                 _("Mapset <%s> in input project <%s> - permission denied"),
                 iset_name, iloc_name);
         else
@@ -458,6 +485,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -467,8 +497,14 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Mapset <%s> in input location <%s> not found"),
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

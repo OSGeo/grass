@@ -54,16 +54,23 @@ paramType param; /*params */
 void fatal_error(Database db, char *errorMsg); /*Simple Error message */
 <<<<<<< HEAD
 <<<<<<< HEAD
-void set_params(void);                         /*Fill the paramType structure */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 void set_params(void);                         /*Fill the paramType structure */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+void set_params(void);                         /*Fill the paramType structure */
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+void set_params(void);                         /*Fill the paramType structure */
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 void set_params(void);                         /*Fill the paramType structure */
@@ -84,6 +91,9 @@ void set_params(void);                         /*Fill the paramType structure */
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -298,12 +308,15 @@ void elev_raster_to_g3d(Database db, RASTER3D_Region region)
                 4,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 "Caluclating position in 3d region -> height %g with value %g",
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                 "Calculating position in 3d region -> height %g with value %g",
 =======
                 "Caluclating position in 3d region -> height %g with value %g",
@@ -312,6 +325,9 @@ void elev_raster_to_g3d(Database db, RASTER3D_Region region)
                 "Caluclating position in 3d region -> height %g with value %g",
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

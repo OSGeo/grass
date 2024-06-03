@@ -879,12 +879,15 @@ void v5dDecompressGrid(int nr, int nc, int nl, int compressmode, void *compdata,
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int v5dSizeofGrid(const v5dstruct *v, int time, int var)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 int v5dSizeofGrid(const v5dstruct *v, int time UNUSED, int var)
 =======
 int v5dSizeofGrid(const v5dstruct *v, int time, int var)
@@ -893,6 +896,9 @@ int v5dSizeofGrid(const v5dstruct *v, int time, int var)
 int v5dSizeofGrid(const v5dstruct *v, int time, int var)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

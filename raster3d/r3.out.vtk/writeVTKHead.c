@@ -32,12 +32,15 @@
 /* ************************************************************************* */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void write_vtk_structured_point_header(FILE *fp, char *vtkFile,
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 void write_vtk_structured_point_header(FILE *fp, char *vtkFile UNUSED,
 =======
 void write_vtk_structured_point_header(FILE *fp, char *vtkFile,
@@ -46,6 +49,9 @@ void write_vtk_structured_point_header(FILE *fp, char *vtkFile,
 void write_vtk_structured_point_header(FILE *fp, char *vtkFile,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -114,12 +120,15 @@ void write_vtk_structured_point_header(FILE *fp, char *vtkFile,
 /* ************************************************************************* */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void write_vtk_structured_grid_header(FILE *fp, char *vtkFile,
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 void write_vtk_structured_grid_header(FILE *fp, char *vtkFile UNUSED,
 =======
 void write_vtk_structured_grid_header(FILE *fp, char *vtkFile,
@@ -128,6 +137,9 @@ void write_vtk_structured_grid_header(FILE *fp, char *vtkFile,
 void write_vtk_structured_grid_header(FILE *fp, char *vtkFile,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -155,12 +167,15 @@ void write_vtk_structured_grid_header(FILE *fp, char *vtkFile,
 /* ************************************************************************* */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void write_vtk_unstructured_grid_header(FILE *fp, char *vtkFile,
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 void write_vtk_unstructured_grid_header(FILE *fp, char *vtkFile UNUSED,
 =======
 void write_vtk_unstructured_grid_header(FILE *fp, char *vtkFile,
@@ -169,6 +184,9 @@ void write_vtk_unstructured_grid_header(FILE *fp, char *vtkFile,
 void write_vtk_unstructured_grid_header(FILE *fp, char *vtkFile,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

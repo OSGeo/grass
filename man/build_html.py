@@ -3,6 +3,7 @@
 # utilities for generating HTML indices
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # (C) 2003-2023 Markus Neteler and the GRASS Development Team
 =======
 <<<<<<< HEAD
@@ -10,6 +11,9 @@
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 # (C) 2003-2024 Markus Neteler and the GRASS Development Team
 =======
@@ -25,6 +29,9 @@
 # (C) 2003-2023 Markus Neteler and the GRASS Development Team
 >>>>>>> 6104ec7096 (i.maxlik: fix crash when classification result is NULL (#2724))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

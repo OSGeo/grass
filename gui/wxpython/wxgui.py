@@ -84,6 +84,7 @@ class GMApp(wx.App):
             # create and show main frame
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             single = UserSettings.Get(
                 group="general", key="singleWindow", subkey="enabled"
 =======
@@ -91,6 +92,8 @@ class GMApp(wx.App):
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             single = UserSettings.Get(
                 group="appearance", key="singleWindow", subkey="enabled"
@@ -103,6 +106,9 @@ class GMApp(wx.App):
                 group="general", key="singleWindow", subkey="enabled"
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -111,6 +117,7 @@ class GMApp(wx.App):
                 from main_window.frame import GMFrame
             else:
                 from lmgr.frame import GMFrame
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 
@@ -123,6 +130,8 @@ class GMApp(wx.App):
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             try:
                 mainframe = GMFrame(
                     parent=None, id=wx.ID_ANY, workspace=self.workspaceFile
@@ -164,6 +173,9 @@ class GMApp(wx.App):
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

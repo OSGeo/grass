@@ -309,16 +309,23 @@ typedef struct {
 typedef struct {
 <<<<<<< HEAD
 <<<<<<< HEAD
-    N_data_star *(*callback)(void *, N_geom_data *, int, int, int);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     N_data_star *(*callback)(void *, N_geom_data *, int, int, int);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    N_data_star *(*callback)(void *, N_geom_data *, int, int, int);
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    N_data_star *(*callback)(void *, N_geom_data *, int, int, int);
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     N_data_star *(*callback)(void *, N_geom_data *, int, int, int);
@@ -339,6 +346,9 @@ typedef struct {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -350,6 +360,7 @@ typedef struct {
 typedef struct {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -358,6 +369,10 @@ typedef struct {
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -372,7 +387,10 @@ extern void N_set_les_callback_2d_func(
     N_data_star *(*callback_func_2d)(void *, N_geom_data *, int, int));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -413,6 +431,9 @@ extern void N_set_les_callback_2d_func(
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

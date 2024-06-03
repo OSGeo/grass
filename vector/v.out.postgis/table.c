@@ -14,12 +14,15 @@
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void check_columns(const struct Map_info *Map, const char *layer,
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 void check_columns(struct Map_info *Map, const char *layer,
 =======
 void check_columns(const struct Map_info *Map, const char *layer,
@@ -28,6 +31,9 @@ void check_columns(const struct Map_info *Map, const char *layer,
 void check_columns(const struct Map_info *Map, const char *layer,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

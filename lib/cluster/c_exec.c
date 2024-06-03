@@ -33,16 +33,23 @@ int I_cluster_exec(struct Cluster *C, int maxclass, int iterations,
                    double convergence, double separation, int min_class_size,
 <<<<<<< HEAD
 <<<<<<< HEAD
-                   int (*checkpoint)(struct Cluster *, int), int *interrupted)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                    int (*checkpoint)(struct Cluster *, int), int *interrupted)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                   int (*checkpoint)(struct Cluster *, int), int *interrupted)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                   int (*checkpoint)(struct Cluster *, int), int *interrupted)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
                    int (*checkpoint)(struct Cluster *, int), int *interrupted)
@@ -63,6 +70,9 @@ int I_cluster_exec(struct Cluster *C, int maxclass, int iterations,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

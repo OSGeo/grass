@@ -72,6 +72,9 @@ from main_window.notebook import MainNotebook
 =======
 >>>>>>> 5871ca876b (wxGUI/Single-Window GUI: arrangement of basic widgets (#1621))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -101,16 +104,22 @@ from lmgr.workspace import WorkspaceManager
 from lmgr.pyshell import PyShellWindow
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 from lmgr.giface import LayerManagerGrassInterface
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -120,10 +129,13 @@ from lmgr.giface import (
 )
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 from mapdisp.frame import MapPanel
 from datacatalog.catalog import DataCatalog
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 >>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
@@ -172,12 +184,15 @@ class GMFrame(wx.Frame):
         workspace=None,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         size=wx.Display().GetGeometry().GetSize(),
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         size=wx.GetClientDisplayRect().GetSize(),
 =======
         size=wx.Display().GetGeometry().GetSize(),
@@ -186,6 +201,9 @@ class GMFrame(wx.Frame):
         size=wx.Display().GetGeometry().GetSize(),
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -240,12 +258,15 @@ class GMFrame(wx.Frame):
         self._moduleTreeBuilder = LayerManagerModuleTree(message_handler=add_menu_error)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         self._auimgr = aui.AuiManager(self)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         self._auimgr = SingleWindowAuiManager(self)
 =======
         self._auimgr = aui.AuiManager(self)
@@ -254,6 +275,9 @@ class GMFrame(wx.Frame):
         self._auimgr = aui.AuiManager(self)
 >>>>>>> 5871ca876b (wxGUI/Single-Window GUI: arrangement of basic widgets (#1621))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -267,6 +291,7 @@ class GMFrame(wx.Frame):
         # set pane sizes according to the full screen size of the primary monitor
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -275,6 +300,10 @@ class GMFrame(wx.Frame):
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -288,7 +317,10 @@ class GMFrame(wx.Frame):
         )
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -330,6 +362,9 @@ class GMFrame(wx.Frame):
         )
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -344,8 +379,11 @@ class GMFrame(wx.Frame):
         if UserSettings.Get(group="general", key="defWindowPos", subkey="enabled"):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
             single_window_dim = {
@@ -376,6 +414,9 @@ class GMFrame(wx.Frame):
             self.Maximize(True)
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -405,8 +446,14 @@ class GMFrame(wx.Frame):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -527,12 +574,16 @@ class GMFrame(wx.Frame):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
     def SetStatusText(self, *args):
@@ -553,6 +604,9 @@ class GMFrame(wx.Frame):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -562,8 +616,14 @@ class GMFrame(wx.Frame):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -600,8 +660,14 @@ class GMFrame(wx.Frame):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -713,11 +779,14 @@ class GMFrame(wx.Frame):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -725,6 +794,9 @@ class GMFrame(wx.Frame):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -749,6 +821,7 @@ class GMFrame(wx.Frame):
         )
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -761,6 +834,11 @@ class GMFrame(wx.Frame):
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         # create display toolbar
         dmgrToolbar = DisplayPanelToolbar(guiparent=self.pg_panel, parent=self)
 
@@ -771,8 +849,11 @@ class GMFrame(wx.Frame):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
         def CreateNewMapDisplay(giface, layertree):
@@ -800,6 +881,9 @@ class GMFrame(wx.Frame):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -819,8 +903,14 @@ class GMFrame(wx.Frame):
                 giface=self._gifaceForDisplay,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -836,17 +926,23 @@ class GMFrame(wx.Frame):
                 Map=layertree.Map,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                 dockable=True,
 =======
 >>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -856,6 +952,7 @@ class GMFrame(wx.Frame):
             # add map display panel to notebook and make it current
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             self.mapnotebook.AddPage(mapdisplay, name)
             self.mapnotebook.SetSelection(self.currentPageNum)
 =======
@@ -863,6 +960,8 @@ class GMFrame(wx.Frame):
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             self.mainnotebook.AddPage(mapdisplay, name)
 =======
             self.mapnotebook.AddPage(mapdisplay, name)
@@ -873,6 +972,9 @@ class GMFrame(wx.Frame):
             self.mapnotebook.SetSelection(self.currentPageNum)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -906,15 +1008,21 @@ class GMFrame(wx.Frame):
         cb_boxsizer = wx.BoxSizer(wx.VERTICAL)
 <<<<<<< HEAD
 <<<<<<< HEAD
-        cb_boxsizer.Add(dmgrToolbar, proportion=0, flag=wx.EXPAND)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         cb_boxsizer.Add(dmgrToolbar, proportion=0, flag=wx.EXPAND)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        cb_boxsizer.Add(dmgrToolbar, proportion=0, flag=wx.EXPAND)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+        cb_boxsizer.Add(dmgrToolbar, proportion=0, flag=wx.EXPAND)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
         cb_boxsizer.Add(dmgrToolbar, proportion=0, flag=wx.EXPAND)
 =======
@@ -927,6 +1035,9 @@ class GMFrame(wx.Frame):
         cb_boxsizer.Add(dmgrToolbar, proportion=0, flag=wx.EXPAND)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -937,11 +1048,14 @@ class GMFrame(wx.Frame):
         self.GetLayerTree().Layout()
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         # Repaint Layers pane map display toolbar widget on the wxMac
         self._repaintLayersPaneMapDisplayToolbar()
 =======
@@ -949,6 +1063,9 @@ class GMFrame(wx.Frame):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -964,17 +1081,23 @@ class GMFrame(wx.Frame):
         def CanCloseDisplay(askIfSaveWorkspace):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -986,12 +1109,15 @@ class GMFrame(wx.Frame):
                                                tree page index and
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                                                "mapnotebook" key represent
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                                                "mainnotebook" key represent
 =======
                                                "mapnotebook" key represent
@@ -1000,6 +1126,9 @@ class GMFrame(wx.Frame):
                                                "mapnotebook" key represent
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1010,6 +1139,7 @@ class GMFrame(wx.Frame):
             pgnum_dict["layers"] = self.notebookLayers.GetPageIndex(page)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             pgnum_dict["mapnotebook"] = self.mapnotebook.GetPageIndex(mapdisplay)
             name = self.notebookLayers.GetPageText(pgnum_dict["layers"])
 =======
@@ -1017,6 +1147,8 @@ class GMFrame(wx.Frame):
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             pgnum_dict["mainnotebook"] = self.mainnotebook.GetPageIndex(mapdisplay)
             name = self.notebookLayers.GetPageText(pgnum_dict["layers"])
 =======
@@ -1033,6 +1165,9 @@ class GMFrame(wx.Frame):
             name = self.notebookLayers.GetPageText(pgnum_dict["layers"])
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1042,11 +1177,14 @@ class GMFrame(wx.Frame):
             ):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                 return pgnum_dict
             return None
@@ -1077,6 +1215,9 @@ class GMFrame(wx.Frame):
 >>>>>>> 7896e1a53f (wxGUI/Single-Window: New change page event for AuiNotebook (#1780))
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1090,6 +1231,10 @@ class GMFrame(wx.Frame):
             lambda page=self.currentPage: self._onMapDisplayFocus(page),
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
@@ -1107,6 +1252,7 @@ class GMFrame(wx.Frame):
         mapdisplay.ending3dMode.connect(self.RemoveNvizTools)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         mapdisplay.closingDisplay.connect(self._closePageNoEvent)
 =======
 <<<<<<< HEAD
@@ -1114,12 +1260,17 @@ class GMFrame(wx.Frame):
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+>>>>>>> osgeo-main
+=======
         mapdisplay.closingDisplay.connect(self._closePageNoEvent)
 >>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
 =======
         mapdisplay.closingDisplay.connect(self._closePageNoEvent)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1144,11 +1295,14 @@ class GMFrame(wx.Frame):
         )
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 
     def BuildPanes(self):
         """Build panes - toolbars as well as panels"""
@@ -1250,6 +1404,9 @@ class GMFrame(wx.Frame):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1345,8 +1502,11 @@ class GMFrame(wx.Frame):
             aui.AuiPaneInfo()
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
             .Name("display")
@@ -1536,6 +1696,9 @@ class GMFrame(wx.Frame):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1553,6 +1716,10 @@ class GMFrame(wx.Frame):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 5871ca876b (wxGUI/Single-Window GUI: arrangement of basic widgets (#1621))
+>>>>>>> osgeo-main
 =======
 >>>>>>> 5871ca876b (wxGUI/Single-Window GUI: arrangement of basic widgets (#1621))
 >>>>>>> osgeo-main
@@ -1620,11 +1787,14 @@ class GMFrame(wx.Frame):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         single_win_panes_layout_pos_enabled = UserSettings.Get(
             group="general",
             key="singleWinPanesLayoutPos",
@@ -1644,6 +1814,9 @@ class GMFrame(wx.Frame):
 =======
 >>>>>>> 5871ca876b (wxGUI/Single-Window GUI: arrangement of basic widgets (#1621))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1654,11 +1827,14 @@ class GMFrame(wx.Frame):
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindowOrExit)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -1672,6 +1848,9 @@ class GMFrame(wx.Frame):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1746,10 +1925,13 @@ class GMFrame(wx.Frame):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 
         self._auimgr.GetPane("nviz").Show()
@@ -1760,6 +1942,9 @@ class GMFrame(wx.Frame):
         self._auimgr.Update()
 >>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1956,8 +2141,11 @@ class GMFrame(wx.Frame):
         self.currentPageNum = self.notebookLayers.GetSelection()
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 
@@ -1965,6 +2153,9 @@ class GMFrame(wx.Frame):
             self.mainnotebook.SetSelectionToMainPage(self.GetMapDisplay())
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1972,6 +2163,7 @@ class GMFrame(wx.Frame):
             self.mapnotebook.SetSelection(self.GetMapDisplayIndex())
         except Exception:
             pass
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 
@@ -1986,6 +2178,12 @@ class GMFrame(wx.Frame):
 
         event.Skip()
 
+=======
+>>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
+
+        event.Skip()
+
+>>>>>>> osgeo-main
 =======
 >>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
 
@@ -2021,12 +2219,15 @@ class GMFrame(wx.Frame):
         maptree.GetMapDisplay().CleanUp()
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.mapnotebook.DeletePage(self.GetMapDisplayIndex())
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         self.mainnotebook.DeleteMainPage(self.GetMapDisplay())
 =======
         self.mapnotebook.DeletePage(self.GetMapDisplayIndex())
@@ -2035,6 +2236,9 @@ class GMFrame(wx.Frame):
         self.mapnotebook.DeletePage(self.GetMapDisplayIndex())
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2046,11 +2250,14 @@ class GMFrame(wx.Frame):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     def _renamePageNoEvent(self, pgnum_dict, is_docked, text):
         if is_docked:
@@ -2072,6 +2279,9 @@ class GMFrame(wx.Frame):
         page closing event.
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -2110,12 +2320,15 @@ class GMFrame(wx.Frame):
                     notebook.SetSelection(i)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     def RunSpecialCmd(self, command):
         """Run command from command line, check for GUI wrappers"""
         if re.compile(r"^d\..*").search(command[0]):
             self.RunDisplayCmd(command)
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -2902,12 +3115,15 @@ class GMFrame(wx.Frame):
             self.notebookLayers.SetPageText(page=self.currentPageNum, text=name)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             self.mapnotebook.SetPageText(page_idx=self.GetMapDisplayIndex(), text=name)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             self.mainnotebook.SetMainPageText(page=self.GetMapDisplay(), text=name)
 =======
             self.mapnotebook.SetPageText(page_idx=self.GetMapDisplayIndex(), text=name)
@@ -2916,6 +3132,9 @@ class GMFrame(wx.Frame):
             self.mapnotebook.SetPageText(page_idx=self.GetMapDisplayIndex(), text=name)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3546,6 +3765,7 @@ class GMFrame(wx.Frame):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     def OnCloseWindow(self, event):
         """Cleanup when wxGUI is quitted"""
         self._closeWindow(event)
@@ -3557,6 +3777,8 @@ class GMFrame(wx.Frame):
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
     def OnKeyDown(self, event):
@@ -3662,11 +3884,14 @@ class GMFrame(wx.Frame):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     def _onMapsetWatchdog(self, map_path, map_dest):
         """Current mapset watchdog event handler
 
@@ -3684,6 +3909,9 @@ class GMFrame(wx.Frame):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -3694,8 +3922,14 @@ class GMFrame(wx.Frame):
         event.Veto()
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

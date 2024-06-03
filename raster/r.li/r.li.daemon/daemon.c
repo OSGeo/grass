@@ -68,8 +68,13 @@ int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -82,10 +87,13 @@ int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     /* conf files go into ~/.grass8/r.li/ */
     sprintf(rlipath, "%s%c%s%c", G_config_path(), HOST_DIRSEP, "r.li",
             HOST_DIRSEP);
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -104,6 +112,9 @@ int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
             HOST_DIRSEP);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -137,17 +148,24 @@ int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
     else {
 <<<<<<< HEAD
 <<<<<<< HEAD
-        /* text file output */
-        /* check if ~/.grass8/ exists */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         /* text file output */
         /* check if ~/.grass8/ exists */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        /* text file output */
+        /* check if ~/.grass8/ exists */
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+        /* text file output */
+        /* check if ~/.grass8/ exists */
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
         /* text file output */
         /* check if ~/.grass8/ exists */
@@ -168,6 +186,9 @@ int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
         /* check if ~/.grass8/ exists */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -178,11 +199,14 @@ int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -190,6 +214,9 @@ int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -200,12 +227,15 @@ int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
             G_fatal_error(_("Cannot create %s directory"), out);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 
         /* check if ~/.grass7/r.li/output exists */
         if (snprintf(out, GPATH_MAX, "%s%s", rlipath, "output") >= GPATH_MAX)
@@ -243,6 +273,9 @@ int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -261,8 +294,14 @@ int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
             G_fatal_error(_("Cannot create %s output"), out);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -833,16 +872,23 @@ int error_Output(int out, msg m)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-        if (write(out, s, strlen(s)) == (ssize_t)strlen(s))
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         if (write(out, s, strlen(s)) == (ssize_t)strlen(s))
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (write(out, s, strlen(s)) == (ssize_t)strlen(s))
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (write(out, s, strlen(s)) == (ssize_t)strlen(s))
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         if (write(out, s, strlen(s)) == (ssize_t)strlen(s))
@@ -863,6 +909,9 @@ int error_Output(int out, msg m)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -874,16 +923,22 @@ int error_Output(int out, msg m)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 int raster_Output(int fd, int aid, struct g_area *g UNUSED, double res)
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

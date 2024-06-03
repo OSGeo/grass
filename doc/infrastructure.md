@@ -12,8 +12,11 @@ Related Wiki documents:
 * <https://grass.osgeo.org/wiki/GRASS_Migration_to_OSGeo> (historical document)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 
@@ -25,6 +28,9 @@ Related Wiki documents:
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -40,6 +46,7 @@ than in SVN).
 
 The GitHub repositories are:
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 * GRASS GIS core (7.x): <https://github.com/OSGeo/grass>
@@ -61,6 +68,8 @@ Issues:
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 - GRASS GIS core (7+): <https://github.com/OSGeo/grass>
 - GRASS GIS legacy (3.x-6.x): <https://github.com/OSGeo/grass-legacy>
 - GRASS GIS Add-ons: <https://github.com/OSGeo/grass-addons>
@@ -113,6 +122,9 @@ Issues:
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -127,10 +139,13 @@ Trac related notes:
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 * For easier linking in the Trac Wiki, some macro definitions are used for manual
   page refs (G7:modulename)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 * For easier linking in the Trac Wiki, some macro definitions are used for manual page refs (G7:modulename)
@@ -140,6 +155,9 @@ Trac related notes:
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -158,8 +176,11 @@ Statistics:
 * <https://trac.osgeo.org/grass/stats/code>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 
@@ -171,6 +192,9 @@ Statistics:
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -181,6 +205,7 @@ Statistics:
 
 Maintainer: M. Neteler
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 * <https://grass.osgeo.org>
@@ -230,6 +255,8 @@ Maintainer: M. Neteler
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 - <https://grass.osgeo.org>
 
   - osgeo7-grass: LXD container on osgeo7 (<https://wiki.osgeo.org/wiki/SAC_Service_Status#osgeo_7>)
@@ -407,6 +434,9 @@ Maintainer: M. Neteler
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -428,8 +458,14 @@ Maintainer: M. Neteler
     * cronjob script: /osgeo/scripts/update_logs.sh
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -446,12 +482,15 @@ Summary: The system should run almost autonomously.
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 * <https://github.com/landam/wingrass-maintenance-scripts>
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 See <https://github.com/landam/wingrass-maintenance-scripts>
 =======
 =======
@@ -467,6 +506,9 @@ See <https://github.com/landam/wingrass-maintenance-scripts>
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -479,6 +521,7 @@ Maintainer: Markus Neteler
 
 Available lists:
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 * at OSGeo.org (<https://lists.osgeo.org/mailman/listinfo>):
@@ -507,6 +550,8 @@ Notes:
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 - at OSGeo.org (<https://lists.osgeo.org/mailman/listinfo>):
   - grass-abm: Integration of GRASS with JAVA based agent based modeling
     (ABM)
@@ -608,6 +653,9 @@ Notes:
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -624,6 +672,10 @@ Notes:
   at Ecole Polytechnique de Montreal, Canada. Not open for other postings.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 >>>>>>> osgeo-main
@@ -637,11 +689,14 @@ Maintainer: Martin Landa, Markus Neteler
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 - <https://grasswiki.osgeo.org>
 - Mediawiki software
 - requires registration to keep spammers out
@@ -649,6 +704,9 @@ Maintainer: Martin Landa, Markus Neteler
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -658,6 +716,7 @@ Maintainer: Martin Landa, Markus Neteler
 * requires registration to keep spammers out
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 Summary: The system should run almost autonomous. An eye must be be kept on people
@@ -670,6 +729,8 @@ Macros for manual pages (src, cmd, API, ...):
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 Summary: The system should run almost autonomous. An eye must be be kept
 on people trying to spam the site. Several layers of registration protection
 are in place due to excessive spam.
@@ -713,6 +774,9 @@ Macros for manual pages (src, cmd, API, ...):
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -732,8 +796,14 @@ Web based client: See <https://grasswiki.osgeo.org/wiki/IRC>
   * Brad ("bdouglas")
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -749,11 +819,14 @@ Web based client: See <https://grasswiki.osgeo.org/wiki/IRC>
 Current bugtracker (Jan 2020 - today):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 
 - <https://github.com/OSGeo/grass/issues>
 
@@ -764,6 +837,9 @@ Old bugtrackers: see <https://grasswiki.osgeo.org/wiki/Bug_tracking>
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -782,9 +858,12 @@ Old tracsvn (OSGeo server) (Dec 2007 * Mai 2019)
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -792,6 +871,9 @@ Old tracsvn (OSGeo server) (Dec 2007 * Mai 2019)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -819,8 +901,11 @@ Very old bugtracker (Jan 2007 * Dec 2008):
 Very very old bugtracker (Dec 2000 * Dec 2006):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -832,6 +917,11 @@ Very very old bugtracker (Dec 2000 * Dec 2006):
 * TODO: migrate to trac
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 =======
 =======
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
@@ -859,6 +949,7 @@ Details:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 * Windows-addons: grass-addons/utils/addons/README.txt
 * Addon manual pages cronjob: <https://github.com/OSGeo/grass-addons/tree/master/utils/cronjobs_osgeo_lxd>
 * Rendered manuals: <https://grass.osgeo.org/grass8/manuals/addons/>
@@ -867,6 +958,8 @@ Details:
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 - Windows-addons: grass-addons/utils/addons/README.txt
 - Addon manual pages cronjob: <https://github.com/OSGeo/grass-addons/tree/grass8/utils/cronjobs_osgeo_lxd>
@@ -890,6 +983,9 @@ Details:
 * Rendered manuals: <https://grass.osgeo.org/grass8/manuals/addons/>
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -898,6 +994,7 @@ The redirect to the latest grassX directory is defined on grass.osgeo.org:
 /etc/apache2/includes/grass.osgeo.org.inc
 
 Procedure building of binaries (Windows):
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 
@@ -916,6 +1013,8 @@ Procedure of granting write access to Addons repo:
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 
 - Addons module are compiled on winGRASS build server, at the CTU in Prague) and
@@ -981,6 +1080,9 @@ XML file for g.extension: <https://grass.osgeo.org/addons/grass7/modules.xml>
 Procedure of granting write access to Addons repo:
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -995,8 +1097,11 @@ XML file for g.extension: <https://grass.osgeo.org/addons/grass7/modules.xml>
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 * generated in grass-addons/utils/addons/grass-addons-publish.sh
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
@@ -1007,6 +1112,9 @@ XML file for g.extension: <https://grass.osgeo.org/addons/grass7/modules.xml>
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1017,17 +1125,23 @@ Maintainer: Martin Landa
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 - <https://app.travis-ci.com/github/OSGeo/grass>
 - <https://github.com/OSGeo/grass/tree/main/.travis/>
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1048,9 +1162,12 @@ Maintenance script:
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 =======
@@ -1058,6 +1175,9 @@ Maintenance script:
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1067,11 +1187,14 @@ The github update is run as a cronjob on server "geo102" (CTU, CZ).
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 =======
@@ -1079,6 +1202,9 @@ The github update is run as a cronjob on server "geo102" (CTU, CZ).
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1090,11 +1216,14 @@ Maintainer: Vaclav Petras
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 - <https://github.com/OSGeo/grass/actions>
 - Details: <https://github.com/OSGeo/grass/pull/525>
 - CI workflow with:
@@ -1117,6 +1246,9 @@ Helper files placed in .github/workflows/
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1126,8 +1258,11 @@ Helper files placed in .github/workflows/
 * CI workflow with:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
   * A build job which is not parallelized and is meant for clear & relatively fast check of compilation and building in general. (Duplicating what is running on Travis)
@@ -1144,6 +1279,9 @@ Helper files placed in .github/workflows/
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1162,8 +1300,11 @@ Helper files placed in .github/workflows/
     the future.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
@@ -1171,6 +1312,9 @@ Helper files placed in .github/workflows/
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1179,11 +1323,14 @@ Helper files placed in .github/workflows/
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 Maintainer: Carmen Tawalika, Vaclav Petras + OSGeo-SAC
 
 Docker images are created with a GitHub action. Subsequently, login is done
@@ -1225,6 +1372,9 @@ Explanations: <https://grasswiki.osgeo.org/wiki/GitHub-Zenodo_linkage>
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1234,12 +1384,15 @@ Maintainer: Markus Neteler
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 * <https://scan.coverity.com/projects/grass?tab=overview>
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 Coverity Scan is a service to find security issues. At time the service
 is used only occasionally.
 =======
@@ -1255,6 +1408,9 @@ is used only occasionally.
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1272,16 +1428,22 @@ Messages are extracted with `gettext` message macros.
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 Translations may be done using the OSGeo Weblate platform:
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1296,10 +1458,13 @@ Translations may be done using the OSGeo Weblate platform:
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 
@@ -1361,8 +1526,14 @@ Further notification/functionality test systems:
 * posts into #osgeo-commits IRC channel
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1383,11 +1554,14 @@ Numerous institutions have sponsored the GRASS Project with Hardware/Bandwidth
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 - 1997-1999: Institut fuer Landschaftspflege und Naturschutz (ILN), Universitaet
   Hannover, Germany
 - 1999-2001: Institut fuer Physische Geographie und Landschaftsoekologie,
@@ -1399,6 +1573,9 @@ Numerous institutions have sponsored the GRASS Project with Hardware/Bandwidth
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

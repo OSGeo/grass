@@ -169,16 +169,23 @@ char *MEM_STREAM<T>::sprint()
     static char buf[BUFSIZ];
 <<<<<<< HEAD
 <<<<<<< HEAD
-    snprintf(buf, sizeof(buf), "[MEM_STREAM %d]", stream_len());
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     snprintf(buf, sizeof(buf), "[MEM_STREAM %d]", stream_len());
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(buf, sizeof(buf), "[MEM_STREAM %d]", stream_len());
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(buf, sizeof(buf), "[MEM_STREAM %d]", stream_len());
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     snprintf(buf, sizeof(buf), "[MEM_STREAM %d]", stream_len());
@@ -199,6 +206,9 @@ char *MEM_STREAM<T>::sprint()
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

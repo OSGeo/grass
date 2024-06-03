@@ -9,17 +9,23 @@ Classes:
  - mapdisp::DoubleMapPanel
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
  - mapdisp::FrameMixin
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -45,15 +51,21 @@ from gui_core.wrap import NewId
 from mapdisp import statusbar as sb
 <<<<<<< HEAD
 <<<<<<< HEAD
-from mapwin.base import MapWindowProperties
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 from mapwin.base import MapWindowProperties
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+from mapwin.base import MapWindowProperties
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+from mapwin.base import MapWindowProperties
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 from mapwin.base import MapWindowProperties
 =======
@@ -66,6 +78,9 @@ from mapwin.base import MapWindowProperties
 from mapwin.base import MapWindowProperties
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -76,16 +91,22 @@ from grass.script import core as grass
 class MapPanelBase(wx.Panel):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     r"""Base class for map display window
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -219,11 +240,14 @@ class MapPanelBase(wx.Panel):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
     def OnFullScreen(self, event):
@@ -240,6 +264,9 @@ class MapPanelBase(wx.Panel):
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -420,17 +447,24 @@ class MapPanelBase(wx.Panel):
         statusbar.SetMinHeight(24)
 <<<<<<< HEAD
 <<<<<<< HEAD
-        statusbar.SetFieldsCount(3)
-        statusbar.SetStatusWidths([-6, -2, -1])
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         statusbar.SetFieldsCount(3)
         statusbar.SetStatusWidths([-6, -2, -1])
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        statusbar.SetFieldsCount(3)
+        statusbar.SetStatusWidths([-6, -2, -1])
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+        statusbar.SetFieldsCount(3)
+        statusbar.SetStatusWidths([-6, -2, -1])
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
         statusbar.SetFieldsCount(3)
         statusbar.SetStatusWidths([-6, -2, -1])
@@ -448,6 +482,9 @@ class MapPanelBase(wx.Panel):
         statusbar.SetStatusWidths([-6, -2, -1])
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -460,17 +497,24 @@ class MapPanelBase(wx.Panel):
         self.statusbarManager.AddStatusbarItem(
 <<<<<<< HEAD
 <<<<<<< HEAD
-            sb.SbRender(self, statusbar=statusbar, position=2)
-        )
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             sb.SbRender(self, statusbar=statusbar, position=2)
         )
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            sb.SbRender(self, statusbar=statusbar, position=2)
+        )
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+            sb.SbRender(self, statusbar=statusbar, position=2)
+        )
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
             sb.SbRender(self, statusbar=statusbar, position=2)
         )
@@ -492,6 +536,9 @@ class MapPanelBase(wx.Panel):
         )
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -517,12 +564,15 @@ class MapPanelBase(wx.Panel):
     def SetStatusText(self, *args):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         """Overide wx.StatusBar method"""
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         """Override wx.StatusBar method"""
 =======
         """Overide wx.StatusBar method"""
@@ -531,6 +581,9 @@ class MapPanelBase(wx.Panel):
         """Overide wx.StatusBar method"""
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -558,6 +611,10 @@ class MapPanelBase(wx.Panel):
         for toolbar in six.itervalues(self.toolbars):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
@@ -616,6 +673,7 @@ class MapPanelBase(wx.Panel):
             return self._mgr.GetPane(name).IsShown()
         return False
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 
     def AreAllToolbarsShown(self):
         return self.GetMapToolbar().IsShown()
@@ -709,6 +767,8 @@ class MapPanelBase(wx.Panel):
             return self._mgr.GetPane(name).IsShown()
         return False
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> osgeo-main
 
     def AreAllToolbarsShown(self):
         return self.GetMapToolbar().IsShown()
@@ -745,8 +805,11 @@ class MapPanelBase(wx.Panel):
 
 <<<<<<< HEAD
 =======
+<<<<<<< HEAD
 >>>>>>> osgeo-main
 =======
+=======
+>>>>>>> osgeo-main
 >>>>>>> 953489b535 (wxGUI: fix layout flag assert in wms dialog (#1764))
 =======
 >>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
@@ -828,12 +891,15 @@ class MapPanelBase(wx.Panel):
 class SingleMapPanel(MapPanelBase):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     """Panel with one map window.
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     r"""Panel with one map window.
 =======
     """Panel with one map window.
@@ -842,6 +908,9 @@ class SingleMapPanel(MapPanelBase):
     """Panel with one map window.
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -1208,11 +1277,14 @@ class FrameMixin:
         self.GetParent().SetSize(*args)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 
     def Close(self):
         self.GetParent().Close()
@@ -1221,6 +1293,9 @@ class FrameMixin:
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

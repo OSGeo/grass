@@ -11,16 +11,23 @@ static void process_row_di(int), process_row_df(int), process_row_dd(int);
 
 <<<<<<< HEAD
 <<<<<<< HEAD
-static void (*process_row_FtypeOtype[3][3])(int) = {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 static void (*process_row_FtypeOtype[3][3])(int) = {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+static void (*process_row_FtypeOtype[3][3])(int) = {
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+static void (*process_row_FtypeOtype[3][3])(int) = {
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 static void (*process_row_FtypeOtype[3][3])(int) = {
@@ -41,6 +48,9 @@ static void (*process_row_FtypeOtype[3][3])(int) = {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

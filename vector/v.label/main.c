@@ -227,12 +227,15 @@ int main(int argc, char **argv)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* figure out space param dynamically from current dispay */
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         /* figure out space param dynamically from current display */
 =======
         /* figure out space param dynamically from current dispay */
@@ -241,6 +244,9 @@ int main(int argc, char **argv)
         /* figure out space param dynamically from current dispay */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

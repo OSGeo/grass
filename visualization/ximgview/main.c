@@ -147,16 +147,23 @@ static void main_loop(void)
         struct timeval tv;
 <<<<<<< HEAD
 <<<<<<< HEAD
-        unsigned long delay = 0;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         unsigned long delay = 0;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        unsigned long delay = 0;
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        unsigned long delay = 0;
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
         unsigned long delay = 0;
@@ -177,6 +184,9 @@ static void main_loop(void)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -262,16 +272,23 @@ static int read_bmp_header(const unsigned char *p)
         return 0;
 <<<<<<< HEAD
 <<<<<<< HEAD
-    if (get_4(&p) != (unsigned int)i_width * i_height * 4)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if (get_4(&p) != (unsigned int)i_width * i_height * 4)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (get_4(&p) != (unsigned int)i_width * i_height * 4)
+=======
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (get_4(&p) != (unsigned int)i_width * i_height * 4)
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
     if (get_4(&p) != (unsigned int)i_width * i_height * 4)
@@ -292,6 +309,9 @@ static int read_bmp_header(const unsigned char *p)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

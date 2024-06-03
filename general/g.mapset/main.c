@@ -52,12 +52,15 @@ int main(int argc, char *argv[])
     module->description = _("Optionally create new mapset or list available "
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                             "mapsets in given location.");
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                             "mapsets in given project (location).");
 =======
                             "mapsets in given location.");
@@ -66,6 +69,9 @@ int main(int argc, char *argv[])
                             "mapsets in given location.");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

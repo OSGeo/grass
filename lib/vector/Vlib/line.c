@@ -173,12 +173,15 @@ int Vect_append_point(struct line_pnts *Points, double x, double y, double z)
    \return number of points
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
    \return -1 on error (alocation)
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
    \return -1 on error (allocation)
 =======
    \return -1 on error (alocation)
@@ -187,6 +190,9 @@ int Vect_append_point(struct line_pnts *Points, double x, double y, double z)
    \return -1 on error (alocation)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main

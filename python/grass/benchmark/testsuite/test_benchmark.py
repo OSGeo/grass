@@ -20,6 +20,7 @@ from grass.benchmark import (
     benchmark_resolutions,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     benchmark_single,
 =======
 <<<<<<< HEAD
@@ -33,6 +34,11 @@ from grass.benchmark import (
     benchmark_single,
 =======
 >>>>>>> osgeo-main
+=======
+<<<<<<< HEAD
+    benchmark_single,
+=======
+>>>>>>> osgeo-main
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 =======
     benchmark_single,
@@ -41,6 +47,9 @@ from grass.benchmark import (
     benchmark_single,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -88,17 +97,23 @@ class TestBenchmarksRun(TestCase):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 >>>>>>> ba3c0640fa (libpython: Support benchmarks of non-parallel runs better (#1733))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
@@ -127,16 +142,22 @@ class TestBenchmarksRun(TestCase):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 =======
 >>>>>>> ba3c0640fa (libpython: Support benchmarks of non-parallel runs better (#1733))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
