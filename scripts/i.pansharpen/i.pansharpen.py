@@ -104,6 +104,7 @@ except ImportError:
 import grass.script as grass
 from grass.exceptions import CalledModuleError
 
+
 def main():
     if not hasNumPy:
         grass.fatal(_("Required dependency NumPy not found. Exiting."))

@@ -110,8 +110,13 @@ class Settings:
             self.locs.sort()
             # Add a default choice to not override system locale
             self.locs.insert(0, "system")
-        except (KeyError, FileNotFoundError, PermissionError, NotADirectoryError,
-                OSError):
+        except (
+            KeyError,
+            FileNotFoundError,
+            PermissionError,
+            NotADirectoryError,
+            OSError,
+        ):
             # No NLS
             self.locs = ["system"]
 
