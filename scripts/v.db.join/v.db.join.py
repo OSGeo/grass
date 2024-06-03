@@ -204,7 +204,6 @@ def main():
             cols_to_add.append(col_spec)
 
     if cols_to_add:
-        print(cols_to_add)
         try:
             gs.run_command(
                 "v.db.addcolumn",
