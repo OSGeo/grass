@@ -1,3 +1,4 @@
+from grass.exceptions import CalledModuleError
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
@@ -39,10 +40,35 @@ class TestImageryGroupToDict(TestCase):
             list(ref_dict.values()), [val.split("@")[0] for val in group_info.values()]
         )
 
+    def test_invalid_input(self):
+        # Non existing group
+        self.assertRaises(
+            CalledModuleError, gs.imagery.group_to_dict, "non_existing_group"
+        )
+        # invalid dict_key
+        self.assertRaises(
+            CalledModuleError,
+            gs.imagery.group_to_dict,
+            self.group,
+            **{"dict_key": "invalid_dict_key"},
+        )
+
     def test_basic_group_map_keys(self):
         ref_dict = {f"lsat7_2002_{band}0": f"L8_{band}" for band in self.bands}
         group_info = gs.imagery.group_to_dict(
-            self.group, dict_key=None, full_info=False
+            self.group, dict_key="map_names", full_info=False
+        )
+        # Check that a dict is returned
+        self.assertIsInstance(group_info, dict)
+        self.assertListEqual(
+            list(ref_dict.keys()), [key.split("@")[0] for key in group_info.keys()]
+        )
+        self.assertListEqual(list(ref_dict.values()), list(group_info.values()))
+
+    def test_basic_group_index_keys(self):
+        ref_dict = {band: f"lsat7_2002_{band}0" for band in self.bands}
+        group_info = gs.imagery.group_to_dict(
+            self.group, dict_key="indices", full_info=False
         )
         # Check that a dict is returned
         self.assertIsInstance(group_info, dict)
