@@ -10,6 +10,9 @@ class TestPansharpeningAlgorithms(unittest.TestCase):
         cls.mock_find_file = patch('grass.script.find_file', return_value={'name': 'dummy'})
         cls.mock_find_file.start()
 
+        cls.mock_run_command = patch('grass.script.run_command', return_value=0)
+        cls.mock_run_command.start()
+
         cls.inputs = {
             'blue': 'ms1_orig',
             'green': 'ms2_orig',
@@ -25,8 +28,6 @@ class TestPansharpeningAlgorithms(unittest.TestCase):
             'min': 0,
             'max': 255
         }
-        # Set region to the first raster (usually the pan band)
-        gs.run_command("g.region", raster=cls.inputs['pan'], flags="p")
 
     @classmethod
     def tearDownClass(cls):
