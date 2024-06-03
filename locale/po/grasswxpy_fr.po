@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-23 03:37-0600\n"
-"PO-Revision-Date: 2023-04-15 15:08+0000\n"
-"Last-Translator: Sylvain Maillard <sylvain.maillard@gmail.com>\n"
+"PO-Revision-Date: 2024-05-27 09:55+0000\n"
+"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/"
 "grasswxpy/fr/>\n"
 "Language: fr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.16.4\n"
+"X-Generator: Weblate 5.4.3\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: ../gui/wxpython/nviz/tools.py:109 ../gui/wxpython/nviz/preferences.py:65
@@ -721,7 +721,7 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:2857
 msgid "No file prefix given."
-msgstr "Pas de préfix de fichier."
+msgstr "Pas de préfixe de fichier."
 
 #: ../gui/wxpython/nviz/tools.py:2860
 #, python-format
@@ -1173,8 +1173,9 @@ msgstr ""
 "Avec un stvds vous devez utiliser une des options 'coordonées' ou 'cats'"
 
 #: ../gui/wxpython/tplot/g.gui.tplot.py:175
+#, fuzzy
 msgid "Temporal Plot Tool - GRASS GIS"
-msgstr ""
+msgstr "Outil d'affichage temporel - GRASS GIS"
 
 #: ../gui/wxpython/tplot/frame.py:46
 #, python-brace-format
@@ -1186,8 +1187,9 @@ msgstr ""
 "matplotlib) soit installé. {0}"
 
 #: ../gui/wxpython/tplot/frame.py:104
+#, fuzzy
 msgid "Temporal Plot Tool"
-msgstr ""
+msgstr "Outil d'affichage temporel"
 
 #: ../gui/wxpython/tplot/frame.py:189
 msgid ""
@@ -1674,8 +1676,9 @@ msgid "Subgroup <%s> not found"
 msgstr "Sous-groupe <%s> non trouvé"
 
 #: ../gui/wxpython/iclass/g.gui.iclass.py:111
+#, fuzzy
 msgid "Supervised Classification Tool - GRASS GIS"
-msgstr ""
+msgstr "Outil de classification dirigée - GRASS GIS"
 
 #: ../gui/wxpython/iclass/g.gui.iclass.py:122
 #, python-format
@@ -1723,7 +1726,7 @@ msgstr ""
 #: ../gui/wxpython/iclass/frame.py:88 ../gui/wxpython/iclass/frame.py:1622
 #: ../gui/wxpython/main_window/frame.py:1851 ../gui/wxpython/lmgr/frame.py:1701
 msgid "Supervised Classification Tool"
-msgstr ""
+msgstr "Outil de classification dirigée"
 
 #: ../gui/wxpython/iclass/frame.py:306 ../gui/wxpython/mapswipe/frame.py:287
 #: ../gui/wxpython/gcp/mapdisplay.py:247
@@ -2274,7 +2277,7 @@ msgstr "Aucune carte sélectionnée pour la copie."
 
 #: ../gui/wxpython/datacatalog/tree.py:1263
 msgid "No map selected for moving."
-msgstr "Pas de carte sélectionnée pour le déplacement."
+msgstr "Aucune carte sélectionnée pour le déplacement."
 
 #: ../gui/wxpython/datacatalog/tree.py:1285
 #: ../gui/wxpython/datacatalog/tree.py:1305
@@ -2379,11 +2382,11 @@ msgstr "&Renommer"
 
 #: ../gui/wxpython/datacatalog/tree.py:2102
 msgid "&Display layers"
-msgstr ""
+msgstr "Afficher les couches"
 
 #: ../gui/wxpython/datacatalog/tree.py:2104
 msgid "&Display layer"
-msgstr "Afficher la carte"
+msgstr "Afficher la couche"
 
 #: ../gui/wxpython/datacatalog/tree.py:2108
 msgid "Show &metadata"
@@ -2421,19 +2424,16 @@ msgid "&Delete project"
 msgstr "Supprimer les enregistrements"
 
 #: ../gui/wxpython/datacatalog/tree.py:2174
-#, fuzzy
 msgid "&Rename project"
-msgstr "Reprojeter"
+msgstr "&Renommer le projet"
 
 #: ../gui/wxpython/datacatalog/tree.py:2193
-#, fuzzy
 msgid "&Create new project (location)"
-msgstr "Créer un nouveau secteur"
+msgstr "&Créer un nouveau projet (secteur)"
 
 #: ../gui/wxpython/datacatalog/tree.py:2197
-#, fuzzy
 msgid "&Download sample project (location)"
-msgstr "Télécharger le Secteur d'exemple"
+msgstr "Télécharger le projet (secteur) d'exemple"
 
 #: ../gui/wxpython/datacatalog/tree.py:2202
 msgid "&Remove GRASS database from data catalog"
@@ -2716,7 +2716,7 @@ msgstr ""
 #: ../gui/wxpython/mapswipe/frame.py:742 ../gui/wxpython/mapdisp/frame.py:1034
 msgid "No raster or vector map layer selected for querying."
 msgstr ""
-"Pas de carte rater ou couche de carte vecteur sélectionnée pour "
+"Pas de carte raster ou couche de carte vecteur sélectionnée pour "
 "interrogation."
 
 #: ../gui/wxpython/icons/icon.py:36
@@ -2743,7 +2743,7 @@ msgstr "Double-clic pour exécuter le module sélectionné"
 #: ../gui/wxpython/history/tree.py:191
 #, fuzzy
 msgid "&Remove"
-msgstr "Supprimer"
+msgstr "Supp&rimer"
 
 #: ../gui/wxpython/history/tree.py:465
 msgid "Cannot be parsed into command"
@@ -3442,7 +3442,7 @@ msgstr "Suffixe pour les cartes en sortie :"
 
 #: ../gui/wxpython/gcp/manager.py:690
 msgid "No vector maps."
-msgstr ""
+msgstr "Aucune carte vectorielle."
 
 #: ../gui/wxpython/gcp/manager.py:698
 #: ../gui/wxpython/image2target/ii2t_manager.py:704
@@ -4121,9 +4121,8 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:184
 #: ../gui/wxpython/location_wizard/wizard.py:2432
-#, fuzzy
 msgid "Define new GRASS project"
-msgstr "Définir un nouveau secteur GRASS"
+msgstr "Définir un nouveau projet GRASS"
 
 #: ../gui/wxpython/location_wizard/wizard.py:198
 msgid "Change"
@@ -6737,12 +6736,16 @@ msgstr ""
 "et projection de destination."
 
 #: ../gui/wxpython/menustrings.py:298 ../gui/wxpython/menustrings.py:1263
+#, fuzzy
 msgid "Build a VRT (Virtual Raster)"
-msgstr ""
+msgstr "Construire un VRT (raster virtuel)"
 
 #: ../gui/wxpython/menustrings.py:299 ../gui/wxpython/menustrings.py:1264
+#, fuzzy
 msgid "Build a VRT (Virtual Raster) from the list of input raster maps."
 msgstr ""
+"Construire un VRT (raster virtuel) à partir de la liste de cartes raster "
+"d'entrée."
 
 #: ../gui/wxpython/menustrings.py:300 ../gui/wxpython/menustrings.py:606
 #: ../gui/wxpython/menustrings.py:1265 ../gui/wxpython/menustrings.py:1571
@@ -9038,7 +9041,7 @@ msgstr "Classification d'image"
 
 #: ../gui/wxpython/menustrings.py:790 ../gui/wxpython/menustrings.py:1755
 msgid "Clustering input for unsupervised classification"
-msgstr "Regroupement pour classification non-supervisée"
+msgstr "Regroupement pour classification non dirigée"
 
 #: ../gui/wxpython/menustrings.py:791 ../gui/wxpython/menustrings.py:1756
 msgid ""
@@ -9049,11 +9052,11 @@ msgstr ""
 "Générer les signatures spectrales pour les types d'occupation des sols dans "
 "une image avec un algorithme de regroupement. Le fichier de signature "
 "résultant est utilisé en entrée pour i.maxlik, pour générer une "
-"classification non supervisée de l'image."
+"classification non dirigée de l'image."
 
 #: ../gui/wxpython/menustrings.py:792 ../gui/wxpython/menustrings.py:1757
 msgid "Input for supervised MLC"
-msgstr "Entrée pour classification supervisée MLC"
+msgstr "Entrée pour classification dirigée MLC"
 
 #: ../gui/wxpython/menustrings.py:793 ../gui/wxpython/menustrings.py:1758
 msgid "Generates statistics for i.maxlik from raster map."
@@ -9076,7 +9079,7 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:796 ../gui/wxpython/menustrings.py:1761
 #: ../gui/wxpython/menustrings.py:2042
 msgid "Interactive input for supervised classification"
-msgstr "Entrée interactive pour la  classification supervisée"
+msgstr "Entrée interactive pour la classification dirigée"
 
 #: ../gui/wxpython/menustrings.py:797 ../gui/wxpython/menustrings.py:1762
 #: ../gui/wxpython/menustrings.py:2043
@@ -10306,7 +10309,7 @@ msgstr "Afficher les informations système"
 #: ../gui/wxpython/menustrings.py:1069 ../gui/wxpython/menustrings.py:1070
 #: ../gui/wxpython/gui_core/ghelp.py:60
 msgid "About GRASS GIS"
-msgstr "Au sujet du SIG GRASS"
+msgstr "À propos du SIG GRASS"
 
 #: ../gui/wxpython/menustrings.py:1073
 msgid "Import, export and link data"
@@ -10763,8 +10766,7 @@ msgstr "Rien à profiler"
 
 #: ../gui/wxpython/wxplot/profile.py:414
 msgid "Choose prefix for file(s) where to save profile values..."
-msgstr ""
-"Choisir le préfixe des fichiers où enregistrer les valeurs du profil ..."
+msgstr "Choisir le préfixe des fichiers où enregistrer les valeurs du profil…"
 
 #: ../gui/wxpython/wxplot/profile.py:416
 msgid "Comma separated value (*.csv)|*.csv"
@@ -11075,8 +11077,9 @@ msgstr ""
 "La documentation pour %s est maintenant disponible dans le navigateur web"
 
 #: ../gui/wxpython/gui_core/menu.py:407
+#, fuzzy
 msgid "&Recent Files"
-msgstr ""
+msgstr "Fichiers &récents"
 
 #: ../gui/wxpython/gui_core/gselect.py:523
 msgid "Not selectable element"
@@ -11300,7 +11303,7 @@ msgstr "Polygone"
 #: ../gui/wxpython/gui_core/gselect.py:3013
 msgid "No vector map selected in layer manager. Operation canceled."
 msgstr ""
-"Pas de carte vecteur sélectionnée dans le gestionnaire de couches. Opération "
+"Aucune carte vecteur sélectionnée dans le gestionnaire de couches. Opération "
 "annulée."
 
 #: ../gui/wxpython/gui_core/gselect.py:3030
@@ -11323,7 +11326,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/gselect.py:3241
 msgid "No vector map selected"
-msgstr "Pas de carte vecteur sélectionnée"
+msgstr "Aucune carte vecteur sélectionnée"
 
 #: ../gui/wxpython/gui_core/ghelp.py:76
 msgid "Info"
@@ -11400,7 +11403,7 @@ msgid ""
 "Unable to provide citation suggestion, see GRASS GIS website instead. The "
 "error was: {0}"
 msgstr ""
-"Impossible de fournir une sugestion de citation, merci de consulter le site "
+"Impossible de fournir une suggestion de citation, veuillez consulter le site "
 "internet de GRASS. L'erreur est : {0}"
 
 #: ../gui/wxpython/gui_core/ghelp.py:420 ../gui/wxpython/gui_core/ghelp.py:493
@@ -11603,12 +11606,12 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/vselect.py:281
 msgid "No vector map layer selected. Operation canceled."
-msgstr ""
+msgstr "Aucune couche de carte vectorielle sélectionnée. Opération annulée."
 
 #: ../gui/wxpython/gui_core/vselect.py:290 ../gui/wxpython/mapdisp/frame.py:698
 #: ../gui/wxpython/main_window/frame.py:2426 ../gui/wxpython/lmgr/frame.py:2332
 msgid "No map layer selected. Operation canceled."
-msgstr "Aucune ccouche sélectionnée. Opération annulée."
+msgstr "Aucune couche sélectionnée. Opération annulée."
 
 #: ../gui/wxpython/gui_core/vselect.py:310
 #, python-format
@@ -11905,10 +11908,13 @@ msgstr "Niveau de verbosité :"
 #: ../gui/wxpython/gui_core/preferences.py:1294
 msgid "Number of threads for parallel computing (supported tools only):"
 msgstr ""
+"Nombre de threads pour le calcul parallèle (outils pris en charge uniquement)"
+" :"
 
 #: ../gui/wxpython/gui_core/preferences.py:1319
 msgid "Maximum memory in MB to be used (supported tools only):"
 msgstr ""
+"Maximum de mémoire à utiliser en MB (outils pris en charge uniquement) :"
 
 #: ../gui/wxpython/gui_core/preferences.py:1349
 #: ../gui/wxpython/main_window/frame.py:658 ../gui/wxpython/lmgr/frame.py:632
@@ -12010,7 +12016,6 @@ msgid "Projection statusbar settings"
 msgstr "Paramètres de la barre de statut de projection"
 
 #: ../gui/wxpython/gui_core/preferences.py:1803
-#, fuzzy
 msgid ""
 "\n"
 "Note: This only controls the coordinates displayed in the lower-left of the "
@@ -12024,7 +12029,7 @@ msgstr ""
 "\n"
 "Note : Ceci contrôle uniquement les coordonnées affichées dans le coin "
 "inférieur gauche\n"
-"de la fenêtre de Carte. L'effet est purement cosméthique et n'affecte pas la "
+"de la fenêtre de Carte. L'effet est purement cosmétique et n'affecte pas la "
 "projection\n"
 "du secteur d'aucune manière. Vous devrez cocher la case Projection dans le "
 "menu déroulant\n"
@@ -12297,12 +12302,14 @@ msgid "&Clear"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/wrap.py:273
+#, fuzzy
 msgid "&Cancel"
-msgstr ""
+msgstr "&Annuler"
 
 #: ../gui/wxpython/gui_core/wrap.py:286
+#, fuzzy
 msgid "&Close"
-msgstr ""
+msgstr "&Fermer"
 
 #: ../gui/wxpython/gui_core/wrap.py:297
 msgid "Apply"
@@ -13670,7 +13677,7 @@ msgstr "Impossible d'ouvrir la carte vecteur <%s>."
 
 #: ../gui/wxpython/vdigit/wxdigit.py:61
 msgid "No vector map open for editing."
-msgstr "Pas de carte vecteur sélectionnée pour édition."
+msgstr "Aucune carte vecteur sélectionnée pour édition."
 
 #: ../gui/wxpython/vdigit/wxdigit.py:63
 msgid "Operation canceled."
@@ -14019,7 +14026,7 @@ msgstr "Région nommée :"
 #: ../gui/wxpython/web_services/dialogs.py:886
 msgid "Extent and resolution are based on Map Display geometry."
 msgstr ""
-"L'emprise et la résolution sont basés sur la géométrie de l'écran "
+"L'emprise et la résolution sont basées sur la géométrie de l'écran "
 "d'affichage."
 
 #: ../gui/wxpython/web_services/dialogs.py:889
@@ -14179,7 +14186,7 @@ msgstr "Sélectionner la projection source.\n"
 
 #: ../gui/wxpython/web_services/widgets.py:890
 msgid "Choose output layer name.\n"
-msgstr "Choisir le nom de la couche de sorte.\n"
+msgstr "Choisir le nom de la couche de sortie.\n"
 
 #: ../gui/wxpython/web_services/widgets.py:1154
 msgid "Add default"
@@ -16453,7 +16460,7 @@ msgstr "Couche à reprojeter"
 
 #: ../gui/wxpython/modules/import_export.py:996
 msgid "&Import && reproject"
-msgstr "&Importe && reprojecte"
+msgstr "&Importer && reprojeter"
 
 #: ../gui/wxpython/modules/import_export.py:998
 msgid "Reproject selected layers"
@@ -17005,7 +17012,7 @@ msgstr "Bandes à ajouter au nuage de points (x y) :"
 
 #: ../gui/wxpython/iscatt/dialogs.py:156
 msgid "No scatter plots selected."
-msgstr "Pas de nuage de points sélectionné."
+msgstr "Aucun nuage de points sélectionné."
 
 #: ../gui/wxpython/iscatt/dialogs.py:196
 msgid "Select both x and y bands."
@@ -17798,9 +17805,8 @@ msgid "Launching script '%s'..."
 msgstr "Lancement du script '%s'..."
 
 #: ../gui/wxpython/main_window/frame.py:1456
-#, fuzzy
 msgid "No project provided. Operation canceled."
-msgstr "Aucun jeux de carte sélectionné. Opération annulée."
+msgstr "Aucun projet sélectionné. Opération annulée."
 
 #: ../gui/wxpython/main_window/frame.py:1496 ../gui/wxpython/lmgr/frame.py:1345
 msgid "No mapset provided. Operation canceled."
@@ -17886,7 +17892,7 @@ msgid ""
 "\n"
 "Reason: %s"
 msgstr ""
-"Impossible de lancer l' « Outil de classification supervisée ».\n"
+"Impossible de lancer l' « Outil de classification dirigée ».\n"
 "\n"
 "Raison : %s"
 
@@ -18885,8 +18891,9 @@ msgid "Table"
 msgstr "Table"
 
 #: ../gui/wxpython/dbmgr/base.py:1183 ../gui/wxpython/dbmgr/base.py:2345
+#, fuzzy
 msgid " (read-only)"
-msgstr ""
+msgstr " (lecture-seule)"
 
 #: ../gui/wxpython/dbmgr/base.py:1200
 msgid "SQL Query"
@@ -19390,7 +19397,7 @@ msgstr "Pas de nom défini pour l'animation."
 
 #: ../gui/wxpython/animation/data.py:134
 msgid "No workspace file selected."
-msgstr "Pas de fichier d'espace de travail sélectionné."
+msgstr "Aucun fichier d'espace de travail sélectionné."
 
 #: ../gui/wxpython/animation/data.py:137
 #, python-format
@@ -20326,7 +20333,7 @@ msgstr "Sélection de la région"
 
 #: ../gui/wxpython/psmap/dialogs.py:1475
 msgid "No map selected!"
-msgstr "Pas de carte sélectionnée !"
+msgstr "Aucune carte sélectionnée !"
 
 #: ../gui/wxpython/psmap/dialogs.py:1507
 msgid "No region selected!"
@@ -20759,7 +20766,7 @@ msgstr "pivoter le texte (sens anti-horaire)"
 
 #: ../gui/wxpython/psmap/dialogs.py:5600
 msgid "No text entered!"
-msgstr "Pas de texte saisi !"
+msgstr "Aucun texte saisi !"
 
 #: ../gui/wxpython/psmap/dialogs.py:5799
 msgid "Choose a directory with images"
@@ -22515,3 +22522,6 @@ msgstr "étiquettes :"
 #~ msgstr ""
 #~ "Impossible d'obtenir l’extension géographique courante. Sortie forcée de "
 #~ "wxGUI. Merci d'exécuter manuellement g.region pour résoudre ce problème."
+
+msgid "supported tools only"
+msgstr "outils pris en charge uniquement"
