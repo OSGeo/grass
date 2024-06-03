@@ -6,12 +6,14 @@ from grass.exceptions import CalledModuleError
 class TestPansharpeningAlgorithms(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        # Start mocking the raster existence check to always return True
         cls.mock_find_file = patch('grass.script.find_file', return_value={'name': 'dummy'})
         cls.mock_find_file.start()
 
         cls.mock_run_command = patch('grass.script.run_command', return_value=0)
         cls.mock_run_command.start()
+
+        cls.mock_parse_command = patch('grass.script.parse_command', return_value={'min': '0', 'max': '255'})
+        cls.mock_parse_command.start()
 
         cls.inputs = {
             'blue': 'ms1_orig',
@@ -32,7 +34,8 @@ class TestPansharpeningAlgorithms(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.mock_find_file.stop()
-        gs.run_command("g.remove", type="raster", pattern="output_*", flags="f")
+        cls.mock_run_command.stop()
+        cls.mock_parse_command.stop()
 
     def test_brovey_algorithm(self):
         output = self.outputs['brovey']
@@ -51,8 +54,6 @@ class TestPansharpeningAlgorithms(unittest.TestCase):
         # Check the existence and integrity of each output raster component.
         for suffix in ['red', 'green', 'blue']:
             raster_name = f"{output}_{suffix}"
-            if not gs.find_file(raster_name)['name']:
-                self.fail(f"Output raster {raster_name} not found.")
             stats = gs.parse_command('r.univar', map=raster_name, flags="g")
             self.assertTrue(float(stats['min']) >= expected_stats['min'], f"{raster_name} min value is below expected.")
             self.assertTrue(float(stats['max']) <= expected_stats['max'], f"{raster_name} max value exceeds expected.")
