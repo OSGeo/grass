@@ -1,7 +1,15 @@
 """
-Created on Sun Jun 09 11:28:34 2018
+TEST:      test_v_db_join.py
 
-@author: Sanjeet Bhatti
+AUTHOR(S): Stefan Blumentrath
+
+PURPOSE:   Test for v.db.join
+
+COPYRIGHT: (C) 2024 Stefan Blumentrath, and by the GRASS Development Team
+
+           This program is free software under the GNU General Public
+           License (>=v2). Read the file COPYING that comes with GRASS
+           for details.
 """
 
 from grass.gunittest.case import TestCase
