@@ -215,6 +215,7 @@ class TestHorizon(TestCase):
         reference["y"] = 216180.0
         reference["azimuth"] = azimuths
         reference["horizon_height"] = horizons
+        stdout[0].pop("horizon_distance", None)
 
         self.assertListEqual([reference], stdout)
 
@@ -242,6 +243,8 @@ class TestHorizon(TestCase):
         reference["y"] = 216180.0
         reference["azimuth"] = azimuths
         reference["horizon_height"] = horizons
+        stdout[0].pop("horizon_distance", None)
+        stdout[1].pop("horizon_distance", None)
 
         self.assertListEqual([reference, reference], stdout)
 
