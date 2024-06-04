@@ -20,7 +20,7 @@ for details.
 
 from grass.exceptions import CalledModuleError
 
-from .core import read_command, warning
+from .core import read_command, warning, fatal
 from .raster import raster_info
 
 
@@ -34,8 +34,8 @@ def group_to_dict(
 ):
     """Create a dictionary to represent an imagery group with metadata.
 
-    Defined by the dict_keys option, the dictionary uses either the names
-    of the raster maps ("map_names"), their row indices in the group
+    Depending on the dict_keys option, the returned dictionary uses either
+    the names of the raster maps ("map_names"), their row indices in the group
     ("indices") or their associated semantic_labels ("semantic_labels") as keys.
     The default is to use semantic_labels. Note that map metadata
     of the maps in the group have to be read to get the semantic label,
@@ -94,8 +94,8 @@ def group_to_dict(
             .strip()
             .split()
         )
-    except CalledModuleError as cme:
-        raise cme
+    except CalledModuleError as error:
+        raise error
 
     if dict_keys not in ["indices", "map_names", "semantic_labels"]:
         raise ValueError(f"Invalid dictionary keys <{dict_keys}> requested")
@@ -127,13 +127,14 @@ def group_to_dict(
         elif dict_keys == "semantic_labels":
             key = raster_map_info["semantic_label"]
             if not key or key == '"none"':
-                warning(
-                    _(
-                        "Raster map {m} in group <{g}> does not have a semantic label."
-                    ).format(m=raster_map, g=imagery_group_name)
-                )
                 if fill_semantic_label:
                     key = str(idx + 1)
+                else:
+                    fatal(
+                        _(
+                            "Semantic label missing for raster map {m} in group <{g}>."
+                        ).format(m=raster_map, g=imagery_group_name)
+                    )
 
         if dict_values == "indices":
             val = str(idx + 1)
