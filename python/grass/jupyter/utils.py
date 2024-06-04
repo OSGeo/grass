@@ -104,7 +104,7 @@ def estimate_resolution(raster, mapset, location, dbase, env):
         flags="g",
         input=raster,
         mapset=mapset,
-        location=location,
+        project=location,
         dbase=dbase,
         env=env,
     ).strip()
