@@ -482,7 +482,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             try:
                 self.seltree.EnsureVisible(item)
                 self.seltree.SelectItem(item)
-            except:
+            except Exception:
                 pass
 
     def _getElementList(self, element, mapsets=None, elements=None, exclude=False):

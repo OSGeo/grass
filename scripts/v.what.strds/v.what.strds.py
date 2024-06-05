@@ -50,7 +50,7 @@
 # %end
 
 import grass.script as grass
-from grass.exceptions import CalledModuleError
+from grass.exceptions import CalledModuleError, OpenError
 
 ############################################################################
 
@@ -227,7 +227,7 @@ def main():
     pymap = Vector(output)
     try:
         pymap.open("r")
-    except:
+    except Exception:
         dbif.close()
         grass.fatal(_("Unable to create vector map <%s>" % output))
 

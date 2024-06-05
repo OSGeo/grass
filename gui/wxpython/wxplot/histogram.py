@@ -99,7 +99,7 @@ class HistogramPlotFrame(BasePlotFrame):
         """
         try:
             self.SetCursor(StockCursor(wx.CURSOR_ARROW))
-        except:
+        except Exception:
             pass
 
         self.SetGraphStyle()

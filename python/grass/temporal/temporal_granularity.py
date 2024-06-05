@@ -90,19 +90,19 @@ def check_granularity_string(granularity, temporal_type):
     if temporal_type == "absolute":
         try:
             num, unit = granularity.split(" ")
-        except:
+        except (TypeError, ValueError):
             return False
         if unit not in SUPPORTED_GRAN:
             return False
 
         try:
             integer = int(num)
-        except:
+        except (TypeError, ValueError):
             return False
     elif temporal_type == "relative":
         try:
             integer = int(granularity)
-        except:
+        except (TypeError, ValueError):
             return False
     else:
         return False

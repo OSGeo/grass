@@ -79,7 +79,7 @@ def _read_map_full_info(lock, conn, data):
             info = _read_raster_full_info(name, mapset)
         elif maptype == RPCDefs.TYPE_VECTOR:
             info = _read_vector_full_info(name, mapset)
-    except:
+    except Exception:
         raise
     finally:
         conn.send(info)
@@ -294,7 +294,7 @@ def _get_database_name(lock, conn, data):
             dbstring = dbstring.replace(encode("$GISDBASE"), libgis.G_gisdbase())
             dbstring = dbstring.replace(encode("$LOCATION_NAME"), libgis.G_location())
             dbstring = dbstring.replace(encode("$MAPSET"), mapset)
-    except:
+    except Exception:
         raise
     finally:
         conn.send(decode(dbstring))
@@ -352,7 +352,7 @@ def _available_mapsets(lock, conn, data):
         mapset_list.reverse()
         mapset_list.append(current_mapset)
         mapset_list.reverse()
-    except:
+    except Exception:
         raise
     finally:
         conn.send(mapset_list)
@@ -386,7 +386,7 @@ def _has_timestamp(lock, conn, data):
         elif maptype == RPCDefs.TYPE_RASTER3D:
             if libgis.G_has_raster3d_timestamp(name, mapset) == 1:
                 check = True
-    except:
+    except Exception:
         raise
     finally:
         conn.send(check)
@@ -436,7 +436,7 @@ def _read_timestamp(lock, conn, data):
             check = libgis.G_read_raster3d_timestamp(name, mapset, byref(ts))
 
         dates = _convert_timestamp_from_grass(ts)
-    except:
+    except Exception:
         raise
     finally:
         conn.send((check, dates))
@@ -480,7 +480,7 @@ def _write_timestamp(lock, conn, data):
             check = libgis.G_write_vector_timestamp(name, layer, byref(ts))
         elif maptype == RPCDefs.TYPE_RASTER3D:
             check = libgis.G_write_raster3d_timestamp(name, byref(ts))
-    except:
+    except Exception:
         raise
     finally:
         conn.send(check)
@@ -517,7 +517,7 @@ def _remove_timestamp(lock, conn, data):
             check = libgis.G_remove_vector_timestamp(name, layer, mapset)
         elif maptype == RPCDefs.TYPE_RASTER3D:
             check = libgis.G_remove_raster3d_timestamp(name, mapset)
-    except:
+    except Exception:
         raise
     finally:
         conn.send(check)
@@ -557,7 +557,7 @@ def _read_semantic_label(lock, conn, data):
                 "Unable to read semantic label. " "Unsupported map type %s" % maptype
             )
             return -1
-    except:
+    except Exception:
         raise
     finally:
         conn.send(semantic_label)
@@ -594,7 +594,7 @@ def _write_semantic_label(lock, conn, data):
                 "Unable to write semantic label. " "Unsupported map type %s" % maptype
             )
             return -2
-    except:
+    except Exception:
         raise
     finally:
         conn.send(True)
@@ -628,7 +628,7 @@ def _remove_semantic_label(lock, conn, data):
                 "Unable to remove semantic label. " "Unsupported map type %s" % maptype
             )
             return -2
-    except:
+    except Exception:
         raise
     finally:
         conn.send(check)
@@ -662,7 +662,7 @@ def _map_exists(lock, conn, data):
 
         if mapset:
             check = True
-    except:
+    except Exception:
         raise
     finally:
         conn.send(check)
@@ -690,7 +690,7 @@ def _read_map_info(lock, conn, data):
             kvp = _read_vector_info(name, mapset)
         elif maptype == RPCDefs.TYPE_RASTER3D:
             kvp = _read_raster3d_info(name, mapset)
-    except:
+    except Exception:
         raise
     finally:
         conn.send(kvp)
@@ -1000,7 +1000,7 @@ def _read_map_history(lock, conn, data):
             kvp = _read_vector_history(name, mapset)
         elif maptype == RPCDefs.TYPE_RASTER3D:
             kvp = _read_raster3d_history(name, mapset)
-    except:
+    except Exception:
         raise
     finally:
         conn.send(kvp)
