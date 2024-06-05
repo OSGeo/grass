@@ -256,8 +256,8 @@ def download_file(url, response_format, file_name, *args, **kwargs):
     ...         url=url,
     ...         response_format="application/xml",
     ...         file_name=os.path.basename(urlparse(url).path),
-    ...     ) # doctest: +SKIP
-    ...     response.code # doctest: +SKIP
+    ...     )
+    ...     response.code
     200
     """
     import grass.script as gs
