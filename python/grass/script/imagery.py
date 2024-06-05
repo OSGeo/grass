@@ -141,7 +141,7 @@ def group_to_dict(
         elif dict_values == "map_names":
             val = raster_map
         elif dict_values == "semantic_labels":
-            val = raster_map_info or raster_map
+            val = raster_map_info["semantic_label"]
         elif dict_values == "metadata":
             val = raster_map_info
         if key in group_dict:
