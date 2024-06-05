@@ -2086,9 +2086,9 @@ def find_addon_name(addons, url=None):
     ...             "t.info.iso",
     ...             "db.join",
     ...   ]
-    ... ) # doctest: +SKIP
-    >>> addons.sort() # doctest: +SKIP
-    >>> addons # doctest: +SKIP
+    ... )
+    >>> addons.sort()
+    >>> addons
     ['db.join', 'wx.metadata']
     """
     if not url:
