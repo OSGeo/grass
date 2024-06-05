@@ -230,8 +230,8 @@ def main():
         try:
             zf = zfile.ZipFile(zipfile)
             zf.extractall()
-        except (FileNotFoundError, PermissionError, OSError, zipfile.BadZipFile):
-            grass.fatal(_("Unable to unzip file."))
+        except (FileNotFoundError, PermissionError, OSError, zipfile.BadZipFile) as error:
+            grass.fatal(_("Unable to unzip file: {error}").format(error=error))
 
     grass.message(_("Converting input file to BIL..."))
     os.rename(hgtfile, bilfile)
