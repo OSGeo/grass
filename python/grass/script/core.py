@@ -19,6 +19,7 @@ for details.
 """
 
 import os
+import re
 import sys
 import atexit
 import subprocess
