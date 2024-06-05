@@ -77,8 +77,8 @@ def main():
     tar = tarfile.TarFile.open(name=input_base, mode="r")
     try:
         data_name = tar.getnames()[0]
-    except (AttributeError, IndexError, tarfile.ReadError):
-        grass.fatal(_("Pack file unreadable"))
+    except (AttributeError, IndexError, tarfile.ReadError) as error:
+        grass.fatal(_("Pack file unreadable: {error}").format(error=error))
 
     if flags["p"]:
         # print proj info and exit

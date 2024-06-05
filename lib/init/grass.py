@@ -742,7 +742,7 @@ def set_paths(grass_config_dir):
             s = p.stdout.read()
             p.wait()
             sys_man_path = s.strip()
-        except Exception:
+        except (subprocess.TimeoutExpired, subprocess.SubprocessError):
             pass
 
         if sys_man_path:

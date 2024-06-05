@@ -50,7 +50,7 @@
 # %end
 
 import grass.script as grass
-from grass.exceptions import CalledModuleError, OpenError
+from grass.exceptions import CalledModuleError
 
 ############################################################################
 

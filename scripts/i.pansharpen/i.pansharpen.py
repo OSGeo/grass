@@ -102,7 +102,6 @@ except ImportError:
     hasNumPy = False
 
 import grass.script as grass
-from grass.exceptions import CalledModuleError
 
 
 def main():
@@ -455,12 +454,11 @@ def main():
 
     # Cleanup
     grass.message(_("cleaning up temp files"))
-    try:
-        grass.run_command(
-            "g.remove", flags="f", type="raster", pattern="tmp%s*" % pid, quiet=True
-        )
-    except Exception:
-        pass
+
+    grass.run_command(
+        "g.remove", flags="f", type="raster", pattern="tmp%s*" % pid, quiet=True,
+        errors="ignore"
+    )
 
 
 def brovey(pan, ms1, ms2, ms3, out, pid, sproc):
@@ -528,16 +526,15 @@ def brovey(pan, ms1, ms2, ms3, out, pid, sproc):
             pass
 
     # Cleanup
-    try:
-        grass.run_command(
-            "g.remove",
-            flags="f",
-            quiet=True,
-            type="raster",
-            name="%s,%s,%s" % (panmatch1, panmatch2, panmatch3),
-        )
-    except CalledModuleError:
-        pass
+    grass.run_command(
+        "g.remove",
+        flags="f",
+        quiet=True,
+        type="raster",
+        name="%s,%s,%s" % (panmatch1, panmatch2, panmatch3),
+        errors="ignore"
+    )
+
 
 
 def ihs(pan, ms1, ms2, ms3, out, pid, sproc):
@@ -574,12 +571,10 @@ def ihs(pan, ms1, ms2, ms3, out, pid, sproc):
     )
 
     # Cleanup
-    try:
-        grass.run_command(
-            "g.remove", flags="f", quiet=True, type="raster", name=panmatch
-        )
-    except CalledModuleError:
-        pass
+    grass.run_command(
+        "g.remove", flags="f", quiet=True, type="raster", name=panmatch, errors="ignore"
+    )
+
 
 
 def pca(pan, ms1, ms2, ms3, out, pid, sproc):
