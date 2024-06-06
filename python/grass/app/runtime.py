@@ -26,43 +26,6 @@ MACOS = sys.platform.startswith("darwin")
 GISBASE = None
 
 
-def set_gisbase(path, /):
-    global GISBASE
-    GISBASE = path
-
-
-def gpath(*args):
-    """Construct path to file or directory in GRASS GIS installation
-
-    Can be called only after GISBASE was set.
-    """
-    return os.path.join(GISBASE, *args)
-
-
-def wxpath(*args):
-    """Construct path to file or directory in GRASS wxGUI
-
-    Can be called only after GISBASE was set.
-
-    This function does not check if the directories exist or if GUI works
-    this must be done by the caller if needed.
-    """
-    global _WXPYTHON_BASE
-    if not _WXPYTHON_BASE:
-        # this can be called only after GISBASE was set
-        _WXPYTHON_BASE = gpath("gui", "wxpython")
-    return os.path.join(_WXPYTHON_BASE, *args)
-
-
-def path_prepend(directory, var):
-    path = os.getenv(var)
-    if path:
-        path = directory + os.pathsep + path
-    else:
-        path = directory
-    os.environ[var] = path
-
-
 def get_grass_config_dir(major_version, minor_version, env):
     """Get configuration directory
 
@@ -121,27 +84,39 @@ def set_executable_paths(install_path, grass_config_dir, env):
     env["PATH"] = os.pathsep.join(paths)
 
 
-def set_paths(grass_config_dir, ld_library_path_variable_name):
+def set_paths(install_path, grass_config_dir, ld_library_path_variable_name):
     set_executable_paths(
-        install_path=GISBASE, grass_config_dir=grass_config_dir, env=os.environ
+        install_path=install_path, grass_config_dir=grass_config_dir, env=os.environ
     )
-    set_python_path_variable(install_path=GISBASE, env=os.environ)
+    # Set LD_LIBRARY_PATH (etc) to find GRASS shared libraries
+    # this works for subprocesses but won't affect the current process
+    if ld_library_path_variable_name:
+        set_dynamic_library_path(
+            variable_name=ld_library_path_variable_name,
+            install_path=install_path,
+            env=os.environ,
+        )
+    set_python_path_variable(install_path=install_path, env=os.environ)
 
-    # set path for the GRASS man pages
-    grass_man_path = gpath("docs", "man")
     # retrieving second time, but now it is always set
     addon_base = os.getenv("GRASS_ADDON_BASE")
+    set_man_path(install_path=install_path, addon_base=addon_base, env=os.environ)
+
+
+def set_man_path(install_path, addon_base, env):
+    # set path for the GRASS man pages
+    grass_man_path = os.path.join(install_path, "docs", "man")
     addons_man_path = os.path.join(addon_base, "docs", "man")
-    man_path = os.getenv("MANPATH")
+    man_path = env.get("MANPATH")
+    paths = collections.deque()
     if man_path:
-        path_prepend(addons_man_path, "MANPATH")
-        path_prepend(grass_man_path, "MANPATH")
+        paths.appendleft(man_path)
     else:
-        sys_man_path = None
+        system_path = None
         manpath_executable = shutil.which("manpath")
         if manpath_executable:
             try:
-                sys_man_path = subprocess.run(
+                system_path = subprocess.run(
                     manpath_executable,
                     text=True,
                     check=True,
@@ -152,22 +127,12 @@ def set_paths(grass_config_dir, ld_library_path_variable_name):
             except (OSError, subprocess.SubprocessError):
                 pass
 
-        if sys_man_path:
-            os.environ["MANPATH"] = sys_man_path
-            path_prepend(addons_man_path, "MANPATH")
-            path_prepend(grass_man_path, "MANPATH")
-        else:
-            os.environ["MANPATH"] = addons_man_path
-            path_prepend(grass_man_path, "MANPATH")
-
-    # Set LD_LIBRARY_PATH (etc) to find GRASS shared libraries
-    # this works for subprocesses but won't affect the current process
-    if ld_library_path_variable_name:
-        set_dynamic_library_path(
-            variable_name=ld_library_path_variable_name,
-            install_path=GISBASE,
-            env=os.environ,
-        )
+        if system_path:
+            # Variable does not exist, but the system has the information.
+            paths.appendleft(system_path)
+    paths.appendleft(addons_man_path)
+    paths.appendleft(grass_man_path)
+    os.environ["MANPATH"] = os.pathsep.join(paths)
 
 
 def set_dynamic_library_path(variable_name, install_path, env):
@@ -238,14 +203,13 @@ def set_display_defaults():
         os.environ["GRASS_RENDER_WIDTH"] = "240"
 
 
-def set_browser():
+def set_browser(install_path):
     # GRASS_HTML_BROWSER
     browser = os.getenv("GRASS_HTML_BROWSER")
     if not browser:
         if MACOS:
-            # OSX doesn't execute browsers from the shell PATH - route through a
-            # script
-            browser = gpath("etc", "html_browser_mac.sh")
+            # OSX doesn't execute browsers from the shell PATH - route through a script
+            browser = os.path.join(install_path, "etc", "html_browser_mac.sh")
             os.environ["GRASS_HTML_BROWSER_MACOSX"] = "-b com.apple.helpviewer"
 
         if WINDOWS:
@@ -278,10 +242,9 @@ def set_browser():
                     break
 
     elif MACOS:
-        # OSX doesn't execute browsers from the shell PATH - route through a
-        # script
+        # OSX doesn't execute browsers from the shell PATH - route through a script
         os.environ["GRASS_HTML_BROWSER_MACOSX"] = "-b %s" % browser
-        browser = gpath("etc", "html_browser_mac.sh")
+        browser = os.path.join(install_path, "etc", "html_browser_mac.sh")
 
     if not browser:
         # even so we set to 'xdg-open' as a generic fallback

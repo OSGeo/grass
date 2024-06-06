@@ -202,6 +202,21 @@ def gpath(*args):
     return os.path.join(GISBASE, *args)
 
 
+def wxpath(*args):
+    """Construct path to file or directory in GRASS wxGUI
+
+    Can be called only after GISBASE was set.
+
+    This function does not check if the directories exist or if GUI works
+    this must be done by the caller if needed.
+    """
+    global _WXPYTHON_BASE
+    if not _WXPYTHON_BASE:
+        # this can be called only after GISBASE was set
+        _WXPYTHON_BASE = gpath("gui", "wxpython")
+    return os.path.join(_WXPYTHON_BASE, *args)
+
+
 def count_wide_chars(s):
     """Returns the number of wide CJK characters in a string.
 
@@ -395,7 +410,7 @@ def get_grass_config_dir():
         directory = os.path.join(win_conf_path, grass_config_dirname)
     elif MACOS:
         version = f"{GRASS_VERSION_MAJOR}.{GRASS_VERSION_MINOR}"
-        return os.path.join(env.get("HOME"), "Library", "GRASS", version)
+        return os.path.join(os.getenv("HOME"), "Library", "GRASS", version)
     else:
         grass_config_dirname = f".grass{GRASS_VERSION_MAJOR}"
         directory = os.path.join(os.getenv("HOME"), grass_config_dirname)
@@ -1999,6 +2014,7 @@ def get_username():
             user = os.getenv("LOGNAME")
         if not user:
             try:
+                # TODO: Use higher-level API to remove need for decode
                 p = Popen(["whoami"], stdout=subprocess.PIPE)
                 s = p.stdout.read()
                 p.wait()
@@ -2210,12 +2226,8 @@ def validate_cmdline(params):
 
 
 def find_python_packages():
-    # Set PYTHONPATH to find GRASS Python modules
     if os.path.exists(gpath("etc", "python")):
         pythonpath = gpath("etc", "python")
-        # path_prepend(pythonpath, "PYTHONPATH")
-        # the env var PYTHONPATH is only evaluated when python is started,
-        # thus:
         sys.path.append(pythonpath)
         # now we can import stuff from grass package
     else:
@@ -2302,21 +2314,20 @@ def main():
         set_defaults,
         set_display_defaults,
         set_browser,
-        set_gisbase,
     )
 
-    set_gisbase(GISBASE)
     ensure_home()
     # Set PATH, PYTHONPATH, ...
     set_paths(
+        install_path=GISBASE,
         grass_config_dir=grass_config_dir,
         ld_library_path_variable_name=LD_LIBRARY_PATH_VAR,
     )
     # Set GRASS_PAGER, GRASS_PYTHON, GRASS_GNUPLOT, GRASS_PROJSHARE
     set_defaults(config_projshare_path=CONFIG_PROJSHARE)
-    set_display_defaults()
     # Set GRASS_HTML_BROWSER
-    set_browser()
+    set_browser(install_path=GISBASE)
+    set_display_defaults()
 
     # First time user - GISRC is defined in the GRASS script
     if not os.access(gisrc, os.F_OK):

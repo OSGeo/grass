@@ -11,6 +11,21 @@ for details.
 This is not a stable part of the API. Use at your own risk.
 """
 
+import locale
+
+
+def get_encoding():
+    try:
+        # Python >= 3.11
+        encoding = locale.getencoding()
+    except AttributeError:
+        encoding = locale.getdefaultlocale()[1]
+    if encoding is None:
+        encoding = "UTF-8"
+        # intentionally not translatable
+        print("Default locale not found, using UTF-8")
+    return encoding
+
 
 def decode(bytes_, *, encoding):
     """Decode bytes with default locale and return (unicode) string

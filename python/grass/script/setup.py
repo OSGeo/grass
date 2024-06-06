@@ -233,8 +233,8 @@ def setup_runtime_env(gisbase=None, *, env=None):
     set_dynamic_library_path(
         variable_name="@LD_LIBRARY_PATH_VAR@", install_path=gisbase, env=env
     )
-    set_path_to_python_executable(env=env)
     set_python_path_variable(install_path=gisbase, env=env)
+    set_path_to_python_executable(env=env)
 
 
 def init(path, location=None, mapset=None, grass_path=None):
