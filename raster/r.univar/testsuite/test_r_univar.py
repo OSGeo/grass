@@ -3,7 +3,11 @@
 @author Soeren Gebbert
 """
 
+import json
+
 from grass.gunittest.case import TestCase
+
+from grass.gunittest.gmodules import SimpleModule
 
 
 class TestRasterUnivar(TestCase):
@@ -562,11 +566,52 @@ class TestRasterUnivar(TestCase):
             sep="=",
         )
 
+    def test_json(self):
+        reference = [
+            {
+                "zone_number": 1,
+                "zone_category": "",
+                "n": 3420,
+                "null_cells": 0,
+                "cells": 3420,
+                "min": 102,
+                "max": 309,
+                "range": 207,
+                "mean": 205.5,
+                "mean_of_abs": 205.5,
+                "stddev": 56.611983419296187,
+                "variance": 3204.9166666666665,
+                "coeff_var": 27.548410423015174,
+                "sum": 702810,
+            },
+            {
+                "zone_number": 2,
+                "zone_category": "",
+                "n": 12780,
+                "null_cells": 0,
+                "cells": 12780,
+                "min": 121,
+                "max": 380,
+                "range": 259,
+                "mean": 250.5,
+                "mean_of_abs": 250.5,
+                "stddev": 59.957623924457401,
+                "variance": 3594.9166666666665,
+                "coeff_var": 23.935179211360243,
+                "sum": 3201390,
+            },
+        ]
 
-class TestAccumulateFails(TestCase):
-    def test_error_handling(self):
-        # No vector map, no strds, no coordinates
-        self.assertModuleFail("r.univar", flags="r", map="map_a", zones="map_b")
+        module = SimpleModule(
+            "r.univar",
+            map=["map_a", "map_b"],
+            zones="zone_map",
+            flags="g",
+            format="json",
+        )
+        self.runModule(module)
+        expected = json.loads(module.outputs.stdout)
+        self.assertListEqual(reference, expected)
 
 
 if __name__ == "__main__":
