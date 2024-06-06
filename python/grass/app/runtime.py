@@ -15,9 +15,8 @@ This is not a stable part of the API. Use at your own risk.
 import os
 import subprocess
 import sys
+import shutil
 import collections
-
-from .utils import to_text_string
 
 # Get the system name
 WINDOWS = sys.platform.startswith("win")
@@ -25,13 +24,6 @@ CYGWIN = sys.platform.startswith("cygwin")
 MACOS = sys.platform.startswith("darwin")
 
 GISBASE = None
-
-
-def Popen(cmd, **kwargs):  # pylint: disable=C0103
-    """Wrapper for subprocess.Popen to deal with platform-specific issues"""
-    if WINDOWS:
-        kwargs["shell"] = True
-    return subprocess.Popen(cmd, **kwargs)
 
 
 def set_gisbase(path, /):
@@ -141,28 +133,31 @@ def set_paths(grass_config_dir, ld_library_path_variable_name):
     addon_base = os.getenv("GRASS_ADDON_BASE")
     addons_man_path = os.path.join(addon_base, "docs", "man")
     man_path = os.getenv("MANPATH")
-    sys_man_path = None
     if man_path:
         path_prepend(addons_man_path, "MANPATH")
         path_prepend(grass_man_path, "MANPATH")
     else:
-        try:
-            # TODO: use higher level API
-            nul = open(os.devnull, "w")
-            p = Popen(["manpath"], stdout=subprocess.PIPE, stderr=nul)
-            nul.close()
-            s = p.stdout.read()
-            p.wait()
-            sys_man_path = s.strip()
-        except FileNotFoundError:
-            pass
+        sys_man_path = None
+        manpath_executable = shutil.which("manpath")
+        if manpath_executable:
+            try:
+                sys_man_path = subprocess.run(
+                    manpath_executable,
+                    text=True,
+                    check=True,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.DEVNULL,
+                    timeout=2,
+                ).stdout.strip()
+            except (OSError, subprocess.SubprocessError):
+                pass
 
         if sys_man_path:
-            os.environ["MANPATH"] = to_text_string(sys_man_path)
+            os.environ["MANPATH"] = sys_man_path
             path_prepend(addons_man_path, "MANPATH")
             path_prepend(grass_man_path, "MANPATH")
         else:
-            os.environ["MANPATH"] = to_text_string(addons_man_path)
+            os.environ["MANPATH"] = addons_man_path
             path_prepend(grass_man_path, "MANPATH")
 
     # Set LD_LIBRARY_PATH (etc) to find GRASS shared libraries

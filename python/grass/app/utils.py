@@ -51,6 +51,7 @@ def encode(string, *, encoding):
         raise TypeError("can only accept types str and bytes")
 
 
+# TODO: Is this needed?
 # see https://trac.osgeo.org/grass/ticket/3508
 def to_text_string(obj, *, encoding):
     """Convert `obj` to (unicode) text string"""
