@@ -12,11 +12,11 @@ for details.
 This is not a stable part of the API. Use at your own risk.
 """
 
+import collections
 import os
+import shutil
 import subprocess
 import sys
-import shutil
-import collections
 
 # Get the system name
 WINDOWS = sys.platform.startswith("win")
