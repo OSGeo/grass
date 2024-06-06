@@ -47,11 +47,7 @@ import grass.script as grass
 
 
 def main():
-    from grass.script.db import (
-        db_begin_transaction,
-        db_commit_transaction,
-        db_execute,
-    )
+    from grass.script.db import DBHandler
 
     global rm_files
     map = options["map"]
@@ -88,6 +84,8 @@ def main():
     driver = f["driver"]
     column_existing = grass.vector_columns(map, int(layer)).keys()
 
+    db_handler = DBHandler(driver_name=driver, database=database)
+
     sqls = []
     pattern = re.compile(r"\s+")
     for col in columns:
@@ -111,14 +109,7 @@ def main():
         sqls.append(f'ALTER TABLE {table} ADD COLUMN "{col_name}" {col_type};')
     cols_add_str = ",".join([col[0] for col in columns])
     try:
-        pdriver = db_begin_transaction(driver_name=driver, database=database)
-        for sql in sqls:
-            db_execute(pdriver=pdriver, sql=sql)
-        db_commit_transaction(
-            driver_name=driver,
-            database=database,
-            pdriver=pdriver,
-        )
+        db_handler.execute(sql=sqls)
     except CalledModuleError:
         grass.fatal(_("Error adding columns {}").format(cols_add_str))
     # write cmd history:

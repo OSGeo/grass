@@ -246,105 +246,138 @@ def db_table_in_vector(table, mapset=".", env=None):
         return None
 
 
-def db_begin_transaction(driver_name, database):
-    """Begin transaction.
+class DBHandler:
+    """DB handler
 
-    :param str driver_name: DB driver name
-    :param str database: database name
+    Allow execute SQL command(s) in transaction mode.
 
-    :return driver: opened driver/database connection
-    :rtype dbDriver* pointer
+    Public methods:
+
+    ::execute
     """
-    try:
-        from grass.lib.dbmi import (
-            db_begin_transaction,
-            db_start_driver_open_database,
-            db_close_database_shutdown_driver,
-            DB_OK,
-        )
-        from grass.lib.gis import G_gisinit
-        from grass.lib.vector import Map_info, Vect_subst_var
-    except (ImportError, OSError, TypeError) as e:
-        fatal(_("Unable to import C functions: {e}").format(e))
 
-    G_gisinit("")
-    map = Map_info()
+    def __init__(self, driver_name, database):
+        """Constructor
 
-    driver = db_start_driver_open_database(
-        driver_name, Vect_subst_var(database, byref(map))
-    )
-    if not driver:
-        fatal(
-            _("Unable to open database <{db}> by driver <{driver}>.").format(
-                db=database, driver=driver_name
+        :param str driver_name: DB driver name
+        :param str database: database name
+        """
+        self._driver_name = driver_name
+        self._database = database
+        self._import_c_funcs()
+
+    def _import_c_funcs(self):
+        """Import C functions"""
+        try:
+            from grass.lib.dbmi import (
+                db_begin_transaction,
+                db_close_database_shutdown_driver,
+                db_commit_transaction,
+                db_execute_immediate,
+                db_free_string,
+                db_init_string,
+                db_set_string,
+                db_start_driver_open_database,
+                dbString,
+                DB_OK,
             )
+            from grass.lib.gis import G_gisinit
+            from grass.lib.vector import (
+                Map_info,
+                Vect_subst_var,
+            )
+
+            self._c_funcs = {
+                "db_begin_transaction": db_begin_transaction,
+                "db_execute_immediate": db_execute_immediate,
+                "db_free_string": db_free_string,
+                "db_init_string": db_init_string,
+                "db_close_database_shutdown_driver": db_close_database_shutdown_driver,
+                "db_commit_transaction": db_commit_transaction,
+                "db_set_string": db_set_string,
+                "db_start_driver_open_database": db_start_driver_open_database,
+                "dbString": dbString,
+                "DB_OK": DB_OK,
+                "G_gisinit": G_gisinit,
+                "Map_info": Map_info,
+                "Vect_subst_var": Vect_subst_var,
+            }
+        except (ImportError, OSError, TypeError) as e:
+            fatal(_("Unable to import C functions: {e}").format(e))
+
+    def _init_driver(self):
+        """Init DB driver"""
+        map = self._c_funcs["Map_info"]()
+        self._pdriver = self._c_funcs["db_start_driver_open_database"](
+            self._driver_name,
+            self._c_funcs["Vect_subst_var"](self._database, byref(map)),
         )
+        if not self._pdriver:
+            fatal(
+                _("Unable to open database <{db}> by driver <{driver}>.").format(
+                    db=self._database, driver=self._driver_name
+                )
+            )
 
-    ret = db_begin_transaction(driver)
-    if ret != DB_OK:
-        db_close_database_shutdown_driver(driver)
-        fatal(
-            _(
-                "Error while start database <{db}> transaction by driver <{driver}>."
-            ).format(db=database, driver=driver_name)
-        )
-    return driver
+    def _begin_transaction(self):
+        """Begin DB transaction."""
+        self._c_funcs["G_gisinit"]("")
 
+        self._init_driver()
 
-def db_commit_transaction(driver_name, database, pdriver):
-    """Commit transaction.
+        ret = self._c_funcs["db_begin_transaction"](self._pdriver)
+        if ret != self._c_funcs["DB_OK"]:
+            self._c_funcs["db_close_database_shutdown_driver"](self._pdriver)
+            fatal(
+                _(
+                    "Error while start database <{db}> transaction by driver <{driver}>."
+                ).format(db=self._database, driver=self._driver_name)
+            )
 
-    :param str driver_name: DB driver name
-    :param str database: database name
-    :param dbDriver* pointer pdriver: opened driver/database connection
-                                      pointer
-    """
-    try:
-        from grass.lib.dbmi import (
-            db_commit_transaction,
-            db_close_database_shutdown_driver,
-            DB_OK,
-        )
-    except (ImportError, OSError, TypeError) as e:
-        fatal(_("Unable to import C functions: {e}").format(e))
+    def _commit_transaction(self):
+        """Commit DB transaction."""
+        ret = self._c_funcs["db_commit_transaction"](self._pdriver)
+        if ret != self._c_funcs["DB_OK"]:
+            self._c_funcs["db_close_database_shutdown_driver"](self._pdriver)
+            fatal(
+                _(
+                    "Error while commit database <{db}> transaction"
+                    " by driver <{driver}>."
+                ).format(db=self._database, driver=self._driver_name)
+            )
+        self._c_funcs["db_close_database_shutdown_driver"](self._pdriver)
 
-    ret = db_commit_transaction(pdriver)
-    if ret != DB_OK:
-        db_close_database_shutdown_driver(pdriver)
-        fatal(
-            _(
-                "Error while commit database <{db}> transaction"
-                " by driver <{driver}>."
-            ).format(db=database, driver=driver_name)
-        )
-    db_close_database_shutdown_driver(pdriver)
+    def _execute(self, sql):
+        """Execute SQL
 
+        :param str|list|tuple sql: SQL command string or list of SQLs
+                                   commands
+        """
+        stmt = self._c_funcs["dbString"]()
+        self._c_funcs["db_init_string"](byref(stmt))
+        self._c_funcs["db_set_string"](byref(stmt), sql)
+        if (
+            self._c_funcs["db_execute_immediate"](self._pdriver, byref(stmt))
+            != self._c_funcs["DB_OK"]
+        ):
+            self._c_funcs["db_free_string"](byref(stmt))
+            self._c_funcs["db_close_database_shutdown_driver"](self._pdriver)
+            fatal(_("Error while executing SQL <{}>.").format(sql))
+        self._c_funcs["db_free_string"](byref(stmt))
 
-def db_execute(pdriver, sql):
-    """Execute SQL
+    def execute(self, sql):
+        """Execute SQL
 
-    :param dbDriver* pointer pdriver: opened driver/database connection
-                                      pointer
-    :param str sql: SQL command
-    """
-    try:
-        from grass.lib.dbmi import (
-            dbString,
-            db_close_database_shutdown_driver,
-            db_execute_immediate,
-            db_free_string,
-            db_init_string,
-            db_set_string,
-            DB_OK,
-        )
-    except (ImportError, OSError, TypeError) as e:
-        fatal(_("Unable to import C functions: {e}").format(e))
-
-    stmt = dbString()
-    db_init_string(byref(stmt))
-    db_set_string(byref(stmt), sql)
-    if db_execute_immediate(pdriver, byref(stmt)) != DB_OK:
-        db_free_string(byref(stmt))
-        db_close_database_shutdown_driver(pdriver)
-        fatal(_("Error while executing SQL <{}>.").format(sql))
-    db_free_string(byref(stmt))
+        :param str|list|tuple sql: SQL command string or list of SQLs
+                                   statement
+        """
+        # Begin DB transaction
+        self._begin_transaction()
+        # Execute SQL string
+        if isinstance(sql, (list, tuple)):
+            for statement in sql:
+                self._execute(sql=statement)
+        else:
+            self._execute(sql)
+        # Commit DB transaction
+        self._commit_transaction()

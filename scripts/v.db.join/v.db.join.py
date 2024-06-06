@@ -70,11 +70,7 @@ from grass.exceptions import CalledModuleError
 
 
 def main():
-    from grass.script.db import (
-        db_begin_transaction,
-        db_commit_transaction,
-        db_execute,
-    )
+    from grass.script.db import DBHandler
 
     # Include mapset into the name, so we avoid multiple messages about
     # found in more mapsets. The following generates an error message, while the code
@@ -100,6 +96,8 @@ def main():
     maptable = f["table"]
     database = f["database"]
     driver = f["driver"]
+
+    db_handler = DBHandler(driver_name=driver, database=database)
 
     if driver == "dbf":
         gs.fatal(_("JOIN is not supported for tables stored in DBF format"))
@@ -221,11 +219,7 @@ def main():
         )
     )
     try:
-        db_commit_transaction(
-            driver_name=driver,
-            database=database,
-            pdriver=pdriver,
-        )
+        db_handler.execute(sql=sqls)
     except CalledModuleError:
         gs.fatal(_("Error filling columns {}").format(cols_to_update))
 

@@ -50,17 +50,15 @@ import grass.script as gscript
 
 
 def main():
-    from grass.script.db import (
-        db_begin_transaction,
-        db_commit_transaction,
-        db_execute,
-    )
+    from grass.script.db import DBHandler
 
     table = options["table"]
     column = options["column"]
     database = options["database"]
     driver = options["driver"]
     force = flags["f"]
+
+    db_handler = DBHandler(driver_name=driver, database=database)
 
     # check if DB parameters are set, and if not set them.
     gscript.run_command("db.connect", flags="c")
@@ -141,14 +139,7 @@ def main():
         sqls.append(f"ALTER TABLE {table} DROP COLUMN {column};")
 
     try:
-        pdriver = db_begin_transaction(driver_name=driver, database=database)
-        for sql in sqls:
-            db_execute(pdriver=pdriver, sql=sql)
-        db_commit_transaction(
-            driver_name=driver,
-            database=database,
-            pdriver=pdriver,
-        )
+        db_handler.execute(sql=";".join(sqls))
     except CalledModuleError:
         gscript.fatal(_("Cannot continue (problem deleting column)"))
 

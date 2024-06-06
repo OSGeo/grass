@@ -217,11 +217,7 @@ def updates_to_sql(table, updates):
 
 def update_columns(output_name, output_layer, updates, add_columns):
     """Update attribute values based on a list of updates"""
-    from grass.script.db import (
-        db_begin_transaction,
-        db_commit_transaction,
-        db_execute,
-    )
+    from grass.script.db import DBHandler
 
     if add_columns:
         gs.run_command(
@@ -234,17 +230,8 @@ def update_columns(output_name, output_layer, updates, add_columns):
     driver = db_info["driver"]
     database = db_info["database"]
     sqls = updates_to_sql(table=db_info["table"], updates=updates)
-    pdriver = db_begin_transaction(
-        driver_name=driver,
-        database=database,
-    )
-    for sql in sqls:
-        db_execute(pdriver=pdriver, sql=sql)
-    db_commit_transaction(
-        driver_name=driver,
-        database=database,
-        pdriver=pdriver,
-    )
+    db_handler = DBHandler(driver_name=driver, database=database)
+    db_handler.execute(sql=sqls)
 
 
 def column_value_to_where(column, value, *, quote):

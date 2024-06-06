@@ -5,11 +5,7 @@ from types import SimpleNamespace
 import pytest
 
 import grass.script as gs
-from grass.script.db import (
-    db_begin_transaction,
-    db_commit_transaction,
-    db_execute,
-)
+from grass.script.db import DBHandler
 
 
 def updates_as_transaction(table, cat_column, column, cats, values):
@@ -47,17 +43,8 @@ def value_update_by_category(map_name, layer, column_name, cats, values):
         cats=cats,
         values=values,
     )
-    pdriver = db_begin_transaction(
-        driver_name=driver,
-        database=database,
-    )
-    for sql in sqls:
-        db_execute(pdriver=pdriver, sql=sql)
-    db_commit_transaction(
-        driver_name=driver,
-        database=database,
-        pdriver=pdriver,
-    )
+    db_handler = DBHandler(driver_name=driver, database=database)
+    db_handler.execute(sql=sqls)
 
 
 @pytest.fixture(scope="module")

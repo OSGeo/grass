@@ -37,13 +37,12 @@
 # % required: yes
 # %end
 
-import string
 import grass.script as grass
 from grass.exceptions import CalledModuleError
 
 
 def main():
-    from grass.script.db import db_begin_transaction, db_commit_transaction
+    from grass.script.db import DBHandler
 
     map = options["map"]
     layer = options["layer"]
@@ -61,6 +60,8 @@ def main():
     keycol = f["key"]
     database = f["database"]
     driver = f["driver"]
+
+    db_handler = DBHandler(driver_name=driver, database=database)
 
     if not table:
         grass.fatal(
@@ -105,32 +106,20 @@ def main():
             colnames = ", ".join([f'"{col}"' for col in colnames])
             coltypes = ", ".join(coltypes)
 
-            cmds = [
-                "CREATE TEMPORARY TABLE ${table}_backup (${coldef})",
-                "INSERT INTO ${table}_backup SELECT ${colnames} FROM ${table}",
-                "DROP TABLE ${table}",
-                "CREATE TABLE ${table}(${coldef})",
-                "INSERT INTO ${table} SELECT ${colnames} FROM ${table}_backup",
-                "CREATE UNIQUE INDEX ${table}_cat ON ${table} (${keycol} )",
-                "DROP TABLE ${table}_backup",
+            sql = [
+                f"CREATE TEMPORARY TABLE {table}_backup ({coltypes})",
+                f"INSERT INTO {table}_backup SELECT {colnames} FROM {table}",
+                f"DROP TABLE {table}",
+                f"CREATE TABLE {table}({coltypes})",
+                f"INSERT INTO {table} SELECT {colnames} FROM {table}_backup",
+                f"CREATE UNIQUE INDEX {table}_cat ON {table} ({keycol} )",
+                f"DROP TABLE {table}_backup",
             ]
-            tmpl = string.Template(";\n".join(cmds))
-            sql = tmpl.substitute(
-                table=table, coldef=coltypes, colnames=colnames, keycol=keycol
-            )
         else:
             sql = f'ALTER TABLE {table} DROP COLUMN "{column}"'
 
         try:
-            pdriver = db_begin_transaction(driver_name=driver, database=database)
-            grass.write_command(
-                "db.execute", input="-", database=database, driver=driver, stdin=sql
-            )
-            db_commit_transaction(
-                driver_name=driver,
-                database=database,
-                pdriver=pdriver,
-            )
+            db_handler.execute(sql=sql)
         except CalledModuleError:
             grass.fatal(_("Deleting column failed"))
 

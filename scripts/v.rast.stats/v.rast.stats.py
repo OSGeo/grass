@@ -93,11 +93,7 @@ def cleanup():
 
 
 def main():
-    from grass.script.db import (
-        db_begin_transaction,
-        db_commit_transaction,
-        db_execute,
-    )
+    from grass.script.db import DBHandler
 
     global tmp, sqltmp, tmpname, nuldev, vector, rastertmp
     rastertmp = False
@@ -213,6 +209,8 @@ def main():
     # calculate statistics:
     grass.message(_("Processing input data (%d categories)...") % number)
 
+    db_handler = DBHandler(driver_name=fi["driver"], database=fi["database"])
+
     for i in range(len(rasters)):
         raster = rasters[i]
 
@@ -236,17 +234,7 @@ def main():
         grass.message(_("Updating the database ..."))
         exitcode = 0
         try:
-            pdriver = db_begin_transaction(
-                driver_name=fi["driver"],
-                database=fi["database"],
-            )
-            for sql in sqls:
-                db_execute(pdriver=pdriver, sql=sql)
-            db_commit_transaction(
-                driver_name=fi["driver"],
-                database=fi["database"],
-                pdriver=pdriver,
-            )
+            db_handler.execute(sql=sqls)
             grass.verbose(
                 _(
                     "Statistics calculated from raster map <{raster}>"
