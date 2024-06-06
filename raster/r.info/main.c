@@ -120,15 +120,13 @@ int main(int argc, char **argv)
     if ((mapset = G_find_raster2(name, "")) == NULL)
         G_fatal_error(_("Raster map <%s> not found"), name);
 
-    if (strcmp(fopt->answer, "json") == 0)
+    if (strcmp(fopt->answer, "json") == 0) {
         format = JSON;
-    else
-        format = PLAIN;
-
-    if (format == JSON) {
         root_value = json_value_init_object();
         root_object = json_value_get_object(root_value);
-        json_set_float_serialization_format("%lf");
+    }
+    else {
+        format = PLAIN;
     }
 
     Rast_get_cellhd(name, "", &cellhd);
