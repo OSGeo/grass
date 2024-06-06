@@ -20,10 +20,8 @@ per-file-ignores =
     # F841 local variable assigned to but never used
     # E741 ambiguous variable name 'l'
     __init__.py: F401, F403
-    lib/init/grass.py: E722, F821, F841, W605
-    utils/mkrest.py: W605
-    utils/gitlog2changelog.py: E722, E712, W605
-    utils/g.html2man/ggroff.py: W605
+    lib/init/grass.py: E722, F821, F841
+    utils/gitlog2changelog.py: E722, E712
     man/build_check_rest.py: F403, F405
     man/build_full_index_rest.py: F403, F405
     man/parser_standard_options.py: F403, F405
@@ -45,10 +43,9 @@ per-file-ignores =
     gui/scripts/d.wms.py: E501
     gui/wxpython/core/gcmd.py: E402
     gui/wxpython/core/gthread.py: F841
-    gui/wxpython/core/gconsole.py: E722, W605
-    gui/wxpython/core/globalvar.py: W605
+    gui/wxpython/core/gconsole.py: E722
     gui/wxpython/core/toolboxes.py: E722
-    gui/wxpython/core/utils.py: E722, F841, W605
+    gui/wxpython/core/utils.py: E722, F841
     gui/wxpython/core/workspace.py: E722
     gui/wxpython/core/render.py: E722, F841
     gui/wxpython/core/ws.py: F841
@@ -64,8 +61,8 @@ per-file-ignores =
     gui/wxpython/gcp/g.gui.gcp.py: F841
     gui/wxpython/gcp/manager.py: F841, E722
     gui/wxpython/gcp/mapdisplay.py: F841
-    gui/wxpython/gui_core/*: F841, E266, E722, W605
-    gui/wxpython/gui_core/dialogs.py: E722, F841, W605
+    gui/wxpython/gui_core/*: F841, E266, E722
+    gui/wxpython/gui_core/dialogs.py: E722, F841
     gui/wxpython/gui_core/forms.py: E722, F841
     gui/wxpython/gui_core/ghelp.py: E722
     gui/wxpython/gui_core/gselect.py: F841, E266, E722
@@ -76,12 +73,12 @@ per-file-ignores =
     gui/wxpython/image2target/g.gui.image2target.py: E501, E265, F841
     gui/wxpython/iscatt/*: F841, E722, E741, F405, F403
     gui/wxpython/lmgr/giface.py: E741
-    gui/wxpython/lmgr/frame.py: F841, E722, W605
+    gui/wxpython/lmgr/frame.py: F841, E722
     # layertree still includes some formatting issues (it is ignored by Black)
     gui/wxpython/lmgr/layertree.py: E722, E266, W504, E225
     gui/wxpython/lmgr/workspace.py: F841
-    gui/wxpython/modules/*: F841, E722, W605
-    gui/wxpython/nviz/*: F841, E266, E722, W605, F403, F405
+    gui/wxpython/modules/*: F841, E722
+    gui/wxpython/nviz/*: F841, E266, E722, F403, F405
     gui/wxpython/photo2image/*: F841, E722, E265
     gui/wxpython/photo2image/g.gui.photo2image.py: E501, F841
     gui/wxpython/psmap/*: F841, E266, E722, F405, F403
@@ -116,7 +113,7 @@ per-file-ignores =
     gui/wxpython/timeline/frame.py: E741
     gui/wxpython/tools/build_modules_xml.py: E722
     gui/wxpython/web_services/cap_interface.py: E501
-    gui/wxpython/web_services/widgets.py: F841, E741, W605, E402
+    gui/wxpython/web_services/widgets.py: F841, E741, E402
     gui/wxpython/rlisetup/frame.py: E741
     gui/wxpython/rlisetup/sampling_frame.py: F841
     gui/wxpython/rlisetup/wizard.py: E722, E741
@@ -129,20 +126,15 @@ per-file-ignores =
     # TODO: Is this really needed?
     python/grass/pygrass/vector/__init__.py: E402
     python/grass/pygrass/raster/__init__.py: E402
-    python/grass/gunittest/gmodules.py: W605
     python/grass/gunittest/invoker.py: E721
-    python/grass/pygrass/vector/geometry.py: W605
     python/grass/pygrass/vector/__init__.py: E402
     python/grass/pygrass/modules/interface/*.py: F401
-    python/grass/pygrass/modules/interface/module.py: W605
-    python/grass/pygrass/modules/interface/parameter.py: W605
     python/grass/pygrass/modules/grid/*.py: F401
     python/grass/pygrass/raster/rowio.py: E741
     python/grass/pygrass/raster/category.py: E721
     python/grass/pygrass/rpc/__init__.py: F401, F403
     python/grass/pygrass/utils.py: E402
-    python/grass/script/task.py: W605
-    python/grass/temporal/abstract_space_time_dataset.py: W605, F841, E722
+    python/grass/temporal/abstract_space_time_dataset.py: F841, E722
     python/grass/temporal/c_libraries_interface.py: F841, E722
     python/grass/temporal/core.py: E722
     python/grass/temporal/datetime_math.py: F841, E722
