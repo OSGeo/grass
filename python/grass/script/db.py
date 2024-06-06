@@ -330,7 +330,8 @@ class DBHandler:
             self._c_funcs["db_close_database_shutdown_driver"](self._pdriver)
             fatal(
                 _(
-                    "Error while start database <{db}> transaction by driver <{driver}>."
+                    "Error while start database <{db}> transaction by"
+                    " driver <{driver}>."
                 ).format(db=self._database, driver=self._driver_name)
             )
 
