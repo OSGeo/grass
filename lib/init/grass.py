@@ -2012,16 +2012,12 @@ def get_username():
         user = os.getenv("USER")
         if not user:
             user = os.getenv("LOGNAME")
-        if not user:
+        if not user and (whoami_executable := shutil.which("whoami")):
             try:
-                # TODO: Use higher-level API to remove need for decode
-                p = Popen(["whoami"], stdout=subprocess.PIPE)
-                s = p.stdout.read()
-                p.wait()
-                user = s.strip()
-                if type(user) is bytes:
-                    user = decode(user)
-            except:
+                user = subprocess.run(
+                    [whoami_executable], stdout=subprocess.PIPE, text=True, check=True
+                ).stdout.strip()
+            except (OSError, subprocess.SubprocessError):
                 pass
         if not user:
             user = "user_%d" % os.getuid()

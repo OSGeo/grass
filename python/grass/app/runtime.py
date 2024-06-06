@@ -23,8 +23,6 @@ WINDOWS = sys.platform.startswith("win")
 CYGWIN = sys.platform.startswith("cygwin")
 MACOS = sys.platform.startswith("darwin")
 
-GISBASE = None
-
 
 def get_grass_config_dir(major_version, minor_version, env):
     """Get configuration directory
@@ -113,11 +111,10 @@ def set_man_path(install_path, addon_base, env):
         paths.appendleft(man_path)
     else:
         system_path = None
-        manpath_executable = shutil.which("manpath")
-        if manpath_executable:
+        if manpath_executable := shutil.which("manpath"):
             try:
                 system_path = subprocess.run(
-                    manpath_executable,
+                    [manpath_executable],
                     text=True,
                     check=True,
                     stdout=subprocess.PIPE,
