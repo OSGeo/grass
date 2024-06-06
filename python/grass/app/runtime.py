@@ -1,13 +1,12 @@
 """Provides functions for the main GRASS GIS executable
 
-(C) 2020 by Vaclav Petras and the GRASS Development Team
+(C) 2024 by Vaclav Petras and the GRASS Development Team
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 .. sectionauthor:: Vaclav Petras <wenzeslaus gmail com>
-.. sectionauthor:: Linda Kladivova <l.kladivova seznam cz>
 
 This is not a stable part of the API. Use at your own risk.
 """
@@ -150,14 +149,6 @@ def set_python_path_variable(install_path, env):
     env["PYTHONPATH"] = path
 
 
-def find_exe(pgm):
-    for directory in os.getenv("PATH").split(os.pathsep):
-        path = os.path.join(directory, pgm)
-        if os.access(path, os.X_OK):
-            return path
-    return None
-
-
 def set_path_to_python_executable(env):
     # Set GRASS_PYTHON
     if not env.get("GRASS_PYTHON"):
@@ -170,9 +161,9 @@ def set_path_to_python_executable(env):
 def set_defaults(config_projshare_path):
     # GRASS_PAGER
     if not os.getenv("GRASS_PAGER"):
-        if find_exe("more"):
+        if shutil.which("more"):
             pager = "more"
-        elif find_exe("less"):
+        elif shutil.which("less"):
             pager = "less"
         elif WINDOWS:
             pager = "more"
@@ -233,9 +224,9 @@ def set_browser(install_path):
                 "links",
                 "w3c",
             ]
-            for b in browsers:
-                if find_exe(b):
-                    browser = b
+            for candidate in browsers:
+                if shutil.which(candidate):
+                    browser = candidate
                     break
 
     elif MACOS:
