@@ -2221,13 +2221,18 @@ def validate_cmdline(params):
     # without --exec (usefulness to be evaluated).
 
 
-def find_python_packages():
+def find_grass_python_package():
+    """Find path to grass package and add it to path"""
     if os.path.exists(gpath("etc", "python")):
-        pythonpath = gpath("etc", "python")
-        sys.path.append(pythonpath)
+        path_to_package = gpath("etc", "python")
+        sys.path.append(path_to_package)
         # now we can import stuff from grass package
     else:
-        raise RuntimeError("Python package grass is missing")
+        # Not translatable because we don't have translations loaded.
+        raise RuntimeError(
+            "The grass Python package is missing. "
+            "Is the installation of GRASS GIS complete?"
+        )
 
 
 def main():
@@ -2302,7 +2307,7 @@ def main():
     # Create the session grassrc file
     gisrc = create_gisrc(tmpdir, gisrcrc)
 
-    find_python_packages()
+    find_grass_python_package()
 
     from grass.app.runtime import (
         ensure_home,
