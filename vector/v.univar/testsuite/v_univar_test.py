@@ -9,6 +9,8 @@ Licence:    This program is free software under the GNU General Public
             for details.
 """
 
+import json
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
@@ -36,6 +38,33 @@ skewness=-2.41826e-14"""
         v_univar = SimpleModule("v.univar", flags="g", map="lakes", column="cat")
         v_univar.run()
         self.assertLooksLike(actual=v_univar.outputs.stdout, reference=output_str)
+
+    def test_json(self):
+        """Test output in JSON format"""
+        reference = {
+            "n": 15279,
+            "missing": 0,
+            "nnull": 0,
+            "min": 1,
+            "max": 15279,
+            "range": 15278,
+            "sum": 116731560,
+            "mean": 7640,
+            "mean_abs": 7640,
+            "population_stddev": 4410.667372027352,
+            "population_variance": 19453986.666666668,
+            "population_coeff_variation": 0.57731248324965345,
+            "sample_stddev": 4410.811716679822,
+            "sample_variance": 19455260,
+            "kurtosis": -1.200235620082768,
+            "skewness": -2.4182623763575773e-14,
+        }
+        v_univar = SimpleModule(
+            "v.univar", flags="g", map="lakes", column="cat", format="json"
+        )
+        v_univar.run()
+        expected = json.loads(v_univar.outputs.stdout)
+        self.assertDictEqual(reference, expected)
 
     def test_flage(self):
         """Testing flag e with map geology"""

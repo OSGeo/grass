@@ -121,6 +121,36 @@ kurtosis: -0.605406
 skewness: 0.238688
 </pre></div>
 
+<h3>Output in JSON format</h3>
+<div class="code"><pre>
+v.univar -e samples column=heights type=point format=json
+</pre></div>
+will output the results in JSON format:
+<div class="code"><pre>
+{
+    "n": 100,
+    "missing": 0,
+    "nnull": 0,
+    "min": 70.502740000000003,
+    "max": 151.244,
+    "range": 80.741259999999997,
+    "sum": 10839.182610000002,
+    "mean": 108.39182610000002,
+    "mean_abs": 108.39182610000002,
+    "population_stddev": 17.950197363819562,
+    "population_variance": 322.20958540007473,
+    "population_coeff_variation": 0.165604714023907,
+    "sample_stddev": 18.04062714200488,
+    "sample_variance": 325.46422767684317,
+    "kurtosis": -0.80852318980579341,
+    "skewness": 0.24812587332362507,
+    "first_quartile": 94.531009999999995,
+    "median": 104.48525000000001,
+    "third_quartile": 121.6682,
+    "percentile_90": 133.7296
+}
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>
