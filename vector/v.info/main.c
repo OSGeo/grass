@@ -57,7 +57,6 @@ int main(int argc, char *argv[])
     if (format == JSON) {
         root_value = json_value_init_object();
         root_object = json_value_get_object(root_value);
-        json_set_float_serialization_format("%lf");
     }
 
     /* try to open head-only on level 2 */

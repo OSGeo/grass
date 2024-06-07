@@ -228,7 +228,6 @@ class TestVInfo(TestCase):
         # therefore only check for their presence in the JSON output
         # and not exact values
         remove_fields = [
-            "location",
             "project",
             "database",
             "source_date",

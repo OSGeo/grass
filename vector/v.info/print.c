@@ -309,7 +309,10 @@ void print_shell(struct Map_info *Map, const char *field_opt,
                     Vect_get_finfo_geometry_type(Map));
             break;
         case JSON:
-            // fixme: add format=%,%s
+            json_object_set_string(root_object, "format",
+                                   Vect_maptype_info(Map));
+            json_object_set_string(root_object, "format-detail",
+                                   Vect_get_finfo_format_info(Map));
             json_object_set_string(root_object, "ogr_layer",
                                    Vect_get_finfo_layer_name(Map));
             json_object_set_string(root_object, "ogr_dsn",
@@ -337,7 +340,10 @@ void print_shell(struct Map_info *Map, const char *field_opt,
                     Vect_get_finfo_geometry_type(Map));
             break;
         case JSON:
-            // fixme: add format=%,%s
+            json_object_set_string(root_object, "format",
+                                   Vect_maptype_info(Map));
+            json_object_set_string(root_object, "format-detail",
+                                   Vect_get_finfo_format_info(Map));
             json_object_set_string(root_object, "pg_table",
                                    Vect_get_finfo_layer_name(Map));
             json_object_set_string(root_object, "pg_dbname",
