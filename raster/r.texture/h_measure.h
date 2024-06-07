@@ -39,6 +39,14 @@
 
 #define PGM_MAXMAXVAL 255
 
+typedef struct menu {
+    char *name;   /* measure name */
+    char *desc;   /* menu display - full description */
+    char *suffix; /* output suffix */
+    char useme;   /* calculate this measure if set */
+    int idx;      /* measure index */
+} menu;
+
 typedef struct matvec {
     float **P_matrix;
     float **P_matrix0;
@@ -52,6 +60,22 @@ typedef struct matvec {
     int *tone;
     int Ng;
 } matvec;
+
+typedef struct dimensions {
+    int size;
+    int dist;
+    int nrows;
+    int ncols;
+    int n_outputs;
+    int n_measures;
+} dimensions;
+
+typedef struct output_setting {
+    int *outfd;
+    RASTER_MAP_TYPE out_data_type;
+    struct Flag *flag_null;
+    struct Flag *flag_ind;
+} output_setting;
 
 int bsearch_gray(int *array, int n, int val);
 
@@ -80,3 +104,6 @@ int set_vars(struct matvec *, int **grays, int curr_row, int curr_col, int size,
              int offset, int t_d, int with_nulls);
 int set_angle_vars(struct matvec *mv, int angle, int have_px, int have_py,
                    int have_pxpys, int have_pxpyd);
+int execute_texture(CELL **data, struct dimensions *dim,
+                    struct menu *measure_menu, int *measure_idx,
+                    struct output_setting *out_set);
