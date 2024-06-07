@@ -88,7 +88,8 @@ int main(int argc, char *argv[])
     int infd, *outfd;
     RASTER_MAP_TYPE out_data_type;
     struct GModule *module;
-    struct Option *opt_input, *opt_output, *opt_size, *opt_dist, *opt_measure;
+    struct Option *opt_input, *opt_output, *opt_size, *opt_dist, *opt_measure,
+        *opt_threads;
     struct Flag *flag_ind, *flag_all, *flag_null;
     struct History history;
     char p[1024];
@@ -108,6 +109,8 @@ int main(int argc, char *argv[])
     opt_input = G_define_standard_option(G_OPT_R_INPUT);
 
     opt_output = G_define_standard_option(G_OPT_R_BASENAME_OUTPUT);
+
+    opt_threads = G_define_standard_option(G_OPT_M_NPROCS);
 
     opt_size = G_define_option();
     opt_size->key = "size";
@@ -362,30 +365,30 @@ int main(int argc, char *argv[])
                   n_measures);
     else
         G_message(_("Calculating %s..."), menu[measure_idx[0]].desc);
-    alloc_vars(size);
+
+    struct matvec *mv = G_calloc(1, sizeof(struct matvec));
+    alloc_vars(size, mv);
+
     for (row = first_row; row < last_row; row++) {
         G_percent(row, nrows, 2);
-
         for (i = 0; i < n_outputs; i++)
             Rast_set_f_null_value(fbuf[i], ncols);
 
         /*process the data */
         for (col = first_col; col < last_col; col++) {
-
-            if (!set_vars(data, row, col, size, offset, dist,
+            if (!set_vars(mv, data, row, col, size, offset, dist,
                           flag_null->answer)) {
                 for (i = 0; i < n_outputs; i++)
                     Rast_set_f_null_value(&(fbuf[i][col]), 1);
                 continue;
             }
-
             /* for all angles (0, 45, 90, 135) */
             for (i = 0; i < 4; i++) {
-                set_angle_vars(i, have_px, have_py, have_pxpys, have_pxpyd);
+                set_angle_vars(mv, i, have_px, have_py, have_pxpys, have_pxpyd);
                 /* for all requested textural measures */
                 for (j = 0; j < n_measures; j++) {
 
-                    measure = (FCELL)h_measure(menu[measure_idx[j]].idx);
+                    measure = (FCELL)h_measure(menu[measure_idx[j]].idx, mv);
 
                     if (flag_ind->answer) {
                         /* output for each angle separately */
@@ -407,6 +410,9 @@ int main(int argc, char *argv[])
             Rast_put_row(outfd[i], fbuf[i], out_data_type);
         }
     }
+    dealloc_vars(mv);
+    G_free(mv);
+
     Rast_set_f_null_value(fbuf[0], ncols);
     for (row = last_row; row < nrows; row++) {
         for (i = 0; i < n_outputs; i++) {
