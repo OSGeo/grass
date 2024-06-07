@@ -29,16 +29,8 @@
 #include <grass/glocale.h>
 #include "h_measure.h"
 
-struct menu {
-    char *name;   /* measure name */
-    char *desc;   /* menu display - full description */
-    char *suffix; /* output suffix */
-    char useme;   /* calculate this measure if set */
-    int idx;      /* measure index */
-};
-
 /* modify this table to add new measures */
-static struct menu menu[] = {
+static struct menu measure_menu[] = {
     {"asm", "Angular Second Moment", "_ASM", 0, 1},
     {"contrast", "Contrast", "_Contr", 0, 2},
     {"corr", "Correlation", "_Corr", 0, 3},
@@ -58,8 +50,8 @@ static int find_measure(const char *measure_name)
 {
     int i;
 
-    for (i = 0; menu[i].name; i++)
-        if (strcmp(menu[i].name, measure_name) == 0)
+    for (i = 0; measure_menu[i].name; i++)
+        if (strcmp(measure_menu[i].name, measure_name) == 0)
             return i;
 
     G_fatal_error(_("Unknown measure <%s>"), measure_name);
@@ -72,7 +64,6 @@ int main(int argc, char *argv[])
     struct Cell_head cellhd;
     char *name, *result;
     char **mapname;
-    FCELL **fbuf;
     int n_measures, n_outputs, *measure_idx, overwrite;
     int nrows, ncols;
     int row, col, first_row, last_row, first_col, last_col;
@@ -81,17 +72,19 @@ int main(int argc, char *argv[])
     DCELL *dcell_row;
     struct FPRange range;
     DCELL min, max, inscale;
-    FCELL measure;  /* Containing measure done */
     int dist, size; /* dist = value of distance, size = s. of moving window */
     int offset;
     int have_px, have_py, have_pxpys, have_pxpyd;
     int infd, *outfd;
+    int threads;
     RASTER_MAP_TYPE out_data_type;
     struct GModule *module;
     struct Option *opt_input, *opt_output, *opt_size, *opt_dist, *opt_measure,
         *opt_threads;
     struct Flag *flag_ind, *flag_all, *flag_null;
     struct History history;
+    struct dimensions *dim;
+    struct output_setting *out_set;
     char p[1024];
 
     G_gisinit(argv[0]);
@@ -133,12 +126,12 @@ int main(int argc, char *argv[])
         _("The distance must be smaller than the size of the moving window");
     opt_dist->answer = "1";
 
-    for (i = 0; menu[i].name; i++) {
+    for (i = 0; measure_menu[i].name; i++) {
         if (i)
             strcat(p, ",");
         else
             *p = 0;
-        strcat(p, menu[i].name);
+        strcat(p, measure_menu[i].name);
     }
     opt_measure = G_define_option();
     opt_measure->key = "method";
@@ -184,8 +177,8 @@ int main(int argc, char *argv[])
 
     n_measures = 0;
     if (flag_all->answer) {
-        for (i = 0; menu[i].name; i++) {
-            menu[i].useme = 1;
+        for (i = 0; measure_menu[i].name; i++) {
+            measure_menu[i].useme = 1;
         }
         n_measures = i;
     }
@@ -195,7 +188,7 @@ int main(int argc, char *argv[])
                 const char *measure_name = opt_measure->answers[i];
                 int n = find_measure(measure_name);
 
-                menu[n].useme = 1;
+                measure_menu[n].useme = 1;
                 n_measures++;
             }
         }
@@ -206,30 +199,12 @@ int main(int argc, char *argv[])
 
     measure_idx = G_malloc(n_measures * sizeof(int));
     j = 0;
-    for (i = 0; menu[i].name; i++) {
-        if (menu[i].useme == 1) {
+    for (i = 0; measure_menu[i].name; i++) {
+        if (measure_menu[i].useme == 1) {
             measure_idx[j] = i;
             j++;
         }
     }
-
-    /* variables needed */
-    if (menu[2].useme || menu[11].useme || menu[12].useme)
-        have_px = 1;
-    else
-        have_px = 0;
-    if (menu[11].useme || menu[12].useme)
-        have_py = 1;
-    else
-        have_py = 0;
-    if (menu[5].useme || menu[6].useme || menu[7].useme)
-        have_pxpys = 1;
-    else
-        have_pxpys = 0;
-    if (menu[9].useme || menu[10].useme)
-        have_pxpyd = 1;
-    else
-        have_pxpyd = 0;
 
     infd = Rast_open_old(name, "");
 
@@ -242,12 +217,9 @@ int main(int argc, char *argv[])
         n_outputs = n_measures * 4;
     }
 
-    fbuf = G_malloc(n_outputs * sizeof(FCELL *));
     mapname = G_malloc(n_outputs * sizeof(char *));
-    for (i = 0; i < n_outputs; i++) {
+    for (i = 0; i < n_outputs; i++)
         mapname[i] = G_malloc(GNAME_MAX * sizeof(char));
-        fbuf[i] = Rast_allocate_buf(out_data_type);
-    }
 
     overwrite = G_check_overwrite(argc, argv);
 
@@ -257,7 +229,7 @@ int main(int argc, char *argv[])
         if (flag_ind->answer) {
             for (j = 0; j < 4; j++) {
                 sprintf(mapname[i * 4 + j], "%s%s_%d", result,
-                        menu[measure_idx[i]].suffix, j * 45);
+                        measure_menu[measure_idx[i]].suffix, j * 45);
                 if (!G_find_raster(mapname[i * 4 + j], G_mapset()) ||
                     overwrite) {
                     outfd[i * 4 + j] =
@@ -270,7 +242,8 @@ int main(int argc, char *argv[])
             }
         }
         else {
-            sprintf(mapname[i], "%s%s", result, menu[measure_idx[i]].suffix);
+            sprintf(mapname[i], "%s%s", result,
+                    measure_menu[measure_idx[i]].suffix);
             if (!G_find_raster(mapname[i], G_mapset()) || overwrite) {
                 outfd[i] = Rast_open_new(mapname[i], out_data_type);
             }
@@ -327,110 +300,41 @@ int main(int argc, char *argv[])
     Rast_close(infd);
     G_free(dcell_row);
 
-    /* Now raster map is loaded to memory. */
+    /* variables needed */
+    dim = G_malloc(sizeof(struct dimensions));
+    out_set = G_malloc(sizeof(struct output_setting));
 
-    /* *************************************************************************************************
-     *
-     * Compute of the matrix S.G.L.D. (Spatial Gray-Level Dependence Matrices)
-     *or co-occurrence matrix. The image is analyzed for piece, every piece is
-     *naming moving window (s.w.). The s.w. must be square with number of size's
-     *samples odd, that because we want the sample at the center of matrix.
-     *
-     ***************************************************************************************************/
+    dim->size = size;
+    dim->dist = dist;
+    dim->nrows = nrows;
+    dim->ncols = ncols;
+    dim->n_outputs = n_outputs;
+    dim->n_measures = n_measures;
 
-    offset = size / 2;
+    out_set->outfd = outfd;
+    out_set->out_data_type = out_data_type;
+    out_set->flag_null = flag_null;
+    out_set->flag_ind = flag_ind;
 
-    if (!flag_null->answer) {
-        first_row = first_col = offset;
-        last_row = nrows - offset;
-        last_col = ncols - offset;
-    }
-    else {
-        /* no cropping at window margins */
-        first_row = first_col = 0;
-        last_row = nrows;
-        last_col = ncols;
-    }
-
-    Rast_set_f_null_value(fbuf[0], ncols);
-
-    for (row = 0; row < first_row; row++) {
-        for (i = 0; i < n_outputs; i++) {
-            Rast_put_row(outfd[i], fbuf[0], out_data_type);
-        }
-    }
-    if (n_measures > 1)
-        G_message(n_("Calculating %d texture measure",
-                     "Calculating %d texture measures", n_measures),
-                  n_measures);
-    else
-        G_message(_("Calculating %s..."), menu[measure_idx[0]].desc);
-
-    struct matvec *mv = G_calloc(1, sizeof(struct matvec));
-    alloc_vars(size, mv);
-
-    for (row = first_row; row < last_row; row++) {
-        G_percent(row, nrows, 2);
-        for (i = 0; i < n_outputs; i++)
-            Rast_set_f_null_value(fbuf[i], ncols);
-
-        /*process the data */
-        for (col = first_col; col < last_col; col++) {
-            if (!set_vars(mv, data, row, col, size, offset, dist,
-                          flag_null->answer)) {
-                for (i = 0; i < n_outputs; i++)
-                    Rast_set_f_null_value(&(fbuf[i][col]), 1);
-                continue;
-            }
-            /* for all angles (0, 45, 90, 135) */
-            for (i = 0; i < 4; i++) {
-                set_angle_vars(mv, i, have_px, have_py, have_pxpys, have_pxpyd);
-                /* for all requested textural measures */
-                for (j = 0; j < n_measures; j++) {
-
-                    measure = (FCELL)h_measure(menu[measure_idx[j]].idx, mv);
-
-                    if (flag_ind->answer) {
-                        /* output for each angle separately */
-                        fbuf[j * 4 + i][col] = measure;
-                    }
-                    else {
-                        /* use average over all angles for each measure */
-                        if (i == 0)
-                            fbuf[j][col] = measure;
-                        else if (i < 3)
-                            fbuf[j][col] += measure;
-                        else
-                            fbuf[j][col] = (fbuf[j][col] + measure) / 4.0;
-                    }
-                }
-            }
-        }
-        for (i = 0; i < n_outputs; i++) {
-            Rast_put_row(outfd[i], fbuf[i], out_data_type);
-        }
-    }
-    dealloc_vars(mv);
-    G_free(mv);
-
-    Rast_set_f_null_value(fbuf[0], ncols);
-    for (row = last_row; row < nrows; row++) {
-        for (i = 0; i < n_outputs; i++) {
-            Rast_put_row(outfd[i], fbuf[0], out_data_type);
-        }
-    }
-    G_percent(nrows, nrows, 1);
+    execute_texture(data, dim, measure_menu, measure_idx, out_set);
 
     for (i = 0; i < n_outputs; i++) {
         Rast_close(outfd[i]);
-
         Rast_short_history(mapname[i], "raster", &history);
         Rast_command_history(&history);
         Rast_write_history(mapname[i], &history);
-        G_free(fbuf[i]);
     }
 
-    G_free(fbuf);
+    /* Free allocated memory */
+    for (i = 0; i < n_outputs; i++)
+        G_free(mapname[i]);
+    for (i = 0; i < nrows; i++)
+        G_free(data[i]);
+
+    G_free(dim);
+    G_free(out_set);
+    G_free(measure_idx);
+    G_free(mapname);
     G_free(data);
 
     exit(EXIT_SUCCESS);
