@@ -16,6 +16,7 @@
 import base64
 import json
 from .reprojection_renderer import ReprojectionRenderer
+from .utils import reproject_latlon
 
 
 def get_backend(interactive_map):
@@ -347,12 +348,64 @@ class InteractiveMap:
         else:
             self.layer_control_object = self._ipyleaflet.LayersControl(**kwargs)
 
+    def add_query_button(self):
+        """Add custom features like query button and coordinate retrieval"""
+        import ipywidgets as widgets
+
+        # A button to activate/deactivate query mode
+        query_button = widgets.Button(description="Activate Query Mode")
+
+        # Variable to store the state of query mode
+        self.query_mode = False
+
+        # Output widget to display query results
+        output_widget = widgets.Output(
+            layout={"border": "1px solid black", "display": "none"}
+        )
+
+        # Function to toggle query mode
+        def toggle_query_mode(button):
+            self.query_mode = not self.query_mode
+            button.description = (
+                "Deactivate Query Mode" if self.query_mode else "Activate Query Mode"
+            )
+            output_widget.layout.display = "block" if self.query_mode else "none"
+
+        query_button.on_click(toggle_query_mode)
+
+        # Add the button to the map using WidgetControl
+        query_control = self._ipyleaflet.WidgetControl(
+            widget=query_button, position="topright"
+        )
+        self.map.add_control(query_control)
+
+        # Create an output widget to display query results
+        output_control = self._ipyleaflet.WidgetControl(
+            widget=output_widget, position="bottomright"
+        )
+        self.map.add_control(output_control)
+
+        # Function to handle map click for querying
+        def handle_interaction(**kwargs):
+            if self.query_mode and kwargs.get("type") == "click":
+                latlon = kwargs.get("coordinates")
+                reprojected_coordinates = reproject_latlon((latlon[0], latlon[1]))
+                with output_widget:
+                    output_widget.clear_output()
+                    print(f"Clicked coordinates: {latlon}")
+                    print(f"Reprojected Coordinates: {reprojected_coordinates}")
+
+        self.map.on_interaction(handle_interaction)
+
     def show(self):
         """This function returns a folium figure or ipyleaflet map object
         with a GRASS raster and/or vector overlaid on a basemap.
 
         If map has layer control enabled, additional layers cannot be
         added after calling show()."""
+
+        if self._ipyleaflet:
+            self.add_query_button()
 
         self.map.fit_bounds(self._renderer.get_bbox())
         if self._folium:

@@ -87,6 +87,37 @@ def reproject_region(region, from_proj, to_proj):
     return region
 
 
+def reproject_latlon(coord):
+    """Reproject coordinates
+
+    :param coord: coordinates given as tuple (longitude, latitude)
+
+    :return: reprojected coordinates (returned as tuple)
+    """
+
+    # Prepare the input coordinate string
+    coord_str = f"{coord[0]} {coord[1]}\n"
+
+    # Start the m.proj command
+    proc = gs.start_command(
+        "m.proj",
+        input="-",
+        flags="i",
+        stdin=gs.PIPE,
+        stdout=gs.PIPE,
+        stderr=gs.PIPE,
+    )
+
+    proc.stdin.write(gs.encode(coord_str))
+    proc.stdin.close()
+    proc.stdin = None
+    proj_output, _ = proc.communicate()
+
+    output = gs.decode(proj_output).splitlines()
+
+    return output[0]
+
+
 def estimate_resolution(raster, mapset, location, dbase, env):
     """Estimates resolution of reprojected raster.
 
