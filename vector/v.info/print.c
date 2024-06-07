@@ -167,7 +167,7 @@ void print_topo(struct Map_info *Map, enum OutputFormat format,
                                    Vect_get_num_holes(Map));
         }
         json_object_set_number(root_object, "primitives", nprimitives);
-        json_object_set_number(root_object, "map3d", Vect_is_3d(Map) ? 1 : 0);
+        json_object_set_boolean(root_object, "map3d", Vect_is_3d(Map));
     }
 }
 
@@ -262,7 +262,6 @@ void print_shell(struct Map_info *Map, const char *field_opt,
     case JSON:
         json_object_set_string(root_object, "name", Vect_get_name(Map));
         json_object_set_string(root_object, "mapset", Vect_get_mapset(Map));
-        json_object_set_string(root_object, "location", G_location());
         json_object_set_string(root_object, "project", G_location());
         json_object_set_string(root_object, "database", G_gisdbase());
         json_object_set_string(root_object, "title", Vect_get_map_name(Map));

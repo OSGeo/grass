@@ -107,8 +107,7 @@ int main(int argc, char *argv[])
     }
 
     if (format == JSON) {
-        char *serialized_string = NULL;
-        serialized_string = json_serialize_to_string_pretty(root_value);
+        char *serialized_string = json_serialize_to_string_pretty(root_value);
         if (serialized_string == NULL) {
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         }
