@@ -209,7 +209,6 @@ float f3_corr(struct matvec *mv)
     int Ng = mv->Ng;
     int *tone = mv->tone;
     float *px = mv->px;
-    float *py = mv->py;
 
     /* Now calculate the means and standard deviations of px and py */
 
