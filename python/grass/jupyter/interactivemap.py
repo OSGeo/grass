@@ -16,7 +16,7 @@
 import base64
 import json
 from .reprojection_renderer import ReprojectionRenderer
-from .utils import reproject_latlon
+from .utils import reproject_latlon, query_raster, query_vector
 
 
 def get_backend(interactive_map):
@@ -303,7 +303,8 @@ class InteractiveMap:
         # Set LayerControl default
         self.layer_control = False
         self.layer_control_object = None
-
+        self.raster_name = ""
+        self.vector_name = ""
         self._renderer = ReprojectionRenderer(
             use_region=use_region, saved_region=saved_region
         )
@@ -317,6 +318,7 @@ class InteractiveMap:
         :param str title: vector name for layer control
         :**kwargs: keyword arguments passed to GeoJSON overlay
         """
+        self.vector_name = name
         Vector(name, title=title, renderer=self._renderer, **kwargs).add_to(self.map)
 
     def add_raster(self, name, title=None, **kwargs):
@@ -335,6 +337,7 @@ class InteractiveMap:
         :param str title: raster name for layer control
         :**kwargs: keyword arguments passed to image overlay
         """
+        self.raster_name = name
         Raster(name, title=title, renderer=self._renderer, **kwargs).add_to(self.map)
 
     def add_layer_control(self, **kwargs):
@@ -388,12 +391,26 @@ class InteractiveMap:
         # Function to handle map click for querying
         def handle_interaction(**kwargs):
             if self.query_mode and kwargs.get("type") == "click":
-                latlon = kwargs.get("coordinates")
-                reprojected_coordinates = reproject_latlon((latlon[0], latlon[1]))
+                lonlat = kwargs.get("coordinates")
+                reprojected_coordinates = reproject_latlon((lonlat[0], lonlat[1]))
+                raster_output = query_raster(
+                    (reprojected_coordinates[0], reprojected_coordinates[1]),
+                    self.raster_name,
+                )
+                vector_output = query_vector(
+                    (reprojected_coordinates[0], reprojected_coordinates[1]),
+                    self.vector_name,
+                )
                 with output_widget:
                     output_widget.clear_output()
-                    print(f"Clicked coordinates: {latlon}")
-                    print(f"Reprojected Coordinates: {reprojected_coordinates}")
+                    if self.raster_name:
+                        print("Raster Info:")
+                        for key, value in raster_output[0].items():
+                            print(f"{key}: {value}")
+                    if self.vector_name and len(vector_output[0]) > 2:
+                        print("Vector Info:")
+                        for key, value in vector_output[0].items():
+                            print(f"{key}: {value}")
 
         self.map.on_interaction(handle_interaction)
 

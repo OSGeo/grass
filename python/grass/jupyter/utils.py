@@ -96,13 +96,14 @@ def reproject_latlon(coord):
     """
 
     # Prepare the input coordinate string
-    coord_str = f"{coord[0]} {coord[1]}\n"
+    coord_str = f"{coord[1]} {coord[0]}\n"
 
     # Start the m.proj command
     proc = gs.start_command(
         "m.proj",
         input="-",
         flags="i",
+        separator=",",
         stdin=gs.PIPE,
         stdout=gs.PIPE,
         stderr=gs.PIPE,
@@ -114,8 +115,17 @@ def reproject_latlon(coord):
     proj_output, _ = proc.communicate()
 
     output = gs.decode(proj_output).splitlines()
+    east, north, elev = map(float, output[0].split(","))
 
-    return output[0]
+    return east, north, elev
+
+
+def query_raster(coord, ratser_map):
+    return gs.raster.raster_what(map=ratser_map, coord=(coord[0], coord[1]))
+
+
+def query_vector(coord, vector_map):
+    return gs.vector.vector_what(map=vector_map, coord=(coord[0], coord[1]))
 
 
 def estimate_resolution(raster, mapset, location, dbase, env):
