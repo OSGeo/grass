@@ -3,8 +3,8 @@
 #include "h_measure.h"
 
 typedef struct dimensions {
-    int size;
-    int dist;
+    int size; /* size of moving window */
+    int dist; /* value of distance */
     int nrows;
     int ncols;
     int n_outputs;
