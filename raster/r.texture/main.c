@@ -65,27 +65,27 @@ int main(int argc, char *argv[])
     struct Cell_head cellhd;
     char *name, *result;
     char **mapname;
-    int n_measures, n_outputs, *measure_idx, overwrite;
-    int nrows, ncols;
-    int row, col, first_row, last_row, first_col, last_col;
+    int *measure_idx, overwrite;
     int i, j;
     CELL **data; /* Data structure containing image */
     DCELL *dcell_row;
     struct FPRange range;
     DCELL min, max, inscale;
-    int dist, size; /* dist = value of distance, size = s. of moving window */
-    int offset;
-    int have_px, have_py, have_pxpys, have_pxpyd;
     int infd, *outfd;
-    int threads;
+
     RASTER_MAP_TYPE out_data_type;
     struct GModule *module;
-    struct Option *opt_input, *opt_output, *opt_size, *opt_dist, *opt_measure,
-        *opt_threads;
-    struct Flag *flag_ind, *flag_all, *flag_null;
+    struct {
+        struct Option *input, *output, *size, *dist, *measure, *nproc;
+    } parm;
+    struct {
+        struct Flag *ind, *all, *null;
+    } flag;
     struct History history;
-    struct dimensions *dim;
-    struct output_setting *out_set;
+
+    struct dimensions dim;
+    struct output_setting out_set;
+    int threads;
     char p[1024];
 
     G_gisinit(argv[0]);
@@ -100,32 +100,32 @@ int main(int argc, char *argv[])
 
     /* Define the different options */
 
-    opt_input = G_define_standard_option(G_OPT_R_INPUT);
+    parm.input = G_define_standard_option(G_OPT_R_INPUT);
 
-    opt_output = G_define_standard_option(G_OPT_R_BASENAME_OUTPUT);
+    parm.output = G_define_standard_option(G_OPT_R_BASENAME_OUTPUT);
 
-    opt_threads = G_define_standard_option(G_OPT_M_NPROCS);
+    parm.nproc = G_define_standard_option(G_OPT_M_NPROCS);
 
-    opt_size = G_define_option();
-    opt_size->key = "size";
-    opt_size->key_desc = "value";
-    opt_size->type = TYPE_INTEGER;
-    opt_size->required = NO;
-    opt_size->description = _("The size of moving window (odd and >= 3)");
-    opt_size->answer = "3";
+    parm.size = G_define_option();
+    parm.size->key = "size";
+    parm.size->key_desc = "value";
+    parm.size->type = TYPE_INTEGER;
+    parm.size->required = NO;
+    parm.size->description = _("The size of moving window (odd and >= 3)");
+    parm.size->answer = "3";
 
     /* Textural character is in direct relation of the spatial size of the
      * texture primitives. */
 
-    opt_dist = G_define_option();
-    opt_dist->key = "distance";
-    opt_dist->key_desc = "value";
-    opt_dist->type = TYPE_INTEGER;
-    opt_dist->required = NO;
-    opt_dist->label = _("The distance between two samples (>= 1)");
-    opt_dist->description =
+    parm.dist = G_define_option();
+    parm.dist->key = "distance";
+    parm.dist->key_desc = "value";
+    parm.dist->type = TYPE_INTEGER;
+    parm.dist->required = NO;
+    parm.dist->label = _("The distance between two samples (>= 1)");
+    parm.dist->description =
         _("The distance must be smaller than the size of the moving window");
-    opt_dist->answer = "1";
+    parm.dist->answer = "1";
 
     for (i = 0; measure_menu[i].name; i++) {
         if (i)
@@ -134,71 +134,72 @@ int main(int argc, char *argv[])
             *p = 0;
         strcat(p, measure_menu[i].name);
     }
-    opt_measure = G_define_option();
-    opt_measure->key = "method";
-    opt_measure->type = TYPE_STRING;
-    opt_measure->required = NO;
-    opt_measure->multiple = YES;
-    opt_measure->options = p;
-    opt_measure->description = _("Textural measurement method");
+    parm.measure = G_define_option();
+    parm.measure->key = "method";
+    parm.measure->type = TYPE_STRING;
+    parm.measure->required = NO;
+    parm.measure->multiple = YES;
+    parm.measure->options = p;
+    parm.measure->description = _("Textural measurement method");
 
-    flag_ind = G_define_flag();
-    flag_ind->key = 's';
-    flag_ind->label = _("Separate output for each angle (0, 45, 90, 135)");
-    flag_ind->description =
+    flag.ind = G_define_flag();
+    flag.ind->key = 's';
+    flag.ind->label = _("Separate output for each angle (0, 45, 90, 135)");
+    flag.ind->description =
         _("Angles are counterclockwise from east: "
           "0 is East to West, 45 is North-East to South-West");
 
-    flag_all = G_define_flag();
-    flag_all->key = 'a';
-    flag_all->description = _("Calculate all textural measurements");
+    flag.all = G_define_flag();
+    flag.all->key = 'a';
+    flag.all->description = _("Calculate all textural measurements");
 
-    flag_null = G_define_flag();
-    flag_null->key = 'n';
-    flag_null->label = _("Allow NULL cells in a moving window");
-    flag_null->description =
+    flag.null = G_define_flag();
+    flag.null->key = 'n';
+    flag.null->label = _("Allow NULL cells in a moving window");
+    flag.null->description =
         _("This will also avoid cropping along edges of the current region");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    name = opt_input->answer;
-    result = opt_output->answer;
-    size = atoi(opt_size->answer);
-    if (size <= 0)
+    name = parm.input->answer;
+    result = parm.output->answer;
+    dim.size = atoi(parm.size->answer);
+    dim.dist = atoi(parm.dist->answer);
+
+    if (dim.size <= 0)
         G_fatal_error(_("Size of the moving window must be > 0"));
-    if (size % 2 != 1)
+    if (dim.size % 2 != 1)
         G_fatal_error(_("Size of the moving window must be odd"));
-    dist = atoi(opt_dist->answer);
-    if (dist <= 0)
+    if (dim.dist <= 0)
         G_fatal_error(_("The distance between two samples must be > 0"));
-    if (dist >= size)
+    if (dim.dist >= dim.size)
         G_fatal_error(_("The distance between two samples must be smaller than "
                         "the size of the moving window"));
 
-    n_measures = 0;
-    if (flag_all->answer) {
+    dim.n_measures = 0;
+    if (flag.all->answer) {
         for (i = 0; measure_menu[i].name; i++) {
             measure_menu[i].useme = 1;
         }
-        n_measures = i;
+        dim.n_measures = i;
     }
     else {
-        for (i = 0; opt_measure->answers[i]; i++) {
-            if (opt_measure->answers[i]) {
-                const char *measure_name = opt_measure->answers[i];
+        for (i = 0; parm.measure->answers[i]; i++) {
+            if (parm.measure->answers[i]) {
+                const char *measure_name = parm.measure->answers[i];
                 int n = find_measure(measure_name);
 
                 measure_menu[n].useme = 1;
-                n_measures++;
+                dim.n_measures++;
             }
         }
     }
-    if (!n_measures)
+    if (!dim.n_measures)
         G_fatal_error(
             _("Nothing to compute. Use at least one textural measure."));
 
-    measure_idx = G_malloc(n_measures * sizeof(int));
+    measure_idx = G_malloc(dim.n_measures * sizeof(int));
     j = 0;
     for (i = 0; measure_menu[i].name; i++) {
         if (measure_menu[i].useme == 1) {
@@ -213,21 +214,21 @@ int main(int argc, char *argv[])
 
     out_data_type = FCELL_TYPE;
     /* Allocate output buffers, use FCELL data_type */
-    n_outputs = n_measures;
-    if (flag_ind->answer) {
-        n_outputs = n_measures * 4;
+    dim.n_outputs = dim.n_measures;
+    if (flag.ind->answer) {
+        dim.n_outputs = dim.n_measures * 4;
     }
 
-    mapname = G_malloc(n_outputs * sizeof(char *));
-    for (i = 0; i < n_outputs; i++)
+    mapname = G_malloc(dim.n_outputs * sizeof(char *));
+    for (i = 0; i < dim.n_outputs; i++)
         mapname[i] = G_malloc(GNAME_MAX * sizeof(char));
 
     overwrite = G_check_overwrite(argc, argv);
 
     /* open output maps */
-    outfd = G_malloc(n_outputs * sizeof(int));
-    for (i = 0; i < n_measures; i++) {
-        if (flag_ind->answer) {
+    outfd = G_malloc(dim.n_outputs * sizeof(int));
+    for (i = 0; i < dim.n_measures; i++) {
+        if (flag.ind->answer) {
             for (j = 0; j < 4; j++) {
                 sprintf(mapname[i * 4 + j], "%s%s_%d", result,
                         measure_menu[measure_idx[i]].suffix, j * 45);
@@ -254,8 +255,8 @@ int main(int argc, char *argv[])
             }
         }
     }
-    nrows = Rast_window_rows();
-    ncols = Rast_window_cols();
+    dim.nrows = Rast_window_rows();
+    dim.ncols = Rast_window_cols();
 
     /* Load raster map. */
 
@@ -263,9 +264,9 @@ int main(int argc, char *argv[])
     dcell_row = Rast_allocate_d_buf();
 
     /* Allocate appropriate memory for the structure containing the image */
-    data = (int **)G_malloc(nrows * sizeof(int *));
-    for (i = 0; i < nrows; i++) {
-        data[i] = (int *)G_malloc(ncols * sizeof(int));
+    data = (int **)G_malloc(dim.nrows * sizeof(int *));
+    for (i = 0; i < dim.nrows; i++) {
+        data[i] = (int *)G_malloc(dim.ncols * sizeof(int));
     }
 
     /* read input range */
@@ -284,9 +285,9 @@ int main(int argc, char *argv[])
     /* Read in cell map values */
     /* TODO: use r.proj cache */
     G_important_message(_("Reading raster map..."));
-    for (j = 0; j < nrows; j++) {
+    for (j = 0; j < dim.nrows; j++) {
         Rast_get_row(infd, dcell_row, j, DCELL_TYPE);
-        for (i = 0; i < ncols; i++) {
+        for (i = 0; i < dim.ncols; i++) {
             if (Rast_is_d_null_value(&(dcell_row[i])))
                 data[j][i] = -1;
             else if (inscale) {
@@ -302,24 +303,14 @@ int main(int argc, char *argv[])
     G_free(dcell_row);
 
     /* variables needed */
-    dim = G_malloc(sizeof(struct dimensions));
-    out_set = G_malloc(sizeof(struct output_setting));
+    out_set.outfd = outfd;
+    out_set.out_data_type = out_data_type;
+    out_set.flag_null = flag.null;
+    out_set.flag_ind = flag.ind;
 
-    dim->size = size;
-    dim->dist = dist;
-    dim->nrows = nrows;
-    dim->ncols = ncols;
-    dim->n_outputs = n_outputs;
-    dim->n_measures = n_measures;
+    execute_texture(data, &dim, measure_menu, measure_idx, &out_set);
 
-    out_set->outfd = outfd;
-    out_set->out_data_type = out_data_type;
-    out_set->flag_null = flag_null;
-    out_set->flag_ind = flag_ind;
-
-    execute_texture(data, dim, measure_menu, measure_idx, out_set);
-
-    for (i = 0; i < n_outputs; i++) {
+    for (i = 0; i < dim.n_outputs; i++) {
         Rast_close(outfd[i]);
         Rast_short_history(mapname[i], "raster", &history);
         Rast_command_history(&history);
@@ -327,13 +318,11 @@ int main(int argc, char *argv[])
     }
 
     /* Free allocated memory */
-    for (i = 0; i < n_outputs; i++)
+    for (i = 0; i < dim.n_outputs; i++)
         G_free(mapname[i]);
-    for (i = 0; i < nrows; i++)
+    for (i = 0; i < dim.nrows; i++)
         G_free(data[i]);
 
-    G_free(dim);
-    G_free(out_set);
     G_free(measure_idx);
     G_free(mapname);
     G_free(data);
