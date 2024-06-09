@@ -1,4 +1,3 @@
-/* h_measure.c */
 /****************************************************************************
  *
  * MODULE:       r.texture
@@ -22,22 +21,22 @@
  *
  *****************************************************************************/
 
-#define BL            "Direction             "
-#define F1            "Angular Second Moment "
-#define F2            "Contrast              "
-#define F3            "Correlation           "
-#define F4            "Variance              "
-#define F5            "Inverse Diff Moment   "
-#define F6            "Sum Average           "
-#define F7            "Sum Variance          "
-#define F8            "Sum Entropy           "
-#define F9            "Entropy               "
-#define F10           "Difference Variance   "
-#define F11           "Difference Entropy    "
-#define F12           "Measure of Correlation-1 "
-#define F13           "Measure of Correlation-2 "
+#include "matvec.h"
 
-#define PGM_MAXMAXVAL 255
+#define BL  "Direction             "
+#define F1  "Angular Second Moment "
+#define F2  "Contrast              "
+#define F3  "Correlation           "
+#define F4  "Variance              "
+#define F5  "Inverse Diff Moment   "
+#define F6  "Sum Average           "
+#define F7  "Sum Variance          "
+#define F8  "Sum Entropy           "
+#define F9  "Entropy               "
+#define F10 "Difference Variance   "
+#define F11 "Difference Entropy    "
+#define F12 "Measure of Correlation-1 "
+#define F13 "Measure of Correlation-2 "
 
 typedef struct menu {
     char *name;   /* measure name */
@@ -46,38 +45,6 @@ typedef struct menu {
     char useme;   /* calculate this measure if set */
     int idx;      /* measure index */
 } menu;
-
-typedef struct matvec {
-    float **P_matrix;
-    float **P_matrix0;
-    float **P_matrix45;
-    float **P_matrix90;
-    float **P_matrix135;
-
-    float *px, *py;
-    float *Pxpys, *Pxpyd;
-
-    int *tone;
-    int Ng;
-} matvec;
-
-typedef struct dimensions {
-    int size;
-    int dist;
-    int nrows;
-    int ncols;
-    int n_outputs;
-    int n_measures;
-} dimensions;
-
-typedef struct output_setting {
-    int *outfd;
-    RASTER_MAP_TYPE out_data_type;
-    struct Flag *flag_null;
-    struct Flag *flag_ind;
-} output_setting;
-
-int bsearch_gray(int *array, int n, int val);
 
 float h_measure(int t_m, struct matvec *mv);
 
@@ -94,16 +61,3 @@ float f10_dvar(struct matvec *mv);
 float f11_dentropy(struct matvec *mv);
 float f12_icorr(struct matvec *mv);
 float f13_icorr(struct matvec *mv);
-
-float **matrix(int nr, int nc);
-float *vector(int n);
-
-void alloc_vars(int, struct matvec *);
-void dealloc_vars(struct matvec *);
-int set_vars(struct matvec *, int **grays, int curr_row, int curr_col, int size,
-             int offset, int t_d, int with_nulls);
-int set_angle_vars(struct matvec *mv, int angle, int have_px, int have_py,
-                   int have_pxpys, int have_pxpyd);
-int execute_texture(CELL **data, struct dimensions *dim,
-                    struct menu *measure_menu, int *measure_idx,
-                    struct output_setting *out_set);

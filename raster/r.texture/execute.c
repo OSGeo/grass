@@ -4,7 +4,8 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
-#include "h_measure.h"
+
+#include "execute.h"
 
 /* *************************************************************************************************
  *
