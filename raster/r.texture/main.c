@@ -85,7 +85,6 @@ int main(int argc, char *argv[])
 
     struct dimensions dim;
     struct output_setting out_set;
-    int threads;
     char p[1024];
 
     G_gisinit(argv[0]);
