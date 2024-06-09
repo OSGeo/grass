@@ -27,7 +27,8 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
-#include "h_measure.h"
+
+#include "execute.h"
 
 /* modify this table to add new measures */
 static struct menu measure_menu[] = {

@@ -30,28 +30,6 @@
 
 #include "h_measure.h"
 
-int bsearch_gray(int *array, int n, int val)
-{
-    int lo, hi, mid;
-
-    lo = 0;
-    hi = n - 1;
-
-    while (lo <= hi) {
-        mid = (lo + hi) >> 1;
-
-        if (array[mid] == val)
-            return mid;
-
-        if (array[mid] > val)
-            hi = mid - 1;
-        else
-            lo = mid + 1;
-    }
-
-    return -1;
-}
-
 float h_measure(int t_m, struct matvec *mv)
 {
     switch (t_m) {
