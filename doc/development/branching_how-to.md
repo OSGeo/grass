@@ -65,7 +65,8 @@ Search for all other mentions of last few versions to see if they need to be upd
 for example:
 
 ```bash
-grep --exclude-dir=.git -IrnE "[^0-9]8[\._][2,3][^0-9]"
+grep --exclude-dir=.git -IrnE "[^0-9^a-z]8[\._][0-9][^0-9]"
+grep --exclude-dir=.git -IrnE "grass8.?[0-9]"
 ```
 
 After the check and update, commit 
