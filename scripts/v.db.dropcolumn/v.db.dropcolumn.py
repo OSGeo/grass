@@ -39,11 +39,10 @@
 
 import grass.script as grass
 from grass.exceptions import CalledModuleError
+from grass.script.db import DBHandler
 
 
 def main():
-    from grass.script.db import DBHandler
-
     map = options["map"]
     layer = options["layer"]
     columns = options["columns"].split(",")

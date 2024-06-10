@@ -67,11 +67,10 @@ import sys
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
+from grass.script.db import DBHandler
 
 
 def main():
-    from grass.script.db import DBHandler
-
     # Include mapset into the name, so we avoid multiple messages about
     # found in more mapsets. The following generates an error message, while the code
     # above does not. However, the above checks that the map exists, so we don't

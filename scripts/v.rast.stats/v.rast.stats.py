@@ -76,9 +76,11 @@
 import sys
 import os
 import atexit
+
 import grass.script as grass
-from grass.script.utils import decode
 from grass.exceptions import CalledModuleError
+from grass.script.db import DBHandler
+from grass.script.utils import decode
 
 
 def cleanup():
@@ -93,8 +95,6 @@ def cleanup():
 
 
 def main():
-    from grass.script.db import DBHandler
-
     global tmp, sqltmp, tmpname, nuldev, vector, rastertmp
     rastertmp = False
     # setup temporary files

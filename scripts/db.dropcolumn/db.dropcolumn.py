@@ -45,13 +45,12 @@
 import sys
 import string
 
-from grass.exceptions import CalledModuleError
 import grass.script as gscript
+from grass.exceptions import CalledModuleError
+from grass.script.db import DBHandler
 
 
 def main():
-    from grass.script.db import DBHandler
-
     table = options["table"]
     column = options["column"]
     database = options["database"]

@@ -42,14 +42,12 @@
 
 import re
 
-from grass.exceptions import CalledModuleError
 import grass.script as grass
+from grass.exceptions import CalledModuleError
+from grass.script.db import DBHandler
 
 
 def main():
-    from grass.script.db import DBHandler
-
-    global rm_files
     map = options["map"]
     layer = options["layer"]
     columns = options["columns"]

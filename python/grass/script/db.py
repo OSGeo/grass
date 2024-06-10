@@ -264,10 +264,10 @@ class DBHandler:
         """
         self._driver_name = driver_name
         self._database = database
-        self._import_c_funcs()
+        self._import_c_interface()
 
-    def _import_c_funcs(self):
-        """Import C functions"""
+    def _import_c_interface(self):
+        """Import C interface"""
         try:
             from grass.lib.dbmi import (
                 db_begin_transaction,
@@ -286,31 +286,35 @@ class DBHandler:
                 Map_info,
                 Vect_subst_var,
             )
-
-            self._c_funcs = {
-                "db_begin_transaction": db_begin_transaction,
-                "db_execute_immediate": db_execute_immediate,
-                "db_free_string": db_free_string,
-                "db_init_string": db_init_string,
-                "db_close_database_shutdown_driver": db_close_database_shutdown_driver,
-                "db_commit_transaction": db_commit_transaction,
-                "db_set_string": db_set_string,
-                "db_start_driver_open_database": db_start_driver_open_database,
-                "dbString": dbString,
-                "DB_OK": DB_OK,
-                "G_gisinit": G_gisinit,
-                "Map_info": Map_info,
-                "Vect_subst_var": Vect_subst_var,
-            }
         except (ImportError, OSError, TypeError) as e:
             fatal(_("Unable to import C functions: {e}").format(e))
 
+        class CInterface:
+            def __init__(self):
+                self.db_begin_transaction = db_begin_transaction
+                self.db_execute_immediate = db_execute_immediate
+                self.db_free_string = db_free_string
+                self.db_init_string = db_init_string
+                self.db_close_database_shutdown_driver = (
+                    db_close_database_shutdown_driver
+                )
+                self.db_commit_transaction = db_commit_transaction
+                self.db_set_string = db_set_string
+                self.db_start_driver_open_database = db_start_driver_open_database
+                self.dbString = dbString
+                self.DB_OK = DB_OK
+                self.G_gisinit = G_gisinit
+                self.Map_info = Map_info
+                self.Vect_subst_var = Vect_subst_var
+
+        self._c_interface = CInterface()
+
     def _init_driver(self):
         """Init DB driver"""
-        map = self._c_funcs["Map_info"]()
-        self._pdriver = self._c_funcs["db_start_driver_open_database"](
+        map = self._c_interface.Map_info()
+        self._pdriver = self._c_interface.db_start_driver_open_database(
             self._driver_name,
-            self._c_funcs["Vect_subst_var"](self._database, byref(map)),
+            self._c_interface.Vect_subst_var(self._database, byref(map)),
         )
         if not self._pdriver:
             fatal(
@@ -321,32 +325,27 @@ class DBHandler:
 
     def _begin_transaction(self):
         """Begin DB transaction."""
-        self._c_funcs["G_gisinit"]("")
-
-        self._init_driver()
-
-        ret = self._c_funcs["db_begin_transaction"](self._pdriver)
-        if ret != self._c_funcs["DB_OK"]:
-            self._c_funcs["db_close_database_shutdown_driver"](self._pdriver)
+        ret = self._c_interface.db_begin_transaction(self._pdriver)
+        if ret != self._c_interface.DB_OK:
+            self._shutdown_driver()
             fatal(
                 _(
-                    "Error while start database <{db}> transaction by"
+                    "Error while starting database <{db}> transaction by"
                     " driver <{driver}>."
                 ).format(db=self._database, driver=self._driver_name)
             )
 
     def _commit_transaction(self):
         """Commit DB transaction."""
-        ret = self._c_funcs["db_commit_transaction"](self._pdriver)
-        if ret != self._c_funcs["DB_OK"]:
-            self._c_funcs["db_close_database_shutdown_driver"](self._pdriver)
+        ret = self._c_interface.db_commit_transaction(self._pdriver)
+        if ret != self._c_interface.DB_OK:
+            self._shutdown_driver()
             fatal(
                 _(
                     "Error while commit database <{db}> transaction"
                     " by driver <{driver}>."
                 ).format(db=self._database, driver=self._driver_name)
             )
-        self._c_funcs["db_close_database_shutdown_driver"](self._pdriver)
 
     def _execute(self, sql):
         """Execute SQL
@@ -354,17 +353,21 @@ class DBHandler:
         :param str|list|tuple sql: SQL command string or list of SQLs
                                    commands
         """
-        stmt = self._c_funcs["dbString"]()
-        self._c_funcs["db_init_string"](byref(stmt))
-        self._c_funcs["db_set_string"](byref(stmt), sql)
+        stmt = self._c_interface.dbString()
+        self._c_interface.db_init_string(byref(stmt))
+        self._c_interface.db_set_string(byref(stmt), sql)
         if (
-            self._c_funcs["db_execute_immediate"](self._pdriver, byref(stmt))
-            != self._c_funcs["DB_OK"]
+            self._c_interface.db_execute_immediate(self._pdriver, byref(stmt))
+            != self._c_interface.DB_OK
         ):
-            self._c_funcs["db_free_string"](byref(stmt))
-            self._c_funcs["db_close_database_shutdown_driver"](self._pdriver)
+            self._c_interface.db_free_string(byref(stmt))
+            self._shutdown_driver()
             fatal(_("Error while executing SQL <{}>.").format(sql))
-        self._c_funcs["db_free_string"](byref(stmt))
+        self._c_interface.db_free_string(byref(stmt))
+
+    def _shutdown_driver(self):
+        """Close DB and shutdown driver"""
+        self._c_interface.db_close_database_shutdown_driver(self._pdriver)
 
     def execute(self, sql):
         """Execute SQL
@@ -372,6 +375,9 @@ class DBHandler:
         :param str|list|tuple sql: SQL command string or list of SQLs
                                    statement
         """
+        self._c_interface.G_gisinit("")
+        self._init_driver()
+
         # Begin DB transaction
         self._begin_transaction()
         # Execute SQL string
@@ -382,3 +388,5 @@ class DBHandler:
             self._execute(sql)
         # Commit DB transaction
         self._commit_transaction()
+
+        self._shutdown_driver()
