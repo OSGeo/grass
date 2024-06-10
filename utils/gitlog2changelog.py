@@ -76,7 +76,7 @@ for line in fin:
             date = dateList[1]
             date = date[0 : len(date) - 1]
             dateFound = True
-        except (IndexError, TypeError):
+        except IndexError:
             print("Could not parse dateList = '%s'" % (line))
     # The Fossil-IDs are ignored:
     elif line.startswith("    Fossil-ID:") or line.startswith("    [[SVN:"):

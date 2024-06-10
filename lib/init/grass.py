@@ -742,7 +742,7 @@ def set_paths(grass_config_dir):
             s = p.stdout.read()
             p.wait()
             sys_man_path = s.strip()
-        except (subprocess.TimeoutExpired, subprocess.SubprocessError):
+        except Exception:
             pass
 
         if sys_man_path:
@@ -2213,7 +2213,7 @@ def print_params(params):
             try:
                 revision = linerev.split(" ")[1]
                 sys.stdout.write("%s\n" % revision[1:])
-            except (IndexError, TypeError, AttributeError):
+            except IndexError:
                 sys.stdout.write("No SVN revision defined\n")
         elif arg == "version":
             sys.stdout.write("%s\n" % GRASS_VERSION)
