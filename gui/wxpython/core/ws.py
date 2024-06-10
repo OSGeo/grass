@@ -16,10 +16,10 @@ This program is free software under the GNU General Public License
 
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
+
 import sys
 import copy
 import time
-import six
 
 import wx
 
@@ -228,9 +228,10 @@ class RenderWMSMgr(wx.EvtHandler):
         return region
 
     def _createRegionStr(self, region):
-        """Create string for GRASS_REGION env variable from  dict created by _getRegionDict."""
+        """Create string for GRASS_REGION env variable from  dict created
+        by _getRegionDict."""
         regionStr = ""
-        for k, v in six.iteritems(region):
+        for k, v in region.items():
             item = k + ": " + str(v)
             if regionStr:
                 regionStr += "; "
@@ -253,6 +254,10 @@ class RenderWMSMgr(wx.EvtHandler):
             region["west"] = center - delta + region["west"]
             region["e-w resol"] = region["n-s resol"]
 
+            if region["proj"] == 3:  # LL locations
+                region["east"] = min(region["east"], 180.0)
+                region["west"] = max(region["west"], -180.0)
+
         else:
             delta = region["e-w resol"] * size["rows"] / 2
 
@@ -261,6 +266,10 @@ class RenderWMSMgr(wx.EvtHandler):
             region["north"] = center + delta + region["south"]
             region["south"] = center - delta + region["south"]
             region["n-s resol"] = region["e-w resol"]
+
+            if region["proj"] == 3:  # LL locations
+                region["north"] = min(region["north"], 90.0)
+                region["south"] = max(region["south"], -90.0)
 
     def Abort(self):
         """Abort rendering process"""
@@ -356,7 +365,7 @@ class GDALRasterMerger:
         if sXsize < 1 or sYsize < 1:
             return
 
-        for sBandNnum, tBandNum in six.iteritems(sTBands):
+        for sBandNnum, tBandNum in sTBands.items():
             bandData = sDataset.GetRasterBand(sBandNnum).ReadRaster(
                 sXoff, sYoff, sXsize, sYsize, tXsize, tYsize, gdal.GDT_Byte
             )

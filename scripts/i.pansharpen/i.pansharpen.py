@@ -426,7 +426,8 @@ def main():
         grass.message(_("Adjusting blue channel color table..."))
         blue_colors = ["0 0 0 0\n5% 0 0 0\n67% 255 255 255\n100% 255 255 255"]
         # these previous colors are way too blue for landsat
-        # blue_colors = ['0 0 0 0\n10% 0 0 0\n20% 200 200 200\n40% 230 230 230\n67% 255 255 255\n100% 255 255 255']
+        # blue_colors = ['0 0 0 0\n10% 0 0 0\n20% 200 200 200\n40% 230 230 230\n67%
+        # 255 255 255\n100% 255 255 255']
         bc = grass.feed_command("r.colors", quiet=True, map="%s_blue" % out, rules="-")
         bc.stdin.write(grass.encode("\n".join(blue_colors)))
         bc.stdin.close()
@@ -649,9 +650,9 @@ def pca(pan, ms1, ms2, ms3, out, pid, sproc):
         outg = "%s_green" % out
         outb = "%s_blue" % out
 
-        cmd1 = "$outb = 1 * round(($panmatch1 * $b1evect1) + ($pca2 * $b1evect2) + ($pca3 * $b1evect3) + $b1mean)"
-        cmd2 = "$outg = 1 * round(($panmatch2 * $b2evect1) + ($pca2 * $b2evect2) + ($pca3 * $b2evect3) + $b2mean)"
-        cmd3 = "$outr = 1 * round(($panmatch3 * $b3evect1) + ($pca2 * $b3evect2) + ($pca3 * $b3evect3) + $b3mean)"
+        cmd1 = "$outb = 1 * round(($panmatch1 * $b1evect1) + ($pca2 * $b1evect2) + ($pca3 * $b1evect3) + $b1mean)"  # noqa: E501
+        cmd2 = "$outg = 1 * round(($panmatch2 * $b2evect1) + ($pca2 * $b2evect2) + ($pca3 * $b2evect3) + $b2mean)"  # noqa: E501
+        cmd3 = "$outr = 1 * round(($panmatch3 * $b3evect1) + ($pca2 * $b3evect2) + ($pca3 * $b3evect3) + $b3mean)"  # noqa: E501
 
         cmd = "\n".join([cmd1, cmd2, cmd3])
 

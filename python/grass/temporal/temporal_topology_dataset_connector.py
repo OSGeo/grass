@@ -15,11 +15,11 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
+
 import copy
 
 
-class TemporalTopologyDatasetConnector(object):
+class TemporalTopologyDatasetConnector:
     """This class implements a temporal topology access structure to connect
     temporal related datasets
 
@@ -55,6 +55,8 @@ class TemporalTopologyDatasetConnector(object):
                 map.print_info()
 
             start = start.next()
+
+    .. code-block:: python
 
          >>> import grass.temporal as tgis
          >>> tgis.init()
@@ -104,7 +106,8 @@ class TemporalTopologyDatasetConnector(object):
          finished=a@P
          >>> rlist = tmr.get_temporal_relations()
          >>> if "FINISHED" in rlist.keys():
-         ...    print(rlist["FINISHED"][0].get_id())
+         ...     print(rlist["FINISHED"][0].get_id())
+         ...
          a@P
 
     """
@@ -504,7 +507,7 @@ class TemporalTopologyDatasetConnector(object):
         """Print information about this class in human readable style"""
 
         print(
-            " +-------------------- Temporal Topology -------------------------------------+"
+            " +-------------------- Temporal Topology -------------------------------------+"  # noqa: E501
         )
         #          0123456789012345678901234567890
         if self.next() is not None:

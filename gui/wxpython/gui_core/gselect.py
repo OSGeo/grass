@@ -26,10 +26,11 @@ Classes:
  - :class:`CoordinatesSelect`
  - :class:`VectorCategorySelect`
  - :class:`SignatureSelect`
+ - :class:`SignatureTypeSelect`
  - :class:`SeparatorSelect`
  - :class:`SqlWhereSelect`
 
-(C) 2007-2018 by the GRASS Development Team
+(C) 2007-2023 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -41,12 +42,9 @@ This program is free software under the GNU General Public License
 @author Matej Krejci <matejkrejci gmail.com> (VectorCategorySelect)
 """
 
-from __future__ import print_function
-
 import os
 import sys
 import glob
-import six
 import ctypes
 
 import wx
@@ -119,7 +117,8 @@ class Select(ComboCtrl):
         :param updateOnPopup: True for updating list of elements on popup
         :param onPopup: function to be called on Popup
         :param fullyQualified: True to provide fully qualified names (map@mapset)
-        :param extraItems: extra items to add (given as dictionary) - see gmodeler for usage
+        :param extraItems: extra items to add (given as dictionary)
+                           - see gmodeler for usage
         :param layerTree: show only elements from given layer tree if not None
         :param validator: validator for TextCtrl
         """
@@ -279,7 +278,7 @@ class ListCtrlComboPopup(ComboPopup):
 
     def GetComboCtrl(self):
         if globalvar.wxPythonPhoenix:
-            return super(ListCtrlComboPopup, self).GetComboCtrl()
+            return super().GetComboCtrl()
         else:
             return self.GetCombo()
 
@@ -538,7 +537,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
 
         # add extra items first
         if self.extraItems:
-            for group, items in six.iteritems(self.extraItems):
+            for group, items in self.extraItems.items():
                 node = self.AddItem(group, node=True)
                 self.seltree.SetItemTextColour(node, wx.Colour(50, 50, 200))
                 for item in items:
@@ -961,7 +960,7 @@ class LayerSelect(wx.ComboBox):
         :param str vector: vector map name (native or connected via v.external)
         :param str dsn: OGR data source name
         """
-        super(LayerSelect, self).__init__(parent, id, size=size, choices=choices)
+        super().__init__(parent, id, size=size, choices=choices)
 
         self.all = all
 
@@ -1020,9 +1019,7 @@ class DriverSelect(wx.ComboBox):
         size=globalvar.DIALOG_LAYER_SIZE,
         **kargs,
     ):
-        super(DriverSelect, self).__init__(
-            parent, id, value, pos, size, choices, style=wx.CB_READONLY
-        )
+        super().__init__(parent, id, value, pos, size, choices, style=wx.CB_READONLY)
 
         self.SetName("DriverSelect")
 
@@ -1040,7 +1037,7 @@ class DatabaseSelect(TextCtrl):
         size=globalvar.DIALOG_TEXTCTRL_SIZE,
         **kargs,
     ):
-        super(DatabaseSelect, self).__init__(parent, id, value, size=size, **kargs)
+        super().__init__(parent, id, value, size=size, **kargs)
         self.SetName("DatabaseSelect")
 
 
@@ -1056,7 +1053,7 @@ class TableSelect(wx.ComboBox):
         choices=[],
         **kargs,
     ):
-        super(TableSelect, self).__init__(
+        super().__init__(
             parent, id, value, size=size, choices=choices, style=wx.CB_READONLY, **kargs
         )
         self.SetName("TableSelect")
@@ -1167,16 +1164,16 @@ class ColumnSelect(ComboCtrl):
             columnchoices = dbInfo.GetTableDesc(table)
             keyColumn = dbInfo.GetKeyColumn(layer)
             self.columns = len(columnchoices.keys()) * [""]
-            for key, val in six.iteritems(columnchoices):
+            for key, val in columnchoices.items():
                 self.columns[val["index"]] = key
             if excludeKey:  # exclude key column
                 self.columns.remove(keyColumn)
             if excludeCols:  # exclude key column
-                for key in six.iterkeys(columnchoices):
+                for key in columnchoices.keys():
                     if key in excludeCols:
                         self.columns.remove(key)
             if type:  # only selected column types
-                for key, value in six.iteritems(columnchoices):
+                for key, value in columnchoices.items():
                     if value["type"] not in type:
                         try:
                             self.columns.remove(key)
@@ -1229,7 +1226,7 @@ class DbaseSelect(wx.lib.filebrowsebutton.DirBrowseButton):
     """Widget for selecting GRASS Database"""
 
     def __init__(self, parent, **kwargs):
-        super(DbaseSelect, self).__init__(
+        super().__init__(
             parent,
             id=wx.ID_ANY,
             size=globalvar.DIALOG_GSELECT_SIZE,
@@ -1252,7 +1249,7 @@ class LocationSelect(wx.ComboBox):
         gisdbase=None,
         **kwargs,
     ):
-        super(LocationSelect, self).__init__(parent, id, size=size, **kwargs)
+        super().__init__(parent, id, size=size, **kwargs)
         self.SetName("LocationSelect")
 
         if not gisdbase:
@@ -1371,7 +1368,7 @@ class SubGroupSelect(wx.ComboBox):
     def __init__(
         self, parent, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE, **kwargs
     ):
-        super(SubGroupSelect, self).__init__(parent, id, size=size, **kwargs)
+        super().__init__(parent, id, size=size, **kwargs)
         self.SetName("SubGroupSelect")
 
     def Insert(self, group):
@@ -1402,7 +1399,7 @@ class FormatSelect(wx.Choice):
         :param srcType: source type ('file', 'database', 'protocol')
         :param ogr: True for OGR otherwise GDAL
         """
-        super(FormatSelect, self).__init__(parent, id=wx.ID_ANY, size=size, **kwargs)
+        super().__init__(parent, id=wx.ID_ANY, size=size, **kwargs)
         self.SetName("FormatSelect")
 
         if ogr:
@@ -1728,7 +1725,7 @@ class GdalSelect(wx.Panel):
                     dsn = v
                     break
             optList = list()
-            for k, v in six.iteritems(data):
+            for k, v in data.items():
                 if k in ("format", "conninfo", "topology"):
                     continue
                 optList.append("%s=%s" % (k, v))
@@ -2288,8 +2285,8 @@ class GdalSelect(wx.Panel):
                     "r.external", quiet=True, read=True, flags="t", input=dsn
                 )
 
-                # v.external returns info for individual bands, however projection is shared by all bands ->
-                # (it is possible to take first line)
+                # v.external returns info for individual bands, however projection is
+                # shared by all bands -> (it is possible to take first line)
 
                 lines = ret.splitlines()
                 projectionMatch = "0"
@@ -2367,6 +2364,17 @@ class GdalSelect(wx.Panel):
                 for raster in rasters:
                     grassName = GetValidLayerName(raster)
                     projectionMatch = hasRastSameProjAsLocation(dsn, table=raster)
+                    projectionMatchCaption = getProjMatchCaption(projectionMatch)
+                    listData.append(
+                        (layerId, raster, projectionMatchCaption, grassName)
+                    )
+                    data.append((layerId, raster, int(projectionMatch), grassName))
+                    layerId += 1
+            elif self.dbWidgets["format"].GetStringSelection() == "Rasterlite":
+                rasters = self._getRasterliteDBRasters(dsn)
+                for raster in rasters:
+                    grassName = GetValidLayerName(raster)
+                    projectionMatch = hasRastSameProjAsLocation(dsn)
                     projectionMatchCaption = getProjMatchCaption(projectionMatch)
                     listData.append(
                         (layerId, raster, projectionMatchCaption, grassName)
@@ -2655,6 +2663,27 @@ class GdalSelect(wx.Panel):
         Debug.msg(3, f"GdalSelect._getPGDBRasters(): return {rasters}")
         return rasters
 
+    def _getRasterliteDBRasters(self, dsn):
+        """Get Rasterlite DB rasters
+
+        :param str dsn: Rasterlite DB data source name
+
+        :return list: list of Rasterlite DB rasters
+        """
+        try:
+            from osgeo import gdal
+        except ImportError:
+            GError(
+                parent=self,
+                message=_("The Python GDAL package is missing. Please install it."),
+            )
+            return []
+        rasterlite = gdal.Open(dsn)
+        rasters = rasterlite.GetSubDatasets()
+        if rasters:
+            return [r[0].rsplit("table=")[-1] for r in rasters]
+        return [os.path.basename(rasterlite.GetFileList()[0]).rsplit(".")[0]]
+
 
 class ProjSelect(wx.ComboBox):
     """Widget for selecting input raster/vector map used by
@@ -2668,7 +2697,7 @@ class ProjSelect(wx.ComboBox):
         size=globalvar.DIALOG_COMBOBOX_SIZE,
         **kwargs,
     ):
-        super(ProjSelect, self).__init__(parent, id, size=size, **kwargs)
+        super().__init__(parent, id, size=size, **kwargs)
         self.SetName("ProjSelect")
         self.isRaster = isRaster
 
@@ -2685,7 +2714,7 @@ class ProjSelect(wx.ComboBox):
                 read=True,
                 flags="l",
                 dbase=dbase,
-                location=location,
+                project=location,
                 mapset=mapset,
             )
         else:
@@ -2695,7 +2724,7 @@ class ProjSelect(wx.ComboBox):
                 read=True,
                 flags="l",
                 dbase=dbase,
-                location=location,
+                project=location,
                 mapset=mapset,
             )
         listMaps = list()
@@ -2722,7 +2751,7 @@ class ElementSelect(wx.Choice):
         :param parent: parent window
         :param elements: filter elements
         """
-        super(ElementSelect, self).__init__(parent, id, size=size, **kwargs)
+        super().__init__(parent, id, size=size, **kwargs)
         self.SetName("ElementSelect")
 
         task = gtask.parse_interface("g.list")
@@ -2812,7 +2841,7 @@ class CoordinatesSelect(Panel):
         self.mapWin = None
         self.drawMapWin = None
 
-        super(CoordinatesSelect, self).__init__(parent=parent, id=wx.ID_ANY)
+        super().__init__(parent=parent, id=wx.ID_ANY)
 
         self.coordsField = TextCtrl(
             parent=self,
@@ -2945,7 +2974,7 @@ class VectorCategorySelect(wx.Panel):
     """Widget that allows interactive selection of vector features"""
 
     def __init__(self, parent, giface, task=None):
-        super(VectorCategorySelect, self).__init__(parent=parent, id=wx.ID_ANY)
+        super().__init__(parent=parent, id=wx.ID_ANY)
         self.task = task
         self.parent = parent
         self.giface = giface
@@ -2987,7 +3016,8 @@ class VectorCategorySelect(wx.Panel):
         return True
 
     def _chckMap(self):
-        """Check if selected map in 'input' widget is the same as selected map in lmgr"""
+        """Check if selected map in 'input' widget is the same as selected map in
+        lmgr"""
         if self._isMapSelected():
             layerList = self.giface.GetLayerList()
             layerSelected = layerList.GetSelectedLayer()
@@ -3001,8 +3031,8 @@ class VectorCategorySelect(wx.Panel):
                     return False
                 GWarning(
                     _(
-                        "Input vector map <%s> and selected map <%s> in layer manager are different. "
-                        "Operation canceled."
+                        "Input vector map <%s> and selected map <%s> in layer manager "
+                        "are different. Operation canceled."
                     )
                     % (inputName["value"], str(layerSelected))
                 )
@@ -3092,11 +3122,19 @@ class SignatureSelect(wx.ComboBox):
         size=globalvar.DIALOG_GSELECT_SIZE,
         **kwargs,
     ):
-        super(SignatureSelect, self).__init__(parent, id, size=size, **kwargs)
+        super().__init__(parent, id, size=size, **kwargs)
+        self.SetName("SignatureSelect")
+        self.mapsets = mapsets
+        self.UpdateItems(element)
 
+    def UpdateItems(self, element):
+        """Update list of signature files for given element
+
+        :param str element: signatures/sig, signatures/sigset or signatures/libsvm
+        """
         items = []
-        if mapsets:
-            for mapset in mapsets:
+        if self.mapsets:
+            for mapset in self.mapsets:
                 self._append_mapset_signatures(mapset, element, items)
         else:
             self._append_mapset_signatures(None, element, items)
@@ -3116,6 +3154,7 @@ class SignatureSelect(wx.ComboBox):
             from grass.lib.imagery import (
                 I_SIGFILE_TYPE_SIG,
                 I_SIGFILE_TYPE_SIGSET,
+                I_SIGFILE_TYPE_LIBSVM,
                 I_signatures_list_by_type,
                 I_free_signatures_list,
             )
@@ -3129,6 +3168,8 @@ class SignatureSelect(wx.ComboBox):
             sig_type = I_SIGFILE_TYPE_SIG
         elif element == "signatures/sigset":
             sig_type = I_SIGFILE_TYPE_SIGSET
+        elif element == "signatures/libsvm":
+            sig_type = I_SIGFILE_TYPE_LIBSVM
         else:
             return
         list_ptr = ctypes.POINTER(ctypes.c_char_p)
@@ -3139,13 +3180,24 @@ class SignatureSelect(wx.ComboBox):
         I_free_signatures_list(count, ctypes.byref(sig_list))
 
 
+class SignatureTypeSelect(wx.ComboBox):
+    """Widget for selecting signature type"""
+
+    def __init__(
+        self, parent, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE, **kwargs
+    ):
+        super().__init__(parent, id, size=size, **kwargs)
+        self.SetName("SignatureTypeSelect")
+        self.SetItems(["sig", "sigset", "libsvm"])
+
+
 class SeparatorSelect(wx.ComboBox):
     """Widget for selecting separator"""
 
     def __init__(
         self, parent, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE, **kwargs
     ):
-        super(SeparatorSelect, self).__init__(parent, id, size=size, **kwargs)
+        super().__init__(parent, id, size=size, **kwargs)
         self.SetName("SeparatorSelect")
         self.SetItems(["pipe", "comma", "space", "tab", "newline"])
 
@@ -3156,7 +3208,7 @@ class SqlWhereSelect(wx.Panel):
 
         :param parent: parent window
         """
-        super(SqlWhereSelect, self).__init__(parent=parent, id=wx.ID_ANY)
+        super().__init__(parent=parent, id=wx.ID_ANY)
         self.parent = parent
         self.vector_map = None
 

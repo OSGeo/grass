@@ -3,15 +3,7 @@ Created on Fri May 25 12:57:10 2012
 
 @author: Pietro Zambelli
 """
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
+
 import ctypes
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
@@ -25,7 +17,7 @@ test_vector_name = "Region_test_vector"
 test_raster_name = "Region_test_raster"
 
 
-class Region(object):
+class Region:
     """This class is design to easily access and modify GRASS computational
     region. ::
 
@@ -354,7 +346,7 @@ class Region(object):
         """Return a list of valid keys. ::
 
             >>> reg = Region()
-            >>> reg.keys()                               # doctest: +ELLIPSIS
+            >>> reg.keys()  # doctest: +ELLIPSIS
             ['proj', 'zone', ..., 'cols', 'cells']
 
         ..
@@ -467,7 +459,8 @@ class Region(object):
             libraster.Rast_get_cellhd(raster_name, mapset, self.byref())
 
     def set_raster_region(self):
-        """Set the computational region (window) for all raster maps in the current process.
+        """Set the computational region (window) for all raster maps in the current
+        process.
 
         Attention: All raster objects must be closed or the
                    process will be terminated.

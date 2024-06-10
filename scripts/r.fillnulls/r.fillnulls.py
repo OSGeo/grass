@@ -188,7 +188,10 @@ def main():
         if usermask:
             grass.message(_("Skipping masked raster parts"))
             grass.mapcalc(
-                '$tmp1 = if(isnull("$input") && !($mask == 0 || isnull($mask)),1,null())',
+                (
+                    '$tmp1 = if(isnull("$input") && !($mask == 0 || isnull($mask)),1,'
+                    "null())"
+                ),
                 tmp1=prefix + "nulls",
                 input=input,
                 mask=usermask,
@@ -232,7 +235,8 @@ def main():
                 )
             )
 
-        # assign unique IDs to each hole or hole system (holes closer than edge distance)
+        # assign unique IDs to each hole or hole system (holes closer than edge
+        # distance)
         grass.message(_("Assigning IDs to NULL areas"))
         tmp_rmaps.append(prefix + "clumped")
         try:
@@ -296,7 +300,17 @@ def main():
         os.remove(cats_file_name)
 
         if len(cat_list) < 1:
-            grass.fatal(_("Input map has no holes. Check region settings."))
+            # no holes found in current region
+            grass.run_command(
+                "g.copy", raster="%s,%sfilled" % (input, prefix), overwrite=True
+            )
+            grass.warning(
+                _(
+                    "Input map <%s> has no holes. Copying to output without "
+                    "modification."
+                )
+                % (input,)
+            )
 
         # GTC Hole is NULL area in a raster map
         grass.message(_("Processing %d map holes") % len(cat_list))
@@ -479,7 +493,8 @@ def main():
                 failed_list.append(holename)
                 continue
 
-            # append hole result to interpolated version later used to patch into original DEM
+            # append hole result to interpolated version later used to patch into
+            # original DEM
             if first:
                 tmp_rmaps.append(filling)
                 grass.run_command(
@@ -563,7 +578,8 @@ def main():
             except CalledModuleError:
                 grass.fatal(
                     _(
-                        "abandoned. Removing temporary maps, restoring user mask if needed:"
+                        "abandoned. Removing temporary maps, restoring user mask if "
+                        "needed:"
                     )
                 )
 
@@ -607,7 +623,8 @@ def main():
                     p.returncode = 0
                     grass.warning(
                         _(
-                            "Input map <%s> has no holes. Copying to output without modification."
+                            "Input map <%s> has no holes. Copying to output without "
+                            "modification."
                         )
                         % (input,)
                     )
@@ -639,7 +656,8 @@ def main():
                     p.returncode = 0
                     grass.warning(
                         _(
-                            "Input map <%s> has no holes. Copying to output without modification."
+                            "Input map <%s> has no holes. Copying to output without "
+                            "modification."
                         )
                         % (input,)
                     )

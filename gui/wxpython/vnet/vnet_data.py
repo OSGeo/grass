@@ -22,9 +22,9 @@ This program is free software under the GNU General Public License
 @author Lukas Bocan <silent_bob centrum.cz> (turn costs support)
 @author Eliska Kyzlikova <eliska.kyzlikova gmail.com> (turn costs support)
 """
+
 import os
 import math
-import six
 from copy import deepcopy
 
 from grass.script.utils import try_remove
@@ -143,7 +143,8 @@ class VNETData:
     def InputsErrorMsgs(
         self, msg, analysis, params, flags, inv_params, relevant_params
     ):
-        """Checks input data in Parameters tab and shows messages if some value is not valid
+        """Checks input data in Parameters tab and shows messages if some value is
+        not valid
 
         :param str msg: message added to start of message string
         :return: True if checked inputs are OK
@@ -175,7 +176,7 @@ class VNETData:
             "turn_layer": _("turntable layer"),
             "turn_cat_layer": _("unique categories layer"),
         }
-        for layer, layerLabel in six.iteritems(vals):
+        for layer, layerLabel in vals.items():
             if layer in ["turn_layer", "turn_cat_layer"] and not flags["t"]:
                 continue
             if layer in inv_params:
@@ -193,7 +194,8 @@ class VNETData:
         for col in ["arc_column", "arc_backward_column", "node_column"]:
             if params[col] and col in inv_params and col in relevant_params:
                 errColStr += _(
-                    "Chosen column '%s' does not exist in attribute table of layer '%s' of vector map '%s'.\n"
+                    "Chosen column '%s' does not exist in attribute table of layer "
+                    "'%s' of vector map '%s'.\n"
                 ) % (params[col], params[layer], params["input"])
 
         if errColStr:
@@ -316,7 +318,7 @@ class VNETPointsData:
         self.pointsChanged.emit(method="SetPoints", kwargs={"pts_data": pts_data})
 
     def SetPointData(self, pt_id, data):
-        for col, v in six.iteritems(data):
+        for col, v in data.items():
             if col == "use":
                 continue
 
@@ -387,7 +389,7 @@ class VNETPointsData:
         textProp = self.pointsToDraw.GetPropertyVal("text")
         textProp["font"].SetPointSize(ptSize + 2)
 
-        for colKey, col in six.iteritems(colors):
+        for colKey, col in colors.items():
             pen = self.pointsToDraw.GetPen(colKey)
             if pen:
                 pen.SetColour(wx.Colour(col[0], col[1], col[2], 255))
@@ -408,7 +410,8 @@ class VNETPointsData:
                 self._vnetPathUpdateUsePoints(None)
 
     def _updateTypeCol(self):
-        """Rename category values when module is changed. Expample: Start point -> Sink point"""
+        """Rename category values when module is changed. Example: Start point
+        -> Sink point"""
         colValues = [""]
         analysis, valid = self.an_params.GetParam("analysis")
         anParamsCats = self.an_data[analysis]["cmdParams"]["cats"]
@@ -422,7 +425,7 @@ class VNETPointsData:
     def _ptDataToList(self, pt_data):
         pt_list_data = [None] * len(self.cols["name"])
 
-        for k, val in six.iteritems(pt_data):
+        for k, val in pt_data.items():
             pt_list_data[self.cols["name"].index(k)] = val
 
         return pt_list_data
@@ -569,7 +572,7 @@ class VNETPointsData:
         i_red = 0
         hidden_cols.sort()
         for idx in hidden_cols:
-            for dt in six.itervalues(cols_data):
+            for dt in cols_data.values():
                 dt.pop(idx - i_red)
             i_red += 1
 
@@ -600,7 +603,7 @@ class VNETAnalysisParameters:
 
     def SetParams(self, params, flags):
         changed_params = {}
-        for p, v in six.iteritems(params):
+        for p, v in params.items():
             if p == "analysis" and v not in self.an_props.used_an:
                 continue
 
@@ -616,7 +619,7 @@ class VNETAnalysisParameters:
                 changed_params[p] = v
 
         changed_flags = {}
-        for p, v in six.iteritems(flags):
+        for p, v in flags.items():
             if p in self.flags:
                 self.flags[p] = v
                 changed_flags[p] = v
@@ -737,7 +740,8 @@ class VNETAnalysesProperties:
                 },
                 "resultProps": {
                     "singleColor": None,
-                    "dbMgr": True,  # TODO delete this property, this information can be get from result
+                    "dbMgr": True,  # TODO delete this property, this information can
+                    # be get from result
                 },
                 "turns_support": True,
             },
@@ -840,7 +844,7 @@ class VNETAnalysesProperties:
 
         cols = self.vnetProperties[analysis]["cmdParams"]["cols"]
 
-        for col, v in six.iteritems(cols):
+        for col, v in cols.items():
             if "inputField" in col:
                 colInptF = v["inputField"]
             else:
@@ -1079,12 +1083,13 @@ class VectMap:
 
             head.close()
             return ""
-        except IOError:
+        except OSError:
             return ""
 
 
 class History:
-    """Class which reads and saves history data (based on gui.core.settings Settings class file save/load)
+    """Class which reads and saves history data (based on gui.core.settings Settings
+    class file save/load)
 
     .. todo::
         Maybe it could be useful for other GRASS wxGUI tools.

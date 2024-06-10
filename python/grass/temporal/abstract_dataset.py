@@ -9,6 +9,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 from abc import ABCMeta, abstractmethod
 from .core import (
     get_tgis_message_interface,
@@ -578,7 +579,7 @@ class AbstractDataset(
 ###############################################################################
 
 
-class AbstractDatasetComparisonKeyStartTime(object):
+class AbstractDatasetComparisonKeyStartTime:
     """This comparison key can be used to sort lists of abstract datasets
     by start time
 
@@ -630,7 +631,7 @@ class AbstractDatasetComparisonKeyStartTime(object):
 ###############################################################################
 
 
-class AbstractDatasetComparisonKeyEndTime(object):
+class AbstractDatasetComparisonKeyEndTime:
     """This comparison key can be used to sort lists of abstract datasets
     by end time
 

@@ -20,7 +20,6 @@ This program is free software under the GNU General Public License
 """
 
 import wx
-import six
 
 from core.settings import UserSettings
 from core.gcmd import GError
@@ -30,7 +29,7 @@ from grass.script import core as grass
 from grass.pydispatch.signal import Signal
 
 
-class MapWindowProperties(object):
+class MapWindowProperties:
     def __init__(self):
         self._resolution = None
         self.resolutionChanged = Signal("MapWindowProperties.resolutionChanged")
@@ -125,7 +124,7 @@ class MapWindowProperties(object):
             self.sbItemChanged.emit(mode=mode)
 
 
-class MapWindowBase(object):
+class MapWindowBase:
     """Abstract map display window class
 
     Superclass for BufferedWindow class (2D display mode), and GLWindow
@@ -208,7 +207,7 @@ class MapWindowBase(object):
         """Binds helper functions, which calls all handlers
         registered to events with the events
         """
-        for ev, handlers in six.iteritems(self.handlersContainer):
+        for ev, handlers in self.handlersContainer.items():
             self.Bind(ev, self.EventTypeHandler(handlers))
 
     def EventTypeHandler(self, evHandlers):
@@ -256,8 +255,9 @@ class MapWindowBase(object):
                 # current map display's map window
                 # expects LayerManager to be the parent
                 self.mapwin = self.parent.GetLayerTree().GetMapDisplay().GetWindow()
-                if self.mapwin.RegisterEventHandler(wx.EVT_LEFT_DOWN, self.OnMouseAction,
-                                                    'cross'):
+                if self.mapwin.RegisterEventHandler(
+                    wx.EVT_LEFT_DOWN, self.OnMouseAction, "cross"
+                ):
                     self.parent.GetLayerTree().GetMapDisplay().Raise()
                 else:
                     # handle that you cannot get coordinates
@@ -265,8 +265,10 @@ class MapWindowBase(object):
             def OnMouseAction(self, event):
                 # get real world coordinates of mouse click
                 coor = self.mapwin.Pixel2Cell(event.GetPositionTuple()[:])
-                self.text.SetLabel('Coor: ' + str(coor))
-                self.mapwin.UnregisterMouseEventHandler(wx.EVT_LEFT_DOWN, self.OnMouseAction)
+                self.text.SetLabel("Coor: " + str(coor))
+                self.mapwin.UnregisterMouseEventHandler(
+                    wx.EVT_LEFT_DOWN, self.OnMouseAction
+                )
                 event.Skip()
 
 
@@ -281,7 +283,7 @@ class MapWindowBase(object):
         """
         self.mouseHandlerRegistered.emit()
         # inserts handler into list
-        for containerEv, handlers in six.iteritems(self.handlersContainer):
+        for containerEv, handlers in self.handlersContainer.items():
             if event == containerEv:
                 handlers.append(handler)
 
@@ -302,7 +304,7 @@ class MapWindowBase(object):
         Before each handler is unregistered it is called with string
         value "unregistered" of event parameter.
         """
-        for containerEv, handlers in six.iteritems(self.handlersContainer):
+        for containerEv, handlers in self.handlersContainer.items():
             for handler in handlers:
                 try:
                     handler("unregistered")
@@ -335,7 +337,7 @@ class MapWindowBase(object):
         :return: False if event cannot be unbind
         """
         # removes handler from list
-        for containerEv, handlers in six.iteritems(self.handlersContainer):
+        for containerEv, handlers in self.handlersContainer.items():
             if event != containerEv:
                 continue
             try:
@@ -391,7 +393,8 @@ class MapWindowBase(object):
     def GetLastEN(self):
         """Returns last coordinates of mouse cursor.
 
-        @deprecated This method is deprecated. Use Signal with coordinates as parameters.
+        @deprecated This method is deprecated. Use Signal with coordinates as
+        parameters.
 
         :func:`OnMotion`
         """

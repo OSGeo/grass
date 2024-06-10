@@ -81,7 +81,8 @@ def main():
             # r.reclass input="$GIS_OPT_MAP" output="${GIS_OPT_MAP}.stdevs" <<
             # EOF
 
-            # >3 S.D. outliers colored black so they show up in d.histogram w/ white background
+            # >3 S.D. outliers colored black so they show up in d.histogram w/ white
+            # background
             rules = "\n".join(
                 [
                     "0% black",
@@ -132,7 +133,8 @@ def main():
         else:
             # zero centered banded  black/red/yellow/green/yellow/red/black
 
-            # >3 S.D. outliers colored black so they show up in d.histogram w/ white background
+            # >3 S.D. outliers colored black so they show up in d.histogram w/ white
+            # background
             rules = "\n".join(
                 [
                     "%f black" % -maxv,

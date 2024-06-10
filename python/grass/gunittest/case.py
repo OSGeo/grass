@@ -8,12 +8,10 @@ for details.
 
 :authors: Vaclav Petras
 """
-from __future__ import print_function
 
 import os
 import shutil
 import subprocess
-import sys
 import hashlib
 import uuid
 import unittest
@@ -35,13 +33,7 @@ from .checkers import (
 from .utils import safe_repr
 from .gutils import is_map_in_mapset
 
-pyversion = sys.version_info[0]
-if pyversion == 2:
-    from StringIO import StringIO
-else:
-    from io import StringIO
-
-    unicode = str
+from io import StringIO
 
 
 class TestCase(unittest.TestCase):
@@ -62,7 +54,7 @@ class TestCase(unittest.TestCase):
     readable_names = False  # prefer shorter but unreadable map and file names
 
     def __init__(self, methodName):
-        super(TestCase, self).__init__(methodName)
+        super().__init__(methodName)
         self.grass_modules = []
         self.supplementary_files = []
         # Python unittest doc is saying that strings use assertMultiLineEqual
@@ -184,9 +176,7 @@ class TestCase(unittest.TestCase):
                 first = first.replace(os.linesep, "\n")
             if os.linesep in second:
                 second = second.replace(os.linesep, "\n")
-        return super(TestCase, self).assertMultiLineEqual(
-            first=first, second=second, msg=msg
-        )
+        return super().assertMultiLineEqual(first=first, second=second, msg=msg)
 
     def assertLooksLike(self, actual, reference, msg=None):
         r"""Test that ``actual`` text is the same as ``reference`` with ellipses.
@@ -199,11 +189,9 @@ class TestCase(unittest.TestCase):
         # actual is in the system codec while the passed reference is in utf-8;
         # re-decode reference into the system codec for proper comparison
         reference = decode(encode(reference, "utf-8"))
+        self.assertTrue(isinstance(actual, str), ("actual argument is not a string"))
         self.assertTrue(
-            isinstance(actual, (str, unicode)), ("actual argument is not a string")
-        )
-        self.assertTrue(
-            isinstance(reference, (str, unicode)),
+            isinstance(reference, str),
             ("reference argument is not a string"),
         )
         if os.linesep != "\n" and os.linesep in actual:
@@ -1282,11 +1270,14 @@ class TestCase(unittest.TestCase):
         # a difference (always a iterator object is returned)
         if i > 0:
             # do HTML diff only if there is not too many lines
-            # TODO: this might be tough to do with some more sophisticated way of reports
+            # TODO: this might be tough to do with some more sophisticated way of
+            # reports
             if self.html_reports and i < maxlines:
-                # TODO: this might be here and somehow stored as file or done in reporter again if right information is stored
+                # TODO: this might be here and somehow stored as file or done in
+                # reporter again if right information is stored
                 # i.e., files not deleted or the whole strings passed
-                # alternative is make_table() which is the same but creates just a table not a whole document
+                # alternative is make_table() which is the same but creates just a table
+                # not a whole document
                 # TODO: all HTML files might be collected by the main reporter
                 # TODO: standardize the format of name of HTML file
                 # for one test id there is only one possible file of this name
@@ -1369,7 +1360,8 @@ class TestCase(unittest.TestCase):
     # should be done by some other function
     # TODO: this should be the function used for valgrind or profiling or debug
     # TODO: it asserts the rc but it does much more, so testModule?
-    # TODO: do we need special function for testing module failures or just add parameter returncode=0?
+    # TODO: do we need special function for testing module failures or just add
+    # parameter returncode=0?
     # TODO: consider not allowing to call this method more than once
     # the original idea was to run this method just once for test method
     # but for "integration" tests  (script-like tests with more than one module)

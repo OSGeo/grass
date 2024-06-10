@@ -16,7 +16,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
+
 from .core import (
     get_current_mapset,
     get_tgis_message_interface,

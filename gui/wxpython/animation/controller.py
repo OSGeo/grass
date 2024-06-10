@@ -13,6 +13,7 @@ This program is free software under the GNU General Public License
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
+
 import os
 import wx
 
@@ -92,7 +93,7 @@ class AnimationController(wx.EvtHandler):
         self._timeTick = value
         if self.timer.IsRunning():
             self.timer.Stop()
-            self.timer.Start(self._timeTick)
+            self.timer.Start(int(self._timeTick))
         self.DisableSliderIfNeeded()
 
     timeTick = property(fget=GetTimeTick, fset=SetTimeTick)
@@ -110,7 +111,7 @@ class AnimationController(wx.EvtHandler):
                 anim.NextFrameIndex()
             anim.Start()
         if not self.timer.IsRunning():
-            self.timer.Start(self.timeTick)
+            self.timer.Start(int(self.timeTick))
             self.DisableSliderIfNeeded()
 
     def PauseAnimation(self, paused):
@@ -120,7 +121,7 @@ class AnimationController(wx.EvtHandler):
                 self.DisableSliderIfNeeded()
         else:
             if not self.timer.IsRunning():
-                self.timer.Start(self.timeTick)
+                self.timer.Start(int(self.timeTick))
                 self.DisableSliderIfNeeded()
 
         for anim in self.animations:
@@ -300,7 +301,7 @@ class AnimationController(wx.EvtHandler):
                     anim.SetLayerList(layerLists[i])
                     animationData.append(anim)
 
-        except (GException, ValueError, IOError) as e:
+        except (GException, ValueError, OSError) as e:
             GError(
                 parent=self.frame,
                 message=str(e),
@@ -582,8 +583,8 @@ class AnimationController(wx.EvtHandler):
             # paste decorations
             for decoration in decorations:
                 # add image
-                x = decoration["pos"][0] / 100.0 * size[0]
-                y = decoration["pos"][1] / 100.0 * size[1]
+                x = int(decoration["pos"][0] / 100.0 * size[0])
+                y = int(decoration["pos"][1] / 100.0 * size[1])
                 if decoration["name"] == "image":
                     decImage = wx.Image(decoration["file"])
                 elif decoration["name"] == "time":

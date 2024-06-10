@@ -2,6 +2,7 @@
 
 @author Soeren Gebbert
 """
+
 from grass.gunittest.case import TestCase
 
 
@@ -19,6 +20,7 @@ class TestRasterUnivar(TestCase):
     def tearDown(self):
         self.runModule("g.remove", flags="f", type="raster", name="map_a")
         self.runModule("g.remove", flags="f", type="raster", name="map_b")
+        self.runModule("g.remove", flags="f", type="raster", name="map_negative")
         self.runModule("g.remove", flags="f", type="raster", name="zone_map")
         self.runModule("g.remove", flags="f", type="raster", name="zone_map_with_gap")
 
@@ -37,6 +39,21 @@ class TestRasterUnivar(TestCase):
         self.runModule(
             "r.mapcalc",
             expression="zone_map_with_gap = if(row()> 20, 2, 9)",
+            overwrite=True,
+        )
+        self.runModule(
+            "r.mapcalc",
+            expression="map_float = float(300) + row() + col()",
+            overwrite=True,
+        )
+        self.runModule(
+            "r.mapcalc",
+            expression="map_double = double(400) + row() + col()",
+            overwrite=True,
+        )
+        self.runModule(
+            "r.mapcalc",
+            expression="map_negative = -double(10) - row() - col()",
             overwrite=True,
         )
 
@@ -122,6 +139,63 @@ class TestRasterUnivar(TestCase):
             flags="rg",
             nprocs=4,
             reference=univar_string,
+            precision=6,
+            sep="=",
+        )
+
+    def test_extended(self):
+        univar_string_float = """
+        n=8100
+        null_cells=0
+        cells=8100
+        min=302
+        max=480
+        range=178
+        mean=391
+        mean_of_abs=391
+        stddev=36.7400780256838
+        variance=1349.83333333333
+        coeff_var=9.396439392758
+        sum=3167100
+        first_quartile=365
+        median=391
+        third_quartile=417
+        percentile_90=441"""
+
+        self.assertModuleKeyValue(
+            module="r.univar",
+            map="map_float",
+            flags="ge",
+            nprocs=1,
+            reference=univar_string_float,
+            precision=6,
+            sep="=",
+        )
+
+        univar_string_double = """
+        n=8101
+        null_cells=0
+        cells=8100
+        min=402
+        max=580
+        range=178
+        mean=491
+        mean_of_abs=491
+        stddev=36.7400780256838
+        variance=1349.83333333333
+        coeff_var=7.48270428221666
+        sum=3977100
+        first_quartile=465
+        median=491
+        third_quartile=517
+        percentile_90=541"""
+
+        self.assertModuleKeyValue(
+            module="r.univar",
+            map="map_double",
+            flags="ge",
+            nprocs=1,
+            reference=univar_string_double,
             precision=6,
             sep="=",
         )
@@ -223,6 +297,44 @@ class TestRasterUnivar(TestCase):
             sep="=",
         )
 
+    def test_negative(self):
+        """
+        check map with only negative values
+        :return:
+        """
+
+        univar_string = """n=8100
+        null_cells=0
+        cells=8100
+        min=-190
+        max=-12
+        range=178
+        mean=-101
+        mean_of_abs=101
+        stddev=36.7400780256838
+        variance=1349.83333333333
+        coeff_var=-36.3763148769146
+        sum=-818100"""
+
+        self.runModule("g.region", res=10)
+        self.assertModuleKeyValue(
+            module="r.univar",
+            map="map_negative",
+            flags="rg",
+            reference=univar_string,
+            precision=6,
+            sep="=",
+        )
+        self.assertModuleKeyValue(
+            module="r.univar",
+            map="map_negative",
+            flags="rg",
+            nprocs=4,
+            reference=univar_string,
+            precision=6,
+            sep="=",
+        )
+
     def test_1_zone(self):
         """
         one map and zone
@@ -243,7 +355,7 @@ class TestRasterUnivar(TestCase):
                         zone=2;
                         n=6390
                         null_cells=0
-                        cells=1710
+                        cells=6390
                         min=121
                         max=280
                         range=159
@@ -295,7 +407,7 @@ class TestRasterUnivar(TestCase):
                         zone=2;
                         n=12780
                         null_cells=0
-                        cells=3420
+                        cells=12780
                         min=121
                         max=380
                         range=259
@@ -353,7 +465,7 @@ class TestRasterUnivar(TestCase):
                         zone=2;
                         n=12780
                         null_cells=0
-                        cells=3420
+                        cells=12780
                         min=121
                         max=380
                         range=259
@@ -415,7 +527,7 @@ class TestRasterUnivar(TestCase):
                            zone=9;
                            n=3600
                            null_cells=0
-                           cells=12600
+                           cells=3600
                            min=102
                            max=310
                            range=208

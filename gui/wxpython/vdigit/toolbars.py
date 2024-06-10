@@ -14,6 +14,7 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 @author Stepan Turek <stepan.turek seznam.cz> (handlers support)
 """
+
 import wx
 
 from grass import script as grass
@@ -53,6 +54,9 @@ class VDigitToolbar(BaseToolbar):
             self.editingStarted.connect(layerTree.StartEditing)
             self.editingStopped.connect(layerTree.StopEditing)
             self.editingBgMap.connect(layerTree.SetBgMapForEditing)
+
+        # replace OnTool from controller
+        self.controller.OnTool = self.OnTool
 
         # bind events
         self.Bind(wx.EVT_SHOW, self.OnShow)
@@ -179,7 +183,8 @@ class VDigitToolbar(BaseToolbar):
             "deleteLine": MetaIcon(
                 img="line-delete",
                 label=_(
-                    "Delete selected point(s), line(s), boundary(ies) or centroid(s) (Ctrl+D)"
+                    "Delete selected point(s), line(s), boundary(ies) or "
+                    "centroid(s) (Ctrl+D)"
                 ),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
@@ -208,7 +213,8 @@ class VDigitToolbar(BaseToolbar):
             "moveLine": MetaIcon(
                 img="line-move",
                 label=_(
-                    "Move selected point(s), line(s), boundary(ies) or centroid(s) (Ctrl+M)"
+                    "Move selected point(s), line(s), boundary(ies) or "
+                    "centroid(s) (Ctrl+M)"
                 ),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
@@ -446,14 +452,15 @@ class VDigitToolbar(BaseToolbar):
             3,
             f"VDigitToolbar.OnTool(): id = {event.GetId() if event else event}",
         )
+        if self.toolSwitcher and event:
+            self.toolSwitcher.ToolChanged(event.GetId())
+
         # set cursor
         self.MapWindow.SetNamedCursor("cross")
         self.MapWindow.mouse["box"] = "point"
         self.MapWindow.mouse["use"] = "pointer"
 
         aId = self.action.get("id", -1)
-        if event:
-            BaseToolbar.OnTool(self, event)
 
         # clear tmp canvas
         if self.action["id"] != aId or aId == -1:
@@ -467,8 +474,8 @@ class VDigitToolbar(BaseToolbar):
         if self.action["id"] == -1:
             self.action = {"desc": "", "type": "", "id": -1}
 
-        # set focus
-        self.MapWindow.SetFocus()
+        if event:
+            event.Skip()
 
     def OnAddPoint(self, event):
         """Add point to the vector map Laier"""

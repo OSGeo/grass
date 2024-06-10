@@ -18,7 +18,6 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import copy
-import six
 
 import wx
 
@@ -45,11 +44,8 @@ try:
     if iconPath and not os.path.exists(iconPath):
         raise OSError
 
-    for key, img in six.iteritems(iconSet):
-        if key not in iconSet or iconSet[key] is None:  # add key
-            iconSet[key] = img
-
-        iconSet[key] = os.path.join(iconPath, iconSet[key])
+    for key, img in iconSet.items():
+        iconSet[key] = os.path.join(iconPath, img)
 except Exception as e:
     sys.exit(_("Unable to load icon theme. Reason: %s. Quitting wxGUI...") % e)
 

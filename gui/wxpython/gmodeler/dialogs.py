@@ -24,7 +24,6 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import six
 
 import wx
 import wx.lib.mixins.listctrl as listmix
@@ -36,7 +35,6 @@ from core.gcmd import GError
 from gui_core.dialogs import SimpleDialog, MapLayersDialogForModeler
 from gui_core.prompt import GPromptSTC
 from gui_core.gselect import Select, ElementSelect
-from gmodeler.model import *
 from lmgr.menudata import LayerManagerMenuData
 from gui_core.wrap import (
     Button,
@@ -48,6 +46,7 @@ from gui_core.wrap import (
     NewId,
     CheckListCtrlMixin,
 )
+from gmodeler.model import ModelData, ModelAction, ModelCondition
 
 
 class ModelDataDialog(SimpleDialog):
@@ -325,8 +324,8 @@ class ModelSearchDialog(wx.Dialog):
 
     def OnCommand(self, cmd):
         """Command in prompt confirmed"""
-        if self.ValidateCmd(cmd):
-            self._command = cmd
+        if self.ValidateCmd(cmd["cmd"]):
+            self._command = cmd["cmd"]
             self.EndModal(wx.ID_OK)
 
     def OnOk(self, event):
@@ -806,7 +805,7 @@ class VariableListCtrl(ModelListCtrl):
         """Populate the list"""
         self.itemDataMap = dict()
         i = 0
-        for name, values in six.iteritems(data):
+        for name, values in data.items():
             self.itemDataMap[i] = [
                 name,
                 values["type"],
@@ -818,7 +817,7 @@ class VariableListCtrl(ModelListCtrl):
         self.itemCount = len(self.itemDataMap.keys())
         self.DeleteAllItems()
         i = 0
-        for name, vtype, value, desc in six.itervalues(self.itemDataMap):
+        for name, vtype, value, desc in self.itemDataMap.values():
             index = self.InsertItem(i, name)
             self.SetItem(index, 0, name)
             self.SetItem(index, 1, vtype)
@@ -833,7 +832,7 @@ class VariableListCtrl(ModelListCtrl):
         :return: None on success
         :return: error string
         """
-        for iname, ivtype, ivalue, idesc in six.itervalues(self.itemDataMap):
+        for iname, ivtype, ivalue, idesc in self.itemDataMap.values():
             if iname == name:
                 return (
                     _(
@@ -886,7 +885,6 @@ class VariableListCtrl(ModelListCtrl):
         """Finish editing of item"""
         itemIndex = event.GetIndex()
         columnIndex = event.GetColumn()
-        nameOld = self.GetItem(itemIndex, 0).GetText()
 
         if columnIndex == 0:  # TODO
             event.Veto()
@@ -1004,7 +1002,7 @@ class ItemListCtrl(ModelListCtrl):
         self.DeleteAllItems()
         i = 0
         if len(self.columns) == 2:
-            for name, desc in six.itervalues(self.itemDataMap):
+            for name, desc in self.itemDataMap.values():
                 index = self.InsertItem(i, str(i))
                 self.SetItem(index, 0, name)
                 self.SetItem(index, 1, desc)
@@ -1013,7 +1011,7 @@ class ItemListCtrl(ModelListCtrl):
                     self.CheckItem(index, True)
                 i += 1
         else:
-            for name, inloop, param, desc in six.itervalues(self.itemDataMap):
+            for name, inloop, param, desc in self.itemDataMap.values():
                 index = self.InsertItem(i, str(i))
                 self.SetItem(index, 0, name)
                 self.SetItem(index, 1, inloop)

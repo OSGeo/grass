@@ -1,7 +1,8 @@
 """
 @package web_services.cap_interface
 
-@brief Provides common interface for GUI web_services.widgets to capabilities data of web services.
+@brief Provides common interface for GUI web_services.widgets to capabilities data of
+       web services.
 
 List of classes:
  - cap_interface::CapabilitiesBase
@@ -92,7 +93,7 @@ class WMSCapabilities(CapabilitiesBase, WMSCapabilitiesTree):
             self.layers_by_id[id] = parent_layer
             id += 1
 
-        layer_nodes = parent_layer.GetLayerNode().findall((self.xml_ns.Ns("Layer")))
+        layer_nodes = parent_layer.GetLayerNode().findall(self.xml_ns.Ns("Layer"))
 
         for node in layer_nodes:
             layer = WMSLayer(node, id, self)

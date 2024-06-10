@@ -59,7 +59,7 @@ static int (*Close_array[][2])(struct Map_info *) = {{clo_dummy, V1_close_nat}
 #endif
 };
 
-static void unlink_file(const struct Map_info *, const char *);
+static void unlink_file(struct Map_info *, const char *);
 
 /*!
    \brief Close vector map
@@ -317,7 +317,7 @@ void Vect__free_offset(struct Format_info_offset *offset)
     G_zero(offset, sizeof(struct Format_info_offset));
 }
 
-void unlink_file(const struct Map_info *Map, const char *name)
+void unlink_file(struct Map_info *Map, const char *name)
 {
     char path[GPATH_MAX];
 

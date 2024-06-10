@@ -21,8 +21,6 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com> (refactoring)
 """
 
-from __future__ import print_function
-
 import os
 import time
 import math
@@ -513,9 +511,11 @@ class BufferedMapWindow(MapWindowBase, Window):
                 pdc.SetTextBackground(img["background"])
             coords, bbox = self.TextBounds(img)
             if rotation == 0:
-                pdc.DrawText(img["text"], coords[0], coords[1])
+                pdc.DrawText(img["text"], int(coords[0]), int(coords[1]))
             else:
-                pdc.DrawRotatedText(img["text"], coords[0], coords[1], rotation)
+                pdc.DrawRotatedText(
+                    img["text"], int(coords[0]), int(coords[1]), rotation
+                )
             pdc.SetIdBounds(drawid, bbox)
 
         pdc.EndDrawing()
@@ -866,7 +866,8 @@ class BufferedMapWindow(MapWindowBase, Window):
             giface
 
         :param render: re-render map composition
-        :param renderVector: re-render vector map layer enabled for editing (used for digitizer)
+        :param renderVector: re-render vector map layer enabled for editing (used for
+                             digitizer)
         :param delay: defines time threshold  in seconds for postponing
                       rendering to merge more update requests.
 
@@ -2254,7 +2255,8 @@ class BufferedMapWindow(MapWindowBase, Window):
                          is not defined DrawCross method is used for
                          type "point", DrawLines method for type "line",
                          DrawRectangle for "rectangle".
-        :param mapCoords: True if map coordinates should be set by user, otherwise pixels
+        :param mapCoords: True if map coordinates should be set by user, otherwise
+                          pixels
 
         :return: reference to GraphicsSet, which was added.
         """
