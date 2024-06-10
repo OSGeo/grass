@@ -91,7 +91,7 @@ for html_file in htmlfiles:
         key = key.strip()
         try:
             key = key.split(">")[1].split("<")[0]
-        except (IndexError, AttributeError):
+        except IndexError:
             pass
         if not key:
             exit("Empty keyword from file %s line: %s" % (fname, lines[index_keys]))

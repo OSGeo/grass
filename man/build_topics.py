@@ -29,11 +29,11 @@ for fname in htmlfiles:
     try:
         key = lines[index_keys].split(",")[1].strip().replace(" ", "_")
         key = key.split(">")[1].split("<")[0]
-    except (IndexError, AttributeError):
+    except IndexError:
         continue
     try:
         desc = lines[index_desc].split("-", 1)[1].strip()
-    except (IndexError, AttributeError):
+    except IndexError:
         desc.strip()
     if key not in keywords.keys():
         keywords[key] = {}

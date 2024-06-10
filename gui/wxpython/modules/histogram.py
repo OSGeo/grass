@@ -258,7 +258,7 @@ class BufferedWindow(wx.Window):
             return
         try:
             id = self.imagedict[self.img]
-        except (KeyError, AttributeError):
+        except KeyError:
             return
 
         # paint images to PseudoDC

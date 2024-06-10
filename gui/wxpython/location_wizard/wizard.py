@@ -1195,15 +1195,15 @@ class DatumPage(TitledPage):
             self.datumparams = self.parent.datums[self.datum][2]
             try:
                 self.datumparams.remove("dx=0.0")
-            except (AttributeError, ValueError):
+            except ValueError:
                 pass
             try:
                 self.datumparams.remove("dy=0.0")
-            except (AttributeError, ValueError):
+            except ValueError:
                 pass
             try:
                 self.datumparams.remove("dz=0.0")
-            except (AttributeError, ValueError):
+            except ValueError:
                 pass
 
             nextButton.Enable(True)
@@ -2642,7 +2642,7 @@ class LocationWizard(wx.Object):
             try:
                 pparam, datatype, proj4term, desc = line.split(":")
                 self.paramdesc[pparam] = (datatype, proj4term, desc)
-            except (ValueError, AttributeError):
+            except ValueError:
                 continue
         f.close()
 
