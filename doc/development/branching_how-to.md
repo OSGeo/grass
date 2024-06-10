@@ -8,6 +8,13 @@ before RC1 of a new release series, please see assumptions in the
 
 ## Create a New Branch
 
+Given how the branch protection rules are set up and work,
+you need to bypass protection againts merge commits on branches
+(we don't want any new ones, but there are existing from the past
+which prevet creation of a new branch).
+To bypass, go to _Settings > Rules > Rulesets > Rules for release branches_.
+Press _Add bypass_ and add the team or user who is creating the branch.
+
 Use GitHub web interface to create a new branch:
 
 1. Go to _branches_.
@@ -17,8 +24,14 @@ Use GitHub web interface to create a new branch:
 5. Modify the name.
 6. Click _Create branch_.
 
-Note down the commit hash which will be recorded in the [release history overview](https://grass.osgeo.org/about/history/releases/).
-Alternatively, see the instructions below to create a new branch using command line.
+As an alterntaive to creation in GitHub, you can create a new branch using
+command line (instructions included at the end of the document).
+
+Note down the latest commit hash on the branch which will be recorded in the
+[release history overview](https://grass.osgeo.org/about/history/releases/).
+The instructions for updating the website come later in the procedure.
+
+Remove the bypass in _Settings_.
 
 ## Check the Version
 
@@ -26,15 +39,6 @@ Alternatively, see the instructions below to create a new branch using command l
 git fetch upstream
 git switch releasebranch_8_4
 ```
-
-If you make changes, commit them:
-
-```bash
-git commit -m "version: ..."
-git push
-```
-
-(You can directly push to release branches.)
 
 ## Increase Version on the main Branch
 
@@ -52,14 +56,24 @@ Update the version in the source code (use `minor` or `major`):
 ./utils/update_version.py minor
 ```
 
-If you are using a clone you also use for building GRASS GIS,
-rebuild GRASS GIS to update the generated version numbers.
+If you are using a clone you use for building GRASS GIS,
+clean up (`make distclean`) your GRASS GIS build to remove
+the now outdated generated version numbers.
 (You don't need to build GRASS GIS if you have a fresh clone.)
 
-Search for all other mentions of last few versions to see if they need to be updated.
+Search for all other mentions of last few versions to see if they need to be updated,
+for example:
+
+```bash
+grep --exclude-dir=.git -IrnE "[^0-9]8[\._][2,3][^0-9]"
+```
+
+After the check and update, commit 
 
 ```bash
 git switch -c update-version
+git add -p
+./utils/update_version.py suggest
 git commit -m "version: ..."
 git push
 ```
@@ -69,7 +83,9 @@ the wrong version on the branch in case other PRs need to be merged.
 
 ## Server Updates
 
-(Here go things like updates to grass-addons repo.)
+In the grass-addons repo:
+
+* Add new branch into [`.github/workflows/ci.yml`](https://github.com/OSGeo/grass-addons/blob/grass8/.github/workflows/ci.yml).
 
 ## Website Updates
 
@@ -77,7 +93,20 @@ Add the branch creation to the following history:
 
 <https://github.com/OSGeo/grass-website/blob/master/content/about/history/releases.md>
 
-## Create by Command Line
+## Additional Notes
+
+### Making Changes in General
+
+If you make changes, commit them:
+
+```bash
+git commit -m "version: ..."
+git push
+```
+
+(You can directly push to release branches.)
+
+### Create by Command Line
 
 Get the latest main branch:
 
