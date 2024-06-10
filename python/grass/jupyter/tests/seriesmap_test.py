@@ -20,7 +20,7 @@ def test_default_init(space_time_raster_dataset):
     """Check that TimeSeriesMap init runs with default parameters"""
     img = gj.SeriesMap()
     img.add_rasters(space_time_raster_dataset.raster_names)
-    assert img._names == space_time_raster_dataset.raster_names
+    assert img._labels == space_time_raster_dataset.raster_names
 
 
 def test_render_layers(space_time_raster_dataset):
@@ -37,7 +37,7 @@ def test_render_layers(space_time_raster_dataset):
     # check files exist
     # We need to check values which are only in protected attributes
     # pylint: disable=protected-access
-    for unused_layer, filename in img._layer_filename_dict.items():
+    for unused_layer, filename in img._base_filename_dict.items():
         assert Path(filename).is_file()
 
 

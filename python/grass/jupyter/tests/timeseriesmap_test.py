@@ -44,7 +44,7 @@ def test_default_init(space_time_raster_dataset):
     """Check that TimeSeriesMap init runs with default parameters"""
     img = gj.TimeSeriesMap()
     img.add_raster_series(space_time_raster_dataset.name)
-    assert img.timeseries == space_time_raster_dataset.name
+    assert img.baseseries == space_time_raster_dataset.name
 
 
 @pytest.mark.parametrize("fill_gaps", [False, True])
@@ -63,7 +63,7 @@ def test_render_layers(space_time_raster_dataset, fill_gaps):
     # check files exist
     # We need to check values which are only in protected attributes
     # pylint: disable=protected-access
-    for unused_date, filename in img._date_filename_dict.items():
+    for unused_date, filename in img._base_filename_dict.items():
         assert Path(filename).is_file()
 
 
