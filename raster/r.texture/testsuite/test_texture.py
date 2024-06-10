@@ -24,9 +24,23 @@ class TestRasterreport(TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
-        maps = "asm_ASM,contrast_Contr,corr_Corr,var_Var,idm_IDM,sa_SA,\
-        sv_SV,se_SE,entr_Entr,dv_DV,de_DE,moc1_MOC-1,moc2_MOC-2"
-        cls.runModule("g.remove", flags="f", type="raster", name=maps)
+        maps = [
+            "asm_ASM",
+            "contrast_Contr",
+            "corr_Corr",
+            "var_Var",
+            "idm_IDM",
+            "sa_SA",
+            "sv_SV",
+            "se_SE",
+            "entr_Entr",
+            "dv_DV",
+            "de_DE",
+            "moc1_MOC-1",
+            "moc2_MOC-2",
+        ]
+        maps_string = ",".join(maps)
+        cls.runModule("g.remove", flags="f", type="raster", name=maps_string)
 
     def test_asm(self):
         """Testing method asm"""
