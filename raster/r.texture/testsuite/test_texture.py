@@ -39,8 +39,7 @@ class TestRasterreport(TestCase):
             "moc1_MOC-1",
             "moc2_MOC-2",
         ]
-        maps_string = ",".join(maps)
-        cls.runModule("g.remove", flags="f", type="raster", name=maps_string)
+        cls.runModule("g.remove", flags="f", type="raster", name=maps)
 
     def test_asm(self):
         """Testing method asm"""
