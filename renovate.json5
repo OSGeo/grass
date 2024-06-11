@@ -1,0 +1,13 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        "config:best-practices",
+        ":semanticCommits",
+        ":semanticCommitTypeAll(CI)",
+ 
+        // allows to use comments starting with 
+        // "# renovate: " to update _VERSION 
+        // environment variables in GitHub Action files.
+        "customManagers:githubActionsVersions"
+    ]
+}
