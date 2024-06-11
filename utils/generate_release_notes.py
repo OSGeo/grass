@@ -200,13 +200,15 @@ def notes_from_git_log(start_tag, end_tag, categories, exclude):
         key="svn_name",
         value="github_name",
     )
+    github_name_by_git_author_file = config_directory / "git_author_github_name.csv"
     github_name_by_git_author = csv_to_dict(
-        config_directory / "git_author_github_name.csv",
+        github_name_by_git_author_file,
         key="git_author",
         value="github_name",
     )
 
     lines = []
+    unknow_authors = []
     for commit in commits:
         if commit["author_email"].endswith("users.noreply.github.com"):
             github_name = commit["author_email"].split("@")[0]
@@ -230,6 +232,7 @@ def notes_from_git_log(start_tag, end_tag, categories, exclude):
                     github_name = f"@{github_name}"
                 except KeyError:
                     github_name = git_author
+                    unknow_authors.append((git_author, commit["message"]))
         lines.append(f"{commit['message']} by {github_name}")
     lines = remove_excluded_changes(changes=lines, exclude=exclude)
     print_notes(
@@ -242,6 +245,16 @@ def notes_from_git_log(start_tag, end_tag, categories, exclude):
         ),
         categories=categories,
     )
+    processed_authors = []
+    if unknow_authors:
+        print(
+            f"\n\nAuthors who need to be added to {github_name_by_git_author_file}:\n"
+        )
+        for author, message in unknow_authors:
+            if author in processed_authors:
+                continue
+            print(f"{author} -- authored {message}")
+            processed_authors.append(author)
 
 
 def create_release_notes(args):
