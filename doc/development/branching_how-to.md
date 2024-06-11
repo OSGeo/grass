@@ -9,9 +9,10 @@ before RC1 of a new release series, please see assumptions in the
 ## Create a New Branch
 
 Given how the branch protection rules are set up and work,
-you need to bypass protection againts merge commits on branches
-(we don't want any new ones, but there are existing from the past
-which prevet creation of a new branch).
+you need to bypass protection against merge commits on branches.
+(We don't want any new merge commits. However, there are merge commits
+from the past and they prevent creation of a new branch when the rules are
+applied.)
 To bypass, go to _Settings > Rules > Rulesets > Rules for release branches_.
 Press _Add bypass_ and add the team or user who is creating the branch.
 
@@ -24,7 +25,7 @@ Use GitHub web interface to create a new branch:
 5. Modify the name.
 6. Click _Create branch_.
 
-As an alterntaive to creation in GitHub, you can create a new branch using
+As an alternative to creation in GitHub, you can create a new branch using
 command line (instructions included at the end of the document).
 
 Note down the latest commit hash on the branch which will be recorded in the
@@ -69,7 +70,7 @@ grep --exclude-dir=.git -IrnE "[^0-9^a-z]8[\._][0-9][^0-9]"
 grep --exclude-dir=.git -IrnE "grass8.?[0-9]"
 ```
 
-After the check and update, commit 
+After the check and update, commit
 
 ```bash
 git switch -c update-version
