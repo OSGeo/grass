@@ -16,6 +16,7 @@ import unittest
 
 IS_MAC = sys.platform.startswith("darwin")
 
+
 class TestRasterreport(TestCase):
     input = "lsat7_2002_80"
 
