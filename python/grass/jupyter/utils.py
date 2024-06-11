@@ -87,6 +87,59 @@ def reproject_region(region, from_proj, to_proj):
     return region
 
 
+def reproject_latlon(coord):
+    """Reproject coordinates
+
+    :param coord: coordinates given as tuple (latitude, longitude)
+    :return: reprojected coordinates (returned as tuple)
+    """
+    # Prepare the input coordinate string
+    coord_str = f"{coord[1]} {coord[0]}\n"
+
+    # Start the m.proj command
+    proc = gs.start_command(
+        "m.proj",
+        input="-",
+        flags="i",
+        separator=",",
+        stdin=gs.PIPE,
+        stdout=gs.PIPE,
+        stderr=gs.PIPE,
+    )
+
+    proc.stdin.write(gs.encode(coord_str))
+    proc.stdin.close()
+    proc.stdin = None
+    proj_output, _ = proc.communicate()
+
+    output = gs.decode(proj_output).splitlines()
+    east, north, elev = map(float, output[0].split(","))
+
+    return east, north, elev
+
+
+def query_raster(coord, raster):
+    """Queries Raster
+
+    :param coord: coordinates given as tuple
+    :param str raster: name of raster
+
+    :return dict: category values and category labels
+    """
+    return gs.raster.raster_what(map=raster, coord=(coord[0], coord[1]))
+
+
+def query_vector(coord, vector):
+    """Queries Vector
+
+    :param coord: coordinates given as tuple
+    :param str vector: name of vector
+
+    :return dict: category number value
+    """
+    return gs.vector.vector_what(map=vector, coord=(coord[0], coord[1]))
+
+
 def estimate_resolution(raster, mapset, location, dbase, env):
     """Estimates resolution of reprojected raster.
 

@@ -16,6 +16,7 @@
 import base64
 import json
 from .reprojection_renderer import ReprojectionRenderer
+from .utils import query_raster, query_vector, reproject_latlon
 
 
 def get_backend(interactive_map):
@@ -283,6 +284,10 @@ class InteractiveMap:
         self.width = width
         self.height = height
 
+        # Store vector and raster name
+        self.raster_name = ""
+        self.vector_name = ""
+
         if self._ipyleaflet:
             basemap = xyzservices.providers.query_name(tiles)
             if API_key and basemap.get("accessToken"):
@@ -316,6 +321,7 @@ class InteractiveMap:
         :param str title: vector name for layer control
         :**kwargs: keyword arguments passed to GeoJSON overlay
         """
+        self.vector_name = name
         Vector(name, title=title, renderer=self._renderer, **kwargs).add_to(self.map)
 
     def add_raster(self, name, title=None, **kwargs):
@@ -334,6 +340,7 @@ class InteractiveMap:
         :param str title: raster name for layer control
         :**kwargs: keyword arguments passed to image overlay
         """
+        self.raster_name = name
         Raster(name, title=title, renderer=self._renderer, **kwargs).add_to(self.map)
 
     def add_layer_control(self, **kwargs):
@@ -347,13 +354,104 @@ class InteractiveMap:
         else:
             self.layer_control_object = self._ipyleaflet.LayersControl(**kwargs)
 
+    def add_query_button(self):
+        """Add custom features like query button and coordinate retrieval"""
+        import ipywidgets as widgets
+        from IPython.display import HTML
+
+        # A button to activate/deactivate query mode
+        query_button = widgets.Button(description="Activate Query Mode")
+
+        # Variable to store the state of query mode
+        self.query_mode = False
+
+        # Output widget to display query results
+        output_widget = widgets.Output(
+            layout={
+                "display": "none",
+                "width": "100%",
+                "max_height": "300px",
+                "max_width": "300px",
+                "overflow": "auto",
+            }
+        )
+
+        # Function to toggle query mode
+        def toggle_query_mode(button):
+            self.query_mode = not self.query_mode
+            button.description = (
+                "Deactivate Query Mode" if self.query_mode else "Activate Query Mode"
+            )
+            output_widget.layout.display = "block" if self.query_mode else "none"
+            # Change cursor style based on query mode
+            if self.query_mode:
+                self.map.default_style = {"cursor": "crosshair"}
+            else:
+                self.map.default_style = {"cursor": "default"}
+
+        query_button.on_click(toggle_query_mode)
+
+        # Add the button to the map using WidgetControl
+        query_control = self._ipyleaflet.WidgetControl(
+            widget=query_button, position="topright"
+        )
+        self.map.add_control(query_control)
+
+        # Create an output widget to display query results
+        output_control = self._ipyleaflet.WidgetControl(
+            widget=output_widget, position="bottomright"
+        )
+        self.map.add_control(output_control)
+
+        # Function to handle map click for querying
+        def handle_interaction(**kwargs):
+            if self.query_mode and kwargs.get("type") == "click":
+                lonlat = kwargs.get("coordinates")
+                reprojected_coordinates = reproject_latlon((lonlat[0], lonlat[1]))
+                raster_output = query_raster(
+                    (reprojected_coordinates[0], reprojected_coordinates[1]),
+                    self.raster_name,
+                )
+                vector_output = query_vector(
+                    (reprojected_coordinates[0], reprojected_coordinates[1]),
+                    self.vector_name,
+                )
+                with output_widget:
+                    output_widget.clear_output()
+                    output = (
+                        "<div style='font-family: Arial, sans-serif; font-size: 14px;'>"
+                    )
+                    if self.raster_name:
+                        output += "<b>Raster Info:</b><br>"
+                        for key, value in raster_output[0].items():
+                            output += f"&nbsp;&nbsp;Map: {key}<br>"
+                            for sub_key, sub_value in value.items():
+                                output += f"&nbsp;&nbsp;{sub_key}: {sub_value}<br>"
+                    if self.vector_name and len(vector_output[0]) > 2:
+                        output += "<b>Vector Info:</b><br>"
+                        for key, value in vector_output[0].items():
+                            if isinstance(value, dict):
+                                output += f"&nbsp;&nbsp;{key}:<br>"
+                                for sub_key, sub_value in value.items():
+                                    output += (
+                                        f"&nbsp;&nbsp;&nbsp;&nbsp;{sub_key}: "
+                                        f"{sub_value}<br>"
+                                    )
+                            else:
+                                output += f"&nbsp;&nbsp;{key}: {value}<br>"
+                    output += "</div>"
+                    output_widget.append_display_data(HTML(output))
+
+        self.map.on_interaction(handle_interaction)
+
     def show(self):
         """This function returns a folium figure or ipyleaflet map object
         with a GRASS raster and/or vector overlaid on a basemap.
 
         If map has layer control enabled, additional layers cannot be
         added after calling show()."""
-
+        if self._ipyleaflet:
+            self.add_query_button()
         self.map.fit_bounds(self._renderer.get_bbox())
         if self._folium:
             if self.layer_control:
