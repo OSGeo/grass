@@ -25,8 +25,8 @@ Use GitHub web interface to create a new branch:
 5. Modify the name.
 6. Click _Create branch_.
 
-As an alternative to creation in GitHub, you can create a new branch using
-command line (instructions included at the end of the document).
+As an alternative to creation in GitHub, you can
+[create a new branch using command line](#create-in-command-line).
 
 Note down the latest commit hash on the branch which will be recorded in the
 [release history overview](https://grass.osgeo.org/about/history/releases/).
@@ -108,7 +108,7 @@ git push
 
 (You can directly push to release branches.)
 
-### Create by Command Line
+### Create in Command Line
 
 Get the latest main branch:
 
