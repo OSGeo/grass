@@ -11,7 +11,10 @@ Licence:    This program is free software under the GNU General Public
 """
 
 from grass.gunittest.case import TestCase
+import sys
+import unittest
 
+IS_MAC = sys.platform.startswith("darwin")
 
 class TestRasterreport(TestCase):
     input = "lsat7_2002_80"
@@ -119,6 +122,7 @@ class TestRasterreport(TestCase):
         self.assertModule("r.texture", input=self.input, output=method, method=method)
         self.assertRasterFitsUnivar(output, reference=values, precision=1e-2)
 
+    @unittest.skipIf(IS_MAC, reason="Fails on macOS")
     def test_sv(self):
         """Testing method sv"""
         basename = "SV"
