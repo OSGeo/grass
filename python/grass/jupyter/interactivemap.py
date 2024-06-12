@@ -285,8 +285,9 @@ class InteractiveMap:
         self.height = height
 
         # Store vector and raster name
-        self.raster_name = ""
-        self.vector_name = ""
+        self.raster_name = []
+        self.vector_name = []
+        self.query_mode = None
 
         if self._ipyleaflet:
             basemap = xyzservices.providers.query_name(tiles)
@@ -321,7 +322,7 @@ class InteractiveMap:
         :param str title: vector name for layer control
         :**kwargs: keyword arguments passed to GeoJSON overlay
         """
-        self.vector_name = name
+        self.vector_name.append(name)
         Vector(name, title=title, renderer=self._renderer, **kwargs).add_to(self.map)
 
     def add_raster(self, name, title=None, **kwargs):
@@ -340,7 +341,7 @@ class InteractiveMap:
         :param str title: raster name for layer control
         :**kwargs: keyword arguments passed to image overlay
         """
-        self.raster_name = name
+        self.raster_name.append(name)
         Raster(name, title=title, renderer=self._renderer, **kwargs).add_to(self.map)
 
     def add_layer_control(self, **kwargs):
@@ -359,11 +360,12 @@ class InteractiveMap:
         import ipywidgets as widgets
         from IPython.display import HTML
 
-        # A button to activate/deactivate query mode
-        query_button = widgets.Button(description="Activate Query Mode")
-
-        # Variable to store the state of query mode
-        self.query_mode = False
+        # A ToggleButton to activate/deactivate query mode
+        query_toggle_button = widgets.ToggleButton(
+            description="Activate Query Mode",
+            value=False,
+            tooltip="Click to activate/deactivate query mode",
+        )
 
         # Output widget to display query results
         output_widget = widgets.Output(
@@ -376,24 +378,23 @@ class InteractiveMap:
             }
         )
 
-        # Function to toggle query mode
-        def toggle_query_mode(button):
-            self.query_mode = not self.query_mode
-            button.description = (
+        # Function to handle toggle state change
+        def on_toggle_change(change):
+            self.query_mode = change.new
+            query_toggle_button.description = (
                 "Deactivate Query Mode" if self.query_mode else "Activate Query Mode"
             )
             output_widget.layout.display = "block" if self.query_mode else "none"
             # Change cursor style based on query mode
-            if self.query_mode:
-                self.map.default_style = {"cursor": "crosshair"}
-            else:
-                self.map.default_style = {"cursor": "default"}
+            self.map.default_style = {
+                "cursor": "crosshair" if self.query_mode else "default"
+            }
 
-        query_button.on_click(toggle_query_mode)
+        query_toggle_button.observe(on_toggle_change, names="value")
 
-        # Add the button to the map using WidgetControl
+        # Add the toggle button to the map using WidgetControl
         query_control = self._ipyleaflet.WidgetControl(
-            widget=query_button, position="topright"
+            widget=query_toggle_button, position="topright"
         )
         self.map.add_control(query_control)
 
@@ -421,24 +422,10 @@ class InteractiveMap:
                     output = (
                         "<div style='font-family: Arial, sans-serif; font-size: 14px;'>"
                     )
-                    if self.raster_name:
-                        output += "<b>Raster Info:</b><br>"
-                        for key, value in raster_output[0].items():
-                            output += f"&nbsp;&nbsp;Map: {key}<br>"
-                            for sub_key, sub_value in value.items():
-                                output += f"&nbsp;&nbsp;{sub_key}: {sub_value}<br>"
-                    if self.vector_name and len(vector_output[0]) > 2:
-                        output += "<b>Vector Info:</b><br>"
-                        for key, value in vector_output[0].items():
-                            if isinstance(value, dict):
-                                output += f"&nbsp;&nbsp;{key}:<br>"
-                                for sub_key, sub_value in value.items():
-                                    output += (
-                                        f"&nbsp;&nbsp;&nbsp;&nbsp;{sub_key}: "
-                                        f"{sub_value}<br>"
-                                    )
-                            else:
-                                output += f"&nbsp;&nbsp;{key}: {value}<br>"
+                    if raster_output:
+                        output += raster_output
+                    if vector_output:
+                        output += vector_output
                     output += "</div>"
                     output_widget.append_display_data(HTML(output))
 

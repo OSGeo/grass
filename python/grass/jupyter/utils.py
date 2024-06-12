@@ -118,18 +118,28 @@ def reproject_latlon(coord):
     return east, north, elev
 
 
-def query_raster(coord, raster):
+def query_raster(coord, raster_list):
     """Queries Raster
 
     :param coord: coordinates given as tuple
-    :param str raster: name of raster
+    :param list raster_list: list of raster names
 
-    :return dict: category values and category labels
+    :return str: formatted output of raster query results
     """
-    return gs.raster.raster_what(map=raster, coord=(coord[0], coord[1]))
+
+    output = ""
+    for raster in raster_list:
+        output = "<b>Raster Info:</b><br>"
+        raster_output = gs.raster.raster_what(map=raster, coord=coord)
+
+        output += f"&nbsp;&nbsp;Map: {raster}<br>"
+        if raster in raster_output[0] and "value" in raster_output[0]["tower_los"]:
+            value = raster_output[0]["tower_los"]["value"]
+            output += f"&nbsp;&nbsp;Value: {value}<br>"
+    return output
 
 
-def query_vector(coord, vector):
+def query_vector(coord, vector_list):
     """Queries Vector
 
     :param coord: coordinates given as tuple
@@ -137,7 +147,21 @@ def query_vector(coord, vector):
 
     :return dict: category number value
     """
-    return gs.vector.vector_what(map=vector, coord=(coord[0], coord[1]))
+    output = ""
+    for vector in vector_list:
+        vector_output = gs.vector.vector_what(map=vector, coord=coord, distance=100)
+        if len(vector_output[0]) > 2:
+            output = "<b>Vector Info:</b><br>"
+            for key, value in vector_output[0].items():
+                if isinstance(value, dict):
+                    output += f"&nbsp;&nbsp;{key}:<br>"
+                    for sub_key, sub_value in value.items():
+                        output += (
+                            f"&nbsp;&nbsp;&nbsp;&nbsp;{sub_key}: " f"{sub_value}<br>"
+                        )
+                else:
+                    output += f"&nbsp;&nbsp;{key}: {value}<br>"
+    return output
 
 
 def estimate_resolution(raster, mapset, location, dbase, env):
