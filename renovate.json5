@@ -8,6 +8,9 @@
         // allows to use comments starting with 
         // "# renovate: " to update _VERSION 
         // environment variables in GitHub Action files.
-        "customManagers:githubActionsVersions"
+        "customManagers:githubActionsVersions",
+        
+        // when a dependency is really out of date, this will prevent to skip directly to the latest version.
+        ":separateMultipleMajorReleases",
     ]
 }
