@@ -219,10 +219,7 @@ def notes_from_git_log(start_tag, end_tag, categories, exclude):
             # Emails are stored with @ replaced by a space.
             email = commit["author_email"].replace("@", " ")
             git_author = f"{commit['author_name']} <{email}>"
-            if (
-                git_author not in svn_name_by_git_author
-                and git_author in github_name_by_git_author
-            ):
+            if git_author in github_name_by_git_author:
                 github_name = github_name_by_git_author[git_author]
                 github_name = f"@{github_name}"
             else:
