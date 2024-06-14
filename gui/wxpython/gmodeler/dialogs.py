@@ -60,13 +60,7 @@ class ModelDataDialog(SimpleDialog):
         self.etype = etype
         SimpleDialog.__init__(self, parent, title)
 
-        self.element = Select(
-            parent=self.panel,
-            type=self.shape.GetPrompt(),
-            validator=SimpleValidator(callback=self.ValidatorCallback),
-        )
-        if shape.GetValue():
-            self.element.SetValue(shape.GetValue())
+        self.element = self._createElementControl(shape)
 
         self.Bind(wx.EVT_BUTTON, self.OnOK, self.btnOK)
         self.Bind(wx.EVT_BUTTON, self.OnCancel, self.btnCancel)
@@ -85,6 +79,18 @@ class ModelDataDialog(SimpleDialog):
 
         self._layout()
         self.SetMinSize(self.GetSize())
+
+    def _createElementControl(self, shape):
+        """Create Select element and set its value."""
+        element = Select(
+            parent=self.panel,
+            type=self.shape.GetPrompt(),
+            validator=SimpleValidator(callback=self.ValidatorCallback),
+        )
+        if shape.GetValue():
+            element.SetValue(shape.GetValue())
+
+        return element
 
     def _getLabel(self):
         etype = False
@@ -552,6 +558,11 @@ class ModelItemDialog(wx.Dialog):
         """Get loop condition"""
         return self.condText.GetValue()
 
+    def SetSizes(self):
+        """Set default and minimal size."""
+        self.SetMinSize(self.GetSize())
+        self.SetSize((500, 400))
+
 
 class ModelLoopDialog(ModelItemDialog):
     """Loop properties dialog"""
@@ -576,8 +587,7 @@ class ModelLoopDialog(ModelItemDialog):
         self.btnSeries.Bind(wx.EVT_BUTTON, self.OnSeries)
 
         self._layout()
-        self.SetMinSize(self.GetSize())
-        self.SetSize((500, 400))
+        self.SetSizes()
 
     def _layout(self):
         """Do layout"""
@@ -667,8 +677,7 @@ class ModelConditionDialog(ModelItemDialog):
         self.itemListElse.Populate(self.parent.GetModel().GetItems())
 
         self._layout()
-        self.SetMinSize(self.GetSize())
-        self.SetSize((500, 400))
+        self.SetSizes()
 
     def _layout(self):
         """Do layout"""
@@ -748,20 +757,26 @@ class ModelListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEditMi
         listmix.ListCtrlAutoWidthMixin.__init__(self)
         listmix.TextEditMixin.__init__(self)
 
-        i = 0
-        for col in columns:
-            self.InsertColumn(i, col)
-            self.SetColumnWidth(i, wx.LIST_AUTOSIZE_USEHEADER)
-            i += 1
+        self.InsertColumns(columns)
 
         self.itemDataMap = {}  # requested by sorter
         self.itemCount = 0
 
+        self.BindButtons()
+
+    def BindButtons(self):
+        """Bind signals to buttons."""
         self.Bind(wx.EVT_LIST_BEGIN_LABEL_EDIT, self.OnBeginEdit)
         self.Bind(wx.EVT_LIST_END_LABEL_EDIT, self.OnEndEdit)
         self.Bind(wx.EVT_LIST_COL_CLICK, self.OnColClick)
         self.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.OnRightUp)  # wxMSW
         self.Bind(wx.EVT_RIGHT_UP, self.OnRightUp)  # wxGTK
+
+    def InsertColumns(self, columns):
+        """INsert columns and set their width."""
+        for i, col in enumerate(columns):
+            self.InsertColumn(i, col)
+            self.SetColumnWidth(i, wx.LIST_AUTOSIZE_USEHEADER)
 
     def OnBeginEdit(self, event):
         """Editing of item started"""
