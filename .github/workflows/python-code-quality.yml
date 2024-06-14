@@ -15,21 +15,26 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ github.job }}-${{
         github.event_name == 'pull_request' &&
-        github.head_ref || github.sha }}-${{ matrix.pylint-version }}
+        github.head_ref || github.sha }}
       cancel-in-progress: true
 
-    # Using matrix just to get variables which are not environmental variables
-    # and also to sync with other workflows which use matrix.
     strategy:
       matrix:
         include:
           - os: ubuntu-22.04
-            python-version: "3.10"
-            min-python-version: "3.8"
-            black-version: "24.4.0"
-            flake8-version: "3.9.2"
-            pylint-version: "2.12.2"
-            bandit-version: "1.7.8"
+
+    env:
+      # renovate: datasource=python-version depName=python
+      PYTHON_VERSION: "3.10"
+      MIN_PYTHON_VERSION: "3.8"
+      # renovate: datasource=pypi depName=black
+      BLACK_VERSION: "24.4.0"
+      # renovate: datasource=pypi depName=flake8
+      FLAKE8_VERSION: "3.9.2"
+      # renovate: datasource=pypi depName=pylint
+      PYLINT_VERSION: "2.12.2"
+      # renovate: datasource=pypi depName=bandit
+      BANDIT_VERSION: "1.7.8"
 
     runs-on: ${{ matrix.os }}
     permissions:
@@ -39,25 +44,25 @@ jobs:
       - name: Versions
         run: |
           echo OS: ${{ matrix.os }}
-          echo Python: ${{ matrix.python-version }}
-          echo Minimal Python version: ${{ matrix.min-python-version }}
-          echo Black: ${{ matrix.black-version }}
-          echo Flake8: ${{ matrix.flake8-version }}
-          echo Pylint: ${{ matrix.pylint-version }}
-          echo Bandit: ${{matrix.bandit-version}}
+          echo Python: ${{ env.PYTHON_VERSION }}
+          echo Minimal Python version: ${{ env.MIN_PYTHON_VERSION }}
+          echo Black: ${{ env.BLACK_VERSION }}
+          echo Flake8: ${{ env.FLAKE8_VERSION }}
+          echo Pylint: ${{ env.PYLINT_VERSION }}
+          echo Bandit: ${{ env.BANDIT_VERSION }}
 
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
       - name: Set up Python
         uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ env.PYTHON_VERSION }}
           cache: pip
       - name: Upgrade pip
         run: python -m pip install --upgrade pip
 
       - name: Install Black only
-        run: pip install black[jupyter]==${{ matrix.black-version }}
+        run: pip install black[jupyter]==${{ env.BLACK_VERSION }}
 
       - name: Run Black
         run: black .
@@ -82,9 +87,9 @@ jobs:
         run: |
           pip install -r .github/workflows/python_requirements.txt
           pip install -r .github/workflows/optional_requirements.txt
-          pip install flake8==${{ matrix.flake8-version }}
-          pip install pylint==${{ matrix.pylint-version }} pytest-github-actions-annotate-failures
-          pip install bandit[sarif]==${{matrix.bandit-version}}
+          pip install flake8==${{ env.FLAKE8_VERSION }}
+          pip install pylint==${{ env.PYLINT_VERSION }} pytest-github-actions-annotate-failures
+          pip install bandit[sarif]==${{ env.BANDIT_VERSION }}
 
       - name: Run Flake8
         run: |
@@ -130,19 +135,19 @@ jobs:
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
           cd python
-          pylint --persistent=no --py-version=${{ matrix.min-python-version }} --jobs=$(nproc) grass
+          pylint --persistent=no --py-version=${{ env.MIN_PYTHON_VERSION }} --jobs=$(nproc) grass
 
       - name: Run Pylint on wxGUI
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
           cd gui/wxpython
-          pylint --persistent=no --py-version=${{ matrix.min-python-version }} --jobs=$(nproc) *
+          pylint --persistent=no --py-version=${{ env.MIN_PYTHON_VERSION }} --jobs=$(nproc) *
 
       - name: Run Pylint on other files using pytest
         run: |
           pip install pytest==7.4.4 pytest-pylint==0.19
-          echo "::warning file=.github/workflows/python-code-quality.yml,line=116,col=42,endColumn=48::\
+          echo "::warning file=.github/workflows/python-code-quality.yml,line=149,col=42,endColumn=48::\
             Temporarily downgraded pytest-pylint and pytest to allow merging other PRs.\
             The errors reported with a newer version seem legitimite and should be fixed \
             (2023-10-18, see https://github.com/OSGeo/grass/pull/3205)\
