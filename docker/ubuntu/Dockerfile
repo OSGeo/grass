@@ -277,20 +277,20 @@ RUN make distclean || echo "nothing to clean"
 RUN ./configure $GRASS_CONFIG \
     && make -j $NUMTHREADS \
     && make install && ldconfig \
-    &&  cp /usr/local/grass84/gui/wxpython/xml/module_items.xml module_items.xml; \
-    rm -rf /usr/local/grass84/demolocation; \
-    rm -rf /usr/local/grass84/fonts; \
-    rm -rf /usr/local/grass84/gui; \
-    rm -rf /usr/local/grass84/share; \
-    mkdir -p /usr/local/grass84/gui/wxpython/xml/; \
-    mv module_items.xml /usr/local/grass84/gui/wxpython/xml/module_items.xml;
+    &&  cp /usr/local/grass85/gui/wxpython/xml/module_items.xml module_items.xml; \
+    rm -rf /usr/local/grass85/demolocation; \
+    rm -rf /usr/local/grass85/fonts; \
+    rm -rf /usr/local/grass85/gui; \
+    rm -rf /usr/local/grass85/share; \
+    mkdir -p /usr/local/grass85/gui/wxpython/xml/; \
+    mv module_items.xml /usr/local/grass85/gui/wxpython/xml/module_items.xml;
 
 # Build the GDAL-GRASS plugin
 RUN git clone https://github.com/OSGeo/gdal-grass \
     && cd "gdal-grass" \
     && ./configure \
       --with-gdal=/usr/bin/gdal-config \
-      --with-grass=/usr/local/grass84 \
+      --with-grass=/usr/local/grass85 \
     && make -j $NUMTHREADS \
     && make install -j $NUMTHREADS \
     && cd /src \
@@ -317,13 +317,13 @@ ENV GRASSBIN="/usr/local/bin/grass" \
 
 # Copy GRASS GIS from build image
 COPY --link --from=build /usr/local/bin/* /usr/local/bin/
-COPY --link --from=build /usr/local/grass84 /usr/local/grass84/
+COPY --link --from=build /usr/local/grass85 /usr/local/grass85/
 COPY --link --from=build /src/site-packages /usr/lib/python3.10/
 COPY --link --from=build /usr/lib/gdalplugins /usr/lib/gdalplugins
 # COPY --link --from=datum_grids /tmp/cdn.proj.org/*.tif /usr/share/proj/
 
 # Create generic GRASS GIS lib name regardless of version number
-RUN ln -sf /usr/local/grass84 /usr/local/grass \
+RUN ln -sf /usr/local/grass85 /usr/local/grass \
     && ldconfig /etc/ld.so.conf.d
 
 # Data workdir
