@@ -204,6 +204,8 @@ class AttributeManager(wx.Frame, DbMgrBase):
         if self.parent and self.parent.GetName() == "LayerManager":
             # deregister ATM
             self.parent.dialogs["atm"].remove(self)
+            # set map window focus
+            self.parent.GetMapDisplay().GetMapWindow().SetFocus()
 
         if not isinstance(event, wx.CloseEvent):
             self.Destroy()
