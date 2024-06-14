@@ -3,7 +3,7 @@ Created on Tue Jun 24 09:43:53 2014
 
 @author: pietro
 """
-from __future__ import unicode_literals
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 

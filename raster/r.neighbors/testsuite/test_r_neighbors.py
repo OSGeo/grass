@@ -41,18 +41,18 @@ class TestNeighbors(TestCase):
                 "sum": 221701132.328964,
             },
             "perc90": {
-                "n": 2022154,
-                "null_cells": 2846,
+                "n": 2025000,
+                "null_cells": 0,
                 "cells": 2025000,
-                "min": 50.5460597991944,
-                "max": 153.0166015625,
-                "range": 102.470541763306,
-                "mean": 100.145484105243,
-                "mean_of_abs": 100.145484105243,
-                "stddev": 18.2647774894326,
-                "variance": 333.602096738483,
-                "coeff_var": 18.2382437437099,
-                "sum": 202509591.265354,
+                "min": 56.0450115203857,
+                "max": 156.317572021484,
+                "range": 100.272560501099,
+                "mean": 111.060386339868,
+                "mean_of_abs": 111.060386339868,
+                "stddev": 20.301968270214,
+                "variance": 412.169915644776,
+                "coeff_var": 18.2801167358501,
+                "sum": 224897282.338233,
             },
             "average": {
                 "n": 2025000,
@@ -116,43 +116,43 @@ class TestNeighbors(TestCase):
                 "n": 2025000,
                 "null_cells": 0,
                 "cells": 2025000,
-                "min": 55.5858826446533,
-                "max": 156.204046478271,
-                "range": 100.618163833618,
-                "mean": 109.505643774445,
-                "mean_of_abs": 109.505643774445,
-                "stddev": 20.3076172385227,
-                "variance": 412.399317906343,
-                "coeff_var": 18.5448133434578,
-                "sum": 221748928.643252,
+                "min": 55.5847009658813,
+                "max": 156.203791503906,
+                "range": 100.619090538025,
+                "mean": 109.503018547944,
+                "mean_of_abs": 109.503018547944,
+                "stddev": 20.3076172385226,
+                "variance": 412.398941046239,
+                "coeff_var": 18.5452494634586,
+                "sum": 221743612.559588,
             },
             0.03: {
                 "n": 2025000,
                 "null_cells": 0,
                 "cells": 2025000,
-                "min": 55.600062789917,
-                "max": 156.208636016846,
-                "range": 100.608573226929,
-                "mean": 109.552850010781,
-                "mean_of_abs": 109.552850010781,
-                "stddev": 20.3078616792495,
-                "variance": 412.409245983529,
-                "coeff_var": 18.5370455239192,
-                "sum": 221844521.271832,
+                "min": 55.5965177536011,
+                "max": 156.20787109375,
+                "range": 100.611353340149,
+                "mean": 109.544974331288,
+                "mean_of_abs": 109.544974331288,
+                "stddev": 20.3078125947647,
+                "variance": 412.407252384084,
+                "coeff_var": 18.5383334276472,
+                "sum": 221828573.020859,
             },
             0.95: {
-                "n": 2022154,
-                "null_cells": 2846,
+                "n": 2025000,
+                "null_cells": 0,
                 "cells": 2025000,
-                "min": 25.2730298995972,
-                "max": 153.0166015625,
-                "range": 127.743571662903,
-                "mean": 50.141999640313,
-                "mean_of_abs": 50.141999640313,
-                "stddev": 9.33982798423495,
-                "variance": 87.2323867750984,
-                "coeff_var": 18.6267561150991,
-                "sum": 101394845.140658,
+                "min": 56.0488119125366,
+                "max": 156.323718261719,
+                "range": 100.274906349182,
+                "mean": 111.161659406447,
+                "mean_of_abs": 111.161659406447,
+                "stddev": 20.3000320258108,
+                "variance": 412.091300248942,
+                "coeff_var": 18.2617209334619,
+                "sum": 225102360.298055,
             },
         },
         "test_standard_options_circular": {
@@ -174,15 +174,15 @@ class TestNeighbors(TestCase):
                 "n": 2025000,
                 "null_cells": 0,
                 "cells": 2025000,
-                "min": 56.4984405517578,
-                "max": 156.306396484375,
-                "range": 99.8079559326172,
-                "mean": 111.82648180616,
-                "mean_of_abs": 111.82648180616,
-                "stddev": 20.2829112001524,
-                "variance": 411.396486753269,
-                "coeff_var": 18.1378425508466,
-                "sum": 226448625.657474,
+                "min": 56.2710201263428,
+                "max": 156.299404907227,
+                "range": 100.028384780884,
+                "mean": 111.688409057181,
+                "mean_of_abs": 111.688409057181,
+                "stddev": 20.286687968792,
+                "variance": 411.54970874313,
+                "coeff_var": 18.1636466487815,
+                "sum": 226169028.340791,
             },
             "average": {
                 "n": 2025000,
@@ -428,6 +428,11 @@ class TestNeighbors(TestCase):
                 reference=self.test_options[test_case][method],
                 precision=1e-5,
             )
+            self.assertRasterFitsUnivar(
+                raster="{}_threaded_raster_{}".format(test_case, method),
+                reference=self.test_options[test_case][method],
+                precision=1e-5,
+            )
 
     @classmethod
     def setUpClass(cls):
@@ -451,12 +456,24 @@ class TestNeighbors(TestCase):
             "{}_raster_{}".format(test_case, method)
             for method in self.test_options[test_case]
         ]
+        outputs_threaded = [
+            "{}_threaded_raster_{}".format(test_case, method)
+            for method in self.test_options[test_case]
+        ]
         self.to_remove.extend(outputs)
+        self.to_remove.extend(outputs_threaded)
         self.assertModule(
             "r.neighbors",
             input="elevation",
             output=",".join(outputs),
             method=list(self.test_options[test_case].keys()),
+        )
+        self.assertModule(
+            "r.neighbors",
+            input="elevation",
+            output=",".join(outputs_threaded),
+            method=list(self.test_options[test_case].keys()),
+            nprocs=4,
         )
         self.check_univar(test_case)
 
@@ -469,13 +486,26 @@ class TestNeighbors(TestCase):
             "{}_raster_{}".format(test_case, method)
             for method in self.test_options[test_case]
         ]
+        outputs_threaded = [
+            "{}_threaded_raster_{}".format(test_case, method)
+            for method in self.test_options[test_case]
+        ]
         self.to_remove.extend(outputs)
+        self.to_remove.extend(outputs_threaded)
         self.assertModule(
             "r.neighbors",
             input="elevation",
             output=",".join(outputs),
             method=["quantile"] * len(self.test_options[test_case]),
             quantile=list(self.test_options[test_case].keys()),
+        )
+        self.assertModule(
+            "r.neighbors",
+            input="elevation",
+            output=",".join(outputs_threaded),
+            method=["quantile"] * len(self.test_options[test_case]),
+            quantile=list(self.test_options[test_case].keys()),
+            nprocs=4,
         )
         self.check_univar(test_case)
 
@@ -487,7 +517,12 @@ class TestNeighbors(TestCase):
             "{}_raster_{}".format(test_case, method)
             for method in self.test_options[test_case]
         ]
+        outputs_threaded = [
+            "{}_threaded_raster_{}".format(test_case, method)
+            for method in self.test_options[test_case]
+        ]
         self.to_remove.extend(outputs)
+        self.to_remove.extend(outputs_threaded)
         self.assertModule(
             "r.neighbors",
             flags="c",
@@ -495,6 +530,15 @@ class TestNeighbors(TestCase):
             size=7,
             output=",".join(outputs),
             method=list(self.test_options[test_case].keys()),
+        )
+        self.assertModule(
+            "r.neighbors",
+            flags="c",
+            input="elevation",
+            size=7,
+            output=",".join(outputs_threaded),
+            method=list(self.test_options[test_case].keys()),
+            nprocs=4,
         )
         self.check_univar(test_case)
 
@@ -505,7 +549,12 @@ class TestNeighbors(TestCase):
             "{}_raster_{}".format(test_case, method)
             for method in self.test_options[test_case]
         ]
+        outputs_threaded = [
+            "{}_threaded_raster_{}".format(test_case, method)
+            for method in self.test_options[test_case]
+        ]
         self.to_remove.extend(outputs)
+        self.to_remove.extend(outputs_threaded)
         selection = "test_neighbors_selection"
         self.to_remove.append(selection)
         self.runModule(
@@ -519,6 +568,14 @@ class TestNeighbors(TestCase):
             selection=selection,
             method=list(self.test_options[test_case].keys()),
         )
+        self.assertModule(
+            "r.neighbors",
+            input="elevation",
+            output=",".join(outputs_threaded),
+            selection=selection,
+            method=list(self.test_options[test_case].keys()),
+            nprocs=4,
+        )
         self.check_univar(test_case)
 
     def test_weighting_function(self):
@@ -528,7 +585,12 @@ class TestNeighbors(TestCase):
             "{}_raster_{}".format(test_case, method)
             for method in self.test_options[test_case]
         ]
+        outputs_threaded = [
+            "{}_threaded_raster_{}".format(test_case, method)
+            for method in self.test_options[test_case]
+        ]
         self.to_remove.extend(outputs)
+        self.to_remove.extend(outputs_threaded)
         self.assertModule(
             "r.neighbors",
             input="elevation",
@@ -537,6 +599,16 @@ class TestNeighbors(TestCase):
             weighting_factor=2.0,
             output=",".join(outputs),
             method=list(self.test_options[test_case].keys()),
+        )
+        self.assertModule(
+            "r.neighbors",
+            input="elevation",
+            size=7,
+            weighting_function="gaussian",
+            weighting_factor=2.0,
+            output=",".join(outputs_threaded),
+            method=list(self.test_options[test_case].keys()),
+            nprocs=4,
         )
         self.check_univar(test_case)
 
@@ -548,7 +620,12 @@ class TestNeighbors(TestCase):
             "{}_raster_{}".format(test_case, method)
             for method in self.test_options[test_case]
         ]
+        outputs_threaded = [
+            "{}_threaded_raster_{}".format(test_case, method)
+            for method in self.test_options[test_case]
+        ]
         self.to_remove.extend(outputs)
+        self.to_remove.extend(outputs_threaded)
 
         weights = tempfile()
         with open(weights, "w") as w:
@@ -563,6 +640,16 @@ class TestNeighbors(TestCase):
             method=list(self.test_options[test_case].keys()),
             weight=weights,
         )
+        self.assertModule(
+            "r.neighbors",
+            input="elevation",
+            size=5,
+            weighting_function="file",
+            output=",".join(outputs_threaded),
+            method=list(self.test_options[test_case].keys()),
+            weight=weights,
+            nprocs=4,
+        )
         self.check_univar(test_case)
 
         # Module fails with mutual exclusive options
@@ -576,6 +663,17 @@ class TestNeighbors(TestCase):
             method="sum",
             weight=weights,
         )
+        self.assertModuleFail(
+            "r.neighbors",
+            input="elevation",
+            flags="c",
+            size=5,
+            weighting_function="file",
+            output="{}_fails".format(test_case),
+            method="sum",
+            weight=weights,
+            nprocs=4,
+        )
 
     def test_standard_options_datatype(self):
         """Test if result is of integer or float data type depending on
@@ -586,14 +684,27 @@ class TestNeighbors(TestCase):
 
         methods = ["average", "variance", "diversity", "range", "mode"]
         outputs = ["{}_{}".format(test_case, method) for method in methods]
+        outputs_threaded = [
+            "{}_threaded_{}".format(test_case, method) for method in methods
+        ]
         self.to_remove.extend(outputs)
+        self.to_remove.extend(outputs_threaded)
         self.assertModule(
             "r.neighbors",
             input="landclass96",
             output=",".join(outputs),
             method=methods,
         )
-        for rmap in outputs:
+        self.assertModule(
+            "r.neighbors",
+            input="landclass96",
+            output=",".join(outputs_threaded),
+            method=methods,
+            nprocs=4,
+        )
+        from itertools import chain
+
+        for rmap in chain(outputs, outputs_threaded):
             rinfo = raster_info(rmap)
             self.assertTrue(
                 rinfo["datatype"] == "CELL"

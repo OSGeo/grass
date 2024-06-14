@@ -5,7 +5,7 @@
 # MODULE:    build_graphical_index
 # AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
 # PURPOSE:   Build graphical index
-# COPYRIGHT: (C) 2015-2021 by Vaclav Petras and the GRASS Development Team
+# COPYRIGHT: (C) 2015-2024 by Vaclav Petras and the GRASS Development Team
 #
 #        This program is free software under the GNU General Public
 #        License (>=v2). Read the file COPYING that comes with GRASS
@@ -100,7 +100,7 @@ index_items = [
     ("wxGUI_graphical.html", std_img_name("gui"), "GUI"),
     ("wxGUI.nviz.html", std_img_name("3dview"), "3D view"),
     (
-        "https://grass.osgeo.org/grass80/manuals/libpython/index.html",
+        "https://grass.osgeo.org/grass-devel/manuals/libpython/index.html",
         std_img_name("python"),
         "Python",
     ),

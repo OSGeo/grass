@@ -293,5 +293,77 @@ class TestRSunMode1(TestCase):
         )
 
 
+class TestRSunHighNorthernSlope(TestCase):
+    elevation = "elevation_high_slope"
+    slope = "slope_high_slope"
+    aspect = "aspect_high_slope"
+    beam_radiation = "beam_high_slope"
+
+    @classmethod
+    def setUpClass(cls):
+        """Use temporary region settings"""
+        cls.use_temp_region()
+        cls.runModule("g.region", raster="elevation", res=50, flags="a")
+        cls.runModule(
+            "r.mapcalc",
+            expression=(
+                f"{cls.elevation} = "
+                "-0.0002 * (x() - 637500) * (x() - 637500) +"
+                "0.0002 * (y() - 221750) * (y() - 221750)"
+            ),
+        )
+        cls.runModule(
+            "r.slope.aspect",
+            elevation=cls.elevation,
+            slope=cls.slope,
+            aspect=cls.aspect,
+        )
+
+    @classmethod
+    def tearDownClass(cls):
+        """Remove the temporary region"""
+        cls.del_temp_region()
+        cls.runModule(
+            "g.remove",
+            type="raster",
+            flags="f",
+            name=[cls.elevation, cls.aspect, cls.slope],
+        )
+
+    def tearDown(self):
+        self.runModule("g.remove", type="raster", flags="f", name=self.beam_radiation)
+
+    def test_beam_radiation_no_terrain(self):
+        self.assertModule(
+            "r.sun",
+            flags="p",
+            elevation=self.elevation,
+            aspect=self.aspect,
+            slope=self.slope,
+            beam_rad=self.beam_radiation,
+            day=90,
+        )
+        self.assertRasterExists(name=self.beam_radiation)
+        values = "min=50.77406\nmax=6845.00146\nmean=3452.85688\nstddev=1893.56956"
+        self.assertRasterFitsUnivar(
+            raster=self.beam_radiation, reference=values, precision=1e-5
+        )
+
+    def test_beam_radiation_with_terrain(self):
+        self.assertModule(
+            "r.sun",
+            elevation=self.elevation,
+            aspect=self.aspect,
+            slope=self.slope,
+            beam_rad=self.beam_radiation,
+            day=90,
+        )
+        self.assertRasterExists(name=self.beam_radiation)
+        values = "min=44.05826\nmax=6845.00146\nmean=3425.53184\nstddev=1891.98052"
+        self.assertRasterFitsUnivar(
+            raster=self.beam_radiation, reference=values, precision=1e-5
+        )
+
+
 if __name__ == "__main__":
     test()

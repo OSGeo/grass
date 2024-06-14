@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 DataCollectingParser subclasses ctypesparser.CtypesParser and builds Description
 objects from the CtypesType objects and other information from CtypesParser.
@@ -7,16 +5,27 @@ After parsing is complete, a DescriptionCollection object can be retrieved by
 calling DataCollectingParser.data().
 """
 
-from . import ctypesparser
-from ..descriptions import *
-from ..ctypedescs import *
-from ..expressions import *
-from ..messages import *
-from tempfile import mkstemp
 import os
+from tempfile import mkstemp
+
+from ctypesgen.ctypedescs import CtypesEnum, CtypesType, CtypesTypeVisitor
+from ctypesgen.descriptions import (
+    ConstantDescription,
+    DescriptionCollection,
+    EnumDescription,
+    FunctionDescription,
+    MacroDescription,
+    StructDescription,
+    TypedefDescription,
+    UndefDescription,
+    VariableDescription,
+)
+from ctypesgen.expressions import ConstantExpressionNode
+from ctypesgen.messages import error_message, status_message
+from ctypesgen.parser import ctypesparser
 
 
-class DataCollectingParser(ctypesparser.CtypesParser, ctypesparser.CtypesTypeVisitor):
+class DataCollectingParser(ctypesparser.CtypesParser, CtypesTypeVisitor):
     """Main class for the Parser component. Steps for use:
     p=DataCollectingParser(names_of_header_files,options)
     p.parse()
@@ -113,7 +122,7 @@ class DataCollectingParser(ctypesparser.CtypesParser, ctypesparser.CtypesTypeVis
 
     def handle_ctypes_new_type(self, ctype, filename, lineno):
         # Called by CtypesParser
-        if isinstance(ctype, ctypesparser.CtypesEnum):
+        if isinstance(ctype, CtypesEnum):
             self.handle_enum(ctype, filename, lineno)
         else:
             self.handle_struct(ctype, filename, lineno)
@@ -265,7 +274,7 @@ class DataCollectingParser(ctypesparser.CtypesParser, ctypesparser.CtypesTypeVis
         # Called from within DataCollectingParser
         src = (filename, lineno)
 
-        if expr == None:
+        if expr is None:
             expr = ConstantExpressionNode(True)
             constant = ConstantDescription(name, expr, src)
             self.constants.append(constant)

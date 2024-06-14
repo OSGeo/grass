@@ -8,6 +8,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 import copy
 from datetime import datetime
 from multiprocessing import Process
@@ -220,7 +221,6 @@ def dataset_mapcalculator(
     map_list = []
 
     if len(map_matrix) > 0:
-
         msgr.message(_("Starting mapcalc computation..."))
 
         count = 0
@@ -233,7 +233,6 @@ def dataset_mapcalculator(
 
         # For all samples
         for i in range(num):
-
             count += 1
             msgr.percent(count, num, 10)
 
@@ -287,6 +286,11 @@ def dataset_mapcalculator(
             else:
                 start, end, unit = sample_map_list[i].get_relative_time()
                 new_map.set_relative_time(start, end, unit)
+
+            # Set the semantic label
+            semantic_label = sample_map_list[i].metadata.get_semantic_label()
+            if semantic_label is not None:
+                new_map.set_semantic_label(semantic_label)
 
             # Parse the temporal expressions
             expr = _operator_parser(expr, sample_map_list[0], sample_map_list[i])
@@ -347,7 +351,6 @@ def dataset_mapcalculator(
         # Insert maps in the temporal database and in the new space time
         # dataset
         for new_map in map_list:
-
             count += 1
             msgr.percent(count, num, 10)
 

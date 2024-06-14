@@ -6,7 +6,7 @@
 # shortname "parameters" "Where Used" "Comment"
 #
 # where
-# * parameters can be in any format accepted by PROJ.4, 
+# * parameters can be in any format accepted by PROJ.4,
 #   so towgs84= 3 parameters or 7 parameters, or nadgrids=
 # * area of validity
 # * comment
@@ -17,7 +17,7 @@
 # contain a single space between the quotes (" ") but try to provide as
 # much detail as possible for the user.
 #
-# Note: datum.table only holds one 3-parameter transformation. Extra sets of 
+# Note: datum.table only holds one 3-parameter transformation. Extra sets of
 # transformation parameters may be defined in this file for each datum
 # and will be presented to the user to select the most appropriate one for
 # his/her location. The "Where Used" and "Comment" fields should contain
@@ -26,7 +26,7 @@
 # the 3-term parameters in datum.table to be 99999, along with the correct
 # ellipsoid.
 #
-# Any supplementary files needed by the PROJ.4 library (e.g. gridshift tables) 
+# Any supplementary files needed by the PROJ.4 library (e.g. gridshift tables)
 # should be placed in the directory $GISBASE/etc/proj/nad/.
 #
 # http://www.osni.gov.uk/downloads/Making%20maps%20GPS%20compatible.pdf
@@ -97,7 +97,7 @@ sam69   "towgs84=-60.0,-2.0,-41.0" "Brazil" " "
 sam69   "towgs84=-77.0,3.0,-45.0" "South America?" "Old GRASS sam69 parameters"
 nad27   "towgs84=-9.0,151.0,185.0" "Alaska & Canada" "Old GRASS a-can parameters"
 # http://www.linz.govt.nz/geodetic/conversion-coordinates/geodetic-datum-conversion/nzgd1949-nzgd2000/distortion-grid/
-nzgd49  "nadgrids=nzgd2kgrid0005.gsb"  "New Zealand"   "LINZ NZGD49 NTv2 Distortion Model, accuracy 10-30cm" 
+nzgd49  "nadgrids=nzgd2kgrid0005.gsb"  "New Zealand"   "LINZ NZGD49 NTv2 Distortion Model, accuracy 10-30cm"
 # http://www.linz.govt.nz/geodetic/conversion-coordinates/geodetic-datum-conversion/nzgd1949-nzgd2000/three-and-seven-parameter/
 #  note: values in above URL use the Helmert convention for the sign of rotation terms, while PROJ.4 uses the Bursa-Wolf convention.
 nzgd49  "towgs84=59.47,-5.04,187.44,0.47,-0.1,1.024,-4.5993" "New Zealand" "Accuracy approx. 4m"

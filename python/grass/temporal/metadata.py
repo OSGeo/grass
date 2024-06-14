@@ -21,7 +21,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
+
 from .base import SQLDatabaseInterface
 from .core import SQLDatabaseInterfaceConnection, get_tgis_db_version_from_metadata
 
@@ -36,9 +36,18 @@ class RasterMetadataBase(SQLDatabaseInterface):
     .. code-block:: python
 
         >>> init()
-        >>> meta = RasterMetadataBase(table="metadata", ident="soil@PERMANENT",
-        ... datatype="CELL", cols=100, rows=100, number_of_cells=10000, nsres=0.1,
-        ... ewres=0.1, min=0, max=100)
+        >>> meta = RasterMetadataBase(
+        ...     table="metadata",
+        ...     ident="soil@PERMANENT",
+        ...     datatype="CELL",
+        ...     cols=100,
+        ...     rows=100,
+        ...     number_of_cells=10000,
+        ...     nsres=0.1,
+        ...     ewres=0.1,
+        ...     min=0,
+        ...     max=100,
+        ... )
         >>> meta.datatype
         'CELL'
         >>> meta.cols
@@ -89,7 +98,6 @@ class RasterMetadataBase(SQLDatabaseInterface):
         min=None,
         max=None,
     ):
-
         SQLDatabaseInterface.__init__(self, table, ident)
 
         self.set_id(ident)
@@ -286,9 +294,17 @@ class RasterMetadata(RasterMetadataBase):
     .. code-block:: python
 
         >>> init()
-        >>> meta = RasterMetadata(ident="soil@PERMANENT",
-        ... datatype="CELL", cols=100, rows=100, number_of_cells=10000, nsres=0.1,
-        ... ewres=0.1, min=0, max=100)
+        >>> meta = RasterMetadata(
+        ...     ident="soil@PERMANENT",
+        ...     datatype="CELL",
+        ...     cols=100,
+        ...     rows=100,
+        ...     number_of_cells=10000,
+        ...     nsres=0.1,
+        ...     ewres=0.1,
+        ...     min=0,
+        ...     max=100,
+        ... )
         >>> meta.datatype
         'CELL'
         >>> meta.cols
@@ -340,7 +356,6 @@ class RasterMetadata(RasterMetadataBase):
         max=None,
         semantic_label=None,
     ):
-
         RasterMetadataBase.__init__(
             self,
             "raster_metadata",
@@ -354,9 +369,6 @@ class RasterMetadata(RasterMetadataBase):
             min,
             max,
         )
-
-        if get_tgis_db_version_from_metadata() > 2:
-            self.set_semantic_label(semantic_label)
 
     def set_semantic_label(self, semantic_label):
         """Set the semantic label identifier"""
@@ -404,10 +416,19 @@ class Raster3DMetadata(RasterMetadataBase):
     .. code-block:: python
 
         >>> init()
-        >>> meta = Raster3DMetadata(ident="soil@PERMANENT",
-        ... datatype="FCELL", cols=100, rows=100, depths=100,
-        ... number_of_cells=1000000, nsres=0.1, ewres=0.1, tbres=0.1,
-        ... min=0, max=100)
+        >>> meta = Raster3DMetadata(
+        ...     ident="soil@PERMANENT",
+        ...     datatype="FCELL",
+        ...     cols=100,
+        ...     rows=100,
+        ...     depths=100,
+        ...     number_of_cells=1000000,
+        ...     nsres=0.1,
+        ...     ewres=0.1,
+        ...     tbres=0.1,
+        ...     min=0,
+        ...     max=100,
+        ... )
         >>> meta.datatype
         'FCELL'
         >>> meta.cols
@@ -468,7 +489,6 @@ class Raster3DMetadata(RasterMetadataBase):
         min=None,
         max=None,
     ):
-
         RasterMetadataBase.__init__(
             self,
             "raster3d_metadata",
@@ -548,11 +568,22 @@ class VectorMetadata(SQLDatabaseInterface):
     .. code-block:: python
 
         >>> init()
-        >>> meta = VectorMetadata(ident="lidar@PERMANENT", is_3d=True,
-        ... number_of_points=1, number_of_lines=2, number_of_boundaries=3,
-        ... number_of_centroids=4, number_of_faces=5, number_of_kernels=6,
-        ... number_of_primitives=7, number_of_nodes=8, number_of_areas=9,
-        ... number_of_islands=10, number_of_holes=11, number_of_volumes=12)
+        >>> meta = VectorMetadata(
+        ...     ident="lidar@PERMANENT",
+        ...     is_3d=True,
+        ...     number_of_points=1,
+        ...     number_of_lines=2,
+        ...     number_of_boundaries=3,
+        ...     number_of_centroids=4,
+        ...     number_of_faces=5,
+        ...     number_of_kernels=6,
+        ...     number_of_primitives=7,
+        ...     number_of_nodes=8,
+        ...     number_of_areas=9,
+        ...     number_of_islands=10,
+        ...     number_of_holes=11,
+        ...     number_of_volumes=12,
+        ... )
         >>> meta.id
         'lidar@PERMANENT'
         >>> meta.is_3d
@@ -630,7 +661,6 @@ class VectorMetadata(SQLDatabaseInterface):
         number_of_holes=None,
         number_of_volumes=None,
     ):
-
         SQLDatabaseInterface.__init__(self, "vector_metadata", ident)
 
         self.set_id(ident)
@@ -902,8 +932,9 @@ class STDSMetadataBase(SQLDatabaseInterface):
      .. code-block:: python
 
          >>> init()
-         >>> meta = STDSMetadataBase(ident="soils@PERMANENT",
-         ... title="Soils", description="Soils 1950 - 2010")
+         >>> meta = STDSMetadataBase(
+         ...     ident="soils@PERMANENT", title="Soils", description="Soils 1950 - 2010"
+         ... )
          >>> meta.id
          'soils@PERMANENT'
          >>> meta.title
@@ -927,7 +958,6 @@ class STDSMetadataBase(SQLDatabaseInterface):
     def __init__(
         self, table=None, ident=None, title=None, description=None, command=None
     ):
-
         SQLDatabaseInterface.__init__(self, table, ident)
 
         self.set_id(ident)
@@ -1023,7 +1053,7 @@ class STDSMetadataBase(SQLDatabaseInterface):
         """
         if not shell:
             print(
-                " +-------------------- Metadata information ----------------------------------+"
+                " +-------------------- Metadata information ----------------------------------+"  # noqa: E501
             )
 
     def _print_info_tail(self, shell=False):
@@ -1094,8 +1124,9 @@ class STDSRasterMetadataBase(STDSMetadataBase):
     .. code-block:: python
 
         >>> init()
-        >>> meta = STDSRasterMetadataBase(ident="soils@PERMANENT",
-        ... title="Soils", description="Soils 1950 - 2010")
+        >>> meta = STDSRasterMetadataBase(
+        ...     ident="soils@PERMANENT", title="Soils", description="Soils 1950 - 2010"
+        ... )
         >>> meta.id
         'soils@PERMANENT'
         >>> meta.title
@@ -1150,7 +1181,6 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         description=None,
         aggregation_type=None,
     ):
-
         STDSMetadataBase.__init__(self, table, ident, title, description)
 
         # Initialize the dict to select all values from the db
@@ -1313,8 +1343,9 @@ class STRDSMetadata(STDSRasterMetadataBase):
     .. code-block:: python
 
         >>> init()
-        >>> meta = STRDSMetadata(ident="soils@PERMANENT",
-        ... title="Soils", description="Soils 1950 - 2010")
+        >>> meta = STRDSMetadata(
+        ...     ident="soils@PERMANENT", title="Soils", description="Soils 1950 - 2010"
+        ... )
         >>> meta.id
         'soils@PERMANENT'
         >>> meta.title
@@ -1370,7 +1401,6 @@ class STRDSMetadata(STDSRasterMetadataBase):
     """
 
     def __init__(self, ident=None, raster_register=None, title=None, description=None):
-
         STDSRasterMetadataBase.__init__(
             self, "strds_metadata", ident, title, description
         )
@@ -1402,7 +1432,7 @@ class STRDSMetadata(STDSRasterMetadataBase):
             return None
 
     def get_semantic_labels(self):
-        """Get the distinct semantic lables of registered maps
+        """Get the distinct semantic labels of registered maps
            The distinct semantic labels are not stored in the metadata table
            and fetched on-the-fly
         :return: None if not found
@@ -1488,8 +1518,9 @@ class STR3DSMetadata(STDSRasterMetadataBase):
     .. code-block:: python
 
         >>> init()
-        >>> meta = STR3DSMetadata(ident="soils@PERMANENT",
-        ... title="Soils", description="Soils 1950 - 2010")
+        >>> meta = STR3DSMetadata(
+        ...     ident="soils@PERMANENT", title="Soils", description="Soils 1950 - 2010"
+        ... )
         >>> meta.id
         'soils@PERMANENT'
         >>> meta.title
@@ -1549,7 +1580,6 @@ class STR3DSMetadata(STDSRasterMetadataBase):
     def __init__(
         self, ident=None, raster3d_register=None, title=None, description=None
     ):
-
         STDSRasterMetadataBase.__init__(
             self, "str3ds_metadata", ident, title, description
         )
@@ -1631,8 +1661,11 @@ class STVDSMetadata(STDSMetadataBase):
      .. code-block:: python
 
          >>> init()
-         >>> meta = STVDSMetadata(ident="lidars@PERMANENT",
-         ... title="LIDARS", description="LIDARS 2008 - 2010")
+         >>> meta = STVDSMetadata(
+         ...     ident="lidars@PERMANENT",
+         ...     title="LIDARS",
+         ...     description="LIDARS 2008 - 2010",
+         ... )
          >>> meta.id
          'lidars@PERMANENT'
          >>> meta.title
@@ -1693,7 +1726,6 @@ class STVDSMetadata(STDSMetadataBase):
     """
 
     def __init__(self, ident=None, vector_register=None, title=None, description=None):
-
         STDSMetadataBase.__init__(self, "stvds_metadata", ident, title, description)
 
         self.set_vector_register(vector_register)

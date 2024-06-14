@@ -107,7 +107,7 @@ called "id".
 
 \verbatim
 * 1 $MAP id $GISDBASE/$LOCATION_NAME/$MAPSET/dbf dbf
-\endverbatim 
+\endverbatim
 
 Similar as above but all dbf files are in one directory dbf/ in mapset
 and names of dbf files are $MAP.dbf
@@ -180,10 +180,10 @@ The body consists of line records:
  - 0. bit: 1 - alive, 0 - dead line
  - 1. bit: 1 - categories, 0 - no categories
  - 2.-3. bit: type - one of: GV_POINT, GV_LINE, GV_BOUNDARY, GV_CENTROID, GV_FACE, GV_KERNEL
- - 4.-7. bit: reserved, not used 
+ - 4.-7. bit: reserved, not used
 </td></tr>
 
-<tr><td>ncats</td><td>I</td><td>1</td><td>number of categories 
+<tr><td>ncats</td><td>I</td><td>1</td><td>number of categories
     (written only if categories exist) </td></tr>
 
 <tr><td>field</td><td>I</td><td>ncats</td><td>field identifier,
@@ -194,7 +194,7 @@ The body consists of line records:
 <tr><td>cat</td><td>I</td><td>ncats</td><td>category value (written
     only if categories exist)</td></tr>
 
-<tr><td>ncoor</td><td>I</td><td>1</td><td>written for GV_LINES and GV_BOUNDARIES 
+<tr><td>ncoor</td><td>I</td><td>1</td><td>written for GV_LINES and GV_BOUNDARIES
     only</td></tr>
 
 <tr><td>x</td><td>D</td><td>ncoor</td><td>x coordinate</td></tr>

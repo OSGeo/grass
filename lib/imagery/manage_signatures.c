@@ -34,6 +34,9 @@ void I_get_signatures_dir(char *dir, I_SIGFILE_TYPE type)
     else if (type == I_SIGFILE_TYPE_SIGSET) {
         sprintf(dir, "signatures%csigset", HOST_DIRSEP);
     }
+    else if (type == I_SIGFILE_TYPE_LIBSVM) {
+        sprintf(dir, "signatures%clibsvm", HOST_DIRSEP);
+    }
     else {
         G_fatal_error("Programming error: unknown signature file type");
     }
@@ -60,10 +63,10 @@ static int list_by_type(I_SIGFILE_TYPE, const char *, int, char ***);
 
 /*!
  * \brief Remove a signature file
- * 
+ *
  * If removal fails, prints a warning and returns 1.
  * It is safe to pass fully qualified names.
- * 
+ *
  * \param type I_SIGFILE_TYPE signature type
  * \param name of signature to remove
  * \return 0 on success
@@ -73,15 +76,13 @@ int I_signatures_remove(I_SIGFILE_TYPE type, const char *name)
 {
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
     char dir[GNAME_MAX];
-    int ret = 0;
 
     G_debug(1, "I_signatures_remove(%d, %s);", type, name);
 
     /* Remove only if file is in the current mapset */
     if (G_name_is_fully_qualified(name, xname, xmapset) &&
         strcmp(xmapset, G_mapset()) != 0) {
-        G_warning(_("%s is not in the current mapset (%s)"), name,
-                  G_mapset());
+        G_warning(_("%s is not in the current mapset (%s)"), name, G_mapset());
         return 1;
     }
     if (I_find_signature2(type, name, G_mapset())) {
@@ -119,8 +120,8 @@ int I_signatures_copy(I_SIGFILE_TYPE type, const char *old_name,
     const char *smapset;
     char old_path[GPATH_MAX], new_path[GPATH_MAX];
 
-    G_debug(1, "I_signatures_copy(%d, %s@%s, %s);", type, old_name,
-            old_mapset, new_name);
+    G_debug(1, "I_signatures_copy(%d, %s@%s, %s);", type, old_name, old_mapset,
+            new_name);
 
     /* Copy only if mapset of new name is the current mapset */
     if (G_name_is_fully_qualified(new_name, tname, tmapset)) {
@@ -291,14 +292,14 @@ static int list_by_type(I_SIGFILE_TYPE type, const char *mapset, int base,
     /* Make items fully qualified names */
     int mapset_len = strlen(mapset);
 
-    *out_list =
-        (char **)G_realloc(*out_list, (base + count) * sizeof(char *));
+    *out_list = (char **)G_realloc(*out_list, (base + count) * sizeof(char *));
     for (int i = 0; i < count; i++) {
-        (*out_list)[base + i] =
-            (char *)G_malloc((strlen(dirlist[i]) + 1 + mapset_len + 1) *
-                             sizeof(char));
+        (*out_list)[base + i] = (char *)G_malloc(
+            (strlen(dirlist[i]) + 1 + mapset_len + 1) * sizeof(char));
         sprintf((*out_list)[base + i], "%s@%s", dirlist[i], mapset);
+        G_free(dirlist[i]);
     }
+    G_free(dirlist);
 
     return count;
 }

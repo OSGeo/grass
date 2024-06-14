@@ -15,7 +15,6 @@ This program is free software under the GNU General Public License
 """
 
 import textwrap
-import six
 
 import wx
 import wx.lib.colourselect as csel
@@ -303,7 +302,8 @@ class VDigitSettingsDialog(wx.Dialog):
         )
         self.selectIn.SetToolTip(
             _(
-                "By default are selected all features overlapping selection bounding box "
+                "By default are selected all features overlapping selection bounding "
+                "box "
             )
         )
 
@@ -528,22 +528,19 @@ class VDigitSettingsDialog(wx.Dialog):
         settings = ((_("Layer"), 1), (_("Category"), 1), (_("Mode"), _("Next to use")))
         # layer
         text = StaticText(parent=panel, id=wx.ID_ANY, label=_("Layer"))
-        self.layer = SpinCtrl(
-            parent=panel, id=wx.ID_ANY, size=(125, -1), min=1, max=1e3
-        )
+        self.layer = SpinCtrl(parent=panel, id=wx.ID_ANY, min=1, max=1e3)
         self.layer.SetValue(
             int(UserSettings.Get(group="vdigit", key="layer", subkey="value"))
         )
         flexSizer.Add(text, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
         flexSizer.Add(
-            self.layer, proportion=0, flag=wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL
+            self.layer, proportion=0, flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL
         )
         # category number
         text = StaticText(parent=panel, id=wx.ID_ANY, label=_("Category number"))
         self.category = SpinCtrl(
             parent=panel,
             id=wx.ID_ANY,
-            size=(125, -1),
             initial=UserSettings.Get(group="vdigit", key="category", subkey="value"),
             min=-1e9,
             max=1e9,
@@ -557,7 +554,7 @@ class VDigitSettingsDialog(wx.Dialog):
         flexSizer.Add(
             self.category,
             proportion=0,
-            flag=wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL,
+            flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL,
         )
         # category mode
         text = StaticText(parent=panel, id=wx.ID_ANY, label=_("Category mode"))
@@ -574,7 +571,7 @@ class VDigitSettingsDialog(wx.Dialog):
         flexSizer.Add(
             self.categoryMode,
             proportion=0,
-            flag=wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL,
+            flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL,
         )
 
         sizer.Add(flexSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=1)
@@ -635,7 +632,8 @@ class VDigitSettingsDialog(wx.Dialog):
             check = CheckBox(
                 parent=panel, id=wx.ID_ANY, label=self.geomAttrb[attrb]["label"]
             )
-            # self.deleteRecord.SetValue(UserSettings.Get(group='vdigit', key="delRecord", subkey='enabled'))
+            # self.deleteRecord.SetValue(UserSettings.Get(
+            # group='vdigit', key="delRecord", subkey='enabled'))
             check.Bind(wx.EVT_CHECKBOX, self.OnGeomAttrb)
             # column (only numeric)
             column = ColumnSelect(parent=panel, size=(200, -1))
@@ -755,7 +753,7 @@ class VDigitSettingsDialog(wx.Dialog):
         checked = event.IsChecked()
         id = event.GetId()
         key = None
-        for attrb, val in six.iteritems(self.geomAttrb):
+        for attrb, val in self.geomAttrb.items():
             if val["check"] == id:
                 key = attrb
                 break
@@ -906,7 +904,7 @@ class VDigitSettingsDialog(wx.Dialog):
         """
         self._giface.workspaceChanged.emit()
         # symbology
-        for key, (enabled, color) in six.iteritems(self.symbology):
+        for key, (enabled, color) in self.symbology.items():
             if enabled:
                 UserSettings.Set(
                     group="vdigit",
@@ -996,7 +994,7 @@ class VDigitSettingsDialog(wx.Dialog):
             item = tree.FindItemByData("maplayer", mapLayer)
         else:
             item = None
-        for key, val in six.iteritems(self.geomAttrb):
+        for key, val in self.geomAttrb.items():
             checked = self.FindWindowById(val["check"]).IsChecked()
             column = self.FindWindowById(val["column"]).GetValue()
             unitsIdx = self.FindWindowById(val["units"]).GetSelection()

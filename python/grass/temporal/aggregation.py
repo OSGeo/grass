@@ -7,7 +7,9 @@ Usage:
 
     import grass.temporal as tgis
 
-    tgis.aggregate_raster_maps(dataset, mapset, inputs, base, start, end, count, method, register_null, dbif)
+    tgis.aggregate_raster_maps(
+        dataset, mapset, inputs, base, start, end, count, method, register_null, dbif
+    )
 
 (C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -122,7 +124,7 @@ def aggregate_raster_maps(
                absolute
     :param count: The number to be attached to the basename of the new
                  created raster map
-    :param method: The aggreation method to be used by r.series
+    :param method: The aggregation method to be used by r.series
     :param register_null: If true null maps will be registered in the space
                          time raster dataset, if false not
     :param dbif: The temporal database interface to use

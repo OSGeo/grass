@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 This file contains classes that represent C declarations. cparser produces
 declarations in this format, and ctypesparser reformats them into a format that
@@ -24,8 +22,8 @@ class Declaration(object):
         d = {"declarator": self.declarator, "type": self.type}
         if self.storage:
             d["storage"] = self.storage
-        l = ["%s=%r" % (k, v) for k, v in d.items()]
-        return "Declaration(%s)" % ", ".join(l)
+        li = ["%s=%r" % (k, v) for k, v in d.items()]
+        return "Declaration(%s)" % ", ".join(li)
 
 
 class Declarator(object):
@@ -45,7 +43,7 @@ class Declarator(object):
     def __repr__(self):
         s = self.identifier or ""
         if self.bitfield:
-            s += ":%d" % self.bitfield
+            s += f":{self.bitfield.value}"
         if self.array:
             s += repr(self.array)
         if self.initializer:
@@ -98,8 +96,8 @@ class Parameter(object):
             d["declarator"] = self.declarator
         if self.storage:
             d["storage"] = self.storage
-        l = ["%s=%r" % (k, v) for k, v in d.items()]
-        return "Parameter(%s)" % ", ".join(l)
+        li = ["%s=%r" % (k, v) for k, v in d.items()]
+        return "Parameter(%s)" % ", ".join(li)
 
 
 class Type(object):
@@ -262,7 +260,7 @@ class Attrib(dict):
         Check for any attribute aliases and remove leading/trailing '__'
 
         According to https://gcc.gnu.org/onlinedocs/gcc/Attribute-Syntax.html,
-        an attribute can also be preceeded/followed by a double underscore
+        an attribute can also be preceded/followed by a double underscore
         ('__').
         """
 

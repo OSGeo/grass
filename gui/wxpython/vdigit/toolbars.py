@@ -14,6 +14,7 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 @author Stepan Turek <stepan.turek seznam.cz> (handlers support)
 """
+
 import wx
 
 from grass import script as grass
@@ -53,6 +54,9 @@ class VDigitToolbar(BaseToolbar):
             self.editingStarted.connect(layerTree.StartEditing)
             self.editingStopped.connect(layerTree.StopEditing)
             self.editingBgMap.connect(layerTree.SetBgMapForEditing)
+
+        # replace OnTool from controller
+        self.controller.OnTool = self.OnTool
 
         # bind events
         self.Bind(wx.EVT_SHOW, self.OnShow)
@@ -144,63 +148,64 @@ class VDigitToolbar(BaseToolbar):
         self.icons = {
             "addPoint": MetaIcon(
                 img="point-create",
-                label=_("Digitize new point"),
+                label=_("Digitize new point (Ctrl+P)"),
                 desc=_("Left: new point"),
             ),
             "addLine": MetaIcon(
                 img="line-create",
-                label=_("Digitize new line"),
+                label=_("Digitize new line (Ctrl+L)"),
                 desc=_(
                     "Left: new point; Ctrl+Left: undo last point; Right: close line"
                 ),
             ),
             "addBoundary": MetaIcon(
                 img="boundary-create",
-                label=_("Digitize new boundary"),
+                label=_("Digitize new boundary (Ctrl+B)"),
                 desc=_(
                     "Left: new point; Ctrl+Left: undo last point; Right: close line"
                 ),
             ),
             "addCentroid": MetaIcon(
                 img="centroid-create",
-                label=_("Digitize new centroid"),
+                label=_("Digitize new centroid (Ctrl+C)"),
                 desc=_("Left: new point"),
             ),
             "addArea": MetaIcon(
                 img="polygon-create",
-                label=_("Digitize new area (boundary without category)"),
+                label=_("Digitize new area (boundary without category) (Ctrl+A)"),
                 desc=_("Left: new point"),
             ),
             "addVertex": MetaIcon(
                 img="vertex-create",
-                label=_("Add new vertex to line or boundary"),
+                label=_("Add new vertex to line or boundary (Ctrl+V)"),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
             "deleteLine": MetaIcon(
                 img="line-delete",
                 label=_(
-                    "Delete selected point(s), line(s), boundary(ies) or centroid(s)"
+                    "Delete selected point(s), line(s), boundary(ies) or "
+                    "centroid(s) (Ctrl+D)"
                 ),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
             "deleteArea": MetaIcon(
                 img="polygon-delete",
-                label=_("Delete selected area(s)"),
+                label=_("Delete selected area(s) (Ctrl+F)"),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
             "displayAttr": MetaIcon(
                 img="attributes-display",
-                label=_("Display/update attributes"),
+                label=_("Display/update attributes (Ctrl+K)"),
                 desc=_("Left: Select"),
             ),
             "displayCats": MetaIcon(
                 img="cats-display",
-                label=_("Display/update categories"),
+                label=_("Display/update categories (Ctrl+J)"),
                 desc=_("Left: Select"),
             ),
             "editLine": MetaIcon(
                 img="line-edit",
-                label=_("Edit selected line/boundary"),
+                label=_("Edit selected line/boundary (Ctrl+E)"),
                 desc=_(
                     "Left: new point; Ctrl+Left: undo last point; Right: close line"
                 ),
@@ -208,26 +213,30 @@ class VDigitToolbar(BaseToolbar):
             "moveLine": MetaIcon(
                 img="line-move",
                 label=_(
-                    "Move selected point(s), line(s), boundary(ies) or centroid(s)"
+                    "Move selected point(s), line(s), boundary(ies) or "
+                    "centroid(s) (Ctrl+M)"
                 ),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
             "moveVertex": MetaIcon(
                 img="vertex-move",
-                label=_("Move selected vertex"),
+                label=_("Move selected vertex (Ctrl+G)"),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
             "removeVertex": MetaIcon(
                 img="vertex-delete",
-                label=_("Remove selected vertex"),
+                label=_("Remove selected vertex (Ctrl+X)"),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
-            "settings": BaseIcons["settings"].SetLabel(_("Digitization settings")),
+            "settings": BaseIcons["settings"].SetLabel(
+                label=_("Settings (Ctrl+T)"),
+            ),
             "quit": BaseIcons["quit"].SetLabel(
-                label=_("Quit digitizer"), desc=_("Quit digitizer and save changes")
+                label=_("Quit (Ctrl+Q)"),
+                desc=_("Quit digitizer and save changes"),
             ),
             "help": BaseIcons["help"].SetLabel(
-                label=_("Vector Digitizer manual"),
+                label=_("Show manual (Ctrl+H)"),
                 desc=_("Show Vector Digitizer manual"),
             ),
             "additionalTools": MetaIcon(
@@ -236,10 +245,14 @@ class VDigitToolbar(BaseToolbar):
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
             "undo": MetaIcon(
-                img="undo", label=_("Undo"), desc=_("Undo previous changes")
+                img="undo",
+                label=_("Undo (Ctrl+Z)"),
+                desc=_("Undo previous change"),
             ),
             "redo": MetaIcon(
-                img="redo", label=_("Redo"), desc=_("Redo previous changes")
+                img="redo",
+                label=_("Redo (Ctrl+Y)"),
+                desc=_("Redo previous change"),
             ),
         }
 
@@ -247,97 +260,142 @@ class VDigitToolbar(BaseToolbar):
             data.append((None,))
         if not self.tools or "addPoint" in self.tools:
             data.append(
-                ("addPoint", self.icons["addPoint"], self.OnAddPoint, wx.ITEM_CHECK)
+                (
+                    ("addPoint", self.icons["addPoint"].label),
+                    self.icons["addPoint"],
+                    self.OnAddPoint,
+                    wx.ITEM_CHECK,
+                )
             )
         if not self.tools or "addLine" in self.tools:
             data.append(
-                ("addLine", self.icons["addLine"], self.OnAddLine, wx.ITEM_CHECK)
+                (
+                    ("addLine", self.icons["addLine"].label),
+                    self.icons["addLine"],
+                    self.OnAddLine,
+                    wx.ITEM_CHECK,
+                ),
             )
         if not self.tools or "addArea" in self.tools:
             data.append(
-                ("addArea", self.icons["addArea"], self.OnAddAreaTool, wx.ITEM_CHECK)
+                (
+                    ("addArea", self.icons["addArea"].label),
+                    self.icons["addArea"],
+                    self.OnAddAreaTool,
+                    wx.ITEM_CHECK,
+                ),
             )
         if not self.tools or "deleteLine" in self.tools:
             data.append(
                 (
-                    "deleteLine",
+                    ("deleteLine", self.icons["deleteLine"].label),
                     self.icons["deleteLine"],
                     self.OnDeleteLine,
                     wx.ITEM_CHECK,
-                )
+                ),
             )
         if not self.tools or "deleteArea" in self.tools:
             data.append(
                 (
-                    "deleteArea",
+                    ("deleteArea", self.icons["deleteArea"].label),
                     self.icons["deleteArea"],
                     self.OnDeleteArea,
                     wx.ITEM_CHECK,
-                )
+                ),
             )
         if not self.tools or "moveVertex" in self.tools:
             data.append(
                 (
-                    "moveVertex",
+                    ("moveVertex", self.icons["moveVertex"].label),
                     self.icons["moveVertex"],
                     self.OnMoveVertex,
                     wx.ITEM_CHECK,
-                )
+                ),
             )
         if not self.tools or "addVertex" in self.tools:
             data.append(
-                ("addVertex", self.icons["addVertex"], self.OnAddVertex, wx.ITEM_CHECK)
+                (
+                    ("addVertex", self.icons["addVertex"].label),
+                    self.icons["addVertex"],
+                    self.OnAddVertex,
+                    wx.ITEM_CHECK,
+                ),
             )
         if not self.tools or "removeVertex" in self.tools:
             data.append(
                 (
-                    "removeVertex",
+                    ("removeVertex", self.icons["removeVertex"].label),
                     self.icons["removeVertex"],
                     self.OnRemoveVertex,
                     wx.ITEM_CHECK,
-                )
+                ),
             )
         if not self.tools or "editLine" in self.tools:
             data.append(
-                ("editLine", self.icons["editLine"], self.OnEditLine, wx.ITEM_CHECK)
+                (
+                    ("editLine", self.icons["editLine"].label),
+                    self.icons["editLine"],
+                    self.OnEditLine,
+                    wx.ITEM_CHECK,
+                ),
             )
         if not self.tools or "moveLine" in self.tools:
             data.append(
-                ("moveLine", self.icons["moveLine"], self.OnMoveLine, wx.ITEM_CHECK)
+                (
+                    ("moveLine", self.icons["moveLine"].label),
+                    self.icons["moveLine"],
+                    self.OnMoveLine,
+                    wx.ITEM_CHECK,
+                ),
             )
         if not self.tools or "displayCats" in self.tools:
             data.append(
                 (
-                    "displayCats",
+                    ("displayCats", self.icons["displayCats"].label),
                     self.icons["displayCats"],
                     self.OnDisplayCats,
                     wx.ITEM_CHECK,
-                )
+                ),
             )
         if not self.tools or "displayAttr" in self.tools:
             data.append(
                 (
-                    "displayAttr",
+                    ("displayAttr", self.icons["displayAttr"].label),
                     self.icons["displayAttr"],
                     self.OnDisplayAttr,
                     wx.ITEM_CHECK,
-                )
+                ),
             )
         if not self.tools or "additionalSelf.Tools" in self.tools:
             data.append(
                 (
-                    "additionalTools",
+                    (
+                        "additionalTools",
+                        self.icons["additionalTools"].label,
+                    ),
                     self.icons["additionalTools"],
                     self.OnAdditionalToolMenu,
                     wx.ITEM_CHECK,
-                )
+                ),
             )
         if not self.tools or "undo" in self.tools or "redo" in self.tools:
             data.append((None,))
         if not self.tools or "undo" in self.tools:
-            data.append(("undo", self.icons["undo"], self.OnUndo))
+            data.append(
+                (
+                    ("undo", self.icons["undo"].label),
+                    self.icons["undo"],
+                    self.OnUndo,
+                ),
+            )
         if not self.tools or "redo" in self.tools:
-            data.append(("redo", self.icons["redo"], self.OnRedo))
+            data.append(
+                (
+                    ("redo", self.icons["redo"].label),
+                    self.icons["redo"],
+                    self.OnRedo,
+                ),
+            )
         if (
             not self.tools
             or "settings" in self.tools
@@ -346,11 +404,29 @@ class VDigitToolbar(BaseToolbar):
         ):
             data.append((None,))
         if not self.tools or "settings" in self.tools:
-            data.append(("settings", self.icons["settings"], self.OnSettings))
+            data.append(
+                (
+                    ("settings", self.icons["settings"].label),
+                    self.icons["settings"],
+                    self.OnSettings,
+                ),
+            )
         if not self.tools or "help" in self.tools:
-            data.append(("help", self.icons["help"], self.OnHelp))
+            data.append(
+                (
+                    ("help", self.icons["help"].label),
+                    self.icons["help"],
+                    self.OnHelp,
+                ),
+            )
         if not self.tools or "quit" in self.tools:
-            data.append(("quit", self.icons["quit"], self.OnExit))
+            data.append(
+                (
+                    ("quit", self.icons["quit"].label),
+                    self.icons["quit"],
+                    self.OnExit,
+                ),
+            )
 
         return self._getToolbarData(data)
 
@@ -372,14 +448,19 @@ class VDigitToolbar(BaseToolbar):
     def OnTool(self, event):
         """Tool selected -> untoggles previusly selected tool in
         toolbar"""
-        Debug.msg(3, "VDigitToolbar.OnTool(): id = %s" % event.GetId())
+        Debug.msg(
+            3,
+            f"VDigitToolbar.OnTool(): id = {event.GetId() if event else event}",
+        )
+        if self.toolSwitcher and event:
+            self.toolSwitcher.ToolChanged(event.GetId())
+
         # set cursor
         self.MapWindow.SetNamedCursor("cross")
         self.MapWindow.mouse["box"] = "point"
         self.MapWindow.mouse["use"] = "pointer"
 
         aId = self.action.get("id", -1)
-        BaseToolbar.OnTool(self, event)
 
         # clear tmp canvas
         if self.action["id"] != aId or aId == -1:
@@ -393,8 +474,8 @@ class VDigitToolbar(BaseToolbar):
         if self.action["id"] == -1:
             self.action = {"desc": "", "type": "", "id": -1}
 
-        # set focus
-        self.MapWindow.SetFocus()
+        if event:
+            event.Skip()
 
     def OnAddPoint(self, event):
         """Add point to the vector map Laier"""
@@ -566,14 +647,16 @@ class VDigitToolbar(BaseToolbar):
         if self.digit:
             self.digit.Undo()
 
-        event.Skip()
+        if event:
+            event.Skip()
 
     def OnRedo(self, event):
         """Undo previous changes"""
         if self.digit:
             self.digit.Undo(level=1)
 
-        event.Skip()
+        if event:
+            event.Skip()
 
     def EnableUndo(self, enable=True):
         """Enable 'Undo' in toolbar
@@ -950,7 +1033,7 @@ class VDigitToolbar(BaseToolbar):
             return
 
         if self.mapLayer:
-            # deactive map layer for editing
+            # deactivate map layer for editing
             self.StopEditing()
 
         # select the given map layer for editing
@@ -986,7 +1069,7 @@ class VDigitToolbar(BaseToolbar):
             else:
                 return
 
-        # deactive layer
+        # deactivate layer
         self.Map.ChangeLayerActive(mapLayer, False)
 
         # clean map canvas

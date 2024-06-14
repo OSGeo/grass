@@ -581,7 +581,7 @@ class MapCalcFrame(wx.Frame):
         if self.overwrite.IsChecked():
             overwrite = " --overwrite"
         seed_flag = seed = ""
-        if re.search(pattern="rand *\(.+\)", string=expr):
+        if re.search(pattern=r"rand *\(.+\)", string=expr):
             if self.randomSeed.IsChecked():
                 seed_flag = " -s"
             else:
@@ -624,7 +624,7 @@ class MapCalcFrame(wx.Frame):
 
         self.text_mcalc.SetValue(newmcalcstr)
         if len(what) > 0:
-            match = re.search(pattern="\(.*\)", string=what)
+            match = re.search(pattern=r"\(.*\)", string=what)
             if match:
                 position_offset += match.start() + 1
             else:
@@ -665,7 +665,7 @@ class MapCalcFrame(wx.Frame):
             return
 
         seed_flag = seed = None
-        if re.search(pattern="rand *\(.+\)", string=expr):
+        if re.search(pattern=r"rand *\(.+\)", string=expr):
             if self.randomSeed.IsChecked():
                 seed_flag = "-s"
             else:
@@ -802,7 +802,6 @@ class MapCalcFrame(wx.Frame):
 
 
 if __name__ == "__main__":
-
     app = wx.App(0)
     frame = MapCalcFrame(
         parent=None, cmd="r.mapcalc", giface=StandaloneGrassInterface()

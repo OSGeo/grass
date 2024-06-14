@@ -17,10 +17,7 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
-from __future__ import print_function
-
 import locale
-import six
 
 import os
 import sys
@@ -32,14 +29,10 @@ from core.gcmd import DecodeString
 from gui_core.wrap import Rect
 
 try:
-    WindowsError
-except NameError:
-    WindowsError = OSError
-try:
     from grass.lib.gis import *
     from grass.lib.vector import *
     from grass.lib.vedit import *
-except (ImportError, WindowsError, TypeError) as e:
+except (ImportError, OSError, TypeError) as e:
     print("wxdigit.py: {}".format(e), file=sys.stderr)
 
 log = None
@@ -51,8 +44,7 @@ def print_error(msg, type):
     """Redirect stderr"""
     global log
     if log:
-        if sys.version_info.major >= 3:
-            msg = DecodeString(msg.data)
+        msg = DecodeString(msg.data)
         log.write(msg + os.linesep)
     else:
         print(msg)
@@ -826,7 +818,8 @@ class DisplayDriver:
             self.selected["cats"] = ids
             self.selected["ids"] = list()
             # cidx is not up-to-date
-            # Vect_cidx_find_all(self.poMapInfo, layer, GV_POINTS | GV_LINES, lid, ilist)
+            # Vect_cidx_find_all(self.poMapInfo,
+            # layer, GV_POINTS | GV_LINES, lid, ilist)
             nlines = Vect_get_num_lines(self.poMapInfo)
             for line in range(1, nlines + 1):
                 if not Vect_line_alive(self.poMapInfo, line):
@@ -1064,7 +1057,7 @@ class DisplayDriver:
         .. todo::
             map units
 
-        :param alpha: color value for aplha channel
+        :param alpha: color value for alpha channel
         """
         color = dict()
         for key in self.settings.keys():
@@ -1189,7 +1182,7 @@ class DisplayDriver:
             catsDict[layer].append(cats.cat[i])
 
         catsStr = ""
-        for l, c in six.iteritems(catsDict):
+        for l, c in catsDict.items():
             catsStr = "%d: (%s)" % (l, ",".join(map(str, c)))
 
         return catsStr

@@ -13,7 +13,7 @@ v.random --o -z output=soil_6 n=100 zmin=0 zmax=100 column=height seed=6
 v.random --o -z output=soil_7 n=100 zmin=0 zmax=100 column=height seed=7
 v.random --o -z output=soil_8 n=100 zmin=0 zmax=100 column=height seed=8
 
-n1=`g.tempfile pid=1 -d` 
+n1=`g.tempfile pid=1 -d`
 
 cat > "${n1}" << EOF
 soil_1

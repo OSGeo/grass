@@ -1,5 +1,6 @@
 """!
-@brief WMS, WMTS and NASA OnEarth drivers implemented in GRASS using GDAL Python bindings.
+@brief WMS, WMTS and NASA OnEarth drivers implemented in GRASS using GDAL Python
+bindings.
 
 List of classes:
  - wms_drv::WMSDrv
@@ -26,7 +27,8 @@ try:
 except:
     grass.fatal(
         _(
-            "Unable to load GDAL Python bindings (requires package 'python-gdal' being installed)"
+            "Unable to load GDAL Python bindings (requires package 'python-gdal' "
+            "being installed)"
         )
     )
 
@@ -36,18 +38,10 @@ Numeric.arrayrange = Numeric.arange
 
 from math import pi, floor
 
-try:
-    from urllib2 import HTTPError
-    from httplib import HTTPException
-except ImportError:
-    # python3
-    from urllib.error import HTTPError
-    from http.client import HTTPException
+from urllib.error import HTTPError
+from http.client import HTTPException
 
-try:
-    from xml.etree.ElementTree import ParseError
-except ImportError:  # < Python 2.7
-    from xml.parsers.expat import ExpatError as ParseError
+from xml.etree.ElementTree import ParseError
 
 from wms_base import GetEpsg, GetSRSParamVal, WMSBase
 
@@ -99,7 +93,6 @@ class WMSDrv(WMSBase):
 
         # iterate through all tiles and download them
         while True:
-
             if fetch_try == 0:
                 # get url for request the tile and information for placing the tile into
                 # raster with other tiles
@@ -112,14 +105,15 @@ class WMSDrv(WMSBase):
             # url for request the tile
             query_url = tile[0]
 
-            # the tile size and offset in pixels for placing it into raster where tiles are joined
+            # the tile size and offset in pixels for placing it into raster where tiles
+            # are joined
             tile_ref = tile[1]
             grass.debug(query_url, 2)
             try:
                 wms_data = self._fetchDataFromServer(
                     query_url, self.params["username"], self.params["password"]
                 )
-            except (IOError, HTTPException) as e:
+            except (OSError, HTTPException) as e:
                 if isinstance(e, HTTPError) and e.code == 401:
                     grass.fatal(
                         _("Authorization failed to '%s' when fetching data.\n%s")
@@ -137,9 +131,10 @@ class WMSDrv(WMSBase):
             try:
                 temp_tile_opened = open(temp_tile, "wb")
                 temp_tile_opened.write(wms_data.read())
-            except IOError as e:
-                # some servers are not happy with many subsequent requests for tiles done immediately,
-                # if immediate request was unsuccessful, try to repeat the request after 5s and 30s breaks
+            except OSError as e:
+                # some servers are not happy with many subsequent requests for tiles
+                # done immediately, if immediate request was unsuccessful, try to
+                # repeat the request after 5s and 30s breaks
                 # TODO probably servers can return more kinds of errors related to this
                 # problem (not only 104)
                 if isinstance(e, socket.error) and e[0] == 104 and fetch_try < 2:
@@ -152,7 +147,8 @@ class WMSDrv(WMSBase):
 
                     grass.warning(
                         _(
-                            "Server refused to send data for a tile.\nRequest will be repeated after %d s."
+                            "Server refused to send data for a tile.\nRequest will be "
+                            "repeated after %d s."
                         )
                         % sleep_time
                     )
@@ -172,7 +168,7 @@ class WMSDrv(WMSBase):
                 try:
                     error_xml_opened = open(temp_tile, "rb")
                     err_str = error_xml_opened.read()
-                except IOError as e:
+                except OSError as e:
                     grass.fatal(_("Unable to read data from tempfile.\n%s") % str(e))
                 finally:
                     error_xml_opened.close()
@@ -186,7 +182,8 @@ class WMSDrv(WMSBase):
             if tile_dataset_info.RasterCount < 1:
                 grass.fatal(
                     _(
-                        "WMS server error: no band(s) received. Is server URL correct? <%s>"
+                        "WMS server error: no band(s) received. Is server URL correct? "
+                        "<%s>"
                     )
                     % server_url
                 )
@@ -277,7 +274,8 @@ class WMSDrv(WMSBase):
         return temp_map
 
     def _pct2rgb(self, src_filename, dst_filename):
-        """!Create new dataset with data in dst_filename with bands according to src_filename
+        """!Create new dataset with data in dst_filename with bands according to
+        src_filename
         raster color table - modified code from gdal utility pct2rgb
 
         @return new dataset
@@ -330,7 +328,8 @@ class BaseRequestMgr:
     """!Base class for request managers."""
 
     def _computeRequestData(self, bbox, tl_corner, tile_span, tile_size, mat_num_bbox):
-        """!Initialize data needed for iteration through tiles. Used by WMTS_GRASS and OnEarth_GRASS drivers."""
+        """!Initialize data needed for iteration through tiles. Used by WMTS_GRASS and
+        OnEarth_GRASS drivers."""
         epsilon = 1e-15
 
         # request data bbox specified in row and col number
@@ -443,7 +442,6 @@ class BaseRequestMgr:
     def _isGeoProj(self, proj):
         """!Is it geographic projection?"""
         if proj.find("+proj=latlong") != -1 or proj.find("+proj=longlat") != -1:
-
             return True
         return False
 
@@ -456,7 +454,8 @@ class WMSRequestMgr(BaseRequestMgr):
 
         proj = params["proj_name"] + "=" + GetSRSParamVal(params["srs"])
         self.url = params["url"] + (
-            "SERVICE=WMS&REQUEST=GetMap&VERSION=%s&LAYERS=%s&WIDTH=%s&HEIGHT=%s&STYLES=%s&TRANSPARENT=%s"
+            "SERVICE=WMS&REQUEST=GetMap&VERSION=%s&LAYERS=%s&WIDTH=%s&HEIGHT=%s&"
+            "STYLES=%s&TRANSPARENT=%s"
             % (
                 params["wms_version"],
                 params["layers"],
@@ -521,11 +520,13 @@ class WMSRequestMgr(BaseRequestMgr):
         self.map_region["rows"] = rows
 
     def GetMapRegion(self):
-        """!Get size in pixels and bounding box of raster where all tiles will be merged."""
+        """!Get size in pixels and bounding box of raster where all tiles will be
+        merged."""
         return self.map_region
 
     def GetNextTile(self):
-        """!Get url for tile request from server and information for merging the tile with other tiles"""
+        """!Get url for tile request from server and information for merging the tile
+        with other tiles"""
 
         tile_ref = {}
 
@@ -646,7 +647,8 @@ class WMTSRequestMgr(BaseRequestMgr):
             mat_set.findall(self.xml_ns.NsWmts("TileMatrix")), region, bbox
         )
 
-        # get extend of data available on server expressed in max/min rows and cols of tile matrix
+        # get extend of data available on server expressed in max/min rows and cols of
+        # tile matrix
         mat_num_bbox = self._getMatSize(tile_mat, mat_set_link)
 
         # initialize data needed for iteration through tiles
@@ -655,11 +657,13 @@ class WMTSRequestMgr(BaseRequestMgr):
         )
 
     def GetMapRegion(self):
-        """!Get size in pixels and bounding box of raster where all tiles will be merged."""
+        """!Get size in pixels and bounding box of raster where all tiles will be
+        merged."""
         return self.map_region
 
     def _getMatSets(self, root, layer_name, srs):
-        """!Get matrix sets which are available for chosen layer and have required EPSG."""
+        """!Get matrix sets which are available for chosen layer and have required
+        EPSG."""
 
         contents = root.find(self.xml_ns.NsWmts("Contents"))
         layers = contents.findall(self.xml_ns.NsWmts("Layer"))
@@ -698,7 +702,6 @@ class WMTSRequestMgr(BaseRequestMgr):
         return suitable_mat_sets  # [[TileMatrixSet, TileMatrixSetLink], ....]
 
     def _getMatSetSrs(self, mat_set):
-
         return mat_set.find(self.xml_ns.NsOws("SupportedCRS")).text
 
     def _findTileMats(self, tile_mats, region, bbox):
@@ -742,7 +745,8 @@ class WMTSRequestMgr(BaseRequestMgr):
         return best_t_mat
 
     def _getMetersPerUnit(self):
-        """!Get coefficient which allows converting units of request projection into meters."""
+        """!Get coefficient which allows converting units of request projection into
+        meters."""
         if self.meters_per_unit:
             return self.meters_per_unit
 
@@ -771,7 +775,8 @@ class WMTSRequestMgr(BaseRequestMgr):
         return self.meters_per_unit
 
     def _getMatSize(self, tile_mat, mat_set_link):
-        """!Get rows and cols extend of data available on server for chosen layer and tile matrix."""
+        """!Get rows and cols extend of data available on server for chosen layer and
+        tile matrix."""
 
         # general tile matrix size
         mat_num_bbox = {}
@@ -785,7 +790,7 @@ class WMTSRequestMgr(BaseRequestMgr):
 
         # get extend restriction in TileMatrixSetLink for the tile matrix, if exists
         tile_mat_set_limits = mat_set_link.find(
-            (self.xml_ns.NsWmts("TileMatrixSetLimits"))
+            self.xml_ns.NsWmts("TileMatrixSetLimits")
         )
         if tile_mat_set_limits is None:
             return mat_num_bbox
@@ -828,7 +833,8 @@ class WMTSRequestMgr(BaseRequestMgr):
         tl_corner["minx"] = float(tl_str[0])
         tl_corner["maxy"] = float(tl_str[1])
 
-        # TODO do it more generally WMS cap parser may use it in future(not needed now)???
+        # TODO do it more generally WMS cap parser may use it in future(not needed
+        #  now)???
         s = Srs(
             mat_set_srs
         )  # NOTE not used params['srs'], it is just number, encoding needed
@@ -869,7 +875,8 @@ class WMTSRequestMgr(BaseRequestMgr):
         )
 
     def GetNextTile(self):
-        """!Get url for tile request from server and information for merging the tile with other tiles."""
+        """!Get url for tile request from server and information for merging the tile
+        with other tiles."""
         if not self.intersects or self.i_col > self.t_num_bbox["max_col"]:
             return None
 
@@ -916,7 +923,8 @@ class OnEarthRequestMgr(BaseRequestMgr):
         self._computeRequestData(bbox, t_patt_bbox, self.tile_span, self.tile_size)
 
     def GetMapRegion(self):
-        """!Get size in pixels and bounding box of raster where all tiles will be merged."""
+        """!Get size in pixels and bounding box of raster where all tiles will be
+        merged."""
         return self.map_region
 
     def _parseTileService(self, root, bbox, region, params):
@@ -1015,7 +1023,6 @@ class OnEarthRequestMgr(BaseRequestMgr):
             if (best_diff < tile_diff and tile_diff < 0) or (
                 best_diff > tile_diff and best_diff > 0
             ):
-
                 best_res = t_res[comp_res]
                 best_patt = pattern
 
@@ -1023,7 +1030,8 @@ class OnEarthRequestMgr(BaseRequestMgr):
 
     def _insTimeToTilePatternUrl(self, url_params, urls):
         """!Time can be variable in some urls in OnEarth TMS.
-        Insert requested time from 'urlparams' into the variable if any url of urls contains the variable.
+        Insert requested time from 'urlparams' into the variable if any url of urls
+        contains the variable.
         """
         url = None
         not_sup_params = []
@@ -1067,7 +1075,8 @@ class OnEarthRequestMgr(BaseRequestMgr):
         if not_sup_params:
             grass.warning(
                 _(
-                    "%s driver supports only '%s' parameter in '%s'. Other parameters are ignored."
+                    "%s driver supports only '%s' parameter in '%s'. Other parameters "
+                    "are ignored."
                 )
                 % ("OnEarth GRASS", "time", "urlparams")
             )
@@ -1092,7 +1101,8 @@ class OnEarthRequestMgr(BaseRequestMgr):
         )
 
     def GetNextTile(self):
-        """!Get url for tile request from server and information for merging the tile with other tiles"""
+        """!Get url for tile request from server and information for merging the tile
+        with other tiles"""
         if self.i_col > self.t_num_bbox["max_col"]:
             return None
 

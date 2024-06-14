@@ -1,12 +1,14 @@
-
 /****************************************************************************
  *
  * MODULE:       v.surf.idw
- * AUTHOR(S):    Michael Shapiro, U.S. Army Construction Engineering Research Laboratory
- *               Improved algorithm (indexes points according to cell and ignores
- *               points outside current region) by Paul Kelly
- *               further: Radim Blazek <radim.blazek gmail.com>,  Huidae Cho <grass4u gmail.com>,
- *               Glynn Clements <glynn gclements.plus.com>, Markus Neteler <neteler itc.it>
+ * AUTHOR(S):    Michael Shapiro, U.S. Army Construction Engineering Research
+ *                 Laboratory
+ *               Improved algorithm (indexes points according to cell and
+ *                 ignores points outside current region) by Paul Kelly
+ *               further: Radim Blazek <radim.blazek gmail.com>,
+ *               Huidae Cho <grass4u gmail.com>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Markus Neteler <neteler itc.it>
  *               OGR support by Martin Landa <landa.martin gmail.com>
  * PURPOSE:      Surface interpolation from vector point data by Inverse
  *               Distance Squared Weighting
@@ -31,13 +33,11 @@ long **npoints_currcell;
 int nsearch;
 static int i;
 
-struct Point
-{
+struct Point {
     double north, east;
     double z;
 };
-struct list_Point
-{
+struct list_Point {
     double north, east;
     double z;
     double dist;
@@ -63,16 +63,13 @@ int main(int argc, char *argv[])
     double sum1, sum2, interp_value;
     int n;
     double p;
-    struct
-    {
+    struct {
         struct Option *input, *npoints, *power, *output, *dfield, *col;
     } parm;
-    struct
-    {
+    struct {
         struct Flag *noindex;
     } flag;
-    struct cell_list
-    {
+    struct cell_list {
         int row, column;
         struct cell_list *next;
     };
@@ -98,11 +95,11 @@ int main(int argc, char *argv[])
 
     parm.col = G_define_standard_option(G_OPT_DB_COLUMN);
     parm.col->required = NO;
-    parm.col->label =
-        _("Name of attribute column with values to interpolate");
+    parm.col->label = _("Name of attribute column with values to interpolate");
     parm.col->description =
-        _("If not given and input is 2D vector map then category values are used. "
-         "If input is 3D vector map then z-coordinates are used.");
+        _("If not given and input is 2D vector map then category values are "
+          "used. "
+          "If input is 3D vector map then z-coordinates are used.");
     parm.col->guisection = _("Values");
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
@@ -128,9 +125,10 @@ int main(int argc, char *argv[])
     flag.noindex = G_define_flag();
     flag.noindex->key = 'n';
     flag.noindex->label = _("Don't index points by raster cell");
-    flag.noindex->description = _("Slower but uses"
-                                  " less memory and includes points from outside region"
-                                  " in the interpolation");
+    flag.noindex->description =
+        _("Slower but uses"
+          " less memory and includes points from outside region"
+          " in the interpolation");
     flag.noindex->guisection = _("Settings");
 
     if (G_parser(argc, argv))
@@ -141,9 +139,8 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Illegal number (%s) of interpolation points"),
                       parm.npoints->answer);
 
-    list =
-        (struct list_Point *)G_calloc((size_t) search_points,
-                                      sizeof(struct list_Point));
+    list = (struct list_Point *)G_calloc((size_t)search_points,
+                                         sizeof(struct list_Point));
 
     p = atof(parm.power->answer);
 
@@ -155,13 +152,11 @@ int main(int argc, char *argv[])
         points =
             (struct Point ***)G_malloc(window.rows * sizeof(struct Point **));
 
-
         for (row = 0; row < window.rows; row++) {
             npoints_currcell[row] =
                 (long *)G_malloc(window.cols * sizeof(long));
             points[row] =
-                (struct Point **)G_malloc(window.cols *
-                                          sizeof(struct Point *));
+                (struct Point **)G_malloc(window.cols * sizeof(struct Point *));
 
             for (col = 0; col < window.cols; col++) {
                 npoints_currcell[row][col] = 0;
@@ -171,8 +166,8 @@ int main(int argc, char *argv[])
     }
 
     /* read the elevation points from the input sites file */
-    read_sites(parm.input->answer, parm.dfield->answer,
-               parm.col->answer, flag.noindex->answer);
+    read_sites(parm.input->answer, parm.dfield->answer, parm.col->answer,
+               flag.noindex->answer);
 
     if (npoints == 0)
         G_fatal_error(_("No points found. Check current region with g.region"));
@@ -192,13 +187,10 @@ int main(int argc, char *argv[])
                 for (searchcolumn = 0; searchcolumn < window.cols;
                      searchcolumn++)
                     if (npoints_currcell[searchrow][searchcolumn] > 0) {
-                        shortlistrows = (int *)G_realloc(shortlistrows,
-                                                         (1 +
-                                                          ncells) *
-                                                         sizeof(int));
-                        shortlistcolumns =
-                            (int *)G_realloc(shortlistcolumns,
-                                             (1 + ncells) * sizeof(int));
+                        shortlistrows = (int *)G_realloc(
+                            shortlistrows, (1 + ncells) * sizeof(int));
+                        shortlistcolumns = (int *)G_realloc(
+                            shortlistcolumns, (1 + ncells) * sizeof(int));
                         shortlistrows[ncells] = searchrow;
                         shortlistcolumns[ncells] = searchcolumn;
                         ncells++;
@@ -208,34 +200,30 @@ int main(int argc, char *argv[])
             /* Fill look-up table of row and column offsets for
              * doing a circular region growing search looking for sites */
             /* Use units of column width */
-            max_radius = (int)(0.5 + sqrt(window.cols * window.cols +
-                                          (window.rows * window.ns_res /
-                                           window.ew_res) * (window.rows *
-                                                             window.ns_res /
-                                                             window.ew_res)));
+            max_radius =
+                (int)(0.5 +
+                      sqrt(window.cols * window.cols +
+                           (window.rows * window.ns_res / window.ew_res) *
+                               (window.rows * window.ns_res / window.ew_res)));
 
-            search_list =
-                (struct cell_list **)G_malloc(max_radius *
-                                              sizeof(struct cell_list *));
-            search_list_start =
-                (struct cell_list **)G_malloc(max_radius *
-                                              sizeof(struct cell_list *));
+            search_list = (struct cell_list **)G_malloc(
+                max_radius * sizeof(struct cell_list *));
+            search_list_start = (struct cell_list **)G_malloc(
+                max_radius * sizeof(struct cell_list *));
 
             for (radius = 0; radius < max_radius; radius++)
                 search_list[radius] = NULL;
 
             for (row = 0; row < window.rows; row++)
                 for (col = 0; col < window.cols; col++) {
-                    radius = (int)sqrt(col * col +
-                                       (row * window.ns_res / window.ew_res) *
-                                       (row * window.ns_res / window.ew_res));
+                    radius = (int)sqrt(
+                        col * col + (row * window.ns_res / window.ew_res) *
+                                        (row * window.ns_res / window.ew_res));
                     if (search_list[radius] == NULL)
-                        search_list[radius] =
-                            search_list_start[radius] =
+                        search_list[radius] = search_list_start[radius] =
                             G_malloc(sizeof(struct cell_list));
                     else
-                        search_list[radius] =
-                            search_list[radius]->next =
+                        search_list[radius] = search_list[radius]->next =
                             G_malloc(sizeof(struct cell_list));
 
                     search_list[radius]->row = row;
@@ -254,7 +242,6 @@ int main(int argc, char *argv[])
     else
         mask = NULL;
 
-
     fd = Rast_open_new(parm.output->answer, DCELL_TYPE);
 
     /* GTC Count of window rows */
@@ -262,7 +249,8 @@ int main(int argc, char *argv[])
     /* GTC Count of window columns */
     G_asprintf(&tmpstr2, n_("%d column", "%d columns", window.cols),
                window.cols);
-    /* GTC First argument is map name, second - message about number of rows, third - columns. */
+    /* GTC First argument is map name, second - message about number of rows,
+     * third - columns. */
     G_important_message(_("Interpolating raster map <%s> (%s, %s)..."),
                         parm.output->answer, tmpstr1, tmpstr2);
     G_free(tmpstr1);
@@ -280,7 +268,7 @@ int main(int argc, char *argv[])
         for (col = 0; col < window.cols; col++) {
             east += window.ew_res;
             /* don't interpolate outside of the mask */
-            if (mask && mask[col] == 0) {
+            if (mask && (mask[col] == 0 || Rast_is_c_null_value(&mask[col]))) {
                 Rast_set_d_null_value(&dcell[col], 1);
                 continue;
             }
@@ -304,8 +292,8 @@ int main(int argc, char *argv[])
                     i = 0;
 
                     if (searchallpoints == 1) {
-                        /* If there aren't many sites just check them all to find
-                         * the nearest */
+                        /* If there aren't many sites just check them all to
+                         * find the nearest */
                         for (n = 0; n < ncells; n++)
                             calculate_distances(shortlistrows[n],
                                                 shortlistcolumns[n], north,
@@ -319,18 +307,16 @@ int main(int argc, char *argv[])
                             search_list[radius] = search_list_start[radius];
                             while (search_list[radius] != NULL) {
                                 /* Always */
-                                if (row <
-                                    (window.rows - search_list[radius]->row)
-                                    && col <
-                                    (window.cols -
-                                     search_list[radius]->column)) {
-                                    searchrow =
-                                        row + search_list[radius]->row;
+                                if (row < (window.rows -
+                                           search_list[radius]->row) &&
+                                    col < (window.cols -
+                                           search_list[radius]->column)) {
+                                    searchrow = row + search_list[radius]->row;
                                     searchcolumn =
                                         col + search_list[radius]->column;
-                                    calculate_distances(searchrow,
-                                                        searchcolumn, north,
-                                                        east, &pointsfound);
+                                    calculate_distances(searchrow, searchcolumn,
+                                                        north, east,
+                                                        &pointsfound);
                                 }
 
                                 /* Only if at least one offset is not 0 */
@@ -338,48 +324,42 @@ int main(int argc, char *argv[])
                                      search_list[radius]->column > 0) &&
                                     row >= search_list[radius]->row &&
                                     col >= search_list[radius]->column) {
-                                    searchrow =
-                                        row - search_list[radius]->row;
+                                    searchrow = row - search_list[radius]->row;
                                     searchcolumn =
                                         col - search_list[radius]->column;
-                                    calculate_distances(searchrow,
-                                                        searchcolumn, north,
-                                                        east, &pointsfound);
+                                    calculate_distances(searchrow, searchcolumn,
+                                                        north, east,
+                                                        &pointsfound);
                                 }
 
                                 /* Only if both offsets are not 0 */
                                 if (search_list[radius]->row > 0 &&
                                     search_list[radius]->column > 0) {
-                                    if (row <
-                                        (window.rows -
-                                         search_list[radius]->row) &&
+                                    if (row < (window.rows -
+                                               search_list[radius]->row) &&
                                         col >= search_list[radius]->column) {
                                         searchrow =
                                             row + search_list[radius]->row;
                                         searchcolumn =
                                             col - search_list[radius]->column;
                                         calculate_distances(searchrow,
-                                                            searchcolumn,
-                                                            north, east,
-                                                            &pointsfound);
+                                                            searchcolumn, north,
+                                                            east, &pointsfound);
                                     }
                                     if (row >= search_list[radius]->row &&
-                                        col <
-                                        (window.cols -
-                                         search_list[radius]->column)) {
+                                        col < (window.cols -
+                                               search_list[radius]->column)) {
                                         searchrow =
                                             row - search_list[radius]->row;
                                         searchcolumn =
                                             col + search_list[radius]->column;
                                         calculate_distances(searchrow,
-                                                            searchcolumn,
-                                                            north, east,
-                                                            &pointsfound);
+                                                            searchcolumn, north,
+                                                            east, &pointsfound);
                                     }
                                 }
 
-                                search_list[radius] =
-                                    search_list[radius]->next;
+                                search_list[radius] = search_list[radius]->next;
                             }
                             radius++;
                         }
@@ -396,7 +376,7 @@ int main(int argc, char *argv[])
                     }
                     else {
                         /* If one site is dead on the centre of the cell, ignore
-                         * all the other sites and just use this value. 
+                         * all the other sites and just use this value.
                          * (Unlikely when using floating point numbers?) */
                         sum1 = list[n].z;
                         sum2 = 1.0;
@@ -405,7 +385,7 @@ int main(int argc, char *argv[])
                 }
                 interp_value = sum1 / sum2;
             }
-            dcell[col] = (DCELL) interp_value;
+            dcell[col] = (DCELL)interp_value;
         }
         Rast_put_d_row(fd, dcell);
     }
@@ -432,14 +412,13 @@ void newpoint(double z, double east, double north, int noindex)
 
     if (!noindex) {
         if (row < 0 || row >= window.rows || column < 0 ||
-            column >= window.cols) ;
-        else {                  /* Ignore sites outside current region as can't be indexed */
+            column >= window.cols)
+            ;
+        else { /* Ignore sites outside current region as can't be indexed */
 
-            points[row][column] =
-                (struct Point *)G_realloc(points[row][column],
-                                          (1 +
-                                           npoints_currcell[row][column]) *
-                                          sizeof(struct Point));
+            points[row][column] = (struct Point *)G_realloc(
+                points[row][column],
+                (1 + npoints_currcell[row][column]) * sizeof(struct Point));
             points[row][column][npoints_currcell[row][column]].north = north;
             points[row][column][npoints_currcell[row][column]].east = east;
             points[row][column][npoints_currcell[row][column]].z = z;
@@ -448,10 +427,8 @@ void newpoint(double z, double east, double north, int noindex)
         }
     }
     else {
-        noidxpoints = (struct Point *)G_realloc(noidxpoints,
-                                                (1 +
-                                                 npoints) *
-                                                sizeof(struct Point));
+        noidxpoints = (struct Point *)G_realloc(
+            noidxpoints, (1 + npoints) * sizeof(struct Point));
         noidxpoints[npoints].north = north;
         noidxpoints[npoints].east = east;
         noidxpoints[npoints].z = z;
@@ -459,8 +436,8 @@ void newpoint(double z, double east, double north, int noindex)
     }
 }
 
-void calculate_distances(int row, int column, double north,
-                         double east, int *pointsfound)
+void calculate_distances(int row, int column, double north, double east,
+                         int *pointsfound)
 {
     int j, n;
     static int max;
@@ -503,7 +480,6 @@ void calculate_distances(int row, int column, double north,
                         maxdist = list[max = n].dist;
                 }
             }
-
         }
     }
     *pointsfound += npoints_currcell[row][column];
@@ -545,5 +521,4 @@ void calculate_distances_noindex(double north, double east)
             }
         }
     }
-
 }

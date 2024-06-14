@@ -48,7 +48,7 @@ algorithm of Anthony Dekker to Python (See the NeuQuant class for its
 license).
 
 Many thanks to Alex Robinson for implementing the concept of subrectangles,
-which (depening on image content) can give a very significant reduction in
+which (depending on image content) can give a very significant reduction in
 file size.
 
 This code is based on gifmaker (in the scripts folder of the source
@@ -95,7 +95,7 @@ def get_cKDTree():
 
 # getheader gives a 87a header and a color palette (two elements in a list)
 # getdata()[0] gives the Image Descriptor up to (including) "LZW min code size"
-# getdatas()[1:] is the image data itself in chuncks of 256 bytes (well
+# getdatas()[1:] is the image data itself in chunks of 256 bytes (well
 # technically the first byte says how many bytes follow, after which that
 # amount (max 255) follows)
 
@@ -112,7 +112,7 @@ def checkImages(images):
 
     for im in images:
         if PIL and isinstance(im, PIL.Image.Image):
-            # We assume PIL images are allright
+            # We assume PIL images are alright
             images2.append(im)
 
         elif np and isinstance(im, np.ndarray):
@@ -179,7 +179,7 @@ class GifWriter:
         :param xy:
         """
 
-        # Defaule use full image and place at upper left
+        # Default use full image and place at upper left
         if xy is None:
             xy = (0, 0)
 
@@ -207,7 +207,7 @@ class GifWriter:
         """
 
         if loops == 0 or loops == float("inf"):
-            loops = 2 ** 16 - 1
+            loops = 2**16 - 1
             # bb = ""
             # application extension should not be used
             # (the extension interprets zero loops
@@ -325,7 +325,6 @@ class GifWriter:
         # Iterate over images
         prev = ims[0]
         for im in ims[1:]:
-
             # Get difference, sum over colors
             diff = np.abs(im - prev)
             if diff.ndim == 3:
@@ -428,7 +427,6 @@ class GifWriter:
         firstFrame = True
 
         for im, palette in zip(images, palettes):
-
             if firstFrame:
                 # Write header
 
@@ -647,7 +645,7 @@ def readGif(filename, asNumpy=True):
 
     # Check whether it exists
     if not os.path.isfile(filename):
-        raise IOError("File not found: " + str(filename))
+        raise OSError("File not found: " + str(filename))
 
     # Load file using PIL
     pilIm = PIL.Image.open(filename)
@@ -797,16 +795,15 @@ class NeuQuant:
         self.a_s = {}
 
     def __init__(self, image, samplefac=10, colors=256):
-
         # Check Numpy
         if np is None:
             raise RuntimeError("Need Numpy for the NeuQuant algorithm.")
 
         # Check image
         if image.size[0] * image.size[1] < NeuQuant.MAXPRIME:
-            raise IOError("Image is too small")
+            raise OSError("Image is too small")
         if image.mode != "RGBA":
-            raise IOError("Image mode should be RGBA.")
+            raise OSError("Image mode should be RGBA.")
 
         # Initialize
         self.setconstants(samplefac, colors)
@@ -894,7 +891,8 @@ class NeuQuant:
     #    """ Search for biased BGR values
     #            Finds closest neuron (min dist) and updates self.freq
     #            finds best neuron (min dist-self.bias) and returns position
-    #            for frequently chosen neurons, self.freq[i] is high and self.bias[i] is negative
+    #            for frequently chosen neurons, self.freq[i] is high and self.bias[i]
+    #            is negative
     #            self.bias[i] = self.GAMMA * ((1/self.NETSIZE)-self.freq[i])"""
     #
     #    i, j = self.SPECIALS, self.NETSIZE

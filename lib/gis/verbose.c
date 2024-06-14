@@ -35,7 +35,7 @@
 
 static struct state {
     int initialized;
-    int verbose;       /* current verbosity level */
+    int verbose; /* current verbosity level */
 } state;
 
 static struct state *st = &state;
@@ -45,16 +45,21 @@ static struct state *st = &state;
  *
  * Currently, there are 5 levels of verbosity (see return codes)
  *
- * \return -1 - nothing will be printed (also errors and warnings will be also discarded)
+ * \return -1 - nothing will be printed (also errors and warnings will be
+ *              also discarded)
  * \return  0 - nothing will be printed except of errors and warnings
- *              (G_fatal_error(), G_warning()). Triggered by <tt>--q</tt> or <tt>--quiet</tt> flag..
- * \return  1 - only progress information (G_percent()) and important messages (G_important_message()) will be printed
- * \return  2 - all messages (G_message() and G_important_message()) will be printed
- * \return  3 - also verbose messages (G_verbose_message()) will be printed. Triggered by <tt>--v</tt> or <tt>--verbose</tt> flag.
+ *              (G_fatal_error(), G_warning()). Triggered by <tt>--q</tt>
+ *              or <tt>--quiet</tt> flag..
+ * \return  1 - only progress information (G_percent()) and important messages
+ *              (G_important_message()) will be printed
+ * \return  2 - all messages (G_message() and G_important_message()) will be
+ *              printed
+ * \return  3 - also verbose messages (G_verbose_message()) will be printed.
+ *              Triggered by <tt>--v</tt> or <tt>--verbose</tt> flag.
  */
 int G_verbose(void)
 {
-    const char *verstr;         /* string for GRASS_VERBOSE content */
+    const char *verstr; /* string for GRASS_VERBOSE content */
 
     if (G_is_initialized(&(st->initialized)))
         return st->verbose;
@@ -101,12 +106,16 @@ int G_verbose_min(void)
 /*!
  * \brief Set verbosity level.
  *
- * - -1 - nothing will be printed (also errors and warnings will be also discarded)
+ * - -1 - nothing will be printed (also errors and warnings will be also
+ *        discarded)
  * -  0 - nothing will be printed except of errors and warnings
- *              (G_fatal_error(), G_warning()). Triggered by <tt>--q</tt> or <tt>--quiet</tt> flag.
- * -  1 - only progress information (G_percent()) and important messages (G_important_message()) will be printed
+ *        (G_fatal_error(), G_warning()). Triggered by <tt>--q</tt> or
+ *        <tt>--quiet</tt> flag.
+ * -  1 - only progress information (G_percent()) and important messages
+ *        (G_important_message()) will be printed
  * -  2 - all messages (G_message() and G_important_message()) will be printed
- * -  3 - also verbose messages (G_verbose_message()) will be printed. Triggered by <tt>--v</tt> or <tt>--verbose</tt> flag.
+ * -  3 - also verbose messages (G_verbose_message()) will be printed. Triggered
+ *        by <tt>--v</tt> or <tt>--verbose</tt> flag.
  *
  * \param level new verbosity level (-1,0,1,2,3)
  *
@@ -119,7 +128,7 @@ int G_set_verbose(int level)
         st->verbose = level;
         if (!G_is_initialized(&(st->initialized)))
             G_initialize_done(&(st->initialized));
-        
+
         return 1;
     }
 

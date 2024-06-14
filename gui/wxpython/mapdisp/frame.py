@@ -37,7 +37,6 @@ from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
 from core.debug import Debug
 from core.settings import UserSettings
 from gui_core.mapdisp import SingleMapPanel, FrameMixin
-from mapwin.base import MapWindowProperties
 from gui_core.query import QueryDialog, PrepareQueryResults
 from mapwin.buffered import BufferedMapWindow
 from mapwin.decorations import (
@@ -57,13 +56,14 @@ from core.giface import Notification
 from gui_core.vselect import VectorSelectBase, VectorSelectHighlighter
 from gui_core.wrap import Menu
 from mapdisp import statusbar as sb
+from main_window.page import MainPageBase
 
 import grass.script as grass
 
 from grass.pydispatch.signal import Signal
 
 
-class MapPanel(SingleMapPanel):
+class MapPanel(SingleMapPanel, MainPageBase):
     """Main panel for map display window. Drawing takes place in
     child double buffered drawing window.
     """
@@ -79,6 +79,7 @@ class MapPanel(SingleMapPanel):
         lmgr=None,
         Map=None,
         auimgr=None,
+        dockable=False,
         name="MapWindow",
         **kwargs,
     ):
@@ -103,6 +104,7 @@ class MapPanel(SingleMapPanel):
             name=name,
             **kwargs,
         )
+        MainPageBase.__init__(self, dockable)
 
         self._giface = giface
         # Layer Manager object
@@ -111,28 +113,19 @@ class MapPanel(SingleMapPanel):
         # Layer Manager layer tree object
         # used for VDigit toolbar and window and GLWindow
         self.tree = tree
-        # checks for saving workspace
-        self.canCloseDisplayCallback = None
 
-        # Emitted when switching map notebook tabs (Single-Window)
-        self.onFocus = Signal("MapPanel.onFocus")
+        # Saved Map Display output img size
+        self._saved_output_img_size = None
 
         # Emitted when starting (switching to) 3D mode.
-        # Parameter firstTime specifies if 3D was already actived.
+        # Parameter firstTime specifies if 3D was already activated.
         self.starting3dMode = Signal("MapPanel.starting3dMode")
 
         # Emitted when ending (switching from) 3D mode.
         self.ending3dMode = Signal("MapPanel.ending3dMode")
 
         # Emitted when closing display by closing its window.
-        self.closingDisplay = Signal("MapPanel.closingDisplay")
-
-        # Emitted when closing display by closing its window.
         self.closingVNETDialog = Signal("MapPanel.closingVNETDialog")
-
-        # properties are shared in other objects, so defining here
-        self.mapWindowProperties = MapWindowProperties()
-        self.mapWindowProperties.setValuesFromUserSettings()
 
         #
         # Add toolbars
@@ -151,19 +144,12 @@ class MapPanel(SingleMapPanel):
                 sb.SbCoordinates,
                 sb.SbRegionExtent,
                 sb.SbCompRegionExtent,
-                sb.SbShowRegion,
-                sb.SbAlignExtent,
-                sb.SbResolution,
                 sb.SbDisplayGeometry,
                 sb.SbMapScale,
                 sb.SbGoTo,
-                sb.SbProjection,
             ]
-            self.statusbarItemsHiddenInNviz = (
-                sb.SbAlignExtent,
+            self.statusbarItemsDisabledInNviz = (
                 sb.SbDisplayGeometry,
-                sb.SbShowRegion,
-                sb.SbResolution,
                 sb.SbMapScale,
             )
             self.statusbar = self.CreateStatusbar(statusbarItems)
@@ -400,7 +386,7 @@ class MapPanel(SingleMapPanel):
             .TopDockable(True)
             .CloseButton(False)
             .Layer(2)
-            .BestSize((self.toolbars["vdigit"].GetBestSize())),
+            .BestSize(self.toolbars["vdigit"].GetBestSize()),
         )
         # change mouse to draw digitized line
         self.MapWindow.mouse["box"] = "point"
@@ -460,10 +446,10 @@ class MapPanel(SingleMapPanel):
         )
         # update status bar
 
-        self.statusbarManager.HideStatusbarChoiceItemsByClass(
-            self.statusbarItemsHiddenInNviz
+        self.statusbarManager.DisableStatusbarItemsByClass(
+            self.statusbarItemsDisabledInNviz
         )
-        self.statusbarManager.SetMode(0)
+        self.mapWindowProperties.sbItem = 0
 
         # erase map window
         self.MapWindow.EraseMap()
@@ -560,13 +546,12 @@ class MapPanel(SingleMapPanel):
             pass
 
         # update status bar
-        self.statusbarManager.ShowStatusbarChoiceItemsByClass(
-            self.statusbarItemsHiddenInNviz
-        )
-        self.statusbarManager.SetMode(
-            UserSettings.Get(group="display", key="statusbarMode", subkey="selection")
-        )
         self.SetStatusText(_("Please wait, unloading data..."), 0)
+        self.statusbarManager.disabledItems = {}
+        self.mapWindowProperties.sbItem = UserSettings.Get(
+            group="display", key="statusbarMode", subkey="selection"
+        )
+
         # unloading messages from library cause highlight anyway
         self._giface.WriteCmdLog(
             _("Switching back to 2D view mode..."),
@@ -631,8 +616,13 @@ class MapPanel(SingleMapPanel):
                 .TopDockable(True)
                 .CloseButton(False)
                 .Layer(2)
-                .BestSize((self.toolbars["map"].GetBestSize())),
+                .BestSize(self.toolbars["map"].GetBestSize()),
             )
+
+        # nviz
+        elif name == "nviz":
+            self.toolbars["map"].combo.SetValue(_("3D view"))
+            self.AddNviz()
 
         # vector digitizer
         elif name == "vdigit":
@@ -743,12 +733,12 @@ class MapPanel(SingleMapPanel):
             return
 
         # get size
-        dlg = ImageSizeDialog(self)
+        dlg = ImageSizeDialog(self, img_size=self._saved_output_img_size)
         dlg.CentreOnParent()
         if dlg.ShowModal() != wx.ID_OK:
             dlg.Destroy()
             return
-        width, height = dlg.GetValues()
+        self._saved_output_img_size = dlg.GetValues()
         dlg.Destroy()
 
         # get filename
@@ -773,7 +763,7 @@ class MapPanel(SingleMapPanel):
             if ext != extType:
                 path = base + "." + extType
 
-            self.MapWindow.SaveToFile(path, fileType, width, height)
+            self.MapWindow.SaveToFile(path, fileType, *self._saved_output_img_size)
 
         dlg.Destroy()
 
@@ -984,12 +974,20 @@ class MapPanel(SingleMapPanel):
         Also close associated layer tree page
         """
         Debug.msg(2, "MapPanel.OnCloseWindow()")
-        if self.canCloseDisplayCallback:
-            pgnum = self.canCloseDisplayCallback(askIfSaveWorkspace=askIfSaveWorkspace)
-            if pgnum is not None:
+        if self.canCloseCallback:
+            pgnum_dict = self.canCloseCallback(askIfSaveWorkspace=askIfSaveWorkspace)
+            if pgnum_dict is not None:
                 self.CleanUp()
-                if pgnum > -1:
-                    self.closingDisplay.emit(page_index=pgnum)
+                if pgnum_dict["layers"] > -1:
+                    if self.IsDockable():
+                        self.closingPage.emit(
+                            pgnum_dict=pgnum_dict, is_docked=self.IsDocked()
+                        )
+                        if not self.IsDocked():
+                            frame = self.GetParent()
+                            frame.Destroy()
+                    else:
+                        self.closingPage.emit(pgnum_dict=pgnum_dict)
                     # Destroy is called when notebook page is deleted
         else:
             self.CleanUp()
@@ -1084,14 +1082,14 @@ class MapPanel(SingleMapPanel):
                 mapdisp=self._giface.GetMapDisplay(), giface=self._giface
             )
 
-        # use display region settings instead of computation region settings
-        self.tmpreg = os.getenv("GRASS_REGION")
-        os.environ["GRASS_REGION"] = self.Map.SetRegion(windres=False)
-
         rastQuery = []
         vectQuery = []
-        if rast:
-            rastQuery = grass.raster_what(map=rast, coord=(east, north), localized=True)
+        env = os.environ.copy()
+        for raster in rast:
+            env["GRASS_REGION"] = grass.region_env(raster=raster)
+            rastQuery += grass.raster_what(
+                map=raster, coord=(east, north), localized=True, env=env
+            )
         if vect:
             encoding = UserSettings.Get(group="atm", key="encoding", subkey="value")
             try:
@@ -1110,7 +1108,6 @@ class MapPanel(SingleMapPanel):
                         "Check database settings and topology."
                     ).format(maps=",".join(vect)),
                 )
-        self._QueryMapDone()
 
         self._highlighter_layer.Clear()
         if vectQuery and "Category" in vectQuery[0]:
@@ -1155,19 +1152,6 @@ class MapPanel(SingleMapPanel):
 
             self._highlighter_layer.SetCats(tmp)
             self._highlighter_layer.DrawSelected()
-
-    def _QueryMapDone(self):
-        """Restore settings after querying (restore GRASS_REGION)"""
-        if hasattr(self, "tmpreg"):
-            if self.tmpreg:
-                os.environ["GRASS_REGION"] = self.tmpreg
-            elif "GRASS_REGION" in os.environ:
-                del os.environ["GRASS_REGION"]
-        elif "GRASS_REGION" in os.environ:
-            del os.environ["GRASS_REGION"]
-
-        if hasattr(self, "tmpreg"):
-            del self.tmpreg
 
     def OnQuery(self, event):
         """Query tools menu"""
@@ -1257,7 +1241,8 @@ class MapPanel(SingleMapPanel):
     def _onMeasure(self, controller):
         """Starts measurement mode.
 
-        :param controller: measurement class (MeasureDistanceController, MeasureAreaController)
+        :param controller: measurement class (MeasureDistanceController,
+                           MeasureAreaController)
         """
         self.measureController = controller(self._giface, mapWindow=self.GetMapWindow())
         # assure that the mode is ended and lines are cleared whenever other
@@ -1323,8 +1308,8 @@ class MapPanel(SingleMapPanel):
 
         win.CentreOnParent()
         win.Show()
-        # Open raster select dialog to make sure that at least 2 rasters (and the desired rasters)
-        # are selected to be plotted
+        # Open raster select dialog to make sure that at least 2 rasters (and the
+        # desired rasters) are selected to be plotted
         win.OnSelectRaster(None)
 
     def OnHistogram(self, event):
@@ -1577,8 +1562,7 @@ class MapPanel(SingleMapPanel):
         self.mapWindowProperties.autoRender = render
         if self.statusbarManager:
             self.statusbarManager.SetMode(mode)
-            self.StatusbarUpdate()
-            self.SetProperty("projection", projection)
+        self.mapWindowProperties.useDefinedProjection = projection
         self.mapWindowProperties.showRegion = showCompExtent
         self.mapWindowProperties.alignExtent = alignExtent
         self.mapWindowProperties.resolution = constrainRes
@@ -1674,7 +1658,7 @@ class MapPanel(SingleMapPanel):
             .CloseButton(False)
             .Layer(2)
             .DestroyOnClose()
-            .BestSize((self.toolbars["rdigit"].GetBestSize())),
+            .BestSize(self.toolbars["rdigit"].GetBestSize()),
         )
         self._mgr.Update()
 
@@ -1730,16 +1714,26 @@ class MapDisplay(FrameMixin, MapPanel):
             )
         )
         # use default frame window layout
+        client_disp = wx.ClientDisplayRect()
         if UserSettings.Get(group="general", key="defWindowPos", subkey="enabled"):
             dim = UserSettings.Get(group="general", key="defWindowPos", subkey="dim")
             idx = 4 + idx * 4
             try:
                 x, y = map(int, dim.split(",")[idx : idx + 2])
                 w, h = map(int, dim.split(",")[idx + 2 : idx + 4])
+                if x == 1:
+                    # Get client display x offset (OS panel)
+                    x = client_disp[0]
+                if y == 1:
+                    # Get client display y offset (OS panel)
+                    y = client_disp[1]
                 parent.SetPosition((x, y))
                 parent.SetSize((w, h))
             except Exception:
                 pass
+        else:
+            # Set client display x, y offset (OS panel)
+            parent.SetPosition((client_disp[0], client_disp[1]))
 
         # bindings
         parent.Bind(wx.EVT_CLOSE, self.OnCloseWindow)

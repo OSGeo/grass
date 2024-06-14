@@ -55,7 +55,7 @@
 # TODO use option G_OPT_V_CATS
 # %option
 # % key: cats
-# % label: Categories of vectores features
+# % label: Categories of vectors features
 # % description: To use only with stvds
 # % required: no
 # %end
@@ -104,7 +104,7 @@
 # %option
 # % key: size
 # % type: string
-# % label: The size for output image
+# % label: Size of output image as width,height in pixels
 # % description: It works only with output parameter
 # % required: no
 # %end

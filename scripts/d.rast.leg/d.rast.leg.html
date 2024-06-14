@@ -1,16 +1,16 @@
 <h2>DESCRIPTION</h2>
 
 <em>d.rast.leg</em> shows a raster map along with its legend.
-It first clears the entire screen, then divides it 
-into a main (left) and a minor (right) frames, and displays a raster 
+It first clears the entire screen, then divides it
+into a main (left) and a minor (right) frames, and displays a raster
 map in the main frame and the map legend in the minor frame. The main
 frame remains active when the program finishes.
 
 <h2>NOTES</h2>
 
 The legend may be flipped with the <b>-f</b> flag.
-<p>If the <b>lines</b> parameter is not given then the legend frame will 
-display as many lines as number of categories in the map, otherwise, it 
+<p>If the <b>lines</b> parameter is not given then the legend frame will
+display as many lines as number of categories in the map, otherwise, it
 will display the first <b>lines</b> minus 1 categories with the
 rest being truncated.
 <p>The user may adjust the <b>lines</b> parameter or
@@ -25,7 +25,7 @@ raster maps with a common static legend instead of the default dynamic legend.
 <h2>EXAMPLE</h2>
 
 In this example, the polar diagram of the 'aspect' angle map in the
-North Carolina sample dataset location is generated:
+North Carolina sample dataset is generated:
 
 <div class="code"><pre>
 g.region raster=landclass96 -p
@@ -44,8 +44,3 @@ d.rast.leg landclass96
 
 Jianping Xu, Scott Madry, Rutgers University<br>
 Markus Neteler
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

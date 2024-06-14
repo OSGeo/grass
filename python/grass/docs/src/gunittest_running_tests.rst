@@ -31,7 +31,7 @@ the directory tree. The report is placed in ``testreport`` by default.
 Open file ``testreport/index.html`` in you web browser to inspect it.
 
 To execute just part of the tests when fixing something, ``cd`` into some
-subdirectory, e.g. ``lib`` and execute the same command as above. 
+subdirectory, e.g. ``lib`` and execute the same command as above.
 gain, it will execute all tests in all ``testsuite`` subdirectories and
 create a report.
 
@@ -100,7 +100,7 @@ you would use::
     [gunittest]
     exclude =
         vector/*
-        raster/r.contour/testsuite/testrc.py
+        raster/r.contour/testsuite/test_broken.py
 
 
 Running tests and creating report
@@ -127,7 +127,7 @@ Example Bash script to run be used as a cron job
     # here we suppose default compilation settings of GRASS and no make install
     GRASSBIN="$GRASSSRC/bin.../grass"
     GRASSDIST="$GRASSSRC/dist..."
-    
+
     # necessary hardcoded GRASS paths
     GRASSDIST_PYTHON="$GRASSDIST/etc/python"
     GRASS_MULTI_RUNNER="$GRASSSRC/python/grass/gunittest/multirunner.py"

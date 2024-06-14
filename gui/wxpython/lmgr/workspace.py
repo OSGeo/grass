@@ -25,18 +25,19 @@ from core.settings import UserSettings
 from core.gcmd import RunCommand, GError, GMessage
 from core.workspace import ProcessWorkspaceFile, WriteWorkspaceFile
 from core.debug import Debug
+from gui_core.menu import RecentFilesMenu
 
 
 class WorkspaceManager:
     """Workspace Manager for creating, loading and saving workspaces."""
 
     def __init__(self, lmgr, giface):
-
         self.lmgr = lmgr
         self.workspaceFile = None
         self._giface = giface
         self.workspaceChanged = False  # track changes in workspace
         self.loadingWorkspace = False
+        self._recent_files = None
 
         Debug.msg(1, "WorkspaceManager.__init__()")
 
@@ -126,7 +127,7 @@ class WorkspaceManager:
         returncode, errors = RunCommand(
             "g.mapset",
             dbase=gxwXml.database,
-            location=gxwXml.location,
+            project=gxwXml.location,
             mapset=gxwXml.mapset,
             getErrorMsg=True,
         )
@@ -266,6 +267,8 @@ class WorkspaceManager:
             if "showToolbars" in display and not display["showToolbars"]:
                 for toolbar in mapdisp.GetToolbarNames():
                     mapdisp.RemoveToolbar(toolbar)
+            if "isDocked" in display and not display["isDocked"]:
+                mapdisp.OnDockUndock()
 
             displayId += 1
             mapdisp.Show()  # show mapdisplay
@@ -341,7 +344,17 @@ class WorkspaceManager:
                 self.lmgr.nvizUpdateSettings()
                 mapdisplay[i].toolbars["map"].combo.SetSelection(1)
 
+        #
+        # load layout
+        #
+        if UserSettings.Get(group="appearance", key="singleWindow", subkey="enabled"):
+            if gxwXml.layout["panes"]:
+                self.lmgr.GetAuiManager().LoadPerspective(gxwXml.layout["panes"])
+            if gxwXml.layout["notebook"]:
+                self.lmgr.GetAuiNotebook().LoadPerspective(gxwXml.layout["notebook"])
+
         self.workspaceFile = filename
+        self.AddFileToHistory()
         return True
 
     def SaveAs(self):
@@ -430,7 +443,7 @@ class WorkspaceManager:
             tmpfile.seek(0)
             for line in tmpfile.readlines():
                 mfile.write(line)
-        except IOError:
+        except OSError:
             GError(
                 parent=self.lmgr,
                 message=_("Unable to open file <%s> for writing.") % filename,
@@ -438,6 +451,8 @@ class WorkspaceManager:
             return False
 
         mfile.close()
+
+        self.AddFileToHistory(file_path=filename)
 
         return True
 
@@ -490,3 +505,61 @@ class WorkspaceManager:
         self.lmgr._setTitle()
         self.lmgr.displayIndex = 0
         self.lmgr.currentPage = None
+
+    def CreateRecentFilesMenu(self, menu=None):
+        """Create workspace recent files menu
+
+        :param gui_core.menu.Menu menu: menu default arg is None
+
+        :return None
+        """
+        if menu:
+            file_menu = menu.GetMenu(
+                menuIndex=menu.FindMenu(title=_("File")),
+            )
+            workspace_item = file_menu.FindItem(
+                id=file_menu.FindItem(itemString=_("Workspace")),
+            )[0]
+            self._recent_files = RecentFilesMenu(
+                app_name="main",
+                parent_menu=workspace_item.GetSubMenu(),
+                pos=0,
+            )
+            self._recent_files.file_requested.connect(self.OpenRecentFile)
+
+    def AddFileToHistory(self, file_path=None):
+        """Add file to history (recent files)
+
+        :param str file_path: file path wit default arg None
+
+        :return None
+        """
+        if not file_path:
+            file_path = self.workspaceFile
+        if self._recent_files:
+            self._recent_files.AddFileToHistory(filename=file_path)
+
+    def OpenRecentFile(self, path, file_exists, file_history):
+        """Try open recent file and read content
+
+        :param str path: file path
+        :param bool file_exists: file path exists
+        :param bool file_history: file history obj instance
+
+        :return: None
+        """
+        if not file_exists:
+            GError(
+                _(
+                    "File <{}> doesn't exist."
+                    " It was probably moved or deleted.".format(path)
+                ),
+                parent=self.lmgr,
+            )
+        else:
+            self.Close()
+            self.loadingWorkspace = True
+            self.Load(path)
+            self.loadingWorkspace = False
+            self.lmgr._setTitle()
+            file_history.AddFileToHistory(filename=path)  # move up the list

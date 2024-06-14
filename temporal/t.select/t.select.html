@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<em>t.select</em> performs selection of maps that are registered in 
+<em>t.select</em> performs selection of maps that are registered in
 space time datasets using temporal algebra.
 
 <h3>PROGRAM USE</h3>
@@ -10,23 +10,23 @@ The module expects an <b>expression</b> as input parameter in the following form
 <p>
 
 The statement structure is similar to r.mapcalc, see <a href="r.mapcalc.html">r.mapcalc</a>.
-Where <b>result</b> represents the name of a space time dataset 
-(STDS)that will contain the result of the calculation that is given as 
+Where <b>result</b> represents the name of a space time dataset
+(STDS)that will contain the result of the calculation that is given as
 <b>expression</b> on the right side of the equality sign.
 
-These expression can be any valid or nested combination of temporal 
-operations and functions that are provided by the temporal algebra.  
+These expression can be any valid or nested combination of temporal
+operations and functions that are provided by the temporal algebra.
 <br>
-The temporal algebra works with space time datasets of any type 
-(STRDS, STR3DS and STVDS). The algebra provides methods for map 
-selection from STDS based on their temporal relations. It is also 
-possible to temporally shift maps, to create temporal buffer and to 
-snap time instances to create a valid temporal topology. Furthermore 
-expressions can be nested and evaluated in conditional statements (if, 
-else statements). Within if-statements the algebra provides temporal 
-variables like start time, end time, day of year, time differences or 
-number of maps per time interval to build up conditions. These 
-operations can be assigned to space time datasets or to the results of 
+The temporal algebra works with space time datasets of any type
+(STRDS, STR3DS and STVDS). The algebra provides methods for map
+selection from STDS based on their temporal relations. It is also
+possible to temporally shift maps, to create temporal buffer and to
+snap time instances to create a valid temporal topology. Furthermore
+expressions can be nested and evaluated in conditional statements (if,
+else statements). Within if-statements the algebra provides temporal
+variables like start time, end time, day of year, time differences or
+number of maps per time interval to build up conditions. These
+operations can be assigned to space time datasets or to the results of
 operations between space time datasets.
 <p>
 The type of the input space time datasets must be defined with the input
@@ -74,7 +74,7 @@ starts            A ----
 started           A ------
                   B ----
 
-finishs           A   ----
+finishes          A   ----
                   B ------
 
 finished          A ------
@@ -101,9 +101,9 @@ Topological relations must be specified in {} parentheses. <br>
 
 <h3>TEMPORAL OPERATORS</h3>
 
-The temporal algebra defines temporal operators that can be combined with other 
-operators to perform spatio-temporal operations. 
-The temporal operators process the time instances and intervals of two temporal 
+The temporal algebra defines temporal operators that can be combined with other
+operators to perform spatio-temporal operations.
+The temporal operators process the time instances and intervals of two temporal
 related maps and calculate the result temporal extent by five different possibilities.
 <div class="code"><pre>
 LEFT REFERENCE     l       Use the time stamp of the left space time dataset
@@ -112,7 +112,6 @@ DISJOINT UNION     d       Disjoint union
 UNION              u       Union
 RIGHT REFERENCE    r       Use the time stamp of the right space time dataset
 </pre></div>
-
 
 <h3>TEMPORAL SELECTION</h3>
 
@@ -140,8 +139,8 @@ means: select all parts of space time time dataset A that are not equal to B
 and store it in space time dataset (STDS) C. <p>
 To select parts of a STDS by different topological relations to other STDS,
 the temporal topology selection operator can be used. The operator consists of
-the temporal selection operator, the topological relations, that must be separated 
-by the logical OR operator <b>|</b> and the temporal extent operator. 
+the temporal selection operator, the topological relations, that must be separated
+by the logical OR operator <b>|</b> and the temporal extent operator.
 All three parts are separated by comma and surrounded by curly braces:
 <div class="code"><pre>
 {"temporal selection operator", "topological relations", "temporal operator"}
@@ -169,7 +168,7 @@ temporal operator.
 C = A {:, during,r} B
 </pre></div>
 
-Select all parts of A that are during B and use the temporal extents from B for 
+Select all parts of A that are during B and use the temporal extents from B for
 C. <br>
 
 <br>
@@ -196,9 +195,9 @@ C = A {!:,equal,l} B
 Selection operations can be evaluated within conditional statements.
 <br>
 <div class="code"><pre>
-Note A and B can either be space time datasets or expressions. The temporal 
-relationship between the conditions and the conclusions can be defined at the 
-beginning of the if statement. The relationship between then and else conclusion 
+Note A and B can either be space time datasets or expressions. The temporal
+relationship between the conditions and the conclusions can be defined at the
+beginning of the if statement. The relationship between then and else conclusion
 must be always equal.
 
 if statement                           decision option                        temporal relations
@@ -211,7 +210,7 @@ if statement                           decision option                        te
 The conditions are comparison expressions that are used to evaluate
 space time datasets. Specific values of temporal variables are
 compared by logical operators and evaluated for each map of the STDS.<br>
-<b>Important:</b> The conditions are evaluated from left to right. 
+<b>Important:</b> The conditions are evaluated from left to right.
 
 <h4>Logical operators</h4>
 <div class="code"><pre>
@@ -266,22 +265,22 @@ end_second(A)            The second of the end time [0 - 59]
 
 The conditions are comparison expressions that are used to evaluate
 space time datasets. Specific values of temporal variables are
-compared by logical operators and evaluated for each map of the STDS and 
+compared by logical operators and evaluated for each map of the STDS and
 the related maps.
-For complex relations the comparison operator can be used to combine conditions: 
+For complex relations the comparison operator can be used to combine conditions:
 <br>
-The structure is similar to the select operator with the extension of an aggregation operator: 
+The structure is similar to the select operator with the extension of an aggregation operator:
 {"comparison operator", "topological relations", aggregation operator, "temporal operator"}
 <br>
-This aggregation operator (| or &) define the behaviour if a map is related the more 
+This aggregation operator (| or &) define the behaviour if a map is related the more
 than one map, e.g for the topological relations 'contains'.
-Should all (&) conditions for the related maps be true or is it sufficient to 
-have any (|) condition that is true. The resulting boolean value is then compared 
-to the first condition by the comparison operator (|| or &&). 
+Should all (&) conditions for the related maps be true or is it sufficient to
+have any (|) condition that is true. The resulting boolean value is then compared
+to the first condition by the comparison operator (|| or &&).
 As default the aggregation operator is related to the comparison operator: <br>
 Comparison operator -> aggregation operator:
 <div class="code"><pre>
-|| -> | and && -> & 
+|| -> | and && -> &
 </pre></div>
 Examples:
 <div class="code"><pre>
@@ -293,7 +292,7 @@ Condition 1 {&&, equal|during, l} Condition 2 {&&,contains, |, r} Condition 3
 </pre></div>
 
 <h4>Hash operator</h4>
-Additionally the number of maps in intervals can be computed and used in 
+Additionally the number of maps in intervals can be computed and used in
 conditional statements with the hash (#) operator. <br>
 <div class="code"><pre>
 A{#, contains}B
@@ -306,10 +305,10 @@ that contain maps from B will be returned. <p>
 <div class="code"><pre>
 C = if({equal}, A {#, contains} B > 2, A {:, contains} B)
 </pre></div>
-This expression selects all maps from A that temporally contains at least 2 
-maps from B and stores them in space time dataset C. The leading equal statement 
-in the if condition specifies the temporal relation between the if and then part 
-of the if expression. This is very important, so we do not need to specify a 
+This expression selects all maps from A that temporally contains at least 2
+maps from B and stores them in space time dataset C. The leading equal statement
+in the if condition specifies the temporal relation between the if and then part
+of the if expression. This is very important, so we do not need to specify a
 global time reference (a space time dataset) for temporal processing.
 <p>
 Furthermore the temporal algebra allows temporal buffering, shifting
@@ -335,7 +334,7 @@ This statement select all maps from space time data set A that are during
 the temporal extent of single map 'event'
 
 <br>
-<h2>Examples</h2>
+<h2>EXAMPLES</h2>
 
 Select all maps from space time dataset A which have equal time stamps
 with space time dataset B and C and are earlier that Jan. 1. 2005 and
@@ -358,12 +357,6 @@ select maps from C and store them in space time dataset D.
 D = if(contains, td(buff_t(A, "1 days")) == 3, B, C)
 </pre></div>
 
-<h2>SEE ALSO</h2>
-
-<em>
-<a href="r.mapcalc.html">r.mapcalc</a>
-</em>
-
 <h2>REFERENCES</h2>
 
 <a href="http://www.dabeaz.com/ply/">PLY(Python-Lex-Yacc)</a>
@@ -371,12 +364,12 @@ D = if(contains, td(buff_t(A, "1 days")) == 3, B, C)
 Gebbert, S., Leppelt, T., Pebesma, E., 2019. A topology based spatio-temporal map algebra for
 big data analysis. Data 4, 86. <a href="https://doi.org/10.3390/data4020086">https://doi.org/10.3390/data4020086</a>
 
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.mapcalc.html">r.mapcalc</a>
+</em>
+
 <h2>AUTHORS</h2>
 
 Thomas Leppelt, S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
-

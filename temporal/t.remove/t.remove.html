@@ -26,7 +26,7 @@ raster maps) are removed:
 t.create output=precip_months_sum semantictype=mean \
   title="Monthly sum of precipitation" \
   description="Monthly sum of precipitation for the \
-  North Carolina sample data location"
+  North Carolina sample data"
 
 #Register maps from sample dataset (selecting a subset with g.list)
 t.register -i type=raster input=precip_months_sum \
@@ -58,8 +58,3 @@ t.remove -f type=strds input=precip_months_sum
 <h2>AUTHOR</h2>
 
 S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

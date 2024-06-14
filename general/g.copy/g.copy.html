@@ -20,7 +20,7 @@ mapset search path. However, the user may only modify data stored
 under their own current mapset. <em>g.copy</em> allows the user to copy
 existing data files <b>from</b> other mapsets <b>to</b> the user's
 current mapset (<code>g.mapset -p</code>). The files to be copied must exist in the
-user's current mapset search path (<code>g.mapsets -p</code>) and location;
+user's current mapset search path (<code>g.mapsets -p</code>) and project;
 output is sent to the
 relevant data element directory(ies) under the user's current mapset.
 
@@ -30,7 +30,7 @@ Errors typically occur when a map or other element does not exist,
 <b>from</b> and <b>to</b> are the same, <b>to</b> element
 already exists and overwriting (e.g., by <b>--overwrite</b>) is not
 enabled, or the <b>to</b> element has an illegal name.
- 
+
 When only one map or other element is requested to be copied and the copying
 is not possible or fails, an error is reported.
 
@@ -89,10 +89,5 @@ listed there (see <em><a href="g.mapsets.html">g.mapsets</a></em>).
 <h2>AUTHOR</h2>
 
 Michael Shapiro,
-U.S. Army Construction Engineering 
+U.S. Army Construction Engineering
 Research Laboratory
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

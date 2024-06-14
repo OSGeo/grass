@@ -557,7 +557,7 @@ Section "GRASS" SecGRASS
 	FileWrite $0 'set GISRC=dummy$\r$\n'
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 'rem run g.mkfontcap outside a grass session$\r$\n'
-	FileWrite $0 '"%GISBASE%\bin\g.mkfontcap.exe" -o$\r$\n'
+	FileWrite $0 '"%GISBASE%\bin\g.mkfontcap.exe" --overwrite$\r$\n'
 	FileWrite $0 'exit$\r$\n'
 	FileClose $0
 	done_create_run_gmkfontcap.bat:
@@ -758,7 +758,8 @@ Section "GRASS" SecGRASS
 	Push 'config_projshare = "$INSTDIR\share\proj"' ; string to replace whole line with
 	Call ReplaceLineStr
 
-        AccessControl::SetOnFile "$INSTDIR\etc\grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@.py" "(BU)" "Execute"                 
+	;replace BU with numeric group name for local users. Users  S-1-5-32-545 does not work for Windows Enterprise. Try Authenticated Users S-1-5-11
+        AccessControl::SetOnFile "$INSTDIR\etc\grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@.py" "(S-1-5-11)" "GenericRead + GenericExecute"                 
 SectionEnd
 
 ;--------------------------------------------------------------------------
@@ -799,7 +800,7 @@ Function DownloadInstallMSRuntime
 		
 	download_ok:	
 	InitPluginsDir
-	untgz::extract "-d" "$TEMP\$ORIGINAL_UNTAR_FOLDER" "-zbz2" "$TEMP\$ARCHIVE_NAME"
+	untgz::extract -d "$TEMP\$ORIGINAL_UNTAR_FOLDER" -zbz2 "$TEMP\$ARCHIVE_NAME"
 	Pop $0
 	StrCmp $0 "success" untar_ok untar_failed
 	
@@ -871,7 +872,7 @@ Function DownloadDataSet
 		
 	download_ok:	
 	InitPluginsDir
-	untgz::extract "-d" "$GIS_DATABASE" "$TEMP\$ARCHIVE_NAME"
+	untgz::extract -d "$GIS_DATABASE" "$TEMP\$ARCHIVE_NAME"
 	Pop $0
 	StrCmp $0 "success" untar_ok untar_failed
 	

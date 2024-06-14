@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 This package parses C header files and generates lists of functions, typedefs,
 variables, structs, unions, enums, macros, and constants. This package knows

@@ -16,9 +16,8 @@ for details.
 .. sectionauthor:: Glynn Clements
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
-from __future__ import absolute_import
+
 import os
-import sys
 
 from .utils import parse_key_val
 from .core import (
@@ -31,14 +30,12 @@ from .core import (
 
 from grass.exceptions import CalledModuleError, ScriptError
 
-unicode = str
-
 
 def vector_db(map, env=None, **kwargs):
     """Return the database connection details for a vector map
     (interface to `v.db.connect -g`). Example:
 
-    >>> vector_db('geology') # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
+    >>> vector_db("geology")  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
     {1: {'layer': 1, ... 'table': 'geology'}}
 
     :param str map: vector map
@@ -102,7 +99,7 @@ def vector_columns(map, layer=None, getDict=True, env=None, **kwargs):
     """Return a dictionary (or a list) of the columns for the
     database table connected to a vector map (interface to `v.info -c`).
 
-    >>> vector_columns('geology', getDict=True) # doctest: +NORMALIZE_WHITESPACE
+    >>> vector_columns("geology", getDict=True)  # doctest: +NORMALIZE_WHITESPACE
     {'PERIMETER': {'index': 2, 'type': 'DOUBLE PRECISION'}, 'GEOL250_':
     {'index': 3, 'type': 'INTEGER'}, 'SHAPE_area': {'index': 6, 'type':
     'DOUBLE PRECISION'}, 'onemap_pro': {'index': 1, 'type': 'DOUBLE
@@ -110,7 +107,7 @@ def vector_columns(map, layer=None, getDict=True, env=None, **kwargs):
     'cat': {'index': 0, 'type': 'INTEGER'}, 'GEOL250_ID': {'index': 4, 'type':
     'INTEGER'}, 'GEO_NAME': {'index': 5, 'type': 'CHARACTER'}}
 
-    >>> vector_columns('geology', getDict=False) # doctest: +NORMALIZE_WHITESPACE
+    >>> vector_columns("geology", getDict=False)  # doctest: +NORMALIZE_WHITESPACE
     ['cat',
      'onemap_pro',
      'PERIMETER',
@@ -171,7 +168,7 @@ def vector_info_topo(map, layer=1, env=None):
     """Return information about a vector map (interface to `v.info -t`).
     Example:
 
-    >>> vector_info_topo('geology') # doctest: +NORMALIZE_WHITESPACE
+    >>> vector_info_topo("geology")  # doctest: +NORMALIZE_WHITESPACE
     {'lines': 0, 'centroids': 1832, 'boundaries': 3649, 'points': 0,
     'primitives': 5481, 'islands': 907, 'nodes': 2724, 'map3d': False,
     'areas': 1832}
@@ -194,7 +191,7 @@ def vector_info(map, layer=1, env=None):
     """Return information about a vector map (interface to
     `v.info`). Example:
 
-    >>> vector_info('geology') # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
+    >>> vector_info("geology")  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
     {'comment': '', 'projection': 'Lambert Conformal Conic' ... 'south': 10875.8272320917}
 
     :param str map: map name
@@ -202,7 +199,7 @@ def vector_info(map, layer=1, env=None):
     :param env: environment
 
     :return: parsed vector info
-    """
+    """  # noqa: E501
 
     s = read_command("v.info", flags="get", layer=layer, map=map, env=env)
 
@@ -237,11 +234,11 @@ def vector_db_select(map, layer=1, env=None, **kwargs):
     Function returns list of columns and dictionary of values ordered by
     key column value. Example:
 
-    >>> print vector_db_select('geology')['columns']
+    >>> print(vector_db_select("geology")["columns"])
     ['cat', 'onemap_pro', 'PERIMETER', 'GEOL250_', 'GEOL250_ID', 'GEO_NAME', 'SHAPE_area', 'SHAPE_len']
-    >>> print vector_db_select('geology')['values'][3]
+    >>> print(vector_db_select("geology")["values"][3])
     ['3', '579286.875', '3335.55835', '4', '3', 'Zml', '579286.829631', '3335.557182']
-    >>> print vector_db_select('geology', columns = 'GEO_NAME')['values'][3]
+    >>> print(vector_db_select("geology", columns="GEO_NAME")["values"][3])
     ['Zml']
 
     :param str map: map name
@@ -250,7 +247,7 @@ def vector_db_select(map, layer=1, env=None, **kwargs):
     :param env: environment
 
     :return: dictionary ('columns' and 'values')
-    """
+    """  # noqa: E501
     try:
         key = vector_db(map=map, env=env)[layer]["key"]
     except KeyError:
@@ -367,7 +364,7 @@ def vector_what(
     :param ttype: list of topology types (default of v.what are point, line,
                   area, face)
     :param encoding: attributes encoding
-    :param skip_attributes: True to skip quering attributes
+    :param skip_attributes: True to skip querying attributes
     :param layer: layer number or list of layers (one for each vector),
                   if None, all layers (-1) are used
     :param multiple: find multiple features within threshold distance
@@ -380,7 +377,7 @@ def vector_what(
     if "LC_ALL" in env:
         env["LC_ALL"] = "C"
 
-    if isinstance(map, (bytes, unicode)):
+    if isinstance(map, (bytes, str)):
         map_list = [map]
     else:
         map_list = map
@@ -449,8 +446,7 @@ def vector_what(
     if encoding:
         kwargs["encoding"] = encoding
 
-    if sys.version_info[0:2] > (2, 6):
-        kwargs["object_pairs_hook"] = orderedDict
+    kwargs["object_pairs_hook"] = orderedDict
 
     try:
         result = json.loads(ret, **kwargs)

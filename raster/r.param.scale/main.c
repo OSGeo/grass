@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.param.scale
@@ -15,23 +14,21 @@
 #include <grass/glocale.h>
 #include "param.h"
 
-const char *rast_in_name;	/* Name of the raster file to process.  */
-const char *rast_out_name;	/* Name of the raster output file.      */
-int constrained;		/* Flag that forces quadtratic through  */
-				/* the central cell of the window.      */
-int
-  fd_in,			/* File descriptor for input and        */
-  fd_out,			/* output raster files.                 */
-  wsize,			/* Size of local processing window.     */
-  mparam;			/* Morphometric parameter to calculate. */
+const char *rast_in_name;  /* Name of the raster file to process.  */
+const char *rast_out_name; /* Name of the raster output file.      */
+int constrained;           /* Flag that forces quadtratic through  */
 
+/* the central cell of the window.      */
+int fd_in,  /* File descriptor for input and        */
+    fd_out, /* output raster files.                 */
+    wsize,  /* Size of local processing window.     */
+    mparam; /* Morphometric parameter to calculate. */
 
-double
-  resoln,			/* Planimetric resolution.              */
-  exponent,			/* Distance weighting exponent.         */
-  zscale,			/* Vertical scaling factor.             */
-  slope_tol,			/* Vertical tolerences for surface      */
-  curve_tol;			/* feature identification.              */
+double resoln, /* Planimetric resolution.              */
+    exponent,  /* Distance weighting exponent.         */
+    zscale,    /* Vertical scaling factor.             */
+    slope_tol, /* Vertical tolerences for surface      */
+    curve_tol; /* feature identification.              */
 
 int main(int argc, char **argv)
 {
@@ -39,7 +36,7 @@ int main(int argc, char **argv)
 
     /* Make sure that the current projection is not lat/long */
     if ((G_projection() == PROJECTION_LL))
-	G_fatal_error(_("Lat/Long locations are not supported by this module"));
+        G_fatal_error(_("Lat/Long projects are not supported by this module"));
 
     open_files();
 
@@ -48,8 +45,8 @@ int main(int argc, char **argv)
     close_down();
 
     if (mparam == FEATURE) {
-	write_cols();
-	write_cats();
+        write_cols();
+        write_cats();
     }
 
     return 0;

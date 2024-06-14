@@ -26,7 +26,6 @@ import os
 import shutil
 import copy
 import tempfile
-import six
 
 import wx
 import wx.lib.colourselect as csel
@@ -91,9 +90,7 @@ class RulesPanel:
         # clear button
         self.clearAll = Button(parent, id=wx.ID_ANY, label=_("Clear all"))
         #  determines how many rules should be added
-        self.numRules = SpinCtrl(
-            parent, id=wx.ID_ANY, min=1, max=1e6, initial=1, size=(150, -1)
-        )
+        self.numRules = SpinCtrl(parent, id=wx.ID_ANY, min=1, max=1e6, initial=1)
         # add rules
         self.btnAdd = Button(parent, id=wx.ID_ADD)
 
@@ -681,7 +678,7 @@ class ColorTable(wx.Frame):
                 return
 
         rulestxt = ""
-        for rule in six.itervalues(self.rulesPanel.ruleslines):
+        for rule in self.rulesPanel.ruleslines.values():
             if "value" not in rule:
                 continue
             rulestxt += rule["value"] + " " + rule["color"] + "\n"
@@ -785,7 +782,7 @@ class ColorTable(wx.Frame):
         """
         rulestxt = ""
 
-        for rule in six.itervalues(self.rulesPanel.ruleslines):
+        for rule in self.rulesPanel.ruleslines.values():
             if "value" not in rule:  # skip empty rules
                 continue
 
@@ -1406,8 +1403,8 @@ class VectorColorTable(ColorTable):
         :param type: type of column (e.g. vachar(11))"""
         if not self.CheckMapset():
             return
-        # because more than one dialog with the same map can be opened we must test column name and
-        # create another one
+        # because more than one dialog with the same map can be opened we must test
+        # column name and create another one
         while (
             self.properties["tmpColumn"]
             in self.dbInfo.GetTableDesc(self.properties["table"]).keys()
@@ -1832,7 +1829,7 @@ class VectorColorTable(ColorTable):
         """
         rulestxt = ""
 
-        for rule in six.itervalues(self.rulesPanel.ruleslines):
+        for rule in self.rulesPanel.ruleslines.values():
             if "value" not in rule:  # skip empty rules
                 break
 
@@ -1979,7 +1976,6 @@ class BufferedWindow(wx.Window):
     def __init__(
         self, parent, id, style=wx.NO_FULL_REPAINT_ON_RESIZE, Map=None, **kwargs
     ):
-
         wx.Window.__init__(self, parent, id, style=style, **kwargs)
 
         self.parent = parent

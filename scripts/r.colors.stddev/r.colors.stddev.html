@@ -14,13 +14,19 @@ and above the mean the colors will simularly transition to full red at +2 S.D.
 
 <h2>EXAMPLE</h2>
 
-North Carolina sample dataset location:
+North Carolina sample dataset:
 
 <div class="code"><pre>
 g.region raster=elevation -p
 r.colors.stddev elevation
 </pre></div>
 
+<div align="center" style="margin: 10px">
+<a href="r_colors_stddev.png">
+<img src="r_colors_stddev.png" width="600" height="540" alt="r.colors.stddev example" border="0">
+</a><br>
+<i>Figure: Standard deviations from mean elevation</i>
+</div>
 
 <h2>SEE ALSO</h2>
 
@@ -30,12 +36,6 @@ r.colors.stddev elevation
 <a href="v.colors.html">v.colors</a>
 </em>
 
-
 <h2>AUTHOR</h2>
 
 Hamish Bowman, <i>Dunedin, New Zealand</i>
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

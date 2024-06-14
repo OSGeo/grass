@@ -3,6 +3,7 @@ Created on Wed Jun 18 17:21:42 2014
 
 @author: pietro
 """
+
 import numpy as np
 
 from grass.gunittest.case import TestCase
@@ -28,7 +29,6 @@ def generate_coordinates(number, bbox=None, with_z=False):
 
 
 class VectorTopo3DTestCase(TestCase):
-
     npoints = 10
     tmpname = "tmp_vect3d"
 

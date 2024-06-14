@@ -1,10 +1,10 @@
-
 /***************************************************************************
  *
  * MODULE:    r.fill.stats
  * AUTHOR(S): Benjamin Ducke
  *            Anna Petrasova (speedup with -p, fix of median, mode computation)
- * PURPOSE:   Rapidly fill "no data" cells in a raster map by simple interpolation.
+ * PURPOSE:   Rapidly fill "no data" cells in a raster map by simple
+ *            interpolation.
  *
  * COPYRIGHT: (C) 2011-2018 by the GRASS Development Team
  *
@@ -18,7 +18,8 @@
 
    DOCS:
    - docs need a lot of updates!
-   - dropped medoid (since we always have an odd number of cells, median=medoid).
+   - dropped medoid (since we always have an odd number of cells,
+   median=medoid).
    - flag -p(reserve) reversed (preservation is now default)
    - flag for including center cell has been dropped; center always included
    - "method" renamed to "mode"
@@ -28,16 +29,20 @@
    if (default) cells size specification is used, then the neighborhood
    shape is a less exact rectangle; in that case the neighborhood dimensions
    will also be different for x and y if the cell dimensions are different
-   - lat/lon data is allowed, but distance measure for -m(ap units) is straight line!
+   - lat/lon data is allowed, but distance measure for -m(ap units) is straight
+   line!
    - cell weights are now normalized to be in range [0;1]
    - center cell weight for "wmean" is now "1.0"
 
    BUGS:
-   - mode, median and mode produce large areas of "no data" where there is input data!!!
+   - mode, median and mode produce large areas of "no data" where there is input
+   data!!!
 
    NEXT VERSION:
-   - add lat/lon distance and cost map distance measures (lat/lon currently throws an error).
-   - allow user to set which cell value should be filled (i.e. interpreted as "no data")
+   - add lat/lon distance and cost map distance measures (lat/lon currently
+   throws an error).
+   - allow user to set which cell value should be filled (i.e. interpreted as
+   "no data")
 
  */
 
@@ -51,10 +56,10 @@
 
 #include "cell_funcs.h"
 
-
 /* Global variables :-) */
-double **WEIGHTS;               /* neighborhood weights */
-double SUM_WEIGHTS;             /* sum of weights in all cells (with or without data) of neighborhood */
+double **WEIGHTS;   /* neighborhood weights */
+double SUM_WEIGHTS; /* sum of weights in all cells (with or without data) of
+                       neighborhood */
 
 unsigned long WINDOW_WIDTH = 0; /* dimensions of neighborhood window */
 unsigned long WINDOW_HEIGHT = 0;
@@ -69,30 +74,31 @@ void *CELL_OUTPUT = NULL;
 FCELL *ERR_OUTPUT = NULL;
 
 /* holds statistics of cells within the neighborhood */
-typedef struct
-{
-    unsigned long num_values;   /* number of cells with values in input raster */
-    double *values;             /* individual values of all cells */
-    double *weights;            /* individual weights of all cells */
-    double result;              /* weighted mean of values in entire neighborhood */
-    double certainty;           /* certainty measure, always between 0 (lowest) and 1 (highest) */
+typedef struct {
+    unsigned long num_values; /* number of cells with values in input raster */
+    double *values;           /* individual values of all cells */
+    double *weights;          /* individual weights of all cells */
+    double result;    /* weighted mean of values in entire neighborhood */
+    double certainty; /* certainty measure, always between 0 (lowest) and 1
+                         (highest) */
     unsigned long *frequencies; /* frequency count for each value */
-    double *overwrite_value;    /* will be set to non-null to overwrite the statistical result with this value */
-    int overwrite;              /* 1 to overwrite the statistical result with the original value */
+    double *overwrite_value;    /* will be set to non-null to overwrite the
+                                   statistical result with this value */
+    int overwrite; /* 1 to overwrite the statistical result with the original
+                      value */
 } stats_struct;
 
-
 /* function pointers for operation modes */
-void (*GET_STATS) (unsigned long, unsigned long, double, double, int,
-                   stats_struct *);
-void (*COLLECT_DATA) (double, double, double, double, stats_struct *);
-
+void (*GET_STATS)(unsigned long, unsigned long, double, double, int,
+                  stats_struct *);
+void (*COLLECT_DATA)(double, double, double, double, stats_struct *);
 
 /*
  * Returns a rough estimate of the amount of RAM
  * (in bytes) that this program will require.
  */
-//TODO: this also needs to take into account additional input and output maps (once implemented).
+// TODO: this also needs to take into account additional input and output maps
+// (once implemented).
 long int estimate_mem_needed(long int cols, char *mode)
 {
     long int mem_count = 0;
@@ -100,14 +106,17 @@ long int estimate_mem_needed(long int cols, char *mode)
     long int out_bytes = 0;
     long int stat_bytes = 0;
 
-
     /* memory for neighborhood weights and statistics */
     if (!strcmp(mode, "wmean")) {
-        stat_bytes += sizeof(double) * (DATA_WIDTH * DATA_HEIGHT);      /* weights matrix */
+        stat_bytes +=
+            sizeof(double) * (DATA_WIDTH * DATA_HEIGHT); /* weights matrix */
     }
-    stat_bytes += sizeof(double) * (DATA_WIDTH * DATA_HEIGHT);  /* max. cell values */
-    stat_bytes += sizeof(double) * (DATA_WIDTH * DATA_HEIGHT);  /* max. cell weights */
-    stat_bytes += sizeof(unsigned long) * (DATA_WIDTH * DATA_HEIGHT);   /* max. cell frequencies */
+    stat_bytes +=
+        sizeof(double) * (DATA_WIDTH * DATA_HEIGHT); /* max. cell values */
+    stat_bytes +=
+        sizeof(double) * (DATA_WIDTH * DATA_HEIGHT); /* max. cell weights */
+    stat_bytes += sizeof(unsigned long) *
+                  (DATA_WIDTH * DATA_HEIGHT); /* max. cell frequencies */
 
     /* input data rows with padded buffers */
     in_bytes = (unsigned long)(WINDOW_HEIGHT * (cols + (PADDING_WIDTH * 2)));
@@ -138,6 +147,7 @@ long int estimate_mem_needed(long int cols, char *mode)
     return (mem_count);
 }
 
+#define WEIGHT_MATRIX_LINE_LENGTH 80
 
 /*
  * Prints the spatial weights matrix to the console.
@@ -147,27 +157,26 @@ long int estimate_mem_needed(long int cols, char *mode)
 void print_weights_matrix(long int rows, long int cols)
 {
     int i, j;
-    int weight_matrix_line_length = 80;
-    int weight_matrix_weight_length = 7;
-    char weight_matrix_line_buf[weight_matrix_line_length + 1];
-    char weight_matrix_weight_buf[weight_matrix_line_length + 1];
+    char weight_matrix_line_buf[WEIGHT_MATRIX_LINE_LENGTH + 1];
+    char weight_matrix_weight_buf[WEIGHT_MATRIX_LINE_LENGTH + 1];
 
     G_message(_("Spatial weights neighborhood (cells):"));
     for (i = 0; i < rows; i++) {
         weight_matrix_line_buf[0] = '\0';
         for (j = 0; j < cols; j++) {
             if (WEIGHTS[i][j] != -1.0) {
-                snprintf(weight_matrix_weight_buf, weight_matrix_line_length,
+                snprintf(weight_matrix_weight_buf, WEIGHT_MATRIX_LINE_LENGTH,
                          "%06.2f ", WEIGHTS[i][j]);
             }
             else {
-                snprintf(weight_matrix_weight_buf, weight_matrix_line_length,
+                snprintf(weight_matrix_weight_buf, WEIGHT_MATRIX_LINE_LENGTH,
                          "...... ");
             }
             if (strlen(weight_matrix_weight_buf) +
-                strlen(weight_matrix_line_buf) > weight_matrix_line_length) {
+                    strlen(weight_matrix_line_buf) >
+                WEIGHT_MATRIX_LINE_LENGTH) {
                 strncpy(weight_matrix_line_buf, "[line too long to print]",
-                        weight_matrix_line_length);
+                        WEIGHT_MATRIX_LINE_LENGTH);
                 break;
             }
             else {
@@ -178,7 +187,6 @@ void print_weights_matrix(long int rows, long int cols)
     }
 }
 
-
 /*
  * Returns a void* that points to the first valid data cell in the
  * input data row corresponding to "row_idx".
@@ -186,37 +194,38 @@ void print_weights_matrix(long int rows, long int cols)
 void *get_input_row(unsigned long row_idx)
 {
     unsigned long i;
-    void *my_cell = NULL;
-
+    char *my_cell = NULL;
 
     my_cell = CELL_INPUT_HANDLES[row_idx];
 
     for (i = 0; i < PADDING_WIDTH; i++)
         my_cell += CELL_IN_SIZE;
 
-
-    return (my_cell);
+    return (void *)my_cell;
 }
-
 
 /* NEIGHBORHOOD STATISTICS
  *
- * The following function provide the different neighborhood statistics (interpolators)
- * that have been implemented in this software.
+ * The following function provide the different neighborhood statistics
+ * (interpolators) that have been implemented in this software.
  *
- * Only those cells go into the statistics that are within the circular neighborhood window.
+ * Only those cells go into the statistics that are within the circular
+ * neighborhood window.
  *
- * Since the input buffers are padded with NULL data for rows lying to the South or North,
- * West or East of the current region, these functions can just blindly read values above and
- * below the current position on the W-E axis.
+ * Since the input buffers are padded with NULL data for rows lying to the South
+ * or North, West or East of the current region, these functions can just
+ * blindly read values above and below the current position on the W-E axis.
  *
- * The parameter "col" must be set to actual GRASS region column number on the W-E axis.
+ * The parameter "col" must be set to actual GRASS region column number on the
+ * W-E axis.
  *
- * "min" and "max" define the smallest and largest values to use for interpolation. Set
- * filter_min and filter_max to !=0 to use these for range filtering the data.
+ * "min" and "max" define the smallest and largest values to use for
+ * interpolation. Set filter_min and filter_max to !=0 to use these for range
+ * filtering the data.
  *
- * The results will be stored in the cell_stats object passed to this function. This object
- * must have been properly initialized before passing it to any of the functions below!
+ * The results will be stored in the cell_stats object passed to this function.
+ * This object must have been properly initialized before passing it to any of
+ * the functions below!
  */
 
 /*
@@ -224,8 +233,8 @@ void *get_input_row(unsigned long row_idx)
  * types of information to be collected.
  */
 
-void collect_values_unfiltered(double val1, double val2, double min,
-                               double max, stats_struct * stats)
+void collect_values_unfiltered(double val1, double val2, double min UNUSED,
+                               double max UNUSED, stats_struct *stats)
 {
     stats->values[stats->num_values] = val1;
     stats->certainty += val2;
@@ -233,7 +242,7 @@ void collect_values_unfiltered(double val1, double val2, double min,
 }
 
 void collect_values_filtered(double val1, double val2, double min, double max,
-                             stats_struct * stats)
+                             stats_struct *stats)
 {
     if (val1 >= min && val1 <= max) {
         collect_values_unfiltered(val1, val2, min, max, stats);
@@ -241,8 +250,8 @@ void collect_values_filtered(double val1, double val2, double min, double max,
 }
 
 void collect_values_and_weights_unfiltered(double val1, double val2,
-                                           double min, double max,
-                                           stats_struct * stats)
+                                           double min UNUSED, double max UNUSED,
+                                           stats_struct *stats)
 {
     stats->values[stats->num_values] = val1;
     stats->weights[stats->num_values] = val2;
@@ -251,7 +260,7 @@ void collect_values_and_weights_unfiltered(double val1, double val2,
 }
 
 void collect_values_and_weights_filtered(double val1, double val2, double min,
-                                         double max, stats_struct * stats)
+                                         double max, stats_struct *stats)
 {
     if (val1 >= min && val1 <= max) {
         collect_values_and_weights_unfiltered(val1, val2, min, max, stats);
@@ -259,8 +268,9 @@ void collect_values_and_weights_filtered(double val1, double val2, double min,
 }
 
 void collect_values_and_frequencies_unfiltered(double val1, double val2,
-                                               double min, double max,
-                                               stats_struct * stats)
+                                               double min UNUSED,
+                                               double max UNUSED,
+                                               stats_struct *stats)
 {
     unsigned long i;
 
@@ -293,14 +303,12 @@ void collect_values_and_frequencies_unfiltered(double val1, double val2,
 
 void collect_values_and_frequencies_filtered(double val1, double val2,
                                              double min, double max,
-                                             stats_struct * stats)
+                                             stats_struct *stats)
 {
     if (val1 >= min && val1 <= max) {
-        collect_values_and_frequencies_unfiltered(val1, val2, min, max,
-                                                  stats);
+        collect_values_and_frequencies_unfiltered(val1, val2, min, max, stats);
     }
 }
-
 
 /*
  * Simple double comparison function for use by qsort().
@@ -320,13 +328,13 @@ int compare_dbl(const void *val1, const void *val2)
  * basic loop for every type of statistics: collect only non-null
  * cells, and collect only within the neighborhood mask.
  */
-void read_neighborhood(unsigned long row_index, unsigned long col,
-                       double min, double max, int preserve,
-                       stats_struct * stats)
+void read_neighborhood(unsigned long row_index, unsigned long col, double min,
+                       double max, int preserve, stats_struct *stats)
 {
     unsigned long i, j;
-    void *cell;
+    char *cell;
     double cell_value;
+
     stats->overwrite = 0;
     if (preserve == TRUE) {
         cell = CELL_INPUT_HANDLES[row_index];
@@ -334,8 +342,7 @@ void read_neighborhood(unsigned long row_index, unsigned long col,
         cell += CELL_IN_SIZE * ((DATA_WIDTH - 1) / 2);
         if (!IS_NULL(cell)) {
             stats->overwrite = 1;
-            *stats->overwrite_value =
-                    (double)Rast_get_d_value(cell, IN_TYPE);
+            *stats->overwrite_value = (double)Rast_get_d_value(cell, IN_TYPE);
             return;
         }
     }
@@ -357,8 +364,7 @@ void read_neighborhood(unsigned long row_index, unsigned long col,
                 /* only add if within neighborhood */
                 if (WEIGHTS[i][j] != -1.0) {
                     /* get data needed for chosen statistic */
-                    COLLECT_DATA(cell_value, WEIGHTS[i][j], min, max,
-                                 stats);
+                    COLLECT_DATA(cell_value, WEIGHTS[i][j], min, max, stats);
                 }
             }
             /* go to next cell on current row */
@@ -367,16 +373,16 @@ void read_neighborhood(unsigned long row_index, unsigned long col,
     }
 }
 
-
 /*
  * NEIGHBORHOOD STATISTICS FUNCTION WMEAN
  * Spatially weighted mean.
  *
- * The cell values are multiplied by their spatial weights before they are stored.
+ * The cell values are multiplied by their spatial weights before they are
+ * stored.
  */
 void get_statistics_wmean(unsigned long row_index, unsigned long col,
                           double min, double max, int preserve,
-                          stats_struct * stats)
+                          stats_struct *stats)
 {
     unsigned long i;
     double total;
@@ -396,14 +402,12 @@ void get_statistics_wmean(unsigned long row_index, unsigned long col,
     stats->result = total / total_weight;
 }
 
-
 /*
  * NEIGHBORHOOD STATISTICS FUNCTION MEAN
  * Simple, unweighted mean.
  */
-void get_statistics_mean(unsigned long row_index, unsigned long col,
-                         double min, double max, int preserve,
-                         stats_struct * stats)
+void get_statistics_mean(unsigned long row_index, unsigned long col, double min,
+                         double max, int preserve, stats_struct *stats)
 {
     unsigned long i;
     double total;
@@ -420,15 +424,14 @@ void get_statistics_mean(unsigned long row_index, unsigned long col,
     stats->result = total / ((double)stats->num_values);
 }
 
-
 /*
  * NEIGHBORHOOD STATISTICS FUNCTION MEDIAN
- * Simple, unweighted median. For an even number of data points, the median is the
- * average of the two central elements in the sorted data list.
+ * Simple, unweighted median. For an even number of data points, the median is
+ * the average of the two central elements in the sorted data list.
  */
 void get_statistics_median(unsigned long row_index, unsigned long col,
                            double min, double max, int preserve,
-                           stats_struct * stats)
+                           stats_struct *stats)
 {
     read_neighborhood(row_index, col, min, max, preserve, stats);
     if (stats->overwrite)
@@ -438,10 +441,11 @@ void get_statistics_median(unsigned long row_index, unsigned long col,
     qsort(&stats->values[0], stats->num_values, sizeof(double), &compare_dbl);
 
     if (stats->num_values % 2 == 0.0) {
-        /* even number of elements: result is average of the two central values */
-        stats->result =
-            (stats->values[stats->num_values / 2 - 1] +
-             stats->values[(stats->num_values / 2)]) / 2.0;
+        /* even number of elements: result is average of the two central values
+         */
+        stats->result = (stats->values[stats->num_values / 2 - 1] +
+                         stats->values[(stats->num_values / 2)]) /
+                        2.0;
     }
     else {
         /* odd number of elements: result is the central element */
@@ -449,15 +453,14 @@ void get_statistics_median(unsigned long row_index, unsigned long col,
     }
 }
 
-
 /*
  * NEIGHBORHOOD STATISTICS FUNCTION MODE
- * Simple, unweighted mode. Mathematically, the mode is not always unique. If there is more than
- * one value with highest frequency, the smallest one is chosen to represent the mode.
+ * Simple, unweighted mode. Mathematically, the mode is not always unique. If
+ * there is more than one value with highest frequency, the smallest one is
+ * chosen to represent the mode.
  */
-void get_statistics_mode(unsigned long row_index, unsigned long col,
-                         double min, double max, int preserve,
-                         stats_struct * stats)
+void get_statistics_mode(unsigned long row_index, unsigned long col, double min,
+                         double max, int preserve, stats_struct *stats)
 {
     unsigned long i;
     double mode;
@@ -484,11 +487,10 @@ void get_statistics_mode(unsigned long row_index, unsigned long col,
         stats->frequencies[i] = 0;
 }
 
-
 /*
  * Initializes handlers to point to corresponding data rows.
  */
-void init_handles()
+void init_handles(void)
 {
     unsigned long i;
 
@@ -496,7 +498,6 @@ void init_handles()
         CELL_INPUT_HANDLES[i] = CELL_INPUT[i];
     }
 }
-
 
 /*
  * Replaces upper-most data row in input buffer with
@@ -511,12 +512,13 @@ void init_handles()
 void advance_one_row(int file_desc, long current_row)
 {
     unsigned long i, j;
-    void *cell_input;
-    static unsigned long replace_row = 0;       /* points to the row which will be replaced next */
+    char *cell_input;
+    static unsigned long replace_row =
+        0; /* points to the row which will be replaced next */
     unsigned long replace_pos = 0;
 
-
-    /* the actual replacement position needs to consider the "no data" padding offset, as well */
+    /* the actual replacement position needs to consider the "no data" padding
+     * offset, as well */
     replace_pos = replace_row + PADDING_HEIGHT;
 
     /* get address of data row to replace */
@@ -547,17 +549,15 @@ void advance_one_row(int file_desc, long current_row)
     }
 }
 
-
 /*
  * Interpolates one row of input data, stores result in CELL_OUTPUT (global var)
  */
-void interpolate_row(unsigned long row_index, unsigned long cols,
-                     double min, double max, int preserve,
-                     unsigned long min_cells,
-                     stats_struct * stats, int write_err)
+void interpolate_row(unsigned long row_index, unsigned long cols, double min,
+                     double max, int preserve, unsigned long min_cells,
+                     stats_struct *stats, int write_err)
 {
     unsigned long j;
-    void *cell_output;
+    char *cell_output;
     FCELL *err_output;
 
     cell_output = CELL_OUTPUT;
@@ -571,8 +571,7 @@ void interpolate_row(unsigned long row_index, unsigned long cols,
             WRITE_DOUBLE_VAL(cell_output, *stats->overwrite_value);
             /* write error/uncertainty output map? */
             if (write_err) {
-                Rast_set_f_value(err_output, 0,
-                                 FCELL_TYPE);
+                Rast_set_f_value(err_output, 0, FCELL_TYPE);
             }
         }
         /* enough reachable cells in input map? */
@@ -588,8 +587,7 @@ void interpolate_row(unsigned long row_index, unsigned long cols,
             /* write error/uncertainty output map? */
             if (write_err) {
                 Rast_set_f_value(err_output,
-                                 (FCELL) 1.0 -
-                                 (stats->certainty / SUM_WEIGHTS),
+                                 (FCELL)1.0 - (stats->certainty / SUM_WEIGHTS),
                                  FCELL_TYPE);
             }
         }
@@ -599,13 +597,13 @@ void interpolate_row(unsigned long row_index, unsigned long cols,
     }
 }
 
-
 /*
  * Pre-computes the matrix of spatial weights.
- * For operation mode "wmean" (spatially weighted mean), "constant" is passed as "0"
- * and distance-dependent weights are calculated. For all other modes, "constant" is
- * passed as "1" and all cells within the circular neighborhood will be set to "1.0".
- * In both cases, all cells outside the neighborhood will be set to "-1.0".
+ * For operation mode "wmean" (spatially weighted mean), "constant" is passed as
+ * "0" and distance-dependent weights are calculated. For all other modes,
+ * "constant" is passed as "1" and all cells within the circular neighborhood
+ * will be set to "1.0". In both cases, all cells outside the neighborhood will
+ * be set to "-1.0".
  */
 void build_weights_matrix(double radius, double power, double res_x,
                           double res_y, int constant, int use_map_units)
@@ -614,7 +612,6 @@ void build_weights_matrix(double radius, double power, double res_x,
     unsigned long i, j;
     double p1_x, p1_y, p2_x, p2_y, A, B, C, W;
     double tolerance;
-
 
     /* alloc enough mem for weights matrix */
     WEIGHTS = G_malloc(sizeof(double *) * DATA_HEIGHT);
@@ -685,13 +682,17 @@ void build_weights_matrix(double radius, double power, double res_x,
                 }
                 else {
                     WEIGHTS[i][j] = W;
-                    WEIGHTS[DATA_HEIGHT / 2][DATA_WIDTH / 2] = 0.0;     /* safeguard against total weight growing by center cell weight (InF) */
+                    WEIGHTS[DATA_HEIGHT / 2][DATA_WIDTH / 2] =
+                        0.0; /* safeguard against total weight growing by center
+                                cell weight (InF) */
                     SUM_WEIGHTS += WEIGHTS[i][j];
                 }
             }
             else {
                 WEIGHTS[i][j] = W;
-                WEIGHTS[DATA_HEIGHT / 2][DATA_WIDTH / 2] = 0.0; /* safeguard against total weight growing by center cell weight (InF) */
+                WEIGHTS[DATA_HEIGHT / 2][DATA_WIDTH / 2] =
+                    0.0; /* safeguard against total weight growing by center
+                            cell weight (InF) */
                 SUM_WEIGHTS += WEIGHTS[i][j];
             }
         }
@@ -700,7 +701,6 @@ void build_weights_matrix(double radius, double power, double res_x,
     /* weight of center cell is always = 1 */
     WEIGHTS[DATA_HEIGHT / 2][DATA_WIDTH / 2] = 1.0;
 }
-
 
 /*
  *
@@ -724,13 +724,10 @@ int main(int argc, char *argv[])
 
     /* GRASS module options */
     struct GModule *module;
-    struct
-    {
-        struct Option
-            *input, *output, *error,
-            *radius, *mode, *power, *min, *max, *minpts;
-        struct Flag
-            *dist_m, *preserve, *print_w, *print_u, *center,
+    struct {
+        struct Option *input, *output, *error, *radius, *mode, *power, *min,
+            *max, *minpts;
+        struct Flag *dist_m, *preserve, *print_w, *print_u, *center,
             *single_precision;
     } parm;
 
@@ -748,7 +745,7 @@ int main(int argc, char *argv[])
     int write_error;
 
     /* file handlers */
-    void *cell_input;
+    char *cell_input;
     int in_fd;
     int out_fd;
     int err_fd;
@@ -760,7 +757,6 @@ int main(int argc, char *argv[])
     unsigned long i, j;
     long l;
 
-
     start = time(NULL);
 
     G_gisinit(argv[0]);
@@ -771,8 +767,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("interpolation"));
     G_add_keyword(_("IDW"));
     G_add_keyword(_("no-data filling"));
-    module->description =
-        _("Rapidly fills 'no data' cells (NULLs) of a raster map with interpolated values (IDW).");
+    module->description = _("Rapidly fills 'no data' cells (NULLs) of a raster "
+                            "map with interpolated values (IDW).");
 
     /* parameters */
 
@@ -857,8 +853,7 @@ int main(int argc, char *argv[])
     parm.preserve = G_define_flag();
     parm.preserve->key = 'k';
     parm.preserve->label = _("Keep (preserve) original cell values");
-    parm.preserve->description =
-        _("By default original values are smoothed");
+    parm.preserve->description = _("By default original values are smoothed");
 
     parm.print_w = G_define_flag();
     parm.print_w->key = 'w';
@@ -872,7 +867,6 @@ int main(int argc, char *argv[])
     parm.single_precision->key = 's';
     parm.single_precision->description =
         _("Single precision floating point output");
-
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -901,7 +895,8 @@ int main(int argc, char *argv[])
     if (parm.error->answer) {
         write_error = 1;
         if (!strcmp(parm.error->answer, parm.output->answer)) {
-            G_fatal_error(_("Result map name cannot be identical with uncertainty map name."));
+            G_fatal_error(_("Result map name cannot be identical with "
+                            "uncertainty map name."));
         }
     }
 
@@ -914,22 +909,26 @@ int main(int argc, char *argv[])
         }
         if (res_x < res_y) {
             if (radius < res_x)
-                G_fatal_error(_("Maximum distance must be at least '%.6f' (W-E resolution)."),
+                G_fatal_error(_("Maximum distance must be at least '%.6f' (W-E "
+                                "resolution)."),
                               res_x);
         }
         if (res_y < res_x) {
             if (radius < res_y)
-                G_fatal_error(_("Maximum distance must be at least '%.6f' (S-N resolution)."),
+                G_fatal_error(_("Maximum distance must be at least '%.6f' (S-N "
+                                "resolution)."),
                               res_y);
         }
         if (res_y == res_x) {
             if (radius < res_y)
-                G_fatal_error(_("Maximum distance must be at least '%.6f' (W-E and S-N resolution)."),
+                G_fatal_error(_("Maximum distance must be at least '%.6f' (W-E "
+                                "and S-N resolution)."),
                               res_y);
         }
         max_dist = sqrt(pow((cols * res_x), 2) + pow((rows * res_y), 2));
         if (radius > max_dist) {
-            G_warning(_("Maximum distance too large. Adjusted to '%.6f' (diagonal of current region)."),
+            G_warning(_("Maximum distance too large. Adjusted to '%.6f' "
+                        "(diagonal of current region)."),
                       max_dist);
             radius = max_dist;
         }
@@ -937,7 +936,7 @@ int main(int argc, char *argv[])
     else {
         unsigned long radius_i = (unsigned long)radius;
 
-        radius = (double)radius_i;      //truncate to whole cell number
+        radius = (double)radius_i; // truncate to whole cell number
         if (radius < 1) {
             G_fatal_error(_("Maximum distance must be at least one cell."));
         }
@@ -945,7 +944,8 @@ int main(int argc, char *argv[])
             (unsigned long)(sqrt(pow((cols), 2) + pow((rows), 2)));
         max_dist = (double)max_dist_i;
         if (radius > max_dist) {
-            G_warning(_("Maximum distance too large. Adjusted to '%lu' cells (diagonal of current region)."),
+            G_warning(_("Maximum distance too large. Adjusted to '%lu' cells "
+                        "(diagonal of current region)."),
                       max_dist_i);
             radius = (double)max_dist_i;
         }
@@ -955,19 +955,21 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Minimum number of cells must be at least '1'."));
     }
     if (min_cells > ((DATA_WIDTH * DATA_HEIGHT) - 1)) {
-        G_fatal_error(_("Specified minimum number of cells unreachable with current settings."));
+        G_fatal_error(_("Specified minimum number of cells unreachable with "
+                        "current settings."));
     }
 
     if (filter_min != 0 && filter_max != 0) {
         if (min >= max) {
-            G_fatal_error(_("Value for 'minimum' must be smaller than value for 'maximum'."));
+            G_fatal_error(_("Value for 'minimum' must be smaller than value "
+                            "for 'maximum'."));
         }
     }
     if (parm.power->answer && strcmp(parm.mode->answer, "wmean")) {
-        G_warning(_("The 'power' option has no effect in any mode other than 'wmean'."));
+        G_warning(_("The 'power' option has no effect in any mode other than "
+                    "'wmean'."));
         parm.power->answer = 0;
     }
-
 
     /* rounded dimensions of weight matrix (in map cells) */
     if (parm.dist_m->answer) {
@@ -975,12 +977,13 @@ int main(int argc, char *argv[])
         DATA_HEIGHT = ((unsigned long)ceil(radius / res_y)) * 2 + 1;
         if ((!parm.print_w->answer) &&
             (fmod(radius, res_x) != 0 || fmod(radius, res_y) != 0)) {
-            G_warning(_("The specified maximum distance cannot be resolved to whole cells\n at the current resolution settings."));
+            G_warning(_("The specified maximum distance cannot be resolved to "
+                        "whole cells\n at the current resolution settings."));
         }
     }
     else {
-        DATA_WIDTH = (unsigned long)radius *2 + 1;
-        DATA_HEIGHT = (unsigned long)radius *2 + 1;
+        DATA_WIDTH = (unsigned long)radius * 2 + 1;
+        DATA_HEIGHT = (unsigned long)radius * 2 + 1;
     }
     PADDING_WIDTH = (DATA_WIDTH - 1) / 2;
     PADDING_HEIGHT = (DATA_HEIGHT - 1) / 2;
@@ -990,7 +993,8 @@ int main(int argc, char *argv[])
     G_message(_("S-N size of neighborhood is %lu cells."), DATA_HEIGHT);
 
     if (DATA_WIDTH < 3 || DATA_HEIGHT < 3) {
-        G_fatal_error(_("Neighborhood cannot be smaller than 3 cells in X or Y direction."));
+        G_fatal_error(_("Neighborhood cannot be smaller than 3 cells in X or Y "
+                        "direction."));
     }
 
     if (parm.print_w->answer) {
@@ -1057,10 +1061,11 @@ int main(int argc, char *argv[])
     }
     if (IN_TYPE == CELL_TYPE) {
         if ((!strcmp(parm.mode->answer, "wmean")) ||
-            (!strcmp(parm.mode->answer, "mean"))
-            || (!strcmp(parm.mode->answer, "median"))) {
-            G_warning(_("Input data type is integer but interpolation mode is '%s'."),
-                      parm.mode->answer);
+            (!strcmp(parm.mode->answer, "mean")) ||
+            (!strcmp(parm.mode->answer, "median"))) {
+            G_warning(
+                _("Input data type is integer but interpolation mode is '%s'."),
+                parm.mode->answer);
             if (parm.single_precision->answer) {
                 OUT_TYPE = FCELL_TYPE;
                 G_warning(_("Output type changed to floating point (single)."));
@@ -1072,13 +1077,14 @@ int main(int argc, char *argv[])
         }
         else {
             if (parm.single_precision->answer) {
-                G_warning(_("Ignoring '%c' flag. Output data type will be integer."),
-                          parm.single_precision->key);
+                G_warning(
+                    _("Ignoring '%c' flag. Output data type will be integer."),
+                    parm.single_precision->key);
             }
         }
     }
-    char *data_type_string_in;
-    char *data_type_string_out;
+    char *data_type_string_in = NULL;
+    char *data_type_string_out = NULL;
 
     if (IN_TYPE == CELL_TYPE) {
         data_type_string_in = "integer";
@@ -1102,14 +1108,15 @@ int main(int argc, char *argv[])
     /* initialize data type dependent cell handling functions */
     init_cell_funcs();
 
-    G_message(_("Input data type is '%s' (%i bytes) and output data type is '%s' (%i bytes)."),
+    G_message(_("Input data type is '%s' (%i bytes) and output data type is "
+                "'%s' (%i bytes)."),
               data_type_string_in, CELL_IN_SIZE, data_type_string_out,
               CELL_OUT_SIZE);
 
     /* just print projected mem usage if user wants it so */
     G_message("Minimal estimated memory usage is %.3f MB.",
               ((double)estimate_mem_needed(cols, parm.mode->answer)) / 1024 /
-              1024);
+                  1024);
     if (parm.print_u->answer) {
         exit(0);
     }
@@ -1126,8 +1133,7 @@ int main(int argc, char *argv[])
         CELL_INPUT[i] = G_malloc(CELL_IN_SIZE * (cols + (PADDING_WIDTH * 2)));
     }
     for (i = 0; i < WINDOW_HEIGHT; i++) {
-        Rast_set_null_value(CELL_INPUT[i], cols + (PADDING_WIDTH * 2),
-                            IN_TYPE);
+        Rast_set_null_value(CELL_INPUT[i], cols + (PADDING_WIDTH * 2), IN_TYPE);
     }
 
     /*
@@ -1144,8 +1150,7 @@ int main(int argc, char *argv[])
     CELL_INPUT_HANDLES = G_malloc(CELL_IN_PTR_SIZE * WINDOW_HEIGHT);
 
     /* create statistics object */
-    cell_stats.values =
-        G_malloc(sizeof(double) * WINDOW_WIDTH * WINDOW_HEIGHT);
+    cell_stats.values = G_malloc(sizeof(double) * WINDOW_WIDTH * WINDOW_HEIGHT);
     cell_stats.weights =
         G_malloc(sizeof(double) * WINDOW_WIDTH * WINDOW_HEIGHT);
     cell_stats.frequencies =
@@ -1340,15 +1345,14 @@ int main(int argc, char *argv[])
     Rast_put_cell_title(parm.output->answer,
                         "Result of interpolation/gap filling");
     if (parm.dist_m->answer) {
-        Rast_append_format_history(&hist,
-                                   "Settings: mode=%s, distance (map units)=%.6f, power=%.3f",
-                                   parm.mode->answer, radius, power);
+        Rast_append_format_history(
+            &hist, "Settings: mode=%s, distance (map units)=%.6f, power=%.3f",
+            parm.mode->answer, radius, power);
     }
     else {
-        Rast_append_format_history(&hist,
-                                   "Settings: mode=%s, distance (cells)=%lu, power=%.3f",
-                                   parm.mode->answer, (unsigned long)radius,
-                                   power);
+        Rast_append_format_history(
+            &hist, "Settings: mode=%s, distance (cells)=%lu, power=%.3f",
+            parm.mode->answer, (unsigned long)radius, power);
     }
     Rast_append_format_history(&hist,
                                "          min=%.3f, max=%.3f, min. points=%lu",
@@ -1361,8 +1365,8 @@ int main(int argc, char *argv[])
                             "Uncertainty of interpolation/gap filling");
         Rast_append_format_history(&hist, "Result map: %s",
                                    parm.output->answer);
-        Rast_append_format_history(&hist,
-                                   "Theoretic range is '0' (lowest) to '1' (highest).");
+        Rast_append_format_history(
+            &hist, "Theoretic range is '0' (lowest) to '1' (highest).");
         Rast_write_history(parm.error->answer, &hist);
     }
 

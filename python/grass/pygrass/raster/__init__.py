@@ -1,12 +1,3 @@
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
 import ctypes
 import numpy as np
 
@@ -22,16 +13,12 @@ import grass.lib.rowio as librowio
 
 libgis.G_gisinit("")
 
-#
 # import pygrass modules
-#
 from grass.pygrass.errors import must_be_open
 from grass.pygrass.gis.region import Region
 from grass.pygrass import utils
 
-#
 # import raster classes
-#
 from grass.pygrass.raster.abstract import RasterAbstractBase
 from grass.pygrass.raster.raster_type import TYPE as RTYPE, RTYPE_STR
 from grass.pygrass.raster.buffer import Buffer
@@ -144,7 +131,7 @@ class RasterRow(RasterAbstractBase):
     """
 
     def __init__(self, name, mapset="", *args, **kargs):
-        super(RasterRow, self).__init__(name, mapset, *args, **kargs)
+        super().__init__(name, mapset, *args, **kargs)
 
     # mode = "r", method = "row",
     @must_be_open
@@ -240,7 +227,7 @@ class RasterRowIO(RasterRow):
 
     def __init__(self, name, *args, **kargs):
         self.rowio = RowIO()
-        super(RasterRowIO, self).__init__(name, *args, **kargs)
+        super().__init__(name, *args, **kargs)
 
     def open(self, mode=None, mtype=None, overwrite=False):
         """Open the raster if exist or created a new one.
@@ -255,7 +242,7 @@ class RasterRowIO(RasterRow):
                           raster maps
         :type overwrite: bool
         """
-        super(RasterRowIO, self).open(mode, mtype, overwrite)
+        super().open(mode, mtype, overwrite)
         self.rowio.open(self._fd, self._rows, self._cols, self.mtype)
 
     @must_be_open
@@ -320,7 +307,7 @@ class RasterSegment(RasterAbstractBase):
 
     def __init__(self, name, srows=64, scols=64, maxmem=100, *args, **kargs):
         self.segment = Segment(srows, scols, maxmem)
-        super(RasterSegment, self).__init__(name, *args, **kargs)
+        super().__init__(name, *args, **kargs)
 
     def _get_mode(self):
         return self._mode
@@ -634,7 +621,7 @@ def raster2numpy(rastname, mapset=""):
     """Return a numpy array from a raster map
 
     :param str rastname: the name of raster map
-    :parar str mapset: the name of mapset containig raster map
+    :parar str mapset: the name of mapset containing raster map
     """
     with RasterRow(rastname, mapset=mapset, mode="r") as rast:
         return np.array(rast)
@@ -729,7 +716,6 @@ def numpy2raster(array, mtype, rastname, overwrite=False):
 
 
 if __name__ == "__main__":
-
     import doctest
     from grass.pygrass.modules import Module
 

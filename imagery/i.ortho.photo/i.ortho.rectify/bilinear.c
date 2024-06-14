@@ -13,19 +13,19 @@
 #include <math.h>
 #include "global.h"
 
-void p_bilinear(struct cache *ibuffer,	  /* input buffer                */
-		void *obufptr,		  /* ptr in output buffer        */
-		int cell_type,		  /* raster map type of obufptr  */
-		double *row_idx,	  /* row index                   */
-		double *col_idx,	  /* column index                */
-		struct Cell_head *cellhd  /* information of output map   */
-    )
+void p_bilinear(struct cache *ibuffer,   /* input buffer                */
+                void *obufptr,           /* ptr in output buffer        */
+                int cell_type,           /* raster map type of obufptr  */
+                double *row_idx,         /* row index                   */
+                double *col_idx,         /* column index                */
+                struct Cell_head *cellhd /* information of output map   */
+)
 {
-    int row;			/* row indices for interp        */
-    int col;			/* column indices for interp     */
+    int row; /* row indices for interp        */
+    int col; /* column indices for interp     */
     int i, j;
-    double t, u;		/* intermediate slope            */
-    DCELL result;		/* result of interpolation       */
+    double t, u;  /* intermediate slope            */
+    DCELL result; /* result of interpolation       */
     DCELL c[2][2];
 
     /* cut indices to integer */
@@ -33,20 +33,22 @@ void p_bilinear(struct cache *ibuffer,	  /* input buffer                */
     col = (int)floor(*col_idx - 0.5);
 
     /* check for out of bounds - if out of bounds set NULL value and return */
-    if (row < 0 || row + 1 >= cellhd->rows || col < 0 || col + 1 >= cellhd->cols) {
-	Rast_set_null_value(obufptr, 1, cell_type);
-	return;
+    if (row < 0 || row + 1 >= cellhd->rows || col < 0 ||
+        col + 1 >= cellhd->cols) {
+        Rast_set_null_value(obufptr, 1, cell_type);
+        return;
     }
 
     for (i = 0; i < 2; i++)
-	for (j = 0; j < 2; j++) {
-	    const DCELL *cellp = CPTR(ibuffer, row + i, col + j);
-	    if (Rast_is_d_null_value(cellp)) {
-		Rast_set_null_value(obufptr, 1, cell_type);
-		return;
-	    }
-	    c[i][j] = *cellp;
-	}
+        for (j = 0; j < 2; j++) {
+            const DCELL *cellp = CPTR(ibuffer, row + i, col + j);
+
+            if (Rast_is_d_null_value(cellp)) {
+                Rast_set_null_value(obufptr, 1, cell_type);
+                return;
+            }
+            c[i][j] = *cellp;
+        }
 
     /* do the interpolation  */
     t = *col_idx - 0.5 - col;

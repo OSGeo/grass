@@ -133,7 +133,8 @@ def main():
     except KeyError:
         grass.fatal(
             _(
-                "There is no table connected to this map. Run v.db.connect or v.db.addtable first."
+                "There is no table connected to this map. Run v.db.connect or "
+                "v.db.addtable first."
             )
         )
     # we need this for non-DBF driver:
@@ -237,13 +238,11 @@ def main():
                 "db.execute", input=sqltmp, database=fi["database"], driver=fi["driver"]
             )
             grass.verbose(
-                (
-                    _(
-                        "Statistics calculated from raster map <{raster}>"
-                        " and uploaded to attribute table"
-                        " of vector map <{vector}>."
-                    ).format(raster=raster, vector=vector)
-                )
+                _(
+                    "Statistics calculated from raster map <{raster}>"
+                    " and uploaded to attribute table"
+                    " of vector map <{vector}>."
+                ).format(raster=raster, vector=vector)
             )
         except CalledModuleError:
             grass.warning(

@@ -1,14 +1,14 @@
-
 /****************************************************************************
  *
  * MODULE:       g.parser
- * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original contributor)
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Cedric Shock <cedricgrass shockfamily.net>, 
- *               Hamish Bowman <hamish_b yahoo.com>, 
- *               Paul Kelly <paul-grass stjohnspoint.co.uk>, 
+ * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original
+ *                 contributor)
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Cedric Shock <cedricgrass shockfamily.net>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
+ *               Paul Kelly <paul-grass stjohnspoint.co.uk>,
  *               Radim Blazek <radim.blazek gmail.com>
- * PURPOSE:      
+ * PURPOSE:
  * COPYRIGHT:    (C) 2001-2007, 2010-2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     const char *filename;
     int standard_output;
     int separator_nul;
-    
+
     progname = argv[0];
 
     ctx.module = NULL;
@@ -47,32 +47,33 @@ int main(int argc, char *argv[])
     standard_output = translate_output = separator_nul = FALSE;
 
     /* Detect request to get strings to translate from a file */
-    /* It comes BEFORE the filename to completely avoid confusion with parser.c behaviours */
+    /* It comes BEFORE the filename to completely avoid confusion with parser.c
+     * behaviours */
     if (argc >= 2 && (strcmp(argv[1], "-t") == 0)) {
-	/* Turn on translation output */
-	translate_output = TRUE;
-	argv++, argc--;
+        /* Turn on translation output */
+        translate_output = TRUE;
+        argv++, argc--;
     }
 
     if (argc >= 2 && (strcmp(argv[1], "-s") == 0)) {
-	/* write to stdout rather than re-invoking */
-	standard_output = TRUE;
-	argv++, argc--;
+        /* write to stdout rather than re-invoking */
+        standard_output = TRUE;
+        argv++, argc--;
     }
 
     if (argc >= 2 && (strcmp(argv[1], "-n") == 0)) {
-	/* write to stdout with NUL as separator */
-	standard_output = TRUE;
-	separator_nul = TRUE;
-	argv++, argc--;
+        /* write to stdout with NUL as separator */
+        standard_output = TRUE;
+        separator_nul = TRUE;
+        argv++, argc--;
     }
 
-    if ((argc < 2) || ((strcmp(argv[1], "help") == 0) ||
-		       (strcmp(argv[1], "-help") == 0) ||
-		       (strcmp(argv[1], "--help") == 0))) {
-	fprintf(stderr, "%s: %s [-t] [-s] [-n] <filename> [<argument> ...]\n",
-		_("Usage"), progname);
-	exit(EXIT_FAILURE);
+    if ((argc < 2) ||
+        ((strcmp(argv[1], "help") == 0) || (strcmp(argv[1], "-help") == 0) ||
+         (strcmp(argv[1], "--help") == 0))) {
+        fprintf(stderr, "%s: %s [-t] [-s] [-n] <filename> [<argument> ...]\n",
+                _("Usage"), progname);
+        exit(EXIT_FAILURE);
     }
 
     filename = argv[1];
@@ -81,84 +82,84 @@ int main(int argc, char *argv[])
 
     ctx.fp = fopen(filename, "r");
     if (!ctx.fp) {
-	perror(_("Unable to open script file"));
-	exit(EXIT_FAILURE);
+        perror(_("Unable to open script file"));
+        exit(EXIT_FAILURE);
     }
 
     G_gisinit((char *)filename);
 
     for (ctx.line = 1;; ctx.line++) {
-	char buff[4096];
-	char *cmd, *arg;
-	size_t line_size;
+        char buff[4096];
+        char *cmd, *arg;
+        size_t line_size;
 
-	if (!fgets(buff, sizeof(buff), ctx.fp))
-	    break;
+        if (!fgets(buff, sizeof(buff), ctx.fp))
+            break;
 
-	arg = strchr(buff, '\n');
-	if (!arg) {
-	    fprintf(stderr, _("Line too long or missing newline at line %d\n"),
-		    ctx.line);
-	    exit(EXIT_FAILURE);
-	}
-	*arg = '\0';
+        arg = strchr(buff, '\n');
+        if (!arg) {
+            fprintf(stderr, _("Line too long or missing newline at line %d\n"),
+                    ctx.line);
+            exit(EXIT_FAILURE);
+        }
+        *arg = '\0';
 
-	line_size = strlen(buff);
-	if (line_size > 2 && buff[0] == '#') {
-	    if (buff[1] == '%')
-		cmd = buff + 2;
-	    else if (line_size > 3 && buff[1] == ' ' && buff[2] == '%')
-		cmd = buff + 3;
-	    else
-		continue;
-	}
-	else {
-	    continue;
-	}
+        line_size = strlen(buff);
+        if (line_size > 2 && buff[0] == '#') {
+            if (buff[1] == '%')
+                cmd = buff + 2;
+            else if (line_size > 3 && buff[1] == ' ' && buff[2] == '%')
+                cmd = buff + 3;
+            else
+                continue;
+        }
+        else {
+            continue;
+        }
 
-	G_chop(cmd);
+        G_chop(cmd);
 
-	arg = strchr(cmd, ':');
+        arg = strchr(cmd, ':');
 
-	if (arg) {
-	    *(arg++) = '\0';
-	    G_strip(cmd);
-	    G_strip(arg);
-	}
+        if (arg) {
+            *(arg++) = '\0';
+            G_strip(cmd);
+            G_strip(arg);
+        }
 
-	switch (ctx.state) {
-	case S_TOPLEVEL:
-	    parse_toplevel(&ctx, cmd);
-	    break;
-	case S_MODULE:
-	    parse_module(&ctx, cmd, arg);
-	    break;
-	case S_FLAG:
-	    parse_flag(&ctx, cmd, arg);
-	    break;
-	case S_OPTION:
-	    parse_option(&ctx, cmd, arg);
-	    break;
-	case S_RULES:
-	    parse_rule(&ctx, cmd, arg);
-	    break;
-	}
+        switch (ctx.state) {
+        case S_TOPLEVEL:
+            parse_toplevel(&ctx, cmd);
+            break;
+        case S_MODULE:
+            parse_module(&ctx, cmd, arg);
+            break;
+        case S_FLAG:
+            parse_flag(&ctx, cmd, arg);
+            break;
+        case S_OPTION:
+            parse_option(&ctx, cmd, arg);
+            break;
+        case S_RULES:
+            parse_rule(&ctx, cmd, arg);
+            break;
+        }
     }
 
     if (fclose(ctx.fp) != 0) {
-	perror(_("Error closing script file"));
-	exit(EXIT_FAILURE);
+        perror(_("Error closing script file"));
+        exit(EXIT_FAILURE);
     }
 
-    /* Stop here successfully if all that was desired was output of text to translate */
+    /* Stop here successfully if all that was desired was output of text to
+     * translate */
     /* Continuing from here would get argc and argv all wrong in G_parser. */
     if (translate_output)
-	exit(EXIT_SUCCESS);
+        exit(EXIT_SUCCESS);
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
-    return standard_output
-	? print_options(&ctx, separator_nul ? '\0' : '\n')
-	: reinvoke_script(&ctx, filename);
+    return standard_output ? print_options(&ctx, separator_nul ? '\0' : '\n')
+                           : reinvoke_script(&ctx, filename);
 }

@@ -8,10 +8,10 @@ Singularity container for GRASS GIS to be run into GRASS main directory
   Maintainer Luca Delucchi
 
 %setup
-  mkdir /tmp/grass_build
+  mkdir -p /tmp/grass_build
 
 %files
-  . /tmp/grass_build
+  * /tmp/grass_build
 
 %post
     # Install useful libraries
@@ -67,7 +67,7 @@ Singularity container for GRASS GIS to be run into GRASS main directory
         python3-magic \
         python3-numpy \
         python3-pdal \
-        python3-pil \
+        python3-pillow \
         python3-pip \
         python3-ply \
         python3-requests \
@@ -126,7 +126,7 @@ Singularity container for GRASS GIS to be run into GRASS main directory
     apt-get autoremove -y
     apt-get clean -y
     cd /tmp
-    rm -rf /src/grass_build
+    rm -rf /tmp/grass_build
     # Add useful GRASS addons
     grass -c EPSG:4326 --tmp-location --exec g.extension -s ext=i.modis
     grass -c EPSG:4326 --tmp-location --exec g.extension -s ext=i.sentinel

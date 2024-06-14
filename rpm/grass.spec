@@ -1,9 +1,9 @@
-%global shortver 80
+%global shortver 83
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:		grass
-Version:	8.0.0
-Release:	1%{?dist}
+Version:	8.3.0
+Release:	3%{?dist}
 Summary:	GRASS GIS - Geographic Resources Analysis Support System
 
 %if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
@@ -20,12 +20,16 @@ Summary:	GRASS GIS - Geographic Resources Analysis Support System
 # "%%bcond_without" means "ENABLE by default and create a --without option"
 %bcond_without python3
 
-License:	GPLv2+
+# GRASS GIS addon reuses the compiler flags originating from rpmbuild environment,
+# hence disabling package-notes plugin
+%undefine _package_note_file
+
+License:	GPL-2.0-or-later
 URL:		https://grass.osgeo.org
 Source0:	https://grass.osgeo.org/%{name}%{shortver}/source/%{name}-%{version}.tar.gz
 
 # fix pkgconfig file
-Patch0:		grass-pkgconfig.patch
+Patch 0:	grass-pkgconfig.patch
 
 BuildRequires:	bison
 %if %{with flexiblas}
@@ -38,16 +42,12 @@ BuildRequires:	gcc-c++
 BuildRequires:	desktop-file-utils
 BuildRequires:	fftw-devel
 BuildRequires:	flex
-%if (0%{?rhel} > 6 || 0%{?fedora})
 BuildRequires:	freetype-devel
-%endif
 BuildRequires:	gdal-devel
 BuildRequires:	geos-devel
 BuildRequires:	gettext
 BuildRequires:	laszip-devel
-%if (0%{?rhel} > 6 || 0%{?fedora})
 BuildRequires:	libappstream-glib
-%endif
 BuildRequires:	libpng-devel
 BuildRequires:	libtiff-devel
 BuildRequires:	libXmu-devel
@@ -58,9 +58,7 @@ BuildRequires:	mariadb-connector-c-devel openssl-devel
 %else
 BuildRequires:	mysql-devel
 %endif
-%if (0%{?rhel} > 6 || 0%{?fedora})
 BuildRequires:	netcdf-devel
-%endif
 BuildRequires:	python3
 %if 0%{?rhel} == 7
 # EPEL7
@@ -68,16 +66,12 @@ BuildRequires:	python%{python3_version_nodots}-numpy
 %else
 BuildRequires:	python3-numpy
 %endif
-%if 0%{?rhel} && 0%{?rhel} <= 7
+%if 0%{?rhel} && 0%{?rhel} == 7
 BuildRequires:	postgresql-devel
 %else
 BuildRequires:	libpq-devel
 %endif
 BuildRequires:	proj-devel
-%if (0%{?rhel} <= 6 && !0%{?fedora})
-# argparse is included in python2.7+ but not python2.6
-BuildRequires:	python-argparse
-%endif
 %if 0%{?rhel} == 7
 # EPEL7
 BuildRequires:	python%{python3_version_nodots}-dateutil
@@ -85,12 +79,7 @@ BuildRequires:	python%{python3_version_nodots}-dateutil
 BuildRequires:	python3-dateutil
 %endif
 BuildRequires:	python3-devel
-%if (0%{?rhel} > 6 || 0%{?fedora})
 BuildRequires:	python3-pillow
-%else
-# EPEL6
-BuildRequires:	python-imaging
-%endif
 BuildRequires:	PDAL
 BuildRequires:	PDAL-libs
 BuildRequires:	PDAL-devel
@@ -118,23 +107,13 @@ Requires:	python%{python3_version_nodots}-numpy
 %else
 Requires:	python3-numpy
 %endif
-%if 0%{?rhel} > 6
-# EPEL7/EPEL8
-#Requires:  python3-matplotlib-wx
-%else
-Requires:	python3-matplotlib
-%endif
 %if 0%{?rhel} == 7
 # EPEL7
 Requires:	python%{python3_version_nodots}-dateutil
 %else
 Requires:	python3-dateutil
 %endif
-%if 0%{?rhel} && 0%{?rhel} < 7
-Requires: wxPython
-%else
 Requires:	python3-wxpython4
-%endif
 Requires:	PDAL
 Requires:	PDAL-libs
 
@@ -176,7 +155,7 @@ GRASS GIS development headers
 
 %prep
 %setup -q
-%patch0 -p1 -b.libdir
+%patch 0 -p1 -b.libdir
 
 # Correct mysql_config query
 sed -i -e 's/--libmysqld-libs/--libs/g' configure
@@ -189,10 +168,8 @@ sed -i -e 's/-lblas/-lflexiblas/g' -e 's/-llapack/-lflexiblas/g' configure
 find -name \*.pl | xargs sed -i -e 's,#!/usr/bin/env perl,#!%{__perl},'
 
 %build
-# Package is not ready for -Werror=format-security or the C++11 standard
-CFLAGS="$(echo ${RPM_OPT_FLAGS} | sed -e 's/ -Werror=format-security//')"
-CXXFLAGS="-std=c++98 ${CFLAGS}"
 %configure \
+	--prefix=%{_libdir} \
 	--with-cxx \
 	--with-tiff \
 	--with-png \
@@ -212,9 +189,7 @@ CXXFLAGS="-std=c++98 ${CFLAGS}"
 	--with-lapack-includes=%{_includedir}/flexiblas \
 %endif
 	--with-cairo \
-%if (0%{?rhel} > 6 || 0%{?fedora})
 	--with-freetype \
-%endif
 	--with-nls \
 	--with-pdal \
 	--with-readline \
@@ -223,9 +198,7 @@ CXXFLAGS="-std=c++98 ${CFLAGS}"
 	--with-gdal=%{_bindir}/gdal-config \
 	--with-wxwidgets=%{_bindir}/wx-config \
 	--with-geos=%{_bindir}/geos-config \
-%if (0%{?rhel} > 6 || 0%{?fedora})
 	--with-netcdf=%{_bindir}/nc-config \
-%endif
 	--with-mysql-includes=%{_includedir}/mysql \
 %if (0%{?fedora} >= 27)
 	--with-mysql-libs=%{_libdir} \
@@ -238,6 +211,9 @@ CXXFLAGS="-std=c++98 ${CFLAGS}"
 	--with-bzlib \
 	--with-zstd \
 	--with-proj-share=%{_datadir}/proj
+
+# .package_note hack for RHBZ #2084342 and RHBZ #2102895
+sed -i "s+ -Wl,-dT,${RPM_BUILD_DIR}/grass-%{version}/.package_note-grass-%{version}-%{release}.%{_arch}.ld++g" include/Make/Platform.make
 
 make %{?_smp_mflags}
 
@@ -283,9 +259,6 @@ do
 	iconv -f iso8859-1 -t utf8 $man > %{buildroot}%{_mandir}/man1/$(basename $man)"%{name}"
 done
 
-# create symlink to unversioned name
-ln -s %{_bindir}/%{name}%{shortver} %{buildroot}%{_bindir}/%{name}
-
 # symlink docs from GISBASE to standard system location
 mkdir -p %{buildroot}%{_docdir}
 # append shortver to destination since man pages are unversioned
@@ -314,7 +287,7 @@ cat >  %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf<<EOF
 %{_libdir}/%{name}%{shortver}/lib
 EOF
 
-%if 0%{?rhel} && 0%{?rhel} <= 7
+%if 0%{?rhel} && 0%{?rhel} == 7
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 
@@ -350,7 +323,6 @@ fi
 %license AUTHORS COPYING GPL.TXT CHANGES
 %{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf
 %{_libdir}/%{name}%{shortver}/lib/*.so
-%{_libdir}/%{name}%{shortver}/lib/*.a
 %dir %{_libdir}/%{name}%{shortver}/driver
 %dir %{_libdir}/%{name}%{shortver}/driver/db
 %{_libdir}/%{name}%{shortver}/driver/db/*
@@ -359,15 +331,84 @@ fi
 %{_libdir}/%{name}%{shortver}/gui
 
 %files devel
-%doc TODO doc/* SUBMITTING
+%doc TODO doc/* CONTRIBUTING.md
 %{macrosdir}/macros.%{name}
 %{_libdir}/pkgconfig/*
 %dir %{_libdir}/%{name}%{shortver}/lib
 %{_libdir}/%{name}%{shortver}/include
 
 %changelog
-* Wed Nov 10 2021 Markus Neteler <neteler@mundialis.de> - 8.0.0-1
+* Sun Aug 06 2023 Alexandre Detiste <alexandre.detiste@gmail.com> - 8.3.0-3
+- Remove support for RHEL6: Grass is now Python3 only
+
+* Thu Jul 20 2023 Fedora Release Engineering <releng@fedoraproject.org> - 8.3.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
+
+* Sun Jun 25 2023 Markus Neteler <neteler@mundialis.de> 8.3.0-1
+- New upstream version GRASS GIS 8.3.0
+
+* Thu May 11 2023 Sandro Mani <manisandro@gmail.com> - 8.2.1-2
+- Rebuild (gdal)
+
+* Sat Jan 21 2023 Markus Neteler <neteler@mundialis.de> 8.2.1-1
+- New upstream version GRASS GIS 8.2.1
+
+* Thu Jan 19 2023 Fedora Release Engineering <releng@fedoraproject.org> - 8.2.0-11
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
+
+* Mon Jan 16 2023 Markus Neteler <neteler@mundialis.de> 8.2.0-10
+- modify grass-pdal.patch for alternative C++ fix
+
+* Sat Jan 14 2023 Sandro Mani <manisandro@gmail.com> - 8.2.0-9
+- Rebuild (PDAL)
+
+* Sat Nov 12 2022 Sandro Mani <manisandro@gmail.com> - 8.2.0-8
+- Rebuild (gdal)
+
+* Wed Nov 09 2022 Markus Neteler <neteler@mundialis.de> 8.2.0-7
+- SPDX license tag update
+
+* Thu Nov 03 2022 Markus Neteler <neteler@mundialis.de> - 8.2.0-6
+- fix RPM ARCH not defined for GRASS GIS addon installation (RHBZ #2138373)
+
+* Sat Sep 17 2022 Markus Neteler <neteler@mundialis.de> - 8.2.0-5
+- fix unexpected keyword argument 'codeset' (Python 3.11) for RHBZ #2126608
+
+* Mon Aug 08 2022 Markus Neteler <neteler@mundialis.de> - 8.2.0-4
+- Rebuild for RHBZ #2107826 (PYC magic number has changed)
+
+* Thu Jul 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 8.2.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
+* Mon Jul 11 2022 Markus Neteler <neteler@mundialis.de> - 8.2.0-2
+- .package_note hack for RHBZ #2084342 and RHBZ #2102895
+
+* Sat Jun 04 2022 Markus Neteler <neteler@mundialis.de> - 8.2.0-1
+- New upstream version GRASS GIS 8.2.0
+
+* Sat May 21 2022 Sandro Mani <manisandro@gmail.com> - 8.0.2-2
+- Rebuild for gdal-3.5.0 and/or openjpeg-2.5.0
+
+* Thu May 12 2022 Markus Neteler <neteler@mundialis.de> - 8.0.2-1
+- New upstream version GRASS GIS 8.0.2
+
+* Tue Mar 29 2022 Markus Neteler <neteler@mundialis.de> - 8.0.1-3
+- Rebuild for pdal-2.4.0
+
+* Thu Mar 10 2022 Sandro Mani <manisandro@gmail.com> - 8.0.1-2
+- Rebuild for proj-9.0.0
+
+* Thu Feb 24 2022 Markus Neteler <neteler@mundialis.de> - 8.0.1-1
+- New upstream version GRASS GIS 8.0.1
+
+* Fri Jan 28 2022 Markus Neteler <neteler@mundialis.de> - 8.0.0-1
 - New upstream version GRASS GIS 8.0.0
+
+* Thu Jan 20 2022 Fedora Release Engineering <releng@fedoraproject.org> - 7.8.6-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
+
+* Thu Nov 11 2021 Sandro Mani <manisandro@gmail.com> - 7.8.6-3
+- Rebuild (gdal)
 
 * Sun Nov 07 2021 Björn Esser <besser82@fedoraproject.org> - 7.8.6-2
 - Add patch to fix installation path in pkgconfig file
@@ -408,16 +449,16 @@ fi
 * Tue Dec 22 2020 Markus Neteler <neteler@mundialis.de> - 7.8.5-1
 - New upstream version GRASS GIS 7.8.5
 
-* Tue Nov 24 20:59:37 CET 2020 Markus Neteler <neteler@mundialis.de> - 7.8.4-6
+* Tue Nov 24 2020 Markus Neteler <neteler@mundialis.de> - 7.8.4-6
 - Clean up proj-datumgrid requires < f34+
 
-* Fri Nov 20 15:59:37 CET 2020 Sandro Mani <manisandro@gmail.com> - 7.8.4-5
+* Fri Nov 20 2020 Sandro Mani <manisandro@gmail.com> - 7.8.4-5
 - Drop proj-datumgrid requires on f34+
 
-* Fri Nov  6 22:26:41 CET 2020 Sandro Mani <manisandro@gmail.com> - 7.8.4-4
+* Fri Nov  6 2020 Sandro Mani <manisandro@gmail.com> - 7.8.4-4
 - Rebuild (proj, gdal)
 
-* Wed Nov  4 18:22:40 CET 2020 Sandro Mani <manisandro@gmail.com> - 7.8.4-3
+* Wed Nov  4 2020 Sandro Mani <manisandro@gmail.com> - 7.8.4-3
 - Rebuild (PDAL)
 
 * Sat Oct 17 2020 Markus Neteler <neteler@mundialis.de> - 7.8.4-2

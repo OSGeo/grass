@@ -67,7 +67,7 @@ vrt = """<VRTDataset rasterXSize="$XSIZE" rasterYSize="$YSIZE">
       <DstRect xOff="0" yOff="0" xSize="$XSIZE" ySize="$YSIZE"/>
     </SimpleSource>
  </VRTRasterBand>
-</VRTDataset>"""
+</VRTDataset>"""  # noqa: E501
 
 # a function for writing VRT files
 
@@ -155,7 +155,7 @@ def main():
         s = p.communicate()[0]
         if s == "application/x-zip":
             gscript.fatal(_("Please extract %s before import.") % infile)
-    except:
+    except Exception:
         pass
 
     # create VRT header for NDVI

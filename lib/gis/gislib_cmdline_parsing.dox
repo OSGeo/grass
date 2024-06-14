@@ -4,7 +4,7 @@
 <!--
 extracted form gislib.dox and improved by Vaclav Petras, 2013
 
-Copyright 2004-2021 by the GRASS Development Team
+Copyright 2004-2024 by the GRASS Development Team
 
 Published under GNU Free Documentation License
 -->
@@ -515,9 +515,9 @@ coordinates.
  <td>char * </td>
  <td>NO </td>
  <td>NULL </td>
- <td>Single word describing the key. Commas in this string denote 
- to the parser that several comma-separated arguments are expected 
- from the user as one answer. For example, if a pair of coordinates 
+ <td>Single word describing the key. Commas in this string denote
+ to the parser that several comma-separated arguments are expected
+ from the user as one answer. For example, if a pair of coordinates
  is desired, this element should be defined as follows.<br>
   <tt>opt->key_desc = "x,y" ;</tt></td>
 </tr>
@@ -533,8 +533,8 @@ coordinates.
  <td>int </td>
  <td>NO </td>
  <td>NO </td>
- <td>Indicates whether the user can provide multiple answers or not. 
- YES and NO are defined in "gis.h" and should be used (NO is 
+ <td>Indicates whether the user can provide multiple answers or not.
+ YES and NO are defined in "gis.h" and should be used (NO is
  the default.) <b>multiple</b> is used in conjunction with the <b>answers</b>
  structure member below.<br>
  <tt>opt->multiple = NO ;</tt></td>
@@ -552,8 +552,8 @@ coordinates.
  <td>int </td>
  <td>NO </td>
  <td>NO </td>
- <td>Indicates whether the user MUST provide the option on the command 
- line. YES and NO are defined in "gis.h" and should be used (NO 
+ <td>Indicates whether the user MUST provide the option on the command
+ line. YES and NO are defined in "gis.h" and should be used (NO
  is the default).<br>
  <tt>opt->required = YES ;</tt></td>
 </tr>
@@ -572,8 +572,8 @@ coordinates.
  <td>char *</td>
  <td>NO</td>
  <td>NULL</td>
- <td>Interactive prompt guidance. There are three comma-separated 
- parts to this argument, which guide the standard GRASS 
+ <td>Interactive prompt guidance. There are three comma-separated
+ parts to this argument, which guide the standard GRASS
  file name prompting routines.<br>
  <tt>opt->gisprompt = "old,cell,raster" ;</tt></td>
 </tr>
@@ -588,7 +588,7 @@ coordinates.
 </table>
 
 
-\section Description_of_Complex_Structure_Members Description of Complex Structure Members 
+\section Description_of_Complex_Structure_Members Description of Complex Structure Members
 
 What follows are explanations of possibly confusing structure
 members. They are intended to clarify and supplement the structures table
@@ -623,15 +623,15 @@ on the command line. But if the user enters an option without an
 answer, G_parser() will replace the default <b>answer</b> member value with
 NULL.
 
-As an example, please review the use of <b>answer</b> members in the structures 
+As an example, please review the use of <b>answer</b> members in the structures
 implemented in \ref gislibcmd_Full_Module_Example.
 
 
 \subsection Multiple_and_Answers_Members Multiple and Answers Members
 
-The functionality of the <b>answers</b> structure member is reliant on the 
+The functionality of the <b>answers</b> structure member is reliant on the
 programmer's definition of the <b>multiple</b> structure member. If the <b>multiple</b>
-member is set to NO, the <b>answer</b> member is used to obtain the answer to an 
+member is set to NO, the <b>answer</b> member is used to obtain the answer to an
 option as described above.
 
 If the <b>multiple</b> structure member is set to YES, it
@@ -675,10 +675,10 @@ answers[4] == NULL
 
 \subsection key_desc_Member key_desc Member
 
-The <b>key_desc</b> structure member is used to define the format of a single 
-command line answer to an option. A programmer may wish to ask for one 
-answer to an option, but this answer may not be a single argument of a type 
-set by the type structure member. If the programmer wants the user to enter 
+The <b>key_desc</b> structure member is used to define the format of a single
+command line answer to an option. A programmer may wish to ask for one
+answer to an option, but this answer may not be a single argument of a type
+set by the type structure member. If the programmer wants the user to enter
 a coordinate, for example, the programmer might define an Option as follows:
 
 \code
@@ -702,7 +702,7 @@ answers[1] == "225"
 answers[2] == NULL
 \endcode
 
-Note that "coordinate=112" would not be valid, as it does not contain both 
+Note that "coordinate=112" would not be valid, as it does not contain both
 components of an answer as defined by the <b>key_desc</b> structure member.
 
 If the <b>multiple</b> structure member was set to YES instead of NO in the
@@ -713,7 +713,7 @@ would be "coordinate=112,225,142,155,43,201". Note that G_parser()
 recognizes only a comma for both the <b>key_desc</b> member, and multiple
 answers.
 
-The <b>answers</b> array would have the following values after a call to 
+The <b>answers</b> array would have the following values after a call to
 G_parser():
 
 \code
@@ -847,9 +847,9 @@ of the G_define_option() and the G_define_flag() function calls.
 
 \par Is the user required to use full option names?
 
-No. Users are required to type in only as many characters of an option name 
-as is necessary to make the option choice unambiguous. If, for example, 
-there are two options, "input=" and "output=", the following would be 
+No. Users are required to type in only as many characters of an option name
+as is necessary to make the option choice unambiguous. If, for example,
+there are two options, "input=" and "output=", the following would be
 valid command line arguments:
 
 \verbatim
@@ -861,12 +861,12 @@ $ command in=map1 out=map2
 
 \par Are options standardized at all?
 
-Yes. There are a few conventions. Options that identify a single input map 
-are usually "map=", not "raster=" or "vector=". In the case of an 
-input and an output map the convention is "input=xx output=yy". By passing 
-the '--help' flag to existing GRASS commands, it is likely that you will 
-find other conventions. The intent is to make it as easy as possible for the 
-user to remember (or to guess correctly) what the command line syntax is for a 
+Yes. There are a few conventions. Options that identify a single input map
+are usually "map=", not "raster=" or "vector=". In the case of an
+input and an output map the convention is "input=xx output=yy". By passing
+the '--help' flag to existing GRASS commands, it is likely that you will
+find other conventions. The intent is to make it as easy as possible for the
+user to remember (or to guess correctly) what the command line syntax is for a
 given command.
 
 To ensure maximal consistency, the most common options such as the options

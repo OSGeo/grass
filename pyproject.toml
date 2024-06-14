@@ -1,28 +1,28 @@
 [tool.black]
+required-version = '24'
 line-length = 88
-target-version = ['py36', 'py37', 'py38', 'py39']
-include = '\.pyi?$'
-exclude = '''
+target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
+# 'extend-exclude' excludes files or directories in addition to the defaults
+extend-exclude = '''
 (
-    # exclude directories in the root of the project
-    /(
-          \.eggs
-        | \.git
-        | \.hg
-        | \.mypy_cache
-        | \.tox
-        | \.venv
-        | _build
-        | buck-out
-        | build
-        | bin\..*
-        | dist\..*
-    )/
-    | python/libgrass_interface_generator/
-    # Bug in Black related to r-string prefix capitalization reformats
-    # a line in this file unnecessarily. File is however fully Black-formatted
-    # at the time of writing.
-    # https://github.com/psf/black/issues/1244
-    | python/grass/pygrass/utils.py
+    python/libgrass_interface_generator/
 )
 '''
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+python_files = "*/tests/*_test.py"
+addopts = """
+    --ignore-glob='dist.*'
+    --ignore-glob='bin.*'
+    --ignore-glob='*/tests/data/*'
+    --ignore-glob='*/grass/pygrass/tests/*'
+    --doctest-glob='*doctest*.txt'
+    --ignore='raster/r.category/test_rcategory_doctest.txt'
+"""
+timeout = 300
+
+
+[tool.bandit]
+exclude_dirs = ["./testsuite", "*/tests/*", "*/testsuite/*", "utils/test_generate_last_commit_file.py"]
+skips = ["B324","B110", "B101", "B112", "B311", "B404"]

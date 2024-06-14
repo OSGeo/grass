@@ -61,9 +61,10 @@ def _export_raster_maps_as_gdal(
         max_val = row["max"]
         min_val = row["min"]
         datatype = row["datatype"]
+        semantic_label = row["semantic_label"]
         if not end:
             end = start
-        string = "%s%s%s%s%s\n" % (name, fs, start, fs, end)
+        string = "%s%s%s%s%s%s%s\n" % (name, fs, start, fs, end, fs, semantic_label)
         # Write the filename, the start_time and the end_time
         list_file.write(string)
 
@@ -154,9 +155,10 @@ def _export_raster_maps(rows, tar, list_file, new_cwd, fs):
         name = row["name"]
         start = row["start_time"]
         end = row["end_time"]
+        semantic_label = row["semantic_label"]
         if not end:
             end = start
-        string = "%s%s%s%s%s\n" % (name, fs, start, fs, end)
+        string = "%s%s%s%s%s%s%s\n" % (name, fs, start, fs, end, fs, semantic_label)
         # Write the filename, the start_time and the end_time
         list_file.write(string)
         # Export the raster map with r.pack
@@ -357,7 +359,7 @@ def export_stds(
     os.chdir(new_cwd)
 
     if type_ == "strds":
-        columns = "name,start_time,end_time,min,max,datatype"
+        columns = "name,start_time,end_time,min,max,datatype,semantic_label"
     elif type_ == "stvds":
         columns = "name,start_time,end_time,layer"
     else:
@@ -439,17 +441,17 @@ def export_stds(
     if type_ == "strds":
         read_file.write(
             "This space time raster dataset was exported with "
-            "t.rast.export of GRASS GIS 7\n"
+            "t.rast.export of GRASS GIS 8\n"
         )
     elif type_ == "stvds":
         read_file.write(
             "This space time vector dataset was exported with "
-            "t.vect.export of GRASS GIS 7\n"
+            "t.vect.export of GRASS GIS 8\n"
         )
     elif type_ == "str3ds":
         read_file.write(
             "This space time 3D raster dataset was exported "
-            "with t.rast3d.export of GRASS GIS 7\n"
+            "with t.rast3d.export of GRASS GIS 8\n"
         )
     read_file.write("\n")
     read_file.write("Files:\n")

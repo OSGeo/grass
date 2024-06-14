@@ -4,7 +4,6 @@
 #include <grass/imagery.h>
 #include "bouman.h"
 
-
 int parse(int argc, char *argv[], struct parms *parms)
 {
     struct Option *group, *subgroup, *sigfile, *output, *goodness;
@@ -25,12 +24,14 @@ int parse(int argc, char *argv[], struct parms *parms)
     sigfile->type = TYPE_STRING;
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
-    output->description = _("Name for output raster map holding classification results");
-    
+    output->description =
+        _("Name for output raster map holding classification results");
+
     goodness = G_define_standard_option(G_OPT_R_OUTPUT);
     goodness->key = "goodness";
     goodness->required = NO;
-    goodness->description = _("Name for output raster map holding goodness of fit (lower is better)");
+    goodness->description = _(
+        "Name for output raster map holding goodness of fit (lower is better)");
 
     blocksize = G_define_option();
     blocksize->key = "blocksize";
@@ -41,11 +42,10 @@ int parse(int argc, char *argv[], struct parms *parms)
 
     ml = G_define_flag();
     ml->key = 'm';
-    ml->description =
-	_("Use maximum likelihood estimation (instead of smap)");
+    ml->description = _("Use maximum likelihood estimation (instead of smap)");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     parms->ml = ml->answer;
 
@@ -53,19 +53,21 @@ int parse(int argc, char *argv[], struct parms *parms)
     parms->group = group->answer;
     parms->subgroup = subgroup->answer;
     parms->sigfile = sigfile->answer;
-    
+
     parms->goodness_map = goodness->answer;
 
     /* check all the inputs */
     if (!I_find_group(parms->group))
-	G_fatal_error(_("Group <%s> not found in current mapset"), parms->group);
+        G_fatal_error(_("Group <%s> not found in current mapset"),
+                      parms->group);
 
     if (!I_find_subgroup(parms->group, parms->subgroup))
-	G_fatal_error(_("Subgroup <%s> in group <%s> not found"), parms->subgroup, parms->group);
+        G_fatal_error(_("Subgroup <%s> in group <%s> not found"),
+                      parms->subgroup, parms->group);
 
-    if (sscanf(blocksize->answer, "%d", &parms->blocksize) != 1
-	|| parms->blocksize <= 8)
-	parms->blocksize = 8;
+    if (sscanf(blocksize->answer, "%d", &parms->blocksize) != 1 ||
+        parms->blocksize <= 8)
+        parms->blocksize = 8;
 
     return 0;
 }

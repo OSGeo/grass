@@ -47,7 +47,7 @@ class Circle:
         self.radius = r
 
 
-class MaskedArea(object):
+class MaskedArea:
     def __init__(self, region, raster, radius):
         self.region = region
         self.raster = raster
@@ -107,7 +107,7 @@ class RLiSetupMapPanel(wx.Panel):
             .CloseButton(False)
             .Layer(1)
             .Gripper(False)
-            .BestSize((self.toolbar.GetBestSize())),
+            .BestSize(self.toolbar.GetBestSize()),
         )
         self._mgr.Update()
 
@@ -285,7 +285,9 @@ class RLiSetupMapPanel(wx.Panel):
             "r.to.vect", input=tmpraster, output=tmpvector, type="area", overwrite=True
         )
 
-        RunCommand("v.to.rast", input=tmpvector, output=rasterName, value=1, use="val")
+        RunCommand(
+            "v.to.rast", input=tmpvector, output=rasterName, value=1, use="value"
+        )
         wx.EndBusyCursor()
         grass.use_temp_region()
         grass.run_command("g.region", vector=tmpvector)
@@ -495,44 +497,58 @@ class RLiSetupToolbar(BaseToolbar):
         """Toolbar data"""
         if self.parent.samplingtype == SamplingType.REGIONS:
             drawTool = (
-                "digitizeregion",
+                ("digitizeregion", icons["digitizeregion"].label),
                 icons["digitizeregion"],
                 self.parent.OnDigitizeRegion,
                 wx.ITEM_CHECK,
             )
         elif self.parent.samplingtype in [SamplingType.MUNITSR, SamplingType.MMVWINR]:
             drawTool = (
-                "digitizeunit",
+                ("digitizeunit", icons["digitizeunit"].label),
                 icons["digitizeunit"],
                 self.parent.OnDraw,
                 wx.ITEM_CHECK,
             )
         elif self.parent.samplingtype in [SamplingType.MUNITSC, SamplingType.MMVWINC]:
             drawTool = (
-                "digitizeunitc",
+                ("digitizeunitc", icons["digitizeunitc"].label),
                 icons["digitizeunitc"],
                 self.parent.OnDrawRadius,
                 wx.ITEM_CHECK,
             )
         else:
-            drawTool = ("draw", icons["draw"], self.parent.OnDraw, wx.ITEM_CHECK)
+            drawTool = (
+                ("draw", icons["draw"].label),
+                icons["draw"],
+                self.parent.OnDraw,
+                wx.ITEM_CHECK,
+            )
         if self.parent.samplingtype == SamplingType.VECT:
             return self._getToolbarData(
                 (
-                    ("pan", BaseIcons["pan"], self.parent.OnPan, wx.ITEM_CHECK),
                     (
-                        "zoomIn",
+                        ("pan", BaseIcons["pan"].label),
+                        BaseIcons["pan"],
+                        self.parent.OnPan,
+                        wx.ITEM_CHECK,
+                    ),
+                    (
+                        ("zoomIn", BaseIcons["zoomIn"].label),
                         BaseIcons["zoomIn"],
                         self.parent.OnZoomIn,
                         wx.ITEM_CHECK,
                     ),
                     (
-                        "zoomOut",
+                        ("zoomOut", BaseIcons["zoomOut"].label),
                         BaseIcons["zoomOut"],
                         self.parent.OnZoomOut,
                         wx.ITEM_CHECK,
                     ),
-                    ("zoomExtent", BaseIcons["zoomExtent"], self.parent.OnZoomToMap),
+                    (
+                        ("zoomExtent", BaseIcons["zoomExtent"].label),
+                        BaseIcons["zoomExtent"],
+                        self.parent.OnZoomToMap,
+                    ),
                 )
             )
         else:
@@ -540,19 +556,28 @@ class RLiSetupToolbar(BaseToolbar):
                 (
                     drawTool,
                     (None,),
-                    ("pan", BaseIcons["pan"], self.parent.OnPan, wx.ITEM_CHECK),
                     (
-                        "zoomIn",
+                        ("pan", BaseIcons["pan"].label),
+                        BaseIcons["pan"],
+                        self.parent.OnPan,
+                        wx.ITEM_CHECK,
+                    ),
+                    (
+                        ("zoomIn", BaseIcons["zoomIn"].label),
                         BaseIcons["zoomIn"],
                         self.parent.OnZoomIn,
                         wx.ITEM_CHECK,
                     ),
                     (
-                        "zoomOut",
+                        ("zoomOut", BaseIcons["zoomOut"].label),
                         BaseIcons["zoomOut"],
                         self.parent.OnZoomOut,
                         wx.ITEM_CHECK,
                     ),
-                    ("zoomExtent", BaseIcons["zoomExtent"], self.parent.OnZoomToMap),
+                    (
+                        ("zoomExtent", BaseIcons["zoomExtent"].label),
+                        BaseIcons["zoomExtent"],
+                        self.parent.OnZoomToMap,
+                    ),
                 )
             )

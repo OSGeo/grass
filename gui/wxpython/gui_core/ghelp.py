@@ -23,7 +23,6 @@ import platform
 import re
 import textwrap
 import sys
-import six
 import wx
 from wx.html import HtmlWindow
 
@@ -49,6 +48,7 @@ if __name__ == "__main__":
 
 from core import globalvar
 from core.gcmd import GError, DecodeString
+from core.settings import UserSettings
 from gui_core.widgets import FormNotebook, ScrolledPanel
 from gui_core.wrap import Button, StaticText, TextCtrl
 from core.debug import Debug
@@ -188,16 +188,26 @@ class AboutWindow(wx.Frame):
 
         # show only basic info
         # row += 1
-        # infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-        #                                        label = '%s:' % _('GIS Library Revision')),
-        #                   pos = (row, 0),
-        #                   flag = wx.ALIGN_RIGHT)
-
-        # infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-        #                                        label = vInfo['libgis_revision'] + ' (' +
-        #                                        vInfo['libgis_date'].split(' ')[0] + ')'),
-        #                   pos = (row, 1),
-        #                   flag = wx.ALIGN_LEFT)
+        # infoGridSizer.Add(
+        #     item=wx.StaticText(
+        #         parent=infoTxt, id=wx.ID_ANY, label="%s:" % _("GIS Library Revision")
+        #     ),
+        #     pos=(row, 0),
+        #     flag=wx.ALIGN_RIGHT,
+        # )
+        #
+        # infoGridSizer.Add(
+        #     item=wx.StaticText(
+        #         parent=infoTxt,
+        #         id=wx.ID_ANY,
+        #         label=vInfo["libgis_revision"]
+        #         + " ("
+        #         + vInfo["libgis_date"].split(" ")[0]
+        #         + ")",
+        #     ),
+        #     pos=(row, 1),
+        #     flag=wx.ALIGN_LEFT,
+        # )
 
         row += 2
         infoGridSizer.Add(
@@ -239,7 +249,11 @@ class AboutWindow(wx.Frame):
         if not self.langUsed:
             import locale
 
-            loc = locale.getdefaultlocale()
+            try:
+                # Python >= 3.11
+                loc = locale.getlocale()
+            except AttributeError:
+                loc = locale.getdefaultlocale()
             if loc == (None, None):
                 self.langUsed = _("unknown")
             else:
@@ -388,6 +402,7 @@ class AboutWindow(wx.Frame):
                             country,
                             osgeo_id,
                             rfc2_agreed,
+                            orcid,
                         ) = line.split(",")
                 except ValueError:
                     errLines.append(line)
@@ -395,7 +410,7 @@ class AboutWindow(wx.Frame):
                 if extra:
                     contribs.append((name, email, country))
                 else:
-                    contribs.append((name, email, country, osgeo_id))
+                    contribs.append((name, email, country, osgeo_id, orcid))
 
             contribFile.close()
 
@@ -426,7 +441,13 @@ class AboutWindow(wx.Frame):
             if extra:
                 items = (_("Name"), _("E-mail"), _("Country"))
             else:
-                items = (_("Name"), _("E-mail"), _("Country"), _("OSGeo_ID"))
+                items = (
+                    _("Name"),
+                    _("E-mail"),
+                    _("Country"),
+                    _("OSGeo_ID"),
+                    _("ORCID"),
+                )
             contribBox = wx.FlexGridSizer(cols=len(items), vgap=5, hgap=5)
             for item in items:
                 text = StaticText(parent=contribwin, id=wx.ID_ANY, label=item)
@@ -611,7 +632,7 @@ class AboutWindow(wx.Frame):
         # else:
         # panel.Collapse(True)
         pageSizer = wx.BoxSizer(wx.VERTICAL)
-        for k, v in six.iteritems(js):
+        for k, v in js.items():
             if k != "total" and k != "name":
                 box = self._langBox(win, k, v)
                 pageSizer.Add(box, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)
@@ -730,7 +751,7 @@ class HelpWindow(HtmlWindow):
         self.historyIdx = 0
         self.fspath = os.path.join(os.getenv("GISBASE"), "docs", "html")
 
-        self.SetStandardFonts(size=10)
+        self._setFont()
         self.SetBorders(10)
 
         if text is None:
@@ -740,12 +761,32 @@ class HelpWindow(HtmlWindow):
                 self.history.append(url)
                 self.loaded = True
             else:
-                # FIXME: calling LoadPage() is strangely time-consuming (only first call)
+                # FIXME: calling LoadPage() is strangely time-consuming
+                #        (only first call)
                 # self.LoadPage(self.fspath + command + ".html")
                 self.loaded = False
         else:
             self.SetPage(text)
             self.loaded = True
+
+    def _setFont(self):
+        """Set font size/face"""
+        font_face_name = UserSettings.Get(
+            group="appearance",
+            key="manualPageFont",
+            subkey="faceName",
+        )
+        font_size = UserSettings.Get(
+            group="appearance",
+            key="manualPageFont",
+            subkey="pointSize",
+        )
+        if font_size:
+            self.SetStandardFonts(
+                size=font_size,
+                normal_face=font_face_name,
+                fixed_face=font_face_name,
+            )
 
     def OnLinkClicked(self, linkinfo):
         url = linkinfo.GetHref()
@@ -755,10 +796,10 @@ class HelpWindow(HtmlWindow):
         self.historyIdx += 1
         self.parent.OnHistory()
 
-        super(HelpWindow, self).OnLinkClicked(linkinfo)
+        super().OnLinkClicked(linkinfo)
 
     def LoadPage(self, path):
-        super(HelpWindow, self).LoadPage(path)
+        super().LoadPage(path)
         self.loaded = True
 
     def fillContentsFromFile(self, htmlFile, skipDescription=True):

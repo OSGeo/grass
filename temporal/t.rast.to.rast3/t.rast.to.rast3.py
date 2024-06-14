@@ -35,11 +35,10 @@
 
 # %option G_OPT_R3_OUTPUT
 # %end
-from __future__ import print_function
-
 import os
-import grass.script as grass
 from datetime import datetime
+
+import grass.script as grass
 from grass.exceptions import CalledModuleError
 
 ############################################################################
@@ -82,7 +81,7 @@ def main():
     # In case of days, hours, minutes and seconds, a double number
     # is used to represent days and fracs of a day
 
-    # Space time voxel cubes with montly or yearly granularity can not be
+    # Space time voxel cubes with monthly or yearly granularity can not be
     # mixed with other temporal units
 
     # Compatible temporal units are : days, hours, minutes and seconds

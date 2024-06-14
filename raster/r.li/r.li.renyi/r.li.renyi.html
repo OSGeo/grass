@@ -8,7 +8,7 @@ with:
   <li><b>alpha</b>: order of the generalized entropy</li>
   <li><b>i</b>: patch type</li>
   <li><b>S</b>: number of different patch types</li>
-  <li><b>p<small><small>i</small></small></b>: proportional abundance of 
+  <li><b>p<small><small>i</small></small></b>: proportional abundance of
 patch type <i>i</i> </li>
 </ul>
 
@@ -27,6 +27,7 @@ If the input raster map contains only NULL values then <em>r.li.renyi</em>
 returns NULL.
 
 <h2>EXAMPLES</h2>
+
 To calculate Renyi's diversity index on map <em>my_map</em>, using
 <em>my_conf</em> configuration file (previously defined with
 <em>g.gui.rlisetup</em>) and saving results in <em>my_out</em>, run:
@@ -59,22 +60,20 @@ d.vect forests type=boundary
 </pre></div>
 
 <h2>SEE ALSO</h2>
+
 <em>
 <a href="r.li.html">r.li</a> - package overview<br>
 <a href="g.gui.rlisetup.html">g.gui.rlisetup</a>
 </em>
 
 <h2>REFERENCES</h2>
+
 McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
 analysis program for quantifying landscape structure. USDA For. Serv.
 Gen. Tech. Rep. PNW-351. (<a href="http://treesearch.fs.fed.us/pubs/3064">PDF</a>)
 
 <h2>AUTHORS</h2>
+
 Luca Delucchi and Duccio Rocchini, Fondazione E. Mach (Italy), based on
 the <em>r.li.shannon</em> code developed by Serena Pallecchi student of
-Computer Science University of Pisa (Italy).<br>
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+Computer Science University of Pisa (Italy).

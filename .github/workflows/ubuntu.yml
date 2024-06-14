@@ -1,24 +1,101 @@
+---
 name: Ubuntu
+
 # Build and run tests on Ubuntu
 
 on:
-  - push
-  - pull_request
+  push:
+    branches:
+      - main
+      - releasebranch_*
+  pull_request:
 
 jobs:
-  build-and-test:
-    name: ${{ matrix.os }} tests
+  ubuntu:
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{
+        matrix.name }}-${{ matrix.os }}-${{ matrix.extra-include }}
+      cancel-in-progress: true
 
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os:
-          - ubuntu-18.04
-          - ubuntu-20.04
+        name:
+          - "22.04"
+          - minimum config
+
+        # Only run tests for these folders in this matrix job.
+        extra-include:
+          # All root folders that could contain tests are:
+          #   db display doc docker general gui
+          #   imagery lib misc ps python raster raster3d scripts
+          #   temporal testsuite utils vector visualization
+          #
+          # In order to split test executions, all these root folders are
+          # added as excluded folders, then items included for this matrix
+          # job are removed from that exclusion list.
+          #
+          # Using folded YAML multiline string block chomping (>-) to replace
+          # newlines with spaces, and strip newline at end.
+          # See https://yaml-multiline.info/
+          - temporal
+          - >-
+            db display doc docker general gui
+            imagery lib misc ps python raster raster3d scripts
+            testsuite utils vector visualization
+
+        include:
+          - name: "22.04"
+            os: ubuntu-22.04
+            config: ubuntu-22.04
+          # This is without optional things but it still keeps things useful,
+          # so, e.g., without OpenMP, but with PDAL. Code or tests should be written
+          # so that test pass even when these optional things are not present.
+          - name: minimum config
+            os: ubuntu-22.04
+            config: ubuntu-22.04_without_x
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+
+      - name: Invert inclusion list to an exclusion list
+        id: get-exclude
+        run: |
+          array=(db display doc docker general gui \
+          imagery lib misc ps python raster raster3d scripts \
+          temporal testsuite utils vector visualization)
+          echo "Complete set of folders that can be included:"
+          echo "${array[@]}"
+          delete=( ${{ env.DELETE_ARRAY }} )
+          echo "Included folders to remove from the complete set:"
+          echo "${delete[@]}"
+          for target in "${delete[@]}"; do
+            for i in "${!array[@]}"; do
+              if [[ ${array[i]} = $target ]]; then
+                unset 'array[i]'
+              fi
+            done
+          done
+          unset new_array
+          for i in "${!array[@]}"; do
+              new_array+=( "${array[i]}" )
+          done
+          echo "Excluded folders:"
+          echo "${new_array[@]}"
+          printf -v extra_exclude './%s/* ' "${new_array[@]}"
+          echo "Exclusion string to add to gunittest config"
+          echo "${extra_exclude}"
+          echo "extra-exclude=${extra_exclude}" >> "${GITHUB_OUTPUT}"
+        env:
+          DELETE_ARRAY: ${{ matrix.extra-include }}
+
+      - name: Add extra exclusions to a gunittest config file
+        run: |
+          sed 's:exclude =:exclude = ${{
+            steps.get-exclude.outputs.extra-exclude
+          }}:g' .gunittest.cfg > .gunittest.extra.cfg
+          cat .gunittest.extra.cfg
 
       - name: Get dependencies
         run: |
@@ -39,27 +116,48 @@ jobs:
         run: |
           echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
 
+      - name: Print build environment variables
+        shell: bash -el {0}
+        run: |
+          printenv | sort
+          gcc --version
+          ldd --version
+
       - name: Build
-        run: .github/workflows/build_${{ matrix.os }}.sh $HOME/install
+        env:
+          # TODO: -pedantic-errors here won't go through ./configure (with GNU C)
+          CFLAGS: -fPIC -Wvla
+          # TODO: -pedantic-errors here won't compile
+          CXXFLAGS: -fPIC
+        run: .github/workflows/build_${{ matrix.config }}.sh $HOME/install -Werror
 
       - name: Add the bin directory to PATH
         run: |
           echo "$HOME/install/bin" >> $GITHUB_PATH
 
+      - name: Print installed versions
+        if: always()
+        run: .github/workflows/print_versions.sh
+
       - name: Test executing of the grass command
         run: .github/workflows/test_simple.sh
 
       - name: Run tests
-        run: .github/workflows/test_thorough.sh
+        run: .github/workflows/test_thorough.sh --config .gunittest.extra.cfg
 
       - name: Make HTML test report available
         if: ${{ always() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
-          name: testreport-${{ matrix.os }}
+          name: testreport-${{ matrix.os }}-${{ matrix.config }}-${{ matrix.extra-include }}
           path: testreport
           retention-days: 3
 
-      - name: Print installed versions
-        if: always()
-        run: .github/workflows/print_versions.sh
+  build-and-test-success:
+    name: Build & Test Result
+    needs:
+      - ubuntu
+    if: ${{ always() }}
+    uses: ./.github/workflows/verify-success.yml
+    with:
+      needs_context: ${{ toJson(needs) }}

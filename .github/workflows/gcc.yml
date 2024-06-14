@@ -1,14 +1,23 @@
+---
 name: GCC C/C++ standards check
 
 on:
-  - push
-  - pull_request
+  push:
+    branches:
+      - main
+      - releasebranch_*
+  pull_request:
 
 jobs:
   build:
     name: ${{ matrix.c }} & ${{ matrix.cpp }}
 
-    runs-on: ubuntu-20.04
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{
+        matrix.c }}-${{ matrix.cpp }}
+      cancel-in-progress: true
+
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         include:
@@ -23,7 +32,7 @@ jobs:
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: Get dependencies
         run: |
           sudo apt-get update -y
@@ -39,10 +48,18 @@ jobs:
       - name: Set LD_LIBRARY_PATH for compilation
         run: |
           echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
+      - name: Print build environment variables
+        shell: bash -el {0}
+        run: |
+          printenv | sort
+          gcc --version
+          ldd --version
       - name: Build
         env:
           # TODO: -pedantic-errors here won't go through ./configure (with GNU C)
-          CFLAGS: "-std=${{ matrix.c }} -fPIC"
+          CFLAGS: -std=${{ matrix.c }} -fPIC -Wall -Wextra
           # TODO: -pedantic-errors here won't compile
-          CXXFLAGS: "-std=${{ matrix.cpp }} -fPIC"
-        run: .github/workflows/build_ubuntu-20.04.sh $HOME/install -Werror
+          CXXFLAGS: -std=${{ matrix.cpp }} -fPIC -Wall -Wextra
+        run: |
+          .github/workflows/build_ubuntu-22.04.sh $HOME/install \
+              -isystem/usr/include/gdal -Wpedantic -Werror

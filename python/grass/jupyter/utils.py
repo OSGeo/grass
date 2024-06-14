@@ -3,19 +3,21 @@
 #
 # PURPOSE:   This module contains utility functions for InteractiveMap.
 #
-# COPYRIGHT: (C) 2021 Caitlin Haedrich, and by the GRASS Development Team
+# COPYRIGHT: (C) 2021-2022 Caitlin Haedrich, and by the GRASS Development Team
 #
 #            This program is free software under the GNU General Public
 #            License (>=v2). Read the file COPYING that comes with GRASS
 #            for details.
 
-import os
+"""Utility functions warpping existing processes in a suitable way"""
+from pathlib import Path
 import grass.script as gs
 
 
 def get_region(env=None):
     """Returns current computational region as dictionary.
-    Adds long key names.
+
+    Additionally, it adds long key names.
     """
     region = gs.region(env=env)
     region["east"] = region["e"]
@@ -43,7 +45,14 @@ def reproject_region(region, from_proj, to_proj):
     :return dict region: reprojected region as a dictionary with long key names
     """
     region = region.copy()
-    proj_input = "{east} {north}\n{west} {south}".format(**region)
+    # reproject all corners, otherwise reproj. region may be underestimated
+    # even better solution would be reprojecting vector region like in r.import
+    proj_input = (
+        f"{region['east']} {region['north']}\n"
+        f"{region['west']} {region['north']}\n"
+        f"{region['east']} {region['south']}\n"
+        f"{region['west']} {region['south']}\n"
+    )
     proc = gs.start_command(
         "m.proj",
         input="-",
@@ -60,14 +69,21 @@ def reproject_region(region, from_proj, to_proj):
     proc.stdin = None
     proj_output, stderr = proc.communicate()
     if proc.returncode:
-        raise RuntimeError("reprojecting region: m.proj error: " + stderr)
-    enws = gs.decode(proj_output).split(os.linesep)
-    elon, nlat, unused = enws[0].split(" ")
-    wlon, slat, unused = enws[1].split(" ")
-    region["east"] = elon
-    region["north"] = nlat
-    region["west"] = wlon
-    region["south"] = slat
+        raise RuntimeError(
+            _("Encountered error while running m.proj: {}").format(stderr)
+        )
+    output = gs.decode(proj_output).splitlines()
+    # get the largest bbox
+    latitude_list = []
+    longitude_list = []
+    for row in output:
+        longitude, latitude, unused = row.split(" ")
+        longitude_list.append(float(longitude))
+        latitude_list.append(float(latitude))
+    region["east"] = max(longitude_list)
+    region["north"] = max(latitude_list)
+    region["west"] = min(longitude_list)
+    region["south"] = min(latitude_list)
     return region
 
 
@@ -88,7 +104,7 @@ def estimate_resolution(raster, mapset, location, dbase, env):
         flags="g",
         input=raster,
         mapset=mapset,
-        location=location,
+        project=location,
         dbase=dbase,
         env=env,
     ).strip()
@@ -118,9 +134,18 @@ def setup_location(name, path, epsg, src_env):
     # Location and mapset
     gs.create_location(path, name, epsg=epsg, overwrite=True)
     # Reproject region
+    set_target_region(src_env, new_env)
+    return rcfile, new_env
+
+
+def set_target_region(src_env, tgt_env):
+    """Set target region based on source region.
+
+    Number of rows and columns is preserved.
+    """
     region = get_region(env=src_env)
     from_proj = get_location_proj_string(src_env)
-    to_proj = get_location_proj_string(env=new_env)
+    to_proj = get_location_proj_string(env=tgt_env)
     new_region = reproject_region(region, from_proj, to_proj)
     # Set region to match original region extent
     gs.run_command(
@@ -129,9 +154,10 @@ def setup_location(name, path, epsg, src_env):
         s=new_region["south"],
         e=new_region["east"],
         w=new_region["west"],
-        env=new_env,
+        rows=new_region["rows"],
+        cols=new_region["cols"],
+        env=tgt_env,
     )
-    return rcfile, new_env
 
 
 def get_map_name_from_d_command(module, **kwargs):
@@ -144,3 +170,99 @@ def get_map_name_from_d_command(module, **kwargs):
     special = {"d.his": "hue", "d.legend": "raster", "d.rgb": "red", "d.shade": "shade"}
     parameter = special.get(module, "map")
     return kwargs.get(parameter, "")
+
+
+def get_rendering_size(region, width, height, default_width=600, default_height=400):
+    """Returns the rendering width and height based
+    on the region aspect ratio.
+
+    :param dict region: region dictionary
+    :param integer width: rendering width (can be None)
+    :param integer height: rendering height (can be None)
+    :param integer default_width: default rendering width (can be None)
+    :param integer default_height: default rendering height (can be None)
+
+    :return tuple (width, height): adjusted width and height
+
+    When both width and height are provided, values are returned without
+    adjustment. When one value is provided, the other is computed
+    based on the region aspect ratio. When no dimension is given,
+    the default width or height is used and the other dimension computed.
+    """
+    if width and height:
+        return (width, height)
+    region_width = region["e"] - region["w"]
+    region_height = region["n"] - region["s"]
+    if width:
+        return (width, round(width * region_height / region_width))
+    if height:
+        return (round(height * region_width / region_height), height)
+    if region_height > region_width:
+        return (round(default_height * region_width / region_height), default_height)
+    return (default_width, round(default_width * region_height / region_width))
+
+
+def save_gif(
+    input_files,
+    output_filename,
+    duration=500,
+    label=True,
+    labels=None,
+    font=None,
+    text_size=12,
+    text_color="gray",
+):
+    """
+    Creates a GIF animation
+
+    param list input_files: list of paths to source
+    param str output_filename: destination gif filename
+    param int duration: time to display each frame; milliseconds
+    param bool label: include label stamp on each frame
+    param list labels: list of labels for each source image
+    param str font: font file
+    param int text_size: size of label text
+    param str text_color: color to use for the text
+    """
+    # Create a GIF from the PNG images
+    import PIL.Image  # pylint: disable=import-outside-toplevel
+    import PIL.ImageDraw  # pylint: disable=import-outside-toplevel
+    import PIL.ImageFont  # pylint: disable=import-outside-toplevel
+
+    # filepath to output GIF
+    filename = Path(output_filename)
+    if filename.suffix.lower() != ".gif":
+        raise ValueError(_("filename must end in '.gif'"))
+
+    images = []
+    for i, file in enumerate(input_files):
+        img = PIL.Image.open(file)
+        img = img.convert("RGBA", dither=None)
+        draw = PIL.ImageDraw.Draw(img)
+        if label:
+            if font:
+                font_obj = PIL.ImageFont.truetype(font, text_size)
+            else:
+                try:
+                    font_obj = PIL.ImageFont.load_default(size=text_size)
+                except TypeError:
+                    font_obj = PIL.ImageFont.load_default()
+            draw.text(
+                (0, 0),
+                labels[i],
+                fill=text_color,
+                font=font_obj,
+            )
+        images.append(img)
+
+    images[0].save(
+        fp=filename,
+        format="GIF",
+        append_images=images[1:],
+        save_all=True,
+        duration=duration,
+        loop=0,
+    )
+
+    # Display the GIF
+    return filename

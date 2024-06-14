@@ -14,20 +14,11 @@
 <h2>EXAMPLES</h2>
 
 Import only XYZ coordinates of points, limit the import to the current
-computational region and reproject to the Location projection during
-the import:
+computational region and reproject to the current project's coordinate reference
+system during the import:
 <div class="code"><pre>
 v.in.pdal input=points.las output=points -c -r -w
 </pre></div>
-
-<h2>SEE ALSO</h2>
-
-<em>
-<a href="r.in.pdal.html">r.in.pdal</a>,
-<a href="g.region.html">g.region</a>,
-<a href="v.vect.stats.html">v.vect.stats</a>
-<a href="v.in.ogr.html">v.in.ogr</a>,
-</em>
 
 <h2>REFERENCES</h2>
 
@@ -40,12 +31,16 @@ v.in.pdal input=points.las output=points -c -r -w
     <a href="https://www.researchgate.net/publication/304340172_Processing_UAV_and_lidar_point_clouds_in_GRASS_GIS">ResearchGate</a>]
 </ul>
 
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.in.pdal.html">r.in.pdal</a>,
+<a href="g.region.html">g.region</a>,
+<a href="v.vect.stats.html">v.vect.stats</a>
+<a href="v.in.ogr.html">v.in.ogr</a>,
+</em>
+
 <h2>AUTHOR</h2>
 
 Vaclav Petras,
 <a href="http://geospatial.ncsu.edu/osgeorel/">NCSU GeoForAll Lab</a>
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

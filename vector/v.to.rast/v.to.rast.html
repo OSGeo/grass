@@ -4,12 +4,11 @@
 layer format. Optionally, attributes can be converted to raster category
 labels.
 
-
 <h2>NOTES</h2>
 
-In order to avoid unexpected results, the type of vector features 
-should always be specified. The default is to convert all vector 
-features, but if only e.g. areas should be converted use 
+In order to avoid unexpected results, the type of vector features
+should always be specified. The default is to convert all vector
+features, but if only e.g. areas should be converted use
 <em>type=area</em> rather than <em>type=point,line,area</em>.
 
 <p>
@@ -23,7 +22,7 @@ correctly set and that the region resolution is at the
 desired level.
 
 <p>Either the <em><b>column</b></em> parameter or the <em><b>value</b></em>
-parameter must be specified.  The <em><b>use</b></em> option may be 
+parameter must be specified.  The <em><b>use</b></em> option may be
 specified alone when using the <em>dir</em> option.
 <p><em><b>use</b></em> options are:
 <ul>
@@ -32,27 +31,27 @@ specified alone when using the <em>dir</em> option.
 <li>
 <em>cat</em>  - read values from category
 <li>
-<em>val</em>  - use value specified by <em><b>value</b></em> option
+<em>value</em>  - use value specified by <em><b>value</b></em> option
 <li>
 <em>z</em>    - use z coordinate (points or contours only)
 <li>
 <em>dir</em>  - line direction in degrees counterclockwise from east (lines only)
 </ul>
 <p>The <em><b>column</b></em> parameter uses an existing column from the vector map
-database table as the category value in the output raster map. Existing table 
+database table as the category value in the output raster map. Existing table
 columns can be shown by using <em><a href="db.describe.html">db.describe</a></em>.
 <p>An empty raster map layer will be created if the vector map layer has not
-been assigned category/attribute labels (e.g., through use of 
-<a href="v.category.html">v.category option=add</a>). 
+been assigned category/attribute labels (e.g., through use of
+<a href="v.category.html">v.category option=add</a>).
 <p>Otherwise:
 <ul>
 <li>
-Labeled areas and/or centroids will produce filled raster coverages with edges 
-that straddle the original area boundary <b>as long as the boundary is NOT 
+Labeled areas and/or centroids will produce filled raster coverages with edges
+that straddle the original area boundary <b>as long as the boundary is NOT
 labeled</b>.
 <br>(Use <tt>v.category option=del type=boundary</tt> to remove.)
 <li>
-Labeled lines and boundaries will produce lines of raster cells which touch the 
+Labeled lines and boundaries will produce lines of raster cells which touch the
 original vector line. This tends to be more aggressive than area-only conversions.
 <li>
 Points and orphaned centroids will be converted into single cells on the
@@ -61,12 +60,12 @@ resultant raster map.
 <p><p><b>Line directions</b> are given in degrees counterclockwise from east.
 <p><p>Raster category labels are supported for all of <em>use=</em> except <em>use=z</em>.
 <p>
-The <b>-d</b> flag applies only to lines and boundaries, the default is 
+The <b>-d</b> flag applies only to lines and boundaries, the default is
 to set only those cells on the render path (thin line).
 <p>
 Boundaries (usually without categories) can be rasterized with
 <div class="code"><pre>
-v.to.rast type=boundary layer=-1 use=val
+v.to.rast type=boundary layer=-1 use=value
 </pre></div>
 
 <h2>EXAMPLES</h2>
@@ -79,7 +78,7 @@ db.describe -c table=vect_map
 ncols:3
 Column 1: CAT
 Column 2: SPEED
-Column 3: WIDTH 
+Column 3: WIDTH
 </pre></div>
 
 <div class="code"><pre>
@@ -124,7 +123,6 @@ g.region vector=zipcodes_wake res=50 -ap
 v.to.rast input=zipcodes_wake output=myzipcodes use=attr attribute_column="ZIPNUM" label_column="NAME"
 </pre></div>
 
-
 <h3>Convert vector points to raster with raster cell binning</h3>
 
 In this example, the number of schools per raster cell are counted
@@ -150,7 +148,7 @@ v.out.ascii input=myschools_wake output=- column=value | r.in.xyz input=- \
 
 d.mon wx0
 d.rast schools_wake_aggreg
-d.vect schools_wake 
+d.vect schools_wake
 d.grid 5000
 </pre></div>
 
@@ -160,6 +158,7 @@ Number of schools per raster cell
 </center>
 
 <h2>SEE ALSO</h2>
+
 <em>
 <a href="db.describe.html">db.describe</a>,
 <a href="v.category.html">v.category</a>
@@ -174,7 +173,3 @@ GRASS 6.0 updates: Radim Blazek, ITC-irst, Trento, Italy
 Stream directions: Jaro Hofierka and Helena Mitasova
 <br>
 GRASS 6.3 code cleanup and label support: Brad Douglas
-<p><!--
-<p>
-<i>Last changed: $Date$</i>
--->

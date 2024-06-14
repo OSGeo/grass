@@ -1,6 +1,6 @@
 /*!
  * \file lib/raster/open.c
- * 
+ *
  * \brief Raster Library - Open raster file
  *
  * (C) 1999-2009 by the GRASS Development Team
@@ -37,23 +37,23 @@ static int new_fileinfo(void)
     int i;
 
     for (i = 0; i < oldsize; i++)
-	if (R__.fileinfo[i].open_mode <= 0) {
-	    memset(&R__.fileinfo[i], 0, sizeof(struct fileinfo));
-	    R__.fileinfo[i].open_mode = -1;
-	    return i;
-	}
+        if (R__.fileinfo[i].open_mode <= 0) {
+            memset(&R__.fileinfo[i], 0, sizeof(struct fileinfo));
+            R__.fileinfo[i].open_mode = -1;
+            return i;
+        }
 
     if (newsize < 20)
-	newsize += 20;
+        newsize += 20;
     else
-	newsize *= 2;
+        newsize *= 2;
 
     R__.fileinfo = G_realloc(R__.fileinfo, newsize * sizeof(struct fileinfo));
 
     /* Mark all cell files as closed */
     for (i = oldsize; i < newsize; i++) {
-	memset(&R__.fileinfo[i], 0, sizeof(struct fileinfo));
-	R__.fileinfo[i].open_mode = -1;
+        memset(&R__.fileinfo[i], 0, sizeof(struct fileinfo));
+        R__.fileinfo[i].open_mode = -1;
     }
 
     R__.fileinfo_count = newsize;
@@ -82,7 +82,7 @@ static int new_fileinfo(void)
  */
 
 static int open_raster_new(const char *name, int open_mode,
-			   RASTER_MAP_TYPE map_type);
+                           RASTER_MAP_TYPE map_type);
 
 /*!
    \brief Open an existing integer raster map (cell)
@@ -157,8 +157,7 @@ int Rast__open_old(const char *name, const char *mapset)
     const char *r_name;
     const char *r_mapset;
     struct Cell_head cellhd;
-    int CELL_nbytes = 0;	/* bytes per cell in CELL map */
-    int INTERN_SIZE;
+    int CELL_nbytes = 0; /* bytes per cell in CELL map */
     int reclass_flag;
     int MAP_NBYTES;
     RASTER_MAP_TYPE MAP_TYPE;
@@ -174,29 +173,30 @@ int Rast__open_old(const char *name, const char *mapset)
     mapset = xmapset;
 
     if (!G_find_raster2(name, mapset))
-	G_fatal_error(_("Raster map <%s> not found"),
-		      G_fully_qualified_name(name, mapset));
+        G_fatal_error(_("Raster map <%s> not found"),
+                      G_fully_qualified_name(name, mapset));
 
     /* Check for reclassification */
     reclass_flag = Rast_get_reclass(name, mapset, &reclass);
 
     switch (reclass_flag) {
     case 0:
-	r_name = name;
-	r_mapset = mapset;
-	break;
+        r_name = name;
+        r_mapset = mapset;
+        break;
     case 1:
-	r_name = reclass.name;
-	r_mapset = reclass.mapset;
-	if (!G_find_raster2(r_name, r_mapset))
-	    G_fatal_error(_("Unable to open raster map <%s@%s> since it is a reclass "
-			    "of raster map <%s@%s> which does not exist"),
-			  name, mapset, r_name, r_mapset);
-	break;
-    default:			/* Error reading cellhd/reclass file */
-	G_fatal_error(_("Error reading reclass file for raster map <%s>"),
-		      G_fully_qualified_name(name, mapset));
-	break;
+        r_name = reclass.name;
+        r_mapset = reclass.mapset;
+        if (!G_find_raster2(r_name, r_mapset))
+            G_fatal_error(
+                _("Unable to open raster map <%s@%s> since it is a reclass "
+                  "of raster map <%s@%s> which does not exist"),
+                name, mapset, r_name, r_mapset);
+        break;
+    default: /* Error reading cellhd/reclass file */
+        G_fatal_error(_("Error reading reclass file for raster map <%s>"),
+                      G_fully_qualified_name(name, mapset));
+        break;
     }
 
     /* read the cell header */
@@ -205,67 +205,70 @@ int Rast__open_old(const char *name, const char *mapset)
     /* now check the type */
     MAP_TYPE = Rast_map_type(r_name, r_mapset);
     if (MAP_TYPE < 0)
-	G_fatal_error(_("Error reading map type for raster map <%s>"),
-		      G_fully_qualified_name(name, mapset));
+        G_fatal_error(_("Error reading map type for raster map <%s>"),
+                      G_fully_qualified_name(name, mapset));
 
     if (MAP_TYPE == CELL_TYPE)
-	/* set the number of bytes for CELL map */
+    /* set the number of bytes for CELL map */
     {
-	CELL_nbytes = cellhd.format + 1;
-	if (CELL_nbytes < 1)
-	    G_fatal_error(_("Raster map <%s@%s>: format field in header file invalid"),
-			  r_name, r_mapset);
+        CELL_nbytes = cellhd.format + 1;
+        if (CELL_nbytes < 1)
+            G_fatal_error(
+                _("Raster map <%s@%s>: format field in header file invalid"),
+                r_name, r_mapset);
     }
 
     /* compressor */
     if (MAP_TYPE != CELL_TYPE) {
-	/* fp maps do not use RLE */
-	/* previously, compressed simply meant yes (ZLIB) or no
-	 * now compressed encodes compressor type
-	 * 0: not compressed
-	 * 1, 2: ZLIB
-	 * 3: LZ4
-	 * 4: BZIP2
-	 * etc */
-	if (cellhd.compressed == 1)
-	    cellhd.compressed = 2;
+        /* fp maps do not use RLE */
+        /* previously, compressed simply meant yes (ZLIB) or no
+         * now compressed encodes compressor type
+         * 0: not compressed
+         * 1, 2: ZLIB
+         * 3: LZ4
+         * 4: BZIP2
+         * etc */
+        if (cellhd.compressed == 1)
+            cellhd.compressed = 2;
     }
     /* test if compressor type is supported */
     if (!G_check_compressor(cellhd.compressed)) {
-	G_fatal_error(_("Compression with %s is not supported in this GRASS GIS installation"), G_compressor_name(cellhd.compressed));
+        G_fatal_error(_("Compression with %s is not supported in this GRASS "
+                        "GIS installation"),
+                      G_compressor_name(cellhd.compressed));
     }
 
     if (cellhd.proj != R__.rd_window.proj)
-	G_fatal_error(_("Raster map <%s> is in different projection than current region. "
-			"Found <%s>, should be <%s>."),
-		      G_fully_qualified_name(name, mapset),
-		      G_projection_name(cellhd.proj),
-		      G_projection_name(R__.rd_window.proj));
+        G_fatal_error(
+            _("Raster map <%s> is in different projection than current region. "
+              "Found <%s>, should be <%s>."),
+            G_fully_qualified_name(name, mapset),
+            G_projection_name(cellhd.proj),
+            G_projection_name(R__.rd_window.proj));
 
     if (cellhd.zone != R__.rd_window.zone)
-	G_fatal_error(_("Raster map <%s> is in different zone (%d) than current region (%d)"),
-		      G_fully_qualified_name(name, mapset), cellhd.zone, R__.rd_window.zone);
+        G_fatal_error(_("Raster map <%s> is in different zone (%d) than "
+                        "current region (%d)"),
+                      G_fully_qualified_name(name, mapset), cellhd.zone,
+                      R__.rd_window.zone);
 
     /* when map is int warn if too large cell size */
     if (MAP_TYPE == CELL_TYPE && (unsigned int)CELL_nbytes > sizeof(CELL))
-	G_fatal_error(_("Raster map <%s>: bytes per cell (%d) too large"),
-		      G_fully_qualified_name(name, mapset), CELL_nbytes);
+        G_fatal_error(_("Raster map <%s>: bytes per cell (%d) too large"),
+                      G_fully_qualified_name(name, mapset), CELL_nbytes);
 
     /* record number of bytes per cell */
     if (MAP_TYPE == FCELL_TYPE) {
-	cell_dir = "fcell";
-	INTERN_SIZE = sizeof(FCELL);
-	MAP_NBYTES = XDR_FLOAT_NBYTES;
+        cell_dir = "fcell";
+        MAP_NBYTES = XDR_FLOAT_NBYTES;
     }
     else if (MAP_TYPE == DCELL_TYPE) {
-	cell_dir = "fcell";
-	INTERN_SIZE = sizeof(DCELL);
-	MAP_NBYTES = XDR_DOUBLE_NBYTES;
+        cell_dir = "fcell";
+        MAP_NBYTES = XDR_DOUBLE_NBYTES;
     }
-    else {			/* integer */
-	cell_dir = "cell";
-	INTERN_SIZE = sizeof(CELL);
-	MAP_NBYTES = CELL_nbytes;
+    else { /* integer */
+        cell_dir = "cell";
+        MAP_NBYTES = CELL_nbytes;
     }
 
     gdal = Rast_get_gdal_link(r_name, r_mapset);
@@ -273,21 +276,22 @@ int Rast__open_old(const char *name, const char *mapset)
     cell_fd = -1;
     if (gdal) {
 #ifdef HAVE_GDAL
-	cell_fd = -1;
+        cell_fd = -1;
 #else
-	G_fatal_error(_("Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"),
-		      r_name, r_mapset);
+        G_fatal_error(_("Raster map <%s@%s> is a GDAL link but GRASS is "
+                        "compiled without GDAL support"),
+                      r_name, r_mapset);
 #endif
     }
     else if (vrt) {
-	cell_fd = -1;
+        cell_fd = -1;
     }
     else {
-	/* now actually open file for reading */
-	cell_fd = G_open_old(cell_dir, r_name, r_mapset);
-	if (cell_fd < 0)
-	    G_fatal_error(_("Unable to open %s file for raster map <%s@%s>"),
-			  cell_dir, r_name, r_mapset);
+        /* now actually open file for reading */
+        cell_fd = G_open_old(cell_dir, r_name, r_mapset);
+        if (cell_fd < 0)
+            G_fatal_error(_("Unable to open %s file for raster map <%s@%s>"),
+                          cell_dir, r_name, r_mapset);
     }
 
     fd = new_fileinfo();
@@ -316,22 +320,23 @@ int Rast__open_old(const char *name, const char *mapset)
 
     /* if reclass, copy reclass structure */
     if ((fcb->reclass_flag = reclass_flag))
-	fcb->reclass = reclass;
+        fcb->reclass = reclass;
 
     fcb->gdal = gdal;
     fcb->vrt = vrt;
     if (!gdal && !vrt) {
-	/* check for compressed data format, making initial reads if necessary */
-	if (Rast__check_format(fd) < 0) {
-	    close(cell_fd);	/* warning issued by check_format() */
-	    G_fatal_error(_("Error reading format for <%s@%s>"),
-			  r_name, r_mapset);
-	}
+        /* check for compressed data format, making initial reads if necessary
+         */
+        if (Rast__check_format(fd) < 0) {
+            close(cell_fd); /* warning issued by check_format() */
+            G_fatal_error(_("Error reading format for <%s@%s>"), r_name,
+                          r_mapset);
+        }
     }
 
     if (!vrt) {
-	/* create the mapping from cell file to window */
-	Rast__create_window_mapping(fd);
+        /* create the mapping from cell file to window */
+        Rast__create_window_mapping(fd);
     }
 
     /*
@@ -339,17 +344,17 @@ int Rast__open_old(const char *name, const char *mapset)
      * number of bytes per cell is cellhd.format+1
      */
 
-    /* for reading fcb->data is allocated to be fcb->cellhd.cols * fcb->nbytes 
+    /* for reading fcb->data is allocated to be fcb->cellhd.cols * fcb->nbytes
        (= XDR_FLOAT/DOUBLE_NBYTES) */
     fcb->data = (unsigned char *)G_calloc(fcb->cellhd.cols, MAP_NBYTES);
 
     /* initialize/read in quant rules for float point maps */
     if (fcb->map_type != CELL_TYPE) {
-	if (fcb->reclass_flag)
-	    Rast_read_quant(fcb->reclass.name, fcb->reclass.mapset,
-			    &(fcb->quant));
-	else
-	    Rast_read_quant(fcb->name, fcb->mapset, &(fcb->quant));
+        if (fcb->reclass_flag)
+            Rast_read_quant(fcb->reclass.name, fcb->reclass.mapset,
+                            &(fcb->quant));
+        else
+            Rast_read_quant(fcb->name, fcb->mapset, &(fcb->quant));
     }
 
     /* now mark open for read: this must follow create_window_mapping() */
@@ -360,21 +365,24 @@ int Rast__open_old(const char *name, const char *mapset)
     fcb->null_row_ptr = NULL;
 
     if (!gdal && !vrt) {
-	/* First, check for compressed null file */
-	fcb->null_fd = G_open_old_misc("cell_misc", NULL_FILE, r_name, r_mapset);
-	if (fcb->null_fd < 0) {
-	    fcb->null_fd = G_open_old_misc("cell_misc", NULLC_FILE, r_name, r_mapset);
-	    if (fcb->null_fd >= 0) {
-		fcb->null_row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
-		if (Rast__read_null_row_ptrs(fd, fcb->null_fd) < 0) {
-		    close(fcb->null_fd);
-		    fcb->null_fd = -1;
-		    G_free(fcb->null_row_ptr);
-		    fcb->null_row_ptr = NULL;
-		}
-	    }
-	}
-	fcb->null_file_exists = fcb->null_fd >= 0;
+        /* First, check for compressed null file */
+        fcb->null_fd =
+            G_open_old_misc("cell_misc", NULL_FILE, r_name, r_mapset);
+        if (fcb->null_fd < 0) {
+            fcb->null_fd =
+                G_open_old_misc("cell_misc", NULLC_FILE, r_name, r_mapset);
+            if (fcb->null_fd >= 0) {
+                fcb->null_row_ptr =
+                    G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
+                if (Rast__read_null_row_ptrs(fd, fcb->null_fd) < 0) {
+                    close(fcb->null_fd);
+                    fcb->null_fd = -1;
+                    G_free(fcb->null_row_ptr);
+                    fcb->null_row_ptr = NULL;
+                }
+            }
+        }
+        fcb->null_file_exists = fcb->null_fd >= 0;
     }
 
     return fd;
@@ -457,9 +465,9 @@ void Rast_set_cell_format(int n)
 {
     R__.nbytes = n + 1;
     if (R__.nbytes <= 0)
-	R__.nbytes = 1;
-    if (R__.nbytes > sizeof(CELL))
-	R__.nbytes = sizeof(CELL);
+        R__.nbytes = 1;
+    if (R__.nbytes > (int)sizeof(CELL))
+        R__.nbytes = sizeof(CELL);
 }
 
 /*!
@@ -474,9 +482,9 @@ int Rast_get_cell_format(CELL v)
     unsigned int i;
 
     if (v >= 0)
-	for (i = 0; i < sizeof(CELL); i++)
-	    if (!(v /= 256))
-		return i;
+        for (i = 0; i < sizeof(CELL); i++)
+            if (!(v /= 256))
+                return i;
     return sizeof(CELL) - 1;
 }
 
@@ -517,7 +525,7 @@ int Rast_open_fp_new_uncompressed(const char *name)
 
 #ifdef HAVE_GDAL
 static int open_raster_new_gdal(char *map, char *mapset,
-				RASTER_MAP_TYPE map_type)
+                                RASTER_MAP_TYPE map_type)
 {
     int fd;
     struct fileinfo *fcb;
@@ -532,12 +540,12 @@ static int open_raster_new_gdal(char *map, char *mapset,
 
     fcb->gdal = Rast_create_gdal_link(map, map_type);
     if (!fcb->gdal)
-	G_fatal_error(_("Unable to create GDAL link"));
+        G_fatal_error(_("Unable to create GDAL link"));
 
     fcb->cellhd = R__.wr_window;
     fcb->cellhd.compressed = 0;
     fcb->nbytes = Rast_cell_size(fcb->map_type);
-    /* for writing fcb->data is allocated to be R__.wr_window.cols * 
+    /* for writing fcb->data is allocated to be R__.wr_window.cols *
        sizeof(CELL or DCELL or FCELL)  */
     fcb->data = G_calloc(R__.wr_window.cols, fcb->nbytes);
 
@@ -554,19 +562,19 @@ static int open_raster_new_gdal(char *map, char *mapset,
     fcb->null_row_ptr = NULL;
 
     if (fcb->map_type != CELL_TYPE)
-	Rast_quant_init(&(fcb->quant));
+        Rast_quant_init(&(fcb->quant));
 
     /* init cell stats */
     /* now works only for int maps */
     if (fcb->map_type == CELL_TYPE)
-	if ((fcb->want_histogram = R__.want_histogram))
-	    Rast_init_cell_stats(&fcb->statf);
+        if ((fcb->want_histogram = R__.want_histogram))
+            Rast_init_cell_stats(&fcb->statf);
 
     /* init range and if map is double/float init d/f_range */
     Rast_init_range(&fcb->range);
 
     if (fcb->map_type != CELL_TYPE)
-	Rast_init_fp_range(&fcb->fp_range);
+        Rast_init_fp_range(&fcb->fp_range);
 
     /* mark file as open for write */
     fcb->open_mode = OPEN_NEW_UNCOMPRESSED;
@@ -577,7 +585,7 @@ static int open_raster_new_gdal(char *map, char *mapset,
 #endif /* HAVE_GDAL */
 
 static int open_raster_new(const char *name, int open_mode,
-			   RASTER_MAP_TYPE map_type)
+                           RASTER_MAP_TYPE map_type)
 {
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
     struct fileinfo *fcb;
@@ -592,35 +600,35 @@ static int open_raster_new(const char *name, int open_mode,
 
     switch (map_type) {
     case CELL_TYPE:
-	cell_dir = "cell";
-	nbytes = R__.nbytes;
-	break;
+        cell_dir = "cell";
+        nbytes = R__.nbytes;
+        break;
     case FCELL_TYPE:
-	nbytes = XDR_FLOAT_NBYTES;
-	cell_dir = "fcell";
-	break;
+        nbytes = XDR_FLOAT_NBYTES;
+        cell_dir = "fcell";
+        break;
     case DCELL_TYPE:
-	nbytes = XDR_DOUBLE_NBYTES;
-	cell_dir = "fcell";
-	break;
+        nbytes = XDR_DOUBLE_NBYTES;
+        cell_dir = "fcell";
+        break;
     default:
-	G_fatal_error(_("Invalid map type <%d>"), map_type);
-	break;
+        G_fatal_error(_("Invalid map type <%d>"), map_type);
+        break;
     }
 
     if (G_unqualified_name(name, G_mapset(), xname, xmapset) < 0)
-	G_fatal_error(_("Raster map <%s> is not in the current mapset (%s)"),
-		      name, G_mapset());
+        G_fatal_error(_("Raster map <%s> is not in the current mapset (%s)"),
+                      name, G_mapset());
     map = G_store(xname);
     mapset = G_store(xmapset);
 
     /* check for legal grass name */
     if (G_legal_filename(map) < 0)
-	G_fatal_error(_("<%s> is an illegal file name"), map);
+        G_fatal_error(_("<%s> is an illegal file name"), map);
 
 #ifdef HAVE_GDAL
     if (G_find_file2("", "GDAL", G_mapset()))
-	return open_raster_new_gdal(map, mapset, map_type);
+        return open_raster_new_gdal(map, mapset, map_type);
 #endif
 
     /* open a tempfile name */
@@ -628,10 +636,11 @@ static int open_raster_new(const char *name, int open_mode,
     cell_fd = creat(tempname, 0666);
     if (cell_fd < 0) {
         int err = errno;
-	G_free(mapset);
-	G_free(tempname);
-	G_free(map);
-	G_fatal_error(_("No temp files available: %s"), strerror(err));
+
+        G_free(mapset);
+        G_free(tempname);
+        G_free(map);
+        G_fatal_error(_("No temp files available: %s"), strerror(err));
     }
 
     fd = new_fileinfo();
@@ -640,7 +649,7 @@ static int open_raster_new(const char *name, int open_mode,
 
     /*
      * since we are bypassing the normal open logic
-     * must create the cell element 
+     * must create the cell element
      */
     G_make_mapset_object_group(cell_dir);
 
@@ -650,10 +659,10 @@ static int open_raster_new(const char *name, int open_mode,
     fcb->gdal = NULL;
     fcb->vrt = NULL;
 
-    /* for writing fcb->data is allocated to be R__.wr_window.cols * 
+    /* for writing fcb->data is allocated to be R__.wr_window.cols *
        sizeof(CELL or DCELL or FCELL)  */
     fcb->data = (unsigned char *)G_calloc(R__.wr_window.cols,
-					  Rast_cell_size(fcb->map_type));
+                                          Rast_cell_size(fcb->map_type));
 
     /*
      * copy current window into cell header
@@ -662,36 +671,37 @@ static int open_raster_new(const char *name, int open_mode,
      *   allocate space to hold the row address array
      */
     fcb->cellhd = R__.wr_window;
-    
-    /* change open_mode to OPEN_NEW_UNCOMPRESSED if R__.compression_type == 0 ? */
+
+    /* change open_mode to OPEN_NEW_UNCOMPRESSED if R__.compression_type == 0 ?
+     */
 
     if (open_mode == OPEN_NEW_COMPRESSED && fcb->map_type == CELL_TYPE) {
-	fcb->row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
-	G_zero(fcb->row_ptr, (fcb->cellhd.rows + 1) * sizeof(off_t));
-	Rast__write_row_ptrs(fd);
-	fcb->cellhd.compressed = R__.compression_type;
+        fcb->row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
+        G_zero(fcb->row_ptr, (fcb->cellhd.rows + 1) * sizeof(off_t));
+        Rast__write_row_ptrs(fd);
+        fcb->cellhd.compressed = R__.compression_type;
 
-	fcb->nbytes = 1;	/* to the minimum */
+        fcb->nbytes = 1; /* to the minimum */
     }
     else {
-	fcb->nbytes = nbytes;
-	if (open_mode == OPEN_NEW_COMPRESSED) {
-	    fcb->row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
-	    G_zero(fcb->row_ptr, (fcb->cellhd.rows + 1) * sizeof(off_t));
-	    Rast__write_row_ptrs(fd);
-	    fcb->cellhd.compressed = R__.compression_type;
-	}
-	else
-	    fcb->cellhd.compressed = 0;
+        fcb->nbytes = nbytes;
+        if (open_mode == OPEN_NEW_COMPRESSED) {
+            fcb->row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
+            G_zero(fcb->row_ptr, (fcb->cellhd.rows + 1) * sizeof(off_t));
+            Rast__write_row_ptrs(fd);
+            fcb->cellhd.compressed = R__.compression_type;
+        }
+        else
+            fcb->cellhd.compressed = 0;
 
-	if (fcb->map_type != CELL_TYPE) {
-	    Rast_quant_init(&(fcb->quant));
-	}
+        if (fcb->map_type != CELL_TYPE) {
+            Rast_quant_init(&(fcb->quant));
+        }
     }
     if (open_mode == OPEN_NEW_COMPRESSED && fcb->map_type != CELL_TYPE &&
         fcb->cellhd.compressed == 1) {
-	/* fp maps do not use RLE */
-	fcb->cellhd.compressed = 2;
+        /* fp maps do not use RLE */
+        fcb->cellhd.compressed = 2;
     }
 
     /* save name and mapset, and tempfile name */
@@ -707,21 +717,22 @@ static int open_raster_new(const char *name, int open_mode,
     fcb->null_fd = creat(tempname, 0666);
     if (fcb->null_fd < 0) {
         int err = errno;
-	G_free(tempname);
-	G_free(fcb->name);
-	G_free(fcb->mapset);
-	G_free(fcb->temp_name);
-	close(cell_fd);
-	G_fatal_error(_("No temp files available: %s"), strerror(err));
+
+        G_free(tempname);
+        G_free(fcb->name);
+        G_free(fcb->mapset);
+        G_free(fcb->temp_name);
+        close(cell_fd);
+        G_fatal_error(_("No temp files available: %s"), strerror(err));
     }
 
     fcb->null_temp_name = tempname;
 
     fcb->null_row_ptr = NULL;
     if (R__.compress_nulls) {
-	fcb->null_row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
-	G_zero(fcb->null_row_ptr, (fcb->cellhd.rows + 1) * sizeof(off_t));
-	Rast__write_null_row_ptrs(fd, fcb->null_fd);
+        fcb->null_row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
+        G_zero(fcb->null_row_ptr, (fcb->cellhd.rows + 1) * sizeof(off_t));
+        Rast__write_null_row_ptrs(fd, fcb->null_fd);
     }
 
     /* next row to be written (in order) is zero */
@@ -733,14 +744,14 @@ static int open_raster_new(const char *name, int open_mode,
     /* init cell stats */
     /* now works only for int maps */
     if (fcb->map_type == CELL_TYPE)
-	if ((fcb->want_histogram = R__.want_histogram))
-	    Rast_init_cell_stats(&fcb->statf);
+        if ((fcb->want_histogram = R__.want_histogram))
+            Rast_init_cell_stats(&fcb->statf);
 
     /* init range and if map is double/float init d/f_range */
     Rast_init_range(&fcb->range);
 
     if (fcb->map_type != CELL_TYPE)
-	Rast_init_fp_range(&fcb->fp_range);
+        Rast_init_fp_range(&fcb->fp_range);
 
     /* mark file as open for write */
     fcb->open_mode = open_mode;
@@ -761,12 +772,13 @@ int Rast__open_null_write(const char *name)
     Rast__init();
 
     if (!G_find_raster2(name, G_mapset()))
-	G_fatal_error(_("Raster map <%s> does not exist in the current mapset (%s)"),
-		      name, G_mapset());
+        G_fatal_error(
+            _("Raster map <%s> does not exist in the current mapset (%s)"),
+            name, G_mapset());
 
     if (G_unqualified_name(name, G_mapset(), xname, xmapset) < 0)
-	G_fatal_error(_("Raster map <%s> is not in the current mapset (%s)"),
-		      name, G_mapset());
+        G_fatal_error(_("Raster map <%s> is not in the current mapset (%s)"),
+                      name, G_mapset());
     map = G_store(xname);
     mapset = G_store(xmapset);
 
@@ -785,17 +797,18 @@ int Rast__open_null_write(const char *name)
     fcb->null_fd = creat(tempname, 0666);
     if (fcb->null_fd < 0) {
         int err = errno;
-	G_free(tempname);
-	G_free(fcb->name);
-	G_free(fcb->mapset);
-	G_fatal_error(_("No temp files available: %s"), strerror(err));
+
+        G_free(tempname);
+        G_free(fcb->name);
+        G_free(fcb->mapset);
+        G_fatal_error(_("No temp files available: %s"), strerror(err));
     }
     fcb->null_temp_name = tempname;
 
     if (R__.compress_nulls) {
-	fcb->null_row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
-	G_zero(fcb->null_row_ptr, (fcb->cellhd.rows + 1) * sizeof(off_t));
-	Rast__write_null_row_ptrs(fd, fcb->null_fd);
+        fcb->null_row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
+        G_zero(fcb->null_row_ptr, (fcb->cellhd.rows + 1) * sizeof(off_t));
+        Rast__write_null_row_ptrs(fd, fcb->null_fd);
     }
 
     /* allocate null bitstream buffer for writing */
@@ -824,11 +837,12 @@ void Rast_set_fp_type(RASTER_MAP_TYPE map_type)
     switch (map_type) {
     case FCELL_TYPE:
     case DCELL_TYPE:
-	R__.fp_type = map_type;
-	break;
+        R__.fp_type = map_type;
+        break;
     default:
-	G_fatal_error(_("Rast_set_fp_type(): can only be called with FCELL_TYPE or DCELL_TYPE"));
-	break;
+        G_fatal_error(_("Rast_set_fp_type(): can only be called with "
+                        "FCELL_TYPE or DCELL_TYPE"));
+        break;
     }
 }
 
@@ -851,16 +865,16 @@ int Rast_map_is_fp(const char *name, const char *mapset)
 
     xmapset = G_find_raster2(name, mapset);
     if (!xmapset)
-	G_fatal_error(_("Raster map <%s> not found"),
-		      G_fully_qualified_name(name, mapset));
+        G_fatal_error(_("Raster map <%s> not found"),
+                      G_fully_qualified_name(name, mapset));
 
     G_file_name(path, "fcell", name, xmapset);
     if (access(path, 0) == 0)
-	return 1;
+        return 1;
 
     G_file_name(path, "g3dcell", name, xmapset);
     if (access(path, 0) == 0)
-	return 1;
+        return 1;
 
     return 0;
 }
@@ -872,7 +886,7 @@ int Rast_map_is_fp(const char *name, const char *mapset)
    DCELL_TYPE for double maps, FCELL_TYPE for float maps, CELL_TYPE for
    integer maps, -1 if error has occurred
 
-   \param name map name 
+   \param name map name
    \param mapset mapset where map <i>name</i> lives
 
    \return raster data type
@@ -884,22 +898,22 @@ RASTER_MAP_TYPE Rast_map_type(const char *name, const char *mapset)
 
     xmapset = G_find_raster2(name, mapset);
     if (!xmapset) {
-	if (mapset && *mapset)
-	    G_fatal_error(_("Raster map <%s> not found in mapset <%s>"),
-			  name, mapset);
-	else
-	    G_fatal_error(_("Raster map <%s> not found"), name);
+        if (mapset && *mapset)
+            G_fatal_error(_("Raster map <%s> not found in mapset <%s>"), name,
+                          mapset);
+        else
+            G_fatal_error(_("Raster map <%s> not found"), name);
     }
 
     G_file_name(path, "fcell", name, xmapset);
 
     if (access(path, 0) == 0)
-	return Rast__check_fp_type(name, xmapset);
+        return Rast__check_fp_type(name, xmapset);
 
     G_file_name(path, "g3dcell", name, xmapset);
 
     if (access(path, 0) == 0)
-	return DCELL_TYPE;
+        return DCELL_TYPE;
 
     return CELL_TYPE;
 }
@@ -923,7 +937,8 @@ RASTER_MAP_TYPE Rast_get_map_type(int fd)
 }
 
 /*!
-   \brief Determines whether the floating points cell file has double or float type
+   \brief Determines whether the floating points cell file has double or float
+   type
 
    \param name map name
    \param mapset mapset where map <i>name</i> lives
@@ -940,36 +955,37 @@ RASTER_MAP_TYPE Rast__check_fp_type(const char *name, const char *mapset)
 
     xmapset = G_find_raster2(name, mapset);
     if (!xmapset)
-	G_fatal_error(_("Raster map <%s> not found"),
-		      G_fully_qualified_name(name, mapset));
+        G_fatal_error(_("Raster map <%s> not found"),
+                      G_fully_qualified_name(name, mapset));
 
     G_file_name_misc(path, "cell_misc", FORMAT_FILE, name, xmapset);
 
     if (access(path, 0) != 0)
-	G_fatal_error(_("Unable to find '%s'"), path);
+        G_fatal_error(_("Unable to find '%s'"), path);
 
     format_keys = G_read_key_value_file(path);
 
     if ((str = G_find_key_value("type", format_keys)) != NULL) {
-	if (strcmp(str, "double") == 0)
-	    map_type = DCELL_TYPE;
-	else if (strcmp(str, "float") == 0)
-	    map_type = FCELL_TYPE;
-	else {
-	    G_free_key_value(format_keys);
-	    G_fatal_error(_("Invalid type: field '%s' in file '%s'"), str, path);
-	}
+        if (strcmp(str, "double") == 0)
+            map_type = DCELL_TYPE;
+        else if (strcmp(str, "float") == 0)
+            map_type = FCELL_TYPE;
+        else {
+            G_free_key_value(format_keys);
+            G_fatal_error(_("Invalid type: field '%s' in file '%s'"), str,
+                          path);
+        }
     }
     else {
-	G_free_key_value(format_keys);
-	G_fatal_error(_("Missing type: field in file '%s'"), path);
+        G_free_key_value(format_keys);
+        G_fatal_error(_("Missing type: field in file '%s'"), path);
     }
 
     if ((str1 = G_find_key_value("byte_order", format_keys)) != NULL) {
-	if (strcmp(str1, "xdr") != 0)
-	    G_warning(_("Raster map <%s> is not xdr: byte_order: %s"),
-		      name, str);
-	/* here read and translate  byte order if not using xdr */
+        if (strcmp(str1, "xdr") != 0)
+            G_warning(_("Raster map <%s> is not xdr: byte_order: %s"), name,
+                      str);
+        /* here read and translate  byte order if not using xdr */
     }
     G_free_key_value(format_keys);
     return map_type;
@@ -1036,21 +1052,20 @@ void Rast_set_quant_rules(int fd, struct Quant *q)
     struct Quant_table *p;
 
     if (fcb->open_mode != OPEN_OLD)
-	G_fatal_error(_("Rast_set_quant_rules() can be called only for "
-			"raster maps opened for reading"));
+        G_fatal_error(_("Rast_set_quant_rules() can be called only for "
+                        "raster maps opened for reading"));
 
     /* copy all info from q to fcb->quant) */
     Rast_quant_init(&fcb->quant);
     if (q->truncate_only) {
-	Rast_quant_truncate(&fcb->quant);
-	return;
+        Rast_quant_truncate(&fcb->quant);
+        return;
     }
 
     for (p = &(q->table[q->nofRules - 1]); p >= q->table; p--)
-	Rast_quant_add_rule(&fcb->quant, p->dLow, p->dHigh, p->cLow,
-			    p->cHigh);
+        Rast_quant_add_rule(&fcb->quant, p->dLow, p->dHigh, p->cLow, p->cHigh);
     if (Rast_quant_get_neg_infinite_rule(q, &dcell, &cell) > 0)
-	Rast_quant_set_neg_infinite_rule(&fcb->quant, dcell, cell);
+        Rast_quant_set_neg_infinite_rule(&fcb->quant, dcell, cell);
     if (Rast_quant_get_pos_infinite_rule(q, &dcell, &cell) > 0)
-	Rast_quant_set_pos_infinite_rule(&fcb->quant, dcell, cell);
+        Rast_quant_set_pos_infinite_rule(&fcb->quant, dcell, cell);
 }

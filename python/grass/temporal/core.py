@@ -15,8 +15,9 @@ Usage:
     >>> # Execute a SQL statement
     >>> dbif.execute_transaction("SELECT datetime(0, 'unixepoch', 'localtime');")
     >>> # Mogrify an SQL statement
-    >>> dbif.mogrify_sql_statement(["SELECT name from raster_base where name = ?",
-    ... ("precipitation",)])
+    >>> dbif.mogrify_sql_statement(
+    ...     ["SELECT name from raster_base where name = ?", ("precipitation",)]
+    ... )
     "SELECT name from raster_base where name = 'precipitation'"
     >>> dbif.close()
 
@@ -28,9 +29,9 @@ for details.
 
 :author: Soeren Gebbert
 """
+
 # import traceback
 import os
-import sys
 import grass.script as gscript
 
 from .c_libraries_interface import CLibrariesInterface
@@ -53,9 +54,6 @@ except:
 import atexit
 from datetime import datetime
 
-if sys.version_info.major >= 3:
-    long = int
-
 ###############################################################################
 
 
@@ -66,11 +64,8 @@ def profile_function(func):
     if do_profiling == "True" or do_profiling == "1":
         import cProfile
         import pstats
+        import io
 
-        try:
-            import StringIO as io
-        except ImportError:
-            import io
         pr = cProfile.Profile()
         pr.enable()
         func()
@@ -264,7 +259,7 @@ def get_tgis_message_interface():
     """Return the temporal GIS message interface which is of type
     grass.pygrass.message.Messenger()
 
-    Use this message interface to print messages to stdout using the
+    Use this message interface to print messages to stderr using the
     GRASS C-library messaging system.
     """
     global message_interface
@@ -435,7 +430,7 @@ def get_tgis_database_string():
     """Return the preprocessed temporal database string
 
     This string is the temporal database string set with t.connect
-    that was processed to substitue location, gisdbase and mapset
+    that was processed to substitute location, gisdbase and mapset
     variables.
     """
     global tgis_database_string
@@ -496,7 +491,8 @@ def get_available_temporal_mapsets():
         )
         if driver and database:
             # Check if the temporal sqlite database exists
-            # We need to set non-existing databases in case the mapset is the current mapset
+            # We need to set non-existing databases in case the mapset is the current
+            # mapset
             # to create it
             if (
                 driver == "sqlite" and os.path.exists(database)
@@ -712,13 +708,14 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
         if dbif.fetchone()[0]:
             db_exists = True
 
-    backup_howto = _(
-        "Please create a backup of your temporal database to avoid losing data.\n"
-    )
     if tgis_db_version > 2:
-        backup_howto += _("Run t.upgrade command to upgrade your temporal database.\n")
+        backup_howto = _(
+            "Run t.upgrade command to upgrade your temporal database.\n"
+            "Consider creating a backup of your temporal database to avoid "
+            "loosing data in case something goes wrong.\n"
+        )
     else:
-        backup_howto += _(
+        backup_howto = _(
             "You need to export it by "
             "restoring the GRASS GIS version used for creating this DB."
             "Notes: Use t.rast.export and t.vect.export "
@@ -1064,7 +1061,7 @@ def _create_tgis_metadata_table(content, dbif=None):
 ###############################################################################
 
 
-class SQLDatabaseInterfaceConnection(object):
+class SQLDatabaseInterfaceConnection:
     def __init__(self):
         self.tgis_mapsets = get_available_temporal_mapsets()
         self.current_mapset = get_current_mapset()
@@ -1246,7 +1243,6 @@ class SQLDatabaseInterfaceConnection(object):
         return self.connections[mapset].execute_transaction(statement)
 
     def _create_mapset_error_message(self, mapset):
-
         return (
             "You have no permission to "
             "access mapset <%(mapset)s>, or "
@@ -1259,7 +1255,7 @@ class SQLDatabaseInterfaceConnection(object):
 ###############################################################################
 
 
-class DBConnection(object):
+class DBConnection:
     """This class represents the database interface connection
     and provides access to the chosen backend modules.
 
@@ -1400,8 +1396,14 @@ class DBConnection(object):
 
             >>> init()
             >>> dbif = SQLDatabaseInterfaceConnection()
-            >>> dbif.mogrify_sql_statement(["SELECT ctime FROM raster_base WHERE id = ?",
-            ... ["soil@PERMANENT",]])
+            >>> dbif.mogrify_sql_statement(
+            ...     [
+            ...         "SELECT ctime FROM raster_base WHERE id = ?",
+            ...         [
+            ...             "soil@PERMANENT",
+            ...         ],
+            ...     ]
+            ... )
             "SELECT ctime FROM raster_base WHERE id = 'soil@PERMANENT'"
 
         """
@@ -1449,7 +1451,7 @@ class DBConnection(object):
                             statement[0:pos],
                             statement[pos + 1 :],
                         )
-                    elif isinstance(args[count], (int, long)):
+                    elif isinstance(args[count], int):
                         statement = "%s%d%s" % (
                             statement[0:pos],
                             args[count],
@@ -1500,7 +1502,6 @@ class DBConnection(object):
 
         # Check if the database already exists
         if self.dbmi.__name__ == "sqlite3":
-
             self.cursor.execute(
                 "SELECT name FROM sqlite_master WHERE "
                 "type='table' AND name='%s';" % table_name
@@ -1609,8 +1610,9 @@ def init_dbif(dbif):
 
         dbif, connection_state_changed = tgis.init_dbif(None)
 
-        sql = dbif.mogrify_sql_statement(["SELECT * FROM raster_base WHERE ? = ?"],
-                                               ["id", "soil@PERMANENT"])
+        sql = dbif.mogrify_sql_statement(
+            ["SELECT * FROM raster_base WHERE ? = ?"], ["id", "soil@PERMANENT"]
+        )
         dbif.execute_transaction(sql)
 
         if connection_state_changed:

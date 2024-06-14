@@ -331,7 +331,6 @@ def main():
     indicator_maps = {}
 
     while input_strds_end > start and stop > start:
-
         # Make sure that the cyclic computation will stop at the correct time
         if stop and end > stop:
             end = stop
@@ -430,14 +429,18 @@ def main():
                     elif i > 0 and i < num_maps - 1:
                         prev_map = occurrence_maps[map.next().get_id()].get_name()
                         next_map = occurrence_maps[map.prev().get_id()].get_name()
-                        # In case the previous map is null() set null() or the start indicator
+                        # In case the previous map is null() set null() or the start
+                        # indicator
                         subexpr1 = "if(isnull(%s), null(), %i)" % (
                             curr_map,
                             indicator_start,
                         )
-                        # In case the previous map was not null() if the current map is null() set null()
-                        # if the current map is not null() and the next map is not null() set
-                        # intermediate indicator, if the next map is null set the end indicator
+                        # In case the previous map was not null() if the current map is
+                        #   null() set null()
+                        # if the current map is not null() and the next map is not
+                        #   null() set
+                        # intermediate indicator, if the next map is null set the end
+                        #   indicator
                         subexpr2 = "if(isnull(%s), %i, %i)" % (
                             next_map,
                             indicator_end,
@@ -468,14 +471,18 @@ def main():
                     elif i > 0 and i < num_maps - 1:
                         prev_map = occurrence_maps[map.prev().get_id()].get_name()
                         next_map = occurrence_maps[map.next().get_id()].get_name()
-                        # In case the previous map is null() set null() or the start indicator
+                        # In case the previous map is null() set null() or the start
+                        # indicator
                         subexpr1 = "if(isnull(%s), null(), %i)" % (
                             curr_map,
                             indicator_start,
                         )
-                        # In case the previous map was not null() if the current map is null() set null()
-                        # if the current map is not null() and the next map is not null() set
-                        # intermediate indicator, if the next map is null set the end indicator
+                        # In case the previous map was not null() if the current map
+                        #   is null() set null()
+                        # if the current map is not null() and the next map is not
+                        #   null() set
+                        # intermediate indicator, if the next map is null set the end
+                        #   indicator
                         subexpr2 = "if(isnull(%s), %i, %i)" % (
                             next_map,
                             indicator_end,
@@ -564,7 +571,6 @@ def main():
 def create_strds_register_maps(
     in_strds, out_strds, out_maps, register_null, empty_maps, dbif
 ):
-
     out_id = out_strds.get_id()
 
     if out_strds.is_in_db(dbif):
@@ -617,7 +623,6 @@ def compute_occurrence(
     maximum_strds,
     dbif,
 ):
-
     if minimum_strds:
         input_maps_minimum = input_strds.get_registered_maps_as_objects(
             where=where, dbif=dbif

@@ -18,8 +18,6 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
-from __future__ import print_function
-
 import io
 from contextlib import redirect_stdout
 import sys

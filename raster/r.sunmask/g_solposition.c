@@ -22,7 +22,7 @@
  *    Martin Rymes
  *    National Renewable Energy Laboratory
  *    25 March 1998
- *----------------------------------------------------------------------------*/
+ *---------------------------------------------------------------------------*/
 
 /* uncomment to get debug output */
 
@@ -34,12 +34,11 @@
 #include <grass/gprojects.h>
 #include "solpos00.h"
 
-struct posdata pd, *pdat;	/* declare solpos data struct and a pointer for it */
-
+struct posdata pd, *pdat; /* declare solpos data struct and a pointer for it */
 
 long calc_solar_position(double longitude, double latitude, double timezone,
-			 int year, int month, int day, int hour, int minute,
-			 int second)
+                         int year, int month, int day, int hour, int minute,
+                         int second)
 {
 
     /* Note: this code is valid from year 1950 to 2050 (solpos restriction)
@@ -53,21 +52,22 @@ long calc_solar_position(double longitude, double latitude, double timezone,
        - time: local time from your watch
      */
 
-    long retval;		/* to capture S_solpos return codes */
-    struct Key_Value *in_proj_info, *in_unit_info;	/* projection information of input map */
-    struct pj_info iproj;	/* input map proj parameters  */
-    struct pj_info oproj;	/* output map proj parameters  */
-    struct pj_info tproj;	/* transformation parameters  */
+    long retval; /* to capture S_solpos return codes */
+    struct Key_Value *in_proj_info,
+        *in_unit_info;    /* projection information of input map */
+    struct pj_info iproj; /* input map proj parameters  */
+    struct pj_info oproj; /* output map proj parameters  */
+    struct pj_info tproj; /* transformation parameters  */
     extern struct Cell_head window;
     int inside;
 
-
     /* we don't like to run G_calc_solar_position in xy locations */
     if (window.proj == 0)
-	G_fatal_error(_("Unable to calculate sun position in un-projected locations. "
-			"Specify sunposition directly."));
+        G_fatal_error(
+            _("Unable to calculate sun position in projects without CRS. "
+              "Specify sunposition directly."));
 
-    pdat = &pd;			/* point to the structure for convenience */
+    pdat = &pd; /* point to the structure for convenience */
 
     /* Initialize structure to default values. (Optional only if ALL input
        parameters are initialized in the calling code, which they are not
@@ -77,73 +77,77 @@ long calc_solar_position(double longitude, double latitude, double timezone,
 
     /* check if given point is in current window */
     G_debug(1, "window.north: %f, window.south: %f\n", window.north,
-	    window.south);
+            window.south);
     G_debug(1, "window.west:  %f, window.east : %f\n", window.west,
-	    window.east);
-    
+            window.east);
+
     inside = 0;
     if (latitude >= window.south && latitude <= window.north &&
-	longitude >= window.west && longitude <= window.east)
-	inside = 1;
+        longitude >= window.west && longitude <= window.east)
+        inside = 1;
     if (!inside)
-	G_warning(_("Specified point %f, %f outside of current region, "
-		    "is that intended? Anyway, it will be used."),
-		  longitude, latitude);
+        G_warning(_("Specified point %f, %f outside of current region, "
+                    "is that intended? Anyway, it will be used."),
+                  longitude, latitude);
 
     /* if coordinates are not in lat/long format, transform them: */
     if ((G_projection() != PROJECTION_LL) && window.proj != 0) {
-	G_debug(1, "Transforming input coordinates to lat/long (req. for solar position)");
-	
-	/* read current projection info */
-	if ((in_proj_info = G_get_projinfo()) == NULL)
-	    G_fatal_error(_("Unable to get projection info of current location"));
+        G_debug(1, "Transforming input coordinates to lat/long (req. for solar "
+                   "position)");
 
-	if ((in_unit_info = G_get_projunits()) == NULL)
-	    G_fatal_error(_("Unable to get projection units of current location"));
+        /* read current projection info */
+        if ((in_proj_info = G_get_projinfo()) == NULL)
+            G_fatal_error(
+                _("Unable to get projection info of current project"));
 
-	if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
-	    G_fatal_error(_("Unable to get projection key values of current location"));
-	
-	G_free_key_value(in_proj_info);
-	G_free_key_value(in_unit_info);
+        if ((in_unit_info = G_get_projunits()) == NULL)
+            G_fatal_error(
+                _("Unable to get projection units of current project"));
 
-	/* Try using pj_print_proj_params() instead of all this */
-	G_debug(1, "Projection found in location:");
-	G_debug(1, "IN: meter: %f zone: %i proj: %s (iproj struct)",
-		iproj.meters, iproj.zone, iproj.proj);
-	G_debug(1, "IN coord: longitude: %f, latitude: %f", longitude,
-		latitude);
+        if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
+            G_fatal_error(
+                _("Unable to get projection key values of current project"));
 
-	oproj.pj = NULL;
-	tproj.def = NULL;
+        G_free_key_value(in_proj_info);
+        G_free_key_value(in_unit_info);
 
-	if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
-	    G_fatal_error(_("Unable to initialize coordinate transformation"));
+        /* Try using pj_print_proj_params() instead of all this */
+        G_debug(1, "Projection found in project:");
+        G_debug(1, "IN: meter: %f zone: %i proj: %s (iproj struct)",
+                iproj.meters, iproj.zone, iproj.proj);
+        G_debug(1, "IN coord: longitude: %f, latitude: %f", longitude,
+                latitude);
 
-	/* XX do the transform 
-	 *               outx        outy    in_info  out_info */
+        oproj.pj = NULL;
+        tproj.def = NULL;
 
-	if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
-			  &longitude, &latitude, NULL) < 0)
-	    G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
-			   "GPJ_transform()");
+        if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
+            G_fatal_error(_("Unable to initialize coordinate transformation"));
 
-	G_debug(1, "Transformation to lat/long:");
-	G_debug(1, "OUT: longitude: %f, latitude: %f", longitude,
-		latitude);
+        /* XX do the transform
+         *               outx        outy    in_info  out_info */
 
-    }				/* transform if not LL */
+        if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD, &longitude, &latitude,
+                          NULL) < 0)
+            G_fatal_error(
+                _("Error in %s (projection of input coordinate pair)"),
+                "GPJ_transform()");
 
-    pdat->longitude = longitude;	/* Note that latitude and longitude are  */
-    pdat->latitude = latitude;	/*   in DECIMAL DEGREES, not Deg/Min/Sec */
-    pdat->timezone = timezone;	/* DO NOT ADJUST FOR DAYLIGHT SAVINGS TIME. */
+        G_debug(1, "Transformation to lat/long:");
+        G_debug(1, "OUT: longitude: %f, latitude: %f", longitude, latitude);
 
-    pdat->year = year;		/* The year */
+    } /* transform if not LL */
+
+    pdat->longitude = longitude; /* Note that latitude and longitude are  */
+    pdat->latitude = latitude;   /*   in DECIMAL DEGREES, not Deg/Min/Sec */
+    pdat->timezone = timezone;   /* DO NOT ADJUST FOR DAYLIGHT SAVINGS TIME. */
+
+    pdat->year = year; /* The year */
     pdat->function &= ~S_DOY;
     pdat->month = month;
-    pdat->day = day;		/* the algorithm will compensate for leap year, so
-				   you just count days). S_solpos can be
-				   configured to accept day-of-the year */
+    pdat->day = day; /* the algorithm will compensate for leap year, so
+                        you just count days). S_solpos can be
+                        configured to accept day-of-the year */
 
     /* The time of day (STANDARD (GMT) time) */
 
@@ -162,13 +166,12 @@ long calc_solar_position(double longitude, double latitude, double timezone,
     /* Finally, we will assume that you have a flat surface
        facing nowhere, tilted at latitude. */
 
-    pdat->tilt = pdat->latitude;	/* tilted at latitude */
+    pdat->tilt = pdat->latitude; /* tilted at latitude */
     pdat->aspect = 180.0;
 
     /* perform the calculation */
-    retval = S_solpos(pdat);	/* S_solpos function call: returns long value */
-    S_decode(retval, pdat);	/* prints an error in case of problems */
+    retval = S_solpos(pdat); /* S_solpos function call: returns long value */
+    S_decode(retval, pdat);  /* prints an error in case of problems */
 
     return retval;
-
 }

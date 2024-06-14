@@ -8,6 +8,7 @@
 Read the file COPYING that comes with GRASS
 for details
 """
+
 import os
 import stat
 import ctypes
@@ -58,7 +59,7 @@ class SignatureFileTestCase(TestCase):
 
     def test_roundtrip_signature_v1_norgb_one_label(self):
         """Test writing and reading back signature file (v1)
-        wiht a single label"""
+        with a single label"""
 
         # Create signature struct
         So = Signature()
@@ -92,6 +93,7 @@ class SignatureFileTestCase(TestCase):
         self.assertEqual(ret, 1)
         self.assertEqual(Sn.title, b"Signature title")
         self.assertEqual(Sn.nbands, 1)
+        self.assertEqual(Sn.have_oclass, 0)
         semantic_label = utils.decode(
             ctypes.cast(Sn.semantic_labels[0], ctypes.c_char_p).value
         )
@@ -198,6 +200,7 @@ class SignatureFileTestCase(TestCase):
         self.assertEqual(ret, 1)
         self.assertEqual(Sn.title, b"Signature title")
         self.assertEqual(Sn.nbands, 2)
+        self.assertEqual(Sn.have_oclass, 0)
         semantic_label = utils.decode(
             ctypes.cast(Sn.semantic_labels[0], ctypes.c_char_p).value
         )
@@ -218,6 +221,97 @@ class SignatureFileTestCase(TestCase):
         self.assertEqual(Sn.sig[1].status, 1)
         self.assertEqual(Sn.sig[1].have_color, 0)
         self.assertEqual(Sn.sig[1].npoints, 69)
+        self.assertEqual(Sn.sig[1].desc, b"my label2")
+        self.assertEqual(Sn.sig[1].mean[0], 3.5)
+        self.assertEqual(Sn.sig[1].mean[1], 4.5)
+        self.assertEqual(Sn.sig[1].var[0][0], 1.7)
+        self.assertEqual(Sn.sig[1].var[1][0], 1.2)
+        self.assertEqual(Sn.sig[1].var[1][1], 1.8)
+
+        # Free signature struct after use
+        So.semantic_labels[0] = None
+        So.semantic_labels[1] = None
+        I_free_signatures(ctypes.byref(So))
+        I_free_signatures(ctypes.byref(Sn))
+        self.assertEqual(Sn.nbands, 0)
+        self.assertEqual(Sn.nsigs, 0)
+
+    def test_roundtrip_signature_v2_norgb_two_labels_oclass(self):
+        """Test writing and reading back signature (v1) with two labels
+        and original class values"""
+
+        # Create signature struct
+        So = Signature()
+        I_init_signatures(ctypes.byref(So), 2)
+        self.assertEqual(So.nbands, 2)
+        sig_count = I_new_signature(ctypes.byref(So))
+        self.assertEqual(sig_count, 1)
+        sig_count = I_new_signature(ctypes.byref(So))
+        self.assertEqual(sig_count, 2)
+
+        # Fill signatures struct with data
+        So.title = b"Signature title"
+        So.semantic_labels[0] = ctypes.create_string_buffer(b"The_Doors")
+        So.semantic_labels[1] = ctypes.create_string_buffer(b"The_Who")
+        So.have_oclass = 1
+        So.sig[0].status = 1
+        So.sig[0].have_color = 0
+        So.sig[0].oclass = 1337
+        So.sig[0].npoints = 42
+        So.sig[0].desc = b"my label1"
+        So.sig[0].mean[0] = 2.5
+        So.sig[0].mean[1] = 3.5
+        So.sig[0].var[0][0] = 0.7
+        So.sig[0].var[1][0] = 0.2
+        So.sig[0].var[1][1] = 0.8
+        So.sig[1].status = 1
+        So.sig[1].have_color = 0
+        So.sig[1].oclass = 59009
+        So.sig[1].npoints = 69
+        So.sig[1].desc = b"my label2"
+        So.sig[1].mean[0] = 3.5
+        So.sig[1].mean[1] = 4.5
+        So.sig[1].var[0][0] = 1.7
+        So.sig[1].var[1][0] = 1.2
+        So.sig[1].var[1][1] = 1.8
+
+        # Write signatures to file
+        p_new_sigfile = I_fopen_signature_file_new(self.sig_name)
+        sig_stat = os.stat(f"{self.sig_dir}/sig")
+        self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
+        I_write_signatures(p_new_sigfile, ctypes.byref(So))
+        self.libc.fclose(p_new_sigfile)
+
+        # Read back from signatures file
+        Sn = Signature()
+        p_old_sigfile = I_fopen_signature_file_old(self.sig_name)
+        ret = I_read_signatures(p_old_sigfile, ctypes.byref(Sn))
+        self.assertEqual(ret, 1)
+        self.assertEqual(Sn.title, b"Signature title")
+        self.assertEqual(Sn.nbands, 2)
+        self.assertEqual(Sn.have_oclass, 1)
+        semantic_label = utils.decode(
+            ctypes.cast(Sn.semantic_labels[0], ctypes.c_char_p).value
+        )
+        self.assertEqual(semantic_label, "The_Doors")
+        self.assertEqual(Sn.sig[0].status, 1)
+        self.assertEqual(Sn.sig[0].have_color, 0)
+        self.assertEqual(Sn.sig[0].npoints, 42)
+        self.assertEqual(Sn.sig[0].oclass, 1337)
+        self.assertEqual(Sn.sig[0].desc, b"my label1")
+        self.assertEqual(Sn.sig[0].mean[0], 2.5)
+        self.assertEqual(Sn.sig[0].mean[1], 3.5)
+        self.assertEqual(Sn.sig[0].var[0][0], 0.7)
+        self.assertEqual(Sn.sig[0].var[1][0], 0.2)
+        self.assertEqual(Sn.sig[0].var[1][1], 0.8)
+        semantic_label = utils.decode(
+            ctypes.cast(Sn.semantic_labels[1], ctypes.c_char_p).value
+        )
+        self.assertEqual(semantic_label, "The_Who")
+        self.assertEqual(Sn.sig[1].status, 1)
+        self.assertEqual(Sn.sig[1].have_color, 0)
+        self.assertEqual(Sn.sig[1].npoints, 69)
+        self.assertEqual(Sn.sig[1].oclass, 59009)
         self.assertEqual(Sn.sig[1].desc, b"my label2")
         self.assertEqual(Sn.sig[1].mean[0], 3.5)
         self.assertEqual(Sn.sig[1].mean[1], 4.5)
@@ -290,9 +384,9 @@ class SortSignaturesBysemantic_labelTest(TestCase):
         self.assertEqual(ref_err, "The_Doors")
 
         # Clean up memory to help track memory leaks when run by valgrind
-        S.semantic_labels[
-            0
-        ] = None  # C should not call free() on memory allocated by python
+        S.semantic_labels[0] = (
+            None  # C should not call free() on memory allocated by python
+        )
         I_free_signatures(ctypes.byref(S))
         I_free_group_ref(ctypes.byref(R))
         if ret:

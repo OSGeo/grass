@@ -30,7 +30,6 @@ This program is free software under the GNU General Public License
 
 import os
 import re
-import six
 
 import wx
 
@@ -59,10 +58,12 @@ from gui_core.wrap import (
     HyperlinkCtrl,
     Menu,
     NewId,
+    Slider,
     SpinCtrl,
     StaticBox,
     StaticText,
     TextCtrl,
+    ListBox,
 )
 
 
@@ -106,7 +107,8 @@ class SimpleDialog(wx.Dialog):
 
         self.sizer.Add(self.dataSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
 
-        # self.sizer.Add(item = self.informLabel, proportion = 0, flag = wx.ALL, border = 5)
+        # self.sizer.Add(item = self.informLabel, proportion = 0,
+        # flag = wx.ALL, border = 5)
         self.sizer.Add(btnSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 
     def ValidatorCallback(self, win):
@@ -118,7 +120,7 @@ class SimpleDialog(wx.Dialog):
 class LocationDialog(SimpleDialog):
     """Dialog used to select location"""
 
-    def __init__(self, parent, title=_("Select GRASS location and mapset")):
+    def __init__(self, parent, title=_("Select GRASS project and mapset")):
         SimpleDialog.__init__(self, parent, title)
 
         self.element1 = LocationSelect(
@@ -138,7 +140,7 @@ class LocationDialog(SimpleDialog):
             validator=SimpleValidator(callback=self.ValidatorCallback),
         )
         self.element1.SetFocus()
-        self.warning = _("Location or mapset is not defined.")
+        self.warning = _("Project or mapset is not defined.")
         self._layout()
         self.SetMinSize(self.GetSize())
 
@@ -146,7 +148,7 @@ class LocationDialog(SimpleDialog):
         """Do layout"""
         self.dataSizer.Add(
             StaticText(
-                parent=self.panel, id=wx.ID_ANY, label=_("Name of GRASS location:")
+                parent=self.panel, id=wx.ID_ANY, label=_("Name of GRASS project:")
             ),
             proportion=0,
             flag=wx.ALL,
@@ -189,7 +191,7 @@ class MapsetDialog(SimpleDialog):
     """Dialog used to select mapset"""
 
     def __init__(
-        self, parent, title=_("Select mapset in GRASS location"), location=None
+        self, parent, title=_("Select mapset in GRASS project"), location=None
     ):
         SimpleDialog.__init__(self, parent, title)
 
@@ -303,7 +305,8 @@ class NewVectorDialog(VectorDialog):
         :param title: window title
         :param disableAdd: disable 'add layer' checkbox
         :param disableTable: disable 'create table' checkbox
-        :param showType: True to show feature type selector (used for creating new empty OGR layers)
+        :param showType: True to show feature type selector (used for creating new
+                         empty OGR layers)
 
         :return: dialog instance
         """
@@ -451,7 +454,7 @@ def CreateNewVector(
     disableAdd=False,
     disableTable=False,
 ):
-    """Create new vector map layer
+    r"""Create new vector map layer
 
     :param cmd: (prog, \*\*kwargs)
     :param title: window title
@@ -697,7 +700,6 @@ class GroupDialog(wx.Dialog):
         style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
         **kwargs,
     ):
-
         wx.Dialog.__init__(
             self, parent=parent, id=wx.ID_ANY, title=title, style=style, **kwargs
         )
@@ -869,7 +871,7 @@ class GroupDialog(wx.Dialog):
 
         sizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.gLayerBox = wx.ListBox(
+        self.gLayerBox = ListBox(
             parent=self.gListPanel,
             id=wx.ID_ANY,
             size=(-1, 150),
@@ -984,8 +986,7 @@ class GroupDialog(wx.Dialog):
         if not check:
             self.gLayerBox.DeselectAll()
         else:
-            for item in range(self.subgListBox.GetCount()):
-                self.gLayerBox.Select(item)
+            self.gLayerBox.SelectAll()
 
         event.Skip()
 
@@ -1105,8 +1106,13 @@ class GroupDialog(wx.Dialog):
 
     def OnRemoveLayer(self, event):
         """Remove layer from listbox"""
-        while self.gLayerBox.GetSelections():
-            sel = self.gLayerBox.GetSelections()[0]
+        # After removal of last selected item by .Delete,
+        # ListBox selects the last of remaining items in the list
+        # and thus adds a new item to GetSelections
+        # Items are removed in reverse order to maintain positional number
+        # of other selected items (ListBox is dynamic!)
+        selections = sorted(self.gLayerBox.GetSelections(), reverse=True)
+        for sel in selections:
             m = self.gLayerBox.GetString(sel)
             self.gLayerBox.Delete(sel)
             self.gmaps.remove(m)
@@ -1116,7 +1122,7 @@ class GroupDialog(wx.Dialog):
         """Get layers"""
         if self.edit_subg:
             layers = []
-            for maps, sel in six.iteritems(self.subgmaps):
+            for maps, sel in self.subgmaps.items():
                 if sel:
                     layers.append(maps)
         else:
@@ -1130,7 +1136,7 @@ class GroupDialog(wx.Dialog):
         wx.CallAfter(self.GroupSelected)
 
     def GroupSelected(self):
-        """Group was selected, check if changes were apllied"""
+        """Group was selected, check if changes were applied"""
         self._checkChange()
         group, s = self.GetSelectedGroup()
         maps = list()
@@ -1161,13 +1167,13 @@ class GroupDialog(wx.Dialog):
         self.subgListBox.Set(maps)
 
         for i, m in enumerate(maps):
-            if m in six.iterkeys(self.subgmaps) and self.subgmaps[m]:
+            if m in self.subgmaps.keys() and self.subgmaps[m]:
                 self.subgListBox.Check(i)
 
         self._checkSubGSellAll()
 
     def SubGroupSelected(self):
-        """Subgroup was selected, check if changes were apllied"""
+        """Subgroup was selected, check if changes were applied"""
         self._checkChange()
 
         subgroup = self.subGroupSelect.GetValue().strip()
@@ -1596,7 +1602,6 @@ class MapLayersDialogBase(wx.Dialog):
 
         # check all items by default
         for item in range(self.layers.GetCount()):
-
             self.layers.Check(item, check=self._selectAll())
 
     def OnChangeParams(self, event):
@@ -1803,13 +1808,10 @@ class SetOpacityDialog(wx.Dialog):
         style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
         opacity=1,
     ):
-
         self.parent = parent  # GMFrame
         self.opacity = opacity  # current opacity
 
-        super(SetOpacityDialog, self).__init__(
-            parent, id=id, pos=pos, size=size, style=style, title=title
-        )
+        super().__init__(parent, id=id, pos=pos, size=size, style=style, title=title)
 
         self.applyOpacity = Signal("SetOpacityDialog.applyOpacity")
         panel = wx.Panel(parent=self, id=wx.ID_ANY)
@@ -1817,17 +1819,17 @@ class SetOpacityDialog(wx.Dialog):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         box = wx.GridBagSizer(vgap=5, hgap=5)
-        self.value = wx.Slider(
+        box.AddGrowableCol(0)
+        self.value = Slider(
             panel,
             id=wx.ID_ANY,
             value=int(self.opacity * 100),
             style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS | wx.SL_TOP | wx.SL_LABELS,
             minValue=0,
             maxValue=100,
-            size=(350, -1),
         )
 
-        box.Add(self.value, flag=wx.ALIGN_CENTRE, pos=(0, 0), span=(1, 2))
+        box.Add(self.value, flag=wx.EXPAND, pos=(0, 0), span=(1, 2))
         box.Add(
             StaticText(parent=panel, id=wx.ID_ANY, label=_("transparent")), pos=(1, 0)
         )
@@ -1862,7 +1864,10 @@ class SetOpacityDialog(wx.Dialog):
         panel.SetSizer(sizer)
         sizer.Fit(panel)
 
-        self.SetSize(self.GetBestSize())
+        w, h = self.GetBestSize()
+        self.SetSize(wx.Size(w, h))
+        self.SetMaxSize(wx.Size(-1, h))
+        self.SetMinSize(wx.Size(w, h))
 
         self.Layout()
 
@@ -1930,6 +1935,7 @@ class ImageSizeDialog(wx.Dialog):
         style=wx.DEFAULT_DIALOG_STYLE,
         **kwargs,
     ):
+        img_size = kwargs.pop("img_size", None)
         self.parent = parent
 
         wx.Dialog.__init__(self, parent, id=id, style=style, title=title, **kwargs)
@@ -1943,11 +1949,11 @@ class ImageSizeDialog(wx.Dialog):
         size = self.parent.GetWindow().GetClientSize()
         self.width = SpinCtrl(parent=self.panel, id=wx.ID_ANY, style=wx.SP_ARROW_KEYS)
         self.width.SetRange(20, 1e6)
-        self.width.SetValue(size.width)
+        self.width.SetValue(img_size[0] if img_size else size.width)
         wx.CallAfter(self.width.SetFocus)
         self.height = SpinCtrl(parent=self.panel, id=wx.ID_ANY, style=wx.SP_ARROW_KEYS)
         self.height.SetRange(20, 1e6)
-        self.height.SetValue(size.height)
+        self.height.SetValue(img_size[1] if img_size else size.height)
         self.template = wx.Choice(
             parent=self.panel,
             id=wx.ID_ANY,
@@ -2434,7 +2440,6 @@ class DefaultFontDialog(wx.Dialog):
         settings=UserSettings,
         type="font",
     ):
-
         self.settings = settings
         self.type = type
 
@@ -2596,7 +2601,8 @@ class DefaultFontDialog(wx.Dialog):
         return fontdict, fontdict_reverse, fontlist
 
     def RenderText(self, font, text, size):
-        """Renders an example text with the selected font and resets the bitmap widget"""
+        """Renders an example text with the selected font and resets the bitmap
+        widget"""
         env = os.environ.copy()
         driver = UserSettings.Get(group="display", key="driver", subkey="type")
         if driver == "png":

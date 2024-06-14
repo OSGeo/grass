@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 Parse a C source file.
 
@@ -9,17 +7,10 @@ the class with a string to parse.
 
 __docformat__ = "restructuredtext"
 
-import operator
 import os.path
-import re
 import sys
-import time
-import warnings
 
-from . import preprocessor
-from . import yacc
-from . import cgrammar
-from . import cdeclarations
+from ctypesgen.parser import cgrammar, preprocessor, yacc
 
 # --------------------------------------------------------------------------
 # Lexer
@@ -31,6 +22,8 @@ class CLexer(object):
         self.cparser = cparser
         self.type_names = set()
         self.in_define = False
+        self.lineno = -1
+        self.lexpos = -1
 
     def input(self, tokens):
         self.tokens = tokens
@@ -51,12 +44,8 @@ class CLexer(object):
                 self.in_define = False
 
             # Transform PP tokens into C tokens
-            elif t.type == "LPAREN":
-                t.type = "("
-            elif t.type == "PP_NUMBER":
-                t.type = "CONSTANT"
             elif t.type == "IDENTIFIER" and t.value in cgrammar.keywords:
-                t.type = t.value.upper()
+                t.type = cgrammar.keyword_map[t.value]
             elif t.type == "IDENTIFIER" and t.value in self.type_names:
                 if self.pos < 2 or self.tokens[self.pos - 2].type not in (
                     "VOID",
@@ -98,8 +87,7 @@ class CParser(object):
     def __init__(self, options):
         super(CParser, self).__init__()
         self.preprocessor_parser = preprocessor.PreprocessorParser(options, self)
-        self.parser = yacc.Parser()
-        prototype = yacc.yacc(
+        self.parser = yacc.yacc(
             method="LALR",
             debug=False,
             module=cgrammar,
@@ -108,10 +96,7 @@ class CParser(object):
             optimize=True,
         )
 
-        # If yacc is reading tables from a file, then it won't find the error
-        # function... need to set it manually
-        prototype.errorfunc = cgrammar.p_error
-        prototype.init_parser(self.parser)
+        self.parser.errorfunc = cgrammar.p_error
         self.parser.cparser = self
 
         self.lexer = CLexer(self)
@@ -134,14 +119,14 @@ class CParser(object):
         self.preprocessor_parser.parse(filename)
         self.lexer.input(self.preprocessor_parser.output)
         self.handle_status("Parsing %s" % filename)
-        self.parser.parse(lexer=self.lexer, debug=debug)
+        self.parser.parse(lexer=self.lexer, debug=debug, tracking=True)
 
     # ----------------------------------------------------------------------
     # Parser interface.  Override these methods in your subclass.
     # ----------------------------------------------------------------------
 
     def handle_error(self, message, filename, lineno):
-        """A parse error occured.
+        """A parse error occurred.
 
         The default implementation prints `lineno` and `message` to stderr.
         The parser will try to recover from errors by synchronising at the

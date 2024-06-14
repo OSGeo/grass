@@ -20,7 +20,6 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
-import six
 import time
 import copy
 import math
@@ -62,7 +61,7 @@ class NvizThread(Thread):
 
         self._display = None
 
-        self.setDaemon(True)
+        self.daemon = True
 
     def run(self):
         self._display = wxnviz.Nviz(self.log, self.progressbar)
@@ -478,7 +477,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         and then to textures so that they can be rendered by OpenGL.
         Updates self.imagelist"""
         # update images (legend and text)
-        for oid, overlay in six.iteritems(self.overlays):
+        for oid, overlay in self.overlays.items():
             if not overlay.IsShown() or overlay.name in ("barscale", "northarrow"):
                 continue
             if oid not in [t.GetId() for t in self.imagelist]:  # new
@@ -565,7 +564,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                     self.fly["pos"]["x"] = sx / 2
                     self.fly["pos"]["y"] = sy / 2
                     self.fly["mouseControl"] = False  # controlled by keyboard
-                    self.timerFly.Start(self.fly["interval"])
+                    self.timerFly.Start(int(self.fly["interval"]))
 
                 self.ProcessFlyByArrows(keyCode=key)
 
@@ -713,13 +712,12 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
         if self.mouse["use"] == "fly":
             if not self.timerFly.IsRunning():
-                self.timerFly.Start(self.fly["interval"])
+                self.timerFly.Start(int(self.fly["interval"]))
                 self.fly["mouseControl"] = True
 
         event.Skip()
 
     def OnDragging(self, event):
-
         if self.mouse["use"] == "pointer":
             if self.dragid >= 0:
                 self.DragItem(self.dragid, event.GetPosition())
@@ -1180,7 +1178,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
     def UpdateMap(self, render=True, reRenderTool=False):
         """Updates the canvas anytime there is a change to the
-        underlaying images or to the geometry of the canvas.
+        underlying images or to the geometry of the canvas.
 
         :param render: re-render map composition
         :type render: bool
@@ -2075,18 +2073,18 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 if (
                     data["draw"]["shading"]["isosurface"]["value"] < 0
                 ):  # need to calculate
-                    mode = data["draw"]["shading"]["isosurface"][
-                        "value"
-                    ] = self.nvizDefault.GetDrawMode(
-                        shade=data["draw"]["shading"]["isosurface"], string=False
+                    mode = data["draw"]["shading"]["isosurface"]["value"] = (
+                        self.nvizDefault.GetDrawMode(
+                            shade=data["draw"]["shading"]["isosurface"], string=False
+                        )
                     )
                     self._display.SetIsosurfaceMode(id, mode)
             else:
                 if data["draw"]["shading"]["slice"]["value"] < 0:  # need to calculate
-                    mode = data["draw"]["shading"]["slice"][
-                        "value"
-                    ] = self.nvizDefault.GetDrawMode(
-                        shade=data["draw"]["shading"]["slice"], string=False
+                    mode = data["draw"]["shading"]["slice"]["value"] = (
+                        self.nvizDefault.GetDrawMode(
+                            shade=data["draw"]["shading"]["slice"], string=False
+                        )
                     )
                     self._display.SetSliceMode(id, mode)
             data["draw"]["shading"].pop("update")
@@ -2259,7 +2257,6 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             or "update" in data["marker"]
             or "update" in data["color"]
         ):
-
             ret = self._display.SetVectorPointMode(
                 id,
                 data["color"]["value"],
@@ -2380,7 +2377,8 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         return -1
 
     def ReloadLayersData(self):
-        """Delete nviz data of all loaded layers and reload them from current settings"""
+        """Delete nviz data of all loaded layers and reload them from current
+        settings"""
         for item in self.layers:
             type = self.tree.GetLayerInfo(item, key="type")
             layer = self.tree.GetLayerInfo(item, key="maplayer")
@@ -2514,17 +2512,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         # vlines
         #
         if vectors:
-            cmdLines = (
-                cmdLWidth
-            ) = (
-                cmdLHeight
-            ) = (
-                cmdLColor
-            ) = (
-                cmdLMode
-            ) = (
-                cmdLPos
-            ) = (
+            cmdLines = cmdLWidth = cmdLHeight = cmdLColor = cmdLMode = cmdLPos = (
                 cmdPoints
             ) = cmdPWidth = cmdPSize = cmdPColor = cmdPMarker = cmdPPos = cmdPLayer = ""
             markers = [

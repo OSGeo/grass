@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """Preprocess a C source file using gcc and convert the result into
    a token stream
 
@@ -10,11 +8,17 @@ Reference is C99:
 
 __docformat__ = "restructuredtext"
 
-import os, re, shlex, sys, tokenize, traceback, subprocess
-import ctypes
-from . import lex, yacc
-from .lex import TOKEN, LexError
-from . import pplexer
+import os
+import re
+import sys
+import subprocess
+
+from ctypesgen.parser import pplexer, lex
+from ctypesgen.parser.lex import LexError
+
+
+IS_WINDOWS = sys.platform.startswith("win")
+IS_MAC = sys.platform.startswith("darwin")
 
 # --------------------------------------------------------------------------
 # Lexers
@@ -31,28 +35,11 @@ class PreprocessorLexer(lex.Lexer):
         if filename:
             self.filename = filename
         self.lasttoken = None
-        self.input_stack = []
 
         lex.Lexer.input(self, data)
 
-    def push_input(self, data, filename):
-        self.input_stack.append((self.lexdata, self.lexpos, self.filename, self.lineno))
-        self.lexdata = data
-        self.lexpos = 0
-        self.lineno = 1
-        self.filename = filename
-        self.lexlen = len(self.lexdata)
-
-    def pop_input(self):
-        self.lexdata, self.lexpos, self.filename, self.lineno = self.input_stack.pop()
-        self.lexlen = len(self.lexdata)
-
     def token(self):
         result = lex.Lexer.token(self)
-        while result is None and self.input_stack:
-            self.pop_input()
-            result = lex.Lexer.token(self)
-
         if result:
             self.lasttoken = result.type
             result.filename = self.filename
@@ -60,45 +47,6 @@ class PreprocessorLexer(lex.Lexer):
             self.lasttoken = None
 
         return result
-
-
-class TokenListLexer(object):
-    def __init__(self, tokens):
-        self.tokens = tokens
-        self.pos = 0
-
-    def token(self):
-        if self.pos < len(self.tokens):
-            t = self.tokens[self.pos]
-            self.pos += 1
-            return t
-        else:
-            return None
-
-
-def symbol_to_token(sym):
-    if isinstance(sym, yacc.YaccSymbol):
-        return sym.value
-    elif isinstance(sym, lex.LexToken):
-        return sym
-    else:
-        assert False, "Not a symbol: %r" % sym
-
-
-def create_token(type, value, production=None):
-    """Create a token of type and value, at the position where 'production'
-    was reduced.  Don't specify production if the token is built-in"""
-    t = lex.LexToken()
-    t.type = type
-    t.value = value
-    t.lexpos = -1
-    if production:
-        t.lineno = production.slice[1].lineno
-        t.filename = production.slice[1].filename
-    else:
-        t.lineno = -1
-        t.filename = "<builtin>"
-    return t
 
 
 # --------------------------------------------------------------------------
@@ -109,8 +57,6 @@ def create_token(type, value, production=None):
 class PreprocessorParser(object):
     def __init__(self, options, cparser):
         self.defines = [
-            "inline=",
-            "__inline__=",
             "__extension__=",
             "__const=const",
             "__asm__(x)=",
@@ -118,10 +64,13 @@ class PreprocessorParser(object):
             "CTYPESGEN=1",
         ]
 
-        # On OSX, explicitly add these defines to keep from getting syntax
-        # errors in the OSX standard headers.
-        if sys.platform == "darwin":
-            self.defines += ["__uint16_t=uint16_t", "__uint32_t=uint32_t", "__uint64_t=uint64_t"]
+        # On macOS, explicitly add these defines to keep from getting syntax
+        # errors in the macOS standard headers.
+        if IS_MAC:
+            self.defines += [
+                "_Nullable=",
+                "_Nonnull=",
+            ]
 
         self.matches = []
         self.output = []
@@ -141,14 +90,26 @@ class PreprocessorParser(object):
         """Parse a file and save its output"""
 
         cmd = self.options.cpp
-        cmd += " -U __GNUC__ -dD"
+
+        # Legacy behaviour is to implicitly undefine '__GNUC__'
+        # Continue doing this, unless user explicitly requested to allow it.
+        if self.options.allow_gnu_c:
+            # New behaviour. No implicit override.
+            # (currently NOT enabled by default yet)
+            pass
+        else:
+            # Legacy behaviour. Add an implicit override.
+            # (currently the default)
+            cmd += " -U __GNUC__"
+
+        cmd += " -dD"
 
         for undefine in self.options.cpp_undefines:
             cmd += " -U%s" % undefine
 
         # This fixes Issue #6 where OS X 10.6+ adds a C extension that breaks
         # the parser.  Blocks shouldn't be needed for ctypesgen support anyway.
-        if sys.platform == "darwin":
+        if IS_MAC:
             cmd += " -U __BLOCKS__"
 
         for path in self.options.include_search_paths:
@@ -159,36 +120,30 @@ class PreprocessorParser(object):
 
         self.cparser.handle_status(cmd)
 
-        if sys.platform == "win32":
+        if IS_WINDOWS:
             cmd = ["sh.exe", "-c", cmd]
 
         pp = subprocess.Popen(
             cmd,
             shell=True,
-            universal_newlines=True,
+            universal_newlines=False,  # binary
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )
-        try:
-            ppout, pperr = pp.communicate()
-        except UnicodeError:
-            # Fix for https://trac.osgeo.org/grass/ticket/3883,
-            # handling file(s) encoded with mac_roman
-            if sys.platform == "darwin":
-                pp = subprocess.Popen(
-                    cmd,
-                    shell=True,
-                    universal_newlines=False,  # read as binary
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                )
-                ppout, pperr = pp.communicate()
+        ppout_data, pperr_data = pp.communicate()
 
-                data = ppout.decode("utf8", errors="replace")
-                ppout = data.replace("\r\n", "\n").replace("\r", "\n")
-                pperr = pperr.decode("utf8", errors="replace")
+        try:
+            ppout = ppout_data.decode("utf-8")
+        except UnicodeError:
+            if IS_MAC:
+                ppout = ppout_data.decode("utf-8", errors="replace")
             else:
                 raise UnicodeError
+        pperr = pperr_data.decode("utf-8")
+
+        if IS_WINDOWS:
+            ppout = ppout.replace("\r\n", "\n")
+            pperr = pperr.replace("\r\n", "\n")
 
         for line in pperr.split("\n"):
             if line:

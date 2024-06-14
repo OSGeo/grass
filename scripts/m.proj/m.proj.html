@@ -1,4 +1,4 @@
-<h2>DESCRIPTION</h2> 
+<h2>DESCRIPTION</h2>
 
 This program allows a user to convert coordinates from one projection
 to another. Coordinates can be read from one file, converted, and
@@ -96,9 +96,9 @@ v.out.ascii bridges | m.proj -o -d input=-
 
 <h3>Reproject Long/Lat WGS84 coordinate pair to current map projection</h3>
 
-To convert a Long/Lat WGS84 coordinate pair to the current map projection
+To convert a Long/Lat WGS84 coordinate pair to the current map CRS
 using the <b>-i</b> flag which sets the target projection parameters
-automatically from the current location definition:
+automatically from the current project definition:
 <div class="code"><pre>
 echo "-78.61168178 33.92225767" | m.proj -i input=-
 645513.47|19180.31|0.00
@@ -110,14 +110,14 @@ continue on to import the results into a GRASS vector points map in
 the current map projection:
 <div class="code"><pre>
 # check file content
-cat waypoints.txt 
+cat waypoints.txt
 -78.43977824 33.89587173
 -78.54944691 33.88964566
 -78.51078074 33.88141495
 -77.14037951 35.60543020
 
 # reproject points and generate vector map on the fly
-m.proj -i input=waypoints.txt | v.in.ascii input=- output=test_pnts 
+m.proj -i input=waypoints.txt | v.in.ascii input=- output=test_pnts
 
 # verify result
 v.db.select test_pnts cat|dbl_1|dbl_2|dbl_3
@@ -126,7 +126,6 @@ v.db.select test_pnts cat|dbl_1|dbl_2|dbl_3
 3|654867.21|14690.64|0
 4|778074.58|207402.6|0
 </pre></div>
-
 
 <h3>Custom projection parameter usage</h3>
 
@@ -156,8 +155,8 @@ performs an inverse projection to latitude-longitude and then projects
 the coordinate list to the target projection.
 <p>
 Datum conversions are automatically handled by the PROJ library if
-<tt>+datum</tt> setings are specified on <b>both</b> the input <b>and</b> output
-projections on the command line. The <tt>+towgs84</tt> parameter can be used to 
+<tt>+datum</tt> settings are specified on <b>both</b> the input <b>and</b> output
+projections on the command line. The <tt>+towgs84</tt> parameter can be used to
 define either 3 or 7 term datum transform coefficients, satisfying this requirement.
 <p>If a datum is specified there is no need for the <tt>+ellps=</tt> or underlying
 parameters, <tt>+a=</tt>, <tt>+es=</tt>, etc.
@@ -189,7 +188,6 @@ ellipsoid).
 For more usage examples, see the documentation for the
 <a href="https://proj.org">PROJ</a> <em>cs2cs</em> program.
 
-
 <h2>REFERENCES</h2>
 
 <ul>
@@ -213,14 +211,8 @@ For more usage examples, see the documentation for the
 <a href="v.out.ascii.html">v.out.ascii</a>
 </em>
 
-
 <h2>AUTHOR</h2>
 
 M. Hamish Bowman, Dept. Marine Science, Otago University, New Zealand<br>
 Functionality inspired by the <em>m.proj</em> and <em>m.proj2</em> modules for
 GRASS GIS 5.
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

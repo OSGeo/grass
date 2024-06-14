@@ -1,6 +1,7 @@
 MODULE_TOPDIR = ..
 
 SUBDIRS = \
+	d.background \
 	d.correlate \
 	d.frame \
 	d.out.file \
@@ -8,7 +9,6 @@ SUBDIRS = \
 	d.polar \
 	d.rast.edit \
 	d.rast.leg \
-	d.redraw \
 	d.shade \
 	d.what.rast \
 	d.what.vect \
@@ -86,4 +86,3 @@ SUBDIRS = \
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
 default: parsubdirs
-

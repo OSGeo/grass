@@ -1,5 +1,6 @@
 """!
-@brief Preparation of parameters for drivers, which download it, and managing downloaded data.
+@brief Preparation of parameters for drivers, which download it, and managing
+    downloaded data.
 
 List of classes:
  - wms_base::WMSBase
@@ -14,25 +15,19 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (Mentor: Martin Landa)
 """
 
-import os
-from math import ceil
-
 import base64
-
-try:
-    from urllib2 import Request, urlopen, HTTPError
-    from httplib import HTTPException
-except ImportError:
-    from urllib.request import Request, urlopen
-    from urllib.error import HTTPError
-    from http.client import HTTPException
+import os
+from http.client import HTTPException
+from math import ceil
+from urllib.request import Request, urlopen
+from urllib.error import HTTPError
 
 
 import grass.script as grass
 from grass.exceptions import CalledModuleError
 
 
-class WMSBase(object):
+class WMSBase:
     def __init__(self):
         # these variables are information for destructor
         self.temp_files_to_cleanup = []
@@ -44,7 +39,6 @@ class WMSBase(object):
         self.temp_warpmap = None
 
     def __del__(self):
-
         # tries to remove temporary files, all files should be
         # removed before, implemented just in case of unexpected
         # stop of module
@@ -115,7 +109,8 @@ class WMSBase(object):
             self.params["wms_version"] = "1.3.0"
             grass.warning(
                 _(
-                    "WMS version <1.3.0> will be used, because version <1.1.1> does not support <%s>projection"
+                    "WMS version <1.3.0> will be used, because version <1.1.1> does "
+                    "not support <%s>projection"
                 )
                 % GetSRSParamVal(self.params["srs"])
             )
@@ -137,7 +132,8 @@ class WMSBase(object):
             if self.source_epsg != self.target_epsg:
                 grass.warning(
                     _(
-                        "SRS differences: WMS source EPSG %s != location EPSG %s (use srs=%s to adjust)"
+                        "SRS differences: WMS source EPSG %s != location EPSG %s (use "
+                        "srs=%s to adjust)"
                     )
                     % (self.source_epsg, self.target_epsg, self.target_epsg)
                 )
@@ -180,18 +176,19 @@ class WMSBase(object):
     def _modifyProj(self, proj):
         """!Modify proj.4 string for usage in this module"""
 
-        # add +wktext parameter to avoid droping of +nadgrids parameter (if presented) in gdalwarp
+        # add +wktext parameter to avoid dropping of +nadgrids parameter (if presented)
+        # in gdalwarp
         if "+nadgrids=" in proj and " +wktext" not in proj:
             proj += " +wktext"
 
         return proj
 
     def _checkIgnoeredParams(self, options, flags, driver_props):
-        """!Write warnings for set parameters and flags, which chosen driver does not use."""
+        """!Write warnings for set parameters and flags, which chosen driver does not
+        use."""
 
         not_relevant_params = []
         for i_param in driver_props["ignored_params"]:
-
             if (
                 i_param in options
                 and options[i_param]
@@ -210,7 +207,6 @@ class WMSBase(object):
 
         not_relevant_flags = []
         for i_flag in driver_props["ignored_flags"]:
-
             if flags[i_flag]:
                 not_relevant_flags.append("<" + i_flag + ">")
 
@@ -265,7 +261,7 @@ class WMSBase(object):
             cap = self._fetchDataFromServer(
                 cap_url, options["username"], options["password"]
             )
-        except (IOError, HTTPException) as e:
+        except (OSError, HTTPException) as e:
             if isinstance(e, HTTPError) and e.code == 401:
                 grass.fatal(
                     _("Authorization failed to <%s> when fetching capabilities")
@@ -311,7 +307,7 @@ class WMSBase(object):
                 with open(capfile_output, "w") as temp:
                     temp.write(cap)
                 return
-            except IOError as error:
+            except OSError as error:
                 grass.fatal(
                     _("Unable to open file '%s'.\n%s\n" % (capfile_output, error))
                 )
@@ -355,20 +351,24 @@ class WMSBase(object):
                         self.region["s"],
                     )
                 )
-            except IOError:
+            except OSError:
                 grass.fatal(_("Unable to write data into tempfile"))
             finally:
                 temp_region_opened.close()
+            try:
+                points = grass.read_command(
+                    "m.proj",
+                    flags="d",
+                    proj_out=self.proj_srs,
+                    proj_in=self.proj_location,
+                    input=temp_region,
+                    quiet=True,
+                )  # TODO: stdin
+            except CalledModuleError:
+                points = None
+            finally:
+                grass.try_remove(temp_region)
 
-            points = grass.read_command(
-                "m.proj",
-                flags="d",
-                proj_out=self.proj_srs,
-                proj_in=self.proj_location,
-                input=temp_region,
-                quiet=True,
-            )  # TODO: stdin
-            grass.try_remove(temp_region)
             if not points:
                 grass.fatal(_("Unable to determine region, %s failed") % "m.proj")
 
@@ -506,7 +506,6 @@ class WMSBase(object):
 
 class GRASSImporter:
     def __init__(self, opt_output, cleanup_bands):
-
         self.cleanup_mask = False
         self.cleanup_bands = cleanup_bands
 
@@ -648,7 +647,7 @@ class GRASSImporter:
                 grass.fatal(_("%s failed") % "r.mask")
 
             if not self.cleanup_bands:
-                # use the MASK to set NULL vlues
+                # use the MASK to set NULL values
                 for suffix in (".red", ".green", ".blue"):
                     rast = self.opt_output + suffix
                     if grass.find_file(rast, element="cell", mapset=".")["file"]:
@@ -722,7 +721,6 @@ class WMSDriversInfo:
             return self._OnEarthProperties()
 
     def _OnEarthProperties(self):
-
         props = {}
         props["ignored_flags"] = ["o"]
         props["ignored_params"] = [
@@ -738,7 +736,6 @@ class WMSDriversInfo:
         return props
 
     def _WMSProperties(self):
-
         props = {}
         props["ignored_params"] = ["capfile"]
         props["ignored_flags"] = []
@@ -747,7 +744,6 @@ class WMSDriversInfo:
         return props
 
     def _WMTSProperties(self):
-
         props = {}
         props["ignored_flags"] = ["o"]
         props["ignored_params"] = ["urlparams", "bgcolor", "wms_version"]
@@ -756,7 +752,6 @@ class WMSDriversInfo:
         return props
 
     def _GDALDrvProperties(self):
-
         props = {}
         props["ignored_flags"] = []
         props["ignored_params"] = [

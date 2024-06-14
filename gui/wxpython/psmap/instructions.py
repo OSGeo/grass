@@ -34,10 +34,8 @@ This program is free software under the GNU General Public License
 
 import os
 import string
-import six
 from math import ceil
 from time import strftime, localtime
-from io import open
 
 import wx
 import grass.script as grass
@@ -58,7 +56,6 @@ class Instruction:
     """Class which represents instruction file"""
 
     def __init__(self, parent, objectsToDraw, env):
-
         self.parent = parent
         self.objectsToDraw = objectsToDraw
         # here are kept objects like mapinfo, rasterlegend, etc.
@@ -150,7 +147,7 @@ class Instruction:
         # open file
         try:
             file = open(filename, encoding="Latin_1", errors="ignore")
-        except IOError:
+        except OSError:
             GError(message=_("Unable to open file\n%s") % filename)
             return
         # first read file to get information about region and scaletype
@@ -181,7 +178,7 @@ class Instruction:
             toM = float(proj["meters"])
         units = UnitConversion(self.parent)
         w = units.convert(value=mapRect.Get()[2], fromUnit="inch", toUnit="meter") / toM
-        map["scale"] = w / abs((region["w"] - region["e"]))
+        map["scale"] = w / abs(region["w"] - region["e"])
 
         SetResolution(
             dpi=300, width=map["rect"].width, height=map["rect"].height, env=self.env
@@ -381,7 +378,6 @@ class Instruction:
             for vmap in vectorMaps:
                 for i, each in enumerate(vector["list"]):
                     if each[2] == vmap.id:
-
                         vector["list"][i][4] = vmap["label"]
                         vector["list"][i][3] = vmap["lpos"]
             if vectorLegend:
@@ -466,7 +462,6 @@ class Instruction:
                 )
                 or not instr
             ):
-
                 id = NewId()  # !vProperties expect subtype
                 if i == "vProperties":
                     id = kwargs["id"]
@@ -543,7 +538,7 @@ class Instruction:
 
 
 class InstructionObject:
-    """Abtract class representing single instruction"""
+    """Abstract class representing single instruction"""
 
     def __init__(self, id, env):
         self.id = id
@@ -743,7 +738,8 @@ class MapFrame(InstructionObject):
                 ):
                     GWarning(
                         _(
-                            "Map frame position changed, old value: %(old1)s %(old2)s\nnew value: %(new1)s %(new2)s"
+                            "Map frame position changed, old value: %(old1)s %(old2)s\n"
+                            "new value: %(new1)s %(new2)s"
                         )
                         % {
                             "old1": maploc[0],
@@ -753,7 +749,12 @@ class MapFrame(InstructionObject):
                         }
                     )
 
-                # instr['rect'] = wx.Rect2D(float(maploc[0]), float(maploc[1]), self.instruction['rect'][2], self.instruction['rect'][3])
+                # instr["rect"] = wx.Rect2D(
+                #     float(maploc[0]),
+                #     float(maploc[1]),
+                #     self.instruction["rect"][2],
+                #     self.instruction["rect"][3],
+                # )
             if len(maploc) == 4:
                 if (
                     abs(self.instruction["rect"].Get()[2] - float(maploc[2])) > 0.5
@@ -761,7 +762,8 @@ class MapFrame(InstructionObject):
                 ):
                     GWarning(
                         _(
-                            "Map frame size changed, old value: %(old1)s %(old2)s\nnew value: %(new1)s %(new2)s"
+                            "Map frame size changed, old value: %(old1)s %(old2)s\n"
+                            "new value: %(new1)s %(new2)s"
                         )
                         % {
                             "old1": maploc[2],
@@ -804,7 +806,8 @@ class PageSetup(InstructionObject):
         else:
             instr = string.Template("paper $Format\n").substitute(self.instruction)
         instr += string.Template(
-            "    left $Left\n    right $Right\n    bottom $Bottom\n    top $Top\n    end"
+            "    left $Left\n    right $Right\n    bottom $Bottom\n    top $Top\n"
+            "    end"
         ).substitute(self.instruction)
 
         return instr
@@ -828,13 +831,14 @@ class PageSetup(InstructionObject):
                         # e.g. paper a3
                         try:
                             instr["Format"] = pformat
-                            for key, value in six.iteritems(availableFormats[pformat]):
+                            for key, value in availableFormats[pformat].items():
                                 instr[key] = float(value)
                             break
                         except KeyError:
                             GError(
                                 _(
-                                    "Failed to read instruction %(file)s.\nUnknown format %(for)s"
+                                    "Failed to read instruction %(file)s.\n"
+                                    "Unknown format %(for)s"
                                 )
                                 % {"file": instruction, "for": format}
                             )

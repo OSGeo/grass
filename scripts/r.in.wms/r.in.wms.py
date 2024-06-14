@@ -212,7 +212,6 @@ from grass.script.utils import decode
 
 
 def GetRegionParams(opt_region):
-
     # set region
     if opt_region:
         reg_spl = opt_region.strip().split("@", 1)
@@ -265,7 +264,8 @@ def main():
             if "GRASS" in options["driver"]:
                 grass.warning(
                     _(
-                        "The proxy will be ignored by the choosen GRASS driver. It is only used with the GDAL driver."
+                        "The proxy will be ignored by the chosen GRASS driver. It is "
+                        "only used with the GDAL driver."
                     )
                 )
 

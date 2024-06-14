@@ -9,10 +9,11 @@ for details.
 :authors: Vaclav Petras
 """
 
+import collections
 import os
-import sys
 import shutil
 import subprocess
+import sys
 
 from .checkers import text_to_keyvalue
 
@@ -29,20 +30,10 @@ from .reporters import (
 )
 from .utils import silent_rmtree, ensure_dir
 
+import grass.script as gs
 from grass.script.utils import decode, _get_encoding
 
-try:
-    from string import maketrans
-except ImportError:
-    maketrans = str.maketrans
-
-# needed for write_gisrc
-# TODO: it would be good to find some way of writing rc without the need to
-# have GRASS proprly set (anything from grass.script requires translations to
-# be set, i.e. the GRASS environment properly set)
-import grass.script.setup as gsetup
-
-import collections
+maketrans = str.maketrans
 
 
 # TODO: this might be more extend then update
@@ -59,11 +50,15 @@ def update_keyval_file(filename, module, returncode):
     if test_file_authors is None:
         test_file_authors = ""
 
-    # always owerwrite name and status
+    # always overwrite name and status
     keyval["name"] = module.name
     keyval["tested_dir"] = module.tested_dir
     if "status" not in keyval.keys():
-        keyval["status"] = "failed" if returncode else "passed"
+        if returncode is None or returncode:
+            status = "failed"
+        else:
+            status = "passed"
+        keyval["status"] = status
     keyval["returncode"] = returncode
     keyval["test_file_authors"] = test_file_authors
 
@@ -72,7 +67,7 @@ def update_keyval_file(filename, module, returncode):
     return keyval
 
 
-class GrassTestFilesInvoker(object):
+class GrassTestFilesInvoker:
     """A class used to invoke test files and create the main report"""
 
     # TODO: it is not clear what clean_outputs mean, if should be split
@@ -87,6 +82,7 @@ class GrassTestFilesInvoker(object):
         clean_before=True,
         testsuite_dir="testsuite",
         file_anonymizer=None,
+        timeout=None,
     ):
         """
 
@@ -96,6 +92,7 @@ class GrassTestFilesInvoker(object):
         :param bool clean_before: if mapsets, outputs, and results
             should be removed before the tests start
             (advantageous when the previous run left everything behind)
+        :param float timeout: maximum duration of one test in seconds
         """
         self.start_dir = start_dir
         self.clean_mapsets = clean_mapsets
@@ -111,19 +108,18 @@ class GrassTestFilesInvoker(object):
         else:
             self._file_anonymizer = file_anonymizer
 
+        self.timeout = timeout
+
     def _create_mapset(self, gisdbase, location, module):
         """Create mapset according to information in module.
 
         :param loader.GrassTestPythonModule module:
         """
         # TODO: use g.mapset -c, no need to duplicate functionality
-        # using path.sep but also / and \ for cases when it is confused
-        # (namely the case of Unix path on MS Windows)
-        # replace . to get rid of unclean path
-        # TODO: clean paths
-        # note that backslash cannot be at the end of raw string
-        dir_as_name = module.tested_dir.translate(maketrans(r"/\.", "___"))
-        mapset = dir_as_name + "_" + module.name
+        # All path characters such as slash, backslash and dot are replaced.
+        dir_as_name = gs.legalize_vector_name(module.tested_dir, fallback_prefix=None)
+        # Multiple processes can run the same test in the same location.
+        mapset = gs.append_node_pid(f"{dir_as_name}_{module.name}")
         # TODO: use grass module to do this? but we are not in the right gisdbase
         mapset_dir = os.path.join(gisdbase, location, mapset)
         if self.clean_before:
@@ -131,15 +127,15 @@ class GrassTestFilesInvoker(object):
         os.mkdir(mapset_dir)
         # TODO: default region in mapset will be what?
         # copy DEFAULT_WIND file from PERMANENT to WIND
-        # TODO: this should be a function in grass.script (used also in gis_set.py, PyGRASS also has its way with Mapset)
-        # TODO: are premisions an issue here?
+        # TODO: this should be a function in grass.script (used also in gis_set.py,
+        # PyGRASS also has its way with Mapset)
         shutil.copy(
             os.path.join(gisdbase, location, "PERMANENT", "DEFAULT_WIND"),
             os.path.join(mapset_dir, "WIND"),
         )
         return mapset, mapset_dir
 
-    def _run_test_module(self, module, results_dir, gisdbase, location):
+    def _run_test_module(self, module, results_dir, gisdbase, location, timeout):
         """Run one test file."""
         self.testsuite_dirs[module.tested_dir].append(module.name)
         cwd = os.path.join(results_dir, module.tested_dir, module.name)
@@ -157,7 +153,7 @@ class GrassTestFilesInvoker(object):
         # TODO: put this to constructor and copy here again
         env = os.environ.copy()
         mapset, mapset_dir = self._create_mapset(gisdbase, location, module)
-        gisrc = gsetup.write_gisrc(gisdbase, location, mapset)
+        gisrc = gs.setup.write_gisrc(gisdbase, location, mapset)
 
         # here is special setting of environmental variables for running tests
         # some of them might be set from outside in the future and if the list
@@ -178,13 +174,7 @@ class GrassTestFilesInvoker(object):
             # ignoring shebang line to use current Python
             # and also pass parameters to it
             # add also '-Qwarn'?
-            if sys.version_info.major >= 3:
-                args = [sys.executable, "-tt", module.abs_file_path]
-            else:
-                args = [sys.executable, "-tt", "-3", module.abs_file_path]
-            p = subprocess.Popen(
-                args, cwd=cwd, env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE
-            )
+            args = [sys.executable, "-tt", module.abs_file_path]
         elif module.file_type == "sh":
             # ignoring shebang line to pass parameters to shell
             # expecting system to have sh or something compatible
@@ -198,23 +188,42 @@ class GrassTestFilesInvoker(object):
             #                command is used to control an if, elif, while, or
             #                until; or if the command is the left hand operand
             #                of an '&&' or '||' operator.
-            p = subprocess.Popen(
-                ["sh", "-e", "-x", module.abs_file_path],
-                cwd=cwd,
-                env=env,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-            )
+            args = ["sh", "-e", "-x", module.abs_file_path]
         else:
-            p = subprocess.Popen(
-                [module.abs_file_path],
+            args = [module.abs_file_path]
+        try:
+            p = subprocess.run(
+                args,
                 cwd=cwd,
                 env=env,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
+                timeout=timeout,
+                check=False,
             )
-        stdout, stderr = p.communicate()
-        returncode = p.returncode
+            stdout = p.stdout
+            stderr = p.stderr
+            returncode = p.returncode
+            # No timeout to report. Non-none time out values are used to indicate
+            # the timeout case.
+            timed_out = None
+        except subprocess.TimeoutExpired as error:
+            stdout = error.stdout
+            stderr = error.stderr
+            if stdout is None:
+                stdout = ""
+            if stderr is None:
+                stderr = (
+                    f"Process has timed out in {timeout}s and produced no error "
+                    "output.\n"
+                )
+            # Return code is None if the process times out.
+            # Rest of the code expects success to evaluate as False.
+            # So, we assign a failing return code.
+            # In any case, we treat the timeout case as a failure.
+            returncode = 1
+            timed_out = timeout
+
         encodings = [_get_encoding(), "utf8", "latin-1", "ascii"]
 
         def try_decode(data, encodings):
@@ -259,12 +268,21 @@ class GrassTestFilesInvoker(object):
             stdout=stdout_path,
             stderr=stderr_path,
             test_summary=test_summary,
+            timed_out=timed_out,
         )
         # TODO: add some try-except or with for better error handling
         os.remove(gisrc)
         # TODO: only if clean up
         if self.clean_mapsets:
-            shutil.rmtree(mapset_dir)
+            try:
+                shutil.rmtree(mapset_dir)
+            except OSError:
+                # If there are still running processes (e.g., in timeout case),
+                # the cleaning may fail on non-empty directory. Although this does
+                # not guarantee removal of the directory, try it again, but this
+                # time ignore errors if something happens. (More file can appear
+                # later on if the processes are still running.)
+                shutil.rmtree(mapset_dir, ignore_errors=True)
 
     def run_in_location(self, gisdbase, location, location_type, results_dir, exclude):
         """Run tests in a given location
@@ -314,6 +332,7 @@ class GrassTestFilesInvoker(object):
                 results_dir=results_dir,
                 gisdbase=gisdbase,
                 location=location,
+                timeout=self.timeout,
             )
         self.reporter.finish()
 

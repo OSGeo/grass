@@ -1,15 +1,17 @@
-FROM debian:10.1
+FROM debian:stable@sha256:82f8da149d6d567c74564cccd6f355fb5ade42a958e4cde10a1100eaeb24d42e
+# currently Debian 12
+
+# docker run -it --rm debian:stable bash
+# apt-get update && apt-get install lsb-release -y && lsb_release -a
 
 LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann"
 LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
 
 ENV DEBIAN_FRONTEND noninteractive
 
-# define versions to be used
-ARG PDAL_VERSION=1.8.0
-ARG PROJ_VERSION=5.2.0
-ARG PROJ_DATUMGRID_VERSION=1.8
-ARG LAZ_PERF_VERSION=1.3.0
+# define versions to be used (PDAL is not available on Debian, so we compile it here)
+# https://github.com/PDAL/PDAL/releases
+ARG PDAL_VERSION=2.5.5
 
 SHELL ["/bin/bash", "-c"]
 
@@ -33,20 +35,20 @@ RUN apt-get update && apt-get upgrade -y && \
     libcurl4-gnutls-dev \
     libfftw3-bin \
     libfftw3-dev \
-    libfreetype6-dev \
+    libfreetype-dev \
     libgdal-dev \
     libgeos-dev \
     libgsl0-dev \
     libjpeg-dev \
     libjsoncpp-dev \
     libnetcdf-dev \
-    libncurses5-dev \
-    libopenblas-base \
+    libncurses-dev \
     libopenblas-dev \
     libopenjp2-7 \
     libopenjp2-7-dev \
     libpnglite-dev \
     libpq-dev \
+    libproj-dev \
     libpython3-all-dev \
     libsqlite3-dev \
     libtiff-dev \
@@ -57,6 +59,8 @@ RUN apt-get update && apt-get upgrade -y && \
     moreutils \
     ncurses-bin \
     netcdf-bin \
+    proj-bin \
+    proj-data \
     python3 \
     python3-dateutil \
     python3-dev \
@@ -74,35 +78,11 @@ RUN apt-get update && apt-get upgrade -y && \
     vim \
     wget \
     zip \
-    zlib1g-dev
+    zlib1g-dev \
+    && apt-get clean all && rm -rf /var/lib/apt/lists/*
 
 RUN echo LANG="en_US.UTF-8" > /etc/default/locale
 RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen && locale-gen
-
-## install a more recent projection library for GRASS GIS
-WORKDIR /src
-RUN wget -q http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz && \
-    tar xzf proj-${PROJ_VERSION}.tar.gz && \
-    cd /src/proj-${PROJ_VERSION}/ && \
-    wget -q http://download.osgeo.org/proj/proj-datumgrid-${PROJ_DATUMGRID_VERSION}.zip && \
-    cd nad && \
-    unzip ../proj-datumgrid-${PROJ_DATUMGRID_VERSION}.zip && \
-    cd .. && \
-    ./configure --prefix=/usr/ && \
-    make && \
-    make install
-
-## install laz-perf
-RUN apt-get install cmake
-WORKDIR /src
-RUN wget -q https://github.com/hobu/laz-perf/archive/${LAZ_PERF_VERSION}.tar.gz -O laz-perf-${LAZ_PERF_VERSION}.tar.gz && \
-    tar -zxf laz-perf-${LAZ_PERF_VERSION}.tar.gz && \
-    cd laz-perf-${LAZ_PERF_VERSION} && \
-    mkdir build && \
-    cd build && \
-    cmake .. && \
-    make && \
-    make install
 
 ## fetch vertical datums for PDAL and store into PROJ dir
 WORKDIR /src
@@ -120,7 +100,7 @@ RUN mkdir vdatum && \
     cd .. && \
     rm -rf vdatum
 
-## install pdal
+## compile and install PDAL (not available on Debian/Ubuntu) with laz-perf enabled
 ENV NUMTHREADS=4
 WORKDIR /src
 RUN wget -q \
@@ -143,10 +123,10 @@ RUN wget -q \
       -DHEXER_INCLUDE_DIR=/usr/include/ \
       -DBUILD_PLUGIN_NITF=OFF \
       -DBUILD_PLUGIN_ICEBRIDGE=ON \
-      -DBUILD_PLUGIN_PGPOINTCLOUD=ON \
+      -DBUILD_PLUGIN_PGPOINTCLOUD=OFF \
       -DBUILD_PGPOINTCLOUD_TESTS=OFF \
       -DBUILD_PLUGIN_SQLITE=ON \
-      -DWITH_LASZIP=ON \
+      -DWITH_LASZIP=OFF \
       -DWITH_LAZPERF=ON \
       -DWITH_TESTS=ON && \
     make -j $NUMTHREADS && \
@@ -156,6 +136,8 @@ RUN wget -q \
 WORKDIR /src
 COPY . /src/grass_build/
 WORKDIR /src/grass_build
+# Cleanup potentially leftover GISRC file with wrong path to "demolocation"
+RUN rm -f /src/grass_build/dist.*/demolocation/.grassrc*
 
 # Set environmental variables for GRASS GIS compilation, without debug symbols
 # Set gcc/g++ environmental variables for GRASS GIS compilation, without debug symbols
@@ -208,8 +190,11 @@ ENV SHELL /bin/bash
 ENV LC_ALL "en_US.UTF-8"
 ENV GRASS_SKIP_MAPSET_OWNER_CHECK 1
 
+# https://proj.org/usage/environmentvars.html#envvar-PROJ_NETWORK
+ENV PROJ_NETWORK=ON
+
 # Create generic GRASS GIS lib name regardless of version number
-RUN ln -sf /usr/local/grass80 /usr/local/grass
+RUN ln -sf /usr/local/grass85 /usr/local/grass
 
 # show GRASS GIS, PROJ, GDAL etc versions
 RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
@@ -224,10 +209,7 @@ RUN rm -r /src/grass_build/.git
 WORKDIR /scripts
 
 # install external GRASS GIS session Python API
-RUN pip3 install grass-session
-
-# install GRASS GIS extensions
-RUN grass --tmp-location EPSG:4326 --exec g.extension extension=r.in.pdal
+RUN pip3 install grass-session --break-system-packages
 
 # add GRASS GIS envs for python usage
 ENV GISBASE "/usr/local/grass/"
@@ -242,7 +224,8 @@ COPY docker/testdata/test_grass_session.py .
 ## just scan the LAZ file
 # Not yet ready for GRASS GIS 8:
 #RUN /usr/bin/python3 /scripts/test_grass_session.py
-RUN grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -s
+# test LAZ file
+RUN grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g
 
 WORKDIR /grassdb
 VOLUME /grassdb

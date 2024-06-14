@@ -8,7 +8,7 @@ Usage:
     from grass.script import core as grass
     grass.parser()
 
-(C) 2008-2021 by the GRASS Development Team
+(C) 2008-2024 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -17,7 +17,6 @@ for details.
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 .. sectionauthor:: Michael Barton <michael.barton asu.edu>
 """
-from __future__ import absolute_import, print_function
 
 import os
 import sys
@@ -27,15 +26,16 @@ import shutil
 import codecs
 import string
 import random
-import pipes
+import shlex
+import json
+import csv
+import io
 from tempfile import NamedTemporaryFile
+from pathlib import Path
 
 from .utils import KeyValue, parse_key_val, basename, encode, decode, try_remove
 from grass.exceptions import ScriptError, CalledModuleError
-
-# PY2/PY3 compat
-if sys.version_info.major >= 3:
-    unicode = str
+from grass.grassdb.manage import resolve_mapset_path
 
 
 # subprocess wrapper that uses shell on Windows
@@ -54,7 +54,7 @@ class Popen(subprocess.Popen):
             and not kwargs.get("shell", False)
             and kwargs.get("executable") is None
         ):
-            cmd = shutil_which(args[0])
+            cmd = shutil.which(args[0])
             if cmd is None:
                 raise OSError(_("Cannot find the executable {0}").format(args[0]))
             args = [cmd] + args[1:]
@@ -62,6 +62,13 @@ class Popen(subprocess.Popen):
             if ext.lower() not in self._builtin_exts:
                 kwargs["shell"] = True
                 args = [self._escape_for_shell(arg) for arg in args]
+
+            # hides the window on MS Windows - another window will be activated
+            si = subprocess.STARTUPINFO()
+            si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+            si.wShowWindow = subprocess.SW_HIDE
+            kwargs["startupinfo"] = si
+
         subprocess.Popen.__init__(self, args, **kwargs)
 
 
@@ -97,16 +104,16 @@ _popen_args = [
 
 
 def _make_val(val):
-    """Convert value to unicode"""
-    if isinstance(val, (bytes, str, unicode)):
+    """Convert value to a unicode string"""
+    if isinstance(val, (bytes, str)):
         return decode(val)
     if isinstance(val, (int, float)):
-        return unicode(val)
+        return str(val)
     try:
         return ",".join(map(_make_val, iter(val)))
     except TypeError:
         pass
-    return unicode(val)
+    return str(val)
 
 
 def _make_unicode(val, enc):
@@ -124,7 +131,7 @@ def _make_unicode(val, enc):
             return decode(val, encoding=enc)
 
 
-def get_commands():
+def get_commands(*, env=None):
     """Create list of available GRASS commands to use when parsing
     string from the command line
 
@@ -137,7 +144,17 @@ def get_commands():
     ['d.barscale', 'd.colorlist', 'd.colortable', 'd.correlate', 'd.erase']
 
     """
-    gisbase = os.environ["GISBASE"]
+    if not env:
+        env = os.environ
+    gisbase = env.get("GISBASE")
+
+    # Lazy-importing to avoid circular dependencies.
+    # pylint: disable=import-outside-toplevel
+    if not gisbase:
+        from grass.script.setup import get_install_path
+
+        gisbase = get_install_path()
+
     cmd = list()
     scripts = {".py": list()} if sys.platform == "win32" else {}
 
@@ -164,87 +181,6 @@ def get_commands():
         cmd = cmd + os.listdir(gui_path)
 
     return set(cmd), scripts
-
-
-# TODO: Please replace this function with shutil.which() before 8.0 comes out
-# replacement for which function from shutil (not available in all versions)
-# from http://hg.python.org/cpython/file/6860263c05b3/Lib/shutil.py#l1068
-# added because of Python scripts running Python scripts on MS Windows
-# see also ticket #2008 which is unrelated but same function was proposed
-def shutil_which(cmd, mode=os.F_OK | os.X_OK, path=None):
-    """Given a command, mode, and a PATH string, return the path which
-    conforms to the given mode on the PATH, or None if there is no such
-    file.
-
-    `mode` defaults to os.F_OK | os.X_OK. `path` defaults to the result
-    of os.environ.get("PATH"), or can be overridden with a custom search
-    path.
-
-    :param cmd: the command
-    :param mode:
-    :param path:
-
-    """
-    # Check that a given file can be accessed with the correct mode.
-    # Additionally check that `file` is not a directory, as on Windows
-    # directories pass the os.access check.
-    def _access_check(fn, mode):
-        return os.path.exists(fn) and os.access(fn, mode) and not os.path.isdir(fn)
-
-    # If we're given a path with a directory part, look it up directly rather
-    # than referring to PATH directories. This includes checking relative to the
-    # current directory, e.g. ./script
-    if os.path.dirname(cmd):
-        if _access_check(cmd, mode):
-            return cmd
-        return None
-
-    if path is None:
-        path = os.environ.get("PATH", os.defpath)
-    if not path:
-        return None
-    path = path.split(os.pathsep)
-
-    if sys.platform == "win32":
-        # The current directory takes precedence on Windows.
-        if os.curdir not in path:
-            path.insert(0, os.curdir)
-
-        # PATHEXT is necessary to check on Windows (force lowercase)
-        pathext = list(
-            map(lambda x: x.lower(), os.environ.get("PATHEXT", "").split(os.pathsep))
-        )
-        if ".py" not in pathext:
-            # we assume that PATHEXT contains always '.py'
-            pathext.insert(0, ".py")
-        # See if the given file matches any of the expected path extensions.
-        # This will allow us to short circuit when given "python3.exe".
-        # If it does match, only test that one, otherwise we have to try
-        # others.
-        if any(cmd.lower().endswith(ext) for ext in pathext):
-            files = [cmd]
-        else:
-            files = [cmd + ext for ext in pathext]
-    else:
-        # On other platforms you don't have things like PATHEXT to tell you
-        # what file suffixes are executable, so just pass on cmd as-is.
-        files = [cmd]
-
-    seen = set()
-    for dir in path:
-        normdir = os.path.normcase(dir)
-        if normdir not in seen:
-            seen.add(normdir)
-            for thefile in files:
-                name = os.path.join(dir, thefile)
-                if _access_check(name, mode):
-                    return name
-    return None
-
-
-if sys.version_info.major >= 3:
-    # Use shutil.which in Python 3, not the custom implementation.
-    shutil_which = shutil.which  # noqa: F811
 
 
 # Added because of scripts calling scripts on MS Windows.
@@ -288,7 +224,7 @@ def get_real_command(cmd):
         if ".py" not in pathext:
             # we assume that PATHEXT contains always '.py'
             os.environ["PATHEXT"] = ".py;" + os.environ["PATHEXT"]
-        full_path = shutil_which(cmd + ".py")
+        full_path = shutil.which(cmd + ".py")
         if full_path:
             return full_path
 
@@ -317,6 +253,7 @@ def make_command(
     :param str flags: flags to be used (given as a string)
     :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
     :param bool quiet: True to run quietly (<tt>--q</tt>)
+    :param bool superquiet: True to run extra quietly (<tt>--qq</tt>)
     :param bool verbose: True to run verbosely (<tt>--v</tt>)
     :param options: module's parameters
 
@@ -460,6 +397,7 @@ def start_command(
     :param str flags: flags to be used (given as a string)
     :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
     :param bool quiet: True to run quietly (<tt>--q</tt>)
+    :param bool superquiet: True to run extra quietly (<tt>--qq</tt>)
     :param bool verbose: True to run verbosely (<tt>--v</tt>)
     :param kwargs: module's parameters
 
@@ -473,7 +411,15 @@ def start_command(
         else:
             options[opt] = val
 
-    args = make_command(prog, flags, overwrite, quiet, verbose, **options)
+    args = make_command(
+        prog,
+        flags=flags,
+        overwrite=overwrite,
+        quiet=quiet,
+        superquiet=superquiet,
+        verbose=verbose,
+        **options,
+    )
 
     if debug_level() > 0:
         sys.stderr.write(
@@ -534,7 +480,7 @@ def run_command(*args, **kwargs):
             stdout = _make_unicode(stdout, encoding)
             stderr = _make_unicode(stderr, encoding)
         returncode = ps.poll()
-        if returncode:
+        if returncode and stderr:
             sys.stderr.write(stderr)
     else:
         returncode = ps.wait()
@@ -601,33 +547,44 @@ def read_command(*args, **kwargs):
         stdout = _make_unicode(stdout, encoding)
         stderr = _make_unicode(stderr, encoding)
     returncode = process.poll()
-    if _capture_stderr and returncode:
+    if returncode and _capture_stderr and stderr:
+        # Print only when we are capturing it and there was some output.
+        # (User can request ignoring the subprocess stderr and then we get only None.)
         sys.stderr.write(stderr)
     return handle_errors(returncode, stdout, args, kwargs)
 
 
 def parse_command(*args, **kwargs):
     """Passes all arguments to read_command, then parses the output
-    by parse_key_val().
+    by default with parse_key_val().
 
-    Parsing function can be optionally given by <em>parse</em> parameter
+    If the command has parameter <em>format</em> and is called with
+    <em>format=json</em>, the output will be parsed into a dictionary.
+    Similarly, with <em>format=csv</em> the output will be parsed into
+    a list of lists (CSV rows).
+
+    ::
+
+        parse_command("v.db.select", ..., format="json")
+
+    Custom parsing function can be optionally given by <em>parse</em> parameter
     including its arguments, e.g.
 
     ::
 
-        parse_command(..., parse = (grass.parse_key_val, { 'sep' : ':' }))
+        parse_command(..., parse=(gs.parse_key_val, {'sep': ':'}))
 
-    or you can simply define <em>delimiter</em>
-
-    ::
-
-        parse_command(..., delimiter = ':')
+    Parameter <em>delimiter</em> is deprecated.
 
     :param args: list of unnamed arguments (see start_command() for details)
     :param kwargs: list of named arguments (see start_command() for details)
 
     :return: parsed module output
     """
+
+    def parse_csv(result):
+        return list(csv.DictReader(io.StringIO(result)))
+
     parse = None
     parse_args = {}
     if "parse" in kwargs:
@@ -635,13 +592,16 @@ def parse_command(*args, **kwargs):
             parse = kwargs["parse"][0]
             parse_args = kwargs["parse"][1]
         del kwargs["parse"]
-
-    if "delimiter" in kwargs:
-        parse_args = {"sep": kwargs["delimiter"]}
-        del kwargs["delimiter"]
+    elif kwargs.get("format") == "json":
+        parse = json.loads
+    elif kwargs.get("format") == "csv":
+        parse = parse_csv
 
     if not parse:
         parse = parse_key_val  # use default fn
+        if "delimiter" in kwargs:
+            parse_args = {"sep": kwargs["delimiter"]}
+            del kwargs["delimiter"]
 
     res = read_command(*args, **kwargs)
 
@@ -689,7 +649,7 @@ def write_command(*args, **kwargs):
         unused = _make_unicode(unused, encoding)
         stderr = _make_unicode(stderr, encoding)
     returncode = process.poll()
-    if _capture_stderr and returncode:
+    if returncode and _capture_stderr and stderr:
         sys.stderr.write(stderr)
     return handle_errors(returncode, None, args, kwargs)
 
@@ -710,12 +670,13 @@ def exec_command(
     :param str flags: flags to be used (given as a string)
     :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
     :param bool quiet: True to run quietly (<tt>--q</tt>)
+    :param bool superquiet: True to run quietly (<tt>--qq</tt>)
     :param bool verbose: True to run verbosely (<tt>--v</tt>)
-    :param env: directory with environmental variables
+    :param env: dictionary with system environment variables (`os.environ` by default)
     :param list kwargs: module's parameters
 
     """
-    args = make_command(prog, flags, overwrite, quiet, verbose, **kwargs)
+    args = make_command(prog, flags, overwrite, quiet, superquiet, verbose, **kwargs)
 
     if env is None:
         env = os.environ
@@ -725,46 +686,57 @@ def exec_command(
 # interface to g.message
 
 
-def message(msg, flag=None):
+def message(msg, flag=None, env=None):
     """Display a message using `g.message`
 
     :param str msg: message to be displayed
     :param str flag: flags (given as string)
+    :param env: dictionary with system environment variables (`os.environ` by default)
     """
-    run_command("g.message", flags=flag, message=msg, errors="ignore")
+    run_command("g.message", flags=flag, message=msg, errors="ignore", env=env)
 
 
-def debug(msg, debug=1):
-    """Display a debugging message using `g.message -d`
+def debug(msg, debug=1, env=None):
+    """Display a debugging message using `g.message -d`.
+
+    The visibility of a debug message at runtime is controlled by
+    setting the corresponding DEBUG level with `g.gisenv set="DEBUG=X"`
+    (with `X` set to the debug level specified in the function call).
 
     :param str msg: debugging message to be displayed
-    :param str debug: debug level (0-5)
+    :param str debug: debug level (0-5) with the following recommended levels:
+        Use 1 for messages generated once of few times,
+        3 for messages generated for each raster row or vector line,
+        5 for messages generated for each raster cell or vector point.
+    :param env: dictionary with system environment variables (`os.environ` by default)
     """
     if debug_level() >= debug:
         # TODO: quite a random hack here, do we need it somewhere else too?
         if sys.platform == "win32":
             msg = msg.replace("&", "^&")
 
-        run_command("g.message", flags="d", message=msg, debug=debug)
+        run_command("g.message", flags="d", message=msg, debug=debug, env=env)
 
 
-def verbose(msg):
+def verbose(msg, env=None):
     """Display a verbose message using `g.message -v`
 
     :param str msg: verbose message to be displayed
+    :param env: dictionary with system environment variables (`os.environ` by default)
     """
-    message(msg, flag="v")
+    message(msg, flag="v", env=env)
 
 
-def info(msg):
+def info(msg, env=None):
     """Display an informational message using `g.message -i`
 
     :param str msg: informational message to be displayed
+    :param env: dictionary with system environment variables (`os.environ` by default)
     """
-    message(msg, flag="i")
+    message(msg, flag="i", env=env)
 
 
-def percent(i, n, s):
+def percent(i, n, s, env=None):
     """Display a progress info message using `g.message -p`
 
     ::
@@ -778,19 +750,21 @@ def percent(i, n, s):
     :param int i: current item
     :param int n: total number of items
     :param int s: increment size
+    :param env: dictionary with system environment variables (`os.environ` by default)
     """
-    message("%d %d %d" % (i, n, s), flag="p")
+    message("%d %d %d" % (i, n, s), flag="p", env=env)
 
 
-def warning(msg):
+def warning(msg, env=None):
     """Display a warning message using `g.message -w`
 
     :param str msg: warning message to be displayed
+    :param env: dictionary with system environment variables (`os.environ` by default)
     """
-    message(msg, flag="w")
+    message(msg, flag="w", env=env)
 
 
-def error(msg):
+def error(msg, env=None):
     """Display an error message using `g.message -e`
 
     This function does not end the execution of the program.
@@ -798,11 +772,12 @@ def error(msg):
     For error handling using the standard mechanism use :func:`fatal()`.
 
     :param str msg: error message to be displayed
+    :param env: dictionary with system environment variables (`os.environ` by default)
     """
-    message(msg, flag="e")
+    message(msg, flag="e", env=env)
 
 
-def fatal(msg):
+def fatal(msg, env=None):
     """Display an error message using `g.message -e`, then abort or raise
 
     Raises exception when module global raise_on_error is 'True', abort
@@ -810,12 +785,13 @@ def fatal(msg):
     Use :func:`set_raise_on_error()` to set the behavior.
 
     :param str msg: error message to be displayed
+    :param env: dictionary with system environment variables (`os.environ` by default)
     """
     global raise_on_error
     if raise_on_error:
         raise ScriptError(msg)
 
-    error(msg)
+    error(msg, env=env)
     sys.exit(1)
 
 
@@ -854,8 +830,8 @@ def set_capture_stderr(capture=True):
 
     .. note::
 
-        This is advantages for interactive shells such as the one in GUI
-        and interactive notebooks such as Jupyer Notebook.
+        This is advantageous for interactive shells such as the one in GUI
+        and interactive notebooks such as Jupyter Notebook.
 
     The capturing can be applied only in certain cases, for example
     in case of run_command() it is applied because run_command() nor
@@ -932,14 +908,14 @@ def parser():
     "flags" are Python booleans.
 
     Overview table of parser standard options:
-    https://grass.osgeo.org/grass80/manuals/parser_standard_options.html
+    https://grass.osgeo.org/grass-devel/manuals/parser_standard_options.html
     """
     if not os.getenv("GISBASE"):
         print("You must be in GRASS GIS to run this program.", file=sys.stderr)
         sys.exit(1)
 
     cmdline = [basename(sys.argv[0])]
-    cmdline += [pipes.quote(a) for a in sys.argv[1:]]
+    cmdline += [shlex.quote(a) for a in sys.argv[1:]]
     os.environ["CMDLINE"] = " ".join(cmdline)
 
     argv = sys.argv[:]
@@ -1211,7 +1187,7 @@ def gisenv(env=None):
     >>> print(env['GISDBASE'])  # doctest: +SKIP
     /opt/grass-data
 
-    :param env run with different environment
+    :param env: dictionary with system environment variables (`os.environ` by default)
     :return: list of GRASS variables
     """
     s = read_command("g.gisenv", flags="n", env=env)
@@ -1241,7 +1217,7 @@ def region(region3d=False, complete=False, env=None):
 
     :param bool region3d: True to get 3D region
     :param bool complete:
-    :param env env
+    :param env: dictionary with system environment variables (`os.environ` by default)
 
     >>> curent_region = region()
     >>> # obtain n, s, e and w values
@@ -1291,7 +1267,7 @@ def region_env(region3d=False, flags=None, env=None, **kwargs):
 
     :param bool region3d: True to get 3D region
     :param string flags: for example 'a'
-    :param env: different environment than current
+    :param env: dictionary with system environment variables (`os.environ` by default)
     :param kwargs: g.region's parameters like 'raster', 'vector' or 'region'
 
     ::
@@ -1402,9 +1378,26 @@ def del_temp_region():
 
 def find_file(name, element="cell", mapset=None, env=None):
     """Returns the output from running g.findfile as a
-    dictionary. Example:
+    dictionary.
+
+    Elements in g.findfile refer to mapset directories. However, in
+    parts of the code, different element terms like rast, raster, or rast3d
+    are used. For convenience the function translates such element types
+    to respective mapset elements. Current translations are:
+    "rast": "cell",
+    "raster": "cell",
+    "rast3d": "grid3",
+    "raster3d": "grid3",
+    "raster_3d": "grid3",
+
+    Example:
 
     >>> result = find_file('elevation', element='cell')
+    >>> print(result['fullname'])
+    elevation@PERMANENT
+    >>> print(result['file'])  # doctest: +ELLIPSIS
+    /.../PERMANENT/cell/elevation
+    >>> result = find_file('elevation', element='raster')
     >>> print(result['fullname'])
     elevation@PERMANENT
     >>> print(result['file'])  # doctest: +ELLIPSIS
@@ -1418,11 +1411,19 @@ def find_file(name, element="cell", mapset=None, env=None):
 
     :return: parsed output of g.findfile
     """
-    if element == "raster" or element == "rast":
-        verbose(_('Element type should be "cell" and not "%s"') % element)
-        element = "cell"
+    element_translation = {
+        "rast": "cell",
+        "raster": "cell",
+        "rast3d": "grid3",
+        "raster3d": "grid3",
+        "raster_3d": "grid3",
+    }
+
+    if element in element_translation:
+        element = element_translation[element]
+
     # g.findfile returns non-zero when file was not found
-    # se we ignore return code and just focus on stdout
+    # so we ignore return code and just focus on stdout
     process = start_command(
         "g.findfile",
         flags="n",
@@ -1723,9 +1724,19 @@ def mapsets(search_path=False, env=None):
 # interface to `g.proj -c`
 
 
-def create_location(
-    dbase,
-    location,
+def create_location(*args, **kwargs):
+    if "dbase" in kwargs:
+        kwargs["path"] = kwargs["dbase"]
+        del kwargs["dbase"]
+    if "location" in kwargs:
+        kwargs["name"] = kwargs["location"]
+        del kwargs["location"]
+    return create_project(*args, **kwargs)
+
+
+def create_project(
+    path,
+    name=None,
     epsg=None,
     proj4=None,
     filename=None,
@@ -1735,42 +1746,65 @@ def create_location(
     desc=None,
     overwrite=False,
 ):
-    """Create new location
+    """Create new project
 
     Raise ScriptError on error.
 
-    :param str dbase: path to GRASS database
-    :param str location: location name to create
-    :param epsg: if given create new location based on EPSG code
-    :param proj4: if given create new location based on Proj4 definition
-    :param str filename: if given create new location based on georeferenced file
-    :param str wkt: if given create new location based on WKT definition
+    :param str path: path to GRASS database or project; if path to database, project
+                     name must be specified with name parameter
+    :param str name: project name to create
+    :param epsg: if given create new project based on EPSG code
+    :param proj4: if given create new project based on Proj4 definition
+    :param str filename: if given create new project based on georeferenced file
+    :param str wkt: if given create new project based on WKT definition
                     (can be path to PRJ file or WKT string)
     :param datum: GRASS format datum code
     :param datum_trans: datum transformation parameters (used for epsg and proj4)
-    :param desc: description of the location (creates MYNAME file)
-    :param bool overwrite: True to overwrite location if exists(WARNING:
-                           ALL DATA from existing location ARE DELETED!)
+    :param desc: description of the project (creates MYNAME file)
+    :param bool overwrite: True to overwrite project if exists (WARNING:
+                           ALL DATA from existing project ARE DELETED!)
     """
+    # Add default mapset to project path if needed
+    if not name:
+        path = os.path.join(path, "PERMANENT")
+
+    # resolve dbase, location and mapset
+    mapset_path = resolve_mapset_path(path=path, location=name)
+
     # create dbase if not exists
-    if not os.path.exists(dbase):
-        os.mkdir(dbase)
-    if epsg or proj4 or filename or wkt:
-        # here the location shouldn't really matter
-        tmp_gisrc, env = create_environment(
-            dbase, gisenv()["LOCATION_NAME"], "PERMANENT"
-        )
+    if not os.path.exists(mapset_path.directory):
+        os.mkdir(mapset_path.directory)
+
+    # Lazy-importing to avoid circular dependencies.
+    # pylint: disable=import-outside-toplevel
+    if os.environ.get("GISBASE"):
+        env = os.environ
+    else:
+        from grass.script.setup import setup_runtime_env
+
+        env = os.environ.copy()
+        setup_runtime_env(env=env)
+
+    # Even g.proj and g.message need GISRC to be present.
+    # The names don't really matter here.
+    tmp_gisrc, env = create_environment(
+        mapset_path.directory, mapset_path.location, mapset_path.mapset, env=env
+    )
+
     # check if location already exists
-    if os.path.exists(os.path.join(dbase, location)):
+    if Path(mapset_path.directory, mapset_path.location).exists():
         if not overwrite:
-            warning(_("Location <%s> already exists. Operation canceled.") % location)
-            try_remove(tmp_gisrc)
-            return
-        else:
-            warning(
-                _("Location <%s> already exists and will be overwritten") % location
+            fatal(
+                _("Location <%s> already exists. Operation canceled.")
+                % mapset_path.location,
+                env=env,
             )
-            shutil.rmtree(os.path.join(dbase, location))
+        warning(
+            _("Location <%s> already exists and will be overwritten")
+            % mapset_path.location,
+            env=env,
+        )
+        shutil.rmtree(os.path.join(mapset_path.directory, mapset_path.location))
 
     stdin = None
     kwargs = dict()
@@ -1785,7 +1819,7 @@ def create_location(
             quiet=True,
             flags="t",
             epsg=epsg,
-            location=location,
+            project=mapset_path.location,
             stderr=PIPE,
             env=env,
             **kwargs,
@@ -1796,7 +1830,7 @@ def create_location(
             quiet=True,
             flags="t",
             proj4=proj4,
-            location=location,
+            project=mapset_path.location,
             stderr=PIPE,
             env=env,
             **kwargs,
@@ -1806,28 +1840,33 @@ def create_location(
             "g.proj",
             quiet=True,
             georef=filename,
-            location=location,
+            project=mapset_path.location,
             stderr=PIPE,
             env=env,
         )
     elif wkt:
         if os.path.isfile(wkt):
             ps = pipe_command(
-                "g.proj", quiet=True, wkt=wkt, location=location, stderr=PIPE, env=env
+                "g.proj",
+                quiet=True,
+                wkt=wkt,
+                project=mapset_path.location,
+                stderr=PIPE,
+                env=env,
             )
         else:
             ps = pipe_command(
                 "g.proj",
                 quiet=True,
                 wkt="-",
-                location=location,
+                project=mapset_path.location,
                 stderr=PIPE,
                 stdin=PIPE,
                 env=env,
             )
             stdin = encode(wkt)
     else:
-        _create_location_xy(dbase, location)
+        _create_location_xy(mapset_path.directory, mapset_path.location)
 
     if epsg or proj4 or filename or wkt:
         error = ps.communicate(stdin)[1]
@@ -1836,14 +1875,19 @@ def create_location(
         if ps.returncode != 0 and error:
             raise ScriptError(repr(error))
 
+    _set_location_description(mapset_path.directory, mapset_path.location, desc)
+
+
+def _set_location_description(path, location, text):
+    """Set description (aka title aka MYNAME) for a location"""
     try:
         fd = codecs.open(
-            os.path.join(dbase, location, "PERMANENT", "MYNAME"),
+            os.path.join(path, location, "PERMANENT", "MYNAME"),
             encoding="utf-8",
             mode="w",
         )
-        if desc:
-            fd.write(desc + os.linesep)
+        if text:
+            fd.write(text + os.linesep)
         else:
             fd.write(os.linesep)
         fd.close()
@@ -1991,7 +2035,7 @@ def sanitize_mapset_environment(env):
     return env
 
 
-def create_environment(gisdbase, location, mapset):
+def create_environment(gisdbase, location, mapset, env=None):
     """Creates environment to be passed in run_command for example.
     Returns tuple with temporary file path and the environment. The user
     of this function is responsible for deleting the file."""
@@ -2000,7 +2044,10 @@ def create_environment(gisdbase, location, mapset):
         f.write("GISDBASE: {g}\n".format(g=gisdbase))
         f.write("LOCATION_NAME: {l}\n".format(l=location))
         f.write("GUI: text\n")
-    env = os.environ.copy()
+    if env:
+        env = env.copy()
+    else:
+        env = os.environ.copy()
     env["GISRC"] = f.name
     # remove mapset-specific env vars
     env = sanitize_mapset_environment(env)

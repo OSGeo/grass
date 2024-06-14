@@ -56,7 +56,6 @@ class GRASSStartup(wx.Frame):
     """GRASS start-up screen"""
 
     def __init__(self, parent=None, id=wx.ID_ANY, style=wx.DEFAULT_FRAME_STYLE):
-
         #
         # GRASS variables
         #
@@ -133,7 +132,8 @@ class GRASSStartup(wx.Frame):
         self.lmessage = StaticText(parent=self.panel)
         # It is not clear if all wx versions supports color, so try-except.
         # The color itself may not be correct for all platforms/system settings
-        # but in http://xoomer.virgilio.it/infinity77/wxPython/Widgets/wx.SystemSettings.html
+        # but in
+        # http://xoomer.virgilio.it/infinity77/wxPython/Widgets/wx.SystemSettings.html
         # there is no 'warning' color.
         try:
             self.lmessage.SetForegroundColour(wx.Colour(255, 0, 0))
@@ -910,7 +910,7 @@ class GRASSStartup(wx.Frame):
             "g.mapset",
             read=True,
             flags="l",
-            location=locationName,
+            project=locationName,
             gisdbase=self.gisdbase,
         )
 
@@ -1140,7 +1140,7 @@ class GRASSStartup(wx.Frame):
                 if ret == wx.ID_YES:
                     try:
                         os.remove(lockfile)
-                    except IOError as e:
+                    except OSError as e:
                         GError(
                             _("Unable to remove '%(lock)s'.\n\n" "Details: %(reason)s")
                             % {"lock": lockfile, "reason": e}

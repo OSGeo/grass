@@ -10,11 +10,32 @@ __docformat__ = "restructuredtext"
 
 __all__ = ["CtypesParser"]
 
-from ..ctypedescs import *
-from ..expressions import *
-
-from .cparser import *
-from .cdeclarations import *
+from ctypesgen.ctypedescs import (
+    CtypesArray,
+    CtypesBitfield,
+    CtypesEnum,
+    CtypesFunction,
+    CtypesPointer,
+    CtypesSimple,
+    CtypesSpecial,
+    CtypesStruct,
+    CtypesTypedef,
+    ctypes_type_map,
+    ctypes_type_map_python_builtin,
+    remove_function_pointer,
+)
+from ctypesgen.expressions import (
+    BinaryExpressionNode,
+    ConstantExpressionNode,
+    IdentifierExpressionNode,
+)
+from ctypesgen.parser.cdeclarations import (
+    Attrib,
+    EnumSpecifier,
+    Pointer,
+    StructTypeSpecifier,
+)
+from ctypesgen.parser.cparser import CParser
 
 
 def make_enum_from_specifier(specifier):
@@ -109,6 +130,8 @@ class CtypesParser(CParser):
                 signed = False
             elif specifier == "long":
                 longs += 1
+            elif specifier == "short":
+                longs = -1
             else:
                 typename = str(specifier)
 

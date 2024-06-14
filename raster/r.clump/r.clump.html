@@ -1,8 +1,8 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.clump</em> finds all areas of contiguous cell category values 
-(connected components) in the input raster map. NULL values in the 
-input are ignored. It assigns a unique category value to each such area 
+<em>r.clump</em> finds all areas of contiguous cell category values
+(connected components) in the input raster map. NULL values in the
+input are ignored. It assigns a unique category value to each such area
 (&quot;clump&quot;) in the resulting output raster map.
 
 <p>
@@ -14,30 +14,30 @@ to <em>r.clump</em> to recategorize cells and reassign cell category
 values.
 
 <p>
-<em>r.clump</em> can also perform &quot;fuzzy&quot; clumping where 
-neighboring cells that are not identical but similar to each other are 
-clumped together. Here, the spectral distance between two cells is 
-scaled to the range [0, 1] and compared to the <em>threshold</em> 
-value. Cells are clumped together if their spectral distance is &le; 
-<em>threshold</em>. The result is very sensitive to this 
-<em>threshold</em> value, a recommended start value is 0.01, then 
-increasing or decreasing this value according to the desired output. 
-Once a suitable threshold has been determined, noise can be reduced by 
+<em>r.clump</em> can also perform &quot;fuzzy&quot; clumping where
+neighboring cells that are not identical but similar to each other are
+clumped together. Here, the spectral distance between two cells is
+scaled to the range [0, 1] and compared to the <em>threshold</em>
+value. Cells are clumped together if their spectral distance is &le;
+<em>threshold</em>. The result is very sensitive to this
+<em>threshold</em> value, a recommended start value is 0.01, then
+increasing or decreasing this value according to the desired output.
+Once a suitable threshold has been determined, noise can be reduced by
 merging small clumps with the <em>minsize</em> option.
 
 <p>
-<em>r.clump</em> can also use multiple raster maps of any kind (CELL, 
-FCELL, DCELL) as input. In this case, the spectral distance between 
-cells is used to determine the similarity of two cells. This means that 
-input maps must be metric: the difference cell 1 - cell 2 must make 
-sense. Categorical maps, e.g. land cover, can not be used in this case. 
-Examples for valid input maps are satellite imagery, vegetation 
+<em>r.clump</em> can also use multiple raster maps of any kind (CELL,
+FCELL, DCELL) as input. In this case, the spectral distance between
+cells is used to determine the similarity of two cells. This means that
+input maps must be metric: the difference cell 1 - cell 2 must make
+sense. Categorical maps, e.g. land cover, can not be used in this case.
+Examples for valid input maps are satellite imagery, vegetation
 indices, elevation, climatic parameters etc.
 
 <h2>NOTES</h2>
 
-By default, the resulting clumps are connected only by their four 
-direct neighbors (left, right, top, bottom). The <em>-d</em> flag 
+By default, the resulting clumps are connected only by their four
+direct neighbors (left, right, top, bottom). The <em>-d</em> flag
 activates also diagonal clump tracing.
 
 <p>
@@ -124,7 +124,7 @@ d.rast lsat7_2002_clump_min10
 <a href="r_clump_lakes.png">
 <img src="r_clump_lsat.png" width="600" height="178" alt="r.clump example Landsat fuzzy clumping" border="1">
 </a><br>
-<i>Figure: Fuzzy clumping on Landsat bands: original RGB composite (left), 
+<i>Figure: Fuzzy clumping on Landsat bands: original RGB composite (left),
            fuzzy clumped map (middle), and fuzzy clumped with minsize map (right)</i>
 </div>
 
@@ -149,8 +149,3 @@ d.rast lsat7_2002_clump_min10
 Michael Shapiro, U.S. Army Construction Engineering Research
 Laboratory<br>
 Markus Metz (diagonal clump tracing, fuzzy clumping)
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

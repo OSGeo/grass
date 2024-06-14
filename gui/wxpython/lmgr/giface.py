@@ -15,14 +15,12 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com>
 """
 
-from __future__ import print_function
-
 from grass.pydispatch.signal import Signal
 from core.giface import Notification
 from core.utils import GetLayerNameFromCmd
 
 
-class Layer(object):
+class Layer:
     """@implements core::giface::Layer
 
     .. note::
@@ -49,7 +47,7 @@ class Layer(object):
         )
 
 
-class LayerList(object):
+class LayerList:
     """@implements core.giface.Layer"""
 
     def __init__(self, tree):
@@ -60,10 +58,11 @@ class LayerList(object):
 
     def __iter__(self):
         """Iterates over the contents of the list."""
-        item = self._tree.GetFirstChild(self._tree.root)[0]
-        while item and item.IsOk():
-            yield Layer(item, self._tree.GetPyData(item))
-            item = self._tree.GetNextItem(item)
+        if self._tree:
+            item = self._tree.GetFirstChild(self._tree.root)[0]
+            while item and item.IsOk():
+                yield Layer(item, self._tree.GetPyData(item))
+                item = self._tree.GetNextItem(item)
 
     def __getitem__(self, index):
         """Select a layer from the LayerList using the index."""
@@ -173,11 +172,11 @@ class LayerList(object):
             return Layer(item, self._tree.GetPyData(item))
 
 
-class LayerManagerGrassInterface(object):
+class LayerManagerGrassInterface:
     """@implements core::giface::GrassInterface"""
 
     def __init__(self, lmgr):
-        """Costructor is specific to the current implementation.
+        """Constructor is specific to the current implementation.
 
         Uses Layer Manager object including its private attributes.
         (It encapsulates existing Layer Manager so access to private members
@@ -199,10 +198,12 @@ class LayerManagerGrassInterface(object):
         # Signal for communicating something in current grassdb has changed.
         # Parameters:
         # action: required, is one of 'new', 'rename', 'delete'
-        # element: required, can be one of 'grassdb', 'location', 'mapset', 'raster', 'vector' and 'raster_3d'
+        # element: required, can be one of 'grassdb', 'location', 'mapset', 'raster',
+        #          'vector' and 'raster_3d'
         # grassdb: path to grass db, required
         # location: location name, required
-        # mapset: mapset name, required when element is 'mapset', 'raster', 'vector' or 'raster_3d'
+        # mapset: mapset name, required when element is 'mapset', 'raster',
+        #         'vector' or 'raster_3d'
         # map: map name, required when element is 'raster', 'vector' or 'raster_3d'
         # newname: new name (of mapset, map), required with action='rename'
         self.grassdbChanged = Signal("LayerManagerGrassInterface.grassdbChanged")
@@ -212,6 +213,21 @@ class LayerManagerGrassInterface(object):
 
         # Signal emitted when workspace is changed
         self.workspaceChanged = Signal("LayerManagerGrassInterface.workspaceChanged")
+
+        # Signal emitted when entry to history is added
+        self.entryToHistoryAdded = Signal(
+            "LayerManagerGrassInterface.entryToHistoryAdded"
+        )
+
+        # Signal emitted when entry from history is removed
+        self.entryFromHistoryRemoved = Signal(
+            "LayerManagerGrassInterface.entryFromHistoryRemoved"
+        )
+
+        # Signal emitted when entry in history is updated
+        self.entryInHistoryUpdated = Signal(
+            "LayerManagerGrassInterface.entryInHistoryUpdated"
+        )
 
     def RunCmd(self, *args, **kwargs):
         self.lmgr._gconsole.RunCmd(*args, **kwargs)
@@ -258,11 +274,8 @@ class LayerManagerGrassInterface(object):
     def GetProgress(self):
         return self.lmgr.goutput.GetProgressBar()
 
-    def UpdateCmdHistory(self, cmd):
-        self.lmgr.goutput.GetPrompt().UpdateCmdHistory(cmd)
 
-
-class LayerManagerGrassInterfaceForMapDisplay(object):
+class LayerManagerGrassInterfaceForMapDisplay:
     """Provides reference only to the given layer list (according to tree),
     not to the current.
 

@@ -34,7 +34,7 @@ __To build a stable version__:
 change to the releasebranch or tag you want to build:
 
 ```bash
-git checkout remotes/origin/releasebranch_7_8
+git checkout remotes/origin/releasebranch_8_2
 ```
 
 and build and enter with:

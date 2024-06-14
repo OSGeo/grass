@@ -1,9 +1,9 @@
 <h2>DESCRIPTION</h2>
 
-<em>d.vect.thematic</em> draws thematic choropleth vector maps based 
-on an attribute column or an expression involving several columns. 
-It takes a list of class <b>breaks</b> (excluding the minimum and maximum 
-values) and a list of <b>colors</b> to apply to the classes (has to be the 
+<em>d.vect.thematic</em> draws thematic choropleth vector maps based
+on an attribute column or an expression involving several columns.
+It takes a list of class <b>breaks</b> (excluding the minimum and maximum
+values) and a list of <b>colors</b> to apply to the classes (has to be the
 number of class breaks + 1).
 <p>
 Instead of a list of class breaks, the user can also chose a
@@ -12,7 +12,6 @@ classification <b>algorithm</b> and a number of classes
 <em><a href="v.class.html">v.class</a></em> for more information on
 these different algorithms.
 
-
 <h2>NOTES</h2>
 
 The <b>-l</b> flag instructs the module to print legend information
@@ -20,7 +19,7 @@ in vector legend format as described in <em><a href="d.legend.vect.html">d.legen
  to standard output for further use in graphical software.
 When combined with the verbose flag, the legend information will
 be extended with some additional statistical information. If the
-<b>-n</b> flag is set, the module will only print the legend 
+<b>-n</b> flag is set, the module will only print the legend
 information without drawing the map.
 
 <p>Option <b>legendfile</b>, is deprecated, instead
@@ -41,8 +40,8 @@ d.vect.thematic -l map=communes3 column=pop \
 
 <h3>Thematic map with calculated class breaks</h3>
 
-The following example uses a calculated attribute (<tt>density = 
-pop/area</tt>) and the standard deviation algorithm to calculate class 
+The following example uses a calculated attribute (<tt>density =
+pop/area</tt>) and the standard deviation algorithm to calculate class
 breaks for 5 classes:
 
 <div class="code"><pre>
@@ -107,8 +106,3 @@ AddOns: <em><a href="https://grass.osgeo.org/grass8/manuals/addons/d.vect.themat
 <h2>AUTHOR</h2>
 
 Moritz Lennert
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

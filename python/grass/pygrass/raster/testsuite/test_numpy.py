@@ -3,6 +3,7 @@ Created on Thu Jul 30 18:27:22 2015
 
 @author: lucadelu
 """
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from numpy.random import random
@@ -20,7 +21,6 @@ def check_raster(name):
 
 
 class NumpyTestCase(TestCase):
-
     name = "RasterRowTestCase_map"
 
     @classmethod

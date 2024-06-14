@@ -10,19 +10,25 @@ Usage:
     tgis.register_maps_in_space_time_dataset(type, name, maps)
 
 
-(C) 2012-2016 by the GRASS Development Team
+(C) 2012-2022 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS GIS
 for details.
 
 :authors: Soeren Gebbert
+:authors: Vaclav Petras
 """
-from __future__ import print_function
+
+import os
+from contextlib import contextmanager
+import sys
+
+import grass.script as gs
+
 from .core import get_tgis_message_interface, get_available_temporal_mapsets, init_dbif
 from .datetime_math import time_delta_to_relative_time
 from .factory import dataset_factory
 from .open_stds import open_old_stds
-import grass.script as gscript
 
 ###############################################################################
 
@@ -54,21 +60,37 @@ def get_dataset_list(
         >>> import grass.temporal as tgis
         >>> tgis.core.init()
         >>> name = "list_stds_test"
-        >>> sp = tgis.open_stds.open_new_stds(name=name, type="strds",
-        ... temporaltype="absolute", title="title", descr="descr",
-        ... semantic="mean", dbif=None, overwrite=True)
+        >>> sp = tgis.open_stds.open_new_stds(
+        ...     name=name,
+        ...     type="strds",
+        ...     temporaltype="absolute",
+        ...     title="title",
+        ...     descr="descr",
+        ...     semantic="mean",
+        ...     dbif=None,
+        ...     overwrite=True,
+        ... )
         >>> mapset = tgis.get_current_mapset()
-        >>> stds_list = tgis.list_stds.get_dataset_list("strds", "absolute", columns="name")
-        >>> rows =  stds_list[mapset]
+        >>> stds_list = tgis.list_stds.get_dataset_list(
+        ...     "strds", "absolute", columns="name"
+        ... )
+        >>> rows = stds_list[mapset]
         >>> for row in rows:
         ...     if row["name"] == name:
         ...         print(True)
+        ...
         True
-        >>> stds_list = tgis.list_stds.get_dataset_list("strds", "absolute", columns="name,mapset", where="mapset = '%s'"%(mapset))
-        >>> rows =  stds_list[mapset]
+        >>> stds_list = tgis.list_stds.get_dataset_list(
+        ...     "strds",
+        ...     "absolute",
+        ...     columns="name,mapset",
+        ...     where="mapset = '%s'" % (mapset),
+        ... )
+        >>> rows = stds_list[mapset]
         >>> for row in rows:
         ...     if row["name"] == name and row["mapset"] == mapset:
         ...         print(True)
+        ...
         True
         >>> check = sp.delete()
 
@@ -83,7 +105,6 @@ def get_dataset_list(
     result = {}
 
     for mapset in mapsets.keys():
-
         if temporal_type == "absolute":
             table = sp.get_type() + "_view_abs_time"
         else:
@@ -118,9 +139,347 @@ def get_dataset_list(
 ###############################################################################
 
 
+@contextmanager
+def _open_output_file(file, encoding="utf-8", **kwargs):
+    if not file:
+        yield sys.stdout
+    elif not isinstance(file, (str, os.PathLike)):
+        yield file
+    else:
+        with open(file, "w", encoding=encoding, **kwargs) as stream:
+            yield stream
+
+
+def _write_line(items, separator, file):
+    if not separator:
+        separator = ","
+    output = separator.join([f"{item}" for item in items])
+    with _open_output_file(file) as stream:
+        print(f"{output}", file=stream)
+
+
+def _write_plain(rows, header, separator, file):
+    def write_plain_row(items, separator, file):
+        output = separator.join([f"{item}" for item in items])
+        print(f"{output}", file=file)
+
+    with _open_output_file(file) as stream:
+        # Print the column names if requested
+        if header:
+            write_plain_row(items=header, separator=separator, file=stream)
+        for row in rows:
+            write_plain_row(items=row, separator=separator, file=stream)
+
+
+def _write_json(rows, column_names, file):
+    # Lazy import output format-specific dependencies.
+    # pylint: disable=import-outside-toplevel
+    import json
+    import datetime
+
+    class ResultsEncoder(json.JSONEncoder):
+        """Results encoder for JSON which handles SimpleNamespace objects"""
+
+        def default(self, o):
+            """Handle additional types"""
+            if isinstance(o, datetime.datetime):
+                return f"{o}"
+            return super().default(o)
+
+    dict_rows = []
+    for row in rows:
+        new_row = {}
+        for key, value in zip(column_names, row):
+            new_row[key] = value
+        dict_rows.append(new_row)
+    meta = {"column_names": column_names}
+    with _open_output_file(file) as stream:
+        json.dump({"data": dict_rows, "metadata": meta}, stream, cls=ResultsEncoder)
+
+
+def _write_yaml(rows, column_names, file=sys.stdout):
+    # Lazy import output format-specific dependencies.
+    # pylint: disable=import-outside-toplevel
+    import yaml
+
+    class NoAliasIndentListSafeDumper(yaml.SafeDumper):
+        """YAML dumper class which does not create aliases and indents lists
+
+        This avoid dates being labeled with &id001 and referenced with *id001.
+        Instead, same dates are simply repeated.
+
+        Lists have their dash-space (- ) indented instead of considering the
+        dash and space to be a part of indentation. This might be better handled
+        when https://github.com/yaml/pyyaml/issues/234 is resolved.
+        """
+
+        def ignore_aliases(self, data):
+            return True
+
+        def increase_indent(self, flow=False, indentless=False):
+            return super().increase_indent(flow=flow, indentless=False)
+
+    dict_rows = []
+    for row in rows:
+        new_row = {}
+        for key, value in zip(column_names, row):
+            new_row[key] = value
+        dict_rows.append(new_row)
+    meta = {"column_names": column_names}
+    with _open_output_file(file) as stream:
+        print(
+            yaml.dump(
+                {"data": dict_rows, "metadata": meta},
+                Dumper=NoAliasIndentListSafeDumper,
+                default_flow_style=False,
+            ),
+            end="",
+            file=stream,
+        )
+
+
+def _write_csv(rows, column_names, separator, file=sys.stdout):
+    # Lazy import output format-specific dependencies.
+    # pylint: disable=import-outside-toplevel
+    import csv
+
+    # Newlines handled by the CSV writer. Set according to the package doc.
+    with _open_output_file(file, newline="") as stream:
+        spamwriter = csv.writer(
+            stream,
+            delimiter=separator,
+            quotechar='"',
+            doublequote=True,
+            quoting=csv.QUOTE_NONNUMERIC,
+            lineterminator="\n",
+        )
+        if column_names:
+            spamwriter.writerow(column_names)
+        for row in rows:
+            spamwriter.writerow(row)
+
+
+def _write_table(rows, column_names, output_format, separator, file):
+    if output_format == "json":
+        _write_json(rows=rows, column_names=column_names, file=file)
+    elif output_format == "yaml":
+        _write_yaml(rows=rows, column_names=column_names, file=file)
+    elif output_format == "plain":
+        # No particular reason for this separator except that this is the original
+        # behavior.
+        if not separator:
+            separator = "\t"
+        _write_plain(rows=rows, header=column_names, separator=separator, file=file)
+    elif output_format == "csv":
+        if not separator:
+            separator = ","
+        _write_csv(rows=rows, column_names=column_names, separator=separator, file=file)
+    else:
+        raise ValueError(f"Unknown value '{output_format}' for output_format")
+
+
+def _get_get_registered_maps_as_objects_with_method(dataset, where, method, gran, dbif):
+    if method == "deltagaps":
+        return dataset.get_registered_maps_as_objects_with_gaps(where=where, dbif=dbif)
+    if method == "delta":
+        return dataset.get_registered_maps_as_objects(
+            where=where, order="start_time", dbif=dbif
+        )
+    if method == "gran":
+        if where:
+            raise ValueError(
+                f"The where parameter is not supported with method={method}"
+            )
+        if gran is not None and gran != "":
+            return dataset.get_registered_maps_as_objects_by_granularity(
+                gran=gran, dbif=dbif
+            )
+        return dataset.get_registered_maps_as_objects_by_granularity(dbif=dbif)
+    raise ValueError(f"Invalid method '{method}'")
+
+
+def _get_get_registered_maps_as_objects_delta_gran(
+    dataset, where, method, gran, dbif, msgr
+):
+    maps = _get_get_registered_maps_as_objects_with_method(
+        dataset=dataset, where=where, method=method, gran=gran, dbif=dbif
+    )
+    if not maps:
+        return []
+
+    if isinstance(maps[0], list):
+        if len(maps[0]) > 0:
+            first_time, unused = maps[0][0].get_temporal_extent_as_tuple()
+        else:
+            msgr.warning(_("Empty map list"))
+            return []
+    else:
+        first_time, unused = maps[0].get_temporal_extent_as_tuple()
+
+    records = []
+    for map_object in maps:
+        if isinstance(map_object, list):
+            if len(map_object) > 0:
+                map_object = map_object[0]
+            else:
+                msgr.fatal(_("Empty entry in map list, this should not happen"))
+
+        start, end = map_object.get_temporal_extent_as_tuple()
+        if end:
+            delta = end - start
+        else:
+            delta = None
+        delta_first = start - first_time
+
+        if map_object.is_time_absolute():
+            if end:
+                delta = time_delta_to_relative_time(delta)
+            delta_first = time_delta_to_relative_time(delta_first)
+        records.append((map_object, start, end, delta, delta_first))
+    return records
+
+
+def _get_list_of_maps_delta_gran(dataset, columns, where, method, gran, dbif, msgr):
+    maps = _get_get_registered_maps_as_objects_delta_gran(
+        dataset=dataset, where=where, method=method, gran=gran, dbif=dbif, msgr=msgr
+    )
+    rows = []
+    for map_object, start, end, delta, delta_first in maps:
+        row = []
+        # Here the names must be the same as in the database
+        # to make the interface consistent.
+        for column in columns:
+            if column == "id":
+                row.append(map_object.get_id())
+            elif column == "name":
+                row.append(map_object.get_name())
+            elif column == "layer":
+                row.append(map_object.get_layer())
+            elif column == "mapset":
+                row.append(map_object.get_mapset())
+            elif column == "start_time":
+                row.append(start)
+            elif column == "end_time":
+                row.append(end)
+            elif column == "interval_length":
+                row.append(delta)
+            elif column == "distance_from_begin":
+                row.append(delta_first)
+            else:
+                raise ValueError(f"Unsupported column '{column}'")
+        rows.append(row)
+    return rows
+
+
+def _get_list_of_maps_stds(
+    element_type,
+    name,
+    columns,
+    order,
+    where,
+    method,
+    output_format,
+    gran=None,
+    dbif=None,
+):
+    dbif, connection_state_changed = init_dbif(dbif)
+    msgr = get_tgis_message_interface()
+
+    dataset = open_old_stds(name, element_type, dbif)
+
+    def check_columns(column_names, output_format, element_type):
+        if element_type != "stvds" and "layer" in columns:
+            raise ValueError(
+                f"Column 'layer' is not allowed with temporal type '{element_type}'"
+            )
+        if output_format == "line" and len(column_names) > 1:
+            raise ValueError(
+                f"'{output_format}' output_format can have only 1 column, "
+                f"not {len(column_names)}"
+            )
+
+    # This method expects a list of objects for gap detection
+    if method in ["delta", "deltagaps", "gran"]:
+        if not columns:
+            if output_format == "list":
+                # Only one column is needed.
+                columns = ["id"]
+            else:
+                columns = ["id", "name"]
+                if element_type == "stvds":
+                    columns.append("layer")
+                columns.extend(
+                    [
+                        "mapset",
+                        "start_time",
+                        "end_time",
+                        "interval_length",
+                        "distance_from_begin",
+                    ]
+                )
+        check_columns(
+            column_names=columns,
+            output_format=output_format,
+            element_type=element_type,
+        )
+        rows = _get_list_of_maps_delta_gran(
+            dataset=dataset,
+            columns=columns,
+            where=where,
+            method=method,
+            gran=gran,
+            dbif=dbif,
+            msgr=msgr,
+        )
+    else:
+        if columns:
+            check_columns(
+                column_names=columns,
+                output_format=output_format,
+                element_type=element_type,
+            )
+        else:
+            if output_format == "line":
+                # For list of values, only one column is needed.
+                columns = ["id"]
+            else:
+                columns = ["name", "mapset", "start_time", "end_time"]
+        if not order:
+            order = "start_time"
+
+        rows = dataset.get_registered_maps(",".join(columns), where, order, dbif)
+
+        # End with error for the old, custom formats. Proper formats simply return
+        # empty result whatever empty is for each format (e.g., empty list for JSON).
+        if not rows and (output_format in ["plain", "line"]):
+            dbif.close()
+            gs.fatal(
+                _(
+                    "Nothing found in the database for space time dataset <{name}> "
+                    "(type: {element_type}): {detail}"
+                ).format(
+                    name=dataset.get_id(),
+                    element_type=element_type,
+                    detail=(
+                        _(
+                            "Dataset is empty or where clause is too constrained or "
+                            "incorrect"
+                        )
+                        if where
+                        else _("Dataset is empty")
+                    ),
+                )
+            )
+    if connection_state_changed:
+        dbif.close()
+    return rows, columns
+
+
+# The code is compatible with pre-v8.2 versions, but for v9, it needs to be reviewed
+# to remove the backwards compatibility which will clean it up.
 def list_maps_of_stds(
-    type,
-    input,
+    type,  # pylint: disable=redefined-builtin
+    input,  # pylint: disable=redefined-builtin
     columns,
     order,
     where,
@@ -130,6 +489,7 @@ def list_maps_of_stds(
     gran=None,
     dbif=None,
     outpath=None,
+    output_format=None,
 ):
     """List the maps of a space time dataset using different methods
 
@@ -161,171 +521,41 @@ def list_maps_of_stds(
                  dataset is used
     :param outpath: The path to file where to save output
     """
-
-    dbif, connection_state_changed = init_dbif(dbif)
-    msgr = get_tgis_message_interface()
-
-    sp = open_old_stds(input, type, dbif)
-
-    if separator is None or separator == "":
-        separator = "\t"
-
-    if outpath:
-        outfile = open(outpath, "w")
-
-    # This method expects a list of objects for gap detection
-    if method == "delta" or method == "deltagaps" or method == "gran":
-        if type == "stvds":
-            columns = "id,name,layer,mapset,start_time,end_time"
-        else:
-            columns = "id,name,mapset,start_time,end_time"
-        if method == "deltagaps":
-            maps = sp.get_registered_maps_as_objects_with_gaps(where=where, dbif=dbif)
-        elif method == "delta":
-            maps = sp.get_registered_maps_as_objects(
-                where=where, order="start_time", dbif=dbif
-            )
-        elif method == "gran":
-            if gran is not None and gran != "":
-                maps = sp.get_registered_maps_as_objects_by_granularity(
-                    gran=gran, dbif=dbif
-                )
-            else:
-                maps = sp.get_registered_maps_as_objects_by_granularity(dbif=dbif)
-
-        if no_header is False:
-            string = ""
-            string += "%s%s" % ("id", separator)
-            string += "%s%s" % ("name", separator)
-            if type == "stvds":
-                string += "%s%s" % ("layer", separator)
-            string += "%s%s" % ("mapset", separator)
-            string += "%s%s" % ("start_time", separator)
-            string += "%s%s" % ("end_time", separator)
-            string += "%s%s" % ("interval_length", separator)
-            string += "%s" % ("distance_from_begin")
-            if outpath:
-                outfile.write("{st}\n".format(st=string))
-            else:
-                print(string)
-
-        if maps and len(maps) > 0:
-
-            if isinstance(maps[0], list):
-                if len(maps[0]) > 0:
-                    first_time, dummy = maps[0][0].get_temporal_extent_as_tuple()
-                else:
-                    msgr.warning(_("Empty map list"))
-                    return
-            else:
-                first_time, dummy = maps[0].get_temporal_extent_as_tuple()
-
-            for mymap in maps:
-
-                if isinstance(mymap, list):
-                    if len(mymap) > 0:
-                        map = mymap[0]
-                    else:
-                        msgr.fatal(_("Empty entry in map list, this should not happen"))
-                else:
-                    map = mymap
-
-                start, end = map.get_temporal_extent_as_tuple()
-                if end:
-                    delta = end - start
-                else:
-                    delta = None
-                delta_first = start - first_time
-
-                if map.is_time_absolute():
-                    if end:
-                        delta = time_delta_to_relative_time(delta)
-                    delta_first = time_delta_to_relative_time(delta_first)
-
-                string = ""
-                string += "%s%s" % (map.get_id(), separator)
-                string += "%s%s" % (map.get_name(), separator)
-                if type == "stvds":
-                    string += "%s%s" % (map.get_layer(), separator)
-                string += "%s%s" % (map.get_mapset(), separator)
-                string += "%s%s" % (start, separator)
-                string += "%s%s" % (end, separator)
-                string += "%s%s" % (delta, separator)
-                string += "%s" % (delta_first)
-                if outpath:
-                    outfile.write("{st}\n".format(st=string))
-                else:
-                    print(string)
-
-    else:
-        # In comma separated mode only map ids are needed
+    if not output_format:
         if method == "comma":
-            if columns not in ["id", "name"]:
-                columns = "id"
+            output_format = "line"
+        output_format = "plain"
 
-        rows = sp.get_registered_maps(columns, where, order, dbif)
+    if columns:
+        if isinstance(columns, str):
+            columns = columns.split(",")
 
-        if not rows:
-            dbif.close()
-            err = "Space time %(sp)s dataset <%(i)s> is empty"
-            if where:
-                err += " or where condition is wrong"
-            gscript.fatal(
-                _(err)
-                % {"sp": sp.get_new_map_instance(None).get_type(), "i": sp.get_id()}
-            )
+    rows, columns = _get_list_of_maps_stds(
+        element_type=type,
+        name=input,
+        columns=columns,
+        order=order,
+        where=where,
+        method=method,
+        output_format=output_format,
+        gran=gran,
+        dbif=dbif,
+    )
 
-        if rows:
-            if method == "comma":
-                string = ""
-                count = 0
-                for row in rows:
-                    if count == 0:
-                        string += row[columns]
-                    else:
-                        string += ",%s" % row[columns]
-                    count += 1
-                if outpath:
-                    outfile.write("{st}\n".format(st=string))
-                else:
-                    print(string)
-
-            elif method == "cols":
-                # Print the column names if requested
-                if no_header is False:
-                    output = ""
-                    count = 0
-
-                    collist = columns.split(",")
-
-                    for key in collist:
-                        if count > 0:
-                            output += separator + str(key)
-                        else:
-                            output += str(key)
-                        count += 1
-                    if outpath:
-                        outfile.write("{st}\n".format(st=output))
-                    else:
-                        print(output)
-
-                for row in rows:
-                    output = ""
-                    count = 0
-                    for col in row:
-                        if count > 0:
-                            output += separator + str(col)
-                        else:
-                            output += str(col)
-                        count += 1
-                    if outpath:
-                        outfile.write("{st}\n".format(st=output))
-                    else:
-                        print(output)
-    if outpath:
-        outfile.close()
-    if connection_state_changed:
-        dbif.close()
+    if output_format == "line":
+        _write_line(
+            items=[row[0] for row in rows],
+            separator=separator,
+            file=outpath,
+        )
+    else:
+        _write_table(
+            rows=rows,
+            column_names=None if no_header else columns,
+            separator=separator,
+            output_format=output_format,
+            file=outpath,
+        )
 
 
 ###############################################################################

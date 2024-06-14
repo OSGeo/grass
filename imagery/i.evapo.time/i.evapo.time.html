@@ -8,7 +8,7 @@ Inputs:
 <li> ETa images
 <li> ETa images DOY (Day of Year)
 <li> ETo images
-<li> ETo DOYmin as a single value 
+<li> ETo DOYmin as a single value
 </ul>
 
 Method:
@@ -35,7 +35,7 @@ If you only have one meteorological station data set, the easiest way is:
 n=0
 for ETo_val in Eto[1] Eto[2] ...
 do
-	r.mapcalc "eto$n = $ETo_val" 
+	r.mapcalc "eto$n = $ETo_val"
 	`expr n = n + 1`
 done
 </pre></div>
@@ -50,6 +50,21 @@ for each day.
 For multi-year calculations, just continue incrementing DOY values above
 366, it will continue working, up to maximum input of 400 satellite images.
 
+<p>
+<img src="i_evapo_time.png" alt="Temporal integration from a weather station"><br>
+<i>This is an example of a temporal integration from a weather station as done by
+Chemin and Alexandridis (2004)</i>
+<p>
+
+<h2>References</h2>
+
+<p>
+Chemin and Alexandridis, 2004. Spatial Resolution Improvement of Seasonal
+Evapotranspiration for Irrigated Rice, Zhanghe Irrigation District, Hubei Province, China.
+Asian Journal of Geoinformatics, Vol. 5, No. 1, September 2004
+(<a href="https://ikee.lib.auth.gr/record/270217/files/Chemin-Alexandridis.pdf">PDF</a>)
+
+
 <h2>SEE ALSO</h2>
 
 <em>
@@ -60,11 +75,6 @@ For multi-year calculations, just continue incrementing DOY values above
 <a href="r.sun.html">r.sun</a>
 </em>
 
-
 <h2>AUTHOR</h2>
-Yann Chemin, International Rice Research Institute, The Philippines
 
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+Yann Chemin, International Rice Research Institute, The Philippines

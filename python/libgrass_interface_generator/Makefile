@@ -37,7 +37,7 @@ raster_HDRS     = raster.h defs/raster.h
 gmath_HDRS      = gmath.h defs/gmath.h
 proj_HDRS       = gprojects.h defs/gprojects.h
 imagery_HDRS    = imagery.h defs/imagery.h
-vector_HDRS     = vector.h defs/vector.h vect/dig_structs.h vect/dig_defines.h vect/dig_externs.h 
+vector_HDRS     = vector.h defs/vector.h vect/dig_structs.h vect/dig_defines.h vect/dig_externs.h
 rtree_HDRS	= rtree.h
 display_HDRS    = display.h defs/display.h
 stats_HDRS      = stats.h defs/stats.h
@@ -56,18 +56,15 @@ proj_INC        = $(PROJINC)
 vector_INC      = $(VECT_INC) $(VECT_CFLAGS)
 vedit_INC       = $(VECT_INC) $(VECT_CFLAGS)
 
-MAC_FLAGS = ""
-ifneq ($(findstring darwin,$(ARCH)),)
-MAC_FLAGS  = "-D_Nullable="
-endif
-
-CTYPESGEN = ./run.py
-CTYPESFLAGS = --cpp "$(CC) -E $(CPPFLAGS) $(LFS_CFLAGS) $(MAC_FLAGS) $(EXTRA_CFLAGS) $(NLS_CFLAGS) $(DEFS) $(EXTRA_INC) $(INC) -D__GLIBC_HAVE_LONG_LONG"
-EXTRA_CLEAN_FILES := $(wildcard ctypesgencore/*.pyc) $(wildcard ctypesgencore/*/*.pyc)
-
 ifneq ($(MINGW),)
 INTLLIB = -lintl-8
 endif
+
+CTYPESGEN = ./run.py
+CTYPESFLAGS = --no-embed-preamble --strip-build-path "$(ARCH_DISTDIR)" \
+	--cpp "$(CC) -E $(CPPFLAGS) $(LFS_CFLAGS) $(EXTRA_CFLAGS) $(NLS_CFLAGS) $(DEFS) $(EXTRA_INC) $(INC) -D__GLIBC_HAVE_LONG_LONG"
+EXTRA_CLEAN_FILES := $(wildcard ctypesgen/*.pyc) $(wildcard ctypesgen/*/*.pyc)
+EXTRA_CLEAN_DIRS := $(wildcard ctypesgen/__pycache__) $(wildcard ctypesgen/*/__pycache__)
 
 include $(MODULE_TOPDIR)/include/Make/Python.make
 
@@ -75,29 +72,32 @@ PYDIR = $(ETC)/python
 GDIR = $(PYDIR)/grass
 DSTDIR = $(GDIR)/lib
 
-PYFILES  := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__ ctypes_preamble ctypes_loader)
-PYCFILES  := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__ ctypes_preamble ctypes_loader)
+PYFILES  := $(patsubst %,$(DSTDIR)/%.py,$(MODULES))
+PYCFILES  := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES))
 LPYFILES := $(patsubst %,$(OBJDIR)/%.py,$(MODULES))
 
-COPY_FILES = $(DSTDIR)/ctypes_loader.py $(DSTDIR)/ctypes_preamble.py $(DSTDIR)/__init__.py
+COPY_FILES = ctypes_loader ctypes_preamble __init__
+PY_COPY_FILES = $(patsubst %,$(DSTDIR)/%.py,$(COPY_FILES))
+PYC_COPY_FILES = $(patsubst %,$(DSTDIR)/%.pyc,$(COPY_FILES))
 
 ifeq ($(strip $(GRASS_LIBRARY_TYPE)),shlib)
-default: $(COPY_FILES)
+default:
 	$(MAKE) $(DSTDIR)
 	$(MAKE) $(LPYFILES) $(PYFILES) $(PYCFILES)
+	$(MAKE) $(PY_COPY_FILES) $(PYC_COPY_FILES)
 else
 default:
 	@echo "Cannot build Python wrappers for static libraries" >&2
 	exit 1
 endif
 
-$(COPY_FILES): | $(DSTDIR)
-$(DSTDIR)/ctypes_loader.py: ctypesgen/libraryloader.py
-	cp -f $< $@
-$(DSTDIR)/ctypes_preamble.py: ctypesgen/printer_python/preamble/3_2.py
-	cp -f $< $@
+$(PY_COPY_FILES): | $(DSTDIR)
 $(DSTDIR)/__init__.py: libgrass__init__.py
-	cp -f $< $@
+	$(INSTALL_DATA) $< $@
+$(DSTDIR)/ctypes_loader.py: $(OBJDIR)/ctypes_loader.py
+	$(INSTALL_DATA) $< $@
+$(DSTDIR)/ctypes_preamble.py: $(OBJDIR)/ctypes_preamble.py
+	$(INSTALL_DATA) $< $@
 
 $(DSTDIR)/%.py: $(OBJDIR)/%.py | $(DSTDIR)
 	$(INSTALL_DATA) $< $@
@@ -118,4 +118,4 @@ $(GDIR): | $(PYDIR)
 $(DSTDIR): | $(GDIR)
 	$(MKDIR) $@
 
-.SECONDARY: $(patsubst %,%.py,$(MODULES))
+.SECONDARY: $(patsubst %,%.py,$(MODULES)) $(patsubst %,%.py,$(COPY_FILES))

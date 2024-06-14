@@ -178,7 +178,7 @@ class TestTemporalRasterAlgebraImplicitAggregation(TestCase):
     def test_single_map_complex_operator_right_ts(self):
         """Test implicit aggregation
 
-        TODO: Ist this the correct result? Implicit aggregation and full permutation?
+        TODO: Is this the correct result? Implicit aggregation and full permutation?
 
         R = singletmap {+,equal,r} A
 

@@ -48,7 +48,7 @@ def save_results_to_file(results, filename):
     See :func:`save_results` for details.
     """
     text = save_results(results)
-    with open(filename, "w") as file:
+    with open(filename, "w", encoding="utf-8") as file:
         file.write(text)
 
 
@@ -67,7 +67,7 @@ def load_results_from_file(filename):
 
     See :func:`load_results` for details.
     """
-    with open(filename, "r") as file:
+    with open(filename, "r", encoding="utf-8") as file:
         return load_results(file.read())
 
 

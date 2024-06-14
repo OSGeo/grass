@@ -3,27 +3,20 @@ Created on Tue Apr  2 18:57:42 2013
 
 @author: pietro
 """
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
+
 from grass.pygrass.gis.region import Region
 from grass.pygrass.raster import RasterRow
 from grass.pygrass.utils import coor2pixel
+from grass.pygrass.modules import Module
 
 
 def get_start_end_index(bbox_list):
     """Convert a Bounding Box to a list of the index of
     column start, end, row start and end
-
     :param bbox_list: a list of BBox object to convert
     :type bbox_list: list of BBox object
 
+    .. deprecated:: 8.3
     """
     ss_list = []
     reg = Region()
@@ -44,16 +37,15 @@ def rpatch_row(rast, rasts, bboxes):
     :param bboxes: a list of BBox object
     :type bboxes: list of BBox object
     """
-    sei = get_start_end_index(bboxes)
     # instantiate two buffer
     buff = rasts[0][0]
     rbuff = rasts[0][0]
-    r_start, r_end, c_start, c_end = sei[0]
-    for row in range(r_start, r_end):
+    r_start, r_end, c_start, c_end = bboxes[0]
+    for row in range(r_start, r_end + 1):
         for col, ras in enumerate(rasts):
-            r_start, r_end, c_start, c_end = sei[col]
+            r_start, r_end, c_start, c_end = bboxes[col]
             buff = ras.get_row(row, buff)
-            rbuff[c_start:c_end] = buff[c_start:c_end]
+            rbuff[c_start : c_end + 1] = buff[c_start : c_end + 1]
         rast.put_row(rbuff)
 
 
@@ -111,3 +103,47 @@ def rpatch_map(
             del rst
 
     rast.close()
+
+
+def rpatch_map_r_patch_backend(
+    raster,
+    mset_str,
+    bbox_list,
+    overwrite=False,
+    start_row=0,
+    start_col=0,
+    prefix="",
+    processes=1,
+):
+    """Patch raster using a r.patch. Only use with overlap=0.
+    Will be faster than rpatch_map, since r.patch is parallelized.
+
+    :param raster: the name of output raster
+    :type raster: str
+    :param mset_str:
+    :type mset_str: str
+    :param bbox_list: a list of BBox object to convert
+    :type bbox_list: list of BBox object
+    :param overwrite: overwrite existing raster
+    :type overwrite: bool
+    :param start_row: the starting row of original raster
+    :type start_row: int
+    :param start_col: the starting column of original raster
+    :type start_col: int
+    :param prefix: the prefix of output raster
+    :type prefix: str
+    :param processes: number of parallel process for r.patch
+    :type processes: int
+    """
+    rasts = []
+    for row, rbbox in enumerate(bbox_list):
+        for col in range(len(rbbox)):
+            mapset = mset_str % (start_row + row, start_col + col)
+            rasts.append(f"{raster}@{mapset}")
+    Module(
+        "r.patch",
+        input=rasts,
+        output=prefix + raster,
+        overwrite=overwrite,
+        nprocs=processes,
+    )

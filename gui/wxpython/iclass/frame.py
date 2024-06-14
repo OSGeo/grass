@@ -19,7 +19,6 @@ for details.
 """
 
 import os
-import six
 import copy
 import tempfile
 
@@ -49,7 +48,6 @@ from core.render import Map
 from core.gcmd import RunCommand, GMessage, GError
 from gui_core.dialogs import SetOpacityDialog
 from gui_core.wrap import Menu
-from mapwin.base import MapWindowProperties
 from dbmgr.vinfo import VectorDBInfo
 
 from iclass.digit import IClassVDigitWindow, IClassVDigit
@@ -96,7 +94,8 @@ class IClassMapPanel(DoubleMapPanel):
         """
         :param parent: (no parent is expected)
         :param title: window title
-        :param toolbars: dictionary of active toolbars (default value represents all toolbars)
+        :param toolbars: dictionary of active toolbars (default value represents all
+                         toolbars)
         :param size: default size
         """
         DoubleMapPanel.__init__(
@@ -113,9 +112,8 @@ class IClassMapPanel(DoubleMapPanel):
         else:
             self.giface = StandaloneMapDisplayGrassInterface(self)
         self.tree = None
-        self.mapWindowProperties = MapWindowProperties()
-        self.mapWindowProperties.setValuesFromUserSettings()
-        # show computation region by defaut
+
+        # show computation region by default
         self.mapWindowProperties.showRegion = True
         self.mapWindowProperties.autoRenderChanged.connect(self.OnAutoRenderChanged)
 
@@ -196,13 +194,9 @@ class IClassMapPanel(DoubleMapPanel):
             sb.SbCoordinates,
             sb.SbRegionExtent,
             sb.SbCompRegionExtent,
-            sb.SbShowRegion,
-            sb.SbAlignExtent,
-            sb.SbResolution,
             sb.SbDisplayGeometry,
             sb.SbMapScale,
             sb.SbGoTo,
-            sb.SbProjection,
         ]
         self.statusbar = self.CreateStatusbar(statusbarItems)
         self._addPanes()
@@ -325,7 +319,7 @@ class IClassMapPanel(DoubleMapPanel):
                 .Layer(2)
                 .Row(1)
                 .Position(0)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
         if name == "iClass":
@@ -347,7 +341,7 @@ class IClassMapPanel(DoubleMapPanel):
                 .Layer(2)
                 .Row(2)
                 .Position(0)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
         if name == "iClassMisc":
@@ -369,7 +363,7 @@ class IClassMapPanel(DoubleMapPanel):
                 .Layer(2)
                 .Row(1)
                 .Position(1)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
         if name == "vdigit":
@@ -409,7 +403,7 @@ class IClassMapPanel(DoubleMapPanel):
                 .Layer(2)
                 .Row(2)
                 .Position(1)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
         self._mgr.Update()
@@ -457,7 +451,7 @@ class IClassMapPanel(DoubleMapPanel):
             .Center()
             .Layer(0)
             .Position(position)
-            .BestSize((self.toolbars[name].GetBestSize())),
+            .BestSize(self.toolbars[name].GetBestSize()),
         )
 
     def _addPaneMapWindow(self, name, position):
@@ -508,7 +502,7 @@ class IClassMapPanel(DoubleMapPanel):
         mapTb.Enable("zoomBack", enable=(len(self.MapWindow.zoomhistory) > 1))
 
         if mapTb.GetActiveMap() != (win == self.secondMapWindow):
-            mapTb.SetActiveMap((win == self.secondMapWindow))
+            mapTb.SetActiveMap(win == self.secondMapWindow)
         self.StatusbarUpdate()
 
     def ActivateFirstMap(self, event=None):
@@ -609,7 +603,6 @@ class IClassMapPanel(DoubleMapPanel):
 
         while True:
             if dlg.ShowModal() == wx.ID_OK:
-
                 if dlg.GetGroupBandsErr(parent=self):
                     g, s = dlg.GetData()
                     group = grass.find_file(name=g, element="group")
@@ -1367,17 +1360,17 @@ class IClassMapPanel(DoubleMapPanel):
 
     def OnZoomIn(self, event):
         """Enable zooming for plots"""
-        super(IClassMapPanel, self).OnZoomIn(event)
+        super().OnZoomIn(event)
         self.plotPanel.EnableZoom(type=1)
 
     def OnZoomOut(self, event):
         """Enable zooming for plots"""
-        super(IClassMapPanel, self).OnZoomOut(event)
+        super().OnZoomOut(event)
         self.plotPanel.EnableZoom(type=-1)
 
     def OnPan(self, event):
         """Enable panning for plots"""
-        super(IClassMapPanel, self).OnPan(event)
+        super().OnPan(event)
         self.plotPanel.EnablePan()
 
     def OnPointer(self, event):
@@ -1458,7 +1451,8 @@ class MapManager:
         """Adds layer to Map and update toolbar
 
         :param str name: layer (raster) name
-        :param str resultsLayer: True if layer is temp. raster showing the results of computation
+        :param str resultsLayer: True if layer is temp. raster showing the results of
+                                 computation
         """
         if resultsLayer and name in [
             layer.GetName() for layer in self.map.GetListOfLayers(name=name)
@@ -1546,7 +1540,7 @@ class MapManager:
     def Render(self):
         """
         .. todo::
-            giface shoud be used instead of this method"""
+            giface should be used instead of this method"""
         self.frame.Render(self.mapWindow)
 
     def RemoveLayer(self, name, idx):
@@ -1609,7 +1603,7 @@ class MapManager:
 
     def GetAlias(self, name):
         """Returns alias for layer"""
-        name = [k for k, v in six.iteritems(self.layerName) if v == name]
+        name = [k for k, v in self.layerName.items() if v == name]
         if name:
             return name[0]
         return None

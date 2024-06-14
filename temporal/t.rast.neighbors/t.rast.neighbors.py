@@ -77,6 +77,17 @@
 # %end
 
 # %option
+# % key: semantic_labels
+# % type: string
+# % options: input,method
+# % description: Set semantic labels
+# % descriptions: input;copy semantic labels from input to output;method;append method name to input label if existing, otherwise use method name
+# % answer: input
+# % required: no
+# % multiple: no
+# %end
+
+# %option
 # % key: nprocs
 # % type: integer
 # % description: Number of r.neighbor processes to run in parallel
@@ -95,9 +106,8 @@
 # % description: Ignore the current region settings and use the raster map regions
 # %end
 
-from __future__ import print_function
-
 import copy
+
 import grass.script as grass
 
 
@@ -120,6 +130,7 @@ def main():
     method = options["method"]
     nprocs = options["nprocs"]
     time_suffix = options["suffix"]
+    new_labels = options["semantic_labels"]
 
     # Make sure the temporal database exists
     tgis.init()
@@ -187,6 +198,16 @@ def main():
             overwrite=overwrite,
             dbif=dbif,
         )
+        semantic_label = map.metadata.get_semantic_label()
+        if new_labels == "input":
+            if semantic_label is not None:
+                new_map.set_semantic_label(semantic_label)
+        elif new_labels == "method":
+            if semantic_label is not None:
+                semantic_label = f"{semantic_label}_{method}"
+            else:
+                semantic_label = method
+            new_map.set_semantic_label(semantic_label)
         new_maps.append(new_map)
 
         mod = copy.deepcopy(neighbor_module)

@@ -6,10 +6,9 @@
 #include <grass/config.h>
 #include "driver.h"
 
-#define FILE_NAME  "map.ps"
+#define FILE_NAME "map.ps"
 
-struct ps_state
-{
+struct ps_state {
     const char *tempfile, *outfile;
     FILE *tempfp;
     int true_color;
@@ -38,9 +37,8 @@ extern void PS_Set_window(double, double, double, double);
 extern void PS_Color(int, int, int);
 extern void PS_Bitmap(int, int, int, const unsigned char *);
 extern void PS_begin_raster(int, int[2][2], double[2][2]);
-extern int PS_raster(int, int, const unsigned char *,
-		     const unsigned char *, const unsigned char *,
-		     const unsigned char *);
+extern int PS_raster(int, int, const unsigned char *, const unsigned char *,
+                     const unsigned char *, const unsigned char *);
 extern void PS_end_raster(void);
 extern void PS_Begin(void);
 extern void PS_Move(double, double);

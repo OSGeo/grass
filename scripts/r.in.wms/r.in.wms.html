@@ -16,7 +16,7 @@ capabilities of the WMS server. This should be available via a capabilities
 request (see examples)
 
 <p>
-If possible, the EPSG code of the current location should be used with the 
+If possible, the EPSG code of the current project should be used with the
 <b>srs</b> option to avoid unnecessary reprojection.
 
 <p>
@@ -77,7 +77,7 @@ and on the <a href="http://wiki.openstreetmap.org/wiki/OSM-WMS-EUROPE">OSM-WMS-E
 
 <div class="code"><pre>
 # using WMS_GRASS driver
-r.in.wms url="http://www2.demis.nl/WMS/wms.asp" layers=Countries,Borders,Coastline output=countries srs=4326 format=png 
+r.in.wms url="http://www2.demis.nl/WMS/wms.asp" layers=Countries,Borders,Coastline output=countries srs=4326 format=png
 r.info countries
 </pre></div>
 
@@ -152,7 +152,6 @@ r.info jrc_copernicus_core003_mosaik2
 
 </pre></div>
 
-
 <h2>REQUIREMENTS</h2>
 
 <em>r.in.wms</em> requires the <a href="https://gdal.org/gdalwarp.html">gdalwarp</a>
@@ -183,8 +182,3 @@ See also
 
 Stepan Turek, Czech Technical University in Prague, Czech Republic<br>
 (bachelor's final project 2012, mentor: Martin Landa)
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

@@ -132,7 +132,7 @@ class VectorSelectBase:
         if createButton:
             createMap = Button(self._dialog, wx.ID_ANY, _("Create a new map"))
             createMap.Bind(wx.EVT_BUTTON, self.OnExportMap)
-            self._dialog.AddWidget(createMap, proportion=0.1)
+            self._dialog.AddWidget(createMap, proportion=0)
         self.slist = VectorSelectList(self._dialog)
         self.slist.Bind(wx.EVT_LIST_KEY_DOWN, self.OnDelete)
         self.slist.Bind(wx.EVT_LIST_ITEM_RIGHT_CLICK, self.OnDeleteRow)
@@ -198,7 +198,7 @@ class VectorSelectBase:
         self.RegisterMapEvtHandler()
 
     def _onMapClickHandler(self, event):
-        """Registred handler for clicking on grass disp"""
+        """Registered handler for clicking on grass disp"""
         if event == "unregistered":
             return
         vWhatDic = self.QuerySelectedMap()
@@ -328,7 +328,7 @@ class VectorSelectBase:
 
         Add new map layer to layer tree and checked it
 
-        @todo: set color of map to higlight color
+        @todo: set color of map to highlight color
         """
 
         if len(self.selectedFeatures) == 0:
@@ -358,6 +358,7 @@ class VectorSelectBase:
         if ret == 0:
             tree = self._giface.GetLayerTree()
             if tree:
+                outMap = f"{outMap}@{grass.gisenv()['MAPSET']}"
                 tree.AddLayer(
                     ltype="vector",
                     lname=outMap,
@@ -428,7 +429,7 @@ class VectorSelectHighlighter:
         """Highlight selected features"""
         self.layerCat[int(self.data["Layer"])] = self.data["Category"]
 
-        # add map layer with higlighted vector features
+        # add map layer with highlighted vector features
         self.AddQueryMapLayer()  # -> self.qlayer
         self.qlayer.SetOpacity(0.7)
         self.giface.updateMap.emit(render=True, renderVector=True)

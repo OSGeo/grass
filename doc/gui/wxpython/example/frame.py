@@ -114,13 +114,9 @@ class ExampleMapPanel(SingleMapPanel):
             sb.SbCoordinates,
             sb.SbRegionExtent,
             sb.SbCompRegionExtent,
-            sb.SbShowRegion,
-            sb.SbAlignExtent,
-            sb.SbResolution,
             sb.SbDisplayGeometry,
             sb.SbMapScale,
             sb.SbGoTo,
-            sb.SbProjection,
         ]
         self.statusbar = self.CreateStatusbar(statusbarItems)
 
@@ -163,7 +159,6 @@ class ExampleMapPanel(SingleMapPanel):
     def InitVariables(self):
         """!Initialize any variables nneded by application"""
         self.currentRaster = None
-        self.statitistics = dict()
 
         # use WIND_OVERRIDE region not to affect current region
         gcore.use_temp_region()
@@ -227,7 +222,7 @@ class ExampleMapPanel(SingleMapPanel):
                 .CloseButton(False)
                 .Layer(1)
                 .Row(1)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
         if name == "MiscToolbar":
@@ -248,7 +243,7 @@ class ExampleMapPanel(SingleMapPanel):
                 .CloseButton(False)
                 .Layer(1)
                 .Row(1)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
         if name == "MainToolbar":
@@ -269,7 +264,7 @@ class ExampleMapPanel(SingleMapPanel):
                 .CloseButton(False)
                 .Layer(1)
                 .Row(1)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
     def GetMapToolbar(self):
@@ -333,7 +328,7 @@ class ExampleMapPanel(SingleMapPanel):
 
         self.UpdateStatistics()
 
-    def ComputeStatitistics(self):
+    def ComputeStatistics(self):
         """!Computes statistics for raster map using 'r.univar' module.
 
         @return statistic in form of dictionary
@@ -349,11 +344,11 @@ class ExampleMapPanel(SingleMapPanel):
         return gcore.parse_key_val(res, val_type=float)
 
     def UpdateStatistics(self):
-        """!Upadate statistic information.
+        """!Update statistic information.
 
         Called after changing raster map.
         """
-        stats = self.ComputeStatitistics()
+        stats = self.ComputeStatistics()
         self.info.WriteStatistics(name=self.currentRaster, statDict=stats)
 
 
@@ -361,7 +356,6 @@ class ExampleMapDisplay(FrameMixin, ExampleMapPanel):
     """Map display for wrapping map panel with frame methods"""
 
     def __init__(self, parent, giface, **kwargs):
-
         # init map panel
         ExampleMapPanel.__init__(
             self,
@@ -420,7 +414,7 @@ class ExampleInfoTextManager:
         else:
             return
 
-        self.textCtrl.SetDefaultStyle(wx.TextAttr(font=self.font))
+        self.textCtrl.SetFont(self.font)
 
     def _writeLine(self, title, value):
         """!Formats text (key, value pair) with styles."""
@@ -442,5 +436,5 @@ class ExampleInfoTextManager:
         """
         self.GetControl().Clear()
         self._writeRasterTitle(name=name)
-        for key, value in statDict.iteritems():
+        for key, value in statDict.items():
             self._writeLine(title=key, value=value)
