@@ -39,7 +39,7 @@ CONFIGURE_FLAGS="\
   --with-cairo \
   --with-cairo-includes=${CONDA_PREFIX}/include/cairo \
   --with-cairo-libs=${CONDA_PREFIX}/lib \
-  --with-cairo-ldflags="-lcairo" \
+  --with-cairo-ldflags=-lcairo \
   --with-zstd \
   --with-zstd-libs=${CONDA_PREFIX}/lib \
   --with-zstd-includes=${CONDA_PREFIX}/include \
@@ -70,7 +70,7 @@ export CPPFLAGS="-isystem${CONDA_PREFIX}/include"
 ./configure $CONFIGURE_FLAGS
 
 EXEMPT="-Wno-error=deprecated-non-prototype -Wno-error=strict-prototypes"
-make -j$(sysctl -n hw.ncpu) CFLAGS="$CFLAGS -Werror $EXEMPT" \
-  CXXFLAGS="$CXXFLAGS -Werror $EXEMPT"
+make -j"$(sysctl -n hw.ncpu)" CFLAGS="$CFLAGS -Werror $EXEMPT" \
+    CXXFLAGS="$CXXFLAGS -Werror $EXEMPT"
 
 make install
