@@ -34,7 +34,7 @@ jobs:
       # renovate: datasource=pypi depName=pylint
       PYLINT_VERSION: "2.12.2"
       # renovate: datasource=pypi depName=bandit
-      BANDIT_VERSION: "1.7.8"
+      BANDIT_VERSION: "1.7.9"
 
     runs-on: ${{ matrix.os }}
     permissions:
