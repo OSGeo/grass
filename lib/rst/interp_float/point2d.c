@@ -65,13 +65,10 @@ int IL_check_at_points_2d(struct interp_params *params,
     double south = data->y_orig;
     double /* rfsta2, errmax, */ h, xx, yy, r2, hz, zz, err, xmm, ymm, r;
     double skip_err;
-    int /* n1, */ mm, m, cat;
+    int /* n1, */ mm, m;
 
     /* double fstar2; */
     int inside;
-
-    /*  Site *site; */
-    char buf[1024];
 
     /*  if ((site = G_site_new_struct (-1, 2, 0, 1)) == NULL)
        G_fatal_error ("Memory error for site struct"); */
