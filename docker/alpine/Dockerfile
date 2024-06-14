@@ -215,7 +215,7 @@ RUN ln -sf /usr/local/grass $(grass --config path); \
     grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g \
     && rm -f /scripts/grass_tests.sh /tmp/simple.laz /scripts/test_grass_python.py; \
     apk del --no-cache gettext pdal-dev; \
-    grass --tmp-location XY --exec g.version -rge \
+    grass --tmp-project XY --exec g.version -rge \
     && pdal --version \
     && python3 --version
 
