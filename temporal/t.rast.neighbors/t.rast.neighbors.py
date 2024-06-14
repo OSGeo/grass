@@ -42,7 +42,7 @@
 # % key: region_relation
 # % description: Process only maps with this spatial relation to the current computational region
 # % guisection: Selection
-# % options: overlaps,contains,is_contained
+# % options: overlaps, contains, is_contained
 # % required: no
 # % multiple: no
 # %end
@@ -79,7 +79,7 @@
 # % multiple: no
 # % options: none,gaussian,exponential,file
 # % description: Weighting function
-# % descriptions: none;No weighting;gaussian;Gaussian weighting function;exponential;Exponential weighting function;file;File with a custom weighting matrix;
+# % descriptions: none, No weighting; gaussian, Gaussian weighting function; exponential, Exponential weighting function; file, File with a custom weighting matrix
 # % answer: none
 # %end
 
@@ -88,7 +88,7 @@
 # % type: double
 # % required: no
 # % multiple: no
-# % description: Factor used in the selected weighting function (ignored for none and file)
+# % description: Factor used in the selected weighting function (ignored for weighting_function=none and file)
 # %end
 
 # %option G_OPT_F_INPUT
