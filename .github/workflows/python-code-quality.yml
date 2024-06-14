@@ -128,14 +128,14 @@ jobs:
       - name: Run Pylint on grass package
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$HOME/install/grass84/lib:$LD_LIBRARY_PATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
           cd python
           pylint --persistent=no --py-version=${{ matrix.min-python-version }} --jobs=$(nproc) grass
 
       - name: Run Pylint on wxGUI
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$HOME/install/grass84/lib:$LD_LIBRARY_PATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
           cd gui/wxpython
           pylint --persistent=no --py-version=${{ matrix.min-python-version }} --jobs=$(nproc) *
 
@@ -148,7 +148,7 @@ jobs:
             (2023-10-18, see https://github.com/OSGeo/grass/pull/3205)\
             (2024-01-28, see https://github.com/OSGeo/grass/issues/3380)"
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$HOME/install/grass84/lib:$LD_LIBRARY_PATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
           pytest --pylint -m pylint --pylint-rcfile=.pylintrc --pylint-jobs=$(nproc) \
             --pylint-ignore-patterns="${{ env.PylintIgnore }}"
         env:
