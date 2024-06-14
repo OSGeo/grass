@@ -383,7 +383,7 @@ int main(int argc, char **argv)
         int need_range, have_range, need_stats, have_stats;
 
         need_range = rflag->answer || format == JSON;
-        need_stats = sflag->answer || format == JSON;
+        need_stats = sflag->answer;
         if (need_stats)
             need_range = 1;
 
@@ -588,7 +588,7 @@ int main(int argc, char **argv)
             }
         }
 
-        if (sflag->answer || format == JSON) {
+        if (sflag->answer) {
 
             if (!gflag->answer) {
                 grass_int64 total_cells =
