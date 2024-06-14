@@ -58,6 +58,7 @@ int IL_check_at_points_2d(struct interp_params *params,
 {
     int n_points = data->n_points;        /* number of points */
     struct triple *points = data->points; /* points for interpolation */
+    struct triple point_writeout;
     double east = data->xmax;
     double west = data->x_orig;
     double north = data->ymax;
@@ -109,30 +110,10 @@ int IL_check_at_points_2d(struct interp_params *params,
         if (params->create_devi) {
 
             if (inside) { /* if the point is inside the region */
-                Vect_reset_line(Pnts);
-                Vect_reset_cats(Cats2);
-
-                Vect_append_point(Pnts, xmm, ymm, zz);
-                cat = count;
-                Vect_cat_set(Cats2, 1, cat);
-                Vect_write_line(&Map2, GV_POINT, Pnts, Cats2);
-
-                db_zero_string(&sql2);
-                sprintf(buf, "insert into %s values ( %d ", ff->table, cat);
-                db_append_string(&sql2, buf);
-
-                sprintf(buf, ", %f", err);
-                db_append_string(&sql2, buf);
-                db_append_string(&sql2, ")");
-                G_debug(3, "IL_check_at_points_2d: %s", db_get_string(&sql2));
-
-                if (db_execute_immediate(driver2, &sql2) != DB_OK) {
-                    db_close_database(driver2);
-                    db_shutdown_driver(driver2);
-                    G_fatal_error("Cannot insert new row: %s",
-                                  db_get_string(&sql2));
-                }
-                count++;
+                point_writeout.x = xmm;
+                point_writeout.y = ymm;
+                point_writeout.z = zz;
+                IL_write_point_2d(point_writeout, err);
             }
         }
         (*ertot) += err * err;
@@ -164,32 +145,52 @@ int IL_check_at_points_2d(struct interp_params *params,
             inside = 0;
 
         if (inside) { /* if the point is inside the region */
-            Vect_reset_line(Pnts);
-            Vect_reset_cats(Cats2);
-
-            Vect_append_point(Pnts, xmm, ymm, zz);
-            cat = count;
-            Vect_cat_set(Cats2, 1, cat);
-            Vect_write_line(&Map2, GV_POINT, Pnts, Cats2);
-
-            db_zero_string(&sql2);
-            sprintf(buf, "insert into %s values ( %d ", ff->table, cat);
-            db_append_string(&sql2, buf);
-
-            sprintf(buf, ", %f", skip_err);
-            db_append_string(&sql2, buf);
-            db_append_string(&sql2, ")");
-            G_debug(3, "IL_check_at_points_2d: %s", db_get_string(&sql2));
-
-            if (db_execute_immediate(driver2, &sql2) != DB_OK) {
-                db_close_database(driver2);
-                db_shutdown_driver(driver2);
-                G_fatal_error("Cannot insert new row: %s",
-                              db_get_string(&sql2));
-            }
-            count++;
+            point_writeout.x = xmm;
+            point_writeout.y = ymm;
+            point_writeout.z = zz;
+            IL_write_point_2d(point_writeout, skip_err);
         }
     } /* cv */
+
+    return 1;
+}
+
+/*!
+ * \brief A function to write out point and deviation at point to database.
+ *
+ * \param point point to write out
+ * \param error deviation at point
+ *
+ * \return 1
+ */
+
+int IL_write_point_2d(struct triple point, double err)
+{
+
+    char buf[1024];
+
+    Vect_reset_line(Pnts);
+    Vect_reset_cats(Cats2);
+
+    Vect_append_point(Pnts, point.x, point.y, point.z);
+    Vect_cat_set(Cats2, 1, count);
+    Vect_write_line(&Map2, GV_POINT, Pnts, Cats2);
+
+    db_zero_string(&sql2);
+    sprintf(buf, "insert into %s values ( %d ", ff->table, count);
+    db_append_string(&sql2, buf);
+
+    sprintf(buf, ", %f", err);
+    db_append_string(&sql2, buf);
+    db_append_string(&sql2, ")");
+    G_debug(3, "IL_check_at_points_2d: %s", db_get_string(&sql2));
+
+    if (db_execute_immediate(driver2, &sql2) != DB_OK) {
+        db_close_database(driver2);
+        db_shutdown_driver(driver2);
+        G_fatal_error("Cannot insert new row: %s", db_get_string(&sql2));
+    }
+    count++;
 
     return 1;
 }
