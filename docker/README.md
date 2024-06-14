@@ -7,7 +7,7 @@
 Find out included version of GDAL, GEOS, PROJ, PDAL, Python and GRASS GIS using
 
 ```bash
-grass --tmp-location XY --exec g.version -rge \
+grass --tmp-project XY --exec g.version -rge \
     && pdal --version \
     && python3 --version
 ```
