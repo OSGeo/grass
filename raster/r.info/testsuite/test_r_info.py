@@ -115,7 +115,8 @@ class TestReport(TestCase):
         for key, value in expected.items():
             if isinstance(value, float):
                 self.assertAlmostEqual(value, result[key])
-            self.assertEqual(value, result[key])
+            else:
+                self.assertEqual(value, result[key])
 
     def test_format_json(self):
         """Testing using simple module in json format"""
