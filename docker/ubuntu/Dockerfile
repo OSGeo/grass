@@ -72,6 +72,7 @@ ARG GRASS_RUN_PACKAGES="build-essential \
     ncurses-bin \
     pdal \
     proj-data \
+    python-is-python3 \
     python3 \
     python3-dev \
     python3-venv \
@@ -265,13 +266,12 @@ WORKDIR /src/grass_build
 ENV MYCFLAGS "-O2 -std=gnu99 -m64"
 ENV MYLDFLAGS "-s"
 # CXX stuff:
-#ENV LD_LIBRARY_PATH "/usr/local/lib"
+ENV LD_LIBRARY_PATH "/usr/local/lib"
 ENV LDFLAGS "$MYLDFLAGS"
 ENV CFLAGS "$MYCFLAGS"
 ENV CXXFLAGS "$MYCXXFLAGS"
 
 # Configure compile and install GRASS GIS
-ENV GRASS_PYTHON=/usr/bin/python3
 ENV NUMTHREADS=4
 RUN make distclean || echo "nothing to clean"
 RUN ./configure $GRASS_CONFIG \
@@ -301,18 +301,13 @@ FROM grass_gis as grass_gis_final
 
 # GRASS GIS specific
 # allow work with MAPSETs that are not owned by current user
-# add GRASS GIS envs for python usage
-ENV GRASSBIN="/usr/local/bin/grass" \
-    GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
+ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     SHELL="/bin/bash" \
     # https://proj.org/usage/environmentvars.html#envvar-PROJ_NETWORK
     PROJ_NETWORK=ON \
-    # GRASSBIN=grass \
     LC_ALL="en_US.UTF-8" \
-    GISBASE="/usr/local/grass/" \
-    GRASSBIN="/usr/local/bin/grass" \
-    PYTHONPATH="${PYTHONPATH}:/usr/local/grass/etc/python/" \
-    LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/grass/lib" \
+    PYTHONPATH="/usr/local/grass/etc/python/:${PYTHONPATH}" \
+    LD_LIBRARY_PATH="/usr/local/grass/lib:$LD_LIBRARY_PATH" \
     GDAL_DRIVER_PATH="/usr/lib/gdalplugins"
 
 # Copy GRASS GIS from build image
@@ -323,11 +318,37 @@ COPY --link --from=build /usr/lib/gdalplugins /usr/lib/gdalplugins
 # COPY --link --from=datum_grids /tmp/cdn.proj.org/*.tif /usr/share/proj/
 
 # Create generic GRASS GIS lib name regardless of version number
-RUN ln -sf /usr/local/grass85 /usr/local/grass \
-    && ldconfig /etc/ld.so.conf.d
+RUN ln -sf /usr/local/grass85 /usr/local/grass
 
-# Data workdir
+# show GRASS GIS, PROJ, GDAL etc versions
+RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
+    pdal --version && \
+    python3 --version
+
+# Reduce the image size
+RUN apt-get autoremove -y
+RUN apt-get clean -y
+RUN rm -r /src/grass_build/.git
+
+WORKDIR /scripts
+
+# enable GRASS GIS Python session support
+## grass --config python-path
+ENV PYTHONPATH "/usr/local/grass/etc/python:${PYTHONPATH}"
+# enable GRASS GIS ctypes imports
+## grass --config path
+ENV LD_LIBRARY_PATH "/usr/local/grass/lib:$LD_LIBRARY_PATH"
+
+WORKDIR /tmp
+COPY docker/testdata/simple.laz .
+WORKDIR /scripts
+COPY docker/testdata/test_grass_session.py .
+## run GRASS GIS python session and scan the test LAZ file
+RUN python /scripts/test_grass_session.py
+RUN rm -rf /tmp/grasstest_epsg_25832
+# test LAZ file
+RUN grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g
 WORKDIR /grassdb
 VOLUME /grassdb
 
-CMD ["bash", "-c", "$GRASSBIN", "--version"]
+CMD ["$GRASSBIN", "--version"]

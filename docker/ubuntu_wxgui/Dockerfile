@@ -244,24 +244,23 @@ RUN rm -r /src/grass_build/.git
 
 WORKDIR /scripts
 
-# install external GRASS GIS session Python API
-RUN pip3 install grass-session
-
-# add GRASS GIS envs for python usage
-ENV GISBASE "/usr/local/grass/"
-ENV GRASSBIN "/usr/local/bin/grass"
-ENV PYTHONPATH "${PYTHONPATH}:$GISBASE/etc/python/"
-ENV LD_LIBRARY_PATH "$LD_LIBRARY_PATH:$GISBASE/lib"
+# enable GRASS GIS Python session support
+## grass --config python-path
+ENV PYTHONPATH "/usr/local/grass/etc/python:${PYTHONPATH}"
+# enable GRASS GIS ctypes imports
+## grass --config path
+ENV LD_LIBRARY_PATH "/usr/local/grass/lib:$LD_LIBRARY_PATH"
 
 WORKDIR /tmp
 COPY docker/testdata/simple.laz .
 WORKDIR /scripts
 COPY docker/testdata/test_grass_session.py .
-## just scan the LAZ file
-# Not yet ready for GRASS GIS 8:
-#RUN /usr/bin/python3 /scripts/test_grass_session.py
+## run GRASS GIS python session and scan the test LAZ file
+RUN python /scripts/test_grass_session.py
+RUN rm -rf /tmp/grasstest_epsg_25832
 # test LAZ file
 RUN grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g
 
 WORKDIR /grassdb
 VOLUME /grassdb
+CMD ["$GRASSBIN", "--version"]
