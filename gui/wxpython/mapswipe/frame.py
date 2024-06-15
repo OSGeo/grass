@@ -925,6 +925,14 @@ class MapSplitter(wx.SplitterWindow):
 
     def OnSashChanging(self, event):
         Debug.msg(5, "MapSplitter.OnSashChanging()")
+        if event:
+            # Prevent map image flickering if it is used sash not slider
+            # for changing position
+            wx.CallAfter(self._onSashChanging, event)
+        else:
+            self._onSashChanging(event)
+
+    def _onSashChanging(self, event):
         if not self._moveSash:
             event.SetSashPosition(-1)
             return
