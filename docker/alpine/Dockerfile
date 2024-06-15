@@ -212,7 +212,7 @@ RUN ln -sf /usr/local/grass $(grass --config path); \
     rm -rf /tmp/grasstest_epsg_25832; \
     $SHELL /scripts/grass_tests.sh; \
     python /scripts/test_grass_session.py && rm -rf /tmp/grasstest_epsg_25832; \
-    grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g \
+    grass --tmp-project EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g \
     && rm -f /scripts/grass_tests.sh /tmp/simple.laz /scripts/test_grass_python.py; \
     apk del --no-cache gettext pdal-dev; \
     grass --tmp-project XY --exec g.version -rge \
