@@ -2,17 +2,20 @@
 
 <em>t.rast.neighbors</em> performs <a href="r.neighbors.html">r.neighbors</a>
 computations on the maps of a space time raster dataset (STRDS). This
-module supports a subset of options that are available in
+module supports the options that are available in
 <a href="r.neighbors.html">r.neighbors</a>. The size of the neighborhood
 and the aggregation method can be chosen.
 <p>
 The user must provide an input and an output space time raster dataset and
 the basename of the resulting raster maps. The resulting STRDS will have
-the same temporal resolution as the input dataset.
+the same temporal resolution as the input dataset. With the <b>-e</b> flag,
+resulting maps can be registered in an existing STRDS, that e.g. may have
+been created with a previous run of <em>t.rast.neighbors</em>.
 All maps will be processed using the current region settings.
 <p>
 The user can select a subset of the input space time raster dataset for
-processing using a SQL WHERE statement. The number of CPU's to be used
+processing using a SQL WHERE statement or using the <b>region_relation</b>
+for spatial selection of raster maps. The number of CPU's to be used
 for parallel processing can be specified with the <em>nprocs</em>
 option to speedup the computation on multi-core system.
 <p>
