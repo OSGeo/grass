@@ -105,6 +105,7 @@ def benchmark_nprocs(module, label, max_nprocs, repeat=5, shuffle=True):
     serial_avg = None
     avg_times = []
     all_times = []
+    speedup = []
     efficiency = []
     nprocs_list = list(range(1, max_nprocs + 1))
     nprocs_list_shuffled = sorted(nprocs_list * repeat)
@@ -129,6 +130,7 @@ def benchmark_nprocs(module, label, max_nprocs, repeat=5, shuffle=True):
         if avg < min_avg:
             min_avg = avg
             min_time = nprocs
+        speedup.append(avg / serial_avg)
         efficiency.append(serial_avg / (nprocs * avg))
 
     print("\u2500" * term_size.columns)
@@ -139,6 +141,7 @@ def benchmark_nprocs(module, label, max_nprocs, repeat=5, shuffle=True):
     return SimpleNamespace(
         all_times=all_times,
         times=avg_times,
+        speedup=speedup,
         efficiency=efficiency,
         nprocs=nprocs_list,
         label=label,
