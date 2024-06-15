@@ -12,15 +12,48 @@ import grass.benchmark as bm
 
 
 def main():
-    results = []
+    results_dic = {}
 
-    # Users can add more or modify existing reference maps
-    benchmark(7071, "r.texture_50M", results)
-    # benchmark(10000, "r.texture_100M", results)
-    # benchmark(14142, "r.texture_200M", results)
-    # benchmark(20000, "r.texture_400M", results)
+    mapsizes = [50e6, 100e6, 200e6, 400e6]
+    methods = [
+        "asm",
+        "contrast",
+        "corr",
+        "var",
+        "idm",
+        "sa",
+        "sv",
+        "se",
+        "entr",
+        "dv",
+        "de",
+        "moc1",
+        "moc2",
+    ]
+    basenames = [
+        "ASM",
+        "Contr",
+        "Corr",
+        "Var",
+        "IDM",
+        "SA",
+        "SV",
+        "SE",
+        "Entr",
+        "DV",
+        "DE",
+        "MOC-1",
+        "MOC-2",
+    ]
+    for method, basename in zip(methods, basenames):
+        results_dic[method] = []
+        for mapsize in mapsizes:
+            benchmark(
+                int(mapsize**0.5), f"r.texture_{int(mapsize/1e6)}M", results_dic[method]
+            )
 
-    bm.nprocs_plot(results)
+    for method in methods:
+        bm.nprocs_plot(results_dic[method])
 
 
 def benchmark(size, label, results):

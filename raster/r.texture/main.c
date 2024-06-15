@@ -315,20 +315,16 @@ int main(int argc, char *argv[])
 #if defined(_OPENMP)
     /* Set the number of threads */
     omp_set_num_threads(threads);
-    if (threads > 1) {
-        G_message(_("Using %d threads for parallel computing."), threads);
-        execute_texture_parallel(data, &dim, measure_menu, measure_idx,
-                                 &out_set, threads);
-    }
-    else {
-        execute_texture(data, &dim, measure_menu, measure_idx, &out_set);
-    }
-#else
     if (threads > 1)
+        G_message(_("Using %d threads for parallel computing."), threads);
+#else
+    if (threads > 1) {
         G_warning(_("GRASS GIS is not compiled with OpenMP support, parallel "
                     "computation is disabled."));
-    execute_texture(data, &dim, measure_menu, measure_idx, &out_set);
+        threads = 1;
+    }
 #endif
+    execute_texture(data, &dim, measure_menu, measure_idx, &out_set, threads);
 
     for (i = 0; i < dim.n_outputs; i++) {
         Rast_close(outfd[i]);
