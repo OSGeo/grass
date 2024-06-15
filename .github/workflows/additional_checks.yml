@@ -28,6 +28,14 @@ jobs:
         with:
           fetch-depth: 31
 
+      - name: Check what files were changed
+        uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
+        id: changes
+        with:
+          filters: |
+            precommit:
+              - '.pre-commit-config.yaml'
+
       - name: Check for CRLF endings
         uses: erclu/check-crlf@94acb86c2a41b0a46bd8087b63a06f0457dd0c6c # v1.2.0
         with:
@@ -60,3 +68,6 @@ jobs:
               ${{ github.ref_name }} \
               $(git rev-parse HEAD~30) \
               ""
+
+      - run: pip install pre-commit && pre-commit run -a
+        if: ${{ steps.changes.outputs.precommit == 'true' }}
