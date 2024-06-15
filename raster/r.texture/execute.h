@@ -21,3 +21,7 @@ typedef struct output_setting {
 int execute_texture(CELL **data, struct dimensions *dim,
                     struct menu *measure_menu, int *measure_idx,
                     struct output_setting *out_set);
+
+int execute_texture_parallel(CELL **data, struct dimensions *dim,
+                             struct menu *measure_menu, int *measure_idx,
+                             struct output_setting *out_set, int threads);

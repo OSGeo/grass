@@ -38,6 +38,7 @@ int execute_texture_parallel(CELL **data, struct dimensions *dim,
 
     int offset = size / 2;
     int i, j, row, col, first_row, first_col, last_row, last_col;
+    int tid, trow;
     int have_px, have_py, have_pxpys, have_pxpyd;
 
     FCELL ***fbuf_threads; /* Buffer for each thread */
@@ -46,21 +47,23 @@ int execute_texture_parallel(CELL **data, struct dimensions *dim,
     struct matvec **mvs;   /* matrices and vectors for each thread */
 
     /* allocate memory*/
+    fbuf_threads = (FCELL ***)G_malloc(sizeof(FCELL **) * threads);
     fbuf_output = G_malloc(n_outputs * sizeof(FCELL *));
-    fbuf_threads = G_malloc(sizeof(FCELL **) * threads);
 
     for (i = 0; i < n_outputs; i++)
         fbuf_output[i] = Rast_allocate_buf(out_data_type);
 
     for (i = 0; i < threads; i++) {
-        fbuf_threads[i] = G_malloc(n_outputs * sizeof(FCELL *));
+        fbuf_threads[i] = (FCELL **)G_malloc(n_outputs * sizeof(FCELL *));
         for (j = 0; j < n_outputs; j++)
             fbuf_threads[i][j] = Rast_allocate_buf(out_data_type);
     }
 
-    mvs = G_malloc(sizeof(struct matvec *) * threads);
-    for (i = 0; i < threads; i++)
+    mvs = (struct matvec **)G_malloc(sizeof(struct matvec *) * threads);
+    for (i = 0; i < threads; i++) {
+        mvs[i] = G_malloc(sizeof(struct matvec));
         alloc_vars(size, mvs[i]);
+    }
 
     /* variables needed */
     if (measure_menu[2].useme || measure_menu[11].useme ||
@@ -107,23 +110,25 @@ int execute_texture_parallel(CELL **data, struct dimensions *dim,
     else
         G_message(_("Calculating %s..."), measure_menu[measure_idx[0]].desc);
 
-#pragma omp parallel firstprivate(row, col, i, j, measure) default(shared)
+#pragma omp parallel firstprivate(row, col, i, j, measure, tid, \
+                                  trow) default(shared)
     {
 #pragma omp for schedule(static, 1) ordered
         for (row = first_row; row < last_row; row++) {
-            int tid = omp_get_thread_num(); /* Obtain thread id */
+            tid = omp_get_thread_num(); /* Obtain thread id */
+            trow = row % threads;       /* Obtain thread row id */
             G_percent(row, nrows, 2);
 
             /* initialize the output row */
             for (i = 0; i < n_outputs; i++)
-                Rast_set_f_null_value(fbuf_threads[row][i], ncols);
+                Rast_set_f_null_value(fbuf_threads[trow][i], ncols);
 
             /*process the data */
             for (col = first_col; col < last_col; col++) {
                 if (!set_vars(mvs[tid], data, row, col, size, offset, dist,
                               flag_null->answer)) {
                     for (i = 0; i < n_outputs; i++)
-                        Rast_set_f_null_value(&(fbuf_threads[row][i][col]), 1);
+                        Rast_set_f_null_value(&(fbuf_threads[trow][i][col]), 1);
                     continue;
                 }
                 /* for all angles (0, 45, 90, 135) */
@@ -136,17 +141,18 @@ int execute_texture_parallel(CELL **data, struct dimensions *dim,
                             measure_menu[measure_idx[j]].idx, mvs[tid]);
                         if (flag_ind->answer) {
                             /* output for each angle separately */
-                            fbuf_threads[row][j * 4 + i][col] = measure;
+                            fbuf_threads[trow][j * 4 + i][col] = measure;
                         }
                         else {
                             /* use average over all angles for each measure */
                             if (i == 0)
-                                fbuf_threads[row][j][col] = measure;
+                                fbuf_threads[trow][j][col] = measure;
                             else if (i < 3)
-                                fbuf_threads[row][j][col] += measure;
+                                fbuf_threads[trow][j][col] += measure;
                             else
-                                fbuf_threads[row][j][col] =
-                                    (fbuf_threads[row][j][col] + measure) / 4.0;
+                                fbuf_threads[trow][j][col] =
+                                    (fbuf_threads[trow][j][col] + measure) /
+                                    4.0;
                         }
                     }
                 }
@@ -154,7 +160,8 @@ int execute_texture_parallel(CELL **data, struct dimensions *dim,
 #pragma omp ordered
             {
                 for (i = 0; i < n_outputs; i++)
-                    Rast_put_row(outfd[i], fbuf_threads[row][i], out_data_type);
+                    Rast_put_row(outfd[i], fbuf_threads[trow][i],
+                                 out_data_type);
             }
         }
     } /* end of parallel section */

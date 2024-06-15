@@ -27,6 +27,7 @@ int execute_texture(CELL **data, struct dimensions *dim,
     int n_outputs = dim->n_outputs;
     int n_measures = dim->n_measures;
     int *outfd = out_set->outfd;
+
     RASTER_MAP_TYPE out_data_type = out_set->out_data_type;
     struct Flag *flag_null = out_set->flag_null;
     struct Flag *flag_ind = out_set->flag_ind;
