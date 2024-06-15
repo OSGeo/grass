@@ -12,11 +12,11 @@
 #            for details.
 
 """Interactive visualizations map with folium or ipyleaflet"""
-
+import os
 import base64
 import json
 from .reprojection_renderer import ReprojectionRenderer
-from .utils import query_raster, query_vector, reproject_latlon
+from .utils import query_raster, query_vector, reproject_latlon, get_region
 
 
 def get_backend(interactive_map):
@@ -289,6 +289,9 @@ class InteractiveMap:
         self.vector_name = []
         self.query_mode = None
 
+        # Store Region
+        self.region = None
+
         if self._ipyleaflet:
             basemap = xyzservices.providers.query_name(tiles)
             if API_key and basemap.get("accessToken"):
@@ -361,7 +364,7 @@ class InteractiveMap:
 
         # A ToggleButton to activate/deactivate query mode
         query_toggle_button = widgets.ToggleButton(
-            icon="crosshairs",
+            icon="info",
             value=False,
             tooltip="Click to activate/deactivate query mode",
             layout=widgets.Layout(width="33px", margin="0px 0px 0px 0px"),
@@ -394,9 +397,12 @@ class InteractiveMap:
                     (reprojected_coordinates[0], reprojected_coordinates[1]),
                     self.raster_name,
                 )
+                self.region = get_region(env=os.environ.copy())
+
                 vector_output = query_vector(
                     (reprojected_coordinates[0], reprojected_coordinates[1]),
                     self.vector_name,
+                    10.0 * ((self.region["east"] - self.region["west"]) / self.width),
                 )
                 message = widgets.HTML()
                 message.value = raster_output + vector_output
@@ -416,7 +422,7 @@ class InteractiveMap:
                     location=lonlat,
                     child=scrollable_container,
                     close_button=False,
-                    auto_close=False,
+                    auto_close=True,
                     close_on_escape_key=False,
                 )
                 self.map.add(popup)

@@ -147,7 +147,7 @@ def query_raster(coord, raster_list):
     return final_output
 
 
-def query_vector(coord, vector_list):
+def query_vector(coord, vector_list, distance):
     """Queries Vector
 
     :param coord: coordinates given as tuple
@@ -158,7 +158,9 @@ def query_vector(coord, vector_list):
     output_list = ["<table border='1' style='border-collapse:collapse;'>"]
 
     for vector in vector_list:
-        vector_output = gs.vector.vector_what(map=vector, coord=coord, distance=100)
+        vector_output = gs.vector.vector_what(
+            map=vector, coord=coord, distance=distance
+        )
 
         if len(vector_output[0]) > 2:
             output_list.append(f"<tr><th colspan='2'>Vector: {vector}</th></tr>")
