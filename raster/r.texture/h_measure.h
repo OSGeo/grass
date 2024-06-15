@@ -23,21 +23,6 @@
 
 #include "matvec.h"
 
-#define BL  "Direction             "
-#define F1  "Angular Second Moment "
-#define F2  "Contrast              "
-#define F3  "Correlation           "
-#define F4  "Variance              "
-#define F5  "Inverse Diff Moment   "
-#define F6  "Sum Average           "
-#define F7  "Sum Variance          "
-#define F8  "Sum Entropy           "
-#define F9  "Entropy               "
-#define F10 "Difference Variance   "
-#define F11 "Difference Entropy    "
-#define F12 "Measure of Correlation-1 "
-#define F13 "Measure of Correlation-2 "
-
 typedef struct menu {
     char *name;   /* measure name */
     char *desc;   /* menu display - full description */

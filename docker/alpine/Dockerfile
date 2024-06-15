@@ -217,7 +217,7 @@ RUN ln -sf /usr/local/grass $(grass --config path); \
     # delete unused packages
     apk del --no-cache gettext pdal-dev; \
     # show installed version
-    grass --tmp-location XY --exec g.version -rge \
+    grass --tmp-project XY --exec g.version -rge \
     && pdal --version \
     && python3 --version
 
