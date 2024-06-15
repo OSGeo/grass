@@ -1,4 +1,4 @@
-# Import GRASS GIS Python bindings (requires 8-4+) and test r.in.pdal
+# Import GRASS GIS Python bindings (requires 8.4+) and test r.in.pdal
 
 # PYTHONPATH=$(grass --config python-path) python
 

@@ -217,7 +217,7 @@ RUN ln -sf /usr/local/grass $(grass --config path); \
     apk del --no-cache gettext pdal-dev; \
     grass --tmp-project XY --exec g.version -rge \
     && pdal --version \
-    && python3 --version
+    && python --version
 
 # Data workdir
 WORKDIR /grassdb

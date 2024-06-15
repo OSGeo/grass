@@ -323,7 +323,7 @@ RUN ln -sf /usr/local/grass85 /usr/local/grass
 # show GRASS GIS, PROJ, GDAL etc versions
 RUN grass --tmp-project EPSG:4326 --exec g.version -rge && \
     pdal --version && \
-    python3 --version
+    python --version
 
 # Reduce the image size
 RUN apt-get autoremove -y
