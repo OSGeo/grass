@@ -60,17 +60,17 @@ def nprocs_plot(results, filename=None, title=None, metric="time"):
 
     x_ticks = set()  # gather x values
     for result in results:
-        x = result.nprocs
+        x = result["nprocs"]
         x_ticks.update(x)
         if metric == "time":
-            mins = [min(i) for i in result.all_times]
-            maxes = [max(i) for i in result.all_times]
-            plt.plot(x, result.times, label=result.label)
+            mins = [min(i) for i in result["all_times"]]
+            maxes = [max(i) for i in result["all_times"]]
+            plt.plot(x, result["times"], label=result["label"])
             plt.fill_between(x, mins, maxes, color="gray", alpha=0.3)
             ylabel = "Time [s]"
         elif metric in ["speedup", "efficiency"]:
             ylabel = metric.title()
-            plt.plot(x, result.__dict__[metric], label=result.label)
+            plt.plot(x, result[metric], label=result["label"])
         else:
             raise ValueError(
                 f"Invalid metric '{metric}' in result, it should be:\
