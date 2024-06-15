@@ -59,6 +59,7 @@ RUN apt-get update && apt-get upgrade -y && \
     netcdf-bin \
     proj-bin \
     proj-data \
+    python-is-python3 \
     python3 \
     python3-dateutil \
     python3-dev \
@@ -148,7 +149,6 @@ ENV CFLAGS "$MYCFLAGS"
 ENV CXXFLAGS "$MYCXXFLAGS"
 
 # Configure compile and install GRASS GIS
-ENV GRASS_PYTHON=/usr/bin/python3
 ENV NUMTHREADS=4
 RUN make distclean || echo "nothing to clean"
 RUN /src/grass_build/configure \
@@ -197,7 +197,7 @@ RUN ln -sf /usr/local/grass85 /usr/local/grass
 # show GRASS GIS, PROJ, GDAL etc versions
 RUN grass --tmp-project EPSG:4326 --exec g.version -rge && \
     pdal --version && \
-    python3 --version
+    python --version
 
 # Reduce the image size
 RUN apt-get autoremove -y

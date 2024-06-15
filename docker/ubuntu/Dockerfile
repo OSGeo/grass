@@ -245,12 +245,12 @@ RUN apt-get update \
 RUN (echo "Install Python" \
     && wget https://bootstrap.pypa.io/pip/get-pip.py \
     # && apt-get install -y python3-ensurepip \
-    && python3 get-pip.py \
+    && python get-pip.py \
     # && python3 -m ensurepip --upgrade \
     && rm -r get-pip.py \
     && mkdir -p /src/site-packages \
     && cd /src \
-    && python3 -m pip install --no-cache-dir -t /src/site-packages --upgrade \
+    && python -m pip install --no-cache-dir -t /src/site-packages --upgrade \
     $GRASS_PYTHON_PACKAGES \
     && rm -r /root/.cache \
     && rm -rf /tmp/pip-* \
