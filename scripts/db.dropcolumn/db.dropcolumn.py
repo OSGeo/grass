@@ -45,8 +45,9 @@
 import sys
 import string
 
-from grass.exceptions import CalledModuleError
 import grass.script as gscript
+from grass.exceptions import CalledModuleError
+from grass.script.db import DBHandler
 
 
 def main():
@@ -55,6 +56,8 @@ def main():
     database = options["database"]
     driver = options["driver"]
     force = flags["f"]
+
+    db_handler = DBHandler(driver_name=driver, database=database)
 
     # check if DB parameters are set, and if not set them.
     gscript.run_command("db.connect", flags="c")
@@ -94,6 +97,7 @@ def main():
         )
         return 0
 
+    sqls = []
     if driver == "sqlite":
         sqlite3_version = gscript.read_command(
             "db.select",
@@ -104,9 +108,9 @@ def main():
         ).split(".")[0:2]
 
         if [int(i) for i in sqlite3_version] >= [int(i) for i in "3.35".split(".")]:
-            sql = "ALTER TABLE %s DROP COLUMN %s" % (table, column)
             if column == "cat":
-                sql = "DROP INDEX %s_%s; %s" % (table, column, sql)
+                sqls.append(f"DROP INDEX {table}_{column};")
+            sqls.append(f"ALTER TABLE {table} DROP COLUMN {column};")
         else:
             # for older sqlite3 versions, use old way to remove column
             colnames = []
@@ -120,24 +124,21 @@ def main():
             coltypes = ", ".join(coltypes)
 
             cmds = [
-                "BEGIN TRANSACTION",
                 "CREATE TEMPORARY TABLE ${table}_backup(${coldef})",
                 "INSERT INTO ${table}_backup SELECT ${colnames} FROM ${table}",
                 "DROP TABLE ${table}",
                 "CREATE TABLE ${table}(${coldef})",
                 "INSERT INTO ${table} SELECT ${colnames} FROM ${table}_backup",
                 "DROP TABLE ${table}_backup",
-                "COMMIT",
             ]
             tmpl = string.Template(";\n".join(cmds))
             sql = tmpl.substitute(table=table, coldef=coltypes, colnames=colnames)
+            sqls.extend(sql.split("\n"))
     else:
-        sql = "ALTER TABLE %s DROP COLUMN %s" % (table, column)
+        sqls.append(f"ALTER TABLE {table} DROP COLUMN {column};")
 
     try:
-        gscript.write_command(
-            "db.execute", input="-", database=database, driver=driver, stdin=sql
-        )
+        db_handler.execute(sql=";".join(sqls))
     except CalledModuleError:
         gscript.fatal(_("Cannot continue (problem deleting column)"))
 

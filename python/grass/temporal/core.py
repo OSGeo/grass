@@ -1560,7 +1560,7 @@ class DBConnection:
     def execute_transaction(self, statement, mapset=None):
         """Execute a transactional SQL statement
 
-        The BEGIN and END TRANSACTION statements will be added automatically
+        The BEGIN and COMMIT statements will be added automatically
         to the sql statement
 
         :param statement: The executable SQL statement or SQL script
@@ -1571,9 +1571,9 @@ class DBConnection:
             connected = True
 
         sql_script = ""
-        sql_script += "BEGIN TRANSACTION;\n"
+        sql_script += "BEGIN;\n"
         sql_script += statement
-        sql_script += "END TRANSACTION;"
+        sql_script += "COMMIT;"
 
         try:
             if self.dbmi.__name__ == "sqlite3":

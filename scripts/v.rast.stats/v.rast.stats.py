@@ -76,9 +76,11 @@
 import sys
 import os
 import atexit
+
 import grass.script as grass
-from grass.script.utils import decode
 from grass.exceptions import CalledModuleError
+from grass.script.db import DBHandler
+from grass.script.utils import decode
 
 
 def cleanup():
@@ -97,7 +99,6 @@ def main():
     rastertmp = False
     # setup temporary files
     tmp = grass.tempfile()
-    sqltmp = tmp + ".sql"
     # we need a random name
     tmpname = grass.basename(tmp)
 
@@ -208,6 +209,8 @@ def main():
     # calculate statistics:
     grass.message(_("Processing input data (%d categories)...") % number)
 
+    db_handler = DBHandler(driver_name=fi["driver"], database=fi["database"])
+
     for i in range(len(rasters)):
         raster = rasters[i]
 
@@ -215,11 +218,8 @@ def main():
             vector, layer, percentile, colprefixes[i], basecols, dbfdriver, flags["c"]
         )
 
-        # get rid of any earlier attempts
-        grass.try_remove(sqltmp)
-
         # do the stats
-        perform_stats(
+        sqls = perform_stats(
             raster,
             percentile,
             fi,
@@ -234,9 +234,7 @@ def main():
         grass.message(_("Updating the database ..."))
         exitcode = 0
         try:
-            grass.run_command(
-                "db.execute", input=sqltmp, database=fi["database"], driver=fi["driver"]
-            )
+            db_handler.execute(sql=sqls)
             grass.verbose(
                 _(
                     "Statistics calculated from raster map <{raster}>"
@@ -459,48 +457,50 @@ def perform_stats(
     colnames,
     extstat,
 ):
-    with open(sqltmp, "w") as f:
-        # do the stats
-        p = grass.pipe_command(
-            "r.univar",
-            flags="t" + extstat,
-            map=raster,
-            zones=rastertmp,
-            percentile=percentile,
-            sep=";",
-        )
+    sqls = []
 
-        first_line = 1
+    # do the stats
+    p = grass.pipe_command(
+        "r.univar",
+        flags="t" + extstat,
+        map=raster,
+        zones=rastertmp,
+        percentile=percentile,
+        sep=";",
+    )
 
-        f.write("{0}\n".format(grass.db_begin_transaction(fi["driver"])))
-        for line in p.stdout:
-            if first_line:
-                first_line = 0
-                continue
+    first_line = 1
 
-            vars = decode(line).rstrip("\r\n").split(";")
+    for line in p.stdout:
+        if first_line:
+            first_line = 0
+            continue
 
-            f.write("UPDATE %s SET" % fi["table"])
-            first_var = 1
-            for colname in colnames:
-                variable = colname.replace("%s_" % colprefix, "", 1)
-                if dbfdriver:
-                    variable = variables_dbf[variable]
-                i = variables[variable]
-                value = vars[i]
-                # convert nan, +nan, -nan, inf, +inf, -inf, Infinity, +Infinity,
-                # -Infinity to NULL
-                if value.lower().endswith("nan") or "inf" in value.lower():
-                    value = "NULL"
-                if not first_var:
-                    f.write(" , ")
-                else:
-                    first_var = 0
-                f.write(" %s=%s" % (colname, value))
+        vars = decode(line).rstrip("\r\n").split(";")
 
-            f.write(" WHERE %s=%s;\n" % (fi["key"], vars[0]))
-        f.write("{0}\n".format(grass.db_commit_transaction(fi["driver"])))
-        p.wait()
+        sql = ""
+        sql += f"UPDATE {fi['table']} SET"
+        first_var = 1
+        for colname in colnames:
+            variable = colname.replace("%s_" % colprefix, "", 1)
+            if dbfdriver:
+                variable = variables_dbf[variable]
+            i = variables[variable]
+            value = vars[i]
+            # convert nan, +nan, -nan, inf, +inf, -inf, Infinity, +Infinity,
+            # -Infinity to NULL
+            if value.lower().endswith("nan") or "inf" in value.lower():
+                value = "NULL"
+            if not first_var:
+                sql += " , "
+            else:
+                first_var = 0
+            sql += f" {colname}={value}"
+
+        sql += f" WHERE {fi['key']}={vars[0]};"
+        sqls.append(sql)
+    p.wait()
+    return sqls
 
 
 if __name__ == "__main__":

@@ -63,31 +63,14 @@
 # % description: Columns to exclude from the other table
 # %end
 
-import atexit
 import sys
-
-from pathlib import Path
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
-
-rm_files = []
-
-
-def cleanup():
-    for file_path in rm_files:
-        try:
-            file_path.unlink(missing_ok=True)
-        except Exception as e:
-            gs.warning(
-                _("Unable to remove file {file}: {message}").format(
-                    file=file_path, message=e
-                )
-            )
+from grass.script.db import DBHandler
 
 
 def main():
-    global rm_files
     # Include mapset into the name, so we avoid multiple messages about
     # found in more mapsets. The following generates an error message, while the code
     # above does not. However, the above checks that the map exists, so we don't
@@ -112,6 +95,8 @@ def main():
     maptable = f["table"]
     database = f["database"]
     driver = f["driver"]
+
+    db_handler = DBHandler(driver_name=driver, database=database)
 
     if driver == "dbf":
         gs.fatal(_("JOIN is not supported for tables stored in DBF format"))
@@ -218,32 +203,22 @@ def main():
                 )
             )
 
-    update_str = "BEGIN TRANSACTION\n"
+    sqls = []
     for col in cols_to_update:
         cur_up_str = (
             f"UPDATE {maptable} SET {col} = (SELECT {col} FROM "
             f"{otable} WHERE "
-            f"{otable}.{ocolumn}={maptable}.{column});\n"
+            f"{otable}.{ocolumn}={maptable}.{column});"
         )
-        update_str += cur_up_str
-    update_str += "END TRANSACTION"
-    gs.debug(update_str, 1)
+        sqls.append(cur_up_str)
+    gs.debug("".join(sqls), 1)
     gs.verbose(
         _("Updating columns {columns} of vector map {map_name}...").format(
             columns=", ".join(cols_to_update.keys()), map_name=vector_map
         )
     )
-    sql_file = Path(gs.tempfile())
-    rm_files.append(sql_file)
-    sql_file.write_text(update_str, encoding="UTF8")
-
     try:
-        gs.run_command(
-            "db.execute",
-            input=str(sql_file),
-            database=database,
-            driver=driver,
-        )
+        db_handler.execute(sql=sqls)
     except CalledModuleError:
         gs.fatal(_("Error filling columns {}").format(cols_to_update))
 
@@ -255,5 +230,4 @@ def main():
 
 if __name__ == "__main__":
     options, flags = gs.parser()
-    atexit.register(cleanup)
     sys.exit(main())
