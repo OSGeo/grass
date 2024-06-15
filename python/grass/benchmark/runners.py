@@ -52,7 +52,7 @@ def benchmark_single(module, label, repeat=5):
         module.run()
         print(f"{module.time}s")
         time_sum += module.time
-        result["label"].append(module.time)
+        result["all_times"].append(module.time)
 
     result["time"] = time_sum / repeat
     if result["time"] < min_avg:
@@ -167,7 +167,7 @@ def benchmark_resolutions(module, resolutions, label, repeat=5, nprocs=None):
     for resolution in resolutions:
         gs.run_command("g.region", res=resolution)
         region = gs.region()
-        result["label"].append(region["cells"])
+        result["cells"].append(region["cells"])
         print("\u2500" * term_size.columns)
         print(f"Benchmark with {resolution} resolution...\n")
         time_sum = 0

@@ -122,14 +122,14 @@ def num_cells_plot(results, filename=None, title=None, show_resolution=False):
     x_ticks = set()
     for result in results:
         if show_resolution:
-            x = result.resolutions
+            x = result["resolutions"]
         else:
-            x = result.cells
+            x = result["cells"]
         x_ticks.update(x)
-        plt.plot(x, result.times, label=result.label)
+        plt.plot(x, result["times"], label=result["label"])
         if hasattr(result, "all_times"):
-            mins = [min(i) for i in result.all_times]
-            maxes = [max(i) for i in result.all_times]
+            mins = [min(i) for i in result["all_times"]]
+            maxes = [max(i) for i in result["all_times"]]
             plt.fill_between(x, mins, maxes, color="gray", alpha=0.3)
 
     plt.legend()

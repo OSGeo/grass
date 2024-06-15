@@ -66,7 +66,7 @@ def plot_nprocs_cli(args):
     """Translate CLI parser result to API calls."""
     results = load_results_from_file(args.input)
     nprocs_plot(
-        results.results,
+        results["results"],
         filename=args.output,
         title=args.title,
     )
@@ -76,7 +76,7 @@ def plot_cells_cli(args):
     """Translate CLI parser result to API calls."""
     results = load_results_from_file(args.input)
     num_cells_plot(
-        results.results,
+        results["results"],
         filename=args.output,
         title=args.title,
         show_resolution=args.resolutions,
