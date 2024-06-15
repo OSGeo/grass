@@ -14,7 +14,6 @@
 
 from pathlib import Path
 from subprocess import DEVNULL
-from types import SimpleNamespace
 
 from grass.benchmark import (
     benchmark_resolutions,
@@ -76,11 +75,11 @@ class TestBenchmarksRun(TestCase):
             results.append(benchmark_single(**benchmark, repeat=repeat))
         self.assertEqual(len(results), len(benchmarks))
         for result in results:
-            self.assertTrue(hasattr(result, "all_times"))
-            self.assertTrue(hasattr(result, "time"))
-            self.assertTrue(hasattr(result, "label"))
-            self.assertEqual(len(result.all_times), repeat)
-        self.assertEqual(results[0].label, label)
+            self.assertTrue("all_times" in result)
+            self.assertTrue("time" in result)
+            self.assertTrue("label" in result)
+            self.assertEqual(len(result["all_times"]), repeat)
+        self.assertEqual(results[0]["label"], label)
 
 
 class TestBenchmarkResults(TestCase):
@@ -104,39 +103,39 @@ class TestBenchmarkResults(TestCase):
         ]
         results = load_results(save_results(results))
         plot_file = "test_res_plot.png"
-        num_cells_plot(results.results, filename=plot_file)
+        num_cells_plot(results["results"], filename=plot_file)
         self.assertTrue(Path(plot_file).is_file())
 
     def test_data_file_roundtrip(self):
         """Test functions can save and load to a file"""
-        original = [SimpleNamespace(nprocs=[1, 2, 3], times=[3, 2, 1], label="Test 1")]
+        original = [dict(nprocs=[1, 2, 3], times=[3, 2, 1], label="Test 1")]
         filename = "test_res_file.json"
 
         save_results_to_file(original, filename)
         self.assertTrue(Path(filename).is_file())
 
-        loaded = load_results_from_file(filename).results
+        loaded = load_results_from_file(filename)["results"]
         self.assertEqual(original, loaded)
 
     def test_join_results_list(self):
         """Test that we can join lists"""
         list_1 = [
-            SimpleNamespace(nprocs=[1, 2, 3], times=[3, 2, 1], label="Test 1"),
-            SimpleNamespace(nprocs=[1, 2, 3], times=[3, 2, 1], label="Test 2"),
+            dict(nprocs=[1, 2, 3], times=[3, 2, 1], label="Test 1"),
+            dict(nprocs=[1, 2, 3], times=[3, 2, 1], label="Test 2"),
         ]
-        list_2 = [SimpleNamespace(nprocs=[1, 2, 3], times=[3, 2, 1], label="Test 3")]
+        list_2 = [dict(nprocs=[1, 2, 3], times=[3, 2, 1], label="Test 3")]
         new_results = join_results([list_1, list_2])
         self.assertEqual(len(new_results), 3)
 
     def test_join_results_structure(self):
         """Test that we can join a full results structure"""
-        list_1 = SimpleNamespace(
+        list_1 = dict(
             results=[
-                SimpleNamespace(nprocs=[1, 2, 3], times=[3, 2, 1], label="Test 1"),
-                SimpleNamespace(nprocs=[1, 2, 3], times=[3, 2, 1], label="Test 2"),
+                dict(nprocs=[1, 2, 3], times=[3, 2, 1], label="Test 1"),
+                dict(nprocs=[1, 2, 3], times=[3, 2, 1], label="Test 2"),
             ]
         )
-        list_2 = [SimpleNamespace(nprocs=[1, 2, 3], times=[3, 2, 1], label="Test 3")]
+        list_2 = [dict(nprocs=[1, 2, 3], times=[3, 2, 1], label="Test 3")]
         new_results = join_results([list_1, list_2])
         self.assertEqual(len(new_results), 3)
 
