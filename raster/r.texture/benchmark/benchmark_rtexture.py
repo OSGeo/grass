@@ -14,7 +14,7 @@ import grass.benchmark as bm
 def main():
     results_dic = {}
 
-    mapsizes = [50e6, 100e6, 200e6, 400e6]
+    mapsizes = [1e6, 2e6, 4e6, 8e6]
     methods = [
         "asm",
         "contrast",
@@ -53,7 +53,7 @@ def main():
             )
 
     for method in methods:
-        bm.nprocs_plot(results_dic[method])
+        bm.nprocs_plot(results_dic[method], title=f"r.texture {method} runtime")
 
 
 def benchmark(size, label, results):
