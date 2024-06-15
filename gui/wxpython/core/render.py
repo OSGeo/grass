@@ -1441,8 +1441,7 @@ class Map:
 
         if layer in list:
             if layer.mapfile:
-                base = os.path.split(layer.mapfile)[0]
-                mapfile = os.path.split(layer.mapfile)[1]
+                base, mapfile = os.path.split(layer.mapfile)
                 tempbase = mapfile.split(".")[0]
                 if base == "" or tempbase == "":
                     return None

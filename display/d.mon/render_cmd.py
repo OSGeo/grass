@@ -27,8 +27,7 @@ non_rendering_modules = (
 # remove empty mapfile from non-rendering modules
 def remove_mapfile(mapfile):
     # adopted from Map.DeleteLayer() in gui/wxpython/core/render.py
-    base = os.path.split(mapfile)[0]
-    mapfile = os.path.split(mapfile)[1]
+    base, mapfile = os.path.split(mapfile)
     tempbase = mapfile.split(".")[0]
     if base == "" or tempbase == "":
         return
