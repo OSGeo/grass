@@ -7,6 +7,7 @@ Needs PyYAML, Git, and GitHub CLI.
 
 import argparse
 import csv
+import itertools
 import json
 import re
 import subprocess
@@ -81,8 +82,28 @@ def print_category(category, changes, file=None):
     if not items:
         return
     print_section_heading_3(category, file=file)
+    bot_file = Path("utils") / "known_bot_names.txt"
+    known_bot_names = bot_file.read_text().splitlines()
+    visible = []
+    hidden = []
+    overflow = []
+    max_section_length = 25
     for item in sorted(items):
+        author = item.rsplit(" by ", maxsplit=1)[-1]
+        if author in known_bot_names or author.endswith("[bot]"):
+            hidden.append(item)
+        elif len(visible) > max_section_length:
+            overflow.append(item)
+        else:
+            visible.append(item)
+    for item in visible:
         print(f"* {item}", file=file)
+    if hidden:
+        print("\n<details>")
+        print(" <summary>Show more</summary>\n")
+        for item in itertools.chain(overflow, hidden):
+            print(f"  * {item}", file=file)
+        print("\n</details>")
     print("")
 
 
