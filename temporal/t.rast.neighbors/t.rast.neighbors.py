@@ -200,10 +200,10 @@ def main():
         else None
     )
 
-    if method == "quantile" and not options["region_relation"]:
+    if flags["r"] and options["region_relation"]:
         gs.warning(_("Using current computational region for map selection."))
 
-    if flags["r"] and options["quantile"]:
+    if method == "quantile" and not options["quantile"]:
         gs.fatal(_("The method <quantile> requires input in the 'quantile' option."))
 
     # Make sure the temporal database exists
@@ -233,6 +233,7 @@ def main():
         return
 
     output_strds = tgis.check_new_stds(output, "strds", dbif=dbif, overwrite=overwrite)
+    output_exists = output_strds.is_in_db(dbif)
     # Configure the r.neighbor module
     neighbor_module = pymod.Module(
         "r.neighbors",
@@ -334,7 +335,7 @@ def main():
         gs.fatal(_("Error running modules."))
 
     # Open a new space time raster dataset
-    if not output_strds.is_in_db(dbif) or (overwrite and not flags["e"]):
+    if not output_exists or (overwrite and not flags["e"]):
         # Get basic metadata
         temporal_type, semantic_type, title, description = sp.get_initial_values()
 
@@ -351,7 +352,7 @@ def main():
         )
 
     # Append to existing
-    elif output_strds.is_in_db(dbif) and flags["e"]:
+    elif output_exists and flags["e"]:
         output_strds = tgis.open_old_stds(output, "strds", dbif)
 
     num_maps = len(new_maps)
@@ -380,6 +381,9 @@ def main():
     # Update the spatio-temporal extent and the metadata table entries
     output_strds.update_from_registered_maps(dbif)
     gs.percent(1, 1, 1)
+
+    if output_exists:
+        output_strds.update_command_string(dbif=dbif)
 
     # Remove empty maps
     if len(empty_maps) > 0:
