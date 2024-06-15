@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ### inspired by https://github.com/OSGeo/gdal/blob/master/gdal/scripts/vagrant/gdal.sh
 
@@ -21,7 +21,6 @@ if [ ! -f "include/Make/Platform.make" ] ; then
         --bindir=/usr/bin \
         --srcdir=/vagrant \
         --prefix=/usr/lib \
-        --enable-socket \
         --enable-shared \
         --with-postgres \
         --with-mysql \
@@ -30,7 +29,6 @@ if [ ! -f "include/Make/Platform.make" ] ; then
         --with-gdal \
         --with-geos \
         --with-freetype \
-        --with-motif \
         --with-readline \
         --with-nls \
         --with-odbc \
@@ -43,9 +41,10 @@ if [ ! -f "include/Make/Platform.make" ] ; then
         --with-postgres-includes=`pg_config --includedir` \
         --with-mysql-includes=`mysql_config --include | sed -e 's/-I//'` \
         --with-proj-share=/usr/share/proj \
-        --with-python \
         --with-cairo \
-        --with-liblas
+        --with-pthread \
+        --with-bzlib \
+        --without-pdal
 fi
 
 make -j $NUMTHREADS
