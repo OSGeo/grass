@@ -284,10 +284,13 @@ def main():
         epilog="Run in utils directory to access the helper files.",
     )
     parser.add_argument(
-        "backend", choices=["log", "api"], help="use git log or GitHub API"
+        "backend",
+        choices=["log", "api", "check"],
+        help="use git log or GitHub API (or check a PR title)",
     )
     parser.add_argument(
-        "branch", help="needed for the GitHub API when tag does not exist"
+        "branch",
+        help="needed for the GitHub API when tag does not exist (or a PR title)",
     )
     parser.add_argument("start_tag", help="old tag to compare against")
     parser.add_argument(
@@ -299,6 +302,22 @@ def main():
         ),
     )
     args = parser.parse_args()
+    if args.backend == "check":
+        config_file = Path("utils") / "release.yml"
+        with open(config_file, encoding="utf-8") as file:
+            config = yaml.safe_load(file.read())
+        has_match = False
+        for category in config["notes"]["categories"]:
+            if re.match(category["regexp"], args.branch):
+                has_match = True
+                break
+        if has_match:
+            sys.exit(0)
+        else:
+            sys.exit(
+                f"Title '{args.branch}' does not fit into one of "
+                f"the categories specified in {config_file}"
+            )
     try:
         create_release_notes(args)
     except subprocess.CalledProcessError as error:
