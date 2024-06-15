@@ -127,7 +127,6 @@ ARG GRASS_CONFIG="--with-cxx \
 
 ARG GRASS_PYTHON_PACKAGES="pip \
     setuptools \
-    grass-session \
     python-dateutil \
     python-magic \
     numpy \

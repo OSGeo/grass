@@ -5,7 +5,7 @@
 # add dependency
 apk add --no-cache py3-scikit-learn
 
-# Test grass-session:
+# Test grass-session
 /usr/bin/python3 /scripts/test_grass_session.py
 # Test PDAL
 grass --tmp-project EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g
