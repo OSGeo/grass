@@ -137,9 +137,6 @@ Singularity container for GRASS GIS to be run into GRASS main directory
     #grass -c EPSG:4326 --tmp-project --exec g.extension -s ext=v.clip
     #grass -c EPSG:4326 --tmp-project --exec g.extension -s ext=v.strds.stats
 
-    # Add Python GRASS session
-    pip3 install grass-session
-
 %environment
     export LANG=C.UTF-8
     export LC_ALL=C.UTF-8
