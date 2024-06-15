@@ -13,9 +13,9 @@ import math
 def main():
     results = []
     # Users can add more or modify existing reference maps
-    raster_cells = [1e5, 2e5, 4e5, 8e5]  # 0.1M, 0.2M, 0.4M, 0.8M cells
+    raster_cells = [1e5, 2e5, 4e5, 8e5]  # 100k, 200k, 400k, 800k cells
     for ncells in raster_cells:
-        benchmark(math.sqrt(ncells), f"v.surf.rst_cv_{int(ncells / 1e6)}M", results)
+        benchmark(math.sqrt(ncells), f"v.surf.rst_cv_{int(ncells / 1e3)}k", results)
     bm.nprocs_plot(results)
 
 
