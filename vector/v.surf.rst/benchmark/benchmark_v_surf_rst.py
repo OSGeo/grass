@@ -33,7 +33,6 @@ def benchmark(size, label, results):
         elevation=output,
         stdout_=DEVNULL,
         overwrite=True,
-        c=True,
     )
 
     results.append(bm.benchmark_nprocs(module, label=label, max_nprocs=8, repeat=3))
