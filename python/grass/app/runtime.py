@@ -56,6 +56,7 @@ def append_left_main_executable_paths(paths, install_path):
 
 
 def append_left_addon_paths(paths, config_dir, env):
+    """Add addons to path"""
     # addons (base)
     addon_base = env.get("GRASS_ADDON_BASE")
     if not addon_base:
@@ -67,7 +68,9 @@ def append_left_addon_paths(paths, config_dir, env):
         env["GRASS_ADDON_BASE"] = addon_base
 
     if not WINDOWS:
-        paths.appendleft(os.path.join(addon_base, "scripts"))
+        script_path = os.path.join(addon_base, "scripts")
+        if os.path.exists(script_path):
+            paths.appendleft(script_path)
     paths.appendleft(os.path.join(addon_base, "bin"))
 
     # addons (path)
@@ -78,6 +81,7 @@ def append_left_addon_paths(paths, config_dir, env):
 
 
 def set_executable_paths(install_path, grass_config_dir, env):
+    """Add paths with executables to PATH in _env_"""
     paths = collections.deque()
     # Addons
     append_left_addon_paths(paths, grass_config_dir, env=env)
@@ -89,6 +93,7 @@ def set_executable_paths(install_path, grass_config_dir, env):
 
 
 def set_paths(install_path, grass_config_dir, ld_library_path_variable_name):
+    """Set variables with executable paths, library paths, and other paths"""
     set_executable_paths(
         install_path=install_path, grass_config_dir=grass_config_dir, env=os.environ
     )
@@ -108,7 +113,7 @@ def set_paths(install_path, grass_config_dir, ld_library_path_variable_name):
 
 
 def set_man_path(install_path, addon_base, env):
-    # set path for the GRASS man pages
+    """Set path for the GRASS man pages"""
     grass_man_path = os.path.join(install_path, "docs", "man")
     addons_man_path = os.path.join(addon_base, "docs", "man")
     man_path = env.get("MANPATH")
@@ -139,7 +144,7 @@ def set_man_path(install_path, addon_base, env):
 
 
 def set_dynamic_library_path(variable_name, install_path, env):
-    # define LD_LIBRARY_PATH
+    """Define path to dynamic libraries (LD_LIBRARY_PATH on Linux)"""
     if variable_name not in env:
         env[variable_name] = ""
     env[variable_name] += os.pathsep + os.path.join(install_path, "lib")
@@ -157,7 +162,7 @@ def set_python_path_variable(install_path, env):
 
 
 def set_path_to_python_executable(env):
-    # Set GRASS_PYTHON
+    """Set GRASS_PYTHON environment variable"""
     if not env.get("GRASS_PYTHON"):
         if WINDOWS:
             env["GRASS_PYTHON"] = "python3.exe"
@@ -166,6 +171,7 @@ def set_path_to_python_executable(env):
 
 
 def set_defaults(config_projshare_path):
+    """Set paths or commands for dependencies and auxiliary utilities"""
     # GRASS_PAGER
     if not os.getenv("GRASS_PAGER"):
         if shutil.which("more"):
@@ -199,6 +205,7 @@ def set_display_defaults():
 
 
 def set_browser(install_path):
+    """Set path to HTML browser"""
     # GRASS_HTML_BROWSER
     browser = os.getenv("GRASS_HTML_BROWSER")
     if not browser:
