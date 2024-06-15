@@ -29,10 +29,10 @@ notes:
       regexp: '(packaging|pkg|rpm|deb|pkg-config|configure|config|[Mm]ake|build): '
 
     - title: Docker
-      regexp: '[Dd]ocker(/[^ ]+)?(\(\w[\w.]*\))?: '
+      regexp: '[Dd]ocker(/[^ ]+)?(\(\w[\w.-]*\))?: '
 
     - title: Singularity
-      regexp: '[Ss]ingularity: '
+      regexp: '[Ss]ingularity(\(\w[\w.-]*\))?: '
 
     - title: Continuous Integration, Infrastructure, Tests and Code Quality
       regexp: '(CI|ci|[Tt]ests|[Cc]hecks|style|perf|CQ|[Rr]efactoring|utils|pytest|unittest)(\(\w[\w.-]*\))?: '
