@@ -83,6 +83,7 @@ ARG GRASS_RUN_PACKAGES="build-essential \
     zip \
     zlib1g \
     "
+ENV GRASS_RUN_PACKAGES=${GRASS_RUN_PACKAGES}
 
 # Define build packages
 ARG GRASS_BUILD_PACKAGES="cmake \
@@ -102,6 +103,7 @@ ARG GRASS_BUILD_PACKAGES="cmake \
     mesa-common-dev \
     zlib1g-dev \
     "
+ENV GRASS_BUILD_PACKAGES=${GRASS_BUILD_PACKAGES}
 
 ARG GRASS_CONFIG="--with-cxx \
   --enable-largefile \
@@ -135,12 +137,13 @@ ARG GRASS_PYTHON_PACKAGES="pip \
     matplotlib \
     psycopg2 \
   "
+ENV GRASS_PYTHON_PACKAGES=${GRASS_PYTHON_PACKAGES}
 
 
 FROM common_start as grass_without_gui
 
 ARG GRASS_CONFIG="${GRASS_CONFIG} --without-opengl"
-
+ENV GRASS_CONFIG=${GRASS_CONFIG}
 
 FROM common_start as grass_with_gui
 
