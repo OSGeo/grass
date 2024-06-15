@@ -7,8 +7,7 @@ DSTDIR = $(ETC)/python/grass/app
 
 MODULES = \
 	data \
-	runtime \
-	utils
+	runtime
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)
