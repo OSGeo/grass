@@ -126,42 +126,70 @@ def query_raster(coord, raster_list):
 
     :return str: formatted output of raster query results
     """
+    output_list = ["<table border='1' style='border-collapse:collapse;'>"]
 
-    output = ""
     for raster in raster_list:
-        output = "<b>Raster Info:</b><br>"
         raster_output = gs.raster.raster_what(map=raster, coord=coord)
 
-        output += f"&nbsp;&nbsp;Map: {raster}<br>"
-        if raster in raster_output[0] and "value" in raster_output[0]["tower_los"]:
-            value = raster_output[0]["tower_los"]["value"]
-            output += f"&nbsp;&nbsp;Value: {value}<br>"
-    return output
+        output = f"<tr><th colspan='2'>Raster: {raster}</th></tr>"
+        if raster in raster_output[0] and "value" in raster_output[0][raster]:
+            value = raster_output[0][raster]["value"]
+            output += f"<tr><td>Value</td><td>{value}</td></tr>"
+
+        output_list.append(output)
+
+    if len(output_list) == 1:
+        return ""
+
+    output_list.append("</table>")
+    output_list.append("<br>")
+    final_output = "".join(output_list)
+    return final_output
 
 
 def query_vector(coord, vector_list):
     """Queries Vector
 
     :param coord: coordinates given as tuple
-    :param str vector: name of vector
+    :param list vector_list: list of vector names
 
-    :return dict: category number value
+    :return str: formatted output of vector query results
     """
-    output = ""
+    output_list = ["<table border='1' style='border-collapse:collapse;'>"]
+
     for vector in vector_list:
         vector_output = gs.vector.vector_what(map=vector, coord=coord, distance=100)
+
         if len(vector_output[0]) > 2:
-            output = "<b>Vector Info:</b><br>"
-            for key, value in vector_output[0].items():
+            output_list.append(f"<tr><th colspan='2'>Vector: {vector}</th></tr>")
+
+            items = list(vector_output[0].items())
+
+            for key, value in items[1:]:
+                output = ""
+
                 if isinstance(value, dict):
-                    output += f"&nbsp;&nbsp;{key}:<br>"
+                    output += f"""
+                    <tr>
+                    <td>{key}</td>
+                    <td>
+                    <table border='1' style='border-collapse:collapse;'>
+                    """
                     for sub_key, sub_value in value.items():
-                        output += (
-                            f"&nbsp;&nbsp;&nbsp;&nbsp;{sub_key}: " f"{sub_value}<br>"
-                        )
+                        output += f"<tr><td>{sub_key}</td><td>{sub_value}</td></tr>"
+                    output += "</table></td></tr>"
                 else:
-                    output += f"&nbsp;&nbsp;{key}: {value}<br>"
-    return output
+                    output += f"<tr><td>{key}</td><td>{value}</td></tr>"
+
+                output_list.append(output)
+
+    if len(output_list) == 1:
+        return ""
+
+    output_list.append("</table>")
+    output_list.append("<br>")
+    final_output = "".join(output_list)
+    return final_output
 
 
 def estimate_resolution(raster, mapset, location, dbase, env):
