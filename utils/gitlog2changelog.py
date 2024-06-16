@@ -88,7 +88,7 @@ for line in fin:
     elif "Signed-off-by" in line:
         continue
     # Extract the actual commit message for this commit
-    elif authorFound & dateFound & messageFound == False:
+    elif authorFound & dateFound & messageFound is False:
         # Find the commit message if we can
         if len(line) == 1:
             if messageNL:
