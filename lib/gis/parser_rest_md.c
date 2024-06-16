@@ -43,7 +43,7 @@ void usage_rest_md(bool rest)
     struct Option *opt;
     struct Flag *flag;
     const char *type;
-    char *header = NULL;
+    /* char *header = NULL; */
     int new_prompt = 0;
 
     new_prompt = G__uses_new_gisprompt();
@@ -53,7 +53,7 @@ void usage_rest_md(bool rest)
     if (!st->pgm_name)
         st->pgm_name = "??";
 
-    /* main header */
+    /* main header
     G_asprintf(&header, "%s - GRASS GIS manual", st->pgm_name);
     if (rest) {
         size_t s;
@@ -67,6 +67,7 @@ void usage_rest_md(bool rest)
         fprintf(stdout, "# %s\n", header);
     }
     fprintf(stdout, "\n");
+    */
 
     /* GRASS GIS logo */
     if (rest) {
@@ -77,6 +78,7 @@ void usage_rest_md(bool rest)
     else {
         fprintf(stdout, "![GRASS logo](./grass_logo.png)\n");
     }
+
     /* horizontal line */
     fprintf(stdout, "\n---");
     if (rest)
