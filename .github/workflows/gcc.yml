@@ -21,12 +21,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - c: gnu99
-            cpp: c++11
-          - c: gnu11
-            cpp: c++11
-          - c: gnu11
-            cpp: c++14
           - c: gnu17
             cpp: c++17
       fail-fast: false
