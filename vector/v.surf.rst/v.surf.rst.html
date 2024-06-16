@@ -293,6 +293,22 @@ for for poorly sampled phenomena (result could be strongly smoothed
 with lost details and fluctuations) or when significant noise is
 present that needs to be smoothed out.
 
+<h3>Performance</h3>
+To enable parallel processing, the user can specify the number of threads to be
+used with the <b>nprocs</b> parameter (default 1). Figure 1 and 2 provides benchmarks of the parallelizations running on Intel® Core™ i5-10210U CPU @ 1.60GHz × 8. See benchmark scripts in source code for more details.  </i>
+
+<div align="center" style="margin: 10px">
+  <img src="vsurfrst_benchmark.png" alt="benchmark for v.surf.rst" border="0">
+  <br>
+  <i>Figure 1: Benchmark shows execution time for different
+    number of cells (1M, 2M, 4M, and 8M).
+</div>
+<div align="center" style="margin: 10px">
+    <img src="vsurfrst_cv_benchmark.png" alt="benchmark for cross-validation of v.surf.rst" border="0">
+    <br>
+    <i>Figure 2: Benchmark shows execution time for running cross-validation on different number of cells (100k, 200k, 400k, and 800k).
+</div>
+
 <h2>EXAMPLE</h2>
 
 <h3>Setting for lidar point cloud</h3>
@@ -338,26 +354,6 @@ r.colors map=elev_partial raster=elevation
 d.rast elev_partial
 d.vect elevrand where="value > 94.9"
 </pre></div>
-
-<h3>Performance</h3>
-To enable parallel processing, the user can specify the number of threads to be
-used with the <b>nprocs</b> parameter (default 1). The <b>memory</b> parameter
-(default 300) can also be provided to determine the size of the buffer for
-computation.
-
-<div align="center" style="margin: 10px">
-  <img src="vsurfrst_benchmark.png" alt="benchmark for v.surf.rst" border="0">
-  <br>
-  <i>Figure 1 Benchmark shows execution time for different
-    number of cells.
-</div>
-<div align="center" style="margin: 10px">
-    <img src="vsurfrst_cv_benchmark.png" alt="benchmark for cross-validation of v.surf.rst" border="0">
-    <br>
-    <i>Figure 2 Benchmark shows execution time for running cross-validation on different number of cells.
-</div>
-
-<i>See benchmark scripts in source code. (Intel® Core™ i5-10210U CPU @ 1.60GHz × 8) </i>
 
 <h2>REFERENCES</h2>
 
@@ -438,3 +434,7 @@ procedure):</em>
 <em>Parallelization using OpenMP:</em>
 <br>Stanislav Zubal, Czech Technical University in Prague
 <br>Michal Lacko, Pavol Jozef Safarik University in Kosice
+
+<p>
+<em>Parallelization of cross-validation using OpenMP:</em>
+<br>Chung-Yuan Liang, Purdue University, West Lafayette, Indiana, USA
