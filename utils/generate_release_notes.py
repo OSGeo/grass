@@ -89,7 +89,14 @@ def print_category(category, changes, file=None):
     overflow = []
     max_section_length = 25
     for item in sorted(items):
+        # Relies on author being specified after the last "by".
         author = item.rsplit(" by ", maxsplit=1)[-1]
+        # Relies on author being specified as username.
+        if " " in author:
+            author = author.split(" ", maxsplit=1)[0]
+        if author.startswith("@"):
+            # We expect that to be always the case, but we test anyway.
+            author = author[1:]
         if author in known_bot_names or author.endswith("[bot]"):
             hidden.append(item)
         elif len(visible) > max_section_length:
@@ -98,7 +105,7 @@ def print_category(category, changes, file=None):
             visible.append(item)
     for item in visible:
         print(f"* {item}", file=file)
-    if hidden:
+    if hidden or overflow:
         print("\n<details>")
         print(" <summary>Show more</summary>\n")
         for item in itertools.chain(overflow, hidden):

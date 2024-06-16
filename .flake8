@@ -196,6 +196,7 @@ per-file-ignores =
 
 
 max-line-length = 88
+# Remember to remove the exclusions from .pre-commit-config.yaml when removing here
 exclude =
     .git,
     __pycache__,
