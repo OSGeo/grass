@@ -48,6 +48,9 @@ def nprocs_plot(results, filename=None, title=None, metric="time"):
     from the *nprocs* list.
     The *label* attribute identifies the benchmark in the legend.
 
+    *metric* can be "time", "speedup", or "efficiency".
+    This function plots a corresponding figure based on the chosen metric.
+
     Optionally, result can have an *all_times* attribute which is a list
     of lists. One sublist is all times recorded for each value of nprocs.
 
