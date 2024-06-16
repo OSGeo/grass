@@ -128,7 +128,7 @@ def benchmark_nprocs(module, label, max_nprocs, repeat=5, shuffle=True):
         if avg < min_avg:
             min_avg = avg
             min_time = nprocs
-        result.speedup.append(avg / serial_avg)
+        result.speedup.append(serial_avg / avg)
         result.efficiency.append(serial_avg / (nprocs * avg))
 
     print("\u2500" * term_size.columns)
