@@ -92,6 +92,7 @@ int D_open_driver(void)
     if (!p && (m || c)) {
         char *cmd;
         char progname[GPATH_MAX];
+        char sep[2] = {HOST_DIRSEP, '\0'};
 
         cmd = G_recreate_command();
 
@@ -108,9 +109,9 @@ int D_open_driver(void)
             char element[GPATH_MAX];
 
             G_temp_element(element);
-            strcat(element, "/");
+            strcat(element, sep);
             strcat(element, "MONITORS");
-            strcat(element, "/");
+            strcat(element, sep);
             strcat(element, m);
             G_file_name(progname, element, "render.py", G_mapset());
         }
