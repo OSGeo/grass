@@ -610,10 +610,11 @@ def parse_source():
     if git_commit["commit"] == "unknown":
         date_tag = "Accessed: {date}".format(date=git_commit["date"])
     else:
+        commit = git_commit["commit"]
         date_tag = (
             "Latest change: {date} in commit: "
-            "[{commit}](https://github.com/OSGeo/grass/commit/{commit})".format(
-                date=git_commit["date"], commit=git_commit["commit"]
+            "[{commit_short}](https://github.com/OSGeo/grass/commit/{commit})".format(
+                date=git_commit["date"], commit=commit, commit_short=commit[:7]
             )
         )
 
@@ -758,7 +759,7 @@ if __name__ == "__main__":
 ## SOURCE CODE
 
 Available at: [${PGM} source code](${URL_SOURCE})</a>
- ([history](${URL_LOG}"))${MD_NEWLINE}
+([history](${URL_LOG}"))${MD_NEWLINE}
 ${DATE_TAG}
 """
     )
