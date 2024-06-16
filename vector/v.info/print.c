@@ -52,6 +52,8 @@ void print_region(struct Map_info *Map, enum OutputFormat format,
 
     switch (format) {
     case PLAIN:
+        break;
+    case SHELL:
         G_format_northing(box.N, tmp1, -1);
         G_format_northing(box.S, tmp2, -1);
         fprintf(stdout, "north=%s\n", tmp1);
@@ -96,6 +98,8 @@ void print_topo(struct Map_info *Map, enum OutputFormat format,
 
     switch (format) {
     case PLAIN:
+        break;
+    case SHELL:
         fprintf(stdout, "nodes=%d\n", Vect_get_num_nodes(Map));
         fflush(stdout);
 
@@ -248,6 +252,8 @@ void print_shell(struct Map_info *Map, const char *field_opt,
 
     switch (format) {
     case PLAIN:
+        break;
+    case SHELL:
         fprintf(stdout, "name=%s\n", Vect_get_name(Map));
         fprintf(stdout, "mapset=%s\n", Vect_get_mapset(Map));
         fprintf(stdout, "location=%s\n", G_location());
@@ -280,6 +286,8 @@ void print_shell(struct Map_info *Map, const char *field_opt,
         G_format_timestamp(&ts, timebuff);
         switch (format) {
         case PLAIN:
+            break;
+        case SHELL:
             fprintf(stdout, "timestamp=%s\n", timebuff);
             break;
         case JSON:
@@ -290,6 +298,8 @@ void print_shell(struct Map_info *Map, const char *field_opt,
     else {
         switch (format) {
         case PLAIN:
+            break;
+        case SHELL:
             fprintf(stdout, "timestamp=none\n");
             break;
         case JSON:
@@ -301,6 +311,8 @@ void print_shell(struct Map_info *Map, const char *field_opt,
     if (map_type == GV_FORMAT_OGR || map_type == GV_FORMAT_OGR_DIRECT) {
         switch (format) {
         case PLAIN:
+            break;
+        case SHELL:
             fprintf(stdout, "format=%s,%s\n", Vect_maptype_info(Map),
                     Vect_get_finfo_format_info(Map));
             fprintf(stdout, "ogr_layer=%s\n", Vect_get_finfo_layer_name(Map));
@@ -331,6 +343,8 @@ void print_shell(struct Map_info *Map, const char *field_opt,
 
         switch (format) {
         case PLAIN:
+            break;
+        case SHELL:
             fprintf(stdout, "format=%s,%s\n", Vect_maptype_info(Map),
                     Vect_get_finfo_format_info(Map));
             fprintf(stdout, "pg_table=%s\n", Vect_get_finfo_layer_name(Map));
@@ -360,6 +374,8 @@ void print_shell(struct Map_info *Map, const char *field_opt,
         if (topo_format == GV_TOPO_POSTGIS) {
             switch (format) {
             case PLAIN:
+                break;
+            case SHELL:
                 fprintf(stdout, "pg_topo_schema=%s\n", toposchema_name);
                 fprintf(stdout, "pg_topo_column=%s\n", topogeom_column);
                 break;
@@ -375,6 +391,8 @@ void print_shell(struct Map_info *Map, const char *field_opt,
     else {
         switch (format) {
         case PLAIN:
+            break;
+        case SHELL:
             fprintf(stdout, "format=%s\n", Vect_maptype_info(Map));
             break;
         case JSON:
@@ -386,6 +404,8 @@ void print_shell(struct Map_info *Map, const char *field_opt,
 
     switch (format) {
     case PLAIN:
+        break;
+    case SHELL:
         fprintf(stdout, "level=%d\n", Vect_level(Map));
         break;
     case JSON:
@@ -395,6 +415,8 @@ void print_shell(struct Map_info *Map, const char *field_opt,
     if (Vect_level(Map) > 0) {
         switch (format) {
         case PLAIN:
+            break;
+        case SHELL:
             fprintf(stdout, "num_dblinks=%d\n", Vect_get_num_dblinks(Map));
             break;
         case JSON:
@@ -408,6 +430,8 @@ void print_shell(struct Map_info *Map, const char *field_opt,
             if (fi != NULL) {
                 switch (format) {
                 case PLAIN:
+                    break;
+                case SHELL:
                     fprintf(stdout, "attribute_layer_number=%i\n", fi->number);
                     fprintf(stdout, "attribute_layer_name=%s\n", fi->name);
                     fprintf(stdout, "attribute_database=%s\n", fi->database);
@@ -437,6 +461,8 @@ void print_shell(struct Map_info *Map, const char *field_opt,
 
     switch (format) {
     case PLAIN:
+        break;
+    case SHELL:
         fprintf(stdout, "projection=%s\n", Vect_get_proj_name(Map));
         if (G_projection() == PROJECTION_UTM) {
             fprintf(stdout, "zone=%d\n", Vect_get_zone(Map));

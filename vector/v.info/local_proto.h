@@ -6,7 +6,7 @@
 #define SHELL_REGION 0x04
 #define SHELL_TOPO   0x08
 
-enum OutputFormat { PLAIN, JSON };
+enum OutputFormat { PLAIN, SHELL, JSON };
 
 /* level1.c */
 int level_one_info(struct Map_info *);

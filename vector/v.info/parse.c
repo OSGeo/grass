@@ -43,6 +43,10 @@ void parse_args(int argc, char **argv, char **input, char **field, int *history,
     topo_flag->guisection = _("Print");
 
     format_opt = G_define_standard_option(G_OPT_F_FORMAT);
+    format_opt->options = "plain,shell,json";
+    format_opt->descriptions = _("plain;Human readable text output;"
+                                 "shell;shell script style text output;"
+                                 "json;JSON (JavaScript Object Notation);");
     format_opt->guisection = _("Print");
 
     if (G_parser(argc, argv))
@@ -60,8 +64,16 @@ void parse_args(int argc, char **argv, char **input, char **field, int *history,
     if (topo_flag->answer)
         *shell |= SHELL_TOPO;
 
-    if (strcmp(format_opt->answer, "json") == 0)
-        *format_ptr = JSON;
-    else
+    if (strcmp(format_opt->answer, "plain") == 0) {
         *format_ptr = PLAIN;
+    }
+    else if (strcmp(format_opt->answer, "json") == 0)
+        *format_ptr = JSON;
+    else {
+        *format_ptr = SHELL;
+    }
+
+    if (*shell != 0 && *format_ptr == PLAIN) {
+        *format_ptr = SHELL;
+    }
 }
