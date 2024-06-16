@@ -92,7 +92,7 @@ void usage_rest_md(bool rest)
     if (rest)
         fprintf(stdout, "----");
     fprintf(stdout, "\n");
-    fprintf(stdout, "**%s**", st->pgm_name);
+    fprintf(stdout, "***%s***", st->pgm_name);
 
     if (st->module_info.label || st->module_info.description)
         fprintf(stdout, " - ");

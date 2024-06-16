@@ -720,6 +720,7 @@ def header(pgm):
         if name_desc:
             pgm_desc = name_desc.group(2).strip()
     desc = re.search("(<!-- meta page description:)(.*)(-->)", src_data, re.IGNORECASE)
+
     if desc:
         pgm = desc.group(2).strip()
         header_tmpl = string.Template(header_base + header_nopgm)
@@ -798,7 +799,7 @@ GRASS GIS ${GRASS_VERSION} Reference Manual
     # if not re.search("<html>", src_data, re.IGNORECASE):
     tmp_data = read_file(tmp_file)
     # TODO: if not re.search("<html>", tmp_data, re.IGNORECASE):
-    sys.stdout.write(header(pgm))
+    # sys.stdout.write(header(pgm))
     if tmp_data:
         header_logo_img_el = "![GRASS logo](grass_logo.png)"
         for line in tmp_data.splitlines(True):
