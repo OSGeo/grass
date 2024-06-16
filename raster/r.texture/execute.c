@@ -104,8 +104,7 @@ int execute_texture(CELL **data, struct dimensions *dim,
     else
         G_message(_("Calculating %s..."), measure_menu[measure_idx[0]].desc);
 
-#pragma omp parallel firstprivate(row, col, i, j, measure, tid, \
-                                  trow) default(shared)
+#pragma omp parallel private(row, col, i, j, measure, tid, trow) default(shared)
     {
 #pragma omp for schedule(static, 1) ordered
         for (row = first_row; row < last_row; row++) {
