@@ -1,0 +1,25 @@
+---
+site_name: GRASS GIS manual
+site_url: https://grass.osgeo.org/grass-stable/manuals/
+docs_dir: source
+theme: readthedocs
+plugins:
+    - search
+#    - awesome-pages
+# collapse_single_pages: true
+# https://github.com/mkdocs/mkdocs/issues/991
+use_directory_urls: true
+nav:
+    - Startup: grass.md
+    - Databases: database.md
+    - Display: display.md
+    - General: general.md
+    - Imagery: imagery.md
+    - Keywords: keywords.md
+    - Misc: miscellaneous.md
+    - Raster: raster.md
+    - Raster 3D: raster3d.md
+    - SQL: sql.md
+    - Temporal: temporal.md
+    - Variables: variables.md
+    - Vector: vector.md
