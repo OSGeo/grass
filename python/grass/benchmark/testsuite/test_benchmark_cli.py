@@ -43,14 +43,14 @@ class TestBenchmarkCLI(TestCase):
     """Tests that benchmarkin CLI works"""
 
     json_filename = "plot_test.json"
-    png_filename1 = "plot_test1.png"
-    png_filename2 = "plot_test2.png"
+    png_filenames = [f"plot_test1_{i}.png" for i in range(4)]
+    png_filenames.append("plot_test2.png")
 
     def tearDown(self):
         """Remove test files"""
         remove_file(self.json_filename)
-        remove_file(self.png_filename1)
-        remove_file(self.png_filename2)
+        for filename in self.png_filenames:
+            remove_file(filename)
 
     def test_plot_nprocs_workflow(self):
         """Test that plot nprocs workflow runs"""
@@ -67,8 +67,15 @@ class TestBenchmarkCLI(TestCase):
         except grass.exceptions.ParameterError:
             self.skipTest("r.univar without nprocs parameter")
         save_results_to_file([result], self.json_filename)
-        benchmark_main(["plot", "nprocs", self.json_filename, self.png_filename1])
-        self.assertTrue(Path(self.png_filename1).is_file())
+
+        metrics = ["time", "speedup", "efficiency"]
+        benchmark_main(["plot", "nprocs", self.json_filename, self.png_filenames[0]])
+        for png_fname, metric in zip(self.png_filenames[1:4], metrics):
+            benchmark_main(
+                ["plot", "nprocs", "--metric", metric, self.json_filename, png_fname]
+            )
+        for filename in self.png_filenames[:4]:
+            self.assertTrue(Path(filename).is_file())
 
     def test_plot_cells_workflow(self):
         """Test that plot cells workflow runs"""
@@ -82,12 +89,18 @@ class TestBenchmarkCLI(TestCase):
             resolutions=[1000, 500],
         )
         save_results_to_file([result], self.json_filename)
-        benchmark_main(["plot", "cells", self.json_filename, self.png_filename1])
-        self.assertTrue(Path(self.png_filename1).is_file())
+        benchmark_main(["plot", "cells", self.json_filename, self.png_filenames[0]])
+        self.assertTrue(Path(self.png_filenames[0]).is_file())
         benchmark_main(
-            ["plot", "cells", "--resolutions", self.json_filename, self.png_filename2]
+            [
+                "plot",
+                "cells",
+                "--resolutions",
+                self.json_filename,
+                self.png_filenames[-1],
+            ]
         )
-        self.assertTrue(Path(self.png_filename2).is_file())
+        self.assertTrue(Path(self.png_filenames[-1]).is_file())
 
 
 if __name__ == "__main__":
