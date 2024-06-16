@@ -16,5 +16,8 @@
 
         // when a dependency is really out of date, this will prevent to skip directly to the latest version.
         ":separateMultipleMajorReleases",
+
+        // Renovate's pre-commit support is still opt-in
+        ":enablePreCommit",
     ]
 }
