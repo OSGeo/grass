@@ -17,7 +17,7 @@ class TestAggregationAbsolute(TestCase):
         os.putenv("GRASS_OVERWRITE", "1")
         tgis.init()
         cls.use_temp_region()
-        cls.runModule("g.region", s=90, n=100, w=140, e=160, b=0, t=50, res=10, res3=10)
+        cls.runModule("g.region", s=0, n=90, w=140, e=160, b=0, t=50, res=10, res3=10)
         cls.runModule(
             "r.mapcalc", expression="a4 = rand(1,10)", flags=["s"], overwrite=True
         )
