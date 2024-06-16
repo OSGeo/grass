@@ -47,7 +47,7 @@
 # % multiple: no
 # %end
 
-# %option G_OPT_STRDS_INPUT
+# %option G_OPT_R_INPUT
 # % key: selection
 # % required: no
 # % description: Name of an input raster map to select the cells which should be processed
