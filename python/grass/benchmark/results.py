@@ -59,7 +59,7 @@ def load_results(data):
     default dictionary object. Use attribute access to access by key
     (not dict-like syntax).
     """
-    return json.loads(data, object_hook=lambda d: dict(**d))
+    return json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
 
 
 def load_results_from_file(filename):
@@ -84,18 +84,18 @@ def join_results(results, prefixes=None, select=None, prefixes_as_labels=False):
         prefixes = [None] * len(results)
     joined = []
     for result_list, prefix in zip(results, prefixes):
-        if "results" in result_list:
+        if hasattr(result_list, "results"):
             # This is the actual list in the full results structure.
-            result_list = result_list["results"]
+            result_list = result_list.results
         for result in result_list:
             if select and not select(result):
                 continue
             result = copy.deepcopy(result)
             if prefix:
                 if prefixes_as_labels:
-                    result["label"] = prefix
+                    result.label = prefix
                 else:
-                    result["label"] = f"{prefix}: {result.label}"
+                    result.label = f"{prefix}: {result.label}"
             joined.append(result)
     return joined
 

@@ -16,6 +16,7 @@
 
 import random
 import shutil
+from types import SimpleNamespace
 
 import grass.script as gs
 
@@ -46,23 +47,26 @@ def benchmark_single(module, label, repeat=5):
 
     print("\u2500" * term_size.columns)
     time_sum = 0
-    result = {"all_times": [], "time": []}
-    result["label"] = label
+    measured_times = []
     for _ in range(repeat):
         module.run()
         print(f"{module.time}s")
         time_sum += module.time
-        result["all_times"].append(module.time)
+        measured_times.append(module.time)
 
-    result["time"] = time_sum / repeat
-    if result["time"] < min_avg:
-        min_avg = result["time"]
-    print(f"\nResult - {result['time']}s")
+    avg = time_sum / repeat
+    if avg < min_avg:
+        min_avg = avg
+    print(f"\nResult - {avg}s")
 
     print("\u2500" * term_size.columns)
     print(f"Best average time - {min_avg}s\n")
 
-    return result
+    return SimpleNamespace(
+        all_times=measured_times,
+        time=avg,
+        label=label,
+    )
 
 
 def benchmark_nprocs(module, label, max_nprocs, repeat=5, shuffle=True):
@@ -99,10 +103,10 @@ def benchmark_nprocs(module, label, max_nprocs, repeat=5, shuffle=True):
     min_avg = float("inf")
     min_time = None
     serial_avg = None
-    result = {"times": [], "all_times": [], "speedup": [], "efficiency": []}
-    result["nprocs"] = list(range(1, max_nprocs + 1))
-    result["label"] = label
-    nprocs_list_shuffled = sorted(result["nprocs"] * repeat)
+    result = SimpleNamespace(times=[], all_times=[], speedup=[], efficiency=[])
+    result.nprocs = list(range(1, max_nprocs + 1))
+    result.label = label
+    nprocs_list_shuffled = sorted(result.nprocs * repeat)
     if shuffle:
         random.shuffle(nprocs_list_shuffled)
     times = {}
@@ -117,15 +121,15 @@ def benchmark_nprocs(module, label, max_nprocs, repeat=5, shuffle=True):
             times[nprocs] = [module.time]
     for nprocs in sorted(times):
         avg = sum(times[nprocs]) / repeat
-        result["times"].append(avg)
-        result["all_times"].append(times[nprocs])
+        result.times.append(avg)
+        result.all_times.append(times[nprocs])
         if nprocs == 1:
             serial_avg = avg
         if avg < min_avg:
             min_avg = avg
             min_time = nprocs
-        result["speedup"].append(avg / serial_avg)
-        result["efficiency"].append(serial_avg / (nprocs * avg))
+        result.speedup.append(avg / serial_avg)
+        result.efficiency.append(serial_avg / (nprocs * avg))
 
     print("\u2500" * term_size.columns)
     if serial_avg is not None:
@@ -162,12 +166,13 @@ def benchmark_resolutions(module, resolutions, label, repeat=5, nprocs=None):
     else:
         print(module)
 
-    result = {"times": [], "all_times": [], "resolutions": resolutions, "cells": []}
-    result["label"] = label
+    avg_times = []
+    all_times = []
+    n_cells = []
     for resolution in resolutions:
         gs.run_command("g.region", res=resolution)
         region = gs.region()
-        result["cells"].append(region["cells"])
+        n_cells.append(region["cells"])
         print("\u2500" * term_size.columns)
         print(f"Benchmark with {resolution} resolution...\n")
         time_sum = 0
@@ -181,8 +186,14 @@ def benchmark_resolutions(module, resolutions, label, repeat=5, nprocs=None):
             measured_times.append(module.time)
 
         avg = time_sum / repeat
-        result["times"].append(avg)
-        result["all_times"].append(measured_times)
+        avg_times.append(avg)
+        all_times.append(measured_times)
         print(f"\nResult - {avg}s")
 
-    return result
+    return SimpleNamespace(
+        all_times=all_times,
+        times=avg_times,
+        resolutions=resolutions,
+        cells=n_cells,
+        label=label,
+    )
