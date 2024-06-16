@@ -3,6 +3,11 @@
 
 include $(MODULE_TOPDIR)/include/Make/HtmlRules.make
 
+$(HTMLDIR)/%.html: %.html %.tmp.html $(HTMLSRC) $(IMGDST) | $(HTMLDIR)
+	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) MODULE_TOPDIR=$(MODULE_TOPDIR) \
+        $(PYTHON) $(GISBASE)/utils/mkhtml.py $* > $@
+
+# TODO: mode to Markdown.make (?)
 $(MDDIR)/source/%.md: %.md %.tmp.md $(HTMLSRC) $(IMGDST) | $(MDDIR)
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) MODULE_TOPDIR=$(MODULE_TOPDIR) \
         $(PYTHON) $(GISBASE)/utils/mkmarkdown.py $* > $@
@@ -10,8 +15,12 @@ $(MDDIR)/source/%.md: %.md %.tmp.md $(HTMLSRC) $(IMGDST) | $(MDDIR)
 $(MANDIR)/%.$(MANSECT): $(HTMLDIR)/%.html
 	$(HTML2MAN) "$<" "$@"
 
+%.tmp.html: $(HTMLSRC)
+	if [ "$(HTMLSRC)" != "" ] ; then $(call htmldesc,$<,$@) ; fi
+
+# TODO: mode to Markdown.make (?)
 %.tmp.md: $(HTMLSRC)
-	if [ "$(HTMLSRC)" != "" ] ; then $(call moduledesc,$<,$@) ; fi
+	if [ "$(HTMLSRC)" != "" ] ; then $(call mddesc,$<,$@) ; fi
 
 ifdef CROSS_COMPILING
 
@@ -19,7 +28,7 @@ html:
 
 else
 
-html: $(MDDIR)/source/$(PGM).md # $(MANDIR)/$(PGM).$(MANSECT)
+html: $(HTMLDIR)/$(PGM).html $(MANDIR)/$(PGM).$(MANSECT) $(MDDIR)/source/$(PGM).md
 
 endif
 

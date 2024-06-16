@@ -605,7 +605,7 @@ def parse_source():
         src_dir=cur_dir if addon_path else top_dir,
         top_dir=top_dir,
         addon_path=addon_path if addon_path else None,
-        major=major,
+        major_version=major,
     )
     if git_commit["commit"] == "unknown":
         date_tag = "Accessed: {date}".format(date=git_commit["date"])
