@@ -37,7 +37,7 @@ int execute_texture(CELL **data, struct dimensions *dim,
 
     int offset = size / 2;
     int i, j, row, col, first_row, first_col, last_row, last_col;
-    int tid, trow;
+    int trow;
     int have_px, have_py, have_pxpys, have_pxpyd;
 
     FCELL ***fbuf_threads; /* Buffer for each thread */
@@ -104,13 +104,10 @@ int execute_texture(CELL **data, struct dimensions *dim,
     else
         G_message(_("Calculating %s..."), measure_menu[measure_idx[0]].desc);
 
-#pragma omp parallel private(row, col, i, j, measure, tid, trow) default(shared)
+#pragma omp parallel private(row, col, i, j, measure, trow) default(shared)
     {
 #pragma omp for schedule(static, 1) ordered
         for (row = first_row; row < last_row; row++) {
-#if defined(_OPENMP)
-            tid = omp_get_thread_num(); /* Obtain thread id */
-#endif
             trow = row % threads; /* Obtain thread row id */
             G_percent(row, nrows, 2);
 
@@ -120,7 +117,7 @@ int execute_texture(CELL **data, struct dimensions *dim,
 
             /*process the data */
             for (col = first_col; col < last_col; col++) {
-                if (!set_vars(mvs[tid], data, row, col, size, offset, dist,
+                if (!set_vars(mvs[trow], data, row, col, size, offset, dist,
                               flag_null->answer)) {
                     for (i = 0; i < n_outputs; i++)
                         Rast_set_f_null_value(&(fbuf_threads[trow][i][col]), 1);
@@ -128,12 +125,12 @@ int execute_texture(CELL **data, struct dimensions *dim,
                 }
                 /* for all angles (0, 45, 90, 135) */
                 for (i = 0; i < 4; i++) {
-                    set_angle_vars(mvs[tid], i, have_px, have_py, have_pxpys,
+                    set_angle_vars(mvs[trow], i, have_px, have_py, have_pxpys,
                                    have_pxpyd);
                     /* for all requested textural measures */
                     for (j = 0; j < n_measures; j++) {
                         measure = (FCELL)h_measure(
-                            measure_menu[measure_idx[j]].idx, mvs[tid]);
+                            measure_menu[measure_idx[j]].idx, mvs[trow]);
                         if (flag_ind->answer) {
                             /* output for each angle separately */
                             fbuf_threads[trow][j * 4 + i][col] = measure;
