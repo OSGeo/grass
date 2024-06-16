@@ -109,8 +109,10 @@ int execute_texture(CELL **data, struct dimensions *dim,
     {
 #pragma omp for schedule(static, 1) ordered
         for (row = first_row; row < last_row; row++) {
+#if defined(_OPENMP)
             tid = omp_get_thread_num(); /* Obtain thread id */
-            trow = row % threads;       /* Obtain thread row id */
+#endif
+            trow = row % threads; /* Obtain thread row id */
             G_percent(row, nrows, 2);
 
             /* initialize the output row */
