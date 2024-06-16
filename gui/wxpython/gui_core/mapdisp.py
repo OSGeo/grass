@@ -43,9 +43,6 @@ class MapPanelBase(wx.Panel):
     Several methods has to be overridden or
     \c NotImplementedError("MethodName") will be raised.
 
-    If derived class enables and disables auto-rendering,
-    it should override IsAutoRendered method.
-
     It is expected that derived class will call _setUpMapWindow().
 
     Derived class can has one or more map windows (and map renders)
@@ -315,14 +312,6 @@ class MapPanelBase(wx.Panel):
         if self.statusbarManager:
             Debug.msg(5, "MapPanelBase.StatusbarUpdate()")
             self.statusbarManager.Update()
-
-    def IsAutoRendered(self):
-        """Check if auto-rendering is enabled"""
-        # TODO: this is now not the right place to access this attribute
-        # TODO: add mapWindowProperties to init parameters
-        # and pass the right object in the init of derived class?
-        # or do not use this method at all, let mapwindow decide
-        return self.mapWindowProperties.autoRender
 
     def CoordinatesChanged(self):
         """Shows current coordinates on statusbar."""
