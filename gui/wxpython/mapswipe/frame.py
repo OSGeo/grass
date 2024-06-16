@@ -244,6 +244,7 @@ class SwipeMapPanel(DoubleMapPanel):
         style = self.splitter.GetWindowStyle()
         style ^= wx.SP_LIVE_UPDATE
         self.splitter.SetWindowStyle(style)
+        self._simpleLmgrChanged()
 
     def AddToolbar(self, name):
         """Add defined toolbar to the window
@@ -443,8 +444,7 @@ class SwipeMapPanel(DoubleMapPanel):
         return converter
 
     def _simpleLmgrChanged(self):
-        if self.IsAutoRendered():
-            self.OnRender(event=None)
+        self.OnRender(event=None)
 
     def OnApplyInputChanges(self):
         first, second = self._inputDialog.GetValues()
@@ -467,8 +467,7 @@ class SwipeMapPanel(DoubleMapPanel):
             LayerListToRendererConverter(self.GetSecondMap()).ConvertAll(second)
 
         self.SetRasterNames()
-        if self.IsAutoRendered():
-            self.OnRender(event=None)
+        self.OnRender(event=None)
 
     def SetFirstRaster(self, name):
         """Set raster map to first Map"""

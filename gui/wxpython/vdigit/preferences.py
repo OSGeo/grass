@@ -1106,5 +1106,4 @@ class VDigitSettingsDialog(wx.Dialog):
         self.digit.UpdateSettings()
 
         # redraw map if auto-rendering is enabled
-        if self.parent.IsAutoRendered():
-            self.parent.OnRender(None)
+        self.parent.OnRender(None)

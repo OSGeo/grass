@@ -625,7 +625,7 @@ class ColorTable(wx.Frame):
             if updatePreview:
                 self.OnPreview(None)
             display = self.layerTree.GetMapDisplay()
-            if display and display.IsAutoRendered():
+            if display:
                 display.GetWindow().UpdateMap(render=True)
 
         return ret

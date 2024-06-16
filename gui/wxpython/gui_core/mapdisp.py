@@ -43,9 +43,6 @@ class MapPanelBase(wx.Panel):
     Several methods has to be overridden or
     \c NotImplementedError("MethodName") will be raised.
 
-    If derived class enables and disables auto-rendering,
-    it should override IsAutoRendered method.
-
     It is expected that derived class will call _setUpMapWindow().
 
     Derived class can has one or more map windows (and map renders)
@@ -115,6 +112,7 @@ class MapPanelBase(wx.Panel):
             (self.OnCloseWindow, wx.ACCEL_CTRL, ord("W")),
             (self.OnRender, wx.ACCEL_CTRL, ord("R")),
             (self.OnRender, wx.ACCEL_NORMAL, wx.WXK_F5),
+            (self.OnEnableDisableRender, wx.ACCEL_NORMAL, wx.WXK_F6),
         ]
 
         self._initShortcuts()
@@ -315,14 +313,6 @@ class MapPanelBase(wx.Panel):
             Debug.msg(5, "MapPanelBase.StatusbarUpdate()")
             self.statusbarManager.Update()
 
-    def IsAutoRendered(self):
-        """Check if auto-rendering is enabled"""
-        # TODO: this is now not the right place to access this attribute
-        # TODO: add mapWindowProperties to init parameters
-        # and pass the right object in the init of derived class?
-        # or do not use this method at all, let mapwindow decide
-        return self.mapWindowProperties.autoRender
-
     def CoordinatesChanged(self):
         """Shows current coordinates on statusbar."""
         # assuming that the first mode is coordinates
@@ -434,6 +424,13 @@ class MapPanelBase(wx.Panel):
     def OnRender(self, event):
         """Re-render map composition (each map layer)"""
         raise NotImplementedError("OnRender")
+
+    def OnEnableDisableRender(self, event):
+        """Enable/disable auto-rendering map composition (each map layer)"""
+        if self.MapWindow.parent.mapWindowProperties.autoRender:
+            self.MapWindow.parent.mapWindowProperties.autoRender = False
+        else:
+            self.MapWindow.parent.mapWindowProperties.autoRender = True
 
     def OnDraw(self, event):
         """Re-display current map composition"""
@@ -776,13 +773,20 @@ class DoubleMapPanel(MapPanelBase):
 
     def OnRender(self, event):
         """Re-render map composition (each map layer)"""
-        self.Render(mapToRender=self.GetFirstWindow())
-        self.Render(mapToRender=self.GetSecondWindow())
+        kwargs = {}
+        # Handle re-render map event (mouse click on toolbar Render map
+        # tool, F5/Ctrl + R keyboard shortcut)
+        if event and event.GetEventType() == wx.EVT_TOOL.typeId:
+            kwargs = {"reRenderTool": True}
+        self.Render(mapToRender=self.GetFirstWindow(), **kwargs)
+        self.Render(mapToRender=self.GetSecondWindow(), **kwargs)
 
-    def Render(self, mapToRender):
+    def Render(self, mapToRender, reRenderTool=False):
         """Re-render map composition"""
         mapToRender.UpdateMap(
-            render=True, renderVector=mapToRender == self.GetFirstWindow()
+            render=True,
+            renderVector=mapToRender == self.GetFirstWindow(),
+            reRenderTool=reRenderTool,
         )
 
         # update statusbar
@@ -799,12 +803,17 @@ class DoubleMapPanel(MapPanelBase):
 
     def OnDraw(self, event):
         """Re-display current map composition"""
-        self.Draw(mapToDraw=self.GetFirstWindow())
-        self.Draw(mapToDraw=self.GetSecondWindow())
+        kwargs = {}
+        # Handle display map event (mouse click on toolbar Display map
+        # tool)
+        if event and event.GetEventType() == wx.EVT_TOOL.typeId:
+            kwargs = {"reRenderTool": True}
+        self.Draw(mapToDraw=self.GetFirstWindow(), **kwargs)
+        self.Draw(mapToDraw=self.GetSecondWindow(), **kwargs)
 
-    def Draw(self, mapToDraw):
+    def Draw(self, mapToDraw, reRenderTool=False):
         """Re-display current map composition"""
-        mapToDraw.UpdateMap(render=False)
+        mapToDraw.UpdateMap(render=False, reRenderTool=reRenderTool)
 
 
 class FrameMixin:
