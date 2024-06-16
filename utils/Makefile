@@ -5,9 +5,12 @@ SUBDIRS = timer g.html2man
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 include $(MODULE_TOPDIR)/include/Make/Compile.make
 
-default: parsubdirs $(UTILSDIR)/mkmarkdown.py \
+default: parsubdirs $(UTILSDIR)/mkhtml.py $(UTILSDIR)/mkmarkdown.py \
 	$(UTILSDIR)/generate_last_commit_file.py \
 	$(UTILSDIR)/g.echo$(EXE)
+
+$(UTILSDIR)/mkhtml.py: mkhtml.py
+	$(INSTALL) $< $@
 
 $(UTILSDIR)/mkmarkdown.py: mkmarkdown.py
 	$(INSTALL) $< $@

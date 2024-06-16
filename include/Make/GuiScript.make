@@ -31,13 +31,25 @@ $(HTMLDIR)/g.gui.%.html: g.gui.%.html g.gui.%.tmp.html | $(HTMLDIR)
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) MODULE_TOPDIR=$(MODULE_TOPDIR) \
         $(PYTHON) $(GISBASE)/utils/mkhtml.py g.gui.$* $(GRASS_VERSION_DATE) > $@
 
+$(MDDIR)/source/g.gui.%.md: g.gui.%.md g.gui.%.tmp.md | $(MDDIR)
+	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) MODULE_TOPDIR=$(MODULE_TOPDIR) \
+        $(PYTHON) $(GISBASE)/utils/mkmarkdown.py g.gui.$* $(GRASS_VERSION_DATE) > $@
+
 $(HTMLDIR)/wxGUI.%.html: g.gui.%.html | $(HTMLDIR)
 	-rm -f g.gui.$*.tmp.html
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) MODULE_TOPDIR=$(MODULE_TOPDIR) \
         $(PYTHON) $(GISBASE)/utils/mkhtml.py g.gui.$* $(GRASS_VERSION_DATE) > $@
 
+$(HTMLDIR)/source/wxGUI.%.md: g.gui.%.,d | $(HTMLDIR)
+	-rm -f g.gui.$*.tmp.md
+	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) MODULE_TOPDIR=$(MODULE_TOPDIR) \
+        $(PYTHON) $(GISBASE)/utils/mkmarkdown.py g.gui.$* $(GRASS_VERSION_DATE) > $@
+
 g.gui.%.tmp.html: $(SCRIPTDIR)/g.gui.%
 	$(call htmldesc,$<,$@)
+
+g.gui.%.tmp.md: $(SCRIPTDIR)/g.gui.%
+	$(call mddesc,$<,$@)
 
 $(SCRIPTDIR)/g.gui.%$(SCRIPTEXT): g.gui.%.py | $(SCRIPTDIR)
 	$(INSTALL) $< $@
