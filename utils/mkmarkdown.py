@@ -757,7 +757,8 @@ if __name__ == "__main__":
         """
 ## SOURCE CODE
 
-Available at: [${PGM} source code](${URL_SOURCE})</a> ([history](${URL_LOG}"))\\
+Available at: [${PGM} source code](${URL_SOURCE})</a>
+ ([history](${URL_LOG}"))${MD_NEWLINE}
 ${DATE_TAG}
 """
     )
@@ -827,5 +828,6 @@ GRASS GIS ${GRASS_VERSION} Reference Manual
             PGM=pgm,
             URL_LOG=url_log,
             DATE_TAG=date_tag,
+            MD_NEWLINE="  ",
         )
     )

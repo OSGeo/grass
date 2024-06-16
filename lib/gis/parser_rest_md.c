@@ -4,7 +4,7 @@
    \brief GIS Library - Argument parsing functions (reStructuredText and
    Markdown output)
 
-   (C) 2012-2023 by the GRASS Development Team
+   (C) 2012-2024 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -19,6 +19,8 @@
 #include <grass/glocale.h>
 
 #include "parser_local_proto.h"
+
+#define MD_NEWLINE "  "
 
 static void usage_rest_md(bool rest);
 static void print_flag(const char *key, const char *label,
@@ -130,13 +132,13 @@ void usage_rest_md(bool rest)
     }
     fprintf(stdout, "**%s**", st->pgm_name);
     if (!rest)
-        fprintf(stdout, "\\");
+        fprintf(stdout, MD_NEWLINE);
     fprintf(stdout, "\n");
     if (rest)
         fprintf(stdout, "| ");
     fprintf(stdout, "**%s --help**", st->pgm_name);
     if (!rest)
-        fprintf(stdout, "\\");
+        fprintf(stdout, MD_NEWLINE);
     fprintf(stdout, "\n");
     if (rest)
         fprintf(stdout, "| ");
@@ -219,7 +221,7 @@ void usage_rest_md(bool rest)
         while (st->n_flags && flag != NULL) {
             print_flag(&flag->key, flag->label, flag->description, rest);
             if (!rest)
-                fprintf(stdout, "\\");
+                fprintf(stdout, MD_NEWLINE);
             fprintf(stdout, "\n");
             flag = flag->next_flag;
         }
@@ -228,21 +230,21 @@ void usage_rest_md(bool rest)
                        _("Allow output files to overwrite existing files"),
                        rest);
             if (!rest)
-                fprintf(stdout, "\\");
+                fprintf(stdout, MD_NEWLINE);
             fprintf(stdout, "\n");
         }
     }
     print_flag("help", NULL, _("Print usage summary"), rest);
     if (!rest)
-        fprintf(stdout, "\\");
+        fprintf(stdout, MD_NEWLINE);
     fprintf(stdout, "\n");
     print_flag("verbose", NULL, _("Verbose module output"), rest);
     if (!rest)
-        fprintf(stdout, "\\");
+        fprintf(stdout, MD_NEWLINE);
     fprintf(stdout, "\n");
     print_flag("quiet", NULL, _("Quiet module output"), rest);
     if (!rest)
-        fprintf(stdout, "\\");
+        fprintf(stdout, MD_NEWLINE);
     fprintf(stdout, "\n");
     print_flag("ui", NULL, _("Force launching GUI dialog"), rest);
     fprintf(stdout, "\n");
@@ -263,7 +265,7 @@ void usage_rest_md(bool rest)
             opt = opt->next_opt;
             if (opt != NULL) {
                 if (!rest)
-                    fprintf(stdout, "\\");
+                    fprintf(stdout, MD_NEWLINE);
             }
             fprintf(stdout, "\n");
         }
@@ -284,7 +286,7 @@ void print_flag(const char *key, const char *label, const char *description,
         fprintf(stdout, "-");
     fprintf(stdout, "-%s**", key);
     if (!rest)
-        fprintf(stdout, "\\");
+        fprintf(stdout, MD_NEWLINE);
     fprintf(stdout, "\n");
     if (label != NULL) {
         if (rest)
@@ -292,7 +294,7 @@ void print_flag(const char *key, const char *label, const char *description,
         print_escaped(stdout, "\t", rest);
         print_escaped(stdout, label, rest);
         if (!rest)
-            fprintf(stdout, "\\");
+            fprintf(stdout, MD_NEWLINE);
         fprintf(stdout, "\n");
     }
     if (rest)
@@ -341,7 +343,7 @@ void print_option(const struct Option *opt, bool rest, char *image_spec_rest)
         fprintf(stdout, " **[required]**");
     }
     if (!rest)
-        fprintf(stdout, "\\");
+        fprintf(stdout, MD_NEWLINE);
     fprintf(stdout, "\n");
     if (opt->label) {
         if (rest)
@@ -352,7 +354,7 @@ void print_option(const struct Option *opt, bool rest, char *image_spec_rest)
     if (opt->description) {
         if (opt->label) {
             if (!rest)
-                fprintf(stdout, "\\");
+                fprintf(stdout, MD_NEWLINE);
             fprintf(stdout, "\n");
         }
         if (rest)
@@ -363,7 +365,7 @@ void print_option(const struct Option *opt, bool rest, char *image_spec_rest)
 
     if (opt->options) {
         if (!rest)
-            fprintf(stdout, "\\");
+            fprintf(stdout, MD_NEWLINE);
         fprintf(stdout, "\n");
         if (rest)
             fprintf(stdout, "| ");
@@ -375,7 +377,7 @@ void print_option(const struct Option *opt, bool rest, char *image_spec_rest)
 
     if (opt->def) {
         if (!rest)
-            fprintf(stdout, "\\");
+            fprintf(stdout, MD_NEWLINE);
         fprintf(stdout, "\n");
         if (rest)
             fprintf(stdout, "| ");
@@ -394,7 +396,7 @@ void print_option(const struct Option *opt, bool rest, char *image_spec_rest)
         while (opt->opts[i]) {
             if (opt->descs[i]) {
                 if (!rest)
-                    fprintf(stdout, "\\");
+                    fprintf(stdout, MD_NEWLINE);
                 fprintf(stdout, "\n");
                 char *thumbnails = NULL;
                 if (opt->gisprompt) {
