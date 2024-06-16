@@ -250,6 +250,9 @@ void print_shell(struct Map_info *Map, const char *field_opt,
 
     map_type = Vect_maptype(Map);
 
+    char scale_tmp[18];
+    snprintf(scale_tmp, 18, "1:%d", Vect_get_scale(Map));
+
     switch (format) {
     case PLAIN:
         break;
@@ -260,7 +263,7 @@ void print_shell(struct Map_info *Map, const char *field_opt,
         fprintf(stdout, "project=%s\n", G_location());
         fprintf(stdout, "database=%s\n", G_gisdbase());
         fprintf(stdout, "title=%s\n", Vect_get_map_name(Map));
-        fprintf(stdout, "scale=1:%d\n", Vect_get_scale(Map));
+        fprintf(stdout, "scale=%s\n", scale_tmp);
         fprintf(stdout, "creator=%s\n", Vect_get_person(Map));
         fprintf(stdout, "organization=%s\n", Vect_get_organization(Map));
         fprintf(stdout, "source_date=%s\n", Vect_get_map_date(Map));
@@ -271,8 +274,7 @@ void print_shell(struct Map_info *Map, const char *field_opt,
         json_object_set_string(root_object, "project", G_location());
         json_object_set_string(root_object, "database", G_gisdbase());
         json_object_set_string(root_object, "title", Vect_get_map_name(Map));
-        json_object_set_number(root_object, "scale",
-                               Vect_get_scale(Map)); // fixme: 1:scale
+        json_object_set_string(root_object, "scale", scale_tmp);
         json_object_set_string(root_object, "creator", Vect_get_person(Map));
         json_object_set_string(root_object, "organization",
                                Vect_get_organization(Map));
