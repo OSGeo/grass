@@ -313,8 +313,7 @@ def main():
             "g.remove", type="vector", flags="f", name=tgtregion, env=src_env
         )
 
-    # switch to target location
-    if "r" in region_flag:
+        # switch to target location
         grass.run_command("g.remove", type="vector", flags="f", name=tgtregion)
 
     region = grass.region()
