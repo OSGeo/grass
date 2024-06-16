@@ -27,28 +27,22 @@ double euclidean_distance(const struct Point *p1, const struct Point *p2);
 
 int main(int argc, char *argv[])
 {
-    struct GModule *module;
-    struct Option *input_opt, *output_opt, *method_opt;
     struct Map_info Map;
-    struct line_pnts *points;
-    struct line_cats *cats;
-    int i, nlines, line, n;
-    const char *input_vector, *output_file, *method;
 
     // Initialize the GIS environment
     G_gisinit(argv[0]);
 
     // Set up module description
-    module = G_define_module();
+    struct GModule *module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("point pattern analysis"));
     module->description =
         _("Point pattern analysis using K, L, F, and G functions.");
 
     // Define options
-    input_opt = G_define_standard_option(G_OPT_V_INPUT);
-    output_opt = G_define_standard_option(G_OPT_F_OUTPUT);
-    method_opt = G_define_option();
+    struct Option *input_opt = G_define_standard_option(G_OPT_V_INPUT);
+    struct Option *output_opt = G_define_standard_option(G_OPT_F_OUTPUT);
+    struct Option *method_opt = G_define_option();
     method_opt->key = "method";
     method_opt->type = TYPE_STRING;
     method_opt->required = YES;
@@ -58,26 +52,20 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    input_vector = input_opt->answer;
-    output_file = output_opt->answer;
-    method = method_opt->answer;
+    const char *input_vector = input_opt->answer;
+    const char *output_file = output_opt->answer;
+    const char *method = method_opt->answer;
 
     // Open the vector map
     if (Vect_open_old(&Map, input_vector, "") < 0)
         G_fatal_error(_("Unable to open vector map <%s>"), input_vector);
 
     // Allocate memory for points
-    points = Vect_new_line_struct();
-    cats = Vect_new_cats_struct();
-    nlines = Vect_get_num_lines(&Map);
-    n = 0;
+    struct line_pnts *points = Vect_new_line_struct();
+    struct line_cats *cats = Vect_new_cats_struct();
+    int nlines = Vect_get_num_lines(&Map);
 
-    // Count points
-    for (line = 1; line <= nlines; line++) {
-        if (Vect_read_line(&Map, points, cats, line) == GV_POINT) {
-            n++;
-        }
-    }
+    int n = Vect_get_num_primitives(&Map, GV_POINT);
 
     // Allocate memory for points array
     struct Point *pts = (struct Point *)malloc(n * sizeof(struct Point));
@@ -86,7 +74,8 @@ int main(int argc, char *argv[])
     // Store points
     // Initialize k-d tree
     struct kdtree *kdtree = kdtree_create(2, NULL);
-    for (line = 1; line <= nlines; line++) {
+
+    for (int line = 1; line <= nlines; line++) {
         if (Vect_read_line(&Map, points, cats, line) == GV_POINT) {
             pts[idx].x = points->x[0];
             pts[idx].y = points->y[0];
