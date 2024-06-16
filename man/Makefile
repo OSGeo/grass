@@ -34,6 +34,10 @@ IDXSRC = full_index index topics keywords graphical_index manual_gallery class_g
 
 INDICES := $(patsubst %,$(HTMLDIR)/%.html,$(IDXSRC))
 
+# TODO: rename to INDICES_MD
+IDXSRC_MD = index
+INDICES_MD := $(patsubst %,$(MDDIR)/source/%.md,$(IDXSRC_MD))
+
 ALL_HTML := $(wildcard $(HTMLDIR)/*.*.html)
 
 ifneq (@(type sphinx-build2 > /dev/null),)
@@ -48,6 +52,7 @@ default: $(DSTFILES)
 	$(MAKE) $(INDICES)
 	$(call build,check)
 	$(MAKE) manpages
+	$(MAKE) $(INDICES_MD)
 	$(MAKE) mkdocs
 
 # This must be a separate target so that evaluation of $(MANPAGES)
@@ -113,6 +118,10 @@ $(HTMLDIR)/full_index.html: $(ALL_HTML) build_full_index.py build_html.py
 	touch $@
 
 $(HTMLDIR)/index.html: build_index.py build_html.py
+	$(call build,index)
+	touch $@
+
+$(MDDIR)/source/index.md: build_index.py build_md.py
 	$(call build,index)
 	touch $@
 
