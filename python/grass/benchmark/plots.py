@@ -56,7 +56,7 @@ def nprocs_plot(results, filename=None, title=None, metric="time"):
     """
     ylabel = ""
     plt = get_pyplot(to_file=bool(filename))
-    axes = plt.gca()
+    _, axes = plt.subplots()
 
     x_ticks = set()  # gather x values
     for result in results:
