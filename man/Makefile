@@ -48,6 +48,7 @@ default: $(DSTFILES)
 	$(MAKE) $(INDICES)
 	$(call build,check)
 	$(MAKE) manpages
+	$(MAKE) mkdocs
 
 # This must be a separate target so that evaluation of $(MANPAGES)
 # is delayed until the indices have been generated
@@ -167,3 +168,7 @@ $(HTMLDIR)/parser_standard_options.js: parser_standard_options.js
 
 $(HTMLDIR)/parser_standard_options.css: parser_standard_options.css
 	$(INSTALL_DATA) $< $@
+
+mkdocs:
+	$(INSTALL_DATA) mkdocs.yml $(MDDIR)/
+	@cd $(MDDIR) ; mkdocs build
