@@ -185,6 +185,8 @@ int main(int argc, char **argv)
     struct in_file in[12];
     struct GModule *module;
 
+    // Initialize the 'in' array to zero
+    memset(in, 0, sizeof(in));
     float max_y;
     float min_y;
     float height, width;
