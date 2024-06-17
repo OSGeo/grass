@@ -87,9 +87,11 @@ jobs:
         run: |
           pip install -r .github/workflows/python_requirements.txt
           pip install -r .github/workflows/optional_requirements.txt
-          pip install flake8==${{ env.FLAKE8_VERSION }}
-          pip install pylint==${{ env.PYLINT_VERSION }} pytest-github-actions-annotate-failures
-          pip install bandit[sarif]==${{ env.BANDIT_VERSION }}
+          pip install --user pipx
+          pipx ensurepath
+          pipx install flake8==${{ env.FLAKE8_VERSION }}
+          pipx install pylint==${{ env.PYLINT_VERSION }} pytest-github-actions-annotate-failures
+          pipx install bandit[sarif]==${{ env.BANDIT_VERSION }}
 
       - name: Run Flake8
         run: |
