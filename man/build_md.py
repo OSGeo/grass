@@ -296,14 +296,14 @@ moduletopics_tmpl = string.Template(
 )
 
 headertopics_tmpl = r"""
-[![GRASS logo]("grass_logo.png)](index.html)
+[![GRASS logo](grass_logo.png)](index.html)
 ___
 ## Topics
 
 """
 
 headerkeywords_tmpl = r"""
-[![GRASS logo]("grass_logo.png)](index.html)
+[![GRASS logo](grass_logo.png)](index.html)
 ___
 ## Keywords - Index of GRASS GIS modules
 """
@@ -311,7 +311,7 @@ ___
 
 headerkey_tmpl = string.Template(
     r"""
-[![GRASS logo]("grass_logo.png)](index.html)
+[![GRASS logo](grass_logo.png)](index.html)
 ___
 ## Topic: ${keyword}
 
