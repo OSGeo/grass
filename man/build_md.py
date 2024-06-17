@@ -42,7 +42,7 @@ ___
 
 ## GRASS GIS ${grass_version} Reference Manual
 
-**Geographic Resources Analysis Support System<**, commonly
+**Geographic Resources Analysis Support System**, commonly
 referred to as [GRASS GIS](https://grass.osgeo.org), is a
 [Geographic Information System](https://en.wikipedia.org/wiki/Geographic_information_system) (GIS) used for geospatial data management and
 analysis, image processing, graphics/maps production, spatial
@@ -402,7 +402,7 @@ def copy_file(src, dst):
 
 
 def html_files(cls=None, ignore_gui=True):
-    for cmd in sorted(os.listdir(html_dir)):
+    for cmd in sorted(os.listdir(md_dir)):
         if (
             cmd.endswith(".html")
             and (cls in [None, "*"] or cmd.startswith(cls + "."))
@@ -416,10 +416,11 @@ def html_files(cls=None, ignore_gui=True):
 
 def write_md_header(f, title, ismain=False, body_width="99%"):
     # f.write(header1_tmpl.substitute(title=title))
-    if ismain and macosx:
-        f.write(
-            macosx_tmpl.substitute(grass_version=grass_version, grass_mmver=grass_mmver)
-        )
+    # if ismain and macosx:
+    #     f.write(
+    #         macosx_tmpl.substitute(grass_version=grass_version,
+    #                                grass_mmver=grass_mmver)
+    #     )
     f.write(header2_tmpl.substitute(grass_version=grass_version, body_width=body_width))
 
 
