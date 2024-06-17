@@ -98,6 +98,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("algebra"));
     G_add_keyword(_("statistics"));
     G_add_keyword(_("texture"));
+    G_add_keyword(_("parallel"));
     module->description =
         _("Generate images with textural features from a raster map.");
 
