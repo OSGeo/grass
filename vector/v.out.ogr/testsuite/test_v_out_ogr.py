@@ -53,19 +53,16 @@ skewness=4.86561
         """Use temporary region settings"""
         cls.use_temp_region()
 
-
     @classmethod
     def tearDownClass(cls):
         """!Remove the temporary region"""
         cls.del_temp_region()
 
-
     def tearDown(self):
 
         # Remove maps in temp mapset
         self.runModule(
-            "g.remove", type="vector", flags="f", 
-            pattern="%s*" % self.temp_import
+            "g.remove", type="vector", flags="f", pattern="%s*" % self.temp_import
         )
 
         # Remove temporary files
@@ -76,14 +73,16 @@ skewness=4.86561
         if len(self.session_file) > 0:
             Path(self.session_file).unlink()
 
-        # Remove temporary location    
+        # Remove temporary location
         env = gs.parse_command("g.gisenv")
-        rmtree("%s/%s" % (env["GISDBASE"].replace('\'', '').replace(';', ''),
-                          self.temp_location),
-               ignore_errors=True)
-
+        rmtree(
+            "%s/%s"
+            % (env["GISDBASE"].replace("'", "").replace(";", ""), self.temp_location),
+            ignore_errors=True,
+        )
 
     def test_1(self):
+
         self.assertModule(
             "v.out.ogr",
             "Export to GeoPackage Format",
@@ -109,6 +108,7 @@ skewness=4.86561
         )
 
     def test_2(self):
+
         self.assertModule(
             "v.out.ogr",
             "Export to Shapefile Format",
@@ -135,30 +135,23 @@ skewness=4.86561
 
     def test_3(self):
 
-        # Record original location to return later
+        # Record original location to use corect GISDBASE
         env_orig = gs.parse_command("g.gisenv")
 
         # Create new location with CRS without EPSG code
         gs.run_command(
-            "g.proj",
-            wkt="ESRI54052.wkt",
-            location=self.temp_location,
-            flags="c"
+            "g.proj", wkt="ESRI54052.wkt", location=self.temp_location, flags="c"
         )
 
+        # Create new session to avoid temporary region
         self.session_file, env_new = gs.core.create_environment(
-            env_orig["GISDBASE"].replace('\'', '').replace(';', ''),
+            env_orig["GISDBASE"].replace("'", "").replace(";", ""),
             self.temp_location,
-            "PERMANENT"
+            "PERMANENT",
         )
 
         # Creates a random layer to test output
-        gs.run_command(
-            "v.random",
-            output="temp_rand",
-            npoints=3,
-            env=env_new
-        )
+        gs.run_command("v.random", output="temp_rand", npoints=3, env=env_new)
 
         # Test output of a vector with non-EPSG CRS
         gs.run_command(
@@ -167,8 +160,7 @@ skewness=4.86561
             output=self.temp_54052,
             format="GPKG",
             dsco="a_srs=ESRI:54052",
-            env=env_new
-
+            env=env_new,
         )
 
 
