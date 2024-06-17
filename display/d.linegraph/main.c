@@ -126,7 +126,9 @@ static char *icon_files(void)
 
     closedir(dir);
 
+    if (list != NULL) {
     qsort(list, count, sizeof(char *), cmp);
+}
 
     if (len > 0) {
         ret = G_malloc((len + 1) * sizeof(char)); /* \0 */
