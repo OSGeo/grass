@@ -127,7 +127,7 @@ static char *icon_files(void)
     closedir(dir);
 
     if (list != NULL) {
-    qsort(list, count, sizeof(char *), cmp);
+        qsort(list, count, sizeof(char *), cmp);
 }
 
     if (len > 0) {
