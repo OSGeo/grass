@@ -8,7 +8,7 @@ plugins:
 #    - awesome-pages
 # collapse_single_pages: true
 # https://github.com/mkdocs/mkdocs/issues/991
-use_directory_urls: true
+use_directory_urls: false
 nav:
     - Startup: grass.md
     - Databases: database.md
