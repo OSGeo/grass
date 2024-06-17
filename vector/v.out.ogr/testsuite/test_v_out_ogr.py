@@ -140,7 +140,7 @@ skewness=4.86561
 
         # Create new location with CRS without EPSG code
         gs.run_command(
-            "g.proj", wkt="ESRI54052.wkt", location=self.temp_location, flags="c"
+            "g.proj", wkt="data/ESRI54052.wkt", location=self.temp_location, flags="c"
         )
 
         # Create new session to avoid temporary region
