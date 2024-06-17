@@ -56,8 +56,7 @@ class ModelDataDialog(SimpleDialog):
         self.parent = parent
         self.shape = shape
 
-        label, etype = self._getLabel()
-        self.etype = etype
+        label, self.etype = self._getLabel()
         SimpleDialog.__init__(self, parent, title)
 
         self.element = self._createElementControl(shape)
