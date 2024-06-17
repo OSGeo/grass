@@ -63,9 +63,9 @@ skewness=4.86561
             format="GPKG",
         )
 
-        self.assertModule(
+        # Import back to verify
+        self.runModule(
             "v.in.ogr",
-            "Import back to verify",
             input="%s.gpkg" % self.test_map,
             output=self.temp_import,
         )
@@ -88,9 +88,9 @@ skewness=4.86561
             format="ESRI_Shapefile",
         )
 
-        self.assertModule(
+        # Import back to verify
+        self.runModule(
             "v.in.ogr",
-            "Import back to verify",
             input="%s.shp" % self.test_map,
             output=self.temp_import,
         )
