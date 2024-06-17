@@ -1162,11 +1162,12 @@ class ItemCheckListCtrl(ItemListCtrl, CheckListCtrlMixin):
 
     def OnCheckItem(self, index, flag):
         """Item checked/unchecked"""
-        name = self.GetLabel()
-        if name == "IfBlockList" and self.window:
-            self.window.OnCheckItemIf(index, flag)
-        elif name == "ElseBlockList" and self.window:
-            self.window.OnCheckItemElse(index, flag)
+        if self.window:
+            name = self.GetLabel()
+            if name == "IfBlockList":
+                self.window.OnCheckItemIf(index, flag)
+            elif name == "ElseBlockList":
+                self.window.OnCheckItemElse(index, flag)
 
     def GetItems(self):
         """Get list of selected actions"""
