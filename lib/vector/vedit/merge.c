@@ -184,7 +184,8 @@ int Vedit_merge_lines(struct Map_info *Map, struct ilist *List)
         if (Points->n_points > 0) {
             line = Vect_rewrite_line(Map, line1, type1, Points, Cats1);
             if (line < 0) {
-                return -1;
+                nlines_merged = -1;
+                goto free_exit;
             }
 
             if (line1 <= nlines)
@@ -195,6 +196,7 @@ int Vedit_merge_lines(struct Map_info *Map, struct ilist *List)
         }
     } /* for each line */
 
+free_exit:
     /* destroy structures */
     Vect_destroy_line_struct(Points1);
     Vect_destroy_line_struct(Points2);

@@ -156,12 +156,13 @@ int Vedit_move_vertex(struct Map_info *Map, struct Map_info **BgMap,
 
         if (rewrite) {
             if (Vect_rewrite_line(Map, line, type, Points, Cats) < 0) {
-                G_free(moved);
-                return -1;
+                nvertices_moved = -1;
+                goto free_exit;
             }
         }
     } /* for each selected line */
 
+free_exit:
     /* destroy structures */
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);

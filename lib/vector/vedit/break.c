@@ -99,7 +99,8 @@ int Vedit_split_lines(struct Map_info *Map, struct ilist *List,
             else
                 newline = Vect_write_line(Map, type, Points2, Cats);
             if (newline < 0) {
-                return -1;
+                nlines_modified = -1;
+                goto free_exit;
             }
             if (List_updated)
                 Vect_list_append(List_updated, newline);
@@ -116,7 +117,8 @@ int Vedit_split_lines(struct Map_info *Map, struct ilist *List,
             /* rewrite the line */
             newline = Vect_write_line(Map, type, Points2, Cats);
             if (newline < 0) {
-                return -1;
+                nlines_modified = -1;
+                goto free_exit;
             }
             if (List_updated)
                 Vect_list_append(List_updated, newline);
@@ -125,6 +127,7 @@ int Vedit_split_lines(struct Map_info *Map, struct ilist *List,
         } /* for each bounding box */
     }     /* for each selected line */
 
+free_exit:
     Vect_destroy_line_struct(Points);
     Vect_destroy_line_struct(Points2);
     Vect_destroy_cats_struct(Cats);

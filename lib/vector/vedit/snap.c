@@ -190,13 +190,15 @@ int Vedit_snap_lines(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
         if (Vedit_snap_line(Map, BgMap, nbgmaps, line, Points, thresh,
                             to_vertex) == 1) {
             if (Vect_rewrite_line(Map, line, type, Points, Cats) < 0) {
-                return -1;
+                nlines_modified = -1;
+                goto free_exit;
             }
 
             nlines_modified++;
         }
     }
 
+free_exit:
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);
 
