@@ -79,7 +79,7 @@ endef
 define build_keywords
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
-	$(PYTHON) ./build_keywords.py $(HTMLDIR)
+	$(PYTHON) ./build_keywords.py
 endef
 
 define build_graphical_index

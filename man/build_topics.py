@@ -4,7 +4,6 @@
 # (c) 2012-2024 by the GRASS Development Team, Markus Neteler, Luca Delucchi, Martin Landa
 
 import os
-import sys
 import glob
 
 year = os.getenv("VERSION_DATE")
@@ -125,7 +124,6 @@ if __name__ == "__main__":
         headerkey_tmpl,
         desc1_tmpl,
         write_html_footer,
-        write_html_footer,
         moduletopics_tmpl,
         html_dir as path,
     )
@@ -137,7 +135,6 @@ if __name__ == "__main__":
         headertopics_tmpl,
         headerkey_tmpl,
         desc1_tmpl,
-        write_md_footer,
         write_md_footer,
         moduletopics_tmpl,
         md_dir as path,

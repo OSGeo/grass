@@ -207,10 +207,10 @@ footer_tmpl = string.Template(  # TODO: https://trac.osgeo.org/grass/ticket/3987
     r"""
 ____
 [Main index](${index_url}) |
-[Topics index](topics.html) |
-[Keywords index](keywords.html) |
-[Graphical index](graphical_index.html) |
-[Full index](full_index.html)
+[Topics index](topics.md) |
+[Keywords index](keywords.md) |
+[Graphical index](graphical_index.md) |
+[Full index](full_index.md)
 
 &copy; 2003-${year}
 [GRASS Development Team](https://grass.osgeo.org),
