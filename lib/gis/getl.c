@@ -31,7 +31,7 @@
  */
 int G_getl(char *buf, int n, FILE *fd)
 {
-    G_getl2(buf, n, fd);
+    return G_getl2(buf, n, fd);
 }
 
 /*!
