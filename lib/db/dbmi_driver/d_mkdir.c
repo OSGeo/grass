@@ -66,7 +66,7 @@ static int make_parent_dir(char *path, int mode)
     char *slash;
     int stat;
 
-    slash = rfind(path, '/');
+    slash = rfind(path, HOST_DIRSEP);
     if (slash == NULL || slash == path)
         return DB_OK; /* no parent dir to make. return ok */
 
@@ -83,7 +83,7 @@ static int make_parent_dir(char *path, int mode)
     else {
         stat = DB_FAILED;
     }
-    *slash = '/'; /* put the slash back into the path */
+    *slash = HOST_DIRSEP; /* put the slash back into the path */
 
     return stat;
 }
