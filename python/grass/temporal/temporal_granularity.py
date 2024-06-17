@@ -17,6 +17,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 from .datetime_math import compute_datetime_delta
 from .abstract_map_dataset import AbstractMapDataset
 from functools import reduce
@@ -204,94 +205,102 @@ def compute_relative_time_granularity(maps):
         >>> tgis.init()
         >>> maps = []
         >>> for i in range(5):
-        ...   map = tgis.RasterDataset("a%i@P"%i)
-        ...   check = map.set_relative_time(i,i + 1,"seconds")
-        ...   if check:
-        ...     maps.append(map)
+        ...     map = tgis.RasterDataset("a%i@P" % i)
+        ...     check = map.set_relative_time(i, i + 1, "seconds")
+        ...     if check:
+        ...         maps.append(map)
+        ...
         >>> tgis.compute_relative_time_granularity(maps)
         1
 
         >>> maps = []
         >>> count = 0
-        >>> timelist = ((0,3), (3,6), (6,9))
+        >>> timelist = ((0, 3), (3, 6), (6, 9))
         >>> for t in timelist:
-        ...   map = tgis.RasterDataset("a%i@P"%count)
-        ...   check = map.set_relative_time(t[0],t[1],"years")
-        ...   if check:
-        ...     maps.append(map)
-        ...   count += 1
+        ...     map = tgis.RasterDataset("a%i@P" % count)
+        ...     check = map.set_relative_time(t[0], t[1], "years")
+        ...     if check:
+        ...         maps.append(map)
+        ...     count += 1
+        ...
         >>> tgis.compute_relative_time_granularity(maps)
         3
 
         >>> maps = []
         >>> count = 0
-        >>> timelist = ((0,3), (4,6), (8,11))
+        >>> timelist = ((0, 3), (4, 6), (8, 11))
         >>> for t in timelist:
-        ...   map = tgis.RasterDataset("a%i@P"%count)
-        ...   check = map.set_relative_time(t[0],t[1],"years")
-        ...   if check:
-        ...     maps.append(map)
-        ...   count += 1
+        ...     map = tgis.RasterDataset("a%i@P" % count)
+        ...     check = map.set_relative_time(t[0], t[1], "years")
+        ...     if check:
+        ...         maps.append(map)
+        ...     count += 1
+        ...
         >>> tgis.compute_relative_time_granularity(maps)
         1
 
         >>> maps = []
         >>> count = 0
-        >>> timelist = ((0,8), (2,6), (5,9))
+        >>> timelist = ((0, 8), (2, 6), (5, 9))
         >>> for t in timelist:
-        ...   map = tgis.RasterDataset("a%i@P"%count)
-        ...   check = map.set_relative_time(t[0],t[1],"months")
-        ...   if check:
-        ...     maps.append(map)
-        ...   count += 1
+        ...     map = tgis.RasterDataset("a%i@P" % count)
+        ...     check = map.set_relative_time(t[0], t[1], "months")
+        ...     if check:
+        ...         maps.append(map)
+        ...     count += 1
+        ...
         >>> tgis.compute_relative_time_granularity(maps)
         4
 
         >>> maps = []
         >>> count = 0
-        >>> timelist = ((0,8), (8,12), (12,18))
+        >>> timelist = ((0, 8), (8, 12), (12, 18))
         >>> for t in timelist:
-        ...   map = tgis.RasterDataset("a%i@P"%count)
-        ...   check = map.set_relative_time(t[0],t[1],"days")
-        ...   if check:
-        ...     maps.append(map)
-        ...   count += 1
+        ...     map = tgis.RasterDataset("a%i@P" % count)
+        ...     check = map.set_relative_time(t[0], t[1], "days")
+        ...     if check:
+        ...         maps.append(map)
+        ...     count += 1
+        ...
         >>> tgis.compute_relative_time_granularity(maps)
         2
 
         >>> maps = []
         >>> count = 0
-        >>> timelist = ((0,None), (8,None), (12,None), (24,None))
+        >>> timelist = ((0, None), (8, None), (12, None), (24, None))
         >>> for t in timelist:
-        ...   map = tgis.RasterDataset("a%i@P"%count)
-        ...   check = map.set_relative_time(t[0],t[1],"minutes")
-        ...   if check:
-        ...     maps.append(map)
-        ...   count += 1
+        ...     map = tgis.RasterDataset("a%i@P" % count)
+        ...     check = map.set_relative_time(t[0], t[1], "minutes")
+        ...     if check:
+        ...         maps.append(map)
+        ...     count += 1
+        ...
         >>> tgis.compute_relative_time_granularity(maps)
         4
 
         >>> maps = []
         >>> count = 0
-        >>> timelist = ((0,None), (8,14), (18,None), (24,None))
+        >>> timelist = ((0, None), (8, 14), (18, None), (24, None))
         >>> for t in timelist:
-        ...   map = tgis.RasterDataset("a%i@P"%count)
-        ...   check = map.set_relative_time(t[0],t[1],"hours")
-        ...   if check:
-        ...     maps.append(map)
-        ...   count += 1
+        ...     map = tgis.RasterDataset("a%i@P" % count)
+        ...     check = map.set_relative_time(t[0], t[1], "hours")
+        ...     if check:
+        ...         maps.append(map)
+        ...     count += 1
+        ...
         >>> tgis.compute_relative_time_granularity(maps)
         2
 
         >>> maps = []
         >>> count = 0
-        >>> timelist = ((0,21),)
+        >>> timelist = ((0, 21),)
         >>> for t in timelist:
-        ...   map = tgis.RasterDataset("a%i@P"%count)
-        ...   check = map.set_relative_time(t[0],t[1],"hours")
-        ...   if check:
-        ...     maps.append(map)
-        ...   count += 1
+        ...     map = tgis.RasterDataset("a%i@P" % count)
+        ...     check = map.set_relative_time(t[0], t[1], "hours")
+        ...     if check:
+        ...         maps.append(map)
+        ...     count += 1
+        ...
         >>> tgis.compute_relative_time_granularity(maps)
         21
 
@@ -363,61 +372,77 @@ def compute_absolute_time_granularity(maps):
         >>> tgis.init()
         >>> maps = []
         >>> count = 0
-        >>> timelist = ((dt(2000,01,01),None), (dt(2000,02,01),None))
+        >>> timelist = ((dt(2000, 1, 1), None), (dt(2000, 2, 1), None))
         >>> for t in timelist:
-        ...   map = tgis.RasterDataset("a%i@P"%count)
-        ...   check = map.set_absolute_time(t[0],t[1])
-        ...   if check:
-        ...     maps.append(map)
-        ...   count += 1
+        ...     map = tgis.RasterDataset("a%i@P" % count)
+        ...     check = map.set_absolute_time(t[0], t[1])
+        ...     if check:
+        ...         maps.append(map)
+        ...     count += 1
+        ...
         >>> tgis.compute_absolute_time_granularity(maps)
         '1 month'
 
         >>> maps = []
         >>> count = 0
-        >>> timelist = ((dt(2000,01,01),None), (dt(2000,01,02),None), (dt(2000,01,03),None))
+        >>> timelist = (
+        ...     (dt(2000, 1, 1), None),
+        ...     (dt(2000, 1, 2), None),
+        ...     (dt(2000, 1, 3), None),
+        ... )
         >>> for t in timelist:
-        ...   map = tgis.RasterDataset("a%i@P"%count)
-        ...   check = map.set_absolute_time(t[0],t[1])
-        ...   if check:
-        ...     maps.append(map)
-        ...   count += 1
+        ...     map = tgis.RasterDataset("a%i@P" % count)
+        ...     check = map.set_absolute_time(t[0], t[1])
+        ...     if check:
+        ...         maps.append(map)
+        ...     count += 1
+        ...
         >>> tgis.compute_absolute_time_granularity(maps)
         '1 day'
 
         >>> maps = []
         >>> count = 0
-        >>> timelist = ((dt(2000,01,01),None), (dt(2000,01,02),None), (dt(2000,05,04,0,5,30),None))
+        >>> timelist = (
+        ...     (dt(2000, 1, 1), None),
+        ...     (dt(2000, 1, 2), None),
+        ...     (dt(2000, 5, 4, 0, 5, 30), None),
+        ... )
         >>> for t in timelist:
-        ...   map = tgis.RasterDataset("a%i@P"%count)
-        ...   check = map.set_absolute_time(t[0],t[1])
-        ...   if check:
-        ...     maps.append(map)
-        ...   count += 1
+        ...     map = tgis.RasterDataset("a%i@P" % count)
+        ...     check = map.set_absolute_time(t[0], t[1])
+        ...     if check:
+        ...         maps.append(map)
+        ...     count += 1
+        ...
         >>> tgis.compute_absolute_time_granularity(maps)
         '30 seconds'
 
         >>> maps = []
         >>> count = 0
-        >>> timelist = ((dt(2000,01,01),dt(2000,05,02)), (dt(2000,05,04,2),None))
+        >>> timelist = ((dt(2000, 1, 1), dt(2000, 5, 2)), (dt(2000, 5, 4, 2), None))
         >>> for t in timelist:
-        ...   map = tgis.RasterDataset("a%i@P"%count)
-        ...   check = map.set_absolute_time(t[0],t[1])
-        ...   if check:
-        ...     maps.append(map)
-        ...   count += 1
+        ...     map = tgis.RasterDataset("a%i@P" % count)
+        ...     check = map.set_absolute_time(t[0], t[1])
+        ...     if check:
+        ...         maps.append(map)
+        ...     count += 1
+        ...
         >>> tgis.compute_absolute_time_granularity(maps)
         '2 hours'
 
         >>> maps = []
         >>> count = 0
-        >>> timelist = ((dt(2000,01,01),dt(2000,02,01)), (dt(2005,05,04,12),dt(2007,05,20,6)))
+        >>> timelist = (
+        ...     (dt(2000, 1, 1), dt(2000, 2, 1)),
+        ...     (dt(2005, 5, 4, 12), dt(2007, 5, 20, 6)),
+        ... )
         >>> for t in timelist:
-        ...   map = tgis.RasterDataset("a%i@P"%count)
-        ...   check = map.set_absolute_time(t[0],t[1])
-        ...   if check:
-        ...     maps.append(map)
-        ...   count += 1
+        ...     map = tgis.RasterDataset("a%i@P" % count)
+        ...     check = map.set_absolute_time(t[0], t[1])
+        ...     if check:
+        ...         maps.append(map)
+        ...     count += 1
+        ...
         >>> tgis.compute_absolute_time_granularity(maps)
         '6 hours'
 
@@ -537,13 +562,13 @@ def compute_common_relative_time_granularity(gran_list):
 
         >>> import grass.temporal as tgis
         >>> tgis.init()
-        >>> grans = [1,2,30]
+        >>> grans = [1, 2, 30]
         >>> tgis.compute_common_relative_time_granularity(grans)
         1
 
         >>> import grass.temporal as tgis
         >>> tgis.init()
-        >>> grans = [10,20,30]
+        >>> grans = [10, 20, 30]
         >>> tgis.compute_common_relative_time_granularity(grans)
         10
     """
@@ -572,130 +597,168 @@ def compute_common_absolute_time_granularity(gran_list, start_date_list=None):
         >>> import grass.temporal as tgis
         >>> tgis.init()
         >>> grans = ["20 second", "10 minutes", "2 hours"]
-        >>> dates = [datetime(2001,1,1,0,0,0),
-        ...          datetime(2001,1,1,0,0,0),
-        ...          datetime(2001,1,1,0,0,0),]
+        >>> dates = [
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ... ]
         >>> tgis.compute_common_absolute_time_granularity(grans, dates)
         '20 seconds'
 
         >>> grans = ["20 second", "10 minutes", "2 hours"]
-        >>> dates = [datetime(2001,1,1,0,0,20),
-        ...          datetime(2001,1,1,0,0,0),
-        ...          datetime(2001,1,1,0,0,0),]
+        >>> dates = [
+        ...     datetime(2001, 1, 1, 0, 0, 20),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ... ]
         >>> tgis.compute_common_absolute_time_granularity(grans, dates)
         '1 second'
 
         >>> grans = ["7200 second", "240 minutes", "1 year"]
-        >>> dates = [datetime(2001,1,1,0,0,10),
-        ...          datetime(2001,1,1,0,0,0),
-        ...          datetime(2001,1,1,0,0,0),]
+        >>> dates = [
+        ...     datetime(2001, 1, 1, 0, 0, 10),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ... ]
         >>> tgis.compute_common_absolute_time_granularity(grans, dates)
         '1 second'
 
         >>> grans = ["7200 second", "89 minutes", "1 year"]
-        >>> dates = [datetime(2001,1,1,0,0,0),
-        ...          datetime(2001,1,1,0,0,0),
-        ...          datetime(2001,1,1,0,0,0),]
+        >>> dates = [
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ... ]
         >>> tgis.compute_common_absolute_time_granularity(grans, dates)
         '60 seconds'
 
         >>> grans = ["120 minutes", "2 hours"]
-        >>> dates = [datetime(2001,1,1,0,0,0),
-        ...          datetime(2001,1,1,0,0,0),]
+        >>> dates = [
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ... ]
         >>> tgis.compute_common_absolute_time_granularity(grans, dates)
         '60 minutes'
 
         >>> grans = ["120 minutes", "2 hours"]
-        >>> dates = [datetime(2001,1,1,0,30,0),
-        ...          datetime(2001,1,1,0,0,0),]
+        >>> dates = [
+        ...     datetime(2001, 1, 1, 0, 30, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ... ]
         >>> tgis.compute_common_absolute_time_granularity(grans, dates)
         '1 minute'
 
         >>> grans = ["360 minutes", "3 hours"]
-        >>> dates = [datetime(2001,1,1,0,0,0),
-        ...          datetime(2001,1,1,0,0,0),]
+        >>> dates = [
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ... ]
         >>> tgis.compute_common_absolute_time_granularity(grans, dates)
         '60 minutes'
 
         >>> grans = ["2 hours", "4 hours", "8 hours"]
-        >>> dates = [datetime(2001,1,1,0,0,0),
-        ...          datetime(2001,1,1,0,0,0),
-        ...          datetime(2001,1,1,0,0,0),]
+        >>> dates = [
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ... ]
         >>> tgis.compute_common_absolute_time_granularity(grans, dates)
         '2 hours'
 
         >>> grans = ["2 hours", "4 hours", "8 hours"]
-        >>> dates = [datetime(2001,1,1,2,0,0),
-        ...          datetime(2001,1,1,4,0,0),
-        ...          datetime(2001,1,1,8,0,0),]
+        >>> dates = [
+        ...     datetime(2001, 1, 1, 2, 0, 0),
+        ...     datetime(2001, 1, 1, 4, 0, 0),
+        ...     datetime(2001, 1, 1, 8, 0, 0),
+        ... ]
         >>> tgis.compute_common_absolute_time_granularity(grans, dates)
         '1 hour'
 
         >>> grans = ["8 hours", "2 days"]
-        >>> dates = [datetime(2001,1,1,0,0,0),
-        ...          datetime(2001,1,1,0,0,0),]
+        >>> dates = [
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ... ]
         >>> tgis.compute_common_absolute_time_granularity(grans, dates)
         '8 hours'
 
         >>> grans = ["8 hours", "2 days"]
-        >>> dates = [datetime(2001,1,1,10,0,0),
-        ...          datetime(2001,1,1,0,0,0),]
+        >>> dates = [
+        ...     datetime(2001, 1, 1, 10, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ... ]
         >>> tgis.compute_common_absolute_time_granularity(grans, dates)
         '1 hour'
 
         >>> grans = ["120 months", "360 months", "4 years"]
-        >>> dates = [datetime(2001,1,1,0,0,0),
-        ...          datetime(2001,1,1,0,0,0),
-        ...          datetime(2001,1,1,0,0,0),]
+        >>> dates = [
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ... ]
         >>> tgis.compute_common_absolute_time_granularity(grans, dates)
         '12 months'
 
         >>> grans = ["30 days", "10 days", "5 days"]
-        >>> dates = [datetime(2001,2,1,0,0,0),
-        ...          datetime(2001,1,1,0,0,0),
-        ...          datetime(2001,1,1,0,0,0),]
+        >>> dates = [
+        ...     datetime(2001, 2, 1, 0, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ... ]
         >>> tgis.compute_common_absolute_time_granularity(grans, dates)
         '5 days'
 
         >>> grans = ["30 days", "10 days", "5 days"]
-        >>> dates = [datetime(2001,2,2,0,0,0),
-        ...          datetime(2001,1,1,0,0,0),
-        ...          datetime(2001,1,1,0,0,0),]
+        >>> dates = [
+        ...     datetime(2001, 2, 2, 0, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ... ]
         >>> tgis.compute_common_absolute_time_granularity(grans, dates)
         '1 day'
 
         >>> grans = ["2 days", "360 months", "4 years"]
-        >>> dates = [datetime(2001,1,1,0,0,0),
-        ...          datetime(2001,1,1,0,0,0),
-        ...          datetime(2001,1,1,0,0,0),]
+        >>> dates = [
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ... ]
         >>> tgis.compute_common_absolute_time_granularity(grans, dates)
         '2 days'
 
         >>> grans = ["2 days", "360 months", "4 years"]
-        >>> dates = [datetime(2001,1,2,0,0,0),
-        ...          datetime(2001,1,1,0,0,0),
-        ...          datetime(2001,1,1,0,0,0),]
+        >>> dates = [
+        ...     datetime(2001, 1, 2, 0, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ... ]
         >>> tgis.compute_common_absolute_time_granularity(grans, dates)
         '1 day'
 
         >>> grans = ["120 months", "360 months", "4 years"]
-        >>> dates = [datetime(2001,2,1,0,0,0),
-        ...          datetime(2001,1,1,0,0,0),
-        ...          datetime(2001,1,1,0,0,0),]
+        >>> dates = [
+        ...     datetime(2001, 2, 1, 0, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ... ]
         >>> tgis.compute_common_absolute_time_granularity(grans, dates)
         '1 month'
 
         >>> grans = ["120 months", "361 months", "4 years"]
-        >>> dates = [datetime(2001,1,1,0,0,0),
-        ...          datetime(2001,1,1,0,0,0),
-        ...          datetime(2001,1,1,0,0,0),]
+        >>> dates = [
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ... ]
         >>> tgis.compute_common_absolute_time_granularity(grans, dates)
         '1 month'
 
         >>> grans = ["120 months", "360 months", "4 years"]
-        >>> dates = [datetime(2001,1,1,0,0,0),
-        ...          datetime(2001,1,1,0,0,0),
-        ...          datetime(2001,1,1,0,0,0),]
+        >>> dates = [
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ...     datetime(2001, 1, 1, 0, 0, 0),
+        ... ]
         >>> tgis.compute_common_absolute_time_granularity(grans, dates)
         '12 months'
 
@@ -1055,16 +1118,16 @@ def gran_singular_unit(gran):
 
         >>> import grass.temporal as tgis
         >>> tgis.init()
-        >>> tgis.gran_singular_unit('1 month')
+        >>> tgis.gran_singular_unit("1 month")
         'month'
 
-        >>> tgis.gran_singular_unit('2 months')
+        >>> tgis.gran_singular_unit("2 months")
         'month'
 
-        >>> tgis.gran_singular_unit('6 seconds')
+        >>> tgis.gran_singular_unit("6 seconds")
         'second'
 
-        >>> tgis.gran_singular_unit('1 year')
+        >>> tgis.gran_singular_unit("1 year")
         'year'
     """
     if check_granularity_string(gran, "absolute"):
@@ -1100,16 +1163,16 @@ def gran_plural_unit(gran):
 
         >>> import grass.temporal as tgis
         >>> tgis.init()
-        >>> tgis.gran_singular_unit('1 month')
+        >>> tgis.gran_singular_unit("1 month")
         'month'
 
-        >>> tgis.gran_singular_unit('2 months')
+        >>> tgis.gran_singular_unit("2 months")
         'month'
 
-        >>> tgis.gran_singular_unit('6 seconds')
+        >>> tgis.gran_singular_unit("6 seconds")
         'second'
 
-        >>> tgis.gran_singular_unit('1 year')
+        >>> tgis.gran_singular_unit("1 year")
         'year'
     """
     if check_granularity_string(gran, "absolute"):
@@ -1148,28 +1211,28 @@ def gran_to_gran(from_gran, to_gran="days", shell=False):
 
         >>> import grass.temporal as tgis
         >>> tgis.init()
-        >>> tgis.gran_to_gran('1 month', '1 day')
+        >>> tgis.gran_to_gran("1 month", "1 day")
         '30.436875 days'
 
-        >>> tgis.gran_to_gran('1 month', '1 day', True)
+        >>> tgis.gran_to_gran("1 month", "1 day", True)
         30.436875
 
-        >>> tgis.gran_to_gran('10 year', '1 hour')
+        >>> tgis.gran_to_gran("10 year", "1 hour")
         '87658.2 hours'
 
-        >>> tgis.gran_to_gran('10 year', '1 minute')
+        >>> tgis.gran_to_gran("10 year", "1 minute")
         '5259492.0 minutes'
 
-        >>> tgis.gran_to_gran('6 months', '1 day')
+        >>> tgis.gran_to_gran("6 months", "1 day")
         '182.62125 days'
 
-        >>> tgis.gran_to_gran('1 months', '1 second')
+        >>> tgis.gran_to_gran("1 months", "1 second")
         '2629746.0 seconds'
 
-        >>> tgis.gran_to_gran('1 month', '1 second', True)
+        >>> tgis.gran_to_gran("1 month", "1 second", True)
         2629746.0
 
-        >>> tgis.gran_to_gran('30 month', '1 month', True)
+        >>> tgis.gran_to_gran("30 month", "1 month", True)
         30
     """
 

@@ -117,7 +117,8 @@ class Select(ComboCtrl):
         :param updateOnPopup: True for updating list of elements on popup
         :param onPopup: function to be called on Popup
         :param fullyQualified: True to provide fully qualified names (map@mapset)
-        :param extraItems: extra items to add (given as dictionary) - see gmodeler for usage
+        :param extraItems: extra items to add (given as dictionary)
+                           - see gmodeler for usage
         :param layerTree: show only elements from given layer tree if not None
         :param validator: validator for TextCtrl
         """
@@ -2284,8 +2285,8 @@ class GdalSelect(wx.Panel):
                     "r.external", quiet=True, read=True, flags="t", input=dsn
                 )
 
-                # v.external returns info for individual bands, however projection is shared by all bands ->
-                # (it is possible to take first line)
+                # v.external returns info for individual bands, however projection is
+                # shared by all bands -> (it is possible to take first line)
 
                 lines = ret.splitlines()
                 projectionMatch = "0"
@@ -2363,6 +2364,17 @@ class GdalSelect(wx.Panel):
                 for raster in rasters:
                     grassName = GetValidLayerName(raster)
                     projectionMatch = hasRastSameProjAsLocation(dsn, table=raster)
+                    projectionMatchCaption = getProjMatchCaption(projectionMatch)
+                    listData.append(
+                        (layerId, raster, projectionMatchCaption, grassName)
+                    )
+                    data.append((layerId, raster, int(projectionMatch), grassName))
+                    layerId += 1
+            elif self.dbWidgets["format"].GetStringSelection() == "Rasterlite":
+                rasters = self._getRasterliteDBRasters(dsn)
+                for raster in rasters:
+                    grassName = GetValidLayerName(raster)
+                    projectionMatch = hasRastSameProjAsLocation(dsn)
                     projectionMatchCaption = getProjMatchCaption(projectionMatch)
                     listData.append(
                         (layerId, raster, projectionMatchCaption, grassName)
@@ -2650,6 +2662,27 @@ class GdalSelect(wx.Panel):
             )
         Debug.msg(3, f"GdalSelect._getPGDBRasters(): return {rasters}")
         return rasters
+
+    def _getRasterliteDBRasters(self, dsn):
+        """Get Rasterlite DB rasters
+
+        :param str dsn: Rasterlite DB data source name
+
+        :return list: list of Rasterlite DB rasters
+        """
+        try:
+            from osgeo import gdal
+        except ImportError:
+            GError(
+                parent=self,
+                message=_("The Python GDAL package is missing. Please install it."),
+            )
+            return []
+        rasterlite = gdal.Open(dsn)
+        rasters = rasterlite.GetSubDatasets()
+        if rasters:
+            return [r[0].rsplit("table=")[-1] for r in rasters]
+        return [os.path.basename(rasterlite.GetFileList()[0]).rsplit(".")[0]]
 
 
 class ProjSelect(wx.ComboBox):
@@ -2983,7 +3016,8 @@ class VectorCategorySelect(wx.Panel):
         return True
 
     def _chckMap(self):
-        """Check if selected map in 'input' widget is the same as selected map in lmgr"""
+        """Check if selected map in 'input' widget is the same as selected map in
+        lmgr"""
         if self._isMapSelected():
             layerList = self.giface.GetLayerList()
             layerSelected = layerList.GetSelectedLayer()
@@ -2997,8 +3031,8 @@ class VectorCategorySelect(wx.Panel):
                     return False
                 GWarning(
                     _(
-                        "Input vector map <%s> and selected map <%s> in layer manager are different. "
-                        "Operation canceled."
+                        "Input vector map <%s> and selected map <%s> in layer manager "
+                        "are different. Operation canceled."
                     )
                     % (inputName["value"], str(layerSelected))
                 )

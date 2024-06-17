@@ -131,7 +131,7 @@ class Formatter:
 
     def pp_li(self, content):
         if self.get("in_ul"):
-            self.fmt("\n.IP \(bu 4n\n@", content)
+            self.fmt("\n.IP \\(bu 4n\n@", content)
         else:
             idx = self.get("index")
             idx[-1] += 1

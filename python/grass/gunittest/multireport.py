@@ -9,7 +9,6 @@ for details.
 :authors: Vaclav Petras
 """
 
-
 import sys
 import os
 import argparse
