@@ -12,39 +12,12 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
 
-def load_libc_by_name(names):
-    """Return loaded libc library trying the given names"""
-    for name in names:
-        try:
-            return ctypes.CDLL(name)
-        except OSError:
-            pass
-    for name in names:
-        path = ctypes.util.find_library(name)
-        if path:
-            try:
-                return ctypes.CDLL(path)
-            except OSError:
-                pass
-    raise OSError("Could not load libc library")
-
-
-def load_libc():
-    """Return loaded libc library based on platfrom"""
-    if platform.system() == "Windows":
-        return ctypes.CDLL("msvcrt.dll")
-    if platform.system() == "Darwin":
-        return ctypes.CDLL("libc.dylib")
-    names = ["libc.so.6", "libc.so", "libc"]
-    return load_libc_by_name(names)
-
-
 class TestNewlinesWithGetlFunctions(TestCase):
     """Test C functions G_getl() and G_getl2() from gis library"""
 
     @classmethod
     def setUpClass(cls):
-        cls.libc = load_libc()
+        cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
         cls.file_path = pathlib.Path("test.txt")
 
     def tearDown(self):
