@@ -79,7 +79,7 @@
 # % multiple: no
 # % options: none,gaussian,exponential,file
 # % description: Weighting function
-# % descriptions: none, No weighting; gaussian, Gaussian weighting function; exponential, Exponential weighting function; file, File with a custom weighting matrix
+# % descriptions: none;No weighting; gaussian;Gaussian weighting function; exponential;Exponential weighting function; file;File with a custom weighting matrix
 # % answer: none
 # %end
 
