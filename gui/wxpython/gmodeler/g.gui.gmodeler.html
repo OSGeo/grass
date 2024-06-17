@@ -39,6 +39,7 @@ The Graphical Modeler allows you to:
   <li>save model properties to a file (<i>GRASS Model File|*.gxm</i>)</li>
   <li>export model to Python script</li>
   <li>export model to Python script in the form of a PyWPS process</li>
+  <li>export model to an actinia process</li>
   <li>export model to image file</li>
 </ul>
 
@@ -57,7 +58,7 @@ toolbar with buttons (see figure below). There are options including
 (<font size="2" color="red">2</font>) Load model from file,
 (<font size="2" color="red">3</font>) Save current model to file,
 (<font size="2" color="red">4</font>) Export model to image,
-(<font size="2" color="red">5</font>) Export model to Python script,
+(<font size="2" color="red">5</font>) Export model to a (Python/PyWPS/actinia) script,
 (<font size="2" color="red">6</font>) Add command (GRASS module) to model,
 (<font size="2" color="red">7</font>) Add data to model,
 (<font size="2" color="red">8</font>) Manually define relation between
@@ -82,9 +83,9 @@ data and commands,
 <p>
 There is also a lower menu bar in the Graphical modeler dialog where one can
 manage model items, visualize commands, add or manage model variables,
-define default values and descriptions. The Python editor dialog window
-allows seeing workflows written in Python code, either as a basic Python
-script, or as a PyWPS script. The rightmost tab of the bottom menu is
+define default values and descriptions. The Script editor dialog window
+allows seeing and exporting workflows as basic Python scripts, as PyWPS
+scripts, or as actinia processes. The rightmost tab of the bottom menu is
 automatically triggered when the model is activated and shows all the steps
 of running GRASS modeler modules; in the case some errors occur in
 the calculation process, they are are written at that place.
@@ -220,7 +221,7 @@ slightly thicker than those of unparameterized elements.
 </center>
 
 <p>
-The final model, the list of all model items, and the Python code window with
+The final model, the list of all model items, and the Script editor window with
 <i>Save</i> and <i>Run</i> option are shown in the figures below.
 
 <center>
@@ -237,7 +238,7 @@ The final model, the list of all model items, and the Python code window with
 <a href="g_gui_gmodeler_python.png">
 <img src="g_gui_gmodeler_python.png" width="600" height="330"></a>
 <br>
-<i>Figure: Items with Python editor window.</i>
+<i>Figure: Items with Script editor window.</i>
 </center>
 
 <p>
@@ -345,8 +346,8 @@ model completion. The boundary of intermediate component is dotted line.
 <i>Figure: Usage and definition of intermediate data in model.</i>
 </center>
 
-<h3>Using the Python editor</h3>
-By using the Python editor in the Graphical Modeler the user can add Python code and then
+<h3>Using the Script editor</h3>
+By using the Script editor in the Graphical Modeler, the user can add Python code and then
 run it with <i>Run</i> button or just save it as a Python script <tt>*.py</tt>.
 The result is shown in the Figure below:
 
@@ -356,11 +357,11 @@ The result is shown in the Figure below:
 <a href="g_gui_gmodeler_python_code_result.png">
 <img src="g_gui_gmodeler_python_code_result.png" height="500"></a>
 <br>
-<i>Figure: Python editor in the wxGUI Graphical Modeler.</i>
+<i>Figure: Script editor in the wxGUI Graphical Modeler.</i>
 </center>
 
-In the <i>Script type</i> combobox, the user can also choose a PyWPS export
-instead of a basic Python script. A PyWPS process based on the model will be
+The second option in the <i>Script type</i> combobox exports a PyWPS script
+instead of a basic Python one. A PyWPS process based on the model will be
 generated then; for the PyWPS script, the <i>Run</i> button is disabled as
 users are expected to include this script in their web processing service and
 not to run it on itself.
@@ -369,7 +370,20 @@ not to run it on itself.
 <a href="g_gui_gmodeler_pywps_code.png">
 <img src="g_gui_gmodeler_pywps_code.png" width="500"></a>
 <br>
-<i>Figure: Python editor in the wxGUI Graphical Modeler - set to PyWPS.</i>
+<i>Figure: Script editor in the wxGUI Graphical Modeler - set to PyWPS.</i>
+</center>
+
+The third option in the <i>Script type</i> combobox exports an actinia process
+chain (non-parameterized model) or an actinia template (parameterized model).
+An actinia JSON based on the model will be generated then; as for the PyWPS
+script, the <i>Run</i> button is disabled as users are expected to include this
+JSON in their web processing service and not to run it on itself.
+
+<center>
+<a href="g_gui_gmodeler_actinia_code.png">
+<img src="g_gui_gmodeler_actinia_code.png" width="500"></a>
+<br>
+<i>Figure: Script editor in the wxGUI Graphical Modeler - set to actinia.</i>
 </center>
 
 <p>
