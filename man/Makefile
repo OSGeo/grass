@@ -73,7 +73,7 @@ endef
 define build_topics
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
-	$(PYTHON) ./build_topics.py $(HTMLDIR)
+	$(PYTHON) ./build_topics.py
 endef
 
 define build_keywords

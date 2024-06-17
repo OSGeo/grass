@@ -204,7 +204,8 @@ footer_tmpl = string.Template(  # TODO: https://trac.osgeo.org/grass/ticket/3987
     #
     # <p>
     # <hr class="header">
-    r"""----
+    r"""
+____
 [Main index](${index_url}) |
 [Topics index](topics.html) |
 [Keywords index](keywords.html) |
@@ -227,7 +228,7 @@ cmd2_tmpl = string.Template(
 # "
 
 desc1_tmpl = string.Template(
-    r"""<tr><td valign="top"><a href="${cmd}">${basename}</a></td> <td>${desc}</td></tr>
+    r"""| [${basename}](${cmd}) | ${desc} |
 """
 )
 # "
@@ -290,52 +291,35 @@ Following modules are missing the 'modulename.html' file in src code:
 
 moduletopics_tmpl = string.Template(
     r"""
-<li> <a href="topic_${key}.html">${name}</a></li>
+- [${name}](topic_${key}.html)
 """
 )
-# "
 
 headertopics_tmpl = r"""
-<link rel="stylesheet" href="grassdocs.css" type="text/css">
-</head>
-<body style="width: 99%">
-<div id="container">
+[![GRASS logo]("grass_logo.png)](index.html)
+___
+## Topics
 
-<a href="index.html"><img src="grass_logo.png" alt="GRASS logo"></a>
-<hr class="header">
-<h2>Topics</h2>
-<ul>
 """
-# "
 
 headerkeywords_tmpl = r"""
-<link rel="stylesheet" href="grassdocs.css" type="text/css">
-</head>
-<body style="width: 99%">
-<div id="container">
-
-<a href="index.html"><img src="grass_logo.png" alt="GRASS logo"></a>
-<hr class="header">
-<h2>Keywords - Index of GRASS GIS modules</h2>
+[![GRASS logo]("grass_logo.png)](index.html)
+___
+## Keywords - Index of GRASS GIS modules
 """
 # "
 
 headerkey_tmpl = string.Template(
     r"""
-<link rel="stylesheet" href="grassdocs.css" type="text/css">
-</head>
-<body bgcolor="white">
-<div id="container">
+[![GRASS logo]("grass_logo.png)](index.html)
+___
+## Topic: ${keyword}
 
-<a href="index.html"><img src="grass_logo.png" alt="GRASS logo"></a>
-<hr class="header">
-
-<h2>Topic: ${keyword}</h2>
-
-<table>
+| Module | Description |
+|--------|-------------|
 """
 )
-# "
+
 
 headerpso_tmpl = r"""
 <link rel="stylesheet" href="grassdocs.css" type="text/css">
