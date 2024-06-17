@@ -753,9 +753,16 @@ void summary(void)
             json_object_set_number(root_object, "median", median);
             json_object_set_number(root_object, "third_quartile", quartile_75);
 
-            char percentile_key[24];
-            snprintf(percentile_key, 24, "percentile_%d", perc);
-            json_object_set_number(root_object, percentile_key, quartile_perc);
+            JSON_Value *percentiles_array_value = json_value_init_array();
+            JSON_Array *percentiles_array = json_array(percentiles_array_value);
+            JSON_Value *percentile_value = json_value_init_object();
+            JSON_Object *percentile_object = json_object(percentile_value);
+
+            json_object_set_number(percentile_object, "percentile", perc);
+            json_object_set_number(percentile_object, "value", quartile_perc);
+            json_array_append_value(percentiles_array, percentile_value);
+            json_object_set_value(root_object, "percentiles",
+                                  percentiles_array_value);
         }
         else if (shell_flag->answer) {
             fprintf(stdout, "first_quartile=%g\n", quartile_25);
