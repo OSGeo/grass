@@ -197,7 +197,7 @@ if __name__ == "__main__":
         html_dir as path
     )
 
-    # build_keywords("html")
+    build_keywords("html")
 
     from build_md import (
         grass_version,
