@@ -83,22 +83,11 @@ def build_keywords(ext):
             except:
                 continue
             try:
-                keys = lines[index_keys].split(",")
+                keys = []
+                for k in lines[index_keys].split(","):
+                    keys.append(k.strip().split(">")[1].split("<")[0])
             except:
                 continue
-
-            for key in keys:
-                key = key.strip()
-                try:
-                    key = key.split(">")[1].split("<")[0]
-                except:
-                    pass
-                if not key:
-                    exit(
-                        "Empty keyword from file {} line: {}".format(
-                            (fname, lines[index_keys])
-                        )
-                    )
         else:
             keys = []
             for line in lines:
