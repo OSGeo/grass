@@ -135,7 +135,7 @@ def print_support(file=None):
     response = requests.get(url=url)
     data = response.json()
     if data:
-        print_section_heading_3("Monthly financial supporters", file=file)
+        print_section_heading_3("Monthly Financial Supporters", file=file)
         random.shuffle(data)
         supporters = []
         for member in data:
