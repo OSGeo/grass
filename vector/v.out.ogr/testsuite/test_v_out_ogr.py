@@ -54,7 +54,9 @@ skewness=4.86561
         for p in Path(".").glob(f"{self.test_map}*"):
             p.unlink()
 
-    def test_1(self):
+    def test_gpkg_format(self):
+        """Tests output to GeoPackage format"""
+
         self.assertModule(
             "v.out.ogr",
             "Export to GeoPackage Format",
@@ -79,7 +81,9 @@ skewness=4.86561
             precision=1e-8,
         )
 
-    def test_2(self):
+    def test_shp_format(self):
+        """Tests output to Shapefile format"""
+
         self.assertModule(
             "v.out.ogr",
             "Export to Shapefile Format",
