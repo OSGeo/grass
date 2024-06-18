@@ -189,7 +189,6 @@ class InteractiveMap:
     >>> m = InteractiveMap()
     >>> m.add_vector("streams")
     >>> m.add_raster("elevation")
-    >>> m.add_layer_control()
     >>> m.show()
     """
 
