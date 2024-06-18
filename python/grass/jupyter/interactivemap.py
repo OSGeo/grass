@@ -336,7 +336,7 @@ class InteractiveMap:
 
     def add_layer_control(self, **kwargs):
         """Add layer control to display.
-        
+
         A Layer Control is added by default. Call this function to customize
         layer control object. Accepts keyword arguments to be passed to leaflet
         layer control object"""
