@@ -213,7 +213,7 @@ void calculate_l_function(struct Point *points, int n, const char *output_file)
     G_message(_("Max distance: %f"), max_dist);
 
     fprintf(fp, "Distance,L-value\n");
-    for (double d = 0; d <= max_dist; d += max_dist / 100) {
+    for (double d = 0.0; d <= max_dist; d += max_dist / 100.0) {
         double k_value = 0.0;
 
 #pragma omp parallel for reduction(+ : k_value)
