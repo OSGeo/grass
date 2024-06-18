@@ -67,7 +67,6 @@ from gmodeler.giface import GraphicalModelerGrassInterface
 from gmodeler.model import (
     Model,
     ModelAction,
-    ModelData,
     ModelRelation,
     ModelLoop,
     ModelCondition,
