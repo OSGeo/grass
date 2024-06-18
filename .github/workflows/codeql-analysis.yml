@@ -52,7 +52,7 @@ jobs:
           sudo apt-get install -y wget git gawk findutils
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
-      - uses: rui314/setup-mold@8de9eea54963d01c1a6c200606257d65bd53bea1 # v1
+      - uses: rui314/setup-mold@65685f45207903d37d006cd402c397653c57660e # v1
         if: ${{ matrix.language == 'c-cpp' }}
 
       - name: Initialize CodeQL
