@@ -21,7 +21,7 @@ void calculate_k_function(struct kdtree *kdtree, struct Point *points, int n,
                           const char *output_file);
 void calculate_l_function(struct Point *points, int n, const char *output_file);
 void calculate_f_function(struct Point *points, int n, const char *output_file);
-void calculate_g_functoin(struct kdtree *kdtree, struct Point *points, int n,
+void calculate_g_function(struct kdtree *kdtree, struct Point *points, int n,
                           const char *output_file);
 double euclidean_distance(const struct Point *p1, const struct Point *p2);
 
@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
         calculate_f_function(pts, n, output_file);
     }
     else if (strcmp(method, "g") == 0) {
-        calculate_g_functoin(kdtree, pts, n, output_file);
+        calculate_g_function(kdtree, pts, n, output_file);
     }
     else {
         G_fatal_error(_("Method not implemented yet"));
@@ -170,8 +170,8 @@ void calculate_k_function(struct kdtree *kdtree, struct Point *points, int n,
 
 double euclidean_distance(const struct Point *p1, const struct Point *p2)
 {
-    return sqrt((p1->x - p2->x) * (p1->x - p2->x) +
-                (p1->y - p2->y) * (p1->y - p2->y));
+    return (p1->x - p2->x) * (p1->x - p2->x) +
+           (p1->y - p2->y) * (p1->y - p2->y);
 }
 
 /**
@@ -209,7 +209,7 @@ void calculate_l_function(struct Point *points, int n, const char *output_file)
             }
         }
     }
-
+    max_dist = sqrt(max_dist);
     G_message(_("Max distance: %f"), max_dist);
 
     fprintf(fp, "Distance,L-value\n");
@@ -268,9 +268,9 @@ void calculate_f_function(struct Point *points, int n, const char *output_file)
                 }
             }
         }
-        distances[i] = min_dist;
+        distances[i] = sqrt(min_dist);
     }
-
+    max_dist = sqrt(max_dist);
     G_message(_("Max distance: %f"), max_dist);
 
     fprintf(fp, "Distance,F-value\n");
@@ -322,7 +322,7 @@ void calculate_g_function(struct kdtree *kdtree, struct Point *points, int n,
             }
         }
     }
-
+    max_dist = sqrt(max_dist);
     fprintf(fp, "Distance,G-value\n");
     for (double d = 0; d <= max_dist; d += max_dist / 100) {
         G_percent(d, max_dist, 4);
