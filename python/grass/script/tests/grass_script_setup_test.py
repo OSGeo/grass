@@ -111,7 +111,7 @@ def test_init_finish_global_functions_capture_strerrX(tmp_path):
     assert runtime_present_after, "Runtime should continue to be present"
 
 
-def test_init_finish_global_functions_capture_strerr(tmp_path):
+def test_init_finish_global_functions_isolated(tmp_path):
     """Check that init and finish global functions work with global env"""
 
     def init_finish(queue):
@@ -123,18 +123,45 @@ def test_init_finish_global_functions_capture_strerr(tmp_path):
         gs.setup.init(tmp_path / location)
         gs.run_command("g.region", flags="p")
         runtime_present_during = bool(os.environ.get("GISBASE"))
+        session_file_variable_present_during = bool(os.environ.get("GISRC"))
+        session_file = os.environ.get("GISRC")
+        if session_file:
+            session_file_present_during = os.path.exists(session_file)
+        else:
+            session_file_present_during = False
         gs.setup.finish()
+        session_file_variable_present_after = bool(os.environ.get("GISRC"))
         runtime_present_after = bool(os.environ.get("GISBASE"))
-        queue.put((os.environ["GISRC"], runtime_present_during, runtime_present_after))
+        queue.put(
+            (
+                session_file,
+                session_file_variable_present_during,
+                session_file_present_during,
+                session_file_variable_present_after,
+                runtime_present_during,
+                runtime_present_after,
+            )
+        )
 
-    session_file, runtime_present, runtime_present_after = run_in_subprocess(
-        init_finish
-    )
-    assert session_file, "Expected file name from the subprocess"
-    assert runtime_present, "Runtime (GISBASE) should be present"
+    (
+        session_file,
+        session_file_variable_present_during,
+        session_file_present_during,
+        session_file_variable_present_after,
+        runtime_present_during,
+        runtime_present_after,
+    ) = run_in_subprocess(init_finish)
+
+    # Runtime
+    assert runtime_present_during, "Runtime (GISBASE) should be present"
     # This is testing the current implementation behavior, but it is not required
     # to be this way in terms of design.
-    assert runtime_present_after, "Runtime should continue to be present"
+    assert runtime_present_after, "Expected GISBASE to be present when finished"
+
+    # Session
+    assert session_file_present_during, "Expected session file to be present"
+    assert session_file_variable_present_during, "Variable GISRC should be present"
+    assert not session_file_variable_present_after, "Not expecting GISRC when finished"
     assert not os.path.exists(session_file), "Session file not deleted"
 
 
