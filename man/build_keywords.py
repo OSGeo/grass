@@ -205,7 +205,7 @@ if __name__ == "__main__":
         grass_version,
         headerkeywords_tmpl,
         write_html_footer,
-        html_dir as path
+        html_dir as path,
     )
 
     build_keywords("html")
