@@ -90,7 +90,7 @@ jobs:
           pip install --user pipx
           pipx ensurepath
           pipx install flake8==${{ env.FLAKE8_VERSION }}
-          pipx install pylint==${{ env.PYLINT_VERSION }} pytest-github-actions-annotate-failures
+          pipx install pylint==${{ env.PYLINT_VERSION }}
           pipx install bandit[sarif]==${{ env.BANDIT_VERSION }}
 
       - name: Run Flake8
@@ -148,7 +148,7 @@ jobs:
 
       - name: Run Pylint on other files using pytest
         run: |
-          pip install pytest==7.4.4 pytest-pylint==0.19
+          pip install pytest==7.4.4 pytest-pylint==0.19 pytest-github-actions-annotate-failures
           echo "::warning file=.github/workflows/python-code-quality.yml,line=149,col=42,endColumn=48::\
             Temporarily downgraded pytest-pylint and pytest to allow merging other PRs.\
             The errors reported with a newer version seem legitimite and should be fixed \
