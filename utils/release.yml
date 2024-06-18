@@ -1,7 +1,7 @@
 ---
 notes:
   categories:
-    - title: Modules
+    - title: Tools
       regexp: '((d|db|g|i|m|ps|r|r3|t|v)\.[^ ]*)(, (d|db|g|i|m|ps|r|r3|t|v)\.[^ ]*)?: |(modules|tools|temporal): '
 
     - title: Graphical User Interface
