@@ -77,7 +77,8 @@ skewness=4.86561
         dbase = env["GISDBASE"].replace("'", "").replace(";", "")
         rmtree(f"{dbase}/{self.temp_location}", ignore_errors=True)
 
-    def test_1(self):
+    def test_gpkg_format(self):
+        """Tests output to GeoPackage format"""
 
         self.assertModule(
             "v.out.ogr",
@@ -103,7 +104,8 @@ skewness=4.86561
             precision=1e-8,
         )
 
-    def test_2(self):
+    def test_shp_format(self):
+        """Tests output to Shapefile format"""
 
         self.assertModule(
             "v.out.ogr",
