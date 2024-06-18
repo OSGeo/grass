@@ -133,7 +133,7 @@ see: <https://help.github.com/en/articles/creating-releases>.
 ### Tag release
 
 Before creating the tag, it is a good idea to see if the CI jobs are not failing.
-Check on GitHub or use GitHub CLI:
+Check on [GitHub Actions](https://github.com/OSGeo/grass/actions) or use GitHub CLI:
 
 ```bash
 gh run list --branch releasebranch_8_4
@@ -152,7 +152,7 @@ stored for annotated tags including a date; message is suggested by the
 `./utils/update_version.py` script):
 
 ```bash
-git tag $TAG -a -m "..."
+git tag $TAG -a -m "GRASS GIS $VERSION"
 ```
 
 List all tags (annotated will be at the top of both lists):
@@ -174,15 +174,15 @@ so that you can continue in the release process.
 
 ### Create release notes
 
-Generate a draft of release notes using a script. The script the script needs to
+Generate a draft of release notes using a script. The script needs to be
 run from the top directory and will expect its configuration files
 to be in the _utils_ directory.
 
-#### Major and minor releases
+#### First RC of a major and minor releases
 
-For major (X.y.z) and minor (x.Y.z) releases, GitHub API gives good results for the
-first release candidate because it contains contributor handles and can identify
-new contributors, so use with the _api_ backend, e.g.:
+For a first RC of a major (X.y.z) and minor (x.Y.z) release, the GitHub API gives
+good results for the first release candidate because it contains contributor handles
+and can identify new contributors, so use with the _api_ backend, e.g.:
 
 ```bash
 python ./utils/generate_release_notes.py api releasebranch_8_4 8.3.0 $VERSION
@@ -198,7 +198,7 @@ The _git log_ command operates on commits, so use use the _log_ backend:
 python ./utils/generate_release_notes.py log releasebranch_8_4 8.4.0 $VERSION
 ```
 
-#### RCs
+#### Between RCs and from last RC to final release
 
 In between RCs and between last RC and final release, the _log_ backend is useful
 for showing updates since the last RC:
@@ -528,7 +528,7 @@ Add release to history page:
 
 ## Tell others about release
 
-- If release candidate (just a short invitation to test):
+- If release candidate (just a short invitation to test it):
   - <grass-dev@lists.osgeo.org>
   - <grass-user@lists.osgeo.org>
 
