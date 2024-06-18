@@ -3,12 +3,12 @@
 
 include $(MODULE_TOPDIR)/include/Make/HtmlRules.make
 
-$(HTMLDIR)/%.html: %.html %.tmp.html $(HTMLSRC) $(IMGDST) | $(HTMLDIR)
+$(HTMLDIR)/%.html: %.html %.tmp.html $(HTMLSRC) $(IMGDST)  | $(HTMLDIR)
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) MODULE_TOPDIR=$(MODULE_TOPDIR) \
         $(PYTHON) $(GISBASE)/utils/mkhtml.py $* > $@
 
 # TODO: mode to Markdown.make (?)
-$(MDDIR)/source/%.md: %.md %.tmp.md $(HTMLSRC) $(IMGDST) | $(MDDIR)
+$(MDDIR)/source/%.md: %.md %.tmp.md $(HTMLSRC) $(IMGDST_MD) | $(MDDIR)
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) MODULE_TOPDIR=$(MODULE_TOPDIR) \
         $(PYTHON) $(GISBASE)/utils/mkmarkdown.py $* > $@
 
