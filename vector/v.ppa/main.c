@@ -304,7 +304,7 @@ void calculate_f_function(struct Point *points, int n, const char *output_file)
 void calculate_g_function(struct kdtree *kdtree, struct Point *points, int n,
                           const char *output_file)
 {
-    G_message(_("G-Funtion"));
+    G_message(_("G-Function"));
     FILE *fp = fopen(output_file, "w");
     if (fp == NULL) {
         G_fatal_error(_("Unable to open output file <%s>"), output_file);
