@@ -301,7 +301,7 @@ void calculate_f_function(struct Point *points, int n, const char *output_file)
  * @param output_file The path to the output file where the results will be
  * written.
  */
-void calculate_g_functoin(struct kdtree *kdtree, struct Point *points, int n,
+void calculate_g_function(struct kdtree *kdtree, struct Point *points, int n,
                           const char *output_file)
 {
     G_message(_("G-Funtion"));
