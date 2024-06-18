@@ -893,72 +893,70 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
     }
 
 #pragma omp parallel for schedule(static, 1) default(shared) ordered
-    {
-        for (int i = 0; i < printCount; i++) {
-            double angle = angle_direction + dfr_rad * i;
-            double printangle = printangle_direction + settings->step * i;
+    for (int i = 0; i < printCount; i++) {
+        double angle = angle_direction + dfr_rad * i;
+        double printangle = printangle_direction + settings->step * i;
 
-            /* make sure the anlge between 0 and 2pi */
-            if (angle < 0.)
-                angle += twopi;
-            else if (angle > twopi)
-                angle -= twopi;
+        /* make sure the anlge between 0 and 2pi */
+        if (angle < 0.)
+            angle += twopi;
+        else if (angle > twopi)
+            angle -= twopi;
 
-            /* make sure the printangle between 0 and 360 degree */
-            if (printangle < 0.)
-                printangle += 360.;
-            else if (printangle > 360.)
-                printangle -= 360.;
+        /* make sure the printangle between 0 and 360 degree */
+        if (printangle < 0.)
+            printangle += 360.;
+        else if (printangle > 360.)
+            printangle -= 360.;
 
-            OriginAngle origin_angle;
-            com_par(geometry, &origin_angle, angle, xp, yp);
+        OriginAngle origin_angle;
+        com_par(geometry, &origin_angle, angle, xp, yp);
 
-            HorizonProperties horizon =
-                horizon_height(geometry, &origin_point, &origin_angle);
-            double shadow_angle = atan(horizon.tanh0);
+        HorizonProperties horizon =
+            horizon_height(geometry, &origin_point, &origin_angle);
+        double shadow_angle = atan(horizon.tanh0);
 
-            if (settings->degreeOutput)
-                shadow_angle *= rad2deg;
+        if (settings->degreeOutput)
+            shadow_angle *= rad2deg;
 
 #pragma omp ordered
-            {
-                if (settings->compassOutput) {
-                    double tmpangle;
-                    tmpangle = 360. - printangle + 90.;
-                    if (tmpangle >= 360.)
-                        tmpangle = tmpangle - 360.;
-                    switch (format) {
-                    case PLAIN:
-                        fprintf(fp, "%lf,%lf", tmpangle, shadow_angle);
-                        if (settings->horizonDistance)
-                            fprintf(fp, ",%lf", horizon.length);
-                        fprintf(fp, "\n");
-                        break;
-                    case JSON:
-                        json_array_append_number(azimuths, tmpangle);
-                        json_array_append_number(horizons, shadow_angle);
-                        json_array_append_number(distances, horizon.length);
-                        break;
-                    }
-                }
-                else {
-                    switch (format) {
-                    case PLAIN:
-                        fprintf(fp, "%lf,%lf", printangle, shadow_angle);
-                        if (settings->horizonDistance)
-                            fprintf(fp, ",%lf", horizon.length);
-                        fprintf(fp, "\n");
-                        break;
-                    case JSON:
-                        json_array_append_number(azimuths, printangle);
-                        json_array_append_number(horizons, shadow_angle);
-                        json_array_append_number(distances, horizon.length);
-                        break;
-                    }
+        {
+            if (settings->compassOutput) {
+                double tmpangle;
+                tmpangle = 360. - printangle + 90.;
+                if (tmpangle >= 360.)
+                    tmpangle = tmpangle - 360.;
+                switch (format) {
+                case PLAIN:
+                    fprintf(fp, "%lf,%lf", tmpangle, shadow_angle);
+                    if (settings->horizonDistance)
+                        fprintf(fp, ",%lf", horizon.length);
+                    fprintf(fp, "\n");
+                    break;
+                case JSON:
+                    json_array_append_number(azimuths, tmpangle);
+                    json_array_append_number(horizons, shadow_angle);
+                    json_array_append_number(distances, horizon.length);
+                    break;
                 }
             }
-        } /* end of for loop over angles */
-    }     /* end of parallel section */
+            else {
+                switch (format) {
+                case PLAIN:
+                    fprintf(fp, "%lf,%lf", printangle, shadow_angle);
+                    if (settings->horizonDistance)
+                        fprintf(fp, ",%lf", horizon.length);
+                    fprintf(fp, "\n");
+                    break;
+                case JSON:
+                    json_array_append_number(azimuths, printangle);
+                    json_array_append_number(horizons, shadow_angle);
+                    json_array_append_number(distances, horizon.length);
+                    break;
+                }
+            }
+        }
+    } /* end of parallel section */
 
     if (format == JSON) {
         json_object_set_value(json_origin, "azimuth", azimuths_value);
@@ -1216,54 +1214,51 @@ void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
             (k + 1), arrayNumInt, angle_deg, shad_filename);
 
 #pragma omp parallel for schedule(static, 1) default(shared)
-        {
-            for (int j = hor_row_start; j < hor_row_end; j++) {
-                G_percent(j - hor_row_start, hor_numrows - 1, 2);
-                for (int i = hor_col_start; i < hor_col_end; i++) {
-                    OriginPoint origin_point;
-                    OriginAngle origin_angle;
-                    origin_point.xg0 = (double)i * geometry->stepx;
+        for (int j = hor_row_start; j < hor_row_end; j++) {
+            G_percent(j - hor_row_start, hor_numrows - 1, 2);
+            for (int i = hor_col_start; i < hor_col_end; i++) {
+                OriginPoint origin_point;
+                OriginAngle origin_angle;
+                origin_point.xg0 = (double)i * geometry->stepx;
 
-                    double xp = geometry->xmin + origin_point.xg0;
-                    origin_point.yg0 = (double)j * geometry->stepy;
+                double xp = geometry->xmin + origin_point.xg0;
+                origin_point.yg0 = (double)j * geometry->stepy;
 
-                    double yp = geometry->ymin + origin_point.yg0;
-                    origin_point.coslatsq = 0;
-                    if (ll_correction) {
-                        double coslat = cos(deg2rad * yp);
-                        origin_point.coslatsq = coslat * coslat;
+                double yp = geometry->ymin + origin_point.yg0;
+                origin_point.coslatsq = 0;
+                if (ll_correction) {
+                    double coslat = cos(deg2rad * yp);
+                    origin_point.coslatsq = coslat * coslat;
+                }
+
+                double inputAngle = angle + pihalf;
+                inputAngle =
+                    (inputAngle >= twopi) ? inputAngle - twopi : inputAngle;
+                com_par(geometry, &origin_angle, inputAngle, xp, yp);
+
+                origin_point.z_orig = z[j][i];
+                origin_point.maxlength =
+                    (geometry->zmax - origin_point.z_orig) / TANMINANGLE;
+                origin_point.maxlength =
+                    (origin_point.maxlength < settings->fixedMaxLength)
+                        ? origin_point.maxlength
+                        : settings->fixedMaxLength;
+
+                if (origin_point.z_orig != UNDEFZ) {
+
+                    G_debug(4, "**************new line %d %d\n", i, j);
+                    HorizonProperties horizon =
+                        horizon_height(geometry, &origin_point, &origin_angle);
+                    double shadow_angle = atan(horizon.tanh0);
+
+                    if (settings->degreeOutput) {
+                        shadow_angle *= rad2deg;
                     }
+                    horizon_raster[j - buffer_s][i - buffer_w] = shadow_angle;
 
-                    double inputAngle = angle + pihalf;
-                    inputAngle =
-                        (inputAngle >= twopi) ? inputAngle - twopi : inputAngle;
-                    com_par(geometry, &origin_angle, inputAngle, xp, yp);
-
-                    origin_point.z_orig = z[j][i];
-                    origin_point.maxlength =
-                        (geometry->zmax - origin_point.z_orig) / TANMINANGLE;
-                    origin_point.maxlength =
-                        (origin_point.maxlength < settings->fixedMaxLength)
-                            ? origin_point.maxlength
-                            : settings->fixedMaxLength;
-
-                    if (origin_point.z_orig != UNDEFZ) {
-
-                        G_debug(4, "**************new line %d %d\n", i, j);
-                        HorizonProperties horizon = horizon_height(
-                            geometry, &origin_point, &origin_angle);
-                        double shadow_angle = atan(horizon.tanh0);
-
-                        if (settings->degreeOutput) {
-                            shadow_angle *= rad2deg;
-                        }
-                        horizon_raster[j - buffer_s][i - buffer_w] =
-                            shadow_angle;
-
-                    } /* undefs */
-                }     /* end of loop over columns */
-            }         /* end of loop over rows */
-        }             /* end of parallel section */
+                } /* undefs */
+            }     /* end of loop over columns */
+        }         /* end of parallel section */
 
         G_debug(1, "OUTGR() starts...");
         OUTGR(settings, shad_filename, cellhd);
