@@ -10,13 +10,11 @@ matrix:
     - os: linux
       dist: jammy
       compiler: gcc
-      sudo: required
       env: CC=gcc CXX=g++
 
     - os: linux
       dist: jammy
       compiler: clang
-      sudo: required
       env: CC=clang CXX=clang++
 
 env:
