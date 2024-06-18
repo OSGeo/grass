@@ -11,7 +11,7 @@ before RC1 of a new release series, please see assumptions in the
 Given how the branch protection rules are set up and work,
 you need to bypass protection against merge commits on branches.
 (We don't want any new merge commits. However, there are merge commits
-from the past and they prevent creation of a new branch when the rules are
+from the past and they prevent the creation of a new branch when the rules are
 applied.)
 To bypass, go to _Settings > Rules > Rulesets > Rules for release branches_.
 Press _Add bypass_ and add the team or user who is creating the branch.
@@ -19,16 +19,16 @@ Press _Add bypass_ and add the team or user who is creating the branch.
 Use GitHub web interface to create a new branch:
 
 1. Go to _branches_.
-2. Copy name of one of the existing branches.
+2. Copy the name of one of the existing branches.
 3. Click _New branch_.
-4. Paste name of the existing branch.
+4. Paste the name of the existing branch.
 5. Modify the name.
 6. Click _Create branch_.
 
 As an alternative to creation in GitHub, you can
 [create a new branch using command line](#create-in-command-line).
 
-Note down the latest commit hash on the branch which will be recorded in the
+Note down the latest commit hash on the branch to record it in the
 [release history overview](https://grass.osgeo.org/about/history/releases/).
 The instructions for updating the website come later in the procedure.
 
@@ -62,7 +62,7 @@ clean up (`make distclean`) your GRASS GIS build to remove
 the now outdated generated version numbers.
 (You don't need to build GRASS GIS if you have a fresh clone.)
 
-Search for all other mentions of last few versions to see if they need to be updated,
+Search for all other mentions of the last few versions to see if they need to be updated,
 for example:
 
 ```bash
@@ -84,14 +84,23 @@ Create a PR and review and merge it as soon as possible to avoid having
 the wrong version on the branch in case other PRs need to be merged.
 
 ## Server Updates
+### New directory on server
 
-In the grass-addons repo:
+On grass.osgeo.org (grasslxd), new version directories need to be created: 
+
+```bash
+cd /var/www/code_and_data/
+VER=grass85
+mkdir -p ${VER}/manuals \
+                ${VER}/source/snapshot \
+                ${VER}/binary/mswindows/native \
+                ${VER}/binary/linux/snapshot 
 
 * Add new branch into [`.github/workflows/ci.yml`](https://github.com/OSGeo/grass-addons/blob/grass8/.github/workflows/ci.yml).
 
 ## Website Updates
 
-Add the branch creation to the following history:
+Add the branch creation to the release history (use the commit hash you saved earlier):
 
 <https://github.com/OSGeo/grass-website/blob/master/content/about/history/releases.md>
 
@@ -121,7 +130,7 @@ git rebase upstream/main
 Create the branch:
 
 ```bash
-git switch -c releasebranch_8_3
+git switch -c releasebranch_8_4
 ```
 
 Push the version to the upstream repo:
