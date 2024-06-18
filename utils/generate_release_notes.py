@@ -9,12 +9,14 @@ import argparse
 import csv
 import itertools
 import json
+import random
 import re
 import subprocess
 import sys
 from collections import defaultdict
 from pathlib import Path
 
+import requests
 import yaml
 
 PRETTY_TEMPLATE = (
@@ -128,6 +130,20 @@ def binder_badge(tag):
     return f"[![Binder]({binder_image_url})]({binder_url})"
 
 
+def print_support(file=None):
+    url = "https://opencollective.com/grass/tiers/supporter/all.json"
+    response = requests.get(url=url)
+    data = response.json()
+    if data:
+        print_section_heading_3("Monthly Financial Supporters", file=file)
+        random.shuffle(data)
+        supporters = []
+        for member in data:
+            supporters.append(f"""[{member['name']}]({member['profile']})""")
+        print(", ".join(supporters))
+        print("")
+
+
 def adjust_after(lines):
     """Adjust new contributor lines in the last part of the generated notes"""
     bot_file = Path("utils") / "known_bot_names.txt"
@@ -170,7 +186,13 @@ def print_notes(
     if before:
         print(before)
     print_section_heading_2("Highlights", file=file)
-    print("* _Put handcrafted list of items here._\n")
+    print("* _Put handcrafted list of 2-15 items here._\n")
+    print_section_heading_2("New Addon Tools", file=file)
+    print(
+        "* _Put here a list of new addos since last release "
+        "or delete the section if there are none._\n"
+    )
+    print_support(file=file)
     print_section_heading_2("What's Changed", file=file)
     changes_by_category = split_to_categories(changes, categories=categories)
     print_by_category(changes_by_category, categories=categories, file=file)
