@@ -103,16 +103,10 @@ def build_topics(ext):
                 " for additional references.*\n".format(key=key.replace("_", " "))
             )
 
-        if ext == "html":
-            write_html_footer(keyfile, f"index.{ext}", year)
-        else:
-            write_md_footer(keyfile, f"index.{ext}", year)
+        write_footer(keyfile, f"index.{ext}", year)
     if ext == "html":
         topicsfile.write("</ul>\n")
-    if ext == "html":
-        write_html_footer(topicsfile, f"index.{ext}", year)
-    else:
-        write_md_footer(topicsfile, f"index.{ext}", year)
+    write_footer(topicsfile, f"index.{ext}", year)
     topicsfile.close()
 
 
@@ -123,7 +117,7 @@ if __name__ == "__main__":
         headertopics_tmpl,
         headerkey_tmpl,
         desc1_tmpl,
-        write_html_footer,
+        write_html_footer as write_footer,
         moduletopics_tmpl,
         html_dir as path,
     )
@@ -135,7 +129,7 @@ if __name__ == "__main__":
         headertopics_tmpl,
         headerkey_tmpl,
         desc1_tmpl,
-        write_md_footer,
+        write_md_footer as write_footer,
         moduletopics_tmpl,
         md_dir as path,
     )

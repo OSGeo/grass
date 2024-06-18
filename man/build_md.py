@@ -220,9 +220,11 @@ GRASS GIS ${grass_version} Reference Manual
 # "
 
 cmd2_tmpl = string.Template(
-    r"""<a name="${cmd}"></a>
-<h3>${cmd_label} commands (${cmd}.*)</h3>
-<table>
+    r"""
+### ${cmd_label} commands (${cmd}.*)
+
+| Module | Description |
+|--------|-------------|
 """
 )
 # "
@@ -275,8 +277,7 @@ desc2_tmpl = string.Template(
 # "
 
 
-full_index_header = r"""
-Go <a href="index.html">back to help overview</a>
+full_index_header = r"""Go [back to help overview](index.md)
 """
 # "
 
@@ -338,6 +339,13 @@ headerpso_tmpl = r"""
 """
 # "
 
+
+header_graphical_index_tmpl = """\
+[![GRASS logo](grass_logo.png)](index.md)
+___
+# Graphical index of GRASS GIS modules
+"""
+
 ############################################################################
 
 
@@ -385,13 +393,13 @@ def copy_file(src, dst):
     write_file(dst, read_file(src))
 
 
-def html_files(cls=None, ignore_gui=True):
+def md_files(cls=None, ignore_gui=True):
     for cmd in sorted(os.listdir(md_dir)):
         if (
-            cmd.endswith(".html")
+            cmd.endswith(".md")
             and (cls in [None, "*"] or cmd.startswith(cls + "."))
             and (cls != "*" or len(cmd.split(".")) >= 3)
-            and cmd not in ["full_index.html", "index.html"]
+            and cmd not in ["full_index.md", "index.md"]
             and cmd not in exclude_mods
             and (ignore_gui and not cmd.startswith("wxGUI.") or not ignore_gui)
         ):
@@ -430,30 +438,17 @@ def write_md_footer(f, index_url, year=None):
 
 
 def get_desc(cmd):
-    f = open(cmd, "r")
-    while True:
-        line = f.readline()
-        if not line:
-            return ""
-        if "NAME" in line:
-            break
+    desc = ""
+    with open(cmd, "r") as f:
+        while True:
+            line = f.readline()
+            if not line:
+                return desc
+            if "meta page module description" in line:
+                desc = line.split(":", 1)[1].rstrip("-->\n").strip()
+                break
 
-    while True:
-        line = f.readline()
-        if not line:
-            return ""
-        if "SYNOPSIS" in line:
-            break
-        if "<em>" in line:
-            sp = line.split("-", 1)
-            if len(sp) > 1:
-                return sp[1].strip()
-            else:
-                return None
-
-    f.close()
-
-    return ""
+    return desc
 
 
 def to_title(name):

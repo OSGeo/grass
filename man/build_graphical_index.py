@@ -16,70 +16,10 @@
 import os
 import sys
 
-from build_html import write_html_footer, grass_version, header1_tmpl
-
-
-output_name = "graphical_index.html"
+output_name = "graphical_index"
 
 year = os.getenv("VERSION_DATE")
 
-# other similar strings are in a different file
-# TODO: all HTML manual building needs refactoring (perhaps grass.tools?)
-header_graphical_index_tmpl = """\
-<link rel="stylesheet" href="grassdocs.css" type="text/css">
-<style>
-.img-list {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-}
-
-.img-list li {
-    display: inline-block;
-    position: relative;
-    width: 8em;
-    margin: 0;
-    padding: 0.5em;
-    margin-bottom: 1em;
-}
-
-.img-list li:hover {
-    background-color: #eee;
-}
-
-.img-list li img {
-    float: left;
-    max-width: 100%;
-    background: white;
-}
-
-.img-list li span {
-    text-align: center;
-}
-
-.img-list li a {
-    color: initial;
-    text-decoration: none;
-}
-
-.img-list li .name {
-    margin: 0.1em;
-    display: block;
-    color: #409940;
-    font-weight: bold;
-    font-style: normal;
-    font-size: 120%;
-}
-</style>
-</head>
-<body style="width: 99%">
-<div id="container">
-
-<a href="index.html"><img src="grass_logo.png" alt="GRASS logo"></a>
-<hr class="header">
-<h2>Graphical index of GRASS GIS modules</h2>
-"""
 
 
 def std_img_name(name):
@@ -114,30 +54,44 @@ index_items = [
 ]
 
 
-def main():
-    html_dir = sys.argv[1]
-
-    with open(os.path.join(html_dir, output_name), "w") as output:
-        output.write(
-            header1_tmpl.substitute(
-                title="GRASS GIS %s Reference "
-                "Manual: Graphical index" % grass_version
-            )
-        )
-        output.write(header_graphical_index_tmpl)
-        output.write('<ul class="img-list">\n')
-        for html_file, image, label in index_items:
+def main(ext):
+    with open(os.path.join(path, output_name + f".{ext}"), "w") as output:
+        if ext == "html":
             output.write(
-                "<li>"
-                '<a href="{html}">'
-                '<img src="{img}">'
-                '<span class="name">{name}</span>'
-                "</a>"
-                "</li>\n".format(html=html_file, img=image, name=label)
+                header1_tmpl.substitute(
+                    title="GRASS GIS %s Reference "
+                    "Manual: Graphical index" % grass_version
+                )
             )
-        output.write("</ul>")
-        write_html_footer(output, "index.html", year)
+        output.write(header_graphical_index_tmpl)
+        if ext == "html":
+            output.write('<ul class="img-list">\n')
+        for html_file, image, label in index_items:
+            if ext == "html":
+                output.write(
+                    "<li>"
+                    '<a href="{html}">'
+                    '<img src="{img}">'
+                    '<span class="name">{name}</span>'
+                    "</a>"
+                    "</li>\n".format(html=html_file, img=image, name=label)
+                )
+            else:
+                output.write(
+                    "- [![{name}]({img})]({link})".format(
+                        link=html_file, img=image, name=label)
+                )
+
+        if ext == "html":
+            output.write("</ul>")
+        write_footer(output, f"index.{ext}", year)
 
 
 if __name__ == "__main__":
-    main()
+    from build_html import write_html_footer as write_footer, grass_version, header1_tmpl, header_graphical_index_tmpl, html_dir as path
+
+    main('html')
+
+    from build_md import write_md_footer as write_footer, grass_version, header_graphical_index_tmpl, md_dir as path
+
+    main('md')

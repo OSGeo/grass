@@ -75,42 +75,38 @@ def build_keywords(ext):
         fname = os.path.basename(in_file)
         with open(in_file) as f:
             lines = f.readlines()
-        # TODO maybe move to Python re (regex)
-        try:
-            if ext == "html":
-                index_keys = lines.index("<h2>KEYWORDS</h2>\n") + 1
-            else:
-                # expecting markdown
-                index_keys = lines.index("### KEYWORDS\n") + 2
-        except:
-            continue
-        try:
-            if ext == "html":
-                keys = lines[index_keys].split(",")
-            else:
-                # expecting markdown
-                keys = []
-                while True:
-                    keys.append(lines[index_keys].split("]")[0].lstrip("["))
-                    index_keys += 1
-                    if lines[index_keys] == "\n":
-                        break
-        except:
-            continue
 
-        for key in keys:
-            key = key.strip()
-            if ext == "html":
+        if ext == "html":
+            # TODO maybe move to Python re (regex)
+            try:
+                index_keys = lines.index("<h2>KEYWORDS</h2>\n") + 1
+            except:
+                continue
+            try:
+                keys = lines[index_keys].split(",")
+            except:
+                continue
+
+            for key in keys:
+                key = key.strip()
                 try:
                     key = key.split(">")[1].split("<")[0]
                 except:
                     pass
-            if not key:
-                exit(
-                    "Empty keyword from file {} line: {}".format(
-                        (fname, lines[index_keys])
+                if not key:
+                    exit(
+                        "Empty keyword from file {} line: {}".format(
+                            (fname, lines[index_keys])
+                        )
                     )
-                )
+        else:
+            keys = []
+            for line in lines:
+                if "meta page module keywords" in line:
+                    keys = line.split(":", 1)[1].rstrip("-->\n").strip().split(',')
+                    break
+
+        for key in keys:
             if key not in keywords.keys():
                 keywords[key] = []
                 keywords[key].append(fname)
@@ -193,10 +189,7 @@ def build_keywords(ext):
         toc += "</p></div>\n"
         keywordsfile.write(toc)
 
-    if ext == "html":
-        write_html_footer(keywordsfile, f"index.{ext}", year)
-    else:
-        write_md_footer(keywordsfile, f"index.{ext}", year)
+    write_footer(keywordsfile, f"index.{ext}", year)
     keywordsfile.close()
 
 
@@ -205,7 +198,7 @@ if __name__ == "__main__":
         header1_tmpl,
         grass_version,
         headerkeywords_tmpl,
-        write_html_footer,
+        write_html_footer as write_footer,
         html_dir as path,
     )
 
@@ -214,7 +207,7 @@ if __name__ == "__main__":
     from build_md import (
         grass_version,
         headerkeywords_tmpl,
-        write_md_footer,
+        write_md_footer as write_footer,
         md_dir as path,
     )
 

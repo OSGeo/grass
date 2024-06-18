@@ -53,6 +53,13 @@ void usage_rest_md(bool rest)
     if (!st->pgm_name)
         st->pgm_name = "??";
 
+    /* print metadata used by man/build*.py */
+    fprintf(stdout, "<!-- meta page module description: %s -->\n",
+            st->module_info.description);
+    fprintf(stdout, "<!-- meta page module keywords: ");
+    G__print_keywords(stdout, NULL, FALSE);
+    fprintf(stdout, " -->\n\n");
+
     /* main header
     G_asprintf(&header, "%s - GRASS GIS manual", st->pgm_name);
     if (rest) {

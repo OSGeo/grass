@@ -385,6 +385,63 @@ headerpso_tmpl = r"""
 """
 # "
 
+# TODO: all HTML manual building needs refactoring (perhaps grass.tools?)
+header_graphical_index_tmpl = """\
+<link rel="stylesheet" href="grassdocs.css" type="text/css">
+<style>
+.img-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.img-list li {
+    display: inline-block;
+    position: relative;
+    width: 8em;
+    margin: 0;
+    padding: 0.5em;
+    margin-bottom: 1em;
+}
+
+.img-list li:hover {
+    background-color: #eee;
+}
+
+.img-list li img {
+    float: left;
+    max-width: 100%;
+    background: white;
+}
+
+.img-list li span {
+    text-align: center;
+}
+
+.img-list li a {
+    color: initial;
+    text-decoration: none;
+}
+
+.img-list li .name {
+    margin: 0.1em;
+    display: block;
+    color: #409940;
+    font-weight: bold;
+    font-style: normal;
+    font-size: 120%;
+}
+</style>
+</head>
+<body style="width: 99%">
+<div id="container">
+
+<a href="index.html"><img src="grass_logo.png" alt="GRASS logo"></a>
+<hr class="header">
+<h2>Graphical index of GRASS GIS modules</h2>
+"""
+
 ############################################################################
 
 
