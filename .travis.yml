@@ -10,12 +10,10 @@ cache: ccache
 jobs:
   include:
     - os: linux
-      dist: jammy
       compiler: gcc
       env: CC=gcc CXX=g++
 
     - os: linux
-      dist: jammy
       compiler: clang
       env: CC=clang CXX=clang++
 
