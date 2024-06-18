@@ -22,7 +22,7 @@ jobs:
 env:
   global:
     - CFLAGS="-Werror=implicit-function-declaration"
-    - CXXFLAGS="-std=c++11"
+    - CXXFLAGS="-std=c++17"
 
 before_install:
   - ./.travis/$TRAVIS_OS_NAME.before_install.sh
