@@ -7,7 +7,7 @@ dist: jammy
 language: c
 cache: ccache
 
-matrix:
+jobs:
   include:
     - os: linux
       dist: jammy
