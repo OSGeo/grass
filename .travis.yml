@@ -30,6 +30,3 @@ install:
 
 script:
   - ./.travis/$TRAVIS_OS_NAME.script.sh
-
-notifications:
-  irc: chat.freenode.net#grass
