@@ -13,10 +13,11 @@ import grass.benchmark as bm
 
 def main():
     results = []
-    mapsizes = [1e6, 2e6, 4e6, 8e6]
+    mapsize = 1e6
+    window_sizes = [3, 9, 15, 27]
 
-    for mapsize in mapsizes:
-        benchmark(int(mapsize**0.5), f"r.texture_{int(mapsize/1e6)}M", results)
+    for window in window_sizes:
+        benchmark(int(mapsize**0.5), window, f"r.texture_{window}x{window}", results)
 
     bm.nprocs_plot(
         results,
@@ -30,7 +31,7 @@ def main():
     )
 
 
-def benchmark(size, label, results):
+def benchmark(size, window, label, results):
     reference = "r_texture_reference_map"
     basenames = [
         "ASM",
@@ -53,6 +54,7 @@ def benchmark(size, label, results):
         "r.texture",
         input=reference,
         output="a",
+        size=window,
         a=True,
         run_=False,
         stdout_=DEVNULL,
