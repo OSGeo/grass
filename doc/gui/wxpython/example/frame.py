@@ -222,7 +222,7 @@ class ExampleMapPanel(SingleMapPanel):
                 .CloseButton(False)
                 .Layer(1)
                 .Row(1)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
         if name == "MiscToolbar":
@@ -243,7 +243,7 @@ class ExampleMapPanel(SingleMapPanel):
                 .CloseButton(False)
                 .Layer(1)
                 .Row(1)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
         if name == "MainToolbar":
@@ -264,7 +264,7 @@ class ExampleMapPanel(SingleMapPanel):
                 .CloseButton(False)
                 .Layer(1)
                 .Row(1)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
     def GetMapToolbar(self):
@@ -414,7 +414,7 @@ class ExampleInfoTextManager:
         else:
             return
 
-        self.textCtrl.SetDefaultStyle(wx.TextAttr(font=self.font))
+        self.textCtrl.SetFont(self.font)
 
     def _writeLine(self, title, value):
         """!Formats text (key, value pair) with styles."""
@@ -436,5 +436,5 @@ class ExampleInfoTextManager:
         """
         self.GetControl().Clear()
         self._writeRasterTitle(name=name)
-        for key, value in statDict.iteritems():
+        for key, value in statDict.items():
             self._writeLine(title=key, value=value)

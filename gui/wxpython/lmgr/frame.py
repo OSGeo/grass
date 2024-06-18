@@ -73,6 +73,7 @@ from lmgr.pyshell import PyShellWindow
 from lmgr.giface import LayerManagerGrassInterface
 from mapdisp.frame import MapDisplay
 from datacatalog.catalog import DataCatalog
+from history.browser import HistoryBrowser
 from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog
 from startup.guiutils import (
@@ -82,6 +83,7 @@ from startup.guiutils import (
     create_location_interactively,
 )
 from grass.grassdb.checks import is_first_time_user
+from grass.grassdb.history import Status
 
 
 class GMFrame(wx.Frame):
@@ -164,6 +166,7 @@ class GMFrame(wx.Frame):
         self._createDisplay(self.notebook)
         self._createSearchModule(self.notebook)
         self._createConsole(self.notebook)
+        self._createHistoryBrowser(self.notebook)
         self._createPythonShell(self.notebook)
         self._addPagesToNotebook()
         self.toolbars = {
@@ -201,7 +204,7 @@ class GMFrame(wx.Frame):
                 .TopDockable(True)
                 .CloseButton(False)
                 .Layer(2)
-                .BestSize((self.toolbars[toolbar].GetBestSize())),
+                .BestSize(self.toolbars[toolbar].GetBestSize()),
             )
 
         self._auimgr.GetPane("toolbarNviz").Hide()
@@ -421,10 +424,7 @@ class GMFrame(wx.Frame):
         self._gconsole = GConsole(
             guiparent=self,
             giface=self._giface,
-            ignoredCmdPattern="^d\..*|^r[3]?\.mapcalc$|^i.group$|^r.import$|"
-            "^r.external$|^r.external.out$|"
-            "^v.import$|^v.external$|^v.external.out$|"
-            "^cd$|^cd .*",
+            ignoredCmdPattern=globalvar.ignoredCmdPattern,
         )
         # create 'console' widget
         self.goutput = GConsoleWindow(
@@ -444,6 +444,19 @@ class GMFrame(wx.Frame):
         )
 
         self._setCopyingOfSelectedText()
+
+    def _createHistoryBrowser(self, parent):
+        """Initialize history browser widget"""
+        if not UserSettings.Get(group="manager", key="hideTabs", subkey="history"):
+            self.history = HistoryBrowser(parent=parent, giface=self._giface)
+            self.history.showNotification.connect(
+                lambda message: self.SetStatusText(message)
+            )
+            self.history.runIgnoredCmdPattern.connect(
+                lambda cmd: self.RunSpecialCmd(command=cmd),
+            )
+        else:
+            self.history = None
 
     def _createPythonShell(self, parent):
         """Initialize Python shell widget"""
@@ -574,7 +587,7 @@ class GMFrame(wx.Frame):
                 return pgnum_dict
             return None
 
-        mapdisplay.canCloseDisplayCallback = CanCloseDisplay
+        mapdisplay.canCloseCallback = CanCloseDisplay
 
         # bind various events
         mapdisplay.BindToFrame(
@@ -583,13 +596,13 @@ class GMFrame(wx.Frame):
         )
 
         mapdisplay.starting3dMode.connect(
-            lambda firstTime, mapDisplayPage=self.currentPage: self._onMapDisplayStarting3dMode(
-                mapDisplayPage
+            lambda firstTime, mapDisplayPage=self.currentPage: (
+                self._onMapDisplayStarting3dMode(mapDisplayPage)
             )
         )
         mapdisplay.starting3dMode.connect(self.AddNvizTools)
         mapdisplay.ending3dMode.connect(self.RemoveNvizTools)
-        mapdisplay.closingDisplay.connect(self._closePageNoEvent)
+        mapdisplay.closingPage.connect(self._closePageNoEvent)
 
         # set default properties
         mapdisplay.SetProperties(
@@ -627,6 +640,10 @@ class GMFrame(wx.Frame):
         self.goutput.contentChanged.connect(
             lambda notification: self._switchPage(notification)
         )
+
+        # add 'history module' widget to main notebook page
+        if self.history:
+            self.notebook.AddPage(page=self.history, text=_("History"), name="history")
 
         # add 'python shell' widget to main notebook page
         if self.pyshell:
@@ -759,9 +776,9 @@ class GMFrame(wx.Frame):
 
     def OnGModeler(self, event=None, cmd=None):
         """Launch Graphical Modeler. See OnIClass documentation"""
-        from gmodeler.frame import ModelFrame
+        from gmodeler.frame import ModelerFrame
 
-        win = ModelFrame(parent=self, giface=self._giface)
+        win = ModelerFrame(parent=self, giface=self._giface)
         win.CentreOnScreen()
         win.Show()
 
@@ -931,9 +948,10 @@ class GMFrame(wx.Frame):
 
     def RunSpecialCmd(self, command):
         """Run command from command line, check for GUI wrappers"""
-        if re.compile("^d\..*").search(command[0]):
-            self.RunDisplayCmd(command)
-        elif re.compile("r[3]?\.mapcalc").search(command[0]):
+        result = True
+        if re.compile(r"^d\..*").search(command[0]):
+            result = self.RunDisplayCmd(command)
+        elif re.compile(r"r[3]?\.mapcalc").search(command[0]):
             self.OnMapCalculator(event=None, cmd=command)
         elif command[0] == "i.group":
             self.OnEditImageryGroups(event=None, cmd=command)
@@ -952,15 +970,21 @@ class GMFrame(wx.Frame):
         elif command[0] == "cd":
             self.OnChangeCWD(event=None, cmd=command)
         else:
+            result = False
             raise ValueError(
                 "Layer Manager special command (%s)"
                 " not supported." % " ".join(command)
             )
+        if result:
+            self._gconsole.UpdateHistory(status=Status.SUCCESS)
+        else:
+            self._gconsole.UpdateHistory(status=Status.FAILED)
 
     def RunDisplayCmd(self, command):
         """Handles display commands.
 
         :param command: command in a list
+        :return int: False if failed, True if succcess
         """
         if not self.currentPage:
             self.NewDisplay(show=True)
@@ -968,7 +992,7 @@ class GMFrame(wx.Frame):
         if command[0] == "d.erase":
             # rest of d.erase is ignored
             self.GetLayerTree().DeleteAllLayers()
-            return
+            return False
         try:
             # display GRASS commands
             layertype = command2ltype[command[0]]
@@ -981,7 +1005,7 @@ class GMFrame(wx.Frame):
                 )
                 % command[0],
             )
-            return
+            return False
 
         if layertype == "barscale":
             if len(command) > 1:
@@ -1035,6 +1059,7 @@ class GMFrame(wx.Frame):
                 lname=lname,
                 lcmd=command,
             )
+        return True
 
     def GetLayerNotebook(self):
         """Get Layers Notebook"""
@@ -2113,8 +2138,13 @@ class GMFrame(wx.Frame):
             dlg.Destroy()
 
         # region = tree.GetMap().GetCurrentRegion()
-        # if region['cells'] > 10000:
-        #   GMessage(message = "Cell values can only be displayed for regions of < 10,000 cells.", parent = self)
+        # if region["cells"] > 10000:
+        # GMessage(
+        #     message=(
+        #     "Cell values can only be displayed for regions of < 10,000 cells."
+        #     ),
+        #     parent=self,
+        # )
         self.GetLayerTree().AddLayer("rastnum")
 
     def OnAddCommand(self, event):
@@ -2182,8 +2212,7 @@ class GMFrame(wx.Frame):
         # redraw map if auto-rendering is enabled
         # seems little too low level for this place
         # no redraw when Render is unchecked
-        if mapdisp.IsAutoRendered():
-            mapdisp.GetMapWindow().UpdateMap(render=False)
+        mapdisp.GetMapWindow().UpdateMap(render=False)
 
     def OnDeleteLayer(self, event):
         """Remove selected map layer from the current layer Tree"""

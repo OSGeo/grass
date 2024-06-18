@@ -17,6 +17,7 @@ for details.
 
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
+
 import os
 import re
 import sys
@@ -146,9 +147,6 @@ class grassTask:
                 continue
             if isinstance(val, (list, tuple)):
                 if value in val:
-                    return p
-            elif isinstance(val, (bytes, str)):
-                if p[element][: len(value)] == value:
                     return p
             else:
                 if p[element] == value:
@@ -446,7 +444,7 @@ def convert_xml_to_utf8(xml_text):
 
     # modify: fetch encoding from the interface description text(xml)
     # e.g. <?xml version="1.0" encoding="GBK"?>
-    pattern = re.compile(b'<\?xml[^>]*\Wencoding="([^"]*)"[^>]*\?>')
+    pattern = re.compile(rb'<\?xml[^>]*\Wencoding="([^"]*)"[^>]*\?>')
     m = re.match(pattern, xml_text)
     if m is None:
         return xml_text.encode("utf-8") if xml_text else None

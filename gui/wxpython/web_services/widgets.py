@@ -556,10 +556,10 @@ class WSPanel(wx.Panel):
         """
         try:
             self.cap = self.ws_drvs[self.ws]["cap_parser"](cap_file)
-        except (IOError, ParseError) as error:
+        except (OSError, ParseError) as error:
             error_msg = _(
-                "%s web service was not found in fetched capabilities file from <%s>:\n%s\n"
-                % (self.ws, self.conn["url"], str(error))
+                "%s web service was not found in fetched capabilities file from "
+                "<%s>:\n%s\n" % (self.ws, self.conn["url"], str(error))
             )
             if Debug.GetLevel() != 0:
                 Debug.msg(1, error_msg)
@@ -980,7 +980,8 @@ class LayersList(TreeCtrl):
                     item,
                     {
                         "type": "layer",  # is it layer or style?
-                        "layer": layer,  # Layer instance from web_services.cap_interface
+                        # Layer instance from web_services.cap_interface
+                        "layer": layer,
                         "style": def_st,
                     },
                 )  # layer can have assigned default style
@@ -1000,7 +1001,7 @@ class LayersList(TreeCtrl):
         # self.ExpandAll(self.GetRootItem())
 
     def GetSelectedLayers(self):
-        """Get selected layers/styles in LayersList
+        r"""Get selected layers/styles in LayersList
 
         :return: dict with these items:
                  * 'name'  : layer name used for request

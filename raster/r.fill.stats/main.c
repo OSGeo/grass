@@ -147,6 +147,8 @@ long int estimate_mem_needed(long int cols, char *mode)
     return (mem_count);
 }
 
+#define WEIGHT_MATRIX_LINE_LENGTH 80
+
 /*
  * Prints the spatial weights matrix to the console.
  * This uses a fixed layout which may not be able to print very
@@ -155,27 +157,26 @@ long int estimate_mem_needed(long int cols, char *mode)
 void print_weights_matrix(long int rows, long int cols)
 {
     int i, j;
-    size_t weight_matrix_line_length = 80;
-    char weight_matrix_line_buf[weight_matrix_line_length + 1];
-    char weight_matrix_weight_buf[weight_matrix_line_length + 1];
+    char weight_matrix_line_buf[WEIGHT_MATRIX_LINE_LENGTH + 1];
+    char weight_matrix_weight_buf[WEIGHT_MATRIX_LINE_LENGTH + 1];
 
     G_message(_("Spatial weights neighborhood (cells):"));
     for (i = 0; i < rows; i++) {
         weight_matrix_line_buf[0] = '\0';
         for (j = 0; j < cols; j++) {
             if (WEIGHTS[i][j] != -1.0) {
-                snprintf(weight_matrix_weight_buf, weight_matrix_line_length,
+                snprintf(weight_matrix_weight_buf, WEIGHT_MATRIX_LINE_LENGTH,
                          "%06.2f ", WEIGHTS[i][j]);
             }
             else {
-                snprintf(weight_matrix_weight_buf, weight_matrix_line_length,
+                snprintf(weight_matrix_weight_buf, WEIGHT_MATRIX_LINE_LENGTH,
                          "...... ");
             }
             if (strlen(weight_matrix_weight_buf) +
                     strlen(weight_matrix_line_buf) >
-                weight_matrix_line_length) {
+                WEIGHT_MATRIX_LINE_LENGTH) {
                 strncpy(weight_matrix_line_buf, "[line too long to print]",
-                        weight_matrix_line_length);
+                        WEIGHT_MATRIX_LINE_LENGTH);
                 break;
             }
             else {

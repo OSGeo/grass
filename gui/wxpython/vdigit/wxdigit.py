@@ -26,7 +26,6 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
-
 import grass.script.core as grass
 
 from grass.pydispatch.signal import Signal
@@ -37,15 +36,11 @@ from core.settings import UserSettings
 from vdigit.wxdisplay import DisplayDriver, GetLastError
 
 try:
-    WindowsError
-except NameError:
-    WindowsError = OSError
-try:
     from grass.lib.gis import *
     from grass.lib.vector import *
     from grass.lib.vedit import *
     from grass.lib.dbmi import *
-except (ImportError, WindowsError, TypeError) as e:
+except (ImportError, OSError, TypeError) as e:
     print("wxdigit.py: {}".format(e), file=sys.stderr)
 
 
@@ -205,7 +200,8 @@ class IVDigit:
         # signals parameter description:
         # old_bboxs - list of bboxes of boundary features, which covers changed areas
         # it is bbox of old state (before edit)
-        # old_areas_cats - list of area categories of boundary features of old state (before edit)
+        # old_areas_cats -
+        # list of area categories of boundary features of old state (before edit)
         # same position in both lists corresponds to same feature
 
         # new_bboxs = list of bboxes of created features / after edit
@@ -242,7 +238,8 @@ class IVDigit:
             del self.bgMapInfo
 
     def EmitSignals(self, emit):
-        """Activate/deactivate signals which describes features changes during digitization."""
+        """Activate/deactivate signals which describes features changes during
+        digitization."""
         self.emit_signals = emit
 
     def CloseBackgroundMap(self):
@@ -439,7 +436,8 @@ class IVDigit:
                 if Vect_line_alive(self.poMapInfo, line):
                     Debug.msg(
                         3,
-                        "IVDigit._applyChangeset(): changeset=%d, action=add, line=%d -> deleted",
+                        "IVDigit._applyChangeset(): "
+                        "changeset=%d, action=add, line=%d -> deleted",
                         changeset,
                         line,
                     )
@@ -449,7 +447,8 @@ class IVDigit:
                 else:
                     Debug.msg(
                         3,
-                        "Digit.ApplyChangeset(): changeset=%d, action=add, line=%d dead",
+                        "Digit.ApplyChangeset(): "
+                        "changeset=%d, action=add, line=%d dead",
                         changeset,
                         line,
                     )
@@ -460,7 +459,8 @@ class IVDigit:
                 if not Vect_line_alive(self.poMapInfo, line):
                     Debug.msg(
                         3,
-                        "Digit.ApplyChangeset(): changeset=%d, action=delete, line=%d -> added",
+                        "Digit.ApplyChangeset(): "
+                        "changeset=%d, action=delete, line=%d -> added",
                         changeset,
                         line,
                     )
@@ -471,7 +471,8 @@ class IVDigit:
                 else:
                     Debug.msg(
                         3,
-                        "Digit.ApplyChangeset(): changeset=%d, action=delete, line=%d alive",
+                        "Digit.ApplyChangeset(): "
+                        "changeset=%d, action=delete, line=%d alive",
                         changeset,
                         line,
                     )

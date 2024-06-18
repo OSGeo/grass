@@ -14,6 +14,9 @@ It assumes that you have some very basic knowledge of Git and GitHub,
 but if you don't just go through some tutorial online or ask on the
 GRASS GIS developer mailing list.
 
+To contribute effectively, please familiarize yourself with our
+[Programming Style Guide](./doc/development/style_guide.md).
+
 ### First time setup
 
 * Create an account on GitHub.
@@ -119,7 +122,7 @@ git checkout -b new-feature
 
 You can use your favorite tools to change source code or other files
 in the local copy of the code. When making changes, please follow the
-[Submitting Guidelines](./doc/development/submitting/submitting.md).
+[Programming Style Guide](./doc/development/style_guide.md).
 
 ### Testing changes
 

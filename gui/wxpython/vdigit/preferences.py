@@ -302,7 +302,8 @@ class VDigitSettingsDialog(wx.Dialog):
         )
         self.selectIn.SetToolTip(
             _(
-                "By default are selected all features overlapping selection bounding box "
+                "By default are selected all features overlapping selection bounding "
+                "box "
             )
         )
 
@@ -631,7 +632,8 @@ class VDigitSettingsDialog(wx.Dialog):
             check = CheckBox(
                 parent=panel, id=wx.ID_ANY, label=self.geomAttrb[attrb]["label"]
             )
-            # self.deleteRecord.SetValue(UserSettings.Get(group='vdigit', key="delRecord", subkey='enabled'))
+            # self.deleteRecord.SetValue(UserSettings.Get(
+            # group='vdigit', key="delRecord", subkey='enabled'))
             check.Bind(wx.EVT_CHECKBOX, self.OnGeomAttrb)
             # column (only numeric)
             column = ColumnSelect(parent=panel, size=(200, -1))
@@ -1104,5 +1106,4 @@ class VDigitSettingsDialog(wx.Dialog):
         self.digit.UpdateSettings()
 
         # redraw map if auto-rendering is enabled
-        if self.parent.IsAutoRendered():
-            self.parent.OnRender(None)
+        self.parent.OnRender(None)

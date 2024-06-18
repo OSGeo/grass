@@ -7,25 +7,6 @@
 #include <ogr_api.h>
 #include <cpl_string.h>
 
-/* switch to new GDAL API with GDAL 2.2+ */
-#if GDAL_VERSION_NUM >= 2020000
-typedef GDALDatasetH ds_t;
-typedef GDALDriverH dr_t;
-
-#define get_driver_by_name        GDALGetDriverByName
-#define get_driver                GDALGetDriver
-#define ds_getlayerbyindex(ds, i) GDALDatasetGetLayer((ds), (i))
-#define ds_close(ds)              GDALClose(ds)
-#else
-typedef OGRDataSourceH ds_t;
-typedef OGRSFDriverH dr_t;
-
-#define get_driver_by_name        OGRGetDriverByName
-#define get_driver                OGRGetDriver
-#define ds_getlayerbyindex(ds, i) OGR_DS_GetLayer((ds), (i))
-#define ds_close(ds)              OGR_DS_Destroy(ds)
-#endif
-
 /* some hard limits */
 #define SQL_BUFFER_SIZE 2000
 
