@@ -12,24 +12,26 @@ import grass.benchmark as bm
 
 
 def main():
-    results_dic = {}
-
+    results = []
     mapsizes = [1e6, 2e6, 4e6, 8e6]
-    methods = [
-        "asm",
-        "contrast",
-        "corr",
-        "var",
-        "idm",
-        "sa",
-        "sv",
-        "se",
-        "entr",
-        "dv",
-        "de",
-        "moc1",
-        "moc2",
-    ]
+
+    for mapsize in mapsizes:
+        benchmark(int(mapsize**0.5), f"r.texture_{int(mapsize/1e6)}M", results)
+
+    bm.nprocs_plot(
+        results,
+        title="r.texture -a runtime",
+        metric="speedup",
+    )
+    bm.nprocs_plot(
+        results,
+        title="r.texture -a runtime",
+        metric="efficiency",
+    )
+
+
+def benchmark(size, label, results):
+    reference = "r_texture_reference_map"
     basenames = [
         "ASM",
         "Contr",
@@ -45,37 +47,22 @@ def main():
         "MOC-1",
         "MOC-2",
     ]
-    for method, basename in zip(methods, basenames):
-        results_dic[method] = []
-        for mapsize in mapsizes:
-            benchmark(
-                int(mapsize**0.5), f"r.texture_{int(mapsize/1e6)}M", results_dic[method]
-            )
-
-    for method in methods:
-        bm.nprocs_plot(results_dic[method], title=f"r.texture {method} runtime")
-
-
-def benchmark(size, label, results):
-    reference = "r_texture_reference_map"
-    output = "benchmark_r_texture_nprocs"
-    method = "asm"
-    basename = "ASM"
-    module_output = f"{output}_{basename}"
 
     generate_map(rows=size, cols=size, fname=reference)
     module = Module(
         "r.texture",
         input=reference,
-        output=output,
-        method=method,
+        output="a",
+        a=True,
         run_=False,
         stdout_=DEVNULL,
         overwrite=True,
     )
     results.append(bm.benchmark_nprocs(module, label=label, max_nprocs=8, repeat=3))
     Module("g.remove", quiet=True, flags="f", type="raster", name=reference)
-    Module("g.remove", quiet=True, flags="f", type="raster", name=module_output)
+
+    for basename in basenames:
+        Module("g.remove", quiet=True, flags="f", type="raster", name=f"a_{basename}")
 
 
 def generate_map(rows, cols, fname):
