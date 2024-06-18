@@ -5,6 +5,7 @@ docs_dir: source
 theme: 
   name: material
   language: en
+  logo: grass_logo.png
   features:
     - content.code.copy
   palette:
