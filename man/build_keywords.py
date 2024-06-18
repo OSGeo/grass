@@ -150,7 +150,11 @@ def build_keywords(ext):
 
     for key in sortedKeys:
         if ext == "html":
-            keyword_line = '<dt><b><a name="{key}" class="urlblack">{key}</a></b></dt><dd>'.format(key=key)
+            keyword_line = (
+                '<dt><b><a name="{key}" class="urlblack">{key}</a></b></dt><dd>'.format(
+                    key=key
+                )
+            )
         else:
             keyword_line = f"### **{key}**\n"
         for value in sorted(keywords[key]):
