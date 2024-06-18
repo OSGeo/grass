@@ -44,19 +44,28 @@ def benchmark(size, step, point_mode, label, results):
 
     generate_map(rows=size, cols=size, fname=reference)
 
-    module = Module(
-        "r.horizon",
-        elevation=reference,
-        output=output,
-        direction=0,
-        step=step,
-    )
     if point_mode:
         r = Region()
         r.set_current()
         x = (r.east + r.west) / 2
         y = (r.north + r.south) / 2
-        module.coordinates = (x, y)
+
+        module = Module(
+            "r.horizon",
+            elevation=reference,
+            output=output,
+            direction=0,
+            step=step,
+            coordinates=(x, y),
+        )
+    else:
+        module = Module(
+            "r.horizon",
+            elevation=reference,
+            output=output,
+            direction=0,
+            step=step,
+        )
 
     results.append(bm.benchmark_nprocs(module, label=label, max_nprocs=8, repeat=3))
     Module(
