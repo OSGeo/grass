@@ -336,7 +336,7 @@ void calculate_g_function(struct kdtree *kdtree, struct Point *points, int n,
             kdtree_knn(kdtree, coords, &puid, &pd, 1, &points[i].id);
 
             if (pd <= d) {
-                g_value += 1; // add the distance to the nearest neighbor
+                g_value += 1.0; // add the distance to the nearest neighbor
             }
         }
 
