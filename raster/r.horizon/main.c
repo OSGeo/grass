@@ -31,7 +31,7 @@ Program was refactored by Anna Petrasova to remove most global variables.
  *   Free Software Foundation, Inc.,
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
-#if defined(__OPENMP)
+#if defined(_OPENMP)
 #include <omp.h>
 #endif
 
@@ -346,11 +346,11 @@ int main(int argc, char *argv[])
                   threads, abs(threads));
         threads = abs(threads);
     }
-#if defined(__OPENMP)
+#if defined(_OPENMP)
     if (threads > 1) {
-        omp_set_num_threads(threads);
         G_message(_("Using %d threads for parallel computing."), threads);
     }
+    omp_set_num_threads(threads);
 #else
     if (threads > 1)
         G_warning(_("This version of GRASS GIS was not compiled with OpenMP "
@@ -1215,7 +1215,7 @@ void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
             _("Calculating map %01d of %01d (angle %.2f, raster map <%s>)"),
             (k + 1), arrayNumInt, angle_deg, shad_filename);
 
-#pragma omp parallel for schedule(static) default(shared)
+#pragma omp parallel for schedule(static, 1) default(shared)
         {
             for (int j = hor_row_start; j < hor_row_end; j++) {
                 G_percent(j - hor_row_start, hor_numrows - 1, 2);
@@ -1257,7 +1257,6 @@ void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
                         if (settings->degreeOutput) {
                             shadow_angle *= rad2deg;
                         }
-
                         horizon_raster[j - buffer_s][i - buffer_w] =
                             shadow_angle;
 
