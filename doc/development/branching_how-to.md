@@ -83,7 +83,7 @@ git push
 Create a PR and review and merge it as soon as possible to avoid having
 the wrong version on the branch in case other PRs need to be merged.
 
-## Server Updates
+## Updates of grass-addon Repo
 
 In the grass-addons repo:
 
