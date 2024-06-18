@@ -35,4 +35,4 @@ echo "MAKEFLAGS is '$MAKEFLAGS'"
             --with-cairo \
             --with-pdal
 
-make
+make CFLAGS="$CFLAGS $GRASS_EXTRA_CFLAGS" CXXFLAGS="$CXXFLAGS $GRASS_EXTRA_CXXFLAGS"

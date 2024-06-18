@@ -21,6 +21,8 @@ env:
   global:
     - CFLAGS="-Werror=implicit-function-declaration"
     - CXXFLAGS="-std=c++17"
+    - GRASS_EXTRA_CFLAGS="-Werror -fPIC"
+    - GRASS_EXTRA_CXXFLAGS="-Werror -fPIC"
 
 before_install:
   - ./.travis/$TRAVIS_OS_NAME.before_install.sh
