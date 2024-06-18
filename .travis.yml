@@ -31,8 +31,5 @@ install:
 script:
   - ./.travis/$TRAVIS_OS_NAME.script.sh
 
-after_success:
-  - bash < (curl -s https://codecov.io/bash)
-
 notifications:
   irc: chat.freenode.net#grass
