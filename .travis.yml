@@ -7,6 +7,12 @@ dist: jammy
 language: c
 cache: ccache
 
+# safelist
+branches:
+  only:
+  - main
+  - releasebranch*
+
 jobs:
   include:
     - os: linux
