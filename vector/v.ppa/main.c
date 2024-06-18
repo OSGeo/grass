@@ -220,7 +220,7 @@ void calculate_l_function(struct Point *points, int n, const char *output_file)
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 if (i != j && distances[i][j] <= d) {
-                    k_value += 1;
+                    k_value += 1.0;
                 }
             }
         }
