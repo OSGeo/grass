@@ -399,8 +399,8 @@ class SessionHandle:
     If you don't want to modify the global environment, use the _env_ parameter
     for the _init_ function to modify the provided environment instead.
     This environment is then available as an attribute of the session object.
-    The attribute than needs to be passed to all calls of GRASS
-    tools and function which wrap them.
+    The attribute then needs to be passed to all calls of GRASS
+    tools and functions that wrap them.
     Context manager usage with custom environment::
 
         # ... setup sys.path before import as needed
