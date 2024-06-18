@@ -215,7 +215,7 @@ if __name__ == "__main__":
         grass_version,
         headerkeywords_tmpl,
         write_md_footer,
-        md_dir as path
+        md_dir as path,
     )
 
     build_keywords("md")
