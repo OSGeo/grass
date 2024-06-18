@@ -41,6 +41,7 @@ if len(sys.argv) >= 2:
 
 year = os.getenv("VERSION_DATE")
 
+
 def get_module_man_file_path(module):
     """Get module manual HTML file path
 
