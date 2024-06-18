@@ -65,15 +65,25 @@ void parse_args(int argc, char **argv, char **input, char **field, int *history,
         *shell |= SHELL_TOPO;
 
     if (strcmp(format_opt->answer, "plain") == 0) {
-        *format_ptr = PLAIN;
+        // if shell flags are specified and format=PLAIN (default),
+        // print in shell script format
+        if (*shell != 0) {
+            *format_ptr = SHELL;
+        }
+        else {
+            *format_ptr = PLAIN;
+        }
     }
     else if (strcmp(format_opt->answer, "json") == 0)
         *format_ptr = JSON;
     else {
         *format_ptr = SHELL;
-    }
-
-    if (*shell != 0 && *format_ptr == PLAIN) {
-        *format_ptr = SHELL;
+        // if shell flags are specified with format=shell, obey them
+        // if only format=shell is specified, print all info
+        if (*shell == 0) {
+            *shell |= SHELL_BASIC;
+            *shell |= SHELL_REGION;
+            *shell |= SHELL_TOPO;
+        }
     }
 }
