@@ -5,7 +5,7 @@ set -e
 
 export CC="ccache $CC"
 export CXX="ccache $CXX"
-export MAKEFLAGS="-j $(nproc)"
+export MAKEFLAGS="-j $(nproc) --no-keep-going"
 
 echo "MAKEFLAGS is '$MAKEFLAGS'"
 
