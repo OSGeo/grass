@@ -214,7 +214,7 @@ added manually to the result from the _api_ backend.
 
 The script sorts them into categories defined in _utils/release.yml_.
 However, these notes need to be manually edited to collapse related items into
-one. Additionally, a _Highlights_ section needs to be added with manually
+one. Additionally, a _Highlights_ section needs to be added on top with manually
 identified new major features for major and minor releases. For all releases, a
 _Major_ section may need to be added showing critical fixes or breaking changes
 if there are any.
@@ -260,7 +260,8 @@ Eventually, commit with the suggested commit message and push, e.g.:
 
 ```bash
 git show
-git commit include/VERSION -m "..."
+eval $(./utils/update_version.py status --bash)
+git commit include/VERSION -m "version: Back to $VERSION"
 git push upstream
 ```
 
@@ -349,11 +350,14 @@ SERVER2=osgeo7-download
 SERVER2DIR=/osgeo/download/grass/grass$MAJOR$MINOR/source/
 echo $SERVER1:$SERVER1DIR
 echo $SERVER2:$SERVER2DIR
+eval $(ssh-agent) && ssh-add
 
-# upload along with associated files:
+# upload along with associated files, creating target dir if still needed
+ssh $USER@$SERVER1 "mkdir -p $SERVER1DIR"
 scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
   INSTALL.md REQUIREMENTS.md CONTRIBUTING.md $USER@$SERVER1:$SERVER1DIR
 
+ssh $USER@$SERVER2 "mkdir -p $SERVER2DIR"
 scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
   INSTALL.md REQUIREMENTS.md CONTRIBUTING.md $USER@$SERVER2:$SERVER2DIR
 
