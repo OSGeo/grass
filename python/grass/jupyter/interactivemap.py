@@ -364,7 +364,7 @@ class InteractiveMap:
             fig.add_child(self.map)
 
             return fig
-        
+
         # ipyleaflet
         self.map.add(self.layer_control_object)
         return self.map
