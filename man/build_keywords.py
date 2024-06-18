@@ -91,7 +91,7 @@ def build_keywords(ext):
                 # expecting markdown
                 keys = []
                 while True:
-                    keys.append(lines[index_keys].split(']')[0].lstrip('['))
+                    keys.append(lines[index_keys].split("]")[0].lstrip("["))
                     index_keys += 1
                     if lines[index_keys] == "\n":
                         break
