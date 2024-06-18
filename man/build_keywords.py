@@ -106,7 +106,11 @@ def build_keywords(ext):
                 except:
                     pass
             if not key:
-                exit("Empty keyword from file {} line: {}".format((fname, lines[index_keys])))
+                exit(
+                    "Empty keyword from file {} line: {}".format(
+                        (fname, lines[index_keys])
+                    )
+                )
             if key not in keywords.keys():
                 keywords[key] = []
                 keywords[key].append(fname)
