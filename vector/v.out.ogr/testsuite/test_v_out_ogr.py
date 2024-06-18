@@ -3,10 +3,10 @@
 @author Luís Moreira de Sousa
 """
 
-import grass.script as gs
-from grass.gunittest.case import TestCase
 from pathlib import Path
 from shutil import rmtree
+import grass.script as gs
+from grass.gunittest.case import TestCase
 
 
 class TestOgrExport(TestCase):
@@ -62,11 +62,10 @@ skewness=4.86561
 
         # Remove maps in temp mapset
         self.runModule(
-            "g.remove", type="vector", flags="f", pattern="%s*" % self.temp_import
+            "g.remove", type="vector", flags="f", pattern=f"{self.temp_import}*"
         )
-
         # Remove temporary files
-        for p in Path(".").glob("%s*" % self.test_map):
+        for p in Path(".").glob(f"{self.test_map}*"):
             p.unlink()
         for p in Path(".").glob("%s*" % self.temp_54052):
             p.unlink()
@@ -87,14 +86,14 @@ skewness=4.86561
             "v.out.ogr",
             "Export to GeoPackage Format",
             input=self.test_map,
-            output="%s.gpkg" % self.test_map,
+            output=f"{self.test_map}.gpkg",
             format="GPKG",
         )
 
         # Import back to verify
         self.runModule(
             "v.in.ogr",
-            input="%s.gpkg" % self.test_map,
+            input=f"{self.test_map}.gpkg",
             output=self.temp_import,
         )
 
@@ -113,14 +112,14 @@ skewness=4.86561
             "v.out.ogr",
             "Export to Shapefile Format",
             input=self.test_map,
-            output="%s.shp" % self.test_map,
+            output=f"{self.test_map}.shp",
             format="ESRI_Shapefile",
         )
 
         # Import back to verify
         self.runModule(
             "v.in.ogr",
-            input="%s.shp" % self.test_map,
+            input=f"{self.test_map}.shp",
             output=self.temp_import,
         )
 
