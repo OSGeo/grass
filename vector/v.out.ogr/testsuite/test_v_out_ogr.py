@@ -67,18 +67,15 @@ skewness=4.86561
         # Remove temporary files
         for p in Path(".").glob(f"{self.test_map}*"):
             p.unlink()
-        for p in Path(".").glob("%s*" % self.temp_54052):
+        for p in Path(".").glob(f"{self.temp_54052}*"):
             p.unlink()
         if len(self.session_file) > 0:
             Path(self.session_file).unlink()
 
         # Remove temporary location
         env = gs.parse_command("g.gisenv")
-        rmtree(
-            "%s/%s"
-            % (env["GISDBASE"].replace("'", "").replace(";", ""), self.temp_location),
-            ignore_errors=True,
-        )
+        dbase = env["GISDBASE"].replace("'", "").replace(";", "")
+        rmtree(f"{dbase}/{self.temp_location}", ignore_errors=True)
 
     def test_1(self):
 
