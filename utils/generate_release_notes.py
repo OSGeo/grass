@@ -186,7 +186,12 @@ def print_notes(
     if before:
         print(before)
     print_section_heading_2("Highlights", file=file)
-    print("* _Put handcrafted list of items here._\n")
+    print("* _Put handcrafted list of 2-15 items here._\n")
+    print_section_heading_2("New Addon Tools", file=file)
+    print(
+        "* _Put here a list of new addos since last release "
+        "or delete the section if there are none._\n"
+    )
     print_support(file=file)
     print_section_heading_2("What's Changed", file=file)
     changes_by_category = split_to_categories(changes, categories=categories)
