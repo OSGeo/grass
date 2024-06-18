@@ -187,6 +187,47 @@ will contain a value. The output will thus appear cropped at the margins.
 <p>
 Importantly, the input raster map cannot have more than 255 categories.
 
+<h3>Performance</h3>
+To enable parallel processing, the user can specify the number of threads
+to be used with the <b>nprocs</b> parameter (default 1).
+Figures below show benchmark results running on
+Intel® Core™ i9-10940X CPU @ 3.30GHz. See benchmark scripts
+in the source code for more details.
+
+<div align="center" style="margin: 10px">
+  <img src="./figure/a_mapsize_time.svg"
+  alt="time benchmark for r.texture with different map sizes" border="0">
+  <br>
+  <i>Figure 1: Benchmark shows execution time for different
+    number of cells (1M, 2M, 4M, and 8M) and
+    the fixed size of window (3x3).
+</div>
+<div align="center" style="margin: 10px">
+  <img src="./figure/a_mapsize_efficiency.svg"
+  alt="efficiency benchmark for r.texture with different map sizes" border="0">
+  <br>
+  <i>Figure 2: Benchmark shows efficiency for different
+    numbers of cells (1M, 2M, 4M, and 8M) and
+    the fixed size of window (3x3).
+</div>
+<div align="center" style="margin: 10px">
+  <img src="./figure/a_window_time.svg"
+  alt="time benchmark for r.texture with different window sizes" border="0">
+  <br>
+  <i>Figure 3: Benchmark shows execution time for different
+    sizes of windows (3x3, 9x9, 15x15, and 27x27)
+    and the fixed number of cells (1M).
+</div>
+<div align="center" style="margin: 10px">
+  <img src="./figure/a_window_efficiency.svg"
+  alt="efficiency benchmark for r.texture with different window sizes"  border="0">
+  <br>
+  <i>Figure 4: Benchmark shows efficiency for different
+    sizes of windows (3x3, 9x9, 15x15, and 27x27)
+    and the fixed number of cells (1M).
+</div>
+
+
 <h2>EXAMPLE</h2>
 
 Calculation of Angular Second Moment of B/W orthophoto (North Carolina data set):
@@ -260,7 +301,7 @@ The overlaid grid highlights that the texture measures output maps
 are cropped at the margins.
 
 <center>
-	<img src="r_texture_directions_example.png" border=1><br>
+	<img src="./figure/r_texture_directions_example.png" border=1><br>
 	<i>IDM textures according to direction</i>
 </center>
 
