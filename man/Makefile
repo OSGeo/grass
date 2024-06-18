@@ -7,13 +7,15 @@ MANPAGES := $(patsubst $(HTMLDIR)/%.html,$(MANDIR)/%.$(MANSECT),$(wildcard $(HTM
 DSTFILES := \
 	$(HTMLDIR)/grassdocs.css \
 	$(HTMLDIR)/grass_logo.png \
-	$(MDDIR)/source/grass_logo.png \
 	$(HTMLDIR)/hamburger_menu.svg \
 	$(HTMLDIR)/hamburger_menu_close.svg \
 	$(HTMLDIR)/grass_icon.png \
 	$(HTMLDIR)/jquery.fixedheadertable.min.js \
 	$(HTMLDIR)/parser_standard_options.css \
-	$(HTMLDIR)/parser_standard_options.js
+	$(HTMLDIR)/parser_standard_options.js \
+	$(MDDIR)/mkdocs.yml \
+	$(MDDIR)/source/grass_logo.png \
+	$(MDDIR)/source/grassdocs.css
 
 categories = \
 	d:display \
@@ -54,7 +56,7 @@ default: $(DSTFILES)
 	$(call build,check)
 	$(MAKE) manpages
 	$(MAKE) $(INDICES_MD)
-	$(MAKE) mkdocs
+	$(MAKE) build-mkdocs
 
 # This must be a separate target so that evaluation of $(MANPAGES)
 # is delayed until the indices have been generated
@@ -182,6 +184,11 @@ $(HTMLDIR)/parser_standard_options.js: parser_standard_options.js
 $(HTMLDIR)/parser_standard_options.css: parser_standard_options.css
 	$(INSTALL_DATA) $< $@
 
-mkdocs:
-	$(INSTALL_DATA) mkdocs.yml $(MDDIR)/
+$(MDDIR)/mkdocs.yml: mkdocs/mkdocs.yml
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/grassdocs.css: mkdocs/grassdocs.css
+	$(INSTALL_DATA) $< $@
+
+build-mkdocs:
 	@cd $(MDDIR) ; mkdocs build

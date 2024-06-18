@@ -40,7 +40,7 @@ header2_tmpl = string.Template(
 ![GRASS GIS logo](grass_logo.png)
 ___
 
-## GRASS GIS ${grass_version} Reference Manual
+# GRASS GIS ${grass_version} Reference Manual
 
 **Geographic Resources Analysis Support System**, commonly
 referred to as [GRASS GIS](https://grass.osgeo.org), is a
@@ -296,24 +296,24 @@ moduletopics_tmpl = string.Template(
 )
 
 headertopics_tmpl = r"""
-[![GRASS logo](grass_logo.png)](index.html)
+[![GRASS logo](grass_logo.png)](index.md)
 ___
-## Topics
+# Topics
 
 """
 
 headerkeywords_tmpl = r"""
-[![GRASS logo](grass_logo.png)](index.html)
+[![GRASS logo](grass_logo.png)](index.md)
 ___
-## Keywords - Index of GRASS GIS modules
+# Keywords - Index of GRASS GIS modules
 """
 # "
 
 headerkey_tmpl = string.Template(
     r"""
-[![GRASS logo](grass_logo.png)](index.html)
+[![GRASS logo](grass_logo.png)](index.md)
 ___
-## Topic: ${keyword}
+# Topic: ${keyword}
 
 | Module | Description |
 |--------|-------------|

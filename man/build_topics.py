@@ -75,7 +75,7 @@ def build_topics(ext):
             num_modules += 1
             keyfile.write(
                 desc1_tmpl.substitute(
-                    cmd=mod, desc=desc, basename=mod.replace(".html", "")
+                    cmd=mod, desc=desc, basename=mod.replace(f".{ext}", "")
                 )
             )
         if num_modules >= min_num_modules_for_topic:
@@ -99,7 +99,7 @@ def build_topics(ext):
             # expecting markdown
             keyfile.write(
                 "*See also the corresponding keyword"
-                " [{key}](keywords.html#{key})"
+                " [{key}](keywords.md#{key})"
                 " for additional references.*\n".format(key=key.replace("_", " "))
             )
 

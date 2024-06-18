@@ -2,7 +2,15 @@
 site_name: GRASS GIS manual
 site_url: https://grass.osgeo.org/grass-stable/manuals/
 docs_dir: source
-theme: readthedocs
+theme: 
+  name: material
+  language: en
+  features:
+    - content.code.copy
+  palette:
+    primary: custom
+extra_css:
+  - grassdocs.css    
 plugins:
     - search
 #    - awesome-pages
@@ -23,3 +31,11 @@ nav:
     - Temporal: temporal.md
     - Variables: variables.md
     - Vector: vector.md
+markdown_extensions:
+    - admonition
+    - pymdownx.details
+    - pymdownx.superfences
+    - attr_list
+    - md_in_html
+plugins:
+    - glightbox
