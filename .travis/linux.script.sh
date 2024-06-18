@@ -5,6 +5,10 @@ set -e
 
 export CC="ccache $CC"
 export CXX="ccache $CXX"
+export MAKEFLAGS="-j $(nproc)"
+
+echo "MAKEFLAGS is '$MAKEFLAGS'"
+
 ./configure --host=x86_64-linux-gnu \
             --build=x86_64-linux-gnu \
             --prefix=/usr/lib \
@@ -32,4 +36,4 @@ export CXX="ccache $CXX"
             --with-cairo \
             --with-pdal
 
-make -j2
+make
