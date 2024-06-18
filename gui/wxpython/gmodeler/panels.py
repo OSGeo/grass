@@ -1136,7 +1136,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
         """Add data item to model"""
         # add action to canvas
         width, height = self.canvas.GetSize()
-        data = ModelData(
+        data = ModelDataSingle(
             self, x=width / 2 + self._randomShift(), y=height / 2 + self._randomShift()
         )
 
