@@ -97,13 +97,15 @@ class TestParserJson(TestCase):
         inputs = [
             {"param": "map", "value": "hospitals@PERMANENT"},
             {"param": "layer", "value": "1"},
+            {"param": "format", "value": "plain"},
         ]
 
         stdout, stderr = subprocess.Popen(args, stdout=subprocess.PIPE).communicate()
         print(stdout)
         json_code = json.loads(decode(stdout))
+        print(json_code)
         self.assertEqual(json_code["module"], "v.info")
-        self.assertEqual(len(json_code["inputs"]), 2)
+        self.assertEqual(len(json_code["inputs"]), 3)
         self.assertEqual(json_code["inputs"], inputs)
 
 
