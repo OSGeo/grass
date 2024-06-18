@@ -76,7 +76,7 @@ void usage_rest_md(bool rest)
     fprintf(stdout, "\n");
     */
 
-    /* GRASS GIS logo */
+    /* GRASS GIS logo
     if (rest) {
         fprintf(stdout, ".. image:: grass_logo.png\n");
         fprintf(stdout, "   :align: center\n");
@@ -85,12 +85,18 @@ void usage_rest_md(bool rest)
     else {
         fprintf(stdout, "![GRASS logo](./grass_logo.png)\n");
     }
+    */
 
-    /* horizontal line */
+    /* main header */
+    if (!rest)
+        fprintf(stdout, "# %s\n\n", st->pgm_name);
+
+    /* horizontal line
     fprintf(stdout, "\n---");
     if (rest)
         fprintf(stdout, "-");
     fprintf(stdout, "\n\n");
+    */
 
     /* header - GRASS module */
     if (!rest)
