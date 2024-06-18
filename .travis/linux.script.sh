@@ -32,7 +32,6 @@ echo "MAKEFLAGS is '$MAKEFLAGS'"
             --with-freetype-includes=/usr/include/freetype2/ \
             --with-postgres-includes=/usr/include/postgresql/ \
             --with-proj-share=/usr/share/proj \
-            --with-python \
             --with-cairo \
             --with-pdal
 
