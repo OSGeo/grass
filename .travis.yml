@@ -2,6 +2,8 @@
 # Author: Ivan Mincik, ivan.mincik@gmail.com (linux)
 #         Rainer M. Krug, Rainer@krugs.de (osx)
 
+os: linux
+dist: jammy
 language: c
 cache: ccache
 
