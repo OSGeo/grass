@@ -131,7 +131,8 @@ skewness=4.86561
             precision=1e-8,
         )
 
-    def test_3(self):
+    def test_no_epsg_crs(self):
+        """Tests output from a location/project lacking an EPSG code"""
 
         # Record original location to use corect GISDBASE
         env_orig = gs.parse_command("g.gisenv")
