@@ -199,6 +199,7 @@ def build_keywords(ext):
         write_md_footer(keywordsfile, f"index.{ext}", year)
     keywordsfile.close()
 
+
 if __name__ == "__main__":
     from build_html import (
         header1_tmpl,
