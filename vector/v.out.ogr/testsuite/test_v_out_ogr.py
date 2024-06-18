@@ -3,8 +3,8 @@
 @author Luís Moreira de Sousa
 """
 
-from grass.gunittest.case import TestCase
 from pathlib import Path
+from grass.gunittest.case import TestCase
 
 
 class TestOgrExport(TestCase):
@@ -49,9 +49,9 @@ skewness=4.86561
 
     def tearDown(self):
         self.runModule(
-            "g.remove", type="vector", flags="f", pattern="%s*" % self.temp_import
+            "g.remove", type="vector", flags="f", pattern=f"{self.temp_import}*"
         )
-        for p in Path(".").glob("%s*" % self.test_map):
+        for p in Path(".").glob(f"{self.test_map}*"):
             p.unlink()
 
     def test_1(self):
@@ -59,14 +59,14 @@ skewness=4.86561
             "v.out.ogr",
             "Export to GeoPackage Format",
             input=self.test_map,
-            output="%s.gpkg" % self.test_map,
+            output=f"{self.test_map}.gpkg",
             format="GPKG",
         )
 
         # Import back to verify
         self.runModule(
             "v.in.ogr",
-            input="%s.gpkg" % self.test_map,
+            input=f"{self.test_map}.gpkg",
             output=self.temp_import,
         )
 
@@ -84,14 +84,14 @@ skewness=4.86561
             "v.out.ogr",
             "Export to Shapefile Format",
             input=self.test_map,
-            output="%s.shp" % self.test_map,
+            output=f"{self.test_map}.shp",
             format="ESRI_Shapefile",
         )
 
         # Import back to verify
         self.runModule(
             "v.in.ogr",
-            input="%s.shp" % self.test_map,
+            input=f"{self.test_map}.shp",
             output=self.temp_import,
         )
 
