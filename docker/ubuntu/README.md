@@ -88,7 +88,7 @@ bash-5.0#
 
 __To build a latest version with wxgui__:
 
-The `GUI` build argument allows to choose if the GUI should
+The `GUI` build argument allows choosing if the GUI should
 be included in the build (`GUI=with`) or not (`GUI=without`).
 
 ```bash
