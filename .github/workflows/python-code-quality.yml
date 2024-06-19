@@ -91,6 +91,7 @@ jobs:
           pipx ensurepath
           pipx install flake8==${{ env.FLAKE8_VERSION }}
           pipx install pylint==${{ env.PYLINT_VERSION }}
+          pipx inject pylint -r .github/workflows/python_requirements.txt -r .github/workflows/optional_requirements.txt
           # The extra toml is only needed before Python 3.11
           pipx install bandit[sarif,toml]==${{ env.BANDIT_VERSION }}
 
