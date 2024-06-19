@@ -25,7 +25,7 @@ jobs:
 
     env:
       # renovate: datasource=python-version depName=python
-      PYTHON_VERSION: "3.11"
+      PYTHON_VERSION: "3.10"
       MIN_PYTHON_VERSION: "3.8"
       # renovate: datasource=pypi depName=black
       BLACK_VERSION: "24.4.2"
@@ -91,7 +91,8 @@ jobs:
           pipx ensurepath
           pipx install flake8==${{ env.FLAKE8_VERSION }}
           pipx install pylint==${{ env.PYLINT_VERSION }}
-          pipx install bandit[sarif]==${{ env.BANDIT_VERSION }}
+          # The extra toml is only needed before Python 3.11
+          pipx install bandit[sarif,toml]==${{ env.BANDIT_VERSION }}
 
       - name: Run Flake8
         run: |
