@@ -70,6 +70,10 @@ jobs:
         run: |
           echo "$HOME/install/bin" >> $GITHUB_PATH
 
+      - name: Print installed versions
+        if: always()
+        run: .github/workflows/print_versions.sh
+
       - name: Test executing of the grass command
         run: .github/workflows/test_simple.sh
 
@@ -85,9 +89,6 @@ jobs:
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
           pytest --verbose --color=yes --durations=0 --durations-min=0.5 -ra . -m 'needs_solo_run'
 
-      - name: Print installed versions
-        if: always()
-        run: .github/workflows/print_versions.sh
   pytest-success:
     name: pytest Result
     needs:
