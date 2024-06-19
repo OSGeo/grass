@@ -1,4 +1,4 @@
-"""Test of v.in.ogr
+"""Test of v.out.ogr
 
 @author Luís Moreira de Sousa
 """
