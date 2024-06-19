@@ -351,6 +351,7 @@ Geographic Resources Analysis Support System (GRASS GIS).
   FLAG                           {standard_flags}
 
 {env_vars}:
+  GRASS_CONFIG_DIR               {config_dir_var}
   GRASS_GUI                      {gui_var}
   GRASS_HTML_BROWSER             {html_var}
   GRASS_ADDON_PATH               {addon_path_var}
@@ -394,6 +395,7 @@ def help_message(default_gui):
             mapset=_("initial GRASS mapset"),
             full_mapset=_("fully qualified initial mapset directory"),
             env_vars=_("Environment variables relevant for startup"),
+            config_dir_var=_("set root path for configuation directory"),
             gui_var=_("select GUI (text, gui, gtext)"),
             html_var=_("set html web browser for help pages"),
             addon_path_var=_(
@@ -454,7 +456,10 @@ def get_grass_config_dir():
         directory = os.path.join(win_conf_path, grass_config_dirname)
     else:
         grass_config_dirname = f".grass{GRASS_VERSION_MAJOR}"
-        directory = os.path.join(os.getenv("HOME"), grass_config_dirname)
+        if os.getenv("GRASS_CONFIG_DIR"):
+            directory = os.path.join(os.getenv("GRASS_CONFIG_DIR"), grass_config_dirname)
+        else:
+            directory = os.path.join(os.getenv("HOME"), grass_config_dirname)
     if not os.path.isdir(directory):
         try:
             os.mkdir(directory)
