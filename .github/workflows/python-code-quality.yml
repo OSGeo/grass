@@ -91,7 +91,7 @@ jobs:
           pipx ensurepath
           pipx install flake8==${{ env.FLAKE8_VERSION }}
           pipx install pylint==${{ env.PYLINT_VERSION }}
-          pipx install bandit[sarif]==${{ env.BANDIT_VERSION }}
+          pipx install 'bandit[sarif]==${{ env.BANDIT_VERSION }}'
 
       - name: Run Flake8
         run: |
