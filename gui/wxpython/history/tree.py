@@ -69,7 +69,7 @@ class HistoryBrowserNode(DictFilterNode):
     def time_sort(self):
         if "day" in self.data.keys():
             return self.data["day"]
-        elif "timestamp" in self.data.keys():
+        if "timestamp" in self.data.keys():
             return self.data["timestamp"]
         return None
 
