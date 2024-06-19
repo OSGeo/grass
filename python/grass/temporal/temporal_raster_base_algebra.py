@@ -14,7 +14,7 @@ for details.
     >>> p = TemporalRasterAlgebraLexer()
     >>> p.build()
     >>> p.debug = True
-    >>> expression =  'R = A {+,equal,l} B'
+    >>> expression = "R = A {+,equal,l} B"
     >>> p.test(expression)
     R = A {+,equal,l} B
     LexToken(NAME,'R',1,0)
@@ -22,7 +22,7 @@ for details.
     LexToken(NAME,'A',1,4)
     LexToken(T_ARITH2_OPERATOR,'{+,equal,l}',1,6)
     LexToken(NAME,'B',1,18)
-    >>> expression =  'R = A {*,equal|during,r} B'
+    >>> expression = "R = A {*,equal|during,r} B"
     >>> p.test(expression)
     R = A {*,equal|during,r} B
     LexToken(NAME,'R',1,0)
@@ -30,7 +30,7 @@ for details.
     LexToken(NAME,'A',1,4)
     LexToken(T_ARITH1_OPERATOR,'{*,equal|during,r}',1,6)
     LexToken(NAME,'B',1,25)
-    >>> expression =  'R = A {+,equal|during} B'
+    >>> expression = "R = A {+,equal|during} B"
     >>> p.test(expression)
     R = A {+,equal|during} B
     LexToken(NAME,'R',1,0)
@@ -40,6 +40,7 @@ for details.
     LexToken(NAME,'B',1,23)
 
 """
+
 import copy
 
 import grass.pygrass.modules as pymod
@@ -118,7 +119,7 @@ class TemporalRasterAlgebraLexer(TemporalAlgebraLexer):
     t_MULT = r"[\*]"
     t_ADD = r"[\+]"
     t_SUB = r"[-]"
-    t_T_ARITH1_OPERATOR = r"\{[\%\*\/][,]?[a-zA-Z\| ]*([,])?([lrudi]|left|right|union|disjoint|intersect)?\}"
+    t_T_ARITH1_OPERATOR = r"\{[\%\*\/][,]?[a-zA-Z\| ]*([,])?([lrudi]|left|right|union|disjoint|intersect)?\}"  # noqa: E501
     t_T_ARITH2_OPERATOR = (
         r"\{[+-][,]?[a-zA-Z\| ]*([,])?([lrudi]|left|right|union|disjoint|intersect)?\}"
     )
@@ -244,23 +245,27 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         >>> mapsA = []
         >>> mapsB = []
         >>> for i in range(10):
-        ...     idA = "a%i@B"%(i)
+        ...     idA = "a%i@B" % (i)
         ...     mapA = tgis.RasterDataset(idA)
         ...     mapA.uid = idA
         ...     mapA.map_value = True
-        ...     idB = "b%i@B"%(i)
+        ...     idB = "b%i@B" % (i)
         ...     mapB = tgis.RasterDataset(idB)
         ...     mapB.uid = idB
         ...     mapB.map_value = False
-        ...     check = mapA.set_absolute_time(datetime(2000,1,i+1),
-        ...             datetime(2000,1,i + 2))
-        ...     check = mapB.set_absolute_time(datetime(2000,1,i+6),
-        ...             datetime(2000,1,i + 7))
+        ...     check = mapA.set_absolute_time(
+        ...         datetime(2000, 1, i + 1), datetime(2000, 1, i + 2)
+        ...     )
+        ...     check = mapB.set_absolute_time(
+        ...         datetime(2000, 1, i + 6), datetime(2000, 1, i + 7)
+        ...     )
         ...     mapsA.append(mapA)
         ...     mapsB.append(mapB)
+        ...
         >>> resultlist = l.build_spatio_temporal_topology_list(mapsA, mapsB)
         >>> for map in resultlist:
         ...     print(map.get_id())
+        ...
         a5@B
         a6@B
         a7@B
@@ -440,7 +445,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         :return: Map object with conditional value that has been evaluated by
                     comparison operators.
         """
-        # Build command list list with elements from related maps and given relation operator.
+        # Build command list list with elements from related maps and given relation
+        # operator.
         if convert and "condition_value" in dir(map_i):
             if map_i.condition_value != []:
                 cmdstring = str(int(map_i.condition_value[0]))
@@ -508,7 +514,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         temporal_relations = map_i.get_temporal_relations()
         spatial_relations = map_i.get_spatial_relations()
 
-        # Build comandlist list with elements from related maps and given relation operator.
+        # Build comandlist list with elements from related maps and given relation
+        # operator.
         leftcmd = map_i
         cmdstring = ""
         for topo in temporal_topo_list:
@@ -576,7 +583,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 base_map=map_i, bool_op="and", copy=True, rename=True
             )
 
-            # Combine temporal and spatial extents of intermediate map with related maps.
+            # Combine temporal and spatial extents of intermediate map with related
+            # maps.
             for topo in topolist:
                 if topo in tbrelations.keys():
                     for map_j in tbrelations[topo]:
@@ -599,7 +607,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                                 map_new, map_j, "and", temp_op=temporal
                             )
 
-                            # Stop the loop if no temporal or spatial relationship exist.
+                            # Stop the loop if no temporal or spatial relationship
+                            # exist.
                             if returncode == 0:
                                 break
                             # Append map to result map list.
@@ -607,7 +616,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                                 # print(map_new.cmd_list)
                                 # resultlist.append(map_new)
                                 if cmd_bool:
-                                    # Create r.mapcalc expression string for the operation.
+                                    # Create r.mapcalc expression string for the
+                                    # operation.
                                     cmdstring = self.build_command_string(
                                         map_i,
                                         map_j,
@@ -643,8 +653,10 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         For Example: 'if(a1 == 1, b1, c2)'
 
         :param iflist: Map list with temporal extents and command list.
-        :param thenlist: Map list with temporal extents and command list or numeric string.
-        :param elselist: Map list with temporal extents and command list or numeric string.
+        :param thenlist: Map list with temporal extents and command list or numeric
+                         string.
+        :param elselist: Map list with temporal extents and command list or numeric
+                         string.
         :param condition_topolist: List of strings for given temporal relations between
                                    conditions and conclusions.
         :param conclusion_topolist: List of strings for given temporal relations between
@@ -1783,7 +1795,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
              | IF LPAREN ts_var_expr COMMA NULL   LPAREN RPAREN COMMA  number RPAREN
              | IF LPAREN ts_var_expr COMMA number COMMA  NULL   LPAREN RPAREN RPAREN
              | IF LPAREN ts_var_expr COMMA NULL   LPAREN RPAREN COMMA  NULL   LPAREN RPAREN RPAREN
-        """
+        """  # noqa: E501
         ifmaplist = self.check_stds(t[3])
         # Select input for r.mapcalc expression based on length of PLY object.
         if len(t) == 9:
@@ -1894,7 +1906,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
              | IF LPAREN T_REL_OPERATOR COMMA ts_var_expr COMMA stds   COMMA  NULL   LPAREN RPAREN RPAREN
              | IF LPAREN T_REL_OPERATOR COMMA ts_var_expr COMMA expr   COMMA  number RPAREN
              | IF LPAREN T_REL_OPERATOR COMMA ts_var_expr COMMA expr   COMMA  NULL   LPAREN RPAREN RPAREN
-        """
+        """  # noqa: E501
         relations, temporal, function, aggregation = self.eval_toperator(
             t[3], optype="relation"
         )

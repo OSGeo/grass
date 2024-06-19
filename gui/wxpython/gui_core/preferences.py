@@ -36,6 +36,7 @@ except ImportError:
     havePwd = False
 
 import wx
+import wx.lib.agw.aui as aui
 import wx.lib.colourselect as csel
 import wx.lib.mixins.listctrl as listmix
 import wx.lib.scrolledpanel as SP
@@ -112,7 +113,8 @@ class PreferencesBaseDialog(wx.Dialog):
         self.btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
         self.btnSave.SetToolTip(
             _(
-                "Apply and save changes to user settings file (default for next sessions)"
+                "Apply and save changes to user settings file (default for next "
+                "sessions)"
             )
         )
         self.btnSave.SetDefault()
@@ -312,48 +314,6 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         gridSizer.Add(askOnQuit, pos=(row, 0), span=(1, 2))
 
-        row += 1
-        hideSearch = wx.CheckBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=_("Hide '%s' tab (requires GUI restart)") % _("Tools"),
-            name="IsChecked",
-        )
-        hideSearch.SetValue(
-            self.settings.Get(group="manager", key="hideTabs", subkey="search")
-        )
-        self.winId["manager:hideTabs:search"] = hideSearch.GetId()
-
-        gridSizer.Add(hideSearch, pos=(row, 0), span=(1, 2))
-
-        row += 1
-        hideHistory = wx.CheckBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=_("Hide '%s' tab (requires GUI restart)") % _("History"),
-            name="IsChecked",
-        )
-        hideHistory.SetValue(
-            self.settings.Get(group="manager", key="hideTabs", subkey="history")
-        )
-        self.winId["manager:hideTabs:history"] = hideHistory.GetId()
-
-        gridSizer.Add(hideHistory, pos=(row, 0), span=(1, 2))
-
-        row += 1
-        hidePyShell = wx.CheckBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=_("Hide '%s' tab (requires GUI restart)") % _("Python"),
-            name="IsChecked",
-        )
-        hidePyShell.SetValue(
-            self.settings.Get(group="manager", key="hideTabs", subkey="pyshell")
-        )
-        self.winId["manager:hideTabs:pyshell"] = hidePyShell.GetId()
-
-        gridSizer.Add(hidePyShell, pos=(row, 0), span=(1, 2))
-
         #
         # Selected text is copied to clipboard
         #
@@ -371,15 +331,125 @@ class PreferencesDialog(PreferencesBaseDialog):
                 group="manager", key="copySelectedTextToClipboard", subkey="enabled"
             )
         )
-        self.winId[
-            "manager:copySelectedTextToClipboard:enabled"
-        ] = copySelectedTextToClipboard.GetId()
+        self.winId["manager:copySelectedTextToClipboard:enabled"] = (
+            copySelectedTextToClipboard.GetId()
+        )
 
         gridSizer.Add(copySelectedTextToClipboard, pos=(row, 0), span=(1, 2))
 
         gridSizer.AddGrowableCol(0)
         sizer.Add(gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
+
+        #
+        # Layout settings
+        #
+        box = StaticBox(
+            parent=panel, id=wx.ID_ANY, label=" {} ".format(_("Layout settings"))
+        )
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
+
+        row = 0
+        defaultPos = wx.CheckBox(
+            parent=panel,
+            id=wx.ID_ANY,
+            label=_("Save current window layout as default"),
+            name="IsChecked",
+        )
+        defaultPos.SetValue(
+            self.settings.Get(group="general", key="defWindowPos", subkey="enabled")
+        )
+        defaultPos.SetToolTip(
+            wx.ToolTip(
+                _(
+                    "Save current position and size of Layer Manager window and opened "
+                    "Map Display window(s) and use as default for next sessions."
+                )
+            )
+        )
+        self.winId["general:defWindowPos:enabled"] = defaultPos.GetId()
+
+        gridSizer.Add(defaultPos, pos=(row, 0), span=(1, 2))
+
+        row += 1
+        singleWinPanesLayoutPos = wx.CheckBox(
+            parent=panel,
+            id=wx.ID_ANY,
+            label=_("Save current single window panes layout as default"),
+            name="SingleWinPanesLayoutPos",
+        )
+        singleWinPanesLayoutPos.SetValue(
+            self.settings.Get(
+                group="general",
+                key="singleWinPanesLayoutPos",
+                subkey="enabled",
+            )
+        )
+        singleWinPanesLayoutPos.SetToolTip(
+            wx.ToolTip(
+                _(
+                    "Save current position and size of single-window mode panes"
+                    " and use as default for next sessions."
+                )
+            )
+        )
+        if not self.settings.Get(
+            group="appearance",
+            key="singleWindow",
+            subkey="enabled",
+        ):
+            singleWinPanesLayoutPos.Disable()
+        self.winId["general:singleWinPanesLayoutPos:enabled"] = (
+            singleWinPanesLayoutPos.GetId()
+        )
+
+        gridSizer.Add(singleWinPanesLayoutPos, pos=(row, 0), span=(1, 2))
+
+        row += 1
+        hideSearch = wx.CheckBox(
+            parent=panel,
+            id=wx.ID_ANY,
+            label=_("Hide '{}' tab (requires GUI restart)").format(_("Tools")),
+            name="IsChecked",
+        )
+        hideSearch.SetValue(
+            self.settings.Get(group="manager", key="hideTabs", subkey="search")
+        )
+        self.winId["manager:hideTabs:search"] = hideSearch.GetId()
+
+        gridSizer.Add(hideSearch, pos=(row, 0), span=(1, 2))
+
+        row += 1
+        hideHistory = wx.CheckBox(
+            parent=panel,
+            id=wx.ID_ANY,
+            label=_("Hide '{}' tab (requires GUI restart)").format(_("History")),
+            name="IsChecked",
+        )
+        hideHistory.SetValue(
+            self.settings.Get(group="manager", key="hideTabs", subkey="history")
+        )
+        self.winId["manager:hideTabs:history"] = hideHistory.GetId()
+
+        gridSizer.Add(hideHistory, pos=(row, 0), span=(1, 2))
+
+        row += 1
+        hidePyShell = wx.CheckBox(
+            parent=panel,
+            id=wx.ID_ANY,
+            label=_("Hide '{}' tab (requires GUI restart)").format(_("Python")),
+            name="IsChecked",
+        )
+        hidePyShell.SetValue(
+            self.settings.Get(group="manager", key="hideTabs", subkey="pyshell")
+        )
+        self.winId["manager:hideTabs:pyshell"] = hidePyShell.GetId()
+
+        gridSizer.Add(hidePyShell, pos=(row, 0), span=(1, 2))
+        sizer.Add(gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
+
         #
         # Data catalog settings
         #
@@ -427,7 +497,6 @@ class PreferencesDialog(PreferencesBaseDialog):
         gridSizer.Add(posDisplay, pos=(row, 0), span=(1, 2))
 
         row += 1
-
         posManager = wx.CheckBox(
             parent=panel,
             id=wx.ID_ANY,
@@ -442,28 +511,6 @@ class PreferencesDialog(PreferencesBaseDialog):
         self.winId["general:workspace:posManager:enabled"] = posManager.GetId()
 
         gridSizer.Add(posManager, pos=(row, 0), span=(1, 2))
-
-        row += 1
-        defaultPos = wx.CheckBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=_("Save current window layout as default"),
-            name="IsChecked",
-        )
-        defaultPos.SetValue(
-            self.settings.Get(group="general", key="defWindowPos", subkey="enabled")
-        )
-        defaultPos.SetToolTip(
-            wx.ToolTip(
-                _(
-                    "Save current position and size of Layer Manager window and opened "
-                    "Map Display window(s) and use as default for next sessions."
-                )
-            )
-        )
-        self.winId["general:defWindowPos:enabled"] = defaultPos.GetId()
-
-        gridSizer.Add(defaultPos, pos=(row, 0), span=(1, 2))
 
         gridSizer.AddGrowableCol(0)
         sizer.Add(gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
@@ -1423,9 +1470,9 @@ class PreferencesDialog(PreferencesBaseDialog):
                 subkey=["transparent", "enabled"],
             )
         )
-        self.winId[
-            "vectorLayer:featureColor:transparent:enabled"
-        ] = transpFeature.GetId()
+        self.winId["vectorLayer:featureColor:transparent:enabled"] = (
+            transpFeature.GetId()
+        )
         gridSizer.Add(transpFeature, pos=(row, col + 1), flag=wx.ALIGN_CENTER_VERTICAL)
 
         # area fill color
@@ -1942,6 +1989,24 @@ class PreferencesDialog(PreferencesBaseDialog):
                 # multi window mode
                 self.settings.Set(
                     group="general", key="defWindowPos", subkey="dim", value=dim
+                )
+
+        #
+        # update single window panes layout
+        #
+        single_win_panes_layout_pos = self.settings.Get(
+            group="general",
+            key="singleWinPanesLayoutPos",
+            subkey="enabled",
+        )
+        if single_window and single_win_panes_layout_pos:
+            aui_manager = aui.GetManager(self.parent)
+            if aui_manager:
+                self.settings.Set(
+                    group="general",
+                    key="singleWinPanesLayoutPos",
+                    subkey="pos",
+                    value=aui_manager.SavePerspective(),
                 )
 
         return True

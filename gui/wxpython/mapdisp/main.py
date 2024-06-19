@@ -25,7 +25,7 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 @author Vaclav Petras <wenzeslaus gmail.com> (MapPanelBase)
 @author Anna Kratochvilova <kratochanna gmail.com> (MapPanelBase)
-"""
+"""  # noqa: E501
 
 import os
 import sys
@@ -227,7 +227,8 @@ class DMonMap(Map):
                         if layersOrder[i] == -1:
                             layersOrder[i] = next_layer
                             next_layer += 1
-                        # layer must be put higher in render order (same cmd was insered more times)
+                        # layer must be put higher in render order (same cmd was
+                        # insered more times)
                         # TODO delete rendurant cmds from cmd file?
                         else:
                             for j, l_order in enumerate(layersOrder):

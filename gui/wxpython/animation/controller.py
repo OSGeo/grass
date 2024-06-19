@@ -13,6 +13,7 @@ This program is free software under the GNU General Public License
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
+
 import os
 import wx
 
@@ -92,7 +93,7 @@ class AnimationController(wx.EvtHandler):
         self._timeTick = value
         if self.timer.IsRunning():
             self.timer.Stop()
-            self.timer.Start(self._timeTick)
+            self.timer.Start(int(self._timeTick))
         self.DisableSliderIfNeeded()
 
     timeTick = property(fget=GetTimeTick, fset=SetTimeTick)
@@ -110,7 +111,7 @@ class AnimationController(wx.EvtHandler):
                 anim.NextFrameIndex()
             anim.Start()
         if not self.timer.IsRunning():
-            self.timer.Start(self.timeTick)
+            self.timer.Start(int(self.timeTick))
             self.DisableSliderIfNeeded()
 
     def PauseAnimation(self, paused):
@@ -120,7 +121,7 @@ class AnimationController(wx.EvtHandler):
                 self.DisableSliderIfNeeded()
         else:
             if not self.timer.IsRunning():
-                self.timer.Start(self.timeTick)
+                self.timer.Start(int(self.timeTick))
                 self.DisableSliderIfNeeded()
 
         for anim in self.animations:

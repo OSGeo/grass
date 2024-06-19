@@ -1049,7 +1049,8 @@ class Map:
         :param rast: list of raster maps
         :param zoom: zoom to raster map (ignore NULLs)
         :param vect: list of vector maps
-        :param rast3d: 3d raster map (not list, no support of multiple 3d rasters in g.region)
+        :param rast3d: 3d raster map (not list, no support of multiple 3d rasters in
+                       g.region)
         :param regionName:  named region or None
         :param n,s,e,w: force extent
         :param default: force default region settings
@@ -1256,7 +1257,8 @@ class Map:
         """Returns list of layers of selected properties or list of
         all layers.
 
-        :param ltype: layer type, e.g. raster/vector/wms/overlay (value or tuple of values)
+        :param ltype: layer type, e.g. raster/vector/wms/overlay (value or tuple of
+                      values)
         :param mapset: all layers from given mapset (only for maplayers)
         :param name: all layers with given name
         :param active: only layers with 'active' attribute set to True or False
@@ -1439,8 +1441,7 @@ class Map:
 
         if layer in list:
             if layer.mapfile:
-                base = os.path.split(layer.mapfile)[0]
-                mapfile = os.path.split(layer.mapfile)[1]
+                base, mapfile = os.path.split(layer.mapfile)
                 tempbase = mapfile.split(".")[0]
                 if base == "" or tempbase == "":
                     return None

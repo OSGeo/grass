@@ -112,10 +112,12 @@ class ExampleMainToolbar(BaseToolbar):
         """!Toolbar data"""
         return self._getToolbarData(
             (
-                ("addRaster", BaseIcons["addRast"].label),
-                BaseIcons["addRast"],
-                self.parent.OnSelectRaster,
-            ),
+                (
+                    ("addRaster", BaseIcons["addRast"].label),
+                    BaseIcons["addRast"],
+                    self.parent.OnSelectRaster,
+                ),
+            )
         )
 
 
@@ -135,13 +137,15 @@ class ExampleMiscToolbar(BaseToolbar):
         icons = BaseIcons
         return self._getToolbarData(
             (
-                ("help", icons["help"].label),
-                icons["help"],
-                self.parent.OnHelp,
-            ),
-            (
-                ("quit", icons["quit"].label),
-                icons["quit"],
-                self.parent.OnCloseWindow,
-            ),
+                (
+                    ("help", icons["help"].label),
+                    icons["help"],
+                    self.parent.OnHelp,
+                ),
+                (
+                    ("quit", icons["quit"].label),
+                    icons["quit"],
+                    self.parent.OnCloseWindow,
+                ),
+            )
         )

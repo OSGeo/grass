@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 @author Jachym Cepicky
 @author Martin Landa <landa.martin gmail.com>
 """
+
 import os
 
 import wx
@@ -238,10 +239,12 @@ class RegionDef(BaseClass, wx.Dialog):
         self.ttbres = TextCtrl(
             parent=pane, id=wx.ID_ANY, value=str(self.tbres), size=(150, -1)
         )
-        #         self.tnsres3 = wx.TextCtrl(parent = pane, id = wx.ID_ANY, value = str(self.nsres3),
-        #                                    size = (150, -1))
-        #         self.tewres3  =  wx.TextCtrl(parent = pane, id = wx.ID_ANY, value = str(self.ewres3),
-        #                                    size = (150, -1))
+        # self.tnsres3 = wx.TextCtrl(
+        #     parent=pane, id=wx.ID_ANY, value=str(self.nsres3), size=(150, -1)
+        # )
+        # self.tewres3 = wx.TextCtrl(
+        #     parent=pane, id=wx.ID_ANY, value=str(self.ewres3), size=(150, -1)
+        # )
 
         # labels
         self.ldepth = StaticText(parent=pane, label=_("Depth: %d") % self.depth)
@@ -279,20 +282,30 @@ class RegionDef(BaseClass, wx.Dialog):
         )
 
         # res
-        #         gridSizer.Add(item = wx.StaticText(parent = pane, label = _("3D N-S resolution")),
-        #                       flag = wx.ALIGN_CENTER |
-        #                       wx.LEFT | wx.RIGHT | wx.TOP, border = 5,
-        #                       pos = (2, 1))
-        #         gridSizer.Add(item = self.tnsres3,
-        #                       flag = wx.ALIGN_CENTER_HORIZONTAL |
-        #                       wx.ALL, border = 5, pos = (3, 1))
-        #         gridSizer.Add(item = wx.StaticText(parent = pane, label = _("3D E-W resolution")),
-        #                       flag = wx.ALIGN_CENTER |
-        #                       wx.LEFT | wx.RIGHT | wx.TOP, border = 5,
-        #                       pos = (2, 3))
-        #         gridSizer.Add(item = self.tewres3,
-        #                       flag = wx.ALIGN_CENTER_HORIZONTAL |
-        #                       wx.ALL, border = 5, pos = (3, 3))
+        # gridSizer.Add(
+        #     item=wx.StaticText(parent=pane, label=_("3D N-S resolution")),
+        #     flag=wx.ALIGN_CENTER | wx.LEFT | wx.RIGHT | wx.TOP,
+        #     border=5,
+        #     pos=(2, 1),
+        # )
+        # gridSizer.Add(
+        #     item=self.tnsres3,
+        #     flag=wx.ALIGN_CENTER_HORIZONTAL | wx.ALL,
+        #     border=5,
+        #     pos=(3, 1),
+        # )
+        # gridSizer.Add(
+        #     item=wx.StaticText(parent=pane, label=_("3D E-W resolution")),
+        #     flag=wx.ALIGN_CENTER | wx.LEFT | wx.RIGHT | wx.TOP,
+        #     border=5,
+        #     pos=(2, 3),
+        # )
+        # gridSizer.Add(
+        #     item=self.tewres3,
+        #     flag=wx.ALIGN_CENTER_HORIZONTAL | wx.ALL,
+        #     border=5,
+        #     pos=(3, 3),
+        # )
 
         # rows/cols/cells
         gridSizer.Add(
@@ -526,10 +539,10 @@ class RegionDef(BaseClass, wx.Dialog):
                 self.top = float(event.GetString())
             elif event.GetId() == self.tbottom.GetId():
                 self.bottom = float(event.GetString())
-            #             elif event.GetId() == self.tnsres3.GetId():
-            #                 self.nsres3 = float(event.GetString())
-            #             elif event.GetId() == self.tewres3.GetId():
-            #                 self.ewres3 = float(event.GetString())
+            # elif event.GetId() == self.tnsres3.GetId():
+            #     self.nsres3 = float(event.GetString())
+            # elif event.GetId() == self.tewres3.GetId():
+            #     self.ewres3 = float(event.GetString())
             elif event.GetId() == self.ttbres.GetId():
                 self.tbres = float(event.GetString())
 

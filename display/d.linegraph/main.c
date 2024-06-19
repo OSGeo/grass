@@ -182,7 +182,7 @@ int main(int argc, char **argv)
         FILE *fp;             /* pointer to file        */
     };
 
-    struct in_file in[12];
+    struct in_file in[12] = {0};
     struct GModule *module;
 
     float max_y;
