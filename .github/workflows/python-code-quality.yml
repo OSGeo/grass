@@ -150,7 +150,7 @@ jobs:
 
       - name: Run Pylint on other files using pytest
         run: |
-          pip install pytest==7.4.4 pytest-pylint==0.19 pytest-github-actions-annotate-failures
+          pipx inject pylint pytest==7.4.4 pytest-pylint==0.19 pytest-github-actions-annotate-failures
           echo "::warning file=.github/workflows/python-code-quality.yml,line=149,col=42,endColumn=48::\
             Temporarily downgraded pytest-pylint and pytest to allow merging other PRs.\
             The errors reported with a newer version seem legitimite and should be fixed \
