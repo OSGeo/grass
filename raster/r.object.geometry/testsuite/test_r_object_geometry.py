@@ -4,9 +4,11 @@ Purpose:   This script is to demonstrate a unit test for r.object.geometry
            module.
 """
 
+import json
 import os
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+from grass.gunittest.gmodules import call_module
 
 testraster1 = """\
 north:   250000
@@ -71,6 +73,45 @@ class TestObjectGeometryPixel(TestCase):
             "data/file_pixel.csv",
             msg="Output file is not equal to reference file",
         )
+
+    def test_object_geometry_json(self):
+        """Test json format output"""
+        reference = [
+            {
+                "category": 1,
+                "area": 4,
+                "perimeter": 8,
+                "compact_circle": 1.1283791670955126,
+                "compact_square": 1,
+                "fd": 2.999459154496928,
+                "mean_x": 625000,
+                "mean_y": 237500,
+            },
+            {
+                "category": 2,
+                "area": 8,
+                "perimeter": 12,
+                "compact_circle": 1.1968268412042982,
+                "compact_square": 0.94280904158206347,
+                "fd": 2.3898313512153728,
+                "mean_x": 655000,
+                "mean_y": 225000,
+            },
+            {
+                "category": 3,
+                "area": 4,
+                "perimeter": 8,
+                "compact_circle": 1.1283791670955126,
+                "compact_square": 1,
+                "fd": 2.999459154496928,
+                "mean_x": 625000,
+                "mean_y": 212500,
+            },
+        ]
+        output = call_module(
+            "r.object.geometry", input=self.test_objects1, format="json"
+        )
+        self.assertCountEqual(reference, json.loads(output))
 
 
 class TestObjectGeometryMeter(TestCase):
