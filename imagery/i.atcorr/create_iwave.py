@@ -196,6 +196,7 @@ def write_cpp(bands, values, sensor, folder):
     create output file in cpp style
     needs other functions: interpolate_bands, pretty_print
     """
+
     def get_min_wavelength(c, rthresh, fi):
         """Get minimum wavelength rounded by threshold.
 
@@ -227,12 +228,8 @@ def write_cpp(bands, values, sensor, folder):
         li = limits
         # Get wavelength range for spectral response in band
         maxresponse_idx = np.argmax(fi)
-        min_wavelength = get_min_wavelength(
-            maxresponse_idx, rthresh, fi
-        )
-        max_wavelength = get_max_wavelength(
-            maxresponse_idx, rthresh, fi
-        )
+        min_wavelength = get_min_wavelength(maxresponse_idx, rthresh, fi)
+        max_wavelength = get_max_wavelength(maxresponse_idx, rthresh, fi)
     else:
         filter_f = []
         limits = []
@@ -243,12 +240,8 @@ def write_cpp(bands, values, sensor, folder):
 
             # Get wavelength range for spectral response in band
             maxresponse_idx = np.argmax(fi)
-            min_wavelength = get_min_wavelength(
-                maxresponse_idx, rthresh, fi
-            )
-            max_wavelength = get_max_wavelength(
-                maxresponse_idx, rthresh, fi
-            )
+            min_wavelength = get_min_wavelength(maxresponse_idx, rthresh, fi)
+            max_wavelength = get_max_wavelength(maxresponse_idx, rthresh, fi)
             print("   %s (%inm - %inm)" % (bands[b], min_wavelength, max_wavelength))
 
     # writing...
