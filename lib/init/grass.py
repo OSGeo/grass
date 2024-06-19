@@ -395,7 +395,7 @@ def help_message(default_gui):
             mapset=_("initial GRASS mapset"),
             full_mapset=_("fully qualified initial mapset directory"),
             env_vars=_("Environment variables relevant for startup"),
-            config_dir_var=_("set root path for configuation directory"),
+            config_dir_var=_("set root path for configuration directory"),
             gui_var=_("select GUI (text, gui, gtext)"),
             html_var=_("set html web browser for help pages"),
             addon_path_var=_(
