@@ -53,7 +53,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r .github/workflows/python_requirements.txt
           pip install -r .github/workflows/optional_requirements.txt
-          pip install pytest pytest-timeout pytest-github-actions-annotate-failures pytest-xdist
+          pip install pytest pytest-timeout pytest-github-actions-annotate-failures pytest-xdist pytest-cov
 
       - name: Create installation directory
         run: |
