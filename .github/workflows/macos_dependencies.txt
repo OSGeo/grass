@@ -1,7 +1,7 @@
 blas
 cairo
-clangxx_osx-arm64
 clang_osx-arm64
+clangxx_osx-arm64
 cmake
 fftw
 flex
@@ -11,7 +11,6 @@ gettext
 ghostscript
 giflib
 git
-libjpeg-turbo
 krb5
 lapack
 lastools
@@ -39,6 +38,10 @@ pkg-config
 ply
 postgresql
 proj
+pytest
+pytest-github-actions-annotate-failures
+pytest-timeout
+pytest-xdist
 python
 python.app
 setuptools
