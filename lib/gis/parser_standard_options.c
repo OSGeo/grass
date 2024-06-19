@@ -3,7 +3,7 @@
 
    \brief GIS Library - Argument parsing functions (standard options)
 
-   (C) 2001-2019 by the GRASS Development Team
+   (C) 2001-2024 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -759,7 +759,7 @@ struct Option *G_define_standard_option(int opt)
         Opt->type = TYPE_INTEGER;
         Opt->required = NO;
         Opt->multiple = NO;
-        Opt->answer = "1";
+        Opt->answer = "4";
         /* start dynamic answer */
         /* check NPROCS in GISRC, set with g.gisenv */
         memstr = G_store(G_getenv_nofatal("NPROCS"));
