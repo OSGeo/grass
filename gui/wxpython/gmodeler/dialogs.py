@@ -412,12 +412,10 @@ class ModelRelationDialog(wx.Dialog):
             flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
             border=5,
         )
-        mainSizer.Add(
-            btnSizer, proportion=0, flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5
-        )
+        mainSizer.Add(btnSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 
         self.panel.SetSizer(mainSizer)
-        mainSizer.Fit(self.panel)
+        mainSizer.Fit(self)
 
         self.Layout()
         self.SetSize(self.GetBestSize())
