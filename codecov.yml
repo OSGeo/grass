@@ -11,6 +11,10 @@ coverage:
 # Disable PR comments initially, until it is possible to have the information as a job summary
 comment: false
 
+github_checks:
+  # Until more tests are added, disable GitHub checks annotation when added lines aren't covered by tests
+  annotations: false
+
 component_management:
   individual_components:
     - component_id: modules_database # this is an identifier that should not be changed
