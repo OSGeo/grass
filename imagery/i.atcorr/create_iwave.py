@@ -162,6 +162,7 @@ def plot_filter(values):
     function has to be used inside Spyder python environment
     """
     import matplotlib.pyplot as plt
+
     filter_f, limits = interpolate_band(values)
 
     # removing nodata
