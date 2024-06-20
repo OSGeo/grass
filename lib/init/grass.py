@@ -427,41 +427,14 @@ def help_message(default_gui):
 
 
 def get_grass_config_dir():
-    """Get configuration directory
+    """Get/Create GRASS configuration directory."""
+    from grass.utils.config import get_grass_config_dir, ConfigError
 
-    Determines path of GRASS GIS user configuration directory and creates
-    it if it does not exist.
+    try:
+        directory = get_grass_config_dir()
+    except ConfigError as e:
+        fatal(e)
 
-    Configuration directory is for example used for grass env file
-    (the one which caries mapset settings from session to session).
-    """
-    if WINDOWS:
-        grass_config_dirname = f"GRASS{GRASS_VERSION_MAJOR}"
-        win_conf_path = os.getenv("APPDATA")
-        # this can happen with some strange settings
-        if not win_conf_path:
-            fatal(
-                _(
-                    "The APPDATA variable is not set, ask your operating"
-                    " system support"
-                )
-            )
-        if not os.path.exists(win_conf_path):
-            fatal(
-                _(
-                    "The APPDATA variable points to directory which does"
-                    " not exist, ask your operating system support"
-                )
-            )
-        directory = os.path.join(win_conf_path, grass_config_dirname)
-    else:
-        grass_config_dirname = f".grass{GRASS_VERSION_MAJOR}"
-        if os.getenv("GRASS_CONFIG_DIR"):
-            directory = os.path.join(
-                os.getenv("GRASS_CONFIG_DIR"), grass_config_dirname
-            )
-        else:
-            directory = os.path.join(os.getenv("HOME"), grass_config_dirname)
     if not os.path.isdir(directory):
         try:
             os.mkdir(directory)
@@ -469,8 +442,9 @@ def get_grass_config_dir():
             # Can happen as a race condition
             if not e.errno == errno.EEXIST or not os.path.isdir(directory):
                 fatal(
-                    _("Failed to create configuration directory '%s' with error: %s")
-                    % (directory, e.strerror)
+                    _(
+                        "Failed to create configuration directory '{}' with error: {}"
+                    ).format(directory, e.strerror)
                 )
     return directory
 
@@ -697,7 +671,7 @@ def path_append(directory, var):
     os.environ[var] = path
 
 
-def set_paths(grass_config_dir):
+def set_addon_paths(grass_config_dir):
     # addons (path)
     addon_path = os.getenv("GRASS_ADDON_PATH")
     if addon_path:
@@ -719,6 +693,17 @@ def set_paths(grass_config_dir):
         path_prepend(os.path.join(addon_base, "scripts"), "PATH")
     path_prepend(os.path.join(addon_base, "bin"), "PATH")
 
+    # set path for the GRASS man pages
+    addons_man_path = os.path.join(addon_base, "docs", "man")
+    man_path = os.getenv("MANPATH")
+    if man_path:
+        path_prepend(addons_man_path, "MANPATH")
+    else:
+        os.environ["MANPATH"] = to_text_string(addons_man_path)
+        path_prepend(gpath("docs", "man"), "MANPATH")
+
+
+def set_paths():
     # standard installation
     if not WINDOWS:
         path_prepend(gpath("scripts"), "PATH")
@@ -735,11 +720,9 @@ def set_paths(grass_config_dir):
 
     # set path for the GRASS man pages
     grass_man_path = gpath("docs", "man")
-    addons_man_path = os.path.join(addon_base, "docs", "man")
     man_path = os.getenv("MANPATH")
     sys_man_path = None
     if man_path:
-        path_prepend(addons_man_path, "MANPATH")
         path_prepend(grass_man_path, "MANPATH")
     else:
         try:
@@ -754,10 +737,6 @@ def set_paths(grass_config_dir):
 
         if sys_man_path:
             os.environ["MANPATH"] = to_text_string(sys_man_path)
-            path_prepend(addons_man_path, "MANPATH")
-            path_prepend(grass_man_path, "MANPATH")
-        else:
-            os.environ["MANPATH"] = to_text_string(addons_man_path)
             path_prepend(grass_man_path, "MANPATH")
 
     # Set LD_LIBRARY_PATH (etc) to find GRASS shared libraries
@@ -2467,11 +2446,22 @@ def main():
 
     Only few things are set on the module level.
     """
+    # Set GRASS version number for R interface etc
+    # (must be an env var for MS Windows)
+    os.environ["GRASS_VERSION"] = GRASS_VERSION
+    # Set PATH, PYTHONPATH, ... (must be called before get_grass_config_dir())
+    set_paths()
+    from grass.utils.config import get_grass_config_dir, ConfigError
+
+    try:
+        grass_config_dir = get_grass_config_dir()
+    except ConfigError as e:
+        sys.exit("ERROR: {}".format(e))
+    set_addon_paths(grass_config_dir)
     # Set language
     # This has to be called before any _() function call!
     # Subsequent functions are using _() calls and
     # thus must be called only after Language has been set.
-    grass_config_dir = get_grass_config_dir()
     set_language(grass_config_dir)
 
     # Set default GUI
@@ -2484,10 +2474,6 @@ def main():
         " Use 'g.gisenv set=\"DEBUG=[0-5]\"'"
         " to turn GRASS GIS debug mode on if you wish to do so."
     )
-
-    # Set GRASS version number for R interface etc
-    # (must be an env var for MS Windows)
-    os.environ["GRASS_VERSION"] = GRASS_VERSION
 
     # Set the GIS_LOCK variable to current process id
     gis_lock = str(os.getpid())
@@ -2535,8 +2521,6 @@ def main():
     gisrc = create_gisrc(tmpdir, gisrcrc)
 
     ensure_home()
-    # Set PATH, PYTHONPATH, ...
-    set_paths(grass_config_dir=grass_config_dir)
     # Set GRASS_PAGER, GRASS_PYTHON, GRASS_GNUPLOT, GRASS_PROJSHARE
     set_defaults()
     set_display_defaults()
