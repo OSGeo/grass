@@ -111,7 +111,8 @@ double trunca()
             break;
         kk = i - 1;
     }
-    if (kk < 0) kk = 0;
+    if (kk < 0)
+        kk = 0;
     double aa =
         (double)((log10(sixs_trunc.pha[kk]) - log10(sixs_trunc.pha[k])) /
                  (acos(rmu[kk]) - acos(rmu[k])));
