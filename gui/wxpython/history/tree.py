@@ -112,8 +112,12 @@ class HistoryTreeModel(TreeModel):
         super().__init__(nodeClass=nodeClass)
 
     def SortChildren(self, node):
-        """Sort children chronologically based on time_sort property.
-        Leave out day nodes that include commands with missing info."""
+        """
+        Sort children chronologically based on time_sort property.
+        Leave out day nodes that include commands with missing info.
+
+        :param node: node whose children are sorted
+        """
         if node.children and node.time_sort != OLD_DATE:
             node.children.sort(key=lambda node: node.time_sort, reverse=True)
 
@@ -248,7 +252,7 @@ class HistoryBrowserTree(CTreeView):
         """
         Convert a datetime timestamp to ISO format.
 
-        :param str datetime_timestamp: datetime.datetime object .
+        :param str datetime_timestamp: datetime.datetime object
         :return: Command timestamp in ISO format or None if datetime_timestamp is None.
         """
         return (
@@ -267,7 +271,7 @@ class HistoryBrowserTree(CTreeView):
         return datetime.datetime.fromisoformat(iso_timestamp) if iso_timestamp else None
 
     def _reloadNode(self, node):
-        """Reload the model of a specific node"""
+        """Reload the model of a specific node."""
         self._model.SortChildren(node)
         self._orig_model = copy.deepcopy(self._model)
         self.RefreshItems()
