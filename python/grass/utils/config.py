@@ -1,4 +1,4 @@
-# MODULE:    grass.config
+# MODULE:    grass.utils.config
 #
 # AUTHOR(S): Martin Landa <landa.martin gmail com>
 #
