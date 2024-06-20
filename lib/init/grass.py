@@ -457,7 +457,9 @@ def get_grass_config_dir():
     else:
         grass_config_dirname = f".grass{GRASS_VERSION_MAJOR}"
         if os.getenv("GRASS_CONFIG_DIR"):
-            directory = os.path.join(os.getenv("GRASS_CONFIG_DIR"), grass_config_dirname)
+            directory = os.path.join(
+                os.getenv("GRASS_CONFIG_DIR"), grass_config_dirname
+            )
         else:
             directory = os.path.join(os.getenv("HOME"), grass_config_dirname)
     if not os.path.isdir(directory):
