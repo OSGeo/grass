@@ -126,10 +126,11 @@ PERMANENT
 
   <dt>GRASS_CONFIG_DIR</dt>
   <dd>[grass startup script]<br>
-    specifies root path for GRASS configuration directory. If not specified,
-    the default placement of the configuration directory is used
-    (<tt>$HOME/.grass8/rc</tt> on GNU/Linux and
-    macOS, <tt>%APPDATA%\Roaming\GRASS8\rc</tt> on MS Windows).</dd>
+    specifies root path for GRASS configuration directory
+    (<tt>.grass8</tt> on GNU/Linux and macOS and <tt>GRASS8</tt> on MS
+    Windows) . If not specified, the default placement of the
+    configuration directory is used: <tt>$HOME</tt> on GNU/Linux and
+    macOS, <tt>%APPDATA%\Roaming</tt> on MS Windows.</dd>
 
   <dt>GRASS_DB_ENCODING</dt>
   <dd>[various modules, wxGUI]<br>
