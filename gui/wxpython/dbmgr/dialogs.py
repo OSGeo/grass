@@ -326,9 +326,8 @@ class DisplayAttributesDialog(wx.Dialog):
         frame.dialogs["attributes"] = None
         if hasattr(self, "digit"):
             self.parent.digit.GetDisplay().SetSelected([])
-            if frame.IsAutoRendered():
-                self.parent.UpdateMap(render=False)
-        elif frame.IsAutoRendered():
+            self.parent.UpdateMap(render=False)
+        else:
             frame.RemoveQueryLayer()
             self.parent.UpdateMap(render=True)
         if self.IsModal():

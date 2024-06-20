@@ -13,15 +13,16 @@ msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-23 03:37-0600\n"
-"PO-Revision-Date: 2014-01-01 11:35+0100\n"
-"Last-Translator: Sylvain Maillard <sylvain.maillard@gmail.com>\n"
-"Language-Team: Français <grass-translations@lists.osgeo.org>\n"
+"PO-Revision-Date: 2024-05-27 09:55+0000\n"
+"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
+"Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/"
+"grassmods/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.5\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: ../temporal/t.connect/main.c:34
 #: ../locale/scriptstrings/t.merge_to_translate.c:2
@@ -129,7 +130,7 @@ msgstr ""
 
 #: ../temporal/t.connect/main.c:42 ../db/db.connect/main.c:50
 msgid "Print current connection parameters and exit"
-msgstr "Affiche les paramètres de connexion courants et quitte"
+msgstr "Afficher les paramètres de connexion courants et quitter"
 
 #: ../temporal/t.connect/main.c:43 ../raster/r.external/main.c:96
 #: ../raster/r.external/main.c:135 ../raster/r.out.gdal/main.c:142
@@ -1444,22 +1445,20 @@ msgstr "Lister les formats supportés et sortir"
 #: ../locale/scriptstrings/v.import_to_translate.c:27
 #: ../vector/v.in.lidar/main.c:322 ../vector/v.external/args.c:49
 #: ../vector/v.in.pdal/main.cpp:225 ../vector/v.in.ogr/main.c:380
-#, fuzzy
 msgid "Override projection check (use current project's CRS)"
 msgstr ""
 "Supplanter la vérification de la projection (utiliser la projection du "
-"secteur courant)"
+"projet courant)"
 
 #: ../raster/r.external/main.c:102 ../raster/r.in.pdal/main.cpp:398
 #: ../raster/r.in.gdal/main.c:217 ../raster/r.in.lidar/main.c:305
 #: ../raster3d/r3.in.lidar/main.c:292 ../vector/v.in.lidar/main.c:324
 #: ../vector/v.external/args.c:51 ../vector/v.in.pdal/main.cpp:227
-#, fuzzy
 msgid ""
 "Assume that the dataset has the same coordinate reference system as the "
 "current project"
 msgstr ""
-"Considérer que le jeu de données a la même projection que le secteur courant"
+"Considérer que le jeu de données a la même projection que le projet courant"
 
 #: ../raster/r.external/main.c:107 ../raster/r.in.gdal/main.c:223
 #: ../vector/v.external/args.c:56 ../vector/v.in.ogr/main.c:387
@@ -1575,28 +1574,27 @@ msgid "No projection information available"
 msgstr ""
 
 #: ../raster/r.external/proj.c:134
-#, fuzzy
 msgid ""
 "Unable to convert input map coordinate reference system to GRASS format; "
 "cannot create new project."
 msgstr ""
-"Impossible de convertir la projection de la couche en entrée au format "
-"GRASS ; impossible de créer le nouveau Secteur"
+"Impossible de convertir la projection de la couche en entrée au format GRASS "
+"; impossible de créer le nouveau projet"
 
 #: ../raster/r.external/proj.c:140 ../raster/r.in.gdal/main.c:1035
 #: ../raster/r.in.gdal/proj.c:139 ../vector/v.in.lidar/main.c:522
 #: ../vector/v.external/proj.c:172 ../vector/v.in.ogr/proj.c:306
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create new project <%s>"
-msgstr "Impossible de créer l'index sur la table <%s>"
+msgstr "Impossible de créer le nouveau projet <%s>"
 
 #: ../raster/r.external/proj.c:142 ../raster/r.in.gdal/main.c:1041
 #: ../raster/r.in.gdal/proj.c:141 ../general/g.proj/create.c:16
 #: ../vector/v.in.lidar/main.c:525 ../vector/v.external/proj.c:174
 #: ../vector/v.in.ogr/proj.c:308
-#, fuzzy, c-format
+#, c-format
 msgid "Project <%s> created"
-msgstr "Secteur <%s> créé"
+msgstr "Projet <%s> créé"
 
 #: ../raster/r.external/proj.c:165 ../raster/r.in.gdal/proj.c:164
 #: ../vector/v.external/proj.c:197 ../vector/v.in.ogr/proj.c:331
@@ -1640,13 +1638,17 @@ msgstr "Le PROJ_INFO du jeu de données est : \n"
 #: ../raster/r.in.lidar/projection.c:89 ../raster3d/r3.in.lidar/projection.c:90
 #: ../vector/v.in.lidar/projection.c:87 ../vector/v.external/proj.c:360
 #: ../vector/v.in.pdal/projection.c:87 ../vector/v.in.ogr/proj.c:492
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "\n"
 "In case of no significant differences in the coordinate reference system "
 "definitions, use the -o flag to ignore them and use current project "
 "definition.\n"
 msgstr ""
+"\n"
+"Si les définitions des systèmes de référence des coordonnées ne présentent "
+"pas de différences significatives, l'option -o permet de les ignorer et "
+"d'utiliser la définition actuelle du projet.\n"
 
 #: ../raster/r.external/proj.c:328 ../raster/r.in.gdal/proj.c:327
 #: ../vector/v.external/proj.c:364 ../vector/v.in.ogr/proj.c:496
@@ -3845,23 +3847,20 @@ msgstr ""
 
 #: ../raster/r.sun/main.c:804 ../general/g.region/printwindow.c:251
 #: ../general/g.region/printwindow.c:496 ../general/g.region/printwindow.c:570
-#, fuzzy
 msgid "Can't get projection info of current project"
 msgstr ""
-"Impossible d'obtenir les informations de projection pour le Secteur courant"
+"Impossible d'obtenir les informations de projection pour le projet courant"
 
 #: ../raster/r.sun/main.c:807 ../general/g.region/printwindow.c:255
 #: ../general/g.region/printwindow.c:500 ../general/g.region/printwindow.c:579
-#, fuzzy
 msgid "Can't get projection units of current project"
-msgstr "Impossible d'obtenir les unités de projection pour le Secteur courant"
+msgstr "Impossible d'obtenir les unités de projection pour le projet courant"
 
 #: ../raster/r.sun/main.c:811 ../general/g.region/printwindow.c:259
 #: ../general/g.region/printwindow.c:504 ../general/g.region/printwindow.c:583
-#, fuzzy
 msgid "Can't get projection key values of current project"
 msgstr ""
-"Impossible d'obtenir les valeurs clefs de projection pour le Secteur courant"
+"Impossible d'obtenir les valeurs clefs de projection pour le projet courant"
 
 #: ../raster/r.sun/main.c:820 ../raster/r.horizon/main.c:597
 #: ../raster/r.latlong/main.c:115 ../raster/r.in.gdal/main.c:1141
@@ -4247,17 +4246,17 @@ msgstr ""
 #: ../raster/r.horizon/main.c:582 ../display/d.where/main.c:104
 msgid "Can't get projection info of current location"
 msgstr ""
-"Impossible d'obtenir les informations de projection pour le Secteur courant"
+"Impossible d'obtenir les informations de projection pour le projet courant"
 
 #: ../raster/r.horizon/main.c:585 ../display/d.where/main.c:107
 msgid "Can't get projection units of current location"
-msgstr "Impossible d'obtenir les unités de projection pour le Secteur courant"
+msgstr "Impossible d'obtenir les unités de projection pour le projet courant"
 
 #: ../raster/r.horizon/main.c:588 ../ps/ps.map/do_geogrid.c:279
 #: ../display/d.where/main.c:111 ../display/d.grid/plot.c:578
 msgid "Can't get projection key values of current location"
 msgstr ""
-"Impossible d'obtenir les valeurs clefs de projection pour le Secteur courant"
+"Impossible d'obtenir les valeurs clefs de projection pour le projet courant"
 
 #: ../raster/r.horizon/main.c:723 ../raster/r.in.ascii/main.c:187
 #, c-format
@@ -4445,11 +4444,14 @@ msgid "unable to open input file <%s>"
 msgstr ""
 
 #: ../raster/r.quant/read_rules.c:89
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "\n"
 "Enter the rule or 'help' for the format description or 'end' to exit:\n"
 msgstr ""
+"\n"
+"Entrez la règle ou 'help' pour la description du format, ou 'end' pour la "
+"quitter :\n"
 
 #: ../raster/r.quant/read_rules.c:114
 msgid "quant rules do not cover the whole range map"
@@ -4500,12 +4502,12 @@ msgstr "Arrondir les valeurs en virgule flottante"
 #: ../raster/r.quant/main.c:112
 #, c-format
 msgid "-%c, -%c, %s=, %s= and %s= are mutually exclusive"
-msgstr ""
+msgstr "-%c, -%c, %s=, %s= et %s= sont mutuellement exclusifs"
 
 #: ../raster/r.quant/main.c:122
 #, c-format
 msgid "%s= and %s= must be used together"
-msgstr ""
+msgstr "%s= et %s= doivent être utilisés ensemble"
 
 #: ../raster/r.quant/main.c:133
 #, c-format
@@ -4518,7 +4520,7 @@ msgstr ""
 
 #: ../raster/r.quant/main.c:146
 msgid "Rounding..."
-msgstr ""
+msgstr "Arrondissement..."
 
 #: ../raster/r.quant/main.c:154
 #, c-format
@@ -4559,9 +4561,9 @@ msgid "Failed to set raster attribute table"
 msgstr ""
 
 #: ../raster/r.out.gdal/main.c:51
-#, c-format
+#, c-format, fuzzy
 msgid "Supported formats:\n"
-msgstr ""
+msgstr "Formats supportés :\n"
 
 #: ../raster/r.out.gdal/main.c:134
 msgid "Exports GRASS raster maps into GDAL supported formats."
@@ -4790,7 +4792,7 @@ msgstr ""
 
 #: ../raster/r.out.gdal/main.c:701
 msgid "Unable to set projection"
-msgstr ""
+msgstr "Impossible de définir la projection"
 
 #: ../raster/r.out.gdal/main.c:729
 #, c-format
@@ -7611,8 +7613,11 @@ msgid "virtual raster"
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:80
+#, fuzzy
 msgid "Build a VRT (Virtual Raster) from the list of input raster maps."
 msgstr ""
+"Construire un VRT (raster virtuel) à partir de la liste de cartes raster "
+"d'entrée."
 
 #: ../raster/r.buildvrt/main.c:83
 msgid "Name of input raster files"
@@ -9271,8 +9276,9 @@ msgid " ignored\n"
 msgstr ""
 
 #: ../raster/r.reclass/main.c:124
+#, fuzzy
 msgid " - invalid reclass rule"
-msgstr ""
+msgstr " - Règle de reclassement invalide"
 
 #: ../raster/r.reclass/main.c:140
 #, c-format
@@ -9969,11 +9975,16 @@ msgstr ""
 "GRASS ; impossible de créer le nouveau Secteur"
 
 #: ../raster/r.in.gdal/proj.c:323
+#, fuzzy
 msgid ""
 "\n"
 "In case of no significant differences in the CRS definitions, use the -o "
 "flag to ignore them and use current project definition.\n"
 msgstr ""
+"\n"
+"S'il n'y a pas de différences significatives entre les définitions des SCR, "
+"utilisez l'option -o pour les ignorer et utiliser la définition du projet "
+"actuel.\n"
 
 #: ../raster/r.clump/rclist.c:17 ../imagery/i.segment/rclist.c:17
 msgid "rclist out of memory"
@@ -12791,9 +12802,9 @@ msgid "Amount of memory cannot be negative."
 msgstr "Maximum de mémoire à utiliser (en MB)"
 
 #: ../raster/r.viewshed/main.cpp:616
-#, c-format
+#, c-format, fuzzy
 msgid " Converting %d to %d MB"
-msgstr ""
+msgstr " Conversion de %d en %d MB"
 
 #: ../raster/r.viewshed/distribute.cpp:80
 msgid "Start distributed sweeping."
@@ -18475,7 +18486,7 @@ msgstr ""
 #: ../locale/scriptstrings/v.class.mlR_to_translate.c:2
 #: ../vector/v.class/main.c:45
 msgid "classification"
-msgstr ""
+msgstr "classification"
 
 #: ../raster/r.kappa/main.c:72
 msgid ""
@@ -23470,14 +23481,14 @@ msgid "Region%s"
 msgstr ""
 
 #: ../imagery/i.cluster/main.c:261
-#, c-format
+#, c-format, fuzzy
 msgid "  North: %12.2f  East: %12.2f%s"
-msgstr ""
+msgstr "  Nord : %12.2f  Est : %12.2f%s"
 
 #: ../imagery/i.cluster/main.c:263
-#, c-format
+#, c-format, fuzzy
 msgid "  South: %12.2f  West: %12.2f%s"
-msgstr ""
+msgstr "  Sud : %12.2f  Ouest : %12.2f%s"
 
 #: ../imagery/i.cluster/main.c:265
 #, c-format
@@ -23485,9 +23496,9 @@ msgid "  Res:   %12.2f  Res:  %12.2f%s"
 msgstr ""
 
 #: ../imagery/i.cluster/main.c:267
-#, c-format
+#, c-format, fuzzy
 msgid "  Rows:  %12d  Cols: %12d  Cells: %d%s"
-msgstr ""
+msgstr "  Lignes :  %12d  Colonnes : %12d  Cellules : %d%s"
 
 #: ../imagery/i.cluster/main.c:269
 #, c-format
@@ -23515,19 +23526,19 @@ msgid " Minimum class size:           %d%s"
 msgstr ""
 
 #: ../imagery/i.cluster/main.c:278
-#, c-format
+#, c-format, fuzzy
 msgid " Minimum class separation:     %f%s"
-msgstr ""
+msgstr " Séparation minimale des classes : %f%s"
 
 #: ../imagery/i.cluster/main.c:280
-#, c-format
+#, c-format, fuzzy
 msgid " Percent convergence:          %f%s"
-msgstr ""
+msgstr " Pourcentage de convergence :         %f%s"
 
 #: ../imagery/i.cluster/main.c:282
-#, c-format
+#, c-format, fuzzy
 msgid " Maximum number of iterations: %d%s"
-msgstr ""
+msgstr " Nombre maximum d'itérations : %d%s"
 
 #: ../imagery/i.cluster/main.c:285
 #, c-format
@@ -24837,7 +24848,7 @@ msgstr ""
 #: ../imagery/i.rectify/cp.c:28 ../imagery/i.rectify/cp.c:53
 #: ../vector/v.rectify/cp.c:358
 msgid " Can not generate the transformation equation."
-msgstr ""
+msgstr " Impossible de générer l'équation de transformation."
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/cp.c:25
 msgid " Run OPTION 7 of i.ortho.photo again!\n"
@@ -25461,7 +25472,7 @@ msgstr "Calcul des matrices de covariance de classe"
 #: ../imagery/i.gensig/main.c:40 ../imagery/i.smap/main.c:39
 #: ../imagery/i.gensigset/main.c:42
 msgid "supervised classification"
-msgstr ""
+msgstr "classification dirigée"
 
 #: ../imagery/i.gensig/main.c:41 ../imagery/i.maxlik/main.c:63
 msgid "Maximum Likelihood Classification"
@@ -26374,9 +26385,8 @@ msgstr "Afficher les jeux de cartes dans le chemin de recherche"
 #: ../locale/scriptstrings/d.vect.thematic2_to_translate.c:42
 #: ../locale/scriptstrings/d.vect.thematic2_to_translate.c:46
 #: ../locale/scriptstrings/d.vect.thematic2_to_translate.c:48
-#, fuzzy
 msgid "Files"
-msgstr "mile"
+msgstr "Fichiers"
 
 #: ../imagery/i.signatures/main.c:153
 #, fuzzy
@@ -28066,9 +28076,9 @@ msgid "Lists all database drivers."
 msgstr "Lister tous les pilotes de bases de données."
 
 #: ../db/db.execute/main.c:55 ../db/db.select/main.c:62
-#, c-format
+#, c-format, fuzzy
 msgid "Unable to open file <%s>: %s"
-msgstr ""
+msgstr "Impossible d'ouvrir le fichier <%s> : %s"
 
 #: ../db/db.execute/main.c:74 ../db/db.columns/main.c:52
 #: ../db/db.describe/main.c:56 ../db/db.tables/main.c:50
@@ -28812,6 +28822,7 @@ msgstr "Pilote SQLite : colonne '%s', type de donnée SQLite %d non géré"
 #, c-format
 msgid "Table <%s> not found in database <%s> using driver <%s>"
 msgstr ""
+"Table <%s> non trouvée dans la Base de données <%s> utilisant le pilote <%s>"
 
 #: ../db/db.columns/main.c:96
 msgid "List all columns for a given table."
@@ -28970,25 +28981,26 @@ msgid "The password was stored in file (%s%cdblogin)"
 msgstr ""
 
 #: ../db/db.select/main.c:104
-#, c-format
+#, c-format, fuzzy
 msgid "Test %s."
-msgstr ""
+msgstr "Test %s."
 
 #: ../db/db.select/main.c:104
 msgid "succeeded"
-msgstr ""
+msgstr "à réussi"
 
 #: ../db/db.select/main.c:205
 msgid "Name of file containing SQL select statement(s)"
-msgstr ""
+msgstr "Nom du fichier contenant la ou les instructions SELECT SQL"
 
 #: ../db/db.select/main.c:210
 msgid "Name of table to query"
-msgstr ""
+msgstr "Nom de la table à interroger"
 
 #: ../db/db.select/main.c:229
+#, fuzzy
 msgid "Vertical record separator (requires -v flag)"
-msgstr ""
+msgstr "Séparateur vertical d'enregistrements (requiert l'option -v)."
 
 #: ../db/db.select/main.c:243 ../locale/scriptstrings/v.report_to_translate.c:9
 #: ../locale/scriptstrings/m.cdo.download_to_translate.c:24
@@ -29774,7 +29786,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.maxent.train_to_translate.c:52
 msgid "Extrapolate"
-msgstr ""
+msgstr "Extrapoler"
 
 #: ../locale/scriptstrings/r.maxent.train_to_translate.c:53
 msgid ""
@@ -29805,9 +29817,8 @@ msgid ""
 msgstr ""
 
 #: ../locale/scriptstrings/r.maxent.train_to_translate.c:61
-#, fuzzy
 msgid "Disable linear features"
-msgstr "entités simples"
+msgstr ""
 
 #: ../locale/scriptstrings/r.maxent.train_to_translate.c:62
 msgid "Do not use linear features for the model (they are used by default)."
@@ -39617,8 +39628,9 @@ msgid ""
 msgstr ""
 
 #: ../locale/scriptstrings/v.class.mlpy_to_translate.c:4
+#, fuzzy
 msgid "supervised"
-msgstr ""
+msgstr "dirigée"
 
 #: ../locale/scriptstrings/v.class.mlpy_to_translate.c:6
 #, fuzzy
@@ -40336,9 +40348,8 @@ msgid ""
 msgstr ""
 
 #: ../locale/scriptstrings/i.ortho.corr_to_translate.c:3
-#, fuzzy
 msgid "orthorectification"
-msgstr "reclassification"
+msgstr "orthorectification"
 
 #: ../locale/scriptstrings/i.ortho.corr_to_translate.c:5
 msgid "Suffix of ortophoto map, default is .ortho, use None for no suffix"
@@ -42376,6 +42387,8 @@ msgid ""
 "Supervised classification and regression of GRASS rasters using the python "
 "scikit-learn package."
 msgstr ""
+"Classification dirigée et régression de rasters GRASS en utilisant le paquet "
+"python scikit-learn"
 
 #: ../locale/scriptstrings/r.learn.train_to_translate.c:10
 msgid ""
@@ -57789,9 +57802,9 @@ msgstr ""
 #: ../vector/v.vol.rst/user1.c:586 ../vector/v.vol.rst/user1.c:640
 #: ../vector/v.vol.rst/user1.c:694 ../vector/v.vol.rst/user1.c:748
 #: ../vector/v.vol.rst/user1.c:802
-#, c-format
+#, c-format, fuzzy
 msgid "Error closing output file %s"
-msgstr ""
+msgstr "Erreur en fermant le fichier de sortie %s"
 
 #: ../vector/v.vol.rst/user1.c:480 ../vector/v.vol.rst/user1.c:535
 #: ../vector/v.vol.rst/user1.c:589 ../vector/v.vol.rst/user1.c:643
@@ -66424,11 +66437,13 @@ msgid ""
 msgstr ""
 
 #: ../display/d.vect.thematic/main.c:515
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "\n"
 "Total number of records: %.0f\n"
 msgstr ""
+"\n"
+"Nombre total d'enregistrements : %.0f\n"
 
 #: ../display/d.vect.thematic/main.c:516
 #, c-format
@@ -70413,9 +70428,8 @@ msgid "Adding column <{}> to the table"
 msgstr ""
 
 #: ../scripts/v.db.addcolumn/v.db.addcolumn.py:137
-#, fuzzy
 msgid "Error adding columns {}"
-msgstr "Arguments de l'erreur de scanning"
+msgstr "Erreur d'ajout de colonnes {}"
 
 #: ../scripts/r.reclass.area/r.reclass.area.py:97
 #: ../scripts/r.reclass.area/r.reclass.area.py:218

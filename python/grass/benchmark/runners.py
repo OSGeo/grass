@@ -103,11 +103,10 @@ def benchmark_nprocs(module, label, max_nprocs, repeat=5, shuffle=True):
     min_avg = float("inf")
     min_time = None
     serial_avg = None
-    avg_times = []
-    all_times = []
-    efficiency = []
-    nprocs_list = list(range(1, max_nprocs + 1))
-    nprocs_list_shuffled = sorted(nprocs_list * repeat)
+    result = SimpleNamespace(times=[], all_times=[], speedup=[], efficiency=[])
+    result.nprocs = list(range(1, max_nprocs + 1))
+    result.label = label
+    nprocs_list_shuffled = sorted(result.nprocs * repeat)
     if shuffle:
         random.shuffle(nprocs_list_shuffled)
     times = {}
@@ -122,27 +121,22 @@ def benchmark_nprocs(module, label, max_nprocs, repeat=5, shuffle=True):
             times[nprocs] = [module.time]
     for nprocs in sorted(times):
         avg = sum(times[nprocs]) / repeat
-        avg_times.append(avg)
-        all_times.append(times[nprocs])
+        result.times.append(avg)
+        result.all_times.append(times[nprocs])
         if nprocs == 1:
             serial_avg = avg
         if avg < min_avg:
             min_avg = avg
             min_time = nprocs
-        efficiency.append(serial_avg / (nprocs * avg))
+        result.speedup.append(serial_avg / avg)
+        result.efficiency.append(serial_avg / (nprocs * avg))
 
     print("\u2500" * term_size.columns)
     if serial_avg is not None:
         print(f"\nSerial average time - {serial_avg}s")
     print(f"Best average time - {min_avg}s ({min_time} threads)\n")
 
-    return SimpleNamespace(
-        all_times=all_times,
-        times=avg_times,
-        efficiency=efficiency,
-        nprocs=nprocs_list,
-        label=label,
-    )
+    return result
 
 
 def benchmark_resolutions(module, resolutions, label, repeat=5, nprocs=None):

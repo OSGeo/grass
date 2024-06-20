@@ -1,11 +1,11 @@
 """Fixtures for grass.script"""
 
 import uuid
+import os
 
 import pytest
 
 import grass.script as gs
-import grass.script.setup as grass_setup
 import grass.experimental as experimental
 
 
@@ -14,7 +14,7 @@ def xy_session(tmp_path):
     """Active session in an XY location (scope: function)"""
     location = "xy_test"
     gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with grass_setup.init(tmp_path / location) as session:
+    with gs.setup.init(tmp_path / location, env=os.environ.copy()) as session:
         yield session
 
 
@@ -29,7 +29,7 @@ def xy_session_for_module(tmp_path_factory):
     tmp_path = tmp_path_factory.mktemp("xy_session_for_module")
     location = "xy_test"
     gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with grass_setup.init(tmp_path / location) as session:
+    with gs.setup.init(tmp_path / location, env=os.environ.copy()) as session:
         yield session
 
 
