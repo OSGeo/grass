@@ -524,13 +524,13 @@ class HistoryBrowserTree(CTreeView):
         timestamp = command_info["timestamp"]
 
         # Convert timestamp to datetime object
-        timestamp = self._timestampToDatetime(timestamp)
+        datetime_timestamp = self._timestampToDatetime(timestamp)
 
         # Update command node
         self._model.UpdateNode(
             first_node,
             status=status,
-            timestamp=timestamp,
+            timestamp=datetime_timestamp,
         )
         self._reloadNode(first_node)
 
