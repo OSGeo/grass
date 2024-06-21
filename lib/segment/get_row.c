@@ -27,7 +27,7 @@
  * Transfers data from a segment file, row by row, into memory
  * (which can then be written to a regular matrix file, typically raster
  * map). *SEG* is the
- * segment structure that was configured from a call to 
+ * segment structure that was configured from a call to
  * Segment_init() or Segment_open().
  *
  * *buf* will be filled with <em>ncols*len</em> bytes of data
