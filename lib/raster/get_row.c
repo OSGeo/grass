@@ -917,7 +917,7 @@ int Rast__read_null_bits(int fd, int row, unsigned char *flags)
 }
 
 #define check_null_bit(flags, bit_num) \
-    ((flags)[(bit_num) >> 3] & ((unsigned char)0x80 >> ((bit_num)&7)) ? 1 : 0)
+    ((flags)[(bit_num) >> 3] & ((unsigned char)0x80 >> ((bit_num) & 7)) ? 1 : 0)
 
 static void get_null_value_row_nomask(int fd, char *flags, int row)
 {
