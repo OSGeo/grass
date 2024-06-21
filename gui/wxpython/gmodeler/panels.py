@@ -67,7 +67,6 @@ from gmodeler.giface import GraphicalModelerGrassInterface
 from gmodeler.model import (
     Model,
     ModelAction,
-    ModelData,
     ModelRelation,
     ModelLoop,
     ModelCondition,
@@ -139,13 +138,13 @@ class ModelerPanel(wx.Panel, MainPageBase):
 
         self.notebook = GNotebook(parent=self, style=globalvar.FNPageDStyle)
 
-        self.canvas = ModelCanvas(self)
+        self.canvas = ModelCanvas(self, giface=self._giface)
         self.canvas.SetBackgroundColour(
             wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOW)
         )
         self.canvas.SetCursor(self.cursors["default"])
 
-        self.model = Model(self.canvas)
+        self.model = Model(giface=self._giface, canvas=self.canvas)
 
         self.variablePanel = VariablePanel(parent=self)
 
@@ -218,7 +217,9 @@ class ModelerPanel(wx.Panel, MainPageBase):
 
     def _addEvent(self, item):
         """Add event to item"""
-        evthandler = ModelEvtHandler(self.statusbar, self)
+        evthandler = ModelEvtHandler(
+            log=self.statusbar, frame=self, giface=self._giface
+        )
         evthandler.SetShape(item)
         evthandler.SetPreviousHandler(item.GetEventHandler())
         item.SetEventHandler(evthandler)
@@ -1115,7 +1116,10 @@ class ModelerPanel(wx.Panel, MainPageBase):
             gmodule = GUI(
                 parent=self,
                 show=True,
-                giface=GraphicalModelerGrassInterface(self.model),
+                giface=GraphicalModelerGrassInterface(
+                    model=self.model,
+                    giface=self._giface,
+                ),
             )
             gmodule.ParseCommand(
                 action.GetLog(string=False),
@@ -1131,7 +1135,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
         """Add data item to model"""
         # add action to canvas
         width, height = self.canvas.GetSize()
-        data = ModelData(
+        data = ModelDataSingle(
             self, x=width / 2 + self._randomShift(), y=height / 2 + self._randomShift()
         )
 
