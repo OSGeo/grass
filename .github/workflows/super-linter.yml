@@ -37,7 +37,7 @@ jobs:
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # By default, super-linter expect all linters to have their config
-          # files inside .github/linters. 
+          # files inside .github/linters.
           # Setting it to the root of the repo for easier configuration here.
           LINTER_RULES_PATH: .
           # Listed but commented out linters would be nice to have.
