@@ -31,13 +31,13 @@ def _check_value(param, value):
     def check_string(value):
         """Function to check that a string parameter is already a string"""
         if param.type in string:
-            if type(value) in (int, float):
+            try:
                 value = str(value)
-            if type(value) not in string:
+            except TypeError as error:
                 msg = (
                     "The Parameter <%s> require a string," " %s instead is provided: %r"
                 )
-                raise ValueError(msg % (param.name, type(value), value))
+                raise ValueError(msg % (param.name, type(value), value)) from error
         return value
 
     # return None if None
