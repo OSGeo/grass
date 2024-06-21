@@ -20,10 +20,8 @@
 #include <grass/raster.h>
 #include <grass/segment.h>
 
-
 /* function declaration */
-static void process(SEGMENT * raster_seg, int ninputs);
-
+static void process(SEGMENT *raster_seg, int ninputs);
 
 /* main function driving the execution */
 int main(int argc, char *argv[])
@@ -72,7 +70,8 @@ int main(int argc, char *argv[])
     output_name = opt_output->answer;
 
     /* count input rasters */
-    for (input = 0; opt_inputs->answers[input] != NULL; input++) ;
+    for (input = 0; opt_inputs->answers[input] != NULL; input++)
+        ;
     ninputs = input;
 
     nrows = Rast_window_rows();
@@ -96,9 +95,8 @@ int main(int argc, char *argv[])
     SEGMENT raster_seg;
 
     /* initialize the segment structures */
-    if (Segment_open(&raster_seg, G_tempfile(),
-                     nrows, ncols, srows, scols, segment_cell_size,
-                     nsegs) != 1)
+    if (Segment_open(&raster_seg, G_tempfile(), nrows, ncols, srows, scols,
+                     segment_cell_size, nsegs) != 1)
         G_fatal_error(_("Unable to create temporary segment file"));
 
     /* array to store file descriptors */
@@ -119,8 +117,8 @@ int main(int argc, char *argv[])
         for (input = 0; input < ninputs; input++) {
             Rast_get_d_row(input_fds[input], row_buffer, row);
             for (col = 0; col < ncols; col++) {
-                    seg_buffer[col * ninputs + input] = row_buffer[col];
-                }
+                seg_buffer[col * ninputs + input] = row_buffer[col];
+            }
         }
         if (Segment_put_row(&raster_seg, seg_buffer, row) < 1)
             G_fatal_error(_("Unable to write temporary segment file"));
@@ -135,11 +133,11 @@ int main(int argc, char *argv[])
 
     for (row = 0; row < nrows; row++) {
         for (col = 0; col < ncols; col++) {
-                row_buffer[col] = 0;
+            row_buffer[col] = 0;
         }
         Segment_get_row(&raster_seg, seg_buffer, row);
         for (input = 0; input < ninputs; input++) {
-           for (col = 0; col < ncols; col++) {
+            for (col = 0; col < ncols; col++) {
                 row_buffer[col] += seg_buffer[col * ninputs + input];
             }
         }
@@ -168,7 +166,7 @@ int main(int argc, char *argv[])
 /* This would be the main processing function.
  * Here we just hardcode a cell to modify.
  */
-static void process(SEGMENT * raster_seg, int ninputs)
+static void process(SEGMENT *raster_seg, int ninputs)
 {
     /* buffer we use to hold the values */
     DCELL *values = G_malloc(ninputs * sizeof(DCELL *));

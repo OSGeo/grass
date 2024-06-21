@@ -23,7 +23,7 @@
 #include <grass/segment.h>
 
 /* function declaration */
-static void process(SEGMENT * raster_seg);
+static void process(SEGMENT *raster_seg);
 
 /* main function driving the execution */
 int main(int argc, char *argv[])
@@ -103,8 +103,8 @@ int main(int argc, char *argv[])
     SEGMENT raster_seg;
 
     /* initialize the segment structures */
-    if (Segment_open(&raster_seg, G_tempfile(),
-                     nrows, ncols, srows, scols, cell_size, num_seg) != 1)
+    if (Segment_open(&raster_seg, G_tempfile(), nrows, ncols, srows, scols,
+                     cell_size, num_seg) != 1)
         G_fatal_error("Unable to create temporary segment file");
 
     /* load data into the segment structures */
@@ -144,7 +144,7 @@ int main(int argc, char *argv[])
 /* This would be the main processing function.
  * Here we just hardcode a cell to modify.
  */
-static void process(SEGMENT * raster_seg)
+static void process(SEGMENT *raster_seg)
 {
     /* variable we use to hold the value */
     DCELL value;
