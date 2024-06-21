@@ -11,6 +11,9 @@
  *               for details.
  *
  *****************************************************************************/
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 
 #include <unistd.h>
 #include <stdio.h>
@@ -59,10 +62,11 @@ static expr_list *parse_file(const char *filename)
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct Option *expr, *file, *seed, *region;
+    struct Option *expr, *file, *seed, *region, *nprocs;
     struct Flag *random, *describe;
     int all_ok;
     char *desc;
+    int threads = 1;
 
     G_gisinit(argv[0]);
 
@@ -118,6 +122,8 @@ int main(int argc, char **argv)
     describe = G_define_flag();
     describe->key = 'l';
     describe->description = _("List input and output maps");
+
+    nprocs = G_define_standard_option(G_OPT_M_NPROCS);
 
     if (argc == 1) {
         char **p = G_malloc(3 * sizeof(char *));
@@ -183,6 +189,14 @@ int main(int argc, char **argv)
     }
 
     pre_exec();
+    threads = atoi(nprocs->answer);
+#if defined(_OPENMP)
+    omp_set_num_threads(threads);
+    G_message(_("Computing in parallel, number of threads: %d"),
+              omp_get_max_threads());
+#else
+    G_message(_("Number of threads: 1"));
+#endif
     execute(result);
     post_exec();
 

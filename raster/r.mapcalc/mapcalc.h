@@ -2,6 +2,9 @@
 #define _MAPCALC_H_
 
 /****************************************************************************/
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 
 #include <stdio.h>
 

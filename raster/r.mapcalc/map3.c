@@ -1,3 +1,7 @@
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
+
 #include <stdlib.h>
 #include <limits.h>
 #include <string.h>
@@ -619,8 +623,12 @@ int open_output_map(const char *name, int res_type)
 void put_map_row(int fd, void *buf, int res_type)
 {
     void *handle = omaps[fd];
+    int tid = 0;
+#if defined(_OPENMP)
+    tid = omp_get_thread_num();
+#endif
 
-    write_row(handle, buf, res_type, current_depth, current_row);
+    write_row(handle, buf, res_type, current_depth, current_row[tid]);
 }
 
 void close_output_map(int fd)

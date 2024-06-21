@@ -1,3 +1,7 @@
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
+
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
@@ -12,7 +16,8 @@
 
 /****************************************************************************/
 
-int current_depth, current_row;
+int current_depth;
+int *current_row;
 int depths, rows;
 
 /* Local variables for map management */
@@ -69,10 +74,18 @@ void extract_maps(expression *e)
 
 static void allocate_buf(expression *e)
 {
-    e->buf = G_malloc(columns * Rast_cell_size(e->res_type));
+
+    int threads = 1;
+#if defined(_OPENMP)
+    threads = omp_get_max_threads();
+#endif
+
+    e->buf = (void **)G_malloc(sizeof(void *) * threads);
+    for (int t = 0; t < threads; t++)
+        e->buf[t] = G_malloc(columns * Rast_cell_size(e->res_type));
 }
 
-static void set_buf(expression *e, void *buf)
+static void set_buf(expression *e, void **buf)
 {
     e->buf = buf;
 }
@@ -102,8 +115,7 @@ static void initialize_function(expression *e)
     int i;
 
     allocate_buf(e);
-
-    e->data.func.argv = G_malloc((e->data.func.argc + 1) * sizeof(void *));
+    e->data.func.argv = G_malloc((e->data.func.argc + 1) * sizeof(void **));
     e->data.func.argv[0] = e->buf;
 
     for (i = 1; i <= e->data.func.argc; i++) {
@@ -163,9 +175,14 @@ static void end_evaluate(struct expression *e)
 
 static void evaluate_constant(expression *e)
 {
-    int *ibuf = e->buf;
-    float *fbuf = e->buf;
-    double *dbuf = e->buf;
+    int tid = 0;
+#if defined(_OPENMP)
+    tid = omp_get_thread_num();
+#endif
+
+    int *ibuf = e->buf[tid];
+    float *fbuf = e->buf[tid];
+    double *dbuf = e->buf[tid];
     int i;
 
     switch (e->res_type) {
@@ -195,15 +212,25 @@ static void evaluate_variable(expression *e UNUSED)
 
 static void evaluate_map(expression *e)
 {
-    get_map_row(
-        e->data.map.idx, e->data.map.mod, current_depth + e->data.map.depth,
-        current_row + e->data.map.row, e->data.map.col, e->buf, e->res_type);
+    int tid = 0;
+#if defined(_OPENMP)
+    tid = omp_get_thread_num();
+#endif
+
+    get_map_row(e->data.map.idx, e->data.map.mod,
+                current_depth + e->data.map.depth,
+                current_row[tid] + e->data.map.row, e->data.map.col,
+                e->buf[tid], e->res_type);
 }
 
 static void evaluate_function(expression *e)
 {
     int i;
     int res;
+    int tid = 0;
+#if defined(_OPENMP)
+    tid = omp_get_thread_num();
+#endif
 
     if (e->data.func.argc > 1 && e->data.func.func != f_eval) {
         for (i = 1; i <= e->data.func.argc; i++)
@@ -216,8 +243,19 @@ static void evaluate_function(expression *e)
         for (i = 1; i <= e->data.func.argc; i++)
             evaluate(e->data.func.args[i]);
 
-    res = (*e->data.func.func)(e->data.func.argc, e->data.func.argt,
-                               e->data.func.argv);
+    /* copy the argv in the individual thread */
+    void **thread_argv = G_malloc((e->data.func.argc + 1) * sizeof(void *));
+    for (i = 0; i < e->data.func.argc + 1; i++)
+        thread_argv[i] = e->data.func.argv[i][tid];
+
+    res =
+        (*e->data.func.func)(e->data.func.argc, e->data.func.argt, thread_argv);
+
+    /* copy the results from thread_argv to e */
+    for (i = 0; i < e->data.func.argc + 1; i++)
+        e->data.func.argv[i][tid] = thread_argv[i];
+
+    G_free(thread_argv);
 
     switch (res) {
     case E_ARG_LO:
@@ -303,6 +341,12 @@ void execute(expr_list *ee)
     int verbose = isatty(2);
     expr_list *l;
     int count, n;
+    int threads = 1;
+
+#if defined(_OPENMP)
+    threads = omp_get_max_threads();
+#endif
+    current_row = (int *)G_malloc(sizeof(int) * threads);
 
     exprs = ee;
     G_add_error_handler(error_handler, NULL);
@@ -361,27 +405,34 @@ void execute(expr_list *ee)
     count = rows * depths;
     n = 0;
 
-    G_init_workers();
-
     for (current_depth = 0; current_depth < depths; current_depth++) {
-        for (current_row = 0; current_row < rows; current_row++) {
+#pragma omp parallel for default(shared) schedule(static, 1) ordered
+        for (int row = 0; row < rows; row++) {
             if (verbose)
                 G_percent(n, count, 2);
 
-            for (l = ee; l; l = l->next) {
+            int tid = 0;
+#if defined(_OPENMP)
+            tid = omp_get_thread_num();
+#endif
+            current_row[tid] = row;
+            for (l = ee; l != NULL; l = l->next) {
                 expression *e = l->exp;
                 int fd;
 
                 evaluate(e);
-
-                if (e->type != expr_type_binding)
-                    continue;
-
-                fd = e->data.bind.fd;
-                put_map_row(fd, e->buf, e->res_type);
+#pragma omp ordered
+                {
+                    if (e->type == expr_type_binding) {
+                        fd = e->data.bind.fd;
+                        put_map_row(fd, e->buf[tid], e->res_type);
+                    }
+                }
             }
-
-            n++;
+#pragma omp critical
+            {
+                n++;
+            }
         }
     }
 

@@ -1,3 +1,7 @@
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
+
 #include <grass/config.h>
 
 #include <stdlib.h>
@@ -60,7 +64,7 @@ struct map {
     struct Categories cats;
     struct Colors colors;
     BTREE btree;
-    struct row_cache cache;
+    struct row_cache *caches;
 #ifdef HAVE_PTHREAD_H
     pthread_mutex_t mutex;
 #endif
@@ -383,13 +387,19 @@ static void translate_from_cats(struct map *m, CELL *cell, DCELL *xcell,
 static void setup_map(struct map *m)
 {
     int nrows = m->max_row - m->min_row + 1;
-
+    int threads = 1;
 #ifdef HAVE_PTHREAD_H
     pthread_mutex_init(&m->mutex, NULL);
 #endif
 
+#ifdef _OPENMP
+    threads = omp_get_max_threads();
+#endif
+    m->caches =
+        (struct row_cache *)G_malloc(threads * sizeof(struct row_cache));
     if (nrows > 1 && nrows <= max_rows_in_memory) {
-        cache_setup(&m->cache, m->fd, nrows);
+        for (int i = 0; i < threads; i++)
+            cache_setup(&m->caches[i], m->fd, nrows);
         m->use_rowio = 1;
     }
     else
@@ -426,8 +436,13 @@ static void read_map(struct map *m, void *buf, int res_type, int row, int col)
         return;
     }
 
+    int tid = 0;
+#ifdef _OPENMP
+    tid = omp_get_thread_num();
+#endif
+
     if (m->use_rowio)
-        cache_get(&m->cache, buf, row, res_type);
+        cache_get(&m->caches[tid], buf, row, res_type);
     else
         read_row(m->fd, buf, row, res_type);
 
@@ -437,6 +452,11 @@ static void read_map(struct map *m, void *buf, int res_type, int row, int col)
 
 static void close_map(struct map *m)
 {
+    int threads = 1;
+#ifdef _OPENMP
+    threads = omp_get_max_threads();
+#endif
+
     if (m->fd < 0)
         return;
 
@@ -458,7 +478,9 @@ static void close_map(struct map *m)
     }
 
     if (m->use_rowio) {
-        cache_release(&m->cache);
+        for (int i = 0; i < threads; i++)
+            cache_release(&m->caches[i]);
+        G_free(&m->caches);
         m->use_rowio = 0;
     }
 }
