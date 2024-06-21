@@ -25,7 +25,7 @@ FILES = \
 	$(ETC)/echo$(EXE) \
 	$(ETC)/license \
 	$(ETC)/VERSIONNUMBER \
-	$(HTMLDIR)/help_loc_struct.png \
+	$(HTMLDIR)/help_project_structure.png \
 	$(HTMLDIR)/grassdb.png \
 	$(HTMLDIR)/location.png \
 	$(HTMLDIR)/location-add.png \
