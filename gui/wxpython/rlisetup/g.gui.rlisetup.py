@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 ############################################################################
 #
 # MODULE:    g.gui.rlisetup
@@ -18,13 +18,13 @@
 #
 ############################################################################
 
-#%module
-#% description: Configuration tool for r.li modules.
-#% keyword: general
-#% keyword: GUI
-#% keyword: raster
-#% keyword: landscape structure analysis
-#%end
+# %module
+# % description: Configuration tool for r.li modules.
+# % keyword: general
+# % keyword: GUI
+# % keyword: raster
+# % keyword: landscape structure analysis
+# %end
 
 import grass.script as gscript
 
@@ -35,20 +35,23 @@ def main():
     import wx
 
     from grass.script.setup import set_gui_path
+
     set_gui_path()
 
     from core.giface import StandaloneGrassInterface
-    from core.globalvar import CheckWxVersion
     from rlisetup.frame import RLiSetupFrame
 
     app = wx.App()
-    if not CheckWxVersion([2, 9]):
-        wx.InitAllImageHandlers()
-    frame = RLiSetupFrame(parent=None, giface=StandaloneGrassInterface())
+    frame = RLiSetupFrame(
+        parent=None,
+        giface=StandaloneGrassInterface(),
+        title=_("Setup for r.li modules - GRASS GIS"),
+    )
     frame.Show()
     frame.CenterOnScreen()
 
     app.MainLoop()
+
 
 if __name__ == "__main__":
     main()

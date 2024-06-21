@@ -3,11 +3,11 @@
  * 01 -> class 1: Low
  * 10 -> class 2: Average
  * 11 -> class 3: High
- */  
+ */
 
 #include <grass/raster.h>
 
-CELL mod09A1sd(CELL pixel) 
+CELL mod09A1sd(CELL pixel)
 {
     CELL qctemp;
 
@@ -16,5 +16,3 @@ CELL mod09A1sd(CELL pixel)
 
     return qctemp;
 }
-
-

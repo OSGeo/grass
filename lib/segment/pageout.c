@@ -1,4 +1,3 @@
-
 /**
  * \file pageout.c
  *
@@ -19,13 +18,12 @@
 #include <grass/gis.h>
 #include "local_proto.h"
 
-
 /**
  * \brief Internal use only
- * 
+ *
  * Pages segment to disk.
  *
- * Finds segment value <b>i</b> in segment <b>seg</b> and pages it out 
+ * Finds segment value <b>i</b> in segment <b>seg</b> and pages it out
  * to disk.
  *
  * \param[in] SEG segment
@@ -34,18 +32,18 @@
  * \return -1 on error
  */
 
-int seg_pageout(SEGMENT * SEG, int i)
+int seg_pageout(SEGMENT *SEG, int i)
 {
     SEG->seek(SEG, SEG->scb[i].n, 0);
     errno = 0;
     if (write(SEG->fd, SEG->scb[i].buf, SEG->size) != SEG->size) {
-	int err = errno;
+        int err = errno;
 
-	if (err)
-	    G_warning("Segment pageout: %s", strerror(err));
-	else
-	    G_warning("Segment pageout: insufficient disk space?");
-	return -1;
+        if (err)
+            G_warning("Segment pageout: %s", strerror(err));
+        else
+            G_warning("Segment pageout: insufficient disk space?");
+        return -1;
     }
     SEG->scb[i].dirty = 0;
 

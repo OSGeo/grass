@@ -1,9 +1,9 @@
-
 /***** BallAux.c *****/
+
 #include <math.h>
 #include "BallAux.h"
 
-Quat qOne = { 0, 0, 0, 1 };
+Quat qOne = {0, 0, 0, 1};
 
 /* Return quaternion product qL * qR.  Note: order is important!
  * To combine rotations, use the product Mul(qSecond, qFirst),
@@ -18,7 +18,6 @@ Quat Qt_Mul(Quat qL, Quat qR)
     qq.z = qL.w * qR.z + qL.z * qR.w + qL.x * qR.y - qL.y * qR.x;
     return (qq);
 }
-
 
 /* Construct rotation matrix from (possibly non-unit) quaternion.
  * Assumes matrix is used to multiply column vector on the left:
@@ -43,9 +42,9 @@ HMatrix *Qt_ToMatrix(Quat q, HMatrix out)
     out[YY][ZZ] = yz - wx;
     out[ZZ][ZZ] = 1.0 - (xx + yy);
     out[XX][WW] = out[YY][WW] = out[ZZ][WW] = out[WW][XX] = out[WW][YY] =
-	out[WW][ZZ] = 0.0;
+        out[WW][ZZ] = 0.0;
     out[WW][WW] = 1.0;
-    return ((HMatrix *) & out);
+    return ((HMatrix *)&out);
 }
 
 Quat Matrix_to_Qt(HMatrix dircos)
@@ -94,13 +93,13 @@ float V3_Norm(HVect v)
 /* Return unit magnitude vector in direction of v */
 HVect V3_Unit(HVect v)
 {
-    HVect u = { 0, 0, 0, 0 };
+    HVect u = {0, 0, 0, 0};
     float vlen = sqrt(V3_Norm(v));
 
     if (vlen != 0.0) {
-	u.x = v.x / vlen;
-	u.y = v.y / vlen;
-	u.z = v.z / vlen;
+        u.x = v.x / vlen;
+        u.y = v.y / vlen;
+        u.z = v.z / vlen;
     }
     return (u);
 }
@@ -120,7 +119,7 @@ HVect V3_Scale(HVect v, float s)
 /* Return negative of v */
 HVect V3_Negate(HVect v)
 {
-    HVect u = { 0, 0, 0, 0 };
+    HVect u = {0, 0, 0, 0};
     u.x = -v.x;
     u.y = -v.y;
     u.z = -v.z;
@@ -130,7 +129,7 @@ HVect V3_Negate(HVect v)
 /* Return sum of v1 and v2 */
 HVect V3_Add(HVect v1, HVect v2)
 {
-    HVect v = { 0, 0, 0, 0 };
+    HVect v = {0, 0, 0, 0};
     v.x = v1.x + v2.x;
     v.y = v1.y + v2.y;
     v.z = v1.z + v2.z;
@@ -140,7 +139,7 @@ HVect V3_Add(HVect v1, HVect v2)
 /* Return difference of v1 minus v2 */
 HVect V3_Sub(HVect v1, HVect v2)
 {
-    HVect v = { 0, 0, 0, 0 };
+    HVect v = {0, 0, 0, 0};
     v.x = v1.x - v2.x;
     v.y = v1.y - v2.y;
     v.z = v1.z - v2.z;
@@ -150,16 +149,16 @@ HVect V3_Sub(HVect v1, HVect v2)
 /* Halve arc between unit vectors v0 and v1. */
 HVect V3_Bisect(HVect v0, HVect v1)
 {
-    HVect v = { 0, 0, 0, 0 };
+    HVect v = {0, 0, 0, 0};
     float Nv;
 
     v = V3_Add(v0, v1);
     Nv = V3_Norm(v);
     if (Nv < 1.0e-5) {
-	v = V3_(0, 0, 1);
+        v = V3_(0, 0, 1);
     }
     else {
-	v = V3_Scale(v, 1 / sqrt(Nv));
+        v = V3_Scale(v, 1 / sqrt(Nv));
     }
     return (v);
 }
@@ -170,11 +169,10 @@ float V3_Dot(HVect v1, HVect v2)
     return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z);
 }
 
-
 /* Return cross product, v1 x v2 */
 HVect V3_Cross(HVect v1, HVect v2)
 {
-    HVect v = { 0, 0, 0, 0 };
+    HVect v = {0, 0, 0, 0};
     v.x = v1.y * v2.z - v1.z * v2.y;
     v.y = v1.z * v2.x - v1.x * v2.z;
     v.z = v1.x * v2.y - v1.y * v2.x;

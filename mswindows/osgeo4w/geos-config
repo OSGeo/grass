@@ -6,7 +6,7 @@ usage()
 Usage: geos-config [OPTIONS]
 Options:
      [--prefix]
-     [--libs]
+     [--clibs]
      [--cflags]
      [--ldflags]
      [--includes]
@@ -28,7 +28,7 @@ case $1 in
     --cflags)
       echo -I$OSGEO4W_ROOT_MSYS/include
       ;;
-    --libs)
+    --clibs)
       echo $OSGEO4W_ROOT_MSYS/lib/geos_c.lib
       ;;
     --ldflags)

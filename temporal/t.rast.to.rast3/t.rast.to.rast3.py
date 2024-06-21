@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
+
 ############################################################################
 #
 # MODULE:       t.rast.to.rast3
@@ -20,26 +20,25 @@
 #
 #############################################################################
 
-#%module
-#% description: Converts a space time raster dataset into a 3D raster map.
-#% keyword: temporal
-#% keyword: conversion
-#% keyword: raster
-#% keyword: raster3d
-#% keyword: voxel
-#% keyword: time
-#%end
+# %module
+# % description: Converts a space time raster dataset into a 3D raster map.
+# % keyword: temporal
+# % keyword: conversion
+# % keyword: raster
+# % keyword: raster3d
+# % keyword: voxel
+# % keyword: time
+# %end
 
-#%option G_OPT_STRDS_INPUT
-#%end
+# %option G_OPT_STRDS_INPUT
+# %end
 
-#%option G_OPT_R3_OUTPUT
-#%end
-from __future__ import print_function
-
+# %option G_OPT_R3_OUTPUT
+# %end
 import os
-import grass.script as grass
 from datetime import datetime
+
+import grass.script as grass
 from grass.exceptions import CalledModuleError
 
 ############################################################################
@@ -82,7 +81,7 @@ def main():
     # In case of days, hours, minutes and seconds, a double number
     # is used to represent days and fracs of a day
 
-    # Space time voxel cubes with montly or yearly granularity can not be
+    # Space time voxel cubes with monthly or yearly granularity can not be
     # mixed with other temporal units
 
     # Compatible temporal units are : days, hours, minutes and seconds
@@ -93,7 +92,7 @@ def main():
         unit = granularity.split(" ")[1]
         granularity = float(granularity.split(" ")[0])
 
-        print("Gran from stds %0.15f"%(granularity))
+        print("Gran from stds %0.15f" % (granularity))
 
         if unit == "years" or unit == "year":
             bottom = float(start.year - 1900)
@@ -116,8 +115,9 @@ def main():
             if unit == "seconds" or unit == "second":
                 seconds = float(granularity)
 
-            granularity = float(days + hours / 24.0 + minutes / \
-                1440.0 + seconds / 86400.0)
+            granularity = float(
+                days + hours / 24.0 + minutes / 1440.0 + seconds / 86400.0
+            )
     else:
         unit = sp.get_relative_time_unit()
         bottom = start
@@ -130,9 +130,9 @@ def main():
 
     # Create a NULL map to fill the gaps
     null_map = "temporary_null_map_%i" % os.getpid()
-    if datatype == 'DCELL':
+    if datatype == "DCELL":
         grass.mapcalc("%s = double(null())" % (null_map))
-    elif datatype == 'FCELL':
+    elif datatype == "FCELL":
         grass.mapcalc("%s = float(null())" % (null_map))
     else:
         grass.mapcalc("%s = null()" % (null_map))
@@ -155,23 +155,32 @@ def main():
             count += 1
 
         try:
-            grass.run_command("r.to.rast3", input=map_names,
-                              output=output, overwrite=grass.overwrite())
+            grass.run_command(
+                "r.to.rast3",
+                input=map_names,
+                output=output,
+                overwrite=grass.overwrite(),
+            )
         except CalledModuleError:
             grass.fatal(_("Unable to create 3D raster map <%s>" % output))
 
-    grass.run_command("g.remove", flags='f', type='raster', name=null_map)
+    grass.run_command("g.remove", flags="f", type="raster", name=null_map)
 
     title = _("Space time voxel cube")
     descr = _("This space time voxel cube was created with t.rast.to.rast3")
 
     # Set the unit
     try:
-        grass.run_command("r3.support", map=output, vunit=unit,
-                          title=title, description=descr,
-                          overwrite=grass.overwrite())
+        grass.run_command(
+            "r3.support",
+            map=output,
+            vunit=unit,
+            title=title,
+            description=descr,
+            overwrite=grass.overwrite(),
+        )
     except CalledModuleError:
-        grass.warning(_("%s failed to set units.") % 'r3.support')
+        grass.warning(_("%s failed to set units.") % "r3.support")
 
     # Register the space time voxel cube in the temporal GIS
     if output.find("@") >= 0:
@@ -195,6 +204,7 @@ def main():
         r3ds.set_relative_time(start, end, sp.get_relative_time_unit())
 
     r3ds.insert()
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

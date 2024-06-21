@@ -30,7 +30,7 @@ AR                  = @AR@
 RANLIB              = @RANLIB@
 MKDIR               = mkdir -p
 CHMOD               = chmod
-INSTALL             = @INSTALL@ 
+INSTALL             = @INSTALL@
 INSTALL_DATA        = @INSTALL_DATA@
 
 prefix              = @prefix@
@@ -46,7 +46,7 @@ GRASS_VERSION_MAJOR = @GRASS_VERSION_MAJOR@
 GRASS_VERSION_MINOR = @GRASS_VERSION_MINOR@
 GRASS_VERSION_RELEASE = @GRASS_VERSION_RELEASE@
 GRASS_VERSION_DATE  = @GRASS_VERSION_DATE@
-GRASS_VERSION_SVN   = @GRASS_VERSION_SVN@
+GRASS_VERSION_GIT   = @GRASS_VERSION_GIT@
 
 STRIPFLAG           = @STRIPFLAG@
 LD_SEARCH_FLAGS     = @LD_SEARCH_FLAGS@
@@ -63,6 +63,7 @@ STLIB_SUFFIX        = @STLIB_SUFFIX@
 #shared libs
 SHLIB_PREFIX        = lib
 SHLIB_LD            = @SHLIB_LD@
+SHLIB_LDX           = @SHLIB_LDX@
 SHLIB_LDFLAGS       = @SHLIB_LD_FLAGS@
 SHLIB_CFLAGS        = @SHLIB_CFLAGS@
 SHLIB_SUFFIX        = @SHLIB_SUFFIX@
@@ -84,7 +85,7 @@ XLIB                = @X_PRE_LIBS@ @XLIB@
 XEXTRALIBS          = @X_EXTRA_LIBS@
 USE_X11             = @USE_X11@
 
-MATHLIB             = @MATHLIB@ 
+MATHLIB             = @MATHLIB@
 ICONVLIB            = @ICONVLIB@
 INTLLIB             = @INTLLIB@
 SOCKLIB             = @SOCKLIB@
@@ -161,6 +162,11 @@ BLASINC             = @BLASINC@
 LAPACKLIB           = @LAPACKLIB@
 LAPACKINC           = @LAPACKINC@
 
+#LIBSVM
+LIBSVM_LIB          = @LIBSVM_LIB@
+LIBSVM_INC          = @LIBSVM_INC@
+USE_LIBSVM          = @USE_LIBSVM@
+
 #GDAL/OGR
 GDALLIBS            = @GDAL_LIBS@
 GDALCFLAGS          = @GDAL_CFLAGS@
@@ -169,7 +175,7 @@ USE_OGR             = @USE_OGR@
 
 #NetCDF
 NETCDFLIBS          = @NETCDF_LIBS@
-NETCDFCFLAGS        = @NETCDF_CFLAGS@    
+NETCDFCFLAGS        = @NETCDF_CFLAGS@
 USE_NETCDF          = @USE_NETCDF@
 
 #LAS LiDAR through libLAS
@@ -180,7 +186,6 @@ USE_LIBLAS          = @USE_LIBLAS@
 
 #LAS LiDAR through PDAL
 PDALLIBS             = @PDAL_LIBS@
-PDALCPPFLAGS         = @PDAL_CPPFLAGS@
 PDALINC              = @PDAL_INC@
 USE_PDAL             = @USE_PDAL@
 
@@ -212,7 +217,7 @@ CAIRO_HAS_XRENDER         = @CAIRO_HAS_XRENDER@
 CAIRO_HAS_XRENDER_SURFACE = @CAIRO_HAS_XRENDER_SURFACE@
 
 #Python
-PYTHON              = python
+PYTHON              = python3
 
 #regex
 REGEXINCPATH        = @REGEXINCPATH@
@@ -227,10 +232,10 @@ PTHREADLIB          = @PTHREADLIB@
 USE_PTHREAD         = @USE_PTHREAD@
 
 #OpenMP
-OMPINCPATH          = @OMPINCPATH@
-OMPLIBPATH          = @OMPLIBPATH@
-OMPLIB              = @OMPLIB@
-OMPCFLAGS           = @OMPCFLAGS@
+OPENMP_INCPATH      = @OPENMP_INCPATH@
+OPENMP_LIBPATH      = @OPENMP_LIBPATH@
+OPENMP_LIB          = @OPENMP_LIB@
+OPENMP_CFLAGS       = @OPENMP_CFLAGS@
 USE_OPENMP          = @USE_OPENMP@
 
 #OpenCL
@@ -250,9 +255,10 @@ LFS_CFLAGS          = @LFS_CFLAGS@
 HAVE_SOCKET         = @HAVE_SOCKET@
 
 MINGW		    = @MINGW32@
+WINDRES		    = @WINDRES@
 MACOSX_APP	    = @MACOSX_APP@
 MACOSX_ARCHS        = @MACOSX_ARCHS@
 MACOSX_SDK          = @MACOSX_SDK@
 
 # Cross compilation
-CROSS_COMPILING     = @CROSS_COMPILING@ 
+CROSS_COMPILING     = @CROSS_COMPILING@

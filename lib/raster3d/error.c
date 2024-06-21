@@ -10,7 +10,6 @@
 
 /*---------------------------------------------------------------------------*/
 
-
 /*!
  * \brief This function ignores the error.
  *
@@ -18,10 +17,9 @@
  *  \return void
  */
 
-void Rast3d_skip_error(const char *msg)
+void Rast3d_skip_error(const char *msg UNUSED)
 {
 }
-
 
 /*!
  * \brief Prints error message
@@ -40,7 +38,6 @@ void Rast3d_print_error(const char *msg)
     fprintf(stderr, "\n");
 }
 
-
 /*!
  * \brief Prints fatal error message
  *
@@ -53,7 +50,7 @@ void Rast3d_print_error(const char *msg)
 
 void Rast3d_fatal_error(const char *msg, ...)
 {
-    char buffer[2000];		/* No novels to the error logs, OK? */
+    char buffer[2000]; /* No novels to the error logs, OK? */
     va_list ap;
 
     va_start(ap, msg);
@@ -70,12 +67,12 @@ void Rast3d_fatal_error_noargs(const char *msg)
 
 void Rast3d_error(const char *msg, ...)
 {
-    char buffer[2000];		/* No novels to the error logs, OK? */
+    char buffer[2000]; /* No novels to the error logs, OK? */
     va_list ap;
 
     va_start(ap, msg);
     vsprintf(buffer, msg, ap);
     va_end(ap);
 
-    (*g3d_error_fun) (buffer);
+    (*g3d_error_fun)(buffer);
 }

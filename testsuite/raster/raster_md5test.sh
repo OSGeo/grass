@@ -35,6 +35,9 @@ fi
 unset LC_ALL
 export LC_NUMERIC=C
 
+# enforce ZLIB
+export GRASS_COMPRESSOR=ZLIB
+
 eval `g.gisenv`
 : ${GISBASE?} ${GISDBASE?} ${LOCATION_NAME?} ${MAPSET?}
 MAPSET_PATH=$GISDBASE/$LOCATION_NAME/$MAPSET
@@ -115,7 +118,7 @@ r.mapcalc "$TMPNAME = 1"
 check_exit_status $?
 
 echo "MD5 checksum on output of INT/CELL test."
-MD5="`r.out.ascii $TMPNAME dp=15 | md5sum | cut -d' ' -f1`"
+MD5="`r.out.ascii $TMPNAME precision=15 | md5sum | cut -d' ' -f1`"
 check_md5sum "549e7dabe70df893803690571d2e1503" "$MD5"
 
 cleanup
@@ -129,7 +132,7 @@ r.mapcalc "$TMPNAME = $VALUE"
 check_exit_status $?
 
 echo "MD5 checksum on output of FLOAT/FCELL test."
-MD5="`r.out.ascii $TMPNAME dp=15 | md5sum | cut -d' ' -f1`"
+MD5="`r.out.ascii $TMPNAME precision=15 | md5sum | cut -d' ' -f1`"
 check_md5sum "379f3d880b6d509051af6b4ccf470762" "$MD5"
 
 cleanup

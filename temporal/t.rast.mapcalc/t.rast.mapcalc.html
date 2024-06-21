@@ -5,32 +5,32 @@
 raster datasets (STRDS). Spatial and temporal operators and internal
 variables are available in the expression string. The description of
 the spatial operators, functions and internal variables is available in
-the <a href="r.mapcalc.html">r.mapcalc</a> manual page. The temporal
+the <em><a href="r.mapcalc.html">r.mapcalc</a></em> manual page. The temporal
 functions are described in detail below.
 <p>
 This module expects several parameters. All space time raster datasets
 that are referenced in the <em>mapcalc expression</em> must be listed
-in the <em>input</em> option. The <em>first</em> space time raster
+in the <b>inputs</b> option. The <em>first</em> space time raster
 dataset that is listed as input will be used to temporally sample all
 other space time raster datasets. The temporal sampling method can be
-chosen using the <em>method</em> option. The order of the STRDS's in
+chosen using the <b>method</b> option. The order of the STRDS's in
 the mapcalc expression can be different to the order of the STRDS's in
 the input option. The resulting space time raster dataset must be
-specified in the <em>output</em> option together with the <em>basename</em>
+specified in the <b>output</b> option together with the <b>basename</b>
 of generated raster maps that are registered in the resulting
 STRDS. Empty maps resulting from map-calculation are not registered by
-default. This behavior can be changed with the <em>-n</em> flag. The
-flag <em>-s</em> can be used to assure that only spatially related maps
+default. This behavior can be changed with the <b>-n</b> flag. The
+flag <b>-s</b> can be used to assure that only spatially related maps
 in the STRDS's are processed. Spatially related means that temporally
 related maps overlap in their spatial extent.
 <p>
 The module <em>t.rast.mapcalc</em> supports parallel processing. The option
-<em>nprocs</em> specifies the number of processes that can be started in
+<b>nprocs</b> specifies the number of processes that can be started in
 parallel.
 <p>
 A mapcalc expression must be provided to process the temporal
 sampled maps. Temporal internal variables are available in addition to
-the <em>r.mapcalc</em> spatial operators and functions:
+the <em><a href="r.mapcalc.html">r.mapcalc</a></em> spatial operators and functions:
 <p>
 The supported internal variables for relative and absolute time are:
 <ul>
@@ -95,7 +95,7 @@ t.rast.mapcalc input=A,B output=C basename=c method=equal \
     expression="if(start_month() == 5 || start_month() == 6, (A + B), (A * B))"
 </pre></div>
 <p>
-The resulting raster maps in dataset C can be listed with <em>t.rast.list</em>:
+The resulting raster maps in dataset C can be listed with <em><a href="t.rast.list.html">t.rast.list</a></em>:
 <p>
 <div class="code"><pre>
 name    start_time              min     max
@@ -111,7 +111,7 @@ Internally the spatio-temporal expression will be analyzed for each
 time interval of the sample dataset A, the temporal functions will be
 replaced by numerical values, the names of the space time raster
 datasets will be replaced by the corresponding raster maps. The final
-expression will be passed to <em>r.mapcalc</em>, resulting in 6 runs:
+expression will be passed to <em><a href="r.mapcalc.html">r.mapcalc</a></em>, resulting in 6 runs:
 <p>
 <div class="code"><pre>
 r.mapcalc expression="c_1 = if(3 == 5 || 3 == 6, (a3 + b3), (a3 * b3))"
@@ -122,10 +122,12 @@ r.mapcalc expression="c_5 = if(7 == 5 || 7 == 6, (a7 + b7), (a7 * b7))"
 r.mapcalc expression="c_6 = if(8 == 5 || 8 == 6, (a8 + b8), (a8 * b8))"
 </pre></div>
 <p>
+Semantic labels present in the sample dataset A will be transferred to
+the output dataset.
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
-The following command creates a new space time raster dataset 
+The following command creates a new space time raster dataset
 <tt>january_under_0</tt> that will set to null all cells with
 temperature above zero in the January maps while keeping all the rest
 as in the original time series. This will change the maximum values
@@ -153,6 +155,20 @@ t.rast.list tempmean_monthly columns=name,start_time,min,max | grep 01-01
 2012_01_tempmean|2012-01-01 00:00:00|-0.534994|9.69511
 </pre></div>
 
+<h3>Semantic label filtering</h3>
+
+<em>t.rast.mapcalc</em> supports semantic label filtering similarly
+to <em><a href="t.rast.list.html#filtering-the-result-by-semantic-label">t.rast.list</a></em>. In
+example below a new STRDS will be created and filled by NDVI products.
+
+<div class="code"><pre>
+t.rast.mapcalc inputs=test.S2_8,test.S2_4 output=ndvi basename=ndvi \
+     expression="float(test.S2_8 - test.S2_4) / (test.S2_8 + test.S2_4)"
+</pre></div>
+
+For more information about semantic label concept
+see <em><a href="i.band.library.html">i.band.library</a></em> module.
+
 <h2>SEE ALSO</h2>
 
 <em>
@@ -162,11 +178,8 @@ t.rast.list tempmean_monthly columns=name,start_time,min,max | grep 01-01
 <a href="t.info.html">t.info</a>
 </em>
 <p>
-<a href="http://grasswiki.osgeo.org/wiki/Temporal_data_processing">Temporal data processing Wiki</a>
+<a href="https://grasswiki.osgeo.org/wiki/Temporal_data_processing">Temporal data processing Wiki</a>
 
 <h2>AUTHOR</h2>
 
 S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
-
-<p><i>Last changed: $Date$</i>
-

@@ -3,12 +3,12 @@
 
    \brief OGSF library - loading volumes (lower level functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -37,16 +37,16 @@ int Gvl_load_colors_data(void **color_data, const char *name)
     struct Colors *colors;
 
     if (NULL == (mapset = G_find_raster3d(name, ""))) {
-	G_warning(_("3D raster map <%s> not found"), name);
-	return (-1);
+        G_warning(_("3D raster map <%s> not found"), name);
+        return (-1);
     }
 
     if (NULL == (colors = (struct Colors *)G_malloc(sizeof(struct Colors))))
-	return (-1);
+        return (-1);
 
     if (0 > Rast3d_read_colors(name, mapset, colors)) {
-	G_free(colors);
-	return (-1);
+        G_free(colors);
+        return (-1);
     }
 
     *color_data = colors;
@@ -83,6 +83,6 @@ int Gvl_get_color_for_value(void *color_data, float *value)
 {
     int r, g, b;
 
-    Rast_get_f_color((FCELL *) value, &r, &g, &b, color_data);
+    Rast_get_f_color((FCELL *)value, &r, &g, &b, color_data);
     return ((r & 0xff) | ((g & 0xff) << 8) | ((b & 0xff) << 16));
 }

@@ -1,6 +1,6 @@
 /*! \page netalib GRASS Network Analysis Library
 
-by GRASS Development Team (http://grass.osgeo.org)
+by GRASS Development Team (https://grass.osgeo.org)
 
 \tableofcontents
 
@@ -40,6 +40,6 @@ modules for implementation issues.
 \section netaSeeAlso See Also
 
  - \ref vectorlib
-  
+
  - \ref dbmilib
 */

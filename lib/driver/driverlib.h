@@ -1,4 +1,3 @@
-
 #define DEF_WIDTH  640
 #define DEF_HEIGHT 480
 
@@ -18,7 +17,8 @@ void soft_text(const char *);
 
 /* Text3.c */
 void soft_text_freetype(const char *);
-void get_text_ext_freetype(const char *, double *, double *, double *, double *);
+void get_text_ext_freetype(const char *, double *, double *, double *,
+                           double *);
 
 /* font2.c */
 int font_init(const char *);

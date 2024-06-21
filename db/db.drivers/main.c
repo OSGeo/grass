@@ -1,9 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       db.drivers
  * AUTHOR(S):    Radim Blazek <radim.blazek gmail.com> (original contributor)
- *               Glynn Clements <glynn gclements.plus.com>, Markus Neteler <neteler itc.it>, Stephan Holl
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Markus Neteler <neteler itc.it>,
+ *               Stephan Holl
  * PURPOSE:      lists all database drivers
  * COPYRIGHT:    (C) 2002-2006, 2012 by the GRASS Development Team
  *
@@ -18,15 +19,12 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-
-struct
-{
+struct {
     int f;
 } parms;
 
 /* function prototypes */
 static void parse_command_line(int, char **);
-
 
 int main(int argc, char **argv)
 {
@@ -36,19 +34,18 @@ int main(int argc, char **argv)
 
     list = db_read_dbmscap();
     if (list == NULL) {
-	G_fatal_error(_("Unable to read dbmscap file"));
+        G_fatal_error(_("Unable to read dbmscap file"));
     }
 
     for (p = list; p; p = p->next) {
-	fprintf(stdout, "%s", p->driverName);
-	if (parms.f)
-	    fprintf(stdout, ":%s", p->comment);
-	fprintf(stdout, "\n");
+        fprintf(stdout, "%s", p->driverName);
+        if (parms.f)
+            fprintf(stdout, ":%s", p->comment);
+        fprintf(stdout, "\n");
     }
 
     exit(EXIT_SUCCESS);
 }
-
 
 static void parse_command_line(int argc, char **argv)
 {
@@ -73,7 +70,7 @@ static void parse_command_line(int argc, char **argv)
     module->description = _("Lists all database drivers.");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     parms.f = full->answer;
 }

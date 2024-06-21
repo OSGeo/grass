@@ -2,11 +2,11 @@
 # first found target
 first: pre default
 
-# create platform dirs 
+# create platform dirs
 ARCH_DIRS = $(ARCH_DISTDIR) $(ARCH_BINDIR) $(ARCH_INCDIR) $(ARCH_LIBDIR) \
 	$(BIN) $(ETC) \
 	$(DRIVERDIR) $(DBDRIVERDIR) $(FONTDIR) $(DOCSDIR) $(HTMLDIR) \
-	$(MANBASEDIR) $(MANDIR) $(TOOLSDIR)
+	$(MANBASEDIR) $(MANDIR) $(UTILSDIR)
 
 pre: | $(ARCH_DIRS)
 
@@ -22,7 +22,17 @@ $(ARCH_INCDIR)/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
 ifneq ($(MINGW),)
-mkpath = $(shell $(TOOLSDIR)/g.echo$(EXE) $(1));$(2)
+ifdef CROSS_COMPILING
+# build system is not MS Windows when cross-compiling
+mkpath = $(1):$(2)
+else
+ifeq ($(wildcard $(UTILSDIR)/g.echo$(EXE)),)
+# dummy path until g.echo.exe gets compiled and is needed
+mkpath = $(1);$(2)
+else
+mkpath = $(shell $(UTILSDIR)/g.echo$(EXE) $(1));$(2)
+endif
+endif
 else
 mkpath = $(1):$(2)
 endif

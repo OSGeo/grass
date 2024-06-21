@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_version.c
- * 
+ *
  * \brief DBMI Library (driver) - version info
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -16,11 +16,11 @@
 #include "macros.h"
 
 /*!
-  \brief Get version info
+   \brief Get version info
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
-*/
+   \return DB_OK on success
+   \return DB_FAILED on failure
+ */
 int db_d_version(void)
 {
     /* no arg(s) */

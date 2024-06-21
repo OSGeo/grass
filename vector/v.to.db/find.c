@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
-#include  "global.h"
-
+#include "global.h"
 
 static int bsearch_cat(int cat)
 {
@@ -9,35 +8,35 @@ static int bsearch_cat(int cat)
 
     /* tests */
     if (vstat.rcat < 1)
-	return -1;
+        return -1;
 
     lo = 0;
     hi = vstat.rcat - 1;
-    
+
     if (hi == 0 || Values[lo].cat > cat || Values[hi].cat < cat)
-	return -1;
+        return -1;
 
     if (Values[hi].cat == cat)
-	return hi;
+        return hi;
 
     if (Values[lo].cat == cat)
-	return lo;
+        return lo;
 
     /* bsearch */
     while (lo < hi) {
-	mid = (lo + hi) / 2;
-	
-	if (Values[mid].cat == cat)
-	    return mid;
+        mid = (lo + hi) / 2;
 
-	if (Values[mid].cat > cat) {
-	    hi = mid;
-	}
-	else {
-	    lo = mid;
-	}
+        if (Values[mid].cat == cat)
+            return mid;
+
+        if (Values[mid].cat > cat) {
+            hi = mid;
+        }
+        else {
+            lo = mid;
+        }
     }
-    
+
     return -1;
 }
 
@@ -49,7 +48,7 @@ int find_cat(int cat, int used)
     i = bsearch_cat(cat);
 
     if (i >= 0 && used)
-	Values[i].used = 1;
+        Values[i].used = 1;
 
     return (i);
 }

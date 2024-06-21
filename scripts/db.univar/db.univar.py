@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 ############################################################################
 #
@@ -10,113 +10,139 @@
 #               Based on r.univar.sh by Markus Neteler
 # COPYRIGHT:	(C) 2005, 2007, 2008 by the GRASS Development Team
 #
-#		This program is free software under the GNU General Public
-#		License (>=v2). Read the file COPYING that comes with GRASS
-#		for details.
+# 		This program is free software under the GNU General Public
+# 		License (>=v2). Read the file COPYING that comes with GRASS
+# 		for details.
 #
 #############################################################################
 
-#%module
-#% description: Calculates univariate statistics on selected table column.
-#% keyword: database
-#% keyword: statistics
-#% keyword: attribute table
-#%end
-#%option G_OPT_DB_TABLE
-#% key: table
-#% required: yes
-#%end
-#%option G_OPT_DB_COLUMN
-#% description: Name of attribute column on which to calculate statistics (must be numeric)
-#% required: yes
-#%end
-#%option G_OPT_DB_DATABASE
-#%end
-#%option G_OPT_DB_DRIVER
-#% options: dbf,odbc,ogr,sqlite,pg
-#%end
-#%option G_OPT_DB_WHERE
-#%end
-#%option
-#% key: percentile
-#% type: double
-#% description: Percentile to calculate (requires extended statistics flag)
-#% required : no
-#% answer: 90
-#% options: 0-100
-#% multiple: yes
-#%end
-#%flag
-#% key: e
-#% description: Extended statistics (quartiles and 90th percentile)
-#%end
-#%flag
-#% key: g
-#% description: Print stats in shell script style
-#%end
+# %module
+# % description: Calculates univariate statistics on selected table column.
+# % keyword: database
+# % keyword: statistics
+# % keyword: attribute table
+# %end
+# %option G_OPT_DB_TABLE
+# % key: table
+# % required: yes
+# %end
+# %option G_OPT_DB_COLUMN
+# % description: Name of attribute column on which to calculate statistics (must be numeric)
+# % required: yes
+# %end
+# %option G_OPT_DB_DATABASE
+# %end
+# %option G_OPT_DB_DRIVER
+# % options: dbf,odbc,ogr,sqlite,pg
+# %end
+# %option G_OPT_DB_WHERE
+# %end
+# %option
+# % key: percentile
+# % type: double
+# % description: Percentile to calculate (requires extended statistics flag)
+# % required : no
+# % answer: 90
+# % options: 0-100
+# % multiple: yes
+# %end
+# %option
+# % key: format
+# % type: string
+# % multiple: no
+# % options: plain,json,shell
+# % label: Output format
+# % descriptions: plain;Plain text output;json;JSON (JavaScript Object Notation);shell;Shell script style for Bash eval
+# %end
+# %flag
+# % key: e
+# % description: Extended statistics (quartiles and 90th percentile)
+# %end
+# %flag
+# % key: g
+# % description: Print stats in shell script style
+# %end
 
 import sys
 import atexit
+import json
 import math
 
 import grass.script as gscript
 
 
 def cleanup():
-    for ext in ['', '.sort']:
+    for ext in ["", ".sort"]:
         gscript.try_remove(tmp + ext)
 
 
 def sortfile(infile, outfile):
-    inf = open(infile, 'r')
-    outf = open(outfile, 'w')
+    inf = open(infile, "r")
+    outf = open(outfile, "w")
 
-    if gscript.find_program('sort', '--help'):
-        gscript.run_command('sort', flags='n', stdin=inf, stdout=outf)
+    if gscript.find_program("sort", "--help"):
+        gscript.run_command("sort", flags="n", stdin=inf, stdout=outf)
     else:
         # FIXME: we need a large-file sorting function
         gscript.warning(_("'sort' not found: sorting in memory"))
         lines = inf.readlines()
         for i in range(len(lines)):
-            lines[i] = float(lines[i].rstrip('\r\n'))
+            lines[i] = float(lines[i].rstrip("\r\n"))
         lines.sort()
         for line in lines:
-            outf.write(str(line) + '\n')
+            outf.write(str(line) + "\n")
 
     inf.close()
     outf.close()
 
 
 def main():
+    # A more substantial rewrite of the code is needed, possibly to C or
+    # using Python packages such as statistics or NumPy,
+    # so ignoring the duplication of final computation of some statistics
+    # as well as pushing the limit of how long the function can be.
+    # pylint: disable=too-many-branches
     global tmp
     tmp = gscript.tempfile()
 
-    extend = flags['e']
-    shellstyle = flags['g']
-    table = options['table']
-    column = options['column']
-    database = options['database']
-    driver = options['driver']
-    where = options['where']
-    perc = options['percentile']
+    extend = flags["e"]
+    shellstyle = flags["g"]
+    table = options["table"]
+    column = options["column"]
+    database = options["database"]
+    driver = options["driver"]
+    where = options["where"]
+    perc = options["percentile"]
+    output_format = options["format"]
 
-    perc = [float(p) for p in perc.split(',')]
+    perc = [float(p) for p in perc.split(",")]
+
+    if not output_format:
+        if shellstyle:
+            output_format = "shell"
+        else:
+            output_format = "plain"
+    elif shellstyle:
+        # This can be a message or warning in future versions.
+        # In version 9, -g may be removed.
+        gscript.verbose(_("The format option is used and -g flag ignored"))
 
     desc_table = gscript.db_describe(table, database=database, driver=driver)
     if not desc_table:
         gscript.fatal(_("Unable to describe table <%s>") % table)
     found = False
-    for cname, ctype, cwidth in desc_table['cols']:
+    for cname, ctype, cwidth in desc_table["cols"]:
         if cname == column:
             found = True
-            if ctype not in ('INTEGER', 'DOUBLE PRECISION'):
+            if ctype not in ("INTEGER", "DOUBLE PRECISION"):
                 gscript.fatal(_("Column <%s> is not numeric") % cname)
     if not found:
         gscript.fatal(_("Column <%s> not found in table <%s>") % (column, table))
 
-    if not shellstyle:
-        gscript.verbose(_("Calculation for column <%s> of table <%s>..."
-                          ) % (column, table))
+    if output_format == "plain":
+        gscript.verbose(
+            _("Calculation for column <%s> of table <%s>...") % (column, table)
+        )
         gscript.message(_("Reading column values..."))
 
     sql = "SELECT %s FROM %s" % (column, table)
@@ -129,20 +155,27 @@ def main():
     if not driver:
         driver = None
 
-    tmpf = open(tmp, 'w')
-    gscript.run_command('db.select', flags='c', table=table,
-                        database=database, driver=driver, sql=sql,
-                        stdout=tmpf)
+    tmpf = open(tmp, "w")
+    gscript.run_command(
+        "db.select",
+        flags="c",
+        table=table,
+        database=database,
+        driver=driver,
+        sql=sql,
+        stdout=tmpf,
+    )
     tmpf.close()
 
     # check if result is empty
     tmpf = open(tmp)
-    if tmpf.read(1) == '':
-        gscript.fatal(_("Table <%s> contains no data.") % table)
+    if tmpf.read(1) == "":
+        if output_format in ["plain", "shell"]:
+            gscript.fatal(_("Table <%s> contains no data.") % table)
         tmpf.close()
 
     # calculate statistics
-    if not shellstyle:
+    if output_format == "plain":
         gscript.verbose(_("Calculating statistics..."))
 
     N = 0
@@ -154,9 +187,10 @@ def main():
 
     tmpf = open(tmp)
     for line in tmpf:
-        if len(line.rstrip('\r\n')) == 0:
+        line = line.rstrip("\r\n")
+        if len(line) == 0:
             continue
-        x = float(line.rstrip('\r\n'))
+        x = float(line)
         N += 1
         sum += x
         sum2 += x * x
@@ -166,43 +200,89 @@ def main():
     tmpf.close()
 
     if N <= 0:
-        gscript.fatal(_("No non-null values found"))
+        if output_format in ["plain", "shell"]:
+            gscript.fatal(_("No non-null values found"))
+        else:
+            # We produce valid JSON with a value for n even when the query returned
+            # no rows or when all values are nulls.
+            result = {}
+            result["n"] = N
+            nan_value = None
+            result["min"] = nan_value
+            result["max"] = nan_value
+            result["range"] = nan_value
+            result["mean"] = nan_value
+            result["mean_abs"] = nan_value
+            result["variance"] = nan_value
+            result["stddev"] = nan_value
+            result["coeff_var"] = nan_value
+            result["sum"] = nan_value
+            json.dump({"statistics": result}, sys.stdout)
+            return
 
-    if not shellstyle:
+    if output_format == "plain":
         sys.stdout.write("Number of values: %d\n" % N)
         sys.stdout.write("Minimum: %.15g\n" % minv)
         sys.stdout.write("Maximum: %.15g\n" % maxv)
         sys.stdout.write("Range: %.15g\n" % (maxv - minv))
         sys.stdout.write("Mean: %.15g\n" % (sum / N))
-        sys.stdout.write(
-            "Arithmetic mean of absolute values: %.15g\n" %
-            (sum3 / N))
-        sys.stdout.write("Variance: %.15g\n" % ((sum2 - sum * sum / N) / N))
-        sys.stdout.write(
-            "Standard deviation: %.15g\n" %
-            (math.sqrt((sum2 - sum * sum / N) / N)))
-        sys.stdout.write(
-            "Coefficient of variation: %.15g\n" %
-            ((math.sqrt((sum2 - sum * sum / N) / N)) /
-             (math.sqrt(sum * sum) / N)))
+        sys.stdout.write("Arithmetic mean of absolute values: %.15g\n" % (sum3 / N))
+        if not ((sum2 - sum * sum / N) / N) < 0:
+            sys.stdout.write("Variance: %.15g\n" % ((sum2 - sum * sum / N) / N))
+            sys.stdout.write(
+                "Standard deviation: %.15g\n" % (math.sqrt((sum2 - sum * sum / N) / N))
+            )
+            sys.stdout.write(
+                "Coefficient of variation: %.15g\n"
+                % ((math.sqrt((sum2 - sum * sum / N) / N)) / (math.sqrt(sum * sum) / N))
+            )
+        else:
+            sys.stdout.write("Variance: 0\n")
+            sys.stdout.write("Standard deviation: 0\n")
+            sys.stdout.write("Coefficient of variation: 0\n")
         sys.stdout.write("Sum: %.15g\n" % sum)
-    else:
+    elif output_format == "json":
+        result = {}
+        result["n"] = N
+        result["min"] = minv
+        result["max"] = maxv
+        result["range"] = maxv - minv
+        result["mean"] = sum / N
+        result["mean_abs"] = sum3 / N
+        if not ((sum2 - sum * sum / N) / N) < 0:
+            result["variance"] = (sum2 - sum * sum / N) / N
+            result["stddev"] = math.sqrt((sum2 - sum * sum / N) / N)
+            result["coeff_var"] = (math.sqrt((sum2 - sum * sum / N) / N)) / (
+                math.sqrt(sum * sum) / N
+            )
+        else:
+            result["variance"] = 0
+            result["stddev"] = 0
+            result["coeff_var"] = 0
+        result["sum"] = sum
+        if not extend:
+            json.dump({"statistics": result}, sys.stdout)
+    elif output_format == "shell":
         sys.stdout.write("n=%d\n" % N)
         sys.stdout.write("min=%.15g\n" % minv)
         sys.stdout.write("max=%.15g\n" % maxv)
         sys.stdout.write("range=%.15g\n" % (maxv - minv))
         sys.stdout.write("mean=%.15g\n" % (sum / N))
         sys.stdout.write("mean_abs=%.15g\n" % (sum3 / N))
-        sys.stdout.write("variance=%.15g\n" % ((sum2 - sum * sum / N) / N))
-        sys.stdout.write(
-            "stddev=%.15g\n" %
-            (math.sqrt(
-                (sum2 - sum * sum / N) / N)))
-        sys.stdout.write(
-            "coeff_var=%.15g\n" %
-            ((math.sqrt((sum2 - sum * sum / N) / N)) /
-             (math.sqrt(sum * sum) / N)))
+        if not ((sum2 - sum * sum / N) / N) < 0:
+            sys.stdout.write("variance=%.15g\n" % ((sum2 - sum * sum / N) / N))
+            sys.stdout.write("stddev=%.15g\n" % (math.sqrt((sum2 - sum * sum / N) / N)))
+            sys.stdout.write(
+                "coeff_var=%.15g\n"
+                % ((math.sqrt((sum2 - sum * sum / N) / N)) / (math.sqrt(sum * sum) / N))
+            )
+        else:
+            sys.stdout.write("variance=0\n")
+            sys.stdout.write("stddev=0\n")
+            sys.stdout.write("coeff_var=0\n")
         sys.stdout.write("sum=%.15g\n" % sum)
+    else:
+        raise ValueError(f"Unknown output format {output_format}")
 
     if not extend:
         return
@@ -211,7 +291,7 @@ def main():
     sortfile(tmp, tmp + ".sort")
 
     odd = N % 2
-    eostr = ['even', 'odd'][odd]
+    eostr = ["even", "odd"][odd]
 
     q25pos = round(N * 0.25)
     if q25pos == 0:
@@ -235,22 +315,25 @@ def main():
     inf = open(tmp + ".sort")
     l = 1
     for line in inf:
+        line = line.rstrip("\r\n")
+        if len(line) == 0:
+            continue
         if l == q25pos:
-            q25 = float(line.rstrip('\r\n'))
+            q25 = float(line)
         if l == q50apos:
-            q50a = float(line.rstrip('\r\n'))
+            q50a = float(line)
         if l == q50bpos:
-            q50b = float(line.rstrip('\r\n'))
+            q50b = float(line)
         if l == q75pos:
-            q75 = float(line.rstrip('\r\n'))
+            q75 = float(line)
         for i in range(len(ppos)):
             if l == ppos[i]:
-                pval[i] = float(line.rstrip('\r\n'))
+                pval[i] = float(line)
         l += 1
 
     q50 = (q50a + q50b) / 2
 
-    if not shellstyle:
+    if output_format == "plain":
         sys.stdout.write("1st Quartile: %.15g\n" % q25)
         sys.stdout.write("Median (%s N): %.15g\n" % (eostr, q50))
         sys.stdout.write("3rd Quartile: %.15g\n" % q75)
@@ -258,40 +341,42 @@ def main():
             if perc[i] == int(perc[i]):  # integer
                 if int(perc[i]) % 10 == 1 and int(perc[i]) != 11:
                     sys.stdout.write(
-                        "%dst Percentile: %.15g\n" %
-                        (int(
-                            perc[i]),
-                            pval[i]))
+                        "%dst Percentile: %.15g\n" % (int(perc[i]), pval[i])
+                    )
                 elif int(perc[i]) % 10 == 2 and int(perc[i]) != 12:
                     sys.stdout.write(
-                        "%dnd Percentile: %.15g\n" %
-                        (int(
-                            perc[i]),
-                            pval[i]))
+                        "%dnd Percentile: %.15g\n" % (int(perc[i]), pval[i])
+                    )
                 elif int(perc[i]) % 10 == 3 and int(perc[i]) != 13:
                     sys.stdout.write(
-                        "%drd Percentile: %.15g\n" %
-                        (int(
-                            perc[i]),
-                            pval[i]))
+                        "%drd Percentile: %.15g\n" % (int(perc[i]), pval[i])
+                    )
                 else:
                     sys.stdout.write(
-                        "%dth Percentile: %.15g\n" %
-                        (int(
-                            perc[i]),
-                            pval[i]))
+                        "%dth Percentile: %.15g\n" % (int(perc[i]), pval[i])
+                    )
             else:
-                sys.stdout.write(
-                    "%.15g Percentile: %.15g\n" %
-                    (perc[i], pval[i]))
+                sys.stdout.write("%.15g Percentile: %.15g\n" % (perc[i], pval[i]))
+    elif output_format == "json":
+        result["first_quartile"] = q25
+        result["median"] = q50
+        result["third_quartile"] = q75
+        if options["percentile"]:
+            percentile_values = []
+            for i in range(len(perc)):
+                percentile_values.append(pval[i])
+        result["percentiles"] = perc
+        result["percentile_values"] = percentile_values
+        json.dump({"statistics": result}, sys.stdout)
     else:
         sys.stdout.write("first_quartile=%.15g\n" % q25)
         sys.stdout.write("median=%.15g\n" % q50)
         sys.stdout.write("third_quartile=%.15g\n" % q75)
         for i in range(len(perc)):
             percstr = "%.15g" % perc[i]
-            percstr = percstr.replace('.', '_')
+            percstr = percstr.replace(".", "_")
             sys.stdout.write("percentile_%s=%.15g\n" % (percstr, pval[i]))
+
 
 if __name__ == "__main__":
     options, flags = gscript.parser()

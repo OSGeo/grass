@@ -12,13 +12,10 @@
  */
 
 #include <string.h>
-
+#include <math.h>
 #include <grass/glocale.h>
-
 #include <liblas/capi/liblas.h>
-
 #include "local_proto.h"
-
 
 void print_lasinfo(LASHeaderH LAS_header, LASSRSH LAS_srs)
 {
@@ -48,18 +45,17 @@ void print_lasinfo(LASHeaderH LAS_header, LASSRSH LAS_srs)
             LASHeader_GetPointRecordsByReturnCount(LAS_header, 3),
             LASHeader_GetPointRecordsByReturnCount(LAS_header, 4));
     fprintf(stdout, "Scale Factor X Y Z:                %g %g %g\n",
-            LASHeader_GetScaleX(LAS_header),
-            LASHeader_GetScaleY(LAS_header), LASHeader_GetScaleZ(LAS_header));
+            LASHeader_GetScaleX(LAS_header), LASHeader_GetScaleY(LAS_header),
+            LASHeader_GetScaleZ(LAS_header));
     fprintf(stdout, "Offset X Y Z:                      %g %g %g\n",
-            LASHeader_GetOffsetX(LAS_header),
-            LASHeader_GetOffsetY(LAS_header),
+            LASHeader_GetOffsetX(LAS_header), LASHeader_GetOffsetY(LAS_header),
             LASHeader_GetOffsetZ(LAS_header));
     fprintf(stdout, "Min X Y Z:                         %g %g %g\n",
-            LASHeader_GetMinX(LAS_header),
-            LASHeader_GetMinY(LAS_header), LASHeader_GetMinZ(LAS_header));
+            LASHeader_GetMinX(LAS_header), LASHeader_GetMinY(LAS_header),
+            LASHeader_GetMinZ(LAS_header));
     fprintf(stdout, "Max X Y Z:                         %g %g %g\n",
-            LASHeader_GetMaxX(LAS_header),
-            LASHeader_GetMaxY(LAS_header), LASHeader_GetMaxZ(LAS_header));
+            LASHeader_GetMaxX(LAS_header), LASHeader_GetMaxY(LAS_header),
+            LASHeader_GetMaxZ(LAS_header));
     if (las_srs_proj4 && strlen(las_srs_proj4) > 0) {
         fprintf(stdout, "Spatial Reference:\n");
         fprintf(stdout, "%s\n", las_srs_proj4);
@@ -69,8 +65,7 @@ void print_lasinfo(LASHeaderH LAS_header, LASSRSH LAS_srs)
     }
 
     fprintf(stdout, "\nData Fields:\n");
-    fprintf(stdout,
-            "  'X'\n  'Y'\n  'Z'\n  'Intensity'\n  'Return Number'\n");
+    fprintf(stdout, "  'X'\n  'Y'\n  'Z'\n  'Intensity'\n  'Return Number'\n");
     fprintf(stdout, "  'Number of Returns'\n  'Scan Direction'\n");
     fprintf(stdout,
             "  'Flighline Edge'\n  'Classification'\n  'Scan Angle Rank'\n");
@@ -89,7 +84,6 @@ void print_lasinfo(LASHeaderH LAS_header, LASSRSH LAS_srs)
     return;
 }
 
-
 int scan_bounds(LASReaderH LAS_reader, int shell_style, int extents, int update,
                 double zscale, struct Cell_head *region)
 {
@@ -103,7 +97,7 @@ int scan_bounds(LASReaderH LAS_reader, int shell_style, int extents, int update,
     first = TRUE;
 
     /* init to nan in case no points are found */
-    min_x = max_x = min_y = max_y = min_z = max_z = 0.0 / 0.0;
+    min_x = max_x = min_y = max_y = min_z = max_z = NAN;
 
     G_verbose_message(_("Scanning data ..."));
 
@@ -151,13 +145,12 @@ int scan_bounds(LASReaderH LAS_reader, int shell_style, int extents, int update,
             fprintf(stdout, "z: %11f %11f\n", min_z * zscale, max_z * zscale);
         }
         else
-            fprintf(stdout, "n=%f s=%f e=%f w=%f b=%f t=%f\n",
-                    max_y, min_y, max_x, min_x, min_z * zscale,
-                    max_z * zscale);
+            fprintf(stdout, "n=%f s=%f e=%f w=%f b=%f t=%f\n", max_y, min_y,
+                    max_x, min_x, min_z * zscale, max_z * zscale);
 
         G_debug(1, "Processed %lu points.", line);
-        G_debug(1, "region template: g.region n=%f s=%f e=%f w=%f",
-                max_y, min_y, max_x, min_x);
+        G_debug(1, "region template: g.region n=%f s=%f e=%f w=%f", max_y,
+                min_y, max_x, min_x);
     }
     else if (update) {
         if (min_x < region->west)

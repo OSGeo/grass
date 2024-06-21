@@ -30,7 +30,6 @@ Communication between GRASS and ODBC database for attribute management:
   </tbody>
 </table>
 
-
 <h2>Supported SQL commands</h2>
 
 All SQL commands supported by ODBC.
@@ -86,7 +85,7 @@ the beginning of lines:
 &nbsp;UserName&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = neteler
 &nbsp;Password&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
 &nbsp;Port&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 5432
-&nbsp;Protocol&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 8.0 
+&nbsp;Protocol&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 8.0
 
 &nbsp;ReadOnly&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = No
 &nbsp;RowVersioning&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = No
@@ -106,7 +105,6 @@ To find out about your PostgreSQL protocol, run:<br>
 psql -V
 </pre></div>
 
-
 <h3>Using the ODBC driver</h3>
 
 Now create a new database if not yet existing:
@@ -115,7 +113,7 @@ Now create a new database if not yet existing:
 db.createdb driver=odbc database=grass6test
 </pre></div>
 <p>
-To store a table 'mytable.dbf' (here: in current directory) into 
+To store a table 'mytable.dbf' (here: in current directory) into
 PostgreSQL through ODBC, run:
 <p>
 <div class="code"><pre>
@@ -164,6 +162,3 @@ which should print the database connection through ODBC to the defined RDBMS.
 <a href="http://www.unixODBC.org">unixODBC web site</a>,
 <a href="sql.html">SQL support in GRASS GIS</a>
 </em>
-
-<p>
-<i>Last changed: $Date$</i>

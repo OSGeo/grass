@@ -1,9 +1,8 @@
 #include <grass/gis.h>
 
-struct order
-{
-    int cat;			/* point category */
-    int count;			/* nuber of points with category 'cat' */
+struct order {
+    int cat;   /* point category */
+    int count; /* number of points with category 'cat' */
     double x;
     double y;
     double z;

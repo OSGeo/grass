@@ -3,10 +3,10 @@
 # Script to test i.topo.corr with a synthetic map
 #
 # Use North Carolina location to test:
-#   grass77 ~/grassdata/nc_spm_08_grass7/user1
+#   grass ~/grassdata/nc_spm_08_grass7/user1
 
 if test "$GISBASE" = ""; then
- echo "You must be in GRASS to run this program."
+ echo "You must be in GRASS GIS to run this program."
  exit
 fi
 
@@ -54,7 +54,7 @@ r.relief input=myplane_pyr output=myplane_pyr_shaded altitude=$sunangleabovehori
 
 # pre-run: illumination map
 i.topo.corr -i output=myplane_pyr_illumination \
-	    basemap=myplane_pyr zenith=$solarzenith azimuth=$sunazimuth 
+	    basemap=myplane_pyr zenith=$solarzenith azimuth=$sunazimuth
 r.colors myplane_pyr_illumination color=gyr
 
 # show original

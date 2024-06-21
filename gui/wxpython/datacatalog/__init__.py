@@ -1,6 +1,1 @@
-all = [
-    'catalog',
-    'frame',
-    'tree',
-    'dialogs'
-]
+all = ["catalog", "frame", "tree", "dialogs", "infomanager"]

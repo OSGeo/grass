@@ -16,14 +16,15 @@ file/map parameters.
 
 If the "moving window" method was selected in <b>g.gui.rlisetup</b>, then the
 output will be a raster map, otherwise an ASCII file will be generated in
-the folder <tt>C:\Users\userxy\AppData\Roaming\GRASS7\r.li\output\</tt>
-(MS-Windows) or <tt>$HOME/.grass7/r.li/output/</tt> (GNU/Linux).
+the folder <tt>C:\Users\userxy\AppData\Roaming\GRASS8\r.li\output\</tt>
+(MS-Windows) or <tt>$HOME/.grass8/r.li/output/</tt> (GNU/Linux).
 <p>
 <!-- TODO: verify next: -->
 If the input raster contains NULL value cells, <em>r.li.pielou</em>
 returns NULL for these cells.
 
 <h2>EXAMPLES</h2>
+
 To calculate Pielou's diversity index on map <em>my_map</em>, using
 <em>my_conf</em> configuration file (previously defined with
 <em>g.gui.rlisetup</em>) and saving results in <em>my_out</em>, run:
@@ -56,19 +57,19 @@ d.vect forests type=boundary
 </pre></div>
 
 <h2>SEE ALSO</h2>
+
 <em>
 <a href="r.li.html">r.li</a> - package overview<br>
 <a href="g.gui.rlisetup.html">g.gui.rlisetup</a>
 </em>
 
 <h2>REFERENCES</h2>
+
 McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
 analysis program for quantifying landscape structure. USDA For. Serv.
 Gen. Tech. Rep. PNW-351. (<a href="http://treesearch.fs.fed.us/pubs/3064">PDF</a>)
 
 <h2>AUTHORS</h2>
-Luca Delucchi and Duccio Rocchini, Fondazione E. Mach (Italy), based on the <em>r.li.shannon</em> code
-developed by Serena Pallecchi student of Computer Science University of Pisa (Italy).<br>
 
-<p>
-<i>Last changed: $Date$</i>
+Luca Delucchi and Duccio Rocchini, Fondazione E. Mach (Italy), based on the <em>r.li.shannon</em> code
+developed by Serena Pallecchi student of Computer Science University of Pisa (Italy)

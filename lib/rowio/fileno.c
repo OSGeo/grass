@@ -1,15 +1,15 @@
 /*!
-  \file rowio/fileno.c
-  
-  \brief RowIO library - file descriptor
-  
-  (C) 2001-2009 by the GRASS Development Team
-  
-  This program is free software under the GNU General Public License
-  (>=v2).  Read the file COPYING that comes with GRASS for details.
-  
-  \author Original author CERL
-*/
+   \file rowio/fileno.c
+
+   \brief RowIO library - file descriptor
+
+   (C) 2001-2009 by the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
+
+   \author Original author CERL
+ */
 
 #include <grass/rowio.h>
 
@@ -22,7 +22,7 @@
  *
  * \return file descriptor
  */
-int Rowio_fileno(const ROWIO * R)
+int Rowio_fileno(const ROWIO *R)
 {
     return R->fd;
 }

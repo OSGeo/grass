@@ -15,16 +15,16 @@
 int dxf_open(char *filename)
 {
     if ((dxf_fp = fopen(filename, "r")) != NULL) {
-	fclose(dxf_fp);
+        fclose(dxf_fp);
 
-	if (!overwrite)
-	    G_fatal_error(_("The file '%s' already exists."), filename);
+        if (!overwrite)
+            G_fatal_error(_("The file '%s' already exists."), filename);
 
-	G_warning(_("The file '%s' already exists and will be overwritten."),
-		  filename);
+        G_warning(_("The file '%s' already exists and will be overwritten."),
+                  filename);
     }
     if ((dxf_fp = fopen(filename, "w")) == NULL)
-	G_fatal_error(_("%s: Cannot write dxf file."), filename);
+        G_fatal_error(_("%s: Cannot write dxf file."), filename);
 
     return 0;
 }
@@ -127,9 +127,9 @@ int dxf_layer(char *name, int color, char *linetype, int frozen)
     int is_frozen;
 
     if (frozen)
-	is_frozen = 1;
+        is_frozen = 1;
     else
-	is_frozen = 64;
+        is_frozen = 64;
     fprintf(dxf_fp, "  0\nLAYER\n  2\n%s\n 70\n", name);
     fprintf(dxf_fp, "%6d\n 62\n%6d\n  6\n%s\n", is_frozen, color, linetype);
 
@@ -152,7 +152,7 @@ int dxf_polyline(char *layer)
     fprintf(dxf_fp, "0\nPOLYLINE\n");
     fprintf(dxf_fp, "8\n%s\n", (layer));
     fprintf(dxf_fp, "66\n1\n");
-    /* fprintf(dxf_fp,"10\n0.0\n 20\n0.0\n 30\n0.0\n"); *//* ? */
+    /* fprintf(dxf_fp,"10\n0.0\n 20\n0.0\n 30\n0.0\n"); */ /* ? */
 
     return 0;
 }
@@ -167,13 +167,12 @@ int dxf_vertex(char *layer, double x, double y, double z)
 }
 
 int dxf_text(char *layer, double x, double y, double z, double size, int just,
-	     char *text)
+             char *text)
 {
     fprintf(dxf_fp, "  0\nTEXT\n  8\n%s\n 10\n%f\n 20\n", layer, x);
     fprintf(dxf_fp, "%f\n 30\n%f\n 40\n%f\n  1\n%s\n", y, z, size, text);
     if (just)
-	fprintf(dxf_fp, " 72\n%6d\n 11\n%f\n 21\n%f\n 31\n%f\n", just, x, y,
-		z);
+        fprintf(dxf_fp, " 72\n%6d\n 11\n%f\n 21\n%f\n 31\n%f\n", just, x, y, z);
 
     return 0;
 }

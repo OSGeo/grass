@@ -1,42 +1,35 @@
 #define DELETED -2
 
-#define le 0
-#define re 1
+#define le      0
+#define re      1
 
-struct Freenode
-{
+struct Freenode {
     struct Freenode *nextfree;
 };
-struct Freelist
-{
+struct Freelist {
     struct Freenode *head;
     int nodesize;
 };
 
-
-struct Point
-{
+struct Point {
     double x, y, z;
 };
 
 /* structure used both for sites and for vertices */
-struct Site
-{
+struct Site {
     struct Point coord;
     int sitenbr;
     int refcnt;
 };
 
-struct Edge
-{
+struct Edge {
     double a, b, c;
     struct Site *ep[2];
     struct Site *reg[2];
     int edgenbr;
 };
 
-struct Halfedge
-{
+struct Halfedge {
     struct Halfedge *ELleft, *ELright;
     struct Edge *ELedge;
     int ELrefcnt;
@@ -57,6 +50,7 @@ extern struct Site *bottomsite;
 extern int nedges;
 extern struct Freelist efl;
 extern double xmin, xmax, ymin, ymax, deltax, deltay;
+extern double xcenter, ycenter;
 extern struct Freelist hfl;
 extern struct Halfedge *ELleftend, *ELrightend;
 extern int ELhashsize;
@@ -111,6 +105,7 @@ int scomp(const void *, const void *);
 struct Site *nextone(void);
 int readsites(void);
 int readbounds(void);
+int copybounds(void);
 
 /* sw_memory.c */
 int freeinit(struct Freelist *, int);
@@ -122,10 +117,9 @@ char *myalloc(unsigned);
 int voronoi(struct Site *(*)(void));
 
 /* vo_extend.c */
-int extend_line(double, double, double, double, double, double, double,
-		double, double, double *, double *, int);
+int extend_line(double, double, double, double, double, double, double, double,
+                double, double *, double *, int);
 
 /* vo_write.c */
 int vo_write(void);
 int write_ep(struct Edge *);
-

@@ -1,0 +1,32 @@
+[tool.black]
+required-version = '24'
+line-length = 88
+target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
+# 'extend-exclude' excludes files or directories in addition to the defaults
+extend-exclude = '''
+(
+    python/libgrass_interface_generator/
+)
+'''
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+python_files = "*/tests/*_test.py"
+addopts = """
+    --ignore-glob='dist.*'
+    --ignore-glob='bin.*'
+    --ignore-glob='*/tests/data/*'
+    --ignore-glob='*/grass/pygrass/tests/*'
+    --doctest-glob='*doctest*.txt'
+    --ignore='raster/r.category/test_rcategory_doctest.txt'
+"""
+timeout = 300
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "needs_solo_run: marks tests that must be run without any other tests running in parallel",
+]
+
+
+[tool.bandit]
+exclude_dirs = ["./testsuite", "*/tests/*", "*/testsuite/*", "utils/test_generate_last_commit_file.py"]
+skips = ["B324","B110", "B101", "B112", "B311", "B404", "B603"]

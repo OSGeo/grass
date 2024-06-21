@@ -16,7 +16,7 @@ current region settings. See the <em>g.region</em> module for details.
 The <em>r.out.ascii</em> module should be used to export an array (of
 size row x column) containing z values.
 <p>
-<em>r.out.xyz</em> can combine several input raster maps, which can be 
+<em>r.out.xyz</em> can combine several input raster maps, which can be
 convenient when it comes to e.g. produce ASCII point cloud files.
 <p>
 <em>r.out.xyz</em> is simply a front-end to "<tt>r.stats -1g[n]</tt>".
@@ -24,7 +24,7 @@ convenient when it comes to e.g. produce ASCII point cloud files.
 <h2>EXAMPLES</h2>
 
 In this example, a LiDAR elevation map in the
-North Carolina sample dataset location is exported to CSV format.
+North Carolina sample dataset is exported to CSV format.
 
 <div class="code"><pre>
 g.region raster=elev_lid792_1m -p
@@ -35,7 +35,7 @@ r.out.xyz input=elev_lid792_1m output=elev_lid792_1m.csv separator=","
 In this example, elevation data from the North Carolina dataset are
 exported along with R,G,B triplet of the related orthophoto into a
 combined file (requires the import of the supplementary high-resolution
-<a href="http://grass.osgeo.org/sampledata/north_carolina/ortho2010_t792_subset_20cm.tif">color orthophoto</a>, here called "ortho2010_t792"):
+<a href="https://grass.osgeo.org/sampledata/north_carolina/ortho2010_t792_subset_20cm.tif">color orthophoto</a>, here called "ortho2010_t792"):
 
 <div class="code"><pre>
 g.region raster=elev_lid792_1m res=1 -a -p
@@ -53,7 +53,6 @@ head -n 3 pointcloud.asc
 
 Implement this script as a <em>r.out.ascii</em> option?
 
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -68,5 +67,3 @@ Implement this script as a <em>r.out.ascii</em> option?
 M. Hamish Bowman<br>
 <i>Dept. Marine Science<br>
 Otago University, New Zealand</i>
-
-<p><i>Last changed: $Date$</i>

@@ -2,6 +2,7 @@ MODULE_TOPDIR = ..
 
 SUBDIRS = \
 	t.connect \
+	t.copy \
 	t.create \
 	t.support \
 	t.topology \
@@ -41,6 +42,7 @@ SUBDIRS = \
 	t.select \
 	t.snap \
 	t.shift \
+	t.upgrade \
 	t.vect.list \
 	t.vect.db.select \
 	t.vect.export \
@@ -58,4 +60,3 @@ include $(MODULE_TOPDIR)/include/Make/Dir.make
 default: htmldir
 
 htmldir: parsubdirs
-
