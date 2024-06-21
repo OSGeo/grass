@@ -179,7 +179,8 @@ def main():
     elif tgtres == "value":
         grass.fatal(
             _(
-                "Please provide the resolution for the imported dataset or change to 'estimated' resolution"
+                "Please provide the resolution for the imported dataset or change to "
+                "'estimated' resolution"
             )
         )
 
@@ -312,8 +313,7 @@ def main():
             "g.remove", type="vector", flags="f", name=tgtregion, env=src_env
         )
 
-    # switch to target location
-    if "r" in region_flag:
+        # switch to target location
         grass.run_command("g.remove", type="vector", flags="f", name=tgtregion)
 
     region = grass.region()

@@ -33,6 +33,7 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 @author Hamish Bowman (planetary ellipsoids)
 """
+
 import os
 import locale
 import functools
@@ -2519,7 +2520,7 @@ class LocationWizard(wx.Object):
                 self.grassdatabase = self.startpage.grassdatabase
                 self.georeffile = self.filepage.georeffile
                 # FIXME here was code for setting default region, what for is this if:
-                # if self.altdb == False:
+                # if self.altdb is False:
 
             else:  # -> error
                 self.wizard.Destroy()

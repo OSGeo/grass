@@ -21,7 +21,8 @@ This program is free software under the GNU General Public License
 @author Jachym Cepicky <jachym.cepicky gmail.com> (original author)
 @author Martin Landa <landa.martin gmail.com>
 @author Hamish Bowman <hamish_b yahoo.com>
-@author Refactoring, SQLBUilderUpdate by Stepan Turek <stepan.turek seznam.cz> (GSoC 2012, mentor: Martin Landa)
+@author Refactoring, SQLBUilderUpdate by Stepan Turek <stepan.turek seznam.cz>
+        (GSoC 2012, mentor: Martin Landa)
 """
 
 import os
@@ -364,8 +365,8 @@ class SQLBuilder(wx.Frame):
             return
 
         self.list_values.Clear()
-
-        sql = "SELECT DISTINCT {column} FROM {table} ORDER BY {column}".format(
+        # Enclose column name with SQL standard double quotes
+        sql = 'SELECT DISTINCT "{column}" FROM {table} ORDER BY "{column}"'.format(
             column=column, table=self.tablename
         )
         if justsample:
@@ -398,7 +399,8 @@ class SQLBuilder(wx.Frame):
         idx = self.list_columns.GetSelections()
         for i in idx:
             column = self.list_columns.GetString(i)
-            self._add(element="column", value=column)
+            # Enclose column name with SQL standard double quotes
+            self._add(element="column", value=f'"{column}"')
 
         if not self.btn_uniquesample.IsEnabled():
             self.btn_uniquesample.Enable(True)

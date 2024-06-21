@@ -11,11 +11,22 @@ for details.
 
 import json
 import shutil
+from enum import Enum
 from pathlib import Path
 
 from datetime import datetime
 import grass.script as gs
-from grass.script.utils import parse_key_val
+
+
+class Status(Enum):
+    """Enum representing a set of status constants
+    that are used to represent various states or command outcomes."""
+
+    ABORTED = "aborted"
+    FAILED = "failed"
+    RUNNING = "running"
+    SUCCESS = "success"
+    UNKNOWN = "unknown"
 
 
 def get_current_mapset_gui_history_path():
@@ -134,6 +145,25 @@ def read(history_path):
     return _read_from_plain_text(history_path)
 
 
+def filter(json_data, command, timestamp):
+    """
+    Filter JSON history file based on provided command and the time of command launch.
+
+    :param json_data: List of dictionaries representing JSON entries
+    :param command: First filtering argument representing command as string
+    :param timestamp: Second filtering argument representing the time of command launch
+    :return: Index of entry matching the filter criteria.
+    """
+    for index, entry in enumerate(json_data):
+        if entry["command_info"]:
+            if (
+                entry["command"] == command
+                and entry["command_info"]["timestamp"] == timestamp
+            ):
+                return index
+    return None
+
+
 def _remove_entry_from_plain_text(history_path, index):
     """Remove entry from plain text history file.
 
@@ -243,15 +273,7 @@ def get_initial_command_info(env_run):
     mask3d_present = (mapset_path / "grid3" / "RASTER3D_MASK").exists()
 
     # Computational region settings
-    region_settings = dict(
-        parse_key_val(
-            gs.read_command("g.region", flags="g", env=env_run), val_type=float
-        )
-    )
-
-    # Convert floats to integers if possible
-    for key, value in region_settings.items():
-        region_settings[key] = int(value) if value.is_integer() else value
+    region_settings = gs.region(env=env_run)
 
     # Finalize the command info dictionary
     cmd_info = {
@@ -259,6 +281,7 @@ def get_initial_command_info(env_run):
         "mask2d": mask2d_present,
         "mask3d": mask3d_present,
         "region": region_settings,
+        "status": Status.RUNNING.value,
     }
     return cmd_info
 

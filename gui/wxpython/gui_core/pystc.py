@@ -15,7 +15,6 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com> (dark theme)
 """
 
-
 import keyword
 
 import wx
