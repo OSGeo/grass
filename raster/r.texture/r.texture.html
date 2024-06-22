@@ -187,6 +187,50 @@ will contain a value. The output will thus appear cropped at the margins.
 <p>
 Importantly, the input raster map cannot have more than 255 categories.
 
+<h3>Performance</h3>
+To enable parallel processing, the user can specify the number of threads
+to be used with the <b>nprocs</b> parameter (default 1).
+Figures below show benchmark results running on
+Intel® Core™ i9-10940X CPU @ 3.30GHz. See benchmark scripts
+in the source code for more details.
+
+<div align="center" style="margin: 10px">
+  <img src="r_texture_mapsize_time.png"
+  alt="time benchmark for r.texture with different map sizes" border="0">
+  <br>
+  <i>Figure 1: Benchmark shows execution time for different
+    number of cells (1M, 2M, 4M, and 8M) and
+    the fixed size of window (3<span>&#215</span>3).
+</div>
+<div align="center" style="margin: 10px">
+  <img src="r_texture_mapsize_efficiency.png"
+  alt="efficiency benchmark for r.texture with different map sizes" border="0">
+  <br>
+  <i>Figure 2: Benchmark shows efficiency for different
+    numbers of cells (1M, 2M, 4M, and 8M) and
+    the fixed size of window (3<span>&#215</span>3).
+</div>
+<div align="center" style="margin: 10px">
+  <img src="r_texture_window_time.png"
+  alt="time benchmark for r.texture with different window sizes" border="0">
+  <br>
+  <i>Figure 3: Benchmark shows execution time for different
+    sizes of windows
+    (3<span>&#215</span>3, 9<span>&#215</span>9,
+    15<span>&#215</span>15, and 27<span>&#215</span>27)
+    and the fixed number of cells (1M).
+</div>
+<div align="center" style="margin: 10px">
+  <img src="r_texture_window_efficiency.png"
+  alt="efficiency benchmark for r.texture with different window sizes"  border="0">
+  <br>
+  <i>Figure 4: Benchmark shows efficiency for different
+    sizes of windows (3<span>&#215</span>3, 9<span>&#215</span>9,
+    15<span>&#215</span>15, and 27<span>&#215</span>27)
+    and the fixed number of cells (1M).
+</div>
+
+
 <h2>EXAMPLE</h2>
 
 Calculation of Angular Second Moment of B/W orthophoto (North Carolina data set):
@@ -263,11 +307,6 @@ are cropped at the margins.
 	<img src="r_texture_directions_example.png" border=1><br>
 	<i>IDM textures according to direction</i>
 </center>
-
-<h2>KNOWN ISSUES</h2>
-
-The program can run incredibly slow for large raster maps and large
-moving windows (<em>size</em> option).
 
 <h2>REFERENCES</h2>
 
