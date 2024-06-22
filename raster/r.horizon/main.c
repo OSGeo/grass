@@ -892,7 +892,6 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
         break;
     }
 
-#pragma omp parallel for schedule(static, 1) default(shared) ordered
     for (int i = 0; i < printCount; i++) {
         double angle = angle_direction + dfr_rad * i;
         double printangle = printangle_direction + settings->step * i;
@@ -919,44 +918,41 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
         if (settings->degreeOutput)
             shadow_angle *= rad2deg;
 
-#pragma omp ordered
-        {
-            if (settings->compassOutput) {
-                double tmpangle;
-                tmpangle = 360. - printangle + 90.;
-                if (tmpangle >= 360.)
-                    tmpangle = tmpangle - 360.;
-                switch (format) {
-                case PLAIN:
-                    fprintf(fp, "%lf,%lf", tmpangle, shadow_angle);
-                    if (settings->horizonDistance)
-                        fprintf(fp, ",%lf", horizon.length);
-                    fprintf(fp, "\n");
-                    break;
-                case JSON:
-                    json_array_append_number(azimuths, tmpangle);
-                    json_array_append_number(horizons, shadow_angle);
-                    json_array_append_number(distances, horizon.length);
-                    break;
-                }
-            }
-            else {
-                switch (format) {
-                case PLAIN:
-                    fprintf(fp, "%lf,%lf", printangle, shadow_angle);
-                    if (settings->horizonDistance)
-                        fprintf(fp, ",%lf", horizon.length);
-                    fprintf(fp, "\n");
-                    break;
-                case JSON:
-                    json_array_append_number(azimuths, printangle);
-                    json_array_append_number(horizons, shadow_angle);
-                    json_array_append_number(distances, horizon.length);
-                    break;
-                }
+        if (settings->compassOutput) {
+            double tmpangle;
+            tmpangle = 360. - printangle + 90.;
+            if (tmpangle >= 360.)
+                tmpangle = tmpangle - 360.;
+            switch (format) {
+            case PLAIN:
+                fprintf(fp, "%lf,%lf", tmpangle, shadow_angle);
+                if (settings->horizonDistance)
+                    fprintf(fp, ",%lf", horizon.length);
+                fprintf(fp, "\n");
+                break;
+            case JSON:
+                json_array_append_number(azimuths, tmpangle);
+                json_array_append_number(horizons, shadow_angle);
+                json_array_append_number(distances, horizon.length);
+                break;
             }
         }
-    } /* end of parallel section */
+        else {
+            switch (format) {
+            case PLAIN:
+                fprintf(fp, "%lf,%lf", printangle, shadow_angle);
+                if (settings->horizonDistance)
+                    fprintf(fp, ",%lf", horizon.length);
+                fprintf(fp, "\n");
+                break;
+            case JSON:
+                json_array_append_number(azimuths, printangle);
+                json_array_append_number(horizons, shadow_angle);
+                json_array_append_number(distances, horizon.length);
+                break;
+            }
+        }
+    }
 
     if (format == JSON) {
         json_object_set_value(json_origin, "azimuth", azimuths_value);
