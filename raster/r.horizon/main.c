@@ -864,8 +864,8 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
     double xp = geometry->xmin + origin_point.xg0;
     double yp = geometry->ymin + origin_point.yg0;
 
-    double angle_direction = (settings->single_direction * deg2rad) + pihalf;
-    double printangle_direction = settings->single_direction;
+    double angle = (settings->single_direction * deg2rad) + pihalf;
+    double printangle = settings->single_direction;
 
     origin_point.maxlength = settings->fixedMaxLength;
     /* JSON variables and formating */
@@ -893,21 +893,6 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
     }
 
     for (int i = 0; i < printCount; i++) {
-        double angle = angle_direction + dfr_rad * i;
-        double printangle = printangle_direction + settings->step * i;
-
-        /* make sure the anlge between 0 and 2pi */
-        if (angle < 0.)
-            angle += twopi;
-        else if (angle > twopi)
-            angle -= twopi;
-
-        /* make sure the printangle between 0 and 360 degree */
-        if (printangle < 0.)
-            printangle += 360.;
-        else if (printangle > 360.)
-            printangle -= 360.;
-
         OriginAngle origin_angle;
         com_par(geometry, &origin_angle, angle, xp, yp);
 
@@ -915,11 +900,13 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
             horizon_height(geometry, &origin_point, &origin_angle);
         double shadow_angle = atan(horizon.tanh0);
 
-        if (settings->degreeOutput)
+        if (settings->degreeOutput) {
             shadow_angle *= rad2deg;
+        }
 
         if (settings->compassOutput) {
             double tmpangle;
+
             tmpangle = 360. - printangle + 90.;
             if (tmpangle >= 360.)
                 tmpangle = tmpangle - 360.;
@@ -952,7 +939,20 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
                 break;
             }
         }
-    }
+
+        angle += dfr_rad;
+        printangle += settings->step;
+
+        if (angle < 0.)
+            angle += twopi;
+        else if (angle > twopi)
+            angle -= twopi;
+
+        if (printangle < 0.)
+            printangle += 360;
+        else if (printangle > 360.)
+            printangle -= 360;
+    } /* end of for loop over angles */
 
     if (format == JSON) {
         json_object_set_value(json_origin, "azimuth", azimuths_value);
