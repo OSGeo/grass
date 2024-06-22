@@ -133,6 +133,8 @@ int main(int argc, char **argv)
         p[2] = NULL;
         argv = p;
         argc = 2;
+        G_free(p);
+        p = NULL;
     }
 
     if (G_parser(argc, argv))
@@ -195,12 +197,14 @@ int main(int argc, char **argv)
     G_message(_("Computing in parallel, number of threads: %d"),
               omp_get_max_threads());
 #else
-    G_message(_("Number of threads: 1"));
+    G_message(_("Computing in serial (no OpenMP support)"));
 #endif
     execute(result);
     post_exec();
 
     all_ok = 1;
+
+    G_free(nprocs->answer);
 
     if (floating_point_exception_occurred) {
         G_warning(_("Floating point error(s) occurred in the calculation"));

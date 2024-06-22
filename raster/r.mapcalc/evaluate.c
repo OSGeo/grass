@@ -90,6 +90,34 @@ static void set_buf(expression *e, void **buf)
     e->buf = buf;
 }
 
+static void free_buf(expression *e)
+{
+    int threads = 1;
+#if defined(_OPENMP)
+    threads = omp_get_max_threads();
+#endif
+
+    for (int t = 0; t < threads; t++) {
+        G_free(e->buf[t]);
+        e->buf[t] = NULL;
+    }
+    G_free(e->buf);
+    e->buf = NULL;
+}
+
+static void free_argv(expression *e)
+{
+    int i;
+
+    for (i = 1; i <= e->data.func.argc; i++) {
+        free_buf(e->data.func.args[i]);
+        e->data.func.args[i]->buf = NULL;
+    }
+
+    G_free(e->data.func.argv);
+    e->data.func.argv = NULL;
+}
+
 /****************************************************************************/
 
 static void initialize_constant(expression *e)
@@ -340,7 +368,9 @@ void execute(expr_list *ee)
 {
     int verbose = isatty(2);
     expr_list *l;
-    int count, n;
+    expression **exp_arr;
+    int count, n, i;
+    int num_exprs = 0;
     int threads = 1;
 
 #if defined(_OPENMP)
@@ -367,13 +397,19 @@ void execute(expr_list *ee)
             G_fatal_error(_("output map <%s> exists. To overwrite, "
                             "use the --overwrite flag"),
                           var);
+        num_exprs++;
     }
 
-    /* Parse each expression and extract all raster maps */
-    for (l = ee; l; l = l->next) {
-        expression *e = l->exp;
+    /* Create a array of expreesion and stored it in heap */
+    exp_arr = G_malloc(num_exprs * sizeof(struct expression *));
 
+    /* Parse each expression and extract all raster maps */
+    l = ee;
+    for (i = 0; i < num_exprs; i++) {
+        expression *e = l->exp;
         extract_maps(e);
+        exp_arr[i] = e;
+        l = l->next;
     }
 
     /* Set the region from the input maps */
@@ -385,8 +421,9 @@ void execute(expr_list *ee)
     setup_region();
 
     /* Parse each expression and initialize the maps, buffers and variables */
-    for (l = ee; l; l = l->next) {
-        expression *e = l->exp;
+
+    for (i = 0; i < num_exprs; i++) {
+        expression *e = exp_arr[i];
         const char *var;
         expression *val;
 
@@ -416,8 +453,8 @@ void execute(expr_list *ee)
             tid = omp_get_thread_num();
 #endif
             current_row[tid] = row;
-            for (l = ee; l != NULL; l = l->next) {
-                expression *e = l->exp;
+            for (i = 0; i < num_exprs; i++) {
+                expression *e = exp_arr[i];
                 int fd;
 
                 evaluate(e);
@@ -472,6 +509,18 @@ void execute(expr_list *ee)
     }
 
     G_unset_error_routine();
+
+    /* Free the memory and make it unreachable */
+    G_free(current_row);
+    for (i = 0; i < num_exprs; i++) {
+        expression *e = exp_arr[i];
+        free_buf(e);
+        if (e->type == expr_type_function)
+            free_argv(e);
+    }
+    G_free(exp_arr);
+    current_row = NULL;
+    exp_arr = NULL;
 }
 
 void describe_maps(FILE *fp, expr_list *ee)
