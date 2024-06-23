@@ -335,26 +335,25 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
 
     int threads = atoi(parm.nprocs->answer);
-    if (threads == 0) {
-        G_warning(_("0 is not valid number of threads. Number of threads "
-                    "will be set on 1"));
+#if defined(_OPENMP)
+    /* Set the number of threads */
+    if (threads < 0) {
+        threads += omp_get_num_procs() + 1;
+    }
+    else if (threads == 0) {
+        G_warning(_("At least one thread should be used, the number of threads "
+                    "will be set on <%d>"),
+                  1);
         threads = 1;
     }
-    else if (threads < 0) {
-        G_warning(_("<%d> is not valid number of threads. Number of threads "
-                    "will be set on <%d>"),
-                  threads, abs(threads));
-        threads = abs(threads);
-    }
-#if defined(_OPENMP)
-    if (threads > 1) {
-        G_message(_("Using %d threads for parallel computing."), threads);
-    }
+    G_message(_("Using %d threads for parallel computing."), threads);
     omp_set_num_threads(threads);
 #else
-    if (threads > 1)
-        G_warning(_("This version of GRASS GIS was not compiled with OpenMP "
-                    "support. Number of threads will be set on 1"));
+    /* The number of threads is always 1 when OpenMP is not available */
+    if (threads != 1) {
+        G_warning(_("GRASS GIS is not compiled with OpenMP support, parallel "
+                    "computation is disabled."));
+    }
     threads = 1;
 #endif
 
