@@ -631,7 +631,7 @@ int main(int argc, char **argv)
         in[i].value = 0.0;
         in[i].num_pnts = 0;
 
-        while ((err = fscanf(in[i].fp, "%f", &in[i].value)) != EOF) {
+        while (fscanf(in[i].fp, "%f", &in[i].value) != EOF) {
             if (scale_y_values)
                 in[i].value *= y_scale;
             in[i].num_pnts++;
