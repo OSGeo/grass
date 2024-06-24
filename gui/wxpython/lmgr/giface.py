@@ -66,7 +66,7 @@ class LayerList:
 
     def __getitem__(self, index):
         """Select a layer from the LayerList using the index."""
-        return [l for l in self][index]
+        return [layer for layer in self][index]
 
     def __repr__(self):
         """Return a representation of the object."""
