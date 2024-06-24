@@ -1,14 +1,15 @@
 """Test functions in grass.script.setup"""
 
 import multiprocessing
+import os
+
+import pytest
 
 import grass.script as gs
 
 
-# All init tests change the global environment, but when it really matters,
-# we use a separate process.
-# Ideally, the functions would support env parameter and the test
-# would mostly use that.
+# This is useful when we want to ensure that function like init does
+# not change the global environment.
 def run_in_subprocess(function):
     """Run function in a separate process
 
@@ -30,15 +31,17 @@ def create_and_get_srid(tmp_path):
     gs.core._create_location_xy(
         tmp_path, bootstrap_location
     )  # pylint: disable=protected-access
-    with gs.setup.init(tmp_path / bootstrap_location):
+    with gs.setup.init(tmp_path / bootstrap_location, env=os.environ.copy()) as session:
         gs.create_location(tmp_path, desired_location, epsg="3358")
         assert (tmp_path / desired_location).exists()
         wkt_file = tmp_path / desired_location / "PERMANENT" / "PROJ_WKT"
         assert wkt_file.exists()
-        gs.run_command("g.gisenv", set=f"GISDBASE={tmp_path}")
-        gs.run_command("g.gisenv", set=f"LOCATION_NAME={desired_location}")
-        gs.run_command("g.gisenv", set="MAPSET=PERMANENT")
-        return gs.parse_command("g.proj", flags="g")["srid"]
+        gs.run_command("g.gisenv", set=f"GISDBASE={tmp_path}", env=session.env)
+        gs.run_command(
+            "g.gisenv", set=f"LOCATION_NAME={desired_location}", env=session.env
+        )
+        gs.run_command("g.gisenv", set="MAPSET=PERMANENT", env=session.env)
+        return gs.parse_command("g.proj", flags="g", env=session.env)["srid"]
 
 
 def test_with_same_path(tmp_path):
@@ -58,19 +61,28 @@ def test_with_init_in_subprocess(tmp_path):
     assert epsg == "EPSG:3358"
 
 
+@pytest.mark.usefixtures("mock_no_session")
 def test_without_session(tmp_path):
     """Check that creation works outside of session.
 
     Assumes that there is no session for the test. This can be ensured by running only
-    this test with pylint outside a session.
+    this test with pytest outside of a session.
+
+    Also checks that the global environment is intact after calling the function.
     """
+
     name = "desired"
     gs.create_location(tmp_path, name, epsg="3358")
+
+    # Check that the global environment is still intact.
+    assert not os.environ.get("GISRC"), "Session exists after the call"
+    assert not os.environ.get("GISBASE"), "Runtime exists after the call"
+
     assert (tmp_path / name).exists()
     wkt_file = tmp_path / name / "PERMANENT" / "PROJ_WKT"
     assert wkt_file.exists()
-    with gs.setup.init(tmp_path / name):
-        epsg = gs.parse_command("g.proj", flags="g")["srid"]
+    with gs.setup.init(tmp_path / name, env=os.environ.copy()) as session:
+        epsg = gs.parse_command("g.proj", flags="g", env=session.env)["srid"]
         assert epsg == "EPSG:3358"
 
 
@@ -84,15 +96,19 @@ def test_with_different_path(tmp_path):
     gs.core._create_location_xy(
         tmp_path_a, bootstrap_location
     )  # pylint: disable=protected-access
-    with gs.setup.init(tmp_path_a / bootstrap_location):
+    with gs.setup.init(
+        tmp_path_a / bootstrap_location, env=os.environ.copy()
+    ) as session:
         gs.create_location(tmp_path_b, desired_location, epsg="3358")
         assert (tmp_path_b / desired_location).exists()
         wkt_file = tmp_path_b / desired_location / "PERMANENT" / "PROJ_WKT"
         assert wkt_file.exists()
-        gs.run_command("g.gisenv", set=f"GISDBASE={tmp_path_b}")
-        gs.run_command("g.gisenv", set=f"LOCATION_NAME={desired_location}")
-        gs.run_command("g.gisenv", set="MAPSET=PERMANENT")
-        epsg = gs.parse_command("g.proj", flags="g")["srid"]
+        gs.run_command("g.gisenv", set=f"GISDBASE={tmp_path_b}", env=session.env)
+        gs.run_command(
+            "g.gisenv", set=f"LOCATION_NAME={desired_location}", env=session.env
+        )
+        gs.run_command("g.gisenv", set="MAPSET=PERMANENT", env=session.env)
+        epsg = gs.parse_command("g.proj", flags="g", env=session.env)["srid"]
         assert epsg == "EPSG:3358"
 
 
@@ -105,8 +121,8 @@ def test_path_only(tmp_path):
     assert full_path.exists()
     assert mapset_path.exists()
     assert wkt_file.exists()
-    with gs.setup.init(full_path):
-        epsg = gs.parse_command("g.proj", flags="g")["srid"]
+    with gs.setup.init(full_path, env=os.environ.copy()) as session:
+        epsg = gs.parse_command("g.proj", flags="g", env=session.env)["srid"]
         assert epsg == "EPSG:3358"
 
 
@@ -116,8 +132,8 @@ def test_create_project(tmp_path):
     assert (tmp_path / name).exists()
     wkt_file = tmp_path / name / "PERMANENT" / "PROJ_WKT"
     assert wkt_file.exists()
-    with gs.setup.init(tmp_path / name):
-        epsg = gs.parse_command("g.proj", flags="g")["srid"]
+    with gs.setup.init(tmp_path / name, env=os.environ.copy()) as session:
+        epsg = gs.parse_command("g.proj", flags="g", env=session.env)["srid"]
         assert epsg == "EPSG:3358"
 
 
@@ -128,7 +144,7 @@ def test_files(tmp_path):
     gs.core._create_location_xy(
         tmp_path, bootstrap_location
     )  # pylint: disable=protected-access
-    with gs.setup.init(tmp_path / bootstrap_location):
+    with gs.setup.init(tmp_path / bootstrap_location, env=os.environ.copy()):
         description = "This is a test (not Gauss-Krüger or Křovák)"
         gs.create_location(tmp_path, desired_location, epsg="3358", desc=description)
         assert (tmp_path / desired_location).exists()

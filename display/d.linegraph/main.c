@@ -126,7 +126,9 @@ static char *icon_files(void)
 
     closedir(dir);
 
-    qsort(list, count, sizeof(char *), cmp);
+    if (list != NULL) {
+        qsort(list, count, sizeof(char *), cmp);
+    }
 
     if (len > 0) {
         ret = G_malloc((len + 1) * sizeof(char)); /* \0 */
@@ -182,7 +184,7 @@ int main(int argc, char **argv)
         FILE *fp;             /* pointer to file        */
     };
 
-    struct in_file in[12];
+    struct in_file in[12] = {0};
     struct GModule *module;
 
     float max_y;
