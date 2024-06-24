@@ -453,20 +453,20 @@ class WSPanel(wx.Panel):
     def _updateLayerOrderList(self, selected=None):
         """Update order in list."""
 
-        def getlayercaption(l):
-            if l["title"]:
-                cap = l["title"]
+        def getlayercaption(layer):
+            if layer["title"]:
+                cap = layer["title"]
             else:
-                cap = l["name"]
+                cap = layer["name"]
 
-            if l["style"]:
-                if l["style"]["title"]:
-                    cap += " / " + l["style"]["title"]
+            if layer["style"]:
+                if layer["style"]["title"]:
+                    cap += " / " + layer["style"]["title"]
                 else:
-                    cap += " / " + l["style"]["name"]
+                    cap += " / " + layer["style"]["name"]
             return cap
 
-        layer_capts = [getlayercaption(l) for l in self.sel_layers]
+        layer_capts = [getlayercaption(sel_layer) for sel_layer in self.sel_layers]
         self.l_odrder_list.Set(layer_capts)
         if self.l_odrder_list.IsEmpty():
             self.enableButtons(False)
