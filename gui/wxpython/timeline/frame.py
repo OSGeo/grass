@@ -503,7 +503,10 @@ class TimelineFrame(wx.Frame):
             )
             mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
             allDatasets = [
-                i for i in sorted(allDatasets, key=lambda l: mapsets.index(l[1]))
+                i
+                for i in sorted(
+                    allDatasets, key=lambda dataset_info: mapsets.index(dataset_info[1])
+                )
             ]
 
         for dataset in datasets:
