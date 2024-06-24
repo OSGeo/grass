@@ -105,10 +105,10 @@ class LayerList:
         :param opacity: layer opacity level
         :param cmd: command (given as a list)
         """
-        l = self._tree.AddLayer(
+        new_layer_lst = self._tree.AddLayer(
             ltype=ltype, lname=name, lchecked=checked, lopacity=opacity, lcmd=cmd
         )
-        return Layer(l, self._tree.GetPyData(l))
+        return Layer(new_layer_lst, self._tree.GetPyData(new_layer_lst))
 
     def DeleteLayer(self, layer):
         """Remove layer from layer list"""
