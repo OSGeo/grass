@@ -1888,13 +1888,13 @@ class VectorAreasPage(TitledPage):
             opacity=1.0,
             render=True,
         )
-        for l in self.map_.GetListOfLayers():
-            if l.name == self.outname:
+        for layer in self.map_.GetListOfLayers():
+            if layer.name == self.outname:
                 self.mapPanel.mapWindow.ZoomToMap(
-                    layers=[l], render=True, ignoreNulls=True
+                    layers=[layer], render=True, ignoreNulls=True
                 )
-            elif l.name != self.rast:
-                self.map_.DeleteLayer(l)
+            elif layer.name != self.rast:
+                self.map_.DeleteLayer(layer)
         self.areaText.SetLabel("Is this area (cat={n}) ok?".format(n=cat))
 
     def OnEnterPage(self, event):
