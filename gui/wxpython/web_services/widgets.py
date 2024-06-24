@@ -744,9 +744,9 @@ class WSPanel(wx.Panel):
                 if sel_l not in curr_sel_ls:
                     self.sel_layers.remove(sel_l)
 
-            for l in curr_sel_ls:
-                if l not in self.sel_layers:
-                    self.sel_layers.append(l)
+            for curr in curr_sel_ls:
+                if curr not in self.sel_layers:
+                    self.sel_layers.append(curr)
 
             self._updateLayerOrderList()
         else:
@@ -759,8 +759,8 @@ class WSPanel(wx.Panel):
 
         intersect_proj = []
         first = True
-        for l in curr_sel_ls:
-            layer_projs = l["cap_intf_l"].GetLayerData("srs")
+        for curr in curr_sel_ls:
+            layer_projs = curr["cap_intf_l"].GetLayerData("srs")
             if first:
                 projs_list = layer_projs
                 first = False
