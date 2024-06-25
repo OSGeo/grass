@@ -140,9 +140,9 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
 
         layers = parent_layer.findall(self.xml_ns.Ns("Layer"))
 
-        for l in layers:
-            self._initLayer(l, parent_layer)
-            self._checkLayerTree(l, False)
+        for layer in layers:
+            self._initLayer(layer, parent_layer)
+            self._checkLayerTree(layer, False)
 
     def _initLayer(self, layer, parent_layer):
         """Inherit elements from parent layer
@@ -340,10 +340,10 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
         self._findall(contents, "TileMatrixSet", self.xml_ns.NsWmts)
 
         layers = self._findall(contents, "Layer", self.xml_ns.NsWmts)
-        for l in layers:
-            if not self._checkLayer(l):
+        for layer in layers:
+            if not self._checkLayer(layer):
                 grass.debug("Removed invalid <Layer> element.", 4)
-                contents.remove(l)
+                contents.remove(layer)
 
         # are there any <Layer> elements after the check
         self._findall(contents, "Layer", self.xml_ns.NsWmts)
@@ -580,12 +580,12 @@ class OnEarthCapabilitiesTree(BaseCapabilitiesTree):
             layers = parent_layer.findall("TiledGroup")
             layers += parent_layer.findall("TiledGroups")
 
-        for l in layers:
-            if not self._checkLayer(l):
-                grass.debug(("Removed invalid <%s> element." % l.tag), 4)
-                parent_layer.remove(l)
-            if l.tag == "TiledGroups":
-                self._checkLayerTree(l, False)
+        for layer in layers:
+            if not self._checkLayer(layer):
+                grass.debug(("Removed invalid <%s> element." % layer.tag), 4)
+                parent_layer.remove(layer)
+            if layer.tag == "TiledGroups":
+                self._checkLayerTree(layer, False)
 
     def _find(self, etreeElement, tag):
         """!Find child element.
