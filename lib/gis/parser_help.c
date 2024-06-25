@@ -347,5 +347,8 @@ void G__setup_threads(char *nprocs)
     }
     threads = 1;
 #endif
-    sprintf(nprocs, "%d", threads);
+
+    /* only update while nprocs is not the default value*/
+    if (threads != atoi(nprocs))
+        sprintf(nprocs, "%d", threads);
 }
