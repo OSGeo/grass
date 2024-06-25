@@ -442,6 +442,7 @@ int G_parser(int argc, char **argv)
                 strcat(opt->answer, opt->answers[i]);
             }
         }
+
         opt->def = opt->answer;
         opt = opt->next_opt;
     }
@@ -1328,6 +1329,10 @@ void check_opts(void)
 
         if (opt->checker)
             opt->checker(opt->answer);
+
+        /* Check if nprocs is set for OpenMP multithreading */
+        if (strcmp(opt->key, "nprocs") == 0)
+            G__setup_threads(opt->answer);
 
         opt = opt->next_opt;
     }

@@ -3,6 +3,9 @@
 
 #include <stdio.h>
 #include <grass/gis.h>
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 
 #define KEYLENGTH 64
 
@@ -67,5 +70,6 @@ void G__check_option_rules(void);
 void G__describe_option_rules(void);
 int G__has_required_rule(void);
 void G__describe_option_rules_xml(FILE *);
+void G__setup_threads(char *nprocs);
 
 #endif
