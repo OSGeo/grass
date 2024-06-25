@@ -344,7 +344,7 @@ static int cross_seg(int i, int j, int b)
 #define QEVT_CRS         3
 
 #define GET_PARENT(p, c) ((p) = (int)(((c)-2) / 3 + 1))
-#define GET_CHILD(c, p)  ((c) = (int)(((p)*3) - 1))
+#define GET_CHILD(c, p)  ((c) = (int)(((p) * 3) - 1))
 
 struct qitem {
     int l; /* line 0 - A line , 1 - B line */

@@ -273,7 +273,7 @@ void main_loop(void)
             eff = 0.0;
 
 #pragma omp parallel firstprivate(l, lw, k, decr, d1, hhc, velx, vely, eff, \
-                                  gaux, gauy) // nwalka
+                                      gaux, gauy) // nwalka
             {
 #if defined(_OPENMP)
                 int steps =

@@ -48,7 +48,7 @@ extern double meters_to_grid;
 extern double ns_to_ew_squared;
 extern int count_rows_with_data;
 
-#define MAPINDEX(r, c)       ((size_t)(r)*window.cols + (c))
+#define MAPINDEX(r, c)       ((size_t)(r) * window.cols + (c))
 #define ZONE_INCR            2
 
 #define FEET_TO_METERS       0.3048

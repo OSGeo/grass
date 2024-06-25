@@ -6,7 +6,7 @@
 #include <math.h>
 #include <grass/raster.h>
 
-#define ODD(a)               ((a)&1)
+#define ODD(a)               ((a) & 1)
 
 #define MAX_INTERVAL         10
 #define MIN_INTERVAL         -10

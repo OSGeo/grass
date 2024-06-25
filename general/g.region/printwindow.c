@@ -5,8 +5,8 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-#define DEG2RAD(a) ((a)*M_PI / 180.0)
-#define RAD2DEG(a) ((a)*180.0 / M_PI)
+#define DEG2RAD(a) ((a) * M_PI / 180.0)
+#define RAD2DEG(a) ((a) * 180.0 / M_PI)
 
 static double get_shift(double east)
 {

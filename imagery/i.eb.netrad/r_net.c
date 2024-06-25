@@ -35,7 +35,7 @@ double r_net(double bbalb, double ndvi UNUSED, double tempk, double dtair,
     Kin = 1358.0 * (cos(sunzangle * PI / 180) * tsw / (ds * ds));
 
     /* Lin is incoming longwave radiation */
-    Lin = (e_atm)*5.67 * pow(10, -8) * pow((tempk - dtair), 4);
+    Lin = (e_atm) * 5.67 * pow(10, -8) * pow((tempk - dtair), 4);
 
     /* Lout is surface grey body emission in Longwave spectrum */
     Lout = e0 * 5.67 * pow(10, -8) * pow(tempk, 4);

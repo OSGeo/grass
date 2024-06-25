@@ -10,6 +10,7 @@
     (size_t)(                                                              \
         ((((size_t)(r) >> RAMSEGBITS) * (s) + ((size_t)(c) >> RAMSEGBITS)) \
          << DOUBLEBITS) +                                                  \
-        (((size_t)(r)&SEGLENLESS) << RAMSEGBITS) + ((size_t)(c)&SEGLENLESS))
+        (((size_t)(r) & SEGLENLESS) << RAMSEGBITS) +                       \
+        ((size_t)(c) & SEGLENLESS))
 
 #endif /* __RAMSEG_H__ */

@@ -3428,7 +3428,7 @@ void GS_clear(int col)
      */
     glClearDepth(1.0);
     glClearColor(
-        ((float)((col)&0xff)) / 255., (float)((col) >> 8 & 0xff) / 255.,
+        ((float)((col) & 0xff)) / 255., (float)((col) >> 8 & 0xff) / 255.,
         (float)((col) >> 16 & 0xff) / 255., (float)((col) >> 24 & 0xff) / 255.);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 

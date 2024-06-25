@@ -5,7 +5,7 @@
 #include <grass/raster.h>
 #include "flag.h"
 
-#define ODD(a)     ((a)&1)
+#define ODD(a)     ((a) & 1)
 
 #define PI         M_PI
 

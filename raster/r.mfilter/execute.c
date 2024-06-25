@@ -92,7 +92,7 @@ int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
     DCELL *cellp = cell[MASTER];
 
 #pragma omp parallel firstprivate(starty, id, start, end, cellp) private( \
-    i, count, row, col, cp) if (nprocs > 1)
+        i, count, row, col, cp) if (nprocs > 1)
     {
 #if defined(_OPENMP)
         if (nprocs > 1) {

@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
     cell_real = Rast_allocate_d_buf();
     cell_imag = Rast_allocate_d_buf();
 
-#define C(i, j) ((i)*cols + (j))
+#define C(i, j) ((i) * cols + (j))
 
     /* Read in cell map values */
     G_message(_("Reading raster maps..."));

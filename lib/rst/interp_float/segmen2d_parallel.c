@@ -105,11 +105,11 @@ int IL_interp_segments_2d_parallel(
     cut_tree(tree, all_leafs, &i);
 
     G_message(_("Starting parallel work"));
-#pragma omp parallel firstprivate(                                           \
-    tid, i, j, zmin, zmax, tree, totsegm, offset1, dnorm, smseg, ertot,      \
-    params, info, all_leafs, bitmask, b, indx, matrix, data_local, A)        \
-    shared(cursegm, threads, some_thread_failed, zminac, zmaxac, gmin, gmax, \
-           c1min, c1max, c2min, c2max) default(none)
+#pragma omp parallel firstprivate(                                            \
+        tid, i, j, zmin, zmax, tree, totsegm, offset1, dnorm, smseg, ertot,   \
+            params, info, all_leafs, bitmask, b, indx, matrix, data_local, A) \
+    shared(cursegm, threads, some_thread_failed, zminac, zmaxac, gmin, gmax,  \
+               c1min, c1max, c2min, c2max) default(none)
     {
 #pragma omp for schedule(dynamic)
         for (i_cnt = 0; i_cnt < totsegm; i_cnt++) {

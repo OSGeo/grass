@@ -4,8 +4,8 @@
 #include "local_proto.h"
 
 #define PI         M_PI
-#define Radians(x) ((x)*PI / 180.0)
-#define Degrees(x) ((x)*180.0 / PI)
+#define Radians(x) ((x) * PI / 180.0)
+#define Degrees(x) ((x) * 180.0 / PI)
 
 int parse_line(const char *key, char **s, double *e1, double *n1, double *e2,
                double *n2, int projection)
