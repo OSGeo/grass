@@ -66,7 +66,7 @@ import os
 import grass.script as grass
 
 
-def make_frame(f, b, t, l, r):
+def make_frame(f, b, t, l, r):  # noqa: E741
     (fl, fr, ft, fb) = f
 
     t /= 100.0
