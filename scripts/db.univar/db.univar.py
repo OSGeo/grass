@@ -313,23 +313,23 @@ def main():
         pval[i] = 0
 
     inf = open(tmp + ".sort")
-    l = 1
+    ln = 1
     for line in inf:
         line = line.rstrip("\r\n")
         if len(line) == 0:
             continue
-        if l == q25pos:
+        if ln == q25pos:
             q25 = float(line)
-        if l == q50apos:
+        if ln == q50apos:
             q50a = float(line)
-        if l == q50bpos:
+        if ln == q50bpos:
             q50b = float(line)
-        if l == q75pos:
+        if ln == q75pos:
             q75 = float(line)
         for i in range(len(ppos)):
-            if l == ppos[i]:
+            if ln == ppos[i]:
                 pval[i] = float(line)
-        l += 1
+        ln += 1
 
     q50 = (q50a + q50b) / 2
 
