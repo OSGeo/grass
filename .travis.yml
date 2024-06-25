@@ -10,8 +10,8 @@ cache: ccache
 # safelist
 branches:
   only:
-  - main
-  - releasebranch*
+    - main
+    - releasebranch*
 
 jobs:
   include:
