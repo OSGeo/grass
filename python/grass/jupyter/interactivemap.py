@@ -430,7 +430,7 @@ class InteractiveMap:
             def on_toggle_popup_change(change):
                 if not change.new:
                     # Find and remove all popups on the map
-                    for item in list(self.map.layers):
+                    for item in reversed(list(self.map.layers)):
                         if isinstance(item, self._ipyleaflet.Popup):
                             self.map.remove_layer(item)
 
