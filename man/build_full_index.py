@@ -89,6 +89,18 @@ if __name__ == "__main__":
         replace_file,
     )
 
-    from build_md import md_dir as path, md_files as get_files, write_md_footer as write_footer, write_md_header as write_header, full_index_header, cmd2_tmpl, to_title, desc1_tmpl, get_desc
+    build_full_index("html")
+
+    from build_md import (
+        md_dir as path,
+        md_files as get_files,
+        write_md_footer as write_footer,
+        write_md_header as write_header,
+        full_index_header,
+        cmd2_tmpl,
+        to_title,
+        desc1_tmpl,
+        get_desc,
+    )
 
     build_full_index('md')
