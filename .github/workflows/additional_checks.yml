@@ -59,7 +59,7 @@ jobs:
 
       - name: Generate release notes using git log
         run: |
-          python -m pip install PyYAML
+          python -m pip install PyYAML requests
           # Git works without any special permissions.
           # Using current branch or the branch against the PR is open.
           # Using the last 30 commits (for branches, tags, and PRs).

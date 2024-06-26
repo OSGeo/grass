@@ -39,7 +39,7 @@
 #include "cell_ptrHa.h"
 #include "local_proto.h"
 
-#define DATA(map, r, c) (map)[(r)*ncols + (c)]
+#define DATA(map, r, c) (map)[(r) * ncols + (c)]
 
 CELL *cell;
 CELL *x_cell;

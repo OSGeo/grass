@@ -13,13 +13,13 @@ FLAG
 };
 
 #define FLAG_UNSET(flags, row, col) \
-    (flags)->array[(row)][(col) >> 3] &= ~(1 << ((col)&7))
+    (flags)->array[(row)][(col) >> 3] &= ~(1 << ((col) & 7))
 
 #define FLAG_SET(flags, row, col) \
-    (flags)->array[(row)][(col) >> 3] |= (1 << ((col)&7))
+    (flags)->array[(row)][(col) >> 3] |= (1 << ((col) & 7))
 
 #define FLAG_GET(flags, row, col) \
-    (flags)->array[(row)][(col) >> 3] & (1 << ((col)&7))
+    (flags)->array[(row)][(col) >> 3] & (1 << ((col) & 7))
 
 /* flag.[ch] is a set of routines which will set up an array of bits
  ** that allow the programmer to "flag" cells in a raster map.

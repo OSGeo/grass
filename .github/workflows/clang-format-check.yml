@@ -8,8 +8,8 @@ on:
   pull_request:
   workflow_dispatch:
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.ref_protected != true }}
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
 permissions: {}
 jobs:
   formatting-check:
@@ -22,7 +22,7 @@ jobs:
       - uses: DoozyX/clang-format-lint-action@11b773b1598aa4ae3b32f023701bca5201c3817d # v0.17
         with:
           source: "."
-          clangFormatVersion: 15
+          clangFormatVersion: 17
           inplace: True
       - name: Create and uploads code suggestions to apply
         id: diff

@@ -23,6 +23,7 @@ def run_in_subprocess(function):
     process.join()
 
 
+@pytest.mark.needs_solo_run
 @pytest.mark.parametrize("processes", list(range(1, max_processes() + 1)) + [None])
 def test_processes(tmp_path, processes):
     """Check that running with multiple processes works"""
@@ -232,6 +233,7 @@ def test_tiling(tmp_path, width, height, processes):
         assert info["min"] > 0
 
 
+@pytest.mark.needs_solo_run
 @pytest.mark.parametrize(
     "processes, backend",
     [
