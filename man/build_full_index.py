@@ -72,7 +72,22 @@ def build_full_index(ext):
 if __name__ == "__main__":
     from build_html import html_dir as path, html_files as get_files, write_html_footer as write_footer, write_html_header as write_header, grass_version, full_index_header, toc, cmd2_tmpl, to_title, check_for_desc_override, get_desc, desc1_tmpl, replace_file
 
-    build_full_index('html')
+if __name__ == "__main__":
+    from build_html import (
+        html_dir as path,
+        html_files as get_files,
+        write_html_footer as write_footer,
+        write_html_header as write_header,
+        grass_version,
+        full_index_header,
+        toc,
+        cmd2_tmpl,
+        to_title,
+        check_for_desc_override,
+        get_desc,
+        desc1_tmpl,
+        replace_file,
+    )
 
     from build_md import md_dir as path, md_files as get_files, write_md_footer as write_footer, write_md_header as write_header, full_index_header, cmd2_tmpl, to_title, desc1_tmpl, get_desc
 
