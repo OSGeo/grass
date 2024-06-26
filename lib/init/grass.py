@@ -2294,8 +2294,6 @@ def main():
     # Create the session grassrc file
     gisrc = create_gisrc(tmpdir, gisrcrc)
 
-    find_grass_python_package()
-
     from grass.app.runtime import (
         ensure_home,
         set_paths,
