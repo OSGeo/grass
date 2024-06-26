@@ -5,8 +5,8 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-#define DEG2RAD(a) ((a)*M_PI / 180.0)
-#define RAD2DEG(a) ((a)*180.0 / M_PI)
+#define DEG2RAD(a) ((a) * M_PI / 180.0)
+#define RAD2DEG(a) ((a) * 180.0 / M_PI)
 
 static double get_shift(double east)
 {
@@ -248,15 +248,15 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             /* read current projection info */
             if ((in_proj_info = G_get_projinfo()) == NULL)
                 G_fatal_error(
-                    _("Can't get projection info of current location"));
+                    _("Can't get projection info of current project"));
 
             if ((in_unit_info = G_get_projunits()) == NULL)
                 G_fatal_error(
-                    _("Can't get projection units of current location"));
+                    _("Can't get projection units of current project"));
 
             if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
                 G_fatal_error(
-                    _("Can't get projection key values of current location"));
+                    _("Can't get projection key values of current project"));
 
             G_free_key_value(in_proj_info);
             G_free_key_value(in_unit_info);
@@ -399,7 +399,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
                     _("You are already in Lat/Long. Use the -p flag instead."));
             else
                 G_message(
-                    _("You are in a simple XY location, projection to Lat/Lon "
+                    _("You are in a simple XY project, projection to Lat/Lon "
                       "is not possible. Use the -p flag instead."));
         }
     }
@@ -493,15 +493,15 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             /* read current projection info */
             if ((in_proj_info = G_get_projinfo()) == NULL)
                 G_fatal_error(
-                    _("Can't get projection info of current location"));
+                    _("Can't get projection info of current project"));
 
             if ((in_unit_info = G_get_projunits()) == NULL)
                 G_fatal_error(
-                    _("Can't get projection units of current location"));
+                    _("Can't get projection units of current project"));
 
             if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
                 G_fatal_error(
-                    _("Can't get projection key values of current location"));
+                    _("Can't get projection key values of current project"));
 
             G_free_key_value(in_proj_info);
             G_free_key_value(in_unit_info);
@@ -567,7 +567,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             /* read current projection info */
             if ((in_proj_info = G_get_projinfo()) == NULL)
                 G_fatal_error(
-                    _("Can't get projection info of current location"));
+                    _("Can't get projection info of current project"));
             /* do not wrap to -180, 180, otherwise east can be < west */
             /* TODO: for PROJ 6+, the +over switch must be added to the
              * transformation pipeline if authority:name or WKt are used
@@ -576,11 +576,11 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 
             if ((in_unit_info = G_get_projunits()) == NULL)
                 G_fatal_error(
-                    _("Can't get projection units of current location"));
+                    _("Can't get projection units of current project"));
 
             if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
                 G_fatal_error(
-                    _("Can't get projection key values of current location"));
+                    _("Can't get projection key values of current project"));
 
             /*  output projection to lat/long and wgs84 ellipsoid */
             out_proj_info = G_create_key_value();
@@ -594,7 +594,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             /* PROJ6+ has its own datum transformation parameters */
             if (G_get_datumparams_from_projinfo(in_proj_info, buff, dum) < 0)
                 G_fatal_error(_(
-                    "WGS84 output not possible as this location does not "
+                    "WGS84 output not possible as this project does not "
                     "contain "
                     "datum transformation parameters. Try running g.setproj."));
             else

@@ -1,4 +1,4 @@
-FROM alpine:3.19 as common
+FROM alpine:3.20@sha256:b89d9c93e9ed3597455c90a0b88a8bbb5cb7188438f70953fede212a0c4394e0 as common
 
 # Based on:
 # https://github.com/mundialis/docker-grass-gis/blob/master/Dockerfile
@@ -56,6 +56,7 @@ ENV GRASS_RUN_PACKAGES="\
       openblas \
       py3-numpy \
       py3-pillow \
+      python3 \
       pdal \
       pdal-dev \
       postgresql15-client \
@@ -73,18 +74,8 @@ ENV GRASS_RUN_PACKAGES="\
 
 WORKDIR /src
 
-ENV PYTHONBIN=python$PYTHON_VERSION
-
-RUN echo "Install Python";\
-    apk add --no-cache $PYTHONBIN && \
-    $PYTHONBIN -m ensurepip && \
-    rm -r /usr/lib/python*/ensurepip && \
-    pip$PYTHON_VERSION install --upgrade pip setuptools && \
-    if [ ! -e /usr/bin/pip ]; then ln -s pip$PYTHON_VERSION /usr/bin/pip ; fi && \
-    if [ ! -e /usr/bin/python ]; then ln -sf /usr/bin/$PYTHONBIN /usr/bin/python; fi && \
-    rm -r /root/.cache; \
-    # Add the packages
-    echo "Install main packages";\
+# Add the packages
+RUN echo "Install main packages";\
     apk update; \
     apk add --no-cache $GRASS_RUN_PACKAGES
 
@@ -200,13 +191,12 @@ FROM common as grass
 
 # GRASS GIS specific
 # allow work with MAPSETs that are not owned by current user
-ENV GRASSBIN="/usr/local/bin/grass" \
-    GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
+ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     SHELL="/bin/bash" \
     # https://proj.org/usage/environmentvars.html#envvar-PROJ_NETWORK
     PROJ_NETWORK=ON \
-    GRASSBIN=grass \
-    LC_ALL="en_US.UTF-8"
+    LC_ALL="en_US.UTF-8" \
+    PYTHONPATH="/usr/local/grass/etc/python:$PYTHONPATH"
 
 # Copy GRASS GIS and GDAL GRASS driver from build image
 COPY --from=build /usr/local/bin/grass /usr/local/bin/grass
@@ -214,21 +204,20 @@ COPY --from=build /usr/local/grass* /usr/local/grass/
 COPY --from=build /usr/lib/gdalplugins/*_GRASS.so /usr/lib/gdalplugins/
 # run simple LAZ test
 COPY docker/testdata/simple.laz /tmp/
-COPY docker/testdata/test_grass_session.py docker/alpine/grass_tests.sh /scripts/
-COPY docker/testdata/test_grass_session.py /scripts/
+COPY docker/testdata/test_grass_python.py docker/testdata/test_grass_session.py docker/alpine/grass_tests.sh /scripts/
 
-# install external Python API
-RUN pip3 install --upgrade pip six grass-session --ignore-installed six; \
-    ln -sf /usr/local/grass $(grass --config path); \
-    # run some tests and cleanup
-    $SHELL /scripts/grass_tests.sh \
-    && rm -f /scripts/grass_tests.sh /tmp/simple.laz /scripts/test_grass_session.py; \
-    # delete unused packages
+# run GRASS GIS python session and scan the test LAZ file; some cleanup
+# also show installed version
+RUN ln -sf /usr/local/grass $(grass --config path); \
+    rm -rf /tmp/grasstest_epsg_25832; \
+    $SHELL /scripts/grass_tests.sh; \
+    python /scripts/test_grass_session.py && rm -rf /tmp/grasstest_epsg_25832; \
+    grass --tmp-project EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g \
+    && rm -f /scripts/grass_tests.sh /tmp/simple.laz /scripts/test_grass_python.py; \
     apk del --no-cache gettext pdal-dev; \
-    # show installed version
-    grass --tmp-location XY --exec g.version -rge \
+    grass --tmp-project XY --exec g.version -rge \
     && pdal --version \
-    && python3 --version
+    && python --version
 
 # Data workdir
 WORKDIR /grassdb

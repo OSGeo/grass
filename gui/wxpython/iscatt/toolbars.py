@@ -13,6 +13,7 @@ This program is free software under the GNU General Public License
 
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
+
 import wx
 
 from icons.icon import MetaIcon
@@ -68,7 +69,8 @@ class MainToolbar(BaseToolbar):
             "zoomExtent": MetaIcon(
                 img="zoom-extent",
                 label=_(
-                    "Zoom to scatter plot data extend mode (click on scatter plot for zooming to extend)"
+                    "Zoom to scatter plot data extend mode (click on scatter plot for "
+                    "zooming to extend)"
                 ),
             ),
             "cats_mgr": MetaIcon(

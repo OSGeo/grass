@@ -12,7 +12,7 @@ convert x,y image coordinates to standard map coordinates for each pixel in
 the image.  The result is an image with a standard map coordinate system,
 compensated for relief distortions and photographic tilt. Upon completion of
 the program the rectified image is deposited in a previously targeted GRASS
-LOCATION.
+project (location).
 <p>
 Images can be resampled with various different interpolation methods:
 nearest neighbor assignment, bilinear and bicubic interpolation. The
@@ -24,7 +24,7 @@ The process may take an hour or more depending on the size of the image,
 the speed of the computer, the number files, and the size and resolution
 of the selected window.
 <p>
-The rectified image will be located in the target LOCATION when the program
+The rectified image will be located in the target project when the program
 is completed. The original unrectified files are not modified or removed.
 <p>
 The optional <em>angle</em> output holds the camera angle in degrees to
@@ -57,13 +57,13 @@ The next prompt will ask you whether a camera angle map should be
 produced and if yes, what should be its name.
 <p>
 After that you are asked if overwriting existing maps in the target
-location and mapset should be allowed.
+project and mapset should be allowed.
 <p>
 The next prompt asks you to select one of two windows:
 <p>
 <pre>
       Please select one of the following options
-      1.   Use the current window in the target location
+      1.   Use the current window in the target project
       2.   Determine the smallest window which covers the image
       &gt;
 </pre>
@@ -73,7 +73,7 @@ If you choose option 2, you can also specify a desired target resolution.
 <em>i.photo.rectify</em> will only rectify that portion of the
 image that occurs within the chosen window.  Only that portion will be
 relocated in the target database. It is therefore important to check the
-current window in the target LOCATION if choice number one is selected.
+current window in the target project if choice number one is selected.
 <p>
 Next you are asked to select an interpolation method.
 <pre>

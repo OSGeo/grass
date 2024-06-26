@@ -1234,7 +1234,8 @@ class TestsuiteDirReporter:
         return row
 
     def report_for_dirs(self, root, directories):
-        # TODO: this will need chanages according to potential changes in absolute/relative paths
+        # TODO: this will need changes according to potential changes in
+        # absolute/relative paths
 
         page_name = os.path.join(root, self.main_page_name)
         page = open(page_name, "w")
