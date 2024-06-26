@@ -83,6 +83,7 @@ from startup.guiutils import (
     create_location_interactively,
 )
 from grass.grassdb.checks import is_first_time_user
+from grass.grassdb.history import Status
 
 
 class GMFrame(wx.Frame):
@@ -586,7 +587,7 @@ class GMFrame(wx.Frame):
                 return pgnum_dict
             return None
 
-        mapdisplay.canCloseDisplayCallback = CanCloseDisplay
+        mapdisplay.canCloseCallback = CanCloseDisplay
 
         # bind various events
         mapdisplay.BindToFrame(
@@ -595,13 +596,13 @@ class GMFrame(wx.Frame):
         )
 
         mapdisplay.starting3dMode.connect(
-            lambda firstTime, mapDisplayPage=self.currentPage: self._onMapDisplayStarting3dMode(
-                mapDisplayPage
+            lambda firstTime, mapDisplayPage=self.currentPage: (
+                self._onMapDisplayStarting3dMode(mapDisplayPage)
             )
         )
         mapdisplay.starting3dMode.connect(self.AddNvizTools)
         mapdisplay.ending3dMode.connect(self.RemoveNvizTools)
-        mapdisplay.closingDisplay.connect(self._closePageNoEvent)
+        mapdisplay.closingPage.connect(self._closePageNoEvent)
 
         # set default properties
         mapdisplay.SetProperties(
@@ -775,9 +776,9 @@ class GMFrame(wx.Frame):
 
     def OnGModeler(self, event=None, cmd=None):
         """Launch Graphical Modeler. See OnIClass documentation"""
-        from gmodeler.frame import ModelFrame
+        from gmodeler.frame import ModelerFrame
 
-        win = ModelFrame(parent=self, giface=self._giface)
+        win = ModelerFrame(parent=self, giface=self._giface)
         win.CentreOnScreen()
         win.Show()
 
@@ -947,8 +948,9 @@ class GMFrame(wx.Frame):
 
     def RunSpecialCmd(self, command):
         """Run command from command line, check for GUI wrappers"""
+        result = True
         if re.compile(r"^d\..*").search(command[0]):
-            self.RunDisplayCmd(command)
+            result = self.RunDisplayCmd(command)
         elif re.compile(r"r[3]?\.mapcalc").search(command[0]):
             self.OnMapCalculator(event=None, cmd=command)
         elif command[0] == "i.group":
@@ -968,15 +970,21 @@ class GMFrame(wx.Frame):
         elif command[0] == "cd":
             self.OnChangeCWD(event=None, cmd=command)
         else:
+            result = False
             raise ValueError(
                 "Layer Manager special command (%s)"
                 " not supported." % " ".join(command)
             )
+        if result:
+            self._gconsole.UpdateHistory(status=Status.SUCCESS)
+        else:
+            self._gconsole.UpdateHistory(status=Status.FAILED)
 
     def RunDisplayCmd(self, command):
         """Handles display commands.
 
         :param command: command in a list
+        :return int: False if failed, True if succcess
         """
         if not self.currentPage:
             self.NewDisplay(show=True)
@@ -984,7 +992,7 @@ class GMFrame(wx.Frame):
         if command[0] == "d.erase":
             # rest of d.erase is ignored
             self.GetLayerTree().DeleteAllLayers()
-            return
+            return False
         try:
             # display GRASS commands
             layertype = command2ltype[command[0]]
@@ -997,7 +1005,7 @@ class GMFrame(wx.Frame):
                 )
                 % command[0],
             )
-            return
+            return False
 
         if layertype == "barscale":
             if len(command) > 1:
@@ -1051,6 +1059,7 @@ class GMFrame(wx.Frame):
                 lname=lname,
                 lcmd=command,
             )
+        return True
 
     def GetLayerNotebook(self):
         """Get Layers Notebook"""
@@ -2129,8 +2138,13 @@ class GMFrame(wx.Frame):
             dlg.Destroy()
 
         # region = tree.GetMap().GetCurrentRegion()
-        # if region['cells'] > 10000:
-        #   GMessage(message = "Cell values can only be displayed for regions of < 10,000 cells.", parent = self)
+        # if region["cells"] > 10000:
+        # GMessage(
+        #     message=(
+        #     "Cell values can only be displayed for regions of < 10,000 cells."
+        #     ),
+        #     parent=self,
+        # )
         self.GetLayerTree().AddLayer("rastnum")
 
     def OnAddCommand(self, event):
@@ -2198,8 +2212,7 @@ class GMFrame(wx.Frame):
         # redraw map if auto-rendering is enabled
         # seems little too low level for this place
         # no redraw when Render is unchecked
-        if mapdisp.IsAutoRendered():
-            mapdisp.GetMapWindow().UpdateMap(render=False)
+        mapdisp.GetMapWindow().UpdateMap(render=False)
 
     def OnDeleteLayer(self, event):
         """Remove selected map layer from the current layer Tree"""

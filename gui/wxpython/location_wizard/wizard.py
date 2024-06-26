@@ -33,6 +33,7 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 @author Hamish Bowman (planetary ellipsoids)
 """
+
 import os
 import locale
 import functools
@@ -2299,7 +2300,7 @@ class SummaryPage(TitledPage):
         # print coordsys,proj4string
         if coordsys in ("proj", "epsg", "iau", "wkt", "file"):
             extra_opts = {}
-            extra_opts["location"] = "location"
+            extra_opts["project"] = "project"
             extra_opts["getErrorMsg"] = True
             extra_opts["read"] = True
 
@@ -2519,7 +2520,7 @@ class LocationWizard(wx.Object):
                 self.grassdatabase = self.startpage.grassdatabase
                 self.georeffile = self.filepage.georeffile
                 # FIXME here was code for setting default region, what for is this if:
-                # if self.altdb == False:
+                # if self.altdb is False:
 
             else:  # -> error
                 self.wizard.Destroy()

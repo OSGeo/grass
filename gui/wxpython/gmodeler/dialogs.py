@@ -35,7 +35,6 @@ from core.gcmd import GError
 from gui_core.dialogs import SimpleDialog, MapLayersDialogForModeler
 from gui_core.prompt import GPromptSTC
 from gui_core.gselect import Select, ElementSelect
-from gmodeler.model import *
 from lmgr.menudata import LayerManagerMenuData
 from gui_core.wrap import (
     Button,
@@ -47,6 +46,7 @@ from gui_core.wrap import (
     NewId,
     CheckListCtrlMixin,
 )
+from gmodeler.model import ModelData, ModelAction, ModelCondition
 
 
 class ModelDataDialog(SimpleDialog):
@@ -412,12 +412,10 @@ class ModelRelationDialog(wx.Dialog):
             flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
             border=5,
         )
-        mainSizer.Add(
-            btnSizer, proportion=0, flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5
-        )
+        mainSizer.Add(btnSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 
         self.panel.SetSizer(mainSizer)
-        mainSizer.Fit(self.panel)
+        mainSizer.Fit(self)
 
         self.Layout()
         self.SetSize(self.GetBestSize())
@@ -885,7 +883,6 @@ class VariableListCtrl(ModelListCtrl):
         """Finish editing of item"""
         itemIndex = event.GetIndex()
         columnIndex = event.GetColumn()
-        nameOld = self.GetItem(itemIndex, 0).GetText()
 
         if columnIndex == 0:  # TODO
             event.Veto()

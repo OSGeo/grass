@@ -36,7 +36,7 @@ footer_index = string.Template(
 
 :doc:`Main Page <index>` - :doc:`${INDEXNAMECAP} index <${INDEXNAME}>` - :doc:`Full index <full_index>`
 2003-${YEAR} `GRASS Development Team <https://grass.osgeo.org>`_
-"""
+"""  # noqa: E501
 )
 
 footer_noindex = string.Template(
@@ -63,7 +63,7 @@ replacement = {
     "`* `": "`",
     ">`_*": ">`_",
     ">`_,*": ">`_,",
-    '``*\ "': '``"',
+    r'``*\ "': '``"',
     "***": "**",
 }
 

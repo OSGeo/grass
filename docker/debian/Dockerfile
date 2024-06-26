@@ -1,7 +1,5 @@
-FROM debian:stable@sha256:e8f0d90c2b8a7b8040aa032b166866a93431bb221494d938a826dd7ad3a476bd
-# currently Debian 12
+FROM debian:bookworm-20240612-slim@sha256:67f3931ad8cb1967beec602d8c0506af1e37e8d73c2a0b38b181ec5d8560d395
 
-# docker run -it --rm debian:stable bash
 # apt-get update && apt-get install lsb-release -y && lsb_release -a
 
 LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann"
@@ -11,7 +9,8 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # define versions to be used (PDAL is not available on Debian, so we compile it here)
 # https://github.com/PDAL/PDAL/releases
-ARG PDAL_VERSION=2.5.5
+# renovate: datasource=github-tags depName=PDAL/PDAL
+ARG PDAL_VERSION=2.7.1
 
 SHELL ["/bin/bash", "-c"]
 
@@ -61,6 +60,7 @@ RUN apt-get update && apt-get upgrade -y && \
     netcdf-bin \
     proj-bin \
     proj-data \
+    python-is-python3 \
     python3 \
     python3-dateutil \
     python3-dev \
@@ -150,7 +150,6 @@ ENV CFLAGS "$MYCFLAGS"
 ENV CXXFLAGS "$MYCXXFLAGS"
 
 # Configure compile and install GRASS GIS
-ENV GRASS_PYTHON=/usr/bin/python3
 ENV NUMTHREADS=4
 RUN make distclean || echo "nothing to clean"
 RUN /src/grass_build/configure \
@@ -194,12 +193,12 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK 1
 ENV PROJ_NETWORK=ON
 
 # Create generic GRASS GIS lib name regardless of version number
-RUN ln -sf /usr/local/grass84 /usr/local/grass
+RUN ln -sf /usr/local/grass85 /usr/local/grass
 
 # show GRASS GIS, PROJ, GDAL etc versions
-RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
+RUN grass --tmp-project EPSG:4326 --exec g.version -rge && \
     pdal --version && \
-    python3 --version
+    python --version
 
 # Reduce the image size
 RUN apt-get autoremove -y
@@ -208,24 +207,23 @@ RUN rm -r /src/grass_build/.git
 
 WORKDIR /scripts
 
-# install external GRASS GIS session Python API
-RUN pip3 install grass-session --break-system-packages
-
-# add GRASS GIS envs for python usage
-ENV GISBASE "/usr/local/grass/"
-ENV GRASSBIN "/usr/local/bin/grass"
-ENV PYTHONPATH "${PYTHONPATH}:$GISBASE/etc/python/"
-ENV LD_LIBRARY_PATH "$LD_LIBRARY_PATH:$GISBASE/lib"
+# enable GRASS GIS Python session support
+## grass --config python-path
+ENV PYTHONPATH "/usr/local/grass/etc/python:${PYTHONPATH}"
+# enable GRASS GIS ctypes imports
+## grass --config path
+ENV LD_LIBRARY_PATH "/usr/local/grass/lib:$LD_LIBRARY_PATH"
 
 WORKDIR /tmp
 COPY docker/testdata/simple.laz .
 WORKDIR /scripts
 COPY docker/testdata/test_grass_session.py .
-## just scan the LAZ file
-# Not yet ready for GRASS GIS 8:
-#RUN /usr/bin/python3 /scripts/test_grass_session.py
+## run GRASS GIS python session and scan the test LAZ file
+RUN python /scripts/test_grass_session.py
+RUN rm -rf /tmp/grasstest_epsg_25832
 # test LAZ file
-RUN grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g
+RUN grass --tmp-project EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g
 
 WORKDIR /grassdb
 VOLUME /grassdb
+CMD ["$GRASSBIN", "--version"]

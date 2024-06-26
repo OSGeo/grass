@@ -12,7 +12,6 @@ COPYRIGHT: (C) 2015 Vaclav Petras, and by the GRASS Development Team
            for details.
 """
 
-
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 

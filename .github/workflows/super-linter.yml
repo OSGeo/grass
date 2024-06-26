@@ -7,9 +7,6 @@ on:
       - main
       - releasebranch_*
   pull_request:
-    branches:
-      - main
-      - releasebranch_*
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
@@ -28,17 +25,21 @@ jobs:
       statuses: write
 
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           # super-linter needs the full git history to get the
           # list of files that changed across commits
           fetch-depth: 0
       - name: Lint code base
-        uses: super-linter/super-linter/slim@e0fc164bba85f4b58c6cd17ba1dfd435d01e8a06 # v6.3.0
+        uses: super-linter/super-linter/slim@88ea3923a7e1f89dd485d079f6eb5f5e8f937589 # v6.6.0
         env:
           DEFAULT_BRANCH: main
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # By default, super-linter expect all linters to have their config
+          # files inside .github/linters.
+          # Setting it to the root of the repo for easier configuration here.
+          LINTER_RULES_PATH: .
           # Listed but commented out linters would be nice to have.
           # (see https://github.com/github/super-linter#environment-variables)
           #
@@ -55,3 +56,5 @@ jobs:
           VALIDATE_POWERSHELL: true
           # VALIDATE_XML: true
           VALIDATE_YAML: true
+          MARKDOWN_CONFIG_FILE: .markdownlint.yml
+          YAML_CONFIG_FILE: .yamllint
