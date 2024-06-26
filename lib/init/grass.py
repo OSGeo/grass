@@ -381,14 +381,23 @@ def help_message(default_gui):
     sys.stderr.write(s)
 
 
-def get_grass_config_dir():
-    """Get/Create GRASS configuration directory."""
-    from grass.utils.config import get_grass_config_dir, ConfigError
+def create_grass_config_dir():
+    """Create configuration directory
+
+    Determines path of GRASS GIS user configuration directory and creates
+    it if it does not exist.
+
+    Configuration directory is for example used for grass env file
+    (the one which caries mapset settings from session to session).
+    """
+    from grass.app.runtime import get_grass_config_dir
 
     try:
-        directory = get_grass_config_dir()
-    except ConfigError as e:
-        fatal(e)
+        directory = get_grass_config_dir(
+            GRASS_VERSION_MAJOR, GRASS_VERSION_MINOR, os.environ
+        )
+    except (KeyError, IsADirectoryError) as e:
+        fatal(f"{e}")
 
     if not os.path.isdir(directory):
         try:
@@ -2217,22 +2226,12 @@ def main():
 
     Only few things are set on the module level.
     """
-    # Set GRASS version number for R interface etc
-    # (must be an env var for MS Windows)
-    os.environ["GRASS_VERSION"] = GRASS_VERSION
-    # Set PATH, PYTHONPATH, ... (must be called before get_grass_config_dir())
-    set_paths()
-    from grass.utils.config import get_grass_config_dir, ConfigError
-
-    try:
-        grass_config_dir = get_grass_config_dir()
-    except ConfigError as e:
-        sys.exit("ERROR: {}".format(e))
-    set_addon_paths(grass_config_dir)
     # Set language
     # This has to be called before any _() function call!
     # Subsequent functions are using _() calls and
     # thus must be called only after Language has been set.
+    find_grass_python_package()
+    grass_config_dir = create_grass_config_dir()
     set_language(grass_config_dir)
 
     # Set default GUI
@@ -2245,6 +2244,10 @@ def main():
         " Use 'g.gisenv set=\"DEBUG=[0-5]\"'"
         " to turn GRASS GIS debug mode on if you wish to do so."
     )
+
+    # Set GRASS version number for R interface etc
+    # (must be an env var for MS Windows)
+    os.environ["GRASS_VERSION"] = GRASS_VERSION
 
     # Set the GIS_LOCK variable to current process id
     gis_lock = str(os.getpid())

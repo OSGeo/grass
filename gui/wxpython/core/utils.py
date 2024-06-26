@@ -23,7 +23,7 @@ import operator
 
 from grass.script import core as grass
 from grass.script import task as gtask
-from grass.utils.config import get_grass_config_dir
+from grass.app.runtime import get_grass_config_dir
 
 from core.gcmd import RunCommand
 from core.debug import Debug
@@ -800,7 +800,8 @@ vectorFormatExtension = {
 
 def GetSettingsPath():
     """Get full path to the settings directory"""
-    return get_grass_config_dir()
+    version_major, version_minor, _ = grass.version()["version"].split(".")
+    return get_grass_config_dir(version_major, version_minor, os.environ)
 
 
 def StoreEnvVariable(key, value=None, envFile=None):
