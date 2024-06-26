@@ -89,10 +89,21 @@ def main(ext):
 
 
 if __name__ == "__main__":
-    from build_html import write_html_footer as write_footer, grass_version, header1_tmpl, header_graphical_index_tmpl, html_dir as path
+    from build_html import (
+        write_html_footer as write_footer,
+        grass_version,
+        header1_tmpl,
+        header_graphical_index_tmpl,
+        html_dir as path,
+    )
 
-    main('html')
+    main("html")
 
-    from build_md import write_md_footer as write_footer, grass_version, header_graphical_index_tmpl, md_dir as path
+    from build_md import (
+        write_md_footer as write_footer,
+        grass_version,
+        header_graphical_index_tmpl,
+        md_dir as path,
+    )
 
-    main('md')
+    main("md")
