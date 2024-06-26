@@ -13,6 +13,11 @@ on:
       - .github/**
       - utils/**
 
+concurrency:
+  group: >-
+    ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
 env:
   OUT_DIR: ${{ github.workspace }}/../grass_outdir
   GRASS: grass-${{ github.ref_name }}
