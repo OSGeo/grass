@@ -103,4 +103,4 @@ if __name__ == "__main__":
         get_desc,
     )
 
-    build_full_index('md')
+    build_full_index("md")
