@@ -3,9 +3,10 @@
  * MODULE:       db.columns
  * AUTHOR(S):    Radim Blazek <radim.blazek gmail.com> (original contributor)
  *               Glynn Clements <glynn gclements.plus.com>,
- *               Markus Neteler <neteler itc.it>
+ *               Markus Neteler <neteler itc.it>,
+ *               Huidae Cho <grass4u gmail.com>
  * PURPOSE:      list the column names for a table
- * COPYRIGHT:    (C) 2002-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2023 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -14,13 +15,14 @@
  *****************************************************************************/
 
 #include <stdlib.h>
+#include <string.h>
 
 #include <grass/gis.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
 struct {
-    char *driver, *database, *table;
+    char *driver, *database, *table, *separator, **exclude;
 } parms;
 
 /* function prototypes */
@@ -33,6 +35,7 @@ int main(int argc, char **argv)
     dbTable *table;
     dbString table_name;
     int col, ncols;
+    int first = 1;
 
     parse_command_line(argc, argv);
 
@@ -61,16 +64,29 @@ int main(int argc, char **argv)
     db_shutdown_driver(driver);
 
     ncols = db_get_table_number_of_columns(table);
-    for (col = 0; col < ncols; col++)
-        fprintf(stdout, "%s\n",
-                db_get_column_name(db_get_table_column(table, col)));
+    for (col = 0; col < ncols; col++) {
+        const char *colname =
+            db_get_column_name(db_get_table_column(table, col));
+        if (parms.exclude) {
+            char **p;
+            for (p = parms.exclude; *p && strcmp(colname, *p); p++)
+                ;
+            if (*p)
+                continue;
+        }
+        if (!first)
+            fprintf(stdout, "%s", parms.separator);
+        fprintf(stdout, "%s", colname);
+        first = 0;
+    }
+    fprintf(stdout, "\n");
 
     exit(EXIT_SUCCESS);
 }
 
 static void parse_command_line(int argc, char **argv)
 {
-    struct Option *driver, *database, *table;
+    struct Option *driver, *database, *table, *separator, *exclude;
     struct GModule *module;
     const char *drv, *db;
 
@@ -89,6 +105,14 @@ static void parse_command_line(int argc, char **argv)
     if ((db = db_get_default_database_name()))
         database->answer = (char *)db;
 
+    separator = G_define_standard_option(G_OPT_F_SEP);
+    separator->answer = "newline";
+
+    exclude = G_define_standard_option(G_OPT_DB_COLUMN);
+    exclude->key = "exclude";
+    exclude->description = "Columns to exclude";
+    exclude->multiple = YES;
+
     /* Set description */
     module = G_define_module();
     G_add_keyword(_("database"));
@@ -101,4 +125,6 @@ static void parse_command_line(int argc, char **argv)
     parms.driver = driver->answer;
     parms.database = database->answer;
     parms.table = table->answer;
+    parms.separator = G_option_to_separator(separator);
+    parms.exclude = exclude->answers;
 }
