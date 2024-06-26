@@ -126,7 +126,9 @@ static char *icon_files(void)
 
     closedir(dir);
 
-    qsort(list, count, sizeof(char *), cmp);
+    if (list != NULL) {
+        qsort(list, count, sizeof(char *), cmp);
+    }
 
     if (len > 0) {
         ret = G_malloc((len + 1) * sizeof(char)); /* \0 */
@@ -631,7 +633,7 @@ int main(int argc, char **argv)
         in[i].value = 0.0;
         in[i].num_pnts = 0;
 
-        while ((err = fscanf(in[i].fp, "%f", &in[i].value)) != EOF) {
+        while (fscanf(in[i].fp, "%f", &in[i].value) != EOF) {
             if (scale_y_values)
                 in[i].value *= y_scale;
             in[i].num_pnts++;

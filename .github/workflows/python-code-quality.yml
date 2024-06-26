@@ -30,7 +30,7 @@ jobs:
       # renovate: datasource=pypi depName=black
       BLACK_VERSION: "24.4.2"
       # renovate: datasource=pypi depName=flake8
-      FLAKE8_VERSION: "5.0.4"
+      FLAKE8_VERSION: "7.1.0"
       # renovate: datasource=pypi depName=pylint
       PYLINT_VERSION: "2.12.2"
       # renovate: datasource=pypi depName=bandit
@@ -87,9 +87,13 @@ jobs:
         run: |
           pip install -r .github/workflows/python_requirements.txt
           pip install -r .github/workflows/optional_requirements.txt
-          pip install flake8==${{ env.FLAKE8_VERSION }}
-          pip install pylint==${{ env.PYLINT_VERSION }} pytest-github-actions-annotate-failures
-          pip install bandit[sarif]==${{ env.BANDIT_VERSION }}
+          pip install --user pipx
+          pipx ensurepath
+          pipx install flake8==${{ env.FLAKE8_VERSION }}
+          pipx install pylint==${{ env.PYLINT_VERSION }}
+          pipx inject pylint -r .github/workflows/python_requirements.txt -r .github/workflows/optional_requirements.txt
+          # The extra toml is only needed before Python 3.11
+          pipx install bandit[sarif,toml]==${{ env.BANDIT_VERSION }}
 
       - name: Run Flake8
         run: |
@@ -146,7 +150,8 @@ jobs:
 
       - name: Run Pylint on other files using pytest
         run: |
-          pip install pytest==7.4.4 pytest-pylint==0.19
+          pipx inject --include-apps pylint pytest==7.4.4
+          pipx inject pylint pytest-pylint==0.19 pytest-github-actions-annotate-failures
           echo "::warning file=.github/workflows/python-code-quality.yml,line=149,col=42,endColumn=48::\
             Temporarily downgraded pytest-pylint and pytest to allow merging other PRs.\
             The errors reported with a newer version seem legitimite and should be fixed \
