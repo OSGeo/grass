@@ -12,7 +12,10 @@ DSTFILES := \
 	$(HTMLDIR)/grass_icon.png \
 	$(HTMLDIR)/jquery.fixedheadertable.min.js \
 	$(HTMLDIR)/parser_standard_options.css \
-	$(HTMLDIR)/parser_standard_options.js
+	$(HTMLDIR)/parser_standard_options.js \
+	$(MDDIR)/mkdocs.yml \
+	$(MDDIR)/source/grass_logo.png \
+	$(MDDIR)/source/grassdocs.css
 
 categories = \
 	d:display \
@@ -34,7 +37,12 @@ IDXSRC = full_index index topics keywords graphical_index manual_gallery class_g
 
 INDICES := $(patsubst %,$(HTMLDIR)/%.html,$(IDXSRC))
 
+# TODO: rename to INDICES_MD
+IDXSRC_MD = index
+INDICES_MD := $(patsubst %,$(MDDIR)/source/%.md,$(IDXSRC_MD))
+
 ALL_HTML := $(wildcard $(HTMLDIR)/*.*.html)
+ALL_MD := $(wildcard $(MDDIR)/source/*.*.html)
 
 ifneq (@(type sphinx-build2 > /dev/null),)
 SPHINXBUILD   = sphinx-build2
@@ -48,6 +56,8 @@ default: $(DSTFILES)
 	$(MAKE) $(INDICES)
 	$(call build,check)
 	$(MAKE) manpages
+	$(MAKE) $(INDICES_MD)
+	$(MAKE) build-mkdocs
 
 # This must be a separate target so that evaluation of $(MANPAGES)
 # is delayed until the indices have been generated
@@ -67,19 +77,19 @@ endef
 define build_topics
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
-	$(PYTHON) ./build_topics.py $(HTMLDIR)
+	$(PYTHON) ./build_topics.py
 endef
 
 define build_keywords
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
-	$(PYTHON) ./build_keywords.py $(HTMLDIR)
+	$(PYTHON) ./build_keywords.py
 endef
 
 define build_graphical_index
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
-	$(PYTHON) ./build_graphical_index.py $(HTMLDIR)
+	$(PYTHON) ./build_graphical_index.py
 endef
 
 define build_manual_gallery
@@ -97,6 +107,8 @@ endef
 
 $(HTMLDIR)/topics.html: $(ALL_HTML)
 
+$(MDDIR)/source/topics.md: $(ALL_MD)
+
 define build_class_graphical
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
@@ -107,7 +119,15 @@ $(HTMLDIR)/topics.html: $(ALL_HTML) build_topics.py
 	$(call build_topics)
 	touch $@
 
+$(MDDIR)/source/topics.md: $(ALL_MD) build_topics.py
+	$(call build_topics)
+	touch $@
+
 $(HTMLDIR)/full_index.html: $(ALL_HTML) build_full_index.py build_html.py
+	$(call build,full_index)
+	touch $@
+
+$(MDDIR)/source/full_index.md: $(ALL_MD) build_full_index.py build_html.py
 	$(call build,full_index)
 	touch $@
 
@@ -115,12 +135,23 @@ $(HTMLDIR)/index.html: build_index.py build_html.py
 	$(call build,index)
 	touch $@
 
+$(MDDIR)/source/index.md: build_index.py build_md.py
+	$(call build,index)
+	touch $@
+
 $(HTMLDIR)/keywords.html: $(ALL_HTML)
 	$(call build_keywords)
 	touch $@
 
+$(MDDIR)/source/keywords.md: $(ALL_MD)
+	$(call build_keywords)
+	touch $@
 
 $(HTMLDIR)/graphical_index.html: $(ALL_HTML)
+	$(call build_graphical_index)
+	touch $@
+
+$(MDDIR)/source/graphical_index.md: $(ALL_MD)
 	$(call build_graphical_index)
 	touch $@
 
@@ -150,6 +181,9 @@ $(HTMLDIR)/grassdocs.css: grassdocs.css
 $(HTMLDIR)/grass_logo.png: grass_logo.png
 	$(INSTALL_DATA) $< $@
 
+$(MDDIR)/source/grass_logo.png: grass_logo.png
+	$(INSTALL_DATA) $< $@
+
 $(HTMLDIR)/hamburger_menu.svg: hamburger_menu.svg
 	$(INSTALL_DATA) $< $@
 
@@ -167,3 +201,12 @@ $(HTMLDIR)/parser_standard_options.js: parser_standard_options.js
 
 $(HTMLDIR)/parser_standard_options.css: parser_standard_options.css
 	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/mkdocs.yml: mkdocs/mkdocs.yml
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/grassdocs.css: mkdocs/grassdocs.css
+	$(INSTALL_DATA) $< $@
+
+build-mkdocs:
+	@cd $(MDDIR) ; mkdocs build
