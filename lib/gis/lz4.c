@@ -204,7 +204,7 @@ typedef size_t uptrval; /* generally true, except OpenVMS-64 */
 #if defined(__x86_64__)
 typedef U64 reg_t; /* 64-bits in x32 mode */
 #else
-typedef size_t reg_t;   /* 32-bits in x32 mode */
+typedef size_t reg_t; /* 32-bits in x32 mode */
 #endif
 
 /*-************************************

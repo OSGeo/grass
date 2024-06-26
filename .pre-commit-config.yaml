@@ -3,7 +3,7 @@ ci:
   skip: [flake8]
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v4.6.0
     hooks:
       - id: trailing-whitespace
         exclude: |
@@ -36,27 +36,29 @@ repos:
                 lib/fonts/fonts/.*
           )
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.33.0
+    rev: v0.41.0
     hooks:
-      - id: markdownlint
-  - repo: https://github.com/psf/black
-    rev: 23.1.0
+      - id: markdownlint-fix
+  # Using this mirror lets us use mypyc-compiled black, which is about 2x faster
+  - repo: https://github.com/psf/black-pre-commit-mirror
+    rev: 24.4.2
     hooks:
-      - id: black
+      - id: black-jupyter
         exclude: |
           (?x)^(
                 python/libgrass_interface_generator/
           )
   - repo: https://github.com/pycqa/flake8
-    rev: 3.9.2
+    rev: 7.1.0
     hooks:
       - id: flake8
         exclude: |
           (?x)^(
-                python/libgrass_interface_generator/
+                python/libgrass_interface_generator/|
+                .*/testsuite/.*
           )
   - repo: https://github.com/pre-commit/mirrors-clang-format
-    rev: v15.0.6
+    rev: v17.0.6
     hooks:
       - id: clang-format
         types_or: [c, c++, javascript, json, objective-c]
@@ -66,10 +68,6 @@ repos:
                 .*\.ipynb$
           )
   - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.29.0
+    rev: v1.35.1
     hooks:
       - id: yamllint
-        args: [--format, parsable, --strict, -d,
-               '{extends: default, rules: {truthy: disable,
-                 line-length: {max: 120, allow-non-breakable-words: true},
-                 comments: {min-spaces-from-content: 1}}}']

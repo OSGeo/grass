@@ -97,9 +97,9 @@ The most critical user-provided settings are the interpolation/gap
 filling method (<b>mode</b>) and the maximum distance, up to which
 <em>r.fill.stats</em> will scan for cells with values (<b>distance</b>).
 The distance can be expressed as a number of cells (default) or in the
-current GRASS location's units (if the <b>-m</b> flag is given). The latter
-are typically meters, but can be any other units of a <em>planar</em>
-coordinate system.
+current coordinate reference system's units (if the <b>-m</b> flag is given).
+The latter are typically meters, but can be any other units of a
+<em>planar</em> coordinate system.
 
 <p>
 
@@ -466,7 +466,7 @@ d.mon stop=cairo
 <h3>Outlier removal and gap-filling of SRTM elevation data</h3>
 
 In this example, the SRTM elevation map in the
-North Carolina sample dataset location is filtered for outlier
+North Carolina sample dataset is filtered for outlier
 elevation values; missing pixels are then re-interpolated to obtain
 a complete elevation map:
 

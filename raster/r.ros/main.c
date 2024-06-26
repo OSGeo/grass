@@ -76,7 +76,7 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-#define DATA(map, r, c) (map)[(r)*ncols + (c)]
+#define DATA(map, r, c) (map)[(r) * ncols + (c)]
 
 /*measurements of the 13 fuel models, input of Rothermel equation (1972) */
 float WO[4][14] = {{0, 0.034, 0.092, 0.138, 0.230, 0.046, 0.069, 0.052, 0.069,

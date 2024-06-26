@@ -851,7 +851,13 @@ class BufferedMapWindow(MapWindowBase, Window):
     def IsAlwaysRenderEnabled(self):
         return self.alwaysRender
 
-    def UpdateMap(self, render=True, renderVector=True, delay=0.0):
+    def UpdateMap(
+        self,
+        render=True,
+        renderVector=True,
+        delay=0.0,
+        reRenderTool=False,
+    ):
         """Updates the canvas anytime there is a change to the
         underlying images or to the geometry of the canvas.
 
@@ -866,9 +872,14 @@ class BufferedMapWindow(MapWindowBase, Window):
             giface
 
         :param render: re-render map composition
-        :param renderVector: re-render vector map layer enabled for editing (used for digitizer)
+        :param renderVector: re-render vector map layer enabled for editing (used for
+                             digitizer)
         :param delay: defines time threshold  in seconds for postponing
                       rendering to merge more update requests.
+        :param reRenderTool bool: enable re-render map if True, when
+                                  auto re-render map is disabled and
+                                  Display map or Render map tool is
+                                  activated from the Map Display toolbar
 
         If another request comes within the limit, rendering is delayed
         again. Next delay limit is chosen according to the smallest
@@ -886,6 +897,9 @@ class BufferedMapWindow(MapWindowBase, Window):
         period and at least one request has argument set for True, map
         will be updated with the True value of the argument.
         """
+
+        if not self._properties.autoRender and not reRenderTool:
+            return
 
         if self.timerRunId is None or delay < self.updDelay:
             self.updDelay = delay
@@ -1087,6 +1101,14 @@ class BufferedMapWindow(MapWindowBase, Window):
 
         :param moveto: dx,dy
         """
+        # Prevent drag map error if auto re-render map is disabled
+        # wx._core.wxAssertionError: C++ assertion
+        # "!wxMouseCapture::IsInCaptureStack(this) failed at
+        # /tmp/pip-req-build-oxkmg2wi/ext/wxWidgets/src/common/wincmn.cpp(3270) in
+        # CaptureMouse(): Recapturing the mouse in the same window?
+        if not self._properties.autoRender:
+            return
+
         dc = wx.BufferedDC(wx.ClientDC(self))
         dc.SetBackground(wx.Brush("White"))
         dc.Clear()
@@ -2254,7 +2276,8 @@ class BufferedMapWindow(MapWindowBase, Window):
                          is not defined DrawCross method is used for
                          type "point", DrawLines method for type "line",
                          DrawRectangle for "rectangle".
-        :param mapCoords: True if map coordinates should be set by user, otherwise pixels
+        :param mapCoords: True if map coordinates should be set by user, otherwise
+                          pixels
 
         :return: reference to GraphicsSet, which was added.
         """
