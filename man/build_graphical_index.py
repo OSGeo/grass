@@ -79,7 +79,8 @@ def main(ext):
             else:
                 output.write(
                     "- [![{name}]({img})]({link})".format(
-                        link=html_file, img=image, name=label)
+                        link=html_file, img=image, name=label
+                    )
                 )
 
         if ext == "html":
