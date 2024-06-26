@@ -21,7 +21,6 @@ output_name = "graphical_index"
 year = os.getenv("VERSION_DATE")
 
 
-
 def std_img_name(name):
     return "gi_{0}.jpg".format(name)
 
