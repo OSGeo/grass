@@ -18,7 +18,7 @@ struct Point {
 };
 
 void calculate_g_function(struct kdtree *kdtree, struct Point *points, int n,
-                          const char *output_file);
+                          int i, const char *output_file);
 void calculate_f_function(struct kdtree *kdtree, struct Point *points, int n,
                           const char *output_file, struct bound_box *box,
                           int num_random_points);
@@ -29,6 +29,7 @@ void calculate_l_function(struct Point *points, int n, const char *output_file);
 double euclidean_distance(const struct Point *p1, const struct Point *p2);
 void generate_random_points(struct Point *random_points, int num_random_points,
                             struct bound_box *box);
+double csr_g_value(double d, double i);
 
 int main(int argc, char *argv[])
 {
@@ -124,6 +125,14 @@ int main(int argc, char *argv[])
         }
     }
 
+    // Get bounding box
+    struct bound_box box;
+    Vect_get_map_box(&Map, &box);
+    // Calculate mean number of points per unit area (intensity)
+    double area = (box.E - box.W) * (box.N - box.S);
+    double intensity = n / area;
+    G_message(_("intensity: %f"), intensity);
+
     G_message(_("Number of points: %d"), n);
     G_message(_("Method: %s"), method);
 
@@ -134,14 +143,11 @@ int main(int argc, char *argv[])
         calculate_l_function(pts, n, output_file);
     }
     else if (strcmp(method, "f") == 0) {
-        // Get bounding box
-        struct bound_box box;
-        Vect_get_map_box(&Map, &box);
         calculate_f_function(kdtree, pts, n, output_file, &box,
                              num_random_points);
     }
     else if (strcmp(method, "g") == 0) {
-        calculate_g_function(kdtree, pts, n, output_file);
+        calculate_g_function(kdtree, pts, n, intensity, output_file);
     }
     else {
         G_fatal_error(_("Method not implemented yet"));
@@ -225,6 +231,19 @@ void generate_random_points(struct Point *random_points, int num_random_points,
         random_points[i].y = box->S + (box->N - box->S) * (double)G_drand48();
         random_points[i].id = i;
     }
+}
+
+/**
+ * Calculates the g function for a given array of points.
+ * G(d) = 1 - exp(-i * π * d^2)
+ *
+ * @param d     The distance.
+ * @param i     The intensity (points per unit area).
+ * @return The g value.
+ */
+double csr_g_value(double d, double i)
+{
+    return 1 - exp(-i * M_PI * d * d);
 }
 
 /**
@@ -352,17 +371,8 @@ void calculate_f_function(struct kdtree *kdtree, struct Point *points, int n,
     fclose(fp);
 }
 
-/**
- * Calculates the g function using a k-d tree and an array of points.
- *
- * @param kdtree The k-d tree used for nearest neighbor search.
- * @param points An array of points.
- * @param n The number of points in the array.
- * @param output_file The path to the output file where the results will be
- * written.
- */
 void calculate_g_function(struct kdtree *kdtree, struct Point *points, int n,
-                          const char *output_file)
+                          int i, const char *output_file)
 {
     G_message(_("G-Function"));
     FILE *fp = fopen(output_file, "w");
@@ -371,39 +381,40 @@ void calculate_g_function(struct kdtree *kdtree, struct Point *points, int n,
     }
 
     double max_dist = 0.0;
+    double *nearest_distances = (double *)malloc(n * sizeof(double));
+
 #pragma omp parallel for reduction(max : max_dist)
     for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            if (i != j) {
-                double dist = euclidean_distance(&points[i], &points[j]);
-                if (dist > max_dist) {
-                    max_dist = dist;
-                }
-            }
+        double coords[2] = {points[i].x, points[i].y};
+        int puid = 0;
+        double pd = 0.0;
+        kdtree_knn(
+            kdtree, coords, &puid, &pd, 2,
+            &points[i]
+                 .id); // Find the nearest neighbor excluding the point itself
+
+        nearest_distances[i] = sqrt(pd);
+        if (nearest_distances[i] > max_dist) {
+            max_dist = nearest_distances[i];
         }
     }
-    max_dist = sqrt(max_dist);
-    fprintf(fp, "Distance,G-value\n");
-    for (double d = 0; d <= max_dist; d += max_dist / 100) {
-        G_percent(d, max_dist, 4);
+    G_message(_("Max distance: %f"), max_dist);
+    double g_value_csr = 0.0;
+    fprintf(fp, "Distance,G-value,G-value-CSR\n");
+    for (double d = 0.0; d <= max_dist; d += max_dist / 100) {
         double g_value = 0.0;
 
 #pragma omp parallel for reduction(+ : g_value)
         for (int i = 0; i < n; i++) {
-            double coords[2] = {points[i].x, points[i].y};
-            int puid = 0;
-            double pd = 0.0;
-            kdtree_knn(kdtree, coords, &puid, &pd, 1, &points[i].id);
-
-            if (pd <= d) {
-                g_value += 1.0; // add the distance to the nearest neighbor
+            if (nearest_distances[i] <= d) {
+                g_value += 1.0;
             }
         }
-
-        // Normalize g-value
-        g_value /= n;
-        fprintf(fp, "%f,%f\n", d, g_value);
+        g_value_csr = csr_g_value(d, i);
+        g_value /= n; // Normalize g-value
+        fprintf(fp, "%f,%f,%f\n", d, g_value, g_value_csr);
     }
 
+    free(nearest_distances);
     fclose(fp);
 }
