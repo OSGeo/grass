@@ -189,7 +189,6 @@ class InteractiveMap:
     >>> m = InteractiveMap()
     >>> m.add_vector("streams")
     >>> m.add_raster("elevation")
-    >>> m.add_layer_control()
     >>> m.show()
     """
 
@@ -300,7 +299,6 @@ class InteractiveMap:
                 API_key=API_key,  # pylint: disable=invalid-name
             )
         # Set LayerControl default
-        self.layer_control = False
         self.layer_control_object = None
 
         self._renderer = ReprojectionRenderer(
@@ -337,11 +335,12 @@ class InteractiveMap:
         Raster(name, title=title, renderer=self._renderer, **kwargs).add_to(self.map)
 
     def add_layer_control(self, **kwargs):
-        """Add layer control to display"
+        """Add layer control to display.
 
-        Accepts keyword arguments to be passed to layer control object"""
+        A Layer Control is added by default. Call this function to customize
+        layer control object. Accepts keyword arguments to be passed to leaflet
+        layer control object"""
 
-        self.layer_control = True
         if self._folium:
             self.layer_control_object = self._folium.LayerControl(**kwargs)
         else:
@@ -355,16 +354,20 @@ class InteractiveMap:
         added after calling show()."""
 
         self.map.fit_bounds(self._renderer.get_bbox())
+
+        if not self.layer_control_object:
+            self.add_layer_control()
+
+        # folium
         if self._folium:
-            if self.layer_control:
-                self.map.add_child(self.layer_control_object)
+            self.map.add_child(self.layer_control_object)
             fig = self._folium.Figure(width=self.width, height=self.height)
             fig.add_child(self.map)
 
             return fig
+
         # ipyleaflet
-        if self.layer_control:
-            self.map.add(self.layer_control_object)
+        self.map.add(self.layer_control_object)
         return self.map
 
     def save(self, filename):

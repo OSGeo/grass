@@ -1791,24 +1791,37 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         where=None,
         order=None,
         dbif=None,
+        group=None,
         spatial_extent=None,
         spatial_relation=None,
     ):
-        """Return SQL rows of all registered maps.
+        """Return SQL rows of the selected registered maps.
 
-        In case columns are not specified, each row includes all columns
-        specified in the datatype specific view.
+        In case neither columns nor columns for grouping (group)
+        are specified, each returned row represents a dataset and
+        includes all columns specified in the datatype specific view.
+
+        If group is not None, the rows in the register tables are
+        grouped_by the list of columns in the group option. This
+        function is useful to retrieve e.g. granules from an STRDS
+        with satellite imagery where scene consists of different bands
+        that have different semantic_labels but equal an temporal extend
+        (group=["strat_time", "end_time"]).
+        The returned SQL rows of grouped output contain the selected
+        columns plus the columns in the group option. If no columns
+        are selected only the "id" column is returned. Content of the
+        selected columns is concatenated to a comma separated string.
 
         The combination of the spatial_extent and spatial_relation parameters
         can be used to return only SQL rows of maps with the given spatial
         relation to the provided spatial extent
 
-        :param columns: Columns to be selected as SQL compliant string
+        :param columns: Columns to be selected as SQL compliant string,
+                        default is "*" or "id" if group is given.
         :param where: The SQL where statement to select a subset
-                     of the registered maps without "WHERE"
-        :param order: The SQL order statement to be used to order the
-                     objects in the list without "ORDER BY"
-        :param dbif: The database interface to be used
+                      of the registered maps without "WHERE"
+        :param group: The columns to be used in the SQL GROUP BY statement
+                      as SQL compliant string without "GROUP BY"
         :param spatial_extent: Spatial extent dict and projection information
             e.g. from g.region -ug3 with GRASS GIS region keys
             "n", "s", "e", "w", "b", "t", and  "projection".
@@ -1818,9 +1831,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                         within the provided spatial extent
             "is_contained": maps that are fully within the provided spatial extent
             "contains": maps that contain (fully cover) the provided spatial extent
+        :param dbif: The database interface to be used
 
-        :return: SQL rows of all registered maps,
-                In case nothing found None is returned
+        :return: SQL rows of all registered maps grouped by the columns given in
+                the group option, in case no maps are found, None is returned
         """
 
         dbif, connection_state_changed = init_dbif(dbif)
@@ -1834,43 +1848,61 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             else:
                 map_view = self.get_new_map_instance(None).get_type() + "_view_rel_time"
 
-            if columns is not None and columns != "":
-                sql = "SELECT %s FROM %s  WHERE %s.id IN (SELECT id FROM %s)" % (
-                    columns,
-                    map_view,
-                    map_view,
-                    self.get_map_register(),
-                )
+            if group:
+                if not columns:
+                    columns = f"{group},group_concat(id,',') AS id"
+                else:
+                    columns = (
+                        group
+                        + ", "
+                        + ", ".join(
+                            [
+                                f"group_concat({column},',') AS {column}"
+                                for column in columns.split(",")
+                            ]
+                        )
+                    )
+                if order is not None and order != "":
+                    order = f"{group},{order.split(';')[0]}"
+
             else:
-                sql = "SELECT * FROM %s  WHERE %s.id IN (SELECT id FROM %s)" % (
-                    map_view,
-                    map_view,
-                    self.get_map_register(),
-                )
+                columns = columns or "*"
 
             # filter by semantic label identifier
             if self.semantic_label:
                 where = self._update_where_statement_by_semantic_label(where)
 
-            # filter by semantic label identifier
-            if spatial_extent:
+            # filter by spatial extent
+            if spatial_extent and spatial_relation:
                 where = self._update_where_statement_by_spatial_extent(
                     where, spatial_extent, spatial_relation
                 )
 
+            sql = "SELECT %s FROM %s WHERE %s.id IN (SELECT id FROM %s)" % (
+                columns,
+                map_view,
+                map_view,
+                self.get_map_register(),
+            )
+
             if where is not None and where != "":
                 sql += " AND (%s)" % (where.split(";")[0])
+            if group:
+                sql += f" GROUP BY {group}"
             if order is not None and order != "":
                 sql += " ORDER BY %s" % (order.split(";")[0])
+            sql += ";"
+
             try:
                 dbif.execute(sql, mapset=self.base.mapset)
                 rows = dbif.fetchall(mapset=self.base.mapset)
-            except:
+            except RuntimeError:
                 if connection_state_changed:
                     dbif.close()
                 self.msgr.error(
-                    _("Unable to get map ids from register table " "<%s>")
-                    % (self.get_map_register())
+                    _("Unable to get map ids from register table <{}>").format(
+                        self.get_map_register()
+                    )
                 )
                 raise
 
