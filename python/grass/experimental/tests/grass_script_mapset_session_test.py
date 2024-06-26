@@ -59,7 +59,7 @@ def test_create_overwrite(xy_session):
     """Session creates and creates again with overwrite"""
     name = "test_mapset_1"
     session_file = xy_session.env["GISRC"]
-    with experimental.MapsetSession(name, create=True) as session:
+    with experimental.MapsetSession(name, create=True, env=xy_session.env) as session:
         session_mapset = gs.read_command("g.mapset", flags="p", env=session.env).strip()
         assert name == session_mapset
         gs.run_command("r.mapcalc", expression="a = 1", env=session.env)
@@ -69,7 +69,9 @@ def test_create_overwrite(xy_session):
             .split()
         )
         assert len(rasters) == 1 and rasters[0] == "a"
-    with experimental.MapsetSession(name, create=True, overwrite=True) as session:
+    with experimental.MapsetSession(
+        name, create=True, overwrite=True, env=xy_session.env
+    ) as session:
         session_mapset = gs.read_command("g.mapset", flags="p", env=session.env).strip()
         assert name == session_mapset
         rasters = (
@@ -92,7 +94,7 @@ def test_ensure(xy_session):
     """Session ensures and does not delete"""
     name = "test_mapset_1"
     session_file = xy_session.env["GISRC"]
-    with experimental.MapsetSession(name, ensure=True) as session:
+    with experimental.MapsetSession(name, ensure=True, env=xy_session.env) as session:
         session_mapset = gs.read_command("g.mapset", flags="p", env=session.env).strip()
         assert name == session_mapset
         gs.run_command("r.mapcalc", expression="a = 1", env=session.env)
@@ -102,7 +104,7 @@ def test_ensure(xy_session):
             .split()
         )
         assert len(rasters) == 1 and rasters[0] == "a"
-    with experimental.MapsetSession(name, ensure=True) as session:
+    with experimental.MapsetSession(name, ensure=True, env=xy_session.env) as session:
         session_mapset = gs.read_command("g.mapset", flags="p", env=session.env).strip()
         assert name == session_mapset
         rasters = (
