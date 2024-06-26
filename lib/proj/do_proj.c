@@ -167,6 +167,20 @@ int get_pj_area(const struct pj_info *iproj, double *xmin, double *xmax,
                 *ymax = y[i];
         }
 
+        /* detect an attempt to reproject outside the intended area of use */
+        if (*xmin < -180 && *xmax < -180) {
+            G_warning(_("The requested region seems to be outside the area of "
+                        "use of the target CRS"));
+            *xmin += 360;
+            *xmax += 360;
+        }
+        if (*xmin > 180 && *xmax > 180) {
+            G_warning(_("The requested region seems to be outside the area of "
+                        "use of the target CRS"));
+            *xmin -= 360;
+            *xmax -= 360;
+        }
+
         /* The west longitude is generally lower than the east longitude,
          * except for areas of interest that go across the anti-meridian.
          * do not reduce global coverage to a small north-south strip
