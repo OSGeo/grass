@@ -91,7 +91,7 @@ system of the source data and the current project, they may pass the
 <p>If the user wishes to import the data with the full CRS definition,
 it is possible to have <em>v.in.lidar</em> automatically create a new project based
 on the CRS and extents of the file being read.  This is accomplished
-by passing the name to be used for the new project via the <b>location</b>
+by passing the name to be used for the new project via the <b>project</b>
 parameter.  Upon completion of the command, a new project will have been
 created (with only a PERMANENT mapset), and the vector map will have been
 imported with the indicated <b>output</b> name into the PERMANENT mapset.
@@ -116,7 +116,7 @@ available at
   v.in.lidar -p input="Serpent Mound Model LAS Data.las"
 
   # create a project with CRS information of the LAS data
-  v.in.lidar -i input="Serpent Mound Model LAS Data.las" location=Serpent_Mound
+  v.in.lidar -i input="Serpent Mound Model LAS Data.las" project=Serpent_Mound
 
   # quit and restart GRASS in the newly created project "Serpent_Mound"
   # real import of LiDAR LAS data, without topology and without attribute table

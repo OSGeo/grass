@@ -1176,13 +1176,20 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         if event.refresh:
             self.Refresh(False)
 
-    def UpdateMap(self, render=True):
+    def UpdateMap(self, render=True, reRenderTool=False):
         """Updates the canvas anytime there is a change to the
         underlying images or to the geometry of the canvas.
 
         :param render: re-render map composition
         :type render: bool
+        :param reRenderTool bool: enable re-render map if True, when
+                                  auto re-render map is disabled and
+                                  Render map tool is activated from the
+                                  Map Display toolbar
         """
+        if not self.parent.mapWindowProperties.autoRender and not reRenderTool:
+            return
+
         start = grass.clock()
 
         self.resize = False
@@ -2370,7 +2377,8 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         return -1
 
     def ReloadLayersData(self):
-        """Delete nviz data of all loaded layers and reload them from current settings"""
+        """Delete nviz data of all loaded layers and reload them from current
+        settings"""
         for item in self.layers:
             type = self.tree.GetLayerInfo(item, key="type")
             layer = self.tree.GetLayerInfo(item, key="maplayer")

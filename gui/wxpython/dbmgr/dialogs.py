@@ -14,7 +14,8 @@ This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Martin Landa <landa.martin gmail.com>
-@author Refactoring by Stepan Turek <stepan.turek seznam.cz> (GSoC 2012, mentor: Martin Landa)
+@author Refactoring by Stepan Turek <stepan.turek seznam.cz>
+        (GSoC 2012, mentor: Martin Landa)
 """
 
 import wx
@@ -237,7 +238,8 @@ class DisplayAttributesDialog(wx.Dialog):
                             GError(
                                 parent=self,
                                 message=_(
-                                    "Column <%(col)s>: Value '%(value)s' needs to be entered as %(type)s."
+                                    "Column <%(col)s>: Value '%(value)s' needs to be "
+                                    "entered as %(type)s."
                                 )
                                 % {
                                     "col": name,
@@ -324,9 +326,8 @@ class DisplayAttributesDialog(wx.Dialog):
         frame.dialogs["attributes"] = None
         if hasattr(self, "digit"):
             self.parent.digit.GetDisplay().SetSelected([])
-            if frame.IsAutoRendered():
-                self.parent.UpdateMap(render=False)
-        elif frame.IsAutoRendered():
+            self.parent.UpdateMap(render=False)
+        else:
             frame.RemoveQueryLayer()
             self.parent.UpdateMap(render=True)
         if self.IsModal():

@@ -27,6 +27,9 @@ import codecs
 import string
 import random
 import shlex
+import json
+import csv
+import io
 from tempfile import NamedTemporaryFile
 from pathlib import Path
 
@@ -128,7 +131,7 @@ def _make_unicode(val, enc):
             return decode(val, encoding=enc)
 
 
-def get_commands():
+def get_commands(*, env=None):
     """Create list of available GRASS commands to use when parsing
     string from the command line
 
@@ -141,7 +144,17 @@ def get_commands():
     ['d.barscale', 'd.colorlist', 'd.colortable', 'd.correlate', 'd.erase']
 
     """
-    gisbase = os.environ["GISBASE"]
+    if not env:
+        env = os.environ
+    gisbase = env.get("GISBASE")
+
+    # Lazy-importing to avoid circular dependencies.
+    # pylint: disable=import-outside-toplevel
+    if not gisbase:
+        from grass.script.setup import get_install_path
+
+        gisbase = get_install_path()
+
     cmd = list()
     scripts = {".py": list()} if sys.platform == "win32" else {}
 
@@ -543,26 +556,35 @@ def read_command(*args, **kwargs):
 
 def parse_command(*args, **kwargs):
     """Passes all arguments to read_command, then parses the output
-    by parse_key_val().
+    by default with parse_key_val().
 
-    Parsing function can be optionally given by <em>parse</em> parameter
+    If the command has parameter <em>format</em> and is called with
+    <em>format=json</em>, the output will be parsed into a dictionary.
+    Similarly, with <em>format=csv</em> the output will be parsed into
+    a list of lists (CSV rows).
+
+    ::
+
+        parse_command("v.db.select", ..., format="json")
+
+    Custom parsing function can be optionally given by <em>parse</em> parameter
     including its arguments, e.g.
 
     ::
 
-        parse_command(..., parse = (grass.parse_key_val, { 'sep' : ':' }))
+        parse_command(..., parse=(gs.parse_key_val, {'sep': ':'}))
 
-    or you can simply define <em>delimiter</em>
-
-    ::
-
-        parse_command(..., delimiter = ':')
+    Parameter <em>delimiter</em> is deprecated.
 
     :param args: list of unnamed arguments (see start_command() for details)
     :param kwargs: list of named arguments (see start_command() for details)
 
     :return: parsed module output
     """
+
+    def parse_csv(result):
+        return list(csv.DictReader(io.StringIO(result)))
+
     parse = None
     parse_args = {}
     if "parse" in kwargs:
@@ -570,13 +592,16 @@ def parse_command(*args, **kwargs):
             parse = kwargs["parse"][0]
             parse_args = kwargs["parse"][1]
         del kwargs["parse"]
-
-    if "delimiter" in kwargs:
-        parse_args = {"sep": kwargs["delimiter"]}
-        del kwargs["delimiter"]
+    elif kwargs.get("format") == "json":
+        parse = json.loads
+    elif kwargs.get("format") == "csv":
+        parse = parse_csv
 
     if not parse:
         parse = parse_key_val  # use default fn
+        if "delimiter" in kwargs:
+            parse_args = {"sep": kwargs["delimiter"]}
+            del kwargs["delimiter"]
 
     res = read_command(*args, **kwargs)
 
@@ -766,7 +791,7 @@ def fatal(msg, env=None):
     if raise_on_error:
         raise ScriptError(msg)
 
-    error(msg, env=None)
+    error(msg, env=env)
     sys.exit(1)
 
 
@@ -1760,11 +1785,11 @@ def create_project(
         env = os.environ.copy()
         setup_runtime_env(env=env)
 
-    if epsg or proj4 or filename or wkt:
-        # The names don't really matter here.
-        tmp_gisrc, env = create_environment(
-            mapset_path.directory, mapset_path.location, mapset_path.mapset, env=env
-        )
+    # Even g.proj and g.message need GISRC to be present.
+    # The names don't really matter here.
+    tmp_gisrc, env = create_environment(
+        mapset_path.directory, mapset_path.location, mapset_path.mapset, env=env
+    )
 
     # check if location already exists
     if Path(mapset_path.directory, mapset_path.location).exists():
