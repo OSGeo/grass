@@ -13,6 +13,7 @@ year = None
 if len(sys.argv) > 1:
     year = sys.argv[1]
 
+
 def build_full_index(ext):
     os.chdir(path)
 
