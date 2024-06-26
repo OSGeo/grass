@@ -12,7 +12,7 @@ set GDAL_DATA=%GISBASE%\share\gdal
 
 set FONTCONFIG_FILE=%GISBASE%\etc\fonts.conf
 
-set PATH=%GISBASE%\extrabin;%GISBASE%\bin;%PYTHONHOME%;%PATH%
+set PATH=%GISBASE%\extrabin;%PYTHONHOME%;%PATH%
 
 REM set RStudio temporarily to %PATH% if it exists
 
