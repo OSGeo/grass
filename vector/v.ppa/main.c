@@ -371,6 +371,17 @@ void calculate_f_function(struct kdtree *kdtree, struct Point *points, int n,
     fclose(fp);
 }
 
+/**
+ * Calculates the G-Function for a given set of points and writes the results to
+ * an output file.
+ *
+ * @param kdtree The k-d tree data structure used for nearest neighbor search.
+ * @param points An array of Point structures representing the input points.
+ * @param n The number of points in the input array.
+ * @param i The intensity of the point being processed.
+ * @param output_file The path to the output file where the results will be
+ * written.
+ */
 void calculate_g_function(struct kdtree *kdtree, struct Point *points, int n,
                           int i, const char *output_file)
 {
