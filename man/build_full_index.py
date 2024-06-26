@@ -69,8 +69,6 @@ def build_full_index(ext):
     f.close()
     replace_file(filename)
 
-if __name__ == "__main__":
-    from build_html import html_dir as path, html_files as get_files, write_html_footer as write_footer, write_html_header as write_header, grass_version, full_index_header, toc, cmd2_tmpl, to_title, check_for_desc_override, get_desc, desc1_tmpl, replace_file
 
 if __name__ == "__main__":
     from build_html import (
