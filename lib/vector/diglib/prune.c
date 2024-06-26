@@ -216,7 +216,7 @@ int dig_prune(struct line_pnts *points, double thresh)
                 nt[++it] = ij;
             }
             else
-            endseg : { /* All points are inside threshold. */
+            endseg: { /* All points are inside threshold. */
                 /* Former start becomes new end     */
                 nu[++inu] = jd;
                 if (--it < 0)
