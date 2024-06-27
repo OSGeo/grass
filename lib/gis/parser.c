@@ -1306,9 +1306,15 @@ void check_opts(void)
 {
     struct Option *opt;
     int ans;
+    bool parallel_in_c = false;
+    int i = 0;
 
     if (!st->n_opts)
         return;
+
+    /* Check if the module uses parallel processing supported by OpenMP in C */
+    while (i < st->n_keys && !parallel_in_c)
+        parallel_in_c = strcmp(st->module_info.keywords[i++], "parallel") == 0;
 
     opt = &st->first_option;
     while (opt) {
@@ -1330,8 +1336,8 @@ void check_opts(void)
         if (opt->checker)
             opt->checker(opt->answer);
 
-        /* Check if nprocs is set for OpenMP multithreading */
-        if (strcmp(opt->key, "nprocs") == 0)
+        /* Check if nprocs is set for OpenMP multithreading in C */
+        if (parallel_in_c && (strcmp(opt->key, "nprocs") == 0))
             G__setup_threads(opt->answer);
 
         opt = opt->next_opt;

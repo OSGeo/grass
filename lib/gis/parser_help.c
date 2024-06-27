@@ -344,8 +344,8 @@ void G__setup_threads(char *nprocs)
     if (threads != 1) {
         G_warning(_("GRASS GIS is not compiled with OpenMP support, parallel "
                     "computation is disabled. Only one thread will be used."));
+        threads = 1;
     }
-    threads = 1;
 #endif
 
     /* only update while nprocs is not the default value*/
