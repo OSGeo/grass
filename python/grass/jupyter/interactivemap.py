@@ -16,6 +16,7 @@
 import base64
 import json
 from .reprojection_renderer import ReprojectionRenderer
+from .utils import get_computational_region_bb
 
 
 def get_backend(interactive_map):
@@ -348,153 +349,106 @@ class InteractiveMap:
             self.layer_control_object = self._ipyleaflet.LayersControl(**kwargs)
 
     def draw_computational_region(self):
-        import ipywidgets as widgets
-        from shapely.geometry import Polygon
+        # import ipywidgets as widgets
+        # import pyproj
+        # from shapely.geometry import box
+        # from shapely.ops import transform
 
-        region_mode_button = widgets.ToggleButton(
-            icon="square",
-            value=False,
-            tooltip="Click to add computational region",
-            button_style="info",
-            layout=widgets.Layout(width="33px", margin="0px 0px 0px 0px"),
+        # region_mode_button = widgets.ToggleButton(
+        #     icon="square",
+        #     value=False,
+        #     tooltip="Click to add computational region",
+        #     button_style="info",
+        #     layout=widgets.Layout(width="33px", margin="0px 0px 0px 0px"),
+        # )
+
+        # bottom_output_widget = widgets.Output(
+        #     layout={
+        #         "width": "100%",
+        #         "max_height": "300px",
+        #         "max_width": "300px",
+        #         "overflow": "auto",
+        #     }
+        # )
+
+        # region_coordinates = {}
+        rectangle = None
+        latlon_bounds = get_computational_region_bb()
+        print(latlon_bounds)
+        latlon_bounds = get_computational_region_bb()
+        rectangle = self._ipyleaflet.Rectangle(
+            bounds=latlon_bounds,
+            color="red",
+            fill_color="red",
+            fill_opacity=0.5,
+            draggable=True,
         )
+        self.map.add_layer(rectangle)
 
-        bottom_output_widget = widgets.Output(
-            layout={
-                "width": "100%",
-                "max_height": "300px",
-                "max_width": "300px",
-                "overflow": "auto",
-            }
-        )
+        # def transform_bounds(bounds, from_crs, to_crs):
+        #     project =
+        # pyproj.Transformer.from_crs(from_crs, to_crs, always_xy=True).transform
+        #     transformed_bounds = transform(project, box(*bounds)).bounds
+        #     return [[transformed_bounds[1], transformed_bounds[0]],
+        # [transformed_bounds[3], transformed_bounds[2]]]
 
-        region_coordinates = {}
-        drawn_feature = None
-        temp_drawn_feature = None
-        bottom_output_control = None
+        # def toggle_region_mode(change):
+        #     nonlocal rectangle
 
-        draw_control = self._ipyleaflet.DrawControl(
-            rectangle={"shapeOptions": {"color": "#ff0000"}},
-            polyline={},
-            circlemarker={},
-            circle={},
-            polygon={},
-            edit=False,
-            remove=True,
-        )
+        #     if change["new"]:
+        #         if rectangle is None:
+        #             latlon_bounds = get_computational_region_bb()
+        #             rectangle = ipyleaflet.Rectangle(
+        #                 bounds=latlon_bounds,
+        #                 color="red",
+        #                 fill_color="red",
+        #                 fill_opacity=0.5,
+        #                 draggable=True
+        #             )
+        #             self.map.add_layer(rectangle)
+        #         else:
+        #             rectangle.editable = True
+        #             rectangle.draggable = True
+        #     else:
+        #         if rectangle:
+        #             rectangle.editable = False
+        #             rectangle.draggable = False
+        #             latlon_bounds =
+        # rectangle.bounds
+        #             bounds =
+        # transform_bounds([latlon_bounds[0][1], latlon_bounds[0][0],
+        # latlon_bounds[1][1], latlon_bounds[1][0]],
+        # "epsg:4326", "epsg:3857")
+        #             region_coordinates["North"] = bounds[3]
+        #             region_coordinates["South"] = bounds[1]
+        #             region_coordinates["East"] = bounds[2]
+        #             region_coordinates["West"] = bounds[0]
 
-        def handle_draw(_, action, geo_json):
-            nonlocal temp_drawn_feature, drawn_feature
+        #             with bottom_output_widget:
+        #                 bottom_output_widget.clear_output()
+        #                 print(
+        #                     f"""
+        #                     Saved Region coordinates:
+        #                     North={region_coordinates['North']},
+        #                     South={region_coordinates['South']},
+        #                     East={region_coordinates['East']},
+        #                     West={region_coordinates['West']}
+        #                     """
+        #                 )
+        #             self.map.remove_layer(rectangle)
+        #             rectangle = None
 
-            temp_drawn_feature = temp_drawn_feature
+        # region_mode_button.observe(toggle_region_mode, names="value")
 
-            if action == "created" and geo_json["geometry"]["type"] == "Polygon":
-                bounds = geo_json["geometry"]["coordinates"][0]
-                min_x, min_y = bounds[0]
-                max_x, max_y = bounds[2]
+        # region_mode_control = ipyleaflet.WidgetControl(
+        #     widget=region_mode_button, position="topright"
+        # )
+        # self.map.add_control(region_mode_control)
 
-                region_coordinates["North"] = max_y
-                region_coordinates["South"] = min_y
-                region_coordinates["East"] = max_x
-                region_coordinates["West"] = min_x
-
-                if temp_drawn_feature:
-                    self.map.remove_layer(temp_drawn_feature)
-
-                polygon = Polygon([tuple(coord) for coord in bounds])
-                geo_json_data = self._ipyleaflet.GeoJSON(
-                    data=polygon.__geo_interface__,
-                    style={"color": "red"},
-                    name="Computational Region",
-                )
-                temp_drawn_feature = geo_json_data
-
-                save_button.disabled = False
-
-            elif action == "deleted":
-                if drawn_feature:
-                    self.map.remove_layer(drawn_feature)
-                    drawn_feature = None
-
-                if temp_drawn_feature:
-                    self.map.remove_layer(temp_drawn_feature)
-                    temp_drawn_feature = None
-
-                save_button.disabled = True
-                if bottom_output_control and bottom_output_control in self.map.controls:
-                    self.map.remove_control(bottom_output_control)
-
-        draw_control.on_draw(handle_draw)
-
-        save_button = widgets.Button(
-            icon="download",
-            tooltip="Click to save computational region",
-            button_style="success",
-            disabled=True,
-            layout=widgets.Layout(width="33px", margin="0px 0px 0px 0px"),
-        )
-
-        def save_region(_):
-            nonlocal drawn_feature, temp_drawn_feature, bottom_output_control
-            temp_drawn_feature = temp_drawn_feature
-
-            if temp_drawn_feature:
-                if drawn_feature:
-                    self.map.remove_layer(drawn_feature)
-
-                self.map.add_layer(temp_drawn_feature)
-                drawn_feature = temp_drawn_feature
-                temp_drawn_feature = None
-
-                with bottom_output_widget:
-                    bottom_output_widget.clear_output()
-                    print(
-                        f"""
-                        Saved Region coordinates:
-                        North={region_coordinates['North']},
-                        South={region_coordinates['South']},
-                        East={region_coordinates['East']},
-                        West={region_coordinates['West']}
-                        """
-                    )
-
-                if bottom_output_control and bottom_output_control in self.map.controls:
-                    self.map.remove_control(bottom_output_control)
-                bottom_output_control = self._ipyleaflet.WidgetControl(
-                    widget=bottom_output_widget, position="bottomright"
-                )
-                self.map.add_control(bottom_output_control)
-
-        save_button.on_click(save_region)
-
-        save_button_control = self._ipyleaflet.WidgetControl(
-            widget=save_button, position="topright"
-        )
-
-        def toggle_region_mode(change):
-            nonlocal save_button_control, bottom_output_control
-
-            if change["new"]:
-                self.map.add_control(draw_control)
-                self.map.add_control(save_button_control)
-            else:
-                self.map.remove_control(draw_control)
-                if save_button_control in self.map.controls:
-                    self.map.remove_control(save_button_control)
-                if bottom_output_control and bottom_output_control in self.map.controls:
-                    self.map.remove_control(bottom_output_control)
-                bottom_output_widget.clear_output()
-
-                if temp_drawn_feature:
-                    self.map.remove_layer(temp_drawn_feature)
-                    save_button.disabled = True
-
-        region_mode_button.observe(toggle_region_mode, names="value")
-
-        region_mode_control = self._ipyleaflet.WidgetControl(
-            widget=region_mode_button, position="topright"
-        )
-        self.map.add_control(region_mode_control)
+        # output_control = ipyleaflet.WidgetControl(
+        #     widget=bottom_output_widget, position="bottomright"
+        # )
+        # self.map.add_control(output_control)
 
     def show(self):
         """This function returns a folium figure or ipyleaflet map object
