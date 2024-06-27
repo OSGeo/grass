@@ -44,8 +44,6 @@
               echo " 2.  export LD_LIBRARY_PATH=\$(app/bin/grass --config path)/lib:\$LD_LIBRARY_PATH"
               echo " 3.  pytest"
               echo
-              echo "Note: run 'nix flake update' from time to time to update dependencies."
-              echo
               echo "Run 'dev-help' to see this message again."
             }
 

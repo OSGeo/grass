@@ -1,0 +1,44 @@
+---
+name: Update Nix dependencies
+
+on:
+  schedule:
+    - cron: '0 1 * * 1'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  update-nix:
+    runs-on: ubuntu-22.04
+    permissions:
+      pull-request: write
+
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+
+      - name: Install nix
+        uses: DeterminateSystems/nix-installer-action@v12
+
+      - name: Update nix lock file
+        run: nix flake update
+
+      - name: Generate branch name
+        id: branch
+        run: echo branch="weekly-nix-dependencies-update-$(date "+%Y.%V")" >> "$GITHUB_OUTPUT"
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          add-paths: |
+            flake.lock
+          title: "nix: weekly nix dependencies update (${{ steps.branch.outputs.branch }})"
+          body: Weekly update of nix flake.lock file.
+          branch: "${{ steps.branch.outputs.branch }}"
+          commit-message: "nix: weekly nix dependencies update"
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          delete-branch: true
