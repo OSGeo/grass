@@ -1,0 +1,114 @@
+---
+# When modifying this file, please validate using
+# curl -X POST --data-binary @codecov.yml https://codecov.io/validate
+
+coverage:
+  status:
+    project:
+      default:
+        target: auto # auto compares coverage to the previous base commit
+        informational: true
+    patch:
+      default:
+        informational: true
+
+# Disable PR comments initially, until it is possible to have the information as a job summary
+comment: false
+
+github_checks:
+  # Until more tests are added, disable GitHub checks annotation when added lines aren't covered by tests
+  annotations: false
+
+component_management:
+  individual_components:
+    - component_id: modules_database # this is an identifier that should not be changed
+      name: db # this is a display name, and can be changed freely
+      paths:
+        - db/**
+        - lib/db/**
+        - scripts/db.*/**
+    - component_id: modules_display
+      name: display
+      paths:
+        - display/**
+        - lib/display/**
+        - scripts/d.*/**
+    - component_id: modules_general
+      name: general
+      paths:
+        - general/**
+        - scripts/g.*/**
+    - component_id: gui
+      name: gui
+      paths:
+        - gui/**
+    - component_id: modules_imagery
+      name: imagery
+      paths:
+        - imagery/**
+        - lib/imagery/**
+        - scripts/i.*/**
+    - component_id: man
+      name: man
+      paths:
+        - man/**
+    - component_id: modules_misc
+      name: imagery
+      paths:
+        - misc/**
+        - scripts/m.*/**
+    - component_id: modules_postscript
+      name: ps
+      paths:
+        - ps/**
+    - component_id: modules_raster
+      name: raster
+      paths:
+        - raster/**
+        - lib/raster/**
+        - scripts/r.*/**
+    - component_id: modules_raster3d
+      name: raster3d
+      paths:
+        - raster3d/**
+        - lib/raster3d/**
+        - scripts/r3.*/**
+    - component_id: modules_temporal
+      name: temporal
+      paths:
+        - temporal/**
+        - lib/temporal/**
+        - scripts/t.*/**
+    - component_id: modules_vector
+      name: vector
+      paths:
+        - vector/**
+        - lib/vector/**
+        - scripts/v.*/**
+    - component_id: utils
+      paths:
+        - utils/**
+    - component_id: scripts
+      paths:
+        - scripts/**
+    - component_id: library
+      name: lib
+      paths:
+        - lib/**
+    - component_id: python_pygrass
+      name: pygrass
+      paths:
+        - python/grass/pygrass/**
+    - component_id: python_gunittest
+      name: gunittest
+      paths:
+        - python/grass/gunittest/**
+    - component_id: notebooks
+      name: notebooks (jupyter)
+      paths:
+        - python/grass/jupyter/**
+        - "**/*.ipynb"
+    - component_id: python_library
+      name: python library
+      paths:
+        - python/grass/**
