@@ -318,7 +318,6 @@ static int show(FILE *fp, const char *item, int len)
 
 /*! \brief A helper function to setup the number of threads
    \param nprocs the number of threads specified by the user
-   \return the number of threads to setup for the program
  */
 
 void G__setup_threads(char *nprocs)
