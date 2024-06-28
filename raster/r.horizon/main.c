@@ -839,8 +839,9 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
 
     origin_point.maxlength = settings->fixedMaxLength;
     /* JSON variables and formating */
-    JSON_Value *azimuths_value, *horizons_value, *distances_value;
-    JSON_Array *azimuths, *horizons, *distances;
+
+    JSON_Value *horizons_value;
+    JSON_Array *horizons;
 
     switch (format) {
     case PLAIN:
@@ -850,18 +851,15 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
         fprintf(fp, "\n");
         break;
     case JSON:
-
         json_object_set_number(json_origin, "x", xcoord);
         json_object_set_number(json_origin, "y", ycoord);
-        azimuths_value = json_value_init_array();
-        azimuths = json_value_get_array(azimuths_value);
         horizons_value = json_value_init_array();
         horizons = json_value_get_array(horizons_value);
-        distances_value = json_value_init_array();
-        distances = json_value_get_array(distances_value);
         break;
     }
     for (int i = 0; i < printCount; i++) {
+        JSON_Value *value;
+        JSON_Object *object;
         OriginAngle origin_angle;
         com_par(geometry, &origin_angle, angle, xp, yp);
 
@@ -872,7 +870,10 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
         if (settings->degreeOutput) {
             shadow_angle *= rad2deg;
         }
-
+        if (format == JSON) {
+            value = json_value_init_object();
+            object = json_object(value);
+        }
         if (settings->compassOutput) {
             double tmpangle;
 
@@ -887,9 +888,10 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
                 fprintf(fp, "\n");
                 break;
             case JSON:
-                json_array_append_number(azimuths, tmpangle);
-                json_array_append_number(horizons, shadow_angle);
-                json_array_append_number(distances, horizon.length);
+                json_object_set_number(object, "azimuth", tmpangle);
+                json_object_set_number(object, "angle", shadow_angle);
+                json_object_set_number(object, "distance", horizon.length);
+                json_array_append_value(horizons, value);
                 break;
             }
         }
@@ -902,9 +904,10 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
                 fprintf(fp, "\n");
                 break;
             case JSON:
-                json_array_append_number(azimuths, printangle);
-                json_array_append_number(horizons, shadow_angle);
-                json_array_append_number(distances, horizon.length);
+                json_object_set_number(object, "azimuth", printangle);
+                json_object_set_number(object, "angle", shadow_angle);
+                json_object_set_number(object, "distance", horizon.length);
+                json_array_append_value(horizons, value);
                 break;
             }
         }
@@ -924,9 +927,7 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
     } /* end of for loop over angles */
 
     if (format == JSON) {
-        json_object_set_value(json_origin, "azimuth", azimuths_value);
-        json_object_set_value(json_origin, "horizon_height", horizons_value);
-        json_object_set_value(json_origin, "horizon_distance", distances_value);
+        json_object_set_value(json_origin, "horizons", horizons_value);
     }
 }
 
