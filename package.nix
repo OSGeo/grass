@@ -41,8 +41,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = lib.cleanSourceWith {
     src = ./.;
-    filter = path: type:
-      ! (lib.hasSuffix ".nix" path);
+    filter = (
+      path: type: (builtins.all (x: x != baseNameOf path) [
+        ".git"
+        ".github"
+        "flake.nix"
+        "package.nix"
+      ])
+    );
   };
 
   nativeBuildInputs = [

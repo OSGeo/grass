@@ -2,6 +2,9 @@
   description = "GRASS GIS";
 
   nixConfig = {
+    extra-substituters = [ "https://osgeo-grass.cachix.org" ];
+    extra-trusted-public-keys = [ "osgeo-grass.cachix.org-1:rLnUl3u0ikSIudZ/oBfTqTL7mb3qwYmfmtuwexPpHjw=" ];
+
     bash-prompt = "\\[\\033[1m\\][grass-dev]\\[\\033\[m\\]\\040\\w >\\040";
   };
 
