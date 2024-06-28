@@ -30,6 +30,7 @@ int parse_command_line(int argc, char *argv[])
                            i.e. read it as int */
         struct Flag *C; /*  report for fp ranges in Cats file
                            (fp maps only) */
+        struct Flag *j; /* Return results as JSON*/
     } flags;
 
     parms.cell = G_define_standard_option(G_OPT_R_MAPS);
@@ -140,6 +141,11 @@ int parse_command_line(int argc, char *argv[])
         _("Read floating-point map as integer (use map's quant rules)");
     flags.i->guisection = _("Floating point");
 
+    flags.j = G_define_flag();
+    flags.j->key = 'j';
+    flags.j->description = _("Return report as JSON");
+    flags.j->guisection = _("Formatting");
+
     /* hidden feature.
      * if first arg is >file just run r.stats into this file and quit
      * if first arg is <file, run report from stats in file
@@ -171,6 +177,7 @@ int parse_command_line(int argc, char *argv[])
     no_nulls_all = flags.N->answer;
     cat_ranges = flags.C->answer;
     as_int = flags.i->answer;
+    as_json = flags.j->answer;
 
     for (i = 0; parms.cell->answers[i]; i++)
         parse_layer(parms.cell->answers[i]);
