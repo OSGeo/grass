@@ -330,9 +330,10 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
                     case JSON:
                         json_object_set_null(category, "value");
                         json_object_set_string(
-                            category, "label",
+                            category, "category",
                             Rast_get_c_cat(&null_cell, &labels[i]));
-                        json_object_set_string(category, "name", names[i]);
+                        json_object_set_string(category, "description",
+                                               names[i]);
                         break;
                     case PLAIN:
                         fprintf(stdout, "%s%s", i ? fs : "", no_data_str);
@@ -348,10 +349,11 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
                         json_object_set_number(category, "value",
                                                (long)node->values[i]);
                         json_object_set_string(
-                            category, "label",
+                            category, "category",
                             Rast_get_c_cat((CELL *)&(node->values[i]),
                                            &labels[i]));
-                        json_object_set_string(category, "name", names[i]);
+                        json_object_set_string(category, "description",
+                                               names[i]);
                         break;
                     case PLAIN:
                         fprintf(stdout, "%s%ld", i ? fs : "",
@@ -382,7 +384,7 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
                         double average = (dLow + dHigh) / 2.0;
                         switch (format) {
                         case JSON:
-                            json_object_set_number(category, "average",
+                            json_object_set_number(category, "category_average",
                                                    average);
                             break;
                         case PLAIN:
@@ -415,18 +417,19 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
                     case JSON:
                         if (cat_ranges) {
                             json_object_set_string(
-                                category, "label",
+                                category, "category",
                                 labels[i].labels[node->values[i]]);
                         }
                         else {
                             json_object_set_string(
-                                category, "label_low",
+                                category, "category_low",
                                 Rast_get_d_cat(&dLow, &labels[i]));
                             json_object_set_string(
-                                category, "label_high",
+                                category, "category_high",
                                 Rast_get_d_cat(&dHigh, &labels[i]));
                         }
-                        json_object_set_string(category, "name", names[i]);
+                        json_object_set_string(category, "description",
+                                               names[i]);
                         break;
                     case PLAIN:
                         if (with_labels) {
