@@ -39,7 +39,7 @@ int bar(struct stat_list *dist_stats, /* list of distribution statistics */
     int draw = YES;
     long int bar_height; /* height, in pixels, of a histogram bar */
     CELL bar_color;      /* color/category number of a histogram bar */
-    DCELL dmax, range_dmin, range_dmax, dmin, dval;
+    DCELL dmax, range_dmin = 0, range_dmax = 0, dmin, dval;
     long int max_tics; /* maximum tics allowed on an axis */
     long int xoffset;  /* offset for x-axis */
     long int yoffset;  /* offset for y-axis */
