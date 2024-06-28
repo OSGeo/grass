@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 # Author: Ivan Mincik, ivan.mincik@gmail.com
 
 set -e

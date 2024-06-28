@@ -105,11 +105,11 @@ int IL_interp_segments_2d_parallel(
     cut_tree(tree, all_leafs, &i);
 
     G_message(_("Starting parallel work"));
-#pragma omp parallel firstprivate(                                           \
-    tid, i, j, zmin, zmax, tree, totsegm, offset1, dnorm, smseg, ertot,      \
-    params, info, all_leafs, bitmask, b, indx, matrix, data_local, A)        \
-    shared(cursegm, threads, some_thread_failed, zminac, zmaxac, gmin, gmax, \
-           c1min, c1max, c2min, c2max) default(none)
+#pragma omp parallel firstprivate(                                            \
+        tid, i, j, zmin, zmax, tree, totsegm, offset1, dnorm, smseg, ertot,   \
+            params, info, all_leafs, bitmask, b, indx, matrix, data_local, A) \
+    shared(cursegm, threads, some_thread_failed, zminac, zmaxac, gmin, gmax,  \
+               c1min, c1max, c2min, c2max) default(none)
     {
 #pragma omp for schedule(dynamic)
         for (i_cnt = 0; i_cnt < totsegm; i_cnt++) {
@@ -125,9 +125,10 @@ int IL_interp_segments_2d_parallel(
             int MINPTS;
             double pr;
             struct triple *point;
-            struct triple skip_point;
-            int m_skip, skip_index, k, segtest;
+            struct triple target_point;
+            int npoints, point_index, k;
             double xx, yy /*, zz */;
+            double xmm, ymm, err, pointz;
 
             // struct quaddata *data_local;
 
@@ -292,88 +293,124 @@ int IL_interp_segments_2d_parallel(
                      */
                 }
 
-                /* cv stuff */
-                if (params->cv) {
-                    m_skip = data_local[tid]->n_points;
-                }
-                else {
-                    m_skip = 1;
-                }
-                /* remove after cleanup - this is just for testing */
-                skip_point.x = 0.;
-                skip_point.y = 0.;
-                skip_point.z = 0.;
+                target_point.x = 0;
+                target_point.y = 0;
+                target_point.z = 0;
 
-                for (skip_index = 0; skip_index < m_skip; skip_index++) {
-                    if (params->cv) {
-                        segtest = 0;
-                        j = 0;
-                        xx = point[skip_index].x * dnorm +
-                             data_local[tid]->x_orig + params->x_orig;
-                        yy = point[skip_index].y * dnorm +
-                             data_local[tid]->y_orig + params->y_orig;
-                        /* zz = point[skip_index].z; */
+                /* one time interpolation and devi */
+                if (!params->cv) {
+                    if (/* params */
+                        IL_matrix_create_alloc(params, data_local[tid]->points,
+                                               data_local[tid]->n_points,
+                                               matrix[tid], indx[tid],
+                                               A[tid]) < 0) {
+                        some_thread_failed = -1;
+                        continue;
+                    }
+
+                    for (i = 0; i < data_local[tid]->n_points; i++) {
+                        b[tid][i + 1] = data_local[tid]->points[i].z;
+                    }
+                    b[tid][0] = 0.;
+                    G_lubksb(matrix[tid], data_local[tid]->n_points + 1,
+                             indx[tid], b[tid]);
+                    /* put here condition to skip error if not needed */
+
+                    if (!params->create_devi) { /* check_points only for one
+                                                   time interpolation */
+                        params->check_points(params, data_local[tid], b[tid],
+                                             ertot, zmin, dnorm, &target_point);
+                    }
+                }
+
+                npoints = (params->cv || params->create_devi)
+                              ? data_local[tid]->n_points
+                              : 0;
+                for (point_index = 0; point_index < npoints;
+                     point_index++) { /* loop only for cv or devi*/
+                    if (params->cv) { /* cv: skip one point */
+                        /* skip point for cv */
+                        target_point.x = point[point_index].x;
+                        target_point.y = point[point_index].y;
+                        target_point.z = point[point_index].z;
+
+                        xx = target_point.x * dnorm + data_local[tid]->x_orig +
+                             params->x_orig;
+                        yy = target_point.y * dnorm + data_local[tid]->y_orig +
+                             params->y_orig;
+                        /* zz = point[point_index].z; */
+
                         if (xx >= data_local[tid]->x_orig + params->x_orig &&
                             xx <= data_local[tid]->xmax + params->x_orig &&
                             yy >= data_local[tid]->y_orig + params->y_orig &&
                             yy <= data_local[tid]->ymax + params->y_orig) {
-                            segtest = 1;
-                            skip_point.x = point[skip_index].x;
-                            skip_point.y = point[skip_index].y;
-                            skip_point.z = point[skip_index].z;
-                            for (k = 0; k < m_skip; k++) {
-                                if (k != skip_index && params->cv) {
+
+                            j = 0;
+                            for (k = 0; k < npoints; k++) {
+                                if (k != point_index) {
                                     data_local[tid]->points[j].x = point[k].x;
                                     data_local[tid]->points[j].y = point[k].y;
                                     data_local[tid]->points[j].z = point[k].z;
                                     j++;
                                 }
                             }
-                        } /* segment area test */
-                    }
-                    if (!params->cv) {
-                        if (/* params */
-                            IL_matrix_create_alloc(
-                                params, data_local[tid]->points,
-                                data_local[tid]->n_points, matrix[tid],
-                                indx[tid], A[tid]) < 0) {
-                            some_thread_failed = -1;
-                            continue;
-                        }
-                    }
-                    else if (segtest == 1) {
-                        if (/* params */
-                            IL_matrix_create_alloc(
-                                params, data_local[tid]->points,
-                                data_local[tid]->n_points - 1, matrix[tid],
-                                indx[tid], A[tid]) < 0) {
-                            some_thread_failed = -1;
-                            continue;
-                        }
-                    }
-                    if (!params->cv) {
-                        for (i = 0; i < data_local[tid]->n_points; i++) {
-                            b[tid][i + 1] = data_local[tid]->points[i].z;
-                        }
-                        b[tid][0] = 0.;
-                        G_lubksb(matrix[tid], data_local[tid]->n_points + 1,
-                                 indx[tid], b[tid]);
-                        /* put here condition to skip error if not needed */
-                        params->check_points(params, data_local[tid], b[tid],
-                                             ertot, zmin, dnorm, skip_point);
-                    }
-                    else if (segtest == 1) {
-                        for (i = 0; i < data_local[tid]->n_points - 1; i++) {
-                            b[tid][i + 1] = data_local[tid]->points[i].z;
-                        }
-                        b[tid][0] = 0.;
-                        G_lubksb(matrix[tid], data_local[tid]->n_points,
-                                 indx[tid], b[tid]);
-                        params->check_points(params, data_local[tid], b[tid],
-                                             ertot, zmin, dnorm, skip_point);
-                    }
-                } /*end of cv loop */
 
+                            /* segment area test for cv */
+                            if (/* params */
+                                IL_matrix_create_alloc(
+                                    params, data_local[tid]->points,
+                                    data_local[tid]->n_points - 1, matrix[tid],
+                                    indx[tid], A[tid]) < 0) {
+                                some_thread_failed = -1;
+                                continue;
+                            }
+
+                            for (i = 0; i < data_local[tid]->n_points - 1;
+                                 i++) {
+                                b[tid][i + 1] = data_local[tid]->points[i].z;
+                            }
+                            b[tid][0] = 0.;
+                            G_lubksb(matrix[tid], data_local[tid]->n_points,
+                                     indx[tid], b[tid]);
+                        }
+                        else {
+                            continue;
+                        }
+                    } /* cv: skip one point */
+
+                    if (params->create_devi) {
+                        target_point.x = data_local[tid]->points[point_index].x;
+                        target_point.y = data_local[tid]->points[point_index].y;
+                        target_point.z = data_local[tid]->points[point_index].z;
+                    }
+
+                    /* x, y, z is required input, while xmm, ymm, err output*/
+                    pointz = target_point.z;
+                    params->check_points(params, data_local[tid], b[tid], ertot,
+                                         zmin, dnorm, &target_point);
+
+                    err = target_point.z;
+                    target_point.z = pointz + zmin;
+                    xmm = target_point.x;
+                    ymm = target_point.y;
+
+                    /* write out vector (point), if the point is inside the
+                     * region*/
+                    if (xmm >= data_local[tid]->x_orig + params->x_orig &&
+                        xmm <= data_local[tid]->xmax + params->x_orig &&
+                        ymm >= data_local[tid]->y_orig + params->y_orig &&
+                        ymm <= data_local[tid]->ymax + params->y_orig) {
+                        /* vect append, count, vect_write, db_execute will have
+                         * conflicts between threads */
+#pragma omp critical
+                        {
+                            params->check_points(params, NULL, NULL, &err, 0.0,
+                                                 0.0, &target_point);
+                        }
+                    }
+                } /* end of computations for every point in cv or devi*/
+
+                /* write out grid*/
                 if (!params->cv) {
                     if ((params->Tmp_fd_z != NULL) ||
                         (params->Tmp_fd_dx != NULL) ||

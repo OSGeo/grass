@@ -23,7 +23,7 @@
 #include <grass/bitmap.h>
 
 #define BM_col_to_byte(x) ((x) >> 3) /* x / 8 */
-#define BM_col_to_bit(x)  ((x)&7)    /* x % 8 */
+#define BM_col_to_bit(x)  ((x) & 7)  /* x % 8 */
 
 static int depth;
 

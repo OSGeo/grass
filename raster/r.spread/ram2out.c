@@ -5,7 +5,7 @@
 #include "costHa.h"
 #include "local_proto.h"
 
-#define DATA(map, r, c) (map)[(r)*ncols + (c)]
+#define DATA(map, r, c) (map)[(r) * ncols + (c)]
 
 void ram2out(void)
 {

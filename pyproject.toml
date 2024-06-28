@@ -21,6 +21,10 @@ addopts = """
     --ignore='raster/r.category/test_rcategory_doctest.txt'
 """
 timeout = 300
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "needs_solo_run: marks tests that must be run without any other tests running in parallel",
+]
 
 
 [tool.bandit]

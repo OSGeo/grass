@@ -398,12 +398,26 @@ def main():
             if re.match(category["regexp"], args.branch):
                 has_match = True
                 break
+        for item in config["notes"]["exclude"]["regexp"]:
+            if re.match(item, args.branch):
+                has_match = True
+                break
         if has_match:
             sys.exit(0)
         else:
+            expressions = "\n".join(
+                [category["regexp"] for category in config["notes"]["categories"]]
+            )
+            suggestions = "\n".join(
+                [category["example"] for category in config["notes"]["categories"]]
+            )
             sys.exit(
                 f"Title '{args.branch}' does not fit into one of "
-                f"the categories specified in {config_file}"
+                f"the categories specified in {config_file}. "
+                "Try to make it fit one of these regular expressions:\n"
+                f"{expressions}\n"
+                "Here are some examples:\n"
+                f"{suggestions}"
             )
     try:
         create_release_notes(args)
