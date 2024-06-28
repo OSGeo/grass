@@ -132,6 +132,1256 @@ r.report map=zipcodes@PERMANENT,landclass96@PERMANENT units=h,p
 +-----------------------------------------------------------------------------+
 </pre></div>
 
+The output from <em>r.report</em> can be output in JSON by passing the <b>format=json</b> option.
+
+<div class="code"><pre>
+r.report map=zipcodes@PERMANENT,landclass96@PERMANENT units=h,p format=json
+</pre></div>
+
+<div class="code"><pre>
+{
+    "location": "nc_spm_08_grass7",
+    "created": "Fri Jun 28 18:41:29 2024",
+    "region": {
+        "north": 228500,
+        "south": 215000,
+        "east": 645000,
+        "west": 630000,
+        "ew_res": 10,
+        "ns_res": 10
+    },
+    "mask": "none",
+    "maps": [
+        {
+            "name": "zipcodes@PERMANENT",
+            "description": "PERMANENT",
+            "layer": "zipcodes@PERMANENT",
+            "type": "raster"
+        },
+        {
+            "name": "landclass96@PERMANENT",
+            "description": "PERMANENT",
+            "layer": "landclass96@PERMANENT",
+            "type": "raster"
+        }
+    ],
+    "categories": [
+        {
+            "category": 27511,
+            "description": "CARY",
+            "units": [
+                {
+                    "unit": "hectares",
+                    "value": 1058
+                },
+                {
+                    "unit": "% cover",
+                    "value": 5.2246913580246916
+                }
+            ],
+            "categories": [
+                {
+                    "category": 1,
+                    "description": "developed",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 197.94
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 18.708884688090738
+                        }
+                    ]
+                },
+                {
+                    "category": 3,
+                    "description": "herbaceous",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 24.440000000000001
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 2.3100189035916823
+                        }
+                    ]
+                },
+                {
+                    "category": 4,
+                    "description": "shrubland",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 58.080000000000005
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 5.4896030245746692
+                        }
+                    ]
+                },
+                {
+                    "category": 5,
+                    "description": "forest",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 775.91000000000008
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 73.337429111531193
+                        }
+                    ]
+                },
+                {
+                    "category": 6,
+                    "description": "water",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 1.54
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 0.14555765595463138
+                        }
+                    ]
+                },
+                {
+                    "category": -2147483648,
+                    "description": "no data",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 0.090000000000000011
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 0.0085066162570888466
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "category": 27513,
+            "description": "CARY",
+            "units": [
+                {
+                    "unit": "hectares",
+                    "value": 205.30000000000001
+                },
+                {
+                    "unit": "% cover",
+                    "value": 1.0138271604938272
+                }
+            ],
+            "categories": [
+                {
+                    "category": 1,
+                    "description": "developed",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 32.579999999999998
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 15.869459327812956
+                        }
+                    ]
+                },
+                {
+                    "category": 3,
+                    "description": "herbaceous",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 5.9300000000000006
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 2.8884559181685336
+                        }
+                    ]
+                },
+                {
+                    "category": 4,
+                    "description": "shrubland",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 52.030000000000001
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 25.343399902581588
+                        }
+                    ]
+                },
+                {
+                    "category": 5,
+                    "description": "forest",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 114.76000000000001
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 55.898684851436919
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "category": 27518,
+            "description": "CARY",
+            "units": [
+                {
+                    "unit": "hectares",
+                    "value": 1345.1900000000001
+                },
+                {
+                    "unit": "% cover",
+                    "value": 6.6429135802469137
+                }
+            ],
+            "categories": [
+                {
+                    "category": 1,
+                    "description": "developed",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 106.46000000000001
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 7.9141236553944054
+                        }
+                    ]
+                },
+                {
+                    "category": 2,
+                    "description": "agriculture",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 7.5
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 0.55754205725585237
+                        }
+                    ]
+                },
+                {
+                    "category": 3,
+                    "description": "herbaceous",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 84.620000000000005
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 6.2905611846653633
+                        }
+                    ]
+                },
+                {
+                    "category": 4,
+                    "description": "shrubland",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 179.63
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 13.353503965982501
+                        }
+                    ]
+                },
+                {
+                    "category": 5,
+                    "description": "forest",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 919.35000000000002
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 68.343505378422378
+                        }
+                    ]
+                },
+                {
+                    "category": 6,
+                    "description": "water",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 47.630000000000003
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 3.5407637582794997
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "category": 27529,
+            "description": "GARNER",
+            "units": [
+                {
+                    "unit": "hectares",
+                    "value": 1415.72
+                },
+                {
+                    "unit": "% cover",
+                    "value": 6.99120987654321
+                }
+            ],
+            "categories": [
+                {
+                    "category": 1,
+                    "description": "developed",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 614.97000000000003
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 43.438674314129912
+                        }
+                    ]
+                },
+                {
+                    "category": 2,
+                    "description": "agriculture",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 7.25
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 0.51210691379651341
+                        }
+                    ]
+                },
+                {
+                    "category": 3,
+                    "description": "herbaceous",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 35.960000000000001
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 2.5400502924307067
+                        }
+                    ]
+                },
+                {
+                    "category": 4,
+                    "description": "shrubland",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 12.890000000000001
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 0.91049077501200804
+                        }
+                    ]
+                },
+                {
+                    "category": 5,
+                    "description": "forest",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 719.13
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 50.796061368067129
+                        }
+                    ]
+                },
+                {
+                    "category": 6,
+                    "description": "water",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 4.1699999999999999
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 0.29454976972847741
+                        }
+                    ]
+                },
+                {
+                    "category": -2147483648,
+                    "description": "no data",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 21.350000000000001
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 1.50806656683525
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "category": 27539,
+            "description": "APEX",
+            "units": [
+                {
+                    "unit": "hectares",
+                    "value": 254.44000000000003
+                },
+                {
+                    "unit": "% cover",
+                    "value": 1.2564938271604937
+                }
+            ],
+            "categories": [
+                {
+                    "category": 1,
+                    "description": "developed",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 2.46
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 0.96682911491903789
+                        }
+                    ]
+                },
+                {
+                    "category": 2,
+                    "description": "agriculture",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 28.720000000000002
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 11.28753340669706
+                        }
+                    ]
+                },
+                {
+                    "category": 3,
+                    "description": "herbaceous",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 4.04
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 1.5878006602735419
+                        }
+                    ]
+                },
+                {
+                    "category": 4,
+                    "description": "shrubland",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 18.560000000000002
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 7.294450558088351
+                        }
+                    ]
+                },
+                {
+                    "category": 5,
+                    "description": "forest",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 192.37
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 75.605250746737937
+                        }
+                    ]
+                },
+                {
+                    "category": 6,
+                    "description": "water",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 0.87
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 0.34192736991039147
+                        }
+                    ]
+                },
+                {
+                    "category": -2147483648,
+                    "description": "no data",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 7.4199999999999999
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 2.9162081433736833
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "category": 27601,
+            "description": "RALEIGH",
+            "units": [
+                {
+                    "unit": "hectares",
+                    "value": 454.68000000000001
+                },
+                {
+                    "unit": "% cover",
+                    "value": 2.2453333333333334
+                }
+            ],
+            "categories": [
+                {
+                    "category": 1,
+                    "description": "developed",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 436.65000000000003
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 96.034573766165209
+                        }
+                    ]
+                },
+                {
+                    "category": 3,
+                    "description": "herbaceous",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 11.610000000000001
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 2.5534441805225652
+                        }
+                    ]
+                },
+                {
+                    "category": 5,
+                    "description": "forest",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 6.4199999999999999
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 1.4119820533122196
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "category": 27603,
+            "description": "RALEIGH",
+            "units": [
+                {
+                    "unit": "hectares",
+                    "value": 4291.79
+                },
+                {
+                    "unit": "% cover",
+                    "value": 21.194024691358024
+                }
+            ],
+            "categories": [
+                {
+                    "category": 1,
+                    "description": "developed",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 1183.24
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 27.569848478140823
+                        }
+                    ]
+                },
+                {
+                    "category": 2,
+                    "description": "agriculture",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 14.770000000000001
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 0.34414544980066591
+                        }
+                    ]
+                },
+                {
+                    "category": 3,
+                    "description": "herbaceous",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 808.62
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 18.841089615288727
+                        }
+                    ]
+                },
+                {
+                    "category": 4,
+                    "description": "shrubland",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 216.73000000000002
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 5.0498742948746331
+                        }
+                    ]
+                },
+                {
+                    "category": 5,
+                    "description": "forest",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 2036.2900000000002
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 47.446170478984293
+                        }
+                    ]
+                },
+                {
+                    "category": 6,
+                    "description": "water",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 16.100000000000001
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 0.37513485049361689
+                        }
+                    ]
+                },
+                {
+                    "category": 7,
+                    "description": "sediment",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 10.66
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 0.24838121156906559
+                        }
+                    ]
+                },
+                {
+                    "category": -2147483648,
+                    "description": "no data",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 5.3799999999999999
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 0.12535562084817756
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "category": 27604,
+            "description": "RALEIGH",
+            "units": [
+                {
+                    "unit": "hectares",
+                    "value": 473.89000000000004
+                },
+                {
+                    "unit": "% cover",
+                    "value": 2.3401975308641974
+                }
+            ],
+            "categories": [
+                {
+                    "category": 1,
+                    "description": "developed",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 338.04000000000002
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 71.333009770199837
+                        }
+                    ]
+                },
+                {
+                    "category": 3,
+                    "description": "herbaceous",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 49.710000000000001
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 10.489776108379582
+                        }
+                    ]
+                },
+                {
+                    "category": 5,
+                    "description": "forest",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 83.77000000000001
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 17.677098060731392
+                        }
+                    ]
+                },
+                {
+                    "category": -2147483648,
+                    "description": "no data",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 2.3700000000000001
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 0.50011606068918946
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "category": 27605,
+            "description": "RALEIGH",
+            "units": [
+                {
+                    "unit": "hectares",
+                    "value": 236.77000000000001
+                },
+                {
+                    "unit": "% cover",
+                    "value": 1.1692345679012346
+                }
+            ],
+            "categories": [
+                {
+                    "category": 1,
+                    "description": "developed",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 187.45000000000002
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 79.169658318199097
+                        }
+                    ]
+                },
+                {
+                    "category": 3,
+                    "description": "herbaceous",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 5.71
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 2.4116230941419943
+                        }
+                    ]
+                },
+                {
+                    "category": 4,
+                    "description": "shrubland",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 6.6000000000000005
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 2.7875153102166661
+                        }
+                    ]
+                },
+                {
+                    "category": 5,
+                    "description": "forest",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 37.010000000000005
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 15.631203277442243
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "category": 27606,
+            "description": "RALEIGH",
+            "units": [
+                {
+                    "unit": "hectares",
+                    "value": 6626.4200000000001
+                },
+                {
+                    "unit": "% cover",
+                    "value": 32.723061728395059
+                }
+            ],
+            "categories": [
+                {
+                    "category": 1,
+                    "description": "developed",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 1030.6200000000001
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 15.553194636017638
+                        }
+                    ]
+                },
+                {
+                    "category": 2,
+                    "description": "agriculture",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 115.23
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 1.7389480292525978
+                        }
+                    ]
+                },
+                {
+                    "category": 3,
+                    "description": "herbaceous",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 631.49000000000001
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 9.5298818970122632
+                        }
+                    ]
+                },
+                {
+                    "category": 4,
+                    "description": "shrubland",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 682.66000000000008
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 10.302093739907823
+                        }
+                    ]
+                },
+                {
+                    "category": 5,
+                    "description": "forest",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 3807.6200000000003
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 57.461193223490213
+                        }
+                    ]
+                },
+                {
+                    "category": 6,
+                    "description": "water",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 349.17000000000002
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 5.2693611331608921
+                        }
+                    ]
+                },
+                {
+                    "category": -2147483648,
+                    "description": "no data",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 9.6300000000000008
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 0.14532734115857432
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "category": 27607,
+            "description": "RALEIGH",
+            "units": [
+                {
+                    "unit": "hectares",
+                    "value": 2089.8900000000003
+                },
+                {
+                    "unit": "% cover",
+                    "value": 10.320444444444444
+                }
+            ],
+            "categories": [
+                {
+                    "category": 1,
+                    "description": "developed",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 727.16000000000008
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 34.794175770016601
+                        }
+                    ]
+                },
+                {
+                    "category": 3,
+                    "description": "herbaceous",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 329.22000000000003
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 15.752982214374919
+                        }
+                    ]
+                },
+                {
+                    "category": 4,
+                    "description": "shrubland",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 126.89
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 6.0716114245247361
+                        }
+                    ]
+                },
+                {
+                    "category": 5,
+                    "description": "forest",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 894.04000000000008
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 42.77928503414055
+                        }
+                    ]
+                },
+                {
+                    "category": 6,
+                    "description": "water",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 7.1400000000000006
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 0.34164477556235018
+                        }
+                    ]
+                },
+                {
+                    "category": 7,
+                    "description": "sediment",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 5.4400000000000004
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 0.26030078138083823
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "category": 27608,
+            "description": "RALEIGH",
+            "units": [
+                {
+                    "unit": "hectares",
+                    "value": 439.80000000000001
+                },
+                {
+                    "unit": "% cover",
+                    "value": 2.1718518518518519
+                }
+            ],
+            "categories": [
+                {
+                    "category": 1,
+                    "description": "developed",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 307.54000000000002
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 69.927239654388359
+                        }
+                    ]
+                },
+                {
+                    "category": 3,
+                    "description": "herbaceous",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 1.72
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 0.39108685766257389
+                        }
+                    ]
+                },
+                {
+                    "category": 5,
+                    "description": "forest",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 130.54000000000002
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 29.681673487949066
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "category": 27610,
+            "description": "RALEIGH",
+            "units": [
+                {
+                    "unit": "hectares",
+                    "value": 1358.1100000000001
+                },
+                {
+                    "unit": "% cover",
+                    "value": 6.7067160493827158
+                }
+            ],
+            "categories": [
+                {
+                    "category": 1,
+                    "description": "developed",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 757.76999999999998
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 55.79592227433713
+                        }
+                    ]
+                },
+                {
+                    "category": 3,
+                    "description": "herbaceous",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 68.219999999999999
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 5.0231571816715874
+                        }
+                    ]
+                },
+                {
+                    "category": 4,
+                    "description": "shrubland",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 5.8700000000000001
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 0.43221830337748784
+                        }
+                    ]
+                },
+                {
+                    "category": 5,
+                    "description": "forest",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 500.04000000000002
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 36.81881438175111
+                        }
+                    ]
+                },
+                {
+                    "category": 6,
+                    "description": "water",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 1.9200000000000002
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 0.14137293739093298
+                        }
+                    ]
+                },
+                {
+                    "category": -2147483648,
+                    "description": "no data",
+                    "units": [
+                        {
+                            "unit": "hectares",
+                            "value": 24.290000000000003
+                        },
+                        {
+                            "unit": "% cover",
+                            "value": 1.7885149214717513
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "totals": [
+        {
+            "unit": "hectares",
+            "value": 20250
+        },
+        {
+            "unit": "% cover",
+            "value": 100
+        }
+    ]
+}
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>
