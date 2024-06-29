@@ -9,9 +9,10 @@
 /*! \brief A helper function to setup the number of threads for C modules
    supported by OpenMP
    \param nprocs the number of threads specified by the user
+   \return the number of threads set up for OpenMP parallel computing
  */
 
-void G_setup_threads(char *nprocs)
+int G_setup_threads(char *nprocs)
 {
     int threads = atoi(nprocs);
 #if defined(_OPENMP)
@@ -38,7 +39,5 @@ void G_setup_threads(char *nprocs)
     }
 #endif
 
-    /* only update while nprocs is not the default value*/
-    if (threads != atoi(nprocs))
-        sprintf(nprocs, "%d", threads);
+    return threads;
 }
