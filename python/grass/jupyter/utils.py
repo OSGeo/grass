@@ -228,8 +228,8 @@ def get_computational_region_bb():
     east_longitude = dms_to_dd(output_dict["east longitude"])
 
     # Create tuples for SW and NE locations
-    sw_location = (west_longitude, south_latitude)
-    ne_location = (east_longitude, north_latitude)
+    sw_location = (south_latitude, west_longitude)
+    ne_location = (north_latitude, east_longitude)
 
     # Return the list of tuples
     return [sw_location, ne_location]

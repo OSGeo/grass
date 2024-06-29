@@ -349,106 +349,129 @@ class InteractiveMap:
             self.layer_control_object = self._ipyleaflet.LayersControl(**kwargs)
 
     def draw_computational_region(self):
-        # import ipywidgets as widgets
-        # import pyproj
-        # from shapely.geometry import box
-        # from shapely.ops import transform
+        import ipywidgets as widgets
+        from ipyleaflet import Rectangle, WidgetControl
 
-        # region_mode_button = widgets.ToggleButton(
-        #     icon="square",
-        #     value=False,
-        #     tooltip="Click to add computational region",
-        #     button_style="info",
-        #     layout=widgets.Layout(width="33px", margin="0px 0px 0px 0px"),
-        # )
-
-        # bottom_output_widget = widgets.Output(
-        #     layout={
-        #         "width": "100%",
-        #         "max_height": "300px",
-        #         "max_width": "300px",
-        #         "overflow": "auto",
-        #     }
-        # )
-
-        # region_coordinates = {}
-        rectangle = None
-        latlon_bounds = get_computational_region_bb()
-        print(latlon_bounds)
-        latlon_bounds = get_computational_region_bb()
-        rectangle = self._ipyleaflet.Rectangle(
-            bounds=latlon_bounds,
-            color="red",
-            fill_color="red",
-            fill_opacity=0.5,
-            draggable=True,
+        region_mode_button = widgets.ToggleButton(
+            icon="square",
+            value=False,
+            tooltip="Click to add computational region",
+            button_style="info",
+            layout=widgets.Layout(width="33px", margin="0px 0px 0px 0px"),
         )
-        self.map.add_layer(rectangle)
 
-        # def transform_bounds(bounds, from_crs, to_crs):
-        #     project =
-        # pyproj.Transformer.from_crs(from_crs, to_crs, always_xy=True).transform
-        #     transformed_bounds = transform(project, box(*bounds)).bounds
-        #     return [[transformed_bounds[1], transformed_bounds[0]],
-        # [transformed_bounds[3], transformed_bounds[2]]]
+        save_button = widgets.Button(
+            description="Save Region",
+            button_style="success",
+            layout=widgets.Layout(width="100px", margin="0px 0px 0px 5px"),
+            disabled=True,
+        )
 
-        # def toggle_region_mode(change):
-        #     nonlocal rectangle
+        bottom_output_widget = widgets.Output(
+            layout={
+                "width": "100%",
+                "max_height": "300px",
+                "max_width": "300px",
+                "overflow": "auto",
+                "display": "none",
+            }
+        )
 
-        #     if change["new"]:
-        #         if rectangle is None:
-        #             latlon_bounds = get_computational_region_bb()
-        #             rectangle = ipyleaflet.Rectangle(
-        #                 bounds=latlon_bounds,
-        #                 color="red",
-        #                 fill_color="red",
-        #                 fill_opacity=0.5,
-        #                 draggable=True
-        #             )
-        #             self.map.add_layer(rectangle)
-        #         else:
-        #             rectangle.editable = True
-        #             rectangle.draggable = True
-        #     else:
-        #         if rectangle:
-        #             rectangle.editable = False
-        #             rectangle.draggable = False
-        #             latlon_bounds =
-        # rectangle.bounds
-        #             bounds =
-        # transform_bounds([latlon_bounds[0][1], latlon_bounds[0][0],
-        # latlon_bounds[1][1], latlon_bounds[1][0]],
-        # "epsg:4326", "epsg:3857")
-        #             region_coordinates["North"] = bounds[3]
-        #             region_coordinates["South"] = bounds[1]
-        #             region_coordinates["East"] = bounds[2]
-        #             region_coordinates["West"] = bounds[0]
+        region_coordinates = {}
+        rectangle = None
+        save_button_control = None
 
-        #             with bottom_output_widget:
-        #                 bottom_output_widget.clear_output()
-        #                 print(
-        #                     f"""
-        #                     Saved Region coordinates:
-        #                     North={region_coordinates['North']},
-        #                     South={region_coordinates['South']},
-        #                     East={region_coordinates['East']},
-        #                     West={region_coordinates['West']}
-        #                     """
-        #                 )
-        #             self.map.remove_layer(rectangle)
-        #             rectangle = None
+        def update_output():
+            with bottom_output_widget:
+                bottom_output_widget.clear_output()
+                print("Current Bounds:")
+                print(f"North: {region_coordinates['North']}")
+                print(f"South: {region_coordinates['South']}")
+                print(f"East: {region_coordinates['East']}")
+                print(f"West: {region_coordinates['West']}")
 
-        # region_mode_button.observe(toggle_region_mode, names="value")
+        def on_rectangle_change(event, property_name, value):
+            nonlocal region_coordinates
+            if property_name == "bounds":
+                latlon_bounds = value
+                region_coordinates = {
+                    "North": latlon_bounds[1][0],
+                    "South": latlon_bounds[0][0],
+                    "East": latlon_bounds[1][1],
+                    "West": latlon_bounds[0][1],
+                }
+                update_output()
 
-        # region_mode_control = ipyleaflet.WidgetControl(
-        #     widget=region_mode_button, position="topright"
-        # )
-        # self.map.add_control(region_mode_control)
+        def toggle_region_mode(change):
+            nonlocal rectangle, save_button_control, region_coordinates
 
-        # output_control = ipyleaflet.WidgetControl(
-        #     widget=bottom_output_widget, position="bottomright"
-        # )
-        # self.map.add_control(output_control)
+            if change["new"]:
+                if rectangle is None:
+                    latlon_bounds = get_computational_region_bb()
+                    region_coordinates = {
+                        "North": latlon_bounds[1][0],
+                        "South": latlon_bounds[0][0],
+                        "East": latlon_bounds[1][1],
+                        "West": latlon_bounds[0][1],
+                    }
+                    rectangle = Rectangle(
+                        bounds=latlon_bounds,
+                        color="red",
+                        fill_color="red",
+                        fill_opacity=0.5,
+                        draggable=True,
+                        editable=True,
+                        transform=True,
+                        name="computational_region",
+                    )
+                    rectangle.observe(on_rectangle_change, names="bounds")
+                    self.map.add_layer(rectangle)
+
+                else:
+                    latlon_bounds = rectangle.bounds
+                    rectangle.editable = True
+                    rectangle.draggable = True
+                    rectangle.transform = True
+
+                save_button.disabled = False
+                bottom_output_widget.layout.display = "block"
+                update_output()
+
+                if save_button_control is None:
+                    save_button_control = WidgetControl(
+                        widget=save_button, position="topright"
+                    )
+                    self.map.add_control(save_button_control)
+                else:
+                    self.map.add_control(save_button_control)
+            else:
+                if rectangle:
+                    rectangle.editable = False
+                    rectangle.draggable = False
+
+                save_button.disabled = True
+                bottom_output_widget.layout.display = "none"
+
+                if save_button_control:
+                    self.map.remove_control(save_button_control)
+
+        def save_region(change):
+            if rectangle:
+                update_output()
+                rectangle.name = "computational_region"
+
+        region_mode_button.observe(toggle_region_mode, names="value")
+        save_button.on_click(save_region)
+
+        region_mode_control = WidgetControl(
+            widget=region_mode_button, position="topright"
+        )
+        self.map.add_control(region_mode_control)
+
+        output_control = WidgetControl(
+            widget=bottom_output_widget, position="bottomright"
+        )
+        self.map.add_control(output_control)
 
     def show(self):
         """This function returns a folium figure or ipyleaflet map object
