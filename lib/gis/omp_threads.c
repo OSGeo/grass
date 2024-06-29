@@ -3,6 +3,7 @@
 #endif
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
