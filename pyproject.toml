@@ -509,7 +509,9 @@ persistent = true
 
 # Minimum Python version to use for version dependent checks. Will default to the
 # version used to run pylint.
-py-version = "3.12"
+# *GRASS modified*
+# *GRASS TODO: keep in sync with MIN_PYTHON_VERSION supported*
+py-version = "3.9"
 
 # Discover python modules and packages in the file system subtree.
 # recursive =
@@ -691,19 +693,29 @@ valid-metaclass-classmethod-first-arg = ["mcs"]
 # ignored-parents =
 
 # Maximum number of arguments for function / method.
-max-args = 5
+# *GRASS modified: default 5, (see R0913)*
+# *GRASS TODO: Try to reduce this value*
+max-args = 15
 
 # Maximum number of attributes for a class (see R0902).
-max-attributes = 7
+# *GRASS modified: default 7*
+# *GRASS TODO: Try to reduce this value*
+max-attributes = 25
 
 # Maximum number of boolean expressions in an if statement (see R0916).
-max-bool-expr = 5
+# *GRASS modified: default 5*
+# *GRASS TODO: Try to reduce this value*
+max-bool-expr = 8
 
 # Maximum number of branch for function / method body.
-max-branches = 12
+# *GRASS modified: default 12, (see R0912)*
+# *GRASS TODO: Try to reduce this value*
+max-branches = 44
 
 # Maximum number of locals for function / method body.
-max-locals = 15
+# *GRASS modified: default 15, (see R0914)*
+# *GRASS TODO: Try to reduce this value*
+max-locals = 50
 
 # Maximum number of parents for a class (see R0901).
 max-parents = 7
@@ -712,13 +724,19 @@ max-parents = 7
 max-public-methods = 20
 
 # Maximum number of return / yield for function / method body.
-max-returns = 6
+# *GRASS modified: default 6, (see R0911)*
+# *GRASS TODO: Try to reduce this value*
+max-returns = 9
 
 # Maximum number of statements in function / method body.
-max-statements = 50
+# *GRASS modified: default 50, (see R0915)*
+# *GRASS TODO: Try to reduce this value*
+max-statements = 220
 
 # Minimum number of public methods for a class (see R0903).
-min-public-methods = 2
+# *GRASS modified: default 2, (see R0915)*
+# *GRASS TODO: Try to increase this value*
+min-public-methods = 1
 
 [tool.pylint.exceptions]
 # Exceptions that will emit a warning when caught.
@@ -742,7 +760,9 @@ indent-string = "    "
 max-line-length = 100
 
 # Maximum number of lines in a module.
-max-module-lines = 1000
+# *GRASS modified: default 1000, (see C0302)*
+# *GRASS TODO: Try to reduce this value*
+max-module-lines = 2000
 
 # Allow the body of a class to be on the same line as the declaration if body
 # contains single statement.
@@ -816,16 +836,83 @@ confidence = [
 # no Warning level messages displayed, use "--disable=all --enable=classes
 # --disable=W".
 disable = [
-    "raw-checker-failed",
+    # *GRASS: The 10 following rules are disabled by default*
     "bad-inline-option",
-    "locally-disabled",
-    "file-ignored",
-    "suppressed-message",
-    "useless-suppression",
     "deprecated-pragma",
-    "use-symbolic-message-instead",
+    "file-ignored",
+    "locally-disabled",
+    "raw-checker-failed",
+    "suppressed-message",
     "use-implicit-booleaness-not-comparison-to-string",
     "use-implicit-booleaness-not-comparison-to-zero",
+    "use-symbolic-message-instead",
+    "useless-suppression",
+    # *GRASS modified: The following rules are added to the disabled list*
+    # *GRASS TODO: Try to ignore less rules*
+    "anomalous-backslash-in-string",
+    "attribute-defined-outside-init",
+    "bare-except",
+    "broad-except",
+    "cell-var-from-loop",
+    "chained-comparison",
+    "consider-iterating-dictionary",
+    "consider-using-dict-items",
+    "consider-using-enumerate",
+    "consider-using-f-string",
+    "consider-using-from-import",
+    "consider-using-generator",
+    "consider-using-get",
+    "consider-using-in",
+    "consider-using-max-builtin",
+    "consider-using-min-builtin",
+    "consider-using-with",
+    "deprecated-argument",
+    "deprecated-method",
+    "eval-used",
+    "expression-not-assigned",
+    "fixme",
+    "global-statement",
+    "global-variable-not-assigned",
+    "global-variable-undefined",
+    "import-error",
+    "import-outside-toplevel",
+    "inconsistent-return-statements",
+    "invalid-name",
+    "line-too-long",
+    "missing-class-docstring",
+    "missing-function-docstring",
+    "missing-module-docstring",
+    "no-else-break",
+    "no-else-raise",
+    "no-else-return",
+    "no-member",
+    "no-name-in-module",
+    "no-value-for-parameter",
+    "not-callable",
+    "raise-missing-from",
+    "redefined-builtin",
+    "redefined-outer-name",
+    "self-assigning-variable",
+    "simplifiable-if-statement",
+    "super-with-arguments",
+    "undefined-loop-variable",
+    "undefined-variable",
+    "unidiomatic-typecheck",
+    "unnecessary-comprehension",
+    "unnecessary-pass",
+    "unneeded-not",
+    "unspecified-encoding",
+    "unused-argument",
+    "unused-import",
+    "unused-variable",
+    "use-a-generator",
+    "use-list-literal",
+    "use-maxsplit-arg",
+    "useless-import-alias",
+    "useless-object-inheritance",
+    "useless-return",
+    "wrong-import-order",
+    "wrong-import-position",
 ]
 
 # Enable the message, report, category or checker with the given id(s). You can
@@ -857,7 +944,9 @@ notes = ["FIXME", "XXX", "TODO"]
 
 [tool.pylint.refactoring]
 # Maximum number of nested blocks for function / method body
-max-nested-blocks = 5
+# *GRASS modified: default 5, (see R1702)*
+# *GRASS TODO: Try to reduce this value*
+max-nested-blocks = 7
 
 # Complete name of functions that never returns. When checking for inconsistent-
 # return-statements if a never returning function is called then it will be
@@ -905,7 +994,10 @@ ignore-imports = true
 ignore-signatures = true
 
 # Minimum lines number of a similarity.
-min-similarity-lines = 4
+# *GRASS modified: default 4, (see R0801)*
+# *GRASS TODO: Try to reduce this value*
+# *GRASS justification: Matching only larger chunks of code, not the default 4 lines.*
+min-similarity-lines = 50
 
 [tool.pylint.spelling]
 # Limits count of emitted suggestions for spelling mistakes.
@@ -993,7 +1085,10 @@ mixin-class-rgx = ".*[Mm]ixin"
 [tool.pylint.variables]
 # List of additional names supposed to be defined in builtins. Remember that you
 # should avoid defining new builtins when possible.
-# additional-builtins =
+# *GRASS modified: default '# additional-builtins ='*
+# *GRASS justification: Translation function is (unfortunately) defined as a builtin.*
+# *GRASS TODO: Find another pattern for translation that allows to use _ as a discard variable and other*
+additional-builtins = ["_"]
 
 # Tells whether unused global variables should be treated as a violation.
 allow-global-unused-variables = true
