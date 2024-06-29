@@ -55,8 +55,10 @@ int read_rast(double east, double north, double dist, int fd, int coords,
 
     switch (format) {
     case JSON:
-        json_object_set_number(object, "easting", east);
-        json_object_set_number(object, "northing", north);
+        if (coords) {
+            json_object_set_number(object, "easting", east);
+            json_object_set_number(object, "northing", north);
+        }
         json_object_set_number(object, "distance", dist);
         break;
     case PLAIN:

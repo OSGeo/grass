@@ -219,6 +219,41 @@ The output looks as follows:
 ]
 </pre></div>
 
+<h3>Using JSON output with Python for plotting data</h3>
+
+The JSON output makes for ease of integration with popular python data science libraries. For instance, here
+is an example of creating a scatterplot of distance vs elevation with color coding.
+
+<div class="code"><pre>
+import grass.script as gs
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Run r.profile command
+elevation = gs.read_command(
+    "r.profile",
+    input="elevation",
+    coordinates="641712,226095,641546,224138,641546,222048,641049,221186",
+    format="json",
+    flags="gc"
+)
+
+# Load the JSON data into a dataframe
+df = pd.read_json(elevation)
+
+# Convert the RGB color values to hex format for matplotlib
+df["color"] = df.apply(lambda x: "#{:02x}{:02x}{:02x}".format(int(x["red"]), int(x["green"]), int(x["blue"])), axis=1)
+
+# Create the scatter plot
+plt.figure(figsize=(10, 6))
+plt.scatter(df['distance'], df['elevation'], c=df['color'], marker='o')
+plt.title('Profile of Distance vs. Elevation with Color Coding')
+plt.xlabel('Distance (meters)')
+plt.ylabel('Elevation')
+plt.grid(True)
+plt.show()
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>
