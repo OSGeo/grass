@@ -422,3 +422,14 @@ exclude_dirs = [
     "utils/test_generate_last_commit_file.py",
 ]
 skips = ["B324", "B110", "B101", "B112", "B311", "B404", "B603"]
+
+
+[tool.pyright]
+exclude = ["**/__pycache__", "**/OBJ.*", "bin.*/**", "dist.*/**"]
+include = ["python"]
+
+# Set extraPath to the output of $(grass --config python_path)
+
+# *GRASS modified*
+# *GRASS TODO: keep in sync with MIN_PYTHON_VERSION supported*
+pythonVersion = "3.9"
