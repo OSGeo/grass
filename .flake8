@@ -71,8 +71,7 @@ per-file-ignores =
     gui/wxpython/gui_core/widgets.py: F841, E722, E266
     gui/wxpython/image2target/*: F841, E722, E265
     gui/wxpython/image2target/g.gui.image2target.py: E501, E265, F841
-    gui/wxpython/iscatt/*: F841, E722, E741, F405, F403
-    gui/wxpython/lmgr/giface.py: E741
+    gui/wxpython/iscatt/*: F841, E722, F405, F403
     gui/wxpython/lmgr/frame.py: F841, E722
     # layertree still includes some formatting issues (it is ignored by Black)
     gui/wxpython/lmgr/layertree.py: E722, E266, W504, E225
@@ -82,16 +81,15 @@ per-file-ignores =
     gui/wxpython/photo2image/*: F841, E722, E265
     gui/wxpython/photo2image/g.gui.photo2image.py: E501, F841
     gui/wxpython/psmap/*: F841, E266, E722, F405, F403
-    gui/wxpython/vdigit/*: F841, E722, E741, F405, F403
+    gui/wxpython/vdigit/*: F841, E722, F405, F403
     gui/wxpython/vnet/*: F841
     gui/wxpython/wxgui.py: F841
     gui/wxpython/animation/g.gui.animation.py: E501
     gui/wxpython/animation/mapwindow.py: F841
     gui/wxpython/animation/provider.py: F841
-    gui/wxpython/tplot/frame.py: F841, E722, E741
+    gui/wxpython/tplot/frame.py: F841, E722
     gui/wxpython/tplot/g.gui.tplot.py: E501
     gui/wxpython/rdigit/g.gui.rdigit.py: F841
-    gui/wxpython/iclass/dialogs.py: E741
     gui/wxpython/iclass/digit.py: F405, F403
     gui/wxpython/iclass/frame.py: F405, F403
     gui/wxpython/iclass/g.gui.iclass.py: E501
@@ -109,14 +107,12 @@ per-file-ignores =
     gui/wxpython/mapwin/buffered.py: E722
     gui/wxpython/mapwin/graphics.py: E722
     gui/wxpython/startup/locdownload.py: E722, E402
-    gui/wxpython/timeline/g.gui.timeline.py: E501, E741
-    gui/wxpython/timeline/frame.py: E741
+    gui/wxpython/timeline/g.gui.timeline.py: E501
     gui/wxpython/tools/build_modules_xml.py: E722
     gui/wxpython/web_services/cap_interface.py: E501
-    gui/wxpython/web_services/widgets.py: F841, E741, E402
-    gui/wxpython/rlisetup/frame.py: E741
+    gui/wxpython/web_services/widgets.py: F841, E402
     gui/wxpython/rlisetup/sampling_frame.py: F841
-    gui/wxpython/rlisetup/wizard.py: E722, E741
+    gui/wxpython/rlisetup/wizard.py: E722
     # Generated file
     gui/wxpython/menustrings.py: E501
     # F821 undefined name 'cmp'

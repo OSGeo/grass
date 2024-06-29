@@ -1182,8 +1182,8 @@ class DisplayDriver:
             catsDict[layer].append(cats.cat[i])
 
         catsStr = ""
-        for l, c in catsDict.items():
-            catsStr = "%d: (%s)" % (l, ",".join(map(str, c)))
+        for layer_num, c in catsDict.items():
+            catsStr = "%d: (%s)" % (layer_num, ",".join(map(str, c)))
 
         return catsStr
 

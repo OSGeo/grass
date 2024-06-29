@@ -217,9 +217,9 @@ class RLiSetupFrame(wx.Frame):
         listfiles = []
         # return all the configuration files in self.rlipath, check if there are
         # link or directory and doesn't add them
-        for l in os.listdir(self.rlipath):
-            if os.path.isfile(os.path.join(self.rlipath, l)):
-                listfiles.append(l)
+        for rli_conf in os.listdir(self.rlipath):
+            if os.path.isfile(os.path.join(self.rlipath, rli_conf)):
+                listfiles.append(rli_conf)
         return sorted(listfiles)
 
     def OnClose(self, event):

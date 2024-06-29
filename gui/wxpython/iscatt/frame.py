@@ -543,10 +543,10 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
             text_c = wx.SystemSettings.GetColour(wx.SYS_COLOUR_INACTIVECAPTIONTEXT)
 
         # if it is in scope of the method, gui falls, using self solved it
-        self.l = wx.ItemAttr()
-        self.l.SetBackgroundColour(back_c)
-        self.l.SetTextColour(text_c)
-        return self.l
+        self.item_attr = wx.ItemAttr()
+        self.item_attr.SetBackgroundColour(back_c)
+        self.item_attr.SetTextColour(text_c)
+        return self.item_attr
 
     def OnCategoryRightUp(self, event):
         """Show context menu on right click"""
