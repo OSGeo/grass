@@ -1614,28 +1614,28 @@ class RasterLegend(InstructionObject):
         InstructionObject.__init__(self, id=id, env=env)
         self.type = "rasterLegend"
         # default values
-        self.defaultInstruction = dict(
-            rLegend=False,
-            unit="inch",
-            rasterDefault=True,
-            raster=None,
-            discrete=None,
-            type=None,
-            where=(0, 0),
-            width=None,
-            height=None,
-            cols=1,
-            font="Helvetica",
-            fontsize=10,
+        self.defaultInstruction = {
+            "rLegend": False,
+            "unit": "inch",
+            "rasterDefault": True,
+            "raster": None,
+            "discrete": None,
+            "type": None,
+            "where": (0, 0),
+            "width": None,
+            "height": None,
+            "cols": 1,
+            "font": "Helvetica",
+            "fontsize": 10,
             # color = '0:0:0', tickbar = False,
             # range = False, min = 0, max = 0,
-            color="black",
-            tickbar="n",
-            range=False,
-            min=0,
-            max=0,
-            nodata="n",
-        )
+            "color": "black",
+            "tickbar": "n",
+            "range": False,
+            "min": 0,
+            "max": 0,
+            "nodata": "n",
+        }
         # current values
         self.instruction = dict(self.defaultInstruction)
 
