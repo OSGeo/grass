@@ -232,16 +232,19 @@ class VirtualAttributeList(
             self.sqlFilter = {"sql": sql}
         else:
             cmdParams.update(
-                {"map": self.mapDBInfo.map, "layer": layer, "where": where, "stdout": outFile}
+                {
+                    "map": self.mapDBInfo.map,
+                    "layer": layer,
+                    "where": where,
+                    "stdout": outFile,
+                }
             )
 
             self.sqlFilter = {"where": where}
 
             if columns:
                 # Enclose column name with SQL standard double quotes
-                cmdParams.update(
-                    {"columns": ",".join([f'"{col}"' for col in columns])}
-                )
+                cmdParams.update({"columns": ",".join([f'"{col}"' for col in columns])})
 
             ret = RunCommand("v.db.select", **cmdParams)
 
