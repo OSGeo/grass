@@ -137,12 +137,8 @@ class HistoryBrowserTree(CTreeView):
         self.runIgnoredCmdPattern = Signal("HistoryBrowserTree.runIgnoredCmdPattern")
 
         self._giface.currentMapsetChanged.connect(self.UpdateHistoryModelFromScratch)
-        self._giface.entryToHistoryAdded.connect(
-            lambda entry: self.InsertCommand(entry)
-        )
-        self._giface.entryInHistoryUpdated.connect(
-            lambda entry: self.UpdateCommand(entry)
-        )
+        self._giface.entryToHistoryAdded.connect(self.InsertCommand)
+        self._giface.entryInHistoryUpdated.connect(self.UpdateCommand)
 
         self.SetToolTip(_("Double-click to open the tool"))
         self.selectionChanged.connect(self.OnItemSelected)

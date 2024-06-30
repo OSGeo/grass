@@ -156,9 +156,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
         self.goutput = GConsoleWindow(
             parent=self, giface=giface, gconsole=self._gconsole
         )
-        self.goutput.showNotification.connect(
-            lambda message: self.SetStatusText(message)
-        )
+        self.goutput.showNotification.connect(self.SetStatusText)
 
         # here events are binded twice
         self._gconsole.Bind(
