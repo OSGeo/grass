@@ -123,7 +123,7 @@ for key in sorted(keywords.keys()):
 keywordsfile = open(os.path.join(path, "keywords.html"), "w")
 keywordsfile.write(
     header1_tmpl.substitute(
-        title="GRASS GIS %s Reference " "Manual: Keywords index" % grass_version
+        title="GRASS GIS %s Reference Manual: Keywords index" % grass_version
     )
 )
 keywordsfile.write(headerkeywords_tmpl)

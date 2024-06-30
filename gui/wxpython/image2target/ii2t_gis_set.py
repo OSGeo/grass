@@ -323,7 +323,7 @@ class GRASSStartup(wx.Frame):
                 parent=self,
                 caption=_("Error"),
                 message=_(
-                    "Unable to set GRASS database. " "Check your locale settings."
+                    "Unable to set GRASS database. Check your locale settings."
                 ),
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
@@ -673,7 +673,7 @@ class GRASSStartup(wx.Frame):
         if returncode != 0:
             GError(
                 parent=self,
-                message=_("Import of <%(name)s> failed.\n" "Reason: %(msg)s")
+                message=_("Import of <%(name)s> failed.\nReason: %(msg)s")
                 % ({"name": filePath, "msg": error}),
             )
         else:
@@ -1142,7 +1142,7 @@ class GRASSStartup(wx.Frame):
                         os.remove(lockfile)
                     except OSError as e:
                         GError(
-                            _("Unable to remove '%(lock)s'.\n\n" "Details: %(reason)s")
+                            _("Unable to remove '%(lock)s'.\n\nDetails: %(reason)s")
                             % {"lock": lockfile, "reason": e}
                         )
                 else:

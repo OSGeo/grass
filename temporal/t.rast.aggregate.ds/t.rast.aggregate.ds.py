@@ -140,7 +140,7 @@ def main():
     if sampler_sp.get_temporal_type() != sp.get_temporal_type():
         dbif.close()
         gcore.fatal(
-            _("Input and aggregation dataset must have " "the same temporal type")
+            _("Input and aggregation dataset must have the same temporal type")
         )
 
     # Check if intervals are present

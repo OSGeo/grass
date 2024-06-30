@@ -1769,7 +1769,7 @@ class PythonPanel(wx.Panel):
             dlg = wx.MessageDialog(
                 self,
                 message=_(
-                    "File <%s> already exists. " "Do you want to overwrite this file?"
+                    "File <%s> already exists. Do you want to overwrite this file?"
                 )
                 % filename,
                 caption=_("Save file"),

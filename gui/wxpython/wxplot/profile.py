@@ -443,7 +443,7 @@ class ProfileFrame(BasePlotFrame):
                     GError(
                         parent=self,
                         message=_(
-                            "Unable to open file <%s> for writing.\n" "Reason: %s"
+                            "Unable to open file <%s> for writing.\nReason: %s"
                         )
                         % (pfile[-1], e),
                     )

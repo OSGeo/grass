@@ -467,7 +467,7 @@ class AbstractMapDataset(AbstractDataset):
                 return False
             else:
                 self.msgr.error(
-                    _("End time must be of type datetime for " "%(type)s map <%(id)s>")
+                    _("End time must be of type datetime for %(type)s map <%(id)s>")
                     % {"type": self.get_type(), "id": self.get_map_id()}
                 )
                 return False
@@ -1023,7 +1023,7 @@ class AbstractMapDataset(AbstractDataset):
             statement += self.unregister(dbif=dbif, update=update, execute=False)
 
             self.msgr.verbose(
-                _("Delete %s dataset <%s> from temporal " "database")
+                _("Delete %s dataset <%s> from temporal database")
                 % (self.get_type(), self.get_id())
             )
 

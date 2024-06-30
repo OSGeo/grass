@@ -110,5 +110,5 @@ def mapcalc3d(
         )
     except CalledModuleError:
         fatal(
-            _("An error occurred while running r3.mapcalc" " with expression: %s") % e
+            _("An error occurred while running r3.mapcalc with expression: %s") % e
         )

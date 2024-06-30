@@ -533,7 +533,7 @@ def parse_interface(name, parser=processTask, blackList=None):
     except ETREE_EXCEPTIONS as error:
         raise ScriptError(
             _(
-                "Cannot parse interface description of" "<{name}> module: {error}"
+                "Cannot parse interface description of<{name}> module: {error}"
             ).format(name=name, error=error)
         )
     task = parser(tree, blackList=blackList).get_task()

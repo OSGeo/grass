@@ -437,7 +437,7 @@ class Columns:
             col = col_type.upper()
             valid = [col.startswith(tp) for tp in valid_type]
             if not any(valid):
-                str_err = "Type: %r is not supported." "\nSupported types are: %s"
+                str_err = "Type: %r is not supported.\nSupported types are: %s"
                 raise TypeError(str_err % (col_type, ", ".join(valid_type)))
             return col_type
 
@@ -740,7 +740,7 @@ class Link:
         name=None,
         table=None,
         key="cat",
-        database="$GISDBASE/$LOCATION_NAME/" "$MAPSET/sqlite/sqlite.db",
+        database="$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db",
         driver="sqlite",
         c_fieldinfo=None,
     ):
@@ -1140,13 +1140,13 @@ class Table:
             used = db_table_in_vector(self.name)
             if used is not None and len(used) > 0 and not force:
                 print(
-                    _("Deleting table <%s> which is attached" " to following map(s):")
+                    _("Deleting table <%s> which is attached to following map(s):")
                     % self.name
                 )
                 for vect in used:
                     warning("%s" % vect)
                 print(
-                    _("You must use the force flag to actually" " remove it. Exiting.")
+                    _("You must use the force flag to actually remove it. Exiting.")
                 )
             else:
                 cur.execute(sql.DROP_TAB.format(tname=self.name))

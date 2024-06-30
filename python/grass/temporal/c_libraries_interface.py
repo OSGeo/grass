@@ -554,7 +554,7 @@ def _read_semantic_label(lock, conn, data):
                 semantic_label = decode(ret)
         else:
             logging.error(
-                "Unable to read semantic label. " "Unsupported map type %s" % maptype
+                "Unable to read semantic label. Unsupported map type %s" % maptype
             )
             return -1
     except:
@@ -591,7 +591,7 @@ def _write_semantic_label(lock, conn, data):
             libraster.Rast_write_semantic_label(name, semantic_label)
         else:
             logging.error(
-                "Unable to write semantic label. " "Unsupported map type %s" % maptype
+                "Unable to write semantic label. Unsupported map type %s" % maptype
             )
             return -2
     except:
@@ -625,7 +625,7 @@ def _remove_semantic_label(lock, conn, data):
             check = libgis.G_remove_misc("cell_misc", "semantic_label", name)
         else:
             logging.error(
-                "Unable to remove semantic label. " "Unsupported map type %s" % maptype
+                "Unable to remove semantic label. Unsupported map type %s" % maptype
             )
             return -2
     except:

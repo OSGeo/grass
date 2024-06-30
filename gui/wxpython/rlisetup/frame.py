@@ -241,7 +241,7 @@ class RLiSetupFrame(wx.Frame):
             return
         dlg = wx.MessageDialog(
             parent=self.parent,
-            message=_("Do you want remove r.li " "configuration file <%s>?") % confile,
+            message=_("Do you want remove r.li configuration file <%s>?") % confile,
             caption=_("Remove new r.li configuration file?"),
             style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
         )

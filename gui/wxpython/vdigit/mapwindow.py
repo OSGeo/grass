@@ -702,7 +702,7 @@ class VDigitWindow(BufferedMapWindow):
             GMessage(
                 parent=self,
                 message=_(
-                    "Nothing to do. " "Choose appropriate tool from digitizer toolbar."
+                    "Nothing to do. Choose appropriate tool from digitizer toolbar."
                 ),
             )
             event.Skip()
@@ -740,7 +740,7 @@ class VDigitWindow(BufferedMapWindow):
         ):
             self.OnLeftDownMoveLine(event)
 
-        elif action in ("displayAttrs" "displayCats"):
+        elif action in ("displayAttrsdisplayCats"):
             self.OnLeftDownDisplayCA(event)
 
         elif action in ("copyCats", "copyAttrs"):

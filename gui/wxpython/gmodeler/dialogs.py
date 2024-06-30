@@ -305,7 +305,7 @@ class ModelSearchDialog(wx.Dialog):
             GError(
                 parent=self,
                 message=_(
-                    "Command not defined.\n\n" "Unable to add new action to the model."
+                    "Command not defined.\n\nUnable to add new action to the model."
                 ),
             )
             return False
@@ -458,7 +458,7 @@ class ModelRelationDialog(wx.Dialog):
             GError(
                 parent=self.parent,
                 message=_(
-                    "Relation doesn't start with data item.\n" "Unable to add relation."
+                    "Relation doesn't start with data item.\nUnable to add relation."
                 ),
             )
             return items
@@ -483,7 +483,7 @@ class ModelRelationDialog(wx.Dialog):
         if not items:
             GError(
                 parent=self.parent,
-                message=_("No relevant option found.\n" "Unable to add relation."),
+                message=_("No relevant option found.\nUnable to add relation."),
             )
         return items
 
@@ -867,7 +867,7 @@ class VariableListCtrl(ModelListCtrl):
         """Remove all variable(s) from the model"""
         dlg = wx.MessageBox(
             parent=self,
-            message=_("Do you want to delete all variables from " "the model?"),
+            message=_("Do you want to delete all variables from the model?"),
             caption=_("Delete variables"),
             style=wx.YES_NO | wx.CENTRE,
         )

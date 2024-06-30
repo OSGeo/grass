@@ -69,7 +69,7 @@ class VDigitError:
         """Writing line failed"""
         GError(
             message=_(
-                "Writing new feature failed. " "Operation canceled.\n\n" "Reason: %s"
+                "Writing new feature failed. Operation canceled.\n\nReason: %s"
             )
             % GetLastError(),
             parent=self.parent,
@@ -79,7 +79,7 @@ class VDigitError:
     def ReadLine(self, line):
         """Reading line failed"""
         GError(
-            message=_("Reading feature id %d failed. " "Operation canceled.") % line,
+            message=_("Reading feature id %d failed. Operation canceled.") % line,
             parent=self.parent,
             caption=self.caption,
         )
@@ -87,7 +87,7 @@ class VDigitError:
     def DbLink(self, dblink):
         """No dblink available"""
         GError(
-            message=_("Database link %d not available. " "Operation canceled.")
+            message=_("Database link %d not available. Operation canceled.")
             % dblink,
             parent=self.parent,
             caption=self.caption,
@@ -96,7 +96,7 @@ class VDigitError:
     def Driver(self, driver):
         """Staring driver failed"""
         GError(
-            message=_("Unable to start database driver <%s>. " "Operation canceled.")
+            message=_("Unable to start database driver <%s>. Operation canceled.")
             % driver,
             parent=self.parent,
             caption=self.caption,
@@ -117,7 +117,7 @@ class VDigitError:
     def DbExecute(self, sql):
         """Sql query failed"""
         GError(
-            message=_("Unable to execute SQL query '%s'. " "Operation canceled.") % sql,
+            message=_("Unable to execute SQL query '%s'. Operation canceled.") % sql,
             parent=self.parent,
             caption=self.caption,
         )
@@ -125,7 +125,7 @@ class VDigitError:
     def DeadLine(self, line):
         """Dead line"""
         GError(
-            message=_("Feature id %d is marked as dead. " "Operation canceled.") % line,
+            message=_("Feature id %d is marked as dead. Operation canceled.") % line,
             parent=self.parent,
             caption=self.caption,
         )
@@ -133,7 +133,7 @@ class VDigitError:
     def FeatureType(self, ftype):
         """Unknown feature type"""
         GError(
-            message=_("Unsupported feature type %d. " "Operation canceled.") % ftype,
+            message=_("Unsupported feature type %d. Operation canceled.") % ftype,
             parent=self.parent,
             caption=self.caption,
         )

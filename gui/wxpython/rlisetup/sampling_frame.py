@@ -222,7 +222,7 @@ class RLiSetupMapPanel(wx.Panel):
                     GMessage(
                         parent=self,
                         message=_(
-                            "The raster file %s already" " exists, please change name"
+                            "The raster file %s already exists, please change name"
                         )
                         % raster,
                     )
@@ -345,7 +345,7 @@ class RLiSetupMapPanel(wx.Panel):
                     GMessage(
                         parent=self,
                         message=_(
-                            "The raster file %s already" " exists, please change name"
+                            "The raster file %s already exists, please change name"
                         )
                         % raster,
                     )

@@ -82,7 +82,7 @@ def main():
     merging = False
     if os.path.exists(e00name + ".e01") or os.path.exists(e00name + ".E01"):
         gcore.message(
-            _("Found that E00 file is split into pieces (.e01, ...)." " Merging...")
+            _("Found that E00 file is split into pieces (.e01, ...). Merging...")
         )
         merging = True
 
@@ -126,7 +126,7 @@ def main():
         == 1
     ):
         gcore.message(
-            _("E00 ASCII found and converted to Arc Coverage in " "current directory")
+            _("E00 ASCII found and converted to Arc Coverage in current directory")
         )
     else:
         gcore.message(_("E00 Compressed ASCII found. Will uncompress first..."))

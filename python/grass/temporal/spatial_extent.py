@@ -1903,7 +1903,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
         if self.get_projection() == "LL":
             self.msgr.error(
-                _("Volume computation is not supported " "for LL projections")
+                _("Volume computation is not supported for LL projections")
             )
 
         area = self.get_area()
@@ -1922,7 +1922,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
         if self.get_projection() == "LL":
             self.msgr.error(
-                _("Area computation is not supported " "for LL projections")
+                _("Area computation is not supported for LL projections")
             )
 
         bbox = self.get_spatial_extent_as_tuple()

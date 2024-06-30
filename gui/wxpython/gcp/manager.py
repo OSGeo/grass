@@ -508,7 +508,7 @@ class LocationPage(TitledPage):
         """Sets source mapset for map(s) to georectify"""
         if self.xylocation == "":
             GMessage(
-                _("You must select a valid location " "before selecting a mapset"),
+                _("You must select a valid location before selecting a mapset"),
                 parent=self,
             )
             return
@@ -695,7 +695,7 @@ class GroupPage(TitledPage):
     def OnPageChanging(self, event=None):
         if event.GetDirection() and self.xygroup == "":
             GMessage(
-                _("You must select a valid image/map " "group in order to continue"),
+                _("You must select a valid image/map group in order to continue"),
                 parent=self,
             )
             event.Veto()
@@ -703,7 +703,7 @@ class GroupPage(TitledPage):
 
         if event.GetDirection() and self.extension == "":
             GMessage(
-                _("You must enter an map name " "extension in order to continue"),
+                _("You must enter an map name extension in order to continue"),
                 parent=self,
             )
             event.Veto()
@@ -917,7 +917,7 @@ class DispMapPage(TitledPage):
 
         if event.GetDirection() and (src_map == ""):
             GMessage(
-                _("You must select a source map " "in order to continue"), parent=self
+                _("You must select a source map in order to continue"), parent=self
             )
             event.Veto()
             return
