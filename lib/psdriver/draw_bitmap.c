@@ -4,7 +4,7 @@ void PS_Bitmap(int ncols, int nrows, int threshold, const unsigned char *buf)
 {
     int i, j;
 
-    output("%d %d %d %d BITMAP\n", cur_x, cur_y, ncols, nrows);
+    output("%lf %lf %d %d BITMAP\n", cur_x, cur_y, ncols, nrows);
 
     for (j = 0; j < nrows; j++) {
         unsigned int bit = 0x80;
