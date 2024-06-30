@@ -147,7 +147,6 @@ int bar(struct stat_list *dist_stats, /* list of distribution statistics */
     for (i = dist_stats->mincat; i <= dist_stats->maxcat; i++) {
         if (!ptr)
             break;
-        draw = NO;
         /* figure bar color and height
          *
          * the cat number determines the color, the corresponding stat,
