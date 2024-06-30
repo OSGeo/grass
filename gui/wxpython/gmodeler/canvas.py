@@ -103,8 +103,7 @@ class ModelCanvas(ogl.ShapeCanvas):
         ymax = 20
         for item in self.GetDiagram().GetShapeList():
             y = item.GetY() + item.GetBoundingBoxMin()[1]
-            if y > ymax:
-                ymax = y
+            ymax = max(y, ymax)
 
         return (self.GetSize()[0] // 2, ymax + yoffset)
 

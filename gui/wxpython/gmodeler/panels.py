@@ -989,14 +989,10 @@ class ModelerPanel(wx.Panel, MainPageBase):
             xmax = x + w / 2
             ymin = y - h / 2
             ymax = y + h / 2
-            if xmin < xminImg:
-                xminImg = xmin
-            if xmax > xmaxImg:
-                xmaxImg = xmax
-            if ymin < yminImg:
-                yminImg = ymin
-            if ymax > ymaxImg:
-                ymaxImg = ymax
+            xminImg = min(xmin, xminImg)
+            xmaxImg = max(xmax, xmaxImg)
+            yminImg = min(ymin, yminImg)
+            ymaxImg = max(ymax, ymaxImg)
         size = wx.Size(int(xmaxImg - xminImg) + 50, int(ymaxImg - yminImg) + 50)
         bitmap = EmptyBitmap(width=size.width, height=size.height)
 

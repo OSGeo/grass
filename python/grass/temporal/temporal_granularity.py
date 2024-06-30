@@ -948,55 +948,43 @@ def compute_common_absolute_time_granularity_simple(gran_list):
 
         if gran in ["seconds", "second"]:
             has_seconds = True
-            if min_gran > 0:
-                min_gran = 0
-            if max_gran < 0:
-                max_gran = 0
+            min_gran = min(min_gran, 0)
+            max_gran = max(max_gran, 0)
 
             seconds.append(int(num))
 
         if gran in ["minutes", "minute"]:
             has_minutes = True
-            if min_gran > 1:
-                min_gran = 1
-            if max_gran < 1:
-                max_gran = 1
+            min_gran = min(min_gran, 1)
+            max_gran = max(max_gran, 1)
 
             minutes.append(int(num))
 
         if gran in ["hours", "hour"]:
             has_hours = True
-            if min_gran > 2:
-                min_gran = 2
-            if max_gran < 2:
-                max_gran = 2
+            min_gran = min(min_gran, 2)
+            max_gran = max(max_gran, 2)
 
             hours.append(int(num))
 
         if gran in ["days", "day"]:
             has_days = True
-            if min_gran > 3:
-                min_gran = 3
-            if max_gran < 3:
-                max_gran = 3
+            min_gran = min(min_gran, 3)
+            max_gran = max(max_gran, 3)
 
             days.append(int(num))
 
         if gran in ["months", "month"]:
             has_months = True
-            if min_gran > 4:
-                min_gran = 4
-            if max_gran < 4:
-                max_gran = 4
+            min_gran = min(min_gran, 4)
+            max_gran = max(max_gran, 4)
 
             months.append(int(num))
 
         if gran in ["years", "year"]:
             has_years = True
-            if min_gran > 5:
-                min_gran = 5
-            if max_gran < 5:
-                max_gran = 5
+            min_gran = min(min_gran, 5)
+            max_gran = max(max_gran, 5)
 
             years.append(int(num))
 

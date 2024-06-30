@@ -55,8 +55,7 @@ def benchmark_single(module, label, repeat=5):
         measured_times.append(module.time)
 
     avg = time_sum / repeat
-    if avg < min_avg:
-        min_avg = avg
+    min_avg = min(avg, min_avg)
     print(f"\nResult - {avg}s")
 
     print("\u2500" * term_size.columns)
