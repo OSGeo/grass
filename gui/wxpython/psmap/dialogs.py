@@ -263,7 +263,7 @@ class PsmapDialog(Dialog):
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
     def AddUnits(self, parent, dialogDict):
-        parent.units = dict()
+        parent.units = {}
         parent.units["unitsLabel"] = StaticText(parent, id=wx.ID_ANY, label=_("Units:"))
         choices = self.unitConv.getPageUnitsNames()
         parent.units["unitsCtrl"] = Choice(parent, id=wx.ID_ANY, choices=choices)
@@ -273,7 +273,7 @@ class PsmapDialog(Dialog):
 
     def AddPosition(self, parent, dialogDict):
         if not hasattr(parent, "position"):
-            parent.position = dict()
+            parent.position = {}
         parent.position["comment"] = StaticText(
             parent,
             id=wx.ID_ANY,
@@ -307,7 +307,7 @@ class PsmapDialog(Dialog):
 
     def AddExtendedPosition(self, panel, gridBagSizer, dialogDict):
         """Add widgets for setting position relative to paper and to map"""
-        panel.position = dict()
+        panel.position = {}
         positionLabel = StaticText(panel, id=wx.ID_ANY, label=_("Position is given:"))
         panel.position["toPaper"] = RadioButton(
             panel, id=wx.ID_ANY, label=_("relative to paper"), style=wx.RB_GROUP
@@ -435,7 +435,7 @@ class PsmapDialog(Dialog):
         gridBagSizer.Add(sizerM, pos=(2, 1), flag=wx.ALIGN_LEFT | wx.EXPAND, border=0)
 
     def AddFont(self, parent, dialogDict, color=True):
-        parent.font = dict()
+        parent.font = {}
         # parent.font["fontLabel"] = wx.StaticText(
         #     parent, id=wx.ID_ANY, label=_("Choose font:")
         # )
@@ -758,7 +758,7 @@ class PageSetupDialog(PsmapDialog):
         currPaper = self.paperTable[self.getCtrl("Format").GetSelection()]
         currUnit = self.unitConv.findUnit(self.getCtrl("Units").GetStringSelection())
         currOrientIdx = self.getCtrl("Orientation").GetSelection()
-        newSize = dict()
+        newSize = {}
         for item in self.cat[3:]:
             newSize[item] = self.unitConv.convert(
                 float(currPaper[item]), fromUnit="inch", toUnit=currUnit
@@ -782,7 +782,7 @@ class PageSetupDialog(PsmapDialog):
         return self.hBoxDict[item].GetItem(1).GetWindow()
 
     def _toList(self, paperStr):
-        sizeList = list()
+        sizeList = []
         for line in paperStr.strip().split("\n"):
             d = dict(zip([self.cat[1]] + self.cat[3:], line.split()))
             sizeList.append(d)

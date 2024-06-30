@@ -460,11 +460,11 @@ class VDigitWindow(BufferedMapWindow):
         """Left mouse button pressed - vector digitizer move
         feature/vertex, edit linear feature
         """
-        self.moveInfo = dict()
+        self.moveInfo = {}
         # geographic coordinates of initial position (left-down)
         self.moveInfo["begin"] = None
         # list of ids to modify
-        self.moveInfo["id"] = list()
+        self.moveInfo["id"] = []
 
         # set pen
         if self.toolbar.GetAction() in ["moveVertex", "editLine"]:

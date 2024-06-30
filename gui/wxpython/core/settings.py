@@ -1065,8 +1065,8 @@ class Settings:
                 else:
                     return settings[group][key]
             else:
-                if isinstance(subkey, type(tuple())) or isinstance(
-                    subkey, type(list())
+                if isinstance(subkey, type(())) or isinstance(
+                    subkey, type([])
                 ):
                     return settings[group][key][subkey[0]][subkey[1]]
                 else:
@@ -1104,8 +1104,8 @@ class Settings:
                 else:
                     settings[group][key] = value
             else:
-                if isinstance(subkey, type(tuple())) or isinstance(
-                    subkey, type(list())
+                if isinstance(subkey, type(())) or isinstance(
+                    subkey, type([])
                 ):
                     settings[group][key][subkey[0]][subkey[1]] = value
                 else:
@@ -1201,7 +1201,7 @@ UserSettings = Settings()
 
 
 def GetDisplayVectSettings():
-    settings = list()
+    settings = []
     if not UserSettings.Get(
         group="vectorLayer", key="featureColor", subkey=["transparent", "enabled"]
     ):

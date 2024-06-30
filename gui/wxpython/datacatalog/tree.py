@@ -503,13 +503,13 @@ class DataCatalogTree(TreeView):
         except NotImplementedError:
             nprocs = 1
 
-        results = dict()
+        results = {}
         errors = []
         location_nodes = []
         all_location_nodes = []
         nlocations = len(locations)
         for location in locations:
-            results[location] = dict()
+            results[location] = {}
             varloc = self._model.AppendNode(
                 parent=grassdb_node, data=dict(type="location", name=location)
             )

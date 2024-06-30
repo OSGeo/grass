@@ -146,7 +146,7 @@ class PsMapFrame(wx.Frame):
             parent=self, objectsToDraw=self.objectId, env=self.env
         )
         # open dialogs
-        self.openDialogs = dict()
+        self.openDialogs = {}
 
         self.pageId = NewId()
         # current page of GNotebook

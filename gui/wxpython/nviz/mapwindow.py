@@ -134,15 +134,15 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         self.mouse = {"use": "pointer"}
 
         # list of loaded map layers (layer tree items)
-        self.layers = list()
+        self.layers = []
         # list of constant surfaces
-        self.constants = list()
+        self.constants = []
         # id of base surface (when vector is loaded and no surface exist)
         self.baseId = -1
         # list of cutting planes
-        self.cplanes = list()
+        self.cplanes = []
         # list of query points
-        self.qpoints = list()
+        self.qpoints = []
         # list of past views
         self.viewhistory = []
         self.saveHistory = False
@@ -1013,7 +1013,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
     def ResetViewHistory(self):
         """Reset view history"""
-        self.viewhistory = list()
+        self.viewhistory = []
 
     def GoTo(self, e, n):
         """Focus on given point"""
@@ -1454,8 +1454,8 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
     def SetVectorSurface(self, data):
         """Set reference surfaces of vector"""
         data["mode"]["surface"] = {}
-        data["mode"]["surface"]["value"] = list()
-        data["mode"]["surface"]["show"] = list()
+        data["mode"]["surface"]["value"] = []
+        data["mode"]["surface"]["show"] = []
         for name in self.GetLayerNames("raster"):
             data["mode"]["surface"]["value"].append(name)
             data["mode"]["surface"]["show"].append(True)
@@ -1635,7 +1635,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             name = self.constants[-1]["constant"]["object"]["name"] + 1
         except IndexError:
             name = 1
-        data = dict()
+        data = {}
         self.constants.append(data)
         data = self.SetMapObjProperties(item=index, id=-1, nvizType="constant")
         self.AddConstant(data, name)

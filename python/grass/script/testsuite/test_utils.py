@@ -7,7 +7,7 @@ from grass.script import utils
 
 
 class EnvironChange(TestCase):
-    env = dict()
+    env = {}
     NOT_FOUND = "Not found!"
 
     def setUp(self):
