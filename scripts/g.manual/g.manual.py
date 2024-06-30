@@ -94,7 +94,7 @@ def start_browser(entry):
 
     grass.verbose(
         _("Starting browser '%(browser)s' for manual" " entry '%(entry)s'...")
-        % dict(browser=browser_name, entry=entry)
+        % {"browser": browser_name, "entry": entry}
     )
 
     try:
@@ -102,7 +102,7 @@ def start_browser(entry):
     except Exception:
         grass.fatal(
             _("Error starting browser '%(browser)s' for HTML file" " '%(path)s'")
-            % dict(browser=browser, path=path)
+            % {"browser": browser, "path": path}
         )
 
 

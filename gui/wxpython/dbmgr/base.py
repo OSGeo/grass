@@ -224,15 +224,15 @@ class VirtualAttributeList(
 
         outFile = tempfile.NamedTemporaryFile(mode="w+b")
 
-        cmdParams = dict(quiet=True, parent=self, flags="c", separator=fs)
+        cmdParams = {"quiet": True, "parent": self, "flags": "c", "separator": fs}
 
         if sql:
-            cmdParams.update(dict(sql=sql, output=outFile.name, overwrite=True))
+            cmdParams.update({"sql": sql, "output": outFile.name, "overwrite": True})
             ret = RunCommand("db.select", **cmdParams)
             self.sqlFilter = {"sql": sql}
         else:
             cmdParams.update(
-                dict(map=self.mapDBInfo.map, layer=layer, where=where, stdout=outFile)
+                {"map": self.mapDBInfo.map, "layer": layer, "where": where, "stdout": outFile}
             )
 
             self.sqlFilter = {"where": where}
@@ -240,7 +240,7 @@ class VirtualAttributeList(
             if columns:
                 # Enclose column name with SQL standard double quotes
                 cmdParams.update(
-                    dict(columns=",".join([f'"{col}"' for col in columns]))
+                    {"columns": ",".join([f'"{col}"' for col in columns])}
                 )
 
             ret = RunCommand("v.db.select", **cmdParams)

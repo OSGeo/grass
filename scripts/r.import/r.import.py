@@ -192,12 +192,12 @@ def main():
     if options["extent"] == "region":
         region_flag += "r"
     if flags["o"] or is_projection_matching(GDALdatasource):
-        parameters = dict(
-            input=GDALdatasource,
-            output=output,
-            memory=memory,
-            flags="ak" + additional_flags + region_flag,
-        )
+        parameters = {
+            "input": GDALdatasource,
+            "output": output,
+            "memory": memory,
+            "flags": "ak" + additional_flags + region_flag,
+        }
         if bands:
             parameters["band"] = bands
         try:
@@ -233,15 +233,15 @@ def main():
     # creating a new location with r.in.gdal requires a sanitized env
     env = os.environ.copy()
     env = grass.sanitize_mapset_environment(env)
-    parameters = dict(
-        input=GDALdatasource,
-        output=output,
-        memory=memory,
-        flags="c",
-        title=title,
-        project=TMPLOC,
-        quiet=True,
-    )
+    parameters = {
+        "input": GDALdatasource,
+        "output": output,
+        "memory": memory,
+        "flags": "c",
+        "title": title,
+        "project": TMPLOC,
+        "quiet": True,
+    }
     if bands:
         parameters["band"] = bands
     try:
@@ -273,12 +273,12 @@ def main():
 
     # import into temp location
     grass.verbose(_("Importing <%s> to temporary project...") % GDALdatasource)
-    parameters = dict(
-        input=GDALdatasource,
-        output=output,
-        memory=memory,
-        flags="ak" + additional_flags,
-    )
+    parameters = {
+        "input": GDALdatasource,
+        "output": output,
+        "memory": memory,
+        "flags": "ak" + additional_flags,
+    }
     if bands:
         parameters["band"] = bands
     if "r" in region_flag:

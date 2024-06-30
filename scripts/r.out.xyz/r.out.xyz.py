@@ -52,9 +52,9 @@ def main():
         statsflags = "1g"
     else:
         statsflags = "1gn"
-    parameters = dict(
-        flags=statsflags, input=options["input"], separator=options["separator"]
-    )
+    parameters = {
+        "flags": statsflags, "input": options["input"], "separator": options["separator"]
+    }
     if output:
         parameters.update(output=output)
 
