@@ -22,7 +22,12 @@ GETTYPE = {
 class TestCheckValueFunction(TestCase):
     def test_single_all(self):
         param = Parameter(
-            diz={"name": "int_number", "required": "yes", "multiple": "no", "type": "all"}
+            diz={
+                "name": "int_number",
+                "required": "yes",
+                "multiple": "no",
+                "type": "all",
+            }
         )
         value = 1
         self.assertTupleEqual((value, value), _check_value(param, value))
@@ -38,7 +43,12 @@ class TestCheckValueFunction(TestCase):
     def test_single_float_double(self):
         for ptype in ("float", "double"):
             param = Parameter(
-                diz={"name": "int_number", "required": "yes", "multiple": "no", "type": ptype}
+                diz={
+                    "name": "int_number",
+                    "required": "yes",
+                    "multiple": "no",
+                    "type": ptype,
+                }
             )
             value = 1
             self.assertTupleEqual((float(value), value), _check_value(param, value))
@@ -58,7 +68,12 @@ class TestCheckValueFunction(TestCase):
     def test_multiple_float_double(self):
         for ptype in ("float", "double"):
             param = Parameter(
-                diz={"name": "number", "required": "yes", "multiple": "yes", "type": ptype}
+                diz={
+                    "name": "number",
+                    "required": "yes",
+                    "multiple": "yes",
+                    "type": ptype,
+                }
             )
             value = (1.4, 2.3)
             self.assertTupleEqual((list(value), value), _check_value(param, value))
@@ -213,7 +228,12 @@ class TestCheckValueFunction(TestCase):
 
     def test_single_integer(self):
         param = Parameter(
-            diz={"name": "int_number", "required": "yes", "multiple": "no", "type": "integer"}
+            diz={
+                "name": "int_number",
+                "required": "yes",
+                "multiple": "no",
+                "type": "integer",
+            }
         )
         value = 1
         self.assertTupleEqual((value, value), _check_value(param, value))
@@ -232,7 +252,12 @@ class TestCheckValueFunction(TestCase):
 
     def test_multiple_integer(self):
         param = Parameter(
-            diz={"name": "int_number", "required": "yes", "multiple": "yes", "type": "integer"}
+            diz={
+                "name": "int_number",
+                "required": "yes",
+                "multiple": "yes",
+                "type": "integer",
+            }
         )
         value = (1, 2)
         # import ipdb; ipdb.set_trace()
@@ -389,7 +414,12 @@ class TestCheckValueFunction(TestCase):
 
     def test_multiple_strings(self):
         param = Parameter(
-            diz={"name": "rastnames", "required": "yes", "multiple": "yes", "type": "string"}
+            diz={
+                "name": "rastnames",
+                "required": "yes",
+                "multiple": "yes",
+                "type": "string",
+            }
         )
         value = ["elev", "slope", "aspect"]
         self.assertTupleEqual((value, value), _check_value(param, value))
@@ -449,7 +479,12 @@ class TestParameterGetBash(TestCase):
     def test_single_float_double(self):
         for ptype in ("float", "double"):
             param = Parameter(
-                diz={"name": "number", "required": "yes", "multiple": "no", "type": ptype}
+                diz={
+                    "name": "number",
+                    "required": "yes",
+                    "multiple": "no",
+                    "type": ptype,
+                }
             )
             # set private attributes to skip the check function
             param._value = 1.0
@@ -462,7 +497,12 @@ class TestParameterGetBash(TestCase):
     def test_multiple_float_double(self):
         for ptype in ("float", "double"):
             param = Parameter(
-                diz={"name": "number", "required": "yes", "multiple": "yes", "type": ptype}
+                diz={
+                    "name": "number",
+                    "required": "yes",
+                    "multiple": "yes",
+                    "type": ptype,
+                }
             )
             # set private attributes to skip the check function
             param._value = [

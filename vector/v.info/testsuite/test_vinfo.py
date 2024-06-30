@@ -118,7 +118,11 @@ class TestVInfo(TestCase):
             sep="=",
             precision=0.1,
             reference={
-                "name": self.test_vinfo_no_db, "map3d": 0, "num_dblinks": 0, "bottom": 0.0, "top": 0.0
+                "name": self.test_vinfo_no_db,
+                "map3d": 0,
+                "num_dblinks": 0,
+                "bottom": 0.0,
+                "top": 0.0,
             },
         )
 

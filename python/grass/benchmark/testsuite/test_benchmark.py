@@ -39,7 +39,9 @@ class TestBenchmarksRun(TestCase):
         """Test that resolution tests runs without nprocs and plots to file"""
         benchmarks = [
             {
-                "module": Module("r.univar", map="elevation", stdout_=DEVNULL, run_=False),
+                "module": Module(
+                    "r.univar", map="elevation", stdout_=DEVNULL, run_=False
+                ),
                 "label": "Standard output",
             },
             {
@@ -68,7 +70,9 @@ class TestBenchmarksRun(TestCase):
         repeat = 4
         benchmarks = [
             {
-                "module": Module("r.univar", map="elevation", stdout_=DEVNULL, run_=False),
+                "module": Module(
+                    "r.univar", map="elevation", stdout_=DEVNULL, run_=False
+                ),
                 "label": label,
             }
         ]
@@ -89,7 +93,9 @@ class TestBenchmarksRun(TestCase):
         repeat = 4
         benchmarks = [
             {
-                "module": Module("r.univar", map="elevation", stdout_=DEVNULL, run_=False),
+                "module": Module(
+                    "r.univar", map="elevation", stdout_=DEVNULL, run_=False
+                ),
                 "label": label,
                 "max_nprocs": 4,
             }
