@@ -368,11 +368,11 @@ class Info:
         # update the overwrite attribute
         self.overwrite = overwrite if overwrite is not None else self.overwrite
         # check if the mode is valid
-        if self.mode not in ("r", "rw", "w"):
+        if self.mode not in {"r", "rw", "w"}:
             raise ValueError("Mode not supported. Use one of: 'r', 'rw', 'w'.")
 
         # check if the map exist
-        if self.exist() and self.mode in ("r", "rw"):
+        if self.exist() and self.mode in {"r", "rw"}:
             # open in READ mode
             if self.mode == "r":
                 openvect = libvect.Vect_open_old2(
@@ -392,7 +392,7 @@ class Info:
             openvect = libvect.Vect_open_new(self.c_mapinfo, self.name, with_z)
             self.dblinks = DBlinks(self.c_mapinfo)
 
-        if self.mode in ("w", "rw") and tab_cols:
+        if self.mode in {"w", "rw"} and tab_cols:
             # create a link
             link = Link(
                 layer,

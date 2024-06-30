@@ -1004,7 +1004,7 @@ def get_wxgui_extensions(url):
         if not sline:
             continue
         name = sline.group(2).rstrip("/")
-        if name not in ("..", "Makefile"):
+        if name not in {"..", "Makefile"}:
             mlist.append(name)
 
     return mlist
@@ -1886,7 +1886,7 @@ def download_source_code(
                              URL path
     """
     gs.verbose(_("Type of source identified as '{source}'.").format(source=source))
-    if source in ("official", "official_fork"):
+    if source in {"official", "official_fork"}:
         gs.message(
             _("Fetching <{name}> from <{url}> (be patient)...").format(
                 name=name, url=url
@@ -1902,7 +1902,7 @@ def download_source_code(
             )
         )
         download_source_code_svn(url, name, outdev, directory)
-    elif source in ["remote_zip"]:
+    elif source in {"remote_zip"}:
         gs.message(
             _("Fetching <{name}> from " "<{url}> (be patient)...").format(
                 name=name, url=url
@@ -2514,7 +2514,7 @@ def resolve_xmlurl_prefix(url, source=None):
     'https://grass.osgeo.org/addons/'
     """
     gs.debug("resolve_xmlurl_prefix(url={0}, source={1})".format(url, source))
-    if source in ("official", "official_fork"):
+    if source in {"official", "official_fork"}:
         # use pregenerated modules XML file
         # Define branch to fetch from (latest or current version)
         version_branch = get_version_branch(VERSION[0])

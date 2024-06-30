@@ -90,7 +90,7 @@ except ImportError:
     if __name__ == "__main__":
         if len(sys.argv) == 2:
             arg = sys.argv[1]
-            if arg[0:2] == "--" or arg in ["help", "-help"]:
+            if arg[0:2] == "--" or arg in {"help", "-help"}:
                 grass.parser()
     # Either we didn't call g.parser, or it returned
     # At this point, there's nothing to be done except re-raise the exception

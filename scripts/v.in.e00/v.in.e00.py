@@ -71,7 +71,7 @@ def main():
         )
 
     # check that the user didn't use all three, which gets past the parser.
-    if type not in ["point", "line", "area"]:
+    if type not in {"point", "line", "area"}:
         gcore.fatal(_('Must specify one of "point", "line", or "area".'))
 
     e00name = basename(filename, "e00")
