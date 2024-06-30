@@ -1014,10 +1014,10 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 ltype = layer.maplayer.GetType()
                 if ltype == "raster":
                     rast.append(name)
-                elif ltype in ("rgb", "his"):
+                elif ltype in {"rgb", "his"}:
                     for iname in name.split("\n"):
                         rast.append(iname)
-                elif ltype in ("vector", "thememap", "themechart"):
+                elif ltype in {"vector", "thememap", "themechart"}:
                     vect.append(name)
             if vect:
                 # check for vector maps open to be edited

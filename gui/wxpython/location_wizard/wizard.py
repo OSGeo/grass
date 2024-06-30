@@ -2298,7 +2298,7 @@ class SummaryPage(TitledPage):
         global coordsys
 
         # print coordsys,proj4string
-        if coordsys in ("proj", "epsg", "iau", "wkt", "file"):
+        if coordsys in {"proj", "epsg", "iau", "wkt", "file"}:
             extra_opts = {}
             extra_opts["project"] = "project"
             extra_opts["getErrorMsg"] = True

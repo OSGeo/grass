@@ -242,9 +242,9 @@ if __name__ == "__main__":
     menu = "manager"
 
     for arg in sys.argv:
-        if arg in ("strings", "tree", "commands", "dump"):
+        if arg in {"strings", "tree", "commands", "dump"}:
             action = arg
-        elif arg in ("manager", "module_tree", "modeler", "psmap"):
+        elif arg in {"manager", "module_tree", "modeler", "psmap"}:
             menu = arg
 
     # FIXME: cross-dependencies

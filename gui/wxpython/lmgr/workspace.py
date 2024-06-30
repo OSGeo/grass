@@ -149,7 +149,7 @@ class WorkspaceManager:
                 style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
             )
             dlg.CenterOnParent()
-            if dlg.ShowModal() in [wx.ID_NO, wx.ID_CANCEL]:
+            if dlg.ShowModal() in {wx.ID_NO, wx.ID_CANCEL}:
                 return False
         else:
             # TODO: copy from ChangeLocation function

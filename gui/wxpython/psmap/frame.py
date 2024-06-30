@@ -1128,7 +1128,7 @@ class PsMapFrame(wx.Frame):
         for id in ids:
             itype = self.instruction[id].type
 
-            if itype in ("scalebar", "mapinfo", "image"):
+            if itype in {"scalebar", "mapinfo", "image"}:
                 drawRectangle = self.canvas.CanvasPaperCoordinates(
                     rect=self.instruction[id]["rect"], canvasToPaper=False
                 )
@@ -1157,7 +1157,7 @@ class PsMapFrame(wx.Frame):
                 )
                 self.canvas.RedrawSelectBox(id)
 
-            if itype in ("point", "line", "rectangle"):
+            if itype in {"point", "line", "rectangle"}:
                 drawRectangle = self.canvas.CanvasPaperCoordinates(
                     rect=self.instruction[id]["rect"], canvasToPaper=False
                 )
@@ -1243,7 +1243,7 @@ class PsMapFrame(wx.Frame):
                 )
                 self.canvas.RedrawSelectBox(id)
 
-            if itype in ("map", "vector", "raster", "labels"):
+            if itype in {"map", "vector", "raster", "labels"}:
                 if itype == "raster":  # set resolution
                     try:
                         info = grass.raster_info(self.instruction[id]["raster"])
@@ -1539,7 +1539,7 @@ class PsMapBufferedWindow(wx.Window):
             items = self.instruction.FindInstructionByType(itemType, list=True)
             for item in items:
                 instr = self.instruction[item.id]
-                if itemType in ("line", "rectangle"):
+                if itemType in {"line", "rectangle"}:
                     if itemType == "line":
                         e1, n1 = PaperMapCoordinates(
                             mapInstr=self.instruction[mapId],
@@ -1611,14 +1611,14 @@ class PsMapBufferedWindow(wx.Window):
 
     def MouseActions(self, event):
         """Mouse motion and button click notifier"""
-        disable = self.preview and self.mouse["use"] in (
+        disable = self.preview and self.mouse["use"] in {
             "pointer",
             "resize",
             "addMap",
             "addPoint",
             "addLine",
             "addRectangle",
-        )
+        }
         # zoom with mouse wheel
         if event.GetWheelRotation() != 0:
             self.OnMouseWheel(event)
@@ -1681,7 +1681,7 @@ class PsMapBufferedWindow(wx.Window):
         if self.preview:
             return
 
-        if self.mouse["use"] in ("pointer", "resize"):
+        if self.mouse["use"] in {"pointer", "resize"}:
             pos = event.GetPosition()
             foundResize = self.pdcTmp.FindObjects(pos[0], pos[1])
             if (
@@ -1724,7 +1724,7 @@ class PsMapBufferedWindow(wx.Window):
                 if self.instruction[self.dragId].type == "map":
                     self.constraint = False
                     self.mapBounds = self.pdcObj.GetIdBounds(self.dragId)
-                    if self.instruction[self.dragId]["scaleType"] in (0, 1, 2):
+                    if self.instruction[self.dragId]["scaleType"] in {0, 1, 2}:
                         self.constraint = True
                         self.mapBounds = self.pdcObj.GetIdBounds(self.dragId)
 
@@ -1734,7 +1734,7 @@ class PsMapBufferedWindow(wx.Window):
             elif found:
                 self.dragId = found[0]
                 self.RedrawSelectBox(self.dragId)
-                if self.instruction[self.dragId].type not in ("map", "rectangle"):
+                if self.instruction[self.dragId].type not in {"map", "rectangle"}:
                     self.pdcTmp.RemoveId(self.idResizeBoxTmp)
                     self.Refresh()
                 if self.instruction[self.dragId].type != "line":
@@ -1756,7 +1756,7 @@ class PsMapBufferedWindow(wx.Window):
         Recalculate zooming/resizing/moving and redraw.
         """
         # zoom in, zoom out
-        if self.mouse["use"] in ("zoomin", "zoomout"):
+        if self.mouse["use"] in {"zoomin", "zoomout"}:
             zoomR = self.pdcTmp.GetIdBounds(self.idZoomBoxTmp)
             self.pdcTmp.RemoveId(self.idZoomBoxTmp)
             self.Refresh()
@@ -1802,7 +1802,7 @@ class PsMapBufferedWindow(wx.Window):
                 )
                 self.instruction[mapId]["rect"] = newRectPaper
 
-                if self.instruction[mapId]["scaleType"] in (0, 1, 2):
+                if self.instruction[mapId]["scaleType"] in {0, 1, 2}:
                     if self.instruction[mapId]["scaleType"] == 0:
                         scale, foo, rect = AutoAdjust(
                             self,
@@ -1871,13 +1871,13 @@ class PsMapBufferedWindow(wx.Window):
             self.mouse["use"] = "pointer"
 
         # recalculate the position of objects after dragging
-        if self.mouse["use"] in ("pointer", "resize") and self.dragId != -1:
+        if self.mouse["use"] in {"pointer", "resize"} and self.dragId != -1:
             if self.mouse["begin"] != event.GetPosition():  # for double click
                 self.RecalculatePosition(ids=[self.dragId])
                 if self.instruction[self.dragId].type in self.openDialogs:
                     self.openDialogs[self.instruction[self.dragId].type].updateDialog()
 
-        elif self.mouse["use"] in ("addPoint", "addLine", "addRectangle"):
+        elif self.mouse["use"] in {"addPoint", "addLine", "addRectangle"}:
             endCoordinates = self.CanvasPaperCoordinates(
                 rect=Rect(event.GetX(), event.GetY(), 0, 0), canvasToPaper=True
             )[:2]
@@ -1887,7 +1887,7 @@ class PsMapBufferedWindow(wx.Window):
 
             if self.mouse["use"] == "addPoint":
                 self.parent.AddPoint(coordinates=endCoordinates)
-            elif self.mouse["use"] in ("addLine", "addRectangle"):
+            elif self.mouse["use"] in {"addLine", "addRectangle"}:
                 # not too small lines/rectangles
                 if sqrt(diffX * diffX + diffY * diffY) < 5:
                     self.pdcTmp.RemoveId(self.idZoomBoxTmp)
@@ -1951,13 +1951,13 @@ class PsMapBufferedWindow(wx.Window):
 
         elif event.LeftIsDown():
             # draw box when zooming, creating map
-            if self.mouse["use"] in (
+            if self.mouse["use"] in {
                 "zoomin",
                 "zoomout",
                 "addMap",
                 "addLine",
                 "addRectangle",
-            ):
+            }:
                 self.mouse["end"] = event.GetPosition()
                 r = Rect(
                     self.mouse["begin"][0],
@@ -1967,7 +1967,7 @@ class PsMapBufferedWindow(wx.Window):
                 )
                 r = self.modifyRectangle(r)
 
-                if self.mouse["use"] in ("addLine", "addRectangle"):
+                if self.mouse["use"] in {"addLine", "addRectangle"}:
                     if self.mouse["use"] == "addLine":
                         pdcType = "line"
                         lineCoords = (self.mouse["begin"], self.mouse["end"])
@@ -2125,26 +2125,26 @@ class PsMapBufferedWindow(wx.Window):
     def RecalculatePosition(self, ids):
         for id in ids:
             itype = self.instruction[id].type
-            if itype in ("map", "rectangle"):
+            if itype in {"map", "rectangle"}:
                 self.instruction[id]["rect"] = self.CanvasPaperCoordinates(
                     rect=self.pdcObj.GetIdBounds(id), canvasToPaper=True
                 )
                 self.RecalculateEN()
 
-            elif itype in (
+            elif itype in {
                 "mapinfo",
                 "rasterLegend",
                 "vectorLegend",
                 "image",
                 "northArrow",
-            ):
+            }:
                 self.instruction[id]["rect"] = self.CanvasPaperCoordinates(
                     rect=self.pdcObj.GetIdBounds(id), canvasToPaper=True
                 )
                 self.instruction[id]["where"] = self.CanvasPaperCoordinates(
                     rect=self.pdcObj.GetIdBounds(id), canvasToPaper=True
                 )[:2]
-                if itype in ("image", "northArrow"):
+                if itype in {"image", "northArrow"}:
                     self.RecalculateEN()
 
             elif itype == "point":
@@ -2322,14 +2322,14 @@ class PsMapBufferedWindow(wx.Window):
                         bb=oRect,
                     )
 
-                elif type in ("point", "line", "rectangle"):
+                elif type in {"point", "line", "rectangle"}:
                     instr = self.instruction[id]
                     color = self.instruction[id]["color"]
                     width = fcolor = coords = None
 
-                    if type in ("point", "rectangle"):
+                    if type in {"point", "rectangle"}:
                         fcolor = self.instruction[id]["fcolor"]
-                    if type in ("line", "rectangle"):
+                    if type in {"line", "rectangle"}:
                         width = self.instruction[id]["width"]
                     if type in ("line"):
                         point1, point2 = instr["where"][0], instr["where"][1]
@@ -2418,7 +2418,7 @@ class PsMapBufferedWindow(wx.Window):
             else:  # draw only rectangle with label
                 pdctype = "rectText"
 
-        if pdctype in ("rect", "rectText"):
+        if pdctype in {"rect", "rectText"}:
             pdc.DrawRectangle(*bb)
 
         if pdctype == "rectText":
@@ -2635,7 +2635,7 @@ class PsMapBufferedWindow(wx.Window):
             )
 
             # draw small marks signalizing resizing
-            if self.instruction[id].type in ("map", "rectangle"):
+            if self.instruction[id].type in {"map", "rectangle"}:
                 controlP = self.pdcObj.GetIdBounds(id).GetBottomRight()
                 rect = Rect(
                     controlP[0],

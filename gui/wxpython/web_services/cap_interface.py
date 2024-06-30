@@ -229,7 +229,7 @@ class WMTSLayer(LayerBase):
         title = self.xml_ns.NsOws("Title")
         name = self.xml_ns.NsOws("Identifier")
 
-        if self.layer_node is None and param in ["title", "name"]:
+        if self.layer_node is None and param in {"title", "name"}:
             return None
         elif self.layer_node is None:
             return []
@@ -373,7 +373,7 @@ class OnEarthLayer(LayerBase):
 
     def GetLayerData(self, param):
         """Get layer data"""
-        if self.layer_node is None and param in ["title", "name"]:
+        if self.layer_node is None and param in {"title", "name"}:
             return None
         elif self.layer_node is None:
             return []
