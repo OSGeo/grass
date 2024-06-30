@@ -22,9 +22,9 @@ from datetime import datetime
 from .core import init_dbif
 from .abstract_dataset import AbstractDatasetComparisonKeyStartTime
 from .datetime_math import time_delta_to_relative_time_seconds
-import grass.lib.vector as vector
-import grass.lib.rtree as rtree
-import grass.lib.gis as gis
+from grass.lib import vector
+from grass.lib import rtree
+from grass.lib import gis
 
 ###############################################################################
 

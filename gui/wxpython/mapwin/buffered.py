@@ -48,7 +48,7 @@ from core.gcmd import RunCommand, GException, GError
 from core.debug import Debug
 from core.settings import UserSettings
 from mapwin.base import MapWindowBase
-import core.utils as utils
+from core import utils
 from mapwin.graphics import GraphicsSet
 from core.gthread import gThread
 
