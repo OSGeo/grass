@@ -287,7 +287,7 @@ class InteractiveMap:
         # Store vector and raster name
         self.raster_name = []
         self.vector_name = []
-        self.query_mode = None
+        self.query_mode = False
 
         # Store Region
         self.region = None
