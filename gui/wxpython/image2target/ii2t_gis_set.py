@@ -322,9 +322,7 @@ class GRASSStartup(wx.Frame):
             wx.MessageBox(
                 parent=self,
                 caption=_("Error"),
-                message=_(
-                    "Unable to set GRASS database. Check your locale settings."
-                ),
+                message=_("Unable to set GRASS database. Check your locale settings."),
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
 

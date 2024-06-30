@@ -127,9 +127,7 @@ def check_new_stds(name, type, dbif=None, overwrite=False):
         if name.find(".") > -1:
             # a dot is used as a separator for semantic label filtering
             msgr.fatal(
-                _("Illegal dataset name <{}>. Character '.' not allowed.").format(
-                    name
-                )
+                _("Illegal dataset name <{}>. Character '.' not allowed.").format(name)
             )
         sp = dataset_factory("strds", id)
     elif (

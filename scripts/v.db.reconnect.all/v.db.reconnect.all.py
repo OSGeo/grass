@@ -222,9 +222,7 @@ def main():
     new_database_subst = substitute_db(new_database)
 
     if old_database_subst == new_database_subst and old_schema == new_schema:
-        gscript.fatal(
-            _("Old and new database connection is identical. Nothing to do.")
-        )
+        gscript.fatal(_("Old and new database connection is identical. Nothing to do."))
 
     mapset = gscript.gisenv()["MAPSET"]
 

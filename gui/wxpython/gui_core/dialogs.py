@@ -493,9 +493,7 @@ def CreateNewVector(
     if dlg.table.IsEnabled() and not key:
         GError(
             parent=parent,
-            message=_(
-                "Invalid or empty key column.\nUnable to create vector map <%s>."
-            )
+            message=_("Invalid or empty key column.\nUnable to create vector map <%s>.")
             % outmap,
         )
         dlg.Destroy()

@@ -1536,9 +1536,7 @@ class GMFrame(wx.Frame):
             self._giface.WriteCmdLog(" ")
 
         def write_help():
-            self._giface.WriteLog(
-                _("Changes current working directory for this GUI.")
-            )
+            self._giface.WriteLog(_("Changes current working directory for this GUI."))
             self._giface.WriteLog(_("Usage: cd [directory]"))
             self._giface.WriteLog(_("Without parameters it opens a dialog."))
             # TODO: the following is longer then 80 chars

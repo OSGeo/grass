@@ -132,8 +132,7 @@ def _import_raster_maps(maplist, set_current_region=False):
 
         except CalledModuleError:
             gscript.fatal(
-                _("Unable to unpack raster map <%s> from file %s.")
-                % (name, filename)
+                _("Unable to unpack raster map <%s> from file %s.") % (name, filename)
             )
 
     # Set the computational region from the last map imported
@@ -163,8 +162,7 @@ def _import_vector_maps_from_gml(maplist, overr, exp, location, link):
 
         except CalledModuleError:
             gscript.fatal(
-                _("Unable to import vector map <%s> from file %s.")
-                % (name, filename)
+                _("Unable to import vector map <%s> from file %s.") % (name, filename)
             )
 
 
@@ -194,8 +192,7 @@ def _import_vector_maps(maplist):
 
         except CalledModuleError:
             gscript.fatal(
-                _("Unable to unpack vector map <%s> from file %s.")
-                % (name, filename)
+                _("Unable to unpack vector map <%s> from file %s.") % (name, filename)
             )
 
         imported_maps[name] = name
@@ -494,8 +491,7 @@ def import_stds(
                 filename = row["filename"] + ".xml"
                 if not os.path.exists(filename):
                     gscript.fatal(
-                        _("Unable to find GML vector file <%s> in archive.")
-                        % filename
+                        _("Unable to find GML vector file <%s> in archive.") % filename
                     )
         elif format_ == "pack":
             for row in maplist:

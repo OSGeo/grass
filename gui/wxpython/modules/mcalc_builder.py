@@ -658,9 +658,7 @@ class MapCalcFrame(wx.Frame):
         if not expr:
             GError(
                 parent=self,
-                message=_(
-                    "You must enter an expression to create a new raster map."
-                ),
+                message=_("You must enter an expression to create a new raster map."),
             )
             return
 

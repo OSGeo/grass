@@ -54,9 +54,9 @@ def main():
         # Message is formulated in the way that it does not mislead
         # in case where a map of the same name is in another mapset.
         gscript.fatal(
-            _(
-                "Vector map <{name}> not found in the current mapset ({mapset})"
-            ).format(name=map, mapset=mapset)
+            _("Vector map <{name}> not found in the current mapset ({mapset})").format(
+                name=map, mapset=mapset
+            )
         )
 
     # do some paranoia tests as well:

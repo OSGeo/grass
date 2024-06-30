@@ -166,8 +166,7 @@ def reclass(inf, outf, lim, clump, diag, les):
     if p2.returncode != 0:
         if lesser:
             grass.fatal(
-                _("No areas of size less than or equal to %f hectares found.")
-                % limit
+                _("No areas of size less than or equal to %f hectares found.") % limit
             )
         else:
             grass.fatal(

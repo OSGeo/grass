@@ -1033,9 +1033,7 @@ class SamplingAreasPage(TitledPage):
         self.overwriteText = StaticText(
             parent=self.areaPanel,
             id=wx.ID_ANY,
-            label=_(
-                "Do you want to overwrite existing temporal maps if they exist?"
-            ),
+            label=_("Do you want to overwrite existing temporal maps if they exist?"),
         )
         self.overwriteCheck = wx.CheckBox(parent=self.areaPanel, id=wx.ID_ANY)
         self.areaText = StaticText(

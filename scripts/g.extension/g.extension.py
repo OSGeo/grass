@@ -1215,9 +1215,7 @@ def install_extension(source=None, url=None, xmlurl=None, branch=None):
         return
 
     if ret != 0:
-        gs.warning(
-            _("Installation failed, sorry. Please check above error messages.")
-        )
+        gs.warning(_("Installation failed, sorry. Please check above error messages."))
     else:
         # update extensions metadata file
         gs.message(_("Updating extensions metadata file..."))
@@ -1343,9 +1341,9 @@ def get_addons_metadata(url, mlist):
         tree = etree_fromurl(url)
     except (HTTPError, URLError, OSError) as error:
         gs.error(
-            _(
-                "Unable to read addons metadata file from the remote server: {0}"
-            ).format(error)
+            _("Unable to read addons metadata file from the remote server: {0}").format(
+                error
+            )
         )
         return data, bin_list
     except ETREE_EXCEPTIONS as error:

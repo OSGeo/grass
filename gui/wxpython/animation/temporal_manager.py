@@ -618,9 +618,7 @@ def createRelativePoint():
 
     n1 = grass.read_command("g.tempfile", pid=1, flags="d").strip()
     fd = open(n1, "w")
-    fd.write(
-        "prec_1|1\nprec_2|3\nprec_3|5\nprec_4|7\nprec_5|11\nprec_6|13\n"
-    )
+    fd.write("prec_1|1\nprec_2|3\nprec_3|5\nprec_4|7\nprec_5|11\nprec_6|13\n")
     fd.close()
     name = "relpoint"
     grass.run_command(

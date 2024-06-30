@@ -466,9 +466,7 @@ class WorkspaceManager:
             if self.workspaceFile:
                 message = _("Do you want to save changes in the workspace?")
             else:
-                message = _(
-                    "Do you want to store current settings to workspace file?"
-                )
+                message = _("Do you want to store current settings to workspace file?")
 
             # ask user to save current settings
             if maptree.GetCount() > 0:

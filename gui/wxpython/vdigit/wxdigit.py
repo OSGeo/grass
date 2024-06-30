@@ -68,9 +68,7 @@ class VDigitError:
     def WriteLine(self):
         """Writing line failed"""
         GError(
-            message=_(
-                "Writing new feature failed. Operation canceled.\n\nReason: %s"
-            )
+            message=_("Writing new feature failed. Operation canceled.\n\nReason: %s")
             % GetLastError(),
             parent=self.parent,
             caption=self.caption,
@@ -87,8 +85,7 @@ class VDigitError:
     def DbLink(self, dblink):
         """No dblink available"""
         GError(
-            message=_("Database link %d not available. Operation canceled.")
-            % dblink,
+            message=_("Database link %d not available. Operation canceled.") % dblink,
             parent=self.parent,
             caption=self.caption,
         )

@@ -1145,9 +1145,7 @@ class Table:
                 )
                 for vect in used:
                     warning("%s" % vect)
-                print(
-                    _("You must use the force flag to actually remove it. Exiting.")
-                )
+                print(_("You must use the force flag to actually remove it. Exiting."))
             else:
                 cur.execute(sql.DROP_TAB.format(tname=self.name))
 

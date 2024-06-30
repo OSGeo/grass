@@ -207,8 +207,7 @@ class IClassGroupDialog(SimpleDialog):
             if not bands:
                 if self.use_subg:
                     GError(
-                        _("No data found in subgroup <%s> of group <%s>.\n.")
-                        % (s, g),
+                        _("No data found in subgroup <%s> of group <%s>.\n.") % (s, g),
                         parent=parent,
                     )
 
