@@ -119,7 +119,7 @@ def main():
 
     dataset.select(dbif)
 
-    if history and type_ in ["strds", "stvds", "str3ds"]:
+    if history and type_ in {"strds", "stvds", "str3ds"}:
         dataset.print_history()
         return
 
