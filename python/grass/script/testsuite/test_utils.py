@@ -27,7 +27,7 @@ class EnvironChange(TestCase):
 
 
 class LcAllC(EnvironChange):
-    env = dict(LC_ALL="C")
+    env = {"LC_ALL": "C"}
 
 
 class TestEncode(TestCase):
