@@ -9,18 +9,16 @@ Licence:   This program is free software under the GNU General Public
            for details.
 """
 
+import json
 import os
 import pathlib
-import json
-
 from tempfile import NamedTemporaryFile
 
-from grass.script import read_command
-from grass.script import decode
-from grass.script.core import tempname
 from grass.gunittest.case import TestCase
-from grass.gunittest.main import test
 from grass.gunittest.checkers import keyvalue_equals
+from grass.gunittest.main import test
+from grass.script import decode, read_command
+from grass.script.core import tempname
 
 
 class MatrixCorrectnessTest(TestCase):

@@ -3,12 +3,12 @@
 @author Aaron Saw Min Sern
 """
 
-from grass.exceptions import CalledModuleError
-from grass.pygrass.modules import Module
-from grass.script import tempfile
 from subprocess import DEVNULL
 
 import grass.benchmark as bm
+from grass.exceptions import CalledModuleError
+from grass.pygrass.modules import Module
+from grass.script import tempfile
 
 
 def main():

@@ -9,10 +9,11 @@ Licence:    This program is free software under the GNU General Public
             for details.
 """
 
+import json
+import os
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
-import os
-import json
 
 
 class TestRasterWhat(TestCase):

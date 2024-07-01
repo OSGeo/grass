@@ -3,9 +3,9 @@
 @author Anna Petrasova
 """
 
+import grass.script as gs
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import call_module
-import grass.script as gs
 
 
 class TestRegion(TestCase):

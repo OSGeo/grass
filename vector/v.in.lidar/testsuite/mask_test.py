@@ -78,6 +78,7 @@ C  1 1
 
 
 import os
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 

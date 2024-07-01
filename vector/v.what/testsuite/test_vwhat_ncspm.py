@@ -1,9 +1,8 @@
 # Author: Anna Petrasova
 
 from grass.gunittest.case import TestCase
-from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
-
+from grass.gunittest.main import test
 
 # v.what map=schools,roadsmajor,elev_points,geology layer=-1,-1,-1,-1 coordinates=636661,226489 distance=1000
 out1 = """East: 636661

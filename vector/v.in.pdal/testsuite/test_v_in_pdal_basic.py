@@ -11,9 +11,10 @@ Licence:   This program is free software under the GNU General Public
 
 import os
 import shutil
+import unittest
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-import unittest
 
 
 class BasicTest(TestCase):

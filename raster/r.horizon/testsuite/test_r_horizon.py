@@ -15,10 +15,9 @@ COPYRIGHT: (C) 2015-2024 Anna Petrasova
 import json
 
 from grass.gunittest.case import TestCase
-from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
+from grass.gunittest.main import test
 from grass.script import raster_what
-
 
 ref1 = """azimuth,horizon_height
 180.000000,0.023101

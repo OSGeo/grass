@@ -1,9 +1,9 @@
 import os
 import tempfile
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.script.core import read_command
-
 
 input1 = b"""
 A

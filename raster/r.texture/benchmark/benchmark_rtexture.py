@@ -4,11 +4,11 @@
         Chung-Yuan Liang
 """
 
-from grass.exceptions import CalledModuleError
-from grass.pygrass.modules import Module
 from subprocess import DEVNULL
 
 import grass.benchmark as bm
+from grass.exceptions import CalledModuleError
+from grass.pygrass.modules import Module
 
 
 def main():

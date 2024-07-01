@@ -10,8 +10,9 @@ Licence:    This program is free software under the GNU General Public
             for details.
 """
 
-from grass.gunittest.case import TestCase
 import sys
+
+from grass.gunittest.case import TestCase
 
 IS_MAC = sys.platform.startswith("darwin")
 

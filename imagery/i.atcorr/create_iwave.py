@@ -28,6 +28,7 @@ Bug fix (9/12/2010) by Daniel:
 """
 import os
 import sys
+
 import numpy as np
 from scipy import interpolate
 

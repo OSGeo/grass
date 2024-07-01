@@ -1,7 +1,6 @@
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
-
 # TODO: add more expressions
 # TODO: add tests with prepared data
 

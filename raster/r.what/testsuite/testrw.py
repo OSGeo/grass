@@ -10,8 +10,8 @@ Licence:    This program is free software under the GNU General Public
 """
 
 from grass.gunittest.case import TestCase
-from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
+from grass.gunittest.main import test
 
 
 class Testrr(TestCase):

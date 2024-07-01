@@ -4,10 +4,10 @@
 """
 
 import os
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.script.core import read_command
-
 
 INPUT_NOQUOTES = """Id,POINT_X,POINT_Y,Category,ED field estimate
 100,437343.6704,4061363.41525,High Erosion,Low Deposition

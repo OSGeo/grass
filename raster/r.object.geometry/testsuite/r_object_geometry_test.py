@@ -5,6 +5,7 @@ Purpose:   This script is to demonstrate a unit test for r.object.geometry
 """
 
 import os
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 

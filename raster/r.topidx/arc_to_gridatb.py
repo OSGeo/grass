@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-import sys
-import re
 import os
+import re
+import sys
 
 
 def match(pattern, string):

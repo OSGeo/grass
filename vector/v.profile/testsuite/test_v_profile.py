@@ -15,8 +15,8 @@ TODO:       Convert to synthetic dataset. It would allow to shorten output sampl
 import os
 
 from grass.gunittest.case import TestCase
-from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
+from grass.gunittest.main import test
 
 output_full = """Number|Distance|cat|feature_id|featurenam|class|st_alpha|st_num|county|county_num|primlat_dm|primlon_dm|primlatdec|primlondec|srclat_dms|srclon_dms|srclatdec|srclondec|elev_m|map_name
 1|19537.97|572|986138|"Greshams Lake"|"Reservoir"|"NC"|37|"Wake"|183|"078:34:31W"|"35:52:43N"|35.878484|-78.57528|""|""|""|""|77|"Wake Forest"

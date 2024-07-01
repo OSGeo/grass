@@ -1,7 +1,6 @@
 from grass.gunittest.case import TestCase
+from grass.gunittest.gmodules import SimpleModule, call_module
 from grass.gunittest.main import test
-from grass.gunittest.gmodules import call_module
-from grass.gunittest.gmodules import SimpleModule
 
 reference_str = """\
 27511:0:33.333333:134.717331

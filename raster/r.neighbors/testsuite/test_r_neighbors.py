@@ -1,7 +1,7 @@
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-from grass.script.raster import raster_info
 from grass.script import tempfile
+from grass.script.raster import raster_info
 
 
 class TestNeighbors(TestCase):
