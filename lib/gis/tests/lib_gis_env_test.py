@@ -31,8 +31,8 @@ def test_reading_respects_change_of_session(tmp_path):
         """Switches through a list of locations"""
         # Just to be sure we don't influence other tests.
         # pylint: disable=import-outside-toplevel
-        import grass.pygrass.utils as pygrass_utils
         import grass.lib.gis as libgis
+        import grass.pygrass.utils as pygrass_utils
 
         names = []
         for location_name in ["test1", "test2", "abc"]:

@@ -16,8 +16,7 @@
 import os
 import sys
 
-from build_html import write_html_footer, grass_version, header1_tmpl
-
+from build_html import grass_version, header1_tmpl, write_html_footer
 
 output_name = "graphical_index.html"
 

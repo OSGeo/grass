@@ -3,9 +3,10 @@
 # generates topics.html and topic_*.html
 # (c) 2012 by the GRASS Development Team, Markus Neteler, Luca Delucchi
 
+import glob
 import os
 import sys
-import glob
+
 from build_html import *
 
 path = sys.argv[1]

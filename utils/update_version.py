@@ -2,11 +2,10 @@
 
 """Update VERSION file to release and development versions"""
 
-import sys
-import datetime
-from types import SimpleNamespace
-
 import argparse
+import datetime
+import sys
+from types import SimpleNamespace
 
 
 def read_version_file():

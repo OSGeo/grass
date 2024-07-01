@@ -5,10 +5,9 @@
 
 from ctypes import byref, c_int
 
+import grass.lib.gis as libgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-import grass.lib.gis as libgis
 
 
 class StringToColorTestCase(TestCase):

@@ -47,7 +47,6 @@
 import sys
 
 import grass.script as gs
-
 from grass.lib.gis import *
 
 

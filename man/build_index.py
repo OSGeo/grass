@@ -6,8 +6,8 @@
 #   Markus Neteler
 #   Glynn Clements
 
-import sys
 import os
+import sys
 
 from build_html import *
 

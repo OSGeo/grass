@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-import sys
 import re
-from ghtml import HTMLParser
-from ggroff import Formatter
-
+import sys
 from io import StringIO
+
+from ggroff import Formatter
+from ghtml import HTMLParser
 
 entities = {"nbsp": " ", "bull": "*"}
 

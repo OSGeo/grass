@@ -14,10 +14,10 @@
 #
 #############################################################################
 
-import sys
-import string
 import re
+import string
 import subprocess
+import sys
 from datetime import datetime
 
 pgm = sys.argv[1]
