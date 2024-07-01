@@ -320,7 +320,6 @@ ignore = [
     "TRY302",  # useless-try-except
     "UP015",   # redundant-open-modes
     "UP018",   # native-literals
-    "UP022",   # replace-stdout-stderr
     "UP030",   # format-literals
     "UP031",   # printf-string-formatting
     "UP032",   # f-string
