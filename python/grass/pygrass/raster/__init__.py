@@ -313,7 +313,7 @@ class RasterSegment(RasterAbstractBase):
         return self._mode
 
     def _set_mode(self, mode):
-        if mode and mode.lower() not in ("r", "w", "rw"):
+        if mode and mode.lower() not in {"r", "w", "rw"}:
             str_err = _("Mode type: {0} not supported ('r', 'w','rw')")
             raise ValueError(str_err.format(mode))
         self._mode = mode

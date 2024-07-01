@@ -708,7 +708,7 @@ class TestNeighbors(TestCase):
             rinfo = raster_info(rmap)
             self.assertTrue(
                 rinfo["datatype"] == "CELL"
-                if rinfo["datatype"] in ["diversity", "range", "mode"]
+                if rinfo["datatype"] in {"diversity", "range", "mode"}
                 else "DCELL"
             )
 

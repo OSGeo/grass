@@ -76,7 +76,7 @@ def make_gradient(path):
                 minval += abs(minval / 100)
             maxval = float(records[-1][0])
             maxval = min(maxval, 2500000)
-        if os.path.basename(path) in ("ndvi", "ndwi", "ndwi2"):
+        if os.path.basename(path) in {"ndvi", "ndwi", "ndwi2"}:
             minval = -1.0
             maxval = 1.0
         if os.path.basename(path) == "ndvi_MODIS":
@@ -86,7 +86,7 @@ def make_gradient(path):
             maxval = 1000.0
         if os.path.basename(path) == "precipitation":
             maxval = 2000.0
-        if os.path.basename(path) in ("terrain", "srtm", "srtm_plus"):
+        if os.path.basename(path) in {"terrain", "srtm", "srtm_plus"}:
             minval = -500.0
             maxval = 3000.0
         grad = tmp_grad_abs

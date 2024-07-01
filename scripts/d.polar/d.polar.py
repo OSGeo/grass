@@ -480,7 +480,7 @@ def main():
     freq = {}
     for line in rawf:
         line = line.rstrip("\r\n")
-        if line in ["*", undef]:
+        if line in {"*", undef}:
             continue
         nvals += 1
         x = float(line)

@@ -145,7 +145,7 @@ def generate_page_for_category(
     )
     output.write(header_graphical_index_tmpl)
 
-    if module_family.lower() not in ["general", "postscript"]:
+    if module_family.lower() not in {"general", "postscript"}:
         if module_family == "raster3d":
             # covert keyword to nice form
             module_family = "3D raster"
