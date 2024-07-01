@@ -30,3 +30,11 @@ markers = [
 [tool.bandit]
 exclude_dirs = ["./testsuite", "*/tests/*", "*/testsuite/*", "utils/test_generate_last_commit_file.py"]
 skips = ["B324","B110", "B101", "B112", "B311", "B404", "B603"]
+
+
+[tool.isort]
+# *GRASS modified*
+# *GRASS TODO: keep un sync with MIN_PYTHON_VERSION supported*
+py_version = 39
+profile = "black"
+skip_glob = ["python/libgrass_interface_generator/*"]
