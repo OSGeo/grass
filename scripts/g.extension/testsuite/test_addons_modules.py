@@ -80,7 +80,7 @@ class TestModulesFromDifferentSources(TestCase):
         if os.path.exists(self.install_prefix):
             files = os.listdir(self.install_prefix)
             if files:
-                RuntimeError(
+                raise RuntimeError(
                     "Install prefix path '{}' contains files {}".format(
                         self.install_prefix, files
                     )
