@@ -139,7 +139,8 @@ inline void unionFind<T>::makeSet(T x)
         T *new_rank = (T *)realloc(rank, 2 * maxsize * sizeof(T));
         if (!new_rank) {
             assert(new_rank && "Memory reallocation failed for rank");
-        } else {
+        }
+        else {
             rank = new_rank;
             memset(rank + maxsize, 0, maxsize * sizeof(T));
         }
