@@ -498,7 +498,11 @@ jobs = 0
 
 # List of plugins (as comma separated values of python module names) to load,
 # usually to register additional checkers.
-# load-plugins =
+load-plugins = [
+    "pylint.extensions.bad_builtin",
+    "pylint.extensions.no_self_use",
+    "pylint.extensions.redefined_variable_type",
+]
 
 # # Pickle collected data for later comparisons.
 # persistent = true
