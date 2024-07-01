@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 
-from os import listdir
-from os.path import join, isdir
-import shutil
 import ctypes as ct
 import fnmatch
-
+import shutil
+from os import listdir
+from os.path import isdir, join
 
 import grass.lib.gis as libgis
 from grass.pygrass.errors import GrassError
-from grass.script.utils import encode, decode
 from grass.pygrass.utils import getenv
+from grass.script.utils import decode, encode
 
 test_vector_name = "Gis_test_vector"
 test_raster_name = "Gis_test_raster"
@@ -493,6 +492,7 @@ class VisibleMapset:
 
 if __name__ == "__main__":
     import doctest
+
     from grass.pygrass import utils
     from grass.script.core import run_command
 

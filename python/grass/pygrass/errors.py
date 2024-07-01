@@ -1,9 +1,8 @@
 from functools import wraps
 
-from grass.exceptions import GrassError
-
-from grass.pygrass.messages import get_msgr
 import grass.lib.gis as libgis
+from grass.exceptions import GrassError
+from grass.pygrass.messages import get_msgr
 
 
 def must_be_open(method):

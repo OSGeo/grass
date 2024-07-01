@@ -9,11 +9,11 @@ for details.
 :authors: Vaclav Petras
 """
 
-import sys
-import os
 import argparse
-import subprocess
 import locale
+import os
+import subprocess
+import sys
 
 
 def _get_encoding():

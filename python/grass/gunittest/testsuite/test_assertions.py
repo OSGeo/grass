@@ -5,11 +5,10 @@ Tests assertion methods.
 import os
 
 import grass.script.core as gcore
-from grass.pygrass.modules import Module
-
 from grass.gunittest.case import TestCase
-from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
+from grass.gunittest.main import test
+from grass.pygrass.modules import Module
 
 
 class TestTextAssertions(TestCase):

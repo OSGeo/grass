@@ -9,20 +9,20 @@ for details.
 :authors: Vaclav Petras
 """
 
-import sys
-import os
 import argparse
-import itertools
 import datetime
+import itertools
 import operator
+import os
+import sys
 from collections import defaultdict, namedtuple
-
-from grass.gunittest.checkers import text_to_keyvalue
-from grass.gunittest.utils import ensure_dir
-from grass.gunittest.reporters import success_to_html_percent
 
 # TODO: we should be able to work without matplotlib
 import matplotlib
+
+from grass.gunittest.checkers import text_to_keyvalue
+from grass.gunittest.reporters import success_to_html_percent
+from grass.gunittest.utils import ensure_dir
 
 matplotlib.use("Agg")
 # This counts as code already, so silence "import not at top of file".

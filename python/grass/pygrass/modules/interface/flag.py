@@ -1,5 +1,5 @@
-from grass.pygrass.modules.interface.docstring import docstring_property
 from grass.pygrass.modules.interface import read
+from grass.pygrass.modules.interface.docstring import docstring_property
 
 
 class Flag:

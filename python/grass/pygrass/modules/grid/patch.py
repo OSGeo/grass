@@ -5,9 +5,9 @@ Created on Tue Apr  2 18:57:42 2013
 """
 
 from grass.pygrass.gis.region import Region
+from grass.pygrass.modules import Module
 from grass.pygrass.raster import RasterRow
 from grass.pygrass.utils import coor2pixel
-from grass.pygrass.modules import Module
 
 
 def get_start_end_index(bbox_list):

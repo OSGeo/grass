@@ -4,10 +4,9 @@ Created on Thu Feb 18 09:42:23 2016
 @author: lucadelu
 """
 
+import grass.script as gs
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-import grass.script as gs
 
 
 class TestRaster(TestCase):

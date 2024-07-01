@@ -17,10 +17,10 @@ import shutil
 
 from grass.grassdb.data import map_exists
 
+from .baseseriesmap import BaseSeriesMap
 from .map import Map
 from .region import RegionManagerForSeries
 from .utils import save_gif
-from .baseseriesmap import BaseSeriesMap
 
 
 class SeriesMap(BaseSeriesMap):

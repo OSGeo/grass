@@ -18,15 +18,17 @@ import os
 import tempfile
 import weakref
 from pathlib import Path
+
 import grass.script as gs
+
 from .map import Map
+from .region import RegionManagerForInteractiveMap
 from .utils import (
     get_location_proj_string,
     get_region,
     reproject_region,
     setup_location,
 )
-from .region import RegionManagerForInteractiveMap
 
 
 class ReprojectionRenderer:

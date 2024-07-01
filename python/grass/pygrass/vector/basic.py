@@ -5,9 +5,9 @@ Created on Tue Jul 31 13:06:20 2012
 """
 
 import ctypes
-import grass.lib.vector as libvect
 from collections.abc import Iterable
 
+import grass.lib.vector as libvect
 from grass.pygrass.shell.conversion import dict2html
 
 

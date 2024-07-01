@@ -80,13 +80,13 @@ for details.
 # is known, this would allow moving things from there, here
 # then this could even do locking
 
-from pathlib import Path
 import datetime
 import os
 import shutil
 import subprocess
 import sys
 import tempfile as tmpfile
+from pathlib import Path
 
 WINDOWS = sys.platform.startswith("win")
 MACOS = sys.platform.startswith("darwin")

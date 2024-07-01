@@ -7,7 +7,7 @@ Created on Tue Apr  2 18:31:47 2013
 import re
 
 from grass.pygrass.modules.interface.docstring import docstring_property
-from grass.pygrass.modules.interface.read import GETTYPE, element2dict, DOC
+from grass.pygrass.modules.interface.read import DOC, GETTYPE, element2dict
 
 
 def _check_value(param, value):

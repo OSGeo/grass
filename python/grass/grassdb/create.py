@@ -9,11 +9,11 @@ for details.
 .. sectionauthor:: Vaclav Petras <wenzeslaus gmail com>
 """
 
+import getpass
 import os
 import shutil
-import getpass
 
-from grass.grassdb.manage import resolve_mapset_path, MapsetPath
+from grass.grassdb.manage import MapsetPath, resolve_mapset_path
 
 
 def _directory_to_mapset(path: MapsetPath):

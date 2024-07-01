@@ -5,9 +5,9 @@ Created on Thu Aug 23 11:07:38 2012
 
 """
 
+import optparse
 import os
 import subprocess
-import optparse
 
 from grass.script import core as grasscore
 

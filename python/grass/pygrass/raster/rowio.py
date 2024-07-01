@@ -6,12 +6,10 @@ Created on Mon Jun 18 13:22:38 2012
 
 import ctypes
 
-import grass.lib.rowio as librowio
 import grass.lib.raster as librast
-
+import grass.lib.rowio as librowio
 from grass.pygrass.errors import GrassError
 from grass.pygrass.raster.raster_type import TYPE as RTYPE
-
 
 CMPFUNC = ctypes.CFUNCTYPE(
     ctypes.c_int, ctypes.c_int, ctypes.c_void_p, ctypes.c_int, ctypes.c_int

@@ -17,8 +17,8 @@ from subprocess import DEVNULL
 from types import SimpleNamespace
 
 from grass.benchmark import (
-    benchmark_resolutions,
     benchmark_nprocs,
+    benchmark_resolutions,
     benchmark_single,
     join_results,
     load_results,

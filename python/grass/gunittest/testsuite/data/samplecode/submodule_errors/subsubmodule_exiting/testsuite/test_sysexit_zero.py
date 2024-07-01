@@ -1,4 +1,5 @@
 import sys
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 

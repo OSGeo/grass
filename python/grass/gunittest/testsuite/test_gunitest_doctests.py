@@ -5,12 +5,10 @@ Tests checkers
 import doctest
 
 import grass.gunittest.case
+import grass.gunittest.checkers
+import grass.gunittest.gmodules
 import grass.gunittest.main
 import grass.gunittest.utils
-
-import grass.gunittest.gmodules
-import grass.gunittest.checkers
-
 
 # doctest does not allow changing the base classes of test case, skip test case
 # and test suite, so we need to create a new type which inherits from our class

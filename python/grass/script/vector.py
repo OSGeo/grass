@@ -19,16 +19,10 @@ for details.
 
 import os
 
-from .utils import parse_key_val
-from .core import (
-    run_command,
-    read_command,
-    error,
-    fatal,
-    debug,
-)
-
 from grass.exceptions import CalledModuleError, ScriptError
+
+from .core import debug, error, fatal, read_command, run_command
+from .utils import parse_key_val
 
 
 def vector_db(map, env=None, **kwargs):

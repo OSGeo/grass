@@ -6,7 +6,6 @@ Created on Mon Sep 15 17:09:40 2014
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
 from grass.pygrass.raster import RasterRow
 from grass.pygrass.raster.category import Category
 from grass.script.core import tempfile

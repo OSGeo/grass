@@ -9,21 +9,20 @@ for details.
 :authors: Vaclav Petras
 """
 
-import os
-import sys
 import argparse
 import configparser
+import os
+import sys
 from pathlib import Path
-
 from unittest.main import TestProgram
 
 import grass.script.core as gs
 
-from .loader import GrassTestLoader
-from .runner import GrassTestRunner, MultiTestResult, TextTestResult, KeyValueTestResult
 from .invoker import GrassTestFilesInvoker
-from .utils import silent_rmtree
+from .loader import GrassTestLoader
 from .reporters import FileAnonymizer
+from .runner import GrassTestRunner, KeyValueTestResult, MultiTestResult, TextTestResult
+from .utils import silent_rmtree
 
 
 class GrassTestProgram(TestProgram):

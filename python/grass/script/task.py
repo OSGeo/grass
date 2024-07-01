@@ -25,8 +25,9 @@ import xml.etree.ElementTree as etree
 from xml.parsers import expat
 
 from grass.exceptions import ScriptError
+
+from .core import PIPE, Popen, get_real_command
 from .utils import decode, split
-from .core import Popen, PIPE, get_real_command
 
 ETREE_EXCEPTIONS = (etree.ParseError, expat.ExpatError)
 

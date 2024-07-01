@@ -9,11 +9,11 @@ for details.
 :authors: Vaclav Petras, Soeren Gebbert
 """
 
-import os
-import sys
-import re
 import doctest
 import hashlib
+import os
+import re
+import sys
 
 from grass.script.utils import encode
 

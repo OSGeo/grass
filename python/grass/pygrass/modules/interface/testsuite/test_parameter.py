@@ -6,7 +6,6 @@ Created on Fri Jul  4 16:32:54 2014
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
 from grass.pygrass.modules.interface.parameter import Parameter, _check_value
 
 GETTYPE = {

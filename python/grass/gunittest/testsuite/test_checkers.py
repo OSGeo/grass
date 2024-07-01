@@ -11,19 +11,18 @@ for details.
 @author Vaclav Petras
 """
 
-from grass.script.utils import parse_key_val, try_remove
-
 from grass.gunittest.case import TestCase
-from grass.gunittest.main import test
 from grass.gunittest.checkers import (
-    values_equal,
-    text_to_keyvalue,
+    file_md5,
     keyvalue_equals,
     proj_info_equals,
     proj_units_equals,
-    file_md5,
     text_file_md5,
+    text_to_keyvalue,
+    values_equal,
 )
+from grass.gunittest.main import test
+from grass.script.utils import parse_key_val, try_remove
 
 
 class TestValuesEqual(TestCase):

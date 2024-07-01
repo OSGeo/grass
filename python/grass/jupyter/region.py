@@ -16,10 +16,10 @@ import grass.script as gs
 from grass.exceptions import CalledModuleError
 
 from .utils import (
-    get_map_name_from_d_command,
     estimate_resolution,
-    set_target_region,
+    get_map_name_from_d_command,
     get_rendering_size,
+    set_target_region,
 )
 
 

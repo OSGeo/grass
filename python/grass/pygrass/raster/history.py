@@ -5,10 +5,11 @@ Created on Thu Jun 28 17:44:45 2012
 """
 
 import ctypes
-import grass.lib.raster as libraster
 import datetime
-from grass.script.utils import encode
+
+import grass.lib.raster as libraster
 from grass.pygrass.utils import decode
+from grass.script.utils import encode
 
 
 class History:

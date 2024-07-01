@@ -1,6 +1,7 @@
 """Test SeriesMap functions"""
 
 from pathlib import Path
+
 import pytest
 
 try:

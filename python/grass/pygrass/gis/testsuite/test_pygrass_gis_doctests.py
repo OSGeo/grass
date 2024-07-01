@@ -7,10 +7,8 @@ import doctest
 import grass.gunittest.case
 import grass.gunittest.main
 import grass.gunittest.utils
-
 from grass.pygrass import gis
 from grass.pygrass.gis import region
-
 
 # doctest does not allow changing the base classes of test case, skip test case
 # and test suite, so we need to create a new type which inherits from our class

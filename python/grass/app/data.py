@@ -12,13 +12,13 @@ for details.
 This is not a stable part of the API. Use at your own risk.
 """
 
-import os
-import tempfile
 import getpass
+import os
 import sys
+import tempfile
 from shutil import copytree, ignore_patterns
-import grass.grassdb.config as cfg
 
+import grass.grassdb.config as cfg
 from grass.grassdb.checks import is_location_valid
 
 

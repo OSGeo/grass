@@ -10,10 +10,11 @@ for details.
 """
 
 import subprocess
-from grass.script.core import start_command
-from grass.script.utils import encode, decode
+
 from grass.exceptions import CalledModuleError
 from grass.pygrass.modules import Module
+from grass.script.core import start_command
+from grass.script.utils import decode, encode
 
 from .utils import do_doctest_gettext_workaround
 

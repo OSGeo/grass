@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-import subprocess
-import sys
 import os
 import platform
+import subprocess
+import sys
 
 import grass.script as gs
 

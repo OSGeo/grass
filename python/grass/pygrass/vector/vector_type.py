@@ -6,7 +6,6 @@ Created on Wed Jul 18 10:49:26 2012
 
 import grass.lib.vector as libvect
 
-
 MAPTYPE = {
     libvect.GV_FORMAT_NATIVE: "native",
     libvect.GV_FORMAT_OGR: "OGR",

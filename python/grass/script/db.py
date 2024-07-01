@@ -20,16 +20,18 @@ for details.
 """
 
 import os
+
+from grass.exceptions import CalledModuleError
+
 from .core import (
-    run_command,
-    parse_command,
-    read_command,
-    tempfile,
     fatal,
     list_strings,
+    parse_command,
+    read_command,
+    run_command,
+    tempfile,
 )
 from .utils import try_remove
-from grass.exceptions import CalledModuleError
 
 
 def db_describe(table, env=None, **args):

@@ -17,10 +17,10 @@ import shutil
 
 import grass.script as gs
 
+from .baseseriesmap import BaseSeriesMap
 from .map import Map
 from .region import RegionManagerForTimeSeries
 from .utils import save_gif
-from .baseseriesmap import BaseSeriesMap
 
 
 def fill_none_values(names):

@@ -10,12 +10,13 @@ for details.
 :authors: Soeren Gebbert
 """
 
-from grass.exceptions import FatalError
-import time
-import threading
-import sys
-from multiprocessing import Process, Lock, Pipe
 import logging
+import sys
+import threading
+import time
+from multiprocessing import Lock, Pipe, Process
+
+from grass.exceptions import FatalError
 
 ###############################################################################
 

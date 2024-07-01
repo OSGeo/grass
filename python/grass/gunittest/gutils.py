@@ -9,11 +9,11 @@ for details.
 :authors: Vaclav Petras
 """
 
-from grass.script.core import start_command, PIPE
+from grass.script.core import PIPE, start_command
 from grass.script.utils import decode
 
-from .gmodules import call_module
 from .checkers import text_to_keyvalue
+from .gmodules import call_module
 
 
 def get_current_mapset():

@@ -4,9 +4,11 @@ Created on Wed Jun 13 19:42:22 2012
 @author: pietro
 """
 
-import grass.lib.raster as libraster
 import ctypes
+
 import numpy as np
+
+import grass.lib.raster as libraster
 
 # Private dictionary to convert RASTER_TYPE into type string.
 RTYPE_STR = {

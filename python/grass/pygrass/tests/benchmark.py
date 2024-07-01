@@ -4,24 +4,25 @@ Created on Sat Jun 16 20:24:56 2012
 @author: soeren
 """
 
-import optparse
-
-# import numpy as np
-import time
 import collections
 import copy
 import cProfile
-import sys
+import optparse
 import os
+import sys
+import time
+
+# import numpy as np
 from jinja2 import Template
 
 sys.path.append(os.getcwd())
 sys.path.append("%s/.." % (os.getcwd()))
 
+import ctypes
+
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
 import grass.script as core
-import ctypes
 
 
 def test__RasterSegment_value_access__if():

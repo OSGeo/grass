@@ -6,28 +6,18 @@ Created on Fri Aug 17 16:05:25 2012
 
 import ctypes
 
-#
-# import GRASS modules
-#
-from grass.script import fatal, gisenv
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
-
-#
-# import pygrass modules
-#
 from grass.pygrass import utils
+from grass.pygrass.errors import must_be_in_current_mapset, must_be_open
 from grass.pygrass.gis.region import Region
-from grass.pygrass.errors import must_be_open, must_be_in_current_mapset
-from grass.pygrass.shell.conversion import dict2html
-from grass.pygrass.shell.show import raw_figure
-
-#
-# import raster classes
-#
-from grass.pygrass.raster.raster_type import TYPE as RTYPE, RTYPE_STR
 from grass.pygrass.raster.category import Category
 from grass.pygrass.raster.history import History
+from grass.pygrass.raster.raster_type import RTYPE_STR
+from grass.pygrass.raster.raster_type import TYPE as RTYPE
+from grass.pygrass.shell.conversion import dict2html
+from grass.pygrass.shell.show import raw_figure
+from grass.script import fatal, gisenv
 
 test_raster_name = "abstract_test_map"
 
@@ -623,6 +613,7 @@ class RasterAbstractBase:
 
 if __name__ == "__main__":
     import doctest
+
     from grass.pygrass.modules import Module
 
     Module("g.region", n=40, s=0, e=40, w=0, res=10)

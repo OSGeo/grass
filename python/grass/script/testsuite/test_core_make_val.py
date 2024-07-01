@@ -1,6 +1,5 @@
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
 from grass.script.core import _make_val
 
 

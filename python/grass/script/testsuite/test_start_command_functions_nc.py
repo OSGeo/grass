@@ -2,8 +2,7 @@
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-from grass.script.core import parse_command, start_command, PIPE
+from grass.script.core import PIPE, parse_command, start_command
 from grass.script.utils import parse_key_val
 
 LOCATION = "nc"

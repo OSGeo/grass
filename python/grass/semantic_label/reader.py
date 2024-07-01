@@ -1,8 +1,8 @@
-import os
-import sys
-import json
 import glob
+import json
+import os
 import re
+import sys
 from collections import OrderedDict
 
 import grass.script as gs

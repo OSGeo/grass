@@ -1,6 +1,6 @@
+from grass.exceptions import ScriptError
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-from grass.exceptions import ScriptError
 
 
 class TestTextAssertions(TestCase):

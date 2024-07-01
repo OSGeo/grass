@@ -20,12 +20,13 @@ for details.
 """
 
 import os
-import time
 import string
+import time
 
-from .core import read_command, write_command, fatal
-from .utils import float_or_dms, parse_key_val
 from grass.exceptions import CalledModuleError
+
+from .core import fatal, read_command, write_command
+from .utils import float_or_dms, parse_key_val
 
 
 def raster3d_info(map, env=None):

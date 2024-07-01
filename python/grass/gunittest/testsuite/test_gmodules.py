@@ -1,8 +1,8 @@
 import subprocess
 
 from grass.gunittest.case import TestCase
+from grass.gunittest.gmodules import CalledModuleError, call_module
 from grass.gunittest.main import test
-from grass.gunittest.gmodules import call_module, CalledModuleError
 
 G_REGION_OUTPUT = """...
 n=...

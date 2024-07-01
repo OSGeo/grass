@@ -1,9 +1,9 @@
 """Base class for SeriesMap and TimeSeriesMap"""
 
 import os
+import shutil
 import tempfile
 import weakref
-import shutil
 
 import grass.script as gs
 
