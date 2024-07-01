@@ -161,7 +161,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
         self.Map.GetRenderMgr().renderingFailed.connect(
             lambda cmd, error: self._giface.WriteError(
                 _("Failed to run command '%(command)s'. Details:\n%(error)s")
-                % dict(command=" ".join(cmd), error=error)
+                % {"command": " ".join(cmd), "error": error}
             )
         )
 
@@ -305,7 +305,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
             self.toolbars["map"].combo.SetValue(_("2D view"))
 
             GError(
-                _("Unable to start wxGUI vector digitizer.\n" "Details: %s") % errorMsg,
+                _("Unable to start wxGUI vector digitizer.\nDetails: %s") % errorMsg,
                 parent=self,
             )
             return
@@ -745,7 +745,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
         dlg = wx.FileDialog(
             parent=self,
             message=_(
-                "Choose a file name to save the image " "(no need to add extension)"
+                "Choose a file name to save the image (no need to add extension)"
             ),
             wildcard=filetype,
             style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
@@ -1014,10 +1014,10 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 ltype = layer.maplayer.GetType()
                 if ltype == "raster":
                     rast.append(name)
-                elif ltype in ("rgb", "his"):
+                elif ltype in {"rgb", "his"}:
                     for iname in name.split("\n"):
                         rast.append(iname)
-                elif ltype in ("vector", "thememap", "themechart"):
+                elif ltype in {"vector", "thememap", "themechart"}:
                     vect.append(name)
             if vect:
                 # check for vector maps open to be edited
@@ -1027,7 +1027,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
                     for name in vect:
                         if lmap == name:
                             self._giface.WriteWarning(
-                                _("Vector map <%s> " "opened for editing - skipped.")
+                                _("Vector map <%s> opened for editing - skipped.")
                                 % lmap
                             )
                             vect.remove(name)
@@ -1146,7 +1146,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
             self._highlighter_layer.SetMap(
                 vectQuery[0]["Map"] + "@" + vectQuery[0]["Mapset"]
             )
-            tmp = list()
+            tmp = []
             for i in vectQuery:
                 tmp.append(i["Category"])
 

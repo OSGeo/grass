@@ -256,17 +256,17 @@ class HistoryBrowserTree(CTreeView):
                     # Prepare it for entries without command info
                     day = self._model.AppendNode(
                         parent=self._model.root,
-                        data=dict(type=TIME_PERIOD, day=self._timestampToDay()),
+                        data={"type": TIME_PERIOD, "day": self._timestampToDay()},
                     )
                 else:
                     day = self._model.AppendNode(
                         parent=self._model.root,
-                        data=dict(
-                            type=TIME_PERIOD,
-                            day=self._timestampToDay(
+                        data={
+                            "type": TIME_PERIOD,
+                            "day": self._timestampToDay(
                                 entry["command_info"]["timestamp"]
                             ),
-                        ),
+                        },
                     )
 
             # Determine status and create command node
@@ -280,12 +280,12 @@ class HistoryBrowserTree(CTreeView):
             # Add command to time period node
             self._model.AppendNode(
                 parent=day,
-                data=dict(
-                    type=COMMAND,
-                    name=entry["command"].strip(),
-                    timestamp=timestamp if timestamp else None,
-                    status=status,
-                ),
+                data={
+                    "type": COMMAND,
+                    "name": entry["command"].strip(),
+                    "timestamp": timestamp if timestamp else None,
+                    "status": status,
+                },
             )
 
         # Refresh the tree view
@@ -387,10 +387,10 @@ class HistoryBrowserTree(CTreeView):
         if not today_nodes:
             today_node = self._model.AppendNode(
                 parent=self._model.root,
-                data=dict(
-                    type=TIME_PERIOD,
-                    day=today,
-                ),
+                data={
+                    "type": TIME_PERIOD,
+                    "day": today,
+                },
             )
         else:
             today_node = today_nodes[0]
@@ -398,12 +398,12 @@ class HistoryBrowserTree(CTreeView):
         # Create the command node under today time period node
         command_node = self._model.AppendNode(
             parent=today_node,
-            data=dict(
-                type=COMMAND,
-                name=entry["command"].strip(),
-                timestamp=entry["command_info"]["timestamp"],
-                status=entry["command_info"].get("status", Status.UNKNOWN.value),
-            ),
+            data={
+                "type": COMMAND,
+                "name": entry["command"].strip(),
+                "timestamp": entry["command_info"]["timestamp"],
+                "status": entry["command_info"].get("status", Status.UNKNOWN.value),
+            },
         )
 
         # Refresh the tree

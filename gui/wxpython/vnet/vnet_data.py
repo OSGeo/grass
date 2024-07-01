@@ -177,7 +177,7 @@ class VNETData:
             "turn_cat_layer": _("unique categories layer"),
         }
         for layer, layerLabel in vals.items():
-            if layer in ["turn_layer", "turn_cat_layer"] and not flags["t"]:
+            if layer in {"turn_layer", "turn_cat_layer"} and not flags["t"]:
                 continue
             if layer in inv_params:
                 if params[layer]:
@@ -633,7 +633,7 @@ class VNETAnalysisParameters:
 
     def GetParam(self, param):
         invParams = []
-        if param in [
+        if param in {
             "input",
             "arc_layer",
             "node_layer",
@@ -642,7 +642,7 @@ class VNETAnalysisParameters:
             "node_column",
             "turn_layer",
             "turn_cat_layer",
-        ]:
+        }:
             invParams = self._getInvalidParams(self.params)
 
         if invParams:
@@ -698,10 +698,10 @@ class VNETAnalysisParameters:
                 invParams.append(col)
                 continue
 
-            if columnchoices[params[col]]["type"] not in [
+            if columnchoices[params[col]]["type"] not in {
                 "integer",
                 "double precision",
-            ]:
+            }:
                 invParams.append(col)
                 continue
 
@@ -1398,7 +1398,7 @@ class VNETGlobalTurnsData:
     def DataValidator(self, row, col, value):
         """Angle recalculation due to value changing"""
 
-        if col not in [1, 2]:
+        if col not in {1, 2}:
             return
 
         if col == 1:

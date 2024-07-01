@@ -19,12 +19,12 @@ for details.
 """
 
 from datetime import datetime
-from .core import init_dbif
+
+from grass.lib import gis, rtree, vector
+
 from .abstract_dataset import AbstractDatasetComparisonKeyStartTime
+from .core import init_dbif
 from .datetime_math import time_delta_to_relative_time_seconds
-import grass.lib.vector as vector
-import grass.lib.rtree as rtree
-import grass.lib.gis as gis
 
 ###############################################################################
 
@@ -755,8 +755,6 @@ def print_temporal_topology_relationships(maps1, maps2=None, dbif=None):
     if connection_state_changed:
         dbif.close()
 
-    return
-
 
 ###############################################################################
 
@@ -789,8 +787,6 @@ def print_spatio_temporal_topology_relationships(
 
     if connection_state_changed:
         dbif.close()
-
-    return
 
 
 ###############################################################################
@@ -1032,12 +1028,12 @@ def create_temporal_relation_sql_where_statement(
                 "> '%s'))" % (end, start, end)
             )
         else:
-            where += "((start_time < %i and end_time > %i and end_time < %i)" " OR " % (
+            where += "((start_time < %i and end_time > %i and end_time < %i) OR " % (
                 start,
                 start,
                 end,
             )
-            where += "(start_time < %i and start_time > %i and end_time > " "%i))" % (
+            where += "(start_time < %i and start_time > %i and end_time > %i))" % (
                 end,
                 start,
                 end,

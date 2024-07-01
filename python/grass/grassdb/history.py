@@ -80,7 +80,7 @@ def _read_from_plain_text(history_path):
     with 'command' and 'command_info' keys
     'command_info' is always empty since plain text history file
     stores only executed commands."""
-    content_list = list()
+    content_list = []
     try:
         with open(
             history_path, encoding="utf-8", mode="r", errors="replace"
@@ -103,7 +103,7 @@ def _read_from_JSON(history_path):
     :return content_list: list of dictionaries
     with 'command' and 'command_info' keys
     """
-    content_list = list()
+    content_list = []
     try:
         with open(
             history_path, encoding="utf-8", mode="r", errors="replace"

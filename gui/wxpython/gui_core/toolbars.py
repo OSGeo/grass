@@ -20,7 +20,7 @@ import platform
 import os
 
 import wx
-import wx.lib.agw.aui as aui
+from wx.lib.agw import aui
 
 from core import globalvar
 from core.debug import Debug
@@ -245,7 +245,7 @@ class ToolbarController:
 
     def _getToolbarData(self, data):
         """Define tool"""
-        retData = list()
+        retData = []
         for args in data:
             retData.append(self._defineTool(*args))
         return retData

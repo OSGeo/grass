@@ -508,7 +508,7 @@ class LocationPage(TitledPage):
         """Sets source mapset for map(s) to georectify"""
         if self.xylocation == "":
             GMessage(
-                _("You must select a valid location " "before selecting a mapset"),
+                _("You must select a valid location before selecting a mapset"),
                 parent=self,
             )
             return
@@ -695,7 +695,7 @@ class GroupPage(TitledPage):
     def OnPageChanging(self, event=None):
         if event.GetDirection() and self.xygroup == "":
             GMessage(
-                _("You must select a valid image/map " "group in order to continue"),
+                _("You must select a valid image/map group in order to continue"),
                 parent=self,
             )
             event.Veto()
@@ -703,7 +703,7 @@ class GroupPage(TitledPage):
 
         if event.GetDirection() and self.extension == "":
             GMessage(
-                _("You must enter an map name " "extension in order to continue"),
+                _("You must enter an map name extension in order to continue"),
                 parent=self,
             )
             event.Veto()
@@ -917,7 +917,7 @@ class DispMapPage(TitledPage):
 
         if event.GetDirection() and (src_map == ""):
             GMessage(
-                _("You must select a source map " "in order to continue"), parent=self
+                _("You must select a source map in order to continue"), parent=self
             )
             event.Veto()
             return
@@ -2236,14 +2236,10 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             e, n = errlist[i].split()
             fe = float(e)
             fn = float(n)
-            if fe < newreg["w"]:
-                newreg["w"] = fe
-            if fe > newreg["e"]:
-                newreg["e"] = fe
-            if fn < newreg["s"]:
-                newreg["s"] = fn
-            if fn > newreg["n"]:
-                newreg["n"] = fn
+            newreg["w"] = min(fe, newreg["w"])
+            newreg["e"] = max(fe, newreg["e"])
+            newreg["s"] = min(fn, newreg["s"])
+            newreg["n"] = max(fn, newreg["n"])
 
         return newreg
 
@@ -2292,10 +2288,8 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         # LL locations
         if self.Map.projinfo["proj"] == "ll":
-            if newreg["n"] > 90.0:
-                newreg["n"] = 90.0
-            if newreg["s"] < -90.0:
-                newreg["s"] = -90.0
+            newreg["n"] = min(newreg["n"], 90.0)
+            newreg["s"] = max(newreg["s"], -90.0)
 
         ce = newreg["w"] + (newreg["e"] - newreg["w"]) / 2
         cn = newreg["s"] + (newreg["n"] - newreg["s"]) / 2

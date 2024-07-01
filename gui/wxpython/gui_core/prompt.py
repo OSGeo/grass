@@ -58,14 +58,14 @@ class GPrompt:
         self.mapsetList = utils.ListOfMapsets()
 
         # auto complete items
-        self.autoCompList = list()
+        self.autoCompList = []
         self.autoCompFilter = None
 
         # command description (gtask.grassTask)
         self.cmdDesc = None
 
         # list of traced commands
-        self.commands = list()
+        self.commands = []
 
         # reload map lists when needed
         if giface:
@@ -74,7 +74,7 @@ class GPrompt:
 
     def _getListOfMaps(self):
         """Get list of maps"""
-        result = dict()
+        result = {}
         result["raster"] = grass.list_strings("raster")
         result["vector"] = grass.list_strings("vector")
 
@@ -361,7 +361,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         """Determines which part of command (flags, parameters) should
         be completed at current cursor position"""
         entry = self.GetTextLeft()
-        toComplete = dict(cmd=None, entity=None)
+        toComplete = {"cmd": None, "entity": None}
         try:
             cmd = entry.split()[0].strip()
         except IndexError:
@@ -423,7 +423,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         """
         textLeft = self.GetTextLeft()
 
-        parts = list()
+        parts = []
         if ignoredDelimiter is None:
             ignoredDelimiter = ""
 
@@ -480,10 +480,8 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                 self.cmdindex = self.cmdindex - 1
             if event.GetKeyCode() == wx.WXK_DOWN:
                 self.cmdindex = self.cmdindex + 1
-            if self.cmdindex < 0:
-                self.cmdindex = 0
-            if self.cmdindex > len(self.cmdbuffer) - 1:
-                self.cmdindex = len(self.cmdbuffer) - 1
+            self.cmdindex = max(self.cmdindex, 0)
+            self.cmdindex = min(self.cmdindex, len(self.cmdbuffer) - 1)
 
             try:
                 # without strip causes problem on windows
@@ -512,7 +510,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         pos = self.GetCurrentPos()
         # complete command after pressing '.'
         if event.GetKeyCode() == 46:
-            self.autoCompList = list()
+            self.autoCompList = []
             entry = self.GetTextLeft()
             self.InsertText(pos, ".")
             self.CharRight()
@@ -539,7 +537,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             or event.GetKeyCode() == wx.WXK_NUMPAD_SUBTRACT
             or event.GetKeyCode() == wx.WXK_SUBTRACT
         ):
-            self.autoCompList = list()
+            self.autoCompList = []
             entry = self.GetTextLeft()
             self.InsertText(pos, "-")
             self.CharRight()
@@ -557,7 +555,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
 
         # complete map or values after parameter
         elif event.GetKeyCode() == 61:
-            self.autoCompList = list()
+            self.autoCompList = []
             self.InsertText(pos, "=")
             self.CharRight()
             self.toComplete = self.EntityToComplete()
@@ -574,7 +572,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
 
         # complete mapset ('@')
         elif event.GetKeyCode() == 64:
-            self.autoCompList = list()
+            self.autoCompList = []
             self.InsertText(pos, "@")
             self.CharRight()
             self.toComplete = self.EntityToComplete()
@@ -585,7 +583,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
 
         # complete after pressing CTRL + Space
         elif event.GetKeyCode() == wx.WXK_SPACE and event.ControlDown():
-            self.autoCompList = list()
+            self.autoCompList = []
             self.toComplete = self.EntityToComplete()
 
             # complete command
@@ -615,7 +613,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             # r.colors | ...-w, -q, -l, color, map, rast, rules
             # r.colors color=grey | ...-w, -q, -l, color, map, rast, rules
             elif self.toComplete["entity"] == "params+flags" and self.cmdDesc:
-                self.autoCompList = list()
+                self.autoCompList = []
 
                 for param in self.cmdDesc.get_options()["params"]:
                     self.autoCompList.append(param["name"])
@@ -631,13 +629,13 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             # r.buffer input=| ...list of raster maps
             # r.buffer units=| ... feet, kilometers, ...
             elif self.toComplete["entity"] == "raster map":
-                self.autoCompList = list()
+                self.autoCompList = []
                 self.autoCompList = self.mapList["raster"]
             elif self.toComplete["entity"] == "vector map":
-                self.autoCompList = list()
+                self.autoCompList = []
                 self.autoCompList = self.mapList["vector"]
             elif self.toComplete["entity"] == "param values":
-                self.autoCompList = list()
+                self.autoCompList = []
                 param = self.GetWordLeft(
                     withDelimiter=False, ignoredDelimiter="="
                 ).strip(" =")

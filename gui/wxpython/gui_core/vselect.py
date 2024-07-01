@@ -247,7 +247,7 @@ class VectorSelectBase:
                 + "@"
                 + self.selectedFeatures[0]["Mapset"]
             )
-            tmp = list()
+            tmp = []
             for i in self.selectedFeatures:
                 tmp.append(i["Category"])
 
@@ -405,7 +405,7 @@ class VectorSelectHighlighter:
         self.giface = giface
         self.layerCat = {}
         self.data = {}
-        self.data["Category"] = list()
+        self.data["Category"] = []
         self.data["Map"] = None
         self.data["Layer"] = None
 
@@ -419,7 +419,7 @@ class VectorSelectHighlighter:
         self.data["Category"] = cats
 
     def Clear(self):
-        self.data["Category"] = list()
+        self.data["Category"] = []
         self.data["Map"] = None
         self.data["Layer"] = None
         self.mapdisp.RemoveQueryLayer()

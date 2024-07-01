@@ -241,7 +241,7 @@ class VDigitToolbar(BaseToolbar):
             ),
             "additionalTools": MetaIcon(
                 img="tools",
-                label=_("Additional tools " "(copy, flip, connect, etc.)"),
+                label=_("Additional tools (copy, flip, connect, etc.)"),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
             "undo": MetaIcon(
@@ -1095,7 +1095,7 @@ class VDigitToolbar(BaseToolbar):
                 )
 
             self.parent.SetStatusText(
-                _("Please wait, " "opening vector map <%s> for editing...")
+                _("Please wait, opening vector map <%s> for editing...")
                 % mapLayer.GetName(),
                 0,
             )
@@ -1210,7 +1210,7 @@ class VDigitToolbar(BaseToolbar):
                 if self.digit.GetUndoLevel() > -1:
                     dlg = wx.MessageDialog(
                         parent=self.parent,
-                        message=_("Do you want to save changes " "in vector map <%s>?")
+                        message=_("Do you want to save changes in vector map <%s>?")
                         % self.mapLayer.GetName(),
                         caption=_("Save changes?"),
                         style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,

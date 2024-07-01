@@ -51,7 +51,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         if self.install_prefix.exists():
             files = list(path.name for path in self.install_prefix.iterdir())
             if files:
-                RuntimeError(
+                raise RuntimeError(
                     f"Install prefix path '{self.install_prefix}' \
                     contains files {','.join(files)}"
                 )
