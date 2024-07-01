@@ -525,7 +525,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             else:
                 renamed_elements.append(elementdict[elem])
 
-        if element in ("stds", "strds", "str3ds", "stvds"):
+        if element in {"stds", "strds", "str3ds", "stvds"}:
             if not self.tgis_error:
                 import grass.temporal as tgis
 
@@ -603,7 +603,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                 collapse = True
 
                 if sel == 0:  # collapse all except PERMANENT and current
-                    if mapset in ("PERMANENT", curr_mapset):
+                    if mapset in {"PERMANENT", curr_mapset}:
                         collapse = False
                 elif sel == 1:  # collapse all except PERMANENT
                     if mapset == "PERMANENT":
@@ -776,7 +776,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         ListCtrlComboPopup.SetData(self, **kargs)
         if "type" in kargs:
             self.type = kargs["type"]
-            if self.type in ("stds", "strds", "str3ds", "stvds"):
+            if self.type in {"stds", "strds", "str3ds", "stvds"}:
                 # Initiate the temporal framework. Catch database error
                 # and set the error flag for the stds listing.
                 try:
@@ -1541,7 +1541,7 @@ class GdalSelect(wx.Panel):
             }
 
         for name, ext in sorted(extList.items()):
-            if name in ("ESRI Shapefile", "GeoTIFF"):
+            if name in {"ESRI Shapefile", "GeoTIFF"}:
                 continue
             fileMask += "%(name)s (*.%(low)s;*.%(up)s)|*.%(low)s;*.%(up)s|" % {
                 "name": name,
@@ -1726,7 +1726,7 @@ class GdalSelect(wx.Panel):
                     break
             optList = list()
             for k, v in data.items():
-                if k in ("format", "conninfo", "topology"):
+                if k in {"format", "conninfo", "topology"}:
                     continue
                 optList.append("%s=%s" % (k, v))
             options = ",".join(optList)
@@ -2097,11 +2097,11 @@ class GdalSelect(wx.Panel):
     def GetDsn(self):
         """Get datasource name"""
         if self._sourceType == "db":
-            if self.dbWidgets["format"].GetStringSelection() in (
+            if self.dbWidgets["format"].GetStringSelection() in {
                 "PostgreSQL",
                 "PostgreSQL/PostGIS",
                 "PostGIS Raster driver",
-            ):
+            }:
                 ret = RunCommand("db.login", read=True, quiet=True, flags="p")
                 message = _(
                     "PostgreSQL/PostGIS login was not set."
@@ -2157,7 +2157,7 @@ class GdalSelect(wx.Panel):
                 dsn = "/vsizip/" + dsn
             elif ext == ".gzip":
                 dsn = "/vsigzip/" + dsn
-            elif ext in (".tar", ".tar.gz", ".tgz"):
+            elif ext in {".tar", ".tar.gz", ".tgz"}:
                 dsn = "/vsitar/" + dsn
 
         return dsn
@@ -2165,22 +2165,22 @@ class GdalSelect(wx.Panel):
     def SetDatabase(self, db):
         """Update database panel."""
         sizer = self.dbPanel.GetSizer()
-        showBrowse = db in ("SQLite", "SQLite / Spatialite", "Rasterlite")
+        showBrowse = db in {"SQLite", "SQLite / Spatialite", "Rasterlite"}
         showDirbrowse = db in ("FileGDB")
-        showChoice = db in (
+        showChoice = db in {
             "PostgreSQL",
             "PostgreSQL/PostGIS",
             "PostGIS WKT Raster driver",
             "PostGIS Raster driver",
-        )
+        }
         enableFeatType = (
             self.dest
             and self.ogr
             and db
-            in (
+            in {
                 "PostgreSQL",
                 "PostgreSQL/PostGIS",
-            )
+            }
         )
         showText = not (showBrowse or showChoice or showDirbrowse)
 

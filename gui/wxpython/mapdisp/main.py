@@ -196,7 +196,7 @@ class DMonMap(Map):
 
                 args = {}
 
-                if ltype in ("barscale", "rastleg", "northarrow", "text", "vectleg"):
+                if ltype in {"barscale", "rastleg", "northarrow", "text", "vectleg"}:
                     # TODO: this is still not optimal
                     # it is there to prevent adding the same overlay multiple times
                     if cmd in self.oldOverlays:

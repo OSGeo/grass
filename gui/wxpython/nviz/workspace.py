@@ -79,7 +79,7 @@ class NvizSettings:
 
             if control == "wire-color":
                 value = str(value[0]) + ":" + str(value[1]) + ":" + str(value[2])
-            elif control in ("mode", "style", "shading"):
+            elif control in {"mode", "style", "shading"}:
                 if "mode" not in data["draw"]:
                     data["draw"]["mode"] = {}
                 continue

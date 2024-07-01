@@ -368,7 +368,7 @@ class MapLayer(Layer):
     def __init__(self, *args, **kwargs):
         """Represents map layer in the map canvas"""
         Layer.__init__(self, *args, **kwargs)
-        if self.type in ("vector", "thememap"):
+        if self.type in {"vector", "thememap"}:
             self._legrow = get_tempfile_name(suffix=".legrow", create=True)
         else:
             self._legrow = ""
@@ -439,7 +439,7 @@ class RenderLayerMgr(wx.EvtHandler):
         env_cmd = env.copy()
         env_cmd.update(self._render_env)
         env_cmd["GRASS_RENDER_FILE"] = self.layer.mapfile
-        if self.layer.GetType() in ("vector", "thememap"):
+        if self.layer.GetType() in {"vector", "thememap"}:
             if not self.layer._legrow:
                 self.layer._legrow = grass.tempfile(create=True)
             if os.path.isfile(self.layer._legrow):
@@ -721,7 +721,7 @@ class RenderMapMgr(wx.EvtHandler):
         new_legend = []
         with open(self.Map.legfile, "w") as outfile:
             for layer in reversed(self.layers):
-                if layer.GetType() not in ("vector", "thememap"):
+                if layer.GetType() not in {"vector", "thememap"}:
                     continue
 
                 if os.path.isfile(layer._legrow) and not layer.hidden:
@@ -883,7 +883,7 @@ class Map:
         for line in ret.splitlines():
             if ":" in line:
                 key, val = map(lambda x: x.strip(), line.split(":", 1))
-                if key in ["units"]:
+                if key in {"units"}:
                     val = val.lower()
                 projinfo[key] = val
             elif "XY location (unprojected)" in line:
@@ -1452,7 +1452,7 @@ class Map:
                 for f in glob.glob(basefile):
                     os.remove(f)
 
-            if layer.GetType() in ("vector", "thememap"):
+            if layer.GetType() in {"vector", "thememap"}:
                 if os.path.isfile(layer._legrow):
                     os.remove(layer._legrow)
 

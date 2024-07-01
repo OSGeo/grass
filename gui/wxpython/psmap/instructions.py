@@ -118,14 +118,14 @@ class Instruction:
         else:
             self.instruction.append(instruction)
         # add to drawable objects
-        if instruction.type not in (
+        if instruction.type not in {
             "page",
             "raster",
             "vector",
             "vProperties",
             "initMap",
             "labels",
-        ):
+        }:
             if instruction.type == "map":
                 self.objectsToDraw.insert(0, instruction.id)
             else:
@@ -201,9 +201,9 @@ class Instruction:
                     kwargs = {}
                     if instruction == "scalebar":
                         kwargs["scale"] = map["scale"]
-                    elif instruction in ("text", "eps", "point", "line", "rectangle"):
+                    elif instruction in {"text", "eps", "point", "line", "rectangle"}:
                         kwargs["mapInstruction"] = map
-                    elif instruction in ("vpoints", "vlines", "vareas"):
+                    elif instruction in {"vpoints", "vlines", "vareas"}:
                         kwargs["id"] = NewId()
                         kwargs["vectorMapNumber"] = vectorMapNumber
                         vectorMapNumber += 1
@@ -222,11 +222,11 @@ class Instruction:
                 buffer.append(line)
 
             elif line.startswith("border"):
-                if line.split()[1].lower() in ("n", "no", "none"):
+                if line.split()[1].lower() in {"n", "no", "none"}:
                     ok = self.SendToRead("border", [line])
                     if not ok:
                         return False
-                elif line.split()[1].lower() in ("y", "yes"):
+                elif line.split()[1].lower() in {"y", "yes"}:
                     instruction = "border"
                     isBuffer = True
                     buffer.append(line)
@@ -284,11 +284,11 @@ class Instruction:
                 buffer.append(line)
 
             elif line.startswith("colortable"):
-                if len(line.split()) == 2 and line.split()[1].lower() in (
+                if len(line.split()) == 2 and line.split()[1].lower() in {
                     "n",
                     "no",
                     "none",
-                ):
+                }:
                     break
                 instruction = "colortable"
                 isBuffer = True
@@ -451,7 +451,7 @@ class Instruction:
             instr = self.FindInstructionByType(i)
             if (
                 i
-                in (
+                in {
                     "text",
                     "vProperties",
                     "image",
@@ -459,7 +459,7 @@ class Instruction:
                     "point",
                     "line",
                     "rectangle",
-                )
+                }
                 or not instr
             ):
                 id = NewId()  # !vProperties expect subtype
@@ -470,7 +470,7 @@ class Instruction:
                         subType=instruction[1:],
                         env=self.env,
                     )
-                elif i in ("image", "northArrow"):
+                elif i in {"image", "northArrow"}:
                     commentFound = False
                     for line in text:
                         if line.find("# north arrow") >= 0:
@@ -642,7 +642,7 @@ class MapFrame(InstructionObject):
             region = self.instruction["region"]
             comment = "# g.region region=%s\n" % region
         # current region, fixed scale
-        elif self.instruction["scaleType"] in (2, 3):
+        elif self.instruction["scaleType"] in {2, 3}:
             comment = string.Template(
                 "# g.region n=$n s=$s e=$e w=$w rows=$rows cols=$cols \n"
             ).substitute(**region)
@@ -693,10 +693,10 @@ class MapFrame(InstructionObject):
                 if line.startswith("end"):
                     break
                 try:
-                    if line.split()[1].lower() in ("n", "no", "none"):
+                    if line.split()[1].lower() in {"n", "no", "none"}:
                         instr["border"] = "n"
                         break
-                    elif line.split()[1].lower() in ("y", "yes"):
+                    elif line.split()[1].lower() in {"y", "yes"}:
                         instr["border"] = "y"
                     elif line.startswith("width"):
                         instr["width"] = line.split()[1]
@@ -1050,7 +1050,7 @@ class Text(InstructionObject):
                 elif sub == "yoffset":
                     instr["yoffset"] = int(line.split(None, 1)[1])
                 elif sub == "opaque":
-                    if line.split(None, 1)[1].lower() in ("n", "none"):
+                    if line.split(None, 1)[1].lower() in {"n", "none"}:
                         instr["background"] = "none"
 
             except (IndexError, ValueError):
@@ -1550,14 +1550,14 @@ class Scalebar(InstructionObject):
                 elif line.startswith("length"):
                     instr["length"] = float(line.split()[1])
                 elif line.startswith("units"):
-                    if line.split()[1] in [
+                    if line.split()[1] in {
                         "auto",
                         "meters",
                         "kilometers",
                         "feet",
                         "miles",
                         "nautmiles",
-                    ]:
+                    }:
                         instr["unitsLength"] = line.split()[1]
                 elif line.startswith("height"):
                     instr["height"] = float(line.split()[1])
@@ -1568,9 +1568,9 @@ class Scalebar(InstructionObject):
                 elif line.startswith("segment"):
                     instr["segment"] = int(line.split()[1])
                 elif line.startswith("background"):
-                    if line.split()[1].strip().lower() in ("y", "yes"):
+                    if line.split()[1].strip().lower() in {"y", "yes"}:
                         instr["background"] = "y"
-                    elif line.split()[1].strip().lower() in ("n", "no", "none"):
+                    elif line.split()[1].strip().lower() in {"n", "no", "none"}:
                         instr["background"] = "n"
             except (IndexError, ValueError):
                 GError(_("Failed to read instruction %s") % instruction)
@@ -1699,19 +1699,19 @@ class RasterLegend(InstructionObject):
                     instr["min"] = float(line.split()[1])
                     instr["max"] = float(line.split()[2])
                 elif line.startswith("nodata"):
-                    if line.split()[1].strip().lower() in ("y", "yes"):
+                    if line.split()[1].strip().lower() in {"y", "yes"}:
                         instr["nodata"] = "y"
-                    elif line.split()[1].strip().lower() in ("n", "no", "none"):
+                    elif line.split()[1].strip().lower() in {"n", "no", "none"}:
                         instr["nodata"] = "n"
                 elif line.startswith("tickbar"):
-                    if line.split()[1].strip().lower() in ("y", "yes"):
+                    if line.split()[1].strip().lower() in {"y", "yes"}:
                         instr["tickbar"] = "y"
-                    elif line.split()[1].strip().lower() in ("n", "no", "none"):
+                    elif line.split()[1].strip().lower() in {"n", "no", "none"}:
                         instr["tickbar"] = "n"
                 elif line.startswith("discrete"):
-                    if line.split()[1].strip().lower() in ("y", "yes"):
+                    if line.split()[1].strip().lower() in {"y", "yes"}:
                         instr["discrete"] = "y"
-                    elif line.split()[1].strip().lower() in ("n", "no", "none"):
+                    elif line.split()[1].strip().lower() in {"n", "no", "none"}:
                         instr["discrete"] = "n"
 
             except (IndexError, ValueError):
@@ -1752,7 +1752,7 @@ class RasterLegend(InstructionObject):
                 cols = 1
 
             rinfo = grass.raster_info(raster)
-            if rinfo["datatype"] in ("DCELL", "FCELL"):
+            if rinfo["datatype"] in {"DCELL", "FCELL"}:
                 minim, maxim = rinfo["min"], rinfo["max"]
                 rows = ceil(maxim / cols)
             else:
@@ -2066,7 +2066,7 @@ class VProperties(InstructionObject):
         dic = self.instruction
         vInstruction = string.Template("v$subType $name\n").substitute(dic)
         # data selection
-        if self.subType in ("points", "lines"):
+        if self.subType in {"points", "lines"}:
             vInstruction += string.Template("    type $type\n").substitute(dic)
         if dic["connection"]:
             vInstruction += string.Template("    layer $layer\n").substitute(dic)
@@ -2077,7 +2077,7 @@ class VProperties(InstructionObject):
         vInstruction += string.Template("    masked $masked\n").substitute(dic)
         # colors
         vInstruction += string.Template("    color $color\n").substitute(dic)
-        if self.subType in ("points", "areas"):
+        if self.subType in {"points", "areas"}:
             if dic["color"] != "none":
                 vInstruction += string.Template("    width $width\n").substitute(dic)
             if dic["rgbcolumn"]:
@@ -2233,7 +2233,7 @@ class VProperties(InstructionObject):
             elif line.startswith("layer"):
                 instr["layer"] = line.split()[1]
             elif line.startswith("masked"):
-                if line.split()[1].lower() in ("y", "yes"):
+                if line.split()[1].lower() in {"y", "yes"}:
                     instr["masked"] = "y"
                 else:
                     instr["masked"] = "n"

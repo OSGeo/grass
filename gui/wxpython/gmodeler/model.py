@@ -838,7 +838,7 @@ class Model:
             result["variables"] = {"flags": list(), "params": params, "idx": idx}
             for name, values in self.variables.items():
                 gtype = values.get("type", "string")
-                if gtype in ("raster", "vector", "mapset", "file", "region", "dir"):
+                if gtype in {"raster", "vector", "mapset", "file", "region", "dir"}:
                     gisprompt = True
                     prompt = gtype
                     if gtype == "raster":
@@ -1487,15 +1487,15 @@ class ModelData(ModelObject):
 
     def _getBrush(self):
         """Get brush"""
-        if self.prompt in ("raster", "strds"):
+        if self.prompt in {"raster", "strds"}:
             color = UserSettings.Get(
                 group="modeler", key="data", subkey=("color", "raster")
             )
-        elif self.prompt in ("raster_3d", "str3ds"):
+        elif self.prompt in {"raster_3d", "str3ds"}:
             color = UserSettings.Get(
                 group="modeler", key="data", subkey=("color", "raster3d")
             )
-        elif self.prompt in ("vector", "stvds"):
+        elif self.prompt in {"vector", "stvds"}:
             color = UserSettings.Get(
                 group="modeler", key="data", subkey=("color", "vector")
             )
@@ -1926,7 +1926,7 @@ class ModelCondition(ModelItem, ogl.PolygonShape):
         :param items: list of items
         :param branch: 'if' / 'else'
         """
-        if branch in ["if", "else"]:
+        if branch in {"if", "else"}:
             self.itemIds[branch] = items
 
 
@@ -3289,7 +3289,7 @@ if __name__ == "__main__":
 
     def _getParamValue(self, param):
         if param["value"] and "output" not in param["name"]:
-            if param["type"] in ["float", "integer"]:
+            if param["type"] in {"float", "integer"}:
                 value = param["value"]
             else:
                 value = '"{}"'.format(param["value"])

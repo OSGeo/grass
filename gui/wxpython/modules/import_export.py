@@ -631,10 +631,10 @@ class OgrImportDialog(ImportDialog):
         if (
             self.dsnInput.GetType() == "db"
             and self.dsnInput.GetFormat()
-            in (
+            in {
                 "PostgreSQL",
                 "PostgreSQL/PostGIS",
-            )
+            }
             and "GRASS_VECTOR_OGR" not in os.environ
         ):
             self.popOGR = True

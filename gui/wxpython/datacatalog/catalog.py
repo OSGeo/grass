@@ -98,7 +98,7 @@ class DataCatalog(wx.Panel):
             # get reason why last used mapset is not usable
             last_mapset_path = gisenv()["LAST_MAPSET_PATH"]
             self.reason_id = get_reason_id_mapset_not_usable(last_mapset_path)
-            if self.reason_id in ("non-existent", "invalid", "different-owner"):
+            if self.reason_id in {"non-existent", "invalid", "different-owner"}:
                 # show non-standard situation info
                 wx.CallLater(delay, self.showFallbackSessionInfo)
             elif self.reason_id == "locked":

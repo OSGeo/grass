@@ -1399,7 +1399,7 @@ class ExportDialog(wx.Dialog):
             self._hideAll()
             return
         cdata = self.listbox.GetClientData(index)
-        self.hidevbox.Show(self.fontBox, (cdata["name"] in ("time", "text")))
+        self.hidevbox.Show(self.fontBox, (cdata["name"] in {"time", "text"}))
         self.hidevbox.Show(self.imageBox, (cdata["name"] == "image"))
         self.hidevbox.Show(self.textBox, (cdata["name"] == "text"))
         self.hidevbox.Show(self.posBox, True)
@@ -1409,7 +1409,7 @@ class ExportDialog(wx.Dialog):
         self.spinY.SetValue(cdata["pos"][1])
         if cdata["name"] == "image":
             self.browse.SetValue(cdata["file"])
-        elif cdata["name"] in ("time", "text"):
+        elif cdata["name"] in {"time", "text"}:
             self.sampleLabel.SetFont(cdata["font"])
             if cdata["name"] == "text":
                 self.textCtrl.SetValue(cdata["text"])
@@ -1750,7 +1750,7 @@ class AddTemporalLayerDialog(wx.Dialog):
         if typeName:
             self.tchoice.SetStringSelection(self._types[typeName])
             self.tselect.SetType(typeName)
-            if typeName in ("strds", "stvds", "str3ds"):
+            if typeName in {"strds", "stvds", "str3ds"}:
                 self.tselect.SetType(typeName, multiple=False)
                 self.addManyMapsButton.Disable()
             else:
@@ -1760,7 +1760,7 @@ class AddTemporalLayerDialog(wx.Dialog):
             self.tselect.SetValue("")
         else:
             typeName = self.tchoice.GetClientData(self.tchoice.GetSelection())
-            if typeName in ("strds", "stvds", "str3ds"):
+            if typeName in {"strds", "stvds", "str3ds"}:
                 self.tselect.SetType(typeName, multiple=False)
                 self.addManyMapsButton.Disable()
             else:
@@ -1773,14 +1773,14 @@ class AddTemporalLayerDialog(wx.Dialog):
 
     def _createDefaultCommand(self):
         cmd = []
-        if self._mapType in ("raster", "strds"):
+        if self._mapType in {"raster", "strds"}:
             cmd.append("d.rast")
-        elif self._mapType in ("vector", "stvds"):
+        elif self._mapType in {"vector", "stvds"}:
             cmd.append("d.vect")
-        elif self._mapType in ("raster_3d", "str3ds"):
+        elif self._mapType in {"raster_3d", "str3ds"}:
             cmd.append("d.rast3d")
         if self._name:
-            if self._mapType in ("raster", "vector", "raster_3d"):
+            if self._mapType in {"raster", "vector", "raster_3d"}:
                 cmd.append("map={name}".format(name=self._name.split(",")[0]))
             else:
                 try:

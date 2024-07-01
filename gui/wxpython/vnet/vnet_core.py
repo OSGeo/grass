@@ -769,7 +769,7 @@ class VNETAnalyses:
             inParams.append(col + "=" + params[colInptF])
 
         for layer in ["arc_layer", "node_layer", "turn_layer", "turn_cat_layer"]:
-            if not flags["t"] and layer in ["turn_layer", "turn_cat_layer"]:
+            if not flags["t"] and layer in {"turn_layer", "turn_cat_layer"}:
                 continue
             # TODO
             if flags["t"] and layer == "node_layer":

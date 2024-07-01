@@ -167,7 +167,7 @@ GM_WINDOW_MIN_SIZE = (525, 400)
 # use UBUNTU_MENUPROXY=0 to disable global menu on ubuntu but in the same time
 # to get smaller lmgr
 # [1] https://wiki.ubuntu.com/DesktopExperienceTeam/ApplicationMenu#Troubleshooting
-if sys.platform in ("win32", "darwin") or os.environ.get("UBUNTU_MENUPROXY"):
+if sys.platform in {"win32", "darwin"} or os.environ.get("UBUNTU_MENUPROXY"):
     GM_WINDOW_SIZE = (GM_WINDOW_MIN_SIZE[0], 600)
 else:
     GM_WINDOW_SIZE = (625, 600)
@@ -213,12 +213,12 @@ def UpdateGRASSAddOnCommands(eList=None):
             os.environ["PATH"] = path + os.pathsep + os.environ["PATH"]
 
         for fname in os.listdir(path):
-            if fname in ["docs", "modules.xml"]:
+            if fname in {"docs", "modules.xml"}:
                 continue
             if grassScripts:  # win32
                 name, ext = os.path.splitext(fname)
                 if name not in grassCmd:
-                    if ext not in [BIN_EXT, SCT_EXT]:
+                    if ext not in {BIN_EXT, SCT_EXT}:
                         continue
                     if name not in grassCmd:
                         grassCmd.add(name)

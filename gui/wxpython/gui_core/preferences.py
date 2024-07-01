@@ -1137,10 +1137,10 @@ class PreferencesDialog(PreferencesBaseDialog):
         #
 
         # see initialization of nviz GLWindow
-        if globalvar.CheckWxVersion(version=[2, 8, 11]) and sys.platform not in (
+        if globalvar.CheckWxVersion(version=[2, 8, 11]) and sys.platform not in {
             "win32",
             "darwin",
-        ):
+        }:
             box = StaticBox(
                 parent=panel,
                 id=wx.ID_ANY,

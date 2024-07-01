@@ -549,7 +549,7 @@ class SbGoTo(SbItem):
                 projIn = settings
                 projOut = RunCommand("g.proj", flags="jf", read=True)
                 proj = projIn.split(" ")[0].split("=")[1]
-                if proj in ("ll", "latlong", "longlat"):
+                if proj in {"ll", "latlong", "longlat"}:
                     e, n = utils.DMS2Deg(e, n)
                     proj, coord1 = utils.ReprojectCoordinates(
                         coord=(e, n), projIn=projIn, projOut=projOut, flags="d"
@@ -629,7 +629,7 @@ class SbGoTo(SbItem):
                     flags="d",
                 )
                 if coord:
-                    if proj in ("ll", "latlong", "longlat") and format == "DMS":
+                    if proj in {"ll", "latlong", "longlat"} and format == "DMS":
                         return "%s" % utils.Deg2DMS(
                             coord[0], coord[1], precision=precision
                         )
@@ -807,7 +807,7 @@ class SbCoordinates(SbTextItem):
                 )
                 if coord:
                     e, n = coord
-                    if proj in ("ll", "latlong", "longlat") and format == "DMS":
+                    if proj in {"ll", "latlong", "longlat"} and format == "DMS":
                         return utils.Deg2DMS(e, n, precision=precision)
                     else:
                         return "%.*f; %.*f" % (precision, e, precision, n)
@@ -897,7 +897,7 @@ class SbRegionExtent(SbTextItem):
                     coord=(region["ewres"], region["nsres"]), projOut=projOut, flags="d"
                 )
                 if coord1 and coord2:
-                    if proj in ("ll", "latlong", "longlat") and format == "DMS":
+                    if proj in {"ll", "latlong", "longlat"} and format == "DMS":
                         w, s = utils.Deg2DMS(
                             coord1[0], coord1[1], string=False, precision=precision
                         )

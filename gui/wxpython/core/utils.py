@@ -121,7 +121,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None, layerType=None):
                 break
 
             # this does not use types, just some (incomplete subset of?) names
-            if p in (
+            if p in {
                 "map",
                 "input",
                 "layer",
@@ -133,7 +133,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None, layerType=None):
                 "intensity",
                 "shade",
                 "labels",
-            ):
+            }:
                 params.append((idx, p, v))
 
         if len(params) < 1:
@@ -161,9 +161,9 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None, layerType=None):
             mapname = v
             mapset = ""
             if fullyQualified and "@" not in mapname:
-                if layerType in ("raster", "vector", "raster_3d", "rgb", "his"):
+                if layerType in {"raster", "vector", "raster_3d", "rgb", "his"}:
                     try:
-                        if layerType in ("raster", "rgb", "his"):
+                        if layerType in {"raster", "rgb", "his"}:
                             findType = "cell"
                         elif layerType == "raster_3d":
                             findType = "grid3"
@@ -477,11 +477,11 @@ def __ll_parts(value, reverse=False, precision=3):
                 except ValueError:
                     raise ValueError
 
-        if hs not in ("N", "S", "E", "W"):
+        if hs not in {"N", "S", "E", "W"}:
             raise ValueError
 
         coef = 1.0
-        if hs in ("S", "W"):
+        if hs in {"S", "W"}:
             coef = -1.0
 
         fm = int(m) / 60.0
@@ -552,7 +552,7 @@ def ReprojectCoordinates(coord, projOut, projIn=None, flags=""):
             proj = projOut.split(" ")[0].split("=")[1]
         except IndexError:
             proj = ""
-        if proj in ("ll", "latlong", "longlat") and "d" not in flags:
+        if proj in {"ll", "latlong", "longlat"} and "d" not in flags:
             return (proj, (e, n))
         else:
             try:
@@ -666,9 +666,9 @@ def _parseFormats(output, writableOnly=False):
         if writableOnly and not patt.search(key):
             continue
 
-        if name in ("Memory", "Virtual Raster", "In Memory Raster"):
+        if name in {"Memory", "Virtual Raster", "In Memory Raster"}:
             continue
-        if name in (
+        if name in {
             "PostgreSQL",
             "PostgreSQL/PostGIS",
             "SQLite",
@@ -681,16 +681,16 @@ def _parseFormats(output, writableOnly=False):
             "CouchDB",
             "MSSQLSpatial",
             "FileGDB",
-        ):
+        }:
             formats["database"][key.split(" ")[0]] = name
-        elif name in (
+        elif name in {
             "GeoJSON",
             "OGC Web Coverage Service",
             "OGC Web Map Service",
             "WFS",
             "GeoRSS",
             "HTTP Fetching Wrapper",
-        ):
+        }:
             formats["protocol"][key.split(" ")[0]] = name
         else:
             formats["file"][key.split(" ")[0]] = name

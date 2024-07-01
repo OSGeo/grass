@@ -1267,7 +1267,7 @@ class MapFramePanel(Panel):
             self.scaleType = scaleType
             self.select.SetValue("")
 
-        if scaleType in (0, 1):  # automatic - region from raster map, saved region
+        if scaleType in {0, 1}:  # automatic - region from raster map, saved region
             if scaleType == 0:
                 # set map selection
                 self.rasterTypeRadio.Show()
@@ -2208,7 +2208,7 @@ class VPropertiesDialog(Dialog):
         self.ColorsPanel = selectPanel[self.type][0](notebook)
 
         self.OnOutline(None)
-        if self.type in ("points", "areas"):
+        if self.type in {"points", "areas"}:
             self.OnFill(None)
         self.OnColor(None)
 
@@ -2252,7 +2252,7 @@ class VPropertiesDialog(Dialog):
 
         # data type
         self.checkType1 = self.checkType2 = None
-        if self.type in ("lines", "points"):
+        if self.type in {"lines", "points"}:
             box = StaticBox(
                 parent=panel, id=wx.ID_ANY, label=" %s " % _("Feature type")
             )
@@ -3108,7 +3108,7 @@ class VPropertiesDialog(Dialog):
         self.choiceColumns.SetItems(cols)
 
         self.choiceColumns.SetSelection(0)
-        if self.type in ("points", "lines"):
+        if self.type in {"points", "lines"}:
             self.colorColChoice.SetItems(cols)
             self.colorColChoice.SetSelection(0)
 
@@ -3205,7 +3205,7 @@ class VPropertiesDialog(Dialog):
 
     def update(self):
         # feature type
-        if self.type in ("lines", "points"):
+        if self.type in {"lines", "points"}:
             featureType = None
             if self.checkType1.GetValue():
                 featureType = self.checkType1.GetName()
@@ -3235,7 +3235,7 @@ class VPropertiesDialog(Dialog):
             self.vPropertiesDict["masked"] = "n"
 
         # colors
-        if self.type in ("points", "areas"):
+        if self.type in {"points", "areas"}:
             if self.outlineCheck.GetValue():
                 self.vPropertiesDict["color"] = convertRGB(self.colorPicker.GetColour())
                 self.vPropertiesDict["width"] = self.widthSpin.GetValue()
@@ -4011,7 +4011,7 @@ class LegendDialog(PsmapDialog):
 
         if type == "CELL":
             self.discrete.SetValue(True)
-        elif type in ("FCELL", "DCELL"):
+        elif type in {"FCELL", "DCELL"}:
             self.continuous.SetValue(True)
         if event is None:
             if self.rLegendDict["discrete"] == "y":

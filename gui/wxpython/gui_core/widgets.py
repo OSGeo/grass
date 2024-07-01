@@ -538,7 +538,7 @@ class SymbolButton(BitmapTextButton):
         elif usage == "pause":
             self.DrawPause(dc, size)
 
-        if sys.platform not in ("win32", "darwin"):
+        if sys.platform not in {"win32", "darwin"}:
             buffer.SetMaskColour(maskColor)
         self.SetBitmapLabel(buffer)
         dc.SelectObject(wx.NullBitmap)

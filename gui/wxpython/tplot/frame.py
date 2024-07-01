@@ -840,13 +840,13 @@ class TplotFrame(wx.Frame):
             xdata = []
             ydata = []
             for keys, values in self.timeDataR[name].items():
-                if keys in [
+                if keys in {
                     "temporalType",
                     "granularity",
                     "validTopology",
                     "unit",
                     "temporalDataType",
-                ]:
+                }:
                     continue
                 xdata.append(self.convert(values["start_datetime"]))
                 ydata.append(values["value"])
@@ -896,13 +896,13 @@ class TplotFrame(wx.Frame):
             ydata = []
             xcsv = []
             for keys, values in self.timeDataV[name_cat[0]][name_cat[1]].items():
-                if keys in [
+                if keys in {
                     "temporalType",
                     "granularity",
                     "validTopology",
                     "unit",
                     "temporalDataType",
-                ]:
+                }:
                     continue
                 xdata.append(self.convert(values["start_datetime"]))
                 if values["value"] == "":
@@ -956,13 +956,13 @@ class TplotFrame(wx.Frame):
             ydata = []
             xcsv = []
             for keys, values in self.timeDataV[name].items():
-                if keys in [
+                if keys in {
                     "temporalType",
                     "granularity",
                     "validTopology",
                     "unit",
                     "temporalDataType",
-                ]:
+                }:
                     continue
                 xdata.append(self.convert(values["start_datetime"]))
                 ydata.append(values["value"])

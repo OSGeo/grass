@@ -490,7 +490,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 same = False
                 break
 
-        if ltype not in ("group", "command"):
+        if ltype not in {"group", "command"}:
             if numSelected == 1:
                 self.popupMenu.AppendSeparator()
                 if not (ltype == "raster_3d" or self.mapdisplay.IsPaneShown("3d")):
@@ -517,17 +517,17 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     wx.EVT_MENU, self.OnPopupProperties, id=self.popupID["properties"]
                 )
 
-                if ltype in (
+                if ltype in {
                     "raster",
                     "vector",
                     "raster_3d",
-                ) and self.mapdisplay.IsPaneShown("3d"):
+                } and self.mapdisplay.IsPaneShown("3d"):
                     self.popupMenu.Append(self.popupID["nviz"], _("3D view properties"))
                     self.Bind(
                         wx.EVT_MENU, self.OnNvizProperties, id=self.popupID["nviz"]
                     )
 
-            if same and ltype in ("raster", "vector", "rgb", "raster_3d"):
+            if same and ltype in {"raster", "vector", "rgb", "raster_3d"}:
                 self.popupMenu.AppendSeparator()
                 item = wx.MenuItem(
                     self.popupMenu,
@@ -1370,9 +1370,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         gisenv = grass.gisenv()
         if not (gisenv["GISDBASE"] == grassdb and gisenv["LOCATION_NAME"] == location):
             return
-        if action not in ("delete", "rename"):
+        if action not in {"delete", "rename"}:
             return
-        if element in ("raster", "vector", "raster_3d"):
+        if element in {"raster", "vector", "raster_3d"}:
             name = map + "@" + mapset if "@" not in map else map
             items = self.FindItemByData(key="name", value=name)
             if items:
@@ -1706,7 +1706,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.SetLayerInfo(layer, key="cmd", value=module.GetCmd())
         elif self.GetLayerInfo(layer, key="type") != "command":
             cmd = [ltype2command[ltype]]
-            if ltype in ("raster", "rgb"):
+            if ltype in {"raster", "rgb"}:
                 if UserSettings.Get(
                     group="rasterLayer", key="opaque", subkey="enabled"
                 ):
@@ -1956,7 +1956,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             group="display", key="autoZooming", subkey="enabled"
         ):
             mapLayer = self.GetLayerInfo(layer, key="maplayer")
-            if mapLayer.GetType() in ("raster", "vector"):
+            if mapLayer.GetType() in {"raster", "vector"}:
                 self.mapdisplay.MapWindow.ZoomToMap(
                     layers=[
                         mapLayer,
@@ -2183,7 +2183,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 )
             ):
                 mapLayer = self.GetLayerInfo(layer, key="maplayer")
-                if mapLayer.GetType() in ("raster", "vector"):
+                if mapLayer.GetType() in {"raster", "vector"}:
                     self.mapdisplay.MapWindow.ZoomToMap(
                         layers=[
                             mapLayer,
@@ -2426,7 +2426,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def _createCommandCtrl(self):
         """Creates text control for command layer"""
         height = 25
-        if sys.platform in ("win32", "darwin"):
+        if sys.platform in {"win32", "darwin"}:
             height = 40
         ctrl = TextCtrl(
             self,

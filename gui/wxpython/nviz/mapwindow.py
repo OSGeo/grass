@@ -85,10 +85,10 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         # for wxGTK we need to set WX_GL_DEPTH_SIZE to draw vectors correctly
         # but we don't know the right value
         # in wxpython 2.9, there is IsDisplaySupported
-        if CheckWxVersion(version=[2, 8, 11]) and sys.platform not in (
+        if CheckWxVersion(version=[2, 8, 11]) and sys.platform not in {
             "win32",
             "darwin",
-        ):
+        }:
             depthBuffer = int(
                 UserSettings.Get(group="display", key="nvizDepthBuffer", subkey="value")
             )
@@ -217,10 +217,10 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
-        if CheckWxVersion(version=[2, 8, 11]) and sys.platform not in (
+        if CheckWxVersion(version=[2, 8, 11]) and sys.platform not in {
             "win32",
             "darwin",
-        ):
+        }:
             wx.CallLater(3000, self._warningDepthBuffer)
 
         # cplanes cannot be initialized now
@@ -478,7 +478,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         Updates self.imagelist"""
         # update images (legend and text)
         for oid, overlay in self.overlays.items():
-            if not overlay.IsShown() or overlay.name in ("barscale", "northarrow"):
+            if not overlay.IsShown() or overlay.name in {"barscale", "northarrow"}:
                 continue
             if oid not in [t.GetId() for t in self.imagelist]:  # new
                 self.CreateTexture(overlay=overlay)
@@ -557,7 +557,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             self.render["quick"] = False
             self.Refresh(False)
 
-        elif key in (wx.WXK_UP, wx.WXK_DOWN, wx.WXK_LEFT, wx.WXK_RIGHT):
+        elif key in {wx.WXK_UP, wx.WXK_DOWN, wx.WXK_LEFT, wx.WXK_RIGHT}:
             if not self.fly["mouseControl"]:
                 if not self.timerFly.IsRunning():
                     sx, sy = self.GetClientSize()
@@ -575,9 +575,9 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 elif key == wx.WXK_DOWN:
                     self.ChangeFlySpeed(increase=False)
 
-        elif key in (wx.WXK_HOME, wx.WXK_PAGEUP) and self.timerFly.IsRunning():
+        elif key in {wx.WXK_HOME, wx.WXK_PAGEUP} and self.timerFly.IsRunning():
             self.ChangeFlySpeed(increase=True)
-        elif key in (wx.WXK_END, wx.WXK_PAGEDOWN) and self.timerFly.IsRunning():
+        elif key in {wx.WXK_END, wx.WXK_PAGEDOWN} and self.timerFly.IsRunning():
             self.ChangeFlySpeed(increase=False)
 
         event.Skip()
@@ -806,7 +806,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             # and moreover we are in left up
             self.mapQueried.emit(x=self.mouse["end"][0], y=self.mouse["end"][1])
 
-        elif self.mouse["use"] in ("arrow", "scalebar"):
+        elif self.mouse["use"] in {"arrow", "scalebar"}:
             self.lmgr.nviz.FindWindowById(
                 self.lmgr.nviz.win["decoration"][self.mouse["use"]]["place"]
             ).SetValue(False)
@@ -1343,7 +1343,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 item = self.tree.GetNextItem(item)
                 continue
 
-            if not item.IsChecked() or type not in ("raster", "vector", "raster_3d"):
+            if not item.IsChecked() or type not in {"raster", "vector", "raster_3d"}:
                 item = self.tree.GetNextItem(item)
                 continue
 
@@ -1544,7 +1544,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                         continue
                     if isinstance(data[sec][sec1], dict):
                         for sec2 in data[sec][sec1].keys():
-                            if sec2 not in ("all", "init", "id"):
+                            if sec2 not in {"all", "init", "id"}:
                                 data[sec][sec1][sec2]["update"] = None
                     elif isinstance(data[sec][sec1], list):
                         for i in range(len(data[sec][sec1])):
@@ -1555,7 +1555,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
         # set id
         if id > 0:
-            if mapType in ("raster", "raster_3d"):
+            if mapType in {"raster", "raster_3d"}:
                 data[nvizType]["object"] = {"id": id, "init": False}
             elif mapType == "vector":
                 data["vector"][nvizType]["object"] = {"id": id, "init": False}
@@ -1585,7 +1585,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         """
         layer = self.tree.GetLayerInfo(item, key="maplayer")
 
-        if layer.type not in ("raster", "raster_3d"):
+        if layer.type not in {"raster", "raster_3d"}:
             return
 
         if layer.type == "raster":
@@ -1600,7 +1600,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             id = -1
 
         if id < 0:
-            if layer.type in ("raster", "raster_3d"):
+            if layer.type in {"raster", "raster_3d"}:
                 self.log.WriteError("%s <%s> %s" % (errorMsg, layer.name, _("failed")))
             else:
                 self.log.WriteError(_("Unsupported layer type '%s'") % layer.type)
@@ -1714,7 +1714,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         """
         layer = self.tree.GetLayerInfo(item, key="maplayer")
 
-        if layer.type not in ("raster", "raster_3d"):
+        if layer.type not in {"raster", "raster_3d"}:
             return
 
         data = self.tree.GetLayerInfo(item, key="nviz")
