@@ -44,15 +44,16 @@
 # % required: no
 # %end
 
-import sys
-import os
 import atexit
-import string
-import time
+import os
 import shutil
-from grass.script.utils import try_remove
-from grass.script import core as grass
+import string
+import sys
+import time
+
 from grass.exceptions import CalledModuleError
+from grass.script import core as grass
+from grass.script.utils import try_remove
 
 
 def cleanup():

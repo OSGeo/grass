@@ -90,8 +90,8 @@ for details.
 # % description: Case sensitive variable names
 # %end
 
-import sys
 import re
+import sys
 
 import grass.script as gs
 

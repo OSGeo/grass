@@ -97,11 +97,11 @@
 # % description: Assume that the dataset has the same coordinate reference system (CRS) as the current project
 # %end
 
-import sys
-import os
 import atexit
-import xml.etree.ElementTree as ET  # only needed for GDAL version < 2.4.1
+import os
 import re  # only needed for GDAL version < 2.4.1
+import sys
+import xml.etree.ElementTree as ET  # only needed for GDAL version < 2.4.1
 
 import grass.script as grass
 from grass.exceptions import CalledModuleError

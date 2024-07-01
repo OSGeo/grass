@@ -98,11 +98,12 @@ COPYRIGHT: (c) 2006-2019 Hamish Bowman, and the GRASS Development Team
 # % exclusive: -i, -o
 # %end
 
-import sys
 import os
+import sys
 import threading
-from grass.script.utils import separator, parse_key_val, encode, decode
+
 from grass.script import core as gcore
+from grass.script.utils import decode, encode, parse_key_val, separator
 
 
 class TrThread(threading.Thread):

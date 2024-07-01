@@ -42,16 +42,16 @@
 # % guisection: Print
 # %end
 
-import os
-import sys
-import shutil
-import tarfile
 import atexit
+import os
+import shutil
+import sys
+import tarfile
 
-from grass.script.utils import diff_files, try_rmdir
+from grass.exceptions import CalledModuleError
 from grass.script import core as grass
 from grass.script import db as grassdb
-from grass.exceptions import CalledModuleError
+from grass.script.utils import diff_files, try_rmdir
 
 
 def cleanup():

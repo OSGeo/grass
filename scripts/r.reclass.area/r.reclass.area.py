@@ -72,9 +72,10 @@
 # % description: Clumps including diagonal neighbors
 # %end
 
-import sys
-import os
 import atexit
+import os
+import sys
+
 import grass.script as grass
 from grass.script.utils import decode, encode
 

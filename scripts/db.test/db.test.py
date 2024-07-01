@@ -26,12 +26,12 @@
 # % options: test1
 # %end
 
-import sys
 import os
+import sys
 
+from grass.exceptions import CalledModuleError
 from grass.script import core as gcore
 from grass.script import db as grassdb
-from grass.exceptions import CalledModuleError
 
 
 def main():

@@ -34,11 +34,12 @@
 # %option G_OPT_F_SEP
 # %end
 
-import sys
-import os
 import atexit
-from grass.script.utils import separator, try_remove
+import os
+import sys
+
 from grass.script import core as grass
+from grass.script.utils import separator, try_remove
 
 
 def cleanup():

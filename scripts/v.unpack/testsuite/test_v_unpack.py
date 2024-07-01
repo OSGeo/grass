@@ -4,11 +4,11 @@ Created on Sun Jun 08 12:50:45 2018
 @author: Sanjeet Bhatti
 """
 
-from grass.gunittest.case import TestCase
-from grass.gunittest.main import test
-from grass.gunittest.gmodules import SimpleModule
-
 import os
+
+from grass.gunittest.case import TestCase
+from grass.gunittest.gmodules import SimpleModule
+from grass.gunittest.main import test
 
 
 class TestVUnpack(TestCase):

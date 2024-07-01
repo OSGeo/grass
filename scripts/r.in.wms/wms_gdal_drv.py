@@ -27,7 +27,7 @@ except:
 
 import xml.etree.ElementTree as etree
 
-from wms_base import WMSBase, GetSRSParamVal
+from wms_base import GetSRSParamVal, WMSBase
 
 
 class NullDevice:

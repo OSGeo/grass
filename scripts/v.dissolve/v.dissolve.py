@@ -83,7 +83,6 @@ from collections import defaultdict
 import grass.script as gs
 from grass.exceptions import CalledModuleError
 
-
 # Methods supported by v.db.univar by default.
 UNIVAR_METHODS = [
     "n",

@@ -57,9 +57,9 @@
 
 import os
 
-from grass.script.utils import try_remove, basename
-from grass.script import core as gcore
 from grass.exceptions import CalledModuleError
+from grass.script import core as gcore
+from grass.script.utils import basename, try_remove
 
 
 def main():

@@ -63,10 +63,10 @@
 # % description: Print stats in shell script style
 # %end
 
-import sys
 import atexit
 import json
 import math
+import sys
 
 import grass.script as gscript
 

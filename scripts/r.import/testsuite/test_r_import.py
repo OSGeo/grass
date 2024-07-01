@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
+import grass.script as gs
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-import grass.script as gs
 
 
 class TestRImportRegion(TestCase):

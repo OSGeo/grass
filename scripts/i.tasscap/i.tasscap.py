@@ -84,7 +84,6 @@
 
 import grass.script as grass
 
-
 # weights for 6 Landsat bands: TM4, TM5, TM7, OLI
 # MODIS: Red, NIR1, Blue, Green, NIR2, SWIR1, SWIR2
 # Sentinel-2: B1 ... B12, B8A

@@ -108,8 +108,8 @@
 # % required: start_coordinates, start_points
 # %end
 
-import sys
 import atexit
+import sys
 
 import grass.script as gs
 

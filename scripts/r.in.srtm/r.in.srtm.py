@@ -71,12 +71,12 @@
 # %end
 
 
+import atexit
 import os
 import shutil
-import atexit
-import grass.script as grass
 import zipfile as zfile
 
+import grass.script as grass
 
 tmpl1sec = """BYTEORDER M
 LAYOUT BIL

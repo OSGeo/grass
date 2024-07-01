@@ -40,9 +40,7 @@ import http
 import os
 import re
 import sys
-
 import xml.etree.ElementTree as etree
-
 from urllib import request as urlrequest
 from urllib.error import HTTPError, URLError
 

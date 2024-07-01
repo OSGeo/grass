@@ -67,8 +67,8 @@
 # % description: Process bands serially (default: run in parallel)
 # %end
 
-import sys
 import multiprocessing as mp
+import sys
 
 import grass.script as gscript
 

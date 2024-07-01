@@ -63,9 +63,10 @@
 
 
 import os
+
+from grass.exceptions import CalledModuleError
 from grass.script import core as gcore
 from grass.script import raster as grast
-from grass.exceptions import CalledModuleError
 
 
 def remove(maps):

@@ -18,9 +18,9 @@ This program is free software under the GNU General Public License
 """
 
 import socket
-import grass.script as grass
-
 from time import sleep
+
+import grass.script as grass
 
 try:
     from osgeo import gdal
@@ -36,17 +36,14 @@ import numpy as Numeric
 
 Numeric.arrayrange = Numeric.arange
 
-from math import pi, floor
-
-from urllib.error import HTTPError
 from http.client import HTTPException
-
+from math import floor, pi
+from urllib.error import HTTPError
 from xml.etree.ElementTree import ParseError
 
-from wms_base import GetEpsg, GetSRSParamVal, WMSBase
-
-from wms_cap_parsers import WMTSCapabilitiesTree, OnEarthCapabilitiesTree
 from srs import Srs
+from wms_base import GetEpsg, GetSRSParamVal, WMSBase
+from wms_cap_parsers import OnEarthCapabilitiesTree, WMTSCapabilitiesTree
 
 
 class WMSDrv(WMSBase):

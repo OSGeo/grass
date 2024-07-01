@@ -46,14 +46,13 @@
 # % required : yes
 # %end
 
-import sys
 import os
+import sys
+import webbrowser
 from urllib.request import urlopen
 
-import webbrowser
-
-from grass.script.utils import basename
 from grass.script import core as grass
+from grass.script.utils import basename
 
 
 def start_browser(entry):

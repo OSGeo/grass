@@ -5,11 +5,12 @@ Created on Mon 17 Feb 2020 02:27:26 PM UTC
 """
 
 import os
+
 from grass.gunittest.case import TestCase
-from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
-from grass.script.core import run_command
+from grass.gunittest.main import test
 from grass.gunittest.utils import silent_rmtree
+from grass.script.core import run_command
 
 
 class TestRBlend(TestCase):

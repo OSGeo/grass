@@ -42,11 +42,11 @@
 # % options: dbf,odbc,ogr,sqlite,pg
 # %end
 
-import sys
 import string
+import sys
 
-from grass.exceptions import CalledModuleError
 import grass.script as gscript
+from grass.exceptions import CalledModuleError
 
 
 def main():

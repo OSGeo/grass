@@ -9,10 +9,10 @@ for details.
 @author Luca Delucchi
 """
 
-from grass.gunittest.case import TestCase
-from grass.gunittest.main import test
-from grass.gunittest.gmodules import SimpleModule
 import grass.script as gscript
+from grass.gunittest.case import TestCase
+from grass.gunittest.gmodules import SimpleModule
+from grass.gunittest.main import test
 from grass.script.utils import decode
 
 

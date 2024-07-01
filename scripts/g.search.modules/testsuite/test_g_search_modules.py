@@ -12,12 +12,12 @@ COPYRIGHT: (C) 2015 Jachym Cepicky, and by the GRASS Development Team
            for details.
 """
 
-from grass.gunittest.case import TestCase
-from grass.gunittest.main import test
-from grass.gunittest.gmodules import SimpleModule
-from grass.script.utils import decode
-
 import unittest
+
+from grass.gunittest.case import TestCase
+from grass.gunittest.gmodules import SimpleModule
+from grass.gunittest.main import test
+from grass.script.utils import decode
 
 try:
     has_termcolor = True

@@ -40,10 +40,11 @@
 # % description: Process bands serially (default: run in parallel)
 # % End
 
-import sys
 import os
-from grass.script.utils import parse_key_val
+import sys
+
 from grass.script import core as grass
+from grass.script.utils import parse_key_val
 
 
 def oifcalc(sdev, corr, k1, k2, k3):

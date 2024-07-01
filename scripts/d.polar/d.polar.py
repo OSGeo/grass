@@ -42,14 +42,15 @@
 # % description: Plot using Xgraph
 # %end
 
-import os
-import string
-import math
 import atexit
 import glob
+import math
+import os
 import shutil
-from grass.script.utils import try_remove, basename
+import string
+
 from grass.script import core as gcore
+from grass.script.utils import basename, try_remove
 
 
 def raster_map_required(name):

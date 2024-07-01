@@ -5,9 +5,8 @@ Created on Sun Jun 08 22:14:26 2018
 """
 
 from grass.gunittest.case import TestCase
-from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
-
+from grass.gunittest.main import test
 from grass.script.core import run_command
 
 

@@ -60,9 +60,9 @@
 # % description: Value to write for "grown" cells
 # %end
 
-import os
 import atexit
 import math
+import os
 
 import grass.script as grass
 from grass.exceptions import CalledModuleError

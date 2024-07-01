@@ -53,10 +53,11 @@
 # % description: Report for geometries with no database records
 # %end
 
-import sys
 import os
+import sys
+
 import grass.script as grass
-from grass.script.utils import separator, decode
+from grass.script.utils import decode, separator
 
 
 def uniq(items):

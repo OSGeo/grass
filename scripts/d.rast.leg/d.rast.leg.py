@@ -61,8 +61,9 @@
 # % required: no
 # %end
 
-import sys
 import os
+import sys
+
 import grass.script as grass
 
 

@@ -107,14 +107,13 @@
 # A reprojector [0] is name of source projection, [1] is name of destination
 # A projection - [0] is proj.4 text, [1] is scale
 
+import math
 import sys
 import tempfile
-import math
 
-from grass.script.utils import separator
-from grass.script import core as gcore
-from grass.script.utils import decode
 from grass.exceptions import CalledModuleError
+from grass.script import core as gcore
+from grass.script.utils import decode, separator
 
 
 def bboxToPoints(bbox):
