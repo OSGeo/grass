@@ -403,10 +403,10 @@ class DisplayDriver:
         elif rtype == TYPE_DIRECTION:
             key = "direction"
 
-        if key not in ("direction", "area", "isle"):
+        if key not in {"direction", "area", "isle"}:
             self.topology[key] += 1
 
-        if key in ("area", "isle"):
+        if key in {"area", "isle"}:
             pen = wx.TRANSPARENT_PEN
             if key == "area":
                 brush = wx.Brush(self.settings[key]["color"], wx.SOLID)

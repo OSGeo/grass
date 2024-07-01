@@ -1541,7 +1541,7 @@ class CreateTtbDialog(wx.Dialog):
 
         for dataSel in dataSelects:
             selPanels[dataSel[0]] = Panel(parent=self)
-            if dataSel[0] in ["input", "output"]:
+            if dataSel[0] in {"input", "output"}:
                 self.inputData[dataSel[0]] = dataSel[2](
                     parent=selPanels[dataSel[0]], size=(-1, -1), type="vector"
                 )
@@ -1933,18 +1933,18 @@ class TurnAnglesList(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEditM
 
     def OnGetItemText(self, item, col):
         val = self.data.GetValue(item, col)
-        if col in [1, 2]:
+        if col in {1, 2}:
             val = RadiansToDegrees(val)
         return str(val)
 
     def SetVirtualData(self, row, column, text):
         """Set data to table"""
-        if column in [1, 2, 3]:
+        if column in {1, 2, 3}:
             try:
                 text = float(text)
             except ValueError:
                 return
-        if column in [1, 2]:
+        if column in {1, 2}:
             text = DegreesToRadians(text)
 
             # Tested allowed range of values

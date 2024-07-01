@@ -455,7 +455,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
             y = layer.GetY()
 
             for p in params["params"]:
-                if p.get("prompt", "") not in (
+                if p.get("prompt", "") not in {
                     "raster",
                     "vector",
                     "raster_3d",
@@ -464,7 +464,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
                     "strds",
                     "stvds",
                     "str3ds",
-                ):
+                }:
                     continue
 
                 # add new data item if defined or required
@@ -1844,7 +1844,7 @@ class PythonPanel(wx.Panel):
         if self.body.script_type == "Python":
             self.btnRun.Enable()
             self.btnRun.SetToolTip(_("Run script"))
-        elif self.body.script_type in ("PyWPS", "actinia"):
+        elif self.body.script_type in {"PyWPS", "actinia"}:
             self.btnRun.Disable()
             self.btnRun.SetToolTip(
                 _("Run script - enabled only for basic Python scripts")

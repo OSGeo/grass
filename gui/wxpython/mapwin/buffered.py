@@ -417,7 +417,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         # polyline is a series of connected lines defined as sequence of points
         # lines are individual, not connected lines which must be drawn as 1
         # object (e.g. cross)
-        elif pdctype in ("polyline", "lines"):
+        elif pdctype in {"polyline", "lines"}:
             if pen:
                 pdc.SetBrush(wx.Brush(wx.CYAN, wx.TRANSPARENT))
                 pdc.SetPen(pen)
@@ -1526,7 +1526,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             self.mouse["end"] = event.GetPosition()
             if event.LeftIsDown() and not (
                 digitToolbar
-                and digitToolbar.GetAction() in ("moveLine",)
+                and digitToolbar.GetAction() in {"moveLine"}
                 and len(self.digit.GetDisplay().GetSelected()) > 0
             ):
                 self.MouseDraw(pdc=self.pdcTmp)
@@ -1574,7 +1574,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         self.mouse["end"] = event.GetPosition()
         coordinates = self.Pixel2Cell(self.mouse["end"])
 
-        if self.mouse["use"] in ["zoom", "pan"]:
+        if self.mouse["use"] in {"zoom", "pan"}:
             # set region in zoom or pan
             begin = self.mouse["begin"]
             end = self.mouse["end"]

@@ -222,7 +222,7 @@ class Popen(subprocess.Popen):
             except ValueError:
                 return self._close("stdin")
             except (pywintypes.error, Exception) as why:
-                if why.winerror in (109, errno.ESHUTDOWN):
+                if why.winerror in {109, errno.ESHUTDOWN}:
                     return self._close("stdin")
                 raise
 
@@ -244,7 +244,7 @@ class Popen(subprocess.Popen):
             except ValueError:
                 return self._close(which)
             except (pywintypes.error, Exception) as why:
-                if why.winerror in (109, errno.ESHUTDOWN):
+                if why.winerror in {109, errno.ESHUTDOWN}:
                     return self._close(which)
                 raise
 

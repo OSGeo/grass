@@ -63,7 +63,7 @@ def get_translated_value(key, value):
         return _("{} sec".format(value))
     elif key == "status":
         return _(value.capitalize())
-    elif key in ("mask2d", "mask3d"):
+    elif key in {"mask2d", "mask3d"}:
         return _(str(value))
 
 

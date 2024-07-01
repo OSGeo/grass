@@ -212,7 +212,7 @@ class BasePlotFrame(wx.Frame):
             rdict[r] = {}  # initialize sub-dictionaries for each raster in the list
 
             rdict[r]["units"] = ""
-            if ret["units"] not in ("(none)", '"none"', "", None):
+            if ret["units"] not in {"(none)", '"none"', "", None}:
                 rdict[r]["units"] = ret["units"]
 
             rdict[r]["plegend"] = r  # use fully-qualified names
@@ -284,9 +284,9 @@ class BasePlotFrame(wx.Frame):
             rdict[rpair][0]["units"] = ""
             rdict[rpair][1]["units"] = ""
 
-            if ret0["units"] not in ("(none)", '"none"', "", None):
+            if ret0["units"] not in {"(none)", '"none"', "", None}:
                 rdict[rpair][0]["units"] = ret0["units"]
-            if ret1["units"] not in ("(none)", '"none"', "", None):
+            if ret1["units"] not in {"(none)", '"none"', "", None}:
                 rdict[rpair][1]["units"] = ret1["units"]
 
             rdict[rpair]["plegend"] = (

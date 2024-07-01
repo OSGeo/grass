@@ -785,7 +785,7 @@ class ColorTable(wx.Frame):
                 continue
 
             if (
-                rule["value"] not in ("nv", "default")
+                rule["value"] not in {"nv", "default"}
                 and rule["value"][-1] != "%"
                 and not self._IsNumber(rule["value"])
             ):
