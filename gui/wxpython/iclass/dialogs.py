@@ -207,13 +207,12 @@ class IClassGroupDialog(SimpleDialog):
             if not bands:
                 if self.use_subg:
                     GError(
-                        _("No data found in subgroup <%s> of group <%s>.\n" ".")
-                        % (s, g),
+                        _("No data found in subgroup <%s> of group <%s>.\n.") % (s, g),
                         parent=parent,
                     )
 
                 else:
-                    GError(_("No data found in group <%s>.\n" ".") % g, parent=parent)
+                    GError(_("No data found in group <%s>.\n.") % g, parent=parent)
         else:
             GError(_("Group <%s> not found") % gr, parent=parent)
 
@@ -799,7 +798,7 @@ class IClassExportAreasDialog(wx.Dialog):
         )
         self.withTableCtrl.SetValue(True)
         self.withTableCtrl.SetToolTip(
-            _("Export attribute table containing" " computed statistical data")
+            _("Export attribute table containing computed statistical data")
         )
 
         dataSizer.Add(self.withTableCtrl, proportion=0, flag=wx.ALL, border=3)

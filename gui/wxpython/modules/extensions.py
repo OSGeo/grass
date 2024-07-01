@@ -474,7 +474,7 @@ class ManageExtensionWindow(wx.Frame):
     def _getSelectedExtensions(self):
         eList = self.extList.GetExtensions()
         if not eList:
-            GMessage(_("No extension selected. " "Operation canceled."), parent=self)
+            GMessage(_("No extension selected. Operation canceled."), parent=self)
             return []
 
         return eList

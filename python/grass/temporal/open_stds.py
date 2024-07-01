@@ -119,7 +119,7 @@ def check_new_stds(name, type, dbif=None, overwrite=False):
         n, m = name.split("@")
         if mapset != m:
             msgr.fatal(
-                _("Space time datasets can only be created in the " "current mapset")
+                _("Space time datasets can only be created in the current mapset")
             )
         id = name
 
@@ -127,9 +127,7 @@ def check_new_stds(name, type, dbif=None, overwrite=False):
         if name.find(".") > -1:
             # a dot is used as a separator for semantic label filtering
             msgr.fatal(
-                _("Illegal dataset name <{}>. " "Character '.' not allowed.").format(
-                    name
-                )
+                _("Illegal dataset name <{}>. Character '.' not allowed.").format(name)
             )
         sp = dataset_factory("strds", id)
     elif (

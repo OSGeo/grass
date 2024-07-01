@@ -493,9 +493,7 @@ def CreateNewVector(
     if dlg.table.IsEnabled() and not key:
         GError(
             parent=parent,
-            message=_(
-                "Invalid or empty key column.\n" "Unable to create vector map <%s>."
-            )
+            message=_("Invalid or empty key column.\nUnable to create vector map <%s>.")
             % outmap,
         )
         dlg.Destroy()
@@ -794,7 +792,7 @@ class GroupDialog(wx.Dialog):
             StaticText(
                 parent=self,
                 id=wx.ID_ANY,
-                label=_("Select existing group or " "enter name of new group:"),
+                label=_("Select existing group or enter name of new group:"),
             ),
             flag=wx.TOP,
             border=10,
@@ -822,7 +820,7 @@ class GroupDialog(wx.Dialog):
             StaticText(
                 parent=self.subg_panel,
                 id=wx.ID_ANY,
-                label=_("Select existing subgroup or " "enter name of new subgroup:"),
+                label=_("Select existing subgroup or enter name of new subgroup:"),
             )
         )
 
@@ -1232,7 +1230,7 @@ class GroupDialog(wx.Dialog):
         if self.currentGroup and self.dataChanged:
             dlg = wx.MessageDialog(
                 self,
-                message=_("Group <%s> was changed, " "do you want to apply changes?")
+                message=_("Group <%s> was changed, do you want to apply changes?")
                 % self.currentGroup,
                 caption=_("Unapplied changes"),
                 style=wx.YES_NO | wx.ICON_QUESTION | wx.YES_DEFAULT,
@@ -1247,7 +1245,7 @@ class GroupDialog(wx.Dialog):
         if self.currentSubgroup and self.dataChanged:
             dlg = wx.MessageDialog(
                 self,
-                message=_("Subgroup <%s> was changed, " "do you want to apply changes?")
+                message=_("Subgroup <%s> was changed, do you want to apply changes?")
                 % self.currentSubgroup,
                 caption=_("Unapplied changes"),
                 style=wx.YES_NO | wx.ICON_QUESTION | wx.YES_DEFAULT,

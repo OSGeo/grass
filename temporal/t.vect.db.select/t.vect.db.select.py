@@ -102,7 +102,7 @@ def main():
 
             if not select:
                 grass.fatal(
-                    _("Unable to run v.db.select for vector map <%s> " "with layer %s")
+                    _("Unable to run v.db.select for vector map <%s> with layer %s")
                     % (vector_name, layer)
                 )
             # The first line are the column names

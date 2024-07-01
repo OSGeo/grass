@@ -1003,7 +1003,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if not mapLayer.GetName():
             wx.MessageBox(
                 parent=self,
-                message=_("Unable to create profile of " "raster map."),
+                message=_("Unable to create profile of raster map."),
                 caption=_("Error"),
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
@@ -1122,7 +1122,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             GError(
                 parent=self,
                 message=_(
-                    "Unable to display histogram of " "raster map. No map name defined."
+                    "Unable to display histogram of raster map. No map name defined."
                 ),
             )
             return
@@ -1178,7 +1178,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.mapdisplay.toolbars["map"].combo.SetValue(_("2D view"))
 
             GError(
-                _("Unable to start wxGUI vector digitizer.\n" "Details: %s") % errorMsg,
+                _("Unable to start wxGUI vector digitizer.\nDetails: %s") % errorMsg,
                 parent=self,
             )
             return

@@ -155,7 +155,7 @@ class GMFrame(wx.Frame):
         def show_menu_errors(messages):
             if messages:
                 self._gconsole.WriteError(
-                    _("There were some issues when loading menu" " or Tools:")
+                    _("There were some issues when loading menu or Tools:")
                 )
                 for message in messages:
                     self._gconsole.WriteError(message)
@@ -1388,7 +1388,7 @@ class GMFrame(wx.Frame):
         if not os.path.exists(filename):
             GError(
                 parent=self,
-                message=_("Script file '%s' doesn't exist. " "Operation canceled.")
+                message=_("Script file '%s' doesn't exist. Operation canceled.")
                 % filename,
             )
             return
@@ -1536,9 +1536,7 @@ class GMFrame(wx.Frame):
             self._giface.WriteCmdLog(" ")
 
         def write_help():
-            self._giface.WriteLog(
-                _("Changes current working directory" " for this GUI.")
-            )
+            self._giface.WriteLog(_("Changes current working directory for this GUI."))
             self._giface.WriteLog(_("Usage: cd [directory]"))
             self._giface.WriteLog(_("Without parameters it opens a dialog."))
             # TODO: the following is longer then 80 chars
@@ -1640,7 +1638,7 @@ class GMFrame(wx.Frame):
         # which appears in the platform.platform() string
         platform_ = decode(platform.platform())
         self._gconsole.WriteLog(
-            "%s: %s\n" "%s: %s\n" "%s: %s\n" "%s: %s\n"
+            "%s: %s\n%s: %s\n%s: %s\n%s: %s\n"
             # "%s: %s (%s)\n"
             "GDAL: %s\n"
             "PROJ: %s\n"
@@ -2343,12 +2341,12 @@ class GMFrame(wx.Frame):
 
             if len(layerName) > 2:  # <>
                 message = (
-                    _("Do you want to remove map layer(s)\n%s\n" "from layer tree?")
+                    _("Do you want to remove map layer(s)\n%s\nfrom layer tree?")
                     % layerName
                 )
             else:
                 message = _(
-                    "Do you want to remove selected map layer(s) " "from layer tree?"
+                    "Do you want to remove selected map layer(s) from layer tree?"
                 )
 
             dlg = wx.MessageDialog(

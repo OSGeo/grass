@@ -442,9 +442,7 @@ class ProfileFrame(BasePlotFrame):
                 except OSError as e:
                     GError(
                         parent=self,
-                        message=_(
-                            "Unable to open file <%s> for writing.\n" "Reason: %s"
-                        )
+                        message=_("Unable to open file <%s> for writing.\nReason: %s")
                         % (pfile[-1], e),
                     )
                     dlg.Destroy()

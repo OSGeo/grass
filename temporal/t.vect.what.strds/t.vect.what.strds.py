@@ -100,9 +100,7 @@ def main():
 
     if strds_sp.get_temporal_type() != sp.get_temporal_type():
         dbif.close()
-        grass.fatal(
-            _("Input and aggregation dataset must " "have the same temporal type")
-        )
+        grass.fatal(_("Input and aggregation dataset must have the same temporal type"))
 
     # Check if intervals are present in the sample dataset
     if sp.get_temporal_type() == "absolute":

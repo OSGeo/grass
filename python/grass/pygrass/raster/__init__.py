@@ -207,14 +207,14 @@ class RasterRow(RasterAbstractBase):
             if self.exist():
                 if not self.overwrite:
                     str_err = _(
-                        "Raster map <{0}> already exists" " and will be not overwritten"
+                        "Raster map <{0}> already exists and will be not overwritten"
                     )
                     raise OpenError(str_err.format(self))
             if self._gtype is None:
                 raise OpenError(_("Raster type not defined"))
             self._fd = libraster.Rast_open_new(self.name, self._gtype)
         else:
-            raise OpenError("Open mode: %r not supported," " valid mode are: r, w")
+            raise OpenError("Open mode: %r not supported, valid mode are: r, w")
         # read rows and cols from the active region
         self._rows = libraster.Rast_window_rows()
         self._cols = libraster.Rast_window_cols()

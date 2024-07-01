@@ -142,11 +142,11 @@ def main():
     # Do some checks before computation
     for _map in gap_list:
         if not _map.get_precedes() or not _map.get_follows():
-            grass.fatal(_("Unable to determine successor " "and predecessor of a gap."))
+            grass.fatal(_("Unable to determine successor and predecessor of a gap."))
 
         if len(_map.get_precedes()) > 1:
             grass.warning(
-                _("More than one successor of the gap found. " "Using the first found.")
+                _("More than one successor of the gap found. Using the first found.")
             )
 
         if len(_map.get_follows()) > 1:

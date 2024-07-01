@@ -653,7 +653,7 @@ class Model:
             dlg = wx.MessageDialog(
                 parent=parent,
                 message=_(
-                    "Model is not valid. Do you want to " "run the model anyway?\n\n%s"
+                    "Model is not valid. Do you want to run the model anyway?\n\n%s"
                 )
                 % "\n".join(errList),
                 caption=_("Run model?"),

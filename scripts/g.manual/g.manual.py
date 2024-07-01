@@ -93,7 +93,7 @@ def start_browser(entry):
         webbrowser.register(browser_name, None)
 
     grass.verbose(
-        _("Starting browser '%(browser)s' for manual" " entry '%(entry)s'...")
+        _("Starting browser '%(browser)s' for manual entry '%(entry)s'...")
         % {"browser": browser_name, "entry": entry}
     )
 
@@ -101,7 +101,7 @@ def start_browser(entry):
         webbrowser.open(url_path)
     except Exception:
         grass.fatal(
-            _("Error starting browser '%(browser)s' for HTML file" " '%(path)s'")
+            _("Error starting browser '%(browser)s' for HTML file '%(path)s'")
             % {"browser": browser, "path": path}
         )
 
