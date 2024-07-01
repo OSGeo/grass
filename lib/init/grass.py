@@ -624,7 +624,7 @@ def read_gui(gisrc, default_gui):
         grass_gui = default_gui
 
     # FIXME oldtcltk, gis.m, d.m no longer exist (remove this around 7.2)
-    if grass_gui in ["d.m", "gis.m", "oldtcltk", "tcltk"]:
+    if grass_gui in {"d.m", "gis.m", "oldtcltk", "tcltk"}:
         warning(_("GUI <%s> not supported in this version") % grass_gui)
         grass_gui = default_gui
 
@@ -648,7 +648,7 @@ def check_gui(expected_gui):
     # Check if we are running X windows by checking the DISPLAY variable
     if os.getenv("DISPLAY") or WINDOWS or MACOS:
         # Check if python is working properly
-        if expected_gui in ("wxpython", "gtext"):
+        if expected_gui in {"wxpython", "gtext"}:
             nul = open(os.devnull, "w")
             p = Popen(
                 [os.environ["GRASS_PYTHON"]],
@@ -1476,13 +1476,13 @@ def get_shell():
 
 def get_grass_env_file(sh, grass_config_dir):
     """Get name of the shell-specific GRASS environment (rc) file"""
-    if sh in ["csh", "tcsh"]:
+    if sh in {"csh", "tcsh"}:
         grass_env_file = os.path.join(grass_config_dir, "cshrc")
-    elif sh in ["bash", "msh", "cygwin", "sh"]:
+    elif sh in {"bash", "msh", "cygwin", "sh"}:
         grass_env_file = os.path.join(grass_config_dir, "bashrc")
     elif sh == "zsh":
         grass_env_file = os.path.join(grass_config_dir, "zshrc")
-    elif sh in ["cmd", "powershell"]:
+    elif sh in {"cmd", "powershell"}:
         grass_env_file = os.path.join(grass_config_dir, "env.bat")
     else:
         grass_env_file = os.path.join(grass_config_dir, "bashrc")
@@ -1959,7 +1959,7 @@ def print_params(params):
     for arg in params:
         if arg == "path":
             sys.stdout.write("%s\n" % GISBASE)
-        elif arg in ["python_path", "python-path"]:
+        elif arg in {"python_path", "python-path"}:
             sys.stdout.write("%s\n" % gpath("etc", "python"))
         elif arg == "arch":
             val = grep("ARCH", linesplat)
@@ -2272,7 +2272,7 @@ def main():
 
     # A shell is activated when using TTY.
     # Explicit --[g]text in command line, forces a shell to be activated.
-    force_shell = grass_gui in ["text", "gtext"]
+    force_shell = grass_gui in {"text", "gtext"}
     use_shell = io_is_interactive() or force_shell
     if not use_shell:
         # If no shell is used, always use actual GUI as GUI, even when "text" is set as
@@ -2518,16 +2518,16 @@ def main():
                     _("Launching <%s> GUI in the background, please wait...")
                     % grass_gui
                 )
-            if sh in ["csh", "tcsh"]:
+            if sh in {"csh", "tcsh"}:
                 shell_process = csh_startup(mapset_settings.full_mapset, grass_env_file)
-            elif sh in ["zsh"]:
+            elif sh in {"zsh"}:
                 shell_process = sh_like_startup(
                     mapset_settings.full_mapset,
                     mapset_settings.location,
                     grass_env_file,
                     "zsh",
                 )
-            elif sh in ["bash", "msh", "cygwin"]:
+            elif sh in {"bash", "msh", "cygwin"}:
                 shell_process = sh_like_startup(
                     mapset_settings.full_mapset,
                     mapset_settings.location,

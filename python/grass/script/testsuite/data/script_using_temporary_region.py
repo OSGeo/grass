@@ -48,7 +48,7 @@ def main():
         remaining = None
         nesting = 0
         map_name = None
-    elif len(sys.argv) not in [3, 4]:
+    elif len(sys.argv) not in {3, 4}:
         gs.fatal(
             "Usage: <script name> <size[,size,...]> <nesting level> [<map name>]\n"
             "  <script name>      The name of this file ({name})\n"

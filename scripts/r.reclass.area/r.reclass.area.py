@@ -142,7 +142,7 @@ def reclass(inf, outf, lim, clump, diag, les):
     TMPRAST.append(recfile)
 
     sflags = "aln"
-    if grass.raster_info(infile)["datatype"] in ("FCELL", "DCELL"):
+    if grass.raster_info(infile)["datatype"] in {"FCELL", "DCELL"}:
         sflags += "i"
     p1 = grass.pipe_command("r.stats", flags=sflags, input=(clumpfile, infile), sep=";")
     p2 = grass.feed_command("r.reclass", input=clumpfile, output=recfile, rules="-")

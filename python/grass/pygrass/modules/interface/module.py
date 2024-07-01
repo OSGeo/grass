@@ -563,7 +563,7 @@ class Module:
         tree = fromstring(self.xml)
 
         for e in tree:
-            if e.tag not in ("parameter", "flag"):
+            if e.tag not in {"parameter", "flag"}:
                 self.__setattr__(e.tag, GETFROMTAG[e.tag](e))
 
         #

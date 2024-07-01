@@ -24,7 +24,7 @@ filename = modclass + ".txt"
 f = open(filename + ".tmp", "wb")
 
 write_rest_header(f, "GRASS GIS %s Reference Manual: %s" % (grass_version, modclass))
-if modclass.lower() not in ["general", "miscellaneous", "postscript"]:
+if modclass.lower() not in {"general", "miscellaneous", "postscript"}:
     f.write(
         modclass_intro_tmpl.substitute(
             modclass=modclass, modclass_lower=modclass.lower()

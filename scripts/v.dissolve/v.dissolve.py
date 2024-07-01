@@ -169,14 +169,14 @@ def quote_from_type(column_type):
     information is assumed to be associated with numbers which don't need quoting.
     """
     # Needs a general solution, e.g., https://github.com/OSGeo/grass/pull/1110
-    if not column_type or column_type.upper() in [
+    if not column_type or column_type.upper() in {
         "INT",
         "INTEGER",
         "SMALLINT",
         "REAL",
         "DOUBLE",
         "DOUBLE PRECISION",
-    ]:
+    }:
         return ""
     return "'"
 
@@ -614,9 +614,9 @@ def main():
         except KeyError:
             gs.fatal(_("Column <%s> not found") % column)
 
-        if coltype["type"] not in ("INTEGER", "SMALLINT", "CHARACTER", "TEXT"):
+        if coltype["type"] not in {"INTEGER", "SMALLINT", "CHARACTER", "TEXT"}:
             gs.fatal(_("Key column must be of type integer or string"))
-        column_is_str = coltype["type"] in ("CHARACTER", "TEXT")
+        column_is_str = coltype["type"] in {"CHARACTER", "TEXT"}
         if columns_to_aggregate and not column_is_str:
             gs.fatal(
                 _(

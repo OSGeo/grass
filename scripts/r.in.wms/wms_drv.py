@@ -585,7 +585,7 @@ class WMSRequestMgr(BaseRequestMgr):
         projection is geographic, the bbox x and y are in most cases flipped.
         """
         # CRS:84 and CRS:83 are exception (CRS:83 and CRS:27 need to be tested)
-        if srs_param in [84, 83] or version != "1.3.0":
+        if srs_param in {84, 83} or version != "1.3.0":
             return bbox
         elif Srs(GetSRSParamVal(srs_param)).axisorder == "yx":
             return self._flipBbox(bbox)
@@ -815,7 +815,7 @@ class WMTSRequestMgr(BaseRequestMgr):
 
                     mat_num_bbox[i[0]] = int(i_tag.text)
 
-                    if i[0] in ("max_row", "max_col"):
+                    if i[0] in {"max_row", "max_col"}:
                         mat_num_bbox[i[0]] = mat_num_bbox[i[0]] - 1
 
                 break
@@ -840,7 +840,7 @@ class WMTSRequestMgr(BaseRequestMgr):
         )  # NOTE not used params['srs'], it is just number, encoding needed
         # TODO needs to be tested, tried only on
         # http://www.landesvermessung.sachsen.de/geoserver/gwc/service/wmts?:
-        if s.getcode() == "EPSG:4326" and s.encoding in ("uri", "urn"):
+        if s.getcode() == "EPSG:4326" and s.encoding in {"uri", "urn"}:
             grass.warning("switch")
             (tl_corner["minx"], tl_corner["maxy"]) = (
                 tl_corner["maxy"],

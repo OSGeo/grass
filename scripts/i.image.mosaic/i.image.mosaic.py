@@ -42,7 +42,7 @@ def copy_colors(fh, map, offset):
     for line in p.stdout:
         f = gscript.decode(line).rstrip("\r\n").split(" ")
         if offset:
-            if f[0] in ["nv", "default"]:
+            if f[0] in {"nv", "default"}:
                 continue
             f[0] = str(float(f[0]) + offset)
         fh.write(gscript.encode(" ".join(f) + "\n"))

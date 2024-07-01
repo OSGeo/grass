@@ -34,7 +34,7 @@ def value_update_by_category(map_name, layer, column_name, cats, values, env):
     driver = db_info["driver"]
     cat_column = "cat"
     column_type = gs.vector_columns(map_name, layer, env=env)[column_name]
-    column_quote = bool(column_type["type"] in ("CHARACTER", "TEXT"))
+    column_quote = bool(column_type["type"] in {"CHARACTER", "TEXT"})
     sql = updates_as_transaction(
         table=table,
         cat_column=cat_column,

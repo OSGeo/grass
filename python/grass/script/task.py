@@ -88,7 +88,7 @@ class grassTask:
         """Get task name"""
         if sys.platform == "win32":
             name, ext = os.path.splitext(self.name)
-            if ext in (".py", ".sh"):
+            if ext in {".py", ".sh"}:
                 return name
             else:
                 return self.name
@@ -641,7 +641,7 @@ def cmdtuple_to_list(cmd):
             cmdList.append("--" + flag)
 
     for k, v in cmd[1].items():
-        if k in ("flags", "help", "verbose", "quiet", "overwrite"):
+        if k in {"flags", "help", "verbose", "quiet", "overwrite"}:
             continue
         if " " in v:
             v = '"%s"' % v
@@ -667,7 +667,7 @@ def cmdlist_to_tuple(cmd):
             dcmd[str(key)] = value.replace('"', "")
         elif item[:2] == "--":  # long flags
             flag = item[2:]
-            if flag in ("help", "verbose", "quiet", "overwrite"):
+            if flag in {"help", "verbose", "quiet", "overwrite"}:
                 dcmd[str(flag)] = True
         elif len(item) == 2 and item[0] == "-":  # -> flags
             if "flags" not in dcmd:

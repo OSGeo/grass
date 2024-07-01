@@ -134,7 +134,7 @@ def main():
     for cname, ctype, cwidth in desc_table["cols"]:
         if cname == column:
             found = True
-            if ctype not in ("INTEGER", "DOUBLE PRECISION"):
+            if ctype not in {"INTEGER", "DOUBLE PRECISION"}:
                 gscript.fatal(_("Column <%s> is not numeric") % cname)
     if not found:
         gscript.fatal(_("Column <%s> not found in table <%s>") % (column, table))
@@ -170,7 +170,7 @@ def main():
     # check if result is empty
     tmpf = open(tmp)
     if tmpf.read(1) == "":
-        if output_format in ["plain", "shell"]:
+        if output_format in {"plain", "shell"}:
             gscript.fatal(_("Table <%s> contains no data.") % table)
         tmpf.close()
 
@@ -200,7 +200,7 @@ def main():
     tmpf.close()
 
     if N <= 0:
-        if output_format in ["plain", "shell"]:
+        if output_format in {"plain", "shell"}:
             gscript.fatal(_("No non-null values found"))
         else:
             # We produce valid JSON with a value for n even when the query returned

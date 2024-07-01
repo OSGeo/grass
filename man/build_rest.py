@@ -314,9 +314,9 @@ def rest_files(cls=None):
     for cmd in sorted(os.listdir(rest_dir)):
         if (
             cmd.endswith(".txt")
-            and (cls in [None, "*"] or cmd.startswith(cls + "."))
+            and (cls in {None, "*"} or cmd.startswith(cls + "."))
             and (cls != "*" or len(cmd.split(".")) >= 3)
-            and cmd not in ["full_index.txt", "index.txt"]
+            and cmd not in {"full_index.txt", "index.txt"}
             and cmd not in exclude_mods
             and not cmd.startswith("wxGUI.")
         ):

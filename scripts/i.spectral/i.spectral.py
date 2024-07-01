@@ -289,7 +289,7 @@ def main():
     for line in s.splitlines():
         f = line.split("|")
         for i, v in enumerate(f):
-            if v in ["", "*"]:
+            if v in {"", "*"}:
                 f[i] = 0
             else:
                 f[i] = float(v)

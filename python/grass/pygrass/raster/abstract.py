@@ -323,7 +323,7 @@ class RasterAbstractBase:
 
     def _set_mtype(self, mtype):
         """Private method to change the Raster type"""
-        if mtype.upper() not in ("CELL", "FCELL", "DCELL"):
+        if mtype.upper() not in {"CELL", "FCELL", "DCELL"}:
             str_err = "Raster type: {0} not supported ('CELL','FCELL','DCELL')"
             raise ValueError(_(str_err).format(mtype))
         self._mtype = mtype
@@ -335,7 +335,7 @@ class RasterAbstractBase:
         return self._mode
 
     def _set_mode(self, mode):
-        if mode.upper() not in ("R", "W"):
+        if mode.upper() not in {"R", "W"}:
             str_err = _("Mode type: {0} not supported ('r', 'w')")
             raise ValueError(str_err.format(mode))
         self._mode = mode
@@ -346,7 +346,7 @@ class RasterAbstractBase:
         return self._overwrite
 
     def _set_overwrite(self, overwrite):
-        if overwrite not in (True, False):
+        if overwrite not in {True, False}:
             str_err = _("Overwrite type: {0} not supported (True/False)")
             raise ValueError(str_err.format(overwrite))
         self._overwrite = overwrite

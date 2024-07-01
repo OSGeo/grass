@@ -884,7 +884,7 @@ def _parse_opts(lines):
             flags[var[5:]] = bool(int(val))
         elif var.startswith("opt_"):
             options[var[4:]] = val
-        elif var in ["GRASS_OVERWRITE", "GRASS_VERBOSE"]:
+        elif var in {"GRASS_OVERWRITE", "GRASS_VERBOSE"}:
             os.environ[var] = val
         else:
             raise SyntaxError(
@@ -1288,13 +1288,13 @@ def region_env(region3d=False, flags=None, env=None, **kwargs):
         grass_region = ""
         for line in fd.readlines():
             key, value = map(lambda x: x.strip(), line.split(":", 1))
-            if kwargs and key not in ("proj", "zone"):
+            if kwargs and key not in {"proj", "zone"}:
                 continue
             if (
                 not kwargs
                 and not region3d
                 and key
-                in (
+                in {
                     "top",
                     "bottom",
                     "cols3",
@@ -1303,7 +1303,7 @@ def region_env(region3d=False, flags=None, env=None, **kwargs):
                     "e-w resol3",
                     "n-s resol3",
                     "t-b resol",
-                )
+                }
             ):
                 continue
 

@@ -104,7 +104,7 @@ def main():
         grass.fatal(_("Column <%s> not found in table <%s>") % (oldcol, table))
 
     # some tricks
-    if driver in ["sqlite", "dbf"]:
+    if driver in {"sqlite", "dbf"}:
         if oldcoltype.upper() == "CHARACTER":
             colspec = f"{newcol} varchar({oldcollength})"
         else:

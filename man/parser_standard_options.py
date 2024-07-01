@@ -222,7 +222,7 @@ if __name__ == "__main__":
 
     options = OptTable(parse_options(cfile.readlines(), startswith=args.startswith))
     outform = args.format
-    if outform in ["csv", "html"]:
+    if outform in {"csv", "html"}:
         print(getattr(options, outform)(), file=args.output)
         args.output.close()
     else:
