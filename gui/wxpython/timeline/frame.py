@@ -709,8 +709,8 @@ class DataCursor:
             xytext=self.offsets,
             textcoords="offset points",
             va="bottom",
-            bbox=dict(boxstyle="round,pad=0.5", fc="yellow", alpha=0.7),
-            arrowprops=dict(arrowstyle="->", connectionstyle="arc3,rad=0"),
+            bbox={"boxstyle": "round,pad=0.5", "fc": "yellow", "alpha": 0.7},
+            arrowprops={"arrowstyle": "->", "connectionstyle": "arc3,rad=0"},
             annotation_clip=False,
             multialignment="left",
         )

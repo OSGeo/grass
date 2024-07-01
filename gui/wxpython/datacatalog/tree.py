@@ -426,14 +426,14 @@ class DataCatalogTree(TreeView):
 
             mapset_node = self._model.AppendNode(
                 parent=location_node,
-                data=dict(
-                    type="mapset",
-                    name=mapset,
-                    current=False,
-                    lock=is_mapset_locked(mapset_path),
-                    is_different_owner=is_different_mapset_owner(mapset_path),
-                    owner=get_mapset_owner(mapset_path),
-                ),
+                data={
+                    "type": "mapset",
+                    "name": mapset,
+                    "current": False,
+                    "lock": is_mapset_locked(mapset_path),
+                    "is_different_owner": is_different_mapset_owner(mapset_path),
+                    "owner": get_mapset_owner(mapset_path),
+                },
             )
             self._populateMapsetItem(mapset_node, maps[mapset])
         self._model.SortChildren(location_node)
@@ -450,7 +450,7 @@ class DataCatalogTree(TreeView):
         locations = GetListOfLocations(grassdb_node.data["name"])
         for location in locations:
             loc_node = self._model.AppendNode(
-                parent=grassdb_node, data=dict(type="location", name=location)
+                parent=grassdb_node, data={"type": "location", "name": location}
             )
             all_location_nodes.append(loc_node)
             q = Queue()
@@ -464,14 +464,14 @@ class DataCatalogTree(TreeView):
                 )
                 mapset_node = self._model.AppendNode(
                     parent=loc_node,
-                    data=dict(
-                        type="mapset",
-                        name=key,
-                        lock=is_mapset_locked(mapset_path),
-                        current=False,
-                        is_different_owner=is_different_mapset_owner(mapset_path),
-                        owner=get_mapset_owner(mapset_path),
-                    ),
+                    data={
+                        "type": "mapset",
+                        "name": key,
+                        "lock": is_mapset_locked(mapset_path),
+                        "current": False,
+                        "is_different_owner": is_different_mapset_owner(mapset_path),
+                        "owner": get_mapset_owner(mapset_path),
+                    },
                 )
                 if (
                     grassdb_node.data["name"] == genv["GISDBASE"]
@@ -511,7 +511,7 @@ class DataCatalogTree(TreeView):
         for location in locations:
             results[location] = dict()
             varloc = self._model.AppendNode(
-                parent=grassdb_node, data=dict(type="location", name=location)
+                parent=grassdb_node, data={"type": "location", "name": location}
             )
             location_nodes.append(varloc)
             all_location_nodes.append(varloc)
@@ -552,16 +552,16 @@ class DataCatalogTree(TreeView):
                         )
                         mapset_node = self._model.AppendNode(
                             parent=location_nodes[i],
-                            data=dict(
-                                type="mapset",
-                                name=key,
-                                lock=is_mapset_locked(mapset_path),
-                                current=False,
-                                is_different_owner=is_different_mapset_owner(
+                            data={
+                                "type": "mapset",
+                                "name": key,
+                                "lock": is_mapset_locked(mapset_path),
+                                "current": False,
+                                "is_different_owner": is_different_mapset_owner(
                                     mapset_path
                                 ),
-                                owner=get_mapset_owner(mapset_path),
-                            ),
+                                "owner": get_mapset_owner(mapset_path),
+                            },
                         )
                         self._populateMapsetItem(mapset_node, maps[key])
 
@@ -593,7 +593,7 @@ class DataCatalogTree(TreeView):
             if not grassdb_nodes:
                 grassdb_node = self._model.AppendNode(
                     parent=self._model.root,
-                    data=dict(type="grassdb", name=grassdatabase),
+                    data={"type": "grassdb", "name": grassdatabase},
                 )
             else:
                 grassdb_node = grassdb_nodes[0]
@@ -722,11 +722,11 @@ class DataCatalogTree(TreeView):
         gisenv = gscript.gisenv()
         for grassdatabase in self.grassdatabases:
             grassdb_node = self._model.AppendNode(
-                parent=self._model.root, data=dict(type="grassdb", name=grassdatabase)
+                parent=self._model.root, data={"type": "grassdb", "name": grassdatabase}
             )
             for location in GetListOfLocations(grassdatabase):
                 self._model.AppendNode(
-                    parent=grassdb_node, data=dict(type="location", name=location)
+                    parent=grassdb_node, data={"type": "location", "name": location}
                 )
             self.RefreshItems()
             if grassdatabase == gisenv["GISDBASE"]:
@@ -1450,7 +1450,7 @@ class DataCatalogTree(TreeView):
     def InsertLayer(self, name, mapset_node, element_name):
         """Insert layer into model and refresh tree"""
         self._model.AppendNode(
-            parent=mapset_node, data=dict(type=element_name, name=name)
+            parent=mapset_node, data={"type": element_name, "name": name}
         )
         self._model.SortChildren(mapset_node)
         self.RefreshNode(mapset_node, recursive=True)
@@ -1463,14 +1463,14 @@ class DataCatalogTree(TreeView):
         )
         mapset_node = self._model.AppendNode(
             parent=location_node,
-            data=dict(
-                type="mapset",
-                name=name,
-                current=False,
-                lock=is_mapset_locked(mapset_path),
-                is_different_owner=is_different_mapset_owner(mapset_path),
-                owner=get_mapset_owner(mapset_path),
-            ),
+            data={
+                "type": "mapset",
+                "name": name,
+                "current": False,
+                "lock": is_mapset_locked(mapset_path),
+                "is_different_owner": is_different_mapset_owner(mapset_path),
+                "owner": get_mapset_owner(mapset_path),
+            },
         )
         self._model.SortChildren(location_node)
         self.RefreshNode(location_node, recursive=True)
@@ -1479,7 +1479,7 @@ class DataCatalogTree(TreeView):
     def InsertLocation(self, name, grassdb_node):
         """Insert new location into model and refresh tree"""
         location_node = self._model.AppendNode(
-            parent=grassdb_node, data=dict(type="location", name=name)
+            parent=grassdb_node, data={"type": "location", "name": name}
         )
         # reload new location since it has a mapset
         self._reloadLocationNode(location_node)
@@ -1495,7 +1495,7 @@ class DataCatalogTree(TreeView):
         grassdb_node = self._model.SearchNodes(name=name, type="grassdb")
         if not grassdb_node:
             grassdb_node = self._model.AppendNode(
-                parent=self._model.root, data=dict(type="grassdb", name=name)
+                parent=self._model.root, data={"type": "grassdb", "name": name}
             )
             if self._useLazyLoading():
                 self._lazyReloadGrassDBNode(grassdb_node)
@@ -1571,13 +1571,13 @@ class DataCatalogTree(TreeView):
                 )
             )
             changes.append(
-                dict(
-                    grassdb=self.selected_grassdb[i].data["name"],
-                    location=self.selected_location[i].data["name"],
-                    mapset=self.selected_mapset[i].data["name"],
-                    action="delete",
-                    element="mapset",
-                )
+                {
+                    "grassdb": self.selected_grassdb[i].data["name"],
+                    "location": self.selected_location[i].data["name"],
+                    "mapset": self.selected_mapset[i].data["name"],
+                    "action": "delete",
+                    "element": "mapset",
+                }
             )
         if delete_mapsets_interactively(self, mapsets):
             for change in changes:
@@ -1598,12 +1598,12 @@ class DataCatalogTree(TreeView):
                 )
             )
             changes.append(
-                dict(
-                    grassdb=self.selected_grassdb[i].data["name"],
-                    location=self.selected_location[i].data["name"],
-                    action="delete",
-                    element="location",
-                )
+                {
+                    "grassdb": self.selected_grassdb[i].data["name"],
+                    "location": self.selected_location[i].data["name"],
+                    "action": "delete",
+                    "element": "location",
+                }
             )
         if delete_locations_interactively(self, locations):
             for change in changes:

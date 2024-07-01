@@ -405,45 +405,45 @@ class Instruction:
         return True
 
     def SendToRead(self, instruction, text, **kwargs):
-        psmapInstrDict = dict(
-            paper=["page"],
-            maploc=["map"],
-            scale=["map"],
-            border=["map"],
-            raster=["raster"],
-            mapinfo=["mapinfo"],
-            scalebar=["scalebar"],
-            text=["text"],
-            eps=["image", "northArrow"],
-            point=["point"],
-            line=["line"],
-            rectangle=["rectangle"],
-            vpoints=["vector", "vProperties"],
-            vlines=["vector", "vProperties"],
-            vareas=["vector", "vProperties"],
-            colortable=["rasterLegend"],
-            vlegend=["vectorLegend"],
-            labels=["labels"],
-        )
+        psmapInstrDict = {
+            "paper": ["page"],
+            "maploc": ["map"],
+            "scale": ["map"],
+            "border": ["map"],
+            "raster": ["raster"],
+            "mapinfo": ["mapinfo"],
+            "scalebar": ["scalebar"],
+            "text": ["text"],
+            "eps": ["image", "northArrow"],
+            "point": ["point"],
+            "line": ["line"],
+            "rectangle": ["rectangle"],
+            "vpoints": ["vector", "vProperties"],
+            "vlines": ["vector", "vProperties"],
+            "vareas": ["vector", "vProperties"],
+            "colortable": ["rasterLegend"],
+            "vlegend": ["vectorLegend"],
+            "labels": ["labels"],
+        }
 
-        myInstrDict = dict(
-            page=PageSetup,
-            map=MapFrame,
-            raster=Raster,
-            mapinfo=Mapinfo,
-            scalebar=Scalebar,
-            text=Text,
-            image=Image,
-            northArrow=NorthArrow,
-            point=Point,
-            line=Line,
-            rectangle=Rectangle,
-            rasterLegend=RasterLegend,
-            vectorLegend=VectorLegend,
-            vector=Vector,
-            vProperties=VProperties,
-            labels=Labels,
-        )
+        myInstrDict = {
+            "page": PageSetup,
+            "map": MapFrame,
+            "raster": Raster,
+            "mapinfo": Mapinfo,
+            "scalebar": Scalebar,
+            "text": Text,
+            "image": Image,
+            "northArrow": NorthArrow,
+            "point": Point,
+            "line": Line,
+            "rectangle": Rectangle,
+            "rasterLegend": RasterLegend,
+            "vectorLegend": VectorLegend,
+            "vector": Vector,
+            "vProperties": VProperties,
+            "labels": Labels,
+        }
 
         myInstruction = psmapInstrDict[instruction]
 
@@ -593,7 +593,7 @@ class InitMap(InstructionObject):
         self.type = "initMap"
 
         # default values
-        self.defaultInstruction = dict(rect=None, scale=None)
+        self.defaultInstruction = {"rect": None, "scale": None}
         # current values
         self.instruction = dict(self.defaultInstruction)
 
@@ -605,20 +605,20 @@ class MapFrame(InstructionObject):
         InstructionObject.__init__(self, id=id, env=env)
         self.type = "map"
         # default values
-        self.defaultInstruction = dict(
-            map=None,
-            mapType=None,
-            drawMap=True,
-            region=None,
-            rect=Rect2D(),
-            scaleType=0,
-            scale=None,
-            center=None,
-            resolution=300,
-            border="y",
-            width=1,
-            color="0:0:0",
-        )
+        self.defaultInstruction = {
+            "map": None,
+            "mapType": None,
+            "drawMap": True,
+            "region": None,
+            "rect": Rect2D(),
+            "scaleType": 0,
+            "scale": None,
+            "center": None,
+            "resolution": 300,
+            "border": "y",
+            "width": 1,
+            "color": "0:0:0",
+        }
         # current values
         self.instruction = dict(self.defaultInstruction)
 
@@ -784,17 +784,17 @@ class PageSetup(InstructionObject):
         InstructionObject.__init__(self, id=id, env=env)
         self.type = "page"
         # default values
-        self.defaultInstruction = dict(
-            Units="inch",
-            Format="a4",
-            Orientation="Portrait",
-            Width=8.268,
-            Height=11.693,
-            Left=0.5,
-            Right=0.5,
-            Top=1,
-            Bottom=1,
-        )
+        self.defaultInstruction = {
+            "Units": "inch",
+            "Format": "a4",
+            "Orientation": "Portrait",
+            "Width": 8.268,
+            "Height": 11.693,
+            "Left": 0.5,
+            "Right": 0.5,
+            "Top": 1,
+            "Bottom": 1,
+        }
         # current values
         self.instruction = dict(self.defaultInstruction)
 
@@ -879,16 +879,16 @@ class Mapinfo(InstructionObject):
         InstructionObject.__init__(self, id=id, env=env)
         self.type = "mapinfo"
         # default values
-        self.defaultInstruction = dict(
-            unit="inch",
-            where=(0, 0),
-            font="Helvetica",
-            fontsize=10,
-            color="0:0:0",
-            background="none",
-            border="none",
-            rect=None,
-        )
+        self.defaultInstruction = {
+            "unit": "inch",
+            "where": (0, 0),
+            "font": "Helvetica",
+            "fontsize": 10,
+            "color": "0:0:0",
+            "background": "none",
+            "border": "none",
+            "rect": None,
+        }
         # current values
         self.instruction = dict(self.defaultInstruction)
 
@@ -953,26 +953,26 @@ class Text(InstructionObject):
         InstructionObject.__init__(self, id=id, env=env)
         self.type = "text"
         # default values
-        self.defaultInstruction = dict(
-            text="",
-            font="Helvetica",
-            fontsize=10,
-            color="black",
-            background="none",
-            hcolor="none",
-            hwidth=1,
-            border="none",
-            width="1",
-            XY=True,
-            where=(0, 0),
-            unit="inch",
-            rotate=None,
-            ref="center center",
-            xoffset=0,
-            yoffset=0,
-            east=None,
-            north=None,
-        )
+        self.defaultInstruction = {
+            "text": "",
+            "font": "Helvetica",
+            "fontsize": 10,
+            "color": "black",
+            "background": "none",
+            "hcolor": "none",
+            "hwidth": 1,
+            "border": "none",
+            "width": "1",
+            "XY": True,
+            "where": (0, 0),
+            "unit": "inch",
+            "rotate": None,
+            "ref": "center center",
+            "xoffset": 0,
+            "yoffset": 0,
+            "east": None,
+            "north": None,
+        }
         # current values
         self.instruction = dict(self.defaultInstruction)
 
@@ -1076,16 +1076,16 @@ class Image(InstructionObject):
         self.settings = settings
         self.type = "image"
         # default values
-        self.defaultInstruction = dict(
-            epsfile="",
-            XY=True,
-            where=(0, 0),
-            unit="inch",
-            east=None,
-            north=None,
-            rotate=None,
-            scale=1,
-        )
+        self.defaultInstruction = {
+            "epsfile": "",
+            "XY": True,
+            "where": (0, 0),
+            "unit": "inch",
+            "east": None,
+            "north": None,
+            "rotate": None,
+            "scale": 1,
+        }
         # current values
         self.instruction = dict(self.defaultInstruction)
 
@@ -1261,18 +1261,18 @@ class Point(InstructionObject):
         InstructionObject.__init__(self, id=id, env=env)
         self.type = "point"
         # default values
-        self.defaultInstruction = dict(
-            symbol=os.path.join("basic", "x"),
-            color="0:0:0",
-            fcolor="200:200:200",
-            rotate=0,
-            size=10,
-            XY=True,
-            where=(0, 0),
-            unit="inch",
-            east=None,
-            north=None,
-        )
+        self.defaultInstruction = {
+            "symbol": os.path.join("basic", "x"),
+            "color": "0:0:0",
+            "fcolor": "200:200:200",
+            "rotate": 0,
+            "size": 10,
+            "XY": True,
+            "where": (0, 0),
+            "unit": "inch",
+            "east": None,
+            "north": None,
+        }
         # current values
         self.instruction = dict(self.defaultInstruction)
 
@@ -1346,15 +1346,15 @@ class Line(InstructionObject):
         InstructionObject.__init__(self, id=id, env=env)
         self.type = "line"
         # default values
-        self.defaultInstruction = dict(
-            color="0:0:0",
-            width=2,
-            where=[wx.Point2D(), wx.Point2D()],
-            east1=None,
-            north1=None,
-            east2=None,
-            north2=None,
-        )
+        self.defaultInstruction = {
+            "color": "0:0:0",
+            "width": 2,
+            "where": [wx.Point2D(), wx.Point2D()],
+            "east1": None,
+            "north1": None,
+            "east2": None,
+            "north2": None,
+        }
         # current values
         self.instruction = dict(self.defaultInstruction)
 
@@ -1421,15 +1421,15 @@ class Rectangle(InstructionObject):
         InstructionObject.__init__(self, id=id, env=env)
         self.type = "rectangle"
         # default values
-        self.defaultInstruction = dict(
-            color="0:0:0",
-            fcolor="none",
-            width=2,
-            east1=None,
-            north1=None,
-            east2=None,
-            north2=None,
-        )
+        self.defaultInstruction = {
+            "color": "0:0:0",
+            "fcolor": "none",
+            "width": 2,
+            "east1": None,
+            "north1": None,
+            "east2": None,
+            "north2": None,
+        }
         # current values
         self.instruction = dict(self.defaultInstruction)
 
@@ -1498,20 +1498,20 @@ class Scalebar(InstructionObject):
         InstructionObject.__init__(self, id=id, env=env)
         self.type = "scalebar"
         # default values
-        self.defaultInstruction = dict(
-            unit="inch",
-            where=(1, 1),
-            unitsLength="auto",
-            unitsHeight="inch",
-            length=None,
-            height=0.1,
-            rect=None,
-            fontsize=10,
-            background="y",
-            scalebar="f",
-            segment=4,
-            numbers=1,
-        )
+        self.defaultInstruction = {
+            "unit": "inch",
+            "where": (1, 1),
+            "unitsLength": "auto",
+            "unitsHeight": "inch",
+            "length": None,
+            "height": 0.1,
+            "rect": None,
+            "fontsize": 10,
+            "background": "y",
+            "scalebar": "f",
+            "segment": 4,
+            "numbers": 1,
+        }
         # current values
         self.instruction = dict(self.defaultInstruction)
 
@@ -1614,28 +1614,26 @@ class RasterLegend(InstructionObject):
         InstructionObject.__init__(self, id=id, env=env)
         self.type = "rasterLegend"
         # default values
-        self.defaultInstruction = dict(
-            rLegend=False,
-            unit="inch",
-            rasterDefault=True,
-            raster=None,
-            discrete=None,
-            type=None,
-            where=(0, 0),
-            width=None,
-            height=None,
-            cols=1,
-            font="Helvetica",
-            fontsize=10,
-            # color = '0:0:0', tickbar = False,
-            # range = False, min = 0, max = 0,
-            color="black",
-            tickbar="n",
-            range=False,
-            min=0,
-            max=0,
-            nodata="n",
-        )
+        self.defaultInstruction = {
+            "rLegend": False,
+            "unit": "inch",
+            "rasterDefault": True,
+            "raster": None,
+            "discrete": None,
+            "type": None,
+            "where": (0, 0),
+            "width": None,
+            "height": None,
+            "cols": 1,
+            "font": "Helvetica",
+            "fontsize": 10,
+            "color": "black",
+            "tickbar": "n",
+            "range": False,
+            "min": 0,
+            "max": 0,
+            "nodata": "n",
+        }
         # current values
         self.instruction = dict(self.defaultInstruction)
 
@@ -1815,18 +1813,18 @@ class VectorLegend(InstructionObject):
         InstructionObject.__init__(self, id=id, env=env)
         self.type = "vectorLegend"
         # default values
-        self.defaultInstruction = dict(
-            vLegend=False,
-            unit="inch",
-            where=(0, 0),
-            defaultSize=True,
-            width=0.4,
-            cols=1,
-            span=None,
-            font="Helvetica",
-            fontsize=10,
-            border="none",
-        )
+        self.defaultInstruction = {
+            "vLegend": False,
+            "unit": "inch",
+            "where": (0, 0),
+            "defaultSize": True,
+            "width": 0.4,
+            "cols": 1,
+            "span": None,
+            "font": "Helvetica",
+            "fontsize": 10,
+            "border": "none",
+        }
         # current values
         self.instruction = dict(self.defaultInstruction)
 
@@ -1911,7 +1909,7 @@ class Raster(InstructionObject):
         InstructionObject.__init__(self, id=id, env=env)
         self.type = "raster"
         # default values
-        self.defaultInstruction = dict(isRaster=False, raster=None)
+        self.defaultInstruction = {"isRaster": False, "raster": None}
         # current values
         self.instruction = dict(self.defaultInstruction)
 
@@ -1946,7 +1944,7 @@ class Vector(InstructionObject):
         InstructionObject.__init__(self, id=id, env=env)
         self.type = "vector"
         # default values
-        self.defaultInstruction = dict(list=None)  # [vmap, type, id, lpos, label]
+        self.defaultInstruction = {"list": None}  # [vmap, type, id, lpos, label]
         # current values
         self.instruction = dict(self.defaultInstruction)
 
@@ -2002,64 +2000,64 @@ class VProperties(InstructionObject):
         self.subType = subType
         # default values
         if self.subType == "points":
-            dd = dict(
-                subType="points",
-                name=None,
-                type="point or centroid",
-                connection=False,
-                layer="1",
-                masked="n",
-                color="0:0:0",
-                width=1,
-                fcolor="255:0:0",
-                rgbcolumn=None,
-                symbol=os.path.join("basic", "x"),
-                eps=None,
-                size=5,
-                sizecolumn=None,
-                scale=None,
-                rotation=False,
-                rotate=0,
-                rotatecolumn=None,
-                label=None,
-                lpos=None,
-            )
+            dd = {
+                "subType": "points",
+                "name": None,
+                "type": "point or centroid",
+                "connection": False,
+                "layer": "1",
+                "masked": "n",
+                "color": "0:0:0",
+                "width": 1,
+                "fcolor": "255:0:0",
+                "rgbcolumn": None,
+                "symbol": os.path.join("basic", "x"),
+                "eps": None,
+                "size": 5,
+                "sizecolumn": None,
+                "scale": None,
+                "rotation": False,
+                "rotate": 0,
+                "rotatecolumn": None,
+                "label": None,
+                "lpos": None,
+            }
         elif self.subType == "lines":
-            dd = dict(
-                subType="lines",
-                name=None,
-                type="line or boundary",
-                connection=False,
-                layer="1",
-                masked="n",
-                color="0:0:0",
-                hwidth=1,
-                hcolor="none",
-                rgbcolumn=None,
-                width=1,
-                cwidth=None,
-                style="solid",
-                linecap="butt",
-                label=None,
-                lpos=None,
-            )
+            dd = {
+                "subType": "lines",
+                "name": None,
+                "type": "line or boundary",
+                "connection": False,
+                "layer": "1",
+                "masked": "n",
+                "color": "0:0:0",
+                "hwidth": 1,
+                "hcolor": "none",
+                "rgbcolumn": None,
+                "width": 1,
+                "cwidth": None,
+                "style": "solid",
+                "linecap": "butt",
+                "label": None,
+                "lpos": None,
+            }
         else:  # areas
-            dd = dict(
-                subType="areas",
-                name=None,
-                connection=False,
-                layer="1",
-                masked="n",
-                color="0:0:0",
-                width=1,
-                fcolor="none",
-                rgbcolumn=None,
-                pat=None,
-                pwidth=1,
-                scale=1,
-                label=None,
-                lpos=None,
-            )
+            dd = {
+                "subType": "areas",
+                "name": None,
+                "connection": False,
+                "layer": "1",
+                "masked": "n",
+                "color": "0:0:0",
+                "width": 1,
+                "fcolor": "none",
+                "rgbcolumn": None,
+                "pat": None,
+                "pwidth": 1,
+                "scale": 1,
+                "label": None,
+                "lpos": None,
+            }
         self.defaultInstruction = dd
         # current values
         self.instruction = dict(self.defaultInstruction)
@@ -2262,7 +2260,7 @@ class Labels(InstructionObject):
         InstructionObject.__init__(self, id=id, env=env)
         self.type = "labels"
         # default values
-        self.defaultInstruction = dict(labels=[])
+        self.defaultInstruction = {"labels": []}
         # current values
         self.instruction = dict(self.defaultInstruction)
 
