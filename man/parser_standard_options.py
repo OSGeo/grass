@@ -167,7 +167,7 @@ if __name__ == "__main__":
         "trunk/lib/gis/parser_standard_options.c?format=txt"
     )
     parser = argparse.ArgumentParser(
-        description="Extract GRASS default " "options from link."
+        description="Extract GRASS default options from link."
     )
     parser.add_argument(
         "-f",

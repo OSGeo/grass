@@ -623,7 +623,7 @@ class IClassMapPanel(DoubleMapPanel):
         if self.GetAreasCount() or self.stats_data.GetCategories():
             qdlg = wx.MessageDialog(
                 parent=self,
-                message=_("All changes will be lost. " "Do you want to continue?"),
+                message=_("All changes will be lost. Do you want to continue?"),
                 style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
             )
             if qdlg.ShowModal() == wx.ID_NO:
@@ -1277,7 +1277,7 @@ class IClassMapPanel(DoubleMapPanel):
         if not group:
             GMessage(
                 parent=self,
-                message=_("No imagery group selected. " "Operation canceled."),
+                message=_("No imagery group selected. Operation canceled."),
             )
             return False
 
@@ -1297,7 +1297,7 @@ class IClassMapPanel(DoubleMapPanel):
 
         # check if vector has any areas
         if self.GetAreasCount() == 0:
-            GMessage(parent=self, message=_("No areas given. " "Operation canceled."))
+            GMessage(parent=self, message=_("No areas given. Operation canceled."))
             return False
 
         # check if vector is inside raster
@@ -1315,7 +1315,7 @@ class IClassMapPanel(DoubleMapPanel):
             GMessage(
                 parent=self,
                 message=_(
-                    "Vector features are outside raster layers. " "Operation canceled."
+                    "Vector features are outside raster layers. Operation canceled."
                 ),
             )
             return False

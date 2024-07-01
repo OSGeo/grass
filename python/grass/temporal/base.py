@@ -258,7 +258,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
         self.msgr = get_tgis_message_interface()
 
         if self.ident and self.ident.find("@") >= 0:
-            self.mapset = self.ident.split("@" "")[1]
+            self.mapset = self.ident.split("@")[1]
         else:
             self.mapset = None
 

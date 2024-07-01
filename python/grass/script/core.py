@@ -1163,7 +1163,7 @@ def compare_key_value_text_files(
                 return False
         elif isinstance(dict_a[key], float) or isinstance(dict_b[key], float):
             warning(
-                _("Mixing value types. Will try to compare after " "integer conversion")
+                _("Mixing value types. Will try to compare after integer conversion")
             )
             return int(dict_a[key]) == int(dict_b[key])
         elif key == "+towgs84":
@@ -2009,7 +2009,7 @@ def legal_name(s):
         useful anyway for checking map names and column names.
     """
     if not s or s[0] == ".":
-        warning(_("Illegal filename <%s>. Cannot be 'NULL' or start with " "'.'.") % s)
+        warning(_("Illegal filename <%s>. Cannot be 'NULL' or start with '.'.") % s)
         return False
 
     illegal = [c for c in s if c in "/\"'@,=*~" or c <= " " or c >= "\177"]

@@ -201,7 +201,7 @@ def _export_vector_maps_as_gml(rows, tar, list_file, new_cwd, fs):
             shutil.rmtree(new_cwd)
             tar.close()
             gscript.fatal(
-                _("Unable to export vector map <%s> as " "GML with v.out.ogr" % name)
+                _("Unable to export vector map <%s> as GML with v.out.ogr" % name)
             )
 
         tar.add(name + ".xml")
@@ -237,7 +237,7 @@ def _export_vector_maps_as_gpkg(rows, tar, list_file, new_cwd, fs):
             shutil.rmtree(new_cwd)
             tar.close()
             gscript.fatal(
-                _("Unable to export vector map <%s> as " "GPKG with v.out.ogr" % name)
+                _("Unable to export vector map <%s> as GPKG with v.out.ogr" % name)
             )
 
         tar.add(name + ".gpkg")

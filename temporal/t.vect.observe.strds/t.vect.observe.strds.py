@@ -236,7 +236,7 @@ def main():
 
     title = _("Observaion of space time raster dataset(s) <%s>") % (strds)
     description = _(
-        "Observation of space time raster dataset(s) <%s>" " with vector map <%s>"
+        "Observation of space time raster dataset(s) <%s> with vector map <%s>"
     ) % (strds, input)
 
     # Create the output space time vector dataset
@@ -297,7 +297,7 @@ def main():
             except CalledModuleError:
                 dbif.close()
                 grass.fatal(
-                    _("Unable to add column %s to vector map <%s> " "with layer %i")
+                    _("Unable to add column %s to vector map <%s> with layer %i")
                     % (columns_string, vectmap, count)
                 )
         else:
@@ -314,7 +314,7 @@ def main():
             except CalledModuleError:
                 dbif.close()
                 grass.fatal(
-                    _("Unable to add table to vector map " "<%s> with layer %i")
+                    _("Unable to add table to vector map <%s> with layer %i")
                     % (vectmap, count)
                 )
 

@@ -185,7 +185,7 @@ def checkSeriesCompatibility(mapSeriesList=None, timeseriesList=None):
 
     if len(timeseriesInfo["count"]) > 1:
         raise GException(
-            _("The number of maps in space-time datasets " "has to be the same.")
+            _("The number of maps in space-time datasets has to be the same.")
         )
 
     if len(timeseriesInfo["temporalType"]) > 1:

@@ -148,7 +148,7 @@ class TimelineFrame(wx.Frame):
         self.view3dCheck.Bind(wx.EVT_CHECKBOX, self.OnRedraw)
         if not check_version(1, 0, 0):
             self.view3dCheck.SetLabel(
-                _("3D plot of spatio-temporal extents " "(matplotlib >= 1.0.0)")
+                _("3D plot of spatio-temporal extents (matplotlib >= 1.0.0)")
             )
             self.view3dCheck.Disable()
 

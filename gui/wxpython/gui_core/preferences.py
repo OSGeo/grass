@@ -2124,7 +2124,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                     GError(
                         parent=self,
                         message=_(
-                            "Failed to set default display font. " "Try different font."
+                            "Failed to set default display font. Try different font."
                         ),
                         showTraceback=True,
                     )

@@ -507,7 +507,7 @@ def one_point_per_col_output(
                     else:
                         x = row[0]
                         y = row[1]
-                        out_str += "{sep}{x:10.10f}{csep}" "{y:10.10f}".format(
+                        out_str += "{sep}{x:10.10f}{csep}{y:10.10f}".format(
                             x=float(x), y=float(y), sep=separator, csep=coor_sep
                         )
                         if site_input:

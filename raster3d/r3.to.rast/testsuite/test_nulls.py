@@ -149,7 +149,7 @@ class TestR3ToRastNulls(TestCase):
             exclude="%s_*" % self.rast2d_ref,
         )
         self.assertEqual(
-            len(rasts), 4, msg="Wrong number of 2D rasters present" " in the mapset"
+            len(rasts), 4, msg="Wrong number of 2D rasters present in the mapset"
         )
         ref_info = {"cells": 9}
         # only this tests the presence of nulls

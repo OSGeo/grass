@@ -105,7 +105,7 @@ def CheckForWx():
     except ImportError as e:
         print("ERROR: wxGUI requires wxPython. {}".format(e), file=sys.stderr)
         print(
-            "You can still use GRASS GIS modules in" " the command line or in Python.",
+            "You can still use GRASS GIS modules in the command line or in Python.",
             file=sys.stderr,
         )
         sys.exit(1)

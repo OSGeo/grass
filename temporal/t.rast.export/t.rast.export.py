@@ -134,7 +134,7 @@ def main():
 
     if _type and _format in {"pack", "AAIGrid"}:
         grass.warning(
-            _("Type options is not working with pack format, " "it will be skipped")
+            _("Type options is not working with pack format, it will be skipped")
         )
         if kws:
             grass.warning(

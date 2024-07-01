@@ -227,7 +227,7 @@ def text_to_keyvalue(
                 if not skip_invalid:
                     # TODO: here should go _ for translation
                     raise ValueError(
-                        ("Line <{l}> does not contain" " separator <{s}>.").format(
+                        ("Line <{l}> does not contain separator <{s}>.").format(
                             l=line, s=sep
                         )
                     )

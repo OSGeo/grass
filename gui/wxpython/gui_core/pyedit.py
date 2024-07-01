@@ -418,7 +418,7 @@ class PyEditController:
             dlg = wx.MessageDialog(
                 parent=self.guiparent,
                 message=_(
-                    "File <%s> already exists. " "Do you want to overwrite this file?"
+                    "File <%s> already exists. Do you want to overwrite this file?"
                 )
                 % filename,
                 caption=_("Save file"),

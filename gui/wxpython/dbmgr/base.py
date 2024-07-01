@@ -1059,9 +1059,7 @@ class DbMgrNotebookBase(GNotebook):
         if not name:
             GError(
                 parent=self,
-                message=_(
-                    "Unable to add column to the table. " "No column name defined."
-                ),
+                message=_("Unable to add column to the table. No column name defined."),
             )
             return False
 
@@ -1667,8 +1665,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                     if len(values[i]) == 0:  # NULL
                         if columnName[i] == keyColumn:
                             raise ValueError(
-                                _("Category number (column %s)" " is missing.")
-                                % keyColumn
+                                _("Category number (column %s) is missing.") % keyColumn
                             )
                         else:
                             continue
@@ -2604,7 +2601,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         if not name or not nameTo:
             GError(
                 parent=self,
-                message=_("Unable to rename column. " "No column name defined."),
+                message=_("Unable to rename column. No column name defined."),
             )
             return
         else:
@@ -3272,7 +3269,7 @@ class LayerBook(wx.Notebook):
 
         # tooltips
         self.addLayerWidgets["addCat"][0].SetToolTip(
-            _("You need to add categories " "by v.category module.")
+            _("You need to add categories by v.category module.")
         )
 
         # table description

@@ -154,7 +154,7 @@ def main():
             )
         elif not coords and not cats:
             gscript.warning(
-                _("With stvds you have to use 'coordinates' or " "'cats' option")
+                _("With stvds you have to use 'coordinates' or 'cats' option")
             )
     title = None
     if options["title"]:

@@ -869,7 +869,7 @@ class Map:
         projinfo = {}
         if not grass.find_program("g.proj", "--help"):
             sys.exit(
-                _("GRASS tool '%s' not found. Unable to start map " "display window.")
+                _("GRASS tool '%s' not found. Unable to start map display window.")
                 % "g.proj"
             )
         env = os.environ.copy()

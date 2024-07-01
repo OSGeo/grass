@@ -222,9 +222,7 @@ def main():
     new_database_subst = substitute_db(new_database)
 
     if old_database_subst == new_database_subst and old_schema == new_schema:
-        gscript.fatal(
-            _("Old and new database connection is identical. " "Nothing to do.")
-        )
+        gscript.fatal(_("Old and new database connection is identical. Nothing to do."))
 
     mapset = gscript.gisenv()["MAPSET"]
 
@@ -240,7 +238,7 @@ def main():
         vect = "%s@%s" % (vect, mapset)
         i += 1
         gscript.message(
-            _("%s\nReconnecting vector map <%s> " "(%d of %d)...\n%s")
+            _("%s\nReconnecting vector map <%s> (%d of %d)...\n%s")
             % ("-" * 80, vect, i, num_vectors, "-" * 80)
         )
         for f in gscript.vector_db(vect, stderr=nuldev).values():

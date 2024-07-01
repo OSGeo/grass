@@ -325,7 +325,7 @@ def aggregate_by_topology(
 
         if aggregation_list:
             msgr.verbose(
-                _("Aggregating %(len)i raster maps from %(start)s to" " %(end)s")
+                _("Aggregating %(len)i raster maps from %(start)s to %(end)s")
                 % (
                     {
                         "len": len(aggregation_list),

@@ -140,7 +140,7 @@ def generate_page_for_category(
 
     output.write(
         header1_tmpl.substitute(
-            title="GRASS GIS %s Reference " "Manual: Graphical index" % grass_version
+            title="GRASS GIS %s Reference Manual: Graphical index" % grass_version
         )
     )
     output.write(header_graphical_index_tmpl)

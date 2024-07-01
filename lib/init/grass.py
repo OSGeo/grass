@@ -523,7 +523,7 @@ def read_gisrc(filename):
             k, v = line.split(":", 1)
         except ValueError as e:
             warning(
-                _("Invalid line in RC file ({file}):" " '{line}' ({error})\n").format(
+                _("Invalid line in RC file ({file}): '{line}' ({error})\n").format(
                     line=line, error=e, file=filename
                 )
             )
@@ -761,7 +761,7 @@ def cannot_create_location_reason(gisdbase, location):
         ).format(**locals())
     elif os.path.isfile(path):
         return _(
-            "Unable to create new project <{location}> because" " <{path}> is a file."
+            "Unable to create new project <{location}> because <{path}> is a file."
         ).format(**locals())
     elif os.path.isdir(path):
         return _(
@@ -1372,7 +1372,7 @@ def lock_mapset(mapset_path, force_gislock_removal, user):
             )
     elif ret != 0:
         msg = (
-            _("Unable to properly access '%s'.\n" "Please notify system personnel.")
+            _("Unable to properly access '%s'.\nPlease notify system personnel.")
             % lockfile
         )
 
@@ -1531,7 +1531,7 @@ def run_batch_job(batch_job: list):
         script = script_path(batch_job)
         proc = Popen(batch_job, shell=False, env=os.environ)
     except OSError as error:
-        error_message = _("Execution of <{cmd}> failed:\n" "{error}").format(
+        error_message = _("Execution of <{cmd}> failed:\n{error}").format(
             cmd=batch_job_string, error=error
         )
         # No such file or directory

@@ -1099,7 +1099,7 @@ class TestsuiteDirReporter:
         page = open(page_name, "w")
         # TODO: should we use forward slashes also for the HTML because
         # it is simpler are more consistent with the rest on MS Windows?
-        head = "<html><body>" "<h1>{name} testsuite results</h1>".format(name=directory)
+        head = "<html><body><h1>{name} testsuite results</h1>".format(name=directory)
         tests_table_head = (
             "<h3>Test files results</h3>"
             "<table>"
@@ -1239,7 +1239,7 @@ class TestsuiteDirReporter:
 
         page_name = os.path.join(root, self.main_page_name)
         page = open(page_name, "w")
-        head = "<html><body>" "<h1>Testsuites results</h1>"
+        head = "<html><body><h1>Testsuites results</h1>"
         tests_table_head = (
             "<table>"
             "<thead><tr>"

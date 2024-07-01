@@ -1028,12 +1028,12 @@ def create_temporal_relation_sql_where_statement(
                 "> '%s'))" % (end, start, end)
             )
         else:
-            where += "((start_time < %i and end_time > %i and end_time < %i)" " OR " % (
+            where += "((start_time < %i and end_time > %i and end_time < %i) OR " % (
                 start,
                 start,
                 end,
             )
-            where += "(start_time < %i and start_time > %i and end_time > " "%i))" % (
+            where += "(start_time < %i and start_time > %i and end_time > %i))" % (
                 end,
                 start,
                 end,

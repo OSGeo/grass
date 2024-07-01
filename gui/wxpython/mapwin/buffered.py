@@ -2175,7 +2175,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             overwrite = wx.MessageBox(
                 parent=self,
                 message=_(
-                    "Region file <%s> already exists. " "Do you want to overwrite it?"
+                    "Region file <%s> already exists. Do you want to overwrite it?"
                 )
                 % (dlg.GetName()),
                 caption=_("Warning"),

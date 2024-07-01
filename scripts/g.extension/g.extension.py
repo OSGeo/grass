@@ -1215,9 +1215,7 @@ def install_extension(source=None, url=None, xmlurl=None, branch=None):
         return
 
     if ret != 0:
-        gs.warning(
-            _("Installation failed, sorry." " Please check above error messages.")
-        )
+        gs.warning(_("Installation failed, sorry. Please check above error messages."))
     else:
         # update extensions metadata file
         gs.message(_("Updating extensions metadata file..."))
@@ -1272,7 +1270,7 @@ def get_toolboxes_metadata(url):
                 "modules": mlist,
             }
     except (HTTPError, OSError):
-        gs.error(_("Unable to read addons metadata file " "from the remote server"))
+        gs.error(_("Unable to read addons metadata file from the remote server"))
     return data
 
 
@@ -1343,9 +1341,9 @@ def get_addons_metadata(url, mlist):
         tree = etree_fromurl(url)
     except (HTTPError, URLError, OSError) as error:
         gs.error(
-            _(
-                "Unable to read addons metadata file" " from the remote server: {0}"
-            ).format(error)
+            _("Unable to read addons metadata file from the remote server: {0}").format(
+                error
+            )
         )
         return data, bin_list
     except ETREE_EXCEPTIONS as error:
@@ -1895,14 +1893,14 @@ def download_source_code(
         )
     elif source == "svn":
         gs.message(
-            _("Fetching <{name}> from " "<{url}> (be patient)...").format(
+            _("Fetching <{name}> from <{url}> (be patient)...").format(
                 name=name, url=url
             )
         )
         download_source_code_svn(url, name, outdev, directory)
     elif source in {"remote_zip"}:
         gs.message(
-            _("Fetching <{name}> from " "<{url}> (be patient)...").format(
+            _("Fetching <{name}> from <{url}> (be patient)...").format(
                 name=name, url=url
             )
         )
@@ -1991,7 +1989,7 @@ def install_extension_std_platforms(name, source, url, branch):
     os.chdir(srcdir)
 
     pgm_not_found_message = _(
-        "Module name not found." " Check module Makefile syntax (PGM variable)."
+        "Module name not found. Check module Makefile syntax (PGM variable)."
     )
     # collect module names
     module_list = []
@@ -2079,7 +2077,7 @@ def install_extension_std_platforms(name, source, url, branch):
         gs.fatal(_("Please install GRASS development package"))
 
     if 0 != gs.call(make_cmd, stdout=outdev):
-        gs.fatal(_("Compilation failed, sorry." " Please check above error messages."))
+        gs.fatal(_("Compilation failed, sorry. Please check above error messages."))
 
     if flags["i"]:
         gs.message(f"\n{path_to_src_code_message}\n")

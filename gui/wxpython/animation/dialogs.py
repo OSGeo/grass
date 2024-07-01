@@ -486,7 +486,7 @@ class InputDialog(wx.Dialog):
             id=wx.ID_ANY,
             size=globalvar.DIALOG_GSELECT_SIZE,
             labelText=_("Workspace file:"),
-            dialogTitle=_("Choose workspace file to " "import 3D view parameters"),
+            dialogTitle=_("Choose workspace file to import 3D view parameters"),
             buttonText=_("Browse"),
             startDirectory=os.getcwd(),
             fileMode=0,
@@ -550,7 +550,7 @@ class InputDialog(wx.Dialog):
         )
         self.zoomRadio = RadioButton(panel, label=_("Zoom value:"))
         self.zoomRadio.SetToolTip(
-            _("N-S/E-W distances in map units used to " "gradually reduce region.")
+            _("N-S/E-W distances in map units used to gradually reduce region.")
         )
         gridSizer.Add(self.zoomRadio, pos=(3, 0), border=10, flag=wx.EXPAND | wx.LEFT)
 
@@ -678,7 +678,7 @@ class InputDialog(wx.Dialog):
     def _update(self):
         if self.nDChoice.GetSelection() == 1 and len(self._layerList) > 1:
             raise GException(
-                _("Only one series or space-time " "dataset is accepted for 3D mode.")
+                _("Only one series or space-time dataset is accepted for 3D mode.")
             )
         hasSeries = False
         for layer in self._layerList:
@@ -1541,7 +1541,7 @@ class ExportDialog(wx.Dialog):
         """
 
         file_path_does_not_exist_err_message = _(
-            "Exported file directory '{base_dir}' " "does not exist."
+            "Exported file directory '{base_dir}' does not exist."
         )
         if not file_path:
             GError(parent=self, message=_("Export file is missing."))

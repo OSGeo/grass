@@ -117,7 +117,7 @@ def writeData(data, file=None):
         data.tree.write(file)
     except OSError:
         print(
-            "'%s' not found." " Please run the script from 'gui/wxpython'." % file,
+            "'%s' not found. Please run the script from 'gui/wxpython'." % file,
             file=sys.stderr,
         )
         return

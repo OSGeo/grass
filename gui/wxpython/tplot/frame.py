@@ -203,7 +203,7 @@ class TplotFrame(wx.Frame):
         self.coor = StaticText(
             parent=self.controlPanelRaster,
             id=wx.ID_ANY,
-            label=_("X and Y coordinates separated by " "comma:"),
+            label=_("X and Y coordinates separated by comma:"),
         )
         try:
             self._giface.GetMapWindow()
@@ -362,7 +362,7 @@ class TplotFrame(wx.Frame):
         self.csvLabel = StaticText(
             parent=self.controlPanelExport,
             id=wx.ID_ANY,
-            label=_("Path for output CSV file " "with plotted data"),
+            label=_("Path for output CSV file with plotted data"),
         )
         self.csvButton = filebrowse.FileBrowseButton(
             parent=self.controlPanelExport,
@@ -429,7 +429,7 @@ class TplotFrame(wx.Frame):
             sp = tgis.dataset_factory(etype, fullname)
             if not sp.is_in_db(dbif=self.dbif):
                 GError(
-                    message=_("Dataset <%s> not found in temporal " "database")
+                    message=_("Dataset <%s> not found in temporal database")
                     % (fullname),
                     parent=self,
                 )
@@ -566,7 +566,7 @@ class TplotFrame(wx.Frame):
             sp = tgis.dataset_factory(etype, fullname)
             if not sp.is_in_db(dbif=self.dbif):
                 GError(
-                    message=_("Dataset <%s> not found in temporal " "database")
+                    message=_("Dataset <%s> not found in temporal database")
                     % (fullname),
                     parent=self,
                     showTraceback=False,
@@ -603,7 +603,7 @@ class TplotFrame(wx.Frame):
                 elif self.timeDataV[name]["unit"] != unit:
                     GError(
                         message=_(
-                            "Datasets have different time unit which" " is not allowed."
+                            "Datasets have different time unit which is not allowed."
                         ),
                         parent=self,
                         showTraceback=False,
@@ -1074,7 +1074,7 @@ class TplotFrame(wx.Frame):
                 if not bbox.contains(self.poi):
                     GError(
                         parent=self,
-                        message=_("Seed point outside the " "current region"),
+                        message=_("Seed point outside the current region"),
                         showTraceback=False,
                     )
                     return
@@ -1186,9 +1186,7 @@ class TplotFrame(wx.Frame):
             elif len(indices) >= 2:
                 dlg = wx.SingleChoiceDialog(
                     self,
-                    message=_(
-                        "Please specify the " "space time dataset " "<%s>." % dataset
-                    ),
+                    message=_("Please specify the space time dataset <%s>." % dataset),
                     caption=_("Ambiguous dataset name"),
                     choices=[
                         (

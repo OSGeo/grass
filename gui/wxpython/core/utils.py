@@ -849,7 +849,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
                 k, v = map(lambda x: x.strip(), line.split(" ", 1)[1].split("=", 1))
             except Exception as e:
                 sys.stderr.write(
-                    _("%s: line skipped - unable to parse '%s'\n" "Reason: %s\n")
+                    _("%s: line skipped - unable to parse '%s'\nReason: %s\n")
                     % (envFile, line, e)
                 )
                 lineSkipped.append(line)

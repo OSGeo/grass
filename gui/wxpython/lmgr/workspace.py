@@ -133,7 +133,7 @@ class WorkspaceManager:
         )
         if returncode != 0:
             # TODO: use the function from grass.py
-            reason = _("Most likely the database, location or mapset" " does not exist")
+            reason = _("Most likely the database, location or mapset does not exist")
             details = errors
             message = _(
                 "Unable to change to location and mapset"
@@ -156,7 +156,7 @@ class WorkspaceManager:
             GMessage(
                 parent=self.lmgr,
                 message=_(
-                    "Current location is <%(loc)s>.\n" "Current mapset is <%(mapset)s>."
+                    "Current location is <%(loc)s>.\nCurrent mapset is <%(mapset)s>."
                 )
                 % {"loc": gxwXml.location, "mapset": gxwXml.mapset},
             )
@@ -434,7 +434,7 @@ class WorkspaceManager:
         except Exception as e:
             GError(
                 parent=self.lmgr,
-                message=_("Writing current settings to workspace file " "failed."),
+                message=_("Writing current settings to workspace file failed."),
             )
             return False
 
@@ -466,9 +466,7 @@ class WorkspaceManager:
             if self.workspaceFile:
                 message = _("Do you want to save changes in the workspace?")
             else:
-                message = _(
-                    "Do you want to store current settings " "to workspace file?"
-                )
+                message = _("Do you want to store current settings to workspace file?")
 
             # ask user to save current settings
             if maptree.GetCount() > 0:

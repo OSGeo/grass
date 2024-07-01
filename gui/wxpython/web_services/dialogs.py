@@ -883,13 +883,13 @@ class SaveWMSLayerDialog(wx.Dialog):
         )
         self.region_types["named"] = RadioButton(parent=self, label=_("Named region"))
         self.region_types["display"].SetToolTip(
-            _("Extent and resolution" " are based on Map Display geometry.")
+            _("Extent and resolution are based on Map Display geometry.")
         )
         self.region_types["comp"].SetToolTip(
-            _("Extent and resolution" " are based on computational region.")
+            _("Extent and resolution are based on computational region.")
         )
         self.region_types["named"].SetToolTip(
-            _("Extent and resolution" " are based on named region.")
+            _("Extent and resolution are based on named region.")
         )
         self.region_types["display"].SetValue(True)  # set default as map display
 

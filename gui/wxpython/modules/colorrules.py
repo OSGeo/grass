@@ -447,7 +447,7 @@ class ColorTable(wx.Frame):
             labelText="",
             dialogTitle=_("Choose file to load color table"),
             buttonText=_("Load"),
-            toolTip=_("Type filename or click to choose " "file and load color table"),
+            toolTip=_("Type filename or click to choose file and load color table"),
             startDirectory=os.getcwd(),
             fileMode=wx.FD_OPEN,
             changeCallback=self.OnLoadRulesFile,
@@ -458,7 +458,7 @@ class ColorTable(wx.Frame):
             fileMask="*",
             labelText="",
             dialogTitle=_("Choose file to save color table"),
-            toolTip=_("Type filename or click to choose " "file and save color table"),
+            toolTip=_("Type filename or click to choose file and save color table"),
             buttonText=_("Save"),
             startDirectory=os.getcwd(),
             fileMode=wx.FD_SAVE,
@@ -584,7 +584,7 @@ class ColorTable(wx.Frame):
         bodySizer.Add(self.btnPreview, pos=(row, 2), flag=wx.ALIGN_RIGHT)
         self.btnPreview.Enable(False)
         self.btnPreview.SetToolTip(
-            _("Show preview of map " "(current Map Display extent is used).")
+            _("Show preview of map (current Map Display extent is used).")
         )
 
         row += 1
@@ -668,7 +668,7 @@ class ColorTable(wx.Frame):
             dlgOw = wx.MessageDialog(
                 self,
                 message=_(
-                    "File <%s> already already exists. " "Do you want to overwrite it?"
+                    "File <%s> already already exists. Do you want to overwrite it?"
                 )
                 % path,
                 caption=_("Overwrite?"),

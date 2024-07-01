@@ -103,7 +103,7 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
 
         if "version" not in self.getroot().attrib:
             raise ParseError(
-                _("Missing version attribute root node " "in Capabilities XML file")
+                _("Missing version attribute root node in Capabilities XML file")
             )
         else:
             wms_version = self.getroot().attrib["version"]

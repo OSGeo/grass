@@ -133,13 +133,13 @@ class TestTRastAlgebra(TestCase):
         of the then/else statement."""
         self.assertModule(
             "t.rast.algebra",
-            expression="R = if({contains}, B == 5, " "A - 1,  A + 1)",
+            expression="R = if({contains}, B == 5, A - 1,  A + 1)",
             basename="r",
             flags="d",
         )
         self.assertModule(
             "t.rast.algebra",
-            expression="R = if({contains}, B == 5, " "A - 1,  A + 1)",
+            expression="R = if({contains}, B == 5, A - 1,  A + 1)",
             basename="r",
         )
 
