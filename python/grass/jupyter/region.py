@@ -114,14 +114,10 @@ class RegionManagerForInteractiveMap:
         west = float(bbox["ll_w"])
         north = float(bbox["ll_n"])
         east = float(bbox["ll_e"])
-        if self._bbox[0][0] > south:
-            self._bbox[0][0] = south
-        if self._bbox[0][1] > west:
-            self._bbox[0][1] = west
-        if self._bbox[1][0] < north:
-            self._bbox[1][0] = north
-        if self._bbox[1][1] < east:
-            self._bbox[1][1] = east
+        self._bbox[0][0] = min(self._bbox[0][0], south)
+        self._bbox[0][1] = min(self._bbox[0][1], west)
+        self._bbox[1][0] = max(self._bbox[1][0], north)
+        self._bbox[1][1] = max(self._bbox[1][1], east)
 
 
 class RegionManagerFor2D:

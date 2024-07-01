@@ -341,8 +341,7 @@ def twitsToBits(arr):
     maxlen = 1
     for i in arr:
         tmp = len(signedIntToBits(i * 20))
-        if tmp > maxlen:
-            maxlen = tmp
+        maxlen = max(tmp, maxlen)
 
     # build array
     bits = intToBits(maxlen, 5)

@@ -703,11 +703,9 @@ class SelectTransformDialog(wx.Dialog):
             width = max(width, w)
 
         height = height + 5
-        if height > 400:
-            height = 400
+        height = min(height, 400)
         width = width + 5
-        if width > 400:
-            width = 400
+        width = min(width, 400)
 
         #
         # VListBox for displaying and selecting transformations

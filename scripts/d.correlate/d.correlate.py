@@ -83,14 +83,10 @@ def main():
                         minx = maxx = x
                         miny = maxy = y
                         first = False
-                    if minx > x:
-                        minx = x
-                    if maxx < x:
-                        maxx = x
-                    if miny > y:
-                        miny = y
-                    if maxy < y:
-                        maxy = y
+                    minx = min(minx, x)
+                    maxx = max(maxx, x)
+                    miny = min(miny, y)
+                    maxy = max(maxy, y)
                 ifile.close()
 
                 kx = 100.0 / (maxx - minx + 1)

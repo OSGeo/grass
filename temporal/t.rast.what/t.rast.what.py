@@ -248,8 +248,7 @@ def main(options, flags):
     else:
         gscript.error(_("Please specify points or coordinates"))
 
-    if len(maps) < nprocs:
-        nprocs = len(maps)
+    nprocs = min(len(maps), nprocs)
 
     # The module queue for parallel execution
     process_queue = pymod.ParallelModuleQueue(int(nprocs))

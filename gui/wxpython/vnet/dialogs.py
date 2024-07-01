@@ -1743,8 +1743,7 @@ class VnetStatusbar(wx.StatusBar):
             if item["key"] == statusTextItem["key"]:
                 self.statusItems.remove(item)
         self.statusItems.append(statusTextItem)
-        if self.maxPriority < statusTextItem["priority"]:
-            self.maxPriority = statusTextItem["priority"]
+        self.maxPriority = max(self.maxPriority, statusTextItem["priority"])
         self._updateStatus()
 
     def _updateStatus(self):
@@ -1770,8 +1769,7 @@ class VnetStatusbar(wx.StatusBar):
         if update:
             for item in self.statusItems:
                 self.maxPriority = 0
-                if self.maxPriority < item["priority"]:
-                    self.maxPriority = item["priority"]
+                self.maxPriority = max(self.maxPriority, item["priority"])
             self._updateStatus()
 
 

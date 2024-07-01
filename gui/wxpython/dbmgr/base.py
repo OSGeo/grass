@@ -360,10 +360,8 @@ class VirtualAttributeList(
         i = 0
         for col in columns:
             width = self.columns[col]["length"] * 6  # FIXME
-            if width < 60:
-                width = 60
-            if width > 300:
-                width = 300
+            width = max(width, 60)
+            width = min(width, 300)
             self.SetColumnWidth(col=i, width=width)
             i += 1
 
