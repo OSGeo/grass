@@ -9,6 +9,7 @@ for details.
 :authors: Soeren Gebbert
 """
 
+import sys
 import copy
 from datetime import datetime
 from multiprocessing import Process
@@ -412,7 +413,7 @@ def _run_mapcalc2d(expr):
             "r.mapcalc", expression=expr, overwrite=gscript.overwrite(), quiet=True
         )
     except CalledModuleError:
-        exit(1)
+        sys.exit(1)
 
 
 ###############################################################################
@@ -425,7 +426,7 @@ def _run_mapcalc3d(expr):
             "r3.mapcalc", expression=expr, overwrite=gscript.overwrite(), quiet=True
         )
     except CalledModuleError:
-        exit(1)
+        sys.exit(1)
 
 
 ###############################################################################

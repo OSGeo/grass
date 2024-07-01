@@ -9,6 +9,7 @@ for details.
 :authors: Soeren Gebbert
 """
 
+import sys
 from .core import (
     get_tgis_message_interface,
     get_current_mapset,
@@ -320,7 +321,7 @@ def run_mapcalc2d(expr):
             "r.mapcalc", expression=expr, overwrite=gscript.overwrite(), quiet=True
         )
     except CalledModuleError:
-        exit(1)
+        sys.exit(1)
 
 
 def run_mapcalc3d(expr):
@@ -330,7 +331,7 @@ def run_mapcalc3d(expr):
             "r3.mapcalc", expression=expr, overwrite=gscript.overwrite(), quiet=True
         )
     except CalledModuleError:
-        exit(1)
+        sys.exit(1)
 
 
 def run_vector_extraction(input, output, layer, type, where):
@@ -347,4 +348,4 @@ def run_vector_extraction(input, output, layer, type, where):
             quiet=True,
         )
     except CalledModuleError:
-        exit(1)
+        sys.exit(1)

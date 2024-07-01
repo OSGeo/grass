@@ -94,7 +94,7 @@ for html_file in htmlfiles:
         except:
             pass
         if not key:
-            exit("Empty keyword from file %s line: %s" % (fname, lines[index_keys]))
+            sys.exit("Empty keyword from file %s line: %s" % (fname, lines[index_keys]))
         if key not in keywords.keys():
             keywords[key] = []
             keywords[key].append(fname)
