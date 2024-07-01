@@ -399,7 +399,7 @@ def _get_list_of_maps_stds(
             )
 
     # This method expects a list of objects for gap detection
-    if method in ["delta", "deltagaps", "gran"]:
+    if method in {"delta", "deltagaps", "gran"}:
         if not columns:
             if output_format == "list":
                 # Only one column is needed.
@@ -451,7 +451,7 @@ def _get_list_of_maps_stds(
 
         # End with error for the old, custom formats. Proper formats simply return
         # empty result whatever empty is for each format (e.g., empty list for JSON).
-        if not rows and (output_format in ["plain", "line"]):
+        if not rows and (output_format in {"plain", "line"}):
             dbif.close()
             gs.fatal(
                 _(
