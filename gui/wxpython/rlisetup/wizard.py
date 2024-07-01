@@ -259,7 +259,6 @@ class RLIWizard:
             self.CIR_RL += 1
         if not self.CIR_CL % 2:
             self.CIR_CL += 1
-        return
 
     def _circle(self, radius, mask):
         """Create a circle mask"""
@@ -1132,11 +1131,9 @@ class SamplingAreasPage(TitledPage):
 
     def OnRegionDraw(self, event):
         self.RegionDraw(event.GetInt())
-        return
 
     def OnOverwrite(self, event):
         self.overwriteTemp = self.overwriteCheck.GetValue()
-        return
 
     def OnVectYes(self, event):
         """The user choose to select the vector areas, this function set the

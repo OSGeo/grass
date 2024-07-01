@@ -175,8 +175,6 @@ def main():
     grass.try_remove(tempfile)
     grass.message(_("Done."))
 
-    return
-
 
 def import_aster(proj, srcfile, tempfile, output, band):
     # run gdalwarp with selected options (must be in $PATH)

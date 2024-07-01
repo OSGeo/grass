@@ -755,8 +755,6 @@ def print_temporal_topology_relationships(maps1, maps2=None, dbif=None):
     if connection_state_changed:
         dbif.close()
 
-    return
-
 
 ###############################################################################
 
@@ -789,8 +787,6 @@ def print_spatio_temporal_topology_relationships(
 
     if connection_state_changed:
         dbif.close()
-
-    return
 
 
 ###############################################################################

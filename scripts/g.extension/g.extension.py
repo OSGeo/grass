@@ -1454,8 +1454,6 @@ def install_extension_xml(edict):
             )
     write_xml_extensions(xml_file, tree)
 
-    return None
-
 
 def get_multi_addon_addons_which_install_only_html_man_page():
     """Get multi-addon addons which install only manual html page
