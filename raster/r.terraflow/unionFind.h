@@ -130,17 +130,18 @@ inline void unionFind<T>::makeSet(T x)
         if (!new_parent) {
             fprintf(stderr, "Memory reallocation failed for parent\n");
             exit(EXIT_FAILURE);
-        } else {
+        }
+        else {
             parent = new_parent;
             memset(parent + maxsize, 0, maxsize * sizeof(T));
         }
-
         /* reallocate rank */
         T *new_rank = (T *)realloc(rank, 2 * maxsize * sizeof(T));
         if (!new_rank) {
             fprintf(stderr, "Memory reallocation failed for rank\n");
             exit(EXIT_FAILURE);
-        } else {
+        }
+        else {
             rank = new_rank;
             memset(rank + maxsize, 0, maxsize * sizeof(T));
         }
