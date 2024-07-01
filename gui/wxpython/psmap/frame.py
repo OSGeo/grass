@@ -1098,7 +1098,7 @@ class PsMapFrame(wx.Frame):
             id = NewId()
             initMap = InitMap(id, env=self.env)
             self.instruction.AddInstruction(initMap)
-        self.instruction[id].SetInstruction(dict(rect=mapInitRect, scale=scale))
+        self.instruction[id].SetInstruction({"rect": mapInitRect, "scale": scale})
 
     def OnDelete(self, event):
         if self.canvas.dragId != -1 and self.currentPage == 0:
@@ -1925,17 +1925,17 @@ class PsMapBufferedWindow(wx.Window):
             }
 
             itemArg = {
-                "text": dict(event=None, id=self.dragId),
-                "mapinfo": dict(event=None),
-                "scalebar": dict(event=None),
-                "image": dict(event=None, id=self.dragId),
-                "northArrow": dict(event=None, id=self.dragId),
-                "point": dict(id=self.dragId),
-                "line": dict(id=self.dragId),
-                "rectangle": dict(id=self.dragId),
-                "rasterLegend": dict(event=None),
-                "vectorLegend": dict(event=None, page=1),
-                "map": dict(event=None, notebook=True),
+                "text": {"event": None, "id": self.dragId},
+                "mapinfo": {"event": None},
+                "scalebar": {"event": None},
+                "image": {"event": None, "id": self.dragId},
+                "northArrow": {"event": None, "id": self.dragId},
+                "point": {"id": self.dragId},
+                "line": {"id": self.dragId},
+                "rectangle": {"id": self.dragId},
+                "rasterLegend": {"event": None},
+                "vectorLegend": {"event": None, "page": 1},
+                "map": {"event": None, "notebook": True},
             }
 
             type = self.instruction[self.dragId].type

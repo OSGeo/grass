@@ -361,7 +361,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         """Determines which part of command (flags, parameters) should
         be completed at current cursor position"""
         entry = self.GetTextLeft()
-        toComplete = dict(cmd=None, entity=None)
+        toComplete = {"cmd": None, "entity": None}
         try:
             cmd = entry.split()[0].strip()
         except IndexError:

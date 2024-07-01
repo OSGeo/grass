@@ -141,8 +141,8 @@ def main():
     # let's import...
     gcore.message(_("Importing %ss...") % type)
 
-    layer = dict(point="LAB", line="ARC", area=["LAB", "ARC"])
-    itype = dict(point="point", line="line", area="centroid")
+    layer = {"point": "LAB", "line": "ARC", "area": ["LAB", "ARC"]}
+    itype = {"point": "point", "line": "line", "area": "centroid"}
 
     try:
         gcore.run_command(

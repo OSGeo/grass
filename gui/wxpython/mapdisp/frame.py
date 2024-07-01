@@ -161,7 +161,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
         self.Map.GetRenderMgr().renderingFailed.connect(
             lambda cmd, error: self._giface.WriteError(
                 _("Failed to run command '%(command)s'. Details:\n%(error)s")
-                % dict(command=" ".join(cmd), error=error)
+                % {"command": " ".join(cmd), "error": error}
             )
         )
 

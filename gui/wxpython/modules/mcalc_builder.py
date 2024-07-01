@@ -687,7 +687,7 @@ class MapCalcFrame(wx.Frame):
                 overwrite = True
             else:
                 overwrite = False
-            params = dict(expression="%s=%s" % (name, expr), overwrite=overwrite)
+            params = {"expression": "%s=%s" % (name, expr), "overwrite": overwrite}
             if seed_flag:
                 params["flags"] = "s"
             if seed:
