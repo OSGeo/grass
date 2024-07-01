@@ -16,12 +16,13 @@ try:
 except ImportError:
     pass
 
-from .temporal_raster_base_algebra import (
-    TemporalRasterBaseAlgebraParser,
-    TemporalRasterAlgebraLexer,
-)
 import grass.pygrass.modules as pymod
+
 from .space_time_datasets import Raster3DDataset
+from .temporal_raster_base_algebra import (
+    TemporalRasterAlgebraLexer,
+    TemporalRasterBaseAlgebraParser,
+)
 
 
 class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):

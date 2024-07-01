@@ -83,8 +83,9 @@
 # % description: Perform a dry run, compute all dependencies and module calls but don't run them
 # %end
 
-import grass.script
 import sys
+
+import grass.script
 
 
 def main():

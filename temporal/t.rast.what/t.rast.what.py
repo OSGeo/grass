@@ -119,18 +119,18 @@
 # % description: Show the category for vector points map
 # %end
 
-import sys
 import copy
-import grass.script as gscript
+import sys
 
+import grass.script as gscript
 
 ############################################################################
 
 
 def main(options, flags):
     # lazy imports
-    import grass.temporal as tgis
     import grass.pygrass.modules as pymod
+    import grass.temporal as tgis
 
     # Get the options
     points = options["points"]

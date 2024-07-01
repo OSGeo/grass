@@ -110,14 +110,13 @@ import copy
 
 import grass.script as grass
 
-
 ############################################################################
 
 
 def main():
     # lazy imports
-    import grass.temporal as tgis
     import grass.pygrass.modules as pymod
+    import grass.temporal as tgis
 
     # Get the options
     input = options["input"]

@@ -9,12 +9,13 @@ for details.
 :authors: Soeren Gebbert
 """
 
+import datetime
+import os
+
+import grass.script as gscript
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-import grass.script as gscript
-import datetime
-import os
 
 
 class TestRasterRegisterFunctions(TestCase):

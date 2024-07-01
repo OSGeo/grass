@@ -10,14 +10,18 @@ for details.
 """
 
 import copy
+from ctypes import byref
 from datetime import datetime
+
+from grass.lib import gis, rtree, vector
 from grass.script import core
+
 from .abstract_dataset import (
-    AbstractDatasetComparisonKeyStartTime,
     AbstractDatasetComparisonKeyEndTime,
+    AbstractDatasetComparisonKeyStartTime,
 )
 from .core import init
-from .datetime_math import increment_datetime_by_string, compute_datetime_delta
+from .datetime_math import compute_datetime_delta, increment_datetime_by_string
 from .space_time_datasets import RasterDataset
 from .spatial_extent import SpatialExtent
 from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
@@ -25,11 +29,6 @@ from .temporal_granularity import (
     adjust_datetime_to_granularity,
     compute_absolute_time_granularity,
 )
-
-from grass.lib import vector
-from grass.lib import rtree
-from grass.lib import gis
-from ctypes import byref
 
 # Uncomment this to detect the error
 core.set_raise_on_error(True)

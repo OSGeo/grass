@@ -10,21 +10,26 @@ for details.
 :authors: Soeren Gebbert
 """
 
+import copy
+import os
 import sys
 import uuid
-import os
-import copy
-from datetime import datetime
 from abc import ABCMeta, abstractmethod
+from datetime import datetime
+
+from .abstract_dataset import AbstractDataset, AbstractDatasetComparisonKeyStartTime
 from .core import (
-    init_dbif,
-    get_sql_template_path,
     get_current_mapset,
+    get_sql_template_path,
     get_tgis_db_version_from_metadata,
+    init_dbif,
 )
-from .abstract_dataset import (
-    AbstractDataset,
-    AbstractDatasetComparisonKeyStartTime,
+from .datetime_math import increment_datetime_by_string, string_to_datetime
+from .spatio_temporal_relationships import (
+    SpatioTemporalTopologyBuilder,
+    count_temporal_topology_relationships,
+    create_temporal_relation_sql_where_statement,
+    print_spatio_temporal_topology_relationships,
 )
 from .temporal_granularity import (
     check_granularity_string,
@@ -32,13 +37,6 @@ from .temporal_granularity import (
     compute_relative_time_granularity,
     get_time_tuple_function,
 )
-from .spatio_temporal_relationships import (
-    count_temporal_topology_relationships,
-    print_spatio_temporal_topology_relationships,
-    SpatioTemporalTopologyBuilder,
-    create_temporal_relation_sql_where_statement,
-)
-from .datetime_math import increment_datetime_by_string, string_to_datetime
 
 ###############################################################################
 

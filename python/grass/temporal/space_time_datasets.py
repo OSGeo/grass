@@ -11,51 +11,52 @@ for details.
 
 import getpass
 from datetime import datetime
+
+import grass.script.array as garray
+
 from .abstract_map_dataset import AbstractMapDataset
 from .abstract_space_time_dataset import AbstractSpaceTimeDataset
 from .base import (
     Raster3DBase,
-    RasterBase,
-    VectorBase,
-    STR3DSBase,
-    STVDSBase,
-    STRDSBase,
-    VectorSTDSRegister,
     Raster3DSTDSRegister,
+    RasterBase,
     RasterSTDSRegister,
+    STR3DSBase,
+    STRDSBase,
+    STVDSBase,
+    VectorBase,
+    VectorSTDSRegister,
 )
 from .metadata import (
     Raster3DMetadata,
     RasterMetadata,
-    VectorMetadata,
-    STRDSMetadata,
     STR3DSMetadata,
+    STRDSMetadata,
     STVDSMetadata,
+    VectorMetadata,
 )
 from .spatial_extent import (
-    RasterSpatialExtent,
     Raster3DSpatialExtent,
-    VectorSpatialExtent,
-    STRDSSpatialExtent,
+    RasterSpatialExtent,
     STR3DSSpatialExtent,
+    STRDSSpatialExtent,
     STVDSSpatialExtent,
+    VectorSpatialExtent,
 )
 from .temporal_extent import (
-    RasterAbsoluteTime,
-    RasterRelativeTime,
     Raster3DAbsoluteTime,
     Raster3DRelativeTime,
-    VectorAbsoluteTime,
-    VectorRelativeTime,
-    STRDSAbsoluteTime,
-    STRDSRelativeTime,
+    RasterAbsoluteTime,
+    RasterRelativeTime,
     STR3DSAbsoluteTime,
     STR3DSRelativeTime,
+    STRDSAbsoluteTime,
+    STRDSRelativeTime,
     STVDSAbsoluteTime,
     STVDSRelativeTime,
+    VectorAbsoluteTime,
+    VectorRelativeTime,
 )
-import grass.script.array as garray
-
 
 GRASS_TIMESTAMP_FMT = "%a %b  %d %H:%M:%S %Y"
 

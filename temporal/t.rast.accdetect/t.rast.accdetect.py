@@ -137,7 +137,6 @@
 
 import grass.script as grass
 
-
 # lazy imports at the end of the file
 
 

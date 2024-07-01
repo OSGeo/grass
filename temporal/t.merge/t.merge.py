@@ -41,7 +41,6 @@
 
 import grass.script as grass
 
-
 ############################################################################
 grass.set_raise_on_error(True)
 

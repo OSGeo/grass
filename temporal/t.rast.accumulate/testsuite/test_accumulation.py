@@ -8,8 +8,9 @@ for details.
 @author Soeren Gebbert
 """
 
-import grass.temporal as tgis
 import datetime
+
+import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 

@@ -9,6 +9,7 @@ for details.
 """
 
 import subprocess
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 

@@ -32,11 +32,12 @@ for details.
 
 # import traceback
 import os
-import grass.script as gscript
 
-from .c_libraries_interface import CLibrariesInterface
+import grass.script as gscript
 from grass.pygrass import messages
 from grass.script.utils import decode
+
+from .c_libraries_interface import CLibrariesInterface
 
 # Import all supported database backends
 # Ignore import errors since they are checked later
@@ -63,8 +64,8 @@ def profile_function(func):
 
     if do_profiling == "True" or do_profiling == "1":
         import cProfile
-        import pstats
         import io
+        import pstats
 
         pr = cProfile.Profile()
         pr.enable()

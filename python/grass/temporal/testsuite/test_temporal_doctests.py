@@ -2,13 +2,13 @@
 Temporal framework doctests
 """
 
-import sys
 import doctest
-import grass.temporal
+import sys
+
 import grass.gunittest.case
 import grass.gunittest.main
 import grass.gunittest.utils
-
+import grass.temporal
 
 doctest.DocFileCase = type(
     "DocFileCase", (grass.gunittest.case.TestCase,), dict(doctest.DocFileCase.__dict__)

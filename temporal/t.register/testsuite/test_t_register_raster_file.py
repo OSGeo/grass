@@ -25,7 +25,6 @@ from datetime import datetime
 
 import grass.script as gs
 import grass.temporal as tgis
-
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 

@@ -71,8 +71,9 @@
 # %end
 
 
-import grass.script
 import sys
+
+import grass.script
 
 
 def main():

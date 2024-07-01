@@ -7,12 +7,13 @@ for details.
 :authors: Thomas leppelt and Soeren Gebbert
 """
 
+import datetime
+import os
+
 import grass.script
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-import datetime
-import os
 
 
 class TestTemporalConditionals(TestCase):

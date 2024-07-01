@@ -52,8 +52,9 @@
 # %end
 
 
-import grass.script as grass
 import sys
+
+import grass.script as grass
 
 ############################################################################
 

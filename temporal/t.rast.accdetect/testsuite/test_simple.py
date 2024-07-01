@@ -8,9 +8,10 @@ for details.
 :authors: Luca Delucchi
 """
 
+import os
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
-import os
 
 
 class TestRasterExtraction(TestCase):

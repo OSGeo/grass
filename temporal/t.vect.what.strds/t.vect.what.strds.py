@@ -65,9 +65,10 @@
 # %end
 
 import os
+
 import grass.script as grass
-from grass.script import raster
 from grass.exceptions import CalledModuleError
+from grass.script import raster
 
 ############################################################################
 

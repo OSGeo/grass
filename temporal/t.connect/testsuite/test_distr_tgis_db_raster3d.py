@@ -8,10 +8,11 @@ for details.
 :authors: Soeren Gebbert
 """
 
+import os
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 from grass.gunittest.utils import silent_rmtree
-import os
 
 
 class testRaster3dExtraction(TestCase):
