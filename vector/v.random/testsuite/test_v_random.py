@@ -37,7 +37,7 @@ class TestVRandom(TestCase):
     def test_num_points(self):
         """Checking if number of points equals 100"""
         self.assertModule("v.random", output=self.output, npoints=self.npoints)
-        topology = dict(points=self.npoints)
+        topology = {"points": self.npoints}
         self.assertVectorFitsTopoInfo(vector=self.output, reference=topology)
 
     def test_num_points_3D(self):
@@ -50,7 +50,7 @@ class TestVRandom(TestCase):
             zmax=self.zmax,
             flags="z",
         )
-        topology = dict(points=self.npoints, map3d=1)
+        topology = {"points": self.npoints, "map3d": 1}
         self.assertVectorFitsTopoInfo(vector=self.output, reference=topology)
 
     def test_restrict(self):

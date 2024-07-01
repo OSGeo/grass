@@ -132,14 +132,14 @@ class TestAssertModuleKeyValue(TestCase):
         """Test syntax with Module and required parameters as module"""
         module = Module("r.info", map="elevation", flags="gr", run_=False, finish_=True)
         self.assertModuleKeyValue(
-            module, reference=dict(min=55.58, max=156.33), precision=0.01, sep="="
+            module, reference={"min": 55.58, "max": 156.33}, precision=0.01, sep="="
         )
 
     def test_pygrass_simple_module(self):
         """Test syntax with SimpleModule as module"""
         module = SimpleModule("r.info", map="elevation", flags="gr")
         self.assertModuleKeyValue(
-            module, reference=dict(min=55.58, max=156.33), precision=0.01, sep="="
+            module, reference={"min": 55.58, "max": 156.33}, precision=0.01, sep="="
         )
 
     def test_direct_parameters(self):
@@ -148,7 +148,7 @@ class TestAssertModuleKeyValue(TestCase):
             "r.info",
             map="elevation",
             flags="gr",
-            reference=dict(min=55.58, max=156.33),
+            reference={"min": 55.58, "max": 156.33},
             precision=0.01,
             sep="=",
         )
@@ -157,8 +157,8 @@ class TestAssertModuleKeyValue(TestCase):
         """Test syntax with module parameters in one parameters dictionary"""
         self.assertModuleKeyValue(
             module="r.info",
-            parameters=dict(map="elevation", flags="gr"),
-            reference=dict(min=55.58, max=156.33),
+            parameters={"map": "elevation", "flags": "gr"},
+            reference={"min": 55.58, "max": 156.33},
             precision=0.01,
             sep="=",
         )
@@ -237,7 +237,7 @@ class TestRasterMapAssertions(TestCase):
             actual="elevation",
             reference="elevation",
             precision=0,  # this might need to be increased
-            statistics=dict(mean=0),
+            statistics={"mean": 0},
             msg="The difference of same maps should have small mean",
         )
         self.assertRaises(
@@ -246,7 +246,7 @@ class TestRasterMapAssertions(TestCase):
             actual="elevation",
             reference="geology",
             precision=1,
-            statistics=dict(mean=0),
+            statistics={"mean": 0},
             msg="The difference of different maps should have huge mean",
         )
 

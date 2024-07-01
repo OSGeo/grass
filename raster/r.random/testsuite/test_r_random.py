@@ -81,7 +81,7 @@ class TestRasterTile(TestCase):
         self.assertVectorExists(
             self.vector, msg="landcover_1m_vector_random was not created"
         )
-        topology = dict(points=20, primitives=20)
+        topology = {"points": 20, "primitives": 20}
         self.assertVectorFitsTopoInfo(vector=self.vector, reference=topology)
 
     def test_random_raster_flag_z(self):
@@ -113,7 +113,7 @@ class TestRasterTile(TestCase):
         self.assertVectorExists(
             self.vector + "_null", msg="landcover_1m_vector_random_null was not created"
         )
-        topology = dict(points=20, primitives=20)
+        topology = {"points": 20, "primitives": 20}
         self.assertVectorFitsTopoInfo(vector=self.vector + "_null", reference=topology)
 
     def test_random_raster_flag_b(self):
@@ -147,7 +147,7 @@ class TestRasterTile(TestCase):
             self.vector + "_without_topology",
             msg="landcover_1m_vector_random_without_topology was not created",
         )
-        topology = dict(points=20, primitives=20)
+        topology = {"points": 20, "primitives": 20}
         self.assertVectorFitsTopoInfo(
             vector=self.vector + "_without_topology", reference=topology
         )
@@ -181,7 +181,7 @@ class TestRasterTile(TestCase):
         self.assertVectorExists(
             self.vector + "_3D", msg="landcover_1m_vector_random_3D was not created"
         )
-        topology = dict(points=20, primitives=20)
+        topology = {"points": 20, "primitives": 20}
         self.assertVectorFitsTopoInfo(vector=self.vector + "_3D", reference=topology)
 
     def test_random_raster_cover(self):
@@ -215,7 +215,7 @@ class TestRasterTile(TestCase):
             self.vector + "_cover_landcover_1m",
             msg="landcover_1m_vector_cover_landcover_1m was not created",
         )
-        topology = dict(points=20, primitives=20)
+        topology = {"points": 20, "primitives": 20}
         self.assertVectorFitsTopoInfo(
             vector=self.vector + "_cover_landcover_1m", reference=topology
         )

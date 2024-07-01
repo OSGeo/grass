@@ -35,9 +35,9 @@ class TestVTo3D(TestCase):
             column="z",
             flags="r",
         )
-        is3d = dict(map3d=0)
+        is3d = {"map3d": 0}
         self.assertVectorFitsTopoInfo(vector=self.contours2d, reference=is3d)
-        missing = dict(nmissing=0, nnull=0)
+        missing = {"nmissing": 0, "nnull": 0}
         self.assertVectorFitsUnivar(map=self.contours2d, column="z", reference=missing)
 
 

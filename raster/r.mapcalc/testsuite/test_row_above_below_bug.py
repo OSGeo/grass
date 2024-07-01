@@ -89,7 +89,7 @@ class TestRowAboveAndBelowBug(TestCase):
         self.assertModule("r.mapcalc", expression=expression, overwrite=True)
         self.assertRasterExists(self.output)
         self.to_remove.append(self.output)
-        ref_univar = dict(null_cells=6, cells=9)
+        ref_univar = {"null_cells": 6, "cells": 9}
         self.assertRasterFitsUnivar(
             raster=self.output, reference=ref_univar, precision=0
         )
