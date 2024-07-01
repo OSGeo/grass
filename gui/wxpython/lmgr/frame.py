@@ -1690,7 +1690,7 @@ class GMFrame(wx.Frame):
 
         if not haveIClass:
             GError(
-                _('Unable to launch "Supervised Classification Tool".\n\n' "Reason: %s")
+                _('Unable to launch "Supervised Classification Tool".\n\nReason: %s')
                 % errMsg
             )
             return

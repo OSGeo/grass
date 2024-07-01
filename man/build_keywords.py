@@ -132,7 +132,7 @@ keywordsfile.write("<dl>")
 sortedKeys = sorted(keywords.keys(), key=lambda s: s.lower())
 
 for key in sortedKeys:
-    keyword_line = '<dt><b><a name="%s" class="urlblack">%s</a></b></dt>' "<dd>" % (
+    keyword_line = '<dt><b><a name="%s" class="urlblack">%s</a></b></dt><dd>' % (
         key,
         key,
     )
