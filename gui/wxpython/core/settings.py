@@ -1065,7 +1065,7 @@ class Settings:
                 else:
                     return settings[group][key]
             else:
-                if isinstance(subkey, type(())) or isinstance(subkey, type([])):
+                if isinstance(subkey, tuple) or isinstance(subkey, list):
                     return settings[group][key][subkey[0]][subkey[1]]
                 else:
                     return settings[group][key][subkey]
@@ -1102,7 +1102,7 @@ class Settings:
                 else:
                     settings[group][key] = value
             else:
-                if isinstance(subkey, type(())) or isinstance(subkey, type([])):
+                if isinstance(subkey, tuple) or isinstance(subkey, list):
                     settings[group][key][subkey[0]][subkey[1]] = value
                 else:
                     settings[group][key][subkey] = value
