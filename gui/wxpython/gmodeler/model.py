@@ -39,7 +39,7 @@ import mimetypes
 import time
 
 import xml.etree.ElementTree as etree
-import xml.sax.saxutils as saxutils
+from xml.sax import saxutils
 
 import wx
 from abc import ABC, abstractmethod

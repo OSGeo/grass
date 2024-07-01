@@ -50,7 +50,7 @@ import ctypes
 import wx
 
 from core import globalvar
-import wx.lib.buttons as buttons
+from wx.lib import buttons
 import wx.lib.filebrowsebutton as filebrowse
 
 

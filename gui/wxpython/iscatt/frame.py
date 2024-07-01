@@ -39,7 +39,7 @@ from iclass.dialogs import ContrastColor
 try:
     from agw import aui
 except ImportError:
-    import wx.lib.agw.aui as aui
+    from wx.lib.agw import aui
 
 
 class IClassIScattPanel(wx.Panel, ManageBusyCursorMixin):

@@ -70,8 +70,8 @@ def main():
     # Check for PLY istallation
     try:
         # Intentionally unused imports
-        import ply.lex as lex  # noqa: F401
-        import ply.yacc as yacc  # noqa: F401
+        from ply import lex  # noqa: F401
+        from ply import yacc  # noqa: F401
     except ImportError:
         grass.fatal(
             _(

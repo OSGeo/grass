@@ -14,7 +14,7 @@ from .core import get_tgis_message_interface
 import copy
 
 try:
-    import dateutil.parser as parser
+    from dateutil import parser
 
     has_dateutil = True
 except:

@@ -20,7 +20,7 @@ import platform
 import os
 
 import wx
-import wx.lib.agw.aui as aui
+from wx.lib.agw import aui
 
 from core import globalvar
 from core.debug import Debug

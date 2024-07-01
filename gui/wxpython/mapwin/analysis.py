@@ -20,7 +20,7 @@ import os
 import math
 import wx
 
-import core.units as units
+from core import units
 from core.gcmd import RunCommand
 from core.giface import Notification
 

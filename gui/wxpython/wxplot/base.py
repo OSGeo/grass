@@ -20,7 +20,7 @@ import os
 import wx
 from random import randint
 
-import wx.lib.plot as plot
+from wx.lib import plot
 from core.globalvar import ICONDIR
 from core.settings import UserSettings
 from wxplot.dialogs import TextDialog, OptDialog
