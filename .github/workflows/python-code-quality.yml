@@ -31,6 +31,8 @@ jobs:
       BLACK_VERSION: "24.4.2"
       # renovate: datasource=pypi depName=flake8
       FLAKE8_VERSION: "7.1.0"
+      # renovate: datasource=pypi depName=isort
+      ISORT_VERSION: "5.13.2"
       # renovate: datasource=pypi depName=pylint
       PYLINT_VERSION: "2.12.2"
       # renovate: datasource=pypi depName=bandit
@@ -48,6 +50,7 @@ jobs:
           echo Minimal Python version: ${{ env.MIN_PYTHON_VERSION }}
           echo Black: ${{ env.BLACK_VERSION }}
           echo Flake8: ${{ env.FLAKE8_VERSION }}
+          echo isort: ${{ env.ISORT_VERSION }}
           echo Pylint: ${{ env.PYLINT_VERSION }}
           echo Bandit: ${{ env.BANDIT_VERSION }}
 
@@ -133,6 +136,17 @@ jobs:
       - name: Add the bin directory to PATH
         run: |
           echo "$HOME/install/bin" >> $GITHUB_PATH
+
+      - name: Run isort
+        run: pipx run isort==${{ env.ISORT_VERSION }} .
+      - name: Create and uploads code suggestions to apply for isort
+        # Will fail fast here if there are changes required
+        id: diff-isort
+        uses: ./.github/actions/create-upload-suggestions
+        with:
+          tool-name: isort
+          # To keep repo's file structure in formatted changes artifact
+          extra-upload-changes: pyproject.toml
 
       - name: Run Pylint on grass package
         run: |
