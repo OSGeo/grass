@@ -898,7 +898,7 @@ class GRASSStartup(wx.Frame):
         """Update list of mapsets"""
         self.FormerMapsetSelection = wx.NOT_FOUND  # for non-selectable item
 
-        self.listOfMapsetsSelectable = list()
+        self.listOfMapsetsSelectable = []
         self.listOfMapsets = GetListOfMapsets(self.gisdbase, location)
 
         self.lbmapsets.Clear()

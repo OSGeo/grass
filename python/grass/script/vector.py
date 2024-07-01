@@ -130,9 +130,9 @@ def vector_columns(map, layer=None, getDict=True, env=None, **kwargs):
         "v.info", flags="c", map=map, layer=layer, quiet=True, env=env, **kwargs
     )
     if getDict:
-        result = dict()
+        result = {}
     else:
-        result = list()
+        result = []
     i = 0
     for line in s.splitlines():
         ctype, cname = line.split("|")
@@ -397,7 +397,7 @@ def vector_what(
     else:
         layer_list = ["-1"] * len(map_list)
 
-    coord_list = list()
+    coord_list = []
     if isinstance(coord, tuple):
         coord_list.append("%f,%f" % (coord[0], coord[1]))
     else:
@@ -425,7 +425,7 @@ def vector_what(
     except CalledModuleError as e:
         raise ScriptError(e.msg)
 
-    data = list()
+    data = []
     if not ret:
         return data
 

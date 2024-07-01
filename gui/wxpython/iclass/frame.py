@@ -179,7 +179,7 @@ class IClassMapPanel(DoubleMapPanel):
         self.exportVector = None
 
         # dialogs
-        self.dialogs = dict()
+        self.dialogs = {}
         self.dialogs["classManager"] = None
         self.dialogs["scatt_plot"] = None
         # just to make digitizer happy

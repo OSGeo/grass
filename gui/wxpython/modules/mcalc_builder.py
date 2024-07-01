@@ -176,7 +176,7 @@ class MapCalcFrame(wx.Frame):
         self.btn_copy = Button(parent=self.panel, id=wx.ID_ANY, label=_("Copy"))
         self.btn_copy.SetToolTip(_("Copy the current command string to the clipboard"))
 
-        self.btn = dict()
+        self.btn = {}
         self.btn["pow"] = Button(parent=self.panel, id=wx.ID_ANY, label="^")
         self.btn["pow"].SetToolTip(_("exponent"))
         self.btn["div"] = Button(parent=self.panel, id=wx.ID_ANY, label="/")

@@ -2008,7 +2008,7 @@ class NvizToolWindow(GNotebook):
 
     def GselectOnPopup(self, ltype, exclude=False):
         """Update gselect.Select() items"""
-        maps = list()
+        maps = []
         for layer in self.mapWindow.Map.GetListOfLayers(ltype=ltype, active=True):
             maps.append(layer.GetName())
         return maps, exclude
@@ -3242,7 +3242,7 @@ class NvizToolWindow(GNotebook):
         floatSlider=False,
     ):
         """Add control (Slider + TextCtrl)"""
-        data[name] = dict()
+        data[name] = {}
         if sliderHor:
             style = wx.SL_HORIZONTAL | wx.SL_AUTOTICKS | wx.SL_BOTTOM
             sizeW = (size, -1)
@@ -4145,8 +4145,8 @@ class NvizToolWindow(GNotebook):
             mode["type"] = "surface"
             mode["surface"] = {}
             checklist = self.FindWindowById(self.win["vector"]["lines"]["surface"])
-            value = list()
-            checked = list()
+            value = []
+            checked = []
             for surface in range(checklist.GetCount()):
                 value.append(checklist.GetString(surface))
                 checked.append(checklist.IsChecked(surface))

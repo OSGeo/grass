@@ -1146,7 +1146,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
             self._highlighter_layer.SetMap(
                 vectQuery[0]["Map"] + "@" + vectQuery[0]["Mapset"]
             )
-            tmp = list()
+            tmp = []
             for i in vectQuery:
                 tmp.append(i["Category"])
 

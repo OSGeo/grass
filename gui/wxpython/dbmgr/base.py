@@ -1538,7 +1538,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
         if dlg.ShowModal() == wx.ID_OK:
             values = dlg.GetValues()  # string
-            updateList = list()
+            updateList = []
             try:
                 for i in range(len(values)):
                     if i == keyId:  # skip key column

@@ -155,8 +155,8 @@ def get_commands(*, env=None):
 
         gisbase = get_install_path()
 
-    cmd = list()
-    scripts = {".py": list()} if sys.platform == "win32" else {}
+    cmd = []
+    scripts = {".py": []} if sys.platform == "win32" else {}
 
     def scan(gisbase, directory):
         dir_path = os.path.join(gisbase, directory)
@@ -1459,7 +1459,7 @@ def list_strings(type, pattern=None, mapset=None, exclude=None, flag="", env=Non
     if type == "cell":
         verbose(_('Element type should be "raster" and not "%s"') % type)
 
-    result = list()
+    result = []
     for line in read_command(
         "g.list",
         quiet=True,
@@ -1807,7 +1807,7 @@ def create_project(
         shutil.rmtree(os.path.join(mapset_path.directory, mapset_path.location))
 
     stdin = None
-    kwargs = dict()
+    kwargs = {}
     if datum:
         kwargs["datum"] = datum
     if datum_trans:

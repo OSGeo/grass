@@ -282,7 +282,7 @@ class ProcessWorkspaceFile:
 
         :param layer: tree node
         """
-        cmd = list()
+        cmd = []
 
         #
         # layer attributes (task) - 2D settings
@@ -344,7 +344,7 @@ class ProcessWorkspaceFile:
         Process overlay item
         :param overlay: tree node
         """
-        cmd = list()
+        cmd = []
 
         cmd.append(node_overlay.get("name", "unknown"))
 
@@ -374,12 +374,12 @@ class ProcessWorkspaceFile:
         :param node_vdigit: vdigit node
         """
         # init nviz layer properties
-        vdigit = dict()
+        vdigit = {}
         for node in node_vdigit.findall("geometryAttribute"):
             if "geomAttr" not in vdigit:
-                vdigit["geomAttr"] = dict()
+                vdigit["geomAttr"] = {}
             type = node.get("type")
-            vdigit["geomAttr"][type] = dict()
+            vdigit["geomAttr"][type] = {}
             vdigit["geomAttr"][type]["column"] = node.get("column")  # required
             # default map units
             vdigit["geomAttr"][type]["units"] = node.get("units", "mu")
@@ -736,7 +736,7 @@ class ProcessWorkspaceFile:
                     else:
                         value = None
             if dc:
-                dc[tag] = dict()
+                dc[tag] = {}
                 dc[tag]["value"] = value
             else:
                 return value
