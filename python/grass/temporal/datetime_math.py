@@ -9,9 +9,10 @@ for details.
 :authors: Soeren Gebbert
 """
 
-from datetime import datetime, timedelta
-from .core import get_tgis_message_interface
 import copy
+from datetime import datetime, timedelta
+
+from .core import get_tgis_message_interface
 
 try:
     from dateutil import parser

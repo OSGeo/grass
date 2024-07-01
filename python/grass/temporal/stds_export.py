@@ -25,15 +25,15 @@ for details.
 :authors: Soeren Gebbert
 """
 
-import shutil
 import os
+import shutil
 import tarfile
 import tempfile
 
 import grass.script as gscript
 from grass.exceptions import CalledModuleError
-from .open_stds import open_old_stds
 
+from .open_stds import open_old_stds
 
 proj_file_name = "proj.txt"
 init_file_name = "init.txt"

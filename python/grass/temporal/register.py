@@ -18,16 +18,18 @@ for details.
 """
 
 from datetime import datetime
+
 import grass.script as gs
-from .core import get_tgis_message_interface, init_dbif, get_current_mapset
-from .open_stds import open_old_stds
+
 from .abstract_map_dataset import AbstractMapDataset
-from .factory import dataset_factory
+from .core import get_current_mapset, get_tgis_message_interface, init_dbif
 from .datetime_math import (
     check_datetime_string,
     increment_datetime_by_string,
     string_to_datetime,
 )
+from .factory import dataset_factory
+from .open_stds import open_old_stds
 
 ###############################################################################
 
@@ -607,8 +609,9 @@ def register_map_object_list(
     :param dbif: The database interface to be used
 
     """
-    import grass.pygrass.modules as pymod
     import copy
+
+    import grass.pygrass.modules as pymod
 
     dbif, connection_state_changed = init_dbif(None)
 

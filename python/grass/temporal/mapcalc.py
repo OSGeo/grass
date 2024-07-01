@@ -9,19 +9,21 @@ for details.
 :authors: Soeren Gebbert
 """
 
-import sys
 import copy
+import sys
 from datetime import datetime
 from multiprocessing import Process
+
 import grass.script as gscript
 from grass.exceptions import CalledModuleError
+
 from .core import (
     SQLDatabaseInterfaceConnection,
     get_current_mapset,
     get_tgis_message_interface,
 )
-from .open_stds import open_new_stds, open_old_stds, check_new_stds
 from .datetime_math import time_delta_to_relative_time
+from .open_stds import check_new_stds, open_new_stds, open_old_stds
 
 ############################################################################
 

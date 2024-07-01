@@ -68,8 +68,9 @@
 # % description: Assign the space time raster dataset start and end time to the output map
 # %end
 
-import sys
 import copy
+import sys
+
 import grass.script as grass
 
 ############################################################################
@@ -77,8 +78,8 @@ import grass.script as grass
 
 def main():
     # lazy imports
-    import grass.temporal as tgis
     import grass.pygrass.modules as pymod
+    import grass.temporal as tgis
 
     # Get the options
     input = options["input"]

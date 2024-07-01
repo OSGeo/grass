@@ -20,14 +20,13 @@ for details.
 
 from .core import get_tgis_message_interface
 from .space_time_datasets import (
+    Raster3DDataset,
+    RasterDataset,
     SpaceTimeRaster3DDataset,
     SpaceTimeRasterDataset,
     SpaceTimeVectorDataset,
-    Raster3DDataset,
-    RasterDataset,
     VectorDataset,
 )
-
 
 ###############################################################################
 

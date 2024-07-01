@@ -141,8 +141,7 @@ for details.
 """  # noqa: E501
 
 try:
-    from ply import lex
-    from ply import yacc
+    from ply import lex, yacc
 except ImportError:
     pass
 

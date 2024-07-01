@@ -21,11 +21,14 @@ for details.
 
 import grass.script as gscript
 from grass.exceptions import CalledModuleError
-from .space_time_datasets import RasterDataset
-from .datetime_math import create_suffix_from_datetime
-from .datetime_math import create_time_suffix
-from .datetime_math import create_numeric_suffix
+
 from .core import get_current_mapset, get_tgis_message_interface, init_dbif
+from .datetime_math import (
+    create_numeric_suffix,
+    create_suffix_from_datetime,
+    create_time_suffix,
+)
+from .space_time_datasets import RasterDataset
 from .spatio_temporal_relationships import (
     SpatioTemporalTopologyBuilder,
     create_temporal_relation_sql_where_statement,
@@ -255,8 +258,9 @@ def aggregate_by_topology(
     :return: A list of RasterDataset objects that contain the new map names
              and the temporal extent for map registration
     """
-    import grass.pygrass.modules as pymod
     import copy
+
+    import grass.pygrass.modules as pymod
 
     msgr = get_tgis_message_interface()
 

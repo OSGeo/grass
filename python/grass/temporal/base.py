@@ -26,11 +26,12 @@ for details.
 """
 
 from datetime import datetime
+
 from .core import (
-    get_tgis_message_interface,
-    get_tgis_dbmi_paramstyle,
     SQLDatabaseInterfaceConnection,
     get_current_mapset,
+    get_tgis_dbmi_paramstyle,
+    get_tgis_message_interface,
 )
 
 ###############################################################################
