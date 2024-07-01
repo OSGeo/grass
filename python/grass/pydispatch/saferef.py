@@ -1,8 +1,8 @@
 """Refactored "safe reference" from dispatcher.py"""
 
-import weakref
-import traceback
 import sys
+import traceback
+import weakref
 
 im_func = "__func__"
 im_self = "__self__"
