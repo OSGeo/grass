@@ -129,7 +129,8 @@ inline void unionFind<T>::makeSet(T x)
         T *new_parent = (T *)realloc(parent, 2 * maxsize * sizeof(T));
         if (!new_parent) {
             assert(new_parent && "Memory reallocation failed for parent");
-        } else {
+        }
+        else {
             parent = new_parent;
             memset(parent + maxsize, 0, maxsize * sizeof(T));
         }
