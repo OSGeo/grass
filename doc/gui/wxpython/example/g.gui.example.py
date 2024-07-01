@@ -32,10 +32,9 @@
 import os
 import sys
 
-
 # i18n is taken care of in the grass library code.
 # So we need to import it before any of the GUI code.
-import grass.script.core as gcore
+import grass.script.core as gcore  # isort: split
 
 if __name__ == "__main__":
     wxbase = os.path.join(os.getenv("GISBASE"), "etc", "gui", "wxpython")
@@ -52,8 +51,8 @@ def main():
 
     set_gui_path()
 
-    from core.globalvar import CheckWxVersion, MAP_WINDOW_SIZE
     from core.giface import StandaloneGrassInterface
+    from core.globalvar import MAP_WINDOW_SIZE, CheckWxVersion
     from core.settings import UserSettings
     from example.frame import ExampleMapDisplay
 
