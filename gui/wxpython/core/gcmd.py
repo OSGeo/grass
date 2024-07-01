@@ -238,8 +238,7 @@ class Popen(subprocess.Popen):
             try:
                 x = msvcrt.get_osfhandle(conn.fileno())
                 (read, nAvail, nMessage) = PeekNamedPipe(x, 0)
-                if maxsize < nAvail:
-                    nAvail = maxsize
+                nAvail = min(maxsize, nAvail)
                 if nAvail > 0:
                     (errCode, read) = ReadFile(x, nAvail, None)
             except ValueError:
@@ -301,8 +300,7 @@ message = "Other end disconnected!"
 
 
 def recv_some(p, t=0.1, e=1, tr=5, stderr=0):
-    if tr < 1:
-        tr = 1
+    tr = max(tr, 1)
     x = time.time() + t
     y = []
     r = ""

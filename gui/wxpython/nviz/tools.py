@@ -2790,8 +2790,7 @@ class NvizToolWindow(GNotebook):
         frameCount = anim.GetFrameCount()
         if index >= frameCount:
             index = frameCount - 1
-        if index < 0:
-            index = 0
+        index = max(index, 0)
 
         if sliderWidget:
             slider = self.FindWindowById(self.win["anim"]["frameIndex"]["slider"])
