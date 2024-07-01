@@ -133,14 +133,14 @@ class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
                         cmdstring = "%s" % (map_new.cmd_list)
                     elif "cmd_list" not in dir(map_new) and len(t) == 5:
                         cmdstring = "%s" % (map_n.get_id())
-                    elif "cmd_list" in dir(map_new) and len(t) in (9, 11):
+                    elif "cmd_list" in dir(map_new) and len(t) in {9, 11}:
                         cmdstring = "%s[%s,%s,%s]" % (
                             map_new.cmd_list,
                             row_neighbor,
                             col_neighbor,
                             depth_neighbor,
                         )
-                    elif "cmd_list" not in dir(map_new) and len(t) in (9, 11):
+                    elif "cmd_list" not in dir(map_new) and len(t) in {9, 11}:
                         cmdstring = "%s[%s,%s,%s]" % (
                             map_n.get_id(),
                             row_neighbor,

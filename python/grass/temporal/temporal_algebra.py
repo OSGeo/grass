@@ -1064,7 +1064,7 @@ class TemporalAlgebraParser:
                     mapA.set_spatial_extent(overlay_ext)
                 else:
                     returncode = 0
-            elif bool_op in ["or", "xor"]:
+            elif bool_op in {"or", "xor"}:
                 overlay_ext = mapA.spatial_union(mapB)
                 if overlay_ext is not None:
                     mapA.set_spatial_extent(overlay_ext)
@@ -2162,14 +2162,14 @@ class TemporalAlgebraParser:
             # Get value for function name from dictionary.
             tfuncval = tfuncdict[tfunc]
             # Check if value has to be transferred to datetime object for comparison.
-            if tfunc in [
+            if tfunc in {
                 "START_DATE",
                 "END_DATE",
                 "START_TIME",
                 "END_TIME",
                 "START_DATETIME",
                 "END_DATETIME",
-            ]:
+            }:
                 timeobj = string_to_datetime(value.replace('"', ""))
                 value = timeobj.date()
                 boolname = self.eval_datetime_str(tfuncval, comp_op, value)

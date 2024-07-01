@@ -351,7 +351,7 @@ def print_vector_dataset_univar_statistics(
             + fs
         )
         string += "min" + fs + "max" + fs + "range"
-        if type in ("point", "centroid"):
+        if type in {"point", "centroid"}:
             string += (
                 fs
                 + "mean"

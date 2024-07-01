@@ -449,11 +449,11 @@ def register_maps_in_space_time_dataset(
     # Update affected datasets
     if datatsets_to_modify:
         for dataset in datatsets_to_modify:
-            if type in ["rast", "raster"]:
+            if type in {"rast", "raster"}:
                 ds = dataset_factory("strds", dataset)
-            elif type in ["raster_3d", "rast3d", "raster3d"]:
+            elif type in {"raster_3d", "rast3d", "raster3d"}:
                 ds = dataset_factory("str3ds", dataset)
-            elif type in ["vect", "vector"]:
+            elif type in {"vect", "vector"}:
                 ds = dataset_factory("stvds", dataset)
             ds.select(dbif)
             ds.update_from_registered_maps(dbif)
@@ -620,7 +620,7 @@ def register_map_object_list(
             map_layer.load()
             # In case of a empty map continue, do not register empty maps
             if delete_empty:
-                if type in ["raster", "raster_3d", "rast", "rast3d"]:
+                if type in {"raster", "raster_3d", "rast", "rast3d"}:
                     if (
                         map_layer.metadata.get_min() is None
                         and map_layer.metadata.get_max() is None

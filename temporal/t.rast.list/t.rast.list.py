@@ -167,7 +167,7 @@ def main():
             # except for setting it to an empty string which does not have a precedence
             # in the current code and the behavior is unclear.
             separator = ","
-    if output_format in ["json", "yaml"] and header:
+    if output_format in {"json", "yaml"} and header:
         gs.fatal(
             message_option_value_excludes_flag(
                 option_name="format",
@@ -185,7 +185,7 @@ def main():
         # Pipe is currently not supported at all.
         separator = ","
 
-    if method in ["delta", "deltagaps", "gran"]:
+    if method in {"delta", "deltagaps", "gran"}:
         if order:
             gs.fatal(
                 message_option_value_excludes_option(

@@ -121,7 +121,7 @@ def main():
     for _map in maps:
         if _map.get_id() is None:
             count += 1
-            if sp.get_temporal_type() == "absolute" and tsuffix in ["gran", "time"]:
+            if sp.get_temporal_type() == "absolute" and tsuffix in {"gran", "time"}:
                 _id = "{ba}@{ma}".format(ba=base, ma=mapset)
             else:
                 map_name = tgis.create_numeric_suffix(base, num + count, tsuffix)

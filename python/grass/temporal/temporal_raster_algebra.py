@@ -177,13 +177,13 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
                         cmdstring = "%s" % (map_new.cmd_list)
                     elif "cmd_list" not in dir(map_new) and len(t) == 5:
                         cmdstring = "%s" % (map_n.get_id())
-                    elif "cmd_list" in dir(map_new) and len(t) in (7, 9):
+                    elif "cmd_list" in dir(map_new) and len(t) in {7, 9}:
                         cmdstring = "%s[%s,%s]" % (
                             map_new.cmd_list,
                             row_neigbour,
                             col_neigbour,
                         )
-                    elif "cmd_list" not in dir(map_new) and len(t) in (7, 9):
+                    elif "cmd_list" not in dir(map_new) and len(t) in {7, 9}:
                         cmdstring = "%s[%s,%s]" % (
                             map_n.get_id(),
                             row_neigbour,
