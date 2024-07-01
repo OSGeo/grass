@@ -999,7 +999,7 @@ class VDigitSettingsDialog(wx.Dialog):
             column = self.FindWindowById(val["column"]).GetValue()
             unitsIdx = self.FindWindowById(val["units"]).GetSelection()
             if item and not tree.GetLayerInfo(item, key="vdigit"):
-                tree.SetLayerInfo(item, key="vdigit", value={"geomAttr": dict()})
+                tree.SetLayerInfo(item, key="vdigit", value={"geomAttr": {}})
 
             if checked:  # enable
                 if key == "area":

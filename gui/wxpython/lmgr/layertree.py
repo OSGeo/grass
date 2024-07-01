@@ -405,7 +405,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         Debug.msg(4, "LayerTree.OnContextMenu: layertype=%s" % ltype)
 
         if not hasattr(self, "popupID"):
-            self.popupID = dict()
+            self.popupID = {}
             for key in (
                 "remove",
                 "rename",

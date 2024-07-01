@@ -48,11 +48,11 @@ class grassTask:
     def __init__(self, path=None, blackList=None):
         self.path = path
         self.name = _("unknown")
-        self.params = list()
+        self.params = []
         self.description = ""
         self.label = ""
-        self.flags = list()
-        self.keywords = list()
+        self.flags = []
+        self.keywords = []
         self.errorMsg = ""
         self.firstParam = None
         if blackList:
@@ -177,7 +177,7 @@ class grassTask:
 
         :return: list of errors
         """
-        errorList = list()
+        errorList = []
         # determine if suppress_required flag is given
         for f in self.flags:
             if f["value"] and f["suppress_required"]:
@@ -585,8 +585,8 @@ def command_info(cmd):
     cmdinfo["params"] = params = task.get_options()["params"]
 
     usage = task.get_name()
-    flags_short = list()
-    flags_long = list()
+    flags_short = []
+    flags_long = []
     for f in flags:
         fname = f.get("name", "unknown")
         if len(fname) > 1:

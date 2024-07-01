@@ -118,7 +118,7 @@ class Layer:
         self.name = name
 
         if self.type == "command":
-            self.cmd = list()
+            self.cmd = []
             for c in cmd:
                 self.cmd.append(cmdlist_to_tuple(c))
         else:
@@ -670,9 +670,9 @@ class RenderMapMgr(wx.EvtHandler):
         """
         stopTime = time.time()
 
-        maps = list()
-        masks = list()
-        opacities = list()
+        maps = []
+        masks = []
+        opacities = []
 
         # TODO: g.pnmcomp is now called every time
         # even when only overlays are rendered
@@ -824,16 +824,16 @@ class Map:
         """
         Debug.msg(1, "Map.__init__(): gisrc=%s" % gisrc)
         # region/extent settings
-        self.wind = dict()  # WIND settings (wind file)
-        self.region = dict()  # region settings (g.region)
+        self.wind = {}  # WIND settings (wind file)
+        self.region = {}  # region settings (g.region)
         self.width = 640  # map width
         self.height = 480  # map height
 
         # list of layers
-        self.layers = list()  # stack of available GRASS layer
+        self.layers = []  # stack of available GRASS layer
 
-        self.overlays = list()  # stack of available overlays
-        self.ovlookup = dict()  # lookup dictionary for overlay items and overlays
+        self.overlays = []  # stack of available overlays
+        self.ovlookup = {}  # lookup dictionary for overlay items and overlays
 
         # path to external gisrc
         self.gisrc = gisrc
@@ -866,7 +866,7 @@ class Map:
 
     def _projInfo(self):
         """Return region projection and map units information"""
-        projinfo = dict()
+        projinfo = {}
         if not grass.find_program("g.proj", "--help"):
             sys.exit(
                 _("GRASS tool '%s' not found. Unable to start map " "display window.")

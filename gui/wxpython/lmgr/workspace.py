@@ -213,7 +213,7 @@ class WorkspaceManager:
         # start map displays first (list of layers can be empty)
         #
         displayId = 0
-        mapdisplay = list()
+        mapdisplay = []
         for display in gxwXml.displays:
             mapdisp = self.lmgr.NewDisplay(name=display["name"], show=False)
             mapdisplay.append(mapdisp)

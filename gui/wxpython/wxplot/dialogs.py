@@ -271,13 +271,13 @@ class ScatterRasterDialog(wx.Dialog):
 
     def GetRasterPairs(self):
         """Get raster pairs"""
-        pairsList = list()
-        pair = list()
+        pairsList = []
+        pair = []
         for r in self.rasterList:
             pair.append(r)
             if len(pair) == 2:
                 pairsList.append(tuple(pair))
-                pair = list()
+                pair = []
 
         return list(pairsList)
 

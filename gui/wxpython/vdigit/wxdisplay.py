@@ -128,9 +128,9 @@ class DisplayDriver:
         # selected objects
         self.selected = {
             "field": -1,  # field number
-            "cats": list(),  # list of cats
-            "ids": list(),  # list of ids
-            "idsDupl": list(),  # list of duplicated features
+            "cats": [],  # list of cats
+            "ids": [],  # list of ids
+            "idsDupl": [],  # list of duplicated features
         }
 
         # digitizer settings
@@ -350,7 +350,7 @@ class DisplayDriver:
                     ),
                 )
             else:
-                points = list()
+                points = []
                 for i in range(robj.npoints):
                     p = robj.point[i]
                     points.append(wx.Point(p.x, p.y))
@@ -536,7 +536,7 @@ class DisplayDriver:
         # reset list of selected features by cat
         # list of ids - see IsSelected()
         self.selected["field"] = -1
-        self.selected["cats"] = list()
+        self.selected["cats"] = []
 
     def _getSelectType(self):
         """Get type(s) to be selected
@@ -596,7 +596,7 @@ class DisplayDriver:
             self._drawSelected = True
 
             # select by ids
-            self.selected["cats"] = list()
+            self.selected["cats"] = []
 
         poList = Vect_new_list()
         x1, y1 = bbox[0]
@@ -689,7 +689,7 @@ class DisplayDriver:
         if thisMapInfo:
             self._drawSelected = True
             # select by ids
-            self.selected["cats"] = list()
+            self.selected["cats"] = []
 
         poFound = Vect_new_list()
 
@@ -788,7 +788,7 @@ class DisplayDriver:
         if grassId:
             return self.selected["ids"]
 
-        dc_ids = list()
+        dc_ids = []
 
         if not self._drawSegments:
             dc_ids.append(1)
@@ -816,7 +816,7 @@ class DisplayDriver:
         self.selected["field"] = layer
         if layer > 0:
             self.selected["cats"] = ids
-            self.selected["ids"] = list()
+            self.selected["ids"] = []
             # cidx is not up-to-date
             # Vect_cidx_find_all(self.poMapInfo,
             # layer, GV_POINTS | GV_LINES, lid, ilist)
@@ -853,7 +853,7 @@ class DisplayDriver:
         :return: 0 no line found
         :return: -1 on error
         """
-        returnId = list()
+        returnId = []
         # only one object can be selected
         if len(self.selected["ids"]) != 1 or not self._drawSegments:
             return returnId
@@ -1059,7 +1059,7 @@ class DisplayDriver:
 
         :param alpha: color value for alpha channel
         """
-        color = dict()
+        color = {}
         for key in self.settings.keys():
             if key == "lineWidth":
                 self.settings[key] = int(
@@ -1137,11 +1137,11 @@ class DisplayDriver:
         if not self.poMapInfo:
             return
 
-        ids = dict()
+        ids = {}
         APoints = Vect_new_line_struct()
         BPoints = Vect_new_line_struct()
 
-        self.selected["idsDupl"] = list()
+        self.selected["idsDupl"] = []
 
         for i in range(len(self.selected["ids"])):
             line1 = self.selected["ids"][i]
@@ -1158,7 +1158,7 @@ class DisplayDriver:
 
                 if Vect_line_check_duplicate(APoints, BPoints, WITHOUT_Z):
                     if i not in ids:
-                        ids[i] = list()
+                        ids[i] = []
                         ids[i].append((line1, self._getCatString(line1)))
                         self.selected["idsDupl"].append(line1)
 
@@ -1174,11 +1174,11 @@ class DisplayDriver:
         Vect_read_line(self.poMapInfo, None, self.poCats, line)
 
         cats = self.poCats.contents
-        catsDict = dict()
+        catsDict = {}
         for i in range(cats.n_cats):
             layer = cats.field[i]
             if layer not in catsDict:
-                catsDict[layer] = list()
+                catsDict[layer] = []
             catsDict[layer].append(cats.cat[i])
 
         catsStr = ""

@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
 class BaseUnits:
     def __init__(self):
-        self._units = dict()
+        self._units = {}
         self._units["length"] = {
             0: {"key": "mu", "label": _("map units")},
             1: {"key": "me", "label": _("meters")},
@@ -53,7 +53,7 @@ class BaseUnits:
 
         :return: list of units labels
         """
-        result = list()
+        result = []
         try:
             keys = sorted(self._units[type].keys())
             for idx in keys:

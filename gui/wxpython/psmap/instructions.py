@@ -59,7 +59,7 @@ class Instruction:
         self.parent = parent
         self.objectsToDraw = objectsToDraw
         # here are kept objects like mapinfo, rasterlegend, etc.
-        self.instruction = list()
+        self.instruction = []
         self.env = env
 
     def __str__(self):
@@ -545,7 +545,7 @@ class InstructionObject:
         self.env = env
 
         # default values
-        self.defaultInstruction = dict()
+        self.defaultInstruction = {}
         # current values
         self.instruction = self.defaultInstruction
         # converting units
@@ -863,7 +863,7 @@ class PageSetup(InstructionObject):
         return True
 
     def _toDict(self, paperStr):
-        sizeDict = dict()
+        sizeDict = {}
         #     cats = self.subInstr[ 'Width', 'Height', 'Left', 'Right', 'Top', 'Bottom']
         for line in paperStr.strip().split("\n"):
             d = dict(zip(self.cats, line.split()[1:]))

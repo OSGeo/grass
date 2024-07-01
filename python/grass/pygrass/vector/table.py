@@ -150,7 +150,7 @@ class Filters:
 
     def get_sql(self):
         """Return the SQL query"""
-        sql_list = list()
+        sql_list = []
         if self._select is None:
             self.select()
         sql_list.append(self._select)

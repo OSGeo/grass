@@ -1475,7 +1475,7 @@ class VariablePanel(wx.Panel):
 
     def UpdateModelVariables(self):
         """Update model variables"""
-        variables = dict()
+        variables = {}
         for values in self.list.GetData().values():
             name = values[0]
             variables[name] = {"type": str(values[1])}

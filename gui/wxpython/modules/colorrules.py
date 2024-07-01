@@ -722,7 +722,7 @@ class ColorTable(wx.Frame):
             self.rulesPanel.ruleslines[count]["value"] = value
             self.rulesPanel.ruleslines[count]["color"] = color
             self.rulesPanel.mainPanel.FindWindowById(count + 1000).SetValue(value)
-            rgb = list()
+            rgb = []
             for c in color.split(":"):
                 rgb.append(int(c))
             self.rulesPanel.mainPanel.FindWindowById(count + 2000).SetColour(rgb)

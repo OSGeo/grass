@@ -245,7 +245,7 @@ class ToolbarController:
 
     def _getToolbarData(self, data):
         """Define tool"""
-        retData = list()
+        retData = []
         for args in data:
             retData.append(self._defineTool(*args))
         return retData

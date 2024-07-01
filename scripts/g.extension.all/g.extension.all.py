@@ -75,7 +75,7 @@ def get_extensions():
     fo.close()
 
     libgis_rev = gscript.version()["libgis_revision"]
-    ret = list()
+    ret = []
     for tnode in tree.findall("task"):
         gnode = tnode.find("libgis")
         if gnode is not None and gnode.get("revision", "") != libgis_rev:

@@ -108,8 +108,8 @@ import subprocess
 import grass.script as grass
 from grass.exceptions import CalledModuleError
 
-tmp_rmaps = list()
-tmp_vmaps = list()
+tmp_rmaps = []
+tmp_vmaps = []
 usermask = None
 mapset = None
 
@@ -151,7 +151,7 @@ def main():
     unique = str(os.getpid())  # Shouldn't we use temp name?
     prefix = "r_fillnulls_%s_" % unique
     failed_list = (
-        list()
+        []
     )  # a list of failed holes. Caused by issues with v.surf.rst. Connected with #1813
 
     # check if input file exists
@@ -292,7 +292,7 @@ def main():
             file=cats_file_name,
             quiet=quiet,
         )
-        cat_list = list()
+        cat_list = []
         cats_file = open(cats_file_name)
         for line in cats_file:
             cat_list.append(line.rstrip("\n"))

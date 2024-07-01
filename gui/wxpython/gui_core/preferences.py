@@ -1818,7 +1818,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         epsgCode = wx.ComboBox(
             parent=panel, id=wx.ID_ANY, name="GetValue", size=(150, -1)
         )
-        self.epsgCodeDict = dict()
+        self.epsgCodeDict = {}
         epsgCode.SetValue(
             str(self.settings.Get(group="projection", key="statusbar", subkey="epsg"))
         )
@@ -2044,7 +2044,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                 caption=_("Error"),
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
-            self.epsgCodeDict = dict()
+            self.epsgCodeDict = {}
             epsgCombo.SetItems([])
             epsgCombo.SetValue("")
             self.FindWindowById(self.winId["projection:statusbar:proj4"]).SetValue("")

@@ -197,7 +197,7 @@ class UpdateThread(Thread):
             map = None
 
         # avoid running db.describe several times
-        cparams = dict()
+        cparams = {}
         cparams[map] = {
             "dbInfo": None,
             "layers": None,
@@ -1216,7 +1216,7 @@ class CmdPanel(wx.Panel):
                         isEnabled[defval] = "yes"
                         # for multi checkboxes, this is an array of all wx IDs
                         # for each individual checkbox
-                        p["wxId"] = list()
+                        p["wxId"] = []
                     idx = 0
                     for val in valuelist:
                         try:
@@ -2303,7 +2303,7 @@ class CmdPanel(wx.Panel):
                         p["wxId"] = [self.win1.GetId()]
 
                         def OnCheckItem(index=None, flag=None, event=None):
-                            layers = list()
+                            layers = []
                             geometry = None
                             for layer, match, listId in self.win1.GetLayers():
                                 if "|" in layer:
@@ -2404,7 +2404,7 @@ class CmdPanel(wx.Panel):
                     pOpt = self.task.get_param(opt, element="name", raiseError=False)
                     if pOpt and id:
                         if "wxId-bind" not in p:
-                            p["wxId-bind"] = list()
+                            p["wxId-bind"] = []
                         p["wxId-bind"] += pOpt["wxId"]
                 continue
             if p.get("gisprompt", False) is False:
@@ -2574,7 +2574,7 @@ class CmdPanel(wx.Panel):
     def OnFileLoad(self, event):
         """Load file to interactive input"""
         me = event.GetId()
-        win = dict()
+        win = {}
         for p in self.task.params:
             if "wxId" in p and me in p["wxId"]:
                 win["file"] = self.FindWindowById(p["wxId"][0])
@@ -3091,7 +3091,7 @@ class GUI:
         self.checkError = checkError
 
         self.grass_task = None
-        self.cmd = list()
+        self.cmd = []
 
         global _blackList
         if self.parent:
@@ -3137,7 +3137,7 @@ class GUI:
             if "flags" in dcmd_params:
                 self.grass_task.flags = dcmd_params["flags"]
 
-        err = list()
+        err = []
         # update parameters if needed && validate command
         if len(cmd) > 1:
             i = 0

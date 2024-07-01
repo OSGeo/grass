@@ -32,7 +32,7 @@ class SemanticLabelReader:
 
     def _read_config(self):
         """Read configuration"""
-        self.config = dict()
+        self.config = {}
         for json_file in self._json_files:
             try:
                 with open(json_file) as fd:

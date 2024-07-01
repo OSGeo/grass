@@ -428,7 +428,7 @@ class SettingsDialog(wx.Dialog):
         gridSizer = wx.GridBagSizer(vgap=1, hgap=1)
 
         row = 0
-        setts = dict()
+        setts = {}
         setts.update(self.colorsSetts)
         setts.update(self.sizeSetts)
 

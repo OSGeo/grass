@@ -118,7 +118,7 @@ class AnimationFrame(wx.Frame):
         self._addPanes()
         self._mgr.Update()
 
-        self.dialogs = dict()
+        self.dialogs = {}
         self.dialogs["speed"] = None
         self.dialogs["preferences"] = None
 

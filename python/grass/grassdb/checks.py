@@ -617,7 +617,7 @@ def get_list_of_locations(dbase):
 
     :return: list of locations (sorted)
     """
-    locations = list()
+    locations = []
     for location in glob.glob(os.path.join(dbase, "*")):
         if os.path.join(location, "PERMANENT") in glob.glob(
             os.path.join(location, "*")

@@ -109,7 +109,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None, layerType=None):
     elif "d.graph" in dcmd[0]:
         mapname = "graph"
     else:
-        params = list()
+        params = []
         for idx in range(len(dcmd)):
             try:
                 p, v = dcmd[idx].split("=", 1)
@@ -186,7 +186,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None, layerType=None):
             if i in mapsets and mapsets[i]:
                 dcmd[i] += "@" + mapsets[i]
 
-        maps = list()
+        maps = []
         ogr = False
         for i, p, v in params:
             if v.lower().rfind("@ogr") > -1:
@@ -321,7 +321,7 @@ def ListSortLower(list):
 
 def GetVectorNumberOfLayers(vector):
     """Get list of all vector layers"""
-    layers = list()
+    layers = []
     if not vector:
         return layers
 
@@ -514,7 +514,7 @@ def ReadEpsgCodes():
 
     :return: dictionary of EPSG code
     """
-    epsgCodeDict = dict()
+    epsgCodeDict = {}
 
     ret = RunCommand("g.proj", read=True, list_codes="EPSG")
 
@@ -570,7 +570,7 @@ def GetListOfLocations(dbase):
 
     :return: list of locations (sorted)
     """
-    listOfLocations = list()
+    listOfLocations = []
 
     try:
         for location in glob.glob(os.path.join(dbase, "*")):
@@ -598,7 +598,7 @@ def GetListOfMapsets(dbase, location, selectable=False):
 
     :return: list of mapsets - sorted (PERMANENT first)
     """
-    listOfMapsets = list()
+    listOfMapsets = []
 
     if selectable:
         ret = RunCommand(
@@ -625,7 +625,7 @@ def GetColorTables():
     """Get list of color tables"""
     ret = RunCommand("r.colors", read=True, flags="l")
     if not ret:
-        return list()
+        return []
 
     return ret.splitlines()
 
@@ -835,8 +835,8 @@ def StoreEnvVariable(key, value=None, envFile=None):
             )
 
     # read env file
-    environ = dict()
-    lineSkipped = list()
+    environ = {}
+    lineSkipped = []
     if os.path.exists(envFile):
         try:
             fd = open(envFile)

@@ -177,13 +177,13 @@ class IVDigit:
         # self.SetCategory()
 
         # layer / max category
-        self.cats = dict()
+        self.cats = {}
 
-        self._settings = dict()
+        self._settings = {}
         self.UpdateSettings()  # -> self._settings
 
         # undo/redo
-        self.changesets = list()
+        self.changesets = []
         self.changesetCurrent = -1  # first changeset to apply
 
         if self.poMapInfo:
@@ -391,7 +391,7 @@ class IVDigit:
             del self.changesets[self.changesetCurrent + 1 : changesetLast + 1]
             self.toolbar.EnableRedo(False)
 
-        data = list()
+        data = []
         for i in range(Vect_get_num_updated_lines(self.poMapInfo) - 1, -1, -1):
             line = Vect_get_updated_line(self.poMapInfo, i)
             offset = Vect_get_updated_line_offset(self.poMapInfo, i)
@@ -536,7 +536,7 @@ class IVDigit:
 
         # collect categories for deleting if requested
         deleteRec = UserSettings.Get(group="vdigit", key="delRecord", subkey="enabled")
-        catDict = dict()
+        catDict = {}
 
         old_bboxs = []
         old_areas_cats = []
@@ -562,7 +562,7 @@ class IVDigit:
         nlines = Vedit_delete_lines(self.poMapInfo, poList)
 
         Vect_destroy_list(poList)
-        self._display.selected["ids"] = list()
+        self._display.selected["ids"] = []
 
         if nlines > 0:
             if deleteRec:
@@ -1449,7 +1449,7 @@ class IVDigit:
         ftype = GV_POINTS | GV_LINES  # TODO: 3D
         layer = 1  # TODO
 
-        ids = list()
+        ids = []
         poList = Vect_new_list()
         coList = poList.contents
         if UserSettings.Get(group="vdigit", key="query", subkey="box"):
@@ -1838,7 +1838,7 @@ class IVDigit:
         :return: tuple (number of added features, list of fids)
         :return: number of features -1 on error
         """
-        fids = list()
+        fids = []
         if not self._checkMap():
             return (-1, None)
 
@@ -2063,7 +2063,7 @@ class IVDigit:
 
         :return: list of layer/cats
         """
-        ret = dict()
+        ret = {}
         if not self._checkMap():
             return ret
 
@@ -2085,7 +2085,7 @@ class IVDigit:
         for i in range(cats.n_cats):
             field = cats.field[i]
             if field not in ret:
-                ret[field] = list()
+                ret[field] = []
             ret[field].append(cats.cat[i])
 
         return ret

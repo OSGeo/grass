@@ -50,7 +50,7 @@ class MenuBase:
         """
         self.parent = parent
         self.model = model
-        self.menucmd = dict()
+        self.menucmd = {}
         self.bmpsize = (16, 16)
         self.class_handler = class_handler if class_handler is not None else parent
 

@@ -1902,7 +1902,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         """
         Debug.msg(4, "BufferedWindow.ZoomBack(): hist)=%s" % self.zoomhistory)
 
-        zoom = list()
+        zoom = []
 
         if len(self.zoomhistory) > 1:
             self.zoomhistory.pop()
@@ -1984,7 +1984,7 @@ class BufferedMapWindow(MapWindowBase, Window):
 
     def ResetZoomHistory(self):
         """Reset zoom history"""
-        self.zoomhistory = list()
+        self.zoomhistory = []
 
     def ZoomToMap(self, layers=None, ignoreNulls=False, render=True):
         """Set display extents to match selected raster

@@ -39,7 +39,7 @@ def make_gradient(path):
     fh.close()
 
     lines = text.splitlines()
-    records = list()
+    records = []
     for line in lines:
         if line.startswith("#"):
             # skip comments

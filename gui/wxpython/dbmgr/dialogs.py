@@ -745,7 +745,7 @@ class ModifyTableRecord(wx.Dialog):
 
         If columns is given (list), return only values of given columns.
         """
-        valueList = list()
+        valueList = []
         for labelId, ctypeId, valueId in self.widgets:
             column = self.FindWindowById(labelId).GetLabel()
             if columns is None or column in columns:
