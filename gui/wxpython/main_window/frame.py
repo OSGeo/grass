@@ -1279,7 +1279,7 @@ class GMFrame(wx.Frame):
 
         # check list of dummy commands for GUI modules that do not have GRASS
         # bin modules or scripts.
-        if cmd in ["vcolors", "r.mapcalc", "r3.mapcalc"]:
+        if cmd in {"vcolors", "r.mapcalc", "r3.mapcalc"}:
             return cmdlist
 
         try:
@@ -1569,7 +1569,7 @@ class GMFrame(wx.Frame):
         # use chdir or dialog
         if cmd and len(cmd) == 2:
             write_beginning(parameter=cmd[1])
-            if cmd[1] in ["-h", "--h", "--help", "help"]:
+            if cmd[1] in {"-h", "--h", "--help", "help"}:
                 write_help()
                 write_end()
                 return
@@ -1838,7 +1838,7 @@ class GMFrame(wx.Frame):
 
         if not haveIClass:
             GError(
-                _('Unable to launch "Supervised Classification Tool".\n\n' "Reason: %s")
+                _('Unable to launch "Supervised Classification Tool".\n\nReason: %s')
                 % errMsg
             )
             return
@@ -2131,7 +2131,7 @@ class GMFrame(wx.Frame):
     def AddOrUpdateMap(self, mapName, ltype):
         """Add map layer or update"""
         # start new map display if no display is available
-        if ltype not in ["raster", "raster_3d", "vector"]:
+        if ltype not in {"raster", "raster_3d", "vector"}:
             GError(parent=self, message=_("Unsupported map layer type <%s>.") % ltype)
             return
 

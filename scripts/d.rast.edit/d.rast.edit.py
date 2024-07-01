@@ -90,7 +90,7 @@ except ImportError:
     if __name__ == "__main__":
         if len(sys.argv) == 2:
             arg = sys.argv[1]
-            if arg[0:2] == "--" or arg in ["help", "-help"]:
+            if arg[0:2] == "--" or arg in {"help", "-help"}:
                 grass.parser()
     # Either we didn't call g.parser, or it returned
     # At this point, there's nothing to be done except re-raise the exception
@@ -483,10 +483,8 @@ def wxGUI():
             for k, f in wind_keys.values():
                 self.total[k] = (f)(reg[k])
 
-            if self.cols > self.total["cols"]:
-                self.cols = self.total["cols"]
-            if self.rows > self.total["rows"]:
-                self.rows = self.total["rows"]
+            self.cols = min(self.cols, self.total["cols"])
+            self.rows = min(self.rows, self.total["rows"])
 
             tempbase = grass.tempfile()
             grass.try_remove(tempbase)
@@ -627,14 +625,10 @@ def wxGUI():
             del wait
 
         def force_window(self):
-            if self.origin_x < 0:
-                self.origin_x = 0
-            if self.origin_x > self.total["cols"] - self.cols:
-                self.origin_x = self.total["cols"] - self.cols
-            if self.origin_y < 0:
-                self.origin_y = 0
-            if self.origin_y > self.total["rows"] - self.rows:
-                self.origin_y = self.total["rows"] - self.rows
+            self.origin_x = max(self.origin_x, 0)
+            self.origin_x = min(self.origin_x, self.total["cols"] - self.cols)
+            self.origin_y = max(self.origin_y, 0)
+            self.origin_y = min(self.origin_y, self.total["rows"] - self.rows)
 
         def update_status(self, row, col):
             self.status["row"] = row

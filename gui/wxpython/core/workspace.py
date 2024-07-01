@@ -1102,7 +1102,7 @@ class WriteWorkspaceFile:
                             self.file.write(
                                 '%s<flag name="%s" />\n' % (" " * self.indent, f)
                             )
-                    elif val in (True, False):
+                    elif val in {True, False}:
                         self.file.write(
                             '%s<flag name="%s" />\n' % (" " * self.indent, key)
                         )
@@ -1369,7 +1369,7 @@ class WriteWorkspaceFile:
                         self.indent += 4
                         self.file.write("%s<%s>\n" % (" " * self.indent, name))
                         for att in slice_[name].keys():
-                            if att in ("map", "update"):
+                            if att in {"map", "update"}:
                                 continue
                             val = slice_[name][att]
                             self.indent += 4
@@ -1382,7 +1382,7 @@ class WriteWorkspaceFile:
                         self.file.write("%s</%s>\n" % (" " * self.indent, name))
                         self.indent -= 4
                     self.file.write("%s</%s>\n" % (" " * self.indent, attrb))
-            if attrb not in ("attribute", "isosurface", "slice"):
+            if attrb not in {"attribute", "isosurface", "slice"}:
                 # end tag
                 self.file.write("%s</%s>\n" % (" " * self.indent, attrb))
 
@@ -1417,7 +1417,7 @@ class WriteWorkspaceFile:
                 )
             self.indent += 4
             for name in data[attrb].keys():
-                if name in ("object", "marker"):
+                if name in {"object", "marker"}:
                     continue
                 if name == "mode":
                     self.file.write(
@@ -1871,7 +1871,7 @@ class ProcessGrcFile:
 
         elif (
             element
-            in (
+            in {
                 "display_shape",
                 "display_cat",
                 "display_topo",
@@ -1883,7 +1883,7 @@ class ProcessGrcFile:
                 "type_centroid",
                 "type_area",
                 "type_face",
-            )
+            }
             and self.inVector
         ):
             if int(self._get_value(line)) == 1:
@@ -1895,7 +1895,7 @@ class ProcessGrcFile:
                 else:
                     self.layers[-1]["cmd"][paramId] += ",%s" % type
 
-        elif element in ("color", "fcolor", "lcolor") and self.inVector:
+        elif element in {"color", "fcolor", "lcolor"} and self.inVector:
             value = self._get_value(line)
             if value != "":
                 self.layers[-1]["cmd"].append(
@@ -1912,7 +1912,7 @@ class ProcessGrcFile:
 
         elif (
             element
-            in (
+            in {
                 "icon",
                 "size",
                 "layer",
@@ -1922,7 +1922,7 @@ class ProcessGrcFile:
                 "where",
                 "minreg",
                 "maxreg",
-            )
+            }
             and self.inVector
         ):
             value = self._get_value(line)
@@ -1985,7 +1985,7 @@ class ProcessGrcFile:
                     "textcolor=%s" % self._color_name_to_rgb(value)
                 )
 
-        elif element in ("gridsize", "gridorigin"):
+        elif element in {"gridsize", "gridorigin"}:
             value = self._get_value(line)
             if value != "":
                 self.layers[-1]["cmd"].append("%s=%s" % (element[4:], value))

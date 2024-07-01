@@ -786,7 +786,7 @@ class DataCatalogTree(TreeView):
         mixed = []
         for item in selected:
             type = item.data["type"]
-            if type in ("raster", "raster_3d", "vector"):
+            if type in {"raster", "raster_3d", "vector"}:
                 self.selected_layer.append(item)
                 self.selected_mapset.append(item.parent)
                 self.selected_location.append(item.parent.parent)
@@ -901,7 +901,7 @@ class DataCatalogTree(TreeView):
         if node.data["type"] == "mapset" and not node.children:
             self._reloadMapsetNode(node)
             self.RefreshNode(node, recursive=True)
-        if node.data["type"] in ("mapset", "location", "grassdb"):
+        if node.data["type"] in {"mapset", "location", "grassdb"}:
             # expand/collapse location/mapset...
             if self.IsNodeExpanded(node):
                 self.CollapseNode(node, recursive=False)
@@ -967,12 +967,12 @@ class DataCatalogTree(TreeView):
         Used to highlight current db/loc/mapset."""
         node = self._model.GetNodeByIndex(index)
         font = self.GetFont()
-        if node.data["type"] in ("grassdb", "location", "mapset"):
-            if node in (
+        if node.data["type"] in {"grassdb", "location", "mapset"}:
+            if node in {
                 self.current_grassdb_node,
                 self.current_location_node,
                 self.current_mapset_node,
-            ):
+            }:
                 font.SetWeight(wx.FONTWEIGHT_BOLD)
             else:
                 font.SetWeight(wx.FONTWEIGHT_NORMAL)
@@ -1156,7 +1156,7 @@ class DataCatalogTree(TreeView):
                 self.selected_location[0].data["name"],
             ):
                 event.Veto()
-        elif node.data["type"] in ("raster", "raster_3d", "vector"):
+        elif node.data["type"] in {"raster", "raster_3d", "vector"}:
             currentGrassDb, currentLocation, currentMapset = self._isCurrent(gisenv())
             if not currentMapset:
                 event.Veto()
@@ -1170,7 +1170,7 @@ class DataCatalogTree(TreeView):
         Debug.msg(1, "End label edit {name}".format(name=old_name))
         new_name = event.GetLabel()
 
-        if node.data["type"] in ("raster", "raster_3d", "vector"):
+        if node.data["type"] in {"raster", "raster_3d", "vector"}:
             self.Rename(old_name, new_name)
 
         elif node.data["type"] == "mapset":
@@ -1810,7 +1810,7 @@ class DataCatalogTree(TreeView):
                 node = self.GetDbNode(grassdb=grassdb)
                 if node:
                     self.RemoveGrassDB(node)
-        elif element in ("raster", "vector", "raster_3d"):
+        elif element in {"raster", "vector", "raster_3d"}:
             # when watchdog is used, it watches current mapset,
             # so we don't process any signals here,
             # instead the watchdog handler takes care of refreshing tree

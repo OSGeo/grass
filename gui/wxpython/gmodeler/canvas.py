@@ -103,8 +103,7 @@ class ModelCanvas(ogl.ShapeCanvas):
         ymax = 20
         for item in self.GetDiagram().GetShapeList():
             y = item.GetY() + item.GetBoundingBoxMin()[1]
-            if y > ymax:
-                ymax = y
+            ymax = max(y, ymax)
 
         return (self.GetSize()[0] // 2, ymax + yoffset)
 
@@ -198,7 +197,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             )
 
         elif isinstance(shape, ModelData):
-            if shape.GetPrompt() in (
+            if shape.GetPrompt() in {
                 "raster",
                 "vector",
                 "raster_3d",
@@ -206,7 +205,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
                 "strds",
                 "stvds",
                 "str3ds",
-            ):
+            }:
                 dlg = ModelDataDialog(parent=self.frame, shape=shape)
                 shape.SetPropDialog(dlg)
                 dlg.CentreOnParent()

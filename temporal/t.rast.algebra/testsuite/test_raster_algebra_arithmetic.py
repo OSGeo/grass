@@ -296,7 +296,7 @@ class TestTRastAlgebra(TestCase):
 
         self.assertModule(
             "t.rast.algebra",
-            expression="R = if({equal}, start_date(A)" ' >= "2001-01-02", A + A)',
+            expression='R = if({equal}, start_date(A) >= "2001-01-02", A + A)',
             basename="r",
         )
 

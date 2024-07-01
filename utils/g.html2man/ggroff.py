@@ -158,7 +158,7 @@ class Formatter:
                 self.warning("invalid item in table row: %s" % str(item))
                 continue
             (tag, attrs, body) = item
-            if tag not in ["td", "th"]:
+            if tag not in {"td", "th"}:
                 self.warning("invalid tag in table row: %s" % tag)
                 continue
             if col > 0:
@@ -174,7 +174,7 @@ class Formatter:
         for item in content:
             if is_tuple(item):
                 (tag, attrs, body) = item
-                if tag in ["thead", "tbody", "tfoot"]:
+                if tag in {"thead", "tbody", "tfoot"}:
                     self.pp_tbody(body)
                 elif tag == "tr":
                     self.pp_tr(body)
@@ -188,7 +188,7 @@ class Formatter:
                 pass
             elif is_tuple(item):
                 (tag, attrs, body) = item
-                if tag in ["thead", "tbody", "tfoot"]:
+                if tag in {"thead", "tbody", "tfoot"}:
                     n = self.count_cols(body)
                 elif tag == "tr":
                     n = len(clean(body))
@@ -241,7 +241,7 @@ class Formatter:
         s = s.replace('"', "\\(dq")
         s = s.replace("`", "\\(ga")
         s = s.replace("-", "\\-")
-        if self.at_bol and s[0] in [".", "'"]:
+        if self.at_bol and s[0] in {".", "'"}:
             s = "\\&" + s
         self.show(s)
 

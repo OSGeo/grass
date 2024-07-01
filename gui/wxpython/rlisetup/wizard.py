@@ -259,7 +259,6 @@ class RLIWizard:
             self.CIR_RL += 1
         if not self.CIR_CL % 2:
             self.CIR_CL += 1
-        return
 
     def _circle(self, radius, mask):
         """Create a circle mask"""
@@ -391,10 +390,10 @@ class RLIWizard:
 
         # MUNITSC = samplingtype=units, regionbox=mouse, shape=cirlce
         # MUNITSR = samplingtype=units, regionbox=mouse, shape=rectangle
-        elif self.samplingareapage.samplingtype in [
+        elif self.samplingareapage.samplingtype in {
             SamplingType.MUNITSR,
             SamplingType.MUNITSC,
-        ]:
+        }:
             # get the raster region into rastregion
             grass.use_temp_region()
             grass.run_command("g.region", raster=self.startpage.rast)
@@ -1130,11 +1129,9 @@ class SamplingAreasPage(TitledPage):
 
     def OnRegionDraw(self, event):
         self.RegionDraw(event.GetInt())
-        return
 
     def OnOverwrite(self, event):
         self.overwriteTemp = self.overwriteCheck.GetValue()
-        return
 
     def OnVectYes(self, event):
         """The user choose to select the vector areas, this function set the
@@ -1644,19 +1641,19 @@ class UnitsMousePage(TitledPage):
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
-        if self.parent.samplingareapage.samplingtype in [
+        if self.parent.samplingareapage.samplingtype in {
             SamplingType.MVWIN,
             SamplingType.MMVWINR,
             SamplingType.MMVWINC,
-        ]:
+        }:
             self.title.SetLabel(_("Draw moving windows region"))
             self.sizer.Hide(self.regionNumPanel)
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
-        elif self.parent.samplingareapage.samplingtype in [
+        elif self.parent.samplingareapage.samplingtype in {
             SamplingType.UNITS,
             SamplingType.MUNITSR,
             SamplingType.MUNITSC,
-        ]:
+        }:
             self.title.SetLabel(_("Draw sampling region"))
             self.sizer.Show(self.regionNumPanel)
         if self.typeBox.GetSelection() == 2:
@@ -1666,22 +1663,22 @@ class UnitsMousePage(TitledPage):
     def OnType(self, event):
         chosen = self.typeBox.GetSelection()
         if chosen == 0:
-            if self.parent.samplingareapage.samplingtype in [
+            if self.parent.samplingareapage.samplingtype in {
                 SamplingType.MVWIN,
                 SamplingType.MMVWINR,
                 SamplingType.MMVWINC,
-            ]:
+            }:
                 self.parent.samplingareapage.samplingtype = SamplingType.MMVWINR
                 wx.FindWindowById(wx.ID_FORWARD).Enable(True)
             else:
                 self.parent.samplingareapage.samplingtype = SamplingType.MUNITSR
             self.drawtype = "rectangle"
         else:
-            if self.parent.samplingareapage.samplingtype in [
+            if self.parent.samplingareapage.samplingtype in {
                 SamplingType.MVWIN,
                 SamplingType.MMVWINR,
                 SamplingType.MMVWINC,
-            ]:
+            }:
                 self.parent.samplingareapage.samplingtype = SamplingType.MMVWINC
                 wx.FindWindowById(wx.ID_FORWARD).Enable(True)
             else:
@@ -1737,11 +1734,11 @@ class DrawSampleUnitsPage(TitledPage):
     def OnEnterPage(self, event):
         """Function during entering"""
 
-        if self.parent.samplingareapage.samplingtype in [
+        if self.parent.samplingareapage.samplingtype in {
             SamplingType.MVWIN,
             SamplingType.MMVWINC,
             SamplingType.MMVWINR,
-        ]:
+        }:
             self.numregions = 1
         else:
             self.numregions = int(self.parent.drawunits.numregions)

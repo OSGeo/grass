@@ -480,10 +480,8 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                 self.cmdindex = self.cmdindex - 1
             if event.GetKeyCode() == wx.WXK_DOWN:
                 self.cmdindex = self.cmdindex + 1
-            if self.cmdindex < 0:
-                self.cmdindex = 0
-            if self.cmdindex > len(self.cmdbuffer) - 1:
-                self.cmdindex = len(self.cmdbuffer) - 1
+            self.cmdindex = max(self.cmdindex, 0)
+            self.cmdindex = min(self.cmdindex, len(self.cmdbuffer) - 1)
 
             try:
                 # without strip causes problem on windows

@@ -728,10 +728,8 @@ class ColorTable(wx.Frame):
             self.rulesPanel.mainPanel.FindWindowById(count + 2000).SetColour(rgb)
             # range
             try:
-                if float(value) < minim:
-                    minim = float(value)
-                if float(value) > maxim:
-                    maxim = float(value)
+                minim = min(float(value), minim)
+                maxim = max(float(value), maxim)
             except ValueError:  # nv, default
                 pass
             count += 1
@@ -787,7 +785,7 @@ class ColorTable(wx.Frame):
                 continue
 
             if (
-                rule["value"] not in ("nv", "default")
+                rule["value"] not in {"nv", "default"}
                 and rule["value"][-1] != "%"
                 and not self._IsNumber(rule["value"])
             ):
@@ -1619,10 +1617,8 @@ class VectorColorTable(ColorTable):
             else:
                 col1, col2 = record.split(sep)
 
-            if float(col1) < minim:
-                minim = float(col1)
-            if float(col1) > maxim:
-                maxim = float(col1)
+            minim = min(float(col1), minim)
+            maxim = max(float(col1), maxim)
 
             # color rules list should only have unique values of col1, not all
             # records
