@@ -11,7 +11,7 @@ for details.
 
 import os
 import datetime
-import xml.sax.saxutils as saxutils
+from xml.sax import saxutils
 import xml.etree.ElementTree as et
 import subprocess
 import collections

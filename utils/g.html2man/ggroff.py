@@ -60,14 +60,14 @@ def clean(content):
 class Formatter:
     def __init__(self, filename, stream=sys.stdout):
         self.stream = stream
-        self.style = dict(
-            preformat=False,
-            in_ul=False,
-            no_nl=False,
-            in_table=False,
-            in_tr=False,
-            index=[],
-        )
+        self.style = {
+            "preformat": False,
+            "in_ul": False,
+            "no_nl": False,
+            "in_table": False,
+            "in_tr": False,
+            "index": [],
+        }
         self.stack = []
         self.strip_re = re.compile("^[ \t]+")
         self.filename = filename

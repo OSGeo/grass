@@ -409,14 +409,14 @@ def vector_what(
         flags += "a"
     if multiple:
         flags += "m"
-    cmdParams = dict(
-        quiet=True,
-        flags=flags,
-        map=",".join(map_list),
-        layer=",".join(layer_list),
-        coordinates=",".join(coord_list),
-        distance=float(distance),
-    )
+    cmdParams = {
+        "quiet": True,
+        "flags": flags,
+        "map": ",".join(map_list),
+        "layer": ",".join(layer_list),
+        "coordinates": ",".join(coord_list),
+        "distance": float(distance),
+    }
     if ttype:
         cmdParams["type"] = ",".join(ttype)
 

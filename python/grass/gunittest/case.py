@@ -485,7 +485,7 @@ class TestCase(unittest.TestCase):
         flag and few other, use `assertModuleKeyValue` for the full interface
         of arbitrary module.
         """
-        parameters = dict(map=map, column=column, flags="g")
+        parameters = {"map": map, "column": column, "flags": "g"}
         if layer:
             parameters.update(layer=layer)
         if type:
@@ -903,7 +903,7 @@ class TestCase(unittest.TestCase):
         """
         if statistics is None or sorted(statistics.keys()) == ["max", "min"]:
             if statistics is None:
-                statistics = dict(min=-precision, max=precision)
+                statistics = {"min": -precision, "max": precision}
             diff = self._compute_difference_raster(
                 reference, actual, "assertRastersNoDifference"
             )
@@ -970,7 +970,7 @@ class TestCase(unittest.TestCase):
         """
         if statistics is None or sorted(statistics.keys()) == ["max", "min"]:
             if statistics is None:
-                statistics = dict(min=-precision, max=precision)
+                statistics = {"min": -precision, "max": precision}
             diff = self._compute_difference_raster3d(
                 reference, actual, "assertRasters3dNoDifference"
             )

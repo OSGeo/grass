@@ -36,7 +36,7 @@ except ImportError:
     havePwd = False
 
 import wx
-import wx.lib.agw.aui as aui
+from wx.lib.agw import aui
 import wx.lib.colourselect as csel
 import wx.lib.mixins.listctrl as listmix
 import wx.lib.scrolledpanel as SP

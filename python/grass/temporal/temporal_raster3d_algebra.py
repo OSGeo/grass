@@ -12,7 +12,7 @@ for details.
 """
 
 try:
-    import ply.yacc as yacc
+    from ply import yacc
 except ImportError:
     pass
 
