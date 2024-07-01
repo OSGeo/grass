@@ -47,19 +47,20 @@ try:
 except ImportError:
     pass
 
+import copy
+
 import grass.pygrass.modules as pygrass
 
-import copy
+from .abstract_dataset import AbstractDatasetComparisonKeyStartTime
+from .core import get_current_mapset, init_dbif
+from .open_stds import open_new_stds
+from .space_time_datasets import VectorDataset
+from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
 from .temporal_algebra import (
+    GlobalTemporalVar,
     TemporalAlgebraLexer,
     TemporalAlgebraParser,
-    GlobalTemporalVar,
 )
-from .core import init_dbif, get_current_mapset
-from .abstract_dataset import AbstractDatasetComparisonKeyStartTime
-from .open_stds import open_new_stds
-from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
-from .space_time_datasets import VectorDataset
 
 
 class TemporalVectorAlgebraLexer(TemporalAlgebraLexer):

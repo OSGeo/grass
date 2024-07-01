@@ -440,40 +440,42 @@ for details.
 """
 
 try:
-    from ply import lex
-    from ply import yacc
+    from ply import lex, yacc
 except:
     pass
 
-import os
 import copy
+import os
 from datetime import datetime
 
 import grass.pygrass.modules as pymod
+
+from .abstract_dataset import AbstractDatasetComparisonKeyStartTime
+from .abstract_map_dataset import AbstractMapDataset
+from .abstract_space_time_dataset import AbstractSpaceTimeDataset
 from .core import (
-    init_dbif,
-    get_tgis_message_interface,
-    get_current_mapset,
     SQLDatabaseInterfaceConnection,
+    get_current_mapset,
+    get_tgis_message_interface,
+    init_dbif,
 )
+from .datetime_math import (
+    create_numeric_suffix,
+    create_suffix_from_datetime,
+    create_time_suffix,
+    string_to_datetime,
+    time_delta_to_relative_time,
+)
+from .factory import dataset_factory
+from .open_stds import open_new_stds, open_old_stds
+from .space_time_datasets import RasterDataset
+from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
 from .temporal_granularity import (
+    compute_absolute_time_granularity,
     compute_common_absolute_time_granularity,
     compute_common_relative_time_granularity,
 )
-from .abstract_dataset import AbstractDatasetComparisonKeyStartTime
-from .abstract_map_dataset import AbstractMapDataset
-from .space_time_datasets import RasterDataset
-from .factory import dataset_factory
-from .open_stds import open_new_stds, open_old_stds
 from .temporal_operator import TemporalOperatorParser
-from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
-from .datetime_math import time_delta_to_relative_time, string_to_datetime
-from .abstract_space_time_dataset import AbstractSpaceTimeDataset
-from .temporal_granularity import compute_absolute_time_granularity
-
-from .datetime_math import create_suffix_from_datetime
-from .datetime_math import create_time_suffix
-from .datetime_math import create_numeric_suffix
 
 
 class TemporalAlgebraLexer:

@@ -18,11 +18,12 @@ for details.
 :authors: Soeren Gebbert
 """
 
-from .datetime_math import compute_datetime_delta
-from .abstract_map_dataset import AbstractMapDataset
-from functools import reduce
-from collections import OrderedDict
 import ast
+from collections import OrderedDict
+from functools import reduce
+
+from .abstract_map_dataset import AbstractMapDataset
+from .datetime_math import compute_datetime_delta
 
 SINGULAR_GRAN = ["second", "minute", "hour", "day", "week", "month", "year"]
 PLURAL_GRAN = ["seconds", "minutes", "hours", "days", "weeks", "months", "years"]
