@@ -28,9 +28,9 @@ from core import globalvar
 from core.gcmd import GError, GMessage
 
 from gui_core.dialogs import SetOpacityDialog
-from gui_core.wrap import StaticBox, Menu, ListCtrl
+from gui_core.wrap import ListCtrl, Menu, StaticBox
 from iscatt.controllers import ScattsManager
-from iscatt.toolbars import MainToolbar, EditingToolbar, CategoryToolbar
+from iscatt.toolbars import CategoryToolbar, EditingToolbar, MainToolbar
 from iscatt.iscatt_core import idScattToidBands
 from iscatt.dialogs import ManageBusyCursorMixin, RenameClassDialog
 from iscatt.plots import ScatterPlotWidget

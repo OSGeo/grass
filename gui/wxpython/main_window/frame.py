@@ -19,11 +19,11 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com> (menu customization)
 """
 
-import sys
 import os
-import stat
 import platform
 import re
+import stat
+import sys
 
 from core import globalvar
 
@@ -45,34 +45,36 @@ if os.path.join(globalvar.ETCDIR, "python") not in sys.path:
 from grass.script import core as grass
 from grass.script.utils import decode
 
-from core.gcmd import RunCommand, GError, GMessage
-from core.settings import UserSettings, GetDisplayVectSettings
-from core.utils import SetAddOnPath, GetLayerNameFromCmd, command2ltype, get_shell_pid
-from core.watchdog import (
-    EVT_UPDATE_MAPSET,
-    EVT_CURRENT_MAPSET_CHANGED,
-    MapsetWatchdog,
-)
+from core.gcmd import GError, GMessage, RunCommand
+from core.settings import GetDisplayVectSettings, UserSettings
+from core.utils import GetLayerNameFromCmd, SetAddOnPath, command2ltype, get_shell_pid
+from core.watchdog import EVT_CURRENT_MAPSET_CHANGED, EVT_UPDATE_MAPSET, MapsetWatchdog
 from gui_core.preferences import MapsetAccess, PreferencesDialog
 from lmgr.layertree import LayerTree, LMIcons
 from lmgr.menudata import LayerManagerMenuData, LayerManagerModuleTree
 from main_window.notebook import MainNotebook
 from gui_core.widgets import GNotebook
-from core.gconsole import GConsole, EVT_IGNORED_CMD_RUN
+from core.gconsole import EVT_IGNORED_CMD_RUN, GConsole
 from core.giface import Notification
-from gui_core.goutput import GConsoleWindow, GC_PROMPT
+from gui_core.goutput import GC_PROMPT, GConsoleWindow
 from gui_core.dialogs import (
-    LocationDialog,
-    MapsetDialog,
     CreateNewVector,
     GroupDialog,
+    LocationDialog,
     MapLayersDialog,
+    MapsetDialog,
     QuitDialog,
 )
-from gui_core.menu import SearchModuleWindow, Menu as GMenu
+from gui_core.menu import Menu as GMenu
+from gui_core.menu import SearchModuleWindow
 from core.debug import Debug
-from lmgr.toolbars import LMWorkspaceToolbar, LMToolsToolbar
-from lmgr.toolbars import LMMiscToolbar, LMNvizToolbar, DisplayPanelToolbar
+from lmgr.toolbars import (
+    DisplayPanelToolbar,
+    LMMiscToolbar,
+    LMNvizToolbar,
+    LMToolsToolbar,
+    LMWorkspaceToolbar,
+)
 from lmgr.statusbar import SbMain
 from lmgr.workspace import WorkspaceManager
 from lmgr.pyshell import PyShellWindow
@@ -81,13 +83,14 @@ from mapdisp.frame import MapPanel
 from datacatalog.catalog import DataCatalog
 from history.browser import HistoryBrowser
 from gui_core.forms import GUI
-from gui_core.wrap import Menu, TextEntryDialog, SimpleTabArt
+from gui_core.wrap import Menu, SimpleTabArt, TextEntryDialog
 from startup.guiutils import (
     can_switch_mapset_interactive,
-    switch_mapset_interactively,
-    create_mapset_interactively,
     create_location_interactively,
+    create_mapset_interactively,
+    switch_mapset_interactively,
 )
+
 from grass.grassdb.checks import is_first_time_user
 from grass.grassdb.history import Status
 
@@ -889,8 +892,8 @@ class GMFrame(wx.Frame):
 
     def OnGModeler(self, event=None, cmd=None):
         """Launch Graphical Modeler. See OnIClass documentation"""
-        from gmodeler.panels import ModelerPanel
         from gmodeler.menudata import ModelerMenuData
+        from gmodeler.panels import ModelerPanel
 
         gmodeler_panel = ModelerPanel(
             parent=self, giface=self._giface, statusbar=self.statusbar, dockable=True
@@ -1834,7 +1837,7 @@ class GMFrame(wx.Frame):
             This documentation is actually documentation of some
             component related to gui_core/menu.py file.
         """
-        from iclass.frame import IClassMapDisplay, haveIClass, errMsg
+        from iclass.frame import IClassMapDisplay, errMsg, haveIClass
 
         if not haveIClass:
             GError(

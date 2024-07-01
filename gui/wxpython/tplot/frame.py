@@ -19,14 +19,14 @@ This program is free software under the GNU General Public License
 @author start stvds support Matej Krejci
 """
 import os
+from functools import reduce
 from itertools import cycle
-import numpy as np
 
+import numpy as np
 import wx
 from grass.pygrass.modules import Module
 
 import grass.script as grass
-from functools import reduce
 
 try:
     import matplotlib
@@ -35,8 +35,8 @@ try:
     # backend.
     matplotlib.use("WXAgg")
     from matplotlib.figure import Figure
+    from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigCanvas
     from matplotlib.backends.backend_wxagg import (
-        FigureCanvasWxAgg as FigCanvas,
         NavigationToolbar2WxAgg as NavigationToolbar,
     )
     import matplotlib.dates as mdates
@@ -50,7 +50,7 @@ except ImportError as e:
 
 
 import grass.temporal as tgis
-from core.gcmd import GMessage, GError, GException, RunCommand
+from core.gcmd import GError, GException, GMessage, RunCommand
 from gui_core.widgets import CoordinatesValidator
 from gui_core import gselect
 from core import globalvar
@@ -67,7 +67,7 @@ except ImportError:
 import wx.lib.filebrowsebutton as filebrowse
 
 from gui_core.widgets import GNotebook
-from gui_core.wrap import CheckBox, TextCtrl, Button, StaticText
+from gui_core.wrap import Button, CheckBox, StaticText, TextCtrl
 
 ALPHA = 0.5
 COLORS = ["b", "g", "r", "c", "m", "y", "k"]

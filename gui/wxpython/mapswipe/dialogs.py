@@ -26,14 +26,14 @@ from gui_core.preferences import PreferencesBaseDialog
 from core.gcmd import GMessage
 from core.layerlist import LayerList
 from core.settings import UserSettings
-from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox
+from gui_core.wrap import Button, SpinCtrl, StaticBox, StaticText
 from gui_core.simplelmgr import (
-    SimpleLayerManager,
     SIMPLE_LMGR_RASTER,
-    SIMPLE_LMGR_VECTOR,
     SIMPLE_LMGR_RGB,
     SIMPLE_LMGR_TB_LEFT,
     SIMPLE_LMGR_TB_RIGHT,
+    SIMPLE_LMGR_VECTOR,
+    SimpleLayerManager,
 )
 
 from grass.pydispatch.signal import Signal

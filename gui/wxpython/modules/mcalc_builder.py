@@ -31,9 +31,9 @@ from gui_core.wrap import (
     Button,
     ClearButton,
     CloseButton,
-    TextCtrl,
-    StaticText,
     StaticBox,
+    StaticText,
+    TextCtrl,
 )
 from core.settings import UserSettings
 

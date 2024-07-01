@@ -24,7 +24,7 @@ import wx.aui
 
 # start new import
 import tempfile
-from core.gcmd import RunCommand
+from core.gcmd import GMessage, RunCommand
 import grass.script.core as grass
 from core import gcmd
 
@@ -32,9 +32,8 @@ from core.giface import StandaloneGrassInterface
 from mapwin.base import MapWindowProperties
 from mapwin.buffered import BufferedMapWindow
 from core.render import Map
-from gui_core.toolbars import BaseToolbar, BaseIcons, ToolSwitcher
+from gui_core.toolbars import BaseIcons, BaseToolbar, ToolSwitcher
 from icons.icon import MetaIcon
-from core.gcmd import GMessage
 from grass.pydispatch.signal import Signal
 from grass.pydispatch.errors import DispatcherKeyError
 

@@ -54,7 +54,7 @@ import grass.script as grass
 from core.utils import PilImageToWxImage
 from dbmgr.vinfo import VectorDBInfo
 from gui_core.gselect import Select
-from core.gcmd import RunCommand, GError, GMessage
+from core.gcmd import GError, GMessage, RunCommand
 from gui_core.dialogs import SymbolDialog
 from gui_core.wrap import (
     BitmapButton,
@@ -62,12 +62,14 @@ from gui_core.wrap import (
     BitmapFromImage,
     Button,
     CheckBox,
+    CheckListCtrlMixin,
     Choice,
     ClientDC,
     ColourPickerCtrl,
     Dialog,
     DirBrowseButton,
     EmptyBitmap,
+    EmptyImage,
     ExpandoTextCtrl,
     FileBrowseButton,
     FloatSpin,
@@ -84,8 +86,6 @@ from gui_core.wrap import (
     StaticText,
     TextCtrl,
     TextEntryDialog,
-    EmptyImage,
-    CheckListCtrlMixin,
 )
 from psmap.utils import *
 from psmap.instructions import *

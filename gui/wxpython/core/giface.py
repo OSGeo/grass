@@ -19,7 +19,6 @@ import os
 import sys
 
 import grass.script as grass
-
 from grass.pydispatch.signal import Signal
 
 # to disable Abstract class not referenced
@@ -250,7 +249,7 @@ class StandaloneGrassInterface(GrassInterface):
         )
 
         # workaround, standalone grass interface should be moved to sep. file
-        from core.gconsole import GConsole, EVT_CMD_OUTPUT, EVT_CMD_PROGRESS
+        from core.gconsole import EVT_CMD_OUTPUT, EVT_CMD_PROGRESS, GConsole
 
         self._gconsole = GConsole()
         self._gconsole.Bind(EVT_CMD_PROGRESS, self._onCmdProgress)

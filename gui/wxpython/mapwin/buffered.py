@@ -21,10 +21,10 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com> (refactoring)
 """
 
-import os
-import time
 import math
+import os
 import sys
+import time
 
 import wx
 
@@ -35,16 +35,16 @@ import grass.script as grass
 
 from gui_core.dialogs import SavedRegion
 from gui_core.wrap import (
-    DragImage,
-    PseudoDC,
-    EmptyBitmap,
     BitmapFromImage,
-    Window,
+    DragImage,
+    EmptyBitmap,
     Menu,
-    Rect,
     NewId,
+    PseudoDC,
+    Rect,
+    Window,
 )
-from core.gcmd import RunCommand, GException, GError
+from core.gcmd import GError, GException, RunCommand
 from core.debug import Debug
 from core.settings import UserSettings
 from mapwin.base import MapWindowBase

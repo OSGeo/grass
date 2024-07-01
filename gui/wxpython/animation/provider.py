@@ -22,17 +22,17 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
-import wx
 import tempfile
 from multiprocessing import Process, Queue
 
-from core.gcmd import GException, DecodeString
+import wx
+from core.gcmd import DecodeString, GException
 from core.settings import UserSettings
 from core.debug import Debug
 from core.utils import autoCropImageFromFile
 
-from animation.utils import HashCmd, HashCmds, GetFileFromCmd, GetFileFromCmds
-from gui_core.wrap import EmptyBitmap, BitmapFromImage
+from animation.utils import GetFileFromCmd, GetFileFromCmds, HashCmd, HashCmds
+from gui_core.wrap import BitmapFromImage, EmptyBitmap
 
 import grass.script.core as gcore
 from grass.script.task import cmdlist_to_tuple
@@ -869,9 +869,10 @@ def read2_command(*args, **kwargs):
 def test():
     import shutil
 
-    from core.layerlist import LayerList, Layer
+    from core.layerlist import Layer, LayerList
     from animation.data import AnimLayer
     from animation.utils import layerListToCmdsMatrix
+
     import grass.temporal as tgis
 
     tgis.init()

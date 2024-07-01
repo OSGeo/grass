@@ -15,20 +15,19 @@ This program is free software under the GNU General Public License
 @author Michael Barton, Arizona State University
 """
 
+import math
 import os
 import sys
-import math
+
 import numpy
-
 import wx
-
 from wx.lib import plot
 import grass.script as grass
 from wxplot.base import BasePlotFrame, PlotIcons
-from gui_core.toolbars import BaseToolbar, BaseIcons
+from gui_core.toolbars import BaseIcons, BaseToolbar
 from gui_core.wrap import StockCursor
-from wxplot.dialogs import ProfileRasterDialog, PlotStatsFrame
-from core.gcmd import RunCommand, GWarning, GError, GMessage
+from wxplot.dialogs import PlotStatsFrame, ProfileRasterDialog
+from core.gcmd import GError, GMessage, GWarning, RunCommand
 
 try:
     import grass.lib.gis as gislib

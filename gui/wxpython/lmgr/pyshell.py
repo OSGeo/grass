@@ -19,8 +19,8 @@ This program is free software under the GNU General Public License
 """
 
 import io
-from contextlib import redirect_stdout
 import sys
+from contextlib import redirect_stdout
 
 import wx
 from wx.py.shell import Shell as PyShell

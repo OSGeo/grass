@@ -16,12 +16,12 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
-from math import ceil
-from itertools import cycle
-import numpy as np
-
-import wx
 from functools import reduce
+from itertools import cycle
+from math import ceil
+
+import numpy as np
+import wx
 
 try:
     import matplotlib
@@ -31,8 +31,8 @@ try:
     matplotlib.use("WXAgg")
     from matplotlib import gridspec
     from matplotlib.figure import Figure
+    from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigCanvas
     from matplotlib.backends.backend_wxagg import (
-        FigureCanvasWxAgg as FigCanvas,
         NavigationToolbar2WxAgg as NavigationToolbar,
     )
     import matplotlib.dates as mdates

@@ -28,25 +28,24 @@ import os
 import wx
 import wx.lib.mixins.listctrl as listmix
 
-from core import globalvar
-from core import utils
+from core import globalvar, utils
 from gui_core.widgets import SearchModuleWidget, SimpleValidator
 from core.gcmd import GError
-from gui_core.dialogs import SimpleDialog, MapLayersDialogForModeler
+from gui_core.dialogs import MapLayersDialogForModeler, SimpleDialog
 from gui_core.prompt import GPromptSTC
-from gui_core.gselect import Select, ElementSelect
+from gui_core.gselect import ElementSelect, Select
 from lmgr.menudata import LayerManagerMenuData
 from gui_core.wrap import (
     Button,
-    StaticText,
-    StaticBox,
-    TextCtrl,
-    Menu,
-    ListCtrl,
-    NewId,
     CheckListCtrlMixin,
+    ListCtrl,
+    Menu,
+    NewId,
+    StaticBox,
+    StaticText,
+    TextCtrl,
 )
-from gmodeler.model import ModelData, ModelAction, ModelCondition
+from gmodeler.model import ModelAction, ModelCondition, ModelData
 
 
 class ModelDataDialog(SimpleDialog):

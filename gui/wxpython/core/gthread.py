@@ -14,16 +14,13 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
 
+import queue as Queue
+import sys
 import threading
 import time
 
 import wx
 from wx.lib.newevent import NewEvent
-
-import sys
-
-import queue as Queue
-
 from core.gconsole import EVT_CMD_DONE, wxCmdDone
 
 wxThdTerminate, EVT_THD_TERMINATE = NewEvent()

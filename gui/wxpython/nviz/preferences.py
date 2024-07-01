@@ -16,16 +16,15 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <KratochAnna seznam.cz> (Google SoC 2011)
 """
 
-import os
 import copy
+import os
 
 import wx
 import wx.lib.colourselect as csel
-
 from core import globalvar
 from core.settings import UserSettings
 from gui_core.preferences import PreferencesBaseDialog
-from gui_core.wrap import SpinCtrl, CheckBox, StaticText, StaticBox
+from gui_core.wrap import CheckBox, SpinCtrl, StaticBox, StaticText
 
 
 class NvizPreferencesDialog(PreferencesBaseDialog):

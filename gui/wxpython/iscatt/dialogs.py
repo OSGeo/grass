@@ -28,7 +28,7 @@ from core import globalvar
 from core.gcmd import GMessage
 from core.settings import UserSettings
 from gui_core.dialogs import SimpleDialog
-from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox, TextCtrl
+from gui_core.wrap import Button, SpinCtrl, StaticBox, StaticText, TextCtrl
 
 
 class AddScattPlotDialog(wx.Dialog):

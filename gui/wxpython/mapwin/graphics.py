@@ -18,7 +18,6 @@ This program is free software under the GNU General Public License
 from copy import copy
 
 import wx
-
 from gui_core.wrap import NewId
 
 

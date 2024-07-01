@@ -24,18 +24,18 @@ from copy import deepcopy
 import wx
 
 
-from core.gcmd import GError, GMessage, RunCommand, GWarning
+from core.gcmd import GError, GMessage, GWarning, RunCommand
 from core.settings import UserSettings
 from core.gthread import gThread
 from iscatt.iscatt_core import (
+    MAX_NCELLS,
+    MAX_SCATT_SIZE,
+    WARN_NCELLS,
+    WARN_SCATT_SIZE,
     Core,
-    idBandsToidScatt,
     GetRasterInfo,
     GetRegion,
-    MAX_SCATT_SIZE,
-    WARN_SCATT_SIZE,
-    MAX_NCELLS,
-    WARN_NCELLS,
+    idBandsToidScatt,
 )
 from iscatt.dialogs import AddScattPlotDialog, ExportCategoryRaster
 from iclass.dialogs import IClassGroupDialog

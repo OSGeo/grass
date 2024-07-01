@@ -16,14 +16,13 @@ This program is free software under the GNU General Public License
 """
 
 import os
-
-import wx
 from random import randint
 
+import wx
 from wx.lib import plot
 from core.globalvar import ICONDIR
 from core.settings import UserSettings
-from wxplot.dialogs import TextDialog, OptDialog
+from wxplot.dialogs import OptDialog, TextDialog
 from core.render import Map
 from icons.icon import MetaIcon
 from gui_core.toolbars import BaseIcons

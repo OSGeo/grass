@@ -16,8 +16,9 @@ for details.
 
 import os
 import tempfile
-import wx
 import uuid
+
+import wx
 from wx.lib.newevent import NewEvent
 
 from grass.script import core as gcore

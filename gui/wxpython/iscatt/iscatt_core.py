@@ -26,13 +26,13 @@ import numpy as np
 # from matplotlib.path import Path
 # from scipy.signal import convolve2d
 
-from math import sqrt, ceil, floor
+from math import ceil, floor, sqrt
 
 from core.gcmd import GException, RunCommand
 
 import grass.script as grass
 
-from iscatt.core_c import CreateCatRast, ComputeScatts, UpdateCatRast, Rasterize
+from iscatt.core_c import ComputeScatts, CreateCatRast, Rasterize, UpdateCatRast
 
 MAX_SCATT_SIZE = 4100 * 4100
 WARN_SCATT_SIZE = 2000 * 2000

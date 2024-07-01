@@ -20,23 +20,24 @@ import wx
 from wx.lib import ogl
 
 from gui_core.dialogs import TextEntryDialog as CustomTextEntryDialog
-from gui_core.wrap import TextEntryDialog as wxTextEntryDialog, NewId, Menu
+from gui_core.wrap import Menu, NewId
+from gui_core.wrap import TextEntryDialog as wxTextEntryDialog
 from gui_core.forms import GUI
-from core.gcmd import GException, GError
+from core.gcmd import GError, GException
 
 from gmodeler.model import (
-    ModelRelation,
     ModelAction,
+    ModelComment,
+    ModelCondition,
     ModelData,
     ModelLoop,
-    ModelCondition,
-    ModelComment,
+    ModelRelation,
 )
 from gmodeler.dialogs import (
-    ModelRelationDialog,
+    ModelConditionDialog,
     ModelDataDialog,
     ModelLoopDialog,
-    ModelConditionDialog,
+    ModelRelationDialog,
 )
 from gmodeler.giface import GraphicalModelerGrassInterface
 

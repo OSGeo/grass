@@ -12,14 +12,14 @@ This program is free software under the GNU General Public License
 @author Jachym Cepicky
 """
 
-import os
-import sys
-import platform
 import glob
-import shlex
-import re
 import inspect
 import operator
+import os
+import platform
+import re
+import shlex
+import sys
 
 from grass.script import core as grass
 from grass.script import task as gtask

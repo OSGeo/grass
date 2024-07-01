@@ -32,8 +32,8 @@ from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
 from gui_core.preferences import DefaultFontDialog
 from core.debug import Debug
 from core.gcmd import GError
-from gui_core.toolbars import BaseToolbar, BaseIcons
-from gui_core.wrap import PseudoDC, Menu, EmptyBitmap, NewId, BitmapFromImage
+from gui_core.toolbars import BaseIcons, BaseToolbar
+from gui_core.wrap import BitmapFromImage, EmptyBitmap, Menu, NewId, PseudoDC
 
 
 class BufferedWindow(wx.Window):

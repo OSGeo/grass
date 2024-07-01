@@ -18,12 +18,12 @@ This program is free software under the GNU General Public License
 @author Python exports Ondrej Pesek <pesej.ondrek gmail.com>
 """
 
+import math
 import os
-import time
+import random
 import stat
 import tempfile
-import random
-import math
+import time
 
 import wx
 
@@ -39,9 +39,9 @@ else:
     import wx.lib.flatnotebook as FN
 from wx.lib.newevent import NewEvent
 
-from core.gconsole import GConsole, EVT_CMD_RUN, EVT_CMD_DONE, EVT_CMD_PREPARE
+from core.gconsole import EVT_CMD_DONE, EVT_CMD_PREPARE, EVT_CMD_RUN, GConsole
 from core.debug import Debug
-from core.gcmd import GMessage, GException, GWarning, GError
+from core.gcmd import GError, GException, GMessage, GWarning
 from core.settings import UserSettings
 from core.giface import Notification
 
@@ -56,33 +56,33 @@ from gui_core.wrap import (
     Button,
     EmptyBitmap,
     ImageFromBitmap,
+    IsDark,
     StaticBox,
     StaticText,
     StockCursor,
     TextCtrl,
-    IsDark,
 )
 from main_window.page import MainPageBase
 from gmodeler.giface import GraphicalModelerGrassInterface
 from gmodeler.model import (
     Model,
     ModelAction,
-    ModelRelation,
-    ModelLoop,
-    ModelCondition,
     ModelComment,
-    WriteModelFile,
+    ModelCondition,
     ModelDataSeries,
     ModelDataSingle,
+    ModelLoop,
+    ModelRelation,
     WriteActiniaFile,
+    WriteModelFile,
     WritePythonFile,
     WritePyWPSFile,
 )
 from gmodeler.dialogs import (
+    ItemListCtrl,
     ModelDataDialog,
     ModelSearchDialog,
     VariableListCtrl,
-    ItemListCtrl,
 )
 from gmodeler.canvas import ModelCanvas, ModelEvtHandler
 from gmodeler.toolbars import ModelerToolbar

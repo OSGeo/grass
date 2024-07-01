@@ -19,9 +19,9 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com> (Google SoC 2011)
 """
 
+import copy
 import os
 import sys
-import copy
 
 import wx
 import wx.lib.colourselect as csel
@@ -46,37 +46,36 @@ except ImportError:
 import grass.script as grass
 
 from core import globalvar
-from gui_core.gselect import VectorDBInfo
+from gui_core.gselect import Select, VectorDBInfo
 from core.gcmd import GMessage, RunCommand
 from modules.colorrules import ThematicVectorTable
 from core.settings import UserSettings
 from gui_core.widgets import (
-    ScrolledPanel,
-    NumTextCtrl,
     FloatSlider,
-    SymbolButton,
     GNotebook,
+    NumTextCtrl,
+    ScrolledPanel,
+    SymbolButton,
 )
-from gui_core.gselect import Select
 from gui_core.wrap import (
-    Window,
-    SpinCtrl,
-    PseudoDC,
-    ToggleButton,
     Button,
-    TextCtrl,
-    Slider,
-    StaticText,
-    StaticBox,
     CheckListBox,
     ColourSelect,
+    PseudoDC,
+    Slider,
+    SpinCtrl,
+    StaticBox,
+    StaticText,
+    TextCtrl,
+    ToggleButton,
+    Window,
 )
 from core.debug import Debug
 from nviz.mapwindow import (
+    wxUpdateCPlane,
+    wxUpdateLight,
     wxUpdateProperties,
     wxUpdateView,
-    wxUpdateLight,
-    wxUpdateCPlane,
 )
 from .wxnviz import DM_FLAT, DM_GOURAUD, MAX_ISOSURFS
 

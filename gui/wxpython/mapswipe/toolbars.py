@@ -17,11 +17,9 @@ This program is free software under the GNU General Public License
 """
 
 import wx
-
-from gui_core.toolbars import BaseToolbar, BaseIcons
+from gui_core.toolbars import BaseIcons, BaseToolbar
 from gui_core.wrap import Menu
 from icons.icon import MetaIcon
-
 
 swipeIcons = {
     "tools": MetaIcon(img="tools", label=_("Tools")),

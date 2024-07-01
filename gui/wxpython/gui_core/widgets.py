@@ -51,9 +51,9 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import sys
-import string
 import re
+import string
+import sys
 from bisect import bisect
 from datetime import datetime
 from core.globalvar import wxPythonPhoenix
@@ -89,21 +89,21 @@ from grass.script import core as grass
 from grass.pydispatch.signal import Signal
 
 from core import globalvar
-from core.gcmd import GMessage, GError
+from core.gcmd import GError, GMessage
 from core.debug import Debug
 from gui_core.wrap import (
     Button,
-    SearchCtrl,
-    Slider,
-    StaticText,
-    StaticBox,
-    TextCtrl,
-    Menu,
-    Rect,
+    CheckListCtrlMixin,
     EmptyBitmap,
     ListCtrl,
+    Menu,
     NewId,
-    CheckListCtrlMixin,
+    Rect,
+    SearchCtrl,
+    Slider,
+    StaticBox,
+    StaticText,
+    TextCtrl,
 )
 
 

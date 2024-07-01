@@ -17,8 +17,8 @@ This program is free software under the GNU General Public License
 import wx
 
 from gui_core.treeview import TreeListView
-from gui_core.wrap import Button, StaticText, Menu, NewId
-from core.treemodel import TreeModel, DictNode
+from gui_core.wrap import Button, Menu, NewId, StaticText
+from core.treemodel import DictNode, TreeModel
 
 from grass.pydispatch.signal import Signal
 
@@ -272,8 +272,8 @@ def PrepareQueryResults(coordinates, result):
 
 def test():
     app = wx.App()
-    from grass.script import vector as gvect
     from grass.script import raster as grast
+    from grass.script import vector as gvect
 
     testdata1 = grast.raster_what(
         map=("elevation_shade@PERMANENT", "landclass96"),

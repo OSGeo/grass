@@ -20,9 +20,9 @@ import wx
 from grass import script as grass
 from grass.pydispatch.signal import Signal
 
-from gui_core.toolbars import BaseToolbar, BaseIcons
+from gui_core.toolbars import BaseIcons, BaseToolbar
 from gui_core.dialogs import CreateNewVector, VectorDialog
-from gui_core.wrap import PseudoDC, Menu
+from gui_core.wrap import Menu, PseudoDC
 from vdigit.preferences import VDigitSettingsDialog
 from core.debug import Debug
 from core.settings import UserSettings

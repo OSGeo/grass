@@ -33,9 +33,9 @@ from core.gcmd import GError, GMessage, GWarning, RunCommand
 from gui_core.forms import CmdPanel
 from gui_core.gselect import GdalSelect
 from gui_core.widgets import GListCtrl, GNotebook, LayersList, LayersListValidator
-from gui_core.wrap import Button, CloseButton, StaticText, StaticBox
+from gui_core.wrap import Button, CloseButton, StaticBox, StaticText
 from core.utils import GetValidLayerName
-from core.settings import UserSettings, GetDisplayVectSettings
+from core.settings import GetDisplayVectSettings, UserSettings
 
 
 class ImportDialog(wx.Dialog):

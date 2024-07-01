@@ -34,9 +34,9 @@ This program is free software under the GNU General Public License
 @author Hamish Bowman (planetary ellipsoids)
 """
 
-import os
-import locale
 import functools
+import locale
+import os
 
 import wx
 import wx.lib.mixins.listctrl as listmix
@@ -44,29 +44,27 @@ from core import globalvar
 
 if globalvar.wxPythonPhoenix:
     from wx import adv as wiz
-    from wx.adv import Wizard
-    from wx.adv import WizardPageSimple
+    from wx.adv import Wizard, WizardPageSimple
 else:
     from wx import wizard as wiz
-    from wx.wizard import Wizard
-    from wx.wizard import WizardPageSimple
+    from wx.wizard import Wizard, WizardPageSimple
 import wx.lib.scrolledpanel as scrolled
 
 from core import utils
 from core.utils import cmp
-from core.gcmd import RunCommand, GError, GWarning
+from core.gcmd import GError, GWarning, RunCommand
 from gui_core.widgets import GenericMultiValidator
 from gui_core.wrap import (
-    SpinCtrl,
-    SearchCtrl,
-    StaticText,
-    TextCtrl,
     Button,
     CheckBox,
-    StaticBox,
-    NewId,
-    ListCtrl,
     HyperlinkCtrl,
+    ListCtrl,
+    NewId,
+    SearchCtrl,
+    SpinCtrl,
+    StaticBox,
+    StaticText,
+    TextCtrl,
 )
 from location_wizard.dialogs import SelectTransformDialog
 

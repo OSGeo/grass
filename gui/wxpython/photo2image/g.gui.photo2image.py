@@ -71,6 +71,7 @@ Module to run GCP management tool as stadalone application.
 @author Vaclav Petras  <wenzeslaus gmail.com> (standalone module)
 """
 import os
+
 import grass.script as gscript
 
 
@@ -79,6 +80,7 @@ def main():
     options, flags = gscript.parser()
 
     import wx
+
     from grass.script.setup import set_gui_path
 
     set_gui_path()

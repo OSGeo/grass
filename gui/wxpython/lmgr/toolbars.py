@@ -24,7 +24,7 @@ This program is free software under the GNU General Public License
 """
 
 from core.gcmd import RunCommand
-from gui_core.toolbars import BaseToolbar, AuiToolbar, BaseIcons
+from gui_core.toolbars import AuiToolbar, BaseIcons, BaseToolbar
 from icons.icon import MetaIcon
 
 

@@ -24,30 +24,30 @@ This program is free software under the GNU General Public License
 @author Eliska Kyzlikova <eliska.kyzlikova gmail.com> (turn costs support)
 """
 
-import os
 import math
+import os
 
 from grass.script import core as grass
 
 import wx
 import wx.aui
 
+
 try:
     import wx.lib.agw.flatnotebook as FN
 except ImportError:
     import wx.lib.flatnotebook as FN
+
 import wx.lib.colourselect as csel
 import wx.lib.mixins.listctrl as listmix
-
 from core import globalvar
-from core.gcmd import RunCommand, GMessage
+from core.gcmd import GMessage, RunCommand
 from core.settings import UserSettings
-
 from dbmgr.base import DbMgrBase
 
 from gui_core.widgets import GNotebook
 from gui_core.goutput import GConsoleWindow
-from gui_core.gselect import Select, LayerSelect, ColumnSelect
+from gui_core.gselect import ColumnSelect, LayerSelect, Select
 from gui_core.wrap import (
     BitmapButton,
     BitmapFromImage,
@@ -64,13 +64,13 @@ from gui_core.wrap import (
 )
 
 from vnet.widgets import PointsList
-from vnet.toolbars import MainToolbar, PointListToolbar, AnalysisToolbar
+from vnet.toolbars import AnalysisToolbar, MainToolbar, PointListToolbar
 from vnet.vnet_core import VNETManager
 from vnet.vnet_utils import (
     DegreesToRadians,
-    RadiansToDegrees,
     GetNearestNodeCat,
     ParseMapStr,
+    RadiansToDegrees,
 )
 
 # Main TODOs

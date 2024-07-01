@@ -69,7 +69,7 @@ def main():
 
     from core.giface import StandaloneGrassInterface
     from core.layerlist import LayerList
-    from animation.frame import AnimationFrame, MAX_COUNT
+    from animation.frame import MAX_COUNT, AnimationFrame
     from animation.data import AnimLayer
 
     rast = options["raster"]

@@ -39,15 +39,15 @@ from grass.script.utils import naturally_sorted, try_remove
 from grass.pydispatch.signal import Signal
 
 from core import globalvar
-from core.gcmd import GError, RunCommand, GMessage
+from core.gcmd import GError, GMessage, RunCommand
 from gui_core.gselect import (
     LocationSelect,
     MapsetSelect,
-    Select,
     OgrTypeSelect,
+    Select,
     SubGroupSelect,
 )
-from gui_core.widgets import SingleSymbolPanel, SimpleValidator, MapValidator
+from gui_core.widgets import MapValidator, SimpleValidator, SingleSymbolPanel
 from core.settings import UserSettings
 from core.debug import Debug
 from core.utils import is_shell_running
@@ -56,6 +56,7 @@ from gui_core.wrap import (
     CheckListBox,
     EmptyBitmap,
     HyperlinkCtrl,
+    ListBox,
     Menu,
     NewId,
     Slider,
@@ -63,7 +64,6 @@ from gui_core.wrap import (
     StaticBox,
     StaticText,
     TextCtrl,
-    ListBox,
 )
 
 

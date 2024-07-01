@@ -22,10 +22,10 @@ import wx
 import grass.script as grass
 from wx.lib import plot
 from gui_core.wrap import StockCursor
-from gui_core.toolbars import BaseToolbar, BaseIcons
+from gui_core.toolbars import BaseIcons, BaseToolbar
 from wxplot.base import BasePlotFrame, PlotIcons
 from wxplot.dialogs import HistRasterDialog, PlotStatsFrame
-from core.gcmd import RunCommand, GException, GError
+from core.gcmd import GError, GException, RunCommand
 
 
 class HistogramPlotFrame(BasePlotFrame):

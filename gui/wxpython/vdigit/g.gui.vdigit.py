@@ -35,6 +35,7 @@
 # %end
 
 import os
+
 import grass.script as grass
 
 
@@ -57,7 +58,7 @@ def main():
     from gui_core.mapdisp import FrameMixin
     from mapdisp.main import DMonGrassInterface
     from core.settings import UserSettings
-    from vdigit.main import haveVDigit, errorMsg
+    from vdigit.main import errorMsg, haveVDigit
     from grass.exceptions import CalledModuleError
 
     # define classes which needs imports as local

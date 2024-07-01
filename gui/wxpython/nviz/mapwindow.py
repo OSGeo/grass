@@ -18,23 +18,22 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com> (Google SoC 2011)
 """
 
+import copy
+import math
 import os
 import sys
 import time
-import copy
-import math
-
 from threading import Thread
 
 import wx
 from wx.lib.newevent import NewEvent
 from wx import glcanvas
-from wx.glcanvas import WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE
+from wx.glcanvas import WX_GL_DEPTH_SIZE, WX_GL_DOUBLEBUFFER, WX_GL_RGBA
 
 import grass.script as grass
 from grass.pydispatch.signal import Signal
 
-from core.gcmd import GMessage, GException, GError
+from core.gcmd import GError, GException, GMessage
 from core.debug import Debug
 from mapwin.base import MapWindowBase
 from core.settings import UserSettings
