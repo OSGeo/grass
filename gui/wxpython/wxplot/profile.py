@@ -22,7 +22,7 @@ import numpy
 
 import wx
 
-import wx.lib.plot as plot
+from wx.lib import plot
 import grass.script as grass
 from wxplot.base import BasePlotFrame, PlotIcons
 from gui_core.toolbars import BaseToolbar, BaseIcons

@@ -11,7 +11,7 @@ for details.
 
 import copy
 from datetime import datetime
-import grass.script.core as core
+from grass.script import core
 from .abstract_dataset import (
     AbstractDatasetComparisonKeyStartTime,
     AbstractDatasetComparisonKeyEndTime,
@@ -26,9 +26,9 @@ from .temporal_granularity import (
     compute_absolute_time_granularity,
 )
 
-import grass.lib.vector as vector
-import grass.lib.rtree as rtree
-import grass.lib.gis as gis
+from grass.lib import vector
+from grass.lib import rtree
+from grass.lib import gis
 from ctypes import byref
 
 # Uncomment this to detect the error
