@@ -51,23 +51,23 @@ Module to run test map window (BufferedWidnow) and map display (MapFrame).
 
 import os
 import sys
+
 import wx
 
 import grass.script as grass
-
 from grass.script.setup import set_gui_path
 
 set_gui_path()
 
 # GUI imports require path to GUI code to be set.
-from core.settings import UserSettings  # noqa: E402
 from core.giface import StandaloneGrassInterface  # noqa: E402
+from core.render import Map  # noqa: E402
+from core.settings import UserSettings  # noqa: E402
+from gui_core.wrap import StaticText  # noqa: E402
+from mapdisp.main import LayerList  # noqa: E402
 from mapwin.base import MapWindowProperties  # noqa: E402
 from mapwin.buffered import BufferedMapWindow  # noqa: E402
-from core.render import Map  # noqa: E402
 from rlisetup.sampling_frame import RLiSetupMapPanel  # noqa: E402
-from mapdisp.main import LayerList  # noqa: E402
-from gui_core.wrap import StaticText  # noqa: E402
 
 
 class MapdispGrassInterface(StandaloneGrassInterface):

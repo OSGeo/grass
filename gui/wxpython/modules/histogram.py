@@ -21,19 +21,18 @@ import os
 import sys
 
 import wx
-
 from core import globalvar
-from core.render import Map
-from core.settings import UserSettings
-from gui_core.forms import GUI
-from mapdisp.gprint import PrintOptions
-from core.utils import GetLayerNameFromCmd
-from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
-from gui_core.preferences import DefaultFontDialog
 from core.debug import Debug
 from core.gcmd import GError
-from gui_core.toolbars import BaseToolbar, BaseIcons
-from gui_core.wrap import PseudoDC, Menu, EmptyBitmap, NewId, BitmapFromImage
+from core.render import Map
+from core.settings import UserSettings
+from core.utils import GetLayerNameFromCmd
+from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
+from gui_core.forms import GUI
+from gui_core.preferences import DefaultFontDialog
+from gui_core.toolbars import BaseIcons, BaseToolbar
+from gui_core.wrap import BitmapFromImage, EmptyBitmap, Menu, NewId, PseudoDC
+from mapdisp.gprint import PrintOptions
 
 
 class BufferedWindow(wx.Window):

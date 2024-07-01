@@ -15,14 +15,11 @@ for details.
 """
 
 import wx
-
-from gui_core.toolbars import BaseToolbar
-from icons.icon import MetaIcon
-from gui_core.widgets import FloatValidator
 import wx.lib.colourselect as csel
-from gui_core.wrap import TextCtrl, StaticText, ColourSelect
-from gui_core.toolbars import BaseIcons
-
+from gui_core.toolbars import BaseIcons, BaseToolbar
+from gui_core.widgets import FloatValidator
+from gui_core.wrap import ColourSelect, StaticText, TextCtrl
+from icons.icon import MetaIcon
 
 rdigitIcons = {
     "area": MetaIcon(img="polygon-create", label=_("Digitize area")),

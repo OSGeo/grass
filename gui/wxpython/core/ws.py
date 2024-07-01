@@ -17,18 +17,17 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
 
-import sys
 import copy
+import sys
 import time
 
 import wx
-
-from grass.script.utils import try_remove
-from grass.script import core as grass
-from grass.exceptions import CalledModuleError
-
 from core.debug import Debug
 from core.gthread import gThread
+
+from grass.exceptions import CalledModuleError
+from grass.script import core as grass
+from grass.script.utils import try_remove
 
 try:
     haveGdal = True

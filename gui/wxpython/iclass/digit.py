@@ -17,14 +17,13 @@ for details.
 """
 
 import wx
-
+from core.gcmd import GWarning
 from vdigit.mapwindow import VDigitWindow
 from vdigit.wxdigit import IVDigit
-from vdigit.wxdisplay import DisplayDriver, TYPE_AREA
-from core.gcmd import GWarning
+from vdigit.wxdisplay import TYPE_AREA, DisplayDriver
 
 try:
-    from grass.lib.gis import G_verbose, G_set_verbose
+    from grass.lib.gis import G_set_verbose, G_verbose
     from grass.lib.vector import *
     from grass.lib.vedit import *
 except ImportError:

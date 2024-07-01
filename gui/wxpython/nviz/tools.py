@@ -19,14 +19,14 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com> (Google SoC 2011)
 """
 
+import copy
 import os
 import sys
-import copy
 
 import wx
 import wx.lib.colourselect as csel
-import wx.lib.scrolledpanel as SP
 import wx.lib.filebrowsebutton as filebrowse
+import wx.lib.scrolledpanel as SP
 
 try:
     import wx.lib.agw.flatnotebook as FN
@@ -43,41 +43,41 @@ try:
     import wx.lib.agw.floatspin as fs
 except ImportError:
     fs = None
-import grass.script as grass
-
 from core import globalvar
-from gui_core.gselect import VectorDBInfo
+from core.debug import Debug
 from core.gcmd import GMessage, RunCommand
-from modules.colorrules import ThematicVectorTable
 from core.settings import UserSettings
+from gui_core.gselect import Select, VectorDBInfo
 from gui_core.widgets import (
-    ScrolledPanel,
-    NumTextCtrl,
     FloatSlider,
-    SymbolButton,
     GNotebook,
+    NumTextCtrl,
+    ScrolledPanel,
+    SymbolButton,
 )
-from gui_core.gselect import Select
 from gui_core.wrap import (
-    Window,
-    SpinCtrl,
-    PseudoDC,
-    ToggleButton,
     Button,
-    TextCtrl,
-    Slider,
-    StaticText,
-    StaticBox,
     CheckListBox,
     ColourSelect,
+    PseudoDC,
+    Slider,
+    SpinCtrl,
+    StaticBox,
+    StaticText,
+    TextCtrl,
+    ToggleButton,
+    Window,
 )
-from core.debug import Debug
+from modules.colorrules import ThematicVectorTable
 from nviz.mapwindow import (
+    wxUpdateCPlane,
+    wxUpdateLight,
     wxUpdateProperties,
     wxUpdateView,
-    wxUpdateLight,
-    wxUpdateCPlane,
 )
+
+import grass.script as grass
+
 from .wxnviz import DM_FLAT, DM_GOURAUD, MAX_ISOSURFS
 
 

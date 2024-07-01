@@ -17,9 +17,7 @@ This program is free software under the GNU General Public License
 import sys
 
 import wx
-
-from gui_core.toolbars import BaseToolbar, BaseIcons
-
+from gui_core.toolbars import BaseIcons, BaseToolbar
 from icons.icon import MetaIcon
 
 

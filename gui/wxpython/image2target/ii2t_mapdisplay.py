@@ -18,21 +18,19 @@ This program is free software under the GNU General Public License
 import os
 import platform
 
-from core import globalvar
+import gcp.statusbar as sbgcp
+import mapdisp.statusbar as sb
 import wx
 import wx.aui
-
-from mapdisp.toolbars import MapToolbar
-from gcp.toolbars import GCPDisplayToolbar, GCPManToolbar
-from mapdisp.gprint import PrintOptions
+from core import globalvar
 from core.gcmd import GMessage
+from gcp.toolbars import GCPDisplayToolbar, GCPManToolbar
 from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
 from gui_core.mapdisp import SingleMapPanel
 from gui_core.wrap import Menu
+from mapdisp.gprint import PrintOptions
+from mapdisp.toolbars import MapToolbar
 from mapwin.buffered import BufferedMapWindow
-
-import mapdisp.statusbar as sb
-import gcp.statusbar as sbgcp
 
 # for standalone app
 cmdfilename = None

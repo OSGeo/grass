@@ -19,18 +19,17 @@ This program is free software under the GNU General Public License
 """
 
 import io
-from contextlib import redirect_stdout
 import sys
+from contextlib import redirect_stdout
 
 import wx
+from core.globalvar import CheckWxVersion
+from gui_core.pystc import SetDarkMode
+from gui_core.wrap import Button, ClearButton, IsDark
 from wx.py.shell import Shell as PyShell
 from wx.py.version import VERSION
 
 import grass.script as grass
-
-from gui_core.wrap import Button, ClearButton, IsDark
-from gui_core.pystc import SetDarkMode
-from core.globalvar import CheckWxVersion
 
 
 class PyShellWindow(wx.Panel):

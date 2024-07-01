@@ -23,22 +23,21 @@ import os
 from copy import copy, deepcopy
 
 import wx
-from wx.lib.mixins.listctrl import ColumnSorterMixin, ListCtrlAutoWidthMixin
-
 from core import globalvar
 from core.gcmd import GError
 from gui_core.widgets import FloatValidator, IntegerValidator
 from gui_core.wrap import (
     BitmapFromImage,
     Button,
+    CheckListCtrlMixin,
     ComboBox,
     ListCtrl,
     Panel,
     StaticBox,
     StaticText,
     TextCtrl,
-    CheckListCtrlMixin,
 )
+from wx.lib.mixins.listctrl import ColumnSorterMixin, ListCtrlAutoWidthMixin
 
 
 class PointsList(

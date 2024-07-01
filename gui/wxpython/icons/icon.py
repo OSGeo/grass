@@ -15,17 +15,16 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
+import copy
 import os
 import sys
-import copy
 
 import wx
-
 from core.settings import UserSettings
 
 # default icon set
-from .grass_icons import iconSet as g_iconSet
 from .grass_icons import iconPath as g_iconPath
+from .grass_icons import iconSet as g_iconSet
 
 iconSetDefault = g_iconSet
 iconPathDefault = g_iconPath

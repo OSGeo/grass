@@ -28,24 +28,22 @@ This program is free software under the GNU General Public License
 import os
 import sys
 
-from core import globalvar
 import wx
-
-from grass.pydispatch.signal import Signal
-
-from core.gcmd import RunCommand, GError, GMessage
-from dbmgr.vinfo import CreateDbInfoDesc, VectorDBInfo, GetUnicodeValue
+from core import globalvar
+from core.gcmd import GError, GMessage, RunCommand
+from dbmgr.vinfo import CreateDbInfoDesc, GetUnicodeValue, VectorDBInfo
 from gui_core.wrap import (
     ApplyButton,
     Button,
     ClearButton,
     CloseButton,
-    TextCtrl,
-    StaticText,
     StaticBox,
+    StaticText,
+    TextCtrl,
 )
 
 import grass.script as grass
+from grass.pydispatch.signal import Signal
 
 
 class SQLBuilder(wx.Frame):

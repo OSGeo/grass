@@ -16,13 +16,13 @@ This program is free software under the GNU General Public License
 """
 
 import sys
+
 import wx
 import wx.lib.agw.floatspin as fs
 import wx.lib.colourselect as csel
 import wx.lib.filebrowsebutton as filebrowse
 import wx.lib.scrolledpanel as scrolled
-from wx.lib import expando
-from wx.lib import buttons
+from wx.lib import buttons, expando
 from wx.lib.agw.aui import tabart
 
 try:
@@ -34,21 +34,25 @@ from core.globalvar import CheckWxVersion, gtk3, wxPythonPhoenix
 
 if wxPythonPhoenix:
     import wx.adv
-    from wx.adv import OwnerDrawnComboBox as OwnerDrawnComboBox_
-    from wx.adv import ODCB_PAINTING_CONTROL, ODCB_PAINTING_SELECTED
+    from wx.adv import (
+        HL_ALIGN_LEFT,
+        HL_CONTEXTMENU,
+        ODCB_PAINTING_CONTROL,
+        ODCB_PAINTING_SELECTED,
+    )
     from wx.adv import BitmapComboBox as BitmapComboBox_
     from wx.adv import HyperlinkCtrl as HyperlinkCtrl_
-    from wx.adv import HL_ALIGN_LEFT, HL_CONTEXTMENU
+    from wx.adv import OwnerDrawnComboBox as OwnerDrawnComboBox_
 
     ComboPopup = wx.ComboPopup
     wxComboCtrl = wx.ComboCtrl
 else:
     import wx.combo
-    from wx.combo import OwnerDrawnComboBox as OwnerDrawnComboBox_
+    from wx import HL_ALIGN_LEFT, HL_CONTEXTMENU
+    from wx import HyperlinkCtrl as HyperlinkCtrl_
     from wx.combo import ODCB_PAINTING_CONTROL, ODCB_PAINTING_SELECTED
     from wx.combo import BitmapComboBox as BitmapComboBox_
-    from wx import HyperlinkCtrl as HyperlinkCtrl_
-    from wx import HL_ALIGN_LEFT, HL_CONTEXTMENU
+    from wx.combo import OwnerDrawnComboBox as OwnerDrawnComboBox_
 
     ComboPopup = wx.combo.ComboPopup
     wxComboCtrl = wx.combo.ComboCtrl

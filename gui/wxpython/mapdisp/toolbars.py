@@ -17,11 +17,10 @@ This program is free software under the GNU General Public License
 """
 
 import wx
-
-from gui_core.toolbars import BaseToolbar, BaseIcons
+from gui_core.toolbars import BaseIcons, BaseToolbar
+from icons.icon import MetaIcon
 from nviz.main import haveNviz
 from vdigit.main import haveVDigit
-from icons.icon import MetaIcon
 
 MapIcons = {
     "query": MetaIcon(

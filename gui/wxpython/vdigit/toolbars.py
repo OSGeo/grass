@@ -16,19 +16,18 @@ This program is free software under the GNU General Public License
 """
 
 import wx
+from core.debug import Debug
+from core.gcmd import GError, RunCommand
+from core.giface import Notification
+from core.settings import UserSettings
+from gui_core.dialogs import CreateNewVector, VectorDialog
+from gui_core.toolbars import BaseIcons, BaseToolbar
+from gui_core.wrap import Menu, PseudoDC
+from icons.icon import MetaIcon
+from vdigit.preferences import VDigitSettingsDialog
 
 from grass import script as grass
 from grass.pydispatch.signal import Signal
-
-from gui_core.toolbars import BaseToolbar, BaseIcons
-from gui_core.dialogs import CreateNewVector, VectorDialog
-from gui_core.wrap import PseudoDC, Menu
-from vdigit.preferences import VDigitSettingsDialog
-from core.debug import Debug
-from core.settings import UserSettings
-from core.gcmd import GError, RunCommand
-from icons.icon import MetaIcon
-from core.giface import Notification
 
 
 class VDigitToolbar(BaseToolbar):

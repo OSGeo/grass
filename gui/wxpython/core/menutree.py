@@ -33,19 +33,18 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
+import copy
 import os
 import sys
-import copy
 import xml.etree.ElementTree as etree
 
 import wx
-
-from core.treemodel import TreeModel, ModuleNode
+from core.gcmd import GError
 from core.settings import UserSettings
+from core.toolboxes import clearMessages as clearToolboxMessages
 from core.toolboxes import expandAddons as expAddons
 from core.toolboxes import getMessages as getToolboxMessages
-from core.toolboxes import clearMessages as clearToolboxMessages
-from core.gcmd import GError
+from core.treemodel import ModuleNode, TreeModel
 
 if not os.getenv("GISBASE"):
     sys.exit("GRASS is not running. Exiting...")
@@ -249,16 +248,16 @@ if __name__ == "__main__":
 
     # FIXME: cross-dependencies
     if menu == "manager":
-        from lmgr.menudata import LayerManagerMenuData
         from core.globalvar import WXGUIDIR
+        from lmgr.menudata import LayerManagerMenuData
 
         filename = os.path.join(WXGUIDIR, "xml", "menudata.xml")
         menudata = LayerManagerMenuData(filename)
     # FIXME: since module descriptions are used again we have now the third
     # copy of the same string (one is in modules)
     elif menu == "module_tree":
-        from lmgr.menudata import LayerManagerModuleTree
         from core.globalvar import WXGUIDIR
+        from lmgr.menudata import LayerManagerModuleTree
 
         filename = os.path.join(WXGUIDIR, "xml", "module_tree_menudata.xml")
         menudata = LayerManagerModuleTree(filename)

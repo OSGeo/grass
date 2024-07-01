@@ -18,12 +18,10 @@ This program is free software under the GNU General Public License
 """
 
 import wx
-
 from core.debug import Debug
 from core.settings import UserSettings
+from gui_core.wrap import NewId, Rect
 from mapwin.buffered import BufferedMapWindow
-from gui_core.wrap import Rect, NewId
-
 
 EVT_MY_MOUSE_EVENTS = wx.NewEventType()
 EVT_MY_MOTION = wx.NewEventType()

@@ -22,38 +22,36 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com> (split to base and derived classes)
 """
 
+import copy
 import os
 import shutil
-import copy
 import tempfile
 
 import wx
 import wx.lib.colourselect as csel
-import wx.lib.scrolledpanel as scrolled
 import wx.lib.filebrowsebutton as filebrowse
+import wx.lib.scrolledpanel as scrolled
+from core import globalvar, utils
+from core.debug import Debug as Debug
+from core.gcmd import GError, GMessage, RunCommand
+from core.render import Map
+from gui_core.forms import GUI
+from gui_core.gselect import ColumnSelect, LayerSelect, Select, VectorDBInfo
+from gui_core.widgets import ColorTablesComboBox
+from gui_core.wrap import (
+    BitmapFromImage,
+    Button,
+    CancelButton,
+    EmptyBitmap,
+    PseudoDC,
+    SpinCtrl,
+    StaticBox,
+    StaticText,
+    TextCtrl,
+)
 
 import grass.script as grass
 from grass.script.task import cmdlist_to_tuple
-
-from core import globalvar
-from core import utils
-from core.gcmd import GMessage, RunCommand, GError
-from gui_core.gselect import Select, LayerSelect, ColumnSelect, VectorDBInfo
-from core.render import Map
-from gui_core.forms import GUI
-from core.debug import Debug as Debug
-from gui_core.widgets import ColorTablesComboBox
-from gui_core.wrap import (
-    SpinCtrl,
-    PseudoDC,
-    TextCtrl,
-    Button,
-    CancelButton,
-    StaticText,
-    StaticBox,
-    EmptyBitmap,
-    BitmapFromImage,
-)
 
 
 class RulesPanel:

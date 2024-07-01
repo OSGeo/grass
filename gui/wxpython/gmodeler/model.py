@@ -31,36 +31,33 @@ This program is free software under the GNU General Public License
 @actinia, PyWPS, Python parameterization Ondrej Pesek <pesej.ondrek gmail.com>
 """
 
-import os
-import getpass
 import copy
-import re
+import getpass
 import mimetypes
+import os
+import re
 import time
-
 import xml.etree.ElementTree as etree
+from abc import ABC, abstractmethod
 from xml.sax import saxutils
 
 import wx
-from abc import ABC, abstractmethod
-from wx.lib import ogl
-
-from core import globalvar
-from core import utils
+from core import globalvar, utils
 from core.gcmd import (
-    GMessage,
-    GException,
     GError,
-    RunCommand,
-    GWarning,
     GetDefaultEncoding,
+    GException,
+    GMessage,
+    GWarning,
+    RunCommand,
 )
-from core.settings import UserSettings
 from core.giface import StandaloneGrassInterface
+from core.settings import UserSettings
+from gmodeler.giface import GraphicalModelerGrassInterface
 from gui_core.forms import GUI, CmdPanel
 from gui_core.widgets import GNotebook
 from gui_core.wrap import Button, IsDark
-from gmodeler.giface import GraphicalModelerGrassInterface
+from wx.lib import ogl
 
 from grass.script import task as gtask
 

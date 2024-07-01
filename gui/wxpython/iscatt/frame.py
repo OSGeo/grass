@@ -21,20 +21,18 @@ This program is free software under the GNU General Public License
 import os
 
 import wx
-import wx.lib.scrolledpanel as scrolled
 import wx.lib.mixins.listctrl as listmix
-
+import wx.lib.scrolledpanel as scrolled
 from core import globalvar
 from core.gcmd import GError, GMessage
-
 from gui_core.dialogs import SetOpacityDialog
-from gui_core.wrap import StaticBox, Menu, ListCtrl
-from iscatt.controllers import ScattsManager
-from iscatt.toolbars import MainToolbar, EditingToolbar, CategoryToolbar
-from iscatt.iscatt_core import idScattToidBands
-from iscatt.dialogs import ManageBusyCursorMixin, RenameClassDialog
-from iscatt.plots import ScatterPlotWidget
+from gui_core.wrap import ListCtrl, Menu, StaticBox
 from iclass.dialogs import ContrastColor
+from iscatt.controllers import ScattsManager
+from iscatt.dialogs import ManageBusyCursorMixin, RenameClassDialog
+from iscatt.iscatt_core import idScattToidBands
+from iscatt.plots import ScatterPlotWidget
+from iscatt.toolbars import CategoryToolbar, EditingToolbar, MainToolbar
 
 try:
     from agw import aui

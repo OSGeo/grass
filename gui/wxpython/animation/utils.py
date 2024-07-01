@@ -18,10 +18,11 @@ This program is free software under the GNU General Public License
 @author Anna Perasova <kratochanna gmail.com>
 """
 
-import os
-import wx
 import hashlib
+import os
 from multiprocessing import cpu_count
+
+import wx
 
 try:
     from PIL import Image
@@ -30,12 +31,12 @@ try:
 except ImportError:
     hasPIL = False
 
-import grass.temporal as tgis
-import grass.script as grass
-from grass.script.utils import encode
+from core.gcmd import GException
 from gui_core.wrap import EmptyBitmap
 
-from core.gcmd import GException
+import grass.script as grass
+import grass.temporal as tgis
+from grass.script.utils import encode
 
 
 class TemporalMode:

@@ -12,17 +12,17 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
-import os
-import sys
 import copy
+import os
 import shutil
+import sys
 import xml.etree.ElementTree as etree
 from xml.parsers import expat
 
-import grass.script.task as gtask
 import grass.script.core as gcore
-from grass.script.utils import try_remove, decode
-from grass.exceptions import ScriptError, CalledModuleError
+import grass.script.task as gtask
+from grass.exceptions import CalledModuleError, ScriptError
+from grass.script.utils import decode, try_remove
 
 ETREE_EXCEPTIONS = (etree.ParseError, expat.ExpatError)
 

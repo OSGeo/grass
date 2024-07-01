@@ -18,8 +18,8 @@ for details.
 """
 
 import os
-import wx
 
+import wx
 from core.globalvar import ICONDIR
 from datacatalog.catalog import DataCatalog
 from gui_core.wrap import Button

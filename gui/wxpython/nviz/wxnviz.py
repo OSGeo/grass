@@ -22,9 +22,9 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <KratochAnna seznam.cz> (Google SoC 2011)
 """
 
-import sys
 import locale
 import struct
+import sys
 from math import sqrt
 
 try:
@@ -48,19 +48,20 @@ except KeyError as e:
 
 try:
     from grass.lib.gis import *
+    from grass.lib.nviz import *
+    from grass.lib.ogsf import *
+    from grass.lib.raster import *
     from grass.lib.raster3d import *
     from grass.lib.vector import *
-    from grass.lib.ogsf import *
-    from grass.lib.nviz import *
-    from grass.lib.raster import *
 except (ImportError, OSError, TypeError) as e:
     print("wxnviz.py: {}".format(e), file=sys.stderr)
 
 from core.debug import Debug
-from core.utils import autoCropImageFromFile
 from core.gcmd import DecodeString
 from core.globalvar import wxPythonPhoenix
+from core.utils import autoCropImageFromFile
 from gui_core.wrap import Rect
+
 import grass.script as grass
 
 log = None

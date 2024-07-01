@@ -19,25 +19,24 @@ This program is free software under the GNU General Public License
 """
 
 import os
+
 import wx
 import wx.aui
+from animation.anim import Animation
+from animation.controller import AnimationController
+from animation.dialogs import PreferencesDialog, SpeedDialog
+from animation.mapwindow import AnimationWindow
+from animation.provider import BitmapPool, BitmapProvider, CleanUp, MapFilesPool
+from animation.toolbars import AnimationToolbar, MainToolbar, MiscToolbar
+from animation.utils import Orientation, ReplayMode, TemporalType
+from core import globalvar
+from core.gcmd import GWarning, RunCommand
+from gui_core.widgets import IntegerValidator
+from gui_core.wrap import Slider, StaticText, TextCtrl
 
 import grass.script as gcore
 import grass.temporal as tgis
 from grass.exceptions import FatalError
-from core import globalvar
-from gui_core.widgets import IntegerValidator
-from gui_core.wrap import StaticText, TextCtrl, Slider
-from core.gcmd import RunCommand, GWarning
-
-from animation.mapwindow import AnimationWindow
-from animation.provider import BitmapProvider, BitmapPool, MapFilesPool, CleanUp
-from animation.controller import AnimationController
-from animation.anim import Animation
-from animation.toolbars import MainToolbar, AnimationToolbar, MiscToolbar
-from animation.dialogs import SpeedDialog, PreferencesDialog
-from animation.utils import Orientation, ReplayMode, TemporalType
-
 
 MAX_COUNT = 4
 TMP_DIR = None

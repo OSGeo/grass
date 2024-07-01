@@ -18,14 +18,14 @@ This program is free software under the GNU General Public License
 import sys
 
 import wx
-
-import grass.script as grass
-from wx.lib import plot
+from core.gcmd import GError, GException, RunCommand
+from gui_core.toolbars import BaseIcons, BaseToolbar
 from gui_core.wrap import StockCursor
-from gui_core.toolbars import BaseToolbar, BaseIcons
+from wx.lib import plot
 from wxplot.base import BasePlotFrame, PlotIcons
 from wxplot.dialogs import HistRasterDialog, PlotStatsFrame
-from core.gcmd import RunCommand, GException, GError
+
+import grass.script as grass
 
 
 class HistogramPlotFrame(BasePlotFrame):

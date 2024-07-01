@@ -22,18 +22,17 @@ import copy
 
 import wx
 import wx.lib.mixins.listctrl as listmix
-
-from core.gcmd import RunCommand, GError
 from core.debug import Debug
+from core.gcmd import GError, RunCommand
 from gui_core.wrap import (
-    SpinCtrl,
     Button,
-    StaticText,
-    StaticBox,
-    Menu,
-    ListCtrl,
-    NewId,
     CheckListCtrlMixin,
+    ListCtrl,
+    Menu,
+    NewId,
+    SpinCtrl,
+    StaticBox,
+    StaticText,
 )
 
 

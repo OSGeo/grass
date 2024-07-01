@@ -16,28 +16,27 @@ for details.
 @author Linda Kladivova l.kladivova@seznam.cz
 """
 
-import wx
 import os
 
+import wx
 from core.debug import Debug
-from datacatalog.tree import DataCatalogTree
-from datacatalog.toolbars import DataCatalogToolbar, DataCatalogSearch
-from gui_core.infobar import InfoBar
-from datacatalog.infomanager import DataCatalogInfoManager
-from gui_core.wrap import Menu
-from gui_core.forms import GUI
 from core.settings import UserSettings
+from datacatalog.infomanager import DataCatalogInfoManager
+from datacatalog.toolbars import DataCatalogSearch, DataCatalogToolbar
+from datacatalog.tree import DataCatalogTree
+from gui_core.forms import GUI
+from gui_core.infobar import InfoBar
+from gui_core.wrap import Menu
 
-from grass.pydispatch.signal import Signal
-from grass.script.utils import clock
-from grass.script import gisenv
-
-from grass.grassdb.manage import split_mapset_path
 from grass.grassdb.checks import (
     get_reason_id_mapset_not_usable,
     is_fallback_session,
     is_first_time_user,
 )
+from grass.grassdb.manage import split_mapset_path
+from grass.pydispatch.signal import Signal
+from grass.script import gisenv
+from grass.script.utils import clock
 
 
 class DataCatalog(wx.Panel):

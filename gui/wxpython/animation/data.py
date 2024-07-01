@@ -16,22 +16,22 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
-import os
 import copy
+import os
 
-from grass.script.utils import parse_key_val
-from grass.script import core as gcore
-
-from core.gcmd import GException
 from animation.nviztask import NvizTask
 from animation.utils import (
-    validateMapNames,
-    getRegisteredMaps,
     checkSeriesCompatibility,
-    validateTimeseriesName,
+    getRegisteredMaps,
     interpolate,
+    validateMapNames,
+    validateTimeseriesName,
 )
-from core.layerlist import LayerList, Layer
+from core.gcmd import GException
+from core.layerlist import Layer, LayerList
+
+from grass.script import core as gcore
+from grass.script.utils import parse_key_val
 
 
 class AnimationData:

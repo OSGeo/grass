@@ -36,33 +36,32 @@ except ImportError:
     havePwd = False
 
 import wx
-from wx.lib.agw import aui
 import wx.lib.colourselect as csel
 import wx.lib.mixins.listctrl as listmix
 import wx.lib.scrolledpanel as SP
+from core import globalvar
+from core.debug import Debug
+from core.gcmd import GError
+from core.globalvar import CheckWxVersion
+from core.settings import UserSettings
+from core.utils import GetColorTables, ListOfMapsets, ReadEpsgCodes
+from gui_core.dialogs import DefaultFontDialog, SymbolDialog
+from gui_core.widgets import ColorTablesComboBox, IntegerValidator
+from gui_core.wrap import (
+    BitmapButton,
+    Button,
+    CheckListCtrlMixin,
+    ListCtrl,
+    SpinCtrl,
+    StaticBox,
+    StaticText,
+    TextCtrl,
+)
+from wx.lib.agw import aui
 
-from grass.pydispatch.signal import Signal
 import grass.script as grass
 from grass.exceptions import OpenError
-
-from core import globalvar
-from core.gcmd import GError
-from core.utils import ListOfMapsets, GetColorTables, ReadEpsgCodes
-from core.settings import UserSettings
-from core.globalvar import CheckWxVersion
-from gui_core.dialogs import SymbolDialog, DefaultFontDialog
-from gui_core.widgets import IntegerValidator, ColorTablesComboBox
-from core.debug import Debug
-from gui_core.wrap import (
-    SpinCtrl,
-    Button,
-    BitmapButton,
-    StaticText,
-    StaticBox,
-    TextCtrl,
-    ListCtrl,
-    CheckListCtrlMixin,
-)
+from grass.pydispatch.signal import Signal
 
 
 class PreferencesBaseDialog(wx.Dialog):

@@ -21,26 +21,25 @@ for details.
 """
 
 import os
-import wx
 
+import wx
 import wx.lib.mixins.listctrl as listmix
 import wx.lib.scrolledpanel as scrolled
-
 from core import globalvar
+from core.gcmd import GError, GMessage, RunCommand
 from core.settings import UserSettings
-from core.gcmd import GError, RunCommand, GMessage
-from gui_core.dialogs import SimpleDialog, GroupDialog
 from gui_core import gselect
+from gui_core.dialogs import GroupDialog, SimpleDialog
 from gui_core.widgets import SimpleValidator
 from gui_core.wrap import (
-    CheckBox,
     Button,
-    StaticText,
-    StaticBox,
-    TextCtrl,
+    CheckBox,
+    ListCtrl,
     Menu,
     NewId,
-    ListCtrl,
+    StaticBox,
+    StaticText,
+    TextCtrl,
 )
 
 import grass.script as grass

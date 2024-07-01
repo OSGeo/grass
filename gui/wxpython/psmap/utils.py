@@ -16,8 +16,9 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
+from math import ceil, cos, floor, pi, sin
+
 import wx
-from math import ceil, floor, sin, cos, pi
 
 try:
     from PIL import Image as PILImage  # noqa
@@ -26,8 +27,9 @@ try:
 except ImportError:
     havePILImage = False
 
+from core.gcmd import GError, RunCommand
+
 import grass.script as grass
-from core.gcmd import RunCommand, GError
 
 
 class Rect2D(wx.Rect2D):

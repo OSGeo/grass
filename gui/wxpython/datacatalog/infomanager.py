@@ -19,8 +19,8 @@ This program is free software under the GNU General Public License
 
 import wx
 
-from grass.script import gisenv
 from grass.grassdb.checks import get_mapset_owner
+from grass.script import gisenv
 
 
 class DataCatalogInfoManager:

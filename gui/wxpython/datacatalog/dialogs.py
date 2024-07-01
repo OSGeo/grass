@@ -15,9 +15,9 @@ This program is free software under the GNU General Public License
 """
 
 import wx
-from gui_core.widgets import FloatValidator, IntegerValidator
-from core.giface import Notification
 from core.gcmd import RunCommand
+from core.giface import Notification
+from gui_core.widgets import FloatValidator, IntegerValidator
 from gui_core.wrap import Button, StaticText, TextCtrl
 
 from grass.script import parse_key_val, region_env

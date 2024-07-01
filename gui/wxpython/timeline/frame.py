@@ -16,12 +16,12 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
-from math import ceil
-from itertools import cycle
-import numpy as np
-
-import wx
 from functools import reduce
+from itertools import cycle
+from math import ceil
+
+import numpy as np
+import wx
 
 try:
     import matplotlib
@@ -29,13 +29,13 @@ try:
     # The recommended way to use wx with mpl is with the WXAgg
     # backend.
     matplotlib.use("WXAgg")
+    import matplotlib.dates as mdates
     from matplotlib import gridspec
-    from matplotlib.figure import Figure
+    from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigCanvas
     from matplotlib.backends.backend_wxagg import (
-        FigureCanvasWxAgg as FigCanvas,
         NavigationToolbar2WxAgg as NavigationToolbar,
     )
-    import matplotlib.dates as mdates
+    from matplotlib.figure import Figure
 except ImportError as e:
     raise ImportError(
         _(
@@ -45,13 +45,13 @@ except ImportError as e:
         ).format(e)
     )
 
-import grass.script as grass
-
-import grass.temporal as tgis
+from core import globalvar
 from core.gcmd import GError, GException, RunCommand
 from gui_core import gselect
 from gui_core.wrap import Button, StaticText
-from core import globalvar
+
+import grass.script as grass
+import grass.temporal as tgis
 
 ALPHA = 1
 COLORS = ["b", "g", "r", "c", "m", "y", "k"]

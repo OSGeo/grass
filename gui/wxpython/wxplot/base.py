@@ -16,18 +16,17 @@ This program is free software under the GNU General Public License
 """
 
 import os
-
-import wx
 from random import randint
 
-from wx.lib import plot
+import wx
 from core.globalvar import ICONDIR
-from core.settings import UserSettings
-from wxplot.dialogs import TextDialog, OptDialog
 from core.render import Map
-from icons.icon import MetaIcon
+from core.settings import UserSettings
 from gui_core.toolbars import BaseIcons
 from gui_core.wrap import Menu
+from icons.icon import MetaIcon
+from wx.lib import plot
+from wxplot.dialogs import OptDialog, TextDialog
 
 import grass.script as grass
 

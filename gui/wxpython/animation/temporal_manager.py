@@ -19,11 +19,12 @@ This program is free software under the GNU General Public License
 
 import datetime
 
-import grass.script as grass
-import grass.temporal as tgis
+from animation.utils import TemporalType, validateTimeseriesName
 from core.gcmd import GException
 from core.settings import UserSettings
-from animation.utils import validateTimeseriesName, TemporalType
+
+import grass.script as grass
+import grass.temporal as tgis
 
 
 class DataMode:

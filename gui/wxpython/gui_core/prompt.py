@@ -23,17 +23,13 @@ import sys
 
 import wx
 import wx.stc
-
-from grass.script import core as grass
-from grass.script import task as gtask
+from core import globalvar, utils
+from core.gcmd import DecodeString, EncodeString, GError
 
 from grass.grassdb import history
-
 from grass.pydispatch.signal import Signal
-
-from core import globalvar
-from core import utils
-from core.gcmd import EncodeString, DecodeString, GError
+from grass.script import core as grass
+from grass.script import task as gtask
 
 
 class GPrompt:

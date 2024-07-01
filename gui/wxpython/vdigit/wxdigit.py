@@ -26,20 +26,19 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
-import grass.script.core as grass
-
-from grass.pydispatch.signal import Signal
-
-from core.gcmd import GError
 from core.debug import Debug
+from core.gcmd import GError
 from core.settings import UserSettings
 from vdigit.wxdisplay import DisplayDriver, GetLastError
 
+import grass.script.core as grass
+from grass.pydispatch.signal import Signal
+
 try:
+    from grass.lib.dbmi import *
     from grass.lib.gis import *
     from grass.lib.vector import *
     from grass.lib.vedit import *
-    from grass.lib.dbmi import *
 except (ImportError, OSError, TypeError) as e:
     print("wxdigit.py: {}".format(e), file=sys.stderr)
 

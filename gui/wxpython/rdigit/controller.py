@@ -16,19 +16,19 @@ for details.
 
 import os
 import tempfile
-import wx
 import uuid
+
+import wx
+from core.gcmd import GError, GMessage
+from core.gthread import gThread
+from core.settings import UserSettings
+from rdigit.dialogs import NewRasterDialog
 from wx.lib.newevent import NewEvent
 
-from grass.script import core as gcore
-from grass.script import raster as grast
 from grass.exceptions import CalledModuleError, ScriptError
 from grass.pydispatch.signal import Signal
-
-from core.gcmd import GError, GMessage
-from core.settings import UserSettings
-from core.gthread import gThread
-from rdigit.dialogs import NewRasterDialog
+from grass.script import core as gcore
+from grass.script import raster as grast
 
 updateProgress, EVT_UPDATE_PROGRESS = NewEvent()
 

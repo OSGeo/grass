@@ -22,19 +22,14 @@ from datetime import datetime
 
 import wx
 import wx.lib.scrolledpanel as SP
-
-from gui_core.wrap import SearchCtrl, StaticText, StaticBox, Button
+from core.gcmd import GError
+from gui_core.wrap import Button, SearchCtrl, StaticBox, StaticText
 from history.tree import HistoryBrowserTree
 from icons.icon import MetaIcon
 
 import grass.script as gs
-
 from grass.grassdb import history
-
 from grass.pydispatch.signal import Signal
-
-from core.gcmd import GError
-
 
 TRANSLATION_KEYS = {
     "timestamp": _("Timestamp:"),

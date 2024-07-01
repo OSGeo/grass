@@ -17,24 +17,23 @@ This program is free software under the GNU General Public License
 """
 
 import os
+
 import wx
-
-import grass.script as grass
-
-from gui_core.mapdisp import DoubleMapPanel, FrameMixin
-from gui_core.dialogs import GetImageHandlers
-from gui_core.wrap import Slider
-from core.render import Map
-from mapdisp import statusbar as sb
+from core import globalvar
 from core.debug import Debug
 from core.gcmd import GError, GMessage
 from core.layerlist import LayerListToRendererConverter
-from core import globalvar
-from gui_core.query import QueryDialog, PrepareQueryResults
-
-from mapswipe.toolbars import SwipeMapToolbar, SwipeMainToolbar, SwipeMiscToolbar
+from core.render import Map
+from gui_core.dialogs import GetImageHandlers
+from gui_core.mapdisp import DoubleMapPanel, FrameMixin
+from gui_core.query import PrepareQueryResults, QueryDialog
+from gui_core.wrap import Slider
+from mapdisp import statusbar as sb
+from mapswipe.dialogs import PreferencesDialog, SwipeMapDialog
 from mapswipe.mapwindow import SwipeBufferedWindow
-from mapswipe.dialogs import SwipeMapDialog, PreferencesDialog
+from mapswipe.toolbars import SwipeMainToolbar, SwipeMapToolbar, SwipeMiscToolbar
+
+import grass.script as grass
 
 
 class SwipeMapPanel(DoubleMapPanel):

@@ -18,17 +18,16 @@ This program is free software under the GNU General Public License
 @author Python exports Ondrej Pesek <pesej.ondrek gmail.com>
 """
 
+import math
 import os
-import time
+import random
 import stat
 import tempfile
-import random
-import math
+import time
 
 import wx
-
-from wx.lib import ogl
 from core import globalvar
+from wx.lib import ogl
 
 if globalvar.wxPythonPhoenix:
     try:
@@ -37,59 +36,58 @@ if globalvar.wxPythonPhoenix:
         import wx.lib.agw.flatnotebook as FN
 else:
     import wx.lib.flatnotebook as FN
-from wx.lib.newevent import NewEvent
 
-from core.gconsole import GConsole, EVT_CMD_RUN, EVT_CMD_DONE, EVT_CMD_PREPARE
 from core.debug import Debug
-from core.gcmd import GMessage, GException, GWarning, GError
-from core.settings import UserSettings
+from core.gcmd import GError, GException, GMessage, GWarning
+from core.gconsole import EVT_CMD_DONE, EVT_CMD_PREPARE, EVT_CMD_RUN, GConsole
 from core.giface import Notification
-
-from gui_core.widgets import GNotebook
-from gui_core.goutput import GConsoleWindow
-from gui_core.dialogs import GetImageHandlers
-from gui_core.dialogs import TextEntryDialog as CustomTextEntryDialog
-from gui_core.ghelp import ShowAboutDialog
-from gui_core.forms import GUI
-from gui_core.pystc import PyStc, SetDarkMode
-from gui_core.wrap import (
-    Button,
-    EmptyBitmap,
-    ImageFromBitmap,
-    StaticBox,
-    StaticText,
-    StockCursor,
-    TextCtrl,
-    IsDark,
+from core.settings import UserSettings
+from gmodeler.canvas import ModelCanvas, ModelEvtHandler
+from gmodeler.dialogs import (
+    ItemListCtrl,
+    ModelDataDialog,
+    ModelSearchDialog,
+    VariableListCtrl,
 )
-from main_window.page import MainPageBase
 from gmodeler.giface import GraphicalModelerGrassInterface
 from gmodeler.model import (
     Model,
     ModelAction,
-    ModelRelation,
-    ModelLoop,
-    ModelCondition,
     ModelComment,
-    WriteModelFile,
+    ModelCondition,
     ModelDataSeries,
     ModelDataSingle,
+    ModelLoop,
+    ModelRelation,
     WriteActiniaFile,
+    WriteModelFile,
     WritePythonFile,
     WritePyWPSFile,
 )
-from gmodeler.dialogs import (
-    ModelDataDialog,
-    ModelSearchDialog,
-    VariableListCtrl,
-    ItemListCtrl,
-)
-from gmodeler.canvas import ModelCanvas, ModelEvtHandler
-from gmodeler.toolbars import ModelerToolbar
 from gmodeler.preferences import PreferencesDialog, PropertiesDialog
+from gmodeler.toolbars import ModelerToolbar
+from gui_core.dialogs import GetImageHandlers
+from gui_core.dialogs import TextEntryDialog as CustomTextEntryDialog
+from gui_core.forms import GUI
+from gui_core.ghelp import ShowAboutDialog
+from gui_core.goutput import GConsoleWindow
+from gui_core.pystc import PyStc, SetDarkMode
+from gui_core.widgets import GNotebook
+from gui_core.wrap import (
+    Button,
+    EmptyBitmap,
+    ImageFromBitmap,
+    IsDark,
+    StaticBox,
+    StaticText,
+    StockCursor,
+    TextCtrl,
+)
+from main_window.page import MainPageBase
+from wx.lib.newevent import NewEvent
 
-from grass.script.utils import try_remove
 from grass.script import core as grass
+from grass.script.utils import try_remove
 
 wxModelDone, EVT_MODEL_DONE = NewEvent()
 

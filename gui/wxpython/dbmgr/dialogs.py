@@ -20,12 +20,11 @@ This program is free software under the GNU General Public License
 
 import wx
 import wx.lib.scrolledpanel as scrolled
-
-from core.gcmd import RunCommand, GError
 from core.debug import Debug
-from dbmgr.vinfo import VectorDBInfo, GetUnicodeValue, GetDbEncoding
-from gui_core.widgets import IntegerValidator, FloatValidator
-from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox, TextCtrl
+from core.gcmd import GError, RunCommand
+from dbmgr.vinfo import GetDbEncoding, GetUnicodeValue, VectorDBInfo
+from gui_core.widgets import FloatValidator, IntegerValidator
+from gui_core.wrap import Button, SpinCtrl, StaticBox, StaticText, TextCtrl
 
 
 class DisplayAttributesDialog(wx.Dialog):
