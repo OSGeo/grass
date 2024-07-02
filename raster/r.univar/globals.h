@@ -52,18 +52,20 @@ typedef struct {
 /* command line options are the same for raster and raster3d maps */
 typedef struct {
     struct Option *inputfile, *zonefile, *percentile, *output_file, *separator,
-        *nprocs;
+        *nprocs, *format;
     struct Flag *shell_style, *extended, *table, *use_rast_region;
 } param_type;
 
 extern param_type param;
 extern zone_type zone_info;
 
+enum OutputFormat { PLAIN, JSON };
+
 /* fn prototypes */
 void heapsort_double(double *data, size_t n);
 void heapsort_float(float *data, size_t n);
 void heapsort_int(int *data, size_t n);
-int print_stats(univar_stat *stats);
+int print_stats(univar_stat *stats, enum OutputFormat format);
 int print_stats_table(univar_stat *stats);
 univar_stat *create_univar_stat_struct(int map_type, int n_perc);
 void free_univar_stat_struct(univar_stat *stats);

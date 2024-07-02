@@ -66,6 +66,9 @@ void set_params(void)
     param.table->description =
         _("Table output format instead of standard output format");
 
+    param.format = G_define_standard_option(G_OPT_F_FORMAT);
+    param.format->guisection = _("Print");
+
     return;
 }
 
@@ -90,6 +93,8 @@ int main(int argc, char *argv[])
     const char *mapset, *name;
 
     struct GModule *module;
+
+    enum OutputFormat format;
 
     G_gisinit(argv[0]);
 
@@ -127,6 +132,13 @@ int main(int argc, char *argv[])
         if (NULL == freopen(name, "w", stdout)) {
             G_fatal_error(_("Unable to open file <%s> for writing"), name);
         }
+    }
+
+    if (strcmp(param.format->answer, "json") == 0) {
+        format = JSON;
+    }
+    else {
+        format = PLAIN;
     }
 
     /* table field separator */
@@ -318,7 +330,7 @@ int main(int argc, char *argv[])
     if (param.table->answer)
         print_stats_table(stats);
     else
-        print_stats(stats);
+        print_stats(stats, format);
 
     /* release memory */
     free_univar_stat_struct(stats);
