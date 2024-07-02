@@ -104,7 +104,7 @@ def main():
             self.toolbars["vdigit"].StartEditing(mapLayer)
             # use Close instead of QuitVDigit for standalone tool
             self.toolbars["vdigit"].quitDigitizer.disconnect(self.QuitVDigit)
-            self.toolbars["vdigit"].quitDigitizer.connect(lambda: self.Close())
+            self.toolbars["vdigit"].quitDigitizer.connect(self.Close)
 
             # add Map Display panel to Map Display frame
             sizer = wx.BoxSizer(wx.VERTICAL)
