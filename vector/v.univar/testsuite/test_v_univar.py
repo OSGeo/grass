@@ -9,6 +9,9 @@ Licence:    This program is free software under the GNU General Public
             for details.
 """
 
+import json
+from itertools import zip_longest
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
@@ -125,6 +128,47 @@ skewness: 0.801646"""
         self.assertVectorFitsUnivar(
             map="roadsmajor", column="MAJORRDS_", reference=univar_string, precision=3
         )
+
+    def test_json(self):
+        """Testing output in JSON fomrat"""
+        module = SimpleModule(
+            "v.univar", map="geology", column="PERIMETER", flags="e", format="json"
+        )
+        self.runModule(module)
+
+        expected = {
+            "n": 1832,
+            "missing": 0,
+            "nnull": 0,
+            "min": 166.946991,
+            "max": 2729482.25,
+            "range": 2729315.3030090001,
+            "sum": 78876146.145385057,
+            "mean": 43054.664926520229,
+            "mean_abs": 43054.664926520229,
+            "population_stddev": 132689.08650029532,
+            "population_variance": 17606393676.282852,
+            "population_coeff_variation": 3.0818747916573215,
+            "sample_stddev": 132725.31560308655,
+            "sample_variance": 17616009401.938931,
+            "kurtosis": 139.15698418811229,
+            "skewness": 9.7065048189730767,
+            "first_quartile": 3699.3234859999998,
+            "median": 10308.4453125,
+            "third_quartile": 29259.074218999998,
+            "percentiles": [{"percentile": 90, "value": 86449.734375}],
+        }
+        results = json.loads(module.outputs.stdout)
+
+        expected_percentiles = expected.pop("percentiles")
+        result_percentiles = results.pop("percentiles")
+        for p1, p2 in zip_longest(expected_percentiles, result_percentiles):
+            self.assertEqual(p1["percentile"], p2["percentile"])
+            self.assertAlmostEqual(p1["value"], p2["value"])
+
+        self.assertCountEqual(list(expected.keys()), list(results.keys()))
+        for key in expected:
+            self.assertAlmostEqual(expected[key], results[key])
 
 
 if __name__ == "__main__":
