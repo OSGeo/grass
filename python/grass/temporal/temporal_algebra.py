@@ -440,40 +440,42 @@ for details.
 """
 
 try:
-    import ply.lex as lex
-    import ply.yacc as yacc
+    from ply import lex, yacc
 except:
     pass
 
-import os
 import copy
+import os
 from datetime import datetime
 
 import grass.pygrass.modules as pymod
+
+from .abstract_dataset import AbstractDatasetComparisonKeyStartTime
+from .abstract_map_dataset import AbstractMapDataset
+from .abstract_space_time_dataset import AbstractSpaceTimeDataset
 from .core import (
-    init_dbif,
-    get_tgis_message_interface,
-    get_current_mapset,
     SQLDatabaseInterfaceConnection,
+    get_current_mapset,
+    get_tgis_message_interface,
+    init_dbif,
 )
+from .datetime_math import (
+    create_numeric_suffix,
+    create_suffix_from_datetime,
+    create_time_suffix,
+    string_to_datetime,
+    time_delta_to_relative_time,
+)
+from .factory import dataset_factory
+from .open_stds import open_new_stds, open_old_stds
+from .space_time_datasets import RasterDataset
+from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
 from .temporal_granularity import (
+    compute_absolute_time_granularity,
     compute_common_absolute_time_granularity,
     compute_common_relative_time_granularity,
 )
-from .abstract_dataset import AbstractDatasetComparisonKeyStartTime
-from .abstract_map_dataset import AbstractMapDataset
-from .space_time_datasets import RasterDataset
-from .factory import dataset_factory
-from .open_stds import open_new_stds, open_old_stds
 from .temporal_operator import TemporalOperatorParser
-from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
-from .datetime_math import time_delta_to_relative_time, string_to_datetime
-from .abstract_space_time_dataset import AbstractSpaceTimeDataset
-from .temporal_granularity import compute_absolute_time_granularity
-
-from .datetime_math import create_suffix_from_datetime
-from .datetime_math import create_time_suffix
-from .datetime_math import create_numeric_suffix
 
 
 class TemporalAlgebraLexer:
@@ -1064,7 +1066,7 @@ class TemporalAlgebraParser:
                     mapA.set_spatial_extent(overlay_ext)
                 else:
                     returncode = 0
-            elif bool_op in ["or", "xor"]:
+            elif bool_op in {"or", "xor"}:
                 overlay_ext = mapA.spatial_union(mapB)
                 if overlay_ext is not None:
                     mapA.set_spatial_extent(overlay_ext)
@@ -2162,14 +2164,14 @@ class TemporalAlgebraParser:
             # Get value for function name from dictionary.
             tfuncval = tfuncdict[tfunc]
             # Check if value has to be transferred to datetime object for comparison.
-            if tfunc in [
+            if tfunc in {
                 "START_DATE",
                 "END_DATE",
                 "START_TIME",
                 "END_TIME",
                 "START_DATETIME",
                 "END_DATETIME",
-            ]:
+            }:
                 timeobj = string_to_datetime(value.replace('"', ""))
                 value = timeobj.date()
                 boolname = self.eval_datetime_str(tfuncval, comp_op, value)

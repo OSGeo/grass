@@ -50,7 +50,7 @@ class MenuBase:
         """
         self.parent = parent
         self.model = model
-        self.menucmd = dict()
+        self.menucmd = {}
         self.bmpsize = (16, 16)
         self.class_handler = class_handler if class_handler is not None else parent
 
@@ -227,7 +227,7 @@ class SearchModuleWindow(wx.Panel):
         self._btnAdvancedSearch.Bind(wx.EVT_BUTTON, lambda evt: self.AdvancedSearch())
 
         self._tree.selectionChanged.connect(self.OnItemSelected)
-        self._tree.itemActivated.connect(lambda node: self.Run(node))
+        self._tree.itemActivated.connect(self.Run)
 
         self._layout()
 

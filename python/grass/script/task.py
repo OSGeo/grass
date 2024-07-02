@@ -48,11 +48,11 @@ class grassTask:
     def __init__(self, path=None, blackList=None):
         self.path = path
         self.name = _("unknown")
-        self.params = list()
+        self.params = []
         self.description = ""
         self.label = ""
-        self.flags = list()
-        self.keywords = list()
+        self.flags = []
+        self.keywords = []
         self.errorMsg = ""
         self.firstParam = None
         if blackList:
@@ -88,7 +88,7 @@ class grassTask:
         """Get task name"""
         if sys.platform == "win32":
             name, ext = os.path.splitext(self.name)
-            if ext in (".py", ".sh"):
+            if ext in {".py", ".sh"}:
                 return name
             else:
                 return self.name
@@ -177,7 +177,7 @@ class grassTask:
 
         :return: list of errors
         """
-        errorList = list()
+        errorList = []
         # determine if suppress_required flag is given
         for f in self.flags:
             if f["value"] and f["suppress_required"]:
@@ -532,9 +532,9 @@ def parse_interface(name, parser=processTask, blackList=None):
         tree = etree.fromstring(get_interface_description(name))
     except ETREE_EXCEPTIONS as error:
         raise ScriptError(
-            _(
-                "Cannot parse interface description of" "<{name}> module: {error}"
-            ).format(name=name, error=error)
+            _("Cannot parse interface description of<{name}> module: {error}").format(
+                name=name, error=error
+            )
         )
     task = parser(tree, blackList=blackList).get_task()
     # if name from interface is different than the originally
@@ -585,8 +585,8 @@ def command_info(cmd):
     cmdinfo["params"] = params = task.get_options()["params"]
 
     usage = task.get_name()
-    flags_short = list()
-    flags_long = list()
+    flags_short = []
+    flags_long = []
     for f in flags:
         fname = f.get("name", "unknown")
         if len(fname) > 1:
@@ -641,7 +641,7 @@ def cmdtuple_to_list(cmd):
             cmdList.append("--" + flag)
 
     for k, v in cmd[1].items():
-        if k in ("flags", "help", "verbose", "quiet", "overwrite"):
+        if k in {"flags", "help", "verbose", "quiet", "overwrite"}:
             continue
         if " " in v:
             v = '"%s"' % v
@@ -667,7 +667,7 @@ def cmdlist_to_tuple(cmd):
             dcmd[str(key)] = value.replace('"', "")
         elif item[:2] == "--":  # long flags
             flag = item[2:]
-            if flag in ("help", "verbose", "quiet", "overwrite"):
+            if flag in {"help", "verbose", "quiet", "overwrite"}:
                 dcmd[str(flag)] = True
         elif len(item) == 2 and item[0] == "-":  # -> flags
             if "flags" not in dcmd:
