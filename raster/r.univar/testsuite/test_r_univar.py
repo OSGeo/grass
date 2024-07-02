@@ -4,6 +4,7 @@
 """
 
 import json
+from itertools import zip_longest
 
 from grass.gunittest.case import TestCase
 
@@ -583,6 +584,10 @@ class TestRasterUnivar(TestCase):
                 "variance": 3204.9166666666665,
                 "coeff_var": 27.548410423015174,
                 "sum": 702810,
+                "first_quartile": 155,
+                "median": 205.5,
+                "percentiles": [{"percentile": 90, "value": 282}],
+                "third_quartile": 255,
             },
             {
                 "zone_number": 2,
@@ -599,6 +604,10 @@ class TestRasterUnivar(TestCase):
                 "variance": 3594.9166666666665,
                 "coeff_var": 23.935179211360243,
                 "sum": 3201390,
+                "first_quartile": 200,
+                "median": 250.5,
+                "percentiles": [{"percentile": 90, "value": 330}],
+                "third_quartile": 300,
             },
         ]
 
@@ -606,12 +615,18 @@ class TestRasterUnivar(TestCase):
             "r.univar",
             map=["map_a", "map_b"],
             zones="zone_map",
-            flags="g",
+            flags="ge",
             format="json",
         )
         self.runModule(module)
-        expected = json.loads(module.outputs.stdout)
-        self.assertListEqual(reference, expected)
+        output = json.loads(module.outputs.stdout)
+        for expected, received in zip_longest(reference, output):
+            self.assertCountEqual(list(expected.keys()), list(received.keys()))
+            for key in expected:
+                if isinstance(expected[key], float):
+                    self.assertAlmostEqual(expected[key], received[key], places=6)
+                else:
+                    self.assertEqual(expected[key], received[key])
 
 
 if __name__ == "__main__":

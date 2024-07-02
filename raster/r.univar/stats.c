@@ -308,6 +308,15 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
                     break;
                 }
 
+                JSON_Value *percentiles_array_value, *percentile_value;
+                JSON_Array *percentiles_array;
+                JSON_Object *percentile_object;
+
+                if (format == JSON) {
+                    percentiles_array_value = json_value_init_array();
+                    percentiles_array = json_array(percentiles_array_value);
+                }
+
                 for (i = 0; i < stats[z].n_perc; i++) {
                     char buf[24], buf2[36];
 
@@ -319,11 +328,21 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
                                 quartile_perc[i]);
                         break;
                     case JSON:
-                        snprintf(buf2, 36, "percentile_%s", buf);
-                        json_object_set_number(zone_object, buf2,
+                        percentile_value = json_value_init_object();
+                        percentile_object = json_object(percentile_value);
+                        json_object_set_number(percentile_object, "percentile",
+                                               stats[z].perc[i]);
+                        json_object_set_number(percentile_object, "value",
                                                quartile_perc[i]);
+                        json_array_append_value(percentiles_array,
+                                                percentile_value);
                         break;
                     }
+                }
+
+                if (format == JSON) {
+                    json_object_set_value(zone_object, "percentiles",
+                                          percentiles_array_value);
                 }
             }
             else {
