@@ -118,7 +118,7 @@ FLOW_DATASTR *initializePQ()
     if (stats)
         stats->comment("sweep:initialize flow data structure", opt->verbose);
 
-    FLOW_DATASTR *flowpq;
+    FLOW_DATASTR *flowpq = nullptr;
 #ifdef IM_PQUEUE
     if (stats)
         stats->comment("FLOW_DATASTRUCTURE: in-memory pqueue");
