@@ -107,14 +107,17 @@
 
 import os
 import sys
-from grass.script.utils import try_remove
-from grass.script import core as grass
+from urllib.error import HTTPError, URLError
+from urllib.request import (
+    HTTPBasicAuthHandler,
+    HTTPPasswordMgrWithDefaultRealm,
+    build_opener,
+    install_opener,
+    urlopen,
+)
 
-from urllib.request import urlopen
-from urllib.request import build_opener, install_opener
-from urllib.request import HTTPPasswordMgrWithDefaultRealm
-from urllib.request import HTTPBasicAuthHandler
-from urllib.error import URLError, HTTPError
+from grass.script import core as grass
+from grass.script.utils import try_remove
 
 
 def main():

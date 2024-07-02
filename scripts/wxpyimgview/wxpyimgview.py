@@ -38,6 +38,7 @@
 # %end
 
 import os
+
 import grass.script as grass
 
 if __name__ == "__main__":

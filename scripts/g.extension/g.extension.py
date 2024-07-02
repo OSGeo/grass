@@ -143,17 +143,17 @@
 
 # TODO: solve addon-extension(-module) confusion
 
-import fileinput
-import os
-import codecs
-import sys
-import re
 import atexit
-import shutil
-import zipfile
-import tempfile
+import codecs
+import fileinput
 import json
+import os
+import re
+import shutil
+import sys
+import tempfile
 import xml.etree.ElementTree as etree
+import zipfile
 
 if sys.version_info.major == 3 and sys.version_info.minor < 8:
     from distutils.dir_util import copy_tree

@@ -26,11 +26,12 @@
 # %option G_OPT_R_MAPS
 # %end
 
-import sys
 import os
-from grass.script.utils import try_remove
-from grass.script import core as gcore
+import sys
+
 from grass.exceptions import CalledModuleError
+from grass.script import core as gcore
+from grass.script.utils import try_remove
 
 
 def main():

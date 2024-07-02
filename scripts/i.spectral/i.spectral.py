@@ -78,10 +78,11 @@
 # % description: output to text file
 # %end
 
-import os
 import atexit
-from grass.script.utils import try_rmdir
+import os
+
 from grass.script import core as gcore
+from grass.script.utils import try_rmdir
 
 
 def cleanup():

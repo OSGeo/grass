@@ -65,7 +65,6 @@
 
 import atexit
 import sys
-
 from pathlib import Path
 
 import grass.script as gs

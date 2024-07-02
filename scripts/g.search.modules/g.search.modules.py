@@ -65,11 +65,10 @@
 
 import os
 import sys
-
-from grass.script import core as grass
-from grass.exceptions import CalledModuleError
-
 import xml.etree.ElementTree as etree
+
+from grass.exceptions import CalledModuleError
+from grass.script import core as grass
 
 COLORIZE = False
 

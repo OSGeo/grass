@@ -4,11 +4,11 @@ Created on Fri 20 Nov 2020
 @author: Markus Neteler
 """
 
-from grass.gunittest.case import TestCase
-from grass.gunittest.main import test
-from grass.gunittest.gmodules import SimpleModule
-
 import os
+
+from grass.gunittest.case import TestCase
+from grass.gunittest.gmodules import SimpleModule
+from grass.gunittest.main import test
 
 
 class TestDPolar(TestCase):

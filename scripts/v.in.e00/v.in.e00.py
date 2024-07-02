@@ -38,13 +38,14 @@
 # %option G_OPT_V_OUTPUT
 # %end
 
+import glob
 import os
 import shutil
-import glob
-from grass.script.utils import try_rmdir, try_remove, basename
-from grass.script import vector as gvect
-from grass.script import core as gcore
+
 from grass.exceptions import CalledModuleError
+from grass.script import core as gcore
+from grass.script import vector as gvect
+from grass.script.utils import basename, try_remove, try_rmdir
 
 
 def main():

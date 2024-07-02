@@ -52,13 +52,13 @@
 # % requires_all: -r, input, output
 # %end
 
+import atexit
 import os
 import sys
-import atexit
 
-from grass.script import parser
 import grass.script as grass
 from grass.exceptions import CalledModuleError
+from grass.script import parser
 
 TMP = []
 

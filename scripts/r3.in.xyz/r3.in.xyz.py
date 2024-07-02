@@ -168,11 +168,12 @@
 # %End
 
 
-import sys
-import os
 import atexit
-from grass.script import core as grass
+import os
+import sys
+
 from grass.exceptions import CalledModuleError
+from grass.script import core as grass
 
 
 def cleanup():

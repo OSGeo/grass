@@ -41,11 +41,11 @@
 # % answer: meters
 # %end
 
-import os
 import atexit
+import os
+
 import grass.script as grass
 from grass.script.utils import encode
-
 
 scales = {
     "meters": 1.0,

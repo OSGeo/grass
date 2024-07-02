@@ -19,9 +19,8 @@ import base64
 import os
 from http.client import HTTPException
 from math import ceil
-from urllib.request import Request, urlopen
 from urllib.error import HTTPError
-
+from urllib.request import Request, urlopen
 
 import grass.script as grass
 from grass.exceptions import CalledModuleError

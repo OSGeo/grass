@@ -59,8 +59,9 @@
 # % description: Print stats in shell script style
 # %end
 
-import sys
 import os
+import sys
+
 import grass.script as gscript
 from grass.exceptions import CalledModuleError
 

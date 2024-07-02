@@ -18,10 +18,9 @@ This program is free software under the GNU General Public License
 """
 
 import pathlib
-
+import xml.etree.ElementTree as etree
 from xml.etree.ElementTree import ParseError
 
-import xml.etree.ElementTree as etree
 import grass.script as grass
 
 

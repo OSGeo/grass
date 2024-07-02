@@ -31,14 +31,14 @@
 # % description: Switch the compression off
 # %end
 
-import os
-import sys
-import shutil
 import atexit
+import os
+import shutil
+import sys
 import tarfile
 
-from grass.script.utils import try_rmdir, try_remove
 from grass.script import core as grass
+from grass.script.utils import try_remove, try_rmdir
 
 
 def cleanup():

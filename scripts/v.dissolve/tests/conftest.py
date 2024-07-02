@@ -1,7 +1,6 @@
 """Fixtures for v.dissolve tests"""
 
 import os
-
 from types import SimpleNamespace
 
 import pytest

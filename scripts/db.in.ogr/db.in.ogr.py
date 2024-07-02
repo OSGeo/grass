@@ -73,9 +73,10 @@
 # %end
 
 import os
+
 import grass.script as grass
-from grass.script.utils import decode
 from grass.exceptions import CalledModuleError
+from grass.script.utils import decode
 
 
 def main():

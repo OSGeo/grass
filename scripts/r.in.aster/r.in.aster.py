@@ -52,6 +52,7 @@
 # %end
 
 import os
+
 import grass.script as grass
 
 bands = {

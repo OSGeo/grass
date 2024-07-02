@@ -15,7 +15,6 @@ COPYRIGHT: (C) 2022 Stefan Blumentrath and by the GRASS Development Team
 import re
 import sys
 import unittest
-
 from pathlib import Path
 from urllib import request as urlrequest
 

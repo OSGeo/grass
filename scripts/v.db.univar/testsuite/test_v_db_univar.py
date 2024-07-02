@@ -6,8 +6,8 @@ Created on Sun Jun 08 19:08:07 2018
 """
 
 from grass.gunittest.case import TestCase
-from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
+from grass.gunittest.main import test
 
 
 class TestVDbUnivar(TestCase):

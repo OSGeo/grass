@@ -68,13 +68,13 @@
 # % guisection: Remove
 # %end
 
+import atexit
 import os
 import sys
-import atexit
 
 import grass.script as grass
-from grass.script.utils import encode
 from grass.exceptions import CalledModuleError
+from grass.script.utils import encode
 
 
 def cleanup():

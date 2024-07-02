@@ -101,8 +101,8 @@
 # %end
 
 
-import os
 import atexit
+import os
 import subprocess
 
 import grass.script as grass

@@ -40,8 +40,8 @@ import signal
 import struct
 import sys
 import time
-import numpy
 
+import numpy
 import wx
 
 import grass.script as grass

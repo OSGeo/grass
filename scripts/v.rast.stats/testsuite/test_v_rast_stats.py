@@ -6,9 +6,7 @@
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 from grass.pygrass.vector import VectorTopo
-from grass.pygrass.vector.geometry import Line
-from grass.pygrass.vector.geometry import Boundary
-from grass.pygrass.vector.geometry import Centroid
+from grass.pygrass.vector.geometry import Boundary, Centroid, Line
 
 
 class TestRastStats(TestCase):

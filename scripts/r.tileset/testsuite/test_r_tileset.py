@@ -4,13 +4,12 @@ Created on Sun Jun 08 19:42:32 2018
 @author: Sanjeet Bhatti
 """
 
-from grass.gunittest.case import TestCase
-from grass.gunittest.main import test
-from grass.gunittest.gmodules import SimpleModule
-
-from grass.script.utils import decode
-
 import os
+
+from grass.gunittest.case import TestCase
+from grass.gunittest.gmodules import SimpleModule
+from grass.gunittest.main import test
+from grass.script.utils import decode
 
 output = """\
 -78.77462049|35.6875073|-78.60830318|35.74855834|1506|678

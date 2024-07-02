@@ -1,10 +1,9 @@
 from grass.gunittest.case import TestCase
-from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
-
-from grass.script.core import tempname
+from grass.gunittest.main import test
 from grass.pygrass.gis import Mapset
 from grass.pygrass.raster import RasterRow
+from grass.script.core import tempname
 
 
 class TestSemanticLabelsSystemDefined(TestCase):
