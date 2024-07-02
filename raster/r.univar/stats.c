@@ -318,9 +318,9 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
                 }
 
                 for (i = 0; i < stats[z].n_perc; i++) {
-                    char buf[24], buf2[36];
+                    char buf[24];
 
-                    sprintf(buf, "%.15g", stats[z].perc[i]);
+                    snprintf(buf, sizeof(buf), "%.15g", stats[z].perc[i]);
                     G_strchg(buf, '.', '_');
                     switch (format) {
                     case PLAIN:
