@@ -6,15 +6,14 @@ Created on Thu Jun 19 14:13:53 2014
 
 import sys
 import unittest
+
 import numpy as np
 
+import grass.lib.vector as libvect
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-import grass.lib.vector as libvect
-from grass.script.core import run_command
-
 from grass.pygrass.vector import VectorTopo
+from grass.script.core import run_command
 
 
 class GeometryAttrsTestCase(TestCase):

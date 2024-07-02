@@ -14,7 +14,6 @@ a template. It is not expected that something will left.
 
 import sys
 import time
-
 import unittest
 
 __unittest = True

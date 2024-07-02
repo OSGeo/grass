@@ -9,20 +9,18 @@ for details.
 :authors: Vaclav Petras
 """
 
-import os
-import datetime
-from xml.sax import saxutils
-import xml.etree.ElementTree as et
-import subprocess
 import collections
+import datetime
+import os
 import re
+import subprocess
+import xml.etree.ElementTree as et
 from collections.abc import Iterable
-
-from .utils import ensure_dir
-from .checkers import text_to_keyvalue
-
-
 from io import StringIO
+from xml.sax import saxutils
+
+from .checkers import text_to_keyvalue
+from .utils import ensure_dir
 
 
 # TODO: change text_to_keyvalue to same sep as here

@@ -1,29 +1,30 @@
 import ctypes
+
 import numpy as np
 
 #
 # import GRASS modules
 #
-from grass.script import fatal
-from grass.exceptions import OpenError
-
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
 import grass.lib.rowio as librowio
+from grass.exceptions import OpenError
+from grass.script import fatal
 
 libgis.G_gisinit("")
 
 # import pygrass modules
+from grass.pygrass import utils
 from grass.pygrass.errors import must_be_open
 from grass.pygrass.gis.region import Region
-from grass.pygrass import utils
 
 # import raster classes
 from grass.pygrass.raster.abstract import RasterAbstractBase
-from grass.pygrass.raster.raster_type import TYPE as RTYPE, RTYPE_STR
 from grass.pygrass.raster.buffer import Buffer
-from grass.pygrass.raster.segment import Segment
+from grass.pygrass.raster.raster_type import RTYPE_STR
+from grass.pygrass.raster.raster_type import TYPE as RTYPE
 from grass.pygrass.raster.rowio import RowIO
+from grass.pygrass.raster.segment import Segment
 
 WARN_OVERWRITE = "Raster map <{0}> already exists and will be overwritten"
 
@@ -717,6 +718,7 @@ def numpy2raster(array, mtype, rastname, overwrite=False):
 
 if __name__ == "__main__":
     import doctest
+
     from grass.pygrass.modules import Module
 
     Module("g.region", n=40, s=0, e=40, w=0, res=10)

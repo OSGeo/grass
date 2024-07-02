@@ -1,7 +1,8 @@
-from grass.pygrass.raster.raster_type import TYPE as RTYPE
 import ctypes
+
 import numpy as np
 
+from grass.pygrass.raster.raster_type import TYPE as RTYPE
 
 _CELL = ("int", "intp", "int8", "int16", "int32", "int64")
 CELL = tuple([getattr(np, attr) for attr in _CELL if hasattr(np, attr)])

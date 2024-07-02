@@ -19,7 +19,6 @@ so that the function ``_`` appears in the global namespace (as an additional bui
 import builtins as _builtins
 import os
 
-
 # Setup translations
 #
 # The translations in the GRASS GIS Python package grass, GRASS Python modules

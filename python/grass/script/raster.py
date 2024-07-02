@@ -22,18 +22,19 @@ import os
 import string
 import time
 
-from .core import (
-    gisenv,
-    find_file,
-    tempfile,
-    run_command,
-    read_command,
-    write_command,
-    feed_command,
-    warning,
-    fatal,
-)
 from grass.exceptions import CalledModuleError
+
+from .core import (
+    fatal,
+    feed_command,
+    find_file,
+    gisenv,
+    read_command,
+    run_command,
+    tempfile,
+    warning,
+    write_command,
+)
 from .utils import encode, float_or_dms, parse_key_val, try_remove
 
 

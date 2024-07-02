@@ -1,7 +1,6 @@
 from grass.exceptions import OpenError
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
 from grass.pygrass.raster import RasterRow
 
 

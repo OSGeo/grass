@@ -1,7 +1,7 @@
 """Fixtures for grass.script"""
 
-import uuid
 import os
+import uuid
 
 import pytest
 

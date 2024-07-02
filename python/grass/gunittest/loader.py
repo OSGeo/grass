@@ -9,11 +9,11 @@ for details.
 :authors: Vaclav Petras
 """
 
-import os
-import fnmatch
-import unittest
 import collections
+import fnmatch
+import os
 import re
+import unittest
 
 
 def fnmatch_exclude_with_base(files, base, exclude):

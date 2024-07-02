@@ -6,7 +6,6 @@ from grass.exceptions import CalledModuleError
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
-
 V_UNIVAR_SCHOOLS_WIDTH_SUBSET = """n=144
 nmissing=0
 nnull=23

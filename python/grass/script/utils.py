@@ -17,16 +17,16 @@ for details.
 .. sectionauthor:: Anna Petrasova <kratochanna gmail.com>
 """
 
-import os
-import shutil
 import locale
-import shlex
-import re
-import time
+import os
 import platform
-import uuid
 import random
+import re
+import shlex
+import shutil
 import string
+import time
+import uuid
 
 
 def float_or_dms(s):
@@ -363,8 +363,8 @@ def naturally_sort(items, key=None):
 
 def get_lib_path(modname, libname=None):
     """Return the path of the libname contained in the module."""
-    from os.path import isdir, join, sep
     from os import getenv
+    from os.path import isdir, join, sep
 
     if isdir(join(getenv("GISBASE"), "etc", modname)):
         path = join(os.getenv("GISBASE"), "etc", modname)

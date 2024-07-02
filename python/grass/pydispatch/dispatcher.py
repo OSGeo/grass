@@ -27,7 +27,8 @@ Internal attributes:
 """
 
 import weakref
-from grass.pydispatch import saferef, robustapply, errors
+
+from grass.pydispatch import errors, robustapply, saferef
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "Id: dispatcher.py,v 1.1 2010/03/30 15:45:55 mcfletch Exp"

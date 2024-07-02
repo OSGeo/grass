@@ -1,6 +1,7 @@
 """Test TimeSeriesMap functions"""
 
 from pathlib import Path
+
 import pytest
 
 try:

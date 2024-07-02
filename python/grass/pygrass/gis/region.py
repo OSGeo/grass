@@ -5,10 +5,10 @@ Created on Fri May 25 12:57:10 2012
 """
 
 import ctypes
+
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
 import grass.script as grass
-
 from grass.pygrass.errors import GrassError
 from grass.pygrass.shell.conversion import dict2html
 from grass.pygrass.utils import get_mapset_raster
@@ -665,6 +665,7 @@ class Region:
 
 if __name__ == "__main__":
     import doctest
+
     from grass.pygrass import utils
     from grass.script.core import run_command
 

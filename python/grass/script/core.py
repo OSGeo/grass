@@ -18,24 +18,25 @@ for details.
 .. sectionauthor:: Michael Barton <michael.barton asu.edu>
 """
 
-import os
-import sys
 import atexit
-import subprocess
-import shutil
 import codecs
-import string
-import random
-import shlex
-import json
 import csv
 import io
-from tempfile import NamedTemporaryFile
+import json
+import os
+import random
+import shlex
+import shutil
+import string
+import subprocess
+import sys
 from pathlib import Path
+from tempfile import NamedTemporaryFile
 
-from .utils import KeyValue, parse_key_val, basename, encode, decode, try_remove
-from grass.exceptions import ScriptError, CalledModuleError
+from grass.exceptions import CalledModuleError, ScriptError
 from grass.grassdb.manage import resolve_mapset_path
+
+from .utils import KeyValue, basename, decode, encode, parse_key_val, try_remove
 
 
 # subprocess wrapper that uses shell on Windows

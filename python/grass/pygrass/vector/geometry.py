@@ -12,12 +12,10 @@ import numpy as np
 
 import grass.lib.gis as libgis
 import grass.lib.vector as libvect
-
-from grass.pygrass.utils import decode
 from grass.pygrass.errors import GrassError, mapinfo_must_be_set
-
-from grass.pygrass.vector.basic import Ilist, Bbox, Cats
+from grass.pygrass.utils import decode
 from grass.pygrass.vector import sql
+from grass.pygrass.vector.basic import Bbox, Cats, Ilist
 
 # For test purposes
 test_vector_name = "geometry_doctest_map"
@@ -1966,6 +1964,7 @@ def read_line(
 
 if __name__ == "__main__":
     import doctest
+
     from grass.pygrass import utils
 
     utils.create_test_vector_map(test_vector_name)

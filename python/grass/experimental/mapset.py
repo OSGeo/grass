@@ -1,13 +1,13 @@
 "Session or subsession for mapsets (subprojects)"
 
-import shutil
 import os
+import shutil
 from pathlib import Path
 
 import grass.script as gs
 from grass.experimental.create import (
-    require_create_ensure_mapset,
     create_temporary_mapset,
+    require_create_ensure_mapset,
 )
 
 

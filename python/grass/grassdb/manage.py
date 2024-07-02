@@ -14,7 +14,6 @@ import shutil
 import sys
 from pathlib import Path
 
-
 import grass.grassdb.config
 
 

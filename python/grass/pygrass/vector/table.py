@@ -7,20 +7,18 @@ Created on Wed Aug  8 15:29:21 2012
 import ctypes
 import os
 from collections import OrderedDict
-
-import numpy as np
 from sqlite3 import OperationalError
 
+import numpy as np
+
 import grass.lib.vector as libvect
-from grass.pygrass.gis import Mapset
 from grass.exceptions import DBError
-from grass.pygrass.utils import table_exist, decode
-from grass.script.db import db_table_in_vector
-from grass.script.core import warning
-
-from grass.pygrass.vector import sql
 from grass.lib.ctypes_preamble import ReturnString
-
+from grass.pygrass.gis import Mapset
+from grass.pygrass.utils import decode, table_exist
+from grass.pygrass.vector import sql
+from grass.script.core import warning
+from grass.script.db import db_table_in_vector
 
 # For test purposes
 test_vector_name = "table_doctest_map"
@@ -1288,6 +1286,7 @@ class Table:
 
 if __name__ == "__main__":
     import doctest
+
     from grass.pygrass import utils
 
     utils.create_test_vector_map(test_vector_name)

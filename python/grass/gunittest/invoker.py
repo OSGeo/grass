@@ -15,23 +15,22 @@ import shutil
 import subprocess
 import sys
 
-from .checkers import text_to_keyvalue
+import grass.script as gs
+from grass.script.utils import _get_encoding, decode
 
+from .checkers import text_to_keyvalue
 from .loader import GrassTestLoader, discover_modules
 from .reporters import (
+    GrassTestFilesHtmlReporter,
+    GrassTestFilesKeyValueReporter,
     GrassTestFilesMultiReporter,
     GrassTestFilesTextReporter,
-    GrassTestFilesHtmlReporter,
-    TestsuiteDirReporter,
-    GrassTestFilesKeyValueReporter,
-    get_svn_path_authors,
     NoopFileAnonymizer,
+    TestsuiteDirReporter,
+    get_svn_path_authors,
     keyvalue_to_text,
 )
-from .utils import silent_rmtree, ensure_dir
-
-import grass.script as gs
-from grass.script.utils import decode, _get_encoding
+from .utils import ensure_dir, silent_rmtree
 
 maketrans = str.maketrans
 

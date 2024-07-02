@@ -1,11 +1,11 @@
-import numpy as np
 import unittest
+
+import numpy as np
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-from grass.pygrass.raster import raster2numpy_img
 from grass.pygrass.gis.region import Region
+from grass.pygrass.raster import raster2numpy_img
 from grass.script.core import tempfile
 
 has_PyQt4 = False

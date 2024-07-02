@@ -9,10 +9,9 @@ from operator import itemgetter
 
 import grass.lib.raster as libraster
 from grass.exceptions import ImplementationError
-
 from grass.pygrass.errors import GrassError
-from grass.pygrass.utils import decode
 from grass.pygrass.raster.raster_type import TYPE as RTYPE
+from grass.pygrass.utils import decode
 
 
 class Category(list):

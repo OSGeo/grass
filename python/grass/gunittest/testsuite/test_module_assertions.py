@@ -1,12 +1,10 @@
 import copy
 import subprocess
 
-from grass.pygrass.modules import Module
-from grass.gunittest.gmodules import SimpleModule
-
 from grass.gunittest.case import TestCase
+from grass.gunittest.gmodules import CalledModuleError, SimpleModule
 from grass.gunittest.main import test
-from grass.gunittest.gmodules import CalledModuleError
+from grass.pygrass.modules import Module
 
 
 class TestModuleAssertions(TestCase):

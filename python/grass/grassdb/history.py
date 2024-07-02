@@ -11,10 +11,10 @@ for details.
 
 import json
 import shutil
+from datetime import datetime
 from enum import Enum
 from pathlib import Path
 
-from datetime import datetime
 import grass.script as gs
 
 

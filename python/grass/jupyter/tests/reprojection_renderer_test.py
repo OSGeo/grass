@@ -1,7 +1,9 @@
 """Test ReprojectionRenderer functions"""
 
 from pathlib import Path
+
 from pytest import approx
+
 from grass.jupyter.reprojection_renderer import ReprojectionRenderer
 
 

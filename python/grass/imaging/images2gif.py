@@ -75,7 +75,7 @@ try:
         PIL.__version__  # test if user has Pillow or PIL
     except AttributeError:
         pillow = False
-    from PIL.GifImagePlugin import getheader, getdata
+    from PIL.GifImagePlugin import getdata, getheader
 except ImportError:
     PIL = None
 

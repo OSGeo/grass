@@ -4,9 +4,14 @@ Tests of start_command function family (location independent)
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-from grass.script.core import start_command, PIPE, run_command, write_command
-from grass.script.core import read_command, find_program
+from grass.script.core import (
+    PIPE,
+    find_program,
+    read_command,
+    run_command,
+    start_command,
+    write_command,
+)
 from grass.script.utils import encode
 
 

@@ -7,9 +7,7 @@ import doctest
 import grass.gunittest.case
 import grass.gunittest.main
 import grass.gunittest.utils
-
-from grass.pygrass.modules import shortcuts, grid, interface
-
+from grass.pygrass.modules import grid, interface, shortcuts
 
 # doctest does not allow changing the base classes of test case, skip test case
 # and test suite, so we need to create a new type which inherits from our class

@@ -1,24 +1,22 @@
 import contextlib
-import os
-import sys
 import multiprocessing as mltp
-import subprocess as sub
+import os
 import shutil as sht
+import subprocess as sub
+import sys
 from math import ceil
 
-from grass.script.setup import write_gisrc
-from grass.script import append_node_pid, legalize_vector_name
-
-from grass.pygrass.gis import Mapset, Location
+from grass.pygrass.gis import Location, Mapset
 from grass.pygrass.gis.region import Region
 from grass.pygrass.modules import Module
-from grass.pygrass.utils import get_mapset_raster, findmaps
-
-from grass.pygrass.modules.grid.split import (
-    split_region_tiles,
-    split_region_in_overlapping_tiles,
-)
 from grass.pygrass.modules.grid.patch import rpatch_map, rpatch_map_r_patch_backend
+from grass.pygrass.modules.grid.split import (
+    split_region_in_overlapping_tiles,
+    split_region_tiles,
+)
+from grass.pygrass.utils import findmaps, get_mapset_raster
+from grass.script import append_node_pid, legalize_vector_name
+from grass.script.setup import write_gisrc
 
 
 def select(parms, ptype):

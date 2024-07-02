@@ -1,7 +1,7 @@
 """Test session functions in grass.jupyter"""
 
-import subprocess
 import os
+import subprocess
 import sys
 
 

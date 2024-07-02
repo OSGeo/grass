@@ -6,7 +6,6 @@ Created on Tue Jun 24 09:43:53 2014
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
 from grass.pygrass.modules.interface.flag import Flag
 
 

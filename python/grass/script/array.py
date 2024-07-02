@@ -111,10 +111,10 @@ for details.
 
 import numpy
 
-from .utils import try_remove
-from . import core as gcore
 from grass.exceptions import CalledModuleError
 
+from . import core as gcore
+from .utils import try_remove
 
 ###############################################################################
 

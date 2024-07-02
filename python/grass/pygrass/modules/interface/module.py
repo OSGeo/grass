@@ -1,18 +1,18 @@
-from multiprocessing import cpu_count, Process, Queue
 import time
+from itertools import zip_longest
+from multiprocessing import Process, Queue, cpu_count
 from xml.etree.ElementTree import fromstring
 
 from grass.exceptions import CalledModuleError, GrassError, ParameterError
-from grass.script.core import Popen, PIPE, use_temp_region, del_temp_region
-from grass.script.utils import encode, decode
-from .docstring import docstring_property
-from .parameter import Parameter
-from .flag import Flag
-from .typedict import TypeDict
-from .read import GETFROMTAG, DOC
-from .env import G_debug
+from grass.script.core import PIPE, Popen, del_temp_region, use_temp_region
+from grass.script.utils import decode, encode
 
-from itertools import zip_longest
+from .docstring import docstring_property
+from .env import G_debug
+from .flag import Flag
+from .parameter import Parameter
+from .read import DOC, GETFROMTAG
+from .typedict import TypeDict
 
 
 def _get_bash(self, *args, **kargs):

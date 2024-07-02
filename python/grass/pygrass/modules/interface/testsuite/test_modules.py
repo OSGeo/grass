@@ -7,13 +7,11 @@ Created on Tue Jun 24 09:43:53 2014
 from fnmatch import fnmatch
 from io import BytesIO
 
+from grass.exceptions import ParameterError
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-from grass.script.core import get_commands
-from grass.exceptions import ParameterError
 from grass.pygrass.modules.interface import Module
-
+from grass.script.core import get_commands
 
 SKIP = [
     "g.parser",

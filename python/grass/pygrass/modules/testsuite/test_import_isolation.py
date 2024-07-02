@@ -10,8 +10,8 @@ Copyright: (C) 2015 pietro
 Created on  Wed Jul 15 11:34:32 2015
 """
 
-import sys
 import fnmatch
+import sys
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -36,8 +36,8 @@ class TestImportIsolation(TestCase):
             isolate, check(*self.patterns), msg="Test isolation before any import."
         )
         # same import done in __init__ file
-        from grass.pygrass.modules.interface import Module, ParallelModuleQueue
         from grass.pygrass.modules import shortcuts
+        from grass.pygrass.modules.interface import Module, ParallelModuleQueue
 
         self.assertEqual(
             isolate, check(*self.patterns), msg="Test isolation after import Module."

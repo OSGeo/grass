@@ -5,6 +5,7 @@ Created on Mon Jun 11 18:02:27 2012
 """
 
 import ctypes
+
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
 import grass.lib.segment as libseg

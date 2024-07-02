@@ -9,31 +9,30 @@ for details.
 :authors: Vaclav Petras
 """
 
+import hashlib
 import os
 import shutil
 import subprocess
-import hashlib
-import uuid
 import unittest
+import uuid
+from io import StringIO
 
-from grass.pygrass.modules import Module
 from grass.exceptions import CalledModuleError
-from grass.script import text_to_string, encode, decode
+from grass.pygrass.modules import Module
+from grass.script import decode, encode, text_to_string
 
-from .gmodules import call_module, SimpleModule
 from .checkers import (
     check_text_ellipsis,
-    text_to_keyvalue,
-    keyvalue_equals,
     diff_keyvalue,
     file_md5,
-    text_file_md5,
     files_equal_md5,
+    keyvalue_equals,
+    text_file_md5,
+    text_to_keyvalue,
 )
-from .utils import safe_repr
+from .gmodules import SimpleModule, call_module
 from .gutils import is_map_in_mapset
-
-from io import StringIO
+from .utils import safe_repr
 
 
 class TestCase(unittest.TestCase):
