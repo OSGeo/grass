@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 #include <windows.h>
 #include <process.h>
 #include <fcntl.h>
@@ -30,7 +30,7 @@
 
 static void close_on_exec(int fd)
 {
-#ifndef __MINGW32__
+#ifndef _WIN32
     int flags = fcntl(fd, F_GETFD);
 
     fcntl(fd, F_SETFD, flags | FD_CLOEXEC);
@@ -136,7 +136,7 @@ dbDriver *db_start_driver(const char *name)
     /* run the driver as a child process and create pipes to its stdin, stdout
      */
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 #define pipe(fds) _pipe(fds, 250000, _O_BINARY | _O_NOINHERIT)
 #endif
 

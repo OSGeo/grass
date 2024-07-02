@@ -36,13 +36,14 @@
 #ifndef RTIMER_H
 #define RTIMER_H
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 
 #include <time.h>
 #include <stdio.h>
 #include <string.h>
+#ifdef __MINGW32__
 #include <strings.h>
-
+#endif
 typedef struct {
     time_t tv1, tv2;
 } Rtimer;

@@ -29,7 +29,7 @@
 #endif
 
 #include <unistd.h>
-#ifndef __MINGW32__
+#ifndef _WIN32
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -389,7 +389,7 @@ static int ends_with(const char *string, const char *suffix)
 
 static void map_file(void)
 {
-#ifndef __MINGW32__
+#ifndef _WIN32
     size_t size = HEADER_SIZE + ca.width * ca.height * sizeof(unsigned int);
     void *ptr;
     int fd;

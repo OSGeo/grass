@@ -167,8 +167,9 @@ static int write_file(LOGIN *login)
 
     /* fchmod is not available on Windows */
     /* fchmod ( fileno(fd), S_IRUSR | S_IWUSR ); */
+#ifndef _MSC_VER
     chmod(file, S_IRUSR | S_IWUSR);
-
+#endif
     for (i = 0; i < login->n; i++) {
         fprintf(fd, "%s|%s", login->data[i].driver, login->data[i].database);
         if (login->data[i].user) {

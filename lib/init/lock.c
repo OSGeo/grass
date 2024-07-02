@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Usage: %s file pid"), argv[0]);
 #define file argv[1]
 
-#ifdef __MINGW32__
+#ifdef _WIN32
     G_warning(_("Concurrent mapset locking is not supported on Windows"));
     exit(0);
 #else
@@ -71,7 +71,7 @@ int find_process(int pid)
        kill failed because no such process, or because user is
        not owner of process
      */
-#ifdef __MINGW32__
+#ifdef _WIN32
     return 0;
 #else
     if (kill(pid, 0) == 0)

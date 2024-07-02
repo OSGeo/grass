@@ -72,6 +72,27 @@
 #define RELDIR "?"
 #endif
 
+/* GDAL < 2.3 does not define HAVE_LONG_LONG when compiled with
+ * Visual Studio as for OSGeo4W, even though long long is available,
+ * and GIntBig falls back to long which is on Windows always 4 bytes.
+ * This patch ensures that GIntBig is defined as long long (8 bytes)
+ * if GDAL is compiled with Visual Studio and GRASS is compiled with
+ * MinGW. This patch must be applied before other GDAL/OGR headers are
+ * included, as done by gprojects.h and vector.h */
+#ifndef _MSC_VER
+#if defined(__MINGW32__) && HAVE_GDAL
+#include <gdal_version.h>
+#if GDAL_VERSION_NUM < 2030000
+#include <cpl_config.h>
+/* HAVE_LONG_LONG_INT comes from GRASS
+ * HAVE_LONG_LONG comes from GDAL */
+#if HAVE_LONG_LONG_INT && !defined(HAVE_LONG_LONG)
+#define HAVE_LONG_LONG 1
+#endif
+#endif
+#endif
+#endif /* _MSC_VER */
+
 /* adj_cellhd.c */
 void G_adjust_Cell_head(struct Cell_head *, int, int);
 void G_adjust_Cell_head3(struct Cell_head *, int, int, int);
@@ -479,7 +500,7 @@ void G_ls(const char *, FILE *);
 void G_ls_format(char **, int, int, FILE *);
 
 /* ls_filter.c */
-#ifdef HAVE_REGEX_H
+#if defined(HAVE_REGEX_H) || defined(HAVE_PCRE_H)
 void *G_ls_regex_filter(const char *, int, int, int);
 void *G_ls_glob_filter(const char *, int, int);
 void G_free_ls_filter(void *);
