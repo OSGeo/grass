@@ -870,7 +870,7 @@ class TemporalAlgebraParser:
 
         :return: True if successful, False otherwise
         """
-        l = lexer
+        lx = lexer
         # Split the expression to ignore the left part
         expressions = expression.split("=")[1:]
         expression = " ".join(expressions)
@@ -886,17 +886,17 @@ class TemporalAlgebraParser:
             return False
 
         # detect all STDS
-        if l is None:
-            l = TemporalAlgebraLexer()
-        l.build()
-        l.lexer.input(expression)
+        if lx is None:
+            lx = TemporalAlgebraLexer()
+        lx.build()
+        lx.lexer.input(expression)
 
         name_list = []
         tokens = []
 
         count = 0
         while True:
-            tok = l.lexer.token()
+            tok = lx.lexer.token()
             if not tok:
                 break
 

@@ -100,12 +100,12 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
 
     def parse(self, expression, basename=None, overwrite=False):
         # Check for space time dataset type definitions from temporal algebra
-        l = TemporalRasterAlgebraLexer()
-        l.build()
-        l.lexer.input(expression)
+        lx = TemporalRasterAlgebraLexer()
+        lx.build()
+        lx.lexer.input(expression)
 
         while True:
-            tok = l.lexer.token()
+            tok = lx.lexer.token()
             if not tok:
                 break
 

@@ -153,12 +153,12 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
     def parse(self, expression, basename=None, overwrite=False):
         # Check for space time dataset type definitions from temporal algebra
-        l = TemporalVectorAlgebraLexer()
-        l.build()
-        l.lexer.input(expression)
+        lx = TemporalVectorAlgebraLexer()
+        lx.build()
+        lx.lexer.input(expression)
 
         while True:
-            tok = l.lexer.token()
+            tok = lx.lexer.token()
             if not tok:
                 break
 

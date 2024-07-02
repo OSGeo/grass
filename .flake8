@@ -39,7 +39,7 @@ per-file-ignores =
     doc/python/vector_example_ctypes.py: F403, F405
     doc/python/m.distance.py: F403, F405, E501
     doc/gui/wxpython/example/dialogs.py: F401
-    locale/grass_po_stats.py: E122, E128, E231, E401, E722, E741
+    locale/grass_po_stats.py: E122, E128, E231, E401, E722
     gui/scripts/d.wms.py: E501
     gui/wxpython/core/gcmd.py: E402
     gui/wxpython/core/gthread.py: F841
@@ -126,7 +126,6 @@ per-file-ignores =
     python/grass/pygrass/vector/__init__.py: E402
     python/grass/pygrass/modules/interface/*.py: F401
     python/grass/pygrass/modules/grid/*.py: F401
-    python/grass/pygrass/raster/rowio.py: E741
     python/grass/pygrass/raster/category.py: E721
     python/grass/pygrass/rpc/__init__.py: F401, F403
     python/grass/pygrass/utils.py: E402
@@ -136,13 +135,11 @@ per-file-ignores =
     python/grass/temporal/datetime_math.py: F841, E722
     python/grass/temporal/open_stds.py: F841
     python/grass/temporal/spatial_topology_dataset_connector.py: E722
-    python/grass/temporal/temporal_algebra.py: E741, F841, E722
+    python/grass/temporal/temporal_algebra.py: F841, E722
     python/grass/temporal/temporal_granularity.py: F841, E722
-    python/grass/temporal/temporal_raster_algebra.py: E741
     python/grass/temporal/temporal_raster_base_algebra.py: F841, E722
-    python/grass/temporal/temporal_raster3d_algebra.py: E741
     python/grass/temporal/temporal_topology_dataset_connector.py: E722
-    python/grass/temporal/temporal_vector_algebra.py: E741, F841
+    python/grass/temporal/temporal_vector_algebra.py: F841
     python/grass/temporal/univar_statistics.py: E231
     # Current benchmarks/tests are changing sys.path before import.
     # Possibly, a different approach should be taken there anyway.
@@ -161,7 +158,7 @@ per-file-ignores =
     # E402 module level import not at top of file
     scripts/d.polar/d.polar.py: F841
     scripts/r.in.wms/wms_gdal_drv.py: F841, E722
-    scripts/r.in.wms/wms_cap_parsers.py: F841, E741
+    scripts/r.in.wms/wms_cap_parsers.py: F841
     scripts/r.in.wms/wms_drv.py: E402, E722
     scripts/r.in.wms/srs.py: E722
     scripts/r.semantic.label/r.semantic.label.py: F841, E501
@@ -170,8 +167,7 @@ per-file-ignores =
     scripts/g.extension/g.extension.py: F841, E722, E501
     scripts/v.unpack/v.unpack.py: F841, E722, E501
     scripts/v.import/v.import.py: F841, E722, E501
-    scripts/db.univar/db.univar.py: E741, E501
-    scripts/d.rast.leg/d.rast.leg.py: E741
+    scripts/db.univar/db.univar.py: E501
     scripts/d.frame/d.frame.py: E722
     scripts/i.pansharpen/i.pansharpen.py: E722, E501
     scripts/r.in.srtm/r.in.srtm.py: E722
