@@ -202,37 +202,19 @@ def get_rendering_size(region, width, height, default_width=600, default_height=
     return (default_width, round(default_width * region_height / region_width))
 
 
-def dms_to_dd(dms_str):
-    dms_str = dms_str.strip()
-    direction = dms_str[-1]
-    dms_str = dms_str[:-1]
-    degrees, minutes, seconds = map(float, dms_str.split(":"))
-    dd = degrees + minutes / 60 + seconds / 3600
-    if direction in ["W", "S"]:
-        dd *= -1
-    return dd
-
-
 def get_computational_region_bb():
-    region = gs.read_command("g.region", flags="b")
-    output = gs.decode(region).splitlines()
-    output_dict = {}
+    """
+    Gets the current computational region.
+    """
+    region = gs.parse_command("g.region", flags="bg")
+    return [(region["ll_s"], region["ll_w"]), (region["ll_n"], region["ll_e"])]
 
-    for line in output:
-        if line.strip():
-            key, value = line.split(":", 1)
-            output_dict[key.strip()] = value.strip()
-    north_latitude = dms_to_dd(output_dict["north latitude"])
-    south_latitude = dms_to_dd(output_dict["south latitude"])
-    west_longitude = dms_to_dd(output_dict["west longitude"])
-    east_longitude = dms_to_dd(output_dict["east longitude"])
 
-    # Create tuples for SW and NE locations
-    sw_location = (south_latitude, west_longitude)
-    ne_location = (north_latitude, east_longitude)
-
-    # Return the list of tuples
-    return [sw_location, ne_location]
+def update_region(north, south, east, west):
+    """
+    Updates the GRASS GIS region using the given coordinates.
+    """
+    gs.run_command("g.region", n=north, s=south, e=east, w=west)
 
 
 def save_gif(
