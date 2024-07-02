@@ -17,8 +17,8 @@ pytest utils/test_generate_last_commit_file.py
 @author Tomas Zigo <tomas.zigo slovanet.sk>
 """
 
-import os
 import json
+import os
 import subprocess
 
 import pytest

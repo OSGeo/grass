@@ -13,10 +13,11 @@
 #       for details.
 #
 
-import sys
-import os
-import atexit
 import array
+import atexit
+import os
+import sys
+
 import grass.script as grass
 
 tmp_img = None

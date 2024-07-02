@@ -13,24 +13,22 @@
 #
 #############################################################################
 
-import sys
-import os
 import fnmatch
+import os
+import sys
 
-# from build_html import *
 from build_html import (
-    default_year,
-    header1_tmpl,
-    grass_version,
-    modclass_intro_tmpl,
-    to_title,
-    html_files,
     check_for_desc_override,
+    default_year,
     get_desc,
-    write_html_footer,
+    grass_version,
+    header1_tmpl,
+    html_files,
+    modclass_intro_tmpl,
     replace_file,
+    to_title,
+    write_html_footer,
 )
-
 
 header_graphical_index_tmpl = """\
 <link rel="stylesheet" href="grassdocs.css" type="text/css">

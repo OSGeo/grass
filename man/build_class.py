@@ -6,11 +6,10 @@
 #   Markus Neteler
 #   Glynn Clements
 
-import sys
 import os
+import sys
 
 from build_html import *
-
 
 no_intro_page_classes = ["display", "general", "miscellaneous", "postscript"]
 

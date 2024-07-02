@@ -7,15 +7,9 @@ Created on Fri Jun 26 19:10:58 2015
 import argparse
 import os
 import sys
-
 from urllib.request import urlopen
 
-from build_html import (
-    header1_tmpl,
-    grass_version,
-    headerpso_tmpl,
-    write_html_footer,
-)
+from build_html import grass_version, header1_tmpl, headerpso_tmpl, write_html_footer
 
 
 def parse_options(lines, startswith="Opt"):

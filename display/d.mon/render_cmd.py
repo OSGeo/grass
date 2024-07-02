@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
+import glob
 import os
 import sys
-import glob
 import tempfile
 from pathlib import Path
 
+from grass.exceptions import CalledModuleError
 from grass.script import core as grass
 from grass.script import task as gtask
-from grass.exceptions import CalledModuleError
 
 non_rendering_modules = (
     "d.colorlist",

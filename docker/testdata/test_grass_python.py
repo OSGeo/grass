@@ -1,5 +1,6 @@
 # Import GRASS Python bindings
 import os
+
 import grass.script as gs
 
 # hint: do not use ~ as an alias for HOME

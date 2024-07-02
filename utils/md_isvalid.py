@@ -5,10 +5,10 @@
 #   (on Debian/Ubuntu - apt install markdownlint)
 #   (using Ruby installer - gem install mdl)
 
-import os
-import sys
 import argparse
+import os
 import subprocess
+import sys
 
 import grass.script as gs
 

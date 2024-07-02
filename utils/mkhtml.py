@@ -17,21 +17,19 @@
 #############################################################################
 
 import http
-import sys
-import os
-import string
-import re
-from datetime import datetime
-import locale
 import json
+import locale
+import os
 import pathlib
+import re
+import string
 import subprocess
-
+import sys
+import urllib.parse as urlparse
+from datetime import datetime
 from html.parser import HTMLParser
-
 from urllib import request as urlrequest
 from urllib.error import HTTPError, URLError
-import urllib.parse as urlparse
 
 try:
     import grass.script as gs

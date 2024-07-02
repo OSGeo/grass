@@ -37,25 +37,24 @@ is not safe, i.e. it has side effects (this should be changed in the future).
 # (this makes it more stable since we have to set up paths first)
 # pylint: disable=too-many-lines
 
-import sys
-import os
-import errno
+import argparse
 import atexit
 import datetime
+import errno
 import gettext
+import json
+import locale
+import os
+import platform
+import re
 import shutil
 import signal
 import string
 import subprocess
-import re
-import platform
+import sys
 import tempfile
-import locale
-import uuid
 import unicodedata
-import argparse
-import json
-
+import uuid
 
 # mechanism meant for debugging this script (only)
 # private global to store if we are debugging
@@ -794,11 +793,11 @@ def set_mapset(
     tmp_location requires tmpdir (which is used as gisdbase)
     """
     from grass.grassdb.checks import (
-        is_mapset_valid,
-        is_location_valid,
-        get_mapset_invalid_reason,
         get_location_invalid_reason,
         get_location_invalid_suggestion,
+        get_mapset_invalid_reason,
+        is_location_valid,
+        is_mapset_valid,
         mapset_exists,
     )
 
@@ -2311,10 +2310,10 @@ def main():
 
     from grass.app.runtime import (
         ensure_home,
-        set_paths,
+        set_browser,
         set_defaults,
         set_display_defaults,
-        set_browser,
+        set_paths,
     )
 
     ensure_home()

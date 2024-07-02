@@ -18,9 +18,10 @@ python man/build_keywords.py <dir_path_to_core_modules_html_man_files>
 @author Tomas Zigo <tomas.zigo slovanet.sk> - inject addons modules keywords
 """
 
+import glob
 import os
 import sys
-import glob
+
 from build_html import *
 
 blacklist = [
