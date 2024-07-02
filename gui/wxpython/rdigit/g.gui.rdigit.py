@@ -139,7 +139,7 @@ def main():
                 rdigit.OnMapSelection()
             # use Close instead of QuitRDigit for standalone tool
             self.rdigit.quitDigitizer.disconnect(self.QuitRDigit)
-            self.rdigit.quitDigitizer.connect(lambda: self.Close())
+            self.rdigit.quitDigitizer.connect(self.Close)
 
             # add Map Display panel to Map Display frame
             sizer = wx.BoxSizer(wx.VERTICAL)

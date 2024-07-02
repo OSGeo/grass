@@ -85,8 +85,8 @@ class SwipeMapPanel(DoubleMapPanel):
         self.secondMapWindow.mapQueried.connect(self.Query)
 
         # bind tracking cursosr to mirror it
-        self.firstMapWindow.Bind(wx.EVT_MOTION, lambda evt: self.TrackCursor(evt))
-        self.secondMapWindow.Bind(wx.EVT_MOTION, lambda evt: self.TrackCursor(evt))
+        self.firstMapWindow.Bind(wx.EVT_MOTION, self.TrackCursor)
+        self.secondMapWindow.Bind(wx.EVT_MOTION, self.TrackCursor)
 
         self.MapWindow = self.firstMapWindow  # current by default
         self.firstMapWindow.zoomhistory = self.secondMapWindow.zoomhistory
@@ -785,9 +785,7 @@ class SwipeMapPanel(DoubleMapPanel):
         else:
             self._queryDialog = QueryDialog(parent=self, data=result)
             self._queryDialog.Bind(wx.EVT_CLOSE, self._oncloseQueryDialog)
-            self._queryDialog.redirectOutput.connect(
-                lambda output: self._giface.WriteLog(output)
-            )
+            self._queryDialog.redirectOutput.connect(self._giface.WriteLog)
             self._queryDialog.Show()
 
     def _oncloseQueryDialog(self, event):
