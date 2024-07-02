@@ -25,14 +25,14 @@ jobs:
 
     env:
       # renovate: datasource=python-version depName=python
-      PYTHON_VERSION: "3.10"
+      PYTHON_VERSION: "3.12"
       MIN_PYTHON_VERSION: "3.8"
       # renovate: datasource=pypi depName=black
       BLACK_VERSION: "24.4.2"
       # renovate: datasource=pypi depName=flake8
       FLAKE8_VERSION: "7.1.0"
       # renovate: datasource=pypi depName=pylint
-      PYLINT_VERSION: "2.12.2"
+      PYLINT_VERSION: "2.13.9"
       # renovate: datasource=pypi depName=bandit
       BANDIT_VERSION: "1.7.9"
 
