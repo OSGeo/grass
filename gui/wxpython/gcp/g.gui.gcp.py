@@ -53,8 +53,8 @@ def main():
 
     set_gui_path()
 
-    from core.settings import UserSettings
     from core.giface import StandaloneGrassInterface
+    from core.settings import UserSettings
     from gcp.manager import GCPWizard
 
     driver = UserSettings.Get(group="display", key="driver", subkey="type")

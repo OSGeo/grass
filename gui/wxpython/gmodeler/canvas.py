@@ -17,28 +17,27 @@ This program is free software under the GNU General Public License
 """
 
 import wx
-from wx.lib import ogl
-
-from gui_core.dialogs import TextEntryDialog as CustomTextEntryDialog
-from gui_core.wrap import TextEntryDialog as wxTextEntryDialog, NewId, Menu
-from gui_core.forms import GUI
-from core.gcmd import GException, GError
-
-from gmodeler.model import (
-    ModelRelation,
-    ModelAction,
-    ModelData,
-    ModelLoop,
-    ModelCondition,
-    ModelComment,
-)
+from core.gcmd import GError, GException
 from gmodeler.dialogs import (
-    ModelRelationDialog,
+    ModelConditionDialog,
     ModelDataDialog,
     ModelLoopDialog,
-    ModelConditionDialog,
+    ModelRelationDialog,
 )
 from gmodeler.giface import GraphicalModelerGrassInterface
+from gmodeler.model import (
+    ModelAction,
+    ModelComment,
+    ModelCondition,
+    ModelData,
+    ModelLoop,
+    ModelRelation,
+)
+from gui_core.dialogs import TextEntryDialog as CustomTextEntryDialog
+from gui_core.forms import GUI
+from gui_core.wrap import Menu, NewId
+from gui_core.wrap import TextEntryDialog as wxTextEntryDialog
+from wx.lib import ogl
 
 
 class ModelCanvas(ogl.ShapeCanvas):

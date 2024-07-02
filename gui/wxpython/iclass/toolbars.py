@@ -19,12 +19,11 @@ for details.
 """
 
 import wx
-
-from gui_core.toolbars import BaseToolbar, BaseIcons
-from icons.icon import MetaIcon
-from iclass.dialogs import IClassMapDialog, ContrastColor
 from gui_core.forms import GUI
+from gui_core.toolbars import BaseIcons, BaseToolbar
 from gui_core.wrap import StaticText
+from iclass.dialogs import ContrastColor, IClassMapDialog
+from icons.icon import MetaIcon
 
 import grass.script as grass
 

@@ -17,11 +17,10 @@ This program is free software under the GNU General Public License
 
 import wx
 import wx.lib.colourselect as csel
-
 from core import globalvar
-from gui_core.preferences import PreferencesBaseDialog
 from core.settings import UserSettings
-from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox, TextCtrl
+from gui_core.preferences import PreferencesBaseDialog
+from gui_core.wrap import Button, SpinCtrl, StaticBox, StaticText, TextCtrl
 
 
 class PreferencesDialog(PreferencesBaseDialog):

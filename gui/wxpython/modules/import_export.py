@@ -23,19 +23,18 @@ This program is free software under the GNU General Public License
 import os
 
 import wx
-from core import globalvar
 import wx.lib.filebrowsebutton as filebrowse
-
-from grass.script import core as grass
-from grass.script import task as gtask
-
+from core import globalvar
 from core.gcmd import GError, GMessage, GWarning, RunCommand
+from core.settings import GetDisplayVectSettings, UserSettings
+from core.utils import GetValidLayerName
 from gui_core.forms import CmdPanel
 from gui_core.gselect import GdalSelect
 from gui_core.widgets import GListCtrl, GNotebook, LayersList, LayersListValidator
-from gui_core.wrap import Button, CloseButton, StaticText, StaticBox
-from core.utils import GetValidLayerName
-from core.settings import UserSettings, GetDisplayVectSettings
+from gui_core.wrap import Button, CloseButton, StaticBox, StaticText
+
+from grass.script import core as grass
+from grass.script import task as gtask
 
 
 class ImportDialog(wx.Dialog):

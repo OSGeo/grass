@@ -12,18 +12,19 @@ This program is free software under the GNU General Public License
 """
 
 import sys
-import numpy as np
+from ctypes import *
 from multiprocessing import Process, Queue
 
-from ctypes import *
+import numpy as np
 
 try:
-    from grass.lib.imagery import *
     from grass.lib.gis import G_get_window
+    from grass.lib.imagery import *
 except ImportError as e:
     sys.stderr.write(_("Loading ctypes libs failed"))
 
 from core.gcmd import GException
+
 from grass.script import encode
 
 

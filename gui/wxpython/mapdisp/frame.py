@@ -22,44 +22,42 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (handlers support)
 """
 
-import os
 import copy
+import os
 
-from core import globalvar
 import wx
 import wx.aui
-
-from mapdisp.toolbars import MapToolbar, NvizIcons
-from mapdisp.gprint import PrintOptions
-from core.gcmd import GError, GMessage, RunCommand
-from core.utils import ListOfCatsToRange, GetLayerNameFromCmd
-from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
+from core import globalvar
 from core.debug import Debug
-from core.settings import UserSettings
-from gui_core.mapdisp import SingleMapPanel, FrameMixin
-from gui_core.query import QueryDialog, PrepareQueryResults
-from mapwin.buffered import BufferedMapWindow
-from mapwin.decorations import (
-    LegendController,
-    BarscaleController,
-    ArrowController,
-    DtextController,
-    LegendVectController,
-)
-from mapwin.analysis import (
-    ProfileController,
-    MeasureDistanceController,
-    MeasureAreaController,
-)
-from gui_core.forms import GUI
+from core.gcmd import GError, GMessage, RunCommand
 from core.giface import Notification
+from core.settings import UserSettings
+from core.utils import GetLayerNameFromCmd, ListOfCatsToRange
+from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
+from gui_core.forms import GUI
+from gui_core.mapdisp import FrameMixin, SingleMapPanel
+from gui_core.query import PrepareQueryResults, QueryDialog
 from gui_core.vselect import VectorSelectBase, VectorSelectHighlighter
 from gui_core.wrap import Menu
-from mapdisp import statusbar as sb
 from main_window.page import MainPageBase
+from mapdisp import statusbar as sb
+from mapdisp.gprint import PrintOptions
+from mapdisp.toolbars import MapToolbar, NvizIcons
+from mapwin.analysis import (
+    MeasureAreaController,
+    MeasureDistanceController,
+    ProfileController,
+)
+from mapwin.buffered import BufferedMapWindow
+from mapwin.decorations import (
+    ArrowController,
+    BarscaleController,
+    DtextController,
+    LegendController,
+    LegendVectController,
+)
 
 import grass.script as grass
-
 from grass.pydispatch.signal import Signal
 
 
@@ -296,7 +294,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
 
     def _addToolbarVDigit(self):
         """Add vector digitizer toolbar"""
-        from vdigit.main import haveVDigit, VDigit
+        from vdigit.main import VDigit, haveVDigit
         from vdigit.toolbars import VDigitToolbar
 
         if not haveVDigit:
@@ -397,7 +395,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
 
     def AddNviz(self):
         """Add 3D view mode window"""
-        from nviz.main import haveNviz, GLWindow, errorMsg
+        from nviz.main import GLWindow, errorMsg, haveNviz
 
         # check for GLCanvas and OpenGL
         if not haveNviz:
@@ -1600,7 +1598,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
     def AddRDigit(self):
         """Adds raster digitizer: creates toolbar and digitizer controller,
         binds events and signals."""
-        from rdigit.controller import RDigitController, EVT_UPDATE_PROGRESS
+        from rdigit.controller import EVT_UPDATE_PROGRESS, RDigitController
         from rdigit.toolbars import RDigitToolbar
 
         self.rdigit = RDigitController(self._giface, mapWindow=self.GetMapWindow())

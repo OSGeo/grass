@@ -18,32 +18,30 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com> (Google SoC 2011)
 """
 
+import copy
+import math
 import os
 import sys
 import time
-import copy
-import math
-
 from threading import Thread
 
 import wx
-from wx.lib.newevent import NewEvent
+from core.debug import Debug
+from core.gcmd import GError, GException, GMessage
+from core.giface import Notification
+from core.globalvar import CheckWxVersion
+from core.settings import UserSettings
+from core.utils import str2rgb
+from mapwin.base import MapWindowBase
+from nviz import wxnviz
+from nviz.animation import Animation
+from nviz.workspace import NvizSettings
 from wx import glcanvas
-from wx.glcanvas import WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE
+from wx.glcanvas import WX_GL_DEPTH_SIZE, WX_GL_DOUBLEBUFFER, WX_GL_RGBA
+from wx.lib.newevent import NewEvent
 
 import grass.script as grass
 from grass.pydispatch.signal import Signal
-
-from core.gcmd import GMessage, GException, GError
-from core.debug import Debug
-from mapwin.base import MapWindowBase
-from core.settings import UserSettings
-from nviz.workspace import NvizSettings
-from nviz.animation import Animation
-from nviz import wxnviz
-from core.globalvar import CheckWxVersion
-from core.utils import str2rgb
-from core.giface import Notification
 
 wxUpdateProperties, EVT_UPDATE_PROP = NewEvent()
 wxUpdateView, EVT_UPDATE_VIEW = NewEvent()

@@ -17,10 +17,9 @@ This program is free software under the GNU General Public License
 """
 
 import wx
-
 from core.gcmd import GMessage
-from mapdisp.statusbar import SbItem, SbTextItem
 from gui_core.wrap import SpinCtrl
+from mapdisp.statusbar import SbItem, SbTextItem
 
 
 class SbGoToGCP(SbItem):

@@ -23,16 +23,16 @@ This program is free software under the GNU General Public License
 @author Tomas Zigo <tomas.zigo slovanet.sk> RecentFilesMenu
 """
 
-import re
 import os
-import wx
+import re
 
-from core import globalvar
-from core import utils
+import wx
+from core import globalvar, utils
 from core.gcmd import EncodeString
 from gui_core.treeview import CTreeView
-from gui_core.wrap import Button, SearchCtrl
+from gui_core.wrap import Button
 from gui_core.wrap import Menu as MenuWidget
+from gui_core.wrap import SearchCtrl
 from icons.icon import MetaIcon
 
 from grass.pydispatch.signal import Signal

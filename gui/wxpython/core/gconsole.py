@@ -21,35 +21,30 @@ This program is free software under the GNU General Public License
 @author Wolf Bergenheim <wolf bergenheim.net> (#962)
 """
 
-import os
-import sys
-import re
-import time
-import threading
-
-import queue as Queue
-
 import codecs
 import locale
+import os
+import queue as Queue
+import re
+import sys
+import threading
+import time
 
 import wx
+from core import globalvar
+from core.debug import Debug
+from core.gcmd import CommandThread, GError, GException
+from core.giface import Notification
+from core.settings import UserSettings
+from gui_core.forms import GUI
+from gui_core.widgets import FormNotebook
 from wx.lib.newevent import NewEvent
 
 import grass.script as grass
-from grass.script import task as gtask
-
-from grass.pydispatch.signal import Signal
-
 from grass.grassdb import history
 from grass.grassdb.history import Status
-
-from core import globalvar
-from core.gcmd import CommandThread, GError, GException
-from gui_core.forms import GUI
-from core.debug import Debug
-from core.settings import UserSettings
-from core.giface import Notification
-from gui_core.widgets import FormNotebook
+from grass.pydispatch.signal import Signal
+from grass.script import task as gtask
 
 wxCmdOutput, EVT_CMD_OUTPUT = NewEvent()
 wxCmdProgress, EVT_CMD_PROGRESS = NewEvent()

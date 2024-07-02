@@ -20,13 +20,12 @@ This program is free software under the GNU General Public License
 """
 
 import wx
-
-from core.settings import UserSettings
 from core.gcmd import GError
+from core.settings import UserSettings
 from gui_core.wrap import StockCursor
 
-from grass.script import core as grass
 from grass.pydispatch.signal import Signal
+from grass.script import core as grass
 
 
 class MapWindowProperties:

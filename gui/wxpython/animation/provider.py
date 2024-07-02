@@ -22,21 +22,20 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
-import wx
 import tempfile
 from multiprocessing import Process, Queue
 
-from core.gcmd import GException, DecodeString
-from core.settings import UserSettings
+import wx
+from animation.utils import GetFileFromCmd, GetFileFromCmds, HashCmd, HashCmds
 from core.debug import Debug
+from core.gcmd import DecodeString, GException
+from core.settings import UserSettings
 from core.utils import autoCropImageFromFile
-
-from animation.utils import HashCmd, HashCmds, GetFileFromCmd, GetFileFromCmds
-from gui_core.wrap import EmptyBitmap, BitmapFromImage
+from gui_core.wrap import BitmapFromImage, EmptyBitmap
 
 import grass.script.core as gcore
-from grass.script.task import cmdlist_to_tuple
 from grass.pydispatch.signal import Signal
+from grass.script.task import cmdlist_to_tuple
 
 
 class BitmapProvider:
@@ -869,9 +868,10 @@ def read2_command(*args, **kwargs):
 def test():
     import shutil
 
-    from core.layerlist import LayerList, Layer
     from animation.data import AnimLayer
     from animation.utils import layerListToCmdsMatrix
+    from core.layerlist import Layer, LayerList
+
     import grass.temporal as tgis
 
     tgis.init()

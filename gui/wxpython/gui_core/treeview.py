@@ -15,8 +15,8 @@ This program is free software under the GNU General Public License
 """
 
 import wx
-from wx.lib.mixins.treemixin import VirtualTree, ExpansionState
 from core.globalvar import hasAgw, wxPythonPhoenix
+from wx.lib.mixins.treemixin import ExpansionState, VirtualTree
 
 try:
     import wx.lib.agw.customtreectrl as CT
@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
     set_gui_path()
 
-from core.treemodel import TreeModel, DictNode
+from core.treemodel import DictNode, TreeModel
 from gui_core.wrap import CustomTreeCtrl
 
 from grass.pydispatch.signal import Signal

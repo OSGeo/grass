@@ -60,17 +60,17 @@ def main():
 
     # import wx only after running parser
     # to avoid issues when only interface is needed
-    import grass.temporal as tgis
     import wx
 
+    import grass.temporal as tgis
     from grass.script.setup import set_gui_path
 
     set_gui_path()
 
+    from animation.data import AnimLayer
+    from animation.frame import MAX_COUNT, AnimationFrame
     from core.giface import StandaloneGrassInterface
     from core.layerlist import LayerList
-    from animation.frame import AnimationFrame, MAX_COUNT
-    from animation.data import AnimLayer
 
     rast = options["raster"]
     vect = options["vector"]

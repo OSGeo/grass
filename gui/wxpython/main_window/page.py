@@ -15,8 +15,10 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
+from gui_core.menu import Menu as GMenu
+from gui_core.menu import MenuItem as GMenuItem
+
 from grass.pydispatch.signal import Signal
-from gui_core.menu import MenuItem as GMenuItem, Menu as GMenu
 
 
 class MainPageBase:

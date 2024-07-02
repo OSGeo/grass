@@ -18,12 +18,11 @@ This program is free software under the GNU General Public License
 """
 
 import wx
-
-import grass.script as gs
-
 from core.gcmd import RunCommand
 from core.watchdog import watchdog_used
 from gui_core.wrap import Button
+
+import grass.script as gs
 
 
 class SbMain:

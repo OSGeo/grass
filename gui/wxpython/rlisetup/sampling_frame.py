@@ -18,25 +18,23 @@ This program is free software under the GNU General Public License
 
 import os
 
-import wx
-import wx.aui
-
-
 # start new import
 import tempfile
-from core.gcmd import RunCommand
-import grass.script.core as grass
-from core import gcmd
 
+import wx
+import wx.aui
+from core import gcmd
+from core.gcmd import GMessage, RunCommand
 from core.giface import StandaloneGrassInterface
+from core.render import Map
+from gui_core.toolbars import BaseIcons, BaseToolbar, ToolSwitcher
+from icons.icon import MetaIcon
 from mapwin.base import MapWindowProperties
 from mapwin.buffered import BufferedMapWindow
-from core.render import Map
-from gui_core.toolbars import BaseToolbar, BaseIcons, ToolSwitcher
-from icons.icon import MetaIcon
-from core.gcmd import GMessage
-from grass.pydispatch.signal import Signal
+
+import grass.script.core as grass
 from grass.pydispatch.errors import DispatcherKeyError
+from grass.pydispatch.signal import Signal
 
 from .functions import SamplingType, checkMapExists
 

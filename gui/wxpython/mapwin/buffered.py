@@ -21,36 +21,34 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com> (refactoring)
 """
 
-import os
-import time
 import math
+import os
 import sys
+import time
 
 import wx
-
-from grass.pydispatch.signal import Signal
-
+from core import utils
+from core.debug import Debug
+from core.gcmd import GError, GException, RunCommand
 from core.globalvar import wxPythonPhoenix
-import grass.script as grass
-
+from core.gthread import gThread
+from core.settings import UserSettings
 from gui_core.dialogs import SavedRegion
 from gui_core.wrap import (
-    DragImage,
-    PseudoDC,
-    EmptyBitmap,
     BitmapFromImage,
-    Window,
+    DragImage,
+    EmptyBitmap,
     Menu,
-    Rect,
     NewId,
+    PseudoDC,
+    Rect,
+    Window,
 )
-from core.gcmd import RunCommand, GException, GError
-from core.debug import Debug
-from core.settings import UserSettings
 from mapwin.base import MapWindowBase
-from core import utils
 from mapwin.graphics import GraphicsSet
-from core.gthread import gThread
+
+import grass.script as grass
+from grass.pydispatch.signal import Signal
 
 try:
     import grass.lib.gis as gislib

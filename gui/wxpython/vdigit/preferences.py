@@ -18,10 +18,9 @@ import textwrap
 
 import wx
 import wx.lib.colourselect as csel
-
-from gui_core.gselect import ColumnSelect
-from core.units import Units
 from core.settings import UserSettings
+from core.units import Units
+from gui_core.gselect import ColumnSelect
 from gui_core.wrap import Button, CheckBox, FloatSpin, SpinCtrl, StaticBox, StaticText
 
 

@@ -18,13 +18,12 @@ for details.
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
-import os
 import copy
+import os
 import tempfile
+from ctypes import *
 
 import wx
-
-from ctypes import *
 
 try:
     from grass.lib.imagery import *
@@ -36,37 +35,35 @@ except ImportError as e:
     haveIClass = False
     errMsg = _("Loading imagery lib failed.\n%s") % e
 
-import grass.script as grass
-
+from core import globalvar
+from core.gcmd import GError, GMessage, RunCommand
+from core.render import Map
+from dbmgr.vinfo import VectorDBInfo
+from gui_core.dialogs import SetOpacityDialog
+from gui_core.mapdisp import DoubleMapPanel, FrameMixin
+from gui_core.wrap import Menu
+from iclass.dialogs import (
+    IClassCategoryManagerDialog,
+    IClassExportAreasDialog,
+    IClassGroupDialog,
+    IClassMapDialog,
+    IClassSignatureFileDialog,
+)
+from iclass.digit import IClassVDigit, IClassVDigitWindow
+from iclass.plots import PlotPanel
+from iclass.statistics import StatisticsData
+from iclass.toolbars import (
+    IClassMapManagerToolbar,
+    IClassMapToolbar,
+    IClassMiscToolbar,
+    IClassToolbar,
+)
 from mapdisp import statusbar as sb
 from mapdisp.main import StandaloneMapDisplayGrassInterface
 from mapwin.buffered import BufferedMapWindow
 from vdigit.toolbars import VDigitToolbar
-from gui_core.mapdisp import DoubleMapPanel, FrameMixin
-from core import globalvar
-from core.render import Map
-from core.gcmd import RunCommand, GMessage, GError
-from gui_core.dialogs import SetOpacityDialog
-from gui_core.wrap import Menu
-from dbmgr.vinfo import VectorDBInfo
 
-from iclass.digit import IClassVDigitWindow, IClassVDigit
-from iclass.toolbars import (
-    IClassMapToolbar,
-    IClassMiscToolbar,
-    IClassToolbar,
-    IClassMapManagerToolbar,
-)
-from iclass.statistics import StatisticsData
-from iclass.dialogs import (
-    IClassCategoryManagerDialog,
-    IClassGroupDialog,
-    IClassSignatureFileDialog,
-    IClassExportAreasDialog,
-    IClassMapDialog,
-)
-from iclass.plots import PlotPanel
-
+import grass.script as grass
 from grass.pydispatch.signal import Signal
 
 

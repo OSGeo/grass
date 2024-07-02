@@ -15,9 +15,10 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com>
 """
 
-from grass.pydispatch.signal import Signal
 from core.giface import Notification
 from core.utils import GetLayerNameFromCmd
+
+from grass.pydispatch.signal import Signal
 
 
 class Layer:

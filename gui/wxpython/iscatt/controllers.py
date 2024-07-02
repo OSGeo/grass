@@ -21,27 +21,25 @@ This program is free software under the GNU General Public License
 """
 
 from copy import deepcopy
+
 import wx
-
-
-from core.gcmd import GError, GMessage, RunCommand, GWarning
-from core.settings import UserSettings
+from core.gcmd import GError, GMessage, GWarning, RunCommand
 from core.gthread import gThread
+from core.settings import UserSettings
+from iclass.dialogs import IClassGroupDialog
+from iscatt.dialogs import AddScattPlotDialog, ExportCategoryRaster
 from iscatt.iscatt_core import (
+    MAX_NCELLS,
+    MAX_SCATT_SIZE,
+    WARN_NCELLS,
+    WARN_SCATT_SIZE,
     Core,
-    idBandsToidScatt,
     GetRasterInfo,
     GetRegion,
-    MAX_SCATT_SIZE,
-    WARN_SCATT_SIZE,
-    MAX_NCELLS,
-    WARN_NCELLS,
+    idBandsToidScatt,
 )
-from iscatt.dialogs import AddScattPlotDialog, ExportCategoryRaster
-from iclass.dialogs import IClassGroupDialog
 
 import grass.script as grass
-
 from grass.pydispatch.signal import Signal
 
 

@@ -17,12 +17,13 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
-import os
 import codecs
+import os
 import platform
 import re
-import textwrap
 import sys
+import textwrap
+
 import wx
 from wx.html import HtmlWindow
 
@@ -31,11 +32,9 @@ try:
 except ImportError:
     from wx.lib.hyperlink import HyperLinkCtrl
 try:
-    from wx.adv import AboutDialogInfo
-    from wx.adv import AboutBox
+    from wx.adv import AboutBox, AboutDialogInfo
 except ImportError:
-    from wx import AboutDialogInfo
-    from wx import AboutBox
+    from wx import AboutBox, AboutDialogInfo
 
 import grass.script as grass
 from grass.exceptions import CalledModuleError
@@ -47,11 +46,11 @@ if __name__ == "__main__":
     set_gui_path()
 
 from core import globalvar
-from core.gcmd import GError, DecodeString
+from core.debug import Debug
+from core.gcmd import DecodeString, GError
 from core.settings import UserSettings
 from gui_core.widgets import FormNotebook, ScrolledPanel
 from gui_core.wrap import Button, StaticText, TextCtrl
-from core.debug import Debug
 
 
 class AboutWindow(wx.Frame):

@@ -19,14 +19,14 @@ This program is free software under the GNU General Public License
 @author start stvds support Matej Krejci
 """
 import os
+from functools import reduce
 from itertools import cycle
-import numpy as np
 
+import numpy as np
 import wx
-from grass.pygrass.modules import Module
 
 import grass.script as grass
-from functools import reduce
+from grass.pygrass.modules import Module
 
 try:
     import matplotlib
@@ -34,12 +34,12 @@ try:
     # The recommended way to use wx with mpl is with the WXAgg
     # backend.
     matplotlib.use("WXAgg")
-    from matplotlib.figure import Figure
+    import matplotlib.dates as mdates
+    from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigCanvas
     from matplotlib.backends.backend_wxagg import (
-        FigureCanvasWxAgg as FigCanvas,
         NavigationToolbar2WxAgg as NavigationToolbar,
     )
-    import matplotlib.dates as mdates
+    from matplotlib.figure import Figure
 except ImportError as e:
     raise ImportError(
         _(
@@ -49,25 +49,27 @@ except ImportError as e:
     )
 
 
-import grass.temporal as tgis
-from core.gcmd import GMessage, GError, GException, RunCommand
-from gui_core.widgets import CoordinatesValidator
-from gui_core import gselect
-from core import globalvar
-from grass.pygrass.vector.geometry import Point
-from grass.pygrass.raster import RasterRow
-from grass.pygrass.gis.region import Region
 from collections import OrderedDict
 from subprocess import PIPE
+
+from core import globalvar
+from core.gcmd import GError, GException, GMessage, RunCommand
+from gui_core import gselect
+from gui_core.widgets import CoordinatesValidator
+
+import grass.temporal as tgis
+from grass.pygrass.gis.region import Region
+from grass.pygrass.raster import RasterRow
+from grass.pygrass.vector.geometry import Point
 
 try:
     import wx.lib.agw.flatnotebook as FN
 except ImportError:
     import wx.lib.flatnotebook as FN
-import wx.lib.filebrowsebutton as filebrowse
 
+import wx.lib.filebrowsebutton as filebrowse
 from gui_core.widgets import GNotebook
-from gui_core.wrap import CheckBox, TextCtrl, Button, StaticText
+from gui_core.wrap import Button, CheckBox, StaticText, TextCtrl
 
 ALPHA = 0.5
 COLORS = ["b", "g", "r", "c", "m", "y", "k"]

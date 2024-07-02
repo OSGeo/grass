@@ -20,22 +20,22 @@ import os
 import re
 
 import wx
-import grass.script as grass
-
 from core import globalvar
 from core.gcmd import GError, RunCommand
 from core.giface import StandaloneGrassInterface
+from core.settings import UserSettings
 from gui_core.gselect import Select
 from gui_core.widgets import IntegerValidator
 from gui_core.wrap import (
     Button,
     ClearButton,
     CloseButton,
-    TextCtrl,
-    StaticText,
     StaticBox,
+    StaticText,
+    TextCtrl,
 )
-from core.settings import UserSettings
+
+import grass.script as grass
 
 
 class MapCalcFrame(wx.Frame):

@@ -18,6 +18,7 @@ for details.
 
 import os
 import sys
+
 import wx
 
 # this enables to run application standalone (> python example/frame.py )
@@ -26,19 +27,18 @@ if __name__ == "__main__":
 
 # i18n is taken care of in the grass library code.
 # So we need to import it before any of the GUI code.
-from grass.script import core as gcore
+from grass.script import core as gcore  # isort: split
 
-from gui_core.mapdisp import SingleMapPanel, FrameMixin
-from mapwin.buffered import BufferedMapWindow
-from mapwin.base import MapWindowProperties
-from mapdisp import statusbar as sb
-from core.render import Map
-from core.debug import Debug
-from core.gcmd import RunCommand, GError
 from core import globalvar
-
-from example.toolbars import ExampleMapToolbar, ExampleMiscToolbar, ExampleMainToolbar
+from core.debug import Debug
+from core.gcmd import GError, RunCommand
+from core.render import Map
 from example.dialogs import ExampleMapDialog
+from example.toolbars import ExampleMainToolbar, ExampleMapToolbar, ExampleMiscToolbar
+from gui_core.mapdisp import FrameMixin, SingleMapPanel
+from mapdisp import statusbar as sb
+from mapwin.base import MapWindowProperties
+from mapwin.buffered import BufferedMapWindow
 
 # It is possible to call grass library functions (in C) directly via ctypes
 # however this is less stable. Example is available in trunk/doc/python/, ctypes

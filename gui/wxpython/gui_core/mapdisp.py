@@ -23,7 +23,6 @@ This program is free software under the GNU General Public License
 import sys
 
 import wx
-
 from core.debug import Debug
 from gui_core.toolbars import ToolSwitcher
 from gui_core.wrap import NewId

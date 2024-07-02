@@ -23,27 +23,21 @@ This program is free software under the GNU General Public License
 @author Eliska Kyzlikova <eliska.kyzlikova gmail.com> (turn costs support)
 """
 
-import os
 import math
+import os
 from copy import deepcopy
 
-from grass.script.utils import try_remove
+import wx
+from core import utils
+from core.gcmd import GMessage, RunCommand
+from core.settings import UserSettings
+from gui_core.gselect import VectorDBInfo
+from vnet.vnet_utils import DegreesToRadians, ParseMapStr, SnapToNode
+
+from grass.pydispatch.signal import Signal
 from grass.script import core as grass
 from grass.script.task import cmdlist_to_tuple
-
-import wx
-
-
-from core import utils
-from core.gcmd import RunCommand, GMessage
-from core.settings import UserSettings
-
-from vnet.vnet_utils import ParseMapStr, SnapToNode
-
-from gui_core.gselect import VectorDBInfo
-from grass.pydispatch.signal import Signal
-
-from vnet.vnet_utils import DegreesToRadians
+from grass.script.utils import try_remove
 
 
 class VNETData:

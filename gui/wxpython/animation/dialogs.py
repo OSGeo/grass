@@ -20,26 +20,41 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
-import os
-import wx
 import copy
 import datetime
+import os
+
+import wx
+import wx.lib.colourselect as csel
 import wx.lib.filebrowsebutton as filebrowse
 import wx.lib.scrolledpanel as SP
-import wx.lib.colourselect as csel
 
 try:
     from wx.adv import HyperlinkCtrl
 except ImportError:
     from wx import HyperlinkCtrl
 
-from core.gcmd import GMessage, GError, GException
+from animation.data import AnimationData, AnimLayer
+from animation.toolbars import SIMPLE_LMGR_STDS, AnimSimpleLmgrToolbar
+from animation.utils import (
+    TemporalMode,
+    getCpuCount,
+    getNameAndLayer,
+    getRegisteredMaps,
+)
 from core import globalvar
-from gui_core.dialogs import MapLayersDialog, GetImageHandlers
-from gui_core.preferences import PreferencesBaseDialog
-from gui_core.forms import GUI
+from core.gcmd import GError, GException, GMessage
 from core.settings import UserSettings
+from gui_core.dialogs import GetImageHandlers, MapLayersDialog
+from gui_core.forms import GUI
 from gui_core.gselect import Select
+from gui_core.preferences import PreferencesBaseDialog
+from gui_core.simplelmgr import (
+    SIMPLE_LMGR_RASTER,
+    SIMPLE_LMGR_TB_TOP,
+    SIMPLE_LMGR_VECTOR,
+    SimpleLayerManager,
+)
 from gui_core.widgets import FloatValidator
 from gui_core.wrap import (
     BitmapButton,
@@ -55,23 +70,8 @@ from gui_core.wrap import (
     TextCtrl,
 )
 
-from animation.utils import (
-    TemporalMode,
-    getRegisteredMaps,
-    getNameAndLayer,
-    getCpuCount,
-)
-from animation.data import AnimationData, AnimLayer
-from animation.toolbars import AnimSimpleLmgrToolbar, SIMPLE_LMGR_STDS
-from gui_core.simplelmgr import (
-    SimpleLayerManager,
-    SIMPLE_LMGR_RASTER,
-    SIMPLE_LMGR_VECTOR,
-    SIMPLE_LMGR_TB_TOP,
-)
-
-from grass.pydispatch.signal import Signal
 import grass.script.core as gcore
+from grass.pydispatch.signal import Signal
 
 
 class SpeedDialog(wx.Dialog):

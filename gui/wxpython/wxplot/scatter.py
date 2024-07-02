@@ -18,14 +18,14 @@ This program is free software under the GNU General Public License
 import sys
 
 import wx
-
-import grass.script as grass
+from core.gcmd import GError, GException, GMessage, RunCommand
+from gui_core.toolbars import BaseIcons, BaseToolbar
+from gui_core.wrap import StockCursor
 from wx.lib import plot
 from wxplot.base import BasePlotFrame, PlotIcons
-from gui_core.toolbars import BaseToolbar, BaseIcons
-from gui_core.wrap import StockCursor
-from wxplot.dialogs import ScatterRasterDialog, PlotStatsFrame
-from core.gcmd import RunCommand, GException, GError, GMessage
+from wxplot.dialogs import PlotStatsFrame, ScatterRasterDialog
+
+import grass.script as grass
 
 
 class ScatterFrame(BasePlotFrame):

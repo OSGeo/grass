@@ -20,21 +20,18 @@ This program is free software under the GNU General Public License
 """
 
 import math
-from grass.script.utils import try_remove
-from grass.script import core as grass
-from grass.script.task import cmdlist_to_tuple
 
 import wx
-
-from core.gcmd import RunCommand, GMessage
-from core.gconsole import CmdThread, EVT_CMD_DONE, GConsole
-
+from core.gcmd import GMessage, RunCommand
+from core.gconsole import EVT_CMD_DONE, CmdThread, GConsole
 from gui_core.gselect import VectorDBInfo
-
-from vnet.vnet_data import VNETData, VNETTmpVectMaps, VectMap, History
-from vnet.vnet_utils import ParseMapStr, haveCtypes, GetNearestNodeCat
+from vnet.vnet_data import History, VectMap, VNETData, VNETTmpVectMaps
+from vnet.vnet_utils import GetNearestNodeCat, ParseMapStr, haveCtypes
 
 from grass.pydispatch.signal import Signal
+from grass.script import core as grass
+from grass.script.task import cmdlist_to_tuple
+from grass.script.utils import try_remove
 
 
 class VNETManager:

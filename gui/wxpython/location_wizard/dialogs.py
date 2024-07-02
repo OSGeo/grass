@@ -22,11 +22,10 @@ import os
 
 import wx
 import wx.lib.scrolledpanel as scrolled
-
 from core import globalvar
 from core.gcmd import RunCommand
+from gui_core.wrap import Button, StaticBox, StaticText, TextCtrl
 from location_wizard.base import BaseClass
-from gui_core.wrap import Button, StaticText, StaticBox, TextCtrl
 
 
 class RegionDef(BaseClass, wx.Dialog):
@@ -757,6 +756,7 @@ class SelectTransformDialog(wx.Dialog):
 
 def testRegionDef():
     import wx.lib.inspection
+
     import grass.script as gscript
 
     app = wx.App()

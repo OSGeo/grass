@@ -11,16 +11,16 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
+import locale
 import os
 import sys
-import locale
 
 if not os.getenv("GISBASE"):
     sys.exit("GRASS is not running. Exiting...")
 
 # i18n is taken care of in the grass library code.
 # So we need to import it before any of the GUI code.
-from grass.script.core import get_commands
+from grass.script.core import get_commands  # isort: split
 
 from core.debug import Debug
 

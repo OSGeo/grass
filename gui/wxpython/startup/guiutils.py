@@ -15,40 +15,39 @@ This is for code which depend on something from GUI (wx or wxGUI).
 """
 
 import os
+
 import wx
-
-from grass.grassdb.checks import (
-    is_mapset_locked,
-    get_mapset_lock_info,
-    is_mapset_name_valid,
-    is_location_name_valid,
-    get_mapset_name_invalid_reason,
-    get_location_name_invalid_reason,
-    get_reason_mapset_not_removable,
-    get_reasons_mapsets_not_removable,
-    get_reasons_location_not_removable,
-    get_reasons_locations_not_removable,
-    get_reasons_grassdb_not_removable,
-    is_fallback_session,
-)
-import grass.grassdb.config as cfg
-
-from grass.grassdb.create import create_mapset, get_default_mapset_name
-from grass.grassdb.manage import (
-    delete_mapset,
-    delete_location,
-    delete_grassdb,
-    rename_mapset,
-    rename_location,
-)
-from grass.script.core import create_environment
-from grass.script.utils import try_remove
-from grass.script import gisenv
-
 from core.gcmd import GError, GMessage, RunCommand
 from gui_core.dialogs import TextEntryDialog
-from location_wizard.dialogs import RegionDef
 from gui_core.widgets import GenericValidator
+from location_wizard.dialogs import RegionDef
+
+import grass.grassdb.config as cfg
+from grass.grassdb.checks import (
+    get_location_name_invalid_reason,
+    get_mapset_lock_info,
+    get_mapset_name_invalid_reason,
+    get_reason_mapset_not_removable,
+    get_reasons_grassdb_not_removable,
+    get_reasons_location_not_removable,
+    get_reasons_locations_not_removable,
+    get_reasons_mapsets_not_removable,
+    is_fallback_session,
+    is_location_name_valid,
+    is_mapset_locked,
+    is_mapset_name_valid,
+)
+from grass.grassdb.create import create_mapset, get_default_mapset_name
+from grass.grassdb.manage import (
+    delete_grassdb,
+    delete_location,
+    delete_mapset,
+    rename_location,
+    rename_mapset,
+)
+from grass.script import gisenv
+from grass.script.core import create_environment
+from grass.script.utils import try_remove
 
 
 class MapsetDialog(TextEntryDialog):

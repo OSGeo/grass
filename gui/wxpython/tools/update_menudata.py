@@ -22,14 +22,13 @@ Usage: python support/update_menudata.py [-d]
 import os
 import sys
 import tempfile
-
 import xml.etree.ElementTree as etree
+
+from core.globalvar import grassCmd
+from lmgr.menudata import LayerManagerMenuData
 
 from grass.script import core as grass
 from grass.script import task as gtask
-
-from lmgr.menudata import LayerManagerMenuData
-from core.globalvar import grassCmd
 
 
 def parseModules():

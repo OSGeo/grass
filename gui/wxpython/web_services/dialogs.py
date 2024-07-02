@@ -18,26 +18,22 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz>
 """
 
-import wx
-
 import os
 import shutil
-
 from copy import deepcopy
+
+import wx
+from core import globalvar
+from core.debug import Debug
+from core.gcmd import GError, GMessage, GWarning
+from core.gconsole import EVT_CMD_DONE, EVT_CMD_OUTPUT, CmdThread, GStderr
+from core.utils import GetSettingsPath
+from gui_core.gselect import Select
+from gui_core.wrap import Button, RadioButton, StaticBox, StaticText, TextCtrl
+from web_services.widgets import WSManageSettingsWidget, WSPanel
 
 import grass.script as grass
 from grass.script.task import cmdlist_to_tuple, cmdtuple_to_list
-
-from core import globalvar
-from core.debug import Debug
-from core.gcmd import GMessage, GWarning, GError
-from core.utils import GetSettingsPath
-from core.gconsole import CmdThread, GStderr, EVT_CMD_DONE, EVT_CMD_OUTPUT
-
-from gui_core.gselect import Select
-from gui_core.wrap import Button, StaticText, StaticBox, TextCtrl, RadioButton
-
-from web_services.widgets import WSPanel, WSManageSettingsWidget
 
 
 class WSDialogBase(wx.Dialog):

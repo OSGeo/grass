@@ -20,19 +20,16 @@ This program is free software under the GNU General Public License
 
 import os
 
-import numpy as np
-
 # used iclass perimeters algorithm instead of convolve2d
 # from matplotlib.path import Path
 # from scipy.signal import convolve2d
+from math import ceil, floor, sqrt
 
-from math import sqrt, ceil, floor
-
+import numpy as np
 from core.gcmd import GException, RunCommand
+from iscatt.core_c import ComputeScatts, CreateCatRast, Rasterize, UpdateCatRast
 
 import grass.script as grass
-
-from iscatt.core_c import CreateCatRast, ComputeScatts, UpdateCatRast, Rasterize
 
 MAX_SCATT_SIZE = 4100 * 4100
 WARN_SCATT_SIZE = 2000 * 2000

@@ -156,8 +156,8 @@
 # %end
 
 import os
-import sys
 import shutil
+import sys
 
 from grass.script import core as grass
 

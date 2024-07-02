@@ -19,11 +19,10 @@ This program is free software under the GNU General Public License
 import os
 
 import wx
-from wx.lib.agw import aui
-
 from core import globalvar
 from gui_core.wrap import SimpleTabArt
 from mapdisp.frame import MapPanel
+from wx.lib.agw import aui
 
 
 class MainPageFrame(wx.Frame):

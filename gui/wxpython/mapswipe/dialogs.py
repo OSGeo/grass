@@ -15,26 +15,26 @@ This program is free software under the GNU General Public License
 """
 
 import copy
-import wx
-import wx.lib.scrolledpanel as SP
-import wx.lib.colourselect as csel
 
+import wx
+import wx.lib.colourselect as csel
+import wx.lib.scrolledpanel as SP
 from core import globalvar
-from gui_core import gselect
-from gui_core.widgets import SimpleValidator
-from gui_core.preferences import PreferencesBaseDialog
 from core.gcmd import GMessage
 from core.layerlist import LayerList
 from core.settings import UserSettings
-from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox
+from gui_core import gselect
+from gui_core.preferences import PreferencesBaseDialog
 from gui_core.simplelmgr import (
-    SimpleLayerManager,
     SIMPLE_LMGR_RASTER,
-    SIMPLE_LMGR_VECTOR,
     SIMPLE_LMGR_RGB,
     SIMPLE_LMGR_TB_LEFT,
     SIMPLE_LMGR_TB_RIGHT,
+    SIMPLE_LMGR_VECTOR,
+    SimpleLayerManager,
 )
+from gui_core.widgets import SimpleValidator
+from gui_core.wrap import Button, SpinCtrl, StaticBox, StaticText
 
 from grass.pydispatch.signal import Signal
 

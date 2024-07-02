@@ -26,14 +26,14 @@ if __name__ == "__main__":
 
     set_gui_path()
 
-from gui_core.toolbars import BaseToolbar, BaseIcons
-from icons.icon import MetaIcon
-from gui_core.forms import GUI
-from gui_core.dialogs import SetOpacityDialog
-from gui_core.wrap import CheckListBox, Menu, NewId
-from core.utils import GetLayerNameFromCmd
 from core.gcmd import GError
 from core.layerlist import LayerList
+from core.utils import GetLayerNameFromCmd
+from gui_core.dialogs import SetOpacityDialog
+from gui_core.forms import GUI
+from gui_core.toolbars import BaseIcons, BaseToolbar
+from gui_core.wrap import CheckListBox, Menu, NewId
+from icons.icon import MetaIcon
 
 SIMPLE_LMGR_RASTER = 1
 SIMPLE_LMGR_VECTOR = 2

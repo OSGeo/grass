@@ -46,24 +46,20 @@ COPYING coming with GRASS for details.
 @author Stepan Turek <stepan.turek seznam.cz> (CoordinatesSelect)
 """
 
-import sys
-import textwrap
-import os
+import codecs
 import copy
 import locale
+import os
 import queue as Queue
-
-import codecs
-
+import sys
+import textwrap
+import xml.etree.ElementTree as etree
 from threading import Thread
 
 import wx
-
 import wx.lib.colourselect as csel
 import wx.lib.filebrowsebutton as filebrowse
 from wx.lib.newevent import NewEvent
-
-import xml.etree.ElementTree as etree
 
 # needed when started from command line and for testing
 if __name__ == "__main__":
@@ -77,45 +73,40 @@ if __name__ == "__main__":
 
     set_gui_path()
 
-from grass.pydispatch.signal import Signal
-
-from grass.script import core as grass
-from grass.script import task as gtask
-
-from core import globalvar
-from gui_core.widgets import (
-    StaticWrapText,
-    ScrolledPanel,
-    ColorTablesComboBox,
-    BarscalesComboBox,
-    NArrowsComboBox,
-)
-from gui_core.ghelp import HelpPanel
-from gui_core import gselect
-from core import gcmd
-from core import utils
+from core import gcmd, globalvar, utils
+from core.debug import Debug
+from core.giface import Notification, StandaloneGrassInterface
 from core.settings import UserSettings
+from gui_core import gselect
+from gui_core.ghelp import HelpPanel
 from gui_core.widgets import (
+    BarscalesComboBox,
+    ColorTablesComboBox,
     FloatValidator,
     FormListbook,
     FormNotebook,
+    LayersList,
+    NArrowsComboBox,
     PlacementValidator,
+    ScrolledPanel,
+    StaticWrapText,
 )
-from core.giface import Notification, StandaloneGrassInterface
-from gui_core.widgets import LayersList
 from gui_core.wrap import (
+    BitmapButton,
     BitmapFromImage,
     Button,
-    CloseButton,
-    StaticText,
-    StaticBox,
-    SpinCtrl,
     CheckBox,
-    BitmapButton,
-    TextCtrl,
+    CloseButton,
     NewId,
+    SpinCtrl,
+    StaticBox,
+    StaticText,
+    TextCtrl,
 )
-from core.debug import Debug
+
+from grass.pydispatch.signal import Signal
+from grass.script import core as grass
+from grass.script import task as gtask
 
 wxUpdateDialog, EVT_DIALOG_UPDATE = NewEvent()
 
@@ -2511,7 +2502,7 @@ class CmdPanel(wx.Panel):
         # are we running from command line?
         # add 'command output' tab regardless standalone dialog
         if self.parent.GetName() == "MainFrame" and self.parent.get_dcmd is None:
-            from core.gconsole import GConsole, EVT_CMD_RUN, EVT_CMD_DONE
+            from core.gconsole import EVT_CMD_DONE, EVT_CMD_RUN, GConsole
             from gui_core.goutput import GConsoleWindow
 
             self._gconsole = GConsole(guiparent=self.notebook, giface=self._giface)

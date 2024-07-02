@@ -19,14 +19,12 @@ This program is free software under the GNU General Public License
 @author Matej Krejci <matejkrejci gmail.com> (mentor: Martin Landa)
 """
 
-import string
 import random
+import string
 
 import wx
 import wx.lib.mixins.listctrl as listmix
-
-from core.gcmd import GMessage, GError, GWarning
-from core.gcmd import RunCommand
+from core.gcmd import GError, GMessage, GWarning, RunCommand
 from gui_core.wrap import Button, ListCtrl
 
 import grass.script as grass

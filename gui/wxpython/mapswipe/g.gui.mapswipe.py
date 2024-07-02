@@ -45,6 +45,7 @@
 # %end
 
 import os
+
 import grass.script as gscript
 
 
@@ -57,9 +58,9 @@ def main():
 
     set_gui_path()
 
-    from core.settings import UserSettings
-    from core.giface import StandaloneGrassInterface
     from core import globalvar
+    from core.giface import StandaloneGrassInterface
+    from core.settings import UserSettings
     from mapswipe.frame import SwipeMapDisplay
 
     driver = UserSettings.Get(group="display", key="driver", subkey="type")

@@ -15,27 +15,27 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import wx
 
-from core.gcmd import GException, GError, GMessage
-from grass.imaging import writeAvi, writeGif, writeIms, writeSwf
+import wx
+from animation.data import AnimationData
+from animation.dialogs import EditDialog, ExportDialog, InputDialog
+from animation.temporal_manager import TemporalManager
+from animation.utils import (
+    HashCmds,
+    Orientation,
+    RenderText,
+    TemporalMode,
+    TemporalType,
+    WxImageToPil,
+    layerListToCmdsMatrix,
+    sampleCmdMatrixAndCreateNames,
+)
+from core.gcmd import GError, GException, GMessage
 from core.gthread import gThread
 from core.settings import UserSettings
 from gui_core.wrap import EmptyImage, ImageFromBitmap
 
-from animation.temporal_manager import TemporalManager
-from animation.dialogs import InputDialog, EditDialog, ExportDialog
-from animation.utils import (
-    TemporalMode,
-    TemporalType,
-    Orientation,
-    RenderText,
-    WxImageToPil,
-    sampleCmdMatrixAndCreateNames,
-    layerListToCmdsMatrix,
-    HashCmds,
-)
-from animation.data import AnimationData
+from grass.imaging import writeAvi, writeGif, writeIms, writeSwf
 
 
 class AnimationController(wx.EvtHandler):

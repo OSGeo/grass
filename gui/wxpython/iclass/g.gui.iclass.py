@@ -50,6 +50,7 @@
 # %end
 
 import os
+
 import grass.script as gscript
 
 
@@ -63,8 +64,8 @@ def main():
 
     set_gui_path()
 
-    from core.settings import UserSettings
     from core import globalvar
+    from core.settings import UserSettings
     from iclass.frame import IClassMapDisplay
 
     group_name = subgroup_name = map_name = trainingmap_name = None

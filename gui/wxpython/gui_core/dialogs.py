@@ -32,30 +32,25 @@ import os
 import re
 
 import wx
-
-from grass.script import core as grass
-from grass.script.utils import naturally_sorted, try_remove
-
-from grass.pydispatch.signal import Signal
-
 from core import globalvar
-from core.gcmd import GError, RunCommand, GMessage
+from core.debug import Debug
+from core.gcmd import GError, GMessage, RunCommand
+from core.settings import UserSettings
+from core.utils import is_shell_running
 from gui_core.gselect import (
     LocationSelect,
     MapsetSelect,
-    Select,
     OgrTypeSelect,
+    Select,
     SubGroupSelect,
 )
-from gui_core.widgets import SingleSymbolPanel, SimpleValidator, MapValidator
-from core.settings import UserSettings
-from core.debug import Debug
-from core.utils import is_shell_running
+from gui_core.widgets import MapValidator, SimpleValidator, SingleSymbolPanel
 from gui_core.wrap import (
     Button,
     CheckListBox,
     EmptyBitmap,
     HyperlinkCtrl,
+    ListBox,
     Menu,
     NewId,
     Slider,
@@ -63,8 +58,11 @@ from gui_core.wrap import (
     StaticBox,
     StaticText,
     TextCtrl,
-    ListBox,
 )
+
+from grass.pydispatch.signal import Signal
+from grass.script import core as grass
+from grass.script.utils import naturally_sorted, try_remove
 
 
 class SimpleDialog(wx.Dialog):

@@ -17,8 +17,7 @@ for details.
 """
 
 import wx
-
-from gui_core.toolbars import BaseToolbar, BaseIcons
+from gui_core.toolbars import BaseIcons, BaseToolbar
 
 
 class ExampleMapToolbar(BaseToolbar):

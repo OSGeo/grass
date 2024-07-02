@@ -18,12 +18,10 @@ This program is free software under the GNU General Public License
 import os
 
 import wx
-
 from core import globalvar
-from gui_core.menu import Menu as Menubar
-
 from gmodeler.menudata import ModelerMenuData
 from gmodeler.panels import ModelerPanel
+from gui_core.menu import Menu as Menubar
 
 
 class ModelerFrame(wx.Frame):

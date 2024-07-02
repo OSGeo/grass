@@ -17,32 +17,23 @@ for details.
 @author Tomas Zigo
 """
 
-import re
 import copy
 import datetime
+import re
 
 import wx
-
 from core import globalvar
-
 from core.gcmd import GError, GException
-from core.utils import (
-    parse_mapcalc_cmd,
-    replace_module_cmd_special_flags,
-    split,
-)
+from core.treemodel import DictFilterNode, TreeModel
+from core.utils import parse_mapcalc_cmd, replace_module_cmd_special_flags, split
 from gui_core.forms import GUI
-from core.treemodel import TreeModel, DictFilterNode
 from gui_core.treeview import CTreeView
 from gui_core.wrap import Menu
-
 from icons.icon import MetaIcon
-
-from grass.pydispatch.signal import Signal
 
 from grass.grassdb import history
 from grass.grassdb.history import Status
-
+from grass.pydispatch.signal import Signal
 
 # global variables for node types
 TIME_PERIOD = "time_period"

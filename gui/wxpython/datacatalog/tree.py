@@ -19,61 +19,59 @@ for details.
 @author Linda Kladivova (l.kladivova@seznam.cz)
 """
 
+import copy
 import os
 import re
-import copy
 from multiprocessing import Process, Queue, cpu_count
 
 import wx
-
-from core.gcmd import RunCommand, GError, GMessage
-from core.utils import GetListOfLocations
 from core.debug import Debug
+from core.gcmd import GError, GMessage, RunCommand
+from core.giface import StandaloneGrassInterface
 from core.gthread import gThread
+from core.settings import UserSettings
+from core.treemodel import DictFilterNode, TreeModel
+from core.utils import GetListOfLocations
 from core.watchdog import (
-    EVT_UPDATE_MAPSET,
     EVT_CURRENT_MAPSET_CHANGED,
+    EVT_UPDATE_MAPSET,
     MapsetWatchdog,
     watchdog_used,
 )
+from datacatalog.dialogs import CatalogReprojectionDialog
 from gui_core.dialogs import TextEntryDialog
-from core.giface import StandaloneGrassInterface
-from core.treemodel import TreeModel, DictFilterNode
 from gui_core.treeview import TreeView
 from gui_core.wrap import Menu
-from datacatalog.dialogs import CatalogReprojectionDialog
 from icons.icon import MetaIcon
-from core.settings import UserSettings
 from startup.guiutils import (
-    create_mapset_interactively,
-    create_location_interactively,
-    rename_mapset_interactively,
-    rename_location_interactively,
-    delete_mapsets_interactively,
-    delete_locations_interactively,
-    download_location_interactively,
-    delete_grassdb_interactively,
     can_switch_mapset_interactive,
-    switch_mapset_interactively,
+    create_location_interactively,
+    create_mapset_interactively,
+    delete_grassdb_interactively,
+    delete_locations_interactively,
+    delete_mapsets_interactively,
+    download_location_interactively,
+    get_location_name_invalid_reason,
+    get_mapset_name_invalid_reason,
     get_reason_mapset_not_removable,
     get_reasons_location_not_removable,
-    get_mapset_name_invalid_reason,
-    get_location_name_invalid_reason,
+    rename_location_interactively,
+    rename_mapset_interactively,
+    switch_mapset_interactively,
 )
-from grass.grassdb.manage import rename_mapset, rename_location
-
-from grass.pydispatch.signal import Signal
 
 import grass.script as gscript
-from grass.script import gisenv
-from grass.grassdb.data import map_exists
+from grass.exceptions import CalledModuleError
 from grass.grassdb.checks import (
     get_mapset_owner,
-    is_mapset_locked,
     is_different_mapset_owner,
     is_first_time_user,
+    is_mapset_locked,
 )
-from grass.exceptions import CalledModuleError
+from grass.grassdb.data import map_exists
+from grass.grassdb.manage import rename_location, rename_mapset
+from grass.pydispatch.signal import Signal
+from grass.script import gisenv
 
 
 def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):

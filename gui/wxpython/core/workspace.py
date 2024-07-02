@@ -20,10 +20,9 @@ import os
 from io import StringIO
 
 import wx
-
-from core.utils import normalize_whitespace
-from core.settings import UserSettings
 from core.gcmd import EncodeString, GetDefaultEncoding
+from core.settings import UserSettings
+from core.utils import normalize_whitespace
 from nviz.main import NvizSettings
 
 from grass.script import core as gcore

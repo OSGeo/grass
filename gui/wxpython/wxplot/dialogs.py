@@ -22,17 +22,16 @@ This program is free software under the GNU General Public License
 import os
 
 import wx
-
 from core import globalvar
-from core.settings import UserSettings
 from core.globalvar import ICONDIR
+from core.settings import UserSettings
 from gui_core.gselect import Select
 from gui_core.wrap import (
-    ColourSelect,
-    ComboBox,
     Button,
     CheckBox,
     Choice,
+    ColourSelect,
+    ComboBox,
     ScrolledPanel,
     SpinCtrl,
     StaticBox,

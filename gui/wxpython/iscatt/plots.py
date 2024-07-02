@@ -16,29 +16,29 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
 
-import wx
-import numpy as np
+from copy import deepcopy
 from math import ceil
 from multiprocessing import Process, Queue
 
-from copy import deepcopy
-from iscatt.core_c import MergeArrays, ApplyColormap
-from iscatt.dialogs import ManageBusyCursorMixin
-from iscatt.utils import dist_point_to_segment
+import numpy as np
+import wx
 from core.settings import UserSettings
 from gui_core.wrap import Menu, NewId
+from iscatt.core_c import ApplyColormap, MergeArrays
+from iscatt.dialogs import ManageBusyCursorMixin
+from iscatt.utils import dist_point_to_segment
 
 try:
     import matplotlib
 
     matplotlib.use("WXAgg")
-    from matplotlib.figure import Figure
-    from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigCanvas
-    from matplotlib.lines import Line2D
-    from matplotlib.artist import Artist
-    from matplotlib.patches import Polygon, Ellipse
-    import matplotlib.image as mi
     import matplotlib.colors as mcolors
+    import matplotlib.image as mi
+    from matplotlib.artist import Artist
+    from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigCanvas
+    from matplotlib.figure import Figure
+    from matplotlib.lines import Line2D
+    from matplotlib.patches import Ellipse, Polygon
 except ImportError as e:
     raise ImportError(
         _(

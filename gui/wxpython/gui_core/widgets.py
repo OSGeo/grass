@@ -51,16 +51,16 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import sys
-import string
 import re
+import string
+import sys
 from bisect import bisect
 from datetime import datetime
-from core.globalvar import wxPythonPhoenix
 
 import wx
 import wx.lib.mixins.listctrl as listmix
 import wx.lib.scrolledpanel as SP
+from core.globalvar import wxPythonPhoenix
 from wx.lib.stattext import GenStaticText
 from wx.lib.wordwrap import wordwrap
 
@@ -84,27 +84,26 @@ if wxPythonPhoenix:
 else:
     from wx import PyValidator as Validator
 
-from grass.script import core as grass
-
-from grass.pydispatch.signal import Signal
-
 from core import globalvar
-from core.gcmd import GMessage, GError
 from core.debug import Debug
+from core.gcmd import GError, GMessage
 from gui_core.wrap import (
     Button,
-    SearchCtrl,
-    Slider,
-    StaticText,
-    StaticBox,
-    TextCtrl,
-    Menu,
-    Rect,
+    CheckListCtrlMixin,
     EmptyBitmap,
     ListCtrl,
+    Menu,
     NewId,
-    CheckListCtrlMixin,
+    Rect,
+    SearchCtrl,
+    Slider,
+    StaticBox,
+    StaticText,
+    TextCtrl,
 )
+
+from grass.pydispatch.signal import Signal
+from grass.script import core as grass
 
 
 class NotebookController:

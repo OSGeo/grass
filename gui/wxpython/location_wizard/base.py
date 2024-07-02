@@ -17,7 +17,7 @@ This program is free software under the GNU General Public License
 """
 
 import wx
-from gui_core.wrap import StaticText, TextCtrl, Button, CheckBox
+from gui_core.wrap import Button, CheckBox, StaticText, TextCtrl
 
 
 class BaseClass(wx.Object):

@@ -4,16 +4,17 @@ Created on Mon Nov 26 11:57:54 2012
 @author: lucadelu
 """
 
-import wx
+import codecs
+import locale
 import os
 
-from core import globalvar, gcmd
-from grass.script.utils import try_remove
+import wx
+from core import gcmd, globalvar
+from gui_core.wrap import Button, StaticBox, TextCtrl
 from rlisetup.functions import retRLiPath
 from rlisetup.wizard import RLIWizard
-import locale
-import codecs
-from gui_core.wrap import Button, StaticBox, TextCtrl
+
+from grass.script.utils import try_remove
 
 
 class ViewFrame(wx.Frame):

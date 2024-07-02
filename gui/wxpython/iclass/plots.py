@@ -16,10 +16,9 @@ for details.
 """
 
 import wx
-
-from wx.lib import plot
 import wx.lib.scrolledpanel as scrolled
 from core.gcmd import GError
+from wx.lib import plot
 
 
 class PlotPanel(scrolled.ScrolledPanel):
