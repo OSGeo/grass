@@ -12,10 +12,11 @@
 #            for details.
 
 """Interactive visualizations map with folium or ipyleaflet"""
-
+import os
 import base64
 import json
 from .reprojection_renderer import ReprojectionRenderer
+from .utils import query_raster, query_vector, reproject_latlon, get_region
 
 
 def get_backend(interactive_map):
@@ -282,6 +283,14 @@ class InteractiveMap:
         self.width = width
         self.height = height
 
+        # Store vector and raster name
+        self.raster_name = []
+        self.vector_name = []
+        self.query_mode = False
+
+        # Store Region
+        self.region = None
+
         if self._ipyleaflet:
             basemap = xyzservices.providers.query_name(tiles)
             if API_key and basemap.get("accessToken"):
@@ -314,6 +323,7 @@ class InteractiveMap:
         :param str title: vector name for layer control
         :**kwargs: keyword arguments passed to GeoJSON overlay
         """
+        self.vector_name.append(name)
         Vector(name, title=title, renderer=self._renderer, **kwargs).add_to(self.map)
 
     def add_raster(self, name, title=None, **kwargs):
@@ -332,6 +342,7 @@ class InteractiveMap:
         :param str title: raster name for layer control
         :**kwargs: keyword arguments passed to image overlay
         """
+        self.raster_name.append(name)
         Raster(name, title=title, renderer=self._renderer, **kwargs).add_to(self.map)
 
     def add_layer_control(self, **kwargs):
@@ -346,13 +357,94 @@ class InteractiveMap:
         else:
             self.layer_control_object = self._ipyleaflet.LayersControl(**kwargs)
 
+    def add_query_button(self):
+        """Add custom features like query button and coordinate retrieval"""
+        import ipywidgets as widgets
+
+        # A ToggleButton to activate/deactivate query mode
+        query_toggle_button = widgets.ToggleButton(
+            icon="info",
+            value=False,
+            tooltip="Click to activate/deactivate query mode",
+            layout=widgets.Layout(width="33px", margin="0px 0px 0px 0px"),
+        )
+
+        # Function to handle toggle state change
+        def on_toggle_change(change):
+            self.query_mode = change.new
+            # Change cursor style based on query mode
+            self.map.default_style = {
+                "cursor": "crosshair" if self.query_mode else "default"
+            }
+
+        query_toggle_button.observe(on_toggle_change, names="value")
+
+        # Add the toggle button to the map
+        query_control = self._ipyleaflet.WidgetControl(
+            widget=query_toggle_button, position="topright"
+        )
+        self.map.add_control(query_control)
+
+        # Function to handle map click for querying
+        def handle_interaction(**kwargs):
+            if not self.query_mode:
+                return
+            if self.query_mode and kwargs.get("type") == "click":
+                lonlat = kwargs.get("coordinates")
+                reprojected_coordinates = reproject_latlon((lonlat[0], lonlat[1]))
+                raster_output = query_raster(
+                    (reprojected_coordinates[0], reprojected_coordinates[1]),
+                    self.raster_name,
+                )
+                self.region = get_region(env=os.environ.copy())
+
+                vector_output = query_vector(
+                    (reprojected_coordinates[0], reprojected_coordinates[1]),
+                    self.vector_name,
+                    10.0 * ((self.region["east"] - self.region["west"]) / self.width),
+                )
+                message = widgets.HTML()
+                message.value = raster_output + vector_output
+
+                # Create a scrollable popup
+                scrollable_container = widgets.HTML(
+                    value=(
+                        "<div style='max-height: 300px; max-width: 300px; "
+                        "overflow-y: auto; overflow-x: auto;'>"
+                        f"{message.value}"
+                        "</div>"
+                    )
+                )
+
+                # Popup with a given location on the map:
+                popup = self._ipyleaflet.Popup(
+                    location=lonlat,
+                    child=scrollable_container,
+                    close_button=False,
+                    auto_close=True,
+                    close_on_escape_key=False,
+                )
+                self.map.add(popup)
+
+            def on_toggle_popup_change(change):
+                if not change.new:
+                    # Find and remove all popups on the map
+                    for item in reversed(list(self.map.layers)):
+                        if isinstance(item, self._ipyleaflet.Popup):
+                            self.map.remove_layer(item)
+
+            query_toggle_button.observe(on_toggle_popup_change, names="value")
+
+        self.map.on_interaction(handle_interaction)
+
     def show(self):
         """This function returns a folium figure or ipyleaflet map object
         with a GRASS raster and/or vector overlaid on a basemap.
 
         If map has layer control enabled, additional layers cannot be
         added after calling show()."""
-
+        if self._ipyleaflet:
+            self.add_query_button()
         self.map.fit_bounds(self._renderer.get_bbox())
 
         if not self.layer_control_object:

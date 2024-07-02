@@ -87,6 +87,113 @@ def reproject_region(region, from_proj, to_proj):
     return region
 
 
+def reproject_latlon(coord):
+    """Reproject coordinates
+
+    :param coord: coordinates given as tuple (latitude, longitude)
+    :return: reprojected coordinates (returned as tuple)
+    """
+    # Prepare the input coordinate string
+    coord_str = f"{coord[1]} {coord[0]}\n"
+
+    # Start the m.proj command
+    proc = gs.start_command(
+        "m.proj",
+        input="-",
+        flags="i",
+        separator=",",
+        stdin=gs.PIPE,
+        stdout=gs.PIPE,
+        stderr=gs.PIPE,
+    )
+
+    proc.stdin.write(gs.encode(coord_str))
+    proc.stdin.close()
+    proc.stdin = None
+    proj_output, _ = proc.communicate()
+
+    output = gs.decode(proj_output).splitlines()
+    east, north, elev = map(float, output[0].split(","))
+
+    return east, north, elev
+
+
+def query_raster(coord, raster_list):
+    """Queries Raster
+
+    :param coord: coordinates given as tuple
+    :param list raster_list: list of raster names
+
+    :return str: formatted output of raster query results
+    """
+    output_list = ["<table border='1' style='border-collapse:collapse;'>"]
+
+    for raster in raster_list:
+        raster_output = gs.raster.raster_what(map=raster, coord=coord)
+
+        output = f"<tr><th colspan='2'>Raster: {raster}</th></tr>"
+        if raster in raster_output[0] and "value" in raster_output[0][raster]:
+            value = raster_output[0][raster]["value"]
+            output += f"<tr><td>Value</td><td>{value}</td></tr>"
+
+        output_list.append(output)
+
+    if len(output_list) == 1:
+        return ""
+
+    output_list.append("</table>")
+    output_list.append("<br>")
+    final_output = "".join(output_list)
+    return final_output
+
+
+def query_vector(coord, vector_list, distance):
+    """Queries Vector
+
+    :param coord: coordinates given as tuple
+    :param list vector_list: list of vector names
+
+    :return str: formatted output of vector query results
+    """
+    output_list = ["<table border='1' style='border-collapse:collapse;'>"]
+
+    for vector in vector_list:
+        vector_output = gs.vector.vector_what(
+            map=vector, coord=coord, distance=distance
+        )
+
+        if len(vector_output[0]) > 2:
+            output_list.append(f"<tr><th colspan='2'>Vector: {vector}</th></tr>")
+
+            items = list(vector_output[0].items())
+
+            for key, value in items[1:]:
+                output = ""
+
+                if isinstance(value, dict):
+                    output += f"""
+                    <tr>
+                    <td>{key}</td>
+                    <td>
+                    <table border='1' style='border-collapse:collapse;'>
+                    """
+                    for sub_key, sub_value in value.items():
+                        output += f"<tr><td>{sub_key}</td><td>{sub_value}</td></tr>"
+                    output += "</table></td></tr>"
+                else:
+                    output += f"<tr><td>{key}</td><td>{value}</td></tr>"
+
+                output_list.append(output)
+
+    if len(output_list) == 1:
+        return ""
+
+    output_list.append("</table>")
+    output_list.append("<br>")
+    final_output = "".join(output_list)
+    return final_output
+
+
 def estimate_resolution(raster, mapset, location, dbase, env):
     """Estimates resolution of reprojected raster.
 
