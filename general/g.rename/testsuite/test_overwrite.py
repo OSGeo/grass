@@ -9,10 +9,10 @@ for details.
 """
 
 from grass.gunittest.case import TestCase
-from grass.gunittest.main import test
+from grass.gunittest.checkers import diff_keyvalue, keyvalue_equals, text_to_keyvalue
 from grass.gunittest.gmodules import SimpleModule
 from grass.gunittest.gutils import is_map_in_mapset
-from grass.gunittest.checkers import text_to_keyvalue, keyvalue_equals, diff_keyvalue
+from grass.gunittest.main import test
 
 
 class RasterRenameTestCase(TestCase):

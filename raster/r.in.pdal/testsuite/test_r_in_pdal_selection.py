@@ -15,9 +15,9 @@ import shutil
 import unittest
 from tempfile import TemporaryDirectory
 
-from grass.script import core as grass
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+from grass.script import core as grass
 
 
 class SelectionTest(TestCase):

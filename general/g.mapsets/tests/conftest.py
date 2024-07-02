@@ -7,8 +7,9 @@ Fixture for ReprojectionRenderer test with simple GRASS location, raster, vector
 
 from types import SimpleNamespace
 
-import grass.script as gs
 import pytest
+
+import grass.script as gs
 
 TEST_MAPSETS = ["PERMANENT", "test1", "test2", "test3"]
 ACCESSIBLE_MAPSETS = ["test3", "PERMANENT"]

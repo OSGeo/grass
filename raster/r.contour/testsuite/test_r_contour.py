@@ -9,8 +9,9 @@ Licence:    This program is free software under the GNU General Public
             for details.
 """
 
-from grass.gunittest.case import TestCase
 import os
+
+from grass.gunittest.case import TestCase
 
 
 class TestRasterWhat(TestCase):

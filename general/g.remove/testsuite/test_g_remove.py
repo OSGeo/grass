@@ -1,12 +1,11 @@
 """Test of g.remove module"""
 
 # TODO: rmapcalc probably fatals, replace or add raise on error?
-from grass.script.raster import mapcalc as rmapcalc
-
 from grass.gunittest.case import TestCase
-from grass.gunittest.main import test
-from grass.gunittest.gutils import get_current_mapset
 from grass.gunittest.gmodules import SimpleModule
+from grass.gunittest.gutils import get_current_mapset
+from grass.gunittest.main import test
+from grass.script.raster import mapcalc as rmapcalc
 
 # when used user1 must be replaced by current mapset
 REMOVE_RASTERS = """raster/test_map_0@user1

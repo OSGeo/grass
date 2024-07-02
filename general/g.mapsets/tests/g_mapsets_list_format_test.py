@@ -14,7 +14,9 @@
 """Test parsing and structure of CSV and JSON outputs from g.mapsets"""
 
 import json
+
 import pytest
+
 import grass.script as gs
 from grass.script import utils as gutils
 

@@ -21,7 +21,6 @@
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
-
 INPUT = """\
 north: 10
 south: 8

@@ -13,13 +13,12 @@
 
 """Test parsing and structure of CSV and JSON outputs from v.db.select"""
 
-import json
 import csv
-import itertools
 import io
+import itertools
+import json
 
 import grass.script as gs
-
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 

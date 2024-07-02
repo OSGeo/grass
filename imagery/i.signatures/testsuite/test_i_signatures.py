@@ -9,21 +9,17 @@ Read the file COPYING that comes with GRASS
 for details
 """
 
+import json
 import os
 import shutil
-import json
 
 from grass.gunittest.case import TestCase
-from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
-
-from grass.script.core import tempname
+from grass.gunittest.main import test
+from grass.lib.gis import G_mapset_path
 from grass.pygrass import utils
 from grass.pygrass.gis import Mapset
-
-from grass.lib.gis import (
-    G_mapset_path,
-)
+from grass.script.core import tempname
 
 
 class PrintSignaturesTestCase(TestCase):

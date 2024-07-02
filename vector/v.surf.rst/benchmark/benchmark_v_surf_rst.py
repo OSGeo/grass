@@ -4,10 +4,11 @@
         Chung-Yuan Liang
 """
 
-from grass.pygrass.modules import Module
-import grass.benchmark as bm
-from subprocess import DEVNULL
 import math
+from subprocess import DEVNULL
+
+import grass.benchmark as bm
+from grass.pygrass.modules import Module
 
 
 def main():

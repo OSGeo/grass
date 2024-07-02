@@ -9,30 +9,28 @@ Licence:   This program is free software under the GNU General Public
            for details.
 """
 
-import os
-import stat
 import ctypes
+import os
 import shutil
-
-from grass.pygrass import utils
-from grass.pygrass.gis import Mapset
-from grass.script.core import tempname
+import stat
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
 from grass.lib.gis import G_mapset_path
-from grass.lib.raster import Rast_write_semantic_label
 from grass.lib.imagery import (
-    Signature,
-    Ref,
-    I_init_group_ref,
     I_add_file_to_group_ref,
+    I_fopen_signature_file_old,
+    I_init_group_ref,
     I_put_group_ref,
     I_put_subgroup_ref,
-    I_fopen_signature_file_old,
     I_read_signatures,
+    Ref,
+    Signature,
 )
+from grass.lib.raster import Rast_write_semantic_label
+from grass.pygrass import utils
+from grass.pygrass.gis import Mapset
+from grass.script.core import tempname
 
 
 class SuccessTest(TestCase):

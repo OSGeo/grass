@@ -9,28 +9,23 @@ Licence:   This program is free software under the GNU General Public
            for details.
 """
 
-import os
-import unittest
 import ctypes
+import os
 import shutil
+import unittest
 
-from grass.script import core as grass
 from grass.gunittest.case import TestCase
-from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
-from grass.pygrass.gis import Mapset
-from grass.pygrass import utils
-
-from grass.lib.gis import (
-    GPATH_MAX,
-    GNAME_MAX,
-    G_file_name_misc,
-)
+from grass.gunittest.main import test
+from grass.lib.gis import GNAME_MAX, GPATH_MAX, G_file_name_misc
 from grass.lib.imagery import (
     I_SIGFILE_TYPE_LIBSVM,
     I_get_signatures_dir,
     I_signatures_remove,
 )
+from grass.pygrass import utils
+from grass.pygrass.gis import Mapset
+from grass.script import core as grass
 
 
 class IOValidationTest(TestCase):

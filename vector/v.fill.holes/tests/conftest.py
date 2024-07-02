@@ -1,7 +1,6 @@
 """Fixture for v.fill.holes test"""
 
 import os
-
 from types import SimpleNamespace
 
 import pytest
