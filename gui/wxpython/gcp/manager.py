@@ -28,8 +28,8 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import sys
 import shutil
+import sys
 from copy import copy
 
 import wx
@@ -48,24 +48,24 @@ import grass.script as grass
 
 from core import utils
 from core.render import Map
-from gui_core.gselect import Select, LocationSelect, MapsetSelect
+from gui_core.gselect import LocationSelect, MapsetSelect, Select
 from gui_core.dialogs import GroupDialog
 from gui_core.mapdisp import FrameMixin
-from core.gcmd import RunCommand, GMessage, GError, GWarning
+from core.gcmd import GError, GMessage, GWarning, RunCommand
 from core.settings import UserSettings
 from gcp.mapdisplay import MapPanel
 from core.giface import Notification
 from gui_core.wrap import (
-    SpinCtrl,
-    Button,
-    StaticText,
-    StaticBox,
-    CheckListBox,
-    TextCtrl,
-    Menu,
-    ListCtrl,
     BitmapFromImage,
+    Button,
+    CheckListBox,
     CheckListCtrlMixin,
+    ListCtrl,
+    Menu,
+    SpinCtrl,
+    StaticBox,
+    StaticText,
+    TextCtrl,
 )
 
 from location_wizard.wizard import GridBagSizerTitledPage as TitledPage

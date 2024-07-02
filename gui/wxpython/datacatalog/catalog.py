@@ -16,12 +16,12 @@ for details.
 @author Linda Kladivova l.kladivova@seznam.cz
 """
 
-import wx
 import os
 
+import wx
 from core.debug import Debug
 from datacatalog.tree import DataCatalogTree
-from datacatalog.toolbars import DataCatalogToolbar, DataCatalogSearch
+from datacatalog.toolbars import DataCatalogSearch, DataCatalogToolbar
 from gui_core.infobar import InfoBar
 from datacatalog.infomanager import DataCatalogInfoManager
 from gui_core.wrap import Menu

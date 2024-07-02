@@ -34,11 +34,11 @@ if __name__ == "__main__":
 
 from core.gcmd import GError
 from core.gconsole import (
-    GConsole,
+    EVT_CMD_DONE,
     EVT_CMD_OUTPUT,
     EVT_CMD_PROGRESS,
     EVT_CMD_RUN,
-    EVT_CMD_DONE,
+    GConsole,
     Notification,
 )
 from core.globalvar import CheckWxVersion, wxPythonPhoenix

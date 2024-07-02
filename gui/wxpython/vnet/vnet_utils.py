@@ -19,12 +19,13 @@ This program is free software under the GNU General Public License
 """
 
 import math
+
 from grass.script import core as grass
 from grass.script.utils import encode
 
 try:
     import grass.lib.vector as vectlib
-    from ctypes import pointer, byref, c_char_p, c_int, c_double, POINTER
+    from ctypes import POINTER, byref, c_char_p, c_double, c_int, pointer
 
     haveCtypes = True
 except ImportError:

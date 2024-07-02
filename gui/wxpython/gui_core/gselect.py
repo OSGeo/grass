@@ -42,10 +42,10 @@ This program is free software under the GNU General Public License
 @author Matej Krejci <matejkrejci gmail.com> (VectorCategorySelect)
 """
 
+import ctypes
+import glob
 import os
 import sys
-import glob
-import ctypes
 
 import wx
 
@@ -58,30 +58,32 @@ import grass.script as grass
 from grass.script import task as gtask
 from grass.exceptions import CalledModuleError
 
-from gui_core.widgets import ManageSettingsWidget, CoordinatesValidator
+from gui_core.widgets import CoordinatesValidator, ManageSettingsWidget
 
-from core.gcmd import RunCommand, GError, GMessage, GWarning, GException
+from core.gcmd import GError, GException, GMessage, GWarning, RunCommand
 from core.utils import (
+    GetFormats,
     GetListOfLocations,
     GetListOfMapsets,
-    GetFormats,
+    GetSettingsPath,
+    GetValidLayerName,
+    GetVectorNumberOfLayers,
+    ListSortLower,
     rasterFormatExtension,
     vectorFormatExtension,
 )
-from core.utils import GetSettingsPath, GetValidLayerName, ListSortLower
-from core.utils import GetVectorNumberOfLayers
 from core.settings import UserSettings
 from core.debug import Debug
 from gui_core.vselect import VectorSelectBase
 from gui_core.wrap import (
-    TreeCtrl,
     Button,
-    StaticText,
-    StaticBox,
-    TextCtrl,
-    Panel,
-    ComboPopup,
     ComboCtrl,
+    ComboPopup,
+    Panel,
+    StaticBox,
+    StaticText,
+    TextCtrl,
+    TreeCtrl,
 )
 
 from grass.pydispatch.signal import Signal
@@ -3152,11 +3154,11 @@ class SignatureSelect(wx.ComboBox):
             return
         try:
             from grass.lib.imagery import (
+                I_SIGFILE_TYPE_LIBSVM,
                 I_SIGFILE_TYPE_SIG,
                 I_SIGFILE_TYPE_SIGSET,
-                I_SIGFILE_TYPE_LIBSVM,
-                I_signatures_list_by_type,
                 I_free_signatures_list,
+                I_signatures_list_by_type,
             )
         except ImportError as e:
             sys.stderr.write(

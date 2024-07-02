@@ -21,9 +21,7 @@ errorMsg = ""
 
 try:
     from wx import glcanvas  # noqa: F401
-    from nviz import mapwindow
-    from nviz import tools
-    from nviz import workspace
+    from nviz import mapwindow, tools, workspace
     from nviz import wxnviz  # noqa: F401
 
     haveNviz = True

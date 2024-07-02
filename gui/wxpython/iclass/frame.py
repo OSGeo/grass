@@ -18,13 +18,12 @@ for details.
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
-import os
 import copy
+import os
 import tempfile
+from ctypes import *
 
 import wx
-
-from ctypes import *
 
 try:
     from grass.lib.imagery import *
@@ -45,25 +44,25 @@ from vdigit.toolbars import VDigitToolbar
 from gui_core.mapdisp import DoubleMapPanel, FrameMixin
 from core import globalvar
 from core.render import Map
-from core.gcmd import RunCommand, GMessage, GError
+from core.gcmd import GError, GMessage, RunCommand
 from gui_core.dialogs import SetOpacityDialog
 from gui_core.wrap import Menu
 from dbmgr.vinfo import VectorDBInfo
 
-from iclass.digit import IClassVDigitWindow, IClassVDigit
+from iclass.digit import IClassVDigit, IClassVDigitWindow
 from iclass.toolbars import (
+    IClassMapManagerToolbar,
     IClassMapToolbar,
     IClassMiscToolbar,
     IClassToolbar,
-    IClassMapManagerToolbar,
 )
 from iclass.statistics import StatisticsData
 from iclass.dialogs import (
     IClassCategoryManagerDialog,
-    IClassGroupDialog,
-    IClassSignatureFileDialog,
     IClassExportAreasDialog,
+    IClassGroupDialog,
     IClassMapDialog,
+    IClassSignatureFileDialog,
 )
 from iclass.plots import PlotPanel
 

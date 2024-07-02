@@ -21,8 +21,7 @@ import wx.lib.agw.floatspin as fs
 import wx.lib.colourselect as csel
 import wx.lib.filebrowsebutton as filebrowse
 import wx.lib.scrolledpanel as scrolled
-from wx.lib import expando
-from wx.lib import buttons
+from wx.lib import buttons, expando
 from wx.lib.agw.aui import tabart
 
 try:

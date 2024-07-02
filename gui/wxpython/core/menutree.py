@@ -33,14 +33,14 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
+import copy
 import os
 import sys
-import copy
 import xml.etree.ElementTree as etree
 
 import wx
 
-from core.treemodel import TreeModel, ModuleNode
+from core.treemodel import ModuleNode, TreeModel
 from core.settings import UserSettings
 from core.toolboxes import expandAddons as expAddons
 from core.toolboxes import getMessages as getToolboxMessages

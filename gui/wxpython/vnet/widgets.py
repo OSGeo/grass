@@ -31,13 +31,13 @@ from gui_core.widgets import FloatValidator, IntegerValidator
 from gui_core.wrap import (
     BitmapFromImage,
     Button,
+    CheckListCtrlMixin,
     ComboBox,
     ListCtrl,
     Panel,
     StaticBox,
     StaticText,
     TextCtrl,
-    CheckListCtrlMixin,
 )
 
 

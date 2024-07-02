@@ -30,12 +30,12 @@ This program is free software under the GNU General Public License
         (GSoC 2012, mentor: Martin Landa)
 """
 
-import os
-import locale
-import tempfile
 import copy
-import math
 import functools
+import locale
+import math
+import os
+import tempfile
 
 from core import globalvar
 import wx
@@ -48,19 +48,20 @@ if globalvar.wxPythonPhoenix:
         import wx.lib.agw.flatnotebook as FN
 else:
     import wx.lib.flatnotebook as FN
+
 import wx.lib.scrolledpanel as scrolled
 
 import grass.script as grass
 from grass.script.utils import decode
 
 from dbmgr.sqlbuilder import SQLBuilderSelect, SQLBuilderUpdate
-from core.gcmd import RunCommand, GException, GError, GMessage, GWarning
-from core.utils import ListOfCatsToRange
+from core.gcmd import GError, GException, GMessage, GWarning, RunCommand
+from core.utils import ListOfCatsToRange, cmp
 from gui_core.dialogs import CreateNewVector
 from gui_core.widgets import GNotebook
-from dbmgr.vinfo import VectorDBInfo, GetUnicodeValue, CreateDbInfoDesc, GetDbEncoding
+from dbmgr.vinfo import CreateDbInfoDesc, GetDbEncoding, GetUnicodeValue, VectorDBInfo
 from core.debug import Debug
-from dbmgr.dialogs import ModifyTableRecord, AddColumnDialog
+from dbmgr.dialogs import AddColumnDialog, ModifyTableRecord
 from core.settings import UserSettings
 from gui_core.wrap import (
     Button,
@@ -74,7 +75,6 @@ from gui_core.wrap import (
     StaticText,
     TextCtrl,
 )
-from core.utils import cmp
 
 
 class Log:

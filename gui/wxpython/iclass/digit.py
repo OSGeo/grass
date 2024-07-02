@@ -20,11 +20,11 @@ import wx
 
 from vdigit.mapwindow import VDigitWindow
 from vdigit.wxdigit import IVDigit
-from vdigit.wxdisplay import DisplayDriver, TYPE_AREA
+from vdigit.wxdisplay import TYPE_AREA, DisplayDriver
 from core.gcmd import GWarning
 
 try:
-    from grass.lib.gis import G_verbose, G_set_verbose
+    from grass.lib.gis import G_set_verbose, G_verbose
     from grass.lib.vector import *
     from grass.lib.vedit import *
 except ImportError:

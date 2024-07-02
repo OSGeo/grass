@@ -21,24 +21,24 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
-import os
-import sys
+import copy
 import glob
 import math
-import copy
+import os
+import sys
 import tempfile
 import time
 
 import wx
 
 from grass.script import core as grass
-from grass.script.utils import try_remove, text_to_string
+from grass.script.utils import text_to_string, try_remove
 from grass.script.task import cmdlist_to_tuple, cmdtuple_to_list
 from grass.pydispatch.signal import Signal
 
 from core import utils
 from core.ws import RenderWMSMgr
-from core.gcmd import GException, GError, RunCommand
+from core.gcmd import GError, GException, RunCommand
 from core.debug import Debug
 from core.settings import UserSettings
 from core.gthread import gThread

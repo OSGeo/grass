@@ -20,7 +20,7 @@ This program is free software under the GNU General Public License
 import wx
 
 from icons.icon import MetaIcon
-from gui_core.toolbars import BaseToolbar, BaseIcons
+from gui_core.toolbars import BaseIcons, BaseToolbar
 from gui_core.wrap import ComboBox
 from core.gcmd import RunCommand
 

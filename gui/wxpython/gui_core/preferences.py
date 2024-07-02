@@ -47,21 +47,21 @@ from grass.exceptions import OpenError
 
 from core import globalvar
 from core.gcmd import GError
-from core.utils import ListOfMapsets, GetColorTables, ReadEpsgCodes
+from core.utils import GetColorTables, ListOfMapsets, ReadEpsgCodes
 from core.settings import UserSettings
 from core.globalvar import CheckWxVersion
-from gui_core.dialogs import SymbolDialog, DefaultFontDialog
-from gui_core.widgets import IntegerValidator, ColorTablesComboBox
+from gui_core.dialogs import DefaultFontDialog, SymbolDialog
+from gui_core.widgets import ColorTablesComboBox, IntegerValidator
 from core.debug import Debug
 from gui_core.wrap import (
-    SpinCtrl,
-    Button,
     BitmapButton,
-    StaticText,
-    StaticBox,
-    TextCtrl,
-    ListCtrl,
+    Button,
     CheckListCtrlMixin,
+    ListCtrl,
+    SpinCtrl,
+    StaticBox,
+    StaticText,
+    TextCtrl,
 )
 
 

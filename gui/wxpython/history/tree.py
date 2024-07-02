@@ -17,22 +17,18 @@ for details.
 @author Tomas Zigo
 """
 
-import re
 import copy
 import datetime
+import re
 
 import wx
 
 from core import globalvar
 
 from core.gcmd import GError, GException
-from core.utils import (
-    parse_mapcalc_cmd,
-    replace_module_cmd_special_flags,
-    split,
-)
+from core.utils import parse_mapcalc_cmd, replace_module_cmd_special_flags, split
 from gui_core.forms import GUI
-from core.treemodel import TreeModel, DictFilterNode
+from core.treemodel import DictFilterNode, TreeModel
 from gui_core.treeview import CTreeView
 from gui_core.wrap import Menu
 

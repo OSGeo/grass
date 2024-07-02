@@ -15,14 +15,12 @@ for details.
 
 import os
 import tempfile
-
 import xml.etree.ElementTree as etree
 
 import wx
 import wx.aui
-
 from core.settings import UserSettings
-from core.gcmd import RunCommand, GError, GMessage
+from core.gcmd import GError, GMessage, RunCommand
 from core.workspace import ProcessWorkspaceFile, WriteWorkspaceFile
 from core.debug import Debug
 from gui_core.menu import RecentFilesMenu

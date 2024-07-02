@@ -23,10 +23,7 @@ import time
 watchdog_used = True
 try:
     from watchdog.observers import Observer
-    from watchdog.events import (
-        PatternMatchingEventHandler,
-        FileSystemEventHandler,
-    )
+    from watchdog.events import FileSystemEventHandler, PatternMatchingEventHandler
 except ImportError:
     watchdog_used = False
     PatternMatchingEventHandler = object

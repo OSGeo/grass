@@ -27,12 +27,12 @@ This program is free software under the GNU General Public License
 """
 
 import copy
-import wx
 
+import wx
 from core import utils
 from core.gcmd import RunCommand
 from core.settings import UserSettings
-from gui_core.wrap import TextCtrl, Menu, NewId
+from gui_core.wrap import Menu, NewId, TextCtrl
 
 from grass.pydispatch.signal import Signal
 

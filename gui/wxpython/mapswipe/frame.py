@@ -30,11 +30,11 @@ from core.debug import Debug
 from core.gcmd import GError, GMessage
 from core.layerlist import LayerListToRendererConverter
 from core import globalvar
-from gui_core.query import QueryDialog, PrepareQueryResults
+from gui_core.query import PrepareQueryResults, QueryDialog
 
-from mapswipe.toolbars import SwipeMapToolbar, SwipeMainToolbar, SwipeMiscToolbar
+from mapswipe.toolbars import SwipeMainToolbar, SwipeMapToolbar, SwipeMiscToolbar
 from mapswipe.mapwindow import SwipeBufferedWindow
-from mapswipe.dialogs import SwipeMapDialog, PreferencesDialog
+from mapswipe.dialogs import PreferencesDialog, SwipeMapDialog
 
 
 class SwipeMapPanel(DoubleMapPanel):

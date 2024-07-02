@@ -23,7 +23,7 @@ from datetime import datetime
 import wx
 import wx.lib.scrolledpanel as SP
 
-from gui_core.wrap import SearchCtrl, StaticText, StaticBox, Button
+from gui_core.wrap import Button, SearchCtrl, StaticBox, StaticText
 from history.tree import HistoryBrowserTree
 from icons.icon import MetaIcon
 

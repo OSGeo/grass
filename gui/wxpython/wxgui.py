@@ -17,14 +17,14 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com> (menu customization)
 """
 
+import getopt
 import os
 import sys
-import getopt
 
 # i18n is taken care of in the grass library code.
 # So we need to import it before any of the GUI code.
 from grass.exceptions import Usage
-from grass.script.core import set_raise_on_error, warning, error
+from grass.script.core import error, set_raise_on_error, warning
 
 from core import globalvar
 from core.utils import registerPid, unregisterPid

@@ -19,15 +19,15 @@ This program is free software under the GNU General Public License
 @author Luca Delucchi <lucadeluge gmail.com> (language choice)
 """
 
+import collections.abc
+import copy
+import json
 import os
 import sys
-import copy
-import wx
-import json
-import collections.abc
 
+import wx
 from core import globalvar
-from core.gcmd import GException, GError
+from core.gcmd import GError, GException
 from core.utils import GetSettingsPath, PathJoin, rgb2str
 
 

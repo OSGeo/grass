@@ -18,10 +18,11 @@ This program is free software under the GNU General Public License
 @author Anna Perasova <kratochanna gmail.com>
 """
 
-import os
-import wx
 import hashlib
+import os
 from multiprocessing import cpu_count
+
+import wx
 
 try:
     from PIL import Image

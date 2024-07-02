@@ -16,10 +16,9 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import sys
-
 import queue as Queue
-from math import sin, cos, pi, sqrt
+import sys
+from math import cos, pi, sin, sqrt
 
 import wx
 
@@ -32,16 +31,16 @@ import grass.script as grass
 
 from core import globalvar
 from gui_core.menu import Menu
-from core.gconsole import CmdThread, EVT_CMD_DONE
+from core.gconsole import EVT_CMD_DONE, CmdThread
 from psmap.toolbars import PsMapToolbar
-from core.gcmd import RunCommand, GError, GMessage
+from core.gcmd import GError, GMessage, RunCommand
 from core.settings import UserSettings
 from core.utils import PilImageToWxImage
 from gui_core.forms import GUI
 from gui_core.widgets import GNotebook
 from gui_core.dialogs import HyperlinkDialog
 from gui_core.ghelp import ShowAboutDialog
-from gui_core.wrap import ClientDC, PseudoDC, Rect, StockCursor, EmptyBitmap
+from gui_core.wrap import ClientDC, EmptyBitmap, PseudoDC, Rect, StockCursor
 from psmap.menudata import PsMapMenuData
 from gui_core.toolbars import ToolSwitcher
 

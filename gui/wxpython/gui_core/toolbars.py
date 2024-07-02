@@ -16,8 +16,9 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
-import platform
 import os
+import platform
+from collections import defaultdict
 
 import wx
 from wx.lib.agw import aui
@@ -25,9 +26,8 @@ from wx.lib.agw import aui
 from core import globalvar
 from core.debug import Debug
 from icons.icon import MetaIcon
-from collections import defaultdict
 from core.globalvar import IMGDIR
-from gui_core.wrap import ToolBar, Menu, BitmapButton, NewId
+from gui_core.wrap import BitmapButton, Menu, NewId, ToolBar
 
 from grass.pydispatch.signal import Signal
 

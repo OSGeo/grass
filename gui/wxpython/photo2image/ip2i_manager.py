@@ -27,8 +27,8 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import sys
 import shutil
+import sys
 from copy import copy
 
 import wx
@@ -37,23 +37,23 @@ import wx.lib.colourselect as csel
 
 import grass.script as grass
 
-from core import utils, globalvar
+from core import globalvar, utils
 from core.render import Map
 from gui_core.gselect import Select
 from gui_core.mapdisp import FrameMixin
-from core.gcmd import RunCommand, GMessage, GError, GWarning
+from core.gcmd import GError, GMessage, GWarning, RunCommand
 from core.settings import UserSettings
 from photo2image.ip2i_mapdisplay import MapPanel
 from gui_core.wrap import (
-    SpinCtrl,
-    Button,
-    StaticText,
-    StaticBox,
-    TextCtrl,
-    Menu,
-    ListCtrl,
     BitmapFromImage,
+    Button,
     CheckListCtrlMixin,
+    ListCtrl,
+    Menu,
+    SpinCtrl,
+    StaticBox,
+    StaticText,
+    TextCtrl,
 )
 
 #

@@ -26,7 +26,7 @@ if __name__ == "__main__":
 
     set_gui_path()
 
-from gui_core.toolbars import BaseToolbar, BaseIcons
+from gui_core.toolbars import BaseIcons, BaseToolbar
 from icons.icon import MetaIcon
 from gui_core.forms import GUI
 from gui_core.dialogs import SetOpacityDialog

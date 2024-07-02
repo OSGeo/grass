@@ -22,7 +22,7 @@ from math import ceil
 from multiprocessing import Process, Queue
 
 from copy import deepcopy
-from iscatt.core_c import MergeArrays, ApplyColormap
+from iscatt.core_c import ApplyColormap, MergeArrays
 from iscatt.dialogs import ManageBusyCursorMixin
 from iscatt.utils import dist_point_to_segment
 from core.settings import UserSettings
@@ -36,7 +36,7 @@ try:
     from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigCanvas
     from matplotlib.lines import Line2D
     from matplotlib.artist import Artist
-    from matplotlib.patches import Polygon, Ellipse
+    from matplotlib.patches import Ellipse, Polygon
     import matplotlib.image as mi
     import matplotlib.colors as mcolors
 except ImportError as e:

@@ -20,7 +20,7 @@ import wx
 
 from gui_core.gselect import VectorDBInfo as VectorDBInfoBase
 from gui_core.wrap import StaticText
-from core.gcmd import RunCommand, GError
+from core.gcmd import GError, RunCommand
 from core.settings import UserSettings
 import grass.script as grass
 

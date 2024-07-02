@@ -26,14 +26,14 @@ import wx
 from grass.script import task as gtask
 
 from core import globalvar
-from core.gcmd import GError, RunCommand, GException, GMessage
+from core.gcmd import GError, GException, GMessage, RunCommand
 from core.utils import SetAddOnPath
 from core.gthread import gThread
-from core.menutree import TreeModel, ModuleNode
+from core.menutree import ModuleNode, TreeModel
 from gui_core.widgets import GListCtrl
 from gui_core.treeview import CTreeView
 from core.toolboxes import toolboxesOutdated
-from gui_core.wrap import Button, StaticBox, Menu, NewId, SearchCtrl
+from gui_core.wrap import Button, Menu, NewId, SearchCtrl, StaticBox
 
 
 class InstallExtensionWindow(wx.Frame):

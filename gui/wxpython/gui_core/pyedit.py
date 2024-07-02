@@ -10,12 +10,11 @@ for details.
 :authors: Martin Landa
 """
 
-import sys
 import os
 import stat
-
-from io import StringIO
+import sys
 import time
+from io import StringIO
 
 import wx
 
@@ -32,8 +31,8 @@ from core.gcmd import GError
 from gui_core.pystc import PyStc, SetDarkMode
 from core import globalvar
 from core.menutree import MenuTreeModelBuilder
-from gui_core.menu import RecentFilesMenu, Menu
-from gui_core.toolbars import BaseToolbar, BaseIcons
+from gui_core.menu import Menu, RecentFilesMenu
+from gui_core.toolbars import BaseIcons, BaseToolbar
 from gui_core.wrap import IsDark
 from icons.icon import MetaIcon
 from core.debug import Debug

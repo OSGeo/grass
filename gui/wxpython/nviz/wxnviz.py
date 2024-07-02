@@ -22,9 +22,9 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <KratochAnna seznam.cz> (Google SoC 2011)
 """
 
-import sys
 import locale
 import struct
+import sys
 from math import sqrt
 
 try:
@@ -61,6 +61,7 @@ from core.utils import autoCropImageFromFile
 from core.gcmd import DecodeString
 from core.globalvar import wxPythonPhoenix
 from gui_core.wrap import Rect
+
 import grass.script as grass
 
 log = None

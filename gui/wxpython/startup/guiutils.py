@@ -15,31 +15,32 @@ This is for code which depend on something from GUI (wx or wxGUI).
 """
 
 import os
+
 import wx
 
 from grass.grassdb.checks import (
-    is_mapset_locked,
-    get_mapset_lock_info,
-    is_mapset_name_valid,
-    is_location_name_valid,
-    get_mapset_name_invalid_reason,
     get_location_name_invalid_reason,
+    get_mapset_lock_info,
+    get_mapset_name_invalid_reason,
     get_reason_mapset_not_removable,
-    get_reasons_mapsets_not_removable,
+    get_reasons_grassdb_not_removable,
     get_reasons_location_not_removable,
     get_reasons_locations_not_removable,
-    get_reasons_grassdb_not_removable,
+    get_reasons_mapsets_not_removable,
     is_fallback_session,
+    is_location_name_valid,
+    is_mapset_locked,
+    is_mapset_name_valid,
 )
 import grass.grassdb.config as cfg
 
 from grass.grassdb.create import create_mapset, get_default_mapset_name
 from grass.grassdb.manage import (
-    delete_mapset,
-    delete_location,
     delete_grassdb,
-    rename_mapset,
+    delete_location,
+    delete_mapset,
     rename_location,
+    rename_mapset,
 )
 from grass.script.core import create_environment
 from grass.script.utils import try_remove

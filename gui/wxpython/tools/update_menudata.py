@@ -22,7 +22,6 @@ Usage: python support/update_menudata.py [-d]
 import os
 import sys
 import tempfile
-
 import xml.etree.ElementTree as etree
 
 from grass.script import core as grass

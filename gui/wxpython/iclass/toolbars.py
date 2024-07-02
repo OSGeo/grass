@@ -20,9 +20,9 @@ for details.
 
 import wx
 
-from gui_core.toolbars import BaseToolbar, BaseIcons
+from gui_core.toolbars import BaseIcons, BaseToolbar
 from icons.icon import MetaIcon
-from iclass.dialogs import IClassMapDialog, ContrastColor
+from iclass.dialogs import ContrastColor, IClassMapDialog
 from gui_core.forms import GUI
 from gui_core.wrap import StaticText
 

@@ -20,12 +20,12 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com> (various updates)
 """
 
-import os
-import sys
-import shutil
 import copy
-import platform
 import getpass
+import os
+import platform
+import shutil
+import sys
 
 from core import globalvar
 import wx
@@ -33,18 +33,18 @@ import wx.lib.mixins.listctrl as listmix
 
 from grass.script import core as grass
 
-from core.gcmd import GMessage, GError, DecodeString, RunCommand
+from core.gcmd import DecodeString, GError, GMessage, RunCommand
 from core.utils import GetListOfLocations, GetListOfMapsets
 from location_wizard.dialogs import RegionDef
 from gui_core.dialogs import TextEntryDialog
 from gui_core.widgets import GenericValidator, StaticWrapText
 from gui_core.wrap import (
+    BitmapFromImage,
     Button,
     ListCtrl,
-    StaticText,
     StaticBox,
+    StaticText,
     TextCtrl,
-    BitmapFromImage,
 )
 
 

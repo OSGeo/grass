@@ -21,16 +21,14 @@ This program is free software under the GNU General Public License
 @author Wolf Bergenheim <wolf bergenheim.net> (#962)
 """
 
-import os
-import sys
-import re
-import time
-import threading
-
-import queue as Queue
-
 import codecs
 import locale
+import os
+import queue as Queue
+import re
+import sys
+import threading
+import time
 
 import wx
 from wx.lib.newevent import NewEvent

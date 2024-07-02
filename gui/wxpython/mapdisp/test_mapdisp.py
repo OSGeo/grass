@@ -51,10 +51,10 @@ Module to run test map window (BufferedWidnow) and map display (MapFrame).
 
 import os
 import sys
+
 import wx
 
 import grass.script as grass
-
 from grass.script.setup import set_gui_path
 
 set_gui_path()

@@ -16,10 +16,10 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
-import os
 import math
-import wx
+import os
 
+import wx
 from core import units
 from core.gcmd import RunCommand
 from core.giface import Notification

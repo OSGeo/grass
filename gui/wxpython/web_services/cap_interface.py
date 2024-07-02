@@ -31,9 +31,9 @@ if WMSLibPath not in sys.path:
 
 # Import only after the path has been set up.
 from wms_cap_parsers import (  # noqa: E402
+    OnEarthCapabilitiesTree,
     WMSCapabilitiesTree,
     WMTSCapabilitiesTree,
-    OnEarthCapabilitiesTree,
 )
 
 

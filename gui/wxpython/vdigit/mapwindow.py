@@ -20,7 +20,7 @@ import tempfile
 from grass.pydispatch.signal import Signal
 
 from dbmgr.dialogs import DisplayAttributesDialog
-from core.gcmd import RunCommand, GMessage, GError
+from core.gcmd import GError, GMessage, RunCommand
 from core.debug import Debug
 from mapwin.buffered import BufferedMapWindow
 from core.settings import UserSettings
@@ -29,11 +29,11 @@ from core.units import ConvertValue as UnitsConvertValue
 from core.globalvar import QUERYLAYER
 from vdigit.dialogs import (
     VDigitCategoryDialog,
-    VDigitZBulkDialog,
     VDigitDuplicatesDialog,
+    VDigitZBulkDialog,
 )
 from gui_core import gselect
-from gui_core.wrap import PseudoDC, NewId
+from gui_core.wrap import NewId, PseudoDC
 
 
 class VDigitWindow(BufferedMapWindow):

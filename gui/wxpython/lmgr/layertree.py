@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 """
 
 import sys
+
 import wx
 
 try:
@@ -34,17 +35,17 @@ from grass.script import vector as gvector
 from grass.script import utils as gutils
 
 from core import globalvar
-from gui_core.dialogs import SqlQueryFrame, SetOpacityDialog, TextEntryDialog
+from gui_core.dialogs import SetOpacityDialog, SqlQueryFrame, TextEntryDialog
 from gui_core.forms import GUI
 from core.render import Map
 from core.utils import GetLayerNameFromCmd, ltype2command
 from core.debug import Debug
-from core.settings import UserSettings, GetDisplayVectSettings
+from core.settings import GetDisplayVectSettings, UserSettings
 from vdigit.main import haveVDigit
-from core.gcmd import GWarning, GError, RunCommand
+from core.gcmd import GError, GWarning, RunCommand
 from icons.icon import MetaIcon
 from gui_core.widgets import MapValidator
-from gui_core.wrap import Menu, GenBitmapButton, TextCtrl, NewId
+from gui_core.wrap import GenBitmapButton, Menu, NewId, TextCtrl
 from lmgr.giface import LayerManagerGrassInterfaceForMapDisplay
 
 

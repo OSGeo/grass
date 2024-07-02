@@ -209,6 +209,7 @@ def doc_test():
     :return: a number of failed tests
     """
     import doctest
+
     from core.utils import do_doctest_gettext_workaround
 
     do_doctest_gettext_workaround()

@@ -16,11 +16,10 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz>
 """
 
-import re
 import os
-import sys
+import re
 import shutil
-
+import sys
 from copy import deepcopy
 from core import globalvar
 
@@ -39,16 +38,15 @@ import wx.lib.colourselect as csel
 
 from core.debug import Debug
 from core.gcmd import GMessage
-from core.gconsole import CmdThread, GStderr, EVT_CMD_DONE, EVT_CMD_OUTPUT
+from core.gconsole import EVT_CMD_DONE, EVT_CMD_OUTPUT, CmdThread, GStderr
 
 from web_services.cap_interface import (
+    OnEarthCapabilities,
     WMSCapabilities,
     WMTSCapabilities,
-    OnEarthCapabilities,
 )
 
-from gui_core.widgets import GNotebook
-from gui_core.widgets import ManageSettingsWidget
+from gui_core.widgets import GNotebook, ManageSettingsWidget
 from gui_core.wrap import (
     Button,
     ScrolledPanel,
