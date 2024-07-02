@@ -202,6 +202,21 @@ def get_rendering_size(region, width, height, default_width=600, default_height=
     return (default_width, round(default_width * region_height / region_width))
 
 
+def get_computational_region_bb():
+    """
+    Gets the current computational region.
+    """
+    region = gs.parse_command("g.region", flags="bg")
+    return [(region["ll_s"], region["ll_w"]), (region["ll_n"], region["ll_e"])]
+
+
+def update_region(north, south, east, west):
+    """
+    Updates the GRASS GIS region using the given coordinates.
+    """
+    gs.run_command("g.region", n=north, s=south, e=east, w=west)
+
+
 def save_gif(
     input_files,
     output_filename,

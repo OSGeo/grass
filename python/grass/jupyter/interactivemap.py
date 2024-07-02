@@ -16,6 +16,12 @@
 import base64
 import json
 from .reprojection_renderer import ReprojectionRenderer
+from .utils import (
+    get_computational_region_bb,
+    reproject_region,
+    update_region,
+    get_location_proj_string,
+)
 
 
 def get_backend(interactive_map):
@@ -346,13 +352,161 @@ class InteractiveMap:
         else:
             self.layer_control_object = self._ipyleaflet.LayersControl(**kwargs)
 
+    def draw_computational_region(self):
+        """
+        Allow Users to draw the computational region and modify it.
+        """
+        import ipywidgets as widgets
+        from ipyleaflet import Rectangle, WidgetControl
+
+        region_mode_button = widgets.ToggleButton(
+            icon="square",
+            value=False,
+            tooltip="Click to add computational region",
+            button_style="info",
+            layout=widgets.Layout(width="33px", margin="0px 0px 0px 0px"),
+        )
+
+        save_button = widgets.Button(
+            icon="save",
+            button_style="success",
+            tooltip="Click to save region",
+            layout=widgets.Layout(width="33px", margin="0px 0px 0px 0px"),
+            disabled=True,
+        )
+
+        bottom_output_widget = widgets.Output(
+            layout={
+                "width": "100%",
+                "max_height": "300px",
+                "max_width": "300px",
+                "overflow": "auto",
+                "display": "none",
+            }
+        )
+
+        region_coordinates = {}
+        reprojected_region = {
+            "north": None,
+            "south": None,
+            "east": None,
+            "west": None,
+        }
+        rectangle = None
+        save_button_control = None
+
+        def update_output():
+            with bottom_output_widget:
+                bottom_output_widget.clear_output()
+                print("Current Bounds:")
+                print(f"North: {reprojected_region['north']}")
+                print(f"South: {reprojected_region['south']}")
+                print(f"East: {reprojected_region['east']}")
+                print(f"West: {reprojected_region['west']}")
+
+        def on_rectangle_change(value):
+            nonlocal region_coordinates, reprojected_region
+            latlon_bounds = value["new"][0]
+            region_coordinates = {
+                "north": latlon_bounds[2]["lat"],
+                "south": latlon_bounds[0]["lat"],
+                "east": latlon_bounds[2]["lng"],
+                "west": latlon_bounds[0]["lng"],
+            }
+            from_proj = "+proj=longlat +datum=WGS84 +no_defs"
+            to_proj = get_location_proj_string()
+            reprojected_region = reproject_region(
+                region_coordinates, from_proj, to_proj
+            )
+            update_region(
+                reprojected_region["north"],
+                reprojected_region["south"],
+                reprojected_region["east"],
+                reprojected_region["west"],
+            )
+
+        def toggle_region_mode(change):
+            nonlocal rectangle, save_button_control, region_coordinates
+
+            if change["new"]:
+                if rectangle is None:
+                    latlon_bounds = get_computational_region_bb()
+                    region_coordinates = {
+                        "North": latlon_bounds[1][0],
+                        "South": latlon_bounds[0][0],
+                        "East": latlon_bounds[1][1],
+                        "West": latlon_bounds[0][1],
+                    }
+                    rectangle = Rectangle(
+                        bounds=latlon_bounds,
+                        color="red",
+                        fill_color="red",
+                        fill_opacity=0.5,
+                        draggable=True,
+                        editable=True,
+                        transform=True,
+                        rotation=False,
+                        name="computational_region",
+                    )
+                    rectangle.observe(on_rectangle_change, names="locations")
+                    self.map.add_layer(rectangle)
+
+                else:
+                    latlon_bounds = rectangle.bounds
+                    rectangle.editable = True
+                    rectangle.draggable = True
+                    rectangle.transform = True
+                    rectangle.rotation = False
+
+                save_button.disabled = False
+                bottom_output_widget.layout.display = "block"
+
+                if save_button_control is None:
+                    save_button_control = WidgetControl(
+                        widget=save_button, position="topright"
+                    )
+                    self.map.add_control(save_button_control)
+                else:
+                    self.map.add_control(save_button_control)
+            else:
+                if rectangle:
+                    rectangle.editable = False
+                    rectangle.draggable = False
+                    rectangle.transform = False
+                    rectangle.rotation = False
+
+                save_button.disabled = True
+                bottom_output_widget.layout.display = "none"
+
+                if save_button_control:
+                    self.map.remove_control(save_button_control)
+
+        def save_region(change):
+            if rectangle:
+                update_output()
+                rectangle.name = "computational_region"
+
+        region_mode_button.observe(toggle_region_mode, names="value")
+        save_button.on_click(save_region)
+
+        region_mode_control = WidgetControl(
+            widget=region_mode_button, position="topright"
+        )
+        self.map.add_control(region_mode_control)
+
+        output_control = WidgetControl(
+            widget=bottom_output_widget, position="bottomright"
+        )
+        self.map.add_control(output_control)
+
     def show(self):
         """This function returns a folium figure or ipyleaflet map object
         with a GRASS raster and/or vector overlaid on a basemap.
 
         If map has layer control enabled, additional layers cannot be
         added after calling show()."""
-
+        if self._ipyleaflet:
+            self.draw_computational_region()
         self.map.fit_bounds(self._renderer.get_bbox())
 
         if not self.layer_control_object:
