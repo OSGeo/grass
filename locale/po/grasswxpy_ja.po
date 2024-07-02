@@ -7723,7 +7723,7 @@ msgstr "境界の融合"
 #: ../gui/wxpython/menustrings.py:572 ../gui/wxpython/menustrings.py:1537
 #, fuzzy
 msgid ""
-"Dissolves adjacent or overlaping features sharing a common category number "
+"Dissolves adjacent or overlapping features sharing a common category number "
 "or attribute."
 msgstr "共通のカテゴリー番号や属性を共有するエリアを融合させる"
 
