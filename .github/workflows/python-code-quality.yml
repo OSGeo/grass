@@ -67,7 +67,7 @@ jobs:
       - name: Install Ruff
         run: pip install ruff==${{ env.RUFF_VERSION }}
       - name: Run Ruff
-        run: ruff check --output-format=github . --preview --fix
+        run: ruff check --output-format=github . --preview --fix --unsafe-fixes
       - name: Create and uploads code suggestions to apply for Ruff
         # Will fail fast here if there are changes required
         id: diff-ruff
