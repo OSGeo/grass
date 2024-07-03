@@ -180,7 +180,6 @@ ignore = [
     "G002",    # logging-percent-format
     "G003",    # logging-string-concat
     "I001",    # unsorted-imports
-    "ICN001",  # unconventional-import-alias
     "ISC003",  # explicit-string-concatenation
     "PERF102", # incorrect-dict-iterator
     "PERF203", # try-except-in-loop
