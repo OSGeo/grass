@@ -453,20 +453,20 @@ class WSPanel(wx.Panel):
     def _updateLayerOrderList(self, selected=None):
         """Update order in list."""
 
-        def getlayercaption(l):
-            if l["title"]:
-                cap = l["title"]
+        def getlayercaption(layer):
+            if layer["title"]:
+                cap = layer["title"]
             else:
-                cap = l["name"]
+                cap = layer["name"]
 
-            if l["style"]:
-                if l["style"]["title"]:
-                    cap += " / " + l["style"]["title"]
+            if layer["style"]:
+                if layer["style"]["title"]:
+                    cap += " / " + layer["style"]["title"]
                 else:
-                    cap += " / " + l["style"]["name"]
+                    cap += " / " + layer["style"]["name"]
             return cap
 
-        layer_capts = [getlayercaption(l) for l in self.sel_layers]
+        layer_capts = [getlayercaption(sel_layer) for sel_layer in self.sel_layers]
         self.l_odrder_list.Set(layer_capts)
         if self.l_odrder_list.IsEmpty():
             self.enableButtons(False)
@@ -634,7 +634,7 @@ class WSPanel(wx.Panel):
 
         # WMS standard - first layer in params is most bottom...
         # therefore layers order need to be reversed
-        l_st_list = [l for l in reversed(l_st_list)]
+        l_st_list = [layer for layer in reversed(l_st_list)]
         self.list.SelectLayers(l_st_list)
 
         params = {}
@@ -744,9 +744,9 @@ class WSPanel(wx.Panel):
                 if sel_l not in curr_sel_ls:
                     self.sel_layers.remove(sel_l)
 
-            for l in curr_sel_ls:
-                if l not in self.sel_layers:
-                    self.sel_layers.append(l)
+            for curr in curr_sel_ls:
+                if curr not in self.sel_layers:
+                    self.sel_layers.append(curr)
 
             self._updateLayerOrderList()
         else:
@@ -759,8 +759,8 @@ class WSPanel(wx.Panel):
 
         intersect_proj = []
         first = True
-        for l in curr_sel_ls:
-            layer_projs = l["cap_intf_l"].GetLayerData("srs")
+        for curr in curr_sel_ls:
+            layer_projs = curr["cap_intf_l"].GetLayerData("srs")
             if first:
                 projs_list = layer_projs
                 first = False

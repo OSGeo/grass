@@ -387,8 +387,8 @@ class AboutWindow(wx.Frame):
             contribfile = os.path.join(os.getenv("GISBASE"), "contributors.csv")
         if os.path.exists(contribfile):
             contribFile = codecs.open(contribfile, encoding="utf-8", mode="r")
-            contribs = list()
-            errLines = list()
+            contribs = []
+            errLines = []
             for line in contribFile.readlines()[1:]:
                 line = line.rstrip("\n")
                 try:
@@ -472,8 +472,8 @@ class AboutWindow(wx.Frame):
         translatorsfile = os.path.join(os.getenv("GISBASE"), "translators.csv")
         if os.path.exists(translatorsfile):
             translatorsFile = codecs.open(translatorsfile, encoding="utf-8", mode="r")
-            translators = dict()
-            errLines = list()
+            translators = {}
+            errLines = []
             for line in translatorsFile.readlines()[1:]:
                 line = line.rstrip("\n")
                 try:
@@ -483,7 +483,7 @@ class AboutWindow(wx.Frame):
                     continue
                 for language in languages.split(" "):
                     if language not in translators:
-                        translators[language] = list()
+                        translators[language] = []
                     translators[language].append((name, email))
             translatorsFile.close()
 
@@ -747,7 +747,7 @@ class HelpWindow(HtmlWindow):
         HtmlWindow.__init__(self, parent=parent, **kwargs)
 
         self.loaded = False
-        self.history = list()
+        self.history = []
         self.historyIdx = 0
         self.fspath = os.path.join(os.getenv("GISBASE"), "docs", "html")
 

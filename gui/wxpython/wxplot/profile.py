@@ -22,7 +22,7 @@ import numpy
 
 import wx
 
-import wx.lib.plot as plot
+from wx.lib import plot
 import grass.script as grass
 from wxplot.base import BasePlotFrame, PlotIcons
 from gui_core.toolbars import BaseToolbar, BaseIcons
@@ -442,9 +442,7 @@ class ProfileFrame(BasePlotFrame):
                 except OSError as e:
                     GError(
                         parent=self,
-                        message=_(
-                            "Unable to open file <%s> for writing.\n" "Reason: %s"
-                        )
+                        message=_("Unable to open file <%s> for writing.\nReason: %s")
                         % (pfile[-1], e),
                     )
                     dlg.Destroy()

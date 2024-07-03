@@ -176,7 +176,7 @@ class MapCalcFrame(wx.Frame):
         self.btn_copy = Button(parent=self.panel, id=wx.ID_ANY, label=_("Copy"))
         self.btn_copy.SetToolTip(_("Copy the current command string to the clipboard"))
 
-        self.btn = dict()
+        self.btn = {}
         self.btn["pow"] = Button(parent=self.panel, id=wx.ID_ANY, label="^")
         self.btn["pow"].SetToolTip(_("exponent"))
         self.btn["div"] = Button(parent=self.panel, id=wx.ID_ANY, label="/")
@@ -645,7 +645,7 @@ class MapCalcFrame(wx.Frame):
         if not name:
             GError(
                 parent=self,
-                message=_("You must enter the name of " "a new raster map to create."),
+                message=_("You must enter the name of a new raster map to create."),
             )
             return
 
@@ -658,9 +658,7 @@ class MapCalcFrame(wx.Frame):
         if not expr:
             GError(
                 parent=self,
-                message=_(
-                    "You must enter an expression " "to create a new raster map."
-                ),
+                message=_("You must enter an expression to create a new raster map."),
             )
             return
 
@@ -687,7 +685,7 @@ class MapCalcFrame(wx.Frame):
                 overwrite = True
             else:
                 overwrite = False
-            params = dict(expression="%s=%s" % (name, expr), overwrite=overwrite)
+            params = {"expression": "%s=%s" % (name, expr), "overwrite": overwrite}
             if seed_flag:
                 params["flags"] = "s"
             if seed:

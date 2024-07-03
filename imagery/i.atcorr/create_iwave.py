@@ -160,8 +160,6 @@ def plot_filter(values):
     plot(response[:, 0], response[:, 1], "ro")
     plot(arange(limits[0], limits[1], 2.5), filter_f)
 
-    return
-
 
 def pretty_print(filter_f):
     """
@@ -312,8 +310,6 @@ def write_cpp(bands, values, sensor, folder):
             outfile.write("        break;\n")
         outfile.write("    }\n}\n")
 
-    return
-
 
 def main():
     """control function"""
@@ -371,8 +367,6 @@ def main():
         " > Don't forget to add the necessary data to the files"
         " iwave.h, geomcond.h, geomcond.cpp, and to i.atcorr.html"
     )
-
-    return
 
 
 if __name__ == "__main__":

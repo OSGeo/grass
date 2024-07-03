@@ -44,7 +44,7 @@ for fname in htmlfiles:
 topicsfile = open(os.path.join(path, "topics.html"), "w")
 topicsfile.write(
     header1_tmpl.substitute(
-        title="GRASS GIS " "%s Reference Manual: Topics index" % grass_version
+        title="GRASS GIS %s Reference Manual: Topics index" % grass_version
     )
 )
 topicsfile.write(headertopics_tmpl)

@@ -34,9 +34,7 @@ def _check_value(param, value):
             if type(value) in (int, float):
                 value = str(value)
             if type(value) not in string:
-                msg = (
-                    "The Parameter <%s> require a string," " %s instead is provided: %r"
-                )
+                msg = "The Parameter <%s> require a string, %s instead is provided: %r"
                 raise ValueError(msg % (param.name, type(value), value))
         return value
 

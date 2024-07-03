@@ -155,8 +155,8 @@ def get_commands(*, env=None):
 
         gisbase = get_install_path()
 
-    cmd = list()
-    scripts = {".py": list()} if sys.platform == "win32" else {}
+    cmd = []
+    scripts = {".py": []} if sys.platform == "win32" else {}
 
     def scan(gisbase, directory):
         dir_path = os.path.join(gisbase, directory)
@@ -884,7 +884,7 @@ def _parse_opts(lines):
             flags[var[5:]] = bool(int(val))
         elif var.startswith("opt_"):
             options[var[4:]] = val
-        elif var in ["GRASS_OVERWRITE", "GRASS_VERBOSE"]:
+        elif var in {"GRASS_OVERWRITE", "GRASS_VERBOSE"}:
             os.environ[var] = val
         else:
             raise SyntaxError(
@@ -1163,7 +1163,7 @@ def compare_key_value_text_files(
                 return False
         elif isinstance(dict_a[key], float) or isinstance(dict_b[key], float):
             warning(
-                _("Mixing value types. Will try to compare after " "integer conversion")
+                _("Mixing value types. Will try to compare after integer conversion")
             )
             return int(dict_a[key]) == int(dict_b[key])
         elif key == "+towgs84":
@@ -1288,13 +1288,13 @@ def region_env(region3d=False, flags=None, env=None, **kwargs):
         grass_region = ""
         for line in fd.readlines():
             key, value = map(lambda x: x.strip(), line.split(":", 1))
-            if kwargs and key not in ("proj", "zone"):
+            if kwargs and key not in {"proj", "zone"}:
                 continue
             if (
                 not kwargs
                 and not region3d
                 and key
-                in (
+                in {
                     "top",
                     "bottom",
                     "cols3",
@@ -1303,7 +1303,7 @@ def region_env(region3d=False, flags=None, env=None, **kwargs):
                     "e-w resol3",
                     "n-s resol3",
                     "t-b resol",
-                )
+                }
             ):
                 continue
 
@@ -1459,7 +1459,7 @@ def list_strings(type, pattern=None, mapset=None, exclude=None, flag="", env=Non
     if type == "cell":
         verbose(_('Element type should be "raster" and not "%s"') % type)
 
-    result = list()
+    result = []
     for line in read_command(
         "g.list",
         quiet=True,
@@ -1807,7 +1807,7 @@ def create_project(
         shutil.rmtree(os.path.join(mapset_path.directory, mapset_path.location))
 
     stdin = None
-    kwargs = dict()
+    kwargs = {}
     if datum:
         kwargs["datum"] = datum
     if datum_trans:
@@ -2009,7 +2009,7 @@ def legal_name(s):
         useful anyway for checking map names and column names.
     """
     if not s or s[0] == ".":
-        warning(_("Illegal filename <%s>. Cannot be 'NULL' or start with " "'.'.") % s)
+        warning(_("Illegal filename <%s>. Cannot be 'NULL' or start with '.'.") % s)
         return False
 
     illegal = [c for c in s if c in "/\"'@,=*~" or c <= " " or c >= "\177"]

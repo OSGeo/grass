@@ -137,14 +137,10 @@ def pointsToBbox(points):
         if not min_y:
             min_y = max_y = point[1]
 
-        if min_x > point[0]:
-            min_x = point[0]
-        if max_x < point[0]:
-            max_x = point[0]
-        if min_y > point[1]:
-            min_y = point[1]
-        if max_y < point[1]:
-            max_y = point[1]
+        min_x = min(min_x, point[0])
+        max_x = max(max_x, point[0])
+        min_y = min(min_y, point[1])
+        max_y = max(max_y, point[1])
 
     bbox["n"] = max_y
     bbox["s"] = min_y

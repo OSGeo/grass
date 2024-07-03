@@ -66,7 +66,7 @@ class Category(list):
         return self._mtype
 
     def _set_mtype(self, mtype):
-        if mtype.upper() not in ("CELL", "FCELL", "DCELL"):
+        if mtype.upper() not in {"CELL", "FCELL", "DCELL"}:
             raise ValueError(_("Raster type: {0} not supported".format(mtype)))
         self._mtype = mtype
         self._gtype = RTYPE[self.mtype]["grass type"]
@@ -93,7 +93,7 @@ class Category(list):
         return cats
 
     def __dict__(self):
-        diz = dict()
+        diz = {}
         for cat in self.__iter__():
             label, min_cat, max_cat = cat
             diz[(min_cat, max_cat)] = label

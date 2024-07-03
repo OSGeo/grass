@@ -192,7 +192,7 @@ class WMSBase:
             if (
                 i_param in options
                 and options[i_param]
-                and i_param not in ["srs", "wms_version", "format"]
+                and i_param not in {"srs", "wms_version", "format"}
             ):  # params with default value
                 not_relevant_params.append("<" + i_param + ">")
 
@@ -790,7 +790,7 @@ class WMSDriversInfo:
 def GetSRSParamVal(srs):
     """!Decides whether to use CRS or EPSG prefix according to srs number."""
 
-    if srs in [84, 83, 27]:
+    if srs in {84, 83, 27}:
         return "OGC:CRS{}".format(srs)
     else:
         return "EPSG:{}".format(srs)
