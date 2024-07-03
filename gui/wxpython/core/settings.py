@@ -73,7 +73,7 @@ def settings_JSON_decode_hook(obj):
         return tuple(int(hexcode[i : i + 2], 16) for i in range(0, len(hexcode), 2))
 
     for k, v in obj.items():
-        if isinstance(v, str) and v.startswith("#") and len(v) in [7, 9]:
+        if isinstance(v, str) and v.startswith("#") and len(v) in {7, 9}:
             obj[k] = colorhex2tuple(v)
     return obj
 
@@ -1065,9 +1065,7 @@ class Settings:
                 else:
                     return settings[group][key]
             else:
-                if isinstance(subkey, type(tuple())) or isinstance(
-                    subkey, type(list())
-                ):
+                if isinstance(subkey, tuple) or isinstance(subkey, list):
                     return settings[group][key][subkey[0]][subkey[1]]
                 else:
                     return settings[group][key][subkey]
@@ -1104,9 +1102,7 @@ class Settings:
                 else:
                     settings[group][key] = value
             else:
-                if isinstance(subkey, type(tuple())) or isinstance(
-                    subkey, type(list())
-                ):
+                if isinstance(subkey, tuple) or isinstance(subkey, list):
                     settings[group][key][subkey[0]][subkey[1]] = value
                 else:
                     settings[group][key][subkey] = value
@@ -1201,7 +1197,7 @@ UserSettings = Settings()
 
 
 def GetDisplayVectSettings():
-    settings = list()
+    settings = []
     if not UserSettings.Get(
         group="vectorLayer", key="featureColor", subkey=["transparent", "enabled"]
     ):

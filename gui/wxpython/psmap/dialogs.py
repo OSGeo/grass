@@ -263,7 +263,7 @@ class PsmapDialog(Dialog):
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
     def AddUnits(self, parent, dialogDict):
-        parent.units = dict()
+        parent.units = {}
         parent.units["unitsLabel"] = StaticText(parent, id=wx.ID_ANY, label=_("Units:"))
         choices = self.unitConv.getPageUnitsNames()
         parent.units["unitsCtrl"] = Choice(parent, id=wx.ID_ANY, choices=choices)
@@ -273,7 +273,7 @@ class PsmapDialog(Dialog):
 
     def AddPosition(self, parent, dialogDict):
         if not hasattr(parent, "position"):
-            parent.position = dict()
+            parent.position = {}
         parent.position["comment"] = StaticText(
             parent,
             id=wx.ID_ANY,
@@ -307,7 +307,7 @@ class PsmapDialog(Dialog):
 
     def AddExtendedPosition(self, panel, gridBagSizer, dialogDict):
         """Add widgets for setting position relative to paper and to map"""
-        panel.position = dict()
+        panel.position = {}
         positionLabel = StaticText(panel, id=wx.ID_ANY, label=_("Position is given:"))
         panel.position["toPaper"] = RadioButton(
             panel, id=wx.ID_ANY, label=_("relative to paper"), style=wx.RB_GROUP
@@ -435,7 +435,7 @@ class PsmapDialog(Dialog):
         gridBagSizer.Add(sizerM, pos=(2, 1), flag=wx.ALIGN_LEFT | wx.EXPAND, border=0)
 
     def AddFont(self, parent, dialogDict, color=True):
-        parent.font = dict()
+        parent.font = {}
         # parent.font["fontLabel"] = wx.StaticText(
         #     parent, id=wx.ID_ANY, label=_("Choose font:")
         # )
@@ -758,7 +758,7 @@ class PageSetupDialog(PsmapDialog):
         currPaper = self.paperTable[self.getCtrl("Format").GetSelection()]
         currUnit = self.unitConv.findUnit(self.getCtrl("Units").GetStringSelection())
         currOrientIdx = self.getCtrl("Orientation").GetSelection()
-        newSize = dict()
+        newSize = {}
         for item in self.cat[3:]:
             newSize[item] = self.unitConv.convert(
                 float(currPaper[item]), fromUnit="inch", toUnit=currUnit
@@ -782,7 +782,7 @@ class PageSetupDialog(PsmapDialog):
         return self.hBoxDict[item].GetItem(1).GetWindow()
 
     def _toList(self, paperStr):
-        sizeList = list()
+        sizeList = []
         for line in paperStr.strip().split("\n"):
             d = dict(zip([self.cat[1]] + self.cat[3:], line.split()))
             sizeList.append(d)
@@ -1267,7 +1267,7 @@ class MapFramePanel(Panel):
             self.scaleType = scaleType
             self.select.SetValue("")
 
-        if scaleType in (0, 1):  # automatic - region from raster map, saved region
+        if scaleType in {0, 1}:  # automatic - region from raster map, saved region
             if scaleType == 0:
                 # set map selection
                 self.rasterTypeRadio.Show()
@@ -2208,7 +2208,7 @@ class VPropertiesDialog(Dialog):
         self.ColorsPanel = selectPanel[self.type][0](notebook)
 
         self.OnOutline(None)
-        if self.type in ("points", "areas"):
+        if self.type in {"points", "areas"}:
             self.OnFill(None)
         self.OnColor(None)
 
@@ -2252,7 +2252,7 @@ class VPropertiesDialog(Dialog):
 
         # data type
         self.checkType1 = self.checkType2 = None
-        if self.type in ("lines", "points"):
+        if self.type in {"lines", "points"}:
             box = StaticBox(
                 parent=panel, id=wx.ID_ANY, label=" %s " % _("Feature type")
             )
@@ -3108,7 +3108,7 @@ class VPropertiesDialog(Dialog):
         self.choiceColumns.SetItems(cols)
 
         self.choiceColumns.SetSelection(0)
-        if self.type in ("points", "lines"):
+        if self.type in {"points", "lines"}:
             self.colorColChoice.SetItems(cols)
             self.colorColChoice.SetSelection(0)
 
@@ -3205,7 +3205,7 @@ class VPropertiesDialog(Dialog):
 
     def update(self):
         # feature type
-        if self.type in ("lines", "points"):
+        if self.type in {"lines", "points"}:
             featureType = None
             if self.checkType1.GetValue():
                 featureType = self.checkType1.GetName()
@@ -3235,7 +3235,7 @@ class VPropertiesDialog(Dialog):
             self.vPropertiesDict["masked"] = "n"
 
         # colors
-        if self.type in ("points", "areas"):
+        if self.type in {"points", "areas"}:
             if self.outlineCheck.GetValue():
                 self.vPropertiesDict["color"] = convertRGB(self.colorPicker.GetColour())
                 self.vPropertiesDict["width"] = self.widthSpin.GetValue()
@@ -4011,7 +4011,7 @@ class LegendDialog(PsmapDialog):
 
         if type == "CELL":
             self.discrete.SetValue(True)
-        elif type in ("FCELL", "DCELL"):
+        elif type in {"FCELL", "DCELL"}:
             self.continuous.SetValue(True)
         if event is None:
             if self.rLegendDict["discrete"] == "y":

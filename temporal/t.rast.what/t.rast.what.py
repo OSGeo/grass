@@ -119,18 +119,18 @@
 # % description: Show the category for vector points map
 # %end
 
-import sys
 import copy
-import grass.script as gscript
+import sys
 
+import grass.script as gscript
 
 ############################################################################
 
 
 def main(options, flags):
     # lazy imports
-    import grass.temporal as tgis
     import grass.pygrass.modules as pymod
+    import grass.temporal as tgis
 
     # Get the options
     points = options["points"]
@@ -248,8 +248,7 @@ def main(options, flags):
     else:
         gscript.error(_("Please specify points or coordinates"))
 
-    if len(maps) < nprocs:
-        nprocs = len(maps)
+    nprocs = min(len(maps), nprocs)
 
     # The module queue for parallel execution
     process_queue = pymod.ParallelModuleQueue(int(nprocs))
@@ -508,7 +507,7 @@ def one_point_per_col_output(
                     else:
                         x = row[0]
                         y = row[1]
-                        out_str += "{sep}{x:10.10f}{csep}" "{y:10.10f}".format(
+                        out_str += "{sep}{x:10.10f}{csep}{y:10.10f}".format(
                             x=float(x), y=float(y), sep=separator, csep=coor_sep
                         )
                         if site_input:

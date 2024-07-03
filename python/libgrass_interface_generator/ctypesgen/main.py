@@ -36,7 +36,7 @@ def option_callback_W(option, opt, value, parser):
     opt = value[2:]
     if opt not in ["-L", "-R", "--rpath"]:
         raise optparse.BadOptionError(
-            "-Wl option must be -L, -R" " or --rpath, not " + value[2:]
+            "-Wl option must be -L, -R or --rpath, not " + value[2:]
         )
     # Push the linker option onto the list for further parsing.
     parser.rargs.insert(0, value)
@@ -337,7 +337,7 @@ def main(givenargs=None):
         action="store_true",
         default=False,
         dest="show_all_errors",
-        help="Display all warnings and errors even " "if they would not affect output.",
+        help="Display all warnings and errors even if they would not affect output.",
     )
     op.add_option(
         "",
@@ -345,7 +345,7 @@ def main(givenargs=None):
         action="store_true",
         default=False,
         dest="show_long_errors",
-        help="Display long error messages " "instead of abbreviating error messages.",
+        help="Display long error messages instead of abbreviating error messages.",
     )
     op.add_option(
         "",

@@ -426,7 +426,7 @@ def set_up_columns(vector, layer, percentile, colprefix, basecols, dbfdriver, c)
         if currcolumn in grass.vector_columns(vector, layer).keys():
             if not c:
                 grass.fatal(
-                    (_("Cannot create column " "<%s> (already present). ") % currcolumn)
+                    (_("Cannot create column <%s> (already present). ") % currcolumn)
                     + _("Use -c flag to update values in this column.")
                 )
         else:

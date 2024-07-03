@@ -83,8 +83,9 @@
 # % description: Perform a dry run, compute all dependencies and module calls but don't run them
 # %end
 
-import grass.script
 import sys
+
+import grass.script
 
 
 def main():
@@ -103,8 +104,8 @@ def main():
     # Check for PLY istallation
     try:
         # Intentionally unused imports
-        import ply.lex as lex  # noqa: F401
-        import ply.yacc as yacc  # noqa: F401
+        from ply import lex  # noqa: F401
+        from ply import yacc  # noqa: F401
     except ImportError:
         grass.script.fatal(
             _(

@@ -9,12 +9,13 @@ for details.
 :authors: Soeren Gebbert
 """
 
-from datetime import datetime, timedelta
-from .core import get_tgis_message_interface
 import copy
+from datetime import datetime, timedelta
+
+from .core import get_tgis_message_interface
 
 try:
-    import dateutil.parser as parser
+    from dateutil import parser
 
     has_dateutil = True
 except:

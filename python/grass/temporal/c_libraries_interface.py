@@ -10,23 +10,24 @@ for details.
 :authors: Soeren Gebbert
 """
 
-from grass.exceptions import FatalError
-import sys
-from multiprocessing import Process, Lock, Pipe
 import logging
-from ctypes import byref, cast, c_int, c_void_p, CFUNCTYPE, POINTER
+import sys
+from ctypes import CFUNCTYPE, POINTER, byref, c_int, c_void_p, cast
 from datetime import datetime
+from multiprocessing import Lock, Pipe, Process
+
+import grass.lib.date as libdate
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
-import grass.lib.vector as libvector
-import grass.lib.date as libdate
 import grass.lib.raster3d as libraster3d
 import grass.lib.temporal as libtgis
-from grass.pygrass.rpc.base import RPCServerBase
+import grass.lib.vector as libvector
+from grass.exceptions import FatalError
 from grass.pygrass.raster import RasterRow
+from grass.pygrass.rpc.base import RPCServerBase
+from grass.pygrass.utils import decode
 from grass.pygrass.vector import VectorTopo
 from grass.script.utils import encode
-from grass.pygrass.utils import decode
 
 ###############################################################################
 
@@ -554,7 +555,7 @@ def _read_semantic_label(lock, conn, data):
                 semantic_label = decode(ret)
         else:
             logging.error(
-                "Unable to read semantic label. " "Unsupported map type %s" % maptype
+                "Unable to read semantic label. Unsupported map type %s" % maptype
             )
             return -1
     except:
@@ -591,7 +592,7 @@ def _write_semantic_label(lock, conn, data):
             libraster.Rast_write_semantic_label(name, semantic_label)
         else:
             logging.error(
-                "Unable to write semantic label. " "Unsupported map type %s" % maptype
+                "Unable to write semantic label. Unsupported map type %s" % maptype
             )
             return -2
     except:
@@ -625,7 +626,7 @@ def _remove_semantic_label(lock, conn, data):
             check = libgis.G_remove_misc("cell_misc", "semantic_label", name)
         else:
             logging.error(
-                "Unable to remove semantic label. " "Unsupported map type %s" % maptype
+                "Unable to remove semantic label. Unsupported map type %s" % maptype
             )
             return -2
     except:

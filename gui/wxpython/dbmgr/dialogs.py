@@ -326,9 +326,8 @@ class DisplayAttributesDialog(wx.Dialog):
         frame.dialogs["attributes"] = None
         if hasattr(self, "digit"):
             self.parent.digit.GetDisplay().SetSelected([])
-            if frame.IsAutoRendered():
-                self.parent.UpdateMap(render=False)
-        elif frame.IsAutoRendered():
+            self.parent.UpdateMap(render=False)
+        else:
             frame.RemoveQueryLayer()
             self.parent.UpdateMap(render=True)
         if self.IsModal():
@@ -746,7 +745,7 @@ class ModifyTableRecord(wx.Dialog):
 
         If columns is given (list), return only values of given columns.
         """
-        valueList = list()
+        valueList = []
         for labelId, ctypeId, valueId in self.widgets:
             column = self.FindWindowById(labelId).GetLabel()
             if columns is None or column in columns:
