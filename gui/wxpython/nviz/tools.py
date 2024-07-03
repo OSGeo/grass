@@ -263,7 +263,7 @@ class NvizToolWindow(GNotebook):
                     foldpanel.GetFoldPanel(panelIdx).GetParent().GetGrandParent()
                 )
                 width = self.GetSize()[0]
-                if sys.platform in ("darwin", "win32"):
+                if sys.platform in {"darwin", "win32"}:
                     width -= 60  # 60px right margin to show scrollbar
                 scrolledPanel.SetVirtualSize(width=width, height=length[2])
                 scrolledPanel.Layout()
@@ -1086,7 +1086,7 @@ class NvizToolWindow(GNotebook):
                 parent=panel, id=wx.ID_ANY, size=(100, -1), choices=[_("map")]
             )
 
-            if code not in ("color", "shine"):
+            if code not in {"color", "shine"}:
                 use.Insert(item=_("unset"), pos=0)
                 self.win["surface"][code]["required"] = False
             else:
@@ -2008,7 +2008,7 @@ class NvizToolWindow(GNotebook):
 
     def GselectOnPopup(self, ltype, exclude=False):
         """Update gselect.Select() items"""
-        maps = list()
+        maps = []
         for layer in self.mapWindow.Map.GetListOfLayers(ltype=ltype, active=True):
             maps.append(layer.GetName())
         return maps, exclude
@@ -2790,8 +2790,7 @@ class NvizToolWindow(GNotebook):
         frameCount = anim.GetFrameCount()
         if index >= frameCount:
             index = frameCount - 1
-        if index < 0:
-            index = 0
+        index = max(index, 0)
 
         if sliderWidget:
             slider = self.FindWindowById(self.win["anim"]["frameIndex"]["slider"])
@@ -2926,7 +2925,7 @@ class NvizToolWindow(GNotebook):
         for attr, value in data["constant"].items():
             if attr == "color":
                 value = self._getColorFromString(value)
-            if attr in ("color", "value", "resolution", "transp"):
+            if attr in {"color", "value", "resolution", "transp"}:
                 if attr == "transp":
                     self.FindWindowById(self.win["constant"][attr]).SetValue(
                         self._getPercent(value)
@@ -3036,7 +3035,7 @@ class NvizToolWindow(GNotebook):
             else:
                 use = None
             # check for required properties
-            if code not in ("topo", "color", "shine"):
+            if code not in {"topo", "color", "shine"}:
                 use.Insert(item=_("unset"), pos=0)
                 self.win["volume"][code]["required"] = False
             else:
@@ -3091,7 +3090,7 @@ class NvizToolWindow(GNotebook):
                 value = SpinCtrl(parent=panel, id=wx.ID_ANY, size=size, initial=0)
                 if code == "topo":
                     value.SetRange(minVal=-1e9, maxVal=1e9)
-                elif code in ("shine", "transp"):
+                elif code in {"shine", "transp"}:
                     value.SetRange(minVal=0, maxVal=100)
 
                 value.Bind(wx.EVT_SPINCTRL, self.OnVolumeIsosurfMap)
@@ -3243,7 +3242,7 @@ class NvizToolWindow(GNotebook):
         floatSlider=False,
     ):
         """Add control (Slider + TextCtrl)"""
-        data[name] = dict()
+        data[name] = {}
         if sliderHor:
             style = wx.SL_HORIZONTAL | wx.SL_AUTOTICKS | wx.SL_BOTTOM
             sizeW = (size, -1)
@@ -3251,14 +3250,14 @@ class NvizToolWindow(GNotebook):
             style = wx.SL_VERTICAL | wx.SL_AUTOTICKS | wx.SL_INVERSE
             sizeW = (-1, size)
 
-        kwargs = dict(
-            parent=parent,
-            id=wx.ID_ANY,
-            minValue=range[0],
-            maxValue=range[1],
-            style=style,
-            size=sizeW,
-        )
+        kwargs = {
+            "parent": parent,
+            "id": wx.ID_ANY,
+            "minValue": range[0],
+            "maxValue": range[1],
+            "style": style,
+            "size": sizeW,
+        }
         if floatSlider:
             slider = FloatSlider(**kwargs)
         else:
@@ -3483,7 +3482,7 @@ class NvizToolWindow(GNotebook):
         else:
             self.PostViewEvent(zExag=False)
 
-        if winName in ("persp", "twist"):
+        if winName in {"persp", "twist"}:
             convert = int
         else:
             convert = float
@@ -3687,7 +3686,7 @@ class NvizToolWindow(GNotebook):
     def EnablePage(self, name, enabled=True):
         """Enable/disable all widgets on page"""
         for key, item in self.win[name].items():
-            if key in ("map", "surface", "new", "planes"):
+            if key in {"map", "surface", "new", "planes"}:
                 continue
             if isinstance(item, dict):
                 for skey, sitem in self.win[name][key].items():
@@ -3706,7 +3705,7 @@ class NvizToolWindow(GNotebook):
 
     def SetMapObjUseMap(self, nvizType, attrb, map=None):
         """Update dialog widgets when attribute type changed"""
-        if attrb in ("topo", "color", "shine"):
+        if attrb in {"topo", "color", "shine"}:
             incSel = -1  # decrement selection (no 'unset')
         else:
             incSel = 0
@@ -3998,10 +3997,10 @@ class NvizToolWindow(GNotebook):
         self.AdjustSliderRange(slider=slider, value=value)
 
         for win in self.win["surface"]["position"].values():
-            if win in (
+            if win in {
                 self.win["surface"]["position"]["axis"],
                 self.win["surface"]["position"]["reset"],
-            ):
+            }:
                 continue
             else:
                 self.FindWindowById(win).SetValue(value)
@@ -4146,8 +4145,8 @@ class NvizToolWindow(GNotebook):
             mode["type"] = "surface"
             mode["surface"] = {}
             checklist = self.FindWindowById(self.win["vector"]["lines"]["surface"])
-            value = list()
-            checked = list()
+            value = []
+            checked = []
             for surface in range(checklist.GetCount()):
                 value.append(checklist.GetString(surface))
                 checked.append(checklist.IsChecked(surface))
@@ -4831,10 +4830,10 @@ class NvizToolWindow(GNotebook):
         self.AdjustSliderRange(slider=slider, value=value)
 
         for win in self.win["volume"]["position"].values():
-            if win in (
+            if win in {
                 self.win["volume"]["position"]["axis"],
                 self.win["volume"]["position"]["reset"],
-            ):
+            }:
                 continue
             else:
                 self.FindWindowById(win).SetValue(value)
@@ -5251,7 +5250,7 @@ class NvizToolWindow(GNotebook):
 
                 self.FindWindowById(self.win["view"]["persp"][control]).SetValue(pval)
 
-        elif pageId in ("surface", "vector", "volume"):
+        elif pageId in {"surface", "vector", "volume"}:
             name = self.FindWindowById(self.win[pageId]["map"]).GetValue()
             data = self.GetLayerData(pageId)
             if data:
@@ -5830,7 +5829,7 @@ class NvizToolWindow(GNotebook):
         """Get named page"""
         if name == "view":
             self.SetSelection(0)
-        elif name in ("surface", "vector", "volume"):
+        elif name in {"surface", "vector", "volume"}:
             self.SetSelection(1)
         else:
             self.SetSelection(2)

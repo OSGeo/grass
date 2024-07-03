@@ -207,13 +207,12 @@ class IClassGroupDialog(SimpleDialog):
             if not bands:
                 if self.use_subg:
                     GError(
-                        _("No data found in subgroup <%s> of group <%s>.\n" ".")
-                        % (s, g),
+                        _("No data found in subgroup <%s> of group <%s>.\n.") % (s, g),
                         parent=parent,
                     )
 
                 else:
-                    GError(_("No data found in group <%s>.\n" ".") % g, parent=parent)
+                    GError(_("No data found in group <%s>.\n.") % g, parent=parent)
         else:
             GError(_("Group <%s> not found") % gr, parent=parent)
 
@@ -573,10 +572,10 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdi
         text_c = wx.Colour(*ContrastColor(back_c))
 
         # if it is in scope of the method, gui falls, using self solved it
-        self.l = wx.ItemAttr()
-        self.l.SetBackgroundColour(back_c)
-        self.l.SetTextColour(text_c)
-        return self.l
+        self.item_attr = wx.ItemAttr()
+        self.item_attr.SetBackgroundColour(back_c)
+        self.item_attr.SetTextColour(text_c)
+        return self.item_attr
 
 
 def ContrastColor(color):
@@ -799,7 +798,7 @@ class IClassExportAreasDialog(wx.Dialog):
         )
         self.withTableCtrl.SetValue(True)
         self.withTableCtrl.SetToolTip(
-            _("Export attribute table containing" " computed statistical data")
+            _("Export attribute table containing computed statistical data")
         )
 
         dataSizer.Add(self.withTableCtrl, proportion=0, flag=wx.ALL, border=3)

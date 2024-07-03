@@ -48,7 +48,7 @@ from core.gcmd import RunCommand, GException, GError
 from core.debug import Debug
 from core.settings import UserSettings
 from mapwin.base import MapWindowBase
-import core.utils as utils
+from core import utils
 from mapwin.graphics import GraphicsSet
 from core.gthread import gThread
 
@@ -417,7 +417,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         # polyline is a series of connected lines defined as sequence of points
         # lines are individual, not connected lines which must be drawn as 1
         # object (e.g. cross)
-        elif pdctype in ("polyline", "lines"):
+        elif pdctype in {"polyline", "lines"}:
             if pen:
                 pdc.SetBrush(wx.Brush(wx.CYAN, wx.TRANSPARENT))
                 pdc.SetPen(pen)
@@ -1526,7 +1526,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             self.mouse["end"] = event.GetPosition()
             if event.LeftIsDown() and not (
                 digitToolbar
-                and digitToolbar.GetAction() in ("moveLine",)
+                and digitToolbar.GetAction() in {"moveLine"}
                 and len(self.digit.GetDisplay().GetSelected()) > 0
             ):
                 self.MouseDraw(pdc=self.pdcTmp)
@@ -1574,7 +1574,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         self.mouse["end"] = event.GetPosition()
         coordinates = self.Pixel2Cell(self.mouse["end"])
 
-        if self.mouse["use"] in ["zoom", "pan"]:
+        if self.mouse["use"] in {"zoom", "pan"}:
             # set region in zoom or pan
             begin = self.mouse["begin"]
             end = self.mouse["end"]
@@ -1902,7 +1902,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         """
         Debug.msg(4, "BufferedWindow.ZoomBack(): hist)=%s" % self.zoomhistory)
 
-        zoom = list()
+        zoom = []
 
         if len(self.zoomhistory) > 1:
             self.zoomhistory.pop()
@@ -1984,7 +1984,7 @@ class BufferedMapWindow(MapWindowBase, Window):
 
     def ResetZoomHistory(self):
         """Reset zoom history"""
-        self.zoomhistory = list()
+        self.zoomhistory = []
 
     def ZoomToMap(self, layers=None, ignoreNulls=False, render=True):
         """Set display extents to match selected raster
@@ -2175,7 +2175,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             overwrite = wx.MessageBox(
                 parent=self,
                 message=_(
-                    "Region file <%s> already exists. " "Do you want to overwrite it?"
+                    "Region file <%s> already exists. Do you want to overwrite it?"
                 )
                 % (dlg.GetName()),
                 caption=_("Warning"),

@@ -653,7 +653,7 @@ def import_file(guiparent, filePath, env):
     if returncode != 0:
         GError(
             parent=guiparent,
-            message=_("Import of <%(name)s> failed.\n" "Reason: %(msg)s")
+            message=_("Import of <%(name)s> failed.\nReason: %(msg)s")
             % ({"name": filePath, "msg": error}),
         )
     else:

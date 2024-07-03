@@ -162,7 +162,7 @@ def main():
         records2 = []
         for line in p.stdout:
             fields = decode(line).rstrip("\r\n").split("|")
-            if fields[0] in ["cat", "-1", "0"]:
+            if fields[0] in {"cat", "-1", "0"}:
                 continue
             records2.append([int(fields[0])] + fields[1:])
         p.wait()
@@ -206,7 +206,7 @@ def main():
         records3 = []
         for line in p.stdout:
             fields = decode(line).rstrip("\r\n").split("|")
-            if fields[0] in ["cat", "-1", "0"]:
+            if fields[0] in {"cat", "-1", "0"}:
                 continue
             records3.append([int(fields[0])] + fields[1:])
         p.wait()
