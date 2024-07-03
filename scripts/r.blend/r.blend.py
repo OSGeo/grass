@@ -127,9 +127,7 @@ def main():
         gscript.run_command("r.support", map=output, history="")
         gscript.run_command("r.support", map=output, history=os.environ["CMDLINE"])
     else:
-        gscript.message(
-            _("Done. Use the following command to visualize " "the result:")
-        )
+        gscript.message(_("Done. Use the following command to visualize the result:"))
         gscript.message(_("d.rgb r=%s.r g=%s.g b=%s.b") % (output, output, output))
 
 

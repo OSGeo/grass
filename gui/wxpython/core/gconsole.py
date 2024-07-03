@@ -661,7 +661,7 @@ class GConsole(wx.EvtHandler):
                 return
 
             skipInterface = True
-            if os.path.splitext(command[0])[1] in (".py", ".sh"):
+            if os.path.splitext(command[0])[1] in {".py", ".sh"}:
                 try:
                     with open(command[0], "r") as sfile:
                         for line in sfile.readlines():
@@ -805,14 +805,14 @@ class GConsole(wx.EvtHandler):
         name = task.get_name()
         for p in task.get_options()["params"]:
             prompt = p.get("prompt", "")
-            if prompt in ("raster", "vector", "raster_3d") and p.get("value", None):
-                if p.get("age", "old") == "new" or name in (
+            if prompt in {"raster", "vector", "raster_3d"} and p.get("value", None):
+                if p.get("age", "old") == "new" or name in {
                     "r.colors",
                     "r3.colors",
                     "v.colors",
                     "v.proj",
                     "r.proj",
-                ):
+                }:
                     # if multiple maps (e.g. r.series.interp), we need add each
                     if p.get("multiple", False):
                         lnames = p.get("value").split(",")

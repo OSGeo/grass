@@ -12,7 +12,7 @@ void G_sleep(unsigned int seconds)
 {
 #ifdef __MINGW32__
     /* note: Sleep() cannot be interrupted */
-    Sleep((seconds)*1000);
+    Sleep((seconds) * 1000);
 #else
     sleep(seconds);
 #endif

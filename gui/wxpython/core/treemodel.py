@@ -310,7 +310,7 @@ class ModuleNode(DictNode):
             keys = key
 
         for key in keys:
-            if key not in ("command", "keywords", "description"):
+            if key not in {"command", "keywords", "description"}:
                 return False
             try:
                 text = self.data[key]

@@ -20,6 +20,9 @@
  * software is provided "as is" without express or implied warranty.
  *
  *****************************************************************************/
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -86,6 +89,7 @@ int main(int argc, char *argv[])
     struct dimensions dim;
     struct output_setting out_set;
     char p[1024];
+    int threads;
 
     G_gisinit(argv[0]);
 
@@ -94,6 +98,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("algebra"));
     G_add_keyword(_("statistics"));
     G_add_keyword(_("texture"));
+    G_add_keyword(_("parallel"));
     module->description =
         _("Generate images with textural features from a raster map.");
 
@@ -307,7 +312,20 @@ int main(int argc, char *argv[])
     out_set.flag_null = flag.null;
     out_set.flag_ind = flag.ind;
 
-    execute_texture(data, &dim, measure_menu, measure_idx, &out_set);
+    threads = atoi(parm.nproc->answer);
+#if defined(_OPENMP)
+    /* Set the number of threads */
+    omp_set_num_threads(threads);
+    if (threads > 1)
+        G_message(_("Using %d threads for parallel computing."), threads);
+#else
+    if (threads > 1) {
+        G_warning(_("GRASS GIS is not compiled with OpenMP support, parallel "
+                    "computation is disabled."));
+        threads = 1;
+    }
+#endif
+    execute_texture(data, &dim, measure_menu, measure_idx, &out_set, threads);
 
     for (i = 0; i < dim.n_outputs; i++) {
         Rast_close(outfd[i]);

@@ -7,12 +7,13 @@ for details.
 :authors: Soeren Gebbert and Thomas Leppelt
 """
 
+import datetime
+import os
+
 import grass.script
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-import datetime
-import os
 
 
 class TestTemporalAlgebraGranularity(TestCase):

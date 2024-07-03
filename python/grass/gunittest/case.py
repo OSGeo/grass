@@ -485,7 +485,7 @@ class TestCase(unittest.TestCase):
         flag and few other, use `assertModuleKeyValue` for the full interface
         of arbitrary module.
         """
-        parameters = dict(map=map, column=column, flags="g")
+        parameters = {"map": map, "column": column, "flags": "g"}
         if layer:
             parameters.update(layer=layer)
         if type:
@@ -575,7 +575,7 @@ class TestCase(unittest.TestCase):
             self.fail(self._formatMessage(msg, stdmsg))
 
     def _get_detailed_message_about_no_map(self, name, type):
-        msg = "There is no map <{n}> of type <{t}>" " in the current mapset".format(
+        msg = "There is no map <{n}> of type <{t}> in the current mapset".format(
             n=name, t=type
         )
         related = call_module(
@@ -903,7 +903,7 @@ class TestCase(unittest.TestCase):
         """
         if statistics is None or sorted(statistics.keys()) == ["max", "min"]:
             if statistics is None:
-                statistics = dict(min=-precision, max=precision)
+                statistics = {"min": -precision, "max": precision}
             diff = self._compute_difference_raster(
                 reference, actual, "assertRastersNoDifference"
             )
@@ -970,7 +970,7 @@ class TestCase(unittest.TestCase):
         """
         if statistics is None or sorted(statistics.keys()) == ["max", "min"]:
             if statistics is None:
-                statistics = dict(min=-precision, max=precision)
+                statistics = {"min": -precision, "max": precision}
             diff = self._compute_difference_raster3d(
                 reference, actual, "assertRasters3dNoDifference"
             )
@@ -1250,9 +1250,7 @@ class TestCase(unittest.TestCase):
         if remove_files:
             os.remove(actual)
             os.remove(reference)
-        stdmsg = (
-            "There is a difference between vectors when compared as" " ASCII files.\n"
-        )
+        stdmsg = "There is a difference between vectors when compared as ASCII files.\n"
 
         output = StringIO()
         # TODO: there is a diff size constant which we can use
@@ -1452,9 +1450,7 @@ def _module_from_parameters(module, **kwargs):
         if not isinstance(module, str):
             raise ValueError("module can be only string or PyGRASS Module")
         if isinstance(module, Module):
-            raise ValueError(
-                "module can be only string if other" " parameters are given"
-            )
+            raise ValueError("module can be only string if other parameters are given")
             # allow passing all parameters in one dictionary called parameters
         if list(kwargs.keys()) == ["parameters"]:
             kwargs = kwargs["parameters"]

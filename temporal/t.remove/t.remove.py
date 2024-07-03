@@ -68,7 +68,6 @@
 
 import grass.script as grass
 
-
 # lazy imports at the end of the file
 
 ############################################################################
@@ -204,7 +203,7 @@ if __name__ == "__main__":
     options, flags = grass.parser()
 
     # lazy imports
-    import grass.temporal as tgis
     import grass.pygrass.modules as pyg
+    import grass.temporal as tgis
 
     tgis.profile_function(main)

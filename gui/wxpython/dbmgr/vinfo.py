@@ -124,9 +124,9 @@ class VectorDBInfo(VectorDBInfoBase):
             return None
 
         # process attributes
-        ret = dict()
+        ret = {}
         for key in ["Category", "Layer", "Table", "Id"]:
-            ret[key] = list()
+            ret[key] = []
 
         for record in data:
             if "Table" not in record:
