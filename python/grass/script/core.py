@@ -19,6 +19,7 @@ for details.
 """
 
 import os
+import re
 import sys
 import atexit
 import subprocess
@@ -32,10 +33,14 @@ import csv
 import io
 from tempfile import NamedTemporaryFile
 from pathlib import Path
+from urllib.parse import urlparse
+
+import xml.etree.ElementTree as etree
 
 from .utils import KeyValue, parse_key_val, basename, encode, decode, try_remove
 from grass.exceptions import ScriptError, CalledModuleError
 from grass.grassdb.manage import resolve_mapset_path
+from grass.utils.download import download_file
 
 
 # subprocess wrapper that uses shell on Windows
@@ -2052,6 +2057,74 @@ def create_environment(gisdbase, location, mapset, env=None):
     # remove mapset-specific env vars
     env = sanitize_mapset_environment(env)
     return f.name, env
+
+
+def find_addon_name(addons, url=None):
+    """Find correct addon name if addon is a multi-addon
+    e.g. wx.metadata contains multiple modules g.gui.cswbrowser etc.
+
+    Examples:
+    - for the g.gui.cswbrowser module the wx.metadata addon name is
+    returned
+    - for the i.sentinel.download module the i.sentinel addon name is
+    returned
+    etc.
+
+    :param list addons: list of individual addon modules
+    :param str url: Addons modules.xml file URL
+
+    :return: list of unique simple and multi addons
+
+    >>> addons = find_addon_name(
+    ...    addons=[
+    ...             "g.gui.metadata",
+    ...             "g.gui.cswbrowser",
+    ...             "db.csw.run",
+    ...             "db.csw.harvest",
+    ...             "db.csw.admin",
+    ...             "v.info.iso",
+    ...             "r.info.iso",
+    ...             "t.info.iso",
+    ...             "db.join",
+    ...   ]
+    ... )
+    >>> addons.sort()
+    >>> addons
+    ['db.join', 'wx.metadata']
+    """
+    if not url:
+        grass_version = os.getenv("GRASS_VERSION", "unknown")
+        if grass_version != "unknown":
+            major, minor, patch = grass_version.split(".")
+        else:
+            fatal(_("Unable to get GRASS GIS version."))
+        url = "https://grass.osgeo.org/addons/grass{major}/modules.xml".format(
+            major=major,
+        )
+    response = download_file(
+        url=url,
+        response_format="application/xml",
+        file_name=os.path.basename(urlparse(url).path),
+    )
+    tree = etree.fromstring(response.read())
+    result = []
+    for addon in addons:
+        found = False
+        addon_pattern = re.compile(r".*{}$".format(addon))
+        for i in tree:
+            for f in i.findall(".//binary/file"):
+                if re.match(addon_pattern, f.text):
+                    result.append(i.attrib["name"])
+                    found = True
+                    break
+        if not found:
+            warning(
+                _(
+                    "The addon <{}> was not found among the official"
+                    " addons.".format(addon)
+                ),
+            )
+    return list(set(result))
 
 
 if __name__ == "__main__":

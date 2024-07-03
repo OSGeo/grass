@@ -24,6 +24,7 @@ import sys
 import wx
 
 from grass.script import task as gtask
+from grass.script import find_addon_name
 
 from core import globalvar
 from core.gcmd import GError, RunCommand, GException, GMessage
@@ -477,7 +478,7 @@ class ManageExtensionWindow(wx.Frame):
             GMessage(_("No extension selected. Operation canceled."), parent=self)
             return []
 
-        return eList
+        return find_addon_name(addons=eList)
 
     def OnUninstall(self, event):
         """Uninstall selected extensions"""
