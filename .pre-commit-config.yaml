@@ -35,6 +35,14 @@ repos:
                 python/libgrass_interface_generator/ctypesgen/|
                 lib/fonts/fonts/.*
           )
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Ruff version.
+    rev: v0.5.0
+    hooks:
+      # Run the linter.
+      - id: ruff
+        types_or: [python, pyi, jupyter]
+        args: [--fix, --preview]
   - repo: https://github.com/igorshubovych/markdownlint-cli
     rev: v0.41.0
     hooks:
