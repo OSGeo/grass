@@ -7,6 +7,7 @@ Created on Wed Feb 17 19:53:04 2016
 import os
 import sys
 import unittest
+
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule

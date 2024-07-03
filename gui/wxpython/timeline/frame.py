@@ -148,7 +148,7 @@ class TimelineFrame(wx.Frame):
         self.view3dCheck.Bind(wx.EVT_CHECKBOX, self.OnRedraw)
         if not check_version(1, 0, 0):
             self.view3dCheck.SetLabel(
-                _("3D plot of spatio-temporal extents " "(matplotlib >= 1.0.0)")
+                _("3D plot of spatio-temporal extents (matplotlib >= 1.0.0)")
             )
             self.view3dCheck.Disable()
 
@@ -503,7 +503,10 @@ class TimelineFrame(wx.Frame):
             )
             mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
             allDatasets = [
-                i for i in sorted(allDatasets, key=lambda l: mapsets.index(l[1]))
+                i
+                for i in sorted(
+                    allDatasets, key=lambda dataset_info: mapsets.index(dataset_info[1])
+                )
             ]
 
         for dataset in datasets:
@@ -706,8 +709,8 @@ class DataCursor:
             xytext=self.offsets,
             textcoords="offset points",
             va="bottom",
-            bbox=dict(boxstyle="round,pad=0.5", fc="yellow", alpha=0.7),
-            arrowprops=dict(arrowstyle="->", connectionstyle="arc3,rad=0"),
+            bbox={"boxstyle": "round,pad=0.5", "fc": "yellow", "alpha": 0.7},
+            arrowprops={"arrowstyle": "->", "connectionstyle": "arc3,rad=0"},
             annotation_clip=False,
             multialignment="left",
         )

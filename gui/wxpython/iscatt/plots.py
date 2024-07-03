@@ -15,6 +15,7 @@ This program is free software under the GNU General Public License
 
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
+
 import wx
 import numpy as np
 from math import ceil
@@ -516,27 +517,37 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
             MergeArrays(merged_img, rend_dt[cat_id]["dt"], styles[cat_id]["opacity"])
 
         """
-                #c_img_a = np.memmap(grass.tempfile(), dtype="uint16", mode='w+', shape = shape)
-                c_img_a = colored_cat.astype('uint16')[:,:,3] * styles[cat_id]['opacity']
+            # c_img_a = np.memmap(
+            #     grass.tempfile(), dtype="uint16", mode="w+", shape=shape
+            # )
+            c_img_a = colored_cat.astype("uint16")[:, :, 3] * styles[cat_id]["opacity"]
 
-                #TODO apply strides and there will be no need for loop
-                #b = as_strided(a, strides=(0, a.strides[3], a.strides[3], a.strides[3]), shape=(3, a.shape[0], a.shape[1]))
+            # TODO apply strides and there will be no need for loop
+            # b = as_strided(
+            #     a,
+            #     strides=(0, a.strides[3], a.strides[3], a.strides[3]),
+            #     shape=(3, a.shape[0], a.shape[1]),
+            # )
 
-                for i in range(3):
-                    merged_img[:,:,i] = (merged_img[:,:,i] * (255 - c_img_a) + colored_cat[:,:,i] * c_img_a) / 255;
-                merged_img[:,:,3] = (merged_img[:,:,3] * (255 - c_img_a) + 255 * c_img_a) / 255;
+            for i in range(3):
+                merged_img[:, :, i] = (
+                    merged_img[:, :, i] * (255 - c_img_a)
+                    + colored_cat[:, :, i] * c_img_a
+                ) / 255
+            merged_img[:, :, 3] = (
+                merged_img[:, :, 3] * (255 - c_img_a) + 255 * c_img_a
+            ) / 255
 
-                del c_img_a
-            """
-
+            del c_img_a
+        """
     _rendDtMemmapsToFiles(rend_dt)
 
     merged_img = {"dt": merged_img.filename, "sh": merged_img.shape}
     output_queue.put((merged_img, full_extend, rend_dt))
 
 
-# _rendDtMemmapsToFiles and _rendDtFilesToMemmaps are workarounds for older numpy versions,
-# where memmap objects are not pickable
+# _rendDtMemmapsToFiles and _rendDtFilesToMemmaps are workarounds for older numpy
+# versions, where memmap objects are not pickable
 
 
 def _rendDtMemmapsToFiles(rend_dt):
@@ -629,7 +640,8 @@ class PolygonDrawer:
     def __init__(self, ax, pol, empty_pol):
         if pol.figure is None:
             raise RuntimeError(
-                "You must first add the polygon to a figure or canvas before defining the interactor"
+                "You must first add the polygon to a figure or canvas before defining "
+                "the interactor"
             )
         self.ax = ax
         self.canvas = pol.figure.canvas

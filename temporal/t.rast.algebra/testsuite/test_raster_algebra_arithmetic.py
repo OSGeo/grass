@@ -9,10 +9,11 @@ for details.
 
 import datetime
 import os
+
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
-from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
+from grass.gunittest.main import test
 
 
 class TestTRastAlgebra(TestCase):
@@ -296,7 +297,7 @@ class TestTRastAlgebra(TestCase):
 
         self.assertModule(
             "t.rast.algebra",
-            expression="R = if({equal}, start_date(A)" ' >= "2001-01-02", A + A)',
+            expression='R = if({equal}, start_date(A) >= "2001-01-02", A + A)',
             basename="r",
         )
 

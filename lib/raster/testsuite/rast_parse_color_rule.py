@@ -51,7 +51,7 @@ class ParseSingleColorRuleColorsTestCase(TestCase):
             byref(nv),
             byref(default),
         )
-        colors = "{string} -> " "{v.value}: {r.value}, {g.value}, {b.value}".format(
+        colors = "{string} -> {v.value}: {r.value}, {g.value}, {b.value}".format(
             **locals()
         )
         error_text = Rast_parse_color_rule_error(ret)

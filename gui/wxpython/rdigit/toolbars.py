@@ -83,7 +83,8 @@ class RDigitToolbar(BaseToolbar):
         self._widthValueChanged()
         self._widthValue.SetToolTip(
             _(
-                "Width of currently digitized line or diameter of a digitized point in map units."
+                "Width of currently digitized line or diameter of a digitized point "
+                "in map units."
             )
         )
         labelWidth = StaticText(self, label=" %s" % _("Width:"))

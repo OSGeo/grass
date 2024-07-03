@@ -69,6 +69,7 @@ def plot_nprocs_cli(args):
         results.results,
         filename=args.output,
         title=args.title,
+        metric=args.metric,
     )
 
 
@@ -161,9 +162,17 @@ def add_results_subcommand(parent_subparsers):
 
 def add_plot_io_arguments(parser):
     """Add input and output arguments to *parser*."""
-    parser.add_argument("input", help="file with results (JSON)", metavar="input_file")
     parser.add_argument(
-        "output", help="output file (e.g., PNG)", nargs="?", metavar="output_file"
+        "input", help="file with results (e.g. results.json)", metavar="input_file"
+    )
+    parser.add_argument(
+        "output",
+        help=(
+            "output file with extension (e.g., figure.png)."
+            " If not provided, the plot will be opened in a new window."
+        ),
+        nargs="?",
+        metavar="output_file",
     )
 
 
@@ -173,6 +182,16 @@ def add_plot_title_argument(parser):
         "--title",
         help="Title for the plot",
         metavar="text",
+    )
+
+
+def add_plot_metric_argument(parser):
+    """Add metric argument to *parser*."""
+    parser.add_argument(
+        "--metric",
+        help="Metric for the plot (default: time)",
+        default="time",
+        choices=["time", "speedup", "efficiency"],
     )
 
 
@@ -198,6 +217,7 @@ def add_plot_subcommand(parent_subparsers):
     )
     add_plot_io_arguments(nprocs)
     add_plot_title_argument(nprocs)
+    add_plot_metric_argument(nprocs)
     nprocs.set_defaults(handler=plot_nprocs_cli)
 
 
@@ -206,6 +226,7 @@ def define_arguments():
     parser = argparse.ArgumentParser(
         description="Process results from module benchmarks.",
         prog=get_executable_name(),
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     subparsers = add_subparsers(parser, dest="command")
 

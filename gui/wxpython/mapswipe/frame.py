@@ -85,8 +85,8 @@ class SwipeMapPanel(DoubleMapPanel):
         self.secondMapWindow.mapQueried.connect(self.Query)
 
         # bind tracking cursosr to mirror it
-        self.firstMapWindow.Bind(wx.EVT_MOTION, lambda evt: self.TrackCursor(evt))
-        self.secondMapWindow.Bind(wx.EVT_MOTION, lambda evt: self.TrackCursor(evt))
+        self.firstMapWindow.Bind(wx.EVT_MOTION, self.TrackCursor)
+        self.secondMapWindow.Bind(wx.EVT_MOTION, self.TrackCursor)
 
         self.MapWindow = self.firstMapWindow  # current by default
         self.firstMapWindow.zoomhistory = self.secondMapWindow.zoomhistory
@@ -244,6 +244,7 @@ class SwipeMapPanel(DoubleMapPanel):
         style = self.splitter.GetWindowStyle()
         style ^= wx.SP_LIVE_UPDATE
         self.splitter.SetWindowStyle(style)
+        self._simpleLmgrChanged()
 
     def AddToolbar(self, name):
         """Add defined toolbar to the window
@@ -443,8 +444,7 @@ class SwipeMapPanel(DoubleMapPanel):
         return converter
 
     def _simpleLmgrChanged(self):
-        if self.IsAutoRendered():
-            self.OnRender(event=None)
+        self.OnRender(event=None)
 
     def OnApplyInputChanges(self):
         first, second = self._inputDialog.GetValues()
@@ -467,8 +467,7 @@ class SwipeMapPanel(DoubleMapPanel):
             LayerListToRendererConverter(self.GetSecondMap()).ConvertAll(second)
 
         self.SetRasterNames()
-        if self.IsAutoRendered():
-            self.OnRender(event=None)
+        self.OnRender(event=None)
 
     def SetFirstRaster(self, name):
         """Set raster map to first Map"""
@@ -611,7 +610,7 @@ class SwipeMapPanel(DoubleMapPanel):
         dlg = wx.FileDialog(
             parent=self,
             message=_(
-                "Choose a file name to save the image " "(no need to add extension)"
+                "Choose a file name to save the image (no need to add extension)"
             ),
             wildcard=filetype,
             style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
@@ -786,9 +785,7 @@ class SwipeMapPanel(DoubleMapPanel):
         else:
             self._queryDialog = QueryDialog(parent=self, data=result)
             self._queryDialog.Bind(wx.EVT_CLOSE, self._oncloseQueryDialog)
-            self._queryDialog.redirectOutput.connect(
-                lambda output: self._giface.WriteLog(output)
-            )
+            self._queryDialog.redirectOutput.connect(self._giface.WriteLog)
             self._queryDialog.Show()
 
     def _oncloseQueryDialog(self, event):
@@ -925,6 +922,14 @@ class MapSplitter(wx.SplitterWindow):
 
     def OnSashChanging(self, event):
         Debug.msg(5, "MapSplitter.OnSashChanging()")
+        if event:
+            # Prevent map image flickering if it is used sash not slider
+            # for changing position
+            wx.CallAfter(self._onSashChanging, event)
+        else:
+            self._onSashChanging(event)
+
+    def _onSashChanging(self, event):
         if not self._moveSash:
             event.SetSashPosition(-1)
             return

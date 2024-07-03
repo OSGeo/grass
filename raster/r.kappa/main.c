@@ -97,15 +97,7 @@ int main(int argc, char **argv)
     parms.titles->answer = "ACCURACY ASSESSMENT";
     parms.titles->guisection = _("Output settings");
 
-    parms.format = G_define_option();
-    parms.format->key = "format";
-    parms.format->type = TYPE_STRING;
-    parms.format->required = YES;
-    parms.format->label = _("Output format");
-    parms.format->options = "plain,json";
-    parms.format->descriptions = "plain;Plain text output;"
-                                 "json;JSON (JavaScript Object Notation);";
-    parms.format->answer = "plain";
+    parms.format = G_define_standard_option(G_OPT_F_FORMAT);
     parms.format->guisection = _("Output settings");
 
     flags.w = G_define_flag();

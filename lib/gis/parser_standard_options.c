@@ -943,6 +943,17 @@ struct Option *G_define_standard_option(int opt)
         Opt->description =
             _("The method to be used for sampling the input dataset");
         break;
+    case G_OPT_F_FORMAT:
+        Opt->key = "format";
+        Opt->type = TYPE_STRING;
+        Opt->key_desc = "name";
+        Opt->required = YES;
+        Opt->label = _("Output format");
+        Opt->answer = "plain";
+        Opt->options = "plain,json";
+        Opt->descriptions = _("plain;Plain text output;"
+                              "json;JSON (JavaScript Object Notation);");
+        break;
     }
 
     return Opt;

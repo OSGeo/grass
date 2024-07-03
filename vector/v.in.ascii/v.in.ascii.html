@@ -256,7 +256,7 @@ v.info mypoints3D
 
 Generate points file by clicking onto the map:
 <div class="code"><pre>
-#For LatLong locations:
+#For LatLong projects:
 d.where -d -l | awk '{printf "%f|%f|point\n", $1, $2}' | v.in.ascii in=- out=points \
     columns='x double precision, y double precision, label varchar(20)'
 

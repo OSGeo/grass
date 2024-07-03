@@ -252,21 +252,6 @@ int read_cube(Cube_data *Cube, file_info *headfax)
     return Cube->n_thresh = t_cnt;
 }
 
-#ifdef NEWCODE
-int my_fread(char *buf, int size, int cnt, FILE *fp)
-{
-    static char in_buf[10240];
-    static char *start, *end;
-    char *outp;
-    int ret;
-
-    if (ret = fread(in_buf, 1, 10240, fp))
-        ;
-
-    return 0;
-}
-#else
-
 static int cptr = 0;
 
 int my_fread(char *buf, int size, int cnt, FILE *fp)
@@ -304,4 +289,3 @@ int new_dspf(file_info *hfax)
 
     return 0;
 }
-#endif

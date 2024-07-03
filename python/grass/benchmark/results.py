@@ -38,7 +38,7 @@ def save_results(data):
     Returns JSON as str.
     """
     if not hasattr(data, "results"):
-        data = dict(results=data)
+        data = {"results": data}
     return json.dumps(data, cls=ResultsEncoder)
 
 

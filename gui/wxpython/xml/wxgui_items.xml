@@ -310,7 +310,7 @@
     <label>Display map projection</label>
     <command>g.proj -p</command>
     <description>Converts co-ordinate system descriptions (i.e. projection information) between various formats (including GRASS format).</description>
-    <keywords>general,projection,create project,create location</keywords>
+    <keywords>general,projection,create project,create project</keywords>
   </wxgui-item>
   <wxgui-item name="InstallExtensionFromAddons">
     <label>Install extension from addons</label>

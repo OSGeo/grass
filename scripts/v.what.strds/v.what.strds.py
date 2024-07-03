@@ -82,9 +82,7 @@ class Sample:
         elif date == "end":
             output = str(self.end).split(" ")[0].replace("-", "_")
         else:
-            grass.fatal(
-                "The values accepted by printDay in Sample are:" " 'start', 'end'"
-            )
+            grass.fatal("The values accepted by printDay in Sample are: 'start', 'end'")
         if self.granu:
             if self.granu.find("minute") != -1 or self.granu.find("second") != -1:
                 output += "_" + str(self.start).split(" ")[1].replace(":", "_")
@@ -266,7 +264,7 @@ def main():
             except CalledModuleError:
                 dbif.close()
                 grass.fatal(
-                    _("Unable to add column %s to vector map " "<%s> ")
+                    _("Unable to add column %s to vector map <%s> ")
                     % (column_string, output)
                 )
             try:

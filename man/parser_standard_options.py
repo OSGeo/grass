@@ -3,6 +3,7 @@ Created on Fri Jun 26 19:10:58 2015
 
 @author: pietro
 """
+
 import argparse
 import os
 import sys
@@ -166,7 +167,7 @@ if __name__ == "__main__":
         "trunk/lib/gis/parser_standard_options.c?format=txt"
     )
     parser = argparse.ArgumentParser(
-        description="Extract GRASS default " "options from link."
+        description="Extract GRASS default options from link."
     )
     parser.add_argument(
         "-f",
@@ -221,7 +222,7 @@ if __name__ == "__main__":
 
     options = OptTable(parse_options(cfile.readlines(), startswith=args.startswith))
     outform = args.format
-    if outform in ["csv", "html"]:
+    if outform in {"csv", "html"}:
         print(getattr(options, outform)(), file=args.output)
         args.output.close()
     else:

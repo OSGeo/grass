@@ -42,7 +42,7 @@ class TestRasterReport(TestCase):
             output=self.output,
             operator="overlap",
         )
-        topology = dict(points=1088, lines=0, areas=0)
+        topology = {"points": 1088, "lines": 0, "areas": 0}
         self.assertVectorFitsTopoInfo(self.overlap, topology)
 
     def test_opd(self):
@@ -54,7 +54,7 @@ class TestRasterReport(TestCase):
             output=self.output,
             operator="disjoint",
         )
-        topology = dict(points=167, lines=0, areas=0)
+        topology = {"points": 167, "lines": 0, "areas": 0}
         self.assertVectorFitsTopoInfo(self.disjoint, topology)
 
     def test_ope(self):
@@ -66,7 +66,7 @@ class TestRasterReport(TestCase):
             output=self.output,
             operator="equals",
         )
-        topology = dict(points=0, lines=49746, areas=0)
+        topology = {"points": 0, "lines": 49746, "areas": 0}
         self.assertVectorFitsTopoInfo(self.equals, topology)
 
     def test_opt(self):
@@ -78,7 +78,7 @@ class TestRasterReport(TestCase):
             output=self.output,
             operator="touches",
         )
-        topology = dict(points=0, lines=0, areas=48)
+        topology = {"points": 0, "lines": 0, "areas": 48}
         self.assertVectorFitsTopoInfo(self.touches, topology)
 
     def test_opw(self):
@@ -90,7 +90,7 @@ class TestRasterReport(TestCase):
             output=self.output,
             operator="within",
         )
-        topology = dict(points=1088, lines=0, areas=0)
+        topology = {"points": 1088, "lines": 0, "areas": 0}
         self.assertVectorFitsTopoInfo(self.within, topology)
 
 

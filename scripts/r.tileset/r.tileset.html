@@ -73,15 +73,15 @@ output format will be strings like the bbox requests for WMS servers:
 r.tileset sourceproj=+init=epsg:4326 overlap=2 -w region=ne-rio
 </pre></div>
 
-Generates tiles in the projection of the location
+Generates tiles in the coordinate reference system of the project
 "IrishGrid". Each tile will be less than 300x400 cells in size, with 3
 cells of overlap in the top and right sides of each tile. The output
 is in a format where each line is in shell script style. The
-substitution <code>`g.proj -j location=IrishGrid`</code> will only
+substitution <code>`g.proj -j project=IrishGrid`</code> will only
 work in a unix style shell:
 <p>
 <div class="code"><pre>
-r.tileset sourceproj="`g.proj -j location=IrishGrid`" maxrows=400 maxcols=300 overlap=3 -g
+r.tileset sourceproj="`g.proj -j project=IrishGrid`" maxrows=400 maxcols=300 overlap=3 -g
 </pre></div>
 
 <h2>KNOWN ISSUES</h2>

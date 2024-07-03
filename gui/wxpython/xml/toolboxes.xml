@@ -315,7 +315,7 @@
       </module-item>
       <separator/>
       <module-item name="r.proj">
-        <label>Reproject raster map from different GRASS location</label>
+        <label>Reproject raster map from different GRASS project</label>
       </module-item>
     </items>
   </toolbox>
@@ -361,7 +361,7 @@
       </module-item>
       <separator/>
       <module-item name="v.proj">
-        <label>Reproject vector map from different GRASS location</label>
+        <label>Reproject vector map from different GRASS project</label>
       </module-item>
     </items>
   </toolbox>
@@ -686,7 +686,7 @@
       </module-item>
       <separator/>
       <module-item name="r.proj">
-        <label>Reproject raster map from different GRASS location</label>
+        <label>Reproject raster map from different GRASS project</label>
       </module-item>
       <module-item name="r.tileset">
         <label>Tiling</label>
@@ -1183,7 +1183,7 @@
         <label>Rectify vector map</label>
       </module-item>
       <module-item name="v.proj">
-        <label>Reproject vector map from different GRASS location</label>
+        <label>Reproject vector map from different GRASS project</label>
       </module-item>
       <separator/>
       <module-item name="v.support">

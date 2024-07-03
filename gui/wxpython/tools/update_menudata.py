@@ -34,7 +34,7 @@ from core.globalvar import grassCmd
 
 def parseModules():
     """Parse modules' interface"""
-    modules = dict()
+    modules = {}
 
     # list of modules to be ignored
     ignore = ["g.mapsets_picker.py", "v.type_wrapper.py", "g.parser", "vcolors"]
@@ -66,12 +66,12 @@ def updateData(data, modules):
     # list of modules to be ignored
     ignore = ["v.type_wrapper.py", "vcolors"]
 
-    menu_modules = list()
+    menu_modules = []
     for node in data.tree.iter():
         if node.tag != "menuitem":
             continue
 
-        item = dict()
+        item = {}
         for child in node:
             item[child.tag] = child.text
 
@@ -117,7 +117,7 @@ def writeData(data, file=None):
         data.tree.write(file)
     except OSError:
         print(
-            "'%s' not found." " Please run the script from 'gui/wxpython'." % file,
+            "'%s' not found. Please run the script from 'gui/wxpython'." % file,
             file=sys.stderr,
         )
         return
@@ -149,7 +149,7 @@ def main(argv=None):
     grass.info("Step 1: running make...")
     grass.call(["make"], stderr=nuldev)
     grass.info("Step 2: parsing modules...")
-    modules = dict()
+    modules = {}
     modules = parseModules()
     grass.info("Step 3: reading menu data...")
     data = LayerManagerMenuData()

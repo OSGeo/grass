@@ -134,7 +134,7 @@ def main():
     for cname, ctype, cwidth in desc_table["cols"]:
         if cname == column:
             found = True
-            if ctype not in ("INTEGER", "DOUBLE PRECISION"):
+            if ctype not in {"INTEGER", "DOUBLE PRECISION"}:
                 gscript.fatal(_("Column <%s> is not numeric") % cname)
     if not found:
         gscript.fatal(_("Column <%s> not found in table <%s>") % (column, table))
@@ -170,7 +170,7 @@ def main():
     # check if result is empty
     tmpf = open(tmp)
     if tmpf.read(1) == "":
-        if output_format in ["plain", "shell"]:
+        if output_format in {"plain", "shell"}:
             gscript.fatal(_("Table <%s> contains no data.") % table)
         tmpf.close()
 
@@ -200,7 +200,7 @@ def main():
     tmpf.close()
 
     if N <= 0:
-        if output_format in ["plain", "shell"]:
+        if output_format in {"plain", "shell"}:
             gscript.fatal(_("No non-null values found"))
         else:
             # We produce valid JSON with a value for n even when the query returned
@@ -313,23 +313,23 @@ def main():
         pval[i] = 0
 
     inf = open(tmp + ".sort")
-    l = 1
+    line_number = 1
     for line in inf:
         line = line.rstrip("\r\n")
         if len(line) == 0:
             continue
-        if l == q25pos:
+        if line_number == q25pos:
             q25 = float(line)
-        if l == q50apos:
+        if line_number == q50apos:
             q50a = float(line)
-        if l == q50bpos:
+        if line_number == q50bpos:
             q50b = float(line)
-        if l == q75pos:
+        if line_number == q75pos:
             q75 = float(line)
         for i in range(len(ppos)):
-            if l == ppos[i]:
+            if line_number == ppos[i]:
                 pval[i] = float(line)
-        l += 1
+        line_number += 1
 
     q50 = (q50a + q50b) / 2
 

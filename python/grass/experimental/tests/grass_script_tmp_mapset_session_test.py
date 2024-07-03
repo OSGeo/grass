@@ -3,7 +3,7 @@
 import os
 
 import grass.script as gs
-import grass.experimental as experimental
+from grass import experimental
 
 
 def test_with_context_manager(xy_session):

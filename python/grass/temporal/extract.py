@@ -8,19 +8,25 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from .core import (
-    get_tgis_message_interface,
-    get_current_mapset,
-    SQLDatabaseInterfaceConnection,
-)
-from .abstract_map_dataset import AbstractMapDataset
-from .open_stds import open_old_stds, check_new_stds, open_new_stds
-from .datetime_math import create_suffix_from_datetime
-from .datetime_math import create_time_suffix
-from .datetime_math import create_numeric_suffix
+
+import sys
 from multiprocessing import Process
+
 import grass.script as gscript
 from grass.exceptions import CalledModuleError
+
+from .abstract_map_dataset import AbstractMapDataset
+from .core import (
+    SQLDatabaseInterfaceConnection,
+    get_current_mapset,
+    get_tgis_message_interface,
+)
+from .datetime_math import (
+    create_numeric_suffix,
+    create_suffix_from_datetime,
+    create_time_suffix,
+)
+from .open_stds import check_new_stds, open_new_stds, open_old_stds
 
 ############################################################################
 
@@ -319,7 +325,7 @@ def run_mapcalc2d(expr):
             "r.mapcalc", expression=expr, overwrite=gscript.overwrite(), quiet=True
         )
     except CalledModuleError:
-        exit(1)
+        sys.exit(1)
 
 
 def run_mapcalc3d(expr):
@@ -329,7 +335,7 @@ def run_mapcalc3d(expr):
             "r3.mapcalc", expression=expr, overwrite=gscript.overwrite(), quiet=True
         )
     except CalledModuleError:
-        exit(1)
+        sys.exit(1)
 
 
 def run_vector_extraction(input, output, layer, type, where):
@@ -346,4 +352,4 @@ def run_vector_extraction(input, output, layer, type, where):
             quiet=True,
         )
     except CalledModuleError:
-        exit(1)
+        sys.exit(1)

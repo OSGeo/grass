@@ -7,7 +7,7 @@ extraterrestrial irradiance, daylight length) are stored in the resultant maps'
 history files. Alternatively, the local time can be specified to compute solar
 incidence angle and/or irradiance raster maps. The shadowing effect of the
 topography is incorporated by default. This can be done either internally by
-calculatoion of the shadowing effect directly from the digital elevation model
+calculation of the shadowing effect directly from the digital elevation model
 or by specifying raster maps of the horizon height which is much faster. These
 horizon raster maps can be calculated using <a href="r.horizon.html">r.horizon</a>.
 <p>For latitude-longitude coordinates it requires that the elevation map is in meters.
@@ -48,8 +48,8 @@ with the <a href="r.info.html">r.info</a> command.
 The solar incidence angle raster map <i>incidout</i> is computed specifying
 elevation raster map <i>elevation</i>, aspect raster map <i>aspect</i>, slope
 steepness raster map <i>slope,</i> given the day <i>day</i> and local time
-<i>time</i>. There is no need to define latitude for locations with known
-and defined projection/coordinate system (check it with the <a href="g.proj.html">
+<i>time</i>. There is no need to define latitude for projects with known
+and defined coordinate system (check it with the <a href="g.proj.html">
 g.proj</a>
  command). If you have undefined projection, (x,y) system, etc. then the latitude
 can be defined explicitly for large areas by input raster map <i>lat_in</i>

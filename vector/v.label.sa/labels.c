@@ -102,7 +102,7 @@ label_t *labels_init(struct params *p, int *n_labels)
     buffer = atof(p->isize->answer);
 
     /* use 1 point = 1 map unit */
-    if (FT_Set_Char_Size(face, (int)((font_size)*64.0), 0, 100, 100))
+    if (FT_Set_Char_Size(face, (int)((font_size) * 64.0), 0, 100, 100))
         G_fatal_error(_("Unable to set font size"));
 
     /* start reading the map */

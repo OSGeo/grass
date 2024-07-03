@@ -25,7 +25,7 @@ def mapinfo_must_be_set(method):
             return method(self, *args, **kargs)
         else:
             raise GrassError(
-                _("The self.c_mapinfo pointer must be " "correctly initiated")
+                _("The self.c_mapinfo pointer must be correctly initiated")
             )
 
     return wrapper

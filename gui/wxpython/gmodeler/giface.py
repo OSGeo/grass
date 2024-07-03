@@ -20,21 +20,15 @@ from grass.pydispatch.signal import Signal
 class GraphicalModelerGrassInterface:
     """@implements core::giface::GrassInterface"""
 
-    def __init__(self, model):
+    def __init__(self, model, giface):
         self._model = model
+        self._giface = giface
 
         # Signal emitted to request updating of map (TODO)
         self.updateMap = Signal("GraphicalModelerGrassInterface.updateMap")
 
-    def GetLayerTree(self):
-        return None
-
     def GetLayerList(self, prompt):
         return self._model.GetMaps(prompt)
 
-    def GetMapDisplay(self):
-        """
-        ..todo::
-            implement connection with mapdisplay
-        """
-        return None
+    def __getattr__(self, name):
+        return getattr(self._giface, name)

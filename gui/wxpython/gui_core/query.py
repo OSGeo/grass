@@ -13,6 +13,7 @@ This program is free software under the GNU General Public License
 
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
+
 import wx
 
 from gui_core.treeview import TreeListView

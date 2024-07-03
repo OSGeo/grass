@@ -135,7 +135,7 @@ class UnaryExpressionNode(ExpressionNode):
         if self.op:
             return self.op(self.child.evaluate(context))
         else:
-            raise ValueError('The C operator "%s" can\'t be evaluated right ' "now" % self.name)
+            raise ValueError('The C operator "%s" can\'t be evaluated right now' % self.name)
 
     def py_string(self, can_be_ctype):
         return self.format % self.child.py_string(self.child_can_be_ctype and can_be_ctype)
@@ -182,7 +182,7 @@ class BinaryExpressionNode(ExpressionNode):
         if self.op:
             return self.op(self.left.evaluate(context), self.right.evaluate(context))
         else:
-            raise ValueError('The C operator "%s" can\'t be evaluated right ' "now" % self.name)
+            raise ValueError('The C operator "%s" can\'t be evaluated right now' % self.name)
 
     def py_string(self, can_be_ctype):
         return self.format % (
@@ -333,10 +333,10 @@ class UnsupportedExpressionNode(ExpressionNode):
         self.error(message, "unsupported-type")
 
     def evaluate(self, context):
-        raise ValueError("Tried to evaluate an unsupported expression " "node: %s" % self.message)
+        raise ValueError("Tried to evaluate an unsupported expression node: %s" % self.message)
 
     def __repr__(self):
         return "<UnsupportedExpressionNode>"
 
     def py_string(self, can_be_ctype):
-        raise ValueError("Called py_string() an unsupported expression " "node: %s" % self.message)
+        raise ValueError("Called py_string() an unsupported expression node: %s" % self.message)

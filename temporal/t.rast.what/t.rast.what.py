@@ -119,18 +119,18 @@
 # % description: Show the category for vector points map
 # %end
 
-import sys
 import copy
-import grass.script as gscript
+import sys
 
+import grass.script as gscript
 
 ############################################################################
 
 
 def main(options, flags):
     # lazy imports
-    import grass.temporal as tgis
     import grass.pygrass.modules as pymod
+    import grass.temporal as tgis
 
     # Get the options
     points = options["points"]
@@ -160,7 +160,9 @@ def main(options, flags):
     if not coordinates and not points and not use_stdin:
         gscript.fatal(
             _(
-                "Please specify the coordinates, the points option or use the 'i' flag to pipe coordinate positions to t.rast.what from stdin, to provide the sampling coordinates"
+                "Please specify the coordinates, the points option or use the 'i' flag "
+                "to pipe coordinate positions to t.rast.what from stdin, to provide "
+                "the sampling coordinates"
             )
         )
 
@@ -246,8 +248,7 @@ def main(options, flags):
     else:
         gscript.error(_("Please specify points or coordinates"))
 
-    if len(maps) < nprocs:
-        nprocs = len(maps)
+    nprocs = min(len(maps), nprocs)
 
     # The module queue for parallel execution
     process_queue = pymod.ParallelModuleQueue(int(nprocs))
@@ -506,7 +507,7 @@ def one_point_per_col_output(
                     else:
                         x = row[0]
                         y = row[1]
-                        out_str += "{sep}{x:10.10f}{csep}" "{y:10.10f}".format(
+                        out_str += "{sep}{x:10.10f}{csep}{y:10.10f}".format(
                             x=float(x), y=float(y), sep=separator, csep=coor_sep
                         )
                         if site_input:
@@ -552,7 +553,7 @@ def one_point_per_timerow_output(
      x|y|1991-01-01 00:00:00;1991-01-02 00:00:00|1991-01-02 00:00:00;1991-01-03 00:00:00|1991-01-03 00:00:00;1991-01-04 00:00:00|1991-01-04 00:00:00;1991-01-05 00:00:00
      3730731.49590371|5642483.51236521|6|8|7|7
      3581249.04638104|5634411.97526282|5|8|7|7
-    """
+    """  # noqa: E501
     out_file = open(output, "w") if output != "-" else sys.stdout
 
     matrix = []

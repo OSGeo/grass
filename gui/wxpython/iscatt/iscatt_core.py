@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
+
 import os
 
 import numpy as np
@@ -808,7 +809,7 @@ def _parseRegion(region_str):
 
     for param in region_str:
         k, v = param.split("=")
-        if k in ["rows", "cols", "cells"]:
+        if k in {"rows", "cols", "cells"}:
             v = int(v)
         else:
             v = float(v)
@@ -836,7 +837,7 @@ def GetRasterInfo(rast):
             if v != "CELL":
                 return None
             pass
-        elif k in ["rows", "cols", "cells", "min", "max"]:
+        elif k in {"rows", "cols", "cells", "min", "max"}:
             v = int(v)
         else:
             v = float(v)

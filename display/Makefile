@@ -27,6 +27,7 @@ SUBDIRS = \
 	d.rast \
 	d.rast.arrow \
 	d.rast.num \
+	d.redraw \
 	d.rgb \
 	d.rhumbline \
 	d.text \

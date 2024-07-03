@@ -158,7 +158,7 @@ def main():
         bandlist = band.split(",")
 
     # initialize datasets for L1A, L1B, L1T
-    if proctype in ["L1A", "L1B", "L1T"]:
+    if proctype in {"L1A", "L1B", "L1T"}:
         for band in bandlist:
             if band in allbands:
                 dataset = bands[proctype][band]
@@ -174,8 +174,6 @@ def main():
     grass.message(_("Cleaning up ..."))
     grass.try_remove(tempfile)
     grass.message(_("Done."))
-
-    return
 
 
 def import_aster(proj, srcfile, tempfile, output, band):

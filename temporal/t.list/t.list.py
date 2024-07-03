@@ -88,6 +88,7 @@
 # %end
 
 import sys
+
 import grass.script as gscript
 
 ############################################################################
@@ -143,14 +144,16 @@ def main():
                         if issubclass(sp.__class__, tgis.AbstractMapDataset):
                             sys.stderr.write(
                                 _(
-                                    "Time stamped %s maps with %s available in mapset <%s>:\n"
+                                    "Time stamped %s maps with %s available in mapset "
+                                    "<%s>:\n"
                                 )
                                 % (sp.get_type(), time, key)
                             )
                         else:
                             sys.stderr.write(
                                 _(
-                                    "Space time %s datasets with %s available in mapset <%s>:\n"
+                                    "Space time %s datasets with %s available in "
+                                    "mapset <%s>:\n"
                                 )
                                 % (sp.get_new_map_instance(None).get_type(), time, key)
                             )

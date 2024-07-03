@@ -20,7 +20,7 @@ import sys
 import wx
 
 import grass.script as grass
-import wx.lib.plot as plot
+from wx.lib import plot
 from wxplot.base import BasePlotFrame, PlotIcons
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from gui_core.wrap import StockCursor
@@ -29,7 +29,8 @@ from core.gcmd import RunCommand, GException, GError, GMessage
 
 
 class ScatterFrame(BasePlotFrame):
-    """Mainframe for displaying bivariate scatter plot of two raster maps. Uses wx.lib.plot."""
+    """Mainframe for displaying bivariate scatter plot of two raster maps. Uses
+    wx.lib.plot."""
 
     def __init__(
         self,

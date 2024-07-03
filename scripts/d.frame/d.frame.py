@@ -188,11 +188,11 @@ def calculate_frame(frame, at, width, height):
 
     This function does also the necessary formatting.
 
-    >>> calculate_frame('apple', "0,49.8,0,50.2", 500, 500)
+    >>> calculate_frame("apple", "0,49.8,0,50.2", 500, 500)
     'GRASS_RENDER_FRAME=251,500,0,251 # apple\\n'
-    >>> calculate_frame('orange', "50.2,0,49.8,100", 500, 500)
+    >>> calculate_frame("orange", "50.2,0,49.8,100", 500, 500)
     'GRASS_RENDER_FRAME=500,249,249,500 # orange\\n'
-    >>> calculate_frame('odd_number', "0,49.8,0,50.2", 367, 367)
+    >>> calculate_frame("odd_number", "0,49.8,0,50.2", 367, 367)
     'GRASS_RENDER_FRAME=184,367,0,184 # odd_number\\n'
 
     The following would give 182,367,0,184 if we would be truncating
@@ -201,7 +201,7 @@ def calculate_frame(frame, at, width, height):
     0.502 times 367 is 184.234 which fits with the (correct) width of
     the frame which is 184.
 
-    >>> calculate_frame('test_truncating_bug', "0,50.2,0,50.2", 367, 367)
+    >>> calculate_frame("test_truncating_bug", "0,50.2,0,50.2", 367, 367)
     'GRASS_RENDER_FRAME=183,367,0,184 # test_truncating_bug\\n'
     """
     try:
@@ -322,7 +322,8 @@ def main():
             if options["at"]:
                 warning(
                     _(
-                        "Frame <%s> already found. An existing frame can be overwritten by '%s' flag."
+                        "Frame <%s> already found. An existing frame can be "
+                        "overwritten by '%s' flag."
                     )
                     % (options["frame"], "--overwrite")
                 )

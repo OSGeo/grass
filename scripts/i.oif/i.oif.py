@@ -141,7 +141,7 @@ def main():
     oif.sort(reverse=True)
 
     grass.verbose(
-        _("The Optimum Index Factor analysis result " "(best combination shown first):")
+        _("The Optimum Index Factor analysis result (best combination shown first):")
     )
 
     if shell:

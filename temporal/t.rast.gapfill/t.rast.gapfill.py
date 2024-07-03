@@ -68,8 +68,9 @@
 # % description: Assign the space time raster dataset start and end time to the output map
 # %end
 
-import sys
 import copy
+import sys
+
 import grass.script as grass
 
 ############################################################################
@@ -77,8 +78,8 @@ import grass.script as grass
 
 def main():
     # lazy imports
-    import grass.temporal as tgis
     import grass.pygrass.modules as pymod
+    import grass.temporal as tgis
 
     # Get the options
     input = options["input"]
@@ -121,7 +122,7 @@ def main():
     for _map in maps:
         if _map.get_id() is None:
             count += 1
-            if sp.get_temporal_type() == "absolute" and tsuffix in ["gran", "time"]:
+            if sp.get_temporal_type() == "absolute" and tsuffix in {"gran", "time"}:
                 _id = "{ba}@{ma}".format(ba=base, ma=mapset)
             else:
                 map_name = tgis.create_numeric_suffix(base, num + count, tsuffix)
@@ -141,11 +142,11 @@ def main():
     # Do some checks before computation
     for _map in gap_list:
         if not _map.get_precedes() or not _map.get_follows():
-            grass.fatal(_("Unable to determine successor " "and predecessor of a gap."))
+            grass.fatal(_("Unable to determine successor and predecessor of a gap."))
 
         if len(_map.get_precedes()) > 1:
             grass.warning(
-                _("More than one successor of the gap found. " "Using the first found.")
+                _("More than one successor of the gap found. Using the first found.")
             )
 
         if len(_map.get_follows()) > 1:

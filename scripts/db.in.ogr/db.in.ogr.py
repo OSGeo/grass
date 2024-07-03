@@ -109,7 +109,7 @@ def main():
         if line == output:
             if grass.overwrite():
                 grass.warning(
-                    _("Table <%s> already exists and will be " "overwritten") % output
+                    _("Table <%s> already exists and will be overwritten") % output
                 )
                 grass.write_command(
                     "db.execute", input="-", stdin="DROP TABLE %s" % output

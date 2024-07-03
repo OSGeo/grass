@@ -28,16 +28,21 @@ def test_layer_2(dataset_layer_2):
         aggregate_column=dataset.float_column_name,
         aggregate_method=stats,
         aggregate_backend="sql",
+        env=dataset_layer_2.session.env,
     )
 
-    vector_info = gs.vector_info(dissolved_vector, layer=2)
+    vector_info = gs.vector_info(
+        dissolved_vector, layer=2, env=dataset_layer_2.session.env
+    )
     assert vector_info["level"] == 2
     assert vector_info["centroids"] == 3
     assert vector_info["areas"] == 3
     assert vector_info["num_dblinks"] == 1
     assert vector_info["attribute_primary_key"] == "cat"
 
-    columns = gs.vector_columns(dissolved_vector, layer=2)
+    columns = gs.vector_columns(
+        dissolved_vector, layer=2, env=dataset_layer_2.session.env
+    )
     assert len(columns) == len(expected_stats_columns) + 2
     assert sorted(columns.keys()) == sorted(
         ["cat", dataset.str_column_name] + expected_stats_columns
@@ -62,6 +67,7 @@ def test_layer_2(dataset_layer_2):
             map=dissolved_vector,
             layer=2,
             format="json",
+            env=dataset_layer_2.session.env,
         )
     )["records"]
     ref_unique_values = set(dataset.str_column_values)
@@ -70,5 +76,8 @@ def test_layer_2(dataset_layer_2):
     assert set(actual_values) == ref_unique_values
 
     aggregate_n = [record[f"{dataset.float_column_name}_count"] for record in records]
-    assert sum(aggregate_n) == gs.vector_info(dataset.vector_name)["areas"]
+    assert (
+        sum(aggregate_n)
+        == gs.vector_info(dataset.vector_name, env=dataset_layer_2.session.env)["areas"]
+    )
     assert sorted(aggregate_n) == [1, 2, 3]

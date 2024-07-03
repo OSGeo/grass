@@ -217,9 +217,9 @@ class RLiSetupFrame(wx.Frame):
         listfiles = []
         # return all the configuration files in self.rlipath, check if there are
         # link or directory and doesn't add them
-        for l in os.listdir(self.rlipath):
-            if os.path.isfile(os.path.join(self.rlipath, l)):
-                listfiles.append(l)
+        for rli_conf in os.listdir(self.rlipath):
+            if os.path.isfile(os.path.join(self.rlipath, rli_conf)):
+                listfiles.append(rli_conf)
         return sorted(listfiles)
 
     def OnClose(self, event):
@@ -241,7 +241,7 @@ class RLiSetupFrame(wx.Frame):
             return
         dlg = wx.MessageDialog(
             parent=self.parent,
-            message=_("Do you want remove r.li " "configuration file <%s>?") % confile,
+            message=_("Do you want remove r.li configuration file <%s>?") % confile,
             caption=_("Remove new r.li configuration file?"),
             style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
         )

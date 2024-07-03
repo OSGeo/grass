@@ -81,7 +81,7 @@ int get_stp_num(void)
     FILE *fipsfile;
     char FIPSfile[256], buff[256];
     int NUM_ZON, sfips, cfips, SFIPS = 0, CFIPS = 0;
-    int record, icode, reccnt, special_case;
+    int record, icode, reccnt = 0, special_case;
     char STabbr[50], COname[50];
 
     sprintf(FIPSfile, "%s/etc/proj/FIPS.code", G_gisbase());
@@ -139,7 +139,7 @@ int get_stp_num(void)
 int ask_fips(FILE *fp, int *s, int *c, int *sc)
 {
     int ii, FIPS = 0, NUM_ZON, sfips, cfips;
-    char STabbr[50], STabbr_prev[50], COname[50], answer[50], buff[256];
+    char STabbr[50], STabbr_prev[50] = "", COname[50], answer[50], buff[256];
     char *Tmp_file1, *Tmp_file2, *a, *b;
     FILE *Tmp_fd1 = NULL, *Tmp_fd2 = NULL;
     int in_stat;

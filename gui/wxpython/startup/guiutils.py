@@ -14,7 +14,6 @@ This program is free software under the GNU General Public License
 This is for code which depend on something from GUI (wx or wxGUI).
 """
 
-
 import os
 import wx
 
@@ -648,7 +647,7 @@ def import_file(guiparent, filePath, env):
     if returncode != 0:
         GError(
             parent=guiparent,
-            message=_("Import of <%(name)s> failed.\n" "Reason: %(msg)s")
+            message=_("Import of <%(name)s> failed.\nReason: %(msg)s")
             % ({"name": filePath, "msg": error}),
         )
     else:

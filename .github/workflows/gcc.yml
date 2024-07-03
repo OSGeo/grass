@@ -7,9 +7,6 @@ on:
       - main
       - releasebranch_*
   pull_request:
-    branches:
-      - main
-      - releasebranch_*
 
 jobs:
   build:
@@ -24,18 +21,12 @@ jobs:
     strategy:
       matrix:
         include:
-          - c: gnu99
-            cpp: c++11
-          - c: gnu11
-            cpp: c++11
-          - c: gnu11
-            cpp: c++14
           - c: gnu17
             cpp: c++17
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: Get dependencies
         run: |
           sudo apt-get update -y

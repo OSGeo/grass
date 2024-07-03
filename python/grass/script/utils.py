@@ -41,7 +41,7 @@ def float_or_dms(s):
 
     :return: float value
     """
-    if s[-1] in ["E", "W", "N", "S"]:
+    if s[-1] in {"E", "W", "N", "S"}:
         s = s[:-1]
     return sum(float(x) / 60**n for (n, x) in enumerate(s.split(":")))
 

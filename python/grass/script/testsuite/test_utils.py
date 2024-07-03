@@ -7,7 +7,7 @@ from grass.script import utils
 
 
 class EnvironChange(TestCase):
-    env = dict()
+    env = {}
     NOT_FOUND = "Not found!"
 
     def setUp(self):
@@ -27,7 +27,7 @@ class EnvironChange(TestCase):
 
 
 class LcAllC(EnvironChange):
-    env = dict(LC_ALL="C")
+    env = {"LC_ALL": "C"}
 
 
 class TestEncode(TestCase):

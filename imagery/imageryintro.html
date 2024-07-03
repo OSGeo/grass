@@ -73,14 +73,14 @@ As a general rule in GRASS:
 The module <a href="r.in.gdal.html">r.in.gdal</a> offers a common
 interface for many different raster and satellite image
 formats. Additionally, it also offers options such as on-the-fly
-location creation or extension of the default region to match the
+project creation or extension of the default region to match the
 extent of the imported raster map.  For special cases, other import
 modules are available. Always the full map is imported. Imagery data
 can be group (e.g. channel-wise) with <a href="i.group.html">i.group</a>.
 
 <p>
 For importing scanned maps, the user will need to create a
-x,y-location, scan the map in the desired resolution and save it into
+x,y-project, scan the map in the desired resolution and save it into
 an appropriate raster format (e.g. tiff, jpeg, png, pbm) and then use
 <a href="r.in.gdal.html">r.in.gdal</a> to import it. Based on
 reference points the scanned map can be rectified to obtain geocoded

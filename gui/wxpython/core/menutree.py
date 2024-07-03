@@ -88,16 +88,16 @@ class MenuTreeModelBuilder:
 
     def _createItem(self, item, node):
         if item.tag == "separator":
-            data = dict(
-                label="",
-                description="",
-                handler="",
-                command="",
-                keywords="",
-                shortcut="",
-                wxId="",
-                icon="",
-            )
+            data = {
+                "label": "",
+                "description": "",
+                "handler": "",
+                "command": "",
+                "keywords": "",
+                "shortcut": "",
+                "wxId": "",
+                "icon": "",
+            }
             self.model.AppendNode(parent=node, label="", data=data)
         elif item.tag == "menuitem":
             origLabel = _(item.find("label").text)
@@ -138,16 +138,16 @@ class MenuTreeModelBuilder:
                     label += "   [" + gcmd + "]"
                 elif self.menustyle == 2:
                     label = "      [" + gcmd + "]"
-            data = dict(
-                label=origLabel,
-                description=desc,
-                handler=handler,
-                command=gcmd,
-                keywords=keywords,
-                shortcut=shortcut,
-                wxId=wxId,
-                icon=icon,
-            )
+            data = {
+                "label": origLabel,
+                "description": desc,
+                "handler": handler,
+                "command": gcmd,
+                "keywords": keywords,
+                "shortcut": shortcut,
+                "wxId": wxId,
+                "icon": icon,
+            }
             self.model.AppendNode(parent=node, label=label, data=data)
         elif item.tag == "menu":
             self._createMenu(item, node)
@@ -242,9 +242,9 @@ if __name__ == "__main__":
     menu = "manager"
 
     for arg in sys.argv:
-        if arg in ("strings", "tree", "commands", "dump"):
+        if arg in {"strings", "tree", "commands", "dump"}:
             action = arg
-        elif arg in ("manager", "module_tree", "modeler", "psmap"):
+        elif arg in {"manager", "module_tree", "modeler", "psmap"}:
             menu = arg
 
     # FIXME: cross-dependencies

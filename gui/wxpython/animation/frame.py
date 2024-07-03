@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
+
 import os
 import wx
 import wx.aui
@@ -117,7 +118,7 @@ class AnimationFrame(wx.Frame):
         self._addPanes()
         self._mgr.Update()
 
-        self.dialogs = dict()
+        self.dialogs = {}
         self.dialogs["speed"] = None
         self.dialogs["preferences"] = None
 
@@ -352,7 +353,7 @@ class AnimationFrame(wx.Frame):
         if not self.dialogs["preferences"]:
             dlg = PreferencesDialog(parent=self, giface=self._giface)
             self.dialogs["preferences"] = dlg
-            dlg.formatChanged.connect(lambda: self.controller.UpdateAnimations())
+            dlg.formatChanged.connect(self.controller.UpdateAnimations)
             dlg.CenterOnParent()
 
         self.dialogs["preferences"].Show()

@@ -8,6 +8,7 @@ Licence:    This program is free software under the GNU General Public
                 License (>=v2). Read the file COPYING that comes with GRASS
                 for details.
 """
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
@@ -72,7 +73,7 @@ class Testrr(TestCase):
             seed=1,
         )
         self.assertModule("v.info", map=self.vector, flags="t")
-        topology = dict(points=100, lines=0, areas=0, map3d=1)
+        topology = {"points": 100, "lines": 0, "areas": 0, "map3d": 1}
         self.assertVectorFitsTopoInfo(self.vector, topology)
 
     def test_flag_b(self):
@@ -87,7 +88,7 @@ class Testrr(TestCase):
             seed=1,
         )
         self.assertModule("v.info", map=self.vector, flags="t")
-        topology = dict(points=36011, lines=0, areas=0)
+        topology = {"points": 36011, "lines": 0, "areas": 0}
         self.assertVectorFitsTopoInfo(self.vector, topology)
 
 

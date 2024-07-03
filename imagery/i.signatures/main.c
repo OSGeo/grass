@@ -118,15 +118,7 @@ int main(int argc, char *argv[])
     parms.type->description = _("Type of signature file");
     parms.type->guisection = _("Main");
 
-    parms.format = G_define_option();
-    parms.format->key = "format";
-    parms.format->type = TYPE_STRING;
-    parms.format->required = NO;
-    parms.format->label = _("Output format");
-    parms.format->options = "plain,json";
-    parms.format->descriptions = "plain;Plain text output;"
-                                 "json;JSON (JavaScript Object Notation);";
-    parms.format->answer = "plain";
+    parms.format = G_define_standard_option(G_OPT_F_FORMAT);
     parms.format->guisection = _("Print");
 
     parms.mapset = G_define_standard_option(G_OPT_M_MAPSET);

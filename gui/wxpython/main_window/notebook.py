@@ -4,8 +4,8 @@
 @brief Custom AuiNotebook class and class for undocked AuiNotebook frame
 
 Classes:
- - notebook::MapPageFrame
- - notebook::MapNotebook
+ - notebook::MainPageFrame
+ - notebook::MainNotebook
 
 (C) 2022 by the GRASS Development Team
 
@@ -19,56 +19,61 @@ This program is free software under the GNU General Public License
 import os
 
 import wx
-import wx.lib.agw.aui as aui
+from wx.lib.agw import aui
 
 from core import globalvar
 from gui_core.wrap import SimpleTabArt
+from mapdisp.frame import MapPanel
 
 
-class MapPageFrame(wx.Frame):
-    """Frame for independent map display window."""
+class MainPageFrame(wx.Frame):
+    """Frame for independent window."""
 
-    def __init__(self, parent, mapdisplay, size, pos, title):
+    def __init__(self, parent, panel, size, pos, title, icon="grass", menu=None):
         wx.Frame.__init__(self, parent=parent, size=size, pos=pos, title=title)
-        self.mapdisplay = mapdisplay
-        self.mapdisplay.Reparent(self)
+        self.panel = panel
+        self.panel.Reparent(self)
 
         self._layout()
 
         # set system icon
         self.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, icon + ".ico"), wx.BITMAP_TYPE_ICO)
         )
 
-        self.mapdisplay.onFocus.emit()
+        if menu is not None:
+            self.SetMenuBar(menu)
+
+        self.panel.onFocus.emit()
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
         self._show()
 
     def _layout(self):
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self.mapdisplay, proportion=1, flag=wx.EXPAND)
+        sizer.Add(self.panel, proportion=1, flag=wx.EXPAND)
         self.SetSizer(sizer)
         self.CentreOnParent()
 
     def _show(self):
-        """Show frame and contained mapdisplay panel"""
-        self.mapdisplay.Show()
+        """Show frame and contained panel"""
+        self.panel.Show()
         self.Show()
 
     def SetDockingCallback(self, function):
-        """Set docking callback on reparented mapdisplay panel"""
-        self.mapdisplay.SetDockingCallback(function)
+        """Set docking callback on reparented panel"""
+        self.panel.SetDockingCallback(function)
 
     def OnClose(self, event):
         """Close frame and associated layer notebook page."""
-        self.mapdisplay.OnCloseWindow(event=None, askIfSaveWorkspace=True)
+        if isinstance(self.panel, MapPanel):
+            self.panel.OnCloseWindow(event=None, askIfSaveWorkspace=True)
+        else:
+            self.panel.OnCloseWindow(event=None)
 
 
-class MapNotebook(aui.AuiNotebook):
-    """Map notebook class. Overrides some AuiNotebook classes.
+class MainNotebook(aui.AuiNotebook):
+    """Main notebook class. Overrides some AuiNotebook classes.
     Takes into consideration the dock/undock functionality.
     """
 
@@ -83,34 +88,62 @@ class MapNotebook(aui.AuiNotebook):
         self.SetArtProvider(SimpleTabArt())
 
         # bindings
-        self.Bind(
-            aui.EVT_AUINOTEBOOK_PAGE_CHANGED,
-            lambda evt: self.GetCurrentPage().onFocus.emit(),
-        )
+        self.Bind(aui.EVT_AUINOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.Bind(aui.EVT_AUINOTEBOOK_PAGE_CLOSE, self.OnClose)
 
-    def UndockMapDisplay(self, page):
-        """Undock active map display to independent MapFrame object"""
+        # remember number of items in the menu
+        self._menuCount = self.parent.menubar.GetMenuCount()
+
+    def OnPageChanged(self, event):
+        page = self.GetCurrentPage()
+        page.onFocus.emit()
+
+        # set up menu
+        mbar = self.parent.menubar
+        if page.HasMenu():
+            # add new (or replace if exists) additional menu item related to this page
+            menu, menuName = page.GetMenu()
+            if mbar.GetMenuCount() == self._menuCount:
+                appendMenu = mbar.Insert
+            else:
+                appendMenu = mbar.Replace
+            appendMenu(self._menuCount - 1, menu, menuName)
+        elif mbar.GetMenuCount() > self._menuCount:
+            # remove additional menu item
+            mbar.Remove(self._menuCount - 1)
+
+    def UndockPage(self, page):
+        """Undock active page to independent MainFrame object"""
         index = self.GetPageIndex(page)
         text = self.GetPageText(index)
         original_size = page.GetSize()
         original_pos = page.GetPosition()
+        icon = "grass_map" if isinstance(page, MapPanel) else "grass"
+        if page.HasMenu():
+            menu, _ = page.GetMenu()
+        else:
+            menu = None
         self.RemovePage(index)
-        frame = MapPageFrame(
+        frame = MainPageFrame(
             parent=self.parent,
-            mapdisplay=page,
+            panel=page,
             size=original_size,
             pos=original_pos,
             title=text,
+            icon=icon,
+            menu=menu,
         )
-        frame.SetDockingCallback(self.DockMapDisplay)
+        frame.SetDockingCallback(self.DockPage)
 
-    def DockMapDisplay(self, page):
-        """Dock independent MapFrame object back to Aui.Notebook"""
+    def DockPage(self, page):
+        """Dock independent MainFrame object back to Aui.Notebook"""
         frame = page.GetParent()
         page.Reparent(self)
-        page.SetDockingCallback(self.UndockMapDisplay)
+        page.SetDockingCallback(self.UndockPage)
         self.AddPage(page, frame.GetTitle())
+        if frame.GetMenuBar():
+            # avoid destroying menu if defined
+            frame.SetMenuBar(None)
         frame.Destroy()
 
     def AddPage(self, *args, **kwargs):
@@ -119,8 +152,8 @@ class MapNotebook(aui.AuiNotebook):
         super().AddPage(*args, **kwargs)
         self.SetSelection(self.GetPageCount() - 1)
 
-    def SetSelectionToMapPage(self, page):
-        """Decides whether to set selection to a MapNotebook page
+    def SetSelectionToMainPage(self, page):
+        """Decides whether to set selection to a MainNotebook page
         or an undocked independent frame"""
         self.SetSelection(self.GetPageIndex(page))
 
@@ -128,8 +161,8 @@ class MapNotebook(aui.AuiNotebook):
             frame = page.GetParent()
             wx.CallLater(500, lambda: frame.Raise() if frame else None)
 
-    def DeleteMapPage(self, page):
-        """Decides whether to delete a MapNotebook page
+    def DeleteMainPage(self, page):
+        """Decides whether to delete a MainNotebook page
         or close an undocked independent frame"""
         if page.IsDocked():
             self.DeletePage(self.GetPageIndex(page))
@@ -137,8 +170,8 @@ class MapNotebook(aui.AuiNotebook):
             frame = page.GetParent()
             frame.Destroy()
 
-    def SetMapPageText(self, page, text):
-        """Decides whether sets title to MapNotebook page
+    def SetMainPageText(self, page, text):
+        """Decides whether sets title to MainNotebook page
         or an undocked independent frame"""
         if page.IsDocked():
             self.SetPageText(page_idx=self.GetPageIndex(page), text=text)
@@ -149,6 +182,9 @@ class MapNotebook(aui.AuiNotebook):
 
     def OnClose(self, event):
         """Page of map notebook is being closed"""
-        display = self.GetCurrentPage()
-        display.OnCloseWindow(event=None, askIfSaveWorkspace=True)
+        page = self.GetCurrentPage()
+        if isinstance(page, MapPanel):
+            page.OnCloseWindow(event=None, askIfSaveWorkspace=True)
+        else:
+            page.OnCloseWindow(event=None)
         event.Veto()

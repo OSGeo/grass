@@ -2,6 +2,7 @@
 
 @author Soeren Gebbert
 """
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 from grass.pygrass.vector import VectorTopo

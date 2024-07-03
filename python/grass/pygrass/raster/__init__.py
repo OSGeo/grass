@@ -13,16 +13,12 @@ import grass.lib.rowio as librowio
 
 libgis.G_gisinit("")
 
-#
 # import pygrass modules
-#
 from grass.pygrass.errors import must_be_open
 from grass.pygrass.gis.region import Region
 from grass.pygrass import utils
 
-#
 # import raster classes
-#
 from grass.pygrass.raster.abstract import RasterAbstractBase
 from grass.pygrass.raster.raster_type import TYPE as RTYPE, RTYPE_STR
 from grass.pygrass.raster.buffer import Buffer
@@ -211,14 +207,14 @@ class RasterRow(RasterAbstractBase):
             if self.exist():
                 if not self.overwrite:
                     str_err = _(
-                        "Raster map <{0}> already exists" " and will be not overwritten"
+                        "Raster map <{0}> already exists and will be not overwritten"
                     )
                     raise OpenError(str_err.format(self))
             if self._gtype is None:
                 raise OpenError(_("Raster type not defined"))
             self._fd = libraster.Rast_open_new(self.name, self._gtype)
         else:
-            raise OpenError("Open mode: %r not supported," " valid mode are: r, w")
+            raise OpenError("Open mode: %r not supported, valid mode are: r, w")
         # read rows and cols from the active region
         self._rows = libraster.Rast_window_rows()
         self._cols = libraster.Rast_window_cols()
@@ -317,7 +313,7 @@ class RasterSegment(RasterAbstractBase):
         return self._mode
 
     def _set_mode(self, mode):
-        if mode and mode.lower() not in ("r", "w", "rw"):
+        if mode and mode.lower() not in {"r", "w", "rw"}:
             str_err = _("Mode type: {0} not supported ('r', 'w','rw')")
             raise ValueError(str_err.format(mode))
         self._mode = mode

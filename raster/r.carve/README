@@ -1,4 +1,4 @@
-http://www4.ncsu.edu/~hmitaso/gmslab/reports/cerl99/rep99.html
+http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/reports/cerl99/rep99.html
 Terrain modeling and Soil Erosion Simulations for Fort Hood and Fort Polk
 test areas
 
@@ -21,7 +21,7 @@ Helena Mitasova, Lubos Mitas, William M. Brown, Douglas M. Johnston
 r.carve does not create a depressionless DEM because many depressions are in
 flat areas and not in the streams.
 
-http://www4.ncsu.edu/~hmitaso/gmslab/reports/cerl99/demstr.gif
+http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/reports/cerl99/demstr.gif
 
 The program will take the vector stream data, transform them to raster, and
 subtracts a defaultdepth + additionaldepth from the DEM. If the given

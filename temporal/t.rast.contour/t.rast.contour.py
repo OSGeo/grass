@@ -116,19 +116,19 @@
 # % description: Do not create attribute tables
 # %end
 
-import sys
 import copy
+import sys
+
 import grass.script as gscript
 from grass.exceptions import FatalError
-
 
 ############################################################################
 
 
 def main(options, flags):
     # lazy imports
-    import grass.temporal as tgis
     import grass.pygrass.modules as pymod
+    import grass.temporal as tgis
 
     # Get the options
     input = options["input"]

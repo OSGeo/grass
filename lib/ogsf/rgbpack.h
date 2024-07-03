@@ -9,8 +9,8 @@
 #define INT_TO_GRN(i, g) (g = (i & GRN_MASK) >> 8)
 #define INT_TO_BLU(i, b) (b = (i & BLU_MASK) >> 16)
 
-#define RGB_TO_INT(r, g, b, i)                            \
-    (i = (((r)&RED_MASK) + ((int)((g) << 8) & GRN_MASK) + \
+#define RGB_TO_INT(r, g, b, i)                              \
+    (i = (((r) & RED_MASK) + ((int)((g) << 8) & GRN_MASK) + \
           ((int)((b) << 16) & BLU_MASK)))
 
 #define CONST_COLS 45

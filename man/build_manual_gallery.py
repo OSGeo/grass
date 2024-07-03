@@ -168,7 +168,7 @@ def main():
     with open(os.path.join(html_dir, output_name), "w") as output:
         output.write(
             header1_tmpl.substitute(
-                title="GRASS GIS %s Reference " "Manual: Manual gallery" % grass_version
+                title="GRASS GIS %s Reference Manual: Manual gallery" % grass_version
             )
         )
         output.write(header_graphical_index_tmpl)

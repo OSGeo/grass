@@ -392,7 +392,7 @@ class GConsoleWindow(wx.SplitterWindow):
 
         self.cmdOutput.AddStyledMessage(message, type)
 
-        if event.type in ("warning", "error"):
+        if event.type in {"warning", "error"}:
             self.contentChanged.emit(notification=Notification.MAKE_VISIBLE)
         else:
             self.contentChanged.emit(notification=Notification.HIGHLIGHT)

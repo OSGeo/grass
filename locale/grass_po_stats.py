@@ -72,9 +72,9 @@ def read_msgfmt_statistics(msg, lgood, lfuzzy, lbad):
 
 def langDefinition(fil):
     f = codecs.open(fil, encoding="utf-8", errors="replace", mode="r")
-    for l in f.readlines():
-        if '"Language-Team:' in l:
-            lang = l.split(" ")[1:-1]
+    for line in f.readlines():
+        if '"Language-Team:' in line:
+            lang = line.split(" ")[1:-1]
             break
     f.close()
     if len(lang) == 2:
@@ -136,7 +136,7 @@ def writejson(stats, outfile):
     # load dictionary into json format
     fjson = json.dumps(stats, sort_keys=True, indent=4)
     # write a string with pretty style
-    outjson = os.linesep.join([l.rstrip() for l in fjson.splitlines()])
+    outjson = os.linesep.join([line.rstrip() for line in fjson.splitlines()])
     # write out file
     fout = open(outfile, "w")
     fout.write(outjson)

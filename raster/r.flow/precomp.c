@@ -28,7 +28,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include "r.flow.h"
-#include "io.h"
+#include "flow_io.h"
 #include "mem.h"
 #include "aspect.h"
 

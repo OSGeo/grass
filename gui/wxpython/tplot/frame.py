@@ -203,7 +203,7 @@ class TplotFrame(wx.Frame):
         self.coor = StaticText(
             parent=self.controlPanelRaster,
             id=wx.ID_ANY,
-            label=_("X and Y coordinates separated by " "comma:"),
+            label=_("X and Y coordinates separated by comma:"),
         )
         try:
             self._giface.GetMapWindow()
@@ -362,7 +362,7 @@ class TplotFrame(wx.Frame):
         self.csvLabel = StaticText(
             parent=self.controlPanelExport,
             id=wx.ID_ANY,
-            label=_("Path for output CSV file " "with plotted data"),
+            label=_("Path for output CSV file with plotted data"),
         )
         self.csvButton = filebrowse.FileBrowseButton(
             parent=self.controlPanelExport,
@@ -429,7 +429,7 @@ class TplotFrame(wx.Frame):
             sp = tgis.dataset_factory(etype, fullname)
             if not sp.is_in_db(dbif=self.dbif):
                 GError(
-                    message=_("Dataset <%s> not found in temporal " "database")
+                    message=_("Dataset <%s> not found in temporal database")
                     % (fullname),
                     parent=self,
                 )
@@ -566,7 +566,7 @@ class TplotFrame(wx.Frame):
             sp = tgis.dataset_factory(etype, fullname)
             if not sp.is_in_db(dbif=self.dbif):
                 GError(
-                    message=_("Dataset <%s> not found in temporal " "database")
+                    message=_("Dataset <%s> not found in temporal database")
                     % (fullname),
                     parent=self,
                     showTraceback=False,
@@ -603,7 +603,7 @@ class TplotFrame(wx.Frame):
                 elif self.timeDataV[name]["unit"] != unit:
                     GError(
                         message=_(
-                            "Datasets have different time unit which" " is not allowed."
+                            "Datasets have different time unit which is not allowed."
                         ),
                         parent=self,
                         showTraceback=False,
@@ -840,13 +840,13 @@ class TplotFrame(wx.Frame):
             xdata = []
             ydata = []
             for keys, values in self.timeDataR[name].items():
-                if keys in [
+                if keys in {
                     "temporalType",
                     "granularity",
                     "validTopology",
                     "unit",
                     "temporalDataType",
-                ]:
+                }:
                     continue
                 xdata.append(self.convert(values["start_datetime"]))
                 ydata.append(values["value"])
@@ -896,13 +896,13 @@ class TplotFrame(wx.Frame):
             ydata = []
             xcsv = []
             for keys, values in self.timeDataV[name_cat[0]][name_cat[1]].items():
-                if keys in [
+                if keys in {
                     "temporalType",
                     "granularity",
                     "validTopology",
                     "unit",
                     "temporalDataType",
-                ]:
+                }:
                     continue
                 xdata.append(self.convert(values["start_datetime"]))
                 if values["value"] == "":
@@ -956,13 +956,13 @@ class TplotFrame(wx.Frame):
             ydata = []
             xcsv = []
             for keys, values in self.timeDataV[name].items():
-                if keys in [
+                if keys in {
                     "temporalType",
                     "granularity",
                     "validTopology",
                     "unit",
                     "temporalDataType",
-                ]:
+                }:
                     continue
                 xdata.append(self.convert(values["start_datetime"]))
                 ydata.append(values["value"])
@@ -1074,7 +1074,7 @@ class TplotFrame(wx.Frame):
                 if not bbox.contains(self.poi):
                     GError(
                         parent=self,
-                        message=_("Seed point outside the " "current region"),
+                        message=_("Seed point outside the current region"),
                         showTraceback=False,
                     )
                     return
@@ -1159,7 +1159,10 @@ class TplotFrame(wx.Frame):
             )
             mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
             allDatasets = [
-                i for i in sorted(allDatasets, key=lambda l: mapsets.index(l[1]))
+                i
+                for i in sorted(
+                    allDatasets, key=lambda dataset_info: mapsets.index(dataset_info[1])
+                )
             ]
 
         for dataset in datasets:
@@ -1183,9 +1186,7 @@ class TplotFrame(wx.Frame):
             elif len(indices) >= 2:
                 dlg = wx.SingleChoiceDialog(
                     self,
-                    message=_(
-                        "Please specify the " "space time dataset " "<%s>." % dataset
-                    ),
+                    message=_("Please specify the space time dataset <%s>." % dataset),
                     caption=_("Ambiguous dataset name"),
                     choices=[
                         (
@@ -1441,8 +1442,8 @@ class DataCursor:
             xytext=self.offsets,
             va="bottom",
             textcoords="offset points",
-            bbox=dict(boxstyle="round,pad=0.5", fc="yellow", alpha=0.7),
-            arrowprops=dict(arrowstyle="->", connectionstyle="arc3,rad=0"),
+            bbox={"boxstyle": "round,pad=0.5", "fc": "yellow", "alpha": 0.7},
+            arrowprops={"arrowstyle": "->", "connectionstyle": "arc3,rad=0"},
             annotation_clip=False,
             multialignment="left",
         )

@@ -59,7 +59,8 @@ def main():
     if dbfdriver:
         grass.warning(
             _(
-                "Since DBF driver is used, the content of the 'alternatenames' column might be cut with respect to the original Geonames.org column content"
+                "Since DBF driver is used, the content of the 'alternatenames' column "
+                "might be cut with respect to the original Geonames.org column content"
             )
         )
 

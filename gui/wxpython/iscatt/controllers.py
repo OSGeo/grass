@@ -19,6 +19,7 @@ This program is free software under the GNU General Public License
 
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
+
 from copy import deepcopy
 import wx
 
@@ -232,8 +233,8 @@ class ScattsManager:
                         "Interactive Scatter Plot Tool can not be used.\n"
                         "Number of cells (rows*cols) <%d> in current region"
                         "is higher than maximum limit <%d>.\n\n"
-                        "You can reduce number of cells in current region using <g.region> command."
-                        % (ncells, MAX_NCELLS)
+                        "You can reduce number of cells in current region using "
+                        "<g.region> command." % (ncells, MAX_NCELLS)
                     ),
                 )
             )
@@ -420,7 +421,7 @@ class ScattsManager:
             if not scatt["scatt"]:
                 continue
             scatt["scatt"].SetSelectionPolygonMode(activate)
-            if not activate and self.plot_mode not in ["zoom", "pan", "zoom_extend"]:
+            if not activate and self.plot_mode not in {"zoom", "pan", "zoom_extend"}:
                 self.SetPlotsMode(None)
 
         self.render_mgr.RunningProcessDone()
@@ -739,9 +740,9 @@ class CategoriesManager:
         update_cat_rast = []
 
         for k, v in attrs_dict.items():
-            if not render and k in ["color", "opacity", "show", "nstd"]:
+            if not render and k in {"color", "opacity", "show", "nstd"}:
                 render = True
-            if k in ["color", "name"]:
+            if k in {"color", "name"}:
                 update_cat_rast.append(k)
 
             self.cats[cat_id][k] = v

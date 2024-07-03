@@ -2,7 +2,8 @@
 
 <em>r.in.gdal</em> allows a user to create a GRASS GIS raster map layer,
 or imagery group, from any GDAL supported raster map format, with an optional
-title. The imported file may also be optionally used to create a new location.
+title. The imported file may also be used to create a new project
+(previously called location).
 
 <!--
 Extended explanations:
@@ -125,27 +126,27 @@ WEBP                                          WEBP              Yes      No     
 WMO GRIB1/GRIB2 (.grb)                        GRIB              No       Yes          2GB
 </pre></div>
 
-<h3>Location Creation</h3>
+<h3>Project Creation</h3>
 
-<em>r.in.gdal</em> attempts to preserve projection information when importing
-datasets if the source format includes projection information, and if
-the GDAL driver supports it.  If the projection of the source dataset does
-not match the projection of the current location <em>r.in.gdal</em> will
-report an error message (<tt>Projection of dataset does not appear to
-match current location</tt>) and then report the PROJ_INFO parameters of
+<em>r.in.gdal</em> attempts to preserve coordinate reference system (CRS)
+information when importing datasets if the source format includes CRS information,
+and if the GDAL driver supports it. If the CRS of the source dataset does
+not match the CRS of the current project <em>r.in.gdal</em> will
+report an error message (<tt>Coordinate reference system of dataset does not appear to
+match current project</tt>) and then report the PROJ_INFO parameters of
 the source dataset.
 
 <p>
 If the user wishes to ignore the difference between the apparent coordinate
-system of the source data and the current location, they may pass the
-<b>-o</b> flag to override the projection check.
+system of the source data and the current project, they may pass the
+<b>-o</b> flag to override the CRS check.
 
 <p>
-If the user wishes to import the data with the full projection definition,
-it is possible to have r.in.gdal automatically create a new location based
-on the projection and extents of the file being read.  This is accomplished
-by passing the name to be used for the new location via the <b>location</b>
-parameter.  Upon completion of the command, a new location will have been
+If the user wishes to import the data with the full CRS definition,
+it is possible to have r.in.gdal automatically create a new project based
+on the CRS and extents of the file being read.  This is accomplished
+by passing the name to be used for the new project via the <b>project</b>
+parameter.  Upon completion of the command, a new project will have been
 created (with only a PERMANENT mapset), and the raster will have been
 imported with the indicated <b>output</b> name into the PERMANENT mapset.
 
@@ -155,12 +156,12 @@ POINTS file within an imagery group. They can directly be used for
 <a href="i.rectify.html">i.rectify</a>.
 <p>
 The <b>target</b> option allows you to automatically re-project the GCPs
-from their own projection into another projection read from the
-PROJ_INFO file of the location name <b>target</b>.
+from their own CRS into another CRS read from the
+PROJ_INFO file of the project name <b>target</b>.
 <p>
-If the <b>target</b> location does not exist, a new location will be
-created matching the projection definition of the GCPs. The target of
-the output group will be set to the new location, and
+If the <b>target</b> project does not exist, a new project will be
+created matching the CRS definition of the GCPs. The target of
+the output group will be set to the new project, and
 <a href=i.rectify.html>i.rectify</a> can now be used without any further
 preparation.
 <p>
@@ -211,11 +212,11 @@ point cell layers (*.real and *.imaginary).<br>
 to set the north, south, east and west edges.  Rotational coefficients will
 be ignored, resulting in incorrect positioning for rotated datasets.<br>
 
-<dt> Projection
-<dd> The dataset's projection will be used to compare to the current location
-or to define a new location.  Internally GDAL represents projections in
+<dt> Coordinate reference system
+<dd> The dataset's CRS will be used to compare to the current project
+or to define a new project.  Internally GDAL represents CRS in
 OpenGIS Well Known Text format.  A large subset of the total set of GRASS
-projections are supported.<br>
+CRSs are supported.<br>
 
 <dt> Null Values
 <dd> Raster bands for which a null value is recognised by GDAL will have
@@ -230,7 +231,7 @@ a POINTS file associated with the imagery group.  Datasets with only one
 band that would otherwise have been translated as a simple raster map
 will also have an associated imagery group if there are ground control points.
 The coordinate system of the ground control points is reported by r.in.gdal
-but not preserved.  It is up to the user to ensure that the location
+but not preserved.  It is up to the user to ensure that the project
 established with i.target has a compatible coordinate system before using
 the points with i.rectify.<br>
 
@@ -260,23 +261,23 @@ gdalwarp rotated.tif northup.tif
 </pre></div>
 
 <p>
-<i>"ERROR: Projection of dataset does not appear to match the current location."</i><br>
+<i>"ERROR: Coordinate reference system of dataset does not appear to match the current project."</i><br>
 
-You need to create a location whose projection matches the data you
-wish to import. Try using <b>location</b> parameter to create a new
-location based upon the projection information in the file. If desired,
-you can then re-project it to another location with <em>r.proj</em>.
+You need to create a project whose CRS matches the data you
+wish to import. Try using <b>project</b> parameter to create a new
+project based upon the CRS information in the file. If desired,
+you can then reproject it to another project with <em>r.proj</em>.
 Alternatively you can override this error by using the <b>-o</b> flag.
 
 <p>
 <i>"WARNING: G_set_window(): Illegal latitude for North"</i><br>
 
-Latitude/Longitude locations in GRASS can not have regions which exceed
+Latitude/Longitude projects in GRASS can not have regions which exceed
 90&deg; North or South. Non-georeferenced imagery will have coordinates
 based on the images's number of pixels: 0,0 in the bottom left; cols,rows
 in the top right. Typically imagery will be much more than 90 pixels tall
 and so the GIS refuses to import it. If you are sure that the data is
-appropriate for your Lat/Lon location and intentd to reset the map's
+appropriate for your Lat/Lon project and intend to reset the map's
 bounds with the <em>r.region</em> module directly after import you may
 use the <b>-l</b> flag to constrain the map coordinates to legal values.
 
@@ -284,10 +285,10 @@ While the resulting bounds and resolution will likely be wrong for your
 map the map's data will be unaltered and safe. After resetting to known
 bounds with <em>r.region</em> you should double check them with
 <em>r.info</em>, paying special attention to the map resolution. In most
-cases you will want to import into the datafile's native projection, or
-into a simple XY location and use the Georectifaction tools
-(<em>i.rectify</em> et al.) to properly project into the target location.
-The <b>-l</b> flag should <i>only</i> be used if you know the projection
+cases you will want to import into the datafile's native CRS, or
+into a simple XY project and use the Georectifaction tools
+(<em>i.rectify</em> et al.) to re-project into the target project.
+The <b>-l</b> flag should <i>only</i> be used if you know the CRS
 is correct but the internal georeferencing has gotten lost, and you know
 the what the map's bounds and resolution should be beforehand.
 
@@ -302,7 +303,7 @@ To import the different chunks of data provided by the project as netCDF files,
 the offset parameter can be used to properly assign numbers to the series
 of daily raster maps from 1st Jan 1950 (in case of importing the ECAD data
 split into multi-annual chunks). The ECAD data must be imported into a
-LatLong location.
+LatLong project.
 <p>
 By using the <em>num_digits</em> parameter leading zeros are added to the
 map name numbers, allowing for chronological numbering of the imported raster

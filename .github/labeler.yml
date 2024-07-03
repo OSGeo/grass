@@ -111,24 +111,24 @@ docker:
           - .dockerignore
 
 docs:
-- all:
-  - changed-files:
-      - any-glob-to-any-file:
-          - doc/**
-          - man/**
-          - '**/*.md'
-          - '**/*.rst'
-          - '**/*.html'
-          - '**/*.dox'
-          - '**/*.png'
-          - '**.cff'
-          - CITING
-          - CHANGES
-          - AUTHORS
-          - NEWS
-          - TODO
-      - all-globs-to-all-files:
-          - '!doc/development/rfc/**'
+  - all:
+      - changed-files:
+          - any-glob-to-any-file:
+              - doc/**
+              - man/**
+              - '**/*.md'
+              - '**/*.rst'
+              - '**/*.html'
+              - '**/*.dox'
+              - '**/*.png'
+              - '**.cff'
+              - CITING
+              - CHANGES
+              - AUTHORS
+              - NEWS
+              - TODO
+          - all-globs-to-all-files:
+              - '!doc/development/rfc/**'
 RFC:
   - changed-files:
       - any-glob-to-any-file:
@@ -141,14 +141,14 @@ translation:
 Python:
   - changed-files:
       - any-glob-to-any-file:
-        - '**/*.py'
-        - '**/pyproject.toml'
+          - '**/*.py'
+          - '**/pyproject.toml'
 notebook:
   - changed-files:
       - any-glob-to-any-file:
-        - '**/*.ipynb'
-        - doc/notebooks/**
-        - python/grass/jupyter/**
+          - '**/*.ipynb'
+          - doc/notebooks/**
+          - python/grass/jupyter/**
 C:
   - changed-files:
       - any-glob-to-any-file: '**/*.c'

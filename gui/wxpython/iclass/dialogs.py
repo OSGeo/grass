@@ -19,6 +19,7 @@ for details.
 @author Vaclav Petras <wenzeslaus gmail.com>
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
+
 import os
 import wx
 
@@ -179,9 +180,9 @@ class IClassGroupDialog(SimpleDialog):
         return self.groupSelect.GetValue().split("@")[0]
 
     def GetGroupBandsErr(self, parent):
-        """Get list of raster bands which are in the soubgroup of group with both having same name.
-        If the group does not exists or it does not contain any bands in subgoup with same name,
-        error dialog is shown.
+        """Get list of raster bands which are in the subgroup of group with both
+        having same name. If the group does not exist, or it does not contain any bands
+        in subgroup with same name, error dialog is shown.
         """
         gr, s = self.GetData()
 
@@ -206,20 +207,20 @@ class IClassGroupDialog(SimpleDialog):
             if not bands:
                 if self.use_subg:
                     GError(
-                        _("No data found in subgroup <%s> of group <%s>.\n" ".")
-                        % (s, g),
+                        _("No data found in subgroup <%s> of group <%s>.\n.") % (s, g),
                         parent=parent,
                     )
 
                 else:
-                    GError(_("No data found in group <%s>.\n" ".") % g, parent=parent)
+                    GError(_("No data found in group <%s>.\n.") % g, parent=parent)
         else:
             GError(_("Group <%s> not found") % gr, parent=parent)
 
         return bands
 
     def GetGroupBands(self, group, subgroup):
-        """Get list of raster bands which are in the soubgroup of group with both having same name."""
+        """Get list of raster bands which are in the subgroup of group with both having
+        same name."""
 
         kwargs = {}
         if subgroup:
@@ -383,7 +384,8 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdi
     def __init__(self, parent, mapwindow, stats_data, id=wx.ID_ANY):
         """
         :param parent: gui parent
-        :param mapwindow: mapwindow instance with iclass toolbar and remove raster method
+        :param mapwindow: mapwindow instance with iclass toolbar and remove raster
+                          method
         :param stats_data: StatisticsData instance (defined in statistics.py)
         :param id: wx id
         """
@@ -570,10 +572,10 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdi
         text_c = wx.Colour(*ContrastColor(back_c))
 
         # if it is in scope of the method, gui falls, using self solved it
-        self.l = wx.ItemAttr()
-        self.l.SetBackgroundColour(back_c)
-        self.l.SetTextColour(text_c)
-        return self.l
+        self.item_attr = wx.ItemAttr()
+        self.item_attr.SetBackgroundColour(back_c)
+        self.item_attr.SetTextColour(text_c)
+        return self.item_attr
 
 
 def ContrastColor(color):
@@ -796,7 +798,7 @@ class IClassExportAreasDialog(wx.Dialog):
         )
         self.withTableCtrl.SetValue(True)
         self.withTableCtrl.SetToolTip(
-            _("Export attribute table containing" " computed statistical data")
+            _("Export attribute table containing computed statistical data")
         )
 
         dataSizer.Add(self.withTableCtrl, proportion=0, flag=wx.ALL, border=3)

@@ -414,7 +414,8 @@ class WSDialogBase(wx.Dialog):
 
     def _getConnectedWS(self):
         """
-        :return: list of found web services on server (identified as keys in self.ws_panels)
+        :return: list of found web services on server (identified as keys in
+                 self.ws_panels)
         """
         conn_ws = []
         for ws, data in self.ws_panels.items():
@@ -424,7 +425,8 @@ class WSDialogBase(wx.Dialog):
         return conn_ws
 
     def UpdateDialogAfterConnection(self):
-        """Update dialog after all web service panels downloaded and parsed capabilities data."""
+        """Update dialog after all web service panels downloaded and parsed
+        capabilities data."""
         avail_ws = {}
         conn_ws = self._getConnectedWS()
 
@@ -881,13 +883,13 @@ class SaveWMSLayerDialog(wx.Dialog):
         )
         self.region_types["named"] = RadioButton(parent=self, label=_("Named region"))
         self.region_types["display"].SetToolTip(
-            _("Extent and resolution" " are based on Map Display geometry.")
+            _("Extent and resolution are based on Map Display geometry.")
         )
         self.region_types["comp"].SetToolTip(
-            _("Extent and resolution" " are based on computational region.")
+            _("Extent and resolution are based on computational region.")
         )
         self.region_types["named"].SetToolTip(
-            _("Extent and resolution" " are based on named region.")
+            _("Extent and resolution are based on named region.")
         )
         self.region_types["display"].SetValue(True)  # set default as map display
 

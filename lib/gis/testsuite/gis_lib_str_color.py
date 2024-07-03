@@ -23,7 +23,7 @@ class StringToColorTestCase(TestCase):
         g = c_int()
         b = c_int()
         ret = libgis.G_str_to_color(string, byref(r), byref(g), byref(b))
-        colors = "{string} -> " "{r.value}, {g.value}, {b.value}".format(**locals())
+        colors = "{string} -> {r.value}, {g.value}, {b.value}".format(**locals())
         self.assertEqual(ret, 1, msg="Not successful return code (%s)" % colors)
         self.assertEqual(r.value, red, msg="Wrong number for red (%s)" % colors)
         self.assertEqual(g.value, green, msg="Wrong number for green (%s)" % colors)

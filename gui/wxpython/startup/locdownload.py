@@ -42,11 +42,11 @@ from gui_core.wrap import Button, StaticText
 LOCATIONS = [
     {
         "label": "Complete North Carolina dataset",
-        "url": "https://grass.osgeo.org/sampledata/north_carolina/nc_spm_08_grass7.tar.gz",
+        "url": "https://grass.osgeo.org/sampledata/north_carolina/nc_spm_08_grass7.tar.gz",  # noqa: E501
     },
     {
         "label": "Basic North Carolina dataset",
-        "url": "https://grass.osgeo.org/sampledata/north_carolina/nc_basic_spm_grass7.tar.gz",
+        "url": "https://grass.osgeo.org/sampledata/north_carolina/nc_basic_spm_grass7.tar.gz",  # noqa: E501
     },
     {
         "label": "World dataset in LatLong/WGS84",
@@ -58,7 +58,7 @@ LOCATIONS = [
     },
     {
         "label": "Piemonte, Italy dataset",
-        "url": "https://grass.osgeo.org/sampledata/grassdata_piemonte_utm32n_wgs84_grass7.tar.gz",
+        "url": "https://grass.osgeo.org/sampledata/grassdata_piemonte_utm32n_wgs84_grass7.tar.gz",  # noqa: E501
     },
     {
         "label": "Slovakia 3D precipitation voxel dataset",
@@ -140,7 +140,9 @@ class RedirectText:
         )
 
 
-# based on https://blog.shichao.io/2012/10/04/progress_speed_indicator_for_urlretrieve_in_python.html
+# based on
+# https://blog.shichao.io/2012/10/04/
+# progress_speed_indicator_for_urlretrieve_in_python.html
 def reporthook(count, block_size, total_size):
     global start_time
     if count == 0:
@@ -252,7 +254,8 @@ class LocationDownloadPanel(wx.Panel):
 
         # It is not clear if all wx versions supports color, so try-except.
         # The color itself may not be correct for all platforms/system settings
-        # but in http://xoomer.virgilio.it/infinity77/wxPython/Widgets/wx.SystemSettings.html
+        # but in
+        # http://xoomer.virgilio.it/infinity77/wxPython/Widgets/wx.SystemSettings.html
         # there is no 'warning' color.
         try:
             self.message.SetForegroundColour(wx.Colour(255, 0, 0))
@@ -340,7 +343,7 @@ class LocationDownloadPanel(wx.Panel):
             dict(zip(("addBtn", "removeBtn"), (True, False))),
         )
         button_label = self.parent.download_button.GetLabel()
-        if button_label in (_("Download"), _("Do&wnload")):
+        if button_label in {_("Download"), _("Do&wnload")}:
             self._change_download_btn_label(
                 label=self._abort_btn_label,
                 tooltip=self._abort_btn_tooltip,

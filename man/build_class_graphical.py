@@ -140,12 +140,12 @@ def generate_page_for_category(
 
     output.write(
         header1_tmpl.substitute(
-            title="GRASS GIS %s Reference " "Manual: Graphical index" % grass_version
+            title="GRASS GIS %s Reference Manual: Graphical index" % grass_version
         )
     )
     output.write(header_graphical_index_tmpl)
 
-    if module_family.lower() not in ["general", "postscript"]:
+    if module_family.lower() not in {"general", "postscript"}:
         if module_family == "raster3d":
             # covert keyword to nice form
             module_family = "3D raster"
