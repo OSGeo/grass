@@ -9,9 +9,10 @@ for details.
 @author: lucadelu
 """
 
-from grass.gunittest.case import TestCase
-import grass.script as gscript
 import os
+
+import grass.script as gscript
+from grass.gunittest.case import TestCase
 
 
 class TestRasterExport(TestCase):

@@ -27,7 +27,7 @@ class Flag:
         diz = read.element2dict(xflag) if xflag is not None else diz
         self.name = diz["name"]
         self.special = (
-            True if self.name in ("verbose", "overwrite", "quiet", "run") else False
+            True if self.name in {"verbose", "overwrite", "quiet", "run"} else False
         )
         self.description = diz.get("description", None)
         self.default = diz.get("default", None)

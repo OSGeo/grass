@@ -54,12 +54,12 @@ class PyShellWindow(wx.Panel):
             + "\n\n"
         )
 
-        shellargs = dict(
-            parent=self,
-            id=wx.ID_ANY,
-            introText=self.intro,
-            locals={"gs": grass, "AddLayer": self.AddLayer, "help": self.Help},
-        )
+        shellargs = {
+            "parent": self,
+            "id": wx.ID_ANY,
+            "introText": self.intro,
+            "locals": {"gs": grass, "AddLayer": self.AddLayer, "help": self.Help},
+        }
         # useStockId (available since wxPython 4.0.2) should be False on macOS
         if sys.platform == "darwin" and CheckWxVersion([4, 0, 2]):
             shellargs["useStockId"] = False

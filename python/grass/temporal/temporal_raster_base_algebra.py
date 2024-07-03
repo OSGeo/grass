@@ -45,22 +45,24 @@ import copy
 
 import grass.pygrass.modules as pymod
 from grass.exceptions import FatalError
-from .temporal_algebra import (
-    TemporalAlgebraLexer,
-    TemporalAlgebraParser,
-    GlobalTemporalVar,
-)
-from .core import init_dbif
+
 from .abstract_dataset import AbstractDatasetComparisonKeyStartTime
+from .core import init_dbif
+from .datetime_math import (
+    create_numeric_suffix,
+    create_suffix_from_datetime,
+    create_time_suffix,
+)
 from .factory import dataset_factory
 from .open_stds import open_new_stds
-from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
 from .space_time_datasets import Raster3DDataset, RasterDataset
+from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
+from .temporal_algebra import (
+    GlobalTemporalVar,
+    TemporalAlgebraLexer,
+    TemporalAlgebraParser,
+)
 from .temporal_granularity import compute_absolute_time_granularity
-
-from .datetime_math import create_suffix_from_datetime
-from .datetime_math import create_time_suffix
-from .datetime_math import create_numeric_suffix
 
 
 class TemporalRasterAlgebraLexer(TemporalAlgebraLexer):

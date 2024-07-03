@@ -382,7 +382,7 @@ class SQLBuilder(wx.Frame):
         i = 0
         items = []
         for item in data:  # sorted(set(map(lambda x: desc['ctype'](x[0]), data))):
-            if desc["type"] not in ("character", "text"):
+            if desc["type"] not in {"character", "text"}:
                 items.append(str(item[0]))
             else:
                 items.append("'{}'".format(GetUnicodeValue(item[0])))
@@ -605,7 +605,7 @@ class SQLBuilderSelect(SQLBuilder):
                 curspos = self.text_sql.GetLastPosition() + len(newsqlstr)
                 newsqlstr = sqlstr + newsqlstr
 
-        elif element in ["value", "mark"]:
+        elif element in {"value", "mark"}:
             addstr = " " + value + " "
             newsqlstr = sqlstr[:curspos] + addstr + sqlstr[curspos:]
             curspos += len(addstr)
@@ -820,7 +820,7 @@ class SQLBuilderUpdate(SQLBuilder):
         curspos = self.text_sql.GetInsertionPoint()
         newsqlstr = ""
 
-        if element in ["value", "mark", "func"] or (
+        if element in {"value", "mark", "func"} or (
             element == "column" and self.mode.GetSelection() == 2
         ):
             addstr = " " + value + " "
@@ -925,7 +925,7 @@ class SQLBuilderWhere(SQLBuilder):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) not in [3, 4]:
+    if len(sys.argv) not in {3, 4}:
         print(__doc__, file=sys.stderr)
         sys.exit()
 

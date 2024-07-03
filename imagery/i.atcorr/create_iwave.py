@@ -181,8 +181,6 @@ def plot_filter(values):
         ax2.plot(rounded[:-1], filter_f)
     plt.show()
 
-    return
-
 
 def pretty_print(filter_f):
     """
@@ -338,8 +336,6 @@ def write_cpp(bands, values, sensor, folder):
             outfile.write("        break;\n")
         outfile.write("    }\n}\n")
 
-    return
-
 
 def main():
     """control function"""
@@ -401,8 +397,6 @@ def main():
         " iwave.h, geomcond.h, geomcond.cpp, and to i.atcorr.html"
     )
     print
-
-    return
 
 
 if __name__ == "__main__":

@@ -90,7 +90,7 @@ def main():
         gscript.message(_("Column <%s> would be deleted.") % column)
         gscript.message("")
         gscript.message(
-            _("You must use the force flag (-f) to actually " "remove it. Exiting.")
+            _("You must use the force flag (-f) to actually remove it. Exiting.")
         )
         return 0
 

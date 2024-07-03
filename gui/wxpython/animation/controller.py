@@ -460,7 +460,7 @@ class AnimationController(wx.EvtHandler):
         for anim in animationData:
             for layer in anim.layerList:
                 if layer.active and hasattr(layer, "maps"):
-                    if layer.mapType in ("strds", "stvds", "str3ds"):
+                    if layer.mapType in {"strds", "stvds", "str3ds"}:
                         stds += 1
                     else:
                         maps += 1
@@ -672,5 +672,5 @@ class AnimationController(wx.EvtHandler):
             del self.busy
             GError(parent=self.frame, message=str(e))
             return
-        if exportInfo["method"] in ("sequence", "gif", "swf"):
+        if exportInfo["method"] in {"sequence", "gif", "swf"}:
             del self.busy
