@@ -29,9 +29,9 @@ from core.settings import UserSettings
 from gui_core.wrap import Menu, NewId
 
 try:
-    import matplotlib
+    import matplotlib as mpl
 
-    matplotlib.use("WXAgg")
+    mpl.use("WXAgg")
     from matplotlib.figure import Figure
     from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigCanvas
     from matplotlib.lines import Line2D
@@ -580,7 +580,7 @@ def _renderCat(cat_id, rend_dt, scatt, styles):
 
 
 def _getColorMap(cat_id, styles):
-    cmap = matplotlib.cm.jet
+    cmap = mpl.cm.jet
     if cat_id == 0:
         cmap.set_bad("w", 1.0)
         cmap._init()
@@ -1035,7 +1035,7 @@ def imshow(
     if norm is not None:
         assert isinstance(norm, mcolors.Normalize)
     if aspect is None:
-        aspect = matplotlib.rcParams["image.aspect"]
+        aspect = mpl.rcParams["image.aspect"]
     axes.set_aspect(aspect)
 
     if extent:
