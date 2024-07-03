@@ -173,7 +173,7 @@ def main():
 
     # use these from now on:
     infile = input
-    while infile[-4:].lower() in [".hgt", ".zip", ".raw"]:
+    while infile[-4:].lower() in {".hgt", ".zip", ".raw"}:
         infile = infile[:-4]
     (fdir, tile) = os.path.split(infile)
 

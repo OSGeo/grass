@@ -47,6 +47,7 @@ jobs:
           INPUT_TOOL_NAMES: >-
             black
             clang-format
+            ruff
       - name: Post Black suggestions
         if: ${{ steps.tools.outputs.black == 'true' }}
         run: |
@@ -78,6 +79,24 @@ jobs:
               -reporter="github-pr-review" < "${TMPFILE}"
         env:
           INPUT_TOOL_NAME: clang-format
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CI_COMMIT: ${{ github.event.workflow_run.head_sha }}
+          CI_REPO_OWNER: ${{ github.event.workflow_run.repository.owner.login }}
+          CI_REPO_NAME: ${{ github.event.workflow_run.repository.name }}
+          # CI_PULL_REQUEST: "" # Populated from reviewdog's "-guess" flag since hard to get
+      - name: Post Ruff suggestions
+        if: ${{ steps.tools.outputs.black == 'true' }}
+        run: |
+          TMPFILE="diff-${INPUT_TOOL_NAME}.patch"
+          GITHUB_ACTIONS="" reviewdog \
+              -name="${INPUT_TOOL_NAME:-reviewdog-suggester}" \
+              -f=diff \
+              -f.diff.strip=1 \
+              -filter-mode=nofilter \
+              -guess \
+              -reporter="github-pr-review" < "${TMPFILE}"
+        env:
+          INPUT_TOOL_NAME: ruff
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CI_COMMIT: ${{ github.event.workflow_run.head_sha }}
           CI_REPO_OWNER: ${{ github.event.workflow_run.repository.owner.login }}

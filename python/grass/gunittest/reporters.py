@@ -11,7 +11,7 @@ for details.
 
 import os
 import datetime
-import xml.sax.saxutils as saxutils
+from xml.sax import saxutils
 import xml.etree.ElementTree as et
 import subprocess
 import collections
@@ -277,7 +277,7 @@ def get_html_test_authors_table(directory, tests_authors):
     # TODO: don't do this for the top level directories?
     tests_authors = set(tests_authors)
     no_svn_text = (
-        '<span style="font-size: 60%">' "Test file authors were not obtained." "</span>"
+        '<span style="font-size: 60%">Test file authors were not obtained.</span>'
     )
     if not tests_authors or (len(tests_authors) == 1 and list(tests_authors)[0] == ""):
         return "<h3>Code and test authors</h3>" + no_svn_text
@@ -522,9 +522,9 @@ def returncode_to_html_sentence(returncode):
 
 def returncode_to_success_html_par(returncode):
     if returncode:
-        return '<p> <span style="color: red">&#x274c;</span>' " Test failed</p>"
+        return '<p> <span style="color: red">&#x274c;</span> Test failed</p>'
     else:
-        return '<p> <span style="color: green">&#x2713;</span>' " Test succeeded</p>"
+        return '<p> <span style="color: green">&#x2713;</span> Test succeeded</p>'
 
 
 def success_to_html_text(total, successes):
@@ -587,7 +587,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             url = get_source_url(
                 path=svn_info["relative-url"], revision=svn_info["revision"]
             )
-            svn_text = ("SVN revision" ' <a href="{url}">' "{rev}</a>").format(
+            svn_text = ('SVN revision <a href="{url}">{rev}</a>').format(
                 url=url, rev=svn_info["revision"]
             )
         self.main_index.write(
@@ -1099,7 +1099,7 @@ class TestsuiteDirReporter:
         page = open(page_name, "w")
         # TODO: should we use forward slashes also for the HTML because
         # it is simpler are more consistent with the rest on MS Windows?
-        head = "<html><body>" "<h1>{name} testsuite results</h1>".format(name=directory)
+        head = "<html><body><h1>{name} testsuite results</h1>".format(name=directory)
         tests_table_head = (
             "<h3>Test files results</h3>"
             "<table>"
@@ -1239,7 +1239,7 @@ class TestsuiteDirReporter:
 
         page_name = os.path.join(root, self.main_page_name)
         page = open(page_name, "w")
-        head = "<html><body>" "<h1>Testsuites results</h1>"
+        head = "<html><body><h1>Testsuites results</h1>"
         tests_table_head = (
             "<table>"
             "<thead><tr>"

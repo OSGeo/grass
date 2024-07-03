@@ -97,8 +97,7 @@ class SbGoToGCP(SbItem):
         and sets the spin limits accordingly."""
         self.statusbar.SetStatusText("")
         maximum = self.mapFrame.GetListCtrl().GetItemCount()
-        if maximum < 1:
-            maximum = 1
+        maximum = max(maximum, 1)
         self.widget.SetRange(0, maximum)
         self.Show()
 
