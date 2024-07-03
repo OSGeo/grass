@@ -40,7 +40,7 @@ import signal
 import struct
 import sys
 import time
-import numpy
+import numpy as np
 
 import wx
 
@@ -161,7 +161,7 @@ class Application(wx.App):
         header = f.read(self.HEADER_SIZE)
         self.read_bmp_header(header)
 
-        self.imgbuf = numpy.memmap(f, mode="r", offset=self.HEADER_SIZE)
+        self.imgbuf = np.memmap(f, mode="r", offset=self.HEADER_SIZE)
 
     def signal_handler(self, sig, frame):
         wx.CallAfter(self.mainwin.Refresh)

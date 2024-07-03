@@ -32,9 +32,9 @@ except:
         )
     )
 
-import numpy as Numeric
+import numpy as np
 
-Numeric.arrayrange = Numeric.arange
+np.arrayrange = np.arange
 
 from math import pi, floor
 
@@ -292,10 +292,10 @@ class WMSDrv(WMSBase):
 
         # Build color table
         lookup = [
-            Numeric.arrayrange(256),
-            Numeric.arrayrange(256),
-            Numeric.arrayrange(256),
-            Numeric.ones(256) * 255,
+            np.arrayrange(256),
+            np.arrayrange(256),
+            np.arrayrange(256),
+            np.ones(256) * 255,
         ]
 
         ct = src_band.GetRasterColorTable()
@@ -318,7 +318,7 @@ class WMSDrv(WMSBase):
             for iBand in range(out_bands):
                 band_lookup = lookup[iBand]
 
-                dst_data = Numeric.take(band_lookup, src_data)
+                dst_data = np.take(band_lookup, src_data)
                 tif_ds.GetRasterBand(iBand + 1).WriteArray(dst_data, 0, iY)
 
         return tif_ds
