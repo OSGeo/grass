@@ -71,6 +71,7 @@ jobs:
       - name: Create and uploads code suggestions to apply for Ruff
         # Will fail fast here if there are changes required
         id: diff-ruff
+        if: always()
         uses: ./.github/actions/create-upload-suggestions
         with:
           tool-name: ruff
