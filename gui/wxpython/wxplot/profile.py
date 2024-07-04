@@ -23,7 +23,7 @@ import numpy as np
 import wx
 
 from wx.lib import plot
-import grass.script as grass
+import grass.script as gs
 from wxplot.base import BasePlotFrame, PlotIcons
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from gui_core.wrap import StockCursor
@@ -164,7 +164,7 @@ class ProfileFrame(BasePlotFrame):
         self.coordstr = ""
         lasteast = lastnorth = None
 
-        region = grass.region()
+        region = gs.region()
         insideRegion = True
         if len(self.transect) > 0:
             for point in self.transect:
@@ -287,7 +287,7 @@ class ProfileFrame(BasePlotFrame):
 
         # keep total number of transect points to 500 or less to avoid
         # freezing with large, high resolution maps
-        region = grass.region()
+        region = gs.region()
         curr_res = min(float(region["nsres"]), float(region["ewres"]))
         transect_rec = 0
         if self.transect_length / curr_res > 500:

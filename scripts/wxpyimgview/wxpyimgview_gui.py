@@ -44,7 +44,7 @@ import numpy as np
 
 import wx
 
-import grass.script as grass
+import grass.script as gs
 from grass.script.setup import set_gui_path
 
 set_gui_path()
@@ -116,7 +116,7 @@ class Application(wx.App):
     def read_bmp_header(self, header):
         magic, bmfh, bmih = struct.unpack("2s12s40s10x", header)
 
-        if grass.decode(magic) != "BM":
+        if gs.decode(magic) != "BM":
             raise SyntaxError("Invalid magic number")
 
         size, res1, res2, hsize = struct.unpack("<IHHI", bmfh)

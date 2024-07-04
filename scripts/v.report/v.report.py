@@ -55,7 +55,7 @@
 
 import sys
 import os
-import grass.script as grass
+import grass.script as gs
 from grass.script.utils import separator, decode
 
 
@@ -79,11 +79,11 @@ def main():
 
     nuldev = open(os.devnull, "w")
 
-    if not grass.find_file(mapname, "vector")["file"]:
-        grass.fatal(_("Vector map <%s> not found") % mapname)
+    if not gs.find_file(mapname, "vector")["file"]:
+        gs.fatal(_("Vector map <%s> not found") % mapname)
 
-    if int(layer) in grass.vector_db(mapname):
-        colnames = grass.vector_columns(mapname, layer, getDict=False, stderr=nuldev)
+    if int(layer) in gs.vector_db(mapname):
+        colnames = gs.vector_columns(mapname, layer, getDict=False, stderr=nuldev)
         isConnection = True
     else:
         isConnection = False
@@ -103,8 +103,8 @@ def main():
 
     # NOTE: we suppress -1 cat and 0 cat
     if isConnection:
-        f = grass.vector_db(map=mapname)[int(layer)]
-        p = grass.pipe_command(
+        f = gs.vector_db(map=mapname)[int(layer)]
+        p = gs.pipe_command(
             "v.db.select", flags="e", quiet=True, map=mapname, layer=layer
         )
         records1 = []
@@ -119,7 +119,7 @@ def main():
                         catcol = i
                         break
                 if catcol == -1:
-                    grass.fatal(
+                    gs.fatal(
                         _(
                             "There is a table connected to input vector map '%s', but "
                             "there is no key column '%s'."
@@ -138,7 +138,7 @@ def main():
 
         if len(records1) == 0:
             try:
-                grass.fatal(
+                gs.fatal(
                     _(
                         "There is a table connected to input vector map '%s', but "
                         "there are no categories present in the key column '%s'. "
@@ -150,7 +150,7 @@ def main():
                 pass
 
         # fetch the requested attribute sorted by cat:
-        p = grass.pipe_command(
+        p = gs.pipe_command(
             "v.to.db",
             flags="p",
             quiet=True,
@@ -184,7 +184,7 @@ def main():
     else:
         catcol = 0
         records1 = []
-        p = grass.pipe_command("v.category", inp=mapname, layer=layer, option="print")
+        p = gs.pipe_command("v.category", inp=mapname, layer=layer, option="print")
         for line in p.stdout:
             field = int(decode(line).rstrip())
             if field > 0:
@@ -194,7 +194,7 @@ def main():
         records1 = uniq(records1)
 
         # make pre-table
-        p = grass.pipe_command(
+        p = gs.pipe_command(
             "v.to.db",
             flags="p",
             quiet=True,
@@ -254,5 +254,5 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

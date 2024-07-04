@@ -14,7 +14,7 @@ import sys
 from datetime import datetime
 from multiprocessing import Process
 
-import grass.script as gscript
+import grass.script as gs
 from grass.exceptions import CalledModuleError
 
 from .core import (
@@ -127,7 +127,7 @@ def dataset_mapcalculator(
         sp = open_old_stds(input, type, dbif)
         input_list.append(copy.copy(sp))
 
-    new_sp = check_new_stds(output, type, dbif, gscript.overwrite())
+    new_sp = check_new_stds(output, type, dbif, gs.overwrite())
 
     # Sample all inputs by the first input and create a sample matrix
     if spatial:
@@ -241,7 +241,7 @@ def dataset_mapcalculator(
 
             # Create the r.mapcalc statement for the current time step
             map_name = "{base}_{suffix}".format(
-                base=base, suffix=gscript.get_num_suffix(count, num)
+                base=base, suffix=gs.get_num_suffix(count, num)
             )
             # Remove spaces and new lines
             expr = expression.replace(" ", "")
@@ -269,7 +269,7 @@ def dataset_mapcalculator(
 
             # Check if new map is in the temporal database
             if new_map.is_in_db(dbif):
-                if gscript.overwrite():
+                if gs.overwrite():
                     # Remove the existing temporal database entry
                     new_map.delete(dbif)
                     new_map = first_input.get_new_map_instance(map_id)
@@ -344,7 +344,7 @@ def dataset_mapcalculator(
             description,
             semantic_type,
             dbif,
-            gscript.overwrite(),
+            gs.overwrite(),
         )
         count = 0
 
@@ -394,11 +394,11 @@ def dataset_mapcalculator(
                     names += ",%s" % (map.get_name())
                 count += 1
             if type == "raster":
-                gscript.run_command(
+                gs.run_command(
                     "g.remove", flags="f", type="raster", name=names, quiet=True
                 )
             elif type == "raster3d":
-                gscript.run_command(
+                gs.run_command(
                     "g.remove", flags="f", type="raster_3d", name=names, quiet=True
                 )
 
@@ -411,8 +411,8 @@ def dataset_mapcalculator(
 def _run_mapcalc2d(expr):
     """Helper function to run r.mapcalc in parallel"""
     try:
-        gscript.run_command(
-            "r.mapcalc", expression=expr, overwrite=gscript.overwrite(), quiet=True
+        gs.run_command(
+            "r.mapcalc", expression=expr, overwrite=gs.overwrite(), quiet=True
         )
     except CalledModuleError:
         sys.exit(1)
@@ -424,8 +424,8 @@ def _run_mapcalc2d(expr):
 def _run_mapcalc3d(expr):
     """Helper function to run r3.mapcalc in parallel"""
     try:
-        gscript.run_command(
-            "r3.mapcalc", expression=expr, overwrite=gscript.overwrite(), quiet=True
+        gs.run_command(
+            "r3.mapcalc", expression=expr, overwrite=gs.overwrite(), quiet=True
         )
     except CalledModuleError:
         sys.exit(1)

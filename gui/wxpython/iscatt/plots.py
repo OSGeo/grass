@@ -47,7 +47,7 @@ except ImportError as e:
         ).format(e)
     )
 
-import grass.script as grass
+import grass.script as gs
 from grass.pydispatch.signal import Signal
 
 
@@ -242,7 +242,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         )
 
         callafter_list.append([self.axes.draw_artist, [img]])
-        callafter_list.append([grass.try_remove, [merged_img.filename]])
+        callafter_list.append([gs.try_remove, [merged_img.filename]])
 
         for cat_id in cats_order:
             if cat_id == 0:
@@ -448,7 +448,7 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
 
     init = True
     merged_img = None
-    merge_tmp = grass.tempfile()
+    merge_tmp = gs.tempfile()
     for cat_id in cats_order:
         if cat_id not in scatts:
             continue
@@ -496,7 +496,7 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
                 rend_dt[cat_id]["color"] = styles[cat_id]["color"]
 
             rend_dt[cat_id]["dt"] = np.memmap(
-                grass.tempfile(), dtype="uint8", mode="w+", shape=(sh[0], sh[1], 4)
+                gs.tempfile(), dtype="uint8", mode="w+", shape=(sh[0], sh[1], 4)
             )
 
             # colored_cat = np.zeros(dtype='uint8', )

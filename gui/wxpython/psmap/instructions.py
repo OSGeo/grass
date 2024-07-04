@@ -38,7 +38,7 @@ from math import ceil
 from time import strftime, localtime
 
 import wx
-import grass.script as grass
+import grass.script as gs
 from grass.script.task import cmdlist_to_tuple
 
 from core.gcmd import GError, GMessage, GWarning
@@ -65,7 +65,7 @@ class Instruction:
     def __str__(self):
         """Returns text for instruction file"""
         comment = "# timestamp: " + strftime("%Y-%m-%d %H:%M", localtime()) + "\n"
-        env = grass.gisenv()
+        env = gs.gisenv()
         comment += "# location: %s\n" % env["LOCATION_NAME"]
         comment += "# mapset: %s\n" % env["MAPSET"]
         comment += (
@@ -166,7 +166,7 @@ class Instruction:
         # then run ps.map -b to get information for maploc
         # compute scale and center
         map = self.FindInstructionByType("map")
-        region = grass.region(env=self.env)
+        region = gs.region(env=self.env)
         map["center"] = (region["n"] + region["s"]) / 2, (region["w"] + region["e"]) / 2
         mapRect = GetMapBounds(
             self.filename, portrait=(orientation == "Portrait"), env=self.env
@@ -523,16 +523,16 @@ class Instruction:
                 map["scaleType"] = 2
         else:
             map["scaleType"] = 2
-            region = grass.region(env=None)
+            region = gs.region(env=None)
             cmd = ["g.region", region]
         cmdString = GetCmdString(cmd).replace("g.region", "")
         GMessage(
             _("Instruction file will be loaded with following region: %s\n") % cmdString
         )
         try:
-            self.env["GRASS_REGION"] = grass.region_env(env=self.env, **cmd[1])
+            self.env["GRASS_REGION"] = gs.region_env(env=self.env, **cmd[1])
 
-        except grass.ScriptError as e:
+        except gs.ScriptError as e:
             GError(_("Region cannot be set\n%s") % e)
             return False
 
@@ -579,7 +579,7 @@ class InstructionObject:
     def PercentToReal(self, e, n):
         """Converts text coordinates from percent of region to map coordinates"""
         e, n = float(e.strip("%")), float(n.strip("%"))
-        region = grass.region(env=self.env)
+        region = gs.region(env=self.env)
         N = region["s"] + (region["n"] - region["s"]) / 100 * n
         E = region["w"] + (region["e"] - region["w"]) / 100 * e
         return E, N
@@ -627,7 +627,7 @@ class MapFrame(InstructionObject):
         comment = ""
 
         # region settings
-        region = grass.region(env=self.env)
+        region = gs.region(env=self.env)
         if self.instruction["scaleType"] == 0:  # match map
             map = self.instruction["map"]
             if self.instruction["mapType"] == "raster":
@@ -826,7 +826,7 @@ class PageSetup(InstructionObject):
                     if len(line.split()) > 1:
                         pformat = line.split()[1]
                         availableFormats = self._toDict(
-                            grass.read_command("ps.map", flags="p", quiet=True)
+                            gs.read_command("ps.map", flags="p", quiet=True)
                         )
                         # e.g. paper a3
                         try:
@@ -1751,13 +1751,13 @@ class RasterLegend(InstructionObject):
             else:
                 cols = 1
 
-            rinfo = grass.raster_info(raster)
+            rinfo = gs.raster_info(raster)
             if rinfo["datatype"] in {"DCELL", "FCELL"}:
                 minim, maxim = rinfo["min"], rinfo["max"]
                 rows = ceil(maxim / cols)
             else:
                 cat = (
-                    grass.read_command("r.category", map=raster, sep=":")
+                    gs.read_command("r.category", map=raster, sep=":")
                     .strip()
                     .split("\n")
                 )
@@ -1775,7 +1775,7 @@ class RasterLegend(InstructionObject):
         """Estimate size to draw raster legend"""
 
         if discrete == "n":
-            rinfo = grass.raster_info(raster)
+            rinfo = gs.raster_info(raster)
             minim, maxim = rinfo["min"], rinfo["max"]
             if width:
                 width = width
@@ -1927,8 +1927,8 @@ class Raster(InstructionObject):
             GError(_("Failed to read instruction %s") % instruction)
             return False
         try:
-            info = grass.find_file(map, element="cell")
-        except grass.ScriptError as e:
+            info = gs.find_file(map, element="cell")
+        except gs.ScriptError as e:
             GError(message=e.value)
             return False
         instr["raster"] = info["fullname"]
@@ -1971,8 +1971,8 @@ class Vector(InstructionObject):
                 # name of vector map
                 vmap = line.split()[1]
                 try:
-                    info = grass.find_file(vmap, element="vector")
-                except grass.ScriptError as e:
+                    info = gs.find_file(vmap, element="vector")
+                except gs.ScriptError as e:
                     GError(message=e.value)
                     return False
                 vmap = info["fullname"]
@@ -2143,8 +2143,8 @@ class VProperties(InstructionObject):
         """Read instruction and save information"""
         instr = {}
         try:
-            info = grass.find_file(name=text[0].split()[1], element="vector")
-        except grass.ScriptError as e:
+            info = gs.find_file(name=text[0].split()[1], element="vector")
+        except gs.ScriptError as e:
             GError(message=e.value)
             return False
         instr["name"] = info["fullname"]

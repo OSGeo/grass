@@ -19,7 +19,7 @@ This program is free software under the GNU General Public License
 import os
 import wx
 
-import grass.script as grass
+import grass.script as gs
 
 from gui_core.mapdisp import DoubleMapPanel, FrameMixin
 from gui_core.dialogs import GetImageHandlers
@@ -222,11 +222,11 @@ class SwipeMapPanel(DoubleMapPanel):
 
     def OnSize(self, event):
         Debug.msg(4, "SwipeMapPanel.OnSize()")
-        self.resize = grass.clock()
+        self.resize = gs.clock()
         super().OnSize(event)
 
     def OnIdle(self, event):
-        if self.resize and grass.clock() - self.resize > 0.2:
+        if self.resize and gs.clock() - self.resize > 0.2:
             w1 = self.GetFirstWindow()
             w2 = self.GetSecondWindow()
 
@@ -472,7 +472,7 @@ class SwipeMapPanel(DoubleMapPanel):
     def SetFirstRaster(self, name):
         """Set raster map to first Map"""
         if name:
-            raster = grass.find_file(name=name, element="cell")
+            raster = gs.find_file(name=name, element="cell")
             if raster.get("fullname"):
                 self.rasters["first"] = raster["fullname"]
                 self.SetLayer(name=raster["fullname"], mapInstance=self.GetFirstMap())
@@ -483,7 +483,7 @@ class SwipeMapPanel(DoubleMapPanel):
     def SetSecondRaster(self, name):
         """Set raster map to second Map"""
         if name:
-            raster = grass.find_file(name=name, element="cell")
+            raster = gs.find_file(name=name, element="cell")
             if raster.get("fullname"):
                 self.rasters["second"] = raster["fullname"]
                 self.SetLayer(name=raster["fullname"], mapInstance=self.GetSecondMap())
@@ -536,8 +536,8 @@ class SwipeMapPanel(DoubleMapPanel):
         w2 = self.splitter.GetWindow2()
         lineWidth = 1
         # render to temporary files
-        filename1 = grass.tempfile(False) + "1"
-        filename2 = grass.tempfile(False) + "2"
+        filename1 = gs.tempfile(False) + "1"
+        filename2 = gs.tempfile(False) + "2"
         width, height = self.splitter.GetClientSize()
 
         class _onDone:
@@ -581,8 +581,8 @@ class SwipeMapPanel(DoubleMapPanel):
                 im.SaveFile(fileName, fileType)
 
                 # remove temporary files
-                grass.try_remove(filename1)
-                grass.try_remove(filename2)
+                gs.try_remove(filename1)
+                gs.try_remove(filename2)
 
         callback = _onDone()
         if self._mode == "swipe":
@@ -755,27 +755,27 @@ class SwipeMapPanel(DoubleMapPanel):
         env = os.environ.copy()
         if rasters[0]:
             for raster in rasters[0]:
-                env["GRASS_REGION"] = grass.region_env(raster=raster)
+                env["GRASS_REGION"] = gs.region_env(raster=raster)
                 result.extend(
-                    grass.raster_what(
+                    gs.raster_what(
                         map=raster, coord=(east, north), localized=True, env=env
                     )
                 )
         if vectors[0]:
             result.extend(
-                grass.vector_what(map=vectors[0], coord=(east, north), distance=qdist)
+                gs.vector_what(map=vectors[0], coord=(east, north), distance=qdist)
             )
         if rasters[1]:
             for raster in rasters[1]:
-                env["GRASS_REGION"] = grass.region_env(raster=raster)
+                env["GRASS_REGION"] = gs.region_env(raster=raster)
                 result.extend(
-                    grass.raster_what(
+                    gs.raster_what(
                         map=raster, coord=(east, north), localized=True, env=env
                     )
                 )
         if vectors[1]:
             result.extend(
-                grass.vector_what(map=vectors[1], coord=(east, north), distance=qdist)
+                gs.vector_what(map=vectors[1], coord=(east, north), distance=qdist)
             )
 
         result = PrepareQueryResults(coordinates=(east, north), result=result)

@@ -37,7 +37,7 @@ except ImportError:
     from wx import AboutDialogInfo
     from wx import AboutBox
 
-import grass.script as grass
+import grass.script as gs
 from grass.exceptions import CalledModuleError
 
 # needed just for testing
@@ -111,7 +111,7 @@ class AboutWindow(wx.Frame):
     def _pageInfo(self):
         """Info page"""
         # get version and web site
-        vInfo = grass.version()
+        vInfo = gs.version()
         if not vInfo:
             sys.stderr.write(_("Unable to get GRASS version\n"))
 
@@ -245,7 +245,7 @@ class AboutWindow(wx.Frame):
             pos=(row, 0),
             flag=wx.ALIGN_RIGHT,
         )
-        self.langUsed = grass.gisenv().get("LANG", None)
+        self.langUsed = gs.gisenv().get("LANG", None)
         if not self.langUsed:
             import locale
 
@@ -973,7 +973,7 @@ def ShowAboutDialog(prgName, startYear):
 
 def _grassDevTeam(start):
     try:
-        end = grass.version()["date"]
+        end = gs.version()["date"]
     except KeyError:
         sys.stderr.write(_("Unable to get GRASS version\n"))
 

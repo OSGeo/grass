@@ -25,7 +25,7 @@ import numpy as np
 import wx
 from grass.pygrass.modules import Module
 
-import grass.script as grass
+import grass.script as gs
 from functools import reduce
 
 try:
@@ -513,7 +513,7 @@ class TplotFrame(wx.Frame):
 
     def _getExistingCategories(self, mapp, cats):
         """Get a list of categories for a vector map"""
-        vdb = grass.read_command("v.category", input=mapp, option="print")
+        vdb = gs.read_command("v.category", input=mapp, option="print")
         categories = vdb.splitlines()
         if not cats:
             return categories
@@ -613,7 +613,7 @@ class TplotFrame(wx.Frame):
                 self.plotNameListV.append(name)
                 # TODO set an appropriate distance, right now a big one is set
                 # to return the closer point to the selected one
-                out = grass.vector_what(
+                out = gs.vector_what(
                     map="pois_srvds",
                     coord=self.poi.coords(),
                     distance=10000000000000000,
@@ -673,7 +673,7 @@ class TplotFrame(wx.Frame):
                             ),
                         )
                         return
-                    vals = grass.vector_db_select(
+                    vals = gs.vector_db_select(
                         map=row["name"],
                         layer=lay,
                         where=wherequery.format(key=catkey),
@@ -1306,7 +1306,7 @@ class TplotFrame(wx.Frame):
                 break
         if found:
             try:
-                vect_list = grass.read_command(
+                vect_list = gs.read_command(
                     "t.vect.list", flags="u", input=dataset, column="name"
                 )
             except Exception:

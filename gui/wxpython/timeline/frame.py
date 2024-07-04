@@ -45,7 +45,7 @@ except ImportError as e:
         ).format(e)
     )
 
-import grass.script as grass
+import grass.script as gs
 
 import grass.temporal as tgis
 from core.gcmd import GError, GException, RunCommand
@@ -303,8 +303,8 @@ class TimelineFrame(wx.Frame):
                 )
             )
 
-        params = grass.read_command("g.proj", flags="g")
-        params = grass.parse_key_val(params)
+        params = gs.read_command("g.proj", flags="g")
+        params = gs.parse_key_val(params)
         if "unit" in params:
             self.axes3d.set_xlabel(_("X [%s]") % params["unit"])
             self.axes3d.set_ylabel(_("Y [%s]") % params["unit"])
