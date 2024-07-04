@@ -85,7 +85,7 @@ jobs:
           CI_REPO_NAME: ${{ github.event.workflow_run.repository.name }}
           # CI_PULL_REQUEST: "" # Populated from reviewdog's "-guess" flag since hard to get
       - name: Post Ruff suggestions
-        if: ${{ steps.tools.outputs.black == 'true' }}
+        if: ${{ steps.tools.outputs.ruff == 'true' }}
         run: |
           TMPFILE="diff-${INPUT_TOOL_NAME}.patch"
           GITHUB_ACTIONS="" reviewdog \
