@@ -35,7 +35,6 @@ from core.gcmd import GError
 from gui_core.dialogs import SimpleDialog, MapLayersDialogForModeler
 from gui_core.prompt import GPromptSTC
 from gui_core.gselect import Select, ElementSelect
-from gmodeler.model import *
 from lmgr.menudata import LayerManagerMenuData
 from gui_core.wrap import (
     Button,
@@ -47,6 +46,7 @@ from gui_core.wrap import (
     NewId,
     CheckListCtrlMixin,
 )
+from gmodeler.model import ModelData, ModelAction, ModelCondition
 
 
 class ModelDataDialog(SimpleDialog):
@@ -206,9 +206,7 @@ class ModelSearchDialog(wx.Dialog):
             parent=self, giface=giface, menuModel=menuModel.GetModel()
         )
         self.cmd_prompt.promptRunCmd.connect(self.OnCommand)
-        self.cmd_prompt.commandSelected.connect(
-            lambda command: self.label.SetValue(command)
-        )
+        self.cmd_prompt.commandSelected.connect(self.label.SetValue)
         self.search = SearchModuleWidget(
             parent=self.panel, model=menuModel.GetModel(), showTip=True
         )
@@ -287,7 +285,7 @@ class ModelSearchDialog(wx.Dialog):
     def _getCmd(self):
         line = self.cmd_prompt.GetCurLine()[0].strip()
         if len(line) == 0:
-            cmd = list()
+            cmd = []
         else:
             cmd = utils.split(str(line))
         return cmd
@@ -305,7 +303,7 @@ class ModelSearchDialog(wx.Dialog):
             GError(
                 parent=self,
                 message=_(
-                    "Command not defined.\n\n" "Unable to add new action to the model."
+                    "Command not defined.\n\nUnable to add new action to the model."
                 ),
             )
             return False
@@ -412,12 +410,10 @@ class ModelRelationDialog(wx.Dialog):
             flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
             border=5,
         )
-        mainSizer.Add(
-            btnSizer, proportion=0, flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5
-        )
+        mainSizer.Add(btnSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 
         self.panel.SetSizer(mainSizer)
-        mainSizer.Fit(self.panel)
+        mainSizer.Fit(self)
 
         self.Layout()
         self.SetSize(self.GetBestSize())
@@ -460,7 +456,7 @@ class ModelRelationDialog(wx.Dialog):
             GError(
                 parent=self.parent,
                 message=_(
-                    "Relation doesn't start with data item.\n" "Unable to add relation."
+                    "Relation doesn't start with data item.\nUnable to add relation."
                 ),
             )
             return items
@@ -485,7 +481,7 @@ class ModelRelationDialog(wx.Dialog):
         if not items:
             GError(
                 parent=self.parent,
-                message=_("No relevant option found.\n" "Unable to add relation."),
+                message=_("No relevant option found.\nUnable to add relation."),
             )
         return items
 
@@ -803,7 +799,7 @@ class VariableListCtrl(ModelListCtrl):
 
     def Populate(self, data):
         """Populate the list"""
-        self.itemDataMap = dict()
+        self.itemDataMap = {}
         i = 0
         for name, values in data.items():
             self.itemDataMap[i] = [
@@ -869,7 +865,7 @@ class VariableListCtrl(ModelListCtrl):
         """Remove all variable(s) from the model"""
         dlg = wx.MessageBox(
             parent=self,
-            message=_("Do you want to delete all variables from " "the model?"),
+            message=_("Do you want to delete all variables from the model?"),
             caption=_("Delete variables"),
             style=wx.YES_NO | wx.CENTRE,
         )
@@ -877,7 +873,7 @@ class VariableListCtrl(ModelListCtrl):
             return
 
         self.DeleteAllItems()
-        self.itemDataMap = dict()
+        self.itemDataMap = {}
 
         self.parent.UpdateModelVariables()
 
@@ -885,7 +881,6 @@ class VariableListCtrl(ModelListCtrl):
         """Finish editing of item"""
         itemIndex = event.GetIndex()
         columnIndex = event.GetColumn()
-        nameOld = self.GetItem(itemIndex, 0).GetText()
 
         if columnIndex == 0:  # TODO
             event.Veto()
@@ -929,7 +924,7 @@ class ItemListCtrl(ModelListCtrl):
         self.disablePopup = disablePopup
 
         ModelListCtrl.__init__(self, parent, columns, frame, **kwargs)
-        self.itemIdMap = list()
+        self.itemIdMap = []
 
         self.SetColumnWidth(0, 100)
         self.SetColumnWidth(1, 75)
@@ -942,8 +937,8 @@ class ItemListCtrl(ModelListCtrl):
 
     def Populate(self, data):
         """Populate the list"""
-        self.itemDataMap = dict()
-        self.itemIdMap = list()
+        self.itemDataMap = {}
+        self.itemIdMap = []
 
         if self.shape:
             items = self.frame.GetModel().GetItems(objType=ModelAction)
@@ -959,11 +954,11 @@ class ItemListCtrl(ModelListCtrl):
             else:
                 shapeItems = map(lambda x: x.GetId(), self.shape.GetItems(items))
         else:
-            shapeItems = list()
+            shapeItems = []
 
         i = 0
         if len(self.columns) == 2:  # ItemCheckList
-            checked = list()
+            checked = []
         for action in data:
             if isinstance(action, ModelData) or action == self.shape:
                 continue
@@ -1068,7 +1063,7 @@ class ItemListCtrl(ModelListCtrl):
             return
 
         if not hasattr(self, "popupId"):
-            self.popupID = dict()
+            self.popupID = {}
             self.popupID["remove"] = NewId()
             self.popupID["reload"] = NewId()
             self.Bind(wx.EVT_MENU, self.OnRemove, id=self.popupID["remove"])
@@ -1106,8 +1101,8 @@ class ItemListCtrl(ModelListCtrl):
 
         model = self.frame.GetModel()
         modelActions = model.GetItems(objType=ModelAction)
-        idxList = dict()
-        itemsToSelect = list()
+        idxList = {}
+        itemsToSelect = []
         for i in items:
             if up:
                 idx = i - 1
@@ -1157,7 +1152,7 @@ class ItemCheckListCtrl(ItemListCtrl, CheckListCtrlMixin):
 
     def GetItems(self):
         """Get list of selected actions"""
-        ids = {"checked": list(), "unchecked": list()}
+        ids = {"checked": [], "unchecked": []}
 
         # action ids start at 1
         for i in range(self.GetItemCount()):

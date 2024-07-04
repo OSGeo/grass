@@ -13,9 +13,10 @@ def test_dissolve_int(dataset):
         input=dataset.vector_name,
         column=dataset.int_column_name,
         output=dissolved_vector,
+        env=dataset.session.env,
     )
 
-    vector_info = gs.vector_info(dissolved_vector)
+    vector_info = gs.vector_info(dissolved_vector, env=dataset.session.env)
     assert vector_info["level"] == 2
     assert vector_info["centroids"] == 3
     assert vector_info["areas"] == 3
@@ -42,9 +43,10 @@ def test_dissolve_str(dataset):
         input=dataset.vector_name,
         column=dataset.str_column_name,
         output=dissolved_vector,
+        env=dataset.session.env,
     )
 
-    vector_info = gs.vector_info(dissolved_vector)
+    vector_info = gs.vector_info(dissolved_vector, env=dataset.session.env)
     assert vector_info["level"] == 2
     assert vector_info["centroids"] == 3
     assert vector_info["areas"] == 3
@@ -63,7 +65,7 @@ def test_dissolve_str(dataset):
     assert vector_info["primitives"] == 18
     assert vector_info["map3d"] == 0
 
-    columns = gs.vector_columns(dissolved_vector)
+    columns = gs.vector_columns(dissolved_vector, env=dataset.session.env)
     assert len(columns) == 2
     assert sorted(columns.keys()) == sorted(["cat", dataset.str_column_name])
     column_info = columns[dataset.str_column_name]
@@ -71,9 +73,7 @@ def test_dissolve_str(dataset):
 
     records = json.loads(
         gs.read_command(
-            "v.db.select",
-            map=dissolved_vector,
-            format="json",
+            "v.db.select", map=dissolved_vector, format="json", env=dataset.session.env
         )
     )["records"]
     ref_unique_values = set(dataset.str_column_values)

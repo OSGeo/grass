@@ -3,6 +3,7 @@ Created on Thu Jun 28 17:44:14 2012
 
 @author: pietro
 """
+
 import ctypes
 from operator import itemgetter
 
@@ -59,13 +60,13 @@ class Category(list):
         libraster.Rast_init_cats("", ctypes.byref(self.c_cats))
         self._mtype = mtype
         self._gtype = None if mtype is None else RTYPE[mtype]["grass type"]
-        super(Category, self).__init__(*args, **kargs)
+        super().__init__(*args, **kargs)
 
     def _get_mtype(self):
         return self._mtype
 
     def _set_mtype(self, mtype):
-        if mtype.upper() not in ("CELL", "FCELL", "DCELL"):
+        if mtype.upper() not in {"CELL", "FCELL", "DCELL"}:
             raise ValueError(_("Raster type: {0} not supported".format(mtype)))
         self._mtype = mtype
         self._gtype = RTYPE[self.mtype]["grass type"]
@@ -92,7 +93,7 @@ class Category(list):
         return cats
 
     def __dict__(self):
-        diz = dict()
+        diz = {}
         for cat in self.__iter__():
             label, min_cat, max_cat = cat
             diz[(min_cat, max_cat)] = label
@@ -125,12 +126,10 @@ class Category(list):
         return value
 
     def __getitem__(self, index):
-        return super(Category, self).__getitem__(self._chk_index(index))
+        return super().__getitem__(self._chk_index(index))
 
     def __setitem__(self, index, value):
-        return super(Category, self).__setitem__(
-            self._chk_index(index), self._chk_value(value)
-        )
+        return super().__setitem__(self._chk_index(index), self._chk_value(value))
 
     def _get_c_cat(self, index):
         """Returns i-th description and i-th data range from the list of

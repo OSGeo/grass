@@ -3,6 +3,7 @@ Created on Fri Aug 17 16:05:25 2012
 
 @author: pietro
 """
+
 import ctypes
 
 #
@@ -42,13 +43,13 @@ proj: {proj}
 """
 
 
-class Info(object):
+class Info:
     def __init__(self, name, mapset=""):
         """Read the information for a raster map. ::
 
         >>> info = Info(test_raster_name)
         >>> info.read()
-        >>> info          # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+        >>> info  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
         abstract_test_map@
         rows: 4
         cols: 4
@@ -255,7 +256,7 @@ class Info(object):
         return dict2html(dict(self.items()), keys=self.keys(), border="1", kdec="b")
 
 
-class RasterAbstractBase(object):
+class RasterAbstractBase:
     """Raster_abstract_base: The base class from which all sub-classes
     inherit. It does not implement any row or map access methods:
 
@@ -322,7 +323,7 @@ class RasterAbstractBase(object):
 
     def _set_mtype(self, mtype):
         """Private method to change the Raster type"""
-        if mtype.upper() not in ("CELL", "FCELL", "DCELL"):
+        if mtype.upper() not in {"CELL", "FCELL", "DCELL"}:
             str_err = "Raster type: {0} not supported ('CELL','FCELL','DCELL')"
             raise ValueError(_(str_err).format(mtype))
         self._mtype = mtype
@@ -334,7 +335,7 @@ class RasterAbstractBase(object):
         return self._mode
 
     def _set_mode(self, mode):
-        if mode.upper() not in ("R", "W"):
+        if mode.upper() not in {"R", "W"}:
             str_err = _("Mode type: {0} not supported ('r', 'w')")
             raise ValueError(str_err.format(mode))
         self._mode = mode
@@ -345,7 +346,7 @@ class RasterAbstractBase(object):
         return self._overwrite
 
     def _set_overwrite(self, overwrite):
-        if overwrite not in (True, False):
+        if overwrite not in {True, False}:
             str_err = _("Overwrite type: {0} not supported (True/False)")
             raise ValueError(str_err.format(overwrite))
         self._overwrite = overwrite
@@ -538,7 +539,8 @@ class RasterAbstractBase(object):
     def get_value(self, point, region=None):
         """This method returns the pixel value of a given pair of coordinates:
 
-        :param point: pair of coordinates in tuple object or class object with coords() method
+        :param point: pair of coordinates in tuple object or class object with coords()
+            method
         """
         # Check for tuple
         if not isinstance(point, list) and not isinstance(point, tuple):

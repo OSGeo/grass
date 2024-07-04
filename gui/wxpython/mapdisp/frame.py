@@ -56,13 +56,14 @@ from core.giface import Notification
 from gui_core.vselect import VectorSelectBase, VectorSelectHighlighter
 from gui_core.wrap import Menu
 from mapdisp import statusbar as sb
+from main_window.page import MainPageBase
 
 import grass.script as grass
 
 from grass.pydispatch.signal import Signal
 
 
-class MapPanel(SingleMapPanel):
+class MapPanel(SingleMapPanel, MainPageBase):
     """Main panel for map display window. Drawing takes place in
     child double buffered drawing window.
     """
@@ -103,6 +104,7 @@ class MapPanel(SingleMapPanel):
             name=name,
             **kwargs,
         )
+        MainPageBase.__init__(self, dockable)
 
         self._giface = giface
         # Layer Manager object
@@ -111,20 +113,9 @@ class MapPanel(SingleMapPanel):
         # Layer Manager layer tree object
         # used for VDigit toolbar and window and GLWindow
         self.tree = tree
-        # checks for saving workspace
-        self.canCloseDisplayCallback = None
 
-        # distinquishes whether map panel is dockable (Single-Window)
-        self._dockable = dockable
-
-        # distinguishes whether map panel is docked or not
-        self._docked = True
-
-        # undock/dock bound method
-        self._docking_callback = None
-
-        # Emitted when switching map notebook tabs (Single-Window)
-        self.onFocus = Signal("MapPanel.onFocus")
+        # Saved Map Display output img size
+        self._saved_output_img_size = None
 
         # Emitted when starting (switching to) 3D mode.
         # Parameter firstTime specifies if 3D was already activated.
@@ -132,9 +123,6 @@ class MapPanel(SingleMapPanel):
 
         # Emitted when ending (switching from) 3D mode.
         self.ending3dMode = Signal("MapPanel.ending3dMode")
-
-        # Emitted when closing display by closing its window.
-        self.closingDisplay = Signal("MapPanel.closingDisplay")
 
         # Emitted when closing display by closing its window.
         self.closingVNETDialog = Signal("MapPanel.closingVNETDialog")
@@ -173,7 +161,7 @@ class MapPanel(SingleMapPanel):
         self.Map.GetRenderMgr().renderingFailed.connect(
             lambda cmd, error: self._giface.WriteError(
                 _("Failed to run command '%(command)s'. Details:\n%(error)s")
-                % dict(command=" ".join(cmd), error=error)
+                % {"command": " ".join(cmd), "error": error}
             )
         )
 
@@ -317,7 +305,7 @@ class MapPanel(SingleMapPanel):
             self.toolbars["map"].combo.SetValue(_("2D view"))
 
             GError(
-                _("Unable to start wxGUI vector digitizer.\n" "Details: %s") % errorMsg,
+                _("Unable to start wxGUI vector digitizer.\nDetails: %s") % errorMsg,
                 parent=self,
             )
             return
@@ -336,9 +324,7 @@ class MapPanel(SingleMapPanel):
             )
             self._setUpMapWindow(self.MapWindowVDigit)
             self.MapWindowVDigit.digitizingInfo.connect(
-                lambda text: self.statusbarManager.statusbarItems[
-                    "coordinates"
-                ].SetAdditionalInfo(text)
+                self.statusbarManager.statusbarItems["coordinates"].SetAdditionalInfo
             )
             self.MapWindowVDigit.digitizingInfoUnavailable.connect(
                 lambda: self.statusbarManager.statusbarItems[
@@ -378,9 +364,7 @@ class MapPanel(SingleMapPanel):
             def openATM(selection):
                 self._layerManager.OnShowAttributeTable(None, selection=selection)
 
-            self.toolbars["vdigit"].openATM.connect(
-                lambda selection: openATM(selection)
-            )
+            self.toolbars["vdigit"].openATM.connect(openATM)
             self.Map.layerAdded.connect(self._updateVDigitLayers)
         self.MapWindowVDigit.SetToolbar(self.toolbars["vdigit"])
 
@@ -398,7 +382,7 @@ class MapPanel(SingleMapPanel):
             .TopDockable(True)
             .CloseButton(False)
             .Layer(2)
-            .BestSize((self.toolbars["vdigit"].GetBestSize())),
+            .BestSize(self.toolbars["vdigit"].GetBestSize()),
         )
         # change mouse to draw digitized line
         self.MapWindow.mouse["box"] = "point"
@@ -628,7 +612,7 @@ class MapPanel(SingleMapPanel):
                 .TopDockable(True)
                 .CloseButton(False)
                 .Layer(2)
-                .BestSize((self.toolbars["map"].GetBestSize())),
+                .BestSize(self.toolbars["map"].GetBestSize()),
             )
 
         # nviz
@@ -674,22 +658,6 @@ class MapPanel(SingleMapPanel):
         for layer in qlayer:
             self.GetMap().DeleteLayer(layer)
 
-    def SetDockingCallback(self, function):
-        """Sets docking bound method to dock or undock"""
-        self._docking_callback = function
-
-    def OnDockUndock(self, event=None):
-        """Dock or undock map display panel to independent MapFrame"""
-        if self._docking_callback:
-            self._docking_callback(self)
-            self._docked = not self._docked
-
-    def IsDocked(self):
-        return self._docked
-
-    def IsDockable(self):
-        return self._dockable
-
     def OnRender(self, event):
         """Re-render map composition (each map layer)"""
         self.RemoveQueryLayer()
@@ -698,9 +666,13 @@ class MapPanel(SingleMapPanel):
         if self.GetToolbar("vdigit"):
             if self.MapWindow.digit:
                 self.MapWindow.digit.GetDisplay().SetSelected([])
-            self.MapWindow.UpdateMap(render=True, renderVector=True)
+            self.MapWindow.UpdateMap(
+                render=True,
+                renderVector=True,
+                reRenderTool=True,
+            )
         else:
-            self.MapWindow.UpdateMap(render=True)
+            self.MapWindow.UpdateMap(render=True, reRenderTool=True)
 
         # reset dialog with selected features
         if self.dialogs["vselect"]:
@@ -757,19 +729,19 @@ class MapPanel(SingleMapPanel):
             return
 
         # get size
-        dlg = ImageSizeDialog(self)
+        dlg = ImageSizeDialog(self, img_size=self._saved_output_img_size)
         dlg.CentreOnParent()
         if dlg.ShowModal() != wx.ID_OK:
             dlg.Destroy()
             return
-        width, height = dlg.GetValues()
+        self._saved_output_img_size = dlg.GetValues()
         dlg.Destroy()
 
         # get filename
         dlg = wx.FileDialog(
             parent=self,
             message=_(
-                "Choose a file name to save the image " "(no need to add extension)"
+                "Choose a file name to save the image (no need to add extension)"
             ),
             wildcard=filetype,
             style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
@@ -787,7 +759,7 @@ class MapPanel(SingleMapPanel):
             if ext != extType:
                 path = base + "." + extType
 
-            self.MapWindow.SaveToFile(path, fileType, width, height)
+            self.MapWindow.SaveToFile(path, fileType, *self._saved_output_img_size)
 
         dlg.Destroy()
 
@@ -998,22 +970,20 @@ class MapPanel(SingleMapPanel):
         Also close associated layer tree page
         """
         Debug.msg(2, "MapPanel.OnCloseWindow()")
-        if self.canCloseDisplayCallback:
-            pgnum_dict = self.canCloseDisplayCallback(
-                askIfSaveWorkspace=askIfSaveWorkspace
-            )
+        if self.canCloseCallback:
+            pgnum_dict = self.canCloseCallback(askIfSaveWorkspace=askIfSaveWorkspace)
             if pgnum_dict is not None:
                 self.CleanUp()
                 if pgnum_dict["layers"] > -1:
                     if self.IsDockable():
-                        self.closingDisplay.emit(
+                        self.closingPage.emit(
                             pgnum_dict=pgnum_dict, is_docked=self.IsDocked()
                         )
                         if not self.IsDocked():
                             frame = self.GetParent()
                             frame.Destroy()
                     else:
-                        self.closingDisplay.emit(pgnum_dict=pgnum_dict)
+                        self.closingPage.emit(pgnum_dict=pgnum_dict)
                     # Destroy is called when notebook page is deleted
         else:
             self.CleanUp()
@@ -1040,10 +1010,10 @@ class MapPanel(SingleMapPanel):
                 ltype = layer.maplayer.GetType()
                 if ltype == "raster":
                     rast.append(name)
-                elif ltype in ("rgb", "his"):
+                elif ltype in {"rgb", "his"}:
                     for iname in name.split("\n"):
                         rast.append(iname)
-                elif ltype in ("vector", "thememap", "themechart"):
+                elif ltype in {"vector", "thememap", "themechart"}:
                     vect.append(name)
             if vect:
                 # check for vector maps open to be edited
@@ -1053,7 +1023,7 @@ class MapPanel(SingleMapPanel):
                     for name in vect:
                         if lmap == name:
                             self._giface.WriteWarning(
-                                _("Vector map <%s> " "opened for editing - skipped.")
+                                _("Vector map <%s> opened for editing - skipped.")
                                 % lmap
                             )
                             vect.remove(name)
@@ -1172,7 +1142,7 @@ class MapPanel(SingleMapPanel):
             self._highlighter_layer.SetMap(
                 vectQuery[0]["Map"] + "@" + vectQuery[0]["Mapset"]
             )
-            tmp = list()
+            tmp = []
             for i in vectQuery:
                 tmp.append(i["Category"])
 
@@ -1267,14 +1237,13 @@ class MapPanel(SingleMapPanel):
     def _onMeasure(self, controller):
         """Starts measurement mode.
 
-        :param controller: measurement class (MeasureDistanceController, MeasureAreaController)
+        :param controller: measurement class (MeasureDistanceController,
+                           MeasureAreaController)
         """
         self.measureController = controller(self._giface, mapWindow=self.GetMapWindow())
         # assure that the mode is ended and lines are cleared whenever other
         # tool is selected
-        self._toolSwitcher.toggleToolChanged.connect(
-            lambda: self.measureController.Stop()
-        )
+        self._toolSwitcher.toggleToolChanged.connect(self.measureController.Stop)
         self.measureController.Start()
 
     def OnProfile(self, event):
@@ -1333,8 +1302,8 @@ class MapPanel(SingleMapPanel):
 
         win.CentreOnParent()
         win.Show()
-        # Open raster select dialog to make sure that at least 2 rasters (and the desired rasters)
-        # are selected to be plotted
+        # Open raster select dialog to make sure that at least 2 rasters (and the
+        # desired rasters) are selected to be plotted
         win.OnSelectRaster(None)
 
     def OnHistogram(self, event):
@@ -1683,7 +1652,7 @@ class MapPanel(SingleMapPanel):
             .CloseButton(False)
             .Layer(2)
             .DestroyOnClose()
-            .BestSize((self.toolbars["rdigit"].GetBestSize())),
+            .BestSize(self.toolbars["rdigit"].GetBestSize()),
         )
         self._mgr.Update()
 

@@ -155,7 +155,8 @@ def main():
                     excluded_option_name="separator",
                     excluded_option_value=separator,
                     reason=_(
-                        "A standard CSV separator (delimiter) is only one character long"
+                        "A standard CSV separator (delimiter) is only one character "
+                        "long"
                     ),
                 )
             )
@@ -166,7 +167,7 @@ def main():
             # except for setting it to an empty string which does not have a precedence
             # in the current code and the behavior is unclear.
             separator = ","
-    if output_format in ["json", "yaml"] and header:
+    if output_format in {"json", "yaml"} and header:
         gs.fatal(
             message_option_value_excludes_flag(
                 option_name="format",
@@ -184,7 +185,7 @@ def main():
         # Pipe is currently not supported at all.
         separator = ","
 
-    if method in ["delta", "deltagaps", "gran"]:
+    if method in {"delta", "deltagaps", "gran"}:
         if order:
             gs.fatal(
                 message_option_value_excludes_option(
@@ -221,7 +222,8 @@ def main():
                             excluded_option_name="columns",
                             excluded_option_value=columns,
                             reason=_(
-                                "Column '{name}' is not available with the method '{method}'"
+                                "Column '{name}' is not available with the method "
+                                "'{method}'"
                             ).format(name=column, method=method),
                         )
                     )
@@ -236,7 +238,8 @@ def main():
                         excluded_option_name="columns",
                         excluded_option_value=columns,
                         reason=_(
-                            "Column '{name}' is not available with the method '{method}'"
+                            "Column '{name}' is not available with the method "
+                            "'{method}'"
                         ).format(name=column, method=method),
                     )
                 )

@@ -33,11 +33,12 @@ import os
 import os.path
 import tarfile
 
-from .core import get_current_mapset, get_tgis_message_interface
-from .register import register_maps_in_space_time_dataset
-from .factory import dataset_factory
 import grass.script as gscript
 from grass.exceptions import CalledModuleError
+
+from .core import get_current_mapset, get_tgis_message_interface
+from .factory import dataset_factory
+from .register import register_maps_in_space_time_dataset
 
 proj_file_name = "proj.txt"
 init_file_name = "init.txt"
@@ -89,7 +90,7 @@ def _import_raster_maps_from_gdal(
 
         except CalledModuleError:
             gscript.fatal(
-                _("Unable to import/link raster map <%s> from file" " %s.")
+                _("Unable to import/link raster map <%s> from file %s.")
                 % (name, filename)
             )
 
@@ -102,7 +103,7 @@ def _import_raster_maps_from_gdal(
                 )
             except CalledModuleError:
                 gscript.fatal(
-                    _("Unable to set the color rules for " "raster map <%s>.") % name
+                    _("Unable to set the color rules for raster map <%s>.") % name
                 )
 
     # Set the computational region from the last map imported
@@ -132,8 +133,7 @@ def _import_raster_maps(maplist, set_current_region=False):
 
         except CalledModuleError:
             gscript.fatal(
-                _("Unable to unpack raster map <%s> from file " "%s.")
-                % (name, filename)
+                _("Unable to unpack raster map <%s> from file %s.") % (name, filename)
             )
 
     # Set the computational region from the last map imported
@@ -163,8 +163,7 @@ def _import_vector_maps_from_gml(maplist, overr, exp, location, link):
 
         except CalledModuleError:
             gscript.fatal(
-                _("Unable to import vector map <%s> from file " "%s.")
-                % (name, filename)
+                _("Unable to import vector map <%s> from file %s.") % (name, filename)
             )
 
 
@@ -194,8 +193,7 @@ def _import_vector_maps(maplist):
 
         except CalledModuleError:
             gscript.fatal(
-                _("Unable to unpack vector map <%s> from file " "%s.")
-                % (name, filename)
+                _("Unable to unpack vector map <%s> from file %s.") % (name, filename)
             )
 
         imported_maps[name] = name
@@ -274,7 +272,18 @@ def import_stds(
         gscript.fatal(_("Unable to find projection file <%s>") % proj_file_name)
 
     msgr.message(_("Extracting data..."))
-    tar.extractall(path=directory)
+    # Extraction filters were added in Python 3.12,
+    # and backported to 3.8.17, 3.9.17, 3.10.12, and 3.11.4
+    # See https://docs.python.org/3.12/library/tarfile.html#tarfile-extraction-filter
+    # and https://peps.python.org/pep-0706/
+    # In Python 3.12, using `filter=None` triggers a DepreciationWarning,
+    # and in Python 3.14, `filter='data'` will be the default
+    if hasattr(tarfile, "data_filter"):
+        tar.extractall(path=directory, filter="data")
+    else:
+        # Remove this when no longer needed
+        gscript.warning(_("Extracting may be unsafe; consider updating Python"))
+        tar.extractall(path=directory)
     tar.close()
 
     # We use a new list file name for map registration
@@ -313,7 +322,7 @@ def import_stds(
         if not gscript.compare_key_value_text_files(temp_name, proj_name_tmp, sep="="):
             if overr:
                 gscript.warning(
-                    _("Projection information does not match. " "Proceeding...")
+                    _("Projection information does not match. Proceeding...")
                 )
             else:
                 diff = "".join(gscript.diff_files(temp_name, proj_name))
@@ -324,7 +333,7 @@ def import_stds(
                         "\n{diff}"
                     ).format(diff=diff)
                 )
-                gscript.fatal(_("Projection information does not match. " "Aborting."))
+                gscript.fatal(_("Projection information does not match. Aborting."))
 
     # Create a new location based on the projection information and switch
     # into it
@@ -349,7 +358,7 @@ def import_stds(
             gscript.run_command(
                 "g.mapset",
                 mapset="PERMANENT",
-                location=location,
+                project=location,
                 dbase=old_env["GISDBASE"],
             )
         except CalledModuleError:
@@ -359,7 +368,7 @@ def import_stds(
             gscript.run_command("t.connect", flags="d")
         except CalledModuleError:
             gscript.fatal(
-                _("Unable to create default temporal database " "in new location %s")
+                _("Unable to create default temporal database in new location %s")
                 % location
             )
 
@@ -410,9 +419,11 @@ def import_stds(
             row["id"] = mapid
             row["start"] = line_list[1].strip()
             row["end"] = line_list[2].strip()
+            row["semantic_label"] = line_list[3].strip() if len(line_list) == 4 else ""
 
             new_list_file.write(
-                "%s%s%s%s%s\n" % (mapname, fs, row["start"], fs, row["end"])
+                f"{mapname}{fs}{row['start']}{fs}{row['end']}"
+                f"{fs}{row['semantic_label']}\n"
             )
 
             maplist.append(row)
@@ -441,7 +452,7 @@ def import_stds(
             or "number_of_maps" not in init
         ):
             gscript.fatal(
-                _("Key words %(t)s, %(s)s or %(n)s not found in init" " file.")
+                _("Key words %(t)s, %(s)s or %(n)s not found in init file.")
                 % {"t": "temporal_type", "s": "semantic_type", "n": "number_of_maps"}
             )
 
@@ -457,7 +468,7 @@ def import_stds(
             format_ = init["format"]
 
         if stds_type != type_:
-            gscript.fatal(_("The archive file is of wrong space time dataset" " type"))
+            gscript.fatal(_("The archive file is of wrong space time dataset type"))
 
         # Check the existence of the files
         if format_ == "GTiff":
@@ -465,7 +476,7 @@ def import_stds(
                 filename = row["filename"] + ".tif"
                 if not os.path.exists(filename):
                     gscript.fatal(
-                        _("Unable to find GeoTIFF raster file " "<%s> in archive.")
+                        _("Unable to find GeoTIFF raster file <%s> in archive.")
                         % filename
                     )
         elif format_ == "AAIGrid":
@@ -473,7 +484,7 @@ def import_stds(
                 filename = row["filename"] + ".asc"
                 if not os.path.exists(filename):
                     gscript.fatal(
-                        _("Unable to find AAIGrid raster file " "<%s> in archive.")
+                        _("Unable to find AAIGrid raster file <%s> in archive.")
                         % filename
                     )
         elif format_ == "GML":
@@ -481,8 +492,7 @@ def import_stds(
                 filename = row["filename"] + ".xml"
                 if not os.path.exists(filename):
                     gscript.fatal(
-                        _("Unable to find GML vector file " "<%s> in archive.")
-                        % filename
+                        _("Unable to find GML vector file <%s> in archive.") % filename
                     )
         elif format_ == "pack":
             for row in maplist:
@@ -492,7 +502,7 @@ def import_stds(
                     filename = row["filename"] + ".pack"
                 if not os.path.exists(filename):
                     gscript.fatal(
-                        _("Unable to find GRASS package file " "<%s> in archive.")
+                        _("Unable to find GRASS package file <%s> in archive.")
                         % filename
                     )
         else:
@@ -590,7 +600,7 @@ def import_stds(
                 gscript.run_command(
                     "g.mapset",
                     mapset=old_env["MAPSET"],
-                    location=old_env["LOCATION_NAME"],
+                    project=old_env["LOCATION_NAME"],
                     gisdbase=old_env["GISDBASE"],
                 )
             except CalledModuleError:

@@ -20,7 +20,7 @@ import platform
 import os
 
 import wx
-import wx.lib.agw.aui as aui
+from wx.lib.agw import aui
 
 from core import globalvar
 from core.debug import Debug
@@ -83,7 +83,7 @@ BaseIcons = {
     "mapDispSettings": MetaIcon(
         img="monitor-settings", label=_("Map Display Settings")
     ),
-    "mapDispDocking": MetaIcon(img="monitor-dock", label=_("(Un)dock Map Display")),
+    "docking": MetaIcon(img="monitor-dock", label=_("(Un)dock")),
 }
 
 
@@ -245,7 +245,7 @@ class ToolbarController:
 
     def _getToolbarData(self, data):
         """Define tool"""
-        retData = list()
+        retData = []
         for args in data:
             retData.append(self._defineTool(*args))
         return retData

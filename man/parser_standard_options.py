@@ -3,6 +3,7 @@ Created on Fri Jun 26 19:10:58 2015
 
 @author: pietro
 """
+
 import argparse
 import os
 import sys
@@ -64,7 +65,7 @@ def parse_options(lines, startswith="Opt"):
             if line.startswith("/*"):
                 continue
             if line.startswith(startswith) and line.endswith(";"):
-                key, default = [w.strip() for w in split_opt_line(line[5:])]
+                key, default = (w.strip() for w in split_opt_line(line[5:]))
                 res[key] = default
             elif line.startswith(startswith):
                 key, default = split_opt_line(line[5:])
@@ -112,7 +113,7 @@ def parse_options(lines, startswith="Opt"):
     return result
 
 
-class OptTable(object):
+class OptTable:
     def __init__(self, list_of_dict):
         self.options = list_of_dict
         self.columns = sorted(set([key for _, d in self.options for key in d.keys()]))
@@ -166,7 +167,7 @@ if __name__ == "__main__":
         "trunk/lib/gis/parser_standard_options.c?format=txt"
     )
     parser = argparse.ArgumentParser(
-        description="Extract GRASS default " "options from link."
+        description="Extract GRASS default options from link."
     )
     parser.add_argument(
         "-f",
@@ -221,7 +222,7 @@ if __name__ == "__main__":
 
     options = OptTable(parse_options(cfile.readlines(), startswith=args.startswith))
     outform = args.format
-    if outform in ["csv", "html"]:
+    if outform in {"csv", "html"}:
         print(getattr(options, outform)(), file=args.output)
         args.output.close()
     else:

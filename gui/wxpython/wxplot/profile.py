@@ -22,13 +22,20 @@ import numpy
 
 import wx
 
-import wx.lib.plot as plot
+from wx.lib import plot
 import grass.script as grass
 from wxplot.base import BasePlotFrame, PlotIcons
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from gui_core.wrap import StockCursor
 from wxplot.dialogs import ProfileRasterDialog, PlotStatsFrame
 from core.gcmd import RunCommand, GWarning, GError, GMessage
+
+try:
+    import grass.lib.gis as gislib
+
+    haveCtypes = True
+except (ImportError, TypeError):
+    haveCtypes = False
 
 
 class ProfileFrame(BasePlotFrame):
@@ -56,6 +63,7 @@ class ProfileFrame(BasePlotFrame):
         self.SetTitle(_("GRASS Profile Analysis Tool"))
         # in case of degrees, we want to use meters
         self._units = units if "degree" not in units else "meters"
+        self._is_lat_lon_proj = self.Map.projinfo.get("proj") == "ll"
 
         #
         # Init variables
@@ -150,7 +158,9 @@ class ProfileFrame(BasePlotFrame):
         """
         # create list of coordinate points for r.profile
         dist = 0
+        segment_geodesic_dist = 0
         cumdist = 0
+        segment_geodesic_cum_dist = 0
         self.coordstr = ""
         lasteast = lastnorth = None
 
@@ -181,6 +191,10 @@ class ProfileFrame(BasePlotFrame):
         # title of window
         self.ptitle = _("Profile of")
 
+        # Initialize lattitude-longitude geodesic distance calculation
+        if self._is_lat_lon_proj and haveCtypes:
+            gislib.G_begin_distance_calculations()
+
         # create list of coordinates for transect segment markers
         if len(self.transect) > 0:
             self.seglist = []
@@ -205,14 +219,29 @@ class ProfileFrame(BasePlotFrame):
                         math.pow((lasteast - point[0]), 2)
                         + math.pow((lastnorth - point[1]), 2)
                     )
+                    if self._is_lat_lon_proj and haveCtypes:
+                        segment_geodesic_dist = gislib.G_distance(
+                            lasteast, lastnorth, point[0], point[1]
+                        )
                 cumdist += dist
+                if self._is_lat_lon_proj and haveCtypes:
+                    segment_geodesic_cum_dist += segment_geodesic_dist
 
                 # store total transect length
                 self.transect_length = cumdist
 
                 # build a list of distance,value pairs for each segment of
                 # transect
-                self.seglist.append((cumdist, val))
+                self.seglist.append(
+                    (
+                        (
+                            segment_geodesic_cum_dist
+                            if self._is_lat_lon_proj and haveCtypes
+                            else cumdist
+                        ),
+                        val,
+                    )
+                )
                 lasteast = point[0]
                 lastnorth = point[1]
 
@@ -410,12 +439,10 @@ class ProfileFrame(BasePlotFrame):
 
                 try:
                     fd = open(pfile[-1], "w")
-                except IOError as e:
+                except OSError as e:
                     GError(
                         parent=self,
-                        message=_(
-                            "Unable to open file <%s> for writing.\n" "Reason: %s"
-                        )
+                        message=_("Unable to open file <%s> for writing.\nReason: %s")
                         % (pfile[-1], e),
                     )
                     dlg.Destroy()

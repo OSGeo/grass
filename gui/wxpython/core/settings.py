@@ -62,7 +62,7 @@ class SettingsJSONEncoder(json.JSONEncoder):
             else:
                 return item
 
-        return super(SettingsJSONEncoder, self).iterencode(color(obj))
+        return super().iterencode(color(obj))
 
 
 def settings_JSON_decode_hook(obj):
@@ -73,7 +73,7 @@ def settings_JSON_decode_hook(obj):
         return tuple(int(hexcode[i : i + 2], 16) for i in range(0, len(hexcode), 2))
 
     for k, v in obj.items():
-        if isinstance(v, str) and v.startswith("#") and len(v) in [7, 9]:
+        if isinstance(v, str) and v.startswith("#") and len(v) in {7, 9}:
             obj[k] = colorhex2tuple(v)
     return obj
 
@@ -152,6 +152,10 @@ class Settings:
                 "region": {
                     "resAlign": {"enabled": False},
                 },
+                "singleWinPanesLayoutPos": {
+                    "enabled": False,
+                    "pos": "",
+                },
             },
             #
             # datacatalog
@@ -169,10 +173,7 @@ class Settings:
                 # ask when quitting wxGUI or closing display
                 "askOnQuit": {"enabled": True},
                 # hide tabs
-                "hideTabs": {
-                    "search": False,
-                    "pyshell": False,
-                },
+                "hideTabs": {"search": False, "pyshell": False, "history": False},
                 "copySelectedTextToClipboard": {"enabled": False},
             },
             #
@@ -182,6 +183,10 @@ class Settings:
                 "outputfont": {
                     "type": "Courier New",
                     "size": 10,
+                },
+                "manualPageFont": {
+                    "faceName": "",
+                    "pointSize": "",
                 },
                 # expand/collapse element list
                 "elementListExpand": {"selection": 0},
@@ -732,6 +737,7 @@ class Settings:
                         "height": 100,
                     },
                 },
+                "grassAPI": {"selection": 0},  # script package
             },
             "mapswipe": {
                 "cursor": {
@@ -874,6 +880,11 @@ class Settings:
             _("circle"),
         )
 
+        self.internalSettings["modeler"]["grassAPI"]["choices"] = (
+            _("Script package"),
+            _("PyGRASS"),
+        )
+
     def ReadSettingsFile(self, settings=None):
         """Reads settings file (mapset, location, gisdbase)"""
         if settings is None:
@@ -932,7 +943,7 @@ class Settings:
 
         try:
             fd = open(self.legacyFilePath, "r")
-        except IOError:
+        except OSError:
             sys.stderr.write(
                 _("Unable to read settings file <%s>\n") % self.legacyFilePath
             )
@@ -987,7 +998,7 @@ class Settings:
         try:
             with open(self.filePath, "w") as f:
                 json.dump(settings, f, indent=2, cls=SettingsJSONEncoder)
-        except IOError as e:
+        except OSError as e:
             raise GException(e)
         except Exception as e:
             raise GException(
@@ -1054,9 +1065,7 @@ class Settings:
                 else:
                     return settings[group][key]
             else:
-                if isinstance(subkey, type(tuple())) or isinstance(
-                    subkey, type(list())
-                ):
+                if isinstance(subkey, tuple) or isinstance(subkey, list):
                     return settings[group][key][subkey[0]][subkey[1]]
                 else:
                     return settings[group][key][subkey]
@@ -1093,9 +1102,7 @@ class Settings:
                 else:
                     settings[group][key] = value
             else:
-                if isinstance(subkey, type(tuple())) or isinstance(
-                    subkey, type(list())
-                ):
+                if isinstance(subkey, tuple) or isinstance(subkey, list):
                     settings[group][key][subkey[0]][subkey[1]] = value
                 else:
                     settings[group][key][subkey] = value
@@ -1190,7 +1197,7 @@ UserSettings = Settings()
 
 
 def GetDisplayVectSettings():
-    settings = list()
+    settings = []
     if not UserSettings.Get(
         group="vectorLayer", key="featureColor", subkey=["transparent", "enabled"]
     ):

@@ -2,7 +2,7 @@ from grass.pygrass.modules.interface.docstring import docstring_property
 from grass.pygrass.modules.interface import read
 
 
-class Flag(object):
+class Flag:
     """The Flag object store all information about a flag of module.
 
     It is possible to set flags of command using this object.
@@ -27,7 +27,7 @@ class Flag(object):
         diz = read.element2dict(xflag) if xflag is not None else diz
         self.name = diz["name"]
         self.special = (
-            True if self.name in ("verbose", "overwrite", "quiet", "run") else False
+            True if self.name in {"verbose", "overwrite", "quiet", "run"} else False
         )
         self.description = diz.get("description", None)
         self.default = diz.get("default", None)

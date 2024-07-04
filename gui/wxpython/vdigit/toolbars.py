@@ -14,6 +14,7 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 @author Stepan Turek <stepan.turek seznam.cz> (handlers support)
 """
+
 import wx
 
 from grass import script as grass
@@ -182,7 +183,8 @@ class VDigitToolbar(BaseToolbar):
             "deleteLine": MetaIcon(
                 img="line-delete",
                 label=_(
-                    "Delete selected point(s), line(s), boundary(ies) or centroid(s) (Ctrl+D)"
+                    "Delete selected point(s), line(s), boundary(ies) or "
+                    "centroid(s) (Ctrl+D)"
                 ),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
@@ -211,7 +213,8 @@ class VDigitToolbar(BaseToolbar):
             "moveLine": MetaIcon(
                 img="line-move",
                 label=_(
-                    "Move selected point(s), line(s), boundary(ies) or centroid(s) (Ctrl+M)"
+                    "Move selected point(s), line(s), boundary(ies) or "
+                    "centroid(s) (Ctrl+M)"
                 ),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
@@ -238,7 +241,7 @@ class VDigitToolbar(BaseToolbar):
             ),
             "additionalTools": MetaIcon(
                 img="tools",
-                label=_("Additional tools " "(copy, flip, connect, etc.)"),
+                label=_("Additional tools (copy, flip, connect, etc.)"),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
             "undo": MetaIcon(
@@ -1092,7 +1095,7 @@ class VDigitToolbar(BaseToolbar):
                 )
 
             self.parent.SetStatusText(
-                _("Please wait, " "opening vector map <%s> for editing...")
+                _("Please wait, opening vector map <%s> for editing...")
                 % mapLayer.GetName(),
                 0,
             )
@@ -1207,7 +1210,7 @@ class VDigitToolbar(BaseToolbar):
                 if self.digit.GetUndoLevel() > -1:
                     dlg = wx.MessageDialog(
                         parent=self.parent,
-                        message=_("Do you want to save changes " "in vector map <%s>?")
+                        message=_("Do you want to save changes in vector map <%s>?")
                         % self.mapLayer.GetName(),
                         caption=_("Save changes?"),
                         style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,

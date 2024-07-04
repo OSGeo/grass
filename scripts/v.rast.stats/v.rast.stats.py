@@ -133,7 +133,8 @@ def main():
     except KeyError:
         grass.fatal(
             _(
-                "There is no table connected to this map. Run v.db.connect or v.db.addtable first."
+                "There is no table connected to this map. Run v.db.connect or "
+                "v.db.addtable first."
             )
         )
     # we need this for non-DBF driver:
@@ -237,13 +238,11 @@ def main():
                 "db.execute", input=sqltmp, database=fi["database"], driver=fi["driver"]
             )
             grass.verbose(
-                (
-                    _(
-                        "Statistics calculated from raster map <{raster}>"
-                        " and uploaded to attribute table"
-                        " of vector map <{vector}>."
-                    ).format(raster=raster, vector=vector)
-                )
+                _(
+                    "Statistics calculated from raster map <{raster}>"
+                    " and uploaded to attribute table"
+                    " of vector map <{vector}>."
+                ).format(raster=raster, vector=vector)
             )
         except CalledModuleError:
             grass.warning(
@@ -427,7 +426,7 @@ def set_up_columns(vector, layer, percentile, colprefix, basecols, dbfdriver, c)
         if currcolumn in grass.vector_columns(vector, layer).keys():
             if not c:
                 grass.fatal(
-                    (_("Cannot create column " "<%s> (already present). ") % currcolumn)
+                    (_("Cannot create column <%s> (already present). ") % currcolumn)
                     + _("Use -c flag to update values in this column.")
                 )
         else:

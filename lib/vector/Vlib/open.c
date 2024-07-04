@@ -1006,7 +1006,7 @@ int Vect_open_tmp_new(struct Map_info *Map, const char *name, int with_z)
    \return 1 on success
    \return 0 on error
  */
-int Vect_coor_info(const struct Map_info *Map, struct Coor_info *Info)
+int Vect_coor_info(struct Map_info *Map, struct Coor_info *Info)
 {
     char file_path[GPATH_MAX];
     struct stat stat_buf;
@@ -1064,7 +1064,7 @@ int Vect_coor_info(const struct Map_info *Map, struct Coor_info *Info)
    \return maptype string on success (allocated by G_store())
    \return error message on error
  */
-const char *Vect_maptype_info(const struct Map_info *Map)
+const char *Vect_maptype_info(struct Map_info *Map)
 {
     char maptype[1000];
 
@@ -1100,7 +1100,7 @@ const char *Vect_maptype_info(const struct Map_info *Map)
 
    \return map format code
  */
-int Vect_maptype(const struct Map_info *Map)
+int Vect_maptype(struct Map_info *Map)
 {
     if (Map->temporary) {
         const struct Format_info *finfo;
@@ -1489,7 +1489,7 @@ int map_format(struct Map_info *Map)
 
    \return buffer containing path
  */
-char *Vect__get_path(char *path, const struct Map_info *Map)
+char *Vect__get_path(char *path, struct Map_info *Map)
 {
     if (Map->temporary) {
         char path_tmp[GPATH_MAX];
@@ -1514,7 +1514,7 @@ char *Vect__get_path(char *path, const struct Map_info *Map)
 
    \return allocated buffer containing path
  */
-char *Vect__get_element_path(char *file_path, const struct Map_info *Map,
+char *Vect__get_element_path(char *file_path, struct Map_info *Map,
                              const char *element)
 {
     char path[GPATH_MAX];

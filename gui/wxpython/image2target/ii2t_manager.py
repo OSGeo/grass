@@ -112,27 +112,40 @@ class GCPWizard:
     Start wizard here and finish wizard here
     """
 
-    # def __init__(self, parent, giface, srcloc, srcmpt, srcgrp, srcras, tgtras, camera, order, extension):
-    #    global maptype
-    #    global src_map
-    #    global tgt_map
-    #    maptype = 'raster'
-    #    rendertype = 'raster'
-    #    self.parent = parent  # GMFrame
-    #    self._giface = giface
-    #    self.srcloc = srcloc
-    #    self.srcmpt = srcmpt
-    #    self.group = srcgrp
-    #    self.src_map = srcras
-    #    self.tgt_map = tgtras
-    #    self.camera = camera
-    #    self.order = int(order)
-    #    self.extension = extension
-    #    self.src_maps = self.src_map
-    #    # location for xy map to georectify
-    #    self.newlocation = self.srcloc
-    #    # mapset for xy map to georectify
-    #    self.newmapset = self.srcmpt
+    # def __init__(
+    #     self,
+    #     parent,
+    #     giface,
+    #     srcloc,
+    #     srcmpt,
+    #     srcgrp,
+    #     srcras,
+    #     tgtras,
+    #     camera,
+    #     order,
+    #     extension,
+    # ):
+    #     global maptype
+    #     global src_map
+    #     global tgt_map
+    #     maptype = "raster"
+    #     rendertype = "raster"
+    #     self.parent = parent  # GMFrame
+    #     self._giface = giface
+    #     self.srcloc = srcloc
+    #     self.srcmpt = srcmpt
+    #     self.group = srcgrp
+    #     self.src_map = srcras
+    #     self.tgt_map = tgtras
+    #     self.camera = camera
+    #     self.order = int(order)
+    #     self.extension = extension
+    #     self.src_maps = self.src_map
+    #     # location for xy map to georectify
+    #     self.newlocation = self.srcloc
+    #     # mapset for xy map to georectify
+    #     self.newmapset = self.srcmpt
+
     def __init__(self, parent, giface):
         self.parent = parent  # GMFrame
         self._giface = giface
@@ -514,7 +527,7 @@ class LocationPage(TitledPage):
         """Sets source mapset for map(s) to georectify"""
         if self.xylocation == "":
             GMessage(
-                _("You must select a valid location " "before selecting a mapset"),
+                _("You must select a valid location before selecting a mapset"),
                 parent=self,
             )
             return
@@ -688,7 +701,7 @@ class GroupPage(TitledPage):
     def OnPageChanging(self, event=None):
         if event.GetDirection() and self.xygroup == "":
             GMessage(
-                _("You must select a valid image/map " "group in order to continue"),
+                _("You must select a valid image/map group in order to continue"),
                 parent=self,
             )
             event.Veto()
@@ -696,7 +709,7 @@ class GroupPage(TitledPage):
 
         if event.GetDirection() and self.extension == "":
             GMessage(
-                _("You must enter an map name " "extension in order to continue"),
+                _("You must enter an map name extension in order to continue"),
                 parent=self,
             )
             event.Veto()
@@ -908,7 +921,7 @@ class DispMapPage(TitledPage):
 
         if event.GetDirection() and (src_map == ""):
             GMessage(
-                _("You must select a source map " "in order to continue"), parent=self
+                _("You must select a source map in order to continue"), parent=self
             )
             event.Veto()
             return
@@ -1552,7 +1565,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             f.write("#\tsource\t\t\ttarget\t\t\tstatus\n")
             f.write("#\teast\tnorth\theight\teast\tnorth\theight\t(1=ok, 0=ignore)\n")
             f.write(
-                "#----------------------------     ---------------------------     ---------------\n"
+                "#----------------------------     ---------------------------     ---------------\n"  # noqa: E501
             )
 
             for index in range(self.list.GetItemCount()):
@@ -1584,7 +1597,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                     + "\n"
                 )
 
-        except IOError as err:
+        except OSError as err:
             GError(
                 parent=self,
                 message="%s <%s>. %s%s"
@@ -1646,7 +1659,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                     self.list.CheckItem(index, check)
                 GCPcnt += 1
 
-        except IOError as err:
+        except OSError as err:
             GError(
                 parent=self,
                 message="%s <%s>. %s%s"
@@ -1707,7 +1720,8 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             targetMapWin.UpdateMap(render=False, renderVector=False)
 
     def OnFocus(self, event):
-        # TODO: it is here just to remove old or obsolete beavior of base class gcp/MapPanel?
+        # TODO: it is here just to remove old or obsolete beavior of base class
+        #       gcp/MapPanel?
         # self.grwiz.SwitchEnv('source')
         pass
 
@@ -1962,16 +1976,19 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         if self.gr_order == 1:
             minNumOfItems = 3
-            # self.SetStatusText(_('Insufficient points, 3+ points needed for 1st order'))
+            # self.SetStatusText(_(
+            # "Insufficient points, 3+ points needed for 1st order"))
 
         elif self.gr_order == 2:
             minNumOfItems = 6
             diff = 6 - numOfItems
-            # self.SetStatusText(_('Insufficient points, 6+ points needed for 2nd order'))
+            # self.SetStatusText(_(
+            # "Insufficient points, 6+ points needed for 2nd order"))
 
         elif self.gr_order == 3:
             minNumOfItems = 10
-            # self.SetStatusText(_('Insufficient points, 10+ points needed for 3rd order'))
+            # self.SetStatusText(_(
+            # "Insufficient points, 10+ points needed for 3rd order"))
 
         for i in range(minNumOfItems - numOfItems):
             self.AddGCP(None)
@@ -2157,14 +2174,10 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             e, n = errlist[i].split()
             fe = float(e)
             fn = float(n)
-            if fe < newreg["w"]:
-                newreg["w"] = fe
-            if fe > newreg["e"]:
-                newreg["e"] = fe
-            if fn < newreg["s"]:
-                newreg["s"] = fn
-            if fn > newreg["n"]:
-                newreg["n"] = fn
+            newreg["w"] = min(fe, newreg["w"])
+            newreg["e"] = max(fe, newreg["e"])
+            newreg["s"] = min(fn, newreg["s"])
+            newreg["n"] = max(fn, newreg["n"])
 
         return newreg
 
@@ -2213,10 +2226,8 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         # LL locations
         if self.Map.projinfo["proj"] == "ll":
-            if newreg["n"] > 90.0:
-                newreg["n"] = 90.0
-            if newreg["s"] < -90.0:
-                newreg["s"] = -90.0
+            newreg["n"] = min(newreg["n"], 90.0)
+            newreg["s"] = max(newreg["s"], -90.0)
 
         ce = newreg["w"] + (newreg["e"] - newreg["w"]) / 2
         cn = newreg["s"] + (newreg["n"] - newreg["s"]) / 2
@@ -2907,7 +2918,8 @@ class GrSettingsDialog(wx.Dialog):
         btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
         btnSave.SetToolTip(
             _(
-                "Apply and save changes to user settings file (default for next sessions)"
+                "Apply and save changes to user settings file (default for next "
+                "sessions)"
             )
         )
         btnClose.Bind(wx.EVT_BUTTON, self.OnClose)

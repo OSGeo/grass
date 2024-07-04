@@ -222,7 +222,7 @@ class Popen(subprocess.Popen):
             except ValueError:
                 return self._close("stdin")
             except (pywintypes.error, Exception) as why:
-                if why.winerror in (109, errno.ESHUTDOWN):
+                if why.winerror in {109, errno.ESHUTDOWN}:
                     return self._close("stdin")
                 raise
 
@@ -238,14 +238,13 @@ class Popen(subprocess.Popen):
             try:
                 x = msvcrt.get_osfhandle(conn.fileno())
                 (read, nAvail, nMessage) = PeekNamedPipe(x, 0)
-                if maxsize < nAvail:
-                    nAvail = maxsize
+                nAvail = min(maxsize, nAvail)
                 if nAvail > 0:
                     (errCode, read) = ReadFile(x, nAvail, None)
             except ValueError:
                 return self._close(which)
             except (pywintypes.error, Exception) as why:
-                if why.winerror in (109, errno.ESHUTDOWN):
+                if why.winerror in {109, errno.ESHUTDOWN}:
                     return self._close(which)
                 raise
 
@@ -301,8 +300,7 @@ message = "Other end disconnected!"
 
 
 def recv_some(p, t=0.1, e=1, tr=5, stderr=0):
-    if tr < 1:
-        tr = 1
+    tr = max(tr, 1)
     x = time.time() + t
     y = []
     r = ""
@@ -402,7 +400,7 @@ class Command:
             Debug.msg(
                 3,
                 "Command(): cmd='%s', wait=%s, returncode=%d, alive=%s"
-                % (" ".join(cmd), wait, self.returncode, self.cmdThread.isAlive()),
+                % (" ".join(cmd), wait, self.returncode, self.cmdThread.is_alive()),
             )
             if rerr is not None and self.returncode != 0:
                 if rerr is False:  # GUI dialog
@@ -430,7 +428,7 @@ class Command:
             Debug.msg(
                 3,
                 "Command(): cmd='%s', wait=%s, returncode=?, alive=%s"
-                % (" ".join(cmd), wait, self.cmdThread.isAlive()),
+                % (" ".join(cmd), wait, self.cmdThread.is_alive()),
             )
 
         if verbose_orig:
@@ -688,7 +686,8 @@ def RunCommand(
     :param env: environment (optional, uses os.environ if not provided)
     :param kwargs: program parameters
 
-    The environment passed to the function (env or os.environ) is not modified (a copy is used internally).
+    The environment passed to the function (env or os.environ) is not modified
+    (a copy is used internally).
 
     :return: returncode (read == False and getErrorMsg == False)
     :return: returncode, messages (read == False and getErrorMsg == True)

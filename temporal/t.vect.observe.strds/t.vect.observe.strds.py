@@ -60,7 +60,7 @@ from grass.exceptions import CalledModuleError
 ############################################################################
 
 
-class Sample(object):
+class Sample:
     def __init__(self, start=None, end=None, raster_names=None):
         self.start = start
         self.end = end
@@ -104,7 +104,8 @@ def main():
     if len(strds_names) != len(column_names):
         grass.fatal(
             _(
-                "The number of columns must be equal to the number of space time raster datasets"
+                "The number of columns must be equal to the number of space time "
+                "raster datasets"
             )
         )
 
@@ -149,7 +150,8 @@ def main():
                 grass.fatal(
                     _(
                         "Temporal type of space time raster datasets must be equal\n"
-                        "<%(a)s> of type %(type_a)s do not match <%(b)s> of type %(type_b)s"
+                        "<%(a)s> of type %(type_a)s do not match <%(b)s> of type "
+                        "%(type_b)s"
                         % {
                             "a": first_strds.get_id(),
                             "type_a": first_strds.get_temporal_type(),
@@ -234,7 +236,7 @@ def main():
 
     title = _("Observaion of space time raster dataset(s) <%s>") % (strds)
     description = _(
-        "Observation of space time raster dataset(s) <%s>" " with vector map <%s>"
+        "Observation of space time raster dataset(s) <%s> with vector map <%s>"
     ) % (strds, input)
 
     # Create the output space time vector dataset
@@ -295,7 +297,7 @@ def main():
             except CalledModuleError:
                 dbif.close()
                 grass.fatal(
-                    _("Unable to add column %s to vector map <%s> " "with layer %i")
+                    _("Unable to add column %s to vector map <%s> with layer %i")
                     % (columns_string, vectmap, count)
                 )
         else:
@@ -312,7 +314,7 @@ def main():
             except CalledModuleError:
                 dbif.close()
                 grass.fatal(
-                    _("Unable to add table to vector map " "<%s> with layer %i")
+                    _("Unable to add table to vector map <%s> with layer %i")
                     % (vectmap, count)
                 )
 

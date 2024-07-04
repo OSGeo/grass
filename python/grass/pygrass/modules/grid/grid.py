@@ -44,8 +44,7 @@ def select(parms, ptype):
         par = parms[k]
         if par.type == ptype or par.typedesc == ptype and par.value:
             if par.multiple:
-                for val in par.value:
-                    yield val
+                yield from par.value
             else:
                 yield par.value
 
@@ -401,7 +400,7 @@ def cmd_exe(args):
     os.remove(gisrc_dst)
 
 
-class GridModule(object):
+class GridModule:
     # TODO maybe also i.* could be supported easily
     """Run GRASS raster commands in a multiprocessing mode.
 
@@ -480,7 +479,7 @@ class GridModule(object):
         # if overlap > 0, r.patch won't work properly
         if not patch_backend:
             self.patch_backend = "RasterRow"
-        elif patch_backend not in ("r.patch", "RasterRow"):
+        elif patch_backend not in {"r.patch", "RasterRow"}:
             raise RuntimeError(
                 _("Parameter patch_backend must be 'r.patch' or 'RasterRow'")
             )
@@ -626,7 +625,7 @@ class GridModule(object):
         """Add the mapset information to the input maps"""
         for inmap in self.module.inputs:
             inm = self.module.inputs[inmap]
-            if inm.type in ("raster", "vector") and inm.value:
+            if inm.type in {"raster", "vector"} and inm.value:
                 if "@" not in inm.value:
                     mset = get_mapset_raster(inm.value)
                     inm.value = inm.value + "@%s" % mset

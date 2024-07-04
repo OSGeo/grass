@@ -141,8 +141,8 @@ def main():
                 grass.fatal(
                     _(
                         "There is a table connected to input vector map '%s', but "
-                        "there are no categories present in the key column '%s'. Consider using "
-                        "v.to.db to correct this."
+                        "there are no categories present in the key column '%s'. "
+                        "Consider using v.to.db to correct this."
                     )
                     % (mapname, f["key"])
                 )
@@ -162,7 +162,7 @@ def main():
         records2 = []
         for line in p.stdout:
             fields = decode(line).rstrip("\r\n").split("|")
-            if fields[0] in ["cat", "-1", "0"]:
+            if fields[0] in {"cat", "-1", "0"}:
                 continue
             records2.append([int(fields[0])] + fields[1:])
         p.wait()
@@ -206,7 +206,7 @@ def main():
         records3 = []
         for line in p.stdout:
             fields = decode(line).rstrip("\r\n").split("|")
-            if fields[0] in ["cat", "-1", "0"]:
+            if fields[0] in {"cat", "-1", "0"}:
                 continue
             records3.append([int(fields[0])] + fields[1:])
         p.wait()

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # utilities for generating HTML indices
-# (C) 2003-2023 Markus Neteler and the GRASS Development Team
+# (C) 2003-2024 Markus Neteler and the GRASS Development Team
 # Authors:
 #   Markus Neteler
 #   Glynn Clements
@@ -436,9 +436,9 @@ def html_files(cls=None, ignore_gui=True):
     for cmd in sorted(os.listdir(html_dir)):
         if (
             cmd.endswith(".html")
-            and (cls in [None, "*"] or cmd.startswith(cls + "."))
+            and (cls in {None, "*"} or cmd.startswith(cls + "."))
             and (cls != "*" or len(cmd.split(".")) >= 3)
-            and cmd not in ["full_index.html", "index.html"]
+            and cmd not in {"full_index.html", "index.html"}
             and cmd not in exclude_mods
             and (ignore_gui and not cmd.startswith("wxGUI.") or not ignore_gui)
         ):

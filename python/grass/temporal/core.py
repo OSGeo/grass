@@ -15,8 +15,9 @@ Usage:
     >>> # Execute a SQL statement
     >>> dbif.execute_transaction("SELECT datetime(0, 'unixepoch', 'localtime');")
     >>> # Mogrify an SQL statement
-    >>> dbif.mogrify_sql_statement(["SELECT name from raster_base where name = ?",
-    ... ("precipitation",)])
+    >>> dbif.mogrify_sql_statement(
+    ...     ["SELECT name from raster_base where name = ?", ("precipitation",)]
+    ... )
     "SELECT name from raster_base where name = 'precipitation'"
     >>> dbif.close()
 
@@ -28,13 +29,15 @@ for details.
 
 :author: Soeren Gebbert
 """
+
 # import traceback
 import os
-import grass.script as gscript
 
-from .c_libraries_interface import CLibrariesInterface
+import grass.script as gscript
 from grass.pygrass import messages
 from grass.script.utils import decode
+
+from .c_libraries_interface import CLibrariesInterface
 
 # Import all supported database backends
 # Ignore import errors since they are checked later
@@ -61,8 +64,8 @@ def profile_function(func):
 
     if do_profiling == "True" or do_profiling == "1":
         import cProfile
-        import pstats
         import io
+        import pstats
 
         pr = cProfile.Profile()
         pr.enable()
@@ -489,7 +492,8 @@ def get_available_temporal_mapsets():
         )
         if driver and database:
             # Check if the temporal sqlite database exists
-            # We need to set non-existing databases in case the mapset is the current mapset
+            # We need to set non-existing databases in case the mapset is the current
+            # mapset
             # to create it
             if (
                 driver == "sqlite" and os.path.exists(database)
@@ -666,7 +670,7 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
             import sqlite3
         except ImportError:
             msgr.error(
-                "Unable to locate the sqlite SQL Python interface" " module sqlite3."
+                "Unable to locate the sqlite SQL Python interface module sqlite3."
             )
             raise
         dbmi = sqlite3
@@ -1058,7 +1062,7 @@ def _create_tgis_metadata_table(content, dbif=None):
 ###############################################################################
 
 
-class SQLDatabaseInterfaceConnection(object):
+class SQLDatabaseInterfaceConnection:
     def __init__(self):
         self.tgis_mapsets = get_available_temporal_mapsets()
         self.current_mapset = get_current_mapset()
@@ -1252,7 +1256,7 @@ class SQLDatabaseInterfaceConnection(object):
 ###############################################################################
 
 
-class DBConnection(object):
+class DBConnection:
     """This class represents the database interface connection
     and provides access to the chosen backend modules.
 
@@ -1393,8 +1397,14 @@ class DBConnection(object):
 
             >>> init()
             >>> dbif = SQLDatabaseInterfaceConnection()
-            >>> dbif.mogrify_sql_statement(["SELECT ctime FROM raster_base WHERE id = ?",
-            ... ["soil@PERMANENT",]])
+            >>> dbif.mogrify_sql_statement(
+            ...     [
+            ...         "SELECT ctime FROM raster_base WHERE id = ?",
+            ...         [
+            ...             "soil@PERMANENT",
+            ...         ],
+            ...     ]
+            ... )
             "SELECT ctime FROM raster_base WHERE id = 'soil@PERMANENT'"
 
         """
@@ -1601,8 +1611,9 @@ def init_dbif(dbif):
 
         dbif, connection_state_changed = tgis.init_dbif(None)
 
-        sql = dbif.mogrify_sql_statement(["SELECT * FROM raster_base WHERE ? = ?"],
-                                               ["id", "soil@PERMANENT"])
+        sql = dbif.mogrify_sql_statement(
+            ["SELECT * FROM raster_base WHERE ? = ?"], ["id", "soil@PERMANENT"]
+        )
         dbif.execute_transaction(sql)
 
         if connection_state_changed:

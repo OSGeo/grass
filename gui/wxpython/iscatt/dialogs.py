@@ -406,7 +406,8 @@ class SettingsDialog(wx.Dialog):
         self.btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
         self.btnSave.SetToolTip(
             _(
-                "Apply and save changes to user settings file (default for next sessions)"
+                "Apply and save changes to user settings file (default for next "
+                "sessions)"
             )
         )
         self.btnClose.Bind(wx.EVT_BUTTON, self.OnClose)
@@ -427,7 +428,7 @@ class SettingsDialog(wx.Dialog):
         gridSizer = wx.GridBagSizer(vgap=1, hgap=1)
 
         row = 0
-        setts = dict()
+        setts = {}
         setts.update(self.colorsSetts)
         setts.update(self.sizeSetts)
 

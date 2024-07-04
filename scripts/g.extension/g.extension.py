@@ -16,8 +16,8 @@
 #
 # TODO:         - update temporary workaround of using grass7 subdir of addon-repo, see
 #                 https://github.com/OSGeo/grass-addons/issues/528
-#               - add sudo support where needed (i.e. check first permission to write into
-#                 $GISBASE directory)
+#               - add sudo support where needed (i.e. check first permission to write
+#                 into $GISBASE directory)
 #               - fix toolbox support in install_private_extension_xml()
 #############################################################################
 
@@ -224,9 +224,11 @@ class GitAdapter:
         #: Attribute containing the URL to the online repository
         self.url = url
         self.major_grass_version = major_grass_version
-        #: Attribute flagging if the repository is structured like the official addons repository
+        #: Attribute flagging if the repository is structured like the official addons
+        # repository
         self.official_repository_structure = official_repository_structure
-        #: Attribute containing the path to the working directory where the repo is cloned out to
+        #: Attribute containing the path to the working directory where the repo is
+        # cloned out to
         if working_directory:
             self.working_directory = Path(working_directory).absolute()
         else:
@@ -247,7 +249,8 @@ class GitAdapter:
         self.default_branch = self._get_default_branch()
         #: Attribute containing the branch used for checkout
         self.branch = self._set_branch(branch)
-        #: Attribute containing list of addons in the repository with path to directories
+        #: Attribute containing list of addons in the repository with path to
+        # directories
         self.addons = self._get_addons_list()
 
     def _get_version(self):
@@ -350,7 +353,8 @@ class GitAdapter:
     def _set_branch(self, branch_name):
         """Set the branch to check out to either:
         a) a user defined branch
-        b) a version branch for repositories following the official addons repository structure
+        b) a version branch for repositories following the official addons repository
+           structure
         c) the default branch of the repository
         """
         checkout_branch = None
@@ -547,12 +551,12 @@ def get_default_branch(full_url):
     # Construct API call and retrieve default branch
     api_calls = {
         "github.com": f"https://api.github.com/repos/{organization}/{repository}",
-        "gitlab.com": f"https://gitlab.com/api/v4/projects/{organization}%2F{repository}",
-        "bitbucket.org": f"https://api.bitbucket.org/2.0/repositories/{organization}/{repository}/branching-model?",
+        "gitlab.com": f"https://gitlab.com/api/v4/projects/{organization}%2F{repository}",  # noqa: E501
+        "bitbucket.org": f"https://api.bitbucket.org/2.0/repositories/{organization}/{repository}/branching-model?",  # noqa: E501
     }
-    # Try to get default branch via API. The API call is known to fail a) if the full_url
-    # does not belong to an implemented hosting service or b) if the rate limit of the
-    # API is exceeded
+    # Try to get default branch via API. The API call is known to fail a) if the
+    # full_url does not belong to an implemented hosting service or b) if the rate
+    # limit of the API is exceeded
     try:
         req = urlrequest.urlopen(api_calls.get(url_parts.netloc))
         content = json.loads(req.read())
@@ -606,9 +610,9 @@ def expand_module_class_name(class_letters):
     The letter or letters are used in module names, e.g. r.slope.aspect.
     The names are used in directories in Addons but also in the source code.
 
-    >>> expand_module_class_name('r')
+    >>> expand_module_class_name("r")
     'raster'
-    >>> expand_module_class_name('v')
+    >>> expand_module_class_name("v")
     'vector'
     """
     name = {
@@ -635,9 +639,9 @@ def get_module_class_name(module_name):
 
     The names are used in directories in Addons but also in the source code.
 
-    >>> get_module_class_name('r.slope.aspect')
+    >>> get_module_class_name("r.slope.aspect")
     'raster'
-    >>> get_module_class_name('v.to.rast')
+    >>> get_module_class_name("v.to.rast")
     'vector'
     """
     classchar = module_name.split(".", 1)[0]
@@ -687,7 +691,7 @@ def get_installed_toolboxes(force=False):
         os.remove(xml_file)
         write_xml_toolboxes(xml_file)
         return []
-    ret = list()
+    ret = []
     for tnode in tree.findall("toolbox"):
         ret.append(tnode.get("code"))
     return ret
@@ -714,7 +718,7 @@ def get_installed_modules(force=False):
         os.remove(xml_file)
         write_xml_modules(xml_file)
         return []
-    ret = list()
+    ret = []
     for tnode in tree.findall("task"):
         if flags["g"]:
             desc, keyw = get_optional_params(tnode)
@@ -763,13 +767,13 @@ def list_available_extensions(url):
 
 def get_available_toolboxes(url):
     """Return toolboxes available in the repository"""
-    tdict = dict()
+    tdict = {}
     url = url + "toolboxes.xml"
     try:
         tree = etree_fromurl(url)
         for tnode in tree.findall("toolbox"):
-            mlist = list()
-            clist = list()
+            mlist = []
+            clist = []
             tdict[tnode.get("code")] = {
                 "name": tnode.get("name"),
                 "correlate": clist,
@@ -781,7 +785,7 @@ def get_available_toolboxes(url):
 
             for mnode in tnode.findall("task"):
                 mlist.append(mnode.get("name"))
-    except (HTTPError, IOError, OSError):
+    except (HTTPError, OSError):
         gs.fatal(_("Unable to fetch addons metadata file"))
 
     return tdict
@@ -794,7 +798,7 @@ def get_toolbox_extensions(url, name):
     :param name: toolbox name
     """
     # dictionary of extensions
-    edict = dict()
+    edict = {}
 
     url = url + "toolboxes.xml"
 
@@ -805,13 +809,13 @@ def get_toolbox_extensions(url, name):
                 for enode in tnode.findall("task"):
                     # extension name
                     ename = enode.get("name")
-                    edict[ename] = dict()
+                    edict[ename] = {}
                     # list of modules installed by this extension
-                    edict[ename]["mlist"] = list()
+                    edict[ename]["mlist"] = []
                     # list of files installed by this extension
-                    edict[ename]["flist"] = list()
+                    edict[ename]["flist"] = []
                 break
-    except (HTTPError, IOError, OSError):
+    except (HTTPError, OSError):
         gs.fatal(_("Unable to fetch addons metadata file"))
 
     return edict
@@ -893,7 +897,7 @@ def list_available_modules(url, mlist=None):
         )
         list_available_extensions_svn(url)
         return
-    except (HTTPError, URLError, IOError, OSError):
+    except (HTTPError, URLError, OSError):
         list_available_extensions_svn(url)
         return
 
@@ -956,7 +960,7 @@ def list_available_extensions_svn(url):
         gs.debug("url = %s" % file_url, debug=2)
         try:
             file_ = urlopen(url)
-        except (HTTPError, IOError, OSError):
+        except (HTTPError, OSError):
             gs.debug(_("Unable to fetch '%s'") % file_url, debug=1)
             continue
 
@@ -978,7 +982,7 @@ def get_wxgui_extensions(url):
 
     :param url: a directory URL (filename will be attached)
     """
-    mlist = list()
+    mlist = []
     gs.debug(
         "Fetching list of wxGUI extensions from "
         "GRASS-Addons SVN repository (be patient)..."
@@ -1000,7 +1004,7 @@ def get_wxgui_extensions(url):
         if not sline:
             continue
         name = sline.group(2).rstrip("/")
-        if name not in ("..", "Makefile"):
+        if name not in {"..", "Makefile"}:
             mlist.append(name)
 
     return mlist
@@ -1171,12 +1175,12 @@ def install_extension(source=None, url=None, xmlurl=None, branch=None):
         gs.message(_("Installing toolbox <%s>...") % options["extension"])
         edict = get_toolbox_extensions(xmlurl, options["extension"])
     else:
-        edict = dict()
-        edict[options["extension"]] = dict()
+        edict = {}
+        edict[options["extension"]] = {}
         # list of modules installed by this extension
-        edict[options["extension"]]["mlist"] = list()
+        edict[options["extension"]]["mlist"] = []
         # list of files installed by this extension
-        edict[options["extension"]]["flist"] = list()
+        edict[options["extension"]]["flist"] = []
     if not edict:
         gs.warning(_("Nothing to install"))
         return
@@ -1184,7 +1188,7 @@ def install_extension(source=None, url=None, xmlurl=None, branch=None):
     ret = 0
     tmp_dir = None
 
-    new_modules = list()
+    new_modules = []
     for extension in edict:
         ret1 = 0
         new_modules_ext = None
@@ -1211,9 +1215,7 @@ def install_extension(source=None, url=None, xmlurl=None, branch=None):
         return
 
     if ret != 0:
-        gs.warning(
-            _("Installation failed, sorry." " Please check above error messages.")
-        )
+        gs.warning(_("Installation failed, sorry. Please check above error messages."))
     else:
         # update extensions metadata file
         gs.message(_("Updating extensions metadata file..."))
@@ -1249,15 +1251,15 @@ def get_toolboxes_metadata(url):
         and dictionary with dest, keyw, files keys as value, the second item
         is list of 'binary' files (installation files)
     """
-    data = dict()
+    data = {}
     try:
         tree = etree_fromurl(url)
         for tnode in tree.findall("toolbox"):
-            clist = list()
+            clist = []
             for cnode in tnode.findall("correlate"):
                 clist.append(cnode.get("code"))
 
-            mlist = list()
+            mlist = []
             for mnode in tnode.findall("task"):
                 mlist.append(mnode.get("name"))
 
@@ -1267,8 +1269,8 @@ def get_toolboxes_metadata(url):
                 "correlate": clist,
                 "modules": mlist,
             }
-    except (HTTPError, IOError, OSError):
-        gs.error(_("Unable to read addons metadata file " "from the remote server"))
+    except (HTTPError, OSError):
+        gs.error(_("Unable to read addons metadata file from the remote server"))
     return data
 
 
@@ -1337,11 +1339,11 @@ def get_addons_metadata(url, mlist):
     bin_list = []
     try:
         tree = etree_fromurl(url)
-    except (HTTPError, URLError, IOError, OSError) as error:
+    except (HTTPError, URLError, OSError) as error:
         gs.error(
-            _(
-                "Unable to read addons metadata file" " from the remote server: {0}"
-            ).format(error)
+            _("Unable to read addons metadata file from the remote server: {0}").format(
+                error
+            )
         )
         return data, bin_list
     except ETREE_EXCEPTIONS as error:
@@ -1351,7 +1353,7 @@ def get_addons_metadata(url, mlist):
         name = mnode.get("name")
         if name not in mlist:
             continue
-        file_list = list()
+        file_list = []
         bnode = mnode.find("binary")
         windows = sys.platform == "win32"
         if bnode is not None:
@@ -1449,8 +1451,6 @@ def install_extension_xml(edict):
                 "Extension already listed in metadata file; metadata not updated!"
             )
     write_xml_extensions(xml_file, tree)
-
-    return None
 
 
 def get_multi_addon_addons_which_install_only_html_man_page():
@@ -1590,7 +1590,8 @@ def install_module_xml(mlist):
             tree.append(tnode)
         else:
             gs.verbose(
-                "Extension module already listed in metadata file; metadata not updated!"
+                "Extension module already listed in metadata file; metadata not "
+                "updated!"
             )
     write_xml_modules(xml_file, tree)
 
@@ -1632,7 +1633,7 @@ def install_extension_win(name):
     )
 
     # collect module names and file names
-    module_list = list()
+    module_list = []
     module_name_pattern = re.compile(
         r"^([d,g,i,m,p,r,s,t,v]|^db|^ps|^r3|^wx)\..*[\.py,\.exe]$"
     )
@@ -1656,7 +1657,7 @@ def install_extension_win(name):
         replace_shebang_win(filename)
 
     # collect old files
-    old_file_list = list()
+    old_file_list = []
     for r, d, f in os.walk(options["prefix"]):
         for filename in f:
             fullname = os.path.join(r, filename)
@@ -1668,7 +1669,7 @@ def install_extension_win(name):
     )
 
     # collect new files
-    file_list = list()
+    file_list = []
     for r, d, f in os.walk(options["prefix"]):
         for filename in f:
             fullname = os.path.join(r, filename)
@@ -1839,17 +1840,33 @@ def extract_tar(name, directory, tmpdir):
         " tmpdir={tmpdir})".format(name=name, directory=directory, tmpdir=tmpdir),
         3,
     )
-    try:
-        import tarfile  # we don't need it anywhere else
+    import tarfile
 
+    try:
         tar = tarfile.open(name)
         extract_dir = os.path.join(tmpdir, "extract_dir")
         os.mkdir(extract_dir)
-        tar.extractall(path=extract_dir)
+
+        # Extraction filters were added in Python 3.12,
+        # and backported to 3.8.17, 3.9.17, 3.10.12, and 3.11.4
+        # See
+        # https://docs.python.org/3.12/library/tarfile.html#tarfile-extraction-filter
+        # and https://peps.python.org/pep-0706/
+        # In Python 3.12, using `filter=None` triggers a DepreciationWarning,
+        # and in Python 3.14, `filter='data'` will be the default
+        if hasattr(tarfile, "data_filter"):
+            tar.extractall(path=extract_dir, filter="data")
+        else:
+            # Remove this when no longer needed
+            gs.warning(_("Extracting may be unsafe; consider updating Python"))
+            tar.extractall(path=extract_dir)
+
         files = os.listdir(extract_dir)
         move_extracted_files(extract_dir=extract_dir, target_dir=directory, files=files)
     except tarfile.TarError as error:
         gs.fatal(_("Archive file is unreadable: {0}").format(error))
+
+    del tarfile  # we don't need it anywhere else
 
 
 extract_tar.supported_formats = ["tar.gz", "gz", "bz2", "tar", "gzip", "targz"]
@@ -1865,7 +1882,7 @@ def download_source_code(
                              URL path
     """
     gs.verbose(_("Type of source identified as '{source}'.").format(source=source))
-    if source in ("official", "official_fork"):
+    if source in {"official", "official_fork"}:
         gs.message(
             _("Fetching <{name}> from <{url}> (be patient)...").format(
                 name=name, url=url
@@ -1876,14 +1893,14 @@ def download_source_code(
         )
     elif source == "svn":
         gs.message(
-            _("Fetching <{name}> from " "<{url}> (be patient)...").format(
+            _("Fetching <{name}> from <{url}> (be patient)...").format(
                 name=name, url=url
             )
         )
         download_source_code_svn(url, name, outdev, directory)
-    elif source in ["remote_zip"]:
+    elif source in {"remote_zip"}:
         gs.message(
-            _("Fetching <{name}> from " "<{url}> (be patient)...").format(
+            _("Fetching <{name}> from <{url}> (be patient)...").format(
                 name=name, url=url
             )
         )
@@ -1972,10 +1989,10 @@ def install_extension_std_platforms(name, source, url, branch):
     os.chdir(srcdir)
 
     pgm_not_found_message = _(
-        "Module name not found." " Check module Makefile syntax (PGM variable)."
+        "Module name not found. Check module Makefile syntax (PGM variable)."
     )
     # collect module names
-    module_list = list()
+    module_list = []
     for r, d, f in os.walk(srcdir):
         for filename in f:
             if filename == "Makefile":
@@ -2060,7 +2077,7 @@ def install_extension_std_platforms(name, source, url, branch):
         gs.fatal(_("Please install GRASS development package"))
 
     if 0 != gs.call(make_cmd, stdout=outdev):
-        gs.fatal(_("Compilation failed, sorry." " Please check above error messages."))
+        gs.fatal(_("Compilation failed, sorry. Please check above error messages."))
 
     if flags["i"]:
         gs.message(f"\n{path_to_src_code_message}\n")
@@ -2068,7 +2085,7 @@ def install_extension_std_platforms(name, source, url, branch):
         return 0, None, None, None
 
     # collect old files
-    old_file_list = list()
+    old_file_list = []
     for r, d, f in os.walk(options["prefix"]):
         for filename in f:
             fullname = os.path.join(r, filename)
@@ -2078,7 +2095,7 @@ def install_extension_std_platforms(name, source, url, branch):
     ret = gs.call(install_cmd, stdout=outdev)
 
     # collect new files
-    file_list = list()
+    file_list = []
     for r, d, f in os.walk(options["prefix"]):
         for filename in f:
             fullname = os.path.join(r, filename)
@@ -2094,15 +2111,15 @@ def remove_extension(force=False):
     if flags["t"]:
         edict = get_toolbox_extensions(options["prefix"], options["extension"])
     else:
-        edict = dict()
-        edict[options["extension"]] = dict()
+        edict = {}
+        edict[options["extension"]] = {}
         # list of modules installed by this extension
-        edict[options["extension"]]["mlist"] = list()
+        edict[options["extension"]]["mlist"] = []
         # list of files installed by this extension
-        edict[options["extension"]]["flist"] = list()
+        edict[options["extension"]]["flist"] = []
 
     # collect modules and files installed by these extensions
-    mlist = list()
+    mlist = []
     xml_file = os.path.join(options["prefix"], "extensions.xml")
     if os.path.exists(xml_file):
         # read XML file
@@ -2209,8 +2226,8 @@ def remove_extension_files(edict, force=False):
     # try to read XML metadata file first
     xml_file = os.path.join(options["prefix"], "extensions.xml")
 
-    einstalled = list()
-    eremoved = list()
+    einstalled = []
+    eremoved = []
 
     if os.path.exists(xml_file):
         tree = etree_fromfile(xml_file)
@@ -2224,7 +2241,7 @@ def remove_extension_files(edict, force=False):
     for name in edict:
         removed = True
         if len(edict[name]["flist"]) > 0:
-            err = list()
+            err = []
             for fpath in edict[name]["flist"]:
                 gs.verbose(fpath)
                 if force:
@@ -2398,7 +2415,7 @@ def update_manual_page(module):
     try:
         oldfile = open(htmlfile)
         shtml = oldfile.read()
-    except IOError as error:
+    except OSError as error:
         gs.fatal(_("Unable to read manual page: %s") % error)
     else:
         oldfile.close()
@@ -2443,7 +2460,7 @@ def update_manual_page(module):
     try:
         newfile = open(htmlfile, "w")
         newfile.write(ohtml)
-    except IOError as error:
+    except OSError as error:
         gs.fatal(_("Unable for write manual page: %s") % error)
     else:
         newfile.close()
@@ -2487,13 +2504,13 @@ def resolve_xmlurl_prefix(url, source=None):
     It ensures that there is a single slash at the end of URL, so we can attach
      file name easily:
 
-    >>> resolve_xmlurl_prefix('https://grass.osgeo.org/addons')
+    >>> resolve_xmlurl_prefix("https://grass.osgeo.org/addons")
     'https://grass.osgeo.org/addons/'
-    >>> resolve_xmlurl_prefix('https://grass.osgeo.org/addons/')
+    >>> resolve_xmlurl_prefix("https://grass.osgeo.org/addons/")
     'https://grass.osgeo.org/addons/'
     """
     gs.debug("resolve_xmlurl_prefix(url={0}, source={1})".format(url, source))
-    if source in ("official", "official_fork"):
+    if source in {"official", "official_fork"}:
         # use pregenerated modules XML file
         # Define branch to fetch from (latest or current version)
         version_branch = get_version_branch(VERSION[0])
@@ -2639,58 +2656,62 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
 
     Official repository:
 
-    >>> resolve_source_code(name='g.example') # doctest: +SKIP
+    >>> resolve_source_code(name="g.example")  # doctest: +SKIP
     ('official', 'https://trac.osgeo.org/.../general/g.example')
 
     Subversion:
 
-    >>> resolve_source_code('https://svn.osgeo.org/grass/grass-addons/grass7')
+    >>> resolve_source_code("https://svn.osgeo.org/grass/grass-addons/grass7")
     ('svn', 'https://svn.osgeo.org/grass/grass-addons/grass7')
 
     ZIP files online:
 
-    >>> resolve_source_code('https://trac.osgeo.org/.../r.modis?format=zip') # doctest: +SKIP
+    >>> resolve_source_code(
+    ...     "https://trac.osgeo.org/.../r.modis?format=zip"
+    ... )  # doctest: +SKIP
     ('remote_zip', 'https://trac.osgeo.org/.../r.modis?format=zip')
 
     Local directories and ZIP files:
 
-    >>> resolve_source_code(os.path.expanduser("~")) # doctest: +ELLIPSIS
+    >>> resolve_source_code(os.path.expanduser("~"))  # doctest: +ELLIPSIS
     ('dir', '...')
-    >>> resolve_source_code('/local/directory/downloaded.zip') # doctest: +SKIP
+    >>> resolve_source_code("/local/directory/downloaded.zip")  # doctest: +SKIP
     ('zip', '/local/directory/downloaded.zip')
 
     OSGeo Trac:
 
-    >>> resolve_source_code('trac.osgeo.org/.../r.agent.aco') # doctest: +SKIP
+    >>> resolve_source_code("trac.osgeo.org/.../r.agent.aco")  # doctest: +SKIP
     ('remote_zip', 'https://trac.osgeo.org/.../r.agent.aco?format=zip')
-    >>> resolve_source_code('https://trac.osgeo.org/.../r.agent.aco') # doctest: +SKIP
+    >>> resolve_source_code("https://trac.osgeo.org/.../r.agent.aco")  # doctest: +SKIP
     ('remote_zip', 'https://trac.osgeo.org/.../r.agent.aco?format=zip')
 
     GitHub:
 
-    >>> resolve_source_code('github.com/user/g.example') # doctest: +SKIP
+    >>> resolve_source_code("github.com/user/g.example")  # doctest: +SKIP
     ('remote_zip', 'https://github.com/user/g.example/archive/master.zip')
-    >>> resolve_source_code('github.com/user/g.example/') # doctest: +SKIP
+    >>> resolve_source_code("github.com/user/g.example/")  # doctest: +SKIP
     ('remote_zip', 'https://github.com/user/g.example/archive/master.zip')
-    >>> resolve_source_code('https://github.com/user/g.example') # doctest: +SKIP
+    >>> resolve_source_code("https://github.com/user/g.example")  # doctest: +SKIP
     ('remote_zip', 'https://github.com/user/g.example/archive/master.zip')
-    >>> resolve_source_code('https://github.com/user/g.example/') # doctest: +SKIP
+    >>> resolve_source_code("https://github.com/user/g.example/")  # doctest: +SKIP
     ('remote_zip', 'https://github.com/user/g.example/archive/master.zip')
 
     GitLab:
 
-    >>> resolve_source_code('gitlab.com/JoeUser/GrassModule') # doctest: +SKIP
+    >>> resolve_source_code("gitlab.com/JoeUser/GrassModule")  # doctest: +SKIP
     ('remote_zip', 'https://gitlab.com/JoeUser/GrassModule/-/archive/master/GrassModule-master.zip')
-    >>> resolve_source_code('https://gitlab.com/JoeUser/GrassModule') # doctest: +SKIP
+    >>> resolve_source_code("https://gitlab.com/JoeUser/GrassModule")  # doctest: +SKIP
     ('remote_zip', 'https://gitlab.com/JoeUser/GrassModule/-/archive/master/GrassModule-master.zip')
 
     Bitbucket:
 
-    >>> resolve_source_code('bitbucket.org/joe-user/grass-module') # doctest: +SKIP
+    >>> resolve_source_code("bitbucket.org/joe-user/grass-module")  # doctest: +SKIP
     ('remote_zip', 'https://bitbucket.org/joe-user/grass-module/get/default.zip')
-    >>> resolve_source_code('https://bitbucket.org/joe-user/grass-module') # doctest: +SKIP
+    >>> resolve_source_code(
+    ...     "https://bitbucket.org/joe-user/grass-module"
+    ... )  # doctest: +SKIP
     ('remote_zip', 'https://bitbucket.org/joe-user/grass-module/get/default.zip')
-    """
+    """  # noqa: E501
     # Handle URL for the official repo
     if not url or url == GIT_URL:
         return "official", GIT_URL

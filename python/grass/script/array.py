@@ -119,7 +119,7 @@ from grass.exceptions import CalledModuleError
 ###############################################################################
 
 
-class _tempfile(object):
+class _tempfile:
     def __init__(self, env=None):
         self.filename = gcore.tempfile(env=env)
 
@@ -155,7 +155,7 @@ class array(numpy.memmap):
             else:
                 raise ValueError(_("Invalid kind <%s>") % kind)
 
-            if size not in [1, 2, 4, 8]:
+            if size not in {1, 2, 4, 8}:
                 raise ValueError(_("Invalid size <%d>") % size)
 
             gcore.run_command(
@@ -202,7 +202,7 @@ class array(numpy.memmap):
                 raise ValueError(_("Invalid FP size <%d>") % size)
             size = None
         elif kind in "biu":
-            if size not in [1, 2, 4]:
+            if size not in {1, 2, 4}:
                 raise ValueError(_("Invalid integer size <%d>") % size)
             flags = None
         else:
@@ -267,7 +267,7 @@ class array3d(numpy.memmap):
             else:
                 raise ValueError(_("Invalid kind <%s>") % kind)
 
-            if size not in [1, 2, 4, 8]:
+            if size not in {1, 2, 4, 8}:
                 raise ValueError(_("Invalid size <%d>") % size)
 
             gcore.run_command(
@@ -310,7 +310,7 @@ class array3d(numpy.memmap):
             if size != 4 and size != 8:
                 raise ValueError(_("Invalid FP size <%d>") % size)
         elif kind in "biu":
-            if size not in [1, 2, 4, 8]:
+            if size not in {1, 2, 4, 8}:
                 raise ValueError(_("Invalid integer size <%d>") % size)
             flags = "i"
         else:

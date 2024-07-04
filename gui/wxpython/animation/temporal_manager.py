@@ -36,7 +36,7 @@ class GranularityMode:
     ORIGINAL = 2
 
 
-class TemporalManager(object):
+class TemporalManager:
     """Class for temporal data processing."""
 
     def __init__(self):
@@ -135,7 +135,8 @@ class TemporalManager(object):
             message = _(
                 "You are going to display data with different "
                 "temporal types of maps (interval and point)."
-                " It is recommended to use data of one temporal type to avoid confusion."
+                " It is recommended to use data of one temporal type to avoid "
+                "confusion."
             )
             return True, message  # warning
 
@@ -221,9 +222,11 @@ class TemporalManager(object):
             timestamps = [
                 (
                     datetime.datetime.strftime(st, formatString),
-                    datetime.datetime.strftime(end, formatString)
-                    if end is not None
-                    else None,
+                    (
+                        datetime.datetime.strftime(end, formatString)
+                        if end is not None
+                        else None
+                    ),
                     unit,
                 )
                 for (st, end, unit) in timestamps
@@ -615,9 +618,7 @@ def createRelativePoint():
 
     n1 = grass.read_command("g.tempfile", pid=1, flags="d").strip()
     fd = open(n1, "w")
-    fd.write(
-        "prec_1|1\n" "prec_2|3\n" "prec_3|5\n" "prec_4|7\n" "prec_5|11\n" "prec_6|13\n"
-    )
+    fd.write("prec_1|1\nprec_2|3\nprec_3|5\nprec_4|7\nprec_5|11\nprec_6|13\n")
     fd.close()
     name = "relpoint"
     grass.run_command(

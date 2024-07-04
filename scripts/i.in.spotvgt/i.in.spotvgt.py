@@ -67,7 +67,7 @@ vrt = """<VRTDataset rasterXSize="$XSIZE" rasterYSize="$YSIZE">
       <DstRect xOff="0" yOff="0" xSize="$XSIZE" ySize="$YSIZE"/>
     </SimpleSource>
  </VRTRasterBand>
-</VRTDataset>"""
+</VRTDataset>"""  # noqa: E501
 
 # a function for writing VRT files
 
@@ -126,7 +126,7 @@ def main():
     # check for gdalinfo (just to check if installation is complete)
     if not gscript.find_program("gdalinfo", "--help"):
         gscript.fatal(
-            _("'gdalinfo' not found, install GDAL tools first " "(http://www.gdal.org)")
+            _("'gdalinfo' not found, install GDAL tools first (http://www.gdal.org)")
         )
 
     pid = str(os.getpid())

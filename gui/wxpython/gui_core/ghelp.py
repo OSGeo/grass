@@ -48,6 +48,7 @@ if __name__ == "__main__":
 
 from core import globalvar
 from core.gcmd import GError, DecodeString
+from core.settings import UserSettings
 from gui_core.widgets import FormNotebook, ScrolledPanel
 from gui_core.wrap import Button, StaticText, TextCtrl
 from core.debug import Debug
@@ -187,16 +188,26 @@ class AboutWindow(wx.Frame):
 
         # show only basic info
         # row += 1
-        # infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-        #                                        label = '%s:' % _('GIS Library Revision')),
-        #                   pos = (row, 0),
-        #                   flag = wx.ALIGN_RIGHT)
-
-        # infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-        #                                        label = vInfo['libgis_revision'] + ' (' +
-        #                                        vInfo['libgis_date'].split(' ')[0] + ')'),
-        #                   pos = (row, 1),
-        #                   flag = wx.ALIGN_LEFT)
+        # infoGridSizer.Add(
+        #     item=wx.StaticText(
+        #         parent=infoTxt, id=wx.ID_ANY, label="%s:" % _("GIS Library Revision")
+        #     ),
+        #     pos=(row, 0),
+        #     flag=wx.ALIGN_RIGHT,
+        # )
+        #
+        # infoGridSizer.Add(
+        #     item=wx.StaticText(
+        #         parent=infoTxt,
+        #         id=wx.ID_ANY,
+        #         label=vInfo["libgis_revision"]
+        #         + " ("
+        #         + vInfo["libgis_date"].split(" ")[0]
+        #         + ")",
+        #     ),
+        #     pos=(row, 1),
+        #     flag=wx.ALIGN_LEFT,
+        # )
 
         row += 2
         infoGridSizer.Add(
@@ -376,8 +387,8 @@ class AboutWindow(wx.Frame):
             contribfile = os.path.join(os.getenv("GISBASE"), "contributors.csv")
         if os.path.exists(contribfile):
             contribFile = codecs.open(contribfile, encoding="utf-8", mode="r")
-            contribs = list()
-            errLines = list()
+            contribs = []
+            errLines = []
             for line in contribFile.readlines()[1:]:
                 line = line.rstrip("\n")
                 try:
@@ -461,8 +472,8 @@ class AboutWindow(wx.Frame):
         translatorsfile = os.path.join(os.getenv("GISBASE"), "translators.csv")
         if os.path.exists(translatorsfile):
             translatorsFile = codecs.open(translatorsfile, encoding="utf-8", mode="r")
-            translators = dict()
-            errLines = list()
+            translators = {}
+            errLines = []
             for line in translatorsFile.readlines()[1:]:
                 line = line.rstrip("\n")
                 try:
@@ -472,7 +483,7 @@ class AboutWindow(wx.Frame):
                     continue
                 for language in languages.split(" "):
                     if language not in translators:
-                        translators[language] = list()
+                        translators[language] = []
                     translators[language].append((name, email))
             translatorsFile.close()
 
@@ -736,11 +747,11 @@ class HelpWindow(HtmlWindow):
         HtmlWindow.__init__(self, parent=parent, **kwargs)
 
         self.loaded = False
-        self.history = list()
+        self.history = []
         self.historyIdx = 0
         self.fspath = os.path.join(os.getenv("GISBASE"), "docs", "html")
 
-        self.SetStandardFonts(size=10)
+        self._setFont()
         self.SetBorders(10)
 
         if text is None:
@@ -750,12 +761,32 @@ class HelpWindow(HtmlWindow):
                 self.history.append(url)
                 self.loaded = True
             else:
-                # FIXME: calling LoadPage() is strangely time-consuming (only first call)
+                # FIXME: calling LoadPage() is strangely time-consuming
+                #        (only first call)
                 # self.LoadPage(self.fspath + command + ".html")
                 self.loaded = False
         else:
             self.SetPage(text)
             self.loaded = True
+
+    def _setFont(self):
+        """Set font size/face"""
+        font_face_name = UserSettings.Get(
+            group="appearance",
+            key="manualPageFont",
+            subkey="faceName",
+        )
+        font_size = UserSettings.Get(
+            group="appearance",
+            key="manualPageFont",
+            subkey="pointSize",
+        )
+        if font_size:
+            self.SetStandardFonts(
+                size=font_size,
+                normal_face=font_face_name,
+                fixed_face=font_face_name,
+            )
 
     def OnLinkClicked(self, linkinfo):
         url = linkinfo.GetHref()
@@ -765,10 +796,10 @@ class HelpWindow(HtmlWindow):
         self.historyIdx += 1
         self.parent.OnHistory()
 
-        super(HelpWindow, self).OnLinkClicked(linkinfo)
+        super().OnLinkClicked(linkinfo)
 
     def LoadPage(self, path):
-        super(HelpWindow, self).LoadPage(path)
+        super().LoadPage(path)
         self.loaded = True
 
     def fillContentsFromFile(self, htmlFile, skipDescription=True):

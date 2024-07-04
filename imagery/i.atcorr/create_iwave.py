@@ -20,8 +20,10 @@ file name is used for sensor name
 
 Updated by: Anne Ghisla, 2010
 Bug fix (9/12/2010) by Daniel:
-   1) function interpolate_band was not generating the spectral response for the last value in the filter function. Fixed
-   2) function pretty_print was not printing the 8th value of every line, cutting the filter function short.
+   1) function interpolate_band was not generating the spectral response for the last
+      value in the filter function. Fixed
+   2) function pretty_print was not printing the 8th value of every line, cutting the
+      filter function short.
 
 """
 import os
@@ -141,9 +143,10 @@ def interpolate_band(values, step=2.5):
 
     # how many spectral responses?
     expected = np.ceil((stop - start) / step)
-    assert (
-        len(filter_f) == expected
-    ), "Number of interpolated spectral responses not equal to expected number of interpolations"
+    assert len(filter_f) == expected, (
+        "Number of interpolated spectral responses not equal to expected number of "
+        "interpolations"
+    )
 
     # convert limits from nanometers to micrometers
     lowerlimit = start / 1000
@@ -166,8 +169,6 @@ def plot_filter(values):
 
     plot(response[:, 0], response[:, 1], "ro")
     plot(arange(limits[0], limits[1], 2.5), filter_f)
-
-    return
 
 
 def pretty_print(filter_f):
@@ -324,8 +325,6 @@ def write_cpp(bands, values, sensor, folder):
             outfile.write("        break;\n")
         outfile.write("    }\n}\n")
 
-    return
-
 
 def main():
     """control function"""
@@ -387,8 +386,6 @@ def main():
         " iwave.h, geomcond.h, geomcond.cpp, and to i.atcorr.html"
     )
     print
-
-    return
 
 
 if __name__ == "__main__":

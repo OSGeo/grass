@@ -447,7 +447,7 @@ class ColorTable(wx.Frame):
             labelText="",
             dialogTitle=_("Choose file to load color table"),
             buttonText=_("Load"),
-            toolTip=_("Type filename or click to choose " "file and load color table"),
+            toolTip=_("Type filename or click to choose file and load color table"),
             startDirectory=os.getcwd(),
             fileMode=wx.FD_OPEN,
             changeCallback=self.OnLoadRulesFile,
@@ -458,7 +458,7 @@ class ColorTable(wx.Frame):
             fileMask="*",
             labelText="",
             dialogTitle=_("Choose file to save color table"),
-            toolTip=_("Type filename or click to choose " "file and save color table"),
+            toolTip=_("Type filename or click to choose file and save color table"),
             buttonText=_("Save"),
             startDirectory=os.getcwd(),
             fileMode=wx.FD_SAVE,
@@ -584,7 +584,7 @@ class ColorTable(wx.Frame):
         bodySizer.Add(self.btnPreview, pos=(row, 2), flag=wx.ALIGN_RIGHT)
         self.btnPreview.Enable(False)
         self.btnPreview.SetToolTip(
-            _("Show preview of map " "(current Map Display extent is used).")
+            _("Show preview of map (current Map Display extent is used).")
         )
 
         row += 1
@@ -625,7 +625,7 @@ class ColorTable(wx.Frame):
             if updatePreview:
                 self.OnPreview(None)
             display = self.layerTree.GetMapDisplay()
-            if display and display.IsAutoRendered():
+            if display:
                 display.GetWindow().UpdateMap(render=True)
 
         return ret
@@ -668,7 +668,7 @@ class ColorTable(wx.Frame):
             dlgOw = wx.MessageDialog(
                 self,
                 message=_(
-                    "File <%s> already already exists. " "Do you want to overwrite it?"
+                    "File <%s> already already exists. Do you want to overwrite it?"
                 )
                 % path,
                 caption=_("Overwrite?"),
@@ -722,16 +722,14 @@ class ColorTable(wx.Frame):
             self.rulesPanel.ruleslines[count]["value"] = value
             self.rulesPanel.ruleslines[count]["color"] = color
             self.rulesPanel.mainPanel.FindWindowById(count + 1000).SetValue(value)
-            rgb = list()
+            rgb = []
             for c in color.split(":"):
                 rgb.append(int(c))
             self.rulesPanel.mainPanel.FindWindowById(count + 2000).SetColour(rgb)
             # range
             try:
-                if float(value) < minim:
-                    minim = float(value)
-                if float(value) > maxim:
-                    maxim = float(value)
+                minim = min(float(value), minim)
+                maxim = max(float(value), maxim)
             except ValueError:  # nv, default
                 pass
             count += 1
@@ -787,7 +785,7 @@ class ColorTable(wx.Frame):
                 continue
 
             if (
-                rule["value"] not in ("nv", "default")
+                rule["value"] not in {"nv", "default"}
                 and rule["value"][-1] != "%"
                 and not self._IsNumber(rule["value"])
             ):
@@ -1403,8 +1401,8 @@ class VectorColorTable(ColorTable):
         :param type: type of column (e.g. vachar(11))"""
         if not self.CheckMapset():
             return
-        # because more than one dialog with the same map can be opened we must test column name and
-        # create another one
+        # because more than one dialog with the same map can be opened we must test
+        # column name and create another one
         while (
             self.properties["tmpColumn"]
             in self.dbInfo.GetTableDesc(self.properties["table"]).keys()
@@ -1619,10 +1617,8 @@ class VectorColorTable(ColorTable):
             else:
                 col1, col2 = record.split(sep)
 
-            if float(col1) < minim:
-                minim = float(col1)
-            if float(col1) > maxim:
-                maxim = float(col1)
+            minim = min(float(col1), minim)
+            maxim = max(float(col1), maxim)
 
             # color rules list should only have unique values of col1, not all
             # records

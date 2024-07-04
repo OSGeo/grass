@@ -13,16 +13,12 @@ import grass.lib.rowio as librowio
 
 libgis.G_gisinit("")
 
-#
 # import pygrass modules
-#
 from grass.pygrass.errors import must_be_open
 from grass.pygrass.gis.region import Region
 from grass.pygrass import utils
 
-#
 # import raster classes
-#
 from grass.pygrass.raster.abstract import RasterAbstractBase
 from grass.pygrass.raster.raster_type import TYPE as RTYPE, RTYPE_STR
 from grass.pygrass.raster.buffer import Buffer
@@ -135,7 +131,7 @@ class RasterRow(RasterAbstractBase):
     """
 
     def __init__(self, name, mapset="", *args, **kargs):
-        super(RasterRow, self).__init__(name, mapset, *args, **kargs)
+        super().__init__(name, mapset, *args, **kargs)
 
     # mode = "r", method = "row",
     @must_be_open
@@ -211,14 +207,14 @@ class RasterRow(RasterAbstractBase):
             if self.exist():
                 if not self.overwrite:
                     str_err = _(
-                        "Raster map <{0}> already exists" " and will be not overwritten"
+                        "Raster map <{0}> already exists and will be not overwritten"
                     )
                     raise OpenError(str_err.format(self))
             if self._gtype is None:
                 raise OpenError(_("Raster type not defined"))
             self._fd = libraster.Rast_open_new(self.name, self._gtype)
         else:
-            raise OpenError("Open mode: %r not supported," " valid mode are: r, w")
+            raise OpenError("Open mode: %r not supported, valid mode are: r, w")
         # read rows and cols from the active region
         self._rows = libraster.Rast_window_rows()
         self._cols = libraster.Rast_window_cols()
@@ -231,7 +227,7 @@ class RasterRowIO(RasterRow):
 
     def __init__(self, name, *args, **kargs):
         self.rowio = RowIO()
-        super(RasterRowIO, self).__init__(name, *args, **kargs)
+        super().__init__(name, *args, **kargs)
 
     def open(self, mode=None, mtype=None, overwrite=False):
         """Open the raster if exist or created a new one.
@@ -246,7 +242,7 @@ class RasterRowIO(RasterRow):
                           raster maps
         :type overwrite: bool
         """
-        super(RasterRowIO, self).open(mode, mtype, overwrite)
+        super().open(mode, mtype, overwrite)
         self.rowio.open(self._fd, self._rows, self._cols, self.mtype)
 
     @must_be_open
@@ -311,13 +307,13 @@ class RasterSegment(RasterAbstractBase):
 
     def __init__(self, name, srows=64, scols=64, maxmem=100, *args, **kargs):
         self.segment = Segment(srows, scols, maxmem)
-        super(RasterSegment, self).__init__(name, *args, **kargs)
+        super().__init__(name, *args, **kargs)
 
     def _get_mode(self):
         return self._mode
 
     def _set_mode(self, mode):
-        if mode and mode.lower() not in ("r", "w", "rw"):
+        if mode and mode.lower() not in {"r", "w", "rw"}:
             str_err = _("Mode type: {0} not supported ('r', 'w','rw')")
             raise ValueError(str_err.format(mode))
         self._mode = mode

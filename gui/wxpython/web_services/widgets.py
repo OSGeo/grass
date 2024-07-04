@@ -453,20 +453,20 @@ class WSPanel(wx.Panel):
     def _updateLayerOrderList(self, selected=None):
         """Update order in list."""
 
-        def getlayercaption(l):
-            if l["title"]:
-                cap = l["title"]
+        def getlayercaption(layer):
+            if layer["title"]:
+                cap = layer["title"]
             else:
-                cap = l["name"]
+                cap = layer["name"]
 
-            if l["style"]:
-                if l["style"]["title"]:
-                    cap += " / " + l["style"]["title"]
+            if layer["style"]:
+                if layer["style"]["title"]:
+                    cap += " / " + layer["style"]["title"]
                 else:
-                    cap += " / " + l["style"]["name"]
+                    cap += " / " + layer["style"]["name"]
             return cap
 
-        layer_capts = [getlayercaption(l) for l in self.sel_layers]
+        layer_capts = [getlayercaption(sel_layer) for sel_layer in self.sel_layers]
         self.l_odrder_list.Set(layer_capts)
         if self.l_odrder_list.IsEmpty():
             self.enableButtons(False)
@@ -556,10 +556,10 @@ class WSPanel(wx.Panel):
         """
         try:
             self.cap = self.ws_drvs[self.ws]["cap_parser"](cap_file)
-        except (IOError, ParseError) as error:
+        except (OSError, ParseError) as error:
             error_msg = _(
-                "%s web service was not found in fetched capabilities file from <%s>:\n%s\n"
-                % (self.ws, self.conn["url"], str(error))
+                "%s web service was not found in fetched capabilities file from "
+                "<%s>:\n%s\n" % (self.ws, self.conn["url"], str(error))
             )
             if Debug.GetLevel() != 0:
                 Debug.msg(1, error_msg)
@@ -634,7 +634,7 @@ class WSPanel(wx.Panel):
 
         # WMS standard - first layer in params is most bottom...
         # therefore layers order need to be reversed
-        l_st_list = [l for l in reversed(l_st_list)]
+        l_st_list = [layer for layer in reversed(l_st_list)]
         self.list.SelectLayers(l_st_list)
 
         params = {}
@@ -744,9 +744,9 @@ class WSPanel(wx.Panel):
                 if sel_l not in curr_sel_ls:
                     self.sel_layers.remove(sel_l)
 
-            for l in curr_sel_ls:
-                if l not in self.sel_layers:
-                    self.sel_layers.append(l)
+            for curr in curr_sel_ls:
+                if curr not in self.sel_layers:
+                    self.sel_layers.append(curr)
 
             self._updateLayerOrderList()
         else:
@@ -759,8 +759,8 @@ class WSPanel(wx.Panel):
 
         intersect_proj = []
         first = True
-        for l in curr_sel_ls:
-            layer_projs = l["cap_intf_l"].GetLayerData("srs")
+        for curr in curr_sel_ls:
+            layer_projs = curr["cap_intf_l"].GetLayerData("srs")
             if first:
                 projs_list = layer_projs
                 first = False
@@ -980,7 +980,8 @@ class LayersList(TreeCtrl):
                     item,
                     {
                         "type": "layer",  # is it layer or style?
-                        "layer": layer,  # Layer instance from web_services.cap_interface
+                        # Layer instance from web_services.cap_interface
+                        "layer": layer,
                         "style": def_st,
                     },
                 )  # layer can have assigned default style
@@ -1000,7 +1001,7 @@ class LayersList(TreeCtrl):
         # self.ExpandAll(self.GetRootItem())
 
     def GetSelectedLayers(self):
-        """Get selected layers/styles in LayersList
+        r"""Get selected layers/styles in LayersList
 
         :return: dict with these items:
                  * 'name'  : layer name used for request

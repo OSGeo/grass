@@ -8,18 +8,22 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 import copy
+import sys
 from datetime import datetime
 from multiprocessing import Process
+
 import grass.script as gscript
 from grass.exceptions import CalledModuleError
+
 from .core import (
     SQLDatabaseInterfaceConnection,
     get_current_mapset,
     get_tgis_message_interface,
 )
-from .open_stds import open_new_stds, open_old_stds, check_new_stds
 from .datetime_math import time_delta_to_relative_time
+from .open_stds import check_new_stds, open_new_stds, open_old_stds
 
 ############################################################################
 
@@ -411,7 +415,7 @@ def _run_mapcalc2d(expr):
             "r.mapcalc", expression=expr, overwrite=gscript.overwrite(), quiet=True
         )
     except CalledModuleError:
-        exit(1)
+        sys.exit(1)
 
 
 ###############################################################################
@@ -424,7 +428,7 @@ def _run_mapcalc3d(expr):
             "r3.mapcalc", expression=expr, overwrite=gscript.overwrite(), quiet=True
         )
     except CalledModuleError:
-        exit(1)
+        sys.exit(1)
 
 
 ###############################################################################
