@@ -330,9 +330,9 @@ class AboutWindow(wx.Frame):
         """Citation information"""
         try:
             # import only when needed
-            import grass.script as gscript
+            import grass.script as gs
 
-            text = gscript.read_command("g.version", flags="x")
+            text = gs.read_command("g.version", flags="x")
         except CalledModuleError as error:
             text = _(
                 "Unable to provide citation suggestion,"

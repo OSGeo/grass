@@ -356,8 +356,6 @@ def main():
         tester.testMapWindowRlisetup(map_)
     else:
         # TODO: this should not happen but happens
-        import grass.script as gs
-
         gs.fatal(_("Unknown value %s of test parameter." % test))
 
     app.MainLoop()
