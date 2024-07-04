@@ -7,11 +7,12 @@ for details.
 :authors: Soeren Gebbert and Thomas Leppelt
 """
 
+import datetime
+
 import grass.script
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-import datetime
 
 
 class TestTemporalRaster3dAlgebra(TestCase):

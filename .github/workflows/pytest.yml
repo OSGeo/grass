@@ -53,7 +53,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r .github/workflows/python_requirements.txt
           pip install -r .github/workflows/optional_requirements.txt
-          pip install pytest pytest-timeout pytest-github-actions-annotate-failures pytest-xdist
+          pip install pytest pytest-timeout pytest-github-actions-annotate-failures pytest-xdist pytest-cov
 
       - name: Create installation directory
         run: |
@@ -69,6 +69,10 @@ jobs:
       - name: Add the bin directory to PATH
         run: |
           echo "$HOME/install/bin" >> $GITHUB_PATH
+
+      - name: Print installed versions
+        if: always()
+        run: .github/workflows/print_versions.sh
 
       - name: Test executing of the grass command
         run: .github/workflows/test_simple.sh
@@ -86,12 +90,18 @@ jobs:
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
           pytest --verbose --color=yes --durations=0 --durations-min=0.5 \
+            --cov \
             -ra . \
             -m 'needs_solo_run'
 
-      - name: Print installed versions
-        if: always()
-        run: .github/workflows/print_versions.sh
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@e28ff129e5465c2c0dcc6f003fc735cb6ae0c673 # v4.5.0
+        with:
+          verbose: true
+          flags: pytest-python-${{ matrix.python-version }}
+          name: pytest-python-${{ matrix.python-version }}
+          token: ${{ secrets.CODECOV_TOKEN }}
+
   pytest-success:
     name: pytest Result
     needs:

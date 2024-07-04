@@ -36,7 +36,7 @@ except ImportError:
     havePwd = False
 
 import wx
-import wx.lib.agw.aui as aui
+from wx.lib.agw import aui
 import wx.lib.colourselect as csel
 import wx.lib.mixins.listctrl as listmix
 import wx.lib.scrolledpanel as SP
@@ -1137,10 +1137,10 @@ class PreferencesDialog(PreferencesBaseDialog):
         #
 
         # see initialization of nviz GLWindow
-        if globalvar.CheckWxVersion(version=[2, 8, 11]) and sys.platform not in (
+        if globalvar.CheckWxVersion(version=[2, 8, 11]) and sys.platform not in {
             "win32",
             "darwin",
-        ):
+        }:
             box = StaticBox(
                 parent=panel,
                 id=wx.ID_ANY,
@@ -1818,7 +1818,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         epsgCode = wx.ComboBox(
             parent=panel, id=wx.ID_ANY, name="GetValue", size=(150, -1)
         )
-        self.epsgCodeDict = dict()
+        self.epsgCodeDict = {}
         epsgCode.SetValue(
             str(self.settings.Get(group="projection", key="statusbar", subkey="epsg"))
         )
@@ -2044,7 +2044,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                 caption=_("Error"),
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
-            self.epsgCodeDict = dict()
+            self.epsgCodeDict = {}
             epsgCombo.SetItems([])
             epsgCombo.SetValue("")
             self.FindWindowById(self.winId["projection:statusbar:proj4"]).SetValue("")
@@ -2124,7 +2124,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                     GError(
                         parent=self,
                         message=_(
-                            "Failed to set default display font. " "Try different font."
+                            "Failed to set default display font. Try different font."
                         ),
                         showTraceback=True,
                     )

@@ -114,7 +114,7 @@ def reclass(inf, outf, lim, clump, diag, les):
                 grass.fatal(_("Temporary raster map <%s> exists") % clumpfile)
         if diagonal:
             grass.message(
-                _("Generating a clumped raster file including " "diagonal neighbors...")
+                _("Generating a clumped raster file including diagonal neighbors...")
             )
             grass.run_command("r.clump", flags="d", input=infile, output=clumpfile)
         else:
@@ -142,7 +142,7 @@ def reclass(inf, outf, lim, clump, diag, les):
     TMPRAST.append(recfile)
 
     sflags = "aln"
-    if grass.raster_info(infile)["datatype"] in ("FCELL", "DCELL"):
+    if grass.raster_info(infile)["datatype"] in {"FCELL", "DCELL"}:
         sflags += "i"
     p1 = grass.pipe_command("r.stats", flags=sflags, input=(clumpfile, infile), sep=";")
     p2 = grass.feed_command("r.reclass", input=clumpfile, output=recfile, rules="-")
@@ -166,12 +166,11 @@ def reclass(inf, outf, lim, clump, diag, les):
     if p2.returncode != 0:
         if lesser:
             grass.fatal(
-                _("No areas of size less than or equal to %f " "hectares found.")
-                % limit
+                _("No areas of size less than or equal to %f hectares found.") % limit
             )
         else:
             grass.fatal(
-                _("No areas of size greater than or equal to %f " "hectares found.")
+                _("No areas of size greater than or equal to %f hectares found.")
                 % limit
             )
     grass.mapcalc("$outfile = $recfile", outfile=outfile, recfile=recfile)

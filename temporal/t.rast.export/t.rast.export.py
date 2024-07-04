@@ -105,6 +105,7 @@
 # %end
 
 import os
+
 import grass.script as grass
 
 
@@ -131,9 +132,9 @@ def main():
     if not os.access(directory, os.W_OK):
         grass.fatal(_("Directory {} is not writable".format(directory)))
 
-    if _type and _format in ["pack", "AAIGrid"]:
+    if _type and _format in {"pack", "AAIGrid"}:
         grass.warning(
-            _("Type options is not working with pack format, " "it will be skipped")
+            _("Type options is not working with pack format, it will be skipped")
         )
         if kws:
             grass.warning(

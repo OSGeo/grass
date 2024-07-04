@@ -90,7 +90,7 @@ def copyOfInitMap(map_, width, height):
     """Initialize map display, set dimensions and map region"""
     if not grass.find_program("g.region", "--help"):
         sys.exit(
-            _("GRASS module '%s' not found. Unable to start map " "display window.")
+            _("GRASS module '%s' not found. Unable to start map display window.")
             % "g.region"
         )
     map_.ChangeMapSize((width, height))

@@ -20,12 +20,12 @@ for details.
 """
 
 import os
-from contextlib import contextmanager
 import sys
+from contextlib import contextmanager
 
 import grass.script as gs
 
-from .core import get_tgis_message_interface, get_available_temporal_mapsets, init_dbif
+from .core import get_available_temporal_mapsets, get_tgis_message_interface, init_dbif
 from .datetime_math import time_delta_to_relative_time
 from .factory import dataset_factory
 from .open_stds import open_old_stds
@@ -174,8 +174,8 @@ def _write_plain(rows, header, separator, file):
 def _write_json(rows, column_names, file):
     # Lazy import output format-specific dependencies.
     # pylint: disable=import-outside-toplevel
-    import json
     import datetime
+    import json
 
     class ResultsEncoder(json.JSONEncoder):
         """Results encoder for JSON which handles SimpleNamespace objects"""
@@ -399,7 +399,7 @@ def _get_list_of_maps_stds(
             )
 
     # This method expects a list of objects for gap detection
-    if method in ["delta", "deltagaps", "gran"]:
+    if method in {"delta", "deltagaps", "gran"}:
         if not columns:
             if output_format == "list":
                 # Only one column is needed.
@@ -451,7 +451,7 @@ def _get_list_of_maps_stds(
 
         # End with error for the old, custom formats. Proper formats simply return
         # empty result whatever empty is for each format (e.g., empty list for JSON).
-        if not rows and (output_format in ["plain", "line"]):
+        if not rows and (output_format in {"plain", "line"}):
             dbif.close()
             gs.fatal(
                 _(
