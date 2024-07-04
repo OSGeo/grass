@@ -210,11 +210,17 @@ def get_computational_region_bb():
     return [(region["ll_s"], region["ll_w"]), (region["ll_n"], region["ll_e"])]
 
 
-def update_region(north, south, east, west):
+def update_region(region_cordinates):
     """
     Updates the GRASS GIS region using the given coordinates.
     """
-    gs.run_command("g.region", n=north, s=south, e=east, w=west)
+    gs.run_command(
+        "g.region",
+        n=region_cordinates["north"],
+        s=region_cordinates["south"],
+        e=region_cordinates["east"],
+        w=region_cordinates["west"],
+    )
 
 
 def save_gif(

@@ -369,10 +369,9 @@ class InteractiveMap:
         )
 
         save_button = widgets.Button(
-            icon="save",
+            description="Update Region",
             button_style="success",
             tooltip="Click to save region",
-            layout=widgets.Layout(width="33px", margin="0px 0px 0px 0px"),
             disabled=True,
         )
 
@@ -419,12 +418,7 @@ class InteractiveMap:
             reprojected_region = reproject_region(
                 region_coordinates, from_proj, to_proj
             )
-            update_region(
-                reprojected_region["north"],
-                reprojected_region["south"],
-                reprojected_region["east"],
-                reprojected_region["west"],
-            )
+            update_region(reprojected_region)
 
         def toggle_region_mode(change):
             nonlocal rectangle, save_button_control, region_coordinates
@@ -433,10 +427,10 @@ class InteractiveMap:
                 if rectangle is None:
                     latlon_bounds = get_computational_region_bb()
                     region_coordinates = {
-                        "North": latlon_bounds[1][0],
-                        "South": latlon_bounds[0][0],
-                        "East": latlon_bounds[1][1],
-                        "West": latlon_bounds[0][1],
+                        "north": latlon_bounds[1][0],
+                        "south": latlon_bounds[0][0],
+                        "east": latlon_bounds[1][1],
+                        "west": latlon_bounds[0][1],
                     }
                     rectangle = Rectangle(
                         bounds=latlon_bounds,
@@ -458,6 +452,9 @@ class InteractiveMap:
                     rectangle.draggable = True
                     rectangle.transform = True
                     rectangle.rotation = False
+                    rectangle.fill_opacity = 0.5
+                    rectangle.fill_color = "red"
+                    rectangle.color = "red"
 
                 save_button.disabled = False
                 bottom_output_widget.layout.display = "block"
@@ -475,6 +472,8 @@ class InteractiveMap:
                     rectangle.draggable = False
                     rectangle.transform = False
                     rectangle.rotation = False
+                    rectangle.opacity = 0
+                    rectangle.fill_opacity = 0
 
                 save_button.disabled = True
                 bottom_output_widget.layout.display = "none"
