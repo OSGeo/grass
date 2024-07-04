@@ -25,11 +25,11 @@
 # % keyword: map management
 # %end
 
-import grass.script as gscript
+import grass.script as gs
 
 
 def main():
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
 
     # import wx only after running parser
     # to avoid issues when only interface is needed

@@ -59,7 +59,7 @@ from gui_core.wrap import (
     TreeCtrl,
 )
 
-import grass.script as grass
+import grass.script as gs
 
 rinwms_path = os.path.join(os.getenv("GISBASE"), "etc", "r.in.wms")
 if rinwms_path not in sys.path:
@@ -131,7 +131,7 @@ class WSPanel(wx.Panel):
 
         self.cmdStdErr = GStderr(self)
         self.cmd_thread = CmdThread(self)
-        self.cap_file = grass.tempfile()
+        self.cap_file = gs.tempfile()
 
         reqDataBox = StaticBox(parent=self, label=_(" Requested data settings "))
         self._nb_sizer = wx.StaticBoxSizer(reqDataBox, wx.VERTICAL)
@@ -151,7 +151,7 @@ class WSPanel(wx.Panel):
 
     def __del__(self):
         self.cmd_thread.abort(abortall=True)
-        grass.try_remove(self.cap_file)
+        gs.try_remove(self.cap_file)
 
     def _layout(self):
         self._nb_sizer.Add(self.notebook, proportion=1, flag=wx.EXPAND)

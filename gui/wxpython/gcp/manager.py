@@ -43,7 +43,7 @@ if globalvar.wxPythonPhoenix:
 else:
     from wx import wizard as wiz
 
-import grass.script as grass
+import grass.script as gs
 
 
 from core import utils
@@ -113,7 +113,7 @@ class GCPWizard:
         #
         # get environmental variables
         #
-        self.grassdatabase = grass.gisenv()["GISDBASE"]
+        self.grassdatabase = gs.gisenv()["GISDBASE"]
 
         #
         # read original environment settings
@@ -1761,7 +1761,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         """
         if maptype == "raster":
             self.grwiz.SwitchEnv("source")
-            maps = grass.read_command(
+            maps = gs.read_command(
                 "i.group",
                 flags="gl",
                 group=self.xygroup,
@@ -1773,7 +1773,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 for map in maps:
                     if map:
                         map_name = map.split("@")[0] + self.extension
-                        found = grass.find_file(
+                        found = gs.find_file(
                             name=map_name,
                             element="cell",
                             mapset=self.currentmapset,
@@ -1783,7 +1783,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 map_name = ", ".join(found_maps)
         else:
             self.grwiz.SwitchEnv("target")
-            found = grass.find_file(
+            found = gs.find_file(
                 name=self.outname,
                 element="vector",
                 mapset=self.currentmapset,
@@ -2366,13 +2366,13 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
     def OnSize(self, event):
         """Adjust Map Windows after GCP Map Display has been resized"""
         # re-render image on idle
-        self.resize = grass.clock()
+        self.resize = gs.clock()
         super(MapPanel, self).OnSize(event)
 
     def OnIdle(self, event):
         """GCP Map Display resized, adjust Map Windows"""
         if self.GetMapToolbar():
-            if self.resize and self.resize + 0.2 < grass.clock():
+            if self.resize and self.resize + 0.2 < gs.clock():
                 srcwidth, srcheight = self.SrcMapWindow.GetSize()
                 tgtwidth, tgtheight = self.TgtMapWindow.GetSize()
                 srcwidth = (srcwidth + tgtwidth) / 2

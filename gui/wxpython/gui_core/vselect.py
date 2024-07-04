@@ -29,7 +29,7 @@ from core.gcmd import GMessage, GError, GWarning
 from core.gcmd import RunCommand
 from gui_core.wrap import Button, ListCtrl
 
-import grass.script as grass
+import grass.script as gs
 from grass.pydispatch.signal import Signal
 
 
@@ -299,13 +299,13 @@ class VectorSelectBase:
         mapInfo = self.mapWin.GetMap()
         threshold = 10.0 * ((mapInfo.region["e"] - mapInfo.region["w"]) / mapInfo.width)
         try:
-            query = grass.vector_what(
+            query = gs.vector_what(
                 map=[self.mapName],
                 coord=self.mapWin.GetLastEN(),
                 distance=threshold,
                 skip_attributes=True,
             )
-        except grass.ScriptError:
+        except gs.ScriptError:
             GError(
                 parent=self, message=_("Failed to query vector map(s) <%s>.") % self.map
             )
@@ -358,7 +358,7 @@ class VectorSelectBase:
         if ret == 0:
             tree = self._giface.GetLayerTree()
             if tree:
-                outMap = f"{outMap}@{grass.gisenv()['MAPSET']}"
+                outMap = f"{outMap}@{gs.gisenv()['MAPSET']}"
                 tree.AddLayer(
                     ltype="vector",
                     lname=outMap,

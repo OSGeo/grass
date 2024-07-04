@@ -19,7 +19,7 @@ import time
 
 import wx
 
-import grass.script as gscript
+import grass.script as gs
 from grass.script.utils import try_remove
 
 # needed just for testing
@@ -356,7 +356,7 @@ class PyEditController:
     def OnRun(self, event):
         """Run Python script"""
         if not self.filename:
-            self.filename = gscript.tempfile() + ".py"
+            self.filename = gs.tempfile() + ".py"
             self.tempfile = True
             file_is_written = self._writeFile(
                 file_path=self.filename,
@@ -623,7 +623,7 @@ class PyEditController:
         # inspired by g.manual but simple not using GRASS_HTML_BROWSER
         # not using g.manual because it does not show
         entry = "libpython/script_intro.html"
-        major, minor, patch = gscript.version()["version"].split(".")
+        major, minor, patch = gs.version()["version"].split(".")
         url = "https://grass.osgeo.org/grass%s%s/manuals/%s" % (major, minor, entry)
         open_url(url)
 

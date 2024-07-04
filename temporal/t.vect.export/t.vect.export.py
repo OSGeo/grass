@@ -66,7 +66,7 @@
 # %option G_OPT_T_WHERE
 # %end
 
-import grass.script as grass
+import grass.script as gs
 
 
 ############################################################################
@@ -90,5 +90,5 @@ def main():
 
 ############################################################################
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

@@ -108,7 +108,7 @@
 
 import copy
 
-import grass.script as grass
+import grass.script as gs
 
 ############################################################################
 
@@ -137,14 +137,14 @@ def main():
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    overwrite = grass.overwrite()
+    overwrite = gs.overwrite()
 
     sp = tgis.open_old_stds(input, "strds", dbif)
     maps = sp.get_registered_maps_as_objects(where=where, dbif=dbif)
 
     if not maps:
         dbif.close()
-        grass.warning(_("Space time raster dataset <%s> is empty") % sp.get_id())
+        gs.warning(_("Space time raster dataset <%s> is empty") % sp.get_id())
         return
 
     new_sp = tgis.check_new_stds(output, "strds", dbif=dbif, overwrite=overwrite)
@@ -231,14 +231,14 @@ def main():
     error = 0
     for proc in proc_list:
         if proc.returncode != 0:
-            grass.error(
+            gs.error(
                 _("Error running module: %\n    stderr: %s")
                 % (proc.get_bash(), proc.outputs.stderr)
             )
             error += 1
 
     if error > 0:
-        grass.fatal(_("Error running modules."))
+        gs.fatal(_("Error running modules."))
 
     # Open the new space time raster dataset
     ttype, stype, title, descr = sp.get_initial_values()
@@ -255,7 +255,7 @@ def main():
         count += 1
 
         if count % 10 == 0:
-            grass.percent(count, num_maps, 1)
+            gs.percent(count, num_maps, 1)
 
         # Do not register empty maps
         map.load()
@@ -270,7 +270,7 @@ def main():
 
     # Update the spatio-temporal extent and the metadata table entries
     new_sp.update_from_registered_maps(dbif)
-    grass.percent(1, 1, 1)
+    gs.percent(1, 1, 1)
 
     # Remove empty maps
     if len(empty_maps) > 0:
@@ -283,7 +283,7 @@ def main():
             else:
                 names += ",%s" % (map.get_name())
 
-        grass.run_command("g.remove", flags="f", type="raster", name=names, quiet=True)
+        gs.run_command("g.remove", flags="f", type="raster", name=names, quiet=True)
 
     dbif.close()
 
@@ -291,5 +291,5 @@ def main():
 ############################################################################
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

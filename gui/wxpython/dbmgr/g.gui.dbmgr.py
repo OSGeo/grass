@@ -28,11 +28,11 @@
 # %option G_OPT_V_MAP
 # %end
 
-import grass.script as gscript
+import grass.script as gs
 
 
 def main():
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
 
     import wx
 
@@ -42,13 +42,13 @@ def main():
 
     from dbmgr.manager import AttributeManager
 
-    mapName = gscript.find_file(options["map"], element="vector")["fullname"]
+    mapName = gs.find_file(options["map"], element="vector")["fullname"]
     if not mapName:
-        gscript.set_raise_on_error(False)
-        gscript.fatal(_("Vector map <%s> not found") % options["map"])
+        gs.set_raise_on_error(False)
+        gs.fatal(_("Vector map <%s> not found") % options["map"])
 
     app = wx.App()
-    gscript.message(_("Loading attribute data for vector map <%s>...") % mapName)
+    gs.message(_("Loading attribute data for vector map <%s>...") % mapName)
     f = AttributeManager(
         parent=None,
         id=wx.ID_ANY,

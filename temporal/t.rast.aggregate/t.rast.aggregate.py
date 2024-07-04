@@ -111,7 +111,7 @@
 # % description: Register Null maps
 # %end
 
-import grass.script as gcore
+import grass.script as gs
 
 ############################################################################
 
@@ -149,10 +149,10 @@ def main():
 
     if not map_list:
         dbif.close()
-        gcore.fatal(_("Space time raster dataset <%s> is empty") % input)
+        gs.fatal(_("Space time raster dataset <%s> is empty") % input)
 
     # We will create the strds later, but need to check here
-    tgis.check_new_stds(output, "strds", dbif, gcore.overwrite())
+    tgis.check_new_stds(output, "strds", dbif, gs.overwrite())
 
     start_time = map_list[0].temporal_extent.get_start_time()
 
@@ -202,7 +202,7 @@ def main():
         method=method,
         nprocs=nprocs,
         spatial=None,
-        overwrite=gcore.overwrite(),
+        overwrite=gs.overwrite(),
         file_limit=file_limit,
     )
 
@@ -216,7 +216,7 @@ def main():
             description,
             semantic_type,
             dbif,
-            gcore.overwrite(),
+            gs.overwrite(),
         )
         if register_null:
             register_null = False
@@ -240,5 +240,5 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = gcore.parser()
+    options, flags = gs.parser()
     main()

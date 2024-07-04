@@ -22,7 +22,7 @@ import pathlib
 from xml.etree.ElementTree import ParseError
 
 import xml.etree.ElementTree as etree
-import grass.script as grass
+import grass.script as gs
 
 
 class BaseCapabilitiesTree(etree.ElementTree):
@@ -99,7 +99,7 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
         BaseCapabilitiesTree.__init__(self, cap_file)
         self.xml_ns = WMSXMLNsHandler(self)
 
-        grass.debug("Checking WMS capabilities tree.", 4)
+        gs.debug("Checking WMS capabilities tree.", 4)
 
         if "version" not in self.getroot().attrib:
             raise ParseError(
@@ -125,7 +125,7 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
         self._checkFormats(capability)
         self._checkLayerTree(root_layer)
 
-        grass.debug("Check of WMS capabilities tree was finished.", 4)
+        gs.debug("Check of WMS capabilities tree was finished.", 4)
 
     def _checkFormats(self, capability):
         """!Check if format element is defined."""
@@ -189,7 +189,7 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
             for s in styles:
                 s_name = s.find(self.xml_ns.Ns("Name"))
                 if s_name is None or not s_name.text:
-                    grass.debug("Removed invalid <Style> element.", 4)
+                    gs.debug("Removed invalid <Style> element.", 4)
                     layer.remove(s)
 
             self._inhNotSame(
@@ -325,7 +325,7 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
         BaseCapabilitiesTree.__init__(self, cap_file)
         self.xml_ns = WMTSXMLNsHandler()
 
-        grass.debug("Checking WMTS capabilities tree.", 4)
+        gs.debug("Checking WMTS capabilities tree.", 4)
 
         contents = self._find(self.getroot(), "Contents", self.xml_ns.NsWmts)
 
@@ -333,7 +333,7 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
 
         for mat_set in tile_mat_sets:
             if not self._checkMatSet(mat_set):
-                grass.debug("Removed invalid <TileMatrixSet> element.", 4)
+                gs.debug("Removed invalid <TileMatrixSet> element.", 4)
                 contents.remove(mat_set)
 
         # are there any <TileMatrixSet> elements after the check
@@ -342,13 +342,13 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
         layers = self._findall(contents, "Layer", self.xml_ns.NsWmts)
         for layer in layers:
             if not self._checkLayer(layer):
-                grass.debug("Removed invalid <Layer> element.", 4)
+                gs.debug("Removed invalid <Layer> element.", 4)
                 contents.remove(layer)
 
         # are there any <Layer> elements after the check
         self._findall(contents, "Layer", self.xml_ns.NsWmts)
 
-        grass.debug("Check of WMTS capabilities tree was finished.", 4)
+        gs.debug("Check of WMTS capabilities tree was finished.", 4)
 
     def _checkMatSet(self, mat_set):
         """!Check <TileMatrixSet>."""
@@ -366,7 +366,7 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
 
         for t_mat in tile_mats:
             if not self._checkMat(t_mat):
-                grass.debug("Removed invalid <TileMatrix> element.", 4)
+                gs.debug("Removed invalid <TileMatrix> element.", 4)
                 mat_set.remove(t_mat)
 
         tile_mats = mat_set.findall(self.xml_ns.NsWmts("TileMatrix"))
@@ -436,7 +436,7 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
         for s in styles:
             s_name = s.find(self.xml_ns.NsOws("Identifier"))
             if s_name is None or not s_name.text:
-                grass.debug("Removed invalid <Style> element.", 4)
+                gs.debug("Removed invalid <Style> element.", 4)
                 layer.remove(s_name)
 
         contents = self.getroot().find(self.xml_ns.NsWmts("Contents"))
@@ -445,7 +445,7 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
         for link in mat_set_links:
             # <TileMatrixSetLink> does not point to existing  <TileMatrixSet>
             if not self._checkMatSetLink(link, mat_sets):
-                grass.debug("Removed invalid <TileMatrixSetLink> element.", 4)
+                gs.debug("Removed invalid <TileMatrixSetLink> element.", 4)
                 layer.remove(link)
 
         return True
@@ -473,7 +473,7 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
             )
             for limit in tile_mat_limits:
                 if not self._checkMatSetLimit(limit):
-                    grass.debug("Removed invalid <TileMatrixLimits> element.", 4)
+                    gs.debug("Removed invalid <TileMatrixLimits> element.", 4)
                     tile_mat_limits.remove(limit)
 
             # are there any <TileMatrixLimits> elements after the check
@@ -481,7 +481,7 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
                 self.xml_ns.NsWmts("TileMatrixLimits")
             )
             if not tile_mat_limits:
-                grass.debug("Removed invalid <TileMatrixSetLimits> element.", 4)
+                gs.debug("Removed invalid <TileMatrixSetLimits> element.", 4)
                 link.remove(tile_mat_set_limits)
 
         if not found:
@@ -563,11 +563,11 @@ class OnEarthCapabilitiesTree(BaseCapabilitiesTree):
         """
         BaseCapabilitiesTree.__init__(self, cap_file)
 
-        grass.debug("Checking OnEarth capabilities tree.", 4)
+        gs.debug("Checking OnEarth capabilities tree.", 4)
 
         self._checkLayerTree(self.getroot())
 
-        grass.debug("Check if OnEarth capabilities tree was finished.", 4)
+        gs.debug("Check if OnEarth capabilities tree was finished.", 4)
 
     def _checkLayerTree(self, parent_layer, first=True):
         """!Recursively check layer tree."""
@@ -582,7 +582,7 @@ class OnEarthCapabilitiesTree(BaseCapabilitiesTree):
 
         for layer in layers:
             if not self._checkLayer(layer):
-                grass.debug(("Removed invalid <%s> element." % layer.tag), 4)
+                gs.debug(("Removed invalid <%s> element." % layer.tag), 4)
                 parent_layer.remove(layer)
             if layer.tag == "TiledGroups":
                 self._checkLayerTree(layer, False)
@@ -623,7 +623,7 @@ class OnEarthCapabilitiesTree(BaseCapabilitiesTree):
 
             # check if there are any valid urls
             if not urls:
-                grass.debug("<TilePattern>  was removed. It has no valid url.", 4)
+                gs.debug("<TilePattern>  was removed. It has no valid url.", 4)
                 layer.remove(patt)
             patt.text = "\n".join(urls)
 

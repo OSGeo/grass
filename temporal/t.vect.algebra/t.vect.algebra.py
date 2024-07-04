@@ -54,7 +54,7 @@
 
 import sys
 
-import grass.script
+import grass.script as gs
 
 
 def main():
@@ -72,7 +72,7 @@ def main():
         from ply import lex  # noqa: F401
         from ply import yacc  # noqa: F401
     except ImportError:
-        grass.script.fatal(
+        gs.fatal(
             _(
                 "Please install PLY (Lex and Yacc Python implementation) to use the "
                 "temporal algebra modules."
@@ -81,9 +81,9 @@ def main():
 
     tgis.init(True)
     p = tgis.TemporalVectorAlgebraParser(run=True, debug=False, spatial=spatial)
-    p.parse(expression, basename, grass.script.overwrite())
+    p.parse(expression, basename, gs.overwrite())
 
 
 if __name__ == "__main__":
-    options, flags = grass.script.parser()
+    options, flags = gs.parser()
     sys.exit(main())

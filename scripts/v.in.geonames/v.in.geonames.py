@@ -36,7 +36,7 @@
 
 import os
 
-import grass.script as grass
+import grass.script as gs
 
 
 def main():
@@ -44,20 +44,20 @@ def main():
     outfile = options["output"]
 
     # are we in LatLong location?
-    s = grass.read_command("g.proj", flags="j")
-    kv = grass.parse_key_val(s)
+    s = gs.read_command("g.proj", flags="j")
+    kv = gs.parse_key_val(s)
     if kv["+proj"] != "longlat":
-        grass.fatal(_("This module only operates in LatLong/WGS84 locations"))
+        gs.fatal(_("This module only operates in LatLong/WGS84 locations"))
 
     # input test
     if not os.access(infile, os.R_OK):
-        grass.fatal(_("File <%s> not found") % infile)
+        gs.fatal(_("File <%s> not found") % infile)
 
     # DBF doesn't support lengthy text fields
-    kv = grass.db_connection()
+    kv = gs.db_connection()
     dbfdriver = kv["driver"] == "dbf"
     if dbfdriver:
-        grass.warning(
+        gs.warning(
             _(
                 "Since DBF driver is used, the content of the 'alternatenames' column "
                 "might be cut with respect to the original Geonames.org column content"
@@ -66,7 +66,7 @@ def main():
 
     with open(infile, encoding="utf-8") as f:
         num_places = sum(1 for each in f)
-    grass.message(_("Converting %d place names...") % num_places)
+    gs.message(_("Converting %d place names...") % num_places)
 
     # pump data into GRASS:
     #  http://download.geonames.org/export/dump/readme.txt
@@ -143,7 +143,7 @@ def main():
             "modification date",
         ]
 
-    grass.run_command(
+    gs.run_command(
         "v.in.ascii",
         cat=0,
         x=6,
@@ -155,9 +155,9 @@ def main():
     )
 
     # write cmd history:
-    grass.vector_history(outfile)
+    gs.vector_history(outfile)
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

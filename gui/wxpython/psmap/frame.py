@@ -28,7 +28,7 @@ try:
 except ImportError:
     import wx.lib.flatnotebook as FN
 
-import grass.script as grass
+import grass.script as gs
 
 from core import globalvar
 from gui_core.menu import Menu
@@ -170,8 +170,8 @@ class PsMapFrame(wx.Frame):
         self.getInitMap()
 
         # image path
-        env = grass.gisenv()
-        self.imgName = grass.tempfile()
+        env = gs.gisenv()
+        self.imgName = gs.tempfile()
 
         # canvas for preview
         self.previewCanvas = PsMapBufferedWindow(
@@ -310,7 +310,7 @@ class PsMapFrame(wx.Frame):
         """Generate PDF from PS with ps2pdf if available"""
         if not sys.platform == "win32":
             try:
-                p = grass.Popen(["ps2pdf"], stderr=grass.PIPE)
+                p = gs.Popen(["ps2pdf"], stderr=gs.PIPE)
                 p.stderr.close()
 
             except OSError:
@@ -333,7 +333,7 @@ class PsMapFrame(wx.Frame):
 
     def PSFile(self, filename=None, pdf=False):
         """Create temporary instructions file and run ps.map with output = filename"""
-        instrFile = grass.tempfile()
+        instrFile = gs.tempfile()
         instrFileFd = open(instrFile, mode="wb")
         content = self.InstructionFile()
         if not content:
@@ -343,7 +343,7 @@ class PsMapFrame(wx.Frame):
         instrFileFd.close()
 
         temp = False
-        regOld = grass.region(env=self.env)
+        regOld = gs.region(env=self.env)
 
         if pdf:
             pdfname = filename
@@ -352,7 +352,7 @@ class PsMapFrame(wx.Frame):
         # preview or pdf
         if not filename or (filename and pdf):
             temp = True
-            filename = grass.tempfile()
+            filename = gs.tempfile()
             if not pdf:  # lower resolution for preview
                 if self.instruction.FindInstructionByType("map"):
                     mapId = self.instruction.FindInstructionByType("map").id
@@ -398,9 +398,9 @@ class PsMapFrame(wx.Frame):
                 message=_("Ps.map exited with return code %s") % event.returncode,
             )
 
-            grass.try_remove(event.userData["instrFile"])
+            gs.try_remove(event.userData["instrFile"])
             if event.userData["temp"]:
-                grass.try_remove(event.userData["filename"])
+                gs.try_remove(event.userData["filename"])
             return
 
         if event.userData["pdfname"]:
@@ -452,7 +452,7 @@ class PsMapFrame(wx.Frame):
                     " Please install it to create PDF.\n\n "
                 ).format(pdf_rendering_prog)
             try:
-                proc = grass.Popen(command)
+                proc = gs.Popen(command)
                 ret = proc.wait()
                 if ret > 0:
                     GMessage(
@@ -483,7 +483,7 @@ class PsMapFrame(wx.Frame):
 
         # show preview only when user doesn't want to create ps or pdf
         if havePILImage and event.userData["temp"] and not event.userData["pdfname"]:
-            self.env["GRASS_REGION"] = grass.region_env(
+            self.env["GRASS_REGION"] = gs.region_env(
                 cols=event.userData["regionOld"]["cols"],
                 rows=event.userData["regionOld"]["rows"],
                 env=self.env,
@@ -530,9 +530,9 @@ class PsMapFrame(wx.Frame):
             del busy
             self.SetStatusText(_("Preview generated"), 0)
 
-        grass.try_remove(event.userData["instrFile"])
+        gs.try_remove(event.userData["instrFile"])
         if event.userData["temp"]:
-            grass.try_remove(event.userData["filename"])
+            gs.try_remove(event.userData["filename"])
 
         self.delayedCall = wx.CallLater(
             4000,
@@ -1066,7 +1066,7 @@ class PsMapFrame(wx.Frame):
     def getInitMap(self):
         """Create default map frame when no map is selected, needed for coordinates in
         map units"""
-        instrFile = grass.tempfile()
+        instrFile = gs.tempfile()
         instrFileFd = open(instrFile, mode="wb")
         content = self.InstructionFile()
         if not content:
@@ -1079,9 +1079,9 @@ class PsMapFrame(wx.Frame):
         mapInitRect = GetMapBounds(
             instrFile, portrait=(page["Orientation"] == "Portrait"), env=self.env
         )
-        grass.try_remove(instrFile)
+        gs.try_remove(instrFile)
 
-        region = grass.region(env=self.env)
+        region = gs.region(env=self.env)
         units = UnitConversion(self)
         realWidth = units.convert(
             value=abs(region["w"] - region["e"]), fromUnit="meter", toUnit="inch"
@@ -1246,11 +1246,11 @@ class PsMapFrame(wx.Frame):
             if itype in {"map", "vector", "raster", "labels"}:
                 if itype == "raster":  # set resolution
                     try:
-                        info = grass.raster_info(self.instruction[id]["raster"])
-                        self.env["GRASS_REGION"] = grass.region_env(
+                        info = gs.raster_info(self.instruction[id]["raster"])
+                        self.env["GRASS_REGION"] = gs.region_env(
                             nsres=info["nsres"], ewres=info["ewres"], env=self.env
                         )
-                    except grass.CalledModuleError:  # fails after switching location
+                    except gs.CalledModuleError:  # fails after switching location
                         pass
                     # change current raster in raster legend
 
@@ -1353,7 +1353,7 @@ class PsMapFrame(wx.Frame):
             os.remove(self.imgName)
         except OSError:
             pass
-        grass.set_raise_on_error(False)
+        gs.set_raise_on_error(False)
         if hasattr(self, "delayedCall") and self.delayedCall.IsRunning():
             self.delayedCall.Stop()
         self.Destroy()

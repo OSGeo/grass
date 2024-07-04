@@ -43,7 +43,7 @@ try:
     import wx.lib.agw.floatspin as fs
 except ImportError:
     fs = None
-import grass.script as grass
+import grass.script as gs
 
 from core import globalvar
 from gui_core.gselect import VectorDBInfo
@@ -5377,7 +5377,7 @@ class NvizToolWindow(GNotebook):
 
     def UpdateSurfacePage(self, layer, data, updateName=True):
         """Update surface page"""
-        desc = grass.raster_info(layer.name)["title"]
+        desc = gs.raster_info(layer.name)["title"]
         if updateName:
             self.FindWindowById(self.win["surface"]["map"]).SetValue(layer.name)
         self.FindWindowById(self.win["surface"]["desc"]).SetLabel(desc)
@@ -5503,7 +5503,7 @@ class NvizToolWindow(GNotebook):
 
     def UpdateVectorPage(self, layer, data, updateName=True):
         """Update vector page"""
-        vInfo = grass.vector_info_topo(layer.GetName())
+        vInfo = gs.vector_info_topo(layer.GetName())
         if not vInfo:
             return
         if vInfo["map3d"]:

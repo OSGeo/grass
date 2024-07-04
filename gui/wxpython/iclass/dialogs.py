@@ -43,7 +43,7 @@ from gui_core.wrap import (
     ListCtrl,
 )
 
-import grass.script as grass
+import grass.script as gs
 
 
 class IClassGroupDialog(SimpleDialog):
@@ -71,7 +71,7 @@ class IClassGroupDialog(SimpleDialog):
         self.groupSelect = gselect.Select(
             parent=self.panel,
             type="group",
-            mapsets=[grass.gisenv()["MAPSET"]],
+            mapsets=[gs.gisenv()["MAPSET"]],
             size=globalvar.DIALOG_GSELECT_SIZE,
             validator=SimpleValidator(callback=self.ValidatorCallback),
         )
@@ -186,7 +186,7 @@ class IClassGroupDialog(SimpleDialog):
         """
         gr, s = self.GetData()
 
-        group = grass.find_file(name=gr, element="group")
+        group = gs.find_file(name=gr, element="group")
 
         bands = []
         g = group["name"]
@@ -617,7 +617,7 @@ class IClassSignatureFileDialog(wx.Dialog):
 
         self.fileName = file
 
-        env = grass.gisenv()
+        env = gs.gisenv()
 
         # inconsistent group and subgroup name
         # path:
@@ -785,7 +785,7 @@ class IClassExportAreasDialog(wx.Dialog):
         self.vectorNameCtrl = gselect.Select(
             parent=self.panel,
             type="vector",
-            mapsets=[grass.gisenv()["MAPSET"]],
+            mapsets=[gs.gisenv()["MAPSET"]],
             size=globalvar.DIALOG_GSELECT_SIZE,
         )
         if self.vectorName:
@@ -830,7 +830,7 @@ class IClassExportAreasDialog(wx.Dialog):
         """Checks if map exists and can be overwritten."""
         overwrite = UserSettings.Get(group="cmd", key="overwrite", subkey="enabled")
         vName = self.GetVectorName()
-        res = grass.find_file(vName, element="vector")
+        res = gs.find_file(vName, element="vector")
         if res["fullname"] and overwrite is False:
             qdlg = wx.MessageDialog(
                 parent=self,

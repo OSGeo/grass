@@ -49,7 +49,7 @@ if globalvar.wxPythonPhoenix:
 else:
     from wx import PyValidator as Validator
 
-import grass.script as grass
+import grass.script as gs
 
 from core.utils import PilImageToWxImage
 from dbmgr.vinfo import VectorDBInfo
@@ -1376,7 +1376,7 @@ class MapFramePanel(Panel):
 
                 if mapFrameDict["drawMap"]:
                     if mapFrameDict["mapType"] == "raster":
-                        mapFile = grass.find_file(mapFrameDict["map"], element="cell")
+                        mapFile = gs.find_file(mapFrameDict["map"], element="cell")
                         if mapFile["file"] == "":
                             GMessage("Raster %s not found" % mapFrameDict["map"])
                             return False
@@ -1390,7 +1390,7 @@ class MapFramePanel(Panel):
                             self.instruction.AddInstruction(raster)
 
                     elif mapFrameDict["mapType"] == "vector":
-                        mapFile = grass.find_file(mapFrameDict["map"], element="vector")
+                        mapFile = gs.find_file(mapFrameDict["map"], element="vector")
                         if mapFile["file"] == "":
                             GMessage("Vector %s not found" % mapFrameDict["map"])
                             return False
@@ -1402,7 +1402,7 @@ class MapFramePanel(Panel):
                                 if each[0] == mapFrameDict["map"]:
                                     isAdded = True
                         if not isAdded:
-                            topoInfo = grass.vector_info_topo(map=mapFrameDict["map"])
+                            topoInfo = gs.vector_info_topo(map=mapFrameDict["map"])
                             if topoInfo:
                                 if bool(topoInfo["areas"]):
                                     topoType = "areas"
@@ -1449,7 +1449,7 @@ class MapFramePanel(Panel):
                 mapFrameDict["center"] = self.center[0]
                 # set region
                 if self.mapType == "raster":
-                    self.env["GRASS_REGION"] = grass.region_env(
+                    self.env["GRASS_REGION"] = gs.region_env(
                         raster=mapFrameDict["map"], env=self.env
                     )
                 if self.mapType == "vector":
@@ -1460,13 +1460,13 @@ class MapFramePanel(Panel):
                         rasterId = None
 
                     if rasterId:
-                        self.env["GRASS_REGION"] = grass.region_env(
+                        self.env["GRASS_REGION"] = gs.region_env(
                             vector=mapFrameDict["map"],
                             raster=self.instruction[rasterId]["raster"],
                             env=self.env,
                         )
                     else:
-                        self.env["GRASS_REGION"] = grass.region_env(
+                        self.env["GRASS_REGION"] = gs.region_env(
                             vector=mapFrameDict["map"], env=self.env
                         )
 
@@ -1499,7 +1499,7 @@ class MapFramePanel(Panel):
                 mapFrameDict["scale"] = self.scale[1]
                 mapFrameDict["center"] = self.center[1]
                 # set region
-                self.env["GRASS_REGION"] = grass.region_env(
+                self.env["GRASS_REGION"] = gs.region_env(
                     region=mapFrameDict["region"], env=self.env
                 )
             else:
@@ -1525,7 +1525,7 @@ class MapFramePanel(Panel):
 
             mapFrameDict["scale"] = self.scale[2]
             mapFrameDict["center"] = self.center[2]
-            region = grass.region(env=None)
+            region = gs.region(env=None)
 
             raster = self.instruction.FindInstructionByType("raster")
             if raster:
@@ -1534,7 +1534,7 @@ class MapFramePanel(Panel):
                 rasterId = None
 
             if rasterId:  # because of resolution
-                self.env["GRASS_REGION"] = grass.region_env(
+                self.env["GRASS_REGION"] = gs.region_env(
                     n=region["n"],
                     s=region["s"],
                     e=region["e"],
@@ -1543,7 +1543,7 @@ class MapFramePanel(Panel):
                     env=self.env,
                 )
             else:
-                self.env["GRASS_REGION"] = grass.region_env(
+                self.env["GRASS_REGION"] = gs.region_env(
                     n=region["n"],
                     s=region["s"],
                     e=region["e"],
@@ -1888,13 +1888,13 @@ class VectorPanel(Panel):
     def OnVector(self, event):
         """Gets info about toplogy and enables/disables choices point/line/area"""
         vmap = self.select.GetValue()
-        if not grass.find_file(
+        if not gs.find_file(
             vmap,
             element="vector",
         )["name"]:
             return
 
-        topoInfo = grass.vector_info_topo(map=vmap)
+        topoInfo = gs.vector_info_topo(map=vmap)
         if topoInfo:
             self.vectorType.EnableItem(2, bool(topoInfo["areas"]))
             self.vectorType.EnableItem(
@@ -2178,7 +2178,7 @@ class VPropertiesDialog(Dialog):
         try:
             self.mapDBInfo = VectorDBInfo(self.vectorName)
             self.layers = self.mapDBInfo.layers.keys()
-        except grass.ScriptError:
+        except gs.ScriptError:
             self.connection = False
             self.layers = []
         if not self.layers:
@@ -3540,7 +3540,7 @@ class LegendDialog(PsmapDialog):
             self.ticks.SetValue(False)
         # range
         if self.rasterId and self.instruction[self.rasterId]["raster"]:
-            rinfo = grass.raster_info(self.instruction[self.rasterId]["raster"])
+            rinfo = gs.raster_info(self.instruction[self.rasterId]["raster"])
             self.minim, self.maxim = rinfo["min"], rinfo["max"]
         else:
             self.minim, self.maxim = 0, 0
@@ -4918,7 +4918,7 @@ class ScalebarDialog(PsmapDialog):
         if self.scalebarDict["length"]:
             self.lengthTextCtrl.SetValue(str(self.scalebarDict["length"]))
         else:  # estimate default
-            reg = grass.region(env=self.env)
+            reg = gs.region(env=self.env)
             w = int((reg["e"] - reg["w"]) / 3)
             w = round(w, -len(str(w)) + 2)  # 12345 -> 12000
             self.lengthTextCtrl.SetValue(str(w))

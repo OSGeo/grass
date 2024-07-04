@@ -50,7 +50,7 @@ else:
     import wx.lib.flatnotebook as FN
 import wx.lib.scrolledpanel as scrolled
 
-import grass.script as grass
+import grass.script as gs
 from grass.script.utils import decode
 
 from dbmgr.sqlbuilder import SQLBuilderSelect, SQLBuilderUpdate
@@ -783,8 +783,8 @@ class DbMgrBase:
         # the current mapset
         mapInfo = None
         if self.dbMgrData["vectName"]:
-            mapInfo = grass.find_file(name=self.dbMgrData["vectName"], element="vector")
-        if not mapInfo or mapInfo["mapset"] != grass.gisenv()["MAPSET"]:
+            mapInfo = gs.find_file(name=self.dbMgrData["vectName"], element="vector")
+        if not mapInfo or mapInfo["mapset"] != gs.gisenv()["MAPSET"]:
             self.dbMgrData["editable"] = False
         else:
             self.dbMgrData["editable"] = True
@@ -818,8 +818,8 @@ class DbMgrBase:
 
         # vector attributes can be changed only if vector map is in
         # the current mapset
-        mapInfo = grass.find_file(name=self.dbMgrData["vectName"], element="vector")
-        if not mapInfo or mapInfo["mapset"] != grass.gisenv()["MAPSET"]:
+        mapInfo = gs.find_file(name=self.dbMgrData["vectName"], element="vector")
+        if not mapInfo or mapInfo["mapset"] != gs.gisenv()["MAPSET"]:
             self.dbMgrData["editable"] = False
         else:
             self.dbMgrData["editable"] = True
@@ -3117,12 +3117,12 @@ class LayerBook(wx.Notebook):
         # get default values
         #
         self.defaultConnect = {}
-        genv = grass.gisenv()
-        vectMap = grass.find_file(
+        genv = gs.gisenv()
+        vectMap = gs.find_file(
             name=vectName,
             element="vector",
         )
-        vectGisrc, vectEnv = grass.create_environment(
+        vectGisrc, vectEnv = gs.create_environment(
             gisdbase=genv["GISDBASE"],
             location=genv["LOCATION_NAME"],
             mapset=vectMap["mapset"],
@@ -3134,7 +3134,7 @@ class LayerBook(wx.Notebook):
             read=True,
             quiet=True,
         )
-        grass.utils.try_remove(vectGisrc)
+        gs.utils.try_remove(vectGisrc)
 
         for line in connect.splitlines():
             item, value = line.split(":", 1)

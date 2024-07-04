@@ -55,7 +55,7 @@
 
 import sys
 import os
-import grass.script as grass
+import grass.script as gs
 from grass.script.utils import decode
 from grass.exceptions import CalledModuleError
 
@@ -68,30 +68,30 @@ def main():
     key = options["key"]
 
     # does map exist in CURRENT mapset?
-    mapset = grass.gisenv()["MAPSET"]
-    if not grass.find_file(vector, element="vector", mapset=mapset)["file"]:
-        grass.fatal(_("Vector map <%s> not found in current mapset") % vector)
+    mapset = gs.gisenv()["MAPSET"]
+    if not gs.find_file(vector, element="vector", mapset=mapset)["file"]:
+        gs.fatal(_("Vector map <%s> not found in current mapset") % vector)
 
     map_name = vector.split("@")[0]
 
     if not table:
         if layer == "1":
-            grass.verbose(_("Using vector map name as table name: <%s>") % map_name)
+            gs.verbose(_("Using vector map name as table name: <%s>") % map_name)
             table = map_name
         else:
             # to avoid tables with identical names on higher layers
             table = "%s_%s" % (map_name, layer)
-            grass.verbose(
+            gs.verbose(
                 _("Using vector map name extended by layer number as table name: <%s>")
                 % table
             )
     else:
-        grass.verbose(_("Using user specified table name: %s") % table)
+        gs.verbose(_("Using user specified table name: %s") % table)
 
     # check if DB parameters are set, and if not set them.
-    grass.run_command("db.connect", flags="c", quiet=True)
-    grass.verbose(_("Creating new DB connection based on default mapset settings..."))
-    kv = grass.db_connection()
+    gs.run_command("db.connect", flags="c", quiet=True)
+    gs.verbose(_("Creating new DB connection based on default mapset settings..."))
+    kv = gs.db_connection()
     database = kv["database"]
     driver = kv["driver"]
     schema = kv["schema"]
@@ -101,13 +101,13 @@ def main():
     # maybe there is already a table linked to the selected layer?
     nuldev = open(os.devnull, "w")
     try:
-        grass.vector_db(map_name, stderr=nuldev)[int(layer)]
-        grass.fatal(_("There is already a table linked to layer <%s>") % layer)
+        gs.vector_db(map_name, stderr=nuldev)[int(layer)]
+        gs.fatal(_("There is already a table linked to layer <%s>") % layer)
     except KeyError:
         pass
 
     # maybe there is already a table with that name?
-    tables = grass.read_command(
+    tables = gs.read_command(
         "db.tables", flags="p", database=database2, driver=driver, stderr=nuldev
     )
     tables = decode(tables)
@@ -120,7 +120,7 @@ def main():
             for x in " ".join(columns.split()).split(","):
                 colname = x.lower().split()[0]
                 if colname in colnames:
-                    grass.fatal(_("Duplicate column name '%s' not allowed") % colname)
+                    gs.fatal(_("Duplicate column name '%s' not allowed") % colname)
                 colnames.append(colname)
                 column_def.append(x)
 
@@ -129,19 +129,19 @@ def main():
             column_def.insert(0, "%s integer" % key)
         column_def = ",".join(column_def)
 
-        grass.verbose(_("Creating table with columns (%s)...") % column_def)
+        gs.verbose(_("Creating table with columns (%s)...") % column_def)
 
         sql = "CREATE TABLE %s (%s)" % (table, column_def)
         try:
-            grass.run_command("db.execute", database=database2, driver=driver, sql=sql)
+            gs.run_command("db.execute", database=database2, driver=driver, sql=sql)
         except CalledModuleError:
-            grass.fatal(_("Unable to create table <%s>") % table)
+            gs.fatal(_("Unable to create table <%s>") % table)
 
     # connect the map to the DB:
     if schema:
         table = "{schema}.{table}".format(schema=schema, table=table)
-    grass.verbose(_("Connecting new table to vector map <%s>...") % map_name)
-    grass.run_command(
+    gs.verbose(_("Connecting new table to vector map <%s>...") % map_name)
+    gs.run_command(
         "v.db.connect",
         quiet=True,
         map=map_name,
@@ -156,7 +156,7 @@ def main():
     # modules such as v.what.rast happy: (creates new row for each
     # vector line):
     try:
-        grass.run_command(
+        gs.run_command(
             "v.to.db",
             overwrite=True,
             map=map_name,
@@ -167,21 +167,19 @@ def main():
         )
     except CalledModuleError:
         # remove link
-        grass.run_command(
-            "v.db.connect", quiet=True, flags="d", map=map_name, layer=layer
-        )
+        gs.run_command("v.db.connect", quiet=True, flags="d", map=map_name, layer=layer)
         return 1
 
-    grass.verbose(_("Current attribute table links:"))
-    if grass.verbosity() > 2:
-        grass.run_command("v.db.connect", flags="p", map=map_name)
+    gs.verbose(_("Current attribute table links:"))
+    if gs.verbosity() > 2:
+        gs.run_command("v.db.connect", flags="p", map=map_name)
 
     # write cmd history:
-    grass.vector_history(map_name)
+    gs.vector_history(map_name)
 
     return 0
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     sys.exit(main())

@@ -18,12 +18,12 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import math
-import numpy
+import numpy as np
 
 import wx
 
 from wx.lib import plot
-import grass.script as grass
+import grass.script as gs
 from wxplot.base import BasePlotFrame, PlotIcons
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from gui_core.wrap import StockCursor
@@ -164,7 +164,7 @@ class ProfileFrame(BasePlotFrame):
         self.coordstr = ""
         lasteast = lastnorth = None
 
-        region = grass.region()
+        region = gs.region()
         insideRegion = True
         if len(self.transect) > 0:
             for point in self.transect:
@@ -287,7 +287,7 @@ class ProfileFrame(BasePlotFrame):
 
         # keep total number of transect points to 500 or less to avoid
         # freezing with large, high resolution maps
-        region = grass.region()
+        region = gs.region()
         curr_res = min(float(region["nsres"]), float(region["ewres"]))
         transect_rec = 0
         if self.transect_length / curr_res > 500:
@@ -472,19 +472,19 @@ class ProfileFrame(BasePlotFrame):
                 statstr = "Profile of %s\n\n" % rast
 
                 iterable = (i[1] for i in self.raster[r]["datalist"])
-                a = numpy.fromiter(iterable, numpy.float)
+                a = np.fromiter(iterable, np.float)
 
                 statstr += "n: %f\n" % a.size
-                statstr += "minimum: %f\n" % numpy.amin(a)
-                statstr += "maximum: %f\n" % numpy.amax(a)
-                statstr += "range: %f\n" % numpy.ptp(a)
-                statstr += "mean: %f\n" % numpy.mean(a)
-                statstr += "standard deviation: %f\n" % numpy.std(a)
-                statstr += "variance: %f\n" % numpy.var(a)
-                cv = numpy.std(a) / numpy.mean(a)
+                statstr += "minimum: %f\n" % np.amin(a)
+                statstr += "maximum: %f\n" % np.amax(a)
+                statstr += "range: %f\n" % np.ptp(a)
+                statstr += "mean: %f\n" % np.mean(a)
+                statstr += "standard deviation: %f\n" % np.std(a)
+                statstr += "variance: %f\n" % np.var(a)
+                cv = np.std(a) / np.mean(a)
                 statstr += "coefficient of variation: %f\n" % cv
-                statstr += "sum: %f\n" % numpy.sum(a)
-                statstr += "median: %f\n" % numpy.median(a)
+                statstr += "sum: %f\n" % np.sum(a)
+                statstr += "median: %f\n" % np.median(a)
                 statstr += "distance along transect: %f\n\n" % self.transect_length
                 message.append(statstr)
             except:

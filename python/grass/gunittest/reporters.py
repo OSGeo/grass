@@ -78,9 +78,9 @@ class FileAnonymizer:
         if remove_gisdbase:
             # import only when really needed to avoid problems with
             # translations when environment is not set properly
-            import grass.script as gscript
+            import grass.script as gs
 
-            gisdbase = gscript.gisenv()["GISDBASE"]
+            gisdbase = gs.gisenv()["GISDBASE"]
             self._paths_to_remove.append(gisdbase)
         if paths_to_remove:
             self._paths_to_remove.extend(paths_to_remove)

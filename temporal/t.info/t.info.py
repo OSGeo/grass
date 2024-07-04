@@ -54,7 +54,7 @@
 # % suppress_required: yes
 # %end
 
-import grass.script as grass
+import grass.script as gs
 
 ############################################################################
 
@@ -101,17 +101,17 @@ def main():
         return
 
     if not system and not name:
-        grass.fatal(_("Please specify %s=") % ("name"))
+        gs.fatal(_("Please specify %s=") % ("name"))
 
     if name.find("@") >= 0:
         id_ = name
     else:
-        id_ = name + "@" + grass.gisenv()["MAPSET"]
+        id_ = name + "@" + gs.gisenv()["MAPSET"]
 
     dataset = tgis.dataset_factory(type_, id_)
 
     if not dataset.is_in_db(dbif):
-        grass.fatal(
+        gs.fatal(
             _("Dataset <{n}> of type <{t}> not found in temporal database").format(
                 n=id_, t=type_
             )
@@ -130,5 +130,5 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

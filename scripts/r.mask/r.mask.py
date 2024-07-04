@@ -72,18 +72,16 @@ import os
 import sys
 import atexit
 
-import grass.script as grass
+import grass.script as gs
 from grass.script.utils import encode
 from grass.exceptions import CalledModuleError
 
 
 def cleanup():
     if tmp:
-        grass.run_command("g.remove", flags="f", type="raster", name=tmp, quiet=True)
+        gs.run_command("g.remove", flags="f", type="raster", name=tmp, quiet=True)
     if tmp_hull:
-        grass.run_command(
-            "g.remove", flags="f", type="vector", name=tmp_hull, quiet=True
-        )
+        gs.run_command("g.remove", flags="f", type="vector", name=tmp_hull, quiet=True)
 
 
 def main():
@@ -97,49 +95,49 @@ def main():
     invert = flags["i"]
 
     if not remove and not raster and not vector:
-        grass.fatal(_("Either parameter <raster> or parameter <vector> is required"))
+        gs.fatal(_("Either parameter <raster> or parameter <vector> is required"))
 
-    mapset = grass.gisenv()["MAPSET"]
-    exists = bool(grass.find_file("MASK", element="cell", mapset=mapset)["file"])
+    mapset = gs.gisenv()["MAPSET"]
+    exists = bool(gs.find_file("MASK", element="cell", mapset=mapset)["file"])
 
     if remove:
         # -> remove
         if exists:
             if sys.platform == "win32":
-                grass.run_command(
+                gs.run_command(
                     "g.remove", flags="if", quiet=True, type="raster", name="MASK"
                 )
             else:
-                grass.run_command(
+                gs.run_command(
                     "g.remove", flags="f", quiet=True, type="raster", name="MASK"
                 )
-            grass.message(_("Raster MASK removed"))
+            gs.message(_("Raster MASK removed"))
         else:
-            grass.fatal(_("No existing MASK to remove"))
+            gs.fatal(_("No existing MASK to remove"))
     else:
         # -> create
         if exists:
-            if not grass.overwrite():
-                grass.fatal(
+            if not gs.overwrite():
+                gs.fatal(
                     _(
                         "MASK already found in current mapset. Delete first or "
                         "overwrite."
                     )
                 )
             else:
-                grass.warning(_("MASK already exists and will be overwritten"))
-                grass.run_command(
+                gs.warning(_("MASK already exists and will be overwritten"))
+                gs.run_command(
                     "g.remove", flags="f", quiet=True, type="raster", name="MASK"
                 )
 
         if raster:
             # check if input raster exists
-            if not grass.find_file(raster)["file"]:
-                grass.fatal(_("Raster map <%s> not found") % raster)
+            if not gs.find_file(raster)["file"]:
+                gs.fatal(_("Raster map <%s> not found") % raster)
 
             if maskcats != "*" and not remove:
-                if grass.raster_info(raster)["datatype"] != "CELL":
-                    grass.fatal(
+                if gs.raster_info(raster)["datatype"] != "CELL":
+                    gs.fatal(
                         _(
                             "The raster map <%s> must be integer (CELL type) "
                             " in order to use the 'maskcats' parameter"
@@ -147,7 +145,7 @@ def main():
                         % raster
                     )
 
-            p = grass.feed_command(
+            p = gs.feed_command(
                 "r.reclass", input=raster, output="MASK", overwrite=True, rules="-"
             )
             res = "%s = 1" % maskcats
@@ -155,9 +153,9 @@ def main():
             p.stdin.close()
             p.wait()
         elif vector:
-            vector_name = grass.find_file(vector, "vector")["fullname"]
+            vector_name = gs.find_file(vector, "vector")["fullname"]
             if not vector_name:
-                grass.fatal(_("Vector map <%s> not found") % vector)
+                gs.fatal(_("Vector map <%s> not found") % vector)
 
             # parser bug?
             if len(cats) == 0:
@@ -165,8 +163,8 @@ def main():
             if len(where) == 0:
                 where = None
 
-            if grass.vector_info_topo(vector_name)["areas"] < 1:
-                grass.warning(
+            if gs.vector_info_topo(vector_name)["areas"] < 1:
+                gs.warning(
                     _(
                         "No area found in vector map <%s>. "
                         "Creating a convex hull for MASK."
@@ -178,7 +176,7 @@ def main():
                 to_rast_input = tmp_hull
                 # force 'flat' convex hull for 3D vector maps
                 try:
-                    grass.run_command(
+                    gs.run_command(
                         "v.hull",
                         flags="f",
                         quiet=True,
@@ -189,7 +187,7 @@ def main():
                         where=where,
                     )
                 except CalledModuleError:
-                    grass.fatal(
+                    gs.fatal(
                         _("Unable to create a convex hull for vector map <%s>")
                         % vector_name
                     )
@@ -197,9 +195,9 @@ def main():
                 to_rast_input = vector_name
 
             env = os.environ.copy()
-            if grass.verbosity() > 1:
+            if gs.verbosity() > 1:
                 env["GRASS_VERBOSE"] = "1"
-            grass.run_command(
+            gs.run_command(
                 "v.to.rast",
                 input=to_rast_input,
                 layer=layer,
@@ -215,14 +213,14 @@ def main():
         if invert:
             global tmp
             tmp = "r_mask_%d" % os.getpid()
-            grass.run_command("g.rename", raster=("MASK", tmp), quiet=True)
-            grass.message(_("Creating inverted raster MASK..."))
-            grass.mapcalc("MASK = if(isnull($tmp), 1, null())", tmp=tmp)
-            grass.verbose(_("Inverted raster MASK created"))
+            gs.run_command("g.rename", raster=("MASK", tmp), quiet=True)
+            gs.message(_("Creating inverted raster MASK..."))
+            gs.mapcalc("MASK = if(isnull($tmp), 1, null())", tmp=tmp)
+            gs.verbose(_("Inverted raster MASK created"))
         else:
-            grass.verbose(_("Raster MASK created"))
+            gs.verbose(_("Raster MASK created"))
 
-        grass.message(
+        gs.message(
             _(
                 "All subsequent raster operations will be limited to "
                 "the MASK area. Removing or renaming raster map named "
@@ -232,7 +230,7 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     tmp = tmp_hull = None
     atexit.register(cleanup)
     main()

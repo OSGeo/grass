@@ -39,7 +39,7 @@
 # % guisection: Required
 # %end
 
-import grass.script as grass
+import grass.script as gs
 
 ############################################################################
 
@@ -57,7 +57,7 @@ def main():
     tgis.init()
 
     # Get the current mapset to create the id of the space time dataset
-    mapset = grass.gisenv()["MAPSET"]
+    mapset = gs.gisenv()["MAPSET"]
 
     if input.find("@") >= 0:
         old_id = input
@@ -79,7 +79,7 @@ def main():
     stds = tgis.dataset_factory(type, old_id)
 
     if new_id.split("@")[1] != mapset:
-        grass.fatal(
+        gs.fatal(
             _(
                 "Space time %s dataset <%s> can not be renamed. "
                 "Mapset of the new identifier differs from the current "
@@ -90,7 +90,7 @@ def main():
 
     if not stds.is_in_db(dbif=dbif):
         dbif.close()
-        grass.fatal(
+        gs.fatal(
             _("Space time %s dataset <%s> not found")
             % (stds.get_new_map_instance(None).get_type(), old_id)
         )
@@ -98,9 +98,9 @@ def main():
     # Check if the new id is in the database
     new_stds = tgis.dataset_factory(type, new_id)
 
-    if new_stds.is_in_db(dbif=dbif) and not grass.overwrite():
+    if new_stds.is_in_db(dbif=dbif) and not gs.overwrite():
         dbif.close()
-        grass.fatal(
+        gs.fatal(
             _(
                 "Unable to rename Space time %s dataset <%s>. Name <%s> "
                 "is in use, please use the overwrite flag."
@@ -118,5 +118,5 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

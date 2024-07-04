@@ -50,7 +50,7 @@
 # % key: t_where
 # %end
 
-import grass.script as grass
+import grass.script as gs
 
 ############################################################################
 
@@ -65,7 +65,7 @@ def main():
     columns = options["columns"]
     tempwhere = options["t_where"]
     layer = options["layer"]
-    separator = grass.separator(options["separator"])
+    separator = gs.separator(options["separator"])
 
     if where == "" or where == " " or where == "\n":
         where = None
@@ -91,7 +91,7 @@ def main():
             if row["layer"]:
                 layer = row["layer"]
 
-            select = grass.read_command(
+            select = gs.read_command(
                 "v.db.select",
                 map=vector_name,
                 layer=layer,
@@ -101,7 +101,7 @@ def main():
             )
 
             if not select:
-                grass.fatal(
+                gs.fatal(
                     _("Unable to run v.db.select for vector map <%s> with layer %s")
                     % (vector_name, layer)
                 )
@@ -141,5 +141,5 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()
