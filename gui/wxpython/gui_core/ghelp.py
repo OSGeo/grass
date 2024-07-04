@@ -329,9 +329,6 @@ class AboutWindow(wx.Frame):
     def _pageCitation(self):
         """Citation information"""
         try:
-            # import only when needed
-            import grass.script as gs
-
             text = gs.read_command("g.version", flags="x")
         except CalledModuleError as error:
             text = _(
