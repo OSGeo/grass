@@ -63,7 +63,7 @@
 
 import sys
 import os
-import grass.script as grass
+import grass.script as gs
 
 
 def make_frame(f, b, t, l, r):  # noqa: E741
@@ -91,14 +91,14 @@ def main():
     smooth = flags["s"]
 
     # for -n flag of d.legend
-    if not grass.find_file(map)["file"]:
-        grass.fatal(_("Raster map <%s> not found") % map)
+    if not gs.find_file(map)["file"]:
+        gs.fatal(_("Raster map <%s> not found") % map)
 
     # for rast=
-    if rast and not grass.find_file(rast)["file"]:
-        grass.fatal(_("Raster map <%s> not found") % rast)
+    if rast and not gs.find_file(rast)["file"]:
+        gs.fatal(_("Raster map <%s> not found") % rast)
 
-    s = grass.read_command("d.info", flags="f")
+    s = gs.read_command("d.info", flags="f")
     if not s:
         sys.exit(1)
 
@@ -106,7 +106,7 @@ def main():
     s = s.split(":")[1]
     f = tuple([float(x) for x in s.split()])
 
-    grass.run_command("d.erase")
+    gs.run_command("d.erase")
     os.environ["GRASS_RENDER_FILE_READ"] = "TRUE"
 
     # draw title
@@ -115,14 +115,12 @@ def main():
     make_frame(f, 90, 100, 70, 100)
     # use map name without mapset suffix
     mapname = map.split("@")[0]
-    grass.run_command(
-        "d.text", color="black", size=5, at="5,97", align="cl", text=mapname
-    )
+    gs.run_command("d.text", color="black", size=5, at="5,97", align="cl", text=mapname)
 
     # draw legend
 
     # set legend vertical position and size based on number of categories
-    cats = grass.read_command("r.describe", map=map, flags="1n")
+    cats = gs.read_command("r.describe", map=map, flags="1n")
     ncats = len(cats.strip().split("\n"))
 
     # Only need to adjust legend size if number of categories is between 1 and 10
@@ -139,7 +137,7 @@ def main():
     else:
         lmap = map
 
-    kv = grass.raster_info(map=lmap)
+    kv = gs.raster_info(map=lmap)
     if kv["datatype"] == "CELL":
         leg_at = None
     else:
@@ -161,13 +159,13 @@ def main():
     #        lflags += 'n'
 
     make_frame(f, 0, 90, 70, 100)
-    grass.run_command("d.legend", flags=lflags, raster=lmap, lines=nlines, at=leg_at)
+    gs.run_command("d.legend", flags=lflags, raster=lmap, lines=nlines, at=leg_at)
 
     # draw map
     make_frame(f, 0, 100, 0, 70)
-    grass.run_command("d.rast", map=map)
+    gs.run_command("d.rast", map=map)
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

@@ -45,7 +45,7 @@ from gui_core.wrap import (
     StaticBox,
 )
 
-import grass.script as grass
+import grass.script as gs
 
 
 class SQLBuilder(wx.Frame):
@@ -67,9 +67,9 @@ class SQLBuilder(wx.Frame):
         # variables
         self.vectmap = vectmap  # fullname
         if "@" not in self.vectmap:
-            self.vectmap = grass.find_file(self.vectmap, element="vector")["fullname"]
+            self.vectmap = gs.find_file(self.vectmap, element="vector")["fullname"]
             if not self.vectmap:
-                grass.fatal(_("Vector map <%s> not found") % vectmap)
+                gs.fatal(_("Vector map <%s> not found") % vectmap)
         self.mapname, self.mapset = self.vectmap.split("@", 1)
 
         # db info
@@ -371,7 +371,7 @@ class SQLBuilder(wx.Frame):
         )
         if justsample:
             sql += " LIMIT {}".format(255)
-        data = grass.db_select(
+        data = gs.db_select(
             sql=sql, database=self.database, driver=self.driver, sep="{_sep_}"
         )
         if not data:

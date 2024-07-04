@@ -104,14 +104,14 @@ Module to run GCP management tool as stadalone application.
 
 import os
 
-import grass.script as gscript
+import grass.script as gs
 
 
 def main():
     """
     Sets the GRASS display driver
     """
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
 
     import wx
 

@@ -33,7 +33,7 @@ for details.
 # import traceback
 import os
 
-import grass.script as gscript
+import grass.script as gs
 from grass.pygrass import messages
 from grass.script.utils import decode
 
@@ -578,8 +578,8 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
 
     # We must run t.connect at first to create the temporal database and to
     # get the environmental variables
-    gscript.run_command("t.connect", flags="c")
-    grassenv = gscript.gisenv()
+    gs.run_command("t.connect", flags="c")
+    grassenv = gs.gisenv()
 
     # Set the global variable for faster access
     current_mapset = grassenv["MAPSET"]
@@ -595,7 +595,7 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
 
     # Check if the script library raises on error,
     # if so we do the same
-    if gscript.get_raise_on_error() is True:
+    if gs.get_raise_on_error() is True:
         raise_on_error = True
 
     # Start the GRASS message interface server
@@ -614,16 +614,16 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
     # Set the mapset check and the timestamp write
     if "TGIS_DISABLE_MAPSET_CHECK" in grassenv:
         if (
-            gscript.encode(grassenv["TGIS_DISABLE_MAPSET_CHECK"]) == "True"
-            or gscript.encode(grassenv["TGIS_DISABLE_MAPSET_CHECK"]) == "1"
+            gs.encode(grassenv["TGIS_DISABLE_MAPSET_CHECK"]) == "True"
+            or gs.encode(grassenv["TGIS_DISABLE_MAPSET_CHECK"]) == "1"
         ):
             enable_mapset_check = False
             msgr.warning("TGIS_DISABLE_MAPSET_CHECK is True")
 
     if "TGIS_DISABLE_TIMESTAMP_WRITE" in grassenv:
         if (
-            gscript.encode(grassenv["TGIS_DISABLE_TIMESTAMP_WRITE"]) == "True"
-            or gscript.encode(grassenv["TGIS_DISABLE_TIMESTAMP_WRITE"]) == "1"
+            gs.encode(grassenv["TGIS_DISABLE_TIMESTAMP_WRITE"]) == "True"
+            or gs.encode(grassenv["TGIS_DISABLE_TIMESTAMP_WRITE"]) == "1"
         ):
             enable_timestamp_write = False
             msgr.warning("TGIS_DISABLE_TIMESTAMP_WRITE is True")
@@ -662,7 +662,7 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
             )
     else:
         # Set the default sqlite3 connection in case nothing was defined
-        gscript.run_command("t.connect", flags="d")
+        gs.run_command("t.connect", flags="d")
         driver_string = ciface.get_driver_name()
         database_string = ciface.get_database_name()
         tgis_backend = driver_string
