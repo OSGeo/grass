@@ -27,7 +27,7 @@ int I_list_group(const char *group, const struct Ref *ref, FILE *fd)
 {
     char buf[80];
     int i;
-    int len, tot_len;
+    int tot_len;
     int max;
 
     if (ref->nfiles <= 0) {
@@ -36,6 +36,7 @@ int I_list_group(const char *group, const struct Ref *ref, FILE *fd)
     }
     max = 0;
     for (i = 0; i < ref->nfiles; i++) {
+        int len;
         I__list_group_name_fit(buf, ref->file[i].name, ref->file[i].mapset);
         len = strlen(buf) + 4;
         if (len > max)
