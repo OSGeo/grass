@@ -136,13 +136,12 @@ def query_raster(coord, raster_list):
     for raster in raster_list:
         raster_output = gs.raster.raster_what(map=raster, coord=coord)
 
-        output = f"""<tr style='background-color: #7CFC00;'>
+        output = f"""<tr style='background-color: #A9A9A9;'>
         <th colspan='3'>Raster: {raster}</th></tr>"""
         if raster in raster_output[0] and "value" in raster_output[0][raster]:
             value = raster_output[0][raster]["value"]
             output += f"""
             <tr style='background-color: #f0f0f0;'>
-            <td>1</td>
             <td>Value</td>
             <td>{value}</td>
             </tr>
@@ -182,7 +181,7 @@ def query_vector(coord, vector_list, distance):
         if len(vector_output[0]) > 2:
             output_list.append(
                 f"""
-                               <tr style='background-color: #7CFC00;'>
+                               <tr style='background-color: #A9A9A9;'>
                                <th colspan='3'>
                                Vector: {vector}
                                </th>
@@ -191,17 +190,13 @@ def query_vector(coord, vector_list, distance):
             )
 
             items = list(vector_output[0].items())
+            attributes_output = ""
+            regular_output = ""
 
-            for i, (key, value) in enumerate(items[1:], 1):
-                output = ""
+            for key, value in items:
 
                 if isinstance(value, dict):
-                    nested_table = """
-                    <table border='1'
-                    style='border-collapse:collapse;
-                    width: 100%;
-                    font-size: 12px;'>
-                    """
+                    nested_table = ""
                     for sub_key, sub_value in value.items():
                         nested_table += f"""
                         <tr style='background-color: #f0f0f0;'>
@@ -209,24 +204,21 @@ def query_vector(coord, vector_list, distance):
                         <td>{sub_value}</td>
                         </tr>
                         """
-                    nested_table += "</table>"
-                    output += f"""
-                    <tr style='background-color: #f0f0f0;'>
-                    <td>{i}</td>
-                    <td>{key}</td>
-                    <td>{nested_table}</td>
-                    </tr>
-                    """
+                    attributes_output += nested_table
                 else:
-                    output += f"""
+                    regular_output += f"""
                     <tr style='background-color: #f0f0f0;'>
-                    <td>{i}</td>
                     <td>{key}</td>
                     <td>{value}</td>
                     </tr>
                     """
 
-                output_list.append(output)
+            if attributes_output:
+                output_list.append(attributes_output)
+
+            # Adding regular items
+            if regular_output:
+                output_list.append(regular_output)
 
     if len(output_list) == 1:
         return ""
