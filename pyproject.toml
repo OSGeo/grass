@@ -317,7 +317,6 @@ ignore = [
     "TRY201",  # verbose-raise
     "TRY300",  # try-consider-else
     "TRY301",  # raise-within-try
-    "TRY302",  # useless-try-except
     "UP015",   # redundant-open-modes
     "UP018",   # native-literals
     "UP022",   # replace-stdout-stderr
