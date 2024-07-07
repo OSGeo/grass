@@ -361,7 +361,7 @@ class InteractiveMap:
         from ipyleaflet import Rectangle, WidgetControl
 
         region_mode_button = widgets.ToggleButton(
-            icon="square",
+            icon="square-o",
             value=False,
             tooltip="Click to add computational region",
             button_style="info",
@@ -369,7 +369,7 @@ class InteractiveMap:
         )
 
         save_button = widgets.Button(
-            description="Update Region",
+            description="Update region",
             button_style="success",
             tooltip="Click to save region",
             disabled=True,
