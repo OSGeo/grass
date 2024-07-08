@@ -348,7 +348,7 @@ def r_export(rast, output="", fmt="png", **kargs):
     from grass.pygrass.modules import Module
 
     if rast.exist():
-        output = output if output else "%s_%s.%s" % (rast.name, rast.mapset, fmt)
+        output = output or "%s_%s.%s" % (rast.name, rast.mapset, fmt)
         Module(
             "r.out.%s" % fmt,
             input=rast.fullname(),

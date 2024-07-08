@@ -586,7 +586,7 @@ def can_switch_mapset_interactive(guiparent, grassdb, location, mapset):
 
     if is_mapset_locked(mapset_path):
         info = get_mapset_lock_info(mapset_path)
-        user = info["owner"] if info["owner"] else _("unknown")
+        user = info["owner"] or _("unknown")
         lockpath = info["lockpath"]
         timestamp = info["timestamp"]
 

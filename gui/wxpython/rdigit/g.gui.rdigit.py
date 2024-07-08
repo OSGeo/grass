@@ -116,7 +116,7 @@ def main():
             self._mapObj = self.GetMap()
 
             # load raster map
-            self._addLayer(name=new_map if new_map else edit_map)
+            self._addLayer(name=new_map or edit_map)
 
             # switch toolbar
             self.AddToolbar("rdigit", fixed=True)

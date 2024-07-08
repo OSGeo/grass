@@ -218,7 +218,7 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    cfile = args.text if args.text else urlopen(args.url, proxies=None)
+    cfile = args.text or urlopen(args.url, proxies=None)
 
     options = OptTable(parse_options(cfile.readlines(), startswith=args.startswith))
     outform = args.format
