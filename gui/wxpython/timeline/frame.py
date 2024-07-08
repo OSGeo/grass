@@ -43,7 +43,7 @@ except ImportError as e:
             "(python-matplotlib and on some systems also python-matplotlib-wx) "
             "package(s) to be installed. {}"
         ).format(e)
-    )
+    ) from e
 
 import grass.script as gs
 

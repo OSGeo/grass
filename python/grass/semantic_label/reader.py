@@ -40,7 +40,7 @@ class SemanticLabelReader:
             except json.decoder.JSONDecodeError as e:
                 raise SemanticLabelReaderError(
                     "Unable to parse '{}': {}".format(json_file, e)
-                )
+                ) from e
 
             # check if configuration is valid
             self._check_config(config)
@@ -116,7 +116,9 @@ class SemanticLabelReader:
                     if shortcut and re.match(shortcut, item["shortcut"]) is None:
                         continue
                 except re.error as e:
-                    raise SemanticLabelReaderError("Invalid pattern: {}".format(e))
+                    raise SemanticLabelReaderError(
+                        "Invalid pattern: {}".format(e)
+                    ) from e
 
                 found = True
                 if band and band not in item["bands"]:

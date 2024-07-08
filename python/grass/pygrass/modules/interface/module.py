@@ -555,7 +555,7 @@ class Module:
         except OSError as e:
             print("OSError error({0}): {1}".format(e.errno, e.strerror))
             str_err = "Error running: `%s --interface-description`."
-            raise GrassError(str_err % self.name)
+            raise GrassError(str_err % self.name) from e
         # get the xml of the module
         self.xml = get_cmd_xml.communicate()[0]
         # transform and parse the xml into an Element class:
