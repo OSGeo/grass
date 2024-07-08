@@ -145,7 +145,6 @@ ignore = [
     "F403",    # undefined-local-with-import-star
     "F405",    # undefined-local-with-import-star-usage
     "F601",    # multi-value-repeated-key-literal
-    "F632",    # is-literal
     "F811",    # redefined-while-unused
     "F821",    # undefined-name
     "F822",    # undefined-export
