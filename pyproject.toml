@@ -155,7 +155,6 @@ ignore = [
     "FBT003",  # boolean-positional-value-in-call
     "FURB101", # read-whole-file
     "FURB103", # write-whole-file.
-    "FURB105", # print-empty-string
     "FURB116", # f-string-number-format
     "FURB116", # f-string-number-format
     "FURB118", # reimplemented-operator
