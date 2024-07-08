@@ -1728,8 +1728,7 @@ class TemporalAlgebraParser:
                         is True
                     ):
                         if count == 0:
-                            condition_value_list.append(compop[0])
-                            condition_value_list.append("(")
+                            condition_value_list.extend((compop[0], "("))
                         for boolean in relationmap.condition_value:
                             if isinstance(boolean, bool):
                                 if count > 0:

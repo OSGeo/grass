@@ -368,8 +368,7 @@ class PsMapFrame(wx.Frame):
             cmd.append("-e")
         if self.instruction[self.pageId]["Orientation"] == "Landscape":
             cmd.append("-r")
-        cmd.append("input=%s" % instrFile)
-        cmd.append("output=%s" % filename)
+        cmd.extend(("input=%s" % instrFile, "output=%s" % filename))
         if pdf:
             self.SetStatusText(_("Generating PDF..."), 0)
         elif not temp:

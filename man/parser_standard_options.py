@@ -138,22 +138,22 @@ class OptTable:
         """Return a HTML table with the options"""
         html = ["<table{0}>".format(" " + toptions if toptions else "")]
         # write headers
-        html.append(indent + "<thead>")
-        html.append(indent + "<tr>")
-        html.append(indent * 2 + "<th>{0}</th>".format("option"))
+        html.extend(
+            (
+                indent + "<thead>",
+                indent + "<tr>",
+                indent * 2 + "<th>{0}</th>".format("option"),
+            )
+        )
         for col in self.columns:
             html.append(indent * 2 + "<th>{0}</th>".format(col))
-        html.append(indent + "</tr>")
-        html.append(indent + "</thead>")
-        html.append(indent + "<tbody>")
+        html.extend((indent + "</tr>", indent + "</thead>", indent + "<tbody>"))
         for optname, options in self.options:
-            html.append(indent + "<tr>")
-            html.append(indent * 2 + "<td>{0}</td>".format(optname))
+            html.extend((indent + "<tr>", indent * 2 + "<td>{0}</td>".format(optname)))
             for col in self.columns:
                 html.append(indent * 2 + "<td>{0}</td>".format(options.get(col, "")))
             html.append(indent + "</tr>")
-        html.append(indent + "</tbody>")
-        html.append("</table>")
+        html.extend((indent + "</tbody>", "</table>"))
         return endline.join(html)
 
     def _repr_html_(self):

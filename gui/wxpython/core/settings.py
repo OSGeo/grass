@@ -1221,14 +1221,15 @@ def GetDisplayVectSettings():
     else:
         settings.append("fcolor=none")
 
-    settings.append(
-        "width=%s" % UserSettings.Get(group="vectorLayer", key="line", subkey="width")
-    )
-    settings.append(
-        "icon=%s" % UserSettings.Get(group="vectorLayer", key="point", subkey="symbol")
-    )
-    settings.append(
-        "size=%s" % UserSettings.Get(group="vectorLayer", key="point", subkey="size")
+    settings.extend(
+        (
+            "width=%s"
+            % UserSettings.Get(group="vectorLayer", key="line", subkey="width"),
+            "icon=%s"
+            % UserSettings.Get(group="vectorLayer", key="point", subkey="symbol"),
+            "size=%s"
+            % UserSettings.Get(group="vectorLayer", key="point", subkey="size"),
+        )
     )
     types = []
     for ftype in ["point", "line", "boundary", "centroid", "area", "face"]:
