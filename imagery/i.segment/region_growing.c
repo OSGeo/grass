@@ -192,7 +192,8 @@ int region_growing(struct globals *globals)
     int pathflag; /* =1 if we didn't find mutually best neighbors, continue with
                      Rk */
     int candidates_only;
-    struct ngbr_stats Ri, Rk, Rk_bestn, /* Rk's best neighbor */
+    struct ngbr_stats Ri = {0}, Rk = {0},
+                      Rk_bestn = {0}, /* Rk's best neighbor */
         *next;
     int Ri_nn, Rk_nn; /* number of neighbors for Ri/Rk */
     struct NB_TREE *Ri_ngbrs, *Rk_ngbrs;
