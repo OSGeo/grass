@@ -1110,7 +1110,7 @@ def _read_vector_history(name, mapset):
         kvp["creation_time"] = decode(libvector.Vect_get_map_date(byref(Map)))
         kvp["creator"] = decode(libvector.Vect_get_person(byref(Map)))
     else:
-        None
+        kvp = None
     libvector.Vect_close(byref(Map))
 
     return kvp
