@@ -2600,8 +2600,7 @@ def resolve_known_host_service(url, name, branch):
         url = "{prefix}{base}{suffix}".format(
             prefix=actual_start, base=url.rstrip("/"), suffix=suffix
         )
-        gs.verbose
-        (_("Will use the following URL for download: {0}").format(url))
+        gs.verbose(_("Will use the following URL for download: {0}").format(url))
         return "remote_zip", url
     else:
         return None, None

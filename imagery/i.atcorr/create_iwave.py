@@ -35,18 +35,15 @@ from scipy import interpolate
 def usage():
     """How to use this..."""
     print("create_iwave.py <csv file>")
-    print
     print("Generates filter function template for iwave.cpp from csv file. Note:")
     print("- csv file must have wl response for each band in each column")
     print("- first line must be a header with wl followed by band names")
     print("- all following lines will be the data.")
     print("If spectral response is null, leave field empty in csv file. Example:")
-    print
     print("WL(nm),band 1,band 2,band 3,band 4")
     print("455,0.93,,,")
     print("485,0.94,0.00,,")
     print("545,0.00,0.87,0.00,")
-    print
     print("This script will interpolate the filter functions to 2.5 nm steps")
     print("and output a cpp template file in the IWave format to be added to iwave.cpp")
 
@@ -207,7 +204,6 @@ def write_cpp(bands, values, sensor, folder):
 
     # keep in sync with IWave::parse()
     rthresh = 0.01
-    print
     print(" > Response peaks from interpolation to 2.5 nm steps:")
 
     # getting necessary data
@@ -334,7 +330,6 @@ def main():
     # getting sensor name from full csv file name
     sensor = os.path.splitext(os.path.basename(inputfile))[0]
 
-    print
     print(" > Getting sensor name from csv file: %s" % (sensor))
 
     # getting data from file
@@ -344,7 +339,6 @@ def main():
     # consider only wavelengths with a reasonably large response
     # around the peak response, keep in sync with IWave::parse()
     rthresh = 0.01
-    print
     print(" > Response peaks from input file:")
     for b in range(1, len(bands) + 1):
         lowl = 0
@@ -372,7 +366,6 @@ def main():
     # writing file in same folder of input file
     write_cpp(bands, values, sensor, os.path.dirname(inputfile))
 
-    print
     print(
         " > Filter functions exported to %s"
         % ("sensors_csv/" + sensor + "_cpp_template.txt")
@@ -385,7 +378,6 @@ def main():
         " > Don't forget to add the necessary data to the files"
         " iwave.h, geomcond.h, geomcond.cpp, and to i.atcorr.html"
     )
-    print
 
 
 if __name__ == "__main__":

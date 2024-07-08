@@ -83,7 +83,6 @@ def check_granularity_string(granularity, temporal_type):
         False
 
     """
-    temporal_type
 
     if granularity is None:
         return False
