@@ -206,11 +206,14 @@ def get_computational_region_bb():
     """
     Gets the current computational region.
     """
-    region = gs.parse_command("g.region", flags="bg")
-    return [(region["ll_s"], region["ll_w"]), (region["ll_n"], region["ll_e"])]
+    region = gs.parse_command("g.region", flags="gbp")
+    latlon = [(region["ll_s"], region["ll_w"]), (region["ll_n"], region["ll_e"])]
+    reprojected = [region["n"], region["s"], region["e"], region["w"]]
+    res = [region["nsres"], region["ewres"]]
+    return latlon, reprojected, res
 
 
-def update_region(region_cordinates):
+def update_region(region_cordinates, res):
     """
     Updates the GRASS GIS region using the given coordinates.
     """
@@ -220,6 +223,8 @@ def update_region(region_cordinates):
         s=region_cordinates["south"],
         e=region_cordinates["east"],
         w=region_cordinates["west"],
+        nsres=res[0],
+        ewers=res[1],
     )
 
 

@@ -362,8 +362,9 @@ class InteractiveMap:
 
         region_mode_button = widgets.ToggleButton(
             icon="square-o",
+            description="",
             value=False,
-            tooltip="Click to add computational region",
+            tooltip="Click to show computational region",
             button_style="info",
             layout=widgets.Layout(width="33px", margin="0px 0px 0px 0px"),
         )
@@ -392,6 +393,7 @@ class InteractiveMap:
             "east": None,
             "west": None,
         }
+        res = {}
         rectangle = None
         save_button_control = None
 
@@ -418,19 +420,26 @@ class InteractiveMap:
             reprojected_region = reproject_region(
                 region_coordinates, from_proj, to_proj
             )
-            update_region(reprojected_region)
+            update_region(reprojected_region, res)
 
         def toggle_region_mode(change):
-            nonlocal rectangle, save_button_control, region_coordinates
+            nonlocal rectangle, save_button_control
+            nonlocal region_coordinates, reprojected_region, res
 
             if change["new"]:
                 if rectangle is None:
-                    latlon_bounds = get_computational_region_bb()
+                    latlon_bounds, rregion, res = get_computational_region_bb()
                     region_coordinates = {
                         "north": latlon_bounds[1][0],
                         "south": latlon_bounds[0][0],
                         "east": latlon_bounds[1][1],
                         "west": latlon_bounds[0][1],
+                    }
+                    reprojected_region = {
+                        "north": rregion[0],
+                        "south": rregion[1],
+                        "east": rregion[2],
+                        "west": rregion[3],
                     }
                     rectangle = Rectangle(
                         bounds=latlon_bounds,
