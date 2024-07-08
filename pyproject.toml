@@ -164,7 +164,6 @@ ignore = [
     "FURB118", # reimplemented-operator
     "FURB129", # readlines-in-for
     "FURB131", # delete-full-slice
-    "FURB136", # if-expr-min-max
     "FURB140", # reimplemented-starmap
     "FURB142", # for-loop-set-mutations
     "FURB148", # unnecessary-enumerate
