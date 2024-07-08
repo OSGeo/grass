@@ -177,8 +177,6 @@ ignore = [
     "FURB154", # repeated-global
     "FURB171", # single-item-membership-test
     "FURB192", # sorted-min-max
-    "G002",    # logging-percent-format
-    "G003",    # logging-string-concat
     "I001",    # unsorted-imports
     "ISC003",  # explicit-string-concatenation
     "PERF102", # incorrect-dict-iterator
