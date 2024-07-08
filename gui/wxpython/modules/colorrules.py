@@ -1901,12 +1901,12 @@ class VectorColorTable(ColorTable):
         ]
         for widget in widgets:
             if bind is True:
-                getattr(widget["widget"], "Bind")(
+                widget["widget"].Bind(
                     widget["event"],
                     widget["handler"],
                 )
             else:
-                getattr(widget["widget"], "Unbind")(widget["event"])
+                widget["widget"].Unbind(widget["event"])
 
 
 class ThematicVectorTable(VectorColorTable):
