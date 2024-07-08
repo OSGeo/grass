@@ -1268,7 +1268,7 @@ class TplotFrame(wx.Frame):
             except:
                 self.coorval.SetValue(",".join(coors))
         if self.datasetsV:
-            vdatas = ",".join(map(lambda x: x[0] + "@" + x[1], self.datasetsV))
+            vdatas = ",".join((x[0] + "@" + x[1] for x in self.datasetsV))
             self.datasetSelectV.SetValue(vdatas)
             if attr:
                 self.attribute.SetValue(attr)
@@ -1276,7 +1276,7 @@ class TplotFrame(wx.Frame):
                 self.cats.SetValue(cats)
         if self.datasetsR:
             self.datasetSelectR.SetValue(
-                ",".join(map(lambda x: x[0] + "@" + x[1], self.datasetsR))
+                ",".join((x[0] + "@" + x[1] for x in self.datasetsR))
             )
         if title:
             self.title.SetValue(title)

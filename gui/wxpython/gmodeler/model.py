@@ -493,7 +493,7 @@ class Model:
             cmd = action.GetLog(string=False)
 
             task = GUI(show=None).ParseCommand(cmd=cmd)
-            errList += map(lambda x: cmd[0] + ": " + x, task.get_cmd_error())
+            errList += (cmd[0] + ": " + x for x in task.get_cmd_error())
 
             # check also variables
             for opt in cmd[1:]:
@@ -695,7 +695,7 @@ class Model:
                     parent=parent,
                     message=_("Variables below not defined:")
                     + "\n\n"
-                    + "\n".join(map(lambda x: "%s: %s (%s)" % (x[0], x[1], x[2]), err)),
+                    + "\n".join(("%s: %s (%s)" % (x[0], x[1], x[2]) for x in err)),
                 )
                 return
 
@@ -735,9 +735,7 @@ class Model:
 
                 # split condition
                 # TODO: this part needs some better solution
-                condVar, condText = map(
-                    lambda x: x.strip(), re.split(r"\s* in \s*", cond)
-                )
+                condVar, condText = (x.strip() for x in re.split(r"\s* in \s*", cond))
                 pattern = re.compile("%" + condVar)
                 # for vars()[condVar] in eval(condText): ?
                 vlist = []
@@ -2668,9 +2666,7 @@ class WriteScriptFile(ABC):
                         value = '"' + value + '"'
                     cond = pattern.sub(value, cond)
             if isinstance(item, ModelLoop):
-                condVar, condText = map(
-                    lambda x: x.strip(), re.split(r"\s* in \s*", cond)
-                )
+                condVar, condText = (x.strip() for x in re.split(r"\s* in \s*", cond))
                 cond = "%sfor %s in " % (" " * self.indent, condVar)
                 if condText[0] == "`" and condText[-1] == "`":
                     task = GUI(show=None).ParseCommand(cmd=utils.split(condText[1:-1]))
@@ -3499,21 +3495,21 @@ def cleanup():
                 r"""    %s("g.remove", flags="f", type="raster",
                 name=%s)
 """
-                % (run_command, ",".join(map(lambda x: '"' + x + '"', rast)))
+                % (run_command, ",".join(('"' + x + '"' for x in rast)))
             )
         if vect:
             self.fd.write(
                 r"""    %s("g.remove", flags="f", type="vector",
                 name=%s)
 """
-                % (run_command, ",".join(map(lambda x: '"' + x + '"', vect)))
+                % (run_command, ",".join(('"' + x + '"' for x in vect)))
             )
         if rast3d:
             self.fd.write(
                 r"""    %s("g.remove", flags="f", type="raster_3d",
                 name=%s)
 """
-                % (run_command, ",".join(map(lambda x: '"' + x + '"', rast3d)))
+                % (run_command, ",".join(('"' + x + '"' for x in rast3d)))
             )
         if not rast and not vect and not rast3d:
             self.fd.write("    pass\n")

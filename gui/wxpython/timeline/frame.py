@@ -572,9 +572,7 @@ class TimelineFrame(wx.Frame):
             GError(parent=self, message=str(error), showTraceback=False)
             return
         self.datasets = datasets
-        self.datasetSelect.SetValue(
-            ",".join(map(lambda x: x[0] + "@" + x[1], datasets))
-        )
+        self.datasetSelect.SetValue(",".join((x[0] + "@" + x[1] for x in datasets)))
         self._redraw()
 
     def Show3D(self, show):
