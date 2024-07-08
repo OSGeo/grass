@@ -694,7 +694,7 @@ class VNETAnalysisParameters:
                 except (KeyError, ValueError):
                     table = None
 
-            if not table or not params[col] in list(columnchoices.keys()):
+            if not table or params[col] not in list(columnchoices.keys()):
                 invParams.append(col)
                 continue
 
