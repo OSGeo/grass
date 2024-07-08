@@ -109,7 +109,6 @@ ignore = [
     "C414",    # unnecessary-double-cast-or-process
     "C416",    # unnecessary-comprehension
     "C417",    # unnecessary-map
-    "C419",    # unnecessary-comprehension-in-call
     "COM812",  # missing-trailing-comma
     "COM818",  # trailing-comma-on-bare-tuple
     "D1",
