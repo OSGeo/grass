@@ -194,24 +194,25 @@ def query_vector(coord, vector_list, distance):
             regular_output = ""
 
             for key, value in items:
-
-                if isinstance(value, dict):
-                    nested_table = ""
-                    for sub_key, sub_value in value.items():
-                        nested_table += f"""
+                if key in {"Category", "Layer", "Attributes"}:
+                    if key == "Attributes" and isinstance(value, dict):
+                        nested_table = ""
+                        for sub_key, sub_value in value.items():
+                            if sub_value:
+                                nested_table += f"""
+                                <tr style='background-color: #f0f0f0;'>
+                                <td>{sub_key}</td>
+                                <td>{sub_value}</td>
+                                </tr>
+                                """
+                        attributes_output += nested_table
+                    else:
+                        regular_output += f"""
                         <tr style='background-color: #f0f0f0;'>
-                        <td>{sub_key}</td>
-                        <td>{sub_value}</td>
+                        <td>{key}</td>
+                        <td>{value}</td>
                         </tr>
                         """
-                    attributes_output += nested_table
-                else:
-                    regular_output += f"""
-                    <tr style='background-color: #f0f0f0;'>
-                    <td>{key}</td>
-                    <td>{value}</td>
-                    </tr>
-                    """
 
             if attributes_output:
                 output_list.append(attributes_output)
