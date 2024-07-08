@@ -204,7 +204,6 @@ ignore = [
     "PLR1714", # repeated-equality-comparison
     "PLR1733", # unnecessary-dict-index-lookup
     "PLR2004", # magic-value-comparison
-    "PLR2044", # empty-comment
     "PLR5501", # collapsible-else-if
     "PLR6104", # non-augmented-assignment
     "PLR6201", # literal-membership
