@@ -65,8 +65,7 @@ def get_last_commit(src_dir):
                 f"--format=%H,{COMMIT_DATE_FORMAT}",
                 rel_path,
             ],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            capture_output=True,
         )  # --format=%H,COMMIT_DATE_FORMAT commit hash,author date
         if process_result.returncode == 0:
             try:
