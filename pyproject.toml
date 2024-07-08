@@ -299,7 +299,6 @@ ignore = [
     "SIM114",  # if-with-same-arms
     "SIM115",  # open-file-with-context-handler
     "SIM116",  # if-else-block-instead-of-dict-lookup
-    "SIM117",  # multiple-with-statements
     "SIM118",  # in-dict-keys
     "SIM201",  # negate-equal-op
     "SIM223",  # expr-and-false
@@ -379,6 +378,8 @@ ignore = [
 "gui/wxpython/wxplot/profile.py" = ["NPY001"]
 "lib/init/grass.py" = ["INT003"]
 "python/grass/__init__.py" = ["PYI056"]
+"python/grass/exp*/tests/grass_script_mapset_session_test.py" = ["SIM117"]
+"python/grass/exp*/tests/grass_script_tmp_mapset_session_test.py" = ["SIM117"]
 "python/grass/gunittest/loader.py" = ["PYI024"]
 "python/grass/gunittest/multireport.py" = ["PYI024"]
 "python/grass/gunittest/testsu*/d*/s*/s*/subsub*/t*/test_segfaut.py" = ["B018"]
