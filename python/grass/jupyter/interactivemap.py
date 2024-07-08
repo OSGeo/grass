@@ -346,6 +346,95 @@ class InteractiveMap:
         else:
             self.layer_control_object = self._ipyleaflet.LayersControl(**kwargs)
 
+    def setup_drawing_interface(self):
+        """
+        Allow Users to draw Geometry and Save them.
+        """
+        import ipywidgets as widgets
+        from IPython.display import display
+
+        draw_control = self._ipyleaflet.DrawControl()
+        drawn_geometries = []
+        out = widgets.Output()
+        save_button_control = None
+
+        def handle_draw(target, action, geo_json):
+            with out:
+                if action == "created":
+                    drawn_geometries.append(geo_json)
+                    print(f"Geometry created: {geo_json}")
+                elif action == "deleted":
+                    drawn_geometries[:] = [
+                        g
+                        for g in drawn_geometries
+                        if g["properties"]["id"] != geo_json["properties"]["id"]
+                    ]
+                    print(f"Geometry deleted: {geo_json}")
+
+        draw_control.on_draw(handle_draw)
+
+        draw_button = widgets.ToggleButton(
+            icon="pencil",
+            value=False,
+            tooltip="Click to draw geometries",
+            layout=widgets.Layout(width="33px", margin="0px 0px 0px 0px"),
+        )
+
+        def toggle_geometry(change):
+            if change["new"]:
+                self.map.add_control(draw_control)
+                show_interface()
+            else:
+                self.map.remove_control(draw_control)
+                hide_interface()
+
+        draw_button.observe(toggle_geometry, names="value")
+
+        def show_interface():
+            nonlocal save_button_control
+
+            name_input = widgets.Text(description="Name:")
+            save_button = widgets.Button(
+                description="Save Geometries", button_style="success"
+            )
+
+            def save_geometries(b):
+                name = name_input.value
+                if name and drawn_geometries:
+                    for geometry in drawn_geometries:
+                        geometry["properties"]["name"] = name
+                    geo_json = {
+                        "type": "FeatureCollection",
+                        "features": drawn_geometries,
+                    }
+                    geo_json_layer = self._ipyleaflet.GeoJSON(data=geo_json, name=name)
+                    self.map.add_layer(geo_json_layer)
+                    print(
+                        f"Saved {len(drawn_geometries)} geometries with name '{name}'"
+                    )
+
+            save_button.on_click(save_geometries)
+
+            save_button_control = self._ipyleaflet.WidgetControl(
+                widget=widgets.VBox([name_input, save_button]), position="topright"
+            )
+            self.map.add_control(save_button_control)
+
+            display(out)
+
+        def hide_interface():
+            nonlocal save_button_control
+
+            out.clear_output()
+            if save_button_control:
+                self.map.remove_control(save_button_control)
+                save_button_control = None
+
+        toggle_control = self._ipyleaflet.WidgetControl(
+            widget=draw_button, position="topright"
+        )
+        self.map.add_control(toggle_control)
+
     def show(self):
         """This function returns a folium figure or ipyleaflet map object
         with a GRASS raster and/or vector overlaid on a basemap.
@@ -367,6 +456,8 @@ class InteractiveMap:
             return fig
 
         # ipyleaflet
+        if self._ipyleaflet:
+            self.setup_drawing_interface()
         self.map.add(self.layer_control_object)
         return self.map
 
