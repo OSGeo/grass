@@ -3495,7 +3495,7 @@ def cleanup():
                 r"""    %s("g.remove", flags="f", type="raster",
                 name=%s)
 """
-                % (run_command, ",".join(f"\"{x}\"" for x in rast3d))
+                % (run_command, ",".join(f'"{x}"' for x in rast3d))
             )
         if vect:
             self.fd.write(
@@ -3509,7 +3509,7 @@ def cleanup():
                 r"""    %s("g.remove", flags="f", type="raster_3d",
                 name=%s)
 """
-                % (run_command, ",".join(f"\"{x}\"" for x in rast3d))
+                % (run_command, ",".join(f'"{x}"' for x in rast3d))
             )
         if not rast and not vect and not rast3d:
             self.fd.write("    pass\n")
