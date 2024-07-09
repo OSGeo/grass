@@ -94,7 +94,6 @@ ignore = [
     "B008",    # function-call-in-default-argument
     "B009",    # get-attr-with-constant
     "B015",    # useless-comparison
-    "B020",    # loop-variable-overrides-iterator
     "B023",    # function-uses-loop-variable
     "B026",    # star-arg-unpacking-after-keyword-arg
     "B028",    # no-explicit-stacklevel
