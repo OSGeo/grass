@@ -437,7 +437,7 @@ def table_exist(cursor, table_name):
         except OperationalError:
             return False
     one = cursor.fetchone() if cursor else None
-    return True if one and one[0] else False
+    return bool(one and one[0])
 
 
 def txt2numpy(

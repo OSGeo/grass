@@ -304,8 +304,6 @@ ignore = [
     "SIM117",  # multiple-with-statements
     "SIM118",  # in-dict-keys
     "SIM201",  # negate-equal-op
-    "SIM210",  # if-expr-with-true-false
-    "SIM211",  # if-expr-with-false-true
     "SIM223",  # expr-and-false
     "SIM300",  # yoda-conditions
     "SIM401",  # if-else-block-instead-of-dict-get

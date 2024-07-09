@@ -183,7 +183,7 @@ def copy_groups(groups, gisrc_src, gisrc_dst, region=None):
 
     src = read_gisrc(gisrc_src)
     dst = read_gisrc(gisrc_dst)
-    rm = True if src[2] != dst[2] else False
+    rm = src[2] != dst[2]
     all_rasts = [r[0] for r in findmaps("raster", location=dst[1], gisdbase=dst[2])]
     for grp in groups:
         # change gisdbase to src
@@ -376,7 +376,7 @@ def cmd_exe(args):
     src, dst = get_mapset(gisrc_src, gisrc_dst)
     env = os.environ.copy()
     env["GISRC"] = gisrc_dst
-    shell = True if sys.platform == "win32" else False
+    shell = sys.platform == "win32"
     if mapnames:
         inputs = dict(cmd["inputs"])
         # reset the inputs to

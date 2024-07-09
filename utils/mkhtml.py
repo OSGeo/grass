@@ -929,7 +929,7 @@ else:
 git_commit = get_last_git_commit(
     src_dir=curdir,
     addon_path=addon_path if addon_path else None,
-    is_addon=True if addon_path else False,
+    is_addon=bool(addon_path),
 )
 if git_commit["commit"] == "unknown":
     date_tag = "Accessed: {date}".format(date=git_commit["date"])
