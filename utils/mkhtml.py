@@ -418,9 +418,7 @@ def get_last_git_commit(src_dir, addon_path, is_addon):
             return get_git_commit_from_file(src_dir=src_dir)
 
 
-html_page_footer_pages_path = (
-    os.getenv("HTML_PAGE_FOOTER_PAGES_PATH") or ""
-)
+html_page_footer_pages_path = os.getenv("HTML_PAGE_FOOTER_PAGES_PATH") or ""
 
 pgm = sys.argv[1]
 
