@@ -11,11 +11,14 @@
 #include <math.h>
 #include <grass/kdtree.h>
 #include <float.h>
+#include <grass/parson.h>
 
 struct Point {
     double x, y;
     int id;
 };
+
+enum OutputFormat { PLAIN, JSON };
 
 void calculate_g_function(struct kdtree *kdtree, struct Point *points, int n,
                           int i, const char *output_file);
@@ -88,6 +91,9 @@ int main(int argc, char *argv[])
     random_points_opt->description =
         _("Number of random points for F-function calculation (default: 1000)");
 
+    struct Option *format_opt = G_define_standard_option(G_OPT_F_FORMAT);
+    format_opt->required = NO;
+
     struct Option *num_distances_opt = G_define_option();
     num_distances_opt->key = "num_distances";
     num_distances_opt->type = TYPE_INTEGER;
@@ -133,6 +139,7 @@ int main(int argc, char *argv[])
     const char *input_vector = input_opt->answer;
     const char *output_file = output_opt->answer;
     const char *method = method_opt->answer;
+
     int num_random_points = atoi(random_points_opt->answer);
     int num_distances = atoi(num_distances_opt->answer);
     int num_simulations = atoi(simulations_opt->answer);
@@ -140,6 +147,22 @@ int main(int argc, char *argv[])
     // Open the vector map
     if (Vect_open_old(&Map, input_vector, "") < 0)
         G_fatal_error(_("Unable to open vector map <%s>"), input_vector);
+
+    enum OutputFormat format;
+    JSON_Value *root_value;
+    JSON_Object *root_object;
+
+    if (strcmp(format_opt->answer, "json") == 0) {
+        format = JSON;
+        root_value = json_value_init_object();
+        if (root_value == NULL) {
+            G_fatal_error(_("Unable to initialize JSON object"));
+        }
+        root_object = json_object(root_value);
+    }
+    else {
+        format = PLAIN;
+    }
 
     // Allocate memory for points
     struct line_pnts *points = Vect_new_line_struct();
@@ -201,6 +224,17 @@ int main(int argc, char *argv[])
     free(pts);
     kdtree_destroy(kdtree); // Ensure k-d tree is destroyed
     Vect_close(&Map);
+
+    if (format == JSON) {
+        char *serialized_string = NULL;
+        serialized_string = json_serialize_to_string_pretty(root_value);
+        if (serialized_string == NULL) {
+            G_fatal_error(_("Failed to initialize pretty JSON string."));
+        }
+        puts(serialized_string);
+        json_free_serialized_string(serialized_string);
+        json_value_free(root_value);
+    }
 
     return 0;
 }
