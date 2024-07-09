@@ -66,7 +66,7 @@ def test_render_layers(space_time_raster_dataset, fill_gaps):
     # check files exist
     # We need to check values which are only in protected attributes
     # pylint: disable=protected-access
-    for unused_date, filename in img._base_filename_dict.items():
+    for filename in img._base_filename_dict.values():
         assert Path(filename).is_file()
 
 
