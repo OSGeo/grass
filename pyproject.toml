@@ -94,7 +94,6 @@ ignore = [
     "B008",    # function-call-in-default-argument
     "B009",    # get-attr-with-constant
     "B015",    # useless-comparison
-    "B020",    # loop-variable-overrides-iterator
     "B023",    # function-uses-loop-variable
     "B026",    # star-arg-unpacking-after-keyword-arg
     "B028",    # no-explicit-stacklevel
@@ -140,8 +139,6 @@ ignore = [
     "DTZ011",  # call-date-today
     "E401",    # multiple-imports-on-one-line
     "E402",    # module-import-not-at-top-of-file
-    "E713",    # not-in-test
-    "E714",    # not-is-test
     "E721",    # type-comparison
     "E722",    # bare-except
     "E731",    # lambda-assignment
@@ -177,7 +174,6 @@ ignore = [
     "FURB192", # sorted-min-max
     "I001",    # unsorted-imports
     "ISC003",  # explicit-string-concatenation
-    "PERF102", # incorrect-dict-iterator
     "PERF203", # try-except-in-loop
     "PERF401", # manual-list-comprehension
     "PERF402", # manual-list-copy
@@ -298,7 +294,6 @@ ignore = [
     "SIM114",  # if-with-same-arms
     "SIM115",  # open-file-with-context-handler
     "SIM116",  # if-else-block-instead-of-dict-lookup
-    "SIM117",  # multiple-with-statements
     "SIM118",  # in-dict-keys
     "SIM201",  # negate-equal-op
     "SIM223",  # expr-and-false
@@ -378,6 +373,8 @@ ignore = [
 "gui/wxpython/wxplot/profile.py" = ["NPY001"]
 "lib/init/grass.py" = ["INT003"]
 "python/grass/__init__.py" = ["PYI056"]
+"python/grass/exp*/tests/grass_script_mapset_session_test.py" = ["SIM117"]
+"python/grass/exp*/tests/grass_script_tmp_mapset_session_test.py" = ["SIM117"]
 "python/grass/gunittest/loader.py" = ["PYI024"]
 "python/grass/gunittest/multireport.py" = ["PYI024"]
 "python/grass/gunittest/testsu*/d*/s*/s*/subsub*/t*/test_segfaut.py" = ["B018"]
