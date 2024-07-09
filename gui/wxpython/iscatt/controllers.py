@@ -109,7 +109,7 @@ class ScattsManager:
         self.core.CleanUp()
 
     def CleanUpDone(self):
-        for scatt_id, scatt in self.plots.items():
+        for scatt in self.plots.values():
             if scatt["scatt"]:
                 scatt["scatt"].CleanUp()
 

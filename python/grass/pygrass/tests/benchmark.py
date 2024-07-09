@@ -334,7 +334,7 @@ def print_test(testdict):
         print(execmode)
         for oper, operdict in operation.items():
             print("    ", oper)
-            for key, value in operdict.items():
+            for key in operdict.keys():
                 print("        ", key)
 
 

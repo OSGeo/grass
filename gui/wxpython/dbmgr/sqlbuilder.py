@@ -454,7 +454,7 @@ class SQLBuilder(wx.Frame):
         elif self.btn_arithmeticpanel and self.btn_arithmeticpanel.IsShown():
             btns = self.btn_arithmetic
 
-        for key, value in btns.items():
+        for value in btns.values():
             if event.GetId() == value[1]:
                 mark = value[0]
                 break

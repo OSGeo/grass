@@ -905,7 +905,7 @@ class ProjParamsPage(TitledPage):
         """Go to next page"""
         if event.GetDirection():
             self.p4projparams = ""
-            for id, param in self.pparam.items():
+            for param in self.pparam.values():
                 if param["type"] == "bool":
                     if param["value"] is False:
                         continue
