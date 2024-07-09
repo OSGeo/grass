@@ -757,11 +757,11 @@ class SelectTransformDialog(wx.Dialog):
 
 def testRegionDef():
     import wx.lib.inspection
-    import grass.script as gscript
+    import grass.script as gs
 
     app = wx.App()
 
-    dlg = RegionDef(None, location=gscript.gisenv()["LOCATION_NAME"])
+    dlg = RegionDef(None, location=gs.gisenv()["LOCATION_NAME"])
     dlg.Show()
     wx.lib.inspection.InspectionTool().Show()
     app.MainLoop()

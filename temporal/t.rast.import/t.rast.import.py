@@ -104,7 +104,7 @@
 # % description: Create the project specified by the "project" parameter and exit. Do not import the space time raster datasets.
 # %end
 
-import grass.script as grass
+import grass.script as gs
 
 
 def main():
@@ -147,5 +147,5 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

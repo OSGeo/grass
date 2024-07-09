@@ -20,7 +20,7 @@ import os
 import re
 
 import wx
-import grass.script as grass
+import grass.script as gs
 
 from core import globalvar
 from core.gcmd import GError, RunCommand
@@ -700,14 +700,14 @@ class MapCalcFrame(wx.Frame):
         """
         if event.returncode != 0:
             return
-        name = self.newmaptxt.GetValue().strip(' "') + "@" + grass.gisenv()["MAPSET"]
+        name = self.newmaptxt.GetValue().strip(' "') + "@" + gs.gisenv()["MAPSET"]
         ltype = "raster"
         if self.rast3d:
             ltype = "raster_3d"
         self._giface.mapCreated.emit(
             name=name, ltype=ltype, add=self.addbox.IsChecked()
         )
-        gisenv = grass.gisenv()
+        gisenv = gs.gisenv()
         self._giface.grassdbChanged.emit(
             grassdb=gisenv["GISDBASE"],
             location=gisenv["LOCATION_NAME"],

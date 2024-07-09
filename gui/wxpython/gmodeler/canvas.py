@@ -167,7 +167,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
                 del self.frame.defineRelation
 
         # select object
-        self._onSelectShape(shape, append=True if keys == 1 else False)
+        self._onSelectShape(shape, append=keys == 1)
 
         if hasattr(shape, "GetLog"):
             self.log.SetStatusText(shape.GetLog(), 0)

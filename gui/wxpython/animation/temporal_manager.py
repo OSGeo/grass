@@ -19,7 +19,7 @@ This program is free software under the GNU General Public License
 
 import datetime
 
-import grass.script as grass
+import grass.script as gs
 import grass.temporal as tgis
 from core.gcmd import GException
 from core.settings import UserSettings
@@ -389,7 +389,7 @@ def test():
 
 
 def createAbsoluteInterval():
-    grass.run_command(
+    gs.run_command(
         "g.region",
         s=0,
         n=80,
@@ -403,21 +403,21 @@ def createAbsoluteInterval():
         quiet=True,
     )
 
-    grass.mapcalc(exp="prec_1 = rand(0, 550)", overwrite=True)
-    grass.mapcalc(exp="prec_2 = rand(0, 450)", overwrite=True)
-    grass.mapcalc(exp="prec_3 = rand(0, 320)", overwrite=True)
-    grass.mapcalc(exp="prec_4 = rand(0, 510)", overwrite=True)
-    grass.mapcalc(exp="prec_5 = rand(0, 300)", overwrite=True)
-    grass.mapcalc(exp="prec_6 = rand(0, 650)", overwrite=True)
+    gs.mapcalc(exp="prec_1 = rand(0, 550)", overwrite=True)
+    gs.mapcalc(exp="prec_2 = rand(0, 450)", overwrite=True)
+    gs.mapcalc(exp="prec_3 = rand(0, 320)", overwrite=True)
+    gs.mapcalc(exp="prec_4 = rand(0, 510)", overwrite=True)
+    gs.mapcalc(exp="prec_5 = rand(0, 300)", overwrite=True)
+    gs.mapcalc(exp="prec_6 = rand(0, 650)", overwrite=True)
 
-    grass.mapcalc(exp="temp_1 = rand(0, 550)", overwrite=True)
-    grass.mapcalc(exp="temp_2 = rand(0, 450)", overwrite=True)
-    grass.mapcalc(exp="temp_3 = rand(0, 320)", overwrite=True)
-    grass.mapcalc(exp="temp_4 = rand(0, 510)", overwrite=True)
-    grass.mapcalc(exp="temp_5 = rand(0, 300)", overwrite=True)
-    grass.mapcalc(exp="temp_6 = rand(0, 650)", overwrite=True)
+    gs.mapcalc(exp="temp_1 = rand(0, 550)", overwrite=True)
+    gs.mapcalc(exp="temp_2 = rand(0, 450)", overwrite=True)
+    gs.mapcalc(exp="temp_3 = rand(0, 320)", overwrite=True)
+    gs.mapcalc(exp="temp_4 = rand(0, 510)", overwrite=True)
+    gs.mapcalc(exp="temp_5 = rand(0, 300)", overwrite=True)
+    gs.mapcalc(exp="temp_6 = rand(0, 650)", overwrite=True)
 
-    n1 = grass.read_command("g.tempfile", pid=1, flags="d").strip()
+    n1 = gs.read_command("g.tempfile", pid=1, flags="d").strip()
     fd = open(n1, "w")
     fd.write(
         "prec_1|2001-01-01|2001-02-01\n"
@@ -429,7 +429,7 @@ def createAbsoluteInterval():
     )
     fd.close()
 
-    n2 = grass.read_command("g.tempfile", pid=2, flags="d").strip()
+    n2 = gs.read_command("g.tempfile", pid=2, flags="d").strip()
     fd = open(n2, "w")
     fd.write(
         "temp_1|2000-10-01|2001-01-01\n"
@@ -442,14 +442,14 @@ def createAbsoluteInterval():
     fd.close()
     name1 = "absinterval1"
     name2 = "absinterval2"
-    grass.run_command(
+    gs.run_command(
         "t.unregister",
         type="raster",
         maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6,"
         "temp_1,temp_2,temp_3,temp_4,temp_5,temp_6",
     )
     for name, fname in zip((name1, name2), (n1, n2)):
-        grass.run_command(
+        gs.run_command(
             "t.create",
             overwrite=True,
             type="strds",
@@ -458,15 +458,13 @@ def createAbsoluteInterval():
             title="A test with input files",
             descr="A test with input files",
         )
-        grass.run_command(
-            "t.register", flags="i", input=name, file=fname, overwrite=True
-        )
+        gs.run_command("t.register", flags="i", input=name, file=fname, overwrite=True)
 
     return name1, name2
 
 
 def createRelativeInterval():
-    grass.run_command(
+    gs.run_command(
         "g.region",
         s=0,
         n=80,
@@ -480,21 +478,21 @@ def createRelativeInterval():
         quiet=True,
     )
 
-    grass.mapcalc(exp="prec_1 = rand(0, 550)", overwrite=True)
-    grass.mapcalc(exp="prec_2 = rand(0, 450)", overwrite=True)
-    grass.mapcalc(exp="prec_3 = rand(0, 320)", overwrite=True)
-    grass.mapcalc(exp="prec_4 = rand(0, 510)", overwrite=True)
-    grass.mapcalc(exp="prec_5 = rand(0, 300)", overwrite=True)
-    grass.mapcalc(exp="prec_6 = rand(0, 650)", overwrite=True)
+    gs.mapcalc(exp="prec_1 = rand(0, 550)", overwrite=True)
+    gs.mapcalc(exp="prec_2 = rand(0, 450)", overwrite=True)
+    gs.mapcalc(exp="prec_3 = rand(0, 320)", overwrite=True)
+    gs.mapcalc(exp="prec_4 = rand(0, 510)", overwrite=True)
+    gs.mapcalc(exp="prec_5 = rand(0, 300)", overwrite=True)
+    gs.mapcalc(exp="prec_6 = rand(0, 650)", overwrite=True)
 
-    grass.mapcalc(exp="temp_1 = rand(0, 550)", overwrite=True)
-    grass.mapcalc(exp="temp_2 = rand(0, 450)", overwrite=True)
-    grass.mapcalc(exp="temp_3 = rand(0, 320)", overwrite=True)
-    grass.mapcalc(exp="temp_4 = rand(0, 510)", overwrite=True)
-    grass.mapcalc(exp="temp_5 = rand(0, 300)", overwrite=True)
-    grass.mapcalc(exp="temp_6 = rand(0, 650)", overwrite=True)
+    gs.mapcalc(exp="temp_1 = rand(0, 550)", overwrite=True)
+    gs.mapcalc(exp="temp_2 = rand(0, 450)", overwrite=True)
+    gs.mapcalc(exp="temp_3 = rand(0, 320)", overwrite=True)
+    gs.mapcalc(exp="temp_4 = rand(0, 510)", overwrite=True)
+    gs.mapcalc(exp="temp_5 = rand(0, 300)", overwrite=True)
+    gs.mapcalc(exp="temp_6 = rand(0, 650)", overwrite=True)
 
-    n1 = grass.read_command("g.tempfile", pid=1, flags="d").strip()
+    n1 = gs.read_command("g.tempfile", pid=1, flags="d").strip()
     fd = open(n1, "w")
     fd.write(
         "prec_1|1|4\n"
@@ -506,7 +504,7 @@ def createRelativeInterval():
     )
     fd.close()
 
-    n2 = grass.read_command("g.tempfile", pid=2, flags="d").strip()
+    n2 = gs.read_command("g.tempfile", pid=2, flags="d").strip()
     fd = open(n2, "w")
     fd.write(
         "temp_1|5|6\n"
@@ -519,14 +517,14 @@ def createRelativeInterval():
     fd.close()
     name1 = "relinterval1"
     name2 = "relinterval2"
-    grass.run_command(
+    gs.run_command(
         "t.unregister",
         type="raster",
         maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6,"
         "temp_1,temp_2,temp_3,temp_4,temp_5,temp_6",
     )
     for name, fname in zip((name1, name2), (n1, n2)):
-        grass.run_command(
+        gs.run_command(
             "t.create",
             overwrite=True,
             type="strds",
@@ -535,7 +533,7 @@ def createRelativeInterval():
             title="A test with input files",
             descr="A test with input files",
         )
-        grass.run_command(
+        gs.run_command(
             "t.register",
             flags="i",
             input=name,
@@ -547,7 +545,7 @@ def createRelativeInterval():
 
 
 def createAbsolutePoint():
-    grass.run_command(
+    gs.run_command(
         "g.region",
         s=0,
         n=80,
@@ -561,14 +559,14 @@ def createAbsolutePoint():
         quiet=True,
     )
 
-    grass.mapcalc(exp="prec_1 = rand(0, 550)", overwrite=True)
-    grass.mapcalc(exp="prec_2 = rand(0, 450)", overwrite=True)
-    grass.mapcalc(exp="prec_3 = rand(0, 320)", overwrite=True)
-    grass.mapcalc(exp="prec_4 = rand(0, 510)", overwrite=True)
-    grass.mapcalc(exp="prec_5 = rand(0, 300)", overwrite=True)
-    grass.mapcalc(exp="prec_6 = rand(0, 650)", overwrite=True)
+    gs.mapcalc(exp="prec_1 = rand(0, 550)", overwrite=True)
+    gs.mapcalc(exp="prec_2 = rand(0, 450)", overwrite=True)
+    gs.mapcalc(exp="prec_3 = rand(0, 320)", overwrite=True)
+    gs.mapcalc(exp="prec_4 = rand(0, 510)", overwrite=True)
+    gs.mapcalc(exp="prec_5 = rand(0, 300)", overwrite=True)
+    gs.mapcalc(exp="prec_6 = rand(0, 650)", overwrite=True)
 
-    n1 = grass.read_command("g.tempfile", pid=1, flags="d").strip()
+    n1 = gs.read_command("g.tempfile", pid=1, flags="d").strip()
     fd = open(n1, "w")
     fd.write(
         "prec_1|2001-01-01\n"
@@ -580,7 +578,7 @@ def createAbsolutePoint():
     )
     fd.close()
     name = "abspoint"
-    grass.run_command(
+    gs.run_command(
         "t.create",
         overwrite=True,
         type="strds",
@@ -590,12 +588,12 @@ def createAbsolutePoint():
         descr="A test with input files",
     )
 
-    grass.run_command("t.register", flags="i", input=name, file=n1, overwrite=True)
+    gs.run_command("t.register", flags="i", input=name, file=n1, overwrite=True)
     return name
 
 
 def createRelativePoint():
-    grass.run_command(
+    gs.run_command(
         "g.region",
         s=0,
         n=80,
@@ -609,19 +607,19 @@ def createRelativePoint():
         quiet=True,
     )
 
-    grass.mapcalc(exp="prec_1 = rand(0, 550)", overwrite=True)
-    grass.mapcalc(exp="prec_2 = rand(0, 450)", overwrite=True)
-    grass.mapcalc(exp="prec_3 = rand(0, 320)", overwrite=True)
-    grass.mapcalc(exp="prec_4 = rand(0, 510)", overwrite=True)
-    grass.mapcalc(exp="prec_5 = rand(0, 300)", overwrite=True)
-    grass.mapcalc(exp="prec_6 = rand(0, 650)", overwrite=True)
+    gs.mapcalc(exp="prec_1 = rand(0, 550)", overwrite=True)
+    gs.mapcalc(exp="prec_2 = rand(0, 450)", overwrite=True)
+    gs.mapcalc(exp="prec_3 = rand(0, 320)", overwrite=True)
+    gs.mapcalc(exp="prec_4 = rand(0, 510)", overwrite=True)
+    gs.mapcalc(exp="prec_5 = rand(0, 300)", overwrite=True)
+    gs.mapcalc(exp="prec_6 = rand(0, 650)", overwrite=True)
 
-    n1 = grass.read_command("g.tempfile", pid=1, flags="d").strip()
+    n1 = gs.read_command("g.tempfile", pid=1, flags="d").strip()
     fd = open(n1, "w")
     fd.write("prec_1|1\nprec_2|3\nprec_3|5\nprec_4|7\nprec_5|11\nprec_6|13\n")
     fd.close()
     name = "relpoint"
-    grass.run_command(
+    gs.run_command(
         "t.create",
         overwrite=True,
         type="strds",
@@ -631,7 +629,7 @@ def createRelativePoint():
         descr="A test with input files",
     )
 
-    grass.run_command("t.register", unit="day", input=name, file=n1, overwrite=True)
+    gs.run_command("t.register", unit="day", input=name, file=n1, overwrite=True)
     return name
 
 

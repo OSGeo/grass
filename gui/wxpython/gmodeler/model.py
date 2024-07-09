@@ -2166,9 +2166,9 @@ class ProcessModelFile:
                 prompt = param.get("prompt", None)
                 value = self._filterValue(self._getNodeText(param, "value"))
 
-            intermediate = False if data.find("intermediate") is None else True
+            intermediate = data.find("intermediate") is not None
 
-            display = False if data.find("display") is None else True
+            display = data.find("display") is not None
 
             rels = []
             for rel in data.findall("relation"):

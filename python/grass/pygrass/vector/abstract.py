@@ -300,7 +300,7 @@ class Info:
             if self.mapset == "":
                 mapset = utils.get_mapset_vector(self.name, self.mapset)
                 self.mapset = mapset if mapset else ""
-                return True if mapset else False
+                return bool(mapset)
             return bool(utils.get_mapset_vector(self.name, self.mapset))
         else:
             return False

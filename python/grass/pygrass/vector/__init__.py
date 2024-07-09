@@ -258,7 +258,7 @@ class Vector(Info):
         """
         loc = Location()
         path = join(loc.path(), self.mapset, "vector", self.name, "colr")
-        return True if exists(path) else False
+        return bool(exists(path))
 
 
 # =============================================

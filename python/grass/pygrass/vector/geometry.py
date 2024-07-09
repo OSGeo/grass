@@ -459,7 +459,7 @@ class Point(Geo):
         if self.id and self.c_mapinfo:
             self.read()
         else:
-            self.is2D = True if z is None else False
+            self.is2D = z is None
             z = z if z is not None else 0
             libvect.Vect_append_point(self.c_points, x, y, z)
 

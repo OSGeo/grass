@@ -198,7 +198,7 @@ class SeriesMap(BaseSeriesMap):
             self.render()
 
         tmp_files = []
-        for _, file in self._base_filename_dict.items():
+        for file in self._base_filename_dict.values():
             tmp_files.append(file)
 
         save_gif(

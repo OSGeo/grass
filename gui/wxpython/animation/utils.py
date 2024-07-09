@@ -31,7 +31,7 @@ except ImportError:
     hasPIL = False
 
 import grass.temporal as tgis
-import grass.script as grass
+import grass.script as gs
 from grass.script.utils import encode
 from gui_core.wrap import EmptyBitmap
 
@@ -87,7 +87,7 @@ def validateMapNames(names, etype):
     Input is list of map names.
     Raises GException if map doesn't exist.
     """
-    mapDict = grass.list_grouped(etype)
+    mapDict = gs.list_grouped(etype)
 
     newNames = []
     for name in names:
