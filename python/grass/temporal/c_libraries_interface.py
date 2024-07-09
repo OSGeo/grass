@@ -472,7 +472,9 @@ def _write_timestamp(lock, conn, data):
         check = libgis.G_scan_timestamp(byref(ts), timestring)
 
         if check != 1:
-            logging.error("Unable to convert the timestamp: " + timestring)
+            logging.error(
+                "Unable to convert the timestamp: {timestring}", timestring=timestring
+            )
             return -2
 
         if maptype == RPCDefs.TYPE_RASTER:
@@ -555,7 +557,8 @@ def _read_semantic_label(lock, conn, data):
                 semantic_label = decode(ret)
         else:
             logging.error(
-                "Unable to read semantic label. Unsupported map type %s" % maptype
+                "Unable to read semantic label. Unsupported map type {maptype}",
+                maptype=maptype,
             )
             return -1
     except:
@@ -592,7 +595,8 @@ def _write_semantic_label(lock, conn, data):
             libraster.Rast_write_semantic_label(name, semantic_label)
         else:
             logging.error(
-                "Unable to write semantic label. Unsupported map type %s" % maptype
+                "Unable to write semantic label. Unsupported map type {maptype}",
+                maptype=maptype,
             )
             return -2
     except:
@@ -626,7 +630,8 @@ def _remove_semantic_label(lock, conn, data):
             check = libgis.G_remove_misc("cell_misc", "semantic_label", name)
         else:
             logging.error(
-                "Unable to remove semantic label. Unsupported map type %s" % maptype
+                "Unable to remove semantic label. Unsupported map type {maptype}",
+                maptype=maptype,
             )
             return -2
     except:
