@@ -16,6 +16,7 @@
 import base64
 import json
 from .reprojection_renderer import ReprojectionRenderer
+from .utils import save_vector
 
 
 def get_backend(interactive_map):
@@ -407,11 +408,16 @@ class InteractiveMap:
                         "type": "FeatureCollection",
                         "features": drawn_geometries,
                     }
+                    geojson_filename = f"/tmp/{name}.geojson"
+                    with open(geojson_filename, "w") as f:
+                        json.dump(geo_json, f)
+                    try:
+                        save_vector(geojson_filename, name)
+                        print(f"Imported geometry with name '{name}' into GRASS GIS.")
+                    except Exception as e:
+                        print(f"Failed to import geometries into GRASS GIS: {e}")
                     geo_json_layer = self._ipyleaflet.GeoJSON(data=geo_json, name=name)
                     self.map.add_layer(geo_json_layer)
-                    print(
-                        f"Saved {len(drawn_geometries)} geometries with name '{name}'"
-                    )
 
             save_button.on_click(save_geometries)
 

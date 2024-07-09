@@ -202,6 +202,16 @@ def get_rendering_size(region, width, height, default_width=600, default_height=
     return (default_width, round(default_width * region_height / region_width))
 
 
+def save_vector(geojson_filename, name):
+    """
+    Saves the user drawn vector.
+
+    param geojson_filename: name of the geojson file to be saved
+    param name: name with which vector should be saved
+    """
+    gs.run_command("v.import", input=geojson_filename, output=name)
+
+
 def save_gif(
     input_files,
     output_filename,
