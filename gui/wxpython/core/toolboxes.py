@@ -342,8 +342,8 @@ def _indent(elem, level=0):
             elem.text = i + "  "
         if not elem.tail or not elem.tail.strip():
             elem.tail = i
-        for elem in elem:
-            _indent(elem, level + 1)
+        for _elem in elem:
+            _indent(_elem, level + 1)
         if not elem.tail or not elem.tail.strip():
             elem.tail = i
     else:
