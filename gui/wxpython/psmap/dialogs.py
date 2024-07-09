@@ -4284,7 +4284,7 @@ class LegendDialog(PsmapDialog):
                 else:
                     self.rLegendDict["range"] = False
 
-        if not self.id[0] in self.instruction:
+        if self.id[0] not in self.instruction:
             rasterLegend = RasterLegend(self.id[0], env=self.env)
             self.instruction.AddInstruction(rasterLegend)
         self.instruction[self.id[0]].SetInstruction(self.rLegendDict)
@@ -4404,7 +4404,7 @@ class LegendDialog(PsmapDialog):
                 else:
                     self.vLegendDict["border"] = "none"
 
-        if not self.id[1] in self.instruction:
+        if self.id[1] not in self.instruction:
             vectorLegend = VectorLegend(self.id[1], env=self.env)
             self.instruction.AddInstruction(vectorLegend)
         self.instruction[self.id[1]].SetInstruction(self.vLegendDict)

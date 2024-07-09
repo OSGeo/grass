@@ -995,7 +995,7 @@ class CmdPanel(wx.Panel):
         not_hidden = [
             p
             for p in self.task.params + self.task.flags
-            if not p.get("hidden", False) is True
+            if p.get("hidden", False) is not True
         ]
 
         self.label_id = []  # wrap titles on resize
@@ -1057,7 +1057,7 @@ class CmdPanel(wx.Panel):
         # flags
         #
         visible_flags = [
-            f for f in self.task.flags if not f.get("hidden", False) is True
+            f for f in self.task.flags if f.get("hidden", False) is not True
         ]
         for f in visible_flags:
             # we don't want another help (checkbox appeared in r58783)
@@ -1124,7 +1124,7 @@ class CmdPanel(wx.Panel):
         # parameters
         #
         visible_params = [
-            p for p in self.task.params if not p.get("hidden", False) is True
+            p for p in self.task.params if p.get("hidden", False) is not True
         ]
 
         try:
