@@ -51,7 +51,7 @@ skewness=4.86561
         self.runModule(
             "g.remove", type="vector", flags="f", pattern=f"{self.temp_import}*"
         )
-        for p in Path(".").glob(f"{self.test_map}*"):
+        for p in Path().glob(f"{self.test_map}*"):
             p.unlink()
 
     def test_gpkg_format(self):
