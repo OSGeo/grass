@@ -828,8 +828,6 @@ def writeSwf(filename, images, duration=0.1, repeat=True):
     fp = open(filename, "wb")
     try:
         buildFile(fp, taglist, nframes=nframes, framesize=wh, fps=fps)
-    except Exception:
-        raise
     finally:
         fp.close()
 
