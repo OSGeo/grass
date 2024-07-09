@@ -323,10 +323,7 @@ def modify_datetime(
         if residual_months == 0:
             residual_months = 1
 
-        try:
-            dt1 = dt1.replace(year=year + years_to_add, month=residual_months)
-        except:
-            raise
+        dt1 = dt1.replace(year=year + years_to_add, month=residual_months)
 
         tdelta_months = dt1 - mydate
     elif months < 0:
@@ -350,10 +347,7 @@ def modify_datetime(
         if residual_months <= 0:
             residual_months += 12
 
-        try:
-            dt1 = dt1.replace(year=year - years_to_remove, month=residual_months)
-        except:
-            raise
+        dt1 = dt1.replace(year=year - years_to_remove, month=residual_months)
 
         tdelta_months = dt1 - mydate
 
