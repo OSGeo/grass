@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "global.h"
 #include <grass/parson.h>
 #include <grass/glocale.h>
@@ -59,10 +60,40 @@ JSON_Value *make_category(int ns, int nl, JSON_Value *sub_categories)
     JSON_Object *object = json_object(object_value);
 
     CELL *cats = Gstats[ns].cats;
-    char *cp = construct_cat_label(nl, cats[nl]);
-
     json_object_set_number(object, "category", cats[nl]);
-    json_object_set_string(object, "description", cp);
+
+    DCELL dLow, dHigh;
+    char str[500];
+
+    if (!is_fp[nl] || as_int)
+        json_object_set_number(object, "description", cats[nl]);
+    else {
+        /* find or construct the label for floating point range to print */
+        if (Rast_is_c_null_value(&cats[nl]))
+            json_object_set_null(object, "description");
+        if (cat_ranges) {
+            json_object_set_string(object, "description",
+                                   Rast_get_ith_d_cat(&layers[nl].labels,
+                                                      cats[nl], &dLow, &dHigh));
+        }
+        else {
+            dLow = (DMAX[nl] - DMIN[nl]) / (double)nsteps *
+                       (double)(cats[nl] - 1) +
+                   DMIN[nl];
+            dHigh = (DMAX[nl] - DMIN[nl]) / (double)nsteps * (double)cats[nl] +
+                    DMIN[nl];
+            char *from = Rast_get_d_cat(&dLow, &layers[nl].labels);
+            char *to = Rast_get_d_cat(&dHigh, &layers[nl].labels);
+            sprintf(str, "from %s to %s", from, to);
+            json_object_set_string(object, "description", str);
+
+            JSON_Value *range_value = json_value_init_object();
+            JSON_Object *range_object = json_object(range_value);
+            json_object_set_number(range_object, "from", dLow);
+            json_object_set_number(range_object, "to", dHigh);
+            json_object_set_value(object, "range", range_value);
+        }
+    }
 
     JSON_Value *units_value = make_units(ns, nl);
     json_object_set_value(object, "units", units_value);
@@ -164,7 +195,13 @@ void print_json()
     json_object_set_number(region_object, "ns_res", window.ns_res);
     json_object_set_value(root_object, "region", region_value);
 
-    json_object_set_string(root_object, "mask", maskinfo());
+    char *mask = maskinfo();
+    if (strcmp(mask, "none") == 0) {
+        json_object_set_null(root_object, "mask");
+    }
+    else {
+        json_object_set_string(root_object, "mask", maskinfo());
+    }
 
     JSON_Value *maps_value = json_value_init_array();
     JSON_Array *maps_array = json_array(maps_value);
