@@ -1529,7 +1529,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # use predefined value if given
         if lchecked is not None:
             checked = lchecked
-            render = True if checked else False
+            render = bool(checked)
         else:
             checked = False
             render = False
