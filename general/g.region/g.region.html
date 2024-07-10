@@ -457,6 +457,39 @@ gdalwarp -t_srs "`g.proj -wf`" -te $w $s $e $n \
 Here the input raster map does not have to match the project's
 coordinate reference system since it is reprojected on the fly.
 
+<h3>JSON Output</h3>
+<div class="code"><pre>
+g.region -p format=json
+</pre></div>
+<div class="code"><pre>
+{
+    "projection": "99 (Lambert Conformal Conic)",
+    "zone": 0,
+    "datum": "nad83",
+    "ellipsoid": "a=6378137 es=0.006694380022900787",
+    "region": {
+        "north": 320000,
+        "south": 10000,
+        "west": 120000,
+        "east": 935000,
+        "ns-res": 500,
+        "ns-res3": 1000,
+        "ew-res": 500,
+        "ew-res3": 1000
+    },
+    "top": 500,
+    "bottom": -500,
+    "tbres": 100,
+    "rows": 620,
+    "rows3": 310,
+    "cols": 1630,
+    "cols3": 815,
+    "depths": 10,
+    "cells": 1010600,
+    "cells3": 2526500
+}
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>
