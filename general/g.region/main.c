@@ -435,6 +435,10 @@ int main(int argc, char *argv[])
     if (strcmp(parm.format->answer, "json") == 0) {
         format = JSON;
         root_value = json_value_init_object();
+        if (root_value == NULL) {
+            G_fatal_error(
+                _("Failed to initialize JSON object. Out of memory?"));
+        }
         root_object = json_object(root_value);
     }
     else if (strcmp(parm.format->answer, "shell") == 0 ||
