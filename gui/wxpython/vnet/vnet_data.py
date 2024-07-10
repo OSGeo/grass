@@ -562,8 +562,7 @@ class VNETPointsData:
         cols_data = deepcopy(self.cols)
 
         hidden_cols = []
-        hidden_cols.append(self.cols["name"].index("e"))
-        hidden_cols.append(self.cols["name"].index("n"))
+        hidden_cols.extend((self.cols["name"].index("e"), self.cols["name"].index("n")))
 
         analysis, valid = self.an_params.GetParam("analysis")
         if only_relevant and len(self.an_data[analysis]["cmdParams"]["cats"]) <= 1:

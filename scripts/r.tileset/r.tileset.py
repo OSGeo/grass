@@ -120,10 +120,14 @@ from grass.exceptions import CalledModuleError
 def bboxToPoints(bbox):
     """Make points that are the corners of a bounding box"""
     points = []
-    points.append((bbox["w"], bbox["s"]))
-    points.append((bbox["w"], bbox["n"]))
-    points.append((bbox["e"], bbox["n"]))
-    points.append((bbox["e"], bbox["s"]))
+    points.extend(
+        (
+            (bbox["w"], bbox["s"]),
+            (bbox["w"], bbox["n"]),
+            (bbox["e"], bbox["n"]),
+            (bbox["e"], bbox["s"]),
+        )
+    )
 
     return points
 
@@ -344,8 +348,9 @@ def main():
     # points later.
 
     bigger = []
-    bigger.append(max(source_bbox_dest_lengths["x"]))
-    bigger.append(max(source_bbox_dest_lengths["y"]))
+    bigger.extend(
+        (max(source_bbox_dest_lengths["x"]), max(source_bbox_dest_lengths["y"]))
+    )
     maxdim = (max_cols, max_rows)
 
     # Compute the number and size of tiles to use in each direction
