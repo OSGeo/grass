@@ -19,5 +19,13 @@
 
         // Renovate's pre-commit support is still opt-in
         ":enablePreCommit",
-    ]
+
+        // weekly update of lock files (flake.lock)
+        ":maintainLockFilesWeekly",
+    ],
+
+    // enable Nix lock file update (flake.lock)
+    "nix": {
+        "enabled": true
+    }
 }
