@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     geos # for `geos-config`
     netcdf # for `nc-config`
     pkg-config
-  ] ++ (with pyPackages; [ python-dateutil numpy wxPython_4_2 ]);
+  ] ++ (with pyPackages; [ python-dateutil numpy wxpython ]);
 
   buildInputs = [
     blas
