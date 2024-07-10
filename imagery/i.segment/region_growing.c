@@ -1541,7 +1541,7 @@ static int calculate_reg_stats(int row, int col, struct reg_stats *rs,
         /* rs->id must be set */
         struct pavl_table *rc_check_tree; /* cells already checked */
         int n, rid;
-        struct rc ngbr_rc = {0}, *pngbr_rc = NULL, next ={0};
+        struct rc ngbr_rc = {0}, *pngbr_rc = NULL, next = {0};
         struct rclist rilist;
         int neighbors[8][2];
         int no_check;
