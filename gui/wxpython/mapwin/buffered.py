@@ -1072,11 +1072,15 @@ class BufferedMapWindow(MapWindowBase, Window):
             reg = dispReg if utils.isInRegion(dispReg, compReg) else compReg
 
             regionCoords = []
-            regionCoords.append((reg["w"], reg["n"]))
-            regionCoords.append((reg["e"], reg["n"]))
-            regionCoords.append((reg["e"], reg["s"]))
-            regionCoords.append((reg["w"], reg["s"]))
-            regionCoords.append((reg["w"], reg["n"]))
+            regionCoords.extend(
+                (
+                    (reg["w"], reg["n"]),
+                    (reg["e"], reg["n"]),
+                    (reg["e"], reg["s"]),
+                    (reg["w"], reg["s"]),
+                    (reg["w"], reg["n"]),
+                )
+            )
 
             # draw region extent
             self.polypen = wx.Pen(

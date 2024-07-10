@@ -2855,12 +2855,16 @@ class EditGCP(wx.Dialog):
         except ValueError:
             return valuelist
 
-        valuelist.append(self.xcoord.GetValue())
-        valuelist.append(self.ycoord.GetValue())
-        valuelist.append(self.zcoord.GetValue())
-        valuelist.append(self.ecoord.GetValue())
-        valuelist.append(self.ncoord.GetValue())
-        valuelist.append(self.hcoord.GetValue())
+        valuelist.extend(
+            (
+                self.xcoord.GetValue(),
+                self.ycoord.GetValue(),
+                self.zcoord.GetValue(),
+                self.ecoord.GetValue(),
+                self.ncoord.GetValue(),
+                self.hcoord.GetValue(),
+            )
+        )
 
         return valuelist
 

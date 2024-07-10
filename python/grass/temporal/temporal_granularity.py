@@ -1000,14 +1000,19 @@ def compute_common_absolute_time_granularity_simple(gran_list):
             seconds.append(days[0] * 60 * 60 * 24)
         if has_months:
             months.sort()
-            seconds.append(months[0] * 60 * 60 * 24 * 28)
-            seconds.append(months[0] * 60 * 60 * 24 * 29)
-            seconds.append(months[0] * 60 * 60 * 24 * 30)
-            seconds.append(months[0] * 60 * 60 * 24 * 31)
+            seconds.extend(
+                (
+                    months[0] * 60 * 60 * 24 * 28,
+                    months[0] * 60 * 60 * 24 * 29,
+                    months[0] * 60 * 60 * 24 * 30,
+                    months[0] * 60 * 60 * 24 * 31,
+                )
+            )
         if has_years:
             years.sort()
-            seconds.append(years[0] * 60 * 60 * 24 * 365)
-            seconds.append(years[0] * 60 * 60 * 24 * 366)
+            seconds.extend(
+                (years[0] * 60 * 60 * 24 * 365, years[0] * 60 * 60 * 24 * 366)
+            )
 
         num = gcd_list(seconds)
         gran = "second"
@@ -1024,14 +1029,17 @@ def compute_common_absolute_time_granularity_simple(gran_list):
             minutes.append(days[0] * 60 * 24)
         if has_months:
             months.sort()
-            minutes.append(months[0] * 60 * 24 * 28)
-            minutes.append(months[0] * 60 * 24 * 29)
-            minutes.append(months[0] * 60 * 24 * 30)
-            minutes.append(months[0] * 60 * 24 * 31)
+            minutes.extend(
+                (
+                    months[0] * 60 * 24 * 28,
+                    months[0] * 60 * 24 * 29,
+                    months[0] * 60 * 24 * 30,
+                    months[0] * 60 * 24 * 31,
+                )
+            )
         if has_years:
             years.sort()
-            minutes.append(years[0] * 60 * 24 * 365)
-            minutes.append(years[0] * 60 * 24 * 366)
+            minutes.extend((years[0] * 60 * 24 * 365, years[0] * 60 * 24 * 366))
         num = gcd_list(minutes)
         gran = "minute"
         if num > 1:
@@ -1044,14 +1052,17 @@ def compute_common_absolute_time_granularity_simple(gran_list):
             hours.append(days[0] * 24)
         if has_months:
             months.sort()
-            hours.append(months[0] * 24 * 28)
-            hours.append(months[0] * 24 * 29)
-            hours.append(months[0] * 24 * 30)
-            hours.append(months[0] * 24 * 31)
+            hours.extend(
+                (
+                    months[0] * 24 * 28,
+                    months[0] * 24 * 29,
+                    months[0] * 24 * 30,
+                    months[0] * 24 * 31,
+                )
+            )
         if has_years:
             years.sort()
-            hours.append(years[0] * 24 * 365)
-            hours.append(years[0] * 24 * 366)
+            hours.extend((years[0] * 24 * 365, years[0] * 24 * 366))
         num = gcd_list(hours)
         gran = "hour"
         if num > 1:
@@ -1061,14 +1072,12 @@ def compute_common_absolute_time_granularity_simple(gran_list):
     if has_days:
         if has_months:
             months.sort()
-            days.append(months[0] * 28)
-            days.append(months[0] * 29)
-            days.append(months[0] * 30)
-            days.append(months[0] * 31)
+            days.extend(
+                (months[0] * 28, months[0] * 29, months[0] * 30, months[0] * 31)
+            )
         if has_years:
             years.sort()
-            days.append(years[0] * 365)
-            days.append(years[0] * 366)
+            days.extend((years[0] * 365, years[0] * 366))
         num = gcd_list(days)
         gran = "day"
         if num > 1:

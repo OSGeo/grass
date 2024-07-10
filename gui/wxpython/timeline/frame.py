@@ -630,10 +630,14 @@ def InfoFormat(timeData, datasetName, mapIndex):
     elif etype == "str3ds":
         text.append(_("Space time 3D raster dataset: %s") % name)
 
-    text.append(_("Mapset: %s") % mapset)
-    text.append(_("Map name: %s") % timeData[datasetName]["names"][mapIndex])
-    text.append(_("Start time: %s") % timeData[datasetName]["start_datetime"][mapIndex])
-    text.append(_("End time: %s") % timeData[datasetName]["end_datetime"][mapIndex])
+    text.extend(
+        (
+            _("Mapset: %s") % mapset,
+            _("Map name: %s") % timeData[datasetName]["names"][mapIndex],
+            _("Start time: %s") % timeData[datasetName]["start_datetime"][mapIndex],
+            _("End time: %s") % timeData[datasetName]["end_datetime"][mapIndex],
+        )
+    )
 
     if not timeData[datasetName]["validTopology"]:
         text.append(_("WARNING: invalid topology"))

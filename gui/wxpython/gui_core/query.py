@@ -127,9 +127,13 @@ class QueryDialog(wx.Dialog):
             col1 = "\n".join([val[1] for val in values if val[1]])
             col2 = "\n".join([val[0] for val in values if val[0]])
             table = "\n".join([val[0] + ": " + val[1] for val in values])
-            texts.append((_("Copy from '%s' column") % self._colNames[1], col1))
-            texts.append((_("Copy from '%s' column") % self._colNames[0], col2))
-            texts.append((_("Copy selected lines"), table))
+            texts.extend(
+                (
+                    (_("Copy from '%s' column") % self._colNames[1], col1),
+                    (_("Copy from '%s' column") % self._colNames[0], col2),
+                    (_("Copy selected lines"), table),
+                )
+            )
         else:
             label1 = nodes[0].label
             texts.append((_("Copy '%s'" % self._cutLabel(label1)), label1))

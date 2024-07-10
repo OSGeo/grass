@@ -423,7 +423,6 @@ html_page_footer_pages_path = (
     if os.getenv("HTML_PAGE_FOOTER_PAGES_PATH")
     else ""
 )
-
 pgm = sys.argv[1]
 
 src_file = "%s.html" % pgm

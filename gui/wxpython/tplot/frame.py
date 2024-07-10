@@ -1368,8 +1368,9 @@ def InfoFormat(timeData, values):
         elif etype == "str3ds":
             text.append(_("Space time 3D raster dataset: %s") % key)
 
-        text.append(_("Value for {date} is {val}".format(date=val[0], val=val[1])))
-        text.append("\n")
+        text.extend(
+            (_("Value for {date} is {val}".format(date=val[0], val=val[1])), "\n")
+        )
     text.append(_("Press Del to dismiss."))
 
     return "\n".join(text)

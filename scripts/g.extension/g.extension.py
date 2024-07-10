@@ -722,11 +722,13 @@ def get_installed_modules(force=False):
     for tnode in tree.findall("task"):
         if flags["g"]:
             desc, keyw = get_optional_params(tnode)
-            ret.append("name={0}".format(tnode.get("name").strip()))
-            ret.append("description={0}".format(desc))
-            ret.append("keywords={0}".format(keyw))
-            ret.append(
-                "executables={0}".format(",".join(get_module_executables(tnode)))
+            ret.extend(
+                (
+                    "name={0}".format(tnode.get("name").strip()),
+                    "description={0}".format(desc),
+                    "keywords={0}".format(keyw),
+                    "executables={0}".format(",".join(get_module_executables(tnode))),
+                )
             )
         else:
             ret.append(tnode.get("name").strip())
