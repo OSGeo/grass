@@ -123,7 +123,10 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
             fprintf(stdout, "%-*s %d\n", width, "zone:", window->zone);
             break;
         case JSON:
-            json_object_set_number(root_object, "projection", window->proj);
+            int len = strlen(prj) + 24;
+            char projection[len];
+            snprintf(projection, len, "%d (%s)", window->proj, prj);
+            json_object_set_string(root_object, "projection", projection);
             json_object_set_number(root_object, "zone", window->zone);
             break;
         }
@@ -159,9 +162,17 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
                }
              */
 
-            if (!(print_flag & PRINT_SH) && format != JSON) {
-                fprintf(stdout, "%-*s %s\n", width, "datum:", datum);
-                fprintf(stdout, "%-*s %s\n", width, "ellipsoid:", ellps);
+            switch (format) {
+            case JSON:
+                json_object_set_string(root_object, "datum", datum);
+                json_object_set_string(root_object, "ellipsoid", ellps);
+                break;
+            default:
+                if (!(print_flag & PRINT_SH)) {
+                    fprintf(stdout, "%-*s %s\n", width, "datum:", datum);
+                    fprintf(stdout, "%-*s %s\n", width, "ellipsoid:", ellps);
+                }
+                break;
             }
         }
 
