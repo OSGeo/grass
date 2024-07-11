@@ -299,7 +299,7 @@ class Info:
         if self.name:
             if self.mapset == "":
                 mapset = utils.get_mapset_vector(self.name, self.mapset)
-                self.mapset = mapset if mapset else ""
+                self.mapset = mapset or ""
                 return bool(mapset)
             return bool(utils.get_mapset_vector(self.name, self.mapset))
         else:
@@ -358,7 +358,7 @@ class Info:
         See more examples in the documentation of the ``read`` and ``write``
         methods
         """
-        self.mode = mode if mode else self.mode
+        self.mode = mode or self.mode
         with_z = libvect.WITH_Z if with_z else libvect.WITHOUT_Z
         # check if map exists or not
         if not self.exist() and self.mode != "w":
@@ -396,8 +396,8 @@ class Info:
             # create a link
             link = Link(
                 layer,
-                link_name if link_name else self.name,
-                tab_name if tab_name else self.name,
+                link_name or self.name,
+                tab_name or self.name,
                 link_key,
                 link_db,
                 link_driver,

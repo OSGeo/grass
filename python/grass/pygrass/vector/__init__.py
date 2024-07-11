@@ -310,9 +310,9 @@ class VectorTopo(Vector):
             return [
                 self.read(indx)
                 for indx in range(
-                    key.start if key.start else 1,
-                    key.stop if key.stop else len(self),
-                    key.step if key.step else 1,
+                    key.start or 1,
+                    key.stop or len(self),
+                    key.step or 1,
                 )
             ]
         elif isinstance(key, int):
@@ -509,7 +509,7 @@ class VectorTopo(Vector):
         ilist = Ilist()
         libvect.Vect_cidx_find_all(
             self.c_mapinfo,
-            layer if layer else self.layer,
+            layer or self.layer,
             Obj.gtype,
             cat_id,
             ilist.c_ilist,

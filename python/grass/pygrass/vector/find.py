@@ -101,7 +101,7 @@ class PointFinder(AbstractFinder):
             self.c_mapinfo,
             point.x,
             point.y,
-            point.z if point.z else 0,
+            point.z or 0,
             float(maxdist),
             int(not point.is2D),
         )
@@ -166,7 +166,7 @@ class PointFinder(AbstractFinder):
             self.c_mapinfo,
             point.x,
             point.y,
-            point.z if point.z else 0,
+            point.z or 0,
             self.vtype[type],
             float(maxdist),
             int(not point.is2D),
@@ -257,7 +257,7 @@ class PointFinder(AbstractFinder):
             self.c_mapinfo,
             point.x,
             point.y,
-            point.z if point.z else 0,
+            point.z or 0,
             self.vtype[type],
             float(maxdist),
             int(not point.is2D),
@@ -586,7 +586,7 @@ class BboxFinder(AbstractFinder):
 
         >>> test_vect.close()
         """
-        boxlist = boxlist if boxlist else BoxList()
+        boxlist = boxlist or BoxList()
         if libvect.Vect_select_areas_by_box(
             self.c_mapinfo, bbox.c_bbox, boxlist.c_boxlist
         ):

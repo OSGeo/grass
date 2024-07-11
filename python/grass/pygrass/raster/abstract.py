@@ -431,7 +431,7 @@ class RasterAbstractBase:
         if self.name:
             if self.mapset == "":
                 mapset = utils.get_mapset_raster(self.name, self.mapset)
-                self.mapset = mapset if mapset else ""
+                self.mapset = mapset or ""
                 return bool(mapset)
             return bool(utils.get_mapset_raster(self.name, self.mapset))
         else:

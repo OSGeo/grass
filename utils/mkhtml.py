@@ -418,11 +418,8 @@ def get_last_git_commit(src_dir, addon_path, is_addon):
             return get_git_commit_from_file(src_dir=src_dir)
 
 
-html_page_footer_pages_path = (
-    os.getenv("HTML_PAGE_FOOTER_PAGES_PATH")
-    if os.getenv("HTML_PAGE_FOOTER_PAGES_PATH")
-    else ""
-)
+html_page_footer_pages_path = os.getenv("HTML_PAGE_FOOTER_PAGES_PATH") or ""
+
 pgm = sys.argv[1]
 
 src_file = "%s.html" % pgm
@@ -927,7 +924,7 @@ else:
 
 git_commit = get_last_git_commit(
     src_dir=curdir,
-    addon_path=addon_path if addon_path else None,
+    addon_path=addon_path or None,
     is_addon=bool(addon_path),
 )
 if git_commit["commit"] == "unknown":

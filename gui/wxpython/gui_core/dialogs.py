@@ -2334,7 +2334,7 @@ class HyperlinkDialog(wx.Dialog):
 
         label = StaticText(self, label=message)
         sizer.Add(label, proportion=0, flag=wx.ALIGN_CENTRE | wx.ALL, border=10)
-        hyperlinkLabel = hyperlinkLabel if hyperlinkLabel else hyperlink
+        hyperlinkLabel = hyperlinkLabel or hyperlink
         hyperlinkCtrl = HyperlinkCtrl(
             self,
             id=wx.ID_ANY,

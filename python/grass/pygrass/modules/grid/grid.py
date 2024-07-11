@@ -469,7 +469,7 @@ class GridModule:
         self.height = height
         self.overlap = overlap
         self.processes = processes
-        self.region = region if region else Region()
+        self.region = region or Region()
         self.start_row = start_row
         self.start_col = start_col
         self.out_prefix = out_prefix

@@ -59,7 +59,7 @@ class MetaModule:
 
     def __init__(self, prefix, cls=None):
         self.prefix = prefix
-        self.cls = cls if cls else Module
+        self.cls = cls or Module
 
     def __dir__(self):
         return [
