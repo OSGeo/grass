@@ -113,7 +113,7 @@ def print_category(category, changes, file=None):
         for item in itertools.chain(overflow, hidden):
             print(f"  * {item}", file=file)
         print("\n</details>")
-    print("")
+    print()
 
 
 def print_by_category(changes, categories, file=None):
@@ -141,7 +141,7 @@ def print_support(file=None):
         for member in data:
             supporters.append(f"""[{member['name']}]({member['profile']})""")
         print(", ".join(supporters))
-        print("")
+        print()
 
 
 def adjust_after(lines):
@@ -198,7 +198,7 @@ def print_notes(
     print_by_category(changes_by_category, categories=categories, file=file)
     if after:
         print(after)
-        print("")
+        print()
     print(binder_badge(end_tag))
 
 

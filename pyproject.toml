@@ -153,7 +153,6 @@ ignore = [
     "FBT003",  # boolean-positional-value-in-call
     "FURB101", # read-whole-file
     "FURB103", # write-whole-file.
-    "FURB105", # print-empty-string
     "FURB118", # reimplemented-operator
     "FURB129", # readlines-in-for
     "FURB131", # delete-full-slice
