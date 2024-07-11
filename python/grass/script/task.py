@@ -448,7 +448,6 @@ def convert_xml_to_utf8(xml_text):
     m = re.match(pattern, xml_text)
     if m is None:
         return xml_text.encode("utf-8") if xml_text else None
-    #
     enc = m.groups()[0]
 
     # modify: change the encoding to "utf-8", for correct parsing
