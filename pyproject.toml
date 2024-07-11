@@ -310,7 +310,6 @@ ignore = [
     "UP032",   # f-string
     "UP034",   # extraneous-parentheses
     "UP036",   # outdated-version-block
-    "W391",    # too-many-newlines-at-end-of-file
     "W605",    # invalid-escape-sequence
     "YTT204",  # sys-version-info-minor-cmp-int
 ]
