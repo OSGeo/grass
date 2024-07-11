@@ -2490,7 +2490,7 @@ class CmdPanel(wx.Panel):
             tab[section].SetupScrolling(True, True, 10, 10)
             tab[section].Layout()
             minsecsizes = tabsizer[section].GetSize()
-            maxsizes = list(map(lambda x: max(maxsizes[x], minsecsizes[x]), (0, 1)))
+            maxsizes = [max(maxsizes[x], minsecsizes[x]) for x in (0, 1)]
 
         # TODO: be less arbitrary with these 600
         self.panelMinHeight = 100
