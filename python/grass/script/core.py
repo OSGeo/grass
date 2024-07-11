@@ -218,9 +218,7 @@ def get_real_command(cmd):
         if os.path.splitext(cmd)[1] == ".py":
             cmd = cmd[:-3]
         # PATHEXT is necessary to check on Windows (force lowercase)
-        pathext = list(
-            map(lambda x: x.lower(), os.environ["PATHEXT"].split(os.pathsep))
-        )
+        pathext = [x.lower() for x in os.environ["PATHEXT"].split(os.pathsep)]
         if ".py" not in pathext:
             # we assume that PATHEXT contains always '.py'
             os.environ["PATHEXT"] = ".py;" + os.environ["PATHEXT"]
@@ -1287,7 +1285,7 @@ def region_env(region3d=False, flags=None, env=None, **kwargs):
     with open(windfile, "r") as fd:
         grass_region = ""
         for line in fd.readlines():
-            key, value = map(lambda x: x.strip(), line.split(":", 1))
+            key, value = (x.strip() for x in line.split(":", 1))
             if kwargs and key not in {"proj", "zone"}:
                 continue
             if (

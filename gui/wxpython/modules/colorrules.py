@@ -713,7 +713,7 @@ class ColorTable(wx.Frame):
         minim = maxim = count = 0
         for line in ctable.splitlines():
             try:
-                value, color = map(lambda x: x.strip(), line.split(" "))
+                value, color = (x.strip() for x in line.split(" "))
             except ValueError:
                 GMessage(parent=self, message=_("Invalid color table format"))
                 self.rulesPanel.Clear()
