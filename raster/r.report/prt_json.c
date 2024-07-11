@@ -71,7 +71,7 @@ JSON_Value *make_category(int ns, int nl, JSON_Value *sub_categories)
         /* find or construct the label for floating point range to print */
         if (Rast_is_c_null_value(&cats[nl]))
             json_object_set_null(object, "description");
-        if (cat_ranges) {
+        else if (cat_ranges) {
             json_object_set_string(object, "description",
                                    Rast_get_ith_d_cat(&layers[nl].labels,
                                                       cats[nl], &dLow, &dHigh));
