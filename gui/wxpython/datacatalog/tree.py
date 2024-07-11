@@ -181,7 +181,7 @@ class DataCatalogNode(DictFilterNode):
     def label(self):
         data = self.data
         if data["type"] == "mapset":
-            owner = data["owner"] if data["owner"] else _("name unknown")
+            owner = data["owner"] or _("name unknown")
             if data["current"]:
                 return _("{name}  (current)").format(**data)
             elif data["is_different_owner"] and data["lock"]:

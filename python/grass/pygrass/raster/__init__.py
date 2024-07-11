@@ -187,8 +187,8 @@ class RasterRow(RasterAbstractBase):
             * self._rows and self._cols
 
         """
-        self.mode = mode if mode else self.mode
-        self.mtype = mtype if mtype else self.mtype
+        self.mode = mode or self.mode
+        self.mtype = mtype or self.mtype
         self.overwrite = overwrite if overwrite is not None else self.overwrite
 
         if self.mode == "r":
@@ -509,8 +509,8 @@ class RasterSegment(RasterAbstractBase):
         self._rows = libraster.Rast_window_rows()
         self._cols = libraster.Rast_window_cols()
 
-        self.mode = mode if mode else self.mode
-        self.mtype = mtype if mtype else self.mtype
+        self.mode = mode or self.mode
+        self.mtype = mtype or self.mtype
         self.overwrite = overwrite if overwrite is not None else self.overwrite
 
         if self.exist():

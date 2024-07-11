@@ -659,7 +659,7 @@ def _parseFormats(output, writableOnly=False):
         patt = re.compile(r"\(rw\+?\)$", re.IGNORECASE)
 
     for line in output.splitlines():
-        key, name = map(lambda x: x.strip(), line.strip().split(":", 1))
+        key, name = (x.strip() for x in line.strip().split(":", 1))
         if writableOnly and not patt.search(key):
             continue
 
@@ -843,7 +843,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
         for line in fd.readlines():
             line = line.rstrip(os.linesep)
             try:
-                k, v = map(lambda x: x.strip(), line.split(" ", 1)[1].split("=", 1))
+                k, v = (x.strip() for x in line.split(" ", 1)[1].split("=", 1))
             except Exception as e:
                 sys.stderr.write(
                     _("%s: line skipped - unable to parse '%s'\nReason: %s\n")

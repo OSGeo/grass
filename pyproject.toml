@@ -108,7 +108,6 @@ ignore = [
     "C405",    # unnecessary-literal-set
     "C414",    # unnecessary-double-cast-or-process
     "C416",    # unnecessary-comprehension
-    "C417",    # unnecessary-map
     "COM812",  # missing-trailing-comma
     "COM818",  # trailing-comma-on-bare-tuple
     "D1",
@@ -157,13 +156,11 @@ ignore = [
     "FURB101", # read-whole-file
     "FURB103", # write-whole-file.
     "FURB105", # print-empty-string
-    "FURB110", # if-exp-instead-of-or-operator
     "FURB116", # f-string-number-format
     "FURB116", # f-string-number-format
     "FURB118", # reimplemented-operator
     "FURB129", # readlines-in-for
     "FURB131", # delete-full-slice
-    "FURB136", # if-expr-min-max
     "FURB140", # reimplemented-starmap
     "FURB142", # for-loop-set-mutations
     "FURB148", # unnecessary-enumerate
@@ -203,7 +200,6 @@ ignore = [
     "PLR1714", # repeated-equality-comparison
     "PLR1733", # unnecessary-dict-index-lookup
     "PLR2004", # magic-value-comparison
-    "PLR2044", # empty-comment
     "PLR5501", # collapsible-else-if
     "PLR6104", # non-augmented-assignment
     "PLR6201", # literal-membership
@@ -312,7 +308,6 @@ ignore = [
     "UP032",   # f-string
     "UP034",   # extraneous-parentheses
     "UP036",   # outdated-version-block
-    "W391",    # too-many-newlines-at-end-of-file
     "W605",    # invalid-escape-sequence
     "YTT204",  # sys-version-info-minor-cmp-int
 ]

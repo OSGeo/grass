@@ -279,7 +279,7 @@ class HistoryBrowserTree(CTreeView):
                 data={
                     "type": COMMAND,
                     "name": entry["command"].strip(),
-                    "timestamp": timestamp if timestamp else None,
+                    "timestamp": timestamp or None,
                     "status": status,
                 },
             )
