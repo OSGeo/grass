@@ -2249,7 +2249,7 @@ class TemporalAlgebraParser:
             # Use method eval_global_var to evaluate expression.
             resultlist = self.eval_global_var(tvarexpr, thenlist)
         # Check if a given list is a list of maps.
-        elif all([issubclass(type(ele), AbstractMapDataset) for ele in tvarexpr]):
+        elif all(issubclass(type(ele), AbstractMapDataset) for ele in tvarexpr):
             # Use method eval_map_list to evaluate map_list in comparison to thenlist.
             resultlist = self.eval_map_list(tvarexpr, thenlist, topolist)
         elif len(tvarexpr) % 2 != 0:
@@ -2259,12 +2259,12 @@ class TemporalAlgebraParser:
                 expr = tvarexpr[iter]
                 operator = tvarexpr[iter + 1]
                 relexpr = tvarexpr[iter + 2]
-                if all([issubclass(type(ele), list) for ele in [expr, relexpr]]):
+                if all(issubclass(type(ele), list) for ele in [expr, relexpr]):
                     resultlist = self.build_spatio_temporal_topology_list(expr, relexpr)
             # Loop through the list, search for map lists or global variables.
             for expr in tvarexpr:
                 if isinstance(expr, list):
-                    if all([issubclass(type(ele), AbstractMapDataset) for ele in expr]):
+                    if all(issubclass(type(ele), AbstractMapDataset) for ele in expr):
                         # Use method eval_map_list to evaluate map_list
                         resultlist = self.eval_map_list(expr, thenlist, topolist)
                     else:
@@ -2274,7 +2274,7 @@ class TemporalAlgebraParser:
                 elif isinstance(expr, GlobalTemporalVar):
                     # Use according functions for different global variable types.
                     if expr.get_type() == "operator":
-                        if all(["condition_value" in dir(map_i) for map_i in thenlist]):
+                        if all("condition_value" in dir(map_i) for map_i in thenlist):
                             # Add operator string to the condition list.
                             [
                                 map_i.condition_value.extend(expr.get_type_value())

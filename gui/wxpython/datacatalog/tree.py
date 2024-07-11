@@ -2092,10 +2092,8 @@ class DataCatalogTree(TreeView):
 
         if not isinstance(self._giface, StandaloneGrassInterface):
             if all(
-                [
-                    each.data["name"] == genv["LOCATION_NAME"]
-                    for each in self.selected_location
-                ]
+                each.data["name"] == genv["LOCATION_NAME"]
+                for each in self.selected_location
             ):
                 if len(self.selected_layer) > 1:
                     item = wx.MenuItem(menu, wx.ID_ANY, _("&Display layers"))
