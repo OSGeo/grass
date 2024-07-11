@@ -213,18 +213,19 @@ def get_computational_region_bb():
     return latlon, reprojected, res
 
 
-def update_region(region_cordinates, res):
+def update_region(region_coordinates, res):
     """
     Updates the GRASS GIS region using the given coordinates.
     """
     gs.run_command(
         "g.region",
-        n=region_cordinates["north"],
-        s=region_cordinates["south"],
-        e=region_cordinates["east"],
-        w=region_cordinates["west"],
+        flags="a",
+        n=region_coordinates["north"],
+        s=region_coordinates["south"],
+        e=region_coordinates["east"],
+        w=region_coordinates["west"],
         nsres=res[0],
-        ewers=res[1],
+        ewres=res[1],
     )
 
 
