@@ -133,9 +133,7 @@ class Bbox:
 
         """
         return bool(
-            libvect.Vect_point_in_box(
-                point.x, point.y, point.z if point.z else 0, self.c_bbox
-            )
+            libvect.Vect_point_in_box(point.x, point.y, point.z or 0, self.c_bbox)
         )
 
     def items(self):
@@ -424,7 +422,7 @@ class Cats:
         return self.c_cats.contents.n_cats
 
     def __init__(self, c_cats=None):
-        self.c_cats = c_cats if c_cats else ctypes.pointer(libvect.line_cats())
+        self.c_cats = c_cats or ctypes.pointer(libvect.line_cats())
 
     def reset(self):
         """Reset the C cats struct from previous values."""
@@ -541,9 +539,7 @@ class CatsList:
         return [max_values[i] for i in range(self.n_ranges)]
 
     def __init__(self, c_cat_list=None):
-        self.c_cat_list = (
-            c_cat_list if c_cat_list else ctypes.pointer(libvect.cat_list())
-        )
+        self.c_cat_list = c_cat_list or ctypes.pointer(libvect.cat_list())
 
     def from_string(self, string):
         """Converts string of categories and cat ranges separated by commas

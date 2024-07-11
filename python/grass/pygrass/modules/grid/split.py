@@ -93,7 +93,7 @@ def split_region_in_overlapping_tiles(region=None, width=100, height=100, overla
     [[Bbox(1350.0, 640.0, 1010.0, 0.0), Bbox(1350.0, 640.0, 1500.0, 990.0)],
      [Bbox(660.0, 0.0, 1010.0, 0.0), Bbox(660.0, 0.0, 1500.0, 990.0)]]
     """
-    reg = region if region else Region()
+    reg = region or Region()
     ncols = (reg.cols + width - 1) // width
     nrows = (reg.rows + height - 1) // height
     box_list = []
@@ -118,7 +118,7 @@ def split_region_tiles(region=None, width=100, height=100):
     :param height: the width of tiles
     :type height: int
     """
-    reg = region if region else Region()
+    reg = region or Region()
     ncols = (reg.cols + width - 1) // width
     nrows = (reg.rows + height - 1) // height
     box_list = []
@@ -142,7 +142,7 @@ def get_overlap_region_tiles(region=None, width=100, height=100, overlap=0):
     :param overlap: the value of overlap between tiles
     :type overlap: int
     """
-    reg = region if region else Region()
+    reg = region or Region()
     ncols = (reg.cols + width - 1) // width
     nrows = (reg.rows + height - 1) // height
     box_list = []

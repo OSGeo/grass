@@ -95,7 +95,7 @@ class TreeModel:
     def SearchNodes(self, parent=None, **kwargs):
         """Search nodes according to specified attributes."""
         nodes = []
-        parent = parent if parent else self.root
+        parent = parent or self.root
         self._searchNodes(node=parent, foundNodes=nodes, **kwargs)
         return nodes
 
@@ -291,7 +291,7 @@ class ModuleNode(DictNode):
 
     def __init__(self, label=None, data=None):
         super().__init__(data=data)
-        self._label = label if label else ""
+        self._label = label or ""
         if not data:
             self.data = {}
 
