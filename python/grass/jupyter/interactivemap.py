@@ -353,6 +353,7 @@ class InteractiveMap:
         """
         import ipywidgets as widgets
         from IPython.display import display
+        import tempfile
 
         draw_control = self._ipyleaflet.DrawControl()
         drawn_geometries = []
@@ -412,8 +413,17 @@ class InteractiveMap:
                     with open(geojson_filename, "w") as f:
                         json.dump(geo_json, f)
                     try:
-                        save_vector(geojson_filename, name)
+                        with tempfile.NamedTemporaryFile(
+                            suffix=".geojson", delete=False
+                        ) as temp_file:
+                            temp_filename = temp_file.name
+                            json.dump(geo_json, temp_file)
+                        save_vector(temp_filename, name)
                         print(f"Imported geometry with name '{name}' into GRASS GIS.")
+                        geo_json_layer = self._ipyleaflet.GeoJSON(
+                            data=geo_json, name=name
+                        )
+                        self.map.add_layer(geo_json_layer)
                     except Exception as e:
                         print(f"Failed to import geometries into GRASS GIS: {e}")
                     geo_json_layer = self._ipyleaflet.GeoJSON(data=geo_json, name=name)
