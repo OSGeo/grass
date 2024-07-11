@@ -1,5 +1,8 @@
 #include <grass/gis.h>
 #include <grass/vector.h>
+#include <grass/parson.h>
+
+enum OutputFormat { PLAIN, JSON };
 
 struct value {
     int cat;   /* category */
@@ -33,6 +36,7 @@ struct options {
     int units;
     int qfield; /* query field */
     char *fs;
+    enum OutputFormat format;
 };
 
 extern struct options options;
@@ -96,7 +100,7 @@ int parse_command_line(int, char *[]);
 int query(struct Map_info *);
 
 /* report.c */
-int report(void);
+int report(enum OutputFormat format);
 int print_stat(void);
 
 /* units.c */
