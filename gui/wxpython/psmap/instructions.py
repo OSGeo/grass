@@ -401,7 +401,6 @@ class Instruction:
         else:
             page["Orientation"] = orientation
 
-        #
         return True
 
     def SendToRead(self, instruction, text, **kwargs):
