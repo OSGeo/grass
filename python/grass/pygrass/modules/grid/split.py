@@ -29,10 +29,10 @@ def get_bbox(reg, row, col, width, height, overlap):
     east = reg.west + ((col + 1) * width + overlap) * reg.ewres
     west = reg.west + (col * width - overlap) * reg.ewres
     return Bbox(
-        north=north if north <= reg.north else reg.north,
-        south=south if south >= reg.south else reg.south,
-        east=east if east <= reg.east else reg.east,
-        west=west if west >= reg.west else reg.west,
+        north=min(north, reg.north),
+        south=max(south, reg.south),
+        east=min(east, reg.east),
+        west=max(west, reg.west),
     )
 
 
