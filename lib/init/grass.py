@@ -1947,7 +1947,7 @@ def print_params(params):
 
     # check if we are dealing with parameters which require dev files
     dev_params = ["arch", "compiler", "build", "date"]
-    if any([param in dev_params for param in params]):
+    if any(param in dev_params for param in params):
         plat = gpath("include", "Make", "Platform.make")
         if not os.path.exists(plat):
             fatal(_("Please install the GRASS GIS development package"))
