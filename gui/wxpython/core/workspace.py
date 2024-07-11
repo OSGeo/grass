@@ -1757,7 +1757,7 @@ class ProcessGrcFile:
             return []
 
         line_id = 1
-        for line in file.readlines():
+        for line in file:
             self.process_line(line.rstrip("\n"), line_id)
             line_id += 1
 

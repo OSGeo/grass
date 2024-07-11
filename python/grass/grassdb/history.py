@@ -86,8 +86,7 @@ def _read_from_plain_text(history_path):
             history_path, encoding="utf-8", mode="r", errors="replace"
         ) as file_history:
             content_list = [
-                {"command": line.strip(), "command_info": None}
-                for line in file_history.readlines()
+                {"command": line.strip(), "command_info": None} for line in file_history
             ]
     except OSError as e:
         raise OSError(

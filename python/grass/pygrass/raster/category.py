@@ -299,7 +299,7 @@ class Category(list):
         """
         self.reset()
         with open(filename, "r") as f:
-            for row in f.readlines():
+            for row in f:
                 cat = row.strip().split(sep)
                 if len(cat) == 2:
                     label, min_cat = cat
