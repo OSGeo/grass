@@ -208,6 +208,7 @@ private:
         /* alt and vis must be in meters */
         rbitem.alt = (alt < 0 ? (int)(alt - 0.5) : (int)(alt + 0.5));
         rbitem.vis = (int)(vis + 0.5);
+
         return rbitem;
     }
 
