@@ -204,11 +204,12 @@ class TICache {
 private:
     struct RBitem set_alt_vis(double alt, double vis)
     {
-        struct RBitem rbitem = {
+        struct RBitem rbitem = {};
+        
         /* alt and vis must be in meters */
-        .alt = (alt < 0 ? (int)(alt - 0.5) : (int)(alt + 0.5)),
-        .vis = (int)(vis + 0.5)
-        };
+        rbitem.alt = (alt < 0 ? (int)(alt - 0.5) : (int)(alt + 0.5));
+        rbitem.vis = (int)(vis + 0.5);
+        
         return rbitem;
     }
 
