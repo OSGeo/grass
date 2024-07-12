@@ -118,30 +118,66 @@ def reproject_latlon(coord):
     return east, north, elev
 
 
+def style_table(html_content):
+    """
+    Use to style table displayed in popup.
+
+    :param html_content: HTML content to be displayed
+
+    :return str: formatted HTML content
+    """
+    css = """
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 12px;
+            font-family: Arial, sans-serif;
+        }
+        th {
+            background-color: #666666;
+            color: white;
+            text-align: center;
+            font-size: 12px;
+        }
+        td {
+            padding-left: 3px;
+            padding-right: 3px;
+            border: 1px solid #ddd;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+        td:last-child {
+            text-align: right;
+        }
+    </style>
+    """
+    return f"{css}{html_content}"
+
+
 def query_raster(coord, raster_list):
     """Queries Raster
 
     :param coord: coordinates given as tuple
     :param list raster_list: list of raster names
 
-    :return str: formatted output of raster query results
+    :return str: output of raster query results
     """
-    output_list = [
-        """<table border='1'
-        style='border-collapse:collapse;
-        width: 100%;
-        font-size: 12px;'>"""
-    ]
+    output_list = ["""<table>"""]
 
     for raster in raster_list:
         raster_output = gs.raster.raster_what(map=raster, coord=coord)
 
-        output = f"""<tr style='background-color: #A9A9A9;'>
-        <th colspan='3'>Raster: {raster}</th></tr>"""
+        output = f"""<tr>
+        <th colspan='2'>Raster: {raster}</th></tr>"""
         if raster in raster_output[0] and "value" in raster_output[0][raster]:
             value = raster_output[0][raster]["value"]
             output += f"""
-            <tr style='background-color: #f0f0f0;'>
+            <tr>
             <td>Value</td>
             <td>{value}</td>
             </tr>
@@ -155,7 +191,7 @@ def query_raster(coord, raster_list):
     output_list.append("</table>")
     output_list.append("<br>")
     final_output = "".join(output_list)
-    return final_output
+    return style_table(final_output)
 
 
 def query_vector(coord, vector_list, distance):
@@ -164,14 +200,9 @@ def query_vector(coord, vector_list, distance):
     :param coord: coordinates given as tuple
     :param list vector_list: list of vector names
 
-    :return str: formatted output of vector query results
+    :return str: output of vector query results
     """
-    output_list = [
-        """<table border='1'
-        style='border-collapse:collapse;
-        width: 100%;
-        font-size: 12px;'>"""
-    ]
+    output_list = ["""<table>"""]
 
     for vector in vector_list:
         vector_output = gs.vector.vector_what(
@@ -181,12 +212,12 @@ def query_vector(coord, vector_list, distance):
         if len(vector_output[0]) > 2:
             output_list.append(
                 f"""
-                               <tr style='background-color: #A9A9A9;'>
-                               <th colspan='3'>
-                               Vector: {vector}
-                               </th>
-                               </tr>
-                               """
+                <tr>
+                <th colspan='2'>
+                Vector: {vector}
+                </th>
+                </tr>
+                """
             )
 
             items = list(vector_output[0].items())
@@ -200,7 +231,7 @@ def query_vector(coord, vector_list, distance):
                         for sub_key, sub_value in value.items():
                             if sub_value:
                                 nested_table += f"""
-                                <tr style='background-color: #f0f0f0;'>
+                                <tr>
                                 <td>{sub_key}</td>
                                 <td>{sub_value}</td>
                                 </tr>
@@ -208,7 +239,7 @@ def query_vector(coord, vector_list, distance):
                         attributes_output += nested_table
                     else:
                         regular_output += f"""
-                        <tr style='background-color: #f0f0f0;'>
+                        <tr>
                         <td>{key}</td>
                         <td>{value}</td>
                         </tr>
@@ -217,7 +248,6 @@ def query_vector(coord, vector_list, distance):
             if attributes_output:
                 output_list.append(attributes_output)
 
-            # Adding regular items
             if regular_output:
                 output_list.append(regular_output)
 
@@ -227,7 +257,7 @@ def query_vector(coord, vector_list, distance):
     output_list.append("</table>")
     output_list.append("<br>")
     final_output = "".join(output_list)
-    return final_output
+    return style_table(final_output)
 
 
 def estimate_resolution(raster, mapset, location, dbase, env):
