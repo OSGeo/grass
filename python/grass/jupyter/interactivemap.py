@@ -422,18 +422,6 @@ class InteractiveMap:
                 region_coordinates, from_proj, to_proj
             )
             update_region(reprojected_region, res)
-            self.map.fit_bounds(
-                [
-                    [
-                        float(region_coordinates["south"]),
-                        float(region_coordinates["west"]),
-                    ],
-                    [
-                        float(region_coordinates["north"]),
-                        float(region_coordinates["east"]),
-                    ],
-                ]
-            )
 
         def toggle_region_mode(change):
             nonlocal rectangle, save_button_control
@@ -526,6 +514,12 @@ class InteractiveMap:
             if rectangle:
                 update_output()
                 rectangle.name = "computational_region"
+            self.map.fit_bounds(
+                [
+                    [rectangle.bounds[0]["lat"], rectangle.bounds[0]["lng"]],
+                    [rectangle.bounds[2]["lat"], rectangle.bounds[2]["lng"]],
+                ]
+            )
 
         region_mode_button.observe(toggle_region_mode, names="value")
         save_button.on_click(save_region)
