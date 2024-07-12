@@ -463,6 +463,8 @@ int scan_ref(char *buf)
         FALLTHROUGH;
     default:
         return 0;
+    case EOF:
+        return 0;
     }
 }
 
