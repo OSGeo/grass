@@ -84,7 +84,7 @@ int do_labels(FILE *infile, int do_rotation)
         else if (!strncmp(text, "yof", 3))
             sscanf(text, "%*s %d", &yoffset);
         else if (!strncmp(text, "col", 3)) {
-            sscanf(text, "%*s %s", buff);
+            sscanf(text, "%*s %127s", buff);
             set_RGBA_from_str(&color, buff);
         }
         else if (!strncmp(text, "siz", 3))
@@ -94,15 +94,15 @@ int do_labels(FILE *infile, int do_rotation)
         else if (!strncmp(text, "wid", 3))
             sscanf(text, "%*s %lf", &width);
         else if (!strncmp(text, "bac", 3)) {
-            sscanf(text, "%*s %s", buff);
+            sscanf(text, "%*s %127s", buff);
             set_RGBA_from_str(&background, buff);
         }
         else if (!strncmp(text, "bor", 3)) {
-            sscanf(text, "%*s %s", buff);
+            sscanf(text, "%*s %127s", buff);
             set_RGBA_from_str(&border, buff);
         }
         else if (!strncmp(text, "opa", 3)) {
-            sscanf(text, "%*s %s", buff);
+            sscanf(text, "%*s %127s", buff);
             if (!strncmp(buff, "YES", 3))
                 opaque = YES;
             else
@@ -115,7 +115,7 @@ int do_labels(FILE *infile, int do_rotation)
             }
         }
         else if (!strncmp(text, "fon", 3)) {
-            if (sscanf(text, "%*s %s", font) != 1 || !strcmp(font, "standard"))
+            if (sscanf(text, "%*s %255s", font) != 1 || !strcmp(font, "standard"))
                 strcpy(font, std_font);
         }
         else if (!strncmp(text, "rot", 3)) {
@@ -123,7 +123,7 @@ int do_labels(FILE *infile, int do_rotation)
                 sscanf(text, "%*s %lf", &rotation);
         }
         else if (!strncmp(text, "hco", 3)) {
-            sscanf(text, "%*s %s", buff);
+            sscanf(text, "%*s %127s", buff);
             set_RGBA_from_str(&highlight_color, buff);
         }
         else if (!strncmp(text, "hwi", 3))
@@ -452,7 +452,7 @@ int scan_ref(char *buf)
         if (buf[i] >= 'A' && buf[i] <= 'Z')
             buf[i] += 'a' - 'A';
     xref = yref = CENT;
-    switch (sscanf(buf, "%s%s", word1, word2)) {
+    switch (sscanf(buf, "%49s%49s", word1, word2)) {
     case 2:
         if (!(xmatch(word2) || ymatch(word2)))
             return 0;
