@@ -188,8 +188,7 @@ def query_raster(coord, raster_list):
     if len(output_list) == 1:
         return ""
 
-    output_list.append("</table>")
-    output_list.append("<br>")
+    output_list.extend(("</table>", "<br>"))
     final_output = "".join(output_list)
     return style_table(final_output)
 
@@ -254,8 +253,7 @@ def query_vector(coord, vector_list, distance):
     if len(output_list) == 1:
         return ""
 
-    output_list.append("</table>")
-    output_list.append("<br>")
+    output_list.extend(("</table>", "<br>"))
     final_output = "".join(output_list)
     return style_table(final_output)
 
