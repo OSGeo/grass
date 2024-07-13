@@ -49,8 +49,7 @@ def save_results_to_file(results, filename):
     See :func:`save_results` for details.
     """
     text = save_results(results)
-    with open(filename, "w", encoding="utf-8") as file:
-        file.write(text)
+    Path(filename).write_text(text, encoding="utf-8")
 
 
 def load_results(data):

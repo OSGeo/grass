@@ -907,9 +907,8 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
             summary[key] = value
 
         summary_filename = os.path.join(self.result_dir, "test_keyvalue_result.txt")
-        with open(summary_filename, "w") as summary_file:
-            text = keyvalue_to_text(summary, sep="=", vsep="\n", isep=",")
-            summary_file.write(text)
+        text = keyvalue_to_text(summary, sep="=", vsep="\n", isep=",")
+        Path(summary_filename).write_text(text)
 
     def end_file_test(
         self, module, cwd, returncode, stdout, stderr, test_summary, timed_out=None
