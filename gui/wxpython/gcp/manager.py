@@ -122,7 +122,7 @@ class GCPWizard:
         self.gisrc_dict = {}
         try:
             f = open(self.target_gisrc, "r")
-            for line in f.readlines():
+            for line in f:
                 line = line.replace("\n", "").strip()
                 if len(line) < 1:
                     continue
@@ -978,7 +978,7 @@ class DispMapPage(TitledPage):
 
             try:
                 with open(vgrpfile) as f:
-                    for vect in f.readlines():
+                    for vect in f:
                         vect = vect.strip("\n")
                         if len(vect) < 1:
                             continue
@@ -1616,7 +1616,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             f = open(self.file["points"], "r")
             GCPcnt = 0
 
-            for line in f.readlines():
+            for line in f:
                 if line[0] == "#" or line == "":
                     continue
                 line = line.replace("\n", "").strip()
@@ -1868,7 +1868,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             f = open(self.file["vgrp"])
             vectlist = []
             try:
-                for vect in f.readlines():
+                for vect in f:
                     vect = vect.strip("\n")
                     if len(vect) < 1:
                         continue
@@ -2736,7 +2736,7 @@ class VectGroup(wx.Dialog):
             f = open(self.vgrpfile)
             try:
                 checked = []
-                for line in f.readlines():
+                for line in f:
                     line = line.replace("\n", "")
                     if len(line) < 1:
                         continue

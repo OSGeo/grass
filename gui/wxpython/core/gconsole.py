@@ -664,7 +664,7 @@ class GConsole(wx.EvtHandler):
             if os.path.splitext(command[0])[1] in {".py", ".sh"}:
                 try:
                     with open(command[0], "r") as sfile:
-                        for line in sfile.readlines():
+                        for line in sfile:
                             if len(line) < 3:
                                 continue
                             if line.startswith(("#%", "# %")):

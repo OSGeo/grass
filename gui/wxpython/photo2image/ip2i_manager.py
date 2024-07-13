@@ -123,7 +123,7 @@ class GCPWizard:
         self.gisrc_dict = {}
         try:
             f = open(self.target_gisrc, "r")
-            for line in f.readlines():
+            for line in f:
                 line = line.replace("\n", "").strip()
                 if len(line) < 1:
                     continue
@@ -963,7 +963,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             f = open(self.file["points"], "r")
             GCPcnt = 0
 
-            for line in f.readlines():
+            for line in f:
                 if line[0] == "#" or line == "":
                     continue
                 line = line.replace("\n", "").strip()

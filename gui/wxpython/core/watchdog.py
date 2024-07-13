@@ -68,7 +68,7 @@ class CurrentMapsetWatch(FileSystemEventHandler):
             time.sleep(0.1)
             with open(event.src_path, "r") as f:
                 gisrc = {}
-                for line in f.readlines():
+                for line in f:
                     key, val = line.split(":")
                     gisrc[key.strip()] = val.strip()
                 new = os.path.join(

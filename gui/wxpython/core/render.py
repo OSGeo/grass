@@ -908,7 +908,7 @@ class Map:
                 % {"file": filename, "ret": e}
             )
 
-        for line in windfile.readlines():
+        for line in windfile:
             line = line.strip()
             try:
                 key, value = line.split(":", 1)

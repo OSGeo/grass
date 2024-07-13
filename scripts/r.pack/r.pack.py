@@ -94,7 +94,7 @@ def main():
             vrt = os.path.join(map_file["file"], "vrt")
             if os.path.exists(vrt):
                 with open(vrt, "r") as f:
-                    for r in f.readlines():
+                    for r in f:
                         map, mapset = r.split("@")
                         map_basedir = os.path.sep.join(
                             os.path.normpath(

@@ -809,7 +809,7 @@ class HelpWindow(HtmlWindow):
         try:
             contents = []
             skip = False
-            for line in open(htmlFile, "rb").readlines():
+            for line in open(htmlFile, "rb"):
                 if "DESCRIPTION" in line:
                     skip = False
                 if not skip:
