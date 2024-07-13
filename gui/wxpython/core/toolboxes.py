@@ -82,7 +82,7 @@ def getMessages():
 
 
 def clearMessages():
-    del _MESSAGES[:]
+    _MESSAGES.clear()
 
 
 def _debug(level, message):

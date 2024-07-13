@@ -116,8 +116,7 @@ class TemporalManager:
         # check for units for relative type
         if relative:
             units = set()
-            for infoDict in self.timeseriesInfo.values():
-                units.add(infoDict["unit"])
+            units.update(infoDict["unit"] for infoDict in self.timeseriesInfo.values())
             if len(units) > 1:
                 message = _(
                     "It is not allowed to display data with different units (%s)."
