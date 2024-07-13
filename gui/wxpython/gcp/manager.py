@@ -1792,7 +1792,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             map_name = "<{}>".format(found["name"])
 
         if found["name"] and not overwrite:
-            overwrite_dlg = wx.MessageDialog(
+            return wx.MessageDialog(
                 self.GetParent(),
                 message=_(
                     "The {map_type} map {map_name} exists. "
@@ -1804,7 +1804,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 caption=_("Overwrite?"),
                 style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
             )
-            return overwrite_dlg
 
     def OnGeorect(self, event):
         """

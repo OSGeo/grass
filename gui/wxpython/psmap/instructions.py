@@ -1913,8 +1913,7 @@ class Raster(InstructionObject):
         self.instruction = dict(self.defaultInstruction)
 
     def __str__(self):
-        instr = string.Template("raster $raster").substitute(self.instruction)
-        return instr
+        return string.Template("raster $raster").substitute(self.instruction)
 
     def Read(self, instruction, text):
         """Read instruction and save information"""

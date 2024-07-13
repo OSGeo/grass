@@ -98,10 +98,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         uuid_rand = str(uuid.uuid4()).replace("-", "")
 
-        table_name = (
-            self.get_new_map_instance(None).get_type() + "_map_register_" + uuid_rand
-        )
-        return table_name
+        return self.get_new_map_instance(None).get_type() + "_map_register_" + uuid_rand
 
     @abstractmethod
     def get_new_map_instance(self, ident=None):

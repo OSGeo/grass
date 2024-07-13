@@ -2212,9 +2212,7 @@ class Texture:
                     ]
         wx.EndBusyCursor()
 
-        id = Nviz_load_image(im, self.width, self.height, self.image.HasAlpha())
-
-        return id
+        return Nviz_load_image(im, self.width, self.height, self.image.HasAlpha())
 
     def Draw(self):
         """Draw texture as an image"""

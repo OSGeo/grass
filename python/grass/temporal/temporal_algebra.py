@@ -1179,8 +1179,7 @@ class TemporalAlgebraParser:
             #    resultlist.append(map_new)
         # Get sorted map objects as values from result dictionary.
         resultlist = resultdict.values()
-        resultlist = sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
-        return resultlist
+        return sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
 
     def remove_maps(self):
         """Removes empty or intermediate maps of different type."""
@@ -1641,9 +1640,7 @@ class TemporalAlgebraParser:
         resultlist = resultdict.values()
 
         # Sort list of maps chronological.
-        resultlist = sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
-
-        return resultlist
+        return sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
 
     def assign_bool_value(
         self, map_i, temporal_topo_list=["EQUAL"], spatial_topo_list=[]
@@ -1871,8 +1868,7 @@ class TemporalAlgebraParser:
                     #        map_i.condition_value.append(False)
 
         # Sort list of maps chronological.
-        resultlist = sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
-        return resultlist
+        return sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
 
     def set_granularity(self, maplistA, maplistB, toperator="l", topolist=["EQUAL"]):
         """This function sets the temporal extends of a list of maps based on
@@ -2006,13 +2002,11 @@ class TemporalAlgebraParser:
 
         resultlist = resultdict.values()
         # Sort list of maps chronological.
-        resultlist = sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
         # Get relations to maplistB per map in A.
         # Loop over all relations from list
         # temporal extent = map.temporal_intersection(map)
         # if temporal extend is None = delete map.
-
-        return resultlist
+        return sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
 
     def get_temporal_func_dict(self, map):
         """This function creates a dictionary containing temporal functions for a
@@ -2196,18 +2190,15 @@ class TemporalAlgebraParser:
         """
         # Get topology of then statement map list in relation to the other maplist
         # and assign boolean values of the maplist to the thenlist.
-        containlist = self.perform_temporal_selection(
-            thenlist, maplist, assign_val=True, topolist=topolist
-        )
         # Inverse selection of maps from thenlist and assigning False values.
         # excludelist = self.perform_temporal_selection(thenlist, maplist,
         #                                              assign_val = True,
         #                                              inverse = True,
         #                                              topolist = topolist)
         # Combining the selection and inverse selection list.
-        resultlist = containlist  # + excludelist
-
-        return resultlist
+        return self.perform_temporal_selection(
+            thenlist, maplist, assign_val=True, topolist=topolist
+        )
 
     def build_condition_list(self, tvarexpr, thenlist, topolist=["EQUAL"]):
         """This function evaluates temporal variable expressions of a conditional
@@ -2285,9 +2276,7 @@ class TemporalAlgebraParser:
                         resultlist = self.eval_global_var(expr, thenlist)
 
         # Sort resulting list of maps chronological.
-        resultlist = sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
-
-        return resultlist
+        return sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
 
     def eval_condition_list(self, maplist, inverse=False):
         """This function evaluates conditional values of a map list.
@@ -2336,9 +2325,7 @@ class TemporalAlgebraParser:
                     conditionlist[ele_index - 2] = result
                     recurse_compare(conditionlist)
 
-            resultlist = conditionlist
-
-            return resultlist
+            return conditionlist
 
         resultlist = []
         inverselist = []

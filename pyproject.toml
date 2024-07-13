@@ -237,7 +237,13 @@ ignore = [
     "PTH202",  # os-path-getsize
     "PTH204",  # os-path-getmtime
     "PTH207",  # glob
-    "RET50",   # flake8-return (RET)
+    "RET501", # unnecessary-return-none
+    "RET502", # implicit-return-value
+    "RET503", # implicit-return
+    "RET505", # superfluous-else-return
+    "RET506", # superfluous-else-raise
+    "RET507", # superfluous-else-continue
+    "RET508", # superfluous-else-break
     "RSE102",  # unnecessary-paren-on-raise-exception
     "RUF002",  # ambiguous-unicode-character-docstring
     "RUF003",  # ambiguous-unicode-character-comment

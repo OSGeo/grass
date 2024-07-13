@@ -295,7 +295,7 @@ def get_html_test_authors_table(directory, tests_authors):
     if not not_testing_authors:
         not_testing_authors = ["all recent authors contributed tests"]
 
-    test_authors = (
+    return (
         "<h3>Code and test authors</h3>"
         '<p style="font-size: 60%"><em>'
         "Note that determination of authors is approximate and only"
@@ -311,7 +311,6 @@ def get_html_test_authors_table(directory, tests_authors):
             not_testing=", ".join(sorted(not_testing_authors)),
         )
     )
-    return test_authors
 
 
 class GrassTestFilesMultiReporter:
@@ -1212,7 +1211,7 @@ class TestsuiteDirReporter:
         page.close()
 
         status = success_to_html_text(total=file_total, successes=file_successes)
-        row = (
+        return (
             "<tr>"
             '<td><a href="{d}/{page}">{d}</a></td><td>{status}</td>'
             "<td>{nfiles}</td><td>{sfiles}</td><td>{pfiles}</td>"
@@ -1231,7 +1230,6 @@ class TestsuiteDirReporter:
                 ptests=dir_pass_per,
             )
         )
-        return row
 
     def report_for_dirs(self, root, directories):
         # TODO: this will need changes according to potential changes in

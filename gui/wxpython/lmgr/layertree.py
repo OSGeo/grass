@@ -2428,7 +2428,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         height = 25
         if sys.platform in {"win32", "darwin"}:
             height = 40
-        ctrl = TextCtrl(
+        return TextCtrl(
             self,
             id=wx.ID_ANY,
             value="",
@@ -2436,4 +2436,3 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             size=(self.GetSize()[0] - 100, height),
             style=wx.TE_PROCESS_ENTER | wx.TE_DONTWRAP,
         )
-        return ctrl

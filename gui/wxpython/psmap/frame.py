@@ -2613,9 +2613,7 @@ class PsMapBufferedWindow(wx.Window):
         iH = iH * self.currScale
         x = cW / 2 - iW / 2
         y = cH / 2 - iH / 2
-        imageRect = Rect(int(x), int(y), int(iW), int(iH))
-
-        return imageRect
+        return Rect(int(x), int(y), int(iW), int(iH))
 
     def RedrawSelectBox(self, id):
         """Redraws select box when selected object changes its size"""

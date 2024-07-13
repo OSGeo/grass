@@ -191,8 +191,7 @@ def pretty_print(filter_f):
             if i < len(filter_f):
                 pstring += ", "
     # trim starting \n and trailing ,
-    pstring = pstring.lstrip("\n").rstrip(", ")
-    return pstring
+    return pstring.lstrip("\n").rstrip(", ")
 
 
 def write_cpp(bands, values, sensor, folder):
