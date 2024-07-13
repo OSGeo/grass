@@ -312,7 +312,7 @@ def dataset_mapcalculator(
             proc_list[proc_count].start()
             proc_count += 1
 
-            if proc_count == nprocs or proc_count == num or count == num:
+            if proc_count in (nprocs, num) or count == num:
                 proc_count = 0
                 exitcodes = 0
                 for proc in proc_list:

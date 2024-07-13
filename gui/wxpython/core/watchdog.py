@@ -94,9 +94,7 @@ class MapWatch(PatternMatchingEventHandler):
         self.event_handler = event_handler
 
     def on_created(self, event):
-        if (
-            self.element == "vector" or self.element == "raster_3d"
-        ) and not event.is_directory:
+        if (self.element in ("vector", "raster_3d")) and not event.is_directory:
             return
         evt = updateMapset(
             src_path=event.src_path,
@@ -107,9 +105,7 @@ class MapWatch(PatternMatchingEventHandler):
         wx.PostEvent(self.event_handler, evt)
 
     def on_deleted(self, event):
-        if (
-            self.element == "vector" or self.element == "raster_3d"
-        ) and not event.is_directory:
+        if (self.element in ("vector", "raster_3d")) and not event.is_directory:
             return
         evt = updateMapset(
             src_path=event.src_path,
@@ -120,9 +116,7 @@ class MapWatch(PatternMatchingEventHandler):
         wx.PostEvent(self.event_handler, evt)
 
     def on_moved(self, event):
-        if (
-            self.element == "vector" or self.element == "raster_3d"
-        ) and not event.is_directory:
+        if (self.element in ("vector", "raster_3d")) and not event.is_directory:
             return
         evt = updateMapset(
             src_path=event.src_path,

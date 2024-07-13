@@ -159,7 +159,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 
         for file in files:
             self.assertFileExists(file)
-            if file.suffix != ".html" and file.suffix != ".py":
+            if file.suffix not in (".html", ".py"):
                 self.assertModule(str(file), help=True)
 
     def test_github_install_official_non_exists_module(self):

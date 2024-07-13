@@ -67,10 +67,10 @@ def main():
     layer = options["layer"]
     separator = gs.separator(options["separator"])
 
-    if where == "" or where == " " or where == "\n":
+    if where in ("", " ", "\n"):
         where = None
 
-    if columns == "" or columns == " " or columns == "\n":
+    if columns in ("", " ", "\n"):
         columns = None
 
     # Make sure the temporal database exists

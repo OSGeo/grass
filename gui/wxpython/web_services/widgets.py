@@ -508,7 +508,7 @@ class WSPanel(wx.Panel):
         """Manage cmd output."""
         if Debug.GetLevel() != 0:
             Debug.msg(1, event.text)
-        elif event.type != "message" and event.type != "warning":
+        elif event.type not in ("message", "warning"):
             self.cmd_err_str += event.text + os.linesep
 
     def _prepareForNewConn(self, url, username, password):

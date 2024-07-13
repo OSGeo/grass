@@ -20,10 +20,7 @@ test_vector_name = "abstract_doctest_map"
 
 def is_open(c_mapinfo):
     """Return if the Vector is open"""
-    return (
-        c_mapinfo.contents.open != 0
-        and c_mapinfo.contents.open != libvect.VECT_CLOSED_CODE
-    )
+    return c_mapinfo.contents.open not in (0, libvect.VECT_CLOSED_CODE)
 
 
 # =============================================
@@ -465,8 +462,8 @@ class Info:
                 str_err = "Error when trying to close the map with Vect_close"
                 raise GrassError(str_err)
             if (
-                self.c_mapinfo.contents.mode == libvect.GV_MODE_RW
-                or self.c_mapinfo.contents.mode == libvect.GV_MODE_WRITE
+                self.c_mapinfo.contents.mode
+                in (libvect.GV_MODE_RW, libvect.GV_MODE_WRITE)
             ) and build:
                 self.build()
 
