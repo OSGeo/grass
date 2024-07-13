@@ -211,7 +211,7 @@ def draw_linegraph(what):
             )
         )
     with open(gcore.parse_command("d.mon", flags="g", quiet=True)["env"]) as f:
-        for line in f.readlines():
+        for line in f:
             if "GRASS_RENDER_FILE=" in line:
                 gcore.info(
                     _(

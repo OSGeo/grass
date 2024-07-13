@@ -1072,7 +1072,7 @@ class VectMap:
         )
         try:
             head = open(headPath, "r")
-            for line in head.readlines():
+            for line in head:
                 i = line.find(
                     "MAP DATE:",
                 )
@@ -1299,7 +1299,7 @@ class History:
 
         newHistStep = False
         isSearchedHistStep = False
-        for line in hist.readlines():
+        for line in hist:
             if not line.strip() and isSearchedHistStep:
                 break
             elif not line.strip():

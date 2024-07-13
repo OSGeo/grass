@@ -840,7 +840,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
         except OSError as e:
             sys.stderr.write(_("Unable to open file '%s'\n") % envFile)
             return
-        for line in fd.readlines():
+        for line in fd:
             line = line.rstrip(os.linesep)
             try:
                 k, v = (x.strip() for x in line.split(" ", 1)[1].split("=", 1))

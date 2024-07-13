@@ -1990,7 +1990,7 @@ def print_params(params):
             date_str = "#define GRASS_HEADERS_DATE "
             gdate = gpath("include", "grass", "version.h")
             with open(gdate) as filegdate:
-                for line in filegdate.readlines():
+                for line in filegdate:
                     if line.startswith(date_str):
                         sys.stdout.write(
                             "{}\n".format(
