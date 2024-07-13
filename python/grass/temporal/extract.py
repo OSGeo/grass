@@ -251,7 +251,7 @@ def extract_dataset(
 
                     # In case of a empty map continue, do not register empty
                     # maps
-                    if type == "raster" or type == "raster3d":
+                    if type in {"raster", "raster3d"}:
                         if (
                             new_map.metadata.get_min() is None
                             and new_map.metadata.get_max() is None

@@ -590,7 +590,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         map_time = self.get_map_time()
 
-        if map_time == "interval" or map_time == "mixed":
+        if map_time in {"interval", "mixed"}:
             if "equal" in relations and relations["equal"] > 0:
                 return False
             if "during" in relations and relations["during"] > 0:
@@ -966,9 +966,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     use_during = True
                 if name == "overlap":
                     use_overlap = True
-                if name == "contain" or name == "contains":
+                if name in {"contain", "contains"}:
                     use_contain = True
-                if name == "equal" or name == "equals":
+                if name in {"equal", "equals"}:
                     use_equal = True
                 if name == "follows":
                     use_follows = True

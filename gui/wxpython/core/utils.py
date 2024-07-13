@@ -288,7 +288,7 @@ def ListOfMapsets(get="ordered"):
     :return: list of mapsets
     :return: [] on error
     """
-    if get == "all" or get == "ordered":
+    if get in {"all", "ordered"}:
         ret = RunCommand("g.mapsets", read=True, quiet=True, flags="l", sep="newline")
         if not ret:
             return []
@@ -297,7 +297,7 @@ def ListOfMapsets(get="ordered"):
         if get == "all":
             return mapsets_all
 
-    if get == "accessible" or get == "ordered":
+    if get in {"accessible", "ordered"}:
         ret = RunCommand("g.mapsets", read=True, quiet=True, flags="p", sep="newline")
         if not ret:
             return []

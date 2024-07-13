@@ -2642,7 +2642,7 @@ class NvizToolWindow(GNotebook):
         if nameOnly:
             return name
 
-        if nvizType == "surface" or nvizType == "fringe":
+        if nvizType in {"surface", "fringe"}:
             return self._getLayerPropertiesByName(name, mapType="raster")
         elif nvizType == "vector":
             return self._getLayerPropertiesByName(name, mapType="vector")
@@ -4044,7 +4044,7 @@ class NvizToolWindow(GNotebook):
 
         :param vecType: vector type (lines, points)
         """
-        if vecType != "lines" and vecType != "points":
+        if vecType not in {"lines", "points"}:
             return False
 
         for win in self.win["vector"][vecType].keys():

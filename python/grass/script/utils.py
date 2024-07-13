@@ -71,9 +71,9 @@ def separator(sep):
         return ","
     elif sep == "space":
         return " "
-    elif sep == "tab" or sep == "\\t":
+    elif sep in {"tab", "\\t"}:
         return "\t"
-    elif sep == "newline" or sep == "\\n":
+    elif sep in {"newline", "\\n"}:
         return "\n"
     return sep
 

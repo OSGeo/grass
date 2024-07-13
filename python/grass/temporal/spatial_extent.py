@@ -1262,11 +1262,11 @@ class SpatialExtent(SQLDatabaseInterface):
             return False
 
         # Check boundaries of the faces
-        if edge == "E" or edge == "W":
+        if edge in {"E", "W"}:
             if N < eS or S > eN:
                 return False
 
-        if edge == "N" or edge == "S":
+        if edge in {"N", "S"}:
             if E < eW or W > eE:
                 return False
 
@@ -1332,19 +1332,19 @@ class SpatialExtent(SQLDatabaseInterface):
             return False
 
         # Check boundaries of the faces
-        if edge == "E" or edge == "W":
+        if edge in {"E", "W"}:
             if N < eS or S > eN:
                 return False
             if T < eB or B > eT:
                 return False
 
-        if edge == "N" or edge == "S":
+        if edge in {"N", "S"}:
             if E < eW or W > eE:
                 return False
             if T < eB or B > eT:
                 return False
 
-        if edge == "T" or edge == "B":
+        if edge in {"T", "B"}:
             if E < eW or W > eE:
                 return False
             if N < eS or S > eN:
@@ -1806,7 +1806,7 @@ class SpatialExtent(SQLDatabaseInterface):
         """Set the projection of the spatial extent it should be XY or LL.
         As default the projection is XY
         """
-        if proj is None or (proj != "XY" and proj != "LL"):
+        if proj is None or (proj not in {"XY", "LL"}):
             self.D["proj"] = "XY"
         else:
             self.D["proj"] = proj
