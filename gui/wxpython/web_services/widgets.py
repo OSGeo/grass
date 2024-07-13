@@ -662,7 +662,7 @@ class WSPanel(wx.Panel):
 
         if "bgcolor" in dcmd and self.params["bgcolor"]:
             bgcolor = dcmd["bgcolor"].strip().lower()
-            if len(bgcolor) == 8 and "0x" == bgcolor[:2]:
+            if len(bgcolor) == 8 and bgcolor[:2] == "0x":
                 colour = "#" + bgcolor[2:]
                 self.params["bgcolor"].SetColour(colour)
 

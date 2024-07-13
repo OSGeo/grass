@@ -183,11 +183,11 @@ class SpatialExtent(SQLDatabaseInterface):
 
         # Adjust the east and west in case of LL projection
         if self.get_projection() == "LL":
-            while E < self.get_west():
+            while self.get_west() > E:
                 E += 360.0
                 W += 360.0
 
-            while W > self.get_east():
+            while self.get_east() < W:
                 E -= 360.0
                 W -= 360.0
 
@@ -285,13 +285,13 @@ class SpatialExtent(SQLDatabaseInterface):
         nE = E
         nW = W
 
-        if W < eW:
+        if eW > W:
             nW = eW
-        if E > eE:
+        if eE < E:
             nE = eE
-        if N > eN:
+        if eN < N:
             nN = eN
-        if S < eS:
+        if eS > S:
             nS = eS
 
         new = SpatialExtent(
@@ -396,9 +396,9 @@ class SpatialExtent(SQLDatabaseInterface):
         nT = T
         nB = B
 
-        if B < eB:
+        if eB > B:
             nB = eB
-        if T > eT:
+        if eT < T:
             nT = eT
 
         new.set_top(nT)
@@ -450,13 +450,13 @@ class SpatialExtent(SQLDatabaseInterface):
         nE = E
         nW = W
 
-        if W > eW:
+        if eW < W:
             nW = eW
-        if E < eE:
+        if eE > E:
             nE = eE
-        if N < eN:
+        if eN > N:
             nN = eN
-        if S > eS:
+        if eS < S:
             nS = eS
 
         new = SpatialExtent(
@@ -584,9 +584,9 @@ class SpatialExtent(SQLDatabaseInterface):
         nT = T
         nB = B
 
-        if B > eB:
+        if eB < B:
             nB = eB
-        if T < eT:
+        if eT > T:
             nT = eT
 
         new.set_top(nT)
@@ -638,13 +638,13 @@ class SpatialExtent(SQLDatabaseInterface):
                 eE -= 360.0
                 eW -= 360.0
 
-        if W <= eW:
+        if eW >= W:
             return False
-        if E >= eE:
+        if eE <= E:
             return False
-        if N >= eN:
+        if eN <= N:
             return False
-        if S <= eS:
+        if eS >= S:
             return False
 
         return True
@@ -680,9 +680,9 @@ class SpatialExtent(SQLDatabaseInterface):
         T = self.get_top()
         B = self.get_bottom()
 
-        if B <= eB:
+        if eB >= B:
             return False
-        if T >= eT:
+        if eT <= T:
             return False
 
         return True
@@ -778,13 +778,13 @@ class SpatialExtent(SQLDatabaseInterface):
                 eE -= 360.0
                 eW -= 360.0
 
-        if W != eW:
+        if eW != W:
             return False
-        if E != eE:
+        if eE != E:
             return False
-        if N != eN:
+        if eN != N:
             return False
-        if S != eS:
+        if eS != S:
             return False
 
         return True
@@ -821,9 +821,9 @@ class SpatialExtent(SQLDatabaseInterface):
         T = self.get_top()
         B = self.get_bottom()
 
-        if B != eB:
+        if eB != B:
             return False
-        if T != eT:
+        if eT != T:
             return False
 
         return True
@@ -894,28 +894,28 @@ class SpatialExtent(SQLDatabaseInterface):
                 eW -= 360.0
 
         # Edges of extent located outside of self are not allowed
-        if E <= eW:
+        if eW >= E:
             return False
-        if W >= eE:
+        if eE <= W:
             return False
-        if N <= eS:
+        if eS >= N:
             return False
-        if S >= eN:
+        if eN <= S:
             return False
 
         # First we check that at least one edge of extent meets an edge of self
-        if W != eW and E != eE and N != eN and S != eS:
+        if eW != W and eE != E and eN != N and eS != S:
             return False
 
         # We check that at least one edge of extent is located in self
         edge_count = 0
-        if W < eW and E > eW:
+        if eW > W and eW < E:
             edge_count += 1
-        if E > eE and W < eE:
+        if eE < E and eE > W:
             edge_count += 1
-        if N > eN and S < eN:
+        if eN < N and eN > S:
             edge_count += 1
-        if S < eS and N > eS:
+        if eS > S and eS < N:
             edge_count += 1
 
         if edge_count == 0:
@@ -976,40 +976,40 @@ class SpatialExtent(SQLDatabaseInterface):
                 eW -= 360.0
 
         # Edges of extent located outside of self are not allowed
-        if E <= eW:
+        if eW >= E:
             return False
-        if W >= eE:
+        if eE <= W:
             return False
-        if N <= eS:
+        if eS >= N:
             return False
-        if S >= eN:
+        if eN <= S:
             return False
-        if T <= eB:
+        if eB >= T:
             return False
-        if B >= eT:
+        if eT <= B:
             return False
 
         # First we check that at least one edge of extent meets an edge of self
-        if W != eW and E != eE and N != eN and S != eS and B != eB and T != eT:
+        if eW != W and eE != E and eN != N and eS != S and eB != B and eT != T:
             return False
 
         # We check that at least one edge of extent is located in self
         edge_count = 0
-        if W < eW and E > eW:
+        if eW > W and eW < E:
             edge_count += 1
-        if E > eE and W < eE:
+        if eE < E and eE > W:
             edge_count += 1
-        if N > eN and S < eN:
+        if eN < N and eN > S:
             edge_count += 1
-        if S < eS and N > eS:
+        if eS > S and eS < N:
             edge_count += 1
-        if N > eN and S < eN:
+        if eN < N and eN > S:
             edge_count += 1
-        if S < eS and N > eS:
+        if eS > S and eS < N:
             edge_count += 1
-        if T > eT and B < eT:
+        if eT < T and eT > B:
             edge_count += 1
-        if B < eB and T > eB:
+        if eB > B and eB < T:
             edge_count += 1
 
         if edge_count == 0:
@@ -1097,11 +1097,11 @@ class SpatialExtent(SQLDatabaseInterface):
 
         # Adjust the east and west in case of LL projection
         if self.get_projection() == "LL":
-            while E < self.get_west():
+            while self.get_west() > E:
                 E += 360.0
                 W += 360.0
 
-            while W > self.get_east():
+            while self.get_east() < W:
                 E -= 360.0
                 W -= 360.0
 
@@ -1159,11 +1159,11 @@ class SpatialExtent(SQLDatabaseInterface):
 
         # Adjust the east and west in case of LL projection
         if self.get_projection() == "LL":
-            while E < self.get_west():
+            while self.get_west() > E:
                 E += 360.0
                 W += 360.0
 
-            while W > self.get_east():
+            while self.get_east() < W:
                 E -= 360.0
                 W -= 360.0
 
@@ -1244,16 +1244,16 @@ class SpatialExtent(SQLDatabaseInterface):
         edge = None
         edge_count = 0
 
-        if E == eW:
+        if eW == E:
             edge = "E"
             edge_count += 1
-        if W == eE:
+        if eE == W:
             edge = "W"
             edge_count += 1
-        if N == eS:
+        if eS == N:
             edge = "N"
             edge_count += 1
-        if S == eN:
+        if eN == S:
             edge = "S"
             edge_count += 1
 
@@ -1263,11 +1263,11 @@ class SpatialExtent(SQLDatabaseInterface):
 
         # Check boundaries of the faces
         if edge == "E" or edge == "W":
-            if N < eS or S > eN:
+            if eS > N or eN < S:
                 return False
 
         if edge == "N" or edge == "S":
-            if E < eW or W > eE:
+            if eW > E or eE < W:
                 return False
 
         return True
@@ -1308,22 +1308,22 @@ class SpatialExtent(SQLDatabaseInterface):
         edge = None
         edge_count = 0
 
-        if E == eW:
+        if eW == E:
             edge = "E"
             edge_count += 1
-        if W == eE:
+        if eE == W:
             edge = "W"
             edge_count += 1
-        if N == eS:
+        if eS == N:
             edge = "N"
             edge_count += 1
-        if S == eN:
+        if eN == S:
             edge = "S"
             edge_count += 1
-        if T == eB:
+        if eB == T:
             edge = "T"
             edge_count += 1
-        if B == eT:
+        if eT == B:
             edge = "B"
             edge_count += 1
 
@@ -1333,21 +1333,21 @@ class SpatialExtent(SQLDatabaseInterface):
 
         # Check boundaries of the faces
         if edge == "E" or edge == "W":
-            if N < eS or S > eN:
+            if eS > N or eN < S:
                 return False
-            if T < eB or B > eT:
+            if eB > T or eT < B:
                 return False
 
         if edge == "N" or edge == "S":
-            if E < eW or W > eE:
+            if eW > E or eE < W:
                 return False
-            if T < eB or B > eT:
+            if eB > T or eT < B:
                 return False
 
         if edge == "T" or edge == "B":
-            if E < eW or W > eE:
+            if eW > E or eE < W:
                 return False
-            if N < eS or S > eN:
+            if eS > N or eN < S:
                 return False
 
         return True

@@ -1093,7 +1093,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 return
 
         kwargs = {key: "%s,%s" % (lnameSrc, lnameDst)}
-        if 0 != RunCommand("g.copy", overwrite=True, **kwargs):
+        if RunCommand("g.copy", overwrite=True, **kwargs) != 0:
             GError(_("Unable to make copy of <%s>") % lnameSrc, parent=self)
             return
 
