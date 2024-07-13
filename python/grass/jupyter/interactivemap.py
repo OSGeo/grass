@@ -15,6 +15,7 @@
 
 import base64
 import json
+from pathlib import Path
 from .reprojection_renderer import ReprojectionRenderer
 
 
@@ -119,9 +120,8 @@ class Raster(Layer):
             # ImageOverlays don't work well with local files,
             # they need relative address and behavior differs
             # for notebooks and jupyterlab
-            with open(self._filename, "rb") as file:
-                data = base64.b64encode(file.read()).decode("ascii")
-                url = "data:image/png;base64," + data
+            data = base64.b64encode(Path(self._filename).read_bytes()).decode("ascii")
+            url = "data:image/png;base64," + data
             image = ipyleaflet.ImageOverlay(
                 url=url, bounds=self._bounds, name=self._title, **self._layer_kwargs
             )

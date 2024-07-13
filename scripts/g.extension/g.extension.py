@@ -489,8 +489,7 @@ def urlretrieve(url, filename, *args, **kwargs):
     """
     request = urlrequest.Request(url, headers=HEADERS)
     response = urlrequest.urlopen(request, *args, **kwargs)
-    with open(filename, "wb") as f:
-        f.write(response.read())
+    Path(filename).write_bytes(response.read())
 
 
 def urlopen(url, *args, **kwargs):
@@ -572,8 +571,7 @@ def get_default_branch(full_url):
 
 def etree_fromfile(filename):
     """Create XML element tree from a given file name"""
-    with open(filename, "r") as file_:
-        return etree.fromstring(file_.read())
+    return etree.fromstring(Path(filename).read_text())
 
 
 def etree_fromurl(url):
@@ -1294,8 +1292,7 @@ def install_toolbox_xml(url, name):
         write_xml_modules(xml_file)
 
     # read XML file
-    with open(xml_file, "r") as xml:
-        tree = etree.fromstring(xml.read())
+    tree = etree.fromstring(Path(xml_file).read_text())
 
     # update tree
     tnode = None
@@ -1798,16 +1795,14 @@ def fix_newlines(directory):
                 continue  # ignore binary files
 
             # read content of text file
-            with open(filename, "rb") as fd:
-                data = fd.read()
+            data = Path(filename).read_bytes()
 
             # we don't expect there would be CRLF file by
             # purpose if we want to allow CRLF files we would
             # have to whitelite .py etc
             newdata = data.replace(b"\r\n", b"\n")
             if newdata != data:
-                with open(filename, "wb") as newfile:
-                    newfile.write(newdata)
+                Path(filename).write_bytes(newdata)
 
 
 def extract_zip(name, directory, tmpdir):

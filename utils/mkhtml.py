@@ -26,6 +26,7 @@ import locale
 import json
 import pathlib
 import subprocess
+from pathlib import Path
 
 from html.parser import HTMLParser
 
@@ -513,8 +514,7 @@ GRASS GIS ${GRASS_VERSION} Reference Manual
 
 def read_file(name):
     try:
-        with open(name) as f:
-            return f.read()
+        return Path(name).read_text()
     except OSError:
         return ""
 

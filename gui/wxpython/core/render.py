@@ -22,6 +22,7 @@ This program is free software under the GNU General Public License
 """
 
 import os
+from pathlib import Path
 import sys
 import glob
 import math
@@ -725,10 +726,9 @@ class RenderMapMgr(wx.EvtHandler):
                     continue
 
                 if os.path.isfile(layer._legrow) and not layer.hidden:
-                    with open(layer._legrow) as infile:
-                        line = infile.read()
-                        outfile.write(line)
-                        new_legend.append(line)
+                    line = Path(layer._legrow).read_text()
+                    outfile.write(line)
+                    new_legend.append(line)
 
         self._rendering = False
         if wx.IsBusy():

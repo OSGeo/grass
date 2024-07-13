@@ -19,6 +19,7 @@ import base64
 import os
 from http.client import HTTPException
 from math import ceil
+from pathlib import Path
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError
 
@@ -304,8 +305,7 @@ class WMSBase:
         # save to file
         if capfile_output:
             try:
-                with open(capfile_output, "w") as temp:
-                    temp.write(cap)
+                Path(capfile_output).write_text(cap)
                 return
             except OSError as error:
                 gs.fatal(_("Unable to open file '%s'.\n%s\n" % (capfile_output, error)))

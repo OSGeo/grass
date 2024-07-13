@@ -2,6 +2,7 @@
 # Author: Owen Smith - Rewritten from test.pl by Huidae Cho
 # Run: d.mon start=wx0 && ./test.py | d.text at=0,100
 import math
+from pathlib import Path
 import re
 
 # Quiet black syntax checking for fonts and colors to keep the code printed to
@@ -66,8 +67,8 @@ font("romans")
 color("gray")
 rc(1, 1)
 
-with open(__file__) as f:
-    src = f.read()
+
+src = Path(__file__).read_text()
 
 print(
     ".L 0\n"

@@ -14,6 +14,7 @@
 #############################################################################
 
 import os
+from pathlib import Path
 import sys
 import fnmatch
 import re
@@ -97,9 +98,8 @@ def img_in_html(filename, imagename):
     # for some reason, calling search just once is much faster
     # than calling it on every line (time is spent in _compile)
     pattern = re.compile("<img .*src=.{0}.*>".format(imagename))
-    with open(filename) as file:
-        if re.search(pattern, file.read()):
-            return True
+    if re.search(pattern, Path(filename).read_text()):
+        return True
     return False
 
 

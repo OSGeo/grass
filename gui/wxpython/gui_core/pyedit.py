@@ -10,6 +10,7 @@ for details.
 :authors: Martin Landa
 """
 
+from pathlib import Path
 import sys
 import os
 import stat
@@ -300,8 +301,7 @@ class PyEditController:
         :return str or None: file content or None
         """
         try:
-            with open(file_path, "r") as f:
-                return f.read()
+            return Path(file_path).read_text()
         except PermissionError:
             GError(
                 message=_(
@@ -327,9 +327,8 @@ class PyEditController:
         :return None or True: file written or None
         """
         try:
-            with open(file_path, "w") as f:
-                f.write(content)
-                return True
+            Path(file_path).write_text(content)
+            return True
         except PermissionError:
             GError(
                 message=_(

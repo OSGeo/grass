@@ -5,14 +5,14 @@
 import sys
 import datetime
 from types import SimpleNamespace
+from pathlib import Path
 
 import argparse
 
 
 def read_version_file():
     """Return version file content as object instance with attributes"""
-    with open("include/VERSION", encoding="utf-8") as file:
-        lines = file.read().splitlines()
+    lines = Path("include/VERSION").read_text(encoding="utf-8").splitlines()
     return SimpleNamespace(
         major=lines[0], minor=lines[1], micro=lines[2], year=lines[3]
     )
