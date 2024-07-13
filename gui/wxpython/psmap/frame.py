@@ -723,7 +723,7 @@ class PsMapFrame(wx.Frame):
                     )
                     self.openDialogs["mapNotebook"] = dlg
                 self.openDialogs["mapNotebook"].Show()
-            else:
+            else:  # noqa: PLR5501
                 if "mapNotebook" in self.openDialogs:
                     self.openDialogs["mapNotebook"].notebook.ChangeSelection(0)
                 else:
@@ -1690,11 +1690,10 @@ class PsMapBufferedWindow(wx.Window):
                 self.SetCursor(self.cursors["sizenwse"])
                 self.parent.SetStatusText(_("Click and drag to resize object"), 0)
                 self.showResizeHelp = True
-            else:
-                if self.showResizeHelp:
-                    self.parent.SetStatusText("", 0)
-                    self.SetCursor(self.cursors["default"])
-                    self.showResizeHelp = False
+            elif self.showResizeHelp:
+                self.parent.SetStatusText("", 0)
+                self.SetCursor(self.cursors["default"])
+                self.showResizeHelp = False
 
     def OnLeftDown(self, event):
         """Left mouse button pressed.

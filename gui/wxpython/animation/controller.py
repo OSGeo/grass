@@ -595,8 +595,7 @@ class AnimationController(wx.EvtHandler):
                             "to": timeLabel[1],
                         }
                     elif (
-                        self.temporalManager.GetTemporalType()
-                        == TemporalType.ABSOLUTE
+                        self.temporalManager.GetTemporalType() == TemporalType.ABSOLUTE
                     ):
                         text = timeLabel[0]
                     else:
