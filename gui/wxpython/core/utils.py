@@ -100,7 +100,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None, layerType=None):
     if len(dcmd) < 1:
         return mapname, False
 
-    if "d.grid" == dcmd[0]:
+    if dcmd[0] == "d.grid":
         mapname = "grid"
     elif "d.geodesic" in dcmd[0]:
         mapname = "geodesic"

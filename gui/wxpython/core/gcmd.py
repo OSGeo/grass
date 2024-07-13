@@ -201,7 +201,7 @@ class Popen(subprocess.Popen):
             import win32api
 
             handle = win32api.OpenProcess(1, 0, self.pid)
-            return 0 != win32api.TerminateProcess(handle, 0)
+            return win32api.TerminateProcess(handle, 0) != 0
         else:
             try:
                 os.kill(-self.pid, signal.SIGTERM)  # kill whole group

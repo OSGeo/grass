@@ -290,7 +290,6 @@ ignore = [
     "SIM118",  # in-dict-keys
     "SIM201",  # negate-equal-op
     "SIM223",  # expr-and-false
-    "SIM300",  # yoda-conditions
     "SIM401",  # if-else-block-instead-of-dict-get
     "SLF001",  # private-member-access
     "TRY002",  # raise-vanilla-class
