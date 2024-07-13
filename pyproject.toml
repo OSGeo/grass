@@ -151,8 +151,6 @@ ignore = [
     "FBT001",  # boolean-type-hint-positional-argument
     "FBT002",  # boolean-default-value-positional-argument
     "FBT003",  # boolean-positional-value-in-call
-    "FURB101", # read-whole-file
-    "FURB103", # write-whole-file.
     "FURB118", # reimplemented-operator
     "FURB152", # math-constant
     "FURB154", # repeated-global

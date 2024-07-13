@@ -103,27 +103,24 @@ def _read_from_JSON(history_path):
     """
     content_list = []
     try:
-        with open(
-            history_path, encoding="utf-8", mode="r", errors="replace"
-        ) as file_history:
-            content = file_history.read()
-            if content:
-                try:
-                    history_entries = json.loads(content)
-                except ValueError as ve:
-                    raise ValueError(
-                        _("Error decoding content of JSON history file {}").format(
-                            history_path
-                        )
-                    ) from ve
-                # Process the content as a list of dictionaries
-                content_list = [
-                    {
-                        "command": entry["command"],
-                        "command_info": entry["command_info"],
-                    }
-                    for entry in history_entries
-                ]
+        content = Path(history_path).read_text(encoding="utf-8", errors="replace")
+        if content:
+            try:
+                history_entries = json.loads(content)
+            except ValueError as ve:
+                raise ValueError(
+                    _("Error decoding content of JSON history file {}").format(
+                        history_path
+                    )
+                ) from ve
+            # Process the content as a list of dictionaries
+            content_list = [
+                {
+                    "command": entry["command"],
+                    "command_info": entry["command_info"],
+                }
+                for entry in history_entries
+            ]
     except OSError as e:
         raise OSError(
             _("Unable to read from JSON history file {}").format(history_path)

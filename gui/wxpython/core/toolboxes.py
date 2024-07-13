@@ -13,6 +13,7 @@ This program is free software under the GNU General Public License
 """
 
 import os
+from pathlib import Path
 import sys
 import copy
 import shutil
@@ -846,8 +847,7 @@ def module_test():
         return 0
 
     menudataFile = "data/test_toolboxes_menudata_ref.xml"
-    with open(menudataFile) as correctMenudata:
-        correct = str(correctMenudata.read())
+    correct = str(Path(menudataFile).read_text())
 
     import difflib
 

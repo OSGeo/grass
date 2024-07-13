@@ -11,6 +11,7 @@ for details.
 
 import os
 import datetime
+from pathlib import Path
 from xml.sax import saxutils
 import xml.etree.ElementTree as et
 import subprocess
@@ -906,9 +907,8 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
             summary[key] = value
 
         summary_filename = os.path.join(self.result_dir, "test_keyvalue_result.txt")
-        with open(summary_filename, "w") as summary_file:
-            text = keyvalue_to_text(summary, sep="=", vsep="\n", isep=",")
-            summary_file.write(text)
+        text = keyvalue_to_text(summary, sep="=", vsep="\n", isep=",")
+        Path(summary_filename).write_text(text)
 
     def end_file_test(
         self, module, cwd, returncode, stdout, stderr, test_summary, timed_out=None
@@ -1025,8 +1025,7 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
             width = 72
             self._stream.write(width * "=")
             self._stream.write("\n")
-            with open(stderr) as text:
-                self._stream.write(text.read())
+            self._stream.write(Path(stderr).read_text())
             self._stream.write(width * "=")
             self._stream.write("\n")
             self._stream.write(f"FAILED {module.file_path}")
@@ -1116,8 +1115,7 @@ class TestsuiteDirReporter:
                 root, directory, test_file_name, "test_keyvalue_result.txt"
             )
             # if os.path.exists(summary_filename):
-            with open(summary_filename, "r") as keyval_file:
-                summary = text_to_keyvalue(keyval_file.read(), sep="=")
+            summary = text_to_keyvalue(Path(summary_filename).read_text(), sep="=")
             # else:
             # TODO: write else here
             #    summary = None
