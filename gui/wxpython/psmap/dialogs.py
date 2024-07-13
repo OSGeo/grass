@@ -3978,7 +3978,7 @@ class LegendDialog(PsmapDialog):
         if page == 0 or event is None:
             children = self.panelRaster.GetChildren()
             if self.isRLegend.GetValue():
-                for i, widget in enumerate(children):
+                for widget in children:
                     widget.Enable()
                 self.OnRaster(None)
                 self.OnRange(None)
@@ -3990,7 +3990,7 @@ class LegendDialog(PsmapDialog):
         if page == 1 or event is None:
             children = self.panelVector.GetChildren()
             if self.isVLegend.GetValue():
-                for i, widget in enumerate(children):
+                for widget in children:
                     widget.Enable()
                 self.OnSpan(None)
                 self.OnBorder(None)
