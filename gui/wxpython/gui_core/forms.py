@@ -351,6 +351,7 @@ class UpdateThread(Thread):
                         "layer": layer,
                         "dbInfo": cparams[map]["dbInfo"],
                     }
+                # table
                 elif driver and db:
                     self.data[win.GetParent().InsertTableColumns] = {
                         "table": pTable.get("value"),
