@@ -358,7 +358,6 @@ class InteractiveMap:
         Allow Users to draw the computational region and modify it.
         """
         import ipywidgets as widgets
-        from ipyleaflet import Rectangle, WidgetControl
 
         region_mode_button = widgets.ToggleButton(
             icon="square-o",
@@ -442,7 +441,7 @@ class InteractiveMap:
                         "east": rregion[2],
                         "west": rregion[3],
                     }
-                    rectangle = Rectangle(
+                    rectangle = self._ipyleaflet.Rectangle(
                         bounds=latlon_bounds,
                         color="red",
                         fill_color="red",
@@ -488,7 +487,7 @@ class InteractiveMap:
                 bottom_output_widget.layout.display = "block"
 
                 if save_button_control is None:
-                    save_button_control = WidgetControl(
+                    save_button_control = self._ipyleaflet.WidgetControl(
                         widget=save_button, position="topright"
                     )
                     self.map.add_control(save_button_control)
@@ -524,12 +523,12 @@ class InteractiveMap:
         region_mode_button.observe(toggle_region_mode, names="value")
         save_button.on_click(save_region)
 
-        region_mode_control = WidgetControl(
+        region_mode_control = self._ipyleaflet.WidgetControl(
             widget=region_mode_button, position="topright"
         )
         self.map.add_control(region_mode_control)
 
-        output_control = WidgetControl(
+        output_control = self._ipyleaflet.WidgetControl(
             widget=bottom_output_widget, position="bottomright"
         )
         self.map.add_control(output_control)
