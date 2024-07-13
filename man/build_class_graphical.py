@@ -128,7 +128,7 @@ def get_module_image(module, images):
             return image
         if basename == module:
             return image
-    return sorted(candidates, key=len)[0]
+    return min(candidates, key=len)
 
 
 def generate_page_for_category(
