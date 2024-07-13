@@ -15,6 +15,7 @@
 
 import copy
 import json
+from pathlib import Path
 from types import SimpleNamespace
 
 
@@ -67,8 +68,7 @@ def load_results_from_file(filename):
 
     See :func:`load_results` for details.
     """
-    with open(filename, "r", encoding="utf-8") as file:
-        return load_results(file.read())
+    return load_results(Path(filename).read_text(encoding="utf-8"))
 
 
 def join_results(results, prefixes=None, select=None, prefixes_as_labels=False):

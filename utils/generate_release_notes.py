@@ -344,8 +344,9 @@ def create_release_notes(args):
         ).stdout.strip()
 
     config_directory = Path("utils")
-    with open(config_directory / "release.yml", encoding="utf-8") as file:
-        config = yaml.safe_load(file.read())["notes"]
+    config = yaml.safe_load(
+        Path(config_directory / "release.yml").read_text(encoding="utf-8")
+    )["notes"]
 
     if args.backend == "api":
         notes_from_gh_api(
@@ -391,8 +392,7 @@ def main():
     args = parser.parse_args()
     if args.backend == "check":
         config_file = Path("utils") / "release.yml"
-        with open(config_file, encoding="utf-8") as file:
-            config = yaml.safe_load(file.read())
+        config = yaml.safe_load(Path(config_file).read_text(encoding="utf-8"))
         has_match = False
         for category in config["notes"]["categories"]:
             if re.match(category["regexp"], args.branch):

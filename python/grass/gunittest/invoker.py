@@ -11,6 +11,7 @@ for details.
 
 import collections
 import os
+from pathlib import Path
 import shutil
 import subprocess
 import sys
@@ -39,8 +40,7 @@ maketrans = str.maketrans
 # TODO: this might be more extend then update
 def update_keyval_file(filename, module, returncode):
     if os.path.exists(filename):
-        with open(filename, "r") as keyval_file:
-            keyval = text_to_keyvalue(keyval_file.read(), sep="=")
+        keyval = text_to_keyvalue(Path(filename).read_text(), sep="=")
     else:
         keyval = {}
 
