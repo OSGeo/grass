@@ -26,6 +26,7 @@ PRETTY_TEMPLATE = (
     "    date: %ad%n"
     "    message: |-%n      %s"
 )
+CONFIG_DIRECTORY = Path("utils")
 
 
 def remove_excluded_changes(changes, exclude):
@@ -266,18 +267,17 @@ def notes_from_git_log(start_tag, end_tag, categories, exclude):
     if not commits:
         raise RuntimeError("No commits retrieved from git log (try different tags)")
 
-    config_directory = Path("utils")
     svn_name_by_git_author = csv_to_dict(
-        config_directory / "svn_name_git_author.csv",
+        CONFIG_DIRECTORY / "svn_name_git_author.csv",
         key="git_author",
         value="svn_name",
     )
     github_name_by_svn_name = csv_to_dict(
-        config_directory / "svn_name_github_name.csv",
+        CONFIG_DIRECTORY / "svn_name_github_name.csv",
         key="svn_name",
         value="github_name",
     )
-    github_name_by_git_author_file = config_directory / "git_author_github_name.csv"
+    github_name_by_git_author_file = CONFIG_DIRECTORY / "git_author_github_name.csv"
     github_name_by_git_author = csv_to_dict(
         github_name_by_git_author_file,
         key="git_author",
@@ -343,10 +343,8 @@ def create_release_notes(args):
             check=True,
         ).stdout.strip()
 
-    config_directory = Path("utils")
-    config = yaml.safe_load(
-        Path(config_directory / "release.yml").read_text(encoding="utf-8")
-    )["notes"]
+    config_file = CONFIG_DIRECTORY / "release.yml"
+    config = yaml.safe_load(config_file.read_text(encoding="utf-8"))["notes"]
 
     if args.backend == "api":
         notes_from_gh_api(
