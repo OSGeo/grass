@@ -53,8 +53,7 @@ def get_history_file_extension(history_path):
     :return str extension: None (plain text) or .json
     """
     file_path = Path(history_path)
-    extension = file_path.suffix
-    return extension
+    return file_path.suffix
 
 
 def ensure_history_file(history_path):
@@ -276,14 +275,13 @@ def get_initial_command_info(env_run):
     region_settings = gs.region(env=env_run)
 
     # Finalize the command info dictionary
-    cmd_info = {
+    return {
         "timestamp": exec_time,
         "mask2d": mask2d_present,
         "mask3d": mask3d_present,
         "region": region_settings,
         "status": Status.RUNNING.value,
     }
-    return cmd_info
 
 
 def _add_entry_to_JSON(history_path, entry):

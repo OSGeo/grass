@@ -243,7 +243,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
     def InitFly(self):
         """Initialize fly through dictionary"""
-        fly = {
+        return {
             "interval": 10,  # interval for timerFly
             "value": [0, 0, 0],  # calculated values for navigation
             "mode": 0,  # fly through mode (0, 1)
@@ -263,8 +263,6 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             "arrowStep": 50,  # step in pixels (when using arrows)
             "flySpeedStep": 2,
         }
-
-        return fly
 
     def OnTimerFly(self, event):
         """Fly event was emitted, move the scene"""

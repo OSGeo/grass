@@ -663,8 +663,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
 
         data = {"node": node, "mapset": mapset}
 
-        item = self.seltree.AppendItem(parent, text=value, data=data)
-        return item
+        return self.seltree.AppendItem(parent, text=value, data=data)
 
     def OnKeyUp(self, event):
         """Enables to select items using keyboard

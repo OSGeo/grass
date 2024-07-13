@@ -215,11 +215,9 @@ class HistoryBrowserTree(CTreeView):
             return OLD_DATE
 
         timestamp_datetime = datetime.datetime.fromisoformat(timestamp)
-        day_midnight = datetime.datetime(
+        return datetime.datetime(
             timestamp_datetime.year, timestamp_datetime.month, timestamp_datetime.day
         ).date()
-
-        return day_midnight
 
     def _initHistoryModel(self):
         """Fill tree history model based on the current history log."""

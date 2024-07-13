@@ -3062,8 +3062,7 @@ class CmdPanel(wx.Panel):
             image = wx.Image(iconSectionDict[section]).Scale(
                 16, 16, wx.IMAGE_QUALITY_HIGH
             )
-            idx = imageList.Add(BitmapFromImage(image))
-            return idx
+            return imageList.Add(BitmapFromImage(image))
 
         return -1
 

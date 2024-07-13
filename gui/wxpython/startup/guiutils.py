@@ -165,9 +165,8 @@ def create_location_interactively(guiparent, grassdb):
     gWizard = LocationWizard(parent=guiparent, grassdatabase=grassdb)
 
     if gWizard.location is None:
-        gWizard_output = (None, None, None)
+        return (None, None, None)
         # Returns Nones after Cancel
-        return gWizard_output
 
     if gWizard.georeffile:
         message = _("Do you want to import {} to the newly created project?").format(

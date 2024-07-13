@@ -481,9 +481,7 @@ def _operator_parser(expr, first, current):
     expr = _parse_start_time_operator(expr, is_time_absolute, first, current)
     expr = _parse_end_time_operator(expr, is_time_absolute, first, current)
     expr = _parse_start_operators(expr, is_time_absolute, current)
-    expr = _parse_end_operators(expr, is_time_absolute, current)
-
-    return expr
+    return _parse_end_operators(expr, is_time_absolute, current)
 
 
 ###############################################################################

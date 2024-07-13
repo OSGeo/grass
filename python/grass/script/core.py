@@ -983,9 +983,7 @@ def tempname(length, lowercase=False):
     if not lowercase:
         chars += string.ascii_uppercase
     random_part = "".join(random.choice(chars) for _ in range(length))
-    randomname = "tmp_" + random_part
-
-    return randomname
+    return "tmp_" + random_part
 
 
 def _compare_projection(dic):

@@ -359,8 +359,7 @@ class DataCatalogTree(TreeView):
         dbs = UserSettings.Get(
             group="datacatalog", key="grassdbs", subkey="listAsString"
         )
-        dbs = [db for db in dbs.split(",") if os.path.isdir(db)]
-        return dbs
+        return [db for db in dbs.split(",") if os.path.isdir(db)]
 
     def _saveGrassDBs(self):
         """Save current grass dbs in tree to settings"""

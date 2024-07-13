@@ -1380,8 +1380,7 @@ class Boundary(Line):
             if idonly:
                 return v_id
             else:
-                cntr = Centroid(v_id=v_id, c_mapinfo=self.c_mapinfo)
-                return cntr
+                return Centroid(v_id=v_id, c_mapinfo=self.c_mapinfo)
 
     def left_centroid(self, idonly=False):
         """Return left centroid
