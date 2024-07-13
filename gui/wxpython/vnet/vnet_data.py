@@ -666,8 +666,7 @@ class VNETAnalysisParameters:
                 vectMaps = grass.list_grouped("vector")[mapSet]
 
         if not params["input"] or mapName not in vectMaps:
-            invParams = list(params.keys())[:]
-            return invParams
+            return list(params.keys())[:]
 
         # check arc/node layer
         layers = utils.GetVectorNumberOfLayers(params["input"])
@@ -1252,8 +1251,7 @@ class History:
                     value[0] == "[" and value[-1] == "]"
                 ):  # TODO, possible wrong interpretation
                     value = value[1:-1].split(",")
-                    value = map(self._castValue, value)
-                    return value
+                    return map(self._castValue, value)
 
             if value == "True":
                 value = True

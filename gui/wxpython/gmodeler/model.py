@@ -2027,9 +2027,7 @@ class ProcessModelFile:
         :param value:
         """
         value = value.replace("&lt;", "<")
-        value = value.replace("&gt;", ">")
-
-        return value
+        return value.replace("&gt;", ">")
 
     def _getNodeText(self, node, tag, default=""):
         """Get node text"""
@@ -2342,8 +2340,7 @@ class WriteModelFile:
         :param value: string to be escaped as XML
         :return: a XML-valid string
         """
-        value = saxutils.escape(value)
-        return value
+        return saxutils.escape(value)
 
     def _header(self):
         """Write header"""

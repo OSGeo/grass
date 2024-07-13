@@ -301,8 +301,7 @@ class PyEditController:
         """
         try:
             with open(file_path, "r") as f:
-                content = f.read()
-                return content
+                return f.read()
         except PermissionError:
             GError(
                 message=_(

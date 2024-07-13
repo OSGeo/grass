@@ -385,8 +385,7 @@ class RLiSetupMapPanel(wx.Panel):
         grass.use_temp_region()
         grass.run_command("g.region", zoom=rasterName)
         region = grass.region()
-        marea = MaskedArea(region, rasterName, circle.radius)
-        return marea
+        return MaskedArea(region, rasterName, circle.radius)
 
     def _rectangleDrawn(self):
         """When drawing finished, get region values"""

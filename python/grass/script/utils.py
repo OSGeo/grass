@@ -91,8 +91,7 @@ def diff_files(filename_a, filename_b):
     differ = difflib.Differ()
     fh_a = open(filename_a, "r")
     fh_b = open(filename_b, "r")
-    result = list(differ.compare(fh_a.readlines(), fh_b.readlines()))
-    return result
+    return list(differ.compare(fh_a.readlines(), fh_b.readlines()))
 
 
 def try_remove(path):

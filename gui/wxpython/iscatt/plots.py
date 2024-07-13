@@ -711,8 +711,7 @@ class PolygonDrawer:
         if self.empty_pol:
             return None
 
-        coords = deepcopy(self.pol.xy)
-        return coords
+        return deepcopy(self.pol.xy)
 
     def SetEmpty(self):
         self._setEmptyPol(True)

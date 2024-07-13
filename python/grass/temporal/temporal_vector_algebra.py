@@ -291,9 +291,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         resultlist = resultdict.values()
 
         # Sort list of maps chronological.
-        resultlist = sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
-
-        return resultlist
+        return sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
 
     def overlay_cmd_value(self, map_i, tbrelations, function, topolist=["EQUAL"]):
         """Function to evaluate two map lists by given overlay operator.
@@ -411,8 +409,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
             #    resultlist.append(map_new)
         # Get sorted map objects as values from result dictionary.
         resultlist = resultdict.values()
-        resultlist = sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
-        return resultlist
+        return sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
 
     def p_statement_assign(self, t):
         # The expression should always return a list of maps.

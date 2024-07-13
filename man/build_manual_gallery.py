@@ -123,8 +123,7 @@ def remove_module_name(string, module):
     string = string.replace(module.replace("wxGUI.", "g.gui."), "")
     string = string.replace(module.replace(".", "_"), "")  # using _
     string = string.replace(module.replace(".", ""), "")  # using nothing
-    string = string.replace(module, "")  # using original dots
-    return string
+    return string.replace(module, "")  # using original dots
 
 
 def title_from_names(module_name, img_name):

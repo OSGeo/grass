@@ -40,9 +40,7 @@ def check_module(module):
         )
         p.wait()
 
-        returncode = p.returncode
-
-    return returncode
+        return p.returncode
 
 
 if __name__ == "__main__":

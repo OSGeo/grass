@@ -743,8 +743,7 @@ class ItemList(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.ColumnSorterMix
     def OnGetItemText(self, item, col):
         """Get item text"""
         index = self.itemIndexMap[item]
-        s = str(self.itemDataMap[index][col])
-        return s
+        return str(self.itemDataMap[index][col])
 
     def OnGetItemImage(self, item):
         return -1
@@ -2795,9 +2794,7 @@ class LocationWizard(wx.Object):
             for item in datumparams:
                 proj4string = "%s +%s" % (proj4string, item)
 
-        proj4string = "%s +no_defs" % proj4string
-
-        return proj4string
+        return "%s +no_defs" % proj4string
 
     def OnHelp(self, event):
         """'Help' button clicked"""

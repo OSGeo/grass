@@ -294,7 +294,7 @@ class SpatialExtent(SQLDatabaseInterface):
         if S < eS:
             nS = eS
 
-        new = SpatialExtent(
+        return SpatialExtent(
             north=nN,
             south=nS,
             east=nE,
@@ -303,7 +303,6 @@ class SpatialExtent(SQLDatabaseInterface):
             bottom=0,
             proj=self.get_projection(),
         )
-        return new
 
     def intersect(self, extent):
         """Return the three dimensional intersection as spatial_extent
@@ -459,7 +458,7 @@ class SpatialExtent(SQLDatabaseInterface):
         if S > eS:
             nS = eS
 
-        new = SpatialExtent(
+        return SpatialExtent(
             north=nN,
             south=nS,
             east=nE,
@@ -468,7 +467,6 @@ class SpatialExtent(SQLDatabaseInterface):
             bottom=0,
             proj=self.get_projection(),
         )
-        return new
 
     def union(self, extent):
         """Return the three dimensional union as spatial_extent

@@ -1179,8 +1179,7 @@ def unregisterPid(pid):
 def get_shell_pid(env=None):
     """Get shell PID from the GIS environment or None"""
     try:
-        shell_pid = int(grass.gisenv(env=env)["PID"])
-        return shell_pid
+        return int(grass.gisenv(env=env)["PID"])
     except (KeyError, ValueError) as error:
         Debug.msg(
             1, "No PID for GRASS shell (assuming no shell running): {}".format(error)

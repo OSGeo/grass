@@ -330,8 +330,7 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
         return name
 
     def _getScatterPlotName(self, i):
-        name = "scatter plot %d" % i
-        return name
+        return "scatter plot %d" % i
 
     def NewScatterPlot(self, scatt_id, transpose):
         # TODO needs to be resolved (should be in this class)

@@ -113,8 +113,7 @@ def estimate_resolution(raster, mapset, location, dbase, env):
     output = gs.parse_key_val(output, val_type=float)
     cell_ns = (output["n"] - output["s"]) / output["rows"]
     cell_ew = (output["e"] - output["w"]) / output["cols"]
-    estimate = (cell_ew + cell_ns) / 2.0
-    return estimate
+    return (cell_ew + cell_ns) / 2.0
 
 
 def setup_location(name, path, epsg, src_env):

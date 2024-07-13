@@ -488,9 +488,7 @@ class ScattPlotsCondsData:
         b1_info = self.an_data.GetBandInfo(b1)
         b2_info = self.an_data.GetBandInfo(b2)
 
-        bands_info = {"b1": b1_info, "b2": b2_info}
-
-        return bands_info
+        return {"b1": b1_info, "b2": b2_info}
 
     def DeleScattPlot(self, cat_id, scatt_id):
         if cat_id not in self.cats:
@@ -784,14 +782,12 @@ def idBandsToidScatt(band_1_id, band_2_id, n_bands):
 
     n_b1 = n_bands - 1
 
-    scatt_id = int(
+    return int(
         (band_1_id * (2 * n_b1 + 1) - band_1_id * band_1_id) / 2
         + band_2_id
         - band_1_id
         - 1
     )
-
-    return scatt_id
 
 
 def GetRegion():

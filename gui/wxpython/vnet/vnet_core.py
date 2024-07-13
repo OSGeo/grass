@@ -1030,8 +1030,7 @@ def AddTmpMapAnalysisMsg(mapName, tmp_maps):  # TODO
         "Temporary map %s  already exists.\n"
         + "Do you want to continue in analysis and overwrite it?"
     ) % (mapName + "@" + grass.gisenv()["MAPSET"])
-    tmpMap = tmp_maps.AddTmpVectMap(mapName, msg)
-    return tmpMap
+    return tmp_maps.AddTmpVectMap(mapName, msg)
 
 
 class SnappingNodes(wx.EvtHandler):

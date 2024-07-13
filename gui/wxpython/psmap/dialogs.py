@@ -3200,8 +3200,7 @@ class VPropertiesDialog(Dialog):
         else:
             cols = []
 
-        choice = Choice(parent=parent, id=wx.ID_ANY, choices=cols)
-        return choice
+        return Choice(parent=parent, id=wx.ID_ANY, choices=cols)
 
     def update(self):
         # feature type
