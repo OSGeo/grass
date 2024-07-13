@@ -162,7 +162,7 @@ def filter(json_data, command, timestamp):
     return None
 
 
-def _remove_entry_from_plain_text(history_path, index):
+def _remove_entry_from_plain_text(history_path, index: int):
     """Remove entry from plain text history file.
 
     :param str history_path: path to the history log file
@@ -174,7 +174,7 @@ def _remove_entry_from_plain_text(history_path, index):
             file_history.seek(0)
             file_history.truncate()
             for number, line in enumerate(lines):
-                if number not in [index]:
+                if number != index:
                     file_history.write(line)
     except OSError as e:
         raise OSError(
@@ -184,7 +184,7 @@ def _remove_entry_from_plain_text(history_path, index):
         ) from e
 
 
-def _remove_entry_from_JSON(history_path, index):
+def _remove_entry_from_JSON(history_path, index: int):
     """Remove entry from JSON history file.
 
     :param str history_path: path to the history log file
@@ -214,7 +214,7 @@ def _remove_entry_from_JSON(history_path, index):
         ) from e
 
 
-def remove_entry(history_path, index):
+def remove_entry(history_path, index: int):
     """Remove entry from history file.
 
     :param str history_path: path to the history log file

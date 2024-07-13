@@ -883,7 +883,7 @@ class Map:
         for line in ret.splitlines():
             if ":" in line:
                 key, val = (x.strip() for x in line.split(":", 1))
-                if key in {"units"}:
+                if key == "units":
                     val = val.lower()
                 projinfo[key] = val
             elif "XY location (unprojected)" in line:

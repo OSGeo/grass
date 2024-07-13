@@ -1900,7 +1900,7 @@ def download_source_code(
             )
         )
         download_source_code_svn(url, name, outdev, directory)
-    elif source in {"remote_zip"}:
+    elif source == "remote_zip":
         gs.message(
             _("Fetching <{name}> from <{url}> (be patient)...").format(
                 name=name, url=url

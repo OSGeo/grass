@@ -36,6 +36,7 @@ from animation.utils import (
     HashCmds,
 )
 from animation.data import AnimationData
+from itertools import starmap
 
 
 class AnimationController(wx.EvtHandler):
@@ -368,10 +369,7 @@ class AnimationController(wx.EvtHandler):
                 if anim.viewMode == "3d":
                     regions = [None] * len(regions)
                 self.animations[i].SetFrames(
-                    [
-                        HashCmds(cmdList, region)
-                        for cmdList, region in zip(anim.cmdMatrix, regions)
-                    ]
+                    list(starmap(HashCmds, zip(anim.cmdMatrix, regions)))
                 )
                 self.animations[i].SetActive(True)
         else:
