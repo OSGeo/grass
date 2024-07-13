@@ -86,7 +86,7 @@ def main():
     tempwhere = options["t_where"]
     sampling = options["sampling"]
 
-    if where == "" or where == " " or where == "\n":
+    if where in {"", " ", "\n"}:
         where = None
 
     # Make sure the temporal database exists

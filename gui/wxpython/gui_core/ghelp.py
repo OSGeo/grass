@@ -630,7 +630,7 @@ class AboutWindow(wx.Frame):
         # panel.Collapse(True)
         pageSizer = wx.BoxSizer(wx.VERTICAL)
         for k, v in js.items():
-            if k != "total" and k != "name":
+            if k not in {"total", "name"}:
                 box = self._langBox(win, k, v)
                 pageSizer.Add(box, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)
 

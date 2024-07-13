@@ -1058,11 +1058,11 @@ class GMFrame(wx.Frame):
 
     def _focusPage(self, notification):
         """Focus the 'Console' notebook page according to event notification."""
-        if (
-            notification == Notification.HIGHLIGHT
-            or notification == Notification.MAKE_VISIBLE
-            or notification == Notification.RAISE_WINDOW
-        ):
+        if notification in {
+            Notification.HIGHLIGHT,
+            Notification.MAKE_VISIBLE,
+            Notification.RAISE_WINDOW,
+        }:
             self.FocusPage("Console")
 
     def FocusPage(self, page_text):

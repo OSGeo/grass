@@ -620,7 +620,7 @@ class SpatioTemporalTopologyBuilder:
 
 
 def set_temoral_relationship(A, B, relation):
-    if relation == "equal" or relation == "equals":
+    if relation in {"equal", "equals"}:
         if A != B:
             if not B.get_equal() or (B.get_equal() and A not in B.get_equal()):
                 B.append_equal(A)
@@ -636,7 +636,7 @@ def set_temoral_relationship(A, B, relation):
             B.append_precedes(A)
         if not A.get_follows() or (A.get_follows() and B not in A.get_follows()):
             A.append_follows(B)
-    elif relation == "during" or relation == "starts" or relation == "finishes":
+    elif relation in {"during", "starts", "finishes"}:
         if not B.get_during() or (B.get_during() and A not in B.get_during()):
             B.append_during(A)
         if not A.get_contains() or (A.get_contains() and B not in A.get_contains()):
@@ -651,7 +651,7 @@ def set_temoral_relationship(A, B, relation):
                 B.append_finishes(A)
             if not A.get_finished() or (A.get_finished() and B not in A.get_finished()):
                 A.append_finished(B)
-    elif relation == "contains" or relation == "started" or relation == "finished":
+    elif relation in {"contains", "started", "finished"}:
         if not B.get_contains() or (B.get_contains() and A not in B.get_contains()):
             B.append_contains(A)
         if not A.get_during() or (A.get_during() and B not in A.get_during()):

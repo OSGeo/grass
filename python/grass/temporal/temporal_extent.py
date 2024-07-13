@@ -176,7 +176,7 @@ class TemporalExtent(SQLDatabaseInterface):
         """
         relation = self.temporal_relation(extent)
 
-        if relation == "after" or relation == "before":
+        if relation in {"after", "before"}:
             return None
 
         if self.D["end_time"] is None:
@@ -423,7 +423,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         relation = self.temporal_relation(extent)
 
-        if relation == "after" or relation == "before":
+        if relation in {"after", "before"}:
             return None
 
         return self.disjoint_union(extent)

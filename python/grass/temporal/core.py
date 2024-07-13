@@ -62,7 +62,7 @@ def profile_function(func):
     """Profiling function provided by the temporal framework"""
     do_profiling = os.getenv("GRASS_TGIS_PROFILE")
 
-    if do_profiling == "True" or do_profiling == "1":
+    if do_profiling in {"True", "1"}:
         import cProfile
         import io
         import pstats

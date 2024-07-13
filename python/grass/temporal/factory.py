@@ -44,11 +44,11 @@ def dataset_factory(type, id):
         sp = SpaceTimeRaster3DDataset(id)
     elif type == "stvds":
         sp = SpaceTimeVectorDataset(id)
-    elif type == "rast" or type == "raster":
+    elif type in {"rast", "raster"}:
         sp = RasterDataset(id)
-    elif type == "raster_3d" or type == "rast3d" or type == "raster3d":
+    elif type in {"raster_3d", "rast3d", "raster3d"}:
         sp = Raster3DDataset(id)
-    elif type == "vect" or type == "vector":
+    elif type in {"vect", "vector"}:
         sp = VectorDataset(id)
     else:
         msgr = get_tgis_message_interface()
