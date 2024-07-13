@@ -312,7 +312,7 @@ def dataset_mapcalculator(
             proc_list[proc_count].start()
             proc_count += 1
 
-            if proc_count == nprocs or proc_count == num or count == num:
+            if proc_count in {nprocs, num} or count == num:
                 proc_count = 0
                 exitcodes = 0
                 for proc in proc_list:
@@ -481,9 +481,7 @@ def _operator_parser(expr, first, current):
     expr = _parse_start_time_operator(expr, is_time_absolute, first, current)
     expr = _parse_end_time_operator(expr, is_time_absolute, first, current)
     expr = _parse_start_operators(expr, is_time_absolute, current)
-    expr = _parse_end_operators(expr, is_time_absolute, current)
-
-    return expr
+    return _parse_end_operators(expr, is_time_absolute, current)
 
 
 ###############################################################################

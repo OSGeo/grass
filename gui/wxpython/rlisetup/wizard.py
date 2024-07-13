@@ -362,7 +362,7 @@ class RLIWizard:
             fil.write("\nMOVINGWINDOW\n")
         # KUNITSC = samplingtype=units, regionbox=keyboard, shape=cirlce
         # KUNITSR = samplingtype=units, regionbox=keyboard, shape=rectangle
-        elif samtype == SamplingType.KUNITSC or samtype == SamplingType.KUNITSR:
+        elif samtype in {SamplingType.KUNITSC, SamplingType.KUNITSR}:
             if samtype == SamplingType.KUNITSC:
                 self._circle(self.units.width, self.units.height)
                 cl = float(self.CIR_CL) / float(self.rasterinfo["cols"])
@@ -1115,7 +1115,7 @@ class SamplingAreasPage(TitledPage):
             self.sizer.Hide(self.areaPanel)
             self.sizer.Hide(self.calculatingAreas)
             self.sizer.Show(self.regionNumPanel)
-        elif samtype == SamplingType.UNITS or samtype == SamplingType.MVWIN:
+        elif samtype in {SamplingType.UNITS, SamplingType.MVWIN}:
             self.sizer.Hide(self.regionNumPanel)
             self.sizer.Hide(self.areaPanel)
             self.sizer.Hide(self.calculatingAreas)

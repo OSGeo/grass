@@ -518,12 +518,12 @@ class RasterSegment(RasterAbstractBase):
             self.cats.mtype = self.mtype
             self.cats.read()
             self.hist.read()
-            if (self.mode == "w" or self.mode == "rw") and self.overwrite is False:
+            if (self.mode in {"w", "rw"}) and self.overwrite is False:
                 str_err = _("Raster map <{0}> already exists. Use overwrite.")
                 fatal(str_err.format(self))
 
             # We copy the raster map content into the segments
-            if self.mode == "rw" or self.mode == "r":
+            if self.mode in {"rw", "r"}:
                 self._fd = libraster.Rast_open_old(self.name, self.mapset)
                 self._gtype = libraster.Rast_get_map_type(self._fd)
                 self.mtype = RTYPE_STR[self._gtype]
@@ -563,7 +563,7 @@ class RasterSegment(RasterAbstractBase):
         :param rm_temp_files: if True all the segments file will be removed
         :type rm_temp_files: bool
         """
-        if self.mode == "w" or self.mode == "rw":
+        if self.mode in {"w", "rw"}:
             self.segment.flush()
             self.segment2map()
         if rm_temp_files:

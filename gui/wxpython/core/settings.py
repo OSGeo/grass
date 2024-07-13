@@ -951,7 +951,7 @@ class Settings:
 
         try:
             line = ""
-            for line in fd.readlines():
+            for line in fd:
                 line = line.rstrip("%s" % os.linesep)
                 group, key = line.split(self.sep)[0:2]
                 kv = line.split(self.sep)[2:]

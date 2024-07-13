@@ -98,10 +98,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         uuid_rand = str(uuid.uuid4()).replace("-", "")
 
-        table_name = (
-            self.get_new_map_instance(None).get_type() + "_map_register_" + uuid_rand
-        )
-        return table_name
+        return self.get_new_map_instance(None).get_type() + "_map_register_" + uuid_rand
 
     @abstractmethod
     def get_new_map_instance(self, ident=None):
@@ -590,7 +587,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         map_time = self.get_map_time()
 
-        if map_time == "interval" or map_time == "mixed":
+        if map_time in {"interval", "mixed"}:
             if "equal" in relations and relations["equal"] > 0:
                 return False
             if "during" in relations and relations["during"] > 0:
@@ -966,9 +963,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     use_during = True
                 if name == "overlap":
                     use_overlap = True
-                if name == "contain" or name == "contains":
+                if name in {"contain", "contains"}:
                     use_contain = True
-                if name == "equal" or name == "equals":
+                if name in {"equal", "equals"}:
                     use_equal = True
                 if name == "follows":
                     use_follows = True

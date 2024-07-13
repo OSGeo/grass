@@ -288,7 +288,7 @@ def ListOfMapsets(get="ordered"):
     :return: list of mapsets
     :return: [] on error
     """
-    if get == "all" or get == "ordered":
+    if get in {"all", "ordered"}:
         ret = RunCommand("g.mapsets", read=True, quiet=True, flags="l", sep="newline")
         if not ret:
             return []
@@ -297,7 +297,7 @@ def ListOfMapsets(get="ordered"):
         if get == "all":
             return mapsets_all
 
-    if get == "accessible" or get == "ordered":
+    if get in {"accessible", "ordered"}:
         ret = RunCommand("g.mapsets", read=True, quiet=True, flags="p", sep="newline")
         if not ret:
             return []
@@ -840,7 +840,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
         except OSError as e:
             sys.stderr.write(_("Unable to open file '%s'\n") % envFile)
             return
-        for line in fd.readlines():
+        for line in fd:
             line = line.rstrip(os.linesep)
             try:
                 k, v = (x.strip() for x in line.split(" ", 1)[1].split("=", 1))
@@ -1179,8 +1179,7 @@ def unregisterPid(pid):
 def get_shell_pid(env=None):
     """Get shell PID from the GIS environment or None"""
     try:
-        shell_pid = int(grass.gisenv(env=env)["PID"])
-        return shell_pid
+        return int(grass.gisenv(env=env)["PID"])
     except (KeyError, ValueError) as error:
         Debug.msg(
             1, "No PID for GRASS shell (assuming no shell running): {}".format(error)

@@ -514,8 +514,7 @@ GRASS GIS ${GRASS_VERSION} Reference Manual
 def read_file(name):
     try:
         with open(name) as f:
-            s = f.read()
-        return s
+            return f.read()
     except OSError:
         return ""
 

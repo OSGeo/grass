@@ -743,8 +743,7 @@ class ItemList(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.ColumnSorterMix
     def OnGetItemText(self, item, col):
         """Get item text"""
         index = self.itemIndexMap[item]
-        s = str(self.itemDataMap[index][col])
-        return s
+        return str(self.itemDataMap[index][col])
 
     def OnGetItemImage(self, item):
         return -1
@@ -2563,7 +2562,7 @@ class LocationWizard(wx.Object):
         f = open(os.path.join(globalvar.ETCDIR, "proj", "parms.table"), "r")
         self.projections = {}
         self.projdesc = {}
-        for line in f.readlines():
+        for line in f:
             line = line.strip()
             try:
                 proj, projdesc, params = line.split(":")
@@ -2586,7 +2585,7 @@ class LocationWizard(wx.Object):
         f = open(os.path.join(globalvar.ETCDIR, "proj", "datum.table"), "r")
         self.datums = {}
         paramslist = []
-        for line in f.readlines():
+        for line in f:
             line = line.expandtabs(1)
             line = line.strip()
             if line == "" or line[0] == "#":
@@ -2603,7 +2602,7 @@ class LocationWizard(wx.Object):
         # read Earth-based ellipsiod definitions
         f = open(os.path.join(globalvar.ETCDIR, "proj", "ellipse.table"), "r")
         self.ellipsoids = {}
-        for line in f.readlines():
+        for line in f:
             line = line.expandtabs(1)
             line = line.strip()
             if line == "" or line[0] == "#":
@@ -2621,7 +2620,7 @@ class LocationWizard(wx.Object):
             os.path.join(globalvar.ETCDIR, "proj", "ellipse.table.solar.system"), "r"
         )
         self.planetary_ellipsoids = {}
-        for line in f.readlines():
+        for line in f:
             line = line.expandtabs(1)
             line = line.strip()
             if line == "" or line[0] == "#":
@@ -2637,7 +2636,7 @@ class LocationWizard(wx.Object):
         # read projection parameter description and parsing table
         f = open(os.path.join(globalvar.ETCDIR, "proj", "desc.table"), "r")
         self.paramdesc = {}
-        for line in f.readlines():
+        for line in f:
             line = line.strip()
             try:
                 pparam, datatype, proj4term, desc = line.split(":")
@@ -2795,9 +2794,7 @@ class LocationWizard(wx.Object):
             for item in datumparams:
                 proj4string = "%s +%s" % (proj4string, item)
 
-        proj4string = "%s +no_defs" % proj4string
-
-        return proj4string
+        return "%s +no_defs" % proj4string
 
     def OnHelp(self, event):
         """'Help' button clicked"""

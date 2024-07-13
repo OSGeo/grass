@@ -666,8 +666,7 @@ class VNETAnalysisParameters:
                 vectMaps = grass.list_grouped("vector")[mapSet]
 
         if not params["input"] or mapName not in vectMaps:
-            invParams = list(params.keys())[:]
-            return invParams
+            return list(params.keys())[:]
 
         # check arc/node layer
         layers = utils.GetVectorNumberOfLayers(params["input"])
@@ -1072,7 +1071,7 @@ class VectMap:
         )
         try:
             head = open(headPath, "r")
-            for line in head.readlines():
+            for line in head:
                 i = line.find(
                     "MAP DATE:",
                 )
@@ -1252,8 +1251,7 @@ class History:
                     value[0] == "[" and value[-1] == "]"
                 ):  # TODO, possible wrong interpretation
                     value = value[1:-1].split(",")
-                    value = map(self._castValue, value)
-                    return value
+                    return map(self._castValue, value)
 
             if value == "True":
                 value = True
@@ -1299,7 +1297,7 @@ class History:
 
         newHistStep = False
         isSearchedHistStep = False
-        for line in hist.readlines():
+        for line in hist:
             if not line.strip() and isSearchedHistStep:
                 break
             elif not line.strip():

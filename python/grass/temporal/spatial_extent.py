@@ -294,7 +294,7 @@ class SpatialExtent(SQLDatabaseInterface):
         if eS > S:
             nS = eS
 
-        new = SpatialExtent(
+        return SpatialExtent(
             north=nN,
             south=nS,
             east=nE,
@@ -303,7 +303,6 @@ class SpatialExtent(SQLDatabaseInterface):
             bottom=0,
             proj=self.get_projection(),
         )
-        return new
 
     def intersect(self, extent):
         """Return the three dimensional intersection as spatial_extent
@@ -459,7 +458,7 @@ class SpatialExtent(SQLDatabaseInterface):
         if eS < S:
             nS = eS
 
-        new = SpatialExtent(
+        return SpatialExtent(
             north=nN,
             south=nS,
             east=nE,
@@ -468,7 +467,6 @@ class SpatialExtent(SQLDatabaseInterface):
             bottom=0,
             proj=self.get_projection(),
         )
-        return new
 
     def union(self, extent):
         """Return the three dimensional union as spatial_extent
@@ -1262,11 +1260,11 @@ class SpatialExtent(SQLDatabaseInterface):
             return False
 
         # Check boundaries of the faces
-        if edge == "E" or edge == "W":
+        if edge in {"E", "W"}:
             if eS > N or eN < S:
                 return False
 
-        if edge == "N" or edge == "S":
+        if edge in {"N", "S"}:
             if eW > E or eE < W:
                 return False
 
@@ -1332,19 +1330,19 @@ class SpatialExtent(SQLDatabaseInterface):
             return False
 
         # Check boundaries of the faces
-        if edge == "E" or edge == "W":
+        if edge in {"E", "W"}:
             if eS > N or eN < S:
                 return False
             if eB > T or eT < B:
                 return False
 
-        if edge == "N" or edge == "S":
+        if edge in {"N", "S"}:
             if eW > E or eE < W:
                 return False
             if eB > T or eT < B:
                 return False
 
-        if edge == "T" or edge == "B":
+        if edge in {"T", "B"}:
             if eW > E or eE < W:
                 return False
             if eS > N or eN < S:
@@ -1806,7 +1804,7 @@ class SpatialExtent(SQLDatabaseInterface):
         """Set the projection of the spatial extent it should be XY or LL.
         As default the projection is XY
         """
-        if proj is None or (proj != "XY" and proj != "LL"):
+        if proj is None or (proj not in {"XY", "LL"}):
             self.D["proj"] = "XY"
         else:
             self.D["proj"] = proj

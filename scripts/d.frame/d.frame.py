@@ -96,7 +96,7 @@ def read_monitor_file(monitor, ftype="env"):
         fatal(_("Unable to get monitor info. %s"), e)
 
     lines = []
-    for line in fd.readlines():
+    for line in fd:
         lines.append(line)
 
     fd.close()

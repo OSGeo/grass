@@ -2000,7 +2000,7 @@ def install_extension_std_platforms(name, source, url, branch):
             if filename == "Makefile":
                 # get the module name: PGM = <module name>
                 with open(os.path.join(r, "Makefile")) as fp:
-                    for line in fp.readlines():
+                    for line in fp:
                         if re.match(r"PGM.*.=|PGM=", line):
                             try:
                                 modulename = line.split("=")[1].strip()
