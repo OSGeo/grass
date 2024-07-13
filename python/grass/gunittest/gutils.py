@@ -39,9 +39,9 @@ def is_map_in_mapset(name, type, mapset=None):
     # so anything accepted by g.findfile will work but this can change in the
     # future (the documentation is clear about what's legal)
     # supporting both short and full names
-    if type in ("rast", "raster"):
+    if type in {"rast", "raster"}:
         type = "cell"
-    elif type in ("rast3d", "raster3d"):
+    elif type in {"rast3d", "raster3d"}:
         type = "grid3"
     elif type == "vect":
         type = "vector"

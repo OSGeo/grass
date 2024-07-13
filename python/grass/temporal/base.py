@@ -741,7 +741,7 @@ class DatasetBase(SQLDatabaseInterface):
 
         :param ttype: The temporal type of the dataset "absolute or relative"
         """
-        if ttype is None or (ttype not in ("absolute", "relative")):
+        if ttype is None or (ttype not in {"absolute", "relative"}):
             self.D["temporal_type"] = "absolute"
         else:
             self.D["temporal_type"] = ttype

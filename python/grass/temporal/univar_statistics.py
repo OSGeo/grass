@@ -440,7 +440,7 @@ def print_vector_dataset_univar_statistics(
         else:
             string += fs + fs + fs
 
-        if type in ("point", "centroid"):
+        if type in {"point", "centroid"}:
             if "mean" in stats:
                 string += (
                     fs

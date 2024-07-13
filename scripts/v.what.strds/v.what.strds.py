@@ -115,7 +115,7 @@ def main():
             _("Attribute table of vector {name} will be updated...").format(name=input)
         )
 
-    if where in ("", " ", "\n"):
+    if where in {"", " ", "\n"}:
         where = None
 
     overwrite = gs.overwrite()

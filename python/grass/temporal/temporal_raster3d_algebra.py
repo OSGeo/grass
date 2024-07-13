@@ -63,7 +63,7 @@ class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
             if not tok:
                 break
 
-            if tok.type in ("STVDS", "STRDS", "STR3DS"):
+            if tok.type in {"STVDS", "STRDS", "STR3DS"}:
                 raise SyntaxError("Syntax error near '%s'" % (tok.type))
 
         self.lexer = TemporalRasterAlgebraLexer()

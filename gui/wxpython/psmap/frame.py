@@ -570,7 +570,7 @@ class PsMapFrame(wx.Frame):
             suffix = suffix[dlg.GetFilterIndex()]
             if not os.path.splitext(filename)[1]:
                 filename = filename + suffix
-            elif suffix not in (os.path.splitext(filename)[1], ""):
+            elif suffix not in {os.path.splitext(filename)[1], ""}:
                 filename = os.path.splitext(filename)[0] + suffix
 
         dlg.Destroy()

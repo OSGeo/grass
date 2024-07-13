@@ -94,10 +94,10 @@ def main():
 
         print("Gran from stds %0.15f" % (granularity))
 
-        if unit in ("years", "year"):
+        if unit in {"years", "year"}:
             bottom = float(start.year - 1900)
             top = float(granularity * num_maps)
-        elif unit in ("months", "month"):
+        elif unit in {"months", "month"}:
             bottom = float((start.year - 1900) * 12 + start.month)
             top = float(granularity * num_maps)
         else:
@@ -106,13 +106,13 @@ def main():
             hours = 0.0
             minutes = 0.0
             seconds = 0.0
-            if unit in ("days", "day"):
+            if unit in {"days", "day"}:
                 days = float(granularity)
-            if unit in ("hours", "hour"):
+            if unit in {"hours", "hour"}:
                 hours = float(granularity)
-            if unit in ("minutes", "minute"):
+            if unit in {"minutes", "minute"}:
                 minutes = float(granularity)
-            if unit in ("seconds", "second"):
+            if unit in {"seconds", "second"}:
                 seconds = float(granularity)
 
             granularity = float(
