@@ -154,7 +154,6 @@ ignore = [
     "FURB101", # read-whole-file
     "FURB103", # write-whole-file.
     "FURB118", # reimplemented-operator
-    "FURB131", # delete-full-slice
     "FURB142", # for-loop-set-mutations
     "FURB148", # unnecessary-enumerate
     "FURB152", # math-constant
