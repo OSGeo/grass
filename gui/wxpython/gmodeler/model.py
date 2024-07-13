@@ -950,9 +950,8 @@ class ModelObject:
             if fdir == "from":
                 if rel.GetFrom() == self:
                     result.append(rel)
-            else:
-                if rel.GetTo() == self:
-                    result.append(rel)
+            elif rel.GetTo() == self:
+                result.append(rel)
 
         return result
 
@@ -1040,10 +1039,7 @@ class ModelAction(ModelObject, ogl.DividedShape):
         if cmd:
             self.task = GUI(show=None).ParseCommand(cmd=cmd)
         else:
-            if task:
-                self.task = task
-            else:
-                self.task = None
+            self.task = task or None
 
         self.propWin = None
 

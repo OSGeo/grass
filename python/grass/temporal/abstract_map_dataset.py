@@ -499,11 +499,9 @@ class AbstractMapDataset(AbstractDataset):
                         % {"type": self.get_type(), "id": self.get_map_id()}
                     )
                     return False
-            else:
-                # Do not create an interval in case start and end time are
-                # equal
-                if start_time == end_time:
-                    end_time = None
+            # Do not create an interval in case start and end time are equal
+            elif start_time == end_time:
+                end_time = None
 
         self.base.set_ttype("absolute")
         self.absolute_time.set_start_time(start_time)
@@ -619,11 +617,9 @@ class AbstractMapDataset(AbstractDataset):
                         % {"type": self.get_type(), "id": self.get_id()}
                     )
                 return False
-            else:
-                # Do not create an interval in case start and end time are
-                # equal
-                if start_time == end_time:
-                    end_time = None
+            # Do not create an interval in case start and end time are equal
+            elif start_time == end_time:
+                end_time = None
 
         self.base.set_ttype("relative")
 

@@ -2195,23 +2195,22 @@ def remove_extension(force=False):
             for ename in edict:
                 if ename in eremoved:
                     gs.message(_("Extension <%s> successfully uninstalled.") % ename)
+    elif flags["t"]:
+        gs.warning(
+            _(
+                "Toolbox <%s> not removed. "
+                "Re-run '%s' with '-f' flag to force removal"
+            )
+            % (options["extension"], "g.extension")
+        )
     else:
-        if flags["t"]:
-            gs.warning(
-                _(
-                    "Toolbox <%s> not removed. "
-                    "Re-run '%s' with '-f' flag to force removal"
-                )
-                % (options["extension"], "g.extension")
+        gs.warning(
+            _(
+                "Extension <%s> not removed. "
+                "Re-run '%s' with '-f' flag to force removal"
             )
-        else:
-            gs.warning(
-                _(
-                    "Extension <%s> not removed. "
-                    "Re-run '%s' with '-f' flag to force removal"
-                )
-                % (options["extension"], "g.extension")
-            )
+            % (options["extension"], "g.extension")
+        )
 
 
 # remove existing extension(s) (reading XML file)

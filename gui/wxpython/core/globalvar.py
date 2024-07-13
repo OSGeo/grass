@@ -230,11 +230,10 @@ def UpdateGRASSAddOnCommands(eList=None):
                     and name not in grassScripts[ext]
                 ):
                     grassScripts[ext].append(name)
-            else:
-                if fname not in grassCmd:
-                    grassCmd.add(fname)
-                    Debug.msg(3, "AddOn commands: %s", fname)
-                    nCmd += 1
+            elif fname not in grassCmd:
+                grassCmd.add(fname)
+                Debug.msg(3, "AddOn commands: %s", fname)
+                nCmd += 1
 
     Debug.msg(1, "Number of GRASS AddOn commands: %d", nCmd)
 

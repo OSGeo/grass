@@ -753,14 +753,13 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
 
         if self.multiple:
             self.value.append(fullName)
-        else:
-            if self.nmaps > 1:  # see key_desc
-                if len(self.value) >= self.nmaps:
-                    self.value = [fullName]
-                else:
-                    self.value.append(fullName)
-            else:
+        elif self.nmaps > 1:  # see key_desc
+            if len(self.value) >= self.nmaps:
                 self.value = [fullName]
+            else:
+                self.value.append(fullName)
+        else:
+            self.value = [fullName]
 
     def _onItemConfirmed(self, event):
         item = event.GetItem()
@@ -2334,52 +2333,43 @@ class GdalSelect(wx.Panel):
                     (layerId, layerName, featureType, int(projectionMatch), grassName)
                 )
                 layerId += 1
-        else:
-            if self._sourceType == "file":
-                baseName = os.path.basename(dsn)
+        elif self._sourceType == "file":
+            baseName = os.path.basename(dsn)
+            grassName = GetValidLayerName(baseName.split(".", -1)[0])
+            projectionMatch = hasRastSameProjAsLocation(dsn)
+            projectionMatchCaption = getProjMatchCaption(projectionMatch)
+            listData.append((layerId, baseName, projectionMatchCaption, grassName))
+            data.append((layerId, baseName, int(projectionMatch), grassName))
+        elif self._sourceType == "dir":
+            ext = self.dirWidgets["extension"].GetValue()
+            for filename in glob.glob(
+                os.path.join(dsn, "%s") % self._getExtPatternGlob(ext)
+            ):
+                baseName = os.path.basename(filename)
                 grassName = GetValidLayerName(baseName.split(".", -1)[0])
-                projectionMatch = hasRastSameProjAsLocation(dsn)
+                projectionMatch = hasRastSameProjAsLocation(filename)
                 projectionMatchCaption = getProjMatchCaption(projectionMatch)
                 listData.append((layerId, baseName, projectionMatchCaption, grassName))
                 data.append((layerId, baseName, int(projectionMatch), grassName))
-            elif self._sourceType == "dir":
-                ext = self.dirWidgets["extension"].GetValue()
-                for filename in glob.glob(
-                    os.path.join(dsn, "%s") % self._getExtPatternGlob(ext)
-                ):
-                    baseName = os.path.basename(filename)
-                    grassName = GetValidLayerName(baseName.split(".", -1)[0])
-                    projectionMatch = hasRastSameProjAsLocation(filename)
-                    projectionMatchCaption = getProjMatchCaption(projectionMatch)
-                    listData.append(
-                        (layerId, baseName, projectionMatchCaption, grassName)
-                    )
-                    data.append((layerId, baseName, int(projectionMatch), grassName))
-                    layerId += 1
-            elif (
-                self.dbWidgets["format"].GetStringSelection() == "PostGIS Raster driver"
-            ):
-                rasters = self._getPGDBRasters(dsn)
-                for raster in rasters:
-                    grassName = GetValidLayerName(raster)
-                    projectionMatch = hasRastSameProjAsLocation(dsn, table=raster)
-                    projectionMatchCaption = getProjMatchCaption(projectionMatch)
-                    listData.append(
-                        (layerId, raster, projectionMatchCaption, grassName)
-                    )
-                    data.append((layerId, raster, int(projectionMatch), grassName))
-                    layerId += 1
-            elif self.dbWidgets["format"].GetStringSelection() == "Rasterlite":
-                rasters = self._getRasterliteDBRasters(dsn)
-                for raster in rasters:
-                    grassName = GetValidLayerName(raster)
-                    projectionMatch = hasRastSameProjAsLocation(dsn)
-                    projectionMatchCaption = getProjMatchCaption(projectionMatch)
-                    listData.append(
-                        (layerId, raster, projectionMatchCaption, grassName)
-                    )
-                    data.append((layerId, raster, int(projectionMatch), grassName))
-                    layerId += 1
+                layerId += 1
+        elif self.dbWidgets["format"].GetStringSelection() == "PostGIS Raster driver":
+            rasters = self._getPGDBRasters(dsn)
+            for raster in rasters:
+                grassName = GetValidLayerName(raster)
+                projectionMatch = hasRastSameProjAsLocation(dsn, table=raster)
+                projectionMatchCaption = getProjMatchCaption(projectionMatch)
+                listData.append((layerId, raster, projectionMatchCaption, grassName))
+                data.append((layerId, raster, int(projectionMatch), grassName))
+                layerId += 1
+        elif self.dbWidgets["format"].GetStringSelection() == "Rasterlite":
+            rasters = self._getRasterliteDBRasters(dsn)
+            for raster in rasters:
+                grassName = GetValidLayerName(raster)
+                projectionMatch = hasRastSameProjAsLocation(dsn)
+                projectionMatchCaption = getProjMatchCaption(projectionMatch)
+                listData.append((layerId, raster, projectionMatchCaption, grassName))
+                data.append((layerId, raster, int(projectionMatch), grassName))
+                layerId += 1
 
         # emit signal
         self.reloadDataRequired.emit(listData=listData, data=data)
@@ -2460,17 +2450,15 @@ class GdalSelect(wx.Panel):
                 cmd = "v.external.out"
             else:
                 cmd = "r.external.out"
-        else:
-            if self.link:
-                if self.ogr:
-                    cmd = "v.external"
-                else:
-                    cmd = "r.external"
+        elif self.link:
+            if self.ogr:
+                cmd = "v.external"
             else:
-                if self.ogr:
-                    cmd = "v.in.ogr"
-                else:
-                    cmd = "r.in.gdal"
+                cmd = "r.external"
+        elif self.ogr:
+            cmd = "v.in.ogr"
+        else:
+            cmd = "r.in.gdal"
 
         RunCommand("g.manual", entry=cmd)
 
@@ -2887,12 +2875,11 @@ class CoordinatesSelect(Panel):
 
             self.registered = True
             self._giface.GetMapDisplay().Raise()
-        else:
-            if self.mapWin and self.mapWin.UnregisterMouseEventHandler(
-                wx.EVT_LEFT_DOWN, self._onMapClickHandler
-            ):
-                self.registered = False
-                return
+        elif self.mapWin and self.mapWin.UnregisterMouseEventHandler(
+            wx.EVT_LEFT_DOWN, self._onMapClickHandler
+        ):
+            self.registered = False
+            return
 
     def drawCleanUp(self):
         if self.drawMapWin:
@@ -3044,7 +3031,7 @@ class VectorCategorySelect(wx.Panel):
             if not self._chckMap():
                 self.buttonVecSelect.SetValue(False)
                 return
-        else:
+        else:  # noqa: PLR5501
             if not self._isMapSelected():
                 self.buttonVecSelect.SetValue(False)
                 return
@@ -3086,7 +3073,7 @@ class VectorCategorySelect(wx.Panel):
                 self.OnClose()
             else:
                 self.catsField.SetValue(self._vectorSelect.GetLineStringSelectedCats())
-        else:
+        else:  # noqa: PLR5501
             if not self._chckMap():
                 self.OnClose()
             else:

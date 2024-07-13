@@ -5737,18 +5737,17 @@ class NvizToolWindow(GNotebook):
                     self.FindWindowById(self.win["volume"][attrb]["const"]).SetColour(
                         color
                     )
-            else:
+            else:  # noqa: PLR5501
                 if data[attrb]["map"]:
                     self.vetoGSelectEvt = True
                     win = self.FindWindowById(self.win["volume"][attrb]["map"])
                     win.SetValue(value)
-                else:
-                    if value:
-                        win = self.FindWindowById(self.win["volume"][attrb]["const"])
-                        if attrb == "topo":
-                            win.SetValue(float(value))
-                        else:
-                            win.SetValue(self._getPercent(value))
+                elif value:
+                    win = self.FindWindowById(self.win["volume"][attrb]["const"])
+                    if attrb == "topo":
+                        win.SetValue(float(value))
+                    else:
+                        win.SetValue(self._getPercent(value))
 
             self.SetMapObjUseMap(nvizType="volume", attrb=attrb, map=data[attrb]["map"])
         # set inout
