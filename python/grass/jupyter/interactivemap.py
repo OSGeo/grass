@@ -16,7 +16,6 @@
 import base64
 import json
 from .reprojection_renderer import ReprojectionRenderer
-from .utils import save_vector
 
 
 def get_backend(interactive_map):
@@ -347,34 +346,155 @@ class InteractiveMap:
         else:
             self.layer_control_object = self._ipyleaflet.LayersControl(**kwargs)
 
-    def setup_drawing_interface(self):
-        """
-        Allow Users to draw Geometry and Save them.
-        """
+    # def setup_drawing_interface(self):
+    #     """
+    #     Allow Users to draw Geometry and Save them.
+    #     """
+    #     import ipywidgets as widgets
+    #     from IPython.display import display
+    #     import tempfile
+    #     from ipyleaflet import WidgetControl, GeoJSON
+    #     from ipyleaflet import GeomanDrawControl
+
+    #     draw_control = GeomanDrawControl(
+    #         drawOptions={
+    #             'polygon': True,
+    #             'rectangle': True,
+    #             'circle': False,
+    #             'marker': False,
+    #             'polyline': False
+    #         },
+    #         editOptions={
+    #             'edit': True,
+    #             'remove': True
+    #         },
+    #         hide_controls=False  # Ensure the toolbar is visible
+    #     )
+
+    #     drawn_geometries = []
+    #     out = widgets.Output()
+    #     save_button_control = None
+    #     name_input = None
+    #     save_button = None
+
+    #     def handle_draw(target, action, geo_json):
+    #         with out:
+    #             if action in ["vertexadded", "featureadded"]:
+    #                 drawn_geometries.append(geo_json)
+    #                 print(f"Geometry added: {geo_json}")
+    #             elif action == "featureremoved":
+    #                 drawn_geometries[:] = [
+    #                     g for g in drawn_geometries if
+    # g["properties"]["id"] != geo_json["properties"]["id"]
+    #                 ]
+    #                 print(f"Geometry removed: {geo_json}")
+
+    #     draw_control.on_draw(handle_draw)
+
+    #     draw_button = widgets.ToggleButton(
+    #         icon="pencil",
+    #         value=False,
+    #         tooltip="Click to draw geometries",
+    #         layout=widgets.Layout(width="33px", margin="0px 0px 0px 0px"),
+    #     )
+
+    #     def toggle_geometry(change):
+    #         if change["new"]:
+    #             # Show drawing interface
+    #             self.map.add_control(draw_control)
+    #             show_interface()
+    #         else:
+    #             # Hide drawing interface
+    #             hide_interface()
+    #             # Remove GeomanDrawControl from the map
+    #             self.map.remove_control(draw_control)
+
+    #     draw_button.observe(toggle_geometry, names="value")
+
+    #     def show_interface():
+    #         nonlocal save_button_control, name_input, save_button
+
+    #         # Create widgets
+    #         name_input = widgets.Text(description="Name:")
+    #         save_button = widgets.Button(
+    #             description="Save Geometries", button_style="success"
+    #         )
+
+    #         def save_geometries(b):
+    #             name = name_input.value
+    #             if name and drawn_geometries:
+    #                 for geometry in drawn_geometries:
+    #                     geometry["properties"]["name"] = name
+    #                 geo_json = {
+    #                     "type": "FeatureCollection",
+    #                     "features": drawn_geometries,
+    #                 }
+    #                 try:
+    #                     with tempfile.NamedTemporaryFile(
+    #                         suffix=".geojson", delete=False
+    #                     ) as temp_file:
+    #                         temp_filename = temp_file.name
+    #                         json.dump(geo_json, temp_file)
+    #                     save_vector(temp_filename, name)
+    # # Ensure this function is implemented
+    #                     print(f"Imported geometry
+    # with name '{name}' into GRASS GIS.")
+    #                     geo_json_layer = GeoJSON(data=geo_json, name=name)
+    #                     self.map.add_layer(geo_json_layer)
+    #                 except Exception as e:
+    #                     print(f"Failed to import geometries into GRASS GIS: {e}")
+
+    #         save_button.on_click(save_geometries)
+
+    #         # Add control for the widgets
+    #         save_button_control = WidgetControl(
+    #             widget=widgets.VBox([name_input, save_button]), position="topright"
+    #         )
+    #         self.map.add_control(save_button_control)
+
+    #         display(out)
+
+    #     def hide_interface():
+    #         nonlocal save_button_control, name_input, save_button
+
+    #         out.clear_output()
+    #         if save_button_control:
+    #             self.map.remove_control(save_button_control)
+    #             save_button_control = None
+    #         # Remove the draw control if it's added
+    #         if draw_control in self.map.controls:
+    #             draw_control = GeomanDrawControl(
+    #                 drawOptions={
+    #                     'polygon': False,
+    #                     'rectangle': False,
+    #                     'circle': False,
+    #                     'marker': False,
+    #                     'polyline': False
+    #                 },
+    #                 editOptions={
+    #                     'edit': True,
+    #                     'remove': True
+    #                 },
+    #                 hide_controls=False  # Ensure the toolbar is visible
+    #             )
+    #             self.map.remove_control(draw_control)
+    #         # Remove the widget controls for the name input and save button
+    #         if name_input:
+    #             name_input.close()
+    #             name_input = None
+    #         if save_button:
+    #             save_button.close()
+    #             save_button = None
+
+    #     toggle_control = WidgetControl(
+    #         widget=draw_button, position="topright"
+    #     )
+    #     self.map.add_control(toggle_control)
+
+    def show_control(self):
         import ipywidgets as widgets
-        from IPython.display import display
-        import tempfile
 
-        draw_control = self._ipyleaflet.DrawControl()
-        drawn_geometries = []
-        out = widgets.Output()
-        save_button_control = None
-
-        def handle_draw(target, action, geo_json):
-            with out:
-                if action == "created":
-                    drawn_geometries.append(geo_json)
-                    print(f"Geometry created: {geo_json}")
-                elif action == "deleted":
-                    drawn_geometries[:] = [
-                        g
-                        for g in drawn_geometries
-                        if g["properties"]["id"] != geo_json["properties"]["id"]
-                    ]
-                    print(f"Geometry deleted: {geo_json}")
-
-        draw_control.on_draw(handle_draw)
-
+        # Create the toggle button
         draw_button = widgets.ToggleButton(
             icon="pencil",
             value=False,
@@ -382,69 +502,28 @@ class InteractiveMap:
             layout=widgets.Layout(width="33px", margin="0px 0px 0px 0px"),
         )
 
-        def toggle_geometry(change):
+        geoman_control = self._ipyleaflet.GeomanDrawControl(position="topright")
+
+        def on_toggle_change(change):
             if change["new"]:
-                self.map.add_control(draw_control)
-                show_interface()
+                # Set drawOptions and editOptions when the button is toggled on
+                geoman_control.polyline = {"pathOptions": {}}
+                geoman_control.polygon = {"pathOptions": {}}
+                geoman_control.circlemarker = {"pathOptions": {}}
+                geoman_control.drag = False
+                geoman_control.cut = False
+                geoman_control.rotate = False
+                geoman_control.edit = False
+                geoman_control.remove = False
+                self.map.add_control(geoman_control)
             else:
-                self.map.remove_control(draw_control)
-                hide_interface()
+                self.map.remove_control(geoman_control.polyline)
+                self.map.remove_control(geoman_control.polygon)
+                self.map.remove_control(geoman_control.circlemarker)
+                geoman_control.hide_controls = True
+                self.map.remove_layer(geoman_control)
 
-        draw_button.observe(toggle_geometry, names="value")
-
-        def show_interface():
-            nonlocal save_button_control
-
-            name_input = widgets.Text(description="Name:")
-            save_button = widgets.Button(
-                description="Save Geometries", button_style="success"
-            )
-
-            def save_geometries(b):
-                name = name_input.value
-                if name and drawn_geometries:
-                    for geometry in drawn_geometries:
-                        geometry["properties"]["name"] = name
-                    geo_json = {
-                        "type": "FeatureCollection",
-                        "features": drawn_geometries,
-                    }
-                    geojson_filename = f"/tmp/{name}.geojson"
-                    with open(geojson_filename, "w") as f:
-                        json.dump(geo_json, f)
-                    try:
-                        with tempfile.NamedTemporaryFile(
-                            suffix=".geojson", delete=False
-                        ) as temp_file:
-                            temp_filename = temp_file.name
-                            json.dump(geo_json, temp_file)
-                        save_vector(temp_filename, name)
-                        print(f"Imported geometry with name '{name}' into GRASS GIS.")
-                        geo_json_layer = self._ipyleaflet.GeoJSON(
-                            data=geo_json, name=name
-                        )
-                        self.map.add_layer(geo_json_layer)
-                    except Exception as e:
-                        print(f"Failed to import geometries into GRASS GIS: {e}")
-                    geo_json_layer = self._ipyleaflet.GeoJSON(data=geo_json, name=name)
-                    self.map.add_layer(geo_json_layer)
-
-            save_button.on_click(save_geometries)
-
-            save_button_control = self._ipyleaflet.WidgetControl(
-                widget=widgets.VBox([name_input, save_button]), position="topright"
-            )
-            self.map.add_control(save_button_control)
-
-            display(out)
-
-        def hide_interface():
-            nonlocal save_button_control
-
-            out.clear_output()
-            if save_button_control:
-                self.map.remove_control(save_button_control)
-                save_button_control = None
+        draw_button.observe(on_toggle_change, names="value")
 
         toggle_control = self._ipyleaflet.WidgetControl(
             widget=draw_button, position="topright"
@@ -473,7 +552,7 @@ class InteractiveMap:
 
         # ipyleaflet
         if self._ipyleaflet:
-            self.setup_drawing_interface()
+            self.show_control()
         self.map.add(self.layer_control_object)
         return self.map
 
