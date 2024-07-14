@@ -208,8 +208,9 @@ def main():
                     gs.fatal(
                         _(
                             "Map with name <%s> already exists. "
-                            "Please use another base name." % (_id)
+                            "Please use another base name."
                         )
+                        % (_id)
                     )
                 else:
                     if new_map.is_in_db(dbif):
