@@ -31,7 +31,7 @@
 #define CL_OPTICS2       5
 
 #define GET_PARENT(p, c) ((p) = (int)(((c)-2) / 3 + 1))
-#define GET_CHILD(c, p)  ((c) = (int)(((p)*3) - 1))
+#define GET_CHILD(c, p)  ((c) = (int)(((p) * 3) - 1))
 
 struct cl_pnt {
     int uid;

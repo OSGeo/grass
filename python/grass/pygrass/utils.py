@@ -348,7 +348,7 @@ def r_export(rast, output="", fmt="png", **kargs):
     from grass.pygrass.modules import Module
 
     if rast.exist():
-        output = output if output else "%s_%s.%s" % (rast.name, rast.mapset, fmt)
+        output = output or "%s_%s.%s" % (rast.name, rast.mapset, fmt)
         Module(
             "r.out.%s" % fmt,
             input=rast.fullname(),
@@ -437,7 +437,7 @@ def table_exist(cursor, table_name):
         except OperationalError:
             return False
     one = cursor.fetchone() if cursor else None
-    return True if one and one[0] else False
+    return bool(one and one[0])
 
 
 def create_test_vector_map(map_name="test_vector"):

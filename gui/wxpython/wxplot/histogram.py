@@ -19,8 +19,8 @@ import sys
 
 import wx
 
-import grass.script as grass
-import wx.lib.plot as plot
+import grass.script as gs
+from wx.lib import plot
 from gui_core.wrap import StockCursor
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from wxplot.base import BasePlotFrame, PlotIcons
@@ -259,7 +259,7 @@ class HistogramPlotFrame(BasePlotFrame):
         title = _("Statistics for Map(s) Histogrammed")
 
         for rast in self.rasterList:
-            ret = grass.read_command("r.univar", map=rast, flags="e", quiet=True)
+            ret = gs.read_command("r.univar", map=rast, flags="e", quiet=True)
             stats = _("Statistics for raster map <%s>") % rast + ":\n%s\n" % ret
             message.append(stats)
 

@@ -32,7 +32,7 @@ class SemanticLabelReader:
 
     def _read_config(self):
         """Read configuration"""
-        self.config = dict()
+        self.config = {}
         for json_file in self._json_files:
             try:
                 with open(json_file) as fd:
@@ -181,7 +181,7 @@ class SemanticLabelReader:
                     shortcut
                     and config[root]["shortcut"].upper() == shortcut.upper()
                     and band.upper()
-                    in map(lambda x: x.upper(), config[root]["bands"].keys())
+                    in (x.upper() for x in config[root]["bands"].keys())
                 ):
                     return filename
 

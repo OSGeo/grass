@@ -21,7 +21,7 @@ jobs:
       - name: Create URL to the run output
         id: vars
         run: echo "run-url=https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" >> $GITHUB_OUTPUT
-      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: "Check that autoconf scripts are up-to-date:"
         run: |
           rm -f config.guess config.sub
@@ -33,7 +33,7 @@ jobs:
         run: git status --ignored
       - name: Create Pull Request
         id: cpr
-        uses: peter-evans/create-pull-request@6d6857d36972b65feb161a90e484f2984215f83e # v6.0.5
+        uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c # v6.1.0
         with:
           commit-message: "config.guess + config.sub: updated from http://git.savannah.gnu.org/cgit/config.git/plain/"
           branch: periodic/update-configure

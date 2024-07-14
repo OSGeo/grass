@@ -26,11 +26,12 @@ for details.
 """
 
 from datetime import datetime
+
 from .core import (
-    get_tgis_message_interface,
-    get_tgis_dbmi_paramstyle,
     SQLDatabaseInterfaceConnection,
     get_current_mapset,
+    get_tgis_dbmi_paramstyle,
+    get_tgis_message_interface,
 )
 
 ###############################################################################
@@ -257,7 +258,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
         self.msgr = get_tgis_message_interface()
 
         if self.ident and self.ident.find("@") >= 0:
-            self.mapset = self.ident.split("@" "")[1]
+            self.mapset = self.ident.split("@")[1]
         else:
             self.mapset = None
 
@@ -740,7 +741,7 @@ class DatasetBase(SQLDatabaseInterface):
 
         :param ttype: The temporal type of the dataset "absolute or relative"
         """
-        if ttype is None or (ttype != "absolute" and ttype != "relative"):
+        if ttype is None or (ttype not in {"absolute", "relative"}):
             self.D["temporal_type"] = "absolute"
         else:
             self.D["temporal_type"] = ttype

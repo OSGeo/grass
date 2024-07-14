@@ -30,7 +30,7 @@ from math import sqrt, ceil, floor
 
 from core.gcmd import GException, RunCommand
 
-import grass.script as grass
+import grass.script as gs
 
 from iscatt.core_c import CreateCatRast, ComputeScatts, UpdateCatRast, Rasterize
 
@@ -361,7 +361,7 @@ class CatRastUpdater:
         new_r["nsres"] = r["nsres"]
         new_r["ewres"] = r["ewres"]
 
-        return {"GRASS_REGION": grass.region_env(**new_r)}
+        return {"GRASS_REGION": gs.region_env(**new_r)}
 
 
 class AnalyzedData:
@@ -446,7 +446,7 @@ class ScattPlotsCondsData:
             return False
 
         for scatt in self.cats[cat_id].values():
-            grass.try_remove(scatt["np_vals"])
+            gs.try_remove(scatt["np_vals"])
             del scatt["np_vals"]
 
         del self.cats[cat_id]
@@ -476,7 +476,7 @@ class ScattPlotsCondsData:
             b_i["b1"]["max"] - b_i["b1"]["min"] + 1,
         )
 
-        np_vals = np.memmap(grass.tempfile(), dtype=self.dtype, mode="w+", shape=shape)
+        np_vals = np.memmap(gs.tempfile(), dtype=self.dtype, mode="w+", shape=shape)
 
         self.cats[cat_id][scatt_id] = {"np_vals": np_vals}
 
@@ -488,9 +488,7 @@ class ScattPlotsCondsData:
         b1_info = self.an_data.GetBandInfo(b1)
         b2_info = self.an_data.GetBandInfo(b2)
 
-        bands_info = {"b1": b1_info, "b2": b2_info}
-
-        return bands_info
+        return {"b1": b1_info, "b2": b2_info}
 
     def DeleScattPlot(self, cat_id, scatt_id):
         if cat_id not in self.cats:
@@ -580,7 +578,7 @@ class ScattPlotsData(ScattPlotsCondsData):
             self.cats_rasts_conds[cat_id] = None
             self.cats_rasts[cat_id] = None
         else:
-            self.cats_rasts_conds[cat_id] = grass.tempfile()
+            self.cats_rasts_conds[cat_id] = gs.tempfile()
             self.cats_rasts[cat_id] = "temp_cat_rast_%d_%d" % (cat_id, os.getpid())
             region = self.an_data.GetRegion()
             CreateCatRast(region, self.cats_rasts_conds[cat_id])
@@ -590,7 +588,7 @@ class ScattPlotsData(ScattPlotsCondsData):
     def DeleteCategory(self, cat_id):
         ScattPlotsCondsData.DeleteCategory(self, cat_id)
 
-        grass.try_remove(self.cats_rasts_conds[cat_id])
+        gs.try_remove(self.cats_rasts_conds[cat_id])
         del self.cats_rasts_conds[cat_id]
 
         RunCommand("g.remove", flags="f", type="raster", name=self.cats_rasts[cat_id])
@@ -695,7 +693,7 @@ class ScattPlotsData(ScattPlotsCondsData):
     def CleanUp(self):
         ScattPlotsCondsData.CleanUp(self)
         for tmp in self.cats_rasts_conds.values():
-            grass.try_remove(tmp)
+            gs.try_remove(tmp)
         for tmp in self.cats_rasts.values():
             RunCommand("g.remove", flags="f", type="raster", name=tmp, getErrorMsg=True)
 
@@ -784,14 +782,12 @@ def idBandsToidScatt(band_1_id, band_2_id, n_bands):
 
     n_b1 = n_bands - 1
 
-    scatt_id = int(
+    return int(
         (band_1_id * (2 * n_b1 + 1) - band_1_id * band_1_id) / 2
         + band_2_id
         - band_1_id
         - 1
     )
-
-    return scatt_id
 
 
 def GetRegion():
@@ -809,7 +805,7 @@ def _parseRegion(region_str):
 
     for param in region_str:
         k, v = param.split("=")
-        if k in ["rows", "cols", "cells"]:
+        if k in {"rows", "cols", "cells"}:
             v = int(v)
         else:
             v = float(v)
@@ -837,7 +833,7 @@ def GetRasterInfo(rast):
             if v != "CELL":
                 return None
             pass
-        elif k in ["rows", "cols", "cells", "min", "max"]:
+        elif k in {"rows", "cols", "cells", "min", "max"}:
             v = int(v)
         else:
             v = float(v)

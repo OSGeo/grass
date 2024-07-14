@@ -1,4 +1,3 @@
-/* h_measure.c */
 /****************************************************************************
  *
  * MODULE:       r.texture
@@ -22,9 +21,28 @@
  *
  *****************************************************************************/
 
-float h_measure(int);
-void alloc_vars(int);
-int set_vars(int **grays, int curr_rrow, int curr_col, int size, int offset,
-             int t_d, int with_nulls);
-int set_angle_vars(int angle, int have_px, int have_py, int have_pxpys,
-                   int have_pxpyd);
+#include "matvec.h"
+
+typedef struct menu {
+    char *name;   /* measure name */
+    char *desc;   /* menu display - full description */
+    char *suffix; /* output suffix */
+    char useme;   /* calculate this measure if set */
+    int idx;      /* measure index */
+} menu;
+
+float h_measure(int t_m, struct matvec *mv);
+
+float f1_asm(struct matvec *mv);
+float f2_contrast(struct matvec *mv);
+float f3_corr(struct matvec *mv);
+float f4_var(struct matvec *mv);
+float f5_idm(struct matvec *mv);
+float f6_savg(struct matvec *mv);
+float f7_svar(struct matvec *mv);
+float f8_sentropy(struct matvec *mv);
+float f9_entropy(struct matvec *mv);
+float f10_dvar(struct matvec *mv);
+float f11_dentropy(struct matvec *mv);
+float f12_icorr(struct matvec *mv);
+float f13_icorr(struct matvec *mv);

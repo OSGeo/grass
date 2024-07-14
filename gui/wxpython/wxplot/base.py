@@ -20,7 +20,7 @@ import os
 import wx
 from random import randint
 
-import wx.lib.plot as plot
+from wx.lib import plot
 from core.globalvar import ICONDIR
 from core.settings import UserSettings
 from wxplot.dialogs import TextDialog, OptDialog
@@ -29,7 +29,7 @@ from icons.icon import MetaIcon
 from gui_core.toolbars import BaseIcons
 from gui_core.wrap import Menu
 
-import grass.script as grass
+import grass.script as gs
 
 PlotIcons = {
     "draw": MetaIcon(img="show", label=_("Draw/re-draw plot")),
@@ -116,12 +116,12 @@ class BasePlotFrame(wx.Frame):
         for assigning colors to images in imagery groups"""
 
         self.colorDict = {}
-        for clr in grass.named_colors.keys():
+        for clr in gs.named_colors.keys():
             if clr == "white":
                 continue
-            r = int(grass.named_colors[clr][0] * 255)
-            g = int(grass.named_colors[clr][1] * 255)
-            b = int(grass.named_colors[clr][2] * 255)
+            r = int(gs.named_colors[clr][0] * 255)
+            g = int(gs.named_colors[clr][1] * 255)
+            b = int(gs.named_colors[clr][2] * 255)
             self.colorDict[clr] = (r, g, b, 255)
 
     def InitPlotOpts(self, plottype):
@@ -203,7 +203,7 @@ class BasePlotFrame(wx.Frame):
             idx = rasterList.index(r)
 
             try:
-                ret = grass.raster_info(r)
+                ret = gs.raster_info(r)
             except:
                 continue
                 # if r.info cannot parse map, skip it
@@ -212,7 +212,7 @@ class BasePlotFrame(wx.Frame):
             rdict[r] = {}  # initialize sub-dictionaries for each raster in the list
 
             rdict[r]["units"] = ""
-            if ret["units"] not in ("(none)", '"none"', "", None):
+            if ret["units"] not in {"(none)", '"none"', "", None}:
                 rdict[r]["units"] = ret["units"]
 
             rdict[r]["plegend"] = r  # use fully-qualified names
@@ -267,8 +267,8 @@ class BasePlotFrame(wx.Frame):
             idx = rasterList.index(rpair)
 
             try:
-                ret0 = grass.raster_info(rpair[0])
-                ret1 = grass.raster_info(rpair[1])
+                ret0 = gs.raster_info(rpair[0])
+                ret1 = gs.raster_info(rpair[1])
 
             except:
                 continue
@@ -284,9 +284,9 @@ class BasePlotFrame(wx.Frame):
             rdict[rpair][0]["units"] = ""
             rdict[rpair][1]["units"] = ""
 
-            if ret0["units"] not in ("(none)", '"none"', "", None):
+            if ret0["units"] not in {"(none)", '"none"', "", None}:
                 rdict[rpair][0]["units"] = ret0["units"]
-            if ret1["units"] not in ("(none)", '"none"', "", None):
+            if ret1["units"] not in {"(none)", '"none"', "", None}:
                 rdict[rpair][1]["units"] = ret1["units"]
 
             rdict[rpair]["plegend"] = (
@@ -584,7 +584,7 @@ class BasePlotFrame(wx.Frame):
         )
 
         btnval = dlg.ShowModal()
-        if btnval == wx.ID_SAVE or btnval == wx.ID_OK or btnval == wx.ID_CANCEL:
+        if btnval in {wx.ID_SAVE, wx.ID_OK, wx.ID_CANCEL}:
             dlg.Destroy()
 
     def PlotOptions(self, event):
@@ -602,7 +602,7 @@ class BasePlotFrame(wx.Frame):
         )
         btnval = dlg.ShowModal()
 
-        if btnval == wx.ID_SAVE or btnval == wx.ID_OK or btnval == wx.ID_CANCEL:
+        if btnval in {wx.ID_SAVE, wx.ID_OK, wx.ID_CANCEL}:
             dlg.Destroy()
         self.Update()
 

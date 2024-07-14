@@ -457,6 +457,7 @@ static int find_best_neighbour(struct globals *globals, int row, int col,
     visited = pavl_create(cmp_rc, NULL);
     ngbr_rc.row = row;
     ngbr_rc.col = col;
+    ngbr_rc.next = NULL;
     pngbr_rc = G_malloc(sizeof(struct rc));
     *pngbr_rc = ngbr_rc;
     pavl_insert(visited, pngbr_rc);

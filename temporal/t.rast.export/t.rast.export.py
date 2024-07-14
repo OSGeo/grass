@@ -105,7 +105,8 @@
 # %end
 
 import os
-import grass.script as grass
+
+import grass.script as gs
 
 
 ############################################################################
@@ -126,17 +127,17 @@ def main():
     }
 
     if not directory or not os.path.exists(directory):
-        grass.fatal(_("Directory {} not found".format(directory)))
+        gs.fatal(_("Directory {} not found".format(directory)))
 
     if not os.access(directory, os.W_OK):
-        grass.fatal(_("Directory {} is not writable".format(directory)))
+        gs.fatal(_("Directory {} is not writable".format(directory)))
 
-    if _type and _format in ["pack", "AAIGrid"]:
-        grass.warning(
-            _("Type options is not working with pack format, " "it will be skipped")
+    if _type and _format in {"pack", "AAIGrid"}:
+        gs.warning(
+            _("Type options is not working with pack format, it will be skipped")
         )
         if kws:
-            grass.warning(
+            gs.warning(
                 _(
                     "Createopt, metaopt and nodata options are not "
                     "working with pack and AAIGrid formats, "
@@ -153,5 +154,5 @@ def main():
 
 ############################################################################
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

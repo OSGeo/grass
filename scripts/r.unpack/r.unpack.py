@@ -41,6 +41,7 @@
 # %end
 
 import os
+from pathlib import Path
 import sys
 import shutil
 import tarfile
@@ -243,8 +244,7 @@ def main():
     if maps:
         if vrt_file and os.path.exists(vrt_file):
             files = "\n".join(maps)
-            with open(vrt_file, "w") as f:
-                f.write(files)
+            Path(vrt_file).write_text(files)
 
     grass.message(_("Raster map <{name}> unpacked".format(name=map_name)))
 

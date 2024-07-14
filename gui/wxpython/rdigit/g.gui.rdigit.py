@@ -116,7 +116,7 @@ def main():
             self._mapObj = self.GetMap()
 
             # load raster map
-            self._addLayer(name=new_map if new_map else edit_map)
+            self._addLayer(name=new_map or edit_map)
 
             # switch toolbar
             self.AddToolbar("rdigit", fixed=True)
@@ -139,7 +139,7 @@ def main():
                 rdigit.OnMapSelection()
             # use Close instead of QuitRDigit for standalone tool
             self.rdigit.quitDigitizer.disconnect(self.QuitRDigit)
-            self.rdigit.quitDigitizer.connect(lambda: self.Close())
+            self.rdigit.quitDigitizer.connect(self.Close)
 
             # add Map Display panel to Map Display frame
             sizer = wx.BoxSizer(wx.VERTICAL)

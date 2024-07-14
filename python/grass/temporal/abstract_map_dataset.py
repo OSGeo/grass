@@ -10,24 +10,26 @@ for details.
 :authors: Soeren Gebbert
 """
 
+from abc import ABCMeta, abstractmethod
+from datetime import datetime
+
 import grass.script as gs
 from grass.exceptions import ImplementationError
-from datetime import datetime
-from abc import ABCMeta, abstractmethod
+
+from .abstract_dataset import AbstractDataset
 from .core import (
-    get_tgis_c_library_interface,
-    get_enable_timestamp_write,
-    get_enable_mapset_check,
     get_current_mapset,
+    get_enable_mapset_check,
+    get_enable_timestamp_write,
+    get_tgis_c_library_interface,
     init_dbif,
 )
-from .abstract_dataset import AbstractDataset
-from .temporal_extent import RelativeTemporalExtent, AbsoluteTemporalExtent
 from .datetime_math import (
     datetime_to_grass_datetime_string,
-    increment_datetime_by_string,
     decrement_datetime_by_string,
+    increment_datetime_by_string,
 )
+from .temporal_extent import AbsoluteTemporalExtent, RelativeTemporalExtent
 
 
 class AbstractMapDataset(AbstractDataset):
@@ -467,7 +469,7 @@ class AbstractMapDataset(AbstractDataset):
                 return False
             else:
                 self.msgr.error(
-                    _("End time must be of type datetime for " "%(type)s map <%(id)s>")
+                    _("End time must be of type datetime for %(type)s map <%(id)s>")
                     % {"type": self.get_type(), "id": self.get_map_id()}
                 )
                 return False
@@ -1023,7 +1025,7 @@ class AbstractMapDataset(AbstractDataset):
             statement += self.unregister(dbif=dbif, update=update, execute=False)
 
             self.msgr.verbose(
-                _("Delete %s dataset <%s> from temporal " "database")
+                _("Delete %s dataset <%s> from temporal database")
                 % (self.get_type(), self.get_id())
             )
 
@@ -1130,7 +1132,7 @@ class AbstractMapDataset(AbstractDataset):
             datasets = None
 
         if connection_state_changed:
-            dbif.close
+            dbif.close()
 
         return datasets
 
@@ -1166,7 +1168,7 @@ class AbstractMapDataset(AbstractDataset):
         # Check if the dataset is already present
         if stds_id in datasets:
             if connection_state_changed:
-                dbif.close
+                dbif.close()
             return ""
 
         datasets.append(stds_id)
@@ -1181,7 +1183,7 @@ class AbstractMapDataset(AbstractDataset):
             statement = self.stds_register.get_update_statement_mogrified(dbif=dbif)
 
         if connection_state_changed:
-            dbif.close
+            dbif.close()
 
         return statement
 
@@ -1208,13 +1210,13 @@ class AbstractMapDataset(AbstractDataset):
         # Check if no datasets are present
         if datasets is None:
             if connection_state_changed:
-                dbif.close
+                dbif.close()
             return ""
 
         # Check if the dataset is already present
         if stds_id not in datasets:
             if connection_state_changed:
-                dbif.close
+                dbif.close()
             return ""
 
         datasets.remove(stds_id)
@@ -1229,7 +1231,7 @@ class AbstractMapDataset(AbstractDataset):
             statement = self.stds_register.get_update_statement_mogrified(dbif=dbif)
 
         if connection_state_changed:
-            dbif.close
+            dbif.close()
 
         return statement
 

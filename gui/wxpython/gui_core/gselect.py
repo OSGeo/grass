@@ -50,11 +50,11 @@ import ctypes
 import wx
 
 from core import globalvar
-import wx.lib.buttons as buttons
+from wx.lib import buttons
 import wx.lib.filebrowsebutton as filebrowse
 
 
-import grass.script as grass
+import grass.script as gs
 from grass.script import task as gtask
 from grass.exceptions import CalledModuleError
 
@@ -212,7 +212,7 @@ class VectorSelect(Select):
     def _isElement(self, vectorName):
         """Check if element should be filtered out"""
         try:
-            if int(grass.vector_info_topo(vectorName)[self.ftype]) < 1:
+            if int(gs.vector_info_topo(vectorName)[self.ftype]) < 1:
                 return False
         except KeyError:
             return False
@@ -441,7 +441,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         self.mapsets = None
         self.onPopup = None
         self.fullyQualified = True
-        self.extraItems = dict()
+        self.extraItems = {}
 
         self.SetFilter(None)
         self.tgis_error = False
@@ -495,7 +495,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         :param exclude: True to exclude, False for forcing the list (elements)
         """
         # get current mapset
-        curr_mapset = grass.gisenv()["MAPSET"]
+        curr_mapset = gs.gisenv()["MAPSET"]
 
         # map element types to g.list types
         elementdict = {
@@ -525,7 +525,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             else:
                 renamed_elements.append(elementdict[elem])
 
-        if element in ("stds", "strds", "str3ds", "stvds"):
+        if element in {"stds", "strds", "str3ds", "stvds"}:
             if not self.tgis_error:
                 import grass.temporal as tgis
 
@@ -533,7 +533,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             else:
                 filesdict = None
         else:
-            filesdict = grass.list_grouped(renamed_elements, check_search_path=False)
+            filesdict = gs.list_grouped(renamed_elements, check_search_path=False)
 
         # add extra items first
         if self.extraItems:
@@ -546,7 +546,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
 
         # list of mapsets in current location
         if mapsets is None:
-            mapsets = grass.mapsets(search_path=True)
+            mapsets = gs.mapsets(search_path=True)
 
         # current mapset first
         if curr_mapset in mapsets and mapsets[0] != curr_mapset:
@@ -603,7 +603,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                 collapse = True
 
                 if sel == 0:  # collapse all except PERMANENT and current
-                    if mapset in ("PERMANENT", curr_mapset):
+                    if mapset in {"PERMANENT", curr_mapset}:
                         collapse = False
                 elif sel == 1:  # collapse all except PERMANENT
                     if mapset == "PERMANENT":
@@ -635,7 +635,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         :param exclude: True to exclude, False for forcing the list
         :param node: parent node
         """
-        elist = grass.naturally_sorted(elist)
+        elist = gs.naturally_sorted(elist)
         for elem in elist:
             if elem != "":
                 fullqElem = elem + "@" + mapset
@@ -663,8 +663,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
 
         data = {"node": node, "mapset": mapset}
 
-        item = self.seltree.AppendItem(parent, text=value, data=data)
-        return item
+        return self.seltree.AppendItem(parent, text=value, data=data)
 
     def OnKeyUp(self, event):
         """Enables to select items using keyboard
@@ -776,7 +775,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         ListCtrlComboPopup.SetData(self, **kargs)
         if "type" in kargs:
             self.type = kargs["type"]
-            if self.type in ("stds", "strds", "str3ds", "stvds"):
+            if self.type in {"stds", "strds", "str3ds", "stvds"}:
                 # Initiate the temporal framework. Catch database error
                 # and set the error flag for the stds listing.
                 try:
@@ -838,7 +837,7 @@ class VectorDBInfo:
         # if map is not defined (happens with vnet initialization) or it
         # doesn't exist
         try:
-            self.layers = grass.vector_db(map=self.map, stderr=nuldev)
+            self.layers = gs.vector_db(map=self.map, stderr=nuldev)
         except CalledModuleError:
             return False
         finally:  # always close nuldev
@@ -862,7 +861,7 @@ class VectorDBInfo:
                     self.layers[layer]["database"],
                 ),
             )
-            for item in grass.db_describe(
+            for item in gs.db_describe(
                 table=self.layers[layer]["table"],
                 driver=self.layers[layer]["driver"],
                 database=self.layers[layer]["database"],
@@ -977,7 +976,7 @@ class LayerSelect(wx.ComboBox):
         :param str vector: vector map name (native or connected via v.external)
         :param str dsn: OGR data source name
         """
-        layers = list()
+        layers = []
 
         if vector:
             layers = GetVectorNumberOfLayers(vector)
@@ -1066,7 +1065,7 @@ class TableSelect(wx.ComboBox):
         items = []
 
         if not driver or not database:
-            connect = grass.db_connection()
+            connect = gs.db_connection()
 
             driver = connect["driver"]
             database = connect["database"]
@@ -1233,7 +1232,7 @@ class DbaseSelect(wx.lib.filebrowsebutton.DirBrowseButton):
             labelText="",
             dialogTitle=_("Choose GIS Data Directory"),
             buttonText=_("Browse"),
-            startDirectory=grass.gisenv()["GISDBASE"],
+            startDirectory=gs.gisenv()["GISDBASE"],
             **kwargs,
         )
 
@@ -1253,7 +1252,7 @@ class LocationSelect(wx.ComboBox):
         self.SetName("LocationSelect")
 
         if not gisdbase:
-            self.gisdbase = grass.gisenv()["GISDBASE"]
+            self.gisdbase = gs.gisenv()["GISDBASE"]
         else:
             self.gisdbase = gisdbase
 
@@ -1300,12 +1299,12 @@ class MapsetSelect(wx.ComboBox):
         self.value = ""
         self.multiple = multiple
         if not gisdbase:
-            self.gisdbase = grass.gisenv()["GISDBASE"]
+            self.gisdbase = gs.gisenv()["GISDBASE"]
         else:
             self.gisdbase = gisdbase
 
         if not location:
-            self.location = grass.gisenv()["LOCATION_NAME"]
+            self.location = gs.gisenv()["LOCATION_NAME"]
         else:
             self.location = location
 
@@ -1351,7 +1350,7 @@ class MapsetSelect(wx.ComboBox):
         else:
             mlist = GetListOfMapsets(self.gisdbase, self.location, selectable=False)
 
-        gisenv = grass.gisenv()
+        gisenv = gs.gisenv()
         if (
             self.skipCurrent
             and gisenv["LOCATION_NAME"] == self.location
@@ -1375,7 +1374,7 @@ class SubGroupSelect(wx.ComboBox):
         """Insert subgroups for defined group"""
         if not group:
             return
-        gisenv = grass.gisenv()
+        gisenv = gs.gisenv()
         try:
             name, mapset = group.split("@", 1)
         except ValueError:
@@ -1407,14 +1406,14 @@ class FormatSelect(wx.Choice):
         else:
             ftype = "gdal"
 
-        formats = list()
+        formats = []
         for f in GetFormats()[ftype][srcType].items():
             formats += f
         self.SetItems(formats)
 
     def GetExtension(self, name):
         """Get file extension by format name"""
-        formatToExt = dict()
+        formatToExt = {}
         formatToExt.update(rasterFormatExtension)
         formatToExt.update(vectorFormatExtension)
 
@@ -1462,7 +1461,7 @@ class GdalSelect(wx.Panel):
             self.inputBox.SetLabel(" %s " % _("Source input"))
 
         # source type
-        sources = list()
+        sources = []
         self.sourceMap = {"file": -1, "dir": -1, "db": -1, "pro": -1, "native": -1}
         idx = 0
         if dest:
@@ -1541,7 +1540,7 @@ class GdalSelect(wx.Panel):
             }
 
         for name, ext in sorted(extList.items()):
-            if name in ("ESRI Shapefile", "GeoTIFF"):
+            if name in {"ESRI Shapefile", "GeoTIFF"}:
                 continue
             fileMask += "%(name)s (*.%(low)s;*.%(up)s)|*.%(low)s;*.%(up)s|" % {
                 "name": name,
@@ -1700,7 +1699,7 @@ class GdalSelect(wx.Panel):
                 "v.external.out",
                 parent=self,
                 read=True,
-                parse=grass.parse_key_val,
+                parse=gs.parse_key_val,
                 flags="g",
             )
             if current["format"] == "native":
@@ -1724,9 +1723,9 @@ class GdalSelect(wx.Panel):
                 if k == "dbname":
                     dsn = v
                     break
-            optList = list()
+            optList = []
             for k, v in data.items():
-                if k in ("format", "conninfo", "topology"):
+                if k in {"format", "conninfo", "topology"}:
                     continue
                 optList.append("%s=%s" % (k, v))
             options = ",".join(optList)
@@ -1964,7 +1963,7 @@ class GdalSelect(wx.Panel):
 
     def _getExtension(self, name):
         """Get file extension by format name"""
-        formatToExt = dict()
+        formatToExt = {}
         formatToExt.update(rasterFormatExtension)
         formatToExt.update(vectorFormatExtension)
 
@@ -2097,11 +2096,11 @@ class GdalSelect(wx.Panel):
     def GetDsn(self):
         """Get datasource name"""
         if self._sourceType == "db":
-            if self.dbWidgets["format"].GetStringSelection() in (
+            if self.dbWidgets["format"].GetStringSelection() in {
                 "PostgreSQL",
                 "PostgreSQL/PostGIS",
                 "PostGIS Raster driver",
-            ):
+            }:
                 ret = RunCommand("db.login", read=True, quiet=True, flags="p")
                 message = _(
                     "PostgreSQL/PostGIS login was not set."
@@ -2157,7 +2156,7 @@ class GdalSelect(wx.Panel):
                 dsn = "/vsizip/" + dsn
             elif ext == ".gzip":
                 dsn = "/vsigzip/" + dsn
-            elif ext in (".tar", ".tar.gz", ".tgz"):
+            elif ext in {".tar", ".tar.gz", ".tgz"}:
                 dsn = "/vsitar/" + dsn
 
         return dsn
@@ -2165,22 +2164,22 @@ class GdalSelect(wx.Panel):
     def SetDatabase(self, db):
         """Update database panel."""
         sizer = self.dbPanel.GetSizer()
-        showBrowse = db in ("SQLite", "SQLite / Spatialite", "Rasterlite")
+        showBrowse = db in {"SQLite", "SQLite / Spatialite", "Rasterlite"}
         showDirbrowse = db in ("FileGDB")
-        showChoice = db in (
+        showChoice = db in {
             "PostgreSQL",
             "PostgreSQL/PostGIS",
             "PostGIS WKT Raster driver",
             "PostGIS Raster driver",
-        )
+        }
         enableFeatType = (
             self.dest
             and self.ogr
             and db
-            in (
+            in {
                 "PostgreSQL",
                 "PostgreSQL/PostGIS",
-            )
+            }
         )
         showText = not (showBrowse or showChoice or showDirbrowse)
 
@@ -2199,12 +2198,12 @@ class GdalSelect(wx.Panel):
             if dbNames is not None:
                 self.dbWidgets["choice"].SetItems(sorted(dbNames))
                 self.dbWidgets["choice"].SetSelection(0)
-            elif grass.find_program(self._psql, "--help"):
+            elif gs.find_program(self._psql, "--help"):
                 if not self.dbWidgets["choice"].GetItems():
-                    p = grass.Popen([self._psql, "-ltA"], stdout=grass.PIPE)
+                    p = gs.Popen([self._psql, "-ltA"], stdout=gs.PIPE)
                     ret = p.communicate()[0]
                     if ret:
-                        dbNames = list()
+                        dbNames = []
                         for line in ret.splitlines():
                             sline = line.split("|")
                             if len(sline) < 2:
@@ -2243,7 +2242,7 @@ class GdalSelect(wx.Panel):
 
             if "PG:" in dsn:
                 dsn = dsn.replace("PG:", "")
-                p = grass.Popen(
+                p = gs.Popen(
                     [
                         self._psql,
                         "-t",
@@ -2252,7 +2251,7 @@ class GdalSelect(wx.Panel):
                         "-c",
                         f"SELECT ST_SRID(rast) AS srid FROM {table} WHERE rid=1;",
                     ],
-                    stdout=grass.PIPE,
+                    stdout=gs.PIPE,
                 )
                 ret, error = p.communicate()
                 if error:
@@ -2271,13 +2270,13 @@ class GdalSelect(wx.Panel):
                                     dsn,
                                     conn_param="host",
                                 ),
-                                error=grass.utils.decode(error),
+                                error=gs.utils.decode(error),
                             ),
                         ),
                     )
                 if ret:
-                    raster_srid = grass.utils.decode(ret).replace(os.linesep, "")
-                    location_srid = grass.parse_command("g.proj", flags="g")
+                    raster_srid = gs.utils.decode(ret).replace(os.linesep, "")
+                    location_srid = gs.parse_command("g.proj", flags="g")
                     if raster_srid == location_srid["srid"].split(":")[-1]:
                         projectionMatch = "1"
             else:
@@ -2291,8 +2290,8 @@ class GdalSelect(wx.Panel):
                 lines = ret.splitlines()
                 projectionMatch = "0"
                 if lines:
-                    bandNumber, bandType, projectionMatch = map(
-                        lambda x: x.strip(), lines[0].split(",")
+                    bandNumber, bandType, projectionMatch = (
+                        x.strip() for x in lines[0].split(",")
                     )
 
             return projectionMatch
@@ -2309,8 +2308,8 @@ class GdalSelect(wx.Panel):
         if not dsn:
             return
 
-        data = list()
-        listData = list()
+        data = []
+        listData = []
         layerId = 1
 
         if self.ogr:
@@ -2321,8 +2320,8 @@ class GdalSelect(wx.Panel):
 
             layerId = 1
             for line in ret.splitlines():
-                layerName, featureType, projectionMatch, geometryColumn = map(
-                    lambda x: x.strip(), line.split(",")
+                layerName, featureType, projectionMatch, geometryColumn = (
+                    x.strip() for x in line.split(",")
                 )
                 projectionMatchCaption = getProjMatchCaption(projectionMatch)
                 grassName = GetValidLayerName(layerName)
@@ -2518,7 +2517,7 @@ class GdalSelect(wx.Panel):
               AND schemaname != 'pg_catalog';
         """
         # Get tables list
-        p = grass.Popen(
+        p = gs.Popen(
             [
                 self._psql,
                 "-t",
@@ -2527,7 +2526,7 @@ class GdalSelect(wx.Panel):
                 "-c",
                 f"{tables_list_sql}",
             ],
-            stdout=grass.PIPE,
+            stdout=gs.PIPE,
         )
         ret, error = p.communicate()
         if error:
@@ -2544,12 +2543,12 @@ class GdalSelect(wx.Panel):
                             dsn,
                             conn_param="host",
                         ),
-                        error=grass.utils.decode(error),
+                        error=gs.utils.decode(error),
                     ),
                 ),
             )
         if ret:
-            ret = grass.utils.decode(ret)
+            ret = gs.utils.decode(ret)
             tables = [i.strip() for i in ret.split(os.linesep) if i]
         Debug.msg(3, f"GdalSelect._getPGDBtables(): return {tables}")
         return tables
@@ -2599,7 +2598,7 @@ class GdalSelect(wx.Panel):
         field_sep = ","
 
         dsn = dsn.replace("PG:", "")
-        if grass.find_program(self._psql, "--help"):
+        if gs.find_program(self._psql, "--help"):
             tables = self._getPGDBtables(dsn)
             # Get tables columns data types list
             if tables:
@@ -2607,7 +2606,7 @@ class GdalSelect(wx.Panel):
                 tables_cols_data_types_sql = self._getPGDBTablesColumnsTypesSql(
                     tables=tables_with_quotes,
                 )
-                p = grass.Popen(
+                p = gs.Popen(
                     [
                         self._psql,
                         "-t",
@@ -2618,7 +2617,7 @@ class GdalSelect(wx.Panel):
                         "-c",
                         f"{tables_cols_data_types_sql}",
                     ],
-                    stdout=grass.PIPE,
+                    stdout=gs.PIPE,
                 )
                 ret, error = p.communicate()
                 if error:
@@ -2636,14 +2635,14 @@ class GdalSelect(wx.Panel):
                                     dsn,
                                     conn_param="host",
                                 ),
-                                error=grass.utils.decode(error),
+                                error=gs.utils.decode(error),
                             ),
                         ),
                     )
                 if ret:
                     import re
 
-                    tables_cols = grass.utils.decode(ret)
+                    tables_cols = gs.utils.decode(ret)
                     rasters_cols = re.findall(
                         rf".*.{raster_col_type}",
                         tables_cols,
@@ -2704,9 +2703,9 @@ class ProjSelect(wx.ComboBox):
     def UpdateItems(self, dbase, location, mapset):
         """Update list of maps"""
         if not dbase:
-            dbase = grass.gisenv()["GISDBASE"]
+            dbase = gs.gisenv()["GISDBASE"]
         if not mapset:
-            mapset = grass.gisenv()["MAPSET"]
+            mapset = gs.gisenv()["MAPSET"]
         if self.isRaster:
             ret = RunCommand(
                 "r.proj",
@@ -2727,7 +2726,7 @@ class ProjSelect(wx.ComboBox):
                 project=location,
                 mapset=mapset,
             )
-        listMaps = list()
+        listMaps = []
         if ret:
             for line in ret.splitlines():
                 listMaps.append(line.strip())
@@ -3176,7 +3175,7 @@ class SignatureSelect(wx.ComboBox):
         sig_list = list_ptr()
         count = I_signatures_list_by_type(sig_type, mapset, ctypes.byref(sig_list))
         for n in range(count):
-            items.append(grass.decode(sig_list[n]))
+            items.append(gs.decode(sig_list[n]))
         I_free_signatures_list(count, ctypes.byref(sig_list))
 
 
