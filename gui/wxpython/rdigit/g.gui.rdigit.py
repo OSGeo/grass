@@ -191,10 +191,8 @@ def main():
 
         if not edit_map:
             gs.fatal(
-                _(
-                    "Raster map <{}> not found in current mapset.".format(
-                        options["edit"],
-                    ),
+                _("Raster map <{}> not found in current mapset.").format(
+                    options["edit"],
                 ),
             )
         else:
@@ -208,11 +206,8 @@ def main():
             )["fullname"]
             if not base_map:
                 gs.fatal(
-                    _(
-                        "Base raster map <{}> not found in "
-                        "current mapset.".format(
-                            options["base"],
-                        ),
+                    _("Base raster map <{}> not found in current mapset.").format(
+                        options["base"],
                     ),
                 )
             kwargs["base_map"] = base_map

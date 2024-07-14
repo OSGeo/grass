@@ -153,11 +153,11 @@ def sampleAreaVector(
         ):
             GError(
                 message=_(
-                    "The raster map <%s> already exists."
+                    "The raster map <{map_name}> already exists."
                     " Please remove or rename the maps "
-                    "with the prefix '%s' or select the "
-                    "option to overwrite existing maps" % (rast_name, outpref)
-                )
+                    "with the prefix '{prefix}' or select the "
+                    "option to overwrite existing maps"
+                ).format(map_name=rast_name, prefix=outpref)
             )
             return None
         convertFeature(vect, rast_name, cat, rast, layer, overwrite)
