@@ -39,6 +39,7 @@ from grass.lib.imagery import (
     I_free_group_ref,
     ReturnString,
 )
+import math
 
 
 class SigSetFileTestCase(TestCase):
@@ -78,7 +79,7 @@ class SigSetFileTestCase(TestCase):
         So.ClassSig[0].classnum = 2
         So.ClassSig[0].title = ReturnString("1st class")
         So.ClassSig[0].type = 1
-        So.ClassSig[0].SubSig[0].pi = 3.14
+        So.ClassSig[0].SubSig[0].pi = math.pi
         So.ClassSig[0].SubSig[0].means[0] = 42.42
         So.ClassSig[0].SubSig[0].R[0][0] = 69.69
 
@@ -108,7 +109,7 @@ class SigSetFileTestCase(TestCase):
         self.assertEqual(Sn.ClassSig[0].classnum, 2)
         self.assertEqual(utils.decode(Sn.ClassSig[0].title), "1st class")
         self.assertEqual(Sn.ClassSig[0].type, 1)
-        self.assertEqual(Sn.ClassSig[0].SubSig[0].pi, 3.14)
+        self.assertEqual(Sn.ClassSig[0].SubSig[0].pi, math.pi)
         self.assertEqual(Sn.ClassSig[0].SubSig[0].means[0], 42.42)
         self.assertEqual(Sn.ClassSig[0].SubSig[0].R[0][0], 69.69)
 
@@ -133,7 +134,7 @@ class SigSetFileTestCase(TestCase):
         So.ClassSig[0].classnum = 2
         So.ClassSig[0].title = ReturnString("1st class")
         So.ClassSig[0].type = 1
-        So.ClassSig[0].SubSig[0].pi = 3.14
+        So.ClassSig[0].SubSig[0].pi = math.pi
         So.ClassSig[0].SubSig[0].means[0] = 42.42
         So.ClassSig[0].SubSig[0].R[0][0] = 69.69
 
@@ -173,7 +174,7 @@ class SigSetFileTestCase(TestCase):
         So.ClassSig[0].classnum = 2
         So.ClassSig[0].title = ReturnString("1st class")
         So.ClassSig[0].type = 1
-        So.ClassSig[0].SubSig[0].pi = 3.14
+        So.ClassSig[0].SubSig[0].pi = math.pi
         So.ClassSig[0].SubSig[0].means[0] = 42.42
         So.ClassSig[0].SubSig[0].means[1] = 24.24
         So.ClassSig[0].SubSig[0].R[0][0] = 69.69
@@ -210,7 +211,7 @@ class SigSetFileTestCase(TestCase):
         self.assertEqual(Sn.ClassSig[0].classnum, 2)
         self.assertEqual(utils.decode(Sn.ClassSig[0].title), "1st class")
         self.assertEqual(Sn.ClassSig[0].type, 1)
-        self.assertEqual(Sn.ClassSig[0].SubSig[0].pi, 3.14)
+        self.assertEqual(Sn.ClassSig[0].SubSig[0].pi, math.pi)
         self.assertEqual(Sn.ClassSig[0].SubSig[0].means[0], 42.42)
         self.assertEqual(Sn.ClassSig[0].SubSig[0].means[1], 24.24)
         self.assertEqual(Sn.ClassSig[0].SubSig[0].R[0][0], 69.69)
@@ -267,7 +268,7 @@ class SortSigSetBySemanticLabelTest(TestCase):
         S.ClassSig[0].classnum = 2
         S.ClassSig[0].title = ReturnString("1st class")
         S.ClassSig[0].type = 1
-        S.ClassSig[0].SubSig[0].pi = 3.14
+        S.ClassSig[0].SubSig[0].pi = math.pi
         S.ClassSig[0].SubSig[0].means[0] = 42.42
         S.ClassSig[0].SubSig[0].R[0][0] = 69.69
 
@@ -312,7 +313,7 @@ class SortSigSetBySemanticLabelTest(TestCase):
         S.ClassSig[0].classnum = 2
         S.ClassSig[0].title = ReturnString("1st class")
         S.ClassSig[0].type = 1
-        S.ClassSig[0].SubSig[0].pi = 3.14
+        S.ClassSig[0].SubSig[0].pi = math.pi
         S.ClassSig[0].SubSig[0].means[0] = 42.42
         S.ClassSig[0].SubSig[0].R[0][0] = 69.69
 
@@ -358,7 +359,7 @@ class SortSigSetBySemanticLabelTest(TestCase):
         S.ClassSig[0].classnum = 2
         S.ClassSig[0].title = ReturnString("1st class")
         S.ClassSig[0].type = 1
-        S.ClassSig[0].SubSig[0].pi = 3.14
+        S.ClassSig[0].SubSig[0].pi = math.pi
         S.ClassSig[0].SubSig[0].means[0] = 42.42
         S.ClassSig[0].SubSig[0].R[0][0] = 69.69
 
@@ -407,7 +408,7 @@ class SortSigSetBySemanticLabelTest(TestCase):
         S.ClassSig[0].classnum = 2
         S.ClassSig[0].title = ReturnString("1st class")
         S.ClassSig[0].type = 1
-        S.ClassSig[0].SubSig[0].pi = 3.14
+        S.ClassSig[0].SubSig[0].pi = math.pi
         S.ClassSig[0].SubSig[0].means[0] = 42.42
         S.ClassSig[0].SubSig[0].R[0][0] = 69.69
 
@@ -418,7 +419,7 @@ class SortSigSetBySemanticLabelTest(TestCase):
             ctypes.cast(S.semantic_labels[0], ctypes.c_char_p).value
         )
         self.assertEqual(semantic_label, "The_Doors")
-        self.assertEqual(S.ClassSig[0].SubSig[0].pi, 3.14)
+        self.assertEqual(S.ClassSig[0].SubSig[0].pi, math.pi)
         self.assertEqual(S.ClassSig[0].SubSig[0].means[0], 42.42)
         self.assertEqual(S.ClassSig[0].SubSig[0].R[0][0], 69.69)
 
@@ -455,7 +456,7 @@ class SortSigSetBySemanticLabelTest(TestCase):
         S.ClassSig[0].classnum = 2
         S.ClassSig[0].title = ReturnString("1st class")
         S.ClassSig[0].type = 1
-        S.ClassSig[0].SubSig[0].pi = 3.14
+        S.ClassSig[0].SubSig[0].pi = math.pi
         S.ClassSig[0].SubSig[0].means[0] = 42.42
         S.ClassSig[0].SubSig[0].means[1] = 24.24
         S.ClassSig[0].SubSig[0].R[0][0] = 69.69
@@ -468,7 +469,7 @@ class SortSigSetBySemanticLabelTest(TestCase):
         self.assertFalse(bool(ret))
         # Semantic labels and sig items should be swapped
         # Static items
-        self.assertEqual(S.ClassSig[0].SubSig[0].pi, 3.14)
+        self.assertEqual(S.ClassSig[0].SubSig[0].pi, math.pi)
         # Reordered items
         semantic_label1 = utils.decode(
             ctypes.cast(S.semantic_labels[0], ctypes.c_char_p).value
@@ -518,7 +519,7 @@ class SortSigSetBySemanticLabelTest(TestCase):
         S.ClassSig[0].classnum = 2
         S.ClassSig[0].title = ReturnString("1st class")
         S.ClassSig[0].type = 1
-        S.ClassSig[0].SubSig[0].pi = 3.14
+        S.ClassSig[0].SubSig[0].pi = math.pi
         S.ClassSig[0].SubSig[0].means[0] = 42.42
         S.ClassSig[0].SubSig[0].means[1] = 24.24
         S.ClassSig[0].SubSig[0].R[0][0] = 69.69
@@ -531,7 +532,7 @@ class SortSigSetBySemanticLabelTest(TestCase):
         self.assertFalse(bool(ret))
         # Semantic labels and sig items should not be swapped
         # Static items
-        self.assertEqual(S.ClassSig[0].SubSig[0].pi, 3.14)
+        self.assertEqual(S.ClassSig[0].SubSig[0].pi, math.pi)
         # Reordered items
         semantic_label1 = utils.decode(
             ctypes.cast(S.semantic_labels[0], ctypes.c_char_p).value
