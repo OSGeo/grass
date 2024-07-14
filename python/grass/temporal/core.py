@@ -454,8 +454,7 @@ def stop_subprocesses():
     """Stop the messenger and C-interface subprocesses
     that are started by tgis.init()
     """
-    global message_interface
-    global c_library_interface
+    global message_interface, c_library_interface
     if message_interface:
         message_interface.stop()
     if c_library_interface:
@@ -473,8 +472,7 @@ def get_available_temporal_mapsets():
     :returns: A dictionary, mapset names are keys, the tuple (driver,
               database) are the values
     """
-    global c_library_interface
-    global message_interface
+    global c_library_interface, message_interface
 
     mapsets = c_library_interface.available_mapsets()
 
@@ -562,17 +560,11 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
     """
     # We need to set the correct database backend and several global variables
     # from the GRASS mapset specific environment variables of g.gisenv and t.connect
-    global tgis_backend
-    global tgis_database
-    global tgis_database_string
-    global tgis_dbmi_paramstyle
-    global tgis_db_version
-    global raise_on_error
-    global enable_mapset_check
-    global enable_timestamp_write
-    global current_mapset
-    global current_location
-    global current_gisdbase
+    global tgis_backend, tgis_database, tgis_database_string  # noqa: FURB154
+    global tgis_dbmi_paramstyle, tgis_db_version  # noqa: FURB154
+    global raise_on_error  # noqa: FURB154
+    global enable_mapset_check, enable_timestamp_write  # noqa: FURB154
+    global current_mapset, current_location, current_gisdbase  # noqa: FURB154
 
     raise_on_error = raise_fatal_error
 
@@ -846,10 +838,7 @@ def create_temporal_database(dbif):
 
     :param dbif: The database interface to be used
     """
-    global tgis_backend
-    global tgis_version
-    global tgis_db_version
-    global tgis_database_string
+    global tgis_backend, tgis_version, tgis_db_version, tgis_database_string
 
     template_path = get_sql_template_path()
     msgr = get_tgis_message_interface()
@@ -977,8 +966,7 @@ def upgrade_temporal_database(dbif):
 
     :param dbif: The database interface to be used
     """
-    global tgis_database_string
-    global tgis_db_version
+    global tgis_database_string, tgis_db_version
 
     metadata = get_tgis_metadata(dbif)
 
