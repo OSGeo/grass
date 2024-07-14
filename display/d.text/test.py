@@ -56,8 +56,8 @@ for i in range(36):
     rotate(i * 10)
     color(colors[i % len(colors)])
     xy(
-        (80 + 10 * math.cos(i * 10 / 180 * 3.141593)),
-        (50 + 10 * 640 / 480 * math.sin(i * 10 / 180 * 3.141593)),
+        (80 + 10 * math.cos(i * 10 / 180 * math.pi)),
+        (50 + 10 * 640 / 480 * math.sin(i * 10 / 180 * math.pi)),
     )
     text(fonts[int(i % len(fonts))])
 
