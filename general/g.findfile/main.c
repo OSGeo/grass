@@ -104,8 +104,11 @@ int main(int argc, char *argv[])
             strcpy(name, file_opt->answer);
         G_free_tokens(map_mapset);
     }
-    else
-        strcpy(name, file_opt->answer);
+    else {
+    strncpy(name, file_opt->answer, sizeof(name) - 1);
+    name[sizeof(name) - 1] = '\0';  // Ensure null-termination
+    }
+        
 
     mapset = G_find_file2(elem_opt->answer, name, search_mapset);
     if (mapset) {
