@@ -835,10 +835,10 @@ class IClassExportAreasDialog(wx.Dialog):
             qdlg = wx.MessageDialog(
                 parent=self,
                 message=_(
-                    "Vector map <%s> already exists."
-                    " Do you want to overwrite it?" % vName
-                ),
-                caption=_("Vector <%s> exists" % vName),
+                    "Vector map <%s> already exists. Do you want to overwrite it?"
+                )
+                % vName,
+                caption=_("Vector <%s> exists") % vName,
                 style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
             )
             if qdlg.ShowModal() == wx.ID_YES:

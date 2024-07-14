@@ -60,7 +60,7 @@ def get_translated_value(key, value):
         exec_datetime = datetime.fromisoformat(value)
         return exec_datetime.strftime("%Y-%m-%d %H:%M:%S")
     elif key == "runtime":
-        return _("{} sec".format(value))
+        return _("{} sec").format(value)
     elif key == "status":
         return _(value.capitalize())
     elif key in {"mask2d", "mask3d"}:
@@ -480,7 +480,9 @@ class HistoryBrowser(wx.SplitterWindow):
             try:
                 history.copy(history_path, target_path)
                 self.showNotification.emit(
-                    message=_("Command history saved to '{}'".format(target_path))
+                    message=_("Command history saved to '{target_path}'").format(
+                        target_path=target_path
+                    )
                 )
             except OSError as e:
                 GError(str(e))
