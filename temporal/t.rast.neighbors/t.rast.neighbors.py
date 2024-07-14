@@ -218,7 +218,7 @@ def main():
 
     spatial_extent = None
     if region_relation:
-        spatial_extent = gs.parse_command("g.region", flags="gu")
+        spatial_extent = gs.parse_command("g.region", flags="3gu")
 
     maps = sp.get_registered_maps_as_objects(
         where=where,
