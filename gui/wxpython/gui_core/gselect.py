@@ -3027,27 +3027,22 @@ class VectorCategorySelect(wx.Panel):
         return False
 
     def _onClick(self, evt=None):
-        if self.task is not None:
-            if not self._chckMap():
-                self.buttonVecSelect.SetValue(False)
-                return
-        else:  # noqa: PLR5501
-            if not self._isMapSelected():
-                self.buttonVecSelect.SetValue(False)
-                return
-        if self._vectorSelect is None:
-            if self.mapdisp:
-                if self.buttonVecSelect.IsEnabled():
-                    switcher = self.mapdisp.GetToolSwitcher()
-                    switcher.ToolChanged(self.buttonVecSelect.GetId())
+        if (self.task is not None and not self._chckMap()) or not self._isMapSelected():
+            self.buttonVecSelect.SetValue(False)
+            return
 
-                self._vectorSelect = VectorSelectBase(self.mapdisp, self.giface)
-                if not self.mapdisp.GetWindow().RegisterMouseEventHandler(
-                    wx.EVT_LEFT_DOWN, self._onMapClickHandler, "cross"
-                ):
-                    return
-                self.registered = True
-                self.mapdisp.Raise()
+        if self._vectorSelect is None and self.mapdisp:
+            if self.buttonVecSelect.IsEnabled():
+                switcher = self.mapdisp.GetToolSwitcher()
+                switcher.ToolChanged(self.buttonVecSelect.GetId())
+
+            self._vectorSelect = VectorSelectBase(self.mapdisp, self.giface)
+            if not self.mapdisp.GetWindow().RegisterMouseEventHandler(
+                wx.EVT_LEFT_DOWN, self._onMapClickHandler, "cross"
+            ):
+                return
+            self.registered = True
+            self.mapdisp.Raise()
         else:
             self.OnClose()
 
@@ -3068,16 +3063,10 @@ class VectorCategorySelect(wx.Panel):
         if event == "unregistered":
             return
 
-        if self.task is None:
-            if not self._isMapSelected():
-                self.OnClose()
-            else:
-                self.catsField.SetValue(self._vectorSelect.GetLineStringSelectedCats())
-        else:  # noqa: PLR5501
-            if not self._chckMap():
-                self.OnClose()
-            else:
-                self.catsField.SetValue(self._vectorSelect.GetLineStringSelectedCats())
+        if (self.task is None and not self._isMapSelected()) or not self._chckMap():
+            self.OnClose()
+        else:
+            self.catsField.SetValue(self._vectorSelect.GetLineStringSelectedCats())
 
     def GetTextWin(self):
         return self.catsField

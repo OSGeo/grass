@@ -322,16 +322,12 @@ class UpdateThread(Thread):
                             native = False
                             break
                 # TODO: update only if needed
-                if native:
-                    if map:
-                        self.data[win.InsertLayers] = {"vector": map}
-                    else:
-                        self.data[win.InsertLayers] = {}
-                else:  # noqa: PLR5501
-                    if map:
-                        self.data[win.InsertLayers] = {"dsn": map.rstrip("@OGR")}
-                    else:
-                        self.data[win.InsertLayers] = {}
+                if map:
+                    self.data[win.InsertLayers] = (
+                        {"vector": map} if native else {"dsn": map.rstrip("@OGR")}
+                    )
+                else:
+                    self.data[win.InsertLayers] = {}
 
             elif name == "TableSelect":
                 self.data[win.InsertTables] = {"driver": driver, "database": db}
@@ -2762,10 +2758,9 @@ class CmdPanel(wx.Panel):
         verbose = self.FindWindowById(self.task.get_flag("verbose")["wxId"][0])
         quiet = self.FindWindowById(self.task.get_flag("quiet")["wxId"][0])
         if event.IsChecked():
-            if event.GetId() == verbose.GetId():
-                if quiet.IsChecked():
-                    quiet.SetValue(False)
-                    self.task.get_flag("quiet")["value"] = False
+            if event.GetId() == verbose.GetId() and quiet.IsChecked():
+                quiet.SetValue(False)
+                self.task.get_flag("quiet")["value"] = False
             elif verbose.IsChecked():
                 verbose.SetValue(False)
                 self.task.get_flag("verbose")["value"] = False
