@@ -648,12 +648,14 @@ class IClassMapPanel(DoubleMapPanel):
 
         warning = ""
         if topo["areas"] == 0:
-            warning = _("No areas in vector map <%s>.\n" % vector)
+            warning = _("No areas in vector map <{map_name}>.\n").format(
+                map_name=vector
+            )
         if topo["points"] or topo["lines"]:
             warning += _(
-                "Vector map <%s> contains points or lines, "
-                "these features are ignored." % vector
-            )
+                "Vector map <{map_name}> contains points or lines, "
+                "these features are ignored."
+            ).format(map_name=vector)
 
         return warning
 

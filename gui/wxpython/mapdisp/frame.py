@@ -407,8 +407,9 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 message=_(
                     "Unable to switch to 3D display mode.\nThe Nviz python extension "
                     "was not found or loaded properly.\n"
-                    "Switching back to 2D display mode.\n\nDetails: %s" % errorMsg
-                ),
+                    "Switching back to 2D display mode.\n\nDetails: %s"
+                )
+                % errorMsg,
             )
             return
 

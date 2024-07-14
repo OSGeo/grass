@@ -1241,8 +1241,8 @@ class GMFrame(wx.Frame):
                     "Do you want to set the permissions "
                     "that allows you to run this script "
                     "(note that you must be the owner of the file)?"
-                    % os.path.basename(filename)
-                ),
+                )
+                % os.path.basename(filename),
                 caption=_("Set permission?"),
                 style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
             )
