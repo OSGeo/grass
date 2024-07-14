@@ -560,7 +560,11 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
     """
     # We need to set the correct database backend and several global variables
     # from the GRASS mapset specific environment variables of g.gisenv and t.connect
-    global tgis_backend, tgis_database, tgis_database_string, tgis_dbmi_paramstyle, tgis_db_version, raise_on_error, enable_mapset_check, enable_timestamp_write, current_mapset, current_location, current_gisdbase
+    global tgis_backend, tgis_database, tgis_database_string  # noqa: FURB154
+    global tgis_dbmi_paramstyle, tgis_db_version  # noqa: FURB154
+    global raise_on_error  # noqa: FURB154
+    global enable_mapset_check, enable_timestamp_write  # noqa: FURB154
+    global current_mapset, current_location, current_gisdbase  # noqa: FURB154
 
     raise_on_error = raise_fatal_error
 
