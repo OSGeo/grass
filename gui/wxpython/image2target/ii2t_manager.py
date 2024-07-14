@@ -79,9 +79,7 @@ from location_wizard.wizard import GridBagSizerTitledPage as TitledPage
 #
 # global variables
 #
-global src_map
-global tgt_map
-global maptype
+global src_map, tgt_map, maptype
 
 src_map = ""
 tgt_map = {"raster": "", "vector": ""}
@@ -178,9 +176,7 @@ class GCPWizard:
         # mapset for xy map to georectify
         self.newmapset = ""
 
-        global maptype
-        global src_map
-        global tgt_map
+        global maptype, src_map, tgt_map
 
         # src_map = ''
         # tgt_map = ''
@@ -879,8 +875,7 @@ class DispMapPage(TitledPage):
 
     def OnSrcSelection(self, event):
         """Source map to display selected"""
-        global src_map
-        global maptype
+        global src_map, maptype
 
         src_map = self.srcselection.GetValue()
 
@@ -916,8 +911,7 @@ class DispMapPage(TitledPage):
         tgt_map["vector"] = self.tgtvectselection.GetValue()
 
     def OnPageChanging(self, event=None):
-        global src_map
-        global tgt_map
+        global src_map, tgt_map
 
         if event.GetDirection() and (src_map == ""):
             GMessage(
@@ -929,9 +923,7 @@ class DispMapPage(TitledPage):
         self.parent.SwitchEnv("target")
 
     def OnEnterPage(self, event=None):
-        global maptype
-        global src_map
-        global tgt_map
+        global maptype, src_map, tgt_map
 
         self.srcselection.SetElementList(maptype)
 
@@ -3317,9 +3309,7 @@ class GrSettingsDialog(wx.Dialog):
         self.parent.extension = self.ext_txt.GetValue()
 
     def UpdateSettings(self):
-        global src_map
-        global tgt_map
-        global maptype
+        global src_map, tgt_map, maptype
 
         layers = None
 

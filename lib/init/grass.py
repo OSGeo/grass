@@ -2510,7 +2510,7 @@ def main():
                 )
             if sh in {"csh", "tcsh"}:
                 shell_process = csh_startup(mapset_settings.full_mapset, grass_env_file)
-            elif sh in {"zsh"}:
+            elif sh == "zsh":
                 shell_process = sh_like_startup(
                     mapset_settings.full_mapset,
                     mapset_settings.location,

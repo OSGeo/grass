@@ -151,16 +151,8 @@ ignore = [
     "FBT001",  # boolean-type-hint-positional-argument
     "FBT002",  # boolean-default-value-positional-argument
     "FBT003",  # boolean-positional-value-in-call
-    "FURB101", # read-whole-file
-    "FURB103", # write-whole-file.
     "FURB118", # reimplemented-operator
-    "FURB131", # delete-full-slice
-    "FURB140", # reimplemented-starmap
-    "FURB142", # for-loop-set-mutations
-    "FURB148", # unnecessary-enumerate
     "FURB152", # math-constant
-    "FURB154", # repeated-global
-    "FURB171", # single-item-membership-test
     "I001",    # unsorted-imports
     "ISC003",  # explicit-string-concatenation
     "PERF203", # try-except-in-loop
@@ -395,7 +387,7 @@ ignore = [
 "python/grass/temporal/univar_statistics.py" = ["INT002"]
 "raster3d/r3.flow/testsuite/r3flow_test.py" = ["FLY002"]
 "raster3d/r3.gradient/testsuite/r3gradient_test.py" = ["FLY002"]
-"scripts/d.polar/d.polar.py" = ["INT002"]
+"scripts/d.polar/d.polar.py" = ["FURB154", "INT002"]
 "scripts/g.extension.all/g.extension.all.py" = ["INT002"]
 "scripts/g.extension/g.extension.py" = ["INT002"]
 "scripts/i.oif/i.oif.py" = ["INT003"]

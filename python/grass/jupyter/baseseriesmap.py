@@ -1,6 +1,7 @@
 """Base class for SeriesMap and TimeSeriesMap"""
 
 import os
+from pathlib import Path
 import tempfile
 import weakref
 import shutil
@@ -176,8 +177,7 @@ class BaseSeriesMap:
         # Display image associated with datetime
         def change_image(index):
             filename = self._base_filename_dict[index]
-            with open(filename, "rb") as rfile:
-                out_img.value = rfile.read()
+            out_img.value = Path(filename).read_bytes()
 
         widgets.interactive_output(change_image, {"index": slider})
 

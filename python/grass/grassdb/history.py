@@ -103,27 +103,24 @@ def _read_from_JSON(history_path):
     """
     content_list = []
     try:
-        with open(
-            history_path, encoding="utf-8", mode="r", errors="replace"
-        ) as file_history:
-            content = file_history.read()
-            if content:
-                try:
-                    history_entries = json.loads(content)
-                except ValueError as ve:
-                    raise ValueError(
-                        _("Error decoding content of JSON history file {}").format(
-                            history_path
-                        )
-                    ) from ve
-                # Process the content as a list of dictionaries
-                content_list = [
-                    {
-                        "command": entry["command"],
-                        "command_info": entry["command_info"],
-                    }
-                    for entry in history_entries
-                ]
+        content = Path(history_path).read_text(encoding="utf-8", errors="replace")
+        if content:
+            try:
+                history_entries = json.loads(content)
+            except ValueError as ve:
+                raise ValueError(
+                    _("Error decoding content of JSON history file {}").format(
+                        history_path
+                    )
+                ) from ve
+            # Process the content as a list of dictionaries
+            content_list = [
+                {
+                    "command": entry["command"],
+                    "command_info": entry["command_info"],
+                }
+                for entry in history_entries
+            ]
     except OSError as e:
         raise OSError(
             _("Unable to read from JSON history file {}").format(history_path)
@@ -162,7 +159,7 @@ def filter(json_data, command, timestamp):
     return None
 
 
-def _remove_entry_from_plain_text(history_path, index):
+def _remove_entry_from_plain_text(history_path, index: int):
     """Remove entry from plain text history file.
 
     :param str history_path: path to the history log file
@@ -174,7 +171,7 @@ def _remove_entry_from_plain_text(history_path, index):
             file_history.seek(0)
             file_history.truncate()
             for number, line in enumerate(lines):
-                if number not in [index]:
+                if number != index:
                     file_history.write(line)
     except OSError as e:
         raise OSError(
@@ -184,7 +181,7 @@ def _remove_entry_from_plain_text(history_path, index):
         ) from e
 
 
-def _remove_entry_from_JSON(history_path, index):
+def _remove_entry_from_JSON(history_path, index: int):
     """Remove entry from JSON history file.
 
     :param str history_path: path to the history log file
@@ -214,7 +211,7 @@ def _remove_entry_from_JSON(history_path, index):
         ) from e
 
 
-def remove_entry(history_path, index):
+def remove_entry(history_path, index: int):
     """Remove entry from history file.
 
     :param str history_path: path to the history log file

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from pathlib import Path
 import sys
 import re
 from ghtml import HTMLParser
@@ -53,9 +54,8 @@ def main():
     s = s.lstrip()
 
     # write groff
-    with open(sys.argv[2], "wb") as outf:
-        s = s.encode("UTF-8")
-        outf.write(s)
+    s = s.encode("UTF-8")
+    Path(sys.argv[2]).write_bytes(s)
 
 
 if __name__ == "__main__":
