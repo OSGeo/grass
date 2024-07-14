@@ -105,8 +105,8 @@ int main(int argc, char *argv[])
         G_free_tokens(map_mapset);
     }
     else {
-    strncpy(name, file_opt->answer, sizeof(name) - 1);
-    name[sizeof(name) - 1] = '\0';  // Ensure null-termination
+        strncpy(name, file_opt->answer, sizeof(name) - 1);
+        name[sizeof(name) - 1] = '\0'; // Ensure null-termination
     }
         
 
