@@ -66,7 +66,7 @@ def check_version(*version) -> bool:
             versionInstalled.append(v)
         except ValueError:
             versionInstalled.append(0)
-    return not versionInstalled < list(version)
+    return versionInstalled >= list(version)
 
 
 class TimelineFrame(wx.Frame):
