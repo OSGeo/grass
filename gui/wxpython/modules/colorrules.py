@@ -772,7 +772,7 @@ class ColorTable(wx.Frame):
 
         self.ReadColorTable(ctable=ctable)
 
-    def CreateColorTable(self, tmp=False):
+    def CreateColorTable(self, tmp=False) -> bool:
         """Creates color table
 
         :return: True on success
@@ -822,10 +822,7 @@ class ColorTable(wx.Frame):
 
         cmd = cmdlist_to_tuple(cmd)
         ret = RunCommand(cmd[0], **cmd[1])
-        if ret != 0:
-            return False
-
-        return True
+        return bool(ret == 0)
 
     def DoPreview(self, ltype, cmdlist):
         """Update preview (based on computational region)"""
@@ -1241,15 +1238,12 @@ class VectorColorTable(ColorTable):
         else:
             self.cp.SetLabel(_("Import or export color table"))
 
-    def CheckMapset(self):
+    def CheckMapset(self) -> bool:
         """Check if current vector is in current mapset"""
-        if (
+        return bool(
             gs.find_file(name=self.inmap, element="vector")["mapset"]
             == gs.gisenv()["MAPSET"]
-        ):
-            return True
-        else:
-            return False
+        )
 
     def NoConnection(self, vectorName):
         dlg = wx.MessageDialog(

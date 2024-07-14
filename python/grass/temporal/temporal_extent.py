@@ -428,7 +428,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         return self.disjoint_union(extent)
 
-    def starts(self, extent):
+    def starts(self, extent) -> bool:
         """Return True if this temporal extent (A) starts at the start of the
         provided temporal extent (B) and finishes within it
         ::
@@ -455,15 +455,12 @@ class TemporalExtent(SQLDatabaseInterface):
         if self.D["end_time"] is None or extent.D["end_time"] is None:
             return False
 
-        if (
+        return bool(
             self.D["start_time"] == extent.D["start_time"]
             and self.D["end_time"] < extent.D["end_time"]
-        ):
-            return True
-        else:
-            return False
+        )
 
-    def started(self, extent):
+    def started(self, extent) -> bool:
         """Return True if this temporal extent (A) started at the start of the
         provided temporal extent (B) and finishes after it
         ::
@@ -489,15 +486,12 @@ class TemporalExtent(SQLDatabaseInterface):
         if self.D["end_time"] is None or extent.D["end_time"] is None:
             return False
 
-        if (
+        return bool(
             self.D["start_time"] == extent.D["start_time"]
             and self.D["end_time"] > extent.D["end_time"]
-        ):
-            return True
-        else:
-            return False
+        )
 
-    def finishes(self, extent):
+    def finishes(self, extent) -> bool:
         """Return True if this temporal extent (A) starts after the start of
         the provided temporal extent (B) and finishes with it
         ::
@@ -523,15 +517,12 @@ class TemporalExtent(SQLDatabaseInterface):
         if self.D["end_time"] is None or extent.D["end_time"] is None:
             return False
 
-        if (
+        return bool(
             self.D["end_time"] == extent.D["end_time"]
             and self.D["start_time"] > extent.D["start_time"]
-        ):
-            return True
-        else:
-            return False
+        )
 
-    def finished(self, extent):
+    def finished(self, extent) -> bool:
         """Return True if this temporal extent (A) starts before the start of
         the provided temporal extent (B) and finishes with it
         ::
@@ -557,15 +548,12 @@ class TemporalExtent(SQLDatabaseInterface):
         if self.D["end_time"] is None or extent.D["end_time"] is None:
             return False
 
-        if (
+        return bool(
             self.D["end_time"] == extent.D["end_time"]
             and self.D["start_time"] < extent.D["start_time"]
-        ):
-            return True
-        else:
-            return False
+        )
 
-    def after(self, extent):
+    def after(self, extent) -> bool:
         """Return True if this temporal extent (A) is located after the
         provided temporal extent (B)
         ::
@@ -589,15 +577,9 @@ class TemporalExtent(SQLDatabaseInterface):
 
         """
         if extent.D["end_time"] is None:
-            if self.D["start_time"] > extent.D["start_time"]:
-                return True
-            else:
-                return False
+            return self.D["start_time"] > extent.D["start_time"]
 
-        if self.D["start_time"] > extent.D["end_time"]:
-            return True
-        else:
-            return False
+        return self.D["start_time"] > extent.D["end_time"]
 
     def before(self, extent):
         """Return True if this temporal extent (A) is located before the
@@ -623,17 +605,11 @@ class TemporalExtent(SQLDatabaseInterface):
 
         """
         if self.D["end_time"] is None:
-            if self.D["start_time"] < extent.D["start_time"]:
-                return True
-            else:
-                return False
+            return self.D["start_time"] < extent.D["start_time"]
 
-        if self.D["end_time"] < extent.D["start_time"]:
-            return True
-        else:
-            return False
+        return self.D["end_time"] < extent.D["start_time"]
 
-    def adjacent(self, extent):
+    def adjacent(self, extent) -> bool:
         """Return True if this temporal extent (A) is a meeting neighbor the
         provided temporal extent (B)
         ::
@@ -667,14 +643,12 @@ class TemporalExtent(SQLDatabaseInterface):
         if self.D["end_time"] is None and extent.D["end_time"] is None:
             return False
 
-        if (self.D["start_time"] == extent.D["end_time"]) or (
-            self.D["end_time"] == extent.D["start_time"]
-        ):
-            return True
-        else:
-            return False
+        return bool(
+            self.D["start_time"] == extent.D["end_time"]
+            or self.D["end_time"] == extent.D["start_time"]
+        )
 
-    def follows(self, extent):
+    def follows(self, extent) -> bool:
         """Return True if this temporal extent (A) follows the
         provided temporal extent (B)
         ::
@@ -700,12 +674,9 @@ class TemporalExtent(SQLDatabaseInterface):
         if extent.D["end_time"] is None:
             return False
 
-        if self.D["start_time"] == extent.D["end_time"]:
-            return True
-        else:
-            return False
+        return self.D["start_time"] == extent.D["end_time"]
 
-    def precedes(self, extent):
+    def precedes(self, extent) -> bool:
         """Return True if this temporal extent (A) precedes the provided
         temporal extent (B)
         ::
@@ -733,12 +704,9 @@ class TemporalExtent(SQLDatabaseInterface):
         if self.D["end_time"] is None:
             return False
 
-        if self.D["end_time"] == extent.D["start_time"]:
-            return True
-        else:
-            return False
+        return self.D["end_time"] == extent.D["start_time"]
 
-    def during(self, extent):
+    def during(self, extent) -> bool:
         """Return True if this temporal extent (A) is located during the provided
         temporal extent (B)
         ::
@@ -766,23 +734,17 @@ class TemporalExtent(SQLDatabaseInterface):
 
         # Check single point of time in interval
         if self.D["end_time"] is None:
-            if (
+            return bool(
                 self.D["start_time"] >= extent.D["start_time"]
                 and self.D["start_time"] < extent.D["end_time"]
-            ):
-                return True
-            else:
-                return False
+            )
 
-        if (
+        return bool(
             self.D["start_time"] > extent.D["start_time"]
             and self.D["end_time"] < extent.D["end_time"]
-        ):
-            return True
-        else:
-            return False
+        )
 
-    def contains(self, extent):
+    def contains(self, extent) -> bool:
         """Return True if this temporal extent (A) contains the provided
         temporal extent (B)
         ::
@@ -811,23 +773,17 @@ class TemporalExtent(SQLDatabaseInterface):
 
         # Check single point of time in interval
         if extent.D["end_time"] is None:
-            if (
+            return bool(
                 self.D["start_time"] <= extent.D["start_time"]
                 and self.D["end_time"] > extent.D["start_time"]
-            ):
-                return True
-            else:
-                return False
+            )
 
-        if (
+        return bool(
             self.D["start_time"] < extent.D["start_time"]
             and self.D["end_time"] > extent.D["end_time"]
-        ):
-            return True
-        else:
-            return False
+        )
 
-    def equal(self, extent):
+    def equal(self, extent) -> bool:
         """Return True if this temporal extent (A) is equal to the provided
         temporal extent (B)
         ::
@@ -851,23 +807,17 @@ class TemporalExtent(SQLDatabaseInterface):
 
         """
         if self.D["end_time"] is None and extent.D["end_time"] is None:
-            if self.D["start_time"] == extent.D["start_time"]:
-                return True
-            else:
-                return False
+            return self.D["start_time"] == extent.D["start_time"]
 
         if self.D["end_time"] is None or extent.D["end_time"] is None:
             return False
 
-        if (
+        return bool(
             self.D["start_time"] == extent.D["start_time"]
             and self.D["end_time"] == extent.D["end_time"]
-        ):
-            return True
-        else:
-            return False
+        )
 
-    def overlaps(self, extent):
+    def overlaps(self, extent) -> bool:
         """Return True if this temporal extent (A) overlapped the provided
         temporal extent (B)
         ::
@@ -900,16 +850,13 @@ class TemporalExtent(SQLDatabaseInterface):
         if self.D["end_time"] is None or extent.D["end_time"] is None:
             return False
 
-        if (
+        return bool(
             self.D["start_time"] < extent.D["start_time"]
             and self.D["end_time"] < extent.D["end_time"]
             and self.D["end_time"] > extent.D["start_time"]
-        ):
-            return True
-        else:
-            return False
+        )
 
-    def overlapped(self, extent):
+    def overlapped(self, extent) -> bool:
         """Return True if this temporal extent (A) overlapps the provided
         temporal extent (B)
         ::
@@ -943,14 +890,11 @@ class TemporalExtent(SQLDatabaseInterface):
         if self.D["end_time"] is None or extent.D["end_time"] is None:
             return False
 
-        if (
+        return bool(
             self.D["start_time"] > extent.D["start_time"]
             and self.D["end_time"] > extent.D["end_time"]
             and self.D["start_time"] < extent.D["end_time"]
-        ):
-            return True
-        else:
-            return False
+        )
 
     def temporal_relation(self, extent):
         """Returns the temporal relation between temporal objects

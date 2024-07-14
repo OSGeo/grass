@@ -174,7 +174,7 @@ def get_mapset_vector(mapname, mapset=""):
     return decode(libgis.G_find_vector2(mapname, mapset))
 
 
-def is_clean_name(name):
+def is_clean_name(name) -> bool:
     """Return if the name is valid
 
     >>> is_clean_name("census")
@@ -187,9 +187,7 @@ def is_clean_name(name):
     False
 
     """
-    if libgis.G_legal_filename(name) < 0:
-        return False
-    return True
+    return not libgis.G_legal_filename(name) < 0
 
 
 def coor2pixel(coord, region):

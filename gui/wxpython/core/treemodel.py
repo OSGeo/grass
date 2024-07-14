@@ -229,15 +229,13 @@ class DictNode:
             for child in self.children:
                 child.nprint(text, indent + 2)
 
-    def match(self, key, value):
+    def match(self, key, value) -> bool:
         """Method used for searching according to given parameters.
 
         :param value: dictionary value to be matched
         :param key: data dictionary key
         """
-        if key in self.data and self.data[key] == value:
-            return True
-        return False
+        return bool(key in self.data and self.data[key] == value)
 
 
 class DictFilterNode(DictNode):
@@ -269,7 +267,7 @@ class DictFilterNode(DictNode):
                 return False
         return True
 
-    def _match_filtering(self, **kwargs):
+    def _match_filtering(self, **kwargs) -> bool:
         """Match method for filtering."""
         if (
             "type" in kwargs
@@ -277,13 +275,11 @@ class DictFilterNode(DictNode):
             and kwargs["type"] != self.data["type"]
         ):
             return False
-        if (
+        return not (
             "name" in kwargs
             and "name" in self.data
             and not kwargs["name"].search(self.data["name"])
-        ):
-            return False
-        return True
+        )
 
 
 class ModuleNode(DictNode):
