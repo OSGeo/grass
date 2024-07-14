@@ -152,7 +152,6 @@ ignore = [
     "FBT002",  # boolean-default-value-positional-argument
     "FBT003",  # boolean-positional-value-in-call
     "FURB118", # reimplemented-operator
-    "FURB152", # math-constant
     "I001",    # unsorted-imports
     "ISC003",  # explicit-string-concatenation
     "PERF203", # try-except-in-loop
