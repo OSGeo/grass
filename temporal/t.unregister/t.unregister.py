@@ -155,9 +155,8 @@ def main():
         else:
             gs.warning(
                 _(
-                    "Unable to find %s map <%s> in temporal database"
-                    % (map.get_type(), map.get_id())
-                )
+                    "Unable to find {map_type} map <{map_id}> in temporal database"
+                ).format(map_type=map.get_type(), map_id=map.get_id())
             )
 
         count += 1
@@ -170,7 +169,7 @@ def main():
 
     # Update space time datasets
     if input:
-        gs.message(_("Unregister maps from space time dataset <%s>" % (input)))
+        gs.message(_("Unregister maps from space time dataset <%s>") % (input))
     else:
         gs.message(_("Unregister maps from the temporal database"))
 
