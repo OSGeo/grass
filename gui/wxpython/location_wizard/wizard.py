@@ -75,14 +75,7 @@ from grass.script import decode
 from grass.script import core as grass
 from grass.exceptions import OpenError
 
-global coordsys
-global north
-global south
-global east
-global west
-global resolution
-global wizerror
-global translist
+global coordsys, north, south, east, west, resolution, wizerror, translist
 
 if globalvar.CheckWxVersion(version=[4, 1, 0]):
     search_cancel_evt = wx.EVT_SEARCH_CANCEL
@@ -2539,14 +2532,7 @@ class LocationWizard(wx.Object):
         self.__cleanUp()
 
     def __cleanUp(self):
-        global coordsys
-        global north
-        global south
-        global east
-        global west
-        global resolution
-        global wizerror
-        global translist
+        global coordsys, north, south, east, west, resolution, wizerror, translist
 
         coordsys = None
         north = None
