@@ -353,6 +353,7 @@ ignore = [
 "gui/wxpython/web_services/widgets.py" = ["INT003"]
 "gui/wxpython/wxgui.py" = ["INT002"]
 "gui/wxpython/wxplot/profile.py" = ["NPY001"]
+"lib/imagery/testsuite/test_imagery_sigsetfile.py" = ["FURB152"]
 "lib/init/grass.py" = ["INT003"]
 "python/grass/__init__.py" = ["PYI056"]
 "python/grass/exp*/tests/grass_script_mapset_session_test.py" = ["SIM117"]
