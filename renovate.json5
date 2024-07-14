@@ -22,6 +22,7 @@
 
         // weekly update of lock files (flake.lock)
         ":maintainLockFilesWeekly",
+        "group:githubArtifactActions",
     ],
 
     // enable Nix lock file update (flake.lock)
@@ -30,15 +31,6 @@
     },
 
     "packageRules": [
-        {
-            // Adapted from https://docs.renovatebot.com/presets-group/#groupgithubartifactactions
-            "groupName": "GitHub Artifact Actions",
-            "matchManagers": ["github-actions"],
-            "matchPackageNames": [
-                "actions/download-artifact",
-                "actions/upload-artifact",
-            ],
-        },
         {
             "groupName": "ruff",
             "matchPackageNames": [
