@@ -415,7 +415,9 @@ col1                                    %% colAVERAGE-DIRECTION-COLOR
 
 
 def main():
-    global tmp, sine_cosine_replic, outercircle, vector, totalvalidnumber, totalnumber, maxradius
+    global tmp
+    global sine_cosine_replic, outercircle, vector
+    global totalvalidnumber, totalnumber, maxradius
 
     map = options["map"]
     undef = options["undef"]
