@@ -947,9 +947,8 @@ class ModelObject:
 
         result = []
         for rel in self.rels:
-            if fdir == "from":
-                if rel.GetFrom() == self:
-                    result.append(rel)
+            if fdir == "from" and rel.GetFrom() == self:
+                result.append(rel)
             elif rel.GetTo() == self:
                 result.append(rel)
 
