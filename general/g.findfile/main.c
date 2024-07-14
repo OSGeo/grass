@@ -108,7 +108,6 @@ int main(int argc, char *argv[])
         strncpy(name, file_opt->answer, sizeof(name) - 1);
         name[sizeof(name) - 1] = '\0'; // Ensure null-termination
     }
-        
 
     mapset = G_find_file2(elem_opt->answer, name, search_mapset);
     if (mapset) {
