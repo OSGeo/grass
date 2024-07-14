@@ -1556,7 +1556,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         # use all columns
         rows = self.get_registered_maps(
-            None, where, order, dbif, spatial_extent, spatial_relation
+            columns=None,
+            where=where,
+            order=order,
+            dbif=dbif,
+            spatial_extent=spatial_extent,
+            spatial_relation=spatial_relation,
         )
 
         if rows:
@@ -2376,7 +2381,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             self.msgr.debug(
                 1, _("Drop map register table: %s") % (self.get_map_register())
             )
-            rows = self.get_registered_maps("id", None, None, dbif)
+            rows = self.get_registered_maps(
+                columns="id", where=None, order=None, dbif=dbif
+            )
             # Unregister each registered map in the table
             if rows is not None:
                 for row in rows:
