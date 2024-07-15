@@ -71,7 +71,7 @@ int initialize_options(void)
 
 int do_labels(FILE *infile, int do_rotation)
 {
-    char buff[128];
+    char buff[BUFFSIZE];
     char buff_fmt[10];
     char font_fmt[10];
     char word_fmt[10];
