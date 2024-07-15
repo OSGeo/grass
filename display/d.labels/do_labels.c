@@ -78,7 +78,8 @@ int do_labels(FILE *infile, int do_rotation)
 
     snprintf(buff_fmt, sizeof(buff_fmt), "%%%ds", BUFFSIZE - 1);
     snprintf(font_fmt, sizeof(font_fmt), "%%%ds", FONTSIZE - 1);
-    snprintf(word_fmt, sizeof(word_fmt), "%%%ds%%%ds", WORDSIZE - 1, WORDSIZE - 1);
+    snprintf(word_fmt, sizeof(word_fmt), "%%%ds%%%ds", WORDSIZE - 1,
+             WORDSIZE - 1);
 
     initialize_options();
 
@@ -465,7 +466,8 @@ int scan_ref(char *buf)
             buf[i] += 'a' - 'A';
     xref = yref = CENT;
     char word_fmt[10];
-    snprintf(word_fmt, sizeof(word_fmt), "%%%ds%%%ds", WORDSIZE - 1, WORDSIZE - 1);
+    snprintf(word_fmt, sizeof(word_fmt), "%%%ds%%%ds", WORDSIZE - 1,
+             WORDSIZE - 1);
 
     switch (sscanf(buf, word_fmt, word1, word2)) {
     case 2:
@@ -480,7 +482,6 @@ int scan_ref(char *buf)
         FALLTHROUGH;
     default:
         return 0;
-
     }
 }
 
