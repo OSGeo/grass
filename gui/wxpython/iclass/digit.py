@@ -30,7 +30,7 @@ try:
 except ImportError:
     pass
 
-import grass.script as grass
+import grass.script as gs
 
 
 class IClassVDigitWindow(VDigitWindow):
@@ -53,7 +53,7 @@ class IClassVDigitWindow(VDigitWindow):
         if not action:
             return
 
-        region = grass.region()
+        region = gs.region()
         e, n = self.Pixel2Cell(event.GetPosition())
         if not (
             (region["s"] <= n <= region["n"]) and (region["w"] <= e <= region["e"])
@@ -126,8 +126,7 @@ class IClassVDigit(IVDigit):
         return 1
 
     def _getNewFeaturesCat(self):
-        cat = self.mapWindow.GetCurrentCategory()
-        return cat
+        return self.mapWindow.GetCurrentCategory()
 
     def DeleteAreasByCat(self, cats):
         """Delete areas (centroid+boundaries) by categories

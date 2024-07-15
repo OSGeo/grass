@@ -75,14 +75,7 @@ from grass.script import decode
 from grass.script import core as grass
 from grass.exceptions import OpenError
 
-global coordsys
-global north
-global south
-global east
-global west
-global resolution
-global wizerror
-global translist
+global coordsys, north, south, east, west, resolution, wizerror, translist
 
 if globalvar.CheckWxVersion(version=[4, 1, 0]):
     search_cancel_evt = wx.EVT_SEARCH_CANCEL
@@ -743,8 +736,7 @@ class ItemList(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.ColumnSorterMix
     def OnGetItemText(self, item, col):
         """Get item text"""
         index = self.itemIndexMap[item]
-        s = str(self.itemDataMap[index][col])
-        return s
+        return str(self.itemDataMap[index][col])
 
     def OnGetItemImage(self, item):
         return -1
@@ -835,7 +827,7 @@ class ProjParamsPage(TitledPage):
         self.panel = None
         self.prjParamSizer = None
 
-        self.pparam = dict()
+        self.pparam = {}
 
         self.p4projparams = ""
         self.projdesc = ""
@@ -905,7 +897,7 @@ class ProjParamsPage(TitledPage):
         """Go to next page"""
         if event.GetDirection():
             self.p4projparams = ""
-            for id, param in self.pparam.items():
+            for param in self.pparam.values():
                 if param["type"] == "bool":
                     if param["value"] is False:
                         continue
@@ -954,7 +946,7 @@ class ProjParamsPage(TitledPage):
             self.paramSBox.SetLabel(
                 _(" Enter parameters for %s projection ") % self.projdesc
             )
-            self.pparam = dict()
+            self.pparam = {}
             row = 0
             for paramgrp in self.parent.projections[self.parent.projpage.proj][1]:
                 # get parameters
@@ -1757,10 +1749,10 @@ class EPSGPage(TitledPage):
                 message=_("Unable to read EPGS codes: {0}").format(e),
                 showTraceback=False,
             )
-            self.epsglist.Populate(list(), update=True)
+            self.epsglist.Populate([], update=True)
             return
 
-        data = list()
+        data = []
         for code, val in self.epsgCodeDict.items():
             if code is not None:
                 data.append((code, val[0], val[1]))
@@ -2033,10 +2025,10 @@ class IAUPage(TitledPage):
                 message=_("Unable to read IAU codes: {0}").format(e),
                 showTraceback=False,
             )
-            self.epsglist.Populate(list(), update=True)
+            self.epsglist.Populate([], update=True)
             return
 
-        data = list()
+        data = []
         for code, val in self.epsgCodeDict.items():
             if code is not None:
                 data.append((code, val[0], val[1]))
@@ -2298,7 +2290,7 @@ class SummaryPage(TitledPage):
         global coordsys
 
         # print coordsys,proj4string
-        if coordsys in ("proj", "epsg", "iau", "wkt", "file"):
+        if coordsys in {"proj", "epsg", "iau", "wkt", "file"}:
             extra_opts = {}
             extra_opts["project"] = "project"
             extra_opts["getErrorMsg"] = True
@@ -2520,7 +2512,7 @@ class LocationWizard(wx.Object):
                 self.grassdatabase = self.startpage.grassdatabase
                 self.georeffile = self.filepage.georeffile
                 # FIXME here was code for setting default region, what for is this if:
-                # if self.altdb == False:
+                # if self.altdb is False:
 
             else:  # -> error
                 self.wizard.Destroy()
@@ -2540,14 +2532,7 @@ class LocationWizard(wx.Object):
         self.__cleanUp()
 
     def __cleanUp(self):
-        global coordsys
-        global north
-        global south
-        global east
-        global west
-        global resolution
-        global wizerror
-        global translist
+        global coordsys, north, south, east, west, resolution, wizerror, translist
 
         coordsys = None
         north = None
@@ -2563,7 +2548,7 @@ class LocationWizard(wx.Object):
         f = open(os.path.join(globalvar.ETCDIR, "proj", "parms.table"), "r")
         self.projections = {}
         self.projdesc = {}
-        for line in f.readlines():
+        for line in f:
             line = line.strip()
             try:
                 proj, projdesc, params = line.split(":")
@@ -2586,7 +2571,7 @@ class LocationWizard(wx.Object):
         f = open(os.path.join(globalvar.ETCDIR, "proj", "datum.table"), "r")
         self.datums = {}
         paramslist = []
-        for line in f.readlines():
+        for line in f:
             line = line.expandtabs(1)
             line = line.strip()
             if line == "" or line[0] == "#":
@@ -2603,7 +2588,7 @@ class LocationWizard(wx.Object):
         # read Earth-based ellipsiod definitions
         f = open(os.path.join(globalvar.ETCDIR, "proj", "ellipse.table"), "r")
         self.ellipsoids = {}
-        for line in f.readlines():
+        for line in f:
             line = line.expandtabs(1)
             line = line.strip()
             if line == "" or line[0] == "#":
@@ -2621,7 +2606,7 @@ class LocationWizard(wx.Object):
             os.path.join(globalvar.ETCDIR, "proj", "ellipse.table.solar.system"), "r"
         )
         self.planetary_ellipsoids = {}
-        for line in f.readlines():
+        for line in f:
             line = line.expandtabs(1)
             line = line.strip()
             if line == "" or line[0] == "#":
@@ -2637,7 +2622,7 @@ class LocationWizard(wx.Object):
         # read projection parameter description and parsing table
         f = open(os.path.join(globalvar.ETCDIR, "proj", "desc.table"), "r")
         self.paramdesc = {}
-        for line in f.readlines():
+        for line in f:
             line = line.strip()
             try:
                 pparam, datatype, proj4term, desc = line.split(":")
@@ -2795,9 +2780,7 @@ class LocationWizard(wx.Object):
             for item in datumparams:
                 proj4string = "%s +%s" % (proj4string, item)
 
-        proj4string = "%s +no_defs" % proj4string
-
-        return proj4string
+        return "%s +no_defs" % proj4string
 
     def OnHelp(self, event):
         """'Help' button clicked"""

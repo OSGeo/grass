@@ -15,6 +15,7 @@
 import os
 import base64
 import json
+from pathlib import Path
 from .reprojection_renderer import ReprojectionRenderer
 from .utils import query_raster, query_vector, reproject_latlon, get_region
 
@@ -120,9 +121,8 @@ class Raster(Layer):
             # ImageOverlays don't work well with local files,
             # they need relative address and behavior differs
             # for notebooks and jupyterlab
-            with open(self._filename, "rb") as file:
-                data = base64.b64encode(file.read()).decode("ascii")
-                url = "data:image/png;base64," + data
+            data = base64.b64encode(Path(self._filename).read_bytes()).decode("ascii")
+            url = "data:image/png;base64," + data
             image = ipyleaflet.ImageOverlay(
                 url=url, bounds=self._bounds, name=self._title, **self._layer_kwargs
             )
@@ -190,7 +190,6 @@ class InteractiveMap:
     >>> m = InteractiveMap()
     >>> m.add_vector("streams")
     >>> m.add_raster("elevation")
-    >>> m.add_layer_control()
     >>> m.show()
     """
 
@@ -309,7 +308,6 @@ class InteractiveMap:
                 API_key=API_key,  # pylint: disable=invalid-name
             )
         # Set LayerControl default
-        self.layer_control = False
         self.layer_control_object = None
 
         self._renderer = ReprojectionRenderer(
@@ -348,11 +346,12 @@ class InteractiveMap:
         Raster(name, title=title, renderer=self._renderer, **kwargs).add_to(self.map)
 
     def add_layer_control(self, **kwargs):
-        """Add layer control to display"
+        """Add layer control to display.
 
-        Accepts keyword arguments to be passed to layer control object"""
+        A Layer Control is added by default. Call this function to customize
+        layer control object. Accepts keyword arguments to be passed to leaflet
+        layer control object"""
 
-        self.layer_control = True
         if self._folium:
             self.layer_control_object = self._folium.LayerControl(**kwargs)
         else:
@@ -439,16 +438,20 @@ class InteractiveMap:
         if self._ipyleaflet:
             self.add_query_button()
         self.map.fit_bounds(self._renderer.get_bbox())
+
+        if not self.layer_control_object:
+            self.add_layer_control()
+
+        # folium
         if self._folium:
-            if self.layer_control:
-                self.map.add_child(self.layer_control_object)
+            self.map.add_child(self.layer_control_object)
             fig = self._folium.Figure(width=self.width, height=self.height)
             fig.add_child(self.map)
 
             return fig
+
         # ipyleaflet
-        if self.layer_control:
-            self.map.add(self.layer_control_object)
+        self.map.add(self.layer_control_object)
         return self.map
 
     def save(self, filename):

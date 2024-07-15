@@ -22,9 +22,9 @@ from grass.gunittest.utils import ensure_dir
 from grass.gunittest.reporters import success_to_html_percent
 
 # TODO: we should be able to work without matplotlib
-import matplotlib
+import matplotlib as mpl
 
-matplotlib.use("Agg")
+mpl.use("Agg")
 # This counts as code already, so silence "import not at top of file".
 # Perhaps in the future, switch_backend() could be used.
 import matplotlib.pyplot as plt  # noqa: E402

@@ -26,6 +26,7 @@ import locale
 import json
 import pathlib
 import subprocess
+from pathlib import Path
 
 from html.parser import HTMLParser
 
@@ -380,8 +381,7 @@ def has_src_code_git(src_dir, is_addon):
                 f"--format=%H,{COMMIT_DATE_FORMAT}",
                 src_dir,
             ],
-            stderr=subprocess.PIPE,
-            stdout=subprocess.PIPE,
+            capture_output=True,
         )  # --format=%H,COMMIT_DATE_FORMAT commit hash,author date
         os.chdir(actual_dir)
         return process_result if process_result.returncode == 0 else None
@@ -419,11 +419,7 @@ def get_last_git_commit(src_dir, addon_path, is_addon):
             return get_git_commit_from_file(src_dir=src_dir)
 
 
-html_page_footer_pages_path = (
-    os.getenv("HTML_PAGE_FOOTER_PAGES_PATH")
-    if os.getenv("HTML_PAGE_FOOTER_PAGES_PATH")
-    else ""
-)
+html_page_footer_pages_path = os.getenv("HTML_PAGE_FOOTER_PAGES_PATH") or ""
 
 pgm = sys.argv[1]
 
@@ -518,9 +514,7 @@ GRASS GIS ${GRASS_VERSION} Reference Manual
 
 def read_file(name):
     try:
-        with open(name) as f:
-            s = f.read()
-        return s
+        return Path(name).read_text()
     except OSError:
         return ""
 
@@ -929,8 +923,8 @@ else:
 
 git_commit = get_last_git_commit(
     src_dir=curdir,
-    addon_path=addon_path if addon_path else None,
-    is_addon=True if addon_path else False,
+    addon_path=addon_path or None,
+    is_addon=bool(addon_path),
 )
 if git_commit["commit"] == "unknown":
     date_tag = "Accessed: {date}".format(date=git_commit["date"])

@@ -177,7 +177,7 @@ class VNETData:
             "turn_cat_layer": _("unique categories layer"),
         }
         for layer, layerLabel in vals.items():
-            if layer in ["turn_layer", "turn_cat_layer"] and not flags["t"]:
+            if layer in {"turn_layer", "turn_cat_layer"} and not flags["t"]:
                 continue
             if layer in inv_params:
                 if params[layer]:
@@ -562,8 +562,7 @@ class VNETPointsData:
         cols_data = deepcopy(self.cols)
 
         hidden_cols = []
-        hidden_cols.append(self.cols["name"].index("e"))
-        hidden_cols.append(self.cols["name"].index("n"))
+        hidden_cols.extend((self.cols["name"].index("e"), self.cols["name"].index("n")))
 
         analysis, valid = self.an_params.GetParam("analysis")
         if only_relevant and len(self.an_data[analysis]["cmdParams"]["cats"]) <= 1:
@@ -633,7 +632,7 @@ class VNETAnalysisParameters:
 
     def GetParam(self, param):
         invParams = []
-        if param in [
+        if param in {
             "input",
             "arc_layer",
             "node_layer",
@@ -642,7 +641,7 @@ class VNETAnalysisParameters:
             "node_column",
             "turn_layer",
             "turn_cat_layer",
-        ]:
+        }:
             invParams = self._getInvalidParams(self.params)
 
         if invParams:
@@ -667,8 +666,7 @@ class VNETAnalysisParameters:
                 vectMaps = grass.list_grouped("vector")[mapSet]
 
         if not params["input"] or mapName not in vectMaps:
-            invParams = list(params.keys())[:]
-            return invParams
+            return list(params.keys())[:]
 
         # check arc/node layer
         layers = utils.GetVectorNumberOfLayers(params["input"])
@@ -694,14 +692,14 @@ class VNETAnalysisParameters:
                 except (KeyError, ValueError):
                     table = None
 
-            if not table or not params[col] in list(columnchoices.keys()):
+            if not table or params[col] not in list(columnchoices.keys()):
                 invParams.append(col)
                 continue
 
-            if columnchoices[params[col]]["type"] not in [
+            if columnchoices[params[col]]["type"] not in {
                 "integer",
                 "double precision",
-            ]:
+            }:
                 invParams.append(col)
                 continue
 
@@ -1073,7 +1071,7 @@ class VectMap:
         )
         try:
             head = open(headPath, "r")
-            for line in head.readlines():
+            for line in head:
                 i = line.find(
                     "MAP DATE:",
                 )
@@ -1253,8 +1251,7 @@ class History:
                     value[0] == "[" and value[-1] == "]"
                 ):  # TODO, possible wrong interpretation
                     value = value[1:-1].split(",")
-                    value = map(self._castValue, value)
-                    return value
+                    return map(self._castValue, value)
 
             if value == "True":
                 value = True
@@ -1300,7 +1297,7 @@ class History:
 
         newHistStep = False
         isSearchedHistStep = False
-        for line in hist.readlines():
+        for line in hist:
             if not line.strip() and isSearchedHistStep:
                 break
             elif not line.strip():
@@ -1398,7 +1395,7 @@ class VNETGlobalTurnsData:
     def DataValidator(self, row, col, value):
         """Angle recalculation due to value changing"""
 
-        if col not in [1, 2]:
+        if col not in {1, 2}:
             return
 
         if col == 1:
