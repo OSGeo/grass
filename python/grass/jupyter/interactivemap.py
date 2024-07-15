@@ -360,9 +360,8 @@ class InteractiveMap:
 
     def add_query_button(self):
         """Add custom features like query button and coordinate retrieval"""
-        import ipywidgets as widgets
+        import ipywidgets as widgets  # pylint: disable=import-outside-toplevel
 
-        # A ToggleButton to activate/deactivate query mode
         query_toggle_button = widgets.ToggleButton(
             icon="info",
             value=False,
@@ -370,23 +369,19 @@ class InteractiveMap:
             layout=widgets.Layout(width="33px", margin="0px 0px 0px 0px"),
         )
 
-        # Function to handle toggle state change
         def on_toggle_change(change):
             self.query_mode = change.new
-            # Change cursor style based on query mode
             self.map.default_style = {
                 "cursor": "crosshair" if self.query_mode else "default"
             }
 
         query_toggle_button.observe(on_toggle_change, names="value")
 
-        # Add the toggle button to the map
         query_control = self._ipyleaflet.WidgetControl(
             widget=query_toggle_button, position="topright"
         )
         self.map.add_control(query_control)
 
-        # Function to handle map click for querying
         def handle_interaction(**kwargs):
             if not self.query_mode:
                 return
@@ -407,7 +402,6 @@ class InteractiveMap:
                 message = widgets.HTML()
                 message.value = raster_output + vector_output
 
-                # Create a scrollable popup
                 scrollable_container = widgets.HTML(
                     value=(
                         "<div style='max-height: 300px; max-width: 300px; "
@@ -417,7 +411,6 @@ class InteractiveMap:
                     )
                 )
 
-                # Popup with a given location on the map:
                 popup = self._ipyleaflet.Popup(
                     location=lonlat,
                     child=scrollable_container,
@@ -429,7 +422,6 @@ class InteractiveMap:
 
             def on_toggle_popup_change(change):
                 if not change.new:
-                    # Find and remove all popups on the map
                     for item in reversed(list(self.map.layers)):
                         if isinstance(item, self._ipyleaflet.Popup):
                             self.map.remove_layer(item)

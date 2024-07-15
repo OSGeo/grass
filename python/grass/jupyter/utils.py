@@ -203,7 +203,7 @@ def query_vector(coord, vector_list, distance):
     """
     output_list = ["""<table>"""]
 
-    for vector in vector_list:
+    for vector in vector_list:  # pylint: disable=too-many-nested-blocks
         vector_output = gs.vector.vector_what(
             map=vector, coord=coord, distance=distance
         )
