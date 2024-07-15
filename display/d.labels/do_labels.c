@@ -7,18 +7,18 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-#define NL    012
-#define TAB   011
-#define BACK  0134
-#define MTEXT 1024
+#define NL       012
+#define TAB      011
+#define BACK     0134
+#define MTEXT    1024
 
-#define TOP   0
-#define CENT  1
-#define BOT   2
-#define LEFT  0
-#define RITE  2
-#define YES   1
-#define NO    0
+#define TOP      0
+#define CENT     1
+#define BOT      2
+#define LEFT     0
+#define RITE     2
+#define YES      1
+#define NO       0
 
 #define BUFFSIZE 128
 #define FONTSIZE 256
