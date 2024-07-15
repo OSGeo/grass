@@ -50,7 +50,7 @@ class NumpyTestCase(TestCase):
 
     def test_write(self):
         rng = default_rng()
-        numpy2raster(rng([40, 60]), "FCELL", self.name, True)
+        numpy2raster(rng.random([40, 60]), "FCELL", self.name, True)
         self.assertTrue(check_raster(self.name))
 
 
