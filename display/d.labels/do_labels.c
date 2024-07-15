@@ -466,7 +466,8 @@ int scan_ref(char *buf)
             buf[i] += 'a' - 'A';
     xref = yref = CENT;
     char word_fmt[10];
-    snprintf(word_fmt, sizeof(word_fmt), "%%%ds%%%ds", WORDSIZE - 1, WORDSIZE - 1);
+    snprintf(word_fmt, sizeof(word_fmt), "%%%ds%%%ds", WORDSIZE - 1,
+             WORDSIZE - 1);
 
     switch (sscanf(buf, word_fmt, word1, word2)) {
     case 2:
