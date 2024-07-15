@@ -284,7 +284,7 @@ if(NOT MSVC)
   build_program_in_subdir(r.in.xyz DEPENDS grass_gis grass_raster LIBM)
 endif()
 build_program_in_subdir(r.info TEST_SOURCES "test_r_info.py" DEPENDS grass_gis LIBM
-                        grass_raster)
+                        grass_raster grass_parson)
 
 build_program_in_subdir(r.kappa DEPENDS grass_gis grass_raster LIBM)
 
@@ -376,7 +376,7 @@ build_program_in_subdir(r.patch DEPENDS grass_gis grass_raster OPTIONAL_DEPENDS
 
 build_program_in_subdir(r.path DEPENDS grass_gis grass_raster grass_vector)
 
-build_program_in_subdir(r.profile DEPENDS grass_gis grass_raster LIBM)
+build_program_in_subdir(r.profile DEPENDS grass_gis grass_raster grass_parson LIBM)
 
 build_program_in_subdir(
   r.proj

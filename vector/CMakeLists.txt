@@ -274,7 +274,8 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_dig2
   grass_gis
-  grass_vector)
+  grass_vector
+  grass_parson)
 
 build_program_in_subdir(
   v.in.ascii
