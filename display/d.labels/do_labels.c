@@ -465,7 +465,6 @@ int scan_ref(char *buf)
         if (buf[i] >= 'A' && buf[i] <= 'Z')
             buf[i] += 'a' - 'A';
     xref = yref = CENT;
-
     switch (sscanf(buf, word_fmt, word1, word2)) {
     case 2:
         if (!(xmatch(word2) || ymatch(word2)))
