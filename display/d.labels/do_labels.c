@@ -129,7 +129,6 @@ int do_labels(FILE *infile, int do_rotation)
         }
         else if (!strncmp(text, "fon", 3)) {
             if (sscanf(text, font_fmt, font) != 1 || !strcmp(font, "standard"))
-
                 strcpy(font, std_font);
         }
         else if (!strncmp(text, "rot", 3)) {
