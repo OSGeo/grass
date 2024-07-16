@@ -40,9 +40,9 @@ static char text[MTEXT];
 static char font[FONTSIZE];
 static const char *std_font;
 
-static char buff_fmt[10];
-static char font_fmt[10];
-static char word_fmt[10];
+static char buff_fmt[WORDSIZE];
+static char font_fmt[WORDSIZE];
+static char word_fmt[WORDSIZE];
 
 static int ymatch(char *);
 static int xmatch(char *);
