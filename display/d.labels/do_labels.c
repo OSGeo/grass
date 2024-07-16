@@ -79,7 +79,8 @@ int do_labels(FILE *infile, int do_rotation)
 
     snprintf(buff_fmt, sizeof(buff_fmt), "%%*s %%%ds", BUFFSIZE - 1);
     snprintf(font_fmt, sizeof(font_fmt), "%%*s %%%ds", FONTSIZE - 1);
-    snprintf(word_fmt, sizeof(word_fmt), "%%%ds %%%ds", WORDSIZE - 1, WORDSIZE - 1);
+    snprintf(word_fmt, sizeof(word_fmt), "%%%ds %%%ds", WORDSIZE - 1,
+             WORDSIZE - 1);
 
     initialize_options();
 
