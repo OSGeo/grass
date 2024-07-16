@@ -6,7 +6,7 @@ Created on Thu Jul 30 18:27:22 2015
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-from numpy.random import random
+from numpy.random import default_rng
 from grass.pygrass.raster import raster2numpy, numpy2raster, RasterRow
 
 
@@ -49,8 +49,8 @@ class NumpyTestCase(TestCase):
         self.assertTrue(len(self.numpy_obj[0]), 60)
 
     def test_write(self):
-        ran = random([40, 60])
-        numpy2raster(ran, "FCELL", self.name, True)
+        rng = default_rng()
+        numpy2raster(rng.random([40, 60]), "FCELL", self.name, True)
         self.assertTrue(check_raster(self.name))
 
 

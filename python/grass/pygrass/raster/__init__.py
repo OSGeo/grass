@@ -580,15 +580,11 @@ class RasterSegment(RasterAbstractBase):
 def random_map_only_columns(mapname, mtype, overwrite=True, factor=100):
     region = Region()
     random_map = RasterRow(mapname)
+    rng = np.random.default_rng()
     row_buf = Buffer(
         (region.cols,),
         mtype,
-        buffer=(
-            np.random.random(
-                region.cols,
-            )
-            * factor
-        ).data,
+        buffer=(rng.random(region.cols) * factor).data,
     )
     random_map.open("w", mtype, overwrite)
     for _ in range(region.rows):
@@ -601,16 +597,12 @@ def random_map(mapname, mtype, overwrite=True, factor=100):
     region = Region()
     random_map = RasterRow(mapname)
     random_map.open("w", mtype, overwrite)
+    rng = np.random.default_rng()
     for _ in range(region.rows):
         row_buf = Buffer(
             (region.cols,),
             mtype,
-            buffer=(
-                np.random.random(
-                    region.cols,
-                )
-                * factor
-            ).data,
+            buffer=(rng.random(region.cols) * factor).data,
         )
         random_map.put_row(row_buf)
     random_map.close()
