@@ -37,8 +37,12 @@ static int highlight_width;
 static int opaque;
 static double width, rotation;
 static char text[MTEXT];
-static char font[256];
+static char font[FONTSIZE];
 static const char *std_font;
+
+static char buff_fmt[10];
+static char font_fmt[10];
+static char word_fmt[10];
 
 static int ymatch(char *);
 static int xmatch(char *);
@@ -71,15 +75,11 @@ int initialize_options(void)
 
 int do_labels(FILE *infile, int do_rotation)
 {
-    char buff[128];
-    char buff_fmt[10];
-    char font_fmt[10];
-    char word_fmt[10];
+    char buff[BUFFSIZE];
 
-    snprintf(buff_fmt, sizeof(buff_fmt), "%%%ds", BUFFSIZE - 1);
-    snprintf(font_fmt, sizeof(font_fmt), "%%%ds", FONTSIZE - 1);
-    snprintf(word_fmt, sizeof(word_fmt), "%%%ds%%%ds", WORDSIZE - 1,
-             WORDSIZE - 1);
+    snprintf(buff_fmt, sizeof(buff_fmt), "%%*s %%%ds", BUFFSIZE - 1);
+    snprintf(font_fmt, sizeof(font_fmt), "%%*s %%%ds", FONTSIZE - 1);
+    snprintf(word_fmt, sizeof(word_fmt), "%%%ds %%%ds", WORDSIZE - 1, WORDSIZE - 1);
 
     initialize_options();
 
@@ -465,9 +465,6 @@ int scan_ref(char *buf)
         if (buf[i] >= 'A' && buf[i] <= 'Z')
             buf[i] += 'a' - 'A';
     xref = yref = CENT;
-    char word_fmt[10];
-    snprintf(word_fmt, sizeof(word_fmt), "%%%ds%%%ds", WORDSIZE - 1,
-             WORDSIZE - 1);
 
     switch (sscanf(buf, word_fmt, word1, word2)) {
     case 2:
@@ -479,7 +476,6 @@ int scan_ref(char *buf)
             return 1;
         FALLTHROUGH;
     case EOF:
-        FALLTHROUGH;
     default:
         return 0;
     }
