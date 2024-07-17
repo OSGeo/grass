@@ -514,14 +514,15 @@ class PyEditController:
                 ),
                 parent=self.guiparent,
             )
-        else:
-            if self.CanReplaceContent(by_message="file"):
-                self.filename = path
-                content = self._openFile(file_path=path)
-                if content:
-                    self.body.SetText(content)
-                    file_history.AddFileToHistory(filename=path)  # move up the list
-                    self.tempfile = False
+            return
+
+        if self.CanReplaceContent(by_message="file"):
+            self.filename = path
+            content = self._openFile(file_path=path)
+            if content:
+                self.body.SetText(content)
+                file_history.AddFileToHistory(filename=path)  # move up the list
+                self.tempfile = False
 
     def IsEmpty(self):
         """Check if python script is empty"""

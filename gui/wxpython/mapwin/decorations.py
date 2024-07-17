@@ -211,9 +211,8 @@ class DtextController(OverlayController):
             param = param.split("=")
             if len(param) == 1:
                 inputs += 1
-            else:
-                if param[0] == "text" and len(param) == 2:
-                    inputs += 1
+            elif param[0] == "text" and len(param) == 2:
+                inputs += 1
         return inputs >= 1
 
 
@@ -316,11 +315,10 @@ class LegendController(OverlayController):
             param = param.split("=")
             if len(param) == 1:
                 inputs += 1
-            else:
-                if param[0] == "raster" and len(param) == 2:
-                    inputs += 1
-                elif param[0] == "raster_3d" and len(param) == 2:
-                    inputs += 1
+            elif param[0] == "raster" and len(param) == 2:
+                inputs += 1
+            elif param[0] == "raster_3d" and len(param) == 2:
+                inputs += 1
         return inputs == 1
 
     def ResizeLegend(self, begin, end, screenSize):

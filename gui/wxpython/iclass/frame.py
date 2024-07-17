@@ -953,9 +953,8 @@ class IClassMapPanel(DoubleMapPanel):
             dlg.CenterOnParent()
             dlg.Show()
             self.dialogs["classManager"] = dlg
-        else:
-            if not self.dialogs["classManager"].IsShown():
-                self.dialogs["classManager"].Show()
+        elif not self.dialogs["classManager"].IsShown():
+            self.dialogs["classManager"].Show()
 
     def CategoryChanged(self, currentCat):
         """Updates everything which depends on current category.

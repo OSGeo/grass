@@ -1293,25 +1293,24 @@ class DataCatalogTree(TreeView):
                     if not new_name:
                         return
                 # within one location, different mapsets
-                else:
-                    if map_exists(
-                        new_name,
-                        element=self.copy_layer[i].data["type"],
+                elif map_exists(
+                    new_name,
+                    element=self.copy_layer[i].data["type"],
+                    env=env,
+                    mapset=self.selected_mapset[0].data["name"],
+                ):
+                    new_name = self._getNewMapName(
+                        _("New name for <{n}>").format(
+                            n=self.copy_layer[i].data["name"]
+                        ),
+                        _("Select new name"),
+                        self.copy_layer[i].data["name"],
                         env=env,
                         mapset=self.selected_mapset[0].data["name"],
-                    ):
-                        new_name = self._getNewMapName(
-                            _("New name for <{n}>").format(
-                                n=self.copy_layer[i].data["name"]
-                            ),
-                            _("Select new name"),
-                            self.copy_layer[i].data["name"],
-                            env=env,
-                            mapset=self.selected_mapset[0].data["name"],
-                            element=self.copy_layer[i].data["type"],
-                        )
-                        if not new_name:
-                            return
+                        element=self.copy_layer[i].data["type"],
+                    )
+                    if not new_name:
+                        return
 
                 string = (
                     self.copy_layer[i].data["name"]

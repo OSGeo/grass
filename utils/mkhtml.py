@@ -407,16 +407,15 @@ def get_last_git_commit(src_dir, addon_path, is_addon):
             commit=process_result.stdout.decode(),
             src_dir=src_dir,
         )
+    elif gs:
+        # Addons installation
+        return get_git_commit_from_rest_api_for_addon_repo(
+            addon_path=addon_path,
+            src_dir=src_dir,
+        )
+    # During GRASS GIS compilation from source code without Git
     else:
-        if gs:
-            # Addons installation
-            return get_git_commit_from_rest_api_for_addon_repo(
-                addon_path=addon_path,
-                src_dir=src_dir,
-            )
-        # During GRASS GIS compilation from source code without Git
-        else:
-            return get_git_commit_from_file(src_dir=src_dir)
+        return get_git_commit_from_file(src_dir=src_dir)
 
 
 html_page_footer_pages_path = os.getenv("HTML_PAGE_FOOTER_PAGES_PATH") or ""
@@ -772,11 +771,10 @@ desc = re.search("(<!-- meta page description:)(.*)(-->)", src_data, re.IGNORECA
 if desc:
     pgm = desc.group(2).strip()
     header_tmpl = string.Template(header_base + header_nopgm)
+elif not pgm_desc:
+    header_tmpl = string.Template(header_base + header_pgm)
 else:
-    if not pgm_desc:
-        header_tmpl = string.Template(header_base + header_pgm)
-    else:
-        header_tmpl = string.Template(header_base + header_pgm_desc)
+    header_tmpl = string.Template(header_base + header_pgm_desc)
 
 if not re.search("<html>", src_data, re.IGNORECASE):
     tmp_data = read_file(tmp_file)

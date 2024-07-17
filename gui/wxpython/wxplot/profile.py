@@ -472,7 +472,7 @@ class ProfileFrame(BasePlotFrame):
                 statstr = "Profile of %s\n\n" % rast
 
                 iterable = (i[1] for i in self.raster[r]["datalist"])
-                a = np.fromiter(iterable, np.float)
+                a = np.fromiter(iterable, float)
 
                 statstr += "n: %f\n" % a.size
                 statstr += "minimum: %f\n" % np.amin(a)
