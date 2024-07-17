@@ -272,7 +272,7 @@ class IClassMapPanel(DoubleMapPanel):
             type="vector",
             name=self.trainingAreaVector,
         )
-        return ret == 0
+        return bool(ret == 0)
 
     def RemoveTempRaster(self, raster) -> bool:
         """Removes temporary raster maps"""
@@ -281,7 +281,7 @@ class IClassMapPanel(DoubleMapPanel):
         ret = RunCommand(
             prog="g.remove", parent=self, flags="f", type="raster", name=raster
         )
-        return ret == 0
+        return bool(ret == 0)
 
     def AddToolbar(self, name):
         """Add defined toolbar to the window
