@@ -817,7 +817,7 @@ def check_datetime_string(time_string, use_dateutil=True):
                 time_format = "%Y-%m-%dT%H:%M:%S.%f"
             else:
                 time_format = "%Y-%m-%d %H:%M:%S.%f"
-        else:
+        else:  # noqa: PLR5501
             if "T" in time_string:
                 time_format = "%Y-%m-%dT%H:%M:%S"
             else:

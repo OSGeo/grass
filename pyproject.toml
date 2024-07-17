@@ -183,7 +183,6 @@ ignore = [
     "PLR1704", # redefined-argument-from-local
     "PLR1733", # unnecessary-dict-index-lookup
     "PLR2004", # magic-value-comparison
-    "PLR5501", # collapsible-else-if
     "PLR6104", # non-augmented-assignment
     "PLR6201", # literal-membership
     "PLR6301", # no-self-use
@@ -311,7 +310,6 @@ ignore = [
 "gui/wxpython/psmap/utils.py" = ["PGH004"]
 "gui/wxpython/timeline/frame.py" = ["FLY002"]
 "gui/wxpython/tplot/frame.py" = ["FLY002"]
-"gui/wxpython/wxplot/profile.py" = ["NPY001"]
 "lib/imagery/testsuite/test_imagery_sigsetfile.py" = ["FURB152"]
 "python/grass/__init__.py" = ["PYI056"]
 "python/grass/exp*/tests/grass_script_mapset_session_test.py" = ["SIM117"]
@@ -323,12 +321,9 @@ ignore = [
 "python/grass/jupyter/tests/reprojection_renderer_test.py" = ["PT013"]
 "python/grass/jupyter/testsuite/interactivemap_test.py" = ["PGH004"]
 "python/grass/jupyter/testsuite/map_test.py" = ["PGH004"]
-"python/grass/pygrass/raster/__init__.py" = ["NPY002"]
-"python/grass/pygrass/raster/testsuite/test_numpy.py" = ["NPY002"]
 "python/grass/pygrass/vector/geometry.py" = ["PYI024"]
 "python/grass/pygrass/vector/sql.py" = ["FLY002"]
-"python/grass/pygrass/vector/testsuite/test_table.py" = ["NPY002", "PLW0108"]
-"python/grass/pygrass/vector/testsuite/test_vector3d.py" = ["NPY002"]
+"python/grass/pygrass/vector/testsuite/test_table.py" = ["PLW0108"]
 "raster3d/r3.flow/testsuite/r3flow_test.py" = ["FLY002"]
 "raster3d/r3.gradient/testsuite/r3gradient_test.py" = ["FLY002"]
 "scripts/d.polar/d.polar.py" = ["FURB154"]

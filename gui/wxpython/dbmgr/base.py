@@ -2165,11 +2165,10 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         # sort by key column
         if sql and "order by" in sql.lower():
             pass  # don't order by key column
+        elif keyColumn > -1:
+            listWin.SortListItems(col=keyColumn, ascending=True)
         else:
-            if keyColumn > -1:
-                listWin.SortListItems(col=keyColumn, ascending=True)
-            else:
-                listWin.SortListItems(col=0, ascending=True)
+            listWin.SortListItems(col=0, ascending=True)
 
         wx.EndBusyCursor()
 

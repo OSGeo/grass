@@ -124,11 +124,11 @@ def _make_unicode(val, enc):
     """
     if val is None or enc is None:
         return val
+
+    if enc == "default":
+        return decode(val)
     else:
-        if enc == "default":
-            return decode(val)
-        else:
-            return decode(val, encoding=enc)
+        return decode(val, encoding=enc)
 
 
 def get_commands(*, env=None):
@@ -1166,9 +1166,8 @@ def compare_key_value_text_files(
             # We compare the sum of the entries
             if abs(sum(dict_a[key]) - sum(dict_b[key])) > precision:
                 return False
-        else:
-            if dict_a[key] != dict_b[key]:
-                return False
+        elif dict_a[key] != dict_b[key]:
+            return False
     return True
 
 
@@ -1567,13 +1566,12 @@ def list_grouped(
                         name,
                     ]
                 }
+        elif mapset in result:
+            result[mapset].append(name)
         else:
-            if mapset in result:
-                result[mapset].append(name)
-            else:
-                result[mapset] = [
-                    name,
-                ]
+            result[mapset] = [
+                name,
+            ]
 
     return result
 

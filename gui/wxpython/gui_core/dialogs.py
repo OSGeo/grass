@@ -1330,7 +1330,7 @@ class GroupDialog(wx.Dialog):
                 label = _("Group <%s> was successfully created.") % group
             else:
                 label = _("Group <%s> was successfully changed.") % group
-        else:
+        else:  # noqa: PLR5501
             if create:
                 label = _("Creating of new group <%s> failed.") % group
             else:
