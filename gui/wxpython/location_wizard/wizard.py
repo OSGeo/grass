@@ -803,11 +803,10 @@ class ItemList(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.ColumnSorterMix
                 return data[0]
             else:
                 return data
+        elif firstOnly:
+            return None
         else:
-            if firstOnly:
-                return None
-            else:
-                return []
+            return []
 
 
 class ProjParamsPage(TitledPage):
@@ -903,19 +902,18 @@ class ProjParamsPage(TitledPage):
                         continue
                     else:
                         self.p4projparams += " +" + param["proj4"]
+                elif param["value"] is None:
+                    wx.MessageBox(
+                        parent=self,
+                        message=_("You must enter a value for %s") % param["desc"],
+                        caption=_("Error"),
+                        style=wx.ICON_ERROR | wx.CENTRE,
+                    )
+                    event.Veto()
                 else:
-                    if param["value"] is None:
-                        wx.MessageBox(
-                            parent=self,
-                            message=_("You must enter a value for %s") % param["desc"],
-                            caption=_("Error"),
-                            style=wx.ICON_ERROR | wx.CENTRE,
-                        )
-                        event.Veto()
-                    else:
-                        self.p4projparams += (
-                            " +" + param["proj4"] + "=" + str(param["value"])
-                        )
+                    self.p4projparams += (
+                        " +" + param["proj4"] + "=" + str(param["value"])
+                    )
 
     def OnEnterPage(self, event):
         """Page entered"""
@@ -1489,9 +1487,8 @@ class GeoreferencedFilePage(TitledPage):
         if len(self.georeffile) > 0 and os.path.isfile(self.georeffile):
             if not nextButton.IsEnabled():
                 nextButton.Enable(True)
-        else:
-            if nextButton.IsEnabled():
-                nextButton.Enable(False)
+        elif nextButton.IsEnabled():
+            nextButton.Enable(False)
 
         event.Skip()
 
@@ -1566,9 +1563,8 @@ class WKTPage(TitledPage):
         if len(self.wktstring) == 0:
             if nextButton.IsEnabled():
                 nextButton.Enable(False)
-        else:
-            if not nextButton.IsEnabled():
-                nextButton.Enable()
+        elif not nextButton.IsEnabled():
+            nextButton.Enable()
 
 
 class EPSGPage(TitledPage):
@@ -2160,9 +2156,8 @@ class CustomPage(TitledPage):
         if len(self.customstring) == 0:
             if nextButton.IsEnabled():
                 nextButton.Enable(False)
-        else:
-            if not nextButton.IsEnabled():
-                nextButton.Enable()
+        elif not nextButton.IsEnabled():
+            nextButton.Enable()
 
 
 class SummaryPage(TitledPage):

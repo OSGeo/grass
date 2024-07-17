@@ -235,19 +235,13 @@ def main():
 
     # sort results
     if sort:
-        if sort == "asc":
-            if option == "coor":
-                records3.sort(key=lambda r: (float(r[-3]), float(r[-2]), float(r[-1])))
-            else:
-                records3.sort(key=lambda r: float(r[-1]))
+        if option == "coor":
+            records3.sort(
+                key=lambda r: (float(r[-3]), float(r[-2]), float(r[-1])),
+                reverse=(sort != "asc"),
+            )
         else:
-            if option == "coor":
-                records3.sort(
-                    key=lambda r: (float(r[-3]), float(r[-2]), float(r[-1])),
-                    reverse=True,
-                )
-            else:
-                records3.sort(key=lambda r: float(r[-1]), reverse=True)
+            records3.sort(key=lambda r: float(r[-1]), reverse=(sort != "asc"))
 
     for r in records3:
         sys.stdout.write(fs.join(map(str, r)) + "\n")
