@@ -201,7 +201,7 @@ class Popen(subprocess.Popen):
             import win32api
 
             handle = win32api.OpenProcess(1, 0, self.pid)
-            return 0 != win32api.TerminateProcess(handle, 0)
+            return win32api.TerminateProcess(handle, 0) != 0
         else:
             try:
                 os.kill(-self.pid, signal.SIGTERM)  # kill whole group
@@ -222,7 +222,7 @@ class Popen(subprocess.Popen):
             except ValueError:
                 return self._close("stdin")
             except (pywintypes.error, Exception) as why:
-                if why.winerror in (109, errno.ESHUTDOWN):
+                if why.winerror in {109, errno.ESHUTDOWN}:
                     return self._close("stdin")
                 raise
 
@@ -238,14 +238,13 @@ class Popen(subprocess.Popen):
             try:
                 x = msvcrt.get_osfhandle(conn.fileno())
                 (read, nAvail, nMessage) = PeekNamedPipe(x, 0)
-                if maxsize < nAvail:
-                    nAvail = maxsize
+                nAvail = min(maxsize, nAvail)
                 if nAvail > 0:
                     (errCode, read) = ReadFile(x, nAvail, None)
             except ValueError:
                 return self._close(which)
             except (pywintypes.error, Exception) as why:
-                if why.winerror in (109, errno.ESHUTDOWN):
+                if why.winerror in {109, errno.ESHUTDOWN}:
                     return self._close(which)
                 raise
 
@@ -301,8 +300,7 @@ message = "Other end disconnected!"
 
 
 def recv_some(p, t=0.1, e=1, tr=5, stderr=0):
-    if tr < 1:
-        tr = 1
+    tr = max(tr, 1)
     x = time.time() + t
     y = []
     r = ""

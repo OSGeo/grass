@@ -485,11 +485,13 @@ class VNETAnalyses:
         else:
             cmdParams.append("input=" + params["input"])
 
-        cmdParams.append("file=" + self.coordsTmpFile)
-
-        cmdParams.append("dmax=" + str(params["max_dist"]))
-
-        cmdParams.append("--overwrite")
+        cmdParams.extend(
+            (
+                "file=" + self.coordsTmpFile,
+                "dmax=" + str(params["max_dist"]),
+                "--overwrite",
+            )
+        )
         self._prepareCmd(cmd=cmdParams)
 
         if flags["t"]:
@@ -697,8 +699,9 @@ class VNETAnalyses:
         if not self.tmpInPtsConnected:
             return False
 
-        cmdParams.append("input=" + self.tmpInPtsConnected.GetVectMapName())
-        cmdParams.append("--overwrite")
+        cmdParams.extend(
+            ("input=" + self.tmpInPtsConnected.GetVectMapName(), "--overwrite")
+        )
 
         self._setCmdForSpecificAn(cmdParams)
 
@@ -769,7 +772,7 @@ class VNETAnalyses:
             inParams.append(col + "=" + params[colInptF])
 
         for layer in ["arc_layer", "node_layer", "turn_layer", "turn_cat_layer"]:
-            if not flags["t"] and layer in ["turn_layer", "turn_cat_layer"]:
+            if not flags["t"] and layer in {"turn_layer", "turn_cat_layer"}:
                 continue
             # TODO
             if flags["t"] and layer == "node_layer":
@@ -1027,8 +1030,7 @@ def AddTmpMapAnalysisMsg(mapName, tmp_maps):  # TODO
         "Temporary map %s  already exists.\n"
         + "Do you want to continue in analysis and overwrite it?"
     ) % (mapName + "@" + grass.gisenv()["MAPSET"])
-    tmpMap = tmp_maps.AddTmpVectMap(mapName, msg)
-    return tmpMap
+    return tmp_maps.AddTmpVectMap(mapName, msg)
 
 
 class SnappingNodes(wx.EvtHandler):

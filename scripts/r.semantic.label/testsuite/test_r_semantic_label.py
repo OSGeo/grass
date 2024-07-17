@@ -24,9 +24,7 @@ class TestSemanticLabelsSystemDefined(TestCase):
 
     def read_semantic_label(self):
         with RasterRow(self.map) as rast:
-            semantic_label = rast.info.semantic_label
-
-        return semantic_label
+            return rast.info.semantic_label
 
     def test_semantic_label_assign_not_current_mapset(self):
         if not self.mapset == "PERMANENT":

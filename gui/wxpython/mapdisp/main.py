@@ -78,7 +78,7 @@ class DMonMap(Map):
         self._giface = giface
 
         # environment settings
-        self.env = dict()
+        self.env = {}
 
         self.cmdfile = cmdfile
 
@@ -169,7 +169,7 @@ class DMonMap(Map):
             # next number in rendering order
             next_layer = 0
             mapFile = None
-            render_env = dict()
+            render_env = {}
             for line in lines:
                 if line.startswith("#"):
                     if "GRASS_RENDER_FILE" in line:
@@ -196,7 +196,7 @@ class DMonMap(Map):
 
                 args = {}
 
-                if ltype in ("barscale", "rastleg", "northarrow", "text", "vectleg"):
+                if ltype in {"barscale", "rastleg", "northarrow", "text", "vectleg"}:
                     # TODO: this is still not optimal
                     # it is there to prevent adding the same overlay multiple times
                     if cmd in self.oldOverlays:
@@ -254,7 +254,7 @@ class DMonMap(Map):
                 )
                 if render_env:
                     mapLayer.GetRenderMgr().UpdateRenderEnv(render_env)
-                    render_env = dict()
+                    render_env = {}
 
                 newLayer = self._addLayer(mapLayer)
 
@@ -579,8 +579,8 @@ class MapApp(wx.App):
             ),
         )
 
-        self.Map.saveToFile.connect(lambda cmd: self.mapDisplay.DOutFile(cmd))
-        self.Map.dToRast.connect(lambda cmd: self.mapDisplay.DToRast(cmd))
+        self.Map.saveToFile.connect(self.mapDisplay.DOutFile)
+        self.Map.dToRast.connect(self.mapDisplay.DToRast)
         self.Map.query.connect(
             lambda ltype, maps: self.mapDisplay.SetQueryLayersAndActivate(
                 ltype=ltype, maps=maps

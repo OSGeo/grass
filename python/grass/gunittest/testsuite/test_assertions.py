@@ -3,6 +3,7 @@ Tests assertion methods.
 """
 
 import os
+from pathlib import Path
 
 import grass.script.core as gcore
 from grass.pygrass.modules import Module
@@ -132,14 +133,14 @@ class TestAssertModuleKeyValue(TestCase):
         """Test syntax with Module and required parameters as module"""
         module = Module("r.info", map="elevation", flags="gr", run_=False, finish_=True)
         self.assertModuleKeyValue(
-            module, reference=dict(min=55.58, max=156.33), precision=0.01, sep="="
+            module, reference={"min": 55.58, "max": 156.33}, precision=0.01, sep="="
         )
 
     def test_pygrass_simple_module(self):
         """Test syntax with SimpleModule as module"""
         module = SimpleModule("r.info", map="elevation", flags="gr")
         self.assertModuleKeyValue(
-            module, reference=dict(min=55.58, max=156.33), precision=0.01, sep="="
+            module, reference={"min": 55.58, "max": 156.33}, precision=0.01, sep="="
         )
 
     def test_direct_parameters(self):
@@ -148,7 +149,7 @@ class TestAssertModuleKeyValue(TestCase):
             "r.info",
             map="elevation",
             flags="gr",
-            reference=dict(min=55.58, max=156.33),
+            reference={"min": 55.58, "max": 156.33},
             precision=0.01,
             sep="=",
         )
@@ -157,8 +158,8 @@ class TestAssertModuleKeyValue(TestCase):
         """Test syntax with module parameters in one parameters dictionary"""
         self.assertModuleKeyValue(
             module="r.info",
-            parameters=dict(map="elevation", flags="gr"),
-            reference=dict(min=55.58, max=156.33),
+            parameters={"map": "elevation", "flags": "gr"},
+            reference={"min": 55.58, "max": 156.33},
             precision=0.01,
             sep="=",
         )
@@ -237,7 +238,7 @@ class TestRasterMapAssertions(TestCase):
             actual="elevation",
             reference="elevation",
             precision=0,  # this might need to be increased
-            statistics=dict(mean=0),
+            statistics={"mean": 0},
             msg="The difference of same maps should have small mean",
         )
         self.assertRaises(
@@ -246,7 +247,7 @@ class TestRasterMapAssertions(TestCase):
             actual="elevation",
             reference="geology",
             precision=1,
-            statistics=dict(mean=0),
+            statistics={"mean": 0},
             msg="The difference of different maps should have huge mean",
         )
 
@@ -348,20 +349,19 @@ class TestFileAssertions(TestCase):
         open(cls.emtpy_file, "w").close()
         cls.file_with_md5 = cls.__name__ + "_this_is_a_file_with_known_md5"
         file_content = "Content of the file with known MD5.\n"
-        with open(cls.file_with_md5, "w") as f:
-            f.write(file_content)
+        Path(cls.file_with_md5).write_text(file_content)
         # MD5 sum created using:
         # echo 'Content of the file with known MD5.' > some_file.txt
         # md5sum some_file.txt
         cls.file_md5 = "807bba4ffac4bb351bc3f27853009949"
 
         cls.file_with_same_content = cls.__name__ + "_file_with_same_content"
-        with open(cls.file_with_same_content, "w") as f:
-            f.write(file_content)
+        Path(cls.file_with_same_content).write_text(file_content)
 
         cls.file_with_different_content = cls.__name__ + "_file_with_different_content"
-        with open(cls.file_with_different_content, "w") as f:
-            f.write(file_content + " Something else here.")
+        Path(cls.file_with_different_content).write_text(
+            file_content + " Something else here."
+        )
 
     @classmethod
     def tearDownClass(cls):

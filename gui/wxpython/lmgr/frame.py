@@ -138,7 +138,7 @@ class GMFrame(wx.Frame):
         def show_menu_errors(messages):
             if messages:
                 self._gconsole.WriteError(
-                    _("There were some issues when loading menu" " or Tools tab:")
+                    _("There were some issues when loading menu or Tools tab:")
                 )
                 for message in messages:
                     self._gconsole.WriteError(message)
@@ -150,10 +150,10 @@ class GMFrame(wx.Frame):
         self._auimgr = wx.aui.AuiManager(self)
 
         # list of open dialogs
-        self.dialogs = dict()
+        self.dialogs = {}
         self.dialogs["preferences"] = None
         self.dialogs["nvizPreferences"] = None
-        self.dialogs["atm"] = list()
+        self.dialogs["atm"] = []
 
         # create widgets
         self._createMenuBar()
@@ -389,9 +389,7 @@ class GMFrame(wx.Frame):
     def _createDataCatalog(self, parent):
         """Initialize Data Catalog widget"""
         self.datacatalog = DataCatalog(parent=parent, giface=self._giface)
-        self.datacatalog.showNotification.connect(
-            lambda message: self.SetStatusText(message)
-        )
+        self.datacatalog.showNotification.connect(self.SetStatusText)
 
     def _createDisplay(self, parent):
         """Initialize Display widget"""
@@ -412,9 +410,7 @@ class GMFrame(wx.Frame):
                 giface=self._giface,
                 model=self._moduleTreeBuilder.GetModel(),
             )
-            self.search.showNotification.connect(
-                lambda message: self.SetStatusText(message)
-            )
+            self.search.showNotification.connect(self.SetStatusText)
         else:
             self.search = None
 
@@ -434,9 +430,7 @@ class GMFrame(wx.Frame):
             menuModel=self._moduleTreeBuilder.GetModel(),
             gcstyle=GC_PROMPT,
         )
-        self.goutput.showNotification.connect(
-            lambda message: self.SetStatusText(message)
-        )
+        self.goutput.showNotification.connect(self.SetStatusText)
 
         self._gconsole.mapCreated.connect(self.OnMapCreated)
         self._gconsole.Bind(
@@ -449,9 +443,7 @@ class GMFrame(wx.Frame):
         """Initialize history browser widget"""
         if not UserSettings.Get(group="manager", key="hideTabs", subkey="history"):
             self.history = HistoryBrowser(parent=parent, giface=self._giface)
-            self.history.showNotification.connect(
-                lambda message: self.SetStatusText(message)
-            )
+            self.history.showNotification.connect(self.SetStatusText)
             self.history.runIgnoredCmdPattern.connect(
                 lambda cmd: self.RunSpecialCmd(command=cmd),
             )
@@ -637,9 +629,7 @@ class GMFrame(wx.Frame):
 
         # add 'console' widget to main notebook page and add connect switch page signal
         self.notebook.AddPage(page=self.goutput, text=_("Console"), name="output")
-        self.goutput.contentChanged.connect(
-            lambda notification: self._switchPage(notification)
-        )
+        self.goutput.contentChanged.connect(self._switchPage)
 
         # add 'history module' widget to main notebook page
         if self.history:
@@ -1090,7 +1080,7 @@ class GMFrame(wx.Frame):
             else:
                 return None
         else:  # -> return list of all mapdisplays
-            mlist = list()
+            mlist = []
             for idx in range(0, self.notebookLayers.GetPageCount()):
                 mlist.append(self.notebookLayers.GetPage(idx).maptree.GetMapDisplay())
 
@@ -1128,7 +1118,7 @@ class GMFrame(wx.Frame):
 
         # check list of dummy commands for GUI modules that do not have GRASS
         # bin modules or scripts.
-        if cmd in ["vcolors", "r.mapcalc", "r3.mapcalc"]:
+        if cmd in {"vcolors", "r.mapcalc", "r3.mapcalc"}:
             return cmdlist
 
         try:
@@ -1237,7 +1227,7 @@ class GMFrame(wx.Frame):
         if not os.path.exists(filename):
             GError(
                 parent=self,
-                message=_("Script file '%s' doesn't exist. " "Operation canceled.")
+                message=_("Script file '%s' doesn't exist. Operation canceled.")
                 % filename,
             )
             return
@@ -1385,9 +1375,7 @@ class GMFrame(wx.Frame):
             self._giface.WriteCmdLog(" ")
 
         def write_help():
-            self._giface.WriteLog(
-                _("Changes current working directory" " for this GUI.")
-            )
+            self._giface.WriteLog(_("Changes current working directory for this GUI."))
             self._giface.WriteLog(_("Usage: cd [directory]"))
             self._giface.WriteLog(_("Without parameters it opens a dialog."))
             # TODO: the following is longer then 80 chars
@@ -1420,7 +1408,7 @@ class GMFrame(wx.Frame):
         # use chdir or dialog
         if cmd and len(cmd) == 2:
             write_beginning(parameter=cmd[1])
-            if cmd[1] in ["-h", "--h", "--help", "help"]:
+            if cmd[1] in {"-h", "--h", "--help", "help"}:
                 write_help()
                 write_end()
                 return
@@ -1489,7 +1477,7 @@ class GMFrame(wx.Frame):
         # which appears in the platform.platform() string
         platform_ = decode(platform.platform())
         self._gconsole.WriteLog(
-            "%s: %s\n" "%s: %s\n" "%s: %s\n" "%s: %s\n"
+            "%s: %s\n%s: %s\n%s: %s\n%s: %s\n"
             # "%s: %s (%s)\n"
             "GDAL: %s\n"
             "PROJ: %s\n"
@@ -1690,7 +1678,7 @@ class GMFrame(wx.Frame):
 
         if not haveIClass:
             GError(
-                _('Unable to launch "Supervised Classification Tool".\n\n' "Reason: %s")
+                _('Unable to launch "Supervised Classification Tool".\n\nReason: %s')
                 % errMsg
             )
             return
@@ -1985,7 +1973,7 @@ class GMFrame(wx.Frame):
     def AddOrUpdateMap(self, mapName, ltype):
         """Add map layer or update"""
         # start new map display if no display is available
-        if ltype not in ["raster", "raster_3d", "vector"]:
+        if ltype not in {"raster", "raster_3d", "vector"}:
             GError(parent=self, message=_("Unsupported map layer type <%s>.") % ltype)
             return
 
@@ -1993,8 +1981,8 @@ class GMFrame(wx.Frame):
             self.AddMaps([mapName], ltype, check=True)
         else:
             display = self.GetMapDisplay()
-            mapLayers = map(
-                lambda x: x.GetName(), display.GetMap().GetListOfLayers(ltype=ltype)
+            mapLayers = (
+                x.GetName() for x in display.GetMap().GetListOfLayers(ltype=ltype)
             )
             if mapName in mapLayers:
                 display.GetWindow().UpdateMap(render=True)
@@ -2212,8 +2200,7 @@ class GMFrame(wx.Frame):
         # redraw map if auto-rendering is enabled
         # seems little too low level for this place
         # no redraw when Render is unchecked
-        if mapdisp.IsAutoRendered():
-            mapdisp.GetMapWindow().UpdateMap(render=False)
+        mapdisp.GetMapWindow().UpdateMap(render=False)
 
     def OnDeleteLayer(self, event):
         """Remove selected map layer from the current layer Tree"""
@@ -2234,12 +2221,12 @@ class GMFrame(wx.Frame):
 
             if len(layerName) > 2:  # <>
                 message = (
-                    _("Do you want to remove map layer(s)\n%s\n" "from layer tree?")
+                    _("Do you want to remove map layer(s)\n%s\nfrom layer tree?")
                     % layerName
                 )
             else:
                 message = _(
-                    "Do you want to remove selected map layer(s) " "from layer tree?"
+                    "Do you want to remove selected map layer(s) from layer tree?"
                 )
 
             dlg = wx.MessageDialog(
@@ -2349,13 +2336,12 @@ class GMFrame(wx.Frame):
         )
         if limitText:
             message += "\n\n%s" % _(limitText)
-        dlg = wx.MessageDialog(
+        return wx.MessageDialog(
             parent=self,
             message=message,
             caption=_("Constrain map to region geometry?"),
             style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
         )
-        return dlg
 
     def _onMapsetWatchdog(self, map_path, map_dest):
         """Current mapset watchdog event handler

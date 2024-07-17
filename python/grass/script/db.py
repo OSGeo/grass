@@ -66,7 +66,7 @@ def db_describe(table, env=None, **args):
         if key.startswith("Column "):
             n = int(key.split(" ")[1])
             cols.insert(n, f[1:])
-        elif key in ["ncols", "nrows"]:
+        elif key in {"ncols", "nrows"}:
             result[key] = int(f[1])
         else:
             result[key] = f[1:]
@@ -191,7 +191,7 @@ def db_select(sql=None, filename=None, table=None, env=None, **args):
         fatal(_("Fetching data failed"))
 
     ofile = open(fname)
-    result = [tuple(x.rstrip(os.linesep).split(args["sep"])) for x in ofile.readlines()]
+    result = [tuple(x.rstrip(os.linesep).split(args["sep"])) for x in ofile]
     ofile.close()
     try_remove(fname)
 
@@ -238,7 +238,7 @@ def db_begin_transaction(driver):
 
     :return: SQL command as string
     """
-    if driver in ("sqlite", "pg"):
+    if driver in {"sqlite", "pg"}:
         return "BEGIN"
     if driver == "mysql":
         return "START TRANSACTION"
@@ -250,6 +250,6 @@ def db_commit_transaction(driver):
 
     :return: SQL command as string
     """
-    if driver in ("sqlite", "pg", "mysql"):
+    if driver in {"sqlite", "pg", "mysql"}:
         return "COMMIT"
     return ""

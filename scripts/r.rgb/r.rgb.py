@@ -41,18 +41,18 @@
 # % required: red, green, blue
 # %end
 
-import grass.script as gscript
+import grass.script as gs
 
 
 def main():
-    options, unused = gscript.parser()
+    options, unused = gs.parser()
     input = options["input"]
     red = options["red"]
     green = options["green"]
     blue = options["blue"]
 
-    if not gscript.find_file(input)["file"]:
-        gscript.fatal(_("Raster map <%s> not found") % input)
+    if not gs.find_file(input)["file"]:
+        gs.fatal(_("Raster map <%s> not found") % input)
 
     expressions = []
     maps = []
@@ -66,11 +66,11 @@ def main():
         expressions.append("%s = b#${input}" % blue)
         maps.append(blue)
     expr = ";".join(expressions)
-    gscript.mapcalc(expr, input=input)
+    gs.mapcalc(expr, input=input)
 
     for name in maps:
-        gscript.run_command("r.colors", map=name, color="grey255")
-        gscript.raster_history(name)
+        gs.run_command("r.colors", map=name, color="grey255")
+        gs.raster_history(name)
 
 
 if __name__ == "__main__":
