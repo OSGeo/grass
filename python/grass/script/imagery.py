@@ -18,8 +18,6 @@ for details.
 .. sectionauthor:: Stefan Blumentrath
 """
 
-from grass.exceptions import CalledModuleError
-
 from .core import read_command, warning, fatal
 from .raster import raster_info
 
@@ -81,26 +79,23 @@ def group_to_dict(
     :rtype: dict
     """
     group_dict = {}
-    try:
-        maps_in_group = (
-            read_command(
-                "i.group",
-                group=imagery_group_name,
-                subgroup=subgroup,
-                flags="g",
-                quiet=True,
-                env=env,
-            )
-            .strip()
-            .split()
+    maps_in_group = (
+        read_command(
+            "i.group",
+            group=imagery_group_name,
+            subgroup=subgroup,
+            flags="g",
+            quiet=True,
+            env=env,
         )
-    except CalledModuleError as error:
-        raise error
+        .strip()
+        .split()
+    )
 
-    if dict_keys not in ["indices", "map_names", "semantic_labels"]:
+    if dict_keys not in {"indices", "map_names", "semantic_labels"}:
         raise ValueError(f"Invalid dictionary keys <{dict_keys}> requested")
 
-    if dict_values not in ["indices", "map_names", "semantic_labels", "metadata"]:
+    if dict_values not in {"indices", "map_names", "semantic_labels", "metadata"}:
         raise ValueError(f"Invalid dictionary values <{dict_values}> requested")
 
     if subgroup and not maps_in_group:
@@ -114,7 +109,7 @@ def group_to_dict(
         raster_map_info = None
         # Get raster metadata if needed
         if (
-            dict_values in ["semantic_labels", "metadata"]
+            dict_values in {"semantic_labels", "metadata"}
             or dict_keys == "semantic_labels"
         ):
             raster_map_info = raster_info(raster_map, env=env)
