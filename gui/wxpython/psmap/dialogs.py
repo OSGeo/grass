@@ -891,7 +891,7 @@ class MapDialog(PsmapDialog):
                         self.mPanel.drawMap.SetValue(True)
                     else:
                         self.mPanel.drawMap.SetValue(False)
-            else:
+            else:  # noqa: PLR5501
                 if "vector" in self.parent.openDialogs:
                     found = False
                     for each in self.parent.openDialogs["vector"].vPanel.vectorList:
@@ -2053,9 +2053,8 @@ class VectorPanel(Panel):
                 vLayer["label"] = item[4]
                 vLayer["lpos"] = item[3]
 
-        else:
-            if self.id in self.instruction:
-                del self.instruction[self.id]
+        elif self.id in self.instruction:
+            del self.instruction[self.id]
 
         if "map" in self.parent.parent.openDialogs:
             self.parent.parent.openDialogs["map"].updateDialog()
@@ -4904,13 +4903,12 @@ class ScalebarDialog(PsmapDialog):
         unitName = self.unitConv.findName(self.scalebarDict["unitsLength"])
         if unitName:
             self.unitsLength.SetStringSelection(unitName)
-        else:
-            if self.scalebarDict["unitsLength"] == "auto":
-                self.unitsLength.SetSelection(0)
-            elif self.scalebarDict["unitsLength"] == "nautmiles":
-                self.unitsLength.SetStringSelection(
-                    self.unitConv.findName("nautical miles")
-                )
+        elif self.scalebarDict["unitsLength"] == "auto":
+            self.unitsLength.SetSelection(0)
+        elif self.scalebarDict["unitsLength"] == "nautmiles":
+            self.unitsLength.SetStringSelection(
+                self.unitConv.findName("nautical miles")
+            )
         self.unitsHeight.SetStringSelection(
             self.unitConv.findName(self.scalebarDict["unitsHeight"])
         )

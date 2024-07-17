@@ -264,14 +264,13 @@ class Layer:
         """
         if fullyQualified:
             return self.name
-        else:
-            if "@" in self.name:
-                return {
-                    "name": self.name.split("@")[0],
-                    "mapset": self.name.split("@")[1],
-                }
-            else:
-                return {"name": self.name, "mapset": ""}
+
+        if "@" in self.name:
+            return {
+                "name": self.name.split("@")[0],
+                "mapset": self.name.split("@")[1],
+            }
+        return {"name": self.name, "mapset": ""}
 
     def GetRenderedSize(self):
         """Get currently rendered size of layer as tuple, None if not rendered"""

@@ -152,7 +152,6 @@ ignore = [
     "FBT002",  # boolean-default-value-positional-argument
     "FBT003",  # boolean-positional-value-in-call
     "FURB118", # reimplemented-operator
-    "FURB152", # math-constant
     "I001",    # unsorted-imports
     "ISC003",  # explicit-string-concatenation
     "PERF203", # try-except-in-loop
@@ -184,7 +183,6 @@ ignore = [
     "PLR1704", # redefined-argument-from-local
     "PLR1733", # unnecessary-dict-index-lookup
     "PLR2004", # magic-value-comparison
-    "PLR5501", # collapsible-else-if
     "PLR6104", # non-augmented-assignment
     "PLR6201", # literal-membership
     "PLR6301", # no-self-use
@@ -353,7 +351,7 @@ ignore = [
 "gui/wxpython/web_services/dialogs.py" = ["INT003"]
 "gui/wxpython/web_services/widgets.py" = ["INT003"]
 "gui/wxpython/wxgui.py" = ["INT002"]
-"gui/wxpython/wxplot/profile.py" = ["NPY001"]
+"lib/imagery/testsuite/test_imagery_sigsetfile.py" = ["FURB152"]
 "lib/init/grass.py" = ["INT003"]
 "python/grass/__init__.py" = ["PYI056"]
 "python/grass/exp*/tests/grass_script_mapset_session_test.py" = ["SIM117"]
@@ -365,14 +363,11 @@ ignore = [
 "python/grass/jupyter/tests/reprojection_renderer_test.py" = ["PT013"]
 "python/grass/jupyter/testsuite/interactivemap_test.py" = ["PGH004"]
 "python/grass/jupyter/testsuite/map_test.py" = ["PGH004"]
-"python/grass/pygrass/raster/__init__.py" = ["NPY002"]
 "python/grass/pygrass/raster/category.py" = ["INT002"]
-"python/grass/pygrass/raster/testsuite/test_numpy.py" = ["NPY002"]
 "python/grass/pygrass/vector/__init__.py" = ["INT003"]
 "python/grass/pygrass/vector/geometry.py" = ["PYI024"]
 "python/grass/pygrass/vector/sql.py" = ["FLY002"]
-"python/grass/pygrass/vector/testsuite/test_table.py" = ["NPY002", "PLW0108"]
-"python/grass/pygrass/vector/testsuite/test_vector3d.py" = ["NPY002"]
+"python/grass/pygrass/vector/testsuite/test_table.py" = ["PLW0108"]
 "python/grass/script/raster.py" = ["INT003"]
 "python/grass/temporal/abstract_space_time_dataset.py" = ["INT003"]
 "python/grass/temporal/aggregation.py" = ["INT003"]

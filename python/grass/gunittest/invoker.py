@@ -246,11 +246,10 @@ class GrassTestFilesInvoker:
         with open(stderr_path, "w") as stderr_file:
             if type(stderr) == "bytes":
                 stderr_file.write(decode(stderr))
+            elif isinstance(stderr, str):
+                stderr_file.write(stderr)
             else:
-                if isinstance(stderr, str):
-                    stderr_file.write(stderr)
-                else:
-                    stderr_file.write(stderr.encode("utf8"))
+                stderr_file.write(stderr.encode("utf8"))
         self._file_anonymizer.anonymize([stdout_path, stderr_path])
 
         test_summary = update_keyval_file(

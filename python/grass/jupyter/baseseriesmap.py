@@ -74,12 +74,11 @@ class BaseSeriesMap:
         def wrapper(**kwargs):
             if not self._baseseries_added:
                 self._base_layer_calls.append((grass_module, kwargs))
+            elif self._base_calls is not None:
+                for row in self._base_calls:
+                    row.append((grass_module, kwargs))
             else:
-                if self._base_calls is not None:
-                    for row in self._base_calls:
-                        row.append((grass_module, kwargs))
-                else:
-                    self._base_calls.append((grass_module, kwargs))
+                self._base_calls.append((grass_module, kwargs))
 
         return wrapper
 

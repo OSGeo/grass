@@ -385,9 +385,8 @@ class ExtensionTreeModelBuilder:
                     mainNode = self.mainNodes[self._expandPrefix(prefix)]
                     currentNode = self.model.AppendNode(parent=mainNode, label=value)
                     currentNode.data = {"command": value}
-                else:
-                    if currentNode is not None:
-                        currentNode.data[key] = value
+                elif currentNode is not None:
+                    currentNode.data[key] = value
             else:
                 try:
                     prefix, name = line.strip().split(".", 1)

@@ -72,18 +72,17 @@ def parse_options(lines, startswith="Opt"):
                 res[key] = [
                     default,
                 ]
-            else:
-                if key is not None:
-                    if key not in res:
-                        res[key] = []
-                    start, end = 0, -1
-                    if line.startswith("_("):
-                        start = 2
-                    if line.endswith(");"):
-                        end = -3
-                    elif line.endswith(";"):
-                        end = -2
-                    res[key].append(line[start:end])
+            elif key is not None:
+                if key not in res:
+                    res[key] = []
+                start, end = 0, -1
+                if line.startswith("_("):
+                    start = 2
+                if line.endswith(");"):
+                    end = -3
+                elif line.endswith(";"):
+                    end = -2
+                res[key].append(line[start:end])
         # pprint(glines)
         # pprint(res)
         return res

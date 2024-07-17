@@ -120,7 +120,7 @@ class AnimationController(wx.EvtHandler):
             if self.timer.IsRunning():
                 self.timer.Stop()
                 self.DisableSliderIfNeeded()
-        else:
+        else:  # noqa: PLR5501
             if not self.timer.IsRunning():
                 self.timer.Start(int(self.timeTick))
                 self.DisableSliderIfNeeded()
@@ -555,9 +555,8 @@ class AnimationController(wx.EvtHandler):
                     if frameId is not None:
                         bitmap = self.bitmapProvider.GetBitmap(frameId)
                         lastBitmaps[i] = bitmap
-                    else:
-                        if i not in lastBitmaps:
-                            lastBitmaps[i] = wx.NullBitmap()
+                    elif i not in lastBitmaps:
+                        lastBitmaps[i] = wx.NullBitmap()
                 else:
                     bitmap = self.bitmapProvider.GetBitmap(frameId)
                     lastBitmaps[i] = bitmap
@@ -593,17 +592,15 @@ class AnimationController(wx.EvtHandler):
                             "dash": "\u2013",
                             "to": timeLabel[1],
                         }
+                    elif (
+                        self.temporalManager.GetTemporalType() == TemporalType.ABSOLUTE
+                    ):
+                        text = timeLabel[0]
                     else:
-                        if (
-                            self.temporalManager.GetTemporalType()
-                            == TemporalType.ABSOLUTE
-                        ):
-                            text = timeLabel[0]
-                        else:
-                            text = _("%(start)s %(unit)s") % {
-                                "start": timeLabel[0],
-                                "unit": timeLabel[2],
-                            }
+                        text = _("%(start)s %(unit)s") % {
+                            "start": timeLabel[0],
+                            "unit": timeLabel[2],
+                        }
 
                     decImage = RenderText(
                         text, decoration["font"], bgcolor, fgcolor
