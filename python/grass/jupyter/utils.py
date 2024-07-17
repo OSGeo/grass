@@ -159,13 +159,54 @@ def style_table(html_content):
     return f"{css}{html_content}"
 
 
+def format_nested_table(attributes):
+    """
+    Format nested attributes into an HTML table row.
+
+    :param attributes: Dictionary of nested attributes to format.
+
+    :return: str: HTML formatted string containing rows for each non-empty attribute.
+    """
+    nested_table = ""
+    for sub_key, sub_value in attributes.items():
+        if sub_value:
+            nested_table += f"""
+            <tr>
+            <td>{sub_key}</td>
+            <td>{sub_value}</td>
+            </tr>
+            """
+    return nested_table
+
+
+def format_regular_output(items):
+    """
+    Format attributes into an HTML table.
+
+    :param items: List of key-value pairs (tuples) to process.
+
+    :return: str: HTML formatted string containing rows for specified attributes.
+    """
+    regular_output = ""
+    for key, value in items:
+        if key in {"Category", "Layer"}:
+            regular_output += f"""
+            <tr>
+            <td>{key}</td>
+            <td>{value}</td>
+            </tr>
+            """
+    return regular_output
+
+
 def query_raster(coord, raster_list):
-    """Queries Raster
+    """
+    Queries raster data at specified coordinates.
 
-    :param coord: coordinates given as tuple
-    :param list raster_list: list of raster names
+    :param coord: Coordinates given as a tuple (latitude, longitude).
+    :param list raster_list: List of raster names to query.
 
-    :return str: output of raster query results
+    :return: str: HTML formatted string containing the results of the raster queries.
     """
     output_list = ["""<table>"""]
 
@@ -174,14 +215,19 @@ def query_raster(coord, raster_list):
 
         output = f"""<tr>
         <th colspan='2'>Raster: {raster}</th></tr>"""
-        if raster in raster_output[0] and "value" in raster_output[0][raster]:
-            value = raster_output[0][raster]["value"]
-            output += f"""
-            <tr>
-            <td>Value</td>
-            <td>{value}</td>
-            </tr>
-            """
+
+        if raster in raster_output[0]:
+            if "value" in raster_output[0][raster]:
+                value = raster_output[0][raster]["value"]
+                output += f"""
+                <tr>
+                <td>Value</td>
+                <td>{value}</td>
+                </tr>
+                """
+            items = raster_output[0][raster].items()
+            formatted_output = format_regular_output(items)
+            output += formatted_output
 
         output_list.append(output)
 
@@ -193,62 +239,55 @@ def query_raster(coord, raster_list):
     return style_table(final_output)
 
 
-def query_vector(coord, vector_list, distance):
-    """Queries Vector
-
-    :param coord: coordinates given as tuple
-    :param list vector_list: list of vector names
-
-    :return str: output of vector query results
+def process_vector_output(vector, coord, distance):
     """
-    output_list = ["""<table>"""]
+    Process the output of a vector query.
 
-    for vector in vector_list:  # pylint: disable=too-many-nested-blocks
-        vector_output = gs.vector.vector_what(
-            map=vector, coord=coord, distance=distance
-        )
+    :param vector: Name of the vector map to query.
+    :param coord: Coordinates given as a tuple for querying.
+    :param distance: Distance within which to query the vector attributes.
 
-        if len(vector_output[0]) > 2:
-            output_list.append(
-                f"""
-                <tr>
-                <th colspan='2'>
-                Vector: {vector}
-                </th>
-                </tr>
-                """
-            )
+    :return: str: HTML formatted string containing the vector output, including regular
+                   attributes and any nested attribute tables.
+    """
+    vector_output = gs.vector.vector_what(map=vector, coord=coord, distance=distance)
+    if len(vector_output[0]) <= 2:
+        return ""
 
-            items = list(vector_output[0].items())
-            attributes_output = ""
-            regular_output = ""
+    items = list(vector_output[0].items())
+    attributes_output = ""
+    regular_output = format_regular_output(items)
 
-            for key, value in items:
-                if key in {"Category", "Layer", "Attributes"}:
-                    if key == "Attributes" and isinstance(value, dict):
-                        nested_table = ""
-                        for sub_key, sub_value in value.items():
-                            if sub_value:
-                                nested_table += f"""
-                                <tr>
-                                <td>{sub_key}</td>
-                                <td>{sub_value}</td>
-                                </tr>
-                                """
-                        attributes_output += nested_table
-                    else:
-                        regular_output += f"""
-                        <tr>
-                        <td>{key}</td>
-                        <td>{value}</td>
-                        </tr>
-                        """
+    for key, value in items:
+        if key == "Attributes" and isinstance(value, dict):
+            attributes_output = format_nested_table(value)
 
-            if attributes_output:
-                output_list.append(attributes_output)
+    vector_html = f"""
+    <tr>
+    <th colspan='2'>
+    Vector: {vector}
+    </th>
+    </tr>
+    """
+    return vector_html + attributes_output + regular_output
 
-            if regular_output:
-                output_list.append(regular_output)
+
+def query_vector(coord, vector_list, distance):
+    """
+    Queries vector data at specified coordinates.
+
+    :param coord: Coordinates given as a tuple (latitude, longitude).
+    :param list vector_list: List of vector names to query.
+    :param distance: Distance within which to query the vector attributes.
+
+    :return: str: HTML formatted string containing the results of the vector queries.
+    """
+    output_list = ["<table>"]
+
+    for vector in vector_list:
+        vector_html = process_vector_output(vector, coord, distance)
+        if vector_html:
+            output_list.append(vector_html)
 
     if len(output_list) == 1:
         return ""
