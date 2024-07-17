@@ -5,7 +5,7 @@ build_program_in_subdir(m.measure DEPENDS grass_gis)
 build_program_in_subdir(m.transform DEPENDS grass_gis grass_imagery
                         grass_raster grass_vector LIBM)
 
-if(WITH_OPENGL)
+if(TARGET grass_ogsf)
   build_program_in_subdir(
     m.nviz.image
     DEPENDS
@@ -19,4 +19,4 @@ if(WITH_OPENGL)
 
   build_program_in_subdir(m.nviz.script DEPENDS grass_display grass_raster
                           grass_gis LIBM)
-endif(WITH_OPENGL)
+endif(TARGET grass_ogsf)

@@ -33,6 +33,7 @@ build_library_in_subdir(
   grass_vector
   grass_qtree
   grass_interpdata
+  GDAL
   LIBM
   OPTIONAL_DEPENDS
   OPENMP

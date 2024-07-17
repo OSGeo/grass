@@ -18,7 +18,7 @@ set(MODULES
     rowio
     temporal)
 
-if(WITH_OPENGL)
+if(TARGET grass_ogsf)
   list(APPEND MODULES ogsf nviz)
 endif()
 

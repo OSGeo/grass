@@ -81,7 +81,7 @@ if(WITH_DOCS)
           DESTINATION ${GRASS_INSTALL_DOCDIR})
 endif()
 build_program_in_subdir(d.grid DEPENDS grass_gis grass_symb grass_gproj
-                        grass_display LIBM)
+                        grass_display GDAL LIBM)
 build_program_in_subdir(d.his DEPENDS grass_gis grass_display grass_raster)
 build_program_in_subdir(d.histogram DEPENDS grass_gis grass_display
                         grass_raster LIBM)
@@ -103,7 +103,7 @@ if(WITH_DOCS)
   install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/northarrows
           DESTINATION ${GRASS_INSTALL_DOCDIR})
 endif()
-build_program_in_subdir(d.path DEPENDS grass_gis grass_display grass_vector)
+build_program_in_subdir(d.path DEPENDS grass_gis grass_display grass_vector GDAL)
 build_program_in_subdir(d.profile DEPENDS grass_gis grass_display grass_raster LIBM)
 build_program_in_subdir(d.rast DEPENDS grass_gis grass_display grass_raster)
 build_program_in_subdir(d.rast.arrow DEPENDS grass_gis grass_raster
@@ -125,6 +125,7 @@ build_program_in_subdir(
   grass_raster
   grass_symb
   grass_vector
+  GDAL
   LIBM)
 build_program_in_subdir(
   d.vect.chart
@@ -136,6 +137,7 @@ build_program_in_subdir(
   grass_gis
   grass_symb
   grass_vector
+  GDAL
   LIBM)
 build_program_in_subdir(
   d.vect.thematic
@@ -147,5 +149,6 @@ build_program_in_subdir(
   grass_display
   grass_gis
   grass_symb
-  grass_vector)
-build_program_in_subdir(d.where DEPENDS grass_gis grass_display grass_gproj)
+  grass_vector
+  GDAL)
+build_program_in_subdir(d.where DEPENDS grass_gis grass_display grass_gproj GDAL)

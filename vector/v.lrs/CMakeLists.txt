@@ -19,6 +19,7 @@ build_program_in_subdir(
   grass_dbmibase
   grass_dbmiclient
   grass_dbmidriver
+  GDAL
   LIBM)
 
 build_program_in_subdir(
@@ -30,6 +31,7 @@ build_program_in_subdir(
   grass_dbmibase
   grass_dbmiclient
   grass_dbmidriver
+  GDAL
   LIBM)
 
 build_program_in_subdir(
@@ -41,6 +43,7 @@ build_program_in_subdir(
   grass_dbmibase
   grass_dbmiclient
   grass_dbmidriver
+  GDAL
   LIBM)
 
 build_program_in_subdir(
@@ -51,4 +54,5 @@ build_program_in_subdir(
   grass_gis
   grass_dbmibase
   grass_dbmiclient
-  grass_dbmidriver)
+  grass_dbmidriver
+  GDAL)

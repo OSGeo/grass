@@ -146,7 +146,7 @@ add_subdirectory(fonts)
 
 add_subdirectory(vector)
 
-build_library_in_subdir(imagery DEPENDS grass_gis grass_vector grass_raster)
+build_library_in_subdir(imagery DEPENDS grass_gis grass_vector grass_raster GDAL)
 
 build_library_in_subdir(cluster DEPENDS grass_imagery grass_gis grass_raster)
 
@@ -168,6 +168,7 @@ build_library_in_subdir(
   grass_dbmidriver
   grass_gmath
   grass_segment
+  GDAL
   HEADERS
   "lidar.h")
 
@@ -181,7 +182,8 @@ build_program_in_subdir(
   DEPENDS
   grass_gis
   grass_raster3d
-  grass_raster)
+  grass_raster
+  GDAL)
 
 build_library_in_subdir(
   gpde
@@ -217,7 +219,7 @@ build_library_in_subdir(stats DEPENDS grass_gis grass_raster)
 
 build_library_in_subdir(arraystats DEPENDS grass_gis)
 
-if(WITH_OPENGL)
+if(WITH_OPENGL AND OPENGL_GLU_FOUND AND OpenGL_GLX_FOUND)
   build_library_in_subdir(
     ogsf
     DEPENDS
@@ -229,6 +231,7 @@ if(WITH_OPENGL)
     grass_raster
     grass_raster3d
     grass_vector
+    GDAL
     OPENGL
     TIFF)
 
@@ -250,7 +253,7 @@ add_subdirectory(temporal)
 build_library_in_subdir(iostream SRC_REGEX "*.cpp" DEPENDS grass_gis)
 
 build_library_in_subdir(manage DEPENDS grass_gis grass_raster grass_vector
-                        grass_raster3d)
+                        grass_raster3d GDAL)
 file(COPY manage/element_list DESTINATION ${OUTDIR}/${GRASS_INSTALL_ETCDIR})
 install(FILES ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/element_list
         DESTINATION ${GRASS_INSTALL_ETCDIR})

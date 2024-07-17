@@ -161,6 +161,7 @@ build_program_in_subdir(
   grass_vector
   grass_bitmap
   grass_dig2
+  GDAL
   LIBM)
 
 build_program_in_subdir(r.category DEPENDS grass_gis grass_raster)
@@ -188,10 +189,11 @@ build_program_in_subdir(
   grass_dbmibase
   grass_dbmiclient
   grass_dbmidriver
+  GDAL
   LIBM)
 
 build_program_in_subdir(r.cost DEPENDS grass_gis grass_raster grass_segment
-                        grass_vector LIBM)
+                        grass_vector GDAL LIBM)
 
 build_program_in_subdir(r.covar DEPENDS grass_gis grass_raster LIBM)
 
@@ -226,6 +228,7 @@ build_program_in_subdir(
   grass_segment
   grass_vector
   grass_bitmap
+  GDAL
   LIBM)
 
 build_program_in_subdir(r.geomorphon DEPENDS grass_gis grass_raster grass_gmath LIBM)
@@ -238,7 +241,7 @@ build_program_in_subdir(r.gwflow DEPENDS grass_gis grass_raster grass_gpde
 build_program_in_subdir(r.his DEPENDS grass_gis grass_raster grass_gproj)
 
 build_program_in_subdir(r.horizon DEPENDS grass_gis grass_raster grass_gproj
-                        grass_parson LIBM)
+                        grass_parson GDAL LIBM)
 
 build_program_in_subdir(r.in.ascii DEPENDS grass_gis grass_raster)
 
@@ -270,6 +273,7 @@ build_program_in_subdir(
   grass_gmath
   grass_segment
   grass_gproj
+  GDAL
   LIBM
   PRIMARY_DEPENDS
   PDAL)
@@ -288,7 +292,7 @@ build_program_in_subdir(r.info TEST_SOURCES "test_r_info.py" DEPENDS grass_gis L
 
 build_program_in_subdir(r.kappa DEPENDS grass_gis grass_raster LIBM)
 
-build_program_in_subdir(r.latlong DEPENDS grass_gis grass_raster grass_gproj)
+build_program_in_subdir(r.latlong DEPENDS grass_gis grass_raster grass_gproj GDAL)
 
 build_program_in_subdir(r.lake DEPENDS grass_gis grass_raster)
 
@@ -374,7 +378,7 @@ build_program_in_subdir(
 build_program_in_subdir(r.patch DEPENDS grass_gis grass_raster OPTIONAL_DEPENDS
                         OPENMP)
 
-build_program_in_subdir(r.path DEPENDS grass_gis grass_raster grass_vector)
+build_program_in_subdir(r.path DEPENDS grass_gis grass_raster grass_vector GDAL)
 
 build_program_in_subdir(r.profile DEPENDS grass_gis grass_raster grass_parson LIBM)
 
@@ -384,6 +388,7 @@ build_program_in_subdir(
   grass_gis
   grass_raster
   grass_gproj
+  GDAL
   LIBM
   OPTIONAL_DEPENDS
   OPENMP)
@@ -401,6 +406,7 @@ build_program_in_subdir(
   grass_dbmibase
   grass_dbmiclient
   grass_dbmidriver
+  GDAL
   LIBM)
 
 build_program_in_subdir(r.random.cells DEPENDS grass_gis grass_raster LIBM)
@@ -411,7 +417,7 @@ build_program_in_subdir(r.reclass DEPENDS grass_gis grass_raster grass_manage)
 
 build_program_in_subdir(r.recode DEPENDS grass_gis grass_raster)
 
-build_program_in_subdir(r.region DEPENDS grass_gis grass_raster grass_vector)
+build_program_in_subdir(r.region DEPENDS grass_gis grass_raster grass_vector GDAL)
 
 build_program_in_subdir(r.regression.line DEPENDS grass_gis grass_raster LIBM)
 
@@ -428,6 +434,7 @@ build_program_in_subdir(
   grass_vector
   grass_segment
   grass_lidar
+  GDAL
   LIBM)
 
 build_program_in_subdir(r.resamp.filter DEPENDS grass_gis grass_raster LIBM
@@ -444,7 +451,9 @@ build_program_in_subdir(
   grass_gmath
   grass_interpfl
   grass_interpdata
-  grass_qtree)
+  grass_qtree
+  GDAL)
+
 
 build_program_in_subdir(r.resamp.stats DEPENDS grass_gis grass_raster
                         grass_stats LIBM)
@@ -511,6 +520,7 @@ build_program_in_subdir(
   grass_dbmibase
   grass_dbmiclient
   grass_dbmidriver
+  GDAL
   LIBM)
 
 build_program_in_subdir(
@@ -520,13 +530,14 @@ build_program_in_subdir(
   grass_gmath
   grass_raster
   grass_gproj
+  GDAL
   LIBM
   OPTIONAL_DEPENDS
   OPENMP)
 
-build_program_in_subdir(r.sunhours DEPENDS grass_gis grass_raster grass_gproj LIBM)
+build_program_in_subdir(r.sunhours DEPENDS grass_gis grass_raster grass_gproj GDAL LIBM)
 
-build_program_in_subdir(r.sunmask DEPENDS grass_gis grass_raster grass_gproj LIBM)
+build_program_in_subdir(r.sunmask DEPENDS grass_gis grass_raster grass_gproj GDAL LIBM)
 
 build_program_in_subdir(r.support DEPENDS grass_gis grass_raster)
 
@@ -574,7 +585,8 @@ build_program_in_subdir(
   grass_vector
   grass_dbmibase
   grass_dbmiclient
-  grass_dbmidriver)
+  grass_dbmidriver
+  GDAL)
 
 build_program_in_subdir(r.topidx DEPENDS grass_gis grass_raster LIBM)
 
@@ -596,15 +608,16 @@ build_program_in_subdir(
   grass_vector
   grass_dbmibase
   grass_dbmiclient
-  grass_dbmidriver)
+  grass_dbmidriver
+  GDAL)
 
 build_program_in_subdir(r.walk DEPENDS grass_gis grass_raster grass_segment
-                        grass_vector LIBM)
+                        grass_vector GDAL LIBM)
 
 build_program_in_subdir(r.water.outlet DEPENDS grass_gis grass_raster)
 
 build_program_in_subdir(r.what DEPENDS grass_gis grass_raster grass_vector
-                        grass_parson)
+                        grass_parson GDAL)
 
 build_program_in_subdir(r.what.color DEPENDS grass_gis grass_raster)
 

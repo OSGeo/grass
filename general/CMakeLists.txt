@@ -35,6 +35,7 @@ build_program_in_subdir(
   grass_raster3d
   grass_gmath
   PROJ
+  GDAL
   LIBM)
 
 build_program_in_subdir(g.rename DEPENDS grass_gis grass_manage grass_raster)
@@ -72,7 +73,8 @@ build_program_in_subdir(
   grass_manage
   grass_raster
   grass_raster3d
-  grass_vector)
+  grass_vector
+  GDAL)
 add_dependencies(g.list cell vector)
 
 build_program_in_subdir(g.remove DEPENDS grass_gis grass_manage grass_raster)

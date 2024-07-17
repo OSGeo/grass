@@ -42,7 +42,8 @@ build_library_in_subdir(
   grass_vector
   grass_dbmibase
   grass_dbmiclient
-  grass_dbmidriver)
+  grass_dbmidriver
+  GDAL)
 
 build_library_in_subdir(
   neta
@@ -54,7 +55,8 @@ build_library_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_dgl
-  grass_vector)
+  grass_vector
+  GDAL)
 
 if(WITH_DOCS)
   generate_html(TARGET grass_vector NAME vectorascii)

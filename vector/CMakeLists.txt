@@ -126,13 +126,14 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_vector
+  GDAL
   LIBM)
 
-build_program_in_subdir(v.build DEPENDS grass_gis grass_vector)
+build_program_in_subdir(v.build DEPENDS grass_gis grass_vector GDAL)
 
-build_program_in_subdir(v.build.polylines DEPENDS grass_gis grass_vector)
+build_program_in_subdir(v.build.polylines DEPENDS grass_gis grass_vector GDAL)
 
-build_program_in_subdir(v.category DEPENDS grass_gis grass_vector)
+build_program_in_subdir(v.category DEPENDS grass_gis grass_vector GDAL)
 
 build_program_in_subdir(
   v.class
@@ -142,11 +143,12 @@ build_program_in_subdir(
   grass_dbmiclient
   grass_dbmidriver
   grass_gis
-  grass_vector)
+  grass_vector
+  GDAL)
 
-build_program_in_subdir(v.clean DEPENDS grass_gis grass_vector LIBM)
+build_program_in_subdir(v.clean DEPENDS grass_gis grass_vector GDAL LIBM)
 
-build_program_in_subdir(v.cluster DEPENDS grass_btree2 grass_gis grass_vector LIBM)
+build_program_in_subdir(v.cluster DEPENDS grass_btree2 grass_gis grass_vector GDAL LIBM)
 
 build_program_in_subdir(
   v.colors
@@ -157,7 +159,8 @@ build_program_in_subdir(
   grass_gis
   grass_raster
   grass_raster3d
-  grass_vector)
+  grass_vector
+  GDAL)
 
 build_program_in_subdir(
   v.colors.out
@@ -167,7 +170,8 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_raster
-  grass_vector)
+  grass_vector
+  GDAL)
 
 build_program_in_subdir(
   v.db.connect
@@ -176,7 +180,8 @@ build_program_in_subdir(
   grass_dbmiclient
   grass_dbmidriver
   grass_gis
-  grass_vector)
+  grass_vector
+  GDAL)
 
 build_program_in_subdir(
   v.db.select
@@ -185,7 +190,8 @@ build_program_in_subdir(
   grass_dbmiclient
   grass_dbmidriver
   grass_gis
-  grass_vector)
+  grass_vector
+  GDAL)
 
 build_program_in_subdir(
   v.decimate
@@ -195,9 +201,10 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_raster
-  grass_vector)
+  grass_vector
+  GDAL)
 
-build_program_in_subdir(v.delaunay DEPENDS grass_gis grass_vector)
+build_program_in_subdir(v.delaunay DEPENDS grass_gis grass_vector GDAL)
 
 build_program_in_subdir(
   v.distance
@@ -208,9 +215,10 @@ build_program_in_subdir(
   grass_gis
   grass_gmath
   grass_vector
+  GDAL
   LIBM)
 
-build_program_in_subdir(v.drape DEPENDS grass_gis grass_raster grass_vector)
+build_program_in_subdir(v.drape DEPENDS grass_gis grass_raster grass_vector GDAL)
 
 build_program_in_subdir(
   v.edit
@@ -220,7 +228,8 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_vector
-  grass_vedit)
+  grass_vedit
+  GDAL)
 
 build_program_in_subdir(
   v.extract
@@ -231,6 +240,7 @@ build_program_in_subdir(
   grass_gis
   grass_gmath
   grass_vector
+  GDAL
   LIBM)
 
 build_program_in_subdir(
@@ -241,7 +251,8 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_raster
-  grass_vector)
+  grass_vector
+  GDAL)
 
 build_program_in_subdir(
   v.fill.holes
@@ -250,7 +261,8 @@ build_program_in_subdir(
   grass_dbmiclient
   grass_dbmidriver
   grass_gis
-  grass_vector)
+  grass_vector
+  GDAL)
 
 build_program_in_subdir(
   v.generalize
@@ -262,9 +274,10 @@ build_program_in_subdir(
   grass_dig2
   grass_gis
   grass_vector
+  GDAL
   LIBM)
 
-build_program_in_subdir(v.hull DEPENDS grass_gis grass_vector)
+build_program_in_subdir(v.hull DEPENDS grass_gis grass_vector GDAL)
 
 build_program_in_subdir(
   v.info
@@ -275,7 +288,8 @@ build_program_in_subdir(
   grass_dig2
   grass_gis
   grass_vector
-  grass_parson)
+  grass_parson
+  GDAL)
 
 build_program_in_subdir(
   v.in.ascii
@@ -284,7 +298,8 @@ build_program_in_subdir(
   grass_dbmiclient
   grass_dbmidriver
   grass_gis
-  grass_vector)
+  grass_vector
+  GDAL)
 
 build_program_in_subdir(
   v.in.db
@@ -294,6 +309,7 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_vector
+  GDAL
   LIBM)
 
 build_program_in_subdir(
@@ -304,6 +320,7 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_vector
+  GDAL
   LIBM)
 
 file(GLOB v_in_pdal_SOURCES "v.in.pdal/*.c" "v.in.pdal/main.cpp")
@@ -315,6 +332,7 @@ build_program_in_subdir(
   grass_gis
   grass_gproj
   grass_vector
+  GDAL
   LIBM
   PRIMARY_DEPENDS
   PDAL)
@@ -327,7 +345,8 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_raster
-  grass_vector)
+  grass_vector
+  GDAL)
 
 build_program_in_subdir(
   v.kcv
@@ -337,10 +356,11 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_vector
+  GDAL
   LIBM)
 
 build_program_in_subdir(v.kernel DEPENDS grass_gis grass_gmath grass_raster
-                        grass_vector LIBM)
+                        grass_vector GDAL LIBM)
 
 build_program_in_subdir(
   v.label
@@ -350,7 +370,8 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_display
   grass_gis
-  grass_vector)
+  grass_vector
+  GDAL)
 
 build_program_in_subdir(
   v.label.sa
@@ -363,11 +384,12 @@ build_program_in_subdir(
   grass_display
   grass_gis
   grass_vector
+  GDAL
   LIBM)
 
-build_program_in_subdir(v.proj DEPENDS grass_gis grass_gproj grass_vector LIBM)
+build_program_in_subdir(v.proj DEPENDS grass_gis grass_gproj grass_vector GDAL LIBM)
 
-build_program_in_subdir(v.profile DEPENDS grass_gis grass_vector)
+build_program_in_subdir(v.profile DEPENDS grass_gis grass_vector GDAL)
 
 add_subdirectory(v.lrs)
 
@@ -379,6 +401,7 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_vector
+  GDAL
   LIBM)
 
 build_program_in_subdir(
@@ -391,6 +414,7 @@ build_program_in_subdir(
   grass_raster
   grass_stats
   grass_vector
+  GDAL
   LIBM)
 
 build_program_in_subdir(
@@ -401,6 +425,7 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_vector
+  GDAL
   LIBM)
 
 build_program_in_subdir(
@@ -411,7 +436,8 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_dgl
   grass_gis
-  grass_vector)
+  grass_vector
+  GDAL)
 
 build_program_in_subdir(
   v.net.allpairs
@@ -421,9 +447,10 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_neta
-  grass_vector)
+  grass_vector
+  GDAL)
 
-build_program_in_subdir(v.net.bridge DEPENDS grass_gis grass_neta grass_vector)
+build_program_in_subdir(v.net.bridge DEPENDS grass_gis grass_neta grass_vector GDAL)
 
 build_program_in_subdir(
   v.net.centrality
@@ -434,7 +461,8 @@ build_program_in_subdir(
   grass_dgl
   grass_gis
   grass_neta
-  grass_vector)
+  grass_vector
+  GDAL)
 
 build_program_in_subdir(
   v.net.components
@@ -444,10 +472,11 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_neta
-  grass_vector)
+  grass_vector
+  GDAL)
 
 build_program_in_subdir(v.net.connectivity DEPENDS grass_gis grass_neta
-                        grass_vector)
+                        grass_vector GDAL)
 
 build_program_in_subdir(
   v.net.distance
@@ -458,7 +487,8 @@ build_program_in_subdir(
   grass_dgl
   grass_gis
   grass_neta
-  grass_vector)
+  grass_vector
+  GDAL)
 
 build_program_in_subdir(
   v.net.flow
@@ -468,7 +498,8 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_neta
-  grass_vector)
+  grass_vector
+  GDAL)
 
 build_program_in_subdir(
   v.net.iso
@@ -478,7 +509,8 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_dgl
   grass_gis
-  grass_vector)
+  grass_vector
+  GDAL)
 
 build_program_in_subdir(
   v.net.path
@@ -487,15 +519,16 @@ build_program_in_subdir(
   grass_dbmiclient
   grass_dbmidriver
   grass_gis
-  grass_vector)
+  grass_vector
+  GDAL)
 
 build_program_in_subdir(v.net.salesman DEPENDS grass_gis grass_neta
-                        grass_vector)
+                        grass_vector GDAL)
 
 build_program_in_subdir(v.net.spanningtree DEPENDS grass_gis grass_neta
-                        grass_vector)
+                        grass_vector GDAL)
 
-build_program_in_subdir(v.net.steiner DEPENDS grass_gis grass_neta grass_vector)
+build_program_in_subdir(v.net.steiner DEPENDS grass_gis grass_neta grass_vector GDAL)
 
 build_program_in_subdir(
   v.net.timetable
@@ -505,10 +538,11 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_neta
-  grass_vector)
+  grass_vector
+  GDAL)
 
 build_program_in_subdir(v.net.visibility DEPENDS grass_dgl grass_gis
-                        grass_vector)
+                        grass_vector GDAL)
 
 build_program_in_subdir(
   v.normal
@@ -519,13 +553,14 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_vector
+  GDAL
   LIBM)
 
-build_program_in_subdir(v.out.ascii DEPENDS grass_gis grass_vector)
+build_program_in_subdir(v.out.ascii DEPENDS grass_gis grass_vector GDAL)
 
-build_program_in_subdir(v.out.dxf DEPENDS grass_gis grass_vector)
+build_program_in_subdir(v.out.dxf DEPENDS grass_gis grass_vector GDAL)
 
-build_program_in_subdir(v.out.pov DEPENDS grass_gis grass_vector)
+build_program_in_subdir(v.out.pov DEPENDS grass_gis grass_vector GDAL)
 
 build_program_in_subdir(
   v.out.svg
@@ -534,7 +569,8 @@ build_program_in_subdir(
   grass_dbmiclient
   grass_dbmidriver
   grass_gis
-  grass_vector)
+  grass_vector
+  GDAL)
 
 build_program_in_subdir(
   v.out.vtk
@@ -543,7 +579,8 @@ build_program_in_subdir(
   grass_dbmiclient
   grass_dbmidriver
   grass_gis
-  grass_vector)
+  grass_vector
+  GDAL)
 
 build_program_in_subdir(
   v.outlier
@@ -555,6 +592,7 @@ build_program_in_subdir(
   grass_gmath
   grass_lidar
   grass_vector
+  GDAL
   LIBM)
 
 build_program_in_subdir(
@@ -564,9 +602,10 @@ build_program_in_subdir(
   grass_dbmiclient
   grass_dbmidriver
   grass_gis
-  grass_vector)
+  grass_vector
+  GDAL)
 
-build_program_in_subdir(v.parallel DEPENDS grass_gis grass_vector)
+build_program_in_subdir(v.parallel DEPENDS grass_gis grass_vector GDAL)
 
 build_program_in_subdir(
   v.patch
@@ -576,6 +615,7 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_vector
+  GDAL
   LIBM)
 
 build_program_in_subdir(
@@ -586,11 +626,12 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_vector
+  GDAL
   LIBM)
 
-build_program_in_subdir(v.split DEPENDS grass_gis grass_vector LIBM)
+build_program_in_subdir(v.split DEPENDS grass_gis grass_vector GDAL LIBM)
 
-build_program_in_subdir(v.qcount DEPENDS grass_gis grass_vector LIBM)
+build_program_in_subdir(v.qcount DEPENDS grass_gis grass_vector GDAL LIBM)
 
 build_program_in_subdir(
   v.random
@@ -599,7 +640,8 @@ build_program_in_subdir(
   grass_dbmiclient
   grass_dbmidriver
   grass_gis
-  grass_vector)
+  grass_vector
+  GDAL)
 
 build_program_in_subdir(
   v.reclass
@@ -608,10 +650,11 @@ build_program_in_subdir(
   grass_dbmiclient
   grass_dbmidriver
   grass_gis
-  grass_vector)
+  grass_vector
+  GDAL)
 
 build_program_in_subdir(v.rectify DEPENDS grass_gis grass_gmath grass_imagery
-                        grass_vector LIBM)
+                        grass_vector GDAL LIBM)
 
 build_program_in_subdir(
   v.sample
@@ -621,9 +664,10 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_raster
-  grass_vector)
+  grass_vector
+  GDAL)
 
-build_program_in_subdir(v.segment DEPENDS grass_gis grass_vector LIBM)
+build_program_in_subdir(v.segment DEPENDS grass_gis grass_vector GDAL LIBM)
 
 build_program_in_subdir(
   v.select
@@ -632,9 +676,10 @@ build_program_in_subdir(
   grass_dbmiclient
   grass_dbmidriver
   grass_gis
-  grass_vector)
+  grass_vector
+  GDAL)
 
-build_program_in_subdir(v.support DEPENDS grass_gis grass_vector)
+build_program_in_subdir(v.support DEPENDS grass_gis grass_vector GDAL)
 
 build_program_in_subdir(
   v.surf.bspline
@@ -649,6 +694,7 @@ build_program_in_subdir(
   grass_raster
   grass_segment
   grass_vector
+  GDAL
   LIBM)
 
 build_program_in_subdir(
@@ -660,6 +706,7 @@ build_program_in_subdir(
   grass_gis
   grass_raster
   grass_vector
+  GDAL
   LIBM)
 
 build_program_in_subdir(
@@ -674,6 +721,7 @@ build_program_in_subdir(
   grass_interpfl
   grass_qtree
   grass_vector
+  GDAL
   LIBM
   OPTIONAL_DEPENDS
   OPENMP)
@@ -686,6 +734,7 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_vector
+  GDAL
   LIBM)
 
 build_program_in_subdir(v.timestamp DEPENDS grass_gis grass_vector)
@@ -697,7 +746,8 @@ build_program_in_subdir(
   grass_dbmiclient
   grass_dbmidriver
   grass_gis
-  grass_vector)
+  grass_vector
+  GDAL)
 
 build_program_in_subdir(
   v.to.db
@@ -707,6 +757,7 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_vector
+  GDAL
   LIBM)
 
 build_program_in_subdir(
@@ -717,6 +768,7 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_vector
+  GDAL
   LIBM)
 
 build_program_in_subdir(
@@ -728,6 +780,7 @@ build_program_in_subdir(
   grass_gis
   grass_raster
   grass_vector
+  GDAL
   LIBM)
 
 build_program_in_subdir(
@@ -739,9 +792,10 @@ build_program_in_subdir(
   grass_gis
   grass_raster3d
   grass_vector
+  GDAL
   LIBM)
 
-build_program_in_subdir(v.type DEPENDS grass_gis grass_vector)
+build_program_in_subdir(v.type DEPENDS grass_gis grass_vector GDAL)
 
 build_program_in_subdir(
   v.univar
@@ -751,6 +805,7 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_vector
+  GDAL
   LIBM)
 
 build_program_in_subdir(
@@ -762,6 +817,7 @@ build_program_in_subdir(
   grass_dig2
   grass_gis
   grass_vector
+  GDAL
   LIBM)
 
 build_program_in_subdir(
@@ -771,7 +827,8 @@ build_program_in_subdir(
   grass_dbmiclient
   grass_dbmidriver
   grass_gis
-  grass_vector)
+  grass_vector
+  GDAL)
 
 build_program_in_subdir(
   v.what.rast
@@ -781,7 +838,8 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_raster
-  grass_vector)
+  grass_vector
+  GDAL)
 
 build_program_in_subdir(
   v.what.rast3
@@ -791,7 +849,8 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_raster3d
-  grass_vector)
+  grass_vector
+  GDAL)
 
 build_program_in_subdir(
   v.vect.stats
@@ -801,7 +860,8 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_stats
-  grass_vector)
+  grass_vector
+  GDAL)
 
 build_program_in_subdir(
   v.vol.rst
@@ -814,6 +874,7 @@ build_program_in_subdir(
   grass_raster
   grass_raster3d
   grass_vector
+  GDAL
   LIBM)
 
 build_program_in_subdir(
