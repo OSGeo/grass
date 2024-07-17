@@ -197,9 +197,6 @@ def main():
         else None
     )
 
-    if flags["r"] and options["region_relation"]:
-        gs.warning(_("Using current computational region for map selection."))
-
     if method == "quantile" and not options["quantile"]:
         gs.fatal(_("The method <quantile> requires input in the 'quantile' option."))
 
