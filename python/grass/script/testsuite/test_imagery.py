@@ -54,7 +54,7 @@ class TestImageryGroupToDict(TestCase):
             ValueError,
             gs.imagery.group_to_dict,
             self.group,
-            **{"dict_keys": "invalid_dict_key"},
+            dict_keys="invalid_dict_key",
         )
 
     def test_invalid_dict_value(self):
@@ -63,7 +63,7 @@ class TestImageryGroupToDict(TestCase):
             ValueError,
             gs.imagery.group_to_dict,
             self.group,
-            **{"dict_values": "invalid_dict_value"},
+            dict_values="invalid_dict_value",
         )
 
     def test_missing_subgroup(self):
@@ -97,7 +97,7 @@ class TestImageryGroupToDict(TestCase):
         self.assertListEqual(list(ref_dict.keys()), list(group_info.keys()))
         self.assertListEqual(
             list(ref_dict.values()),
-            list([val.split("@")[0] for val in group_info.values()]),
+            [val.split("@")[0] for val in group_info.values()],
         )
 
     def test_full_info_group_label_keys(self):
