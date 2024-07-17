@@ -2083,7 +2083,7 @@ class VProperties(InstructionObject):
                     "    rgbcolumn $rgbcolumn\n"
                 ).substitute(dic)
             vInstruction += string.Template("    fcolor $fcolor\n").substitute(dic)
-        else:
+        else:  # noqa: PLR5501
             if dic["rgbcolumn"]:
                 vInstruction += string.Template(
                     "    rgbcolumn $rgbcolumn\n"

@@ -2536,10 +2536,9 @@ class TemporalAlgebraParser:
                                     "Error map %s exist in temporal database. "
                                     "Use overwrite flag." % map_i.get_map_id()
                                 )
-                            else:
+                            elif self.dry_run is False:
                                 # Insert map into temporal database.
-                                if self.dry_run is False:
-                                    map_i.insert(dbif)
+                                map_i.insert(dbif)
 
                         # Register map in result space time dataset.
                         if self.dry_run is False:
@@ -3241,11 +3240,10 @@ class TemporalAlgebraParser:
             resultlist = self.check_stds(resultlist, clear=True)
             # Return resulting map list.
             t[0] = resultlist
+        elif t[5]:
+            t[0] = str(t[7])
         else:
-            if t[5]:
-                t[0] = str(t[7])
-            else:
-                t[0] = str(t[9])
+            t[0] = str(t[9])
 
         if self.debug:
             if t[5]:

@@ -573,9 +573,8 @@ class GStc(stc.StyledTextCtrl):
 
         if wrap:
             txt = textwrap.fill(txt, wrap) + "\n"
-        else:
-            if txt[-1] != "\n":
-                txt += "\n"
+        elif txt[-1] != "\n":
+            txt += "\n"
 
         if "\r" in txt:
             self.linePos = -1

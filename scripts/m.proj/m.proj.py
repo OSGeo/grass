@@ -216,16 +216,15 @@ def main():
         fd.write("%s%s%s\n" % (x, ifs, y))
         fd.close()
         inf = open(tmpfile)
+    elif input == "-":
+        infile = None
+        inf = sys.stdin
     else:
-        if input == "-":
-            infile = None
-            inf = sys.stdin
-        else:
-            infile = input
-            if not os.path.exists(infile):
-                gcore.fatal(_("Unable to read input data"))
-            inf = open(infile)
-            gcore.debug("input file=[%s]" % infile)
+        infile = input
+        if not os.path.exists(infile):
+            gcore.fatal(_("Unable to read input data"))
+        inf = open(infile)
+        gcore.debug("input file=[%s]" % infile)
 
     # set up output file
     if not output:

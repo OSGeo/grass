@@ -93,14 +93,14 @@ def unify_units(dic):
             for n in range(len(dic["unit"])):
                 if dic["unit"][n] in item:
                     dic["unit"][n] = item[0]
-        else:
+        else:  # noqa: PLR5501
             if dic["unit"] in item:
                 dic["unit"] = item[0]
         if not isinstance(dic["units"], str):
             for n in range(len(dic["units"])):
                 if dic["units"][n] in item:
                     dic["units"][n] = item[0]
-        else:
+        else:  # noqa: PLR5501
             if dic["units"] in item:
                 dic["units"] = item[0]
     return dic
@@ -222,7 +222,7 @@ def text_to_keyvalue(
                             " Previous line's key is <%s>"
                         ) % key
                     raise ValueError(msg)
-            else:
+            else:  # noqa: PLR5501
                 # line contains something but not separator
                 if not skip_invalid:
                     # TODO: here should go _ for translation
@@ -312,9 +312,8 @@ def values_equal(value_a, value_b, precision=0.000001):
             # apply this function for comparison of items in the list
             if not values_equal(value_a[i], value_b[i], precision):
                 return False
-    else:
-        if value_a != value_b:
-            return False
+    elif value_a != value_b:
+        return False
     return True
 
 

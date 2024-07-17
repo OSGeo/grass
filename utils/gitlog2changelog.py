@@ -97,11 +97,10 @@ for line in fin:
                 messageNL = True
         elif len(line) == 4:
             messageFound = True
+        elif len(message) == 0:
+            message = message + line.strip()
         else:
-            if len(message) == 0:
-                message = message + line.strip()
-            else:
-                message = message + " " + line.strip()
+            message = message + " " + line.strip()
     # If this line is hit all of the files have been stored for this commit
     elif re.search("files? changed", line):
         filesFound = True

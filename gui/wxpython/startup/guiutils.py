@@ -715,7 +715,7 @@ def switch_mapset_interactively(
             giface.currentMapsetChanged.emit(
                 dbase=None, location=location, mapset=mapset
             )
-    else:
+    else:  # noqa: PLR5501
         if RunCommand("g.mapset", parent=guiparent, mapset=mapset) == 0:
             if show_confirmation:
                 GMessage(

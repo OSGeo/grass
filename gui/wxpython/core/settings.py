@@ -1032,7 +1032,7 @@ class Settings:
                         value = float(value)
                     except ValueError:
                         pass
-        else:  # -> write settings
+        else:  # -> write settings  # noqa: PLR5501
             if isinstance(value, type(())):  # -> color
                 value = str(value[0]) + ":" + str(value[1]) + ":" + str(value[2])
 
@@ -1062,13 +1062,13 @@ class Settings:
             if subkey is None:
                 if key is None:
                     return settings[group]
-                else:
-                    return settings[group][key]
-            else:
-                if isinstance(subkey, tuple) or isinstance(subkey, list):
-                    return settings[group][key][subkey[0]][subkey[1]]
-                else:
-                    return settings[group][key][subkey]
+
+                return settings[group][key]
+
+            if isinstance(subkey, (list, tuple)):
+                return settings[group][key][subkey[0]][subkey[1]]
+
+            return settings[group][key][subkey]
 
         except KeyError:
             print(
@@ -1099,13 +1099,16 @@ class Settings:
             if subkey is None:
                 if key is None:
                     settings[group] = value
-                else:
-                    settings[group][key] = value
-            else:
-                if isinstance(subkey, tuple) or isinstance(subkey, list):
-                    settings[group][key][subkey[0]][subkey[1]] = value
-                else:
-                    settings[group][key][subkey] = value
+                    return
+                settings[group][key] = value
+                return
+
+            if isinstance(subkey, (list, tuple)):
+                settings[group][key][subkey[0]][subkey[1]] = value
+                return
+            settings[group][key][subkey] = value
+            return
+
         except KeyError:
             raise GException(
                 "%s '%s:%s:%s'" % (_("Unable to set "), group, key, subkey)

@@ -57,11 +57,10 @@ class MetaIcon:
         self.imagepath = iconSet.get(img, wx.ART_MISSING_IMAGE)
         if not self.imagepath:
             self.type = "unknown"
+        elif self.imagepath.find("wxART_") > -1:
+            self.type = "wx"
         else:
-            if self.imagepath.find("wxART_") > -1:
-                self.type = "wx"
-            else:
-                self.type = "img"
+            self.type = "img"
 
         self.label = label
 

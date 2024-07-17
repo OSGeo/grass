@@ -2151,7 +2151,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     maps[i].set_relative_time(
                         start, start_next, maps[i].get_relative_time_unit()
                     )
-            else:
+            else:  # noqa: PLR5501
                 if maps[i].is_time_absolute():
                     maps[i].set_absolute_time(start, end)
                 elif maps[i].is_time_relative():

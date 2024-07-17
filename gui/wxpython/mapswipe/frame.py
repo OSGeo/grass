@@ -424,12 +424,11 @@ class SwipeMapPanel(DoubleMapPanel):
             self._inputDialog = dlg
             dlg.CentreOnParent()
             dlg.Show()
+        elif self._inputDialog.IsShown():
+            self._inputDialog.Raise()
+            self._inputDialog.SetFocus()
         else:
-            if self._inputDialog.IsShown():
-                self._inputDialog.Raise()
-                self._inputDialog.SetFocus()
-            else:
-                self._inputDialog.Show()
+            self._inputDialog.Show()
 
     def _connectSimpleLmgr(self, lmgr, renderer):
         converter = LayerListToRendererConverter(renderer)
@@ -569,7 +568,7 @@ class SwipeMapPanel(DoubleMapPanel):
                         im1 = wx.Image(filename1).GetSubImage((0, 0, -x, height))
                         im.Paste(im1, 0, 0)
                         im.Paste(wx.Image(filename2), -x + lineWidth, -y)
-                else:
+                else:  # noqa: PLR5501
                     if self.splitter.GetSplitMode() == wx.SPLIT_HORIZONTAL:
                         im1 = wx.Image(filename1)
                         im.Paste(im1, 0, 0)

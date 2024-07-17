@@ -802,7 +802,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                     wxPen = "highest"
                 else:
                     wxPen = "default"
-            else:
+            else:  # noqa: PLR5501
                 if self.mapcoordlist[key][5] > self.rmsthresh:
                     wxPen = "highest"
                 else:
@@ -2527,7 +2527,7 @@ class GrSettingsDialog(wx.Dialog):
                 self.parent.activemap.SetSelection(0)
                 self.parent.activemap.Enable(False)
                 self.parent.GetMapToolbar().Enable("zoommenu", enable=False)
-        else:
+        else:  # noqa: PLR5501
             if not self.parent.show_target:
                 self.parent.show_target = True
                 self.parent._mgr.GetPane("target").Show()

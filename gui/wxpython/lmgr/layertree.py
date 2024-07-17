@@ -1502,28 +1502,27 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 if not parent:
                     parent = self.root
                 layer = self.AppendItem(parentId=parent, text="", ct_type=1, wnd=ctrl)
-        else:
-            if selectedLayer and selectedLayer != self.GetRootItem():
-                if (
-                    selectedLayer
-                    and self.GetLayerInfo(selectedLayer, key="type") == "group"
-                ):
-                    # add to group (first child of self.layer_selected)
-                    layer = self.PrependItem(
-                        parent=selectedLayer, text="", ct_type=1, wnd=ctrl
-                    )
-                else:
-                    # -> previous sibling of selected layer
-                    parent = self.GetItemParent(selectedLayer)
-                    layer = self.InsertItem(
-                        parentId=parent,
-                        input=self.GetPrevSibling(selectedLayer),
-                        text="",
-                        ct_type=1,
-                        wnd=ctrl,
-                    )
-            else:  # add first layer to the layer tree (first child of root)
-                layer = self.PrependItem(parent=self.root, text="", ct_type=1, wnd=ctrl)
+        elif selectedLayer and selectedLayer != self.GetRootItem():
+            if (
+                selectedLayer
+                and self.GetLayerInfo(selectedLayer, key="type") == "group"
+            ):
+                # add to group (first child of self.layer_selected)
+                layer = self.PrependItem(
+                    parent=selectedLayer, text="", ct_type=1, wnd=ctrl
+                )
+            else:
+                # -> previous sibling of selected layer
+                parent = self.GetItemParent(selectedLayer)
+                layer = self.InsertItem(
+                    parentId=parent,
+                    input=self.GetPrevSibling(selectedLayer),
+                    text="",
+                    ct_type=1,
+                    wnd=ctrl,
+                )
+        else:  # add first layer to the layer tree (first child of root)
+            layer = self.PrependItem(parent=self.root, text="", ct_type=1, wnd=ctrl)
 
         # layer is initially unchecked as inactive (beside 'command')
         # use predefined value if given
@@ -1543,21 +1542,20 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.SetItemImage(layer, self.folder, CT.TreeItemIcon_Normal)
             self.SetItemImage(layer, self.folder_open, CT.TreeItemIcon_Expanded)
             self.SetItemText(layer, grouptext)
+        elif ltype in self._icon:
+            self.SetItemImage(layer, self._icon[ltype])
+            # do not use title() - will not work with ltype == 'raster_3d'
+            self.SetItemText(
+                layer,
+                "%s %s"
+                % (
+                    LMIcons["layer" + ltype[0].upper() + ltype[1:]].GetLabel(),
+                    _("(double click to set properties)") + " " * 15,
+                ),
+            )
         else:
-            if ltype in self._icon:
-                self.SetItemImage(layer, self._icon[ltype])
-                # do not use title() - will not work with ltype == 'raster_3d'
-                self.SetItemText(
-                    layer,
-                    "%s %s"
-                    % (
-                        LMIcons["layer" + ltype[0].upper() + ltype[1:]].GetLabel(),
-                        _("(double click to set properties)") + " " * 15,
-                    ),
-                )
-            else:
-                self.SetItemImage(layer, self._icon["cmd"])
-                self.SetItemText(layer, ltype)
+            self.SetItemImage(layer, self._icon["cmd"])
+            self.SetItemText(layer, ltype)
 
         if ltype != "group":
             if lcmd and len(lcmd) > 1:
@@ -1659,9 +1657,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 ctrl.SetValue(lname)
             else:
                 self.SetItemText(layer, self._getLayerName(layer, lname))
-        else:
-            if ltype == "group":
-                self.OnRenameLayer(None)
+        elif ltype == "group":
+            self.OnRenameLayer(None)
 
         return layer
 
@@ -1849,7 +1846,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     if (vInfo["lines"] + vInfo["boundaries"]) > 0:
                         self.mapdisplay.MapWindow.LoadVector(item, points=False)
 
-            else:  # disable
+            else:  # disable # noqa: PLR5501
                 if mapLayer.type == "raster":
                     self.mapdisplay.MapWindow.UnloadRaster(item)
                 elif mapLayer.type == "raster_3d":
@@ -2094,22 +2091,21 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     image=image,
                     data=data,
                 )
-        else:
+        elif self.flag & wx.TREE_HITTEST_ABOVE:
             # if dragItem not dropped on a layer or group, append or prepend it
             # to the layer tree
-            if self.flag & wx.TREE_HITTEST_ABOVE:
-                newItem = self.PrependItem(
-                    self.root, text=text, ct_type=1, wnd=newctrl, image=image, data=data
-                )
-            elif (
-                (self.flag & wx.TREE_HITTEST_BELOW)
-                or (self.flag & wx.TREE_HITTEST_NOWHERE)
-                or (self.flag & wx.TREE_HITTEST_TOLEFT)
-                or (self.flag & wx.TREE_HITTEST_TORIGHT)
-            ):
-                newItem = self.AppendItem(
-                    self.root, text=text, ct_type=1, wnd=newctrl, image=image, data=data
-                )
+            newItem = self.PrependItem(
+                self.root, text=text, ct_type=1, wnd=newctrl, image=image, data=data
+            )
+        elif (
+            (self.flag & wx.TREE_HITTEST_BELOW)
+            or (self.flag & wx.TREE_HITTEST_NOWHERE)
+            or (self.flag & wx.TREE_HITTEST_TOLEFT)
+            or (self.flag & wx.TREE_HITTEST_TORIGHT)
+        ):
+            newItem = self.AppendItem(
+                self.root, text=text, ct_type=1, wnd=newctrl, image=image, data=data
+            )
 
         # update new layer
         self.SetPyData(newItem, self.GetPyData(dragItem))

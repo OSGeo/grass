@@ -111,11 +111,10 @@ class NvizTask:
                     mapname = surface["attribute"][attr]["value"]
                 else:
                     const = surface["attribute"][attr]["value"]
-            else:
-                if attr == "transp":
-                    const = 0
-                elif attr == "color":
-                    mapname = mapName
+            elif attr == "transp":
+                const = 0
+            elif attr == "color":
+                mapname = mapName
 
             if mapname:
                 self._setMultiTaskParam(params[0], mapname)
@@ -194,21 +193,19 @@ class NvizTask:
                             mapname = isosurface[attr]["value"]
                         else:
                             const = float(isosurface[attr]["value"])
-                    else:
-                        if attr == "transp":
-                            const = 0
-                        elif attr == "color":
-                            mapname = mapName
+                    elif attr == "transp":
+                        const = 0
+                    elif attr == "color":
+                        mapname = mapName
 
                     if mapname:
                         self._setMultiTaskParam(params[0], mapname)
+                    elif attr == "topo":
+                        # TODO: we just assume it's the first volume, what
+                        # to do else?
+                        self._setMultiTaskParam(params[1], "1:" + str(const))
                     else:
-                        if attr == "topo":
-                            # TODO: we just assume it's the first volume, what
-                            # to do else?
-                            self._setMultiTaskParam(params[1], "1:" + str(const))
-                        else:
-                            self._setMultiTaskParam(params[1], const)
+                        self._setMultiTaskParam(params[1], const)
                 if isosurface["inout"]["value"]:
                     self.task.set_flag("n", True)
         # slices

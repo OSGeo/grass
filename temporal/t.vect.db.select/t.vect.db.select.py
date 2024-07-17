@@ -120,23 +120,22 @@ def main():
                         if col_names != col_names_new:
                             col_names = col_names_new
                             print(col_names)
+                    elif row["end_time"]:
+                        print(
+                            "%s%s%s%s%s"
+                            % (
+                                row["start_time"],
+                                separator,
+                                row["end_time"],
+                                separator,
+                                entry,
+                            )
+                        )
                     else:
-                        if row["end_time"]:
-                            print(
-                                "%s%s%s%s%s"
-                                % (
-                                    row["start_time"],
-                                    separator,
-                                    row["end_time"],
-                                    separator,
-                                    entry,
-                                )
-                            )
-                        else:
-                            print(
-                                "%s%s%s%s"
-                                % (row["start_time"], separator, separator, entry)
-                            )
+                        print(
+                            "%s%s%s%s"
+                            % (row["start_time"], separator, separator, entry)
+                        )
                     count += 1
 
 

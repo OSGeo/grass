@@ -199,23 +199,22 @@ def main():
             )
         else:
             kwargs["edit_map"] = edit_map
-    else:
-        if kwargs["base_map"]:
-            base_map = gs.find_file(
-                name=kwargs["base_map"],
-                element="raster",
-                mapset=mapset,
-            )["fullname"]
-            if not base_map:
-                gs.fatal(
-                    _(
-                        "Base raster map <{}> not found in "
-                        "current mapset.".format(
-                            options["base"],
-                        ),
+    elif kwargs["base_map"]:
+        base_map = gs.find_file(
+            name=kwargs["base_map"],
+            element="raster",
+            mapset=mapset,
+        )["fullname"]
+        if not base_map:
+            gs.fatal(
+                _(
+                    "Base raster map <{}> not found in "
+                    "current mapset.".format(
+                        options["base"],
                     ),
-                )
-            kwargs["base_map"] = base_map
+                ),
+            )
+        kwargs["base_map"] = base_map
 
     # allow immediate rendering
     driver = UserSettings.Get(

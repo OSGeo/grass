@@ -665,11 +665,10 @@ def list_installed_extensions(toolboxes=False):
             gs.message(_("List of installed extensions (modules):"))
         sys.stdout.write("\n".join(elist))
         sys.stdout.write("\n")
+    elif toolboxes:
+        gs.info(_("No extension (toolbox) installed"))
     else:
-        if toolboxes:
-            gs.info(_("No extension (toolbox) installed"))
-        else:
-            gs.info(_("No extension (module) installed"))
+        gs.info(_("No extension (module) installed"))
 
 
 def get_installed_toolboxes(force=False):
@@ -756,9 +755,8 @@ def list_available_extensions(url):
                 print("%s (%s)" % (toolbox_data["name"], toolbox_code))
             if flags["c"] or flags["g"]:
                 list_available_modules(url, toolbox_data["modules"])
-            else:
-                if toolbox_data["modules"]:
-                    print(os.linesep.join(["* " + x for x in toolbox_data["modules"]]))
+            elif toolbox_data["modules"]:
+                print(os.linesep.join(["* " + x for x in toolbox_data["modules"]]))
     else:
         gs.message(_("List of available extensions (modules):"))
         # TODO: extensions with several modules + lib
@@ -2192,23 +2190,22 @@ def remove_extension(force=False):
             for ename in edict:
                 if ename in eremoved:
                     gs.message(_("Extension <%s> successfully uninstalled.") % ename)
+    elif flags["t"]:
+        gs.warning(
+            _(
+                "Toolbox <%s> not removed. "
+                "Re-run '%s' with '-f' flag to force removal"
+            )
+            % (options["extension"], "g.extension")
+        )
     else:
-        if flags["t"]:
-            gs.warning(
-                _(
-                    "Toolbox <%s> not removed. "
-                    "Re-run '%s' with '-f' flag to force removal"
-                )
-                % (options["extension"], "g.extension")
+        gs.warning(
+            _(
+                "Extension <%s> not removed. "
+                "Re-run '%s' with '-f' flag to force removal"
             )
-        else:
-            gs.warning(
-                _(
-                    "Extension <%s> not removed. "
-                    "Re-run '%s' with '-f' flag to force removal"
-                )
-                % (options["extension"], "g.extension")
-            )
+            % (options["extension"], "g.extension")
+        )
 
 
 # remove existing extension(s) (reading XML file)

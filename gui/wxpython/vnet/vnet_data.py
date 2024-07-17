@@ -1200,11 +1200,10 @@ class History:
                 else:
                     newHist.write("%s%s%s" % ("\n", line, "\n"))
                     self.histStepsNum = newHistStepsNum
+            elif newHistStepsNum >= self.maxHistSteps:
+                self._parseLine(line, removedHistStep)
             else:
-                if newHistStepsNum >= self.maxHistSteps:
-                    self._parseLine(line, removedHistStep)
-                else:
-                    newHist.write("%s" % line)
+                newHist.write("%s" % line)
 
         return removedHistData
 
@@ -1272,9 +1271,9 @@ class History:
                         value = float(value)
                     except ValueError:
                         pass
-        else:  # -> write data
-            if isinstance(value, type(())):  # -> color
-                value = str(value[0]) + ":" + str(value[1]) + ":" + str(value[2])
+        # -> write data
+        elif isinstance(value, type(())):  # -> color
+            value = str(value[0]) + ":" + str(value[1]) + ":" + str(value[2])
 
         return value
 

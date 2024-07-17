@@ -1267,7 +1267,7 @@ class DBConnection:
                 self.dbmi = sqlite3
             else:
                 self.dbmi = psycopg2
-        else:
+        else:  # noqa: PLR5501
             if decode(backend) == "sqlite":
                 self.dbmi = sqlite3
             else:
@@ -1402,18 +1402,17 @@ class DBConnection:
         if self.dbmi.__name__ == "psycopg2":
             if len(args) == 0:
                 return sql
+            elif self.connected:
+                try:
+                    return self.cursor.mogrify(sql, args)
+                except Exception as exc:
+                    print(sql, args)
+                    raise exc
             else:
-                if self.connected:
-                    try:
-                        return self.cursor.mogrify(sql, args)
-                    except Exception as exc:
-                        print(sql, args)
-                        raise exc
-                else:
-                    self.connect()
-                    statement = self.cursor.mogrify(sql, args)
-                    self.close()
-                    return statement
+                self.connect()
+                statement = self.cursor.mogrify(sql, args)
+                self.close()
+                return statement
 
         elif self.dbmi.__name__ == "sqlite3":
             if len(args) == 0:

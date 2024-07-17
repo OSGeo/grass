@@ -295,20 +295,19 @@ class TemporalManager:
                         # map exists, stop point mode
                         listOfMaps.append(series)
                         afterPoint = False
-                    else:
+                    elif afterPoint:
                         # check point mode
-                        if afterPoint:
-                            if followsPoint:
-                                # skip this one, already there
-                                followsPoint = False
-                                continue
-                            else:
-                                # append the last one (of point time)
-                                listOfMaps.append(lastTimeseries)
-                                end = None
+                        if followsPoint:
+                            # skip this one, already there
+                            followsPoint = False
+                            continue
                         else:
-                            # append series which is None
-                            listOfMaps.append(series)
+                            # append the last one (of point time)
+                            listOfMaps.append(lastTimeseries)
+                            end = None
+                    else:
+                        # append series which is None
+                        listOfMaps.append(series)
                 timeLabels.append((start, end, unit))
 
         return timeLabels, listOfMaps

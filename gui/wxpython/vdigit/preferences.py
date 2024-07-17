@@ -808,11 +808,10 @@ class VDigitSettingsDialog(wx.Dialog):
             region = self.parent.MapWindow.Map.GetRegion()
             res = (region["nsres"] + region["ewres"]) / 2.0
             threshold = self.digit.GetDisplay().GetThreshold(value=res)
+        elif self.snappingUnit.GetSelection() == 1:  # map units
+            threshold = value
         else:
-            if self.snappingUnit.GetSelection() == 1:  # map units
-                threshold = value
-            else:
-                threshold = self.digit.GetDisplay().GetThreshold(value=value)
+            threshold = self.digit.GetDisplay().GetThreshold(value=value)
 
         if value == 0:
             self.snappingInfo.SetLabel(_("Snapping disabled"))
@@ -1011,13 +1010,12 @@ class VDigitSettingsDialog(wx.Dialog):
                     "column": column,
                     "units": unitsKey,
                 }
-            else:
-                if (
-                    item
-                    and tree.GetLayerInfo(item, key="vdigit")
-                    and key in tree.GetLayerInfo(item, key="vdigit")["geomAttr"]
-                ):
-                    del tree.GetLayerInfo(item, key="vdigit")["geomAttr"][key]
+            elif (
+                item
+                and tree.GetLayerInfo(item, key="vdigit")
+                and key in tree.GetLayerInfo(item, key="vdigit")["geomAttr"]
+            ):
+                del tree.GetLayerInfo(item, key="vdigit")["geomAttr"][key]
 
         # query tool
         if self.queryLength.GetValue():

@@ -1148,7 +1148,7 @@ class PtsList(PointsList):
                 if not item[1]:
                     self.CheckItem(iItem, False)
 
-        else:
+        else:  # noqa: PLR5501
             if self.IsShown("type"):
                 self.HideColumn("type")
 

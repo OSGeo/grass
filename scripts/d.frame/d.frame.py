@@ -311,22 +311,19 @@ def main():
                 fatal(_("Required parameter <%s> not set") % "at")
             # create new frame if not exists
             create_frame(monitor, options["frame"], options["at"])
-    else:
-        if os.getenv("GRASS_OVERWRITE", "0") == "1":
-            warning(
-                _("Frame <%s> already exists and will be overwritten")
-                % options["frame"]
+    elif os.getenv("GRASS_OVERWRITE", "0") == "1":
+        warning(
+            _("Frame <%s> already exists and will be overwritten") % options["frame"]
+        )
+        create_frame(monitor, options["frame"], options["at"], overwrite=True)
+    elif options["at"]:
+        warning(
+            _(
+                "Frame <%s> already found. An existing frame can be "
+                "overwritten by '%s' flag."
             )
-            create_frame(monitor, options["frame"], options["at"], overwrite=True)
-        else:
-            if options["at"]:
-                warning(
-                    _(
-                        "Frame <%s> already found. An existing frame can be "
-                        "overwritten by '%s' flag."
-                    )
-                    % (options["frame"], "--overwrite")
-                )
+            % (options["frame"], "--overwrite")
+        )
 
     # select givenframe
     select_frame(monitor, options["frame"])

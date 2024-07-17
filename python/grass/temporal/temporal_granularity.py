@@ -1237,11 +1237,11 @@ def gran_to_gran(from_gran, to_gran="days", shell=False):
         """Function to return the output"""
         if shell:
             return output
+
+        if output == 1:
+            return f"{output} {tounit}"
         else:
-            if output == 1:
-                return f"{output} {tounit}"
-            else:
-                return f"{output} {tounit}s"
+            return f"{output} {tounit}s"
 
     # TODO check the leap second
     if check_granularity_string(from_gran, "absolute"):

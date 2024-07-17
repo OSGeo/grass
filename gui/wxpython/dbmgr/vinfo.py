@@ -136,11 +136,10 @@ class VectorDBInfo(VectorDBInfoBase):
             for key, value in record["Attributes"].items():
                 if len(value) < 1:
                     value = None
+                elif self.tables[table][key]["ctype"] != str:
+                    value = self.tables[table][key]["ctype"](value)
                 else:
-                    if self.tables[table][key]["ctype"] != str:
-                        value = self.tables[table][key]["ctype"](value)
-                    else:
-                        value = GetUnicodeValue(value)
+                    value = GetUnicodeValue(value)
                 self.tables[table][key]["values"].append(value)
 
             for key, value in record.items():

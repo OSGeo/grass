@@ -322,11 +322,10 @@ class ModuleNode(DictNode):
                 # start supported but unused, so testing last
                 if value in text or value == "*":
                     return True
-            else:
+            elif value.lower() in text.lower() or value == "*":
                 # this works fully only for English and requires accents
                 # to be exact match (even Python 3 casefold() does not help)
-                if value.lower() in text.lower() or value == "*":
-                    return True
+                return True
         return False
 
 

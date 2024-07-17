@@ -438,12 +438,11 @@ def _get_list_of_maps_stds(
                 output_format=output_format,
                 element_type=element_type,
             )
+        elif output_format == "line":
+            # For list of values, only one column is needed.
+            columns = ["id"]
         else:
-            if output_format == "line":
-                # For list of values, only one column is needed.
-                columns = ["id"]
-            else:
-                columns = ["name", "mapset", "start_time", "end_time"]
+            columns = ["name", "mapset", "start_time", "end_time"]
         if not order:
             order = "start_time"
 

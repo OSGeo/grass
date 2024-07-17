@@ -244,24 +244,21 @@ class HistoryBrowserTree(CTreeView):
 
             if day:
                 day = day[0]
+            # Create time period node if not found
+            elif not entry["command_info"]:
+                # Prepare it for entries without command info
+                day = self._model.AppendNode(
+                    parent=self._model.root,
+                    data={"type": TIME_PERIOD, "day": self._timestampToDay()},
+                )
             else:
-                # Create time period node if not found
-                if not entry["command_info"]:
-                    # Prepare it for entries without command info
-                    day = self._model.AppendNode(
-                        parent=self._model.root,
-                        data={"type": TIME_PERIOD, "day": self._timestampToDay()},
-                    )
-                else:
-                    day = self._model.AppendNode(
-                        parent=self._model.root,
-                        data={
-                            "type": TIME_PERIOD,
-                            "day": self._timestampToDay(
-                                entry["command_info"]["timestamp"]
-                            ),
-                        },
-                    )
+                day = self._model.AppendNode(
+                    parent=self._model.root,
+                    data={
+                        "type": TIME_PERIOD,
+                        "day": self._timestampToDay(entry["command_info"]["timestamp"]),
+                    },
+                )
 
             # Determine status and create command node
             status = (
@@ -543,8 +540,9 @@ class HistoryBrowserTree(CTreeView):
         self.DefineItems([node])
         if self.selected_command[0]:
             self.Run(node)
+            return
+
+        if self.IsNodeExpanded(node):
+            self.CollapseNode(node, recursive=False)
         else:
-            if self.IsNodeExpanded(node):
-                self.CollapseNode(node, recursive=False)
-            else:
-                self.ExpandNode(node, recursive=False)
+            self.ExpandNode(node, recursive=False)

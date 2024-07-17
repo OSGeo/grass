@@ -160,7 +160,7 @@ class IClassVDigit(IVDigit):
                 open_fn = Vect_open_update
             else:
                 open_fn = Vect_open_new
-        else:
+        else:  # noqa: PLR5501
             if update:
                 open_fn = Vect_open_tmp_update
             else:

@@ -332,7 +332,7 @@ def get_raster_for_points(poi_vector, raster, column=None, region=None):
         if column:
             if val is not None and not isnan(val):
                 poi.attrs[column] = val
-        else:
+        else:  # noqa: PLR5501
             if val is not None and not isnan(val):
                 result.append((poi.id, poi.x, poi.y, val))
             else:

@@ -322,16 +322,12 @@ class UpdateThread(Thread):
                             native = False
                             break
                 # TODO: update only if needed
-                if native:
-                    if map:
-                        self.data[win.InsertLayers] = {"vector": map}
-                    else:
-                        self.data[win.InsertLayers] = {}
+                if map:
+                    self.data[win.InsertLayers] = (
+                        {"vector": map} if native else {"dsn": map.rstrip("@OGR")}
+                    )
                 else:
-                    if map:
-                        self.data[win.InsertLayers] = {"dsn": map.rstrip("@OGR")}
-                    else:
-                        self.data[win.InsertLayers] = {}
+                    self.data[win.InsertLayers] = {}
 
             elif name == "TableSelect":
                 self.data[win.InsertTables] = {"driver": driver, "database": db}
@@ -351,17 +347,17 @@ class UpdateThread(Thread):
                         "layer": layer,
                         "dbInfo": cparams[map]["dbInfo"],
                     }
-                else:  # table
-                    if driver and db:
-                        self.data[win.GetParent().InsertTableColumns] = {
-                            "table": pTable.get("value"),
-                            "driver": driver,
-                            "database": db,
-                        }
-                    elif pTable:
-                        self.data[win.GetParent().InsertTableColumns] = {
-                            "table": pTable.get("value")
-                        }
+                # table
+                elif driver and db:
+                    self.data[win.GetParent().InsertTableColumns] = {
+                        "table": pTable.get("value"),
+                        "driver": driver,
+                        "database": db,
+                    }
+                elif pTable:
+                    self.data[win.GetParent().InsertTableColumns] = {
+                        "table": pTable.get("value")
+                    }
 
             elif name == "SubGroupSelect":
                 self.data[win.Insert] = {"group": p.get("value", "")}
@@ -2762,14 +2758,12 @@ class CmdPanel(wx.Panel):
         verbose = self.FindWindowById(self.task.get_flag("verbose")["wxId"][0])
         quiet = self.FindWindowById(self.task.get_flag("quiet")["wxId"][0])
         if event.IsChecked():
-            if event.GetId() == verbose.GetId():
-                if quiet.IsChecked():
-                    quiet.SetValue(False)
-                    self.task.get_flag("quiet")["value"] = False
-            else:
-                if verbose.IsChecked():
-                    verbose.SetValue(False)
-                    self.task.get_flag("verbose")["value"] = False
+            if event.GetId() == verbose.GetId() and quiet.IsChecked():
+                quiet.SetValue(False)
+                self.task.get_flag("quiet")["value"] = False
+            elif verbose.IsChecked():
+                verbose.SetValue(False)
+                self.task.get_flag("verbose")["value"] = False
 
         event.Skip()
 
@@ -2925,15 +2919,14 @@ class CmdPanel(wx.Panel):
             pLayer = self.task.get_param("layer", element="name", raiseError=False)
             if pLayer:
                 pLayer["value"] = ""
+        elif isinstance(me, SpinCtrl):
+            porf["value"] = str(me.GetValue())
+        elif isinstance(me, wx.ComboBox):
+            porf["value"] = me.GetValue()
+        elif isinstance(me, wx.Choice):
+            porf["value"] = me.GetStringSelection()
         else:
-            if isinstance(me, SpinCtrl):
-                porf["value"] = str(me.GetValue())
-            elif isinstance(me, wx.ComboBox):
-                porf["value"] = me.GetValue()
-            elif isinstance(me, wx.Choice):
-                porf["value"] = me.GetStringSelection()
-            else:
-                porf["value"] = me.GetValue()
+            porf["value"] = me.GetValue()
 
         self.OnUpdateValues(event)
 

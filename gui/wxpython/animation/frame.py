@@ -642,7 +642,7 @@ class TimeAnimationSlider(AnimationSliderBase):
                 }
             else:
                 label = _("to %(to)s") % {"to": self.timeLabels[index][1]}
-        else:
+        else:  # noqa: PLR5501
             if self.temporalType == TemporalType.ABSOLUTE:
                 label = start
             else:
