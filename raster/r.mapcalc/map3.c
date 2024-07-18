@@ -265,7 +265,7 @@ static void translate_from_cats(map *m, CELL *cell, DCELL *xcell, int ncols)
 {
     struct Categories *pcats;
     BTREE *btree;
-    int i, idx;
+    int i = 0, idx = 0;
     CELL cat, key;
     double vbuf[1 << SHIFT];
     double *values;

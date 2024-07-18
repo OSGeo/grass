@@ -32,7 +32,7 @@ int print_coin(int Conformat, int out_cols, int tofile)
     double colarea_no_0, rowarea_no_0;
     double area;
 
-    int addflag;
+    int addflag = 0;
     char topformat[133], midformat[133], namformat[133];
     char fillformat[133];
     const char *mapone;

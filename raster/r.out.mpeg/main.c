@@ -235,7 +235,7 @@ static int load_files(void)
     register int i, rowoff, row, col, vxoff, vyoff, offset;
     int cnt, fd, size, tsiz, coff;
     int vnum;
-    int y_rows, y_cols;
+    int y_rows = 0, y_cols = 0;
     char *pr, *pg, *pb;
     unsigned char *tr, *tg, *tb, *tset;
     char *mpfilename, *name;

@@ -17,7 +17,7 @@ int o_kurt(const char *basemap, const char *covermap, const char *outputmap,
 {
     struct Popen stats_child, reclass_child;
     FILE *stats, *reclass;
-    int first, i, count;
+    int first, i, count = 0;
     size_t mem;
     long basecat, covercat, catb, catc;
     double value, var, x;
