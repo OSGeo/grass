@@ -312,12 +312,7 @@ class ProfileFrame(BasePlotFrame):
         for line in ret.splitlines():
             dist, elev = line.strip().split(" ")
             if (
-                dist is None
-                or dist == ""
-                or dist == "nan"
-                or elev is None
-                or elev == ""
-                or elev == "nan"
+                dist is None or dist in ("", "nan") or elev is None or elev in ("", "nan")
             ):
                 continue
             dist = float(dist)
