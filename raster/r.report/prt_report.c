@@ -3,48 +3,49 @@
 #include <grass/raster.h>
 #include "global.h"
 
-int print_report(int unit1, int unit2)
+int compute_unit_format(int unit1, int unit2, enum OutputFormat format)
 {
-    int ns, nl, nx;
+    int i, ns, len;
     char num[100];
-    int len, new;
-    CELL *cats, *prev;
-    int first;
-    int i;
-    int divider_level;
-    int after_header;
     int need_format;
-    int with_stats;
-    char *cp;
-    int spacing;
-    char dot;
 
     /* examine units, determine output format */
     for (i = unit1; i <= unit2; i++) {
-        need_format = 1;
+        if (format == PLAIN) {
+            need_format = 1;
+        }
+        else {
+            need_format = 0;
+        }
         unit[i].label[0] = "";
         unit[i].label[1] = "";
 
         switch (unit[i].type) {
         case CELL_COUNTS:
-            need_format = 0;
-            unit[i].len = 5;
             unit[i].label[0] = " cell";
             unit[i].label[1] = "count";
-            ns = 0;
-            sprintf(num, "%ld", count_sum(&ns, -1));
-            len = strlen(num);
-            if (len > unit[i].len)
-                unit[i].len = len;
+
+            if (need_format) {
+                need_format = 0;
+                unit[i].len = 5;
+                ns = 0;
+                sprintf(num, "%ld", count_sum(&ns, -1));
+                len = strlen(num);
+                if (len > unit[i].len)
+                    unit[i].len = len;
+            }
             break;
 
         case PERCENT_COVER:
-            need_format = 0;
-            unit[i].dp = 2;
-            unit[i].len = 6;
             unit[i].label[0] = "  %  ";
             unit[i].label[1] = "cover";
-            unit[i].eformat = 0;
+
+            if (need_format) {
+                need_format = 0;
+                unit[i].dp = 2;
+                unit[i].len = 6;
+                unit[i].eformat = 0;
+            }
             break;
 
         case SQ_METERS:
@@ -90,6 +91,24 @@ int print_report(int unit1, int unit2)
                          &unit[i].dp, &(unit[i].eformat), e_format);
         }
     }
+}
+
+int print_report(int unit1, int unit2)
+{
+    int ns, nl, nx;
+    char num[100];
+    int len, new;
+    CELL *cats, *prev;
+    int first;
+    int i;
+    int divider_level;
+    int after_header;
+    int with_stats;
+    char *cp;
+    int spacing;
+    char dot;
+
+    compute_unit_format(unit1, unit2, PLAIN);
 
     /* figure out how big the category numbers are when printed */
     for (nl = 0; nl < nlayers; nl++)

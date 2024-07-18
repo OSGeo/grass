@@ -63,16 +63,16 @@ JSON_Value *make_category(int ns, int nl, JSON_Value *sub_categories)
     json_object_set_number(object, "category", cats[nl]);
 
     DCELL dLow, dHigh;
-    char str[500];
 
     if (!is_fp[nl] || as_int)
-        json_object_set_number(object, "description", cats[nl]);
+        json_object_set_string(object, "label",
+                               Rast_get_c_cat(&cats[nl], &layers[nl].labels));
     else {
         /* find or construct the label for floating point range to print */
         if (Rast_is_c_null_value(&cats[nl]))
-            json_object_set_null(object, "description");
+            json_object_set_null(object, "label");
         else if (cat_ranges) {
-            json_object_set_string(object, "description",
+            json_object_set_string(object, "label",
                                    Rast_get_ith_d_cat(&layers[nl].labels,
                                                       cats[nl], &dLow, &dHigh));
         }
@@ -82,10 +82,8 @@ JSON_Value *make_category(int ns, int nl, JSON_Value *sub_categories)
                    DMIN[nl];
             dHigh = (DMAX[nl] - DMIN[nl]) / (double)nsteps * (double)cats[nl] +
                     DMIN[nl];
-            char *from = Rast_get_d_cat(&dLow, &layers[nl].labels);
-            char *to = Rast_get_d_cat(&dHigh, &layers[nl].labels);
-            sprintf(str, "from %s to %s", from, to);
-            json_object_set_string(object, "description", str);
+
+            json_object_set_string(object, "label", "from to");
 
             JSON_Value *range_value = json_value_init_object();
             JSON_Object *range_object = json_object(range_value);
@@ -132,53 +130,8 @@ JSON_Value *make_categories(int start, int end, int level)
 
 void print_json()
 {
-    for (int i = 0; i < nunits; i++) {
-        switch (unit[i].type) {
-        case CELL_COUNTS:
-            unit[i].label[0] = " cell";
-            unit[i].label[1] = "count";
-            break;
+    compute_unit_format(0, nunits - 1, JSON);
 
-        case PERCENT_COVER:
-            unit[i].label[0] = "  %  ";
-            unit[i].label[1] = "cover";
-            break;
-
-        case SQ_METERS:
-            unit[i].label[0] = "square";
-            unit[i].label[1] = "meters";
-            unit[i].factor = 1.0;
-            break;
-
-        case SQ_KILOMETERS:
-            unit[i].label[0] = "  square  ";
-            unit[i].label[1] = "kilometers";
-            unit[i].factor = 1.0e-6;
-            break;
-
-        case ACRES:
-            unit[i].label[0] = "";
-            unit[i].label[1] = "acres";
-            unit[i].factor = 2.47105381467165e-4; /* 640 acres in a sq mile */
-            break;
-
-        case HECTARES:
-            unit[i].label[0] = "";
-            unit[i].label[1] = "hectares";
-            unit[i].factor = 1.0e-4;
-            break;
-
-        case SQ_MILES:
-            unit[i].label[0] = "square";
-            unit[i].label[1] = " miles";
-            unit[i].factor = 3.86102158542446e-7; /* 1 / ( (0.0254m/in * 12in/ft
-                                                   * 5280ft/mi)^2 ) */
-            break;
-
-        default:
-            G_fatal_error("Unit %d not yet supported", unit[i].type);
-        }
-    }
     JSON_Value *root_value = json_value_init_object();
     JSON_Object *root_object = json_object(root_value);
 
@@ -200,7 +153,7 @@ void print_json()
         json_object_set_null(root_object, "mask");
     }
     else {
-        json_object_set_string(root_object, "mask", maskinfo());
+        json_object_set_string(root_object, "mask", mask);
     }
 
     JSON_Value *maps_value = json_value_init_array();
@@ -208,10 +161,10 @@ void print_json()
     for (int i = 0; i < nlayers; i++) {
         JSON_Value *map_value = json_value_init_object();
         JSON_Object *map_object = json_object(map_value);
-        json_object_set_string(map_object, "name", layers[i].name); // fixme
+        json_object_set_string(map_object, "name", layers[i].name);
         json_object_set_string(map_object, "description", layers[i].mapset);
         json_object_set_string(map_object, "layer", layers[i].name);
-        json_object_set_string(map_object, "type", "raster"); // fixme
+        json_object_set_string(map_object, "type", "raster");
         json_array_append_value(maps_array, map_value);
     }
     json_object_set_value(root_object, "maps", maps_value);

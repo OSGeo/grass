@@ -109,6 +109,7 @@ int parse_layer(char *);
 int match(char *, char *, int);
 
 /* prt_report.c */
+int compute_unit_format(int, int, enum OutputFormat);
 int print_report(int, int);
 int construct_val_str(int, CELL *, char *);
 char *construct_cat_label(int, CELL);
