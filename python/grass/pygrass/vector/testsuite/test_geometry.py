@@ -3,6 +3,7 @@ Created on Thu Jun 19 14:13:53 2014
 
 @author: pietro
 """
+
 import sys
 import unittest
 import numpy as np
@@ -335,17 +336,13 @@ class AreaTestCase(TestCase):
         self.assertEqual(len(boundaries), 4)
 
         string_list = []
-        string_list.append(
-            "LINESTRING (0.0000000000000000 0.0000000000000000, 0.0000000000000000 4.0000000000000000)"
-        )
-        string_list.append(
-            "LINESTRING (0.0000000000000000 4.0000000000000000, 4.0000000000000000 4.0000000000000000)"
-        )
-        string_list.append(
-            "LINESTRING (4.0000000000000000 4.0000000000000000, 4.0000000000000000 0.0000000000000000)"
-        )
-        string_list.append(
-            "LINESTRING (4.0000000000000000 0.0000000000000000, 0.0000000000000000 0.0000000000000000)"
+        string_list.extend(
+            (
+                "LINESTRING (0.0000000000000000 0.0000000000000000, 0.0000000000000000 4.0000000000000000)",
+                "LINESTRING (0.0000000000000000 4.0000000000000000, 4.0000000000000000 4.0000000000000000)",
+                "LINESTRING (4.0000000000000000 4.0000000000000000, 4.0000000000000000 0.0000000000000000)",
+                "LINESTRING (4.0000000000000000 0.0000000000000000, 0.0000000000000000 0.0000000000000000)",
+            )
         )
 
         for boundary, i in zip(boundaries, range(4)):

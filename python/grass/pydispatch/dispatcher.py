@@ -25,6 +25,7 @@ Internal attributes:
         deletion, (considerably speeds up the cleanup process
         vs. the original code.)
 """
+
 import weakref
 from grass.pydispatch import saferef, robustapply, errors
 

@@ -128,17 +128,14 @@ Singularity container for GRASS GIS to be run into GRASS main directory
     cd /tmp
     rm -rf /tmp/grass_build
     # Add useful GRASS addons
-    grass -c EPSG:4326 --tmp-location --exec g.extension -s ext=i.modis
-    grass -c EPSG:4326 --tmp-location --exec g.extension -s ext=i.sentinel
-    grass -c EPSG:4326 --tmp-location --exec g.extension -s ext=r.in.pdal
-    #grass -c EPSG:4326 --tmp-location --exec g.extension -s ext=i.wi
-    #grass -c EPSG:4326 --tmp-location --exec g.extension -s ext=r.bioclim
-    #grass -c EPSG:4326 --tmp-location --exec g.extension -s ext=r.series.lwr
-    #grass -c EPSG:4326 --tmp-location --exec g.extension -s ext=v.clip
-    #grass -c EPSG:4326 --tmp-location --exec g.extension -s ext=v.strds.stats
-
-    # Add Python GRASS session
-    pip3 install grass-session
+    grass -c EPSG:4326 --tmp-project --exec g.extension -s ext=i.modis
+    grass -c EPSG:4326 --tmp-project --exec g.extension -s ext=i.sentinel
+    grass -c EPSG:4326 --tmp-project --exec g.extension -s ext=r.in.pdal
+    #grass -c EPSG:4326 --tmp-project --exec g.extension -s ext=i.wi
+    #grass -c EPSG:4326 --tmp-project --exec g.extension -s ext=r.bioclim
+    #grass -c EPSG:4326 --tmp-project --exec g.extension -s ext=r.series.lwr
+    #grass -c EPSG:4326 --tmp-project --exec g.extension -s ext=v.clip
+    #grass -c EPSG:4326 --tmp-project --exec g.extension -s ext=v.strds.stats
 
 %environment
     export LANG=C.UTF-8

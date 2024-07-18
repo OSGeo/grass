@@ -15,6 +15,7 @@ This program is free software under the GNU General Public License
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
+
 import os
 import copy
 
@@ -84,7 +85,7 @@ class AnimationData:
         timeseriesList = []
         for layer in layerList:
             if layer.active and hasattr(layer, "maps"):
-                if layer.mapType in ("strds", "stvds", "str3ds"):
+                if layer.mapType in {"strds", "stvds", "str3ds"}:
                     timeseriesList.append((layer.name, layer.mapType))
                     self._firstStdsNameType = layer.name, layer.mapType
                 else:
@@ -297,7 +298,7 @@ class AnimLayer(Layer):
                 raise ValueError(
                     "To set layer name, the type of layer must be specified."
                 )
-            if self._mapType in ("strds", "stvds", "str3ds"):
+            if self._mapType in {"strds", "stvds", "str3ds"}:
                 try:
                     name = validateTimeseriesName(name, self._mapType)
                     self._maps = getRegisteredMaps(name, self._mapType)

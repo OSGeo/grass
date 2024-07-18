@@ -33,7 +33,7 @@ for other platforms you may have to install some of them.
   PROJ: [https://proj.org/](https://proj.org/)
 - **GDAL/OGR** for import and export of most external raster and vector map formats
   GDAL: [https://gdal.org](https://gdal.org)
-- **Python >= 3.7** (for temporal framework, scripts, wxGUI, and ctypes interface)
+- **Python >= 3.8** (for temporal framework, scripts, wxGUI, and ctypes interface)
   [https://www.python.org](https://www.python.org)
 
 ## Optional packages

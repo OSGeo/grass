@@ -11,6 +11,7 @@
  * \author Original author CERL
  */
 
+#include <string.h>
 #include <stdio.h>
 #include <grass/gis.h>
 
@@ -48,55 +49,38 @@ int G_getl(char *buf, int n, FILE *fd)
  * i.e. <code>\\n (\\012)</code>, <code>\\r (\\015)</code>, and
  * <code>\\r\\n (\\015\\012)</code> style newlines.
  *
- *
  * Reads in at most <i>n-1</i> characters from stream (the last spot
  * is reserved for the end-of-string NUL) and stores them into the
  * buffer pointed to by <i>buf</i>. Reading stops after an EOF or a
- * newline.  New line is not stored in the buffer. At least <i>n</i>
- * must be allocated for the string buffer.
+ * newline. New line is not stored in the buffer. At least <i>n</i>
+ * bytes must be allocated for the string buffer.
  *
- * \param buf: string buffer to receive read data, at least <i>n</i> must be
- * allocated \param n: maximum number of bytes to read \param fd: file
- * descriptor structure
+ * \param buf: string buffer to receive read data, at least <i>n</i>
+ *             bytes must be allocated
+ * \param n: maximum number of bytes to read
+ * \param fd: file descriptor structure
  *
  * \return 1 on success
  * \return 0 EOF
  */
 int G_getl2(char *buf, int n, FILE *fd)
 {
-    int i = 0;
-    int c;
-    int ret = 1;
-
-    while (i < n - 1) {
-        c = fgetc(fd);
-
-        if (c == EOF) {
-            if (i == 0) { /* Read correctly (return 1) last line in file without
-                             '\n' */
-                ret = 0;
-            }
-            break;
-        }
-
-        if (c == '\n')
-            break; /* UNIX */
-
-        if (c == '\r') { /* DOS or MacOS9 */
-            if ((c = fgetc(fd)) != EOF) {
-                if (c !=
-                    '\n') { /* MacOS9 - we have to return the char to stream */
-                    ungetc(c, fd);
-                }
-            }
-            break;
-        }
-
-        buf[i] = c;
-
-        i++;
+    if (buf == NULL || fd == NULL || n <= 1) {
+        return 0;
     }
-    buf[i] = '\0';
 
-    return ret;
+    if (fgets(buf, n, fd) == NULL) {
+        return 0; /* EOF or error */
+    }
+
+    /* Remove newline characters (\n, \r\n, or \r) */
+    int len = strlen(buf);
+    if (len > 0 && buf[len - 1] == '\n') {
+        buf[--len] = '\0';
+    }
+    if (len > 0 && buf[len - 1] == '\r') {
+        buf[--len] = '\0';
+    }
+
+    return 1;
 }

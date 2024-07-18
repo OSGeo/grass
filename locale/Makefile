@@ -57,7 +57,7 @@ pot:
 	@echo "Generating $(WXPYDOMAIN)..."
 	xgettext --from-code=utf-8 --keyword=_ --keyword=n_:1,2 -cGTC -o ./templates/$(WXPYDOMAIN).pot `$(WXPY_POTFILES)`
 
-#merge already existing translations with new messages in POT template file and create new po files:
+#merge already existing translations with new messages in POT template file, deduplicate it and create new po files:
 update-po:
 	@for i in $(DOMAINS) ; do \
 		if [ "`ls ./po/$$i\_*.po 2>/dev/null`" = "" ] ; then \
@@ -72,7 +72,8 @@ update-po:
 		lingua=`basename $$suffix .po`; \
 		prefix=`echo $$po | cut -d'_' -f1`; \
 		if msgmerge -o $$prefix\_$$suffix.new $$prefix\_$$suffix ../templates/$$prefix.pot; then\
-		  mv $$prefix\_$$suffix.new $$prefix\_$$suffix; \
+		  msguniq --use-first $$prefix\_$$suffix.new > $$prefix\_$$suffix; \
+		  rm -f $$prefix\_$$suffix.new; \
 		  echo "Merged new messages into $$prefix\_$$suffix" ; \
 		else \
 		    echo "Merging failed"; \

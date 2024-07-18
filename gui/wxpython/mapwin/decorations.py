@@ -32,7 +32,6 @@ from gui_core.wrap import NewId
 
 
 class OverlayController:
-
     """Base class for decorations (barscale, legend) controller."""
 
     def __init__(self, renderer, giface):
@@ -212,9 +211,8 @@ class DtextController(OverlayController):
             param = param.split("=")
             if len(param) == 1:
                 inputs += 1
-            else:
-                if param[0] == "text" and len(param) == 2:
-                    inputs += 1
+            elif param[0] == "text" and len(param) == 2:
+                inputs += 1
         if inputs >= 1:
             return True
         return False
@@ -300,7 +298,8 @@ class LegendController(OverlayController):
         for param in self._cmd:
             if not param.startswith("at"):
                 continue
-            # if the at= is the default, we will move the legend from the center to bottom left
+            # if the at= is the default, we will move the legend from the center to
+            # bottom left
             if param == self._defaultAt:
                 b, t, l, r = 5, 50, 7, 10
             else:
@@ -318,11 +317,10 @@ class LegendController(OverlayController):
             param = param.split("=")
             if len(param) == 1:
                 inputs += 1
-            else:
-                if param[0] == "raster" and len(param) == 2:
-                    inputs += 1
-                elif param[0] == "raster_3d" and len(param) == 2:
-                    inputs += 1
+            elif param[0] == "raster" and len(param) == 2:
+                inputs += 1
+            elif param[0] == "raster_3d" and len(param) == 2:
+                inputs += 1
         if inputs == 1:
             return True
         return False

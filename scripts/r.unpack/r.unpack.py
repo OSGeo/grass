@@ -30,8 +30,8 @@
 # %end
 # %flag
 # % key: o
-# % label: Override projection check (use current location's projection)
-# % description: Assume that the dataset has same projection as the current location
+# % label: Override projection check (use current projects's CRS)
+# % description: Assume that the dataset has same coordinate reference system as the current project
 # % guisection: Output settings
 # %end
 # %flag
@@ -41,6 +41,7 @@
 # %end
 
 import os
+from pathlib import Path
 import sys
 import shutil
 import tarfile
@@ -140,9 +141,7 @@ def main():
     # check projection compatibility in a rather crappy way
 
     if flags["o"]:
-        grass.warning(
-            _("Overriding projection check (using current location's projection).")
-        )
+        grass.warning(_("Overriding projection check (using current project's CRS)."))
 
     else:
         diff_result_1 = diff_result_2 = None
@@ -155,7 +154,8 @@ def main():
             if os.path.exists(proj_info_file_2):
                 grass.fatal(
                     _(
-                        "PROJ_INFO file is missing, unpack raster map in XY (unprojected) location."
+                        "PROJ_INFO file is missing, unpack raster map in XY "
+                        "(unprojected) project."
                     )
                 )
             skip_projection_check = True  # XY location
@@ -179,22 +179,23 @@ def main():
                     grass.warning(
                         _(
                             "Difference between PROJ_INFO file of packed map "
-                            "and of current location:\n{diff}"
+                            "and of current project:\n{diff}"
                         ).format(diff="".join(diff_result_1))
                     )
                 if diff_result_2:
                     grass.warning(
                         _(
                             "Difference between PROJ_UNITS file of packed map "
-                            "and of current location:\n{diff}"
+                            "and of current project:\n{diff}"
                         ).format(diff="".join(diff_result_2))
                     )
                 grass.fatal(
                     _(
-                        "Projection of dataset does not appear to match current location."
-                        " In case of no significant differences in the projection definitions,"
+                        "Coordinate reference system of dataset does"
+                        " not appear to match current project."
+                        " In case of no significant differences in the CRS definitions,"
                         " use the -o flag to ignore them and use"
-                        " current location definition."
+                        " current project definition."
                     )
                 )
 
@@ -243,8 +244,7 @@ def main():
     if maps:
         if vrt_file and os.path.exists(vrt_file):
             files = "\n".join(maps)
-            with open(vrt_file, "w") as f:
-                f.write(files)
+            Path(vrt_file).write_text(files)
 
     grass.message(_("Raster map <{name}> unpacked".format(name=map_name)))
 

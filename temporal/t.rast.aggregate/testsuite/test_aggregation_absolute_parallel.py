@@ -7,12 +7,14 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 import os
+from datetime import datetime
+
 import grass.pygrass.modules as pymod
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
-from datetime import datetime
 
 
 class TestAggregationAbsoluteParallel(TestCase):

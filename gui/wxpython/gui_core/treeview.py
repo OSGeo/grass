@@ -91,8 +91,7 @@ class AbstractTreeViewMixin(VirtualTree):
         """
         node = self._model.GetNodeByIndex(index)
         # remove & because of & needed in menu (&Files)
-        label = node.label.replace("&", "")
-        return label
+        return node.label.replace("&", "")
 
     def OnGetChildrenCount(self, index):
         """Overridden method necessary to communicate with tree model."""
@@ -258,8 +257,7 @@ class TreeListView(AbstractTreeViewMixin, ExpansionState, TreeListCtrl):
         if column > 0:
             return node.data.get(self._columns[column], "")
         else:
-            label = node.label.replace("&", "")
-            return label
+            return node.label.replace("&", "")
 
     def OnRightClick(self, event):
         """Select item on right click.
@@ -279,8 +277,8 @@ class TreeFrame(wx.Frame):
         wx.Frame.__init__(self, None, title="Test tree")
 
         panel = wx.Panel(self)
-        #        self.tree = TreeListView(model=model, parent=panel, columns=['col1', 'xxx'])
-        #        self.tree = TreeView(model=model, parent=panel)
+        # self.tree = TreeListView(model=model, parent=panel, columns=["col1", "xxx"])
+        # self.tree = TreeView(model=model, parent=panel)
         self.tree = CTreeView(model=model, parent=panel)
         self.tree.selectionChanged.connect(self.OnSelChanged)
         self.tree.itemActivated.connect(self.OnItemActivated)
