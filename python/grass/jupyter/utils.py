@@ -202,31 +202,32 @@ def get_rendering_size(region, width, height, default_width=600, default_height=
     return (default_width, round(default_width * region_height / region_width))
 
 
-def get_computational_region_bb():
-    """
-    Gets the current computational region.
-    """
+def get_region_bounds_latlon():
+    """Gets the current computational region bounds in latlon."""
     region = gs.parse_command("g.region", flags="gbp")
-    latlon = [(region["ll_s"], region["ll_w"]), (region["ll_n"], region["ll_e"])]
-    reprojected = [region["n"], region["s"], region["e"], region["w"]]
-    res = [region["nsres"], region["ewres"]]
-    return latlon, reprojected, res
+    return [
+        (float(region["ll_s"]), float(region["ll_w"])),
+        (float(region["ll_n"]), float(region["ll_e"])),
+    ]
 
 
-def update_region(region_coordinates, res):
+def update_region(region):
+    """Updates the computational region bounds.
+
+    :return: the new region
     """
-    Updates the GRASS GIS region using the given coordinates.
-    """
-    gs.run_command(
+    current = gs.region()
+    new = gs.parse_command(
         "g.region",
-        flags="a",
-        n=region_coordinates["north"],
-        s=region_coordinates["south"],
-        e=region_coordinates["east"],
-        w=region_coordinates["west"],
-        nsres=res[0],
-        ewres=res[1],
+        flags="ga",
+        n=region["north"],
+        s=region["south"],
+        e=region["east"],
+        w=region["west"],
+        nsres=current["nsres"],
+        ewres=current["ewres"],
     )
+    return new
 
 
 def save_gif(

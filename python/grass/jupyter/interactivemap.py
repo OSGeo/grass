@@ -17,7 +17,7 @@ import base64
 import json
 from .reprojection_renderer import ReprojectionRenderer
 from .utils import (
-    get_computational_region_bb,
+    get_region_bounds_latlon,
     reproject_region,
     update_region,
     get_location_proj_string,
@@ -308,6 +308,7 @@ class InteractiveMap:
         # Set LayerControl default
         self.layer_control = False
         self.layer_control_object = None
+        self.region_rectangle = None
 
         self._renderer = ReprojectionRenderer(
             use_region=use_region, saved_region=saved_region
@@ -363,162 +364,88 @@ class InteractiveMap:
             icon="square-o",
             description="",
             value=False,
-            tooltip="Click to show computational region",
-            button_style="info",
-            layout=widgets.Layout(width="33px", margin="0px 0px 0px 0px"),
+            tooltip="Click to show and edit computational region",
+            layout=widgets.Layout(width="40px", margin="0px 0px 0px 0px"),
         )
 
         save_button = widgets.Button(
             description="Update region",
-            button_style="success",
-            tooltip="Click to save region",
+            tooltip="Click to update region",
             disabled=True,
         )
-
         bottom_output_widget = widgets.Output(
             layout={
                 "width": "100%",
                 "max_height": "300px",
-                "max_width": "300px",
                 "overflow": "auto",
                 "display": "none",
             }
         )
 
-        region_coordinates = {}
-        reprojected_region = {
-            "north": None,
-            "south": None,
-            "east": None,
-            "west": None,
-        }
-        res = {}
-        rectangle = None
+        changed_region = {}
         save_button_control = None
 
-        def update_output():
+        def update_output(region):
             with bottom_output_widget:
                 bottom_output_widget.clear_output()
-                print("Current Bounds:")
-                print(f"North: {reprojected_region['north']}")
-                print(f"South: {reprojected_region['south']}")
-                print(f"East: {reprojected_region['east']}")
-                print(f"West: {reprojected_region['west']}")
+                print(
+                    _(
+                        "Region changed to: n={n}, s={s}, e={e}, w={w} "
+                        "nsres={nsres} ewres={ewres}"
+                    ).format(**region)
+                )
 
         def on_rectangle_change(value):
-            nonlocal region_coordinates, reprojected_region
+            save_button.disabled = False
+            bottom_output_widget.layout.display = "none"
             latlon_bounds = value["new"][0]
-            region_coordinates = {
-                "north": latlon_bounds[2]["lat"],
-                "south": latlon_bounds[0]["lat"],
-                "east": latlon_bounds[2]["lng"],
-                "west": latlon_bounds[0]["lng"],
-            }
-            rectangle.bounds = latlon_bounds
-            from_proj = "+proj=longlat +datum=WGS84 +no_defs"
-            to_proj = get_location_proj_string()
-            reprojected_region = reproject_region(
-                region_coordinates, from_proj, to_proj
-            )
-            update_region(reprojected_region, res)
+            changed_region["north"] = latlon_bounds[2]["lat"]
+            changed_region["south"] = latlon_bounds[0]["lat"]
+            changed_region["east"] = latlon_bounds[2]["lng"]
+            changed_region["west"] = latlon_bounds[0]["lng"]
 
         def toggle_region_mode(change):
-            nonlocal rectangle, save_button_control
-            nonlocal region_coordinates, reprojected_region, res
+            nonlocal save_button_control
 
             if change["new"]:
-                if rectangle is None:
-                    latlon_bounds, rregion, res = get_computational_region_bb()
-                    region_coordinates = {
-                        "north": latlon_bounds[1][0],
-                        "south": latlon_bounds[0][0],
-                        "east": latlon_bounds[1][1],
-                        "west": latlon_bounds[0][1],
-                    }
-                    reprojected_region = {
-                        "north": rregion[0],
-                        "south": rregion[1],
-                        "east": rregion[2],
-                        "west": rregion[3],
-                    }
-                    rectangle = self._ipyleaflet.Rectangle(
-                        bounds=latlon_bounds,
-                        color="red",
-                        fill_color="red",
-                        fill_opacity=0.5,
-                        draggable=True,
-                        editable=True,
-                        transform=True,
-                        rotation=False,
-                        name="computational_region",
-                    )
-                    rectangle.observe(on_rectangle_change, names="locations")
-                    self.map.add_layer(rectangle)
-                    self.map.fit_bounds(
-                        [
-                            [
-                                float(region_coordinates["south"]),
-                                float(region_coordinates["west"]),
-                            ],
-                            [
-                                float(region_coordinates["north"]),
-                                float(region_coordinates["east"]),
-                            ],
-                        ]
-                    )
+                region_bounds = get_region_bounds_latlon()
+                self.region_rectangle = self._ipyleaflet.Rectangle(
+                    bounds=region_bounds,
+                    color="red",
+                    fill_color="red",
+                    fill_opacity=0.5,
+                    draggable=True,
+                    transform=True,
+                    rotation=False,
+                    name="Computational region",
+                )
+                self.region_rectangle.observe(on_rectangle_change, names="locations")
+                self.map.fit_bounds(region_bounds)
+                self.map.add(self.region_rectangle)
 
-                else:
-                    rectangle.editable = True
-                    rectangle.draggable = True
-                    rectangle.transform = True
-                    rectangle.rotation = False
-                    rectangle.fill_opacity = 0.5
-                    rectangle.fill_color = "red"
-                    rectangle.color = "red"
-                    rectangle.opacity = 1
-                    self.map.fit_bounds(
-                        [
-                            [rectangle.bounds[0]["lat"], rectangle.bounds[0]["lng"]],
-                            [rectangle.bounds[2]["lat"], rectangle.bounds[2]["lng"]],
-                        ]
-                    )
-
-                save_button.disabled = False
-                bottom_output_widget.layout.display = "block"
-
-                if save_button_control is None:
-                    save_button_control = self._ipyleaflet.WidgetControl(
-                        widget=save_button, position="topright"
-                    )
-                    self.map.add_control(save_button_control)
-                else:
-                    self.map.add_control(save_button_control)
-
+                save_button_control = self._ipyleaflet.WidgetControl(
+                    widget=save_button, position="topright"
+                )
+                self.map.add_control(save_button_control)
             else:
-                if rectangle:
-                    rectangle.editable = False
-                    rectangle.draggable = False
-                    rectangle.transform = False
-                    rectangle.rotation = False
-                    rectangle.opacity = 0
-                    rectangle.fill_opacity = 0
+                if self.region_rectangle:
+                    self.region_rectangle.transform = False
+                    self.map.remove(self.region_rectangle)
+                    self.region_rectangle = None
 
                 save_button.disabled = True
-                bottom_output_widget.layout.display = "none"
 
                 if save_button_control:
-                    self.map.remove_control(save_button_control)
+                    self.map.remove(save_button_control)
+                bottom_output_widget.layout.display = "none"
 
         def save_region(change):
-            if rectangle:
-                update_output()
-                rectangle.name = "computational_region"
-            self.map.fit_bounds(
-                [
-                    [rectangle.bounds[0]["lat"], rectangle.bounds[0]["lng"]],
-                    [rectangle.bounds[2]["lat"], rectangle.bounds[2]["lng"]],
-                ]
-            )
+            from_proj = "+proj=longlat +datum=WGS84 +no_defs"
+            to_proj = get_location_proj_string()
+            reprojected_region = reproject_region(changed_region, from_proj, to_proj)
+            new = update_region(reprojected_region)
+            bottom_output_widget.layout.display = "block"
+            update_output(new)
 
         region_mode_button.observe(toggle_region_mode, names="value")
         save_button.on_click(save_region)
@@ -529,7 +456,7 @@ class InteractiveMap:
         self.map.add_control(region_mode_control)
 
         output_control = self._ipyleaflet.WidgetControl(
-            widget=bottom_output_widget, position="bottomright"
+            widget=bottom_output_widget, position="bottomleft"
         )
         self.map.add_control(output_control)
 
