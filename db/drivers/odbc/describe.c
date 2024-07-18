@@ -9,9 +9,7 @@
 
 int set_column_type(dbColumn *column, int otype);
 
-int db__driver_describe_table(table_name, table)
-dbString *table_name;
-dbTable **table;
+int db__driver_describe_table(dbString *table_name, dbTable **table)
 {
     char *name = NULL;
     SQLINTEGER err;
@@ -60,9 +58,7 @@ dbTable **table;
     return DB_OK;
 }
 
-int describe_table(stmt, table)
-SQLHSTMT stmt;
-dbTable **table;
+int describe_table(SQLHSTMT stmt, dbTable **table)
 {
     dbColumn *column;
     int col;
@@ -71,7 +67,7 @@ dbTable **table;
     SQLRETURN ret;
     SQLCHAR charval[100];
 
-    /* get the number of colummns */
+    /* get the number of columns */
     ret = SQLNumResultCols(stmt, &ncols);
     if ((ret != SQL_SUCCESS) && (ret != SQL_SUCCESS_WITH_INFO)) {
         db_d_append_error("SQLNumResultCols()");
@@ -143,9 +139,7 @@ dbTable **table;
     return DB_OK;
 }
 
-int set_column_type(column, otype)
-dbColumn *column;
-int otype;
+int set_column_type(dbColumn *column, int otype)
 {
     int dbtype;
 

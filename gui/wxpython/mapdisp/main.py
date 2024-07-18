@@ -25,13 +25,10 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 @author Vaclav Petras <wenzeslaus gmail.com> (MapPanelBase)
 @author Anna Kratochvilova <kratochanna gmail.com> (MapPanelBase)
-"""
-
-from __future__ import print_function
+"""  # noqa: E501
 
 import os
 import sys
-import six
 import time
 import shutil
 import fileinput
@@ -81,7 +78,7 @@ class DMonMap(Map):
         self._giface = giface
 
         # environment settings
-        self.env = dict()
+        self.env = {}
 
         self.cmdfile = cmdfile
 
@@ -172,7 +169,7 @@ class DMonMap(Map):
             # next number in rendering order
             next_layer = 0
             mapFile = None
-            render_env = dict()
+            render_env = {}
             for line in lines:
                 if line.startswith("#"):
                     if "GRASS_RENDER_FILE" in line:
@@ -199,7 +196,7 @@ class DMonMap(Map):
 
                 args = {}
 
-                if ltype in ("barscale", "rastleg", "northarrow", "text", "vectleg"):
+                if ltype in {"barscale", "rastleg", "northarrow", "text", "vectleg"}:
                     # TODO: this is still not optimal
                     # it is there to prevent adding the same overlay multiple times
                     if cmd in self.oldOverlays:
@@ -230,7 +227,8 @@ class DMonMap(Map):
                         if layersOrder[i] == -1:
                             layersOrder[i] = next_layer
                             next_layer += 1
-                        # layer must be put higher in render order (same cmd was insered more times)
+                        # layer must be put higher in render order (same cmd was
+                        # insered more times)
                         # TODO delete rendurant cmds from cmd file?
                         else:
                             for j, l_order in enumerate(layersOrder):
@@ -256,7 +254,7 @@ class DMonMap(Map):
                 )
                 if render_env:
                     mapLayer.GetRenderMgr().UpdateRenderEnv(render_env)
-                    render_env = dict()
+                    render_env = {}
 
                 newLayer = self._addLayer(mapLayer)
 
@@ -270,7 +268,6 @@ class DMonMap(Map):
 
             reorderedLayers = [-1] * next_layer
             for i, layer in enumerate(existingLayers):
-
                 # owned layer was not found in cmd file -> is deleted
                 if layersOrder[i] == -1 and layer in self.ownedLayers:
                     self.ownedLayers.remove(layer)
@@ -287,7 +284,7 @@ class DMonMap(Map):
 
             self.SetLayers(reorderedLayers)
 
-        except IOError as e:
+        except OSError as e:
             grass.warning(
                 _("Unable to read cmdfile '%(cmd)s'. Details: %(det)s")
                 % {"cmd": self.cmdfile, "det": e}
@@ -328,7 +325,7 @@ class DMonMap(Map):
         return layer
 
 
-class Layer(object):
+class Layer:
     """@implements core::giface::Layer"""
 
     def __init__(self, maplayer):
@@ -349,7 +346,7 @@ class Layer(object):
             # elif name == 'propwin':
 
 
-class LayerList(object):
+class LayerList:
     """@implements core::giface::LayerList"""
 
     def __init__(self, map, giface):
@@ -582,8 +579,8 @@ class MapApp(wx.App):
             ),
         )
 
-        self.Map.saveToFile.connect(lambda cmd: self.mapDisplay.DOutFile(cmd))
-        self.Map.dToRast.connect(lambda cmd: self.mapDisplay.DToRast(cmd))
+        self.Map.saveToFile.connect(self.mapDisplay.DOutFile)
+        self.Map.dToRast.connect(self.mapDisplay.DToRast)
         self.Map.query.connect(
             lambda ltype, maps: self.mapDisplay.SetQueryLayersAndActivate(
                 ltype=ltype, maps=maps
@@ -598,7 +595,7 @@ class MapApp(wx.App):
             if self.timer.IsRunning:
                 self.timer.Stop()
             # terminate thread
-            for f in six.itervalues(monFile):
+            for f in monFile.values():
                 try_remove(f)
         return True
 
@@ -614,7 +611,7 @@ class MapApp(wx.App):
         # try:
         # GISBASE and other system environmental variables can not be used
         # since the process inherited them from GRASS
-        # raises exception when vaiable does not exists
+        # raises exception when viable does not exists
         # grass.gisenv()['GISDBASE']
         # except KeyError:
         #    self.timer.Stop()

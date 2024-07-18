@@ -109,7 +109,7 @@ int G_math_solver_lu(double **A, double *x, double *b, int rows)
 
 /*!
  * \brief The choleksy decomposition solver for quardatic, symmetric
- * positiv definite matrices
+ * positive definite matrices
  *
  * This solver does not support sparse matrices
  * The matrix A will be overwritten.
@@ -202,7 +202,7 @@ void G_math_lu_decomposition(double **A, double *b UNUSED, int rows)
 }
 
 /*!
- * \brief cholesky decomposition for symmetric, positiv definite matrices
+ * \brief cholesky decomposition for symmetric, positive definite matrices
  *        with bandwidth optimization
  *
  * The provided matrix will be overwritten with the lower and
@@ -231,7 +231,8 @@ int G_math_cholesky_decomposition(double **A, int rows, int bandwidth)
     colsize = bandwidth;
 
     for (k = 0; k < rows; k++) {
-#pragma omp parallel for schedule (static) private(i, j, sum_2) shared(A, k) reduction(+:sum_1)
+#pragma omp parallel for schedule(static) private(i, j, sum_2) shared(A, k) \
+    reduction(+ : sum_1)
         for (j = 0; j < k; j++) {
             sum_1 += A[k][j] * A[k][j];
         }

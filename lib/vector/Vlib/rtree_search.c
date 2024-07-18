@@ -29,7 +29,7 @@ static int add_id_to_list(int id, const struct RTree_Rect *rect UNUSED,
 }
 
 /**
- * Search in an index tree for all data retangles that
+ * Search in an index tree for all data rectangles that
  * overlap the argument rectangle.
  *
  * \param t: The RTree

@@ -133,7 +133,7 @@ static void line_coefficients(double x1, double y1, double x2, double y2,
 /*
  * Finds intersection of two straight lines. Returns 0 if the lines are
  * parallel, 1 if they cross, 2 if they are the same line.
- * !!!!!!!!!!!!!!!! FIX THIS TOLLERANCE CONSTANTS BAD (and UGLY) CODE !!!!!!!!!
+ * !!!!!!!!!!!!!!!! FIX THIS TOLERANCE CONSTANTS BAD (and UGLY) CODE !!!!!!!!!
  */
 static int line_intersection(double a1, double b1, double c1, double a2,
                              double b2, double c2, double *x, double *y)
@@ -1023,9 +1023,11 @@ void Vect_line_buffer2(const struct line_pnts *Points, double da, double db,
 
     Vect_line_prune((struct line_pnts *)Points);
 
-    if (Points->n_points == 1)
-        return Vect_point_buffer2(Points->x[0], Points->y[0], da, db, dalpha,
-                                  round, tol, oPoints);
+    if (Points->n_points == 1) {
+        Vect_point_buffer2(Points->x[0], Points->y[0], da, db, dalpha, round,
+                           tol, oPoints);
+        return;
+    }
 
     /* initializations */
     tPoints = Vect_new_line_struct();
@@ -1052,8 +1054,6 @@ void Vect_line_buffer2(const struct line_pnts *Points, double da, double db,
     Vect_destroy_line_struct(outer);
     destroy_lines_array(isles, isles_count);
     pg_destroy_struct(pg);
-
-    return;
 }
 
 /*!
@@ -1071,10 +1071,10 @@ void Vect_line_buffer2(const struct line_pnts *Points, double da, double db,
    \param[out] inner_count number of holes
    \param[out] iPoints array of output polygon's holes (cw order)
  */
-void Vect_area_buffer2(const struct Map_info *Map, int area, double da,
-                       double db, double dalpha, int round, int caps,
-                       double tol, struct line_pnts **oPoints,
-                       struct line_pnts ***iPoints, int *inner_count)
+void Vect_area_buffer2(struct Map_info *Map, int area, double da, double db,
+                       double dalpha, int round, int caps, double tol,
+                       struct line_pnts **oPoints, struct line_pnts ***iPoints,
+                       int *inner_count)
 {
     struct line_pnts *tPoints, *outer;
     struct line_pnts **isles;

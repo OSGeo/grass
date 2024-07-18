@@ -34,7 +34,7 @@ static float RASTER3D_MASKNUMmaskValue;
 
 /*--------------------------------------------------------------------------*/
 
-int Rast3d_mask_close()
+int Rast3d_mask_close(void)
 {
     /* No Idea if this is correct return value */
     if (!Rast3d_maskMapExistsVar)
@@ -304,12 +304,12 @@ void Rast3d_mask_tile(RASTER3D_Map *map, int tileIndex, void *tile, int type)
         for (dy = y; dy < rows; dy++) {
             for (dx = x; dx < cols; dx++) {
                 RASTER3D_MASKNUM(map, dx, dy, dz, tile, type);
-                tile += length;
+                tile = (char *)tile + length;
             }
 
-            tile += xLength;
+            tile = (char *)tile + xLength;
         }
-        tile += yLength;
+        tile = (char *)tile + yLength;
     }
 }
 

@@ -17,12 +17,12 @@ This program is free software under the GNU General Public License
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
+
 import os
 import wx
 import wx.aui
-import six
 
-import grass.script as gcore
+import grass.script as gs
 import grass.temporal as tgis
 from grass.exceptions import FatalError
 from core import globalvar
@@ -42,7 +42,7 @@ from animation.utils import Orientation, ReplayMode, TemporalType
 MAX_COUNT = 4
 TMP_DIR = None
 
-gcore.set_raise_on_error(True)
+gs.set_raise_on_error(True)
 
 
 class AnimationFrame(wx.Frame):
@@ -71,7 +71,7 @@ class AnimationFrame(wx.Frame):
         # create temporal directory and ensure it's deleted after programs ends
         # (stored in MAPSET/.tmp/)
         global TMP_DIR
-        TMP_DIR = gcore.tempdir()
+        TMP_DIR = gs.tempdir()
 
         self.animations = [Animation() for i in range(MAX_COUNT)]
         self.windows = []
@@ -118,7 +118,7 @@ class AnimationFrame(wx.Frame):
         self._addPanes()
         self._mgr.Update()
 
-        self.dialogs = dict()
+        self.dialogs = {}
         self.dialogs["speed"] = None
         self.dialogs["preferences"] = None
 
@@ -143,7 +143,7 @@ class AnimationFrame(wx.Frame):
             .DestroyOnClose(True)
             .Layer(0),
         )
-        for name, slider in six.iteritems(self.animationSliders):
+        for name, slider in self.animationSliders.items():
             self._mgr.AddPane(
                 slider,
                 wx.aui.AuiPaneInfo()
@@ -182,7 +182,7 @@ class AnimationFrame(wx.Frame):
             .Layer(2)
             .Row(1)
             .Position(0)
-            .BestSize((self.toolbars["mainToolbar"].GetBestSize())),
+            .BestSize(self.toolbars["mainToolbar"].GetBestSize()),
         )
 
         self.toolbars["animationToolbar"] = AnimationToolbar(self)
@@ -201,7 +201,7 @@ class AnimationFrame(wx.Frame):
             .Layer(2)
             .Row(1)
             .Position(1)
-            .BestSize((self.toolbars["animationToolbar"].GetBestSize())),
+            .BestSize(self.toolbars["animationToolbar"].GetBestSize()),
         )
         self.controller.SetAnimationToolbar(self.toolbars["animationToolbar"])
 
@@ -221,7 +221,7 @@ class AnimationFrame(wx.Frame):
             .Layer(2)
             .Row(1)
             .Position(2)
-            .BestSize((self.toolbars["miscToolbar"].GetBestSize())),
+            .BestSize(self.toolbars["miscToolbar"].GetBestSize()),
         )
 
     def SetAnimations(self, layerLists):
@@ -353,7 +353,7 @@ class AnimationFrame(wx.Frame):
         if not self.dialogs["preferences"]:
             dlg = PreferencesDialog(parent=self, giface=self._giface)
             self.dialogs["preferences"] = dlg
-            dlg.formatChanged.connect(lambda: self.controller.UpdateAnimations())
+            dlg.formatChanged.connect(self.controller.UpdateAnimations)
             dlg.CenterOnParent()
 
         self.dialogs["preferences"].Show()
@@ -642,7 +642,7 @@ class TimeAnimationSlider(AnimationSliderBase):
                 }
             else:
                 label = _("to %(to)s") % {"to": self.timeLabels[index][1]}
-        else:
+        else:  # noqa: PLR5501
             if self.temporalType == TemporalType.ABSOLUTE:
                 label = start
             else:

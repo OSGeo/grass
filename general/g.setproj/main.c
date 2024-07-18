@@ -273,7 +273,7 @@ int main(int argc, char *argv[])
             else if (G_strcasecmp(proj_out, "OB_TRAN") == 0) {
                 /* Hard coded to use "Equidistant Cylincrical"
                  * until g.setproj has been changed to run
-                 * recurively, to allow input of options for
+                 * recursively, to allow input of options for
                  * a second projection, MHu991010 */
                 G_set_key_value("o_proj", "eqc", out_proj_keys);
                 sph_check = 2;
@@ -284,7 +284,7 @@ int main(int argc, char *argv[])
                     strcpy(spheroid, buf);
                     G_strip(spheroid);
                     if (G_get_spheroid_by_name(spheroid, &aa, &e2, &f)) {
-                        /* if legal ellips. exist, ask wether or not to change
+                        /* if legal ellips. exist, ask whether or not to change
                          * it */
                         G_message(_("The current ellipsoid is %s"), spheroid);
                         if (G_yes(

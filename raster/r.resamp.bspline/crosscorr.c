@@ -138,7 +138,7 @@ int cross_correlation(SEGMENT *in_seg, struct Cell_head *src_reg, double passWE,
 
 #ifdef nodef
     double rms_min, stdev_min;
-    int lbd_min; /* lbd_min: index where minimun lambda index is found */
+    int lbd_min; /* lbd_min: index where minimum lambda index is found */
 #endif
 
     /* double lambda[PARAM_LAMBDA] = { 0.0001, 0.001, 0.01, 0.1, 1.0, 10.0 }; */ /* Fixed values (by the moment) */

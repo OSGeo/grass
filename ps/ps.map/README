@@ -129,7 +129,7 @@ The following p.map requests have been modified in ps.map:
     colortable (has the following additional sub-requests)
       where x y (distance in inches from left and top edges of page - optional)
       width  tablewidth (maximum width of colortable in inches - optional)
-      cols table_columns (optional - defaullt = 1)
+      cols table_columns (optional - default = 1)
       font fontname (optional - default = Helvetica)
       fontsize fontsize (optional - default = 10)
       color textcolor (optional - default = black)

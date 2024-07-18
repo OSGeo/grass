@@ -242,7 +242,7 @@ int Rast3d_write_tile_double(RASTER3D_Map *map, int tileIndex, const void *tile)
  * tile from the cache (in non-cache mode the buffer provided by the
  * map-structure is written). If this tile has already been written before the
  * write request is ignored. If the tile was never referred to before the
- * invokation of Rast3d_flush_tile, a tile filled with NULL-values is written.
+ * invocation of Rast3d_flush_tile, a tile filled with NULL-values is written.
  *
  *  \param map
  *  \param tileIndex

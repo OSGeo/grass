@@ -333,7 +333,7 @@ def get_location_invalid_reason(database, location, none_for_no_reason=False):
     # directory
     if not os.path.exists(location_path):
         return _("Location <%s> doesn't exist") % location_path
-    # permament mapset
+    # permanent mapset
     if "PERMANENT" not in os.listdir(location_path):
         return (
             _(
@@ -605,9 +605,7 @@ def get_reasons_grassdb_not_removable(grassdb):
     locations = []
     for g_location in g_locations:
         locations.append((grassdb, g_location))
-    messages = get_reasons_locations_not_removable(locations)
-
-    return messages
+    return get_reasons_locations_not_removable(locations)
 
 
 def get_list_of_locations(dbase):
@@ -617,7 +615,7 @@ def get_list_of_locations(dbase):
 
     :return: list of locations (sorted)
     """
-    locations = list()
+    locations = []
     for location in glob.glob(os.path.join(dbase, "*")):
         if os.path.join(location, "PERMANENT") in glob.glob(
             os.path.join(location, "*")

@@ -204,7 +204,7 @@ typedef size_t uptrval; /* generally true, except OpenVMS-64 */
 #if defined(__x86_64__)
 typedef U64 reg_t; /* 64-bits in x32 mode */
 #else
-typedef size_t reg_t;   /* 32-bits in x32 mode */
+typedef size_t reg_t; /* 32-bits in x32 mode */
 #endif
 
 /*-************************************
@@ -641,7 +641,7 @@ int LZ4_compressBound(int isize)
     return LZ4_COMPRESSBOUND(isize);
 }
 
-int LZ4_sizeofState()
+int LZ4_sizeofState(void)
 {
     return LZ4_STREAMSIZE;
 }
@@ -2454,7 +2454,7 @@ int LZ4_uncompress_unknownOutputSize(const char *source, char *dest, int isize,
 
 /* Obsolete Streaming functions */
 
-int LZ4_sizeofStreamState()
+int LZ4_sizeofStreamState(void)
 {
     return LZ4_STREAMSIZE;
 }

@@ -262,13 +262,13 @@ void elev_raster_to_g3d(Database db, RASTER3D_Region region)
 
             G_debug(
                 4,
-                "Caluclating position in 3d region -> height %g with value %g",
+                "Calculating position in 3d region -> height %g with value %g",
                 height, inval);
 
             /* Calculate if the RASTER3D cell is lower or upper the elevation
              * map and set the value.*/
             if (db.count == 0) {
-                /*Use this method if the 3d raster map was not touched befor */
+                /*Use this method if the 3d raster map was not touched before */
                 for (z = 0; z < depths; z++) {
 
                     /*Upper cells */

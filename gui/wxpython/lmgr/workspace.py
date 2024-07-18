@@ -32,7 +32,6 @@ class WorkspaceManager:
     """Workspace Manager for creating, loading and saving workspaces."""
 
     def __init__(self, lmgr, giface):
-
         self.lmgr = lmgr
         self.workspaceFile = None
         self._giface = giface
@@ -128,13 +127,13 @@ class WorkspaceManager:
         returncode, errors = RunCommand(
             "g.mapset",
             dbase=gxwXml.database,
-            location=gxwXml.location,
+            project=gxwXml.location,
             mapset=gxwXml.mapset,
             getErrorMsg=True,
         )
         if returncode != 0:
             # TODO: use the function from grass.py
-            reason = _("Most likely the database, location or mapset" " does not exist")
+            reason = _("Most likely the database, location or mapset does not exist")
             details = errors
             message = _(
                 "Unable to change to location and mapset"
@@ -150,14 +149,14 @@ class WorkspaceManager:
                 style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
             )
             dlg.CenterOnParent()
-            if dlg.ShowModal() in [wx.ID_NO, wx.ID_CANCEL]:
+            if dlg.ShowModal() in {wx.ID_NO, wx.ID_CANCEL}:
                 return False
         else:
             # TODO: copy from ChangeLocation function
             GMessage(
                 parent=self.lmgr,
                 message=_(
-                    "Current location is <%(loc)s>.\n" "Current mapset is <%(mapset)s>."
+                    "Current location is <%(loc)s>.\nCurrent mapset is <%(mapset)s>."
                 )
                 % {"loc": gxwXml.location, "mapset": gxwXml.mapset},
             )
@@ -214,7 +213,7 @@ class WorkspaceManager:
         # start map displays first (list of layers can be empty)
         #
         displayId = 0
-        mapdisplay = list()
+        mapdisplay = []
         for display in gxwXml.displays:
             mapdisp = self.lmgr.NewDisplay(name=display["name"], show=False)
             mapdisplay.append(mapdisp)
@@ -268,6 +267,8 @@ class WorkspaceManager:
             if "showToolbars" in display and not display["showToolbars"]:
                 for toolbar in mapdisp.GetToolbarNames():
                     mapdisp.RemoveToolbar(toolbar)
+            if "isDocked" in display and not display["isDocked"]:
+                mapdisp.OnDockUndock()
 
             displayId += 1
             mapdisp.Show()  # show mapdisplay
@@ -342,6 +343,15 @@ class WorkspaceManager:
                     self.lmgr.nvizUpdatePage(page)
                 self.lmgr.nvizUpdateSettings()
                 mapdisplay[i].toolbars["map"].combo.SetSelection(1)
+
+        #
+        # load layout
+        #
+        if UserSettings.Get(group="appearance", key="singleWindow", subkey="enabled"):
+            if gxwXml.layout["panes"]:
+                self.lmgr.GetAuiManager().LoadPerspective(gxwXml.layout["panes"])
+            if gxwXml.layout["notebook"]:
+                self.lmgr.GetAuiNotebook().LoadPerspective(gxwXml.layout["notebook"])
 
         self.workspaceFile = filename
         self.AddFileToHistory()
@@ -424,7 +434,7 @@ class WorkspaceManager:
         except Exception as e:
             GError(
                 parent=self.lmgr,
-                message=_("Writing current settings to workspace file " "failed."),
+                message=_("Writing current settings to workspace file failed."),
             )
             return False
 
@@ -433,7 +443,7 @@ class WorkspaceManager:
             tmpfile.seek(0)
             for line in tmpfile.readlines():
                 mfile.write(line)
-        except IOError:
+        except OSError:
             GError(
                 parent=self.lmgr,
                 message=_("Unable to open file <%s> for writing.") % filename,
@@ -456,9 +466,7 @@ class WorkspaceManager:
             if self.workspaceFile:
                 message = _("Do you want to save changes in the workspace?")
             else:
-                message = _(
-                    "Do you want to store current settings " "to workspace file?"
-                )
+                message = _("Do you want to store current settings to workspace file?")
 
             # ask user to save current settings
             if maptree.GetCount() > 0:

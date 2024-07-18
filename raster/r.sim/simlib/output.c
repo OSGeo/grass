@@ -607,7 +607,7 @@ int output_data(int tt, double ft UNUSED)
     return 1;
 }
 
-int output_et()
+int output_et(void)
 {
 
     FCELL *tc_cell, *et_cell;

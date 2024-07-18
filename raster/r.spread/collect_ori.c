@@ -2,7 +2,7 @@
  *
  *        collect_ori.c        in ~/r.spread2
  *
- *        functin to collect the spread origins from the source map and
+ *        function to collect the spread origins from the source map and
  *        put them into a min-heap; also marks the origin locations and
  *        the other locations to avoid redundant computation and to be
  *        able to terminate.
@@ -16,7 +16,7 @@
 #include "costHa.h"
 #include "local_proto.h"
 
-#define DATA(map, r, c) (map)[(r)*ncols + (c)]
+#define DATA(map, r, c) (map)[(r) * ncols + (c)]
 
 /*#define DEBUG */
 

@@ -14,9 +14,10 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 @author Stepan Turek <stepan.turek seznam.cz> (handlers support)
 """
+
 import wx
 
-from grass import script as grass
+from grass import script as gs
 from grass.pydispatch.signal import Signal
 
 from gui_core.toolbars import BaseToolbar, BaseIcons
@@ -53,6 +54,9 @@ class VDigitToolbar(BaseToolbar):
             self.editingStarted.connect(layerTree.StartEditing)
             self.editingStopped.connect(layerTree.StopEditing)
             self.editingBgMap.connect(layerTree.SetBgMapForEditing)
+
+        # replace OnTool from controller
+        self.controller.OnTool = self.OnTool
 
         # bind events
         self.Bind(wx.EVT_SHOW, self.OnShow)
@@ -179,7 +183,8 @@ class VDigitToolbar(BaseToolbar):
             "deleteLine": MetaIcon(
                 img="line-delete",
                 label=_(
-                    "Delete selected point(s), line(s), boundary(ies) or centroid(s) (Ctrl+D)"
+                    "Delete selected point(s), line(s), boundary(ies) or "
+                    "centroid(s) (Ctrl+D)"
                 ),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
@@ -208,7 +213,8 @@ class VDigitToolbar(BaseToolbar):
             "moveLine": MetaIcon(
                 img="line-move",
                 label=_(
-                    "Move selected point(s), line(s), boundary(ies) or centroid(s) (Ctrl+M)"
+                    "Move selected point(s), line(s), boundary(ies) or "
+                    "centroid(s) (Ctrl+M)"
                 ),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
@@ -235,7 +241,7 @@ class VDigitToolbar(BaseToolbar):
             ),
             "additionalTools": MetaIcon(
                 img="tools",
-                label=_("Additional tools " "(copy, flip, connect, etc.)"),
+                label=_("Additional tools (copy, flip, connect, etc.)"),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
             "undo": MetaIcon(
@@ -446,14 +452,15 @@ class VDigitToolbar(BaseToolbar):
             3,
             f"VDigitToolbar.OnTool(): id = {event.GetId() if event else event}",
         )
+        if self.toolSwitcher and event:
+            self.toolSwitcher.ToolChanged(event.GetId())
+
         # set cursor
         self.MapWindow.SetNamedCursor("cross")
         self.MapWindow.mouse["box"] = "point"
         self.MapWindow.mouse["use"] = "pointer"
 
         aId = self.action.get("id", -1)
-        if event:
-            BaseToolbar.OnTool(self, event)
 
         # clear tmp canvas
         if self.action["id"] != aId or aId == -1:
@@ -467,8 +474,8 @@ class VDigitToolbar(BaseToolbar):
         if self.action["id"] == -1:
             self.action = {"desc": "", "type": "", "id": -1}
 
-        # set focus
-        self.MapWindow.SetFocus()
+        if event:
+            event.Skip()
 
     def OnAddPoint(self, event):
         """Add point to the vector map Laier"""
@@ -665,16 +672,12 @@ class VDigitToolbar(BaseToolbar):
         """
         self._enableTool(self.redo, enable)
 
-    def _enableTool(self, tool, enable):
+    def _enableTool(self, tool, enable: bool):
         if not self.FindById(tool):
             return
 
-        if enable:
-            if self.GetToolEnabled(tool) is False:
-                self.EnableTool(tool, True)
-        else:
-            if self.GetToolEnabled(tool) is True:
-                self.EnableTool(tool, False)
+        if self.GetToolEnabled(tool) is not bool(enable):
+            self.EnableTool(tool, bool(enable))
 
     def GetAction(self, type="desc"):
         """Get current action info"""
@@ -995,7 +998,7 @@ class VDigitToolbar(BaseToolbar):
 
             if dlg and dlg.GetName():
                 # add layer to map layer tree/map display
-                mapName = dlg.GetName() + "@" + grass.gisenv()["MAPSET"]
+                mapName = dlg.GetName() + "@" + gs.gisenv()["MAPSET"]
                 self._giface.GetLayerList().AddLayer(
                     ltype="vector",
                     name=mapName,
@@ -1026,7 +1029,7 @@ class VDigitToolbar(BaseToolbar):
             return
 
         if self.mapLayer:
-            # deactive map layer for editing
+            # deactivate map layer for editing
             self.StopEditing()
 
         # select the given map layer for editing
@@ -1041,10 +1044,7 @@ class VDigitToolbar(BaseToolbar):
         """
         # check if topology is available (skip for hidden - temporary
         # maps, see iclass for details)
-        if (
-            not mapLayer.IsHidden()
-            and grass.vector_info(mapLayer.GetName())["level"] != 2
-        ):
+        if not mapLayer.IsHidden() and gs.vector_info(mapLayer.GetName())["level"] != 2:
             dlg = wx.MessageDialog(
                 parent=self.MapWindow,
                 message=_(
@@ -1062,7 +1062,7 @@ class VDigitToolbar(BaseToolbar):
             else:
                 return
 
-        # deactive layer
+        # deactivate layer
         self.Map.ChangeLayerActive(mapLayer, False)
 
         # clean map canvas
@@ -1088,7 +1088,7 @@ class VDigitToolbar(BaseToolbar):
                 )
 
             self.parent.SetStatusText(
-                _("Please wait, " "opening vector map <%s> for editing...")
+                _("Please wait, opening vector map <%s> for editing...")
                 % mapLayer.GetName(),
                 0,
             )
@@ -1203,7 +1203,7 @@ class VDigitToolbar(BaseToolbar):
                 if self.digit.GetUndoLevel() > -1:
                     dlg = wx.MessageDialog(
                         parent=self.parent,
-                        message=_("Do you want to save changes " "in vector map <%s>?")
+                        message=_("Do you want to save changes in vector map <%s>?")
                         % self.mapLayer.GetName(),
                         caption=_("Save changes?"),
                         style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
@@ -1283,7 +1283,7 @@ class VDigitToolbar(BaseToolbar):
         # select vector map layer in the current mapset
         layerNameList = []
         self.layers = self.Map.GetListOfLayers(
-            ltype="vector", mapset=grass.gisenv()["MAPSET"]
+            ltype="vector", mapset=gs.gisenv()["MAPSET"]
         )
 
         for layer in self.layers:

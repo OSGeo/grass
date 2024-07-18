@@ -2963,7 +2963,7 @@ int v5dwrite
  * to the grid specified by time and var.
  * Input:  time, var - timestep and variable of grid (starting at 1)
  *         mcfile, mcgrid - McIDAS grid file number and grid number
- * Return:  1 = ok, 0 = errror (bad time or var)
+ * Return:  1 = ok, 0 = error (bad time or var)
  */
 #ifdef UNDERSCORE
 int v5dmcfile_

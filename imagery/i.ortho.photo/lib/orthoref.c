@@ -515,7 +515,7 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
                 CC.x[1][0], CC.x[2][0], CC.x[3][0], CC.x[4][0], CC.x[5][0]);
 #endif
 
-        /* Add weigth matrix of unknowns to NN */
+        /* Add weight matrix of unknowns to NN */
         m_add(&NN, &WT1, &NN);
         /* Solve for delta */
 
@@ -679,7 +679,7 @@ int I_ortho_ref(double e1, double n1, double z1, double *e2, double *n2,
     return (1);
 }
 
-/* given the photo coordiantes (e1,n1) and elevation z2  */
+/* given the photo coordinates (e1,n1) and elevation z2  */
 /* and the solution from I_compute_ortho_equation */
 /* compute ground position (e2,n2) */
 int I_inverse_ortho_ref(double e1, double n1, double z1, double *e2, double *n2,

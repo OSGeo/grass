@@ -114,7 +114,7 @@ int dig_write_cidx_head(struct gvfile *fp, struct Plus_head *plus)
    \brief Read header of cidx file
 
    \param fp pointer to gvfile structure
-   \param plus pointer to Plus_head strcuture
+   \param plus pointer to Plus_head structure
 
    \return 0 OK
    \return -1 error

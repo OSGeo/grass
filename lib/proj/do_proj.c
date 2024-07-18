@@ -368,7 +368,7 @@ PJ *get_pj_object(const struct pj_info *in_gpj, char **in_defstr)
      * the reverse projection, and no datum shift.
      * The easiest would probably to mess up with the PROJ string.
      * Otherwise with the PROJ API, you could
-     * instanciate a PJ object from the string,
+     * instantiate a PJ object from the string,
      * check if it is a BoundCRS with proj_get_source_crs(),
      * and in that case, take the source CRS with proj_get_source_crs(),
      * and do the inverse transform on it */
@@ -696,9 +696,25 @@ int GPJ_init_transform(const struct pj_info *info_in,
         if (op_list)
             proj_list_destroy(op_list);
 
-        /* follwing code copied from proj_create_crs_to_crs_from_pj()
+        /* following code copied from proj_create_crs_to_crs_from_pj()
          * in proj src/4D_api.cpp
-         * but using PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT */
+         * using PROJ_SPATIAL_CRITERION_PARTIAL_INTERSECTION
+         * this can cause problems and artefacts
+         * switch to PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT
+         * in case of problems
+         * but results can be different from gdalwarp:
+         * shifted geolocation in some areas
+         * in these cases there is no right or wrong,
+         * different pipelines are all regarded as valid by PROJ
+         * depending on the area of interest
+         *
+         * see also:
+         * OGRProjCT::ListCoordinateOperations() in GDAL ogr/ogrct.cpp
+         * create_operation_to_geog_crs() in PROJ src/4D_api.cpp
+         * proj_create_crs_to_crs_from_pj() in PROJ src/4D_api.cpp
+         * proj_operation_factory_context_set_spatial_criterion() in PROJ
+         * src/iso19111/c_api.cpp
+         *  */
 
         /* now use the current region as area of interest */
         operation_ctx =
@@ -707,10 +723,17 @@ int GPJ_init_transform(const struct pj_info *info_in,
             PJ_DEFAULT_CTX, operation_ctx, xmin, ymin, xmax, ymax);
         proj_operation_factory_context_set_spatial_criterion(
             PJ_DEFAULT_CTX, operation_ctx,
-            PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT);
+            PROJ_SPATIAL_CRITERION_PARTIAL_INTERSECTION);
+        /* from GDAL OGRProjCT::ListCoordinateOperations() */
         proj_operation_factory_context_set_grid_availability_use(
             PJ_DEFAULT_CTX, operation_ctx,
-            PROJ_GRID_AVAILABILITY_DISCARD_OPERATION_IF_MISSING_GRID);
+#if PROJ_VERSION_NUM >= 7000000
+            proj_context_is_network_enabled(PJ_DEFAULT_CTX)
+                ? PROJ_GRID_AVAILABILITY_KNOWN_AVAILABLE
+                :
+#endif
+                PROJ_GRID_AVAILABILITY_DISCARD_OPERATION_IF_MISSING_GRID);
+
         /* The operations are sorted with the most relevant ones first:
          * by descending area (intersection of the transformation area
          * with the area of interest, or intersection of the

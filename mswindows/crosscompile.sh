@@ -40,7 +40,7 @@
 # stop on errors
 set -e
 
-# default paths, but can be overriden from the command line
+# default paths, but can be overridden from the command line
 mxe_path=${MXE_PATH-$HOME/usr/local/src/mxe}
 addons_path=${ADDONS_PATH-../grass-addons}
 freetype_include=${FREETYPE_INCLUDE-/usr/include/freetype2}
@@ -350,10 +350,10 @@ if defined GRASS_PYTHON (
 ) else (
 	rem Change this variable to override auto-detection of python.exe in
 	rem PATH
-	set GRASS_PYTHON=C:\Python39\python.exe
+	set GRASS_PYTHON=C:\Python312\python.exe
 
 	rem For portable installation, use %~d0 for the changing drive letter
-	rem set GRASS_PYTHON=%~d0\Python39\python.exe
+	rem set GRASS_PYTHON=%~d0\Python312\python.exe
 
 	if not exist "%GRASS_PYTHON%" (
 		set GRASS_PYTHON=

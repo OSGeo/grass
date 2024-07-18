@@ -19,6 +19,7 @@ This program is free software under the GNU General Public License
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
+
 import os
 import sys
 import wx
@@ -48,7 +49,6 @@ class BitmapProvider:
     def __init__(
         self, bitmapPool, mapFilesPool, tempDir, imageWidth=640, imageHeight=480
     ):
-
         self._bitmapPool = bitmapPool
         self._mapFilesPool = mapFilesPool
         self.imageWidth = (
@@ -93,9 +93,9 @@ class BitmapProvider:
         Applies to 2D mode.
 
         :param cmdsForComposition: list of lists of command lists
-                                   [[['d.rast', 'map=elev_2001'], ['d.vect', 'map=points']], # g.pnmcomp
-                                   [['d.rast', 'map=elev_2002'], ['d.vect', 'map=points']],
-                                   ...]
+                   [[['d.rast', 'map=elev_2001'], ['d.vect', 'map=points']], # g.pnmcomp
+                   [['d.rast', 'map=elev_2002'], ['d.vect', 'map=points']],
+                   ...]
         :param opacities: list of opacity values
         :param regions: list of regions
         """
@@ -121,7 +121,7 @@ class BitmapProvider:
     def _getUniqueCmds(self):
         """Returns list of unique commands.
         Takes into account the region assigned."""
-        unique = list()
+        unique = []
         for cmdList, region in zip(self._cmdsForComposition, self._regions):
             for cmd in cmdList:
                 if region:
@@ -428,9 +428,9 @@ class BitmapRenderer:
                 for i in range(len(cmd_list)):
                     proc_list[i].join()
                     filename = queue_list[i].get()
-                    self._mapFilesPool[
-                        HashCmd(cmd_list[i][0], cmd_list[i][1])
-                    ] = filename
+                    self._mapFilesPool[HashCmd(cmd_list[i][0], cmd_list[i][1])] = (
+                        filename
+                    )
                     self._mapFilesPool.SetSize(
                         HashCmd(cmd_list[i][0], cmd_list[i][1]),
                         (self.imageWidth, self.imageHeight),
@@ -541,15 +541,17 @@ class BitmapComposer:
                     proc_list[i].join()
                     filename = queue_list[i].get()
                     if filename is None:
-                        self._bitmapPool[
-                            HashCmds(cmd_lists[i][0], cmd_lists[i][1])
-                        ] = createNoDataBitmap(
-                            self.imageWidth, self.imageHeight, text="Failed to render"
+                        self._bitmapPool[HashCmds(cmd_lists[i][0], cmd_lists[i][1])] = (
+                            createNoDataBitmap(
+                                self.imageWidth,
+                                self.imageHeight,
+                                text="Failed to render",
+                            )
                         )
                     else:
-                        self._bitmapPool[
-                            HashCmds(cmd_lists[i][0], cmd_lists[i][1])
-                        ] = BitmapFromImage(wx.Image(filename))
+                        self._bitmapPool[HashCmds(cmd_lists[i][0], cmd_lists[i][1])] = (
+                            BitmapFromImage(wx.Image(filename))
+                        )
                         os.remove(filename)
                 proc_count = 0
                 proc_list = []

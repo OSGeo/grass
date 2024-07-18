@@ -69,7 +69,7 @@ int snap_line2(struct Map_info *Map, int line1, int line2, double thresh)
     Vect_read_line(Map, Points1, NULL, line1);
     type2 = Vect_read_line(Map, Points2, Cats2, line2);
 
-    /* find mininal distance and its indexes */
+    /* find minimal distance and its indexes */
     mindist = Vedit_get_min_distance(Points1, Points2, 0, /* TODO 3D */
                                      &mindistidx);
 

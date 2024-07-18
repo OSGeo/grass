@@ -271,7 +271,7 @@ int com_line_Gwater(INPUT *input, OUTPUT *output)
     /*
        COMMENT2 This section of code tells the program where to place the
        statistics about the watershed basin. GRASS users don't need this (w/
-       r.stats), but the format is suppossed to be "user-friendly" to
+       r.stats), but the format is supposed to be "user-friendly" to
        hydrologists. For the stats to be created, the armsed file output needs
        to exist. For the stats to be an option in this program: 1) it should be
        querried before the armsed file query, and 2) make the armsed file query

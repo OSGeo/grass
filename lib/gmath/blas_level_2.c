@@ -109,7 +109,7 @@ void G_math_f_Ax(float **A, float *x, float *y, int rows, int cols)
  * \param y (double *)
  * \param A (float **)  -- matrix of size rows*cols
  * \param rows (int) -- length of vector x
- * \param cols (int) -- lengt of vector y
+ * \param cols (int) -- length of vector y
  * \return (void)
  *
  * */
@@ -140,7 +140,7 @@ void G_math_d_x_dyad_y(double *x, double *y, double **A, int rows, int cols)
  * \param y (float *)
  * \param A (float **=  -- matrix of size rows*cols
  * \param rows (int) -- length of vector x
- * \param cols (int) -- lengt of vector y
+ * \param cols (int) -- length of vector y
  * \return (void)
  *
  * */

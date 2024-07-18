@@ -143,12 +143,10 @@ int db__driver_fetch(dbCursor *cn, int position, int *more)
             value->i = OGR_F_GetFieldAsInteger(c->hFeature, i);
             break;
 
-#if GDAL_VERSION_NUM >= 2000000
         case OFTInteger64:
             /* test for integer overflow ? */
             value->i = OGR_F_GetFieldAsInteger64(c->hFeature, i);
             break;
-#endif
 
         case OFTReal:
             value->d = OGR_F_GetFieldAsDouble(c->hFeature, i);

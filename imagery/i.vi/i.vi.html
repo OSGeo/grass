@@ -262,13 +262,10 @@ This index is important for monitoring vegetation health (not implemented).
 <b>PVI: Perpendicular Vegetation Index</b>
 
 <div class="code"><pre>
-pvi( redchan, nirchan )
+pvi( redchan, nirchan, soil_line_slope )
 
 PVI = sin(a)NIR-cos(a)red
 </pre></div>
-
-for a isovegetation lines (lines of equal vegetation)
-would all be parallel to the soil line therefore <tt>a=1</tt>.
 
 <p>
 <b>SAVI: Soil Adjusted Vegetation Index</b>
@@ -437,7 +434,7 @@ The calculation of PVI from the reflectance values is done as follows:
 
 <div class="code"><pre>
 g.region raster=band.3 -p
-i.vi red=band.3 nir=band.4 viname=pvi output=pvi
+i.vi red=band.3 nir=band.4 soil_line_slope=0.45 viname=pvi output=pvi
 r.univar -e pvi
 </pre></div>
 

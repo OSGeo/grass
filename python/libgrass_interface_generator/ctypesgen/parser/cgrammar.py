@@ -108,7 +108,7 @@ tokens = reserved_keyword_tokens + reserved_keyword_tokens_new + (
     # Pragma
     "PRAGMA", "PRAGMA_END", "PRAGMA_PACK",
 
-    # Delimeters
+    # Delimiters
     "PERIOD", "ELLIPSIS", "LPAREN", "RPAREN", "LBRACKET",
     "RBRACKET", "LBRACE", "RBRACE", "COMMA", "SEMI",
     "COLON",

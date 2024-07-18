@@ -34,7 +34,7 @@ static int test_resampling_fcell(RASTER3D_Map *map, double north, double east,
 /* *************************************************************** */
 /* Perform the put-get value tests ******************************* */
 /* *************************************************************** */
-int unit_test_put_get_value()
+int unit_test_put_get_value(void)
 {
     int sum = 0;
 

@@ -62,7 +62,7 @@ label_t *labels_init(struct params *p, int *n_labels)
     G_debug(1, "Need to allocate %lu bytes of memory",
             sizeof(label_t) * label_sz);
     labels = (label_t *)G_malloc(sizeof(label_t) * label_sz);
-    G_debug(1, "labels=%p", labels);
+    G_debug(1, "labels=%p", (void *)labels);
 
     if (labels == NULL)
         G_fatal_error(_("Cannot allocate %lu bytes of memory"),
@@ -102,7 +102,7 @@ label_t *labels_init(struct params *p, int *n_labels)
     buffer = atof(p->isize->answer);
 
     /* use 1 point = 1 map unit */
-    if (FT_Set_Char_Size(face, (int)((font_size)*64.0), 0, 100, 100))
+    if (FT_Set_Char_Size(face, (int)((font_size) * 64.0), 0, 100, 100))
         G_fatal_error(_("Unable to set font size"));
 
     /* start reading the map */
@@ -222,7 +222,7 @@ label_t *labels_init(struct params *p, int *n_labels)
 /**
  * This function calculates the skyline of a label and stores it in the label
  * structure.
- * @param face The openned FT library face to use.
+ * @param face The opened FT library face to use.
  * @param The charset to use [unused]
  * @param The label to which we want to create a skyline
  */
@@ -332,7 +332,7 @@ void label_candidates(label_t *labels, int n_labels)
 {
     int i;
 
-    /* generate candidate location for each label based on feture type
+    /* generate candidate location for each label based on feature type
      * see chapter 5 of MERL-TR-96-04 */
     fprintf(stderr, "Generating label candidates: ...");
     for (i = 0; i < n_labels; i++) {
@@ -1090,8 +1090,8 @@ static double label_lineover(label_t *label, label_candidate_t *candidate,
  * line.
  * @param skyline The skyline to investigate.
  * @param swathline The swath line to investigate.
- * @param p The point on the skyline which is neares to the swath line is stored
- * in this structure.
+ * @param p The point on the skyline which is nearest to the swath line is
+ * stored in this structure.
  * @return The distance in map units.
  */
 static double min_dist_2_lines(struct line_pnts *skyline,
@@ -1216,7 +1216,7 @@ void label_candidate_overlap(label_t *labels, int n_labels)
  * This function checks if the two given boxes overlap.
  * @param a Bounding box A
  * @param b Bounding box B
- * @return REtruns 1 if the two boxes overlap 0 if not.
+ * @return returns 1 if the two boxes overlap 0 if not.
  */
 static int box_overlap(struct bound_box *a, struct bound_box *b)
 {

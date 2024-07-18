@@ -62,7 +62,7 @@ class ExtendedEltMergeType;
 // enables printing when pq gets filled from buffers
 // #define EMPQ_PQ_FILL_PRINT
 
-// enables priting inserts
+// enables printing inserts
 // #define EMPQ_PRINT_INSERT
 
 // enables printing deletes
@@ -71,7 +71,7 @@ class ExtendedEltMergeType;
 // enables printing the empq on insert/extract_all_min
 // #define EMPQ_PRINT_EMPQ
 
-// enable priting the size of the EMPQ and nb of active streams
+// enable printing the size of the EMPQ and nb of active streams
 // on fillpq() amd on empty_buff_0
 // #define EMPQ_PRINT_SIZE
 

@@ -3,7 +3,7 @@
 GRASS database management
 =========================
 
-PyGRASS imlements the classes described bellow:
+PyGRASS implements the classes described bellow:
 
 * :class:`~pygrass.gis.Gisdbase`
 * :class:`~pygrass.gis.Location`

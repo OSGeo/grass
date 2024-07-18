@@ -895,7 +895,7 @@ int Gs_save_3dview(const char *vname, geoview *gv, geodisplay *gd UNUSED,
         v.twist = gv->twist;
         v.fringe = 0; /* not implemented here */
 
-        v.lightson = 1; /* always true, curently */
+        v.lightson = 1; /* always true, currently */
 
         if (gv->lights[0].position[W] == 1) {
             /* local */

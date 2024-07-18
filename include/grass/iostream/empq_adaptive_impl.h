@@ -73,7 +73,7 @@ EMPQueueAdaptive<T, Key>::EMPQueueAdaptive(size_t inMem)
 }
 
 //------------------------------------------------------------
-// This more resembles the original constuctor which is greedy
+// This more resembles the original constructor which is greedy
 template <class T, class Key>
 EMPQueueAdaptive<T, Key>::EMPQueueAdaptive()
 {
@@ -92,7 +92,7 @@ EMPQueueAdaptive<T, Key>::EMPQueueAdaptive()
 }
 
 //------------------------------------------------------------
-// This metod initialized the PQ based on the memory passed
+// This method initialized the PQ based on the memory passed
 // into it
 template <class T, class Key>
 void EMPQueueAdaptive<T, Key>::initPQ(size_t initMem)

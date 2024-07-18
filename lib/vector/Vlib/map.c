@@ -220,7 +220,7 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
    Attribute tables are created in the same database where input tables were
    stored.
 
-   The origial format (native/OGR) is used.
+   The original format (native/OGR) is used.
 
    Note: Output vector map is overwritten if exists!
 
@@ -536,7 +536,7 @@ int Vect__delete(const char *map, int is_tmp)
 }
 
 /*!
-   \brief Set spatial index to be realease when vector is closed.
+   \brief Set spatial index to be released when vector is closed.
 
    By default, the memory occupied by spatial index is not released.
 

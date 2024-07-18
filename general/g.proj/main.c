@@ -59,19 +59,20 @@ int main(int argc, char *argv[])
     int formats;
     const char *epsg = NULL;
 
+    /* We don't call G_gisinit() here because it validates the
+     * mapset, whereas this module may legitimately be used
+     * (to create a new location) when none exists. */
     G_set_program_name(argv[0]);
-    G_no_gisinit(); /* We don't call G_gisinit() here because it validates the
-                     * mapset, whereas this module may legitmately be used
-                     * (to create a new location) when none exists */
+    G_no_gisinit();
 
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("projection"));
-    G_add_keyword(_("create location"));
+    G_add_keyword(_("create project"));
 #ifdef HAVE_OGR
     module->label = _("Prints or modifies GRASS projection information files "
                       "(in various co-ordinate system descriptions).");
-    module->description = _("Can also be used to create new GRASS locations.");
+    module->description = _("Can also be used to create new GRASS projects.");
 #else
     module->description =
         _("Prints and manipulates GRASS projection information files.");
@@ -104,12 +105,13 @@ int main(int argc, char *argv[])
     dontprettify = G_define_flag();
     dontprettify->key = 'f';
     dontprettify->guisection = _("Print");
-    dontprettify->description =
-        _("Print 'flat' output with no linebreaks (applies to "
 #ifdef HAVE_OGR
-          "WKT and "
+    dontprettify->description = _("Print 'flat' output with no linebreaks "
+                                  "(applies to WKT and PROJ.4 output)");
+#else
+    dontprettify->description =
+        _("Print 'flat' output with no linebreaks (applies to PROJ.4 output)");
 #endif
-          "PROJ.4 output)");
 
 #ifdef HAVE_OGR
     printwkt = G_define_flag();
@@ -211,15 +213,15 @@ int main(int argc, char *argv[])
     create = G_define_flag();
     create->key = 'c';
     create->guisection = _("Modify");
-    create->description = _("Modify current location projection files");
+    create->description = _("Modify current project's projection files");
 
     location = G_define_option();
-    location->key = "location";
+    location->key = "project";
     location->type = TYPE_STRING;
     location->key_desc = "name";
     location->required = NO;
     location->guisection = _("Create");
-    location->description = _("Name of new location to create");
+    location->description = _("Name of new project (location) to create");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -310,19 +312,19 @@ int main(int argc, char *argv[])
                (printwkt->answer ? 1 : 0) +
 #endif
                (create->answer ? 1 : 0));
-    if (formats > 1)
-        G_fatal_error(_("Only one of -%c, -%c, -%c, -%c"
+    if (formats > 1) {
 #ifdef HAVE_OGR
-                        ", -%c"
-#endif
+        G_fatal_error(_("Only one of -%c, -%c, -%c, -%c, -%c"
                         " or -%c flags may be specified"),
                       printinfo->key, shellinfo->key, datuminfo->key,
-                      printproj4->key,
-#ifdef HAVE_OGR
-                      printwkt->key,
+                      printproj4->key, printwkt->key, create->key);
+#else
+        G_fatal_error(_("Only one of -%c, -%c, -%c, -%c"
+                        " or -%c flags may be specified"),
+                      printinfo->key, shellinfo->key, datuminfo->key,
+                      printproj4->key, create->key);
 #endif
-                      create->key);
-
+    }
     if (printinfo->answer || shellinfo->answer)
         print_projinfo(shellinfo->answer);
     else if (datuminfo->answer)

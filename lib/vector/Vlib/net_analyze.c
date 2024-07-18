@@ -164,7 +164,7 @@ static int find_shortest_path(struct Map_info *Map, int from, int to,
         Vect_reset_list(List);
 
     /* Check if from and to are identical, otherwise dglib returns path to
-     * neares node and back! */
+     * nearest node and back! */
     if (from == to) {
         if (cost != NULL)
             *cost = 0;
@@ -411,7 +411,7 @@ dglGraph_s *Vect_net_get_graph(struct Map_info *Map)
    \return 1 OK
    \return 0 does not exist (was not inserted)
  */
-int Vect_net_get_line_cost(const struct Map_info *Map, int line, int direction,
+int Vect_net_get_line_cost(struct Map_info *Map, int line, int direction,
                            double *cost)
 {
     /* dglInt32_t *pEdge; */
@@ -465,7 +465,7 @@ int Vect_net_get_line_cost(const struct Map_info *Map, int line, int direction,
 
    \return 1
  */
-int Vect_net_get_node_cost(const struct Map_info *Map, int node, double *cost)
+int Vect_net_get_node_cost(struct Map_info *Map, int node, double *cost)
 {
     G_debug(3, "Vect_net_get_node_cost(): node = %d", node);
 
@@ -954,8 +954,8 @@ find_shortest_path_coor(struct Map_info *Map, double fx, double fy, double fz,
                     int node, node1, node2;
 
                     Vect_get_line_nodes(Map, abs(line), &node1, &node2);
-                    /* add the second node, the first of first segmet was alread
-                     * added */
+                    /* add the second node, the first of first segmet was
+                     * already added */
                     if (line > 0)
                         node = node2;
                     else

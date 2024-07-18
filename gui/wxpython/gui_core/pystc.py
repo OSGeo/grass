@@ -15,7 +15,6 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com> (dark theme)
 """
 
-
 import keyword
 
 import wx
@@ -351,7 +350,6 @@ class PyStc(stc.StyledTextCtrl):
                 level & stc.STC_FOLDLEVELHEADERFLAG
                 and (level & stc.STC_FOLDLEVELNUMBERMASK) == stc.STC_FOLDLEVELBASE
             ):
-
                 if expanding:
                     self.SetFoldExpanded(lineNum, True)
                     lineNum = self.Expand(lineNum, True)
@@ -375,9 +373,8 @@ class PyStc(stc.StyledTextCtrl):
                     self.ShowLines(line, line)
                 else:
                     self.HideLines(line, line)
-            else:
-                if doExpand:
-                    self.ShowLines(line, line)
+            elif doExpand:
+                self.ShowLines(line, line)
 
             if level == -1:
                 level = self.GetFoldLevel(line)
@@ -390,11 +387,10 @@ class PyStc(stc.StyledTextCtrl):
                         self.SetFoldExpanded(line, False)
 
                     line = self.Expand(line, doExpand, force, visLevels - 1)
+                elif doExpand and self.GetFoldExpanded(line):
+                    line = self.Expand(line, True, force, visLevels - 1)
                 else:
-                    if doExpand and self.GetFoldExpanded(line):
-                        line = self.Expand(line, True, force, visLevels - 1)
-                    else:
-                        line = self.Expand(line, False, force, visLevels - 1)
+                    line = self.Expand(line, False, force, visLevels - 1)
             else:
                 line = line + 1
 

@@ -145,7 +145,7 @@ int Vect_merge_lines(struct Map_info *Map, int type, int *new_lines,
                     if (abs(curr_line) != abs(first)) {
                         Vect_read_line(Map, NULL, Cats, abs(curr_line));
 
-                        /* catgories must be identical */
+                        /* categories must be identical */
                         if (compare_cats(MCats, Cats) == 0)
                             next_line = curr_line;
                     }

@@ -65,7 +65,7 @@ static int type_to_topogeom(const struct Format_info_pg *);
 static int update_next_edge(struct Map_info *, int, int);
 
 #if 0 /* unused */
-static int delete_face(const struct Map_info *, int);
+static int delete_face(struct Map_info *, int);
 static int update_topo_edge(struct Map_info *, int);
 #endif
 static int update_topo_face(struct Map_info *, int);
@@ -1836,7 +1836,7 @@ char *line_to_wkb(struct Format_info_pg *pg_info,
     nsize = nbytes * 2 + 8 + 1;
     text_data = text_data_p = (char *)G_malloc(nsize);
 
-    /* convert the 1st byte, which is the endianess flag, to hex */
+    /* convert the 1st byte, which is the endianness flag, to hex */
     hex_data = binary_to_hex(1, wkb_data);
     strcpy(text_data_p, hex_data);
     G_free(hex_data);
@@ -1849,7 +1849,7 @@ char *line_to_wkb(struct Format_info_pg *pg_info,
     if (pg_info->srid > 0) {
         unsigned int srs_flag;
 
-        /* change the flag to little endianess */
+        /* change the flag to little endianness */
         srs_flag = LSBWORD32(WKBSRIDFLAG);
         /* apply the flag */
         sf_type = sf_type | srs_flag;
@@ -1865,7 +1865,7 @@ char *line_to_wkb(struct Format_info_pg *pg_info,
     if (pg_info->srid > 0) {
         unsigned int srs_id;
 
-        /* force the srsid to little endianess */
+        /* force the srsid to little endianness */
         srs_id = LSBWORD32(pg_info->srid);
         hex_data = binary_to_hex(sizeof(srs_id), (unsigned char *)&srs_id);
         strcpy(text_data_p, hex_data);
@@ -2612,7 +2612,7 @@ int Vect__insert_face_pg(struct Map_info *Map, int area)
    \return 0 on success
    \return -1 on error
  */
-int delete_face(const struct Map_info *Map, int area)
+int delete_face(struct Map_info *Map, int area)
 {
     char stmt[DB_SQL_MAX];
 
@@ -2999,7 +2999,7 @@ int set_constraint_to_deferrable(struct Format_info_pg *pg_info,
 
    \param pg_info pointer to Format_info_pg struct
 
-   \return pointer to dbDriver on succes
+   \return pointer to dbDriver on success
    \return NULL on failure
  */
 dbDriver *open_db(struct Format_info_pg *pg_info)

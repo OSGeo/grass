@@ -254,7 +254,7 @@ void gsd_draw_cplane_fence(geosurf *surf1, geosurf *surf2 UNUSED, int cpnum)
         gsd_set_clipplane(cpnum, 0);
     }
 
-    /* line on surface (asuming NO TILT) is (-A,B)->(A,-B),
+    /* line on surface (assuming NO TILT) is (-A,B)->(A,-B),
        extended thru Cp_pt */
     dir[X] = -Cp_norm[cpnum][Y];
     dir[Y] = Cp_norm[cpnum][X];

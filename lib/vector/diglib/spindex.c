@@ -49,21 +49,25 @@ int dig_spidx_init(struct Plus_head *Plus)
         fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
         Plus->Node_spidx = RTreeCreateTree(fd, 0, ndims);
         remove(filename);
+        G_free(filename);
 
         filename = G_tempfile();
         fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
         Plus->Line_spidx = RTreeCreateTree(fd, 0, ndims);
         remove(filename);
+        G_free(filename);
 
         filename = G_tempfile();
         fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
         Plus->Area_spidx = RTreeCreateTree(fd, 0, ndims);
         remove(filename);
+        G_free(filename);
 
         filename = G_tempfile();
         fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
         Plus->Isle_spidx = RTreeCreateTree(fd, 0, ndims);
         remove(filename);
+        G_free(filename);
 
         Plus->Face_spidx = NULL;
         Plus->Volume_spidx = NULL;
@@ -124,6 +128,7 @@ void dig_spidx_free_nodes(struct Plus_head *Plus)
         remove(filename);
         if (!Plus->Spidx_new)
             close(Plus->Node_spidx->fd);
+        G_free(filename);
     }
     else {
         RTreeDestroyTree(Plus->Node_spidx);
@@ -156,6 +161,7 @@ void dig_spidx_free_lines(struct Plus_head *Plus)
         remove(filename);
         if (!Plus->Spidx_new)
             close(Plus->Line_spidx->fd);
+        G_free(filename);
     }
     else {
         RTreeDestroyTree(Plus->Line_spidx);
@@ -188,6 +194,7 @@ void dig_spidx_free_areas(struct Plus_head *Plus)
         remove(filename);
         if (!Plus->Spidx_new)
             close(Plus->Area_spidx->fd);
+        G_free(filename);
     }
     else {
         RTreeDestroyTree(Plus->Area_spidx);
@@ -220,6 +227,7 @@ void dig_spidx_free_isles(struct Plus_head *Plus)
         remove(filename);
         if (!Plus->Spidx_new)
             close(Plus->Isle_spidx->fd);
+        G_free(filename);
     }
     else {
         RTreeDestroyTree(Plus->Isle_spidx);
@@ -682,9 +690,11 @@ int dig_select_nodes(struct Plus_head *Plus, const struct bound_box *box,
     rect.boundary[5] = box->T;
 
     if (Plus->Spidx_new)
-        RTreeSearch(Plus->Node_spidx, &rect, (void *)_add_item, list);
+        RTreeSearch(Plus->Node_spidx, &rect, (SearchHitCallback *)_add_item,
+                    list);
     else
-        rtree_search(Plus->Node_spidx, &rect, (void *)_add_item, list, Plus);
+        rtree_search(Plus->Node_spidx, &rect, (SearchHitCallback *)_add_item,
+                     list, Plus);
 
     return (list->n_values);
 }
@@ -728,9 +738,11 @@ int dig_find_node(struct Plus_head *Plus, double x, double y, double z)
 
     node = 0;
     if (Plus->Spidx_new)
-        RTreeSearch(Plus->Node_spidx, &rect, (void *)_add_node, &node);
+        RTreeSearch(Plus->Node_spidx, &rect, (SearchHitCallback *)_add_node,
+                    &node);
     else
-        rtree_search(Plus->Node_spidx, &rect, (void *)_add_node, &node, Plus);
+        rtree_search(Plus->Node_spidx, &rect, (SearchHitCallback *)_add_node,
+                     &node, Plus);
 
     return node;
 }
@@ -769,10 +781,11 @@ int dig_select_lines(struct Plus_head *Plus, const struct bound_box *box,
     rect.boundary[5] = box->T;
 
     if (Plus->Spidx_new)
-        RTreeSearch(Plus->Line_spidx, &rect, (void *)_add_item_with_box, list);
+        RTreeSearch(Plus->Line_spidx, &rect,
+                    (SearchHitCallback *)_add_item_with_box, list);
     else
-        rtree_search(Plus->Line_spidx, &rect, (void *)_add_item_with_box, list,
-                     Plus);
+        rtree_search(Plus->Line_spidx, &rect,
+                     (SearchHitCallback *)_add_item_with_box, list, Plus);
 
     return (list->n_values);
 }
@@ -832,11 +845,12 @@ int dig_find_line_box(struct Plus_head *Plus, int line, struct bound_box *box)
         box_id.box = box;
 
         if (Plus->Spidx_new)
-            ret = RTreeSearch(Plus->Line_spidx, &rect, (void *)_set_item_box,
-                              &box_id);
+            ret = RTreeSearch(Plus->Line_spidx, &rect,
+                              (SearchHitCallback *)_set_item_box, &box_id);
         else
-            ret = rtree_search(Plus->Line_spidx, &rect, (void *)_set_item_box,
-                               &box_id, Plus);
+            ret =
+                rtree_search(Plus->Line_spidx, &rect,
+                             (SearchHitCallback *)_set_item_box, &box_id, Plus);
 
         return ret;
     }
@@ -883,10 +897,11 @@ int dig_select_areas(struct Plus_head *Plus, const struct bound_box *box,
     rect.boundary[5] = box->T;
 
     if (Plus->Spidx_new)
-        RTreeSearch(Plus->Area_spidx, &rect, (void *)_add_item_with_box, list);
+        RTreeSearch(Plus->Area_spidx, &rect,
+                    (SearchHitCallback *)_add_item_with_box, list);
     else
-        rtree_search(Plus->Area_spidx, &rect, (void *)_add_item_with_box, list,
-                     Plus);
+        rtree_search(Plus->Area_spidx, &rect,
+                     (SearchHitCallback *)_add_item_with_box, list, Plus);
 
     return (list->n_values);
 }
@@ -936,11 +951,11 @@ int dig_find_area_box(struct Plus_head *Plus, int area, struct bound_box *box)
     box_id.box = box;
 
     if (Plus->Spidx_new)
-        ret = RTreeSearch(Plus->Area_spidx, &rect, (void *)_set_item_box,
-                          &box_id);
+        ret = RTreeSearch(Plus->Area_spidx, &rect,
+                          (SearchHitCallback *)_set_item_box, &box_id);
     else
-        ret = rtree_search(Plus->Area_spidx, &rect, (void *)_set_item_box,
-                           &box_id, Plus);
+        ret = rtree_search(Plus->Area_spidx, &rect,
+                           (SearchHitCallback *)_set_item_box, &box_id, Plus);
 
     return ret;
 }
@@ -978,10 +993,11 @@ int dig_select_isles(struct Plus_head *Plus, const struct bound_box *box,
     rect.boundary[5] = box->T;
 
     if (Plus->Spidx_new)
-        RTreeSearch(Plus->Isle_spidx, &rect, (void *)_add_item_with_box, list);
+        RTreeSearch(Plus->Isle_spidx, &rect,
+                    (SearchHitCallback *)_add_item_with_box, list);
     else
-        rtree_search(Plus->Isle_spidx, &rect, (void *)_add_item_with_box, list,
-                     Plus);
+        rtree_search(Plus->Isle_spidx, &rect,
+                     (SearchHitCallback *)_add_item_with_box, list, Plus);
 
     return (list->n_values);
 }
@@ -1031,11 +1047,11 @@ int dig_find_isle_box(struct Plus_head *Plus, int isle, struct bound_box *box)
     box_id.box = box;
 
     if (Plus->Spidx_new)
-        ret = RTreeSearch(Plus->Isle_spidx, &rect, (void *)_set_item_box,
-                          &box_id);
+        ret = RTreeSearch(Plus->Isle_spidx, &rect,
+                          (SearchHitCallback *)_set_item_box, &box_id);
     else
-        ret = rtree_search(Plus->Isle_spidx, &rect, (void *)_set_item_box,
-                           &box_id, Plus);
+        ret = rtree_search(Plus->Isle_spidx, &rect,
+                           (SearchHitCallback *)_set_item_box, &box_id, Plus);
 
     return ret;
 }

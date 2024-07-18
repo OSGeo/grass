@@ -22,7 +22,7 @@
 static int integration_test_heatflow(void);
 
 /* *************************************************************** */
-/* Performe the heat flow integration tests ********************** */
+/* Perform the heat flow integration tests ********************** */
 /* *************************************************************** */
 int integration_test_heatflow(void)
 {

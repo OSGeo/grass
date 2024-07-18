@@ -1,7 +1,7 @@
 """
 @package rdigit.dialogs
 
-@brief rdigit dialog for craeting new map.
+@brief rdigit dialog for creating new map.
 
 Classes:
  - rdigit:NewRasterDialog

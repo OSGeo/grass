@@ -30,7 +30,10 @@ SUBDIRS = \
 	i.rectify \
 	i.rgb.his \
 	i.segment \
+	i.signatures \
 	i.smap \
+	i.svm.predict \
+	i.svm.train \
 	i.target \
 	i.topo.corr \
 	i.pca \

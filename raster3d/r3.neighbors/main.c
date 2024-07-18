@@ -232,7 +232,7 @@ int main(int argc, char **argv)
     ny = region.rows;
     nz = region.depths;
 
-    /* Size fo the moving window */
+    /* Size of the moving window */
     x_size = atoi(param.window->answers[0]);
     y_size = atoi(param.window->answers[1]);
     z_size = atoi(param.window->answers[2]);

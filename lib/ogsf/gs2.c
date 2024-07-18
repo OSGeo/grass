@@ -218,7 +218,7 @@ int GS_surf_exists(int id)
    since left and right columns are on the edges.
 
    \return surface id
-   \return -1 on error (MAX_SURFS exceded)
+   \return -1 on error (MAX_SURFS exceeded)
  */
 int GS_new_surface(void)
 {
@@ -263,7 +263,7 @@ int GS_get_light_reset(void)
    \brief Add new model light
 
    \return light model id
-   \return -1 on error (MAX_LIGHTS exceded)
+   \return -1 on error (MAX_LIGHTS exceeded)
  */
 int GS_new_light(void)
 {
@@ -1520,7 +1520,7 @@ int GS_num_surfs(void)
 /*!
    \brief Get surface list
 
-   Must be freed when not neeed!
+   Must be freed when not needed!
 
    \param[out] numsurf number of available surfaces
 
@@ -2843,7 +2843,7 @@ void GS_set_fov(int fov)
 }
 
 /*!
-   \brief Get fied of view
+   \brief Get field of view
 
    \return field of view, in 10ths of degrees
  */
@@ -3428,7 +3428,7 @@ void GS_clear(int col)
      */
     glClearDepth(1.0);
     glClearColor(
-        ((float)((col)&0xff)) / 255., (float)((col) >> 8 & 0xff) / 255.,
+        ((float)((col) & 0xff)) / 255., (float)((col) >> 8 & 0xff) / 255.,
         (float)((col) >> 16 & 0xff) / 255., (float)((col) >> 24 & 0xff) / 255.);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 

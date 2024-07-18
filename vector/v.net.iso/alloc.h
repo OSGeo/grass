@@ -4,7 +4,7 @@ typedef struct {
 } CENTER;
 
 typedef struct {
-    int center;  /* neares center, initially -1 */
+    int center;  /* nearest center, initially -1 */
     double cost; /* costs from this center, initially not defined */
     int edge;    /* edge to follow from this node */
 } NODE;

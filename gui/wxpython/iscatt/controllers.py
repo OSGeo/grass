@@ -19,9 +19,9 @@ This program is free software under the GNU General Public License
 
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
+
 from copy import deepcopy
 import wx
-import six
 
 
 from core.gcmd import GError, GMessage, RunCommand, GWarning
@@ -40,7 +40,7 @@ from iscatt.iscatt_core import (
 from iscatt.dialogs import AddScattPlotDialog, ExportCategoryRaster
 from iclass.dialogs import IClassGroupDialog
 
-import grass.script as grass
+import grass.script as gs
 
 from grass.pydispatch.signal import Signal
 
@@ -109,7 +109,7 @@ class ScattsManager:
         self.core.CleanUp()
 
     def CleanUpDone(self):
-        for scatt_id, scatt in self.plots.items():
+        for scatt in self.plots.values():
             if scatt["scatt"]:
                 scatt["scatt"].CleanUp()
 
@@ -233,8 +233,8 @@ class ScattsManager:
                         "Interactive Scatter Plot Tool can not be used.\n"
                         "Number of cells (rows*cols) <%d> in current region"
                         "is higher than maximum limit <%d>.\n\n"
-                        "You can reduce number of cells in current region using <g.region> command."
-                        % (ncells, MAX_NCELLS)
+                        "You can reduce number of cells in current region using "
+                        "<g.region> command." % (ncells, MAX_NCELLS)
                     ),
                 )
             )
@@ -265,7 +265,6 @@ class ScattsManager:
         )
 
         if dlg.ShowModal() == wx.ID_OK:
-
             scatt_ids = []
             sel_bands = dlg.GetBands()
 
@@ -409,9 +408,8 @@ class ScattsManager:
         del self.plots[scatt_id]
 
     def SetPlotsMode(self, mode):
-
         self.plot_mode = mode
-        for scatt in six.itervalues(self.plots):
+        for scatt in self.plots.values():
             if scatt["scatt"]:
                 scatt["scatt"].SetMode(mode)
 
@@ -419,11 +417,11 @@ class ScattsManager:
 
     def ActivateSelectionPolygonMode(self, activate):
         self.pol_sel_mode[0] = activate
-        for scatt in six.itervalues(self.plots):
+        for scatt in self.plots.values():
             if not scatt["scatt"]:
                 continue
             scatt["scatt"].SetSelectionPolygonMode(activate)
-            if not activate and self.plot_mode not in ["zoom", "pan", "zoom_extend"]:
+            if not activate and self.plot_mode not in {"zoom", "pan", "zoom_extend"}:
                 self.SetPlotsMode(None)
 
         self.render_mgr.RunningProcessDone()
@@ -431,7 +429,7 @@ class ScattsManager:
 
     def ProcessSelectionPolygons(self, process_mode):
         scatts_polygons = {}
-        for scatt_id, scatt in six.iteritems(self.plots):
+        for scatt_id, scatt in self.plots.items():
             if not scatt["scatt"]:
                 continue
             coords = scatt["scatt"].GetCoords()
@@ -465,7 +463,7 @@ class ScattsManager:
         if not sel_cat_id:
             return
 
-        for scatt in six.itervalues(self.plots):
+        for scatt in self.plots.values():
             if scatt["scatt"]:
                 scatt["scatt"].SetEmpty()
 
@@ -594,7 +592,7 @@ class PlotsRenderingManager:
             else:
                 ellipses_dt = {}
 
-            for c in six.iterkeys(scatt_dt):
+            for c in scatt_dt.keys():
                 try:
                     self.cat_ids.remove(c)
                     scatt_dt[c]["render"] = True
@@ -617,7 +615,6 @@ class PlotsRenderingManager:
             self.renderingFinished.emit()
 
     def _getSelectedAreas(self, cats_order, scatt_id, scatt_dt, cats_attrs):
-
         cat_id = self.cats_mgr.GetSelectedCat()
         if not cat_id:
             return
@@ -655,7 +652,6 @@ class CategoriesManager:
     """Manages categories list of scatter plot."""
 
     def __init__(self, scatt_mgr, core):
-
         self.core = core
         self.scatt_mgr = scatt_mgr
 
@@ -694,7 +690,6 @@ class CategoriesManager:
         self.scatt_mgr.thread.Run(callable=self.core.AddCategory, cat_id=cat_id)
 
     def SetData(self):
-
         if not self.scatt_mgr.data_set:
             return
 
@@ -702,7 +697,6 @@ class CategoriesManager:
             self.scatt_mgr.thread.Run(callable=self.core.AddCategory, cat_id=cat_id)
 
     def AddCategory(self, cat_id=None, name=None, color=None, nstd=None):
-
         if cat_id is None:
             if self.cats_ids:
                 cat_id = max(self.cats_ids) + 1
@@ -745,10 +739,10 @@ class CategoriesManager:
         render = False
         update_cat_rast = []
 
-        for k, v in six.iteritems(attrs_dict):
-            if not render and k in ["color", "opacity", "show", "nstd"]:
+        for k, v in attrs_dict.items():
+            if not render and k in {"color", "opacity", "show", "nstd"}:
                 render = True
-            if k in ["color", "name"]:
+            if k in {"color", "name"}:
                 update_cat_rast.append(k)
 
             self.cats[cat_id][k] = v
@@ -763,7 +757,6 @@ class CategoriesManager:
         self.setCategoryAttrs.emit(cat_id=cat_id, attrs_dict=attrs_dict)
 
     def DeleteCategory(self, cat_id):
-
         if self.scatt_mgr.data_set:
             self.scatt_mgr.thread.Run(callable=self.core.DeleteCategory, cat_id=cat_id)
         del self.cats[cat_id]
@@ -792,7 +785,6 @@ class CategoriesManager:
         return self.cats_ids[:]
 
     def ExportCatRast(self, cat_id):
-
         cat_attrs = self.GetCategoryAttrs(cat_id)
 
         dlg = ExportCategoryRaster(
@@ -924,7 +916,6 @@ class IClassDigitConnection:
         )
 
     def DigitDataChanged(self, vectMap, digit):
-
         self.digit = digit
         self.vectMap = vectMap
 
@@ -956,7 +947,7 @@ class IClassDigitConnection:
 
 
 class IMapDispConnection:
-    """Manage comunication of the scatter plot with mapdisplay in mapwindow."""
+    """Manage communication of the scatter plot with mapdisplay in mapwindow."""
 
     def __init__(self, scatt_mgr, cats_mgr, giface):
         self.scatt_mgr = scatt_mgr
@@ -966,7 +957,6 @@ class IMapDispConnection:
         self.added_cats_rasts = {}
 
     def SetData(self):
-
         dlg = IClassGroupDialog(
             self.scatt_mgr.guiparent,
             group=self.set_g["group"],
@@ -976,11 +966,10 @@ class IMapDispConnection:
         bands = []
         while True:
             if dlg.ShowModal() == wx.ID_OK:
-
                 bands = dlg.GetGroupBandsErr(parent=self.scatt_mgr.guiparent)
                 if bands:
                     name, s = dlg.GetData()
-                    group = grass.find_file(name=name, element="group")
+                    group = gs.find_file(name=name, element="group")
                     self.set_g["group"] = group["name"]
                     self.set_g["subg"] = s
 
@@ -998,9 +987,8 @@ class IMapDispConnection:
         return None
 
     def UpdateCategoryRaster(self, cat_id, attrs, render=True):
-
         cat_rast = self.scatt_mgr.core.GetCatRast(cat_id)
-        if not grass.find_file(cat_rast, element="cell", mapset=".")["file"]:
+        if not gs.find_file(cat_rast, element="cell", mapset=".")["file"]:
             return
         cats_attrs = self.cats_mgr.GetCategoryAttrs(cat_id)
 
@@ -1026,8 +1014,7 @@ class IMapDispConnection:
             cats_attrs["name"]
 
     def RenderCatRast(self, cat_id):
-
-        if cat_id not in six.iterkeys(self.added_cats_rasts):
+        if cat_id not in self.added_cats_rasts.keys():
             cat_rast = self.scatt_mgr.core.GetCatRast(cat_id)
 
             cat_name = self.cats_mgr.GetCategoryAttrs(cat_id)["name"]
@@ -1044,7 +1031,7 @@ class IMapDispConnection:
 
 
 class IClassConnection:
-    """Manage comunication of the scatter plot with mapdisplay in wx.iclass."""
+    """Manage communication of the scatter plot with mapdisplay in wx.iclass."""
 
     def __init__(self, scatt_mgr, iclass_frame, cats_mgr):
         self.iclass_frame = iclass_frame
@@ -1076,7 +1063,7 @@ class IClassConnection:
         if not cat_rast:
             return
 
-        if not grass.find_file(cat_rast, element="cell", mapset=".")["file"]:
+        if not gs.find_file(cat_rast, element="cell", mapset=".")["file"]:
             return
         cats_attrs = self.cats_mgr.GetCategoryAttrs(cat_id)
         train_mgr, preview_mgr = self.iclass_frame.GetMapManagers()
@@ -1102,7 +1089,6 @@ class IClassConnection:
             cats_attrs["name"]
 
     def RenderCatRast(self, cat_id):
-
         train_mgr, preview_mgr = self.iclass_frame.GetMapManagers()
         if cat_id not in self.added_cats_rasts:
             cat_rast = self.scatt_mgr.core.GetCatRast(cat_id)
@@ -1147,7 +1133,6 @@ class IClassConnection:
         self.cats_mgr.deletedCategory.connect(self.DeleteStatistics)
 
     def DeletAllCategories(self):
-
         self.cats_mgr.deletedCategory.disconnect(self.DeleteStatistics)
         cats = self.stats_data.GetCategories()
         for c in cats:
@@ -1155,7 +1140,6 @@ class IClassConnection:
         self.cats_mgr.deletedCategory.connect(self.DeleteStatistics)
 
     def SetCategory(self, cat, stats):
-
         self.cats_mgr.setCategoryAttrs.disconnect(self.SetStatistics)
         cats_attr = {}
 

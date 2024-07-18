@@ -9,10 +9,10 @@ for details.
 :authors: Vaclav Petras
 """
 
-import os
-import sys
-import shutil
 import errno
+import os
+import shutil
+import sys
 
 
 def ensure_dir(directory):
@@ -55,11 +55,9 @@ def do_doctest_gettext_workaround():
 
     sys.displayhook = new_displayhook
 
-    try:
-        import __builtin__
-    except ImportError:
-        import builtins as __builtin__
-    __builtin__._ = new_translator
+    import builtins
+
+    builtins.__dict__["_"] = new_translator
 
 
 _MAX_LENGTH = 80

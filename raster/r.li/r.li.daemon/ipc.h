@@ -1,7 +1,7 @@
 /**
  * \file IPC.h
  *
- * \brief Types, definitions and primitives for interprocess comunication
+ * \brief Types, definitions and primitives for interprocess communication
  *  between r.li.daemon and r.li.worker
  *
  * \author Lucio Davide Spano

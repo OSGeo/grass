@@ -172,7 +172,7 @@ int dig_is_line_degenerate(const struct line_pnts *points, double thresh)
 }
 
 /* Check if line is degenerate (one point or more identical points)
- *  Returns: 0 is not degenerate (but som points may be identical)
+ *  Returns: 0 is not degenerate (but some points may be identical)
  *           1 one point
  *           2 more identical points
  */

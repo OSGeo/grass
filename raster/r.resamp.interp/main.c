@@ -132,7 +132,10 @@ int main(int argc, char *argv[])
                     "threads setting."));
     threads = 1;
 #endif
-
+    if (threads > 1 && G_find_raster("MASK", G_mapset()) != NULL) {
+        G_warning(_("Parallel processing disabled due to active MASK."));
+        threads = 1;
+    }
     bufrows = atoi(memory->answer) * (((1 << 20) / sizeof(DCELL)) / dst_w.cols);
     /* set the output buffer rows to be at most covering the entire map */
     if (bufrows > dst_w.rows) {
@@ -246,10 +249,13 @@ int main(int argc, char *argv[])
 
                         if (Rast_is_d_null_value(&c)) {
                             Rast_set_d_null_value(
-                                &outbuf[(row - start) * dst_w.cols + col], 1);
+                                &outbuf[(size_t)(row - start) * dst_w.cols +
+                                        col],
+                                1);
                         }
                         else {
-                            outbuf[(row - start) * dst_w.cols + col] = c;
+                            outbuf[(size_t)(row - start) * dst_w.cols + col] =
+                                c;
                         }
                     }
 
@@ -288,10 +294,12 @@ int main(int argc, char *argv[])
                             Rast_is_d_null_value(&c10) ||
                             Rast_is_d_null_value(&c11)) {
                             Rast_set_d_null_value(
-                                &outbuf[(row - start) * dst_w.cols + col], 1);
+                                &outbuf[(size_t)(row - start) * dst_w.cols +
+                                        col],
+                                1);
                         }
                         else {
-                            outbuf[(row - start) * dst_w.cols + col] =
+                            outbuf[(size_t)(row - start) * dst_w.cols + col] =
                                 Rast_interp_bilinear(u, v, c00, c01, c10, c11);
                         }
                     }
@@ -361,10 +369,12 @@ int main(int argc, char *argv[])
                             Rast_is_d_null_value(&c32) ||
                             Rast_is_d_null_value(&c33)) {
                             Rast_set_d_null_value(
-                                &outbuf[(row - start) * dst_w.cols + col], 1);
+                                &outbuf[(size_t)(row - start) * dst_w.cols +
+                                        col],
+                                1);
                         }
                         else {
-                            outbuf[(row - start) * dst_w.cols + col] =
+                            outbuf[(size_t)(row - start) * dst_w.cols + col] =
                                 Rast_interp_bicubic(u, v, c00, c01, c02, c03,
                                                     c10, c11, c12, c13, c20,
                                                     c21, c22, c23, c30, c31,
@@ -419,7 +429,7 @@ int main(int argc, char *argv[])
                         }
 
                         if (do_lanczos) {
-                            outbuf[(row - start) * dst_w.cols + col] =
+                            outbuf[(size_t)(row - start) * dst_w.cols + col] =
                                 Rast_interp_lanczos(u, v, c);
                         }
                     }
@@ -433,7 +443,8 @@ int main(int argc, char *argv[])
 
         /* write to output map */
         for (row = start; row < end; row++) {
-            Rast_put_d_row(outfile, &outbuf[(row - start) * dst_w.cols]);
+            Rast_put_d_row(outfile,
+                           &outbuf[(size_t)(row - start) * dst_w.cols]);
         }
         written = end;
     }

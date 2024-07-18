@@ -8,7 +8,7 @@
     copyright            : (C) 2003 by Christo Zietsman
     email                : 13422863@sun.ac.za
 
-    This program has been rewriten in C/C++ from the fortran source found
+    This program has been rewritten in C/C++ from the fortran source found
     on http://www.ltid.inpe.br/dsr/mauro/6s/index.html. This code is
     provided as is, with no implied warranty and under the conditions
     and restraint as placed on it by previous authors.
@@ -204,8 +204,7 @@ class TICache {
 private:
     struct RBitem set_alt_vis(double alt, double vis)
     {
-        struct RBitem rbitem;
-
+        struct RBitem rbitem = {};
         /* alt and vis must be in meters */
         rbitem.alt = (alt < 0 ? (int)(alt - 0.5) : (int)(alt + 0.5));
         rbitem.vis = (int)(vis + 0.5);

@@ -3,8 +3,10 @@ Created on Thu Jun 28 17:44:14 2012
 
 @author: pietro
 """
+
 import ctypes
 from operator import itemgetter
+from pathlib import Path
 
 import grass.lib.raster as libraster
 from grass.exceptions import ImplementationError
@@ -59,13 +61,13 @@ class Category(list):
         libraster.Rast_init_cats("", ctypes.byref(self.c_cats))
         self._mtype = mtype
         self._gtype = None if mtype is None else RTYPE[mtype]["grass type"]
-        super(Category, self).__init__(*args, **kargs)
+        super().__init__(*args, **kargs)
 
     def _get_mtype(self):
         return self._mtype
 
     def _set_mtype(self, mtype):
-        if mtype.upper() not in ("CELL", "FCELL", "DCELL"):
+        if mtype.upper() not in {"CELL", "FCELL", "DCELL"}:
             raise ValueError(_("Raster type: {0} not supported".format(mtype)))
         self._mtype = mtype
         self._gtype = RTYPE[self.mtype]["grass type"]
@@ -92,7 +94,7 @@ class Category(list):
         return cats
 
     def __dict__(self):
-        diz = dict()
+        diz = {}
         for cat in self.__iter__():
             label, min_cat, max_cat = cat
             diz[(min_cat, max_cat)] = label
@@ -125,12 +127,10 @@ class Category(list):
         return value
 
     def __getitem__(self, index):
-        return super(Category, self).__getitem__(self._chk_index(index))
+        return super().__getitem__(self._chk_index(index))
 
     def __setitem__(self, index, value):
-        return super(Category, self).__setitem__(
-            self._chk_index(index), self._chk_value(value)
-        )
+        return super().__setitem__(self._chk_index(index), self._chk_value(value))
 
     def _get_c_cat(self, index):
         """Returns i-th description and i-th data range from the list of
@@ -283,7 +283,7 @@ class Category(list):
         raise ImplementationError("set_cats_fmt() is not implemented yet.")
 
     def read_rules(self, filename, sep=":"):
-        """Copy categories from a rules file, default separetor is ':', the
+        """Copy categories from a rules file, default separator is ':', the
         columns must be: min and/or max and label. ::
 
             1:forest
@@ -300,7 +300,7 @@ class Category(list):
         """
         self.reset()
         with open(filename, "r") as f:
-            for row in f.readlines():
+            for row in f:
                 cat = row.strip().split(sep)
                 if len(cat) == 2:
                     label, min_cat = cat
@@ -312,7 +312,7 @@ class Category(list):
                 self.append((label, min_cat, max_cat))
 
     def write_rules(self, filename, sep=":"):
-        """Copy categories from a rules file, default separetor is ':', the
+        """Copy categories from a rules file, default separator is ':', the
         columns must be: min and/or max and label. ::
 
             1:forest
@@ -326,13 +326,12 @@ class Category(list):
         :param str filename: the name of file with categories rules
         :param str sep: the separator used to divide values and category
         """
-        with open(filename, "w") as f:
-            cats = []
-            for cat in self.__iter__():
-                if cat[-1] is None:
-                    cat = cat[:-1]
-                cats.append(sep.join([str(i) for i in cat]))
-            f.write("\n".join(cats))
+        cats = []
+        for cat in self.__iter__():
+            if cat[-1] is None:
+                cat = cat[:-1]
+            cats.append(sep.join([str(i) for i in cat]))
+        Path(filename).write_text("\n".join(cats))
 
     def sort(self):
         libraster.Rast_sort_cats(ctypes.byref(self.c_cats))

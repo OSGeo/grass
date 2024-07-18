@@ -73,7 +73,7 @@ void Rast_quant_free(struct Quant *q)
  *  Organizes fp_lookup table for faster (logarithmic) lookup time
  *  G_quant_organize_fp_lookup() creates a list of min and max for
  *  each quant rule, sorts this list, and stores the pointer to quant
- *  rule that should be used inbetween any 2 numbers in this list.
+ *  rule that should be used in between any 2 numbers in this list.
  *  Also it stores extreme points for 2 infinite rules, if exist.
  *  After the call to G_quant_organize_fp_lookup()
  *  instead of linearly searching through list of rules to find
@@ -124,7 +124,7 @@ int Rast__quant_organize_fp_lookup(struct Quant *q)
         qsort((char *)q->fp_lookup.vals, q->fp_lookup.nalloc, sizeof(DCELL),
               double_comp);
 
-        /* now find the rule to apply inbetween each 2 values in a list */
+        /* now find the rule to apply in between each 2 values in a list */
         for (i = 0; i < q->fp_lookup.nalloc - 1; i++) {
             /*debug
                fprintf (stderr, "%lf %lf ", q->fp_lookup.vals[i],

@@ -8,6 +8,7 @@ Licence:    This program is free software under the GNU General Public
 	            License (>=v2). Read the file COPYING that comes with GRASS
 	            for details.
 """
+
 import os
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
@@ -85,7 +86,7 @@ class TestRasterreport(TestCase):
         )
 
     def test_flagt(self):
-        """Testing Falg T"""
+        """Testing Flag T"""
         self.assertModule(
             "v.extract", input=self.input, output=self.output, flags="t", cats=1
         )

@@ -6,7 +6,7 @@
  *               Purdue University
  *               Markus Neteler: update to FP (C-code)
  *                             : update to FP (Fortran)
- *               Roger Miller: rewrite all code in C, complient with GRASS 5
+ *               Roger Miller: rewrite all code in C, compliant with GRASS 5
  * PURPOSE:      fills a DEM to become a depression-less DEM
  *               This creates two layers from a user specified elevation map.
  *               The output maps are filled elevation or rectified elevation

@@ -158,7 +158,7 @@ int update_dbcolors(const char *rast_name, const char *vector_map, int field,
         }
 
         /* append color rules to my_color_rules array, they will be set
-         * later all togheter */
+         * later all together */
         colors_n_values++;
         my_color_rules[i].red = red;
         my_color_rules[i].green = grn;

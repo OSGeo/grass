@@ -59,3 +59,4 @@ void disp_wind(CELL * z)
     fgets(dummy, 70, stdin);
 }
 #endif
+extern int dummy_for_iso_compilers; /* suppress -Wempty-translation-unit */

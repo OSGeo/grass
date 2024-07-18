@@ -319,7 +319,7 @@ Creating a new map typically creates a subdirectory of cell_misc for
 that map, and some files within it (e.g. a "null" file). Any new files
 and subdirectories will be owned by their creator (not the mapset's
 owner) and will have permissions determined by the current umask. The
-result is that there's no guarantee that tha mapset's owner will be
+result is that there's no guarantee that the mapset's owner will be
 able to delete (or even access) such files or directories.
 
 In short, it's a safety mechanism against people trying to share
