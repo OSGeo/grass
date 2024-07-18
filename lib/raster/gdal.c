@@ -1,15 +1,15 @@
 /*!
-  \file lib/raster/gdal.c
-  
-  \brief Raster Library - Utilization of GDAL library.
-  
-  (C) 2010 by the GRASS Development Team
-  
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
-  
-  \author Glynn Clements
-*/
+   \file lib/raster/gdal.c
+
+   \brief Raster Library - Utilization of GDAL library.
+
+   (C) 2010 by the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
+
+   \author Glynn Clements
+ */
 
 #include <stdlib.h>
 #include <string.h>
@@ -32,10 +32,10 @@
 #endif
 
 /*!
-  \brief Initialization
+   \brief Initialization
 
-  Register all GDAL drivers.
-*/
+   Register all GDAL drivers.
+ */
 void Rast_init_gdal(void)
 {
 #ifdef GDAL_LINK
@@ -50,14 +50,14 @@ void Rast_init_gdal(void)
 }
 
 /*!
-  \brief Get GDAL link settings for given raster map
+   \brief Get GDAL link settings for given raster map
 
-  \param name map name
-  \param mapset name of mapset
+   \param name map name
+   \param mapset name of mapset
 
-  \return pointer to GDAL_link structure
-  \return NULL if link not found
-*/
+   \return pointer to GDAL_link structure
+   \return NULL if link not found
+ */
 struct GDAL_link *Rast_get_gdal_link(const char *name, const char *mapset)
 {
 #ifdef GDAL_LINK
@@ -107,8 +107,8 @@ struct GDAL_link *Rast_get_gdal_link(const char *name, const char *mapset)
     if (!p)
         return NULL;
     /* atof on windows can not read "nan" and returns 0 instead */
-    if (strcmp(p, "none") == 0 ||
-        G_strcasecmp(p, "nan") == 0 || G_strcasecmp(p, "-nan") == 0) {
+    if (strcmp(p, "none") == 0 || G_strcasecmp(p, "nan") == 0 ||
+        G_strcasecmp(p, "-nan") == 0) {
         Rast_set_d_null_value(&null_val, 1);
     }
     else
@@ -173,16 +173,14 @@ struct GDAL_link *Rast_get_gdal_link(const char *name, const char *mapset)
     return gdal;
 }
 
-struct GDAL_Options
-{
+struct GDAL_Options {
     const char *dir;
     const char *ext;
     const char *format;
     char **options;
 };
 
-static struct state
-{
+static struct state {
     int initialized;
     struct GDAL_Options opts;
     struct Key_Value *projinfo, *projunits, *projepsg;
@@ -231,14 +229,14 @@ static void read_gdal_options(void)
 }
 
 /*!
-  \brief Create GDAL settings for given raster map
+   \brief Create GDAL settings for given raster map
 
-  \param name map name
-  \param map_type map type (CELL, FCELL, DCELL)
+   \param name map name
+   \param map_type map type (CELL, FCELL, DCELL)
 
-  \return pointer to allocated GDAL_link structure
-  \return NULL on error
-*/
+   \return pointer to allocated GDAL_link structure
+   \return NULL on error
+ */
 struct GDAL_link *Rast_create_gdal_link(const char *name,
                                         RASTER_MAP_TYPE map_type)
 {
@@ -279,16 +277,16 @@ struct GDAL_link *Rast_create_gdal_link(const char *name,
         switch (R__.nbytes) {
         case 1:
             gdal->type = GDT_Byte;
-            gdal->null_val = (DCELL) 0xFF;
+            gdal->null_val = (DCELL)0xFF;
             break;
         case 2:
             gdal->type = GDT_UInt16;
-            gdal->null_val = (DCELL) 0xFFFF;
+            gdal->null_val = (DCELL)0xFFFF;
             break;
         case 3:
         case 4:
             gdal->type = GDT_Int32;
-            gdal->null_val = (DCELL) 0x80000000U;
+            gdal->null_val = (DCELL)0x80000000U;
             break;
         }
         break;
@@ -312,14 +310,13 @@ struct GDAL_link *Rast_create_gdal_link(const char *name,
     /* Does driver support GDALCreate ? */
     if (GDALGetMetadataItem(driver, GDAL_DCAP_CREATE, NULL)) {
         gdal->data =
-            GDALCreate(driver, gdal->filename,
-                       R__.wr_window.cols, R__.wr_window.rows,
-                       1, gdal->type, st->opts.options);
+            GDALCreate(driver, gdal->filename, R__.wr_window.cols,
+                       R__.wr_window.rows, 1, gdal->type, st->opts.options);
         if (!gdal->data)
             G_fatal_error(_("Unable to create <%s> dataset using <%s> driver"),
                           name, st->opts.format);
     }
-    /* If not - create MEM driver for intermediate dataset. 
+    /* If not - create MEM driver for intermediate dataset.
      * Check if raster can be created at all (with GDALCreateCopy) */
     else if (GDALGetMetadataItem(driver, GDAL_DCAP_CREATECOPY, NULL)) {
         GDALDriverH mem_driver;
@@ -333,12 +330,11 @@ struct GDAL_link *Rast_create_gdal_link(const char *name,
             G_fatal_error(_("Unable to get in-memory raster driver"));
 
         gdal->data =
-            GDALCreate(mem_driver, "",
-                       R__.wr_window.cols, R__.wr_window.rows,
+            GDALCreate(mem_driver, "", R__.wr_window.cols, R__.wr_window.rows,
                        1, gdal->type, st->opts.options);
         if (!gdal->data)
-            G_fatal_error(_("Unable to create <%s> dataset using memory driver"),
-                          name);
+            G_fatal_error(
+                _("Unable to create <%s> dataset using memory driver"), name);
     }
     else
         G_fatal_error(_("Driver <%s> does not support creating rasters"),
@@ -394,10 +390,10 @@ struct GDAL_link *Rast_create_gdal_link(const char *name,
 }
 
 /*!
-  \brief Close existing GDAL link
-  
-  \param gdal pointer to GDAL_link to be closed
-*/
+   \brief Close existing GDAL link
+
+   \param gdal pointer to GDAL_link to be closed
+ */
 void Rast_close_gdal_link(struct GDAL_link *gdal)
 {
 #ifdef GDAL_LINK
@@ -408,13 +404,13 @@ void Rast_close_gdal_link(struct GDAL_link *gdal)
 }
 
 /*!
-  \brief Close existing GDAL link and write out data
+   \brief Close existing GDAL link and write out data
 
-  \param gdal pointer to GDAL_link to be closed
+   \param gdal pointer to GDAL_link to be closed
 
-  \return 1 on success
-  \return -1 on failure
-*/
+   \return 1 on success
+   \return -1 on failure
+ */
 int Rast_close_gdal_write_link(struct GDAL_link *gdal)
 {
     int stat = 1;
@@ -424,9 +420,8 @@ int Rast_close_gdal_write_link(struct GDAL_link *gdal)
 
     if (G_strcasecmp(GDALGetDriverShortName(src_drv), "MEM") == 0) {
         GDALDriverH dst_drv = GDALGetDriverByName(st->opts.format);
-        GDALDatasetH dst =
-            GDALCreateCopy(dst_drv, gdal->filename, gdal->data, FALSE,
-                           st->opts.options, NULL, NULL);
+        GDALDatasetH dst = GDALCreateCopy(dst_drv, gdal->filename, gdal->data,
+                                          FALSE, st->opts.options, NULL, NULL);
 
         if (!dst) {
             G_warning(_("Unable to create output file <%s> using driver <%s>"),
@@ -447,18 +442,17 @@ int Rast_close_gdal_write_link(struct GDAL_link *gdal)
 
 #ifdef GDAL_LINK
 /*!
-  \brief Input/output function for GDAL links
+   \brief Input/output function for GDAL links
 
-  See GDAL's RasterIO for details.
-*/
-CPLErr Rast_gdal_raster_IO(GDALRasterBandH band, GDALRWFlag rw_flag,
-                           int x_off, int y_off, int x_size, int y_size,
-                           void *buffer, int buf_x_size, int buf_y_size,
-                           GDALDataType buf_type, int pixel_size,
-                           int line_size)
+   See GDAL's RasterIO for details.
+ */
+CPLErr Rast_gdal_raster_IO(GDALRasterBandH band, GDALRWFlag rw_flag, int x_off,
+                           int y_off, int x_size, int y_size, void *buffer,
+                           int buf_x_size, int buf_y_size,
+                           GDALDataType buf_type, int pixel_size, int line_size)
 {
-    return GDALRasterIO(band, rw_flag, x_off, y_off, x_size, y_size,
-                        buffer, buf_x_size, buf_y_size, buf_type,
-                        pixel_size, line_size);
+    return GDALRasterIO(band, rw_flag, x_off, y_off, x_size, y_size, buffer,
+                        buf_x_size, buf_y_size, buf_type, pixel_size,
+                        line_size);
 }
 #endif

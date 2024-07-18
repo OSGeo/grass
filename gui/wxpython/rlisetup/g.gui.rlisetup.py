@@ -26,11 +26,11 @@
 # % keyword: landscape structure analysis
 # %end
 
-import grass.script as gscript
+import grass.script as gs
 
 
 def main():
-    gscript.parser()
+    gs.parser()
 
     import wx
 

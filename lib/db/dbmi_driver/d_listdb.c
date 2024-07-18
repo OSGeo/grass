@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_listdb.c
- * 
+ *
  * \brief DBMI Library (driver) - list databases
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -18,11 +18,11 @@
 #include "dbstubs.h"
 
 /*!
-  \brief List databases
-  
-  \return DB_OK on success
-  \return DB_FAILED on failure
-*/
+   \brief List databases
+
+   \return DB_OK on success
+   \return DB_FAILED on failure
+ */
 int db_d_list_databases(void)
 {
     dbHandle *handles;
@@ -40,15 +40,15 @@ int db_d_list_databases(void)
 
     /* send the return code */
     if (stat != DB_OK) {
-	DB_SEND_FAILURE();
-	return DB_OK;
+        DB_SEND_FAILURE();
+        return DB_OK;
     }
     DB_SEND_SUCCESS();
 
     /* send results */
     DB_SEND_INT(count);
     for (i = 0; i < count; i++) {
-	DB_SEND_HANDLE(&handles[i]);
+        DB_SEND_HANDLE(&handles[i]);
     }
     db_free_handle_array(handles, count);
     return DB_OK;

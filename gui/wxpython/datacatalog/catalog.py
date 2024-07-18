@@ -98,7 +98,7 @@ class DataCatalog(wx.Panel):
             # get reason why last used mapset is not usable
             last_mapset_path = gisenv()["LAST_MAPSET_PATH"]
             self.reason_id = get_reason_id_mapset_not_usable(last_mapset_path)
-            if self.reason_id in ("non-existent", "invalid", "different-owner"):
+            if self.reason_id in {"non-existent", "invalid", "different-owner"}:
                 # show non-standard situation info
                 wx.CallLater(delay, self.showFallbackSessionInfo)
             elif self.reason_id == "locked":
@@ -208,11 +208,13 @@ class DataCatalog(wx.Panel):
 
             # Offer to create a new location
             if grassdb_node and not os.listdir(grassdatabase):
-                message = _("Do you want to create a location?")
+                message = _(
+                    "Do you want to create a new project (also known as location)?"
+                )
                 dlg2 = wx.MessageDialog(
                     self,
                     message=message,
-                    caption=_("Create location?"),
+                    caption=_("Create project?"),
                     style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
                 )
                 if dlg2.ShowModal() == wx.ID_YES:

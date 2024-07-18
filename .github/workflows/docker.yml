@@ -1,48 +1,41 @@
+---
+name: Docker
+
 # This workflow builds and pushes docker images to dockerhub
 #
 # Summary
 #
-# job docker-branch-os-matrix:
-# * creates tags latest-alpine, latest-debian and latest-ubuntu for main branch
-# * creates tags stable-alpine, stable-debian and stable-ubuntu for releasebranch_7_8
-# * if action would trigger other branches as well, they would create
-#   tags <branch_name>-alpine, <branch_name>-debian and <branch_name>-ubuntu
-#
-# job docker-main-latest:
-# * creates tag latest for main branch
-#
-# job docker-release-os-matrix:
+# job docker-os-matrix:
 # * creates tags <version>-alpine, <version>-debian and <version>-ubuntu for each release
-
-name: Docker
+# * creates tags <branch_name>-alpine, <branch_name>-debian and <branch_name>-ubuntu for all triggered branches
+# * creates tags current-alpine, current-debian and current-ubuntu for releasebranch_8_3
+# * creates tag latest for last stable release with ubuntu os
 
 on:
   push:
     branches:
-      - 'main'
-      - 'releasebranch_*'
+      - main
+      - releasebranch_*
       - '!releasebranch_7_*'
-      - 'releasebranch_7_8'
-    tags: ['*.*.*']
-    paths-ignore: ['doc/**']
+    # tags: ['*.*.*']
+    paths-ignore: [doc/**]
   release:
     types: [published]
 
-env:
-    # Additionally mentioned in docker-sha-release-latest
-    # as use of variable fails there
-    DOCKERHUB_REPOSITORY: mundialis/grass-py3-pdal
-
 jobs:
 
-  # Only run for push to configured branches, do not run for releases.
-  # Take care of different os. For main branch, created tags are:
-  # latest-alpine, latest-debian, latest-ubuntu
-  # For releasebranch_7_8, created tags are:
-  # stable-alpine, stable-debian, stable-ubuntu
-  docker-branch-os-matrix:
-    name: build and push ${{ matrix.os }} for branch
-    if: startsWith(github.ref, 'refs/heads/') && github.repository_owner == 'OSGeo'
+  # Run for push to configured branches and all published releases.
+  # Take care of different os.
+  # For main branch, created tags are:
+  #     main-alpine, main-debian, main-ubuntu
+  # For releasebranch_8_3, created tags are:
+  #     current-alpine, current-debian, current-ubuntu,
+  #     releasebranch_8_3-alpine, releasebranch_8_3-debian, releasebranch_8_3-ubuntu
+  # For a release, e.g. 8.3.0, created tags are:
+  #     8.3.0-alpine, 8.3.0-debian, 8.3.0-ubuntu and latest (with ubuntu)
+  docker-os-matrix:
+    name: build and push ${{ matrix.os }} for ${{ github.ref }}
+    if: github.repository_owner == 'OSGeo'
     runs-on: ubuntu-latest
 
     strategy:
@@ -51,149 +44,44 @@ jobs:
           - alpine
           - debian
           - ubuntu
+          - ubuntu_wxgui
       fail-fast: false
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           fetch-depth: 0
-      - id: meta
-        name: Create tag name
-        run: |
-          if [ "$GITHUB_REF" == "refs/heads/main" ]
-          then
-            TAG_PREFIX=latest
-          elif [ "$GITHUB_REF" == "refs/heads/releasebranch_7_8" ]
-          then
-            TAG_PREFIX=stable
-          else
-            # use branch name as TAG_PREFIX
-            TAG_PREFIX=`echo $GITHUB_REF|cut -d '/' -f3`
-          fi
-          tag="${DOCKERHUB_REPOSITORY}:${TAG_PREFIX}-${{ matrix.os }}"
-          echo "::set-output name=tags::$tag"
-      - name: Log
-        run: |
-          echo ${{ steps.meta.outputs.tags }}
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN  }}
-      - name: Build and push
-        id: docker_build
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          pull: true
-          context: .
-          tags: ${{ steps.meta.outputs.tags }}
-          file: docker/${{ matrix.os }}/Dockerfile
-      - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
-
-
-  # Only run for push to main branch
-  # Take care of tag latest
-  # This job needs to build the configured image (ubuntu)
-  # again for main branch to create latest tag.
-  docker-main-latest:
-    name: build and push latest for main branch
-    if: github.ref == 'refs/heads/main' && github.repository_owner == 'OSGeo'
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - id: meta
-        name: Create tag name
-        run: |
-          tag=${DOCKERHUB_REPOSITORY}:latest
-          echo "::set-output name=tags::$tag"
-      - name: Log
-        run: echo ${{ steps.meta.outputs.tags }}
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN  }}
-      - name: Build and push
-        id: docker_build
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          pull: true
-          context: .
-          tags: ${{ steps.meta.outputs.tags }}
-          file: docker/ubuntu/Dockerfile
-      - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
-
-
-  # run for releases, take care of release tags
-  docker-release-os-matrix:
-    name: build and push release for ${{ matrix.os }}
-    if: startsWith(github.ref, 'refs/tags/') && github.repository_owner == 'OSGeo'
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os:
-          - alpine
-          - debian
-          - ubuntu
-      fail-fast: false
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Create image and tag name
+      - name: Docker meta
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81 # v5.5.1
         with:
-          # images: ${DOCKERHUB_REPOSITORY}
-          images: mundialis/grass-py3-pdal
+          images: osgeo/grass-gis
           tags: |
             type=ref,event=tag
+            type=ref,event=branch
+            type=raw,value=current,enable=${{ github.ref == format('refs/heads/{0}', 'releasebranch_8_3') }}
+            type=raw,value=latest,enable=${{ startsWith(github.ref, 'refs/tags/8.3') && matrix.os == 'ubuntu' }},suffix=
           flavor: |
             latest=false
-      - id: meta2
-        name: Update tag name
-        run: |
-          tag="${{ steps.meta.outputs.tags }}-${{ matrix.os }}"
-          echo "::set-output name=tags::$tag"
-      - name: Log
-        run: |
-          echo ${{ steps.meta2.outputs.tags }}
+            suffix=-${{ matrix.os }}
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
+        uses: docker/setup-qemu-action@5927c834f5b4fdf503fca6f4c7eccda82949e1ee # v3.1.0
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@4fd812986e6c8c2a69e18311145f9371337f27d4 # v3.4.0
       - name: Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3.2.0
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN  }}
       - name: Build and push
         id: docker_build
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@1ca370b3a9802c92e886402e0dd88098a2533b12 # v6.4.1
         with:
           push: true
           pull: true
           context: .
-          tags: ${{ steps.meta2.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tags }}
           file: docker/${{ matrix.os }}/Dockerfile
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}

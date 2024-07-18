@@ -22,10 +22,7 @@ from wx.lib.newevent import NewEvent
 
 import sys
 
-if sys.version_info.major == 2:
-    import Queue
-else:
-    import queue as Queue
+import queue as Queue
 
 from core.gconsole import EVT_CMD_DONE, wxCmdDone
 

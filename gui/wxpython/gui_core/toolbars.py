@@ -20,6 +20,7 @@ import platform
 import os
 
 import wx
+from wx.lib.agw import aui
 
 from core import globalvar
 from core.debug import Debug
@@ -82,11 +83,247 @@ BaseIcons = {
     "mapDispSettings": MetaIcon(
         img="monitor-settings", label=_("Map Display Settings")
     ),
+    "docking": MetaIcon(img="monitor-dock", label=_("(Un)dock")),
 }
 
 
+class ToolbarController:
+    """Controller specialized for wx.ToolBar subclass.
+
+    Toolbar subclasses must delegate methods to controller.
+    Methods inherited from toolbar class must be delegated explicitly
+    and other methods can be delegated by @c __getattr__.
+    """
+
+    def __init__(self, classObject, widget, parent, toolSwitcher):
+        """
+        :param classObject: toolbar class name (object, i.e. wx.Toolbar)
+        :param widget: toolbar instance
+        """
+        self.classObject = classObject
+        self.widget = widget
+        self.parent = parent
+        self.toolSwitcher = toolSwitcher
+        self.handlers = {}
+        self.data = None
+
+    def InitToolbar(self, toolData):
+        """Initialize toolbar, add tools to the toolbar"""
+        for tool in toolData:
+            self.CreateTool(*tool)
+
+        self.data = toolData
+
+    def CreateTool(self, label, bitmap, kind, shortHelp, longHelp, handler, pos=-1):
+        """Add tool to the toolbar
+
+        :param pos: if -1 add tool, if > 0 insert at given pos
+        :return: id of tool
+        """
+        bmpDisabled = wx.NullBitmap
+        tool = -1
+
+        if isinstance(label, tuple):
+            internal_label, label = label[0], label[1]
+        else:
+            internal_label = label
+
+        if label:
+            tool = vars(self.widget)[internal_label] = NewId()
+            Debug.msg(
+                3, "CreateTool(): tool=%d, label=%s bitmap=%s" % (tool, label, bitmap)
+            )
+            if pos < 0:
+                toolWin = self.classObject.AddTool(
+                    self.widget,
+                    tool,
+                    label,
+                    bitmap,
+                    bmpDisabled,
+                    kind,
+                    shortHelp,
+                    longHelp,
+                )
+            else:
+                toolWin = self.classObject.InsertTool(
+                    self.widget,
+                    pos,
+                    tool,
+                    label,
+                    bitmap,
+                    bmpDisabled,
+                    kind,
+                    shortHelp,
+                    longHelp,
+                )
+            self.handlers[tool] = handler
+            self.widget.Bind(wx.EVT_TOOL, handler, toolWin)
+            self.widget.Bind(wx.EVT_TOOL, self.OnTool, toolWin)
+        else:  # separator
+            self.classObject.AddSeparator(self.widget)
+
+        return tool
+
+    def EnableLongHelp(self, enable):
+        """Enable/disable long help
+
+        :param enable: True for enable otherwise disable
+        """
+        for tool in self.data:
+            if isinstance(tool[0], tuple):
+                if tool[0][0] == "":  # separator
+                    continue
+                internal_label = tool[0][0]
+            elif tool[0] == "":  # separator
+                continue
+            internal_label = tool[0]
+
+            label = vars(self.widget)[internal_label]
+            if enable:
+                self.classObject.SetToolLongHelp(self.widget, label, tool[4])
+            else:
+                self.classObject.SetToolLongHelp(self.widget, label, "")
+
+    def OnTool(self, event):
+        """Tool selected"""
+        if self.toolSwitcher:
+            Debug.msg(3, "BaseToolbar.OnTool(): id = %s" % event.GetId())
+            self.toolSwitcher.ToolChanged(event.GetId())
+        event.Skip()
+
+    def SelectTool(self, id):
+        self.classObject.ToggleTool(self.widget, id, True)
+        self.toolSwitcher.ToolChanged(id)
+
+        self.handlers[id](event=None)
+
+    def SelectDefault(self):
+        """Select default tool"""
+        self.SelectTool(self.widget._default)
+
+    def FixSize(self, width):
+        """Fix toolbar width on Windows
+
+        .. todo::
+            Determine why combobox causes problems here
+        """
+        if platform.system() == "Windows":
+            size = self.classObject.GetBestSize(self.widget)
+            self.classObject.SetSize(self.widget, (size[0] + width, size[1]))
+
+    def Enable(self, tool, enable=True):
+        """Enable/Disable defined tool
+
+        :param str/tuple tool: name
+        :param enable: True to enable otherwise disable tool
+        """
+        try:
+            if isinstance(tool, tuple):
+                id = getattr(self.widget, tool[0])
+            else:
+                id = getattr(self.widget, tool)
+        except AttributeError:
+            # TODO: test everything that this is not raised
+            # this error was ignored for a long time
+            raise AttributeError("Toolbar does not have a tool %s." % tool)
+            return
+
+        self.classObject.EnableTool(self.widget, id, enable)
+
+    def EnableAll(self, enable=True):
+        """Enable/Disable all tools
+
+        :param enable: True to enable otherwise disable tool
+        """
+        for item in self.widget._toolbarData():
+            if not item[0]:
+                continue
+            self.Enable(item[0], enable)
+
+    def _getToolbarData(self, data):
+        """Define tool"""
+        retData = []
+        for args in data:
+            retData.append(self._defineTool(*args))
+        return retData
+
+    def _defineTool(
+        self, name=None, icon=None, handler=None, item=wx.ITEM_NORMAL, pos=-1
+    ):
+        """Define tool"""
+        if name:
+            return (
+                name,
+                icon.GetBitmap(),
+                item,
+                icon.GetLabel(),
+                icon.GetDesc(),
+                handler,
+                pos,
+            )
+        return ("", "", "", "", "", "")  # separator
+
+    def _onMenu(self, data):
+        """Toolbar pop-up menu"""
+        menu = Menu()
+
+        for icon, handler in data:
+            item = wx.MenuItem(menu, wx.ID_ANY, icon.GetLabel())
+            item.SetBitmap(icon.GetBitmap(self.parent.iconsize))
+            menu.AppendItem(item)
+            self.widget.Bind(wx.EVT_MENU, handler, item)
+
+        self.classObject.PopupMenu(self.widget, menu)
+        menu.Destroy()
+
+    def CreateSelectionButton(self, tooltip):
+        """Add button to toolbar for selection of graphics drawing mode.
+
+        Button must be custom (not toolbar tool) to set smaller width.
+        """
+        arrowPath = os.path.join(IMGDIR, "small_down_arrow.png")
+        if os.path.isfile(arrowPath) and os.path.getsize(arrowPath):
+            bitmap = wx.Bitmap(name=arrowPath)
+        else:
+            bitmap = wx.ArtProvider.GetBitmap(
+                id=wx.ART_MISSING_IMAGE, client=wx.ART_TOOLBAR
+            )
+        button = BitmapButton(
+            parent=self.widget,
+            id=wx.ID_ANY,
+            size=((-1, self.classObject.GetToolSize(self.widget)[1])),
+            bitmap=bitmap,
+            style=wx.NO_BORDER,
+        )
+        button.SetToolTip(tooltip)
+
+        return button
+
+
+class AuiToolbarController(ToolbarController):
+    """Controller specialized for wx.lib.agw.aui.auibar.AuiToolBar subclass"""
+
+    def _defineTool(self, name=None, icon=None, handler=None, item=wx.ITEM_NORMAL):
+        """Define tool. Position is not needed since wx.lib.agw.aui.auibar.AuiToolBar
+        does not have InsertTool method."""
+        if name:
+            return (
+                name,
+                icon.GetBitmap(),
+                item,
+                icon.GetLabel(),
+                icon.GetDesc(),
+                handler,
+            )
+        return ("", "", "", "", "", "")  # separator
+
+    def CreateTool(self, label, bitmap, kind, shortHelp, longHelp, handler):
+        """Add tool to the toolbar"""
+        return super().CreateTool(label, bitmap, kind, shortHelp, longHelp, handler)
+
+
 class BaseToolbar(ToolBar):
-    """Abstract toolbar class.
+    """Abstract basic toolbar class.
 
     Following code shows how to create new basic toolbar:
 
@@ -119,189 +356,79 @@ class BaseToolbar(ToolBar):
         self.SetToolBitmapSize(globalvar.toolbarSize)
 
         self.toolSwitcher = toolSwitcher
-        self.handlers = {}
-
-    def InitToolbar(self, toolData):
-        """Initialize toolbar, add tools to the toolbar"""
-        for tool in toolData:
-            self.CreateTool(*tool)
-
-        self._data = toolData
+        self.controller = ToolbarController(
+            classObject=ToolBar,
+            widget=self,
+            parent=self.parent,
+            toolSwitcher=toolSwitcher,
+        )
 
     def _toolbarData(self):
         """Toolbar data (virtual)"""
         return None
 
-    def CreateTool(self, label, bitmap, kind, shortHelp, longHelp, handler, pos=-1):
-        """Add tool to the toolbar
+    def Enable(self, tool, enable=True):
+        """@copydoc ToolbarController::Enable()"""
+        self.controller.Enable(tool, enable)
 
-        :param pos: if -1 add tool, if > 0 insert at given pos
-        :return: id of tool
-        """
-        bmpDisabled = wx.NullBitmap
-        tool = -1
-
-        if isinstance(label, tuple):
-            internal_label, label = label[0], label[1]
-        else:
-            internal_label = label
-
-        if label:
-            tool = vars(self)[internal_label] = NewId()
-            Debug.msg(
-                3, "CreateTool(): tool=%d, label=%s bitmap=%s" % (tool, label, bitmap)
-            )
-            if pos < 0:
-                toolWin = self.AddLabelTool(
-                    tool, label, bitmap, bmpDisabled, kind, shortHelp, longHelp
-                )
-            else:
-                toolWin = self.InsertLabelTool(
-                    pos, tool, label, bitmap, bmpDisabled, kind, shortHelp, longHelp
-                )
-            self.handlers[tool] = handler
-            self.Bind(wx.EVT_TOOL, handler, toolWin)
-            self.Bind(wx.EVT_TOOL, self.OnTool, toolWin)
-        else:  # separator
-            self.AddSeparator()
-
-        return tool
-
-    def EnableLongHelp(self, enable=True):
-        """Enable/disable long help
-
-        :param enable: True for enable otherwise disable
-        """
-        for tool in self._data:
-            if isinstance(tool[0], tuple):
-                if tool[0][0] == "":  # separator
-                    continue
-                else:
-                    internal_label = tool[0][0]
-            else:
-                if tool[0] == "":  # separator
-                    continue
-                else:
-                    internal_label = tool[0]
-            if enable:
-                self.SetToolLongHelp(vars(self)[internal_label], tool[4])
-            else:
-                self.SetToolLongHelp(vars(self)[internal_label], "")
+    def CreateTool(self, *args, **kwargs):
+        """@copydoc ToolbarController::CreateTool()"""
+        self.controller.CreateTool(*args, **kwargs)
 
     def OnTool(self, event):
-        """Tool selected"""
-        if self.toolSwitcher:
-            Debug.msg(3, "BaseToolbar.OnTool(): id = %s" % event.GetId())
-            self.toolSwitcher.ToolChanged(event.GetId())
-        event.Skip()
+        """@copydoc ToolbarController::OnTool()"""
+        self.controller.OnTool(event)
 
-    def SelectTool(self, id):
-        self.ToggleTool(id, True)
-        self.toolSwitcher.ToolChanged(id)
+    def __getattr__(self, name):
+        return getattr(self.controller, name)
 
-        self.handlers[id](event=None)
 
-    def SelectDefault(self):
-        """Select default tool"""
-        self.SelectTool(self._default)
+class AuiToolbar(aui.AuiToolBar):
+    """Abstract AUI toolbar class.
 
-    def FixSize(self, width):
-        """Fix toolbar width on Windows
+    Toolbar for integration with the AUI layout system."""
 
-        .. todo::
-            Determine why combobox causes problems here
-        """
-        if platform.system() == "Windows":
-            size = self.GetBestSize()
-            self.SetSize((size[0] + width, size[1]))
+    def __init__(
+        self,
+        parent,
+        toolSwitcher=None,
+        style=wx.NO_BORDER | wx.TB_HORIZONTAL,
+        agwStyle=aui.AUI_TB_PLAIN_BACKGROUND | aui.AUI_TB_GRIPPER,
+    ):
+        self.parent = parent
+        super().__init__(
+            parent=self.parent, id=wx.ID_ANY, style=style, agwStyle=agwStyle
+        )
+
+        self._default = None
+        self.SetToolBitmapSize(globalvar.toolbarSize)
+
+        self.toolSwitcher = toolSwitcher
+        self.controller = AuiToolbarController(
+            classObject=aui.AuiToolBar,
+            widget=self,
+            parent=self.parent,
+            toolSwitcher=toolSwitcher,
+        )
+
+    def _toolbarData(self):
+        """Toolbar data (virtual)"""
+        return None
 
     def Enable(self, tool, enable=True):
-        """Enable/Disable defined tool
+        """@copydoc ToolbarController::Enable()"""
+        self.controller.Enable(tool, enable)
 
-        :param str/tuple tool: name
-        :param enable: True to enable otherwise disable tool
-        """
-        try:
-            if isinstance(tool, tuple):
-                id = getattr(self, tool[0])
-            else:
-                id = getattr(self, tool)
-        except AttributeError:
-            # TODO: test everything that this is not raised
-            # this error was ignored for a long time
-            raise AttributeError("Toolbar does not have a tool %s." % tool)
-            return
+    def CreateTool(self, *args, **kwargs):
+        """@copydoc ToolbarController::CreateTool()"""
+        self.controller.CreateTool(*args, **kwargs)
 
-        self.EnableTool(id, enable)
+    def OnTool(self, event):
+        """@copydoc ToolbarController::OnTool()"""
+        self.controller.OnTool(event)
 
-    def EnableAll(self, enable=True):
-        """Enable/Disable all tools
-
-        :param enable: True to enable otherwise disable tool
-        """
-        for item in self._toolbarData():
-            if not item[0]:
-                continue
-            self.Enable(item[0], enable)
-
-    def _getToolbarData(self, data):
-        """Define tool"""
-        retData = list()
-        for args in data:
-            retData.append(self._defineTool(*args))
-        return retData
-
-    def _defineTool(
-        self, name=None, icon=None, handler=None, item=wx.ITEM_NORMAL, pos=-1
-    ):
-        """Define tool"""
-        if name:
-            return (
-                name,
-                icon.GetBitmap(),
-                item,
-                icon.GetLabel(),
-                icon.GetDesc(),
-                handler,
-                pos,
-            )
-        return ("", "", "", "", "", "")  # separator
-
-    def _onMenu(self, data):
-        """Toolbar pop-up menu"""
-        menu = Menu()
-
-        for icon, handler in data:
-            item = wx.MenuItem(menu, wx.ID_ANY, icon.GetLabel())
-            item.SetBitmap(icon.GetBitmap(self.parent.iconsize))
-            menu.AppendItem(item)
-            self.Bind(wx.EVT_MENU, handler, item)
-
-        self.PopupMenu(menu)
-        menu.Destroy()
-
-    def CreateSelectionButton(self, tooltip=_("Select graphics tool")):
-        """Add button to toolbar for selection of graphics drawing mode.
-
-        Button must be custom (not toolbar tool) to set smaller width.
-        """
-        arrowPath = os.path.join(IMGDIR, "small_down_arrow.png")
-        if os.path.isfile(arrowPath) and os.path.getsize(arrowPath):
-            bitmap = wx.Bitmap(name=arrowPath)
-        else:
-            bitmap = wx.ArtProvider.GetBitmap(
-                id=wx.ART_MISSING_IMAGE, client=wx.ART_TOOLBAR
-            )
-        button = BitmapButton(
-            parent=self,
-            id=wx.ID_ANY,
-            size=((-1, self.GetToolSize()[1])),
-            bitmap=bitmap,
-            style=wx.NO_BORDER,
-        )
-        button.SetToolTip(tooltip)
-
-        return button
+    def __getattr__(self, name):
+        return getattr(self.controller, name)
 
 
 class ToolSwitcher:

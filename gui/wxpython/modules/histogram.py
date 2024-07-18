@@ -53,7 +53,6 @@ class BufferedWindow(wx.Window):
         Map=None,
         **kwargs,
     ):
-
         wx.Window.__init__(self, parent, id=id, style=style, **kwargs)
 
         self.parent = parent
@@ -472,7 +471,7 @@ class HistogramFrame(wx.Frame):
         dlg = wx.FileDialog(
             parent=self,
             message=_(
-                "Choose a file name to save the image " "(no need to add extension)"
+                "Choose a file name to save the image (no need to add extension)"
             ),
             wildcard=filetype,
             style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,

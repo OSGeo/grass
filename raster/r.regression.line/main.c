@@ -1,14 +1,13 @@
-
 /****************************************************************************
  *
  * MODULE:       r.regression.line
- * 
+ *
  * AUTHOR(S):    Dr. Agustin Lobo
  *               Markus Metz (conversion to C for speed)
- * 
+ *
  * PURPOSE:      Calculates linear regression from two raster maps:
  *               y = a + b*x
- * 
+ *
  * COPYRIGHT:    (C) 2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -27,7 +26,7 @@
 
 int main(int argc, char *argv[])
 {
-    unsigned int r, c, rows, cols;	/*  totals  */
+    unsigned int r, c, rows, cols; /*  totals  */
     int map1_fd, map2_fd;
     double sumX, sumY, sumsqX, sumsqY, sumXY;
     double meanX, meanY, varX, varY, sdX, sdY;
@@ -47,7 +46,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("statistics"));
     G_add_keyword(_("regression"));
     module->description =
-	_("Calculates linear regression from two raster maps: y = a + b*x.");
+        _("Calculates linear regression from two raster maps: y = a + b*x.");
 
     /* Define the different options */
     input_map1 = G_define_standard_option(G_OPT_R_MAP);
@@ -62,20 +61,21 @@ int main(int argc, char *argv[])
     output_opt->key = "output";
     output_opt->required = NO;
     output_opt->description =
-	(_("ASCII file for storing regression coefficients (output to screen if file not specified)."));
+        (_("ASCII file for storing regression coefficients (output to screen "
+           "if file not specified)."));
 
     shell_style = G_define_flag();
     shell_style->key = 'g';
     shell_style->description = _("Print in shell script style");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     name = output_opt->answer;
     if (name != NULL && strcmp(name, "-") != 0) {
-	if (NULL == freopen(name, "w", stdout)) {
-	    G_fatal_error(_("Unable to open file <%s> for writing"), name);
-	}
+        if (NULL == freopen(name, "w", stdout)) {
+            G_fatal_error(_("Unable to open file <%s> for writing"), name);
+        }
     }
 
     G_get_window(&region);
@@ -92,23 +92,23 @@ int main(int argc, char *argv[])
     sumX = sumY = sumsqX = sumsqY = sumXY = 0.0;
     meanX = meanY = varX = varY = sdX = sdY = 0.0;
     for (r = 0; r < rows; r++) {
-	G_percent(r, rows, 2);
-	Rast_get_d_row(map1_fd, map1_buf, r);
-	Rast_get_d_row(map2_fd, map2_buf, r);
-	for (c = 0; c < cols; c++) {
-	    map1_val = map1_buf[c];
-	    map2_val = map2_buf[c];
-	    if (Rast_is_d_null_value(&map1_val) ||
-		Rast_is_d_null_value(&map2_val))
-		continue;
+        G_percent(r, rows, 2);
+        Rast_get_d_row(map1_fd, map1_buf, r);
+        Rast_get_d_row(map2_fd, map2_buf, r);
+        for (c = 0; c < cols; c++) {
+            map1_val = map1_buf[c];
+            map2_val = map2_buf[c];
+            if (Rast_is_d_null_value(&map1_val) ||
+                Rast_is_d_null_value(&map2_val))
+                continue;
 
-	    sumX += map1_val;
-	    sumY += map2_val;
-	    sumsqX += map1_val * map1_val;
-	    sumsqY += map2_val * map2_val;
-	    sumXY += map1_val * map2_val;
-	    count++;
-	}
+            sumX += map1_val;
+            sumY += map2_val;
+            sumsqX += map1_val * map1_val;
+            sumsqY += map2_val * map2_val;
+            sumXY += map1_val * map2_val;
+            count++;
+        }
     }
     Rast_close(map1_fd);
     Rast_close(map2_fd);
@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
 
     B = (sumXY - sumX * sumY / count) / (sumsqX - sumX * sumX / count);
     R = (sumXY - sumX * sumY / count) /
-	sqrt((sumsqX - sumX * sumX / count) * (sumsqY - sumY * sumY / count));
+        sqrt((sumsqX - sumX * sumX / count) * (sumsqY - sumY * sumY / count));
 
     meanX = sumX / count;
     sumsqX = sumsqX / count;
@@ -133,27 +133,27 @@ int main(int argc, char *argv[])
     F = R * R / ((1 - R * R) / (count - 2));
 
     if (shell_style->answer) {
-	fprintf(stdout, "a=%f\n", A);
-	fprintf(stdout, "b=%f\n", B);
-	fprintf(stdout, "R=%f\n", R);
-	fprintf(stdout, "N=%ld\n", count);
-	fprintf(stdout, "F=%f\n", F);
-	fprintf(stdout, "meanX=%f\n", meanX);
-	fprintf(stdout, "sdX=%f\n", sdX);
-	fprintf(stdout, "meanY=%f\n", meanY);
-	fprintf(stdout, "sdY=%f\n", sdY);
+        fprintf(stdout, "a=%f\n", A);
+        fprintf(stdout, "b=%f\n", B);
+        fprintf(stdout, "R=%f\n", R);
+        fprintf(stdout, "N=%ld\n", count);
+        fprintf(stdout, "F=%f\n", F);
+        fprintf(stdout, "meanX=%f\n", meanX);
+        fprintf(stdout, "sdX=%f\n", sdX);
+        fprintf(stdout, "meanY=%f\n", meanY);
+        fprintf(stdout, "sdY=%f\n", sdY);
     }
     else {
-	fprintf(stdout, "y = a + b*x\n");
-	fprintf(stdout, "   a (Offset): %f\n", A);
-	fprintf(stdout, "   b (Gain): %f\n", B);
-	fprintf(stdout, "   R (sumXY - sumX*sumY/N): %f\n", R);
-	fprintf(stdout, "   N (Number of elements): %ld\n", count);
-	fprintf(stdout, "   F (F-test significance): %f\n", F);
-	fprintf(stdout, "   meanX (Mean of map1): %f\n", meanX);
-	fprintf(stdout, "   sdX (Standard deviation of map1): %f\n", sdX);
-	fprintf(stdout, "   meanY (Mean of map2): %f\n", meanY);
-	fprintf(stdout, "   sdY (Standard deviation of map2): %f\n", sdY);
+        fprintf(stdout, "y = a + b*x\n");
+        fprintf(stdout, "   a (Offset): %f\n", A);
+        fprintf(stdout, "   b (Gain): %f\n", B);
+        fprintf(stdout, "   R (sumXY - sumX*sumY/N): %f\n", R);
+        fprintf(stdout, "   N (Number of elements): %ld\n", count);
+        fprintf(stdout, "   F (F-test significance): %f\n", F);
+        fprintf(stdout, "   meanX (Mean of map1): %f\n", meanX);
+        fprintf(stdout, "   sdX (Standard deviation of map1): %f\n", sdX);
+        fprintf(stdout, "   meanY (Mean of map2): %f\n", meanY);
+        fprintf(stdout, "   sdY (Standard deviation of map2): %f\n", sdY);
     }
 
     exit(EXIT_SUCCESS);

@@ -66,7 +66,7 @@ class SuccessTest(TestCase):
         )
         cls.runModule(
             "r.mapcalc",
-            expression=f"{cls.b2}=5.0+rand(-1.0,1.0)",
+            expression=f"{cls.b2}=if(row() == 3 && col() == 3, null(), 5.0+rand(-1.0,1.0))",
             flags="s",
             quiet=True,
         )

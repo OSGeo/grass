@@ -19,7 +19,6 @@
 
 #include "local_proto.h"
 
-
 void projection_mismatch_report(struct Cell_head cellhd,
                                 struct Cell_head loc_wind,
                                 struct Key_Value *loc_proj_info,
@@ -30,14 +29,13 @@ void projection_mismatch_report(struct Cell_head cellhd,
     int i_value;
     char error_msg[8192];
 
-    strcpy(error_msg,
-           _("Projection of dataset does not"
-             " appear to match current location.\n\n"));
+    strcpy(error_msg, _("Coordinate reference system of dataset does not"
+                        " appear to match current project.\n\n"));
 
     /* TODO: output this info sorted by key: */
     if (loc_wind.proj != cellhd.proj || err != -2) {
         if (loc_proj_info != NULL) {
-            strcat(error_msg, _("GRASS LOCATION PROJ_INFO is:\n"));
+            strcat(error_msg, _("GRASS project PROJ_INFO is:\n"));
             for (i_value = 0; i_value < loc_proj_info->nitems; i_value++)
                 sprintf(error_msg + strlen(error_msg), "%s: %s\n",
                         loc_proj_info->key[i_value],
@@ -62,12 +60,12 @@ void projection_mismatch_report(struct Cell_head cellhd,
                         "Dataset proj = %d (lat/long)\n", cellhd.proj);
             else if (cellhd.proj == PROJECTION_UTM)
                 sprintf(error_msg + strlen(error_msg),
-                        "Dataset proj = %d (UTM), zone = %d\n",
-                        cellhd.proj, cellhd.zone);
+                        "Dataset proj = %d (UTM), zone = %d\n", cellhd.proj,
+                        cellhd.zone);
             else
                 sprintf(error_msg + strlen(error_msg),
-                        "Dataset proj = %d (unknown), zone = %d\n",
-                        cellhd.proj, cellhd.zone);
+                        "Dataset proj = %d (unknown), zone = %d\n", cellhd.proj,
+                        cellhd.zone);
         }
     }
     else {
@@ -88,17 +86,17 @@ void projection_mismatch_report(struct Cell_head cellhd,
         }
     }
     sprintf(error_msg + strlen(error_msg),
-            _("\nIn case of no significant differences in the projection definitions,"
-             " use the -o flag to ignore them and use"
-             " current location definition.\n"));
+            _("\nIn case of no significant differences"
+              " in the coordinate reference system definitions,"
+              " use the -o flag to ignore them and use"
+              " current project definition.\n"));
     strcat(error_msg,
-           _("Consider generating a new location with 'location' parameter"
+           _("Consider generating a new project with 'project' parameter"
              " from input data set.\n"));
     G_fatal_error("%s", error_msg);
 }
 
-void projection_check_wkt(struct Cell_head cellhd,
-                          struct Cell_head loc_wind,
+void projection_check_wkt(struct Cell_head cellhd, struct Cell_head loc_wind,
                           const char *projstr, int override, int verbose)
 {
     struct Key_Value *loc_proj_info = NULL, *loc_proj_units = NULL;
@@ -127,16 +125,15 @@ void projection_check_wkt(struct Cell_head cellhd,
         if (verbose)
             G_message(_("Over-riding projection check"));
     }
-    else if (loc_wind.proj != cellhd.proj
-             || (err =
-                 G_compare_projections(loc_proj_info, loc_proj_units,
-                                       proj_info, proj_units)) != TRUE) {
+    else if (loc_wind.proj != cellhd.proj ||
+             (err = G_compare_projections(loc_proj_info, loc_proj_units,
+                                          proj_info, proj_units)) != TRUE) {
         projection_mismatch_report(cellhd, loc_wind, loc_proj_info,
-                                   loc_proj_units,
-                                   proj_info, proj_units, err);
+                                   loc_proj_units, proj_info, proj_units, err);
     }
     else if (verbose) {
-        G_message(_("Projection of input dataset and current location "
-                    "appear to match"));
+        G_message(_(
+            "Coordinate reference system of input dataset and current project "
+            "appear to match"));
     }
 }

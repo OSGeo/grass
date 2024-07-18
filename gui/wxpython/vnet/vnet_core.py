@@ -20,7 +20,6 @@ This program is free software under the GNU General Public License
 """
 
 import math
-import six
 from grass.script.utils import try_remove
 from grass.script import core as grass
 from grass.script.task import cmdlist_to_tuple
@@ -40,7 +39,6 @@ from grass.pydispatch.signal import Signal
 
 class VNETManager:
     def __init__(self, guiparent, giface):
-
         self.data = {}
 
         self.guiparent = guiparent
@@ -98,7 +96,6 @@ class VNETManager:
         return self.vnet_data.GetGlobalTurnsData()
 
     def RunAnalysis(self):
-
         analysis, valid = self.vnet_data.GetParam("analysis")
 
         params, err_params, flags = self.vnet_data.GetParams()
@@ -130,7 +127,8 @@ class VNETManager:
             return False
 
         # for case there is some map with same name
-        # (when analysis does not produce any map, this map would have been shown as result)
+        # (when analysis does not produce any map, this map would have been shown
+        # as result)
         RunCommand(
             "g.remove",
             flags="f",
@@ -150,7 +148,6 @@ class VNETManager:
             return 1
 
     def RunAnDone(self, cmd, returncode, results):
-
         self.results["analysis"] = cmd[0]
 
         self.results["vect_map"].SaveVectMapState()
@@ -267,7 +264,6 @@ class VNETManager:
         self.giface.updateMap.emit(render=False, renderVector=False)
 
     def CreateTttb(self, params):
-
         outputMap = params["output"]
         mapName, mapSet = ParseMapStr(outputMap)
         if mapSet != grass.gisenv()["MAPSET"]:
@@ -308,7 +304,6 @@ class VNETManager:
         return True
 
     def _createTtbDone(self, event):
-
         if event.returncode != 0:
             GMessage(parent=self.guiparent, message=_("Creation of turntable failed."))
             return
@@ -490,11 +485,13 @@ class VNETAnalyses:
         else:
             cmdParams.append("input=" + params["input"])
 
-        cmdParams.append("file=" + self.coordsTmpFile)
-
-        cmdParams.append("dmax=" + str(params["max_dist"]))
-
-        cmdParams.append("--overwrite")
+        cmdParams.extend(
+            (
+                "file=" + self.coordsTmpFile,
+                "dmax=" + str(params["max_dist"]),
+                "--overwrite",
+            )
+        )
         self._prepareCmd(cmd=cmdParams)
 
         if flags["t"]:
@@ -522,15 +519,13 @@ class VNETAnalyses:
         self.onAnDone(event.cmd, event.returncode, output)
 
     def _runTurnsAn(self, analysis, output, params, flags, catPts):
-
         # Creates part of cmd fro analysis
         cmdParams = [analysis]
         cmdParams.extend(self._setInputParams(analysis, params, flags))
         cmdParams.append("output=" + output)
 
         cats = {}
-        for cat_name, pts_coor in six.iteritems(catPts):
-
+        for cat_name, pts_coor in catPts.items():
             for coor in pts_coor:
                 cat_num = str(
                     GetNearestNodeCat(
@@ -547,7 +542,7 @@ class VNETAnalyses:
                 else:
                     cats[cat_name] = [cat_num]
 
-        for cat_name, cat_nums in six.iteritems(cats):
+        for cat_name, cat_nums in cats.items():
             cmdParams.append(cat_name + "=" + ",".join(cat_nums))
 
         self.tmpTurnAn = AddTmpMapAnalysisMsg("vnet_tunr_an_tmp", self.tmp_maps)
@@ -612,10 +607,11 @@ class VNETAnalyses:
             # if angle < from_angle:
             #    angle = math.pi * 2  + angle
 
-            where = " WHERE (((angle < {0}) AND ({2} + angle >= {0} AND {2} + angle < {1})) OR \
-                            ((angle >= {0}) AND (angle >= {0} AND angle < {1}))) AND cost==0.0 ".format(
-                str(from_angle), str(to_angle), str(math.pi * 2)
-            )
+            where = (
+                " WHERE (((angle < {0}) AND ({2} + angle >= {0} AND {2} + angle < {1}))"
+                " OR ((angle >= {0}) AND (angle >= {0} AND angle < {1})))"
+                " AND cost==0.0 "
+            ).format(str(from_angle), str(to_angle), str(math.pi * 2))
 
             stm = ("UPDATE %s SET cost=%f " % (table, cost)) + where + ";\n"
             sqlFile_f.write(stm)
@@ -703,12 +699,13 @@ class VNETAnalyses:
         if not self.tmpInPtsConnected:
             return False
 
-        cmdParams.append("input=" + self.tmpInPtsConnected.GetVectMapName())
-        cmdParams.append("--overwrite")
+        cmdParams.extend(
+            ("input=" + self.tmpInPtsConnected.GetVectMapName(), "--overwrite")
+        )
 
         self._setCmdForSpecificAn(cmdParams)
 
-        for catName, catNum in six.iteritems(catsNums):
+        for catName, catNum in catsNums.items():
             if catNum[0] == catNum[1]:
                 cmdParams.append(catName + "=" + str(catNum[0]))
             else:
@@ -761,14 +758,12 @@ class VNETAnalyses:
     def _setInputParams(self, analysis, params, flags):
         """Return list of chosen values (vector map, layers).
 
-        The list items are in form to be used in command for analysis e.g. 'arc_layer=1'.
+        The list items are in form to be used in command for analysis
+        e.g. 'arc_layer=1'.
         """
 
         inParams = []
-        for col, v in six.iteritems(
-            self.data.GetAnalysisProperties()["cmdParams"]["cols"]
-        ):
-
+        for col, v in self.data.GetAnalysisProperties()["cmdParams"]["cols"].items():
             if "inputField" in v:
                 colInptF = v["inputField"]
             else:
@@ -777,7 +772,7 @@ class VNETAnalyses:
             inParams.append(col + "=" + params[colInptF])
 
         for layer in ["arc_layer", "node_layer", "turn_layer", "turn_cat_layer"]:
-            if not flags["t"] and layer in ["turn_layer", "turn_cat_layer"]:
+            if not flags["t"] and layer in {"turn_layer", "turn_cat_layer"}:
                 continue
             # TODO
             if flags["t"] and layer == "node_layer":
@@ -815,8 +810,7 @@ class VNETAnalyses:
         pt_ascii = ""
         catNum = maxCat
 
-        for catName, pts in six.iteritems(catPts):
-
+        for catName, pts in catPts.items():
             catsNums[catName] = [catNum + 1]
             for pt in pts:
                 catNum += 1
@@ -900,7 +894,7 @@ class VNETHistory:
             return
 
         # delete temporary maps in history steps which were deleted
-        for removedStep in six.itervalues(removedHistData):
+        for removedStep in removedHistData.values():
             mapsNames = removedStep["tmp_data"]["maps"]
             for vectMapName in mapsNames:
                 tmpMap = self.tmp_maps.GetTmpVectMap(vectMapName)
@@ -946,7 +940,7 @@ class VNETHistory:
         # update parameters
         params = {}
         histInputData = histStepData["an_params"]
-        for inpName, inp in six.iteritems(histInputData):
+        for inpName, inp in histInputData.items():
             params[inpName] = str(inp)
             if inpName == "input":
                 inpMap = inp
@@ -998,8 +992,7 @@ class VNETHistory:
                 key="points", subkey=[ptName, "checked"], value=data["use"]
             )
 
-            for param, value in six.iteritems(params):
-
+            for param, value in params.items():
                 if param == "input":
                     inpMap = VectMap(self, value)
                     self.history.Add(
@@ -1037,13 +1030,11 @@ def AddTmpMapAnalysisMsg(mapName, tmp_maps):  # TODO
         "Temporary map %s  already exists.\n"
         + "Do you want to continue in analysis and overwrite it?"
     ) % (mapName + "@" + grass.gisenv()["MAPSET"])
-    tmpMap = tmp_maps.AddTmpVectMap(mapName, msg)
-    return tmpMap
+    return tmp_maps.AddTmpVectMap(mapName, msg)
 
 
 class SnappingNodes(wx.EvtHandler):
     def __init__(self, giface, data, tmp_maps, mapWin):
-
         self.giface = giface
         self.data = data
         self.tmp_maps = tmp_maps
@@ -1067,7 +1058,6 @@ class SnappingNodes(wx.EvtHandler):
             return -1
 
         if not activate:
-
             if self.tmp_maps.HasTmpVectMap("vnet_snap_points"):
                 self.snapPts.DeleteRenderLayer()
 

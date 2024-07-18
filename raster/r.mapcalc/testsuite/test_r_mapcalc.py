@@ -61,7 +61,6 @@ cols: 10
 
 
 class TestRandFunction(TestCase):
-
     # TODO: replace by unified handing of maps
     to_remove = []
 
@@ -166,7 +165,7 @@ class TestRandFunction(TestCase):
         self.assertRastersDifference(
             "rand_auto_1",
             "rand_auto_2",
-            statistics=dict(min=-1, max=1, mean=0),
+            statistics={"min": -1, "max": 1, "mean": 0},
             precision=0.5,
         )  # low precision, we have few cells
 
@@ -176,7 +175,6 @@ class TestRandFunction(TestCase):
 
 
 class TestBasicOperations(TestCase):
-
     # TODO: replace by unified handing of maps
     to_remove = []
 
@@ -231,14 +229,13 @@ class TestBasicOperations(TestCase):
 
     def test_nrows_ncols_sum(self):
         """Test if sum of nrows and ncols matches one
-        expected from current region settigs"""
+        expected from current region settings"""
         self.assertModule("r.mapcalc", expression="nrows_ncols_sum = nrows() + ncols()")
         self.to_remove.append("nrows_ncols_sum")
         self.assertRasterMinMax("nrows_ncols_sum", refmin=20, refmax=20)
 
 
 class TestRegionOperations(TestCase):
-
     # TODO: replace by unified handing of maps
     to_remove = []
 
@@ -282,17 +279,17 @@ class TestRegionOperations(TestCase):
             "r.info",
             map="test_region_4",
             flags="gr",
-            reference=dict(
-                min=6,
-                max=6,
-                cells=625,
-                north=30,
-                south=5,
-                west=5,
-                east=30,
-                nsres=1,
-                ewres=1,
-            ),
+            reference={
+                "min": 6,
+                "max": 6,
+                "cells": 625,
+                "north": 30,
+                "south": 5,
+                "west": 5,
+                "east": 30,
+                "nsres": 1,
+                "ewres": 1,
+            },
             precision=0.01,
             sep="=",
         )
@@ -311,17 +308,17 @@ class TestRegionOperations(TestCase):
             "r.info",
             map="test_region_5",
             flags="gr",
-            reference=dict(
-                min=6,
-                max=6,
-                cells=25,
-                north=20,
-                south=15,
-                west=15,
-                east=20,
-                nsres=1,
-                ewres=1,
-            ),
+            reference={
+                "min": 6,
+                "max": 6,
+                "cells": 25,
+                "north": 20,
+                "south": 15,
+                "west": 15,
+                "east": 20,
+                "nsres": 1,
+                "ewres": 1,
+            },
             precision=0.01,
             sep="=",
         )

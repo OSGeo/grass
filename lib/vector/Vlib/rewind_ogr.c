@@ -10,8 +10,8 @@
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
-   \author Radim Blazek, Piero Cavalieri 
-*/
+   \author Radim Blazek, Piero Cavalieri
+ */
 
 #include <grass/vector.h>
 #include <grass/glocale.h>
@@ -21,13 +21,13 @@
 #endif
 
 /*!
-  \brief Rewind vector map (OGR layer) to cause reads to start at
-  beginning (level 1)
+   \brief Rewind vector map (OGR layer) to cause reads to start at
+   beginning (level 1)
 
-  \param Map pointer to Map_info structure
+   \param Map pointer to Map_info structure
 
-  \return 0 on success
-  \return -1 on error
+   \return 0 on success
+   \return -1 on error
  */
 int V1_rewind_ogr(struct Map_info *Map)
 {
@@ -36,7 +36,7 @@ int V1_rewind_ogr(struct Map_info *Map)
     struct Format_info_ogr *ogr_info;
 
     ogr_info = &(Map->fInfo.ogr);
-    
+
     ogr_info->cache.lines_num = 0;
     ogr_info->cache.lines_next = 0;
 
@@ -50,13 +50,13 @@ int V1_rewind_ogr(struct Map_info *Map)
 }
 
 /*!
-  \brief Rewind vector map (OGR layer) to cause reads to start at
-  beginning on topological level (level 2)
-  
-  \param Map pointer to Map_info structure
+   \brief Rewind vector map (OGR layer) to cause reads to start at
+   beginning on topological level (level 2)
 
-  \return 0 on success
-  \return -1 on error
+   \param Map pointer to Map_info structure
+
+   \return 0 on success
+   \return -1 on error
  */
 int V2_rewind_ogr(struct Map_info *Map)
 {

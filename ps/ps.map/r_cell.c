@@ -15,17 +15,17 @@ int read_cell(char *name, char *mapset)
 
     PS.do_colortable = 0;
     if (PS.cell_fd >= 0) {
-	Rast_close(PS.cell_fd);
-	G_free(PS.cell_name);
-	Rast_free_colors(&PS.colors);
-	PS.cell_fd = -1;
+        Rast_close(PS.cell_fd);
+        G_free(PS.cell_name);
+        Rast_free_colors(&PS.colors);
+        PS.cell_fd = -1;
     }
 
     sprintf(fullname, "%s in %s", name, mapset);
 
     if (Rast_read_colors(name, mapset, &PS.colors) == -1) {
-	error(fullname, "", "can't read color table");
-	return 0;
+        error(fullname, "", "can't read color table");
+        return 0;
     }
     Rast_get_c_color_range(&PS.min_color, &PS.max_color, &PS.colors);
 
@@ -35,7 +35,7 @@ int read_cell(char *name, char *mapset)
     strcpy(PS.celltitle, Rast_get_cell_title(name, mapset));
     G_strip(PS.celltitle);
     if (PS.celltitle[0] == 0)
-	sprintf(PS.celltitle, "(%s)", name);
+        sprintf(PS.celltitle, "(%s)", name);
     PS.cell_name = G_store(name);
     PS.cell_mapset = G_store(mapset);
     PS.do_raster = 1;

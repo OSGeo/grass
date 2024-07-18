@@ -5,12 +5,13 @@
 #include <grass/raster.h>
 #include "flag.h"
 
-#define ODD(a)	((a) & 1)
+#define ODD(a)     ((a) & 1)
 
-#define PI       		M_PI
+#define PI         M_PI
 
 #define CELLSORTER struct cell_sorter_
-CELLSORTER {
+CELLSORTER
+{
     int R, C;
     double Value;
 };

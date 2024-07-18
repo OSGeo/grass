@@ -1,12 +1,4 @@
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
+import contextlib
 import os
 import sys
 import multiprocessing as mltp
@@ -22,7 +14,10 @@ from grass.pygrass.gis.region import Region
 from grass.pygrass.modules import Module
 from grass.pygrass.utils import get_mapset_raster, findmaps
 
-from grass.pygrass.modules.grid.split import split_region_tiles
+from grass.pygrass.modules.grid.split import (
+    split_region_tiles,
+    split_region_in_overlapping_tiles,
+)
 from grass.pygrass.modules.grid.patch import rpatch_map, rpatch_map_r_patch_backend
 
 
@@ -49,8 +44,7 @@ def select(parms, ptype):
         par = parms[k]
         if par.type == ptype or par.typedesc == ptype and par.value:
             if par.multiple:
-                for val in par.value:
-                    yield val
+                yield from par.value
             else:
                 yield par.value
 
@@ -93,10 +87,9 @@ def copy_mapset(mapset, path):
     >>> sorted(os.listdir(os.path.join(path, 'PERMANENT')))
     ['DEFAULT_WIND', 'PROJ_INFO', 'PROJ_UNITS', 'VAR', 'WIND']
     >>> sorted(os.listdir(os.path.join(path, mname)))   # doctest: +ELLIPSIS
-    [...'SEARCH_PATH',...'WIND']
+    [...'WIND'...]
     >>> import shutil
     >>> shutil.rmtree(path)
-
     """
     per_old = os.path.join(mapset.gisdbase, mapset.location, "PERMANENT")
     per_new = os.path.join(path, "PERMANENT")
@@ -190,7 +183,7 @@ def copy_groups(groups, gisrc_src, gisrc_dst, region=None):
 
     src = read_gisrc(gisrc_src)
     dst = read_gisrc(gisrc_dst)
-    rm = True if src[2] != dst[2] else False
+    rm = src[2] != dst[2]
     all_rasts = [r[0] for r in findmaps("raster", location=dst[1], gisdbase=dst[2])]
     for grp in groups:
         # change gisdbase to src
@@ -383,7 +376,7 @@ def cmd_exe(args):
     src, dst = get_mapset(gisrc_src, gisrc_dst)
     env = os.environ.copy()
     env["GISRC"] = gisrc_dst
-    shell = True if sys.platform == "win32" else False
+    shell = sys.platform == "win32"
     if mapnames:
         inputs = dict(cmd["inputs"])
         # reset the inputs to
@@ -407,7 +400,7 @@ def cmd_exe(args):
     os.remove(gisrc_dst)
 
 
-class GridModule(object):
+class GridModule:
     # TODO maybe also i.* could be supported easily
     """Run GRASS raster commands in a multiprocessing mode.
 
@@ -476,7 +469,7 @@ class GridModule(object):
         self.height = height
         self.overlap = overlap
         self.processes = processes
-        self.region = region if region else Region()
+        self.region = region or Region()
         self.start_row = start_row
         self.start_col = start_col
         self.out_prefix = out_prefix
@@ -486,7 +479,7 @@ class GridModule(object):
         # if overlap > 0, r.patch won't work properly
         if not patch_backend:
             self.patch_backend = "RasterRow"
-        elif patch_backend not in ("r.patch", "RasterRow"):
+        elif patch_backend not in {"r.patch", "RasterRow"}:
             raise RuntimeError(
                 _("Parameter patch_backend must be 'r.patch' or 'RasterRow'")
             )
@@ -515,7 +508,7 @@ class GridModule(object):
             groups = [g for g in select(self.module.inputs, "group")]
             if groups:
                 copy_groups(groups, self.gisrc_src, self.gisrc_dst, region=self.region)
-        self.bboxes = split_region_tiles(
+        self.bboxes = split_region_in_overlapping_tiles(
             region=region, width=self.width, height=self.height, overlap=overlap
         )
         if mapset_prefix:
@@ -632,7 +625,7 @@ class GridModule(object):
         """Add the mapset information to the input maps"""
         for inmap in self.module.inputs:
             inm = self.module.inputs[inmap]
-            if inm.type in ("raster", "vector") and inm.value:
+            if inm.type in {"raster", "vector"} and inm.value:
                 if "@" not in inm.value:
                     mset = get_mapset_raster(inm.value)
                     inm.value = inm.value + "@%s" % mset
@@ -646,8 +639,19 @@ class GridModule(object):
                       created by GridModule
         :type clean: bool
         """
+        with contextlib.ExitStack() as stack:
+            if clean:
+                stack.callback(self._clean)
+            self._actual_run(patch=patch)
+
+    def _actual_run(self, patch):
+        """Run the GRASS command
+
+        :param patch: set False if you does not want to patch the results
+        """
         self.module.flags.overwrite = True
         self.define_mapset_inputs()
+
         if self.debug:
             for wrk in self.get_works():
                 cmd_exe(wrk)
@@ -690,24 +694,22 @@ class GridModule(object):
                     fil = open(os.path.join(dirpath, self.out_prefix + par.value), "w+")
                     fil.close()
 
-        if clean:
-            self.clean_location()
-            self.rm_tiles()
-            if self.n_mset:
-                gisdbase, location = os.path.split(self.move)
-                self.clean_location(Location(location, gisdbase))
-                # rm temporary gis_rc
-                os.remove(self.gisrc_dst)
-                self.gisrc_dst = None
-                sht.rmtree(os.path.join(self.move, "PERMANENT"))
-                sht.rmtree(os.path.join(self.move, self.mset.name))
+    def _clean(self):
+        """Cleanup temporary data"""
+        self.clean_location()
+        self.rm_tiles()
+        if self.n_mset:
+            gisdbase, location = os.path.split(self.move)
+            self.clean_location(Location(location, gisdbase))
+            # rm temporary gis_rc
+            os.remove(self.gisrc_dst)
+            self.gisrc_dst = None
+            sht.rmtree(os.path.join(self.move, "PERMANENT"))
+            sht.rmtree(os.path.join(self.move, self.mset.name))
 
     def patch(self):
         """Patch the final results."""
         bboxes = split_region_tiles(width=self.width, height=self.height)
-        loc = Location()
-        mset = loc[self.mset.name]
-        mset.visible.extend(loc.mapsets())
         noutputs = 0
         for otmap in self.module.outputs:
             otm = self.module.outputs[otmap]

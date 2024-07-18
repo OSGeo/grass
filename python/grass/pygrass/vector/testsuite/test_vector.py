@@ -3,6 +3,7 @@ Created on Wed Jun 18 17:21:42 2014
 
 @author: pietro
 """
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
@@ -11,12 +12,10 @@ from grass.pygrass.vector import VectorTopo
 
 
 class VectorTopoTestCase(TestCase):
-
     tmpname = "VectorTopoTestCase_map"
 
     @classmethod
     def setUpClass(cls):
-
         from grass.pygrass import utils
 
         utils.create_test_vector_map(cls.tmpname)

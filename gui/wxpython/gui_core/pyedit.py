@@ -10,19 +10,17 @@ for details.
 :authors: Martin Landa
 """
 
+from pathlib import Path
 import sys
 import os
 import stat
 
-try:
-    from StringIO import StringIO
-except ImportError:
-    from io import StringIO
+from io import StringIO
 import time
 
 import wx
 
-import grass.script as gscript
+import grass.script as gs
 from grass.script.utils import try_remove
 
 # needed just for testing
@@ -271,7 +269,7 @@ def open_url(url):
     webbrowser.open(url)
 
 
-class PyEditController(object):
+class PyEditController:
     # using the naming GUI convention, change for controller?
     # pylint: disable=invalid-name
 
@@ -303,9 +301,7 @@ class PyEditController(object):
         :return str or None: file content or None
         """
         try:
-            with open(file_path, "r") as f:
-                content = f.read()
-                return content
+            return Path(file_path).read_text()
         except PermissionError:
             GError(
                 message=_(
@@ -315,7 +311,7 @@ class PyEditController(object):
                 parent=self.guiparent,
                 showTraceback=False,
             )
-        except IOError:
+        except OSError:
             GError(
                 message=_("Couldn't read file <{}>.".format(file_path)),
                 parent=self.guiparent,
@@ -331,14 +327,13 @@ class PyEditController(object):
         :return None or True: file written or None
         """
         try:
-            with open(file_path, "w") as f:
-                f.write(content)
-                return True
+            Path(file_path).write_text(content)
+            return True
         except PermissionError:
             GError(
                 message=_(
                     "Permission denied <{}>. Please change file "
-                    "permission for writting.{}".format(
+                    "permission for writing.{}".format(
                         file_path,
                         additional_err_message,
                     ),
@@ -346,7 +341,7 @@ class PyEditController(object):
                 parent=self.guiparent,
                 showTraceback=False,
             )
-        except IOError:
+        except OSError:
             GError(
                 message=_(
                     "Couldn't write file <{}>.{}".format(
@@ -359,7 +354,7 @@ class PyEditController(object):
     def OnRun(self, event):
         """Run Python script"""
         if not self.filename:
-            self.filename = gscript.tempfile() + ".py"
+            self.filename = gs.tempfile() + ".py"
             self.tempfile = True
             file_is_written = self._writeFile(
                 file_path=self.filename,
@@ -421,7 +416,7 @@ class PyEditController(object):
             dlg = wx.MessageDialog(
                 parent=self.guiparent,
                 message=_(
-                    "File <%s> already exists. " "Do you want to overwrite this file?"
+                    "File <%s> already exists. Do you want to overwrite this file?"
                 )
                 % filename,
                 caption=_("Save file"),
@@ -519,14 +514,15 @@ class PyEditController(object):
                 ),
                 parent=self.guiparent,
             )
-        else:
-            if self.CanReplaceContent(by_message="file"):
-                self.filename = path
-                content = self._openFile(file_path=path)
-                if content:
-                    self.body.SetText(content)
-                    file_history.AddFileToHistory(filename=path)  # move up the list
-                    self.tempfile = False
+            return
+
+        if self.CanReplaceContent(by_message="file"):
+            self.filename = path
+            content = self._openFile(file_path=path)
+            if content:
+                self.body.SetText(content)
+                file_history.AddFileToHistory(filename=path)  # move up the list
+                self.tempfile = False
 
     def IsEmpty(self):
         """Check if python script is empty"""
@@ -626,7 +622,7 @@ class PyEditController(object):
         # inspired by g.manual but simple not using GRASS_HTML_BROWSER
         # not using g.manual because it does not show
         entry = "libpython/script_intro.html"
-        major, minor, patch = gscript.version()["version"].split(".")
+        major, minor, patch = gs.version()["version"].split(".")
         url = "https://grass.osgeo.org/grass%s%s/manuals/%s" % (major, minor, entry)
         open_url(url)
 
@@ -662,7 +658,7 @@ class PyEditToolbar(BaseToolbar):
             "run": MetaIcon(img="execute", label=_("Run (Ctrl+R)")),
             # TODO: better icons for overwrite modes
             "overwriteTrue": MetaIcon(img="locked", label=_("Activate overwrite")),
-            "overwriteFalse": MetaIcon(img="unlocked", label=_("Deactive overwrite")),
+            "overwriteFalse": MetaIcon(img="unlocked", label=_("Deactivate overwrite")),
             "help": BaseIcons["help"],
             "quit": BaseIcons["quit"],
         }

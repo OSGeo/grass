@@ -10,4 +10,3 @@ DEPENDENCIES = $(IMAGERYDEP) $(RASTERDEP) $(IORTHODEP) $(GISDEP) $(GMATHDEP)
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
 default: cmd
-

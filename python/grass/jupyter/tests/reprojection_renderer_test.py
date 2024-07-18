@@ -1,6 +1,7 @@
 """Test ReprojectionRenderer functions"""
 
 from pathlib import Path
+from pytest import approx
 from grass.jupyter.reprojection_renderer import ReprojectionRenderer
 
 
@@ -20,7 +21,8 @@ def test_render_raster(simple_dataset):
     assert Path(filename).exists()
     # Test bounding box is correct
     # Raster is same extent as region so no need to test bbox for use_region=True
-    assert bbox == [["0.00072155", "-85.48874388"], ["0.00000000", "-85.48766880"]]
+    assert bbox[0] == approx([0.00072155, -85.48874388])
+    assert bbox[1] == approx([0.00000000, -85.48766880])
 
 
 # render_vector produces json

@@ -34,7 +34,6 @@ reference_str = """\
 
 
 class TestStatsQuantile(TestCase):
-
     base = "zipcodes"
     cover = "elevation"
 

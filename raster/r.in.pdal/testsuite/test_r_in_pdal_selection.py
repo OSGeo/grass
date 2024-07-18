@@ -11,11 +11,11 @@ Licence:   This program is free software under the GNU General Public
 
 import os
 import pathlib
+import shutil
 import unittest
 from tempfile import TemporaryDirectory
 
 from grass.script import core as grass
-from grass.script import shutil_which
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
@@ -28,7 +28,7 @@ class SelectionTest(TestCase):
     """
 
     @classmethod
-    @unittest.skipIf(shutil_which("pdal") is None, "Cannot find pdal utility")
+    @unittest.skipIf(shutil.which("pdal") is None, "Cannot find pdal utility")
     def setUpClass(cls):
         """Ensures expected computational region and generated data"""
         cls.use_temp_region()
@@ -74,7 +74,7 @@ class SelectionTest(TestCase):
         except AttributeError:
             pass
 
-    @unittest.skipIf(shutil_which("r.in.pdal") is None, "Cannot find r.in.pdal")
+    @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")
     def test_dimension(self):
         """Test LAS dimension selection"""
         self.imp_raster = "imp_intensity"
@@ -99,7 +99,7 @@ class SelectionTest(TestCase):
         )
         self.assertRastersEqual(self.imp_raster, self.ref_raster, 0)
 
-    @unittest.skipIf(shutil_which("r.in.pdal") is None, "Cannot find r.in.pdal")
+    @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")
     def test_user_dimension(self):
         """Test PDAL user dimension selection"""
         self.imp_raster = "imp_cellid"
@@ -124,7 +124,7 @@ class SelectionTest(TestCase):
         )
         self.assertRastersEqual(self.imp_raster, self.ref_raster, 0)
 
-    @unittest.skipIf(shutil_which("r.in.pdal") is None, "Cannot find r.in.pdal")
+    @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")
     def test_filter(self):
         """Test input filtering"""
         self.imp_raster = "imp_filtered"
@@ -152,9 +152,9 @@ class SelectionTest(TestCase):
         )
         self.assertRastersEqual(self.imp_raster, self.ref_raster, 0)
 
-    @unittest.skipIf(shutil_which("r.in.pdal") is None, "Cannot find r.in.pdal")
+    @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")
     def test_base_raster(self):
-        """Test Z adjustement by base raster"""
+        """Test Z adjustment by base raster"""
         self.imp_raster = "imp_base_adj"
         self.ref_raster = "ref_base_adj"
         self.base_raster = "base_raster"

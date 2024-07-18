@@ -31,8 +31,7 @@ except ImportError:
 from gui_core.wrap import NewId
 
 
-class OverlayController(object):
-
+class OverlayController:
     """Base class for decorations (barscale, legend) controller."""
 
     def __init__(self, renderer, giface):
@@ -190,7 +189,7 @@ class OverlayController(object):
         for param in self._cmd:
             if not param.startswith("at"):
                 continue
-            x, y = [float(number) for number in param.split("=")[1].split(",")]
+            x, y = (float(number) for number in param.split("=")[1].split(","))
             x = int((x / 100.0) * screensize[0])
             y = int((1 - y / 100.0) * screensize[1])
 
@@ -212,9 +211,8 @@ class DtextController(OverlayController):
             param = param.split("=")
             if len(param) == 1:
                 inputs += 1
-            else:
-                if param[0] == "text" and len(param) == 2:
-                    inputs += 1
+            elif param[0] == "text" and len(param) == 2:
+                inputs += 1
         if inputs >= 1:
             return True
         return False
@@ -300,13 +298,14 @@ class LegendController(OverlayController):
         for param in self._cmd:
             if not param.startswith("at"):
                 continue
-            # if the at= is the default, we will move the legend from the center to bottom left
+            # if the at= is the default, we will move the legend from the center to
+            # bottom left
             if param == self._defaultAt:
                 b, t, l, r = 5, 50, 7, 10
             else:
-                b, t, l, r = [
+                b, t, l, r = (
                     float(number) for number in param.split("=")[1].split(",")
-                ]  # pylint: disable-msg=W0612
+                )  # pylint: disable-msg=W0612
             x = int((l / 100.0) * screensize[0])
             y = int((1 - t / 100.0) * screensize[1])
 
@@ -318,11 +317,10 @@ class LegendController(OverlayController):
             param = param.split("=")
             if len(param) == 1:
                 inputs += 1
-            else:
-                if param[0] == "raster" and len(param) == 2:
-                    inputs += 1
-                elif param[0] == "raster_3d" and len(param) == 2:
-                    inputs += 1
+            elif param[0] == "raster" and len(param) == 2:
+                inputs += 1
+            elif param[0] == "raster_3d" and len(param) == 2:
+                inputs += 1
         if inputs == 1:
             return True
         return False

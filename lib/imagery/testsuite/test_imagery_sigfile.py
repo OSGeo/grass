@@ -8,6 +8,7 @@
 Read the file COPYING that comes with GRASS
 for details
 """
+
 import os
 import stat
 import ctypes
@@ -58,7 +59,7 @@ class SignatureFileTestCase(TestCase):
 
     def test_roundtrip_signature_v1_norgb_one_label(self):
         """Test writing and reading back signature file (v1)
-        wiht a single label"""
+        with a single label"""
 
         # Create signature struct
         So = Signature()
@@ -383,9 +384,9 @@ class SortSignaturesBysemantic_labelTest(TestCase):
         self.assertEqual(ref_err, "The_Doors")
 
         # Clean up memory to help track memory leaks when run by valgrind
-        S.semantic_labels[
-            0
-        ] = None  # C should not call free() on memory allocated by python
+        S.semantic_labels[0] = (
+            None  # C should not call free() on memory allocated by python
+        )
         I_free_signatures(ctypes.byref(S))
         I_free_group_ref(ctypes.byref(R))
         if ret:

@@ -19,7 +19,6 @@ cols:    5
 
 
 class TestSlopeAspect(TestCase):
-
     slope = "limits_slope"
     aspect = "limits_aspect"
     slope_threaded = "limits_slope_threaded"
@@ -245,7 +244,6 @@ class TestSlopeAspectAgainstReference(TestCase):
 
 
 class TestSlopeAspectAgainstItself(TestCase):
-
     precision = 0.0000001
     elevation = "elevation"
 
@@ -336,7 +334,6 @@ class TestSlopeAspectAgainstItself(TestCase):
 
 # TODO: implement this class
 class TestExtremes(TestCase):
-
     slope = "small_slope"
     aspect = "small_aspect"
     slope_threaded = "small_slope_threaded"

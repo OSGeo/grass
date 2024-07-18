@@ -3,10 +3,9 @@ Created on Sun Jun 23 19:58:54 2013
 
 @author: pietro
 """
-import io
+
+from pathlib import Path
 
 
 def raw_figure(figpath):
-    with io.OpenWrapper(figpath, mode="rb") as data:
-        res = data.read()
-    return res
+    return Path(figpath).read_bytes()

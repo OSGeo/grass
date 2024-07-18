@@ -29,7 +29,7 @@ from core.gcmd import GMessage, GError, GWarning
 from core.gcmd import RunCommand
 from gui_core.wrap import Button, ListCtrl
 
-import grass.script as grass
+import grass.script as gs
 from grass.pydispatch.signal import Signal
 
 
@@ -132,7 +132,7 @@ class VectorSelectBase:
         if createButton:
             createMap = Button(self._dialog, wx.ID_ANY, _("Create a new map"))
             createMap.Bind(wx.EVT_BUTTON, self.OnExportMap)
-            self._dialog.AddWidget(createMap, proportion=0.1)
+            self._dialog.AddWidget(createMap, proportion=0)
         self.slist = VectorSelectList(self._dialog)
         self.slist.Bind(wx.EVT_LIST_KEY_DOWN, self.OnDelete)
         self.slist.Bind(wx.EVT_LIST_ITEM_RIGHT_CLICK, self.OnDeleteRow)
@@ -198,7 +198,7 @@ class VectorSelectBase:
         self.RegisterMapEvtHandler()
 
     def _onMapClickHandler(self, event):
-        """Registred handler for clicking on grass disp"""
+        """Registered handler for clicking on grass disp"""
         if event == "unregistered":
             return
         vWhatDic = self.QuerySelectedMap()
@@ -247,7 +247,7 @@ class VectorSelectBase:
                 + "@"
                 + self.selectedFeatures[0]["Mapset"]
             )
-            tmp = list()
+            tmp = []
             for i in self.selectedFeatures:
                 tmp.append(i["Category"])
 
@@ -299,13 +299,13 @@ class VectorSelectBase:
         mapInfo = self.mapWin.GetMap()
         threshold = 10.0 * ((mapInfo.region["e"] - mapInfo.region["w"]) / mapInfo.width)
         try:
-            query = grass.vector_what(
+            query = gs.vector_what(
                 map=[self.mapName],
                 coord=self.mapWin.GetLastEN(),
                 distance=threshold,
                 skip_attributes=True,
             )
-        except grass.ScriptError:
+        except gs.ScriptError:
             GError(
                 parent=self, message=_("Failed to query vector map(s) <%s>.") % self.map
             )
@@ -328,7 +328,7 @@ class VectorSelectBase:
 
         Add new map layer to layer tree and checked it
 
-        @todo: set color of map to higlight color
+        @todo: set color of map to highlight color
         """
 
         if len(self.selectedFeatures) == 0:
@@ -358,6 +358,7 @@ class VectorSelectBase:
         if ret == 0:
             tree = self._giface.GetLayerTree()
             if tree:
+                outMap = f"{outMap}@{gs.gisenv()['MAPSET']}"
                 tree.AddLayer(
                     ltype="vector",
                     lname=outMap,
@@ -404,7 +405,7 @@ class VectorSelectHighlighter:
         self.giface = giface
         self.layerCat = {}
         self.data = {}
-        self.data["Category"] = list()
+        self.data["Category"] = []
         self.data["Map"] = None
         self.data["Layer"] = None
 
@@ -418,7 +419,7 @@ class VectorSelectHighlighter:
         self.data["Category"] = cats
 
     def Clear(self):
-        self.data["Category"] = list()
+        self.data["Category"] = []
         self.data["Map"] = None
         self.data["Layer"] = None
         self.mapdisp.RemoveQueryLayer()
@@ -428,7 +429,7 @@ class VectorSelectHighlighter:
         """Highlight selected features"""
         self.layerCat[int(self.data["Layer"])] = self.data["Category"]
 
-        # add map layer with higlighted vector features
+        # add map layer with highlighted vector features
         self.AddQueryMapLayer()  # -> self.qlayer
         self.qlayer.SetOpacity(0.7)
         self.giface.updateMap.emit(render=True, renderVector=True)

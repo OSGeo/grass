@@ -1,19 +1,19 @@
 #############################################################################
 #
-# MODULE:   	Grass Compilation
+# MODULE:	Grass Compilation
 # AUTHOR(S):	Original author unknown - probably CERL
-#   	    	Eric G. Miller - egm2 jps.net
-#   	    	Justin Hickey - Thailand - jhickey hpcc.nectec.or.th
-#   	    	Markus Neteler - Germany/Italy - neteler itc.it
-#   	    	Nicklas Larsson (update to autoconfig 2.69)
-# PURPOSE:  	This configure runs all the tests to determine what components
-#   	    	are installed on the current system. It also defines certain
-#   	    	configuration variables for compilation and installation.
-# COPYRIGHT:    (C) 2000-2021 by the GRASS Development Team
+#		Eric G. Miller - egm2 jps.net
+#		Justin Hickey - Thailand - jhickey hpcc.nectec.or.th
+#		Markus Neteler - Germany/Italy - neteler itc.it
+#		Nicklas Larsson (update to autoconfig 2.69)
+# PURPOSE:	This configure runs all the tests to determine what components
+#		are installed on the current system. It also defines certain
+#		configuration variables for compilation and installation.
+# COPYRIGHT:    (C) 2000-2024 by the GRASS Development Team
 #
-#               This program is free software under the GNU General
-#   	    	Public License (>=v2). Read the file COPYING that
-#   	    	comes with GRASS for details.
+#		This program is free software under the GNU General
+#		Public License (>=v2). Read the file COPYING that
+#		comes with GRASS for details.
 #
 # MANUAL:       http://www.gnu.org/software/autoconf/manual/autoconf.html
 #               http://savannah.gnu.org/projects/autoconf/
@@ -31,10 +31,28 @@ $2
 
 AC_INIT
 AC_CONFIG_SRCDIR([configure.ac])
-AC_PREREQ([2.69])
-AC_CONFIG_HEADER(include/grass/config.h)
+AC_PREREQ([2.71])
+AC_CONFIG_HEADERS([include/grass/config.h])
 AC_CANONICAL_HOST
 AC_PROG_CC
+
+# Enable C++ option
+
+LOC_ARG_WITH(cxx, C++)
+
+LOC_CHECK_USE(cxx,C++,USE_CXX)
+
+if test -n "$USE_CXX"; then
+	AC_PROG_CXX
+else
+	CXX=
+	CXXFLAGS=
+	AC_SUBST(CXX)
+	AC_SUBST(CXXFLAGS)
+fi
+
+# Done checking C++
+
 LOC_EXEEXT
 AC_SUBST(MINGW32)
 
@@ -126,6 +144,7 @@ AC_SUBST(GRASS_BIN)
 # Set GRASS_VERSION_*
 
 GRASS_VERSION_FILE=include/VERSION
+GRASS_VERSION_GIT_FILE=include/VERSION_GIT
 GRASS_VERSION_MAJOR=`sed -n 1p "${GRASS_VERSION_FILE}"`
 GRASS_VERSION_MINOR=`sed -n 2p "${GRASS_VERSION_FILE}"`
 GRASS_VERSION_RELEASE=`sed -n 3p "${GRASS_VERSION_FILE}"`
@@ -139,9 +158,11 @@ changequote([,])
 GRASS_VERSION_GIT="exported"
 # get git short hash + date of last change in GRASS headers
 # (and anything else in include)
-GRASS_HEADERS_GIT_HASH=`date -u +%FT%T%z | sed 's/\(..\)$/:\1/'`
+GRASS_HEADERS_GIT_HASH="${GRASS_VERSION_NUMBER}"
 GRASS_HEADERS_GIT_DATE=`date -u +%FT%T%z | sed 's/\(..\)$/:\1/'`
 AC_PATH_PROG(GIT, git, no)
+AC_CHECK_FILE([$GRASS_VERSION_GIT_FILE])
+AC_MSG_CHECKING(for GRASS GIS headers commit date)
 if test "$GIT" != "no" ; then
    GRASS_VERSION_GIT=`$GIT rev-parse --short HEAD 2>/dev/null`
    if test -z "$GRASS_VERSION_GIT"; then
@@ -149,13 +170,21 @@ if test "$GIT" != "no" ; then
    fi
    GRASS_HEADERS_GIT_HASH=`$GIT log -1 --pretty=format:"%h" -- "${SRCDIR}/include" 2>/dev/null`
    if test -z "$GRASS_HEADERS_GIT_HASH"; then
-      GRASS_HEADERS_GIT_HASH=`date -u +%FT%T%z | sed 's/\(..\)$/:\1/'`
+      GRASS_HEADERS_GIT_HASH="${GRASS_VERSION_NUMBER}"
    fi
-   GRASS_HEADERS_GIT_DATE=`date -d $($GIT log -1 --pretty=format:"%cI" -- "${SRCDIR}/include") -u +%FT%T%z | sed 's/\(..\)$/:\1/'` 2>/dev/null
+   gitdate_utc_local=$(TZ=UTC0 git log -1 --date=iso-local --pretty=format:"%cd" -- include)
+   GRASS_HEADERS_GIT_DATE=$(echo "$gitdate_utc_local" | sed 's/ /T/' | sed 's/ //' | sed 's/\(..\)$/:\1/')
    if test -z "$GRASS_HEADERS_GIT_DATE"; then
       GRASS_HEADERS_GIT_DATE=`date -u +%FT%T%z | sed 's/\(..\)$/:\1/'`
    fi
 fi
+if test $GRASS_VERSION_GIT == "exported" && \
+   test "$ac_cv_file_include_VERSION_GIT" == "yes"; then
+      GRASS_HEADERS_GIT_HASH=$(sed -n 1p "${GRASS_VERSION_GIT_FILE}")
+      GRASS_VERSION_GIT=$GRASS_HEADERS_GIT_HASH
+      GRASS_HEADERS_GIT_DATE=$(sed -n 2p "${GRASS_VERSION_GIT_FILE}")
+fi
+AC_MSG_RESULT($GRASS_HEADERS_GIT_DATE)
 
 AC_SUBST(GRASS_VERSION_FILE)
 AC_SUBST(GRASS_VERSION_MAJOR)
@@ -259,7 +288,6 @@ AC_ARG_ENABLE(w11,
 
 # With options
 
-LOC_ARG_WITH(cxx, C++)
 #LOC_ARG_WITH(g77, GNU Fortran 77, no)
 
 AC_ARG_WITH(macosx-archs,
@@ -271,7 +299,6 @@ AC_ARG_WITH(macosx-sdk,
 [  --with-macosx-sdk[=path/sdk]
                           compile with a system SDK on MacOSX. (default: no)],, with_macosx_sdk="no")
 LOC_ARG_WITH(tiff, TIFF)
-LOC_ARG_WITH(png, PNG)
 LOC_ARG_WITH(postgres, PostgreSQL, no)
 LOC_ARG_WITH(mysql, MySQL, no)
 LOC_ARG_WITH(sqlite, SQLite)
@@ -280,6 +307,7 @@ LOC_ARG_WITH(odbc, ODBC, no)
 LOC_ARG_WITH(fftw, FFTW)
 LOC_ARG_WITH(blas, BLAS, no)
 LOC_ARG_WITH(lapack, LAPACK, no)
+LOC_ARG_WITH(libsvm, LIBSVM, no)
 LOC_ARG_WITH(cairo, Cairo)
 LOC_ARG_WITH(freetype, FreeType)
 LOC_ARG_WITH(nls, NLS, no)
@@ -291,6 +319,12 @@ LOC_ARG_WITH(openmp, OpenMP, no)
 LOC_ARG_WITH(opencl, OpenCL, no)
 LOC_ARG_WITH(bzlib, BZIP2, no)
 LOC_ARG_WITH(zstd, Zstandard)
+LOC_ARG_WITH(pdal, PDAL)
+
+AC_ARG_WITH(libpng,
+[  --with-libpng[=path/libpng-config]
+                          enable PNG support (libpng-config with path,
+                          e.g. '--with-libpng=/usr/local/bin/libpng-config')])
 
 AC_ARG_WITH(gdal,
 [  --with-gdal[=path/gdal-config]
@@ -302,18 +336,6 @@ AC_ARG_WITH(liblas,
                           enable libLAS support (liblas-config with path,
                           e.g. '--with-liblas=/usr/local/bin/liblas-config',
                           default: no)],, with_liblas="no")
-
-AC_ARG_WITH(pdal,
-[  --with-pdal[=path/pdal-config]
-                          enable PDAL support (pdal-config with path,
-                          e.g. '--with-pdal=/usr/local/bin/pdal-config',
-                          default: no)],, with_pdal="no")
-
-AC_ARG_WITH(wxwidgets,
-[  --with-wxwidgets[=path/wx-config]
-                          enable wxWidgets support (wx-config with path,
-                          e.g. '--with-wxwidgets=/usr/local/bin/wx-config',
-                          default: no)],, with_wxwidgets="no")
 
 AC_ARG_WITH(netcdf,
 [  --with-netcdf[=path/nc-config]
@@ -350,9 +372,6 @@ LOC_ARG_WITH_LIB(readline, Readline)
 LOC_ARG_WITH_INC(tiff, TIFF)
 LOC_ARG_WITH_LIB(tiff, TIFF)
 
-LOC_ARG_WITH_INC(png, PNG)
-LOC_ARG_WITH_LIB(png, PNG)
-
 LOC_ARG_WITH_INC(postgres, PostgreSQL)
 LOC_ARG_WITH_LIB(postgres, PostgreSQL)
 
@@ -377,6 +396,9 @@ LOC_ARG_WITH_LIB(blas, BLAS)
 
 LOC_ARG_WITH_INC(lapack, LAPACK)
 LOC_ARG_WITH_LIB(lapack, LAPACK)
+
+LOC_ARG_WITH_INC(libsvm, LIBSVM)
+LOC_ARG_WITH_LIB(libsvm, LIBSVM)
 
 LOC_ARG_WITH_INC(cairo, cairo)
 LOC_ARG_WITH_LIB(cairo, cairo)
@@ -459,11 +481,13 @@ AC_SUBST(LIBRARY_DIRS)
 
 AC_PROG_INSTALL
 
-AC_PROG_LEX
-if test "$LEX" = "lex"; then
+AC_PROG_LEX(noyywrap)
+if test "x$LEX" = "x:"; then
+    AC_MSG_ERROR([*** Unable to locate lex.])
+elif test "$LEX" = "lex"; then
     AC_PATH_PROG(LEXPATH, lex, no)
     if test "$LEXPATH" = "no"; then
-	AC_MSG_ERROR([*** Unable to locate lex.])
+        AC_MSG_ERROR([*** Unable to locate lex.])
     fi
 fi
 
@@ -478,15 +502,15 @@ fi
 AC_PROG_RANLIB
 AC_CHECK_PROGS(AR, ar)
 AC_CHECK_PROGS(ENV, env)
-AC_PATH_PROG(PERL, perl, no)  
-AC_HEADER_STDC
+AC_PATH_PROG(PERL, perl, no)
+
 #AC_CHECK_HEADERS(curses.h limits.h termio.h termios.h unistd.h values.h)
 AC_CHECK_HEADERS(limits.h termio.h termios.h unistd.h values.h f2c.h g2c.h)
 AC_CHECK_HEADERS(sys/ioctl.h sys/mtio.h sys/resource.h sys/time.h)
 AC_CHECK_HEADERS(sys/timeb.h sys/types.h sys/utsname.h)
 AC_CHECK_HEADERS(libintl.h iconv.h)
 AC_CHECK_HEADERS(langinfo.h)
-AC_HEADER_TIME
+
 AC_TYPE_OFF_T
 AC_TYPE_UID_T
 
@@ -511,7 +535,7 @@ fi
 AC_MSG_CHECKING(for long long int)
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[long long int x;]])],[
 AC_MSG_RESULT(yes)
-AC_DEFINE(HAVE_LONG_LONG_INT, 1, [define if "long long int" is available])
+AC_DEFINE(HAVE_LONG_LONG_INT, 1, [Define to 1 if "long long int" is available.])
 ],[
 AC_MSG_RESULT(no)
 ])
@@ -519,7 +543,7 @@ AC_MSG_RESULT(no)
 AC_MSG_CHECKING(for int64_t)
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/types.h>]], [[int64_t x;]])],[
 AC_MSG_RESULT(yes)
-AC_DEFINE(HAVE_INT64_T, 1, [define if "int64_t" is available])
+AC_DEFINE(HAVE_INT64_T, 1, [Define to 1 if "int64_t" is available.])
 ],[
 AC_MSG_RESULT(no)
 ])
@@ -747,7 +771,7 @@ if test $PROJ4API = 0 ; then
     LOC_CHECK_LIBS(proj,proj_pj_info,External PROJ,$PROJLIB,PROJLIB,,,)
 else
     AC_MSG_RESULT([using old PROJ version 4 API])
-    AC_DEFINE(USE_PROJ4API, 1, [define if using old PROJ version 4 API])
+    AC_DEFINE(USE_PROJ4API, 1, [Define to 1 if using old PROJ version 4 API.])
 
     LOC_CHECK_INCLUDES(proj_api.h,External PROJ,$PROJINC)
     # PROJ version check for v4.x
@@ -862,6 +886,55 @@ AC_SUBST(HISTORYLIB)
 
 # Done checking Readline
 
+# PNG option
+
+AC_MSG_CHECKING(whether to use PNG)
+
+PNGLIB=
+PNGINC=
+USE_PNG=
+
+if test "`basename xx/$with_libpng`" = "libpng-config" ; then
+  LIBPNG_CONFIG="$with_libpng"
+fi
+
+if test "$with_libpng" = "no" ; then
+  AC_MSG_RESULT(no)
+else
+  AC_MSG_RESULT(yes)
+  AC_PATH_PROG(LIBPNG_CONFIG, libpng-config, no)
+
+  if test "$LIBPNG_CONFIG" = "no" ; then
+    AC_MSG_ERROR([*** couldn't find libpng-config])
+  fi
+
+  if test "$LIBPNG_CONFIG" != "" ; then
+    PNGLIB=`"$LIBPNG_CONFIG" --static --ldflags`
+    PNGINC=`"$LIBPNG_CONFIG" --cflags`
+    USE_PNG=1
+  fi
+
+  PNG=
+  ac_save_libs="$LIBS"
+  ac_save_cflags="$CFLAGS"
+  LIBS="$LIBS $PNGLIB"
+  CFLAGS="$CFLAGS $PNGINC"
+
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <png.h>]], [[png_read_image(NULL, NULL);]])],[],[
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <png.h>]], [[png_read_image(NULL, NULL);]])],[PNGLIB="$PNGLIB"],[
+  AC_MSG_ERROR([*** Unable to locate libpng library.])
+  ])
+  ])
+  LIBS=${ac_save_libs}
+  CFLAGS=${ac_save_cflags}
+
+  AC_DEFINE(HAVE_PNG_H, 1, [Define to 1 if you have the <png.h> header file.])
+fi
+
+AC_SUBST(PNGLIB)
+AC_SUBST(PNGINC)
+AC_SUBST(USE_PNG)
+
 # GDAL option
 
 AC_MSG_CHECKING(whether to use GDAL)
@@ -891,7 +964,7 @@ else
     GDAL_CFLAGS=`"$GDAL_CONFIG" --cflags`
     USE_GDAL=1
     if test `"$GDAL_CONFIG" --ogr-enabled` = "yes" ; then
-      AC_DEFINE(HAVE_OGR, 1, [define if OGR is to be used])
+      AC_DEFINE(HAVE_OGR, 1, [Define to 1 if OGR is to be used.])
       USE_OGR=1
     fi
   fi
@@ -903,14 +976,14 @@ else
   CFLAGS="$CFLAGS $GDAL_CFLAGS"
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <gdal.h>]], [[GDALOpen("foo", GA_ReadOnly);]])],[],[
   LIBS="$LIBS $GDAL_DEP_LIBS"
-  AC_TRY_LINK([#include <gdal.h>],[GDALOpen("foo", GA_ReadOnly);],GDAL_LIBS="$GDAL_LIBS $GDAL_DEP_LIBS",[
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <gdal.h>]], [[GDALOpen("foo", GA_ReadOnly);]])],[GDAL_LIBS="$GDAL_LIBS $GDAL_DEP_LIBS"],[
   AC_MSG_ERROR([*** Unable to locate GDAL library.])
   ])
   ])
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}
 
-  AC_DEFINE(HAVE_GDAL, 1, [define if GDAL is to be used])
+  AC_DEFINE(HAVE_GDAL, 1, [Define to 1 if GDAL is to be used.])
 fi
 
 AC_SUBST(GDAL_LIBS)
@@ -956,7 +1029,7 @@ else
   CPPFLAGS="$CPPFLAGS $LIBLAS_INC"
   AC_CHECK_HEADERS(liblas/capi/liblas.h)
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <liblas/capi/liblas.h>]], [[LASReader_Create("foo");]])],[],[
-  AC_TRY_LINK([#include <liblas/capi/liblas.h>],[LASReader_Create("foo");],LAS_LIBS="$LAS_LIBS",[
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <liblas/capi/liblas.h>]], [[LASReader_Create("foo");]])],[LAS_LIBS="$LAS_LIBS"],[
   AC_MSG_ERROR([*** Unable to locate libLAS library.])
   ])
   ])
@@ -964,7 +1037,7 @@ else
   CFLAGS=${ac_save_cflags}
   CPPFLAGS=${ac_save_cppflags}
 
-  AC_DEFINE(HAVE_LIBLAS, 1, [define if liblas exists])
+  AC_DEFINE(HAVE_LIBLAS, 1, [Define to 1 if liblas exists.])
 fi
 
 AC_SUBST(LIBLAS_LIBS)
@@ -981,49 +1054,47 @@ AC_LANG_PUSH(C++)
 PDAL_LIBS=
 PDAL_CPPFLAGS=
 USE_PDAL=
-
-if test "`basename xx/$with_pdal`" = "pdal-config" ; then
-  PDAL_CONFIG="$with_pdal"
-fi
+pdal="pdal"
 
 if test "$with_pdal" = "no" ; then
   AC_MSG_RESULT(no)
 else
   AC_MSG_RESULT(yes)
-  AC_PATH_PROG(PDAL_CONFIG, pdal-config, no)
 
-  if test "$PDAL_CONFIG" = "no" ; then
-    AC_MSG_ERROR([*** could not find pdal-config])
+  if test -s "${PKG_CONFIG} --exists ${pdal}" ; then
+    AC_MSG_ERROR([*** Unable to locate PDAL package.])
   fi
 
-  if test "$PDAL_CONFIG" != "" ; then
-    PDAL_LIBS=`"$PDAL_CONFIG" --libs`
-    PDAL_CPPFLAGS=`"$PDAL_CONFIG" --cxxflags`
-    PDAL_INC=`"$PDAL_CONFIG" --includes`
-    USE_PDAL=1
-  fi
+  PDAL_LIBS=`${PKG_CONFIG} --libs "${pdal}"`
+  PDAL_INC=`${PKG_CONFIG} --cflags "${pdal}"`
+  USE_PDAL=1
 
   PDAL=
   ac_save_libs="$LIBS"
   ac_save_cflags="$CFLAGS"
-  ac_save_cppflags="$CPPFLAGS"
   LIBS="$LIBS $PDAL_LIBS"
   CFLAGS="$CFLAGS $PDAL_CFLAGS"
-  CPPFLAGS="$CPPFLAGS $PDAL_CPPFLAGS $PDAL_INC"
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <pdal/PointTable.hpp>
   #include <pdal/Streamable.hpp>
-  class St:public pdal::Streamable {};]], [[pdal::PointTable table;]])],[],[
-  AC_TRY_LINK([#include <pdal/PointTable.hpp>
-  #include <pdal/Streamable.hpp>
-  class St:public pdal::Streamable {};],[pdal::PointTable table;],PDAL_LIBS="$PDAL_LIBS",[
+  class St:public pdal::Streamable {};]], [[pdal::PointTable table;]])],
+  [PDAL_LIBS="$PDAL_LIBS"],[
   AC_MSG_ERROR([*** Unable to locate suitable (>=1.7.1) PDAL library.])
   ])
-  ])
+
+  AC_DEFINE(HAVE_PDAL, 1, [Define to 1 if PDAL exists.])
+
+  AC_MSG_CHECKING(whether to use PDAL NoFilenameWriter)
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <pdal/Writer.hpp>
+  class St:public pdal::NoFilenameWriter {};]], [[
+  class NFWTest : public pdal::NoFilenameWriter {};
+  ]])],
+  [
+    AC_DEFINE(HAVE_PDAL_NOFILENAMEWRITER, 1, [Define to 1 if PDAL NoFilenameWriter is present.])
+    AC_MSG_RESULT(yes)
+  ],[AC_MSG_RESULT(no)])
+
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}
-  CPPFLAGS=${ac_save_cppflags}
-
-  AC_DEFINE(HAVE_PDAL, 1, [define if PDAL exists])
 fi
 
 AC_SUBST(PDAL_LIBS)
@@ -1067,14 +1138,14 @@ else
   LIBS="$LIBS $NETCDF_LIBS"
   CFLAGS="$CFLAGS $NETCDF_CFLAGS"
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <netcdf.h>]], [[nc_create("foo", NC_CLOBBER, NULL);]])],[],[
-  AC_TRY_LINK([#include <netcdf.h>],[nc_create("foo", NC_CLOBBER, NULL);],NETCDF_LIBS="$NETCDF_LIBS",[
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <netcdf.h>]], [[nc_create("foo", NC_CLOBBER, NULL);]])],[NETCDF_LIBS="$NETCDF_LIBS"],[
   AC_MSG_ERROR([*** Unable to locate NetCDF library.])
   ])
   ])
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}
 
-  AC_DEFINE(HAVE_NETCDF, 1, [define if NetCDF exists])
+  AC_DEFINE(HAVE_NETCDF, 1, [Define to 1 if NetCDF exists.])
 fi
 
 AC_SUBST(NETCDF_LIBS)
@@ -1103,13 +1174,13 @@ else
   if test "$GEOS_CONFIG" = "no" ; then
     AC_MSG_ERROR([*** couldn't find geos-config])
   fi
-  
+
   if test "$GEOS_CONFIG" != "" ; then
     GEOS_LIBS=`"$GEOS_CONFIG" --clibs`
     GEOS_CFLAGS=`"$GEOS_CONFIG" --cflags`
     USE_GEOS=1
   fi
-  
+
   LOC_CHECK_INCLUDES(geos_c.h,GEOS,$GEOS_CFLAGS)
 ### geos 3.3.6 installs geos_c.lib, see http://osgeo-org.1560.n6.nabble.com/osgeo4w-329-update-geos-to-3-3-6-td5024605.html
 #  if test "$MINGW32" = yes ; then
@@ -1117,7 +1188,7 @@ else
 #  else
   LOC_CHECK_LIBS(geos_c,initGEOS,GEOS,$GEOS_LIBS,GEOS_LIBS)
 #  fi
-  AC_DEFINE(HAVE_GEOS, 1, [define if GEOS is to be used])
+  AC_DEFINE(HAVE_GEOS, 1, [Define to 1 if GEOS is to be used.])
 fi
 
 AC_SUBST(GEOS_LIBS)
@@ -1154,41 +1225,12 @@ AC_SUBST(TIFFLIB)
 
 # Done checking TIFF
 
-# Enable PNG option
-
-LOC_CHECK_USE(png,PNG,USE_PNG)
-
-PNGINC=
-PNGLIB=
-
-if test -n "$USE_PNG"; then
-
-# With PNG includes directory
-
-LOC_CHECK_INC_PATH(png,PNG,PNGINC)
-
-LOC_CHECK_INCLUDES(png.h,PNG,$PNGINC)
-
-# With PNG library directory
-
-LOC_CHECK_LIB_PATH(png,PNG,PNGLIB)
-
-LOC_CHECK_LIBS(png,png_read_image,PNG,$PNGLIB,PNGLIB,,$ZLIB $MATHLIB,)
-
-fi # $USE_PNG
-
-AC_SUBST(PNGINC)
-AC_SUBST(PNGLIB)
-AC_SUBST(USE_PNG)
-
-# Done checking PNG
-
 # Enable PostgreSQL option
 
 LOC_CHECK_USE(postgres,PostgreSQL,USE_POSTGRES)
 
 if test -n "$USE_POSTGRES"; then
-AC_DEFINE(HAVE_POSTGRES, 1, [define if PostgreSQL is to be used])
+AC_DEFINE(HAVE_POSTGRES, 1, [Define to 1 if PostgreSQL is to be used.])
 fi # $USE_POSTGRES
 
 PQINCPATH=
@@ -1215,8 +1257,8 @@ LOC_CHECK_LIBS(pq,PQsetdbLogin,PostgreSQL,$PQLIBPATH,PQLIB,,,,-lcrypt,-lssl -lcr
 
 ac_save_ldflags="$LDFLAGS"
 LDFLAGS="$LDFLAGS $PQLIBPATH"
-AC_CHECK_LIB(pq,PQcmdTuples, [AC_DEFINE(HAVE_PQCMDTUPLES, 1, [define if PQcmdTuples in lpq])], [
-AC_CHECK_LIB(pq,PQcmdTuples, [AC_DEFINE(HAVE_PQCMDTUPLES, 1, [define if PQcmdTuples in lpq])], [
+AC_CHECK_LIB(pq,PQcmdTuples, [AC_DEFINE(HAVE_PQCMDTUPLES, 1, [Define to 1 if PQcmdTuples in lpq.])], [
+AC_CHECK_LIB(pq,PQcmdTuples, [AC_DEFINE(HAVE_PQCMDTUPLES, 1, [Define to 1 if PQcmdTuples in lpq.])], [
 ], -lcrypt)
 ])
 LDFLAGS="${ac_save_ldflags}"
@@ -1264,13 +1306,16 @@ if test -n "$USE_MYSQL"; then
   fi
 
   if test "$MYSQLD_CONFIG" != "" ; then
+    mysql_version=`"$MYSQLD_CONFIG" --version`
+    AC_MSG_RESULT([using MySQL/MariaDB version "$mysql_version"])
     AC_LANG_PUSH([C++])
     ac_save_libs="$LIBS"
     MYSQLDLIB=`"$MYSQLD_CONFIG" --libmysqld-libs`
 
     LIBS="$MYSQLDLIB $LIBS"
-    AC_CHECK_FUNC(mysql_server_init,,[MYSQLDLIB="";
-                  AC_MSG_WARN([libmysqld not found])] )
+    AC_CHECK_FUNC(mysql_server_init,
+                  AC_MSG_RESULT([libmysqld found]),
+                  [MYSQLDLIB=""; AC_MSG_WARN([libmysqld not found])])
     LIBS=$ac_save_libs
     AC_LANG_POP([C++])
   fi
@@ -1302,7 +1347,7 @@ LOC_CHECK_INC_PATH(sqlite,SQLite,SQLITEINCPATH)
 
 LOC_CHECK_INCLUDES(sqlite3.h,SQLite,$SQLITEINCPATH)
 
-AC_DEFINE(HAVE_SQLITE, 1, [define if SQLite is to be used])
+AC_DEFINE(HAVE_SQLITE, 1, [Define to 1 if SQLite is to be used.])
 
 fi # $USE_SQLITE
 
@@ -1381,10 +1426,10 @@ LOC_CHECK_LIBS(GLU,gluBeginCurve,GLU,$OPENGL_LIB_PATH,OPENGLULIB,$OPENGLLIB $X_L
 OPENGLLIB="$OPENGL_LIB_PATH $OPENGLLIB"
 OPENGLULIB="$OPENGL_LIB_PATH $OPENGLULIB"
 
-LOC_CHECK_FUNC(glXCreatePbuffer,,,,,$OPENGLLIB,[AC_DEFINE(HAVE_PBUFFERS, 1, [define if glXCreatePbuffer exists])])
-LOC_CHECK_FUNC(glXCreateGLXPixmap,,,,,$OPENGLLIB,[AC_DEFINE(HAVE_PIXMAPS, 1, [define if glXCreateGLXPixmap exists])])
+LOC_CHECK_FUNC(glXCreatePbuffer,,,,,$OPENGLLIB,[AC_DEFINE(HAVE_PBUFFERS, 1, [Define to 1 if glXCreatePbuffer exists.])])
+LOC_CHECK_FUNC(glXCreateGLXPixmap,,,,,$OPENGLLIB,[AC_DEFINE(HAVE_PIXMAPS, 1, [Define to 1 if glXCreateGLXPixmap exists.])])
 
-AC_DEFINE(OPENGL_X11, 1, [define if OpenGL uses X11])
+AC_DEFINE(OPENGL_X11, 1, [Define to 1 if OpenGL uses X11.])
 
 fi # $OPENGL_X11
 
@@ -1400,7 +1445,7 @@ LOC_CHECK_FUNC(gluBeginCurve,GLU library,OPENGLLIB,,$OPENGLPATH,$OPENGLLIB)
 OPENGLINC="$OPENGLPATH"
 OPENGLLIBPATH="$OPENGLPATH"
 
-AC_DEFINE(OPENGL_AQUA, 1, [define if OpenGL uses Aqua (MacOS X)])
+AC_DEFINE(OPENGL_AQUA, 1, [Define to 1 if OpenGL uses Aqua (MacOS X).])
 
 fi # $OPENGL_AQUA
 
@@ -1425,7 +1470,7 @@ CFLAGS="${ac_save_cflags}"
 OPENGLLIB="$OPENGL_LIB_PATH $OPENGLLIB"
 OPENGLULIB="$OPENGL_LIB_PATH $OPENGLULIB"
 
-AC_DEFINE(OPENGL_WINDOWS, 1, [define if OpenGL uses Windows])
+AC_DEFINE(OPENGL_WINDOWS, 1, [Define to 1 if OpenGL uses Windows.])
 
 fi # $OPENGL_WINDOWS
 
@@ -1457,7 +1502,7 @@ LOC_CHECK_INC_PATH(odbc,ODBC,ODBCINC)
 
 AC_CHECK_HEADER([windows.h],
     AC_DEFINE(HAVE_WINDOWS_H, 1, [Define to 1 if you have the <windows.h> header file.]))
- 
+
 ac_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$ODBCINC $CPPFLAGS"
 AC_CHECK_HEADER([sql.h],
@@ -1556,7 +1601,7 @@ save_LDFLAGS="$LDFLAGS"
 LDFLAGS="$BLASLIB $LDFLAGS"
 AC_CHECK_LIB(atlas, ATL_xerbla,
 		[AC_CHECK_LIB(f77blas, sgemm_,
-		[AC_CHECK_LIB(cblas, cblas_dgemm, 
+		[AC_CHECK_LIB(cblas, cblas_dgemm,
 			[blas_ok=yes; BLASLIB="-lcblas -lf77blas -latlas"],
 			[],[-lf77blas -latlas])],
 		[],[-latlas])]
@@ -1565,7 +1610,7 @@ LDFLAGS="$save_LDFLAGS"
 
 # Do we have ATLAS?
 if test $blas_ok = yes; then
-	AC_DEFINE(HAVE_LIBATLAS, 1, [define if ATLAS exists])
+	AC_DEFINE(HAVE_LIBATLAS, 1, [Define to 1 if ATLAS exists.])
 fi
 
 # BLAS in Apple vecLib framework? (Mac OS-X)
@@ -1610,7 +1655,7 @@ if test $blas_ok = no; then
 fi
 
 if test $blas_ok = yes; then
-AC_DEFINE(HAVE_LIBBLAS, 1, [define if BLAS exists])
+AC_DEFINE(HAVE_LIBBLAS, 1, [Define to 1 if BLAS exists.])
 fi
 
 fi # $USE_BLAS
@@ -1669,7 +1714,7 @@ if test $lapack_ok = no; then
 	LOC_CHECK_LIBS(lapack,dgesv_,LAPACK,$LAPACKLIB,LAPACKLIB,$BLASLIB $MATHLIB,,,-lg2c)
 fi
 
-AC_DEFINE(HAVE_LIBLAPACK, 1, [define if LAPACK exists])
+AC_DEFINE(HAVE_LIBLAPACK, 1, [Define to 1 if LAPACK exists.])
 
 fi # $USE_LAPACK
 fi # $USE_BLAS
@@ -1678,6 +1723,28 @@ AC_SUBST(LAPACKLIB)
 AC_SUBST(LAPACKINC)
 
 # Done checking LAPACK
+
+# libsvm option
+LIBSVM_INC=
+LIBSVM_LIB=
+USE_LIBSVM=
+
+LOC_CHECK_USE(libsvm,LIBSVM,USE_LIBSVM)
+
+if test -n "$USE_LIBSVM"; then
+  LOC_CHECK_INC_PATH(libsvm,LIBSVM,LIBSVM_INC)
+  LOC_CHECK_INCLUDES(svm.h,LIBSVM,$LIBSVM_INC, [
+    LOC_CHECK_INCLUDES(libsvm/svm.h,LIBSVM,$LIBSVM_INC)
+  ])
+  LOC_CHECK_LIB_PATH(libsvm,libsvm,LIBSVM_LIB)
+  LOC_CHECK_LIBS(svm,svm_load_model,LIBSVM,$LIBSVM_LIB,LIBSVM_LIB,,,)
+  AC_DEFINE(HAVE_LIBSVM, 1, [Define to 1 if using LIBSVM.])
+fi
+
+AC_SUBST(LIBSVM_INC)
+AC_SUBST(LIBSVM_LIB)
+AC_SUBST(USE_LIBSVM)
+# Done with LIBSVM
 
 # Enable Cairo display driver option
 
@@ -1772,7 +1839,7 @@ INTLLIB=
 HAVE_NLS=
 
 if test -n "${USE_NLS}" ; then
-    AC_DEFINE(USE_NLS, 1, [define if NLS requested])
+    AC_DEFINE(USE_NLS, 1, [Define to 1 if NLS requested.])
 
 AC_CHECK_FUNC(gettext, INTLLIB=, [
 AC_CHECK_LIB(intl, gettext, INTLLIB=-lintl, [
@@ -1784,21 +1851,6 @@ fi
 
 AC_SUBST(INTLLIB)
 AC_SUBST(HAVE_NLS)
-
-# Enable C++ option
- 
-LOC_CHECK_USE(cxx,C++,USE_CXX)
-
-if test -n "$USE_CXX"; then
-	AC_PROG_CXX
-else
-	CXX=
-	CXXFLAGS=
-	AC_SUBST(CXX)
-	AC_SUBST(CXXFLAGS)
-fi
-
-# Done checking C++
 
 # Enable openDWG option
 
@@ -1875,59 +1927,43 @@ AC_SUBST(USE_PTHREAD)
 
 LOC_CHECK_USE(openmp,OpenMP,USE_OPENMP)
 
-OMPINCPATH=
-OMPLIBPATH=
-OMPLIB=
-OMPCFLAGS=
+if test "$enable_openmp" != no; then
 
-if test -n "$USE_OPENMP"; then
+if test -n "${USE_OPENMP}"; then
 
-# With OpenMP includes directory
+OPENMP_INCPATH=
+OPENMP_LIBPATH=
+OPENMP_LIB=
+OPENMP_CFLAGS=
 
-LOC_CHECK_INC_PATH(openmp,OpenMP,OMPINCPATH)
+LOC_CHECK_INC_PATH(openmp,OpenMP,OPENMP_INCPATH)
+LOC_CHECK_LIB_PATH(openmp,OpenMP,OPENMP_LIBPATH)
+LOC_CHECK_INCLUDES(omp.h,OpenMP,$OPENMP_INCPATH)
 
-LOC_CHECK_INCLUDES(omp.h,OpenMP,$OMPINCPATH)
+LOC_CHECK_LIBS(omp,omp_get_num_threads,OpenMP,$OPENMP_LIBPATH,OPENMP_LIB,,,[
+LOC_CHECK_LIBS(gomp,GOMP_parallel_start,OpenMP,$OPENMP_LIBPATH,OPENMP_LIB,,,)])
 
-# With OpenMP library directory
-# GCC et al.: -lgomp
-# Solaris cc: -lmtsk
-# AIX xlc: -lxlsmp
-# SGI IRIX 6.5 MIPSpro C/C++: -lmp
+loc_save_cflags="$CFLAGS"
+CFLAGS="${CFLAGS} ${OPENMP_INCPATH} ${OPENMP_LIBPATH} ${OPENMP_LIB}"
+LOC_OPENMP
+CFLAGS="${loc_save_cflags}"
 
-LOC_CHECK_LIB_PATH(openmp,OpenMP,OMPLIBPATH)
+AC_SUBST(OPENMP_INCPATH)
+AC_SUBST(OPENMP_LIBPATH)
+AC_SUBST(OPENMP_LIB)
+AC_SUBST(OPENMP_CFLAGS)
 
-LOC_CHECK_FUNC(GOMP_parallel_start,OpenMP functions,OMPLIB,,,,,[
-LOC_CHECK_LIBS(gomp,GOMP_parallel_start,OpenMP,$OMPLIBPATH,OMPLIB,,,)
-])
+fi # USE_OPENMP
 
-# compiler dependent
-#if test ${CC} = "gcc" ; then
-if test x$GCC = xyes ; then
-	# GNU C compiler (>= 4.2.1)
-	OMPCFLAGS=-fopenmp
-elif test ${CC} = "icc" ; then
-	# Intel compiler
-	OMPCFLAGS=-openmp
-elif test ${CC} = "opencc" ; then
-	# AMD's x86 Open64 compiler
-	OMPCFLAGS=-mp
-elif test ${CC} = "pgcc" ; then
-	# Portland Group's compiler
-	OMPCFLAGS=-mp
-# ... anybody else?
+else # enable_openmp
+
+if test -n "${USE_OPENMP}"; then
+LOC_MSG(OpenMP explicitly disabled with --disable-openmp.)
 fi
+USE_OPENMP=
 
-# try to build a test program with "$CC $OMPCLFAGS" to confirm it works
-#...how?
-#echo "int main() {return 0;}" > test.c 
-#$CC $OMPCLFAGS test.c -o test
+fi  # enable_openmp
 
-fi # $USE_OPENMP
-
-AC_SUBST(OMPINCPATH)
-AC_SUBST(OMPLIBPATH)
-AC_SUBST(OMPLIB)
-AC_SUBST(OMPCFLAGS)
 AC_SUBST(USE_OPENMP)
 
 # Done checking OpenMP
@@ -2036,6 +2072,7 @@ LOC_MSG_USE(GEOS support,USE_GEOS)
 LOC_MSG_USE(LAPACK support,USE_LAPACK)
 LOC_MSG_USE(Large File support (LFS), USE_LARGEFILES)
 LOC_MSG_USE(libLAS support,USE_LIBLAS)
+LOC_MSG_USE(LIBSVM support,USE_LIBSVM)
 LOC_MSG_USE(MySQL support,USE_MYSQL)
 LOC_MSG_USE(NetCDF support,USE_NETCDF)
 LOC_MSG_USE(NLS support,USE_NLS)

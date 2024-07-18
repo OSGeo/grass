@@ -10,9 +10,7 @@
 #            for details.
 
 """Utility functions warpping existing processes in a suitable way"""
-
-import os
-
+from pathlib import Path
 import grass.script as gs
 
 
@@ -47,8 +45,13 @@ def reproject_region(region, from_proj, to_proj):
     :return dict region: reprojected region as a dictionary with long key names
     """
     region = region.copy()
+    # reproject all corners, otherwise reproj. region may be underestimated
+    # even better solution would be reprojecting vector region like in r.import
     proj_input = (
-        f"{region['east']} {region['north']}\n{region['west']} {region['south']}"
+        f"{region['east']} {region['north']}\n"
+        f"{region['west']} {region['north']}\n"
+        f"{region['east']} {region['south']}\n"
+        f"{region['west']} {region['south']}\n"
     )
     proc = gs.start_command(
         "m.proj",
@@ -69,13 +72,18 @@ def reproject_region(region, from_proj, to_proj):
         raise RuntimeError(
             _("Encountered error while running m.proj: {}").format(stderr)
         )
-    enws = gs.decode(proj_output).split(os.linesep)
-    elon, nlat, unused = enws[0].split(" ")
-    wlon, slat, unused = enws[1].split(" ")
-    region["east"] = elon
-    region["north"] = nlat
-    region["west"] = wlon
-    region["south"] = slat
+    output = gs.decode(proj_output).splitlines()
+    # get the largest bbox
+    latitude_list = []
+    longitude_list = []
+    for row in output:
+        longitude, latitude, unused = row.split(" ")
+        longitude_list.append(float(longitude))
+        latitude_list.append(float(latitude))
+    region["east"] = max(longitude_list)
+    region["north"] = max(latitude_list)
+    region["west"] = min(longitude_list)
+    region["south"] = min(latitude_list)
     return region
 
 
@@ -96,7 +104,7 @@ def estimate_resolution(raster, mapset, location, dbase, env):
         flags="g",
         input=raster,
         mapset=mapset,
-        location=location,
+        project=location,
         dbase=dbase,
         env=env,
     ).strip()
@@ -105,8 +113,7 @@ def estimate_resolution(raster, mapset, location, dbase, env):
     output = gs.parse_key_val(output, val_type=float)
     cell_ns = (output["n"] - output["s"]) / output["rows"]
     cell_ew = (output["e"] - output["w"]) / output["cols"]
-    estimate = (cell_ew + cell_ns) / 2.0
-    return estimate
+    return (cell_ew + cell_ns) / 2.0
 
 
 def setup_location(name, path, epsg, src_env):
@@ -192,3 +199,69 @@ def get_rendering_size(region, width, height, default_width=600, default_height=
     if region_height > region_width:
         return (round(default_height * region_width / region_height), default_height)
     return (default_width, round(default_width * region_height / region_width))
+
+
+def save_gif(
+    input_files,
+    output_filename,
+    duration=500,
+    label=True,
+    labels=None,
+    font=None,
+    text_size=12,
+    text_color="gray",
+):
+    """
+    Creates a GIF animation
+
+    param list input_files: list of paths to source
+    param str output_filename: destination gif filename
+    param int duration: time to display each frame; milliseconds
+    param bool label: include label stamp on each frame
+    param list labels: list of labels for each source image
+    param str font: font file
+    param int text_size: size of label text
+    param str text_color: color to use for the text
+    """
+    # Create a GIF from the PNG images
+    import PIL.Image  # pylint: disable=import-outside-toplevel
+    import PIL.ImageDraw  # pylint: disable=import-outside-toplevel
+    import PIL.ImageFont  # pylint: disable=import-outside-toplevel
+
+    # filepath to output GIF
+    filename = Path(output_filename)
+    if filename.suffix.lower() != ".gif":
+        raise ValueError(_("filename must end in '.gif'"))
+
+    images = []
+    for i, file in enumerate(input_files):
+        img = PIL.Image.open(file)
+        img = img.convert("RGBA", dither=None)
+        draw = PIL.ImageDraw.Draw(img)
+        if label:
+            if font:
+                font_obj = PIL.ImageFont.truetype(font, text_size)
+            else:
+                try:
+                    font_obj = PIL.ImageFont.load_default(size=text_size)
+                except TypeError:
+                    font_obj = PIL.ImageFont.load_default()
+            draw.text(
+                (0, 0),
+                labels[i],
+                fill=text_color,
+                font=font_obj,
+            )
+        images.append(img)
+
+    images[0].save(
+        fp=filename,
+        format="GIF",
+        append_images=images[1:],
+        save_all=True,
+        duration=duration,
+        loop=0,
+    )
+
+    # Display the GIF
+    return filename

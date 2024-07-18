@@ -14,4 +14,3 @@ LINK = $(CXX)
 ifneq ($(strip $(CXX)),)
 default: cmd
 endif
-

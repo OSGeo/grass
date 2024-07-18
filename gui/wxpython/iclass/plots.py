@@ -17,7 +17,7 @@ for details.
 
 import wx
 
-import wx.lib.plot as plot
+from wx.lib import plot
 import wx.lib.scrolledpanel as scrolled
 from core.gcmd import GError
 
@@ -57,7 +57,6 @@ class PlotPanel(scrolled.ScrolledPanel):
             self.iscatt_panel.CloseWindow()
 
     def _createPlotPanel(self):
-
         self.canvasPanel = wx.Panel(parent=self)
         self.mainSizer.Add(self.canvasPanel, proportion=1, flag=wx.EXPAND, border=0)
         self.canvasSizer = wx.BoxSizer(wx.VERTICAL)

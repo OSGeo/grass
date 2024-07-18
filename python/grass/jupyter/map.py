@@ -61,7 +61,6 @@ class Map:
         saved_region=None,
         read_file=False,
     ):
-
         """Creates an instance of the Map class.
 
         :param int height: height of map in pixels

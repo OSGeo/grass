@@ -2,8 +2,10 @@
 <html>
 <head>
 <title>r.li - GRASS GIS manual</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link rel="stylesheet" href="grassdocs.css" type="text/css">
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <link rel="stylesheet" href="grassdocs.css" type="text/css">
+ <meta http-equiv="content-language" content="en-us">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body bgcolor="white">
 <div id="container">
@@ -22,9 +24,9 @@
 <!-- meta page description: Landscape structure analysis package overview -->
 <h2>DESCRIPTION</h2>
 
-The <em>r.li</em> suite is a toolset for multiscale analysis of 
-landscape structure. It aims at implementing metrics as found in 
-external software for quantitative measures of landscape structure like 
+The <em>r.li</em> suite is a toolset for multiscale analysis of
+landscape structure. It aims at implementing metrics as found in
+external software for quantitative measures of landscape structure like
 FRAGSTATS (McGarigal and Marks 1995).
 <p>
 The <em>r.li</em> suite offers a set of patch and diversity indices.
@@ -67,7 +69,7 @@ The general procedure to calculate an index from a raster map is two-fold:
     using on the areas selected on configuration file.
 </ol>
 
-<!-- mhh ??: 
+<!-- mhh ??:
 The <em>r.li.daemon</em> source code has a "main" function front-end
 which can be run, but it is only a template for development of new
 indices.
@@ -83,16 +85,16 @@ in the Spearfish sample dataset, using a 5x5 moving window:
 <ol>
 <li> CREATE A NEW CONFIGURATION FILE
   <ol>
-  <li> run 
+  <li> run
 <div class="code"><pre>
   g.gui.rlisetup
 </pre></div>
   <li> The main <em>g.gui.rlisetup</em> window is displayed, click on "New"
   <li> The new configuration window is now displayed, enter the
 	configuration file name (e.g., "my_conf", do not use absolute paths)
-  
+
   Now the new configuration window is displayed.
-	Enter the configuration file name (e.g., "my_conf", do not use absolute paths) 
+	Enter the configuration file name (e.g., "my_conf", do not use absolute paths)
 	and the name of raster map (e.g., "geology").
 	The other fields are not needed for this configuration.
   <li> Click on "Setup sampling frame", select "Whole map layer" and click "OK"
@@ -209,7 +211,7 @@ for more information about development.
 McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
 analysis program for quantifying landscape structure. USDA For. Serv.
 Gen. Tech. Rep. PNW-351
- (<a href="http://www.fs.fed.us/pnw/pubs/gtr_351.pdf">PDF</a>).
+ (<a href="https://research.fs.usda.gov/treesearch/3064">PDF</a>).
 
 <li>
 Baker, W.L. and Y. Cai. 1992. The r.le programs for multiscale analysis of

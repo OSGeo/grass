@@ -41,7 +41,7 @@ double exponential(double factor, double squared_distance)
 void compute_weights(const char *function_type, double factor)
 {
     int i, j;
-    double (*weight) (double, double);
+    double (*weight)(double, double);
 
     if (!strcmp(function_type, "gaussian")) {
         weight = gaussian;
@@ -49,7 +49,6 @@ void compute_weights(const char *function_type, double factor)
     else if (!strcmp(function_type, "exponential")) {
         weight = exponential;
     }
-
 
     ncb.weights = G_malloc(ncb.nsize * sizeof(DCELL *));
     for (i = 0; i < ncb.nsize; i++)

@@ -1,5 +1,4 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       d.erase
  * AUTHOR(S):    James Westervelt - USA CERL
@@ -29,29 +28,29 @@ int main(int argc, char *argv[])
     G_add_keyword(_("display"));
     G_add_keyword(_("graphics"));
     G_add_keyword(_("monitors"));
-    module->description =
-	_("Erases the contents of the active graphics display frame with user defined color.");
+    module->description = _("Erases the contents of the active graphics "
+                            "display frame with user defined color.");
 
     color = G_define_standard_option(G_OPT_C);
     color->key = "bgcolor";
     color->label = _("Background color");
     color->answer = DEFAULT_BG_COLOR;
-    
+
     eraseframe = G_define_flag();
     eraseframe->key = 'f';
     eraseframe->description = _("Remove all frames and erase the screen");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     D_open_driver();
-    
+
     D_setup_unity(0);
 
     D_erase(color->answer);
 
     if (eraseframe->answer)
-	D__erase();
+        D__erase();
 
     D_save_command(NULL);
     D_close_driver();

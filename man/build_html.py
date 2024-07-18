@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # utilities for generating HTML indices
-# (C) 2003-2022 Markus Neteler and the GRASS Development Team
+# (C) 2003-2024 Markus Neteler and the GRASS Development Team
 # Authors:
 #   Markus Neteler
 #   Glynn Clements
@@ -36,9 +36,11 @@ header1_tmpl = string.Template(
     r"""<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
- <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
  <title>${title} - GRASS GIS Manual</title>
  <meta name="Author" content="GRASS Development Team">
+ <meta http-equiv="content-language" content="en-us">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
 """
 )
 
@@ -434,9 +436,9 @@ def html_files(cls=None, ignore_gui=True):
     for cmd in sorted(os.listdir(html_dir)):
         if (
             cmd.endswith(".html")
-            and (cls in [None, "*"] or cmd.startswith(cls + "."))
+            and (cls in {None, "*"} or cmd.startswith(cls + "."))
             and (cls != "*" or len(cmd.split(".")) >= 3)
-            and cmd not in ["full_index.html", "index.html"]
+            and cmd not in {"full_index.html", "index.html"}
             and cmd not in exclude_mods
             and (ignore_gui and not cmd.startswith("wxGUI.") or not ignore_gui)
         ):

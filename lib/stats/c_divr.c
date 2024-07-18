@@ -1,7 +1,7 @@
 #include <grass/gis.h>
 #include <grass/stats.h>
 
-void c_divr(DCELL * result, DCELL * values, int n, const void *closure)
+void c_divr(DCELL *result, DCELL *values, int n, const void *closure UNUSED)
 {
     int count;
     DCELL prev;
@@ -12,18 +12,18 @@ void c_divr(DCELL * result, DCELL * values, int n, const void *closure)
     n = sort_cell(values, n);
 
     if (n == 0) {
-	*result = 0;
-	return;
+        *result = 0;
+        return;
     }
 
     count = 1;
     prev = values[0];
 
     for (i = 0; i < n; i++)
-	if (values[i] != prev) {
-	    prev = values[i];
-	    count++;
-	}
+        if (values[i] != prev) {
+            prev = values[i];
+            count++;
+        }
 
-    *result = (DCELL) count;
+    *result = (DCELL)count;
 }

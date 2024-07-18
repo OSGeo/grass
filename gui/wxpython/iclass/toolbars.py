@@ -18,8 +18,6 @@ for details.
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
-from __future__ import print_function
-
 import wx
 
 from gui_core.toolbars import BaseToolbar, BaseIcons
@@ -28,7 +26,7 @@ from iclass.dialogs import IClassMapDialog, ContrastColor
 from gui_core.forms import GUI
 from gui_core.wrap import StaticText
 
-import grass.script as grass
+import grass.script as gs
 
 iClassIcons = {
     "opacity": MetaIcon(img="layer-opacity", label=_("Set opacity level")),
@@ -253,7 +251,6 @@ class IClassToolbar(BaseToolbar):
         self.parent.CategoryChanged(currentCat=cat)
 
     def _updateColor(self, cat):
-
         if cat:
             stat = self.stats_data.GetStatistics(cat)
             back_c = wx.Colour([int(x) for x in stat.color.split(":")])
@@ -401,7 +398,7 @@ class IClassMapManagerToolbar(BaseToolbar):
     def OnAddRast(self, event):
         dlg = IClassMapDialog(self, title=_("Add raster map"), element="raster")
         if dlg.ShowModal() == wx.ID_OK:
-            raster = grass.find_file(name=dlg.GetMap(), element="cell")
+            raster = gs.find_file(name=dlg.GetMap(), element="cell")
             if raster["fullname"]:
                 self.mapManager.AddLayer(name=raster["fullname"])
 

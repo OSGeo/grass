@@ -34,35 +34,34 @@
 /*                                                                      c */
 /* **********************************************************************c */
 
-struct AtmosModel
-{
-	long int idatm;	/* atmospheric model*/
+struct AtmosModel {
+    long int idatm; /* atmospheric model */
 
-	/* secondary */
+    /* secondary */
     double uw;
     double uo3;
 
-	/* primary */
-	double z[34];
-	double p[34];
-	double t[34];
-	double wh[34];
-	double wo[34];
+    /* primary */
+    double z[34];
+    double p[34];
+    double t[34];
+    double wh[34];
+    double wo[34];
 
 private:
-	/* methods to initialize each model */
-	void us62();
-	void tropic();
-	void midsum();
-	void midwin();
-	void subsum();
-	void subwin();
+    /* methods to initialize each model */
+    void us62();
+    void tropic();
+    void midsum();
+    void midwin();
+    void subsum();
+    void subwin();
 
-	void parse();
+    void parse();
 
 public:
-	void print();
-	static AtmosModel Parse();
+    void print();
+    static AtmosModel Parse();
 };
 
 #endif /* ATMOSPHERIC_MODEL_H */

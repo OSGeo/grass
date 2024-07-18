@@ -41,7 +41,7 @@ from ctypesgen.parser import cdeclarations, yacc
 
 
 reserved_keyword_tokens = (
-    "SIZEOF", "TYPEDEF", "EXTERN", "STATIC", "AUTO", "REGISTER",  # "INLINE",
+    "SIZEOF", "TYPEDEF", "EXTERN", "STATIC", "AUTO", "REGISTER", "INLINE",
     "CONST", "RESTRICT", "VOLATILE",
     "CHAR", "SHORT", "INT", "LONG", "SIGNED", "UNSIGNED", "FLOAT", "DOUBLE",
     "VOID", "STRUCT", "UNION", "ENUM",
@@ -51,16 +51,18 @@ reserved_keyword_tokens = (
 )
 
 reserved_keyword_tokens_new = (
-    "_BOOL",
+    "_BOOL", "_NORETURN",
     # "_ALIGNAS", "_ALIGNOF", "_ATOMIC", "_COMPLEX",
     # "_DECIMAL128", "_DECIMAL32", "_DECIMAL64",
-    # "_GENERIC", "_IMAGINARY", "_NORETURN", "_STATIC_ASSERT", "_THREAD_LOCAL",
+    # "_GENERIC", "_IMAGINARY", "_STATIC_ASSERT", "_THREAD_LOCAL",
 )
 
 extra_keywords_with_alias = {
     "__asm__": "__ASM__",
     "__attribute__": "__ATTRIBUTE__",
     "__restrict": "RESTRICT",
+    "__inline__": "INLINE",
+    "__inline": "INLINE",
 }
 
 keyword_map = {}
@@ -106,7 +108,7 @@ tokens = reserved_keyword_tokens + reserved_keyword_tokens_new + (
     # Pragma
     "PRAGMA", "PRAGMA_END", "PRAGMA_PACK",
 
-    # Delimeters
+    # Delimiters
     "PERIOD", "ELLIPSIS", "LPAREN", "RPAREN", "LBRACKET",
     "RBRACKET", "LBRACE", "RBRACE", "COMMA", "SEMI",
     "COLON",
@@ -650,6 +652,7 @@ def p_declaration_specifier(p):
     """ declaration_specifier : storage_class_specifier
                               | type_specifier
                               | type_qualifier
+                              | function_specifier
     """
     p[0] = p[1]
 
@@ -914,6 +917,12 @@ def p_type_qualifier(p):
                        | RESTRICT
     """
     p[0] = cdeclarations.TypeQualifier(p[1])
+
+
+def p_function_specifier(p):
+    """ function_specifier : INLINE
+                           | _NORETURN
+    """
 
 
 def p_declarator(p):
@@ -1367,6 +1376,7 @@ def p_error(t):
 
 def p_pragma(p):
     """ pragma : pragma_pack
+               | PRAGMA pragma_directive_list PRAGMA_END
     """
 
 
@@ -1418,6 +1428,23 @@ def p_pragma_pack_stack_args(p):
                 n = p[5].value
 
     p[0] = (op, id, n)
+
+
+def p_pragma_directive_list(p):
+    """ pragma_directive_list : pragma_directive
+                              | pragma_directive_list pragma_directive
+    """
+    if len(p) == 3:
+        p[0] = p[1] + (p[2],)
+    else:
+        p[0] = (p[1],)
+
+
+def p_pragma_directive(p):
+    """ pragma_directive : IDENTIFIER
+                         | string_literal
+    """
+    p[0] = p[1]
 
 
 def main():

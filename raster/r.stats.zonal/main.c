@@ -1,8 +1,7 @@
-
 /****************************************************************************
  *
  * MODULE:       r.stats.zonal
- *               
+ *
  * AUTHOR(S):    Glynn Clements; loosely based upon r.statistics, by
  *               Martin Schroeder, Geographisches Institut Heidelberg, Germany
  *
@@ -25,50 +24,53 @@
 #include <grass/spawn.h>
 #include <grass/glocale.h>
 
-#define FUNC_COUNT      1		/* Count                 */
-#define FUNC_SUM        2		/* Sum                   */
-#define FUNC_MIN        3		/* Minimum               */
-#define FUNC_MAX        4		/* Maximum               */
-#define FUNC_RANGE      5		/* Range                 */
-#define FUNC_AVERAGE    6		/* Average (mean)        */
-#define FUNC_ADEV       7		/* Average deviation     */
-#define FUNC_VARIANCE1  8		/* Variance              */
-#define FUNC_STDDEV1    9		/* Standard deviation    */
-#define FUNC_SKEWNESS1 10		/* Skewness              */
-#define FUNC_KURTOSIS1 11		/* Kurtosis              */
-#define FUNC_VARIANCE2 12		/* Variance              */
-#define FUNC_STDDEV2   13		/* Standard deviation    */
-#define FUNC_SKEWNESS2 14		/* Skewness              */
-#define FUNC_KURTOSIS2 15		/* Kurtosis              */
+#define FUNC_COUNT     1  /* Count                 */
+#define FUNC_SUM       2  /* Sum                   */
+#define FUNC_MIN       3  /* Minimum               */
+#define FUNC_MAX       4  /* Maximum               */
+#define FUNC_RANGE     5  /* Range                 */
+#define FUNC_AVERAGE   6  /* Average (mean)        */
+#define FUNC_ADEV      7  /* Average deviation     */
+#define FUNC_VARIANCE1 8  /* Variance              */
+#define FUNC_STDDEV1   9  /* Standard deviation    */
+#define FUNC_SKEWNESS1 10 /* Skewness              */
+#define FUNC_KURTOSIS1 11 /* Kurtosis              */
+#define FUNC_VARIANCE2 12 /* Variance              */
+#define FUNC_STDDEV2   13 /* Standard deviation    */
+#define FUNC_SKEWNESS2 14 /* Skewness              */
+#define FUNC_KURTOSIS2 15 /* Kurtosis              */
 
-struct menu
-{
-    const char *name;		/* method name */
-    int val;			/* number of function */
-    const char *text;		/* menu display - full description */
+struct menu {
+    const char *name; /* method name */
+    int val;          /* number of function */
+    const char *text; /* menu display - full description */
 };
 
 extern struct menu menu[];
 
 /* modify this table to add new methods */
 struct menu menu[] = {
-    {"count",     FUNC_COUNT,     "Count of values in specified objects"},
-    {"sum",       FUNC_SUM,       "Sum of values in specified objects"},
-    {"min",       FUNC_MIN,       "Minimum of values in specified objects"},
-    {"max",       FUNC_MAX,       "Maximum of values in specified objects"},
-    {"range",     FUNC_RANGE,     "Range of values (max - min) in specified objects"},
-    {"average",   FUNC_AVERAGE,   "Average of values in specified objects"},
-    {"avedev",    FUNC_ADEV,      "Average deviation of values in specified objects"},
-    {"variance",  FUNC_VARIANCE1, "Variance of values in specified objects"},
-    {"stddev",    FUNC_STDDEV1,   "Standard deviation of values in specified objects"},
-    {"skewness",  FUNC_SKEWNESS1, "Skewness of values in specified objects"},
-    {"kurtosis",  FUNC_KURTOSIS1, "Kurtosis of values in specified objects"},
-    {"variance2", FUNC_VARIANCE2, "(2-pass) Variance of values in specified objects"},
-    {"stddev2",   FUNC_STDDEV2,   "(2-pass) Standard deviation of values in specified objects"},
-    {"skewness2", FUNC_SKEWNESS2, "(2-pass) Skewness of values in specified objects"},
-    {"kurtosis2", FUNC_KURTOSIS2, "(2-pass) Kurtosis of values in specified objects"},
-    {0, 0, 0}
-};
+    {"count", FUNC_COUNT, "Count of values in specified objects"},
+    {"sum", FUNC_SUM, "Sum of values in specified objects"},
+    {"min", FUNC_MIN, "Minimum of values in specified objects"},
+    {"max", FUNC_MAX, "Maximum of values in specified objects"},
+    {"range", FUNC_RANGE, "Range of values (max - min) in specified objects"},
+    {"average", FUNC_AVERAGE, "Average of values in specified objects"},
+    {"avedev", FUNC_ADEV, "Average deviation of values in specified objects"},
+    {"variance", FUNC_VARIANCE1, "Variance of values in specified objects"},
+    {"stddev", FUNC_STDDEV1,
+     "Standard deviation of values in specified objects"},
+    {"skewness", FUNC_SKEWNESS1, "Skewness of values in specified objects"},
+    {"kurtosis", FUNC_KURTOSIS1, "Kurtosis of values in specified objects"},
+    {"variance2", FUNC_VARIANCE2,
+     "(2-pass) Variance of values in specified objects"},
+    {"stddev2", FUNC_STDDEV2,
+     "(2-pass) Standard deviation of values in specified objects"},
+    {"skewness2", FUNC_SKEWNESS2,
+     "(2-pass) Skewness of values in specified objects"},
+    {"kurtosis2", FUNC_KURTOSIS2,
+     "(2-pass) Kurtosis of values in specified objects"},
+    {0, 0, 0}};
 
 int main(int argc, char **argv)
 {
@@ -76,10 +78,10 @@ int main(int argc, char **argv)
     DCELL *result;
     struct GModule *module;
     struct {
-	struct Option *method, *basemap, *covermap, *output;
+        struct Option *method, *basemap, *covermap, *output;
     } opt;
     struct {
-	struct Flag *c, *r;
+        struct Flag *c, *r;
     } flag;
     char methods[2048];
     const char *basemap, *covermap, *output;
@@ -102,8 +104,8 @@ int main(int argc, char **argv)
     G_add_keyword(_("raster"));
     G_add_keyword(_("statistics"));
     G_add_keyword(_("zonal statistics"));
-    module->description =
-	_("Calculates category or object oriented statistics (accumulator-based statistics).");
+    module->description = _("Calculates category or object oriented statistics "
+                            "(accumulator-based statistics).");
 
     opt.basemap = G_define_standard_option(G_OPT_R_BASE);
 
@@ -116,22 +118,22 @@ int main(int argc, char **argv)
     opt.method->description = _("Method of object-based statistic");
 
     for (i = 0; menu[i].name; i++) {
-	if (i)
-	    strcat(methods, ",");
-	else
-	    *(methods) = 0;
-	strcat(methods, menu[i].name);
+        if (i)
+            strcat(methods, ",");
+        else
+            *(methods) = 0;
+        strcat(methods, menu[i].name);
     }
     opt.method->options = G_store(methods);
 
     for (i = 0; menu[i].name; i++) {
-	if (i)
-	    strcat(methods, ";");
-	else
-	    *(methods) = 0;
-	strcat(methods, menu[i].name);
-	strcat(methods, ";");
-	strcat(methods, menu[i].text);
+        if (i)
+            strcat(methods, ";");
+        else
+            *(methods) = 0;
+        strcat(methods, menu[i].name);
+        strcat(methods, ";");
+        strcat(methods, menu[i].text);
     }
     opt.method->descriptions = G_store(methods);
 
@@ -142,15 +144,15 @@ int main(int argc, char **argv)
     flag.c = G_define_flag();
     flag.c->key = 'c';
     flag.c->description =
-	_("Cover values extracted from the category labels of the cover map");
+        _("Cover values extracted from the category labels of the cover map");
 
     flag.r = G_define_flag();
     flag.r->key = 'r';
     flag.r->description =
-	_("Create reclass map with statistics as category labels");
+        _("Create reclass map with statistics as category labels");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     basemap = opt.basemap->answer;
     covermap = opt.covermap->answer;
@@ -159,14 +161,14 @@ int main(int argc, char **argv)
     reclass = flag.r->answer;
 
     for (i = 0; menu[i].name; i++)
-	if (strcmp(menu[i].name, opt.method->answer) == 0)
-	    break;
+        if (strcmp(menu[i].name, opt.method->answer) == 0)
+            break;
 
     if (!menu[i].name) {
-	G_warning(_("<%s=%s> unknown %s"), opt.method->key, opt.method->answer,
-		  opt.method->key);
-	G_usage();
-	exit(EXIT_FAILURE);
+        G_warning(_("<%s=%s> unknown %s"), opt.method->key, opt.method->answer,
+                  opt.method->key);
+        G_usage();
+        exit(EXIT_FAILURE);
     }
 
     method = menu[i].val;
@@ -176,13 +178,14 @@ int main(int argc, char **argv)
     cover_fd = Rast_open_old(covermap, "");
 
     if (usecats && Rast_read_cats(covermap, "", &cats) < 0)
-	G_fatal_error(_("Unable to read category file of cover map <%s>"), covermap);
+        G_fatal_error(_("Unable to read category file of cover map <%s>"),
+                      covermap);
 
     if (Rast_map_is_fp(basemap, "") != 0)
-	G_fatal_error(_("The base map must be an integer (CELL) map"));
+        G_fatal_error(_("The base map must be an integer (CELL) map"));
 
     if (Rast_read_range(basemap, "", &range) < 0)
-	G_fatal_error(_("Unable to read range of base map <%s>"), basemap);
+        G_fatal_error(_("Unable to read range of base map <%s>"), basemap);
 
     mincat = range.min;
     ncats = range.max - range.min + 1;
@@ -192,56 +195,56 @@ int main(int argc, char **argv)
 
     switch (method) {
     case FUNC_COUNT:
-	count = G_calloc(ncats, sizeof(DCELL));
-	break;
+        count = G_calloc(ncats, sizeof(DCELL));
+        break;
     case FUNC_SUM:
-	sum = G_calloc(ncats, sizeof(DCELL));
-	break;
+        sum = G_calloc(ncats, sizeof(DCELL));
+        break;
     case FUNC_MIN:
-	min = G_malloc(ncats * sizeof(DCELL));
-	break;
+        min = G_malloc(ncats * sizeof(DCELL));
+        break;
     case FUNC_MAX:
-	max = G_malloc(ncats * sizeof(DCELL));
-	break;
+        max = G_malloc(ncats * sizeof(DCELL));
+        break;
     case FUNC_RANGE:
-	min = G_malloc(ncats * sizeof(DCELL));
-	max = G_malloc(ncats * sizeof(DCELL));
-	break;
+        min = G_malloc(ncats * sizeof(DCELL));
+        max = G_malloc(ncats * sizeof(DCELL));
+        break;
     case FUNC_AVERAGE:
     case FUNC_ADEV:
     case FUNC_VARIANCE2:
     case FUNC_STDDEV2:
     case FUNC_SKEWNESS2:
     case FUNC_KURTOSIS2:
-	count = G_calloc(ncats, sizeof(DCELL));
-	sum = G_calloc(ncats, sizeof(DCELL));
-	break;
+        count = G_calloc(ncats, sizeof(DCELL));
+        sum = G_calloc(ncats, sizeof(DCELL));
+        break;
     case FUNC_VARIANCE1:
     case FUNC_STDDEV1:
-	count = G_calloc(ncats, sizeof(DCELL));
-	sum = G_calloc(ncats, sizeof(DCELL));
-	sum2 = G_calloc(ncats, sizeof(DCELL));
-	break;
+        count = G_calloc(ncats, sizeof(DCELL));
+        sum = G_calloc(ncats, sizeof(DCELL));
+        sum2 = G_calloc(ncats, sizeof(DCELL));
+        break;
     case FUNC_SKEWNESS1:
-	count = G_calloc(ncats, sizeof(DCELL));
-	sum = G_calloc(ncats, sizeof(DCELL));
-	sum2 = G_calloc(ncats, sizeof(DCELL));
-	sum3 = G_calloc(ncats, sizeof(DCELL));
-	break;
+        count = G_calloc(ncats, sizeof(DCELL));
+        sum = G_calloc(ncats, sizeof(DCELL));
+        sum2 = G_calloc(ncats, sizeof(DCELL));
+        sum3 = G_calloc(ncats, sizeof(DCELL));
+        break;
     case FUNC_KURTOSIS1:
-	count = G_calloc(ncats, sizeof(DCELL));
-	sum = G_calloc(ncats, sizeof(DCELL));
-	sum2 = G_calloc(ncats, sizeof(DCELL));
-	sum4 = G_calloc(ncats, sizeof(DCELL));
-	break;
+        count = G_calloc(ncats, sizeof(DCELL));
+        sum = G_calloc(ncats, sizeof(DCELL));
+        sum2 = G_calloc(ncats, sizeof(DCELL));
+        sum4 = G_calloc(ncats, sizeof(DCELL));
+        break;
     }
 
     if (min)
-	for (i = 0; i < ncats; i++)
-	    min[i] = 1e300;
+        for (i = 0; i < ncats; i++)
+            min[i] = 1e300;
     if (max)
-	for (i = 0; i < ncats; i++)
-	    max[i] = -1e300;
+        for (i = 0; i < ncats; i++)
+            max[i] = -1e300;
 
     base_buf = Rast_allocate_c_buf();
     cover_buf = Rast_allocate_d_buf();
@@ -249,44 +252,44 @@ int main(int argc, char **argv)
     G_message(_("First pass"));
 
     for (row = 0; row < rows; row++) {
-	Rast_get_c_row(base_fd, base_buf, row);
-	Rast_get_d_row(cover_fd, cover_buf, row);
+        Rast_get_c_row(base_fd, base_buf, row);
+        Rast_get_d_row(cover_fd, cover_buf, row);
 
-	for (col = 0; col < cols; col++) {
-	    int n;
-	    DCELL v;
+        for (col = 0; col < cols; col++) {
+            int n;
+            DCELL v;
 
-	    if (Rast_is_c_null_value(&base_buf[col]))
-		continue;
-	    if (Rast_is_d_null_value(&cover_buf[col]))
-		continue;
+            if (Rast_is_c_null_value(&base_buf[col]))
+                continue;
+            if (Rast_is_d_null_value(&cover_buf[col]))
+                continue;
 
-	    n = base_buf[col] - mincat;
+            n = base_buf[col] - mincat;
 
-	    if (n < 0 || n >= ncats)
-		continue;
+            if (n < 0 || n >= ncats)
+                continue;
 
-	    v = cover_buf[col];
-	    if (usecats)
-		sscanf(Rast_get_c_cat((CELL *) &v, &cats), "%lf", &v);
+            v = cover_buf[col];
+            if (usecats)
+                sscanf(Rast_get_c_cat((CELL *)&v, &cats), "%lf", &v);
 
-	    if (count)
-		count[n]++;
-	    if (sum)
-		sum[n] += v;
-	    if (sum2)
-		sum2[n] += v * v;
-	    if (sum3)
-		sum3[n] += v * v * v;
-	    if (sum4)
-		sum4[n] += v * v * v * v;
-	    if (min && min[n] > v)
-		min[n] = v;
-	    if (max && max[n] < v)
-		max[n] = v;
-	}
+            if (count)
+                count[n]++;
+            if (sum)
+                sum[n] += v;
+            if (sum2)
+                sum2[n] += v * v;
+            if (sum3)
+                sum3[n] += v * v * v;
+            if (sum4)
+                sum4[n] += v * v * v * v;
+            if (min && min[n] > v)
+                min[n] = v;
+            if (max && max[n] < v)
+                max[n] = v;
+        }
 
-	G_percent(row, rows, 2);
+        G_percent(row, rows, 2);
     }
 
     G_percent(row, rows, 2);
@@ -299,233 +302,239 @@ int main(int argc, char **argv)
     case FUNC_STDDEV2:
     case FUNC_SKEWNESS2:
     case FUNC_KURTOSIS2:
-	mean = G_calloc(ncats, sizeof(DCELL));
-	for (i = 0; i < ncats; i++)
-	    mean[i] = sum[i] / count[i];
-	G_free(sum);
-	break;
+        mean = G_calloc(ncats, sizeof(DCELL));
+        for (i = 0; i < ncats; i++)
+            mean[i] = sum[i] / count[i];
+        G_free(sum);
+        break;
     }
 
     switch (method) {
     case FUNC_ADEV:
-	sumu = G_calloc(ncats, sizeof(DCELL));
-	break;
+        sumu = G_calloc(ncats, sizeof(DCELL));
+        break;
     case FUNC_VARIANCE2:
     case FUNC_STDDEV2:
-	sum2 = G_calloc(ncats, sizeof(DCELL));
-	break;
+        sum2 = G_calloc(ncats, sizeof(DCELL));
+        break;
     case FUNC_SKEWNESS2:
-	sum2 = G_calloc(ncats, sizeof(DCELL));
-	sum3 = G_calloc(ncats, sizeof(DCELL));
-	break;
+        sum2 = G_calloc(ncats, sizeof(DCELL));
+        sum3 = G_calloc(ncats, sizeof(DCELL));
+        break;
     case FUNC_KURTOSIS2:
-	sum2 = G_calloc(ncats, sizeof(DCELL));
-	sum4 = G_calloc(ncats, sizeof(DCELL));
-	break;
+        sum2 = G_calloc(ncats, sizeof(DCELL));
+        sum4 = G_calloc(ncats, sizeof(DCELL));
+        break;
     }
 
     if (mean) {
-	G_message(_("Second pass"));
+        G_message(_("Second pass"));
 
-	for (row = 0; row < rows; row++) {
-	    Rast_get_c_row(base_fd, base_buf, row);
-	    Rast_get_d_row(cover_fd, cover_buf, row);
+        for (row = 0; row < rows; row++) {
+            Rast_get_c_row(base_fd, base_buf, row);
+            Rast_get_d_row(cover_fd, cover_buf, row);
 
-	    for (col = 0; col < cols; col++) {
-		int n;
-		DCELL v, d;
+            for (col = 0; col < cols; col++) {
+                int n;
+                DCELL v, d;
 
-		if (Rast_is_c_null_value(&base_buf[col]))
-		    continue;
-		if (Rast_is_d_null_value(&cover_buf[col]))
-		    continue;
+                if (Rast_is_c_null_value(&base_buf[col]))
+                    continue;
+                if (Rast_is_d_null_value(&cover_buf[col]))
+                    continue;
 
-		n = base_buf[col] - mincat;
+                n = base_buf[col] - mincat;
 
-		if (n < 0 || n >= ncats)
-		    continue;
+                if (n < 0 || n >= ncats)
+                    continue;
 
-		v = cover_buf[col];
-		if (usecats)
-		    sscanf(Rast_get_c_cat((CELL *) &v, &cats), "%lf", &v);
-		d = v - mean[n];
+                v = cover_buf[col];
+                if (usecats)
+                    sscanf(Rast_get_c_cat((CELL *)&v, &cats), "%lf", &v);
+                d = v - mean[n];
 
-		if (sumu)
-		    sumu[n] += fabs(d);
-		if (sum2)
-		    sum2[n] += d * d;
-		if (sum3)
-		    sum3[n] += d * d * d;
-		if (sum4)
-		    sum4[n] += d * d * d * d;
-	    }
+                if (sumu)
+                    sumu[n] += fabs(d);
+                if (sum2)
+                    sum2[n] += d * d;
+                if (sum3)
+                    sum3[n] += d * d * d;
+                if (sum4)
+                    sum4[n] += d * d * d * d;
+            }
 
-	    G_percent(row, rows, 2);
-	}
+            G_percent(row, rows, 2);
+        }
 
-	G_percent(row, rows, 2);
-	G_free(mean);
-	G_free(cover_buf);
+        G_percent(row, rows, 2);
+        G_free(mean);
+        G_free(cover_buf);
     }
 
     switch (method) {
     case FUNC_COUNT:
-	for (i = 0; i < ncats; i++)
-	    result[i] = count[i];
-	break;
+        for (i = 0; i < ncats; i++)
+            result[i] = count[i];
+        break;
     case FUNC_SUM:
-	for (i = 0; i < ncats; i++)
-	    result[i] = sum[i];
-	break;
+        for (i = 0; i < ncats; i++)
+            result[i] = sum[i];
+        break;
     case FUNC_AVERAGE:
-	for (i = 0; i < ncats; i++)
-	    result[i] = sum[i] / count[i];
-	break;
+        for (i = 0; i < ncats; i++)
+            result[i] = sum[i] / count[i];
+        break;
     case FUNC_MIN:
-	for (i = 0; i < ncats; i++)
-	    result[i] = min[i];
-	break;
+        for (i = 0; i < ncats; i++)
+            result[i] = min[i];
+        break;
     case FUNC_MAX:
-	for (i = 0; i < ncats; i++)
-	    result[i] = max[i];
-	break;
+        for (i = 0; i < ncats; i++)
+            result[i] = max[i];
+        break;
     case FUNC_RANGE:
-	for (i = 0; i < ncats; i++)
-	    result[i] = max[i] - min[i];
-	break;
+        for (i = 0; i < ncats; i++)
+            result[i] = max[i] - min[i];
+        break;
     case FUNC_VARIANCE1:
-	for (i = 0; i < ncats; i++) {
-	    double n = count[i];
-	    double var = (sum2[i] - sum[i] * sum[i] / n) / (n - 1);
-	    result[i] = var;
-	}
-	break;
+        for (i = 0; i < ncats; i++) {
+            double n = count[i];
+            double var = (sum2[i] - sum[i] * sum[i] / n) / (n - 1);
+
+            result[i] = var;
+        }
+        break;
     case FUNC_STDDEV1:
-	for (i = 0; i < ncats; i++) {
-	    double n = count[i];
-	    double var = (sum2[i] - sum[i] * sum[i] / n) / (n - 1);
-	    result[i] = sqrt(var);
-	}
-	break;
+        for (i = 0; i < ncats; i++) {
+            double n = count[i];
+            double var = (sum2[i] - sum[i] * sum[i] / n) / (n - 1);
+
+            result[i] = sqrt(var);
+        }
+        break;
     case FUNC_SKEWNESS1:
-	for (i = 0; i < ncats; i++) {
-	    double n = count[i];
-	    double var = (sum2[i] - sum[i] * sum[i] / n) / (n - 1);
-	    double skew = (sum3[i] / n
-			   - 3 * sum[i] * sum2[i] / (n * n)
-			   + 2 * sum[i] * sum[i] * sum[i] / (n * n * n))
-		/ (pow(var, 1.5));
-	    result[i] = skew;
-	}
-	break;
+        for (i = 0; i < ncats; i++) {
+            double n = count[i];
+            double var = (sum2[i] - sum[i] * sum[i] / n) / (n - 1);
+            double skew = (sum3[i] / n - 3 * sum[i] * sum2[i] / (n * n) +
+                           2 * sum[i] * sum[i] * sum[i] / (n * n * n)) /
+                          (pow(var, 1.5));
+
+            result[i] = skew;
+        }
+        break;
     case FUNC_KURTOSIS1:
-	for (i = 0; i < ncats; i++) {
-	    double n = count[i];
-	    double var = (sum2[i] - sum[i] * sum[i] / n) / (n - 1);
-	    double kurt = (sum4[i] / n
-			   - 4 * sum[i] * sum3[i] / (n * n)
-			   + 6 * sum[i] * sum[i] * sum2[i] / (n * n * n)
-			   - 3 * sum[i] * sum[i] * sum[i] * sum[i] / (n * n * n * n))
-		/ (var * var) - 3;
-	    result[i] = kurt;
-	}
-	break;
+        for (i = 0; i < ncats; i++) {
+            double n = count[i];
+            double var = (sum2[i] - sum[i] * sum[i] / n) / (n - 1);
+            double kurt =
+                (sum4[i] / n - 4 * sum[i] * sum3[i] / (n * n) +
+                 6 * sum[i] * sum[i] * sum2[i] / (n * n * n) -
+                 3 * sum[i] * sum[i] * sum[i] * sum[i] / (n * n * n * n)) /
+                    (var * var) -
+                3;
+
+            result[i] = kurt;
+        }
+        break;
     case FUNC_ADEV:
-	for (i = 0; i < ncats; i++)
-	    result[i] = sumu[i] / count[i];
-	break;
+        for (i = 0; i < ncats; i++)
+            result[i] = sumu[i] / count[i];
+        break;
     case FUNC_VARIANCE2:
-	for (i = 0; i < ncats; i++)
-	    result[i] = sum2[i] / (count[i] - 1);
-	break;
+        for (i = 0; i < ncats; i++)
+            result[i] = sum2[i] / (count[i] - 1);
+        break;
     case FUNC_STDDEV2:
-	for (i = 0; i < ncats; i++)
-	    result[i] = sqrt(sum2[i] / (count[i] - 1));
-	break;
+        for (i = 0; i < ncats; i++)
+            result[i] = sqrt(sum2[i] / (count[i] - 1));
+        break;
     case FUNC_SKEWNESS2:
-	for (i = 0; i < ncats; i++) {
-	    double n = count[i];
-	    double var = sum2[i] / (n - 1);
-	    double sdev = sqrt(var);
-	    result[i] = sum3[i] / (sdev * sdev * sdev) / n;
-	}
-	G_free(count);
-	G_free(sum2);
-	G_free(sum3);
-	break;
+        for (i = 0; i < ncats; i++) {
+            double n = count[i];
+            double var = sum2[i] / (n - 1);
+            double sdev = sqrt(var);
+
+            result[i] = sum3[i] / (sdev * sdev * sdev) / n;
+        }
+        G_free(count);
+        G_free(sum2);
+        G_free(sum3);
+        break;
     case FUNC_KURTOSIS2:
-	for (i = 0; i < ncats; i++) {
-	    double n = count[i];
-	    double var = sum2[i] / (n - 1);
-	    result[i] = sum4[i] / (var * var) / n - 3;
-	}
-	G_free(count);
-	G_free(sum2);
-	G_free(sum4);
-	break;
+        for (i = 0; i < ncats; i++) {
+            double n = count[i];
+            double var = sum2[i] / (n - 1);
+
+            result[i] = sum4[i] / (var * var) / n - 3;
+        }
+        G_free(count);
+        G_free(sum2);
+        G_free(sum4);
+        break;
     }
 
     if (reclass) {
-	const char *tempfile = G_tempfile();
-	char *input_arg = G_malloc(strlen(basemap) + 7);
-	char *output_arg = G_malloc(strlen(output) + 8);
-	char *rules_arg = G_malloc(strlen(tempfile) + 7);
-	FILE *fp;
+        const char *tempfile = G_tempfile();
+        char *input_arg = G_malloc(strlen(basemap) + 7);
+        char *output_arg = G_malloc(strlen(output) + 8);
+        char *rules_arg = G_malloc(strlen(tempfile) + 7);
+        FILE *fp;
 
-	G_message(_("Generating reclass map"));
+        G_message(_("Generating reclass map"));
 
-	sprintf(input_arg, "input=%s", basemap);
-	sprintf(output_arg, "output=%s", output);
-	sprintf(rules_arg, "rules=%s", tempfile);
+        sprintf(input_arg, "input=%s", basemap);
+        sprintf(output_arg, "output=%s", output);
+        sprintf(rules_arg, "rules=%s", tempfile);
 
-	fp = fopen(tempfile, "w");
-	if (!fp)
-	    G_fatal_error(_("Unable to open temporary file"));
+        fp = fopen(tempfile, "w");
+        if (!fp)
+            G_fatal_error(_("Unable to open temporary file"));
 
-	for (i = 0; i < ncats; i++)
-	    fprintf(fp, "%d = %d %f\n", mincat + i, mincat + i, result[i]);
+        for (i = 0; i < ncats; i++)
+            fprintf(fp, "%d = %d %f\n", mincat + i, mincat + i, result[i]);
 
-	fclose(fp);
+        fclose(fp);
 
-	G_spawn("r.reclass", "r.reclass", input_arg, output_arg, rules_arg, NULL);
+        G_spawn("r.reclass", "r.reclass", input_arg, output_arg, rules_arg,
+                NULL);
     }
     else {
-	int out_fd;
-	DCELL *out_buf;
-	struct Colors colors;
+        int out_fd;
+        DCELL *out_buf;
+        struct Colors colors;
 
-	G_message(_("Writing output map"));
+        G_message(_("Writing output map"));
 
-	out_fd = Rast_open_fp_new(output);
+        out_fd = Rast_open_fp_new(output);
 
-	out_buf = Rast_allocate_d_buf();
+        out_buf = Rast_allocate_d_buf();
 
-	for (row = 0; row < rows; row++) {
-	    Rast_get_c_row(base_fd, base_buf, row);
+        for (row = 0; row < rows; row++) {
+            Rast_get_c_row(base_fd, base_buf, row);
 
-	    for (col = 0; col < cols; col++)
-		if (Rast_is_c_null_value(&base_buf[col]))
-		    Rast_set_d_null_value(&out_buf[col], 1);
-		else
-		    out_buf[col] = result[base_buf[col] - mincat];
+            for (col = 0; col < cols; col++)
+                if (Rast_is_c_null_value(&base_buf[col]))
+                    Rast_set_d_null_value(&out_buf[col], 1);
+                else
+                    out_buf[col] = result[base_buf[col] - mincat];
 
-	    Rast_put_d_row(out_fd, out_buf);
+            Rast_put_d_row(out_fd, out_buf);
 
-	    G_percent(row, rows, 2);
-	}
+            G_percent(row, rows, 2);
+        }
 
-	G_percent(row, rows, 2);
+        G_percent(row, rows, 2);
 
-	Rast_close(out_fd);
+        Rast_close(out_fd);
 
-	Rast_short_history(output, "raster", &history);
-	Rast_command_history(&history);
-	Rast_write_history(output, &history);
+        Rast_short_history(output, "raster", &history);
+        Rast_command_history(&history);
+        Rast_write_history(output, &history);
 
-	if (Rast_read_colors(covermap, "", &colors) > 0)
-	    Rast_write_colors(output, G_mapset(), &colors);
+        if (Rast_read_colors(covermap, "", &colors) > 0)
+            Rast_write_colors(output, G_mapset(), &colors);
     }
 
     return 0;
 }
-

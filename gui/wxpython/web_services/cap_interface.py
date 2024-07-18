@@ -1,7 +1,8 @@
 """
 @package web_services.cap_interface
 
-@brief Provides common interface for GUI web_services.widgets to capabilities data of web services.
+@brief Provides common interface for GUI web_services.widgets to capabilities data of
+       web services.
 
 List of classes:
  - cap_interface::CapabilitiesBase
@@ -92,7 +93,7 @@ class WMSCapabilities(CapabilitiesBase, WMSCapabilitiesTree):
             self.layers_by_id[id] = parent_layer
             id += 1
 
-        layer_nodes = parent_layer.GetLayerNode().findall((self.xml_ns.Ns("Layer")))
+        layer_nodes = parent_layer.GetLayerNode().findall(self.xml_ns.Ns("Layer"))
 
         for node in layer_nodes:
             layer = WMSLayer(node, id, self)
@@ -228,7 +229,7 @@ class WMTSLayer(LayerBase):
         title = self.xml_ns.NsOws("Title")
         name = self.xml_ns.NsOws("Identifier")
 
-        if self.layer_node is None and param in ["title", "name"]:
+        if self.layer_node is None and param in {"title", "name"}:
             return None
         elif self.layer_node is None:
             return []
@@ -250,7 +251,6 @@ class WMTSLayer(LayerBase):
         if param == "styles":
             styles = []
             for style_node in self.layer_node.findall(self.xml_ns.NsWmts("Style")):
-
                 style_name = ""
                 style_title = ""
 
@@ -373,7 +373,7 @@ class OnEarthLayer(LayerBase):
 
     def GetLayerData(self, param):
         """Get layer data"""
-        if self.layer_node is None and param in ["title", "name"]:
+        if self.layer_node is None and param in {"title", "name"}:
             return None
         elif self.layer_node is None:
             return []

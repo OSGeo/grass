@@ -9,7 +9,6 @@ static char *append(char *results, char *text);
 static void do_text(char *text, long first, long last);
 static int reclass_text(char *text, struct Reclass *reclass, int next);
 
-
 char *maskinfo(void)
 {
     struct Reclass reclass;

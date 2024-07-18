@@ -16,7 +16,7 @@ current region settings. See the <em>g.region</em> module for details.
 The <em>r.out.ascii</em> module should be used to export an array (of
 size row x column) containing z values.
 <p>
-<em>r.out.xyz</em> can combine several input raster maps, which can be 
+<em>r.out.xyz</em> can combine several input raster maps, which can be
 convenient when it comes to e.g. produce ASCII point cloud files.
 <p>
 <em>r.out.xyz</em> is simply a front-end to "<tt>r.stats -1g[n]</tt>".
@@ -24,7 +24,7 @@ convenient when it comes to e.g. produce ASCII point cloud files.
 <h2>EXAMPLES</h2>
 
 In this example, a LiDAR elevation map in the
-North Carolina sample dataset location is exported to CSV format.
+North Carolina sample dataset is exported to CSV format.
 
 <div class="code"><pre>
 g.region raster=elev_lid792_1m -p
