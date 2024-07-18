@@ -305,15 +305,15 @@ class PyEditController:
         except PermissionError:
             GError(
                 message=_(
-                    "Permission denied <{path}>. Please change file "
+                    "Permission denied <{}>. Please change file "
                     "permission for reading."
-                ).format(path=file_path),
+                ).format(file_path),
                 parent=self.guiparent,
                 showTraceback=False,
             )
         except OSError:
             GError(
-                message=_("Couldn't read file <{path}>.").format(path=file_path),
+                message=_("Couldn't read file <{}>.").format(file_path),
                 parent=self.guiparent,
             )
 
@@ -332,19 +332,19 @@ class PyEditController:
         except PermissionError:
             GError(
                 message=_(
-                    "Permission denied <{path}>. Please change file "
-                    "permission for writing.{additional_message}"
+                    "Permission denied <{}>. Please change file "
+                    "permission for writing.{}"
                 ).format(
-                    path=file_path,
-                    additional_message=additional_err_message,
+                    file_path,
+                    additional_err_message,
                 ),
                 parent=self.guiparent,
                 showTraceback=False,
             )
         except OSError:
             GError(
-                message=_("Couldn't write file <{path}>.{additional_message}").format(
-                    path=file_path, additional_message=additional_err_message
+                message=_("Couldn't write file <{}>.{}").format(
+                    file_path, additional_err_message
                 ),
                 parent=self.guiparent,
             )
@@ -506,9 +506,9 @@ class PyEditController:
         """
         if not file_exists:
             GError(
-                _(
-                    "File <{path}> doesn't exist. It was probably moved or deleted."
-                ).format(path=path),
+                _("File <{}> doesn't exist. It was probably moved or deleted.").format(
+                    path
+                ),
                 parent=self.guiparent,
             )
             return

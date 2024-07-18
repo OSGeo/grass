@@ -345,9 +345,7 @@ class TemporalManager:
         maps = sp.get_registered_maps_as_objects()
 
         if not sp.check_temporal_topology(maps):
-            raise GException(
-                _("Topology of Space time dataset {id} is invalid.").format(id=id)
-            )
+            raise GException(_("Topology of Space time dataset %s is invalid.") % id)
 
         timeseriesList.append(id)
         infoDict[id] = {}

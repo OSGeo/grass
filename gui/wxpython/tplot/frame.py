@@ -917,8 +917,8 @@ class TplotFrame(wx.Frame):
                     message=_(
                         "Problem getting data from vector temporal"
                         " dataset. Empty list of values for cat "
-                        "{category_name}."
-                    ).format(category_name=name_cat[1].replace("cat", "")),
+                        "{ca}."
+                    ).format(ca=name_cat[1].replace("cat", "")),
                 )
                 continue
             self.lookUp.AddDataset(yranges=ydata, xranges=xdata, datasetName=name)
@@ -1007,8 +1007,8 @@ class TplotFrame(wx.Frame):
         if os.path.exists(self.csvpath) and not self.overwrite:
             dlg = wx.MessageDialog(
                 self,
-                _("{path} already exists, do you want to overwrite?").format(
-                    path=self.csvpath
+                _("{pa} already exists, do you want to overwrite?").format(
+                    pa=self.csvpath
                 ),
                 _("File exists"),
                 wx.OK | wx.CANCEL | wx.ICON_QUESTION,

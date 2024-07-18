@@ -126,9 +126,7 @@ def _export_raster_maps_as_gdal(
         except CalledModuleError:
             shutil.rmtree(new_cwd)
             tar.close()
-            gs.fatal(
-                _("Unable to export raster map <{map_name}>").format(map_name=name)
-            )
+            gs.fatal(_("Unable to export raster map <%s>") % name)
 
         tar.add(out_name)
 
@@ -140,9 +138,7 @@ def _export_raster_maps_as_gdal(
             shutil.rmtree(new_cwd)
             tar.close()
             gs.fatal(
-                _(
-                    "Unable to export color rules for raster map <{map_name}> {module}"
-                ).format(map_name=name, module="r.out.gdal")
+                _("Unable to export color rules for raster map <%s> r.out.gdal") % name
             )
 
         tar.add(out_name)
@@ -168,11 +164,7 @@ def _export_raster_maps(rows, tar, list_file, new_cwd, fs):
         except CalledModuleError:
             shutil.rmtree(new_cwd)
             tar.close()
-            gs.fatal(
-                _("Unable to export raster map <{map_name}> with {module}").format(
-                    map_name=name, module="r.pack"
-                )
-            )
+            gs.fatal(_("Unable to export raster map <%s> with r.pack") % name)
 
         tar.add(name + ".pack")
 
@@ -205,11 +197,7 @@ def _export_vector_maps_as_gml(rows, tar, list_file, new_cwd, fs):
         except CalledModuleError:
             shutil.rmtree(new_cwd)
             tar.close()
-            gs.fatal(
-                _(
-                    "Unable to export vector map <{map_name}> as {format} with {module}"
-                ).format(map_name=name, format="GML", module="v.out.ogr")
-            )
+            gs.fatal(_("Unable to export vector map <%s> as GML with v.out.ogr") % name)
 
         tar.add(name + ".xml")
         tar.add(name + ".xsd")
@@ -244,9 +232,7 @@ def _export_vector_maps_as_gpkg(rows, tar, list_file, new_cwd, fs):
             shutil.rmtree(new_cwd)
             tar.close()
             gs.fatal(
-                _(
-                    "Unable to export vector map <{map_name}> as {format} with {module}"
-                ).format(map_name=name, format="GPKG", module="v.out.ogr")
+                _("Unable to export vector map <%s> as GPKG with v.out.ogr") % name
             )
 
         tar.add(name + ".gpkg")
@@ -279,11 +265,7 @@ def _export_vector_maps(rows, tar, list_file, new_cwd, fs):
         except CalledModuleError:
             shutil.rmtree(new_cwd)
             tar.close()
-            gs.fatal(
-                _("Unable to export vector map <{map_name}> with {module}").format(
-                    map_name=name, module="v.pack"
-                )
-            )
+            gs.fatal(_("Unable to export vector map <%s> with v.pack") % name)
 
         tar.add(name + ".pack")
 
@@ -309,11 +291,7 @@ def _export_raster3d_maps(rows, tar, list_file, new_cwd, fs):
         except CalledModuleError:
             shutil.rmtree(new_cwd)
             tar.close()
-            gs.fatal(
-                _("Unable to export raster map <{map_name}> with {module}").format(
-                    map_name=name, module="r3.pack"
-                )
-            )
+            gs.fatal(_("Unable to export raster map <%s> with r3.pack") % name)
 
         tar.add(name + ".pack")
 

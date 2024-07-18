@@ -187,10 +187,10 @@ def download_git_commit(url, response_format, *args, **kwargs):
         gs.warning(
             _(
                 "The download of the commit from the GitHub API "
-                "server wasn't successful, <{error_message}>. Commit and commit "
-                "date will not be included in the <{pgm}> addon html manual "
+                "server wasn't successful, <{}>. Commit and commit "
+                "date will not be included in the <{}> addon html manual "
                 "page."
-            ).format(error_message=err.msg, pgm=pgm),
+            ).format(err.msg, pgm),
         )
     except URLError:
         gs.warning(

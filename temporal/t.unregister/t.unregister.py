@@ -154,9 +154,8 @@ def main():
                 statement += map.delete(dbif=dbif, update=False, execute=False)
         else:
             gs.warning(
-                _(
-                    "Unable to find {map_type} map <{map_id}> in temporal database"
-                ).format(map_type=map.get_type(), map_id=map.get_id())
+                _("Unable to find %s map <%s> in temporal database")
+                % (map.get_type(), map.get_id())
             )
 
         count += 1

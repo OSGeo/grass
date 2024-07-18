@@ -160,11 +160,7 @@ def main():
                         overwrite=gs.overwrite(),
                     )
             except CalledModuleError:
-                gs.fatal(
-                    _("Unable to export raster map <{map_name}>").format(
-                        map_name=map_name
-                    )
-                )
+                gs.fatal(_("Unable to export raster map <%s>") % map_name)
 
             count += 1
 

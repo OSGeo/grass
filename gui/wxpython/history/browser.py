@@ -480,9 +480,7 @@ class HistoryBrowser(wx.SplitterWindow):
             try:
                 history.copy(history_path, target_path)
                 self.showNotification.emit(
-                    message=_("Command history saved to '{target_path}'").format(
-                        target_path=target_path
-                    )
+                    message=_("Command history saved to '{}'").format(target_path)
                 )
             except OSError as e:
                 GError(str(e))

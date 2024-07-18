@@ -1125,8 +1125,8 @@ class VectorDataset(AbstractMapDataset):
 
         if check == -1:
             self.msgr.error(
-                _("Unable to remove timestamp for vector map <{map_name}>").format(
-                    map_name=self.get_name()
+                _("Unable to remove timestamp for vector map <%s>").format(
+                    self.get_name()
                 )
             )
             return False

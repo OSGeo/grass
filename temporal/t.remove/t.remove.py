@@ -153,10 +153,10 @@ def main():
             for map in maps:
                 map.select(dbif)
                 # We may have multiple layer for a single map, hence we need
-                # to avoid multiple deletion of the same map,
+                # to avoid multiple deletions of the same map,
                 # but the database entries are still present and must be removed
                 if not force:
-                    gs.message(_("- {map_name}").format(map_name=map.get_name()))
+                    gs.message(_("- %s") % map.get_name())
                     continue
                 if clean and force:
                     if map.get_name() not in name_list:

@@ -319,15 +319,11 @@ class ScattsManager:
         err = ""
         for b in [b_1_name, b_2_name]:
             if self.bands_info[b] is None:
-                err += _("Band <{band_name}> is not CELL (integer) type.\n").format(
-                    band_name=b
-                )
+                err += _("Band <%s> is not CELL (integer) type.\n") % b
         if err:
             GMessage(
                 parent=self.guiparent,
-                message=_("Scatter plot cannot be added.\n{additional_message}").format(
-                    additional_message=err
-                ),
+                message=_("Scatter plot cannot be added.\n") + err,
             )
             return False
 

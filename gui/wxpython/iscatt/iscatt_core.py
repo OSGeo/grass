@@ -295,7 +295,7 @@ class CatRastUpdater:
         )
 
         if ret != 0:
-            GException(_("v.build failed:\n{messages}").format(messages=msg))
+            GException(_("v.build failed:\n%s") % msg)
 
         environs = os.environ.copy()
         environs["GRASS_REGION"] = grass_region["GRASS_REGION"]

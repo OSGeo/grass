@@ -548,9 +548,9 @@ class WorkspaceManager:
         """
         if not file_exists:
             GError(
-                _(
-                    "File <{path}> doesn't exist. It was probably moved or deleted."
-                ).format(path=path),
+                _("File <{}> doesn't exist. It was probably moved or deleted.").format(
+                    path
+                ),
                 parent=self.lmgr,
             )
         else:

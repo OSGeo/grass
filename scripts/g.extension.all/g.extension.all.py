@@ -148,8 +148,8 @@ def download_modules_xml_file(url, response_format, *args, **kwargs):
             )
     except URLError:
         gs.fatal(
-            _("Download file from <{url}> failed. Check internet connection.").format(
-                url=url
+            _("Download file from <{url}>, failed. Check internet connection.").format(
+                url=url,
             ),
         )
 

@@ -377,9 +377,7 @@ class WSDialogBase(wx.Dialog):
             self.Fit()
 
         self.statusbar.SetStatusText(
-            _("Connecting to <{web_service_server}>...").format(
-                web_service_server=self.server.GetValue().strip()
-            )
+            _("Connecting to <$s>...") % self.server.GetValue().strip()
         )
 
         # number of panels already connected
@@ -465,18 +463,14 @@ class WSDialogBase(wx.Dialog):
             )
             self._showWsPanel(self.web_service_sel[self.choose_ws_rb.GetSelection()])
             self.statusbar.SetStatusText(
-                _("Connected to <{web_service_server}>").format(
-                    web_service_server=self.server.GetValue().strip()
-                )
+                _("Connected to <%s>") % self.server.GetValue().strip()
             )
             for btn in self.run_btns:
                 btn.Enable(True)
         # no web service found on server
         else:
             self.statusbar.SetStatusText(
-                _("Unable to connect to <{web_service_server}>").format(
-                    web_service_server=self.server.GetValue().strip()
-                )
+                _("Unable to connect to <%s>") % self.server.GetValue().strip()
             )
             for btn in self.run_btns:
                 btn.Enable(False)
@@ -1055,7 +1049,6 @@ class SaveWMSLayerDialog(wx.Dialog):
                 msg = (
                     _("Region <%s> does not exist.") % self.params["region"].GetValue()
                 )
-
                 GWarning(parent=self, message=msg)
                 return
 
