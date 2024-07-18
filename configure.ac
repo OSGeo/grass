@@ -9,7 +9,7 @@
 # PURPOSE:	This configure runs all the tests to determine what components
 #		are installed on the current system. It also defines certain
 #		configuration variables for compilation and installation.
-# COPYRIGHT:    (C) 2000-2023 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2024 by the GRASS Development Team
 #
 #		This program is free software under the GNU General
 #		Public License (>=v2). Read the file COPYING that
@@ -144,6 +144,7 @@ AC_SUBST(GRASS_BIN)
 # Set GRASS_VERSION_*
 
 GRASS_VERSION_FILE=include/VERSION
+GRASS_VERSION_GIT_FILE=include/VERSION_GIT
 GRASS_VERSION_MAJOR=`sed -n 1p "${GRASS_VERSION_FILE}"`
 GRASS_VERSION_MINOR=`sed -n 2p "${GRASS_VERSION_FILE}"`
 GRASS_VERSION_RELEASE=`sed -n 3p "${GRASS_VERSION_FILE}"`
@@ -160,6 +161,8 @@ GRASS_VERSION_GIT="exported"
 GRASS_HEADERS_GIT_HASH="${GRASS_VERSION_NUMBER}"
 GRASS_HEADERS_GIT_DATE=`date -u +%FT%T%z | sed 's/\(..\)$/:\1/'`
 AC_PATH_PROG(GIT, git, no)
+AC_CHECK_FILE([$GRASS_VERSION_GIT_FILE])
+AC_MSG_CHECKING(for GRASS GIS headers commit date)
 if test "$GIT" != "no" ; then
    GRASS_VERSION_GIT=`$GIT rev-parse --short HEAD 2>/dev/null`
    if test -z "$GRASS_VERSION_GIT"; then
@@ -169,11 +172,19 @@ if test "$GIT" != "no" ; then
    if test -z "$GRASS_HEADERS_GIT_HASH"; then
       GRASS_HEADERS_GIT_HASH="${GRASS_VERSION_NUMBER}"
    fi
-   GRASS_HEADERS_GIT_DATE=`date -d $($GIT log -1 --pretty=format:"%cI" -- "${SRCDIR}/include") -u +%FT%T%z | sed 's/\(..\)$/:\1/'` 2>/dev/null
+   gitdate_utc_local=$(TZ=UTC0 git log -1 --date=iso-local --pretty=format:"%cd" -- include)
+   GRASS_HEADERS_GIT_DATE=$(echo "$gitdate_utc_local" | sed 's/ /T/' | sed 's/ //' | sed 's/\(..\)$/:\1/')
    if test -z "$GRASS_HEADERS_GIT_DATE"; then
       GRASS_HEADERS_GIT_DATE=`date -u +%FT%T%z | sed 's/\(..\)$/:\1/'`
    fi
 fi
+if test $GRASS_VERSION_GIT == "exported" && \
+   test "$ac_cv_file_include_VERSION_GIT" == "yes"; then
+      GRASS_HEADERS_GIT_HASH=$(sed -n 1p "${GRASS_VERSION_GIT_FILE}")
+      GRASS_VERSION_GIT=$GRASS_HEADERS_GIT_HASH
+      GRASS_HEADERS_GIT_DATE=$(sed -n 2p "${GRASS_VERSION_GIT_FILE}")
+fi
+AC_MSG_RESULT($GRASS_HEADERS_GIT_DATE)
 
 AC_SUBST(GRASS_VERSION_FILE)
 AC_SUBST(GRASS_VERSION_MAJOR)
@@ -296,6 +307,7 @@ LOC_ARG_WITH(odbc, ODBC, no)
 LOC_ARG_WITH(fftw, FFTW)
 LOC_ARG_WITH(blas, BLAS, no)
 LOC_ARG_WITH(lapack, LAPACK, no)
+LOC_ARG_WITH(libsvm, LIBSVM, no)
 LOC_ARG_WITH(cairo, Cairo)
 LOC_ARG_WITH(freetype, FreeType)
 LOC_ARG_WITH(nls, NLS, no)
@@ -385,6 +397,9 @@ LOC_ARG_WITH_LIB(blas, BLAS)
 LOC_ARG_WITH_INC(lapack, LAPACK)
 LOC_ARG_WITH_LIB(lapack, LAPACK)
 
+LOC_ARG_WITH_INC(libsvm, LIBSVM)
+LOC_ARG_WITH_LIB(libsvm, LIBSVM)
+
 LOC_ARG_WITH_INC(cairo, cairo)
 LOC_ARG_WITH_LIB(cairo, cairo)
 LOC_ARG_WITH_LDFLAGS(cairo, cairo)
@@ -467,10 +482,12 @@ AC_SUBST(LIBRARY_DIRS)
 AC_PROG_INSTALL
 
 AC_PROG_LEX(noyywrap)
-if test "$LEX" = "lex"; then
+if test "x$LEX" = "x:"; then
+    AC_MSG_ERROR([*** Unable to locate lex.])
+elif test "$LEX" = "lex"; then
     AC_PATH_PROG(LEXPATH, lex, no)
     if test "$LEXPATH" = "no"; then
-	AC_MSG_ERROR([*** Unable to locate lex.])
+        AC_MSG_ERROR([*** Unable to locate lex.])
     fi
 fi
 
@@ -1059,17 +1076,25 @@ else
   CFLAGS="$CFLAGS $PDAL_CFLAGS"
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <pdal/PointTable.hpp>
   #include <pdal/Streamable.hpp>
-  class St:public pdal::Streamable {};]], [[pdal::PointTable table;]])],[],[
-  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <pdal/PointTable.hpp>
-  #include <pdal/Streamable.hpp>
-  class St:public pdal::Streamable {};]], [[pdal::PointTable table;]])],[PDAL_LIBS="$PDAL_LIBS"],[
+  class St:public pdal::Streamable {};]], [[pdal::PointTable table;]])],
+  [PDAL_LIBS="$PDAL_LIBS"],[
   AC_MSG_ERROR([*** Unable to locate suitable (>=1.7.1) PDAL library.])
   ])
-  ])
-  LIBS=${ac_save_libs}
-  CFLAGS=${ac_save_cflags}
 
   AC_DEFINE(HAVE_PDAL, 1, [Define to 1 if PDAL exists.])
+
+  AC_MSG_CHECKING(whether to use PDAL NoFilenameWriter)
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <pdal/Writer.hpp>
+  class St:public pdal::NoFilenameWriter {};]], [[
+  class NFWTest : public pdal::NoFilenameWriter {};
+  ]])],
+  [
+    AC_DEFINE(HAVE_PDAL_NOFILENAMEWRITER, 1, [Define to 1 if PDAL NoFilenameWriter is present.])
+    AC_MSG_RESULT(yes)
+  ],[AC_MSG_RESULT(no)])
+
+  LIBS=${ac_save_libs}
+  CFLAGS=${ac_save_cflags}
 fi
 
 AC_SUBST(PDAL_LIBS)
@@ -1281,13 +1306,16 @@ if test -n "$USE_MYSQL"; then
   fi
 
   if test "$MYSQLD_CONFIG" != "" ; then
+    mysql_version=`"$MYSQLD_CONFIG" --version`
+    AC_MSG_RESULT([using MySQL/MariaDB version "$mysql_version"])
     AC_LANG_PUSH([C++])
     ac_save_libs="$LIBS"
     MYSQLDLIB=`"$MYSQLD_CONFIG" --libmysqld-libs`
 
     LIBS="$MYSQLDLIB $LIBS"
-    AC_CHECK_FUNC(mysql_server_init,,[MYSQLDLIB="";
-                  AC_MSG_WARN([libmysqld not found])] )
+    AC_CHECK_FUNC(mysql_server_init,
+                  AC_MSG_RESULT([libmysqld found]),
+                  [MYSQLDLIB=""; AC_MSG_WARN([libmysqld not found])])
     LIBS=$ac_save_libs
     AC_LANG_POP([C++])
   fi
@@ -1696,6 +1724,28 @@ AC_SUBST(LAPACKINC)
 
 # Done checking LAPACK
 
+# libsvm option
+LIBSVM_INC=
+LIBSVM_LIB=
+USE_LIBSVM=
+
+LOC_CHECK_USE(libsvm,LIBSVM,USE_LIBSVM)
+
+if test -n "$USE_LIBSVM"; then
+  LOC_CHECK_INC_PATH(libsvm,LIBSVM,LIBSVM_INC)
+  LOC_CHECK_INCLUDES(svm.h,LIBSVM,$LIBSVM_INC, [
+    LOC_CHECK_INCLUDES(libsvm/svm.h,LIBSVM,$LIBSVM_INC)
+  ])
+  LOC_CHECK_LIB_PATH(libsvm,libsvm,LIBSVM_LIB)
+  LOC_CHECK_LIBS(svm,svm_load_model,LIBSVM,$LIBSVM_LIB,LIBSVM_LIB,,,)
+  AC_DEFINE(HAVE_LIBSVM, 1, [Define to 1 if using LIBSVM.])
+fi
+
+AC_SUBST(LIBSVM_INC)
+AC_SUBST(LIBSVM_LIB)
+AC_SUBST(USE_LIBSVM)
+# Done with LIBSVM
+
 # Enable Cairo display driver option
 
 LOC_CHECK_USE(cairo,Cairo,USE_CAIRO)
@@ -2022,6 +2072,7 @@ LOC_MSG_USE(GEOS support,USE_GEOS)
 LOC_MSG_USE(LAPACK support,USE_LAPACK)
 LOC_MSG_USE(Large File support (LFS), USE_LARGEFILES)
 LOC_MSG_USE(libLAS support,USE_LIBLAS)
+LOC_MSG_USE(LIBSVM support,USE_LIBSVM)
 LOC_MSG_USE(MySQL support,USE_MYSQL)
 LOC_MSG_USE(NetCDF support,USE_NETCDF)
 LOC_MSG_USE(NLS support,USE_NLS)

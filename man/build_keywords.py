@@ -94,7 +94,7 @@ for html_file in htmlfiles:
         except:
             pass
         if not key:
-            exit("Empty keyword from file %s line: %s" % (fname, lines[index_keys]))
+            sys.exit("Empty keyword from file %s line: %s" % (fname, lines[index_keys]))
         if key not in keywords.keys():
             keywords[key] = []
             keywords[key].append(fname)
@@ -123,7 +123,7 @@ for key in sorted(keywords.keys()):
 keywordsfile = open(os.path.join(path, "keywords.html"), "w")
 keywordsfile.write(
     header1_tmpl.substitute(
-        title="GRASS GIS %s Reference " "Manual: Keywords index" % grass_version
+        title="GRASS GIS %s Reference Manual: Keywords index" % grass_version
     )
 )
 keywordsfile.write(headerkeywords_tmpl)
@@ -132,7 +132,7 @@ keywordsfile.write("<dl>")
 sortedKeys = sorted(keywords.keys(), key=lambda s: s.lower())
 
 for key in sortedKeys:
-    keyword_line = '<dt><b><a name="%s" class="urlblack">%s</a></b></dt>' "<dd>" % (
+    keyword_line = '<dt><b><a name="%s" class="urlblack">%s</a></b></dt><dd>' % (
         key,
         key,
     )

@@ -66,7 +66,7 @@ class LayerList:
 
     def __getitem__(self, index):
         """Select a layer from the LayerList using the index."""
-        return [l for l in self][index]
+        return [layer for layer in self][index]
 
     def __repr__(self):
         """Return a representation of the object."""
@@ -105,10 +105,10 @@ class LayerList:
         :param opacity: layer opacity level
         :param cmd: command (given as a list)
         """
-        l = self._tree.AddLayer(
+        new_layer_lst = self._tree.AddLayer(
             ltype=ltype, lname=name, lchecked=checked, lopacity=opacity, lcmd=cmd
         )
-        return Layer(l, self._tree.GetPyData(l))
+        return Layer(new_layer_lst, self._tree.GetPyData(new_layer_lst))
 
     def DeleteLayer(self, layer):
         """Remove layer from layer list"""
@@ -198,10 +198,12 @@ class LayerManagerGrassInterface:
         # Signal for communicating something in current grassdb has changed.
         # Parameters:
         # action: required, is one of 'new', 'rename', 'delete'
-        # element: required, can be one of 'grassdb', 'location', 'mapset', 'raster', 'vector' and 'raster_3d'
+        # element: required, can be one of 'grassdb', 'location', 'mapset', 'raster',
+        #          'vector' and 'raster_3d'
         # grassdb: path to grass db, required
         # location: location name, required
-        # mapset: mapset name, required when element is 'mapset', 'raster', 'vector' or 'raster_3d'
+        # mapset: mapset name, required when element is 'mapset', 'raster',
+        #         'vector' or 'raster_3d'
         # map: map name, required when element is 'raster', 'vector' or 'raster_3d'
         # newname: new name (of mapset, map), required with action='rename'
         self.grassdbChanged = Signal("LayerManagerGrassInterface.grassdbChanged")
@@ -212,8 +214,20 @@ class LayerManagerGrassInterface:
         # Signal emitted when workspace is changed
         self.workspaceChanged = Signal("LayerManagerGrassInterface.workspaceChanged")
 
-        # Signal emitted when history should be updated
-        self.updateHistory = Signal("LayerManagerGrassInterface.updateHistory")
+        # Signal emitted when entry to history is added
+        self.entryToHistoryAdded = Signal(
+            "LayerManagerGrassInterface.entryToHistoryAdded"
+        )
+
+        # Signal emitted when entry from history is removed
+        self.entryFromHistoryRemoved = Signal(
+            "LayerManagerGrassInterface.entryFromHistoryRemoved"
+        )
+
+        # Signal emitted when entry in history is updated
+        self.entryInHistoryUpdated = Signal(
+            "LayerManagerGrassInterface.entryInHistoryUpdated"
+        )
 
     def RunCmd(self, *args, **kwargs):
         self.lmgr._gconsole.RunCmd(*args, **kwargs)

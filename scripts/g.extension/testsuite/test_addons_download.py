@@ -51,7 +51,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         if self.install_prefix.exists():
             files = list(path.name for path in self.install_prefix.iterdir())
             if files:
-                RuntimeError(
+                raise RuntimeError(
                     f"Install prefix path '{self.install_prefix}' \
                     contains files {','.join(files)}"
                 )
@@ -159,7 +159,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 
         for file in files:
             self.assertFileExists(file)
-            if file.suffix != ".html" and file.suffix != ".py":
+            if file.suffix not in {".html", ".py"}:
                 self.assertModule(str(file), help=True)
 
     def test_github_install_official_non_exists_module(self):
@@ -203,8 +203,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         )
         html_man_page = self.install_prefix / "docs" / "html" / "db.join.html"
         self.assertFileExists(str(html_man_page))
-        with open(html_man_page) as f:
-            content = f.read()
+        content = Path(html_man_page).read_text()
         for link_name in [f"{extension} source code", "history"]:
             url = re.search(rf"<a href=\"(.*)\">{link_name}</a>", content).group(1)
             self.assertTrue(url)

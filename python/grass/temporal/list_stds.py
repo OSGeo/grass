@@ -20,12 +20,12 @@ for details.
 """
 
 import os
-from contextlib import contextmanager
 import sys
+from contextlib import contextmanager
 
 import grass.script as gs
 
-from .core import get_tgis_message_interface, get_available_temporal_mapsets, init_dbif
+from .core import get_available_temporal_mapsets, get_tgis_message_interface, init_dbif
 from .datetime_math import time_delta_to_relative_time
 from .factory import dataset_factory
 from .open_stds import open_old_stds
@@ -60,21 +60,37 @@ def get_dataset_list(
         >>> import grass.temporal as tgis
         >>> tgis.core.init()
         >>> name = "list_stds_test"
-        >>> sp = tgis.open_stds.open_new_stds(name=name, type="strds",
-        ... temporaltype="absolute", title="title", descr="descr",
-        ... semantic="mean", dbif=None, overwrite=True)
+        >>> sp = tgis.open_stds.open_new_stds(
+        ...     name=name,
+        ...     type="strds",
+        ...     temporaltype="absolute",
+        ...     title="title",
+        ...     descr="descr",
+        ...     semantic="mean",
+        ...     dbif=None,
+        ...     overwrite=True,
+        ... )
         >>> mapset = tgis.get_current_mapset()
-        >>> stds_list = tgis.list_stds.get_dataset_list("strds", "absolute", columns="name")
-        >>> rows =  stds_list[mapset]
+        >>> stds_list = tgis.list_stds.get_dataset_list(
+        ...     "strds", "absolute", columns="name"
+        ... )
+        >>> rows = stds_list[mapset]
         >>> for row in rows:
         ...     if row["name"] == name:
         ...         print(True)
+        ...
         True
-        >>> stds_list = tgis.list_stds.get_dataset_list("strds", "absolute", columns="name,mapset", where="mapset = '%s'"%(mapset))
-        >>> rows =  stds_list[mapset]
+        >>> stds_list = tgis.list_stds.get_dataset_list(
+        ...     "strds",
+        ...     "absolute",
+        ...     columns="name,mapset",
+        ...     where="mapset = '%s'" % (mapset),
+        ... )
+        >>> rows = stds_list[mapset]
         >>> for row in rows:
         ...     if row["name"] == name and row["mapset"] == mapset:
         ...         print(True)
+        ...
         True
         >>> check = sp.delete()
 
@@ -158,8 +174,8 @@ def _write_plain(rows, header, separator, file):
 def _write_json(rows, column_names, file):
     # Lazy import output format-specific dependencies.
     # pylint: disable=import-outside-toplevel
-    import json
     import datetime
+    import json
 
     class ResultsEncoder(json.JSONEncoder):
         """Results encoder for JSON which handles SimpleNamespace objects"""
@@ -249,7 +265,8 @@ def _write_table(rows, column_names, output_format, separator, file):
     elif output_format == "yaml":
         _write_yaml(rows=rows, column_names=column_names, file=file)
     elif output_format == "plain":
-        # No particular reason for this separator expect that this is the original behavior.
+        # No particular reason for this separator except that this is the original
+        # behavior.
         if not separator:
             separator = "\t"
         _write_plain(rows=rows, header=column_names, separator=separator, file=file)
@@ -382,7 +399,7 @@ def _get_list_of_maps_stds(
             )
 
     # This method expects a list of objects for gap detection
-    if method in ["delta", "deltagaps", "gran"]:
+    if method in {"delta", "deltagaps", "gran"}:
         if not columns:
             if output_format == "list":
                 # Only one column is needed.
@@ -421,12 +438,11 @@ def _get_list_of_maps_stds(
                 output_format=output_format,
                 element_type=element_type,
             )
+        elif output_format == "line":
+            # For list of values, only one column is needed.
+            columns = ["id"]
         else:
-            if output_format == "line":
-                # For list of values, only one column is needed.
-                columns = ["id"]
-            else:
-                columns = ["name", "mapset", "start_time", "end_time"]
+            columns = ["name", "mapset", "start_time", "end_time"]
         if not order:
             order = "start_time"
 
@@ -434,7 +450,7 @@ def _get_list_of_maps_stds(
 
         # End with error for the old, custom formats. Proper formats simply return
         # empty result whatever empty is for each format (e.g., empty list for JSON).
-        if not rows and (output_format in ["plain", "line"]):
+        if not rows and (output_format in {"plain", "line"}):
             dbif.close()
             gs.fatal(
                 _(
@@ -443,11 +459,14 @@ def _get_list_of_maps_stds(
                 ).format(
                     name=dataset.get_id(),
                     element_type=element_type,
-                    detail=_(
-                        "Dataset is empty or where clause is too constrained or incorrect"
-                    )
-                    if where
-                    else _("Dataset is empty"),
+                    detail=(
+                        _(
+                            "Dataset is empty or where clause is too constrained or "
+                            "incorrect"
+                        )
+                        if where
+                        else _("Dataset is empty")
+                    ),
                 )
             )
     if connection_state_changed:

@@ -78,7 +78,7 @@ def main():
 
         outf.close()
         runfile = tmp
-    else:
+    else:  # noqa: PLR5501
         # read from a real file
         if fs == " ":
             runfile = infile

@@ -15,8 +15,9 @@ Usage:
     >>> # Execute a SQL statement
     >>> dbif.execute_transaction("SELECT datetime(0, 'unixepoch', 'localtime');")
     >>> # Mogrify an SQL statement
-    >>> dbif.mogrify_sql_statement(["SELECT name from raster_base where name = ?",
-    ... ("precipitation",)])
+    >>> dbif.mogrify_sql_statement(
+    ...     ["SELECT name from raster_base where name = ?", ("precipitation",)]
+    ... )
     "SELECT name from raster_base where name = 'precipitation'"
     >>> dbif.close()
 
@@ -28,13 +29,15 @@ for details.
 
 :author: Soeren Gebbert
 """
+
 # import traceback
 import os
-import grass.script as gscript
 
-from .c_libraries_interface import CLibrariesInterface
+import grass.script as gs
 from grass.pygrass import messages
 from grass.script.utils import decode
+
+from .c_libraries_interface import CLibrariesInterface
 
 # Import all supported database backends
 # Ignore import errors since they are checked later
@@ -59,10 +62,10 @@ def profile_function(func):
     """Profiling function provided by the temporal framework"""
     do_profiling = os.getenv("GRASS_TGIS_PROFILE")
 
-    if do_profiling == "True" or do_profiling == "1":
+    if do_profiling in {"True", "1"}:
         import cProfile
-        import pstats
         import io
+        import pstats
 
         pr = cProfile.Profile()
         pr.enable()
@@ -451,8 +454,7 @@ def stop_subprocesses():
     """Stop the messenger and C-interface subprocesses
     that are started by tgis.init()
     """
-    global message_interface
-    global c_library_interface
+    global message_interface, c_library_interface
     if message_interface:
         message_interface.stop()
     if c_library_interface:
@@ -470,8 +472,7 @@ def get_available_temporal_mapsets():
     :returns: A dictionary, mapset names are keys, the tuple (driver,
               database) are the values
     """
-    global c_library_interface
-    global message_interface
+    global c_library_interface, message_interface
 
     mapsets = c_library_interface.available_mapsets()
 
@@ -489,7 +490,8 @@ def get_available_temporal_mapsets():
         )
         if driver and database:
             # Check if the temporal sqlite database exists
-            # We need to set non-existing databases in case the mapset is the current mapset
+            # We need to set non-existing databases in case the mapset is the current
+            # mapset
             # to create it
             if (
                 driver == "sqlite" and os.path.exists(database)
@@ -558,24 +560,18 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
     """
     # We need to set the correct database backend and several global variables
     # from the GRASS mapset specific environment variables of g.gisenv and t.connect
-    global tgis_backend
-    global tgis_database
-    global tgis_database_string
-    global tgis_dbmi_paramstyle
-    global tgis_db_version
-    global raise_on_error
-    global enable_mapset_check
-    global enable_timestamp_write
-    global current_mapset
-    global current_location
-    global current_gisdbase
+    global tgis_backend, tgis_database, tgis_database_string  # noqa: FURB154
+    global tgis_dbmi_paramstyle, tgis_db_version  # noqa: FURB154
+    global raise_on_error  # noqa: FURB154
+    global enable_mapset_check, enable_timestamp_write  # noqa: FURB154
+    global current_mapset, current_location, current_gisdbase  # noqa: FURB154
 
     raise_on_error = raise_fatal_error
 
     # We must run t.connect at first to create the temporal database and to
     # get the environmental variables
-    gscript.run_command("t.connect", flags="c")
-    grassenv = gscript.gisenv()
+    gs.run_command("t.connect", flags="c")
+    grassenv = gs.gisenv()
 
     # Set the global variable for faster access
     current_mapset = grassenv["MAPSET"]
@@ -591,7 +587,7 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
 
     # Check if the script library raises on error,
     # if so we do the same
-    if gscript.get_raise_on_error() is True:
+    if gs.get_raise_on_error() is True:
         raise_on_error = True
 
     # Start the GRASS message interface server
@@ -610,16 +606,16 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
     # Set the mapset check and the timestamp write
     if "TGIS_DISABLE_MAPSET_CHECK" in grassenv:
         if (
-            gscript.encode(grassenv["TGIS_DISABLE_MAPSET_CHECK"]) == "True"
-            or gscript.encode(grassenv["TGIS_DISABLE_MAPSET_CHECK"]) == "1"
+            gs.encode(grassenv["TGIS_DISABLE_MAPSET_CHECK"]) == "True"
+            or gs.encode(grassenv["TGIS_DISABLE_MAPSET_CHECK"]) == "1"
         ):
             enable_mapset_check = False
             msgr.warning("TGIS_DISABLE_MAPSET_CHECK is True")
 
     if "TGIS_DISABLE_TIMESTAMP_WRITE" in grassenv:
         if (
-            gscript.encode(grassenv["TGIS_DISABLE_TIMESTAMP_WRITE"]) == "True"
-            or gscript.encode(grassenv["TGIS_DISABLE_TIMESTAMP_WRITE"]) == "1"
+            gs.encode(grassenv["TGIS_DISABLE_TIMESTAMP_WRITE"]) == "True"
+            or gs.encode(grassenv["TGIS_DISABLE_TIMESTAMP_WRITE"]) == "1"
         ):
             enable_timestamp_write = False
             msgr.warning("TGIS_DISABLE_TIMESTAMP_WRITE is True")
@@ -658,7 +654,7 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
             )
     else:
         # Set the default sqlite3 connection in case nothing was defined
-        gscript.run_command("t.connect", flags="d")
+        gs.run_command("t.connect", flags="d")
         driver_string = ciface.get_driver_name()
         database_string = ciface.get_database_name()
         tgis_backend = driver_string
@@ -666,7 +662,7 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
             import sqlite3
         except ImportError:
             msgr.error(
-                "Unable to locate the sqlite SQL Python interface" " module sqlite3."
+                "Unable to locate the sqlite SQL Python interface module sqlite3."
             )
             raise
         dbmi = sqlite3
@@ -842,10 +838,7 @@ def create_temporal_database(dbif):
 
     :param dbif: The database interface to be used
     """
-    global tgis_backend
-    global tgis_version
-    global tgis_db_version
-    global tgis_database_string
+    global tgis_backend, tgis_version, tgis_db_version, tgis_database_string
 
     template_path = get_sql_template_path()
     msgr = get_tgis_message_interface()
@@ -973,8 +966,7 @@ def upgrade_temporal_database(dbif):
 
     :param dbif: The database interface to be used
     """
-    global tgis_database_string
-    global tgis_db_version
+    global tgis_database_string, tgis_db_version
 
     metadata = get_tgis_metadata(dbif)
 
@@ -1275,7 +1267,7 @@ class DBConnection:
                 self.dbmi = sqlite3
             else:
                 self.dbmi = psycopg2
-        else:
+        else:  # noqa: PLR5501
             if decode(backend) == "sqlite":
                 self.dbmi = sqlite3
             else:
@@ -1393,8 +1385,14 @@ class DBConnection:
 
             >>> init()
             >>> dbif = SQLDatabaseInterfaceConnection()
-            >>> dbif.mogrify_sql_statement(["SELECT ctime FROM raster_base WHERE id = ?",
-            ... ["soil@PERMANENT",]])
+            >>> dbif.mogrify_sql_statement(
+            ...     [
+            ...         "SELECT ctime FROM raster_base WHERE id = ?",
+            ...         [
+            ...             "soil@PERMANENT",
+            ...         ],
+            ...     ]
+            ... )
             "SELECT ctime FROM raster_base WHERE id = 'soil@PERMANENT'"
 
         """
@@ -1404,18 +1402,17 @@ class DBConnection:
         if self.dbmi.__name__ == "psycopg2":
             if len(args) == 0:
                 return sql
+            elif self.connected:
+                try:
+                    return self.cursor.mogrify(sql, args)
+                except Exception as exc:
+                    print(sql, args)
+                    raise exc
             else:
-                if self.connected:
-                    try:
-                        return self.cursor.mogrify(sql, args)
-                    except Exception as exc:
-                        print(sql, args)
-                        raise exc
-                else:
-                    self.connect()
-                    statement = self.cursor.mogrify(sql, args)
-                    self.close()
-                    return statement
+                self.connect()
+                statement = self.cursor.mogrify(sql, args)
+                self.close()
+                return statement
 
         elif self.dbmi.__name__ == "sqlite3":
             if len(args) == 0:
@@ -1601,8 +1598,9 @@ def init_dbif(dbif):
 
         dbif, connection_state_changed = tgis.init_dbif(None)
 
-        sql = dbif.mogrify_sql_statement(["SELECT * FROM raster_base WHERE ? = ?"],
-                                               ["id", "soil@PERMANENT"])
+        sql = dbif.mogrify_sql_statement(
+            ["SELECT * FROM raster_base WHERE ? = ?"], ["id", "soil@PERMANENT"]
+        )
         dbif.execute_transaction(sql)
 
         if connection_state_changed:

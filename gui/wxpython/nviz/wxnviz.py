@@ -61,7 +61,7 @@ from core.utils import autoCropImageFromFile
 from core.gcmd import DecodeString
 from core.globalvar import wxPythonPhoenix
 from gui_core.wrap import Rect
-import grass.script as grass
+import grass.script as gs
 
 log = None
 progress = None
@@ -2162,7 +2162,7 @@ class Texture:
         """Delete texture"""
         if self.textureId:
             Nviz_del_texture(self.textureId)
-        grass.try_remove(self.path)
+        gs.try_remove(self.path)
 
     def Resize(self):
         """Resize image to match 2^n"""
@@ -2212,9 +2212,7 @@ class Texture:
                     ]
         wx.EndBusyCursor()
 
-        id = Nviz_load_image(im, self.width, self.height, self.image.HasAlpha())
-
-        return id
+        return Nviz_load_image(im, self.width, self.height, self.image.HasAlpha())
 
     def Draw(self):
         """Draw texture as an image"""

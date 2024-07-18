@@ -7,7 +7,7 @@
 #               Glynn Clements
 #               Martin Landa <landa.martin gmail.com>
 # PURPOSE:      Create HTML manual page snippets
-# COPYRIGHT:    (C) 2007-2023 by Glynn Clements
+# COPYRIGHT:    (C) 2007-2024 by Glynn Clements
 #                and the GRASS Development Team
 #
 #               This program is free software under the GNU General
@@ -26,6 +26,7 @@ import locale
 import json
 import pathlib
 import subprocess
+from pathlib import Path
 
 from html.parser import HTMLParser
 
@@ -291,25 +292,26 @@ def get_git_commit_from_rest_api_for_addon_repo(
     # Accessed date time if getting commit from GitHub REST API wasn't successful
     if not git_log:
         git_log = get_default_git_log(src_dir=src_dir)
-    grass_addons_url = (
-        "https://api.github.com/repos/osgeo/grass-addons/commits?"
-        "path={path}&page=1&per_page=1&sha=grass{major}".format(
-            path=addon_path,
-            major=major,
-        )
-    )  # sha=git_branch_name
-
-    response = download_git_commit(
-        url=grass_addons_url,
-        response_format="application/json",
-    )
-    if response:
-        commit = json.loads(response.read())
-        if commit:
-            git_log["commit"] = commit[0]["sha"]
-            git_log["date"] = format_git_commit_date_from_rest_api(
-                commit_datetime=commit[0]["commit"]["author"]["date"],
+    if addon_path is not None:
+        grass_addons_url = (
+            "https://api.github.com/repos/osgeo/grass-addons/commits?"
+            "path={path}&page=1&per_page=1&sha=grass{major}".format(
+                path=addon_path,
+                major=major,
             )
+        )  # sha=git_branch_name
+
+        response = download_git_commit(
+            url=grass_addons_url,
+            response_format="application/json",
+        )
+        if response:
+            commit = json.loads(response.read())
+            if commit:
+                git_log["commit"] = commit[0]["sha"]
+                git_log["date"] = format_git_commit_date_from_rest_api(
+                    commit_datetime=commit[0]["commit"]["author"]["date"],
+                )
     return git_log
 
 
@@ -341,9 +343,18 @@ def format_git_commit_date_from_local_git(
 
     :return str: output formatted commit datetime
     """
-    return datetime.fromisoformat(
-        commit_datetime,
-    ).strftime(datetime_format)
+    try:
+        date = datetime.fromisoformat(
+            commit_datetime,
+        )
+    except ValueError:
+        if commit_datetime.endswith("Z"):
+            # Python 3.10 and older does not support Z in time, while recent versions
+            # of Git (2.45.1) use it. Try to help the parsing if Z is in the string.
+            date = datetime.fromisoformat(commit_datetime[:-1] + "+00:00")
+        else:
+            raise
+    return date.strftime(datetime_format)
 
 
 def has_src_code_git(src_dir, is_addon):
@@ -370,8 +381,7 @@ def has_src_code_git(src_dir, is_addon):
                 f"--format=%H,{COMMIT_DATE_FORMAT}",
                 src_dir,
             ],
-            stderr=subprocess.PIPE,
-            stdout=subprocess.PIPE,
+            capture_output=True,
         )  # --format=%H,COMMIT_DATE_FORMAT commit hash,author date
         os.chdir(actual_dir)
         return process_result if process_result.returncode == 0 else None
@@ -397,23 +407,18 @@ def get_last_git_commit(src_dir, addon_path, is_addon):
             commit=process_result.stdout.decode(),
             src_dir=src_dir,
         )
+    elif gs:
+        # Addons installation
+        return get_git_commit_from_rest_api_for_addon_repo(
+            addon_path=addon_path,
+            src_dir=src_dir,
+        )
+    # During GRASS GIS compilation from source code without Git
     else:
-        if gs:
-            # Addons installation
-            return get_git_commit_from_rest_api_for_addon_repo(
-                addon_path=addon_path,
-                src_dir=src_dir,
-            )
-        # During GRASS GIS compilation from source code without Git
-        else:
-            return get_git_commit_from_file(src_dir=src_dir)
+        return get_git_commit_from_file(src_dir=src_dir)
 
 
-html_page_footer_pages_path = (
-    os.getenv("HTML_PAGE_FOOTER_PAGES_PATH")
-    if os.getenv("HTML_PAGE_FOOTER_PAGES_PATH")
-    else ""
-)
+html_page_footer_pages_path = os.getenv("HTML_PAGE_FOOTER_PAGES_PATH") or ""
 
 pgm = sys.argv[1]
 
@@ -508,9 +513,7 @@ GRASS GIS ${GRASS_VERSION} Reference Manual
 
 def read_file(name):
     try:
-        with open(name) as f:
-            s = f.read()
-        return s
+        return Path(name).read_text()
     except OSError:
         return ""
 
@@ -768,11 +771,10 @@ desc = re.search("(<!-- meta page description:)(.*)(-->)", src_data, re.IGNORECA
 if desc:
     pgm = desc.group(2).strip()
     header_tmpl = string.Template(header_base + header_nopgm)
+elif not pgm_desc:
+    header_tmpl = string.Template(header_base + header_pgm)
 else:
-    if not pgm_desc:
-        header_tmpl = string.Template(header_base + header_pgm)
-    else:
-        header_tmpl = string.Template(header_base + header_pgm_desc)
+    header_tmpl = string.Template(header_base + header_pgm_desc)
 
 if not re.search("<html>", src_data, re.IGNORECASE):
     tmp_data = read_file(tmp_file)
@@ -919,8 +921,8 @@ else:
 
 git_commit = get_last_git_commit(
     src_dir=curdir,
-    addon_path=addon_path if addon_path else None,
-    is_addon=True if addon_path else False,
+    addon_path=addon_path or None,
+    is_addon=bool(addon_path),
 )
 if git_commit["commit"] == "unknown":
     date_tag = "Accessed: {date}".format(date=git_commit["date"])

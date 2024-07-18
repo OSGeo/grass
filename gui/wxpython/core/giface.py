@@ -18,7 +18,7 @@ This program is free software under the GNU General Public License
 import os
 import sys
 
-import grass.script as grass
+import grass.script as gs
 
 from grass.pydispatch.signal import Signal
 
@@ -218,10 +218,12 @@ class StandaloneGrassInterface(GrassInterface):
         # Signal for communicating something in current grassdb has changed.
         # Parameters:
         # action: required, is one of 'new', 'rename', 'delete'
-        # element: required, can be one of 'grassdb', 'location', 'mapset', 'raster', 'vector' and 'raster_3d'
+        # element: required, can be one of 'grassdb', 'location', 'mapset', 'raster',
+        #          'vector' and 'raster_3d'
         # grassdb: path to grass db, required
         # location: location name, required
-        # mapset: mapset name, required when element is 'mapset', 'raster', 'vector' or 'raster_3d'
+        # mapset: mapset name, required when element is 'mapset', 'raster',
+        #         'vector' or 'raster_3d'
         # map: map name, required when element is 'raster', 'vector' or 'raster_3d'
         # newname: new name (of mapset, map), required with action='rename'
         self.grassdbChanged = Signal("StandaloneGrassInterface.grassdbChanged")
@@ -232,8 +234,20 @@ class StandaloneGrassInterface(GrassInterface):
         # Signal emitted when workspace is changed
         self.workspaceChanged = Signal("StandaloneGrassInterface.workspaceChanged")
 
-        # Signal emitted when history should be updated
-        self.updateHistory = Signal("StandaloneGrassInterface.updateHistory")
+        # Signal emitted when entry to history is added
+        self.entryToHistoryAdded = Signal(
+            "StandaloneGrassInterface.entryToHistoryAdded"
+        )
+
+        # Signal emitted when entry from history is removed
+        self.entryFromHistoryRemoved = Signal(
+            "StandaloneGrassInterface.entryFromHistoryRemoved"
+        )
+
+        # Signal emitted when entry in history is updated
+        self.entryInHistoryUpdated = Signal(
+            "StandaloneGrassInterface.entryInHistoryUpdated"
+        )
 
         # workaround, standalone grass interface should be moved to sep. file
         from core.gconsole import GConsole, EVT_CMD_OUTPUT, EVT_CMD_PROGRESS
@@ -261,7 +275,7 @@ class StandaloneGrassInterface(GrassInterface):
 
     def _onCmdProgress(self, event):
         """Update progress message info"""
-        grass.percent(event.value, 100, 1)
+        gs.percent(event.value, 100, 1)
         event.Skip()
 
     def RunCmd(
@@ -292,18 +306,18 @@ class StandaloneGrassInterface(GrassInterface):
         self._gconsole.RunCmd(["g.manual", "entry=%s" % entry])
 
     def WriteLog(self, text, wrap=None, notification=Notification.HIGHLIGHT):
-        self._write(grass.message, text)
+        self._write(gs.message, text)
 
     def WriteCmdLog(self, text, pid=None, notification=Notification.MAKE_VISIBLE):
         if pid:
             text = "(" + str(pid) + ") " + text
-        self._write(grass.message, text)
+        self._write(gs.message, text)
 
     def WriteWarning(self, text):
-        self._write(grass.warning, text)
+        self._write(gs.warning, text)
 
     def WriteError(self, text):
-        self._write(grass.error, text)
+        self._write(gs.error, text)
 
     def _write(self, function, text):
         orig = os.getenv("GRASS_MESSAGE_FORMAT")
