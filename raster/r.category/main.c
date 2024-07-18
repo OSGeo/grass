@@ -118,6 +118,9 @@ int main(int argc, char *argv[])
     if (strcmp(parm.format->answer, "json") == 0) {
         format = JSON;
         root_value = json_value_init_array();
+        if (root_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
         root_array = json_array(root_value);
     }
     else {
