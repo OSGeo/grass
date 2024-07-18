@@ -7,9 +7,6 @@ on:
       - main
       - releasebranch_*
   pull_request:
-    branches:
-      - main
-      - releasebranch_*
 
 jobs:
   build:
@@ -32,7 +29,7 @@ jobs:
         run: |
           git config --global core.autocrlf false
           git config --global core.eol lf
-      - uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # v4.1.5
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - uses: msys2/setup-msys2@d0e80f58dffbc64f6a3a1f43527d469b4fc7b6c8 # v2.23.0
         with:
           path-type: inherit
@@ -69,12 +66,25 @@ jobs:
         shell: msys2 {0}
         run: .github/workflows/build_osgeo4w.sh
 
+      - name: Print installed versions
+        if: always()
+        shell: msys2 {0}
+        run: .github/workflows/print_versions.sh
+
       - name: Test executing of the grass command
-        run: .github/workflows/test_simple.bat 'C:\OSGeo4W\opt\grass\grass84.bat'
+        run: .github/workflows/test_simple.bat 'C:\OSGeo4W\opt\grass\grass85.bat'
 
       - name: Test executing of the grass command in bash
         shell: msys2 {0}
         run: .github/workflows/test_simple.sh
 
       - name: Run tests
-        run: .github/workflows/test_thorough.bat 'C:\OSGeo4W\opt\grass\grass84.bat' 'C:\OSGeo4W\bin\python3'
+        run: .github/workflows/test_thorough.bat 'C:\OSGeo4W\opt\grass\grass85.bat' 'C:\OSGeo4W\bin\python3'
+
+      - name: Make HTML test report available
+        if: ${{ always() }}
+        uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4.3.4
+        with:
+          name: testreport-${{ matrix.os }}
+          path: testreport
+          retention-days: 3

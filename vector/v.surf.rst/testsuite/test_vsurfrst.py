@@ -13,7 +13,9 @@ class TestVsurfrst(TestCase):
     tcurvature = "tcurvature"
     mcurvature = "mcurvature"
     deviations = "deviations"
+    deviations_threads = "deviations_threads"
     cvdev = "cvdev"
+    cvdev_threads = "cvdev_threads"
     treeseg = "treeseg"
     overwin = "overwin"
 
@@ -47,7 +49,9 @@ class TestVsurfrst(TestCase):
                 cls.tcurvature,
                 cls.mcurvature,
                 cls.deviations,
+                cls.deviations_threads,
                 cls.cvdev,
+                cls.cvdev_threads,
                 cls.treeseg,
                 cls.overwin,
             ],
@@ -63,6 +67,15 @@ class TestVsurfrst(TestCase):
             overwrite=True,
         )
 
+        self.vsurfrst_cv = SimpleModule(
+            "v.surf.rst",
+            input="elev_points3d",
+            npmin=100,
+            cvdev=self.cvdev,
+            overwrite=True,
+            c=True,
+        )
+
     def test_more_threads(self):
         self.assertModule(self.vsurfrst)
         try:
@@ -71,6 +84,35 @@ class TestVsurfrst(TestCase):
             self.assertModule(self.vsurfrst)
             self.assertRastersNoDifference(
                 self.elevation, self.elevation_threads, precision=1e-8
+            )
+        except KeyError:
+            # original version of v.surf.rst without parallel processing
+            return
+
+        # deviations
+        try:
+            self.vsurfrst.inputs["nprocs"].value = 4
+            self.vsurfrst.outputs.deviations = self.deviations_threads
+            self.assertModule(self.vsurfrst)
+            values = "min=-0.035444\nmax=0.048801\nmean=4.21945e-05"
+            self.assertVectorFitsUnivar(
+                map=self.deviations_threads,
+                column="flt1",
+                reference=values,
+                precision=1e-8,
+            )
+        except KeyError:
+            # original version of v.surf.rst without parallel processing
+            return
+
+        # cross-validation
+        try:
+            self.vsurfrst_cv.inputs["nprocs"].value = 4
+            self.vsurfrst_cv.outputs.cvdev = self.cvdev_threads
+            self.assertModule(self.vsurfrst_cv)
+            values = "min=-0.678321\nmax=1.5803\nmean=0.00120956"
+            self.assertVectorFitsUnivar(
+                map=self.cvdev_threads, column="flt1", reference=values, precision=1e-8
             )
         except KeyError:
             # original version of v.surf.rst without parallel processing
@@ -116,7 +158,9 @@ class TestVsurfrst(TestCase):
             raster=self.pcurvature, reference=values, precision=1e-8
         )
         # tcurvature
-        values = "min=-0.0455724261701107\nmax=0.0380486063659191\nmean=-0.000136686790876467"
+        values = (
+            "min=-0.0455724261701107\nmax=0.0380486063659191\nmean=-1.36686790876467e-4"
+        )
         self.assertRasterFitsUnivar(
             raster=self.tcurvature, reference=values, precision=1e-8
         )
@@ -133,10 +177,10 @@ class TestVsurfrst(TestCase):
             map=self.deviations, column="flt1", reference=values, precision=1e-8
         )
         # treeseg
-        topology = dict(primitives=256)
+        topology = {"primitives": 256}
         self.assertVectorFitsTopoInfo(vector=self.treeseg, reference=topology)
         # overwin
-        topology = dict(primitives=256)
+        topology = {"primitives": 256}
         self.assertVectorFitsTopoInfo(vector=self.overwin, reference=topology)
 
         # test 3D versus attribute
@@ -145,6 +189,15 @@ class TestVsurfrst(TestCase):
         self.assertModule(self.vsurfrst)
         self.assertRastersNoDifference(
             self.elevation, self.elevation_attrib, precision=1e-8
+        )
+
+        # cross-validation
+        self.vsurfrst_cv.outputs.cvdev = self.cvdev
+        self.assertModule(self.vsurfrst_cv)
+        self.assertVectorExists(name=self.cvdev)
+        values = "min=-0.678321\nmax=1.5803\nmean=0.00120956"
+        self.assertVectorFitsUnivar(
+            map=self.cvdev, column="flt1", reference=values, precision=1e-8
         )
 
 

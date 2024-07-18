@@ -13,6 +13,7 @@ This program is free software under the GNU General Public License
 """
 
 import os
+from pathlib import Path
 import sys
 import copy
 import shutil
@@ -82,7 +83,7 @@ def getMessages():
 
 
 def clearMessages():
-    del _MESSAGES[:]
+    _MESSAGES.clear()
 
 
 def _debug(level, message):
@@ -342,13 +343,12 @@ def _indent(elem, level=0):
             elem.text = i + "  "
         if not elem.tail or not elem.tail.strip():
             elem.tail = i
-        for elem in elem:
-            _indent(elem, level + 1)
+        for _elem in elem:
+            _indent(_elem, level + 1)
         if not elem.tail or not elem.tail.strip():
             elem.tail = i
-    else:
-        if level and (not elem.tail or not elem.tail.strip()):
-            elem.tail = i
+    elif level and (not elem.tail or not elem.tail.strip()):
+        elem.tail = i
 
 
 def expandAddons(tree):
@@ -846,8 +846,7 @@ def module_test():
         return 0
 
     menudataFile = "data/test_toolboxes_menudata_ref.xml"
-    with open(menudataFile) as correctMenudata:
-        correct = str(correctMenudata.read())
+    correct = str(Path(menudataFile).read_text())
 
     import difflib
 

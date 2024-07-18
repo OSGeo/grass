@@ -5,6 +5,7 @@ import multiprocessing
 import pytest
 
 import grass.script as gs
+from grass.pygrass.modules.grid import GridModule
 
 
 def max_processes():
@@ -22,6 +23,7 @@ def run_in_subprocess(function):
     process.join()
 
 
+@pytest.mark.needs_solo_run
 @pytest.mark.parametrize("processes", list(range(1, max_processes() + 1)) + [None])
 def test_processes(tmp_path, processes):
     """Check that running with multiple processes works"""
@@ -34,10 +36,6 @@ def test_processes(tmp_path, processes):
         gs.run_command("r.surf.fractal", output=surface)
 
         def run_grid_module():
-            # modules/shortcuts calls get_commands which requires GISBASE.
-            # pylint: disable=import-outside-toplevel
-            from grass.pygrass.modules.grid import GridModule
-
             grid = GridModule(
                 "r.slope.aspect",
                 width=10,
@@ -72,10 +70,6 @@ def test_tiling_schemes(tmp_path, width, height):
         gs.run_command("r.surf.fractal", output=surface)
 
         def run_grid_module():
-            # modules/shortcuts calls get_commands which requires GISBASE.
-            # pylint: disable=import-outside-toplevel
-            from grass.pygrass.modules.grid import GridModule
-
             grid = GridModule(
                 "r.slope.aspect",
                 width=width,
@@ -105,10 +99,6 @@ def test_overlaps(tmp_path, overlap):
         gs.run_command("r.surf.fractal", output=surface)
 
         def run_grid_module():
-            # modules/shortcuts calls get_commands which requires GISBASE.
-            # pylint: disable=import-outside-toplevel
-            from grass.pygrass.modules.grid import GridModule
-
             grid = GridModule(
                 "r.slope.aspect",
                 width=10,
@@ -140,10 +130,6 @@ def test_cleans(tmp_path, clean, surface):
             gs.run_command("r.surf.fractal", output=surface)
 
         def run_grid_module():
-            # modules/shortcuts calls get_commands which requires GISBASE.
-            # pylint: disable=import-outside-toplevel
-            from grass.pygrass.modules.grid import GridModule
-
             grid = GridModule(
                 "r.slope.aspect",
                 width=10,
@@ -189,10 +175,6 @@ def test_patching_backend(tmp_path, patch_backend):
         )
 
         def run_grid_module():
-            # modules/shortcuts calls get_commands which requires GISBASE.
-            # pylint: disable=import-outside-toplevel
-            from grass.pygrass.modules.grid import GridModule
-
             grid = GridModule(
                 "v.to.rast",
                 width=10,
@@ -233,10 +215,6 @@ def test_tiling(tmp_path, width, height, processes):
         gs.run_command("r.surf.fractal", output=surface)
 
         def run_grid_module():
-            # modules/shortcuts calls get_commands which requires GISBASE.
-            # pylint: disable=import-outside-toplevel
-            from grass.pygrass.modules.grid import GridModule
-
             grid = GridModule(
                 "r.slope.aspect",
                 width=width,
@@ -255,6 +233,7 @@ def test_tiling(tmp_path, width, height, processes):
         assert info["min"] > 0
 
 
+@pytest.mark.needs_solo_run
 @pytest.mark.parametrize(
     "processes, backend",
     [
@@ -274,10 +253,6 @@ def test_patching_error(tmp_path, processes, backend):
         surface = "fractal"
 
         def run_grid_module():
-            # modules/shortcuts calls get_commands which requires GISBASE.
-            # pylint: disable=import-outside-toplevel
-            from grass.pygrass.modules.grid import GridModule
-
             grid = GridModule(
                 "r.surf.fractal",
                 overlap=0,

@@ -75,7 +75,7 @@ class SbManager:
         self.mapFrame = mapframe
         self.statusbar = statusbar
 
-        self.statusbarItems = dict()
+        self.statusbarItems = {}
 
         self._postInitialized = False
         self._modeIndexSet = False
@@ -549,7 +549,7 @@ class SbGoTo(SbItem):
                 projIn = settings
                 projOut = RunCommand("g.proj", flags="jf", read=True)
                 proj = projIn.split(" ")[0].split("=")[1]
-                if proj in ("ll", "latlong", "longlat"):
+                if proj in {"ll", "latlong", "longlat"}:
                     e, n = utils.DMS2Deg(e, n)
                     proj, coord1 = utils.ReprojectCoordinates(
                         coord=(e, n), projIn=projIn, projOut=projOut, flags="d"
@@ -629,7 +629,7 @@ class SbGoTo(SbItem):
                     flags="d",
                 )
                 if coord:
-                    if proj in ("ll", "latlong", "longlat") and format == "DMS":
+                    if proj in {"ll", "latlong", "longlat"} and format == "DMS":
                         return "%s" % utils.Deg2DMS(
                             coord[0], coord[1], precision=precision
                         )
@@ -637,20 +637,19 @@ class SbGoTo(SbItem):
                         return "%.*f; %.*f" % (precision, coord[0], precision, coord[1])
                 else:
                     raise SbException(_("Error in projection (check the settings)"))
+        elif self.mapFrame.GetMap().projinfo["proj"] == "ll" and format == "DMS":
+            return "%s" % utils.Deg2DMS(
+                region["center_easting"],
+                region["center_northing"],
+                precision=precision,
+            )
         else:
-            if self.mapFrame.GetMap().projinfo["proj"] == "ll" and format == "DMS":
-                return "%s" % utils.Deg2DMS(
-                    region["center_easting"],
-                    region["center_northing"],
-                    precision=precision,
-                )
-            else:
-                return "%.*f; %.*f" % (
-                    precision,
-                    region["center_easting"],
-                    precision,
-                    region["center_northing"],
-                )
+            return "%.*f; %.*f" % (
+                precision,
+                region["center_easting"],
+                precision,
+                region["center_northing"],
+            )
 
     def SetCenter(self):
         """Set current map center as item value"""
@@ -807,17 +806,16 @@ class SbCoordinates(SbTextItem):
                 )
                 if coord:
                     e, n = coord
-                    if proj in ("ll", "latlong", "longlat") and format == "DMS":
+                    if proj in {"ll", "latlong", "longlat"} and format == "DMS":
                         return utils.Deg2DMS(e, n, precision=precision)
                     else:
                         return "%.*f; %.*f" % (precision, e, precision, n)
                 else:
                     raise SbException(_("Error in projection (check the settings)"))
+        elif self.mapFrame.GetMap().projinfo["proj"] == "ll" and format == "DMS":
+            return utils.Deg2DMS(e, n, precision=precision)
         else:
-            if self.mapFrame.GetMap().projinfo["proj"] == "ll" and format == "DMS":
-                return utils.Deg2DMS(e, n, precision=precision)
-            else:
-                return "%.*f; %.*f" % (precision, e, precision, n)
+            return "%.*f; %.*f" % (precision, e, precision, n)
 
 
 class SbRegionExtent(SbTextItem):
@@ -897,7 +895,7 @@ class SbRegionExtent(SbTextItem):
                     coord=(region["ewres"], region["nsres"]), projOut=projOut, flags="d"
                 )
                 if coord1 and coord2:
-                    if proj in ("ll", "latlong", "longlat") and format == "DMS":
+                    if proj in {"ll", "latlong", "longlat"} and format == "DMS":
                         w, s = utils.Deg2DMS(
                             coord1[0], coord1[1], string=False, precision=precision
                         )
@@ -930,25 +928,24 @@ class SbRegionExtent(SbTextItem):
                 else:
                     raise SbException(_("Error in projection (check the settings)"))
 
+        elif self.mapFrame.GetMap().projinfo["proj"] == "ll" and format == "DMS":
+            w, s = utils.Deg2DMS(
+                region["w"], region["s"], string=False, precision=precision
+            )
+            e, n = utils.Deg2DMS(
+                region["e"], region["n"], string=False, precision=precision
+            )
+            ewres, nsres = utils.Deg2DMS(
+                region["ewres"], region["nsres"], string=False, precision=precision
+            )
+            return self._formatRegion(w=w, s=s, e=e, n=n, ewres=ewres, nsres=nsres)
         else:
-            if self.mapFrame.GetMap().projinfo["proj"] == "ll" and format == "DMS":
-                w, s = utils.Deg2DMS(
-                    region["w"], region["s"], string=False, precision=precision
-                )
-                e, n = utils.Deg2DMS(
-                    region["e"], region["n"], string=False, precision=precision
-                )
-                ewres, nsres = utils.Deg2DMS(
-                    region["ewres"], region["nsres"], string=False, precision=precision
-                )
-                return self._formatRegion(w=w, s=s, e=e, n=n, ewres=ewres, nsres=nsres)
-            else:
-                w, s = region["w"], region["s"]
-                e, n = region["e"], region["n"]
-                ewres, nsres = region["ewres"], region["nsres"]
-                return self._formatRegion(
-                    w=w, s=s, e=e, n=n, ewres=ewres, nsres=nsres, precision=precision
-                )
+            w, s = region["w"], region["s"]
+            e, n = region["e"], region["n"]
+            ewres, nsres = region["ewres"], region["nsres"]
+            return self._formatRegion(
+                w=w, s=s, e=e, n=n, ewres=ewres, nsres=nsres, precision=precision
+            )
 
 
 class SbCompRegionExtent(SbRegionExtent):

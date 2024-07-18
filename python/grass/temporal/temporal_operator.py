@@ -141,8 +141,7 @@ for details.
 """  # noqa: E501
 
 try:
-    import ply.lex as lex
-    import ply.yacc as yacc
+    from ply import lex, yacc
 except ImportError:
     pass
 
@@ -242,19 +241,19 @@ class TemporalOperatorLexer:
         # Check for reserved words
         if t.value in TemporalOperatorLexer.relations.keys():
             t.type = TemporalOperatorLexer.relations.get(t.value)
-        elif t.value == "l" or t.value == "left":
+        elif t.value in {"l", "left"}:
             t.value = "l"
             t.type = "LEFTREF"
-        elif t.value == "r" or t.value == "right":
+        elif t.value in {"r", "right"}:
             t.value = "r"
             t.type = "RIGHTREF"
-        elif t.value == "u" or t.value == "union":
+        elif t.value in {"u", "union"}:
             t.value = "u"
             t.type = "UNION"
-        elif t.value == "d" or t.value == "disjoint":
+        elif t.value in {"d", "disjoint"}:
             t.value = "d"
             t.type = "DISJOINT"
-        elif t.value == "i" or t.value == "intersect":
+        elif t.value in {"i", "intersect"}:
             t.value = "i"
             t.type = "INTERSECT"
         else:

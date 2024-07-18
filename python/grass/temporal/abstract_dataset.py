@@ -11,13 +11,10 @@ for details.
 """
 
 from abc import ABCMeta, abstractmethod
-from .core import (
-    get_tgis_message_interface,
-    init_dbif,
-    get_current_mapset,
-)
-from .temporal_topology_dataset_connector import TemporalTopologyDatasetConnector
+
+from .core import get_current_mapset, get_tgis_message_interface, init_dbif
 from .spatial_topology_dataset_connector import SpatialTopologyDatasetConnector
+from .temporal_topology_dataset_connector import TemporalTopologyDatasetConnector
 
 ###############################################################################
 

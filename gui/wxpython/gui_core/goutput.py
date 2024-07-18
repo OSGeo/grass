@@ -392,7 +392,7 @@ class GConsoleWindow(wx.SplitterWindow):
 
         self.cmdOutput.AddStyledMessage(message, type)
 
-        if event.type in ("warning", "error"):
+        if event.type in {"warning", "error"}:
             self.contentChanged.emit(notification=Notification.MAKE_VISIBLE)
         else:
             self.contentChanged.emit(notification=Notification.HIGHLIGHT)
@@ -573,9 +573,8 @@ class GStc(stc.StyledTextCtrl):
 
         if wrap:
             txt = textwrap.fill(txt, wrap) + "\n"
-        else:
-            if txt[-1] != "\n":
-                txt += "\n"
+        elif txt[-1] != "\n":
+            txt += "\n"
 
         if "\r" in txt:
             self.linePos = -1

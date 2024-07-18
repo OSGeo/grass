@@ -119,18 +119,18 @@
 # % description: Show the category for vector points map
 # %end
 
-import sys
 import copy
-import grass.script as gscript
+import sys
 
+import grass.script as gs
 
 ############################################################################
 
 
 def main(options, flags):
     # lazy imports
-    import grass.temporal as tgis
     import grass.pygrass.modules as pymod
+    import grass.temporal as tgis
 
     # Get the options
     points = options["points"]
@@ -141,7 +141,7 @@ def main(options, flags):
     order = options["order"]
     layout = options["layout"]
     null_value = options["null_value"]
-    separator = gscript.separator(options["separator"])
+    separator = gs.separator(options["separator"])
 
     nprocs = int(options["nprocs"])
     write_header = flags["n"]
@@ -152,13 +152,13 @@ def main(options, flags):
     # output_color = flags["r"]
     # output_cat = flags["i"]
 
-    overwrite = gscript.overwrite()
+    overwrite = gs.overwrite()
 
     if coordinates and points:
-        gscript.fatal(_("Options coordinates and points are mutually exclusive"))
+        gs.fatal(_("Options coordinates and points are mutually exclusive"))
 
     if not coordinates and not points and not use_stdin:
-        gscript.fatal(
+        gs.fatal(
             _(
                 "Please specify the coordinates, the points option or use the 'i' flag "
                 "to pipe coordinate positions to t.rast.what from stdin, to provide "
@@ -167,7 +167,7 @@ def main(options, flags):
         )
 
     if vcat and not points:
-        gscript.fatal(_("Flag 'v' required option 'points'"))
+        gs.fatal(_("Flag 'v' required option 'points'"))
 
     if use_stdin:
         coordinates_stdin = str(sys.__stdin__.read())
@@ -190,7 +190,7 @@ def main(options, flags):
     maps = sp.get_registered_maps_as_objects(where=where, order=order, dbif=dbif)
     dbif.close()
     if not maps:
-        gscript.fatal(_("Space time raster dataset <%s> is empty") % sp.get_id())
+        gs.fatal(_("Space time raster dataset <%s> is empty") % sp.get_id())
 
     # Setup flags are disabled due to test issues
     flags = ""
@@ -246,10 +246,9 @@ def main(options, flags):
             quiet=True,
         )
     else:
-        gscript.error(_("Please specify points or coordinates"))
+        gs.error(_("Please specify points or coordinates"))
 
-    if len(maps) < nprocs:
-        nprocs = len(maps)
+    nprocs = min(len(maps), nprocs)
 
     # The module queue for parallel execution
     process_queue = pymod.ParallelModuleQueue(int(nprocs))
@@ -280,7 +279,7 @@ def main(options, flags):
 
     count = 0
     for loop in range(num_loops):
-        file_name = gscript.tempfile() + "_%i" % (loop)
+        file_name = gs.tempfile() + "_%i" % (loop)
         count = process_loop(
             nprocs,
             maps,
@@ -296,7 +295,7 @@ def main(options, flags):
 
     process_queue.wait()
 
-    gscript.verbose(
+    gs.verbose(
         "Number of raster map layers remaining for sampling %i" % (remaining_maps)
     )
     if remaining_maps > 0:
@@ -388,7 +387,7 @@ def one_point_per_row_output(
 
     for count in range(len(output_files)):
         file_name = output_files[count]
-        gscript.verbose(_("Transforming r.what output file %s" % (file_name)))
+        gs.verbose(_("Transforming r.what output file %s" % (file_name)))
         map_list = output_time_list[count]
         in_file = open(file_name, "r")
         for line in in_file:
@@ -466,7 +465,7 @@ def one_point_per_col_output(
     first = True
     for count in range(len(output_files)):
         file_name = output_files[count]
-        gscript.verbose(_("Transforming r.what output file %s" % (file_name)))
+        gs.verbose(_("Transforming r.what output file %s" % (file_name)))
         map_list = output_time_list[count]
         in_file = open(file_name, "r")
         lines = in_file.readlines()
@@ -508,7 +507,7 @@ def one_point_per_col_output(
                     else:
                         x = row[0]
                         y = row[1]
-                        out_str += "{sep}{x:10.10f}{csep}" "{y:10.10f}".format(
+                        out_str += "{sep}{x:10.10f}{csep}{y:10.10f}".format(
                             x=float(x), y=float(y), sep=separator, csep=coor_sep
                         )
                         if site_input:
@@ -563,7 +562,7 @@ def one_point_per_timerow_output(
     first = True
     for count in range(len(output_files)):
         file_name = output_files[count]
-        gscript.verbose("Transforming r.what output file %s" % (file_name))
+        gs.verbose("Transforming r.what output file %s" % (file_name))
         map_list = output_time_list[count]
         in_file = open(file_name, "r")
 
@@ -609,7 +608,7 @@ def one_point_per_timerow_output(
     if write_header:
         out_file.write(header + "\n")
 
-    gscript.verbose(_("Writing the output file <%s>" % (output)))
+    gs.verbose(_("Writing the output file <%s>" % (output)))
     for row in matrix:
         first = True
         for col in row:
@@ -664,7 +663,7 @@ def process_loop(
 
         output_time_list.append(map_list)
 
-        gscript.verbose(
+        gs.verbose(
             _(
                 "Process maps %(samp_start)i to %(samp_end)i (of %(total)i)"
                 % (
@@ -687,5 +686,5 @@ def process_loop(
 ############################################################################
 
 if __name__ == "__main__":
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
     main(options, flags)
