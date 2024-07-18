@@ -7,9 +7,6 @@ on:
       - main
       - releasebranch_*
   pull_request:
-    branches:
-      - main
-      - releasebranch_*
 
 jobs:
   pytest:
@@ -25,17 +22,22 @@ jobs:
         python-version:
           - '3.8'
           - '3.10'
+          - '3.12'
       fail-fast: true
 
     runs-on: ${{ matrix.os }}
+    env:
+      FORCE_COLOR: 1 # for software including pip: https://force-color.org/
+      CLICOLOR_FORCE: 1 # for other software including ninja: https://bixense.com/clicolors/
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@39cd14951b08e74b54015e9e001cdefcf80e669f # v5.1.1
         with:
           python-version: ${{ matrix.python-version }}
+          cache: pip
 
       - name: Install non-Python dependencies
         run: |
@@ -44,12 +46,14 @@ jobs:
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
 
+      - uses: rui314/setup-mold@2e332a0b602c2fc65d2d3995941b1b29a5f554a0 # v1
+
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r .github/workflows/python_requirements.txt
           pip install -r .github/workflows/optional_requirements.txt
-          pip install pytest pytest-timeout
+          pip install pytest pytest-timeout pytest-github-actions-annotate-failures pytest-xdist pytest-cov
 
       - name: Create installation directory
         run: |
@@ -66,15 +70,43 @@ jobs:
         run: |
           echo "$HOME/install/bin" >> $GITHUB_PATH
 
-      - name: Test executing of the grass command
-        run: .github/workflows/test_simple.sh
-
-      - name: Run pytest
-        run: |
-          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$HOME/install/grass84/lib:$LD_LIBRARY_PATH
-          pytest .
-
       - name: Print installed versions
         if: always()
         run: .github/workflows/print_versions.sh
+
+      - name: Test executing of the grass command
+        run: .github/workflows/test_simple.sh
+
+      - name: Run pytest with multiple workers in parallel
+        run: |
+          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
+          pytest --verbose --color=yes --durations=0 --durations-min=0.5 \
+            --numprocesses auto -ra . \
+            -m 'not needs_solo_run'
+
+      - name: Run pytest with a single worker (for tests marked with needs_solo_run)
+        run: |
+          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
+          pytest --verbose --color=yes --durations=0 --durations-min=0.5 \
+            --cov \
+            -ra . \
+            -m 'needs_solo_run'
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@e28ff129e5465c2c0dcc6f003fc735cb6ae0c673 # v4.5.0
+        with:
+          verbose: true
+          flags: pytest-python-${{ matrix.python-version }}
+          name: pytest-python-${{ matrix.python-version }}
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  pytest-success:
+    name: pytest Result
+    needs:
+      - pytest
+    if: ${{ always() }}
+    uses: ./.github/workflows/verify-success.yml
+    with:
+      needs_context: ${{ toJson(needs) }}

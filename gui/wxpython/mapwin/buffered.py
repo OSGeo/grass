@@ -21,8 +21,6 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com> (refactoring)
 """
 
-from __future__ import print_function
-
 import os
 import time
 import math
@@ -33,7 +31,7 @@ import wx
 from grass.pydispatch.signal import Signal
 
 from core.globalvar import wxPythonPhoenix
-import grass.script as grass
+import grass.script as gs
 
 from gui_core.dialogs import SavedRegion
 from gui_core.wrap import (
@@ -50,7 +48,7 @@ from core.gcmd import RunCommand, GException, GError
 from core.debug import Debug
 from core.settings import UserSettings
 from mapwin.base import MapWindowBase
-import core.utils as utils
+from core import utils
 from mapwin.graphics import GraphicsSet
 from core.gthread import gThread
 
@@ -419,7 +417,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         # polyline is a series of connected lines defined as sequence of points
         # lines are individual, not connected lines which must be drawn as 1
         # object (e.g. cross)
-        elif pdctype in ("polyline", "lines"):
+        elif pdctype in {"polyline", "lines"}:
             if pen:
                 pdc.SetBrush(wx.Brush(wx.CYAN, wx.TRANSPARENT))
                 pdc.SetPen(pen)
@@ -513,9 +511,11 @@ class BufferedMapWindow(MapWindowBase, Window):
                 pdc.SetTextBackground(img["background"])
             coords, bbox = self.TextBounds(img)
             if rotation == 0:
-                pdc.DrawText(img["text"], coords[0], coords[1])
+                pdc.DrawText(img["text"], int(coords[0]), int(coords[1]))
             else:
-                pdc.DrawRotatedText(img["text"], coords[0], coords[1], rotation)
+                pdc.DrawRotatedText(
+                    img["text"], int(coords[0]), int(coords[1]), rotation
+                )
             pdc.SetIdBounds(drawid, bbox)
 
         pdc.EndDrawing()
@@ -664,7 +664,7 @@ class BufferedMapWindow(MapWindowBase, Window):
     def OnSize(self, event):
         """Scale map image so that it is the same size as the Window"""
         # re-render image on idle
-        self.resize = grass.clock()
+        self.resize = gs.clock()
 
     def OnIdle(self, event):
         """Only re-render a composite map image from GRASS during
@@ -673,7 +673,7 @@ class BufferedMapWindow(MapWindowBase, Window):
 
         # use OnInternalIdle() instead ?
 
-        if self.resize and self.resize + 0.2 < grass.clock():
+        if self.resize and self.resize + 0.2 < gs.clock():
             Debug.msg(3, "BufferedWindow.OnSize():")
 
             # set size of the input image
@@ -851,7 +851,13 @@ class BufferedMapWindow(MapWindowBase, Window):
     def IsAlwaysRenderEnabled(self):
         return self.alwaysRender
 
-    def UpdateMap(self, render=True, renderVector=True, delay=0.0):
+    def UpdateMap(
+        self,
+        render=True,
+        renderVector=True,
+        delay=0.0,
+        reRenderTool=False,
+    ):
         """Updates the canvas anytime there is a change to the
         underlying images or to the geometry of the canvas.
 
@@ -866,9 +872,14 @@ class BufferedMapWindow(MapWindowBase, Window):
             giface
 
         :param render: re-render map composition
-        :param renderVector: re-render vector map layer enabled for editing (used for digitizer)
+        :param renderVector: re-render vector map layer enabled for editing (used for
+                             digitizer)
         :param delay: defines time threshold  in seconds for postponing
                       rendering to merge more update requests.
+        :param reRenderTool bool: enable re-render map if True, when
+                                  auto re-render map is disabled and
+                                  Display map or Render map tool is
+                                  activated from the Map Display toolbar
 
         If another request comes within the limit, rendering is delayed
         again. Next delay limit is chosen according to the smallest
@@ -886,6 +897,9 @@ class BufferedMapWindow(MapWindowBase, Window):
         period and at least one request has argument set for True, map
         will be updated with the True value of the argument.
         """
+
+        if not self._properties.autoRender and not reRenderTool:
+            return
 
         if self.timerRunId is None or delay < self.updDelay:
             self.updDelay = delay
@@ -1058,11 +1072,15 @@ class BufferedMapWindow(MapWindowBase, Window):
             reg = dispReg if utils.isInRegion(dispReg, compReg) else compReg
 
             regionCoords = []
-            regionCoords.append((reg["w"], reg["n"]))
-            regionCoords.append((reg["e"], reg["n"]))
-            regionCoords.append((reg["e"], reg["s"]))
-            regionCoords.append((reg["w"], reg["s"]))
-            regionCoords.append((reg["w"], reg["n"]))
+            regionCoords.extend(
+                (
+                    (reg["w"], reg["n"]),
+                    (reg["e"], reg["n"]),
+                    (reg["e"], reg["s"]),
+                    (reg["w"], reg["s"]),
+                    (reg["w"], reg["n"]),
+                )
+            )
 
             # draw region extent
             self.polypen = wx.Pen(
@@ -1087,6 +1105,14 @@ class BufferedMapWindow(MapWindowBase, Window):
 
         :param moveto: dx,dy
         """
+        # Prevent drag map error if auto re-render map is disabled
+        # wx._core.wxAssertionError: C++ assertion
+        # "!wxMouseCapture::IsInCaptureStack(this) failed at
+        # /tmp/pip-req-build-oxkmg2wi/ext/wxWidgets/src/common/wincmn.cpp(3270) in
+        # CaptureMouse(): Recapturing the mouse in the same window?
+        if not self._properties.autoRender:
+            return
+
         dc = wx.BufferedDC(wx.ClientDC(self))
         dc.SetBackground(wx.Brush("White"))
         dc.Clear()
@@ -1504,7 +1530,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             self.mouse["end"] = event.GetPosition()
             if event.LeftIsDown() and not (
                 digitToolbar
-                and digitToolbar.GetAction() in ("moveLine",)
+                and digitToolbar.GetAction() == "moveLine"
                 and len(self.digit.GetDisplay().GetSelected()) > 0
             ):
                 self.MouseDraw(pdc=self.pdcTmp)
@@ -1552,7 +1578,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         self.mouse["end"] = event.GetPosition()
         coordinates = self.Pixel2Cell(self.mouse["end"])
 
-        if self.mouse["use"] in ["zoom", "pan"]:
+        if self.mouse["use"] in {"zoom", "pan"}:
             # set region in zoom or pan
             begin = self.mouse["begin"]
             end = self.mouse["end"]
@@ -1880,7 +1906,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         """
         Debug.msg(4, "BufferedWindow.ZoomBack(): hist)=%s" % self.zoomhistory)
 
-        zoom = list()
+        zoom = []
 
         if len(self.zoomhistory) > 1:
             self.zoomhistory.pop()
@@ -1962,7 +1988,7 @@ class BufferedMapWindow(MapWindowBase, Window):
 
     def ResetZoomHistory(self):
         """Reset zoom history"""
-        self.zoomhistory = list()
+        self.zoomhistory = []
 
     def ZoomToMap(self, layers=None, ignoreNulls=False, render=True):
         """Set display extents to match selected raster
@@ -2107,7 +2133,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             return
 
         region = dlg.GetName()
-        if not grass.find_file(name=region, element="windows")["name"]:
+        if not gs.find_file(name=region, element="windows")["name"]:
             GError(
                 parent=self,
                 message=_("Region <%s> not found. Operation canceled.") % region,
@@ -2149,11 +2175,11 @@ class BufferedMapWindow(MapWindowBase, Window):
             return
 
         # test to see if it already exists and ask permission to overwrite
-        if grass.find_file(name=dlg.GetName(), element="windows")["name"]:
+        if gs.find_file(name=dlg.GetName(), element="windows")["name"]:
             overwrite = wx.MessageBox(
                 parent=self,
                 message=_(
-                    "Region file <%s> already exists. " "Do you want to overwrite it?"
+                    "Region file <%s> already exists. Do you want to overwrite it?"
                 )
                 % (dlg.GetName()),
                 caption=_("Warning"),
@@ -2254,7 +2280,8 @@ class BufferedMapWindow(MapWindowBase, Window):
                          is not defined DrawCross method is used for
                          type "point", DrawLines method for type "line",
                          DrawRectangle for "rectangle".
-        :param mapCoords: True if map coordinates should be set by user, otherwise pixels
+        :param mapCoords: True if map coordinates should be set by user, otherwise
+                          pixels
 
         :return: reference to GraphicsSet, which was added.
         """

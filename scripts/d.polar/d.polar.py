@@ -275,7 +275,7 @@ $DIAGRAMLINEWIDTH setlinewidth                          %% DIAGRAM-LINEWIDTH set
 newpath
                                         %% coordinates of rescaled, translated outer circle follow
                                         %% first point moveto, then lineto
-"""
+"""  # noqa: E501
     )
     s = t.substitute(
         AXESLINEWIDTH=axeslinewidth,
@@ -322,7 +322,7 @@ $DIAGRAMLINEWIDTH setlinewidth                          %% DIAGRAM-LINEWIDTH set
 newpath
                                         %% coordinates of rescaled, translated diagram follow
                                         %% first point moveto, then lineto
-"""
+"""  # noqa: E501
     )
     s = t.substitute(
         AXESFONTSIZE=axesfontsize,
@@ -364,7 +364,7 @@ $DIAGRAMLINEWIDTH setlinewidth                          %% DIAGRAM-LINEWIDTH set
 newpath
                                         %% coordinates of rescaled, translated average direction follow
                                         %% first point moveto, second lineto
-"""
+"""  # noqa: E501
     )
     s = t.substitute(DIAGRAMLINEWIDTH=diagramlinewidth)
     outf.write(s)
@@ -396,7 +396,7 @@ col4                                    %% colDIAGRAM-COLOR
 col1                                    %% colAVERAGE-DIRECTION-COLOR
 %% Line below: (AVERAGE-DIRECTION-STRING) LEGENDS-X AVERAGE-DIRECTION-LEGEND-Y 4 just-string
 ($AVERAGEDIRECTIONSTRING) $LEGENDSX $AVERAGEDIRECTIONLEGENDY 4 just-string
-"""
+"""  # noqa: E501
     )
     s = t.substitute(
         ALLDATALEGENDY=alldatalegendy,
@@ -480,7 +480,7 @@ def main():
     freq = {}
     for line in rawf:
         line = line.rstrip("\r\n")
-        if line in ["*", undef]:
+        if line in {"*", undef}:
             continue
         nvals += 1
         x = float(line)
@@ -510,7 +510,7 @@ def main():
     occurrences = sorted([(math.radians(x), freq[x]) for x in freq])
 
     # find the maximum value
-    maxradius = max([f for a, f in occurrences])
+    maxradius = max(f for a, f in occurrences)
 
     # now do cos() sin()
     sine_cosine = [(math.cos(a) * f, math.sin(a) * f) for a, f in occurrences]

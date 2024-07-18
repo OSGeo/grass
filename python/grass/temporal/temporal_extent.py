@@ -19,7 +19,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
+
 from .base import SQLDatabaseInterface
 
 ###############################################################################
@@ -41,9 +41,12 @@ class TemporalExtent(SQLDatabaseInterface):
     .. code-block:: python
 
         >>> init()
-        >>> A = TemporalExtent(table="raster_absolute_time",
-        ... ident="soil@PERMANENT", start_time=datetime(2001, 01, 01),
-        ... end_time=datetime(2005,01,01) )
+        >>> A = TemporalExtent(
+        ...     table="raster_absolute_time",
+        ...     ident="soil@PERMANENT",
+        ...     start_time=datetime(2001, 1, 1),
+        ...     end_time=datetime(2005, 1, 1),
+        ... )
         >>> A.id
         'soil@PERMANENT'
         >>> A.start_time
@@ -57,8 +60,12 @@ class TemporalExtent(SQLDatabaseInterface):
         start_time='2001-01-01 00:00:00'
         end_time='2005-01-01 00:00:00'
         >>> # relative time
-        >>> A = TemporalExtent(table="raster_absolute_time",
-        ... ident="soil@PERMANENT", start_time=0, end_time=1 )
+        >>> A = TemporalExtent(
+        ...     table="raster_absolute_time",
+        ...     ident="soil@PERMANENT",
+        ...     start_time=0,
+        ...     end_time=1,
+        ... )
         >>> A.id
         'soil@PERMANENT'
         >>> A.start_time
@@ -93,14 +100,14 @@ class TemporalExtent(SQLDatabaseInterface):
 
         .. code-block:: python
 
-            >>> A = TemporalExtent(start_time=5, end_time=6 )
+            >>> A = TemporalExtent(start_time=5, end_time=6)
             >>> inter = A.intersect(A)
             >>> inter.print_info()
              | Start time:................. 5
              | End time:................... 6
 
-            >>> A = TemporalExtent(start_time=5, end_time=6 )
-            >>> B = TemporalExtent(start_time=5, end_time=7 )
+            >>> A = TemporalExtent(start_time=5, end_time=6)
+            >>> B = TemporalExtent(start_time=5, end_time=7)
             >>> inter = A.intersect(B)
             >>> inter.print_info()
              | Start time:................. 5
@@ -110,8 +117,8 @@ class TemporalExtent(SQLDatabaseInterface):
              | Start time:................. 5
              | End time:................... 6
 
-            >>> A = TemporalExtent(start_time=3, end_time=6 )
-            >>> B = TemporalExtent(start_time=5, end_time=7 )
+            >>> A = TemporalExtent(start_time=3, end_time=6)
+            >>> B = TemporalExtent(start_time=5, end_time=7)
             >>> inter = A.intersect(B)
             >>> inter.print_info()
              | Start time:................. 5
@@ -121,8 +128,8 @@ class TemporalExtent(SQLDatabaseInterface):
              | Start time:................. 5
              | End time:................... 6
 
-            >>> A = TemporalExtent(start_time=3, end_time=8 )
-            >>> B = TemporalExtent(start_time=5, end_time=6 )
+            >>> A = TemporalExtent(start_time=3, end_time=8)
+            >>> B = TemporalExtent(start_time=5, end_time=6)
             >>> inter = A.intersect(B)
             >>> inter.print_info()
              | Start time:................. 5
@@ -132,8 +139,8 @@ class TemporalExtent(SQLDatabaseInterface):
              | Start time:................. 5
              | End time:................... 6
 
-            >>> A = TemporalExtent(start_time=5, end_time=8 )
-            >>> B = TemporalExtent(start_time=3, end_time=6 )
+            >>> A = TemporalExtent(start_time=5, end_time=8)
+            >>> B = TemporalExtent(start_time=3, end_time=6)
             >>> inter = A.intersect(B)
             >>> inter.print_info()
              | Start time:................. 5
@@ -143,8 +150,8 @@ class TemporalExtent(SQLDatabaseInterface):
              | Start time:................. 5
              | End time:................... 6
 
-            >>> A = TemporalExtent(start_time=5, end_time=None )
-            >>> B = TemporalExtent(start_time=3, end_time=6 )
+            >>> A = TemporalExtent(start_time=5, end_time=None)
+            >>> B = TemporalExtent(start_time=3, end_time=6)
             >>> inter = A.intersect(B)
             >>> inter.print_info()
              | Start time:................. 5
@@ -154,14 +161,14 @@ class TemporalExtent(SQLDatabaseInterface):
              | Start time:................. 5
              | End time:................... None
 
-            >>> A = TemporalExtent(start_time=5, end_time=8 )
-            >>> B = TemporalExtent(start_time=3, end_time=4 )
+            >>> A = TemporalExtent(start_time=5, end_time=8)
+            >>> B = TemporalExtent(start_time=3, end_time=4)
             >>> inter = A.intersect(B)
             >>> print(inter)
             None
 
-            >>> A = TemporalExtent(start_time=5, end_time=8 )
-            >>> B = TemporalExtent(start_time=3, end_time=None )
+            >>> A = TemporalExtent(start_time=5, end_time=8)
+            >>> B = TemporalExtent(start_time=3, end_time=None)
             >>> inter = A.intersect(B)
             >>> print(inter)
             None
@@ -169,7 +176,7 @@ class TemporalExtent(SQLDatabaseInterface):
         """
         relation = self.temporal_relation(extent)
 
-        if relation == "after" or relation == "before":
+        if relation in {"after", "before"}:
             return None
 
         if self.D["end_time"] is None:
@@ -211,14 +218,14 @@ class TemporalExtent(SQLDatabaseInterface):
 
         .. code-block:: python
 
-            >>> A = TemporalExtent(start_time=5, end_time=6 )
+            >>> A = TemporalExtent(start_time=5, end_time=6)
             >>> inter = A.intersect(A)
             >>> inter.print_info()
              | Start time:................. 5
              | End time:................... 6
 
-            >>> A = TemporalExtent(start_time=5, end_time=6 )
-            >>> B = TemporalExtent(start_time=5, end_time=7 )
+            >>> A = TemporalExtent(start_time=5, end_time=6)
+            >>> B = TemporalExtent(start_time=5, end_time=7)
             >>> inter = A.disjoint_union(B)
             >>> inter.print_info()
              | Start time:................. 5
@@ -228,8 +235,8 @@ class TemporalExtent(SQLDatabaseInterface):
              | Start time:................. 5
              | End time:................... 7
 
-            >>> A = TemporalExtent(start_time=3, end_time=6 )
-            >>> B = TemporalExtent(start_time=5, end_time=7 )
+            >>> A = TemporalExtent(start_time=3, end_time=6)
+            >>> B = TemporalExtent(start_time=5, end_time=7)
             >>> inter = A.disjoint_union(B)
             >>> inter.print_info()
              | Start time:................. 3
@@ -239,8 +246,8 @@ class TemporalExtent(SQLDatabaseInterface):
              | Start time:................. 3
              | End time:................... 7
 
-            >>> A = TemporalExtent(start_time=3, end_time=8 )
-            >>> B = TemporalExtent(start_time=5, end_time=6 )
+            >>> A = TemporalExtent(start_time=3, end_time=8)
+            >>> B = TemporalExtent(start_time=5, end_time=6)
             >>> inter = A.disjoint_union(B)
             >>> inter.print_info()
              | Start time:................. 3
@@ -250,8 +257,8 @@ class TemporalExtent(SQLDatabaseInterface):
              | Start time:................. 3
              | End time:................... 8
 
-            >>> A = TemporalExtent(start_time=5, end_time=8 )
-            >>> B = TemporalExtent(start_time=3, end_time=6 )
+            >>> A = TemporalExtent(start_time=5, end_time=8)
+            >>> B = TemporalExtent(start_time=3, end_time=6)
             >>> inter = A.disjoint_union(B)
             >>> inter.print_info()
              | Start time:................. 3
@@ -261,8 +268,8 @@ class TemporalExtent(SQLDatabaseInterface):
              | Start time:................. 3
              | End time:................... 8
 
-            >>> A = TemporalExtent(start_time=5, end_time=None )
-            >>> B = TemporalExtent(start_time=3, end_time=6 )
+            >>> A = TemporalExtent(start_time=5, end_time=None)
+            >>> B = TemporalExtent(start_time=3, end_time=6)
             >>> inter = A.disjoint_union(B)
             >>> inter.print_info()
              | Start time:................. 3
@@ -272,8 +279,8 @@ class TemporalExtent(SQLDatabaseInterface):
              | Start time:................. 3
              | End time:................... 6
 
-            >>> A = TemporalExtent(start_time=5, end_time=8 )
-            >>> B = TemporalExtent(start_time=3, end_time=4 )
+            >>> A = TemporalExtent(start_time=5, end_time=8)
+            >>> B = TemporalExtent(start_time=3, end_time=4)
             >>> inter = A.disjoint_union(B)
             >>> inter.print_info()
              | Start time:................. 3
@@ -282,8 +289,8 @@ class TemporalExtent(SQLDatabaseInterface):
             >>> inter.print_info()
              | Start time:................. 3
              | End time:................... 8
-            >>> A = TemporalExtent(start_time=5, end_time=8 )
-            >>> B = TemporalExtent(start_time=3, end_time=None )
+            >>> A = TemporalExtent(start_time=5, end_time=8)
+            >>> B = TemporalExtent(start_time=3, end_time=None)
             >>> inter = A.disjoint_union(B)
             >>> inter.print_info()
              | Start time:................. 3
@@ -292,8 +299,8 @@ class TemporalExtent(SQLDatabaseInterface):
             >>> inter.print_info()
              | Start time:................. 3
              | End time:................... 8
-            >>> A = TemporalExtent(start_time=5, end_time=None )
-            >>> B = TemporalExtent(start_time=3, end_time=8 )
+            >>> A = TemporalExtent(start_time=5, end_time=None)
+            >>> B = TemporalExtent(start_time=3, end_time=8)
             >>> inter = A.disjoint_union(B)
             >>> inter.print_info()
              | Start time:................. 3
@@ -302,8 +309,8 @@ class TemporalExtent(SQLDatabaseInterface):
             >>> inter.print_info()
              | Start time:................. 3
              | End time:................... 8
-            >>> A = TemporalExtent(start_time=5, end_time=None )
-            >>> B = TemporalExtent(start_time=3, end_time=None )
+            >>> A = TemporalExtent(start_time=5, end_time=None)
+            >>> B = TemporalExtent(start_time=3, end_time=None)
             >>> inter = A.disjoint_union(B)
             >>> inter.print_info()
              | Start time:................. 3
@@ -313,8 +320,8 @@ class TemporalExtent(SQLDatabaseInterface):
              | Start time:................. 3
              | End time:................... 5
 
-            >>> A = RelativeTemporalExtent(start_time=5, end_time=None, unit="years" )
-            >>> B = RelativeTemporalExtent(start_time=3, end_time=None, unit="years" )
+            >>> A = RelativeTemporalExtent(start_time=5, end_time=None, unit="years")
+            >>> B = RelativeTemporalExtent(start_time=3, end_time=None, unit="years")
             >>> inter = A.disjoint_union(B)
             >>> inter.print_info()
              +-------------------- Relative time -----------------------------------------+
@@ -331,8 +338,12 @@ class TemporalExtent(SQLDatabaseInterface):
 
 
             >>> from datetime import datetime as dt
-            >>> A = AbsoluteTemporalExtent(start_time=dt(2001,1,10), end_time=dt(2003,1,1))
-            >>> B = AbsoluteTemporalExtent(start_time=dt(2005,1,10), end_time=dt(2008,1,1))
+            >>> A = AbsoluteTemporalExtent(
+            ...     start_time=dt(2001, 1, 10), end_time=dt(2003, 1, 1)
+            ... )
+            >>> B = AbsoluteTemporalExtent(
+            ...     start_time=dt(2005, 1, 10), end_time=dt(2008, 1, 1)
+            ... )
             >>> inter = A.disjoint_union(B)
             >>> inter.print_info()
              +-------------------- Absolute time -----------------------------------------+
@@ -345,7 +356,7 @@ class TemporalExtent(SQLDatabaseInterface):
              | Start time:................. 2001-01-10 00:00:00
              | End time:................... 2008-01-01 00:00:00
 
-        """
+        """  # noqa: E501
 
         start = None
         end = None
@@ -396,14 +407,14 @@ class TemporalExtent(SQLDatabaseInterface):
 
         .. code-block:: python
 
-            >>> A = TemporalExtent(start_time=5, end_time=8 )
-            >>> B = TemporalExtent(start_time=3, end_time=4 )
+            >>> A = TemporalExtent(start_time=5, end_time=8)
+            >>> B = TemporalExtent(start_time=3, end_time=4)
             >>> inter = A.intersect(B)
             >>> print(inter)
             None
 
-            >>> A = TemporalExtent(start_time=5, end_time=8 )
-            >>> B = TemporalExtent(start_time=3, end_time=None )
+            >>> A = TemporalExtent(start_time=5, end_time=8)
+            >>> B = TemporalExtent(start_time=3, end_time=None)
             >>> inter = A.intersect(B)
             >>> print(inter)
             None
@@ -412,7 +423,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         relation = self.temporal_relation(extent)
 
-        if relation == "after" or relation == "before":
+        if relation in {"after", "before"}:
             return None
 
         return self.disjoint_union(extent)
@@ -433,8 +444,8 @@ class TemporalExtent(SQLDatabaseInterface):
 
         .. code-block:: python
 
-            >>> A = TemporalExtent(start_time=5, end_time=6 )
-            >>> B = TemporalExtent(start_time=5, end_time=7 )
+            >>> A = TemporalExtent(start_time=5, end_time=6)
+            >>> B = TemporalExtent(start_time=5, end_time=7)
             >>> A.starts(B)
             True
             >>> B.starts(A)
@@ -467,8 +478,8 @@ class TemporalExtent(SQLDatabaseInterface):
 
         .. code-block:: python
 
-            >>> A = TemporalExtent(start_time=5, end_time=7 )
-            >>> B = TemporalExtent(start_time=5, end_time=6 )
+            >>> A = TemporalExtent(start_time=5, end_time=7)
+            >>> B = TemporalExtent(start_time=5, end_time=6)
             >>> A.started(B)
             True
             >>> B.started(A)
@@ -501,8 +512,8 @@ class TemporalExtent(SQLDatabaseInterface):
 
         .. code-block:: python
 
-            >>> A = TemporalExtent(start_time=6, end_time=7 )
-            >>> B = TemporalExtent(start_time=5, end_time=7 )
+            >>> A = TemporalExtent(start_time=6, end_time=7)
+            >>> B = TemporalExtent(start_time=5, end_time=7)
             >>> A.finishes(B)
             True
             >>> B.finishes(A)
@@ -535,8 +546,8 @@ class TemporalExtent(SQLDatabaseInterface):
 
         .. code-block:: python
 
-            >>> A = TemporalExtent(start_time=5, end_time=7 )
-            >>> B = TemporalExtent(start_time=6, end_time=7 )
+            >>> A = TemporalExtent(start_time=5, end_time=7)
+            >>> B = TemporalExtent(start_time=6, end_time=7)
             >>> A.finished(B)
             True
             >>> B.finished(A)
@@ -569,8 +580,8 @@ class TemporalExtent(SQLDatabaseInterface):
 
         .. code-block:: python
 
-            >>> A = TemporalExtent(start_time=8, end_time=9 )
-            >>> B = TemporalExtent(start_time=6, end_time=7 )
+            >>> A = TemporalExtent(start_time=8, end_time=9)
+            >>> B = TemporalExtent(start_time=6, end_time=7)
             >>> A.after(B)
             True
             >>> B.after(A)
@@ -603,8 +614,8 @@ class TemporalExtent(SQLDatabaseInterface):
 
         .. code-block:: python
 
-            >>> A = TemporalExtent(start_time=6, end_time=7 )
-            >>> B = TemporalExtent(start_time=8, end_time=9 )
+            >>> A = TemporalExtent(start_time=6, end_time=7)
+            >>> B = TemporalExtent(start_time=8, end_time=9)
             >>> A.before(B)
             True
             >>> B.before(A)
@@ -639,14 +650,14 @@ class TemporalExtent(SQLDatabaseInterface):
 
         .. code-block:: python
 
-            >>> A = TemporalExtent(start_time=5, end_time=7 )
-            >>> B = TemporalExtent(start_time=7, end_time=9 )
+            >>> A = TemporalExtent(start_time=5, end_time=7)
+            >>> B = TemporalExtent(start_time=7, end_time=9)
             >>> A.adjacent(B)
             True
             >>> B.adjacent(A)
             True
-            >>> A = TemporalExtent(start_time=5, end_time=7 )
-            >>> B = TemporalExtent(start_time=3, end_time=5 )
+            >>> A = TemporalExtent(start_time=5, end_time=7)
+            >>> B = TemporalExtent(start_time=3, end_time=5)
             >>> A.adjacent(B)
             True
             >>> B.adjacent(A)
@@ -678,8 +689,8 @@ class TemporalExtent(SQLDatabaseInterface):
 
         .. code-block:: python
 
-            >>> A = TemporalExtent(start_time=5, end_time=7 )
-            >>> B = TemporalExtent(start_time=3, end_time=5 )
+            >>> A = TemporalExtent(start_time=5, end_time=7)
+            >>> B = TemporalExtent(start_time=3, end_time=5)
             >>> A.follows(B)
             True
             >>> B.follows(A)
@@ -710,8 +721,8 @@ class TemporalExtent(SQLDatabaseInterface):
 
         .. code-block:: python
 
-            >>> A = TemporalExtent(start_time=5, end_time=7 )
-            >>> B = TemporalExtent(start_time=7, end_time=9 )
+            >>> A = TemporalExtent(start_time=5, end_time=7)
+            >>> B = TemporalExtent(start_time=7, end_time=9)
             >>> A.precedes(B)
             True
             >>> B.precedes(A)
@@ -741,8 +752,8 @@ class TemporalExtent(SQLDatabaseInterface):
 
         .. code-block:: python
 
-            >>> A = TemporalExtent(start_time=5, end_time=7 )
-            >>> B = TemporalExtent(start_time=4, end_time=9 )
+            >>> A = TemporalExtent(start_time=5, end_time=7)
+            >>> B = TemporalExtent(start_time=4, end_time=9)
             >>> A.during(B)
             True
             >>> B.during(A)
@@ -786,8 +797,8 @@ class TemporalExtent(SQLDatabaseInterface):
 
         .. code-block:: python
 
-            >>> A = TemporalExtent(start_time=4, end_time=9 )
-            >>> B = TemporalExtent(start_time=5, end_time=8 )
+            >>> A = TemporalExtent(start_time=4, end_time=9)
+            >>> B = TemporalExtent(start_time=5, end_time=8)
             >>> A.contains(B)
             True
             >>> B.contains(A)
@@ -831,8 +842,8 @@ class TemporalExtent(SQLDatabaseInterface):
 
         .. code-block:: python
 
-            >>> A = TemporalExtent(start_time=5, end_time=6 )
-            >>> B = TemporalExtent(start_time=5, end_time=6 )
+            >>> A = TemporalExtent(start_time=5, end_time=6)
+            >>> B = TemporalExtent(start_time=5, end_time=6)
             >>> A.equal(B)
             True
             >>> B.equal(A)
@@ -871,15 +882,15 @@ class TemporalExtent(SQLDatabaseInterface):
 
         .. code-block:: python
 
-            >>> A = TemporalExtent(start_time=5, end_time=7 )
-            >>> B = TemporalExtent(start_time=6, end_time=8 )
+            >>> A = TemporalExtent(start_time=5, end_time=7)
+            >>> B = TemporalExtent(start_time=6, end_time=8)
             >>> A.overlaps(B)
             True
             >>> B.overlaps(A)
             False
 
-            >>> A = TemporalExtent(start_time=5, end_time=6 )
-            >>> B = TemporalExtent(start_time=6, end_time=8 )
+            >>> A = TemporalExtent(start_time=5, end_time=6)
+            >>> B = TemporalExtent(start_time=6, end_time=8)
             >>> A.overlaps(B)
             False
             >>> B.overlaps(A)
@@ -914,15 +925,15 @@ class TemporalExtent(SQLDatabaseInterface):
 
         .. code-block:: python
 
-            >>> A = TemporalExtent(start_time=6, end_time=8 )
-            >>> B = TemporalExtent(start_time=5, end_time=7 )
+            >>> A = TemporalExtent(start_time=6, end_time=8)
+            >>> B = TemporalExtent(start_time=5, end_time=7)
             >>> A.overlapped(B)
             True
             >>> B.overlapped(A)
             False
 
-            >>> A = TemporalExtent(start_time=6, end_time=8 )
-            >>> B = TemporalExtent(start_time=5, end_time=6 )
+            >>> A = TemporalExtent(start_time=6, end_time=8)
+            >>> B = TemporalExtent(start_time=5, end_time=6)
             >>> A.overlapped(B)
             False
             >>> B.overlapped(A)
@@ -1079,7 +1090,7 @@ class AbsoluteTemporalExtent(TemporalExtent):
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print(
-            " +-------------------- Absolute time -----------------------------------------+"
+            " +-------------------- Absolute time -----------------------------------------+"  # noqa: E501
         )
         TemporalExtent.print_info(self)
 
@@ -1126,10 +1137,14 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
     .. code-block:: python
 
         >>> init()
-        >>> A = STDSAbsoluteTime(table="strds_absolute_time",
-        ... ident="strds@PERMANENT", start_time=datetime(2001, 01, 01),
-        ... end_time=datetime(2005,01,01), granularity="1 days",
-        ... map_time="interval")
+        >>> A = STDSAbsoluteTime(
+        ...     table="strds_absolute_time",
+        ...     ident="strds@PERMANENT",
+        ...     start_time=datetime(2001, 1, 1),
+        ...     end_time=datetime(2005, 1, 1),
+        ...     granularity="1 days",
+        ...     map_time="interval",
+        ... )
         >>> A.id
         'strds@PERMANENT'
         >>> A.start_time
@@ -1264,8 +1279,13 @@ class RelativeTemporalExtent(TemporalExtent):
     .. code-block:: python
 
         >>> init()
-        >>> A = RelativeTemporalExtent(table="raster_relative_time",
-        ... ident="soil@PERMANENT", start_time=0, end_time=1, unit="years")
+        >>> A = RelativeTemporalExtent(
+        ...     table="raster_relative_time",
+        ...     ident="soil@PERMANENT",
+        ...     start_time=0,
+        ...     end_time=1,
+        ...     unit="years",
+        ... )
         >>> A.id
         'soil@PERMANENT'
         >>> A.start_time
@@ -1337,7 +1357,7 @@ class RelativeTemporalExtent(TemporalExtent):
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print(
-            " +-------------------- Relative time -----------------------------------------+"
+            " +-------------------- Relative time -----------------------------------------+"  # noqa: E501
         )
         TemporalExtent.print_info(self)
         print(" | Relative time unit:......... " + str(self.get_unit()))
@@ -1385,9 +1405,15 @@ class STDSRelativeTime(RelativeTemporalExtent):
     .. code-block:: python
 
         >>> init()
-        >>> A = STDSRelativeTime(table="strds_relative_time",
-        ... ident="strds@PERMANENT", start_time=0, end_time=1, unit="years",
-        ... granularity=5, map_time="interval")
+        >>> A = STDSRelativeTime(
+        ...     table="strds_relative_time",
+        ...     ident="strds@PERMANENT",
+        ...     start_time=0,
+        ...     end_time=1,
+        ...     unit="years",
+        ...     granularity=5,
+        ...     map_time="interval",
+        ... )
         >>> A.id
         'strds@PERMANENT'
         >>> A.start_time

@@ -19,7 +19,6 @@ for details.
 """
 
 import os
-import six
 import copy
 import tempfile
 
@@ -37,7 +36,7 @@ except ImportError as e:
     haveIClass = False
     errMsg = _("Loading imagery lib failed.\n%s") % e
 
-import grass.script as grass
+import grass.script as gs
 
 from mapdisp import statusbar as sb
 from mapdisp.main import StandaloneMapDisplayGrassInterface
@@ -95,7 +94,8 @@ class IClassMapPanel(DoubleMapPanel):
         """
         :param parent: (no parent is expected)
         :param title: window title
-        :param toolbars: dictionary of active toolbars (default value represents all toolbars)
+        :param toolbars: dictionary of active toolbars (default value represents all
+                         toolbars)
         :param size: default size
         """
         DoubleMapPanel.__init__(
@@ -115,6 +115,7 @@ class IClassMapPanel(DoubleMapPanel):
 
         # show computation region by default
         self.mapWindowProperties.showRegion = True
+        self.mapWindowProperties.autoRenderChanged.connect(self.OnAutoRenderChanged)
 
         self.firstMapWindow = IClassVDigitWindow(
             parent=self,
@@ -138,9 +139,7 @@ class IClassMapPanel(DoubleMapPanel):
         # TODO: for vdigit: it does nothing here because areas do not produce
         # this info
         self.firstMapWindow.digitizingInfo.connect(
-            lambda text: self.statusbarManager.statusbarItems[
-                "coordinates"
-            ].SetAdditionalInfo(text)
+            self.statusbarManager.statusbarItems["coordinates"].SetAdditionalInfo
         )
         self.firstMapWindow.digitizingInfoUnavailable.connect(
             lambda: self.statusbarManager.statusbarItems[
@@ -178,7 +177,7 @@ class IClassMapPanel(DoubleMapPanel):
         self.exportVector = None
 
         # dialogs
-        self.dialogs = dict()
+        self.dialogs = {}
         self.dialogs["classManager"] = None
         self.dialogs["scatt_plot"] = None
         # just to make digitizer happy
@@ -213,13 +212,6 @@ class IClassMapPanel(DoubleMapPanel):
 
         self.SendSizeEvent()
 
-    def OnCloseWindow(self, event):
-        self.GetFirstWindow().GetDigit().CloseMap()
-        self.plotPanel.CloseWindow()
-        self._cleanup()
-        self._mgr.UnInit()
-        self.Destroy()
-
     def _cleanup(self):
         """Frees C structs and removes vector map and all raster maps."""
         I_free_signatures(self.signatures)
@@ -231,15 +223,26 @@ class IClassMapPanel(DoubleMapPanel):
         for i in self.stats_data.GetCategories():
             self.RemoveTempRaster(self.stats_data.GetStatistics(i).rasterName)
 
+    def _getTempVectorName(self):
+        """Return new name for temporary vector map (training areas)"""
+        vectorPath = gs.tempfile(create=False)
+
+        return "trAreas" + os.path.basename(vectorPath).replace(".", "")
+
+    def OnAutoRenderChanged(self, value):
+        """Auto rendering state changed."""
+        self.OnRender(event=None)
+
+    def OnCloseWindow(self, event):
+        self.GetFirstWindow().GetDigit().CloseMap()
+        self.plotPanel.CloseWindow()
+        self._cleanup()
+        self._mgr.UnInit()
+        self.Destroy()
+
     def OnHelp(self, event):
         """Show help page"""
         self.giface.Help(entry="wxGUI.iclass")
-
-    def _getTempVectorName(self):
-        """Return new name for temporary vector map (training areas)"""
-        vectorPath = grass.tempfile(create=False)
-
-        return "trAreas" + os.path.basename(vectorPath).replace(".", "")
 
     def SetGroup(self, group, subgroup):
         """Set group and subgroup manually"""
@@ -314,7 +317,7 @@ class IClassMapPanel(DoubleMapPanel):
                 .Layer(2)
                 .Row(1)
                 .Position(0)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
         if name == "iClass":
@@ -336,7 +339,7 @@ class IClassMapPanel(DoubleMapPanel):
                 .Layer(2)
                 .Row(2)
                 .Position(0)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
         if name == "iClassMisc":
@@ -358,7 +361,7 @@ class IClassMapPanel(DoubleMapPanel):
                 .Layer(2)
                 .Row(1)
                 .Position(1)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
         if name == "vdigit":
@@ -398,7 +401,7 @@ class IClassMapPanel(DoubleMapPanel):
                 .Layer(2)
                 .Row(2)
                 .Position(1)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
         self._mgr.Update()
@@ -446,7 +449,7 @@ class IClassMapPanel(DoubleMapPanel):
             .Center()
             .Layer(0)
             .Position(position)
-            .BestSize((self.toolbars[name].GetBestSize())),
+            .BestSize(self.toolbars[name].GetBestSize()),
         )
 
     def _addPaneMapWindow(self, name, position):
@@ -497,7 +500,7 @@ class IClassMapPanel(DoubleMapPanel):
         mapTb.Enable("zoomBack", enable=(len(self.MapWindow.zoomhistory) > 1))
 
         if mapTb.GetActiveMap() != (win == self.secondMapWindow):
-            mapTb.SetActiveMap((win == self.secondMapWindow))
+            mapTb.SetActiveMap(win == self.secondMapWindow)
         self.StatusbarUpdate()
 
     def ActivateFirstMap(self, event=None):
@@ -600,7 +603,7 @@ class IClassMapPanel(DoubleMapPanel):
             if dlg.ShowModal() == wx.ID_OK:
                 if dlg.GetGroupBandsErr(parent=self):
                     g, s = dlg.GetData()
-                    group = grass.find_file(name=g, element="group")
+                    group = gs.find_file(name=g, element="group")
                     self.g["group"] = group["name"]
                     self.g["subgroup"] = s
                     self.groupSet.emit(
@@ -618,7 +621,7 @@ class IClassMapPanel(DoubleMapPanel):
         if self.GetAreasCount() or self.stats_data.GetCategories():
             qdlg = wx.MessageDialog(
                 parent=self,
-                message=_("All changes will be lost. " "Do you want to continue?"),
+                message=_("All changes will be lost. Do you want to continue?"),
                 style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
             )
             if qdlg.ShowModal() == wx.ID_NO:
@@ -641,7 +644,7 @@ class IClassMapPanel(DoubleMapPanel):
 
         :return: warning message (empty if topology is ok)
         """
-        topo = grass.vector_info_topo(map=vector)
+        topo = gs.vector_info_topo(map=vector)
 
         warning = ""
         if topo["areas"] == 0:
@@ -854,14 +857,15 @@ class IClassMapPanel(DoubleMapPanel):
                     % {"band": i + 1, "stat": statistic, "format": format}
                 )
 
-        if 0 != RunCommand(
-            "v.db.addtable", map=vectorName, columns=columns, parent=self
+        if (
+            RunCommand("v.db.addtable", map=vectorName, columns=columns, parent=self)
+            != 0
         ):
             wx.EndBusyCursor()
             return False
 
         try:
-            dbInfo = grass.vector_db(vectorName)[1]
+            dbInfo = gs.vector_db(vectorName)[1]
         except KeyError:
             wx.EndBusyCursor()
             return False
@@ -955,9 +959,8 @@ class IClassMapPanel(DoubleMapPanel):
             dlg.CenterOnParent()
             dlg.Show()
             self.dialogs["classManager"] = dlg
-        else:
-            if not self.dialogs["classManager"].IsShown():
-                self.dialogs["classManager"].Show()
+        elif not self.dialogs["classManager"].IsShown():
+            self.dialogs["classManager"].Show()
 
     def CategoryChanged(self, currentCat):
         """Updates everything which depends on current category.
@@ -1272,7 +1275,7 @@ class IClassMapPanel(DoubleMapPanel):
         if not group:
             GMessage(
                 parent=self,
-                message=_("No imagery group selected. " "Operation canceled."),
+                message=_("No imagery group selected. Operation canceled."),
             )
             return False
 
@@ -1292,25 +1295,25 @@ class IClassMapPanel(DoubleMapPanel):
 
         # check if vector has any areas
         if self.GetAreasCount() == 0:
-            GMessage(parent=self, message=_("No areas given. " "Operation canceled."))
+            GMessage(parent=self, message=_("No areas given. Operation canceled."))
             return False
 
         # check if vector is inside raster
         regionBox = bound_box()
         Vect_get_map_box(self.poMapInfo, byref(regionBox))
 
-        rasterInfo = grass.raster_info(groupLayers[0])
+        rasterInfo = gs.raster_info(groupLayers[0])
 
         if (
-            regionBox.N > rasterInfo["north"]
-            or regionBox.S < rasterInfo["south"]
-            or regionBox.E > rasterInfo["east"]
-            or regionBox.W < rasterInfo["west"]
+            rasterInfo["north"] < regionBox.N
+            or rasterInfo["south"] > regionBox.S
+            or rasterInfo["east"] < regionBox.E
+            or rasterInfo["west"] > regionBox.W
         ):
             GMessage(
                 parent=self,
                 message=_(
-                    "Vector features are outside raster layers. " "Operation canceled."
+                    "Vector features are outside raster layers. Operation canceled."
                 ),
             )
             return False
@@ -1355,17 +1358,17 @@ class IClassMapPanel(DoubleMapPanel):
 
     def OnZoomIn(self, event):
         """Enable zooming for plots"""
-        super(IClassMapPanel, self).OnZoomIn(event)
+        super().OnZoomIn(event)
         self.plotPanel.EnableZoom(type=1)
 
     def OnZoomOut(self, event):
         """Enable zooming for plots"""
-        super(IClassMapPanel, self).OnZoomOut(event)
+        super().OnZoomOut(event)
         self.plotPanel.EnableZoom(type=-1)
 
     def OnPan(self, event):
         """Enable panning for plots"""
-        super(IClassMapPanel, self).OnPan(event)
+        super().OnPan(event)
         self.plotPanel.EnablePan()
 
     def OnPointer(self, event):
@@ -1446,7 +1449,8 @@ class MapManager:
         """Adds layer to Map and update toolbar
 
         :param str name: layer (raster) name
-        :param str resultsLayer: True if layer is temp. raster showing the results of computation
+        :param str resultsLayer: True if layer is temp. raster showing the results of
+                                 computation
         """
         if resultsLayer and name in [
             layer.GetName() for layer in self.map.GetListOfLayers(name=name)
@@ -1597,7 +1601,7 @@ class MapManager:
 
     def GetAlias(self, name):
         """Returns alias for layer"""
-        name = [k for k, v in six.iteritems(self.layerName) if v == name]
+        name = [k for k, v in self.layerName.items() if v == name]
         if name:
             return name[0]
         return None

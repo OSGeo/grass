@@ -15,7 +15,6 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (handlers support, GraphicsSet)
 """
 
-
 from copy import copy
 
 import wx

@@ -17,27 +17,18 @@ for details.
 
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
+
 import os
 import re
 import sys
+import xml.etree.ElementTree as etree
+from xml.parsers import expat
 
 from grass.exceptions import ScriptError
 from .utils import decode, split
 from .core import Popen, PIPE, get_real_command
 
-import xml.etree.ElementTree as etree
-from xml.parsers import expat  # TODO: works for any Python?
-
-# Get the XML parsing exceptions to catch. The behavior chnaged with Python 2.7
-# and ElementTree 1.3.
-if hasattr(etree, "ParseError"):
-    ETREE_EXCEPTIONS = (etree.ParseError, expat.ExpatError)
-else:
-    ETREE_EXCEPTIONS = expat.ExpatError
-
-
-if sys.version_info.major >= 3:
-    unicode = str
+ETREE_EXCEPTIONS = (etree.ParseError, expat.ExpatError)
 
 
 class grassTask:
@@ -57,11 +48,11 @@ class grassTask:
     def __init__(self, path=None, blackList=None):
         self.path = path
         self.name = _("unknown")
-        self.params = list()
+        self.params = []
         self.description = ""
         self.label = ""
-        self.flags = list()
-        self.keywords = list()
+        self.flags = []
+        self.keywords = []
         self.errorMsg = ""
         self.firstParam = None
         if blackList:
@@ -97,7 +88,7 @@ class grassTask:
         """Get task name"""
         if sys.platform == "win32":
             name, ext = os.path.splitext(self.name)
-            if ext in (".py", ".sh"):
+            if ext in {".py", ".sh"}:
                 return name
             else:
                 return self.name
@@ -157,12 +148,8 @@ class grassTask:
             if isinstance(val, (list, tuple)):
                 if value in val:
                     return p
-            elif isinstance(val, (bytes, unicode)):
-                if p[element][: len(value)] == value:
-                    return p
-            else:
-                if p[element] == value:
-                    return p
+            elif p[element] == value:
+                return p
 
         if raiseError:
             raise ValueError(
@@ -189,7 +176,7 @@ class grassTask:
 
         :return: list of errors
         """
-        errorList = list()
+        errorList = []
         # determine if suppress_required flag is given
         for f in self.flags:
             if f["value"] and f["suppress_required"]:
@@ -441,8 +428,7 @@ class processTask:
         """Get node text"""
         p = node.find(tag)
         if p is not None:
-            res = " ".join(p.text.split())
-            return res
+            return " ".join(p.text.split())
 
         return default
 
@@ -456,19 +442,16 @@ def convert_xml_to_utf8(xml_text):
 
     # modify: fetch encoding from the interface description text(xml)
     # e.g. <?xml version="1.0" encoding="GBK"?>
-    pattern = re.compile(b'<\?xml[^>]*\Wencoding="([^"]*)"[^>]*\?>')
+    pattern = re.compile(rb'<\?xml[^>]*\Wencoding="([^"]*)"[^>]*\?>')
     m = re.match(pattern, xml_text)
     if m is None:
         return xml_text.encode("utf-8") if xml_text else None
-    #
     enc = m.groups()[0]
 
     # modify: change the encoding to "utf-8", for correct parsing
     xml_text_utf8 = xml_text.decode(enc.decode("ascii")).encode("utf-8")
     p = re.compile(b'encoding="' + enc + b'"', re.IGNORECASE)
-    xml_text_utf8 = p.sub(b'encoding="utf-8"', xml_text_utf8)
-
-    return xml_text_utf8
+    return p.sub(b'encoding="utf-8"', xml_text_utf8)
 
 
 def get_interface_description(cmd):
@@ -521,13 +504,12 @@ def get_interface_description(cmd):
         )
 
     desc = convert_xml_to_utf8(cmdout)
-    desc = desc.replace(
+    return desc.replace(
         b"grass-interface.dtd",
         os.path.join(os.getenv("GISBASE"), "gui", "xml", "grass-interface.dtd").encode(
             "utf-8"
         ),
     )
-    return desc
 
 
 def parse_interface(name, parser=processTask, blackList=None):
@@ -544,9 +526,9 @@ def parse_interface(name, parser=processTask, blackList=None):
         tree = etree.fromstring(get_interface_description(name))
     except ETREE_EXCEPTIONS as error:
         raise ScriptError(
-            _(
-                "Cannot parse interface description of" "<{name}> module: {error}"
-            ).format(name=name, error=error)
+            _("Cannot parse interface description of<{name}> module: {error}").format(
+                name=name, error=error
+            )
         )
     task = parser(tree, blackList=blackList).get_task()
     # if name from interface is different than the originally
@@ -597,8 +579,8 @@ def command_info(cmd):
     cmdinfo["params"] = params = task.get_options()["params"]
 
     usage = task.get_name()
-    flags_short = list()
-    flags_long = list()
+    flags_short = []
+    flags_long = []
     for f in flags:
         fname = f.get("name", "unknown")
         if len(fname) > 1:
@@ -653,7 +635,7 @@ def cmdtuple_to_list(cmd):
             cmdList.append("--" + flag)
 
     for k, v in cmd[1].items():
-        if k in ("flags", "help", "verbose", "quiet", "overwrite"):
+        if k in {"flags", "help", "verbose", "quiet", "overwrite"}:
             continue
         if " " in v:
             v = '"%s"' % v
@@ -679,7 +661,7 @@ def cmdlist_to_tuple(cmd):
             dcmd[str(key)] = value.replace('"', "")
         elif item[:2] == "--":  # long flags
             flag = item[2:]
-            if flag in ("help", "verbose", "quiet", "overwrite"):
+            if flag in {"help", "verbose", "quiet", "overwrite"}:
                 dcmd[str(flag)] = True
         elif len(item) == 2 and item[0] == "-":  # -> flags
             if "flags" not in dcmd:

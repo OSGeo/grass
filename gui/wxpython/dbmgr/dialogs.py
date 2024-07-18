@@ -14,10 +14,9 @@ This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Martin Landa <landa.martin gmail.com>
-@author Refactoring by Stepan Turek <stepan.turek seznam.cz> (GSoC 2012, mentor: Martin Landa)
+@author Refactoring by Stepan Turek <stepan.turek seznam.cz>
+        (GSoC 2012, mentor: Martin Landa)
 """
-
-import six
 
 import wx
 import wx.lib.scrolledpanel as scrolled
@@ -239,7 +238,8 @@ class DisplayAttributesDialog(wx.Dialog):
                             GError(
                                 parent=self,
                                 message=_(
-                                    "Column <%(col)s>: Value '%(value)s' needs to be entered as %(type)s."
+                                    "Column <%(col)s>: Value '%(value)s' needs to be "
+                                    "entered as %(type)s."
                                 )
                                 % {
                                     "col": name,
@@ -250,21 +250,19 @@ class DisplayAttributesDialog(wx.Dialog):
                             )
                             sqlCommands.append(None)
                             continue
-                    else:
-                        if self.action == "add":
-                            continue
+                    elif self.action == "add":
+                        continue
 
                     if newvalue != value:
                         updatedColumns.append(name)
                         if newvalue == "":
                             updatedValues.append("NULL")
+                        elif ctype != str:
+                            updatedValues.append(str(newvalue))
                         else:
-                            if ctype != str:
-                                updatedValues.append(str(newvalue))
-                            else:
-                                updatedValues.append(
-                                    "'" + newvalue.replace("'", "''") + "'"
-                                )
+                            updatedValues.append(
+                                "'" + newvalue.replace("'", "''") + "'"
+                            )
                         columns[name]["values"][idx] = newvalue
 
                 if self.action != "add" and len(updatedValues) == 0:
@@ -326,9 +324,8 @@ class DisplayAttributesDialog(wx.Dialog):
         frame.dialogs["attributes"] = None
         if hasattr(self, "digit"):
             self.parent.digit.GetDisplay().SetSelected([])
-            if frame.IsAutoRendered():
-                self.parent.UpdateMap(render=False)
-        elif frame.IsAutoRendered():
+            self.parent.UpdateMap(render=False)
+        else:
             frame.RemoveQueryLayer()
             self.parent.UpdateMap(render=True)
         if self.IsModal():
@@ -537,7 +534,7 @@ class DisplayAttributesDialog(wx.Dialog):
                     ctype = columns[name]["ctype"]
 
                     if columns[name]["values"][idx] is not None:
-                        if not isinstance(columns[name]["ctype"], six.string_types):
+                        if not isinstance(columns[name]["ctype"], str):
                             value = str(columns[name]["values"][idx])
                         else:
                             value = columns[name]["values"][idx]
@@ -598,7 +595,7 @@ class DisplayAttributesDialog(wx.Dialog):
         table = self.mapDBInfo.GetTable(layer)
         columns = self.mapDBInfo.GetTableDesc(table)
 
-        for key, col in six.iteritems(columns):
+        for key, col in columns.items():
             if key == column:
                 col["values"] = [
                     col["ctype"](value),
@@ -746,7 +743,7 @@ class ModifyTableRecord(wx.Dialog):
 
         If columns is given (list), return only values of given columns.
         """
-        valueList = list()
+        valueList = []
         for labelId, ctypeId, valueId in self.widgets:
             column = self.FindWindowById(labelId).GetLabel()
             if columns is None or column in columns:

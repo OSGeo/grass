@@ -94,7 +94,7 @@ class SbMask:
         :param str map: map that is changed
         :param str newname: new map
         """
-        if map == self.mask_layer or newname == self.mask_layer:
+        if self.mask_layer in {map, newname}:
             self.Refresh()
             self.giface.updateMap.emit()
 

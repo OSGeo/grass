@@ -137,6 +137,9 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
+    /* Setup driver and check important information */
+    D_open_driver();
+
     map_name = opt.map->answer;
 
     if (strcmp("none", opt.grid_color->answer) == 0)
@@ -220,10 +223,6 @@ int main(int argc, char **argv)
         G_fatal_error(_("Aborting (region larger then 200 rows X 200 cols is "
                         "not allowed)"));
     }
-
-    /* Setup driver and check important information */
-
-    D_open_driver();
 
     if (opt.font->answer)
         D_font(opt.font->answer);

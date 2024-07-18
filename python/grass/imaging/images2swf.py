@@ -253,7 +253,7 @@ def bitsToInt(bb, n=8):
     # Get value in bits
     for i in range(len(bb)):
         b = bb[i : i + 1]
-        tmp = bin(ord(b))[2:]
+        tmp = f"{ord(b):b}"
         # value += tmp.rjust(8,'0')
         value = tmp.rjust(8, "0") + value
 
@@ -271,7 +271,7 @@ def getTypeAndLen(bb):
     # Get first 16 bits
     for i in range(2):
         b = bb[i : i + 1]
-        tmp = bin(ord(b))[2:]
+        tmp = f"{ord(b):b}"
         # value += tmp.rjust(8,'0')
         value = tmp.rjust(8, "0") + value
 
@@ -285,7 +285,7 @@ def getTypeAndLen(bb):
         value = ""
         for i in range(2, 6):
             b = bb[i : i + 1]  # becomes a single-byte bytes() on both PY3 and PY2
-            tmp = bin(ord(b))[2:]
+            tmp = f"{ord(b):b}"
             # value += tmp.rjust(8,'0')
             value = tmp.rjust(8, "0") + value
         L = int(value, 2)
@@ -341,8 +341,7 @@ def twitsToBits(arr):
     maxlen = 1
     for i in arr:
         tmp = len(signedIntToBits(i * 20))
-        if tmp > maxlen:
-            maxlen = tmp
+        maxlen = max(tmp, maxlen)
 
     # build array
     bits = intToBits(maxlen, 5)
@@ -829,8 +828,6 @@ def writeSwf(filename, images, duration=0.1, repeat=True):
     fp = open(filename, "wb")
     try:
         buildFile(fp, taglist, nframes=nframes, framesize=wh, fps=fps)
-    except Exception:
-        raise
     finally:
         fp.close()
 
@@ -896,7 +893,7 @@ def readSwf(filename, asNumpy=True):
 
     # Check whether it exists
     if not os.path.isfile(filename):
-        raise IOError("File not found: " + str(filename))
+        raise OSError("File not found: " + str(filename))
 
     # Check PIL
     if (not asNumpy) and (PIL is None):
@@ -922,7 +919,7 @@ def readSwf(filename, asNumpy=True):
             # Decompress movie
             bb = bb[:8] + zlib.decompress(bb[8:])
         else:
-            raise IOError("Not a valid SWF file: " + str(filename))
+            raise OSError("Not a valid SWF file: " + str(filename))
 
         # Set filepointer at first tag (skipping framesize RECT and two uin16's
         i = 8

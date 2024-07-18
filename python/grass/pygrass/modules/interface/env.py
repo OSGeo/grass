@@ -3,7 +3,7 @@ Created on Thu May 28 17:41:32 2015
 
 @author: pietro
 """
-from __future__ import print_function
+
 import os
 import sys
 
@@ -14,13 +14,12 @@ def get_env():
     if gisrc is None:
         raise RuntimeError("You are not in a GRASS session, GISRC not found.")
     with open(gisrc, mode="r") as grc:
-        env = dict(
+        return dict(
             [
                 (k.strip(), v.strip())
                 for k, v in [row.split(":", 1) for row in grc if row]
             ]
         )
-    return env
 
 
 def get_debug_level():

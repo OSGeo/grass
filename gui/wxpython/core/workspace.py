@@ -17,14 +17,9 @@ This program is free software under the GNU General Public License
 """
 
 import os
+from io import StringIO
 
 import wx
-import six
-
-try:
-    from StringIO import StringIO
-except ImportError:
-    from io import StringIO
 
 from core.utils import normalize_whitespace
 from core.settings import UserSettings
@@ -97,9 +92,7 @@ class ProcessWorkspaceFile:
         :param value:
         """
         value = value.replace("&lt;", "<")
-        value = value.replace("&gt;", ">")
-
-        return value
+        return value.replace("&gt;", ">")
 
     def __getNodeText(self, node, tag, default=""):
         """Get node text"""
@@ -287,7 +280,7 @@ class ProcessWorkspaceFile:
 
         :param layer: tree node
         """
-        cmd = list()
+        cmd = []
 
         #
         # layer attributes (task) - 2D settings
@@ -349,7 +342,7 @@ class ProcessWorkspaceFile:
         Process overlay item
         :param overlay: tree node
         """
-        cmd = list()
+        cmd = []
 
         cmd.append(node_overlay.get("name", "unknown"))
 
@@ -379,12 +372,12 @@ class ProcessWorkspaceFile:
         :param node_vdigit: vdigit node
         """
         # init nviz layer properties
-        vdigit = dict()
+        vdigit = {}
         for node in node_vdigit.findall("geometryAttribute"):
             if "geomAttr" not in vdigit:
-                vdigit["geomAttr"] = dict()
+                vdigit["geomAttr"] = {}
             type = node.get("type")
-            vdigit["geomAttr"][type] = dict()
+            vdigit["geomAttr"][type] = {}
             vdigit["geomAttr"][type]["column"] = node.get("column")  # required
             # default map units
             vdigit["geomAttr"][type]["units"] = node.get("units", "mu")
@@ -741,7 +734,7 @@ class ProcessWorkspaceFile:
                     else:
                         value = None
             if dc:
-                dc[tag] = dict()
+                dc[tag] = {}
                 dc[tag]["value"] = value
             else:
                 return value
@@ -858,7 +851,7 @@ class ProcessWorkspaceFile:
         self.nviz_state["constants"] = constants
 
 
-class WriteWorkspaceFile(object):
+class WriteWorkspaceFile:
     """Generic class for writing workspace file"""
 
     def __init__(self, lmgr, file):
@@ -1048,9 +1041,7 @@ class WriteWorkspaceFile(object):
         """Make value XML-valid"""
         value = value.replace("<", "&lt;")
         value = value.replace(">", "&gt;")
-        value = value.replace("&", "&amp;")
-
-        return value
+        return value.replace("&", "&amp;")
 
     def __writeLayer(self, mapTree, item):
         """Write bunch of layers to GRASS Workspace XML file"""
@@ -1101,13 +1092,13 @@ class WriteWorkspaceFile(object):
                 # layer properties
                 self.file.write('%s<task name="%s">\n' % (" " * self.indent, cmd[0]))
                 self.indent += 4
-                for key, val in six.iteritems(cmd[1]):
+                for key, val in cmd[1].items():
                     if key == "flags":
                         for f in val:
                             self.file.write(
                                 '%s<flag name="%s" />\n' % (" " * self.indent, f)
                             )
-                    elif val in (True, False):
+                    elif val in {True, False}:
                         self.file.write(
                             '%s<flag name="%s" />\n' % (" " * self.indent, key)
                         )
@@ -1130,7 +1121,7 @@ class WriteWorkspaceFile(object):
                     self.file.write("%s<vdigit>\n" % (" " * self.indent))
                     if "geomAttr" in vdigit:
                         self.indent += 4
-                        for type, val in six.iteritems(vdigit["geomAttr"]):
+                        for type, val in vdigit["geomAttr"].items():
                             units = ""
                             if val["units"] != "mu":
                                 units = ' units="%s"' % val["units"]
@@ -1166,13 +1157,13 @@ class WriteWorkspaceFile(object):
         self.indent += 4
         self.file.write("%s<surface>\n" % (" " * self.indent))
         self.indent += 4
-        for attrb in six.iterkeys(data):
+        for attrb in data.keys():
             if len(data[attrb]) < 1:  # skip empty attributes
                 continue
             if attrb == "object":
                 continue
 
-            for name in six.iterkeys(data[attrb]):
+            for name in data[attrb].keys():
                 # surface attribute
                 if attrb == "attribute":
                     if data[attrb][name]["map"] is None:
@@ -1194,7 +1185,7 @@ class WriteWorkspaceFile(object):
             if attrb == "draw":
                 self.file.write("%s<%s" % (" " * self.indent, attrb))
                 if "mode" in data[attrb]:
-                    for tag, value in six.iteritems(data[attrb]["mode"]["desc"]):
+                    for tag, value in data[attrb]["mode"]["desc"].items():
                         self.file.write(' %s="%s"' % (tag, value))
                 self.file.write(">\n")  # <draw ...>
 
@@ -1252,14 +1243,14 @@ class WriteWorkspaceFile(object):
         self.indent += 4
         self.file.write("%s<volume>\n" % (" " * self.indent))
         self.indent += 4
-        for attrb in six.iterkeys(data):
+        for attrb in data.keys():
             if len(data[attrb]) < 1:  # skip empty attributes
                 continue
             if attrb == "object":
                 continue
 
             if attrb == "attribute":
-                for name in six.iterkeys(data[attrb]):
+                for name in data[attrb].keys():
                     # surface attribute
                     if data[attrb][name]["map"] is None:
                         continue
@@ -1343,10 +1334,10 @@ class WriteWorkspaceFile(object):
             if attrb == "isosurface":
                 for isosurface in data[attrb]:
                     self.file.write("%s<%s>\n" % (" " * self.indent, attrb))
-                    for name in six.iterkeys(isosurface):
+                    for name in isosurface.keys():
                         self.indent += 4
                         self.file.write("%s<%s>\n" % (" " * self.indent, name))
-                        for att in six.iterkeys(isosurface[name]):
+                        for att in isosurface[name].keys():
                             if isosurface[name][att] is True:
                                 val = "1"
                             elif isosurface[name][att] is False:
@@ -1370,11 +1361,11 @@ class WriteWorkspaceFile(object):
             if attrb == "slice":
                 for slice_ in data[attrb]:
                     self.file.write("%s<%s>\n" % (" " * self.indent, attrb))
-                    for name in six.iterkeys(slice_):
+                    for name in slice_.keys():
                         self.indent += 4
                         self.file.write("%s<%s>\n" % (" " * self.indent, name))
-                        for att in six.iterkeys(slice_[name]):
-                            if att in ("map", "update"):
+                        for att in slice_[name].keys():
+                            if att in {"map", "update"}:
                                 continue
                             val = slice_[name][att]
                             self.indent += 4
@@ -1387,7 +1378,7 @@ class WriteWorkspaceFile(object):
                         self.file.write("%s</%s>\n" % (" " * self.indent, name))
                         self.indent -= 4
                     self.file.write("%s</%s>\n" % (" " * self.indent, attrb))
-            if attrb not in ("attribute", "isosurface", "slice"):
+            if attrb not in {"attribute", "isosurface", "slice"}:
                 # end tag
                 self.file.write("%s</%s>\n" % (" " * self.indent, attrb))
 
@@ -1401,7 +1392,7 @@ class WriteWorkspaceFile(object):
         :param data: Nviz layer properties
         """
         self.indent += 4
-        for attrb in six.iterkeys(data):
+        for attrb in data.keys():
             if len(data[attrb]) < 1:  # skip empty attributes
                 continue
 
@@ -1421,8 +1412,8 @@ class WriteWorkspaceFile(object):
                     '%s<v%s marker="%s">\n' % (" " * self.indent, attrb, marker)
                 )
             self.indent += 4
-            for name in six.iterkeys(data[attrb]):
-                if name in ("object", "marker"):
+            for name in data[attrb].keys():
+                if name in {"object", "marker"}:
                     continue
                 if name == "mode":
                     self.file.write(
@@ -1450,14 +1441,14 @@ class WriteWorkspaceFile(object):
                     self.file.write("%s</%s>\n" % ((" " * self.indent, name)))
                 elif name == "thematic":
                     self.file.write("%s<%s " % (" " * self.indent, name))
-                    for key in six.iterkeys(data[attrb][name]):
+                    for key in data[attrb][name].keys():
                         if key.startswith("use"):
                             self.file.write(
                                 '%s="%s" ' % (key, int(data[attrb][name][key]))
                             )
                     self.file.write(">\n")
                     self.indent += 4
-                    for key, value in six.iteritems(data[attrb][name]):
+                    for key, value in data[attrb][name].items():
                         if key.startswith("use"):
                             continue
                         if value is None:
@@ -1726,7 +1717,7 @@ class WriteWorkspaceFile(object):
         self.indent -= 4
 
 
-class ProcessGrcFile(object):
+class ProcessGrcFile:
     def __init__(self, filename):
         """Process GRC file"""
         self.filename = filename
@@ -1752,7 +1743,7 @@ class ProcessGrcFile(object):
         """
         try:
             file = open(self.filename, "r")
-        except IOError:
+        except OSError:
             wx.MessageBox(
                 parent=parent,
                 message=_("Unable to open file <%s> for reading.") % self.filename,
@@ -1762,7 +1753,7 @@ class ProcessGrcFile(object):
             return []
 
         line_id = 1
-        for line in file.readlines():
+        for line in file:
             self.process_line(line.rstrip("\n"), line_id)
             line_id += 1
 
@@ -1773,8 +1764,8 @@ class ProcessGrcFile(object):
                 parent=parent,
                 message=_(
                     "Some lines were skipped when reading settings "
-                    "from file <%(file)s>.\nSee 'Command output' window for details.\n\n"
-                    "Number of skipped lines: %(line)d"
+                    "from file <%(file)s>.\nSee 'Command output' window for details."
+                    "\n\nNumber of skipped lines: %(line)d"
                 )
                 % {"file": self.filename, "line": self.num_error},
                 caption=_("Warning"),
@@ -1876,7 +1867,7 @@ class ProcessGrcFile(object):
 
         elif (
             element
-            in (
+            in {
                 "display_shape",
                 "display_cat",
                 "display_topo",
@@ -1888,7 +1879,7 @@ class ProcessGrcFile(object):
                 "type_centroid",
                 "type_area",
                 "type_face",
-            )
+            }
             and self.inVector
         ):
             if int(self._get_value(line)) == 1:
@@ -1900,7 +1891,7 @@ class ProcessGrcFile(object):
                 else:
                     self.layers[-1]["cmd"][paramId] += ",%s" % type
 
-        elif element in ("color", "fcolor", "lcolor") and self.inVector:
+        elif element in {"color", "fcolor", "lcolor"} and self.inVector:
             value = self._get_value(line)
             if value != "":
                 self.layers[-1]["cmd"].append(
@@ -1917,7 +1908,7 @@ class ProcessGrcFile(object):
 
         elif (
             element
-            in (
+            in {
                 "icon",
                 "size",
                 "layer",
@@ -1927,7 +1918,7 @@ class ProcessGrcFile(object):
                 "where",
                 "minreg",
                 "maxreg",
-            )
+            }
             and self.inVector
         ):
             value = self._get_value(line)
@@ -1990,7 +1981,7 @@ class ProcessGrcFile(object):
                     "textcolor=%s" % self._color_name_to_rgb(value)
                 )
 
-        elif element in ("gridsize", "gridorigin"):
+        elif element in {"gridsize", "gridorigin"}:
             value = self._get_value(line)
             if value != "":
                 self.layers[-1]["cmd"].append("%s=%s" % (element[4:], value))

@@ -72,7 +72,7 @@ try:
 
     pillow = True
     try:
-        PIL.__version__  # test if user has Pillow or PIL
+        PIL_version = PIL.__version__  # test if user has Pillow or PIL
     except AttributeError:
         pillow = False
     from PIL.GifImagePlugin import getheader, getdata
@@ -645,7 +645,7 @@ def readGif(filename, asNumpy=True):
 
     # Check whether it exists
     if not os.path.isfile(filename):
-        raise IOError("File not found: " + str(filename))
+        raise OSError("File not found: " + str(filename))
 
     # Load file using PIL
     pilIm = PIL.Image.open(filename)
@@ -801,9 +801,9 @@ class NeuQuant:
 
         # Check image
         if image.size[0] * image.size[1] < NeuQuant.MAXPRIME:
-            raise IOError("Image is too small")
+            raise OSError("Image is too small")
         if image.mode != "RGBA":
-            raise IOError("Image mode should be RGBA.")
+            raise OSError("Image mode should be RGBA.")
 
         # Initialize
         self.setconstants(samplefac, colors)
@@ -891,7 +891,8 @@ class NeuQuant:
     #    """ Search for biased BGR values
     #            Finds closest neuron (min dist) and updates self.freq
     #            finds best neuron (min dist-self.bias) and returns position
-    #            for frequently chosen neurons, self.freq[i] is high and self.bias[i] is negative
+    #            for frequently chosen neurons, self.freq[i] is high and self.bias[i]
+    #            is negative
     #            self.bias[i] = self.GAMMA * ((1/self.NETSIZE)-self.freq[i])"""
     #
     #    i, j = self.SPECIALS, self.NETSIZE
@@ -1104,8 +1105,7 @@ class NeuQuant:
     def inxsearch(self, r, g, b):
         """Search for BGR values 0..255 and return colour index"""
         dists = self.colormap[:, :3] - np.array([r, g, b])
-        a = np.argmin((dists * dists).sum(1))
-        return a
+        return np.argmin((dists * dists).sum(1))
 
 
 if __name__ == "__main__":

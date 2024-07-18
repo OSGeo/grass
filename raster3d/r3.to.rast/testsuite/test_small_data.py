@@ -146,10 +146,10 @@ class TestR3ToRast(TestCase):
             exclude="%s_*" % self.rast2d_ref,
         )
         self.assertEqual(
-            len(rasts), 4, msg="Wrong number of 2D rasters present" " in the mapset"
+            len(rasts), 4, msg="Wrong number of 2D rasters present in the mapset"
         )
-        ref_info = dict(cells=9)
-        ref_univar = dict(cells=9, null_cells=0)
+        ref_info = {"cells": 9}
+        ref_univar = {"cells": 9, "null_cells": 0}
         for rast in rasts:
             self.assertRasterExists(rast)
             # the following doesn't make much sense because we just listed them

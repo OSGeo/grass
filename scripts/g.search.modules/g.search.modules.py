@@ -63,17 +63,13 @@
 # % guisection: Output
 # %end
 
-from __future__ import print_function
 import os
 import sys
 
 from grass.script import core as grass
 from grass.exceptions import CalledModuleError
 
-try:
-    import xml.etree.ElementTree as etree
-except ImportError:
-    import elementtree.ElementTree as etree  # Python <= 2.4
+import xml.etree.ElementTree as etree
 
 COLORIZE = False
 

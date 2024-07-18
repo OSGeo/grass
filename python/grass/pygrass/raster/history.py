@@ -3,6 +3,7 @@ Created on Thu Jun 28 17:44:45 2012
 
 @author: pietro
 """
+
 import ctypes
 import grass.lib.raster as libraster
 import datetime
@@ -10,7 +11,7 @@ from grass.script.utils import encode
 from grass.pygrass.utils import decode
 
 
-class History(object):
+class History:
     """History class help to manage all the metadata of a raster map"""
 
     def __init__(

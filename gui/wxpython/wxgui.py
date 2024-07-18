@@ -17,8 +17,6 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com> (menu customization)
 """
 
-from __future__ import print_function
-
 import os
 import sys
 import getopt
@@ -137,10 +135,10 @@ def process_opt(opts, args):
     """Process command-line arguments"""
     workspaceFile = None
     for o, a in opts:
-        if o in ("-h", "--help"):
+        if o in {"-h", "--help"}:
             printHelp()
 
-        elif o in ("-w", "--workspace"):
+        elif o in {"-w", "--workspace"}:
             if a != "":
                 workspaceFile = str(a)
             else:

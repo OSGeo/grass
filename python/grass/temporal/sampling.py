@@ -16,11 +16,11 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
+
 from .core import (
+    SQLDatabaseInterfaceConnection,
     get_current_mapset,
     get_tgis_message_interface,
-    SQLDatabaseInterfaceConnection,
 )
 from .datetime_math import time_delta_to_relative_time
 from .factory import dataset_factory
