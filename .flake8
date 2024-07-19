@@ -39,7 +39,7 @@ per-file-ignores =
     doc/python/vector_example_ctypes.py: F403, F405
     doc/python/m.distance.py: F403, F405, E501
     doc/gui/wxpython/example/dialogs.py: F401
-    locale/grass_po_stats.py: E122, E128, E231, E401, E722, E741
+    locale/grass_po_stats.py: E122, E128, E231, E401, E722
     gui/scripts/d.wms.py: E501
     gui/wxpython/core/gcmd.py: E402
     gui/wxpython/core/gthread.py: F841
@@ -71,8 +71,7 @@ per-file-ignores =
     gui/wxpython/gui_core/widgets.py: F841, E722, E266
     gui/wxpython/image2target/*: F841, E722, E265
     gui/wxpython/image2target/g.gui.image2target.py: E501, E265, F841
-    gui/wxpython/iscatt/*: F841, E722, E741, F405, F403
-    gui/wxpython/lmgr/giface.py: E741
+    gui/wxpython/iscatt/*: F841, E722, F405, F403
     gui/wxpython/lmgr/frame.py: F841, E722
     # layertree still includes some formatting issues (it is ignored by Black)
     gui/wxpython/lmgr/layertree.py: E722, E266, W504, E225
@@ -82,16 +81,15 @@ per-file-ignores =
     gui/wxpython/photo2image/*: F841, E722, E265
     gui/wxpython/photo2image/g.gui.photo2image.py: E501, F841
     gui/wxpython/psmap/*: F841, E266, E722, F405, F403
-    gui/wxpython/vdigit/*: F841, E722, E741, F405, F403
+    gui/wxpython/vdigit/*: F841, E722, F405, F403
     gui/wxpython/vnet/*: F841
     gui/wxpython/wxgui.py: F841
     gui/wxpython/animation/g.gui.animation.py: E501
     gui/wxpython/animation/mapwindow.py: F841
     gui/wxpython/animation/provider.py: F841
-    gui/wxpython/tplot/frame.py: F841, E722, E741
+    gui/wxpython/tplot/frame.py: F841, E722
     gui/wxpython/tplot/g.gui.tplot.py: E501
     gui/wxpython/rdigit/g.gui.rdigit.py: F841
-    gui/wxpython/iclass/dialogs.py: E741
     gui/wxpython/iclass/digit.py: F405, F403
     gui/wxpython/iclass/frame.py: F405, F403
     gui/wxpython/iclass/g.gui.iclass.py: E501
@@ -109,14 +107,12 @@ per-file-ignores =
     gui/wxpython/mapwin/buffered.py: E722
     gui/wxpython/mapwin/graphics.py: E722
     gui/wxpython/startup/locdownload.py: E722, E402
-    gui/wxpython/timeline/g.gui.timeline.py: E501, E741
-    gui/wxpython/timeline/frame.py: E741
+    gui/wxpython/timeline/g.gui.timeline.py: E501
     gui/wxpython/tools/build_modules_xml.py: E722
     gui/wxpython/web_services/cap_interface.py: E501
-    gui/wxpython/web_services/widgets.py: F841, E741, E402
-    gui/wxpython/rlisetup/frame.py: E741
+    gui/wxpython/web_services/widgets.py: F841, E402
     gui/wxpython/rlisetup/sampling_frame.py: F841
-    gui/wxpython/rlisetup/wizard.py: E722, E741
+    gui/wxpython/rlisetup/wizard.py: E722
     # Generated file
     gui/wxpython/menustrings.py: E501
     # F821 undefined name 'cmp'
@@ -130,7 +126,6 @@ per-file-ignores =
     python/grass/pygrass/vector/__init__.py: E402
     python/grass/pygrass/modules/interface/*.py: F401
     python/grass/pygrass/modules/grid/*.py: F401
-    python/grass/pygrass/raster/rowio.py: E741
     python/grass/pygrass/raster/category.py: E721
     python/grass/pygrass/rpc/__init__.py: F401, F403
     python/grass/pygrass/utils.py: E402
@@ -140,13 +135,11 @@ per-file-ignores =
     python/grass/temporal/datetime_math.py: F841, E722
     python/grass/temporal/open_stds.py: F841
     python/grass/temporal/spatial_topology_dataset_connector.py: E722
-    python/grass/temporal/temporal_algebra.py: E741, F841, E722
+    python/grass/temporal/temporal_algebra.py: F841, E722
     python/grass/temporal/temporal_granularity.py: F841, E722
-    python/grass/temporal/temporal_raster_algebra.py: E741
     python/grass/temporal/temporal_raster_base_algebra.py: F841, E722
-    python/grass/temporal/temporal_raster3d_algebra.py: E741
     python/grass/temporal/temporal_topology_dataset_connector.py: E722
-    python/grass/temporal/temporal_vector_algebra.py: E741, F841
+    python/grass/temporal/temporal_vector_algebra.py: F841
     python/grass/temporal/univar_statistics.py: E231
     # Current benchmarks/tests are changing sys.path before import.
     # Possibly, a different approach should be taken there anyway.
@@ -165,7 +158,7 @@ per-file-ignores =
     # E402 module level import not at top of file
     scripts/d.polar/d.polar.py: F841
     scripts/r.in.wms/wms_gdal_drv.py: F841, E722
-    scripts/r.in.wms/wms_cap_parsers.py: F841, E741
+    scripts/r.in.wms/wms_cap_parsers.py: F841
     scripts/r.in.wms/wms_drv.py: E402, E722
     scripts/r.in.wms/srs.py: E722
     scripts/r.semantic.label/r.semantic.label.py: F841, E501
@@ -174,8 +167,7 @@ per-file-ignores =
     scripts/g.extension/g.extension.py: F841, E722, E501
     scripts/v.unpack/v.unpack.py: F841, E722, E501
     scripts/v.import/v.import.py: F841, E722, E501
-    scripts/db.univar/db.univar.py: E741, E501
-    scripts/d.rast.leg/d.rast.leg.py: E741
+    scripts/db.univar/db.univar.py: E501
     scripts/d.frame/d.frame.py: E722
     scripts/i.pansharpen/i.pansharpen.py: E722, E501
     scripts/r.in.srtm/r.in.srtm.py: E722

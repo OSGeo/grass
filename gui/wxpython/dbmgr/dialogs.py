@@ -250,21 +250,19 @@ class DisplayAttributesDialog(wx.Dialog):
                             )
                             sqlCommands.append(None)
                             continue
-                    else:
-                        if self.action == "add":
-                            continue
+                    elif self.action == "add":
+                        continue
 
                     if newvalue != value:
                         updatedColumns.append(name)
                         if newvalue == "":
                             updatedValues.append("NULL")
+                        elif ctype != str:
+                            updatedValues.append(str(newvalue))
                         else:
-                            if ctype != str:
-                                updatedValues.append(str(newvalue))
-                            else:
-                                updatedValues.append(
-                                    "'" + newvalue.replace("'", "''") + "'"
-                                )
+                            updatedValues.append(
+                                "'" + newvalue.replace("'", "''") + "'"
+                            )
                         columns[name]["values"][idx] = newvalue
 
                 if self.action != "add" and len(updatedValues) == 0:
@@ -745,7 +743,7 @@ class ModifyTableRecord(wx.Dialog):
 
         If columns is given (list), return only values of given columns.
         """
-        valueList = list()
+        valueList = []
         for labelId, ctypeId, valueId in self.widgets:
             column = self.FindWindowById(labelId).GetLabel()
             if columns is None or column in columns:

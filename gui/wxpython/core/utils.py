@@ -101,7 +101,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None, layerType=None):
     if len(dcmd) < 1:
         return mapname, False
 
-    if "d.grid" == dcmd[0]:
+    if dcmd[0] == "d.grid":
         mapname = "grid"
     elif "d.geodesic" in dcmd[0]:
         mapname = "geodesic"
@@ -110,7 +110,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None, layerType=None):
     elif "d.graph" in dcmd[0]:
         mapname = "graph"
     else:
-        params = list()
+        params = []
         for idx in range(len(dcmd)):
             try:
                 p, v = dcmd[idx].split("=", 1)
@@ -122,7 +122,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None, layerType=None):
                 break
 
             # this does not use types, just some (incomplete subset of?) names
-            if p in (
+            if p in {
                 "map",
                 "input",
                 "layer",
@@ -134,7 +134,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None, layerType=None):
                 "intensity",
                 "shade",
                 "labels",
-            ):
+            }:
                 params.append((idx, p, v))
 
         if len(params) < 1:
@@ -162,9 +162,9 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None, layerType=None):
             mapname = v
             mapset = ""
             if fullyQualified and "@" not in mapname:
-                if layerType in ("raster", "vector", "raster_3d", "rgb", "his"):
+                if layerType in {"raster", "vector", "raster_3d", "rgb", "his"}:
                     try:
-                        if layerType in ("raster", "rgb", "his"):
+                        if layerType in {"raster", "rgb", "his"}:
                             findType = "cell"
                         elif layerType == "raster_3d":
                             findType = "grid3"
@@ -187,7 +187,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None, layerType=None):
             if i in mapsets and mapsets[i]:
                 dcmd[i] += "@" + mapsets[i]
 
-        maps = list()
+        maps = []
         ogr = False
         for i, p, v in params:
             if v.lower().rfind("@ogr") > -1:
@@ -289,7 +289,7 @@ def ListOfMapsets(get="ordered"):
     :return: list of mapsets
     :return: [] on error
     """
-    if get == "all" or get == "ordered":
+    if get in {"all", "ordered"}:
         ret = RunCommand("g.mapsets", read=True, quiet=True, flags="l", sep="newline")
         if not ret:
             return []
@@ -298,7 +298,7 @@ def ListOfMapsets(get="ordered"):
         if get == "all":
             return mapsets_all
 
-    if get == "accessible" or get == "ordered":
+    if get in {"accessible", "ordered"}:
         ret = RunCommand("g.mapsets", read=True, quiet=True, flags="p", sep="newline")
         if not ret:
             return []
@@ -322,7 +322,7 @@ def ListSortLower(list):
 
 def GetVectorNumberOfLayers(vector):
     """Get list of all vector layers"""
-    layers = list()
+    layers = []
     if not vector:
         return layers
 
@@ -478,11 +478,11 @@ def __ll_parts(value, reverse=False, precision=3):
                 except ValueError:
                     raise ValueError
 
-        if hs not in ("N", "S", "E", "W"):
+        if hs not in {"N", "S", "E", "W"}:
             raise ValueError
 
         coef = 1.0
-        if hs in ("S", "W"):
+        if hs in {"S", "W"}:
             coef = -1.0
 
         fm = int(m) / 60.0
@@ -515,7 +515,7 @@ def ReadEpsgCodes():
 
     :return: dictionary of EPSG code
     """
-    epsgCodeDict = dict()
+    epsgCodeDict = {}
 
     ret = RunCommand("g.proj", read=True, list_codes="EPSG")
 
@@ -553,7 +553,7 @@ def ReprojectCoordinates(coord, projOut, projIn=None, flags=""):
             proj = projOut.split(" ")[0].split("=")[1]
         except IndexError:
             proj = ""
-        if proj in ("ll", "latlong", "longlat") and "d" not in flags:
+        if proj in {"ll", "latlong", "longlat"} and "d" not in flags:
             return (proj, (e, n))
         else:
             try:
@@ -571,19 +571,16 @@ def GetListOfLocations(dbase):
 
     :return: list of locations (sorted)
     """
-    listOfLocations = list()
+    listOfLocations = []
 
-    try:
-        for location in glob.glob(os.path.join(dbase, "*")):
-            try:
-                if os.path.join(location, "PERMANENT") in glob.glob(
-                    os.path.join(location, "*")
-                ):
-                    listOfLocations.append(os.path.basename(location))
-            except:
-                pass
-    except (UnicodeEncodeError, UnicodeDecodeError) as e:
-        raise e
+    for location in glob.glob(os.path.join(dbase, "*")):
+        try:
+            if os.path.join(location, "PERMANENT") in glob.glob(
+                os.path.join(location, "*")
+            ):
+                listOfLocations.append(os.path.basename(location))
+        except:
+            pass
 
     ListSortLower(listOfLocations)
 
@@ -599,7 +596,7 @@ def GetListOfMapsets(dbase, location, selectable=False):
 
     :return: list of mapsets - sorted (PERMANENT first)
     """
-    listOfMapsets = list()
+    listOfMapsets = []
 
     if selectable:
         ret = RunCommand(
@@ -626,7 +623,7 @@ def GetColorTables():
     """Get list of color tables"""
     ret = RunCommand("r.colors", read=True, flags="l")
     if not ret:
-        return list()
+        return []
 
     return ret.splitlines()
 
@@ -663,13 +660,13 @@ def _parseFormats(output, writableOnly=False):
         patt = re.compile(r"\(rw\+?\)$", re.IGNORECASE)
 
     for line in output.splitlines():
-        key, name = map(lambda x: x.strip(), line.strip().split(":", 1))
+        key, name = (x.strip() for x in line.strip().split(":", 1))
         if writableOnly and not patt.search(key):
             continue
 
-        if name in ("Memory", "Virtual Raster", "In Memory Raster"):
+        if name in {"Memory", "Virtual Raster", "In Memory Raster"}:
             continue
-        if name in (
+        if name in {
             "PostgreSQL",
             "PostgreSQL/PostGIS",
             "SQLite",
@@ -682,16 +679,16 @@ def _parseFormats(output, writableOnly=False):
             "CouchDB",
             "MSSQLSpatial",
             "FileGDB",
-        ):
+        }:
             formats["database"][key.split(" ")[0]] = name
-        elif name in (
+        elif name in {
             "GeoJSON",
             "OGC Web Coverage Service",
             "OGC Web Map Service",
             "WFS",
             "GeoRSS",
             "HTTP Fetching Wrapper",
-        ):
+        }:
             formats["protocol"][key.split(" ")[0]] = name
         else:
             formats["file"][key.split(" ")[0]] = name
@@ -825,21 +822,21 @@ def StoreEnvVariable(key, value=None, envFile=None):
             )
 
     # read env file
-    environ = dict()
-    lineSkipped = list()
+    environ = {}
+    lineSkipped = []
     if os.path.exists(envFile):
         try:
             fd = open(envFile)
         except OSError as e:
             sys.stderr.write(_("Unable to open file '%s'\n") % envFile)
             return
-        for line in fd.readlines():
+        for line in fd:
             line = line.rstrip(os.linesep)
             try:
-                k, v = map(lambda x: x.strip(), line.split(" ", 1)[1].split("=", 1))
+                k, v = (x.strip() for x in line.split(" ", 1)[1].split("=", 1))
             except Exception as e:
                 sys.stderr.write(
-                    _("%s: line skipped - unable to parse '%s'\n" "Reason: %s\n")
+                    _("%s: line skipped - unable to parse '%s'\nReason: %s\n")
                     % (envFile, line, e)
                 )
                 lineSkipped.append(line)
@@ -1172,8 +1169,7 @@ def unregisterPid(pid):
 def get_shell_pid(env=None):
     """Get shell PID from the GIS environment or None"""
     try:
-        shell_pid = int(grass.gisenv(env=env)["PID"])
-        return shell_pid
+        return int(grass.gisenv(env=env)["PID"])
     except (KeyError, ValueError) as error:
         Debug.msg(
             1, "No PID for GRASS shell (assuming no shell running): {}".format(error)

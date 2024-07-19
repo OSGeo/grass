@@ -53,8 +53,8 @@ class ImportDialog(wx.Dialog):
         self.parent = parent  # GMFrame
         self._giface = giface  # used to add layers
         self.importType = itype
-        self.options = dict()  # list of options
-        self.options_par = dict()
+        self.options = {}  # list of options
+        self.options_par = {}
 
         self.commandId = -1  # id of running command
 
@@ -631,10 +631,10 @@ class OgrImportDialog(ImportDialog):
         if (
             self.dsnInput.GetType() == "db"
             and self.dsnInput.GetFormat()
-            in (
+            in {
                 "PostgreSQL",
                 "PostgreSQL/PostGIS",
-            )
+            }
             and "GRASS_VECTOR_OGR" not in os.environ
         ):
             self.popOGR = True
@@ -902,7 +902,7 @@ class DxfImportDialog(ImportDialog):
         if not path:
             return
 
-        data = list()
+        data = []
         ret = RunCommand(
             "v.in.dxf", quiet=True, parent=self, read=True, flags="l", input=path
         )

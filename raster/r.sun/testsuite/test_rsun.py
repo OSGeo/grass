@@ -83,7 +83,7 @@ o_value=0.2 incidout="incidout" day=172 step=0.5 solar_constant=1367\\\
             "r.info",
             map=self.incidout,
             flags="e",
-            reference=dict(comments=self.metadata.format(nprocs=4)),
+            reference={"comments": self.metadata.format(nprocs=4)},
             precision=0,
             sep="=",
         )
@@ -96,7 +96,7 @@ o_value=0.2 incidout="incidout" day=172 step=0.5 solar_constant=1367\\\
             "r.info",
             map=self.incidout,
             flags="e",
-            reference=dict(comments=self.metadata.format(nprocs=1)),
+            reference={"comments": self.metadata.format(nprocs=1)},
             precision=0,
             sep="=",
         )

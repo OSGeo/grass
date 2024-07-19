@@ -106,7 +106,7 @@ def main():
     else:
         # for each layer connection save a table in sqlite database
         sqlitedb = os.path.join(basedir, "db.sqlite")
-        for i, dbconn in db_vect.items():
+        for dbconn in db_vect.values():
             grass.run_command(
                 "db.copy",
                 from_driver=dbconn["driver"],

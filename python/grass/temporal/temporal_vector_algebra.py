@@ -43,23 +43,24 @@ for details.
 """
 
 try:
-    import ply.yacc as yacc
+    from ply import yacc
 except ImportError:
     pass
 
+import copy
+
 import grass.pygrass.modules as pygrass
 
-import copy
+from .abstract_dataset import AbstractDatasetComparisonKeyStartTime
+from .core import get_current_mapset, init_dbif
+from .open_stds import open_new_stds
+from .space_time_datasets import VectorDataset
+from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
 from .temporal_algebra import (
+    GlobalTemporalVar,
     TemporalAlgebraLexer,
     TemporalAlgebraParser,
-    GlobalTemporalVar,
 )
-from .core import init_dbif, get_current_mapset
-from .abstract_dataset import AbstractDatasetComparisonKeyStartTime
-from .open_stds import open_new_stds
-from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
-from .space_time_datasets import VectorDataset
 
 
 class TemporalVectorAlgebraLexer(TemporalAlgebraLexer):
@@ -152,16 +153,16 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
     def parse(self, expression, basename=None, overwrite=False):
         # Check for space time dataset type definitions from temporal algebra
-        l = TemporalVectorAlgebraLexer()
-        l.build()
-        l.lexer.input(expression)
+        lx = TemporalVectorAlgebraLexer()
+        lx.build()
+        lx.lexer.input(expression)
 
         while True:
-            tok = l.lexer.token()
+            tok = lx.lexer.token()
             if not tok:
                 break
 
-            if tok.type == "STVDS" or tok.type == "STRDS" or tok.type == "STR3DS":
+            if tok.type in {"STVDS", "STRDS", "STR3DS"}:
                 raise SyntaxError("Syntax error near '%s'" % (tok.type))
 
         self.lexer = TemporalVectorAlgebraLexer()
@@ -290,9 +291,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         resultlist = resultdict.values()
 
         # Sort list of maps chronological.
-        resultlist = sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
-
-        return resultlist
+        return sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
 
     def overlay_cmd_value(self, map_i, tbrelations, function, topolist=["EQUAL"]):
         """Function to evaluate two map lists by given overlay operator.
@@ -410,8 +409,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
             #    resultlist.append(map_new)
         # Get sorted map objects as values from result dictionary.
         resultlist = resultdict.values()
-        resultlist = sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
-        return resultlist
+        return sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
 
     def p_statement_assign(self, t):
         # The expression should always return a list of maps.

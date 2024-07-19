@@ -10,9 +10,10 @@ for details.
 :authors: Soeren Gebbert
 """
 
+import grass.script as gs
+
 from .core import get_available_temporal_mapsets, init_dbif
 from .factory import dataset_factory
-import grass.script as gscript
 
 ###############################################################################
 
@@ -46,15 +47,15 @@ def tlist_grouped(type, group_type=False, dbif=None):
     for type in types:
         try:
             tlist_result = tlist(type=type, dbif=dbif)
-        except gscript.ScriptError as e:
-            gscript.warning(e)
+        except gs.ScriptError as e:
+            gs.warning(e)
             continue
 
         for line in tlist_result:
             try:
                 name, mapset = line.split("@")
             except ValueError:
-                gscript.warning(_("Invalid element '%s'") % line)
+                gs.warning(_("Invalid element '%s'") % line)
                 continue
 
             if mapset not in result:

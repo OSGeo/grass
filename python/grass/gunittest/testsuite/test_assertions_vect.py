@@ -24,34 +24,34 @@ bbb=156.329864501953
 """
 
 # v.info schools -t
-V_UNIVAR_SCHOOLS_TOPO = dict(
-    nodes=0,
-    points=167,
-    lines=0,
-    boundaries=0,
-    centroids=0,
-    areas=0,
-    islands=0,
-    primitives=167,
-    map3d=0,
-)
+V_UNIVAR_SCHOOLS_TOPO = {
+    "nodes": 0,
+    "points": 167,
+    "lines": 0,
+    "boundaries": 0,
+    "centroids": 0,
+    "areas": 0,
+    "islands": 0,
+    "primitives": 167,
+    "map3d": 0,
+}
 
 # v.info schools -g and rounded
-V_UNIVAR_SCHOOLS_REGION = dict(
-    north=248160,
-    south=203560,
-    east=671715,
-    west=619215,
-    top=0,
-    bottom=0,
-)
+V_UNIVAR_SCHOOLS_REGION = {
+    "north": 248160,
+    "south": 203560,
+    "east": 671715,
+    "west": 619215,
+    "top": 0,
+    "bottom": 0,
+}
 
 # v.info schools -g and reduced to minimum
-V_UNIVAR_SCHOOLS_EXTENDED = dict(
-    name="schools",
-    level=2,
-    num_dblinks=1,
-)
+V_UNIVAR_SCHOOLS_EXTENDED = {
+    "name": "schools",
+    "level": 2,
+    "num_dblinks": 1,
+}
 
 
 class TestVectorInfoAssertions(TestCase):

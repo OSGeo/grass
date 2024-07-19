@@ -322,9 +322,7 @@ class GRASSStartup(wx.Frame):
             wx.MessageBox(
                 parent=self,
                 caption=_("Error"),
-                message=_(
-                    "Unable to set GRASS database. " "Check your locale settings."
-                ),
+                message=_("Unable to set GRASS database. Check your locale settings."),
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
 
@@ -544,7 +542,7 @@ class GRASSStartup(wx.Frame):
         if gisrc and os.path.isfile(gisrc):
             try:
                 rc = open(gisrc, "r")
-                for line in rc.readlines():
+                for line in rc:
                     try:
                         key, val = line.split(":", 1)
                     except ValueError as e:
@@ -673,7 +671,7 @@ class GRASSStartup(wx.Frame):
         if returncode != 0:
             GError(
                 parent=self,
-                message=_("Import of <%(name)s> failed.\n" "Reason: %(msg)s")
+                message=_("Import of <%(name)s> failed.\nReason: %(msg)s")
                 % ({"name": filePath, "msg": error}),
             )
         else:
@@ -898,7 +896,7 @@ class GRASSStartup(wx.Frame):
         """Update list of mapsets"""
         self.FormerMapsetSelection = wx.NOT_FOUND  # for non-selectable item
 
-        self.listOfMapsetsSelectable = list()
+        self.listOfMapsetsSelectable = []
         self.listOfMapsets = GetListOfMapsets(self.gisdbase, location)
 
         self.lbmapsets.Clear()
@@ -1142,7 +1140,7 @@ class GRASSStartup(wx.Frame):
                         os.remove(lockfile)
                     except OSError as e:
                         GError(
-                            _("Unable to remove '%(lock)s'.\n\n" "Details: %(reason)s")
+                            _("Unable to remove '%(lock)s'.\n\nDetails: %(reason)s")
                             % {"lock": lockfile, "reason": e}
                         )
                 else:

@@ -144,7 +144,7 @@ class Window(wx.Window):
                 wx.Window.UnsetToolTip(self)
             else:
                 wx.Window.SetToolTip(self, tipString=tip)
-        else:
+        else:  # noqa: PLR5501
             if tip is None:
                 wx.Window.SetToolTip(self, tip)
             else:

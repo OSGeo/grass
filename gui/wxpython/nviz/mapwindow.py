@@ -31,7 +31,7 @@ from wx.lib.newevent import NewEvent
 from wx import glcanvas
 from wx.glcanvas import WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE
 
-import grass.script as grass
+import grass.script as gs
 from grass.pydispatch.signal import Signal
 
 from core.gcmd import GMessage, GException, GError
@@ -85,10 +85,10 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         # for wxGTK we need to set WX_GL_DEPTH_SIZE to draw vectors correctly
         # but we don't know the right value
         # in wxpython 2.9, there is IsDisplaySupported
-        if CheckWxVersion(version=[2, 8, 11]) and sys.platform not in (
+        if CheckWxVersion(version=[2, 8, 11]) and sys.platform not in {
             "win32",
             "darwin",
-        ):
+        }:
             depthBuffer = int(
                 UserSettings.Get(group="display", key="nvizDepthBuffer", subkey="value")
             )
@@ -134,15 +134,15 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         self.mouse = {"use": "pointer"}
 
         # list of loaded map layers (layer tree items)
-        self.layers = list()
+        self.layers = []
         # list of constant surfaces
-        self.constants = list()
+        self.constants = []
         # id of base surface (when vector is loaded and no surface exist)
         self.baseId = -1
         # list of cutting planes
-        self.cplanes = list()
+        self.cplanes = []
         # list of query points
-        self.qpoints = list()
+        self.qpoints = []
         # list of past views
         self.viewhistory = []
         self.saveHistory = False
@@ -217,10 +217,10 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
-        if CheckWxVersion(version=[2, 8, 11]) and sys.platform not in (
+        if CheckWxVersion(version=[2, 8, 11]) and sys.platform not in {
             "win32",
             "darwin",
-        ):
+        }:
             wx.CallLater(3000, self._warningDepthBuffer)
 
         # cplanes cannot be initialized now
@@ -243,7 +243,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
     def InitFly(self):
         """Initialize fly through dictionary"""
-        fly = {
+        return {
             "interval": 10,  # interval for timerFly
             "value": [0, 0, 0],  # calculated values for navigation
             "mode": 0,  # fly through mode (0, 1)
@@ -263,8 +263,6 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             "arrowStep": 50,  # step in pixels (when using arrows)
             "flySpeedStep": 2,
         }
-
-        return fly
 
     def OnTimerFly(self, event):
         """Fly event was emitted, move the scene"""
@@ -478,7 +476,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         Updates self.imagelist"""
         # update images (legend and text)
         for oid, overlay in self.overlays.items():
-            if not overlay.IsShown() or overlay.name in ("barscale", "northarrow"):
+            if not overlay.IsShown() or overlay.name in {"barscale", "northarrow"}:
                 continue
             if oid not in [t.GetId() for t in self.imagelist]:  # new
                 self.CreateTexture(overlay=overlay)
@@ -557,7 +555,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             self.render["quick"] = False
             self.Refresh(False)
 
-        elif key in (wx.WXK_UP, wx.WXK_DOWN, wx.WXK_LEFT, wx.WXK_RIGHT):
+        elif key in {wx.WXK_UP, wx.WXK_DOWN, wx.WXK_LEFT, wx.WXK_RIGHT}:
             if not self.fly["mouseControl"]:
                 if not self.timerFly.IsRunning():
                     sx, sy = self.GetClientSize()
@@ -569,15 +567,14 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 self.ProcessFlyByArrows(keyCode=key)
 
             # change speed of flight when using mouse
-            else:
-                if key == wx.WXK_UP:
-                    self.ChangeFlySpeed(increase=True)
-                elif key == wx.WXK_DOWN:
-                    self.ChangeFlySpeed(increase=False)
+            elif key == wx.WXK_UP:
+                self.ChangeFlySpeed(increase=True)
+            elif key == wx.WXK_DOWN:
+                self.ChangeFlySpeed(increase=False)
 
-        elif key in (wx.WXK_HOME, wx.WXK_PAGEUP) and self.timerFly.IsRunning():
+        elif key in {wx.WXK_HOME, wx.WXK_PAGEUP} and self.timerFly.IsRunning():
             self.ChangeFlySpeed(increase=True)
-        elif key in (wx.WXK_END, wx.WXK_PAGEDOWN) and self.timerFly.IsRunning():
+        elif key in {wx.WXK_END, wx.WXK_PAGEDOWN} and self.timerFly.IsRunning():
             self.ChangeFlySpeed(increase=False)
 
         event.Skip()
@@ -806,7 +803,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             # and moreover we are in left up
             self.mapQueried.emit(x=self.mouse["end"][0], y=self.mouse["end"][1])
 
-        elif self.mouse["use"] in ("arrow", "scalebar"):
+        elif self.mouse["use"] in {"arrow", "scalebar"}:
             self.lmgr.nviz.FindWindowById(
                 self.lmgr.nviz.win["decoration"][self.mouse["use"]]["place"]
             ).SetValue(False)
@@ -1013,7 +1010,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
     def ResetViewHistory(self):
         """Reset view history"""
-        self.viewhistory = list()
+        self.viewhistory = []
 
     def GoTo(self, e, n):
         """Focus on given point"""
@@ -1190,7 +1187,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         if not self.parent.mapWindowProperties.autoRender and not reRenderTool:
             return
 
-        start = grass.clock()
+        start = gs.clock()
 
         self.resize = False
 
@@ -1234,7 +1231,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 self._display.Start2D()
                 self.DrawImages()
 
-        stop = grass.clock()
+        stop = gs.clock()
 
         if self.render["quick"] is False:
             if sys.platform != "darwin":
@@ -1343,7 +1340,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 item = self.tree.GetNextItem(item)
                 continue
 
-            if not item.IsChecked() or type not in ("raster", "vector", "raster_3d"):
+            if not item.IsChecked() or type not in {"raster", "vector", "raster_3d"}:
                 item = self.tree.GetNextItem(item)
                 continue
 
@@ -1364,7 +1361,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         item = self.tree.GetFirstChild(self.tree.root)[0]
         self._GetDataLayers(item, listOfItems)
 
-        start = grass.clock()
+        start = gs.clock()
 
         while len(listOfItems) > 0:
             item = listOfItems.pop()
@@ -1382,7 +1379,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                     self.LoadRaster3d(item)
                 elif type == "vector":
                     layer = self.tree.GetLayerInfo(item, key="maplayer")
-                    vInfo = grass.vector_info_topo(layer.GetName())
+                    vInfo = gs.vector_info_topo(layer.GetName())
                     if (vInfo["points"]) > 0:
                         # include vInfo['centroids'] to initially load
                         # centroids
@@ -1399,7 +1396,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             except:
                 pass
 
-        stop = grass.clock()
+        stop = gs.clock()
 
         Debug.msg(1, "GLWindow.LoadDataLayers(): time = %f" % (stop - start))
 
@@ -1416,7 +1413,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             item = self.tree.GetFirstChild(self.tree.root)[0]
             self._GetDataLayers(item, listOfItems)
 
-        start = grass.clock()
+        start = gs.clock()
 
         update = False
         layersTmp = self.layers[:]
@@ -1431,7 +1428,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                     self.UnloadRaster3d(layer)
                 elif ltype == "vector":
                     maplayer = self.tree.GetLayerInfo(layer, key="maplayer")
-                    vInfo = grass.vector_info_topo(maplayer.GetName())
+                    vInfo = gs.vector_info_topo(maplayer.GetName())
                     if (vInfo["points"] + vInfo["centroids"]) > 0:
                         self.UnloadVector(layer, points=True)
                     if (vInfo["lines"] + vInfo["boundaries"]) > 0 or vInfo["map3d"]:
@@ -1447,15 +1444,15 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             self.lmgr.nviz.UpdateSettings()
             self.UpdateView(None)
 
-        stop = grass.clock()
+        stop = gs.clock()
 
         Debug.msg(1, "GLWindow.UnloadDataLayers(): time = %f" % (stop - start))
 
     def SetVectorSurface(self, data):
         """Set reference surfaces of vector"""
         data["mode"]["surface"] = {}
-        data["mode"]["surface"]["value"] = list()
-        data["mode"]["surface"]["show"] = list()
+        data["mode"]["surface"]["value"] = []
+        data["mode"]["surface"]["show"] = []
         for name in self.GetLayerNames("raster"):
             data["mode"]["surface"]["value"].append(name)
             data["mode"]["surface"]["show"].append(True)
@@ -1544,7 +1541,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                         continue
                     if isinstance(data[sec][sec1], dict):
                         for sec2 in data[sec][sec1].keys():
-                            if sec2 not in ("all", "init", "id"):
+                            if sec2 not in {"all", "init", "id"}:
                                 data[sec][sec1][sec2]["update"] = None
                     elif isinstance(data[sec][sec1], list):
                         for i in range(len(data[sec][sec1])):
@@ -1555,7 +1552,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
         # set id
         if id > 0:
-            if mapType in ("raster", "raster_3d"):
+            if mapType in {"raster", "raster_3d"}:
                 data[nvizType]["object"] = {"id": id, "init": False}
             elif mapType == "vector":
                 data["vector"][nvizType]["object"] = {"id": id, "init": False}
@@ -1585,7 +1582,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         """
         layer = self.tree.GetLayerInfo(item, key="maplayer")
 
-        if layer.type not in ("raster", "raster_3d"):
+        if layer.type not in {"raster", "raster_3d"}:
             return
 
         if layer.type == "raster":
@@ -1600,7 +1597,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             id = -1
 
         if id < 0:
-            if layer.type in ("raster", "raster_3d"):
+            if layer.type in {"raster", "raster_3d"}:
                 self.log.WriteError("%s <%s> %s" % (errorMsg, layer.name, _("failed")))
             else:
                 self.log.WriteError(_("Unsupported layer type '%s'") % layer.type)
@@ -1635,7 +1632,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             name = self.constants[-1]["constant"]["object"]["name"] + 1
         except IndexError:
             name = 1
-        data = dict()
+        data = {}
         self.constants.append(data)
         data = self.SetMapObjProperties(item=index, id=-1, nvizType="constant")
         self.AddConstant(data, name)
@@ -1714,7 +1711,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         """
         layer = self.tree.GetLayerInfo(item, key="maplayer")
 
-        if layer.type not in ("raster", "raster_3d"):
+        if layer.type not in {"raster", "raster_3d"}:
             return
 
         data = self.tree.GetLayerInfo(item, key="nviz")
@@ -1883,12 +1880,12 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         # hack for latlon projection
         # TODO find more precise way or better rewrite it in OGSF
         self.iview["z-exag"]["llRatio"] = 1
-        if grass.locn_is_latlong():
+        if gs.locn_is_latlong():
             self.iview["z-exag"]["llRatio"] = (
                 math.pi
                 / 180
                 * 6371000
-                * math.cos((grass.region()["n"] + grass.region()["s"]) / 2)
+                * math.cos((gs.region()["n"] + gs.region()["s"]) / 2)
             )
 
         self.view["z-exag"]["value"] = round(
@@ -1996,7 +1993,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 if isinstance(value, str):
                     if len(value) == 0:  # ignore empty values (TODO: warning)
                         continue
-                    if map and not grass.find_file(value, element="cell")["fullname"]:
+                    if map and not gs.find_file(value, element="cell")["fullname"]:
                         continue
                 if attrb == "color":
                     self._display.SetSurfaceColor(id, map, str(value))
@@ -2079,14 +2076,13 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                         )
                     )
                     self._display.SetIsosurfaceMode(id, mode)
-            else:
-                if data["draw"]["shading"]["slice"]["value"] < 0:  # need to calculate
-                    mode = data["draw"]["shading"]["slice"]["value"] = (
-                        self.nvizDefault.GetDrawMode(
-                            shade=data["draw"]["shading"]["slice"], string=False
-                        )
+            elif data["draw"]["shading"]["slice"]["value"] < 0:  # need to calculate
+                mode = data["draw"]["shading"]["slice"]["value"] = (
+                    self.nvizDefault.GetDrawMode(
+                        shade=data["draw"]["shading"]["slice"], string=False
                     )
-                    self._display.SetSliceMode(id, mode)
+                )
+                self._display.SetSliceMode(id, mode)
             data["draw"]["shading"].pop("update")
 
         #
@@ -2115,10 +2111,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                     if isinstance(value, str):
                         if len(value) == 0:  # ignore empty values (TODO: warning)
                             continue
-                        if (
-                            map
-                            and not grass.find_file(value, element="grid3")["fullname"]
-                        ):
+                        if map and not gs.find_file(value, element="grid3")["fullname"]:
                             continue
                     if attrb == "color":
                         self._display.SetIsosurfaceColor(id, isosurfId, map, str(value))
@@ -2387,7 +2380,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             if type == "raster":
                 self.nvizDefault.SetSurfaceDefaultProp(data["surface"])
             if type == "vector":
-                vInfo = grass.vector_info_topo(layer.GetName())
+                vInfo = gs.vector_info_topo(layer.GetName())
                 if (vInfo["points"] + vInfo["centroids"]) > 0:
                     self.nvizDefault.SetVectorPointsDefaultProp(
                         data["vector"]["points"], self._display.GetLongDim()
@@ -2494,13 +2487,12 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                     cmdColorMap += (
                         "%s," % self.tree.GetLayerInfo(item, key="maplayer").GetName()
                     )
+                elif nvizData["color"]["map"]:
+                    cmdColorMap += "%s," % nvizData["color"]["value"]
                 else:
-                    if nvizData["color"]["map"]:
-                        cmdColorMap += "%s," % nvizData["color"]["value"]
-                    else:
-                        cmdColorVal += "%s," % nvizData["color"]["value"]
-                        # TODO
-                        # transparency, shine, mask
+                    cmdColorVal += "%s," % nvizData["color"]["value"]
+                    # TODO
+                    # transparency, shine, mask
             for item in self.constants:
                 cmdColorVal += "%s," % item["constant"]["color"]
             if cmdColorMap.split("=")[1]:
@@ -2529,7 +2521,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             ]
             for vector in vectors:
                 layerName = self.tree.GetLayerInfo(vector, key="maplayer").GetName()
-                vInfo = grass.vector_info_topo(layerName)
+                vInfo = gs.vector_info_topo(layerName)
                 nvizData = self.tree.GetLayerInfo(vector, key="nviz")["vector"]
                 if (vInfo["lines"] + vInfo["boundaries"]) > 0:
                     cmdLines += (
