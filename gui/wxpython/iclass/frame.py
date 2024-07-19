@@ -857,8 +857,9 @@ class IClassMapPanel(DoubleMapPanel):
                     % {"band": i + 1, "stat": statistic, "format": format}
                 )
 
-        if 0 != RunCommand(
-            "v.db.addtable", map=vectorName, columns=columns, parent=self
+        if (
+            RunCommand("v.db.addtable", map=vectorName, columns=columns, parent=self)
+            != 0
         ):
             wx.EndBusyCursor()
             return False
@@ -958,9 +959,8 @@ class IClassMapPanel(DoubleMapPanel):
             dlg.CenterOnParent()
             dlg.Show()
             self.dialogs["classManager"] = dlg
-        else:
-            if not self.dialogs["classManager"].IsShown():
-                self.dialogs["classManager"].Show()
+        elif not self.dialogs["classManager"].IsShown():
+            self.dialogs["classManager"].Show()
 
     def CategoryChanged(self, currentCat):
         """Updates everything which depends on current category.
@@ -1305,10 +1305,10 @@ class IClassMapPanel(DoubleMapPanel):
         rasterInfo = gs.raster_info(groupLayers[0])
 
         if (
-            regionBox.N > rasterInfo["north"]
-            or regionBox.S < rasterInfo["south"]
-            or regionBox.E > rasterInfo["east"]
-            or regionBox.W < rasterInfo["west"]
+            rasterInfo["north"] < regionBox.N
+            or rasterInfo["south"] > regionBox.S
+            or rasterInfo["east"] < regionBox.E
+            or rasterInfo["west"] > regionBox.W
         ):
             GMessage(
                 parent=self,

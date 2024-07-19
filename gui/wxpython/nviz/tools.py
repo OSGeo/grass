@@ -2642,7 +2642,7 @@ class NvizToolWindow(GNotebook):
         if nameOnly:
             return name
 
-        if nvizType == "surface" or nvizType == "fringe":
+        if nvizType in {"surface", "fringe"}:
             return self._getLayerPropertiesByName(name, mapType="raster")
         elif nvizType == "vector":
             return self._getLayerPropertiesByName(name, mapType="vector")
@@ -3320,9 +3320,8 @@ class NvizToolWindow(GNotebook):
                 for win in data[name].values():
                     if win == id:
                         return name
-            else:
-                if data[name] == id:
-                    return name
+            elif data[name] == id:
+                return name
 
         return None
 
@@ -3532,14 +3531,13 @@ class NvizToolWindow(GNotebook):
             self.PostViewEvent(zExag=True)
             self.UpdateSettings()
             self.mapWindow.Refresh(False)
-        else:  # here
-            if self.FindWindowById(event.GetId()).GetValue():
-                self.mapDisplay.Raise()
-                self.mapWindow.mouse["use"] = "lookHere"
-                self.mapWindow.SetNamedCursor("cross")
-            else:
-                self.mapWindow.mouse["use"] = "default"
-                self.mapWindow.SetNamedCursor("default")
+        elif self.FindWindowById(event.GetId()).GetValue():
+            self.mapDisplay.Raise()
+            self.mapWindow.mouse["use"] = "lookHere"
+            self.mapWindow.SetNamedCursor("cross")
+        else:
+            self.mapWindow.mouse["use"] = "default"
+            self.mapWindow.SetNamedCursor("default")
 
     def OnResetView(self, event):
         """Reset to default view (view page)"""
@@ -3694,14 +3692,10 @@ class NvizToolWindow(GNotebook):
                         for ssitem in self.win[name][key][skey].values():
                             if not isinstance(ssitem, bool) and isinstance(ssitem, int):
                                 self.FindWindowById(ssitem).Enable(enabled)
-                    else:
-                        # type(bool) != types.IntType but
-                        # isinstance(bool) == types.IntType
-                        if not isinstance(sitem, bool) and isinstance(sitem, int):
-                            self.FindWindowById(sitem).Enable(enabled)
-            else:
-                if not isinstance(item, bool) and isinstance(item, int):
-                    self.FindWindowById(item).Enable(enabled)
+                    elif not isinstance(sitem, bool) and isinstance(sitem, int):
+                        self.FindWindowById(sitem).Enable(enabled)
+            elif not isinstance(item, bool) and isinstance(item, int):
+                self.FindWindowById(item).Enable(enabled)
 
     def SetMapObjUseMap(self, nvizType, attrb, map=None):
         """Update dialog widgets when attribute type changed"""
@@ -4044,7 +4038,7 @@ class NvizToolWindow(GNotebook):
 
         :param vecType: vector type (lines, points)
         """
-        if vecType != "lines" and vecType != "points":
+        if vecType not in {"lines", "points"}:
             return False
 
         for win in self.win["vector"][vecType].keys():
@@ -4060,11 +4054,10 @@ class NvizToolWindow(GNotebook):
                         self.FindWindowById(
                             self.win["vector"][vecType][win][swin]
                         ).Enable(False)
+            elif enabled:
+                self.FindWindowById(self.win["vector"][vecType][win]).Enable(True)
             else:
-                if enabled:
-                    self.FindWindowById(self.win["vector"][vecType][win]).Enable(True)
-                else:
-                    self.FindWindowById(self.win["vector"][vecType][win]).Enable(False)
+                self.FindWindowById(self.win["vector"][vecType][win]).Enable(False)
 
         return True
 
@@ -4560,13 +4553,12 @@ class NvizToolWindow(GNotebook):
             else:
                 # disable -> make transparent
                 self._display.SetIsosurfaceTransp(vid, id, False, "255")
+        elif list.IsChecked(index):
+            value = data["slice"][id]["transp"]["value"]
+            self._display.SetSliceTransp(vid, id, value)
         else:
-            if list.IsChecked(index):
-                value = data["slice"][id]["transp"]["value"]
-                self._display.SetSliceTransp(vid, id, value)
-            else:
-                # disable -> make transparent
-                self._display.SetSliceTransp(vid, id, 255)
+            # disable -> make transparent
+            self._display.SetSliceTransp(vid, id, 255)
 
         self.mapWindow.Refresh(False)
 
@@ -4720,11 +4712,10 @@ class NvizToolWindow(GNotebook):
                 self.UpdateVolumeIsosurfPage(data["isosurface"][list.GetSelection()])
             else:
                 self.UpdateVolumeSlicePage(data["slice"][list.GetSelection()])
+        elif mode == "isosurf":
+            self.UpdateVolumeIsosurfPage(data["attribute"])
         else:
-            if mode == "isosurf":
-                self.UpdateVolumeIsosurfPage(data["attribute"])
-            else:
-                self.UpdateVolumeSlicePage(None)
+            self.UpdateVolumeSlicePage(None)
         self.UpdateIsosurfButtons(list)
 
         self.mapWindow.Refresh(False)
@@ -5746,18 +5737,17 @@ class NvizToolWindow(GNotebook):
                     self.FindWindowById(self.win["volume"][attrb]["const"]).SetColour(
                         color
                     )
-            else:
+            else:  # noqa: PLR5501
                 if data[attrb]["map"]:
                     self.vetoGSelectEvt = True
                     win = self.FindWindowById(self.win["volume"][attrb]["map"])
                     win.SetValue(value)
-                else:
-                    if value:
-                        win = self.FindWindowById(self.win["volume"][attrb]["const"])
-                        if attrb == "topo":
-                            win.SetValue(float(value))
-                        else:
-                            win.SetValue(self._getPercent(value))
+                elif value:
+                    win = self.FindWindowById(self.win["volume"][attrb]["const"])
+                    if attrb == "topo":
+                        win.SetValue(float(value))
+                    else:
+                        win.SetValue(self._getPercent(value))
 
             self.SetMapObjUseMap(nvizType="volume", attrb=attrb, map=data[attrb]["map"])
         # set inout

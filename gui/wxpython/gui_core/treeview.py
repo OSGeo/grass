@@ -91,8 +91,7 @@ class AbstractTreeViewMixin(VirtualTree):
         """
         node = self._model.GetNodeByIndex(index)
         # remove & because of & needed in menu (&Files)
-        label = node.label.replace("&", "")
-        return label
+        return node.label.replace("&", "")
 
     def OnGetChildrenCount(self, index):
         """Overridden method necessary to communicate with tree model."""
@@ -258,8 +257,7 @@ class TreeListView(AbstractTreeViewMixin, ExpansionState, TreeListCtrl):
         if column > 0:
             return node.data.get(self._columns[column], "")
         else:
-            label = node.label.replace("&", "")
-            return label
+            return node.label.replace("&", "")
 
     def OnRightClick(self, event):
         """Select item on right click.

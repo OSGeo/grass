@@ -14,6 +14,7 @@
 #############################################################################
 
 import os
+from pathlib import Path
 import sys
 import fnmatch
 import re
@@ -97,9 +98,8 @@ def img_in_html(filename, imagename):
     # for some reason, calling search just once is much faster
     # than calling it on every line (time is spent in _compile)
     pattern = re.compile("<img .*src=.{0}.*>".format(imagename))
-    with open(filename) as file:
-        if re.search(pattern, file.read()):
-            return True
+    if re.search(pattern, Path(filename).read_text()):
+        return True
     return False
 
 
@@ -123,8 +123,7 @@ def remove_module_name(string, module):
     string = string.replace(module.replace("wxGUI.", "g.gui."), "")
     string = string.replace(module.replace(".", "_"), "")  # using _
     string = string.replace(module.replace(".", ""), "")  # using nothing
-    string = string.replace(module, "")  # using original dots
-    return string
+    return string.replace(module, "")  # using original dots
 
 
 def title_from_names(module_name, img_name):

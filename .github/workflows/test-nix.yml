@@ -7,6 +7,12 @@ on:
   push:
     tags:
       - '*'
+  pull_request:
+    paths:
+      - 'flake.nix'
+      - 'flake.lock'
+      - 'package.nix'
+      - '.github/workflows/test-nix.yml'
   workflow_dispatch:
 
 concurrency:

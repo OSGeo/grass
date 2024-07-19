@@ -1058,11 +1058,11 @@ class GMFrame(wx.Frame):
 
     def _focusPage(self, notification):
         """Focus the 'Console' notebook page according to event notification."""
-        if (
-            notification == Notification.HIGHLIGHT
-            or notification == Notification.MAKE_VISIBLE
-            or notification == Notification.RAISE_WINDOW
-        ):
+        if notification in {
+            Notification.HIGHLIGHT,
+            Notification.MAKE_VISIBLE,
+            Notification.RAISE_WINDOW,
+        }:
             self.FocusPage("Console")
 
     def FocusPage(self, page_text):
@@ -2129,8 +2129,8 @@ class GMFrame(wx.Frame):
             self.AddMaps([mapName], ltype, check=True)
         else:
             display = self.GetMapDisplay()
-            mapLayers = map(
-                lambda x: x.GetName(), display.GetMap().GetListOfLayers(ltype=ltype)
+            mapLayers = (
+                x.GetName() for x in display.GetMap().GetListOfLayers(ltype=ltype)
             )
             if mapName in mapLayers:
                 display.GetWindow().UpdateMap(render=True)
@@ -2430,13 +2430,12 @@ class GMFrame(wx.Frame):
         )
         if limitText:
             message += "\n\n%s" % _(limitText)
-        dlg = wx.MessageDialog(
+        return wx.MessageDialog(
             parent=self,
             message=message,
             caption=_("Constrain map to region geometry?"),
             style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
         )
-        return dlg
 
     def _onMapsetWatchdog(self, map_path, map_dest):
         """Current mapset watchdog event handler

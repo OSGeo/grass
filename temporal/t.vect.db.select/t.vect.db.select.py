@@ -67,10 +67,10 @@ def main():
     layer = options["layer"]
     separator = gs.separator(options["separator"])
 
-    if where == "" or where == " " or where == "\n":
+    if where in {"", " ", "\n"}:
         where = None
 
-    if columns == "" or columns == " " or columns == "\n":
+    if columns in {"", " ", "\n"}:
         columns = None
 
     # Make sure the temporal database exists
@@ -120,23 +120,22 @@ def main():
                         if col_names != col_names_new:
                             col_names = col_names_new
                             print(col_names)
+                    elif row["end_time"]:
+                        print(
+                            "%s%s%s%s%s"
+                            % (
+                                row["start_time"],
+                                separator,
+                                row["end_time"],
+                                separator,
+                                entry,
+                            )
+                        )
                     else:
-                        if row["end_time"]:
-                            print(
-                                "%s%s%s%s%s"
-                                % (
-                                    row["start_time"],
-                                    separator,
-                                    row["end_time"],
-                                    separator,
-                                    entry,
-                                )
-                            )
-                        else:
-                            print(
-                                "%s%s%s%s"
-                                % (row["start_time"], separator, separator, entry)
-                            )
+                        print(
+                            "%s%s%s%s"
+                            % (row["start_time"], separator, separator, entry)
+                        )
                     count += 1
 
 

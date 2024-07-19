@@ -119,7 +119,7 @@ def main():
                 gs.fatal(_("Table <%s> already exists") % output)
 
     # treat DB as real vector map...
-    layer = db_table if db_table else None
+    layer = db_table or None
 
     vopts = {}
     if options["encoding"]:

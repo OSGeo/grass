@@ -79,9 +79,7 @@ from location_wizard.wizard import GridBagSizerTitledPage as TitledPage
 #
 # global variables
 #
-global src_map
-global tgt_map
-global maptype
+global src_map, tgt_map, maptype
 
 src_map = ""
 tgt_map = {"raster": "", "vector": ""}
@@ -162,7 +160,7 @@ class GCPWizard:
         self.gisrc_dict = {}
         try:
             f = open(self.target_gisrc, "r")
-            for line in f.readlines():
+            for line in f:
                 line = line.replace("\n", "").strip()
                 if len(line) < 1:
                     continue
@@ -178,9 +176,7 @@ class GCPWizard:
         # mapset for xy map to georectify
         self.newmapset = ""
 
-        global maptype
-        global src_map
-        global tgt_map
+        global maptype, src_map, tgt_map
 
         # src_map = ''
         # tgt_map = ''
@@ -879,8 +875,7 @@ class DispMapPage(TitledPage):
 
     def OnSrcSelection(self, event):
         """Source map to display selected"""
-        global src_map
-        global maptype
+        global src_map, maptype
 
         src_map = self.srcselection.GetValue()
 
@@ -916,8 +911,7 @@ class DispMapPage(TitledPage):
         tgt_map["vector"] = self.tgtvectselection.GetValue()
 
     def OnPageChanging(self, event=None):
-        global src_map
-        global tgt_map
+        global src_map, tgt_map
 
         if event.GetDirection() and (src_map == ""):
             GMessage(
@@ -929,9 +923,7 @@ class DispMapPage(TitledPage):
         self.parent.SwitchEnv("target")
 
     def OnEnterPage(self, event=None):
-        global maptype
-        global src_map
-        global tgt_map
+        global maptype, src_map, tgt_map
 
         self.srcselection.SetElementList(maptype)
 
@@ -974,7 +966,7 @@ class DispMapPage(TitledPage):
 
             f = open(vgrpfile)
             try:
-                for vect in f.readlines():
+                for vect in f:
                     vect = vect.strip("\n")
                     if len(vect) < 1:
                         continue
@@ -1443,11 +1435,10 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                     wxPen = "highest"
                 else:
                     wxPen = "default"
+            elif self.mapcoordlist[key][7] > self.rmsthresh:
+                wxPen = "highest"
             else:
-                if self.mapcoordlist[key][7] > self.rmsthresh:
-                    wxPen = "highest"
-                else:
-                    wxPen = "default"
+                wxPen = "default"
 
         if itemIndex == self.list.selectedkey:
             wxPen = "selected"
@@ -1640,7 +1631,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             f = open(self.file["control_points"], "r")
             GCPcnt = 0
 
-            for line in f.readlines():
+            for line in f:
                 if line[0] == "#" or line == "":
                     continue
                 line = line.replace("\n", "").strip()
@@ -1821,7 +1812,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             f = open(self.file["vgrp"])
             vectlist = []
             try:
-                for vect in f.readlines():
+                for vect in f:
                     vect = vect.strip("\n")
                     if len(vect) < 1:
                         continue
@@ -2682,7 +2673,7 @@ class VectGroup(wx.Dialog):
             f = open(self.vgrpfile)
             try:
                 checked = []
-                for line in f.readlines():
+                for line in f:
                     line = line.replace("\n", "")
                     if len(line) < 1:
                         continue
@@ -2855,12 +2846,16 @@ class EditGCP(wx.Dialog):
         except ValueError:
             return valuelist
 
-        valuelist.append(self.xcoord.GetValue())
-        valuelist.append(self.ycoord.GetValue())
-        valuelist.append(self.zcoord.GetValue())
-        valuelist.append(self.ecoord.GetValue())
-        valuelist.append(self.ncoord.GetValue())
-        valuelist.append(self.hcoord.GetValue())
+        valuelist.extend(
+            (
+                self.xcoord.GetValue(),
+                self.ycoord.GetValue(),
+                self.zcoord.GetValue(),
+                self.ecoord.GetValue(),
+                self.ncoord.GetValue(),
+                self.hcoord.GetValue(),
+            )
+        )
 
         return valuelist
 
@@ -3314,9 +3309,7 @@ class GrSettingsDialog(wx.Dialog):
         self.parent.extension = self.ext_txt.GetValue()
 
     def UpdateSettings(self):
-        global src_map
-        global tgt_map
-        global maptype
+        global src_map, tgt_map, maptype
 
         layers = None
 
@@ -3465,7 +3458,7 @@ class GrSettingsDialog(wx.Dialog):
                 self.parent.activemap.SetSelection(0)
                 self.parent.activemap.Enable(False)
                 self.parent.GetMapToolbar().Enable("zoommenu", enable=False)
-        else:
+        else:  # noqa: PLR5501
             if not self.parent.show_target:
                 self.parent.show_target = True
                 self.parent._mgr.GetPane("target").Show()

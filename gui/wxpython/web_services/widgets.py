@@ -508,7 +508,7 @@ class WSPanel(wx.Panel):
         """Manage cmd output."""
         if Debug.GetLevel() != 0:
             Debug.msg(1, event.text)
-        elif event.type != "message" and event.type != "warning":
+        elif event.type not in {"message", "warning"}:
             self.cmd_err_str += event.text + os.linesep
 
     def _prepareForNewConn(self, url, username, password):
@@ -662,7 +662,7 @@ class WSPanel(wx.Panel):
 
         if "bgcolor" in dcmd and self.params["bgcolor"]:
             bgcolor = dcmd["bgcolor"].strip().lower()
-            if len(bgcolor) == 8 and "0x" == bgcolor[:2]:
+            if len(bgcolor) == 8 and bgcolor[:2] == "0x":
                 colour = "#" + bgcolor[2:]
                 self.params["bgcolor"].SetColour(colour)
 

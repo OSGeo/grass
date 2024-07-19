@@ -112,11 +112,10 @@ class DictSQLSerializer:
                         sql += "?"
                     else:
                         sql += "%s"
+                elif self.dbmi_paramstyle == "qmark":
+                    sql += " ,?"
                 else:
-                    if self.dbmi_paramstyle == "qmark":
-                        sql += " ,?"
-                    else:
-                        sql += " ,%s"
+                    sql += " ,%s"
                 count += 1
                 args.append(self.D[key])
             sql += ") "
@@ -138,7 +137,7 @@ class DictSQLSerializer:
                         else:
                             sql += " %s " % key
                             sql += "= %s "
-                    else:
+                    else:  # noqa: PLR5501
                         if self.dbmi_paramstyle == "qmark":
                             sql += " ,%s = ? " % key
                         else:
@@ -161,7 +160,7 @@ class DictSQLSerializer:
                     else:
                         sql += " %s " % key
                         sql += "= %s "
-                else:
+                else:  # noqa: PLR5501
                     if self.dbmi_paramstyle == "qmark":
                         sql += " ,%s = ? " % key
                     else:
@@ -741,7 +740,7 @@ class DatasetBase(SQLDatabaseInterface):
 
         :param ttype: The temporal type of the dataset "absolute or relative"
         """
-        if ttype is None or (ttype != "absolute" and ttype != "relative"):
+        if ttype is None or (ttype not in {"absolute", "relative"}):
             self.D["temporal_type"] = "absolute"
         else:
             self.D["temporal_type"] = ttype

@@ -167,7 +167,7 @@ def set_and_test_description(tmp_path, text):
     gs.core._set_location_description(tmp_path, name, text)
     description_file = tmp_path / name / "PERMANENT" / "MYNAME"
     assert description_file.exists()
-    text = text if text else ""  # None and empty should both yield empty.
+    text = text or ""  # None and empty should both yield empty.
     assert description_file.read_text(encoding="utf-8").strip() == text
 
 

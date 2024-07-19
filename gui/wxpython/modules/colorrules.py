@@ -713,7 +713,7 @@ class ColorTable(wx.Frame):
         minim = maxim = count = 0
         for line in ctable.splitlines():
             try:
-                value, color = map(lambda x: x.strip(), line.split(" "))
+                value, color = (x.strip() for x in line.split(" "))
             except ValueError:
                 GMessage(parent=self, message=_("Invalid color table format"))
                 self.rulesPanel.Clear()
@@ -1695,7 +1695,7 @@ class VectorColorTable(ColorTable):
                 )
             else:
                 self.cr_label.SetLabel(_("Enter vector attribute values %s:") % range)
-        else:
+        else:  # noqa: PLR5501
             if self.colorTable:
                 self.cr_label.SetLabel(_("Enter vector attribute values or percents:"))
             else:
@@ -1809,11 +1809,10 @@ class VectorColorTable(ColorTable):
         """Create color rules (color table or color column)"""
         if self.colorTable:
             ret = ColorTable.CreateColorTable(self)
+        elif self.updateColumn:
+            ret = self.UpdateColorColumn(tmp)
         else:
-            if self.updateColumn:
-                ret = self.UpdateColorColumn(tmp)
-            else:
-                ret = True
+            ret = True
 
         return ret
 
@@ -1901,12 +1900,12 @@ class VectorColorTable(ColorTable):
         ]
         for widget in widgets:
             if bind is True:
-                getattr(widget["widget"], "Bind")(
+                widget["widget"].Bind(
                     widget["event"],
                     widget["handler"],
                 )
             else:
-                getattr(widget["widget"], "Unbind")(widget["event"])
+                widget["widget"].Unbind(widget["event"])
 
 
 class ThematicVectorTable(VectorColorTable):
@@ -1939,17 +1938,13 @@ class ThematicVectorTable(VectorColorTable):
         value = None
         if self.properties["storeColumn"]:
             value = self.properties["storeColumn"]
+        if self.colorTable:
+            value = None
 
-        if not self.colorTable:
-            if self.attributeType == "color":
-                data["vector"][self.vectorType]["thematic"]["rgbcolumn"] = value
-            else:
-                data["vector"][self.vectorType]["thematic"]["sizecolumn"] = value
+        if self.attributeType == "color":
+            data["vector"][self.vectorType]["thematic"]["rgbcolumn"] = value
         else:
-            if self.attributeType == "color":
-                data["vector"][self.vectorType]["thematic"]["rgbcolumn"] = None
-            else:
-                data["vector"][self.vectorType]["thematic"]["sizecolumn"] = None
+            data["vector"][self.vectorType]["thematic"]["sizecolumn"] = value
 
         data["vector"][self.vectorType]["thematic"]["update"] = None
 

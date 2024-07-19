@@ -307,7 +307,7 @@ class array3d(np.memmap):
         flags = None
 
         if kind == "f":
-            if size != 4 and size != 8:
+            if size not in {4, 8}:
                 raise ValueError(_("Invalid FP size <%d>") % size)
         elif kind in "biu":
             if size not in {1, 2, 4, 8}:

@@ -128,9 +128,8 @@ def main():
         semantic_label = semantic_labels[i] if multi_labels else semantic_labels[0]
         if options["operation"] == "print":
             print_map_semantic_label(maps[i], label_reader)
-        else:
-            if manage_map_semantic_label(maps[i], semantic_label) != 0:
-                ret = 1
+        elif manage_map_semantic_label(maps[i], semantic_label) != 0:
+            ret = 1
 
     return ret
 

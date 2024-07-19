@@ -95,7 +95,7 @@ class TreeModel:
     def SearchNodes(self, parent=None, **kwargs):
         """Search nodes according to specified attributes."""
         nodes = []
-        parent = parent if parent else self.root
+        parent = parent or self.root
         self._searchNodes(node=parent, foundNodes=nodes, **kwargs)
         return nodes
 
@@ -291,7 +291,7 @@ class ModuleNode(DictNode):
 
     def __init__(self, label=None, data=None):
         super().__init__(data=data)
-        self._label = label if label else ""
+        self._label = label or ""
         if not data:
             self.data = {}
 
@@ -322,11 +322,10 @@ class ModuleNode(DictNode):
                 # start supported but unused, so testing last
                 if value in text or value == "*":
                     return True
-            else:
+            elif value.lower() in text.lower() or value == "*":
                 # this works fully only for English and requires accents
                 # to be exact match (even Python 3 casefold() does not help)
-                if value.lower() in text.lower() or value == "*":
-                    return True
+                return True
         return False
 
 

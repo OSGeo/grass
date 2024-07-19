@@ -126,8 +126,7 @@ class IClassVDigit(IVDigit):
         return 1
 
     def _getNewFeaturesCat(self):
-        cat = self.mapWindow.GetCurrentCategory()
-        return cat
+        return self.mapWindow.GetCurrentCategory()
 
     def DeleteAreasByCat(self, cats):
         """Delete areas (centroid+boundaries) by categories
@@ -161,7 +160,7 @@ class IClassVDigit(IVDigit):
                 open_fn = Vect_open_update
             else:
                 open_fn = Vect_open_new
-        else:
+        else:  # noqa: PLR5501
             if update:
                 open_fn = Vect_open_tmp_update
             else:

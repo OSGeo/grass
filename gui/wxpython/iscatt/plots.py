@@ -241,8 +241,9 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
             aspect="equal",
         )
 
-        callafter_list.append([self.axes.draw_artist, [img]])
-        callafter_list.append([gs.try_remove, [merged_img.filename]])
+        callafter_list.extend(
+            ([self.axes.draw_artist, [img]], [gs.try_remove, [merged_img.filename]])
+        )
 
         for cat_id in cats_order:
             if cat_id == 0:
@@ -710,8 +711,7 @@ class PolygonDrawer:
         if self.empty_pol:
             return None
 
-        coords = deepcopy(self.pol.xy)
-        return coords
+        return deepcopy(self.pol.xy)
 
     def SetEmpty(self):
         self._setEmptyPol(True)

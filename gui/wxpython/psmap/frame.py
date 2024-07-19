@@ -368,8 +368,7 @@ class PsMapFrame(wx.Frame):
             cmd.append("-e")
         if self.instruction[self.pageId]["Orientation"] == "Landscape":
             cmd.append("-r")
-        cmd.append("input=%s" % instrFile)
-        cmd.append("output=%s" % filename)
+        cmd.extend(("input=%s" % instrFile, "output=%s" % filename))
         if pdf:
             self.SetStatusText(_("Generating PDF..."), 0)
         elif not temp:
@@ -571,7 +570,7 @@ class PsMapFrame(wx.Frame):
             suffix = suffix[dlg.GetFilterIndex()]
             if not os.path.splitext(filename)[1]:
                 filename = filename + suffix
-            elif os.path.splitext(filename)[1] != suffix and suffix != "":
+            elif suffix not in {os.path.splitext(filename)[1], ""}:
                 filename = os.path.splitext(filename)[0] + suffix
 
         dlg.Destroy()
@@ -724,7 +723,7 @@ class PsMapFrame(wx.Frame):
                     )
                     self.openDialogs["mapNotebook"] = dlg
                 self.openDialogs["mapNotebook"].Show()
-            else:
+            else:  # noqa: PLR5501
                 if "mapNotebook" in self.openDialogs:
                     self.openDialogs["mapNotebook"].notebook.ChangeSelection(0)
                 else:
@@ -1691,11 +1690,10 @@ class PsMapBufferedWindow(wx.Window):
                 self.SetCursor(self.cursors["sizenwse"])
                 self.parent.SetStatusText(_("Click and drag to resize object"), 0)
                 self.showResizeHelp = True
-            else:
-                if self.showResizeHelp:
-                    self.parent.SetStatusText("", 0)
-                    self.SetCursor(self.cursors["default"])
-                    self.showResizeHelp = False
+            elif self.showResizeHelp:
+                self.parent.SetStatusText("", 0)
+                self.SetCursor(self.cursors["default"])
+                self.showResizeHelp = False
 
     def OnLeftDown(self, event):
         """Left mouse button pressed.
@@ -2614,9 +2612,7 @@ class PsMapBufferedWindow(wx.Window):
         iH = iH * self.currScale
         x = cW / 2 - iW / 2
         y = cH / 2 - iH / 2
-        imageRect = Rect(int(x), int(y), int(iW), int(iH))
-
-        return imageRect
+        return Rect(int(x), int(y), int(iW), int(iH))
 
     def RedrawSelectBox(self, id):
         """Redraws select box when selected object changes its size"""

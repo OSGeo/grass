@@ -518,7 +518,7 @@ def import_stds(
 
         # Import the maps
         if type_ == "strds":
-            if format_ == "GTiff" or format_ == "AAIGrid":
+            if format_ in {"GTiff", "AAIGrid"}:
                 _import_raster_maps_from_gdal(
                     maplist,
                     overr,

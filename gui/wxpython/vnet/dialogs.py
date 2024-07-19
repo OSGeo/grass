@@ -582,8 +582,12 @@ class VNETDialog(wx.Dialog):
         """Tab switched"""
         if event.GetEventObject() == self.notebook:
             dbMgrIndxs = []
-            dbMgrIndxs.append(self.notebook.GetPageIndexByName("inputDbMgr"))
-            dbMgrIndxs.append(self.notebook.GetPageIndexByName("resultDbMgr"))
+            dbMgrIndxs.extend(
+                (
+                    self.notebook.GetPageIndexByName("inputDbMgr"),
+                    self.notebook.GetPageIndexByName("resultDbMgr"),
+                )
+            )
             if self.notebook.GetSelection() in dbMgrIndxs:
                 self.stBar.AddStatusItem(
                     text=_("Loading tables..."),
@@ -1144,7 +1148,7 @@ class PtsList(PointsList):
                 if not item[1]:
                     self.CheckItem(iItem, False)
 
-        else:
+        else:  # noqa: PLR5501
             if self.IsShown("type"):
                 self.HideColumn("type")
 

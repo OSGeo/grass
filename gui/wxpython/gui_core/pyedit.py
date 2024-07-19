@@ -10,6 +10,7 @@ for details.
 :authors: Martin Landa
 """
 
+from pathlib import Path
 import sys
 import os
 import stat
@@ -300,9 +301,7 @@ class PyEditController:
         :return str or None: file content or None
         """
         try:
-            with open(file_path, "r") as f:
-                content = f.read()
-                return content
+            return Path(file_path).read_text()
         except PermissionError:
             GError(
                 message=_(
@@ -328,9 +327,8 @@ class PyEditController:
         :return None or True: file written or None
         """
         try:
-            with open(file_path, "w") as f:
-                f.write(content)
-                return True
+            Path(file_path).write_text(content)
+            return True
         except PermissionError:
             GError(
                 message=_(
@@ -516,14 +514,15 @@ class PyEditController:
                 ),
                 parent=self.guiparent,
             )
-        else:
-            if self.CanReplaceContent(by_message="file"):
-                self.filename = path
-                content = self._openFile(file_path=path)
-                if content:
-                    self.body.SetText(content)
-                    file_history.AddFileToHistory(filename=path)  # move up the list
-                    self.tempfile = False
+            return
+
+        if self.CanReplaceContent(by_message="file"):
+            self.filename = path
+            content = self._openFile(file_path=path)
+            if content:
+                self.body.SetText(content)
+                file_history.AddFileToHistory(filename=path)  # move up the list
+                self.tempfile = False
 
     def IsEmpty(self):
         """Check if python script is empty"""

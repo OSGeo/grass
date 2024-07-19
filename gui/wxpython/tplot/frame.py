@@ -739,11 +739,10 @@ class TplotFrame(wx.Frame):
         """Function to set the right labels"""
         if self.drawX != "":
             self.axes2d.set_xlabel(self.drawX)
+        elif self.temporalType == "absolute":
+            self.axes2d.set_xlabel(_("Temporal resolution: %s" % x))
         else:
-            if self.temporalType == "absolute":
-                self.axes2d.set_xlabel(_("Temporal resolution: %s" % x))
-            else:
-                self.axes2d.set_xlabel(_("Time [%s]") % self.unit)
+            self.axes2d.set_xlabel(_("Time [%s]") % self.unit)
         if self.drawY != "":
             self.axes2d.set_ylabel(self.drawY)
         else:
@@ -1268,7 +1267,7 @@ class TplotFrame(wx.Frame):
             except:
                 self.coorval.SetValue(",".join(coors))
         if self.datasetsV:
-            vdatas = ",".join(map(lambda x: x[0] + "@" + x[1], self.datasetsV))
+            vdatas = ",".join(f"{x[0]}@{x[1]}" for x in self.datasetsV)
             self.datasetSelectV.SetValue(vdatas)
             if attr:
                 self.attribute.SetValue(attr)
@@ -1276,7 +1275,7 @@ class TplotFrame(wx.Frame):
                 self.cats.SetValue(cats)
         if self.datasetsR:
             self.datasetSelectR.SetValue(
-                ",".join(map(lambda x: x[0] + "@" + x[1], self.datasetsR))
+                ",".join(f"{x[0]}@{x[1]}" for x in self.datasetsR)
             )
         if title:
             self.title.SetValue(title)
@@ -1368,8 +1367,9 @@ def InfoFormat(timeData, values):
         elif etype == "str3ds":
             text.append(_("Space time 3D raster dataset: %s") % key)
 
-        text.append(_("Value for {date} is {val}".format(date=val[0], val=val[1])))
-        text.append("\n")
+        text.extend(
+            (_("Value for {date} is {val}".format(date=val[0], val=val[1])), "\n")
+        )
     text.append(_("Press Del to dismiss."))
 
     return "\n".join(text)

@@ -22,6 +22,7 @@ This program is free software under the GNU General Public License
 """
 
 import os
+from pathlib import Path
 import sys
 import glob
 import math
@@ -263,14 +264,13 @@ class Layer:
         """
         if fullyQualified:
             return self.name
-        else:
-            if "@" in self.name:
-                return {
-                    "name": self.name.split("@")[0],
-                    "mapset": self.name.split("@")[1],
-                }
-            else:
-                return {"name": self.name, "mapset": ""}
+
+        if "@" in self.name:
+            return {
+                "name": self.name.split("@")[0],
+                "mapset": self.name.split("@")[1],
+            }
+        return {"name": self.name, "mapset": ""}
 
     def GetRenderedSize(self):
         """Get currently rendered size of layer as tuple, None if not rendered"""
@@ -725,10 +725,9 @@ class RenderMapMgr(wx.EvtHandler):
                     continue
 
                 if os.path.isfile(layer._legrow) and not layer.hidden:
-                    with open(layer._legrow) as infile:
-                        line = infile.read()
-                        outfile.write(line)
-                        new_legend.append(line)
+                    line = Path(layer._legrow).read_text()
+                    outfile.write(line)
+                    new_legend.append(line)
 
         self._rendering = False
         if wx.IsBusy():
@@ -882,8 +881,8 @@ class Map:
 
         for line in ret.splitlines():
             if ":" in line:
-                key, val = map(lambda x: x.strip(), line.split(":", 1))
-                if key in {"units"}:
+                key, val = (x.strip() for x in line.split(":", 1))
+                if key == "units":
                     val = val.lower()
                 projinfo[key] = val
             elif "XY location (unprojected)" in line:
@@ -908,7 +907,7 @@ class Map:
                 % {"file": filename, "ret": e}
             )
 
-        for line in windfile.readlines():
+        for line in windfile:
             line = line.strip()
             try:
                 key, value = line.split(":", 1)

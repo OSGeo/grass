@@ -124,11 +124,11 @@ def _make_unicode(val, enc):
     """
     if val is None or enc is None:
         return val
+
+    if enc == "default":
+        return decode(val)
     else:
-        if enc == "default":
-            return decode(val)
-        else:
-            return decode(val, encoding=enc)
+        return decode(val, encoding=enc)
 
 
 def get_commands(*, env=None):
@@ -218,9 +218,7 @@ def get_real_command(cmd):
         if os.path.splitext(cmd)[1] == ".py":
             cmd = cmd[:-3]
         # PATHEXT is necessary to check on Windows (force lowercase)
-        pathext = list(
-            map(lambda x: x.lower(), os.environ["PATHEXT"].split(os.pathsep))
-        )
+        pathext = [x.lower() for x in os.environ["PATHEXT"].split(os.pathsep)]
         if ".py" not in pathext:
             # we assume that PATHEXT contains always '.py'
             os.environ["PATHEXT"] = ".py;" + os.environ["PATHEXT"]
@@ -985,9 +983,7 @@ def tempname(length, lowercase=False):
     if not lowercase:
         chars += string.ascii_uppercase
     random_part = "".join(random.choice(chars) for _ in range(length))
-    randomname = "tmp_" + random_part
-
-    return randomname
+    return "tmp_" + random_part
 
 
 def _compare_projection(dic):
@@ -1170,9 +1166,8 @@ def compare_key_value_text_files(
             # We compare the sum of the entries
             if abs(sum(dict_a[key]) - sum(dict_b[key])) > precision:
                 return False
-        else:
-            if dict_a[key] != dict_b[key]:
-                return False
+        elif dict_a[key] != dict_b[key]:
+            return False
     return True
 
 
@@ -1286,8 +1281,8 @@ def region_env(region3d=False, flags=None, env=None, **kwargs):
     )
     with open(windfile, "r") as fd:
         grass_region = ""
-        for line in fd.readlines():
-            key, value = map(lambda x: x.strip(), line.split(":", 1))
+        for line in fd:
+            key, value = (x.strip() for x in line.split(":", 1))
             if kwargs and key not in {"proj", "zone"}:
                 continue
             if (
@@ -1571,13 +1566,12 @@ def list_grouped(
                         name,
                     ]
                 }
+        elif mapset in result:
+            result[mapset].append(name)
         else:
-            if mapset in result:
-                result[mapset].append(name)
-            else:
-                result[mapset] = [
-                    name,
-                ]
+            result[mapset] = [
+                name,
+            ]
 
     return result
 
