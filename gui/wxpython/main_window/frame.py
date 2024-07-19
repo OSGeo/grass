@@ -1509,7 +1509,6 @@ class GMFrame(wx.Frame):
             self.OnWorkspaceNew()
         self.workspace_manager.AutoLoad()
         self._setTitle()
-        return
 
     def OnChangeCWD(self, event=None, cmd=None):
         """Change current working directory
