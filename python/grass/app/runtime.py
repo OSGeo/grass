@@ -31,7 +31,7 @@ def get_grass_config_dir(major_version, minor_version, env):
     # The code is in sync with grass.app.runtime (but not the same).
     env_dirname = "APPDATA" if WINDOWS else "HOME"
     if env.get(env_dirname) is None:
-        raise KeyError(
+        raise RuntimeError(
             f"The {env_dirname} variable is not set, ask your operating"
             " system support"
         )
