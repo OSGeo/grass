@@ -132,7 +132,7 @@ class Map3D:
                     "because pyvirtualdisplay cannot be imported"
                 ).format(screen_backend)
             )
-        elif screen_backend in ["simple", "pyvirtualdisplay"]:
+        elif screen_backend in {"simple", "pyvirtualdisplay"}:
             self._screen_backend = screen_backend
         else:
             raise ValueError(

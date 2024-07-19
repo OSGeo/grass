@@ -605,9 +605,7 @@ def get_reasons_grassdb_not_removable(grassdb):
     locations = []
     for g_location in g_locations:
         locations.append((grassdb, g_location))
-    messages = get_reasons_locations_not_removable(locations)
-
-    return messages
+    return get_reasons_locations_not_removable(locations)
 
 
 def get_list_of_locations(dbase):
@@ -617,7 +615,7 @@ def get_list_of_locations(dbase):
 
     :return: list of locations (sorted)
     """
-    locations = list()
+    locations = []
     for location in glob.glob(os.path.join(dbase, "*")):
         if os.path.join(location, "PERMANENT") in glob.glob(
             os.path.join(location, "*")

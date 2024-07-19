@@ -211,7 +211,7 @@ def draw_linegraph(what):
             )
         )
     with open(gcore.parse_command("d.mon", flags="g", quiet=True)["env"]) as f:
-        for line in f.readlines():
+        for line in f:
             if "GRASS_RENDER_FILE=" in line:
                 gcore.info(
                     _(
@@ -289,7 +289,7 @@ def main():
     for line in s.splitlines():
         f = line.split("|")
         for i, v in enumerate(f):
-            if v in ["", "*"]:
+            if v in {"", "*"}:
                 f[i] = 0
             else:
                 f[i] = float(v)

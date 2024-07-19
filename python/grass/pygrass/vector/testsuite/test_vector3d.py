@@ -19,11 +19,12 @@ from grass.pygrass.utils import get_mapset_vector
 
 def generate_coordinates(number, bbox=None, with_z=False):
     """Return 2 or 3 random arrays of coordinates"""
+    rng = np.random.default_rng()
     bbox = Region() if bbox is None else bbox
-    x = bbox.south + (bbox.north - bbox.south) * np.random.random(number)
-    y = bbox.west + (bbox.east - bbox.west) * np.random.random(number)
+    x = bbox.south + (bbox.north - bbox.south) * rng.random(number)
+    y = bbox.west + (bbox.east - bbox.west) * rng.random(number)
     if with_z:
-        z = np.random.random(number) * 1000
+        z = rng.random(number) * 1000
         return x, y, z
     return x, y
 

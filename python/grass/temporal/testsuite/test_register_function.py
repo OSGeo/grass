@@ -9,12 +9,13 @@ for details.
 :authors: Soeren Gebbert
 """
 
+import datetime
+import os
+
+import grass.script as gs
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-import grass.script as gscript
-import datetime
-import os
 
 
 class TestRasterRegisterFunctions(TestCase):
@@ -979,11 +980,11 @@ class TestRegisterMapsetAccess(TestCase):
             name="register_map_1,register_map_2",
             quiet=True,
         )
-        grassenv = gscript.gisenv()
+        grassenv = gs.gisenv()
         mapset_path = os.path.join(
             grassenv["GISDBASE"], grassenv["LOCATION_NAME"], self.newmapset
         )
-        gscript.try_rmdir(mapset_path)
+        gs.try_rmdir(mapset_path)
 
     def test_mapset_access_1(self):
         """Test the registration of maps from a different mapset."""
