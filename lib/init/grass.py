@@ -396,7 +396,7 @@ def create_grass_config_dir():
         directory = get_grass_config_dir(
             GRASS_VERSION_MAJOR, GRASS_VERSION_MINOR, os.environ
         )
-    except (KeyError, IsADirectoryError) as e:
+    except (KeyError, NotADirectoryError) as e:
         fatal(f"{e}")
 
     if not os.path.isdir(directory):
