@@ -217,7 +217,7 @@ def update_region(region):
     :return: the new region
     """
     current = gs.region()
-    new = gs.parse_command(
+    return gs.parse_command(
         "g.region",
         flags="ga",
         n=region["north"],
@@ -227,7 +227,6 @@ def update_region(region):
         nsres=current["nsres"],
         ewres=current["ewres"],
     )
-    return new
 
 
 def save_gif(

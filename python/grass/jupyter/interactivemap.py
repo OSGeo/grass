@@ -426,7 +426,7 @@ class InteractiveMap:
                 save_button_control = self._ipyleaflet.WidgetControl(
                     widget=save_button, position="topright"
                 )
-                self.map.add_control(save_button_control)
+                self.map.add(save_button_control)
             else:
                 if self.region_rectangle:
                     self.region_rectangle.transform = False
@@ -453,12 +453,12 @@ class InteractiveMap:
         region_mode_control = self._ipyleaflet.WidgetControl(
             widget=region_mode_button, position="topright"
         )
-        self.map.add_control(region_mode_control)
+        self.map.add(region_mode_control)
 
         output_control = self._ipyleaflet.WidgetControl(
             widget=bottom_output_widget, position="bottomleft"
         )
-        self.map.add_control(output_control)
+        self.map.add(output_control)
 
     def show(self):
         """This function returns a folium figure or ipyleaflet map object
