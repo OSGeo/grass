@@ -89,8 +89,11 @@ jobs:
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
-          pytest --verbose --color=yes --durations=0 --durations-min=0.5 \
+          export INITIAL_GISBASE="$(grass --config path)"
+          INITIAL_PWD="${PWD}" pytest --verbose --color=yes --durations=0 --durations-min=0.5 \
             --cov \
+            --cov-context=test \
+            --cov-report=html \
             -ra . \
             -m 'needs_solo_run'
 
@@ -101,6 +104,13 @@ jobs:
           flags: pytest-python-${{ matrix.python-version }}
           name: pytest-python-${{ matrix.python-version }}
           token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Make python-only code coverage test report available
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4.3.4
+        with:
+          name: python-codecoverage-report-${{ matrix.os }}-${{ matrix.python-version }}
+          path: coverage_html_report
+          retention-days: 1
 
   pytest-success:
     name: pytest Result
