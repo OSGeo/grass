@@ -1293,25 +1293,15 @@ class SpatialExtent(SQLDatabaseInterface):
         :return: True or False
         """
 
-        if self.is_in_2d(extent):
-            return False
-
-        if self.contain_2d(extent):
-            return False
-
-        if self.cover_2d(extent):
-            return False
-
-        if self.covered_2d(extent):
-            return False
-
-        if self.equivalent_2d(extent):
-            return False
-
-        if self.overlapping_2d(extent):
-            return False
-
-        return not self.meet_2d(extent)
+        return not (
+            self.is_in_2d(extent)
+            or self.contain_2d(extent)
+            or self.cover_2d(extent)
+            or self.covered_2d(extent)
+            or self.equivalent_2d(extent)
+            or self.overlapping_2d(extent)
+            or self.meet_2d(extent)
+        )
 
     def disjoint(self, extent):
         """Return True if this extent is disjoint with the provided spatial
@@ -1321,25 +1311,15 @@ class SpatialExtent(SQLDatabaseInterface):
         :return: True or False
         """
 
-        if self.is_in(extent):
-            return False
-
-        if self.contain(extent):
-            return False
-
-        if self.cover(extent):
-            return False
-
-        if self.covered(extent):
-            return False
-
-        if self.equivalent(extent):
-            return False
-
-        if self.overlapping(extent):
-            return False
-
-        return not self.meet(extent)
+        return not (
+            self.is_in(extent)
+            or self.contain(extent)
+            or self.cover(extent)
+            or self.covered(extent)
+            or self.equivalent(extent)
+            or self.overlapping(extent)
+            or self.meet(extent)
+        )
 
     def spatial_relation_2d(self, extent):
         """Returns the two dimensional spatial relation between this

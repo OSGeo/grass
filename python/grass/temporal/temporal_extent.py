@@ -644,8 +644,12 @@ class TemporalExtent(SQLDatabaseInterface):
             return False
 
         return bool(
-            self.D["start_time"] == extent.D["end_time"]
-            or self.D["end_time"] == extent.D["start_time"]
+            self.D["start_time"] is not None
+            and extent.D["end_time"] is not None
+            and (
+                self.D["start_time"] == extent.D["end_time"]
+                or self.D["end_time"] == extent.D["start_time"]
+            )
         )
 
     def follows(self, extent) -> bool:
@@ -671,10 +675,10 @@ class TemporalExtent(SQLDatabaseInterface):
             False
 
         """
-        if extent.D["end_time"] is None:
-            return False
-
-        return self.D["start_time"] == extent.D["end_time"]
+        return (
+            extent.D["end_time"] is not None
+            and self.D["start_time"] == extent.D["end_time"]
+        )
 
     def precedes(self, extent) -> bool:
         """Return True if this temporal extent (A) precedes the provided
@@ -701,10 +705,10 @@ class TemporalExtent(SQLDatabaseInterface):
 
 
         """
-        if self.D["end_time"] is None:
-            return False
-
-        return self.D["end_time"] == extent.D["start_time"]
+        return (
+            self.D["end_time"] is not None
+            and self.D["end_time"] == extent.D["start_time"]
+        )
 
     def during(self, extent) -> bool:
         """Return True if this temporal extent (A) is located during the provided
@@ -847,11 +851,11 @@ class TemporalExtent(SQLDatabaseInterface):
             False
 
         """
-        if self.D["end_time"] is None or extent.D["end_time"] is None:
-            return False
 
         return bool(
-            self.D["start_time"] < extent.D["start_time"]
+            self.D["end_time"] is not None
+            and extent.D["end_time"] is not None
+            and self.D["start_time"] < extent.D["start_time"]
             and self.D["end_time"] < extent.D["end_time"]
             and self.D["end_time"] > extent.D["start_time"]
         )
@@ -887,11 +891,11 @@ class TemporalExtent(SQLDatabaseInterface):
             False
 
         """
-        if self.D["end_time"] is None or extent.D["end_time"] is None:
-            return False
 
         return bool(
-            self.D["start_time"] > extent.D["start_time"]
+            self.D["end_time"] is not None
+            and extent.D["end_time"] is not None
+            and self.D["start_time"] > extent.D["start_time"]
             and self.D["end_time"] > extent.D["end_time"]
             and self.D["start_time"] < extent.D["end_time"]
         )
