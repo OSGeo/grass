@@ -118,7 +118,7 @@ def reproject_latlon(coord):
     return east, north, elev
 
 
-def style_table(html_content):
+def _style_table(html_content):
     """
     Use to style table displayed in popup.
 
@@ -159,7 +159,7 @@ def style_table(html_content):
     return f"{css}{html_content}"
 
 
-def format_nested_table(attributes):
+def _format_nested_table(attributes):
     """
     Format nested attributes into an HTML table row.
 
@@ -179,7 +179,7 @@ def format_nested_table(attributes):
     return nested_table
 
 
-def format_regular_output(items):
+def _format_regular_output(items):
     """
     Format attributes into an HTML table.
 
@@ -226,7 +226,7 @@ def query_raster(coord, raster_list):
                 </tr>
                 """
             items = raster_output[0][raster].items()
-            formatted_output = format_regular_output(items)
+            formatted_output = _format_regular_output(items)
             output += formatted_output
 
         output_list.append(output)
@@ -236,10 +236,10 @@ def query_raster(coord, raster_list):
 
     output_list.extend(("</table>", "<br>"))
     final_output = "".join(output_list)
-    return style_table(final_output)
+    return _style_table(final_output)
 
 
-def process_vector_output(vector, coord, distance):
+def _process_vector_output(vector, coord, distance):
     """
     Process the output of a vector query.
 
@@ -256,11 +256,11 @@ def process_vector_output(vector, coord, distance):
 
     items = list(vector_output[0].items())
     attributes_output = ""
-    regular_output = format_regular_output(items)
+    regular_output = _format_regular_output(items)
 
     for key, value in items:
         if key == "Attributes" and isinstance(value, dict):
-            attributes_output = format_nested_table(value)
+            attributes_output = _format_nested_table(value)
 
     vector_html = f"""
     <tr>
@@ -285,7 +285,7 @@ def query_vector(coord, vector_list, distance):
     output_list = ["<table>"]
 
     for vector in vector_list:
-        vector_html = process_vector_output(vector, coord, distance)
+        vector_html = _process_vector_output(vector, coord, distance)
         if vector_html:
             output_list.append(vector_html)
 
@@ -294,7 +294,7 @@ def query_vector(coord, vector_list, distance):
 
     output_list.extend(("</table>", "<br>"))
     final_output = "".join(output_list)
-    return style_table(final_output)
+    return _style_table(final_output)
 
 
 def estimate_resolution(raster, mapset, location, dbase, env):
