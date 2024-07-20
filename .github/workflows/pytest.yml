@@ -93,9 +93,17 @@ jobs:
           INITIAL_PWD="${PWD}" pytest --verbose --color=yes --durations=0 --durations-min=0.5 \
             --cov \
             --cov-context=test \
-            --cov-report=html \
             -ra . \
             -m 'needs_solo_run'
+      - name: Fix non-standard installed script paths in coverage data
+        run: |
+          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
+          export INITIAL_GISBASE="$(grass --config path)"
+          export INITIAL_PWD="${PWD}"
+          python utils/coverage_mapper.py
+          coverage combine
+          coverage html
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@e28ff129e5465c2c0dcc6f003fc735cb6ae0c673 # v4.5.0
