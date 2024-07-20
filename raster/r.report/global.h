@@ -85,6 +85,7 @@ extern struct Categories *labels;
 int format_parms(double, int *, int *, int *, int);
 int scient_format(double, char *, int, int);
 int format_double(double, char *, int, int);
+void compute_unit_format(int, int, enum OutputFormat);
 
 /* header.c */
 int header(int, int);
@@ -109,7 +110,6 @@ int parse_layer(char *);
 int match(char *, char *, int);
 
 /* prt_report.c */
-int compute_unit_format(int, int, enum OutputFormat);
 int print_report(int, int);
 int construct_val_str(int, CELL *, char *);
 char *construct_cat_label(int, CELL);
