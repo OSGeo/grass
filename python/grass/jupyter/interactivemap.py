@@ -356,9 +356,9 @@ class InteractiveMap:
 
     def draw_computational_region(self):
         """
-        Allow Users to draw the computational region and modify it.
+        Allow users to draw the computational region and modify it.
         """
-        import ipywidgets as widgets
+        import ipywidgets as widgets  # pylint: disable=import-outside-toplevel
 
         region_mode_button = widgets.ToggleButton(
             icon="square-o",
@@ -439,7 +439,7 @@ class InteractiveMap:
                     self.map.remove(save_button_control)
                 bottom_output_widget.layout.display = "none"
 
-        def save_region(change):
+        def save_region():
             from_proj = "+proj=longlat +datum=WGS84 +no_defs"
             to_proj = get_location_proj_string()
             reprojected_region = reproject_region(changed_region, from_proj, to_proj)
