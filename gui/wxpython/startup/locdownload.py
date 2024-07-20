@@ -121,8 +121,7 @@ class RedirectText:
         n_lines = string.count("\n")
         attr = self.out.GetClassDefaultAttributes()
         font_size = attr.font.GetPointSize()
-        heigth = int((n_lines + 2) * font_size // 0.75)  # 1 px = 0.75 pt
-        return heigth
+        return int((n_lines + 2) * font_size // 0.75)  # 1 px = 0.75 pt
 
     def _resize(self, heigth=-1):
         """Resize widget heigth
@@ -302,7 +301,7 @@ class LocationDownloadPanel(wx.Panel):
     def OnDownload(self, event):
         """Handle user-initiated action of download"""
         button_label = self.parent.download_button.GetLabel()
-        if button_label in (_("Download"), _("Do&wnload")):
+        if button_label in {_("Download"), _("Do&wnload")}:
             self._change_download_btn_label(
                 label=self._abort_btn_label,
                 tooltip=self._abort_btn_tooltip,

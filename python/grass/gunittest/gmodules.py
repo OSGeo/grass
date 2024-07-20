@@ -45,7 +45,7 @@ class SimpleModule(Module):
         for banned in ["stdout_", "stderr_", "finish_", "run_"]:
             if banned in kargs:
                 raise ValueError(
-                    "Do not set %s parameter" ", it would be overridden" % banned
+                    "Do not set %s parameter, it would be overridden" % banned
                 )
         kargs["stdout_"] = subprocess.PIPE
         kargs["stderr_"] = subprocess.PIPE

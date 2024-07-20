@@ -48,7 +48,7 @@
 # % required: no
 # %end
 
-import grass.script as grass
+import grass.script as gs
 
 # lazy imports at the end of the file
 
@@ -66,12 +66,12 @@ def main():
     tgis.init()
 
     if maps and file:
-        grass.fatal(_("%s= and %s= are mutually exclusive") % ("input", "file"))
+        gs.fatal(_("%s= and %s= are mutually exclusive") % ("input", "file"))
 
     if not maps and not file:
-        grass.fatal(_("%s= or %s= must be specified") % ("input", "file"))
+        gs.fatal(_("%s= or %s= must be specified") % ("input", "file"))
 
-    mapset = grass.gisenv()["MAPSET"]
+    mapset = gs.gisenv()["MAPSET"]
 
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
@@ -127,10 +127,10 @@ def main():
     statement = ""
 
     # Unregister already registered maps
-    grass.message(_("Unregister maps"))
+    gs.message(_("Unregister maps"))
     for mapid in maplist:
         if count % 10 == 0:
-            grass.percent(count, num_maps, 1)
+            gs.percent(count, num_maps, 1)
 
         map = tgis.dataset_factory(type, mapid)
 
@@ -153,7 +153,7 @@ def main():
                 # Collect SQL statements
                 statement += map.delete(dbif=dbif, update=False, execute=False)
         else:
-            grass.warning(
+            gs.warning(
                 _(
                     "Unable to find %s map <%s> in temporal database"
                     % (map.get_type(), map.get_id())
@@ -166,13 +166,13 @@ def main():
     if statement:
         dbif.execute_transaction(statement)
 
-    grass.percent(num_maps, num_maps, 1)
+    gs.percent(num_maps, num_maps, 1)
 
     # Update space time datasets
     if input:
-        grass.message(_("Unregister maps from space time dataset <%s>" % (input)))
+        gs.message(_("Unregister maps from space time dataset <%s>" % (input)))
     else:
-        grass.message(_("Unregister maps from the temporal database"))
+        gs.message(_("Unregister maps from the temporal database"))
 
     if input:
         sp.update_from_registered_maps(dbif)
@@ -183,7 +183,7 @@ def main():
             id = update_dict[key]
             sp = tgis.open_old_stds(id, type, dbif)
             sp.update_from_registered_maps(dbif)
-            grass.percent(count, len(update_dict), 1)
+            gs.percent(count, len(update_dict), 1)
             count += 1
 
     dbif.close()
@@ -192,7 +192,7 @@ def main():
 ###############################################################################
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
 
     # lazy imports
     import grass.temporal as tgis

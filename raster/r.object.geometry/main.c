@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
     } *obj_geos;
     double unit_area;
     int n_objects;
-    int planimetric, compute_areas;
+    int planimetric = 0, compute_areas = 0;
     struct Cell_head cellhd;
 
     G_gisinit(argv[0]);

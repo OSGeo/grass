@@ -88,7 +88,7 @@ for line in fin:
     elif "Signed-off-by" in line:
         continue
     # Extract the actual commit message for this commit
-    elif authorFound & dateFound & messageFound == False:
+    elif authorFound & dateFound & messageFound is False:
         # Find the commit message if we can
         if len(line) == 1:
             if messageNL:
@@ -97,11 +97,10 @@ for line in fin:
                 messageNL = True
         elif len(line) == 4:
             messageFound = True
+        elif len(message) == 0:
+            message = message + line.strip()
         else:
-            if len(message) == 0:
-                message = message + line.strip()
-            else:
-                message = message + " " + line.strip()
+            message = message + " " + line.strip()
     # If this line is hit all of the files have been stored for this commit
     elif re.search("files? changed", line):
         filesFound = True

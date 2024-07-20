@@ -304,7 +304,7 @@ class MapWindowBase:
         Before each handler is unregistered it is called with string
         value "unregistered" of event parameter.
         """
-        for containerEv, handlers in self.handlersContainer.items():
+        for handlers in self.handlersContainer.values():
             for handler in handlers:
                 try:
                     handler("unregistered")
