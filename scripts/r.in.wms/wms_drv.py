@@ -439,11 +439,11 @@ class BaseRequestMgr:
 
         self.tile_ref = {"sizeX": tile_size["x"], "sizeY": tile_size["y"]}
 
-    def _isGeoProj(self, proj):
+    def _isGeoProj(self, proj) -> bool:
         """!Is it geographic projection?"""
-        if proj.find("+proj=latlong") != -1 or proj.find("+proj=longlat") != -1:
-            return True
-        return False
+        return bool(
+            proj.find("+proj=latlong") != -1 or proj.find("+proj=longlat") != -1
+        )
 
 
 class WMSRequestMgr(BaseRequestMgr):

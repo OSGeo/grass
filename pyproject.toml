@@ -268,7 +268,6 @@ ignore = [
     "S608",    # hardcoded-sql-expression
     "SIM101",  # duplicate-isinstance-call
     "SIM102",  # collapsible-if
-    "SIM103",  # needless-bool
     "SIM105",  # suppressible-exception
     "SIM108",  # if-else-block-instead-of-if-exp
     "SIM109",  # compare-with-tuple
