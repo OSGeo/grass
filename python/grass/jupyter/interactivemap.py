@@ -438,7 +438,7 @@ class InteractiveMap:
                     self.map.remove(save_button_control)
                 bottom_output_widget.layout.display = "none"
 
-        def save_region():
+        def save_region(_change):
             from_proj = "+proj=longlat +datum=WGS84 +no_defs"
             to_proj = get_location_proj_string()
             reprojected_region = reproject_region(changed_region, from_proj, to_proj)
