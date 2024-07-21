@@ -1077,7 +1077,7 @@ def autoCropImageFromFile(filename):
         return wx.Image(filename)
 
 
-def isInRegion(regionA, regionB):
+def isInRegion(regionA, regionB) -> bool:
     """Tests if 'regionA' is inside of 'regionB'.
 
     For example, region A is a display region and region B is some reference
@@ -1097,15 +1097,12 @@ def isInRegion(regionA, regionB):
     :return: True if region A is inside of region B
     :return: False otherwise
     """
-    if (
+    return bool(
         regionA["s"] >= regionB["s"]
         and regionA["n"] <= regionB["n"]
         and regionA["w"] >= regionB["w"]
         and regionA["e"] <= regionB["e"]
-    ):
-        return True
-
-    return False
+    )
 
 
 def do_doctest_gettext_workaround():
@@ -1187,11 +1184,9 @@ def get_shell_pid(env=None):
         return None
 
 
-def is_shell_running():
+def is_shell_running() -> bool:
     """Return True if a separate shell is registered in the GIS environment"""
-    if get_shell_pid() is None:
-        return False
-    return True
+    return get_shell_pid() is not None
 
 
 def parse_mapcalc_cmd(command):

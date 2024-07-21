@@ -716,12 +716,9 @@ class VirtualAttributeList(
     def OnGetItemImage(self, item):
         return -1
 
-    def IsEmpty(self):
+    def IsEmpty(self) -> bool:
         """Check if list if empty"""
-        if self.columns:
-            return False
-
-        return True
+        return not self.columns
 
     def _updateColSortFlag(self):
         """

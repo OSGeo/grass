@@ -286,23 +286,22 @@ def _search_module(
     return sorted(found_modules, key=lambda k: k["name"])
 
 
-def _basic_search(pattern, name, description, module_keywords):
+def _basic_search(pattern, name, description, module_keywords) -> bool:
     """Search for a string in all the provided strings.
 
     This lowercases the strings before searching in them, so the pattern
     string should be lowercased too.
     """
-    if name and description and module_keywords:
-        if (
+    return bool(
+        name
+        and description
+        and module_keywords
+        and (
             name.lower().find(pattern) > -1
             or description.lower().find(pattern) > -1
             or module_keywords.lower().find(pattern) > -1
-        ):
-            return True
-        else:
-            return False
-    else:
-        return False
+        )
+    )
 
 
 def _exact_search(keyword, module_keywords):

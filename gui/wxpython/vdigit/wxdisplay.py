@@ -456,7 +456,7 @@ class DisplayDriver:
 
         return ret
 
-    def _isSelected(self, line, force=False):
+    def _isSelected(self, line, force=False) -> bool:
         """Check if vector object selected?
 
         :param line: feature id
@@ -464,10 +464,7 @@ class DisplayDriver:
         :return: True if vector object is selected
         :return: False if vector object is not selected
         """
-        if line in self.selected["ids"]:
-            return True
-
-        return False
+        return line in self.selected["ids"]
 
     def _isDuplicated(self, line):
         """Check for already marked duplicates
@@ -556,7 +553,7 @@ class DisplayDriver:
 
         return ftype
 
-    def _validLine(self, line):
+    def _validLine(self, line) -> bool:
         """Check if feature id is valid
 
         :param line: feature id
@@ -564,10 +561,7 @@ class DisplayDriver:
         :return: True valid feature id
         :return: False invalid
         """
-        if line > 0 and line <= Vect_get_num_lines(self.poMapInfo):
-            return True
-
-        return False
+        return bool(line > 0 and line <= Vect_get_num_lines(self.poMapInfo))
 
     def SelectLinesByBox(self, bbox, ltype=None, drawSeg=False, poMapInfo=None):
         """Select vector objects by given bounding box

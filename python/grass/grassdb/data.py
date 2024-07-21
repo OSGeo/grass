@@ -12,7 +12,7 @@ for details.
 import grass.script as gs
 
 
-def map_exists(name, element, mapset=None, env=None):
+def map_exists(name, element, mapset=None, env=None) -> bool:
     """Check is map is present in the mapset given in the environment
 
     :param name: Name of the map
@@ -42,6 +42,4 @@ def map_exists(name, element, mapset=None, env=None):
     info = gs.parse_key_val(output, sep="=")
     # file is the key questioned in grass.script.core find_file()
     # return code should be equivalent to checking the output
-    if info["file"]:
-        return True
-    return False
+    return bool(info["file"])

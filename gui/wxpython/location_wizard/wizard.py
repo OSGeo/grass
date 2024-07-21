@@ -293,11 +293,9 @@ class DatabasePage(TitledPage):
         ).format(ctrl.GetValue(), "/\"'@,=*~")
         GError(parent=self, message=message, caption=_("Invalid name"))
 
-    def _checkLocationNotExists(self, text):
+    def _checkLocationNotExists(self, text) -> bool:
         """Check whether user's input location exists or not."""
-        if location_exists(self.tgisdbase.GetLabel(), text):
-            return False
-        return True
+        return not location_exists(self.tgisdbase.GetLabel(), text)
 
     def _locationAlreadyExists(self, ctrl):
         message = _(

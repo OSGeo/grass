@@ -57,7 +57,7 @@ ALPHA = 1
 COLORS = ["b", "g", "r", "c", "m", "y", "k"]
 
 
-def check_version(*version):
+def check_version(*version) -> bool:
     """Checks if given version or newer is installed"""
     versionInstalled = []
     for i in mpl.__version__.split("."):
@@ -66,10 +66,7 @@ def check_version(*version):
             versionInstalled.append(v)
         except ValueError:
             versionInstalled.append(0)
-    if versionInstalled < list(version):
-        return False
-    else:
-        return True
+    return versionInstalled >= list(version)
 
 
 class TimelineFrame(wx.Frame):

@@ -313,7 +313,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
             + "';\n"
         )
 
-    def is_in_db(self, dbif=None, mapset=None):
+    def is_in_db(self, dbif=None, mapset=None) -> bool:
         """Check if this object is present in the temporal database
 
         :param dbif: The database interface to be used,
@@ -342,10 +342,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
             dbif.close()
 
         # Nothing found
-        if row is None:
-            return False
-
-        return True
+        return row is not None
 
     def get_select_statement(self):
         """Return the sql statement and the argument list in

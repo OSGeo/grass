@@ -532,7 +532,7 @@ class PointsList(
 
         return False
 
-    def IsShown(self, colName):
+    def IsShown(self, colName) -> bool:
         """Is column shown
 
         :param colName: name of column
@@ -542,10 +542,7 @@ class PointsList(
         :return: False - if is not shown
         """
 
-        if self._getColumnNum(colName) == -1:
-            return False
-        else:
-            return True
+        return not self._getColumnNum(colName) == -1
 
 
 class EditItem(wx.Dialog):

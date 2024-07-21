@@ -565,7 +565,7 @@ def _rendDtFilesToMemmaps(rend_dt):
             del rend_dt[k]["sh"]
 
 
-def _renderCat(cat_id, rend_dt, scatt, styles):
+def _renderCat(cat_id, rend_dt, scatt, styles) -> bool:
     return True
 
     if cat_id not in rend_dt:
@@ -574,10 +574,7 @@ def _renderCat(cat_id, rend_dt, scatt, styles):
         return False
     if scatt["render"]:
         return True
-    if cat_id != 0 and rend_dt[cat_id]["color"] != styles[cat_id]["color"]:
-        return True
-
-    return False
+    return bool(cat_id != 0 and rend_dt[cat_id]["color"] != styles[cat_id]["color"])
 
 
 def _getColorMap(cat_id, styles):

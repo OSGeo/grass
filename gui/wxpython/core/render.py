@@ -284,11 +284,9 @@ class Layer:
         """Check if layer is hidden"""
         return self.hidden
 
-    def IsRendered(self):
+    def IsRendered(self) -> bool:
         """!Check if layer was rendered (if the image file exists)"""
-        if os.path.exists(self.mapfile):
-            return True
-        return False
+        return bool(os.path.exists(self.mapfile))
 
     def SetType(self, ltype):
         """Set layer type"""
