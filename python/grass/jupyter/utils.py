@@ -202,14 +202,26 @@ def get_rendering_size(region, width, height, default_width=600, default_height=
     return (default_width, round(default_width * region_height / region_width))
 
 
-def save_vector(geojson_filename, name):
+def save_vector(name, geo_json):
     """
     Saves the user drawn vector.
 
     param geojson_filename: name of the geojson file to be saved
     param name: name with which vector should be saved
     """
-    gs.run_command("v.import", input=geojson_filename, output=name)
+    import tempfile
+    import json
+
+    try:
+        with tempfile.NamedTemporaryFile(
+            suffix=".geojson", delete=False, mode="w"
+        ) as temp_file:
+            temp_filename = temp_file.name
+            json.dump(geo_json, temp_file)
+        gs.run_command("v.import", input=temp_filename, output=name)
+        print(f"Imported geometry with name '{name}' into GRASS GIS.")
+    except Exception as e:
+        print(f"Failed to import geometries into GRASS GIS: {e}")
 
 
 def save_gif(
