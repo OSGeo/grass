@@ -353,21 +353,15 @@ class InteractiveMap:
         """
         import ipywidgets as widgets  # pylint: disable=import-outside-toplevel
 
-        draw_control = self._ipyleaflet.DrawControl()
+        draw_control = self._ipyleaflet.DrawControl(edit=False, remove=False)
         drawn_geometries = []
         geo_json_layers = {}
         save_button_control = None
 
-        def handle_draw(_, action, geo_json):
-            print(drawn_geometries, "dgb")
+        def handle_draw(_target, action, geo_json):
             if action == "created":
                 drawn_geometries.append(geo_json)
                 print(f"Geometry created: {geo_json}")
-            elif action == "deleted":
-                drawn_geometries.clear()
-                for layers in geo_json_layers:
-                    print("layers", layers)
-                    self.map.remove_layer(layers)
 
         draw_control.on_draw(handle_draw)
 
@@ -392,12 +386,20 @@ class InteractiveMap:
         def show_interface():
             nonlocal save_button_control
 
-            name_input = widgets.Text(description="Name:")
+            name_input = widgets.Text(
+                description="Name:",
+                style={"description_width": "initial"},
+                layout=widgets.Layout(
+                    width="50%",
+                    margin="1px 1px 1px 1px",
+                ),
+            )
             save_button = widgets.Button(
-                description="Save Geometries", button_style="success"
+                description="Save Geometries",
+                layout=widgets.Layout(width="50%", margin="1px 1px 1px 1px"),
             )
 
-            def save_geometries(b):
+            def save_geometries(_b):
                 name = name_input.value
                 if name and drawn_geometries:
                     for geometry in drawn_geometries:
@@ -413,9 +415,15 @@ class InteractiveMap:
 
             save_button.on_click(save_geometries)
 
-            save_button_control = self._ipyleaflet.WidgetControl(
-                widget=widgets.VBox([name_input, save_button]), position="topright"
+            hbox_layout = widgets.Layout(
+                display="flex", flex_flow="row", align_items="stretch", width="300px"
             )
+
+            save_button_control = self._ipyleaflet.WidgetControl(
+                widget=widgets.HBox([name_input, save_button], layout=hbox_layout),
+                position="topright",
+            )
+
             self.map.add_control(save_button_control)
 
         def hide_interface():
@@ -425,9 +433,7 @@ class InteractiveMap:
                 self.map.remove_control(save_button_control)
                 save_button_control = None
 
-        toggle_control = self._ipyleaflet.WidgetControl(
-            widget=draw_button, position="topright"
-        )
+        toggle_control = self._ipyleaflet.WidgetControl(widget=draw_button)
         self.map.add_control(toggle_control)
 
     def show(self):
