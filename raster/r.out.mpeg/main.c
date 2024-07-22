@@ -144,7 +144,8 @@ int main(int argc, char **argv)
     parse_command(viewopts, vfiles, &numviews, &frames);
 
     /* output file */
-    strcpy(outfile, out->answer);
+    strncpy(outfile, out->answer, sizeof(outfile) - 1);
+    outfile[sizeof(outfile) - 1] = '\0';
 
     r_out = 0;
     if (conv->answer)
