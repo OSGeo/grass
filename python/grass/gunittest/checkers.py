@@ -495,7 +495,7 @@ def proj_units_equals(text_a, text_b):
 # TODO: change checking over lines?
 # TODO: change parameter order?
 # TODO: the behavior with last \n is strange but now using DOTALL and $
-def check_text_ellipsis(reference, actual):
+def check_text_ellipsis(reference, actual) -> bool:
     r"""
     >>> check_text_ellipsis(
     ...     "Vector map <...> contains ... points.",
@@ -537,10 +537,7 @@ def check_text_ellipsis(reference, actual):
     ref_escaped = re.escape(reference)
     exp = re.compile(r"\\\.\\\.\\\.")  # matching escaped ...
     ref_regexp = exp.sub(".+", ref_escaped) + "$"
-    if re.match(ref_regexp, actual, re.DOTALL):
-        return True
-    else:
-        return False
+    return bool(re.match(ref_regexp, actual, re.DOTALL))
 
 
 def check_text_ellipsis_doctest(reference, actual):

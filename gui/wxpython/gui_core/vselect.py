@@ -208,7 +208,7 @@ class VectorSelectBase:
             if self._dialog:
                 self._dialog.Raise()
 
-    def AddVecInfo(self, vInfoDictTMP):
+    def AddVecInfo(self, vInfoDictTMP) -> bool:
         """Update vector in list
 
         Note: click on features add category
@@ -232,10 +232,7 @@ class VectorSelectBase:
             if self._dialog:
                 self.slist.AddItem(vInfoDictTMP)
 
-        if len(self.selectedFeatures) == 0:
-            return False
-
-        return True
+        return not len(self.selectedFeatures) == 0
 
     def _draw(self):
         """Call class 'VectorSelectHighlighter' to draw selected features"""

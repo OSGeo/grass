@@ -730,12 +730,10 @@ def create_location(gisdbase, location, geostring):
         fatal(err.value.strip('"').strip("'").replace("\\n", os.linesep))
 
 
-def can_create_location(gisdbase, location):
+def can_create_location(gisdbase, location) -> bool:
     """Checks if location can be created"""
     path = os.path.join(gisdbase, location)
-    if os.path.exists(path):
-        return False
-    return True
+    return not os.path.exists(path)
 
 
 def cannot_create_location_reason(gisdbase, location):
