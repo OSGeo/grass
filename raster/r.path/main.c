@@ -219,13 +219,17 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    strcpy(dir_name, opt.dir->answer);
+    strncpy(dir_name, opt.dir->answer, sizeof(dir_name) - 1);
+    dir_name[sizeof(dir_name) - 1] = '\0';
     *map_name = '\0';
     *out_name = '\0';
     if (opt.rast->answer) {
-        strcpy(out_name, opt.rast->answer);
-        if (opt.val->answer)
-            strcpy(map_name, opt.val->answer);
+        strncpy(out_name, opt.rast->answer, sizeof(out_name) - 1);
+        out_name[sizeof(out_name) - 1] = '\0';
+        if (opt.val->answer) {
+            strncpy(map_name, opt.val->answer, sizeof(map_name) - 1);
+            map_name[sizeof(map_name) - 1] = '\0';
+        }
     }
 
     pvout = NULL;
