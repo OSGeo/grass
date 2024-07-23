@@ -33,7 +33,7 @@ int main(int argc, char **argv)
     char *desc_ortho_opt;
     char *moduletorun;
     const char *grname;
-    char tosystem[99];
+    char tosystem[99] = "";
 
     /* initialize grass */
     G_gisinit(argv[0]);
