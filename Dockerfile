@@ -4,19 +4,29 @@
 #       Changes to this file must be copied over to the other file.
 
 ARG GUI=without
+ARG MYLDFLAGS="-s -Wl,--no-undefined -lblas"
+ARG MYCFLAGS="-O2 -std=gnu99 -m64"
+ARG MYCXXFLAGS=""
+ARG PYTHONPATH=""
+ARG LD_LIBRARY_PATH="/usr/local/lib"
 
-FROM ubuntu:22.04@sha256:340d9b015b194dc6e2a13938944e0d016e57b9679963fdeb9ce021daac430221 as common_start
+FROM ubuntu:22.04@sha256:340d9b015b194dc6e2a13938944e0d016e57b9679963fdeb9ce021daac430221 AS common_start
 
 LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann,Stefan Blumentrath"
 LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 SHELL ["/bin/bash", "-c"]
 
 WORKDIR /tmp
 
 ARG GUI
+ARG MYLDFLAGS
+ARG MYCFLAGS
+ARG MYCXXFLAGS
+ARG PYTHONPATH
+ARG LD_LIBRARY_PATH
 
 # Todo: re-consider required dev packages for addons (~400MB in dev packages)
 ARG GRASS_RUN_PACKAGES="build-essential \
@@ -131,21 +141,22 @@ ARG GRASS_PYTHON_PACKAGES="pip \
     setuptools \
     python-dateutil \
     python-magic \
-    numpy \
+    numpy<2 \
     Pillow \
     ply \
     matplotlib \
     psycopg2 \
   "
 ENV GRASS_PYTHON_PACKAGES=${GRASS_PYTHON_PACKAGES}
+# \
+#    PYHTONPATH="/usr/local/grass/etc/python/:${PYTHONPATH}"
 
+FROM common_start AS grass_without_gui
 
-FROM common_start as grass_without_gui
-
-ARG GRASS_CONFIG="${GRASS_CONFIG} --without-opengl"
+ARG GRASS_CONFIG="${GRASS_CONFIG} --without-opengl --without-x"
 ENV GRASS_CONFIG=${GRASS_CONFIG}
 
-FROM common_start as grass_with_gui
+FROM common_start AS grass_with_gui
 
 ARG GRASS_RUN_PACKAGES="${GRASS_RUN_PACKAGES} adwaita-icon-theme-full \
   libglu1-mesa \
@@ -196,7 +207,7 @@ ARG GRASS_PYTHON_PACKAGES="${GRASS_PYTHON_PACKAGES} wxPython"
 ENV NO_AT_BRIDGE=1
 
 
-FROM grass_${GUI}_gui as grass_gis
+FROM grass_${GUI}_gui AS grass_gis
 # Add ubuntugis unstable and fetch packages
 RUN apt-get update \
     && apt-get install  -y --no-install-recommends --no-install-suggests \
@@ -234,7 +245,7 @@ WORKDIR /src
 # RUN wget --no-check-certificate -r -l inf -A tif https://cdn.proj.org/
 
 # Start build stage
-FROM grass_gis as build
+FROM grass_gis AS build
 
 # Add build packages
 RUN apt-get update \
@@ -265,13 +276,13 @@ WORKDIR /src/grass_build
 
 # Set environmental variables for GRASS GIS compilation, without debug symbols
 # Set gcc/g++ environmental variables for GRASS GIS compilation, without debug symbols
-ENV MYCFLAGS "-O2 -std=gnu99 -m64"
-ENV MYLDFLAGS "-s"
+#ENV MYCFLAGS="-O2 -std=gnu99 -m64"
+#ENV MYLDFLAGS="-s"
 # CXX stuff:
-ENV LD_LIBRARY_PATH "/usr/local/lib"
-ENV LDFLAGS "$MYLDFLAGS"
-ENV CFLAGS "$MYCFLAGS"
-ENV CXXFLAGS "$MYCXXFLAGS"
+ENV LD_LIBRARY_PATH="/usr/local/lib"
+ENV LDFLAGS="$MYLDFLAGS"
+ENV CFLAGS="$MYCFLAGS"
+ENV CXXFLAGS="$MYCXXFLAGS"
 
 # Configure compile and install GRASS GIS
 ENV NUMTHREADS=4
@@ -299,7 +310,7 @@ RUN git clone https://github.com/OSGeo/gdal-grass \
     && rm -rf "gdal-grass"
 
 # Leave build stage
-FROM grass_gis as grass_gis_final
+FROM grass_gis AS grass_gis_final
 
 # GRASS GIS specific
 # allow work with MAPSETs that are not owned by current user
@@ -331,10 +342,10 @@ WORKDIR /scripts
 
 # enable GRASS GIS Python session support
 ## grass --config python-path
-ENV PYTHONPATH "/usr/local/grass/etc/python:${PYTHONPATH}"
+ENV PYTHONPATH="/usr/local/grass/etc/python:${PYTHONPATH}"
 # enable GRASS GIS ctypes imports
 ## grass --config path
-ENV LD_LIBRARY_PATH "/usr/local/grass/lib:$LD_LIBRARY_PATH"
+ENV LD_LIBRARY_PATH="/usr/local/grass/lib:$LD_LIBRARY_PATH"
 
 WORKDIR /tmp
 COPY docker/testdata/simple.laz .
@@ -348,4 +359,4 @@ RUN grass --tmp-project EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" outp
 WORKDIR /grassdb
 VOLUME /grassdb
 
-CMD ["$GRASSBIN", "--version"]
+CMD ["grass", "--version"]
