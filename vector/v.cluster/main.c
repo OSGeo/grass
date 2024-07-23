@@ -493,7 +493,7 @@ int main(int argc, char *argv[])
 
             mean = sum / n;
             sd = sqrt(sumsq / n - mean * mean);
-            eps = mean + 1.644854 * sd; /* 90% CI */
+            // eps = mean + 1.644854 * sd; /* 90% CI */
             eps = mean + 2.575829 * sd; /* 99% CI */
 
             if (eps > max)
