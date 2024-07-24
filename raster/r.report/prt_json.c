@@ -167,12 +167,22 @@ void print_json()
 
     JSON_Value *maps_value = json_value_init_array();
     JSON_Array *maps_array = json_array(maps_value);
+
     for (int i = 0; i < nlayers; i++) {
         JSON_Value *map_value = json_value_init_object();
         JSON_Object *map_object = json_object(map_value);
         json_object_set_string(map_object, "name", layers[i].name);
-        json_object_set_string(map_object, "description", layers[i].mapset);
-        json_object_set_string(map_object, "layer", layers[i].name);
+
+        char *label;
+        label = Rast_get_cats_title(&(layers[i].labels));
+        if (label == NULL || *label == 0) {
+            json_object_set_null(map_object, "label");
+        }
+        else {
+            G_strip(label);
+            json_object_set_string(map_object, "label", label);
+        }
+
         json_object_set_string(map_object, "type", "raster");
         json_array_append_value(maps_array, map_value);
     }

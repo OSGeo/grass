@@ -109,14 +109,12 @@ class TestRasterreport(TestCase):
             "maps": [
                 {
                     "name": "towns",
-                    "description": "PERMANENT",
-                    "layer": "towns",
+                    "label": "South West Wake: Cities and towns derived from zipcodes",
                     "type": "raster",
                 },
                 {
                     "name": "zipcodes",
-                    "description": "PERMANENT",
-                    "layer": "zipcodes",
+                    "label": "South West Wake: Zipcode areas derived from vector map",
                     "type": "raster",
                 },
             ],
@@ -313,14 +311,12 @@ class TestRasterreport(TestCase):
             "maps": [
                 {
                     "name": "towns",
-                    "description": "PERMANENT",
-                    "layer": "towns",
+                    "label": "South West Wake: Cities and towns derived from zipcodes",
                     "type": "raster",
                 },
                 {
                     "name": "elevation",
-                    "description": "PERMANENT",
-                    "layer": "elevation",
+                    "label": "South-West Wake county: Elevation NED 10m",
                     "type": "raster",
                 },
             ],
