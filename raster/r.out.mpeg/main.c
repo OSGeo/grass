@@ -395,9 +395,9 @@ static void mlist(const char *element, const char *wildarg, const char *outfile)
         if (strcmp(mapset, ".") == 0)
             mapset = G_mapset();
 
-        sprintf(type_arg, "type=%s", element);
-        sprintf(pattern_arg, "pattern=%s", wildarg);
-        sprintf(mapset_arg, "mapset=%s", mapset);
+        snprintf(type_arg, sizeof(type_arg), "type=%s", element);
+        snprintf(pattern_arg, sizeof(pattern_arg), "pattern=%s", wildarg);
+        snprintf(mapset_arg, sizeof(mapset_arg), "mapset=%s", mapset);
 
         G_spawn_ex("g.list", "g.list", type_arg, pattern_arg, mapset_arg,
                    SF_REDIRECT_FILE, SF_STDOUT, SF_MODE_APPEND, outfile, NULL);
