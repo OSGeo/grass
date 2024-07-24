@@ -64,15 +64,7 @@ class TestRasterreport(TestCase):
         self.assertFileExists(self.outfile)
 
     def _assert_report_equal(self, reference, data):
-        # the following fields vary with the Grass sample data's path
-        # therefore only check for their presence in the JSON output
-        # and not exact values
-        remove_fields = ["location"]
-        for field in remove_fields:
-            self.assertIn(field, data)
-            data.pop(field)
-
-        keys = ["region", "mask", "maps", "totals"]
+        keys = ["location", "region", "mask", "maps", "totals"]
         for key in keys:
             self.assertEqual(reference[key], data[key])
 
@@ -103,6 +95,7 @@ class TestRasterreport(TestCase):
     def test_json(self):
         """Test JSON format"""
         reference = {
+            "location": "nc_spm_08_grass7",
             "region": {
                 "north": 228500,
                 "south": 215000,
@@ -305,6 +298,7 @@ class TestRasterreport(TestCase):
     def test_json2(self):
         """Test JSON format with more options"""
         reference = {
+            "location": "nc_spm_08_grass7",
             "created": "Thu Jul 18 14:21:20 2024",
             "region": {
                 "north": 228500,
