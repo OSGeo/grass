@@ -19,7 +19,7 @@ import collections
 import re
 from collections.abc import Iterable
 
-from .utils import ensure_dir
+from .utils import add_gitignore_to_dir, ensure_dir
 from .checkers import text_to_keyvalue
 
 
@@ -330,9 +330,10 @@ class GrassTestFilesMultiReporter:
 
     def start(self, results_dir):
         # TODO: no directory cleaning (self.clean_before)? now cleaned by caller
-        # TODO: perhaps only those whoe need it should do it (even multiple times)
+        # TODO: perhaps only those who need it should do it (even multiple times)
         # and there is also the delete problem
         ensure_dir(os.path.abspath(results_dir))
+        add_gitignore_to_dir(os.path.abspath(results_dir))
         for reporter in self.reporters:
             try:
                 reporter.start(results_dir)
