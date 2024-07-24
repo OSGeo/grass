@@ -656,11 +656,11 @@ class TestRasterreport(TestCase):
         self.runModule(module)
         data = json.loads(module.outputs.stdout)
 
-        # created field represents the time of running the command. therefore, its exact value
-        # cannot be tested. we only check that it is present and in the ISO8601 datetime format
+        # created field represents the time of running the command. Therefore, its exact value
+        # cannot be tested. We only check that it is present and in the ISO8601 datetime format
         self.assertIn("created", data)
         try:
-            # on python 3.11 and below, datetime.fromisoformat doesn't support zone info with offset
+            # on Python 3.11 and below, datetime.fromisoformat doesn't support zone info with offset
             datetime.strptime(data["created"], "%Y-%m-%dT%H:%M:%S%z")
         except ValueError:
             self.fail("created field is not in isoformat: %s" % (data["created"],))
