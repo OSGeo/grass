@@ -72,15 +72,9 @@ class TestRasterreport(TestCase):
             self.assertIn(field, data)
             data.pop(field)
 
-        keys = ["region", "mask", "totals"]
+        keys = ["region", "mask", "maps", "totals"]
         for key in keys:
             self.assertEqual(reference[key], data[key])
-
-        for maps1, maps2 in zip_longest(reference["maps"], data["maps"]):
-            self.assertEqual(maps1["name"], maps2["name"])
-            self.assertEqual(maps1["layer"], maps2["layer"])
-            self.assertEqual(maps1["type"], maps2["type"])
-            self.assertIn("description", maps2)
 
         for category1, category2 in zip_longest(
             reference["categories"], data["categories"]
