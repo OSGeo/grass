@@ -95,7 +95,7 @@ class TestRasterreport(TestCase):
     def test_json(self):
         """Test JSON format"""
         reference = {
-            "location": "nc_spm_08_grass7",
+            "location": "nc_spm_full_v2alpha2",
             "region": {
                 "north": 228500,
                 "south": 215000,
@@ -114,7 +114,7 @@ class TestRasterreport(TestCase):
                 },
                 {
                     "name": "zipcodes",
-                    "description": "landsat",
+                    "description": "PERMANENT",
                     "layer": "zipcodes",
                     "type": "raster",
                 },
@@ -298,7 +298,7 @@ class TestRasterreport(TestCase):
     def test_json2(self):
         """Test JSON format with more options"""
         reference = {
-            "location": "nc_spm_08_grass7",
+            "location": "nc_spm_full_v2alpha2",
             "created": "Thu Jul 18 14:21:20 2024",
             "region": {
                 "north": 228500,
