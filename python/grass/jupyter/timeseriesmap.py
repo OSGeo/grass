@@ -281,6 +281,16 @@ class TimeSeriesMap(BaseSeriesMap):
         if self._legend:
             self._render_legend(img)
 
+    def _render_layer_worker(self, date, layer, filename):
+        """Function to render a single layer."""
+        if layer == "None":
+            shutil.copyfile(self.base_file, filename)
+            self._render_blank_layer(filename)
+        else:
+            shutil.copyfile(self.base_file, filename)
+            self._render_layer(layer, filename)
+        return date, filename
+
     def render(self):
         """Renders image for each time-step in space-time dataset.
 
@@ -288,6 +298,7 @@ class TimeSeriesMap(BaseSeriesMap):
         (i.e. show or save). Can be time-consuming to run with large
         space-time datasets.
         """
+        import multiprocessing  # pylint: disable=import-outside-toplevel
 
         self._render()
         if not self._baseseries_added:
@@ -297,30 +308,21 @@ class TimeSeriesMap(BaseSeriesMap):
                 "TimeSeriesMap.add_vector_series() to add dataset"
             )
 
-        # Create name for empty layers
-        # Random name needed to avoid potential conflict with layer names
-        # A new random_name_none is created each time the render function is run,
-        # and any existing random_name_none file will be ignored
         random_name_none = gs.append_random("none", 8) + ".png"
 
-        # Render each layer
+        tasks = []
         for date, layer in self._date_layer_dict.items():
             if layer == "None":
-                # Create file
                 filename = os.path.join(self._tmpdir.name, random_name_none)
-                self._base_filename_dict[date] = filename
-                # Render blank layer if it hasn't been done already
-                if not os.path.exists(filename):
-                    shutil.copyfile(self.base_file, filename)
-                    self._render_blank_layer(filename)
             else:
-                # Create file
                 filename = os.path.join(self._tmpdir.name, f"{layer}.png")
-                # Copying the base_file ensures that previous results are overwritten
-                shutil.copyfile(self.base_file, filename)
-                self._base_filename_dict[date] = filename
-                # Render image
-                self._render_layer(layer, filename)
+            tasks.append((date, layer, filename))
+
+        with multiprocessing.Pool() as pool:
+            results = pool.starmap(self._render_layer_worker, tasks)
+
+        for date, filename in results:
+            self._base_filename_dict[date] = filename
 
         self._layers_rendered = True
 
