@@ -664,7 +664,8 @@ class TestRasterreport(TestCase):
         # cannot be tested. we only check that it is present and in the ISO8601 datetime format
         self.assertIn("created", data)
         try:
-            datetime.fromisoformat(data["created"])
+            # on python 3.11 and below, datetime.fromisoformat doesn't support zone info with offset
+            datetime.strptime(data["created"], "%Y-%m-%dT%H:%M:%S%z")
         except ValueError:
             self.fail("created field is not in isoformat: %s" % (data["created"],))
 
