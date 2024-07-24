@@ -12,6 +12,7 @@ Licence:    This program is free software under the GNU General Public
 import json
 import os
 from itertools import zip_longest
+from datetime import datetime
 
 from grass.gunittest.case import TestCase
 
@@ -299,7 +300,7 @@ class TestRasterreport(TestCase):
         """Test JSON format with more options"""
         reference = {
             "location": "nc_spm_full_v2alpha2",
-            "created": "Thu Jul 18 14:21:20 2024",
+            "created": "2024-07-24T14:59:09+0530",
             "region": {
                 "north": 228500,
                 "south": 215000,
@@ -658,6 +659,15 @@ class TestRasterreport(TestCase):
         )
         self.runModule(module)
         data = json.loads(module.outputs.stdout)
+
+        # created field represents the time of running the command. therefore, its exact value
+        # cannot be tested. we only check that it is present and in the ISO8601 datetime format
+        self.assertIn("created", data)
+        try:
+            datetime.fromisoformat(data["created"])
+        except ValueError:
+            self.fail("created field is not in isoformat: %s" % (data["created"],))
+
         self._assert_report_equal(reference, data)
 
 

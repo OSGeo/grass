@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 #include "global.h"
 #include <grass/parson.h>
 #include <grass/glocale.h>
@@ -136,7 +137,15 @@ void print_json()
     JSON_Object *root_object = json_object(root_value);
 
     json_object_set_string(root_object, "location", G_location());
-    json_object_set_string(root_object, "created", G_date());
+
+    char date[64];
+    time_t now;
+    struct tm *tm_info;
+
+    time(&now);
+    tm_info = localtime(&now);
+    strftime(date, 64, "%Y-%m-%dT%H:%M:%S%z", tm_info);
+    json_object_set_string(root_object, "created", date);
 
     JSON_Value *region_value = json_value_init_object();
     JSON_Object *region_object = json_object(region_value);
