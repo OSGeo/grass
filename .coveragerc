@@ -10,7 +10,7 @@ omit =
     ${INITIAL_PWD-.}/bin.*/*
     ${INITIAL_PWD-.}/dist.*/*
     **/OBJ.*/*
-source = 
+source =
     .
     ${INITIAL_PWD-.}/
     ${INITIAL_GISBASE-/usr/local/grass??}/
