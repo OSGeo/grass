@@ -596,7 +596,7 @@ AC_CHECK_FUNCS(asprintf)
 AC_SUBST(HAVE_ASPRINTF)
 
 # Test if strlcpy exists
-# This is a function part of *BSD libc (optionnaly available on Linux via libbsd)
+# This is a function part of *BSD libc (optionally available on Linux via libbsd)
 AC_CHECK_FUNCS(strlcpy)
 AC_SUBST(HAVE_STRLCPY)
 
