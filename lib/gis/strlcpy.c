@@ -20,13 +20,34 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-/*
- * Copy string src to buffer dst of size dsize.  At most dsize-1
- * chars will be copied.  Always NUL terminates (unless dsize == 0).
- * Returns strlen(src); if retval >= dsize, truncation occurred.
- */
 #include <stddef.h>
-size_t G_strlcpy(char *__restrict dst, const char *__restrict src, size_t dsize)
+
+/**
+ * \brief Safe string copy function.
+ *
+ * Copy string src to buffer dst of size dsize. At most dsize-1
+ * characters will be copied. Always NUL terminates (unless dsize == 0).
+ * This function is a safer alternative to strncpy.
+ *
+ * \param[out] dst Pointer to the destination buffer.
+ * \param[in] src Pointer to the source string. Must be a NUL-terminated C
+ * string.
+ * \param[in] dsize The size of the destination buffer.
+ *
+ * \return The total length of the string src (not including the terminating
+ *         NUL character). If the return value is >= dsize, truncation occurred.
+ *
+ * \note If truncation occurred, the return value is the length of the string
+ *       that would have been created if enough space had been available.
+ *
+ * \warning This function does not pad the destination buffer with NUL bytes
+ *          if the source string is shorter than dsize-1 bytes, unlike strncpy.
+ *
+ * \warning The src string must be a valid NUL-terminated C string. Passing an
+ *          unterminated string may result in buffer overrun.
+ */
+
+size_t G_strlcpy(char *restrict dst, const char *restrict src, size_t dsize)
 {
 #ifdef HAVE_STRLCPY
     return strlcpy(dst, src, dsize);
