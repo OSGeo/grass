@@ -401,7 +401,7 @@ def create_grass_config_dir():
 
     if not os.path.isdir(directory):
         try:
-            os.mkdir(directory)
+            os.makedirs(directory)
         except OSError as e:
             # Can happen as a race condition
             if not e.errno == errno.EEXIST or not os.path.isdir(directory):
