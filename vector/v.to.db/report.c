@@ -302,6 +302,7 @@ int report(enum OutputFormat format)
             }
             break;
         }
+        break;
     case O_COOR:
     case O_START:
     case O_END:
