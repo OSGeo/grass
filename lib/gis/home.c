@@ -113,7 +113,7 @@ const char *G_config_path(void)
         config_dir = G_home();
 #endif
 
-    sprintf(buf, "%s%c%s", config_dir, HOST_DIRSEP, CONFIG_DIR);
+    snprintf(buf, GPATH_MAX, "%s%c%s", config_dir, HOST_DIRSEP, CONFIG_DIR);
     config_path = G_store(buf);
 
 #if 0
