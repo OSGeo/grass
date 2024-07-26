@@ -108,7 +108,7 @@ def split_mapset_path(mapset_path):
     """Split mapset path to three parts - grassdb, location, mapset"""
     mapset_path = Path(mapset_path)
     if len(mapset_path.parts) < 3:
-        ValueError(
+        raise ValueError(
             _("Mapset path '{}' needs at least three components").format(mapset_path)
         )
     mapset = mapset_path.name

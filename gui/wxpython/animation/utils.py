@@ -31,7 +31,7 @@ except ImportError:
     hasPIL = False
 
 import grass.temporal as tgis
-import grass.script as grass
+import grass.script as gs
 from grass.script.utils import encode
 from gui_core.wrap import EmptyBitmap
 
@@ -87,7 +87,7 @@ def validateMapNames(names, etype):
     Input is list of map names.
     Raises GException if map doesn't exist.
     """
-    mapDict = grass.list_grouped(etype)
+    mapDict = gs.list_grouped(etype)
 
     newNames = []
     for name in names:
@@ -185,7 +185,7 @@ def checkSeriesCompatibility(mapSeriesList=None, timeseriesList=None):
 
     if len(timeseriesInfo["count"]) > 1:
         raise GException(
-            _("The number of maps in space-time datasets " "has to be the same.")
+            _("The number of maps in space-time datasets has to be the same.")
         )
 
     if len(timeseriesInfo["temporalType"]) > 1:
@@ -214,8 +214,7 @@ def checkSeriesCompatibility(mapSeriesList=None, timeseriesList=None):
 
     if mapSeriesList:
         count = set()
-        for mapSeries in mapSeriesList:
-            count.add(len(mapSeries))
+        count.update(len(mapSeries) for mapSeries in mapSeriesList)
         if len(count) > 1:
             raise GException(
                 _(

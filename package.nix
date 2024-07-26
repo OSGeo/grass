@@ -26,23 +26,33 @@
 , pkg-config
 , postgresql
 , proj
-, python3Packages
+, python311Packages
 , readline
 , sqlite
 , wxGTK32
 , zlib
 , zstd
-
 }:
 
+
+let
+  pyPackages = python311Packages;
+
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "grass";
   version = "dev";
 
   src = lib.cleanSourceWith {
     src = ./.;
-    filter = path: type:
-      ! (lib.hasSuffix ".nix" path);
+    filter = (
+      path: type: (builtins.all (x: x != baseNameOf path) [
+        ".git"
+        ".github"
+        "flake.nix"
+        "package.nix"
+      ])
+    );
   };
 
   nativeBuildInputs = [
@@ -55,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     geos # for `geos-config`
     netcdf # for `nc-config`
     pkg-config
-  ] ++ (with python3Packages; [ python-dateutil numpy wxPython_4_2 ]);
+  ] ++ (with pyPackages; [ python-dateutil numpy wxpython ]);
 
   buildInputs = [
     blas
@@ -131,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     wrapProgram $out/bin/grass \
     --set PYTHONPATH $PYTHONPATH \
-    --set GRASS_PYTHON ${python3Packages.python.interpreter} \
+    --set GRASS_PYTHON ${pyPackages.python.interpreter} \
     --suffix LD_LIBRARY_PATH ':' '${gdal}/lib'
     ln -s $out/grass*/lib $out/lib
     ln -s $out/grass*/include $out/include

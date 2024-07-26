@@ -40,7 +40,7 @@ from iscatt.iscatt_core import (
 from iscatt.dialogs import AddScattPlotDialog, ExportCategoryRaster
 from iclass.dialogs import IClassGroupDialog
 
-import grass.script as grass
+import grass.script as gs
 
 from grass.pydispatch.signal import Signal
 
@@ -109,7 +109,7 @@ class ScattsManager:
         self.core.CleanUp()
 
     def CleanUpDone(self):
-        for scatt_id, scatt in self.plots.items():
+        for scatt in self.plots.values():
             if scatt["scatt"]:
                 scatt["scatt"].CleanUp()
 
@@ -421,7 +421,7 @@ class ScattsManager:
             if not scatt["scatt"]:
                 continue
             scatt["scatt"].SetSelectionPolygonMode(activate)
-            if not activate and self.plot_mode not in ["zoom", "pan", "zoom_extend"]:
+            if not activate and self.plot_mode not in {"zoom", "pan", "zoom_extend"}:
                 self.SetPlotsMode(None)
 
         self.render_mgr.RunningProcessDone()
@@ -740,9 +740,9 @@ class CategoriesManager:
         update_cat_rast = []
 
         for k, v in attrs_dict.items():
-            if not render and k in ["color", "opacity", "show", "nstd"]:
+            if not render and k in {"color", "opacity", "show", "nstd"}:
                 render = True
-            if k in ["color", "name"]:
+            if k in {"color", "name"}:
                 update_cat_rast.append(k)
 
             self.cats[cat_id][k] = v
@@ -969,7 +969,7 @@ class IMapDispConnection:
                 bands = dlg.GetGroupBandsErr(parent=self.scatt_mgr.guiparent)
                 if bands:
                     name, s = dlg.GetData()
-                    group = grass.find_file(name=name, element="group")
+                    group = gs.find_file(name=name, element="group")
                     self.set_g["group"] = group["name"]
                     self.set_g["subg"] = s
 
@@ -988,7 +988,7 @@ class IMapDispConnection:
 
     def UpdateCategoryRaster(self, cat_id, attrs, render=True):
         cat_rast = self.scatt_mgr.core.GetCatRast(cat_id)
-        if not grass.find_file(cat_rast, element="cell", mapset=".")["file"]:
+        if not gs.find_file(cat_rast, element="cell", mapset=".")["file"]:
             return
         cats_attrs = self.cats_mgr.GetCategoryAttrs(cat_id)
 
@@ -1063,7 +1063,7 @@ class IClassConnection:
         if not cat_rast:
             return
 
-        if not grass.find_file(cat_rast, element="cell", mapset=".")["file"]:
+        if not gs.find_file(cat_rast, element="cell", mapset=".")["file"]:
             return
         cats_attrs = self.cats_mgr.GetCategoryAttrs(cat_id)
         train_mgr, preview_mgr = self.iclass_frame.GetMapManagers()

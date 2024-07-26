@@ -40,7 +40,7 @@ class Testrr(TestCase):
             type=self.point,
             flags="s",
         )
-        topology = dict(points=36011, lines=0, areas=0)
+        topology = {"points": 36011, "lines": 0, "areas": 0}
         self.assertVectorFitsTopoInfo(self.output, topology)
 
     def test_flagz(self):
@@ -52,7 +52,7 @@ class Testrr(TestCase):
             type=self.point,
             flags="z",
         )
-        topology = dict(points=36011, lines=0, areas=0)
+        topology = {"points": 36011, "lines": 0, "areas": 0}
         self.assertVectorFitsTopoInfo(self.output, topology)
 
     def test_flagb(self):
@@ -60,7 +60,7 @@ class Testrr(TestCase):
         self.assertModule(
             "r.to.vect", input=self.input, output=self.output, type=self.area, flags="b"
         )
-        topology = dict(points=0, lines=0, areas=0)
+        topology = {"points": 0, "lines": 0, "areas": 0}
         self.assertVectorFitsTopoInfo(self.output, topology)
 
     def test_flagt(self):
@@ -68,7 +68,7 @@ class Testrr(TestCase):
         self.assertModule(
             "r.to.vect", input=self.input, output=self.output, type=self.area, flags="t"
         )
-        topology = dict(points=0, lines=0, areas=33)
+        topology = {"points": 0, "lines": 0, "areas": 33}
         self.assertVectorFitsTopoInfo(self.output, topology)
 
 

@@ -154,7 +154,7 @@ class RPCServerBase:
 
         if self.stopped is not True:
             logging.warning(
-                "Needed to restart the libgis server, caller: %s" % (caller)
+                "Needed to restart the libgis server, caller: {caller}", caller=caller
             )
 
         self.threadLock.release()

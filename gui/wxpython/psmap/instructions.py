@@ -38,7 +38,7 @@ from math import ceil
 from time import strftime, localtime
 
 import wx
-import grass.script as grass
+import grass.script as gs
 from grass.script.task import cmdlist_to_tuple
 
 from core.gcmd import GError, GMessage, GWarning
@@ -59,13 +59,13 @@ class Instruction:
         self.parent = parent
         self.objectsToDraw = objectsToDraw
         # here are kept objects like mapinfo, rasterlegend, etc.
-        self.instruction = list()
+        self.instruction = []
         self.env = env
 
     def __str__(self):
         """Returns text for instruction file"""
         comment = "# timestamp: " + strftime("%Y-%m-%d %H:%M", localtime()) + "\n"
-        env = grass.gisenv()
+        env = gs.gisenv()
         comment += "# location: %s\n" % env["LOCATION_NAME"]
         comment += "# mapset: %s\n" % env["MAPSET"]
         comment += (
@@ -118,14 +118,14 @@ class Instruction:
         else:
             self.instruction.append(instruction)
         # add to drawable objects
-        if instruction.type not in (
+        if instruction.type not in {
             "page",
             "raster",
             "vector",
             "vProperties",
             "initMap",
             "labels",
-        ):
+        }:
             if instruction.type == "map":
                 self.objectsToDraw.insert(0, instruction.id)
             else:
@@ -166,7 +166,7 @@ class Instruction:
         # then run ps.map -b to get information for maploc
         # compute scale and center
         map = self.FindInstructionByType("map")
-        region = grass.region(env=self.env)
+        region = gs.region(env=self.env)
         map["center"] = (region["n"] + region["s"]) / 2, (region["w"] + region["e"]) / 2
         mapRect = GetMapBounds(
             self.filename, portrait=(orientation == "Portrait"), env=self.env
@@ -201,9 +201,9 @@ class Instruction:
                     kwargs = {}
                     if instruction == "scalebar":
                         kwargs["scale"] = map["scale"]
-                    elif instruction in ("text", "eps", "point", "line", "rectangle"):
+                    elif instruction in {"text", "eps", "point", "line", "rectangle"}:
                         kwargs["mapInstruction"] = map
-                    elif instruction in ("vpoints", "vlines", "vareas"):
+                    elif instruction in {"vpoints", "vlines", "vareas"}:
                         kwargs["id"] = NewId()
                         kwargs["vectorMapNumber"] = vectorMapNumber
                         vectorMapNumber += 1
@@ -222,11 +222,11 @@ class Instruction:
                 buffer.append(line)
 
             elif line.startswith("border"):
-                if line.split()[1].lower() in ("n", "no", "none"):
+                if line.split()[1].lower() in {"n", "no", "none"}:
                     ok = self.SendToRead("border", [line])
                     if not ok:
                         return False
-                elif line.split()[1].lower() in ("y", "yes"):
+                elif line.split()[1].lower() in {"y", "yes"}:
                     instruction = "border"
                     isBuffer = True
                     buffer.append(line)
@@ -284,11 +284,11 @@ class Instruction:
                 buffer.append(line)
 
             elif line.startswith("colortable"):
-                if len(line.split()) == 2 and line.split()[1].lower() in (
+                if len(line.split()) == 2 and line.split()[1].lower() in {
                     "n",
                     "no",
                     "none",
-                ):
+                }:
                     break
                 instruction = "colortable"
                 isBuffer = True
@@ -401,49 +401,48 @@ class Instruction:
         else:
             page["Orientation"] = orientation
 
-        #
         return True
 
     def SendToRead(self, instruction, text, **kwargs):
-        psmapInstrDict = dict(
-            paper=["page"],
-            maploc=["map"],
-            scale=["map"],
-            border=["map"],
-            raster=["raster"],
-            mapinfo=["mapinfo"],
-            scalebar=["scalebar"],
-            text=["text"],
-            eps=["image", "northArrow"],
-            point=["point"],
-            line=["line"],
-            rectangle=["rectangle"],
-            vpoints=["vector", "vProperties"],
-            vlines=["vector", "vProperties"],
-            vareas=["vector", "vProperties"],
-            colortable=["rasterLegend"],
-            vlegend=["vectorLegend"],
-            labels=["labels"],
-        )
+        psmapInstrDict = {
+            "paper": ["page"],
+            "maploc": ["map"],
+            "scale": ["map"],
+            "border": ["map"],
+            "raster": ["raster"],
+            "mapinfo": ["mapinfo"],
+            "scalebar": ["scalebar"],
+            "text": ["text"],
+            "eps": ["image", "northArrow"],
+            "point": ["point"],
+            "line": ["line"],
+            "rectangle": ["rectangle"],
+            "vpoints": ["vector", "vProperties"],
+            "vlines": ["vector", "vProperties"],
+            "vareas": ["vector", "vProperties"],
+            "colortable": ["rasterLegend"],
+            "vlegend": ["vectorLegend"],
+            "labels": ["labels"],
+        }
 
-        myInstrDict = dict(
-            page=PageSetup,
-            map=MapFrame,
-            raster=Raster,
-            mapinfo=Mapinfo,
-            scalebar=Scalebar,
-            text=Text,
-            image=Image,
-            northArrow=NorthArrow,
-            point=Point,
-            line=Line,
-            rectangle=Rectangle,
-            rasterLegend=RasterLegend,
-            vectorLegend=VectorLegend,
-            vector=Vector,
-            vProperties=VProperties,
-            labels=Labels,
-        )
+        myInstrDict = {
+            "page": PageSetup,
+            "map": MapFrame,
+            "raster": Raster,
+            "mapinfo": Mapinfo,
+            "scalebar": Scalebar,
+            "text": Text,
+            "image": Image,
+            "northArrow": NorthArrow,
+            "point": Point,
+            "line": Line,
+            "rectangle": Rectangle,
+            "rasterLegend": RasterLegend,
+            "vectorLegend": VectorLegend,
+            "vector": Vector,
+            "vProperties": VProperties,
+            "labels": Labels,
+        }
 
         myInstruction = psmapInstrDict[instruction]
 
@@ -451,7 +450,7 @@ class Instruction:
             instr = self.FindInstructionByType(i)
             if (
                 i
-                in (
+                in {
                     "text",
                     "vProperties",
                     "image",
@@ -459,7 +458,7 @@ class Instruction:
                     "point",
                     "line",
                     "rectangle",
-                )
+                }
                 or not instr
             ):
                 id = NewId()  # !vProperties expect subtype
@@ -470,7 +469,7 @@ class Instruction:
                         subType=instruction[1:],
                         env=self.env,
                     )
-                elif i in ("image", "northArrow"):
+                elif i in {"image", "northArrow"}:
                     commentFound = False
                     for line in text:
                         if line.find("# north arrow") >= 0:
@@ -523,16 +522,16 @@ class Instruction:
                 map["scaleType"] = 2
         else:
             map["scaleType"] = 2
-            region = grass.region(env=None)
+            region = gs.region(env=None)
             cmd = ["g.region", region]
         cmdString = GetCmdString(cmd).replace("g.region", "")
         GMessage(
             _("Instruction file will be loaded with following region: %s\n") % cmdString
         )
         try:
-            self.env["GRASS_REGION"] = grass.region_env(env=self.env, **cmd[1])
+            self.env["GRASS_REGION"] = gs.region_env(env=self.env, **cmd[1])
 
-        except grass.ScriptError as e:
+        except gs.ScriptError as e:
             GError(_("Region cannot be set\n%s") % e)
             return False
 
@@ -545,7 +544,7 @@ class InstructionObject:
         self.env = env
 
         # default values
-        self.defaultInstruction = dict()
+        self.defaultInstruction = {}
         # current values
         self.instruction = self.defaultInstruction
         # converting units
@@ -579,7 +578,7 @@ class InstructionObject:
     def PercentToReal(self, e, n):
         """Converts text coordinates from percent of region to map coordinates"""
         e, n = float(e.strip("%")), float(n.strip("%"))
-        region = grass.region(env=self.env)
+        region = gs.region(env=self.env)
         N = region["s"] + (region["n"] - region["s"]) / 100 * n
         E = region["w"] + (region["e"] - region["w"]) / 100 * e
         return E, N
@@ -593,7 +592,7 @@ class InitMap(InstructionObject):
         self.type = "initMap"
 
         # default values
-        self.defaultInstruction = dict(rect=None, scale=None)
+        self.defaultInstruction = {"rect": None, "scale": None}
         # current values
         self.instruction = dict(self.defaultInstruction)
 
@@ -605,20 +604,20 @@ class MapFrame(InstructionObject):
         InstructionObject.__init__(self, id=id, env=env)
         self.type = "map"
         # default values
-        self.defaultInstruction = dict(
-            map=None,
-            mapType=None,
-            drawMap=True,
-            region=None,
-            rect=Rect2D(),
-            scaleType=0,
-            scale=None,
-            center=None,
-            resolution=300,
-            border="y",
-            width=1,
-            color="0:0:0",
-        )
+        self.defaultInstruction = {
+            "map": None,
+            "mapType": None,
+            "drawMap": True,
+            "region": None,
+            "rect": Rect2D(),
+            "scaleType": 0,
+            "scale": None,
+            "center": None,
+            "resolution": 300,
+            "border": "y",
+            "width": 1,
+            "color": "0:0:0",
+        }
         # current values
         self.instruction = dict(self.defaultInstruction)
 
@@ -627,7 +626,7 @@ class MapFrame(InstructionObject):
         comment = ""
 
         # region settings
-        region = grass.region(env=self.env)
+        region = gs.region(env=self.env)
         if self.instruction["scaleType"] == 0:  # match map
             map = self.instruction["map"]
             if self.instruction["mapType"] == "raster":
@@ -642,7 +641,7 @@ class MapFrame(InstructionObject):
             region = self.instruction["region"]
             comment = "# g.region region=%s\n" % region
         # current region, fixed scale
-        elif self.instruction["scaleType"] in (2, 3):
+        elif self.instruction["scaleType"] in {2, 3}:
             comment = string.Template(
                 "# g.region n=$n s=$s e=$e w=$w rows=$rows cols=$cols \n"
             ).substitute(**region)
@@ -693,10 +692,10 @@ class MapFrame(InstructionObject):
                 if line.startswith("end"):
                     break
                 try:
-                    if line.split()[1].lower() in ("n", "no", "none"):
+                    if line.split()[1].lower() in {"n", "no", "none"}:
                         instr["border"] = "n"
                         break
-                    elif line.split()[1].lower() in ("y", "yes"):
+                    elif line.split()[1].lower() in {"y", "yes"}:
                         instr["border"] = "y"
                     elif line.startswith("width"):
                         instr["width"] = line.split()[1]
@@ -784,17 +783,17 @@ class PageSetup(InstructionObject):
         InstructionObject.__init__(self, id=id, env=env)
         self.type = "page"
         # default values
-        self.defaultInstruction = dict(
-            Units="inch",
-            Format="a4",
-            Orientation="Portrait",
-            Width=8.268,
-            Height=11.693,
-            Left=0.5,
-            Right=0.5,
-            Top=1,
-            Bottom=1,
-        )
+        self.defaultInstruction = {
+            "Units": "inch",
+            "Format": "a4",
+            "Orientation": "Portrait",
+            "Width": 8.268,
+            "Height": 11.693,
+            "Left": 0.5,
+            "Right": 0.5,
+            "Top": 1,
+            "Bottom": 1,
+        }
         # current values
         self.instruction = dict(self.defaultInstruction)
 
@@ -826,7 +825,7 @@ class PageSetup(InstructionObject):
                     if len(line.split()) > 1:
                         pformat = line.split()[1]
                         availableFormats = self._toDict(
-                            grass.read_command("ps.map", flags="p", quiet=True)
+                            gs.read_command("ps.map", flags="p", quiet=True)
                         )
                         # e.g. paper a3
                         try:
@@ -863,7 +862,7 @@ class PageSetup(InstructionObject):
         return True
 
     def _toDict(self, paperStr):
-        sizeDict = dict()
+        sizeDict = {}
         #     cats = self.subInstr[ 'Width', 'Height', 'Left', 'Right', 'Top', 'Bottom']
         for line in paperStr.strip().split("\n"):
             d = dict(zip(self.cats, line.split()[1:]))
@@ -879,16 +878,16 @@ class Mapinfo(InstructionObject):
         InstructionObject.__init__(self, id=id, env=env)
         self.type = "mapinfo"
         # default values
-        self.defaultInstruction = dict(
-            unit="inch",
-            where=(0, 0),
-            font="Helvetica",
-            fontsize=10,
-            color="0:0:0",
-            background="none",
-            border="none",
-            rect=None,
-        )
+        self.defaultInstruction = {
+            "unit": "inch",
+            "where": (0, 0),
+            "font": "Helvetica",
+            "fontsize": 10,
+            "color": "0:0:0",
+            "background": "none",
+            "border": "none",
+            "rect": None,
+        }
         # current values
         self.instruction = dict(self.defaultInstruction)
 
@@ -953,26 +952,26 @@ class Text(InstructionObject):
         InstructionObject.__init__(self, id=id, env=env)
         self.type = "text"
         # default values
-        self.defaultInstruction = dict(
-            text="",
-            font="Helvetica",
-            fontsize=10,
-            color="black",
-            background="none",
-            hcolor="none",
-            hwidth=1,
-            border="none",
-            width="1",
-            XY=True,
-            where=(0, 0),
-            unit="inch",
-            rotate=None,
-            ref="center center",
-            xoffset=0,
-            yoffset=0,
-            east=None,
-            north=None,
-        )
+        self.defaultInstruction = {
+            "text": "",
+            "font": "Helvetica",
+            "fontsize": 10,
+            "color": "black",
+            "background": "none",
+            "hcolor": "none",
+            "hwidth": 1,
+            "border": "none",
+            "width": "1",
+            "XY": True,
+            "where": (0, 0),
+            "unit": "inch",
+            "rotate": None,
+            "ref": "center center",
+            "xoffset": 0,
+            "yoffset": 0,
+            "east": None,
+            "north": None,
+        }
         # current values
         self.instruction = dict(self.defaultInstruction)
 
@@ -1050,7 +1049,7 @@ class Text(InstructionObject):
                 elif sub == "yoffset":
                     instr["yoffset"] = int(line.split(None, 1)[1])
                 elif sub == "opaque":
-                    if line.split(None, 1)[1].lower() in ("n", "none"):
+                    if line.split(None, 1)[1].lower() in {"n", "none"}:
                         instr["background"] = "none"
 
             except (IndexError, ValueError):
@@ -1076,16 +1075,16 @@ class Image(InstructionObject):
         self.settings = settings
         self.type = "image"
         # default values
-        self.defaultInstruction = dict(
-            epsfile="",
-            XY=True,
-            where=(0, 0),
-            unit="inch",
-            east=None,
-            north=None,
-            rotate=None,
-            scale=1,
-        )
+        self.defaultInstruction = {
+            "epsfile": "",
+            "XY": True,
+            "where": (0, 0),
+            "unit": "inch",
+            "east": None,
+            "north": None,
+            "rotate": None,
+            "scale": 1,
+        }
         # current values
         self.instruction = dict(self.defaultInstruction)
 
@@ -1133,7 +1132,7 @@ class Image(InstructionObject):
                 return False
         if not os.path.exists(instr["epsfile"]):
             GError(
-                _("Failed to read instruction %(inst)s: " "file %(file)s not found.")
+                _("Failed to read instruction %(inst)s: file %(file)s not found.")
                 % {"inst": instruction, "file": instr["epsfile"]}
             )
             return False
@@ -1261,18 +1260,18 @@ class Point(InstructionObject):
         InstructionObject.__init__(self, id=id, env=env)
         self.type = "point"
         # default values
-        self.defaultInstruction = dict(
-            symbol=os.path.join("basic", "x"),
-            color="0:0:0",
-            fcolor="200:200:200",
-            rotate=0,
-            size=10,
-            XY=True,
-            where=(0, 0),
-            unit="inch",
-            east=None,
-            north=None,
-        )
+        self.defaultInstruction = {
+            "symbol": os.path.join("basic", "x"),
+            "color": "0:0:0",
+            "fcolor": "200:200:200",
+            "rotate": 0,
+            "size": 10,
+            "XY": True,
+            "where": (0, 0),
+            "unit": "inch",
+            "east": None,
+            "north": None,
+        }
         # current values
         self.instruction = dict(self.defaultInstruction)
 
@@ -1346,15 +1345,15 @@ class Line(InstructionObject):
         InstructionObject.__init__(self, id=id, env=env)
         self.type = "line"
         # default values
-        self.defaultInstruction = dict(
-            color="0:0:0",
-            width=2,
-            where=[wx.Point2D(), wx.Point2D()],
-            east1=None,
-            north1=None,
-            east2=None,
-            north2=None,
-        )
+        self.defaultInstruction = {
+            "color": "0:0:0",
+            "width": 2,
+            "where": [wx.Point2D(), wx.Point2D()],
+            "east1": None,
+            "north1": None,
+            "east2": None,
+            "north2": None,
+        }
         # current values
         self.instruction = dict(self.defaultInstruction)
 
@@ -1421,15 +1420,15 @@ class Rectangle(InstructionObject):
         InstructionObject.__init__(self, id=id, env=env)
         self.type = "rectangle"
         # default values
-        self.defaultInstruction = dict(
-            color="0:0:0",
-            fcolor="none",
-            width=2,
-            east1=None,
-            north1=None,
-            east2=None,
-            north2=None,
-        )
+        self.defaultInstruction = {
+            "color": "0:0:0",
+            "fcolor": "none",
+            "width": 2,
+            "east1": None,
+            "north1": None,
+            "east2": None,
+            "north2": None,
+        }
         # current values
         self.instruction = dict(self.defaultInstruction)
 
@@ -1498,20 +1497,20 @@ class Scalebar(InstructionObject):
         InstructionObject.__init__(self, id=id, env=env)
         self.type = "scalebar"
         # default values
-        self.defaultInstruction = dict(
-            unit="inch",
-            where=(1, 1),
-            unitsLength="auto",
-            unitsHeight="inch",
-            length=None,
-            height=0.1,
-            rect=None,
-            fontsize=10,
-            background="y",
-            scalebar="f",
-            segment=4,
-            numbers=1,
-        )
+        self.defaultInstruction = {
+            "unit": "inch",
+            "where": (1, 1),
+            "unitsLength": "auto",
+            "unitsHeight": "inch",
+            "length": None,
+            "height": 0.1,
+            "rect": None,
+            "fontsize": 10,
+            "background": "y",
+            "scalebar": "f",
+            "segment": 4,
+            "numbers": 1,
+        }
         # current values
         self.instruction = dict(self.defaultInstruction)
 
@@ -1550,14 +1549,14 @@ class Scalebar(InstructionObject):
                 elif line.startswith("length"):
                     instr["length"] = float(line.split()[1])
                 elif line.startswith("units"):
-                    if line.split()[1] in [
+                    if line.split()[1] in {
                         "auto",
                         "meters",
                         "kilometers",
                         "feet",
                         "miles",
                         "nautmiles",
-                    ]:
+                    }:
                         instr["unitsLength"] = line.split()[1]
                 elif line.startswith("height"):
                     instr["height"] = float(line.split()[1])
@@ -1568,9 +1567,9 @@ class Scalebar(InstructionObject):
                 elif line.startswith("segment"):
                     instr["segment"] = int(line.split()[1])
                 elif line.startswith("background"):
-                    if line.split()[1].strip().lower() in ("y", "yes"):
+                    if line.split()[1].strip().lower() in {"y", "yes"}:
                         instr["background"] = "y"
-                    elif line.split()[1].strip().lower() in ("n", "no", "none"):
+                    elif line.split()[1].strip().lower() in {"n", "no", "none"}:
                         instr["background"] = "n"
             except (IndexError, ValueError):
                 GError(_("Failed to read instruction %s") % instruction)
@@ -1614,28 +1613,26 @@ class RasterLegend(InstructionObject):
         InstructionObject.__init__(self, id=id, env=env)
         self.type = "rasterLegend"
         # default values
-        self.defaultInstruction = dict(
-            rLegend=False,
-            unit="inch",
-            rasterDefault=True,
-            raster=None,
-            discrete=None,
-            type=None,
-            where=(0, 0),
-            width=None,
-            height=None,
-            cols=1,
-            font="Helvetica",
-            fontsize=10,
-            # color = '0:0:0', tickbar = False,
-            # range = False, min = 0, max = 0,
-            color="black",
-            tickbar="n",
-            range=False,
-            min=0,
-            max=0,
-            nodata="n",
-        )
+        self.defaultInstruction = {
+            "rLegend": False,
+            "unit": "inch",
+            "rasterDefault": True,
+            "raster": None,
+            "discrete": None,
+            "type": None,
+            "where": (0, 0),
+            "width": None,
+            "height": None,
+            "cols": 1,
+            "font": "Helvetica",
+            "fontsize": 10,
+            "color": "black",
+            "tickbar": "n",
+            "range": False,
+            "min": 0,
+            "max": 0,
+            "nodata": "n",
+        }
         # current values
         self.instruction = dict(self.defaultInstruction)
 
@@ -1701,19 +1698,19 @@ class RasterLegend(InstructionObject):
                     instr["min"] = float(line.split()[1])
                     instr["max"] = float(line.split()[2])
                 elif line.startswith("nodata"):
-                    if line.split()[1].strip().lower() in ("y", "yes"):
+                    if line.split()[1].strip().lower() in {"y", "yes"}:
                         instr["nodata"] = "y"
-                    elif line.split()[1].strip().lower() in ("n", "no", "none"):
+                    elif line.split()[1].strip().lower() in {"n", "no", "none"}:
                         instr["nodata"] = "n"
                 elif line.startswith("tickbar"):
-                    if line.split()[1].strip().lower() in ("y", "yes"):
+                    if line.split()[1].strip().lower() in {"y", "yes"}:
                         instr["tickbar"] = "y"
-                    elif line.split()[1].strip().lower() in ("n", "no", "none"):
+                    elif line.split()[1].strip().lower() in {"n", "no", "none"}:
                         instr["tickbar"] = "n"
                 elif line.startswith("discrete"):
-                    if line.split()[1].strip().lower() in ("y", "yes"):
+                    if line.split()[1].strip().lower() in {"y", "yes"}:
                         instr["discrete"] = "y"
-                    elif line.split()[1].strip().lower() in ("n", "no", "none"):
+                    elif line.split()[1].strip().lower() in {"n", "no", "none"}:
                         instr["discrete"] = "n"
 
             except (IndexError, ValueError):
@@ -1753,13 +1750,13 @@ class RasterLegend(InstructionObject):
             else:
                 cols = 1
 
-            rinfo = grass.raster_info(raster)
-            if rinfo["datatype"] in ("DCELL", "FCELL"):
+            rinfo = gs.raster_info(raster)
+            if rinfo["datatype"] in {"DCELL", "FCELL"}:
                 minim, maxim = rinfo["min"], rinfo["max"]
                 rows = ceil(maxim / cols)
             else:
                 cat = (
-                    grass.read_command("r.category", map=raster, sep=":")
+                    gs.read_command("r.category", map=raster, sep=":")
                     .strip()
                     .split("\n")
                 )
@@ -1777,7 +1774,7 @@ class RasterLegend(InstructionObject):
         """Estimate size to draw raster legend"""
 
         if discrete == "n":
-            rinfo = grass.raster_info(raster)
+            rinfo = gs.raster_info(raster)
             minim, maxim = rinfo["min"], rinfo["max"]
             if width:
                 width = width
@@ -1815,18 +1812,18 @@ class VectorLegend(InstructionObject):
         InstructionObject.__init__(self, id=id, env=env)
         self.type = "vectorLegend"
         # default values
-        self.defaultInstruction = dict(
-            vLegend=False,
-            unit="inch",
-            where=(0, 0),
-            defaultSize=True,
-            width=0.4,
-            cols=1,
-            span=None,
-            font="Helvetica",
-            fontsize=10,
-            border="none",
-        )
+        self.defaultInstruction = {
+            "vLegend": False,
+            "unit": "inch",
+            "where": (0, 0),
+            "defaultSize": True,
+            "width": 0.4,
+            "cols": 1,
+            "span": None,
+            "font": "Helvetica",
+            "fontsize": 10,
+            "border": "none",
+        }
         # current values
         self.instruction = dict(self.defaultInstruction)
 
@@ -1911,13 +1908,12 @@ class Raster(InstructionObject):
         InstructionObject.__init__(self, id=id, env=env)
         self.type = "raster"
         # default values
-        self.defaultInstruction = dict(isRaster=False, raster=None)
+        self.defaultInstruction = {"isRaster": False, "raster": None}
         # current values
         self.instruction = dict(self.defaultInstruction)
 
     def __str__(self):
-        instr = string.Template("raster $raster").substitute(self.instruction)
-        return instr
+        return string.Template("raster $raster").substitute(self.instruction)
 
     def Read(self, instruction, text):
         """Read instruction and save information"""
@@ -1929,8 +1925,8 @@ class Raster(InstructionObject):
             GError(_("Failed to read instruction %s") % instruction)
             return False
         try:
-            info = grass.find_file(map, element="cell")
-        except grass.ScriptError as e:
+            info = gs.find_file(map, element="cell")
+        except gs.ScriptError as e:
             GError(message=e.value)
             return False
         instr["raster"] = info["fullname"]
@@ -1946,7 +1942,7 @@ class Vector(InstructionObject):
         InstructionObject.__init__(self, id=id, env=env)
         self.type = "vector"
         # default values
-        self.defaultInstruction = dict(list=None)  # [vmap, type, id, lpos, label]
+        self.defaultInstruction = {"list": None}  # [vmap, type, id, lpos, label]
         # current values
         self.instruction = dict(self.defaultInstruction)
 
@@ -1973,8 +1969,8 @@ class Vector(InstructionObject):
                 # name of vector map
                 vmap = line.split()[1]
                 try:
-                    info = grass.find_file(vmap, element="vector")
-                except grass.ScriptError as e:
+                    info = gs.find_file(vmap, element="vector")
+                except gs.ScriptError as e:
                     GError(message=e.value)
                     return False
                 vmap = info["fullname"]
@@ -2002,64 +1998,64 @@ class VProperties(InstructionObject):
         self.subType = subType
         # default values
         if self.subType == "points":
-            dd = dict(
-                subType="points",
-                name=None,
-                type="point or centroid",
-                connection=False,
-                layer="1",
-                masked="n",
-                color="0:0:0",
-                width=1,
-                fcolor="255:0:0",
-                rgbcolumn=None,
-                symbol=os.path.join("basic", "x"),
-                eps=None,
-                size=5,
-                sizecolumn=None,
-                scale=None,
-                rotation=False,
-                rotate=0,
-                rotatecolumn=None,
-                label=None,
-                lpos=None,
-            )
+            dd = {
+                "subType": "points",
+                "name": None,
+                "type": "point or centroid",
+                "connection": False,
+                "layer": "1",
+                "masked": "n",
+                "color": "0:0:0",
+                "width": 1,
+                "fcolor": "255:0:0",
+                "rgbcolumn": None,
+                "symbol": os.path.join("basic", "x"),
+                "eps": None,
+                "size": 5,
+                "sizecolumn": None,
+                "scale": None,
+                "rotation": False,
+                "rotate": 0,
+                "rotatecolumn": None,
+                "label": None,
+                "lpos": None,
+            }
         elif self.subType == "lines":
-            dd = dict(
-                subType="lines",
-                name=None,
-                type="line or boundary",
-                connection=False,
-                layer="1",
-                masked="n",
-                color="0:0:0",
-                hwidth=1,
-                hcolor="none",
-                rgbcolumn=None,
-                width=1,
-                cwidth=None,
-                style="solid",
-                linecap="butt",
-                label=None,
-                lpos=None,
-            )
+            dd = {
+                "subType": "lines",
+                "name": None,
+                "type": "line or boundary",
+                "connection": False,
+                "layer": "1",
+                "masked": "n",
+                "color": "0:0:0",
+                "hwidth": 1,
+                "hcolor": "none",
+                "rgbcolumn": None,
+                "width": 1,
+                "cwidth": None,
+                "style": "solid",
+                "linecap": "butt",
+                "label": None,
+                "lpos": None,
+            }
         else:  # areas
-            dd = dict(
-                subType="areas",
-                name=None,
-                connection=False,
-                layer="1",
-                masked="n",
-                color="0:0:0",
-                width=1,
-                fcolor="none",
-                rgbcolumn=None,
-                pat=None,
-                pwidth=1,
-                scale=1,
-                label=None,
-                lpos=None,
-            )
+            dd = {
+                "subType": "areas",
+                "name": None,
+                "connection": False,
+                "layer": "1",
+                "masked": "n",
+                "color": "0:0:0",
+                "width": 1,
+                "fcolor": "none",
+                "rgbcolumn": None,
+                "pat": None,
+                "pwidth": 1,
+                "scale": 1,
+                "label": None,
+                "lpos": None,
+            }
         self.defaultInstruction = dd
         # current values
         self.instruction = dict(self.defaultInstruction)
@@ -2068,7 +2064,7 @@ class VProperties(InstructionObject):
         dic = self.instruction
         vInstruction = string.Template("v$subType $name\n").substitute(dic)
         # data selection
-        if self.subType in ("points", "lines"):
+        if self.subType in {"points", "lines"}:
             vInstruction += string.Template("    type $type\n").substitute(dic)
         if dic["connection"]:
             vInstruction += string.Template("    layer $layer\n").substitute(dic)
@@ -2079,7 +2075,7 @@ class VProperties(InstructionObject):
         vInstruction += string.Template("    masked $masked\n").substitute(dic)
         # colors
         vInstruction += string.Template("    color $color\n").substitute(dic)
-        if self.subType in ("points", "areas"):
+        if self.subType in {"points", "areas"}:
             if dic["color"] != "none":
                 vInstruction += string.Template("    width $width\n").substitute(dic)
             if dic["rgbcolumn"]:
@@ -2087,7 +2083,7 @@ class VProperties(InstructionObject):
                     "    rgbcolumn $rgbcolumn\n"
                 ).substitute(dic)
             vInstruction += string.Template("    fcolor $fcolor\n").substitute(dic)
-        else:
+        else:  # noqa: PLR5501
             if dic["rgbcolumn"]:
                 vInstruction += string.Template(
                     "    rgbcolumn $rgbcolumn\n"
@@ -2145,8 +2141,8 @@ class VProperties(InstructionObject):
         """Read instruction and save information"""
         instr = {}
         try:
-            info = grass.find_file(name=text[0].split()[1], element="vector")
-        except grass.ScriptError as e:
+            info = gs.find_file(name=text[0].split()[1], element="vector")
+        except gs.ScriptError as e:
             GError(message=e.value)
             return False
         instr["name"] = info["fullname"]
@@ -2235,7 +2231,7 @@ class VProperties(InstructionObject):
             elif line.startswith("layer"):
                 instr["layer"] = line.split()[1]
             elif line.startswith("masked"):
-                if line.split()[1].lower() in ("y", "yes"):
+                if line.split()[1].lower() in {"y", "yes"}:
                     instr["masked"] = "y"
                 else:
                     instr["masked"] = "n"
@@ -2262,7 +2258,7 @@ class Labels(InstructionObject):
         InstructionObject.__init__(self, id=id, env=env)
         self.type = "labels"
         # default values
-        self.defaultInstruction = dict(labels=[])
+        self.defaultInstruction = {"labels": []}
         # current values
         self.instruction = dict(self.defaultInstruction)
 

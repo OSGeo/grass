@@ -18,11 +18,12 @@ for details.
 :authors: Soeren Gebbert
 """
 
-from .datetime_math import compute_datetime_delta
-from .abstract_map_dataset import AbstractMapDataset
-from functools import reduce
-from collections import OrderedDict
 import ast
+from collections import OrderedDict
+from functools import reduce
+
+from .abstract_map_dataset import AbstractMapDataset
+from .datetime_math import compute_datetime_delta
 
 SINGULAR_GRAN = ["second", "minute", "hour", "day", "week", "month", "year"]
 PLURAL_GRAN = ["seconds", "minutes", "hours", "days", "weeks", "months", "years"]
@@ -82,7 +83,6 @@ def check_granularity_string(granularity, temporal_type):
         False
 
     """
-    temporal_type
 
     if granularity is None:
         return False
@@ -150,7 +150,7 @@ def get_time_tuple_function(maps):
         return _get_row_time_tuple
 
 
-def _is_after(start, start1, end1):
+def _is_after(start, start1, end1) -> bool:
     """Helper function that checks if start timestamp is
     temporally after the start1 and end1, where start1 and end1
     represent a temporal extent.
@@ -177,15 +177,9 @@ def _is_after(start, start1, end1):
 
     """
     if end1 is None:
-        if start > start1:
-            return True
-        else:
-            return False
+        return start > start1
 
-    if start > end1:
-        return True
-    else:
-        return False
+    return start > end1
 
 
 def compute_relative_time_granularity(maps):
@@ -773,7 +767,7 @@ def compute_common_absolute_time_granularity(gran_list, start_date_list=None):
 
     num, granule = common_granule.split()
 
-    if granule in ["seconds", "second"]:
+    if granule in {"seconds", "second"}:
         # If the start seconds are different between the start dates
         # set the granularity to one second
         for start_time in start_date_list:
@@ -786,7 +780,7 @@ def compute_common_absolute_time_granularity(gran_list, start_date_list=None):
             else:
                 return "1 second"
 
-    if granule in ["minutes", "minute"]:
+    if granule in {"minutes", "minute"}:
         # If the start minutes are different between the start dates
         # set the granularity to one minute
         for start_time in start_date_list:
@@ -799,7 +793,7 @@ def compute_common_absolute_time_granularity(gran_list, start_date_list=None):
             else:
                 return "1 minute"
 
-    if granule in ["hours", "hour"]:
+    if granule in {"hours", "hour"}:
         # If the start hours are different between the start dates
         # set the granularity to one hour
         for start_time in start_date_list:
@@ -812,7 +806,7 @@ def compute_common_absolute_time_granularity(gran_list, start_date_list=None):
             else:
                 return "1 hour"
 
-    if granule in ["days", "day"]:
+    if granule in {"days", "day"}:
         # If the start days are different between the start dates
         # set the granularity to one day
         for start_time in start_date_list:
@@ -825,7 +819,7 @@ def compute_common_absolute_time_granularity(gran_list, start_date_list=None):
             else:
                 return "1 day"
 
-    if granule in ["months", "month"]:
+    if granule in {"months", "month"}:
         # If the start months are different between the start dates
         # set the granularity to one month
         for start_time in start_date_list:
@@ -946,57 +940,45 @@ def compute_common_absolute_time_granularity_simple(gran_list):
 
         num, gran = entry.split()
 
-        if gran in ["seconds", "second"]:
+        if gran in {"seconds", "second"}:
             has_seconds = True
-            if min_gran > 0:
-                min_gran = 0
-            if max_gran < 0:
-                max_gran = 0
+            min_gran = min(min_gran, 0)
+            max_gran = max(max_gran, 0)
 
             seconds.append(int(num))
 
-        if gran in ["minutes", "minute"]:
+        if gran in {"minutes", "minute"}:
             has_minutes = True
-            if min_gran > 1:
-                min_gran = 1
-            if max_gran < 1:
-                max_gran = 1
+            min_gran = min(min_gran, 1)
+            max_gran = max(max_gran, 1)
 
             minutes.append(int(num))
 
-        if gran in ["hours", "hour"]:
+        if gran in {"hours", "hour"}:
             has_hours = True
-            if min_gran > 2:
-                min_gran = 2
-            if max_gran < 2:
-                max_gran = 2
+            min_gran = min(min_gran, 2)
+            max_gran = max(max_gran, 2)
 
             hours.append(int(num))
 
-        if gran in ["days", "day"]:
+        if gran in {"days", "day"}:
             has_days = True
-            if min_gran > 3:
-                min_gran = 3
-            if max_gran < 3:
-                max_gran = 3
+            min_gran = min(min_gran, 3)
+            max_gran = max(max_gran, 3)
 
             days.append(int(num))
 
-        if gran in ["months", "month"]:
+        if gran in {"months", "month"}:
             has_months = True
-            if min_gran > 4:
-                min_gran = 4
-            if max_gran < 4:
-                max_gran = 4
+            min_gran = min(min_gran, 4)
+            max_gran = max(max_gran, 4)
 
             months.append(int(num))
 
-        if gran in ["years", "year"]:
+        if gran in {"years", "year"}:
             has_years = True
-            if min_gran > 5:
-                min_gran = 5
-            if max_gran < 5:
-                max_gran = 5
+            min_gran = min(min_gran, 5)
+            max_gran = max(max_gran, 5)
 
             years.append(int(num))
 
@@ -1012,14 +994,19 @@ def compute_common_absolute_time_granularity_simple(gran_list):
             seconds.append(days[0] * 60 * 60 * 24)
         if has_months:
             months.sort()
-            seconds.append(months[0] * 60 * 60 * 24 * 28)
-            seconds.append(months[0] * 60 * 60 * 24 * 29)
-            seconds.append(months[0] * 60 * 60 * 24 * 30)
-            seconds.append(months[0] * 60 * 60 * 24 * 31)
+            seconds.extend(
+                (
+                    months[0] * 60 * 60 * 24 * 28,
+                    months[0] * 60 * 60 * 24 * 29,
+                    months[0] * 60 * 60 * 24 * 30,
+                    months[0] * 60 * 60 * 24 * 31,
+                )
+            )
         if has_years:
             years.sort()
-            seconds.append(years[0] * 60 * 60 * 24 * 365)
-            seconds.append(years[0] * 60 * 60 * 24 * 366)
+            seconds.extend(
+                (years[0] * 60 * 60 * 24 * 365, years[0] * 60 * 60 * 24 * 366)
+            )
 
         num = gcd_list(seconds)
         gran = "second"
@@ -1036,14 +1023,17 @@ def compute_common_absolute_time_granularity_simple(gran_list):
             minutes.append(days[0] * 60 * 24)
         if has_months:
             months.sort()
-            minutes.append(months[0] * 60 * 24 * 28)
-            minutes.append(months[0] * 60 * 24 * 29)
-            minutes.append(months[0] * 60 * 24 * 30)
-            minutes.append(months[0] * 60 * 24 * 31)
+            minutes.extend(
+                (
+                    months[0] * 60 * 24 * 28,
+                    months[0] * 60 * 24 * 29,
+                    months[0] * 60 * 24 * 30,
+                    months[0] * 60 * 24 * 31,
+                )
+            )
         if has_years:
             years.sort()
-            minutes.append(years[0] * 60 * 24 * 365)
-            minutes.append(years[0] * 60 * 24 * 366)
+            minutes.extend((years[0] * 60 * 24 * 365, years[0] * 60 * 24 * 366))
         num = gcd_list(minutes)
         gran = "minute"
         if num > 1:
@@ -1056,14 +1046,17 @@ def compute_common_absolute_time_granularity_simple(gran_list):
             hours.append(days[0] * 24)
         if has_months:
             months.sort()
-            hours.append(months[0] * 24 * 28)
-            hours.append(months[0] * 24 * 29)
-            hours.append(months[0] * 24 * 30)
-            hours.append(months[0] * 24 * 31)
+            hours.extend(
+                (
+                    months[0] * 24 * 28,
+                    months[0] * 24 * 29,
+                    months[0] * 24 * 30,
+                    months[0] * 24 * 31,
+                )
+            )
         if has_years:
             years.sort()
-            hours.append(years[0] * 24 * 365)
-            hours.append(years[0] * 24 * 366)
+            hours.extend((years[0] * 24 * 365, years[0] * 24 * 366))
         num = gcd_list(hours)
         gran = "hour"
         if num > 1:
@@ -1073,14 +1066,12 @@ def compute_common_absolute_time_granularity_simple(gran_list):
     if has_days:
         if has_months:
             months.sort()
-            days.append(months[0] * 28)
-            days.append(months[0] * 29)
-            days.append(months[0] * 30)
-            days.append(months[0] * 31)
+            days.extend(
+                (months[0] * 28, months[0] * 29, months[0] * 30, months[0] * 31)
+            )
         if has_years:
             years.sort()
-            days.append(years[0] * 365)
-            days.append(years[0] * 366)
+            days.extend((years[0] * 365, years[0] * 366))
         num = gcd_list(days)
         gran = "day"
         if num > 1:
@@ -1240,11 +1231,11 @@ def gran_to_gran(from_gran, to_gran="days", shell=False):
         """Function to return the output"""
         if shell:
             return output
+
+        if output == 1:
+            return f"{output} {tounit}"
         else:
-            if output == 1:
-                return f"{output} {tounit}"
-            else:
-                return f"{output} {tounit}s"
+            return f"{output} {tounit}s"
 
     # TODO check the leap second
     if check_granularity_string(from_gran, "absolute"):

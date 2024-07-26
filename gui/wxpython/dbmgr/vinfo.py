@@ -22,7 +22,7 @@ from gui_core.gselect import VectorDBInfo as VectorDBInfoBase
 from gui_core.wrap import StaticText
 from core.gcmd import RunCommand, GError
 from core.settings import UserSettings
-import grass.script as grass
+import grass.script as gs
 
 
 def GetUnicodeValue(value):
@@ -106,12 +106,12 @@ class VectorDBInfo(VectorDBInfoBase):
         nselected = 0
 
         try:
-            data = grass.vector_what(
+            data = gs.vector_what(
                 map=self.map,
                 coord=(float(queryCoords[0]), float(queryCoords[1])),
                 distance=float(qdist),
             )
-        except grass.ScriptError:
+        except gs.ScriptError:
             GError(
                 parent=None,
                 message=_(
@@ -124,9 +124,9 @@ class VectorDBInfo(VectorDBInfoBase):
             return None
 
         # process attributes
-        ret = dict()
+        ret = {}
         for key in ["Category", "Layer", "Table", "Id"]:
-            ret[key] = list()
+            ret[key] = []
 
         for record in data:
             if "Table" not in record:
@@ -136,11 +136,10 @@ class VectorDBInfo(VectorDBInfoBase):
             for key, value in record["Attributes"].items():
                 if len(value) < 1:
                     value = None
+                elif self.tables[table][key]["ctype"] != str:
+                    value = self.tables[table][key]["ctype"](value)
                 else:
-                    if self.tables[table][key]["ctype"] != str:
-                        value = self.tables[table][key]["ctype"](value)
-                    else:
-                        value = GetUnicodeValue(value)
+                    value = GetUnicodeValue(value)
                 self.tables[table][key]["values"].append(value)
 
             for key, value in record.items():

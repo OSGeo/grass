@@ -22,6 +22,7 @@ This program is free software under the GNU General Public License
 """
 
 import os
+from pathlib import Path
 import sys
 import glob
 import math
@@ -118,7 +119,7 @@ class Layer:
         self.name = name
 
         if self.type == "command":
-            self.cmd = list()
+            self.cmd = []
             for c in cmd:
                 self.cmd.append(cmdlist_to_tuple(c))
         else:
@@ -263,14 +264,13 @@ class Layer:
         """
         if fullyQualified:
             return self.name
-        else:
-            if "@" in self.name:
-                return {
-                    "name": self.name.split("@")[0],
-                    "mapset": self.name.split("@")[1],
-                }
-            else:
-                return {"name": self.name, "mapset": ""}
+
+        if "@" in self.name:
+            return {
+                "name": self.name.split("@")[0],
+                "mapset": self.name.split("@")[1],
+            }
+        return {"name": self.name, "mapset": ""}
 
     def GetRenderedSize(self):
         """Get currently rendered size of layer as tuple, None if not rendered"""
@@ -284,11 +284,9 @@ class Layer:
         """Check if layer is hidden"""
         return self.hidden
 
-    def IsRendered(self):
+    def IsRendered(self) -> bool:
         """!Check if layer was rendered (if the image file exists)"""
-        if os.path.exists(self.mapfile):
-            return True
-        return False
+        return bool(os.path.exists(self.mapfile))
 
     def SetType(self, ltype):
         """Set layer type"""
@@ -368,7 +366,7 @@ class MapLayer(Layer):
     def __init__(self, *args, **kwargs):
         """Represents map layer in the map canvas"""
         Layer.__init__(self, *args, **kwargs)
-        if self.type in ("vector", "thememap"):
+        if self.type in {"vector", "thememap"}:
             self._legrow = get_tempfile_name(suffix=".legrow", create=True)
         else:
             self._legrow = ""
@@ -439,7 +437,7 @@ class RenderLayerMgr(wx.EvtHandler):
         env_cmd = env.copy()
         env_cmd.update(self._render_env)
         env_cmd["GRASS_RENDER_FILE"] = self.layer.mapfile
-        if self.layer.GetType() in ("vector", "thememap"):
+        if self.layer.GetType() in {"vector", "thememap"}:
             if not self.layer._legrow:
                 self.layer._legrow = grass.tempfile(create=True)
             if os.path.isfile(self.layer._legrow):
@@ -670,9 +668,9 @@ class RenderMapMgr(wx.EvtHandler):
         """
         stopTime = time.time()
 
-        maps = list()
-        masks = list()
-        opacities = list()
+        maps = []
+        masks = []
+        opacities = []
 
         # TODO: g.pnmcomp is now called every time
         # even when only overlays are rendered
@@ -721,14 +719,13 @@ class RenderMapMgr(wx.EvtHandler):
         new_legend = []
         with open(self.Map.legfile, "w") as outfile:
             for layer in reversed(self.layers):
-                if layer.GetType() not in ("vector", "thememap"):
+                if layer.GetType() not in {"vector", "thememap"}:
                     continue
 
                 if os.path.isfile(layer._legrow) and not layer.hidden:
-                    with open(layer._legrow) as infile:
-                        line = infile.read()
-                        outfile.write(line)
-                        new_legend.append(line)
+                    line = Path(layer._legrow).read_text()
+                    outfile.write(line)
+                    new_legend.append(line)
 
         self._rendering = False
         if wx.IsBusy():
@@ -824,16 +821,16 @@ class Map:
         """
         Debug.msg(1, "Map.__init__(): gisrc=%s" % gisrc)
         # region/extent settings
-        self.wind = dict()  # WIND settings (wind file)
-        self.region = dict()  # region settings (g.region)
+        self.wind = {}  # WIND settings (wind file)
+        self.region = {}  # region settings (g.region)
         self.width = 640  # map width
         self.height = 480  # map height
 
         # list of layers
-        self.layers = list()  # stack of available GRASS layer
+        self.layers = []  # stack of available GRASS layer
 
-        self.overlays = list()  # stack of available overlays
-        self.ovlookup = dict()  # lookup dictionary for overlay items and overlays
+        self.overlays = []  # stack of available overlays
+        self.ovlookup = {}  # lookup dictionary for overlay items and overlays
 
         # path to external gisrc
         self.gisrc = gisrc
@@ -866,10 +863,10 @@ class Map:
 
     def _projInfo(self):
         """Return region projection and map units information"""
-        projinfo = dict()
+        projinfo = {}
         if not grass.find_program("g.proj", "--help"):
             sys.exit(
-                _("GRASS tool '%s' not found. Unable to start map " "display window.")
+                _("GRASS tool '%s' not found. Unable to start map display window.")
                 % "g.proj"
             )
         env = os.environ.copy()
@@ -882,8 +879,8 @@ class Map:
 
         for line in ret.splitlines():
             if ":" in line:
-                key, val = map(lambda x: x.strip(), line.split(":", 1))
-                if key in ["units"]:
+                key, val = (x.strip() for x in line.split(":", 1))
+                if key == "units":
                     val = val.lower()
                 projinfo[key] = val
             elif "XY location (unprojected)" in line:
@@ -908,7 +905,7 @@ class Map:
                 % {"file": filename, "ret": e}
             )
 
-        for line in windfile.readlines():
+        for line in windfile:
             line = line.strip()
             try:
                 key, value = line.split(":", 1)
@@ -1452,7 +1449,7 @@ class Map:
                 for f in glob.glob(basefile):
                     os.remove(f)
 
-            if layer.GetType() in ("vector", "thememap"):
+            if layer.GetType() in {"vector", "thememap"}:
                 if os.path.isfile(layer._legrow):
                     os.remove(layer._legrow)
 
