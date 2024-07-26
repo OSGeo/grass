@@ -2085,11 +2085,9 @@ class RasterDialog(PsmapDialog):
         self.id = self.rPanel.getId()
         self._layout(self.rPanel)
 
-    def update(self):
+    def update(self) -> bool:
         ok = self.rPanel.update()
-        if ok:
-            return True
-        return False
+        return bool(ok)
 
     def OnApply(self, event):
         ok = self.update()
@@ -4410,12 +4408,10 @@ class LegendDialog(PsmapDialog):
             self.parent.objectId.append(self.id[1])
         return True
 
-    def update(self):
+    def update(self) -> bool:
         okR = self.updateRasterLegend()
         okV = self.updateVectorLegend()
-        if okR and okV:
-            return True
-        return False
+        return bool(okR and okV)
 
     def updateDialog(self):
         """Update legend coordinates after moving"""
