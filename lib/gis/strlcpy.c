@@ -31,7 +31,7 @@
  *
  * \param[out] dst Pointer to the destination buffer.
  * \param[in] src Pointer to the source string. Must be a NUL-terminated C
- * string.
+ *                string.
  * \param[in] dsize The size of the destination buffer.
  *
  * \return The total length of the string src (not including the terminating
