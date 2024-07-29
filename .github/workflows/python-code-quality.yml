@@ -70,7 +70,7 @@ jobs:
         run: ruff check --output-format=github . --preview --unsafe-fixes
         continue-on-error: true
       - name: Run Ruff (apply fixes for suggestions)
-        run: ruff check --output-format=github . --preview --fix --unsafe-fixes
+        run: ruff check . --preview --fix --unsafe-fixes
       - name: Create and uploads code suggestions to apply for Ruff
         # Will fail fast here if there are changes required
         id: diff-ruff
