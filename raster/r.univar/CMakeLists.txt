@@ -9,6 +9,7 @@ build_program(
   DEPENDS
   grass_gis
   grass_raster
+  grass_parson
   LIBM
   OPTIONAL_DEPENDS
   OPENMP)
@@ -22,6 +23,7 @@ build_program(
   grass_gis
   grass_raster
   grass_raster3d
+  grass_parson
   LIBM
   OPTIONAL_DEPENDS
   OPENMP)
