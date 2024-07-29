@@ -43,7 +43,7 @@ sum=7221101700
         self.runModule(
             "g.remove", type="raster", flags="f", pattern=f"{self.temp_import}*"
         )
-        for p in Path(".").glob(f"{self.test_map}*"):
+        for p in Path().glob(f"{self.test_map}*"):
             p.unlink()
 
     def test_gpkg_format(self):
