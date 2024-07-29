@@ -35,7 +35,7 @@ import locale
 import wx
 from wx.lib.newevent import NewEvent
 
-import grass.script as grass
+import grass.script as gs
 from grass.script import task as gtask
 
 from grass.pydispatch.signal import Signal
@@ -401,7 +401,7 @@ class GConsole(wx.EvtHandler):
 
     def Redirect(self):
         """Redirect stdout/stderr"""
-        if Debug.GetLevel() == 0 and grass.debug_level(force=True) == 0:
+        if Debug.GetLevel() == 0 and gs.debug_level(force=True) == 0:
             # don't redirect when debugging is enabled
             sys.stdout = self.cmdStdOut
             sys.stderr = self.cmdStdErr
@@ -661,10 +661,10 @@ class GConsole(wx.EvtHandler):
                 return
 
             skipInterface = True
-            if os.path.splitext(command[0])[1] in (".py", ".sh"):
+            if os.path.splitext(command[0])[1] in {".py", ".sh"}:
                 try:
                     with open(command[0], "r") as sfile:
-                        for line in sfile.readlines():
+                        for line in sfile:
                             if len(line) < 3:
                                 continue
                             if line.startswith(("#%", "# %")):
@@ -805,14 +805,14 @@ class GConsole(wx.EvtHandler):
         name = task.get_name()
         for p in task.get_options()["params"]:
             prompt = p.get("prompt", "")
-            if prompt in ("raster", "vector", "raster_3d") and p.get("value", None):
-                if p.get("age", "old") == "new" or name in (
+            if prompt in {"raster", "vector", "raster_3d"} and p.get("value", None):
+                if p.get("age", "old") == "new" or name in {
                     "r.colors",
                     "r3.colors",
                     "v.colors",
                     "v.proj",
                     "r.proj",
-                ):
+                }:
                     # if multiple maps (e.g. r.series.interp), we need add each
                     if p.get("multiple", False):
                         lnames = p.get("value").split(",")
@@ -825,12 +825,12 @@ class GConsole(wx.EvtHandler):
                         lnames = [p.get("value")]
                     for lname in lnames:
                         if "@" not in lname:
-                            lname += "@" + grass.gisenv()["MAPSET"]
-                        if grass.find_file(lname, element=p.get("element"))["fullname"]:
+                            lname += "@" + gs.gisenv()["MAPSET"]
+                        if gs.find_file(lname, element=p.get("element"))["fullname"]:
                             self.mapCreated.emit(
                                 name=lname, ltype=prompt, add=event.addLayer
                             )
-                            gisenv = grass.gisenv()
+                            gisenv = gs.gisenv()
                             self._giface.grassdbChanged.emit(
                                 grassdb=gisenv["GISDBASE"],
                                 location=gisenv["LOCATION_NAME"],
@@ -844,7 +844,7 @@ class GConsole(wx.EvtHandler):
             for p in task.get_options()["flags"]:
                 if p.get("name") == "r" and p.get("value"):
                     action = "delete"
-            gisenv = grass.gisenv()
+            gisenv = gs.gisenv()
             self._giface.grassdbChanged.emit(
                 grassdb=gisenv["GISDBASE"],
                 location=gisenv["LOCATION_NAME"],

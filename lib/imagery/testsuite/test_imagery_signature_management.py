@@ -17,7 +17,7 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
 from grass.script.core import tempname
-import grass.script as grass
+import grass.script as gs
 from grass.pygrass import utils
 from grass.pygrass.gis import Mapset, make_mapset
 
@@ -1036,13 +1036,13 @@ class SignaturesListByTypeTestCase(TestCase):
         self.assertNotIn(golden[0], ret_list)
         I_free_signatures_list(ret, ctypes.byref(sig_list))
         # Add temporary mapset to search path and re-run test
-        grass.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="add")
+        gs.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="add")
         # Search path is cached for this run => reset!
         G_reset_mapsets()
         ret = I_signatures_list_by_type(
             I_SIGFILE_TYPE_SIG, None, ctypes.byref(sig_list)
         )
-        grass.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="remove")
+        gs.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="remove")
         G_reset_mapsets()
         shutil.rmtree(sig_dir1)
         shutil.rmtree(sig_dir2)
@@ -1087,13 +1087,13 @@ class SignaturesListByTypeTestCase(TestCase):
         self.assertNotIn(golden[0], ret_list)
         I_free_signatures_list(ret, ctypes.byref(sig_list))
         # Add temporary mapset to search path and re-run test
-        grass.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="add")
+        gs.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="add")
         # Search path is cached for this run => reset!
         G_reset_mapsets()
         ret = I_signatures_list_by_type(
             I_SIGFILE_TYPE_SIGSET, None, ctypes.byref(sig_list)
         )
-        grass.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="remove")
+        gs.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="remove")
         G_reset_mapsets()
         shutil.rmtree(sig_dir1)
         shutil.rmtree(sig_dir2)
@@ -1139,13 +1139,13 @@ class SignaturesListByTypeTestCase(TestCase):
         self.assertNotIn(golden[0], ret_list)
         I_free_signatures_list(ret, ctypes.byref(sig_list))
         # Add temporary mapset to search path and re-run test
-        grass.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="add")
+        gs.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="add")
         # Search path is cached for this run => reset!
         G_reset_mapsets()
         ret = I_signatures_list_by_type(
             I_SIGFILE_TYPE_LIBSVM, None, ctypes.byref(sig_list)
         )
-        grass.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="remove")
+        gs.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="remove")
         G_reset_mapsets()
         shutil.rmtree(sig_dir1)
         shutil.rmtree(sig_dir2)

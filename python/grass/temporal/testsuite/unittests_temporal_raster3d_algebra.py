@@ -7,11 +7,12 @@ for details.
 :authors: Soeren Gebbert and Thomas Leppelt
 """
 
-import grass.script
+import datetime
+
+import grass.script as gs
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-import datetime
 
 
 class TestTemporalRaster3dAlgebra(TestCase):
@@ -20,7 +21,7 @@ class TestTemporalRaster3dAlgebra(TestCase):
         """Initiate the temporal GIS and set the region"""
         tgis.init(True)  # Raise on error instead of exit(1)
         cls.use_temp_region()
-        ret = grass.script.run_command(
+        ret = gs.run_command(
             "g.region", n=80.0, s=0.0, e=120.0, w=0.0, t=100.0, b=0.0, res=10.0
         )
 

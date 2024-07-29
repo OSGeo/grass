@@ -24,11 +24,11 @@ import wx
 from functools import reduce
 
 try:
-    import matplotlib
+    import matplotlib as mpl
 
     # The recommended way to use wx with mpl is with the WXAgg
     # backend.
-    matplotlib.use("WXAgg")
+    mpl.use("WXAgg")
     from matplotlib import gridspec
     from matplotlib.figure import Figure
     from matplotlib.backends.backend_wxagg import (
@@ -45,7 +45,7 @@ except ImportError as e:
         ).format(e)
     )
 
-import grass.script as grass
+import grass.script as gs
 
 import grass.temporal as tgis
 from core.gcmd import GError, GException, RunCommand
@@ -57,19 +57,16 @@ ALPHA = 1
 COLORS = ["b", "g", "r", "c", "m", "y", "k"]
 
 
-def check_version(*version):
+def check_version(*version) -> bool:
     """Checks if given version or newer is installed"""
     versionInstalled = []
-    for i in matplotlib.__version__.split("."):
+    for i in mpl.__version__.split("."):
         try:
             v = int(i)
             versionInstalled.append(v)
         except ValueError:
             versionInstalled.append(0)
-    if versionInstalled < list(version):
-        return False
-    else:
-        return True
+    return versionInstalled >= list(version)
 
 
 class TimelineFrame(wx.Frame):
@@ -148,7 +145,7 @@ class TimelineFrame(wx.Frame):
         self.view3dCheck.Bind(wx.EVT_CHECKBOX, self.OnRedraw)
         if not check_version(1, 0, 0):
             self.view3dCheck.SetLabel(
-                _("3D plot of spatio-temporal extents " "(matplotlib >= 1.0.0)")
+                _("3D plot of spatio-temporal extents (matplotlib >= 1.0.0)")
             )
             self.view3dCheck.Disable()
 
@@ -303,8 +300,8 @@ class TimelineFrame(wx.Frame):
                 )
             )
 
-        params = grass.read_command("g.proj", flags="g")
-        params = grass.parse_key_val(params)
+        params = gs.read_command("g.proj", flags="g")
+        params = gs.parse_key_val(params)
         if "unit" in params:
             self.axes3d.set_xlabel(_("X [%s]") % params["unit"])
             self.axes3d.set_ylabel(_("Y [%s]") % params["unit"])
@@ -503,7 +500,10 @@ class TimelineFrame(wx.Frame):
             )
             mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
             allDatasets = [
-                i for i in sorted(allDatasets, key=lambda l: mapsets.index(l[1]))
+                i
+                for i in sorted(
+                    allDatasets, key=lambda dataset_info: mapsets.index(dataset_info[1])
+                )
             ]
 
         for dataset in datasets:
@@ -569,9 +569,7 @@ class TimelineFrame(wx.Frame):
             GError(parent=self, message=str(error), showTraceback=False)
             return
         self.datasets = datasets
-        self.datasetSelect.SetValue(
-            ",".join(map(lambda x: x[0] + "@" + x[1], datasets))
-        )
+        self.datasetSelect.SetValue(",".join(f"{x[0]}@{x[1]}" for x in datasets))
         self._redraw()
 
     def Show3D(self, show):
@@ -627,10 +625,14 @@ def InfoFormat(timeData, datasetName, mapIndex):
     elif etype == "str3ds":
         text.append(_("Space time 3D raster dataset: %s") % name)
 
-    text.append(_("Mapset: %s") % mapset)
-    text.append(_("Map name: %s") % timeData[datasetName]["names"][mapIndex])
-    text.append(_("Start time: %s") % timeData[datasetName]["start_datetime"][mapIndex])
-    text.append(_("End time: %s") % timeData[datasetName]["end_datetime"][mapIndex])
+    text.extend(
+        (
+            _("Mapset: %s") % mapset,
+            _("Map name: %s") % timeData[datasetName]["names"][mapIndex],
+            _("Start time: %s") % timeData[datasetName]["start_datetime"][mapIndex],
+            _("End time: %s") % timeData[datasetName]["end_datetime"][mapIndex],
+        )
+    )
 
     if not timeData[datasetName]["validTopology"]:
         text.append(_("WARNING: invalid topology"))
@@ -706,8 +708,8 @@ class DataCursor:
             xytext=self.offsets,
             textcoords="offset points",
             va="bottom",
-            bbox=dict(boxstyle="round,pad=0.5", fc="yellow", alpha=0.7),
-            arrowprops=dict(arrowstyle="->", connectionstyle="arc3,rad=0"),
+            bbox={"boxstyle": "round,pad=0.5", "fc": "yellow", "alpha": 0.7},
+            arrowprops={"arrowstyle": "->", "connectionstyle": "arc3,rad=0"},
             annotation_clip=False,
             multialignment="left",
         )

@@ -59,7 +59,7 @@ from gui_core.wrap import (
     TreeCtrl,
 )
 
-import grass.script as grass
+import grass.script as gs
 
 rinwms_path = os.path.join(os.getenv("GISBASE"), "etc", "r.in.wms")
 if rinwms_path not in sys.path:
@@ -131,7 +131,7 @@ class WSPanel(wx.Panel):
 
         self.cmdStdErr = GStderr(self)
         self.cmd_thread = CmdThread(self)
-        self.cap_file = grass.tempfile()
+        self.cap_file = gs.tempfile()
 
         reqDataBox = StaticBox(parent=self, label=_(" Requested data settings "))
         self._nb_sizer = wx.StaticBoxSizer(reqDataBox, wx.VERTICAL)
@@ -151,7 +151,7 @@ class WSPanel(wx.Panel):
 
     def __del__(self):
         self.cmd_thread.abort(abortall=True)
-        grass.try_remove(self.cap_file)
+        gs.try_remove(self.cap_file)
 
     def _layout(self):
         self._nb_sizer.Add(self.notebook, proportion=1, flag=wx.EXPAND)
@@ -453,20 +453,20 @@ class WSPanel(wx.Panel):
     def _updateLayerOrderList(self, selected=None):
         """Update order in list."""
 
-        def getlayercaption(l):
-            if l["title"]:
-                cap = l["title"]
+        def getlayercaption(layer):
+            if layer["title"]:
+                cap = layer["title"]
             else:
-                cap = l["name"]
+                cap = layer["name"]
 
-            if l["style"]:
-                if l["style"]["title"]:
-                    cap += " / " + l["style"]["title"]
+            if layer["style"]:
+                if layer["style"]["title"]:
+                    cap += " / " + layer["style"]["title"]
                 else:
-                    cap += " / " + l["style"]["name"]
+                    cap += " / " + layer["style"]["name"]
             return cap
 
-        layer_capts = [getlayercaption(l) for l in self.sel_layers]
+        layer_capts = [getlayercaption(sel_layer) for sel_layer in self.sel_layers]
         self.l_odrder_list.Set(layer_capts)
         if self.l_odrder_list.IsEmpty():
             self.enableButtons(False)
@@ -508,7 +508,7 @@ class WSPanel(wx.Panel):
         """Manage cmd output."""
         if Debug.GetLevel() != 0:
             Debug.msg(1, event.text)
-        elif event.type != "message" and event.type != "warning":
+        elif event.type not in {"message", "warning"}:
             self.cmd_err_str += event.text + os.linesep
 
     def _prepareForNewConn(self, url, username, password):
@@ -634,7 +634,7 @@ class WSPanel(wx.Panel):
 
         # WMS standard - first layer in params is most bottom...
         # therefore layers order need to be reversed
-        l_st_list = [l for l in reversed(l_st_list)]
+        l_st_list = [layer for layer in reversed(l_st_list)]
         self.list.SelectLayers(l_st_list)
 
         params = {}
@@ -662,7 +662,7 @@ class WSPanel(wx.Panel):
 
         if "bgcolor" in dcmd and self.params["bgcolor"]:
             bgcolor = dcmd["bgcolor"].strip().lower()
-            if len(bgcolor) == 8 and "0x" == bgcolor[:2]:
+            if len(bgcolor) == 8 and bgcolor[:2] == "0x":
                 colour = "#" + bgcolor[2:]
                 self.params["bgcolor"].SetColour(colour)
 
@@ -744,9 +744,9 @@ class WSPanel(wx.Panel):
                 if sel_l not in curr_sel_ls:
                     self.sel_layers.remove(sel_l)
 
-            for l in curr_sel_ls:
-                if l not in self.sel_layers:
-                    self.sel_layers.append(l)
+            for curr in curr_sel_ls:
+                if curr not in self.sel_layers:
+                    self.sel_layers.append(curr)
 
             self._updateLayerOrderList()
         else:
@@ -759,8 +759,8 @@ class WSPanel(wx.Panel):
 
         intersect_proj = []
         first = True
-        for l in curr_sel_ls:
-            layer_projs = l["cap_intf_l"].GetLayerData("srs")
+        for curr in curr_sel_ls:
+            layer_projs = curr["cap_intf_l"].GetLayerData("srs")
             if first:
                 projs_list = layer_projs
                 first = False
@@ -1088,18 +1088,21 @@ class LayersList(TreeCtrl):
         """
 
         def checknext(root_item, l_st_list, items_to_sel):
-            def compare(item, l_name, st_name):
+            def compare(item, l_name, st_name) -> bool:
                 it_l_name = self.GetItemData(item)["layer"].GetLayerData("name")
                 it_st = self.GetItemData(item)["style"]
                 it_type = self.GetItemData(item)["type"]
 
-                if it_l_name == l_name and (
-                    (not it_st and not st_name)
-                    or (it_st and it_st["name"] == st_name and it_type == "style")
-                ):
-                    return True
-
-                return False
+                return bool(
+                    it_l_name == l_name
+                    and (
+                        not it_st
+                        and not st_name
+                        or it_st
+                        and it_st["name"] == st_name
+                        and it_type == "style"
+                    )
+                )
 
             (child, cookie) = self.GetFirstChild(root_item)
             while child.IsOk():

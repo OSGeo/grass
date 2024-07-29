@@ -101,7 +101,8 @@ Topographic parameters are computed directly from the approximation
 function so that the important relationships between these parameters
 are preserved. The equations for computation of these parameters and
 their interpretation is described in
-<a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/hmg.rev1.ps">Mitasova and Hofierka, 1993</a>
+<a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/hmg.rev1.ps">
+ Mitasova and Hofierka, 1993</a>
 or Neteler and Mitasova, 2004).
 Slopes and aspect are computed in degrees (0-90 and 1-360 respectively).
 The aspect raster map has value 0 assigned to flat areas (with slope less
@@ -293,6 +294,27 @@ for for poorly sampled phenomena (result could be strongly smoothed
 with lost details and fluctuations) or when significant noise is
 present that needs to be smoothed out.
 
+<h3>Performance</h3>
+To enable parallel processing, the user can specify the number of threads
+to be used with the <b>nprocs</b> parameter (default 1).
+Figures 1 and 2 show benchmark results running on
+Intel® Core™ i5-10210U CPU @ 1.60GHz × 8. See benchmark scripts
+in the source code for more details.
+
+<div align="center" style="margin: 10px">
+  <img src="vsurfrst_benchmark.png" alt="benchmark for v.surf.rst" border="0">
+  <br>
+  <i>Figure 1: Benchmark shows execution time for different
+    number of cells (1M, 2M, 4M, and 8M).
+</div>
+<div align="center" style="margin: 10px">
+    <img src="vsurfrst_cv_benchmark.png" alt="benchmark for cross-validation of
+     v.surf.rst" border="0">
+    <br>
+    <i>Figure 2: Benchmark shows execution time for running cross-validation on
+     different number of cells (100k, 200k, 400k, and 800k).
+</div>
+
 <h2>EXAMPLE</h2>
 
 <h3>Setting for lidar point cloud</h3>
@@ -346,7 +368,8 @@ d.vect elevrand where="value > 94.9"
       Mitasova, H., Mitas, L. and Harmon, R.S., 2005,</a>
     Simultaneous spline approximation and topographic analysis for
     lidar elevation data in open source GIS, IEEE GRSL 2 (4), 375- 379.</li>
-  <li>Hofierka, J., 2005, Interpolation of Radioactivity Data Using Regularized Spline with Tension. Applied GIS, Vol. 1, No. 2, pp. 16-01 to 16-13. DOI: 10.2104/ag050016</li>
+  <li>Hofierka, J., 2005, Interpolation of Radioactivity Data Using Regularized Spline with Tension.
+    Applied GIS, Vol. 1, No. 2, pp. 16-01 to 16-13. DOI: 10.2104/ag050016</li>
   <li><a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/TGIS2002_Hofierka_et_al.pdf">
       Hofierka J., Parajka J., Mitasova H., Mitas L., 2002,</a> Multivariate
     Interpolation of Precipitation Using Regularized Spline with Tension.
@@ -386,7 +409,8 @@ d.vect elevrand where="value > 94.9"
 </em>
 
 <p>
-Overview: <a href="https://grasswiki.osgeo.org/wiki/Interpolation">Interpolation and Resampling</a> in GRASS GIS
+Overview: <a href="https://grasswiki.osgeo.org/wiki/Interpolation">
+ Interpolation and Resampling</a> in GRASS GIS
 
 <p>
 For examples of applications see
@@ -418,3 +442,7 @@ procedure):</em>
 <em>Parallelization using OpenMP:</em>
 <br>Stanislav Zubal, Czech Technical University in Prague
 <br>Michal Lacko, Pavol Jozef Safarik University in Kosice
+
+<p>
+<em>Parallelization of cross-validation using OpenMP:</em>
+<br>Chung-Yuan Liang, Purdue University, West Lafayette, Indiana, USA

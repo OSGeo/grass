@@ -174,7 +174,7 @@ def get_mapset_vector(mapname, mapset=""):
     return decode(libgis.G_find_vector2(mapname, mapset))
 
 
-def is_clean_name(name):
+def is_clean_name(name) -> bool:
     """Return if the name is valid
 
     >>> is_clean_name("census")
@@ -187,9 +187,7 @@ def is_clean_name(name):
     False
 
     """
-    if libgis.G_legal_filename(name) < 0:
-        return False
-    return True
+    return not libgis.G_legal_filename(name) < 0
 
 
 def coor2pixel(coord, region):
@@ -332,7 +330,7 @@ def get_raster_for_points(poi_vector, raster, column=None, region=None):
         if column:
             if val is not None and not isnan(val):
                 poi.attrs[column] = val
-        else:
+        else:  # noqa: PLR5501
             if val is not None and not isnan(val):
                 result.append((poi.id, poi.x, poi.y, val))
             else:
@@ -348,7 +346,7 @@ def r_export(rast, output="", fmt="png", **kargs):
     from grass.pygrass.modules import Module
 
     if rast.exist():
-        output = output if output else "%s_%s.%s" % (rast.name, rast.mapset, fmt)
+        output = output or "%s_%s.%s" % (rast.name, rast.mapset, fmt)
         Module(
             "r.out.%s" % fmt,
             input=rast.fullname(),
@@ -437,7 +435,7 @@ def table_exist(cursor, table_name):
         except OperationalError:
             return False
     one = cursor.fetchone() if cursor else None
-    return True if one and one[0] else False
+    return bool(one and one[0])
 
 
 def create_test_vector_map(map_name="test_vector"):
