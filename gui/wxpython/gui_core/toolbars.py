@@ -174,9 +174,10 @@ class ToolbarController:
                 if tool[0][0] == "":  # separator
                     continue
                 internal_label = tool[0][0]
-            elif tool[0] == "":  # separator
-                continue
-            internal_label = tool[0]
+            else:
+                if tool[0] == "":  # separator
+                    continue
+                internal_label = tool[0]
 
             label = vars(self.widget)[internal_label]
             if enable:
