@@ -84,8 +84,7 @@ int main(int argc, char **argv)
     /* group validity check */
 
     /*----------------------*/
-    strncpy(group.name, group_opt->answer, BUFFER_SIZE);
-    group.name[BUFFER_SIZE - 1] = '\0';
+    G_strlcpy(group.name, group_opt->answer, BUFFER_SIZE);
     /* strip off mapset if it's there: I_() fns only work with current mapset */
     if ((p = strchr(group.name, '@')))
         *p = 0;
@@ -98,30 +97,26 @@ int main(int argc, char **argv)
     moduletorun = ortho_opt->answer;
     /* run the program chosen */
     if (strcmp(moduletorun, "g.gui.photo2image") == 0) {
-        strncpy(tosystem, "g.gui.photo2image", BUFFER_SIZE - 1);
-        tosystem[BUFFER_SIZE - 1] = '\0';
+        G_strlcpy(tosystem, "g.gui.photo2image", BUFFER_SIZE);
         return system((const char *)tosystem);
     }
     else if (strcmp(moduletorun, "g.gui.image2target") == 0) {
-        strncpy(tosystem, "g.gui.image2target", BUFFER_SIZE - 1);
-        tosystem[BUFFER_SIZE - 1] = '\0';
+        G_strlcpy(tosystem, "g.gui.image2target", BUFFER_SIZE);
         return system((const char *)tosystem);
     }
     else {
         if (strcmp(moduletorun, "i.group") == 0)
-            strncpy(tosystem, "i.group --ui group=", BUFFER_SIZE - 1);
+            G_strlcpy(tosystem, "i.group --ui group=", BUFFER_SIZE);
         if (strcmp(moduletorun, "i.ortho.target") == 0)
-            strncpy(tosystem, "i.ortho.target --ui group=", BUFFER_SIZE - 1);
+            G_strlcpy(tosystem, "i.ortho.target --ui group=", BUFFER_SIZE);
         if (strcmp(moduletorun, "i.ortho.elev") == 0)
-            strncpy(tosystem, "i.ortho.elev --ui group=", BUFFER_SIZE - 1);
+            G_strlcpy(tosystem, "i.ortho.elev --ui group=", BUFFER_SIZE);
         if (strcmp(moduletorun, "i.ortho.camera") == 0)
-            strncpy(tosystem, "i.ortho.camera --ui group=", BUFFER_SIZE - 1);
+            G_strlcpy(tosystem, "i.ortho.camera --ui group=", BUFFER_SIZE);
         if (strcmp(moduletorun, "i.ortho.init") == 0)
-            strncpy(tosystem, "i.ortho.init --ui group=", BUFFER_SIZE - 1);
+            G_strlcpy(tosystem, "i.ortho.init --ui group=", BUFFER_SIZE);
         if (strcmp(moduletorun, "i.ortho.rectify") == 0)
-            strncpy(tosystem, "i.ortho.rectify --ui group=", BUFFER_SIZE - 1);
-
-        tosystem[BUFFER_SIZE - 1] = '\0';
+            G_strlcpy(tosystem, "i.ortho.rectify --ui group=", BUFFER_SIZE);
         strcat(tosystem, grname);
         return system((const char *)tosystem);
     }
