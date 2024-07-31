@@ -65,7 +65,7 @@ skewness=4.86561
             "g.remove", type="vector", flags="f", pattern=f"{self.temp_import}*"
         )
         # Remove temporary files
-        for p in Path(".").glob(f"{self.test_map}*"):
+        for p in Path().glob(f"{self.test_map}*"):
             p.unlink()
         for p in Path(".").glob(f"{self.temp_54052}*"):
             p.unlink()
