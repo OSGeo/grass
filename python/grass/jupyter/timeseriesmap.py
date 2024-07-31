@@ -14,6 +14,7 @@
 
 import os
 import shutil
+import multiprocessing
 
 import grass.script as gs
 
@@ -292,14 +293,7 @@ class TimeSeriesMap(BaseSeriesMap):
         return date, filename
 
     def render(self):
-        """Renders image for each time-step in space-time dataset.
-
-        Save PNGs to temporary directory. Must be run before creating a visualization
-        (i.e. show or save). Can be time-consuming to run with large
-        space-time datasets.
-        """
-        import multiprocessing  # pylint: disable=import-outside-toplevel
-
+        """Renders image for each time-step in space-time dataset."""
         self._render()
         if not self._baseseries_added:
             raise RuntimeError(
@@ -318,7 +312,15 @@ class TimeSeriesMap(BaseSeriesMap):
                 filename = os.path.join(self._tmpdir.name, f"{layer}.png")
             tasks.append((date, layer, filename))
 
-        with multiprocessing.Pool() as pool:
+        nprocs_env = gs.gisenv().get("NPROCS")
+        num_images = len(self._date_layer_dict)
+        if nprocs_env is not None:
+            num_cores = int(nprocs_env)
+        else:
+            num_cores = min(num_images, max(1, multiprocessing.cpu_count() - 1))
+        print(f"Performing on {num_cores} cores.")
+
+        with multiprocessing.Pool(processes=num_cores) as pool:
             results = pool.starmap(self._render_layer_worker, tasks)
 
         for date, filename in results:
