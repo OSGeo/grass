@@ -26,7 +26,7 @@ from .utils import (
     query_raster,
     query_vector,
     reproject_latlon,
-    get_region
+    get_region,
 )
 
 
