@@ -16,7 +16,7 @@ class TestVToDb(TestCase):
     def _assert_dict_almost_equal(self, d1, d2):
         self.assertEqual(set(d1.keys()), set(d2.keys()))
         for k1 in d1:
-            if isinstance(k1, float):
+            if isinstance(d1[k1], float):
                 self.assertAlmostEqual(d1[k1], d2[k1], places=6)
             else:
                 self.assertEqual(d1[k1], d2[k1])
