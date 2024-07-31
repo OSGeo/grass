@@ -67,7 +67,7 @@ skewness=4.86561
         # Remove temporary files
         for p in Path().glob(f"{self.test_map}*"):
             p.unlink()
-        for p in Path(".").glob(f"{self.temp_54052}*"):
+        for p in Path().glob(f"{self.temp_54052}*"):
             p.unlink()
         if len(self.session_file) > 0:
             Path(self.session_file).unlink()
