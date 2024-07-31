@@ -120,10 +120,14 @@ from grass.exceptions import CalledModuleError
 def bboxToPoints(bbox):
     """Make points that are the corners of a bounding box"""
     points = []
-    points.append((bbox["w"], bbox["s"]))
-    points.append((bbox["w"], bbox["n"]))
-    points.append((bbox["e"], bbox["n"]))
-    points.append((bbox["e"], bbox["s"]))
+    points.extend(
+        (
+            (bbox["w"], bbox["s"]),
+            (bbox["w"], bbox["n"]),
+            (bbox["e"], bbox["n"]),
+            (bbox["e"], bbox["s"]),
+        )
+    )
 
     return points
 
@@ -137,14 +141,10 @@ def pointsToBbox(points):
         if not min_y:
             min_y = max_y = point[1]
 
-        if min_x > point[0]:
-            min_x = point[0]
-        if max_x < point[0]:
-            max_x = point[0]
-        if min_y > point[1]:
-            min_y = point[1]
-        if max_y < point[1]:
-            max_y = point[1]
+        min_x = min(min_x, point[0])
+        max_x = max(max_x, point[0])
+        min_y = min(min_y, point[1])
+        max_y = max(max_y, point[1])
 
     bbox["n"] = max_y
     bbox["s"] = min_y
@@ -217,7 +217,7 @@ def sideLengths(points, xmetric, ymetric):
     return {"x": (ret[1], ret[3]), "y": (ret[0], ret[2])}
 
 
-def bboxesIntersect(bbox_1, bbox_2):
+def bboxesIntersect(bbox_1, bbox_2) -> bool:
     """Determine if two bounding boxes intersect"""
     bi_a1 = (bbox_1["w"], bbox_1["s"])
     bi_a2 = (bbox_1["e"], bbox_1["n"])
@@ -233,10 +233,7 @@ def bboxesIntersect(bbox_1, bbox_2):
         ):
             cin[i] = True
 
-    if cin[0] and cin[1]:
-        return True
-
-    return False
+    return bool(cin[0] and cin[1])
 
 
 def main():
@@ -348,8 +345,9 @@ def main():
     # points later.
 
     bigger = []
-    bigger.append(max(source_bbox_dest_lengths["x"]))
-    bigger.append(max(source_bbox_dest_lengths["y"]))
+    bigger.extend(
+        (max(source_bbox_dest_lengths["x"]), max(source_bbox_dest_lengths["y"]))
+    )
     maxdim = (max_cols, max_rows)
 
     # Compute the number and size of tiles to use in each direction

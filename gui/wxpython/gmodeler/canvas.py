@@ -103,14 +103,13 @@ class ModelCanvas(ogl.ShapeCanvas):
         ymax = 20
         for item in self.GetDiagram().GetShapeList():
             y = item.GetY() + item.GetBoundingBoxMin()[1]
-            if y > ymax:
-                ymax = y
+            ymax = max(y, ymax)
 
         return (self.GetSize()[0] // 2, ymax + yoffset)
 
     def GetShapesSelected(self):
         """Get list of selected shapes"""
-        selected = list()
+        selected = []
         diagram = self.GetDiagram()
         for shape in diagram.GetShapeList():
             if shape.Selected():
@@ -168,7 +167,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
                 del self.frame.defineRelation
 
         # select object
-        self._onSelectShape(shape, append=True if keys == 1 else False)
+        self._onSelectShape(shape, append=keys == 1)
 
         if hasattr(shape, "GetLog"):
             self.log.SetStatusText(shape.GetLog(), 0)
@@ -198,7 +197,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             )
 
         elif isinstance(shape, ModelData):
-            if shape.GetPrompt() in (
+            if shape.GetPrompt() in {
                 "raster",
                 "vector",
                 "raster_3d",
@@ -206,7 +205,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
                 "strds",
                 "stvds",
                 "str3ds",
-            ):
+            }:
                 dlg = ModelDataDialog(parent=self.frame, shape=shape)
                 shape.SetPropDialog(dlg)
                 dlg.CentreOnParent()
@@ -219,7 +218,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
                 shape.SetLabel(dlg.GetCondition())
                 model = self.frame.GetModel()
                 ids = dlg.GetItems()
-                alist = list()
+                alist = []
                 for aId in ids["unchecked"]:
                     action = model.GetItem(aId, objType=ModelAction)
                     if action:
@@ -244,7 +243,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
                 model = self.frame.GetModel()
                 ids = dlg.GetItems()
                 for b in ids.keys():
-                    alist = list()
+                    alist = []
                     for aId in ids[b]["unchecked"]:
                         action = model.GetItem(aId, objType=ModelAction)
                         action.UnSetBlock(shape)
@@ -295,7 +294,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
     def OnRightClick(self, x, y, keys=0, attachment=0):
         """Right click -> pop-up menu"""
         if not hasattr(self, "popupID"):
-            self.popupID = dict()
+            self.popupID = {}
             for key in (
                 "remove",
                 "enable",
@@ -445,7 +444,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             shape.Select(False, dc)
         else:
             shapeList = canvas.GetDiagram().GetShapeList()
-            toUnselect = list()
+            toUnselect = []
 
             if not append:
                 for s in shapeList:

@@ -1,6 +1,7 @@
 """Base class for SeriesMap and TimeSeriesMap"""
 
 import os
+from pathlib import Path
 import tempfile
 import weakref
 import shutil
@@ -73,12 +74,11 @@ class BaseSeriesMap:
         def wrapper(**kwargs):
             if not self._baseseries_added:
                 self._base_layer_calls.append((grass_module, kwargs))
+            elif self._base_calls is not None:
+                for row in self._base_calls:
+                    row.append((grass_module, kwargs))
             else:
-                if self._base_calls is not None:
-                    for row in self._base_calls:
-                        row.append((grass_module, kwargs))
-                else:
-                    self._base_calls.append((grass_module, kwargs))
+                self._base_calls.append((grass_module, kwargs))
 
         return wrapper
 
@@ -177,8 +177,7 @@ class BaseSeriesMap:
         # Display image associated with datetime
         def change_image(index):
             filename = self._base_filename_dict[index]
-            with open(filename, "rb") as rfile:
-                out_img.value = rfile.read()
+            out_img.value = Path(filename).read_bytes()
 
         widgets.interactive_output(change_image, {"index": slider})
 

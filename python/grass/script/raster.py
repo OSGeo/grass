@@ -144,7 +144,7 @@ def mapcalc(
             overwrite=overwrite,
         )
     except CalledModuleError:
-        fatal(_("An error occurred while running r.mapcalc" " with expression: %s") % e)
+        fatal(_("An error occurred while running r.mapcalc with expression: %s") % e)
 
 
 def mapcalc_start(
@@ -224,7 +224,7 @@ def raster_what(map, coord, env=None, localized=False):
     else:
         map_list = map
 
-    coord_list = list()
+    coord_list = []
     if isinstance(coord, tuple):
         coord_list.append("%f,%f" % (coord[0], coord[1]))
     else:
@@ -244,7 +244,7 @@ def raster_what(map, coord, env=None, localized=False):
         quiet=True,
         env=env,
     )
-    data = list()
+    data = []
     if not ret:
         return data
 

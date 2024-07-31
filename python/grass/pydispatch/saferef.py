@@ -28,8 +28,7 @@ def safeRef(target, onDelete=None):
                 """but no %s, don't know how """
                 """to create reference""" % (target, im_self, im_func)
             )
-            reference = BoundMethodWeakref(target=target, onDelete=onDelete)
-            return reference
+            return BoundMethodWeakref(target=target, onDelete=onDelete)
     if onDelete is not None:
         return weakref.ref(target, onDelete)
     else:

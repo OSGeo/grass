@@ -18,16 +18,18 @@ for details.
 """
 
 from datetime import datetime
+
 import grass.script as gs
-from .core import get_tgis_message_interface, init_dbif, get_current_mapset
-from .open_stds import open_old_stds
+
 from .abstract_map_dataset import AbstractMapDataset
-from .factory import dataset_factory
+from .core import get_current_mapset, get_tgis_message_interface, init_dbif
 from .datetime_math import (
     check_datetime_string,
     increment_datetime_by_string,
     string_to_datetime,
 )
+from .factory import dataset_factory
+from .open_stds import open_old_stds
 
 ###############################################################################
 
@@ -449,11 +451,11 @@ def register_maps_in_space_time_dataset(
     # Update affected datasets
     if datatsets_to_modify:
         for dataset in datatsets_to_modify:
-            if type in ["rast", "raster"]:
+            if type in {"rast", "raster"}:
                 ds = dataset_factory("strds", dataset)
-            elif type in ["raster_3d", "rast3d", "raster3d"]:
+            elif type in {"raster_3d", "rast3d", "raster3d"}:
                 ds = dataset_factory("str3ds", dataset)
-            elif type in ["vect", "vector"]:
+            elif type in {"vect", "vector"}:
                 ds = dataset_factory("stvds", dataset)
             ds.select(dbif)
             ds.update_from_registered_maps(dbif)
@@ -607,8 +609,9 @@ def register_map_object_list(
     :param dbif: The database interface to be used
 
     """
-    import grass.pygrass.modules as pymod
     import copy
+
+    import grass.pygrass.modules as pymod
 
     dbif, connection_state_changed = init_dbif(None)
 
@@ -620,7 +623,7 @@ def register_map_object_list(
             map_layer.load()
             # In case of a empty map continue, do not register empty maps
             if delete_empty:
-                if type in ["raster", "raster_3d", "rast", "rast3d"]:
+                if type in {"raster", "raster_3d", "rast", "rast3d"}:
                     if (
                         map_layer.metadata.get_min() is None
                         and map_layer.metadata.get_max() is None

@@ -165,9 +165,8 @@ def create_location_interactively(guiparent, grassdb):
     gWizard = LocationWizard(parent=guiparent, grassdatabase=grassdb)
 
     if gWizard.location is None:
-        gWizard_output = (None, None, None)
+        return (None, None, None)
         # Returns Nones after Cancel
-        return gWizard_output
 
     if gWizard.georeffile:
         message = _("Do you want to import {} to the newly created project?").format(
@@ -586,7 +585,7 @@ def can_switch_mapset_interactive(guiparent, grassdb, location, mapset):
 
     if is_mapset_locked(mapset_path):
         info = get_mapset_lock_info(mapset_path)
-        user = info["owner"] if info["owner"] else _("unknown")
+        user = info["owner"] or _("unknown")
         lockpath = info["lockpath"]
         timestamp = info["timestamp"]
 
@@ -653,7 +652,7 @@ def import_file(guiparent, filePath, env):
     if returncode != 0:
         GError(
             parent=guiparent,
-            message=_("Import of <%(name)s> failed.\n" "Reason: %(msg)s")
+            message=_("Import of <%(name)s> failed.\nReason: %(msg)s")
             % ({"name": filePath, "msg": error}),
         )
     else:
@@ -716,7 +715,7 @@ def switch_mapset_interactively(
             giface.currentMapsetChanged.emit(
                 dbase=None, location=location, mapset=mapset
             )
-    else:
+    else:  # noqa: PLR5501
         if RunCommand("g.mapset", parent=guiparent, mapset=mapset) == 0:
             if show_confirmation:
                 GMessage(
