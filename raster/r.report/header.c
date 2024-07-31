@@ -1,6 +1,7 @@
 #include <string.h>
 #include <grass/raster.h>
 #include "global.h"
+#include <grass/parson.h>
 
 static int page = 0;
 static const char *date = NULL;

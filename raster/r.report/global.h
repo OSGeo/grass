@@ -66,7 +66,7 @@ extern int do_sort;
 extern char *stats_file;
 extern char *no_data_str;
 extern int stats_flag;
-extern int nsteps, cat_ranges, as_int;
+extern int nsteps, cat_ranges, as_int, as_json;
 extern int *is_fp;
 extern DCELL *DMAX, *DMIN;
 
