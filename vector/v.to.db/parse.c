@@ -118,6 +118,10 @@ int parse_command_line(int argc, char *argv[])
     parms.fs->guisection = _("Print");
 
     parms.format = G_define_standard_option(G_OPT_F_FORMAT);
+    parms.format->descriptions =
+        _("plain;Plain text output;"
+          "json;JSON (JavaScript Object Notation), only used when print only "
+          "flag is also set;");
     parms.format->guisection = _("Print");
 
     flags.p = G_define_flag();
