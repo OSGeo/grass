@@ -44,7 +44,7 @@ skewness=4.86561
 
     @classmethod
     def tearDownClass(cls):
-        """!Remove the temporary region"""
+        """Remove the temporary region"""
         cls.del_temp_region()
 
     def tearDown(self):
