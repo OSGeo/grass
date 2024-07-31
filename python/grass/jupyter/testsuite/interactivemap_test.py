@@ -114,6 +114,14 @@ class TestDisplay(TestCase):
         interactive_map.query_mode = False
         self.assertFalse(interactive_map.query_mode)
 
+    @unittest.skipIf(not can_import_ipyleaflet(), "Cannot import ipyleaflet")
+    def test_draw_computational_region(self):
+        """Test the draw_computational_region method."""
+        # Create InteractiveMap
+        interactive_map = gj.InteractiveMap()
+        interactive_map.draw_computational_region()
+        self.assertTrue(callable(interactive_map.draw_computational_region))
+
 
 if __name__ == "__main__":
     test()
