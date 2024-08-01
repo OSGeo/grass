@@ -215,9 +215,10 @@ def save_vector(name, geo_json):
         suffix=".geojson", delete=False, mode="w"
     ) as temp_file:
         temp_filename = temp_file.name
+        for each in geo_json["features"]:
+            each["properties"].clear()
         json.dump(geo_json, temp_file)
     gs.run_command("v.import", input=temp_filename, output=name)
-    print(f"Imported geometry with name '{name}' into GRASS GIS.")
 
 
 def get_region_bounds_latlon():
