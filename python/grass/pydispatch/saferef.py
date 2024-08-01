@@ -4,8 +4,12 @@ import weakref
 import traceback
 import sys
 
-im_func = "__func__"
-im_self = "__self__"
+if sys.hexversion >= 0x3000000:
+    im_func = "__func__"
+    im_self = "__self__"
+else:
+    im_func = "im_func"
+    im_self = "im_self"
 
 
 def safeRef(target, onDelete=None):
@@ -126,9 +130,8 @@ class BoundMethodWeakref:
                         traceback.print_exc()
                     except AttributeError:
                         print(
-                            """Exception during saferef %s cleanup """
-                            """function %s: %s""" % (self, function, e),
-                            file=sys.stderr,
+                            """Exception during saferef %s cleanup function %s: %s"""
+                            % (self, function, e)
                         )
 
         self.deletionMethods = [onDelete]
@@ -161,6 +164,8 @@ class BoundMethodWeakref:
     def __nonzero__(self):
         """Whether we are still a valid reference"""
         return self() is not None
+
+    __bool__ = __nonzero__
 
     def __cmp__(self, other):
         """Compare with another reference"""
