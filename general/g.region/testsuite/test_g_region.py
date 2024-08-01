@@ -75,9 +75,11 @@ class TestRegion(TestCase):
             "depths": 10,
             "cells": 1010600,
             "cells3": 2526500,
+            "GMT": "120000/935000/10000/320000",
+            "WMS": "bbox=120000,10000,935000,320000",
         }
 
-        output = call_module("g.region", flags="p", format="json")
+        output = call_module("g.region", flags="ptw", format="json")
         output_json = json.loads(output)
 
         expected_ellps = expected.pop("ellipsoid").split(" ")

@@ -559,16 +559,36 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
     }
 
     /* flag.gmt_style */
-    if ((print_flag & PRINT_GMT) && format != JSON)
-        fprintf(stdout, "%s/%s/%s/%s\n", west, east, south, north);
+    if (print_flag & PRINT_GMT) {
+        char gmt[120];
+        switch (format) {
+        case JSON:
+            snprintf(gmt, 120, "%s/%s/%s/%s", west, east, south, north);
+            json_object_set_string(root_object, "GMT", gmt);
+            break;
+        default:
+            fprintf(stdout, "%s/%s/%s/%s\n", west, east, south, north);
+            break;
+        }
+    }
 
     /* flag.wms_style */
-    if ((print_flag & PRINT_WMS) && format != JSON) {
-        G_format_northing(window->north, north, -1);
-        G_format_northing(window->south, south, -1);
-        G_format_easting(window->east, east, -1);
-        G_format_easting(window->west, west, -1);
-        fprintf(stdout, "bbox=%s,%s,%s,%s%s", west, south, east, north, sep);
+    if (print_flag & PRINT_WMS) {
+        char wms[150];
+        switch (format) {
+        case JSON:
+            snprintf(wms, 150, "bbox=%s,%s,%s,%s", west, south, east, north);
+            json_object_set_string(root_object, "WMS", wms);
+            break;
+        default:
+            G_format_northing(window->north, north, -1);
+            G_format_northing(window->south, south, -1);
+            G_format_easting(window->east, east, -1);
+            G_format_easting(window->west, west, -1);
+            fprintf(stdout, "bbox=%s,%s,%s,%s%s", west, south, east, north,
+                    sep);
+            break;
+        }
     }
 
     /* flag.nangle */
