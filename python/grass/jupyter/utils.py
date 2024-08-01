@@ -10,6 +10,9 @@
 #            for details.
 
 """Utility functions warpping existing processes in a suitable way"""
+import tempfile
+import json
+
 from pathlib import Path
 import grass.script as gs
 
@@ -209,19 +212,13 @@ def save_vector(name, geo_json):
     param geojson_filename: name of the geojson file to be saved
     param name: name with which vector should be saved
     """
-    import tempfile
-    import json
-
-    try:
-        with tempfile.NamedTemporaryFile(
-            suffix=".geojson", delete=False, mode="w"
-        ) as temp_file:
-            temp_filename = temp_file.name
-            json.dump(geo_json, temp_file)
-        gs.run_command("v.import", input=temp_filename, output=name)
-        print(f"Imported geometry with name '{name}' into GRASS GIS.")
-    except Exception as e:
-        print(f"Failed to import geometries into GRASS GIS: {e}")
+    with tempfile.NamedTemporaryFile(
+        suffix=".geojson", delete=False, mode="w"
+    ) as temp_file:
+        temp_filename = temp_file.name
+        json.dump(geo_json, temp_file)
+    gs.run_command("v.import", input=temp_filename, output=name)
+    print(f"Imported geometry with name '{name}' into GRASS GIS.")
 
 
 def save_gif(

@@ -387,16 +387,16 @@ class InteractiveMap:
             nonlocal save_button_control
 
             name_input = widgets.Text(
-                description="Name:",
+                description="New vector map name:",
                 style={"description_width": "initial"},
                 layout=widgets.Layout(
-                    width="50%",
+                    width="80%",
                     margin="1px 1px 1px 1px",
                 ),
             )
             save_button = widgets.Button(
-                description="Save Geometries",
-                layout=widgets.Layout(width="50%", margin="1px 1px 1px 1px"),
+                description="Save",
+                layout=widgets.Layout(width="20%", margin="1px 1px 1px 1px"),
             )
 
             def save_geometries(_b):
@@ -412,11 +412,17 @@ class InteractiveMap:
                     geo_json_layer = self._ipyleaflet.GeoJSON(data=geo_json, name=name)
                     geo_json_layers[name] = geo_json_layer
                     self.map.add_layer(geo_json_layer)
+                    draw_control.clear()
+                    drawn_geometries.clear()
 
             save_button.on_click(save_geometries)
 
             hbox_layout = widgets.Layout(
-                display="flex", flex_flow="row", align_items="stretch", width="300px"
+                display="flex",
+                flex_flow="row",
+                align_items="stretch",
+                width="300px",
+                justify_content="space-between",
             )
 
             save_button_control = self._ipyleaflet.WidgetControl(
