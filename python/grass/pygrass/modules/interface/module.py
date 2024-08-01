@@ -334,11 +334,11 @@ class Module:
     >>> region.flags.u = True
     >>> region.flags["3"].value = True  # set numeric flags
     >>> region.get_bash()
-    'g.region -p -3 -u'
+    'g.region format=plain -p -3 -u'
     >>> new_region = copy.deepcopy(region)
     >>> new_region.inputs.res = "10"
     >>> new_region.get_bash()
-    'g.region res=10 -p -3 -u'
+    'g.region res=10 format=plain -p -3 -u'
 
     >>> neighbors = Module("r.neighbors")
     >>> neighbors.inputs.input = "mapA"
