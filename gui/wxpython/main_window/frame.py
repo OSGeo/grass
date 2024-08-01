@@ -331,9 +331,7 @@ class GMFrame(wx.Frame):
     def _createDataCatalog(self, parent):
         """Initialize Data Catalog widget"""
         self.datacatalog = DataCatalog(parent=parent, giface=self._giface)
-        self.datacatalog.showNotification.connect(
-            lambda message: self.SetStatusText(message)
-        )
+        self.datacatalog.showNotification.connect(self.SetStatusText)
 
     def _createDisplay(self, parent):
         """Initialize Display widget"""
@@ -355,9 +353,7 @@ class GMFrame(wx.Frame):
                 giface=self._giface,
                 model=self._moduleTreeBuilder.GetModel(),
             )
-            self.search.showNotification.connect(
-                lambda message: self.SetStatusText(message)
-            )
+            self.search.showNotification.connect(self.SetStatusText)
         else:
             self.search = None
 
@@ -377,12 +373,8 @@ class GMFrame(wx.Frame):
             menuModel=self._moduleTreeBuilder.GetModel(),
             gcstyle=GC_PROMPT,
         )
-        self.goutput.showNotification.connect(
-            lambda message: self.SetStatusText(message)
-        )
-        self.goutput.contentChanged.connect(
-            lambda notification: self._focusPage(notification)
-        )
+        self.goutput.showNotification.connect(self.SetStatusText)
+        self.goutput.contentChanged.connect(self._focusPage)
 
         self._gconsole.mapCreated.connect(self.OnMapCreated)
         self._gconsole.Bind(
@@ -395,9 +387,7 @@ class GMFrame(wx.Frame):
         """Initialize history browser widget"""
         if not UserSettings.Get(group="manager", key="hideTabs", subkey="history"):
             self.history = HistoryBrowser(parent=parent, giface=self._giface)
-            self.history.showNotification.connect(
-                lambda message: self.SetStatusText(message)
-            )
+            self.history.showNotification.connect(self.SetStatusText)
             self.history.runIgnoredCmdPattern.connect(
                 lambda cmd: self.RunSpecialCmd(command=cmd),
             )
@@ -1068,11 +1058,11 @@ class GMFrame(wx.Frame):
 
     def _focusPage(self, notification):
         """Focus the 'Console' notebook page according to event notification."""
-        if (
-            notification == Notification.HIGHLIGHT
-            or notification == Notification.MAKE_VISIBLE
-            or notification == Notification.RAISE_WINDOW
-        ):
+        if notification in {
+            Notification.HIGHLIGHT,
+            Notification.MAKE_VISIBLE,
+            Notification.RAISE_WINDOW,
+        }:
             self.FocusPage("Console")
 
     def FocusPage(self, page_text):
@@ -2139,8 +2129,8 @@ class GMFrame(wx.Frame):
             self.AddMaps([mapName], ltype, check=True)
         else:
             display = self.GetMapDisplay()
-            mapLayers = map(
-                lambda x: x.GetName(), display.GetMap().GetListOfLayers(ltype=ltype)
+            mapLayers = (
+                x.GetName() for x in display.GetMap().GetListOfLayers(ltype=ltype)
             )
             if mapName in mapLayers:
                 display.GetWindow().UpdateMap(render=True)
@@ -2440,13 +2430,12 @@ class GMFrame(wx.Frame):
         )
         if limitText:
             message += "\n\n%s" % _(limitText)
-        dlg = wx.MessageDialog(
+        return wx.MessageDialog(
             parent=self,
             message=message,
             caption=_("Constrain map to region geometry?"),
             style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
         )
-        return dlg
 
     def _onMapsetWatchdog(self, map_path, map_dest):
         """Current mapset watchdog event handler

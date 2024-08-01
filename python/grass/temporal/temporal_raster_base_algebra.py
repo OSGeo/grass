@@ -354,9 +354,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         resultlist = resultdict.values()
 
         # Sort list of maps chronological.
-        resultlist = sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
-
-        return resultlist
+        return sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
 
     def build_command_string(self, map_i, relmap, operator=None, cmd_type=None):
         """This function build the r.mapcalc command string for conditionals,
@@ -464,8 +462,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             if topo.upper() in temporal_relations.keys():
                 relationmaplist = temporal_relations[topo.upper()]
                 if count == 0 and "cmd_list" in dir(map_i):
-                    cmd_value_list.append(compop)
-                    cmd_value_list.append("(")
+                    cmd_value_list.extend((compop, "("))
                 for relationmap in relationmaplist:
                     if (
                         self._check_spatial_topology_relation(
@@ -637,9 +634,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             #    resultlist.append(map_new)
         # Get sorted map objects as values from result dictionary.
         resultlist = resultdict.values()
-        resultlist = sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
-
-        return resultlist
+        return sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
 
     def build_condition_cmd_list(
         self,
@@ -740,14 +735,13 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             conditiontopolist = self.build_spatio_temporal_topology_list(
                 iflist, conclusionlist, topolist=condition_topolist
             )
-            resultlist = self.set_temporal_extent_list(
+            return self.set_temporal_extent_list(
                 conditiontopolist,
                 topolist=condition_topolist,
                 temporal="r",
                 cmd_bool=True,
                 cmd_type="condition",
             )
-            return resultlist
 
     def p_statement_assign(self, t):
         # This function executes the processing of raster/raster3d algebra
@@ -934,10 +928,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                             "Error raster map %s exist in temporal database. "
                             "Use overwrite flag." % map_i.get_map_id()
                         )
-                    else:
+                    elif self.dry_run is False:
                         # Insert map into temporal database.
-                        if self.dry_run is False:
-                            map_i.insert(dbif)
+                        map_i.insert(dbif)
                     # Register map in result space time dataset.
                     if self.dry_run is False:
                         success = resultstds.register_map(map_i, dbif)

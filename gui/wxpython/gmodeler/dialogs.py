@@ -206,9 +206,7 @@ class ModelSearchDialog(wx.Dialog):
             parent=self, giface=giface, menuModel=menuModel.GetModel()
         )
         self.cmd_prompt.promptRunCmd.connect(self.OnCommand)
-        self.cmd_prompt.commandSelected.connect(
-            lambda command: self.label.SetValue(command)
-        )
+        self.cmd_prompt.commandSelected.connect(self.label.SetValue)
         self.search = SearchModuleWidget(
             parent=self.panel, model=menuModel.GetModel(), showTip=True
         )
@@ -946,15 +944,11 @@ class ItemListCtrl(ModelListCtrl):
             items = self.frame.GetModel().GetItems(objType=ModelAction)
             if isinstance(self.shape, ModelCondition):
                 if self.GetLabel() == "ElseBlockList":
-                    shapeItems = map(
-                        lambda x: x.GetId(), self.shape.GetItems(items)["else"]
-                    )
+                    shapeItems = (x.GetId() for x in self.shape.GetItems(items)["else"])
                 else:
-                    shapeItems = map(
-                        lambda x: x.GetId(), self.shape.GetItems(items)["if"]
-                    )
+                    shapeItems = (x.GetId() for x in self.shape.GetItems(items)["if"])
             else:
-                shapeItems = map(lambda x: x.GetId(), self.shape.GetItems(items))
+                shapeItems = (x.GetId() for x in self.shape.GetItems(items))
         else:
             shapeItems = []
 

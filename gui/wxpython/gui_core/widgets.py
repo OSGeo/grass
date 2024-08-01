@@ -1335,14 +1335,10 @@ class SearchModuleWidget(wx.Panel):
             nodes.update(self._model.SearchNodes(key=key, value=value))
 
         nodes = list(nodes)
-        nodes.sort(key=lambda node: self._model.GetIndexOfNode(node))
+        nodes.sort(key=self._model.GetIndexOfNode)
         self._results = nodes
         self._resultIndex = -1
-        commands = sorted(
-            [node.data["command"] for node in nodes if node.data["command"]]
-        )
-
-        return commands
+        return sorted([node.data["command"] for node in nodes if node.data["command"]])
 
     def OnSelectModule(self, event=None):
         """Module selected from choice, update command prompt"""

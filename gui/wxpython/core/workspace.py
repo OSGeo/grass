@@ -92,9 +92,7 @@ class ProcessWorkspaceFile:
         :param value:
         """
         value = value.replace("&lt;", "<")
-        value = value.replace("&gt;", ">")
-
-        return value
+        return value.replace("&gt;", ">")
 
     def __getNodeText(self, node, tag, default=""):
         """Get node text"""
@@ -1043,9 +1041,7 @@ class WriteWorkspaceFile:
         """Make value XML-valid"""
         value = value.replace("<", "&lt;")
         value = value.replace(">", "&gt;")
-        value = value.replace("&", "&amp;")
-
-        return value
+        return value.replace("&", "&amp;")
 
     def __writeLayer(self, mapTree, item):
         """Write bunch of layers to GRASS Workspace XML file"""
@@ -1757,7 +1753,7 @@ class ProcessGrcFile:
             return []
 
         line_id = 1
-        for line in file.readlines():
+        for line in file:
             self.process_line(line.rstrip("\n"), line_id)
             line_id += 1
 

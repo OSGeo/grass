@@ -23,14 +23,14 @@ def get_pyplot(to_file):
     The *to_file* parameter can be set to True to avoid tkinter dependency
     if the interactive show method is not needed.
     """
-    import matplotlib  # pylint: disable=import-outside-toplevel
+    import matplotlib as mpl  # pylint: disable=import-outside-toplevel
 
     if to_file:
         backend = "agg"
     else:
         backend = None
     if backend:
-        matplotlib.use(backend)
+        mpl.use(backend)
 
     import matplotlib.pyplot as plt  # pylint: disable=import-outside-toplevel
 

@@ -579,8 +579,8 @@ class MapApp(wx.App):
             ),
         )
 
-        self.Map.saveToFile.connect(lambda cmd: self.mapDisplay.DOutFile(cmd))
-        self.Map.dToRast.connect(lambda cmd: self.mapDisplay.DToRast(cmd))
+        self.Map.saveToFile.connect(self.mapDisplay.DOutFile)
+        self.Map.dToRast.connect(self.mapDisplay.DToRast)
         self.Map.query.connect(
             lambda ltype, maps: self.mapDisplay.SetQueryLayersAndActivate(
                 ltype=ltype, maps=maps

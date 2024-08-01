@@ -499,11 +499,9 @@ class AbstractMapDataset(AbstractDataset):
                         % {"type": self.get_type(), "id": self.get_map_id()}
                     )
                     return False
-            else:
-                # Do not create an interval in case start and end time are
-                # equal
-                if start_time == end_time:
-                    end_time = None
+            # Do not create an interval in case start and end time are equal
+            elif start_time == end_time:
+                end_time = None
 
         self.base.set_ttype("absolute")
         self.absolute_time.set_start_time(start_time)
@@ -619,11 +617,9 @@ class AbstractMapDataset(AbstractDataset):
                         % {"type": self.get_type(), "id": self.get_id()}
                     )
                 return False
-            else:
-                # Do not create an interval in case start and end time are
-                # equal
-                if start_time == end_time:
-                    end_time = None
+            # Do not create an interval in case start and end time are equal
+            elif start_time == end_time:
+                end_time = None
 
         self.base.set_ttype("relative")
 
@@ -1132,7 +1128,7 @@ class AbstractMapDataset(AbstractDataset):
             datasets = None
 
         if connection_state_changed:
-            dbif.close
+            dbif.close()
 
         return datasets
 
@@ -1168,7 +1164,7 @@ class AbstractMapDataset(AbstractDataset):
         # Check if the dataset is already present
         if stds_id in datasets:
             if connection_state_changed:
-                dbif.close
+                dbif.close()
             return ""
 
         datasets.append(stds_id)
@@ -1183,7 +1179,7 @@ class AbstractMapDataset(AbstractDataset):
             statement = self.stds_register.get_update_statement_mogrified(dbif=dbif)
 
         if connection_state_changed:
-            dbif.close
+            dbif.close()
 
         return statement
 
@@ -1210,13 +1206,13 @@ class AbstractMapDataset(AbstractDataset):
         # Check if no datasets are present
         if datasets is None:
             if connection_state_changed:
-                dbif.close
+                dbif.close()
             return ""
 
         # Check if the dataset is already present
         if stds_id not in datasets:
             if connection_state_changed:
-                dbif.close
+                dbif.close()
             return ""
 
         datasets.remove(stds_id)
@@ -1231,7 +1227,7 @@ class AbstractMapDataset(AbstractDataset):
             statement = self.stds_register.get_update_statement_mogrified(dbif=dbif)
 
         if connection_state_changed:
-            dbif.close
+            dbif.close()
 
         return statement
 

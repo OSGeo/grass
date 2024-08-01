@@ -35,7 +35,7 @@ import wx
 from wx.lib.mixins.listctrl import ColumnSorterMixin, ListCtrlAutoWidthMixin
 import wx.lib.colourselect as csel
 
-import grass.script as grass
+import grass.script as gs
 
 from core import utils, globalvar
 from core.render import Map
@@ -59,9 +59,7 @@ from gui_core.wrap import (
 #
 # global variables
 #
-global src_map
-global tgt_map
-global maptype
+global src_map, tgt_map, maptype
 
 src_map = ""
 tgt_map = ""
@@ -95,9 +93,7 @@ class GCPWizard:
     def __init__(
         self, parent, giface, group, raster, raster1, camera, order, extension
     ):
-        global maptype
-        global src_map
-        global tgt_map
+        global maptype, src_map, tgt_map
         maptype = "raster"
         rendertype = "raster"
         self.parent = parent  # GMFrame
@@ -113,7 +109,7 @@ class GCPWizard:
         #
         # get environmental variables
         #
-        self.grassdatabase = grass.gisenv()["GISDBASE"]
+        self.grassdatabase = gs.gisenv()["GISDBASE"]
 
         #
         # read original environment settings
@@ -123,7 +119,7 @@ class GCPWizard:
         self.gisrc_dict = {}
         try:
             f = open(self.target_gisrc, "r")
-            for line in f.readlines():
+            for line in f:
                 line = line.replace("\n", "").strip()
                 if len(line) < 1:
                     continue
@@ -806,7 +802,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                     wxPen = "highest"
                 else:
                     wxPen = "default"
-            else:
+            else:  # noqa: PLR5501
                 if self.mapcoordlist[key][5] > self.rmsthresh:
                     wxPen = "highest"
                 else:
@@ -963,7 +959,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             f = open(self.file["points"], "r")
             GCPcnt = 0
 
-            for line in f.readlines():
+            for line in f:
                 if line[0] == "#" or line == "":
                     continue
                 line = line.replace("\n", "").strip()
@@ -1585,13 +1581,13 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
     def OnSize(self, event):
         """Adjust Map Windows after GCP Map Display has been resized"""
         # re-render image on idle
-        self.resize = grass.clock()
+        self.resize = gs.clock()
         super(MapPanel, self).OnSize(event)
 
     def OnIdle(self, event):
         """GCP Map Display resized, adjust Map Windows"""
         if self.GetMapToolbar():
-            if self.resize and self.resize + 0.2 < grass.clock():
+            if self.resize and self.resize + 0.2 < gs.clock():
                 srcwidth, srcheight = self.SrcMapWindow.GetSize()
                 tgtwidth, tgtheight = self.TgtMapWindow.GetSize()
                 srcwidth = (srcwidth + tgtwidth) / 2
@@ -1977,10 +1973,14 @@ class EditGCP(wx.Dialog):
         except ValueError:
             return valuelist
 
-        valuelist.append(self.xcoord.GetValue())
-        valuelist.append(self.ycoord.GetValue())
-        valuelist.append(self.ecoord.GetValue())
-        valuelist.append(self.ncoord.GetValue())
+        valuelist.extend(
+            (
+                self.xcoord.GetValue(),
+                self.ycoord.GetValue(),
+                self.ecoord.GetValue(),
+                self.ncoord.GetValue(),
+            )
+        )
 
         return valuelist
 
@@ -2402,9 +2402,7 @@ class GrSettingsDialog(wx.Dialog):
         self.parent.extension = self.ext_txt.GetValue()
 
     def UpdateSettings(self):
-        global src_map
-        global tgt_map
-        global maptype
+        global src_map, tgt_map, maptype
 
         layers = None
 
@@ -2529,7 +2527,7 @@ class GrSettingsDialog(wx.Dialog):
                 self.parent.activemap.SetSelection(0)
                 self.parent.activemap.Enable(False)
                 self.parent.GetMapToolbar().Enable("zoommenu", enable=False)
-        else:
+        else:  # noqa: PLR5501
             if not self.parent.show_target:
                 self.parent.show_target = True
                 self.parent._mgr.GetPane("target").Show()

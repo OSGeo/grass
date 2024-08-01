@@ -137,12 +137,8 @@ class HistoryBrowserTree(CTreeView):
         self.runIgnoredCmdPattern = Signal("HistoryBrowserTree.runIgnoredCmdPattern")
 
         self._giface.currentMapsetChanged.connect(self.UpdateHistoryModelFromScratch)
-        self._giface.entryToHistoryAdded.connect(
-            lambda entry: self.InsertCommand(entry)
-        )
-        self._giface.entryInHistoryUpdated.connect(
-            lambda entry: self.UpdateCommand(entry)
-        )
+        self._giface.entryToHistoryAdded.connect(self.InsertCommand)
+        self._giface.entryInHistoryUpdated.connect(self.UpdateCommand)
 
         self.SetToolTip(_("Double-click to open the tool"))
         self.selectionChanged.connect(self.OnItemSelected)
@@ -219,11 +215,9 @@ class HistoryBrowserTree(CTreeView):
             return OLD_DATE
 
         timestamp_datetime = datetime.datetime.fromisoformat(timestamp)
-        day_midnight = datetime.datetime(
+        return datetime.datetime(
             timestamp_datetime.year, timestamp_datetime.month, timestamp_datetime.day
         ).date()
-
-        return day_midnight
 
     def _initHistoryModel(self):
         """Fill tree history model based on the current history log."""
@@ -250,24 +244,21 @@ class HistoryBrowserTree(CTreeView):
 
             if day:
                 day = day[0]
+            # Create time period node if not found
+            elif not entry["command_info"]:
+                # Prepare it for entries without command info
+                day = self._model.AppendNode(
+                    parent=self._model.root,
+                    data={"type": TIME_PERIOD, "day": self._timestampToDay()},
+                )
             else:
-                # Create time period node if not found
-                if not entry["command_info"]:
-                    # Prepare it for entries without command info
-                    day = self._model.AppendNode(
-                        parent=self._model.root,
-                        data={"type": TIME_PERIOD, "day": self._timestampToDay()},
-                    )
-                else:
-                    day = self._model.AppendNode(
-                        parent=self._model.root,
-                        data={
-                            "type": TIME_PERIOD,
-                            "day": self._timestampToDay(
-                                entry["command_info"]["timestamp"]
-                            ),
-                        },
-                    )
+                day = self._model.AppendNode(
+                    parent=self._model.root,
+                    data={
+                        "type": TIME_PERIOD,
+                        "day": self._timestampToDay(entry["command_info"]["timestamp"]),
+                    },
+                )
 
             # Determine status and create command node
             status = (
@@ -283,7 +274,7 @@ class HistoryBrowserTree(CTreeView):
                 data={
                     "type": COMMAND,
                     "name": entry["command"].strip(),
-                    "timestamp": timestamp if timestamp else None,
+                    "timestamp": timestamp or None,
                     "status": status,
                 },
             )
@@ -549,8 +540,9 @@ class HistoryBrowserTree(CTreeView):
         self.DefineItems([node])
         if self.selected_command[0]:
             self.Run(node)
+            return
+
+        if self.IsNodeExpanded(node):
+            self.CollapseNode(node, recursive=False)
         else:
-            if self.IsNodeExpanded(node):
-                self.CollapseNode(node, recursive=False)
-            else:
-                self.ExpandNode(node, recursive=False)
+            self.ExpandNode(node, recursive=False)

@@ -18,7 +18,7 @@ class EnvironChange(TestCase):
             os.environ[k] = v
 
     def tearDown(self):
-        for k, v in self.env.items():
+        for k in self.env.keys():
             oval = self.original_env[k]
             if oval == self.NOT_FOUND:
                 os.environ.pop(k)

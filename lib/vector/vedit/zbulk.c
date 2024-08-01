@@ -66,7 +66,8 @@ int Vedit_bulk_labeling(struct Map_info *Map, struct ilist *List, double x1,
     /* write temporary line */
     temp_line = Vect_write_line(Map, GV_LINE, Points_se, Cats);
     if (temp_line < 0) {
-        return -1;
+        nlines_modified = -1;
+        goto free_exit;
     }
 
     Vect_line_box(Points_se, &box_se);
@@ -118,7 +119,8 @@ int Vedit_bulk_labeling(struct Map_info *Map, struct ilist *List, double x1,
         }
 
         if (Vect_rewrite_line(Map, line, type, Points, Cats) < 0) {
-            return -1;
+            nlines_modified = -1;
+            goto free_exit;
         }
         nlines_modified++;
 
@@ -126,9 +128,10 @@ int Vedit_bulk_labeling(struct Map_info *Map, struct ilist *List, double x1,
     }
 
     if (Vect_delete_line(Map, temp_line) < 0) {
-        return -1;
+        nlines_modified = -1;
     }
 
+free_exit:
     db_CatValArray_free(&cv);
     Vect_destroy_line_struct(Points);
     Vect_destroy_line_struct(Points_se);

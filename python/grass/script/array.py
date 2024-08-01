@@ -109,7 +109,7 @@ for details.
 .. sectionauthor:: Glynn Clements
 """
 
-import numpy
+import numpy as np
 
 from .utils import try_remove
 from . import core as gcore
@@ -130,8 +130,8 @@ class _tempfile:
 ###############################################################################
 
 
-class array(numpy.memmap):
-    def __new__(cls, mapname=None, null=None, dtype=numpy.double, env=None):
+class array(np.memmap):
+    def __new__(cls, mapname=None, null=None, dtype=np.double, env=None):
         """Define new numpy array
 
         :param cls:
@@ -145,8 +145,8 @@ class array(numpy.memmap):
 
         tempfile = _tempfile(env)
         if mapname:
-            kind = numpy.dtype(dtype).kind
-            size = numpy.dtype(dtype).itemsize
+            kind = np.dtype(dtype).kind
+            size = np.dtype(dtype).itemsize
 
             if kind == "f":
                 flags = "f"
@@ -170,7 +170,7 @@ class array(numpy.memmap):
                 env=env,
             )
 
-        self = numpy.memmap.__new__(
+        self = np.memmap.__new__(
             cls, filename=tempfile.filename, dtype=dtype, mode="r+", shape=shape
         )
 
@@ -241,8 +241,8 @@ class array(numpy.memmap):
 ###############################################################################
 
 
-class array3d(numpy.memmap):
-    def __new__(cls, mapname=None, null=None, dtype=numpy.double, env=None):
+class array3d(np.memmap):
+    def __new__(cls, mapname=None, null=None, dtype=np.double, env=None):
         """Define new 3d numpy array
 
         :param cls:
@@ -257,8 +257,8 @@ class array3d(numpy.memmap):
 
         tempfile = _tempfile()
         if mapname:
-            kind = numpy.dtype(dtype).kind
-            size = numpy.dtype(dtype).itemsize
+            kind = np.dtype(dtype).kind
+            size = np.dtype(dtype).itemsize
 
             if kind == "f":
                 flags = None  # default is double
@@ -282,7 +282,7 @@ class array3d(numpy.memmap):
                 env=env,
             )
 
-        self = numpy.memmap.__new__(
+        self = np.memmap.__new__(
             cls, filename=tempfile.filename, dtype=dtype, mode="r+", shape=shape
         )
 
@@ -307,7 +307,7 @@ class array3d(numpy.memmap):
         flags = None
 
         if kind == "f":
-            if size != 4 and size != 8:
+            if size not in {4, 8}:
                 raise ValueError(_("Invalid FP size <%d>") % size)
         elif kind in "biu":
             if size not in {1, 2, 4, 8}:
