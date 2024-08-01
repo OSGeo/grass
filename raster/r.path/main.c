@@ -226,7 +226,8 @@ int main(int argc, char **argv)
     *map_name = '\0';
     *out_name = '\0';
     if (opt.rast->answer) {
-        if (G_strlcpy(out_name, opt.rast->answer, sizeof(out_name)) >= sizeof(out_name)) {
+        if (G_strlcpy(out_name, opt.rast->answer, sizeof(out_name)) >=
+            sizeof(out_name)) {
             G_fatal_error(_("Buffer overflow while copying out_name"));
         }
         if (opt.val->answer) {
