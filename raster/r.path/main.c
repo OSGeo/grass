@@ -231,7 +231,8 @@ int main(int argc, char **argv)
             G_fatal_error(_("Buffer overflow while copying out_name"));
         }
         if (opt.val->answer) {
-            if (G_strlcpy(map_name, opt.val->answer, sizeof(map_name)) >= sizeof(map_name)) {
+            if (G_strlcpy(map_name, opt.val->answer, sizeof(map_name)) >=
+                sizeof(map_name)) {
                 G_fatal_error(_("Buffer overflow while copying map_name"));
             }
         }
