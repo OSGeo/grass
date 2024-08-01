@@ -241,8 +241,9 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
             aspect="equal",
         )
 
-        callafter_list.append([self.axes.draw_artist, [img]])
-        callafter_list.append([gs.try_remove, [merged_img.filename]])
+        callafter_list.extend(
+            ([self.axes.draw_artist, [img]], [gs.try_remove, [merged_img.filename]])
+        )
 
         for cat_id in cats_order:
             if cat_id == 0:
@@ -564,7 +565,7 @@ def _rendDtFilesToMemmaps(rend_dt):
             del rend_dt[k]["sh"]
 
 
-def _renderCat(cat_id, rend_dt, scatt, styles):
+def _renderCat(cat_id, rend_dt, scatt, styles) -> bool:
     return True
 
     if cat_id not in rend_dt:
@@ -573,10 +574,7 @@ def _renderCat(cat_id, rend_dt, scatt, styles):
         return False
     if scatt["render"]:
         return True
-    if cat_id != 0 and rend_dt[cat_id]["color"] != styles[cat_id]["color"]:
-        return True
-
-    return False
+    return bool(cat_id != 0 and rend_dt[cat_id]["color"] != styles[cat_id]["color"])
 
 
 def _getColorMap(cat_id, styles):
@@ -710,8 +708,7 @@ class PolygonDrawer:
         if self.empty_pol:
             return None
 
-        coords = deepcopy(self.pol.xy)
-        return coords
+        return deepcopy(self.pol.xy)
 
     def SetEmpty(self):
         self._setEmptyPol(True)

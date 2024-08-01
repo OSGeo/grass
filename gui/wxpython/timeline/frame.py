@@ -57,7 +57,7 @@ ALPHA = 1
 COLORS = ["b", "g", "r", "c", "m", "y", "k"]
 
 
-def check_version(*version):
+def check_version(*version) -> bool:
     """Checks if given version or newer is installed"""
     versionInstalled = []
     for i in mpl.__version__.split("."):
@@ -66,10 +66,7 @@ def check_version(*version):
             versionInstalled.append(v)
         except ValueError:
             versionInstalled.append(0)
-    if versionInstalled < list(version):
-        return False
-    else:
-        return True
+    return versionInstalled >= list(version)
 
 
 class TimelineFrame(wx.Frame):
@@ -572,9 +569,7 @@ class TimelineFrame(wx.Frame):
             GError(parent=self, message=str(error), showTraceback=False)
             return
         self.datasets = datasets
-        self.datasetSelect.SetValue(
-            ",".join(map(lambda x: x[0] + "@" + x[1], datasets))
-        )
+        self.datasetSelect.SetValue(",".join(f"{x[0]}@{x[1]}" for x in datasets))
         self._redraw()
 
     def Show3D(self, show):
@@ -630,10 +625,14 @@ def InfoFormat(timeData, datasetName, mapIndex):
     elif etype == "str3ds":
         text.append(_("Space time 3D raster dataset: %s") % name)
 
-    text.append(_("Mapset: %s") % mapset)
-    text.append(_("Map name: %s") % timeData[datasetName]["names"][mapIndex])
-    text.append(_("Start time: %s") % timeData[datasetName]["start_datetime"][mapIndex])
-    text.append(_("End time: %s") % timeData[datasetName]["end_datetime"][mapIndex])
+    text.extend(
+        (
+            _("Mapset: %s") % mapset,
+            _("Map name: %s") % timeData[datasetName]["names"][mapIndex],
+            _("Start time: %s") % timeData[datasetName]["start_datetime"][mapIndex],
+            _("End time: %s") % timeData[datasetName]["end_datetime"][mapIndex],
+        )
+    )
 
     if not timeData[datasetName]["validTopology"]:
         text.append(_("WARNING: invalid topology"))

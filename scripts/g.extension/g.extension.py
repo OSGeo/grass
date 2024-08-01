@@ -489,8 +489,7 @@ def urlretrieve(url, filename, *args, **kwargs):
     """
     request = urlrequest.Request(url, headers=HEADERS)
     response = urlrequest.urlopen(request, *args, **kwargs)
-    with open(filename, "wb") as f:
-        f.write(response.read())
+    Path(filename).write_bytes(response.read())
 
 
 def urlopen(url, *args, **kwargs):
@@ -572,8 +571,7 @@ def get_default_branch(full_url):
 
 def etree_fromfile(filename):
     """Create XML element tree from a given file name"""
-    with open(filename, "r") as file_:
-        return etree.fromstring(file_.read())
+    return etree.fromstring(Path(filename).read_text())
 
 
 def etree_fromurl(url):
@@ -667,11 +665,10 @@ def list_installed_extensions(toolboxes=False):
             gs.message(_("List of installed extensions (modules):"))
         sys.stdout.write("\n".join(elist))
         sys.stdout.write("\n")
+    elif toolboxes:
+        gs.info(_("No extension (toolbox) installed"))
     else:
-        if toolboxes:
-            gs.info(_("No extension (toolbox) installed"))
-        else:
-            gs.info(_("No extension (module) installed"))
+        gs.info(_("No extension (module) installed"))
 
 
 def get_installed_toolboxes(force=False):
@@ -722,11 +719,13 @@ def get_installed_modules(force=False):
     for tnode in tree.findall("task"):
         if flags["g"]:
             desc, keyw = get_optional_params(tnode)
-            ret.append("name={0}".format(tnode.get("name").strip()))
-            ret.append("description={0}".format(desc))
-            ret.append("keywords={0}".format(keyw))
-            ret.append(
-                "executables={0}".format(",".join(get_module_executables(tnode)))
+            ret.extend(
+                (
+                    "name={0}".format(tnode.get("name").strip()),
+                    "description={0}".format(desc),
+                    "keywords={0}".format(keyw),
+                    "executables={0}".format(",".join(get_module_executables(tnode))),
+                )
             )
         else:
             ret.append(tnode.get("name").strip())
@@ -756,9 +755,8 @@ def list_available_extensions(url):
                 print("%s (%s)" % (toolbox_data["name"], toolbox_code))
             if flags["c"] or flags["g"]:
                 list_available_modules(url, toolbox_data["modules"])
-            else:
-                if toolbox_data["modules"]:
-                    print(os.linesep.join(["* " + x for x in toolbox_data["modules"]]))
+            elif toolbox_data["modules"]:
+                print(os.linesep.join(["* " + x for x in toolbox_data["modules"]]))
     else:
         gs.message(_("List of available extensions (modules):"))
         # TODO: extensions with several modules + lib
@@ -1292,8 +1290,7 @@ def install_toolbox_xml(url, name):
         write_xml_modules(xml_file)
 
     # read XML file
-    with open(xml_file, "r") as xml:
-        tree = etree.fromstring(xml.read())
+    tree = etree.fromstring(Path(xml_file).read_text())
 
     # update tree
     tnode = None
@@ -1796,16 +1793,14 @@ def fix_newlines(directory):
                 continue  # ignore binary files
 
             # read content of text file
-            with open(filename, "rb") as fd:
-                data = fd.read()
+            data = Path(filename).read_bytes()
 
             # we don't expect there would be CRLF file by
             # purpose if we want to allow CRLF files we would
             # have to whitelite .py etc
             newdata = data.replace(b"\r\n", b"\n")
             if newdata != data:
-                with open(filename, "wb") as newfile:
-                    newfile.write(newdata)
+                Path(filename).write_bytes(newdata)
 
 
 def extract_zip(name, directory, tmpdir):
@@ -1898,7 +1893,7 @@ def download_source_code(
             )
         )
         download_source_code_svn(url, name, outdev, directory)
-    elif source in {"remote_zip"}:
+    elif source == "remote_zip":
         gs.message(
             _("Fetching <{name}> from <{url}> (be patient)...").format(
                 name=name, url=url
@@ -1998,7 +1993,7 @@ def install_extension_std_platforms(name, source, url, branch):
             if filename == "Makefile":
                 # get the module name: PGM = <module name>
                 with open(os.path.join(r, "Makefile")) as fp:
-                    for line in fp.readlines():
+                    for line in fp:
                         if re.match(r"PGM.*.=|PGM=", line):
                             try:
                                 modulename = line.split("=")[1].strip()
@@ -2076,7 +2071,7 @@ def install_extension_std_platforms(name, source, url, branch):
     if not os.path.exists(os.path.join(gisbase, "include", "Make", "Module.make")):
         gs.fatal(_("Please install GRASS development package"))
 
-    if 0 != gs.call(make_cmd, stdout=outdev):
+    if gs.call(make_cmd, stdout=outdev) != 0:
         gs.fatal(_("Compilation failed, sorry. Please check above error messages."))
 
     if flags["i"]:
@@ -2195,23 +2190,22 @@ def remove_extension(force=False):
             for ename in edict:
                 if ename in eremoved:
                     gs.message(_("Extension <%s> successfully uninstalled.") % ename)
+    elif flags["t"]:
+        gs.warning(
+            _(
+                "Toolbox <%s> not removed. "
+                "Re-run '%s' with '-f' flag to force removal"
+            )
+            % (options["extension"], "g.extension")
+        )
     else:
-        if flags["t"]:
-            gs.warning(
-                _(
-                    "Toolbox <%s> not removed. "
-                    "Re-run '%s' with '-f' flag to force removal"
-                )
-                % (options["extension"], "g.extension")
+        gs.warning(
+            _(
+                "Extension <%s> not removed. "
+                "Re-run '%s' with '-f' flag to force removal"
             )
-        else:
-            gs.warning(
-                _(
-                    "Extension <%s> not removed. "
-                    "Re-run '%s' with '-f' flag to force removal"
-                )
-                % (options["extension"], "g.extension")
-            )
+            % (options["extension"], "g.extension")
+        )
 
 
 # remove existing extension(s) (reading XML file)
@@ -2593,15 +2587,14 @@ def resolve_known_host_service(url, name, branch):
         if "branch" in match["url_end"]:
             suffix = match["url_end"].format(
                 name=name,
-                branch=branch if branch else get_default_branch(url),
+                branch=branch or get_default_branch(url),
             )
         else:
             suffix = match["url_end"].format(name=name)
         url = "{prefix}{base}{suffix}".format(
             prefix=actual_start, base=url.rstrip("/"), suffix=suffix
         )
-        gs.verbose
-        (_("Will use the following URL for download: {0}").format(url))
+        gs.verbose(_("Will use the following URL for download: {0}").format(url))
         return "remote_zip", url
     else:
         return None, None

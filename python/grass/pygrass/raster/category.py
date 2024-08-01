@@ -6,6 +6,7 @@ Created on Thu Jun 28 17:44:14 2012
 
 import ctypes
 from operator import itemgetter
+from pathlib import Path
 
 import grass.lib.raster as libraster
 from grass.exceptions import ImplementationError
@@ -299,7 +300,7 @@ class Category(list):
         """
         self.reset()
         with open(filename, "r") as f:
-            for row in f.readlines():
+            for row in f:
                 cat = row.strip().split(sep)
                 if len(cat) == 2:
                     label, min_cat = cat
@@ -325,13 +326,12 @@ class Category(list):
         :param str filename: the name of file with categories rules
         :param str sep: the separator used to divide values and category
         """
-        with open(filename, "w") as f:
-            cats = []
-            for cat in self.__iter__():
-                if cat[-1] is None:
-                    cat = cat[:-1]
-                cats.append(sep.join([str(i) for i in cat]))
-            f.write("\n".join(cats))
+        cats = []
+        for cat in self.__iter__():
+            if cat[-1] is None:
+                cat = cat[:-1]
+            cats.append(sep.join([str(i) for i in cat]))
+        Path(filename).write_text("\n".join(cats))
 
     def sort(self):
         libraster.Rast_sort_cats(ctypes.byref(self.c_cats))

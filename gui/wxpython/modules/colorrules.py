@@ -713,7 +713,7 @@ class ColorTable(wx.Frame):
         minim = maxim = count = 0
         for line in ctable.splitlines():
             try:
-                value, color = map(lambda x: x.strip(), line.split(" "))
+                value, color = (x.strip() for x in line.split(" "))
             except ValueError:
                 GMessage(parent=self, message=_("Invalid color table format"))
                 self.rulesPanel.Clear()
@@ -772,7 +772,7 @@ class ColorTable(wx.Frame):
 
         self.ReadColorTable(ctable=ctable)
 
-    def CreateColorTable(self, tmp=False):
+    def CreateColorTable(self, tmp=False) -> bool:
         """Creates color table
 
         :return: True on success
@@ -822,10 +822,7 @@ class ColorTable(wx.Frame):
 
         cmd = cmdlist_to_tuple(cmd)
         ret = RunCommand(cmd[0], **cmd[1])
-        if ret != 0:
-            return False
-
-        return True
+        return bool(ret == 0)
 
     def DoPreview(self, ltype, cmdlist):
         """Update preview (based on computational region)"""
@@ -1241,15 +1238,12 @@ class VectorColorTable(ColorTable):
         else:
             self.cp.SetLabel(_("Import or export color table"))
 
-    def CheckMapset(self):
+    def CheckMapset(self) -> bool:
         """Check if current vector is in current mapset"""
-        if (
+        return bool(
             gs.find_file(name=self.inmap, element="vector")["mapset"]
             == gs.gisenv()["MAPSET"]
-        ):
-            return True
-        else:
-            return False
+        )
 
     def NoConnection(self, vectorName):
         dlg = wx.MessageDialog(
@@ -1695,7 +1689,7 @@ class VectorColorTable(ColorTable):
                 )
             else:
                 self.cr_label.SetLabel(_("Enter vector attribute values %s:") % range)
-        else:
+        else:  # noqa: PLR5501
             if self.colorTable:
                 self.cr_label.SetLabel(_("Enter vector attribute values or percents:"))
             else:
@@ -1809,11 +1803,10 @@ class VectorColorTable(ColorTable):
         """Create color rules (color table or color column)"""
         if self.colorTable:
             ret = ColorTable.CreateColorTable(self)
+        elif self.updateColumn:
+            ret = self.UpdateColorColumn(tmp)
         else:
-            if self.updateColumn:
-                ret = self.UpdateColorColumn(tmp)
-            else:
-                ret = True
+            ret = True
 
         return ret
 
@@ -1901,12 +1894,12 @@ class VectorColorTable(ColorTable):
         ]
         for widget in widgets:
             if bind is True:
-                getattr(widget["widget"], "Bind")(
+                widget["widget"].Bind(
                     widget["event"],
                     widget["handler"],
                 )
             else:
-                getattr(widget["widget"], "Unbind")(widget["event"])
+                widget["widget"].Unbind(widget["event"])
 
 
 class ThematicVectorTable(VectorColorTable):
@@ -1939,17 +1932,13 @@ class ThematicVectorTable(VectorColorTable):
         value = None
         if self.properties["storeColumn"]:
             value = self.properties["storeColumn"]
+        if self.colorTable:
+            value = None
 
-        if not self.colorTable:
-            if self.attributeType == "color":
-                data["vector"][self.vectorType]["thematic"]["rgbcolumn"] = value
-            else:
-                data["vector"][self.vectorType]["thematic"]["sizecolumn"] = value
+        if self.attributeType == "color":
+            data["vector"][self.vectorType]["thematic"]["rgbcolumn"] = value
         else:
-            if self.attributeType == "color":
-                data["vector"][self.vectorType]["thematic"]["rgbcolumn"] = None
-            else:
-                data["vector"][self.vectorType]["thematic"]["sizecolumn"] = None
+            data["vector"][self.vectorType]["thematic"]["sizecolumn"] = value
 
         data["vector"][self.vectorType]["thematic"]["update"] = None
 

@@ -1208,8 +1208,7 @@ class GroupDialog(wx.Dialog):
         """Apply filter for strings in data list"""
         flt_data = []
         if len(self.flt_pattern) == 0:
-            flt_data = data[:]
-            return flt_data
+            return data[:]
 
         for dt in data:
             try:
@@ -1331,7 +1330,7 @@ class GroupDialog(wx.Dialog):
                 label = _("Group <%s> was successfully created.") % group
             else:
                 label = _("Group <%s> was successfully changed.") % group
-        else:
+        else:  # noqa: PLR5501
             if create:
                 label = _("Creating of new group <%s> failed.") % group
             else:
@@ -1872,8 +1871,7 @@ class SetOpacityDialog(wx.Dialog):
     def GetOpacity(self):
         """Button 'OK' pressed"""
         # return opacity value
-        opacity = float(self.value.GetValue()) / 100
-        return opacity
+        return float(self.value.GetValue()) / 100
 
     def OnApply(self, event):
         self.applyOpacity.emit(value=self.GetOpacity())
@@ -2334,7 +2332,7 @@ class HyperlinkDialog(wx.Dialog):
 
         label = StaticText(self, label=message)
         sizer.Add(label, proportion=0, flag=wx.ALIGN_CENTRE | wx.ALL, border=10)
-        hyperlinkLabel = hyperlinkLabel if hyperlinkLabel else hyperlink
+        hyperlinkLabel = hyperlinkLabel or hyperlink
         hyperlinkCtrl = HyperlinkCtrl(
             self,
             id=wx.ID_ANY,

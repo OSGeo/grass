@@ -381,7 +381,7 @@ def export_stds(
 
     if rows:
         if type_ == "strds":
-            if format_ == "GTiff" or format_ == "AAIGrid":
+            if format_ in {"GTiff", "AAIGrid"}:
                 _export_raster_maps_as_gdal(
                     rows, tar, list_file, new_cwd, fs, format_, datatype, **kwargs
                 )

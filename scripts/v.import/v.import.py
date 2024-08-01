@@ -125,8 +125,7 @@ def cleanup():
 
 def gdal_version():
     """Returns the GDAL version as tuple"""
-    version = gs.parse_command("g.version", flags="reg")["gdal"]
-    return version
+    return gs.parse_command("g.version", flags="reg")["gdal"]
 
 
 def GDAL_COMPUTE_VERSION(maj, min, rev):

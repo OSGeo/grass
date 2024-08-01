@@ -1072,11 +1072,15 @@ class BufferedMapWindow(MapWindowBase, Window):
             reg = dispReg if utils.isInRegion(dispReg, compReg) else compReg
 
             regionCoords = []
-            regionCoords.append((reg["w"], reg["n"]))
-            regionCoords.append((reg["e"], reg["n"]))
-            regionCoords.append((reg["e"], reg["s"]))
-            regionCoords.append((reg["w"], reg["s"]))
-            regionCoords.append((reg["w"], reg["n"]))
+            regionCoords.extend(
+                (
+                    (reg["w"], reg["n"]),
+                    (reg["e"], reg["n"]),
+                    (reg["e"], reg["s"]),
+                    (reg["w"], reg["s"]),
+                    (reg["w"], reg["n"]),
+                )
+            )
 
             # draw region extent
             self.polypen = wx.Pen(
@@ -1123,7 +1127,7 @@ class BufferedMapWindow(MapWindowBase, Window):
 
     def DragItem(self, id, coords):
         """Drag an overlay decoration item"""
-        if id == 99 or id == "" or id is None:
+        if id in (99, "") or id is None:
             return
         Debug.msg(5, "BufferedWindow.DragItem(): id=%d" % id)
         x, y = self.lastpos
@@ -1526,7 +1530,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             self.mouse["end"] = event.GetPosition()
             if event.LeftIsDown() and not (
                 digitToolbar
-                and digitToolbar.GetAction() in {"moveLine"}
+                and digitToolbar.GetAction() == "moveLine"
                 and len(self.digit.GetDisplay().GetSelected()) > 0
             ):
                 self.MouseDraw(pdc=self.pdcTmp)

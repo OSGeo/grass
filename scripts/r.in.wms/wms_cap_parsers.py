@@ -234,17 +234,17 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
                 continue
 
             is_there = False
-            for elem in elem:
+            for _elem in elem:
                 cmp_text = None
                 if cmp_type == "attribute":
-                    if add_arg in elem.attrib:
-                        cmp_text = elem.attrib[add_arg]
+                    if add_arg in _elem.attrib:
+                        cmp_text = _elem.attrib[add_arg]
 
                 elif cmp_type == "element_content":
-                    cmp_text = elem.text
+                    cmp_text = _elem.text
 
                 elif cmp_type == "child_element_content":
-                    cmp = elem.find(self.xml_ns.Ns(add_arg))
+                    cmp = _elem.find(self.xml_ns.Ns(add_arg))
                     if cmp is not None:
                         cmp_text = cmp.text
 
@@ -350,7 +350,7 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
 
         gs.debug("Check of WMTS capabilities tree was finished.", 4)
 
-    def _checkMatSet(self, mat_set):
+    def _checkMatSet(self, mat_set) -> bool:
         """!Check <TileMatrixSet>."""
         mat_set_id = mat_set.find(self.xml_ns.NsOws("Identifier"))
         if mat_set_id is None or not mat_set_id.text:
@@ -370,15 +370,12 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
                 mat_set.remove(t_mat)
 
         tile_mats = mat_set.findall(self.xml_ns.NsWmts("TileMatrix"))
-        if not tile_mats:
-            return False
-
-        return True
+        return bool(tile_mats)
 
     def _checkMat(self, t_mat):
         """!Check <TileMatrix>."""
 
-        def _checkElement(t_mat, e, func):
+        def _checkElement(t_mat, e, func) -> bool:
             element = t_mat.find(self.xml_ns.NsWmts(e))
             if element is None or not element.text:
                 return False
@@ -388,9 +385,7 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
             except ValueError:
                 return False
 
-            if e < 0:
-                return False
-            return True
+            return not e < 0
 
         for e, func in [
             ["ScaleDenominator", float],
@@ -450,7 +445,7 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
 
         return True
 
-    def _checkMatSetLink(self, link, mat_sets):
+    def _checkMatSetLink(self, link, mat_sets) -> bool:
         """!Check <TileMatrixSetLink> element."""
         mat_set_link_id = link.find(self.xml_ns.NsWmts("TileMatrixSet")).text
         found = False
@@ -484,10 +479,7 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
                 gs.debug("Removed invalid <TileMatrixSetLimits> element.", 4)
                 link.remove(tile_mat_set_limits)
 
-        if not found:
-            return False
-
-        return True
+        return found
 
     def _checkMatSetLimit(self, limit):
         """!Check <TileMatrixLimits> element."""
@@ -604,7 +596,7 @@ class OnEarthCapabilitiesTree(BaseCapabilitiesTree):
 
         return res
 
-    def _checkLayer(self, layer):
+    def _checkLayer(self, layer) -> bool:
         """!Check <TiledGroup>/<TiledGroups> elements."""
         if layer.tag == "TiledGroups":
             return True
@@ -628,10 +620,7 @@ class OnEarthCapabilitiesTree(BaseCapabilitiesTree):
             patt.text = "\n".join(urls)
 
         t_patts = layer.findall("TilePattern")
-        if not t_patts:
-            return False
-
-        return True
+        return bool(t_patts)
 
     def _getUrls(self, tile_pattern):
         """!Get all urls from tile pattern."""

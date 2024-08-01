@@ -165,12 +165,10 @@ class HistoryInfoPanel(SP.ScrolledPanel):
 
     def _general_info_filter(self, key, value):
         filter_keys = ["timestamp", "runtime", "status"]
-        return key in filter_keys or (
-            (key == "mask2d" or key == "mask3d") and value is True
-        )
+        return key in filter_keys or ((key in {"mask2d", "mask3d"}) and value is True)
 
     def _region_settings_filter(self, key):
-        return (key != "projection") and (key != "zone") and (key != "cells")
+        return key not in {"projection", "zone", "cells"}
 
     def _updateGeneralInfoBox(self, command_info):
         """Update a static box for displaying general info about the command.

@@ -439,11 +439,11 @@ class BaseRequestMgr:
 
         self.tile_ref = {"sizeX": tile_size["x"], "sizeY": tile_size["y"]}
 
-    def _isGeoProj(self, proj):
+    def _isGeoProj(self, proj) -> bool:
         """!Is it geographic projection?"""
-        if proj.find("+proj=latlong") != -1 or proj.find("+proj=longlat") != -1:
-            return True
-        return False
+        return bool(
+            proj.find("+proj=latlong") != -1 or proj.find("+proj=longlat") != -1
+        )
 
 
 class WMSRequestMgr(BaseRequestMgr):
@@ -708,17 +708,17 @@ class WMTSRequestMgr(BaseRequestMgr):
         """!Find best tile matrix set for requested resolution."""
         scale_dens = []
 
-        scale_dens.append(
-            (bbox["maxy"] - bbox["miny"])
-            / region["rows"]
-            * self._getMetersPerUnit()
-            / self.pixel_size
-        )
-        scale_dens.append(
-            (bbox["maxx"] - bbox["minx"])
-            / region["cols"]
-            * self._getMetersPerUnit()
-            / self.pixel_size
+        scale_dens.extend(
+            (
+                (bbox["maxy"] - bbox["miny"])
+                / region["rows"]
+                * self._getMetersPerUnit()
+                / self.pixel_size,
+                (bbox["maxx"] - bbox["minx"])
+                / region["cols"]
+                * self._getMetersPerUnit()
+                / self.pixel_size,
+            )
         )
 
         scale_den = min(scale_dens)

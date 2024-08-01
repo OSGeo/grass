@@ -458,7 +458,7 @@ def main():
                             curr_map,
                             indicator_mid,
                         )
-                else:
+                else:  # noqa: PLR5501
                     if i == 0:
                         prev_map = curr_map
                         subexpr1 = "null()"

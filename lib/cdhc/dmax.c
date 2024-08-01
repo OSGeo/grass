@@ -7,7 +7,7 @@ double *Cdhc_dmax(double *x, int n)
 {
     static double y[2];
     double *xcopy, sqrt2, mean = 0.0, sdx = 0.0, fx;
-    double dp, dp_max, dm, dm_max;
+    double dp = 0.0, dp_max = 0.0, dm = 0.0, dm_max = 0.0;
     int i;
 
     if ((xcopy = (double *)malloc(n * sizeof(double))) == NULL) {

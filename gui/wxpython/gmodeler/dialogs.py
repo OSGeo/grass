@@ -944,15 +944,11 @@ class ItemListCtrl(ModelListCtrl):
             items = self.frame.GetModel().GetItems(objType=ModelAction)
             if isinstance(self.shape, ModelCondition):
                 if self.GetLabel() == "ElseBlockList":
-                    shapeItems = map(
-                        lambda x: x.GetId(), self.shape.GetItems(items)["else"]
-                    )
+                    shapeItems = (x.GetId() for x in self.shape.GetItems(items)["else"])
                 else:
-                    shapeItems = map(
-                        lambda x: x.GetId(), self.shape.GetItems(items)["if"]
-                    )
+                    shapeItems = (x.GetId() for x in self.shape.GetItems(items)["if"])
             else:
-                shapeItems = map(lambda x: x.GetId(), self.shape.GetItems(items))
+                shapeItems = (x.GetId() for x in self.shape.GetItems(items))
         else:
             shapeItems = []
 
