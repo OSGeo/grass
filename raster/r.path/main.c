@@ -219,7 +219,8 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    if (G_strlcpy(dir_name, opt.dir->answer, sizeof(dir_name)) >= sizeof(dir_name)) {
+    if (G_strlcpy(dir_name, opt.dir->answer, sizeof(dir_name)) >=
+        sizeof(dir_name)) {
         G_fatal_error(_("Buffer overflow while copying dir_name"));
     }
     *map_name = '\0';
