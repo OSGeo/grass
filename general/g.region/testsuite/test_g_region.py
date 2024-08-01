@@ -51,7 +51,7 @@ class TestRegion(TestCase):
     def test_format_json(self):
         """Test json format"""
         expected = {
-            "projection": "99 (Lambert Conformal Conic)",
+            "projection": {"code": 99, "name": "Lambert Conformal Conic"},
             "zone": 0,
             "datum": "nad83",
             "ellipsoid": "a=6378137 es=0.006694380022900787",

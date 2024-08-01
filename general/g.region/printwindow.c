@@ -114,7 +114,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
         prj = G_database_projection_name();
         if (!prj)
             prj = "** unknown **";
-        int len;
+
         switch (format) {
         case SHELL:
             fprintf(stdout, "projection=%d%s", window->proj, sep);
@@ -126,10 +126,9 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
             fprintf(stdout, "%-*s %d\n", width, "zone:", window->zone);
             break;
         case JSON:
-            len = strlen(prj) + 24;
-            char projection[len];
-            snprintf(projection, len, "%d (%s)", window->proj, prj);
-            json_object_set_string(root_object, "projection", projection);
+            json_object_dotset_number(root_object, "projection.code",
+                                      window->proj);
+            json_object_dotset_string(root_object, "projection.name", prj);
             json_object_set_number(root_object, "zone", window->zone);
             break;
         }
