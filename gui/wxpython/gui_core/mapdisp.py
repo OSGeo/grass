@@ -720,7 +720,7 @@ class DoubleMapPanel(MapPanelBase):
                 self.firstMapWindow.zoomChanged.connect(self.OnZoomChangedFirstMap)
             else:
                 self.secondMapWindow.zoomChanged.connect(self.OnZoomChangedSecondMap)
-        else:
+        else:  # noqa: PLR5501
             if self.MapWindow == self.firstMapWindow:
                 self.firstMapWindow.zoomChanged.disconnect(self.OnZoomChangedFirstMap)
             else:

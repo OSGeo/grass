@@ -148,9 +148,8 @@ class grassTask:
             if isinstance(val, (list, tuple)):
                 if value in val:
                     return p
-            else:
-                if p[element] == value:
-                    return p
+            elif p[element] == value:
+                return p
 
         if raiseError:
             raise ValueError(

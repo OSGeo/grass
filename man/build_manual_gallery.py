@@ -14,6 +14,7 @@
 #############################################################################
 
 import os
+from pathlib import Path
 import sys
 import fnmatch
 import re
@@ -93,14 +94,11 @@ header_graphical_index_tmpl = """\
 """
 
 
-def img_in_html(filename, imagename):
+def img_in_html(filename, imagename) -> bool:
     # for some reason, calling search just once is much faster
     # than calling it on every line (time is spent in _compile)
     pattern = re.compile("<img .*src=.{0}.*>".format(imagename))
-    with open(filename) as file:
-        if re.search(pattern, file.read()):
-            return True
-    return False
+    return bool(re.search(pattern, Path(filename).read_text()))
 
 
 def file_matches(filename, patterns):

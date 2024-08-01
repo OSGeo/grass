@@ -1200,11 +1200,10 @@ class History:
                 else:
                     newHist.write("%s%s%s" % ("\n", line, "\n"))
                     self.histStepsNum = newHistStepsNum
+            elif newHistStepsNum >= self.maxHistSteps:
+                self._parseLine(line, removedHistStep)
             else:
-                if newHistStepsNum >= self.maxHistSteps:
-                    self._parseLine(line, removedHistStep)
-                else:
-                    newHist.write("%s" % line)
+                newHist.write("%s" % line)
 
         return removedHistData
 
@@ -1272,9 +1271,9 @@ class History:
                         value = float(value)
                     except ValueError:
                         pass
-        else:  # -> write data
-            if isinstance(value, type(())):  # -> color
-                value = str(value[0]) + ":" + str(value[1]) + ":" + str(value[2])
+        # -> write data
+        elif isinstance(value, type(())):  # -> color
+            value = str(value[0]) + ":" + str(value[1]) + ":" + str(value[2])
 
         return value
 
@@ -1465,13 +1464,11 @@ class VNETGlobalTurnsData:
         remove_to_angle = self.turn_data[row][2]
         self.turn_data[prev_row][2] = remove_to_angle
 
-    def IsInInterval(self, from_angle, to_angle, angle):
+    def IsInInterval(self, from_angle, to_angle, angle) -> bool:
         """Test if a direction includes or not includes a value"""
         if to_angle < from_angle:
             to_angle = math.pi * 2 + to_angle
         if angle < from_angle:
             angle = math.pi * 2 + angle
 
-        if angle > from_angle and angle < to_angle:
-            return True
-        return False
+        return bool(angle > from_angle and angle < to_angle)

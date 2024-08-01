@@ -126,15 +126,14 @@ def get_xyz(pnt):
             z = 0.0
         else:
             x, y, z = pnt.x, pnt.y, pnt.z
+    elif len(pnt) == 2:
+        x, y = pnt
+        z = 0.0
+    elif len(pnt) == 3:
+        x, y, z = pnt
     else:
-        if len(pnt) == 2:
-            x, y = pnt
-            z = 0.0
-        elif len(pnt) == 3:
-            x, y, z = pnt
-        else:
-            str_error = "The the format of the point is not supported: {0!r}"
-            raise ValueError(str_error.format(pnt))
+        str_error = "The the format of the point is not supported: {0!r}"
+        raise ValueError(str_error.format(pnt))
     return x, y, z
 
 

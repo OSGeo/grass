@@ -140,7 +140,7 @@ class SemanticLabelReader:
                     else:
                         for iband in item["bands"]:
                             self._print_label_extended(iband, item["bands"])
-                else:
+                else:  # noqa: PLR5501
                     # basic information only
                     if band:
                         self._print_label(
