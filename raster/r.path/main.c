@@ -219,13 +219,20 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    G_strlcpy(dir_name, opt.dir->answer, sizeof(dir_name));
+    if (G_strlcpy(dir_name, opt.dir->answer, sizeof(dir_name)) >= sizeof(dir_name)) {
+        G_fatal_error(_("Buffer overflow while copying dir_name"));
+    }
     *map_name = '\0';
     *out_name = '\0';
     if (opt.rast->answer) {
-        G_strlcpy(out_name, opt.rast->answer, sizeof(out_name));
-        if (opt.val->answer)
-            G_strlcpy(map_name, opt.val->answer, sizeof(map_name));
+        if (G_strlcpy(out_name, opt.rast->answer, sizeof(out_name)) >= sizeof(out_name)) {
+            G_fatal_error(_("Buffer overflow while copying out_name"));
+        }
+        if (opt.val->answer) {
+            if (G_strlcpy(map_name, opt.val->answer, sizeof(map_name)) >= sizeof(map_name)) {
+                G_fatal_error(_("Buffer overflow while copying map_name"));
+            }
+        }
     }
 
     pvout = NULL;
