@@ -100,7 +100,7 @@ void compute_unit_format(int unit1, int unit2, enum OutputFormat format)
                 need_format = 0;
                 unit[i].len = 5;
                 ns = 0;
-                sprintf(num, "%ld", count_sum(&ns, -1));
+                snprintf(num, sizeof(num), "%ld", count_sum(&ns, -1));
                 len = strlen(num);
                 if (len > unit[i].len)
                     unit[i].len = len;
