@@ -952,7 +952,8 @@ class MultiModule:
     ...     set_temp_region=True,
     ... )
     >>> str(mm)
-    'g.region -p ; g.region -p ; g.region -p ; g.region -p ; g.region -p'
+    'g.region format=plain -p ; g.region format=plain -p ; g.region format=plain -p ; \
+g.region format=plain -p ; g.region format=plain -p'
     >>> t = mm.run()
     >>> isinstance(t, Process)
     True
