@@ -175,13 +175,13 @@ def pretty_print(filter_f):
     """
     pstring = ""
     for i in range(len(filter_f) + 1):
-        if i % 8 is 0:
-            if i is not 0:
+        if i % 8 == 0:
+            if i != 0:
                 value_wo_leading_zero = ("%.4f" % (filter_f[i - 1])).lstrip("0")
                 pstring += value_wo_leading_zero
             if i > 1 and i < len(filter_f):
                 pstring += ", "
-            if i is not 1:
+            if i != 1:
                 # trim the trailing whitespace at the end of line
                 pstring = pstring.rstrip()
             pstring += "\n        "
@@ -191,8 +191,7 @@ def pretty_print(filter_f):
             if i < len(filter_f):
                 pstring += ", "
     # trim starting \n and trailing ,
-    pstring = pstring.lstrip("\n").rstrip(", ")
-    return pstring
+    return pstring.lstrip("\n").rstrip(", ")
 
 
 def write_cpp(bands, values, sensor, folder):

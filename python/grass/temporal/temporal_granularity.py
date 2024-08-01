@@ -150,7 +150,7 @@ def get_time_tuple_function(maps):
         return _get_row_time_tuple
 
 
-def _is_after(start, start1, end1):
+def _is_after(start, start1, end1) -> bool:
     """Helper function that checks if start timestamp is
     temporally after the start1 and end1, where start1 and end1
     represent a temporal extent.
@@ -177,15 +177,9 @@ def _is_after(start, start1, end1):
 
     """
     if end1 is None:
-        if start > start1:
-            return True
-        else:
-            return False
+        return start > start1
 
-    if start > end1:
-        return True
-    else:
-        return False
+    return start > end1
 
 
 def compute_relative_time_granularity(maps):
@@ -1237,11 +1231,11 @@ def gran_to_gran(from_gran, to_gran="days", shell=False):
         """Function to return the output"""
         if shell:
             return output
+
+        if output == 1:
+            return f"{output} {tounit}"
         else:
-            if output == 1:
-                return f"{output} {tounit}"
-            else:
-                return f"{output} {tounit}s"
+            return f"{output} {tounit}s"
 
     # TODO check the leap second
     if check_granularity_string(from_gran, "absolute"):

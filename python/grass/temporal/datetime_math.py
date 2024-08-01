@@ -242,7 +242,7 @@ def modify_datetime_by_string(mydate, increment, mult=1, sign=1):
     :return: The new datetime object or none in case of an error
     """
     sign = int(sign)
-    if sign != 1 and sign != -1:
+    if sign not in {1, -1}:
         return None
 
     if increment:
@@ -817,7 +817,7 @@ def check_datetime_string(time_string, use_dateutil=True):
                 time_format = "%Y-%m-%dT%H:%M:%S.%f"
             else:
                 time_format = "%Y-%m-%d %H:%M:%S.%f"
-        else:
+        else:  # noqa: PLR5501
             if "T" in time_string:
                 time_format = "%Y-%m-%dT%H:%M:%S"
             else:

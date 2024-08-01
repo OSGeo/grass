@@ -508,7 +508,7 @@ class WSPanel(wx.Panel):
         """Manage cmd output."""
         if Debug.GetLevel() != 0:
             Debug.msg(1, event.text)
-        elif event.type != "message" and event.type != "warning":
+        elif event.type not in {"message", "warning"}:
             self.cmd_err_str += event.text + os.linesep
 
     def _prepareForNewConn(self, url, username, password):
@@ -662,7 +662,7 @@ class WSPanel(wx.Panel):
 
         if "bgcolor" in dcmd and self.params["bgcolor"]:
             bgcolor = dcmd["bgcolor"].strip().lower()
-            if len(bgcolor) == 8 and "0x" == bgcolor[:2]:
+            if len(bgcolor) == 8 and bgcolor[:2] == "0x":
                 colour = "#" + bgcolor[2:]
                 self.params["bgcolor"].SetColour(colour)
 
@@ -1088,18 +1088,21 @@ class LayersList(TreeCtrl):
         """
 
         def checknext(root_item, l_st_list, items_to_sel):
-            def compare(item, l_name, st_name):
+            def compare(item, l_name, st_name) -> bool:
                 it_l_name = self.GetItemData(item)["layer"].GetLayerData("name")
                 it_st = self.GetItemData(item)["style"]
                 it_type = self.GetItemData(item)["type"]
 
-                if it_l_name == l_name and (
-                    (not it_st and not st_name)
-                    or (it_st and it_st["name"] == st_name and it_type == "style")
-                ):
-                    return True
-
-                return False
+                return bool(
+                    it_l_name == l_name
+                    and (
+                        not it_st
+                        and not st_name
+                        or it_st
+                        and it_st["name"] == st_name
+                        and it_type == "style"
+                    )
+                )
 
             (child, cookie) = self.GetFirstChild(root_item)
             while child.IsOk():

@@ -144,7 +144,6 @@ ignore = [
     "F403",    # undefined-local-with-import-star
     "F405",    # undefined-local-with-import-star-usage
     "F601",    # multi-value-repeated-key-literal
-    "F632",    # is-literal
     "F811",    # redefined-while-unused
     "F821",    # undefined-name
     "F822",    # undefined-export
@@ -152,21 +151,7 @@ ignore = [
     "FBT001",  # boolean-type-hint-positional-argument
     "FBT002",  # boolean-default-value-positional-argument
     "FBT003",  # boolean-positional-value-in-call
-    "FURB101", # read-whole-file
-    "FURB103", # write-whole-file.
-    "FURB105", # print-empty-string
-    "FURB116", # f-string-number-format
-    "FURB116", # f-string-number-format
     "FURB118", # reimplemented-operator
-    "FURB129", # readlines-in-for
-    "FURB131", # delete-full-slice
-    "FURB140", # reimplemented-starmap
-    "FURB142", # for-loop-set-mutations
-    "FURB148", # unnecessary-enumerate
-    "FURB152", # math-constant
-    "FURB154", # repeated-global
-    "FURB171", # single-item-membership-test
-    "FURB192", # sorted-min-max
     "I001",    # unsorted-imports
     "ISC003",  # explicit-string-concatenation
     "PERF203", # try-except-in-loop
@@ -196,10 +181,8 @@ ignore = [
     "PLR0917", # too-many-positional
     "PLR1702", # too-many-nested-blocks
     "PLR1704", # redefined-argument-from-local
-    "PLR1714", # repeated-equality-comparison
     "PLR1733", # unnecessary-dict-index-lookup
     "PLR2004", # magic-value-comparison
-    "PLR5501", # collapsible-else-if
     "PLR6104", # non-augmented-assignment
     "PLR6201", # literal-membership
     "PLR6301", # no-self-use
@@ -244,7 +227,13 @@ ignore = [
     "PTH202",  # os-path-getsize
     "PTH204",  # os-path-getmtime
     "PTH207",  # glob
-    "RET50",   # flake8-return (RET)
+    "RET501", # unnecessary-return-none
+    "RET502", # implicit-return-value
+    "RET503", # implicit-return
+    "RET505", # superfluous-else-return
+    "RET506", # superfluous-else-raise
+    "RET507", # superfluous-else-continue
+    "RET508", # superfluous-else-break
     "RSE102",  # unnecessary-paren-on-raise-exception
     "RUF002",  # ambiguous-unicode-character-docstring
     "RUF003",  # ambiguous-unicode-character-comment
@@ -279,7 +268,6 @@ ignore = [
     "S608",    # hardcoded-sql-expression
     "SIM101",  # duplicate-isinstance-call
     "SIM102",  # collapsible-if
-    "SIM103",  # needless-bool
     "SIM105",  # suppressible-exception
     "SIM108",  # if-else-block-instead-of-if-exp
     "SIM109",  # compare-with-tuple
@@ -291,7 +279,6 @@ ignore = [
     "SIM118",  # in-dict-keys
     "SIM201",  # negate-equal-op
     "SIM223",  # expr-and-false
-    "SIM300",  # yoda-conditions
     "SIM401",  # if-else-block-instead-of-dict-get
     "SLF001",  # private-member-access
     "TRY002",  # raise-vanilla-class
@@ -363,7 +350,7 @@ ignore = [
 "gui/wxpython/web_services/dialogs.py" = ["INT003"]
 "gui/wxpython/web_services/widgets.py" = ["INT003"]
 "gui/wxpython/wxgui.py" = ["INT002"]
-"gui/wxpython/wxplot/profile.py" = ["NPY001"]
+"lib/imagery/testsuite/test_imagery_sigsetfile.py" = ["FURB152"]
 "lib/init/grass.py" = ["INT003"]
 "python/grass/__init__.py" = ["PYI056"]
 "python/grass/exp*/tests/grass_script_mapset_session_test.py" = ["SIM117"]
@@ -375,14 +362,11 @@ ignore = [
 "python/grass/jupyter/tests/reprojection_renderer_test.py" = ["PT013"]
 "python/grass/jupyter/testsuite/interactivemap_test.py" = ["PGH004"]
 "python/grass/jupyter/testsuite/map_test.py" = ["PGH004"]
-"python/grass/pygrass/raster/__init__.py" = ["NPY002"]
 "python/grass/pygrass/raster/category.py" = ["INT002"]
-"python/grass/pygrass/raster/testsuite/test_numpy.py" = ["NPY002"]
 "python/grass/pygrass/vector/__init__.py" = ["INT003"]
 "python/grass/pygrass/vector/geometry.py" = ["PYI024"]
 "python/grass/pygrass/vector/sql.py" = ["FLY002"]
-"python/grass/pygrass/vector/testsuite/test_table.py" = ["NPY002", "PLW0108"]
-"python/grass/pygrass/vector/testsuite/test_vector3d.py" = ["NPY002"]
+"python/grass/pygrass/vector/testsuite/test_table.py" = ["PLW0108"]
 "python/grass/script/raster.py" = ["INT003"]
 "python/grass/temporal/abstract_space_time_dataset.py" = ["INT003"]
 "python/grass/temporal/aggregation.py" = ["INT003"]
@@ -398,7 +382,7 @@ ignore = [
 "python/grass/temporal/univar_statistics.py" = ["INT002"]
 "raster3d/r3.flow/testsuite/r3flow_test.py" = ["FLY002"]
 "raster3d/r3.gradient/testsuite/r3gradient_test.py" = ["FLY002"]
-"scripts/d.polar/d.polar.py" = ["INT002"]
+"scripts/d.polar/d.polar.py" = ["FURB154", "INT002"]
 "scripts/g.extension.all/g.extension.all.py" = ["INT002"]
 "scripts/g.extension/g.extension.py" = ["INT002"]
 "scripts/i.oif/i.oif.py" = ["INT003"]

@@ -475,12 +475,9 @@ class Model:
         #     item.SetId(i)
         #     i += 1
 
-    def IsValid(self):
+    def IsValid(self) -> bool:
         """Return True if model is valid"""
-        if self.Validate():
-            return False
-
-        return True
+        return not self.Validate()
 
     def Validate(self):
         """Validate model, return None if model is valid otherwise
@@ -820,12 +817,9 @@ class Model:
         for item in self.items:
             item.Update()
 
-    def IsParameterized(self):
+    def IsParameterized(self) -> bool:
         """Return True if model is parameterized"""
-        if self.Parameterize():
-            return True
-
-        return False
+        return bool(self.Parameterize())
 
     def Parameterize(self):
         """Return parameterized options"""
@@ -947,12 +941,10 @@ class ModelObject:
 
         result = []
         for rel in self.rels:
-            if fdir == "from":
-                if rel.GetFrom() == self:
-                    result.append(rel)
-            else:
-                if rel.GetTo() == self:
-                    result.append(rel)
+            if fdir == "from" and rel.GetFrom() == self:
+                result.append(rel)
+            elif rel.GetTo() == self:
+                result.append(rel)
 
         return result
 
@@ -1040,10 +1032,7 @@ class ModelAction(ModelObject, ogl.DividedShape):
         if cmd:
             self.task = GUI(show=None).ParseCommand(cmd=cmd)
         else:
-            if task:
-                self.task = task
-            else:
-                self.task = None
+            self.task = task or None
 
         self.propWin = None
 
@@ -2027,9 +2016,7 @@ class ProcessModelFile:
         :param value:
         """
         value = value.replace("&lt;", "<")
-        value = value.replace("&gt;", ">")
-
-        return value
+        return value.replace("&gt;", ">")
 
     def _getNodeText(self, node, tag, default=""):
         """Get node text"""
@@ -2342,8 +2329,7 @@ class WriteModelFile:
         :param value: string to be escaped as XML
         :return: a XML-valid string
         """
-        value = saxutils.escape(value)
-        return value
+        return saxutils.escape(value)
 
     def _header(self):
         """Write header"""
@@ -3793,9 +3779,6 @@ class ModelParamDialog(wx.Dialog):
 
         return errList
 
-    def DeleteIntermediateData(self):
+    def DeleteIntermediateData(self) -> bool:
         """Check if to detele intermediate data"""
-        if self.interData.IsShown() and self.interData.IsChecked():
-            return True
-
-        return False
+        return bool(self.interData.IsShown() and self.interData.IsChecked())

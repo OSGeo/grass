@@ -542,7 +542,7 @@ class GRASSStartup(wx.Frame):
         if gisrc and os.path.isfile(gisrc):
             try:
                 rc = open(gisrc, "r")
-                for line in rc.readlines():
+                for line in rc:
                     try:
                         key, val = line.split(":", 1)
                     except ValueError as e:

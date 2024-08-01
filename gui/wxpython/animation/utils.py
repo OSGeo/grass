@@ -214,8 +214,7 @@ def checkSeriesCompatibility(mapSeriesList=None, timeseriesList=None):
 
     if mapSeriesList:
         count = set()
-        for mapSeries in mapSeriesList:
-            count.add(len(mapSeries))
+        count.update(len(mapSeries) for mapSeries in mapSeriesList)
         if len(count) > 1:
             raise GException(
                 _(

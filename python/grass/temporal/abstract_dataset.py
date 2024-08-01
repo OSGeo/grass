@@ -301,7 +301,7 @@ class AbstractDataset(
         """
         return self.relative_time.get_unit()
 
-    def check_relative_time_unit(self, unit):
+    def check_relative_time_unit(self, unit) -> bool:
         """Check if unit is of type  year(s), month(s), day(s), hour(s),
         minute(s) or second(s)
 
@@ -323,9 +323,7 @@ class AbstractDataset(
             "second",
             "seconds",
         ]
-        if unit not in units:
-            return False
-        return True
+        return not unit not in units
 
     def get_temporal_type(self):
         """Return the temporal type of this dataset

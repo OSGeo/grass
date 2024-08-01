@@ -28,8 +28,7 @@ from .generate_last_commit_file import COMMIT_DATE_FORMAT
 
 @pytest.fixture
 def json_file():
-    file_name = "core_modules_with_last_commit.json"
-    return file_name
+    return "core_modules_with_last_commit.json"
 
 
 @pytest.fixture
