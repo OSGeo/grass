@@ -15,7 +15,14 @@
 
 import base64
 import json
+from pathlib import Path
 from .reprojection_renderer import ReprojectionRenderer
+from .utils import (
+    get_region_bounds_latlon,
+    reproject_region,
+    update_region,
+    get_location_proj_string,
+)
 
 
 def get_backend(interactive_map):
@@ -119,9 +126,8 @@ class Raster(Layer):
             # ImageOverlays don't work well with local files,
             # they need relative address and behavior differs
             # for notebooks and jupyterlab
-            with open(self._filename, "rb") as file:
-                data = base64.b64encode(file.read()).decode("ascii")
-                url = "data:image/png;base64," + data
+            data = base64.b64encode(Path(self._filename).read_bytes()).decode("ascii")
+            url = "data:image/png;base64," + data
             image = ipyleaflet.ImageOverlay(
                 url=url, bounds=self._bounds, name=self._title, **self._layer_kwargs
             )
@@ -189,7 +195,6 @@ class InteractiveMap:
     >>> m = InteractiveMap()
     >>> m.add_vector("streams")
     >>> m.add_raster("elevation")
-    >>> m.add_layer_control()
     >>> m.show()
     """
 
@@ -300,8 +305,8 @@ class InteractiveMap:
                 API_key=API_key,  # pylint: disable=invalid-name
             )
         # Set LayerControl default
-        self.layer_control = False
         self.layer_control_object = None
+        self.region_rectangle = None
 
         self._renderer = ReprojectionRenderer(
             use_region=use_region, saved_region=saved_region
@@ -337,15 +342,122 @@ class InteractiveMap:
         Raster(name, title=title, renderer=self._renderer, **kwargs).add_to(self.map)
 
     def add_layer_control(self, **kwargs):
-        """Add layer control to display"
+        """Add layer control to display.
 
-        Accepts keyword arguments to be passed to layer control object"""
+        A Layer Control is added by default. Call this function to customize
+        layer control object. Accepts keyword arguments to be passed to leaflet
+        layer control object"""
 
-        self.layer_control = True
         if self._folium:
             self.layer_control_object = self._folium.LayerControl(**kwargs)
         else:
             self.layer_control_object = self._ipyleaflet.LayersControl(**kwargs)
+
+    def draw_computational_region(self):
+        """
+        Allow users to draw the computational region and modify it.
+        """
+        import ipywidgets as widgets  # pylint: disable=import-outside-toplevel
+
+        region_mode_button = widgets.ToggleButton(
+            icon="square-o",
+            description="",
+            value=False,
+            tooltip="Click to show and edit computational region",
+            layout=widgets.Layout(width="40px", margin="0px 0px 0px 0px"),
+        )
+
+        save_button = widgets.Button(
+            description="Update region",
+            tooltip="Click to update region",
+            disabled=True,
+        )
+        bottom_output_widget = widgets.Output(
+            layout={
+                "width": "100%",
+                "max_height": "300px",
+                "overflow": "auto",
+                "display": "none",
+            }
+        )
+
+        changed_region = {}
+        save_button_control = None
+
+        def update_output(region):
+            with bottom_output_widget:
+                bottom_output_widget.clear_output()
+                print(
+                    _(
+                        "Region changed to: n={n}, s={s}, e={e}, w={w} "
+                        "nsres={nsres} ewres={ewres}"
+                    ).format(**region)
+                )
+
+        def on_rectangle_change(value):
+            save_button.disabled = False
+            bottom_output_widget.layout.display = "none"
+            latlon_bounds = value["new"][0]
+            changed_region["north"] = latlon_bounds[2]["lat"]
+            changed_region["south"] = latlon_bounds[0]["lat"]
+            changed_region["east"] = latlon_bounds[2]["lng"]
+            changed_region["west"] = latlon_bounds[0]["lng"]
+
+        def toggle_region_mode(change):
+            nonlocal save_button_control
+
+            if change["new"]:
+                region_bounds = get_region_bounds_latlon()
+                self.region_rectangle = self._ipyleaflet.Rectangle(
+                    bounds=region_bounds,
+                    color="red",
+                    fill_color="red",
+                    fill_opacity=0.5,
+                    draggable=True,
+                    transform=True,
+                    rotation=False,
+                    name="Computational region",
+                )
+                self.region_rectangle.observe(on_rectangle_change, names="locations")
+                self.map.fit_bounds(region_bounds)
+                self.map.add(self.region_rectangle)
+
+                save_button_control = self._ipyleaflet.WidgetControl(
+                    widget=save_button, position="topright"
+                )
+                self.map.add(save_button_control)
+            else:
+                if self.region_rectangle:
+                    self.region_rectangle.transform = False
+                    self.map.remove(self.region_rectangle)
+                    self.region_rectangle = None
+
+                save_button.disabled = True
+
+                if save_button_control:
+                    self.map.remove(save_button_control)
+                bottom_output_widget.layout.display = "none"
+
+        def save_region(_change):
+            from_proj = "+proj=longlat +datum=WGS84 +no_defs"
+            to_proj = get_location_proj_string()
+            reprojected_region = reproject_region(changed_region, from_proj, to_proj)
+            new = update_region(reprojected_region)
+            bottom_output_widget.layout.display = "block"
+            update_output(new)
+
+        region_mode_button.observe(toggle_region_mode, names="value")
+        save_button.on_click(save_region)
+
+        region_mode_control = self._ipyleaflet.WidgetControl(
+            widget=region_mode_button, position="topright"
+        )
+        self.map.add(region_mode_control)
+
+        output_control = self._ipyleaflet.WidgetControl(
+            widget=bottom_output_widget, position="bottomleft"
+        )
+        self.map.add(output_control)
 
     def show(self):
         """This function returns a folium figure or ipyleaflet map object
@@ -353,18 +465,23 @@ class InteractiveMap:
 
         If map has layer control enabled, additional layers cannot be
         added after calling show()."""
-
+        if self._ipyleaflet:
+            self.draw_computational_region()
         self.map.fit_bounds(self._renderer.get_bbox())
+
+        if not self.layer_control_object:
+            self.add_layer_control()
+
+        # folium
         if self._folium:
-            if self.layer_control:
-                self.map.add_child(self.layer_control_object)
+            self.map.add_child(self.layer_control_object)
             fig = self._folium.Figure(width=self.width, height=self.height)
             fig.add_child(self.map)
 
             return fig
+
         # ipyleaflet
-        if self.layer_control:
-            self.map.add(self.layer_control_object)
+        self.map.add(self.layer_control_object)
         return self.map
 
     def save(self, filename):

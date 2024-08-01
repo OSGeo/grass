@@ -124,11 +124,11 @@ def _make_unicode(val, enc):
     """
     if val is None or enc is None:
         return val
+
+    if enc == "default":
+        return decode(val)
     else:
-        if enc == "default":
-            return decode(val)
-        else:
-            return decode(val, encoding=enc)
+        return decode(val, encoding=enc)
 
 
 def get_commands(*, env=None):
@@ -155,8 +155,8 @@ def get_commands(*, env=None):
 
         gisbase = get_install_path()
 
-    cmd = list()
-    scripts = {".py": list()} if sys.platform == "win32" else {}
+    cmd = []
+    scripts = {".py": []} if sys.platform == "win32" else {}
 
     def scan(gisbase, directory):
         dir_path = os.path.join(gisbase, directory)
@@ -218,9 +218,7 @@ def get_real_command(cmd):
         if os.path.splitext(cmd)[1] == ".py":
             cmd = cmd[:-3]
         # PATHEXT is necessary to check on Windows (force lowercase)
-        pathext = list(
-            map(lambda x: x.lower(), os.environ["PATHEXT"].split(os.pathsep))
-        )
+        pathext = [x.lower() for x in os.environ["PATHEXT"].split(os.pathsep)]
         if ".py" not in pathext:
             # we assume that PATHEXT contains always '.py'
             os.environ["PATHEXT"] = ".py;" + os.environ["PATHEXT"]
@@ -884,7 +882,7 @@ def _parse_opts(lines):
             flags[var[5:]] = bool(int(val))
         elif var.startswith("opt_"):
             options[var[4:]] = val
-        elif var in ["GRASS_OVERWRITE", "GRASS_VERBOSE"]:
+        elif var in {"GRASS_OVERWRITE", "GRASS_VERBOSE"}:
             os.environ[var] = val
         else:
             raise SyntaxError(
@@ -985,9 +983,7 @@ def tempname(length, lowercase=False):
     if not lowercase:
         chars += string.ascii_uppercase
     random_part = "".join(random.choice(chars) for _ in range(length))
-    randomname = "tmp_" + random_part
-
-    return randomname
+    return "tmp_" + random_part
 
 
 def _compare_projection(dic):
@@ -1163,16 +1159,15 @@ def compare_key_value_text_files(
                 return False
         elif isinstance(dict_a[key], float) or isinstance(dict_b[key], float):
             warning(
-                _("Mixing value types. Will try to compare after " "integer conversion")
+                _("Mixing value types. Will try to compare after integer conversion")
             )
             return int(dict_a[key]) == int(dict_b[key])
         elif key == "+towgs84":
             # We compare the sum of the entries
             if abs(sum(dict_a[key]) - sum(dict_b[key])) > precision:
                 return False
-        else:
-            if dict_a[key] != dict_b[key]:
-                return False
+        elif dict_a[key] != dict_b[key]:
+            return False
     return True
 
 
@@ -1197,7 +1192,7 @@ def gisenv(env=None):
 # interface to g.region
 
 
-def locn_is_latlong(env=None):
+def locn_is_latlong(env=None) -> bool:
     """Tests if location is lat/long. Value is obtained
     by checking the "g.region -pu" projection code.
 
@@ -1205,10 +1200,7 @@ def locn_is_latlong(env=None):
     """
     s = read_command("g.region", flags="pu", env=env)
     kv = parse_key_val(s, ":")
-    if kv["projection"].split(" ")[0] == "3":
-        return True
-    else:
-        return False
+    return kv["projection"].split(" ")[0] == "3"
 
 
 def region(region3d=False, complete=False, env=None):
@@ -1286,15 +1278,15 @@ def region_env(region3d=False, flags=None, env=None, **kwargs):
     )
     with open(windfile, "r") as fd:
         grass_region = ""
-        for line in fd.readlines():
-            key, value = map(lambda x: x.strip(), line.split(":", 1))
-            if kwargs and key not in ("proj", "zone"):
+        for line in fd:
+            key, value = (x.strip() for x in line.split(":", 1))
+            if kwargs and key not in {"proj", "zone"}:
                 continue
             if (
                 not kwargs
                 and not region3d
                 and key
-                in (
+                in {
                     "top",
                     "bottom",
                     "cols3",
@@ -1303,7 +1295,7 @@ def region_env(region3d=False, flags=None, env=None, **kwargs):
                     "e-w resol3",
                     "n-s resol3",
                     "t-b resol",
-                )
+                }
             ):
                 continue
 
@@ -1459,7 +1451,7 @@ def list_strings(type, pattern=None, mapset=None, exclude=None, flag="", env=Non
     if type == "cell":
         verbose(_('Element type should be "raster" and not "%s"') % type)
 
-    result = list()
+    result = []
     for line in read_command(
         "g.list",
         quiet=True,
@@ -1571,13 +1563,12 @@ def list_grouped(
                         name,
                     ]
                 }
+        elif mapset in result:
+            result[mapset].append(name)
         else:
-            if mapset in result:
-                result[mapset].append(name)
-            else:
-                result[mapset] = [
-                    name,
-                ]
+            result[mapset] = [
+                name,
+            ]
 
     return result
 
@@ -1807,7 +1798,7 @@ def create_project(
         shutil.rmtree(os.path.join(mapset_path.directory, mapset_path.location))
 
     stdin = None
-    kwargs = dict()
+    kwargs = {}
     if datum:
         kwargs["datum"] = datum
     if datum_trans:
@@ -2009,7 +2000,7 @@ def legal_name(s):
         useful anyway for checking map names and column names.
     """
     if not s or s[0] == ".":
-        warning(_("Illegal filename <%s>. Cannot be 'NULL' or start with " "'.'.") % s)
+        warning(_("Illegal filename <%s>. Cannot be 'NULL' or start with '.'.") % s)
         return False
 
     illegal = [c for c in s if c in "/\"'@,=*~" or c <= " " or c >= "\177"]

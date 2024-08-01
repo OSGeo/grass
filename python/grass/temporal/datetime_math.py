@@ -9,12 +9,13 @@ for details.
 :authors: Soeren Gebbert
 """
 
-from datetime import datetime, timedelta
-from .core import get_tgis_message_interface
 import copy
+from datetime import datetime, timedelta
+
+from .core import get_tgis_message_interface
 
 try:
-    import dateutil.parser as parser
+    from dateutil import parser
 
     has_dateutil = True
 except:
@@ -241,7 +242,7 @@ def modify_datetime_by_string(mydate, increment, mult=1, sign=1):
     :return: The new datetime object or none in case of an error
     """
     sign = int(sign)
-    if sign != 1 and sign != -1:
+    if sign not in {1, -1}:
         return None
 
     if increment:
@@ -322,10 +323,7 @@ def modify_datetime(
         if residual_months == 0:
             residual_months = 1
 
-        try:
-            dt1 = dt1.replace(year=year + years_to_add, month=residual_months)
-        except:
-            raise
+        dt1 = dt1.replace(year=year + years_to_add, month=residual_months)
 
         tdelta_months = dt1 - mydate
     elif months < 0:
@@ -349,10 +347,7 @@ def modify_datetime(
         if residual_months <= 0:
             residual_months += 12
 
-        try:
-            dt1 = dt1.replace(year=year - years_to_remove, month=residual_months)
-        except:
-            raise
+        dt1 = dt1.replace(year=year - years_to_remove, month=residual_months)
 
         tdelta_months = dt1 - mydate
 
@@ -822,7 +817,7 @@ def check_datetime_string(time_string, use_dateutil=True):
                 time_format = "%Y-%m-%dT%H:%M:%S.%f"
             else:
                 time_format = "%Y-%m-%d %H:%M:%S.%f"
-        else:
+        else:  # noqa: PLR5501
             if "T" in time_string:
                 time_format = "%Y-%m-%dT%H:%M:%S"
             else:

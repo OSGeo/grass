@@ -50,7 +50,7 @@ else:
     import wx.lib.flatnotebook as FN
 import wx.lib.scrolledpanel as scrolled
 
-import grass.script as grass
+import grass.script as gs
 from grass.script.utils import decode
 
 from dbmgr.sqlbuilder import SQLBuilderSelect, SQLBuilderUpdate
@@ -224,24 +224,27 @@ class VirtualAttributeList(
 
         outFile = tempfile.NamedTemporaryFile(mode="w+b")
 
-        cmdParams = dict(quiet=True, parent=self, flags="c", separator=fs)
+        cmdParams = {"quiet": True, "parent": self, "flags": "c", "separator": fs}
 
         if sql:
-            cmdParams.update(dict(sql=sql, output=outFile.name, overwrite=True))
+            cmdParams.update({"sql": sql, "output": outFile.name, "overwrite": True})
             ret = RunCommand("db.select", **cmdParams)
             self.sqlFilter = {"sql": sql}
         else:
             cmdParams.update(
-                dict(map=self.mapDBInfo.map, layer=layer, where=where, stdout=outFile)
+                {
+                    "map": self.mapDBInfo.map,
+                    "layer": layer,
+                    "where": where,
+                    "stdout": outFile,
+                }
             )
 
             self.sqlFilter = {"where": where}
 
             if columns:
                 # Enclose column name with SQL standard double quotes
-                cmdParams.update(
-                    dict(columns=",".join([f'"{col}"' for col in columns]))
-                )
+                cmdParams.update({"columns": ",".join([f'"{col}"' for col in columns])})
 
             ret = RunCommand("v.db.select", **cmdParams)
 
@@ -357,10 +360,8 @@ class VirtualAttributeList(
         i = 0
         for col in columns:
             width = self.columns[col]["length"] * 6  # FIXME
-            if width < 60:
-                width = 60
-            if width > 300:
-                width = 300
+            width = max(width, 60)
+            width = min(width, 300)
             self.SetColumnWidth(col=i, width=width)
             i += 1
 
@@ -715,12 +716,9 @@ class VirtualAttributeList(
     def OnGetItemImage(self, item):
         return -1
 
-    def IsEmpty(self):
+    def IsEmpty(self) -> bool:
         """Check if list if empty"""
-        if self.columns:
-            return False
-
-        return True
+        return not self.columns
 
     def _updateColSortFlag(self):
         """
@@ -782,8 +780,8 @@ class DbMgrBase:
         # the current mapset
         mapInfo = None
         if self.dbMgrData["vectName"]:
-            mapInfo = grass.find_file(name=self.dbMgrData["vectName"], element="vector")
-        if not mapInfo or mapInfo["mapset"] != grass.gisenv()["MAPSET"]:
+            mapInfo = gs.find_file(name=self.dbMgrData["vectName"], element="vector")
+        if not mapInfo or mapInfo["mapset"] != gs.gisenv()["MAPSET"]:
             self.dbMgrData["editable"] = False
         else:
             self.dbMgrData["editable"] = True
@@ -817,8 +815,8 @@ class DbMgrBase:
 
         # vector attributes can be changed only if vector map is in
         # the current mapset
-        mapInfo = grass.find_file(name=self.dbMgrData["vectName"], element="vector")
-        if not mapInfo or mapInfo["mapset"] != grass.gisenv()["MAPSET"]:
+        mapInfo = gs.find_file(name=self.dbMgrData["vectName"], element="vector")
+        if not mapInfo or mapInfo["mapset"] != gs.gisenv()["MAPSET"]:
             self.dbMgrData["editable"] = False
         else:
             self.dbMgrData["editable"] = True
@@ -1058,9 +1056,7 @@ class DbMgrNotebookBase(GNotebook):
         if not name:
             GError(
                 parent=self,
-                message=_(
-                    "Unable to add column to the table. " "No column name defined."
-                ),
+                message=_("Unable to add column to the table. No column name defined."),
             )
             return False
 
@@ -1537,7 +1533,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
         if dlg.ShowModal() == wx.ID_OK:
             values = dlg.GetValues()  # string
-            updateList = list()
+            updateList = []
             try:
                 for i in range(len(values)):
                     if i == keyId:  # skip key column
@@ -1666,8 +1662,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                     if len(values[i]) == 0:  # NULL
                         if columnName[i] == keyColumn:
                             raise ValueError(
-                                _("Category number (column %s)" " is missing.")
-                                % keyColumn
+                                _("Category number (column %s) is missing.") % keyColumn
                             )
                         else:
                             continue
@@ -2167,11 +2162,10 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         # sort by key column
         if sql and "order by" in sql.lower():
             pass  # don't order by key column
+        elif keyColumn > -1:
+            listWin.SortListItems(col=keyColumn, ascending=True)
         else:
-            if keyColumn > -1:
-                listWin.SortListItems(col=keyColumn, ascending=True)
-            else:
-                listWin.SortListItems(col=0, ascending=True)
+            listWin.SortListItems(col=0, ascending=True)
 
         wx.EndBusyCursor()
 
@@ -2603,7 +2597,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         if not name or not nameTo:
             GError(
                 parent=self,
-                message=_("Unable to rename column. " "No column name defined."),
+                message=_("Unable to rename column. No column name defined."),
             )
             return
         else:
@@ -3119,12 +3113,12 @@ class LayerBook(wx.Notebook):
         # get default values
         #
         self.defaultConnect = {}
-        genv = grass.gisenv()
-        vectMap = grass.find_file(
+        genv = gs.gisenv()
+        vectMap = gs.find_file(
             name=vectName,
             element="vector",
         )
-        vectGisrc, vectEnv = grass.create_environment(
+        vectGisrc, vectEnv = gs.create_environment(
             gisdbase=genv["GISDBASE"],
             location=genv["LOCATION_NAME"],
             mapset=vectMap["mapset"],
@@ -3136,7 +3130,7 @@ class LayerBook(wx.Notebook):
             read=True,
             quiet=True,
         )
-        grass.utils.try_remove(vectGisrc)
+        gs.utils.try_remove(vectGisrc)
 
         for line in connect.splitlines():
             item, value = line.split(":", 1)
@@ -3271,7 +3265,7 @@ class LayerBook(wx.Notebook):
 
         # tooltips
         self.addLayerWidgets["addCat"][0].SetToolTip(
-            _("You need to add categories " "by v.category module.")
+            _("You need to add categories by v.category module.")
         )
 
         # table description

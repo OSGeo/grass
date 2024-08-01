@@ -52,8 +52,9 @@
 # % description: Check the spatial topology of temporally related maps and process only spatially related maps
 # %end
 
-import grass.script
 import sys
+
+import grass.script as gs
 
 
 def main():
@@ -68,10 +69,10 @@ def main():
     # Check for PLY istallation
     try:
         # Intentionally unused imports
-        import ply.lex as lex  # noqa: F401
-        import ply.yacc as yacc  # noqa: F401
+        from ply import lex  # noqa: F401
+        from ply import yacc  # noqa: F401
     except ImportError:
-        grass.script.fatal(
+        gs.fatal(
             _(
                 "Please install PLY (Lex and Yacc Python implementation) to use the "
                 "temporal algebra modules."
@@ -80,9 +81,9 @@ def main():
 
     tgis.init(True)
     p = tgis.TemporalVectorAlgebraParser(run=True, debug=False, spatial=spatial)
-    p.parse(expression, basename, grass.script.overwrite())
+    p.parse(expression, basename, gs.overwrite())
 
 
 if __name__ == "__main__":
-    options, flags = grass.script.parser()
+    options, flags = gs.parser()
     sys.exit(main())

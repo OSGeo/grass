@@ -75,14 +75,7 @@ from grass.script import decode
 from grass.script import core as grass
 from grass.exceptions import OpenError
 
-global coordsys
-global north
-global south
-global east
-global west
-global resolution
-global wizerror
-global translist
+global coordsys, north, south, east, west, resolution, wizerror, translist
 
 if globalvar.CheckWxVersion(version=[4, 1, 0]):
     search_cancel_evt = wx.EVT_SEARCH_CANCEL
@@ -300,11 +293,9 @@ class DatabasePage(TitledPage):
         ).format(ctrl.GetValue(), "/\"'@,=*~")
         GError(parent=self, message=message, caption=_("Invalid name"))
 
-    def _checkLocationNotExists(self, text):
+    def _checkLocationNotExists(self, text) -> bool:
         """Check whether user's input location exists or not."""
-        if location_exists(self.tgisdbase.GetLabel(), text):
-            return False
-        return True
+        return not location_exists(self.tgisdbase.GetLabel(), text)
 
     def _locationAlreadyExists(self, ctrl):
         message = _(
@@ -743,8 +734,7 @@ class ItemList(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.ColumnSorterMix
     def OnGetItemText(self, item, col):
         """Get item text"""
         index = self.itemIndexMap[item]
-        s = str(self.itemDataMap[index][col])
-        return s
+        return str(self.itemDataMap[index][col])
 
     def OnGetItemImage(self, item):
         return -1
@@ -811,11 +801,10 @@ class ItemList(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.ColumnSorterMix
                 return data[0]
             else:
                 return data
+        elif firstOnly:
+            return None
         else:
-            if firstOnly:
-                return None
-            else:
-                return []
+            return []
 
 
 class ProjParamsPage(TitledPage):
@@ -835,7 +824,7 @@ class ProjParamsPage(TitledPage):
         self.panel = None
         self.prjParamSizer = None
 
-        self.pparam = dict()
+        self.pparam = {}
 
         self.p4projparams = ""
         self.projdesc = ""
@@ -905,25 +894,24 @@ class ProjParamsPage(TitledPage):
         """Go to next page"""
         if event.GetDirection():
             self.p4projparams = ""
-            for id, param in self.pparam.items():
+            for param in self.pparam.values():
                 if param["type"] == "bool":
                     if param["value"] is False:
                         continue
                     else:
                         self.p4projparams += " +" + param["proj4"]
+                elif param["value"] is None:
+                    wx.MessageBox(
+                        parent=self,
+                        message=_("You must enter a value for %s") % param["desc"],
+                        caption=_("Error"),
+                        style=wx.ICON_ERROR | wx.CENTRE,
+                    )
+                    event.Veto()
                 else:
-                    if param["value"] is None:
-                        wx.MessageBox(
-                            parent=self,
-                            message=_("You must enter a value for %s") % param["desc"],
-                            caption=_("Error"),
-                            style=wx.ICON_ERROR | wx.CENTRE,
-                        )
-                        event.Veto()
-                    else:
-                        self.p4projparams += (
-                            " +" + param["proj4"] + "=" + str(param["value"])
-                        )
+                    self.p4projparams += (
+                        " +" + param["proj4"] + "=" + str(param["value"])
+                    )
 
     def OnEnterPage(self, event):
         """Page entered"""
@@ -954,7 +942,7 @@ class ProjParamsPage(TitledPage):
             self.paramSBox.SetLabel(
                 _(" Enter parameters for %s projection ") % self.projdesc
             )
-            self.pparam = dict()
+            self.pparam = {}
             row = 0
             for paramgrp in self.parent.projections[self.parent.projpage.proj][1]:
                 # get parameters
@@ -1497,9 +1485,8 @@ class GeoreferencedFilePage(TitledPage):
         if len(self.georeffile) > 0 and os.path.isfile(self.georeffile):
             if not nextButton.IsEnabled():
                 nextButton.Enable(True)
-        else:
-            if nextButton.IsEnabled():
-                nextButton.Enable(False)
+        elif nextButton.IsEnabled():
+            nextButton.Enable(False)
 
         event.Skip()
 
@@ -1574,9 +1561,8 @@ class WKTPage(TitledPage):
         if len(self.wktstring) == 0:
             if nextButton.IsEnabled():
                 nextButton.Enable(False)
-        else:
-            if not nextButton.IsEnabled():
-                nextButton.Enable()
+        elif not nextButton.IsEnabled():
+            nextButton.Enable()
 
 
 class EPSGPage(TitledPage):
@@ -1757,10 +1743,10 @@ class EPSGPage(TitledPage):
                 message=_("Unable to read EPGS codes: {0}").format(e),
                 showTraceback=False,
             )
-            self.epsglist.Populate(list(), update=True)
+            self.epsglist.Populate([], update=True)
             return
 
-        data = list()
+        data = []
         for code, val in self.epsgCodeDict.items():
             if code is not None:
                 data.append((code, val[0], val[1]))
@@ -2033,10 +2019,10 @@ class IAUPage(TitledPage):
                 message=_("Unable to read IAU codes: {0}").format(e),
                 showTraceback=False,
             )
-            self.epsglist.Populate(list(), update=True)
+            self.epsglist.Populate([], update=True)
             return
 
-        data = list()
+        data = []
         for code, val in self.epsgCodeDict.items():
             if code is not None:
                 data.append((code, val[0], val[1]))
@@ -2168,9 +2154,8 @@ class CustomPage(TitledPage):
         if len(self.customstring) == 0:
             if nextButton.IsEnabled():
                 nextButton.Enable(False)
-        else:
-            if not nextButton.IsEnabled():
-                nextButton.Enable()
+        elif not nextButton.IsEnabled():
+            nextButton.Enable()
 
 
 class SummaryPage(TitledPage):
@@ -2298,7 +2283,7 @@ class SummaryPage(TitledPage):
         global coordsys
 
         # print coordsys,proj4string
-        if coordsys in ("proj", "epsg", "iau", "wkt", "file"):
+        if coordsys in {"proj", "epsg", "iau", "wkt", "file"}:
             extra_opts = {}
             extra_opts["project"] = "project"
             extra_opts["getErrorMsg"] = True
@@ -2540,14 +2525,7 @@ class LocationWizard(wx.Object):
         self.__cleanUp()
 
     def __cleanUp(self):
-        global coordsys
-        global north
-        global south
-        global east
-        global west
-        global resolution
-        global wizerror
-        global translist
+        global coordsys, north, south, east, west, resolution, wizerror, translist
 
         coordsys = None
         north = None
@@ -2563,7 +2541,7 @@ class LocationWizard(wx.Object):
         f = open(os.path.join(globalvar.ETCDIR, "proj", "parms.table"), "r")
         self.projections = {}
         self.projdesc = {}
-        for line in f.readlines():
+        for line in f:
             line = line.strip()
             try:
                 proj, projdesc, params = line.split(":")
@@ -2586,7 +2564,7 @@ class LocationWizard(wx.Object):
         f = open(os.path.join(globalvar.ETCDIR, "proj", "datum.table"), "r")
         self.datums = {}
         paramslist = []
-        for line in f.readlines():
+        for line in f:
             line = line.expandtabs(1)
             line = line.strip()
             if line == "" or line[0] == "#":
@@ -2603,7 +2581,7 @@ class LocationWizard(wx.Object):
         # read Earth-based ellipsiod definitions
         f = open(os.path.join(globalvar.ETCDIR, "proj", "ellipse.table"), "r")
         self.ellipsoids = {}
-        for line in f.readlines():
+        for line in f:
             line = line.expandtabs(1)
             line = line.strip()
             if line == "" or line[0] == "#":
@@ -2621,7 +2599,7 @@ class LocationWizard(wx.Object):
             os.path.join(globalvar.ETCDIR, "proj", "ellipse.table.solar.system"), "r"
         )
         self.planetary_ellipsoids = {}
-        for line in f.readlines():
+        for line in f:
             line = line.expandtabs(1)
             line = line.strip()
             if line == "" or line[0] == "#":
@@ -2637,7 +2615,7 @@ class LocationWizard(wx.Object):
         # read projection parameter description and parsing table
         f = open(os.path.join(globalvar.ETCDIR, "proj", "desc.table"), "r")
         self.paramdesc = {}
-        for line in f.readlines():
+        for line in f:
             line = line.strip()
             try:
                 pparam, datatype, proj4term, desc = line.split(":")
@@ -2795,9 +2773,7 @@ class LocationWizard(wx.Object):
             for item in datumparams:
                 proj4string = "%s +%s" % (proj4string, item)
 
-        proj4string = "%s +no_defs" % proj4string
-
-        return proj4string
+        return "%s +no_defs" % proj4string
 
     def OnHelp(self, event):
         """'Help' button clicked"""

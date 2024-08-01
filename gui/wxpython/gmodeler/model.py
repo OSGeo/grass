@@ -39,7 +39,7 @@ import mimetypes
 import time
 
 import xml.etree.ElementTree as etree
-import xml.sax.saxutils as saxutils
+from xml.sax import saxutils
 
 import wx
 from abc import ABC, abstractmethod
@@ -73,7 +73,7 @@ class Model:
         giface,
         canvas=None,
     ):
-        self.items = list()  # list of ordered items (action/loop/condition)
+        self.items = []  # list of ordered items (action/loop/condition)
 
         # model properties
         self.properties = {
@@ -82,8 +82,8 @@ class Model:
             "author": getpass.getuser(),
         }
         # model variables
-        self.variables = dict()
-        self.variablesParams = dict()
+        self.variables = {}
+        self.variablesParams = {}
 
         self.canvas = canvas
         self._giface = giface
@@ -100,7 +100,7 @@ class Model:
         if not objType:
             return self.items
 
-        result = list()
+        result = []
         for item in self.items:
             if isinstance(item, objType):
                 result.append(item)
@@ -134,7 +134,7 @@ class Model:
         return len(self.GetItems())
 
     def ReorderItems(self, idxList):
-        items = list()
+        items = []
         for oldIdx, newIdx in idxList.items():
             item = self.items.pop(oldIdx)
             items.append(item)
@@ -210,7 +210,7 @@ class Model:
 
     def Reset(self):
         """Reset model"""
-        self.items = list()
+        self.items = []
 
     def RemoveItem(self, item, reference=None):
         """Remove item from model
@@ -220,8 +220,8 @@ class Model:
 
         :return: list of related items to remove/update
         """
-        relList = list()
-        upList = list()
+        relList = []
+        upList = []
         doRemove = True
 
         if isinstance(item, ModelAction):
@@ -269,7 +269,7 @@ class Model:
         """Get list of maps of selected type
 
         :param prompt: to filter maps"""
-        maps = list()
+        maps = []
         for data in self.GetData():
             if prompt == data.GetPrompt():
                 mapName = data.GetValue()
@@ -281,7 +281,7 @@ class Model:
 
     def GetData(self):
         """Get list of data items"""
-        result = list()
+        result = []
         dataItems = self.GetItems(objType=ModelData)
 
         for action in self.GetItems(objType=ModelAction):
@@ -439,7 +439,7 @@ class Model:
         for condition in gxmXml.conditions:
             conditionItem = self.GetItem(condition["id"])
             for b in condition["items"].keys():
-                alist = list()
+                alist = []
                 for aId in condition["items"][b]:
                     action = self.GetItem(aId)
                     alist.append(action)
@@ -475,17 +475,14 @@ class Model:
         #     item.SetId(i)
         #     i += 1
 
-    def IsValid(self):
+    def IsValid(self) -> bool:
         """Return True if model is valid"""
-        if self.Validate():
-            return False
-
-        return True
+        return not self.Validate()
 
     def Validate(self):
         """Validate model, return None if model is valid otherwise
         error string"""
-        errList = list()
+        errList = []
 
         variables = self.GetVariables().keys()
         pattern = re.compile(r"(.*)(%.+\s?)(.*)")
@@ -493,7 +490,7 @@ class Model:
             cmd = action.GetLog(string=False)
 
             task = GUI(show=None).ParseCommand(cmd=cmd)
-            errList += map(lambda x: cmd[0] + ": " + x, task.get_cmd_error())
+            errList += (cmd[0] + ": " + x for x in task.get_cmd_error())
 
             # check also variables
             for opt in cmd[1:]:
@@ -532,9 +529,9 @@ class Model:
 
         :return: list of undefined variables
         """
-        errList = list()
+        errList = []
 
-        self.fileInput = dict()
+        self.fileInput = {}
 
         # collect ascii inputs
         for p in item.GetParams()["params"]:
@@ -653,7 +650,7 @@ class Model:
             dlg = wx.MessageDialog(
                 parent=parent,
                 message=_(
-                    "Model is not valid. Do you want to " "run the model anyway?\n\n%s"
+                    "Model is not valid. Do you want to run the model anyway?\n\n%s"
                 )
                 % "\n".join(errList),
                 caption=_("Run model?"),
@@ -685,7 +682,7 @@ class Model:
                 GError(parent=parent, message="\n".join(err))
                 return
 
-            err = list()
+            err = []
             for key, item in params.items():
                 for p in item["params"]:
                     if p.get("value", "") == "":
@@ -695,7 +692,7 @@ class Model:
                     parent=parent,
                     message=_("Variables below not defined:")
                     + "\n\n"
-                    + "\n".join(map(lambda x: "%s: %s (%s)" % (x[0], x[1], x[2]), err)),
+                    + "\n".join(f"{x[0]}: {x[1]} ({x[2]})" for x in err),
                 )
                 return
 
@@ -735,12 +732,10 @@ class Model:
 
                 # split condition
                 # TODO: this part needs some better solution
-                condVar, condText = map(
-                    lambda x: x.strip(), re.split(r"\s* in \s*", cond)
-                )
+                condVar, condText = (x.strip() for x in re.split(r"\s* in \s*", cond))
                 pattern = re.compile("%" + condVar)
                 # for vars()[condVar] in eval(condText): ?
-                vlist = list()
+                vlist = []
                 if condText[0] == "`" and condText[-1] == "`":
                     # run command
                     cmd, dcmd = gtask.cmdlist_to_tuple(condText[1:-1].split(" "))
@@ -789,9 +784,9 @@ class Model:
 
     def GetIntermediateData(self):
         """Get info about intermediate data"""
-        rast = list()
-        rast3d = list()
-        vect = list()
+        rast = []
+        rast3d = []
+        vect = []
         for data in self.GetData():
             if not data.IsIntermediate():
                 continue
@@ -822,23 +817,20 @@ class Model:
         for item in self.items:
             item.Update()
 
-    def IsParameterized(self):
+    def IsParameterized(self) -> bool:
         """Return True if model is parameterized"""
-        if self.Parameterize():
-            return True
-
-        return False
+        return bool(self.Parameterize())
 
     def Parameterize(self):
         """Return parameterized options"""
-        result = dict()
+        result = {}
         idx = 0
         if self.variables:
-            params = list()
-            result["variables"] = {"flags": list(), "params": params, "idx": idx}
+            params = []
+            result["variables"] = {"flags": [], "params": params, "idx": idx}
             for name, values in self.variables.items():
                 gtype = values.get("type", "string")
-                if gtype in ("raster", "vector", "mapset", "file", "region", "dir"):
+                if gtype in {"raster", "vector", "mapset", "file", "region", "dir"}:
                     gisprompt = True
                     prompt = gtype
                     if gtype == "raster":
@@ -864,9 +856,9 @@ class Model:
                         "label": "",
                         "guisection": "",
                         "key_desc": "",
-                        "values": list(),
+                        "values": [],
                         "parameterized": False,
-                        "values_desc": list(),
+                        "values_desc": [],
                         "prompt": prompt,
                         "element": element,
                         "type": ptype,
@@ -886,13 +878,13 @@ class Model:
                 if f.get("parameterized", False):
                     if name not in result:
                         increment = True
-                        result[name] = {"flags": list(), "params": list(), "idx": idx}
+                        result[name] = {"flags": [], "params": [], "idx": idx}
                     result[name]["flags"].append(f)
             for p in params["params"]:
                 if p.get("parameterized", False):
                     if name not in result:
                         increment = True
-                        result[name] = {"flags": list(), "params": list(), "idx": idx}
+                        result[name] = {"flags": [], "params": [], "idx": idx}
                     result[name]["params"].append(p)
             if increment:
                 idx += 1
@@ -906,10 +898,10 @@ class ModelObject:
     def __init__(self, id=-1, label=""):
         self.id = id  # internal id, should be not changed
         self.label = ""
-        self.rels = list()  # list of ModelRelations
+        self.rels = []  # list of ModelRelations
 
         self.isEnabled = True
-        self.inBlock = list()  # list of related loops/conditions
+        self.inBlock = []  # list of related loops/conditions
 
     def __del__(self):
         pass
@@ -947,14 +939,12 @@ class ModelObject:
         if fdir is None:
             return self.rels
 
-        result = list()
+        result = []
         for rel in self.rels:
-            if fdir == "from":
-                if rel.GetFrom() == self:
-                    result.append(rel)
-            else:
-                if rel.GetTo() == self:
-                    result.append(rel)
+            if fdir == "from" and rel.GetFrom() == self:
+                result.append(rel)
+            elif rel.GetTo() == self:
+                result.append(rel)
 
         return result
 
@@ -1001,7 +991,7 @@ class ModelObject:
 
         :return: list of ids
         """
-        ret = list()
+        ret = []
         for mo in self.inBlock:
             ret.append(mo.GetId())
 
@@ -1042,14 +1032,11 @@ class ModelAction(ModelObject, ogl.DividedShape):
         if cmd:
             self.task = GUI(show=None).ParseCommand(cmd=cmd)
         else:
-            if task:
-                self.task = task
-            else:
-                self.task = None
+            self.task = task or None
 
         self.propWin = None
 
-        self.data = list()  # list of connected data items
+        self.data = []  # list of connected data items
 
         self.isValid = False
         self.isParameterized = False
@@ -1428,7 +1415,7 @@ class ModelData(ModelObject):
 
     def GetLog(self, string=True):
         """Get logging info"""
-        name = list()
+        name = []
         for rel in self.GetRelations():
             name.append(rel.GetLabel())
         if name:
@@ -1438,7 +1425,7 @@ class ModelData(ModelObject):
 
     def GetLabel(self):
         """Get list of names"""
-        name = list()
+        name = []
         for rel in self.GetRelations():
             name.append(rel.GetLabel())
 
@@ -1487,15 +1474,15 @@ class ModelData(ModelObject):
 
     def _getBrush(self):
         """Get brush"""
-        if self.prompt in ("raster", "strds"):
+        if self.prompt in {"raster", "strds"}:
             color = UserSettings.Get(
                 group="modeler", key="data", subkey=("color", "raster")
             )
-        elif self.prompt in ("raster_3d", "str3ds"):
+        elif self.prompt in {"raster_3d", "str3ds"}:
             color = UserSettings.Get(
                 group="modeler", key="data", subkey=("color", "raster3d")
             )
-        elif self.prompt in ("vector", "stvds"):
+        elif self.prompt in {"vector", "stvds"}:
             color = UserSettings.Get(
                 group="modeler", key="data", subkey=("color", "vector")
             )
@@ -1765,7 +1752,7 @@ class ModelItem(ModelObject):
 
     def Clear(self):
         """Clear object, remove rels"""
-        self.rels = list()
+        self.rels = []
 
 
 class ModelLoop(ModelItem, ogl.RectangleShape):
@@ -1774,7 +1761,7 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
     ):
         """Defines a loop"""
         ModelItem.__init__(self, parent, x, y, id, width, height, label, items)
-        self.itemIds = list()  # unordered
+        self.itemIds = []  # unordered
 
         if not width:
             width = UserSettings.Get(
@@ -1824,7 +1811,7 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
 
     def GetItems(self, items):
         """Get sorted items by id"""
-        result = list()
+        result = []
         for item in items:
             if item.GetId() in self.itemIds:
                 result.append(item)
@@ -1926,7 +1913,7 @@ class ModelCondition(ModelItem, ogl.PolygonShape):
         :param items: list of items
         :param branch: 'if' / 'else'
         """
-        if branch in ["if", "else"]:
+        if branch in {"if", "else"}:
             self.itemIds[branch] = items
 
 
@@ -2009,13 +1996,13 @@ class ProcessModelFile:
             raise GException(_("Details: unsupported tag name '{0}'.").format(tagName))
 
         # list of actions, data
-        self.properties = dict()
-        self.variables = dict()
-        self.actions = list()
-        self.data = list()
-        self.loops = list()
-        self.conditions = list()
-        self.comments = list()
+        self.properties = {}
+        self.variables = {}
+        self.actions = []
+        self.data = []
+        self.loops = []
+        self.conditions = []
+        self.comments = []
 
         self._processWindow()
         self._processProperties()
@@ -2029,9 +2016,7 @@ class ProcessModelFile:
         :param value:
         """
         value = value.replace("&lt;", "<")
-        value = value.replace("&gt;", ">")
-
-        return value
+        return value.replace("&gt;", ">")
 
     def _getNodeText(self, node, tag, default=""):
         """Get node text"""
@@ -2166,18 +2151,18 @@ class ProcessModelFile:
                 prompt = param.get("prompt", None)
                 value = self._filterValue(self._getNodeText(param, "value"))
 
-            intermediate = False if data.find("intermediate") is None else True
+            intermediate = data.find("intermediate") is not None
 
-            display = False if data.find("display") is None else True
+            display = data.find("display") is not None
 
-            rels = list()
+            rels = []
             for rel in data.findall("relation"):
                 defrel = {
                     "id": int(rel.get("id", -1)),
                     "dir": rel.get("dir", "to"),
                     "name": rel.get("name", ""),
                 }
-                points = list()
+                points = []
                 for point in rel.findall("point"):
                     x = self._filterValue(self._getNodeText(point, "x"))
                     y = self._filterValue(self._getNodeText(point, "y"))
@@ -2203,8 +2188,8 @@ class ProcessModelFile:
         :return: grassTask instance
         :return: None on error
         """
-        cmd = list()
-        parameterized = list()
+        cmd = []
+        parameterized = []
 
         name = node.get("name", None)
         if not name:
@@ -2249,7 +2234,7 @@ class ProcessModelFile:
         for node in self.root.findall("loop"):
             pos, size = self._getDim(node)
             text = self._filterValue(self._getNodeText(node, "condition")).strip()
-            aid = list()
+            aid = []
             for anode in node.findall("item"):
                 try:
                     aid.append(int(anode.text))
@@ -2271,7 +2256,7 @@ class ProcessModelFile:
         for node in self.root.findall("if-else"):
             pos, size = self._getDim(node)
             text = self._filterValue(self._getNodeText(node, "condition")).strip()
-            aid = {"if": list(), "else": list()}
+            aid = {"if": [], "else": []}
             for b in aid.keys():
                 bnode = node.find(b)
                 if bnode is None:
@@ -2328,7 +2313,7 @@ class WriteModelFile:
         self._variables()
         self._items()
 
-        dataList = list()
+        dataList = []
         for action in model.GetItems(objType=ModelAction):
             for rel in action.GetRelations():
                 dataItem = rel.GetData()
@@ -2344,8 +2329,7 @@ class WriteModelFile:
         :param value: string to be escaped as XML
         :return: a XML-valid string
         """
-        value = saxutils.escape(value)
-        return value
+        return saxutils.escape(value)
 
     def _header(self):
         """Write header"""
@@ -2668,9 +2652,7 @@ class WriteScriptFile(ABC):
                         value = '"' + value + '"'
                     cond = pattern.sub(value, cond)
             if isinstance(item, ModelLoop):
-                condVar, condText = map(
-                    lambda x: x.strip(), re.split(r"\s* in \s*", cond)
-                )
+                condVar, condText = (x.strip() for x in re.split(r"\s* in \s*", cond))
                 cond = "%sfor %s in " % (" " * self.indent, condVar)
                 if condText[0] == "`" and condText[-1] == "`":
                     task = GUI(show=None).ParseCommand(cmd=utils.split(condText[1:-1]))
@@ -3289,7 +3271,7 @@ if __name__ == "__main__":
 
     def _getParamValue(self, param):
         if param["value"] and "output" not in param["name"]:
-            if param["type"] in ["float", "integer"]:
+            if param["type"] in {"float", "integer"}:
                 value = param["value"]
             else:
                 value = '"{}"'.format(param["value"])
@@ -3499,21 +3481,21 @@ def cleanup():
                 r"""    %s("g.remove", flags="f", type="raster",
                 name=%s)
 """
-                % (run_command, ",".join(map(lambda x: '"' + x + '"', rast)))
+                % (run_command, ",".join(f'"{x}"' for x in rast3d))
             )
         if vect:
             self.fd.write(
                 r"""    %s("g.remove", flags="f", type="vector",
                 name=%s)
 """
-                % (run_command, ",".join(map(lambda x: '"' + x + '"', vect)))
+                % (run_command, ",".join(('"' + x + '"' for x in vect)))
             )
         if rast3d:
             self.fd.write(
                 r"""    %s("g.remove", flags="f", type="raster_3d",
                 name=%s)
 """
-                % (run_command, ",".join(map(lambda x: '"' + x + '"', rast3d)))
+                % (run_command, ",".join(f'"{x}"' for x in rast3d))
             )
         if not rast and not vect and not rast3d:
             self.fd.write("    pass\n")
@@ -3694,7 +3676,7 @@ class ModelParamDialog(wx.Dialog):
         self._model = model
         self._giface = giface
         self.params = params
-        self.tasks = list()  # list of tasks/pages
+        self.tasks = []  # list of tasks/pages
 
         wx.Dialog.__init__(
             self, parent=parent, id=id, title=title, style=style, **kwargs
@@ -3791,15 +3773,12 @@ class ModelParamDialog(wx.Dialog):
 
     def GetErrors(self):
         """Check for errors, get list of messages"""
-        errList = list()
+        errList = []
         for task in self.tasks:
             errList += task.get_cmd_error()
 
         return errList
 
-    def DeleteIntermediateData(self):
+    def DeleteIntermediateData(self) -> bool:
         """Check if to detele intermediate data"""
-        if self.interData.IsShown() and self.interData.IsChecked():
-            return True
-
-        return False
+        return bool(self.interData.IsShown() and self.interData.IsChecked())

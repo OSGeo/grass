@@ -66,8 +66,7 @@
 # % description: Remove stds, unregister maps from temporal database and delete them from mapset
 # %end
 
-import grass.script as grass
-
+import grass.script as gs
 
 # lazy imports at the end of the file
 
@@ -84,7 +83,7 @@ def main():
     clean = flags["d"]
 
     if datasets and file:
-        grass.fatal(_("%s= and %s= are mutually exclusive") % ("input", "file"))
+        gs.fatal(_("%s= and %s= are mutually exclusive") % ("input", "file"))
 
     # Make sure the temporal database exists
     tgis.init()
@@ -121,13 +120,13 @@ def main():
     remove = pyg.Module("g.remove", quiet=True, flags="f", run_=False)
 
     if not force:
-        grass.message(_("The following data base element files will be deleted:"))
+        gs.message(_("The following data base element files will be deleted:"))
 
     for name in dataset_list:
         name = name.strip()
         sp = tgis.open_old_stds(name, type, dbif)
         if not force:
-            grass.message(
+            gs.message(
                 _("{stds}: {gid}".format(stds=sp.get_type().upper(), gid=sp.get_id()))
             )
         if recursive or clean:
@@ -143,7 +142,7 @@ def main():
                         "unregistered from temporal database and removed "
                         "from spatial database:"
                     )
-                grass.message(_(msg.format(stds=sp.get_type(), gid=sp.get_id())))
+                gs.message(_(msg.format(stds=sp.get_type(), gid=sp.get_id())))
             maps = sp.get_registered_maps_as_objects(dbif=dbif)
             map_statement = ""
             count = 1
@@ -154,7 +153,7 @@ def main():
                 # to avoid multiple deletation of the same map,
                 # but the database entries are still present and must be removed
                 if not force:
-                    grass.message(_("- %s" % map.get_name()))
+                    gs.message(_("- %s" % map.get_name()))
                     continue
                 if clean and force:
                     if map.get_name() not in name_list:
@@ -188,7 +187,7 @@ def main():
             statement += sp.delete(dbif=dbif, execute=False)
 
     if not force:
-        grass.message(
+        gs.message(
             _(
                 "Nothing removed. You must use the force flag (-{flag}) to actually "
                 "remove them.".format(flag="f")
@@ -201,10 +200,10 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
 
     # lazy imports
-    import grass.temporal as tgis
     import grass.pygrass.modules as pyg
+    import grass.temporal as tgis
 
     tgis.profile_function(main)

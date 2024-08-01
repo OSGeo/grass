@@ -65,9 +65,9 @@ skewness=4.86561
             "g.remove", type="vector", flags="f", pattern=f"{self.temp_import}*"
         )
         # Remove temporary files
-        for p in Path(".").glob(f"{self.test_map}*"):
+        for p in Path().glob(f"{self.test_map}*"):
             p.unlink()
-        for p in Path(".").glob(f"{self.temp_54052}*"):
+        for p in Path().glob(f"{self.temp_54052}*"):
             p.unlink()
         if len(self.session_file) > 0:
             Path(self.session_file).unlink()
@@ -139,7 +139,7 @@ skewness=4.86561
 
         # Create new location with CRS without EPSG code
         gs.run_command(
-            "g.proj", wkt="data/ESRI54052.wkt", location=self.temp_location, flags="c"
+            "g.proj", wkt="data/ESRI54052.wkt", project=self.temp_location, flags="c"
         )
 
         # Create new session to avoid temporary region

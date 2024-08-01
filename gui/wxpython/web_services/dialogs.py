@@ -25,7 +25,7 @@ import shutil
 
 from copy import deepcopy
 
-import grass.script as grass
+import grass.script as gs
 from grass.script.task import cmdlist_to_tuple, cmdtuple_to_list
 
 from core import globalvar
@@ -587,7 +587,7 @@ class AddWSDialog(WSDialogBase):
         active_ws = self.active_ws_panel.GetWebService()
         if "WMS" not in active_ws:
             cap_file = self.active_ws_panel.GetCapFile()
-            cmd_cap_file = grass.tempfile()
+            cmd_cap_file = gs.tempfile()
             shutil.copyfile(cap_file, cmd_cap_file)
             lcmd.append("capfile=" + cmd_cap_file)
 
@@ -668,7 +668,7 @@ class WSPropertiesDialog(WSDialogBase):
                 self.revert_ws_cap_files[ws] = cmd[1]["capfile"]
                 del ws_cap_files[ws]
             else:
-                self.revert_ws_cap_files[ws] = grass.tempfile()
+                self.revert_ws_cap_files[ws] = gs.tempfile()
 
         self._setRevertCapFiles(ws_cap_files)
 
@@ -677,7 +677,7 @@ class WSPropertiesDialog(WSDialogBase):
 
     def __del__(self):
         for f in self.revert_ws_cap_files.values():
-            grass.try_remove(f)
+            gs.try_remove(f)
 
     def _setRevertCapFiles(self, ws_cap_files):
         for ws, f in ws_cap_files.items():
@@ -865,7 +865,7 @@ class SaveWMSLayerDialog(wx.Dialog):
         self.params["output"] = Select(
             parent=self,
             type="raster",
-            mapsets=[grass.gisenv()["MAPSET"]],
+            mapsets=[gs.gisenv()["MAPSET"]],
             size=globalvar.DIALOG_GSELECT_SIZE,
         )
 
@@ -883,13 +883,13 @@ class SaveWMSLayerDialog(wx.Dialog):
         )
         self.region_types["named"] = RadioButton(parent=self, label=_("Named region"))
         self.region_types["display"].SetToolTip(
-            _("Extent and resolution" " are based on Map Display geometry.")
+            _("Extent and resolution are based on Map Display geometry.")
         )
         self.region_types["comp"].SetToolTip(
-            _("Extent and resolution" " are based on computational region.")
+            _("Extent and resolution are based on computational region.")
         )
         self.region_types["named"].SetToolTip(
-            _("Extent and resolution" " are based on named region.")
+            _("Extent and resolution are based on named region.")
         )
         self.region_types["display"].SetValue(True)  # set default as map display
 
@@ -1012,7 +1012,7 @@ class SaveWMSLayerDialog(wx.Dialog):
     def OnSave(self, event):
         """Import WMS raster data into GRASS as raster layer."""
         self.thread.abort(abortall=True)
-        currmapset = grass.gisenv()["MAPSET"]
+        currmapset = gs.gisenv()["MAPSET"]
 
         self.output = self.params["output"].GetValue().strip()
         l_spl = self.output.strip().split("@")
@@ -1027,7 +1027,7 @@ class SaveWMSLayerDialog(wx.Dialog):
 
         elif (
             not self.overwrite.IsChecked()
-            and grass.find_file(self.output, "cell", ".")["fullname"]
+            and gs.find_file(self.output, "cell", ".")["fullname"]
         ):
             msg = _("Output map <%s> already exists" % self.output)
 
@@ -1046,7 +1046,7 @@ class SaveWMSLayerDialog(wx.Dialog):
             reg_mapset = reg_spl[1]
 
         if self.region_types["named"].GetValue():
-            if not grass.find_file(reg_spl[0], "windows", reg_mapset)["fullname"]:
+            if not gs.find_file(reg_spl[0], "windows", reg_mapset)["fullname"]:
                 msg = _(
                     "Region <%s> does not exist." % self.params["region"].GetValue()
                 )

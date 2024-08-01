@@ -25,15 +25,15 @@ import numpy as np
 import wx
 from grass.pygrass.modules import Module
 
-import grass.script as grass
+import grass.script as gs
 from functools import reduce
 
 try:
-    import matplotlib
+    import matplotlib as mpl
 
     # The recommended way to use wx with mpl is with the WXAgg
     # backend.
-    matplotlib.use("WXAgg")
+    mpl.use("WXAgg")
     from matplotlib.figure import Figure
     from matplotlib.backends.backend_wxagg import (
         FigureCanvasWxAgg as FigCanvas,
@@ -74,19 +74,16 @@ COLORS = ["b", "g", "r", "c", "m", "y", "k"]
 LINEAR_REG_LINE_COLOR = (0.56, 0.00, 1.00)
 
 
-def check_version(*version):
+def check_version(*version) -> bool:
     """Checks if given version or newer is installed"""
     versionInstalled = []
-    for i in matplotlib.__version__.split("."):
+    for i in mpl.__version__.split("."):
         try:
             v = int(i)
             versionInstalled.append(v)
         except ValueError:
             versionInstalled.append(0)
-    if versionInstalled < list(version):
-        return False
-    else:
-        return True
+    return not versionInstalled < list(version)
 
 
 def findBetween(s, first, last):
@@ -203,7 +200,7 @@ class TplotFrame(wx.Frame):
         self.coor = StaticText(
             parent=self.controlPanelRaster,
             id=wx.ID_ANY,
-            label=_("X and Y coordinates separated by " "comma:"),
+            label=_("X and Y coordinates separated by comma:"),
         )
         try:
             self._giface.GetMapWindow()
@@ -362,7 +359,7 @@ class TplotFrame(wx.Frame):
         self.csvLabel = StaticText(
             parent=self.controlPanelExport,
             id=wx.ID_ANY,
-            label=_("Path for output CSV file " "with plotted data"),
+            label=_("Path for output CSV file with plotted data"),
         )
         self.csvButton = filebrowse.FileBrowseButton(
             parent=self.controlPanelExport,
@@ -429,7 +426,7 @@ class TplotFrame(wx.Frame):
             sp = tgis.dataset_factory(etype, fullname)
             if not sp.is_in_db(dbif=self.dbif):
                 GError(
-                    message=_("Dataset <%s> not found in temporal " "database")
+                    message=_("Dataset <%s> not found in temporal database")
                     % (fullname),
                     parent=self,
                 )
@@ -513,7 +510,7 @@ class TplotFrame(wx.Frame):
 
     def _getExistingCategories(self, mapp, cats):
         """Get a list of categories for a vector map"""
-        vdb = grass.read_command("v.category", input=mapp, option="print")
+        vdb = gs.read_command("v.category", input=mapp, option="print")
         categories = vdb.splitlines()
         if not cats:
             return categories
@@ -566,7 +563,7 @@ class TplotFrame(wx.Frame):
             sp = tgis.dataset_factory(etype, fullname)
             if not sp.is_in_db(dbif=self.dbif):
                 GError(
-                    message=_("Dataset <%s> not found in temporal " "database")
+                    message=_("Dataset <%s> not found in temporal database")
                     % (fullname),
                     parent=self,
                     showTraceback=False,
@@ -603,7 +600,7 @@ class TplotFrame(wx.Frame):
                 elif self.timeDataV[name]["unit"] != unit:
                     GError(
                         message=_(
-                            "Datasets have different time unit which" " is not allowed."
+                            "Datasets have different time unit which is not allowed."
                         ),
                         parent=self,
                         showTraceback=False,
@@ -613,7 +610,7 @@ class TplotFrame(wx.Frame):
                 self.plotNameListV.append(name)
                 # TODO set an appropriate distance, right now a big one is set
                 # to return the closer point to the selected one
-                out = grass.vector_what(
+                out = gs.vector_what(
                     map="pois_srvds",
                     coord=self.poi.coords(),
                     distance=10000000000000000,
@@ -673,7 +670,7 @@ class TplotFrame(wx.Frame):
                             ),
                         )
                         return
-                    vals = grass.vector_db_select(
+                    vals = gs.vector_db_select(
                         map=row["name"],
                         layer=lay,
                         where=wherequery.format(key=catkey),
@@ -739,11 +736,10 @@ class TplotFrame(wx.Frame):
         """Function to set the right labels"""
         if self.drawX != "":
             self.axes2d.set_xlabel(self.drawX)
+        elif self.temporalType == "absolute":
+            self.axes2d.set_xlabel(_("Temporal resolution: %s" % x))
         else:
-            if self.temporalType == "absolute":
-                self.axes2d.set_xlabel(_("Temporal resolution: %s" % x))
-            else:
-                self.axes2d.set_xlabel(_("Time [%s]") % self.unit)
+            self.axes2d.set_xlabel(_("Time [%s]") % self.unit)
         if self.drawY != "":
             self.axes2d.set_ylabel(self.drawY)
         else:
@@ -840,13 +836,13 @@ class TplotFrame(wx.Frame):
             xdata = []
             ydata = []
             for keys, values in self.timeDataR[name].items():
-                if keys in [
+                if keys in {
                     "temporalType",
                     "granularity",
                     "validTopology",
                     "unit",
                     "temporalDataType",
-                ]:
+                }:
                     continue
                 xdata.append(self.convert(values["start_datetime"]))
                 ydata.append(values["value"])
@@ -896,13 +892,13 @@ class TplotFrame(wx.Frame):
             ydata = []
             xcsv = []
             for keys, values in self.timeDataV[name_cat[0]][name_cat[1]].items():
-                if keys in [
+                if keys in {
                     "temporalType",
                     "granularity",
                     "validTopology",
                     "unit",
                     "temporalDataType",
-                ]:
+                }:
                     continue
                 xdata.append(self.convert(values["start_datetime"]))
                 if values["value"] == "":
@@ -956,13 +952,13 @@ class TplotFrame(wx.Frame):
             ydata = []
             xcsv = []
             for keys, values in self.timeDataV[name].items():
-                if keys in [
+                if keys in {
                     "temporalType",
                     "granularity",
                     "validTopology",
                     "unit",
                     "temporalDataType",
-                ]:
+                }:
                     continue
                 xdata.append(self.convert(values["start_datetime"]))
                 ydata.append(values["value"])
@@ -1074,7 +1070,7 @@ class TplotFrame(wx.Frame):
                 if not bbox.contains(self.poi):
                     GError(
                         parent=self,
-                        message=_("Seed point outside the " "current region"),
+                        message=_("Seed point outside the current region"),
                         showTraceback=False,
                     )
                     return
@@ -1159,7 +1155,10 @@ class TplotFrame(wx.Frame):
             )
             mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
             allDatasets = [
-                i for i in sorted(allDatasets, key=lambda l: mapsets.index(l[1]))
+                i
+                for i in sorted(
+                    allDatasets, key=lambda dataset_info: mapsets.index(dataset_info[1])
+                )
             ]
 
         for dataset in datasets:
@@ -1183,9 +1182,7 @@ class TplotFrame(wx.Frame):
             elif len(indices) >= 2:
                 dlg = wx.SingleChoiceDialog(
                     self,
-                    message=_(
-                        "Please specify the " "space time dataset " "<%s>." % dataset
-                    ),
+                    message=_("Please specify the space time dataset <%s>." % dataset),
                     caption=_("Ambiguous dataset name"),
                     choices=[
                         (
@@ -1267,7 +1264,7 @@ class TplotFrame(wx.Frame):
             except:
                 self.coorval.SetValue(",".join(coors))
         if self.datasetsV:
-            vdatas = ",".join(map(lambda x: x[0] + "@" + x[1], self.datasetsV))
+            vdatas = ",".join(f"{x[0]}@{x[1]}" for x in self.datasetsV)
             self.datasetSelectV.SetValue(vdatas)
             if attr:
                 self.attribute.SetValue(attr)
@@ -1275,7 +1272,7 @@ class TplotFrame(wx.Frame):
                 self.cats.SetValue(cats)
         if self.datasetsR:
             self.datasetSelectR.SetValue(
-                ",".join(map(lambda x: x[0] + "@" + x[1], self.datasetsR))
+                ",".join(f"{x[0]}@{x[1]}" for x in self.datasetsR)
             )
         if title:
             self.title.SetValue(title)
@@ -1305,7 +1302,7 @@ class TplotFrame(wx.Frame):
                 break
         if found:
             try:
-                vect_list = grass.read_command(
+                vect_list = gs.read_command(
                     "t.vect.list", flags="u", input=dataset, column="name"
                 )
             except Exception:
@@ -1367,8 +1364,9 @@ def InfoFormat(timeData, values):
         elif etype == "str3ds":
             text.append(_("Space time 3D raster dataset: %s") % key)
 
-        text.append(_("Value for {date} is {val}".format(date=val[0], val=val[1])))
-        text.append("\n")
+        text.extend(
+            (_("Value for {date} is {val}".format(date=val[0], val=val[1])), "\n")
+        )
     text.append(_("Press Del to dismiss."))
 
     return "\n".join(text)
@@ -1441,8 +1439,8 @@ class DataCursor:
             xytext=self.offsets,
             va="bottom",
             textcoords="offset points",
-            bbox=dict(boxstyle="round,pad=0.5", fc="yellow", alpha=0.7),
-            arrowprops=dict(arrowstyle="->", connectionstyle="arc3,rad=0"),
+            bbox={"boxstyle": "round,pad=0.5", "fc": "yellow", "alpha": 0.7},
+            arrowprops={"arrowstyle": "->", "connectionstyle": "arc3,rad=0"},
             annotation_clip=False,
             multialignment="left",
         )

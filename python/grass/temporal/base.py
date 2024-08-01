@@ -26,11 +26,12 @@ for details.
 """
 
 from datetime import datetime
+
 from .core import (
-    get_tgis_message_interface,
-    get_tgis_dbmi_paramstyle,
     SQLDatabaseInterfaceConnection,
     get_current_mapset,
+    get_tgis_dbmi_paramstyle,
+    get_tgis_message_interface,
 )
 
 ###############################################################################
@@ -111,11 +112,10 @@ class DictSQLSerializer:
                         sql += "?"
                     else:
                         sql += "%s"
+                elif self.dbmi_paramstyle == "qmark":
+                    sql += " ,?"
                 else:
-                    if self.dbmi_paramstyle == "qmark":
-                        sql += " ,?"
-                    else:
-                        sql += " ,%s"
+                    sql += " ,%s"
                 count += 1
                 args.append(self.D[key])
             sql += ") "
@@ -137,7 +137,7 @@ class DictSQLSerializer:
                         else:
                             sql += " %s " % key
                             sql += "= %s "
-                    else:
+                    else:  # noqa: PLR5501
                         if self.dbmi_paramstyle == "qmark":
                             sql += " ,%s = ? " % key
                         else:
@@ -160,7 +160,7 @@ class DictSQLSerializer:
                     else:
                         sql += " %s " % key
                         sql += "= %s "
-                else:
+                else:  # noqa: PLR5501
                     if self.dbmi_paramstyle == "qmark":
                         sql += " ,%s = ? " % key
                     else:
@@ -257,7 +257,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
         self.msgr = get_tgis_message_interface()
 
         if self.ident and self.ident.find("@") >= 0:
-            self.mapset = self.ident.split("@" "")[1]
+            self.mapset = self.ident.split("@")[1]
         else:
             self.mapset = None
 
@@ -313,7 +313,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
             + "';\n"
         )
 
-    def is_in_db(self, dbif=None, mapset=None):
+    def is_in_db(self, dbif=None, mapset=None) -> bool:
         """Check if this object is present in the temporal database
 
         :param dbif: The database interface to be used,
@@ -342,10 +342,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
             dbif.close()
 
         # Nothing found
-        if row is None:
-            return False
-
-        return True
+        return row is not None
 
     def get_select_statement(self):
         """Return the sql statement and the argument list in
@@ -740,7 +737,7 @@ class DatasetBase(SQLDatabaseInterface):
 
         :param ttype: The temporal type of the dataset "absolute or relative"
         """
-        if ttype is None or (ttype != "absolute" and ttype != "relative"):
+        if ttype is None or (ttype not in {"absolute", "relative"}):
             self.D["temporal_type"] = "absolute"
         else:
             self.D["temporal_type"] = ttype

@@ -92,9 +92,7 @@ class ProcessWorkspaceFile:
         :param value:
         """
         value = value.replace("&lt;", "<")
-        value = value.replace("&gt;", ">")
-
-        return value
+        return value.replace("&gt;", ">")
 
     def __getNodeText(self, node, tag, default=""):
         """Get node text"""
@@ -282,7 +280,7 @@ class ProcessWorkspaceFile:
 
         :param layer: tree node
         """
-        cmd = list()
+        cmd = []
 
         #
         # layer attributes (task) - 2D settings
@@ -344,7 +342,7 @@ class ProcessWorkspaceFile:
         Process overlay item
         :param overlay: tree node
         """
-        cmd = list()
+        cmd = []
 
         cmd.append(node_overlay.get("name", "unknown"))
 
@@ -374,12 +372,12 @@ class ProcessWorkspaceFile:
         :param node_vdigit: vdigit node
         """
         # init nviz layer properties
-        vdigit = dict()
+        vdigit = {}
         for node in node_vdigit.findall("geometryAttribute"):
             if "geomAttr" not in vdigit:
-                vdigit["geomAttr"] = dict()
+                vdigit["geomAttr"] = {}
             type = node.get("type")
-            vdigit["geomAttr"][type] = dict()
+            vdigit["geomAttr"][type] = {}
             vdigit["geomAttr"][type]["column"] = node.get("column")  # required
             # default map units
             vdigit["geomAttr"][type]["units"] = node.get("units", "mu")
@@ -736,7 +734,7 @@ class ProcessWorkspaceFile:
                     else:
                         value = None
             if dc:
-                dc[tag] = dict()
+                dc[tag] = {}
                 dc[tag]["value"] = value
             else:
                 return value
@@ -1043,9 +1041,7 @@ class WriteWorkspaceFile:
         """Make value XML-valid"""
         value = value.replace("<", "&lt;")
         value = value.replace(">", "&gt;")
-        value = value.replace("&", "&amp;")
-
-        return value
+        return value.replace("&", "&amp;")
 
     def __writeLayer(self, mapTree, item):
         """Write bunch of layers to GRASS Workspace XML file"""
@@ -1102,7 +1098,7 @@ class WriteWorkspaceFile:
                             self.file.write(
                                 '%s<flag name="%s" />\n' % (" " * self.indent, f)
                             )
-                    elif val in (True, False):
+                    elif val in {True, False}:
                         self.file.write(
                             '%s<flag name="%s" />\n' % (" " * self.indent, key)
                         )
@@ -1369,7 +1365,7 @@ class WriteWorkspaceFile:
                         self.indent += 4
                         self.file.write("%s<%s>\n" % (" " * self.indent, name))
                         for att in slice_[name].keys():
-                            if att in ("map", "update"):
+                            if att in {"map", "update"}:
                                 continue
                             val = slice_[name][att]
                             self.indent += 4
@@ -1382,7 +1378,7 @@ class WriteWorkspaceFile:
                         self.file.write("%s</%s>\n" % (" " * self.indent, name))
                         self.indent -= 4
                     self.file.write("%s</%s>\n" % (" " * self.indent, attrb))
-            if attrb not in ("attribute", "isosurface", "slice"):
+            if attrb not in {"attribute", "isosurface", "slice"}:
                 # end tag
                 self.file.write("%s</%s>\n" % (" " * self.indent, attrb))
 
@@ -1417,7 +1413,7 @@ class WriteWorkspaceFile:
                 )
             self.indent += 4
             for name in data[attrb].keys():
-                if name in ("object", "marker"):
+                if name in {"object", "marker"}:
                     continue
                 if name == "mode":
                     self.file.write(
@@ -1757,7 +1753,7 @@ class ProcessGrcFile:
             return []
 
         line_id = 1
-        for line in file.readlines():
+        for line in file:
             self.process_line(line.rstrip("\n"), line_id)
             line_id += 1
 
@@ -1871,7 +1867,7 @@ class ProcessGrcFile:
 
         elif (
             element
-            in (
+            in {
                 "display_shape",
                 "display_cat",
                 "display_topo",
@@ -1883,7 +1879,7 @@ class ProcessGrcFile:
                 "type_centroid",
                 "type_area",
                 "type_face",
-            )
+            }
             and self.inVector
         ):
             if int(self._get_value(line)) == 1:
@@ -1895,7 +1891,7 @@ class ProcessGrcFile:
                 else:
                     self.layers[-1]["cmd"][paramId] += ",%s" % type
 
-        elif element in ("color", "fcolor", "lcolor") and self.inVector:
+        elif element in {"color", "fcolor", "lcolor"} and self.inVector:
             value = self._get_value(line)
             if value != "":
                 self.layers[-1]["cmd"].append(
@@ -1912,7 +1908,7 @@ class ProcessGrcFile:
 
         elif (
             element
-            in (
+            in {
                 "icon",
                 "size",
                 "layer",
@@ -1922,7 +1918,7 @@ class ProcessGrcFile:
                 "where",
                 "minreg",
                 "maxreg",
-            )
+            }
             and self.inVector
         ):
             value = self._get_value(line)
@@ -1985,7 +1981,7 @@ class ProcessGrcFile:
                     "textcolor=%s" % self._color_name_to_rgb(value)
                 )
 
-        elif element in ("gridsize", "gridorigin"):
+        elif element in {"gridsize", "gridorigin"}:
             value = self._get_value(line)
             if value != "":
                 self.layers[-1]["cmd"].append("%s=%s" % (element[4:], value))
