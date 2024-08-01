@@ -284,13 +284,20 @@ class TimeSeriesMap(BaseSeriesMap):
 
     def _render_layer_worker(self, date, layer, filename):
         """Function to render a single layer."""
+        shutil.copyfile(self.base_file, filename)
         if layer == "None":
-            shutil.copyfile(self.base_file, filename)
             self._render_blank_layer(filename)
         else:
-            shutil.copyfile(self.base_file, filename)
             self._render_layer(layer, filename)
         return date, filename
+
+    def _get_num_cores(self):
+        """Get the number of available cores."""
+        try:
+            num_cores = len(os.sched_getaffinity(0))
+        except AttributeError:
+            num_cores = multiprocessing.cpu_count()
+        return num_cores
 
     def render(self):
         """Renders image for each time-step in space-time dataset."""
@@ -301,7 +308,10 @@ class TimeSeriesMap(BaseSeriesMap):
                 "Use TimeSeriesMap.add_raster_series() or "
                 "TimeSeriesMap.add_vector_series() to add dataset"
             )
-
+        # Create name for empty layers
+        # Random name needed to avoid potential conflict with layer names
+        # A new random_name_none is created each time the render function is run,
+        # and any existing random_name_none file will be ignored
         random_name_none = gs.append_random("none", 8) + ".png"
 
         tasks = []
@@ -313,11 +323,11 @@ class TimeSeriesMap(BaseSeriesMap):
             tasks.append((date, layer, filename))
 
         nprocs_env = gs.gisenv().get("NPROCS")
-        num_images = len(self._date_layer_dict)
+        num_images = len(tasks)
         if nprocs_env is not None:
             num_cores = int(nprocs_env)
         else:
-            num_cores = min(num_images, max(1, multiprocessing.cpu_count() - 1))
+            num_cores = min(num_images, max(1, self._get_num_cores() - 1))
         print(f"Performing on {num_cores} cores.")
 
         with multiprocessing.Pool(processes=num_cores) as pool:
