@@ -36,6 +36,9 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
     double ew_dist1, ew_dist2, ns_dist1, ns_dist2;
     double longitude, latitude;
 
+    JSON_Value *region_value;
+    JSON_Object *region;
+
     if (print_flag & PRINT_SH) {
         x = G_projection() == PROJECTION_LL ? -1 : 0;
         if (flat_flag)
@@ -111,7 +114,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
         prj = G_database_projection_name();
         if (!prj)
             prj = "** unknown **";
-
+        int len;
         switch (format) {
         case SHELL:
             fprintf(stdout, "projection=%d%s", window->proj, sep);
@@ -123,7 +126,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
             fprintf(stdout, "%-*s %d\n", width, "zone:", window->zone);
             break;
         case JSON:
-            int len = strlen(prj) + 24;
+            len = strlen(prj) + 24;
             char projection[len];
             snprintf(projection, len, "%d (%s)", window->proj, prj);
             json_object_set_string(root_object, "projection", projection);
@@ -265,8 +268,8 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
 #endif
             break;
         case JSON:
-            JSON_Value *region_value = json_value_init_object();
-            JSON_Object *region = json_object(region_value);
+            region_value = json_value_init_object();
+            region = json_object(region_value);
             json_object_set_number(region, "north", window->north);
             json_object_set_number(region, "south", window->south);
             json_object_set_number(region, "west", window->west);
