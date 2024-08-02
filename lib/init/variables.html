@@ -124,6 +124,13 @@ PERMANENT
     available are RLE, ZLIB, and LZ4. The compressors BZIP2 and ZSTD
     must be enabled when configuring GRASS for compilation.</dd>
 
+  <dt>GRASS_CONFIG_DIR</dt>
+  <dd>[grass startup script]<br>
+    specifies root path for GRASS configuration directory.
+    If not specified, the default placement of the
+    configuration directory is used: <tt>$HOME</tt> on GNU/Linux,
+    <tt>$HOME/Library</tt> on Mac OS X, and <tt>%APPDATA%</tt> on MS Windows.</dd>
+
   <dt>GRASS_DB_ENCODING</dt>
   <dd>[various modules, wxGUI]<br>
     encoding for vector attribute data (utf-8, ascii, iso8859-1, koi8-r)</dd>

@@ -28,16 +28,35 @@ def get_grass_config_dir(major_version, minor_version, env):
 
     Determines path of GRASS GIS user configuration directory.
     """
-    # The code is in sync with grass.app.runtime (but not the same).
+    if env.get("GRASS_CONFIG_DIR"):
+        # use GRASS_CONFIG_DIR environmental variable is defined
+        env_dirname = "GRASS_CONFIG_DIR"
+    else:
+        env_dirname = "APPDATA" if WINDOWS else "HOME"
+
+    config_dir = env.get(env_dirname)
+    if config_dir is None:
+        raise RuntimeError(
+            f"The {env_dirname} variable is not set, ask your operating"
+            " system support"
+        )
+
+    if not os.path.isdir(config_dir):
+        raise NotADirectoryError(
+            f"The {env_dirname} variable points to directory which does"
+            " not exist, ask your operating system support"
+        )
+
     if WINDOWS:
         config_dirname = f"GRASS{major_version}"
-        return os.path.join(env.get("APPDATA"), config_dirname)
     elif MACOS:
-        version = f"{major_version}.{minor_version}"
-        return os.path.join(env.get("HOME"), "Library", "GRASS", version)
+        config_dirname = os.path.join(
+            "Library", "GRASS", f"{major_version}.{minor_version}"
+        )
     else:
         config_dirname = f".grass{major_version}"
-        return os.path.join(env.get("HOME"), config_dirname)
+
+    return os.path.join(config_dir, config_dirname)
 
 
 def append_left_main_executable_paths(paths, install_path):
