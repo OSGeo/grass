@@ -12,6 +12,7 @@
 """Utility functions warpping existing processes in a suitable way"""
 import tempfile
 import json
+import os
 
 from pathlib import Path
 import grass.script as gs
@@ -219,6 +220,7 @@ def save_vector(name, geo_json):
             each["properties"].clear()
         json.dump(geo_json, temp_file)
     gs.run_command("v.import", input=temp_filename, output=name)
+    os.remove(temp_filename)
 
 
 def get_region_bounds_latlon():
