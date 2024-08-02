@@ -216,7 +216,6 @@ def get_number_of_cores(requested, env=None):
         num_cores = multiprocessing.cpu_count()
     return min(requested, max(1, num_cores - 1))
 
-  
 def get_region_bounds_latlon():
     """Gets the current computational region bounds in latlon."""
     region = gs.parse_command("g.region", flags="gbp")
