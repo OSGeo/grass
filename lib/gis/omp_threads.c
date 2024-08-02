@@ -8,34 +8,27 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-/*! \brief A helper function to setup the number of threads for C modules
-   supported by OpenMP
-   \param opt A nprocs Option struct to specify the number of threads
-   \return the number of threads set up for OpenMP parallel computing
- */
+/*! \brief Set the number of threads for OpenMP
+    The intended usage is at the beginning of a C tool when parameters are
+    processed, namely the G_OPT_M_NPROCS standard option.
+
+    \param opt A nprocs Option struct to specify the number of threads
+    \return the number of threads set up for OpenMP parallel computing
+*/
 
 int G_set_omp_num_threads(struct Option *opt)
 {
-    /* make sure the nproc Option is given */
+    /* make sure Option is not null */
     if (opt == NULL)
         G_fatal_error(_("Option is NULL."));
     else if (opt->key == NULL)
         G_fatal_error(_("Option key is NULL."));
-    else if (strcmp(opt->key, "nprocs") != 0)
-        G_fatal_error(_("This function can only be used for 'nprocs' Option."));
 
     int threads = atoi(opt->answer);
 #if defined(_OPENMP)
-    int CPU_threads = omp_get_num_procs();
-    if (threads > CPU_threads) {
-        G_warning(_("The number of threads specified for OpenMP is more "
-                    "than the number of CPU threads (%d). The performance "
-                    "may be degraded for an CPU-bound program. Reference: "
-                    "https://www.baeldung.com/cs/servers-threads-number"),
-                  CPU_threads);
-    }
-    else if (threads < 1) {
-        threads += CPU_threads;
+    int num_logic_procs = omp_get_num_procs();
+    if (threads < 1) {
+        threads += num_logic_procs;
         threads = (threads < 1) ? 1 : threads;
     }
     omp_set_num_threads(threads);
