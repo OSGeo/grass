@@ -10,6 +10,9 @@
 #            for details.
 
 """Utility functions warpping existing processes in a suitable way"""
+import os
+import multiprocessing
+
 from pathlib import Path
 import grass.script as gs
 
@@ -199,6 +202,25 @@ def get_rendering_size(region, width, height, default_width=600, default_height=
     if region_height > region_width:
         return (round(default_height * region_width / region_height), default_height)
     return (default_width, round(default_width * region_height / region_width))
+
+
+def _get_num_cores():
+    """Get the number of available cores."""
+    try:
+        return len(os.sched_getaffinity(0))
+    except AttributeError:
+        return multiprocessing.cpu_count()
+
+
+def get_nprocs(task_len):
+    """Get nprocs."""
+    nprocs_env = gs.gisenv().get("NPROCS")
+
+    if nprocs_env is not None:
+        num_cores = int(nprocs_env)
+    else:
+        num_cores = min(task_len, max(1, _get_num_cores() - 1))
+    return num_cores
 
 
 def save_gif(

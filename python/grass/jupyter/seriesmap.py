@@ -14,12 +14,13 @@
 
 import os
 import shutil
+import multiprocessing
 
 from grass.grassdb.data import map_exists
 
 from .map import Map
 from .region import RegionManagerForSeries
-from .utils import save_gif
+from .utils import save_gif, get_nprocs
 from .baseseriesmap import BaseSeriesMap
 
 
@@ -135,6 +136,22 @@ class SeriesMap(BaseSeriesMap):
         self._labels = names
         self._indices = list(range(len(self._labels)))
 
+    def _render_layer(self, i, base_file, width, height, env, base_calls, tmpdir):
+        """Function to render a single layer."""
+        filename = os.path.join(tmpdir, f"{i}.png")
+        shutil.copyfile(base_file, filename)
+        img = Map(
+            width=width,
+            height=height,
+            filename=filename,
+            use_region=True,
+            env=env,
+            read_file=True,
+        )
+        for grass_module, kwargs in base_calls:
+            img.run(grass_module, **kwargs)
+        return i, filename
+
     def render(self):
         """Renders image for each raster in series.
 
@@ -148,24 +165,27 @@ class SeriesMap(BaseSeriesMap):
                 "Use SeriesMap.add_rasters() or SeriesMap.add_vectors()"
             )
 
-        # Render each layer
-        for i in range(self.baseseries):
-            # Create file
-            filename = os.path.join(self._tmpdir.name, f"{i}.png")
-            # Copying the base_file ensures that previous results are overwritten
-            shutil.copyfile(self.base_file, filename)
-            self._base_filename_dict[i] = filename
-            # Render image
-            img = Map(
-                width=self._width,
-                height=self._height,
-                filename=filename,
-                use_region=True,
-                env=self._env,
-                read_file=True,
+        tasks = [
+            (
+                i,
+                self.base_file,
+                self._width,
+                self._height,
+                self._env,
+                self._base_calls[i],
+                self._tmpdir.name,
             )
-            for grass_module, kwargs in self._base_calls[i]:
-                img.run(grass_module, **kwargs)
+            for i in range(self.baseseries)
+        ]
+
+        # Determine number of cores to use
+        nprocs = get_nprocs(self.baseseries)
+
+        with multiprocessing.Pool(processes=nprocs) as pool:
+            results = pool.starmap(self._render_layer, tasks)
+
+        for i, filename in results:
+            self._base_filename_dict[i] = filename
 
         self._layers_rendered = True
 

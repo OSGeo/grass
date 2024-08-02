@@ -20,7 +20,7 @@ import grass.script as gs
 
 from .map import Map
 from .region import RegionManagerForTimeSeries
-from .utils import save_gif
+from .utils import save_gif, get_nprocs
 from .baseseriesmap import BaseSeriesMap
 
 
@@ -291,14 +291,6 @@ class TimeSeriesMap(BaseSeriesMap):
             self._render_layer(layer, filename)
         return date, filename
 
-    def _get_num_cores(self):
-        """Get the number of available cores."""
-        try:
-            num_cores = len(os.sched_getaffinity(0))
-        except AttributeError:
-            num_cores = multiprocessing.cpu_count()
-        return num_cores
-
     def render(self):
         """Renders image for each time-step in space-time dataset."""
         self._render()
@@ -322,15 +314,9 @@ class TimeSeriesMap(BaseSeriesMap):
                 filename = os.path.join(self._tmpdir.name, f"{layer}.png")
             tasks.append((date, layer, filename))
 
-        nprocs_env = gs.gisenv().get("NPROCS")
-        num_images = len(tasks)
-        if nprocs_env is not None:
-            num_cores = int(nprocs_env)
-        else:
-            num_cores = min(num_images, max(1, self._get_num_cores() - 1))
-        print(f"Performing on {num_cores} cores.")
+        nprocs = get_nprocs(len(tasks))
 
-        with multiprocessing.Pool(processes=num_cores) as pool:
+        with multiprocessing.Pool(processes=nprocs) as pool:
             results = pool.starmap(self._render_layer_worker, tasks)
 
         for date, filename in results:
