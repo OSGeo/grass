@@ -19,7 +19,7 @@ import grass.script as gs
 
 from .map import Map
 from .region import RegionManagerForTimeSeries
-from .utils import save_gif, get_nprocs
+from .utils import save_gif
 from .baseseriesmap import BaseSeriesMap
 
 
@@ -281,9 +281,8 @@ class TimeSeriesMap(BaseSeriesMap):
         if self._legend:
             self._render_legend(img)
 
-    def _render_worker(self, args):
+    def _render_worker(self, date, layer, filename):
         """Function to render a single layer."""
-        date, layer, filename = args
         shutil.copyfile(self.base_file, filename)
         if layer == "None":
             self._render_blank_layer(filename)
@@ -304,16 +303,14 @@ class TimeSeriesMap(BaseSeriesMap):
         random_name_none = gs.append_random("none", 8) + ".png"
 
         # Prepare tasks with tuples
-        self.tasks = []
+        tasks = []
         for date, layer in self._date_layer_dict.items():
             if layer == "None":
                 filename = os.path.join(self._tmpdir.name, random_name_none)
             else:
                 filename = os.path.join(self._tmpdir.name, f"{layer}.png")
-            self.tasks.append([(date, layer, filename)])
-        self.nprocs = get_nprocs(len(self.tasks))
-        self._update_values(self.tasks, self.nprocs)
-        self._render()
+            tasks.append((date, layer, filename))
+        self._render(tasks)
 
     def save(
         self,

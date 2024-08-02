@@ -204,23 +204,17 @@ def get_rendering_size(region, width, height, default_width=600, default_height=
     return (default_width, round(default_width * region_height / region_width))
 
 
-def _get_num_cores():
-    """Get the number of available cores."""
+def get_number_of_cores(requested, env=None):
+    """Get the number of cores to use for multiprocessing."""
+    nprocs = gs.gisenv(env).get("NPROCS")
+    if nprocs is not None:
+        return int(nprocs)
+
     try:
-        return len(os.sched_getaffinity(0))
+        num_cores = len(os.sched_getaffinity(0))
     except AttributeError:
-        return multiprocessing.cpu_count()
-
-
-def get_nprocs(task_len):
-    """Get nprocs."""
-    nprocs_env = gs.gisenv().get("NPROCS")
-
-    if nprocs_env is not None:
-        num_cores = int(nprocs_env)
-    else:
-        num_cores = min(task_len, max(1, _get_num_cores() - 1))
-    return num_cores
+        num_cores = multiprocessing.cpu_count()
+    return min(requested, max(1, num_cores - 1))
 
 
 def save_gif(

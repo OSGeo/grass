@@ -19,7 +19,7 @@ from grass.grassdb.data import map_exists
 
 from .map import Map
 from .region import RegionManagerForSeries
-from .utils import save_gif, get_nprocs
+from .utils import save_gif
 from .baseseriesmap import BaseSeriesMap
 
 
@@ -135,20 +135,19 @@ class SeriesMap(BaseSeriesMap):
         self._labels = names
         self._indices = list(range(len(self._labels)))
 
-    def _render_worker(self, args):
+    def _render_worker(self, i):
         """Function to render a single layer."""
-        i, base_file, width, height, env, base_calls, tmpdir = args
-        filename = os.path.join(tmpdir, f"{i}.png")
-        shutil.copyfile(base_file, filename)
+        filename = os.path.join(self._tmpdir.name, f"{i}.png")
+        shutil.copyfile(self.base_file, filename)
         img = Map(
-            width=width,
-            height=height,
+            width=self._width,
+            height=self._height,
             filename=filename,
             use_region=True,
-            env=env,
+            env=self._env,
             read_file=True,
         )
-        for grass_module, kwargs in base_calls:
+        for grass_module, kwargs in self._base_calls[i]:
             img.run(grass_module, **kwargs)
         return i, filename
 
@@ -163,25 +162,8 @@ class SeriesMap(BaseSeriesMap):
                 "Cannot render series since none has been added."
                 "Use SeriesMap.add_rasters() or SeriesMap.add_vectors()"
             )
-
-        self.tasks = [
-            [
-                (
-                    i,
-                    self.base_file,
-                    self._width,
-                    self._height,
-                    self._env,
-                    self._base_calls[i],
-                    self._tmpdir.name,
-                )
-            ]
-            for i in range(self.baseseries)
-        ]
-
-        self.nprocs = get_nprocs(self.baseseries)
-        self._update_values(self.tasks, self.nprocs)
-        self._render()
+        tasks = [(i,) for i in range(self.baseseries)]
+        self._render(tasks)
 
     def save(
         self,
