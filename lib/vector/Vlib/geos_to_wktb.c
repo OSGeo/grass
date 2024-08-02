@@ -83,7 +83,7 @@ char *Vect_read_area_to_wkt(struct Map_info *Map, int area)
    \param trim Set the number trimming option on, With trim set to true, the
                writer will strip trailing 0's from the output coordinates.
 
-   \return pointer to char array
+   \return pointer to string (allocated)
    \return NULL on error
  */
 char *Vect_read_area_to_wkt2(struct Map_info *Map, int area, bool trim)
@@ -217,7 +217,7 @@ unsigned char *Vect_read_line_to_wkb(struct Map_info *Map,
    \param with_z Set to 1 if the feature is 3d, 0 otherwise
    \param size The size of the returned byte array
 
-   \return pointer to char array
+   \return pointer to string (allocated)
    \return NULL on error
  */
 unsigned char *Vect_line_to_wkb(const struct line_pnts *points, int type,
