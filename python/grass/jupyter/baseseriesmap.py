@@ -5,6 +5,7 @@ from pathlib import Path
 import tempfile
 import weakref
 import shutil
+import multiprocessing
 
 import grass.script as gs
 
@@ -42,6 +43,8 @@ class BaseSeriesMap:
         self._labels = []
         self._indices = []
         self.base_file = None
+        self.tasks = []
+        self.nprocs = 0
 
         # Create a temporary directory for our PNG images
         # Resource managed by weakref.finalize.
@@ -87,6 +90,11 @@ class BaseSeriesMap:
         for grass_module, kwargs in self._base_layer_calls:
             img.run(grass_module, **kwargs)
 
+    def _update_values(self, updated_tasks, updated_procs):
+        "Update Values"
+        self.tasks = updated_tasks
+        self.nprocs = updated_procs
+
     def _render(self):
         """
         Renders the base image for the dataset.
@@ -121,6 +129,13 @@ class BaseSeriesMap:
         self._render_baselayers(img)
 
         # Render layers in respective classes
+        with multiprocessing.Pool(processes=self.nprocs) as pool:
+            results = pool.starmap(self._render_worker, self.tasks)
+
+        for i, filename in results:
+            self._base_filename_dict[i] = filename
+
+        self._layers_rendered = True
 
     def show(self, slider_width=None):
         """Create interactive timeline slider.

@@ -14,7 +14,6 @@
 
 import os
 import shutil
-import multiprocessing
 
 from grass.grassdb.data import map_exists
 
@@ -136,8 +135,9 @@ class SeriesMap(BaseSeriesMap):
         self._labels = names
         self._indices = list(range(len(self._labels)))
 
-    def _render_layer(self, i, base_file, width, height, env, base_calls, tmpdir):
+    def _render_worker(self, args):
         """Function to render a single layer."""
+        i, base_file, width, height, env, base_calls, tmpdir = args
         filename = os.path.join(tmpdir, f"{i}.png")
         shutil.copyfile(base_file, filename)
         img = Map(
@@ -158,36 +158,30 @@ class SeriesMap(BaseSeriesMap):
         Save PNGs to temporary directory. Must be run before creating a visualization
         (i.e. show or save).
         """
-        self._render()
         if not self._baseseries_added:
             raise RuntimeError(
                 "Cannot render series since none has been added."
                 "Use SeriesMap.add_rasters() or SeriesMap.add_vectors()"
             )
 
-        tasks = [
-            (
-                i,
-                self.base_file,
-                self._width,
-                self._height,
-                self._env,
-                self._base_calls[i],
-                self._tmpdir.name,
-            )
+        self.tasks = [
+            [
+                (
+                    i,
+                    self.base_file,
+                    self._width,
+                    self._height,
+                    self._env,
+                    self._base_calls[i],
+                    self._tmpdir.name,
+                )
+            ]
             for i in range(self.baseseries)
         ]
 
-        # Determine number of cores to use
-        nprocs = get_nprocs(self.baseseries)
-
-        with multiprocessing.Pool(processes=nprocs) as pool:
-            results = pool.starmap(self._render_layer, tasks)
-
-        for i, filename in results:
-            self._base_filename_dict[i] = filename
-
-        self._layers_rendered = True
+        self.nprocs = get_nprocs(self.baseseries)
+        self._update_values(self.tasks, self.nprocs)
+        self._render()
 
     def save(
         self,

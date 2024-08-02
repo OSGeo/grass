@@ -14,7 +14,6 @@
 
 import os
 import shutil
-import multiprocessing
 
 import grass.script as gs
 
@@ -282,8 +281,9 @@ class TimeSeriesMap(BaseSeriesMap):
         if self._legend:
             self._render_legend(img)
 
-    def _render_layer_worker(self, date, layer, filename):
+    def _render_worker(self, args):
         """Function to render a single layer."""
+        date, layer, filename = args
         shutil.copyfile(self.base_file, filename)
         if layer == "None":
             self._render_blank_layer(filename)
@@ -293,36 +293,27 @@ class TimeSeriesMap(BaseSeriesMap):
 
     def render(self):
         """Renders image for each time-step in space-time dataset."""
-        self._render()
         if not self._baseseries_added:
             raise RuntimeError(
                 "Cannot render space time dataset since none has been added."
-                "Use TimeSeriesMap.add_raster_series() or "
+                " Use TimeSeriesMap.add_raster_series() or "
                 "TimeSeriesMap.add_vector_series() to add dataset"
             )
+
         # Create name for empty layers
-        # Random name needed to avoid potential conflict with layer names
-        # A new random_name_none is created each time the render function is run,
-        # and any existing random_name_none file will be ignored
         random_name_none = gs.append_random("none", 8) + ".png"
 
-        tasks = []
+        # Prepare tasks with tuples
+        self.tasks = []
         for date, layer in self._date_layer_dict.items():
             if layer == "None":
                 filename = os.path.join(self._tmpdir.name, random_name_none)
             else:
                 filename = os.path.join(self._tmpdir.name, f"{layer}.png")
-            tasks.append((date, layer, filename))
-
-        nprocs = get_nprocs(len(tasks))
-
-        with multiprocessing.Pool(processes=nprocs) as pool:
-            results = pool.starmap(self._render_layer_worker, tasks)
-
-        for date, filename in results:
-            self._base_filename_dict[date] = filename
-
-        self._layers_rendered = True
+            self.tasks.append([(date, layer, filename)])
+        self.nprocs = get_nprocs(len(self.tasks))
+        self._update_values(self.tasks, self.nprocs)
+        self._render()
 
     def save(
         self,
