@@ -13,6 +13,7 @@
    \author Soeren Gebbert <soerengebbert googlemail.com>
  */
 
+#include <stdbool.h>
 #include <stdlib.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
@@ -62,16 +63,30 @@ unsigned char *Vect_read_area_to_wkb(struct Map_info *Map, int area,
 
 /*!
    \brief Read vector area and return it as Well Known Text (WKT)
-   unsigned char array
+          unsigned char array
+
+    Calls Vect_read_area_to_wkt2() with trim set to false.
+
+ */
+char *Vect_read_area_to_wkt(struct Map_info *Map, int area)
+{
+    return Vect_read_area_to_wkt2(Map, area, false);
+}
+
+/*!
+   \brief Read vector area and return it as Well Known Text (WKT)
+          unsigned char array
 
    \param Map pointer to Map_info structure
    \param area area id
    \param size The size of the returned unsigned char array
+   \param trim Set the number trimming option on, With trim set to true, the
+               writer will strip trailing 0's from the output coordinates.
 
-   \return pointer to char array
+   \return pointer to string (allocated)
    \return NULL on error
  */
-char *Vect_read_area_to_wkt(struct Map_info *Map, int area)
+char *Vect_read_area_to_wkt2(struct Map_info *Map, int area, bool trim)
 {
     static int init = 0;
 
@@ -86,18 +101,21 @@ char *Vect_read_area_to_wkt(struct Map_info *Map, int area)
     }
 
     GEOSWKTWriter_setOutputDimension(writer, 2);
+    GEOSWKTWriter_setTrim(writer, trim);
 
     GEOSGeometry *geom = Vect_read_area_geos(Map, area);
 
     if (!geom) {
-        return (NULL);
+        return NULL;
     }
 
     wkt = GEOSWKTWriter_write(writer, geom);
+    char *wkt_out = G_store(wkt);
 
     GEOSGeom_destroy(geom);
+    GEOSFree(wkt);
 
-    return (wkt);
+    return wkt_out;
 }
 
 /*!
@@ -199,7 +217,7 @@ unsigned char *Vect_read_line_to_wkb(struct Map_info *Map,
    \param with_z Set to 1 if the feature is 3d, 0 otherwise
    \param size The size of the returned byte array
 
-   \return pointer to char array
+   \return pointer to string (allocated)
    \return NULL on error
  */
 unsigned char *Vect_line_to_wkb(const struct line_pnts *points, int type,
@@ -234,7 +252,18 @@ unsigned char *Vect_line_to_wkb(const struct line_pnts *points, int type,
 
 /*!
    \brief Create a Well Known Text (WKT) representation of
-   given feature type from points.
+          given feature type from points.
+
+   Calls Vect_line_to_wkt2() with trim set to false.
+ */
+char *Vect_line_to_wkt(const struct line_pnts *points, int type, bool with_z)
+{
+    return Vect_line_to_wkt2(points, type, with_z, false);
+}
+
+/*!
+   \brief Create a Well Known Text (WKT) representation of
+          given feature type from points.
 
    This function is not thread safe, it uses static variables for speedup.
 
@@ -246,12 +275,15 @@ unsigned char *Vect_line_to_wkb(const struct line_pnts *points, int type,
 
    \param points pointer to line_pnts structure
    \param type feature type (see supported types)
-   \param with_z Set to 1 if the feature is 3d, 0 otherwise
+   \param with_z Set to true if the feature is 3d, false otherwise
+   \param trim  Set the number trimming option on, With trim set to true, the
+                writer will strip trailing 0's from the output coordinates.
 
    \return pointer to char array
    \return NULL on error
  */
-char *Vect_line_to_wkt(const struct line_pnts *points, int type, int with_z)
+char *Vect_line_to_wkt2(const struct line_pnts *points, int type, bool with_z,
+                        bool trim)
 {
     static int init = 0;
 
@@ -266,18 +298,21 @@ char *Vect_line_to_wkt(const struct line_pnts *points, int type, int with_z)
     }
 
     GEOSWKTWriter_setOutputDimension(writer, with_z ? 3 : 2);
+    GEOSWKTWriter_setTrim(writer, trim);
 
     GEOSGeometry *geom = Vect_line_to_geos(points, type, with_z);
 
     if (!geom) {
-        return (NULL);
+        return NULL;
     }
 
     wkt = GEOSWKTWriter_write(writer, geom);
+    char *wkt_out = G_store(wkt);
 
     GEOSGeom_destroy(geom);
+    GEOSFree(wkt);
 
-    return (wkt);
+    return wkt_out;
 }
 
 #endif /* HAVE_GEOS */
