@@ -11,6 +11,7 @@ for details.
 
 import errno
 import os
+from pathlib import Path
 import shutil
 import sys
 
@@ -19,6 +20,12 @@ def ensure_dir(directory):
     """Create all directories in the given path if needed."""
     if not os.path.exists(directory):
         os.makedirs(directory)
+
+
+def add_gitignore_to_dir(directory):
+    gitignore_path = Path(directory) / ".gitignore"
+    if not Path(gitignore_path).exists():
+        Path(gitignore_path).write_text("*")
 
 
 def silent_rmtree(filename):

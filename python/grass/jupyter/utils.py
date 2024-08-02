@@ -216,6 +216,33 @@ def get_number_of_cores(requested, env=None):
         num_cores = multiprocessing.cpu_count()
     return min(requested, max(1, num_cores - 1))
 
+  
+def get_region_bounds_latlon():
+    """Gets the current computational region bounds in latlon."""
+    region = gs.parse_command("g.region", flags="gbp")
+    return [
+        (float(region["ll_s"]), float(region["ll_w"])),
+        (float(region["ll_n"]), float(region["ll_e"])),
+    ]
+
+
+def update_region(region):
+    """Updates the computational region bounds.
+
+    :return: the new region
+    """
+    current = gs.region()
+    return gs.parse_command(
+        "g.region",
+        flags="ga",
+        n=region["north"],
+        s=region["south"],
+        e=region["east"],
+        w=region["west"],
+        nsres=current["nsres"],
+        ewres=current["ewres"],
+    )
+
 
 def save_gif(
     input_files,
