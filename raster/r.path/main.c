@@ -232,7 +232,6 @@ int main(int argc, char **argv)
             G_fatal_error(_("Name <%s> is too long"), opt.rast->answer);
         }
     }
-
     if (opt.rast->answer && opt.val->answer) {
         len = G_strlcpy(map_name, opt.val->answer, sizeof(map_name));
         if (len >= sizeof(map_name)) {
