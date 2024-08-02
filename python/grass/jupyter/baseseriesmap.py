@@ -44,7 +44,6 @@ class BaseSeriesMap:
         self._labels = []
         self._indices = []
         self.base_file = None
-        self.tasks = []
 
         # Create a temporary directory for our PNG images
         # Resource managed by weakref.finalize.
