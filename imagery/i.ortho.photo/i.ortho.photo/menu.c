@@ -122,7 +122,8 @@ int main(int argc, char **argv)
         if (strcmp(moduletorun, "i.ortho.init") == 0)
             (void)G_strlcpy(tosystem, "i.ortho.init --ui group=", BUFFER_SIZE);
         if (strcmp(moduletorun, "i.ortho.rectify") == 0)
-            (void)G_strlcpy(tosystem, "i.ortho.rectify --ui group=", BUFFER_SIZE);
+            (void)G_strlcpy(tosystem,
+                            "i.ortho.rectify --ui group=", BUFFER_SIZE);
         strcat(tosystem, grname);
         return system((const char *)tosystem);
     }
