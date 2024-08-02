@@ -139,6 +139,7 @@ int main(int argc, char **argv)
     struct line_cats *Cats;
     struct Map_info vout, *pvout;
     char *desc = NULL;
+    size_t len;
 
     G_gisinit(argv[0]);
 
@@ -219,13 +220,23 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    strcpy(dir_name, opt.dir->answer);
+    len = G_strlcpy(dir_name, opt.dir->answer, sizeof(dir_name));
+    if (len >= sizeof(dir_name)) {
+        G_fatal_error(_("Name <%s> is too long"), opt.dir->answer);
+    }
     *map_name = '\0';
     *out_name = '\0';
     if (opt.rast->answer) {
-        strcpy(out_name, opt.rast->answer);
-        if (opt.val->answer)
-            strcpy(map_name, opt.val->answer);
+        len = G_strlcpy(out_name, opt.rast->answer, sizeof(out_name));
+        if (len >= sizeof(out_name)) {
+            G_fatal_error(_("Name <%s> is too long"), opt.rast->answer);
+        }
+    }
+    if (opt.rast->answer && opt.val->answer) {
+        len = G_strlcpy(map_name, opt.val->answer, sizeof(map_name));
+        if (len >= sizeof(map_name)) {
+            G_fatal_error(_("Name <%s> is too long"), opt.val->answer);
+        }
     }
 
     pvout = NULL;
