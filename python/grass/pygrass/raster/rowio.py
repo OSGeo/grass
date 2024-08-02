@@ -13,9 +13,7 @@ from grass.pygrass.errors import GrassError
 from grass.pygrass.raster.raster_type import TYPE as RTYPE
 
 
-CMPFUNC = ctypes.CFUNCTYPE(
-    ctypes.c_int, ctypes.c_int, ctypes.c_void_p, ctypes.c_int, ctypes.c_int
-)
+CMPFUNC = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_int, ctypes.c_void_p, ctypes.c_int)
 
 
 def getmaprow_CELL(fd, buf, row):
