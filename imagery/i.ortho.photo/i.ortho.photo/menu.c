@@ -112,7 +112,8 @@ int main(int argc, char **argv)
         if (strcmp(moduletorun, "i.group") == 0)
             (void)G_strlcpy(tosystem, "i.group --ui group=", BUFFER_SIZE);
         if (strcmp(moduletorun, "i.ortho.target") == 0)
-            (void)G_strlcpy(tosystem, "i.ortho.target --ui group=", BUFFER_SIZE);
+            (void)G_strlcpy(tosystem,
+                            "i.ortho.target --ui group=", BUFFER_SIZE);
         if (strcmp(moduletorun, "i.ortho.elev") == 0)
             (void)G_strlcpy(tosystem, "i.ortho.elev --ui group=", BUFFER_SIZE);
         if (strcmp(moduletorun, "i.ortho.camera") == 0)
