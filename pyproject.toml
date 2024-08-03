@@ -304,10 +304,12 @@ ignore = [
 # "INT002", # f-string-in-get-text-func-call
 # "INT001", # format-in-get-text-func-call
 # "INT003", # printf-in-get-text-func-call
+# "PLW0108", # unnecessary-lambda
 # Ignore `E402` (import violations) in all `__init__.py` files
 "*/testsuite/**.py" = ["PT009", "PT027"]
 "__init__.py" = ["E402"]
 "general/g.parser/test.py" = ["INT003"]
+"gui/**" = ["PLW0108"] # See https://github.com/OSGeo/grass/issues/4124
 "gui/wxpython/animation/dialogs.py" = ["INT002"]
 "gui/wxpython/animation/temporal_manager.py" = ["INT003"]
 "gui/wxpython/core/debug.py" = ["INT002"]
