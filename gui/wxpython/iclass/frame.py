@@ -139,7 +139,9 @@ class IClassMapPanel(DoubleMapPanel):
         # TODO: for vdigit: it does nothing here because areas do not produce
         # this info
         self.firstMapWindow.digitizingInfo.connect(
-            self.statusbarManager.statusbarItems["coordinates"].SetAdditionalInfo
+            lambda text: self.statusbarManager.statusbarItems[
+                "coordinates"
+            ].SetAdditionalInfo(text)
         )
         self.firstMapWindow.digitizingInfoUnavailable.connect(
             lambda: self.statusbarManager.statusbarItems[

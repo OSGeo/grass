@@ -227,7 +227,7 @@ class SearchModuleWindow(wx.Panel):
         self._btnAdvancedSearch.Bind(wx.EVT_BUTTON, lambda evt: self.AdvancedSearch())
 
         self._tree.selectionChanged.connect(self.OnItemSelected)
-        self._tree.itemActivated.connect(self.Run)
+        self._tree.itemActivated.connect(lambda node: self.Run(node))
 
         self._layout()
 

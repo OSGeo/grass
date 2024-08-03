@@ -564,7 +564,9 @@ class TaskFrame(wx.Frame):
             self._gconsole.mapCreated.connect(self.OnMapCreated)
         self.goutput = self.notebookpanel.goutput
         if self.goutput:
-            self.goutput.showNotification.connect(self.SetStatusText)
+            self.goutput.showNotification.connect(
+                lambda message: self.SetStatusText(message)
+            )
 
         self.notebookpanel.OnUpdateValues = self.updateValuesHook
         guisizer.Add(self.notebookpanel, proportion=1, flag=wx.EXPAND)
