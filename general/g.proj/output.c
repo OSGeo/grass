@@ -241,6 +241,8 @@ void print_proj4(int dontprettify)
 #ifdef HAVE_OGR
 void print_wkt(int esristyle, int dontprettify)
 {
+    JSON_Value *value;
+    JSON_Object *object;
     char *outwkt;
 
     if (check_xy(FALSE))
@@ -312,7 +314,17 @@ void print_wkt(int esristyle, int dontprettify)
 #endif
 
     if (outwkt != NULL) {
-        fprintf(stdout, "%s\n", outwkt);
+        switch (format) {
+        case JSON:
+            value = json_value_init_object();
+            object = json_object(value);
+            json_object_set_string(object, "wkt", outwkt);
+            print_json(value);
+            break;
+        default:
+            fprintf(stdout, "%s\n", outwkt);
+            break;
+        }
         CPLFree(outwkt);
     }
     else
