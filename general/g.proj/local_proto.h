@@ -20,10 +20,10 @@ int input_georef(char *);
 /* output.c */
 void print_projinfo(enum OutputFormat);
 void print_datuminfo(void);
-void print_proj4(int);
+void print_proj4(int, enum OutputFormat);
 
 #ifdef HAVE_OGR
-void print_wkt(int, int);
+void print_wkt(int, int, enum OutputFormat);
 #endif
 
 /* datumtrans.c */

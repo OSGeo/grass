@@ -165,12 +165,15 @@ void print_datuminfo(void)
 }
 
 /* print input projection information in PROJ format */
-void print_proj4(int dontprettify)
+void print_proj4(int dontprettify, enum OutputFormat format)
 {
     struct pj_info pjinfo;
     char *i, *projstrmod;
     const char *projstr;
     const char *unfact;
+
+    JSON_Value *value;
+    JSON_Object *object;
 
     if (check_xy(FALSE))
         return;
@@ -222,24 +225,35 @@ void print_proj4(int dontprettify)
     if (!projstrmod)
         projstrmod = G_store(projstr);
 
-    for (i = projstrmod; *i; i++) {
-        /* Don't print the first space */
-        if (i == projstrmod && *i == ' ')
-            continue;
+    switch (format) {
+    case JSON:
+        value = json_value_init_object();
+        object = json_object(value);
+        json_object_set_string(object, "proj4", projstrmod);
+        print_json(value);
+        break;
+    default:
+        for (i = projstrmod; *i; i++) {
+            /* Don't print the first space */
+            if (i == projstrmod && *i == ' ')
+                continue;
 
-        if (*i == ' ' && *(i + 1) == '+' && !(dontprettify))
-            fputc('\n', stdout);
-        else
-            fputc(*i, stdout);
+            if (*i == ' ' && *(i + 1) == '+' && !(dontprettify))
+                fputc('\n', stdout);
+            else
+                fputc(*i, stdout);
+        }
+        fputc('\n', stdout);
+        break;
     }
-    fputc('\n', stdout);
+
     G_free(projstrmod);
 
     return;
 }
 
 #ifdef HAVE_OGR
-void print_wkt(int esristyle, int dontprettify)
+void print_wkt(int esristyle, int dontprettify, enum OutputFormat format)
 {
     JSON_Value *value;
     JSON_Object *object;

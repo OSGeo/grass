@@ -226,11 +226,11 @@ int main(int argc, char *argv[])
     location->description = _("Name of new project (location) to create");
 
     format = G_define_standard_option(G_OPT_F_FORMAT);
-    format_opt->options = "plain,shell,json";
-    format_opt->descriptions = _("plain;Human readable text output;"
-                                 "shell;shell script style text output;"
-                                 "json;JSON (JavaScript Object Notation);");
-    format_opt->guisection = _("Print");
+    format->options = "plain,shell,json";
+    format->descriptions = _("plain;Human readable text output;"
+                             "shell;shell script style text output;"
+                             "json;JSON (JavaScript Object Notation);");
+    format->guisection = _("Print");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -349,10 +349,10 @@ int main(int argc, char *argv[])
     else if (datuminfo->answer)
         print_datuminfo();
     else if (printproj4->answer)
-        print_proj4(dontprettify->answer);
+        print_proj4(dontprettify->answer, outputFormat);
 #ifdef HAVE_OGR
     else if (printwkt->answer)
-        print_wkt(esristyle->answer, dontprettify->answer);
+        print_wkt(esristyle->answer, dontprettify->answer, outputFormat);
 #endif
     else if (location->answer)
         create_location(location->answer);
