@@ -206,7 +206,9 @@ class ModelSearchDialog(wx.Dialog):
             parent=self, giface=giface, menuModel=menuModel.GetModel()
         )
         self.cmd_prompt.promptRunCmd.connect(self.OnCommand)
-        self.cmd_prompt.commandSelected.connect(self.label.SetValue)
+        self.cmd_prompt.commandSelected.connect(
+            lambda command: self.label.SetValue(command)
+        )
         self.search = SearchModuleWidget(
             parent=self.panel, model=menuModel.GetModel(), showTip=True
         )

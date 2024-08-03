@@ -353,7 +353,7 @@ class AnimationFrame(wx.Frame):
         if not self.dialogs["preferences"]:
             dlg = PreferencesDialog(parent=self, giface=self._giface)
             self.dialogs["preferences"] = dlg
-            dlg.formatChanged.connect(self.controller.UpdateAnimations)
+            dlg.formatChanged.connect(lambda: self.controller.UpdateAnimations())
             dlg.CenterOnParent()
 
         self.dialogs["preferences"].Show()
