@@ -44,7 +44,7 @@ int main(int argc, char **argv)
 
     JSON_Object *root_object, *col_object;
     JSON_Value *root_value, *cols_value, *col_value;
-    JSON_Array *cols_array;
+    JSON_Array *cols_array = NULL;
 
     parse_command_line(argc, argv);
 
