@@ -6,6 +6,8 @@ Purpose:   This script is to demonstrate a unit test for r.object.geometry
 
 import json
 import os
+from sys import stderr
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import call_module
@@ -67,6 +69,7 @@ class TestObjectGeometryPixel(TestCase):
         )
         # check to see if output file exists
         self.assertFileExists(self.output_file_pixel, msg="Output file does not exist")
+        print(open(self.output_file_pixel).read(), file=stderr)
         # check if the output file is equal to the reference file
         self.assertFilesEqualMd5(
             self.output_file_pixel,
