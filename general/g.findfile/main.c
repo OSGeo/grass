@@ -111,7 +111,6 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Name <%s> is too long"), file_opt->answer);
         }
     }
-        
 
     mapset = G_find_file2(elem_opt->answer, name, search_mapset);
     if (mapset) {
