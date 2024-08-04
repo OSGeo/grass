@@ -352,7 +352,7 @@ def main():
                 map.set_relative_time(
                     gran_start, gran_end, input_strds.get_relative_time_unit()
                 )
-                gran_start = gran_start + granularity
+                gran_start += granularity
             gran_list.append(copy(map))
             gran_list_low.append(copy(map))
             gran_list_up.append(copy(map))
