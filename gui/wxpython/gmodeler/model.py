@@ -1390,7 +1390,6 @@ class ModelData(ModelObject):
         :param width, height: dimension of the shape
         :param x, y: position of the shape
         """
-        pass
 
     def IsIntermediate(self):
         """Checks if data item is intermediate"""

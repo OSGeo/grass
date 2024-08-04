@@ -98,7 +98,6 @@ class PointTestCase(TestCase):
     def test_buffer(self):
         """Test buffer method"""
         # TODO: verify if the buffer depends from the mapset's projection
-        pass
 
 
 class LineTestCase(TestCase):
