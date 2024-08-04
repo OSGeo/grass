@@ -797,8 +797,6 @@ class VDigitSettingsDialog(wx.Dialog):
 
     def OnChangeAddRecord(self, event):
         """Checkbox 'Add new record' status changed"""
-        pass
-        # self.category.SetValue(self.digit.SetCategory())
 
     def OnChangeSnappingValue(self, event):
         """Change snapping value - update static text"""

@@ -91,7 +91,6 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
 
     def tearDown(self):
         self.runModule("t.remove", flags="rf", inputs="R", quiet=True)
-        pass
 
     @classmethod
     def tearDownClass(cls):

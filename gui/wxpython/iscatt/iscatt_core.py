@@ -832,7 +832,6 @@ def GetRasterInfo(rast):
         if k == "datatype":
             if v != "CELL":
                 return None
-            pass
         elif k in {"rows", "cols", "cells", "min", "max"}:
             v = int(v)
         else:

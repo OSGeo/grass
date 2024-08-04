@@ -2962,7 +2962,6 @@ class DbMgrLayersPage(wx.Panel):
 
     def OnLayerRightUp(self, event):
         """Layer description area, context menu"""
-        pass
 
 
 class TableListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):

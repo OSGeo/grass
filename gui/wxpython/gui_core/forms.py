@@ -2852,7 +2852,6 @@ class CmdPanel(wx.Panel):
         needed. It's a hook, actually.  Beware of what is 'self' in
         the method def, though. It will be called with no arguments.
         """
-        pass
 
     def OnCheckBoxMulti(self, event):
         """Fill the values as a ','-separated string according to

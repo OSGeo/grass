@@ -49,8 +49,6 @@ class Layer:
         layer as used in lmgr.
     """
 
-    pass
-
 
 class LayerList:
     def GetSelectedLayers(self, checkedOnly=True):

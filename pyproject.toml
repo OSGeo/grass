@@ -158,7 +158,6 @@ ignore = [
     "PERF401", # manual-list-comprehension
     "PERF402", # manual-list-copy
     "PERF403", # manual-dict-comprehension
-    "PIE790",  # unnecessary-placeholder
     "PIE794",  # duplicate-class-field-definition
     "PIE808",  # unnecessary-range-start
     "PIE810",  # multiple-starts-ends-with

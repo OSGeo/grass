@@ -2751,8 +2751,6 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
     def DisactivateWin(self):
         """Use when the class instance is hidden in MapFrame."""
-        pass
 
     def ActivateWin(self):
         """Used when the class instance is activated in MapFrame."""
-        pass

@@ -544,7 +544,6 @@ class ModelItemDialog(wx.Dialog):
 
     def _layout(self):
         """Do layout (virtual method)"""
-        pass
 
     def GetCondition(self):
         """Get loop condition"""
@@ -777,7 +776,6 @@ class ModelListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEditMi
 
     def OnEndEdit(self, event):
         """Finish editing of item"""
-        pass
 
     def GetListCtrl(self):
         """Used by ColumnSorterMixin"""
