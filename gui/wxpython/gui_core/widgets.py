@@ -80,7 +80,7 @@ except ImportError:  # not sure about TGBTButton version
     from wx.lib.buttons import GenBitmapTextButton as BitmapTextButton
 
 if wxPythonPhoenix:
-    from wx import Validator as Validator
+    from wx import Validator
 else:
     from wx import PyValidator as Validator
 

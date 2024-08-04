@@ -162,7 +162,6 @@ ignore = [
     "PIE808",  # unnecessary-range-start
     "PIE810",  # multiple-starts-ends-with
     "PLC0206", # dict-index-missing-items
-    "PLC0414", # useless-import-alias
     "PLC0415", # import-outside-top-level
     "PLC1901", # compare-to-empty-string
     "PLC2701", # import-private-name
