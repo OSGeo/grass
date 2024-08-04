@@ -77,9 +77,30 @@ class TestRegion(TestCase):
             "cells3": 2526500,
             "GMT": "120000/935000/10000/320000",
             "WMS": "bbox=120000,10000,935000,320000",
+            "se_lat": 33.78822598716895,
+            "se_long": -75.48643633119754,
+            "sw_lat": 33.722662075471355,
+            "sw_long": -84.28378827453474,
+            "ew_extent": 815000,
+            "ll_clat": 35.17852919352316,
+            "ll_clon": -79.91588285974797,
+            "ll_e": -75.36388301356145,
+            "ll_n": 36.634396311574974,
+            "ll_s": 33.722662075471355,
+            "ll_w": -84.46788270593447,
+            "ne_lat": 36.58069555564894,
+            "ne_long": -75.36388301356145,
+            "ns_extent": 310000,
+            "nw_lat": 36.51287343603797,
+            "nw_long": -84.46788270593447,
+            "center_easting": 527500,
+            "center_lat": 35.23406270825775,
+            "center_long": -79.90206638014922,
+            "center_northing": 165000,
+            "converge_angle": -0.5206458828734528,
         }
 
-        output = call_module("g.region", flags="ptw", format="json")
+        output = call_module("g.region", flags="plectwmn3b", format="json")
         output_json = json.loads(output)
 
         expected_ellps = expected.pop("ellipsoid").split(" ")
