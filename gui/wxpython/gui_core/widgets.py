@@ -348,7 +348,6 @@ class GNotebook(FN.FlatNotebook):
 
     def SetPageImage(self, page, index):
         """Does nothing because we don't want images for this style"""
-        pass
 
     def __getattr__(self, name):
         return getattr(self.controller, name)

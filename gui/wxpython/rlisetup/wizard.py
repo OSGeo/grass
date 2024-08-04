@@ -1780,7 +1780,6 @@ class DrawSampleUnitsPage(TitledPage):
 
     def OnExitPage(self, event=None):
         """Function during exiting"""
-        pass
 
         # if event.GetDirection():
         #    self.SetNext(self.parent.samplingareapage)
