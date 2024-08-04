@@ -280,7 +280,7 @@ def main():
             )
 
         if upper.find("@") >= 0:
-            upper = upper
+            upper_id = upper
         else:
             upper_id = upper + "@" + mapset
 
