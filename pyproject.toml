@@ -193,7 +193,7 @@ ignore = [
     "PLW1514", # unspecified-encoding
     "PLW1641", # eq-without-hash
     "PLW2901", # redefined-loop-name
-    "PLW3201", # nested-min-max
+    "PLW3201", # bad-dunder-method-name
     "PT001",   # pytest-fixture-incorrect-parentheses-style
     "PT004",   # pytest-missing-fixture-name-underscore
     "PT006",   # pytest-parametrize-names-wrong-type
