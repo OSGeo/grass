@@ -2230,7 +2230,7 @@ class PsMapBufferedWindow(wx.Window):
                 zoomFactor = 1
             # when zooming to full extent, in some cases, there was zoom
             # 1.01..., which causes problem
-            if not (abs(zoomFactor - 1) > 0.01):
+            if abs(zoomFactor - 1) <= 0.01:
                 zoomFactor = 1.0
 
             if self.mouse["use"] == "zoomout":
