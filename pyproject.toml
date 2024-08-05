@@ -185,7 +185,6 @@ ignore = [
     "PLR6201", # literal-membership
     "PLR6301", # no-self-use
     "PLW0127", # self-assigning-variable
-    "PLW0406", # import-self
     "PLW0602", # global-variable-not-assigned
     "PLW0603", # global-statement
     "PLW0604", # global-at-module-level
