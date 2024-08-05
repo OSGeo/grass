@@ -1461,7 +1461,7 @@ def get_multi_addon_addons_which_install_only_html_man_page():
         rf".*{options['extension']}*.",
         get_addons_paths(gg_addons_base_dir=options["prefix"]),
     )
-    addon_dir_paths = set([os.path.dirname(i) for i in addon_paths])
+    addon_dir_paths = {os.path.dirname(i) for i in addon_paths}
     for addon_dir in addon_dir_paths:
         addon_src_files = list(
             re.finditer(rf"{addon_dir}/(.*py)|(.*c)\n", "\n".join(addon_paths)),
