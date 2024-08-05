@@ -179,7 +179,6 @@ ignore = [
     "PLR0917", # too-many-positional
     "PLR1702", # too-many-nested-blocks
     "PLR1704", # redefined-argument-from-local
-    "PLR1733", # unnecessary-dict-index-lookup
     "PLR2004", # magic-value-comparison
     "PLR6104", # non-augmented-assignment
     "PLR6201", # literal-membership
