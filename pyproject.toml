@@ -424,7 +424,6 @@ ignore = [
 "utils/generate_release_notes.py" = ["PGH004"]
 "utils/mkhtml.py" = ["INT002"]
 "vector/v.fill.holes/examples.ipynb" = ["PTH201"]
-"vector/v.univar/testsuite/test_v_univar.py" = ["PLC0206"]
 
 [tool.ruff.lint.flake8-import-conventions.extend-aliases]
 # Declare a custom aliases, checked with rule ICN001
