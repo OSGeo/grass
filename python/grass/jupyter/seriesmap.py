@@ -135,39 +135,35 @@ class SeriesMap(BaseSeriesMap):
         self._labels = names
         self._indices = list(range(len(self._labels)))
 
+    def _render_worker(self, i):
+        """Function to render a single layer."""
+        filename = os.path.join(self._tmpdir.name, f"{i}.png")
+        shutil.copyfile(self.base_file, filename)
+        img = Map(
+            width=self._width,
+            height=self._height,
+            filename=filename,
+            use_region=True,
+            env=self._env,
+            read_file=True,
+        )
+        for grass_module, kwargs in self._base_calls[i]:
+            img.run(grass_module, **kwargs)
+        return i, filename
+
     def render(self):
         """Renders image for each raster in series.
 
         Save PNGs to temporary directory. Must be run before creating a visualization
         (i.e. show or save).
         """
-        self._render()
         if not self._baseseries_added:
             raise RuntimeError(
                 "Cannot render series since none has been added."
                 "Use SeriesMap.add_rasters() or SeriesMap.add_vectors()"
             )
-
-        # Render each layer
-        for i in range(self.baseseries):
-            # Create file
-            filename = os.path.join(self._tmpdir.name, f"{i}.png")
-            # Copying the base_file ensures that previous results are overwritten
-            shutil.copyfile(self.base_file, filename)
-            self._base_filename_dict[i] = filename
-            # Render image
-            img = Map(
-                width=self._width,
-                height=self._height,
-                filename=filename,
-                use_region=True,
-                env=self._env,
-                read_file=True,
-            )
-            for grass_module, kwargs in self._base_calls[i]:
-                img.run(grass_module, **kwargs)
-
-        self._layers_rendered = True
+        tasks = [(i,) for i in range(self.baseseries)]
+        self._render(tasks)
 
     def save(
         self,
