@@ -6,6 +6,7 @@
 #endif
 
 #include <grass/raster.h>
+#include <grass/parson.h>
 
 #define SORT_DEFAULT 0
 #define SORT_ASC     1
@@ -52,6 +53,8 @@ extern int nunits;
 #define DEFAULT_PAGE_LENGTH "0"
 #define DEFAULT_PAGE_WIDTH  "79"
 
+enum OutputFormat { PLAIN, JSON };
+
 extern int page_width;
 extern int page_length;
 extern int masking;
@@ -67,6 +70,7 @@ extern char *stats_file;
 extern char *no_data_str;
 extern int stats_flag;
 extern int nsteps, cat_ranges, as_int;
+extern enum OutputFormat format;
 extern int *is_fp;
 extern DCELL *DMAX, *DMIN;
 
@@ -81,6 +85,7 @@ extern struct Categories *labels;
 int format_parms(double, int *, int *, int *, int);
 int scient_format(double, char *, int, int);
 int format_double(double, char *, int, int);
+void compute_unit_format(int, int, enum OutputFormat);
 
 /* header.c */
 int header(int, int);
@@ -111,6 +116,12 @@ char *construct_cat_label(int, CELL);
 
 /* prt_unit.c */
 int print_unit(int, int, int);
+
+/* prt_json.c */
+JSON_Value *make_units(int, int);
+JSON_Value *make_category(int, int, JSON_Value *);
+JSON_Value *make_categories(int, int, int);
+void print_json();
 
 /* report.c */
 int report(void);
