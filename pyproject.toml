@@ -228,7 +228,7 @@ ignore = [
     "RUF003",  # ambiguous-unicode-character-comment
     "RUF005",  # collection-literal-concatenation
     "RUF012",  # mutable-class-default
-    "RUF013",  # unnecessary-iterable-allocation-for-first-element
+    "RUF013",  # implicit-optional
     "RUF015",  # unnecessary-iterable-allocation-for-first-element
     "RUF019",  # unnecessary-key-check
     "RUF021",  # parenthesize-chained-operators
