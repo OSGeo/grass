@@ -100,7 +100,6 @@ ignore = [
     "B904",    # raise-without-from-inside-except
     "B909",    # loop-iterator-mutation
     "BLE001",  # blind-except
-    "C401",    # unnecessary-generator-set
     "C403",    # unnecessary-list-comprehension-set
     "C404",    # unnecessary-list-comprehension-dict
     "C405",    # unnecessary-literal-set
