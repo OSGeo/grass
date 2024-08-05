@@ -167,7 +167,6 @@ ignore = [
     "PLC2701", # import-private-name
     "PLC2801", # unnecessary-dunder-call
     "PLE0704", # misplaced-bare-raise
-    "PLR0124", # comparison-with-itself
     "PLR0904", # too-many-public-methods
     "PLR0911", # too-many-return-statements
     "PLR0912", # too-many-branches
