@@ -1736,17 +1736,13 @@ class RasterLegend(InstructionObject):
     def EstimateHeight(self, raster, discrete, fontsize, cols=None, height=None):
         """Estimate height to draw raster legend"""
         if discrete == "n":
-            if height:
-                height = height
-            else:
+            if not height:
                 height = self.unitConv.convert(
                     value=fontsize * 10, fromUnit="point", toUnit="inch"
                 )
 
         if discrete == "y":
-            if cols:
-                cols = cols
-            else:
+            if not cols:
                 cols = 1
 
             rinfo = gs.raster_info(raster)
@@ -1775,9 +1771,7 @@ class RasterLegend(InstructionObject):
         if discrete == "n":
             rinfo = gs.raster_info(raster)
             minim, maxim = rinfo["min"], rinfo["max"]
-            if width:
-                width = width
-            else:
+            if not width:
                 width = self.unitConv.convert(
                     value=fontsize * 2, fromUnit="point", toUnit="inch"
                 )
@@ -1788,14 +1782,10 @@ class RasterLegend(InstructionObject):
             width += textPart
 
         elif discrete == "y":
-            if cols:
-                cols = cols
-            else:
+            if not cols:
                 cols = 1
 
-            if width:
-                width = width
-            else:
+            if not width:
                 paperWidth = (
                     paperInstr["Width"] - paperInstr["Right"] - paperInstr["Left"]
                 )
@@ -1875,14 +1865,10 @@ class VectorLegend(InstructionObject):
 
     def EstimateSize(self, vectorInstr, fontsize, width=None, cols=None):
         """Estimate size to draw vector legend"""
-        if width:
-            width = width
-        else:
+        if not width:
             width = fontsize / 24.0
 
-        if cols:
-            cols = cols
-        else:
+        if not cols:
             cols = 1
 
         vectors = vectorInstr["list"]
