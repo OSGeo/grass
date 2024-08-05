@@ -1967,7 +1967,9 @@ int v5dReadCompressedGrid(v5dstruct *v, int time, int var, float *ga, float *gb,
 
     /* move to position in file */
     pos = grid_position(v, time, var);
-    lseek(v->FileDesc, pos, SEEK_SET);
+    if (lseek(v->FileDesc, pos, SEEK_SET) == -1) {
+        printf("lseek failed.\n");
+    }
 
     /* read ga, gb arrays */
     read_float4_array(v->FileDesc, ga, v->Nl[var]);
