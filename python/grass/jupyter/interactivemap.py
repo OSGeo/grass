@@ -372,25 +372,7 @@ class InteractiveMap:
 
         draw_control.on_draw(handle_draw)
 
-        draw_button = widgets.ToggleButton(
-            icon="pencil",
-            value=False,
-            tooltip="Click to draw geometries",
-            layout=widgets.Layout(width="33px", margin="0px 0px 0px 0px"),
-        )
-
-        def toggle_geometry(change):
-            if change["new"]:
-                self.map.add_control(draw_control)
-                show_interface()
-            else:
-                drawn_geometries.clear()
-                self.map.remove_control(draw_control)
-                hide_interface()
-
-        draw_button.observe(toggle_geometry, names="value")
-
-        def show_interface():
+        def show_draw_interface():
             nonlocal save_button_control
 
             name_input = widgets.Text(
@@ -439,15 +421,22 @@ class InteractiveMap:
 
             self.map.add_control(save_button_control)
 
-        def hide_interface():
+        def hide_draw_interface():
             nonlocal save_button_control
             drawn_geometries.clear()
             if save_button_control:
                 self.map.remove_control(save_button_control)
                 save_button_control = None
 
-        toggle_control = self._ipyleaflet.WidgetControl(widget=draw_button)
-        self.map.add_control(toggle_control)
+        def toggle_draw_interface(visible):
+            if visible:
+                self.map.add_control(draw_control)
+                show_draw_interface()
+            else:
+                self.map.remove_control(draw_control)
+                hide_draw_interface()
+
+        return toggle_draw_interface
 
     def draw_computational_region(self):
         """
@@ -455,19 +444,8 @@ class InteractiveMap:
         """
         import ipywidgets as widgets  # pylint: disable=import-outside-toplevel
 
-        region_mode_button = widgets.ToggleButton(
-            icon="square-o",
-            description="",
-            value=False,
-            tooltip="Click to show and edit computational region",
-            layout=widgets.Layout(width="40px", margin="0px 0px 0px 0px"),
-        )
-
-        save_button = widgets.Button(
-            description="Update region",
-            tooltip="Click to update region",
-            disabled=True,
-        )
+        region_rectangle = None
+        save_button_control = None
         bottom_output_widget = widgets.Output(
             layout={
                 "width": "100%",
@@ -478,7 +456,6 @@ class InteractiveMap:
         )
 
         changed_region = {}
-        save_button_control = None
 
         def update_output(region):
             with bottom_output_widget:
@@ -499,41 +476,6 @@ class InteractiveMap:
             changed_region["east"] = latlon_bounds[2]["lng"]
             changed_region["west"] = latlon_bounds[0]["lng"]
 
-        def toggle_region_mode(change):
-            nonlocal save_button_control
-
-            if change["new"]:
-                region_bounds = get_region_bounds_latlon()
-                self.region_rectangle = self._ipyleaflet.Rectangle(
-                    bounds=region_bounds,
-                    color="red",
-                    fill_color="red",
-                    fill_opacity=0.5,
-                    draggable=True,
-                    transform=True,
-                    rotation=False,
-                    name="Computational region",
-                )
-                self.region_rectangle.observe(on_rectangle_change, names="locations")
-                self.map.fit_bounds(region_bounds)
-                self.map.add(self.region_rectangle)
-
-                save_button_control = self._ipyleaflet.WidgetControl(
-                    widget=save_button, position="topright"
-                )
-                self.map.add(save_button_control)
-            else:
-                if self.region_rectangle:
-                    self.region_rectangle.transform = False
-                    self.map.remove(self.region_rectangle)
-                    self.region_rectangle = None
-
-                save_button.disabled = True
-
-                if save_button_control:
-                    self.map.remove(save_button_control)
-                bottom_output_widget.layout.display = "none"
-
         def save_region(_change):
             from_proj = "+proj=longlat +datum=WGS84 +no_defs"
             to_proj = get_location_proj_string()
@@ -542,18 +484,102 @@ class InteractiveMap:
             bottom_output_widget.layout.display = "block"
             update_output(new)
 
-        region_mode_button.observe(toggle_region_mode, names="value")
+        save_button = widgets.Button(
+            description="Update region",
+            tooltip="Click to update region",
+            disabled=True,
+        )
         save_button.on_click(save_region)
 
-        region_mode_control = self._ipyleaflet.WidgetControl(
-            widget=region_mode_button, position="topright"
-        )
-        self.map.add(region_mode_control)
+        def show_region_interface():
+            nonlocal region_rectangle, save_button_control
+
+            region_bounds = get_region_bounds_latlon()
+            region_rectangle = self._ipyleaflet.Rectangle(
+                bounds=region_bounds,
+                color="red",
+                fill_color="red",
+                fill_opacity=0.5,
+                draggable=True,
+                transform=True,
+                rotation=False,
+                name="Computational region",
+            )
+            region_rectangle.observe(on_rectangle_change, names="locations")
+            self.map.fit_bounds(region_bounds)
+            self.map.add(region_rectangle)
+
+            save_button_control = self._ipyleaflet.WidgetControl(
+                widget=save_button, position="topright"
+            )
+            self.map.add_control(save_button_control)
+
+        def hide_region_interface():
+            nonlocal region_rectangle, save_button_control
+
+            if region_rectangle:
+                region_rectangle.transform = False
+                self.map.remove(region_rectangle)
+                region_rectangle = None
+
+            save_button.disabled = True
+
+            if save_button_control:
+                self.map.remove(save_button_control)
+            bottom_output_widget.layout.display = "none"
+
+        def toggle_region_interface(visible):
+            if visible:
+                show_region_interface()
+            else:
+                hide_region_interface()
 
         output_control = self._ipyleaflet.WidgetControl(
             widget=bottom_output_widget, position="bottomleft"
         )
-        self.map.add(output_control)
+        self.map.add_control(output_control)
+
+        return toggle_region_interface
+
+    def setup_toggle_buttons(self):
+        """
+        Set up the mutually exclusive toggle buttons.
+        """
+        import ipywidgets as widgets  # pylint: disable=import-outside-toplevel
+
+        toggle_draw_interface = self.setup_drawing_interface()
+        toggle_region_interface = self.draw_computational_region()
+
+        def on_toggle_buttons_change(change):
+            if change["new"] == "pencil":
+                toggle_region_interface(False)
+                toggle_draw_interface(True)
+            elif change["new"] == "square-o":
+                toggle_draw_interface(False)
+                toggle_region_interface(True)
+            else:
+                toggle_draw_interface(False)
+                toggle_region_interface(False)
+
+        mode_selector = widgets.ToggleButtons(
+            options=[("", "pencil"), ("", "square-o")],
+            description="",
+            icons=["pencil", "square-o"],
+            tooltips=["Draw", "Region"],
+            layout=widgets.Layout(
+                display="flex", flex_flow="row", justify_content="center"
+            ),
+        )
+
+        mode_selector.style.button_width = "40px"
+        mode_selector.style.button_height = "40px"
+
+        mode_selector.observe(on_toggle_buttons_change, names="value")
+
+        mode_control = self._ipyleaflet.WidgetControl(
+            widget=mode_selector, position="topright"
+        )
+        self.map.add_control(mode_control)
 
     def show(self):
         """This function returns a folium figure or ipyleaflet map object
@@ -562,7 +588,7 @@ class InteractiveMap:
         If map has layer control enabled, additional layers cannot be
         added after calling show()."""
         if self._ipyleaflet:
-            self.draw_computational_region()
+            self.setup_toggle_buttons()
         self.map.fit_bounds(self._renderer.get_bbox())
 
         if not self.layer_control_object:
@@ -575,10 +601,6 @@ class InteractiveMap:
             fig.add_child(self.map)
 
             return fig
-
-        # ipyleaflet
-        if self._ipyleaflet:
-            self.setup_drawing_interface()
         self.map.add(self.layer_control_object)
         return self.map
 
