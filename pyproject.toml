@@ -242,7 +242,7 @@ ignore = [
     "RUF021",  # parenthesize-chained-operators
     "RUF027",  # missing-f-string-syntax
     "RUF100",  # unused-noqa
-    "S101",    #assert
+    "S101",    # assert
     "S108",    # hardcoded-temp-file
     "S110",    # try-except-pass
     "S112",    # try-except-continue
