@@ -148,7 +148,9 @@ class QueryDialog(wx.Dialog):
             id = NewId()
             ids.append(id)
             self.Bind(
-                wx.EVT_MENU, lambda evt, t=text[1], id=id: self._copyText(t), id=id
+                wx.EVT_MENU,
+                lambda evt, t=text[1], id=id: self._copyText(t),  # noqa: A006
+                id=id,
             )
 
             menu.Append(id, text[0])

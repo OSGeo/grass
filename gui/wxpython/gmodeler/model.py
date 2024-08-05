@@ -475,12 +475,9 @@ class Model:
         #     item.SetId(i)
         #     i += 1
 
-    def IsValid(self):
+    def IsValid(self) -> bool:
         """Return True if model is valid"""
-        if self.Validate():
-            return False
-
-        return True
+        return not self.Validate()
 
     def Validate(self):
         """Validate model, return None if model is valid otherwise
@@ -820,12 +817,9 @@ class Model:
         for item in self.items:
             item.Update()
 
-    def IsParameterized(self):
+    def IsParameterized(self) -> bool:
         """Return True if model is parameterized"""
-        if self.Parameterize():
-            return True
-
-        return False
+        return bool(self.Parameterize())
 
     def Parameterize(self):
         """Return parameterized options"""
@@ -1396,7 +1390,6 @@ class ModelData(ModelObject):
         :param width, height: dimension of the shape
         :param x, y: position of the shape
         """
-        pass
 
     def IsIntermediate(self):
         """Checks if data item is intermediate"""
@@ -3784,9 +3777,6 @@ class ModelParamDialog(wx.Dialog):
 
         return errList
 
-    def DeleteIntermediateData(self):
+    def DeleteIntermediateData(self) -> bool:
         """Check if to detele intermediate data"""
-        if self.interData.IsShown() and self.interData.IsChecked():
-            return True
-
-        return False
+        return bool(self.interData.IsShown() and self.interData.IsChecked())

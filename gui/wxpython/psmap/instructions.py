@@ -573,7 +573,6 @@ class InstructionObject:
 
     def Read(self, instruction, text, **kwargs):
         """Read instruction and save them"""
-        pass
 
     def PercentToReal(self, e, n):
         """Converts text coordinates from percent of region to map coordinates"""

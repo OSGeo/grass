@@ -158,12 +158,10 @@ ignore = [
     "PERF401", # manual-list-comprehension
     "PERF402", # manual-list-copy
     "PERF403", # manual-dict-comprehension
-    "PIE790",  # unnecessary-placeholder
     "PIE794",  # duplicate-class-field-definition
     "PIE808",  # unnecessary-range-start
     "PIE810",  # multiple-starts-ends-with
     "PLC0206", # dict-index-missing-items
-    "PLC0414", # useless-import-alias
     "PLC0415", # import-outside-top-level
     "PLC1901", # compare-to-empty-string
     "PLC2701", # import-private-name
@@ -227,13 +225,13 @@ ignore = [
     "PTH202",  # os-path-getsize
     "PTH204",  # os-path-getmtime
     "PTH207",  # glob
-    "RET501", # unnecessary-return-none
-    "RET502", # implicit-return-value
-    "RET503", # implicit-return
-    "RET505", # superfluous-else-return
-    "RET506", # superfluous-else-raise
-    "RET507", # superfluous-else-continue
-    "RET508", # superfluous-else-break
+    "RET501",  # unnecessary-return-none
+    "RET502",  # implicit-return-value
+    "RET503",  # implicit-return
+    "RET505",  # superfluous-else-return
+    "RET506",  # superfluous-else-raise
+    "RET507",  # superfluous-else-continue
+    "RET508",  # superfluous-else-break
     "RSE102",  # unnecessary-paren-on-raise-exception
     "RUF002",  # ambiguous-unicode-character-docstring
     "RUF003",  # ambiguous-unicode-character-comment
@@ -268,7 +266,6 @@ ignore = [
     "S608",    # hardcoded-sql-expression
     "SIM101",  # duplicate-isinstance-call
     "SIM102",  # collapsible-if
-    "SIM103",  # needless-bool
     "SIM105",  # suppressible-exception
     "SIM108",  # if-else-block-instead-of-if-exp
     "SIM109",  # compare-with-tuple
@@ -302,14 +299,19 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 # See https://docs.astral.sh/ruff/settings/#lint_per-file-ignores
+# "A005", # builtin-module-shadowing
+# "PLW0108", # unnecessary-lambda
 # Ignore `E402` (import violations) in all `__init__.py` files
 "*/testsuite/**.py" = ["PT009", "PT027"]
 "__init__.py" = ["E402"]
+"gui/**" = ["PLW0108"] # See https://github.com/OSGeo/grass/issues/4124
 "gui/wxpython/iclass/frame.py" = ["FLY002"]
+"gui/wxpython/iclass/statistics.py" = ["A005"]
 "gui/wxpython/iscatt/plots.py" = ["PLW0108"]
 "gui/wxpython/psmap/utils.py" = ["PGH004"]
 "gui/wxpython/timeline/frame.py" = ["FLY002"]
 "gui/wxpython/tplot/frame.py" = ["FLY002"]
+"gui/wxpython/wxplot/profile.py" = ["A005"]
 "lib/imagery/testsuite/test_imagery_sigsetfile.py" = ["FURB152"]
 "python/grass/__init__.py" = ["PYI056"]
 "python/grass/exp*/tests/grass_script_mapset_session_test.py" = ["SIM117"]
@@ -321,9 +323,11 @@ ignore = [
 "python/grass/jupyter/tests/reprojection_renderer_test.py" = ["PT013"]
 "python/grass/jupyter/testsuite/interactivemap_test.py" = ["PGH004"]
 "python/grass/jupyter/testsuite/map_test.py" = ["PGH004"]
+"python/grass/pydispatch/signal.py" = ["A005"]
 "python/grass/pygrass/vector/geometry.py" = ["PYI024"]
 "python/grass/pygrass/vector/sql.py" = ["FLY002"]
 "python/grass/pygrass/vector/testsuite/test_table.py" = ["PLW0108"]
+"python/grass/script/array.py" = ["A005"]
 "raster3d/r3.flow/testsuite/r3flow_test.py" = ["FLY002"]
 "raster3d/r3.gradient/testsuite/r3gradient_test.py" = ["FLY002"]
 "scripts/d.polar/d.polar.py" = ["FURB154"]
