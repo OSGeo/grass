@@ -155,7 +155,7 @@ import tempfile
 import json
 import xml.etree.ElementTree as etree
 
-if sys.version_info.major == 3 and sys.version_info.minor < 8:
+if sys.version_info.major == 3 and sys.version_info.minor < 8:  # noqa: YTT204
     from distutils.dir_util import copy_tree
 else:
     from functools import partial
