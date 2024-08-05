@@ -161,7 +161,6 @@ ignore = [
     "PIE794",  # duplicate-class-field-definition
     "PIE808",  # unnecessary-range-start
     "PIE810",  # multiple-starts-ends-with
-    "PLC0206", # dict-index-missing-items
     "PLC0415", # import-outside-top-level
     "PLC1901", # compare-to-empty-string
     "PLC2701", # import-private-name
@@ -425,6 +424,7 @@ ignore = [
 "utils/generate_release_notes.py" = ["PGH004"]
 "utils/mkhtml.py" = ["INT002"]
 "vector/v.fill.holes/examples.ipynb" = ["PTH201"]
+"vector/v.univar/testsuite/test_v_univar.py" = ["PLC0206"]
 
 [tool.ruff.lint.flake8-import-conventions.extend-aliases]
 # Declare a custom aliases, checked with rule ICN001
