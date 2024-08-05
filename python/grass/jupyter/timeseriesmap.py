@@ -281,48 +281,36 @@ class TimeSeriesMap(BaseSeriesMap):
         if self._legend:
             self._render_legend(img)
 
+    def _render_worker(self, date, layer, filename):
+        """Function to render a single layer."""
+        shutil.copyfile(self.base_file, filename)
+        if layer == "None":
+            self._render_blank_layer(filename)
+        else:
+            self._render_layer(layer, filename)
+        return date, filename
+
     def render(self):
-        """Renders image for each time-step in space-time dataset.
-
-        Save PNGs to temporary directory. Must be run before creating a visualization
-        (i.e. show or save). Can be time-consuming to run with large
-        space-time datasets.
-        """
-
-        self._render()
+        """Renders image for each time-step in space-time dataset."""
         if not self._baseseries_added:
             raise RuntimeError(
                 "Cannot render space time dataset since none has been added."
-                "Use TimeSeriesMap.add_raster_series() or "
+                " Use TimeSeriesMap.add_raster_series() or "
                 "TimeSeriesMap.add_vector_series() to add dataset"
             )
 
         # Create name for empty layers
-        # Random name needed to avoid potential conflict with layer names
-        # A new random_name_none is created each time the render function is run,
-        # and any existing random_name_none file will be ignored
         random_name_none = gs.append_random("none", 8) + ".png"
 
-        # Render each layer
+        # Prepare tasks with tuples
+        tasks = []
         for date, layer in self._date_layer_dict.items():
             if layer == "None":
-                # Create file
                 filename = os.path.join(self._tmpdir.name, random_name_none)
-                self._base_filename_dict[date] = filename
-                # Render blank layer if it hasn't been done already
-                if not os.path.exists(filename):
-                    shutil.copyfile(self.base_file, filename)
-                    self._render_blank_layer(filename)
             else:
-                # Create file
                 filename = os.path.join(self._tmpdir.name, f"{layer}.png")
-                # Copying the base_file ensures that previous results are overwritten
-                shutil.copyfile(self.base_file, filename)
-                self._base_filename_dict[date] = filename
-                # Render image
-                self._render_layer(layer, filename)
-
-        self._layers_rendered = True
+            tasks.append((date, layer, filename))
+        self._render(tasks)
 
     def save(
         self,
