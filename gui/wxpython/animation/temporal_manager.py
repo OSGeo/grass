@@ -289,7 +289,6 @@ class TemporalManager:
                     lastTimeseries = series
                     end = None
                 else:
-                    end = end
                     # interval data
                     if series:
                         # map exists, stop point mode
