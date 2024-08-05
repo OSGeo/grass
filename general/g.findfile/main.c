@@ -33,6 +33,7 @@ int main(int argc, char *argv[])
     struct Option *mapset_opt;
     struct Option *file_opt;
     struct Flag *n_flag, *l_flag;
+    size_t len;
 
     module = G_define_module();
     G_add_keyword(_("general"));
@@ -104,8 +105,12 @@ int main(int argc, char *argv[])
             strcpy(name, file_opt->answer);
         G_free_tokens(map_mapset);
     }
-    else
-        strcpy(name, file_opt->answer);
+    else {
+        len = G_strlcpy(name, file_opt->answer, sizeof(name));
+        if (len >= sizeof(name)) {
+            G_fatal_error(_("Name <%s> is too long"), file_opt->answer);
+        }
+    }
 
     mapset = G_find_file2(elem_opt->answer, name, search_mapset);
     if (mapset) {
