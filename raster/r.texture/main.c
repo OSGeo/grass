@@ -312,28 +312,7 @@ int main(int argc, char *argv[])
     out_set.flag_null = flag.null;
     out_set.flag_ind = flag.ind;
 
-    threads = atoi(parm.nproc->answer);
-#if defined(_OPENMP)
-    /* Set the number of threads */
-    if (threads < 0) {
-        threads += omp_get_num_procs() + 1;
-    }
-    else if (threads == 0) {
-        G_warning(_("At least one thread should be used, the number of threads "
-                    "will be set on <%d>"),
-                  1);
-        threads = 1;
-    }
-    G_message(_("Using %d threads for parallel computing."), threads);
-    omp_set_num_threads(threads);
-#else
-    /* The number of threads is always 1 when OpenMP is not available */
-    if (threads != 1) {
-        G_warning(_("GRASS GIS is not compiled with OpenMP support, parallel "
-                    "computation is disabled."));
-    }
-    threads = 1;
-#endif
+    threads = G_set_omp_num_threads(parm.nproc);
     execute_texture(data, &dim, measure_menu, measure_idx, &out_set, threads);
 
     for (i = 0; i < dim.n_outputs; i++) {
