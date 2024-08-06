@@ -486,7 +486,7 @@ class InputDialog(wx.Dialog):
             id=wx.ID_ANY,
             size=globalvar.DIALOG_GSELECT_SIZE,
             labelText=_("Workspace file:"),
-            dialogTitle=_("Choose workspace file to " "import 3D view parameters"),
+            dialogTitle=_("Choose workspace file to import 3D view parameters"),
             buttonText=_("Browse"),
             startDirectory=os.getcwd(),
             fileMode=0,
@@ -550,7 +550,7 @@ class InputDialog(wx.Dialog):
         )
         self.zoomRadio = RadioButton(panel, label=_("Zoom value:"))
         self.zoomRadio.SetToolTip(
-            _("N-S/E-W distances in map units used to " "gradually reduce region.")
+            _("N-S/E-W distances in map units used to gradually reduce region.")
         )
         gridSizer.Add(self.zoomRadio, pos=(3, 0), border=10, flag=wx.EXPAND | wx.LEFT)
 
@@ -671,14 +671,13 @@ class InputDialog(wx.Dialog):
 
             if not self.legend.IsChecked():
                 self.legend.SetValue(True)
-        else:
-            if not self._tmpLegendCmd and not self.animationData.legendCmd:
-                self.legend.SetValue(False)
+        elif not self._tmpLegendCmd and not self.animationData.legendCmd:
+            self.legend.SetValue(False)
 
     def _update(self):
         if self.nDChoice.GetSelection() == 1 and len(self._layerList) > 1:
             raise GException(
-                _("Only one series or space-time " "dataset is accepted for 3D mode.")
+                _("Only one series or space-time dataset is accepted for 3D mode.")
             )
         hasSeries = False
         for layer in self._layerList:
@@ -1399,7 +1398,7 @@ class ExportDialog(wx.Dialog):
             self._hideAll()
             return
         cdata = self.listbox.GetClientData(index)
-        self.hidevbox.Show(self.fontBox, (cdata["name"] in ("time", "text")))
+        self.hidevbox.Show(self.fontBox, (cdata["name"] in {"time", "text"}))
         self.hidevbox.Show(self.imageBox, (cdata["name"] == "image"))
         self.hidevbox.Show(self.textBox, (cdata["name"] == "text"))
         self.hidevbox.Show(self.posBox, True)
@@ -1409,7 +1408,7 @@ class ExportDialog(wx.Dialog):
         self.spinY.SetValue(cdata["pos"][1])
         if cdata["name"] == "image":
             self.browse.SetValue(cdata["file"])
-        elif cdata["name"] in ("time", "text"):
+        elif cdata["name"] in {"time", "text"}:
             self.sampleLabel.SetFont(cdata["font"])
             if cdata["name"] == "text":
                 self.textCtrl.SetValue(cdata["text"])
@@ -1541,7 +1540,7 @@ class ExportDialog(wx.Dialog):
         """
 
         file_path_does_not_exist_err_message = _(
-            "Exported file directory '{base_dir}' " "does not exist."
+            "Exported file directory '{base_dir}' does not exist."
         )
         if not file_path:
             GError(parent=self, message=_("Export file is missing."))
@@ -1623,9 +1622,8 @@ class AnimSimpleLayerManager(SimpleLayerManager):
             else:
                 signal = self.cmdChanged
             signal.emit(index=self._layerList.GetLayerIndex(layer), layer=layer)
-        else:
-            if hidden:
-                self._layerList.RemoveLayer(layer)
+        elif hidden:
+            self._layerList.RemoveLayer(layer)
         dlg.Destroy()
         self._update()
         self.anyChange.emit()
@@ -1750,7 +1748,7 @@ class AddTemporalLayerDialog(wx.Dialog):
         if typeName:
             self.tchoice.SetStringSelection(self._types[typeName])
             self.tselect.SetType(typeName)
-            if typeName in ("strds", "stvds", "str3ds"):
+            if typeName in {"strds", "stvds", "str3ds"}:
                 self.tselect.SetType(typeName, multiple=False)
                 self.addManyMapsButton.Disable()
             else:
@@ -1760,7 +1758,7 @@ class AddTemporalLayerDialog(wx.Dialog):
             self.tselect.SetValue("")
         else:
             typeName = self.tchoice.GetClientData(self.tchoice.GetSelection())
-            if typeName in ("strds", "stvds", "str3ds"):
+            if typeName in {"strds", "stvds", "str3ds"}:
                 self.tselect.SetType(typeName, multiple=False)
                 self.addManyMapsButton.Disable()
             else:
@@ -1773,14 +1771,14 @@ class AddTemporalLayerDialog(wx.Dialog):
 
     def _createDefaultCommand(self):
         cmd = []
-        if self._mapType in ("raster", "strds"):
+        if self._mapType in {"raster", "strds"}:
             cmd.append("d.rast")
-        elif self._mapType in ("vector", "stvds"):
+        elif self._mapType in {"vector", "stvds"}:
             cmd.append("d.vect")
-        elif self._mapType in ("raster_3d", "str3ds"):
+        elif self._mapType in {"raster_3d", "str3ds"}:
             cmd.append("d.rast3d")
         if self._name:
-            if self._mapType in ("raster", "vector", "raster_3d"):
+            if self._mapType in {"raster", "vector", "raster_3d"}:
                 cmd.append("map={name}".format(name=self._name.split(",")[0]))
             else:
                 try:

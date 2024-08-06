@@ -29,7 +29,7 @@ from core.gcmd import GMessage, GError, GWarning
 from core.gcmd import RunCommand
 from gui_core.wrap import Button, ListCtrl
 
-import grass.script as grass
+import grass.script as gs
 from grass.pydispatch.signal import Signal
 
 
@@ -208,7 +208,7 @@ class VectorSelectBase:
             if self._dialog:
                 self._dialog.Raise()
 
-    def AddVecInfo(self, vInfoDictTMP):
+    def AddVecInfo(self, vInfoDictTMP) -> bool:
         """Update vector in list
 
         Note: click on features add category
@@ -232,10 +232,7 @@ class VectorSelectBase:
             if self._dialog:
                 self.slist.AddItem(vInfoDictTMP)
 
-        if len(self.selectedFeatures) == 0:
-            return False
-
-        return True
+        return not len(self.selectedFeatures) == 0
 
     def _draw(self):
         """Call class 'VectorSelectHighlighter' to draw selected features"""
@@ -247,7 +244,7 @@ class VectorSelectBase:
                 + "@"
                 + self.selectedFeatures[0]["Mapset"]
             )
-            tmp = list()
+            tmp = []
             for i in self.selectedFeatures:
                 tmp.append(i["Category"])
 
@@ -299,13 +296,13 @@ class VectorSelectBase:
         mapInfo = self.mapWin.GetMap()
         threshold = 10.0 * ((mapInfo.region["e"] - mapInfo.region["w"]) / mapInfo.width)
         try:
-            query = grass.vector_what(
+            query = gs.vector_what(
                 map=[self.mapName],
                 coord=self.mapWin.GetLastEN(),
                 distance=threshold,
                 skip_attributes=True,
             )
-        except grass.ScriptError:
+        except gs.ScriptError:
             GError(
                 parent=self, message=_("Failed to query vector map(s) <%s>.") % self.map
             )
@@ -358,7 +355,7 @@ class VectorSelectBase:
         if ret == 0:
             tree = self._giface.GetLayerTree()
             if tree:
-                outMap = f"{outMap}@{grass.gisenv()['MAPSET']}"
+                outMap = f"{outMap}@{gs.gisenv()['MAPSET']}"
                 tree.AddLayer(
                     ltype="vector",
                     lname=outMap,
@@ -405,7 +402,7 @@ class VectorSelectHighlighter:
         self.giface = giface
         self.layerCat = {}
         self.data = {}
-        self.data["Category"] = list()
+        self.data["Category"] = []
         self.data["Map"] = None
         self.data["Layer"] = None
 
@@ -419,7 +416,7 @@ class VectorSelectHighlighter:
         self.data["Category"] = cats
 
     def Clear(self):
-        self.data["Category"] = list()
+        self.data["Category"] = []
         self.data["Map"] = None
         self.data["Layer"] = None
         self.mapdisp.RemoveQueryLayer()

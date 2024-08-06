@@ -58,7 +58,7 @@ from gui_core.wrap import Menu
 from mapdisp import statusbar as sb
 from main_window.page import MainPageBase
 
-import grass.script as grass
+import grass.script as gs
 
 from grass.pydispatch.signal import Signal
 
@@ -161,7 +161,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
         self.Map.GetRenderMgr().renderingFailed.connect(
             lambda cmd, error: self._giface.WriteError(
                 _("Failed to run command '%(command)s'. Details:\n%(error)s")
-                % dict(command=" ".join(cmd), error=error)
+                % {"command": " ".join(cmd), "error": error}
             )
         )
 
@@ -305,7 +305,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
             self.toolbars["map"].combo.SetValue(_("2D view"))
 
             GError(
-                _("Unable to start wxGUI vector digitizer.\n" "Details: %s") % errorMsg,
+                _("Unable to start wxGUI vector digitizer.\nDetails: %s") % errorMsg,
                 parent=self,
             )
             return
@@ -745,7 +745,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
         dlg = wx.FileDialog(
             parent=self,
             message=_(
-                "Choose a file name to save the image " "(no need to add extension)"
+                "Choose a file name to save the image (no need to add extension)"
             ),
             wildcard=filetype,
             style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
@@ -834,12 +834,12 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 self._giface.WriteError(_("Failed to run d.to.rast:\n") + messages)
                 return
             # set region for composite
-            grass.use_temp_region()
+            gs.use_temp_region()
             returncode, messages = RunCommand(
                 "g.region", raster=tmpName + ".red", quiet=True, getErrorMsg=True
             )
             if not returncode == 0:
-                grass.del_temp_region()
+                gs.del_temp_region()
                 self._giface.WriteError(_("Failed to run d.to.rast:\n") + messages)
                 return
             # composite
@@ -853,7 +853,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 overwrite=overwrite,
                 getErrorMsg=True,
             )
-            grass.del_temp_region()
+            gs.del_temp_region()
             RunCommand(
                 "g.remove",
                 type="raster",
@@ -863,7 +863,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
             )
             if not returncode == 0:
                 self._giface.WriteError(_("Failed to run d.to.rast:\n") + messages)
-                grass.try_remove(pngFile)
+                gs.try_remove(pngFile)
                 return
 
             # alignExtent changes only region variable
@@ -880,7 +880,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 w=region["w"],
                 quiet=True,
             )
-            grass.try_remove(pngFile)
+            gs.try_remove(pngFile)
 
         if self.IsPaneShown("3d"):
             self._giface.WriteError(_("d.to.rast can be used only in 2D mode."))
@@ -900,7 +900,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
             return
         # output file as PNG
         tmpName = "d_to_rast_tmp"
-        pngFile = grass.tempfile(create=False) + ".png"
+        pngFile = gs.tempfile(create=False) + ".png"
         dOutFileCmd = ["d.out.file", "output=" + pngFile, "format=png"]
         self.DOutFile(dOutFileCmd, callback=_DToRastDone)
 
@@ -1014,10 +1014,10 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 ltype = layer.maplayer.GetType()
                 if ltype == "raster":
                     rast.append(name)
-                elif ltype in ("rgb", "his"):
+                elif ltype in {"rgb", "his"}:
                     for iname in name.split("\n"):
                         rast.append(iname)
-                elif ltype in ("vector", "thememap", "themechart"):
+                elif ltype in {"vector", "thememap", "themechart"}:
                     vect.append(name)
             if vect:
                 # check for vector maps open to be edited
@@ -1027,7 +1027,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
                     for name in vect:
                         if lmap == name:
                             self._giface.WriteWarning(
-                                _("Vector map <%s> " "opened for editing - skipped.")
+                                _("Vector map <%s> opened for editing - skipped.")
                                 % lmap
                             )
                             vect.remove(name)
@@ -1086,21 +1086,21 @@ class MapPanel(SingleMapPanel, MainPageBase):
         vectQuery = []
         env = os.environ.copy()
         for raster in rast:
-            env["GRASS_REGION"] = grass.region_env(raster=raster)
-            rastQuery += grass.raster_what(
+            env["GRASS_REGION"] = gs.region_env(raster=raster)
+            rastQuery += gs.raster_what(
                 map=raster, coord=(east, north), localized=True, env=env
             )
         if vect:
             encoding = UserSettings.Get(group="atm", key="encoding", subkey="value")
             try:
-                vectQuery = grass.vector_what(
+                vectQuery = gs.vector_what(
                     map=vect,
                     coord=(east, north),
                     distance=qdist,
                     encoding=encoding,
                     multiple=True,
                 )
-            except grass.ScriptError:
+            except gs.ScriptError:
                 GError(
                     parent=self,
                     message=_(
@@ -1146,7 +1146,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
             self._highlighter_layer.SetMap(
                 vectQuery[0]["Map"] + "@" + vectQuery[0]["Mapset"]
             )
-            tmp = list()
+            tmp = []
             for i in vectQuery:
                 tmp.append(i["Category"])
 
@@ -1634,7 +1634,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
             ),
         )
         rasters = self.GetMap().GetListOfLayers(
-            ltype="raster", mapset=grass.gisenv()["MAPSET"]
+            ltype="raster", mapset=gs.gisenv()["MAPSET"]
         )
         self.toolbars["rdigit"].UpdateRasterLayers(rasters)
         self.toolbars["rdigit"].SelectDefault()
@@ -1665,7 +1665,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
         self.rdigit.Start()
 
     def _updateRDigitLayers(self, layer):
-        mapset = grass.gisenv()["MAPSET"]
+        mapset = gs.gisenv()["MAPSET"]
         self.toolbars["rdigit"].UpdateRasterLayers(
             rasters=self.GetMap().GetListOfLayers(ltype="raster", mapset=mapset)
         )

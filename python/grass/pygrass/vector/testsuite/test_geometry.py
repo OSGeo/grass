@@ -98,7 +98,6 @@ class PointTestCase(TestCase):
     def test_buffer(self):
         """Test buffer method"""
         # TODO: verify if the buffer depends from the mapset's projection
-        pass
 
 
 class LineTestCase(TestCase):
@@ -336,17 +335,13 @@ class AreaTestCase(TestCase):
         self.assertEqual(len(boundaries), 4)
 
         string_list = []
-        string_list.append(
-            "LINESTRING (0.0000000000000000 0.0000000000000000, 0.0000000000000000 4.0000000000000000)"
-        )
-        string_list.append(
-            "LINESTRING (0.0000000000000000 4.0000000000000000, 4.0000000000000000 4.0000000000000000)"
-        )
-        string_list.append(
-            "LINESTRING (4.0000000000000000 4.0000000000000000, 4.0000000000000000 0.0000000000000000)"
-        )
-        string_list.append(
-            "LINESTRING (4.0000000000000000 0.0000000000000000, 0.0000000000000000 0.0000000000000000)"
+        string_list.extend(
+            (
+                "LINESTRING (0.0000000000000000 0.0000000000000000, 0.0000000000000000 4.0000000000000000)",
+                "LINESTRING (0.0000000000000000 4.0000000000000000, 4.0000000000000000 4.0000000000000000)",
+                "LINESTRING (4.0000000000000000 4.0000000000000000, 4.0000000000000000 0.0000000000000000)",
+                "LINESTRING (4.0000000000000000 0.0000000000000000, 0.0000000000000000 0.0000000000000000)",
+            )
         )
 
         for boundary, i in zip(boundaries, range(4)):

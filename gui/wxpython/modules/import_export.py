@@ -53,8 +53,8 @@ class ImportDialog(wx.Dialog):
         self.parent = parent  # GMFrame
         self._giface = giface  # used to add layers
         self.importType = itype
-        self.options = dict()  # list of options
-        self.options_par = dict()
+        self.options = {}  # list of options
+        self.options_par = {}
 
         self.commandId = -1  # id of running command
 
@@ -274,7 +274,6 @@ class ImportDialog(wx.Dialog):
 
     def OnRun(self, event):
         """Import/Link data (each layes as separate vector map)"""
-        pass
 
     def OnCheckOverwrite(self, event):
         """Check/uncheck overwrite checkbox widget"""
@@ -344,11 +343,9 @@ class ImportDialog(wx.Dialog):
         .. todo::
             not yet implemented
         """
-        pass
 
     def OnCmdDone(self, event):
         """Do what has to be done after importing"""
-        pass
 
     def _getLayersToReprojetion(self, projMatch_idx, grassName_idx):
         """If there are layers with different projection from loation projection,
@@ -631,10 +628,10 @@ class OgrImportDialog(ImportDialog):
         if (
             self.dsnInput.GetType() == "db"
             and self.dsnInput.GetFormat()
-            in (
+            in {
                 "PostgreSQL",
                 "PostgreSQL/PostGIS",
-            )
+            }
             and "GRASS_VECTOR_OGR" not in os.environ
         ):
             self.popOGR = True
@@ -902,7 +899,7 @@ class DxfImportDialog(ImportDialog):
         if not path:
             return
 
-        data = list()
+        data = []
         ret = RunCommand(
             "v.in.dxf", quiet=True, parent=self, read=True, flags="l", input=path
         )

@@ -18,9 +18,9 @@ for details.
 :authors: Soeren Gebbert
 """
 
-from .core import init_dbif, get_current_mapset, get_tgis_message_interface
-from .factory import dataset_factory
 from .abstract_map_dataset import AbstractMapDataset
+from .core import get_current_mapset, get_tgis_message_interface, init_dbif
+from .factory import dataset_factory
 
 ###############################################################################
 
@@ -58,18 +58,13 @@ def open_old_stds(name, type, dbif=None):
             msgr.fatal("Invalid name of the space time dataset. Only one dot allowed.")
     id = name + "@" + mapset
 
-    if type == "strds" or type == "rast" or type == "raster":
+    if type in {"strds", "rast", "raster"}:
         sp = dataset_factory("strds", id)
         if semantic_label:
             sp.set_semantic_label(semantic_label)
-    elif (
-        type == "str3ds"
-        or type == "raster3d"
-        or type == "rast3d"
-        or type == "raster_3d"
-    ):
+    elif type in {"str3ds", "raster3d", "rast3d", "raster_3d"}:
         sp = dataset_factory("str3ds", id)
-    elif type == "stvds" or type == "vect" or type == "vector":
+    elif type in {"stvds", "vect", "vector"}:
         sp = dataset_factory("stvds", id)
     else:
         msgr.fatal(_("Unknown type: %s") % (type))
@@ -119,27 +114,20 @@ def check_new_stds(name, type, dbif=None, overwrite=False):
         n, m = name.split("@")
         if mapset != m:
             msgr.fatal(
-                _("Space time datasets can only be created in the " "current mapset")
+                _("Space time datasets can only be created in the current mapset")
             )
         id = name
 
-    if type == "strds" or type == "rast" or type == "raster":
+    if type in {"strds", "rast", "raster"}:
         if name.find(".") > -1:
             # a dot is used as a separator for semantic label filtering
             msgr.fatal(
-                _("Illegal dataset name <{}>. " "Character '.' not allowed.").format(
-                    name
-                )
+                _("Illegal dataset name <{}>. Character '.' not allowed.").format(name)
             )
         sp = dataset_factory("strds", id)
-    elif (
-        type == "str3ds"
-        or type == "raster3d"
-        or type == "rast3d "
-        or type == "raster_3d"
-    ):
+    elif type in {"str3ds", "raster3d", "rast3d ", "raster_3d"}:
         sp = dataset_factory("str3ds", id)
-    elif type == "stvds" or type == "vect" or type == "vector":
+    elif type in {"stvds", "vect", "vector"}:
         sp = dataset_factory("stvds", id)
     else:
         msgr.error(_("Unknown type: %s") % (type))

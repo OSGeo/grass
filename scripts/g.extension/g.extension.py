@@ -489,8 +489,7 @@ def urlretrieve(url, filename, *args, **kwargs):
     """
     request = urlrequest.Request(url, headers=HEADERS)
     response = urlrequest.urlopen(request, *args, **kwargs)
-    with open(filename, "wb") as f:
-        f.write(response.read())
+    Path(filename).write_bytes(response.read())
 
 
 def urlopen(url, *args, **kwargs):
@@ -572,8 +571,7 @@ def get_default_branch(full_url):
 
 def etree_fromfile(filename):
     """Create XML element tree from a given file name"""
-    with open(filename, "r") as file_:
-        return etree.fromstring(file_.read())
+    return etree.fromstring(Path(filename).read_text())
 
 
 def etree_fromurl(url):
@@ -667,11 +665,10 @@ def list_installed_extensions(toolboxes=False):
             gs.message(_("List of installed extensions (modules):"))
         sys.stdout.write("\n".join(elist))
         sys.stdout.write("\n")
+    elif toolboxes:
+        gs.info(_("No extension (toolbox) installed"))
     else:
-        if toolboxes:
-            gs.info(_("No extension (toolbox) installed"))
-        else:
-            gs.info(_("No extension (module) installed"))
+        gs.info(_("No extension (module) installed"))
 
 
 def get_installed_toolboxes(force=False):
@@ -691,7 +688,7 @@ def get_installed_toolboxes(force=False):
         os.remove(xml_file)
         write_xml_toolboxes(xml_file)
         return []
-    ret = list()
+    ret = []
     for tnode in tree.findall("toolbox"):
         ret.append(tnode.get("code"))
     return ret
@@ -718,15 +715,17 @@ def get_installed_modules(force=False):
         os.remove(xml_file)
         write_xml_modules(xml_file)
         return []
-    ret = list()
+    ret = []
     for tnode in tree.findall("task"):
         if flags["g"]:
             desc, keyw = get_optional_params(tnode)
-            ret.append("name={0}".format(tnode.get("name").strip()))
-            ret.append("description={0}".format(desc))
-            ret.append("keywords={0}".format(keyw))
-            ret.append(
-                "executables={0}".format(",".join(get_module_executables(tnode)))
+            ret.extend(
+                (
+                    "name={0}".format(tnode.get("name").strip()),
+                    "description={0}".format(desc),
+                    "keywords={0}".format(keyw),
+                    "executables={0}".format(",".join(get_module_executables(tnode))),
+                )
             )
         else:
             ret.append(tnode.get("name").strip())
@@ -756,9 +755,8 @@ def list_available_extensions(url):
                 print("%s (%s)" % (toolbox_data["name"], toolbox_code))
             if flags["c"] or flags["g"]:
                 list_available_modules(url, toolbox_data["modules"])
-            else:
-                if toolbox_data["modules"]:
-                    print(os.linesep.join(["* " + x for x in toolbox_data["modules"]]))
+            elif toolbox_data["modules"]:
+                print(os.linesep.join(["* " + x for x in toolbox_data["modules"]]))
     else:
         gs.message(_("List of available extensions (modules):"))
         # TODO: extensions with several modules + lib
@@ -767,13 +765,13 @@ def list_available_extensions(url):
 
 def get_available_toolboxes(url):
     """Return toolboxes available in the repository"""
-    tdict = dict()
+    tdict = {}
     url = url + "toolboxes.xml"
     try:
         tree = etree_fromurl(url)
         for tnode in tree.findall("toolbox"):
-            mlist = list()
-            clist = list()
+            mlist = []
+            clist = []
             tdict[tnode.get("code")] = {
                 "name": tnode.get("name"),
                 "correlate": clist,
@@ -798,7 +796,7 @@ def get_toolbox_extensions(url, name):
     :param name: toolbox name
     """
     # dictionary of extensions
-    edict = dict()
+    edict = {}
 
     url = url + "toolboxes.xml"
 
@@ -809,11 +807,11 @@ def get_toolbox_extensions(url, name):
                 for enode in tnode.findall("task"):
                     # extension name
                     ename = enode.get("name")
-                    edict[ename] = dict()
+                    edict[ename] = {}
                     # list of modules installed by this extension
-                    edict[ename]["mlist"] = list()
+                    edict[ename]["mlist"] = []
                     # list of files installed by this extension
-                    edict[ename]["flist"] = list()
+                    edict[ename]["flist"] = []
                 break
     except (HTTPError, OSError):
         gs.fatal(_("Unable to fetch addons metadata file"))
@@ -982,7 +980,7 @@ def get_wxgui_extensions(url):
 
     :param url: a directory URL (filename will be attached)
     """
-    mlist = list()
+    mlist = []
     gs.debug(
         "Fetching list of wxGUI extensions from "
         "GRASS-Addons SVN repository (be patient)..."
@@ -1004,7 +1002,7 @@ def get_wxgui_extensions(url):
         if not sline:
             continue
         name = sline.group(2).rstrip("/")
-        if name not in ("..", "Makefile"):
+        if name not in {"..", "Makefile"}:
             mlist.append(name)
 
     return mlist
@@ -1175,12 +1173,12 @@ def install_extension(source=None, url=None, xmlurl=None, branch=None):
         gs.message(_("Installing toolbox <%s>...") % options["extension"])
         edict = get_toolbox_extensions(xmlurl, options["extension"])
     else:
-        edict = dict()
-        edict[options["extension"]] = dict()
+        edict = {}
+        edict[options["extension"]] = {}
         # list of modules installed by this extension
-        edict[options["extension"]]["mlist"] = list()
+        edict[options["extension"]]["mlist"] = []
         # list of files installed by this extension
-        edict[options["extension"]]["flist"] = list()
+        edict[options["extension"]]["flist"] = []
     if not edict:
         gs.warning(_("Nothing to install"))
         return
@@ -1188,7 +1186,7 @@ def install_extension(source=None, url=None, xmlurl=None, branch=None):
     ret = 0
     tmp_dir = None
 
-    new_modules = list()
+    new_modules = []
     for extension in edict:
         ret1 = 0
         new_modules_ext = None
@@ -1215,9 +1213,7 @@ def install_extension(source=None, url=None, xmlurl=None, branch=None):
         return
 
     if ret != 0:
-        gs.warning(
-            _("Installation failed, sorry." " Please check above error messages.")
-        )
+        gs.warning(_("Installation failed, sorry. Please check above error messages."))
     else:
         # update extensions metadata file
         gs.message(_("Updating extensions metadata file..."))
@@ -1253,15 +1249,15 @@ def get_toolboxes_metadata(url):
         and dictionary with dest, keyw, files keys as value, the second item
         is list of 'binary' files (installation files)
     """
-    data = dict()
+    data = {}
     try:
         tree = etree_fromurl(url)
         for tnode in tree.findall("toolbox"):
-            clist = list()
+            clist = []
             for cnode in tnode.findall("correlate"):
                 clist.append(cnode.get("code"))
 
-            mlist = list()
+            mlist = []
             for mnode in tnode.findall("task"):
                 mlist.append(mnode.get("name"))
 
@@ -1272,7 +1268,7 @@ def get_toolboxes_metadata(url):
                 "modules": mlist,
             }
     except (HTTPError, OSError):
-        gs.error(_("Unable to read addons metadata file " "from the remote server"))
+        gs.error(_("Unable to read addons metadata file from the remote server"))
     return data
 
 
@@ -1294,8 +1290,7 @@ def install_toolbox_xml(url, name):
         write_xml_modules(xml_file)
 
     # read XML file
-    with open(xml_file, "r") as xml:
-        tree = etree.fromstring(xml.read())
+    tree = etree.fromstring(Path(xml_file).read_text())
 
     # update tree
     tnode = None
@@ -1343,9 +1338,9 @@ def get_addons_metadata(url, mlist):
         tree = etree_fromurl(url)
     except (HTTPError, URLError, OSError) as error:
         gs.error(
-            _(
-                "Unable to read addons metadata file" " from the remote server: {0}"
-            ).format(error)
+            _("Unable to read addons metadata file from the remote server: {0}").format(
+                error
+            )
         )
         return data, bin_list
     except ETREE_EXCEPTIONS as error:
@@ -1355,7 +1350,7 @@ def get_addons_metadata(url, mlist):
         name = mnode.get("name")
         if name not in mlist:
             continue
-        file_list = list()
+        file_list = []
         bnode = mnode.find("binary")
         windows = sys.platform == "win32"
         if bnode is not None:
@@ -1453,8 +1448,6 @@ def install_extension_xml(edict):
                 "Extension already listed in metadata file; metadata not updated!"
             )
     write_xml_extensions(xml_file, tree)
-
-    return None
 
 
 def get_multi_addon_addons_which_install_only_html_man_page():
@@ -1637,7 +1630,7 @@ def install_extension_win(name):
     )
 
     # collect module names and file names
-    module_list = list()
+    module_list = []
     module_name_pattern = re.compile(
         r"^([d,g,i,m,p,r,s,t,v]|^db|^ps|^r3|^wx)\..*[\.py,\.exe]$"
     )
@@ -1661,7 +1654,7 @@ def install_extension_win(name):
         replace_shebang_win(filename)
 
     # collect old files
-    old_file_list = list()
+    old_file_list = []
     for r, d, f in os.walk(options["prefix"]):
         for filename in f:
             fullname = os.path.join(r, filename)
@@ -1673,7 +1666,7 @@ def install_extension_win(name):
     )
 
     # collect new files
-    file_list = list()
+    file_list = []
     for r, d, f in os.walk(options["prefix"]):
         for filename in f:
             fullname = os.path.join(r, filename)
@@ -1800,16 +1793,14 @@ def fix_newlines(directory):
                 continue  # ignore binary files
 
             # read content of text file
-            with open(filename, "rb") as fd:
-                data = fd.read()
+            data = Path(filename).read_bytes()
 
             # we don't expect there would be CRLF file by
             # purpose if we want to allow CRLF files we would
             # have to whitelite .py etc
             newdata = data.replace(b"\r\n", b"\n")
             if newdata != data:
-                with open(filename, "wb") as newfile:
-                    newfile.write(newdata)
+                Path(filename).write_bytes(newdata)
 
 
 def extract_zip(name, directory, tmpdir):
@@ -1886,7 +1877,7 @@ def download_source_code(
                              URL path
     """
     gs.verbose(_("Type of source identified as '{source}'.").format(source=source))
-    if source in ("official", "official_fork"):
+    if source in {"official", "official_fork"}:
         gs.message(
             _("Fetching <{name}> from <{url}> (be patient)...").format(
                 name=name, url=url
@@ -1897,14 +1888,14 @@ def download_source_code(
         )
     elif source == "svn":
         gs.message(
-            _("Fetching <{name}> from " "<{url}> (be patient)...").format(
+            _("Fetching <{name}> from <{url}> (be patient)...").format(
                 name=name, url=url
             )
         )
         download_source_code_svn(url, name, outdev, directory)
-    elif source in ["remote_zip"]:
+    elif source == "remote_zip":
         gs.message(
-            _("Fetching <{name}> from " "<{url}> (be patient)...").format(
+            _("Fetching <{name}> from <{url}> (be patient)...").format(
                 name=name, url=url
             )
         )
@@ -1993,16 +1984,16 @@ def install_extension_std_platforms(name, source, url, branch):
     os.chdir(srcdir)
 
     pgm_not_found_message = _(
-        "Module name not found." " Check module Makefile syntax (PGM variable)."
+        "Module name not found. Check module Makefile syntax (PGM variable)."
     )
     # collect module names
-    module_list = list()
+    module_list = []
     for r, d, f in os.walk(srcdir):
         for filename in f:
             if filename == "Makefile":
                 # get the module name: PGM = <module name>
                 with open(os.path.join(r, "Makefile")) as fp:
-                    for line in fp.readlines():
+                    for line in fp:
                         if re.match(r"PGM.*.=|PGM=", line):
                             try:
                                 modulename = line.split("=")[1].strip()
@@ -2080,8 +2071,8 @@ def install_extension_std_platforms(name, source, url, branch):
     if not os.path.exists(os.path.join(gisbase, "include", "Make", "Module.make")):
         gs.fatal(_("Please install GRASS development package"))
 
-    if 0 != gs.call(make_cmd, stdout=outdev):
-        gs.fatal(_("Compilation failed, sorry." " Please check above error messages."))
+    if gs.call(make_cmd, stdout=outdev) != 0:
+        gs.fatal(_("Compilation failed, sorry. Please check above error messages."))
 
     if flags["i"]:
         gs.message(f"\n{path_to_src_code_message}\n")
@@ -2089,7 +2080,7 @@ def install_extension_std_platforms(name, source, url, branch):
         return 0, None, None, None
 
     # collect old files
-    old_file_list = list()
+    old_file_list = []
     for r, d, f in os.walk(options["prefix"]):
         for filename in f:
             fullname = os.path.join(r, filename)
@@ -2099,7 +2090,7 @@ def install_extension_std_platforms(name, source, url, branch):
     ret = gs.call(install_cmd, stdout=outdev)
 
     # collect new files
-    file_list = list()
+    file_list = []
     for r, d, f in os.walk(options["prefix"]):
         for filename in f:
             fullname = os.path.join(r, filename)
@@ -2115,15 +2106,15 @@ def remove_extension(force=False):
     if flags["t"]:
         edict = get_toolbox_extensions(options["prefix"], options["extension"])
     else:
-        edict = dict()
-        edict[options["extension"]] = dict()
+        edict = {}
+        edict[options["extension"]] = {}
         # list of modules installed by this extension
-        edict[options["extension"]]["mlist"] = list()
+        edict[options["extension"]]["mlist"] = []
         # list of files installed by this extension
-        edict[options["extension"]]["flist"] = list()
+        edict[options["extension"]]["flist"] = []
 
     # collect modules and files installed by these extensions
-    mlist = list()
+    mlist = []
     xml_file = os.path.join(options["prefix"], "extensions.xml")
     if os.path.exists(xml_file):
         # read XML file
@@ -2199,23 +2190,22 @@ def remove_extension(force=False):
             for ename in edict:
                 if ename in eremoved:
                     gs.message(_("Extension <%s> successfully uninstalled.") % ename)
+    elif flags["t"]:
+        gs.warning(
+            _(
+                "Toolbox <%s> not removed. "
+                "Re-run '%s' with '-f' flag to force removal"
+            )
+            % (options["extension"], "g.extension")
+        )
     else:
-        if flags["t"]:
-            gs.warning(
-                _(
-                    "Toolbox <%s> not removed. "
-                    "Re-run '%s' with '-f' flag to force removal"
-                )
-                % (options["extension"], "g.extension")
+        gs.warning(
+            _(
+                "Extension <%s> not removed. "
+                "Re-run '%s' with '-f' flag to force removal"
             )
-        else:
-            gs.warning(
-                _(
-                    "Extension <%s> not removed. "
-                    "Re-run '%s' with '-f' flag to force removal"
-                )
-                % (options["extension"], "g.extension")
-            )
+            % (options["extension"], "g.extension")
+        )
 
 
 # remove existing extension(s) (reading XML file)
@@ -2230,8 +2220,8 @@ def remove_extension_files(edict, force=False):
     # try to read XML metadata file first
     xml_file = os.path.join(options["prefix"], "extensions.xml")
 
-    einstalled = list()
-    eremoved = list()
+    einstalled = []
+    eremoved = []
 
     if os.path.exists(xml_file):
         tree = etree_fromfile(xml_file)
@@ -2245,7 +2235,7 @@ def remove_extension_files(edict, force=False):
     for name in edict:
         removed = True
         if len(edict[name]["flist"]) > 0:
-            err = list()
+            err = []
             for fpath in edict[name]["flist"]:
                 gs.verbose(fpath)
                 if force:
@@ -2476,12 +2466,14 @@ def resolve_install_prefix(path, to_system):
         path = os.environ["GISBASE"]
     if path == "$GRASS_ADDON_BASE":
         if not os.getenv("GRASS_ADDON_BASE"):
-            gs.warning(
-                _(
-                    "GRASS_ADDON_BASE is not defined, installing to ~/.grass{}/addons"
-                ).format(VERSION[0])
+            from grass.app.runtime import get_grass_config_dir
+
+            path = os.path.join(
+                get_grass_config_dir(VERSION[0], VERSION[1], os.environ), "addons"
             )
-            path = os.path.join(os.environ["HOME"], f".grass{VERSION[0]}", "addons")
+            gs.warning(
+                _("GRASS_ADDON_BASE is not defined, installing to {}").format(path)
+            )
         else:
             path = os.environ["GRASS_ADDON_BASE"]
     if os.path.exists(path) and not os.access(path, os.W_OK):
@@ -2514,7 +2506,7 @@ def resolve_xmlurl_prefix(url, source=None):
     'https://grass.osgeo.org/addons/'
     """
     gs.debug("resolve_xmlurl_prefix(url={0}, source={1})".format(url, source))
-    if source in ("official", "official_fork"):
+    if source in {"official", "official_fork"}:
         # use pregenerated modules XML file
         # Define branch to fetch from (latest or current version)
         version_branch = get_version_branch(VERSION[0])
@@ -2597,15 +2589,14 @@ def resolve_known_host_service(url, name, branch):
         if "branch" in match["url_end"]:
             suffix = match["url_end"].format(
                 name=name,
-                branch=branch if branch else get_default_branch(url),
+                branch=branch or get_default_branch(url),
             )
         else:
             suffix = match["url_end"].format(name=name)
         url = "{prefix}{base}{suffix}".format(
             prefix=actual_start, base=url.rstrip("/"), suffix=suffix
         )
-        gs.verbose
-        (_("Will use the following URL for download: {0}").format(url))
+        gs.verbose(_("Will use the following URL for download: {0}").format(url))
         return "remote_zip", url
     else:
         return None, None

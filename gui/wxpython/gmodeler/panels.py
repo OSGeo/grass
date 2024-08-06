@@ -455,7 +455,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
             y = layer.GetY()
 
             for p in params["params"]:
-                if p.get("prompt", "") not in (
+                if p.get("prompt", "") not in {
                     "raster",
                     "vector",
                     "raster_3d",
@@ -464,7 +464,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
                     "strds",
                     "stvds",
                     "str3ds",
-                ):
+                }:
                     continue
 
                 # add new data item if defined or required
@@ -989,14 +989,10 @@ class ModelerPanel(wx.Panel, MainPageBase):
             xmax = x + w / 2
             ymin = y - h / 2
             ymax = y + h / 2
-            if xmin < xminImg:
-                xminImg = xmin
-            if xmax > xmaxImg:
-                xmaxImg = xmax
-            if ymin < yminImg:
-                yminImg = ymin
-            if ymax > ymaxImg:
-                ymaxImg = ymax
+            xminImg = min(xmin, xminImg)
+            xmaxImg = max(xmax, xmaxImg)
+            yminImg = min(ymin, yminImg)
+            ymaxImg = max(ymax, ymaxImg)
         size = wx.Size(int(xmaxImg - xminImg) + 50, int(ymaxImg - yminImg) + 50)
         bitmap = EmptyBitmap(width=size.width, height=size.height)
 
@@ -1479,7 +1475,7 @@ class VariablePanel(wx.Panel):
 
     def UpdateModelVariables(self):
         """Update model variables"""
-        variables = dict()
+        variables = {}
         for values in self.list.GetData().values():
             name = values[0]
             variables[name] = {"type": str(values[1])}
@@ -1769,7 +1765,7 @@ class PythonPanel(wx.Panel):
             dlg = wx.MessageDialog(
                 self,
                 message=_(
-                    "File <%s> already exists. " "Do you want to overwrite this file?"
+                    "File <%s> already exists. Do you want to overwrite this file?"
                 )
                 % filename,
                 caption=_("Save file"),
@@ -1848,7 +1844,7 @@ class PythonPanel(wx.Panel):
         if self.body.script_type == "Python":
             self.btnRun.Enable()
             self.btnRun.SetToolTip(_("Run script"))
-        elif self.body.script_type in ("PyWPS", "actinia"):
+        elif self.body.script_type in {"PyWPS", "actinia"}:
             self.btnRun.Disable()
             self.btnRun.SetToolTip(
                 _("Run script - enabled only for basic Python scripts")

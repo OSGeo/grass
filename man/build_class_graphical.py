@@ -97,17 +97,15 @@ def file_matches(filename, patterns):
     return False
 
 
-def starts_with_module(string, module):
+def starts_with_module(string, module) -> bool:
     # not solving:
     # module = module.replace('wxGUI.', 'g.gui.')
     # TODO: matches g.mapsets images for g.mapset and d.rast.num for d.rast
-    if string.startswith(module.replace(".", "_")):
-        return True
-    if string.startswith(module.replace(".", "")):
-        return True
-    if string.startswith(module):
-        return True
-    return False
+    return bool(
+        string.startswith(module.replace(".", "_"))
+        or string.startswith(module.replace(".", ""))
+        or string.startswith(module)
+    )
 
 
 def get_module_image(module, images):
@@ -128,7 +126,7 @@ def get_module_image(module, images):
             return image
         if basename == module:
             return image
-    return sorted(candidates, key=len)[0]
+    return min(candidates, key=len)
 
 
 def generate_page_for_category(
@@ -140,12 +138,12 @@ def generate_page_for_category(
 
     output.write(
         header1_tmpl.substitute(
-            title="GRASS GIS %s Reference " "Manual: Graphical index" % grass_version
+            title="GRASS GIS %s Reference Manual: Graphical index" % grass_version
         )
     )
     output.write(header_graphical_index_tmpl)
 
-    if module_family.lower() not in ["general", "postscript"]:
+    if module_family.lower() not in {"general", "postscript"}:
         if module_family == "raster3d":
             # covert keyword to nice form
             module_family = "3D raster"
