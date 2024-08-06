@@ -334,7 +334,7 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    int threads = G_set_omp_num_threads(parm.nprocs);
+    G_set_omp_num_threads(parm.nprocs);
 
     struct Cell_head cellhd;
     struct Cell_head new_cellhd;
