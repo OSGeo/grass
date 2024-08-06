@@ -290,7 +290,6 @@ ignore = [
     "UP030",   # format-literals
     "UP031",   # printf-string-formatting
     "UP032",   # f-string
-    "UP034",   # extraneous-parentheses
     "UP036",   # outdated-version-block
     "W605",    # invalid-escape-sequence
     "YTT204",  # sys-version-info-minor-cmp-int
