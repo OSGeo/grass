@@ -312,19 +312,7 @@ int main(int argc, char *argv[])
     out_set.flag_null = flag.null;
     out_set.flag_ind = flag.ind;
 
-    threads = atoi(parm.nproc->answer);
-#if defined(_OPENMP)
-    /* Set the number of threads */
-    omp_set_num_threads(threads);
-    if (threads > 1)
-        G_message(_("Using %d threads for parallel computing."), threads);
-#else
-    if (threads > 1) {
-        G_warning(_("GRASS GIS is not compiled with OpenMP support, parallel "
-                    "computation is disabled."));
-        threads = 1;
-    }
-#endif
+    threads = G_set_omp_num_threads(parm.nproc);
     execute_texture(data, &dim, measure_menu, measure_idx, &out_set, threads);
 
     for (i = 0; i < dim.n_outputs; i++) {
@@ -332,6 +320,7 @@ int main(int argc, char *argv[])
         Rast_short_history(mapname[i], "raster", &history);
         Rast_command_history(&history);
         Rast_write_history(mapname[i], &history);
+        Rast_free_history(&history);
     }
 
     /* Free allocated memory */
