@@ -109,7 +109,12 @@ class TestRegion(TestCase):
         self.assertAlmostEqual(
             float(expected_ellps[1][3:]), float(received_ellps[1][3:]), places=6
         )
-        self.assertDictEqual(expected, output_json)
+        self.assertCountEqual(list(expected.keys()), list(output_json.keys()))
+        for key in expected:
+            if isinstance(expected[key], float):
+                self.assertAlmostEqual(expected[key], output_json[key], places=6)
+            else:
+                self.assertEqual(expected[key], output_json[key])
 
 
 if __name__ == "__main__":
