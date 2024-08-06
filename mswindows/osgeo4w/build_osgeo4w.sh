@@ -50,6 +50,7 @@ export ARCH=x86_64-w64-mingw32
     --with-postgres-libs=${OSGEO4W_ROOT_MSYS}/lib \
     --with-gdal=${SRC}/mswindows/osgeo4w/gdal-config \
     --with-geos=${SRC}/mswindows/osgeo4w/geos-config \
+    --with-libpng=$PWD/mswindows/osgeo4w/libpng-config \
     --with-sqlite \
     --with-sqlite-includes=${OSGEO4W_ROOT_MSYS}/include \
     --with-sqlite-libs=${OSGEO4W_ROOT_MSYS}/lib \

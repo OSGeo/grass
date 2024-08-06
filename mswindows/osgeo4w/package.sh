@@ -115,7 +115,6 @@ DLLS="
 	/mingw64/bin/libsystre-0.dll
 	/mingw64/bin/libtre-5.dll
 	/mingw64/bin/libwinpthread-1.dll
-	/mingw64/bin/libpng16-16.dll
 	/mingw64/bin/libgomp-1.dll
 	/mingw64/bin/libomp.dll
 	/mingw64/bin/libstdc++-6.dll
@@ -168,6 +167,7 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-postgres-libs=${OSGEO4W_ROOT_MSYS}/lib \
 		--with-gdal=$PWD/mswindows/osgeo4w/gdal-config \
 		--with-geos=$PWD/mswindows/osgeo4w/geos-config \
+                --with-libpng=$PWD/mswindows/osgeo4w/libpng-config \
 		--with-sqlite \
 		--with-sqlite-includes=$OSGEO4W_ROOT_MSYS/include \
 		--with-sqlite-libs=$PWD/mswindows/osgeo4w/lib \
