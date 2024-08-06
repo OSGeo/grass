@@ -2818,12 +2818,11 @@ class WriteActiniaFile(WriteScriptFile):
             dlg = wx.MessageDialog(
                 self.model.canvas,
                 message=_(
-                    f"Module {task.get_name()} in your model contains "
-                    f"parameterized flags. actinia does not support "
-                    f"parameterized flags. The following flags are therefore "
-                    f"not being written in the generated json: "
-                    f"{itemParameterizedFlags}"
-                ),
+                    "Module {task_name} in your model contains "
+                    "parameterized flags. actinia does not support "
+                    "parameterized flags. The following flags are therefore "
+                    "not being written in the generated json: {flags}"
+                ).format(task_name=task.get_name(), flags=itemParameterizedFlags),
                 caption=_("Warning"),
                 style=wx.OK_DEFAULT | wx.ICON_WARNING,
             )

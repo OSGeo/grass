@@ -538,10 +538,8 @@ class WSPanel(wx.Panel):
         if event.returncode != 0:
             if self.cmd_err_str:
                 self.cmd_err_str = (
-                    _(
-                        "Unable to download %s capabilities file\nfrom <%s>:\n"
-                        % (self.ws.replace("_", " "), self.conn["url"])
-                    )
+                    _("Unable to download %s capabilities file\nfrom <%s>:\n")
+                    % (self.ws.replace("_", " "), self.conn["url"])
                     + self.cmd_err_str
                 )
             self._postCapParsedEvt(error_msg=self.cmd_err_str)
@@ -559,8 +557,9 @@ class WSPanel(wx.Panel):
         except (OSError, ParseError) as error:
             error_msg = _(
                 "%s web service was not found in fetched capabilities file from "
-                "<%s>:\n%s\n" % (self.ws, self.conn["url"], str(error))
-            )
+                "<%s>:\n%s\n"
+            ) % (self.ws, self.conn["url"], str(error))
+
             if Debug.GetLevel() != 0:
                 Debug.msg(1, error_msg)
                 self._postCapParsedEvt(None)

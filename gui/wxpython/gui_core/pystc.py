@@ -262,10 +262,8 @@ class PyStc(stc.StyledTextCtrl):
             self.modified = True
             if self.statusbar:
                 self.statusbar.SetStatusText(
-                    _(
-                        "{} script contains local modifications".format(
-                            self.script_type
-                        )
+                    _("{} script contains local modifications").format(
+                        self.script_type
                     ),
                     0,
                 )

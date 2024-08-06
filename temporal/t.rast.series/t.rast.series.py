@@ -149,8 +149,8 @@ def main():
             gs.warning(
                 _(
                     "Processing over {} maps: activating -z flag of r.series which "
-                    "slows down processing.".format(max_files_open)
-                )
+                    "slows down processing."
+                ).format(max_files_open)
             )
             flag += "z"
         if nulls:

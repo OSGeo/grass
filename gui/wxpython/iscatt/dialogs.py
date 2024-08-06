@@ -327,10 +327,10 @@ class ExportCategoryRaster(wx.Dialog):
             qdlg = wx.MessageDialog(
                 parent=self,
                 message=_(
-                    "Raster map <%s> already exists."
-                    " Do you want to overwrite it?" % rast_name
-                ),
-                caption=_("Raster <%s> exists" % rast_name),
+                    "Raster map <%s> already exists. Do you want to overwrite it?"
+                )
+                % rast_name,
+                caption=_("Raster <%s> exists") % rast_name,
                 style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
             )
             if qdlg.ShowModal() == wx.ID_YES:

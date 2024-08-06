@@ -356,7 +356,7 @@ def main():
         tester.testMapWindowRlisetup(map_)
     else:
         # TODO: this should not happen but happens
-        gs.fatal(_("Unknown value %s of test parameter." % test))
+        gs.fatal(_("Unknown value %s of test parameter.") % test)
 
     app.MainLoop()
 

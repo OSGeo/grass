@@ -88,9 +88,12 @@ class PlotPanel(scrolled.ScrolledPanel):
             )
             self.iscatt_panel.Hide()
         except ImportError as e:
-            self.scatt_error = _(
-                "Scatter plot functionality is disabled.\n\nReason: "
-                "Unable to import packages needed for scatter plot.\n%s" % e
+            self.scatt_error = (
+                _(
+                    "Scatter plot functionality is disabled.\n\nReason: "
+                    "Unable to import packages needed for scatter plot.\n%s"
+                )
+                % e
             )
             wx.CallAfter(GError, self.scatt_error, showTraceback=False, parent=self)
             self.iscatt_panel = None

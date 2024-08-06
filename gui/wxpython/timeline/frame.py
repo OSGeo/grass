@@ -527,7 +527,7 @@ class TimelineFrame(wx.Frame):
             elif len(indices) >= 2:
                 dlg = wx.SingleChoiceDialog(
                     self,
-                    message=_("Please specify the space time dataset <%s>." % dataset),
+                    message=_("Please specify the space time dataset <%s>.") % dataset,
                     caption=_("Ambiguous dataset name"),
                     choices=[
                         (

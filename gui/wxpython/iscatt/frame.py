@@ -681,7 +681,7 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
         name = cat_attrs["name"]
 
         dlg = SetOpacityDialog(
-            self, opacity=value, title=_("Change opacity of class <%s>" % name)
+            self, opacity=value, title=_("Change opacity of class <%s>") % name
         )
 
         dlg.applyOpacity.connect(

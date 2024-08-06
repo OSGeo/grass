@@ -541,10 +541,8 @@ def get_default_branch(full_url):
         organization, repository = url_parts.path.split("/")[1:3]
     except URLError:
         gs.fatal(
-            _(
-                "Cannot retrieve organization and repository from URL: <{}>.".format(
-                    full_url
-                )
+            _("Cannot retrieve organization and repository from URL: <{}>.").format(
+                full_url
             )
         )
     # Construct API call and retrieve default branch
@@ -583,10 +581,8 @@ def etree_fromurl(url):
             _(
                 "Download file from <{url}>,"
                 " failed. File is not on the server or"
-                " check your internet connection.".format(
-                    url=url,
-                ),
-            ),
+                " check your internet connection."
+            ).format(url=url),
         )
     return etree.fromstring(file_.read())
 
