@@ -564,7 +564,9 @@ class TaskFrame(wx.Frame):
             self._gconsole.mapCreated.connect(self.OnMapCreated)
         self.goutput = self.notebookpanel.goutput
         if self.goutput:
-            self.goutput.showNotification.connect(self.SetStatusText)
+            self.goutput.showNotification.connect(
+                lambda message: self.SetStatusText(message)
+            )
 
         self.notebookpanel.OnUpdateValues = self.updateValuesHook
         guisizer.Add(self.notebookpanel, proportion=1, flag=wx.EXPAND)
@@ -2850,7 +2852,6 @@ class CmdPanel(wx.Panel):
         needed. It's a hook, actually.  Beware of what is 'self' in
         the method def, though. It will be called with no arguments.
         """
-        pass
 
     def OnCheckBoxMulti(self, event):
         """Fill the values as a ','-separated string according to

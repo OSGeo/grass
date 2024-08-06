@@ -28,15 +28,15 @@ jobs:
       PYTHON_VERSION: "3.10"
       MIN_PYTHON_VERSION: "3.8"
       # renovate: datasource=pypi depName=black
-      BLACK_VERSION: "24.4.2"
+      BLACK_VERSION: "24.8.0"
       # renovate: datasource=pypi depName=flake8
-      FLAKE8_VERSION: "7.1.0"
+      FLAKE8_VERSION: "7.1.1"
       # renovate: datasource=pypi depName=pylint
       PYLINT_VERSION: "2.12.2"
       # renovate: datasource=pypi depName=bandit
       BANDIT_VERSION: "1.7.9"
       # renovate: datasource=pypi depName=ruff
-      RUFF_VERSION: "0.5.5"
+      RUFF_VERSION: "0.5.6"
 
     runs-on: ${{ matrix.os }}
     permissions:
@@ -129,7 +129,7 @@ jobs:
           bandit -c pyproject.toml -iii -r . -f sarif -o bandit.sarif --exit-zero
 
       - name: Upload Bandit Scan Results
-        uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4.3.4
+        uses: actions/upload-artifact@89ef406dd8d7e03cfd12d9e0a4a378f454709029 # v4.3.5
         with:
           name: bandit.sarif
           path: bandit.sarif
@@ -201,7 +201,7 @@ jobs:
           cp -rp dist.$ARCH/docs/html/libpython sphinx-grass
 
       - name: Make Sphinx documentation available
-        uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4.3.4
+        uses: actions/upload-artifact@89ef406dd8d7e03cfd12d9e0a4a378f454709029 # v4.3.5
         with:
           name: sphinx-grass
           path: sphinx-grass
