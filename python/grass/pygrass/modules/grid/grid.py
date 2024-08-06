@@ -42,7 +42,7 @@ def select(parms, ptype):
     """
     for k in parms:
         par = parms[k]
-        if par.type == ptype or par.typedesc == ptype and par.value:
+        if par.type == ptype or (par.typedesc == ptype and par.value):
             if par.multiple:
                 yield from par.value
             else:
