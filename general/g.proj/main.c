@@ -28,6 +28,7 @@ struct Cell_head cellhd;
 
 int main(int argc, char *argv[])
 {
+    enum OutputFormat outputFormat;
     /* TODO: replace most of these flags with an option to select the
      * output format */
     struct Flag *printinfo, /* Print contents of PROJ_INFO & PROJ_UNITS */
@@ -53,7 +54,8 @@ int main(int argc, char *argv[])
 #endif
         *listcodes, /* list codes of given authority */
         *datum,     /* datum to add (or replace existing datum) */
-        *dtrans;    /* index to datum transform option          */
+        *dtrans,    /* index to datum transform option          */
+        *format;    /* output format */
     struct GModule *module;
 
     int formats;
@@ -223,8 +225,25 @@ int main(int argc, char *argv[])
     location->guisection = _("Create");
     location->description = _("Name of new project (location) to create");
 
+    format = G_define_standard_option(G_OPT_F_FORMAT);
+    format->options = "plain,shell,json";
+    format->descriptions = _("plain;Human readable text output;"
+                             "shell;shell script style text output;"
+                             "json;JSON (JavaScript Object Notation);");
+    format->guisection = _("Print");
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
+
+    if (strcmp(format->answer, "json") == 0) {
+        outputFormat = JSON;
+    }
+    else if ((strcmp(format->answer, "shell") == 0) || shellinfo->answer) {
+        outputFormat = SHELL;
+    }
+    else {
+        outputFormat = PLAIN;
+    }
 
     /* Initialisation & Validation */
 
@@ -326,14 +345,14 @@ int main(int argc, char *argv[])
 #endif
     }
     if (printinfo->answer || shellinfo->answer)
-        print_projinfo(shellinfo->answer);
+        print_projinfo(outputFormat);
     else if (datuminfo->answer)
         print_datuminfo();
     else if (printproj4->answer)
-        print_proj4(dontprettify->answer);
+        print_proj4(dontprettify->answer, outputFormat);
 #ifdef HAVE_OGR
     else if (printwkt->answer)
-        print_wkt(esristyle->answer, dontprettify->answer);
+        print_wkt(esristyle->answer, dontprettify->answer, outputFormat);
 #endif
     else if (location->answer)
         create_location(location->answer);
