@@ -26,6 +26,7 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 #include <errno.h>
+#include <string.h>
 
 #define INCR 1024
 
