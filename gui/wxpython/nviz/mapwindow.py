@@ -2472,7 +2472,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                     cmd += mode[3]
                 if "wire" in mode[4]:
                     cmd += mode[4]
-                if "coarse" in mode[0] or "both" in mode[0] and "wire" in mode[3]:
+                if "coarse" in mode[0] or ("both" in mode[0] and "wire" in mode[3]):
                     cmd += mode[5]
             #
             # attributes

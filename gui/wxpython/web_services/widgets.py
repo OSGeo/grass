@@ -1096,11 +1096,8 @@ class LayersList(TreeCtrl):
                 return bool(
                     it_l_name == l_name
                     and (
-                        not it_st
-                        and not st_name
-                        or it_st
-                        and it_st["name"] == st_name
-                        and it_type == "style"
+                        (not it_st and not st_name)
+                        or (it_st and it_st["name"] == st_name and it_type == "style")
                     )
                 )
 
