@@ -105,7 +105,7 @@ class Srs:
         """
 
         return "urn:%s:def:crs:%s:%s:%s" % (
-            (self.naming_authority and self.naming_authority or "ogc"),
+            ((self.naming_authority and self.naming_authority) or "ogc"),
             (self.authority or ""),
             (self.version or ""),
             (self.code or ""),

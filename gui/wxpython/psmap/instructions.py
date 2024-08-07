@@ -474,11 +474,8 @@ class Instruction:
                     for line in text:
                         if line.find("# north arrow") >= 0:
                             commentFound = True
-                    if (
-                        i == "image"
-                        and commentFound
-                        or i == "northArrow"
-                        and not commentFound
+                    if (i == "image" and commentFound) or (
+                        i == "northArrow" and not commentFound
                     ):
                         continue
                     newInstr = myInstrDict[i](id, settings=self, env=self.env)

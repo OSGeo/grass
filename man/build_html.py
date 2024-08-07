@@ -440,7 +440,7 @@ def html_files(cls=None, ignore_gui=True):
             and (cls != "*" or len(cmd.split(".")) >= 3)
             and cmd not in {"full_index.html", "index.html"}
             and cmd not in exclude_mods
-            and (ignore_gui and not cmd.startswith("wxGUI.") or not ignore_gui)
+            and ((ignore_gui and not cmd.startswith("wxGUI.")) or not ignore_gui)
         ):
             yield cmd
 

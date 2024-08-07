@@ -164,7 +164,7 @@ class TextTestResult(TestResult):
         self.printErrors()
         self.stream.writeln(self.separator2)
         run = self.testsRun
-        self.stream.write("Ran %d test%s" % (run, run != 1 and "s" or ""))
+        self.stream.write("Ran %d test%s" % (run, (run != 1 and "s") or ""))
         if self.time_taken:
             self.stream.write(" in %.3fs" % (self.time_taken))
         self.stream.writeln()
