@@ -179,8 +179,7 @@ def main():
         sp.update_command_string(dbif=dbif)
     elif len(update_dict) > 0:
         count = 0
-        for key in update_dict.keys():
-            id = update_dict[key]
+        for id in update_dict.values():
             sp = tgis.open_old_stds(id, type, dbif)
             sp.update_from_registered_maps(dbif)
             gs.percent(count, len(update_dict), 1)

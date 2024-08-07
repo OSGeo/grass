@@ -130,11 +130,11 @@ def main():
 
         # Copy vrt files
         if vrt_files:
-            for f in vrt_files.keys():
+            for f, value in vrt_files.items():
                 f_tmp_dir = os.path.join(tmp, f)
                 if not os.path.exists(f_tmp_dir):
                     os.mkdir(f_tmp_dir)
-                path = os.path.join(vrt_files[f], element, f)
+                path = os.path.join(value, element, f)
                 if os.path.exists(path):
                     grass.debug("copying vrt file {}".format(path))
                     if os.path.isfile(path):
