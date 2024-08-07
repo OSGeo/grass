@@ -50,7 +50,8 @@ int dig_read_frmt_ascii(FILE *dascii, struct Format_info *finfo)
 
         len = G_strlcpy(buf1, buff, sizeof(buf1));
         if (len >= sizeof(buf1)) {
-            G_fatal_error(_("Name <%s> is too long"), buff);
+            G_warning(_("Line <%s> is too long"), buff);
+            return -1;
         }
         buf1[ptr - buff] = '\0';
 
@@ -105,7 +106,8 @@ int dig_read_frmt_ascii(FILE *dascii, struct Format_info *finfo)
 
         len = G_strlcpy(buf1, buff, sizeof(buf1));
         if (len >= sizeof(buf1)) {
-            G_fatal_error(_("Name <%s> is too long"), buff);
+            G_warning(_("Line <%s> is too long"), buff);
+            return -1;
         }
         buf1[ptr - buff] = '\0';
 
