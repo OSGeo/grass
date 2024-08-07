@@ -246,6 +246,7 @@ class InteractiveMap:
         """
         self._ipyleaflet = None
         self._folium = None
+        self._ipywidgets = None
 
         def _import_folium(error):
             try:
@@ -283,6 +284,8 @@ class InteractiveMap:
 
         if self._ipyleaflet:
             import ipywidgets as widgets  # pylint: disable=import-outside-toplevel
+
+            self._ipywidgets = widgets
             import xyzservices  # pylint: disable=import-outside-toplevel
 
         # Store height and width
@@ -294,7 +297,7 @@ class InteractiveMap:
             basemap = xyzservices.providers.query_name(tiles)
             if API_key and basemap.get("accessToken"):
                 basemap["accessToken"] = API_key
-            layout = widgets.Layout(width=f"{width}px", height=f"{height}px")
+            layout = self._ipywidgets.Layout(width=f"{width}px", height=f"{height}px")
             self.map = self._ipyleaflet.Map(
                 basemap=basemap, layout=layout, scroll_wheel_zoom=True
             )
@@ -356,8 +359,7 @@ class InteractiveMap:
             self.layer_control_object = self._ipyleaflet.LayersControl(**kwargs)
 
     def setup_drawing_interface(self):
-        """
-        Sets up the drawing interface for users
+        """Sets up the drawing interface for users
         to interactively draw and manage geometries on the map.
 
         This includes creating a toggle button to activate the drawing mode, and
@@ -366,12 +368,11 @@ class InteractiveMap:
         return self._create_toggle_button(
             icon="pencil",
             tooltip=_("Click to draw geometries"),
-            controller=InteractiveDrawController(self.map, self._ipyleaflet),
+            controller_class=InteractiveDrawController,
         )
 
     def setup_computational_region_interface(self):
-        """
-        Sets up the interface for users to draw and
+        """Sets up the interface for users to draw and
         modify the computational region on the map.
 
         This includes creating a toggle button to activate the
@@ -381,19 +382,22 @@ class InteractiveMap:
         return self._create_toggle_button(
             icon="square-o",
             tooltip=_("Click to show and edit computational region"),
-            controller=InteractiveRegionController(self.map, self._ipyleaflet),
+            controller_class=InteractiveRegionController,
         )
 
-    def _create_toggle_button(self, icon, tooltip, controller):
-        import ipywidgets as widgets  # pylint: disable=import-outside-toplevel
-
-        button = widgets.ToggleButton(
+    def _create_toggle_button(self, icon, tooltip, controller_class):
+        button = self._ipywidgets.ToggleButton(
             icon=icon,
             value=False,
             tooltip=tooltip,
-            layout=widgets.Layout(width="40px", margin="0px", border="2px solid lightgrey"),
+            description="",
+            layout=self._ipywidgets.Layout(
+                width="43px", margin="0px", border="2px solid darkgrey"
+            ),
         )
-
+        controller = controller_class(
+            self.map, self._ipyleaflet, self._ipywidgets, button
+        )
         self._controllers[button] = controller
         button.observe(self._toggle_mode, names="value")
         return button
@@ -414,13 +418,17 @@ class InteractiveMap:
 
         If map has layer control enabled, additional layers cannot be
         added after calling show()."""
-        import ipywidgets as widgets  # pylint: disable=import-outside-toplevel
         if self._ipyleaflet:
-            toggle_buttons = []
-            toggle_buttons.append(self.setup_drawing_interface())
-            toggle_buttons.append(self.setup_computational_region_interface())
-            button_box = widgets.HBox(toggle_buttons, layout=widgets.Layout(align_items='flex-start'))
-            self.map.add(self._ipyleaflet.WidgetControl(widget=button_box, position="topright"))
+            toggle_buttons = [
+                self.setup_computational_region_interface(),
+                self.setup_drawing_interface(),
+            ]
+            button_box = self._ipywidgets.HBox(
+                toggle_buttons, layout=self._ipywidgets.Layout(align_items="flex-start")
+            )
+            self.map.add(
+                self._ipyleaflet.WidgetControl(widget=button_box, position="topright")
+            )
 
         self.map.fit_bounds(self._renderer.get_bbox())
 
@@ -448,38 +456,36 @@ class InteractiveMap:
 
 
 class InteractiveRegionController:
-    """
-    A controller for interactive region selection on a map.
+    """A controller for interactive region selection on a map.
 
     Attributes:
-        map : The ipyleaflet.Map object.
-        region_rectangle : The rectangle representing the selected region.
-        _ipyleaflet : The ipyleaflet module.
-        save_button : The button to save the selected region.
-        bottom_output_widget : The output widget to display the selected region.
+        map: The ipyleaflet.Map object.
+        region_rectangle: The rectangle representing the selected region.
+        _ipyleaflet: The ipyleaflet module.
+        _ipywidgets: The ipywidgets module.
+        save_button: The button to save the selected region.
+        bottom_output_widget: The output widget to display the selected region.
         changed_region (dict): The dictionary to store the changed region.
     """
 
-    def __init__(self, map_obj, ipyleaflet):
-        """
-        Initializes the InteractiveRegionController.
+    def __init__(self, map_object, ipyleaflet, ipywidgets, *args):
+        """Initializes the InteractiveRegionController.
 
-        Args:
-            map_obj (ipyleaflet.Map): The map object.
-            ipyleaflet (ipyleaflet): The ipyleaflet module.
+        :param ipyleaflet.Map map_object: The map object.
+        :param ipyleaflet: The ipyleaflet module.
+        :param ipywidgets: The ipywidgets module.
         """
-        self.map = map_obj
+        self.map = map_object
         self.region_rectangle = None
         self._ipyleaflet = ipyleaflet
+        self._ipywidgets = ipywidgets
 
-        import ipywidgets as widgets  # pylint: disable=import-outside-toplevel
-
-        self.save_button = widgets.Button(
+        self.save_button = self._ipywidgets.Button(
             description="Update region",
             tooltip="Click to update region",
             disabled=True,
         )
-        self.bottom_output_widget = widgets.Output(
+        self.bottom_output_widget = self._ipywidgets.Output(
             layout={
                 "width": "100%",
                 "max_height": "300px",
@@ -497,11 +503,9 @@ class InteractiveRegionController:
         self.map.add(output_control)
 
     def _update_output(self, region):
-        """
-        Updates the output widget with the selected region.
+        """Updates the output widget with the selected region.
 
-        Args:
-            region (dict): The selected region.
+        :param dict region: The selected region.
         """
         with self.bottom_output_widget:
             self.bottom_output_widget.clear_output()
@@ -513,11 +517,9 @@ class InteractiveRegionController:
             )
 
     def _on_rectangle_change(self, value):
-        """
-        Handles the change event of the rectangle.
+        """Handles the change event of the rectangle.
 
-        Args:
-            value (dict): The changed value.
+        :param dict value: The changed value.
         """
         self.save_button.disabled = False
         self.bottom_output_widget.layout.display = "none"
@@ -528,9 +530,7 @@ class InteractiveRegionController:
         self.changed_region["west"] = latlon_bounds[0]["lng"]
 
     def activate(self):
-        """
-        Activates the interactive region selection.
-        """
+        """Activates the interactive region selection."""
         region_bounds = get_region_bounds_latlon()
         self.region_rectangle = self._ipyleaflet.Rectangle(
             bounds=region_bounds,
@@ -552,9 +552,7 @@ class InteractiveRegionController:
         self.map.add(self.save_button_control)
 
     def deactivate(self):
-        """
-        Deactivates the interactive region selection.
-        """
+        """Deactivates the interactive region selection."""
         if self.region_rectangle:
             self.region_rectangle.transform = False
             self.map.remove(self.region_rectangle)
@@ -570,11 +568,9 @@ class InteractiveRegionController:
         self.bottom_output_widget.layout.display = "none"
 
     def _save_region(self, _change):
-        """
-        Saves the selected region.
+        """Saves the selected region.
 
-        Args:
-            _change (None): Not used.
+        :param _change:Not used.
         """
         from_proj = "+proj=longlat +datum=WGS84 +no_defs"
         to_proj = get_location_proj_string()
@@ -585,61 +581,56 @@ class InteractiveRegionController:
 
 
 class InteractiveDrawController:
-    """
-    A controller for interactive drawing on a map.
+    """A controller for interactive drawing on a map.
 
     Attributes:
         map: The ipyleaflet.Map object.
-        _ipyleaflet : The ipyleaflet module.
-        draw_control : The draw control.
-        drawn_geometries : The list of drawn geometries.
-        geo_json_layers : The dictionary of GeoJSON layers.
-        save_button_control : The save button control.
+        _ipyleaflet: The ipyleaflet module.
+        draw_control: The draw control.
+        drawn_geometries: The list of drawn geometries.
+        geo_json_layers: The dictionary of GeoJSON layers.
+        save_button_control: The save button control.
+        toggle_button: The toggle button activating/deactivating drawing.
     """
 
-    def __init__(self, map_obj, ipyleaflet):
-        """
-        Initializes the InteractiveDrawController.
+    def __init__(self, map_object, ipyleaflet, ipywidgets, toggle_button):
+        """Initializes the InteractiveDrawController.
 
-        Args:
-            map_obj (ipyleaflet.Map): The map object.
-            ipyleaflet (ipyleaflet): The ipyleaflet module.
+        :param ipyleaflet.Map map_object: The map object.
+        :param ipyleaflet: The ipyleaflet module.
+        :param ipywidgets: The ipywidgets module.
+        :param toggle_button: The toggle button activating/deactivating drawing.
         """
-        import ipywidgets as widgets  # pylint: disable=import-outside-toplevel
-
-        self.map = map_obj
+        self.map = map_object
         self._ipyleaflet = ipyleaflet
-
+        self._ipywidgets = ipywidgets
+        self.toggle_button = toggle_button
         self.draw_control = self._ipyleaflet.DrawControl(edit=False, remove=False)
         self.drawn_geometries = []
         self.geo_json_layers = {}
         self.save_button_control = None
 
-        self.name_input = widgets.Text(
+        self.name_input = self._ipywidgets.Text(
             description=_("New vector map name:"),
             style={"description_width": "initial"},
-            layout=widgets.Layout(width="80%", margin="1px 1px 1px 1px"),
+            layout=self._ipywidgets.Layout(width="80%", margin="1px 1px 1px 1px"),
         )
 
-        self.save_button = widgets.Button(
+        self.save_button = self._ipywidgets.Button(
             description=_("Save"),
-            layout=widgets.Layout(width="20%", margin="1px 1px 1px 1px"),
+            layout=self._ipywidgets.Layout(width="20%", margin="1px 1px 1px 1px"),
         )
 
         self.save_button.on_click(self._save_geometries)
 
     def activate(self):
-        """
-        Activates the interactive drawing.
-        """
+        """Activates the interactive drawing."""
         self.map.add_control(self.draw_control)
         self.draw_control.on_draw(self._handle_draw)
         self._show_interface()
 
     def deactivate(self):
-        """
-        Deactivates the interactive drawing.
-        """
+        """Deactivates the interactive drawing."""
         if self.draw_control in self.map.controls:
             self.map.remove(self.draw_control)
         self.draw_control.clear()
@@ -647,33 +638,27 @@ class InteractiveDrawController:
         self._hide_interface()
 
     def _handle_draw(self, _, action, geo_json):
-        """
-        Handles the draw event.
+        """Handles the draw event.
 
-        Args:
-            action (str): The action type.
-            geo_json (dict): The GeoJSON data.
+        :param str action: The action type.
+        :param dict geo_json: The GeoJSON data.
         """
         if action == "created":
             self.drawn_geometries.append(geo_json)
             print(f"Geometry created: {geo_json}")
 
     def _show_interface(self):
-        """
-        Shows the interface for saving the drawn geometries.
-        """
-        import ipywidgets as widgets  # pylint: disable=import-outside-toplevel
-
-        hbox_layout = widgets.Layout(
+        """Shows the interface for saving the drawn geometries."""
+        hbox_layout = self._ipywidgets.Layout(
             display="flex",
             flex_flow="row",
             align_items="stretch",
             width="300px",
             justify_content="space-between",
         )
-
+        self.name_input.value = ""
         self.save_button_control = self._ipyleaflet.WidgetControl(
-            widget=widgets.HBox(
+            widget=self._ipywidgets.HBox(
                 [self.name_input, self.save_button], layout=hbox_layout
             ),
             position="topright",
@@ -682,19 +667,15 @@ class InteractiveDrawController:
         self.map.add_control(self.save_button_control)
 
     def _hide_interface(self):
-        """
-        Hides the interface for saving the drawn geometries.
-        """
+        """Hides the interface for saving the drawn geometries."""
         if self.save_button_control:
             self.map.remove_control(self.save_button_control)
             self.save_button_control = None
 
     def _save_geometries(self, _b):
-        """
-        Saves the drawn geometries.
+        """Saves the drawn geometries.
 
-        Args:
-            _b (None): Not used.
+        :param _b: Not used.
         """
         name = self.name_input.value
         if name and self.drawn_geometries:
@@ -708,4 +689,5 @@ class InteractiveDrawController:
             geo_json_layer = self._ipyleaflet.GeoJSON(data=geo_json, name=name)
             self.geo_json_layers[name] = geo_json_layer
             self.map.add_layer(geo_json_layer)
-            self.drawn_geometries.clear()
+            self.deactivate()
+            self.toggle_button.value = False
