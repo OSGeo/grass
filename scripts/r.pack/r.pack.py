@@ -130,7 +130,7 @@ def main():
 
         # Copy vrt files
         if vrt_files:
-            for f, value in vrt_files.keys():
+            for f, value in vrt_files.items():
                 f_tmp_dir = os.path.join(tmp, f)
                 if not os.path.exists(f_tmp_dir):
                     os.mkdir(f_tmp_dir)
