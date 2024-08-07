@@ -244,9 +244,6 @@ def main():
 
     # The lower threshold space time raster dataset
     if lower:
-        # TODO: Check if range is defined elsewhere than this file.
-        # Otherwise, the code is unreachable as range is a class, built into Python,
-        # used in for loops notably. See t.rast.accdetect for usage of range_
         if not range:
             dbif.close()
             gs.fatal(
