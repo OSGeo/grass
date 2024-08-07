@@ -396,7 +396,10 @@ class InteractiveMap:
             ),
         )
         controller = controller_class(
-            self.map, self._ipyleaflet, self._ipywidgets, button
+            map_object=self.map,
+            ipyleaflet=self._ipyleaflet,
+            ipywidgets=self._ipywidgets,
+            toggle_button=button,
         )
         self._controllers[button] = controller
         button.observe(self._toggle_mode, names="value")
@@ -468,7 +471,9 @@ class InteractiveRegionController:
         changed_region (dict): The dictionary to store the changed region.
     """
 
-    def __init__(self, map_object, ipyleaflet, ipywidgets, *args):
+    def __init__(
+        self, map_object, ipyleaflet, ipywidgets, **kwargs
+    ):  # pylint: disable=unused-argument
         """Initializes the InteractiveRegionController.
 
         :param ipyleaflet.Map map_object: The map object.

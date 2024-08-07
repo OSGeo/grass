@@ -210,8 +210,8 @@ def save_vector(name, geo_json):
     """
     Saves the user drawn vector.
 
-    param geojson_filename: name of the geojson file to be saved
-    param name: name with which vector should be saved
+    :param geo_json: name of the geojson file to be saved
+    :param name: name with which vector should be saved
     """
     with tempfile.NamedTemporaryFile(
         suffix=".geojson", delete=False, mode="w"
