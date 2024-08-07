@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
     double zrange_min, zrange_max, vrange_min, vrange_max, d_tmp;
     char *fs; /* field delim */
     off_t filesize;
-    int linesize;
+    int linesize = 0;
     unsigned long estimated_lines, line;
     int from_stdin;
     int can_seek;
