@@ -244,14 +244,6 @@ def main():
 
     # The lower threshold space time raster dataset
     if lower:
-        if not range:
-            dbif.close()
-            gs.fatal(
-                _(
-                    "You need to set the range to compute the occurrence"
-                    " space time raster dataset"
-                )
-            )
 
         if lower.find("@") >= 0:
             lower_id = lower
