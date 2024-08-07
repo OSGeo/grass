@@ -13,6 +13,7 @@
 import tempfile
 import json
 import os
+import multiprocessing
 
 from pathlib import Path
 import grass.script as gs
@@ -221,6 +222,19 @@ def save_vector(name, geo_json):
         json.dump(geo_json, temp_file)
     gs.run_command("v.import", input=temp_filename, output=name)
     os.remove(temp_filename)
+
+
+def get_number_of_cores(requested, env=None):
+    """Get the number of cores to use for multiprocessing."""
+    nprocs = gs.gisenv(env).get("NPROCS")
+    if nprocs is not None:
+        return int(nprocs)
+
+    try:
+        num_cores = len(os.sched_getaffinity(0))
+    except AttributeError:
+        num_cores = multiprocessing.cpu_count()
+    return min(requested, max(1, num_cores - 1))
 
 
 def get_region_bounds_latlon():

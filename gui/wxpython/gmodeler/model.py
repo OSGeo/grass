@@ -1390,7 +1390,6 @@ class ModelData(ModelObject):
         :param width, height: dimension of the shape
         :param x, y: position of the shape
         """
-        pass
 
     def IsIntermediate(self):
         """Checks if data item is intermediate"""
@@ -3488,7 +3487,7 @@ def cleanup():
                 r"""    %s("g.remove", flags="f", type="vector",
                 name=%s)
 """
-                % (run_command, ",".join(('"' + x + '"' for x in vect)))
+                % (run_command, ",".join(f'"{x}"' for x in vect))
             )
         if rast3d:
             self.fd.write(
