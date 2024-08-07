@@ -95,7 +95,8 @@ static CELL do_renumber(int *in_fd, DCELL *rng, int nin, int diag, int minsize,
 
             coffset = (off_t)row * csize;
             if (lseek(cfd, coffset, SEEK_SET) == -1) {
-                G_fatal_error(_("Unable to seek in temp file: %s"), strerror(errno));
+                G_fatal_error(_("Unable to seek in temp file: %s"),
+                              strerror(errno));
             }
             if (read(cfd, cur_clump, csize) != csize)
                 G_fatal_error(_("Unable to read from temp file"));
@@ -113,7 +114,8 @@ static CELL do_renumber(int *in_fd, DCELL *rng, int nin, int diag, int minsize,
             }
             if (do_write) {
                 if (lseek(cfd, coffset, SEEK_SET) == -1) {
-                    G_fatal_error(_("Unable to seek in temp file: %s"), strerror(errno));
+                    G_fatal_error(_("Unable to seek in temp file: %s"),
+                                  strerror(errno));
                 }
                 if (write(cfd, cur_clump, csize) != csize)
                     G_fatal_error(_("Unable to write to temp file"));
