@@ -179,8 +179,8 @@ int mean_shift(struct globals *globals)
 
     hspec = globals->hr;
     if (hspec < 0 || hspec >= 1) {
-        hspec = sqrt(avgdiffavg / 10.0);
-        hspec = avgdiffavg;
+        // hspec = sqrt(avgdiffavg / 10.0);
+        // hspec = avgdiffavg;
         hspec = mindiffzeroavg;
 
         if (do_progressive)
