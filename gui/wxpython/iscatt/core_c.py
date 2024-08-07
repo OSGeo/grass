@@ -58,7 +58,7 @@ def ApplyColormap(vals, vals_mask, colmap, out_vals):
     colmap_p = colmap.ctypes.data_as(c_uint8_p)
     out_vals_p = out_vals.ctypes.data_as(c_uint8_p)
 
-    vals_size = vals.reshape((-1)).shape[0]
+    vals_size = vals.reshape(-1).shape[0]
     I_apply_colormap(vals_p, vals_mask_p, vals_size, colmap_p, out_vals_p)
 
 

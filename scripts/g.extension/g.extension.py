@@ -2243,7 +2243,7 @@ def remove_extension_files(edict, force=False):
                         os.remove(fpath)
                     except OSError:
                         msg = "Unable to remove file '%s'"
-                        err.append((_(msg) % fpath))
+                        err.append(_(msg) % fpath)
                         removed = False
             if len(err) > 0:
                 for error_line in err:
