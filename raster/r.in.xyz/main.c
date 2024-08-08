@@ -1213,7 +1213,14 @@ int scan_bounds(FILE *fp, int xcol, int ycol, int zcol, int vcol, char *fs,
     unsigned long line;
     int first, max_col;
     char buff[BUFFSIZE];
-    double min_x, max_x, min_y, max_y, min_z, max_z, min_v, max_v;
+    double min_x = 0.0;
+    double max_x = 0.0;
+    double min_y = 0.0;
+    double max_y = 0.0;
+    double min_z = 0.0;
+    double max_z = 0.0;
+    double min_v = 0.0;
+    double max_v = 0.0;
     char **tokens;
     int ntokens; /* number of tokens */
     double x, y, z, v;
