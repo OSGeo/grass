@@ -195,19 +195,19 @@ specified is over, whichever comes first.
 Preparing the statistics for unsupervised classification of a LANDSAT
 scene within North Carolina project:
 
-::: code
-    # Set computational region to match the scene
-    g.region raster=lsat7_2002_10 -p
+```
+# Set computational region to match the scene
+g.region raster=lsat7_2002_10 -p
 
-    # store VIZ, NIR, MIR into group/subgroup (leaving out TIR)
-    i.group group=lsat7_2002 subgroup=res_30m \
-      input=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70
+# store VIZ, NIR, MIR into group/subgroup (leaving out TIR)
+i.group group=lsat7_2002 subgroup=res_30m \
+  input=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70
 
-    # generate signature file and report
-    i.cluster group=lsat7_2002 subgroup=res_30m \
-      signaturefile=cluster_lsat2002 \
-      classes=10 reportfile=rep_clust_lsat2002.txt
-:::
+# generate signature file and report
+i.cluster group=lsat7_2002 subgroup=res_30m \
+  signaturefile=cluster_lsat2002 \
+  classes=10 reportfile=rep_clust_lsat2002.txt
+```
 
 To complete the unsupervised classification, *i.maxlik* is subsequently
 used. See example in its manual page.
@@ -219,18 +219,18 @@ group(s), they can set semantic labels for each group member beforehand,
 i.e., before generating the signature files. Semantic labels are set by
 means of *r.support* as shown below:
 
-::: code
-    # Define semantic labels for all LANDSAT bands
-    r.support map=lsat7_2002_10 semantic_label=TM7_1
-    r.support map=lsat7_2002_20 semantic_label=TM7_2
-    r.support map=lsat7_2002_30 semantic_label=TM7_3
-    r.support map=lsat7_2002_40 semantic_label=TM7_4
-    r.support map=lsat7_2002_50 semantic_label=TM7_5
-    r.support map=lsat7_2002_61 semantic_label=TM7_61
-    r.support map=lsat7_2002_62 semantic_label=TM7_62
-    r.support map=lsat7_2002_70 semantic_label=TM7_7
-    r.support map=lsat7_2002_80 semantic_label=TM7_8
-:::
+```
+# Define semantic labels for all LANDSAT bands
+r.support map=lsat7_2002_10 semantic_label=TM7_1
+r.support map=lsat7_2002_20 semantic_label=TM7_2
+r.support map=lsat7_2002_30 semantic_label=TM7_3
+r.support map=lsat7_2002_40 semantic_label=TM7_4
+r.support map=lsat7_2002_50 semantic_label=TM7_5
+r.support map=lsat7_2002_61 semantic_label=TM7_61
+r.support map=lsat7_2002_62 semantic_label=TM7_62
+r.support map=lsat7_2002_70 semantic_label=TM7_7
+r.support map=lsat7_2002_80 semantic_label=TM7_8
+```
 
 ## SEE ALSO
 

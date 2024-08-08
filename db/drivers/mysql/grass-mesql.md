@@ -29,10 +29,10 @@ possible to use 3 variables:
 
 Examples of connection parameters:
 
-::: code
-    db.connect driver=mesql database='$GISDBASE/$LOCATION_NAME/$MAPSET/mysql'
-    db.connect driver=mesql database=/home/user1/db
-:::
+```
+db.connect driver=mesql database='$GISDBASE/$LOCATION_NAME/$MAPSET/mysql'
+db.connect driver=mesql database=/home/user1/db
+```
 
 ## Data types, indexes
 

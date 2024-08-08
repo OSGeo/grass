@@ -61,16 +61,16 @@ without topology as well.
 
 Keep only every forth point, throw away the rest:
 
-::: code
-    v.decimate input=points_all output=points_decimated_every_4 preserve=4
-:::
+```
+v.decimate input=points_all output=points_decimated_every_4 preserve=4
+```
 
 Keep only points within a grid cell (given by the current computational
 region) which has unique categories (e.g. LIDAR classes):
 
-::: code
-    v.decimate input=points_all output=points_decimated_unique_cats layer=1 -g -c
-:::
+```
+v.decimate input=points_all output=points_decimated_unique_cats layer=1 -g -c
+```
 
 ![](v_decimate_original.png) ![](v_decimate_count.png)
 ![](v_decimate_grid_cat.png)
@@ -82,9 +82,9 @@ unique categories in each grid cell*
 Keep only points with category 2 and keep only approximately 80% of the
 points:
 
-::: code
-    v.decimate input=points_all output=points_decimated_ skip=5 cats=2 layer=1
-:::
+```
+v.decimate input=points_all output=points_decimated_ skip=5 cats=2 layer=1
+```
 
 ## REFERENCES
 

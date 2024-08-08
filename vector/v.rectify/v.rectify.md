@@ -27,9 +27,9 @@ to transformation.
 **points** option. The 3D format is equivalent to the format for 2D
 ground control points with an additional third coordinate:
 
-::: code
-     x y z east north height status
-:::
+```
+ x y z east north height status
+```
 
 where *x, y, z* are source coordinates, *east, north, height* are target
 coordinates and status (0 or 1) indicates whether a given point should

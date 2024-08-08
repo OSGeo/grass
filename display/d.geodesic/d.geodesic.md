@@ -21,16 +21,16 @@ distance is not displayed.
 A geodesic line if shown over the political map of the world
 (demolocation dataset):
 
-::: code
-    g.region vector=country_boundaries -p
-    d.mon wx0
-    d.vect country_boundaries type=area
-    # show additionally a 20 degree grid
-    d.grid 20
+```
+g.region vector=country_boundaries -p
+d.mon wx0
+d.vect country_boundaries type=area
+# show additionally a 20 degree grid
+d.grid 20
 
-    d.geodesic coordinates=55:58W,33:18S,26:43E,60:37N \
-      line_color=yellow text_color=red units=kilometers
-:::
+d.geodesic coordinates=55:58W,33:18S,26:43E,60:37N \
+  line_color=yellow text_color=red units=kilometers
+```
 
 ![](d_geodesic.png){border="1"}\
 *Geodesic line (great circle line)*

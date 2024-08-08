@@ -68,26 +68,26 @@ middle (*patching*) raster map layer, to produce the *composite* raster
 map layer on the right. The example assumes zero values to be treated as
 NULLs (**-z** flag).
 
-::: code
-      1 1 1 0 2 2 0 0    0 0 1 1 0 0 0 0    1 1 1 1 2 2 0 0
-      1 1 0 2 2 2 0 0    0 0 1 1 0 0 0 0    1 1 1 2 2 2 0 0
-      3 3 3 3 2 2 0 0    0 0 0 0 0 0 0 0    3 3 3 3 2 2 0 0
-      3 3 3 3 0 0 0 0    4 4 4 4 4 4 4 4    3 3 3 3 4 4 4 4
-      3 3 3 0 0 0 0 0    4 4 4 4 4 4 4 4    3 3 3 4 4 4 4 4
-      0 0 0 0 0 0 0 0    4 4 4 4 4 4 4 4    4 4 4 4 4 4 4 4
-:::
+```
+  1 1 1 0 2 2 0 0    0 0 1 1 0 0 0 0    1 1 1 1 2 2 0 0
+  1 1 0 2 2 2 0 0    0 0 1 1 0 0 0 0    1 1 1 2 2 2 0 0
+  3 3 3 3 2 2 0 0    0 0 0 0 0 0 0 0    3 3 3 3 2 2 0 0
+  3 3 3 3 0 0 0 0    4 4 4 4 4 4 4 4    3 3 3 3 4 4 4 4
+  3 3 3 0 0 0 0 0    4 4 4 4 4 4 4 4    3 3 3 4 4 4 4 4
+  0 0 0 0 0 0 0 0    4 4 4 4 4 4 4 4    4 4 4 4 4 4 4 4
+```
 
 Switching the *patched* and the *patching* raster map layers produces
 the following results:
 
-::: code
-      0 0 1 1 0 0 0 0    1 1 1 0 2 2 0 0    1 1 1 1 2 2 0 0
-      0 0 1 1 0 0 0 0    1 1 0 2 2 2 0 0    1 1 1 1 2 2 0 0
-      0 0 0 0 0 0 0 0    3 3 3 3 2 2 0 0    3 3 3 3 2 2 0 0
-      4 4 4 4 4 4 4 4    3 3 3 3 0 0 0 0    4 4 4 4 4 4 4 4
-      4 4 4 4 4 4 4 4    3 3 3 0 0 0 0 0    4 4 4 4 4 4 4 4
-      4 4 4 4 4 4 4 4    0 0 0 0 0 0 0 0    4 4 4 4 4 4 4 4
-:::
+```
+  0 0 1 1 0 0 0 0    1 1 1 0 2 2 0 0    1 1 1 1 2 2 0 0
+  0 0 1 1 0 0 0 0    1 1 0 2 2 2 0 0    1 1 1 1 2 2 0 0
+  0 0 0 0 0 0 0 0    3 3 3 3 2 2 0 0    3 3 3 3 2 2 0 0
+  4 4 4 4 4 4 4 4    3 3 3 3 0 0 0 0    4 4 4 4 4 4 4 4
+  4 4 4 4 4 4 4 4    3 3 3 0 0 0 0 0    4 4 4 4 4 4 4 4
+  4 4 4 4 4 4 4 4    0 0 0 0 0 0 0 0    4 4 4 4 4 4 4 4
+```
 
 ## NOTES
 
@@ -103,9 +103,9 @@ the region resolution is the resolution of the desired data. To set the
 geographic region settings to one or several raster maps, the *g.region*
 program can be used:
 
-::: code
-    g.region raster=map1[,map2[,...]]
-:::
+```
+g.region raster=map1[,map2[,...]]
+```
 
 Use of *r.patch* is generally followed by use of the GRASS programs
 *[g.remove](g.remove.html)* and *[g.rename](g.rename.html)*; *g.remove*
@@ -127,11 +127,11 @@ typically 1024. The soft limit can be changed with e.g. `ulimit -n 1500`
 (UNIX-based operating systems) but not higher than the hard limit. If it
 is too low, you can as superuser add an entry in
 
-::: code
-    /etc/security/limits.conf
-    # <domain>      <type>  <item>         <value>
-    your_username  hard    nofile          1500
-:::
+```
+/etc/security/limits.conf
+# <domain>      <type>  <item>         <value>
+your_username  hard    nofile          1500
+```
 
 This would raise the hard limit to 1500 file. Be warned that more files
 open need more RAM. See also the Wiki page [Hints for large raster data
@@ -171,10 +171,10 @@ region assuming that the all three maps fully overlap and have the same
 resolution (so we can safely use the just the one without further
 modifications of the region). Then we perform the patching.
 
-::: code
-    g.region raster=roads
-    r.patch input=roads,water,forest output=result
-:::
+```
+g.region raster=roads
+r.patch input=roads,water,forest output=result
+```
 
 ### Map mosaic example using Bash syntax
 
@@ -182,11 +182,11 @@ Create a list of maps matching a pattern, extend the region to include
 them all, and patch them together to create a mosaic. Overlapping maps
 will be used in the order listed.
 
-::: code
-    MAPS=`g.list type=raster separator=comma pat="map_*"`
-    g.region raster=$MAPS -p
-    r.patch input=$MAPS output=maps_mosaic
-:::
+```
+MAPS=`g.list type=raster separator=comma pat="map_*"`
+g.region raster=$MAPS -p
+r.patch input=$MAPS output=maps_mosaic
+```
 
 ## SEE ALSO
 

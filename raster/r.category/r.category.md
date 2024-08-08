@@ -41,10 +41,10 @@ category, range of categories, floating point value, or a range of
 floating point values. The format is given as follows (when separator is
 set to colon; no white space must be used after the separator):
 
-::: code
-    cat:Label
-    val1:val2:Label
-:::
+```
+cat:Label
+val1:val2:Label
+```
 
 If the filename is given as \"-\", the category labels are read from
 `stdin`
@@ -55,20 +55,20 @@ Default and dynamic category labels can be created for categories that
 are not explicitly labeled. The coefficient line can be followed by
 explicit category labels which override the format label generation.
 
-::: code
-       0:no data
-       2:   .
-       5:   .             ## explicit category labels
-       7:   .
-:::
+```
+   0:no data
+   2:   .
+   5:   .             ## explicit category labels
+   7:   .
+```
 
 explicit labels can be also of the form:
 
-::: code
-       5.5:5:9 label description
-       or
-       15:30  label description
-:::
+```
+   5.5:5:9 label description
+   or
+   15:30  label description
+```
 
 In the format line
 
@@ -113,51 +113,70 @@ North Carolina sample dataset:
 
 ### Printing categories
 
-::: code
-    r.category map=landclass96
-    1   developed
-    2   agriculture
-    3   herbaceous
-    4   shrubland
-    5   forest
-    6   water
-    7   sediment
-:::
+```
+r.category map=landclass96
+1   developed
+2   agriculture
+3   herbaceous
+4   shrubland
+5   forest
+6   water
+7   sediment
+```
 
 prints the values and labels associated with all of the categories in
 the *landclass96* raster map layer.
 
-::: code
-    r.category map=landclass96 cats=2,5-7
-    2   agriculture
-    5   forest
-    6   water
-    7   sediment
-:::
+```
+r.category map=landclass96 cats=2,5-7
+2   agriculture
+5   forest
+6   water
+7   sediment
+```
 
 prints only the category values and labels for *landclass96* map layer
 categories `2` and `5` through `7`.
 
-::: code
-    r.category map=landclass96 cats=3,4 separator=comma
-    3,herbaceous
-    4,shrubland
-:::
+```
+r.category map=landclass96 cats=3,4 separator=comma
+3,herbaceous
+4,shrubland
+```
 
 prints the values and labels for *landclass96* map layer categories `3`
 and `4`, but uses \"`,`\" (instead of a tab) as the character separating
 the category values from the category values in the output.
 
+```
+r.category map=landclass96 cats=3,4 output_format=json
+```
+
+generates the following JSON output:
+
+```
+[
+    {
+        "category": 3,
+        "description": "herbaceous"
+    },
+    {
+        "category": 4,
+        "description": "shrubland"
+    }
+]
+```
+
 ### Adding categories
 
 Example for defining new category labels, using a colon as separator:
 
-::: code
-    r.category diseasemap separator=":" rules=- << EOF
-    1:potential absence
-    2:potential presence
-    EOF
-:::
+```
+r.category diseasemap separator=":" rules=- << EOF
+1:potential absence
+2:potential presence
+EOF
+```
 
 This sets the categoy values 1 and 2 to respective text labels.
 Alternatively, the rules can be stored in an ASCII text file and loaded

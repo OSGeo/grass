@@ -12,18 +12,18 @@ Quantiles are calculated following algorithm 7 from Hyndman and Fan
 
 Calculation of elevation quantiles (printed to standard-out):
 
-::: code
-    g.region raster=elevation -p
-    r.quantile input=elevation percentiles=0.1,1,10,25,50,75,90,99,99.9
-:::
+```
+g.region raster=elevation -p
+r.quantile input=elevation percentiles=0.1,1,10,25,50,75,90,99,99.9
+```
 
 The output of *r.quantile* can be used for quantile classification:
 
-::: code
-    g.region raster=elevation -p
-    r.quantile elevation quantiles=5 -r --quiet | r.recode elevation \
-               out=elev_quant5 rules=-
-:::
+```
+g.region raster=elevation -p
+r.quantile elevation quantiles=5 -r --quiet | r.recode elevation \
+           out=elev_quant5 rules=-
+```
 
 ## REFERENCES
 

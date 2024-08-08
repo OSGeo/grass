@@ -58,9 +58,9 @@ processed. The *feature ID* is an internal (unique) geometry ID that all
 vector primitives possess, and is separate from any category the feature
 may also possess. Use
 
-::: code
-      v.edit map=inputname tool=select
-:::
+```
+  v.edit map=inputname tool=select
+```
 
 to find out the geometry ids of certain features.
 
@@ -68,47 +68,47 @@ to find out the geometry ids of certain features.
 
 ### Report vector categories
 
-::: code
-    v.category input=testmap option=report
+```
+v.category input=testmap option=report
 
-    LAYER/TABLE 1/testmap:
-    type       count        min        max
-    point          0          0          0
-    line        1379          1       1379
-    boundary       0          0          0
-    centroid       0          0          0
-    area           0          0          0
-    all         1379          1       1379
-:::
+LAYER/TABLE 1/testmap:
+type       count        min        max
+point          0          0          0
+line        1379          1       1379
+boundary       0          0          0
+centroid       0          0          0
+area           0          0          0
+all         1379          1       1379
+```
 
 ### Delete all vector categories in layer 1
 
-::: code
-    v.category input=testmap output=outmap option=del cat=-1
-:::
+```
+v.category input=testmap output=outmap option=del cat=-1
+```
 
 ### Add vector categories in layer 1 with step=2
 
-::: code
-    v.category input=outmap output=stepmap option=add step=2
+```
+v.category input=outmap output=stepmap option=add step=2
 
-    # report
-    v.category input=stepmap option=report
-    LAYER/TABLE 1/outmap:
-    type       count        min        max
-    point          0          0          0
-    line        1379          1       2757
-    boundary       0          0          0
-    centroid       0          0          0
-    area           0          0          0
-    all         1379          1       2757
-:::
+# report
+v.category input=stepmap option=report
+LAYER/TABLE 1/outmap:
+type       count        min        max
+point          0          0          0
+line        1379          1       2757
+boundary       0          0          0
+centroid       0          0          0
+area           0          0          0
+all         1379          1       2757
+```
 
 ### Add categories/centroids to a vector map without categories
 
-::: code
-    v.category input=wkt output=wktnew option=add
-:::
+```
+v.category input=wkt output=wktnew option=add
+```
 
 Results can be tested using *[d.what.vect](d.what.vect.html)*.
 
@@ -116,17 +116,17 @@ Results can be tested using *[d.what.vect](d.what.vect.html)*.
 
 Existing layer will be overwritten, non-existing will be created.
 
-::: code
-    v.category input=observer output=observer_new option=transfer layer=1,2,3,4,5,6,7,8
-:::
+```
+v.category input=observer output=observer_new option=transfer layer=1,2,3,4,5,6,7,8
+```
 
 ### Print vector categories of given layer
 
 Print vector categories from the first layer, only for feature ids 1-50.
 
-::: code
-    v.category input=roads option=print layer=1 id=1-50
-:::
+```
+v.category input=roads option=print layer=1 id=1-50
+```
 
 ## SEE ALSO
 

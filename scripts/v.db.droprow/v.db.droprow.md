@@ -16,22 +16,22 @@ easier usage. The existing database connection(s) can be verified with
 Dropping all vector points without elevation attribute (North Carolina
 data set):\
 
-::: code
-    g.region raster=elevation -p
-    v.random output=rand5k_elev n=5000
+```
+g.region raster=elevation -p
+v.random output=rand5k_elev n=5000
 
-    v.db.addtable map=rand5k_elev column="elevation double precision"
-    v.what.rast vect=rand5k_elev rast=elevation column=elevation
+v.db.addtable map=rand5k_elev column="elevation double precision"
+v.what.rast vect=rand5k_elev rast=elevation column=elevation
 
-    # verify absence of some elevation attributes ("number of NULL attributes"):
-    v.univar rand5k_elev type=point column=elevation
+# verify absence of some elevation attributes ("number of NULL attributes"):
+v.univar rand5k_elev type=point column=elevation
 
-    # Remove all vector points lacking elevation attribute
-    v.db.droprow rand5k_elev output=rand5k_elev_filt where="elevation IS NULL"
+# Remove all vector points lacking elevation attribute
+v.db.droprow rand5k_elev output=rand5k_elev_filt where="elevation IS NULL"
 
-    # verify:
-    v.univar rand5k_elev_filt type=point column=elevation
-:::
+# verify:
+v.univar rand5k_elev_filt type=point column=elevation
+```
 
 ## SEE ALSO
 

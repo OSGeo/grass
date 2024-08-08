@@ -28,10 +28,10 @@ Compute closeness and betweenness centrality measures for each node and
 produce a map containing not only points already present in the input
 map but a map with point on every node.
 
-::: code
-    v.net.centrality input=roads output=roads_cent closeness=closeness \
-          betweenness=betweenness -a
-:::
+```
+v.net.centrality input=roads output=roads_cent closeness=closeness \
+      betweenness=betweenness -a
+```
 
 ## SEE ALSO
 

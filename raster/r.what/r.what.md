@@ -33,13 +33,13 @@ The module\'s **coordinates** parameter can be used to enter coordinate
 pairs directly. The maximum number of pairs will be limited by your
 system\'s maximum input line length (e.g. 4096 characters).
 
-::: code
-    g.region raster=landuse96_28m,aspect -p
-    r.what map=landuse96_28m,aspect coordinates=633614.08,224125.12,632972.36,225382.87 -f
+```
+g.region raster=landuse96_28m,aspect -p
+r.what map=landuse96_28m,aspect coordinates=633614.08,224125.12,632972.36,225382.87 -f
 
-    633614.08|224125.12||2|Low Intensity Developed|209.5939|209 degrees ccw from east
-    632972.36|225382.87||15|Southern Yellow Pine|140.7571|140 degrees ccw from east
-:::
+633614.08|224125.12||2|Low Intensity Developed|209.5939|209 degrees ccw from east
+632972.36|225382.87||15|Southern Yellow Pine|140.7571|140 degrees ccw from east
+```
 
 ### Input coordinates given as a vector points map
 
@@ -47,14 +47,14 @@ Coordinates can be read from existing vector points map by specifying
 **points** option. Other features than points or centroids are ignored.
 Example: query North Carolina county number for each community college:
 
-::: code
-    g.region raster=boundary_county_500m -p
-    r.what map=boundary_county_500m points=comm_colleges
+```
+g.region raster=boundary_county_500m -p
+r.what map=boundary_county_500m points=comm_colleges
 
-    145096.859150|154534.264884||39
-    616341.437150|146049.750884||51
-    ...
-:::
+145096.859150|154534.264884||39
+616341.437150|146049.750884||51
+...
+```
 
 ### Input coordinates given as a vector points map with cats
 
@@ -63,14 +63,14 @@ Coordinates can be read from existing vector points map by specifying
 Using the **v** flag you can get also the cat for each feature. Example:
 query North Carolina county number for each community college:
 
-::: code
-    g.region raster=boundary_county_500m -p
-    r.what map=boundary_county_500m points=comm_colleges -v
+```
+g.region raster=boundary_county_500m -p
+r.what map=boundary_county_500m points=comm_colleges -v
 
-    1|145096.859150|154534.264884||39
-    2|616341.437150|146049.750884||51
-    ...
-:::
+1|145096.859150|154534.264884||39
+2|616341.437150|146049.750884||51
+...
+```
 
 ### Input coordinates given as a vector points map, output into CSV file
 
@@ -79,18 +79,18 @@ Coordinates can be read from existing vector points map by specifying
 The output is stored in a CSV file including header row. Example: query
 North Carolina county number for each community college:
 
-::: code
-    g.region raster=boundary_county_500m -p
-    r.what map=boundary_county_500m points=comm_colleges \
-           separator=comma output=result.csv -n
+```
+g.region raster=boundary_county_500m -p
+r.what map=boundary_county_500m points=comm_colleges \
+       separator=comma output=result.csv -n
 
-    cat result.csv
-    easting,northing,site_name,boundary_county_500m
-    145096.859150,154534.264884,,39
-    616341.437150,146049.750884,,51
-    410595.719150,174301.828884,,71
-    ...
-:::
+cat result.csv
+easting,northing,site_name,boundary_county_500m
+145096.859150,154534.264884,,39
+616341.437150,146049.750884,,51
+410595.719150,174301.828884,,71
+...
+```
 
 ### Input from a text file containing coordinates
 
@@ -99,37 +99,37 @@ follows. If we have a file called *input_coord.txt* containing the
 whitespace separated coordinates and optionally labels, the resulting
 raster map values are extracted:
 
-::: code
-    cat input_coord.txt
-    633614.08 224125.12 site 1
-    632972.36 225382.87 site 2
+```
+cat input_coord.txt
+633614.08 224125.12 site 1
+632972.36 225382.87 site 2
 
-    r.what map=landuse96_28m,aspect < input_coord.txt
+r.what map=landuse96_28m,aspect < input_coord.txt
 
-    633614.08|224125.12|site 1|2|209.5939
-    632972.36|225382.87|site 2|15|140.7571
-:::
+633614.08|224125.12|site 1|2|209.5939
+632972.36|225382.87|site 2|15|140.7571
+```
 
 ### Input from standard input on the command line
 
 Input coordinates may be given directly from standard input (`stdin`),
 for example (input data appears between the \"`EOF`\" markers):
 
-::: code
-    r.what map=landuse96_28m,aspect << EOF
-    633614.08 224125.12 site 1
-    632972.36 225382.87 site 2
-    EOF
+```
+r.what map=landuse96_28m,aspect << EOF
+633614.08 224125.12 site 1
+632972.36 225382.87 site 2
+EOF
 
-    633614.08|224125.12|site 1|2|209.5939
-    632972.36|225382.87|site 2|15|140.7571
-:::
+633614.08|224125.12|site 1|2|209.5939
+632972.36|225382.87|site 2|15|140.7571
+```
 
-::: code
-    echo "633614.08 224125.12" | r.what map=landuse96_28m,aspect
+```
+echo "633614.08 224125.12" | r.what map=landuse96_28m,aspect
 
-    633614.08|224125.12||2|209.5939
-:::
+633614.08|224125.12||2|209.5939
+```
 
 ### Input coordinates piped from another program
 
@@ -137,14 +137,14 @@ The input coordinates may be \"piped\" from the standard output
 (`stdout`) of another program. In the next example, vector point
 coordinates are piped from the *[v.out.ascii](v.out.ascii.html)* module.
 
-::: code
-    v.out.ascii comm_colleges separator=space | r.what map=boundary_county_500m
+```
+v.out.ascii comm_colleges separator=space | r.what map=boundary_county_500m
 
-    145096.8591495|154534.26488388|1|39
-    616341.4371495|146049.75088388|2|51
-    410595.7191495|174301.82888388|3|71
-    ...
-:::
+145096.8591495|154534.26488388|1|39
+616341.4371495|146049.75088388|2|51
+410595.7191495|174301.82888388|3|71
+...
+```
 
 ### Output containing raster map category labels
 
@@ -152,15 +152,15 @@ Here we use the **-f** label flag to enable the output of category
 labels associated with the raster cell(s), as well as values
 (categorical maps only).
 
-::: code
-    r.what -f map=landuse96_28m,aspect << EOF
-    633614.08 224125.12 site 1
-    632972.36 225382.87 site 2
-    EOF
+```
+r.what -f map=landuse96_28m,aspect << EOF
+633614.08 224125.12 site 1
+632972.36 225382.87 site 2
+EOF
 
-    633614.08|224125.12|site 1|2|Low Intensity Developed|209.5939|209 degrees ccw from east
-    632972.36|225382.87|site 2|15|Southern Yellow Pine|140.7571|140 degrees ccw from east
-:::
+633614.08|224125.12|site 1|2|Low Intensity Developed|209.5939|209 degrees ccw from east
+632972.36|225382.87|site 2|15|Southern Yellow Pine|140.7571|140 degrees ccw from east
+```
 
 ## NOTE
 

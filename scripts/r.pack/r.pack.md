@@ -17,15 +17,15 @@ parameter. Currently only 2D raster maps are supported.
 
 Pack up the entire raster map *aspect* into *aspect.pack* file:
 
-::: code
-    r.pack input=aspect
-:::
+```
+r.pack input=aspect
+```
 
 The packed raster map file *aspect.pack* can afterwards be unpacked by
 
-::: code
-    r.unpack input=aspect.pack
-:::
+```
+r.unpack input=aspect.pack
+```
 
 ## SEE ALSO
 

@@ -36,98 +36,98 @@ following suffix can be used:
 In this example, all the raster maps of 2012 of \"tempmean_monthly\"
 will be exported:
 
-::: code
-    t.rast.export input=tempmean_monthly output=tempmean_monthly.tar.bzip2 \
-                  where="start_time >= '2012-01-01' and start_time < '2013-01-01'"
+```
+t.rast.export input=tempmean_monthly output=tempmean_monthly.tar.bzip2 \
+              where="start_time >= '2012-01-01' and start_time < '2013-01-01'"
 
-    tar xvjf precipitation_daily.tar.bzip2
+tar xvjf precipitation_daily.tar.bzip2
 
-    2012_01_tempmean.tif
-    2012_01_tempmean.color
-    2012_02_tempmean.tif
-    2012_02_tempmean.color
-    2012_03_tempmean.tif
-    2012_03_tempmean.color
-    2012_04_tempmean.tif
-    2012_04_tempmean.color
-    2012_05_tempmean.tif
-    2012_05_tempmean.color
-    2012_06_tempmean.tif
-    2012_06_tempmean.color
-    2012_07_tempmean.tif
-    2012_07_tempmean.color
-    2012_08_tempmean.tif
-    2012_08_tempmean.color
-    2012_09_tempmean.tif
-    2012_09_tempmean.color
-    2012_10_tempmean.tif
-    2012_10_tempmean.color
-    2012_11_tempmean.tif
-    2012_11_tempmean.color
-    2012_12_tempmean.tif
-    2012_12_tempmean.color
-    list.txt
-    proj.txt
-    init.txt
-    readme.txt
-    metadata.txt
-
-
-    cat init.txt
-    stds_type=strds
-    format=GTiff
-    temporal_type=absolute
-    semantic_type=mean
-    number_of_maps=48
-    north=320000.0
-    south=10000.0
-    east=935000.0
-    west=120000.0
+2012_01_tempmean.tif
+2012_01_tempmean.color
+2012_02_tempmean.tif
+2012_02_tempmean.color
+2012_03_tempmean.tif
+2012_03_tempmean.color
+2012_04_tempmean.tif
+2012_04_tempmean.color
+2012_05_tempmean.tif
+2012_05_tempmean.color
+2012_06_tempmean.tif
+2012_06_tempmean.color
+2012_07_tempmean.tif
+2012_07_tempmean.color
+2012_08_tempmean.tif
+2012_08_tempmean.color
+2012_09_tempmean.tif
+2012_09_tempmean.color
+2012_10_tempmean.tif
+2012_10_tempmean.color
+2012_11_tempmean.tif
+2012_11_tempmean.color
+2012_12_tempmean.tif
+2012_12_tempmean.color
+list.txt
+proj.txt
+init.txt
+readme.txt
+metadata.txt
 
 
-    cat proj.txt
-    +proj=lcc
-    +lat_1=36.16666666666666
-    +lat_2=34.33333333333334
-    +lat_0=33.75
-    +lon_0=-79
-    +x_0=609601.22
-    +y_0=0
-    +no_defs
-    +a=6378137
-    +rf=298.257222101
-    +towgs84=0.000,0.000,0.000
-    +to_meter=1
+cat init.txt
+stds_type=strds
+format=GTiff
+temporal_type=absolute
+semantic_type=mean
+number_of_maps=48
+north=320000.0
+south=10000.0
+east=935000.0
+west=120000.0
 
 
-    cat list.txt
-    2012_01_tempmean|2012-01-01 00:00:00|2012-02-01 00:00:00
-    2012_02_tempmean|2012-02-01 00:00:00|2012-03-01 00:00:00
-    2012_03_tempmean|2012-03-01 00:00:00|2012-04-01 00:00:00
-    2012_04_tempmean|2012-04-01 00:00:00|2012-05-01 00:00:00
-    2012_05_tempmean|2012-05-01 00:00:00|2012-06-01 00:00:00
-    2012_06_tempmean|2012-06-01 00:00:00|2012-07-01 00:00:00
-    2012_07_tempmean|2012-07-01 00:00:00|2012-08-01 00:00:00
-    2012_08_tempmean|2012-08-01 00:00:00|2012-09-01 00:00:00
-    2012_09_tempmean|2012-09-01 00:00:00|2012-10-01 00:00:00
-    2012_10_tempmean|2012-10-01 00:00:00|2012-11-01 00:00:00
-    2012_11_tempmean|2012-11-01 00:00:00|2012-12-01 00:00:00
-    2012_12_tempmean|2012-12-01 00:00:00|2013-01-01 00:00:00
+cat proj.txt
++proj=lcc
++lat_1=36.16666666666666
++lat_2=34.33333333333334
++lat_0=33.75
++lon_0=-79
++x_0=609601.22
++y_0=0
++no_defs
++a=6378137
++rf=298.257222101
++towgs84=0.000,0.000,0.000
++to_meter=1
 
 
-    cat readme.txt
-    This space time raster dataset was exported with t.rast.export of GRASS GIS 7
+cat list.txt
+2012_01_tempmean|2012-01-01 00:00:00|2012-02-01 00:00:00
+2012_02_tempmean|2012-02-01 00:00:00|2012-03-01 00:00:00
+2012_03_tempmean|2012-03-01 00:00:00|2012-04-01 00:00:00
+2012_04_tempmean|2012-04-01 00:00:00|2012-05-01 00:00:00
+2012_05_tempmean|2012-05-01 00:00:00|2012-06-01 00:00:00
+2012_06_tempmean|2012-06-01 00:00:00|2012-07-01 00:00:00
+2012_07_tempmean|2012-07-01 00:00:00|2012-08-01 00:00:00
+2012_08_tempmean|2012-08-01 00:00:00|2012-09-01 00:00:00
+2012_09_tempmean|2012-09-01 00:00:00|2012-10-01 00:00:00
+2012_10_tempmean|2012-10-01 00:00:00|2012-11-01 00:00:00
+2012_11_tempmean|2012-11-01 00:00:00|2012-12-01 00:00:00
+2012_12_tempmean|2012-12-01 00:00:00|2013-01-01 00:00:00
 
-    Files:
-           *.tif  -- GeoTIFF raster files
-         *.color  -- GRASS GIS raster color rules
-         proj.txt -- Projection information in PROJ format
-         init.txt -- GRASS GIS space time raster dataset information
-         list.txt -- Time series file, lists all maps by name with interval
-                     time stamps in ISO-Format. Field separator is |
-     metadata.txt -- The output of t.info
-       readme.txt -- This file
-:::
+
+cat readme.txt
+This space time raster dataset was exported with t.rast.export of GRASS GIS 7
+
+Files:
+       *.tif  -- GeoTIFF raster files
+     *.color  -- GRASS GIS raster color rules
+     proj.txt -- Projection information in PROJ format
+     init.txt -- GRASS GIS space time raster dataset information
+     list.txt -- Time series file, lists all maps by name with interval
+                 time stamps in ISO-Format. Field separator is |
+ metadata.txt -- The output of t.info
+   readme.txt -- This file
+```
 
 ## SEE ALSO
 

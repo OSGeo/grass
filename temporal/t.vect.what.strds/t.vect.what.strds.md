@@ -12,11 +12,11 @@ The example is based on the space time vector dataset
 example below, the module fills the new column \"new_temp\" with values
 extracted from the \"tempmean_monthly\" space time raster dataset:
 
-::: code
-    t.vect.what.strds input=precip_stations@climate_2009_2012 \
-                      strds=tempmean_monthly@climate_2009_2012 \
-                      column=new_temp method=average
-:::
+```
+t.vect.what.strds input=precip_stations@climate_2009_2012 \
+                  strds=tempmean_monthly@climate_2009_2012 \
+                  column=new_temp method=average
+```
 
 ## SEE ALSO
 

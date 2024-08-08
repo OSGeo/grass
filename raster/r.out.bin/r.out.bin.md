@@ -13,16 +13,16 @@ With the -h flag, data can be directly used by
 [GMT](http://gmt.soest.hawaii.edu/) as Grid Format 1 (float) or 2
 (short). For example:
 
-::: code
-    r.out.bin -h input=grass.raster output=new.grd
-    grdinfo new.grd=1 (if float)
-:::
+```
+r.out.bin -h input=grass.raster output=new.grd
+grdinfo new.grd=1 (if float)
+```
 
 Exported data can be piped directly into the GMT program xyz2grd.
 
-::: code
-    r.out.bin input=grass.raster output=- | xyz2grd -R....  -ZTLf -
-:::
+```
+r.out.bin input=grass.raster output=- | xyz2grd -R....  -ZTLf -
+```
 
 The example uses the GMT program xyz2grd with the -ZTLf flag indicating
 that a float array was output.

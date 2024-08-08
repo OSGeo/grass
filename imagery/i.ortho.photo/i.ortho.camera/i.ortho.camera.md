@@ -17,16 +17,18 @@ After entering the camera file name, following menu is displayed:
 
 Please provide the following information
 
+```
 
-        CAMERA NAME:               camera name______
-        CAMERA IDENTIFICATION:     identification___
-        CALIBRATED FOCAL LENGTH mm.:_________________
-        POINT OF SYMMETRY (X)   mm.:_________________
-        POINT OF SYMMETRY (Y)   mm.:_________________
-        MAXIMUM NUMBER OF FIDUCIALS:_________________
+    CAMERA NAME:               camera name______
+    CAMERA IDENTIFICATION:     identification___
+    CALIBRATED FOCAL LENGTH mm.:_________________
+    POINT OF SYMMETRY (X)   mm.:_________________
+    POINT OF SYMMETRY (Y)   mm.:_________________
+    MAXIMUM NUMBER OF FIDUCIALS:_________________
 
-       AFTER COMPLETING ALL ANSWERS, HIT <ESC> TO CONTINUE
-                   (OR <Ctrl-C> TO CANCEL)
+   AFTER COMPLETING ALL ANSWERS, HIT <ESC> TO CONTINUE
+               (OR <Ctrl-C> TO CANCEL)
+```
 
 The camera name and identification describe the camera reference file.
 The calibrated focal length and the point of symmetry are used in
@@ -64,23 +66,25 @@ in milli-meters from the principle point.
 
 Please provide the following information
 
-        Fid#    FID ID        X          Y
+```
+    Fid#    FID ID        X          Y
 
-        1__ _____       0.0___  0.0___
-        2__ _____       0.0___  0.0___
-        3__ _____       0.0___  0.0___
-        4__ _____       0.0___  0.0___
-        5__ _____       0.0___  0.0___
-        6__ _____       0.0___  0.0___
-        7__ _____       0.0___  0.0___
-        8__ _____       0.0___  0.0___
-        9__ _____       0.0___  0.0___
-        10_ _____       0.0___  0.0___
+    1__ _____       0.0___  0.0___
+    2__ _____       0.0___  0.0___
+    3__ _____       0.0___  0.0___
+    4__ _____       0.0___  0.0___
+    5__ _____       0.0___  0.0___
+    6__ _____       0.0___  0.0___
+    7__ _____       0.0___  0.0___
+    8__ _____       0.0___  0.0___
+    9__ _____       0.0___  0.0___
+    10_ _____       0.0___  0.0___
 
-                 next:  end__
+             next:  end__
 
-         AFTER COMPLETING ALL ANSWERS, HIT <ESC> TO CONTINUE
-                        (OR <Ctrl-C> TO CANCEL)
+     AFTER COMPLETING ALL ANSWERS, HIT <ESC> TO CONTINUE
+                    (OR <Ctrl-C> TO CANCEL)
+```
 
 The input display is repeated until the number of MAXIMUM FIDUCIALS is
 reached.

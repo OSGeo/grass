@@ -38,17 +38,17 @@ values of some of the maps before patching.
 
 Patch together two maps with mixed feature types:
 
-::: code
-       v.patch input=geology,streams out=geol_streams
-:::
+```
+   v.patch input=geology,streams out=geol_streams
+```
 
 \
 Append one map to another:
 
-::: code
-       g.copy vect=roads,transport
-       v.patch -a input=railroads output=transport --overwrite
-:::
+```
+   g.copy vect=roads,transport
+   v.patch -a input=railroads output=transport --overwrite
+```
 
 ## SEE ALSO
 

@@ -23,9 +23,9 @@ The formula from Aitken 1977/Langmuir 1984 (based on Naismith\'s rule
 for walking times) has been used to estimate the cost parameters of
 specific slope intervals:
 
-::: code
-    T = a*delta_S + b*delta_H_uphill + c*delta_H_moderate_downhill + d*delta_H_steep_downhill
-:::
+```
+T = a*delta_S + b*delta_H_uphill + c*delta_H_moderate_downhill + d*delta_H_steep_downhill
+```
 
 where:
 
@@ -62,9 +62,9 @@ which all cells have a value of 0.
 The **lambda** parameter is a dimensionless scaling factor of the
 friction cost:
 
-::: code
-    total cost = movement time cost + lambda * friction costs * delta_S
-:::
+```
+total cost = movement time cost + lambda * friction costs * delta_S
+```
 
 For a more accurate result, the \"knight\'s move\" option can be used
 (although it is more time consuming). In the diagram below, the center
@@ -73,13 +73,13 @@ calculated. Those neighbours marked with an x are always considered for
 cumulative cost updates. With the \"knight\'s move\" option, the
 neighbours marked with a K are also considered.
 
-::: code
-      K   K
-    K x x x K
-      x O x
-    K x x x K
-      K   K
-:::
+```
+  K   K
+K x x x K
+  x O x
+K x x x K
+  K   K
+```
 
 The minimum cumulative costs are computed using Dijkstra\'s algorithm,
 that find an optimum solution (for more details see *r.cost*, that uses
@@ -94,13 +94,13 @@ path from an end point back to the start point. The direction of each
 cell points towards the next cell. The directions are recorded as
 degrees CCW from East:
 
-::: code
-           112.5      67.5         i.e. a cell with the value 135
-    157.5  135   90   45   22.5    means the next cell is to the north-west
-           180   x   360
-    202.5  225  270  315  337.5
-           247.5     292.5
-:::
+```
+       112.5      67.5         i.e. a cell with the value 135
+157.5  135   90   45   22.5    means the next cell is to the north-west
+       180   x   360
+202.5  225  270  315  337.5
+       247.5     292.5
+```
 
 Once *r.walk* computes the cumulative cost map as a linear combination
 of friction cost (from friction map) and the altitude and distance
@@ -124,24 +124,24 @@ We compute a map showing how far a lost person could get from the point
 where he or she was last seen while taking into account the topography
 and landcover.
 
-::: code
-    g.region swwake_30m -p
+```
+g.region swwake_30m -p
 
-    # create friction map based on land cover
-    r.recode landclass96 out=friction rules=- << EOF
-    1:3:0.1:0.1
-    4:5:10.:10.
-    6:6:1000.0:1000.0
-    7:7:0.3:0.3
-    EOF
+# create friction map based on land cover
+r.recode landclass96 out=friction rules=- << EOF
+1:3:0.1:0.1
+4:5:10.:10.
+6:6:1000.0:1000.0
+7:7:0.3:0.3
+EOF
 
-    r.walk -k elevation=elev_ned_30m friction=friction output=walkcost \
-        start_coordinates=635576,216485 lambda=0.5 max=10000
+r.walk -k elevation=elev_ned_30m friction=friction output=walkcost \
+    start_coordinates=635576,216485 lambda=0.5 max=10000
 
-    # compute contours on the cost surface to better understand
-    # how far the person can get in certain time (1000 is in seconds)
-    r.contour walkcost output=walkcost step=1000
-:::
+# compute contours on the cost surface to better understand
+# how far the person can get in certain time (1000 is in seconds)
+r.contour walkcost output=walkcost step=1000
+```
 
 ::: {align="center" style="margin: 10px"}
 [![r.walk example](r_walk.png){width="600" height="600"

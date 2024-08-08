@@ -8,9 +8,9 @@ the current region settings.
 
 To get the full area and resolutin of the raster map, run:
 
-::: code
-    g.region raster=[mapname]
-:::
+```
+g.region raster=[mapname]
+```
 
 before running *r.out.ppm3*.
 

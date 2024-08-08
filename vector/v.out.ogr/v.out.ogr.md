@@ -61,80 +61,80 @@ ConfigOptions](https://trac.osgeo.org/gdal/wiki/ConfigOptions#OGR_SQLITE_CACHE))
 
 Export lines from a GRASS vector map to OGC GeoPackage format:
 
-::: code
-    v.out.ogr input=roadsmajor type=line output=roadsmajor.gpkg
-:::
+```
+v.out.ogr input=roadsmajor type=line output=roadsmajor.gpkg
+```
 
 Export areas from GRASS vector map to OGC GeoPackage format, converting
 islands (holes) to filled polygons:
 
-::: code
-    v.out.ogr -c input=areas_islands type=area output=areas_islands.gpkg
-:::
+```
+v.out.ogr -c input=areas_islands type=area output=areas_islands.gpkg
+```
 
 Export mixed geometry type GRASS vector map to OGC GeoPackage format:
 
-::: code
-    v.out.ogr input=generic_vector output=mixed_geometry.gpkg
-:::
+```
+v.out.ogr input=generic_vector output=mixed_geometry.gpkg
+```
 
 ### Export to ESRI Shapefile
 
 Export lines from GRASS vector map to Shapefile format:
 
-::: code
-    v.out.ogr input=roadsmajor type=line format=ESRI_Shapefile output=lines.shp
-:::
+```
+v.out.ogr input=roadsmajor type=line format=ESRI_Shapefile output=lines.shp
+```
 
 Export areas from GRASS vector map to Shapefile format, converting
 islands (holes) to filled polygons:
 
-::: code
-    v.out.ogr -c input=areas_islands type=area format=ESRI_Shapefile output=areas_islands.shp
-:::
+```
+v.out.ogr -c input=areas_islands type=area format=ESRI_Shapefile output=areas_islands.shp
+```
 
 Export 3D lines from GRASS vector map to Shapefile format:
 
-::: code
-    v.out.ogr input=lines_3d type=line format=ESRI_Shapefile output=lines_3d.shp lco="SHPT=ARCZ"
-:::
+```
+v.out.ogr input=lines_3d type=line format=ESRI_Shapefile output=lines_3d.shp lco="SHPT=ARCZ"
+```
 
 Export 3D points (e.g., Lidar points) from GRASS vector map to Shapefile
 format
 
-::: code
-    v.out.ogr points_3d type=point format=ESRI_Shapefile output=points_3d.shp lco="SHPT=POINTZ"
-:::
+```
+v.out.ogr points_3d type=point format=ESRI_Shapefile output=points_3d.shp lco="SHPT=POINTZ"
+```
 
 Export 3D faces from GRASS vector map to Shapefile format:
 
-::: code
-    v.out.ogr input=objects_3d type=face format=ESRI_Shapefile output=faces_3d.shp lco="SHPT=POLYGONZ"
-:::
+```
+v.out.ogr input=objects_3d type=face format=ESRI_Shapefile output=faces_3d.shp lco="SHPT=POLYGONZ"
+```
 
 Export 3D faces from GRASS vector map to Shapefile format, automatic 3D
 setting:
 
-::: code
-    v.out.ogr input=objects_3d type=face format=ESRI_Shapefile output=faces_3d.shp"
-:::
+```
+v.out.ogr input=objects_3d type=face format=ESRI_Shapefile output=faces_3d.shp"
+```
 
 ### Export to GML
 
 Export lines from GRASS vector map to GML format (generates
 \'/tmp/testogr.gml\' file with layer \'testogr\'):
 
-::: code
-    v.out.ogr input=multi type=line output=/tmp/testogr.gml output_layer=testogr format=GML
-:::
+```
+v.out.ogr input=multi type=line output=/tmp/testogr.gml output_layer=testogr format=GML
+```
 
 ### Export to PostgreSQL/PostGIS
 
 Export areas from GRASS vector map to PostGIS database:
 
-::: code
-    v.out.ogr input=polygons type=area output="PG:host=localhost dbname=postgis user=postgres" output_layer=polymap format=PostgreSQL
-:::
+```
+v.out.ogr input=polygons type=area output="PG:host=localhost dbname=postgis user=postgres" output_layer=polymap format=PostgreSQL
+```
 
 *Note:* For exporting GRASS vector data to PostGIS database can be also
 used *[v.out.postgis](v.out.postgis.html)* module. This module is not
@@ -146,32 +146,32 @@ topological format (PostGIS Topology).
 Export faces (3D vectors) from GRASS vector map to KML format for Google
 Earth:
 
-::: code
-    v.out.ogr input=buildings_3d output=buildings_3d.kml output_layer=buildings_3d format=KML type=face
-:::
+```
+v.out.ogr input=buildings_3d output=buildings_3d.kml output_layer=buildings_3d format=KML type=face
+```
 
 Generate and export GRASS vector \"asteroid\" map (faces, 3D vectors) to
 KML format for Google Earth:
 
-::: code
-    # near Raleigh (NC, USA)
-    g.region n=35.73952587 s=35.73279182 w=-78.68263928 e=-78.67499517
+```
+# near Raleigh (NC, USA)
+g.region n=35.73952587 s=35.73279182 w=-78.68263928 e=-78.67499517
 
-    # two layers of random points
-    v.random -z output=random3d_a n=10 zmin=0 zmax=200
-    v.random -z output=random3d_b n=15 zmin=400 zmax=600
+# two layers of random points
+v.random -z output=random3d_a n=10 zmin=0 zmax=200
+v.random -z output=random3d_b n=15 zmin=400 zmax=600
 
-    # merge into one 3D points map
-    v.patch input=random3d_a,random3d_b output=random3d
+# merge into one 3D points map
+v.patch input=random3d_a,random3d_b output=random3d
 
-    # generate 3D convex hull
-    v.hull input=random3d output="random3d_hull"
+# generate 3D convex hull
+v.hull input=random3d output="random3d_hull"
 
-    # export to KML 3D
-    v.out.ogr input=random3d_hull output=random3d_hull.kml format=KML type=face dsco="AltitudeMode=absolute"
+# export to KML 3D
+v.out.ogr input=random3d_hull output=random3d_hull.kml format=KML type=face dsco="AltitudeMode=absolute"
 
-    # now open KML file 'random3d_hull.kml' in Google Earth or NASA WorldWind or ...
-:::
+# now open KML file 'random3d_hull.kml' in Google Earth or NASA WorldWind or ...
+```
 
 ## REFERENCES
 

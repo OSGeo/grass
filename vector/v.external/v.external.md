@@ -38,9 +38,9 @@ attributes in external DBMS in also writable mode.
 
 To list supported OGR formats, type
 
-::: code
-    v.external -f
-:::
+```
+v.external -f
+```
 
 For details see [GDAL web site](https://gdal.org/drivers/vector/).
 
@@ -51,9 +51,9 @@ For details see [GDAL web site](https://gdal.org/drivers/vector/).
 Assuming that \'test_shape.shp\' is located in directory
 \'/home/user/shape_data\'.
 
-::: code
-    v.external input=/home/user/shape_data layer=test_shape output=grass_map
-:::
+```
+v.external input=/home/user/shape_data layer=test_shape output=grass_map
+```
 
 ### PostGIS layers
 
@@ -64,17 +64,17 @@ support then GRASS will use OGR-PostgreSQL driver for creating a link.
 
 List of layers for given data source can be printed by **-l** flag.
 
-::: code
-    v.external input="PG:host=localhost user=postgres dbname=postgis" -l
+```
+v.external input="PG:host=localhost user=postgres dbname=postgis" -l
 
-    ...
-    polymap
-    ...
-:::
+...
+polymap
+...
+```
 
-::: code
-    v.external input="PG:host=localhost user=postgres dbname=postgis" layer=polymap
-:::
+```
+v.external input="PG:host=localhost user=postgres dbname=postgis" layer=polymap
+```
 
 Note: Authentication details (user password) can be preferably defined
 by *[db.login](db.login.html)*.
@@ -84,23 +84,23 @@ by *[db.login](db.login.html)*.
 Assuming that \'mapinfo_test\' MapInfo file is located in the current
 directory (\".\").
 
-::: code
-    v.external input=./ layer=mapinfo_test output=grass_map
-:::
+```
+v.external input=./ layer=mapinfo_test output=grass_map
+```
 
 ### SDTS files
 
 Note: you have to select the CATD file
 
-::: code
-    v.external input=CITXCATD.DDF output=cities
-:::
+```
+v.external input=CITXCATD.DDF output=cities
+```
 
 ### TIGER files
 
-::: code
-    v.external input=input/2000/56015/ layer=CompleteChain,PIP output=t56015_all
-:::
+```
+v.external input=input/2000/56015/ layer=CompleteChain,PIP output=t56015_all
+```
 
 ### Linking subset of features
 
@@ -108,12 +108,12 @@ By **where** option only subset of features can be linked. In the
 example below only one feature (in this case a vector tile) will be
 linked as a new GRASS vector map.
 
-::: code
-    v.external in="PG:dbname=tiles" layer=wrs2_descending where="pr=191026"
-    ...
-    Number of areas: 1
-    ...
-:::
+```
+v.external in="PG:dbname=tiles" layer=wrs2_descending where="pr=191026"
+...
+Number of areas: 1
+...
+```
 
 ## REFERENCES
 

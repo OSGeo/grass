@@ -13,15 +13,15 @@ Currently only 2D raster maps are supported.
 
 Pack up raster map *aspect* into *aspect.pack* file.
 
-::: code
-    r.pack input=aspect
-:::
+```
+r.pack input=aspect
+```
 
 the raster map can be afterwards unpacked by
 
-::: code
-    r.unpack input=aspect.pack
-:::
+```
+r.unpack input=aspect.pack
+```
 
 ## SEE ALSO
 

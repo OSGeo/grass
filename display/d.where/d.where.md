@@ -13,11 +13,11 @@ a file, it will be written to the file as well.
 
 Mouse buttons:
 
-::: code
-         Left:   where am i
-         Middle: draw to/from here
-         Right:  quit this
-:::
+```
+     Left:   where am i
+     Middle: draw to/from here
+     Right:  quit this
+```
 
 The left mouse button prints the coordinates at the selected point, the
 middle mouse button allows you to query two points (they are connected
@@ -40,10 +40,10 @@ bottom left).
 
 Query position in map (North Carolina sample dataset):
 
-::: code
-    d.rast elevation
-    d.where
-:::
+```
+d.rast elevation
+d.where
+```
 
 ## SEE ALSO
 

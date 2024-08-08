@@ -20,13 +20,13 @@ Internally, a gain code is defined to modify gains according to spectral
 bands following the GeoSystems GmbH ATCOR Ver. 2.0 Calibration Files.
 The function is defined in gain_aster.c file.
 
-::: code
-    /*Gain Code*/
-        /*0 - High (Not Applicable for band 10-14: TIR)*/
-        /*1 - Normal*/
-        /*2 - Low 1(Not Applicable for band 10-14: TIR)*/
-        /*3 - Low 2(Not Applicable for Band 1-3N/B and 10-14)*/
-:::
+```
+/*Gain Code*/
+    /*0 - High (Not Applicable for band 10-14: TIR)*/
+    /*1 - Normal*/
+    /*2 - Low 1(Not Applicable for band 10-14: TIR)*/
+    /*3 - Low 2(Not Applicable for Band 1-3N/B and 10-14)*/
+```
 
 ## SEE ALSO
 

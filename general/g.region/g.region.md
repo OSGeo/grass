@@ -128,110 +128,122 @@ always updated unless **-u** was specified.
 ### Printing extent and raster resolution in 2D and 3D
 
 [` g.region -p `]{.code}
+
 :   This will print the current region in the format:
-    ::: code
-        projection: 1 (UTM)
-        zone:       13
-        datum:      nad27
-        ellipsoid:  clark66
-        north:      4928000
-        south:      4914000
-        west:       590000
-        east:       609000
-        nsres:      20
-        ewres:      20
-        rows:       700
-        cols:       950
-    :::
+
+    ```
+    projection: 1 (UTM)
+    zone:       13
+    datum:      nad27
+    ellipsoid:  clark66
+    north:      4928000
+    south:      4914000
+    west:       590000
+    east:       609000
+    nsres:      20
+    ewres:      20
+    rows:       700
+    cols:       950
+    ```
 
 [` g.region -p3 `]{.code}
+
 :   This will print the current region and the 3D region (used for
     voxels) in the format:
-    ::: code
-        projection: 1 (UTM)
-        zone:       13
-        datum:      nad27
-        ellipsoid:  clark66
-        north:      4928000
-        south:      4914000
-        west:       590000
-        east:       609000
-        top:        1.00000000
-        bottom:     0.00000000
-        nsres:      20
-        nsres3:     20
-        ewres:      20
-        ewres3:     20
-        tbres:      1
-        rows:       700
-        rows3:      700
-        cols:       950
-        cols3:      950
-        depths:     1
-    :::
+
+    ```
+    projection: 1 (UTM)
+    zone:       13
+    datum:      nad27
+    ellipsoid:  clark66
+    north:      4928000
+    south:      4914000
+    west:       590000
+    east:       609000
+    top:        1.00000000
+    bottom:     0.00000000
+    nsres:      20
+    nsres3:     20
+    ewres:      20
+    ewres3:     20
+    tbres:      1
+    rows:       700
+    rows3:      700
+    cols:       950
+    cols3:      950
+    depths:     1
+    ```
 
 [` g.region -g `]{.code}
+
 :   The **-g** option prints the region in the following script style
     (key=value) format:
-    ::: code
-        n=4928000
-        s=4914000
-        w=590000
-        e=609000
-        nsres=20
-        ewres=20
-        rows=700
-        cols=950
-    :::
+
+    ```
+    n=4928000
+    s=4914000
+    w=590000
+    e=609000
+    nsres=20
+    ewres=20
+    rows=700
+    cols=950
+    ```
 
 [` g.region -bg `]{.code}
+
 :   The **-bg** option prints the region in the following script style
     (key=value) format plus the boundary box in
     latitude-longitude/WGS84:
-    ::: code
-        n=4928000
-        s=4914000
-        w=590000
-        e=609000
-        nsres=20
-        ewres=20
-        rows=700
-        cols=950
-        LL_W=-103.87080682
-        LL_E=-103.62942884
-        LL_N=44.50164277
-        LL_S=44.37302019
-    :::
+
+    ```
+    n=4928000
+    s=4914000
+    w=590000
+    e=609000
+    nsres=20
+    ewres=20
+    rows=700
+    cols=950
+    LL_W=-103.87080682
+    LL_E=-103.62942884
+    LL_N=44.50164277
+    LL_S=44.37302019
+    ```
 
 [` g.region -l `]{.code}
+
 :   The **-l** option prints the region in the following format:
-    ::: code
-        long: -103.86789484 lat: 44.50165890 (north/west corner)
-        long: -103.62895703 lat: 44.49904013 (north/east corner)
-        long: -103.63190061 lat: 44.37303558 (south/east corner)
-        long: -103.87032572 lat: 44.37564292 (south/west corner)
-        rows:       700
-        cols:       950
-        Center longitude: 103:44:59.170374W [-103.74977]
-        Center latitude:  44:26:14.439781N [44.43734]
-    :::
+
+    ```
+    long: -103.86789484 lat: 44.50165890 (north/west corner)
+    long: -103.62895703 lat: 44.49904013 (north/east corner)
+    long: -103.63190061 lat: 44.37303558 (south/east corner)
+    long: -103.87032572 lat: 44.37564292 (south/west corner)
+    rows:       700
+    cols:       950
+    Center longitude: 103:44:59.170374W [-103.74977]
+    Center latitude:  44:26:14.439781N [44.43734]
+    ```
 
 [` g.region -pm `]{.code}
+
 :   This will print the current region in the format (latitude-longitude
     project):
-    ::: code
-        projection: 3 (Latitude-Longitude)
-        zone:       0
-        ellipsoid:  wgs84
-        north:      90N
-        south:      40N
-        west:       20W
-        east:       20E
-        nsres:      928.73944902
-        ewres:      352.74269109
-        rows:       6000
-        cols:       4800
-    :::
+
+    ```
+    projection: 3 (Latitude-Longitude)
+    zone:       0
+    ellipsoid:  wgs84
+    north:      90N
+    south:      40N
+    west:       20W
+    east:       20E
+    nsres:      928.73944902
+    ewres:      352.74269109
+    rows:       6000
+    cols:       4800
+    ```
 
     Note that the resolution is here reported in meters, not decimal
     degrees.
@@ -314,10 +326,10 @@ always updated unless **-u** was specified.
 Extracting a spatial subset of the external vector map `soils.shp` into
 new external vector map `soils_cut.shp` using the OGR *ogr2ogr* tool:\
 
-::: code
-    eval `g.region -g`
-    ogr2ogr -spat $w $s $e $n soils_cut.shp soils.shp
-:::
+```
+eval `g.region -g`
+ogr2ogr -spat $w $s $e $n soils_cut.shp soils.shp
+```
 
 This requires that the project and the SHAPE file CRS\' match.
 
@@ -328,12 +340,12 @@ Extracting a spatial subset of the external raster map
 `p016r035_7t20020524_nc_spm_wake_nn30.tif` using the GDAL *gdalwarp*
 tool:\
 
-::: code
-    eval `g.region -g`
-    gdalwarp -t_srs "`g.proj -wf`" -te $w $s $e $n \
-             p016r035_7t20020524_z17_nn30.tif \
-             p016r035_7t20020524_nc_spm_wake_nn30.tif
-:::
+```
+eval `g.region -g`
+gdalwarp -t_srs "`g.proj -wf`" -te $w $s $e $n \
+         p016r035_7t20020524_z17_nn30.tif \
+         p016r035_7t20020524_nc_spm_wake_nn30.tif
+```
 
 Here the input raster map does not have to match the project\'s
 coordinate reference system since it is reprojected on the fly.

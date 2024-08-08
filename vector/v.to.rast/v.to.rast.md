@@ -61,49 +61,49 @@ set only those cells on the render path (thin line).
 
 Boundaries (usually without categories) can be rasterized with
 
-::: code
-    v.to.rast type=boundary layer=-1 use=value
-:::
+```
+v.to.rast type=boundary layer=-1 use=value
+```
 
 ## EXAMPLES
 
 ### Convert a vector map and use column SPEED from attribute table
 
-::: code
-    db.describe -c table=vect_map
+```
+db.describe -c table=vect_map
 
-    ncols:3
-    Column 1: CAT
-    Column 2: SPEED
-    Column 3: WIDTH
-:::
+ncols:3
+Column 1: CAT
+Column 2: SPEED
+Column 3: WIDTH
+```
 
-::: code
-    v.to.rast input=vect_map output=raster_map attribute_column=SPEED type=line
-:::
+```
+v.to.rast input=vect_map output=raster_map attribute_column=SPEED type=line
+```
 
 ### Calculate stream directions from a river vector map (Spearfish)
 
-::: code
-    v.to.rast input=streams output=streamsdir use=dir
-:::
+```
+v.to.rast input=streams output=streamsdir use=dir
+```
 
 ### Calculate slope along path
 
 Using slope and aspect maps, compute slope along a bus route (use full
 NC sample dataset):
 
-::: code
-    g.region raster=elevation -p
-    r.slope.aspect elevation=elevation slope=slope aspect=aspect
+```
+g.region raster=elevation -p
+r.slope.aspect elevation=elevation slope=slope aspect=aspect
 
-    # compute direction of the bus route
-    v.to.rast input=busroute11 type=line output=busroute11_dir use=dir
+# compute direction of the bus route
+v.to.rast input=busroute11 type=line output=busroute11_dir use=dir
 
-    # extract steepest slope values and transform them into slope along path
-    r.mapcalc "route_slope = if(busroute11, slope)"
-    r.mapcalc "route_slope_dir = abs(atan(tan(slope) * cos(aspect - busroute11_dir)))"
-:::
+# extract steepest slope values and transform them into slope along path
+r.mapcalc "route_slope = if(busroute11, slope)"
+r.mapcalc "route_slope_dir = abs(atan(tan(slope) * cos(aspect - busroute11_dir)))"
+```
 
 ![Slope along path](v_to_rast_direction.png){border="1"}\
 Slope in degrees along bus route
@@ -113,41 +113,41 @@ Slope in degrees along bus route
 In this example, the ZIP code vector map is rasterized (North Carolina
 sample dataset):
 
-::: code
-    # rasterize ZIP codes at 50m raster resolution
-    g.region vector=zipcodes_wake res=50 -ap
-    # vector to raster conversion, with category labels
-    v.to.rast input=zipcodes_wake output=myzipcodes use=attr attribute_column="ZIPNUM" label_column="NAME"
-:::
+```
+# rasterize ZIP codes at 50m raster resolution
+g.region vector=zipcodes_wake res=50 -ap
+# vector to raster conversion, with category labels
+v.to.rast input=zipcodes_wake output=myzipcodes use=attr attribute_column="ZIPNUM" label_column="NAME"
+```
 
 ### Convert vector points to raster with raster cell binning
 
 In this example, the number of schools per raster cell are counted
 (North Carolina sample dataset):
 
-::: code
-    g.copy vector=schools_wake,myschools_wake
+```
+g.copy vector=schools_wake,myschools_wake
 
-    # set computation region for raster binning
-    g.region vector=myschools_wake res=5000 -p -a
+# set computation region for raster binning
+g.region vector=myschools_wake res=5000 -p -a
 
-    # add new column for counting
-    v.db.addcolumn myschools_wake column="value integer"
-    v.db.update myschools_wake column=value value=1
+# add new column for counting
+v.db.addcolumn myschools_wake column="value integer"
+v.db.update myschools_wake column=value value=1
 
-    # verify attributes
-    v.db.select myschools_wake column=cat,value
-    v.out.ascii input=myschools_wake output=- column=value
+# verify attributes
+v.db.select myschools_wake column=cat,value
+v.out.ascii input=myschools_wake output=- column=value
 
-    # export and import on the fly, use 4th column (value) as input
-    v.out.ascii input=myschools_wake output=- column=value | r.in.xyz input=- \
-                z=4 output=schools_wake_aggreg method=sum
+# export and import on the fly, use 4th column (value) as input
+v.out.ascii input=myschools_wake output=- column=value | r.in.xyz input=- \
+            z=4 output=schools_wake_aggreg method=sum
 
-    d.mon wx0
-    d.rast schools_wake_aggreg
-    d.vect schools_wake
-    d.grid 5000
-:::
+d.mon wx0
+d.rast schools_wake_aggreg
+d.vect schools_wake
+d.grid 5000
+```
 
 ![Number of schools per raster cell](v_to_rast_binning.png){border="1"}\
 Number of schools per raster cell

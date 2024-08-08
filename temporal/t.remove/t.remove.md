@@ -20,31 +20,31 @@ deleting the original sample data, we generate new data by means of
 computing yearly precipitation sums. Eventually, all newly produced data
 (STRDS and raster maps) are removed:
 
-::: code
-    #Create new and empty STRDS
-    t.create output=precip_months_sum semantictype=mean \
-      title="Monthly sum of precipitation" \
-      description="Monthly sum of precipitation for the \
-      North Carolina sample data"
+```
+#Create new and empty STRDS
+t.create output=precip_months_sum semantictype=mean \
+  title="Monthly sum of precipitation" \
+  description="Monthly sum of precipitation for the \
+  North Carolina sample data"
 
-    #Register maps from sample dataset (selecting a subset with g.list)
-    t.register -i type=raster input=precip_months_sum \
-      maps=$(g.list type=raster pattern="201*_precip" separator=comma) \
-      start="2010-01-01" increment="1 months"
+#Register maps from sample dataset (selecting a subset with g.list)
+t.register -i type=raster input=precip_months_sum \
+  maps=$(g.list type=raster pattern="201*_precip" separator=comma) \
+  start="2010-01-01" increment="1 months"
 
-    #Create some new data by aggregating with 1 years granularity
-    t.rast.aggregate input=precip_months_sum \
-      output=precip_years_sum basename=precip_years_sum granularity="1 \
-      years" method=sum
+#Create some new data by aggregating with 1 years granularity
+t.rast.aggregate input=precip_months_sum \
+  output=precip_years_sum basename=precip_years_sum granularity="1 \
+  years" method=sum
 
-    #Remove all newly produced data:
+#Remove all newly produced data:
 
-    # a) the aggregated STRDS with 1 years granularity along with its raster maps
-    t.remove -df type=strds input=precip_years_sum
+# a) the aggregated STRDS with 1 years granularity along with its raster maps
+t.remove -df type=strds input=precip_years_sum
 
-    # b) the STRDS with 1 months granularity, but not the original sample data
-    t.remove -f type=strds input=precip_months_sum
-:::
+# b) the STRDS with 1 months granularity, but not the original sample data
+t.remove -f type=strds input=precip_months_sum
+```
 
 ## SEE ALSO
 

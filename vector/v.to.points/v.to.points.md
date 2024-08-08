@@ -64,9 +64,9 @@ Use the **-p** flag to treat **dmax** as a percentage of each line
 length. For example, to get points created for the beginning, middle and
 end only, use the **-p** flag and set **dmax** so that:
 
-::: code
-     50 < dmax <= 100
-:::
+```
+ 50 < dmax <= 100
+```
 
 Hence, if **dmax** is between 0.5x and 1.0x the line length, you will
 always get points created at exactly the beginning, middle and end of
@@ -81,31 +81,31 @@ Use the **-r** flag to create points starting from the end node.
 In this example, the \'railroads\' vector lines map of the North
 Carolina sample dataset is used to create points along the input lines:
 
-::: code
-    # The North Carolina data are metric.
-    # 200m distance for points (maximum limit but not an exact distance)
-    v.to.points input=railroads output=railroads_points dmax=200
+```
+# The North Carolina data are metric.
+# 200m distance for points (maximum limit but not an exact distance)
+v.to.points input=railroads output=railroads_points dmax=200
 
-    # verify the two layers in the resulting map
-    v.category input=railroads_points option=report
+# verify the two layers in the resulting map
+v.category input=railroads_points option=report
 
-    # vector info
-    v.info map=railroads_points
-:::
+# vector info
+v.info map=railroads_points
+```
 
 ### Extract nodes as points
 
-::: code
-    v.to.points input=railroads output=railroads_nodes use=node
-:::
+```
+v.to.points input=railroads output=railroads_nodes use=node
+```
 
 ### Extract starting/ending nodes as points
 
-::: code
-    v.to.points input=railroads output=railroads_start use=start
+```
+v.to.points input=railroads output=railroads_start use=start
 
-    v.to.points input=railroads output=railroads_end use=end
-:::
+v.to.points input=railroads output=railroads_end use=end
+```
 
 ## SEE ALSO
 

@@ -25,11 +25,11 @@ is simply a frontend to that module.
 In this example, the `aspect` map in the North Carolina sample dataset
 is used to hillshade the `elevation` map:
 
-::: code
-    g.region raster=aspect -p
-    d.mon wx0
-    d.shade shade=aspect color=elevation
-:::
+```
+g.region raster=aspect -p
+d.mon wx0
+d.shade shade=aspect color=elevation
+```
 
 ![Elevation with aspect shades](dshade.png)
 
@@ -39,13 +39,13 @@ to elevation raster map from North Carolina dataset elevation map
 In this next example, a shaded relief raster map is created and used to
 create a colorized hillshade:
 
-::: code
-    g.region raster=elevation
-    r.relief input=elevation output=elevation_shaded_relief
+```
+g.region raster=elevation
+r.relief input=elevation output=elevation_shaded_relief
 
-    d.mon wx1
-    d.shade shade=elevation_shaded_relief color=elevation
-:::
+d.mon wx1
+d.shade shade=elevation_shaded_relief color=elevation
+```
 
 Interesting visualizations can be created using different color tables
 for elevation raster map, for example using `haxby` color table.

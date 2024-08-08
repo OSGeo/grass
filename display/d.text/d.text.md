@@ -50,9 +50,9 @@ d.text\" in the active display frame using the color yellow, in bold,
 and using 4/100\'ths (4%) of the active frame\'s vertical space per
 line:
 
-::: code
-    d.text text="This is a test of d.text" color=yellow bgcolor=gray size=4
-:::
+```
+d.text text="This is a test of d.text" color=yellow bgcolor=gray size=4
+```
 
 ::: {align="center" style="margin: 10px"}
 ![](d_text.png){width="600" border="1"}\

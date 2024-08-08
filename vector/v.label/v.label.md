@@ -36,20 +36,23 @@ The label information that must be provided in the *labels* file is:
     (i.e. 1/72\" steps).
 
 **PLACEMENT**:
+
 :   Determines which part of the label to which the location refers. If
     placement is unspecified, the label is centered (*center*), by
     default. Label placement may be specified as:
-    ::: code
-            lower left  (lower left corner of the text)
-            lower right (lower right corner of the text)
-            lower center    (bottom center of the text)
 
-            upper left  (upper left corner of the text)
-            upper right (upper right corner of the text)
-            upper center    (top center of the text)
+    ```
+        lower left  (lower left corner of the text)
+        lower right (lower right corner of the text)
+        lower center    (bottom center of the text)
 
-            center  (center of the text)
-    :::
+        upper left  (upper left corner of the text)
+        upper right (upper right corner of the text)
+        upper center    (top center of the text)
+
+        center  (center of the text)
+
+    ```
 
 **FONT**:
 
@@ -58,11 +61,11 @@ The label information that must be provided in the *labels* file is:
     The following fonts are available for use with
     [*d.labels*](d.labels.html):
 
-    ::: code
-          cyrilc gothgbt gothgrt gothitt greekc greekcs greekp greeks
-          italicc italiccs italict romanc romancs romand romans romant
-          scriptc scripts
-    :::
+    ```
+      cyrilc gothgbt gothgrt gothitt greekc greekcs greekp greeks
+      italicc italiccs italict romanc romancs romand romans romant
+      scriptc scripts
+    ```
 
     Alternatively the path to a FreeType (.ttf) font may be given. (for
     *d.labels* only)
@@ -130,22 +133,22 @@ The label information that must be provided in the *labels* file is:
 
 Spearfish example with TrueType font (path may differ):
 
-::: code
-    v.label -a map=roads column=label labels=lroads \
-            font=/usr/X11R6/lib/X11/fonts/TTF/luximri.ttf
-    d.vect roads
-    d.labels lroads
-:::
+```
+v.label -a map=roads column=label labels=lroads \
+        font=/usr/X11R6/lib/X11/fonts/TTF/luximri.ttf
+d.vect roads
+d.labels lroads
+```
 
 Since the label files are simple text files, you can merge them together
 if you like. For example if you set the label colors based on database
 attributes using multiple runs with the **where** option. This example
 uses the standard UNIX `cat` program.
 
-::: code
-    cd $MAPSET/paint/labels/
-    cat file1 file2 file3 file4 > file_all
-:::
+```
+cd $MAPSET/paint/labels/
+cat file1 file2 file3 file4 > file_all
+```
 
 ## SEE ALSO
 

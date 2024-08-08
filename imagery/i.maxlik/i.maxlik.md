@@ -65,25 +65,25 @@ Second part of the unsupervised classification of a LANDSAT subscene
 *[i.cluster](i.cluster.html)* manual page for the first part of the
 example):
 
-::: code
-    # using here the signaturefile created by i.cluster
-    i.maxlik group=lsat7_2002 subgroup=res_30m \
-      signaturefile=cluster_lsat2002 \
-      output=lsat7_2002_cluster_classes reject=lsat7_2002_cluster_reject
+```
+# using here the signaturefile created by i.cluster
+i.maxlik group=lsat7_2002 subgroup=res_30m \
+  signaturefile=cluster_lsat2002 \
+  output=lsat7_2002_cluster_classes reject=lsat7_2002_cluster_reject
 
-    # visually check result
-    d.mon wx0
-    d.rast.leg lsat7_2002_cluster_classes
-    d.rast.leg lsat7_2002_cluster_reject
+# visually check result
+d.mon wx0
+d.rast.leg lsat7_2002_cluster_classes
+d.rast.leg lsat7_2002_cluster_reject
 
-    # see how many pixels were rejected at given levels
-    r.report lsat7_2002_cluster_reject units=k,p
+# see how many pixels were rejected at given levels
+r.report lsat7_2002_cluster_reject units=k,p
 
-    # optionally, filter out pixels with high level of rejection
-    # here we remove pixels of at least 90% of rejection probability, i.e. categories 12-16
-    r.mapcalc "lsat7_2002_cluster_classes_filtered = \
-               if(lsat7_2002_cluster_reject <= 12, lsat7_2002_cluster_classes, null())"
-:::
+# optionally, filter out pixels with high level of rejection
+# here we remove pixels of at least 90% of rejection probability, i.e. categories 12-16
+r.mapcalc "lsat7_2002_cluster_classes_filtered = \
+           if(lsat7_2002_cluster_reject <= 12, lsat7_2002_cluster_classes, null())"
+```
 
 ![](i_maxlik_rgb.png)\
 RGB composite of input data

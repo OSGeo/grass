@@ -7,9 +7,9 @@ change the *key column* away from the default of \"**cat**\" with the
 
 Rules file may contain on each row either pair:
 
-::: code
-    keyword value
-:::
+```
+keyword value
+```
 
 (separated by space) or comment beginning with \'#\' (hash). Definition
 of new category begins with keyword *cat* followed by the new category
@@ -32,19 +32,19 @@ Either the **rules** or **column** option must be specified.
 
 ### Example 1: Reclass by rules
 
-::: code
-    v.reclass input=land output=land_u type=boundary rules=land.rcl
-:::
+```
+v.reclass input=land output=land_u type=boundary rules=land.rcl
+```
 
 The rules file contains:
 
-::: code
-    # land reclass file
-    cat 1
-    where use = 'E13' and owner = 'Jara Cimrman'
-    cat 2
-    where use = 'E14'
-:::
+```
+# land reclass file
+cat 1
+where use = 'E13' and owner = 'Jara Cimrman'
+cat 2
+where use = 'E14'
+```
 
 Produces a new vector area map *land_u* containing boundaries from
 *land* with area category values selected from database by SQL select
@@ -58,14 +58,14 @@ values selected from database by SQL select statement:\
 
 (North Carolina sample dataset)\
 
-::: code
-    v.reclass in=streams out=streams_by_type column=I_vs_P
+```
+v.reclass in=streams out=streams_by_type column=I_vs_P
 
-    v.db.select streams_by_type
-    cat|I_vs_P
-    1|intermittent
-    2|perennial
-:::
+v.db.select streams_by_type
+cat|I_vs_P
+1|intermittent
+2|perennial
+```
 
 ## KNOWN ISSUES
 

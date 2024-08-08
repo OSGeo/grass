@@ -59,19 +59,19 @@ neighbors marked with an `X` are always considered for cumulative cost
 updates. With the **-k** option, the neighbors marked with a `K` are
 also considered.
 
-::: code
-     . . . . . . . . . . . . . . .
-     .   .   . K .   . K .   .   .
-     . . . . . . . . . . . . . . .
-     .   . K . X . X . X . K .   .
-     . . . . . . . . . . . . . . .
-     .   .   . X . O . X .   .   .
-     . . . . . . . . . . . . . . .
-     .   . K . X . X . X . K .   .
-     . . . . . . . . . . . . . . .
-     .   .   . K .   . K .   .   .
-     . . . . . . . . . . . . . . .
-:::
+```
+ . . . . . . . . . . . . . . .
+ .   .   . K .   . K .   .   .
+ . . . . . . . . . . . . . . .
+ .   . K . X . X . X . K .   .
+ . . . . . . . . . . . . . . .
+ .   .   . X . O . X .   .   .
+ . . . . . . . . . . . . . . .
+ .   . K . X . X . X . K .   .
+ . . . . . . . . . . . . . . .
+ .   .   . K .   . K .   .   .
+ . . . . . . . . . . . . . . .
+```
 
 Knight\'s move example:
 
@@ -169,40 +169,40 @@ with less memory this value will have to be set to a lower value.
 
 Consider the following example:
 
-::: code
-           Input:
-             COST SURFACE
-           . . . . . . . . . . . . . . .
-           . 2 . 2 . 1 . 1 . 5 . 5 . 5 .
-           . . . . . . . . . . . . . . .
-           . 2 . 2 . 8 . 8 . 5 . 2 . 1 .
-           . . . . . . . . . . . . . . .
-           . 7 . 1 . 1 . 8 . 2 . 2 . 2 .
-           . . . . . . . . . . . . . . .
-           . 8 . 7 . 8 . 8 . 8 . 8 . 5 .
-           . . . . . . . . . . _____ . .
-           . 8 . 8 . 1 . 1 . 5 | 3 | 9 .
-           . . . . . . . . . . |___| . .
-           . 8 . 1 . 1 . 2 . 5 . 3 . 9 .
-           . . . . . . . . . . . . . . .
+```
+       Input:
+         COST SURFACE
+       . . . . . . . . . . . . . . .
+       . 2 . 2 . 1 . 1 . 5 . 5 . 5 .
+       . . . . . . . . . . . . . . .
+       . 2 . 2 . 8 . 8 . 5 . 2 . 1 .
+       . . . . . . . . . . . . . . .
+       . 7 . 1 . 1 . 8 . 2 . 2 . 2 .
+       . . . . . . . . . . . . . . .
+       . 8 . 7 . 8 . 8 . 8 . 8 . 5 .
+       . . . . . . . . . . _____ . .
+       . 8 . 8 . 1 . 1 . 5 | 3 | 9 .
+       . . . . . . . . . . |___| . .
+       . 8 . 1 . 1 . 2 . 5 . 3 . 9 .
+       . . . . . . . . . . . . . . .
 
 
-    Output (using -k):                Output (not using -k):
-       CUMULATIVE COST SURFACE           CUMULATIVE COST SURFACE
-     . . . . . . . . . . . . . . .     . . . . * * * * * . . . . . .
-     . 21. 21. 20. 19. 17. 15. 14.     . 22. 21* 21* 20* 17. 15. 14.
-     . . . . . . . . . . . . . . .     . . . . * * * * * . . . . . .
-     . 20. 19. 22. 19. 15. 12. 11.     . 20. 19. 22* 20* 15. 12. 11.
-     . . . . . . . . . . . . . . .     . . . . . . * * * * * . . . .
-     . 22. 18. 17. 17. 12. 11.  9.     . 22. 18. 17* 18* 13* 11.  9.
-     . . . . . . . . . . . . . . .     . . . . . . * * * * * . . . .
-     . 21. 14. 13. 12.  8.  6.  6.     . 21. 14. 13. 12.  8.  6.  6.
-     . . . . . . . . . .  _____. .     . . . . . . . . . . . . . . .
-     . 16. 13.  8.  7.  4 | 0 | 6.     . 16. 13.  8. 7 .  4.  0.  6.
-     . . . . . . . . . .  |___|. .     . . . . . . . . . . . . . . .
-     . 14.  9.  8.  9.  6.  3.  8.     . 14.  9.  8. 9 .  6.  3.  8.
-     . . . . . . . . . . . . . . .     . . . . . . . . . . . . . . .
-:::
+Output (using -k):                Output (not using -k):
+   CUMULATIVE COST SURFACE           CUMULATIVE COST SURFACE
+ . . . . . . . . . . . . . . .     . . . . * * * * * . . . . . .
+ . 21. 21. 20. 19. 17. 15. 14.     . 22. 21* 21* 20* 17. 15. 14.
+ . . . . . . . . . . . . . . .     . . . . * * * * * . . . . . .
+ . 20. 19. 22. 19. 15. 12. 11.     . 20. 19. 22* 20* 15. 12. 11.
+ . . . . . . . . . . . . . . .     . . . . . . * * * * * . . . .
+ . 22. 18. 17. 17. 12. 11.  9.     . 22. 18. 17* 18* 13* 11.  9.
+ . . . . . . . . . . . . . . .     . . . . . . * * * * * . . . .
+ . 21. 14. 13. 12.  8.  6.  6.     . 21. 14. 13. 12.  8.  6.  6.
+ . . . . . . . . . .  _____. .     . . . . . . . . . . . . . . .
+ . 16. 13.  8.  7.  4 | 0 | 6.     . 16. 13.  8. 7 .  4.  0.  6.
+ . . . . . . . . . .  |___|. .     . . . . . . . . . . . . . . .
+ . 14.  9.  8.  9.  6.  3.  8.     . 14.  9.  8. 9 .  6.  3.  8.
+ . . . . . . . . . . . . . . .     . . . . . . . . . . . . . . .
+```
 
 The user-provided starting location in the above example is the boxed
 **3** in the above input map. The costs in the output map represent the
@@ -229,17 +229,17 @@ households to the nearby road. For this cost surfaces with cost value 1
 are used. The calculation is done with *r.cost* as follows (example for
 Spearfish region):
 
-::: code
-      g.region raster=roads -p
-      r.mapcalc "area.one = 1"
-      r.cost -k input=area.one output=distance start_raster=roads
-      d.rast distance
-      d.rast.num distance
+```
+  g.region raster=roads -p
+  r.mapcalc "area.one = 1"
+  r.cost -k input=area.one output=distance start_raster=roads
+  d.rast distance
+  d.rast.num distance
 
-      #transform to metric distance from cell distance using the raster resolution:
-      r.mapcalc "dist_meters = distance * (ewres()+nsres())/2."
-      d.rast dist_meters
-:::
+  #transform to metric distance from cell distance using the raster resolution:
+  r.mapcalc "dist_meters = distance * (ewres()+nsres())/2."
+  d.rast dist_meters
+```
 
 []{#move}
 
@@ -252,13 +252,13 @@ path from an end point back to the start point. The direction of each
 cell points towards the next cell. The directions are recorded as
 degrees CCW from East:
 
-::: code
-           112.5      67.5         i.e. a cell with the value 135
-    157.5  135   90   45   22.5    means the next cell is to the north-west
-           180   x   360
-    202.5  225  270  315  337.5
-           247.5     292.5
-:::
+```
+       112.5      67.5         i.e. a cell with the value 135
+157.5  135   90   45   22.5    means the next cell is to the north-west
+       180   x   360
+202.5  225  270  315  337.5
+       247.5     292.5
+```
 
 ### Cost allocation
 
@@ -266,9 +266,9 @@ Example: calculation of the cost allocation map \"costalloc\" and the
 cumulative cost map \"costsurf\" for given starting points (map
 \"sources\") and given cost raster map \"costs\":
 
-::: code
-    r.cost input=costs start_raster=sources output=costsurf nearest=costalloc
-:::
+```
+r.cost input=costs start_raster=sources output=costsurf nearest=costalloc
+```
 
 ### Find the minimum cost path
 

@@ -21,23 +21,23 @@ In this example, the raster polygon map `zipcodes` in the North Carolina
 sample dataset is used to calculate quantile raster statistics using the
 `elevation` raster map:
 
-::: code
-    g.region raster=zipcodes -p
+```
+g.region raster=zipcodes -p
 
-    # print quantiles
-    r.stats.quantile base=zipcodes cover=elevation quantiles=3 -p
-    27511:0:33.333333:134.717392
-    27511:1:66.666667:143.985723
-    27513:0:33.333333:140.669993
-    27513:1:66.666667:146.279449
-    27518:0:33.333333:115.140101
-    27518:1:66.666667:129.893723
-    [...]
+# print quantiles
+r.stats.quantile base=zipcodes cover=elevation quantiles=3 -p
+27511:0:33.333333:134.717392
+27511:1:66.666667:143.985723
+27513:0:33.333333:140.669993
+27513:1:66.666667:146.279449
+27518:0:33.333333:115.140101
+27518:1:66.666667:129.893723
+[...]
 
-    # write out percentile raster maps
-    r.stats.quantile base=zipcodes cover=elevation percentiles=25,50,75 \
-      output=zipcodes_elev_q25,zipcodes_elev_q50,zipcodes_elev_q75
-:::
+# write out percentile raster maps
+r.stats.quantile base=zipcodes cover=elevation percentiles=25,50,75 \
+  output=zipcodes_elev_q25,zipcodes_elev_q50,zipcodes_elev_q75
+```
 
 ## REFERENCES
 

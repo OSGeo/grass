@@ -15,13 +15,13 @@ dataset is displayed with custom background color (specified using HTML
 hex color code) using *cairo* display monitor (creates file called
 *map.png*):
 
-::: code
-    g.region vector=streets_wake
-    d.mon cairo
-    d.background color=#ADEFD1
-    d.vect map=streets_wake color=#00203F legend_label="Streets"
-    d.legend.vect -b at=70,30 title="Wake County"
-:::
+```
+g.region vector=streets_wake
+d.mon cairo
+d.background color=#ADEFD1
+d.vect map=streets_wake color=#00203F legend_label="Streets"
+d.legend.vect -b at=70,30 title="Wake County"
+```
 
 ![Street network with legend and background color](d_background.png)
 

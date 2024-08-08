@@ -73,14 +73,14 @@ Then make perform the topographic correction of e.g. the bands toar.5,
 toar.4 and toar.3 with output as tcor.toar.5, tcor.toar.4, and
 tcor.toar.3 using c-factor (= c-correction) method:
 
-::: code
-    # first pass: create illumination model
-    i.topo.corr -i base=SRTM zenith=33.3631 azimuth=59.8897 output=SRTM.illumination
+```
+# first pass: create illumination model
+i.topo.corr -i base=SRTM zenith=33.3631 azimuth=59.8897 output=SRTM.illumination
 
-    # second pass: apply illumination model
-    i.topo.corr base=SRTM.illumination input=toar.5,toar.4,toar.3 output=tcor \
-      zenith=33.3631 method=c-factor
-:::
+# second pass: apply illumination model
+i.topo.corr base=SRTM.illumination input=toar.5,toar.4,toar.3 output=tcor \
+  zenith=33.3631 method=c-factor
+```
 
 ## REFERENCES
 

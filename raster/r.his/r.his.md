@@ -45,16 +45,17 @@ associated with it.
 
 The name is misleading. The actual conversion used is
 
-::: code
-      H.i.s + G.(1-s)
+```
+  H.i.s + G.(1-s)
 
-    where
+where
 
-      H   is the R,G,B color from the hue map
-      i   is the red value from the intensity map
-      s   is the red value from the saturation map
-      G   is 50% gray (R = G = B = 0.5)
-:::
+  H   is the R,G,B color from the hue map
+  i   is the red value from the intensity map
+  s   is the red value from the saturation map
+  G   is 50% gray (R = G = B = 0.5)
+
+```
 
 Either (but not both) of the intensity or the saturation map layers may
 be omitted. This means that it is possible to produce output images that
@@ -70,26 +71,26 @@ the program *[d.his](d.his.html)*.
 Recreate the following example for *d.his* using *r.his*. First, create
 shaded relief and show it.
 
-::: code
-    g.region raster=elevation
-    r.relief input=elevation output=elevation_shaded_relief
+```
+g.region raster=elevation
+r.relief input=elevation output=elevation_shaded_relief
 
-    d.mon wx0
-    d.his hue=elevation intensity=elevation_shaded_relief brighten=50
-:::
+d.mon wx0
+d.his hue=elevation intensity=elevation_shaded_relief brighten=50
+```
 
 Second, compute lighter version of color of shaded relief. Then convert
 from HIS model to RGB and show the result.
 
-::: code
-    r.mapcalc "elevation_shaded_relief_bright_50 = #elevation_shaded_relief * 1.5"
-    r.colors elevation_shaded_relief_bright_50 color=grey255
-    r.his hue=elevation intensity=elevation_shaded_relief_bright_50 \
-          red=shadedmap_r green=shadedmap_g blue=shadedmap_b
+```
+r.mapcalc "elevation_shaded_relief_bright_50 = #elevation_shaded_relief * 1.5"
+r.colors elevation_shaded_relief_bright_50 color=grey255
+r.his hue=elevation intensity=elevation_shaded_relief_bright_50 \
+      red=shadedmap_r green=shadedmap_g blue=shadedmap_b
 
-    d.mon wx1
-    d.rgb red=shadedmap_r green=shadedmap_g blue=shadedmap_b
-:::
+d.mon wx1
+d.rgb red=shadedmap_r green=shadedmap_g blue=shadedmap_b
+```
 
 ## SEE ALSO
 

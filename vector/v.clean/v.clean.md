@@ -76,18 +76,18 @@ to the outer polygon. This is topologically incorrect (but OGC Simple
 Features allow it). The *rmbridge* tool removes bridges and the
 *chbridge* tool changes bridges to type line:
 
-::: code
-        +-------------+             +-------------+   +-------------+
-        |            P|  P: polygon |            P|   |            P|
-        |    +---+    |  I: island  |    +---+    |   |    +---+    |
-        |    | I |    |  B: bridge  |    | I |    |   |    | I |    |
-        |    |   |    |  L: line    |    |   |    |   |    |   |    |
-        |    +-+-+    |             |    +---+    |   |    +-.-+    |
-        |      |      |             |             |   |      .      |
-        |      | B    |             |             |   |      . L    |
-        |      |      |             |             |   |      .      |
-        +------+------+             +-------------+   +-------------+
-:::
+```
+    +-------------+             +-------------+   +-------------+
+    |            P|  P: polygon |            P|   |            P|
+    |    +---+    |  I: island  |    +---+    |   |    +---+    |
+    |    | I |    |  B: bridge  |    | I |    |   |    | I |    |
+    |    |   |    |  L: line    |    |   |    |   |    |   |    |
+    |    +-+-+    |             |    +---+    |   |    +-.-+    |
+    |      |      |             |             |   |      .      |
+    |      | B    |             |             |   |      . L    |
+    |      |      |             |             |   |      .      |
+    +------+------+             +-------------+   +-------------+
+```
 
 Islands and areas must be already clean, i.e. without dangles or small
 angles, e.g. *v.clean \... type=boundary
@@ -208,28 +208,28 @@ vector.
 
 ### Snap lines to vertex in threshold
 
-::: code
-    v.clean input=testmap output=cleanmap tool=snap threshold=1
-:::
+```
+v.clean input=testmap output=cleanmap tool=snap threshold=1
+```
 
 ### Inspecting the topological errors visually
 
 Both *[v.build](v.build.html)* and *v.clean* can collect the topological
 errors into a vector map:
 
-::: code
-    v.build -e map=imported error=build_errors
-    v.clean -c input=imported output=clean error=cleaning_errors tool=snap,rmdangle,rmbridge,chbridge,bpol,prune threshold=5
-:::
+```
+v.build -e map=imported error=build_errors
+v.clean -c input=imported output=clean error=cleaning_errors tool=snap,rmdangle,rmbridge,chbridge,bpol,prune threshold=5
+```
 
 The vector maps can be visualized together with the original data by the
 following set of display commands:
 
-::: code
-    d.vect map=imported color=26:26:26 fill_color=77:77:77 width=5
-    d.vect map=build_errors color=255:33:36 fill_color=none width=5 icon=basic/point size=30
-    d.vect map=cleaning_errors color=255:33:36 fill_color=none width=5 icon=basic/point size=30
-:::
+```
+d.vect map=imported color=26:26:26 fill_color=77:77:77 width=5
+d.vect map=build_errors color=255:33:36 fill_color=none width=5 icon=basic/point size=30
+d.vect map=cleaning_errors color=255:33:36 fill_color=none width=5 icon=basic/point size=30
+```
 
 ::: {align="center"}
 ![topological errors](v_clean.png)\
@@ -244,15 +244,15 @@ requires a subsequent run of *v.clean* to update the map to a
 topologically valid structure (removal of duplicate collinear lines
 etc). The tools used for that are *bpol* and *rmdupl*:
 
-::: code
-    v.clean input=areamap output=areamap_clean tool=bpol,rmdupl type=boundary
-:::
+```
+v.clean input=areamap output=areamap_clean tool=bpol,rmdupl type=boundary
+```
 
 ### Extracting intersection points of vector lines
 
-::: code
-    v.clean input=lines1 output=lines2 err=points tool=break type=line
-:::
+```
+v.clean input=lines1 output=lines2 err=points tool=break type=line
+```
 
 Intersection points are written to \'points\' map.
 
@@ -261,50 +261,50 @@ Intersection points are written to \'points\' map.
 *v.clean* will break the lines where they cross, creating new node if
 needed. Example:
 
-::: code
-    v.in.ascii -n out=crossed_lines format=standard << EOF
-    L 2
-     0 5
-     10 5
-    L 2
-     5 0
-     5 10
-    EOF
+```
+v.in.ascii -n out=crossed_lines format=standard << EOF
+L 2
+ 0 5
+ 10 5
+L 2
+ 5 0
+ 5 10
+EOF
 
-    v.clean in=crossed_lines out=crossed_lines_brk \
-            error=intersection tool=break type=line
-:::
+v.clean in=crossed_lines out=crossed_lines_brk \
+        error=intersection tool=break type=line
+```
 
 ### Remove all lines of zero length
 
-::: code
-    v.out.ascii zero format=standard
-    L  2 1
-     -819832.09065589 -987825.2187231
-     -806227.28362601 -971104.80702988
-     1     1
-    L  2 1
-     -799165.24638913 -972974.16982788
-     -799165.24638913 -972974.16982788
-     1     2
+```
+v.out.ascii zero format=standard
+L  2 1
+ -819832.09065589 -987825.2187231
+ -806227.28362601 -971104.80702988
+ 1     1
+L  2 1
+ -799165.24638913 -972974.16982788
+ -799165.24638913 -972974.16982788
+ 1     2
 
-    v.clean input=zero output=zero_clean tool=rmline type=line
+v.clean input=zero output=zero_clean tool=rmline type=line
 
-    v.out.ascii zero_clean format=standard
-    L  2 1
-     -819832.09065589 -987825.2187231
-     -806227.28362601 -971104.80702988
-     1     1
-:::
+v.out.ascii zero_clean format=standard
+L  2 1
+ -819832.09065589 -987825.2187231
+ -806227.28362601 -971104.80702988
+ 1     1
+```
 
 v.clean type=boundary would remove nothing.
 
 ### Repeatedly remove dangling lines up to 50m length
 
-::: code
-    v.clean input=testmap output=cleanmap type=line \
-            tool=rmdangle,rmdangle,rmdangle,rmdangle threshold=5,10,20,50
-:::
+```
+v.clean input=testmap output=cleanmap type=line \
+        tool=rmdangle,rmdangle,rmdangle,rmdangle threshold=5,10,20,50
+```
 
 ## SEE ALSO
 

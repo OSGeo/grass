@@ -6,9 +6,9 @@
 
 *Convert lines to area boundaries*\
 
-::: code
-    v.type input=map_l output=map_b from_type=line to_type=boundary
-:::
+```
+v.type input=map_l output=map_b from_type=line to_type=boundary
+```
 
 In order to create areas, centroids must be added with **v.centroids**.
 

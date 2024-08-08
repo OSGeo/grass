@@ -31,23 +31,23 @@ The input format for the **input** file consists of sections describing
 either polygonal areas, linear features, or point features. The basic
 format is:
 
-::: code
-    A                      <for polygonal areas>
-        easting northing
-        .
-        .
-        .
-    =   cat# label
-    L                      <for linear features>
-        easting northing
-        .
-        .
-        .
-    =   cat# label
-    P                      <for single cell point features>
-        easting northing
-    =   cat# label
-:::
+```
+A                      <for polygonal areas>
+    easting northing
+    .
+    .
+    .
+=   cat# label
+L                      <for linear features>
+    easting northing
+    .
+    .
+    .
+=   cat# label
+P                      <for single cell point features>
+    easting northing
+=   cat# label
+```
 
 The `A` signals the beginning of a filled polygon. It must appear in the
 first column. The `L` signals the beginning of a linear feature. It also
@@ -65,14 +65,14 @@ which may be omitted).
 
 An area described by four points:
 
-::: code
-    A
-      591316.80   4926455.50
-      591410.25   4926482.40
-      591434.60   4926393.60
-      591341.20   4926368.70
-    = 42 stadium
-:::
+```
+A
+  591316.80   4926455.50
+  591410.25   4926482.40
+  591434.60   4926393.60
+  591341.20   4926368.70
+= 42 stadium
+```
 
 ## SEE ALSO
 

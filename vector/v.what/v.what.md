@@ -12,16 +12,16 @@ North Carolina sample dataset example:
 
 Query polygon at given position:
 
-::: code
-    v.what zipcodes_wake coordinates=637502.25,221744.25
-:::
+```
+v.what zipcodes_wake coordinates=637502.25,221744.25
+```
 
 Find closest hospital to given position within given distance (search
 radius):
 
-::: code
-    v.what hospitals coordinates=542690.4,204802.7 distance=2000000
-:::
+```
+v.what hospitals coordinates=542690.4,204802.7 distance=2000000
+```
 
 ## SEE ALSO
 

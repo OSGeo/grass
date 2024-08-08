@@ -104,27 +104,27 @@ Export vector map \"urbanarea\" as feature table \"urbanarea\" located
 in database \"grass\", schema \"public\". Note that this database schema
 is automatically used when not defined by the user.
 
-::: code
-    v.out.postgis input=urbanarea output="PG:dbname=grass"
-:::
+```
+v.out.postgis input=urbanarea output="PG:dbname=grass"
+```
 
 GRASS areas are converted into polygons, isles into holes. We can check
 the number or created polygons by simple SQL query below.
 
-::: code
-    db.select driver=pg database=grass \
-     sql="SELECT ST_GeometryType(geom) as geom_type, count(*) from urbanarea group by geom_type"
+```
+db.select driver=pg database=grass \
+ sql="SELECT ST_GeometryType(geom) as geom_type, count(*) from urbanarea group by geom_type"
 
-    geom_type|count
-    ST_Polygon|657
-:::
+geom_type|count
+ST_Polygon|657
+```
 
 *Note:* same procedure can be done by *[v.out.ogr](v.out.ogr.html)*
 module, eg.
 
-::: code
-    v.out.ogr input=urbanarea output="PG:dbname=grass" format=PostgreSQL
-:::
+```
+v.out.ogr input=urbanarea output="PG:dbname=grass" format=PostgreSQL
+```
 
 In this case GRASS vector data are exported to PostGIS database using
 OGR library, namely using PostgreSQL driver. Contrary to the
@@ -142,9 +142,9 @@ schema doesn\'t exist in the database, then it\'s automatically created.
 Export vector map \"bridges\" as feature table in database schema
 \"grassout\".
 
-::: code
-    v.out.postgis input=bridges output="PG:dbname=grass" output_layer=grassout.bridges
-:::
+```
+v.out.postgis input=bridges output="PG:dbname=grass" output_layer=grassout.bridges
+```
 
 ### Export data with creation options
 
@@ -153,9 +153,9 @@ disable building spatial index. Spatial reference system is defined by
 `srid` identifier which corresponds in this case with EPSG 3358 (North
 Carolina dataset).
 
-::: code
-    v.out.postgis input=roadsmajor output="PG:dbname=grass" options="GEOMETRY_NAME=wkb_geometry,SPATIAL_INDEX=NO,SRID=3358"
-:::
+```
+v.out.postgis input=roadsmajor output="PG:dbname=grass" options="GEOMETRY_NAME=wkb_geometry,SPATIAL_INDEX=NO,SRID=3358"
+```
 
 ### Link exported data
 
@@ -165,26 +165,27 @@ by specifying **output_link** parameter. In the example below vector map
 database. *v.out.postgis* after successful export also creates in the
 current mapset GRASS vector map as a link to the PostGIS feature table.
 
-::: code
-    v.out.postgis input=busstopsall@PERMANENT output="PG:dbname=grass" output_link=busstopsall_pg
-:::
+```
+v.out.postgis input=busstopsall@PERMANENT output="PG:dbname=grass" output_link=busstopsall_pg
+```
 
 Created link can be checked by *[v.info](v.info.html)*:
 
-::: code
-     v.info busstopsall_pg
+```
+ v.info busstopsall_pg
 
-    ...
-     |----------------------------------------------------------------------------|
-     | Map format:      PostGIS (PostgreSQL)                                      |
-     | DB table:        public.busstopsall                                        |
-     | DB name:         grass                                                     |
-     | Geometry column: geom                                                      |
-     | Feature type:    point                                                     |
-     | Topology:        pseudo (simple features)                                  |
-     |----------------------------------------------------------------------------|
-    ...
-:::
+...
+ |----------------------------------------------------------------------------|
+ | Map format:      PostGIS (PostgreSQL)                                      |
+ | DB table:        public.busstopsall                                        |
+ | DB name:         grass                                                     |
+ | Geometry column: geom                                                      |
+ | Feature type:    point                                                     |
+ | Topology:        pseudo (simple features)                                  |
+ |----------------------------------------------------------------------------|
+...
+
+```
 
 ### Export data without attributes
 
@@ -193,9 +194,9 @@ features by specifying **-t** flag. Command below exports vector
 features without attributes. The feature will contain only two columns,
 the fid and geometry column.
 
-::: code
-    v.out.postgis -t input=railroads output="PG:dbname=grass"
-:::
+```
+v.out.postgis -t input=railroads output="PG:dbname=grass"
+```
 
 ### Export topological data
 
@@ -204,9 +205,9 @@ allows exporting data as topological elements instead of simple
 features. Export topological elements is stored in [PostGIS
 Topology](http://postgis.refractions.net/docs/Topology.html) schema.
 
-::: code
-    v.out.postgis -l input=busroutesall output="PG:dbname=grass"
-:::
+```
+v.out.postgis -l input=busroutesall output="PG:dbname=grass"
+```
 
 For more info about PostGIS Topology implementation in GRASS see the
 [wiki page](https://grasswiki.osgeo.org/wiki/PostGIS_Topology).

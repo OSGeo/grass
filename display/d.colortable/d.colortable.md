@@ -21,9 +21,9 @@ user for parameter settings using the standard GRASS parser interface.
 
 The user running the command:
 
-::: code
-    d.colortable map=soils color=red lines=1 columns=3
-:::
+```
+d.colortable map=soils color=red lines=1 columns=3
+```
 
 would see the active graphics frame divided into three columns extending
 the full frame height. The lines dividing the color table associated

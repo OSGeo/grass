@@ -19,42 +19,42 @@ factor.
 Calculate the USLE K factor (synthetic values, North Carolina sample
 dataset):
 
-::: code
-    # NC data: simulation
-    g.region rural_1m -p
+```
+# NC data: simulation
+g.region rural_1m -p
 
-    r.mapcalc "sand  = 0.11"
-    r.mapcalc "clay  = 0.47"
-    r.mapcalc "silt  = 0.42"
-    r.mapcalc "organ = 0.0136"
+r.mapcalc "sand  = 0.11"
+r.mapcalc "clay  = 0.47"
+r.mapcalc "silt  = 0.42"
+r.mapcalc "organ = 0.0136"
 
-    r.uslek psand=sand pclay=clay psilt=silt pomat=organ output=usle_k
-    r.univar usle_k
-    # Result: uslek = 0.25
-:::
+r.uslek psand=sand pclay=clay psilt=silt pomat=organ output=usle_k
+r.univar usle_k
+# Result: uslek = 0.25
+```
 
 Example with small variations (condition: d_sand + d_clay + d_silt =\>
 1.0)
 
-::: code
-    # NC data: simulation
-    r.mapcalc -s "sand_r = rand(0.09,0.13)"
-    r.mapcalc -s "clay_r = rand(0.45,0.49)"
-    r.mapcalc -s "silt_r = rand(0.40,0.44)"
-    r.mapcalc -s "organ  = rand(0.01,0.70)"
+```
+# NC data: simulation
+r.mapcalc -s "sand_r = rand(0.09,0.13)"
+r.mapcalc -s "clay_r = rand(0.45,0.49)"
+r.mapcalc -s "silt_r = rand(0.40,0.44)"
+r.mapcalc -s "organ  = rand(0.01,0.70)"
 
-    r.mapcalc "temp_sum = sand_r + clay_r + silt_r"
-    r.mapcalc "sand = sand_r / temp_sum"
-    r.mapcalc "clay = clay_r / temp_sum"
-    r.mapcalc "silt = silt_r / temp_sum"
-    r.mapcalc "test = sand + clay + silt"
-    r.info -r test
-    g.remove -f rast name=sand_r,clay_r,silt_r,temp_sum,test
+r.mapcalc "temp_sum = sand_r + clay_r + silt_r"
+r.mapcalc "sand = sand_r / temp_sum"
+r.mapcalc "clay = clay_r / temp_sum"
+r.mapcalc "silt = silt_r / temp_sum"
+r.mapcalc "test = sand + clay + silt"
+r.info -r test
+g.remove -f rast name=sand_r,clay_r,silt_r,temp_sum,test
 
-    r.uslek psand=sand pclay=clay psilt=silt pomat=organ output=usle_k
-    r.univar usle_k
-    # Result: uslek =  variable values
-:::
+r.uslek psand=sand pclay=clay psilt=silt pomat=organ output=usle_k
+r.univar usle_k
+# Result: uslek =  variable values
+```
 
 ## SEE ALSO
 

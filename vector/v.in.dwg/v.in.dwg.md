@@ -4,9 +4,9 @@
 
 ## EXAMPLE
 
-::: code
-    v.in.dwg input=map.dwg output=map
-:::
+```
+v.in.dwg input=map.dwg output=map
+```
 
 ## NOTES
 
@@ -18,13 +18,13 @@ The toolkit, for example `ad27linx.tar`, unpack in a directory (e.g.
 /home/usr1/opendwg27) and use the related `configure` options to tell
 GRASS about it:
 
-::: code
-       ./configure \
-       ... \
-       --with-opendwg \
-       --with-opendwg-includes=/home/usr1/opendwg27 \
-       --with-opendwg-libs=/home/usr1/opendwg27
-:::
+```
+   ./configure \
+   ... \
+   --with-opendwg \
+   --with-opendwg-includes=/home/usr1/opendwg27 \
+   --with-opendwg-libs=/home/usr1/opendwg27
+```
 
 Then you can compile this module.
 

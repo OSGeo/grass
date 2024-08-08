@@ -9,23 +9,23 @@ around roads. This program could create the raster map shown below on
 the right based on road information contained in the raster map shown on
 the left.
 
-::: code
-          000000000000000000000000 222233333333333333444444
-          111000000000000000000000 111222222222223333333333
-          000111111111100000000000 222111111111122223333333
-          000000001000011100000000 332222221222211122222222
-          000000001000000011111111 333333321233222211111111
-          000000001000000000000000 433333321233333222222222
-          000000001000000000000000 444443321233333333333333
-          000000001000000000000000 444443321233443333333333
-          000000001000000000000000 444443321233444444444444
+```
+      000000000000000000000000 222233333333333333444444
+      111000000000000000000000 111222222222223333333333
+      000111111111100000000000 222111111111122223333333
+      000000001000011100000000 332222221222211122222222
+      000000001000000011111111 333333321233222211111111
+      000000001000000000000000 433333321233333222222222
+      000000001000000000000000 444443321233333333333333
+      000000001000000000000000 444443321233443333333333
+      000000001000000000000000 444443321233444444444444
 
-          Category 0: No roads
-          Category 1: Road location
-          Category 2: Buffer Zone 1 around roads
-          Category 3: Buffer Zone 2 around roads
-          Category 4: Buffer Zone 3 around roads
-:::
+      Category 0: No roads
+      Category 1: Road location
+      Category 2: Buffer Zone 1 around roads
+      Category 3: Buffer Zone 2 around roads
+      Category 4: Buffer Zone 3 around roads
+```
 
 ## NOTES
 
@@ -74,22 +74,22 @@ In the following example (North Carolina sample dataset), the buffer
 zones would be (in the default map units of meters): 0-100, 101-200,
 201-300, 301-400 and 401-500.\
 
-::: code
-    g.region raster=roadsmajor -p
-    r.buffer input=roadsmajor output=roadsmajor_buf distances=100,200,300,400,500
-:::
+```
+g.region raster=roadsmajor -p
+r.buffer input=roadsmajor output=roadsmajor_buf distances=100,200,300,400,500
+```
 
 Result:
 
-::: code
-    r.category input=roads.buf
-          1       distances calculated from these locations
-          2       0-100 meters
-          3       100-200 meters
-          4       200-300 meters
-          5       300-400 meters
-          6       400-500 meters
-:::
+```
+r.category input=roads.buf
+      1       distances calculated from these locations
+      2       0-100 meters
+      3       100-200 meters
+      4       200-300 meters
+      5       300-400 meters
+      6       400-500 meters
+```
 
 ![](r_buffer_road.png){border="1"}\
 *Distances to road*

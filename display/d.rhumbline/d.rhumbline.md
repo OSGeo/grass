@@ -18,15 +18,15 @@ non-interactively.
 A geodesic line if shown over the political map of the world
 (demolocation dataset):
 
-::: code
-    g.region vector=country_boundaries -p
-    d.mon wx0
-    d.vect country_boundaries type=area
-    d.rhumbline coordinates=55:58W,33:18S,26:43E,60:37N \
-      line_color=yellow
-    # show additionally 10 degree grid
-    d.grid 10
-:::
+```
+g.region vector=country_boundaries -p
+d.mon wx0
+d.vect country_boundaries type=area
+d.rhumbline coordinates=55:58W,33:18S,26:43E,60:37N \
+  line_color=yellow
+# show additionally 10 degree grid
+d.grid 10
+```
 
 ![](d_rhumbline.png){border="1"}\
 *Rhumbline (loxodrome)*

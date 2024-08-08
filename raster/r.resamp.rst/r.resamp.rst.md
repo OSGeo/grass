@@ -115,19 +115,19 @@ outside *r.resamp.rst* before processing.
 
 Resampling the Spearfish 30m resolution elevation model to 15m:
 
-::: code
-    # set computation region to original map (30m)
-    g.region raster=elevation.dem -p
+```
+# set computation region to original map (30m)
+g.region raster=elevation.dem -p
 
-    # resample to 15m
-    r.resamp.rst input=elevation.dem ew_res=15 ns_res=15 elevation=elev15
+# resample to 15m
+r.resamp.rst input=elevation.dem ew_res=15 ns_res=15 elevation=elev15
 
-    # set computation region to resulting map
-    g.region raster=elev15 -p
+# set computation region to resulting map
+g.region raster=elev15 -p
 
-    # verify
-    r.univar elev15 -g
-:::
+# verify
+r.univar elev15 -g
+```
 
 ## REFERENCES
 

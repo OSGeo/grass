@@ -50,33 +50,33 @@ To vectorize the raster map *streams_derived* in the North Carolina
 sample dataset that represents the stream network derived from the 10m
 resolution DEM by *r.watershed*, run:
 
-::: code
-    g.region raster=elevation -p
-    # create flow accumulation map
-    r.watershed elevation=elevation accumulation=accum_50K thresh=50000
-    # extract streams from flow accumulation map
-    r.mapcalc "streams_from_flow = if(abs(accum_50K) > 1000, 1, null())"
+```
+g.region raster=elevation -p
+# create flow accumulation map
+r.watershed elevation=elevation accumulation=accum_50K thresh=50000
+# extract streams from flow accumulation map
+r.mapcalc "streams_from_flow = if(abs(accum_50K) > 1000, 1, null())"
 
-    # skeletonize map
-    r.thin streams_from_flow out=streams_thin
+# skeletonize map
+r.thin streams_from_flow out=streams_thin
 
-    d.mon wx0
-    d.rast streams_from_flow
-    d.erase
-    d.rast streams_thin
-:::
+d.mon wx0
+d.rast streams_from_flow
+d.erase
+d.rast streams_thin
+```
 
 ![Raster feature thinning (skeletonizing)](r_thin_network.png)\
 Raster feature thinning (skeletonizing)
 
 The resulting map cabe optionally vectorized:
 
-::: code
-    r.to.vect streams_thin output=streams_thin type=line
-    # visualize
-    d.rast accum_50K
-    d.vect streams_thin color=red width=2
-:::
+```
+r.to.vect streams_thin output=streams_thin type=line
+# visualize
+d.rast accum_50K
+d.vect streams_thin color=red width=2
+```
 
 ![Vectorized stream network after thinning extracted from flow
 accumulation map](r_thin_vectorized.png)\

@@ -17,23 +17,23 @@ the output SVG file).
 Export **polygons** from GRASS vector map soils (Spearfish sample data)
 to SVG format:
 
-::: code
-    v.out.svg input=soils output=/tmp/output.svg type=poly
-:::
+```
+v.out.svg input=soils output=/tmp/output.svg type=poly
+```
 
 Export **lines** from GRASS vector map t_hydro (Spearfish sample data)
 to SVG format, set coordinate precision to 0:
 
-::: code
-    v.out.svg input=t_hydro output=/tmp/output.svg type=line precision=0
-:::
+```
+v.out.svg input=t_hydro output=/tmp/output.svg type=line precision=0
+```
 
 Export **points** from GRASS vector map archsites (Spearfish sample
 data) to SVG format, include attribute **str1** (name):
 
-::: code
-    v.out.svg input=archsites output=/tmp/output.svg type=point precision=0 attrib=str1
-:::
+```
+v.out.svg input=archsites output=/tmp/output.svg type=point precision=0 attrib=str1
+```
 
 ## REFERENCES
 

@@ -25,82 +25,82 @@ create a new database.
 
 Create a new table with columns \'cat\' and \'soiltype\':
 
-::: code
-    db.execute sql="CREATE TABLE soils (cat integer, soiltype varchar(10))"
-:::
+```
+db.execute sql="CREATE TABLE soils (cat integer, soiltype varchar(10))"
+```
 
 Create a new table using a file with SQL statements
 
-::: code
-    db.execute driver=odbc database=grassdb input=file.sql
-:::
+```
+db.execute driver=odbc database=grassdb input=file.sql
+```
 
 Insert new row into attribute table:
 
-::: code
-    db.execute sql="INSERT INTO mysites (id,name,east,north) values (30,'Ala',1657340,5072301)"
-:::
+```
+db.execute sql="INSERT INTO mysites (id,name,east,north) values (30,'Ala',1657340,5072301)"
+```
 
 Update attribute entries to new value based on SQL rule:
 
-::: code
-    db.execute sql="UPDATE roads SET travelcost=5 WHERE cat=1"
-:::
+```
+db.execute sql="UPDATE roads SET travelcost=5 WHERE cat=1"
+```
 
 Update attribute entries to new value based on SQL rule:
 
-::: code
-    db.execute sql="UPDATE dourokukan SET testc=50 WHERE testc is NULL"
-:::
+```
+db.execute sql="UPDATE dourokukan SET testc=50 WHERE testc is NULL"
+```
 
 Delete selected rows from attribute table:
 
-::: code
-    db.execute sql="DELETE FROM gsod_stationlist WHERE latitude < -91"
-:::
+```
+db.execute sql="DELETE FROM gsod_stationlist WHERE latitude < -91"
+```
 
 Add new column to attribute table:
 
-::: code
-    db.execute sql="ALTER TABLE roads ADD COLUMN length double"
-:::
+```
+db.execute sql="ALTER TABLE roads ADD COLUMN length double"
+```
 
 Column type conversion - update new column from existing column (all
 drivers except for DBF):
 
-::: code
-    # 'z_value' is varchar and 'z' is double precision:
-    echo "UPDATE geodetic_pts SET z = CAST(z_value AS numeric)" | db.execute input=-
-:::
+```
+# 'z_value' is varchar and 'z' is double precision:
+echo "UPDATE geodetic_pts SET z = CAST(z_value AS numeric)" | db.execute input=-
+```
 
 Drop column from attribute table:
 
-::: code
-    db.execute sql="ALTER TABLE roads DROP COLUMN length"
-:::
+```
+db.execute sql="ALTER TABLE roads DROP COLUMN length"
+```
 
 Drop table (not supported by all drivers):
 
-::: code
-    db.execute sql="DROP TABLE fmacopy"
-:::
+```
+db.execute sql="DROP TABLE fmacopy"
+```
 
 Update attribute with multiple SQL instructions in file (e.g.,
 `file.sql`, instruction line must end with a semicolon):
 
-::: code
-    UPDATE roads SET travelcost=5 WHERE cat=1;
-    UPDATE roads SET travelcost=2 WHERE cat=2;
+```
+UPDATE roads SET travelcost=5 WHERE cat=1;
+UPDATE roads SET travelcost=2 WHERE cat=2;
 
-    db.execute input=file.sql
-:::
+db.execute input=file.sql
+```
 
 Join table \'myroads\' to table \'extratab\' based on common \'cat\'
 column values (not supported by DBF driver):
 
-::: code
-    db.execute sql="UPDATE extratab SET names=(SELECT label FROM myroads WHERE extratab.cat=myroads.cat)"
-:::
+```
+db.execute sql="UPDATE extratab SET names=(SELECT label FROM myroads WHERE extratab.cat=myroads.cat)"
+```
 
 ## SEE ALSO
 

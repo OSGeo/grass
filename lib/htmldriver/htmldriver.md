@@ -32,9 +32,9 @@ are:
 The HTML driver can be enabled by setting **GRASS_RENDER_IMMEDIATE**
 variable, eg.
 
-::: code
-    export GRASS_RENDER_IMMEDIATE=html
-:::
+```
+export GRASS_RENDER_IMMEDIATE=html
+```
 
 Several environment variables affect the operation of the HTML driver:
 
@@ -77,62 +77,62 @@ Several environment variables affect the operation of the HTML driver:
 
 Start up the driver
 
-::: code
-    g.region vector=zipcodes_wake
-    d.mon start=html
-:::
+```
+g.region vector=zipcodes_wake
+d.mon start=html
+```
 
 Display text strings (HREF\'s) and polygons
 
-::: code
-    echo "https://en.wikipedia.org/wiki/Raleigh,_North_Carolina" | d.text
-    d.vect map=zipcodes_wake where="ZIPNAME = 'RALEIGH'"
-    echo "https://en.wikipedia.org/wiki/Cary,_North_Carolina" | d.text
-    d.vect map=zipcodes_wake where="ZIPNAME = 'CARY'" fill_color=180:200:210
-:::
+```
+echo "https://en.wikipedia.org/wiki/Raleigh,_North_Carolina" | d.text
+d.vect map=zipcodes_wake where="ZIPNAME = 'RALEIGH'"
+echo "https://en.wikipedia.org/wiki/Cary,_North_Carolina" | d.text
+d.vect map=zipcodes_wake where="ZIPNAME = 'CARY'" fill_color=180:200:210
+```
 
 Stop the driver once all polygon have been displayed. This will create a
 file named \'htmlmap\' in your current directory:
 
-::: code
-    d.mon stop=html
-:::
+```
+d.mon stop=html
+```
 
 You will also want to create an image for your image map. Use the PNG
 driver and other utilities to create .gif or .jpg files. *The following
 example is somewhat out of date and refers to options available in GRASS
 5.*
 
-::: code
-    # using previous GRASS_RENDER_WIDTH & GRASS_RENDER_HEIGHT
-    d.mon start=png
-    d.rast map=terrain
-    d.vect map=area51  fillcolor=white  linecolor=blue
-    d.vect map=roswell fillcolor=yellow linecolor=blue
-    d.vect map=states  color=green
-    d.vect map=roads   color=black
-    d.mon stop=png
+```
+# using previous GRASS_RENDER_WIDTH & GRASS_RENDER_HEIGHT
+d.mon start=png
+d.rast map=terrain
+d.vect map=area51  fillcolor=white  linecolor=blue
+d.vect map=roswell fillcolor=yellow linecolor=blue
+d.vect map=states  color=green
+d.vect map=roads   color=black
+d.mon stop=png
 
 
-    # make the region the same as the newly created cell for ppm export
-    g.region save=saved.reg
-    g.region raster=D_cell
-    r.out.ppm -q input=D_cell output=alien.ppm
+# make the region the same as the newly created cell for ppm export
+g.region save=saved.reg
+g.region raster=D_cell
+r.out.ppm -q input=D_cell output=alien.ppm
 
-    # use the netpbm utilities to create a gif (quantize if needed)
-    ppmquant 128 <alien.ppm |  ppmtogif >alien.gif
+# use the netpbm utilities to create a gif (quantize if needed)
+ppmquant 128 <alien.ppm |  ppmtogif >alien.gif
 
-    # assemble some html with the image and the image map
-    echo '<html><body><img src="alien.gif" usemap="#map">' >alien.html
-    cat htmlmap                                           >>alien.html
-    echo '</body></html>'                                 >>alien.html
+# assemble some html with the image and the image map
+echo '<html><body><img src="alien.gif" usemap="#map">' >alien.html
+cat htmlmap                                           >>alien.html
+echo '</body></html>'                                 >>alien.html
 
-    # don't forget to reset your region
-    g.region region=saved.reg
+# don't forget to reset your region
+g.region region=saved.reg
 
-    # take a look and test it out
-    netscape file:`pwd`/alien.html &
-:::
+# take a look and test it out
+netscape file:`pwd`/alien.html &
+```
 
 ## NOTES
 
@@ -146,9 +146,9 @@ If you create an HTML file with two or more images and image maps, you
 will need to edit the map names. The HTML driver creates its map with
 the name `map`. A small sed script can easily change the map name:
 
-::: code
-    sed -e 's/NAME="map"/NAME="foomap"/' < htmlmap > foomap.html
-:::
+```
+sed -e 's/NAME="map"/NAME="foomap"/' < htmlmap > foomap.html
+```
 
 ## SEE ALSO
 

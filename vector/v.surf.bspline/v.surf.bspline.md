@@ -87,18 +87,18 @@ nor raster output will be created when cross-validation is selected.
 
 ### Basic interpolation
 
-::: code
-    v.surf.bspline input=point_vector output=interpolate_surface method=bicubic
-:::
+```
+v.surf.bspline input=point_vector output=interpolate_surface method=bicubic
+```
 
 A bicubic spline interpolation will be done and a vector points map with
 estimated (i.e., interpolated) values will be created.
 
 ### Basic interpolation and raster output with a longer spline step
 
-::: code
-    v.surf.bspline input=point_vector raster=interpolate_surface ew_step=25 ns_step=25
-:::
+```
+v.surf.bspline input=point_vector raster=interpolate_surface ew_step=25 ns_step=25
+```
 
 A bilinear spline interpolation will be done with a spline step length
 of 25 map units. An interpolated raster map will be created at the
@@ -106,36 +106,36 @@ current region resolution.
 
 ### Estimation of lambda_i parameter with a cross validation process
 
-::: code
-    v.surf.bspline -c input=point_vector
-:::
+```
+v.surf.bspline -c input=point_vector
+```
 
 ### Estimation on sparse points
 
-::: code
-    v.surf.bspline input=point_vector sparse=sparse_points output=interpolate_surface
-:::
+```
+v.surf.bspline input=point_vector sparse=sparse_points output=interpolate_surface
+```
 
 An output map of vector points will be created, corresponding to the
 sparse vector map, with interpolated values.
 
 ### Using attribute values instead z-coordinates
 
-::: code
-    v.surf.bspline input=point_vector raster=interpolate_surface layer=1 \
-      column=attrib_column
-:::
+```
+v.surf.bspline input=point_vector raster=interpolate_surface layer=1 \
+  column=attrib_column
+```
 
 The interpolation will be done using the values in *attrib_column*, in
 the table associated with layer 1.
 
 ### North Carolina dataset example using z-coordinates for interpolation
 
-::: code
-    g.region region=rural_1m res=2 -p
-    v.surf.bspline input=elev_lid792_bepts raster=elev_lid792_rast \
-      ew_step=5 ns_step=5 method=bicubic lambda_i=0.1
-:::
+```
+g.region region=rural_1m res=2 -p
+v.surf.bspline input=elev_lid792_bepts raster=elev_lid792_rast \
+  ew_step=5 ns_step=5 method=bicubic lambda_i=0.1
+```
 
 ## KNOWN ISSUES
 

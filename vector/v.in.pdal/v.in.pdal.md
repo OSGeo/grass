@@ -14,9 +14,9 @@ Import only XYZ coordinates of points, limit the import to the current
 computational region and reproject to the current project\'s coordinate
 reference system during the import:
 
-::: code
-    v.in.pdal input=points.las output=points -c -r -w
-:::
+```
+v.in.pdal input=points.las output=points -c -r -w
+```
 
 ## REFERENCES
 

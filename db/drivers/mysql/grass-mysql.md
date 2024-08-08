@@ -10,9 +10,9 @@ mapset.
 
 A new database is created within MySQL:
 
-::: code
-    mysql> CREATE DATABASE mydb;
-:::
+```
+mysql> CREATE DATABASE mydb;
+```
 
 See the MySQL manual for details.
 
@@ -32,8 +32,10 @@ parameter \'driver\' should be set to value \'mysql\'. The parameter
 
 Examples of connection parameters:
 
-      db.connect driver=mysql database=mytest
-      db.connect driver=mysql database='dbname=mytest,host=test.grass.org'
+```
+  db.connect driver=mysql database=mytest
+  db.connect driver=mysql database='dbname=mytest,host=test.grass.org'
+```
 
 ## Data types
 
@@ -69,8 +71,10 @@ privilege to them on the MySQL database used for that mapset. For
 example, to allow everybody to read data in from your database
 \'mydb\':\
 
-    shell> mysql --user=root mysql
-    mysql> GRANT SELECT ON mydb.* TO ''@'%';
+```
+shell> mysql --user=root mysql
+mysql> GRANT SELECT ON mydb.* TO ''@'%';
+```
 
 ## Schemas
 

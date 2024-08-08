@@ -20,9 +20,9 @@ must be created with *v.in.region* and *v.overlay*, and then run
 
 North Carolina sample dataset:
 
-::: code
-    v.report zipcodes_wake option=area units=hectares
-:::
+```
+v.report zipcodes_wake option=area units=hectares
+```
 
 In the output, there is an extra column added containing the results.
 

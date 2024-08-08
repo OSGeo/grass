@@ -47,10 +47,10 @@ The current mask is ignored.
 In this example, the aspect map in the North Carolina sample dataset is
 used to hillshade the elevation map:
 
-::: code
-    g.region raster=elevation -p
-    r.relief input=elevation output=elevation_shade
-:::
+```
+g.region raster=elevation -p
+r.relief input=elevation output=elevation_shade
+```
 
 ![GRASS r.relief result (subset)](r_relief.png){border="0"}\
 *r.relief: shaded elevation map (subset)*
@@ -60,20 +60,20 @@ used to hillshade the elevation map:
 Color can be added later using *[r.shade](r.shade.html)* or
 *[d.shade](d.shade.html)*:
 
-::: code
-    r.shade shade=elevation_shade color=elevation output=elevation_shaded
-:::
+```
+r.shade shade=elevation_shade color=elevation output=elevation_shaded
+```
 
 ### Using the scale factor in Latitude-Longitude
 
 In Latitude-Longitude coordinate reference systems (or other non-metric
 systems), the *scale* factor has to be used:
 
-::: code
-    # Latitude-Longitude example
-    g.region raster=srtm -p
-    r.relief input=srtm output=srtm_shaded scale=111120
-:::
+```
+# Latitude-Longitude example
+g.region raster=srtm -p
+r.relief input=srtm output=srtm_shaded scale=111120
+```
 
 ### Exporting shaded relief maps to GeoTIFF
 
@@ -86,25 +86,25 @@ export as palette byte map. This requires a conversion done in
 *[r.mapcalc](r.mapcalc.html)*, using the \# operator to convert map
 category values to their grey scale equivalents:
 
-::: code
-    # using the map created above
+```
+# using the map created above
 
-    # create new map from map category values
-    r.mapcalc expression="elevation_shade_byte = #elevation_shade"
+# create new map from map category values
+r.mapcalc expression="elevation_shade_byte = #elevation_shade"
 
-    # verify data range
-    r.info elevation_shade_byte
+# verify data range
+r.info elevation_shade_byte
 
-    # assign grey color table
-    r.colors elevation_shade_byte color=grey
+# assign grey color table
+r.colors elevation_shade_byte color=grey
 
-    # export (optionally: createopt="COMPRESS=DEFLATE,BIGTIFF=YES")
-    r.out.gdal input=elevation_shade_byte createopt="COMPRESS=DEFLATE" \
-               output=elevation_shade.tif
+# export (optionally: createopt="COMPRESS=DEFLATE,BIGTIFF=YES")
+r.out.gdal input=elevation_shade_byte createopt="COMPRESS=DEFLATE" \
+           output=elevation_shade.tif
 
-    # add overview images in GeoTIFF file for faster zooming
-    gdaladdo --config GDAL_CACHEMAX 2000 elevation_shade.tif 2 4 8 16
-:::
+# add overview images in GeoTIFF file for faster zooming
+gdaladdo --config GDAL_CACHEMAX 2000 elevation_shade.tif 2 4 8 16
+```
 
 ## SEE ALSO
 

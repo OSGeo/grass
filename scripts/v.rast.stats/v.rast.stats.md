@@ -57,19 +57,19 @@ calculated using any size input region.
 Example to upload DEM statistics to ZIP codes vector map (North Carolina
 sample dataset):
 
-::: code
-    g.copy vect=zipcodes_wake,myzipcodes_wake
-    # set computational region to DEM:
-    g.region raster=elevation -p
-    # calculate selected DEM statistics, upload to vector map table:
-    v.rast.stats myzipcodes_wake raster=elevation \
-      column_prefix=elev method=minimum,maximum,average,range,stddev,percentile \
-      percentile=95
-    # verify results:
-    v.info -c myzipcodes_wake
-    v.db.select myzipcodes_wake
-    v.univar myzipcodes_wake column=elev_range type=centroid
-:::
+```
+g.copy vect=zipcodes_wake,myzipcodes_wake
+# set computational region to DEM:
+g.region raster=elevation -p
+# calculate selected DEM statistics, upload to vector map table:
+v.rast.stats myzipcodes_wake raster=elevation \
+  column_prefix=elev method=minimum,maximum,average,range,stddev,percentile \
+  percentile=95
+# verify results:
+v.info -c myzipcodes_wake
+v.db.select myzipcodes_wake
+v.univar myzipcodes_wake column=elev_range type=centroid
+```
 
 ## SEE ALSO
 

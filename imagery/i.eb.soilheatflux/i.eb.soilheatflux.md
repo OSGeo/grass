@@ -16,17 +16,17 @@ follows:
 For Landsat, the overpass map can be computed by using a two-step
 method:
 
-::: code
-    # 1) extract the overpass time in GMT from metadata file
+```
+# 1) extract the overpass time in GMT from metadata file
 
-    i.landsat.toar -p input=dummy output=dummy2 \
-       metfile=LC81250452013338LGN00_MTL.txt lsatmet=time
-    # ... in this example approx. 03:12am GMT
+i.landsat.toar -p input=dummy output=dummy2 \
+   metfile=LC81250452013338LGN00_MTL.txt lsatmet=time
+# ... in this example approx. 03:12am GMT
 
-    # 2) create map for computational region of Landsat scene
-    g.region rast=LC81250452013338LGN00_B4 -p
-    r.mapcalc "overpasstime = 3.211328"
-:::
+# 2) create map for computational region of Landsat scene
+g.region rast=LC81250452013338LGN00_B4 -p
+r.mapcalc "overpasstime = 3.211328"
+```
 
 ## REFERENCES
 

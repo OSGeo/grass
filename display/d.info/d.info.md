@@ -5,12 +5,12 @@ monitors are maintained by *[d.mon](d.mon.html)*.
 
 ## EXAMPLES
 
-::: code
-    d.mon start=cairo
+```
+d.mon start=cairo
 
-    d.info -r
-    rectangle: 0.000000 640.000000 0.000000 480.000000
-:::
+d.info -r
+rectangle: 0.000000 640.000000 0.000000 480.000000
+```
 
 ## NOTES
 

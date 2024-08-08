@@ -16,19 +16,19 @@ The existing database connection(s) can be verified with *v.db.connect*.
 
 Adding a single column:\
 
-::: code
-    g.copy vect=roadsmajor,myroads
-    v.db.addcolumn myroads columns="slope double precision"
-    v.info -c myroads
-:::
+```
+g.copy vect=roadsmajor,myroads
+v.db.addcolumn myroads columns="slope double precision"
+v.info -c myroads
+```
 
 Adding two columns:\
 
-::: code
-    g.copy vect=roadsmajor,myroads
-    v.db.addcolumn myroads columns="slope double precision,myname varchar(15)"
-    v.info -c myroads
-:::
+```
+g.copy vect=roadsmajor,myroads
+v.db.addcolumn myroads columns="slope double precision,myname varchar(15)"
+v.info -c myroads
+```
 
 ## SEE ALSO
 

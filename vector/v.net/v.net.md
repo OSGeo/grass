@@ -128,20 +128,20 @@ dataset](http://www.grassbook.org/datasets/datasets-3rd-edition/) based.
 
 ### Create nodes globally for all line ends and intersections
 
-::: code
-    v.net input=streets_wake output=streets_node operation=nodes
-    # verify result
-    v.category streets_node option=report
-:::
+```
+v.net input=streets_wake output=streets_node operation=nodes
+# verify result
+v.category streets_node option=report
+```
 
 ### Merge in nodes from a separate map within given threshold
 
-::: code
-    v.net input=streets_wake points=firestations out=streets_net \
-          operation=connect threshold=500
-    # verify result
-    v.category streets_net option=report
-:::
+```
+v.net input=streets_wake points=firestations out=streets_net \
+      operation=connect threshold=500
+# verify result
+v.category streets_net option=report
+```
 
 The nodes are stored in layer 2 unless `node_layer=1` is used.
 
@@ -150,40 +150,40 @@ The nodes are stored in layer 2 unless `node_layer=1` is used.
 For generating network for given vector point map an input file in the
 following format is required:
 
-::: code
-    [category of edge] [category of start node] [category of end node]
-:::
+```
+[category of edge] [category of start node] [category of end node]
+```
 
 Option 1: Save the file (e.g. \"points.txt\") and generate the map:
 
-::: code
-    v.net points=geodetic_swwake_pts output=geodetic_swwake_pts_net \
-          operation=arcs file=points.txt
-    # verify result
-    v.category geodetic_swwake_pts_net option=report
-:::
+```
+v.net points=geodetic_swwake_pts output=geodetic_swwake_pts_net \
+      operation=arcs file=points.txt
+# verify result
+v.category geodetic_swwake_pts_net option=report
+```
 
 Option 2: Read in from command line:
 
-::: code
-    v.net points=geodetic_swwake_pts output=geodetic_swwake_pts_net \
-          operation=arcs file=- << EOF
-    1 28000 28005
-    2 27945 27958
-    3 27886 27897
-    EOF
+```
+v.net points=geodetic_swwake_pts output=geodetic_swwake_pts_net \
+      operation=arcs file=- << EOF
+1 28000 28005
+2 27945 27958
+3 27886 27897
+EOF
 
-    # verify result
-    v.category geodetic_swwake_pts_net option=report
-:::
+# verify result
+v.category geodetic_swwake_pts_net option=report
+```
 
 ### Generating network with turntable for vector point map
 
 Following example generates a vector map with turntable:
 
-::: code
-    v.net operation=turntable in=railroads out=railroads_ttb
-:::
+```
+v.net operation=turntable in=railroads out=railroads_ttb
+```
 
 ## SEE ALSO
 

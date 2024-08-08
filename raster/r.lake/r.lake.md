@@ -48,20 +48,20 @@ checks where done to find out required iteration count. The shell script
 code (using *[r.mapcalc](r.mapcalc)*) used in the original script is
 shown below:
 
-::: code
-    ${seedmap} = if( ${dem}, \
-    if( if( isnull(${seedmap}),0,${seedmap}>0), ${wlevel}-${dem}, \
-     if( \
-      if(isnull(${seedmap}[-1,0]),0, ${seedmap}[-1,0]>0 && ${wlevel}>${dem}) ||\
-      if(isnull(${seedmap}[-1,1]),0, ${seedmap}[-1,1]>0 && ${wlevel}>${dem}) ||\
-      if(isnull(${seedmap}[0,1]), 0, ${seedmap}[0,1]>0  && ${wlevel}>${dem}) ||\
-      if(isnull(${seedmap}[1,1]), 0, ${seedmap}[1,1]>0  && ${wlevel}>${dem}) ||\
-      if(isnull(${seedmap}[1,0]), 0, ${seedmap}[1,0]>0  && ${wlevel}>${dem}) ||\
-      if(isnull(${seedmap}[1,-1]),0, ${seedmap}[1,-1]>0 && ${wlevel}>${dem}) ||\
-      if(isnull(${seedmap}[0,-1]),0, ${seedmap}[0,-1]>0 && ${wlevel}>${dem}) ||\
-      if(isnull(${seedmap}[-1,-1]),0, ${seedmap}[-1,-1]>0 && ${wlevel}>${dem}),\
-     ${wlevel}-${dem}, null() )))
-:::
+```
+${seedmap} = if( ${dem}, \
+if( if( isnull(${seedmap}),0,${seedmap}>0), ${wlevel}-${dem}, \
+ if( \
+  if(isnull(${seedmap}[-1,0]),0, ${seedmap}[-1,0]>0 && ${wlevel}>${dem}) ||\
+  if(isnull(${seedmap}[-1,1]),0, ${seedmap}[-1,1]>0 && ${wlevel}>${dem}) ||\
+  if(isnull(${seedmap}[0,1]), 0, ${seedmap}[0,1]>0  && ${wlevel}>${dem}) ||\
+  if(isnull(${seedmap}[1,1]), 0, ${seedmap}[1,1]>0  && ${wlevel}>${dem}) ||\
+  if(isnull(${seedmap}[1,0]), 0, ${seedmap}[1,0]>0  && ${wlevel}>${dem}) ||\
+  if(isnull(${seedmap}[1,-1]),0, ${seedmap}[1,-1]>0 && ${wlevel}>${dem}) ||\
+  if(isnull(${seedmap}[0,-1]),0, ${seedmap}[0,-1]>0 && ${wlevel}>${dem}) ||\
+  if(isnull(${seedmap}[-1,-1]),0, ${seedmap}[-1,-1]>0 && ${wlevel}>${dem}),\
+ ${wlevel}-${dem}, null() )))
+```
 
 The `${seedmap}` variable is replaced by seed map names, `${dem}` with
 DEM map name, and `${wlevel}` with target water level. To get single
@@ -80,18 +80,18 @@ water level, this code block is called with same level numerous times
 Example of small flooding along a street (North Carolina sample
 dataset):
 
-::: code
-    g.region raster=elev_lid792_1m -p
+```
+g.region raster=elev_lid792_1m -p
 
-    # water accumulation next to street dam
-    r.lake elev_lid792_1m coordinates=638759.3,220264.1 water_level=113.4 lake=flooding
+# water accumulation next to street dam
+r.lake elev_lid792_1m coordinates=638759.3,220264.1 water_level=113.4 lake=flooding
 
-    # draw resulting lake map over shaded terrain map
-    r.relief input=elev_lid792_1m output=elev_lid792_1m_shade
-    d.rast elev_lid792_1m_shade
-    d.rast flooding
-    d.vect streets_wake
-:::
+# draw resulting lake map over shaded terrain map
+r.relief input=elev_lid792_1m output=elev_lid792_1m_shade
+d.rast elev_lid792_1m_shade
+d.rast flooding
+d.vect streets_wake
+```
 
 ![](r_lake_lidar_dem.jpg){border="1"}\
 Small flooding along a street (*r.lake*, using Lidar 1m DEM)

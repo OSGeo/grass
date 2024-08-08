@@ -25,13 +25,13 @@ to NULL (if() condition).
 
 ### RGB Orthophoto from GeoTIFF
 
-::: code
-    # import of all channels (each channel will become a GRASS raster map):
-    r.external input=/home/user/data/maps/059100.tif output=ortho
-    g.region raster=ortho.3 -p
-    d.rgb r=ortho.1 g=ortho.2 b=ortho.3
-    r.composite r=ortho.1 g=ortho.2 b=ortho.3 output=ortho.rgb
-:::
+```
+# import of all channels (each channel will become a GRASS raster map):
+r.external input=/home/user/data/maps/059100.tif output=ortho
+g.region raster=ortho.3 -p
+d.rgb r=ortho.1 g=ortho.2 b=ortho.3
+r.composite r=ortho.1 g=ortho.2 b=ortho.3 output=ortho.rgb
+```
 
 ### Processing workflow without data import and export
 
@@ -39,23 +39,23 @@ External raster maps to be processed can be directly linked using
 *r.external*; likewise, results can be written out to standard raster
 formats with *r.external.out* (GDAL supported formats):
 
-::: code
-    # register GeoTIFF file to be used in current mapset:
-    r.external input=terra_lst1km20030314.LST_Day.tif output=modis_celsius
+```
+# register GeoTIFF file to be used in current mapset:
+r.external input=terra_lst1km20030314.LST_Day.tif output=modis_celsius
 
-    # define output directory for files resulting from GRASS calculation:
-    r.external.out directory=$HOME/gisoutput/ format="GTiff"
+# define output directory for files resulting from GRASS calculation:
+r.external.out directory=$HOME/gisoutput/ format="GTiff"
 
-    # perform GRASS calculation (here: extract pixels > 20 deg C)
-    # this stores the output map directly as GeoTIFF:
-    r.mapcalc "warm.tif = if(modis_celsius > 20.0, modis_celsius, null() )"
+# perform GRASS calculation (here: extract pixels > 20 deg C)
+# this stores the output map directly as GeoTIFF:
+r.mapcalc "warm.tif = if(modis_celsius > 20.0, modis_celsius, null() )"
 
-    # cease GDAL output connection and turn back to write GRASS raster files:
-    r.external.out -r
+# cease GDAL output connection and turn back to write GRASS raster files:
+r.external.out -r
 
-    # now use the resulting file elsewhere
-    gdalinfo $HOME/gisoutput/warm.tif
-:::
+# now use the resulting file elsewhere
+gdalinfo $HOME/gisoutput/warm.tif
+```
 
 ## REFERENCES
 

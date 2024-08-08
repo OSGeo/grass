@@ -18,10 +18,10 @@ combination of two data layers is displayed.
 
 Scatterplot of two LANDSAT TM7 channels (North Carolina sample dataset):
 
-::: code
-    g.region raster=lsat7_2002_30 -p
-    d.correlate map=lsat7_2002_30,lsat7_2002_40
-:::
+```
+g.region raster=lsat7_2002_30 -p
+d.correlate map=lsat7_2002_30,lsat7_2002_40
+```
 
 ![Scatterplot of two LANDSAT TM7
 channels](d_correlate_plot.png){border="1"}\

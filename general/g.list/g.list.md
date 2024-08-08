@@ -13,34 +13,34 @@ input (e.g. time series for *[r.series](r.series.html)*) when used with
 
 List all raster maps as continuous, sorted list:
 
-::: code
-    g.list type=rast
-:::
+```
+g.list type=rast
+```
 
 List all vector maps as continuous, sorted list with MAPSET info (i.e.
 fully-qualified map names):
 
-::: code
-    g.list type=vector -m
-:::
+```
+g.list type=vector -m
+```
 
 List all raster and vector maps ordered by mapset:
 
-::: code
-    g.list type=raster -p
-:::
+```
+g.list type=raster -p
+```
 
 List all raster and vector maps as continuous, sorted list:
 
-::: code
-    g.list type=rast,vect
-:::
+```
+g.list type=rast,vect
+```
 
 List all available GRASS data base files:
 
-::: code
-    g.list type=all
-:::
+```
+g.list type=all
+```
 
 ### Mapset search path
 
@@ -48,150 +48,150 @@ If **mapset** is not specified, then *g.list* searches for data files in
 the mapsets that are included in the search path (defined by
 *[g.mapsets](g.mapsets.html)*). See `g.mapsets -p`.
 
-::: code
-    g.list rast -p
+```
+g.list rast -p
 
-    raster map(s) available in mapset <user1>:
-    dmt
-    ...
-    raster map(s) available in mapset <PERMANENT>:
-    aspect
-    ...
-:::
+raster map(s) available in mapset <user1>:
+dmt
+...
+raster map(s) available in mapset <PERMANENT>:
+aspect
+...
+```
 
 Option **mapset**=. (one dot) lists only data files from the current
 mapset:
 
-::: code
-    g.list rast mapset=.
-    ...
-:::
+```
+g.list rast mapset=.
+...
+```
 
 Similarly, **mapset**=\* (one asterisk) prints data files from all
 available mapsets also including those that are not listed in the
 current search path (see `g.mapsets -l`).
 
-::: code
-    g.list rast mapset=* -p
+```
+g.list rast mapset=* -p
 
-    raster map(s) available in mapset <landsat>:
-    lsat5_1987_10
-    ...
-    raster map(s) available in mapset <user1>:
-    dmt
-    ...
-    raster map(s) available in mapset <PERMANENT>:
-    aspect
-    ...
-:::
+raster map(s) available in mapset <landsat>:
+lsat5_1987_10
+...
+raster map(s) available in mapset <user1>:
+dmt
+...
+raster map(s) available in mapset <PERMANENT>:
+aspect
+...
+```
 
 ### Wildcards
 
 List all vector maps starting with letter \"r\":
 
-::: code
-    g.list type=vector pattern="r*"
-:::
+```
+g.list type=vector pattern="r*"
+```
 
 List all vector maps starting with letter \"r\" or \"a\":
 
-::: code
-    g.list type=vector pattern="[ra]*"
-:::
+```
+g.list type=vector pattern="[ra]*"
+```
 
 List all raster maps starting with \"soil\_\" or \"landuse\_\":
 
-::: code
-    g.list type=raster pattern="{soil,landuse}_*"
-:::
+```
+g.list type=raster pattern="{soil,landuse}_*"
+```
 
 List certain raster maps with one variable character/number:
 
-::: code
-    g.list type=raster pattern="N45E00?.meters"
-:::
+```
+g.list type=raster pattern="N45E00?.meters"
+```
 
 Use of **exclude** parameter:
 
-::: code
-    # without exclude:
-      g.list rast pat="r*" mapset=PERMANENT
-      railroads
-      roads
-      rstrct.areas
-      rushmore
+```
+# without exclude:
+  g.list rast pat="r*" mapset=PERMANENT
+  railroads
+  roads
+  rstrct.areas
+  rushmore
 
-    # exclude only complete word(s):
-      g.list rast pat="r*" exclude=roads mapset=PERMANENT
-      railroads
-      rstrct.areas
-      rushmore
+# exclude only complete word(s):
+  g.list rast pat="r*" exclude=roads mapset=PERMANENT
+  railroads
+  rstrct.areas
+  rushmore
 
-    # exclude with wildcard:
-      g.list rast pat="r*" exclude="*roads*" mapset=PERMANENT
-      rstrct.areas
-      rushmore
-:::
+# exclude with wildcard:
+  g.list rast pat="r*" exclude="*roads*" mapset=PERMANENT
+  rstrct.areas
+  rushmore
+```
 
 ### Regular expressions
 
 List all soil maps starting with \"soils\" in their name:
 
-::: code
-    g.list -r type=raster pattern='^soils'
-:::
+```
+g.list -r type=raster pattern='^soils'
+```
 
 List \"tmp\" if \"tmp\" raster map exists:
 
-::: code
-    g.list -r type=raster pattern='^tmp$'
-:::
+```
+g.list -r type=raster pattern='^tmp$'
+```
 
 List \"tmp0\" \...\"tmp9\" if corresponding vector map exists (each map
 name linewise):
 
-::: code
-    g.list -r type=vector pattern='^tmp[0-9]$'
-:::
+```
+g.list -r type=vector pattern='^tmp[0-9]$'
+```
 
 List \"tmp0\"\...\"tmp9\" if corresponding vector map exists (each map
 name comma separated):
 
-::: code
-    g.list -r type=vector separator=comma pattern='^tmp[0-9]$'
-:::
+```
+g.list -r type=vector separator=comma pattern='^tmp[0-9]$'
+```
 
 ### Extended regular expressions
 
 List all precipitation maps for the years 1997-2012, comma separated:
 
-::: code
-    g.list -e type=raster separator=comma pattern="precip_total.(199[7-9]|200[0-9]|201[0-2]).sum"
-:::
+```
+g.list -e type=raster separator=comma pattern="precip_total.(199[7-9]|200[0-9]|201[0-2]).sum"
+```
 
 ### Maps whose region overlaps with a saved region
 
 List all raster maps starting with \"tmp\_\" whose region overlaps with
 the region of \"test\" raster map:
 
-::: code
-    g.region raster=test save=test_region
-    g.list type=raster pattern='tmp_*' region=test_region
-:::
+```
+g.region raster=test save=test_region
+g.list type=raster pattern='tmp_*' region=test_region
+```
 
 List \"tmp0\"\...\"tmp9\" vector maps whose region overlaps with the
 current region:
 
-::: code
-    g.list -r type=vector pattern='^tmp[0-9]$' region=.
-:::
+```
+g.list -r type=vector pattern='^tmp[0-9]$' region=.
+```
 
 List all raster and vector maps whose region overlaps with the default
 region of the PERMANENT mapset in the current project (DEFAULT_WIND):
 
-::: code
-    g.list type=rast,vect region=*
-:::
+```
+g.list type=rast,vect region=*
+```
 
 Note that, without `region=*`, `g.list type=rast,vect` simply lists all
 available raster and vector maps from the current search path regardless

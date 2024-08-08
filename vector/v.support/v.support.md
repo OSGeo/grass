@@ -4,14 +4,14 @@
 
 ## EXAMPLE
 
-::: code
-    # update scale to 1:24000
-    v.support myvectmap scale=24000
+```
+# update scale to 1:24000
+v.support myvectmap scale=24000
 
-    # update organization
-    v.support myvectmap organization="OSGeo labs"
-    v.info myvectmap
-:::
+# update organization
+v.support myvectmap organization="OSGeo labs"
+v.info myvectmap
+```
 
 ## SEE ALSO
 

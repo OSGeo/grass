@@ -20,11 +20,11 @@ the map\'s *colr* or *colr2* file).
 Running the command below will generate the bar graph shown in the
 figure:
 
-::: code
-    g.region raster=elevation -p
-    d.mon wx0
-    d.histogram map=elevation
-:::
+```
+g.region raster=elevation -p
+d.mon wx0
+d.histogram map=elevation
+```
 
 ::: {align="center" style="margin: 10px"}
 ![d.histogram bar graph example](d_histogram_bar.png){border="0"}\
@@ -34,10 +34,10 @@ figure:
 Running the command below will generate the pie graph shown in the
 figure:
 
-::: code
-    g.region raster=landuse96_28m -p
-    d.histogram map=landuse96_28m style=pie
-:::
+```
+g.region raster=landuse96_28m -p
+d.histogram map=landuse96_28m style=pie
+```
 
 ::: {align="center" style="margin: 10px"}
 ![d.histogram pie graph example](d_histogram_pie.png){border="0"}\

@@ -128,9 +128,9 @@ Screenshots of the wizard window frames:
    configuration files or creating a     maps](g_gui_rlisetup_2.png)\
     new one](g_gui_rlisetup_1.png)\       *g.gui.rlisetup: Frame for
     *g.gui.rlisetup: First frame of             selecting maps*
-         wizard for selecting\
-    existing configuration files or
-          creating a new one*
+         wizard for selecting\        
+    existing configuration files or   
+          creating a new one*         
 
       ![g.gui.rlisetup: Frame for         ![g.gui.rlisetup: Frame for
           inserting sampling              defining rectangular moving
@@ -188,11 +188,11 @@ Select type of shape:
 Now an anaysis can be performed using one of the analytical modules,
 e.g.
 
-::: code
-    g.region raster=forests -p
-    r.li.patchdensity input=forests conf=movwindow7 output=forests_p_dens7
-    r.univar forests_p_dens7
-:::
+```
+g.region raster=forests -p
+r.li.patchdensity input=forests conf=movwindow7 output=forests_p_dens7
+r.univar forests_p_dens7
+```
 
 The result is the new raster map \"forests_p_dens7\" which shows (in
 this example) the patch density of the forest areas.\
@@ -221,10 +221,10 @@ Example for a whole region analysis, the output is a text file: Click on
 Now an anaysis can be performed using one of the analytical modules,
 e.g.
 
-::: code
-    g.region raster=lsat7_2002_40 -p
-    r.li.shannon input=lsat7_2000_40 conf=whole_region output=lsat7_2000_40_shannon
-:::
+```
+g.region raster=lsat7_2002_40 -p
+r.li.shannon input=lsat7_2000_40 conf=whole_region output=lsat7_2000_40_shannon
+```
 
 The result is the new text file \"forests_p_dens7\" (stored in folder
 `$HOME/.r.li/output/`.\

@@ -62,10 +62,10 @@ the flag is ignored.
 The following is a sample call of *r.in.bin* to import [GTOPO30
 DEM](http://edcdaac.usgs.gov/gtopo30/gtopo30.asp) data:
 
-::: code
-    r.in.bin -sb input=E020N90.DEM output=gtopo30 bytes=2 north=90 south=40
-    east=60 west=20 r=6000 c=4800
-:::
+```
+r.in.bin -sb input=E020N90.DEM output=gtopo30 bytes=2 north=90 south=40
+east=60 west=20 r=6000 c=4800
+```
 
 (you can add \"anull=-9999\" if you want sea level to have a NULL value)
 
@@ -74,9 +74,9 @@ DEM](http://edcdaac.usgs.gov/gtopo30/gtopo30.asp) data:
 The following is a sample call of *r.in.bin* to import a GMT type 1
 (float) binary array:
 
-::: code
-    r.in.bin -hf input=sample.grd output=sample.grass
-:::
+```
+r.in.bin -hf input=sample.grd output=sample.grass
+```
 
 (-b could be used to swap bytes if required)
 
@@ -84,9 +84,9 @@ The following is a sample call of *r.in.bin* to import a GMT type 1
 
 The following is a sample call of *r.in.bin* to import an AVHRR image:
 
-::: code
-    r.in.bin in=p07_b6.dat out=avhrr c=128 r=128
-:::
+```
+r.in.bin in=p07_b6.dat out=avhrr c=128 r=128
+```
 
 ### ETOPO2
 
@@ -94,44 +94,44 @@ The following is a sample call of *r.in.bin* to import [ETOPO2
 DEM](http://www.ngdc.noaa.gov/mgg/image/2minrelief.html) data (here full
 data set):
 
-::: code
-    r.in.bin ETOPO2.dos.bin out=ETOPO2min r=5400 c=10800 n=90 s=-90 w=-180 e=180 bytes=2
-    r.colors ETOPO2min rules=terrain
-:::
+```
+r.in.bin ETOPO2.dos.bin out=ETOPO2min r=5400 c=10800 n=90 s=-90 w=-180 e=180 bytes=2
+r.colors ETOPO2min rules=terrain
+```
 
 ### TOPEX/SRTM30 PLUS
 
 The following is a sample call of *r.in.bin* to import [SRTM30
 PLUS](http://topex.ucsd.edu/WWW_html/srtm30_plus.html) data:
 
-::: code
-    r.in.bin -sb input=e020n40.Bathymetry.srtm output=e020n40_topex \
-             bytes=2 north=40 south=-10 east=60 west=20 r=6000 c=4800
-    r.colors e020n40_topex rules=etopo2
-:::
+```
+r.in.bin -sb input=e020n40.Bathymetry.srtm output=e020n40_topex \
+         bytes=2 north=40 south=-10 east=60 west=20 r=6000 c=4800
+r.colors e020n40_topex rules=etopo2
+```
 
 ### GPCP
 
 The following is a sample call of *r.in.bin* to import GPCP 1DD v1.2
 data:
 
-::: code
-    YEAR="2000"
-    MONTH="01"
-    # number of days of this month
-    MDAYS=`date -d"${YEAR}-${MONTH}-01 + 1 month - 1 day" +%d`
-    r.in.bin in=gpcp_1dd_v1.2_p1d.${YEAR}${MONTH} out=gpcp_${YEAR}.${MONTH}. \
-             order=big bytes=4 -f header=1440 anull=-99999 \
-             n=90 s=-90 w=0 e=360 rows=180 cols=360 bands=$MDAYS
-:::
+```
+YEAR="2000"
+MONTH="01"
+# number of days of this month
+MDAYS=`date -d"${YEAR}-${MONTH}-01 + 1 month - 1 day" +%d`
+r.in.bin in=gpcp_1dd_v1.2_p1d.${YEAR}${MONTH} out=gpcp_${YEAR}.${MONTH}. \
+         order=big bytes=4 -f header=1440 anull=-99999 \
+         n=90 s=-90 w=0 e=360 rows=180 cols=360 bands=$MDAYS
+```
 
 The following is a sample call of *r.in.bin* to import GPCP v2.2 data:
 
-::: code
-    r.in.bin in=gpcp_v2.2_psg.1979 out=gpcp_1979. \
-             order=big bytes=4 -f header=576 anull=-99999 \
-             n=90 s=-90 w=0 e=360 rows=72 cols=144 bands=12
-:::
+```
+r.in.bin in=gpcp_v2.2_psg.1979 out=gpcp_1979. \
+         order=big bytes=4 -f header=576 anull=-99999 \
+         n=90 s=-90 w=0 e=360 rows=72 cols=144 bands=12
+```
 
 ## SEE ALSO
 

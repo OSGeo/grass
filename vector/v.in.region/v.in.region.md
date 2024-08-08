@@ -15,11 +15,11 @@ based on the actual computational region (in this case precisely
 reflecting the pixel geometry of the raster map), resulting in a new
 vector polygon:
 
-::: code
-    g.region raster=soils_Kfactor -p
-    v.in.region output=soils_Kfactor_bbox
-    v.info map=soils_Kfactor_bbox
-:::
+```
+g.region raster=soils_Kfactor -p
+v.in.region output=soils_Kfactor_bbox
+v.info map=soils_Kfactor_bbox
+```
 
 ## SEE ALSO
 

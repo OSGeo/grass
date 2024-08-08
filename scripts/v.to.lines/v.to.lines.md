@@ -18,15 +18,15 @@ The examples are for the North Carolina sample dataset:
 
 ### Area to line conversion
 
-::: code
-    v.to.lines input=boundary_municp output=boundary_municp_lines
-:::
+```
+v.to.lines input=boundary_municp output=boundary_municp_lines
+```
 
 ### Point to line conversion
 
-::: code
-    v.to.lines input=geodetic_pts output=geodetic_pts_lines
-:::
+```
+v.to.lines input=geodetic_pts output=geodetic_pts_lines
+```
 
 ## SEE ALSO
 

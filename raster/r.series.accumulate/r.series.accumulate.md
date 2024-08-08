@@ -10,21 +10,21 @@ degree-days to growing degree days (GDDs) can be done by providing a
 The flag **-a** determines the average computation of the input raster
 maps. In case the flag is not set, the average calculation is:
 
-::: code
-        average = (min + max) / 2
-:::
+```
+    average = (min + max) / 2
+```
 
 In case the flag was set, the calculation changes to arithmetic mean
 
-::: code
-        average = sum(input maps) / (number of input maps)
-:::
+```
+    average = sum(input maps) / (number of input maps)
+```
 
 **GDD** Growing Degree Days are calculated as
 
-::: code
-        gdd = average - lower
-:::
+```
+    gdd = average - lower
+```
 
 In case the **-a** is set, the Winkler indices are calculated instead of
 GDD, usually accumulated for the period April 1^st^ to October 31^st^
@@ -33,18 +33,18 @@ GDD, usually accumulated for the period April 1^st^ to October 31^st^
 
 **BEDDs** Biologically Effective Degree Days are calculated as
 
-::: code
-        bedd = average - lower
-:::
+```
+    bedd = average - lower
+```
 
 with an optional upper *cutoff* applied to the average instead of the
 temperature values.
 
 The **Huglin heliothermal index** is calculated as
 
-::: code
-        huglin = (average + max) / 2 - lower
-:::
+```
+    huglin = (average + max) / 2 - lower
+```
 
 usually accumulated for the period April 1^st^ to September 30^th^
 (northern hemisphere) or the period September 1^st^ to April 30^th^
@@ -52,9 +52,9 @@ usually accumulated for the period April 1^st^ to September 30^th^
 
 **Mean** raster values are calculated as
 
-::: code
-        mean = average
-:::
+```
+    mean = average
+```
 
 For all the formulas *min* is the minimum value, *max* the maximum value
 and *average* the average value. The *min*, *max* and *average* values
@@ -73,9 +73,9 @@ this map are added to the output.
 The *scale* and *shift* parameters are used to transform input values
 with
 
-::: code
-        new = old * scale + shift
-:::
+```
+    new = old * scale + shift
+```
 
 With the *-n* flag, any cell for which any of the corresponding input
 cells are NULL is automatically set to NULL (NULL propagation) and the
@@ -102,18 +102,18 @@ with e.g. `ulimit -n 4096` (UNIX-based operating systems) but it cannot
 be higher than the hard limit. If the latter is too low, you can as
 superuser add an entry in:
 
-::: code
-    /etc/security/limits.conf
-    # <domain>      <type>  <item>         <value>
-    your_username  hard    nofile          4096
-:::
+```
+/etc/security/limits.conf
+# <domain>      <type>  <item>         <value>
+your_username  hard    nofile          4096
+```
 
 This will raise the hard limit to 4096 files. Also have a look at the
 overall limit of the operating system
 
-::: code
-    cat /proc/sys/fs/file-max
-:::
+```
+cat /proc/sys/fs/file-max
+```
 
 which on modern Linux systems is several 100,000 files.
 
@@ -132,10 +132,10 @@ file with a new line separated list of raster map names.
 Example with MODIS Land Surface Temperature, transforming values from
 Kelvin \* 50 to degrees Celsius:
 
-::: code
-    r.series.accumulate in=MOD11A1.Day,MOD11A1.Night,MYD11A1.Day,MYD11A1.Night out=MCD11A1.GDD \
-          scale=0.02 shift=-273.15 limits=10,30
-:::
+```
+r.series.accumulate in=MOD11A1.Day,MOD11A1.Night,MYD11A1.Day,MYD11A1.Night out=MCD11A1.GDD \
+      scale=0.02 shift=-273.15 limits=10,30
+```
 
 ## SEE ALSO
 

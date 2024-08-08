@@ -27,28 +27,28 @@ to copy).
 
 Print names of all signature files:
 
-::: code
-    i.signatures -p
-:::
+```
+i.signatures -p
+```
 
 Print only signature files of certain type as a JSON:
 
-::: code
-    i.signatures -p type=sigset format=json
-:::
+```
+i.signatures -p type=sigset format=json
+```
 
 Delete signature file called \"foo\" of type \"sig\" (i.gensig /
 i.maxlik).
 
-::: code
-    i.signatures remove=foo type=sig
-:::
+```
+i.signatures remove=foo type=sig
+```
 
 Copy signature file \"bar\" from mapset \"baz\" to current mapset
 
-::: code
-    i.signatures copy=bar@baz,best_version type=sigset
-:::
+```
+i.signatures copy=bar@baz,best_version type=sigset
+```
 
 ## SEE ALSO
 

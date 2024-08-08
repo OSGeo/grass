@@ -131,29 +131,29 @@ A dynamic example can be found in the *d.polar* shell script.
 
 ### Draw a \"star\" symbol at a given map coordinate
 
-::: code
-    echo "symbol basic/star 20 2264417 5413182 black red" | d.graph -m
-:::
+```
+echo "symbol basic/star 20 2264417 5413182 black red" | d.graph -m
+```
 
 ### Split the screen into quadrants:
 
-::: code
-    d.frame -s full_screen
+```
+d.frame -s full_screen
 
-    d.graph << EOF
-      color 80:80:120
-      polygon
-       0 49.75
-       0 50.25
-       100 50.25
-       100 49.75
-      polygon
-       49.85 0
-       50.15 0
-       50.15 100
-       49.85 100
-    EOF
-:::
+d.graph << EOF
+  color 80:80:120
+  polygon
+   0 49.75
+   0 50.25
+   100 50.25
+   100 49.75
+  polygon
+   49.85 0
+   50.15 0
+   50.15 100
+   49.85 100
+EOF
+```
 
 ## NOTES
 

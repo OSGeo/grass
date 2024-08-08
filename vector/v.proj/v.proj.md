@@ -48,9 +48,9 @@ topological errors.
 Reprojection of a vector map from another project (and mapset) into the
 current mapset:
 
-::: code
-    v.proj in=mymap project=latlong mapset=user1
-:::
+```
+v.proj in=mymap project=latlong mapset=user1
+```
 
 ## REFERENCES
 

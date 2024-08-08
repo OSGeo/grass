@@ -13,30 +13,30 @@ not need to be spcified each time.
 
 ### List columns of a PostgreSQL attribute table
 
-::: code
-    db.columns table=zipcodes_wake driver=pg database=grassdb
-:::
+```
+db.columns table=zipcodes_wake driver=pg database=grassdb
+```
 
 *If the database parameters are already set, the columns can be listed
 directly*\
 
-::: code
-    db.columns table=zipcodes_wake
-:::
+```
+db.columns table=zipcodes_wake
+```
 
 ### List columns from Shape file with DBF attribute table
 
-::: code
-    db.columns table=zipcodes_wake driver=dbf database=/grassdata/nc_spm_08/PERMANENT/dbf/
-:::
+```
+db.columns table=zipcodes_wake driver=dbf database=/grassdata/nc_spm_08/PERMANENT/dbf/
+```
 
 ### List columns of table in SQLite database
 
 Note that the SQLite backend is the default setting.
 
-::: code
-    db.columns driver=sqlite table=archsites database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
-:::
+```
+db.columns driver=sqlite table=archsites database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+```
 
 ## SEE ALSO
 

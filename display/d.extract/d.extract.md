@@ -8,11 +8,11 @@ objects.
 
 ### Graphically extract roads from a roads map:
 
-::: code
-    d.mon x0
-    d.vect roads
-    d.extract input=roads output=interstate
-:::
+```
+d.mon x0
+d.vect roads
+d.extract input=roads output=interstate
+```
 
 ## SEE ALSO
 

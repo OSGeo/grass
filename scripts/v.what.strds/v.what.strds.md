@@ -9,9 +9,9 @@ TBD.
 
 ## EXAMPLES
 
-::: code
-    v.what.strds input=mypoints strds=mystrds output=newvector
-:::
+```
+v.what.strds input=mypoints strds=mystrds output=newvector
+```
 
 ## SEE ALSO
 

@@ -21,16 +21,16 @@ resulting fast Fourier transform invalid.
 
 North Carolina example:
 
-::: code
-    g.region raster=lsat7_2002_70
-    i.fft input=lsat7_2002_70 real=lsat7_2002_70.real imaginary=lsat7_2002_70.imag
+```
+g.region raster=lsat7_2002_70
+i.fft input=lsat7_2002_70 real=lsat7_2002_70.real imaginary=lsat7_2002_70.imag
 
-    # set region to resulting FFT output map (due to new FFT coordinate space):
-    g.region raster=lsat7_2002_70.real -p
-    d.mon x0
-    d.rast lsat7_2002_70.real
-    d.rast lsat7_2002_70.imag
-:::
+# set region to resulting FFT output map (due to new FFT coordinate space):
+g.region raster=lsat7_2002_70.real -p
+d.mon x0
+d.rast lsat7_2002_70.real
+d.rast lsat7_2002_70.imag
+```
 
 ## REFERENCES
 

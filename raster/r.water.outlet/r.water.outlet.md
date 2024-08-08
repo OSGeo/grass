@@ -27,24 +27,24 @@ overland slope uphill of the point.
 A watershed in the [North Carolina sample
 dataset](https://grass.osgeo.org/download/data/) region:
 
-::: code
-    g.region raster=elev_lid792_1m -p
-    # the watershed outlet position should be placed on a stream (from
-    # accumulation map):
-    r.watershed elev_lid792_1m threshold=5000 accumulation=accum_5K drainage=draindir_5K basin=basin_5K
-    r.water.outlet input=draindir_5K output=basin_A30 coordinates=638740.423248,220271.519225
+```
+g.region raster=elev_lid792_1m -p
+# the watershed outlet position should be placed on a stream (from
+# accumulation map):
+r.watershed elev_lid792_1m threshold=5000 accumulation=accum_5K drainage=draindir_5K basin=basin_5K
+r.water.outlet input=draindir_5K output=basin_A30 coordinates=638740.423248,220271.519225
 
-    d.mon wx0
-    d.rast map=accum_5K
-    d.rast map=basin_A30
+d.mon wx0
+d.rast map=accum_5K
+d.rast map=basin_A30
 
-    # overlay with transparency
-    r.colors map=basin_A30 color=grey
-    d.his h=accum_5K i=basin_A30
+# overlay with transparency
+r.colors map=basin_A30 color=grey
+d.his h=accum_5K i=basin_A30
 
-    # report outlet size in ha
-    r.report map=basin_A30 units=h
-:::
+# report outlet size in ha
+r.report map=basin_A30 units=h
+```
 
 ![](r_water_outlet.png){border="0"}\
 *Figure: Watershed draped over flow accumulation*

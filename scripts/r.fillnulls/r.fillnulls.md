@@ -59,37 +59,37 @@ In this example, the SRTM elevation map in the North Carolina sample
 dataset is filtered for outlier elevation values; missing pixels are
 then re-interpolated to obtain a complete elevation map:
 
-::: code
-    g.region raster=elev_srtm_30m -p
-    d.mon wx0
-    d.histogram elev_srtm_30m
+```
+g.region raster=elev_srtm_30m -p
+d.mon wx0
+d.histogram elev_srtm_30m
 
-    # remove SRTM outliers, i.e. SRTM below 50m (esp. lakes), leading to no data areas
-    r.mapcalc "elev_srtm_30m_filt = if(elev_srtm_30m < 50.0, null(), elev_srtm_30m)"
-    d.histogram elev_srtm_30m_filt
-    d.rast elev_srtm_30m_filt
+# remove SRTM outliers, i.e. SRTM below 50m (esp. lakes), leading to no data areas
+r.mapcalc "elev_srtm_30m_filt = if(elev_srtm_30m < 50.0, null(), elev_srtm_30m)"
+d.histogram elev_srtm_30m_filt
+d.rast elev_srtm_30m_filt
 
-    # using the default RST method to fill these holes in DEM
-    r.fillnulls input=elev_srtm_30m_filt output=elev_srtm_30m_rst tension=20
+# using the default RST method to fill these holes in DEM
+r.fillnulls input=elev_srtm_30m_filt output=elev_srtm_30m_rst tension=20
 
-    # using the bilinear method to fill these holes in DEM
-    r.fillnulls input=elev_srtm_30m_filt output=elev_srtm_30m_bilin method=bilinear
+# using the bilinear method to fill these holes in DEM
+r.fillnulls input=elev_srtm_30m_filt output=elev_srtm_30m_bilin method=bilinear
 
-    d.histogram elev_srtm_30m_rst
-    d.rast elev_srtm_30m_rst
+d.histogram elev_srtm_30m_rst
+d.rast elev_srtm_30m_rst
 
-    d.erase
-    d.histogram elev_srtm_30m_bilin
-    d.rast elev_srtm_30m_bilin
+d.erase
+d.histogram elev_srtm_30m_bilin
+d.rast elev_srtm_30m_bilin
 
-    r.mapcalc "diff_rst_bilin = elev_srtm_30m_rst - elev_srtm_30m_bilin"
-    r.colors diff_rst_bilin color=differences
+r.mapcalc "diff_rst_bilin = elev_srtm_30m_rst - elev_srtm_30m_bilin"
+r.colors diff_rst_bilin color=differences
 
-    r.univar -e diff_rst_bilin
-    d.erase
-    d.rast diff_rst_bilin
-    d.legend diff_rst_bilin
-:::
+r.univar -e diff_rst_bilin
+d.erase
+d.rast diff_rst_bilin
+d.legend diff_rst_bilin
+```
 
 ## REFERENCES
 

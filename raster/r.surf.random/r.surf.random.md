@@ -8,13 +8,13 @@ user\'s platform.
 
 ## EXAMPLE
 
-::: code
-    g.region -p n=228500 s=215000 w=630000 e=645000 res=10
-    r.surf.random out=random min=0 max=100
+```
+g.region -p n=228500 s=215000 w=630000 e=645000 res=10
+r.surf.random out=random min=0 max=100
 
-    # check result
-    r.univar random
-:::
+# check result
+r.univar random
+```
 
 ::: {align="center" style="margin: 10px"}
 [![r.random.surface example (min: 10; max:

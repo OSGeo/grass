@@ -29,23 +29,23 @@ Following lines can be copied to `.grass8/toolboxes/main_menu.xml` and
 by removing, adding or reordering lines users can change the main menu
 items. See further examples.
 
-::: code
-    <?xml version="1.0" encoding="UTF-8"?>
-    <toolbox name="MyMainMenu">
-      <label>Default GRASS GIS main menu bar</label>
-      <items>
-        <subtoolbox name="File"/>
-        <subtoolbox name="Settings"/>
-        <subtoolbox name="Raster"/>
-        <subtoolbox name="Vector"/>
-        <subtoolbox name="Imagery"/>
-        <subtoolbox name="Volumes"/>
-        <subtoolbox name="Database"/>
-        <user-toolboxes-list />
-        <subtoolbox name="Help"/>
-      </items>
-    </toolbox>
-:::
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<toolbox name="MyMainMenu">
+  <label>Default GRASS GIS main menu bar</label>
+  <items>
+    <subtoolbox name="File"/>
+    <subtoolbox name="Settings"/>
+    <subtoolbox name="Raster"/>
+    <subtoolbox name="Vector"/>
+    <subtoolbox name="Imagery"/>
+    <subtoolbox name="Volumes"/>
+    <subtoolbox name="Database"/>
+    <user-toolboxes-list />
+    <subtoolbox name="Help"/>
+  </items>
+</toolbox>
+```
 
 ### Brief description of file `toolboxes.xml`
 
@@ -58,34 +58,34 @@ toolboxes are linked through `name` attribute.
 Apart from `subtoolbox` tag, tag `toolbox` can contain individual items
 (modules) and separators (for visual separation in the menu tree).
 
-::: code
-    <?xml version="1.0" encoding="UTF-8"?>
-    <toolboxes>
-      <toolbox name="Raster">
-        <label>&amp;Raster</label>
-        <items>
-          <subtoolbox name="DevelopRasterMap"/>
-          <subtoolbox name="ManageRasterColors"/>
-          <subtoolbox name="QueryRasterMaps"/>
-          <subtoolbox name="RasterMapTypeConversions"/>
-          <separator/>
-          <module-item name="r.buffer">
-            <label>Buffer rasters</label>
-          </module-item>
-          ...
-          ...
-      <toolbox name="QueryRasterMaps">
-        <label>Query raster maps</label>
-        <items>
-          <module-item name="r.what">
-            <label>Query values by coordinates</label>
-          </module-item>
-          <module-item name="r.what.color">
-            <label>Query colors by value</label>
-          </module-item>
-        </items>
-      </toolbox>
-:::
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<toolboxes>
+  <toolbox name="Raster">
+    <label>&amp;Raster</label>
+    <items>
+      <subtoolbox name="DevelopRasterMap"/>
+      <subtoolbox name="ManageRasterColors"/>
+      <subtoolbox name="QueryRasterMaps"/>
+      <subtoolbox name="RasterMapTypeConversions"/>
+      <separator/>
+      <module-item name="r.buffer">
+        <label>Buffer rasters</label>
+      </module-item>
+      ...
+      ...
+  <toolbox name="QueryRasterMaps">
+    <label>Query raster maps</label>
+    <items>
+      <module-item name="r.what">
+        <label>Query values by coordinates</label>
+      </module-item>
+      <module-item name="r.what.color">
+        <label>Query colors by value</label>
+      </module-item>
+    </items>
+  </toolbox>
+```
 
 To redefine a toolbox (or use it as a template), copy specific part of
 file `grass7/gui/wxpython/xml/toolboxes.xml` from GRASS installation to
@@ -100,21 +100,21 @@ If we are for example working only with raster data, we can hide menu
 items *Vector* and *Database*. The file `main_menu.xml` then contains
 the following lines where we omitted the two toolboxes:
 
-::: code
-    <?xml version="1.0" encoding="UTF-8"?>
-    <toolbox name="CustomizedMainMenu">
-      <label>Default GRASS GIS main menu bar</label>
-      <items>
-        <subtoolbox name="File"/>
-        <subtoolbox name="Settings"/>
-        <subtoolbox name="Raster"/>
-        <subtoolbox name="Imagery"/>
-        <subtoolbox name="Volumes"/>
-        <user-toolboxes-list />
-        <subtoolbox name="Help"/>
-      </items>
-    </toolbox>
-:::
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<toolbox name="CustomizedMainMenu">
+  <label>Default GRASS GIS main menu bar</label>
+  <items>
+    <subtoolbox name="File"/>
+    <subtoolbox name="Settings"/>
+    <subtoolbox name="Raster"/>
+    <subtoolbox name="Imagery"/>
+    <subtoolbox name="Volumes"/>
+    <user-toolboxes-list />
+    <subtoolbox name="Help"/>
+  </items>
+</toolbox>
+```
 
 ### Creating custom toolbox
 
@@ -122,52 +122,52 @@ In this example we create a new toolbox *Favorites* containing existing
 GRASS module and toolbox, custom module created by the user and addon
 module. The `toolboxes.xml` file contains following lines:
 
-::: code
-    <?xml version="1.0" encoding="UTF-8"?>
-    <toolboxes>
-      <toolbox name="MyFavorites">
-        <label>&amp;Favorites</label>
-        <items>
-          <module-item name="g.region">
-            <label>Set region</label>
-          </module-item>
-          <module-item name="r.mask">
-            <label>Mask</label>
-          </module-item>
-          <separator/>
-          <module-item name="m.myown">
-            <label>Do my own stuff</label>
-          </module-item>
-          <module-item name="i.histo.match">
-            <label>Calculate histogram matching</label>
-          </module-item>
-          <subtoolbox name="RasterReportsAndStatistics"/>
-        </items>
-      </toolbox>
-    </toolboxes>
-:::
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<toolboxes>
+  <toolbox name="MyFavorites">
+    <label>&amp;Favorites</label>
+    <items>
+      <module-item name="g.region">
+        <label>Set region</label>
+      </module-item>
+      <module-item name="r.mask">
+        <label>Mask</label>
+      </module-item>
+      <separator/>
+      <module-item name="m.myown">
+        <label>Do my own stuff</label>
+      </module-item>
+      <module-item name="i.histo.match">
+        <label>Calculate histogram matching</label>
+      </module-item>
+      <subtoolbox name="RasterReportsAndStatistics"/>
+    </items>
+  </toolbox>
+</toolboxes>
+```
 
 Optionally, we can add this toolbox to the main menu items. The
 `main_menu.xml` file contains following lines:
 
-::: code
-    <?xml version="1.0" encoding="UTF-8"?>
-    <toolbox name="CustomizedMainMenu">
-      <label>Default GRASS GIS main menu bar</label>
-      <items>
-        <subtoolbox name="File"/>
-        <subtoolbox name="Settings"/>
-        <subtoolbox name="Raster"/>
-        <subtoolbox name="Vector"/>
-        <subtoolbox name="Imagery"/>
-        <subtoolbox name="Volumes"/>
-        <subtoolbox name="Database"/>
-        <user-toolboxes-list />
-        <subtoolbox name="Favorites"/>
-        <subtoolbox name="Help"/>
-      </items>
-    </toolbox>
-:::
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<toolbox name="CustomizedMainMenu">
+  <label>Default GRASS GIS main menu bar</label>
+  <items>
+    <subtoolbox name="File"/>
+    <subtoolbox name="Settings"/>
+    <subtoolbox name="Raster"/>
+    <subtoolbox name="Vector"/>
+    <subtoolbox name="Imagery"/>
+    <subtoolbox name="Volumes"/>
+    <subtoolbox name="Database"/>
+    <user-toolboxes-list />
+    <subtoolbox name="Favorites"/>
+    <subtoolbox name="Help"/>
+  </items>
+</toolbox>
+```
 
 If we have `user-toolboxes-list` tag in the `main_menu.xml` file, our
 custom toolbox will be listed in the automatically added *Toolboxes*

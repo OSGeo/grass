@@ -47,15 +47,15 @@ OBJECT DOUBLE PULSE (cat = 4, layer = 2)
 
 ### Basic correction procedure
 
-::: code
-    v.lidar.correction input=growing output=correction out_terrain=only_terrain
-:::
+```
+v.lidar.correction input=growing output=correction out_terrain=only_terrain
+```
 
 ### Second correction procedure
 
-::: code
-    v.lidar.correction input=correction output=correction_bis terrain=only_terrain_bis
-:::
+```
+v.lidar.correction input=correction output=correction_bis terrain=only_terrain_bis
+```
 
 ## REFERENCES
 

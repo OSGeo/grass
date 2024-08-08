@@ -8,13 +8,13 @@ manual](http://www.postgresql.org/docs/manuals/) for details.
 
 ## Connecting GRASS to PostgreSQL
 
-::: code
-    # example for connecting to a PostgreSQL server:
-    db.connect driver=pg database=mydb
-    db.login user=myname password=secret host=myserver.osgeo.org  # port=5432
-    db.connect -p
-    db.tables -p
-:::
+```
+# example for connecting to a PostgreSQL server:
+db.connect driver=pg database=mydb
+db.login user=myname password=secret host=myserver.osgeo.org  # port=5432
+db.connect -p
+db.tables -p
+```
 
 ### Username and password
 
@@ -30,9 +30,9 @@ password file can be specified using the connection parameter passfile
 or the environment variable PGPASSFILE. This file should contain lines
 of the following format:
 
-::: code
-    hostname:port:database:username:password
-:::
+```
+hostname:port:database:username:password
+```
 
 ## Supported SQL commands
 
@@ -48,21 +48,21 @@ All SQL operators supported by PostgreSQL.
 Import vector module require an unique ID column which can be generated
 as follows in a PostgreSQL table:
 
-::: code
-    db.execute sql="ALTER TABLE mytable ADD ID integer"
-    db.execute sql="CREATE SEQUENCE mytable_seq"
-    db.execute sql="UPDATE mytable SET ID = nextval('mytable_seq')"
-    db.execute sql="DROP SEQUENCE mytable_seq"
-:::
+```
+db.execute sql="ALTER TABLE mytable ADD ID integer"
+db.execute sql="CREATE SEQUENCE mytable_seq"
+db.execute sql="UPDATE mytable SET ID = nextval('mytable_seq')"
+db.execute sql="DROP SEQUENCE mytable_seq"
+```
 
 ## Attribute import into PostgreSQL
 
 CSV import into PostgreSQL:
 
-::: code
-    \h copy
-    COPY t1 FROM 'filename' USING DELIMITERS ',';
-:::
+```
+\h copy
+COPY t1 FROM 'filename' USING DELIMITERS ',';
+```
 
 ## Geometry import from PostgreSQL table into GRASS
 
@@ -79,33 +79,33 @@ support to PostgreSQL.
 
 In an existing PostGIS database, create the following table:
 
-::: code
-    CREATE TABLE test
-    (
-     id serial NOT NULL,
-     mytime timestamp DEFAULT now(),
-     text varchar,
-     wkb_geometry geometry,
-     CONSTRAINT test_pkey PRIMARY KEY (id)
-    ) WITHOUT OIDS;
+```
+CREATE TABLE test
+(
+ id serial NOT NULL,
+ mytime timestamp DEFAULT now(),
+ text varchar,
+ wkb_geometry geometry,
+ CONSTRAINT test_pkey PRIMARY KEY (id)
+) WITHOUT OIDS;
 
-    # insert value
-    INSERT INTO test (text, wkb_geometry)
-     VALUES ('Name',geometryFromText('POLYGON((600000 200000,650000
-     200000,650000 250000,600000 250000,600000 200000))',-1));
+# insert value
+INSERT INTO test (text, wkb_geometry)
+ VALUES ('Name',geometryFromText('POLYGON((600000 200000,650000
+ 200000,650000 250000,600000 250000,600000 200000))',-1));
 
-    # register geometry column
-    select AddGeometryColumn ('postgis', 'test', 'geometry', -1, 'GEOMETRY', 2);
-:::
+# register geometry column
+select AddGeometryColumn ('postgis', 'test', 'geometry', -1, 'GEOMETRY', 2);
+```
 
 GRASS can import this PostGIS polygon map as follows:
 
-::: code
-    v.in.ogr input="PG:host=localhost dbname=postgis user=neteler" layer=test \
-             output=test type=boundary,centroid
-    v.db.select test
-    v.info -t test
-:::
+```
+v.in.ogr input="PG:host=localhost dbname=postgis user=neteler" layer=test \
+         output=test type=boundary,centroid
+v.db.select test
+v.info -t test
+```
 
 #### Geometry Converters
 

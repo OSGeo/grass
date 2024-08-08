@@ -14,29 +14,29 @@ connected to a vector map to avoid accidental table removal.
 
 ### Removing an attribute table from default database
 
-::: code
-    # show default database
-    db.connect -p
+```
+# show default database
+db.connect -p
 
-    # show available tables
-    db.tables -p
+# show available tables
+db.tables -p
 
-    # this will show what would happen
-    db.droptable table=sometable
+# this will show what would happen
+db.droptable table=sometable
 
-    # actually drop the table
-    db.droptable -f table=sometable
-:::
+# actually drop the table
+db.droptable -f table=sometable
+```
 
 ### Removing an attribute table from given database
 
 *db.droptable* allows defining optionally **driver** and **database**
 options different from default connection settings (`db.connect -p`).
 
-::: code
-    # drop the table from SQLite database
-    db.droptable -f table=sometable driver=sqlite database=/opt/sqlite.db
-:::
+```
+# drop the table from SQLite database
+db.droptable -f table=sometable driver=sqlite database=/opt/sqlite.db
+```
 
 ## SEE ALSO
 

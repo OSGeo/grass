@@ -45,22 +45,22 @@ If the user wished to copy the existing raster file *soils* to a file
 called *soils.ph* and to copy an existing vector map *roads* to a file
 called *rds.old*, the user could type:
 
-::: code
-    g.copy raster=soils,soils.ph
-    g.copy vector=roads,rds.old
+```
+g.copy raster=soils,soils.ph
+g.copy vector=roads,rds.old
 
-    # or even combined:
-    g.copy raster=soils,soils.ph vector=roads,rds.old
-:::
+# or even combined:
+g.copy raster=soils,soils.ph vector=roads,rds.old
+```
 
 Data files can also be specified by their mapsets. For example, the
 below command copies the raster map named *soils* from the mapset
 *wilson* to a new file called *soils* to be placed under the user\'s
 current mapset:
 
-::: code
-    g.copy raster=soils@wilson,soils
-:::
+```
+g.copy raster=soils@wilson,soils
+```
 
 If no mapset name is specified, *g.copy* searches for the named **from**
 map in each of the mapset directories listed in the user\'s current

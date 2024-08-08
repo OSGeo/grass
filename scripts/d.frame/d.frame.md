@@ -24,42 +24,42 @@ those portions of the underlying frame where these frames overlap.
 
 ## EXAMPLE
 
-::: code
-    # start a new graphics monitor, the data will be rendered to
-    # /tmp/map.png image output file of size 600x540px
-    d.mon cairo out=/tmp/map.png width=600 height=540 --o
+```
+# start a new graphics monitor, the data will be rendered to
+# /tmp/map.png image output file of size 600x540px
+d.mon cairo out=/tmp/map.png width=600 height=540 --o
 
-    # set up region
-    g.region raster=elevation
+# set up region
+g.region raster=elevation
 
-    # remove all frames and erase the current graphics monitor
-    d.frame -e
+# remove all frames and erase the current graphics monitor
+d.frame -e
 
-    # create a first frame and display 'landuse96_28m' raster map including text label
-    # order: bottom,top,left,right - in percent
-    d.frame -c frame=first at=0,50,0,50
-    d.rast landuse96_28m
-    d.text text='Landuse' bgcolor=220:220:220 color=black size=6
+# create a first frame and display 'landuse96_28m' raster map including text label
+# order: bottom,top,left,right - in percent
+d.frame -c frame=first at=0,50,0,50
+d.rast landuse96_28m
+d.text text='Landuse' bgcolor=220:220:220 color=black size=6
 
-    # create a second frame and display 'streams' vector map
-    d.frame -c frame=second at=0,50,50,100
-    d.vect streams color=blue
-    d.text text='Streams' bgcolor=220:220:220 color=black size=6
+# create a second frame and display 'streams' vector map
+d.frame -c frame=second at=0,50,50,100
+d.vect streams color=blue
+d.text text='Streams' bgcolor=220:220:220 color=black size=6
 
-    # create a third frame and display 'elevation' raster map including text label and scale
-    d.frame -c frame=third at=50,100,0,50
-    d.rast elevation
-    d.text text='Elevation' bgcolor=220:220:220 color=black size=6
-    d.barscale at=0,10 style=line bgcolor=none
+# create a third frame and display 'elevation' raster map including text label and scale
+d.frame -c frame=third at=50,100,0,50
+d.rast elevation
+d.text text='Elevation' bgcolor=220:220:220 color=black size=6
+d.barscale at=0,10 style=line bgcolor=none
 
-    # create a fourth frame and display RGB composition map including text label
-    d.frame -c frame=fourth at=50,100,50,100
-    d.rgb red=lsat7_2002_30 green=lsat7_2002_20 blue=lsat7_2002_10
-    d.text text='RGB true colors' bgcolor=220:220:220 color=black size=6
+# create a fourth frame and display RGB composition map including text label
+d.frame -c frame=fourth at=50,100,50,100
+d.rgb red=lsat7_2002_30 green=lsat7_2002_20 blue=lsat7_2002_10
+d.text text='RGB true colors' bgcolor=220:220:220 color=black size=6
 
-    # release the current graphics monitor
-    d.mon -r
-:::
+# release the current graphics monitor
+d.mon -r
+```
 
 ![d.frame example](d_frame.png)\
 *Figure: d.frame example*

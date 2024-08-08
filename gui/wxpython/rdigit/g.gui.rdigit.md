@@ -51,12 +51,12 @@ meters which results in the building having 50 m in diameter. When we
 are done with digitizing, we save the result and explore cast shadows of
 the buildings with [r.sun](r.sun.html) module:
 
-::: code
-    g.region raster=elev_lid792_1m
-    # now create elev_edited raster by digitizing and save
-    r.slope.aspect elevation=elev_edited slope=elev_slope aspect=elev_aspect
-    r.sun elevation=elev_edited aspect=elev_aspect slope=elev_slope beam_rad=beam day=172 time=6
-:::
+```
+g.region raster=elev_lid792_1m
+# now create elev_edited raster by digitizing and save
+r.slope.aspect elevation=elev_edited slope=elev_slope aspect=elev_aspect
+r.sun elevation=elev_edited aspect=elev_aspect slope=elev_slope beam_rad=beam day=172 time=6
+```
 
 ::: {align="center"}
 [![Raster digitizer example step 1](wxGUI_rdigit_step1.png){width="400"

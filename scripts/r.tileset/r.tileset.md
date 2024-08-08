@@ -48,17 +48,17 @@ Generates tiles in latitude longitude that cover the current region,
 each tile will be less than 1024 cells high and 2048 cells across. The
 bounds and sizes of tiles in the output are separated by \| (pipe):
 
-::: code
-    r.tileset sourceproj=+init=epsg:4326 maxrows=1024 maxcols=2048
-:::
+```
+r.tileset sourceproj=+init=epsg:4326 maxrows=1024 maxcols=2048
+```
 
 Generates tiles in latitude longitude projection that cover the named
 region \"ne-rio\". The tiles will have 2 cells of overlap. The output
 format will be strings like the bbox requests for WMS servers:
 
-::: code
-    r.tileset sourceproj=+init=epsg:4326 overlap=2 -w region=ne-rio
-:::
+```
+r.tileset sourceproj=+init=epsg:4326 overlap=2 -w region=ne-rio
+```
 
 Generates tiles in the coordinate reference system of the project
 \"IrishGrid\". Each tile will be less than 300x400 cells in size, with 3
@@ -67,9 +67,9 @@ in a format where each line is in shell script style. The substitution
 `` `g.proj -j project=IrishGrid` `` will only work in a unix style
 shell:
 
-::: code
-    r.tileset sourceproj="`g.proj -j project=IrishGrid`" maxrows=400 maxcols=300 overlap=3 -g
-:::
+```
+r.tileset sourceproj="`g.proj -j project=IrishGrid`" maxrows=400 maxcols=300 overlap=3 -g
+```
 
 ## KNOWN ISSUES
 

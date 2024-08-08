@@ -21,21 +21,21 @@ of a line have the same z-coordinate (for example contours).
 
 ### Transform 2D vector features to 3D
 
-::: code
-    # convert z-values from string to double
-    v.db.addcolumn map=geodetic_pts columns="Z_VALUE_D double precision"
-    v.db.update map=geodetic_pts column=Z_VALUE_D qcolumn=Z_VALUE
-    v.db.select map=geodetic_pts columns=cat,Z_VALUE,Z_VALUE_D
+```
+# convert z-values from string to double
+v.db.addcolumn map=geodetic_pts columns="Z_VALUE_D double precision"
+v.db.update map=geodetic_pts column=Z_VALUE_D qcolumn=Z_VALUE
+v.db.select map=geodetic_pts columns=cat,Z_VALUE,Z_VALUE_D
 
-    # convert 2D vector point map to 3D based on attribute
-    v.to.3d input=geodetic_pts out=geodetic_pts_3d column=Z_VALUE_D
-:::
+# convert 2D vector point map to 3D based on attribute
+v.to.3d input=geodetic_pts out=geodetic_pts_3d column=Z_VALUE_D
+```
 
 ### Transform 3D vector features to 2D
 
-::: code
-    v.to.3d -rt input=elev_lid792_bepts output=elev_lid_2d
-:::
+```
+v.to.3d -rt input=elev_lid792_bepts output=elev_lid_2d
+```
 
 ## SEE ALSO
 

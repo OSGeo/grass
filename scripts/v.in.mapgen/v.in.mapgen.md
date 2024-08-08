@@ -15,9 +15,9 @@ Matlab vector line maps are simply a series of \"x y\" data points.
 Lines are separated by a row containing `NaN NaN`. Output from Matlab
 with this command:\
 
-::: code
-        save filename.txt arrayname -ASCII
-:::
+```
+    save filename.txt arrayname -ASCII
+```
 
 The user can import 3D lines from Matlab by exporting a 3 column array
 and using the **-z** flag.

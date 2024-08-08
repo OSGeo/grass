@@ -40,17 +40,17 @@ longer processing times.
 
 ## EXAMPLES
 
-::: code
-    g.region -p raster=elevation
+```
+g.region -p raster=elevation
 
-    r.surf.area map=elevation units=hectares
-    Null value area ignored in calculation: 0.000000
-    Plan area used in calculation: 20221.510000
-    Surface area calculation(low, high, avg):
-            20294.310421 20320.936368 20307.623395
-    Current region plan area: 20250.000000
-    Estimated region Surface Area: 20336.234719
-:::
+r.surf.area map=elevation units=hectares
+Null value area ignored in calculation: 0.000000
+Plan area used in calculation: 20221.510000
+Surface area calculation(low, high, avg):
+        20294.310421 20320.936368 20307.623395
+Current region plan area: 20250.000000
+Estimated region Surface Area: 20336.234719
+```
 
 ## SEE ALSO
 

@@ -32,39 +32,39 @@ modules for examples.
 
 ### Assign semantic label to a single raster map
 
-::: code
-    r.semantic.label map=T33UVR_20180506T100031_B01 semantic_label=S2_1
-:::
+```
+r.semantic.label map=T33UVR_20180506T100031_B01 semantic_label=S2_1
+```
 
 ### Assign semantic label to a list of raster maps
 
-::: code
-    r.semantic.label map=T33UVR_20180506T100031_B01,T33UVR_20180521T100029_B01 semantic_label=S2_1,S2_1
-:::
+```
+r.semantic.label map=T33UVR_20180506T100031_B01,T33UVR_20180521T100029_B01 semantic_label=S2_1,S2_1
+```
 
 ### Assign different semantic labels to a list of raster maps
 
-::: code
-    r.semantic.label map=T33UVR_20180506T100031_B01,T33UVR_20180506T100031_B02 semantic_label=S2_1,S2_2
-:::
+```
+r.semantic.label map=T33UVR_20180506T100031_B01,T33UVR_20180506T100031_B02 semantic_label=S2_1,S2_2
+```
 
 ### Remove semantic label from a list of raster maps
 
-::: code
-    r.semantic.label map=T33UVR_20180506T100031_B01,T33UVR_20180506T100031_B02 operation=remove
-:::
+```
+r.semantic.label map=T33UVR_20180506T100031_B01,T33UVR_20180506T100031_B02 operation=remove
+```
 
 ### Print semantic label information about single raster map
 
-::: code
-    r.semantic.label map=T33UVR_20180506T100031_B01 operation=print
-:::
+```
+r.semantic.label map=T33UVR_20180506T100031_B01 operation=print
+```
 
 ### Print extended semantic label information for a list of raster map
 
-::: code
-    r.semantic.label map=T33UVR_20180506T100031_B01,T33UVR_20180506T100031_B02 operation=print
-:::
+```
+r.semantic.label map=T33UVR_20180506T100031_B01,T33UVR_20180506T100031_B02 operation=print
+```
 
 ## KNOWN ISSUES
 

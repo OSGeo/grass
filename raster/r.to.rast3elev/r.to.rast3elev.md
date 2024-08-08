@@ -23,53 +23,53 @@ or the input raster maps values.
 
 Simple Spearfish sample data set example
 
-::: code
-    g.region raster=elevation.10m -p
-    g.region res=200 res3=200 t=2000 b=0 tbres=20 -p
+```
+g.region raster=elevation.10m -p
+g.region res=200 res3=200 t=2000 b=0 tbres=20 -p
 
-    # Write the values of raster map soils based on the elevation of elevation.10m
-    # to the 3D map volev
+# Write the values of raster map soils based on the elevation of elevation.10m
+# to the 3D map volev
 
-    r.to.rast3elev in=soils elev=elevation.10m out=volev
+r.to.rast3elev in=soils elev=elevation.10m out=volev
 
-    # Write the values of map soils based on the elevation of elevation.10m
-    # to the 3D map volev_l and fill the lower cells with the soils map values
+# Write the values of map soils based on the elevation of elevation.10m
+# to the 3D map volev_l and fill the lower cells with the soils map values
 
-    r.to.rast3elev in=soils elev=elevation.10m out=volev_l -l
+r.to.rast3elev in=soils elev=elevation.10m out=volev_l -l
 
-    # Write the values of map soils based on the elevation of elevation.10m
-    # to the 3D map volev_u and fill the upper cells with the soils map values
+# Write the values of map soils based on the elevation of elevation.10m
+# to the 3D map volev_u and fill the upper cells with the soils map values
 
-    r.to.rast3elev in=soils elev=elevation.10m out=volev_u -u
+r.to.rast3elev in=soils elev=elevation.10m out=volev_u -u
 
-    # Example with multiple elevation maps.
-    ## first we need three support maps
+# Example with multiple elevation maps.
+## first we need three support maps
 
-    r.mapcalc expression="one = 1"
-    r.mapcalc expression="two = 2"
-    r.mapcalc expression="three = 3"
+r.mapcalc expression="one = 1"
+r.mapcalc expression="two = 2"
+r.mapcalc expression="three = 3"
 
-    ## Now we generate the new evelation maps
+## Now we generate the new evelation maps
 
-    r.mapcalc expression="elev_mid = elevation.10m - 500"
-    r.mapcalc expression="elev_bottom = elevation.10m - 1000"
+r.mapcalc expression="elev_mid = elevation.10m - 500"
+r.mapcalc expression="elev_bottom = elevation.10m - 1000"
 
-    ## Now fill the lower cells below the elevation maps with the values one, two and three
+## Now fill the lower cells below the elevation maps with the values one, two and three
 
-    r.to.rast3elev -l input=one,two,three elevation=elevation.10m,elev_mid,elev_bottom output=threelayer
+r.to.rast3elev -l input=one,two,three elevation=elevation.10m,elev_mid,elev_bottom output=threelayer
 
-    ## Export the map for visualization with paraview (http://www.paraview.org)
-    ## By default the null value is -9999.99, we adjust it to 0.0 for
-    ## better visualization
-    r3.out.vtk null=0.0 input=threelayer output=/tmp/threelayer.vtk
+## Export the map for visualization with paraview (http://www.paraview.org)
+## By default the null value is -9999.99, we adjust it to 0.0 for
+## better visualization
+r3.out.vtk null=0.0 input=threelayer output=/tmp/threelayer.vtk
 
-    # Start paraview
+# Start paraview
 
-    paraview --data=/tmp/threelayer.vtk
+paraview --data=/tmp/threelayer.vtk
 
-    # Note: First you need to choose the surface representation style and
-    # then color by "threelayer" in paraview.
-:::
+# Note: First you need to choose the surface representation style and
+# then color by "threelayer" in paraview.
+```
 
 ## SEE ALSO
 

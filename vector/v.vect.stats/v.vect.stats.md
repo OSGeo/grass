@@ -73,22 +73,22 @@ attributes to floating point numbers.
 The subsequent examples are based on randomly sampled elevation data
 (North Carolina sample database):
 
-::: code
-    # work on map copy for attribute editing
-    g.copy vector=zipcodes_wake,myzipcodes_wake
+```
+# work on map copy for attribute editing
+g.copy vector=zipcodes_wake,myzipcodes_wake
 
-    # set computational region: extent of ZIP code map, raster pixels
-    # aligned to raster map
-    g.region vector=myzipcodes_wake align=elev_state_500m -p
-    #  generate random elevation points
-    r.random elev_state_500m vector=rand5000 n=5000
-    v.colors rand5000 color=elevation
+# set computational region: extent of ZIP code map, raster pixels
+# aligned to raster map
+g.region vector=myzipcodes_wake align=elev_state_500m -p
+#  generate random elevation points
+r.random elev_state_500m vector=rand5000 n=5000
+v.colors rand5000 color=elevation
 
-    # visualization
-    d.mon wx0
-    d.vect myzipcodes_wake -c
-    d.vect rand5000
-:::
+# visualization
+d.mon wx0
+d.vect myzipcodes_wake -c
+d.vect rand5000
+```
 
 These vector maps are used for the examples below.
 
@@ -98,9 +98,9 @@ These vector maps are used for the examples below.
 
 Counting points per polygon, print results to terminal:
 
-::: code
-    v.vect.stats points=rand5000 area=myzipcodes_wake -p
-:::
+```
+v.vect.stats points=rand5000 area=myzipcodes_wake -p
+```
 
 ### Count points per polygon with column update
 
@@ -109,11 +109,11 @@ Counting points per polygon, print results to terminal:
 Counting of points per polygon, with update of \"num_points\" column
 (will be automatically created):
 
-::: code
-    v.vect.stats points=rand5000 area=myzipcodes_wake count_column=num_points
-    # verify result
-    v.db.select myzipcodes_wake column=ZIPCODE_,ZIPNAME,num_points
-:::
+```
+v.vect.stats points=rand5000 area=myzipcodes_wake count_column=num_points
+# verify result
+v.db.select myzipcodes_wake column=ZIPCODE_,ZIPNAME,num_points
+```
 
 ### Average values of points in polygon with printed output
 
@@ -122,12 +122,12 @@ Counting of points per polygon, with update of \"num_points\" column
 Calculation of average point elevation per ZIP code polygon, printed to
 terminal in comma separated style:
 
-::: code
-    # check name of point map column:
-    v.info -c rand5000
-    v.vect.stats points=rand5000 area=myzipcodes_wake \
-      method=average points_column=value separator=comma -p
-:::
+```
+# check name of point map column:
+v.info -c rand5000
+v.vect.stats points=rand5000 area=myzipcodes_wake \
+  method=average points_column=value separator=comma -p
+```
 
 ### Average values of points in polygon with column update
 
@@ -137,14 +137,14 @@ Calculation of average point elevation per ZIP code polygon, with update
 of \"avg_elev\" column and counting of points per polygon, with update
 of \"num_points\" column (new columns will be automatically created):
 
-::: code
-    # check name of point map column:
-    v.info -c rand5000
-    v.vect.stats points=rand5000 area=myzipcodes_wake count_column=num_points \
-      method=average points_column=value stats_column=avg_elev
-    # verify result
-    v.db.select myzipcodes_wake column=ZIPCODE_,ZIPNAME,avg_elev
-:::
+```
+# check name of point map column:
+v.info -c rand5000
+v.vect.stats points=rand5000 area=myzipcodes_wake count_column=num_points \
+  method=average points_column=value stats_column=avg_elev
+# verify result
+v.db.select myzipcodes_wake column=ZIPCODE_,ZIPNAME,avg_elev
+```
 
 ### Point statistics in a hexagonal grid
 
@@ -152,25 +152,25 @@ The grid extent and size is influenced by the current computational
 region. The extent is based on the vector map *points_of_interest* from
 the basic North Carolina sample dataset.
 
-::: code
-    g.region vector=points_of_interest res=2000 -pa
-:::
+```
+g.region vector=points_of_interest res=2000 -pa
+```
 
 The hexagonal grid is created using the *[v.mkgrid](v.mkgrid.html)*
 module as a vector map based on the previously selected extent and size
 of the grid.
 
-::: code
-    v.mkgrid map=hexagons -h
-:::
+```
+v.mkgrid map=hexagons -h
+```
 
 The *v.vect.stats* module counts the number of points and does one
 statistics on a selected column (here: *elev_m*).
 
-::: code
-    v.vect.stats points=points_of_interest areas=hexagons method=average \
-      points_column=elev_m count_column=count stats_column=average
-:::
+```
+v.vect.stats points=points_of_interest areas=hexagons method=average \
+  points_column=elev_m count_column=count stats_column=average
+```
 
 User should note that some of the points may be outside the grid since
 the hexagons cannot cover all the area around the edges (the
@@ -178,9 +178,9 @@ computational region extent needs to be enlarged if all points should be
 considered). The last command sets the vector map color table to
 `viridis` based on the `count` column.
 
-::: code
-    v.colors map=hexagons use=attr column=average color=viridis
-:::
+```
+v.colors map=hexagons use=attr column=average color=viridis
+```
 
 ![](v_vect_stats.png)\
 Point statistics in a hexagonal grid (count of points, average of values

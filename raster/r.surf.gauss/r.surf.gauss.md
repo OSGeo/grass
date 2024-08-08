@@ -8,13 +8,13 @@ generator instead.
 
 ## EXAMPLE
 
-::: code
-    g.region -p n=228500 s=215000 w=630000 e=645000 res=10
-    r.surf.gauss out=gauss mean=0 sigma=10
+```
+g.region -p n=228500 s=215000 w=630000 e=645000 res=10
+r.surf.gauss out=gauss mean=0 sigma=10
 
-    # check result
-    r.univar gauss
-:::
+# check result
+r.univar gauss
+```
 
 ::: {align="center" style="margin: 10px"}
 [![r.surf.gauss example (mean: 0; sigma:

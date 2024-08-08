@@ -50,19 +50,19 @@ Differences to *r.mapcalc.simple* module in GRASS GIS 5 and 6:
 
 ### Basic examples
 
-::: code
-    r.mapcalc.simple expression="0" output=zeros
-    r.mapcalc.simple expression="1" output=ones
-    r.mapcalc.simple expression="2" output=twos
-:::
+```
+r.mapcalc.simple expression="0" output=zeros
+r.mapcalc.simple expression="1" output=ones
+r.mapcalc.simple expression="2" output=twos
+```
 
-::: code
-    r.mapcalc.simple expression="A + B + C" a=zeros b=ones c=twos output=result1
-:::
+```
+r.mapcalc.simple expression="A + B + C" a=zeros b=ones c=twos output=result1
+```
 
-::: code
-    r.mapcalc.simple expression="(A * B) / 2 + 3 * C" a=zeros b=ones c=twos output=result2
-:::
+```
+r.mapcalc.simple expression="(A * B) / 2 + 3 * C" a=zeros b=ones c=twos output=result2
+```
 
 ::: {align="center" style="margin: 10px"}
 ![](r_mapcalc_simple.png){width="594px" height="495px"}\
@@ -73,22 +73,22 @@ Differences to *r.mapcalc.simple* module in GRASS GIS 5 and 6:
 
 Addition:
 
-::: code
-    A + B
-:::
+```
+A + B
+```
 
 No spaces around operators are not recommended for readability, but
 allowed in the expression:
 
-::: code
-    A+B
-:::
+```
+A+B
+```
 
 More complex expression with a function:
 
-::: code
-    exp(A+C)+(B-2)*7
-:::
+```
+exp(A+C)+(B-2)*7
+```
 
 ## SEE ALSO
 

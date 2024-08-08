@@ -116,41 +116,41 @@ The maximum size of input WKT or PROJ CRS descriptions is limited to
 
 Print the CRS information for the current project:\
 
-::: code
-    g.proj -p
-:::
+```
+g.proj -p
+```
 
 List the possible datum transformation parameters for the current
 project:\
 
-::: code
-    g.proj -t datumtrans=-1
-:::
+```
+g.proj -t datumtrans=-1
+```
 
 ### Create projection (PRJ) file
 
 Create a \'.prj\' file in ESRI format corresponding to the current
 project:\
 
-::: code
-    g.proj -wef > irish_grid.prj
-:::
+```
+g.proj -wef > irish_grid.prj
+```
 
 ### Read CRS from file
 
 Read the CRS information from a GeoTIFF file and print it in PROJ
 format:\
 
-::: code
-    g.proj -jf georef=ASTER_DEM20020508161837.tif
-:::
+```
+g.proj -jf georef=ASTER_DEM20020508161837.tif
+```
 
 Convert the PROJ CRS description contained in a text file to WKT
 format:\
 
-::: code
-    cat proj4.description | g.proj -w proj4=-
-:::
+```
+cat proj4.description | g.proj -w proj4=-
+```
 
 ### Create new project
 
@@ -158,48 +158,48 @@ Create a new project with the coordinate system referred to by EPSG code
 4326 (Latitude-Longitude/WGS84), without explicitly specifying datum
 transformation parameters:\
 
-::: code
-    g.proj -c epsg=4326 project=latlong
-:::
+```
+g.proj -c epsg=4326 project=latlong
+```
 
 Create a new project with the coordinate system referred to by EPSG code
 900913 ([Google Mercator
 Projection](http://spatialreference.org/ref/user/6/))\
 
-::: code
-    g.proj -c epsg=900913 project=google
-:::
+```
+g.proj -c epsg=900913 project=google
+```
 
 Create a new project with the coordinate system referred to by EPSG code
 29900 (Irish Grid), selecting datum transformation parameter set no. 2:\
 
-::: code
-    # list available datums for EPSG code 29900
-    g.proj -t datumtrans=-1 epsg=29900
-    g.proj -c epsg=29900 datumtrans=2 project=irish_grid
-:::
+```
+# list available datums for EPSG code 29900
+g.proj -t datumtrans=-1 epsg=29900
+g.proj -c epsg=29900 datumtrans=2 project=irish_grid
+```
 
 Create a new project with the same coordinate system as the current
 project, but forcing a change to datum transformation parameter set no.
 1:\
 
-::: code
-    g.proj -c project=newloc -t datumtrans=1
-:::
+```
+g.proj -c project=newloc -t datumtrans=1
+```
 
 Create a new project with the coordinate system from a WKT definition
 stored in a text file:\
 
-::: code
-    g.proj -c wkt=irish_grid.prj project=irish_grid
-:::
+```
+g.proj -c wkt=irish_grid.prj project=irish_grid
+```
 
 Create a new project from a PROJ description, explicitly specifying a
 datum and using the default datum transformation parameters:\
 
-::: code
-    g.proj -c project=spain proj4="+proj=utm +zone=30 +ellps=intl" datum=eur50 datumtrans=0
-:::
+```
+g.proj -c project=spain proj4="+proj=utm +zone=30 +ellps=intl" datum=eur50 datumtrans=0
+```
 
 ### Using g.proj output for GDAL/OGR tools
 
@@ -207,17 +207,17 @@ Reproject external raster map to current GRASS project (does not always
 make sense!) using the GDAL \'gdalwarp\' tool. We recommend to use the
 ERDAS/Img format and not to use the ESRI style of WKT:\
 
-::: code
-    # example for 30x30 pixel resolution (enforce with -tr to avoid odd values)
-    gdalwarp -of HFA -tr 30 30 -t_srs "`g.proj -wf`" aster.img aster_tmerc.img
-:::
+```
+# example for 30x30 pixel resolution (enforce with -tr to avoid odd values)
+gdalwarp -of HFA -tr 30 30 -t_srs "`g.proj -wf`" aster.img aster_tmerc.img
+```
 
 Reproject external vector map to current GRASS project using the OGR
 \'ogr2ogr\' tool:\
 
-::: code
-    ogr2ogr -t_srs "`g.proj -wf`" polbnda_italy_GB_ovest.shp polbnda_italy_LL.shp
-:::
+```
+ogr2ogr -t_srs "`g.proj -wf`" polbnda_italy_GB_ovest.shp polbnda_italy_LL.shp
+```
 
 ## REFERENCES
 

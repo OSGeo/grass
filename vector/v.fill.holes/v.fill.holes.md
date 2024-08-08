@@ -68,15 +68,15 @@ holes created in the lakes to get the whole perimeter of the lakes
 including islands. Remove the islands by extracting everything else
 (results in holes):
 
-::: code
-    v.extract input=lakes where="FTYPE != 'ROCK/ISLAND'" output=lakes_only
-:::
+```
+v.extract input=lakes where="FTYPE != 'ROCK/ISLAND'" output=lakes_only
+```
 
 Remove the holes:
 
-::: code
-    v.fill.holes input=lakes_only output=lakes_filled
-:::
+```
+v.fill.holes input=lakes_only output=lakes_filled
+```
 
 ::: {align="center" style="margin: 10px"}
 [![Lake without holes overlapping with the lines marking the

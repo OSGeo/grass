@@ -3,16 +3,16 @@
 *r.regression.line* calculates a linear regression from two raster maps,
 according to the formula
 
-::: code
-    y = a + b*x
-:::
+```
+y = a + b*x
+```
 
 where
 
-::: code
-    x
-    y
-:::
+```
+x
+y
+```
 
 represent the input raster maps.
 
@@ -32,38 +32,38 @@ that obtained from R-stats\'s lm() function.
 Comparison of two DEMs (SRTM and NED, both at 30m resolution), provided
 in the North Carolina sample dataset:
 
-::: code
-    g.region raster=elev_srtm_30m -p
-    r.regression.line mapx=elev_ned_30m mapy=elev_srtm_30m
-     y = a + b*x
-       a (Offset): -1.659279
-       b (Gain): 1.043968
-       R (sumXY - sumX*sumY/N): 0.894038
-       N (Number of elements): 225000
-       F (F-test significance): 896093.366283
-       meanX (Mean of map1): 110.307571
-       sdX (Standard deviation of map1): 20.311998
-       meanY (Mean of map2): 113.498292
-       sdY (Standard deviation of map2): 23.718307
-:::
+```
+g.region raster=elev_srtm_30m -p
+r.regression.line mapx=elev_ned_30m mapy=elev_srtm_30m
+ y = a + b*x
+   a (Offset): -1.659279
+   b (Gain): 1.043968
+   R (sumXY - sumX*sumY/N): 0.894038
+   N (Number of elements): 225000
+   F (F-test significance): 896093.366283
+   meanX (Mean of map1): 110.307571
+   sdX (Standard deviation of map1): 20.311998
+   meanY (Mean of map2): 113.498292
+   sdY (Standard deviation of map2): 23.718307
+```
 
 Using the script style flag AND *eval* to make results available in the
 shell:
 
-::: code
-    g.region raster=elev_srtm_30m -p
-    eval `r.regression.line -g mapx=elev_ned_30m mapy=elev_srtm_30m`
+```
+g.region raster=elev_srtm_30m -p
+eval `r.regression.line -g mapx=elev_ned_30m mapy=elev_srtm_30m`
 
-    # print result stored in respective variables
-    echo $a
-    -1.659279
+# print result stored in respective variables
+echo $a
+-1.659279
 
-    echo $b
-    1.043968
+echo $b
+1.043968
 
-    echo $R
-    0.894038
-:::
+echo $R
+0.894038
+```
 
 ## SEE ALSO
 

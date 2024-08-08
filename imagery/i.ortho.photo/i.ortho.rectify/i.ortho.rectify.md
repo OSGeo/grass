@@ -66,10 +66,12 @@ project and mapset should be allowed.
 
 The next prompt asks you to select one of two windows:
 
-          Please select one of the following options
-          1.   Use the current window in the target project
-          2.   Determine the smallest window which covers the image
-          >
+```
+      Please select one of the following options
+      1.   Use the current window in the target project
+      2.   Determine the smallest window which covers the image
+      >
+```
 
 If you choose option 2, you can also specify a desired target
 resolution.
@@ -81,13 +83,15 @@ window in the target project if choice number one is selected.
 
 Next you are asked to select an interpolation method.
 
-          Please select one of the following interpolation methods
-          1. nearest neighbor
-          2. bilinear
-          3. bicubic
-          4. bilinear with fallback
-          5. bicubic with fallback
-          >
+```
+      Please select one of the following interpolation methods
+      1. nearest neighbor
+      2. bilinear
+      3. bicubic
+      4. bilinear with fallback
+      5. bicubic with fallback
+      >
+```
 
 The last prompt will ask you about the amount of memory to be used by
 *i.photo.rectify*.

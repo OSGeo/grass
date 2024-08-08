@@ -67,9 +67,9 @@ All examples are based on the North Carolina sample dataset.
 
 ### Buffer around input lines
 
-::: code
-    v.buffer input=roadsmajor output=roadsmajor_buffer type=line distance=100
-:::
+```
+v.buffer input=roadsmajor output=roadsmajor_buffer type=line distance=100
+```
 
 ![](v_buffer_lines.png){border="1"}\
 Buffer of 100m along the \"roadsmajor\" lines (map subset, original
@@ -77,9 +77,9 @@ center line shown in black)
 
 ### Circles around input points
 
-::: code
-    v.buffer input=hospitals output=hospitals_circled type=point distance=2000
-:::
+```
+v.buffer input=hospitals output=hospitals_circled type=point distance=2000
+```
 
 ![](v_buffer_points.png){border="1"}\
 Buffer of 2000m around the \"hospitals\" points (map subset, original
@@ -87,21 +87,21 @@ points shown in black, new area centroids in red)
 
 ### Circles around input points with attribute transfer
 
-::: code
-    v.buffer input=hospitals output=hospitals_circled type=point distance=1000 -t
+```
+v.buffer input=hospitals output=hospitals_circled type=point distance=1000 -t
 
-    # display buffer around hospital with category 36,
-    # this buffer is composed of several areas:
-    d.vect map=hospitals_circled type=area layer=1 cats=36
-    # extract this buffer, dissolving boundaries
-    v.extract in=hospitals_circled output=hospital_36_circled layer=1 cats=36 -d
-:::
+# display buffer around hospital with category 36,
+# this buffer is composed of several areas:
+d.vect map=hospitals_circled type=area layer=1 cats=36
+# extract this buffer, dissolving boundaries
+v.extract in=hospitals_circled output=hospital_36_circled layer=1 cats=36 -d
+```
 
 ### Buffer around input areas
 
-::: code
-    v.buffer input=lakes output=lakes_buffer type=area distance=100
-:::
+```
+v.buffer input=lakes output=lakes_buffer type=area distance=100
+```
 
 ![](v_buffer_areas.png){border="1"}\
 Buffer of 100m around the \"lakes\" polygons (map subset, original areas
@@ -112,9 +112,9 @@ shown in black)
 In this example, an internal buffer (\"inward buffer\" or \"negative
 buffer\") is generated using a negative **distance** value:
 
-::: code
-    v.buffer input=lakes output=lakes_buffer type=area distance=-50
-:::
+```
+v.buffer input=lakes output=lakes_buffer type=area distance=-50
+```
 
 ![](v_buffer_areas_int.png){border="1"}\
 Internal buffer of 50m inside the \"lakes\" polygons (map subset,

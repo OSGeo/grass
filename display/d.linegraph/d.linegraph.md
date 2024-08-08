@@ -27,9 +27,9 @@ manually. For example when all files are stored in the directory
 `/home/john/data`, the user can provide the following in the command
 line:
 
-::: code
-    d.linegraph directory=/home/john/data x_file=x.txt y_file=y1.txt,y2.txt
-:::
+```
+d.linegraph directory=/home/john/data x_file=x.txt y_file=y1.txt,y2.txt
+```
 
 ### Managing colors
 
@@ -103,38 +103,38 @@ The following can be executed in Bash to create the input data for this
 example. The user can just create these files in a text editor, save
 them and specify path to them.
 
-::: code
-    cat > x.txt <<EOF
-    1
-    3
-    4
-    6
-    9
-    EOF
-    cat > y1.txt <<EOF
-    50
-    58
-    65
-    34
-    27
-    EOF
-    cat > y2.txt <<EOF
-    10
-    20
-    35
-    50
-    45
-    EOF
-:::
+```
+cat > x.txt <<EOF
+1
+3
+4
+6
+9
+EOF
+cat > y1.txt <<EOF
+50
+58
+65
+34
+27
+EOF
+cat > y2.txt <<EOF
+10
+20
+35
+50
+45
+EOF
+```
 
 The next command sequence creates a file `plot.png` in the current
 directory which is the drawing made by *d.linegraph*.
 
-::: code
-    d.mon start=cairo output=plot.png width=400 height=400
-    d.linegraph x_file=x.txt y_file=y1.txt,y2.txt
-    d.mon stop=cairo
-:::
+```
+d.mon start=cairo output=plot.png width=400 height=400
+d.linegraph x_file=x.txt y_file=y1.txt,y2.txt
+d.mon stop=cairo
+```
 
 ## SEE ALSO
 

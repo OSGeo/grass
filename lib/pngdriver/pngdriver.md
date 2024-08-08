@@ -14,9 +14,9 @@ available.
 The PNG driver can be enabled by setting **GRASS_RENDER_IMMEDIATE**
 variable, eg.
 
-::: code
-    export GRASS_RENDER_IMMEDIATE=png
-:::
+```
+export GRASS_RENDER_IMMEDIATE=png
+```
 
 Several environment variables affect the operation of the PNG driver:
 
@@ -52,14 +52,14 @@ Several environment variables affect the operation of the PNG driver:
 
 ### Example
 
-::: code
-    export GRASS_RENDER_IMMEDIATE=png
-    export GRASS_RENDER_TRUECOLOR=TRUE
+```
+export GRASS_RENDER_IMMEDIATE=png
+export GRASS_RENDER_TRUECOLOR=TRUE
 
-    g.region raster=elevation
-    d.rast elevation
-    d.vect roadsmajor color=red
-:::
+g.region raster=elevation
+d.rast elevation
+d.vect roadsmajor color=red
+```
 
 This writes a file named `map.png` in your current directory.
 

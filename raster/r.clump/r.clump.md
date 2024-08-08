@@ -52,18 +52,18 @@ output raster map.
 Perform clumping on \"lakes\" map (North Carolina sample dataset) and
 report area sizes for each lake individually rather by waterbody type:
 
-::: code
-    g.region raster=lakes -p
+```
+g.region raster=lakes -p
 
-    # report sizes by waterbody type
-    r.report lakes units=h
+# report sizes by waterbody type
+r.report lakes units=h
 
-    # clump per raster polygon
-    r.clump lakes out=lakes_individual
+# clump per raster polygon
+r.clump lakes out=lakes_individual
 
-    # report sizes by individual waterbody
-    r.report lakes_individual units=h
-:::
+# report sizes by individual waterbody
+r.report lakes_individual units=h
+```
 
 ::: {align="center" style="margin: 10px"}
 [![r.clump lake clumping example](r_clump_lakes.png){width="600"
@@ -77,15 +77,15 @@ clumped lakes map (right)*
 Perform fuzzy clumping on Landsat 7 2002 imagery (North Carolina sample
 dataset)
 
-::: code
-    g.region raster=lsat7_2002_10 -p
-    r.clump in=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70 \
-            out=lsat7_2002_clump threshold=0.045
+```
+g.region raster=lsat7_2002_10 -p
+r.clump in=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70 \
+        out=lsat7_2002_clump threshold=0.045
 
-    # reduce noise
-    r.clump in=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70 \
-            out=lsat7_2002_clump_min10 threshold=0.045 minsize=10
-:::
+# reduce noise
+r.clump in=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70 \
+        out=lsat7_2002_clump_min10 threshold=0.045 minsize=10
+```
 
 ::: {align="center" style="margin: 10px"}
 [![r.clump example Landsat fuzzy clumping](r_clump_lsat.png){width="600"

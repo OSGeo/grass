@@ -33,15 +33,15 @@ be applied to the *input* data.
 The *filter* file is a normal UNIX ASCII file designed by the user. It
 has the following format:
 
-::: code
-         TITLE      TITLE
-         MATRIX     n
-                      .
-         n lines of n values
-                      .
-         DIVISOR    d
-         TYPE        S/P
-:::
+```
+     TITLE      TITLE
+     MATRIX     n
+                  .
+     n lines of n values
+                  .
+     DIVISOR    d
+     TYPE        S/P
+```
 
 TITLE
 :   A one-line TITLE for the filter. If a TITLE was not specified on the
@@ -81,24 +81,24 @@ TYPE
 
 ### EXAMPLE FILTER FILE
 
-::: code
-          TITLE     3x3 average, non-null data only, followed by 5x5 average
-         MATRIX    3
-         1 1 1
-         1 1 1
-         1 1 1
-         DIVISOR   0
-         TYPE      P
+```
+      TITLE     3x3 average, non-null data only, followed by 5x5 average
+     MATRIX    3
+     1 1 1
+     1 1 1
+     1 1 1
+     DIVISOR   0
+     TYPE      P
 
-         MATRIX    5
-         1 1 1 1 1
-         1 1 1 1 1
-         1 1 1 1 1
-         1 1 1 1 1
-         1 1 1 1 1
-         DIVISOR   25
-         TYPE      P
-:::
+     MATRIX    5
+     1 1 1 1 1
+     1 1 1 1 1
+     1 1 1 1 1
+     1 1 1 1 1
+     1 1 1 1 1
+     DIVISOR   25
+     TYPE      P
+```
 
 ### HOW THE FILTER WORKS
 

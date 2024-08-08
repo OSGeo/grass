@@ -53,15 +53,15 @@ specified, the map center\'s coordinates will be used. Also *g.region
 Note for module usage with the *-g* flag, when performing calculations
 close to sunset/sunrise:
 
-::: code
-     [...]
-     sunangleabovehorizont=0.434240
-     sunrise=07:59:19
-     sunset=16:25:17
-     Time (07:59:02) is before sunrise (07:59:19)!
-     WARNING: Nothing to calculate. Please verify settings.
-     No map calculation requested. Finished.
-:::
+```
+ [...]
+ sunangleabovehorizont=0.434240
+ sunrise=07:59:19
+ sunset=16:25:17
+ Time (07:59:02) is before sunrise (07:59:19)!
+ WARNING: Nothing to calculate. Please verify settings.
+ No map calculation requested. Finished.
+```
 
 In above calculation it appears to be a mistake as the program indicates
 that we are before sunrise while the *sun angle above horizon* is
@@ -75,38 +75,38 @@ refraction. The output without *-g* flag contains related indications.
 Example for North Carolina sample data set for the calculation of sun
 position angles and more:
 
-::: code
-    # set the region to a place near Raleigh (NC)
-    g.region raster=elev_lid792_1m -p
+```
+# set the region to a place near Raleigh (NC)
+g.region raster=elev_lid792_1m -p
 
-    # compute only sun position and no output map
-    r.sunmask -s elev_lid792_1m year=2012 month=2 \
-              day=22 hour=10 minute=30 timezone=-5
-    Using map center coordinates: 638650.000000 220375.000000
-    Calculating sun position... (using solpos (V. 11 April 2001) from NREL)
-    2012/02/22, daynum: 53, time: 10:30:00 (decimal time: 10.500000)
-    long: -78.678856, lat: 35.736160, timezone: -5.000000
-    Solar position: sun azimuth: 143.006409, sun angle above horz. (refraction corrected): 36.233879
-    Sunrise time (without refraction): 06:58:11
-    Sunset time  (without refraction): 17:58:47
+# compute only sun position and no output map
+r.sunmask -s elev_lid792_1m year=2012 month=2 \
+          day=22 hour=10 minute=30 timezone=-5
+Using map center coordinates: 638650.000000 220375.000000
+Calculating sun position... (using solpos (V. 11 April 2001) from NREL)
+2012/02/22, daynum: 53, time: 10:30:00 (decimal time: 10.500000)
+long: -78.678856, lat: 35.736160, timezone: -5.000000
+Solar position: sun azimuth: 143.006409, sun angle above horz. (refraction corrected): 36.233879
+Sunrise time (without refraction): 06:58:11
+Sunset time  (without refraction): 17:58:47
 
-    # with -g flag, useful for eval() shell function
-    r.sunmask -s -g elev_lid792_1m  year=2012 month=2 \
-              day=22 hour=10 minute=30 timezone=-5
-    Using map center coordinates: 638650.000000 220375.000000
-    Calculating sun position... (using solpos (V. 11 April 2001) from NREL)
-    date=2012/02/22
-    daynum=53
-    time=10:30:00
-    decimaltime=10.500000
-    longitudine=-78.678856
-    latitude=35.736160
-    timezone=-5.000000
-    sunazimuth=143.006409
-    sunangleabovehorizon=36.233879
-    sunrise=06:58:11
-    sunset=17:58:47
-:::
+# with -g flag, useful for eval() shell function
+r.sunmask -s -g elev_lid792_1m  year=2012 month=2 \
+          day=22 hour=10 minute=30 timezone=-5
+Using map center coordinates: 638650.000000 220375.000000
+Calculating sun position... (using solpos (V. 11 April 2001) from NREL)
+date=2012/02/22
+daynum=53
+time=10:30:00
+decimaltime=10.500000
+longitudine=-78.678856
+latitude=35.736160
+timezone=-5.000000
+sunazimuth=143.006409
+sunangleabovehorizon=36.233879
+sunrise=06:58:11
+sunset=17:58:47
+```
 
 ## Acknowledgements
 

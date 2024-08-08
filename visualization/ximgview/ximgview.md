@@ -14,19 +14,19 @@ a constant size, rather than being truncated whenever it is updated.
 
 (bash shell syntax)
 
-::: code
-    export GRASS_RENDER_FILE=map.bmp
-    export GRASS_RENDER_WIDTH=640
-    export GRASS_RENDER_HEIGHT=480
-    export GRASS_RENDER_IMMEDIATE=PNG
-    export GRASS_RENDER_FILE_MAPPED=TRUE
-    export GRASS_RENDER_FILE_READ=TRUE
+```
+export GRASS_RENDER_FILE=map.bmp
+export GRASS_RENDER_WIDTH=640
+export GRASS_RENDER_HEIGHT=480
+export GRASS_RENDER_IMMEDIATE=PNG
+export GRASS_RENDER_FILE_MAPPED=TRUE
+export GRASS_RENDER_FILE_READ=TRUE
 
-    d.erase
-    ximgview $GRASS_RENDER_FILE percent=50 &
-    d.rast elevation.dem
-    d.vect roads
-:::
+d.erase
+ximgview $GRASS_RENDER_FILE percent=50 &
+d.rast elevation.dem
+d.vect roads
+```
 
 ## SEE ALSO
 

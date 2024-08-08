@@ -107,16 +107,16 @@ single cell downslope.
 
 ### Diagnostics
 
-::: code
-    Elevation raster map resolution differs from current region resolution
-:::
+```
+Elevation raster map resolution differs from current region resolution
+```
 
 The resolutions of all input raster maps and the current region must
 match (see *[g.region](g.region.html)*).
 
-::: code
-    Resolution too unbalanced
-:::
+```
+Resolution too unbalanced
+```
 
 The difference in length between the two axes of a grid cell is so great
 that quantization error is larger than one of the dimensions. Resample
@@ -128,11 +128,11 @@ In this example a flow line vector map, a flow path length raster map
 and a flow accumulation raster map are computed from an elevation raster
 map (North Carolina sample dataset):
 
-::: code
-    g.region raster=elevation -p
-    r.flow elevation=elevation skip=3 flowline=flowline flowlength=flowlength \
-           flowaccumulation=flowaccumulation
-:::
+```
+g.region raster=elevation -p
+r.flow elevation=elevation skip=3 flowline=flowline flowlength=flowlength \
+       flowaccumulation=flowaccumulation
+```
 
 ![flow line](r_flow_line.png) ![flow path length](r_flow_length.png)
 ![flow accumulation map](r_flow_accumulation.png)

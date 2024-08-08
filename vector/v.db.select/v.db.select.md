@@ -20,13 +20,13 @@ which can be customized using the **separator** option. The records
 
 Example with a pipe as a separator (the default):
 
-::: code
-    cat|road_name|multilane|year|length
-    1|NC-50|no|2001|4825.369405
-    2|NC-50|no|2002|14392.589058
-    3|NC-98|no|2003|3212.981242
-    4|NC-50|no|2004|13391.907552
-:::
+```
+cat|road_name|multilane|year|length
+1|NC-50|no|2001|4825.369405
+2|NC-50|no|2002|14392.589058
+3|NC-98|no|2003|3212.981242
+4|NC-50|no|2004|13391.907552
+```
 
 When escaping is enabled, the following characters in the fields are
 escaped: backslash (`\\`), carriage return (`\r`), line feed (`\n`),
@@ -56,13 +56,13 @@ to parse this format when configured to the above specification.
 
 Example with default settings:
 
-::: code
-    cat,road_name,multilane,year,length
-    1,"NC-50","no",2001,4825.369405
-    2,"NC-50","no",2002,14392.589058
-    3,"NC-98","no",2003,3212.981242
-    4,"NC-50","no",2004,13391.907552
-:::
+```
+cat,road_name,multilane,year,length
+1,"NC-50","no",2001,4825.369405
+2,"NC-50","no",2002,14392.589058
+3,"NC-98","no",2003,3212.981242
+4,"NC-50","no",2004,13391.907552
+```
 
 If desired, the separator can be customized and escaping can be enabled
 with the same characters being escaped as for the plain text. Notably,
@@ -106,41 +106,41 @@ the SQL types. The definition of `is_number` may change in the future.
 
 Example with added indentation:
 
-::: code
-    {
-      "info": {
-        "columns": [
-          {
-            "name": "road_name",
-            "sql_type": "CHARACTER",
-            "is_number": false
-          },
-          {
-            "name": "year",
-            "sql_type": "INTEGER",
-            "is_number": true
-          },
-          {
-            "name": "length",
-            "sql_type": "DOUBLE PRECISION",
-            "is_number": true
-          }
-        ]
+```
+{
+  "info": {
+    "columns": [
+      {
+        "name": "road_name",
+        "sql_type": "CHARACTER",
+        "is_number": false
       },
-      "records": [
-        {
-          "road_name": "NC-50",
-          "year": 2001,
-          "length": 4825.369405
-        },
-        {
-          "road_name": "NC-50",
-          "year": 2001,
-          "length": 14392.589058
-        }
-      ]
+      {
+        "name": "year",
+        "sql_type": "INTEGER",
+        "is_number": true
+      },
+      {
+        "name": "length",
+        "sql_type": "DOUBLE PRECISION",
+        "is_number": true
+      }
+    ]
+  },
+  "records": [
+    {
+      "road_name": "NC-50",
+      "year": 2001,
+      "length": 4825.369405
+    },
+    {
+      "road_name": "NC-50",
+      "year": 2001,
+      "length": 14392.589058
     }
-:::
+  ]
+}
+```
 
 JSON is the recommended format for reading the data in Python and for
 any uses and environments where convenient access to individual values
@@ -156,19 +156,19 @@ separator (**vertical_separator** option).
 Example with (horizontal) separator `=` and vertical separator
 `newline`:
 
-::: code
-    cat=1
-    road_name=NC-50
-    multilane=no
-    year=2001
-    length=4825.369405
+```
+cat=1
+road_name=NC-50
+multilane=no
+year=2001
+length=4825.369405
 
-    cat=2
-    road_name=NC-50
-    multilane=no
-    year=2002
-    length=14392.589058
-:::
+cat=2
+road_name=NC-50
+multilane=no
+year=2002
+length=14392.589058
+```
 
 Newline is automatically added after a vertical separator unless it is a
 newline which allows for separating the records, e.g., by multiple
@@ -195,123 +195,123 @@ All examples are based on the North Carolina sample dataset.
 
 ### Select and show entire table
 
-::: code
-    v.db.select map=roadsmajor
-    cat|MAJORRDS_|ROAD_NAME|MULTILANE|PROPYEAR|OBJECTID|SHAPE_LEN
-    1|1|NC-50|no|0|1|4825.369405
-    2|2|NC-50|no|0|2|14392.589058
-    3|3|NC-98|no|0|3|3212.981242
-    4|4|NC-50|no|0|4|13391.907552
-    ...
-:::
+```
+v.db.select map=roadsmajor
+cat|MAJORRDS_|ROAD_NAME|MULTILANE|PROPYEAR|OBJECTID|SHAPE_LEN
+1|1|NC-50|no|0|1|4825.369405
+2|2|NC-50|no|0|2|14392.589058
+3|3|NC-98|no|0|3|3212.981242
+4|4|NC-50|no|0|4|13391.907552
+...
+```
 
 ### Select and show single column from table
 
 Note: multiple columns can be specified as comma separated list.
 
-::: code
-    v.db.select map=roadsmajor column=ROAD_NAME
-    NC-50
-    NC-50
-    NC-98
-    NC-50
-    NC-98
-    ...
-:::
+```
+v.db.select map=roadsmajor column=ROAD_NAME
+NC-50
+NC-50
+NC-98
+NC-50
+NC-98
+...
+```
 
 ### Print region extent of selected vector features
 
-::: code
-    v.db.select -r map=roadsmajor where="ROAD_NAME = 'NC-98'"
-    n=248425.389891
-    s=245640.640081
-    w=635906.517653
-    e=661979.801880
-:::
+```
+v.db.select -r map=roadsmajor where="ROAD_NAME = 'NC-98'"
+n=248425.389891
+s=245640.640081
+w=635906.517653
+e=661979.801880
+```
 
 ### Select empty vector features (no data entries)
 
-::: code
-    v.db.select geonames_wake where="ALTERNATEN IS NULL"
-    cat|GEONAMEID|NAME|ASCIINAME|ALTERNATEN|FEATURECLA|FEATURECOD|...
-    8|4498303|West Raleigh|West Raleigh||P|PPL|US||NC|338759|123|...
-    14|4459467|Cary|Cary||P|PPL|US||NC|103945|146|152|America/Iqaluit|...
-    31|4452808|Apex|Apex||P|PPL|US||NC|30873|167|134|America/Iqaluit|...
-    ...
-:::
+```
+v.db.select geonames_wake where="ALTERNATEN IS NULL"
+cat|GEONAMEID|NAME|ASCIINAME|ALTERNATEN|FEATURECLA|FEATURECOD|...
+8|4498303|West Raleigh|West Raleigh||P|PPL|US||NC|338759|123|...
+14|4459467|Cary|Cary||P|PPL|US||NC|103945|146|152|America/Iqaluit|...
+31|4452808|Apex|Apex||P|PPL|US||NC|30873|167|134|America/Iqaluit|...
+...
+```
 
 ### Select not empty vector features (no data entries)
 
-::: code
-    v.db.select geonames_wake where="ALTERNATEN IS NOT NULL"
-    cat|GEONAMEID|NAME|ASCIINAME|ALTERNATEN|FEATURECLA|FEATURECOD|...
-    9|4487042|Raleigh|Raleigh|Raleigh,...
-    31299|4487056|Raleigh-Durham Airport|Raleigh-Durham Airport|...
-    ...
-:::
+```
+v.db.select geonames_wake where="ALTERNATEN IS NOT NULL"
+cat|GEONAMEID|NAME|ASCIINAME|ALTERNATEN|FEATURECLA|FEATURECOD|...
+9|4487042|Raleigh|Raleigh|Raleigh,...
+31299|4487056|Raleigh-Durham Airport|Raleigh-Durham Airport|...
+...
+```
 
 ### Select features with distinct road names
 
-::: code
-    v.db.select map=roadsmajor columns=ROAD_NAME group=ROAD_NAME
-    ROAD_NAME
+```
+v.db.select map=roadsmajor columns=ROAD_NAME group=ROAD_NAME
+ROAD_NAME
 
-    I-40
-    I-440
-    I-540
-    NC-231
-    NC-39
-    NC-42
-    ...
-:::
+I-40
+I-440
+I-540
+NC-231
+NC-39
+NC-42
+...
+```
 
 It is also possible to combine with *where* option
 
-::: code
-    v.db.select map=roadsmajor columns=ROAD_NAME,MULTILANE group=ROAD_NAME where='ROAD_NAME is not null'
-    ROAD_NAME|MULTILANE
-    I-40|yes
-    I-440|yes
-    I-540|yes
-    NC-231|no
-    NC-39|no
-    NC-42|no
-    NC-50|no
-    NC-54|no
-    NC-55|no
-    NC-96|no
-    NC-97|no
-    NC-98|no
-    US-1|
-    US-401|no
-    US-64|yes
-    US-70|yes
-:::
+```
+v.db.select map=roadsmajor columns=ROAD_NAME,MULTILANE group=ROAD_NAME where='ROAD_NAME is not null'
+ROAD_NAME|MULTILANE
+I-40|yes
+I-440|yes
+I-540|yes
+NC-231|no
+NC-39|no
+NC-42|no
+NC-50|no
+NC-54|no
+NC-55|no
+NC-96|no
+NC-97|no
+NC-98|no
+US-1|
+US-401|no
+US-64|yes
+US-70|yes
+```
 
 It can also use more columns in *group* option
 
-::: code
-    v.db.select map=roadsmajor columns=ROAD_NAME,MULTILANE group=ROAD_NAME,MULTILANE where='ROAD_NAME is not null'
-    ROAD_NAME|MULTILANE
-    I-40|yes
-    I-440|yes
-    I-540|yes
-    NC-231|no
-    NC-39|no
-    NC-42|no
-    NC-50|no
-    NC-54|no
-    NC-55|no
-    NC-96|no
-    NC-97|no
-    NC-98|no
-    US-1|
-    US-1|yes
-    US-401|no
-    US-401|yes
-    US-64|yes
-    US-70|yes
-:::
+```
+v.db.select map=roadsmajor columns=ROAD_NAME,MULTILANE group=ROAD_NAME,MULTILANE where='ROAD_NAME is not null'
+ROAD_NAME|MULTILANE
+I-40|yes
+I-440|yes
+I-540|yes
+NC-231|no
+NC-39|no
+NC-42|no
+NC-50|no
+NC-54|no
+NC-55|no
+NC-96|no
+NC-97|no
+NC-98|no
+US-1|
+US-1|yes
+US-401|no
+US-401|yes
+US-64|yes
+US-70|yes
+```
 
 ### Read results in Python
 
@@ -319,15 +319,15 @@ The *json* package in the standard Python library can load a JSON string
 obtained as output from the *v.db.select* module through the
 *read_command* function:
 
-::: code
-    import json
-    import grass.script as gs
+```
+import json
+import grass.script as gs
 
-    text = gs.read_command("v.db.select", map="roadsmajor", format="json")
-    data = json.loads(text)
-    for row in data["records"]:
-        print(row["ROAD_NAME"])
-:::
+text = gs.read_command("v.db.select", map="roadsmajor", format="json")
+data = json.loads(text)
+for row in data["records"]:
+    print(row["ROAD_NAME"])
+```
 
 ## SEE ALSO
 

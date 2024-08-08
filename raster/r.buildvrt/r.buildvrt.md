@@ -31,20 +31,20 @@ In this exercise a low resolution DEM is resampled to a high resolution
 DEM. This is subsequently cut into small tiles and from that a virtual
 tile mosaik is created:
 
-::: code
-    # set the computational region to elevation map
-    g.region raster=elev_state_500m -p
-    # enforce higher resolution
-    g.region res=50 -p
-    # resample the 500 meter DEM to 50 meter resolution
-    r.resamp.interp input=elev_state_500m output=elev_state_50m method=bilinear
-    # create tiles from resulting large 50 m elevation map
-    r.tile input=elev_state_50m output=elev_state_50m_tile_ width=1000 height=1000 overlap=0
-    # for convenience, dump list of tile names to a file
-    g.list type=raster pattern=elev_state_50m_tile_* output=tilelist.csv
-    # build a mosaik as VRT from tile list
-    r.buildvrt file=tilelist.csv output=elev_state_50m_vrt
-:::
+```
+# set the computational region to elevation map
+g.region raster=elev_state_500m -p
+# enforce higher resolution
+g.region res=50 -p
+# resample the 500 meter DEM to 50 meter resolution
+r.resamp.interp input=elev_state_500m output=elev_state_50m method=bilinear
+# create tiles from resulting large 50 m elevation map
+r.tile input=elev_state_50m output=elev_state_50m_tile_ width=1000 height=1000 overlap=0
+# for convenience, dump list of tile names to a file
+g.list type=raster pattern=elev_state_50m_tile_* output=tilelist.csv
+# build a mosaik as VRT from tile list
+r.buildvrt file=tilelist.csv output=elev_state_50m_vrt
+```
 
 ## SEE ALSO
 

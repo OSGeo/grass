@@ -60,21 +60,21 @@ editing session).
 
 Editing raster values in a LiDAR DEM, North Carolina sample data:
 
-::: code
-    g.region raster=elev_lid792_1m -p
+```
+g.region raster=elev_lid792_1m -p
 
-    # pan to area of interest and edit raster cells (I used "102" as value to modify cells
-    # Use:  File > Save to save
-    # then: File > Exit
-    d.rast.edit input=elev_lid792_1m output=elev_lid792_1m_modified
+# pan to area of interest and edit raster cells (I used "102" as value to modify cells
+# Use:  File > Save to save
+# then: File > Exit
+d.rast.edit input=elev_lid792_1m output=elev_lid792_1m_modified
 
-    # comparison of raster statistics
-    # original stats, note the min value
-    r.univar -g elev_lid792_1m
+# comparison of raster statistics
+# original stats, note the min value
+r.univar -g elev_lid792_1m
 
-    # modified map stats, note the min value
-    r.univar -g elev_lid792_1m_modified
-:::
+# modified map stats, note the min value
+r.univar -g elev_lid792_1m_modified
+```
 
 ::: {align="center" style="margin: 10px"}
 [![d.rast.edit example](d_rast_edit.png){width="600" height="281"

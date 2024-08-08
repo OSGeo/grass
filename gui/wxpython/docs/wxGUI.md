@@ -166,19 +166,22 @@ These options are those for the d.\* command for each layer type
         only), see *[d.rhumbline](d.rhumbline.html)*.
 
     ![icon](icons/layer-command-add.png)  *Add command layer*
+
     :   Adds a layer in which a GRASS GIS command or command list can be
         entered. For a command list use the semi-colon (\";\") symbol as
         a separator. For example:
-        ::: code
-            d.rast soils;d.rast -o roads;d.vect streams col=blue
-        :::
+
+        ```
+        d.rast soils;d.rast -o roads;d.vect streams col=blue
+        ```
 
         Note that when an option of the command contains spaces, you
         need to \"escape\" them with the backslash (\'\\\') character,
         for example:
-        ::: code
-            d.text text=Population\ density
-        :::
+
+        ```
+        d.text text=Population\ density
+        ```
 
 ![icon](icons/layer-remove.png)  *Delete selected layer*
 :   Removes selected map layer or map layer group from layer tree.
@@ -193,7 +196,7 @@ These options are those for the d.\* command for each layer type
 
 ![icon](icons/layer-open.png)  *Import raster or vector data*
 
-:
+:   
 
     ![icon](icons/layer-import.png)  *Import raster data*
     :   Import selected raster data into GRASS using
@@ -537,21 +540,24 @@ Ctrl+R
 F5
 :   Render map (re-renders map)
 
+F6
+:   Enable/disable auto-rendering map (re-renders map)
+
 ### Starting the GUI from command line
 
 By default, the GUI is always started, but if only the command line
 (shell) is running, the GUI can be also started manually using:
 
-::: code
-    g.gui
-:::
+```
+g.gui
+```
 
 If the wxGUI is not the default user interface, it can defined as
 default by typing at the GRASS GIS command line:
 
-::: code
-    g.gui -d wxpython
-:::
+```
+g.gui -d wxpython
+```
 
 Alternatively, it may be defined in the main configuration file
 (`$HOME/.grass8/rc` on GNU/Linux and macOS,
@@ -559,16 +565,16 @@ Alternatively, it may be defined in the main configuration file
 set to `wxpython` (`GUI: wxpython`) or by the environmental variable
 `GRASS_GUI`. To start with a previously saved workspace file:
 
-::: code
-    g.gui workspace=file.gxw
-:::
+```
+g.gui workspace=file.gxw
+```
 
 The user can also start GRASS from the shell command line with the wxGUI
 specifying the `--gui` switch:
 
-::: code
-    grass --gui
-:::
+```
+grass --gui
+```
 
 The GUI can be quit by selecting the \'File \> Quit GRASS GIS\' menu
 item which gives options to close only GUI or to quit GRASS GIS entirely

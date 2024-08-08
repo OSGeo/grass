@@ -19,21 +19,21 @@ Setting shell environment variables depends on the shell being used:\
 \
 Bash:
 
-::: code
-    export VARIABLE=value
-:::
+```
+export VARIABLE=value
+```
 
 Csh:
 
-::: code
-    setenv VARIABLE value
-:::
+```
+setenv VARIABLE value
+```
 
 Cmd.exe (Windows):
 
-::: code
-    set VARIABLE=value
-:::
+```
+set VARIABLE=value
+```
 
 To set up shell environment variables permanently:
 
@@ -53,9 +53,9 @@ the current GRASS session is closed.\
 \
 Usage:
 
-::: code
-    g.gisenv set="VARIABLE=VALUE"
-:::
+```
+g.gisenv set="VARIABLE=VALUE"
+```
 
 It looks unusual with two equals signs, but *g.gisenv* serves dual duty
 for getting and setting GRASS variables.
@@ -63,10 +63,10 @@ for getting and setting GRASS variables.
 If the user just specifies a variable name, it defaults to **get** mode.
 For example:
 
-::: code
-    g.gisenv MAPSET
-    PERMANENT
-:::
+```
+g.gisenv MAPSET
+PERMANENT
+```
 
 ## List of selected (GRASS related) shell environment variables
 
@@ -117,6 +117,13 @@ GRASS_COMPRESSOR
     the requested compressor. Compressors that are always available are
     RLE, ZLIB, and LZ4. The compressors BZIP2 and ZSTD must be enabled
     when configuring GRASS for compilation.
+
+GRASS_CONFIG_DIR
+:   \[grass startup script\]\
+    specifies root path for GRASS configuration directory. If not
+    specified, the default placement of the configuration directory is
+    used: `$HOME` on GNU/Linux, `$HOME/Library` on Mac OS X, and
+    `%APPDATA%` on MS Windows.
 
 GRASS_DB_ENCODING
 :   \[various modules, wxGUI\]\
@@ -482,11 +489,13 @@ WIND_OVERRIDE
 > \[ Use *[g.gisenv](g.gisenv.html)* to get/set/unset/change them \]
 
 DEBUG
+
 :   \[entire GRASS\]\
     sets level of debug message output (0: no debug messages)
-    ::: code
-        g.gisenv set=DEBUG=0
-    :::
+
+    ```
+    g.gisenv set=DEBUG=0
+    ```
 
 WX_DEBUG
 :   \[wxGUI\]\
@@ -513,20 +522,24 @@ MAPSET
 :   initial mapset
 
 MEMORYMB
+
 :   \[entire GRASS with focus on raster related data processing\]\
     sets the maximum memory to be used (in MB), i.e. the cache size for
     raster rows
-    ::: code
-        # set to 6 GB (default: 300 MB)
-        g.gisenv set="MEMORYMB=6000"
-    :::
+
+    ```
+    # set to 6 GB (default: 300 MB)
+    g.gisenv set="MEMORYMB=6000"
+    ```
 
 NPROCS
+
 :   sets the number of threads for parallel computing
-    ::: code
-        # set to use 12 threads (default: 1)
-        g.gisenv set="NPROCS=12"
-    :::
+
+    ```
+    # set to use 12 threads (default: 1)
+    g.gisenv set="NPROCS=12"
+    ```
 
 OVERWRITE
 :   \[all modules\]\

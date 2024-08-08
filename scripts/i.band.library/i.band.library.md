@@ -108,43 +108,43 @@ is designed in order to support image collections in GRASS GIS.
 Band reference information is stored in JSON files with a pre-defined
 internal data structure. A minimalistic example is shown below.
 
-::: code
-    {
-        "Sentinel2": {
-            "description": "The Sentinel-2 A/B bands",
-            "shortcut": "S2",
-            "instruments": "MultiSpectral Instrument (MSI) optical and infrared",
-            "launched": "23 June 2015 (A); 07 March 2017 (B)",
-            "source": "https://sentinel.esa.int/web/sentinel/missions/sentinel-2",
-            "bands": {
-                "1": {
-                    "Sentinel 2A" : {
-                        "central wavelength (nm)": 443.9,
-                        "bandwidth (nm)": 27
-                    },
-                    "Sentinel 2B" : {
-                        "central wavelength (nm)": 442.3,
-                        "bandwidth (nm)": 45
-                    },
-                    "spatial resolution (meters)": 60,
-                    "tag": "Visible (Coastal/Aerosol)"
+```
+{
+    "Sentinel2": {
+        "description": "The Sentinel-2 A/B bands",
+        "shortcut": "S2",
+        "instruments": "MultiSpectral Instrument (MSI) optical and infrared",
+        "launched": "23 June 2015 (A); 07 March 2017 (B)",
+        "source": "https://sentinel.esa.int/web/sentinel/missions/sentinel-2",
+        "bands": {
+            "1": {
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 443.9,
+                    "bandwidth (nm)": 27
                 },
-                "2": {
-                    "Sentinel 2A" : {
-                        "central wavelength (nm)": 496.6,
-                        "bandwidth (nm)": 98
-                    },
-                    "Sentinel 2B" : {
-                        "central wavelength (nm)": 492.1,
-                        "bandwidth (nm)": 98
-                    },
-                    "spatial resolution (meters)": 10,
-                    "tag": "Visible (Blue)"
-                }
+                "Sentinel 2B" : {
+                    "central wavelength (nm)": 442.3,
+                    "bandwidth (nm)": 45
+                },
+                "spatial resolution (meters)": 60,
+                "tag": "Visible (Coastal/Aerosol)"
+            },
+            "2": {
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 496.6,
+                    "bandwidth (nm)": 98
+                },
+                "Sentinel 2B" : {
+                    "central wavelength (nm)": 492.1,
+                    "bandwidth (nm)": 98
+                },
+                "spatial resolution (meters)": 10,
+                "tag": "Visible (Blue)"
             }
         }
     }
-:::
+}
+```
 
 Each series starts with an unique identifier (\"Sentinel2\" in example
 above). Required attributes are only two: a `shortcut` and `bands`. Note
@@ -171,19 +171,19 @@ see [KNOWN ISSUES](#known-issues) section for details.
 
 ### Print all available band references
 
-::: code
-    i.band.library
+```
+i.band.library
 
-    S2_1 Visible (Coastal/Aerosol)
-    S2_2 Visible (Blue)
-    ...
-    L7_1 Visible (Blue)
-    L7_2 Visible (Green)
-    ...
-    L8_1 Visible (Coastal/Aerosol)
-    L8_2 Visible (Blue)
-    ...
-:::
+S2_1 Visible (Coastal/Aerosol)
+S2_2 Visible (Blue)
+...
+L7_1 Visible (Blue)
+L7_2 Visible (Green)
+...
+L8_1 Visible (Coastal/Aerosol)
+L8_2 Visible (Blue)
+...
+```
 
 The module prints band reference and related tag if defined.
 
@@ -191,50 +191,50 @@ The module prints band reference and related tag if defined.
 
 Only band identifiers related to Sentinel-2 satellite will be printed.
 
-::: code
-    i.band.library pattern=S2
+```
+i.band.library pattern=S2
 
-    S2_1 Visible (Coastal/Aerosol)
-    ...
-    S2_12 SWIR 2
-:::
+S2_1 Visible (Coastal/Aerosol)
+...
+S2_12 SWIR 2
+```
 
 ### Filter band references by a regular expression
 
 Print all available 2nd bands:
 
-::: code
-    i.band.library pattern=.*_2
+```
+i.band.library pattern=.*_2
 
-    S2_2 Visible (Blue)
-    L7_2 Visible (Green)
-    L8_2 Visible (Blue)
-    ...
-:::
+S2_2 Visible (Blue)
+L7_2 Visible (Green)
+L8_2 Visible (Blue)
+...
+```
 
 ### Print extended metadata for specified band identifier
 
 Extended metadata related to the first band of Sentinel-2 satellite will
 be printed.
 
-::: code
-    i.band.library -e pattern=S2_1
+```
+i.band.library -e pattern=S2_1
 
-    description: The Sentinel-2 A/B bands
-    shortcut: S2
-    instruments: MultiSpectral Instrument (MSI) optical and infrared
-    launched: 23 June 2015 (A); 07 March 2017 (B)
-    source: https://sentinel.esa.int/web/sentinel/missions/sentinel-2
-        band: 1
-            Sentinel 2A:
-                    central wavelength (nm): 443.9
-                    bandwidth (nm): 27
-            Sentinel 2B:
-                    central wavelength (nm): 442.3
-                    bandwidth (nm): 45
-            spatial resolution (meters): 60
-            tag: Visible (Coastal/Aerosol)
-:::
+description: The Sentinel-2 A/B bands
+shortcut: S2
+instruments: MultiSpectral Instrument (MSI) optical and infrared
+launched: 23 June 2015 (A); 07 March 2017 (B)
+source: https://sentinel.esa.int/web/sentinel/missions/sentinel-2
+    band: 1
+        Sentinel 2A:
+                central wavelength (nm): 443.9
+                bandwidth (nm): 27
+        Sentinel 2B:
+                central wavelength (nm): 442.3
+                bandwidth (nm): 45
+        spatial resolution (meters): 60
+        tag: Visible (Coastal/Aerosol)
+```
 
 ## KNOWN ISSUES
 

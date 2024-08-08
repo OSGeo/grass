@@ -21,10 +21,10 @@ the user. Default DB driver is defined by
 
 ### Creating a map from PostgreSQL table
 
-::: code
-    v.in.db driver=pg database="host=myserver.itc.it,dbname=mydb" \
-            table=pat_stazioni x=east y=north z=quota key=id output=pat_stazioni
-:::
+```
+v.in.db driver=pg database="host=myserver.itc.it,dbname=mydb" \
+        table=pat_stazioni x=east y=north z=quota key=id output=pat_stazioni
+```
 
 If an ID column is not present in the PostgreSQL table, a new column
 should be added. See [PostgreSQL DB driver](grass-pg.html) page for
@@ -34,10 +34,10 @@ details.
 
 To extract coordinate values from PostGIS, functions have to be used:
 
-::: code
-    v.in.db driver=pg database="host=myserver.itc.it,dbname=mydb" \
-            table=station x="x(geom)" y="y(geom)" z="z(geom)" key=id out=meteostations
-:::
+```
+v.in.db driver=pg database="host=myserver.itc.it,dbname=mydb" \
+        table=station x="x(geom)" y="y(geom)" z="z(geom)" key=id out=meteostations
+```
 
 If an ID column is not present in the PostgreSQL table, a new column
 should be added. See [PostgreSQL DB driver](grass-pg.html) page for
@@ -53,14 +53,14 @@ A new vector point map is created from given sheet in ODS file. The
 of selected spreadsheet list, the **key** option is the identifier
 column:
 
-::: code
-    # preview table structure with OGR tool (table name is "Layer name" here):
-    ogrinfo -al -so meteodata.ods
+```
+# preview table structure with OGR tool (table name is "Layer name" here):
+ogrinfo -al -so meteodata.ods
 
-    # import sheet from ODS into map
-    v.in.db key=ID table=mysheet x=long y=lat z=height output=meteodata \
-             driver=ogr database=meteodata.ods
-:::
+# import sheet from ODS into map
+v.in.db key=ID table=mysheet x=long y=lat z=height output=meteodata \
+         driver=ogr database=meteodata.ods
+```
 
 ### Creating a map from MS Excel file
 
@@ -68,10 +68,10 @@ A new vector point map is created from given sheet in MS Excel file. The
 **database** option points to the file in MS Excel format. Option
 **table** is name of the selected spreadsheet \"List1\":
 
-::: code
-    v.in.db table=List1 x=long y=lat z=height output=meteodata \
-             driver=ogr database=meteodata.xls
-:::
+```
+v.in.db table=List1 x=long y=lat z=height output=meteodata \
+         driver=ogr database=meteodata.xls
+```
 
 Note that in this example the **key** option is omitted. In this case
 *v.in.db* tries to add key column automatically. This requires
@@ -83,17 +83,17 @@ A new 3D point vector map is created from DBF table. Column \'idcol\'
 contains unique row IDs. The **database** option is the directory where
 the DBF file is stored.
 
-::: code
-    v.in.db driver=dbf database=/home/user/tables/ table=pointsfile x=x y=y z=z \
-            key=idcol out=dtmpoints
-:::
+```
+v.in.db driver=dbf database=/home/user/tables/ table=pointsfile x=x y=y z=z \
+        key=idcol out=dtmpoints
+```
 
 To check result:
 
-::: code
-    v.info dtmpoints
-    v.info -c dtmpoints
-:::
+```
+v.info dtmpoints
+v.info -c dtmpoints
+```
 
 If DB driver for output vector map is different from SQLite driver and
 an ID column is missing in the DBF file, it has to be added beforehand,
@@ -107,10 +107,10 @@ unique ID column).
 The user can import only selected vector points from a table using the
 **where** parameter (see above for general DBF handling):
 
-::: code
-    v.in.db driver=dbf  database=/home/user/tables/ table=pointsfile x=x y=y z=z \
-            key=idcol out=dtmpoints where="x NOT NULL and z > 100"
-:::
+```
+v.in.db driver=dbf  database=/home/user/tables/ table=pointsfile x=x y=y z=z \
+        key=idcol out=dtmpoints where="x NOT NULL and z > 100"
+```
 
 ### Creating a map from SQLite table
 
@@ -118,10 +118,10 @@ A new vector point map is created from table in SQLite database file.
 Column \'idcol\' contains unique row IDs. The **database** option is the
 the SQLite database file.
 
-::: code
-    v.in.db driver=sqlite database=/home/user/tables/mysqlite.db table=pointsfile x=x y=y z=z \
-            key=idcol out=dtmpoints
-:::
+```
+v.in.db driver=sqlite database=/home/user/tables/mysqlite.db table=pointsfile x=x y=y z=z \
+        key=idcol out=dtmpoints
+```
 
 ## SEE ALSO
 

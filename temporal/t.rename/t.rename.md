@@ -14,16 +14,16 @@ databases.
 A new vector space time dataset will be created, renamed and in the end
 removed
 
-::: code
-    #Create new and empty STVDS
-    t.create type=stvds output=toberenamed semantictype=mean \
-      title="Example to rename" \
-      description="This is an example just to show how rename"
+```
+#Create new and empty STVDS
+t.create type=stvds output=toberenamed semantictype=mean \
+  title="Example to rename" \
+  description="This is an example just to show how rename"
 
-    t.rename input=toberenamed output=newname type=stvds
+t.rename input=toberenamed output=newname type=stvds
 
-    t.remove input=newname type=stvds
-:::
+t.remove input=newname type=stvds
+```
 
 ## SEE ALSO
 

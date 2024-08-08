@@ -21,17 +21,17 @@ satellite channels.
 An alternative is the assignment of grey color tables to each band with
 *[r.colors](r.colors.html)*:
 
-::: code
-    r.info -r image.1
+```
+r.info -r image.1
 
-    min=0
-    max=255
+min=0
+max=255
 
-    r.colors map=image.1 color=grey
+r.colors map=image.1 color=grey
 
-    r.colors map=image.2 rast=image.1
-    r.colors map=image.3 rast=image.1
-:::
+r.colors map=image.2 rast=image.1
+r.colors map=image.3 rast=image.1
+```
 
 To write out the color composite to a combined R/G/B raster maps, use
 *[r.composite](r.composite.html)*.
@@ -41,10 +41,10 @@ To write out the color composite to a combined R/G/B raster maps, use
 Visual color composite of a LANDSAT scene (North Carolina sample
 dataset):
 
-::: code
-    g.region raster=lsat7_2002_10 -p
-    d.rgb blue=lsat7_2002_10 green=lsat7_2002_20 red=lsat7_2002_30
-:::
+```
+g.region raster=lsat7_2002_10 -p
+d.rgb blue=lsat7_2002_10 green=lsat7_2002_20 red=lsat7_2002_30
+```
 
 ::: {style="margin: 10px" align="center"}
 ![d.rgb example](d_rgb.png){border="0"}\

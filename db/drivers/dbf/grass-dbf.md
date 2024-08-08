@@ -6,11 +6,11 @@ The DBF driver is a file based driver, in theory no user interaction is
 required. However, if the settings should be set back from a different
 driver to the DBF driver, the following step is required:
 
-::: code
-    # keep single quotes:
-    db.connect driver=dbf database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'
-    db.connect -p
-:::
+```
+# keep single quotes:
+db.connect driver=dbf database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'
+db.connect -p
+```
 
 The dbf/ subdirectory in the mapset must exist or must be created by the
 user.
@@ -27,34 +27,34 @@ external tables.
 
 ## Supported SQL commands by DBF driver
 
-::: code
-      ALTER TABLE table ADD [COLUMN] columndef
-      ALTER TABLE table DROP COLUMN colname
-      CREATE TABLE table ( columndefs )
-      DROP TABLE table
-      SELECT columns FROM table
-      SELECT columns FROM table WHERE condition
-      SELECT columns FROM table ORDER BY column
-      DELETE FROM table
-      DELETE FROM table WHERE condition
-      INSERT INTO table VALUES (value1[,value2,...])
-      INSERT INTO table ( column1[,column2,...] ) VALUES (value1[,value2,...])
-      UPDATE table SET assignment1[,assignment2,...]
-      UPDATE table SET assignment1[,assignment2,...] WHERE condition
-:::
+```
+  ALTER TABLE table ADD [COLUMN] columndef
+  ALTER TABLE table DROP COLUMN colname
+  CREATE TABLE table ( columndefs )
+  DROP TABLE table
+  SELECT columns FROM table
+  SELECT columns FROM table WHERE condition
+  SELECT columns FROM table ORDER BY column
+  DELETE FROM table
+  DELETE FROM table WHERE condition
+  INSERT INTO table VALUES (value1[,value2,...])
+  INSERT INTO table ( column1[,column2,...] ) VALUES (value1[,value2,...])
+  UPDATE table SET assignment1[,assignment2,...]
+  UPDATE table SET assignment1[,assignment2,...] WHERE condition
+```
 
 ## Operators available in conditions
 
-::: code
-      "="  : equal
-      "<"  : smaller than
-      "<=" : smaller/equal than
-      ">"  : larger than
-      ">=" : larger/equal than
-      "<>" : not equal
-      "~"  : Substring matching  (non-standard SQL)
-      "%"  : Substring matching  (limited functionality)
-:::
+```
+  "="  : equal
+  "<"  : smaller than
+  "<=" : smaller/equal than
+  ">"  : larger than
+  ">=" : larger/equal than
+  "<>" : not equal
+  "~"  : Substring matching  (non-standard SQL)
+  "%"  : Substring matching  (limited functionality)
+```
 
 Arithmetic expressions using constants and field values are allowed in
 condition clauses and in the RHS of assignments.\
@@ -87,10 +87,10 @@ example,
 
 An error message such as:
 
-::: code
-    DBMI-DBF driver error:
-    SQL parser error: syntax error, unexpected NAME processing 'IN'..
-:::
+```
+DBMI-DBF driver error:
+SQL parser error: syntax error, unexpected NAME processing 'IN'..
+```
 
 indicates that an unsupported SQL statement (here, \'IN\') was used. The
 only solution is to switch the DBMI backend to a real SQL engine
@@ -99,10 +99,10 @@ GIS](sql.html).
 
 An error message such as:
 
-::: code
-    DBMI-DBF driver error:
-    SQL parser error: syntax error, unexpected DESC, expecting NAME processing 'DESC'
-:::
+```
+DBMI-DBF driver error:
+SQL parser error: syntax error, unexpected DESC, expecting NAME processing 'DESC'
+```
 
 indicates that a column name corresponds to a reserved SQL word (here:
 \'DESC\'). A different column name should be used. If this happens

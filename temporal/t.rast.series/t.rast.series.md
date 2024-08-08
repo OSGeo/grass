@@ -38,18 +38,18 @@ GRASS GIS needs to be compiled with OpenMP enabled.
 
 Here the entire stack of input maps is considered:
 
-::: code
-    t.rast.series input=tempmean_monthly output=tempmean_average method=average
-:::
+```
+t.rast.series input=tempmean_monthly output=tempmean_average method=average
+```
 
 ### Estimate the average temperature for a subset of the time series
 
 Here the stack of input maps is limited to a certain period of time:
 
-::: code
-    t.rast.series input=tempmean_daily output=tempmean_season method=average \
-      where="start_time >= '2012-06' and start_time <= '2012-08'"
-:::
+```
+t.rast.series input=tempmean_daily output=tempmean_season method=average \
+  where="start_time >= '2012-06' and start_time <= '2012-08'"
+```
 
 ### Climatology: single month in a multi-annual time series
 
@@ -57,38 +57,38 @@ By considering only a single month in a multi-annual time series the
 so-called climatology can be computed. Estimate average temperature for
 all January maps in the time series:
 
-::: code
-    t.rast.series input=tempmean_monthly \
-        method=average output=tempmean_january \
-        where="strftime('%m', start_time)='01'"
+```
+t.rast.series input=tempmean_monthly \
+    method=average output=tempmean_january \
+    where="strftime('%m', start_time)='01'"
 
-    # equivalently, we can use
-    t.rast.series input=tempmean_monthly \
-        output=tempmean_january method=average \
-        where="start_time = datetime(start_time, 'start of year', '0 month')"
+# equivalently, we can use
+t.rast.series input=tempmean_monthly \
+    output=tempmean_january method=average \
+    where="start_time = datetime(start_time, 'start of year', '0 month')"
 
-    # if we want also February and March averages
+# if we want also February and March averages
 
-    t.rast.series input=tempmean_monthly \
-        output=tempmean_february method=average \
-        where="start_time = datetime(start_time, 'start of year', '1 month')"
+t.rast.series input=tempmean_monthly \
+    output=tempmean_february method=average \
+    where="start_time = datetime(start_time, 'start of year', '1 month')"
 
-    t.rast.series input=tempmean_monthly \
-        output=tempmean_march method=average \
-        where="start_time = datetime(start_time, 'start of year', '2 month')"
-:::
+t.rast.series input=tempmean_monthly \
+    output=tempmean_march method=average \
+    where="start_time = datetime(start_time, 'start of year', '2 month')"
+```
 
 Generalizing a bit, we can estimate monthly climatologies for all months
 by means of different methods
 
-::: code
-    for i in `seq -w 1 12` ; do
-      for m in average stddev minimum maximum ; do
-        t.rast.series input=tempmean_monthly method=${m} output=tempmean_${m}_${i} \
-        where="strftime('%m', start_time)='${i}'"
-      done
-    done
-:::
+```
+for i in `seq -w 1 12` ; do
+  for m in average stddev minimum maximum ; do
+    t.rast.series input=tempmean_monthly method=${m} output=tempmean_${m}_${i} \
+    where="strftime('%m', start_time)='${i}'"
+  done
+done
+```
 
 ## SEE ALSO
 

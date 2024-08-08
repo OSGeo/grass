@@ -85,11 +85,11 @@ The steps to follow are described below:
     *mapset/group/name_of_group/**REF*** is created that contatins the
     names of all images in a group.
 
-    ::: code
-        IMG_0020 source_mapset
-        IMG_0021 source_mapset
-        IMG_0022 source_mapset
-    :::
+    ```
+    IMG_0020 source_mapset
+    IMG_0021 source_mapset
+    IMG_0022 source_mapset
+    ```
 
 2.  *Select/Modify target project and mapset for orthorectification:
     [i.ortho.target](i.ortho.target.html)*
@@ -104,10 +104,10 @@ The steps to follow are described below:
     *mapset/group/name_of_group/**TARGET*** is created contatining the
     names of target project and mapset.
 
-    ::: code
-        ETRS_33N
-        target_mapset
-    :::
+    ```
+    ETRS_33N
+    target_mapset
+    ```
 
 3.  *Select/Modify target elevation model used for orthorectification:
     [i.ortho.elev](i.ortho.elev.html)*
@@ -127,14 +127,14 @@ The steps to follow are described below:
     *mapset/group/name_of_group/**ELEVATION*** is created contatining
     the name and mapset of the chosen DEM.
 
-    ::: code
-        elevation layer :ELEVATION
-        mapset elevation:target_mapset
-        location        :ETRS_33N
-        math expression :(null)
-        units           :(null)
-        no data values  :(null)
-    :::
+    ```
+    elevation layer :ELEVATION
+    mapset elevation:target_mapset
+    location        :ETRS_33N
+    math expression :(null)
+    units           :(null)
+    no data values  :(null)
+    ```
 
 4.  *Create/Modify camera file of imagery group:
     [i.ortho.camera](i.ortho.camera.html)*
@@ -153,18 +153,18 @@ The steps to follow are described below:
     reference camera and a file *mapset/camera/**name_of_reference***,
     contatining the camera parameters.
 
-    ::: code
-        CAMERA NAME   sony
-        CAMERA ID     123
-        CAMERA XP     0
-        CAMERA YP     0
-        CAMERA CFL    16
-        NUM FID       4
-              0 -11.6 0
-              1 0 7.7
-              2 11.6 0
-              3 0 -7.7
-    :::
+    ```
+    CAMERA NAME   sony
+    CAMERA ID     123
+    CAMERA XP     0
+    CAMERA YP     0
+    CAMERA CFL    16
+    NUM FID       4
+          0 -11.6 0
+          1 0 7.7
+          2 11.6 0
+          3 0 -7.7
+    ```
 
 5.  *Compute image-to-photo transformation:
     [g.gui.photo2image](g.gui.photo2image.html)*
@@ -180,19 +180,19 @@ The steps to follow are described below:
     a list of pairs of coordinates in image and photo coordinate
     systems.
 
-    ::: code
-        # Ground Control Points File
-        #
-        # target location: XY
-        # target mapset: source_mapset
-        # source  target  status
-        # east north east north (1=ok, 0=ignore)
-        #-------------------------------------------------------------
-        0 1816     -11.6 0.0     1
-        2728 3632     0.0 7.7     1
-        5456 1816     11.6 0.0     1
-        2728 0.0     0.0 -7.7     1
-    :::
+    ```
+    # Ground Control Points File
+    #
+    # target location: XY
+    # target mapset: source_mapset
+    # source  target  status
+    # east north east north (1=ok, 0=ignore)
+    #-------------------------------------------------------------
+    0 1816     -11.6 0.0     1
+    2728 3632     0.0 7.7     1
+    5456 1816     11.6 0.0     1
+    2728 0.0     0.0 -7.7     1
+    ```
 
     ::: {align="center" style="margin: 10px"}
     [![i.ortho.photo example](i_ortho_photo_step5.png){width="600"
@@ -227,21 +227,21 @@ The steps to follow are described below:
     In Step 6, a new file *mapset/group/name_of_group/**INIT_EXP*** is
     created, contatining camera parameters.
 
-    ::: code
-        INITIAL XC    215258.345387
-        INITIAL YC    6911444.022270
-        INITIAL ZC    1101.991120
-        INITIAL OMEGA 0.000000
-        INITIAL PHI   -0.168721
-        INITIAL KAPPA 3.403392
-        VARIANCE XC    5.000000
-        VARIANCE YC    5.000000
-        VARIANCE ZC    5.000000
-        VARIANCE OMEGA 0.000000
-        VARIANCE PHI   0.020153
-        VARIANCE KAPPA 0.017453
-        STATUS (1=OK, 0=NOT OK) 0
-    :::
+    ```
+    INITIAL XC    215258.345387
+    INITIAL YC    6911444.022270
+    INITIAL ZC    1101.991120
+    INITIAL OMEGA 0.000000
+    INITIAL PHI   -0.168721
+    INITIAL KAPPA 3.403392
+    VARIANCE XC    5.000000
+    VARIANCE YC    5.000000
+    VARIANCE ZC    5.000000
+    VARIANCE OMEGA 0.000000
+    VARIANCE PHI   0.020153
+    VARIANCE KAPPA 0.017453
+    STATUS (1=OK, 0=NOT OK) 0
+    ```
 
 7.  *Compute ortho-rectification parameters from ground control points:
     [g.gui.image2target](g.gui.image2target.html)*
@@ -259,21 +259,21 @@ The steps to follow are described below:
     containing a list of pairs of coordinates of ground control points
     in photo and target coordinate systems.
 
-    ::: code
-        # Ground Control Points File
-        #
-        # target location: ETRS_33N
-        # target mapset: target_mapset
-        #   source                          target                     status
-        #   east    north   height          east    north   height    (1=ok, 0=ignore)
-        #------------------------------     ----------------------    ---------------
-        98.3679932698 906.327649515 0.0     1.0 5.0  100.0             1
-        733.293023813 1329.61100321 0.0     2.0 6.0  100.0             1
-        1292.6317412  1703.76325335 0.0     3.0 7.0  100.0             1
-        1625.54617472 1368.11694482 0.0     4.0 6.0  100.3             1
-        3239.82849913 1390.97403968 0.0     7.4 6.0  100.3             1
-        1570.09788497 2790.06537829 0.0     3.0 11.0 100.0             1
-    :::
+    ```
+    # Ground Control Points File
+    #
+    # target location: ETRS_33N
+    # target mapset: target_mapset
+    #   source                          target                     status
+    #   east    north   height          east    north   height    (1=ok, 0=ignore)
+    #------------------------------     ----------------------    ---------------
+    98.3679932698 906.327649515 0.0     1.0 5.0  100.0             1
+    733.293023813 1329.61100321 0.0     2.0 6.0  100.0             1
+    1292.6317412  1703.76325335 0.0     3.0 7.0  100.0             1
+    1625.54617472 1368.11694482 0.0     4.0 6.0  100.3             1
+    3239.82849913 1390.97403968 0.0     7.4 6.0  100.3             1
+    1570.09788497 2790.06537829 0.0     3.0 11.0 100.0             1
+    ```
 
     ::: {align="center" style="margin: 10px"}
     [![i.ortho.photo example](i_ortho_photo_step7.png){width="600"

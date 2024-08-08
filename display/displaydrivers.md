@@ -19,39 +19,39 @@ this variable. Currently only Python scrips are supported.
 
 Lets start with simple example of Python script called *render.py*:
 
-::: code
-    #!/usr/bin/env python3
+```
+#!/usr/bin/env python3
 
-    import os
-    import sys
+import os
+import sys
 
-    import grass.script as gs
-    from grass.script import task as gtask
+import grass.script as gs
+from grass.script import task as gtask
 
-    os.environ['GRASS_RENDER_IMMEDIATE'] = 'default'
-    os.environ['GRASS_RENDER_FILE'] = 'output.png'
+os.environ['GRASS_RENDER_IMMEDIATE'] = 'default'
+os.environ['GRASS_RENDER_FILE'] = 'output.png'
 
-    cmd, dcmd = gtask.cmdstring_to_tuple(sys.argv[1])
+cmd, dcmd = gtask.cmdstring_to_tuple(sys.argv[1])
 
-    gs.run_command('d.text', text="Test of GRASS_RENDER_COMMAND redirection")
+gs.run_command('d.text', text="Test of GRASS_RENDER_COMMAND redirection")
 
-    os.environ['GRASS_RENDER_FILE_READ'] = 'TRUE'
-    gs.run_command(cmd, **dcmd)
-:::
+os.environ['GRASS_RENDER_FILE_READ'] = 'TRUE'
+gs.run_command(cmd, **dcmd)
+```
 
 After defining GRASS_RENDER_COMMAND variable (example for Bash):
 
-::: code
-    export GRASS_RENDER_COMMAND=render.py
-:::
+```
+export GRASS_RENDER_COMMAND=render.py
+```
 
 Display GRASS modules like *[d.rast](d.rast.html)* or
 *[d.vect](d.vect.html)* will be executed by *render.py* program. For
 example the command
 
-::: code
-    d.vect roadsmajor
-:::
+```
+d.vect roadsmajor
+```
 
 produces output PNG file *output.png* which will contain rendered
 features from vector map *roadsmajor* and sample text *\"Test of

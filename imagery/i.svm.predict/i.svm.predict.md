@@ -38,10 +38,10 @@ This is the second part of classification process. See
 Predict land use classes form a LANDSAT scene from October of 2002 with
 a SVM trained on a 1996 land use map *landuse96_28m*.
 
-::: code
-    i.svm.predict group=lsat7_2002 subgroup=res_30m \
-        signaturefile=landuse96_rnd_points output=pred_landuse_2002
-:::
+```
+i.svm.predict group=lsat7_2002 subgroup=res_30m \
+    signaturefile=landuse96_rnd_points output=pred_landuse_2002
+```
 
 ## SEE ALSO
 

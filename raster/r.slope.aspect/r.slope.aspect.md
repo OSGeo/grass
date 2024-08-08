@@ -24,13 +24,13 @@ map.\
 Note: These values can be transformed to azimuth values (90 is East, 180
 is South, 270 is West, 360 is North) using [r.mapcalc](r.mapcalc.html):
 
-::: code
-    # convert angles from CCW from East to CW from North
-    # modulus (%) can not be used with floating point aspect values
-    r.mapcalc "azimuth_aspect = if(ccw_aspect == 0, 0, \
-                                if(ccw_aspect < 90, 90 - ccw_aspect, \
-                                450 - ccw_aspect)))"
-:::
+```
+# convert angles from CCW from East to CW from North
+# modulus (%) can not be used with floating point aspect values
+r.mapcalc "azimuth_aspect = if(ccw_aspect == 0, 0, \
+                            if(ccw_aspect < 90, 90 - ccw_aspect, \
+                            450 - ccw_aspect)))"
+```
 
 Alternatively, the **-n** flag can be used to produce aspect as degrees
 CW from North. Aspect for flat areas is then set to -9999 (default: 0).
@@ -86,32 +86,32 @@ map of slope that groups slope values into ranges of slope. This can be
 done using *[r.reclass](r.reclass.html)*. An example of a useful
 reclassification is given below:
 
-::: code
-              category      range   category labels
-                         (in degrees)    (in percent)
+```
+          category      range   category labels
+                     (in degrees)    (in percent)
 
-                 1         0-  1             0-  2%
-                 2         2-  3             3-  5%
-                 3         4-  5             6- 10%
-                 4         6-  8            11- 15%
-                 5         9- 11            16- 20%
-                 6        12- 14            21- 25%
-                 7        15- 90            26% and higher
+             1         0-  1             0-  2%
+             2         2-  3             3-  5%
+             3         4-  5             6- 10%
+             4         6-  8            11- 15%
+             5         9- 11            16- 20%
+             6        12- 14            21- 25%
+             7        15- 90            26% and higher
 
-         The following color table works well with the above
-         reclassification.
+     The following color table works well with the above
+     reclassification.
 
-              category   red   green   blue
+          category   red   green   blue
 
-                 0       179    179     179
-                 1         0    102       0
-                 2         0    153       0
-                 3       128    153       0
-                 4       204    179       0
-                 5       128     51      51
-                 6       255      0       0
-                 7         0      0       0
-:::
+             0       179    179     179
+             1         0    102       0
+             2         0    153       0
+             3       128    153       0
+             4       204    179       0
+             5       128     51      51
+             6       255      0       0
+             7         0      0       0
+```
 
 ## NOTES
 
@@ -171,16 +171,16 @@ In this example a slope, aspect, profile and tangential curvature map
 are computed from an elevation raster map (North Carolina sample
 dataset):
 
-::: code
-    g.region raster=elevation
-    r.slope.aspect elevation=elevation slope=slope aspect=aspect pcurvature=pcurv tcurvature=tcurv
+```
+g.region raster=elevation
+r.slope.aspect elevation=elevation slope=slope aspect=aspect pcurvature=pcurv tcurvature=tcurv
 
-    # set nice color tables for output raster maps
-    r.colors -n map=slope color=sepia
-    r.colors map=aspect color=aspectcolr
-    r.colors map=pcurv color=curvature
-    r.colors map=tcurv color=curvature
-:::
+# set nice color tables for output raster maps
+r.colors -n map=slope color=sepia
+r.colors map=aspect color=aspectcolr
+r.colors map=pcurv color=curvature
+r.colors map=tcurv color=curvature
+```
 
 ![](r_slope_aspect_slope.png){border="0"}
 ![](r_slope_aspect_aspect.png){border="0"}
@@ -197,38 +197,38 @@ first generate the standard aspect map (oriented CCW from East), then
 convert it to compass orientation, and finally classify four major
 aspect directions (N, E, S, W):
 
-::: code
-    g.region raster=elevation -p
+```
+g.region raster=elevation -p
 
-    # generate integer aspect map with degrees CCW from East
-    r.slope.aspect elevation=elevation aspect=myaspect precision=CELL
+# generate integer aspect map with degrees CCW from East
+r.slope.aspect elevation=elevation aspect=myaspect precision=CELL
 
-    # generate compass orientation and classify four major directions (N, E, S, W)
-    r.mapcalc "aspect_4_directions = eval( \\
-       compass=(450 - myaspect ) % 360, \\
-         if(compass >=0. && compass < 45., 1)  \\
-       + if(compass >=45. && compass < 135., 2) \\
-       + if(compass >=135. && compass < 225., 3) \\
-       + if(compass >=225. && compass < 315., 4) \\
-       + if(compass >=315., 1) \\
-    )"
+# generate compass orientation and classify four major directions (N, E, S, W)
+r.mapcalc "aspect_4_directions = eval( \\
+   compass=(450 - myaspect ) % 360, \\
+     if(compass >=0. && compass < 45., 1)  \\
+   + if(compass >=45. && compass < 135., 2) \\
+   + if(compass >=135. && compass < 225., 3) \\
+   + if(compass >=225. && compass < 315., 4) \\
+   + if(compass >=315., 1) \\
+)"
 
-    # assign text labels
-    r.category aspect_4_directions separator=comma rules=- << EOF
-    1,north
-    2,east
-    3,south
-    4,west
-    EOF
+# assign text labels
+r.category aspect_4_directions separator=comma rules=- << EOF
+1,north
+2,east
+3,south
+4,west
+EOF
 
-    # assign color table
-    r.colors aspect_4_directions rules=- << EOF
-    1 253,184,99
-    2 178,171,210
-    3 230,97,1
-    4 94,60,153
-    EOF
-:::
+# assign color table
+r.colors aspect_4_directions rules=- << EOF
+1 253,184,99
+2 178,171,210
+3 230,97,1
+4 94,60,153
+EOF
+```
 
 ![Aspect map classified to four major compass
 directions](r_slope_aspect_4_directions.png)\

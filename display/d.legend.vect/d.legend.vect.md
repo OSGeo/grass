@@ -56,7 +56,9 @@ grassdata/project/mapset/.tmp/user directory (in case of d.mon deeper in
 
 Legend file has this format:
 
-    label|symbol_name|size|color_type|feature_color|fill_color|line_width|geometry_type|feature_count
+```
+label|symbol_name|size|color_type|feature_color|fill_color|line_width|geometry_type|feature_count
+```
 
 Color type can be \'lf\' or \'ps\'. Based on color type color columns
 are interpreted as line color and fill colors (lf), or primary and
@@ -64,12 +66,14 @@ secondary colors (ps). Module d.vect always uses \'lf\' and
 d.vect.thematic \'ps\'. Here is an example of legend file with
 subtitles:
 
-    Infrastructure||||||||
-    major roads|legend/line|5|lf|black|200:200:200|2|line|355
-    bridges|extra/bridge|15|lf|black|black|1|point|10938
-    Hydrology||||||||
-    streams|legend/line_crooked|5|lf|30:144:255|200:200:200|3|line|8554
-    water bodies|legend/area_curved|5|lf|none|30:144:255|1|area|27764
+```
+Infrastructure||||||||
+major roads|legend/line|5|lf|black|200:200:200|2|line|355
+bridges|extra/bridge|15|lf|black|black|1|point|10938
+Hydrology||||||||
+streams|legend/line_crooked|5|lf|30:144:255|200:200:200|3|line|8554
+water bodies|legend/area_curved|5|lf|none|30:144:255|1|area|27764
+```
 
 ![Example of subheadings used in vector
 legend](d_legend_vect_subheadings.png)
@@ -78,15 +82,15 @@ legend](d_legend_vect_subheadings.png)
 
 Open cairo monitor to render to file:
 
-::: code
-    g.region vector=nc_state
-    d.mon cairo
-    d.vect map=nc_state color=26:26:26 fill_color=229:229:229 width=2 legend_label="state boundaries"
-    d.vect map=urbanarea color=none fill_color=127:127:127 width=1 legend_label="urban areas"
-    d.vect map=railroads color=red width=1
-    d.vect map=hospitals color=77:77:77 fill_color=0:187:0 width=1 icon=basic/cross3 size=10
-    d.legend.vect -b at=2,40 title="Hospitals in North Carolina" symbol_size=26 fontsize=16 title_fontsize=20
-:::
+```
+g.region vector=nc_state
+d.mon cairo
+d.vect map=nc_state color=26:26:26 fill_color=229:229:229 width=2 legend_label="state boundaries"
+d.vect map=urbanarea color=none fill_color=127:127:127 width=1 legend_label="urban areas"
+d.vect map=railroads color=red width=1
+d.vect map=hospitals color=77:77:77 fill_color=0:187:0 width=1 icon=basic/cross3 size=10
+d.legend.vect -b at=2,40 title="Hospitals in North Carolina" symbol_size=26 fontsize=16 title_fontsize=20
+```
 
 ![d.legend.vect example](d_legend_vect.png)\
 

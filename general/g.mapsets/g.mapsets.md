@@ -46,9 +46,9 @@ order listed there until the program finds a file of the given name.
 Users can also specify a file by its mapset, to make explicit the mapset
 from which the file is to be drawn; e.g., the command:
 
-::: code
-    g.copy raster=soils@PERMANENT,my_soils
-:::
+```
+g.copy raster=soils@PERMANENT,my_soils
+```
 
 ensures that a new file named `my_soils` is to be a copy of the file
 `soils` from the mapset PERMANENT.
@@ -87,9 +87,9 @@ Using the **-s** flag, a convenient graphical mapset manager can be
 opened to select and deselect other mapsets (the actual mapset and the
 PERMANENT mapset are always selected):
 
-::: code
-    g.mapsets -s
-:::
+```
+g.mapsets -s
+```
 
 ![](g_mapsets_gui.png)\
 
@@ -97,72 +97,74 @@ PERMANENT mapset are always selected):
 
 All available mapsets in the current project can be printed out by
 
-::: code
-    g.mapsets -l
+```
+g.mapsets -l
 
-    Available mapsets:
-    PERMANENT user1 user2
-:::
+Available mapsets:
+PERMANENT user1 user2
+```
 
 Mapsets can be also printed out as json by setting the format option to
 \"json\" (**format=\"json\"**).
 
 ::: code
-        g.mapsets format="json" -l
+```
+    g.mapsets format="json" -l
 
-        {
-          "mapsets": [
-            "PERMANENT",
-            "user1",
-            "user2"
-          ]
-        }
-
+    {
+      "mapsets": [
+        "PERMANENT",
+        "user1",
+        "user2"
+      ]
+    }
+  
+```
 :::
 
 ### Add new mapset
 
 Add mapset \'user2\' to the current mapset search path
 
-::: code
-    g.mapsets mapset=user2 operation=add
-:::
+```
+g.mapsets mapset=user2 operation=add
+```
 
 The current mapset search path is changed accordingly
 
-::: code
-    g.mapsets -p
+```
+g.mapsets -p
 
-    Accessible mapsets:
-    user1 user2
-:::
+Accessible mapsets:
+user1 user2
+```
 
 ### Overwrite current search path
 
 Overwrite current search path
 
-::: code
-    g.mapsets mapset=user1,PERMANENT operation=set
-:::
+```
+g.mapsets mapset=user1,PERMANENT operation=set
+```
 
 ### Using shortcuts for search path
 
 The current mapset can be defined by a shortcut \".\" (dot)
 
-::: code
-    g.mapsets mapset=.,PERMANENT operation=set
-:::
+```
+g.mapsets mapset=.,PERMANENT operation=set
+```
 
 *Note:* The current mapset will be always included in the search path on
 the first position even if you change its position or omit the current
 mapset from the **mapset** option.
 
-::: code
-    g.mapsets -p
+```
+g.mapsets -p
 
-    Accessible mapsets:
-    user1 PERMANENT
-:::
+Accessible mapsets:
+user1 PERMANENT
+```
 
 ## SEE ALSO
 

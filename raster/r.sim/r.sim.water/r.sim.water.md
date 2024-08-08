@@ -141,34 +141,34 @@ cutting-edge applications using high performance computing.
 
 Using the North Carolina full sample dataset:
 
-::: code
-    # set computational region
-    g.region raster=elev_lid792_1m -p
+```
+# set computational region
+g.region raster=elev_lid792_1m -p
 
-    # compute dx, dy
-    r.slope.aspect elevation=elev_lid792_1m dx=elev_lid792_dx dy=elev_lid792_dy
+# compute dx, dy
+r.slope.aspect elevation=elev_lid792_1m dx=elev_lid792_dx dy=elev_lid792_dy
 
-    # simulate (this may take a minute or two)
-    r.sim.water elevation=elev_lid792_1m dx=elev_lid792_dx dy=elev_lid792_dy depth=water_depth disch=water_discharge nwalk=10000 rain_value=100 niter=5
-:::
+# simulate (this may take a minute or two)
+r.sim.water elevation=elev_lid792_1m dx=elev_lid792_dx dy=elev_lid792_dy depth=water_depth disch=water_discharge nwalk=10000 rain_value=100 niter=5
+```
 
 Now, let\'s visualize the result using rendering to a file (note the
 further management of computational region and usage of
 [d.mon](d.mon.html) module which are not needed when working in GUI):
 
-::: code
-    # increase the computational region by 350 meters
-    g.region e=e+350
-    # initiate the rendering
-    d.mon start=cairo output=r_sim_water_water_depth.png
-    # render raster, legend, etc.
-    d.rast map=water_depth_1m
-    d.legend raster=water_depth_1m title="Water depth [m]" label_step=0.10 font=sans at=20,80,70,75
-    d.barscale at=67,10 length=250 segment=5 font=sans
-    d.northarrow at=90,25
-    # finish the rendering
-    d.mon stop=cairo
-:::
+```
+# increase the computational region by 350 meters
+g.region e=e+350
+# initiate the rendering
+d.mon start=cairo output=r_sim_water_water_depth.png
+# render raster, legend, etc.
+d.rast map=water_depth_1m
+d.legend raster=water_depth_1m title="Water depth [m]" label_step=0.10 font=sans at=20,80,70,75
+d.barscale at=67,10 length=250 segment=5 font=sans
+d.northarrow at=90,25
+# finish the rendering
+d.mon stop=cairo
+```
 
 ::: {align="center" style="margin: 10px;"}
 ![r.sim.water generated depth
@@ -181,9 +181,9 @@ Carolina sample dataset.*
 
 If the module fails with
 
-::: code
-    ERROR: nwalk (7000001) > maxw (7000000)!
-:::
+```
+ERROR: nwalk (7000001) > maxw (7000000)!
+```
 
 then a lower **nwalkers** parameter value has to be selected.
 

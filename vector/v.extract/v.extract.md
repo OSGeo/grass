@@ -24,9 +24,9 @@ The examples are intended for the North Carolina sample dataset:
 
 ### Extract areas by category number with dissolving #1:
 
-::: code
-    v.extract -d cats=1,2,3,4 input=soils_wake output=soil_groupa type=area new=0
-:::
+```
+v.extract -d cats=1,2,3,4 input=soils_wake output=soil_groupa type=area new=0
+```
 
 produces a new vector **soil_groupa**, containing those areas from
 vector **soils** which have category numbers **1 thru 4**; any common
@@ -35,9 +35,9 @@ category number 0.
 
 ### Extract areas by category number with dissolving #2:
 
-::: code
-    v.extract -d cats=1-4 input=soils_wake output=soil_groupa type=area new=-1
-:::
+```
+v.extract -d cats=1-4 input=soils_wake output=soil_groupa type=area new=-1
+```
 
 produces a new vector map **soil_groupa** containing the areas from
 vector **soils** which have categories **1 thru 4**. Any common
@@ -46,9 +46,9 @@ original category numbers 1 thru 4, since **new** was set to -1.
 
 ### Extract all areas and assign the same category to all:
 
-::: code
-    v.extract input=soils_wake output=soil_groupa type=area new=1
-:::
+```
+v.extract input=soils_wake output=soil_groupa type=area new=1
+```
 
 produces a new vector map **soil_groupa** containing all areas from
 **soils**. No common boundaries are dissolved, all areas of the new map
@@ -56,67 +56,67 @@ will be assigned category number 1.
 
 ### Extract vectors with SQL:
 
-::: code
-    v.extract input=markveggy.shp output=markveggy.1 new=13 \
-      where="(VEGTYPE = 'Wi') or (VEGTYPE = 'PS') or (PRIME_TYPE='Wi')"
-:::
+```
+v.extract input=markveggy.shp output=markveggy.1 new=13 \
+  where="(VEGTYPE = 'Wi') or (VEGTYPE = 'PS') or (PRIME_TYPE='Wi')"
+```
 
 produces a new vector map with category number 13 if the SQL statement
 is fulfilled.
 
 ### Extract vector features which have the given field empty:
 
-::: code
-    v.extract input=lakes output=lakes_gaps where="FTYPE is NULL"
-:::
+```
+v.extract input=lakes output=lakes_gaps where="FTYPE is NULL"
+```
 
 ### Extract vector features which have the given field not empty:
 
-::: code
-    v.extract input=lakes output=lakes_ftype where="FTYPE not NULL"
-:::
+```
+v.extract input=lakes output=lakes_ftype where="FTYPE not NULL"
+```
 
 ### Reverse extracting (behaves like selective vector objects deleting):
 
 Remove meteorological stations from map which are located above 1000m:
 
-::: code
-    # check what to delete:
-    v.db.select precip_30ynormals where="elev > 1000"
+```
+# check what to delete:
+v.db.select precip_30ynormals where="elev > 1000"
 
-    # perform reverse selection
-    v.extract -r input=precip_30ynormals output=precip_30ynormals_lowland \
-      where="elev > 1000"
+# perform reverse selection
+v.extract -r input=precip_30ynormals output=precip_30ynormals_lowland \
+  where="elev > 1000"
 
-    # verify
-    v.db.select precip_30ynormals_lowland
-:::
+# verify
+v.db.select precip_30ynormals_lowland
+```
 
 ### Dissolving based on column attributes:
 
-::: code
-    # check column names:
-    v.info -c zipcodes_wake
+```
+# check column names:
+v.info -c zipcodes_wake
 
-    # reclass based on desired column:
-    v.reclass input=zipcodes_wake output=zipcodes_wake_recl_nam column=ZIPNAME
+# reclass based on desired column:
+v.reclass input=zipcodes_wake output=zipcodes_wake_recl_nam column=ZIPNAME
 
-    # verify:
-    v.info -c zipcodes_wake_recl_nam
-    v.db.select zipcodes_wake_recl_nam
+# verify:
+v.info -c zipcodes_wake_recl_nam
+v.db.select zipcodes_wake_recl_nam
 
-    # dissolve:
-    v.extract -d input=zipcodes_wake_recl_nam output=zipcodes_wake_regions
-:::
+# dissolve:
+v.extract -d input=zipcodes_wake_recl_nam output=zipcodes_wake_regions
+```
 
 This produces a new vector map with common boundaries dissolved where
 the reclassed attributes of adjacent (left/right) areas are identical.
 
 ### Extract 3 random areas from geology map
 
-::: code
-    v.extract input=geology output=random_geology type=area random=3
-:::
+```
+v.extract input=geology output=random_geology type=area random=3
+```
 
 This creates a new map with three random categories matching areas. Note
 that there may be more than one feature with the same category.

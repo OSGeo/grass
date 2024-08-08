@@ -110,7 +110,9 @@ too must be in meters. The buffer parameters must be in the same units
 as the raster coordinates (e.g., for latitude-longitude buffers are
 measured in degrees).
 
-## METHOD
+## NOTES
+
+### Method
 
 The calculation method is based on the method used in **r.sun** to
 calculate shadows. It starts at a very shallow angle and walks along the
@@ -132,6 +134,28 @@ parallel with the focal cell).
 All horizon values are positive (or zero). While negative values are in
 theory possible, **r.horizon** currently does not support them.
 
+### Performance
+
+Parallel processing is implemented for the raster mode. To enable
+parallel processing, the user can specify the number of threads to be
+used with the **nprocs** parameter. Figures below show benchmark results
+running on Intel® Core™ i5-13600K CPU @ 3.5GHz. See benchmark scripts in
+the source code for more details.
+
+The iterations of the algorithm used in **r.horizon** depends on the
+topography. As a result, the benchmark results may vary depending on the
+topography of the study area.
+
+::: {align="center" style="margin: 10px"}
+![time for r.horizon with different map
+sizes](rhorizon_raster_time.png){border="0"} ![speedup for r.horizon
+with different map sizes](rhorizon_raster_speedup.png){border="0"}
+![efficiency for r.horizon with different map
+sizes](rhorizon_raster_efficiency.png){border="0"}\
+*Figure: Benchmark shows execution time, parallel speedup and efficiency
+for different numbers of cells (1M, 2M, 4M, and 8M).*
+:::
+
 ## EXAMPLES
 
 The examples are intended for the North Carolina sample dataset.
@@ -141,28 +165,28 @@ The examples are intended for the North Carolina sample dataset.
 **Example 1**: determine horizon angle in 225 degree direction (output
 of horizon angles CCW from East):
 
-::: code
-    g.region raster=elevation -p
-    r.horizon elevation=elevation direction=215 step=0 bufferzone=200 \
-        coordinates=638871.6,223384.4 maxdistance=5000
-:::
+```
+g.region raster=elevation -p
+r.horizon elevation=elevation direction=215 step=0 bufferzone=200 \
+    coordinates=638871.6,223384.4 maxdistance=5000
+```
 
 **Example 2**: determine horizon values starting at 90 deg (North), step
 size of 5 deg, saving result as CSV file:
 
-::: code
-    r.horizon elevation=elevation direction=90 step=5 bufferzone=200 \
-        coordinates=638871.6,223384.4 maxdistance=5000 file=horizon.csv
-:::
+```
+r.horizon elevation=elevation direction=90 step=5 bufferzone=200 \
+    coordinates=638871.6,223384.4 maxdistance=5000 file=horizon.csv
+```
 
 **Example 3**: test point near highway intersection, saving result as
 CSV file for plotting the horizon around the highway intersection:
 
-::: code
-    g.region n=223540 s=220820 w=634650 e=638780 res=10 -p
-    r.horizon elevation=elevation direction=0 step=5 bufferzone=200 \
-        coordinates=636483.54,222176.25 maxdistance=5000 -d file=horizon.csv
-:::
+```
+g.region n=223540 s=220820 w=634650 e=638780 res=10 -p
+r.horizon elevation=elevation direction=0 step=5 bufferzone=200 \
+    coordinates=636483.54,222176.25 maxdistance=5000 -d file=horizon.csv
+```
 
 ![](rhorizon_shaded_dem_point.png)\
 Test point near high way intersection (North Carolina sample dataset)
@@ -172,21 +196,21 @@ Horizon angles for test point (CCW from East)
 
 We can plot horizon in polar coordinates using Matplotlib in Python:
 
-::: code
-    import numpy as np
-    import matplotlib.pyplot as plt
+```
+import numpy as np
+import matplotlib.pyplot as plt
 
-    horizon = np.genfromtxt('horizon.csv', delimiter=',')
-    horizon = horizon[1:, :]
+horizon = np.genfromtxt('horizon.csv', delimiter=',')
+horizon = horizon[1:, :]
 
-    ax = plt.subplot(111, polar=True)
-    bars = ax.plot(horizon[:, 0] / 180 * np.pi,
-                   (90 - horizon[:, 1]) / 180 * np.pi)
-    # uncomment the 2 following lines when using -c flag
-    # ax.set_theta_direction(-1)
-    # ax.set_theta_zero_location('N')
-    plt.show()
-:::
+ax = plt.subplot(111, polar=True)
+bars = ax.plot(horizon[:, 0] / 180 * np.pi,
+               (90 - horizon[:, 1]) / 180 * np.pi)
+# uncomment the 2 following lines when using -c flag
+# ax.set_theta_direction(-1)
+# ax.set_theta_zero_location('N')
+plt.show()
+```
 
 ![](rhorizon_polar_plot.png)\
 Horizon plot in polar coordinates.
@@ -195,14 +219,14 @@ Horizon plot in polar coordinates.
 
 Raster map mode (output maps \"horangle\*\" become input for *r.sun*):
 
-::: code
-    g.region raster=elevation -p
+```
+g.region raster=elevation -p
 
-    # we put a bufferzone of 10% of maxdistance around the study area
-    # compute only direction between 90 and 270 degrees
-    r.horizon elevation=elevation step=30 start=90 end=300 \
-        bufferzone=200 output=horangle maxdistance=5000
-:::
+# we put a bufferzone of 10% of maxdistance around the study area
+# compute only direction between 90 and 270 degrees
+r.horizon elevation=elevation step=30 start=90 end=300 \
+    bufferzone=200 output=horangle maxdistance=5000
+```
 
 ## REFERENCES
 

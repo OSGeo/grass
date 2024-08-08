@@ -9,21 +9,21 @@ one created by [v.label](v.label.html)
 
 North Carolina example:
 
-::: code
-    # get font names:
-    d.font -L
+```
+# get font names:
+d.font -L
 
-    v.label.sa roadsmajor labels=roads_labels column=ROAD_NAME color=red \
-               background=white size=250 font=Vera
+v.label.sa roadsmajor labels=roads_labels column=ROAD_NAME color=red \
+           background=white size=250 font=Vera
 
-    # set region:
-    g.region raster=lsat7_2002_10 -p
+# set region:
+g.region raster=lsat7_2002_10 -p
 
-    # display:
-    d.rgb b=lsat7_2002_10 g=lsat7_2002_20 r=lsat7_2002_30
-    d.vect roadsmajor col=yellow
-    d.labels roads_labels
-:::
+# display:
+d.rgb b=lsat7_2002_10 g=lsat7_2002_20 r=lsat7_2002_30
+d.vect roadsmajor col=yellow
+d.labels roads_labels
+```
 
 ![Road labeling with v.label.sa](v_label_sa.jpg)\
 *Road labeling with v.label.sa (Raleigh, North Carolina, USA, area)*

@@ -169,52 +169,52 @@ Transform digital numbers of Landsat-7 ETM+ in band rasters 203_30.1,
 203_30.1_toar, 203_30.2_toar \[\...\] and at-sensor temperature in
 output files 293_39.61_toar and 293_39.62_toar:
 
-::: code
-    i.landsat.toar input=203_30. output=_toar \
-      metfile=p203r030_7x20010620.met
-:::
+```
+i.landsat.toar input=203_30. output=_toar \
+  metfile=p203r030_7x20010620.met
+```
 
 or
 
-::: code
-    i.landsat.toar input=L5121060_06020060714. \
-      output=L5121060_06020060714_toar \
-      metfile=L5121060_06020060714_MTL.txt
-:::
+```
+i.landsat.toar input=L5121060_06020060714. \
+  output=L5121060_06020060714_toar \
+  metfile=L5121060_06020060714_MTL.txt
+```
 
 or
 
-::: code
-    i.landsat.toar input=LC80160352013134LGN03_B output=toar \
-      metfile=LC80160352013134LGN03_MTL.txt sensor=oli8 date=2013-05-14
-:::
+```
+i.landsat.toar input=LC80160352013134LGN03_B output=toar \
+  metfile=LC80160352013134LGN03_MTL.txt sensor=oli8 date=2013-05-14
+```
 
 ### DOS1 example
 
 DN to reflectance using DOS1:
 
-::: code
-    # rename channels or make a copy to match i.landsat.toar's input scheme:
-    g.copy raster=lsat7_2002_10,lsat7_2002.1
-    g.copy raster=lsat7_2002_20,lsat7_2002.2
-    g.copy raster=lsat7_2002_30,lsat7_2002.3
-    g.copy raster=lsat7_2002_40,lsat7_2002.4
-    g.copy raster=lsat7_2002_50,lsat7_2002.5
-    g.copy raster=lsat7_2002_61,lsat7_2002.61
-    g.copy raster=lsat7_2002_62,lsat7_2002.62
-    g.copy raster=lsat7_2002_70,lsat7_2002.7
-    g.copy raster=lsat7_2002_80,lsat7_2002.8
-:::
+```
+# rename channels or make a copy to match i.landsat.toar's input scheme:
+g.copy raster=lsat7_2002_10,lsat7_2002.1
+g.copy raster=lsat7_2002_20,lsat7_2002.2
+g.copy raster=lsat7_2002_30,lsat7_2002.3
+g.copy raster=lsat7_2002_40,lsat7_2002.4
+g.copy raster=lsat7_2002_50,lsat7_2002.5
+g.copy raster=lsat7_2002_61,lsat7_2002.61
+g.copy raster=lsat7_2002_62,lsat7_2002.62
+g.copy raster=lsat7_2002_70,lsat7_2002.7
+g.copy raster=lsat7_2002_80,lsat7_2002.8
+```
 
 Calculation of reflectance values from DN using DOS1 (metadata obtained
 from
 [p016r035_7x20020524.met.gz](http://www.grassbook.org/wp-content/uploads/ncexternal/landsat/2002/p016r035_7x20020524.met.gz)):
 
-::: code
-    i.landsat.toar input=lsat7_2002. output=lsat7_2002_toar. sensor=tm7 \
-      method=dos1 date=2002-05-24 sun_elevation=64.7730999 \
-      product_date=2004-02-12 gain=HHHLHLHHL
-:::
+```
+i.landsat.toar input=lsat7_2002. output=lsat7_2002_toar. sensor=tm7 \
+  method=dos1 date=2002-05-24 sun_elevation=64.7730999 \
+  product_date=2004-02-12 gain=HHHLHLHHL
+```
 
 The resulting Landsat channels are named
 `lsat7_2002_toar.1 .. lsat7_2002_toar.8`.

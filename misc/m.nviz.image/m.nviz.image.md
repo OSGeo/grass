@@ -10,10 +10,10 @@ command line.
 
 Render elevation map in a 3D space.
 
-::: code
-    g.region raster=elevation
-    m.nviz.image elevation_map=elevation output=elev perspective=15
-:::
+```
+g.region raster=elevation
+m.nviz.image elevation_map=elevation output=elev perspective=15
+```
 
 ## SEE ALSO
 

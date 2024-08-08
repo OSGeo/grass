@@ -51,27 +51,27 @@ Train a SVM to identify land use classes according to the 1996 land use
 map *landuse96_28m* and then classify a LANDSAT scene from October of
 2002. Example requires the nc_spm_08 dataset.
 
-::: code
-    # Align computation region to the scene
-    g.region raster=lsat7_2002_10 -p
+```
+# Align computation region to the scene
+g.region raster=lsat7_2002_10 -p
 
-    # store VIZ, NIR, MIR into group/subgroup
-    i.group group=lsat7_2002 subgroup=res_30m \
-        input=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70
+# store VIZ, NIR, MIR into group/subgroup
+i.group group=lsat7_2002 subgroup=res_30m \
+    input=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70
 
-    # Now digitize training areas "training" with the digitizer
-    # and convert to raster model with v.to.rast
-    v.to.rast input=training output=training use=cat label_column=label
-    # If you are just playing around and do not care about the accuracy of outcome,
-    # just use one of existing maps instead e.g.
-    # r.random input=landuse96_28m npoints=10000 raster=training -s
+# Now digitize training areas "training" with the digitizer
+# and convert to raster model with v.to.rast
+v.to.rast input=training output=training use=cat label_column=label
+# If you are just playing around and do not care about the accuracy of outcome,
+# just use one of existing maps instead e.g.
+# r.random input=landuse96_28m npoints=10000 raster=training -s
 
-    # Train the SVM
-    i.svm.train group=lsat7_2002 subgroup=res_30m \
-        trainingmap=training signaturefile=landuse96_rnd_points
+# Train the SVM
+i.svm.train group=lsat7_2002 subgroup=res_30m \
+    trainingmap=training signaturefile=landuse96_rnd_points
 
-    # Go to i.svm.predict for the next step.
-:::
+# Go to i.svm.predict for the next step.
+```
 
 ## SEE ALSO
 

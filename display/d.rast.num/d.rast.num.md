@@ -25,11 +25,11 @@ with each will be difficult to see. No data cells are indicated with
 
 A\) Distance from the streams network (North Carolina sample dataset):
 
-::: code
-    g.region raster=streams_derived -p
-    r.grow.distance input=streams_derived distance=dist_from_streams
-    d.rast.num dist_from_streams -a
-:::
+```
+g.region raster=streams_derived -p
+r.grow.distance input=streams_derived distance=dist_from_streams
+d.rast.num dist_from_streams -a
+```
 
 ::: {align="center" style="margin: 10px"}
 ![](d_rast_num_zoom.png){border="0"}\

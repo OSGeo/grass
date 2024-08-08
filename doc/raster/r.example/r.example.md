@@ -13,11 +13,11 @@ Some more detailed notes go here.
 Create a copy of the raster map \"elevation\" (North Carolina sample
 dataset):
 
-::: code
-    g.region raster=elevation -p
-    r.example input=elevation output=elevation2
-    r.info elevation2
-:::
+```
+g.region raster=elevation -p
+r.example input=elevation output=elevation2
+r.info elevation2
+```
 
 ## SEE ALSO
 

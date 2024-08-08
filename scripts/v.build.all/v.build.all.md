@@ -5,10 +5,10 @@ current mapset.
 
 ### Example
 
-::: code
-    # rebuild topology for all vector maps in the current mapset
-    v.build.all
-:::
+```
+# rebuild topology for all vector maps in the current mapset
+v.build.all
+```
 
 ## AUTHOR
 

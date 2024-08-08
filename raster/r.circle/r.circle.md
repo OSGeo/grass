@@ -21,20 +21,20 @@ apply filter with *r.mask*).
 Generate a raster circle at current map center with a radius of 300m and
 outwardly increasing raster values:
 
-::: code
-    EASTCENTER=`g.region -c |  awk ' /center easting:/ { print $3 }'`
-    NORTHCENTER=`g.region -c | awk ' /center northing:/ { print $3 }'`
-    r.circle output=circle coordinate=${EASTCENTER},${NORTHCENTER} max=300
-:::
+```
+EASTCENTER=`g.region -c |  awk ' /center easting:/ { print $3 }'`
+NORTHCENTER=`g.region -c | awk ' /center northing:/ { print $3 }'`
+r.circle output=circle coordinate=${EASTCENTER},${NORTHCENTER} max=300
+```
 
 Generate a binary raster ring around current map center with an inner
 radius of 500m and an outer radius of 1000m:
 
-::: code
-    EASTCENTER=`g.region -c |  awk ' /center easting:/ { print $3 }'`
-    NORTHCENTER=`g.region -c | awk ' /center northing:/ { print $3 }'`
-    r.circle -b output=circle coordinate=${EASTCENTER},${NORTHCENTER} min=500 max=1000
-:::
+```
+EASTCENTER=`g.region -c |  awk ' /center easting:/ { print $3 }'`
+NORTHCENTER=`g.region -c | awk ' /center northing:/ { print $3 }'`
+r.circle -b output=circle coordinate=${EASTCENTER},${NORTHCENTER} min=500 max=1000
+```
 
 ## SEE ALSO
 

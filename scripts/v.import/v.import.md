@@ -54,10 +54,10 @@ the *v.clean* manual page.
 
 ## EXAMPLE
 
-::: code
-    # import SHAPE file at full extent and reproject to current project CRS
-    v.import input=research_area.shp output=research_area extent=input
-:::
+```
+# import SHAPE file at full extent and reproject to current project CRS
+v.import input=research_area.shp output=research_area extent=input
+```
 
 ## SEE ALSO
 

@@ -92,18 +92,18 @@ You can use the **-s** scan flag to find the extent of the input data
 *[g.region](g.region.html)*. A suitable resolution can be found by
 dividing the number of input points by the area covered. e.g.
 
-::: code
-    wc -l inputfile.txt
-    g.region -p
-    # points_per_cell = n_points / (rows * cols)
+```
+wc -l inputfile.txt
+g.region -p
+# points_per_cell = n_points / (rows * cols)
 
-    g.region -e
-    # UTM project:
-    # points_per_sq_m = n_points / (ns_extent * ew_extent)
+g.region -e
+# UTM project:
+# points_per_sq_m = n_points / (ns_extent * ew_extent)
 
-    # Lat/Lon project:
-    # points_per_sq_m = n_points / (ns_extent * ew_extent*cos(lat) * (1852*60)^2)
-:::
+# Lat/Lon project:
+# points_per_sq_m = n_points / (ns_extent * ew_extent*cos(lat) * (1852*60)^2)
+```
 
 If you only intend to interpolate the data with
 *[r.to.vect](r.to.vect.html)* and *[v.surf.rst](v.surf.rst.html)*, then
@@ -170,11 +170,11 @@ and/or resolution as needed before proceeding.
 
 Typical commands to create a DEM using a regularized spline fit:
 
-::: code
-    r.univar lidar_min
-    r.to.vect -z type=point in=lidar_min out=lidar_min_pt
-    v.surf.rst in=lidar_min_pt elev=lidar_min.rst
-:::
+```
+r.univar lidar_min
+r.to.vect -z type=point in=lidar_min out=lidar_min_pt
+v.surf.rst in=lidar_min_pt elev=lidar_min.rst
+```
 
 ### Import of x,y,string data
 
@@ -197,34 +197,34 @@ order to register the elevation points at raster cell centers.
 Note: if the z column is separated by several spaces from the coordinate
 columns, it may be sufficient to adapt the **z** position value.
 
-::: code
-    # Important: observe the raster spacing from the ASCII file:
-    # ASCII file format (example):
-    # 630007.5 228492.5 141.99614
-    # 630022.5 228492.5 141.37904
-    # 630037.5 228492.5 142.29822
-    # 630052.5 228492.5 143.97987
-    # ...
-    # In this example the distance is 15m in x and y direction.
+```
+# Important: observe the raster spacing from the ASCII file:
+# ASCII file format (example):
+# 630007.5 228492.5 141.99614
+# 630022.5 228492.5 141.37904
+# 630037.5 228492.5 142.29822
+# 630052.5 228492.5 143.97987
+# ...
+# In this example the distance is 15m in x and y direction.
 
-    # detect extent, print result as g.region parameters
-    r.in.xyz input=elevation.xyz separator=space -s -g
-    # ... n=228492.5 s=215007.5 e=644992.5 w=630007.5 b=55.578793 t=156.32986
+# detect extent, print result as g.region parameters
+r.in.xyz input=elevation.xyz separator=space -s -g
+# ... n=228492.5 s=215007.5 e=644992.5 w=630007.5 b=55.578793 t=156.32986
 
-    # set computational region, along with the actual raster resolution
-    # as defined by the point spacing in the ASCII file:
-    g.region n=228492.5 s=215007.5 e=644992.5 w=630007.5 res=15 -p
+# set computational region, along with the actual raster resolution
+# as defined by the point spacing in the ASCII file:
+g.region n=228492.5 s=215007.5 e=644992.5 w=630007.5 res=15 -p
 
-    # now enlarge computational region by half a raster cell (here 7.5m) to
-    # store the points as cell centers:
-    g.region n=n+7.5 s=s-7.5 w=w-7.5 e=e+7.5 -p
+# now enlarge computational region by half a raster cell (here 7.5m) to
+# store the points as cell centers:
+g.region n=n+7.5 s=s-7.5 w=w-7.5 e=e+7.5 -p
 
-    # import XYZ ASCII file, with z values as raster cell values
-    r.in.xyz input=elevation.xyz separator=space method=mean output=myelev
+# import XYZ ASCII file, with z values as raster cell values
+r.in.xyz input=elevation.xyz separator=space method=mean output=myelev
 
-    # univariate statistics for verification of raster values
-    r.univar myelev
-:::
+# univariate statistics for verification of raster values
+r.univar myelev
+```
 
 ### Import of LiDAR data and DEM creation
 
@@ -232,39 +232,39 @@ Import the [Jockey\'s Ridge, NC, LIDAR
 dataset](http://www.grassbook.org/ncexternal/index.html) (compressed
 file \"lidaratm2.txt.gz\"), and process it into a clean DEM:
 
-::: code
-    # scan and set region bounds
-    r.in.xyz -s -g separator="," in=lidaratm2.txt
-    g.region n=35.969493 s=35.949693 e=-75.620999 w=-75.639999
-    g.region res=0:00:00.075 -a
+```
+# scan and set region bounds
+r.in.xyz -s -g separator="," in=lidaratm2.txt
+g.region n=35.969493 s=35.949693 e=-75.620999 w=-75.639999
+g.region res=0:00:00.075 -a
 
-    # create "n" map containing count of points per cell for checking density
-    r.in.xyz in=lidaratm2.txt out=lidar_n separator="," method=n zrange=-2,50
+# create "n" map containing count of points per cell for checking density
+r.in.xyz in=lidaratm2.txt out=lidar_n separator="," method=n zrange=-2,50
 
-    # check point density [rho = n_sum / (rows*cols)]
-    r.univar lidar_n
-    # create "min" map (elevation filtered for premature hits)
-    r.in.xyz in=lidaratm2.txt out=lidar_min separator="," method=min zrange=-2,50
+# check point density [rho = n_sum / (rows*cols)]
+r.univar lidar_n
+# create "min" map (elevation filtered for premature hits)
+r.in.xyz in=lidaratm2.txt out=lidar_min separator="," method=min zrange=-2,50
 
-    # set computational region to area of interest
-    g.region n=35:57:56.25N s=35:57:13.575N w=75:38:23.7W e=75:37:15.675W
+# set computational region to area of interest
+g.region n=35:57:56.25N s=35:57:13.575N w=75:38:23.7W e=75:37:15.675W
 
-    # check number of non-null cells (try and keep under a few million)
-    r.univar lidar_min
+# check number of non-null cells (try and keep under a few million)
+r.univar lidar_min
 
-    # convert to points
-    r.to.vect -z type=point in=lidar_min out=lidar_min_pt
+# convert to points
+r.to.vect -z type=point in=lidar_min out=lidar_min_pt
 
-    # interpolate using a regularized spline fit
-    v.surf.rst in=lidar_min_pt elev=lidar_min.rst
+# interpolate using a regularized spline fit
+v.surf.rst in=lidar_min_pt elev=lidar_min.rst
 
-    # set color scale to something interesting
-    r.colors lidar_min.rst rule=bcyr -n -e
+# set color scale to something interesting
+r.colors lidar_min.rst rule=bcyr -n -e
 
-    # prepare a 1:1:1 scaled version for NVIZ visualization (for lat/lon input)
-    r.mapcalc "lidar_min.rst_scaled = lidar_min.rst / (1852*60)"
-    r.colors lidar_min.rst_scaled rule=bcyr -n -e
-:::
+# prepare a 1:1:1 scaled version for NVIZ visualization (for lat/lon input)
+r.mapcalc "lidar_min.rst_scaled = lidar_min.rst / (1852*60)"
+r.colors lidar_min.rst_scaled rule=bcyr -n -e
+```
 
 ## TODO
 

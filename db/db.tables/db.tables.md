@@ -12,21 +12,21 @@ not need to be spcified each time.
 
 ### List all tables if database connection is already set
 
-::: code
-    db.tables -p
-:::
+```
+db.tables -p
+```
 
 ### List all DBF tables
 
-::: code
-    db.tables driver=dbf database=/grassdata/nc_spm_08/user1/PERMANENT/dbf
-:::
+```
+db.tables driver=dbf database=/grassdata/nc_spm_08/user1/PERMANENT/dbf
+```
 
 ### List all tables in SQLite database (note that this is the default setting)
 
-::: code
-    db.tables -p driver=sqlite database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
-:::
+```
+db.tables -p driver=sqlite database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+```
 
 ## SEE ALSO
 

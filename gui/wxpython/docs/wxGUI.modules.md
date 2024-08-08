@@ -46,15 +46,17 @@ which must be used when the specified output map or file is already
 present. If the map or file of the specified name already exist and
 *overwrite* flag is not used, an error message appears:
 
-    r.slope.aspect elevation=elevation slope=slope
-    ERROR: option <slope>: <slope> exists. To overwrite, use the --overwrite flag
+```
+r.slope.aspect elevation=elevation slope=slope
+ERROR: option <slope>: <slope> exists. To overwrite, use the --overwrite flag
+```
 
 If using the command instead of GUI, these flags are unlike other flags
 prefixed with double dash:
 
-::: code
-    r.slope.aspect elevation=elevation slope=slope --overwrite --quiet
-:::
+```
+r.slope.aspect elevation=elevation slope=slope --overwrite --quiet
+```
 
 ### Current working directory
 
@@ -109,49 +111,51 @@ using [g.parser](g.parser.html). Command line interface can be obtained
 when running the module with a *\--help* flag. The options and flags are
 the same as in the module GUI.
 
-    r.neighbors --help
+```
+r.neighbors --help
 
-    Description:
-     Makes each cell category value a function of the category
-    values assigned to the cells around it, and stores new cell
-    values in an output raster map layer.
-    Keywords:
-     raster, algebra, statistics, aggregation, neighbor, focal
-    statistics, filter
-    Usage:
-     r.neighbors [-ac] input=name [selection=name]
-    output=name[,name,...]
-       [method=string[,string,...]] [size=value] [title=phrase]
-    [weight=name]
-       [gauss=value] [quantile=value[,value,...]] [--overwrite]
-    [--help]
-       [--verbose] [--quiet] [--ui]
-    Flags:
-      -a   Do not align output with the input
-      -c   Use circular neighborhood
-     --o   Allow output files to overwrite existing files
-     --h   Print usage summary
-     --v   Verbose module output
-     --q   Quiet module output
-     --ui  Force launching GUI dialog
-    Parameters:
-          input   Name of input raster map
-      selection   Name of an input raster map to select the
-    cells which should be processed
-         output   Name for output raster map
-         method   Neighborhood operation
-                  options:
-    average,median,mode,minimum,maximum,range,stddev,sum,
-    count,variance,diversity,interspersion,quart1,quart3,
-                           perc90,quantile
-                  default: average
-           size   Neighborhood size
-                  default: 3
-          title   Title for output raster map
-         weight   Text file containing weights
-          gauss   Sigma (in cells) for Gaussian filter
-       quantile   Quantile to calculate for method=quantile
-                  options: 0.0-1.0
+Description:
+ Makes each cell category value a function of the category
+values assigned to the cells around it, and stores new cell
+values in an output raster map layer.
+Keywords:
+ raster, algebra, statistics, aggregation, neighbor, focal
+statistics, filter
+Usage:
+ r.neighbors [-ac] input=name [selection=name]
+output=name[,name,...]
+   [method=string[,string,...]] [size=value] [title=phrase]
+[weight=name]
+   [gauss=value] [quantile=value[,value,...]] [--overwrite]
+[--help]
+   [--verbose] [--quiet] [--ui]
+Flags:
+  -a   Do not align output with the input
+  -c   Use circular neighborhood
+ --o   Allow output files to overwrite existing files
+ --h   Print usage summary
+ --v   Verbose module output
+ --q   Quiet module output
+ --ui  Force launching GUI dialog
+Parameters:
+      input   Name of input raster map
+  selection   Name of an input raster map to select the
+cells which should be processed
+     output   Name for output raster map
+     method   Neighborhood operation
+              options:
+average,median,mode,minimum,maximum,range,stddev,sum,
+count,variance,diversity,interspersion,quart1,quart3,
+                       perc90,quantile
+              default: average
+       size   Neighborhood size
+              default: 3
+      title   Title for output raster map
+     weight   Text file containing weights
+      gauss   Sigma (in cells) for Gaussian filter
+   quantile   Quantile to calculate for method=quantile
+              options: 0.0-1.0
+```
 
 ## SEE ALSO
 

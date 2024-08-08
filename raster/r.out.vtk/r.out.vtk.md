@@ -73,34 +73,34 @@ r.out.vtk can export raster cells with different representations.
 
 ### Simple Spearfish example
 
-::: code
-    # set region
-    g.region n=4926970 s=4914857 w=591583 e=607793 res=50 -p
+```
+# set region
+g.region n=4926970 s=4914857 w=591583 e=607793 res=50 -p
 
-    # export the data
-    r.out.vtk input=elevation.10m,slope,aspect elevation=elevation.10m output=/tmp/out.vtk
+# export the data
+r.out.vtk input=elevation.10m,slope,aspect elevation=elevation.10m output=/tmp/out.vtk
 
-    # visualize in Paraview or other VTK viewer:
-    paraview --data=/tmp/out.vtk
-:::
+# visualize in Paraview or other VTK viewer:
+paraview --data=/tmp/out.vtk
+```
 
 ### Spearfish example with RGB data
 
-::: code
-    #set the region
-    g.region n=4926990 s=4914840 w=591570 e=607800 res=30 -p
+```
+#set the region
+g.region n=4926990 s=4914840 w=591570 e=607800 res=30 -p
 
-    # using r.in.wms to create RGB data to get a satellite coverage
-    r.in.wms layers=global_mosaic mapserver=http://wms.jpl.nasa.gov/wms.cgi \
-             output=wms_global_mosaic
+# using r.in.wms to create RGB data to get a satellite coverage
+r.in.wms layers=global_mosaic mapserver=http://wms.jpl.nasa.gov/wms.cgi \
+         output=wms_global_mosaic
 
-    # export the data to VTK
-    r.out.vtk rgbmaps=wms_global_mosaic.red,wms_global_mosaic.green,wms_global_mosaic.blue \
-              elevation=elevation.10m output=/tmp/out.vtk
+# export the data to VTK
+r.out.vtk rgbmaps=wms_global_mosaic.red,wms_global_mosaic.green,wms_global_mosaic.blue \
+          elevation=elevation.10m output=/tmp/out.vtk
 
-    # visualize in Paraview or other VTK viewer:
-    paraview --data=/tmp/out.vtk
-:::
+# visualize in Paraview or other VTK viewer:
+paraview --data=/tmp/out.vtk
+```
 
 **Paraview RGB visualization notes**\
 To achieve proper RGB overlay:

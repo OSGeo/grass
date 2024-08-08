@@ -29,27 +29,27 @@ Most DXF/DWG drawings are done within XY coordinate space. To transform
 them to a national grid, we can use *v.transform* together with
 *v.rectify* and a first-order transformation.
 
-::: code
-    v.transform -t in=watertowerXY out=watertower_z zscale=0.04 zshift=1320
-    v.rectify in=watertower_z out=watertowerUTM points=wt.points order=1
-:::
+```
+v.transform -t in=watertowerXY out=watertower_z zscale=0.04 zshift=1320
+v.rectify in=watertower_z out=watertowerUTM points=wt.points order=1
+```
 
 ### Extrude 2D vector points to 3D based on attribute column values
 
 Spearfish example with manual table editing for vertical shift:
 
-::: code
-    # work on own map copy:
-    g.copy vect=archsites@PERMANENT,myarchsites
-    # add new 'zs' column to later store height of each site:
-    v.db.addcolumn myarchsites col="zs double precision"
-    v.db.update myarchsites layer=1 column=zs value="cat * 1000"
+```
+# work on own map copy:
+g.copy vect=archsites@PERMANENT,myarchsites
+# add new 'zs' column to later store height of each site:
+v.db.addcolumn myarchsites col="zs double precision"
+v.db.update myarchsites layer=1 column=zs value="cat * 1000"
 
-    # perform z transformation:
-    v.transform -t input=archsites output=myarchsites3d column="zshift:zs" table="archsites_t"
-    # drop table containing transformation parameters:
-    echo "drop table archsites_t" | db.execute
-:::
+# perform z transformation:
+v.transform -t input=archsites output=myarchsites3d column="zshift:zs" table="archsites_t"
+# drop table containing transformation parameters:
+echo "drop table archsites_t" | db.execute
+```
 
 The resulting map is a 3D vector map.
 
@@ -58,23 +58,23 @@ The resulting map is a 3D vector map.
 Spearfish example with automated elevation extraction for vertical
 shift:
 
-::: code
-    # work on own map copy:
-    g.copy vect=archsites@PERMANENT,myarchsites
-    # add new 'zs' column to later store height of each site:
-    v.db.addcolumn myarchsites col="zs double precision"
+```
+# work on own map copy:
+g.copy vect=archsites@PERMANENT,myarchsites
+# add new 'zs' column to later store height of each site:
+v.db.addcolumn myarchsites col="zs double precision"
 
-    # set region to elevation map and fetch individual heights:
-    g.region raster=elevation.10m -p
-    v.what.rast myarchsites rast=elevation.10m col=zs
-    # verify:
-    v.db.select myarchsites
+# set region to elevation map and fetch individual heights:
+g.region raster=elevation.10m -p
+v.what.rast myarchsites rast=elevation.10m col=zs
+# verify:
+v.db.select myarchsites
 
-    # perform transformation to 3D
-    v.transform -t myarchsites output=myarchsites3d column="zshift:zs" layer=1
-    # drop table containing transformation parameters
-    v.db.dropcolumn myarchsites3d col=zs
-:::
+# perform transformation to 3D
+v.transform -t myarchsites output=myarchsites3d column="zshift:zs" layer=1
+# drop table containing transformation parameters
+v.db.dropcolumn myarchsites3d col=zs
+```
 
 The resulting map is a 3D vector map.
 

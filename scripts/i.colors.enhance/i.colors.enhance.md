@@ -33,15 +33,15 @@ resolution afterwards.
 
 North Carolina sample dataset example with Landsat data:
 
-::: code
-    g.region raster=lsat7_2002_10 -p
-    d.rgb blue=lsat7_2002_10 green=lsat7_2002_20 red=lsat7_2002_30
-    d.barscale at=55.3125,93.125 bcolor=white text_pos=over
+```
+g.region raster=lsat7_2002_10 -p
+d.rgb blue=lsat7_2002_10 green=lsat7_2002_20 red=lsat7_2002_30
+d.barscale at=55.3125,93.125 bcolor=white text_pos=over
 
-    i.colors.enhance blue=lsat7_2002_10 green=lsat7_2002_20 red=lsat7_2002_30 strength=95
-    d.rgb blue=lsat7_2002_10 green=lsat7_2002_20 red=lsat7_2002_30
-    d.barscale at=55.3125,93.125 bcolor=white text_pos=over
-:::
+i.colors.enhance blue=lsat7_2002_10 green=lsat7_2002_20 red=lsat7_2002_30 strength=95
+d.rgb blue=lsat7_2002_10 green=lsat7_2002_20 red=lsat7_2002_30
+d.barscale at=55.3125,93.125 bcolor=white text_pos=over
+```
 
 ![Uncorrected RGB composite of Landsat ETM channels
 B/G/R](i_colors_enhance_uncorrected.jpg)\

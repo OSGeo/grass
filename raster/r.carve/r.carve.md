@@ -19,48 +19,48 @@ are in flat areas and not in the streams.
 
 North Carolina sample dataset:
 
-::: code
-    # set computational region
-    g.region raster=elev_lid792_1m -p
+```
+# set computational region
+g.region raster=elev_lid792_1m -p
 
-    # digitize a ditch for the farm pond
-    echo "L  3 1
-     638692.93595422 220198.90026383
-     638737.42270627 220149.74706926
-     638984.43306379 220148.19158842
-     1     1" | v.in.ascii -n input=- output=ditch format=standard
+# digitize a ditch for the farm pond
+echo "L  3 1
+ 638692.93595422 220198.90026383
+ 638737.42270627 220149.74706926
+ 638984.43306379 220148.19158842
+ 1     1" | v.in.ascii -n input=- output=ditch format=standard
 
-    # visualize original data
-    d.mon wx0
-    d.rast elev_lid792_1m
-    d.vect ditch
+# visualize original data
+d.mon wx0
+d.rast elev_lid792_1m
+d.vect ditch
 
-    # carve
-    r.carve raster=elev_lid792_1m vector=ditch output=carved_dem width=3 depth=0.5
+# carve
+r.carve raster=elev_lid792_1m vector=ditch output=carved_dem width=3 depth=0.5
 
-    # visualize resulting carved DEM map
-    d.rast carved_dem
+# visualize resulting carved DEM map
+d.rast carved_dem
 
-    # visualize
-    r.relief input=elev_lid792_1m output=elev_lid792_1m_shaded
-    r.relief input=carved_dem output=carved_dem_shaded
-    d.rast elev_lid792_1m_shaded
-    d.erase
-    d.rast carved_dem_shaded
+# visualize
+r.relief input=elev_lid792_1m output=elev_lid792_1m_shaded
+r.relief input=carved_dem output=carved_dem_shaded
+d.rast elev_lid792_1m_shaded
+d.erase
+d.rast carved_dem_shaded
 
-    # flow accumulation
-    r.watershed elevation=elev_lid792_1m accumulation=elev_lid792_1m_accum
-    r.watershed elevation=carved_dem accumulation=carved_dem_accum
-    d.rast elev_lid792_1m_accum
-    d.erase
-    d.rast carved_dem_accum
+# flow accumulation
+r.watershed elevation=elev_lid792_1m accumulation=elev_lid792_1m_accum
+r.watershed elevation=carved_dem accumulation=carved_dem_accum
+d.rast elev_lid792_1m_accum
+d.erase
+d.rast carved_dem_accum
 
-    # differences
-    r.mapcalc "accum_diff = elev_lid792_1m_accum - carved_dem_accum"
-    r.colors accum_diff color=differences
-    d.erase
-    d.rast accum_diff
-:::
+# differences
+r.mapcalc "accum_diff = elev_lid792_1m_accum - carved_dem_accum"
+r.colors accum_diff color=differences
+d.erase
+d.rast accum_diff
+```
 
   ------------------------------------------------------ ---------------------------------------------------------
                [![r.carve example: original                          [![r.carve example: original DEM
@@ -78,7 +78,7 @@ North Carolina sample dataset:
    accumulated](r_carve_dem_orig_accum.png){width="300"   accumulation](r_carve_dem_carved_accum.png){width="300"
   height="321" border="0"}](r_carve_dem_orig_accum.png)\ height="321" border="0"}](r_carve_dem_carved_accum.png)\
     *Fig: Flow accumulation in original 1m LiDAR based     *Fig: Flow accumulation in carved 1m LiDAR based DEM*
-                           DEM*
+                           DEM*                          
   ------------------------------------------------------ ---------------------------------------------------------
 
 ## KNOWN ISSUES

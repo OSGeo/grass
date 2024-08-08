@@ -203,23 +203,23 @@ problem.
 
 Geomorphon calculation example using the EU DEM 25m:
 
-::: code
-    g.region raster=eu_dem_25m -p
-    r.geomorphon elevation=eu_dem_25m forms=eu_dem_25m_geomorph
+```
+g.region raster=eu_dem_25m -p
+r.geomorphon elevation=eu_dem_25m forms=eu_dem_25m_geomorph
 
-    # verify terrestrial landforms found in DEM
-    r.category eu_dem_25m_geomorph
-     1  flat
-     2  peak
-     3  ridge
-     4  shoulder
-     5  spur
-     6  slope
-     7  hollow
-     8  footslope
-     9  valley
-     10 pit
-:::
+# verify terrestrial landforms found in DEM
+r.category eu_dem_25m_geomorph
+ 1  flat
+ 2  peak
+ 3  ridge
+ 4  shoulder
+ 5  spur
+ 6  slope
+ 7  hollow
+ 8  footslope
+ 9  valley
+ 10 pit
+```
 
 ![Geomorphon calculation example using the EU DEM 25m (with
 search=11)](r_geomorphon.png){border="0"}\
@@ -229,12 +229,12 @@ search=11)](r_geomorphon.png){border="0"}\
 Using the resulting terrestrial landforms map, single landforms can be
 extracted, e.g. the peaks, and converted into a vector point map:
 
-::: code
-    r.mapcalc expression="eu_dem_25m_peaks = if(eu_dem_25m_geomorph == 2, 1, null())"
-    r.thin input=eu_dem_25m_peaks output=eu_dem_25m_peaks_thinned
-    r.to.vect input=eu_dem_25m_peaks_thinned output=eu_dem_25m_peaks type=point
-    v.info input=eu_dem_25m_peaks
-:::
+```
+r.mapcalc expression="eu_dem_25m_peaks = if(eu_dem_25m_geomorph == 2, 1, null())"
+r.thin input=eu_dem_25m_peaks output=eu_dem_25m_peaks_thinned
+r.to.vect input=eu_dem_25m_peaks_thinned output=eu_dem_25m_peaks type=point
+v.info input=eu_dem_25m_peaks
+```
 
 ![Extraction of peaks from EU DEM 25m (with
 search=11)](r_geomorphon_peaks.png){border="0"}\

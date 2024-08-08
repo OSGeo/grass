@@ -14,19 +14,19 @@ also for SQLite tables.
 
 Dropping a column (North Carolina sample dataset):
 
-::: code
-    # work on own copy
-    g.copy vect=roadsmajor,myroads
-    db.describe -c myroads
+```
+# work on own copy
+g.copy vect=roadsmajor,myroads
+db.describe -c myroads
 
-    # only shows what would happen:
-    db.dropcolumn myroads column=SHAPE_LEN
+# only shows what would happen:
+db.dropcolumn myroads column=SHAPE_LEN
 
-    # actually drops the column
-    db.dropcolumn -f myroads column=SHAPE_LEN
+# actually drops the column
+db.dropcolumn -f myroads column=SHAPE_LEN
 
-    db.describe -c myroads
-:::
+db.describe -c myroads
+```
 
 ## SEE ALSO
 

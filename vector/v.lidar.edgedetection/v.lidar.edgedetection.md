@@ -41,60 +41,60 @@ for the next module of the procedure of LiDAR data filtering. In this
 table the interpolated height values of each point will be recorded.
 Also points in the output vector map will be classified as:
 
-::: code
-    TERRAIN (cat = 1, layer = 1)
-    EDGE (cat = 2, layer = 1)
-    UNKNOWN (cat = 3, layer = 1)
-:::
+```
+TERRAIN (cat = 1, layer = 1)
+EDGE (cat = 2, layer = 1)
+UNKNOWN (cat = 3, layer = 1)
+```
 
 The final result of the whole procedure (*v.lidar.edgedetection*,
 *[v.lidar.growing](v.lidar.growing.html)*,
 *[v.lidar.correction](v.lidar.correction.html)*) will be a point
 classification in four categories:
 
-::: code
-    TERRAIN SINGLE PULSE (cat = 1, layer = 2)
-    TERRAIN DOUBLE PULSE (cat = 2, layer = 2)
-    OBJECT SINGLE PULSE (cat = 3, layer = 2)
-    OBJECT DOUBLE PULSE (cat = 4, layer = 2)
-:::
+```
+TERRAIN SINGLE PULSE (cat = 1, layer = 2)
+TERRAIN DOUBLE PULSE (cat = 2, layer = 2)
+OBJECT SINGLE PULSE (cat = 3, layer = 2)
+OBJECT DOUBLE PULSE (cat = 4, layer = 2)
+```
 
 ## EXAMPLES
 
 ### Basic edge detection
 
-::: code
-    # last return points
-    v.lidar.edgedetection input=vector_last output=edge ew_step=8 ns_step=8 lambda_g=0.5
-:::
+```
+# last return points
+v.lidar.edgedetection input=vector_last output=edge ew_step=8 ns_step=8 lambda_g=0.5
+```
 
 ### Complete workflow
 
-::: code
-    # region settings (using an existing raster)
-    g.region raster=elev_lid792_1m
+```
+# region settings (using an existing raster)
+g.region raster=elev_lid792_1m
 
-    # import
-    v.in.lidar -tr input=points.las output=points
-    v.in.lidar -tr input=points.las output=points_first return_filter=first
+# import
+v.in.lidar -tr input=points.las output=points
+v.in.lidar -tr input=points.las output=points_first return_filter=first
 
-    # detection
-    v.lidar.edgedetection input=points output=edge ew_step=8 ns_step=8 lambda_g=0.5
-    v.lidar.growing input=edge output=growing first=points_first
-    v.lidar.correction input=growing output=correction terrain=only_terrain
+# detection
+v.lidar.edgedetection input=points output=edge ew_step=8 ns_step=8 lambda_g=0.5
+v.lidar.growing input=edge output=growing first=points_first
+v.lidar.correction input=growing output=correction terrain=only_terrain
 
-    # visualization of selected points
-    # zoom somewhere first, to make it faster
-    d.rast map=orthophoto
-    d.vect map=correction layer=2 cats=2,3,4 color=red size=0.25
-    d.vect map=correction layer=2 cats=1 color=0:128:0 size=0.5
+# visualization of selected points
+# zoom somewhere first, to make it faster
+d.rast map=orthophoto
+d.vect map=correction layer=2 cats=2,3,4 color=red size=0.25
+d.vect map=correction layer=2 cats=1 color=0:128:0 size=0.5
 
-    # interpolation (this may take some time)
-    v.surf.rst input=only_terrain elevation=terrain
+# interpolation (this may take some time)
+v.surf.rst input=only_terrain elevation=terrain
 
-    # get object points for 3D visualization
-    v.extract input=correction layer=2 cats=2,3,4 output=objects
-:::
+# get object points for 3D visualization
+v.extract input=correction layer=2 cats=2,3,4 output=objects
+```
 
 ![](v_lidar_edgedetection.png)
 

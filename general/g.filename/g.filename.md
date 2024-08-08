@@ -22,9 +22,9 @@ The output is a */bin/sh* command to set the variable specified by the
 file *name* to the full UNIX path name for the data base file. This
 variable may be set in the */bin/sh* as follows:
 
-::: code
-    eval `g.filename element=name mapset=name file=name`
-:::
+```
+eval `g.filename element=name mapset=name file=name`
+```
 
 ## NOTES
 

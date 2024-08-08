@@ -13,24 +13,24 @@ space time raster dataset. All maps of this space time raster dataset
 are exported using **t.rast.out.vtk** into the directory
 **/tmp/export**.
 
-::: code
-    mkdir /tmp/export
-    t.rast.out.vtk input=precip_abs directory=/tmp/export/ elevation=elevation
+```
+mkdir /tmp/export
+t.rast.out.vtk input=precip_abs directory=/tmp/export/ elevation=elevation
 
-    ls -1 /tmp/export
-    000000_tempmean_monthly.vtk
-    000001_tempmean_monthly.vtk
-    000002_tempmean_monthly.vtk
-    000003_tempmean_monthly.vtk
-    000004_tempmean_monthly.vtk
-    000005_tempmean_monthly.vtk
-    000006_tempmean_monthly.vtk
-    000007_tempmean_monthly.vtk
-    000008_tempmean_monthly.vtk
-    000009_tempmean_monthly.vtk
-    000010_tempmean_monthly.vtk
-    000011_tempmean_monthly.vtk
-:::
+ls -1 /tmp/export
+000000_tempmean_monthly.vtk
+000001_tempmean_monthly.vtk
+000002_tempmean_monthly.vtk
+000003_tempmean_monthly.vtk
+000004_tempmean_monthly.vtk
+000005_tempmean_monthly.vtk
+000006_tempmean_monthly.vtk
+000007_tempmean_monthly.vtk
+000008_tempmean_monthly.vtk
+000009_tempmean_monthly.vtk
+000010_tempmean_monthly.vtk
+000011_tempmean_monthly.vtk
+```
 
 ## SEE ALSO
 

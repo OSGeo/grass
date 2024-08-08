@@ -53,22 +53,22 @@ flags are separated by null characters.
 
 Typical header definitions are as follows:
 
-::: code
-    # %module
-    # % description: g.parser test script
-    # %end
-    # %flag
-    # % key: f
-    # % description: A flag
-    # %end
-    # %option
-    # % key: raster
-    # % type: string
-    # % gisprompt: old,cell,raster
-    # % description: Raster input map
-    # % required: yes
-    # %end
-:::
+```
+# %module
+# % description: g.parser test script
+# %end
+# %flag
+# % key: f
+# % description: A flag
+# %end
+# %option
+# % key: raster
+# % type: string
+# % gisprompt: old,cell,raster
+# % description: Raster input map
+# % required: yes
+# %end
+```
 
 With `{NULL}` it is possible to suppress a predefined `description` or
 `label`.
@@ -80,58 +80,58 @@ and
 [flags](https://grass.osgeo.org/programming8/parser__standard__options_8c.html#ad081e95e5d4dc3daab9c820d962e6902)
 in the programmer manual. Eg. the option
 
-::: code
-    # %option
-    # % key: raster
-    # % type: string
-    # % gisprompt: old,cell,raster
-    # % description: Raster input map
-    # % required: yes
-    # %end
-:::
+```
+# %option
+# % key: raster
+# % type: string
+# % gisprompt: old,cell,raster
+# % description: Raster input map
+# % required: yes
+# %end
+```
 
 can be easily defined as
 
-::: code
-    # %option G_OPT_R_MAP
-    # % key: raster
-    # %end
-:::
+```
+# %option G_OPT_R_MAP
+# % key: raster
+# %end
+```
 
 The parser allows defining predefined *rules* for used options. The
 syntax of the rules section is following:
 
-::: code
-    # %rules
-    # % exclusive: capfile_output, capfile
-    # %end
-:::
+```
+# %rules
+# % exclusive: capfile_output, capfile
+# %end
+```
 
 The parser also allows defining \"OR\" conditions, e.g. requiring raster
 OR vector (for details, see below), e.g.for options:
 
-::: code
-    # %rules
-    # % required: raster, vector
-    # %end
-:::
+```
+# %rules
+# % required: raster, vector
+# %end
+```
 
 and e.g., for flags:
 
-::: code
-    # %rules
-    # % required: -i,-d,-c
-    # %end
-:::
+```
+# %rules
+# % required: -i,-d,-c
+# %end
+```
 
 ## NOTES
 
 An option can be instructed to allow multiple inputs by adding the
 following line:
 
-::: code
-    # % multiple: yes
-:::
+```
+# % multiple: yes
+```
 
 While this will only directly change the *Usage* section of the help
 screen, the option\'s environmental string may be easily parsed from
@@ -139,30 +139,30 @@ within a script. For example, individual comma separated identities for
 an option named \"input\" can be parsed with the following Bash shell
 code:
 
-::: code
-    IFS=,
-    for opt in $GIS_OPT_INPUT ; do
-        ... "$opt"
-    done
-:::
+```
+IFS=,
+for opt in $GIS_OPT_INPUT ; do
+    ... "$opt"
+done
+```
 
 A \"`guisection`\" field may be added to each option and flag to specify
 that the options should appear in multiple tabs in the auto-generated
 GUI. Any options without a `guisection` field go into the \"Required\"
 or \"Options\" tab. For example:
 
-::: code
-    # % guisection: tabname
-:::
+```
+# % guisection: tabname
+```
 
 would put that option in a tab named *tabname*.
 
 A \"`key_desc`\" field may be added to each option to specify the text
 that appears in the module\'s usage help section. For example:
 
-::: code
-    # % key_desc: filename
-:::
+```
+# % key_desc: filename
+```
 
 added to an **input** option would create the usage summary
 `[input=filename]`.
@@ -199,11 +199,11 @@ For C, the relevant functions are those in
 
 For scripts, relationships are specified using a \"rules\" section, e.g.
 
-::: code
-    # %rules
-    # % required: altitude,elevation
-    # %end
-:::
+```
+# %rules
+# % required: altitude,elevation
+# %end
+```
 
 specifies that at least one of those options must be given. Both options
 and flags can be specified (a leading \"**-**\" denotes a flag). The
@@ -227,27 +227,27 @@ To write out a *g.parser* boilerplate for easy prototyping of Python
 scripts, the flag **\--script** can be added to any GRASS command.
 Example:
 
-::: code
-    v.in.db --script
-:::
+```
+v.in.db --script
+```
 
 ## Help page template (HTML)
 
 The flag **\--html-description** added to a GRASS command generates a
 related help page template in HTML. Example:
 
-::: code
-    v.in.db --html-description
-:::
+```
+v.in.db --html-description
+```
 
 ## GUI window parser (XML)
 
 The flag **\--interface-description** added to a GRASS command generates
 a related help page template in XML. Example:
 
-::: code
-    v.in.db --interface-description
-:::
+```
+v.in.db --interface-description
+```
 
 ## JSON
 
@@ -255,34 +255,34 @@ The flag **\--json** added to a GRASS command with parameters
 mandatorily to be specified generates a module interface description in
 JSON. Example:
 
-::: code
-    v.in.db driver=sqlite database=mysqlite.db table=pointsfile x=x y=y z=z key=idcol out=dtmpoints --json
-    {
-      "module": "v.in.db",
-      "id": "v.in.db_1804289383",
-      "inputs":[
-         {"param": "table", "value": "pointsfile"},
-         {"param": "driver", "value": "sqlite"},
-         {"param": "database", "value": "mysqlite.db"},
-         {"param": "x", "value": "x"},
-         {"param": "y", "value": "y"},
-         {"param": "z", "value": "z"},
-         {"param": "key", "value": "idcol"}
-       ],
-      "outputs":[
-         {"param": "output", "value": "dtmpoints"}
-       ]
-    }
-:::
+```
+v.in.db driver=sqlite database=mysqlite.db table=pointsfile x=x y=y z=z key=idcol out=dtmpoints --json
+{
+  "module": "v.in.db",
+  "id": "v.in.db_1804289383",
+  "inputs":[
+     {"param": "table", "value": "pointsfile"},
+     {"param": "driver", "value": "sqlite"},
+     {"param": "database", "value": "mysqlite.db"},
+     {"param": "x", "value": "x"},
+     {"param": "y", "value": "y"},
+     {"param": "z", "value": "z"},
+     {"param": "key", "value": "idcol"}
+   ],
+  "outputs":[
+     {"param": "output", "value": "dtmpoints"}
+   ]
+}
+```
 
 ## Web Processing Service (WPS)
 
 The flag **\--wps-process-description** added to a GRASS command
 generates a Web Processing Service process description. Example:
 
-::: code
-    v.in.db --wps-process-description
-:::
+```
+v.in.db --wps-process-description
+```
 
 ## reStructuredText
 
@@ -290,9 +290,9 @@ The flag **\--rst-description** added to a GRASS command generates
 module interface description in reStructuredText, a lightweight markup
 language. Example:
 
-::: code
-    v.in.db --rst-description
-:::
+```
+v.in.db --rst-description
+```
 
 reStructuredText is sometimes abbreviated as reST, ReST, or RST. The
 commonly used file extension is `.rst`. Don\'t be confused with
@@ -303,9 +303,9 @@ Representational State Transfer (REST) technology.
 *g.parser* provides some support for translating the options of scripts.
 If called with the -t switch before the script filename like this
 
-::: code
-    g.parser -t somescriptfile
-:::
+```
+g.parser -t somescriptfile
+```
 
 *g.parser* will print the text of the translatable options to standard
 output, one per line, and exit. This is for internal use within the
@@ -325,210 +325,210 @@ being set.
 The script will provide a GUI (as above) and the following usage help
 text:
 
-::: code
-    test.py|sh|pl --help
+```
+test.py|sh|pl --help
 
-    Description:
-     g.parser test script (python)
+Description:
+ g.parser test script (python)
 
-    Usage:
-     test.sh [-f] raster=string vector=string [option1=string]
-       [--verbose] [--quiet]
+Usage:
+ test.sh [-f] raster=string vector=string [option1=string]
+   [--verbose] [--quiet]
 
-    Flags:
-      -f   A flag
-     --v   Verbose module output
-     --q   Quiet module output
+Flags:
+  -f   A flag
+ --v   Verbose module output
+ --q   Quiet module output
 
-    Parameters:
-       raster   Raster input map
-       vector   Vector input map
-      option1   An option
-:::
+Parameters:
+   raster   Raster input map
+   vector   Vector input map
+  option1   An option
+```
 
 ### Example code for Python
 
-::: code
-    #!/usr/bin/env python3
+```
+#!/usr/bin/env python3
 
-    # g.parser demo script for python programming
+# g.parser demo script for python programming
 
-    # %module
-    # % description: g.parser test script (python)
-    # % keyword: keyword1
-    # % keyword: keyword2
-    # %end
-    # %flag
-    # % key: f
-    # % description: A flag
-    # %end
-    # %option G_OPT_R_MAP
-    # % key: raster
-    # % required: yes
-    # %end
-    # %option G_OPT_V_MAP
-    # % key: vector
-    # %end
-    # %option
-    # % key: option1
-    # % type: string
-    # % description: An option
-    # % required: no
-    # %end
+# %module
+# % description: g.parser test script (python)
+# % keyword: keyword1
+# % keyword: keyword2
+# %end
+# %flag
+# % key: f
+# % description: A flag
+# %end
+# %option G_OPT_R_MAP
+# % key: raster
+# % required: yes
+# %end
+# %option G_OPT_V_MAP
+# % key: vector
+# %end
+# %option
+# % key: option1
+# % type: string
+# % description: An option
+# % required: no
+# %end
 
-    import os
-    import sys
+import os
+import sys
 
-    import grass.script as gs
+import grass.script as gs
 
-    def main():
-        flag_f = flags['f']
-        option1 = options['option1']
-        raster = options['raster']
-        vector = options['vector']
+def main():
+    flag_f = flags['f']
+    option1 = options['option1']
+    raster = options['raster']
+    vector = options['vector']
 
-        #### add your code here ####
+    #### add your code here ####
 
-        if flag_f:
-            print "Flag -f set"
-        else:
-            print "Flag -f not set"
+    if flag_f:
+        print "Flag -f set"
+    else:
+        print "Flag -f not set"
 
-        # test if parameter present:
-        if option1:
-            print "Value of option1 option: '%s'" % option1
+    # test if parameter present:
+    if option1:
+        print "Value of option1 option: '%s'" % option1
 
-        print "Value of raster option: '%s'" % raster
-        print "Value of vector option: '%s'" % vector
+    print "Value of raster option: '%s'" % raster
+    print "Value of vector option: '%s'" % vector
 
-        #### end of your code ####
+    #### end of your code ####
 
-        return 0
+    return 0
 
-    if __name__ == "__main__":
-        options, flags = gs.parser()
-        sys.exit(main())
-:::
+if __name__ == "__main__":
+    options, flags = gs.parser()
+    sys.exit(main())
+```
 
 ### Example code for SHELL
 
-::: code
-    #!/bin/sh
+```
+#!/bin/sh
 
-    # g.parser demo script for shell programming
+# g.parser demo script for shell programming
 
-    # %module
-    # % description: g.parser test script (shell)
-    # %end
-    # %flag
-    # % key: f
-    # % description: A flag
-    # %end
-    # %option G_OPT_R_MAP
-    # % key: raster
-    # % required: yes
-    # %end
-    # %option G_OPT_V_MAP
-    # % key: vector
-    # %end
-    # %option
-    # % key: option1
-    # % type: string
-    # % description: An option
-    # % required: no
-    # %end
+# %module
+# % description: g.parser test script (shell)
+# %end
+# %flag
+# % key: f
+# % description: A flag
+# %end
+# %option G_OPT_R_MAP
+# % key: raster
+# % required: yes
+# %end
+# %option G_OPT_V_MAP
+# % key: vector
+# %end
+# %option
+# % key: option1
+# % type: string
+# % description: An option
+# % required: no
+# %end
 
-    if [ -z "$GISBASE" ] ; then
-        echo "You must be in GRASS GIS to run this program." 1>&2
-        exit 1
-    fi
+if [ -z "$GISBASE" ] ; then
+    echo "You must be in GRASS GIS to run this program." 1>&2
+    exit 1
+fi
 
-    if [ "$1" != "@ARGS_PARSED@" ] ; then
-        exec g.parser "$0" "$@"
-    fi
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+    exec g.parser "$0" "$@"
+fi
 
-    #### add your code below ####
+#### add your code below ####
 
-    echo ""
+echo ""
 
-    if [ $GIS_FLAG_F -eq 1 ] ; then
-      g.message message="Flag -f set"
-    else
-      g.message message="Flag -f not set"
-    fi
+if [ $GIS_FLAG_F -eq 1 ] ; then
+  g.message message="Flag -f set"
+else
+  g.message message="Flag -f not set"
+fi
 
-    # test if parameter present:
-    if [ -n "$GIS_OPT_OPTION1" ] ; then
-        echo "Value of GIS_OPT_OPTION1: '$GIS_OPT_OPTION1'"
-    fi
+# test if parameter present:
+if [ -n "$GIS_OPT_OPTION1" ] ; then
+    echo "Value of GIS_OPT_OPTION1: '$GIS_OPT_OPTION1'"
+fi
 
-    g.message message="Value of GIS_OPT_option1: '$GIS_OPT_option1'"
-    g.message message="Value of GIS_OPT_raster: '$GIS_OPT_raster'"
-    g.message message="Value of GIS_OPT_vect: '$GIS_OPT_vector'"
+g.message message="Value of GIS_OPT_option1: '$GIS_OPT_option1'"
+g.message message="Value of GIS_OPT_raster: '$GIS_OPT_raster'"
+g.message message="Value of GIS_OPT_vect: '$GIS_OPT_vector'"
 
-    #### end of your code ####
-:::
+#### end of your code ####
+```
 
 ### Example code for Perl
 
-::: code
-    #!/usr/bin/perl -w
-    use strict;
+```
+#!/usr/bin/perl -w
+use strict;
 
-    # g.parser demo script
+# g.parser demo script
 
-    # %module
-    # %  description: g.parser test script (perl)
-    # %  keyword: keyword1
-    # %  keyword: keyword2
-    # %end
-    # %flag
-    # %  key: f
-    # %  description: A flag
-    # %end
-    # %option G_OPT_R_MAP
-    # % key: raster
-    # % required: yes
-    # %end
-    # %option G_OPT_V_MAP
-    # % key: vector
-    # %end
-    # %option
-    # % key: option1
-    # % type: string
-    # % description: An option
-    # % required: no
-    # %end
+# %module
+# %  description: g.parser test script (perl)
+# %  keyword: keyword1
+# %  keyword: keyword2
+# %end
+# %flag
+# %  key: f
+# %  description: A flag
+# %end
+# %option G_OPT_R_MAP
+# % key: raster
+# % required: yes
+# %end
+# %option G_OPT_V_MAP
+# % key: vector
+# %end
+# %option
+# % key: option1
+# % type: string
+# % description: An option
+# % required: no
+# %end
 
-    if ( !$ENV{'GISBASE'} ) {
-        printf(STDERR  "You must be in GRASS GIS to run this program.\n");
-        exit 1;
+if ( !$ENV{'GISBASE'} ) {
+    printf(STDERR  "You must be in GRASS GIS to run this program.\n");
+    exit 1;
+}
+
+if( $ARGV[0] ne '@ARGS_PARSED@' ){
+    my $arg = "";
+    for (my $i=0; $i < @ARGV;$i++) {
+        $arg .= " $ARGV[$i] ";
     }
+    system("$ENV{GISBASE}/bin/g.parser $0 $arg");
+    exit;
+}
 
-    if( $ARGV[0] ne '@ARGS_PARSED@' ){
-        my $arg = "";
-        for (my $i=0; $i < @ARGV;$i++) {
-            $arg .= " $ARGV[$i] ";
-        }
-        system("$ENV{GISBASE}/bin/g.parser $0 $arg");
-        exit;
-    }
+#### add your code here ####
+print  "\n";
+if ( $ENV{'GIS_FLAG_F'} eq "1" ){
+   print "Flag -f set\n"
+}
+else {
+   print "Flag -f not set\n"
+}
 
-    #### add your code here ####
-    print  "\n";
-    if ( $ENV{'GIS_FLAG_F'} eq "1" ){
-       print "Flag -f set\n"
-    }
-    else {
-       print "Flag -f not set\n"
-    }
+printf ("Value of GIS_OPT_option1: '%s'\n", $ENV{'GIS_OPT_OPTION1'});
+printf ("Value of GIS_OPT_raster: '%s'\n", $ENV{'GIS_OPT_RASTER'});
+printf ("Value of GIS_OPT_vect: '%s'\n", $ENV{'GIS_OPT_VECTOR'});
 
-    printf ("Value of GIS_OPT_option1: '%s'\n", $ENV{'GIS_OPT_OPTION1'});
-    printf ("Value of GIS_OPT_raster: '%s'\n", $ENV{'GIS_OPT_RASTER'});
-    printf ("Value of GIS_OPT_vect: '%s'\n", $ENV{'GIS_OPT_VECTOR'});
-
-    #### end of your code ####
-:::
+#### end of your code ####
+```
 
 ### Easy creation of a script
 
@@ -541,111 +541,111 @@ programming.
 In this example, the module *v.what.rast* is used as an example. The
 output is shown below:
 
-::: code
-    v.what.rast --script
+```
+v.what.rast --script
 
-    #!/usr/bin/env python3
-    ############################################################################
-    #
-    # MODULE:       v.what.rast_wrapper
-    # AUTHOR(S):    username
-    # PURPOSE:      Wrapper for v.what.rast
-    # COPYRIGHT:    (C) 2017 by username, and the GRASS Development Team
-    #
-    #  This program is free software; you can redistribute it and/or modify
-    #  it under the terms of the GNU General Public License as published by
-    #  the Free Software Foundation; either version 2 of the License, or
-    #  (at your option) any later version.
-    #
-    #  This program is distributed in the hope that it will be useful,
-    #  but WITHOUT ANY WARRANTY; without even the implied warranty of
-    #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    #  GNU General Public License for more details.
-    #
-    ############################################################################
+#!/usr/bin/env python3
+############################################################################
+#
+# MODULE:       v.what.rast_wrapper
+# AUTHOR(S):    username
+# PURPOSE:      Wrapper for v.what.rast
+# COPYRIGHT:    (C) 2017 by username, and the GRASS Development Team
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+############################################################################
 
-    # %module
-    # % description: Uploads raster values at positions of vector points to the table.
-    # % keyword: vector, sampling, raster, position, querying, attribute table, surface information
-    # %end
-    # %flag
-    # % key: i
-    # % description: Interpolate values from the nearest four cells
-    # %end
-    # %flag
-    # % key: p
-    # % description: Print categories and values instead of updating the database
-    # %end
-    # %option
-    # % key: map
-    # % type: string
-    # % required: yes
-    # % multiple: no
-    # % key_desc: name
-    # % label: Name of vector points map for which to edit attributes
-    # % description: Or data source for direct OGR access
-    # % gisprompt: old,vector,vector
-    # %end
-    # %option
-    # % key: layer
-    # % type: string
-    # % required: no
-    # % multiple: no
-    # % label: Layer number or name
-    # % description: Vector features can have category values in different layers. This number determines which layer to use. When used with direct OGR access this is the layer name.
-    # % answer: 1
-    # % gisprompt: old,layer,layer
-    # %end
-    # %option
-    # % key: type
-    # % type: string
-    # % required: no
-    # % multiple: yes
-    # % options: point,centroid
-    # % description: Input feature type
-    # % answer: point
-    # %end
-    # %option
-    # % key: raster
-    # % type: string
-    # % required: yes
-    # % multiple: no
-    # % key_desc: name
-    # % description: Name of existing raster map to be queried
-    # % gisprompt: old,cell,raster
-    # %end
-    # %option
-    # % key: column
-    # % type: string
-    # % required: no
-    # % multiple: no
-    # % key_desc: name
-    # % description: Name of attribute column to be updated with the query result
-    # % gisprompt: old,dbcolumn,dbcolumn
-    # %end
-    # %option
-    # % key: where
-    # % type: string
-    # % required: no
-    # % multiple: no
-    # % key_desc: sql_query
-    # % label: WHERE conditions of SQL statement without 'where' keyword
-    # % description: Example: income < 1000 and population >= 10000
-    # %end
+# %module
+# % description: Uploads raster values at positions of vector points to the table.
+# % keyword: vector, sampling, raster, position, querying, attribute table, surface information
+# %end
+# %flag
+# % key: i
+# % description: Interpolate values from the nearest four cells
+# %end
+# %flag
+# % key: p
+# % description: Print categories and values instead of updating the database
+# %end
+# %option
+# % key: map
+# % type: string
+# % required: yes
+# % multiple: no
+# % key_desc: name
+# % label: Name of vector points map for which to edit attributes
+# % description: Or data source for direct OGR access
+# % gisprompt: old,vector,vector
+# %end
+# %option
+# % key: layer
+# % type: string
+# % required: no
+# % multiple: no
+# % label: Layer number or name
+# % description: Vector features can have category values in different layers. This number determines which layer to use. When used with direct OGR access this is the layer name.
+# % answer: 1
+# % gisprompt: old,layer,layer
+# %end
+# %option
+# % key: type
+# % type: string
+# % required: no
+# % multiple: yes
+# % options: point,centroid
+# % description: Input feature type
+# % answer: point
+# %end
+# %option
+# % key: raster
+# % type: string
+# % required: yes
+# % multiple: no
+# % key_desc: name
+# % description: Name of existing raster map to be queried
+# % gisprompt: old,cell,raster
+# %end
+# %option
+# % key: column
+# % type: string
+# % required: no
+# % multiple: no
+# % key_desc: name
+# % description: Name of attribute column to be updated with the query result
+# % gisprompt: old,dbcolumn,dbcolumn
+# %end
+# %option
+# % key: where
+# % type: string
+# % required: no
+# % multiple: no
+# % key_desc: sql_query
+# % label: WHERE conditions of SQL statement without 'where' keyword
+# % description: Example: income < 1000 and population >= 10000
+# %end
 
-    import sys
+import sys
 
-    import grass.script as gs
+import grass.script as gs
 
-    def main():
-        # put code here
+def main():
+    # put code here
 
-        return 0
+    return 0
 
-    if __name__ == "__main__":
-        options, flags = gs.parser()
-        sys.exit(main())
-:::
+if __name__ == "__main__":
+    options, flags = gs.parser()
+    sys.exit(main())
+```
 
 ## SEE ALSO
 

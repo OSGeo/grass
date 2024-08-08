@@ -74,40 +74,40 @@ Note that topological output requires **PostGIS version 2 or later**.
 to process external geodata in GRASS while writing out the results
 directly eg. in ESRI Shapefile format:
 
-::: code
-    # register Shapefile in GRASS mapset:
-    v.external input=/path/to/shapefiles layer=cities
+```
+# register Shapefile in GRASS mapset:
+v.external input=/path/to/shapefiles layer=cities
 
-    # define output directory for GRASS calculation results:
-    v.external.out output=$HOME/gisoutput
+# define output directory for GRASS calculation results:
+v.external.out output=$HOME/gisoutput
 
-    # do something (here: spatial query), write output directly as Shapefile
-    v.select ainput=cities atype=point binput=forests btype=area operator=within output=fcities
-:::
+# do something (here: spatial query), write output directly as Shapefile
+v.select ainput=cities atype=point binput=forests btype=area operator=within output=fcities
+```
 
 Current settings can be printed using **-p** or **-g** flag.
 
-::: code
-    v.external.out -p
+```
+v.external.out -p
 
-    output: /path/to/home/gisoutput
-    format: ESRI Shapefile
-:::
+output: /path/to/home/gisoutput
+format: ESRI Shapefile
+```
 
 ### PostGIS (simple features)
 
 PostGIS data can be accessed directly using *GRASS-PostGIS data
 provider* (GRASS must be compiled with PostgreSQL support).
 
-::: code
-    # register PostGIS table in GRASS mapset:
-    v.external output=PG:dbname=gisdb layer=cities
+```
+# register PostGIS table in GRASS mapset:
+v.external output=PG:dbname=gisdb layer=cities
 
-    # define output PostGIS database for GRASS calculation results stored as simple features:
-    v.external.out output=PG:dbname=gisdb format=PostgreSQL
+# define output PostGIS database for GRASS calculation results stored as simple features:
+v.external.out output=PG:dbname=gisdb format=PostgreSQL
 
-    # do some processing...
-:::
+# do some processing...
+```
 
 *Note:* If the environment variable `GRASS_VECTOR_OGR` is defined, or
 GRASS is compiled without PostgreSQL support then GRASS will use
@@ -115,12 +115,12 @@ PostgreSQL driver from OGR library for reading and writing PostGIS data.
 
 ### PostGIS Topology
 
-::: code
-    # define output PostGIS database for GRASS calculation results stored as topological elements:
-    v.external.out output=PG:dbname=gisdb format=PostgreSQL options=topology=YES
+```
+# define output PostGIS database for GRASS calculation results stored as topological elements:
+v.external.out output=PG:dbname=gisdb format=PostgreSQL options=topology=YES
 
-    # do some processing...
-:::
+# do some processing...
+```
 
 *Note:* PostGIS topological access is supported only in built-in
 *GRASS-PostGIS data provider*.
@@ -129,39 +129,39 @@ PostgreSQL driver from OGR library for reading and writing PostGIS data.
 
 To restore original settings, ie. use the GRASS native format, type:
 
-::: code
-    v.external.out -r
-:::
+```
+v.external.out -r
+```
 
 ### Restore settings
 
 Current settings can be stored to file by specifying **output** option.
 
-::: code
-    # define output PostGIS database for GRASS calculation with
-    # results stored as topological elements:
-    v.external.out output=PG:dbname=gisdb format=PostgreSQL \
-      options=topology=YES savesettings=gisdb_topo.txt
+```
+# define output PostGIS database for GRASS calculation with
+# results stored as topological elements:
+v.external.out output=PG:dbname=gisdb format=PostgreSQL \
+  options=topology=YES savesettings=gisdb_topo.txt
 
-    # ... and do some processing in PostGIS Topology
-:::
+# ... and do some processing in PostGIS Topology
+```
 
 Back to native format:
 
-::: code
-    v.external.out -r
+```
+v.external.out -r
 
-    # do some processing in native format
-:::
+# do some processing in native format
+```
 
 Restore previous settings from \"gisdb_topo.txt\" file by specifying
 **loadsettings** option.
 
-::: code
-    v.external.out loadsettings=gisdb_topo.txt
+```
+v.external.out loadsettings=gisdb_topo.txt
 
-    # ... and do some processing in PostGIS Topology
-:::
+# ... and do some processing in PostGIS Topology
+```
 
 ## REFERENCES
 

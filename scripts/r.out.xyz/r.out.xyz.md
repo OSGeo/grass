@@ -26,10 +26,10 @@ convenient when it comes to e.g. produce ASCII point cloud files.
 In this example, a LiDAR elevation map in the North Carolina sample
 dataset is exported to CSV format.
 
-::: code
-    g.region raster=elev_lid792_1m -p
-    r.out.xyz input=elev_lid792_1m output=elev_lid792_1m.csv separator=","
-:::
+```
+g.region raster=elev_lid792_1m -p
+r.out.xyz input=elev_lid792_1m output=elev_lid792_1m.csv separator=","
+```
 
 In this example, elevation data from the North Carolina dataset are
 exported along with R,G,B triplet of the related orthophoto into a
@@ -38,17 +38,17 @@ combined file (requires the import of the supplementary high-resolution
 orthophoto](https://grass.osgeo.org/sampledata/north_carolina/ortho2010_t792_subset_20cm.tif),
 here called \"ortho2010_t792\"):
 
-::: code
-    g.region raster=elev_lid792_1m res=1 -a -p
-    r.out.xyz input=elev_lid792_1m,ortho2010_t792.red,ortho2010_t792.green,ortho2010_t792.blue \
-            separator=space output=pointcloud.asc
+```
+g.region raster=elev_lid792_1m res=1 -a -p
+r.out.xyz input=elev_lid792_1m,ortho2010_t792.red,ortho2010_t792.green,ortho2010_t792.blue \
+        separator=space output=pointcloud.asc
 
-    # validate: X Y Z R G B
-    head -n 3 pointcloud.asc
-    638300.5 220749.5 126.338218689 78 84 71
-    638301.5 220749.5 126.3381958008 93 101 86
-    638302.5 220749.5 126.3414840698 68 77 59
-:::
+# validate: X Y Z R G B
+head -n 3 pointcloud.asc
+638300.5 220749.5 126.338218689 78 84 71
+638301.5 220749.5 126.3381958008 93 101 86
+638302.5 220749.5 126.3414840698 68 77 59
+```
 
 ## TODO
 

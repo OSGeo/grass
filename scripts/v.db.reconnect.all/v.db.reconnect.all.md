@@ -20,10 +20,10 @@ create an index on key column (usually \"cat\" column).
 The value of the **old_database** option needs to be the exact string
 which appears as the fourth field printed by `v.db.connect -g`.
 
-::: code
-    v.db.connect -g map=census
-    1/census|census|cat|/home/user/grassdata/nc_spm_base/PERMANENT/dbf/|dbf
-:::
+```
+v.db.connect -g map=census
+1/census|census|cat|/home/user/grassdata/nc_spm_base/PERMANENT/dbf/|dbf
+```
 
 *v.db.reconnect.all* respect also variables to be substituted. In the
 example above, database
@@ -49,10 +49,10 @@ the vector maps through [DBF](grass-dbf.html) database driver.
 Reconnect [DBF](grass-dbf.html) attribute tables linked to the vector
 maps in the current mapset to [SQLite](grass-sqlite.html) database:
 
-::: code
-    v.db.reconnect.all old_database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/' \
-     new_driver=sqlite new_database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
-:::
+```
+v.db.reconnect.all old_database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/' \
+ new_driver=sqlite new_database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+```
 
 If attribute table doesn\'t exist in the target database
 (**new_database**) then the module prints an error message.
@@ -62,21 +62,21 @@ If attribute table doesn\'t exist in the target database
 For coping DBF tables to SQLite database and reconnecting them for all
 vector maps in the current mapset must be defined also **-c** flag.
 
-::: code
-    v.db.reconnect.all -c old_database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/' \
-     new_driver=sqlite new_database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
-:::
+```
+v.db.reconnect.all -c old_database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/' \
+ new_driver=sqlite new_database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+```
 
 or alternatively
 
-::: code
-    # set default connection (sqlite)
-    db.connect -d
-    # verify default connection
-    db.connect -g
-    # reconnect
-    v.db.reconnect.all -c old_database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'
-:::
+```
+# set default connection (sqlite)
+db.connect -d
+# verify default connection
+db.connect -g
+# reconnect
+v.db.reconnect.all -c old_database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'
+```
 
 To automatically remove original DBF attribute tables after reconnecting
 the vector maps use **-d** flag. Note that attribute tables will be
@@ -88,16 +88,16 @@ used very carefully!
 To become usable in GRASS 7, all vector maps in a mapset need to be
 updated:
 
-::: code
-    # first rebuild topology for all vector maps
-    v.build.all
+```
+# first rebuild topology for all vector maps
+v.build.all
 
-    # set new default db connection (to SQLite default)
-    db.connect -d
+# set new default db connection (to SQLite default)
+db.connect -d
 
-    # copy attribute tables from old DB to new SQLite DB, delete old tables in DBF format
-    v.db.reconnect.all -cd
-:::
+# copy attribute tables from old DB to new SQLite DB, delete old tables in DBF format
+v.db.reconnect.all -cd
+```
 
 ## SEE ALSO
 

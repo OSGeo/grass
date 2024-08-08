@@ -40,9 +40,9 @@ MPEG produced using **quality=1**.
 
 ## EXAMPLES
 
-::: code
-    r.out.mpeg view1="rain[1-9]","rain1[0-2]" view2="temp*"
-:::
+```
+r.out.mpeg view1="rain[1-9]","rain1[0-2]" view2="temp*"
+```
 
 If the number of files differs for each view, the view with the fewest
 files will determine the number of frames in the animation.

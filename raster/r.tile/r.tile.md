@@ -17,14 +17,14 @@ The overlap is defined in rows/columns.
 
 Retiling example for the North Carolina DEM:
 
-::: code
-    g.region raster=elevation -p
-    # rows:       1350
-    # cols:       1500
+```
+g.region raster=elevation -p
+# rows:       1350
+# cols:       1500
 
-    # generating 2 x 2 = 4 tiles (width=1500/2, height=rows/2)
-    r.tile input=elevation output=elev_tile width=750 height=675
-:::
+# generating 2 x 2 = 4 tiles (width=1500/2, height=rows/2)
+r.tile input=elevation output=elev_tile width=750 height=675
+```
 
 creates 4 tiles with the prefix *elev_tile* (named: elev_tile-000-000,
 elev_tile-000-001, elev_tile-001-000, \...).

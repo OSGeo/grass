@@ -186,81 +186,81 @@ show the input map\'s bounds once reprojected into the current working
 CRS, then use that to set the region bounds before performing the
 reprojection:
 
-::: code
-    # calculate where output map will be
-    r.proj input=elevation project=ll_wgs84 mapset=user1 -p
-    Source cols: 8162
-    Source rows: 12277
-    Local north: -4265502.30382993
-    Local south: -4473453.15255565
-    Local west: 14271663.19157564
-    Local east: 14409956.2693866
+```
+# calculate where output map will be
+r.proj input=elevation project=ll_wgs84 mapset=user1 -p
+Source cols: 8162
+Source rows: 12277
+Local north: -4265502.30382993
+Local south: -4473453.15255565
+Local west: 14271663.19157564
+Local east: 14409956.2693866
 
-    # same calculation, but in a form which can be cut and pasted into a g.region call
-    r.proj input=elevation project=ll_wgs84 mapset=user1 -g
-    n=-4265502.30382993 s=-4473453.15255565 w=14271663.19157564 e=14409956.2693866 rows=12277 cols=8162
+# same calculation, but in a form which can be cut and pasted into a g.region call
+r.proj input=elevation project=ll_wgs84 mapset=user1 -g
+n=-4265502.30382993 s=-4473453.15255565 w=14271663.19157564 e=14409956.2693866 rows=12277 cols=8162
 
-    g.region n=-4265502.30382993 s=-4473453.15255565 \
-      w=14271663.19157564 e=14409956.2693866 rows=12277 cols=8162 -p
-    projection: 99 (Mercator)
-    zone:       0
-    datum:      wgs84
-    ellipsoid:  wgs84
-    north:      -4265502.30382993
-    south:      -4473453.15255565
-    west:       14271663.19157564
-    east:       14409956.2693866
-    nsres:      16.93824621
-    ewres:      16.94352828
-    rows:       12277
-    cols:       8162
-    cells:      100204874
+g.region n=-4265502.30382993 s=-4473453.15255565 \
+  w=14271663.19157564 e=14409956.2693866 rows=12277 cols=8162 -p
+projection: 99 (Mercator)
+zone:       0
+datum:      wgs84
+ellipsoid:  wgs84
+north:      -4265502.30382993
+south:      -4473453.15255565
+west:       14271663.19157564
+east:       14409956.2693866
+nsres:      16.93824621
+ewres:      16.94352828
+rows:       12277
+cols:       8162
+cells:      100204874
 
-    # round resolution to something cleaner
-    g.region res=17 -a -p
-    projection: 99 (Mercator)
-    zone:       0
-    datum:      wgs84
-    ellipsoid:  wgs84
-    north:      -4265487
-    south:      -4473465
-    west:       14271653
-    east:       14409965
-    nsres:      17
-    ewres:      17
-    rows:       12234
-    cols:       8136
-    cells:      99535824
+# round resolution to something cleaner
+g.region res=17 -a -p
+projection: 99 (Mercator)
+zone:       0
+datum:      wgs84
+ellipsoid:  wgs84
+north:      -4265487
+south:      -4473465
+west:       14271653
+east:       14409965
+nsres:      17
+ewres:      17
+rows:       12234
+cols:       8136
+cells:      99535824
 
-    # finally, perform the reprojection
-    r.proj input=elevation project=ll_wgs84 mapset=user1 memory=800
-:::
+# finally, perform the reprojection
+r.proj input=elevation project=ll_wgs84 mapset=user1 memory=800
+```
 
 ### v.in.region method
 
-::: code
+```
 
-    # In the source project, use v.in.region to generate a bounding box around the
-    # region of interest:
+# In the source project, use v.in.region to generate a bounding box around the
+# region of interest:
 
-    v.in.region -d output=bounds type=area
+v.in.region -d output=bounds type=area
 
-    # Now switch to the target project and import the vector bounding box
-    # (you can run v.proj -l to get a list of vector maps in the source project):
+# Now switch to the target project and import the vector bounding box
+# (you can run v.proj -l to get a list of vector maps in the source project):
 
-    v.proj input=bounds project=source_project_name output=bounds_reprojected
+v.proj input=bounds project=source_project_name output=bounds_reprojected
 
-    # Set the region in the target project with that of the newly-imported vector
-    # bounds map, and align the resolution to the desired cell resolution of the
-    # final, reprojected raster map:
+# Set the region in the target project with that of the newly-imported vector
+# bounds map, and align the resolution to the desired cell resolution of the
+# final, reprojected raster map:
 
-    g.region vector=bounds_reprojected res=5 -a
+g.region vector=bounds_reprojected res=5 -a
 
-    # Now reproject the raster into the target project
+# Now reproject the raster into the target project
 
-    r.proj input=elevation.dem output=elevation.dem.reproj \
-      project=source_project_name mapset=PERMANENT res=5 method=bicubic
-:::
+r.proj input=elevation.dem output=elevation.dem.reproj \
+  project=source_project_name mapset=PERMANENT res=5 method=bicubic
+```
 
 ## REFERENCES
 

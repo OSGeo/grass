@@ -18,10 +18,10 @@ red at +2 S.D.
 
 North Carolina sample dataset:
 
-::: code
-    g.region raster=elevation -p
-    r.colors.stddev elevation
-:::
+```
+g.region raster=elevation -p
+r.colors.stddev elevation
+```
 
 ::: {align="center" style="margin: 10px"}
 [![r.colors.stddev example](r_colors_stddev.png){width="600"

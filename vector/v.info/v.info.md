@@ -15,56 +15,56 @@ with *v.db.connect*.
 
 ### Basic metadata information
 
-::: code
-    v.info map=geology
+```
+v.info map=geology
 
-     +----------------------------------------------------------------------------+
-     | Name:            geology                                                   |
-     | Mapset:          PERMANENT                                                 |
-     | Project:         nc_spm_08                                                 |
-     | Database:        /home/martin/grassdata                                    |
-     | Title:           North Carolina geology map (polygon map)                  |
-     | Map scale:       1:1                                                       |
-     | Map format:      native                                                    |
-     | Name of creator: helena                                                    |
-     | Organization:    NC OneMap                                                 |
-     | Source date:     Mon Nov  6 15:48:53 2006                                  |
-     |----------------------------------------------------------------------------|
-     |   Type of map: vector (level: 2)                                           |
-     |                                                                            |
-     |   Number of points:       0               Number of centroids:  1832       |
-     |   Number of lines:        0               Number of boundaries: 3649       |
-     |   Number of areas:        1832            Number of islands:    907        |
-     |                                                                            |
-     |   Map is 3D:              No                                               |
-     |   Number of dblinks:      1                                                |
-     |                                                                            |
-     |   Projection: Lambert Conformal Conic                                      |
-     |                                                                            |
-     |               N:   318117.43741634    S:    10875.82723209                 |
-     |               E:   930172.31282271    W:   123971.19498978                 |
-     |                                                                            |
-     |   Digitization threshold: 0                                                |
-     |   Comment:                                                                 |
-     |                                                                            |
-     +----------------------------------------------------------------------------+
-:::
+ +----------------------------------------------------------------------------+
+ | Name:            geology                                                   |
+ | Mapset:          PERMANENT                                                 |
+ | Project:         nc_spm_08                                                 |
+ | Database:        /home/martin/grassdata                                    |
+ | Title:           North Carolina geology map (polygon map)                  |
+ | Map scale:       1:1                                                       |
+ | Map format:      native                                                    |
+ | Name of creator: helena                                                    |
+ | Organization:    NC OneMap                                                 |
+ | Source date:     Mon Nov  6 15:48:53 2006                                  |
+ |----------------------------------------------------------------------------|
+ |   Type of map: vector (level: 2)                                           |
+ |                                                                            |
+ |   Number of points:       0               Number of centroids:  1832       |
+ |   Number of lines:        0               Number of boundaries: 3649       |
+ |   Number of areas:        1832            Number of islands:    907        |
+ |                                                                            |
+ |   Map is 3D:              No                                               |
+ |   Number of dblinks:      1                                                |
+ |                                                                            |
+ |   Projection: Lambert Conformal Conic                                      |
+ |                                                                            |
+ |               N:   318117.43741634    S:    10875.82723209                 |
+ |               E:   930172.31282271    W:   123971.19498978                 |
+ |                                                                            |
+ |   Digitization threshold: 0                                                |
+ |   Comment:                                                                 |
+ |                                                                            |
+ +----------------------------------------------------------------------------+
+```
 
 ### Map history
 
-::: code
-    v.info -h map=geology
+```
+v.info -h map=geology
 
-    COMMAND: v.in.ogr input="geol.shp" output="geology" min_area=0.0001 snap=-1
-    GISDBASE: /bigdata/grassdata05
-    LOCATION: ncfromfile MAPSET: PERMANENT USER: helena DATE: Mon Nov  6 15:48:53 2006
-    ---------------------------------------------------------------------------------
-    1832 input polygons
-    total area: 1.276093e+11 (1832 areas)
-    overlapping area: 0.000000e+00 (0 areas)
-    area without category: 0.000000e+00 (0 areas)
-    ---------------------------------------------------------------------------------
-:::
+COMMAND: v.in.ogr input="geol.shp" output="geology" min_area=0.0001 snap=-1
+GISDBASE: /bigdata/grassdata05
+LOCATION: ncfromfile MAPSET: PERMANENT USER: helena DATE: Mon Nov  6 15:48:53 2006
+---------------------------------------------------------------------------------
+1832 input polygons
+total area: 1.276093e+11 (1832 areas)
+overlapping area: 0.000000e+00 (0 areas)
+area without category: 0.000000e+00 (0 areas)
+---------------------------------------------------------------------------------
+```
 
 Note that while \"project\" is used by *v.info* elsewhere, history
 output uses the legacy term \"location\" because \"LOCATION\" is
@@ -72,67 +72,111 @@ currently a part of the native vector format.
 
 ### Attribute columns for given layer
 
-::: code
-    v.info -c map=geology
+```
+v.info -c map=geology
 
-    Displaying column types/names for database connection of layer <1>:
-    INTEGER|cat
-    DOUBLE PRECISION|onemap_pro
-    DOUBLE PRECISION|PERIMETER
-    INTEGER|GEOL250_
-    INTEGER|GEOL250_ID
-    CHARACTER|GEO_NAME
-    DOUBLE PRECISION|SHAPE_area
-    DOUBLE PRECISION|SHAPE_len
-:::
+Displaying column types/names for database connection of layer <1>:
+INTEGER|cat
+DOUBLE PRECISION|onemap_pro
+DOUBLE PRECISION|PERIMETER
+INTEGER|GEOL250_
+INTEGER|GEOL250_ID
+CHARACTER|GEO_NAME
+DOUBLE PRECISION|SHAPE_area
+DOUBLE PRECISION|SHAPE_len
+```
 
 ### Basic metadata information in shell script style
 
-::: code
-    v.info -get map=geology
+```
+v.info -get map=geology
 
-    name=geology
-    mapset=PERMANENT
-    project=nc_spm_08
-    database=/home/martin/grassdata
-    title=North Carolina geology map (polygon map)
-    scale=1:1
-    format=native
-    creator=helena
-    organization=NC OneMap
-    source_date=Mon Nov  6 15:48:53 2006
-    level=2
-    map3d=0
-    num_dblinks=1
-    projection=Lambert Conformal Conic
-    digitization_threshold=0.000000
-    comment=
-    north=318117.43741634
-    south=10875.82723209
-    east=930172.31282271
-    west=123971.19498978
-    top=0.000000
-    bottom=0.000000
-    nodes=4556
-    points=0
-    lines=0
-    boundaries=3649
-    centroids=1832
-    areas=1832
-    islands=907
-    primitives=5481
-:::
+name=geology
+mapset=PERMANENT
+project=nc_spm_08
+database=/home/martin/grassdata
+title=North Carolina geology map (polygon map)
+scale=1:1
+format=native
+creator=helena
+organization=NC OneMap
+source_date=Mon Nov  6 15:48:53 2006
+level=2
+map3d=0
+num_dblinks=1
+projection=Lambert Conformal Conic
+digitization_threshold=0.000000
+comment=
+north=318117.43741634
+south=10875.82723209
+east=930172.31282271
+west=123971.19498978
+top=0.000000
+bottom=0.000000
+nodes=4556
+points=0
+lines=0
+boundaries=3649
+centroids=1832
+areas=1832
+islands=907
+primitives=5481
+```
 
-::: code
-    v.info -g map=geology
+```
+v.info -g map=geology
 
-    north=318117.43741634
-    south=10875.82723209
-    east=930172.31282271
-    west=123971.19498978
-    top=0.000000
-    bottom=0.000000
-:::
+north=318117.43741634
+south=10875.82723209
+east=930172.31282271
+west=123971.19498978
+top=0.000000
+bottom=0.000000
+```
+
+### Output in JSON format
+
+```
+{
+    "name": "geology",
+    "mapset": "PERMANENT",
+    "project": "nc_spm_08_grass7",
+    "database": "\/grassdata",
+    "title": "North Carolina geology map (polygon map)",
+    "scale": 1,
+    "creator": "helena",
+    "organization": "NC OneMap",
+    "source_date": "Mon Nov  6 15:48:53 2006",
+    "timestamp": null,
+    "format": "native",
+    "level": 2,
+    "num_dblinks": 1,
+    "attribute_layer_number": 1,
+    "attribute_layer_name": "geology",
+    "attribute_database": "\/grassdata\/nc_spm_08_grass7\/PERMANENT\/sqlite\/sqlite.db",
+    "attribute_database_driver": "sqlite",
+    "attribute_table": "geology",
+    "attribute_primary_key": "cat",
+    "projection": "Lambert Conformal Conic",
+    "digitization_threshold": 0,
+    "comment": "",
+    "north": 318117.43741634465,
+    "south": 10875.827232091688,
+    "east": 930172.31282271142,
+    "west": 123971.19498978264,
+    "top": 0,
+    "bottom": 0,
+    "nodes": 2724,
+    "points": 0,
+    "lines": 0,
+    "boundaries": 3649,
+    "centroids": 1832,
+    "areas": 1832,
+    "islands": 907,
+    "primitives": 5481,
+    "map3d": false
+}
+```
 
 ## PYTHON
 
@@ -143,12 +187,29 @@ more info.
 Note: The Python tab in the *wxGUI* can be used for entering the
 following code:
 
-::: code
-    import grass.script as gcore
+```
+import grass.script as gcore
 
-    gcore.vector_columns('geology')   # for `v.info -c`
-    gcore.vector_info_topo('geology') # for `v.info shell=topo`
-:::
+gcore.vector_columns('geology')   # for `v.info -c`
+gcore.vector_info_topo('geology') # for `v.info shell=topo`
+```
+
+Here is an example of how the JSON output format can be used to
+integrate Grass with other python libraries easily.
+
+```
+import grass.script as gs
+import pandas as pd
+
+# Run v.info command
+busstops = gs.run_command("v.info", map="busstopsall", format="json")
+
+# Load data into dataframe
+df = pd.DataFrame([busstops])
+
+# Display the DataFrame
+print(df)
+```
 
 ## SEE ALSO
 

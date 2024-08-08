@@ -238,6 +238,28 @@ phenomena (result could be strongly smoothed with lost details and
 fluctuations) or when significant noise is present that needs to be
 smoothed out.
 
+### Performance
+
+To enable parallel processing, the user can specify the number of
+threads to be used with the **nprocs** parameter (default 1). Figures 1
+and 2 show benchmark results running on Intel® Core™ i5-10210U CPU @
+1.60GHz × 8. See benchmark scripts in the source code for more details.
+
+::: {align="center" style="margin: 10px"}
+![benchmark for v.surf.rst](vsurfrst_benchmark.png){border="0"}\
+
+Figure 1: Benchmark shows execution time for different number of cells
+(1M, 2M, 4M, and 8M).
+:::
+
+::: {align="center" style="margin: 10px"}
+![benchmark for cross-validation of
+v.surf.rst](vsurfrst_cv_benchmark.png){border="0"}\
+
+Figure 2: Benchmark shows execution time for running cross-validation on
+different number of cells (100k, 200k, 400k, and 800k).
+:::
+
 ## EXAMPLE
 
 ### Setting for lidar point cloud
@@ -247,9 +269,9 @@ to be dense in relation to the desired raster resolution and thus a
 different set of parameters is more advantageous, e.g. in comparison to
 a typical temperature data interpolation.
 
-::: code
-    v.surf.rst input=points elevation=elevation npmin=100
-:::
+```
+v.surf.rst input=points elevation=elevation npmin=100
+```
 
 ### Usage of the where parameter
 
@@ -259,29 +281,29 @@ only a subset of the input vectors.
 North Carolina example (we simulate randomly distributed elevation
 measures which we interpolate to a gap-free elevation surface):
 
-::: code
-    g.region raster=elevation -p
-    # random elevation extraction of 500 samplings
-    r.random -s elevation vector=elevrand n=500
-    v.info -c elevrand
-    v.db.select elevrand
+```
+g.region raster=elevation -p
+# random elevation extraction of 500 samplings
+r.random -s elevation vector=elevrand n=500
+v.info -c elevrand
+v.db.select elevrand
 
-    # interpolation based on all points
-    v.surf.rst elevrand zcol=value elevation=elev_full
-    # apply the color table of the original raster map
-    r.colors elev_full raster=elevation
-    d.rast elev_full
-    d.vect elevrand
+# interpolation based on all points
+v.surf.rst elevrand zcol=value elevation=elev_full
+# apply the color table of the original raster map
+r.colors elev_full raster=elevation
+d.rast elev_full
+d.vect elevrand
 
-    # compute univariate statistics with 1st/3rd quartiles
-    v.db.univar -e elevrand column=value
+# compute univariate statistics with 1st/3rd quartiles
+v.db.univar -e elevrand column=value
 
-    # interpolation based on subset of points (only those over 1st quartile)
-    v.surf.rst input=elevrand zcolumn=value elevation=elev_partial npmin=100 where="value > 94.9"
-    r.colors map=elev_partial raster=elevation
-    d.rast elev_partial
-    d.vect elevrand where="value > 94.9"
-:::
+# interpolation based on subset of points (only those over 1st quartile)
+v.surf.rst input=elevrand zcolumn=value elevation=elev_partial npmin=100 where="value > 94.9"
+r.colors map=elev_partial raster=elevation
+d.rast elev_partial
+d.vect elevrand where="value > 94.9"
+```
 
 ## REFERENCES
 
@@ -359,3 +381,6 @@ Jaroslav Hofierka, University of Presov; Radim Blazek, ITC-irst
 *Parallelization using OpenMP:*\
 Stanislav Zubal, Czech Technical University in Prague\
 Michal Lacko, Pavol Jozef Safarik University in Kosice
+
+*Parallelization of cross-validation using OpenMP:*\
+Chung-Yuan Liang, Purdue University, West Lafayette, Indiana, USA

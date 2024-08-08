@@ -21,9 +21,9 @@ distance between two points that one would measure with a ruler, which
 can be proven by repeated application of the Pythagorean theorem. The
 formula is given by:
 
-::: code
-    d(dx,dy) = sqrt(dx^2 + dy^2)
-:::
+```
+d(dx,dy) = sqrt(dx^2 + dy^2)
+```
 
 Cells grown using this metric would form isolines of distance that are
 circular from a given point, with the distance given by the **radius**.
@@ -36,18 +36,18 @@ most streets on the island of Manhattan, which causes the shortest path
 a car could take between two points in the city to have length equal to
 the points\' distance in taxicab geometry. The formula is given by:
 
-::: code
-    d(dx,dy) = abs(dx) + abs(dy)
-:::
+```
+d(dx,dy) = abs(dx) + abs(dy)
+```
 
 where cells grown using this metric would form isolines of distance that
 are rhombus-shaped from a given point.
 
 The *Maximum metric* is given by the formula
 
-::: code
-    d(dx,dy) = max(abs(dx),abs(dy))
-:::
+```
+d(dx,dy) = max(abs(dx),abs(dy))
+```
 
 where the isolines of distance from a point are squares.
 
@@ -60,19 +60,19 @@ multiple candidates with the same northing, the westernmost is chosen.
 In this example, the lakes map in the North Carolina sample dataset is
 buffered:
 
-::: code
-    g.region raster=lakes -p
-    # the lake raster map pixel resolution is 10m
-    r.grow input=lakes output=lakes_grown_100m radius=10
-:::
+```
+g.region raster=lakes -p
+# the lake raster map pixel resolution is 10m
+r.grow input=lakes output=lakes_grown_100m radius=10
+```
 
 Shrinking instead of growing:
 
-::: code
-    g.region raster=lakes -p
-    # the lake raster map pixel resolution is 10m
-    r.grow input=lakes output=lakes_shrunk_100m radius=-10
-:::
+```
+g.region raster=lakes -p
+# the lake raster map pixel resolution is 10m
+r.grow input=lakes output=lakes_shrunk_100m radius=-10
+```
 
 ## SEE ALSO
 

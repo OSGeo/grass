@@ -37,9 +37,9 @@ the spatial extent of maps.
 The expression option must be passed as **quoted** expression, for
 example:
 
-::: code
-    t.rast.algebra expression="C = A + B" basename=result
-:::
+```
+t.rast.algebra expression="C = A + B" basename=result
+```
 
 Where **C** is the new space time raster dataset that will contain maps
 with the basename \"result\" and a numerical suffix separated by an
@@ -59,42 +59,42 @@ functions that will be presented in the following section.
 Several temporal topology relations are supported between maps
 registered in space time datasets:
 
-::: code
-    equals            A ------
-                      B ------
+```
+equals            A ------
+                  B ------
 
-    during            A  ----
-                      B ------
+during            A  ----
+                  B ------
 
-    contains          A ------
-                      B  ----
+contains          A ------
+                  B  ----
 
-    starts            A ----
-                      B ------
+starts            A ----
+                  B ------
 
-    started           A ------
-                      B ----
+started           A ------
+                  B ----
 
-    finishes          A   ----
-                      B ------
+finishes          A   ----
+                  B ------
 
-    finished          A ------
-                      B   ----
+finished          A ------
+                  B   ----
 
-    precedes          A ----
-                      B     ----
+precedes          A ----
+                  B     ----
 
-    follows           A     ----
-                      B ----
+follows           A     ----
+                  B ----
 
-    overlapped        A   ------
-                      B ------
+overlapped        A   ------
+                  B ------
 
-    overlaps          A ------
-                      B   ------
+overlaps          A ------
+                  B   ------
 
-    over              both overlaps and overlapped
-:::
+over              both overlaps and overlapped
+```
 
 The relations must be read as: A is related to B, like - A equals B - A
 is during B - A contains B.
@@ -109,13 +109,13 @@ operators process the time instances and intervals of two temporally
 related maps and calculate the resulting temporal extent in five
 possible different ways.
 
-::: code
-    LEFT REFERENCE     l       Use the time stamp of the left space time dataset
-    INTERSECTION       i       Intersection
-    DISJOINT UNION     d       Disjoint union
-    UNION              u       Union
-    RIGHT REFERENCE    r       Use the time stamp of the right space time dataset
-:::
+```
+LEFT REFERENCE     l       Use the time stamp of the left space time dataset
+INTERSECTION       i       Intersection
+DISJOINT UNION     d       Disjoint union
+UNION              u       Union
+RIGHT REFERENCE    r       Use the time stamp of the right space time dataset
+```
 
 ### TEMPORAL SELECTION
 
@@ -125,9 +125,9 @@ selection operator **:** that by default selects parts of a space time
 dataset that are temporally equal to parts of a second space time
 dataset. The following expression
 
-::: code
-    C = A : B
-:::
+```
+C = A : B
+```
 
 means: select all parts of space time dataset A that are equal to B and
 store them in space time dataset C. These parts are time stamped maps.
@@ -135,9 +135,9 @@ store them in space time dataset C. These parts are time stamped maps.
 In addition, the inverse selection operator **!:** is defined as the
 complement of the selection operator, hence the following expression
 
-::: code
-    C = A !: B
-:::
+```
+C = A !: B
+```
 
 means: select all parts of space time time dataset A that are not equal
 to B and store them in space time dataset C.
@@ -152,25 +152,25 @@ selection operator\", \"topological relations\", \"temporal operator\"}.
 
 **Examples:**
 
-::: code
-    C = A {:,equals} B
-    C = A {!:,equals} B
-:::
+```
+C = A {:,equals} B
+C = A {!:,equals} B
+```
 
 We can now define arbitrary topological relations using the OR operator
 \"\|\" to connect them:
 
-::: code
-    C = A {:,equals|during|overlaps} B
-:::
+```
+C = A {:,equals|during|overlaps} B
+```
 
 Select all parts of A that are equal to B, during B or overlaps B.\
 In addition, we can define the temporal extent of the resulting STRDS by
 adding the temporal operator.
 
-::: code
-    C = A {:,during,r} B
-:::
+```
+C = A {:,during,r} B
+```
 
 Select all parts of A that are during B and use the temporal extents
 from B for C.\
@@ -179,21 +179,21 @@ The selection operator is implicitly contained in the temporal topology
 selection operator, so that the following statements are exactly the
 same:
 
-::: code
-    C = A : B
-    C = A {:} B
-    C = A {:,equal} B
-    C = A {:,equal,l} B
-:::
+```
+C = A : B
+C = A {:} B
+C = A {:,equal} B
+C = A {:,equal,l} B
+```
 
 Same for the complementary selection:
 
-::: code
-    C = A !: B
-    C = A {!:} B
-    C = A {!:,equal} B
-    C = A {!:,equal,l} B
-:::
+```
+C = A !: B
+C = A {!:} B
+C = A {!:,equal} B
+C = A {!:,equal,l} B
+```
 
 ### CONDITIONAL STATEMENTS
 
@@ -204,14 +204,14 @@ conclusions can be defined at the beginning of the if statement (third
 and fourth examples below). The relationship between then and else
 conclusion must be always equal.
 
-::: code
-    if statement                        decision option                        temporal relations
-      if(if, then, else)
-      if(conditions, A)                   A if conditions are True;              temporal topological relation between if and then is equal.
-      if(conditions, A, B)                A if conditions are True, B otherwise; temporal topological relation between if, then and else is equal.
-      if(topologies, conditions, A)       A if conditions are True;              temporal topological relation between if and then is explicitly specified by topologies.
-      if(topologies, conditions, A, B)    A if conditions are True, B otherwise; temporal topological relation between if, then and else is explicitly specified by topologies.
-:::
+```
+if statement                        decision option                        temporal relations
+  if(if, then, else)
+  if(conditions, A)                   A if conditions are True;              temporal topological relation between if and then is equal.
+  if(conditions, A, B)                A if conditions are True, B otherwise; temporal topological relation between if, then and else is equal.
+  if(topologies, conditions, A)       A if conditions are True;              temporal topological relation between if and then is explicitly specified by topologies.
+  if(topologies, conditions, A, B)    A if conditions are True, B otherwise; temporal topological relation between if, then and else is explicitly specified by topologies.
+```
 
 The conditions are comparison expressions that are used to evaluate
 space time datasets. Specific values of temporal variables are compared
@@ -220,53 +220,53 @@ by logical operators and evaluated for each map of the STRDS.\
 
 #### Logical operators
 
-::: code
-    Symbol  description
+```
+Symbol  description
 
-      ==    equal
-      !=    not equal
-      >     greater than
-      >=    greater than or equal
-      <     less than
-      <=    less than or equal
-      &&    and
-      ||    or
-:::
+  ==    equal
+  !=    not equal
+  >     greater than
+  >=    greater than or equal
+  <     less than
+  <=    less than or equal
+  &&    and
+  ||    or
+```
 
 #### Temporal functions
 
 The following temporal functions are evaluated only for the STDS that
 must be given in parenthesis.
 
-::: code
-    td(A)                    Returns a list of time intervals of STDS A
+```
+td(A)                    Returns a list of time intervals of STDS A
 
-    start_time(A)            Start time as HH::MM:SS
-    start_date(A)            Start date as yyyy-mm-DD
-    start_datetime(A)        Start datetime as yyyy-mm-DD HH:MM:SS
-    end_time(A)              End time as HH:MM:SS
-    end_date(A)              End date as yyyy-mm-DD
-    end_datetime(A)          End datetime as  yyyy-mm-DD HH:MM
+start_time(A)            Start time as HH::MM:SS
+start_date(A)            Start date as yyyy-mm-DD
+start_datetime(A)        Start datetime as yyyy-mm-DD HH:MM:SS
+end_time(A)              End time as HH:MM:SS
+end_date(A)              End date as yyyy-mm-DD
+end_datetime(A)          End datetime as  yyyy-mm-DD HH:MM
 
-    start_doy(A)             Day of year (doy) from the start time [1 - 366]
-    start_dow(A)             Day of week (dow) from the start time [1 - 7], the start of the week is Monday == 1
-    start_year(A)            The year of the start time [0 - 9999]
-    start_month(A)           The month of the start time [1 - 12]
-    start_week(A)            Week of year of the start time [1 - 54]
-    start_day(A)             Day of month from the start time [1 - 31]
-    start_hour(A)            The hour of the start time [0 - 23]
-    start_minute(A)          The minute of the start time [0 - 59]
-    start_second(A)          The second of the start time [0 - 59]
-    end_doy(A)               Day of year (doy) from the end time [1 - 366]
-    end_dow(A)               Day of week (dow) from the end time [1 - 7], the start of the week is Monday == 1
-    end_year(A)              The year of the end time [0 - 9999]
-    end_month(A)             The month of the end time [1 - 12]
-    end_week(A)              Week of year of the end time [1 - 54]
-    end_day(A)               Day of month from the start time [1 - 31]
-    end_hour(A)              The hour of the end time [0 - 23]
-    end_minute(A)            The minute of the end time [0 - 59]
-    end_second(A)            The second of the end time [0 - 59]
-:::
+start_doy(A)             Day of year (doy) from the start time [1 - 366]
+start_dow(A)             Day of week (dow) from the start time [1 - 7], the start of the week is Monday == 1
+start_year(A)            The year of the start time [0 - 9999]
+start_month(A)           The month of the start time [1 - 12]
+start_week(A)            Week of year of the start time [1 - 54]
+start_day(A)             Day of month from the start time [1 - 31]
+start_hour(A)            The hour of the start time [0 - 23]
+start_minute(A)          The minute of the start time [0 - 59]
+start_second(A)          The second of the start time [0 - 59]
+end_doy(A)               Day of year (doy) from the end time [1 - 366]
+end_dow(A)               Day of week (dow) from the end time [1 - 7], the start of the week is Monday == 1
+end_year(A)              The year of the end time [0 - 9999]
+end_month(A)             The month of the end time [1 - 12]
+end_week(A)              Week of year of the end time [1 - 54]
+end_day(A)               Day of month from the start time [1 - 31]
+end_hour(A)              The hour of the end time [0 - 23]
+end_minute(A)            The minute of the end time [0 - 59]
+end_second(A)            The second of the end time [0 - 59]
+```
 
 In order to use the numbers returned by the functions in the last block
 above, an offset value needs to be added. For example, start_doy(A, 0)
@@ -292,37 +292,37 @@ operator (\|\| or &&). By default, the aggregation operator is related
 to the comparison operator:\
 comparison operator -\> aggregation operator:
 
-::: code
-    || -> | and && -> &
-:::
+```
+|| -> | and && -> &
+```
 
 **Examples:**
 
-::: code
-    Condition 1 {||, equal, r} Condition 2
-    Condition 1 {&&, equal|during, l} Condition 2
-    Condition 1 {&&, equal|contains, |, l} Condition 2
-    Condition 1 {&&, equal|during, l} Condition 2 && Condition 3
-    Condition 1 {&&, equal|during, l} Condition 2 {&&,contains, |, r} Condition 3
-:::
+```
+Condition 1 {||, equal, r} Condition 2
+Condition 1 {&&, equal|during, l} Condition 2
+Condition 1 {&&, equal|contains, |, l} Condition 2
+Condition 1 {&&, equal|during, l} Condition 2 && Condition 3
+Condition 1 {&&, equal|during, l} Condition 2 {&&,contains, |, r} Condition 3
+```
 
 #### Hash operator
 
 Additionally, the number of maps in intervals can be computed and used
 in conditional statements with the hash (#) operator.
 
-::: code
-    A {#, contains} B
-:::
+```
+A {#, contains} B
+```
 
 This expression computes the number of maps from space time dataset B
 which are during the time intervals of maps from space time dataset A.\
 A list of integers (scalars) corresponding to the maps of A that contain
 maps from B will be returned.
 
-::: code
-    C = if({equal}, A {#, contains} B > 2, A {:, contains} B)
-:::
+```
+C = if({equal}, A {#, contains} B > 2, A {:, contains} B)
+```
 
 This expression selects all maps from A that temporally contain at least
 2 maps from B and stores them in space time dataset C. The leading equal
@@ -335,26 +335,26 @@ Furthermore, the temporal algebra allows temporal buffering, shifting
 and snapping with the functions buff_t(), tshift() and tsnap(),
 respectively.
 
-::: code
-    buff_t(A, size)         Buffer STDS A with granule ("1 month" or 5)
-    tshift(A, size)         Shift STDS A with granule ("1 month" or 5)
-    tsnap(A)                Snap time instances and intervals of STDS A
-:::
+```
+buff_t(A, size)         Buffer STDS A with granule ("1 month" or 5)
+tshift(A, size)         Shift STDS A with granule ("1 month" or 5)
+tsnap(A)                Snap time instances and intervals of STDS A
+```
 
 #### Single map with temporal extent
 
 The temporal algebra can also handle single maps with time stamps in the
 tmap() function.
 
-::: code
-    tmap()
-:::
+```
+tmap()
+```
 
 For example:
 
-::: code
-    C = A {:, during} tmap(event)
-:::
+```
+C = A {:, during} tmap(event)
+```
 
 This statement selects all maps from space time data set A that are
 during the temporal extent of the single map \'event\'
@@ -363,47 +363,47 @@ during the temporal extent of the single map \'event\'
 
 The module supports the following raster operations:
 
-::: code
-    Symbol  description     precedence
+```
+Symbol  description     precedence
 
-      %     modulus         1
-      /     division        1
-      *     multiplication  1
-      +     addition        2
-      -     subtraction     2
-:::
+  %     modulus         1
+  /     division        1
+  *     multiplication  1
+  +     addition        2
+  -     subtraction     2
+```
 
 And raster functions:
 
-::: code
-    abs(x)                  return absolute value of x
-    float(x)                convert x to foating point
-    int(x)                  convert x to integer [ truncates ]
-    log(x)                  natural log of x
-    sqrt(x)                 square root of x
-    tan(x)                  tangent of x (x is in degrees)
-    round(x)                round x to nearest integer
-    sin(x)                  sine of x (x is in degrees)
-    isnull(x)               check if x = NULL
-    isntnull(x)             check if x is not NULL
-    null                    set null value
-    exist(x)                Check if x is in the current mapset
-:::
+```
+abs(x)                  return absolute value of x
+float(x)                convert x to foating point
+int(x)                  convert x to integer [ truncates ]
+log(x)                  natural log of x
+sqrt(x)                 square root of x
+tan(x)                  tangent of x (x is in degrees)
+round(x)                round x to nearest integer
+sin(x)                  sine of x (x is in degrees)
+isnull(x)               check if x = NULL
+isntnull(x)             check if x is not NULL
+null                    set null value
+exist(x)                Check if x is in the current mapset
+```
 
 #### Single raster map
 
 The temporal raster algebra features also a function to integrate single
 raster maps without time stamps into the expressions.
 
-::: code
-    map()
-:::
+```
+map()
+```
 
 For example:
 
-::: code
-    C = A * map(constant_value)
-:::
+```
+C = A * map(constant_value)
+```
 
 This statement multiplies all raster maps from space time raster data
 set A with the raster map \'constant_value\'
@@ -414,9 +414,9 @@ The user can combine the temporal topology relations, the temporal
 operators and the spatial/select operators to create spatio-temporal
 operators as follows:
 
-::: code
-    {"spatial or select operator", "list of temporal relations", "temporal operator"}
-:::
+```
+{"spatial or select operator", "list of temporal relations", "temporal operator"}
+```
 
 For multiple topological relations or several related maps the
 spatio-temporal operators feature implicit aggregation. The algebra
@@ -427,13 +427,13 @@ temporal extent of the single map a1 of A, then the following arithmetic
 calculations would implicitly aggregate all maps of B into one result
 map for a1 of A:
 
-``` code
+```
  C = A {+, contains} B --> c1 = a1 + b1 + b2 + b3
 ```
 
 **Important**: the aggregation behaviour is not symmetric
 
-``` code
+```
  C = B {+, during} A --> c1 = b1 + a1
                          c2 = b2 + a1
                          c3 = b3 + a1
@@ -448,27 +448,27 @@ c is the column offset. A single neighborhood modifier is interpreted as
 temporal offset \[t\], while two neighborhood modifiers are interpreted
 as row and column offsets \[r,c\].
 
-``` code
+```
 strds[2]
 ```
 
 refers to the second successor of the current map.
 
-``` code
+```
 strds[1,2]
 ```
 
 refers to the cell one row below and two columns to the right of the
 current cell in the current map.
 
-``` code
+```
 strds[1,-2,-1]
 ```
 
 refers to the cell two rows above and one column to the left of the
 current cell of the first successor map.
 
-``` code
+```
 strds[-2,0,1]
 ```
 
@@ -479,39 +479,39 @@ second predecessor map.
 
 ### Computation of NDVI
 
-::: code
-    # Sentinel-2 bands are stored separately in two STDRS "S2_b4" and "S2_b8"
-    g.region raster=sentinel2_B04_10m -p
-    t.rast.list S2_b4
-    t.rast.list S2_b8
-    t.rast.algebra basename=ndvi expression="ndvi = float(S2_b8 - S2_b4) / ( S2_b8 + S2_b4 )"
-    t.rast.colors input=ndvi color=ndvi
-:::
+```
+# Sentinel-2 bands are stored separately in two STDRS "S2_b4" and "S2_b8"
+g.region raster=sentinel2_B04_10m -p
+t.rast.list S2_b4
+t.rast.list S2_b8
+t.rast.algebra basename=ndvi expression="ndvi = float(S2_b8 - S2_b4) / ( S2_b8 + S2_b4 )"
+t.rast.colors input=ndvi color=ndvi
+```
 
 ### Sum of space-time raster datasets
 
 Sum maps from STRDS A with maps from STRDS B which have equal time
 stamps and are temporally before Jan. 1. 2005 and store them in STRDS D:
 
-::: code
-    D = if(start_date(A) < "2005-01-01", A + B)
-:::
+```
+D = if(start_date(A) < "2005-01-01", A + B)
+```
 
 Create the sum of all maps from STRDS A and B that have equal time
 stamps and store the new maps in STRDS C:
 
-::: code
-    C = A + B
-:::
+```
+C = A + B
+```
 
 ### Sum of space-time raster datasets with temporal topology relation
 
 Same expression with explicit definition of the temporal topology
 relation and temporal operators:
 
-::: code
-    C = A {+,equal,l} B
-:::
+```
+C = A {+,equal,l} B
+```
 
 ### Selection of raster cells
 
@@ -519,18 +519,18 @@ Select all cells from STRDS B with equal temporal relations to STRDS A,
 if the cells of A are in the range \[100.0, 1600\] of time intervals
 that have more than 30 days (Jan, Mar, May, Jul, Aug, Oct, Dec):
 
-::: code
-    C = if(A > 100 && A < 1600 && td(A) > 30, B)
-:::
+```
+C = if(A > 100 && A < 1600 && td(A) > 30, B)
+```
 
 ### Selection of raster cells with temporal topology relation
 
 Same expression with explicit definition of the temporal topology
 relation and temporal operators:
 
-::: code
-    C = if({equal}, A > 100 && A < 1600 {&&,equal} td(A) > 30, B)
-:::
+```
+C = if({equal}, A > 100 && A < 1600 {&&,equal} td(A) > 30, B)
+```
 
 ### Conditional computation
 
@@ -541,18 +541,18 @@ higher than 10 degrees. Computation is performed if STRDS \"Prec\" and
 per interval is computed using the td() function that has as argument
 the STRDS \"Prec\":
 
-::: code
-    C = if(Temp > 10.0, Prec / 3600.0 / 24.0 / td(Prec))
-:::
+```
+C = if(Temp > 10.0, Prec / 3600.0 / 24.0 / td(Prec))
+```
 
 ### Conditional computation with temporal topology relation
 
 Same expression with explicit definition of the temporal topology
 relation and temporal operators:
 
-::: code
-    C = if({equal}, Temp > 10.0, Prec / 3600.0 / 24.0 {/,equal,l} td(Prec))
-:::
+```
+C = if({equal}, Temp > 10.0, Prec / 3600.0 / 24.0 {/,equal,l} td(Prec))
+```
 
 ### Computation with time intervals
 
@@ -561,27 +561,27 @@ time intervals of STRDS B if more than one map of A is contained in an
 interval of B, use A otherwise. The resulting time intervals are either
 from B or A:
 
-::: code
-    C = if(B {#,contain} A > 1, (B {+,contain,l} A - B) / (B {#,contain} A), A)
-:::
+```
+C = if(B {#,contain} A > 1, (B {+,contain,l} A - B) / (B {#,contain} A), A)
+```
 
 ### Computation with time intervals with temporal topology relation
 
 Same expression with explicit definition of the temporal topology
 relation and temporal operators:
 
-::: code
-    C = if({equal}, B {#,contain} A > 1, (B {+,contain,l} A {-,equal,l} B) {equal,=/} (B {#,contain} A), A)
-:::
+```
+C = if({equal}, B {#,contain} A > 1, (B {+,contain,l} A {-,equal,l} B) {equal,=/} (B {#,contain} A), A)
+```
 
 ### Compute DOY for spatio-temporal conditions
 
 Compute the DOY for all maps from STRDS A where conditions are met at
 three consecutive time intervals (e.g. temperature \> 0):
 
-::: code
-    B = if(A > 0.0 && A[-1] > 0.0 && A[-2] > 0.0, start_doy(A, -1), 0)"
-:::
+```
+B = if(A > 0.0 && A[-1] > 0.0 && A[-2] > 0.0, start_doy(A, -1), 0)"
+```
 
 ## SEE ALSO
 
@@ -598,16 +598,16 @@ Wiki](https://grasswiki.osgeo.org/wiki/Temporal_data_processing)
 The use of this module requires the following software to be installed:
 [PLY(Python-Lex-Yacc)](http://www.dabeaz.com/ply/)
 
-::: code
-    # Ubuntu/Debian
-    sudo apt-get install python3-ply
+```
+# Ubuntu/Debian
+sudo apt-get install python3-ply
 
-    # Fedora
-    sudo dnf install python3-ply
+# Fedora
+sudo dnf install python3-ply
 
-    # MS-Windows (OSGeo4W: requires "python3-pip" package to be installed)
-    python3-pip install ply
-:::
+# MS-Windows (OSGeo4W: requires "python3-pip" package to be installed)
+python3-pip install ply
+```
 
 Related publications:
 

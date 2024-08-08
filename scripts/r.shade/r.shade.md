@@ -35,27 +35,27 @@ is using method described in *[r.his](r.his.html)* manual page.
 In this example, the `aspect` map in the North Carolina sample dataset
 is used to hillshade the `elevation` map:
 
-::: code
-    g.region raster=aspect -p
-    r.shade shade=aspect color=elevation output=elevation_aspect_shaded
+```
+g.region raster=aspect -p
+r.shade shade=aspect color=elevation output=elevation_aspect_shaded
 
-    d.mon wx0
-    d.rast elevation_aspect_shaded
-:::
+d.mon wx0
+d.rast elevation_aspect_shaded
+```
 
 In this next example, a shaded relief raster map is created and used to
 create a colorized hillshade raster map for later use:
 
-::: code
-    g.region raster=elevation
-    r.relief input=elevation output=elevation_shaded_relief
+```
+g.region raster=elevation
+r.relief input=elevation output=elevation_shaded_relief
 
-    r.shade shade=elevation_shaded_relief color=elevation \
-        output=elevation_relief_shaded
+r.shade shade=elevation_shaded_relief color=elevation \
+    output=elevation_relief_shaded
 
-    d.mon wx1
-    d.rast elevation_relief_shaded
-:::
+d.mon wx1
+d.rast elevation_relief_shaded
+```
 
 Interesting visualizations can be created using different color tables
 for elevation raster map, for example using `haxby` color table.

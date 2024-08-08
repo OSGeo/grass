@@ -27,9 +27,9 @@ current geographic region.
 To create a random, uniformly distributed selection of possible new
 points with a radius of 100,000 map units, use the following command:
 
-::: code
-    v.perturb input=comm_colleges output=uniform_perturb parameters=100000
-:::
+```
+v.perturb input=comm_colleges output=uniform_perturb parameters=100000
+```
 
 Your map should look similar to this figure:
 
@@ -45,9 +45,9 @@ random chosen points.*
 For a normal distribution with a mean of 5000 and standard deviation of
 2000, use the following command:
 
-::: code
-    v.perturb input=comm_colleges output=normal_perturb distribution=normal parameters=5000,2000
-:::
+```
+v.perturb input=comm_colleges output=normal_perturb distribution=normal parameters=5000,2000
+```
 
 ::: {align="center" style="margin: 10px"}
 ![v.perturb normal distribution
@@ -61,9 +61,9 @@ the original point.*
 
 In order to include a minimum value of 500, use the following command:
 
-::: code
-    v.perturb input=comm_colleges output=min_perturb distribution=normal parameters=100000,1000 minimum=500
-:::
+```
+v.perturb input=comm_colleges output=min_perturb distribution=normal parameters=100000,1000 minimum=500
+```
 
 ## SEE ALSO
 

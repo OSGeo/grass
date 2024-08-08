@@ -13,11 +13,11 @@ character label is allowed but not required (see **-l** flag).
 
 **Example COGO input:**
 
-::: code
-       P23 N 23:14:12 W 340
-       P24 S 04:18:56 E 230
-       ...
-:::
+```
+   P23 N 23:14:12 W 340
+   P24 S 04:18:56 E 230
+   ...
+```
 
 The first column may contain a label and you must use the **-l** flag so
 the program knows. This is followed by a space, and then either the
@@ -31,11 +31,11 @@ bearing from the distance (which should be in appropriate linear units).
 
 **Output of the above input:**
 
-::: code
-       -134.140211 312.420236 P23
-       -116.832837 83.072345 P24
-       ...
-:::
+```
+   -134.140211 312.420236 P23
+   -116.832837 83.072345 P24
+   ...
+```
 
 Unless specified with the **coord** option, calculations begin from
 (0,0).
@@ -67,64 +67,64 @@ boundaries may be converted to areas with *v.centroids*.
 
 ## EXAMPLES
 
-::: code
-       m.cogo -l in=cogo.dat
-:::
+```
+   m.cogo -l in=cogo.dat
+```
 
 Where the `cogo.dat` input file looks like:
 
-::: code
-    # Sample COGO input file -- This defines an area.
-    # <label> <bearing> <distance>
-    P001 S 88:44:56 W 6.7195
-    P002 N 33:34:15 W 2.25
-    P003 N 23:23:50 W 31.4024
-    P004 N 05:04:45 W 25.6981
-    P005 N 18:07:25 E 22.2439
-    P006 N 27:49:50 E 75.7317
-    P007 N 22:56:50 E 87.4482
-    P008 N 37:45:15 E 37.7835
-    P009 N 46:04:30 E 11.5854
-    P010 N 90:00:00 E 8.8201
-    P011 N 90:00:00 E 164.1128
-    P012 S 48:41:12 E 10.1311
-    P013 S 00:25:50 W 255.7652
-    P014 N 88:03:13 W 98.8567
-    P015 S 88:44:56 W 146.2713
-    P016 S 88:44:56 W 18.7164
-:::
+```
+# Sample COGO input file -- This defines an area.
+# <label> <bearing> <distance>
+P001 S 88:44:56 W 6.7195
+P002 N 33:34:15 W 2.25
+P003 N 23:23:50 W 31.4024
+P004 N 05:04:45 W 25.6981
+P005 N 18:07:25 E 22.2439
+P006 N 27:49:50 E 75.7317
+P007 N 22:56:50 E 87.4482
+P008 N 37:45:15 E 37.7835
+P009 N 46:04:30 E 11.5854
+P010 N 90:00:00 E 8.8201
+P011 N 90:00:00 E 164.1128
+P012 S 48:41:12 E 10.1311
+P013 S 00:25:50 W 255.7652
+P014 N 88:03:13 W 98.8567
+P015 S 88:44:56 W 146.2713
+P016 S 88:44:56 W 18.7164
+```
 
 Round trip:
 
-::: code
-       m.cogo -l input=cogo.dat | m.cogo -rl in="-"
-:::
+```
+   m.cogo -l input=cogo.dat | m.cogo -rl in="-"
+```
 
 Import as a vector points map:
 
-::: code
-       m.cogo -l input=cogo.dat | v.in.ascii output=cogo_points x=1 y=2 separator=space
-:::
+```
+   m.cogo -l input=cogo.dat | v.in.ascii output=cogo_points x=1 y=2 separator=space
+```
 
 Shell script to import as a vector line map:
 
-::: code
-       m.cogo -l input=cogo.dat | tac | awk '
-           BEGIN { FS=" " ; R=0 }
-           $1~/\d*\.\d*/ { printf(" %.8f %.8f\n", $1, $2) ; ++R }
-           END { printf("L %d\n", R) }' | tac | \
-           v.in.ascii -n format=standard out=cogo_line
-:::
+```
+   m.cogo -l input=cogo.dat | tac | awk '
+       BEGIN { FS=" " ; R=0 }
+       $1~/\d*\.\d*/ { printf(" %.8f %.8f\n", $1, $2) ; ++R }
+       END { printf("L %d\n", R) }' | tac | \
+       v.in.ascii -n format=standard out=cogo_line
+```
 
 Convert that lines map into an area:
 
-::: code
-       # Add the -c flag to the above example to close the loop:
-       m.cogo -l -c input=cogo.dat | ...
-           ...
-       v.type input=cogo_line output=cogo_boundary from_type=line to_type=boundary
-       v.centroids input=cogo_boundary output=cogo_area
-:::
+```
+   # Add the -c flag to the above example to close the loop:
+   m.cogo -l -c input=cogo.dat | ...
+       ...
+   v.type input=cogo_line output=cogo_boundary from_type=line to_type=boundary
+   v.centroids input=cogo_boundary output=cogo_area
+```
 
 If necessary, snap the boundary closed with the *v.clean* module. Use
 `tool=snap` and `thresh=0.0001`, or some small value.

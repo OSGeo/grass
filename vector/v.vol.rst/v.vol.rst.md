@@ -62,10 +62,10 @@ efficiency of the algorithm.
 Using the **where** parameter, the interpolation can be limited to use
 only a subset of the input vectors.
 
-::: code
-    # preparation as in above example
-    v.vol.rst elevrand_3d wcol=soilrange elevation=soilrange zscale=100 where="soilrange > 3"
-:::
+```
+# preparation as in above example
+v.vol.rst elevrand_3d wcol=soilrange elevation=soilrange zscale=100 where="soilrange > 3"
+```
 
 ### Cross validation procedure
 
@@ -83,13 +83,13 @@ dataset.
 *Example (based on [Slovakia3d
 dataset](http://www.grassbook.org/data_menu2nd.php)):*
 
-::: code
-    v.info -c precip3d
-    g.region n=5530000 s=5275000 w=4186000 e=4631000 res=500 -p
-    v.vol.rst -c input=precip3d wcolumn=precip zscale=50 segmax=700 cvdev=cvdevmap tension=10
-    v.db.select cvdevmap
-    v.univar cvdevmap col=flt1 type=point
-:::
+```
+v.info -c precip3d
+g.region n=5530000 s=5275000 w=4186000 e=4631000 res=500 -p
+v.vol.rst -c input=precip3d wcolumn=precip zscale=50 segmax=700 cvdev=cvdevmap tension=10
+v.db.select cvdevmap
+v.univar cvdevmap col=flt1 type=point
+```
 
 Based on these results, the parameters will have to be optimized. It is
 recommended to plot the CV error as curve while modifying the
@@ -162,59 +162,59 @@ interpolation.
 
 Spearfish example (we first simulate 3D soil range data):
 
-::: code
-    g.region -dp
-    # define volume
-    g.region res=100 tbres=100 res3=100 b=0 t=1500 -ap3
+```
+g.region -dp
+# define volume
+g.region res=100 tbres=100 res3=100 b=0 t=1500 -ap3
 
-    ### First part: generate synthetic 3D data (true 3D soil data preferred)
-    # generate random positions from elevation map (2D)
-    r.random elevation.10m vector=elevrand n=200 seed=42
+### First part: generate synthetic 3D data (true 3D soil data preferred)
+# generate random positions from elevation map (2D)
+r.random elevation.10m vector=elevrand n=200 seed=42
 
-    # generate synthetic values
-    v.to.db elevrand option=coor col=x,y
-    v.db.select elevrand
+# generate synthetic values
+v.to.db elevrand option=coor col=x,y
+v.db.select elevrand
 
-    # create new 3D map
-    v.in.db elevrand out=elevrand_3d x=x y=y z=value key=cat
-    v.info -c elevrand_3d
-    v.info -t elevrand_3d
+# create new 3D map
+v.in.db elevrand out=elevrand_3d x=x y=y z=value key=cat
+v.info -c elevrand_3d
+v.info -t elevrand_3d
 
-    # remove the now superfluous 'x', 'y' and 'value' (z) columns
-    v.db.dropcolumn elevrand_3d col=x
-    v.db.dropcolumn elevrand_3d col=y
-    v.db.dropcolumn elevrand_3d col=value
+# remove the now superfluous 'x', 'y' and 'value' (z) columns
+v.db.dropcolumn elevrand_3d col=x
+v.db.dropcolumn elevrand_3d col=y
+v.db.dropcolumn elevrand_3d col=value
 
-    # add attribute to have data available for 3D interpolation
-    # (Soil range types taken from the USDA Soil Survey)
-    d.mon wx0
-    d.rast soils.range
-    d.vect elevrand_3d
-    v.db.addcolumn elevrand_3d col="soilrange integer"
-    v.what.rast elevrand_3d col=soilrange rast=soils.range
+# add attribute to have data available for 3D interpolation
+# (Soil range types taken from the USDA Soil Survey)
+d.mon wx0
+d.rast soils.range
+d.vect elevrand_3d
+v.db.addcolumn elevrand_3d col="soilrange integer"
+v.what.rast elevrand_3d col=soilrange rast=soils.range
 
-    # fix 0 (no data in raster map) to NULL:
-    v.db.update elevrand_3d col=soilrange value=NULL where="soilrange=0"
-    v.db.select elevrand_3d
+# fix 0 (no data in raster map) to NULL:
+v.db.update elevrand_3d col=soilrange value=NULL where="soilrange=0"
+v.db.select elevrand_3d
 
-    # optionally: check 3D points in Paraview
-    v.out.vtk input=elevrand_3d output=elevrand_3d.vtk type=point precision=2
-    paraview --data=elevrand_3d.vtk
+# optionally: check 3D points in Paraview
+v.out.vtk input=elevrand_3d output=elevrand_3d.vtk type=point precision=2
+paraview --data=elevrand_3d.vtk
 
-    ### Second part: 3D interpolation from 3D point data
-    # interpolate volume to "soilrange" voxel map
-    v.vol.rst input=elevrand_3d wcol=soilrange elevation=soilrange zscale=100
+### Second part: 3D interpolation from 3D point data
+# interpolate volume to "soilrange" voxel map
+v.vol.rst input=elevrand_3d wcol=soilrange elevation=soilrange zscale=100
 
-    # visualize I: in GRASS GIS wxGUI
-    g.gui
-    # load: 2D raster map: elevation.10m
-    #       3D raster map: soilrange
+# visualize I: in GRASS GIS wxGUI
+g.gui
+# load: 2D raster map: elevation.10m
+#       3D raster map: soilrange
 
-    # visualize II: export to Paraview
-    r.mapcalc "bottom = 0.0"
-    r3.out.vtk -s input=soilrange top=elevation.10m bottom=bottom dp=2 output=volume.vtk
-    paraview --data=volume.vtk
-:::
+# visualize II: export to Paraview
+r.mapcalc "bottom = 0.0"
+r3.out.vtk -s input=soilrange top=elevation.10m bottom=bottom dp=2 output=volume.vtk
+paraview --data=volume.vtk
+```
 
 ## KNOWN ISSUES
 

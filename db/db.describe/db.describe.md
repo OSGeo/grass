@@ -14,53 +14,53 @@ not need to be spcified each time.
 *List column descriptions of table in SQLite database (note that this is
 the default setting)*\
 
-::: code
-    db.describe driver=sqlite table=hospitals \
-       database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+```
+db.describe driver=sqlite table=hospitals \
+   database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
 
-    # or simply
-    db.describe myarchsites
-:::
+# or simply
+db.describe myarchsites
+```
 
 ### DBF example
 
-::: code
-    db.describe -c table=hospitals database='$GISDBASE/$LOCATION_NAME/PERMANENT/dbf/' \
-                driver=dbf
-    ncols: 16
-    nrows: 160
-    Column 1: cat:INTEGER:11
-    Column 2: OBJECTID:INTEGER:11
-    Column 3: AREA:DOUBLE PRECISION:20
-    [...]
-:::
+```
+db.describe -c table=hospitals database='$GISDBASE/$LOCATION_NAME/PERMANENT/dbf/' \
+            driver=dbf
+ncols: 16
+nrows: 160
+Column 1: cat:INTEGER:11
+Column 2: OBJECTID:INTEGER:11
+Column 3: AREA:DOUBLE PRECISION:20
+[...]
+```
 
-::: code
-    db.describe table=hospitals database='$GISDBASE/$LOCATION_NAME/PERMANENT/dbf/' \
-                driver=dbf
-    table:hospitals
-    description:
-    insert:yes
-    delete:yes
-    ncols:16
-    nrows:160
+```
+db.describe table=hospitals database='$GISDBASE/$LOCATION_NAME/PERMANENT/dbf/' \
+            driver=dbf
+table:hospitals
+description:
+insert:yes
+delete:yes
+ncols:16
+nrows:160
 
-    column:cat
-    description:
-    type:INTEGER
-    len:11
-    scale:0
-    precision:10
-    default:
-    nullok:yes
-    select:yes
-    update:yes
+column:cat
+description:
+type:INTEGER
+len:11
+scale:0
+precision:10
+default:
+nullok:yes
+select:yes
+update:yes
 
-    column:OBJECTID
-    description:
-    type:INTEGER
-    [...]
-:::
+column:OBJECTID
+description:
+type:INTEGER
+[...]
+```
 
 ## SEE ALSO
 

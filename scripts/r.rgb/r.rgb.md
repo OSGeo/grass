@@ -5,10 +5,10 @@ and its associated color table (grey255).
 
 ## EXAMPLE
 
-::: code
-    g.region raster=elevation -p
-    r.rgb input=elevation red=elevation.r green=elevation.g blue=elevation.b
-:::
+```
+g.region raster=elevation -p
+r.rgb input=elevation red=elevation.r green=elevation.g blue=elevation.b
+```
 
 In this case *r.rgb* produces in the current mapset three new raster
 maps - \'elevation.r\', \'elevation.g\', \'elevation.b\'.

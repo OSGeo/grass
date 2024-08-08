@@ -84,11 +84,11 @@ EPSG:code\[:datum_trans\]**\] \| **-e** \| **-f** \| \[**\--text** \|
 
 *Note*: These parameters must be specified in one of the following ways:
 
-::: code
-        MAPSET
-        PROJECT/MAPSET
-        GISDBASE/PROJECT/MAPSET
-:::
+```
+    MAPSET
+    PROJECT/MAPSET
+    GISDBASE/PROJECT/MAPSET
+```
 
 ## DESCRIPTION
 
@@ -193,9 +193,9 @@ a personal version of the Python 3.8 binaries under `$HOME/bin`. You can
 use the above variables to have GRASS use the Python 3.8 binaries
 instead.
 
-::: code
-       GRASS_PYTHON=python3.8
-:::
+```
+   GRASS_PYTHON=python3.8
+```
 
 ### Addon Path to Extra User Scripts
 
@@ -203,10 +203,10 @@ This environment variable allows the user to extend the GRASS program
 search paths to include locally developed/installed GRASS modules or
 user scripts.
 
-::: code
-       GRASS_ADDON_PATH=/usr/mytools
-       GRASS_ADDON_PATH=/usr/mytools:/usr/local/othertools
-:::
+```
+   GRASS_ADDON_PATH=/usr/mytools
+   GRASS_ADDON_PATH=/usr/mytools:/usr/local/othertools
+```
 
 In this example above path(s) would be added to the standard GRASS path
 environment.
@@ -219,9 +219,9 @@ search paths to include locally installed (see
 Addon](https://grasswiki.osgeo.org/wiki/GRASS_AddOns) modules which are
 not distributed with the standard GRASS release.
 
-::: code
-       GRASS_ADDON_BASE=/usr/grass-addons
-:::
+```
+   GRASS_ADDON_BASE=/usr/grass-addons
+```
 
 In this example above path would be added to the standard GRASS path
 environment.
@@ -289,28 +289,28 @@ The following are some examples of how you could start GRASS
 Creating a new project based on a geodata file\'s projection (**-c**)
 and exit (**-e**) immediately:
 
-::: code
-    grass -c elevation.tiff -e /path/to/grassdata/test1/
-:::
+```
+grass -c elevation.tiff -e /path/to/grassdata/test1/
+```
 
 Linking external raster data to PERMANENT Mapset:
 
-::: code
-    grass /path/to/grassdata/test1/PERMANENT/ --exec r.external input=basins.tiff output=basins
-    grass /path/to/grassdata/test1/PERMANENT/ --exec r.external input=elevation.tiff output=elevation
-:::
+```
+grass /path/to/grassdata/test1/PERMANENT/ --exec r.external input=basins.tiff output=basins
+grass /path/to/grassdata/test1/PERMANENT/ --exec r.external input=elevation.tiff output=elevation
+```
 
 Get statistics for one raster map:
 
-::: code
-    grass /path/to/grassdata/test1/PERMANENT/ --exec r.univar map=elevation
-:::
+```
+grass /path/to/grassdata/test1/PERMANENT/ --exec r.univar map=elevation
+```
 
 Compare the rasters visually:
 
-::: code
-    grass /path/to/grassdata/test1/PERMANENT/ --exec g.gui.mapswipe first=elevation second=basins
-:::
+```
+grass /path/to/grassdata/test1/PERMANENT/ --exec g.gui.mapswipe first=elevation second=basins
+```
 
 #### Execution of shell and Python scripts instead of single commands
 
@@ -320,46 +320,46 @@ exec interface.
 **Shell script example:** the command to execute a shell script might
 be:
 
-::: code
-    grass /path/to/grassdata/test1/PERMANENT/ --exec sh test.sh
-:::
+```
+grass /path/to/grassdata/test1/PERMANENT/ --exec sh test.sh
+```
 
 A very simple bash script (\"test.sh\") may look like this:
 
-::: code
-    #!/bin/bash
+```
+#!/bin/bash
 
-    g.region -p
-    g.list type=raster
-    r.info elevation
-:::
+g.region -p
+g.list type=raster
+r.info elevation
+```
 
 **Python script example:** the command to execute a Python script might
 be:
 
-::: code
-    grass /path/to/grassdata/test1/PERMANENT/ --exec python test.py
-:::
+```
+grass /path/to/grassdata/test1/PERMANENT/ --exec python test.py
+```
 
 A very simple Python script (\"test.py\") may look like this:
 
-::: code
-    #!/usr/bin/env python3
+```
+#!/usr/bin/env python3
 
-    # import GRASS Python bindings (see also pygrass)
-    import grass.script as gs
+# import GRASS Python bindings (see also pygrass)
+import grass.script as gs
 
-    gs.message('Current GRASS GIS environment:')
-    print(gs.gisenv())
+gs.message('Current GRASS GIS environment:')
+print(gs.gisenv())
 
-    gs.message('Available raster maps:')
-    for raster in gs.list_strings(type='raster'):
-        print(raster)
+gs.message('Available raster maps:')
+for raster in gs.list_strings(type='raster'):
+    print(raster)
 
-    gs.message('Available vector maps:')
-    for vector in gs.list_strings(type='vector'):
-        print(vector)
-:::
+gs.message('Available vector maps:')
+for vector in gs.list_strings(type='vector'):
+    print(vector)
+```
 
 #### Using temporary project
 
@@ -367,21 +367,21 @@ Creating a new temporary project based on a georeferenced file\'s
 coordinate reference system (CRS) and simultaneously starting
 computation in a shell script:
 
-::: code
-    grass --tmp-project elevation.tiff --exec test.sh
-:::
+```
+grass --tmp-project elevation.tiff --exec test.sh
+```
 
 The same, but using an EPSG code and a Python script:
 
-::: code
-    grass --tmp-project EPSG:3358 --exec test.py
-:::
+```
+grass --tmp-project EPSG:3358 --exec test.py
+```
 
 Finally, for special cases, we can create an XY project without any CRS:
 
-::: code
-    grass --tmp-project XY --exec test.py
-:::
+```
+grass --tmp-project XY --exec test.py
+```
 
 Temporary project is automatically deleted after computation, so the
 script is expected to export, link or otherwise preserve the output data
@@ -390,47 +390,47 @@ before ending.
 A single command can be also executed, e.g. to examine properties of the
 temporary project:
 
-::: code
-    grass --tmp-project EPSG:3358 --exec g.proj -p
-:::
+```
+grass --tmp-project EPSG:3358 --exec g.proj -p
+```
 
 A temporary XY project with single command is useful, e.g. to show help
 text of a module:
 
-::: code
-    grass --tmp-project XY --exec r.neighbors --help
-:::
+```
+grass --tmp-project XY --exec r.neighbors --help
+```
 
 #### Using temporary mapset
 
 A single command can be executed, e.g., to examine properties of a
 project (here using the NC SPM sample dataset):
 
-::: code
-    grass --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec g.proj -p
-:::
+```
+grass --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec g.proj -p
+```
 
 Computation in a Python script can be executed in the same way:
 
-::: code
-    grass --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.py
-:::
+```
+grass --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.py
+```
 
 Additional parameters are just passed to the script, so we can run the
 script with different sets of parameters (here 5, 8 and 3, 9) in
 different temporary mapsets which is good for parallel processing.
 
-::: code
-    grass --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.py 5 8
-    grass --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.py 3 9
-:::
+```
+grass --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.py 5 8
+grass --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.py 3 9
+```
 
 The same applies to Bash scripts (and other scripts supported on you
 platform):
 
-::: code
-    grass --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.sh 5 8
-:::
+```
+grass --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.sh 5 8
+```
 
 The temporary mapset is automatically deleted after computation, so the
 script is expected to export, link or otherwise preserve the output data

@@ -28,31 +28,31 @@ variables.
 
 Set default user interface setting to command line, text-based UI:
 
-::: code
-    g.gui -d ui=text
-:::
+```
+g.gui -d ui=text
+```
 
 Set default user interface setting to the graphical user interface (GUI)
 and *launch* the GUI:
 
-::: code
-    g.gui -d ui=wxpython
-:::
+```
+g.gui -d ui=wxpython
+```
 
 Set default user interface setting to the graphical user interface (GUI)
 but *do not launch* the GUI:
 
-::: code
-    g.gui -dn ui=wxpython
-:::
+```
+g.gui -dn ui=wxpython
+```
 
 ### Load workspace from command line
 
 Start the GUI from command line with an existing workspace:
 
-::: code
-    g.gui workspace=myproject.gxw
-:::
+```
+g.gui workspace=myproject.gxw
+```
 
 ## SEE ALSO
 

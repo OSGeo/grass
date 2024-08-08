@@ -21,14 +21,14 @@ the current region, the module will stop with an error.
 Count the number of schools for a given grid (North Carolina sample
 dataset):
 
-::: code
-    g.region vector=schools_wake res=100 -p -a
-    v.neighbors input=schools_wake output=schools_wake_3000m method=count size=3000
+```
+g.region vector=schools_wake res=100 -p -a
+v.neighbors input=schools_wake output=schools_wake_3000m method=count size=3000
 
-    d.mon wx0
-    d.rast schools_wake_3000m
-    d.vect schools_wake
-:::
+d.mon wx0
+d.rast schools_wake_3000m
+d.vect schools_wake
+```
 
 The result gives for each grid cell the number of points (here: schools)
 not farther than 1500 meter away (half of the given *size* value) from
@@ -36,10 +36,10 @@ the respective cell center.
 
 Calculate the mean capacity of schools for the same grid:
 
-::: code
-    v.neighbors input=schools_wake output=schools_capacity point_column=CAPACITYTO \
-                method=average size=3000
-:::
+```
+v.neighbors input=schools_wake output=schools_capacity point_column=CAPACITYTO \
+            method=average size=3000
+```
 
 ## SEE ALSO
 

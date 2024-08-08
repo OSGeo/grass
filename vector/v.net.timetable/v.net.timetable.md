@@ -6,10 +6,10 @@ standard input and writes output to the standard output as well as to
 the **output** map and to tables linked to layers 1 and 2. Each line of
 input must follow one of the following formats:
 
-::: code
-    PATH_ID FROM_X FROM_Y TO_X TO_Y START_TIME MIN_CHANGE MAX_CHANGES WALK_CHANGE
-    PATH_ID FROM_STOP TO_STOP START_TIME MIN_CHANGE MAX_CHANGES WALK_CHANGE
-:::
+```
+PATH_ID FROM_X FROM_Y TO_X TO_Y START_TIME MIN_CHANGE MAX_CHANGES WALK_CHANGE
+PATH_ID FROM_STOP TO_STOP START_TIME MIN_CHANGE MAX_CHANGES WALK_CHANGE
+```
 
 where PATH_ID is the identificator of a query that is used in the output
 map to differentiate between queries. Search begins at START_TIME.
@@ -24,28 +24,28 @@ For each input query, module outputs a description of the shortest path
 to the standard output. For example, using the tables given below, for
 the following input:
 
-::: code
-    47 130 300 0 1 5 0
-:::
+```
+47 130 300 0 1 5 0
+```
 
 the following output is produced:
 
-::: code
-    Route 15, from 130 leaving at 15 arriving to 250 at 22
-    Walk from 250 leaving at 22 arriving to 300 at 24
-:::
+```
+Route 15, from 130 leaving at 15 arriving to 250 at 22
+Walk from 250 leaving at 22 arriving to 300 at 24
+```
 
 Moreover, the module writes the path to the **output** map and stores
 all the information necessary to reconstruct the path to the tables.
 Table corresponding to stops/points is linked to layer 1 and looks,
 after the query, as follows:
 
-::: code
-    cat|path_id|stop_id|index|arr_time|dep_time
-    1|47|130|1|0|15
-    2|47|250|2|22|22
-    3|47|300|3|24|24
-:::
+```
+cat|path_id|stop_id|index|arr_time|dep_time
+1|47|130|1|0|15
+2|47|250|2|22|22
+3|47|300|3|24|24
+```
 
 where CAT is the category of a point in the map, PATH_ID is the path
 identificator, STOP_ID is the identificator of the stop as used in the
@@ -57,11 +57,11 @@ the last stop is always equal to the arrival time.\
 The table linked to the second layer corresponds to subroutes taken
 between stops. The following table is obtainedd for the above query:
 
-::: code
-    cat|path_id|from_id|to_id|route_id|index|from_time|to_time
-    1|47|130|250|15|1|15|22
-    2|47|250|300|-1|2|22|24
-:::
+```
+cat|path_id|from_id|to_id|route_id|index|from_time|to_time
+1|47|130|250|15|1|15|22
+2|47|250|300|-1|2|22|24
+```
 
 where CAT is the category of lines of subroute between stops FROM_ID to
 TO_ID, ROUTE_ID is the identificator of the route taken or -1 if
@@ -94,21 +94,21 @@ columns: stop - which is the key of the table, **route_id** and
 stop and a certain time. For example, a valid table might look as
 follows:
 
-::: code
-    cat|route_id|stop_time
-    100|5|0
-    130|5|10
-    150|5|20
-    250|5|30
-    300|5|40
-    260|15|5
-    130|15|15
-    250|15|22
-    150|35|17
-    250|35|27
-    300|35|37
-    100|35|50
-:::
+```
+cat|route_id|stop_time
+100|5|0
+130|5|10
+150|5|20
+250|5|30
+300|5|40
+260|15|5
+130|15|15
+250|15|22
+150|35|17
+250|35|27
+300|35|37
+100|35|50
+```
 
 Note that **stop_time** is an integer and so you can use any units and
 offset to specify arrival times.\
@@ -119,10 +119,10 @@ columns: stop - which is the key of the table, **to_stop** and
 **length**. A record in the table says that it takes **length** units of
 time to walk from stop to **to_stop**. The following is a valid table:
 
-::: code
-    cat|length|to_stop
-    250|2|300
-:::
+```
+cat|length|to_stop
+250|2|300
+```
 
 Beware that this only means that it is possible to walk from stop 250 to
 stop 300 but not the other way round.
@@ -134,18 +134,18 @@ To find a path from stop with identificator 130 to stop with category
 changes and with walking not considered a change of route, we use the
 following command:
 
-::: code
-    echo "47 130 300 0 1 5 0" | v.net.timetable \
-         input=buses output=path layer=5 walking=6 path=7
-:::
+```
+echo "47 130 300 0 1 5 0" | v.net.timetable \
+     input=buses output=path layer=5 walking=6 path=7
+```
 
 If, on the other hand, we know the coordinates of the places then the
 following command might be used:
 
-::: code
-    echo "47 10.31 54.31 90.21 28.21 0 1 5 0" | v.net.timetable \
-         input=buses output=path layer=5 walking=6 path=7
-:::
+```
+echo "47 10.31 54.31 90.21 28.21 0 1 5 0" | v.net.timetable \
+     input=buses output=path layer=5 walking=6 path=7
+```
 
 ## SEE ALSO
 

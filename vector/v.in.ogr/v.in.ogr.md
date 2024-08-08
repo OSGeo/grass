@@ -99,9 +99,9 @@ dataset during import to the CRS of the current project.
 The characters which are eligible for table column names are limited by
 the SQL standard. Supported are:
 
-::: code
-    [A-Za-z][A-Za-z0-9_]*
-:::
+```
+[A-Za-z][A-Za-z0-9_]*
+```
 
 This means that SQL neither supports \'.\' (dots) nor \'-\' (minus) nor
 \'#\' in table column names. Also a table name must start with a
@@ -162,15 +162,15 @@ The command imports various vector formats:
 
 ### SHAPE files
 
-::: code
-    v.in.ogr input=/home/user/shape_data/test_shape.shp output=grass_map
-:::
+```
+v.in.ogr input=/home/user/shape_data/test_shape.shp output=grass_map
+```
 
 Alternate method:
 
-::: code
-    v.in.ogr input=/home/user/shape_data layer=test_shape output=grass_map
-:::
+```
+v.in.ogr input=/home/user/shape_data layer=test_shape output=grass_map
+```
 
 Define encoding value for attribute data (in this example we expect
 attribute data in
@@ -178,24 +178,24 @@ attribute data in
 in Central/Eastern European languages that use Latin script, Microsoft
 Windows encoding).
 
-::: code
-    v.in.ogr input=/home/user/shape_data/test_shape.shp output=grass_map encoding=cp1250
-:::
+```
+v.in.ogr input=/home/user/shape_data/test_shape.shp output=grass_map encoding=cp1250
+```
 
 ### MapInfo files
 
-::: code
-    v.in.ogr input=./ layer=mapinfo_test output=grass_map
-:::
+```
+v.in.ogr input=./ layer=mapinfo_test output=grass_map
+```
 
 ### Arc Coverage
 
 We import the Arcs and Label points, the module takes care to build
 areas.
 
-::: code
-    v.in.ogr input=gemeinden layer=LAB,ARC type=centroid,boundary output=mymap
-:::
+```
+v.in.ogr input=gemeinden layer=LAB,ARC type=centroid,boundary output=mymap
+```
 
 ### E00 file
 
@@ -206,43 +206,43 @@ First we have to convert the E00 file to an Arc Coverage with
 tools](http://avce00.maptools.org/avce00/index.html), use *e00conv*
 first in case that *avcimport* fails):
 
-::: code
-    avcimport e00file coverage
-    v.in.ogr input=coverage layer=LAB,ARC type=centroid,boundary output=mymap
-:::
+```
+avcimport e00file coverage
+v.in.ogr input=coverage layer=LAB,ARC type=centroid,boundary output=mymap
+```
 
 ### SDTS files
 
 You have to select the CATD file.
 
-::: code
-    v.in.ogr input=CITXCATD.DDF output=cities
-:::
+```
+v.in.ogr input=CITXCATD.DDF output=cities
+```
 
 ### TIGER files
 
-::: code
-    v.in.ogr input=input/2000/56015/ layer=CompleteChain,PIP output=t56015_all \
-    type=boundary,centroid snap=-1
-:::
+```
+v.in.ogr input=input/2000/56015/ layer=CompleteChain,PIP output=t56015_all \
+type=boundary,centroid snap=-1
+```
 
 ### PostGIS tables
 
 Import polygons as areas:
 
-::: code
-    v.in.ogr input="PG:host=localhost dbname=postgis user=postgres" layer=polymap \
-    output=polygons type=boundary,centroid
-:::
+```
+v.in.ogr input="PG:host=localhost dbname=postgis user=postgres" layer=polymap \
+output=polygons type=boundary,centroid
+```
 
 If the table containing the polygons are in a specific schema, you can
 use:
 
-::: code
-    v.in.ogr input="PG:host=localhost dbname=postgis user=postgres" \
-    layer=myschema.polymap \
-    output=polygons type=boundary,centroid
-:::
+```
+v.in.ogr input="PG:host=localhost dbname=postgis user=postgres" \
+layer=myschema.polymap \
+output=polygons type=boundary,centroid
+```
 
 Generally, *v.in.ogr* just follows the
 [format-specific](https://gdal.org/drivers/vector/) syntax defined by
@@ -268,9 +268,9 @@ categorize features into 5 layers :
 It is recommended to import one layer at a time, and to select features
 with the **where** option, e.g. to import roads, use
 
-::: code
-    v.in.ogr where="highway <> ''"
-:::
+```
+v.in.ogr where="highway <> ''"
+```
 
 i.e. the OSM tag *highway* must be set.
 
@@ -278,9 +278,9 @@ When importing administrative boundaries from OSM, it is important to
 not only select administrative boundaries, but also the admin level to
 be imported (valid range is 1 - 11), e.g. with
 
-::: code
-    v.in.ogr where="boundary = 'administrative' and admin_level = '1'"
-:::
+```
+v.in.ogr where="boundary = 'administrative' and admin_level = '1'"
+```
 
 The OSM topological model differs from the GRASS topological model. OSM
 topologically correct connections of lines can be on all vertices of a
@@ -297,19 +297,19 @@ their values. You should set \"other_tags=no\" to avoid problems with
 import or querying the imported vector. Once a OSM_CONFIG_FILE has been
 created, OSM data can be imported with e.g.
 
-::: code
-    export OSM_CONFIG_FILE=/path/to/osmconf.ini
-    v.in.ogr input=name.pbf layer=lines output=osm_data
-:::
+```
+export OSM_CONFIG_FILE=/path/to/osmconf.ini
+v.in.ogr input=name.pbf layer=lines output=osm_data
+```
 
 ### Oracle Spatial
 
 Note that you have to set the environment-variables
 `ORACLE_BASE, ORACLE_SID, ORACLE_HOME` and `TNS_ADMIN` accordingly.
 
-::: code
-    v.in.ogr input=OCI:username/password@database_instance output=grasslayer layer=roads_oci
-:::
+```
+v.in.ogr input=OCI:username/password@database_instance output=grasslayer layer=roads_oci
+```
 
 ### Multiple geometry columns
 
@@ -317,14 +317,14 @@ This example shows how to work with data which contain multiple geometry
 per feature. The number of geometry columns per feature can be checked
 by *[v.external](v.external.html)* together with **-t** flag.
 
-::: code
-    v.external -t input=20141130_ST_UKSH.xml.gz
-    ...
-    Okresy,point,1,DefinicniBod
-    Okresy,multipolygon,1,OriginalniHranice
-    Okresy,multipolygon,1,GeneralizovaneHranice
-    ...
-:::
+```
+v.external -t input=20141130_ST_UKSH.xml.gz
+...
+Okresy,point,1,DefinicniBod
+Okresy,multipolygon,1,OriginalniHranice
+Okresy,multipolygon,1,GeneralizovaneHranice
+...
+```
 
 In our example layer \"Okresy\" has three geometry columns:
 \"DefinicniBod\", \"OriginalniHranice\" and \"GeneralizovanaHranice\".
@@ -334,17 +334,17 @@ case the module will read geometry only from the specified geometry
 column. In the example below, the output vector map will contain only
 geometry saved in \"OriginalniHranice\" geometry column.
 
-::: code
-    v.in.ogr input=20141130_ST_UKSH.xml.gz layer=Okresy geometry=OriginalniHranice
-:::
+```
+v.in.ogr input=20141130_ST_UKSH.xml.gz layer=Okresy geometry=OriginalniHranice
+```
 
 ## WARNINGS
 
 If a message like
 
-::: code
-    WARNING: Area size 1.3e-06, area not imported
-:::
+```
+WARNING: Area size 1.3e-06, area not imported
+```
 
 appears, the **min_area** may be adjusted to a smaller value so that all
 areas are imported. Otherwise tiny areas are filtered out during import
@@ -352,9 +352,9 @@ areas are imported. Otherwise tiny areas are filtered out during import
 
 If a message like
 
-::: code
-    Try to import again, snapping with at least 1e-008: 'snap=1e-008'
-:::
+```
+Try to import again, snapping with at least 1e-008: 'snap=1e-008'
+```
 
 appears, then the map to be imported contains topological errors. The
 message suggests a value for the *snap* parameter to be tried. For more
@@ -368,19 +368,19 @@ Cleaning](v.in.ogr.html#topology-cleaning)*.
 Depending on the currently selected SQL driver, error messages such as
 follows may arise:
 
-::: code
-    DBMI-SQLite driver error:
-    Error in sqlite3_prepare():
-    near "ORDER": syntax error
-:::
+```
+DBMI-SQLite driver error:
+Error in sqlite3_prepare():
+near "ORDER": syntax error
+```
 
 Or:
 
-::: code
-    DBMI-DBF driver error:
-    SQL parser error:
-    syntax error, unexpected DESC, expecting NAME processing 'DESC
-:::
+```
+DBMI-DBF driver error:
+SQL parser error:
+syntax error, unexpected DESC, expecting NAME processing 'DESC
+```
 
 This indicates that a column name in the input dataset corresponds to a
 reserved SQL word (here: \'ORDER\' and \'DESC\' respectively). A
@@ -392,9 +392,9 @@ words for SQLite (the default driver), see
 
 ### Projection errors
 
-::: code
-    Coordinate reference system of dataset does not appear to match the current project.
-:::
+```
+Coordinate reference system of dataset does not appear to match the current project.
+```
 
 Here you need to create or use a project whose CRS matches that of the
 vector data you wish to import. Try using **project** parameter to

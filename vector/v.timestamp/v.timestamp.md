@@ -21,28 +21,28 @@ timestamp for \"lidar\", nothing is printed. If there is a timestamp,
 one or two time strings are printed, depending on if the timestamp for
 the map consists of a single date or two dates (ie start and end dates).
 
-::: code
-    v.timestamp map=lidar
-:::
+```
+v.timestamp map=lidar
+```
 
 Sets the timestamp for \"lidar\" to the single date \"15 sep 1987\".
 
-::: code
-    v.timestamp map=lidar date='15 sep 1987'
-:::
+```
+v.timestamp map=lidar date='15 sep 1987'
+```
 
 Sets the timestamp for \"lidar\" to have the start date \"15 sep 1987\"
 and the end date \"20 feb 1988\".
 
-::: code
-    v.timestamp map=lidar date='15 sep 1987/20 feb 1988'
-:::
+```
+v.timestamp map=lidar date='15 sep 1987/20 feb 1988'
+```
 
 Removes the timestamp for the \"lidar\" vector map.
 
-::: code
-    v.timestamp map=lidar date=none
-:::
+```
+v.timestamp map=lidar date=none
+```
 
 ## KNOWN ISSUES
 

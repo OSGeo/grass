@@ -41,43 +41,43 @@ rather then in a color table file. Reading color tables with more then
 
 Define color table `wave` based on categories from layer 1
 
-::: code
-    v.colors map=soils_general layer=1 color=wave
-:::
+```
+v.colors map=soils_general layer=1 color=wave
+```
 
 ### Define color table based on attribute values
 
 Define color table `ryg` based on values from attribute column `AREA`.
 Attribute table is linked to layer 1.
 
-::: code
-    v.to.db map=soils_general layer=1 option=area column=AREA
-    v.colors map=soils_general layer=1 color=wave use=attr column=AREA
-:::
+```
+v.to.db map=soils_general layer=1 option=area column=AREA
+v.colors map=soils_general layer=1 color=wave use=attr column=AREA
+```
 
 ### Define color table stored as RGB values in attribute table
 
 Write color values to the attribute table (column `GRASSRGB`) instead of
 creating color table.
 
-::: code
-    v.colors map=soils_general layer=1 color=wave use=attr column=AREA rgb_column=GRASSRGB
+```
+v.colors map=soils_general layer=1 color=wave use=attr column=AREA rgb_column=GRASSRGB
 
-    # See some GRASSRGB values:
-    v.db.select map=soils_general where="cat < 4"
-    cat|OBJECTID|AREA|PERIMETER|GSLNC250_|GSLNC250_I|GSL_NAME|GRASSRGB
-    1|1|0|164616.125|2|1|NC113|212:42:127
-    2|2|0|30785.529297|3|2|NC096|212:42:127
-    3|3|0|87572.882812|4|3|NC097|212:42:127
-:::
+# See some GRASSRGB values:
+v.db.select map=soils_general where="cat < 4"
+cat|OBJECTID|AREA|PERIMETER|GSLNC250_|GSLNC250_I|GSL_NAME|GRASSRGB
+1|1|0|164616.125|2|1|NC113|212:42:127
+2|2|0|30785.529297|3|2|NC096|212:42:127
+3|3|0|87572.882812|4|3|NC097|212:42:127
+```
 
 ### Convert RGB attribute values into color table
 
 Convert existing RGB values to color table rules.
 
-::: code
-    v.colors -c map=soils_general rgb_column=GRASSRGB
-:::
+```
+v.colors -c map=soils_general rgb_column=GRASSRGB
+```
 
 Note that in this case the vector map has a proper color table assigned
 (check by *[v.colors.out](v.colors.out.html)*) together with GRASSRGB
@@ -86,43 +86,43 @@ values stored in attribute table.
 
 ### Transfer raster colors to vector
 
-::: code
-    # create an example raster from census blocks (10m pixel resolution)
-    g.region vector=censusblk_swwake res=10 -ap
-    v.to.rast input=censusblk_swwake use=attr attribute_column=TOTAL_POP output=censusblk_swwake_total_pop
-    r.colors -e map=censusblk_swwake_total_pop color=blues
+```
+# create an example raster from census blocks (10m pixel resolution)
+g.region vector=censusblk_swwake res=10 -ap
+v.to.rast input=censusblk_swwake use=attr attribute_column=TOTAL_POP output=censusblk_swwake_total_pop
+r.colors -e map=censusblk_swwake_total_pop color=blues
 
-    # transfer raster colors to vector attributes (raster values to attributes)
-    r.colors.out map=censusblk_swwake_total_pop rules=- | v.colors map=censusblk_swwake use=attr column=TOTAL_POP rules=-
-    # equivalent, but simpler
-    v.colors map=censusblk_swwake use=attr column=TOTAL_POP raster=censusblk_swwake_total_pop
+# transfer raster colors to vector attributes (raster values to attributes)
+r.colors.out map=censusblk_swwake_total_pop rules=- | v.colors map=censusblk_swwake use=attr column=TOTAL_POP rules=-
+# equivalent, but simpler
+v.colors map=censusblk_swwake use=attr column=TOTAL_POP raster=censusblk_swwake_total_pop
 
-    # transfer raster colors to vector categories (raster values to categories)
-    v.colors map=censusblk_swwake raster=censusblk_swwake_total_pop
-:::
+# transfer raster colors to vector categories (raster values to categories)
+v.colors map=censusblk_swwake raster=censusblk_swwake_total_pop
+```
 
 ### Remove existing color table
 
 Existing color table can be removed by **-r** flag.
 
-::: code
-    v.colors -r map=soils_general
-:::
+```
+v.colors -r map=soils_general
+```
 
 Before removing color table you can store color rules to the file by
 *[v.colors.out](v.colors.out.html)* and later to assign by **rules**
 option.
 
-::: code
-    v.colors.out map=soils_general rules=soils.colr
-    v.colors map=soils_general rules=soils.colr
-:::
+```
+v.colors.out map=soils_general rules=soils.colr
+v.colors map=soils_general rules=soils.colr
+```
 
 To drop RGB column use *[v.db.dropcolumn](v.db.dropcolumn.html)*.
 
-::: code
-    v.db.dropcolumn map=soils_general column=GRASSRGB
-:::
+```
+v.db.dropcolumn map=soils_general column=GRASSRGB
+```
 
 ## SEE ALSO
 

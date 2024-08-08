@@ -61,29 +61,29 @@ Example to create contour lines from elevation model, then recreating
 DEM from these contour lines along with differences analysis (North
 Carolina sample data set):
 
-::: code
-    g.region raster=elevation -p
+```
+g.region raster=elevation -p
 
-    # get minimum elevation value
-    r.univar elevation
+# get minimum elevation value
+r.univar elevation
 
-    # generate vector contour lines
-    r.contour input=elevation output=contours_5m step=5 minlevel=50
+# generate vector contour lines
+r.contour input=elevation output=contours_5m step=5 minlevel=50
 
-    # rasterize contour lines
-    v.info -c contours_5m
-    v.to.rast input=contours_5m output=contours_5m use=attr attribute_column=level
+# rasterize contour lines
+v.info -c contours_5m
+v.to.rast input=contours_5m output=contours_5m use=attr attribute_column=level
 
-    # generate DEM from rasterized contour lines
-    r.surf.contour input=contours_5m output=elevation_from_cont5m
+# generate DEM from rasterized contour lines
+r.surf.contour input=contours_5m output=elevation_from_cont5m
 
-    # calculate difference map
-    r.mapcalc "diff = elevation - elevation_from_cont5m"
-    r.colors diff color=differences
+# calculate difference map
+r.mapcalc "diff = elevation - elevation_from_cont5m"
+r.colors diff color=differences
 
-    # analyze differences statistically
-    r.univar diff
-:::
+# analyze differences statistically
+r.univar diff
+```
 
 ## SEE ALSO
 

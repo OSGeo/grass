@@ -135,22 +135,22 @@ bandwidth selected with the **-a** flag.
 This example uses the ortho photograph included in the NC Sample
 Dataset. Set up an imagery group:
 
-::: code
-    i.group group=ortho_group input=ortho_2001_t792_1m@PERMANENT
-:::
+```
+i.group group=ortho_group input=ortho_2001_t792_1m@PERMANENT
+```
 
 Set the region to a smaller test region (resolution taken from input
 ortho photograph).
 
-::: code
-    g.region -p raster=ortho_2001_t792_1m n=220446 s=220075 e=639151 w=638592
-:::
+```
+g.region -p raster=ortho_2001_t792_1m n=220446 s=220075 e=639151 w=638592
+```
 
 Try out a low threshold and check the results.
 
-::: code
-    i.segment group=ortho_group output=ortho_segs_l1 threshold=0.02
-:::
+```
+i.segment group=ortho_group output=ortho_segs_l1 threshold=0.02
+```
 
 ![](i_segment_ortho_segs_l1.jpg)
 
@@ -158,15 +158,15 @@ From a visual inspection, it seems this results in too many segments.
 Increasing the threshold, using the previous results as seeds, and
 setting a minimum size of 2:
 
-::: code
-    i.segment group=ortho_group output=ortho_segs_l2 threshold=0.05 seeds=ortho_segs_l1 min=2
+```
+i.segment group=ortho_group output=ortho_segs_l2 threshold=0.05 seeds=ortho_segs_l1 min=2
 
-    i.segment group=ortho_group output=ortho_segs_l3 threshold=0.1 seeds=ortho_segs_l2
+i.segment group=ortho_group output=ortho_segs_l3 threshold=0.1 seeds=ortho_segs_l2
 
-    i.segment group=ortho_group output=ortho_segs_l4 threshold=0.2 seeds=ortho_segs_l3
+i.segment group=ortho_group output=ortho_segs_l4 threshold=0.2 seeds=ortho_segs_l3
 
-    i.segment group=ortho_group output=ortho_segs_l5 threshold=0.3 seeds=ortho_segs_l4
-:::
+i.segment group=ortho_group output=ortho_segs_l5 threshold=0.3 seeds=ortho_segs_l4
+```
 
 ![](i_segment_ortho_segs_l2_l5.jpg)
 
@@ -179,15 +179,15 @@ similar than required by our threshold):
 
 Set the region to match the entire map(s) in the group.
 
-::: code
-    g.region -p raster=ortho_2001_t792_1m@PERMANENT
-:::
+```
+g.region -p raster=ortho_2001_t792_1m@PERMANENT
+```
 
 Run *i.segment* on the full map:
 
-::: code
-    i.segment group=ortho_group output=ortho_segs_final threshold=0.25 min=10
-:::
+```
+i.segment group=ortho_group output=ortho_segs_final threshold=0.25 min=10
+```
 
 ![](i_segment_ortho_segs_final.jpg)
 
@@ -199,21 +199,21 @@ about 450 times more then for the final run.
 This example uses the panchromatic channel of the Landsat7 scene
 included in the North Carolina sample dataset:
 
-::: code
-    # create group with single channel
-    i.group group=singleband input=lsat7_2002_80
+```
+# create group with single channel
+i.group group=singleband input=lsat7_2002_80
 
-    # set computational region to Landsat7 PAN band
-    g.region raster=lsat7_2002_80 -p
+# set computational region to Landsat7 PAN band
+g.region raster=lsat7_2002_80 -p
 
-    # perform segmentation with minsize=5
-    i.segment group=singleband threshold=0.05 minsize=5 \
-      output=lsat7_2002_80_segmented_min5 goodness=lsat7_2002_80_goodness_min5
+# perform segmentation with minsize=5
+i.segment group=singleband threshold=0.05 minsize=5 \
+  output=lsat7_2002_80_segmented_min5 goodness=lsat7_2002_80_goodness_min5
 
-    # perform segmentation with minsize=100
-    i.segment group=singleband threshold=0.05 minsize=100
-      output=lsat7_2002_80_segmented_min100 goodness=lsat7_2002_80_goodness_min100
-:::
+# perform segmentation with minsize=100
+i.segment group=singleband threshold=0.05 minsize=100
+  output=lsat7_2002_80_segmented_min100 goodness=lsat7_2002_80_goodness_min100
+```
 
 ![](i_segment_lsat7_pan.png)\
 Original panchromatic channel of the Landsat7 scene

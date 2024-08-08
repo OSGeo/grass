@@ -28,11 +28,11 @@ To connect a vector map to a database table, use
 
 Local storage:\
 
-::: code
-    db.connect -d
-    db.connect -p
-    db.tables -p
-:::
+```
+db.connect -d
+db.connect -p
+db.tables -p
+```
 
 The SQLite database file is created automatically when used the first
 time.
@@ -44,12 +44,12 @@ See [SQLite](grass-sqlite.html) database driver for details.
 Local storage, database tables stored in database \"mydb\" (may require
 the use of *[db.login](db.login.html)*):\
 
-::: code
-    db.connect driver=pg database=mydb
-    db.login user=myname pass=secret
-    db.connect -p
-    db.tables -p
-:::
+```
+db.connect driver=pg database=mydb
+db.login user=myname pass=secret
+db.connect -p
+db.tables -p
+```
 
 See [PostgreSQL](grass-pg.html) database driver for details.
 
@@ -58,12 +58,12 @@ See [PostgreSQL](grass-pg.html) database driver for details.
 Network storage, database tables stored in database \"mydb\" (may
 require the use of *[db.login](db.login.html)*):\
 
-::: code
-    db.connect driver=pg database=mydb
-    db.login user=myname pass=secret host=myserver.com port=6666
-    db.connect -p
-    db.tables -p
-:::
+```
+db.connect driver=pg database=mydb
+db.login user=myname pass=secret host=myserver.com port=6666
+db.connect -p
+db.tables -p
+```
 
 See [PostgreSQL](grass-pg.html) database driver for details.
 
@@ -72,12 +72,12 @@ See [PostgreSQL](grass-pg.html) database driver for details.
 Local storage, database tables stored in database \"mydb\" (may require
 the use of *[db.login](db.login.html)*):\
 
-::: code
-    db.connect driver=mysql database=mydb
-    db.login user=myname pass=secret
-    db.connect -p
-    db.tables -p
-:::
+```
+db.connect driver=mysql database=mydb
+db.login user=myname pass=secret
+db.connect -p
+db.tables -p
+```
 
 See [MySQL](grass-mysql.html) database driver for details.
 
@@ -86,12 +86,12 @@ See [MySQL](grass-mysql.html) database driver for details.
 Network storage, database tables stored in database \"mydb\" (may
 require the use of *[db.login](db.login.html)*):\
 
-::: code
-    db.connect driver=mysql database=mydb
-    db.login user=myname pass=secret host=myserver.com
-    db.connect -p
-    db.tables -p
-:::
+```
+db.connect driver=mysql database=mydb
+db.login user=myname pass=secret host=myserver.com
+db.connect -p
+db.tables -p
+```
 
 See [MySQL](grass-mysql.html) database driver for details.
 
@@ -100,12 +100,12 @@ See [MySQL](grass-mysql.html) database driver for details.
 Network storage, database tables stored in database \"mydb\" (may
 require the use of *[db.login](db.login.html)*):\
 
-::: code
-    db.connect driver=odbc database=mydb
-    db.login user=myname pass=secret
-    db.connect -p
-    db.tables -p
-:::
+```
+db.connect driver=odbc database=mydb
+db.login user=myname pass=secret
+db.connect -p
+db.tables -p
+```
 
 See [ODBC](grass-odbc.html) database driver for details.
 
@@ -114,10 +114,10 @@ See [ODBC](grass-odbc.html) database driver for details.
 Local storage (the dbf/ subdirectory in the mapset must exist or must be
 created by the user):\
 
-::: code
-    db.connect driver=dbf database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'
-    db.tables -p
-:::
+```
+db.connect driver=dbf database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'
+db.tables -p
+```
 
 See [DBF](grass-dbf.html) database driver for details.
 

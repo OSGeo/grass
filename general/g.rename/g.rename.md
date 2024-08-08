@@ -13,14 +13,14 @@ Users can also simply type *g.rename \--help* without arguments on the
 command line, to receive a menu of existing data base element types and
 files from which to choose for possible renaming:
 
-::: code
-           raster   raster map(s) to be renamed
-        raster_3d   3D raster map(s) to be renamed
-           vector   vector map(s) to be renamed
-           labels   paint label file(s) to be renamed
-           region   region definition(s) to be renamed
-            group   imagery group(s) to be renamed
-:::
+```
+       raster   raster map(s) to be renamed
+    raster_3d   3D raster map(s) to be renamed
+       vector   vector map(s) to be renamed
+       labels   paint label file(s) to be renamed
+       region   region definition(s) to be renamed
+        group   imagery group(s) to be renamed
+```
 
 ## NOTES
 
@@ -40,16 +40,16 @@ more than case, then rename it to the intended name.
 
 ## EXAMPLE
 
-::: code
-    # rename raster map
-    g.rename raster=oldrast,newrast
+```
+# rename raster map
+g.rename raster=oldrast,newrast
 
-    # rename vector map
-    g.rename vector=oldvect,newvect
+# rename vector map
+g.rename vector=oldvect,newvect
 
-    # combined renaming
-    g.rename raster=oldrast,newrast vector=oldvect,newvect
-:::
+# combined renaming
+g.rename raster=oldrast,newrast vector=oldvect,newvect
+```
 
 ## SEE ALSO
 

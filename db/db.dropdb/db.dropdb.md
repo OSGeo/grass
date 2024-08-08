@@ -12,15 +12,15 @@ Note that the standard GRASS GIS SQLite database is by default found in
 the user\'s current mapset. This example shows an out-of-mapset database
 removal:
 
-::: code
-    db.dropdb driver=sqlite database=/opt/sqlite.db
-:::
+```
+db.dropdb driver=sqlite database=/opt/sqlite.db
+```
 
 ### Drop an existing database connected through PostgreSQL driver
 
-::: code
-    db.dropdb driver=pg database=grassdb
-:::
+```
+db.dropdb driver=pg database=grassdb
+```
 
 ## TODO
 

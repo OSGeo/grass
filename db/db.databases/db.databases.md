@@ -15,21 +15,21 @@ mapset. For PostgreSQL driver it\'s empty connection string.
 
 List SQLite databases in the current mapset:
 
-::: code
-    db.databases driver=sqlite
-:::
+```
+db.databases driver=sqlite
+```
 
 List SQLite databases in a given directory:
 
-::: code
-    db.databases driver=sqlite location=/opt/sqlite
-:::
+```
+db.databases driver=sqlite location=/opt/sqlite
+```
 
 List PostgreSQL databases from database server running on given port:
 
-::: code
-    db.databases driver=pg location="host=server_name port=5333"
-:::
+```
+db.databases driver=pg location="host=server_name port=5333"
+```
 
 ## SEE ALSO
 

@@ -21,50 +21,50 @@ printed by **-e** flag.
 See also function `version()` from [Python Scripting
 Library](https://grasswiki.osgeo.org/wiki/GRASS_Python_Scripting_Library).
 
-::: code
-    import grass.script as gcore
+```
+import grass.script as gcore
 
-    print gcore.version()
-:::
+print gcore.version()
+```
 
 ## EXAMPLES
 
 ### Basic info
 
-::: code
-    g.version
+```
+g.version
 
-    GRASS 8.4.0 (2024)
-:::
+GRASS 8.4.0 (2024)
+```
 
 ### GIS Library info
 
-::: code
-    g.version -r
+```
+g.version -r
 
-    GRASS 8.4.0 (2024)
-    libgis revision: c9e8576cf
-    libgis date: 2024-04-27T09:38:49+00:00
-:::
+GRASS 8.4.0 (2024)
+libgis revision: c9e8576cf
+libgis date: 2024-04-27T09:38:49+00:00
+```
 
 ### Full info in shell script style
 
-::: code
-    g.version -rge
+```
+g.version -rge
 
-    version=8.4.0
-    date=2024
-    revision=d57f40906
-    build_date=2024-05-23
-    build_platform=x86_64-pc-linux-gnu
-    build_off_t_size=8
-    libgis_revision=c9e8576cf
-    libgis_date=2024-04-27T09:38:49+00:00
-    proj=8.2.1
-    gdal=3.4.3
-    geos=3.9.2
-    sqlite=3.36.0
-:::
+version=8.4.0
+date=2024
+revision=d57f40906
+build_date=2024-05-23
+build_platform=x86_64-pc-linux-gnu
+build_off_t_size=8
+libgis_revision=c9e8576cf
+libgis_date=2024-04-27T09:38:49+00:00
+proj=8.2.1
+gdal=3.4.3
+geos=3.9.2
+sqlite=3.36.0
+```
 
 Note: if `revision=exported` is reported instead of the git hash then
 the `git` program was not available during compilation of GRASS GIS and

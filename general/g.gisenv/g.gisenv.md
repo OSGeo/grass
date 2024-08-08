@@ -13,18 +13,18 @@ If run without arguments, *g.gisenv* lists all of the user\'s current
 GRASS variable settings. Results are sent to standard output, and may
 look like this:
 
-::: code
-    GISDBASE=/opt/grassdata/
-    LOCATION_NAME=nc_spm_08_grass7
-    MAPSET=/user1
-    GUI=gui
-:::
+```
+GISDBASE=/opt/grassdata/
+LOCATION_NAME=nc_spm_08_grass7
+MAPSET=/user1
+GUI=gui
+```
 
 If the user specifies a **get=***variable_name* on the command line
 
-::: code
-    g.gisenv MAPSET
-:::
+```
+g.gisenv MAPSET
+```
 
 only the value for that particular GRASS variable is output to standard
 output. Possible variable names depend on the user\'s system, see
@@ -102,10 +102,10 @@ The full path to the current mapset is determined from *GISDBASE*,
 `/opt/grassdata/spearfish/PERMANENT`. The full path can be printed using
 *g.gisenv* by providing multiple variables:
 
-::: code
-    g.gisenv get=GISDBASE,LOCATION_NAME,MAPSET sep='/'
-    /opt/grassdata/nc_spm_08_grass7/user1
-:::
+```
+g.gisenv get=GISDBASE,LOCATION_NAME,MAPSET sep='/'
+/opt/grassdata/nc_spm_08_grass7/user1
+```
 
 ## NOTES
 
@@ -113,9 +113,9 @@ The output from *g.gisenv* when invoked without arguments is directly
 usable by Bash. The following command will cast each variable into the
 UNIX environment:
 
-::: code
-    eval `g.gisenv`
-:::
+```
+eval `g.gisenv`
+```
 
 This works only for *Bash*, *sh*, *ksh*, etc. The format of the output
 is not compatible with some other UNIX shells.
@@ -130,9 +130,9 @@ current GRASS session is closed.
 To print debugging messages, the variable *DEBUG* must be set to level
 equal or greater than 0:
 
-::: code
-    g.gisenv set="DEBUG=3"
-:::
+```
+g.gisenv set="DEBUG=3"
+```
 
 Levels: (recommended levels)
 
@@ -143,9 +143,9 @@ Levels: (recommended levels)
 
 To disable debugging messages:
 
-::: code
-    g.gisenv unset="DEBUG"
-:::
+```
+g.gisenv unset="DEBUG"
+```
 
 The variable DEBUG controls debugging messages from GRASS libraries and
 modules.

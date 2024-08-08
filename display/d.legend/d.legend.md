@@ -105,33 +105,33 @@ logarithmic space.
 Displaying the legend along with a histogram (North Carolina Sample
 dataset):
 
-::: code
-    g.region raster=elevation -p
-    d.rast elevation
-    d.legend -d elevation
-:::
+```
+g.region raster=elevation -p
+d.rast elevation
+d.legend -d elevation
+```
 
 ![Elevation map with legend](d_legend.png){border="1"}
 
 Displaying the legend with custom labels and background:
 
-::: code
-    g.region raster=elevation -p
-    d.rast elevation
-    d.legend raster=elevation -t label_step=20 label_values=108 title=Legend -b bgcolor=255:255:204 border_color=gray
-:::
+```
+g.region raster=elevation -p
+d.rast elevation
+d.legend raster=elevation -t label_step=20 label_values=108 title=Legend -b bgcolor=255:255:204 border_color=gray
+```
 
 ![Elevation map with custom
 legend](d_legend_custom_labels_and_background.png){border="1"}
 
 Displaying the legend with logarithmic scale:
 
-::: code
-    g.region raster=elevation -p
-    r.watershed -a elevation=elevation threshold=1000 accumulation=flowacc
-    d.rast flowacc
-    d.legend raster=flowacc -t -l label_step=1
-:::
+```
+g.region raster=elevation -p
+r.watershed -a elevation=elevation threshold=1000 accumulation=flowacc
+d.rast flowacc
+d.legend raster=flowacc -t -l label_step=1
+```
 
 ![Flow accumulation map with logarithmic
 legend](d_legend_logarithmic.png){border="1"}

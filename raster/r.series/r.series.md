@@ -36,20 +36,20 @@ Following methods are available:
 Note that most parameters accept multiple answers, allowing multiple
 aggregates to be computed in a single run, e.g.:
 
-::: code
-    r.series input=map1,...,mapN \
-             output=map.mean,map.stddev \
-         method=average,stddev
-:::
+```
+r.series input=map1,...,mapN \
+         output=map.mean,map.stddev \
+     method=average,stddev
+```
 
 or:
 
-::: code
-    r.series input=map1,...,mapN \
-             output=map.p10,map.p50,map.p90 \
-             method=quantile,quantile,quantile \
-             quantile=0.1,0.5,0.9
-:::
+```
+r.series input=map1,...,mapN \
+         output=map.p10,map.p50,map.p90 \
+         method=quantile,quantile,quantile \
+         quantile=0.1,0.5,0.9
+```
 
 The same number of values must be provided for all options.
 
@@ -111,18 +111,18 @@ with e.g. `ulimit -n 4096` (UNIX-based operating systems) but it cannot
 be higher than the hard limit. If the latter is too low, you can as
 superuser add an entry in:
 
-::: code
-    /etc/security/limits.conf
-    # <domain>      <type>  <item>         <value>
-    your_username  hard    nofile          4096
-:::
+```
+/etc/security/limits.conf
+# <domain>      <type>  <item>         <value>
+your_username  hard    nofile          4096
+```
 
 This will raise the hard limit to 4096 files. Also have a look at the
 overall limit of the operating system
 
-::: code
-    cat /proc/sys/fs/file-max
-:::
+```
+cat /proc/sys/fs/file-max
+```
 
 which on modern Linux systems is several 100,000 files.
 
@@ -170,10 +170,10 @@ compiled with OpenMP enabled.
 
 Using *r.series* with wildcards:\
 
-::: code
-    r.series input="`g.list pattern='insitu_data.*' sep=,`" \
-             output=insitu_data.stddev method=stddev
-:::
+```
+r.series input="`g.list pattern='insitu_data.*' sep=,`" \
+         output=insitu_data.stddev method=stddev
+```
 
 Note the *g.list* script also supports regular expressions for selecting
 map names.
@@ -181,58 +181,58 @@ map names.
 Using *r.series* with NULL raster maps (in order to consider a
 \"complete\" time series):\
 
-::: code
-    r.mapcalc "dummy = null()"
-    r.series in=map2001,map2002,dummy,dummy,map2005,map2006,dummy,map2008 \
-             out=res_slope,res_offset,res_coeff meth=slope,offset,detcoeff
-:::
+```
+r.mapcalc "dummy = null()"
+r.series in=map2001,map2002,dummy,dummy,map2005,map2006,dummy,map2008 \
+         out=res_slope,res_offset,res_coeff meth=slope,offset,detcoeff
+```
 
 Example for multiple aggregates to be computed in one run (3 resulting
 aggregates from two input maps):
 
-::: code
-    r.series in=one,two out=result_avg,res_slope,result_count meth=sum,slope,count
-:::
+```
+r.series in=one,two out=result_avg,res_slope,result_count meth=sum,slope,count
+```
 
 Example to use the file option of r.series:
 
-::: code
-    cat > input.txt << EOF
-    map1
-    map2
-    map3
-    EOF
+```
+cat > input.txt << EOF
+map1
+map2
+map3
+EOF
 
-    r.series file=input.txt out=result_sum meth=sum
-:::
+r.series file=input.txt out=result_sum meth=sum
+```
 
 Example to use the file option of r.series including weights. The weight
 0.75 should be assigned to map2. As the other maps do not have weights
 we can leave it out:
 
-::: code
-    cat > input.txt << EOF
-    map1
-    map2|0.75
-    map3
-    EOF
+```
+cat > input.txt << EOF
+map1
+map2|0.75
+map3
+EOF
 
-    r.series file=input.txt out=result_sum meth=sum
-:::
+r.series file=input.txt out=result_sum meth=sum
+```
 
 Example for counting the number of days above a certain temperature
 using daily average maps (\'???\' as DOY wildcard):
 
-::: code
-    # Approach for shell based systems
-    r.series input=`g.list rast pattern="temp_2003_???_avg" separator=comma` \
-             output=temp_2003_days_over_25deg range=25.0,100.0 method=count
+```
+# Approach for shell based systems
+r.series input=`g.list rast pattern="temp_2003_???_avg" separator=comma` \
+         output=temp_2003_days_over_25deg range=25.0,100.0 method=count
 
-    # Approach in two steps (e.g., for Windows systems)
-    g.list rast pattern="temp_2003_???_avg" output=mapnames.txt
-    r.series file=mapnames.txt \
-             output=temp_2003_days_over_25deg range=25.0,100.0 method=count
-:::
+# Approach in two steps (e.g., for Windows systems)
+g.list rast pattern="temp_2003_???_avg" output=mapnames.txt
+r.series file=mapnames.txt \
+         output=temp_2003_days_over_25deg range=25.0,100.0 method=count
+```
 
 ## SEE ALSO
 

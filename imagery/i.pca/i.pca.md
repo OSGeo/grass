@@ -48,25 +48,25 @@ history files. View with *r.info*.
 PCA calculation using Landsat7 imagery in the North Carolina sample
 dataset:
 
-::: code
-    g.region raster=lsat7_2002_10 -p
-    i.pca in=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70 \
-        out=lsat7_2002_pca
+```
+g.region raster=lsat7_2002_10 -p
+i.pca in=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70 \
+    out=lsat7_2002_pca
 
-    r.info -h lsat7_2002_pca.1
-       Eigen values, (vectors), and [percent importance]:
-       PC1   4334.35 ( 0.2824, 0.3342, 0.5092,-0.0087, 0.5264, 0.5217) [83.04%]
-       PC2    588.31 ( 0.2541, 0.1885, 0.2923,-0.7428,-0.5110,-0.0403) [11.27%]
-       PC3    239.22 ( 0.3801, 0.3819, 0.2681, 0.6238,-0.4000,-0.2980) [ 4.58%]
-       PC4     32.85 ( 0.1752,-0.0191,-0.4053, 0.1593,-0.4435, 0.7632) [ 0.63%]
-       PC5     20.73 (-0.6170,-0.2514, 0.6059, 0.1734,-0.3235, 0.2330) [ 0.40%]
-       PC6      4.08 (-0.5475, 0.8021,-0.2282,-0.0607,-0.0208, 0.0252) [ 0.08%]
+r.info -h lsat7_2002_pca.1
+   Eigen values, (vectors), and [percent importance]:
+   PC1   4334.35 ( 0.2824, 0.3342, 0.5092,-0.0087, 0.5264, 0.5217) [83.04%]
+   PC2    588.31 ( 0.2541, 0.1885, 0.2923,-0.7428,-0.5110,-0.0403) [11.27%]
+   PC3    239.22 ( 0.3801, 0.3819, 0.2681, 0.6238,-0.4000,-0.2980) [ 4.58%]
+   PC4     32.85 ( 0.1752,-0.0191,-0.4053, 0.1593,-0.4435, 0.7632) [ 0.63%]
+   PC5     20.73 (-0.6170,-0.2514, 0.6059, 0.1734,-0.3235, 0.2330) [ 0.40%]
+   PC6      4.08 (-0.5475, 0.8021,-0.2282,-0.0607,-0.0208, 0.0252) [ 0.08%]
 
-    d.mon wx0
-    d.rast lsat7_2002_pca.1
-    # ...
-    d.rast lsat7_2002_pca.6
-:::
+d.mon wx0
+d.rast lsat7_2002_pca.1
+# ...
+d.rast lsat7_2002_pca.6
+```
 
 In this example, the first two PCAs (PCA1 and PCA2) already explain
 94.31% of the variance in the six input channels.

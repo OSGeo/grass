@@ -13,21 +13,21 @@ your PATH, or the full path to an executable. See
 
 Show index page in the browser.
 
-::: code
-    g.manual -i
-:::
+```
+g.manual -i
+```
 
 Show manual page of *[d.vect](d.vect.html)* module in the browser.
 
-::: code
-    g.manual d.vect
-:::
+```
+g.manual d.vect
+```
 
 Show module manual page in terminal.
 
-::: code
-    g.manual -m d.vect
-:::
+```
+g.manual -m d.vect
+```
 
 ## AUTHOR
 

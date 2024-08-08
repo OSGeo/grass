@@ -29,18 +29,18 @@ says that the total amount of water flowing is equal to the minimum cut.
 Find maximum flow from factories to stores using SPEED for the
 capacities.
 
-::: code
-    v.net.flow input=roads output=roads_flow cut=roads_cut arc_column=SPEED \
-               source_where="type=factory" sink_where="type=store"
-:::
+```
+v.net.flow input=roads output=roads_flow cut=roads_cut arc_column=SPEED \
+           source_where="type=factory" sink_where="type=store"
+```
 
 If all the capacties are one then the minimum cut corresponds to the
 minimum number of edges separating sources from sinks.
 
-::: code
-    v.net.flow input=network output=flow cut=cut arc_column=ones \
-               source_cats=1-10 sink_cats=100-100
-:::
+```
+v.net.flow input=network output=flow cut=cut arc_column=ones \
+           source_cats=1-10 sink_cats=100-100
+```
 
 ## SEE ALSO
 

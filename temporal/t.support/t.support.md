@@ -18,17 +18,17 @@ register table and the temporal database.
 
 Modification of title and description of space time raster dataset *A*.
 
-::: code
-    t.support type=strds input=tempmean_monthly title="Monthly temperature for North Carolina" \
-              description="Dataset with monthly temperature for North Carolina"
-:::
+```
+t.support type=strds input=tempmean_monthly title="Monthly temperature for North Carolina" \
+          description="Dataset with monthly temperature for North Carolina"
+```
 
 Update the metadata of space time raster dataset *A* and check for
 removed map layers.
 
-::: code
-    t.support -m type=strds input=tempmean_monthly
-:::
+```
+t.support -m type=strds input=tempmean_monthly
+```
 
 ## SEE ALSO
 

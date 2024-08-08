@@ -51,12 +51,12 @@ Terraflow encoding.
 GRASS aspect maps are measured using Cartesian conventions, i.e. in
 degrees counterclockwise from east. e.g.:
 
-::: code
-    90  North
-    180 West
-    270 South
-    0,360 East
-:::
+```
+90  North
+180 West
+270 South
+0,360 East
+```
 
 They can be created from a raster elevation map with
 *[r.slope.aspect](r.slope.aspect.html)*.
@@ -72,11 +72,11 @@ or direction \"to\", as opposed to atmospheric conventions (direction
 Convert U,V velocity component maps into magnitude,direction maps for
 use with *d.rast.arrow*:
 
-::: code
-    r.mapcalc "magnitude = sqrt(U_map^2 + V_map^2)"
-    r.mapcalc "direction = atan(U_map, V_map)"
-    d.rast.arrow map=direction type=grass magnitude_map=magnitude skip=3 grid=none
-:::
+```
+r.mapcalc "magnitude = sqrt(U_map^2 + V_map^2)"
+r.mapcalc "direction = atan(U_map, V_map)"
+d.rast.arrow map=direction type=grass magnitude_map=magnitude skip=3 grid=none
+```
 
 ![](d_rast_arrow_wind.png)\
 *Sea wind speed (magnitude) and direction shown in the Tasmanian Sea*

@@ -27,24 +27,29 @@ With a *Brovey pan sharpening*, each of the 3 lower resolution bands and
 panchromatic band are combined using the following algorithm to
 calculate 3 new bands at the higher resolution (example for band 1):
 
-                             band1
-        new band1 = ----------------------- * panband
-                     band1 + band2 + band3
+```
+                         band1
+    new band1 = ----------------------- * panband
+                 band1 + band2 + band3
+```
 
 In *PCA pan sharpening*, a principal component analysis is performed on
 the original 3 lower resolution bands to create 3 principal component
 images (PC1, PC2, and PC3) and their associated eigenvectors (EV), such
 that:
 
+```
 
-         band1  band2  band3
-    PC1: EV1-1  EV1-2  EV1-3
-    PC2: EV2-1  EV2-2  EV2-3
-    PC3: EV3-1  EV3-2  EV3-3
+     band1  band2  band3
+PC1: EV1-1  EV1-2  EV1-3
+PC2: EV2-1  EV2-2  EV2-3
+PC3: EV3-1  EV3-2  EV3-3
 
-    and
+and
 
-    PC1 = EV1-1 * band1 + EV1-2 * band2 + EV1-3 * band3 - mean(bands 1,2,3)
+PC1 = EV1-1 * band1 + EV1-2 * band2 + EV1-3 * band3 - mean(bands 1,2,3)
+
+```
 
 An inverse PCA is then performed, substituting the panchromatic band for
 PC1. To do this, the eigenvectors matrix is inverted (in this case
@@ -53,8 +58,11 @@ panchromatic band substituted for PC1, and mean of each band is added to
 each transformed image band using the following algorithm (example for
 band 1):
 
+```
 
-    band1 = pan * EV1-1 + PC2 * EV1-2 + PC3 * EV1-3 + mean(band1)
+band1 = pan * EV1-1 + PC2 * EV1-2 + PC3 * EV1-3 + mean(band1)
+
+```
 
 The assignment of the channels depends on the satellite. Examples of
 satellite imagery with high resolution panchromatic bands, and lower
@@ -99,79 +107,79 @@ in terms of spectral response.
 
 LANDSAT ETM+ (Landsat 7), North Carolina sample dataset, PCA method:
 
-::: code
-    # original at 28m
-    g.region raster=lsat7_2002_10 -p
+```
+# original at 28m
+g.region raster=lsat7_2002_10 -p
 
-    d.mon wx0
-    d.rgb b=lsat7_2002_10 g=lsat7_2002_20 r=lsat7_2002_30
+d.mon wx0
+d.rgb b=lsat7_2002_10 g=lsat7_2002_20 r=lsat7_2002_30
 
-    # i.pansharpen with PCA algorithm
-    i.pansharpen red=lsat7_2002_30 \
-      green=lsat7_2002_20 blue=lsat7_2002_10 \
-      pan=lsat7_2002_80 method=pca \
-      output=lsat7_2002_15m_pca -l
+# i.pansharpen with PCA algorithm
+i.pansharpen red=lsat7_2002_30 \
+  green=lsat7_2002_20 blue=lsat7_2002_10 \
+  pan=lsat7_2002_80 method=pca \
+  output=lsat7_2002_15m_pca -l
 
-    # color enhance
-    i.colors.enhance blue=lsat7_2002_15m_pca_blue \
-      green=lsat7_2002_15m_pca_green red=lsat7_2002_15m_pca_red
+# color enhance
+i.colors.enhance blue=lsat7_2002_15m_pca_blue \
+  green=lsat7_2002_15m_pca_green red=lsat7_2002_15m_pca_red
 
-    # display at 14.25m, IHS pansharpened
-    g.region raster=lsat7_2002_15m_pca_red -p
-    d.erase
-    d.rgb b=lsat7_2002_15m_pca_blue g=lsat7_2002_15m_pca_green r=lsat7_2002_15m_pca_red
-:::
+# display at 14.25m, IHS pansharpened
+g.region raster=lsat7_2002_15m_pca_red -p
+d.erase
+d.rgb b=lsat7_2002_15m_pca_blue g=lsat7_2002_15m_pca_green r=lsat7_2002_15m_pca_red
+```
 
 LANDSAT ETM+ (Landsat 7), North Carolina sample dataset, IHS method:
 
-::: code
-    # original at 28m
-    g.region raster=lsat7_2002_10 -p
+```
+# original at 28m
+g.region raster=lsat7_2002_10 -p
 
-    d.mon wx0
-    d.rgb b=lsat7_2002_10 g=lsat7_2002_20 r=lsat7_2002_30
+d.mon wx0
+d.rgb b=lsat7_2002_10 g=lsat7_2002_20 r=lsat7_2002_30
 
-    # i.pansharpen with IHS algorithm
-    i.pansharpen red=lsat7_2002_30 \
-      green=lsat7_2002_20 blue=lsat7_2002_10 \
-      pan=lsat7_2002_80 method=ihs \
-      output=lsat7_2002_15m_ihs -l
+# i.pansharpen with IHS algorithm
+i.pansharpen red=lsat7_2002_30 \
+  green=lsat7_2002_20 blue=lsat7_2002_10 \
+  pan=lsat7_2002_80 method=ihs \
+  output=lsat7_2002_15m_ihs -l
 
-    # color enhance
-    i.colors.enhance blue=lsat7_2002_15m_ihs_blue \
-      green=lsat7_2002_15m_ihs_green red=lsat7_2002_15m_ihs_red
+# color enhance
+i.colors.enhance blue=lsat7_2002_15m_ihs_blue \
+  green=lsat7_2002_15m_ihs_green red=lsat7_2002_15m_ihs_red
 
-    # display at 14.25m, IHS pansharpened
-    g.region raster=lsat7_2002_15m_ihs_red -p
-    d.erase
-    d.rgb b=lsat7_2002_15m_ihs_blue g=lsat7_2002_15m_ihs_green r=lsat7_2002_15m_ihs_red
+# display at 14.25m, IHS pansharpened
+g.region raster=lsat7_2002_15m_ihs_red -p
+d.erase
+d.rgb b=lsat7_2002_15m_ihs_blue g=lsat7_2002_15m_ihs_green r=lsat7_2002_15m_ihs_red
 
-    # compare before/after (RGB support under "Advanced"):
-    g.gui.mapswipe
-:::
+# compare before/after (RGB support under "Advanced"):
+g.gui.mapswipe
+```
 
 ### Pan sharpening comparison example
 
 Pan sharpening of a Landsat image from Boulder, Colorado, USA (LANDSAT
 ETM+ \[Landsat 7\] spectral bands 5,4,2, and pan band 8):
 
-::: code
-    # R, G, B composite at 30m
-    g.region raster=p034r032_7dt20010924_z13_20 -p
-    d.rgb b=p034r032_7dt20010924_z13_20 g=lp034r032_7dt20010924_z13_40
-        r=p034r032_7dt20010924_z13_50
+```
+# R, G, B composite at 30m
+g.region raster=p034r032_7dt20010924_z13_20 -p
+d.rgb b=p034r032_7dt20010924_z13_20 g=lp034r032_7dt20010924_z13_40
+    r=p034r032_7dt20010924_z13_50
 
-    # i.pansharpen with IHS algorithm
-    i.pansharpen red=p034r032_7dt20010924_z13_50 green=p034r032_7dt20010924_z13_40
-        blue=p034r032_7dt20010924_z13_20 pan=p034r032_7dp20010924_z13_80
-        output=ihs321 method=ihs
+# i.pansharpen with IHS algorithm
+i.pansharpen red=p034r032_7dt20010924_z13_50 green=p034r032_7dt20010924_z13_40
+    blue=p034r032_7dt20010924_z13_20 pan=p034r032_7dp20010924_z13_80
+    output=ihs321 method=ihs
 
-    # ... likewise with method=brovey and method=pca
+# ... likewise with method=brovey and method=pca
 
-    # display at 15m
-    g.region raster=ihs542_blue -p
-    d.rgb b=ihs542_blue g=ihs542_green r=ihs542_red
-:::
+# display at 15m
+g.region raster=ihs542_blue -p
+d.rgb b=ihs542_blue g=ihs542_green r=ihs542_red
+```
 
 ***Results:***
 

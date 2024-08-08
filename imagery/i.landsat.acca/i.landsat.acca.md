@@ -24,12 +24,12 @@ Run the standard ACCA algorithm with filling of small cloud holes (the
 `226_62.toar.1, 226_62.toar.2, ` \[\...\] and LANDSAT-7 thermal band
 `226_62.toar.61`, outputting to a new raster map named `226_62.acca`:
 
-::: code
-    i.landsat.toar sensor=7 gain=HHHLHLHHL date=2003-04-07 \
-      product_date=2008-11-27 band_prefix=226_62 solar_elevation=49.51654
+```
+i.landsat.toar sensor=7 gain=HHHLHLHHL date=2003-04-07 \
+  product_date=2008-11-27 band_prefix=226_62 solar_elevation=49.51654
 
-    i.landsat.acca -f band_prefix=226_62.toar output=226_62.acca
-:::
+i.landsat.acca -f band_prefix=226_62.toar output=226_62.acca
+```
 
 ## REFERENCES
 

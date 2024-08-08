@@ -14,15 +14,15 @@ Optionally the name can be given by **output** parameter.
 
 Pack up vector map *random_point* into *random_point.pack* file.
 
-::: code
-    v.pack input=random_point
-:::
+```
+v.pack input=random_point
+```
 
 the vector map can be afterwards unpacked by
 
-::: code
-    v.unpack input=random_point.pack
-:::
+```
+v.unpack input=random_point.pack
+```
 
 ## SEE ALSO
 

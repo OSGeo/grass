@@ -3,27 +3,27 @@
 *r.regression.multi* calculates a multiple linear regression from raster
 maps, according to the formula
 
-::: code
-    Y = b0 + sum(bi*Xi) + E
-:::
+```
+Y = b0 + sum(bi*Xi) + E
+```
 
 where
 
-::: code
-    X = {X1, X2, ..., Xm}
-    m = number of explaining variables
-    Y = {y1, y2, ..., yn}
-    Xi = {xi1, xi2, ..., xin}
-    E = {e1, e2, ..., en}
-    n = number of observations (cases)
-:::
+```
+X = {X1, X2, ..., Xm}
+m = number of explaining variables
+Y = {y1, y2, ..., yn}
+Xi = {xi1, xi2, ..., xin}
+E = {e1, e2, ..., en}
+n = number of observations (cases)
+```
 
 In R notation:
 
-::: code
-    Y ~ sum(bi*Xi)
-    b0 is the intercept, X0 is set to 1
-:::
+```
+Y ~ sum(bi*Xi)
+b0 is the intercept, X0 is set to 1
+```
 
 *r.regression.multi* is designed for large datasets that can not be
 processed in R. A p value is therefore not provided, because even very
@@ -77,11 +77,11 @@ available through the R-function stepAIC.
 Multiple regression with soil K-factor and elevation, aspect, and slope
 (North Carolina dataset). Output maps are the residuals and estimates:
 
-::: code
-    g.region raster=soils_Kfactor -p
-    r.regression.multi mapx=elevation,aspect,slope mapy=soils_Kfactor \
-      residuals=soils_Kfactor.resid estimates=soils_Kfactor.estim
-:::
+```
+g.region raster=soils_Kfactor -p
+r.regression.multi mapx=elevation,aspect,slope mapy=soils_Kfactor \
+  residuals=soils_Kfactor.resid estimates=soils_Kfactor.estim
+```
 
 ## SEE ALSO
 

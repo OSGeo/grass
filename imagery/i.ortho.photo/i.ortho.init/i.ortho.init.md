@@ -24,26 +24,28 @@ created in *[g.gui.image2target](g.gui.image2target.html)*.
 
 The following menu is displayed:
 
-            Please provide the following information
+```
+        Please provide the following information
 
-        INITIAL XC: Meters                __________
-        INITIAL YC: Meters                __________
-        INITIAL ZC: Meters                __________
-        INITIAL omega (pitch) degrees:    __________
-        INITIAL phi  (roll) degrees:      __________
-        INITIAL kappa  (yaw) degrees:     __________
+    INITIAL XC: Meters                __________
+    INITIAL YC: Meters                __________
+    INITIAL ZC: Meters                __________
+    INITIAL omega (pitch) degrees:    __________
+    INITIAL phi  (roll) degrees:      __________
+    INITIAL kappa  (yaw) degrees:     __________
 
-        Standard Deviation XC: Meters     __________
-        Standard Deviation YC: Meters     __________
-        Standard Deviation ZC: Meters     __________
-        Std. Dev. omega (pitch) degrees:  __________
-        Std. Dev. phi  (roll) degrees:    __________
-        Std. Dev. kappa  (yaw) degrees:   __________
+    Standard Deviation XC: Meters     __________
+    Standard Deviation YC: Meters     __________
+    Standard Deviation ZC: Meters     __________
+    Std. Dev. omega (pitch) degrees:  __________
+    Std. Dev. phi  (roll) degrees:    __________
+    Std. Dev. kappa  (yaw) degrees:   __________
 
-            Use these values at run time? (1=yes, 0=no)
+        Use these values at run time? (1=yes, 0=no)
 
-         AFTER COMPLETING ALL ANSWERS, HIT <ESC> TO CONTINUE
-                      (OR <Ctrl-C> TO CANCEL)
+     AFTER COMPLETING ALL ANSWERS, HIT <ESC> TO CONTINUE
+                  (OR <Ctrl-C> TO CANCEL)
+```
 
 The INITIAL values for (XC,YC,ZC) are expressed in standard (e.g. UTM)
 coordinates, and represent an approximation for the location of the

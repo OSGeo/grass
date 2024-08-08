@@ -7,9 +7,9 @@ introduces a semantic label support, see
 
 ## EXAMPLE
 
-::: code
-    t.upgrade
-:::
+```
+t.upgrade
+```
 
 ## SEE ALSO
 

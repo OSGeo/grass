@@ -6,13 +6,13 @@
 
 Show all installed GRASS database drivers:
 
-::: code
-    db.drivers -p
-    pg
-    ogr
-    sqlite
-    dbf
-:::
+```
+db.drivers -p
+pg
+ogr
+sqlite
+dbf
+```
 
 ## SEE ALSO
 

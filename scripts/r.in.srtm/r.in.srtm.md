@@ -15,9 +15,9 @@ the coordinates which refer to the **center** of the lower left pixel
 (e.g., N51E010: lower left cell center at 10E, 51N). To identify a tile
 name, a grid can be easily visualized by *[d.grid](d.grid.html)*:
 
-::: code
-    d.grid size=1
-:::
+```
+d.grid size=1
+```
 
 To import TOPEX/SRTM30 PLUS data, use *[r.in.bin](r.in.bin.html)*.
 

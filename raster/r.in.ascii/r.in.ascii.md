@@ -8,14 +8,14 @@ location and size of the data, followed by the data itself.
 
 The header has 6 lines:
 
-::: code
-    north:   xxxxxx.xx
-    south:   xxxxxx.xx
-    east:    xxxxxx.xx
-    west:    xxxxxx.xx
-    rows:    r
-    cols:    c
-:::
+```
+north:   xxxxxx.xx
+south:   xxxxxx.xx
+east:    xxxxxx.xx
+west:    xxxxxx.xx
+rows:    r
+cols:    c
+```
 
 The north, south, east, and west field values entered are the
 coordinates of the edges of the geographic region. The rows and cols
@@ -25,11 +25,11 @@ follow. The data which follows is *r* rows of *c* integers.
 Optionally the following parameters can be defined in the header
 section:
 
-::: code
-    null: nn
-    type: float
-    multiplier: 2.
-:::
+```
+null: nn
+type: float
+multiplier: 2.
+```
 
 \"null\" defines a string or number to be converted to NULL value (no
 data).\
@@ -63,26 +63,26 @@ SURFER (Golden Software) ASCII files may be imported by passing the
 
 The following is a sample **input** file to *r.in.ascii*:
 
-::: code
-    north:                   4299000.00
-    south:                   4247000.00
-    east:                     528000.00
-    west:                     500000.00
-    rows:                         10
-    cols:                         15
-    null:                      -9999
+```
+north:                   4299000.00
+south:                   4247000.00
+east:                     528000.00
+west:                     500000.00
+rows:                         10
+cols:                         15
+null:                      -9999
 
-    1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-    1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-    1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-    1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-    1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-    1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-    1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-    1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-    1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-    1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-:::
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+```
 
 ## SEE ALSO
 

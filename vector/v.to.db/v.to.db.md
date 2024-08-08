@@ -55,109 +55,109 @@ created in the table if it doesn\'t already exist, except when using the
 
 Upload category numbers to attribute table (used for new map):\
 
-::: code
-    v.to.db map=soils type=centroid option=cat
-:::
+```
+v.to.db map=soils type=centroid option=cat
+```
 
 Upload polygon areas to corresponding centroid record in the attribute
 table:\
 
-::: code
-    v.to.db map=soils type=centroid option=area columns=area_size unit=h
-:::
+```
+v.to.db map=soils type=centroid option=area columns=area_size unit=h
+```
 
 Upload line lengths (in meters) of each vector line to attribute table
 (use *v.category* in case of missing categories):\
 
-::: code
-    v.to.db map=roads option=length type=line columns=linelength units=me
-:::
+```
+v.to.db map=roads option=length type=line columns=linelength units=me
+```
 
 Upload x and y coordinates from vector geometry to attribute table:\
 
-::: code
-    v.to.db map=pointsmap option=coor columns=x,y
-:::
+```
+v.to.db map=pointsmap option=coor columns=x,y
+```
 
 Upload x, y and z coordinates from vector geometry to attribute table:\
 
-::: code
-    v.to.db map=pointsmap option=coor columns=x,y,z
-:::
+```
+v.to.db map=pointsmap option=coor columns=x,y,z
+```
 
 Transfer attributes from a character column (with numeric contents) to a
 new integer column:\
 
-::: code
-    v.db.addcolumn usa_income_employment2002 col="FIPS_NUM integer"
-    v.to.db usa_income_employment2002 option=query columns=FIPS_NUM query_column=STATE_FIPS
-:::
+```
+v.db.addcolumn usa_income_employment2002 col="FIPS_NUM integer"
+v.to.db usa_income_employment2002 option=query columns=FIPS_NUM query_column=STATE_FIPS
+```
 
 Upload category numbers of left and right area, to an attribute table of
 boundaries common for the areas:\
 
-::: code
-    # add categories for boundaries of the input vector map, in layer 2:
-    v.category soils out=mysoils layer=2 type=boundary option=add
-    # add a table with columns named "left" and "right" to layer 2 of the input
-    # vector map:
-    v.db.addtable mysoils layer=2 columns="left integer,right integer"
-    # upload categories of left and right areas:
-    v.to.db mysoils option=sides columns=left,right layer=2
-    # display the result:
-    v.db.select mysoils layer=2
-:::
+```
+# add categories for boundaries of the input vector map, in layer 2:
+v.category soils out=mysoils layer=2 type=boundary option=add
+# add a table with columns named "left" and "right" to layer 2 of the input
+# vector map:
+v.db.addtable mysoils layer=2 columns="left integer,right integer"
+# upload categories of left and right areas:
+v.to.db mysoils option=sides columns=left,right layer=2
+# display the result:
+v.db.select mysoils layer=2
+```
 
 Compute D~L~, the Fractal Dimension (Mandelbrot, 1982), of the boundary
 defining a polygon based on the formula:\
 ` D = 2 * (log perimeter) / (log area):`\
 
-::: code
-    g.copy vect=soils,mysoils
-    v.db.addcolumn mysoils col="d double precision"
-    v.to.db mysoils option=fd column="d"
+```
+g.copy vect=soils,mysoils
+v.db.addcolumn mysoils col="d double precision"
+v.to.db mysoils option=fd column="d"
 
-    g.region vector=mysoils res=50
-    v.to.rast input=mysoils output=soils_fd type=area use=attr attribute_column=d
-    r.colors map=soils_fd color=gyr
+g.region vector=mysoils res=50
+v.to.rast input=mysoils output=soils_fd type=area use=attr attribute_column=d
+r.colors map=soils_fd color=gyr
 
-    d.mon wx0
-    d.rast.leg soils_fd
-    d.vect mysoils type=boundary
-:::
+d.mon wx0
+d.rast.leg soils_fd
+d.vect mysoils type=boundary
+```
 
 ### Printing reports
 
 Report x,y,z coordinates of points in the input vector map:\
 
-::: code
-    v.to.db -p bugsites option=coor type=point
-:::
+```
+v.to.db -p bugsites option=coor type=point
+```
 
 Report all area sizes of the input vector map:\
 
-::: code
-    v.to.db -p soils option=area type=boundary units=h
-:::
+```
+v.to.db -p soils option=area type=boundary units=h
+```
 
 Report all area sizes of the input vector map, in hectares, sorted by
 category number (requires GNU *sort* utility installed):\
 
-::: code
-    v.to.db -p soils option=area type=boundary units=h | sort -n
-:::
+```
+v.to.db -p soils option=area type=boundary units=h | sort -n
+```
 
 Report all line lengths of the input vector map, in kilometers:\
 
-::: code
-    v.to.db -p roads option=length type=line units=k
-:::
+```
+v.to.db -p roads option=length type=line units=k
+```
 
 Report number of features for each category in the input vector map:\
 
-::: code
-    v.to.db -p roads option=count type=line
-:::
+```
+v.to.db -p roads option=count type=line
+```
 
 ## REFERENCES
 

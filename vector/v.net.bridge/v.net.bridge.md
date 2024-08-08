@@ -26,9 +26,9 @@ is an articulation *node* in GRASS terminology.
 
 ## EXAMPLES
 
-::: code
-        TBD
-:::
+```
+    TBD
+```
 
 ## SEE ALSO
 

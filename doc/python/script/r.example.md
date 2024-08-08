@@ -12,11 +12,11 @@ Some more detailed notes go here.
 Computing the mean and standard deviation of the raster map
 \"elevation\" (North Carolina sample dataset):
 
-::: code
-    g.region raster=elevation -p
-    r.example input=elevation output=elevation_mean_stddev
-    r.info elevation_mean_stddev
-:::
+```
+g.region raster=elevation -p
+r.example input=elevation output=elevation_mean_stddev
+r.info elevation_mean_stddev
+```
 
 ## SEE ALSO
 

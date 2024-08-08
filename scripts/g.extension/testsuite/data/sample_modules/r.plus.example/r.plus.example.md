@@ -6,9 +6,9 @@
 
 ## EXAMPLES
 
-::: code
-    r.plus.example
-:::
+```
+r.plus.example
+```
 
 ## SEE ALSO
 

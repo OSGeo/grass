@@ -59,9 +59,9 @@ raster output will be created when cross-validation is selected.
 
 ### Basic interpolation
 
-::: code
-    r.resamp.bspline input=raster_surface output=interpolated_surface method=bicubic
-:::
+```
+r.resamp.bspline input=raster_surface output=interpolated_surface method=bicubic
+```
 
 A bicubic spline interpolation will be done and a raster map with
 estimated (i.e., interpolated) values will be created.
@@ -70,16 +70,16 @@ estimated (i.e., interpolated) values will be created.
 
 General procedure:
 
-::: code
-    # set region to area with NULL cells, align region to input map
-    g.region n=north s=south e=east w=west align=input -p
-    # interpolate NULL cells
-    r.resamp.bspline -n input=input_raster output=interpolated_nulls method=bicubic
-    # set region to area with NULL cells, align region to input map
-    g.region raster=input -p
-    # patch original map and interpolated NULLs
-    r.patch input=input_raster,interpolated_nulls output=input_raster_gapfilled
-:::
+```
+# set region to area with NULL cells, align region to input map
+g.region n=north s=south e=east w=west align=input -p
+# interpolate NULL cells
+r.resamp.bspline -n input=input_raster output=interpolated_nulls method=bicubic
+# set region to area with NULL cells, align region to input map
+g.region raster=input -p
+# patch original map and interpolated NULLs
+r.patch input=input_raster,interpolated_nulls output=input_raster_gapfilled
+```
 
 ### Interpolation of NULL cells and patching (NC data)
 
@@ -87,28 +87,28 @@ In this example, the SRTM elevation map in the North Carolina sample
 dataset is filtered for outlier elevation values; missing pixels are
 then re-interpolated to obtain a complete elevation map:
 
-::: code
-    g.region raster=elev_srtm_30m -p
-    d.mon wx0
-    d.histogram elev_srtm_30m
+```
+g.region raster=elev_srtm_30m -p
+d.mon wx0
+d.histogram elev_srtm_30m
 
-    r.univar -e elev_srtm_30m
+r.univar -e elev_srtm_30m
 
-    # remove too low elevations (esp. lakes)
-    # Threshold: thresh = Q1 - 1.5 * (Q3 - Q1)
-    r.mapcalc "elev_srtm_30m_filt = if(elev_srtm_30m < 50.0, null(), elev_srtm_30m)"
+# remove too low elevations (esp. lakes)
+# Threshold: thresh = Q1 - 1.5 * (Q3 - Q1)
+r.mapcalc "elev_srtm_30m_filt = if(elev_srtm_30m < 50.0, null(), elev_srtm_30m)"
 
-    # verify
-    d.histogram elev_srtm_30m_filt
-    d.erase
-    d.rast elev_srtm_30m_filt
+# verify
+d.histogram elev_srtm_30m_filt
+d.erase
+d.rast elev_srtm_30m_filt
 
-    r.resamp.bspline -n input=elev_srtm_30m_filt output=elev_srtm_30m_complete \
-      method=bicubic
+r.resamp.bspline -n input=elev_srtm_30m_filt output=elev_srtm_30m_complete \
+  method=bicubic
 
-    d.histogram elev_srtm_30m_complete
-    d.rast elev_srtm_30m_complete
-:::
+d.histogram elev_srtm_30m_complete
+d.rast elev_srtm_30m_complete
+```
 
 ### Estimation of **lambda** parameter with a cross validation process
 
@@ -116,9 +116,9 @@ A random sample of points should be generated first with
 *[r.random](r.random.html)*, and the current region should not include
 more than 100 non-NULL random cells.
 
-::: code
-    r.resamp.bspline -c input=input_raster
-:::
+```
+r.resamp.bspline -c input=input_raster
+```
 
 ## REFERENCES
 

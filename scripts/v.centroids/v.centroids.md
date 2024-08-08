@@ -22,10 +22,10 @@ category information.
 
 Create an area from a closed line using North Carolina sample dataset:
 
-::: code
-    v.type input=busroute11 output=busroute11_boundary from_type=line to_type=boundary
-    v.centroids input=busroute11_boundary output=busroute11_area
-:::
+```
+v.type input=busroute11 output=busroute11_boundary from_type=line to_type=boundary
+v.centroids input=busroute11_boundary output=busroute11_area
+```
 
 ::: {align="center" style="margin: 10px"}
 [![v.centroids example](v_centroids.png){width="600" height="300"

@@ -9,16 +9,16 @@ will recursively scan all files within a predefined hierarchy to find
 Freetype-compatible scalable fonts. The list of directories scanned is
 currently:
 
-::: code
-        /usr/lib/X11/fonts
-        /usr/share/X11/fonts
-        /usr/share/fonts
-        /usr/local/share/fonts
-        ${HOME}/Library/Fonts
-        /Library/Fonts
-        /System/Library/Fonts
-        ${WINDIR}/Fonts
-:::
+```
+    /usr/lib/X11/fonts
+    /usr/share/X11/fonts
+    /usr/share/fonts
+    /usr/local/share/fonts
+    ${HOME}/Library/Fonts
+    /Library/Fonts
+    /System/Library/Fonts
+    ${WINDIR}/Fonts
+```
 
 These correspond to directories where fonts can be found on some common
 operating systems. Extra directories to search can easily by added using
@@ -33,13 +33,13 @@ set, the output will instead be written to the file specified by that
 variable. This is useful if you don\'t have permission to modify
 `$GISBASE/etc/fontcap`: in this case you can use e.g.
 
-::: code
-    # use local file version instead of system copy
-    GRASS_FONT_CAP=$HOME/.gfontcap
-    export GRASS_FONT_CAP
+```
+# use local file version instead of system copy
+GRASS_FONT_CAP=$HOME/.gfontcap
+export GRASS_FONT_CAP
 
-    g.mkfontcap
-:::
+g.mkfontcap
+```
 
 to create a personal copy and then to make GRASS use that file instead
 of the system copy.

@@ -17,21 +17,21 @@ deleted/renamed/copied for a given entity type.
 
 *g.findfile* writes four lines to standard output:
 
-::: code
-    name='file_name'
-    mapset='mapset_name'
-    file='unix_filename'
-    fullname='grass_fullname'
-:::
+```
+name='file_name'
+mapset='mapset_name'
+file='unix_filename'
+fullname='grass_fullname'
+```
 
 The output is *Bash* commands to set the variable *name* to the GRASS
 data base file name, *mapset* to the mapset in which the file resides,
 and *file* to the full UNIX path name for the named file. These
 variables may be set in the *Bash* as follows:
 
-::: code
-    eval `g.findfile element=name mapset=name file=name`
-:::
+```
+eval `g.findfile element=name mapset=name file=name`
+```
 
 ## EXAMPLES
 
@@ -39,38 +39,38 @@ variables may be set in the *Bash* as follows:
 
 **Raster map example:**
 
-::: code
-    eval `g.findfile element=cell file=elevation`
-:::
+```
+eval `g.findfile element=cell file=elevation`
+```
 
 If the specified file (here: raster map) does not exist, the variables
 will be set as follows:
 
-::: code
-    name=
-    mapset=
-    fullname=
-    file=
-:::
+```
+name=
+mapset=
+fullname=
+file=
+```
 
 The following is a way to test for this case:
 
-::: code
-    if [ ! "$file" ]
-    then
-        exit 1
-    fi
-:::
+```
+if [ ! "$file" ]
+then
+    exit 1
+fi
+```
 
 **Vector map example (including error message):**
 
-::: code
-    eval `g.findfile element=vector file="$G_OPT_V_INPUT"`
-    if [ ! "$file" ] ; then
-       g.message -e "Vector map <$G_OPT_V_INPUT> not found"
-       exit 1
-    fi
-:::
+```
+eval `g.findfile element=vector file="$G_OPT_V_INPUT"`
+if [ ! "$file" ] ; then
+   g.message -e "Vector map <$G_OPT_V_INPUT> not found"
+   exit 1
+fi
+```
 
 ### PYTHON
 
@@ -81,11 +81,11 @@ more info.
 Note: The Python tab in the *wxGUI* can be used for entering the
 following code:
 
-::: code
-    import grass.script as gcore
+```
+import grass.script as gcore
 
-    gcore.find_file('elevation', element = 'cell')
-:::
+gcore.find_file('elevation', element = 'cell')
+```
 
 ## SEE ALSO
 

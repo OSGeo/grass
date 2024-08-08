@@ -25,24 +25,24 @@ To obtain the length of each segment, the user will have to attribute
 different category values to each of them. The best way to do this on a
 separate layer, using *v.category*
 
-::: code
-    v.category v_split op=add layer=2 output=v_split_2
-:::
+```
+v.category v_split op=add layer=2 output=v_split_2
+```
 
 and then run the following commands on the new layer 2:
 
-::: code
-    v.db.addtable v_split_2 layer=2
-    v.db.addcolumn map=v_split_2 column="length double precision" layer=2
-    v.to.db map=v_split_2 type=line option=length columns=length units=meters layer=2
-:::
+```
+v.db.addtable v_split_2 layer=2
+v.db.addcolumn map=v_split_2 column="length double precision" layer=2
+v.to.db map=v_split_2 type=line option=length columns=length units=meters layer=2
+```
 
 To link the new segments in the new layer to the original segments, use:
 
-::: code
-    v.db.addcolumn map=v_split_2 layer=2 column="cat_1 int"
-    v.to.db map=v_split_2 layer=2 option=query query_layer=1 query_column=cat columns=cat_1
-:::
+```
+v.db.addcolumn map=v_split_2 layer=2 column="cat_1 int"
+v.to.db map=v_split_2 layer=2 option=query query_layer=1 query_column=cat columns=cat_1
+```
 
 ## EXAMPLES
 
@@ -50,40 +50,40 @@ The examples are based on the North Carolina sample data.
 
 ### Example 1: Inserting nodes to railroad lines map
 
-::: code
-    # extract one railroad line for this example
-    v.extract input=railroads output=myrr cats=1
+```
+# extract one railroad line for this example
+v.extract input=railroads output=myrr cats=1
 
-    # show line, category, direction (to find the beginning)
-    g.region vector=myrr
-    d.erase
-    d.vect myrr display=shape,cat,dir
+# show line, category, direction (to find the beginning)
+g.region vector=myrr
+d.erase
+d.vect myrr display=shape,cat,dir
 
-    # insert nodes at a distance not longer than 1000m
-    v.split input=myrr output=myrr_split_1km length=1000
+# insert nodes at a distance not longer than 1000m
+v.split input=myrr output=myrr_split_1km length=1000
 
-    d.vect myrr_split_1km display=shape,topo
-:::
+d.vect myrr_split_1km display=shape,topo
+```
 
 Note: In case that the vector line data are not polylines, generate
 first polylines as the second step, eg.:
 
-::: code
-    # join segments into polyline
-    v.build.polylines input=myrr output=myrr_polylines
-    # regenerate categories
-    v.category input=myrr_polylines output=myrailroads option=add
-:::
+```
+# join segments into polyline
+v.build.polylines input=myrr output=myrr_polylines
+# regenerate categories
+v.category input=myrr_polylines output=myrailroads option=add
+```
 
 ### Example 2: Inserting vertices to railroad lines map
 
 Note: first run the two steps from example 1.
 
-::: code
-    # insert vertices at a distance not longer than 1000m
-    v.split -n input=myrr output=myrr_split length=1000
-    d.vect myrr_split display=shape,topo
-:::
+```
+# insert vertices at a distance not longer than 1000m
+v.split -n input=myrr output=myrr_split length=1000
+d.vect myrr_split display=shape,topo
+```
 
 ## SEE ALSO
 

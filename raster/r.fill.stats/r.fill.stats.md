@@ -190,15 +190,17 @@ distance.
 The illustration below shows the precomputed weights matrix for a search
 distance of four cells from the center cell:
 
-    000.00 000.01 000.04 000.07 000.09 000.07 000.04 000.01 000.00
-    000.01 000.06 000.13 000.19 000.22 000.19 000.13 000.06 000.01
-    000.04 000.13 000.25 000.37 000.42 000.37 000.25 000.13 000.04
-    000.07 000.19 000.37 000.56 000.68 000.56 000.37 000.19 000.07
-    000.09 000.22 000.42 000.68 001.00 000.68 000.42 000.22 000.09
-    000.07 000.19 000.37 000.56 000.68 000.56 000.37 000.19 000.07
-    000.04 000.13 000.25 000.37 000.42 000.37 000.25 000.13 000.04
-    000.01 000.06 000.13 000.19 000.22 000.19 000.13 000.06 000.01
-    000.00 000.01 000.04 000.07 000.09 000.07 000.04 000.01 000.00
+```
+000.00 000.01 000.04 000.07 000.09 000.07 000.04 000.01 000.00
+000.01 000.06 000.13 000.19 000.22 000.19 000.13 000.06 000.01
+000.04 000.13 000.25 000.37 000.42 000.37 000.25 000.13 000.04
+000.07 000.19 000.37 000.56 000.68 000.56 000.37 000.19 000.07
+000.09 000.22 000.42 000.68 001.00 000.68 000.42 000.22 000.09
+000.07 000.19 000.37 000.56 000.68 000.56 000.37 000.19 000.07
+000.04 000.13 000.25 000.37 000.42 000.37 000.25 000.13 000.04
+000.01 000.06 000.13 000.19 000.22 000.19 000.13 000.06 000.01
+000.00 000.01 000.04 000.07 000.09 000.07 000.04 000.01 000.00
+```
 
 Note that the weights in such a small window drop rapidly for the
 default setting of `power=2`.
@@ -208,15 +210,17 @@ window can be modeled more accurately as a circle. The illustration
 below shows the precomputed weights for a distance in map units that is
 approximately equivalent to four cells from the center cell:
 
-    ...... ...... ...... 000.00 000.00 000.00 ...... ...... ......
-    ...... 000.00 000.02 000.06 000.09 000.06 000.02 000.00 ......
-    ...... 000.02 000.11 000.22 000.28 000.22 000.11 000.02 ......
-    000.00 000.07 000.22 000.44 000.58 000.44 000.22 000.07 000.00
-    000.00 000.09 000.28 000.58 001.00 000.58 000.28 000.09 000.00
-    000.00 000.07 000.22 000.44 000.58 000.44 000.22 000.07 000.00
-    ...... 000.02 000.11 000.22 000.28 000.22 000.11 000.02 ......
-    ...... 000.00 000.02 000.06 000.09 000.06 000.02 000.00 ......
-    ...... ...... ...... 000.00 000.00 000.00 ...... ...... ......
+```
+...... ...... ...... 000.00 000.00 000.00 ...... ...... ......
+...... 000.00 000.02 000.06 000.09 000.06 000.02 000.00 ......
+...... 000.02 000.11 000.22 000.28 000.22 000.11 000.02 ......
+000.00 000.07 000.22 000.44 000.58 000.44 000.22 000.07 000.00
+000.00 000.09 000.28 000.58 001.00 000.58 000.28 000.09 000.00
+000.00 000.07 000.22 000.44 000.58 000.44 000.22 000.07 000.00
+...... 000.02 000.11 000.22 000.28 000.22 000.11 000.02 ......
+...... 000.00 000.02 000.06 000.09 000.06 000.02 000.00 ......
+...... ...... ...... 000.00 000.00 000.00 ...... ...... ......
+```
 
 When using a small search radius, **cells** must also be set to a small
 value. Otherwise, there may not be enough cells with data within the
@@ -260,60 +264,62 @@ default \"double precision\" output.
 Gap-fill a dataset using spatially weighted mean (IDW) and a maximum
 search radius of 3.0 map units; also produce uncertainty estimation map:
 
-::: code
-    r.fill.stats input=measurements output=result dist=3.0 -m mode=wmean uncertainty=uncert_map
-:::
+```
+r.fill.stats input=measurements output=result dist=3.0 -m mode=wmean uncertainty=uncert_map
+```
 
 Run a fast low-pass filter (replacement all cells with mean value of
 neighboring cells) on the input map:
 
-::: code
-    r.fill.stats input=measurements output=result dist=10 mode=mean
-:::
+```
+r.fill.stats input=measurements output=result dist=10 mode=mean
+```
 
 Fill data gaps in a categorized raster map; preserve existing data:
 
-::: code
-    r.fill.stats input=categories output=result dist=100 -m mode=mode -k
-:::
+```
+r.fill.stats input=categories output=result dist=100 -m mode=mode -k
+```
 
 ### Lidar point cloud example
 
 Inspect the point density and determine the extent of the point cloud
 using the *[r.in.lidar](r.in.lidar.html)* module:
 
-::: code
-    r.in.lidar -e input=points.las output=density method=n resolution=5 class_filter=2
-:::
+```
+r.in.lidar -e input=points.las output=density method=n resolution=5 class_filter=2
+```
 
 Based on the result, set computational region extent and desired
 resolution:
 
-::: code
-    g.region -pa raster=density res=1
-:::
+```
+g.region -pa raster=density res=1
+```
 
 Import the point cloud as raster using binning:
 
-::: code
-    r.in.lidar input=points.las output=ground_raw method=mean class_filter=2
-:::
+```
+r.in.lidar input=points.las output=ground_raw method=mean class_filter=2
+```
 
 Check that there are more non-NULL cells than NULL (\"no data\") cells:
 
-::: code
-    r.univar map=ground_raw
-:::
+```
+r.univar map=ground_raw
+```
 
-    total null and non-null cells: 2340900
-    total null cells: 639184
-    ...
+```
+total null and non-null cells: 2340900
+total null cells: 639184
+...
+```
 
 Fill in the NULL cells using the default 3-cell search radius:
 
-::: code
-    r.fill.stats input=ground output=ground_filled uncertainty=uncertainty distance=3 mode=wmean power=2.0 cells=8
-:::
+```
+r.fill.stats input=ground output=ground_filled uncertainty=uncertainty distance=3 mode=wmean power=2.0 cells=8
+```
 
 [![Point density and ground surface](r_fill_stats_lidar.png){width="600"
 height="600"}](r_fill_stats_lidar.png)
@@ -328,31 +334,31 @@ In this example, the SRTM elevation map in the North Carolina sample
 dataset is filtered for outlier elevation values; missing pixels are
 then re-interpolated to obtain a complete elevation map:
 
-::: code
-    g.region raster=elev_srtm_30m -p
-    d.mon wx0
-    d.histogram elev_srtm_30m
+```
+g.region raster=elev_srtm_30m -p
+d.mon wx0
+d.histogram elev_srtm_30m
 
-    # remove SRTM outliers, i.e. SRTM below 50m (esp. lakes), leading to no data areas
-    r.mapcalc "elev_srtm_30m_filt = if(elev_srtm_30m < 50.0, null(), elev_srtm_30m)"
-    d.histogram elev_srtm_30m_filt
-    d.rast elev_srtm_30m_filt
+# remove SRTM outliers, i.e. SRTM below 50m (esp. lakes), leading to no data areas
+r.mapcalc "elev_srtm_30m_filt = if(elev_srtm_30m < 50.0, null(), elev_srtm_30m)"
+d.histogram elev_srtm_30m_filt
+d.rast elev_srtm_30m_filt
 
-    # using the IDW method to fill these holes in DEM without low-pass filter
-    # increase distance to gap-fill larger holes
-    r.fill.stats -k input=elev_srtm_30m_filt output=elev_srtm_30m_idw distance=100
+# using the IDW method to fill these holes in DEM without low-pass filter
+# increase distance to gap-fill larger holes
+r.fill.stats -k input=elev_srtm_30m_filt output=elev_srtm_30m_idw distance=100
 
-    d.histogram elev_srtm_30m_idw
-    d.rast elev_srtm_30m_idw
+d.histogram elev_srtm_30m_idw
+d.rast elev_srtm_30m_idw
 
-    r.mapcalc "diff_orig_idw = elev_srtm_30m - elev_srtm_30m_idw"
-    r.colors diff_orig_idw color=differences
+r.mapcalc "diff_orig_idw = elev_srtm_30m - elev_srtm_30m_idw"
+r.colors diff_orig_idw color=differences
 
-    r.univar -e diff_orig_idw
-    d.erase
-    d.rast diff_orig_idw
-    d.legend diff_orig_idw
-:::
+r.univar -e diff_orig_idw
+d.erase
+d.rast diff_orig_idw
+d.legend diff_orig_idw
+```
 
 ## SEE ALSO
 

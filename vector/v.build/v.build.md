@@ -39,9 +39,9 @@ Note that **option=build** recreates also spatial and category indices,
 not only topology. For linked OGR layers (see
 *[v.external](v.external.html)*) also feature index is created.
 
-::: code
-    v.build map=urbanarea option=build
-:::
+```
+v.build map=urbanarea option=build
+```
 
 Note that the vector map *urbanarea* must be located in the current
 mapset.
@@ -55,9 +55,9 @@ the [GRASS GIS 8 Programmer\'s
 Manual](https://grass.osgeo.org/programming8/vlibTopology.html), section
 \"Vector library topology management\".
 
-::: code
-    v.build map=urbanarea option=dump
-:::
+```
+v.build map=urbanarea option=dump
+```
 
 ## SEE ALSO
 

@@ -121,82 +121,82 @@ just in case of C).
 
 Download and install *r.stream.distance* into current GRASS installation
 
-::: code
-    g.extension extension=r.stream.distance
-:::
+```
+g.extension extension=r.stream.distance
+```
 
 This installs the extension from the official repository. For
 convenience, a shorter syntax can be used:
 
-::: code
-    g.extension r.stream.distance
-:::
+```
+g.extension r.stream.distance
+```
 
 ### Download and install of an extension when behind a proxy
 
 Example for an open http proxy:
 
-::: code
-    # syntax: http://proxyurl:proxyport
-    g.extension extension=r.stream.distance proxy="http=http://proxy.example.com:8080"
-:::
+```
+# syntax: http://proxyurl:proxyport
+g.extension extension=r.stream.distance proxy="http=http://proxy.example.com:8080"
+```
 
 Example for a proxy with proxy authentication:
 
-::: code
-    # syntax: http://username:password@proxyurl:proxyport
-    g.extension extension=r.stream.distance proxy="http=http://username:password@proxy.example.com:8080"
-:::
+```
+# syntax: http://username:password@proxyurl:proxyport
+g.extension extension=r.stream.distance proxy="http=http://username:password@proxy.example.com:8080"
+```
 
 ### Managing the extensions
 
 List all available extensions in the official GRASS GIS Addons
 repository:
 
-::: code
-    g.extension -l
-:::
+```
+g.extension -l
+```
 
 List all locally installed extensions:
 
-::: code
-    g.extension -a
-:::
+```
+g.extension -a
+```
 
 Removal of a locally installed extension:
 
-::: code
-    g.extension extension=r.stream.distance operation=remove
-:::
+```
+g.extension extension=r.stream.distance operation=remove
+```
 
 ### Installing from various online repositories: GitHub, GitLab, Bitbucket
 
 Simple URL to GitHub, GitLab, Bitbucket repositories:
 
-::: code
-    g.extension r.example.plus url="https://github.com/wenzeslaus/r.example.plus"
-:::
+```
+g.extension r.example.plus url="https://github.com/wenzeslaus/r.example.plus"
+```
 
 Simple URL to GitHub, GitLab, Bitbucket repositories from a specific
 (e.g. development) branch:
 
-::: code
-    g.extension r.example.plus url="https://github.com/wenzeslaus/r.example.plus" branch=master
-:::
+```
+g.extension r.example.plus url="https://github.com/wenzeslaus/r.example.plus" branch=master
+```
 
 Simple URL to OSGeo Trac (downloads a ZIP file, requires download to be
 enabled in Trac):
 
-::: code
-    g.extension r.example url=trac.osgeo.org/.../r.example
-:::
+```
+g.extension r.example url=trac.osgeo.org/.../r.example
+```
 
 In general, when a ZIP file or other archive is provided, the full URL
 can be used:
 
-::: code
-    g.extension r.example url=http://example.com/.../r.example?format=zip
-:::
+```
+g.extension r.example url=http://example.com/.../r.example?format=zip
+```
 
 Note that because of MS-Windows operating system architecture, only
 official repository is supported on this platform.
@@ -208,18 +208,18 @@ URL pointing to Trac code browser and include Subversion revision
 number. For example, this installs the version number 57854 of
 r.local.relief module:
 
-::: code
-    g.extension r.local.relief url="https://trac.osgeo.org/grass/browser/grass-addons/grass7/raster/r.local.relief?rev=57854&format=zip"
-:::
+```
+g.extension r.local.relief url="https://trac.osgeo.org/grass/browser/grass-addons/grass7/raster/r.local.relief?rev=57854&format=zip"
+```
 
 ### Installing when writing a module locally
 
 Having source code of a GRASS module in a directory on disk one can
 install it using:
 
-::: code
-    g.extension r.example url=/local/directory/r.example/
-:::
+```
+g.extension r.example url=/local/directory/r.example/
+```
 
 ## REQUIREMENTS
 

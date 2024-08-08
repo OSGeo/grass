@@ -31,31 +31,31 @@ formats](http://www.gdal.org/formats_list.html) written by *r.out.gdal*
 depends on the local GDAL installation, printed with the *-l* flag.
 Available may be (incomplete list):
 
-::: code
-      AAIGrid: Arc/Info ASCII Grid
-      BMP: MS Windows Device Independent Bitmap
-      BSB: Maptech BSB Nautical Charts
-      DTED: DTED Elevation Raster
-      ELAS: ELAS
-      ENVI: ENVI .hdr Labelled
-      FIT: FIT Image
-      GIF: Graphics Interchange Format (.gif)
-      GTiff: GeoTIFF
-      HDF4Image: HDF4 Dataset
-      HFA: Erdas Imagine Images (.img)
-      JPEG2000: JPEG-2000 part 1 (ISO/IEC 15444-1)
-      JPEG: JPEG JFIF
-      MEM: In Memory Raster
-      MFF2: Atlantis MFF2 (HKV) Raster
-      MFF: Atlantis MFF Raster
-      NITF: National Imagery Transmission Format
-      PAux: PCI .aux Labelled
-      PCIDSK: PCIDSK Database File
-      PNG: Portable Network Graphics
-      PNM: Portable Pixmap Format (netpbm)
-      VRT: Virtual Raster
-      XPM: X11 PixMap Format
-:::
+```
+  AAIGrid: Arc/Info ASCII Grid
+  BMP: MS Windows Device Independent Bitmap
+  BSB: Maptech BSB Nautical Charts
+  DTED: DTED Elevation Raster
+  ELAS: ELAS
+  ENVI: ENVI .hdr Labelled
+  FIT: FIT Image
+  GIF: Graphics Interchange Format (.gif)
+  GTiff: GeoTIFF
+  HDF4Image: HDF4 Dataset
+  HFA: Erdas Imagine Images (.img)
+  JPEG2000: JPEG-2000 part 1 (ISO/IEC 15444-1)
+  JPEG: JPEG JFIF
+  MEM: In Memory Raster
+  MFF2: Atlantis MFF2 (HKV) Raster
+  MFF: Atlantis MFF Raster
+  NITF: National Imagery Transmission Format
+  PAux: PCI .aux Labelled
+  PCIDSK: PCIDSK Database File
+  PNG: Portable Network Graphics
+  PNM: Portable Pixmap Format (netpbm)
+  VRT: Virtual Raster
+  XPM: X11 PixMap Format
+```
 
 ## NOTES
 
@@ -76,17 +76,17 @@ for details.
 
 ### Ranges of GDAL data types
 
-::: code
-      GDAL data type           minimum      maximum
+```
+  GDAL data type           minimum      maximum
 
-      Byte                   0          255
-      UInt16                 0       65,535
-      Int16, CInt16            -32,768       32,767
-      UInt32                 0    4,294,967,295
-      Int32, CInt32     -2,147,483,648    2,147,483,647
-      Float32, CFloat32        -3.4E38       3.4E38
-      Float64, CFloat64      -1.79E308         1.79E308
-:::
+  Byte                   0          255
+  UInt16                 0       65,535
+  Int16, CInt16            -32,768       32,767
+  UInt32                 0    4,294,967,295
+  Int32, CInt32     -2,147,483,648    2,147,483,647
+  Float32, CFloat32        -3.4E38       3.4E38
+  Float64, CFloat64      -1.79E308         1.79E308
+```
 
 If there is a need to keep file sizes small, use the simplest data type
 covering the data range of the raster(s) to be exported, e.g., if
@@ -181,76 +181,76 @@ Offset is only relevant if not zero. Scale is only relevant if not 1.
 See also [GeoTIFF format
 description](https://gdal.org/drivers/raster/gtiff.html) (GDAL):
 
-::: code
-    g.region raster=basin_50K -p
-    r.out.gdal input=basin_50K output=basin_50K.tif
-:::
+```
+g.region raster=basin_50K -p
+r.out.gdal input=basin_50K output=basin_50K.tif
+```
 
 ### Export the integer raster landclass96 map to Cloud Optimized GeoTIFF format
 
 See also [Cloud Optimized GeoTIFF (COG) format
 description](https://gdal.org/drivers/raster/cog.html) (GDAL):
 
-::: code
-    g.region -p raster=landclass96
-    r.out.gdal -fmt input=landclass96 output=landclass96.tif format=COG overviews=4
-:::
+```
+g.region -p raster=landclass96
+r.out.gdal -fmt input=landclass96 output=landclass96.tif format=COG overviews=4
+```
 
 ### Export a DCELL raster map in GeoTIFF format suitable for ESRI software
 
-::: code
-    g.region raster=elevation -p
-    r.out.gdal in=elevation output=elevation.tif createopt="PROFILE=GeoTIFF,TFW=YES"
-:::
+```
+g.region raster=elevation -p
+r.out.gdal in=elevation output=elevation.tif createopt="PROFILE=GeoTIFF,TFW=YES"
+```
 
 ### Export a raster map in \"Deflate\" compressed GeoTIFF format
 
-::: code
-    g.region raster=elevation -p
-    r.out.gdal in=elevation output=elevation.tif createopt="COMPRESS=DEFLATE"
-:::
+```
+g.region raster=elevation -p
+r.out.gdal in=elevation output=elevation.tif createopt="COMPRESS=DEFLATE"
+```
 
 ### Export a large raster map in LZW compressed (Big) GeoTIFF format
 
-::: code
-    # integer map export
-    g.region raster=zipcodes -p
-    # Using PREDICTOR 2 for integer maps can further reduce file size
-    r.out.gdal in=zipcodes output=zipcodes.tif createopt="COMPRESS=LZW,PREDICTOR=2,BIGTIFF=YES"
+```
+# integer map export
+g.region raster=zipcodes -p
+# Using PREDICTOR 2 for integer maps can further reduce file size
+r.out.gdal in=zipcodes output=zipcodes.tif createopt="COMPRESS=LZW,PREDICTOR=2,BIGTIFF=YES"
 
-    # floating point map export
-    g.region raster=elevation -p
-    # Using PREDICTOR 3 for floating point data can further reduce file size
-    r.out.gdal in=elevation output=elevation.tif createopt="COMPRESS=LZW,PREDICTOR=3,BIGTIFF=YES"
-:::
+# floating point map export
+g.region raster=elevation -p
+# Using PREDICTOR 3 for floating point data can further reduce file size
+r.out.gdal in=elevation output=elevation.tif createopt="COMPRESS=LZW,PREDICTOR=3,BIGTIFF=YES"
+```
 
 ### Export a raster map with internal overview in \"Deflate\" compressed GeoTIFF format
 
-::: code
-    g.region raster=elevation -p
-    # overviews=5 corresponds to 'gdaladdo ... 2 4 8 16 32'
-    r.out.gdal in=elevation output=elevation.tif createopt="COMPRESS=DEFLATE" overviews=5
-:::
+```
+g.region raster=elevation -p
+# overviews=5 corresponds to 'gdaladdo ... 2 4 8 16 32'
+r.out.gdal in=elevation output=elevation.tif createopt="COMPRESS=DEFLATE" overviews=5
+```
 
 ### Export R,G,B imagery bands in GeoTIFF format suitable for ESRI software
 
-::: code
-    i.group group=nc_landsat_rgb input=lsat7_2002_30,lsat7_2002_20,lsat7_2002_10
-    g.region raster=lsat7_2002_30 -p
-    r.out.gdal in=nc_landsat_rgb output=nc_landsat_rgb.tif type=Byte \
-      createopt="PROFILE=GeoTIFF,INTERLEAVE=PIXEL,TFW=YES"
-:::
+```
+i.group group=nc_landsat_rgb input=lsat7_2002_30,lsat7_2002_20,lsat7_2002_10
+g.region raster=lsat7_2002_30 -p
+r.out.gdal in=nc_landsat_rgb output=nc_landsat_rgb.tif type=Byte \
+  createopt="PROFILE=GeoTIFF,INTERLEAVE=PIXEL,TFW=YES"
+```
 
 ### Export group of image maps as multi-band file
 
-::: code
-    g.list group
-    i.group group=tm7 subgroup=tm7 input=tm7_10,tm7_20,tm7_30,tm7_40,tm7_50,tm7_60,tm7_70
-    i.group -l tm7
-    g.region raster=tm7_10 -p
-    r.out.gdal tm7 output=lsat_multiband.tif
-    gdalinfo lsat_multiband.tif
-:::
+```
+g.list group
+i.group group=tm7 subgroup=tm7 input=tm7_10,tm7_20,tm7_30,tm7_40,tm7_50,tm7_60,tm7_70
+i.group -l tm7
+g.region raster=tm7_10 -p
+r.out.gdal tm7 output=lsat_multiband.tif
+gdalinfo lsat_multiband.tif
+```
 
 ### Export RGB with alpha channel that encodes NULL cells
 
@@ -274,37 +274,37 @@ additional alpha channel that encodes all NULL cells and in the RGB
 bands to be exported replace NULL cells with some value in the range
 0-255. For example:
 
-::: code
-    # for simplicity variables are used
-    RMAP="lsat7_2000_30"
-    GMAP="lsat7_2000_20"
-    BMAP="lsat7_2000_10"
+```
+# for simplicity variables are used
+RMAP="lsat7_2000_30"
+GMAP="lsat7_2000_20"
+BMAP="lsat7_2000_10"
 
-    OUTNAME="lsat7_2000_RGBA.tif"
+OUTNAME="lsat7_2000_RGBA.tif"
 
-    # extract alpha
-    r.mapcalc "out_a = if(isnull($RMAP) || isnull($GMAP) || isnull($BMAP), 0, 255)"
+# extract alpha
+r.mapcalc "out_a = if(isnull($RMAP) || isnull($GMAP) || isnull($BMAP), 0, 255)"
 
-    # replace NULL cells with a valid value, extract colors
+# replace NULL cells with a valid value, extract colors
 
-    # exporting 8 bit RGB data, not GIS data, therefore the `#` operator:
-    r.mapcalc "out_r = if(isnull($RMAP), 0, #$RMAP)"
-    r.mapcalc "out_g = if(isnull($GMAP), 0, #$GMAP)"
-    r.mapcalc "out_b = if(isnull($BMAP), 0, #$BMAP)"
+# exporting 8 bit RGB data, not GIS data, therefore the `#` operator:
+r.mapcalc "out_r = if(isnull($RMAP), 0, #$RMAP)"
+r.mapcalc "out_g = if(isnull($GMAP), 0, #$GMAP)"
+r.mapcalc "out_b = if(isnull($BMAP), 0, #$BMAP)"
 
-    # create group for export
-    i.group group=out_rgba input=out_r,out_g,out_b,out_a
+# create group for export
+i.group group=out_rgba input=out_r,out_g,out_b,out_a
 
-    # remove any MASK because this works only if there are
-    # no NULL cells in the bands to be exported
-    r.mask -r
+# remove any MASK because this works only if there are
+# no NULL cells in the bands to be exported
+r.mask -r
 
-    # export the group:
-    # add PROFILE=BASELINE to createopt to produce a standard TIFF file
-    # without any GTiff extensions
-    r.out.gdal input=out_rgba output=$OUTNAME -cm createopt="PHOTOMETRIC=RGB,ALPHA=YES"
-    gdalinfo $OUTNAME
-:::
+# export the group:
+# add PROFILE=BASELINE to createopt to produce a standard TIFF file
+# without any GTiff extensions
+r.out.gdal input=out_rgba output=$OUTNAME -cm createopt="PHOTOMETRIC=RGB,ALPHA=YES"
+gdalinfo $OUTNAME
+```
 
 The resulting GeoTIFF file can be used e.g. for Web server applications.
 
@@ -313,10 +313,10 @@ The resulting GeoTIFF file can be used e.g. for Web server applications.
 See also [Erdas Imagine .img format
 description](https://gdal.org/drivers/raster/hfa.html) (GDAL):
 
-::: code
-    g.region raster=elevation -p
-    r.out.gdal input=elevation output=elelevation.img format=HFA type=Float32
-:::
+```
+g.region raster=elevation -p
+r.out.gdal input=elevation output=elelevation.img format=HFA type=Float32
+```
 
 ### Export raster map with offset/scale assigned
 
@@ -324,28 +324,28 @@ An offset value can be assigned to output raster data by **offset**
 parameter. Similarly a scale value can be assigned by **scale**
 parameter.
 
-::: code
-    # produce raster map
-    g.region n=100 s=0 e=100 w=0 res=1
-    r.random.cells output=random distance=1.0
-    r.info -r random
+```
+# produce raster map
+g.region n=100 s=0 e=100 w=0 res=1
+r.random.cells output=random distance=1.0
+r.info -r random
 
-    # export raster data with offset/scale assigned
-    r.out.gdal input=random output=random.tif offset=100 scale=0.01
-:::
+# export raster data with offset/scale assigned
+r.out.gdal input=random output=random.tif offset=100 scale=0.01
+```
 
 Check result by *gdalinfo* command line tool:
 
-::: code
-    gdalinfo random.tif
-    ...
-    Band 1 Block=100x40 Type=UInt16, ColorInterp=Palette
-      Description = random
-        Computed Min/Max=1.000,3661.000
-      NoData Value=65535
-      Offset: 100,   Scale:0.01
-    ...
-:::
+```
+gdalinfo random.tif
+...
+Band 1 Block=100x40 Type=UInt16, ColorInterp=Palette
+  Description = random
+    Computed Min/Max=1.000,3661.000
+  NoData Value=65535
+  Offset: 100,   Scale:0.01
+...
+```
 
 ## GDAL RELATED ERROR MESSAGES
 

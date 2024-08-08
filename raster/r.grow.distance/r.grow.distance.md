@@ -19,9 +19,9 @@ distance between two points that one would measure with a ruler, which
 can be proven by repeated application of the Pythagorean theorem. The
 formula is given by:
 
-::: code
-    d(dx,dy) = sqrt(dx^2 + dy^2)
-:::
+```
+d(dx,dy) = sqrt(dx^2 + dy^2)
+```
 
 Cells grown using this metric would form isolines of distance that are
 circular from a given point, with the distance given by the **radius**.
@@ -38,18 +38,18 @@ most streets on the island of Manhattan, which causes the shortest path
 a car could take between two points in the city to have length equal to
 the points\' distance in taxicab geometry. The formula is given by:
 
-::: code
-    d(dx,dy) = abs(dx) + abs(dy)
-:::
+```
+d(dx,dy) = abs(dx) + abs(dy)
+```
 
 where cells grown using this metric would form isolines of distance that
 are rhombus-shaped from a given point.
 
 The *Maximum metric* is given by the formula
 
-::: code
-    d(dx,dy) = max(abs(dx),abs(dy))
-:::
+```
+d(dx,dy) = max(abs(dx),abs(dy))
+```
 
 where the isolines of distance from a point are squares.
 
@@ -76,11 +76,11 @@ NULL.
 
 North Carolina sample dataset:
 
-::: code
-    g.region raster=streams_derived -p
-    r.grow.distance input=streams_derived distance=dist_from_streams
-    r.colors map=dist_from_streams color=rainbow
-:::
+```
+g.region raster=streams_derived -p
+r.grow.distance input=streams_derived distance=dist_from_streams
+r.colors map=dist_from_streams color=rainbow
+```
 
 ::: {align="center" style="margin: 10px"}
 ![](r_grow_distance.png){border="0"}\
@@ -95,11 +95,11 @@ shown with d.rast.num)*
 
 ### Distance from sea in meters in latitude-longitude CRS
 
-::: code
-    g.region raster=sea -p
-    r.grow.distance -m input=sea distance=dist_from_sea_geodetic metric=geodesic
-    r.colors map=dist_from_sea_geodetic color=rainbow
-:::
+```
+g.region raster=sea -p
+r.grow.distance -m input=sea distance=dist_from_sea_geodetic metric=geodesic
+r.colors map=dist_from_sea_geodetic color=rainbow
+```
 
 ![](r_grow_distance_sea.png){border="1"}\
 *Geodesic distances to sea in meters*

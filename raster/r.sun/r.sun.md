@@ -236,65 +236,65 @@ used to run a segmented calculation which consumes less memory during
 the computations. The amount of memory by **r.sun** is estimated as
 follows:
 
-::: code
-    # without input raster map partitioning:
-    #  memory requirements: 4 bytes per raster cell
-    #  rows,cols: rows and columns of current region (find out with g.region)
-    #  IR: number of input raster maps without horizon maps
-    #  OR: number of output raster maps
-    memory_bytes = rows*cols*(IR*4 + horizon_steps + OR*4)
+```
+# without input raster map partitioning:
+#  memory requirements: 4 bytes per raster cell
+#  rows,cols: rows and columns of current region (find out with g.region)
+#  IR: number of input raster maps without horizon maps
+#  OR: number of output raster maps
+memory_bytes = rows*cols*(IR*4 + horizon_steps + OR*4)
 
-    # with input raster map partitioning:
-    memory_bytes = rows*cols*((IR*4+horizon_steps)/npartitions  + OR*4)
-:::
+# with input raster map partitioning:
+memory_bytes = rows*cols*((IR*4+horizon_steps)/npartitions  + OR*4)
+```
 
 ## EXAMPLES
 
 North Carolina example (considering also cast shadows):
 
-::: code
-    g.region raster=elevation -p
+```
+g.region raster=elevation -p
 
-    # calculate horizon angles (to speed up the subsequent r.sun calculation)
-    r.horizon elevation=elevation step=30 bufferzone=200 output=horangle \
-        maxdistance=5000
+# calculate horizon angles (to speed up the subsequent r.sun calculation)
+r.horizon elevation=elevation step=30 bufferzone=200 output=horangle \
+    maxdistance=5000
 
-    # slope + aspect
-    r.slope.aspect elevation=elevation aspect=aspect.dem slope=slope.dem
+# slope + aspect
+r.slope.aspect elevation=elevation aspect=aspect.dem slope=slope.dem
 
-    # calculate global radiation for day 180 at 2p.m., using r.horizon output
-    r.sun elevation=elevation horizon_basename=horangle horizon_step=30 \
-          aspect=aspect.dem slope=slope.dem glob_rad=global_rad day=180 time=14
-    # result: output global (total) irradiance/irradiation [W.m-2] for given day/time
-    r.univar global_rad
-:::
+# calculate global radiation for day 180 at 2p.m., using r.horizon output
+r.sun elevation=elevation horizon_basename=horangle horizon_step=30 \
+      aspect=aspect.dem slope=slope.dem glob_rad=global_rad day=180 time=14
+# result: output global (total) irradiance/irradiation [W.m-2] for given day/time
+r.univar global_rad
+```
 
 Calculation of the integrated daily irradiation for a region in
 North-Carolina for a given day of the year at 30m resolution. Here day
 172 (i.e., 21 June in non-leap years):
 
-::: code
-    g.region raster=elev_ned_30m -p
+```
+g.region raster=elev_ned_30m -p
 
-    # considering cast shadows
-    r.sun elevation=elev_ned_30m linke_value=2.5 albedo_value=0.2 day=172 \
-          beam_rad=b172 diff_rad=d172 \
-          refl_rad=r172 insol_time=it172
+# considering cast shadows
+r.sun elevation=elev_ned_30m linke_value=2.5 albedo_value=0.2 day=172 \
+      beam_rad=b172 diff_rad=d172 \
+      refl_rad=r172 insol_time=it172
 
-    d.mon wx0
-    # show irradiation raster map [Wh.m-2.day-1]
-    d.rast.leg b172
-    # show insolation time raster map [h]
-    d.rast.leg it172
-:::
+d.mon wx0
+# show irradiation raster map [Wh.m-2.day-1]
+d.rast.leg b172
+# show insolation time raster map [h]
+d.rast.leg it172
+```
 
 We can compute the day of year from a specific date in Python:
 
-::: code
-    >>> import datetime
-    >>> datetime.datetime(2014, 6, 21).timetuple().tm_yday
-    172
-:::
+```
+>>> import datetime
+>>> datetime.datetime(2014, 6, 21).timetuple().tm_yday
+172
+```
 
 ## SEE ALSO
 

@@ -53,12 +53,12 @@ Assume we have inputs, the following simulates a spotting- involved
 wildfire and generates three raster maps to contain spread time,
 backlink information in UTM northing and easting coordinates:
 
-::: code
-    r.spread -s max=my_ros.max dir=my_ros.maxdir base=my_ros.base \
-        start=fire_origin spot_dist=my_ros.spotdist w_speed=wind_speed \
-        f_mois=1hour_moisture output=my_spread \
-        x_output=my_spread.x y_output=my_spread.y
-:::
+```
+r.spread -s max=my_ros.max dir=my_ros.maxdir base=my_ros.base \
+    start=fire_origin spot_dist=my_ros.spotdist w_speed=wind_speed \
+    f_mois=1hour_moisture output=my_spread \
+    x_output=my_spread.x y_output=my_spread.y
+```
 
 ## NOTES
 

@@ -43,42 +43,42 @@ The following examples are from the Spearfish60 sample dataset:
 
 \# Print the full list of raster map categories:
 
-::: code
-    r.describe landcover.30m
-    * 11 21-23 31 32 41-43 51 71 81-83 85 91 92
-:::
+```
+r.describe landcover.30m
+* 11 21-23 31 32 41-43 51 71 81-83 85 91 92
+```
 
 \# Print the raster range only:
 
-::: code
-    r.describe -r landcover.30m
-    11 thru 92
-    *
-:::
+```
+r.describe -r landcover.30m
+11 thru 92
+*
+```
 
 \# Print raster map category range, suppressing nulls:
 
-::: code
-    r.describe -n landcover.30m
-    11 21-23 31 32 41-43 51 71 81-83 85 91 92
-:::
+```
+r.describe -n landcover.30m
+11 21-23 31 32 41-43 51 71 81-83 85 91 92
+```
 
 \# Print raster map categories, one category per line:
 
-::: code
-    r.describe -1 geology
+```
+r.describe -1 geology
 
-    *
-    1
-    2
-    3
-    4
-    5
-    6
-    7
-    8
-    9
-:::
+*
+1
+2
+3
+4
+5
+6
+7
+8
+9
+```
 
 ## SEE ALSO
 

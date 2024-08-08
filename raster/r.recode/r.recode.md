@@ -10,12 +10,12 @@ entering **rules=-**.
 
 Rules are defined in one of these formats:
 
-::: code
-    old_low:old_high:new_low:new_high
-    old_low:old_high:new_val  (i.e. new_high == new_low)
-    *:old_val:new_val         (interval [inf, old_val])
-    old_val:*:new_val         (interval [old_val, inf])
-:::
+```
+old_low:old_high:new_low:new_high
+old_low:old_high:new_val  (i.e. new_high == new_low)
+*:old_val:new_val         (interval [inf, old_val])
+old_val:*:new_val         (interval [old_val, inf])
+```
 
 *r.recode* is loosely based on *[r.reclass](r.reclass.html)* and uses
 the GRASS Reclass Library to convert the rasters. It has routines for
@@ -45,9 +45,9 @@ via stdin or a file. More than one set of arguments is accepted.
 To simply convert a raster between formats (eg. int to float) the user
 would use the first argument. For example
 
-::: code
-    10:1500:0.1:15.0
-:::
+```
+10:1500:0.1:15.0
+```
 
 would convert an input raster map with range between 10 and 1500 to a
 float raster raster with range between 0.1 and 15.0.
@@ -58,13 +58,13 @@ float raster raster with range between 0.1 and 15.0.
 formatting is as described above. In following example the values 1, 2
 and 3 are replaced by 1.1, 7.5 resp. 0.4:
 
-::: code
-    r.recode input=oldmap output=newmap rules=- << EOF
-    1:1:1.1:1.1
-    2:2:7.5:7.5
-    3:3:0.4:0.4
-    EOF
-:::
+```
+r.recode input=oldmap output=newmap rules=- << EOF
+1:1:1.1:1.1
+2:2:7.5:7.5
+3:3:0.4:0.4
+EOF
+```
 
 ## SEE ALSO
 

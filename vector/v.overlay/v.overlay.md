@@ -44,27 +44,27 @@ If **atype**=auto is given than *v.overlay* determines feature type for
 
 Preparation of example data (North Carolina sample dataset):
 
-::: code
-    # Create an empty box for overlaying to ZIP code vector map
-    v.mkgrid map=box grid=1,1 position=coor coordinates=584037,201970 box=50000,50000
+```
+# Create an empty box for overlaying to ZIP code vector map
+v.mkgrid map=box grid=1,1 position=coor coordinates=584037,201970 box=50000,50000
 
-    # set region to ZIP codes and box vector maps
-    g.region vector=zipcodes_wake,box -p res=100 -a
-    # enlarge region a bit for "white border" around map in monitor
-    g.region n=n+1000 s=s-1000 w=w-1000 e=e+1000 -p
-    d.mon wx0
-:::
+# set region to ZIP codes and box vector maps
+g.region vector=zipcodes_wake,box -p res=100 -a
+# enlarge region a bit for "white border" around map in monitor
+g.region n=n+1000 s=s-1000 w=w-1000 e=e+1000 -p
+d.mon wx0
+```
 
 ### AND operator
 
 Clipping example (no attribute table is generated here):
 
-::: code
-    d.vect map=zipcodes_wake fill_color=0:128:0
-    d.vect map=box fill_color=85:130:176
-    v.overlay -t ainput=box binput=zipcodes_wake operator=and output=v_overlay_AND
-    d.vect map=v_overlay_AND
-:::
+```
+d.vect map=zipcodes_wake fill_color=0:128:0
+d.vect map=box fill_color=85:130:176
+v.overlay -t ainput=box binput=zipcodes_wake operator=and output=v_overlay_AND
+d.vect map=v_overlay_AND
+```
 
 ![v.overlay with AND operator](v_overlay_op_and.png)\
 *Figure: v.overlay with AND operator (selected polygons in grey color)*
@@ -73,12 +73,12 @@ Clipping example (no attribute table is generated here):
 
 Union example of areas:
 
-::: code
-    d.vect map=zipcodes_wake fill_color=0:128:0
-    d.vect map=box fill_color=85:130:176
-    v.overlay -t ainput=box binput=zipcodes_wake operator=or output=v_overlay_OR
-    d.vect map=v_overlay_OR
-:::
+```
+d.vect map=zipcodes_wake fill_color=0:128:0
+d.vect map=box fill_color=85:130:176
+v.overlay -t ainput=box binput=zipcodes_wake operator=or output=v_overlay_OR
+d.vect map=v_overlay_OR
+```
 
 ![v.overlay with OR operator](v_overlay_op_or.png)\
 *Figure: v.overlay with OR operator (selected polygons in grey color)*
@@ -87,12 +87,12 @@ Union example of areas:
 
 Symmetrical difference example:
 
-::: code
-    d.vect map=zipcodes_wake fill_color=0:128:0
-    d.vect map=box fill_color=85:130:176
-    v.overlay -t ainput=box binput=zipcodes_wake operator=xor output=v_overlay_XOR
-    d.vect map=v_overlay_XOR
-:::
+```
+d.vect map=zipcodes_wake fill_color=0:128:0
+d.vect map=box fill_color=85:130:176
+v.overlay -t ainput=box binput=zipcodes_wake operator=xor output=v_overlay_XOR
+d.vect map=v_overlay_XOR
+```
 
 ![v.overlay with XOR operator](v_overlay_op_xor.png)\
 *Figure: v.overlay with XOR operator (selected polygons in grey color)*
@@ -101,12 +101,12 @@ Symmetrical difference example:
 
 Difference example:
 
-::: code
-    d.vect map=zipcodes_wake fill_color=0:128:0
-    d.vect map=box fill_color=85:130:176
-    v.overlay -t ainput=box binput=zipcodes_wake operator=not output=v_overlay_NOT
-    d.vect map=v_overlay_NOT
-:::
+```
+d.vect map=zipcodes_wake fill_color=0:128:0
+d.vect map=box fill_color=85:130:176
+v.overlay -t ainput=box binput=zipcodes_wake operator=not output=v_overlay_NOT
+d.vect map=v_overlay_NOT
+```
 
 ![v.overlay with NOT operator](v_overlay_op_not.png)\
 *Figure: v.overlay with NOT operator (selected polygon in grey color)*
@@ -115,16 +115,16 @@ Difference example:
 
 ZIP code examples, based on North Carolina sample dataset:
 
-::: code
-    # creation of simple dataset
-    v.extract input=zipcodes_wake output=poly1 where="cat = 42"
-    v.extract input=urbanarea output=poly2 where="cat = 55"
+```
+# creation of simple dataset
+v.extract input=zipcodes_wake output=poly1 where="cat = 42"
+v.extract input=urbanarea output=poly2 where="cat = 55"
 
-    v.overlay ainput=poly1 binput=poly2 operator=and output=poly_1_2_and
-    v.overlay ainput=poly1 binput=poly2 operator=or  output=poly_1_2_or
-    v.overlay ainput=poly1 binput=poly2 operator=not output=poly_1_2_not
-    v.overlay ainput=poly1 binput=poly2 operator=xor output=poly_1_2_xor
-:::
+v.overlay ainput=poly1 binput=poly2 operator=and output=poly_1_2_and
+v.overlay ainput=poly1 binput=poly2 operator=or  output=poly_1_2_or
+v.overlay ainput=poly1 binput=poly2 operator=not output=poly_1_2_not
+v.overlay ainput=poly1 binput=poly2 operator=xor output=poly_1_2_xor
+```
 
 ![GRASS v.overlay: input polygons (1 and
 2)](v_overlay_poly_1_2.png){border="0"}\
@@ -136,48 +136,48 @@ operations](v_overlay_poly_1_2_a_o_n_x.png){border="0"}\
 
 ### Polygons overlaid with polygons
 
-::: code
-    v.overlay ainput=lake binput=province output=lakeXprovince operator=or
-:::
+```
+v.overlay ainput=lake binput=province output=lakeXprovince operator=or
+```
 
 Polygon union of urban area and Census 2000 areas (North Carolina
 dataset):
 
-::: code
-    # input maps
-    d.vect urbanarea
-    d.vect census_wake2000
+```
+# input maps
+d.vect urbanarea
+d.vect census_wake2000
 
-    # union
-    v.overlay ain=census_wake2000 bin=urbanarea out=urban_census2000 operator=or
+# union
+v.overlay ain=census_wake2000 bin=urbanarea out=urban_census2000 operator=or
 
-    # show result, graphically zooming a subset
-    g.region n=230400 s=223800 w=655800 e=662400
-    d.erase
-    d.vect urban_census2000
+# show result, graphically zooming a subset
+g.region n=230400 s=223800 w=655800 e=662400
+d.erase
+d.vect urban_census2000
 
-    # show merged attribute table
-    v.db.select urban_census2000 where="cat=108" -v
-    cat|108
-    a_cat|98
-    a_AREA|231001264
-    a_PERIMETE|67804.305
-    a_TRACT_|98
-    a_TRACT_ID|98
-    a_RINGS_OK|1
-    a_RINGS_NO|0
-    a_ID|98
-    a_FIPSSTCO|37183
-    a_TRT2000|054108
-    a_STFID|37183054108
-    a_TRACTID|541.08
-    a_TRACT|541.08
-    b_cat|55
-    b_OBJECTID|55
-    b_UA|73261
-    b_NAME|Raleigh
-    b_UA_TYPE|UA
-:::
+# show merged attribute table
+v.db.select urban_census2000 where="cat=108" -v
+cat|108
+a_cat|98
+a_AREA|231001264
+a_PERIMETE|67804.305
+a_TRACT_|98
+a_TRACT_ID|98
+a_RINGS_OK|1
+a_RINGS_NO|0
+a_ID|98
+a_FIPSSTCO|37183
+a_TRT2000|054108
+a_STFID|37183054108
+a_TRACTID|541.08
+a_TRACT|541.08
+b_cat|55
+b_OBJECTID|55
+b_UA|73261
+b_NAME|Raleigh
+b_UA_TYPE|UA
+```
 
 ![GRASS v.overlay: polygon to polygon union (input
 1)](v_overlay_urbanarea.png){border="1"} ![GRASS v.overlay: polygon to
@@ -196,15 +196,15 @@ a clean result can be obtained by snapping with a threshold of 0.1 m.
 Using the North Carolina sample dataset, we clip the roads map to the
 area of city of Raleigh, preserving road attributes in layer 1:
 
-::: code
-    g.region vector=zipcodes_wake
+```
+g.region vector=zipcodes_wake
 
-    # extract Raleigh city:
-    v.extract in=zipcodes_wake out=raleigh where="ZIPNAME = 'RALEIGH'"
+# extract Raleigh city:
+v.extract in=zipcodes_wake out=raleigh where="ZIPNAME = 'RALEIGH'"
 
-    # clip road network to city polygon:
-    v.overlay ainput=roadsmajor atype=line binput=raleigh out=roadsmajor_raleigh operator=and olayer=0,1,0
-:::
+# clip road network to city polygon:
+v.overlay ainput=roadsmajor atype=line binput=raleigh out=roadsmajor_raleigh operator=and olayer=0,1,0
+```
 
 ![GRASS v.overlay: Line to polygon clipping](v_overlay_area_lines.png)\
 

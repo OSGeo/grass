@@ -22,17 +22,17 @@ In this example, the raster polygon map `zipcodes` in the North Carolina
 sample dataset is used to calculate zonal raster statistics using the
 `elevation` raster map:
 
-::: code
-    g.region raster=zipcodes -p
+```
+g.region raster=zipcodes -p
 
-    # pixel count in zipcode areas
-    r.stats.zonal base=zipcodes cover=elevation method=count output=zipcodes_elev_count
-    r.colors zipcodes_elev_count color=gyr -g
+# pixel count in zipcode areas
+r.stats.zonal base=zipcodes cover=elevation method=count output=zipcodes_elev_count
+r.colors zipcodes_elev_count color=gyr -g
 
-    # average elevation in zipcode areas
-    r.stats.zonal base=zipcodes cover=elevation method=average output=zipcodes_elev_avg
-    r.colors zipcodes_elev_avg color=elevation -g
-:::
+# average elevation in zipcode areas
+r.stats.zonal base=zipcodes cover=elevation method=average output=zipcodes_elev_avg
+r.colors zipcodes_elev_avg color=elevation -g
+```
 
 ::: {align="center" style="margin: 10px"}
 [![Zonal (average) elevation

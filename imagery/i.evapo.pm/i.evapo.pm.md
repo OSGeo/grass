@@ -40,12 +40,12 @@ command.
 
 Example:
 
-::: code
-    r.sun -s elevin=dem aspin=aspect slopein=slope lin=2 albedo=alb_Mar \
-          incidout=out beam_rad=beam diff_rad=diffuse refl_rad=reflected \
-          day=73 time=13:00 dist=100;
-    r.mapcalc "NSR = 0.0036 * (beam + diffuse + reflected)"
-:::
+```
+r.sun -s elevin=dem aspin=aspect slopein=slope lin=2 albedo=alb_Mar \
+      incidout=out beam_rad=beam diff_rad=diffuse refl_rad=reflected \
+      day=73 time=13:00 dist=100;
+r.mapcalc "NSR = 0.0036 * (beam + diffuse + reflected)"
+```
 
 ## REFERENCES
 

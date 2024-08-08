@@ -9,9 +9,9 @@ as costs to traverse a length unit (e.g. meter) of the segment. For
 example, if the speed limit is 100 km / h, the cost to traverse a 10 km
 long road segment must be calculated as
 
-::: code
-    length / speed = 10 km / (100 km/h) = 0.1 h.
-:::
+```
+length / speed = 10 km / (100 km/h) = 0.1 h.
+```
 
 Supported are cost assignments for both arcs and nodes, and also
 different costs for both directions of a vector line. For areas, costs
@@ -33,17 +33,17 @@ Nodes can be
 
 The syntax is as follows:
 
-::: code
-    id start_point_category end_point_category
-:::
+```
+id start_point_category end_point_category
+```
 
 (Example: 1 1 2)
 
 or
 
-::: code
-    id start_point_x start_point_y end_point_x end_point_y
-:::
+```
+id start_point_x start_point_y end_point_x end_point_y
+```
 
 Points specified by category must be exactly on network nodes, and the
 input vector map needs to be prepared with `v.net operation=connect`.
@@ -99,74 +99,74 @@ Shortest (red) and fastest (blue) path between two digitized nodes
 
 ![v.net.path example](vnetpath.png){border="1"}
 
-::: code
-    # Spearfish
+```
+# Spearfish
 
-    echo "1|601955.1|4916944.9|start
-    2|594385.6|4921565.2|end" | v.in.ascii in=- cat=1 x=2 y=3 out=startend col="cat integer, \
-                             east double precision, north double precision, label varchar(6)"
+echo "1|601955.1|4916944.9|start
+2|594385.6|4921565.2|end" | v.in.ascii in=- cat=1 x=2 y=3 out=startend col="cat integer, \
+                         east double precision, north double precision, label varchar(6)"
 
-    v.db.select startend
+v.db.select startend
 
-    g.copy vect=roads,myroads
+g.copy vect=roads,myroads
 
-    # create lines map connecting points to network
-    v.net myroads points=startend out=myroads_net op=connect thresh=500 arc_layer=1 node_layer=2
+# create lines map connecting points to network
+v.net myroads points=startend out=myroads_net op=connect thresh=500 arc_layer=1 node_layer=2
 
-    # set up costs
+# set up costs
 
-    # create unique categories for each road in layer 3
-    v.category in=myroads_net out=myroads_net_time opt=add cat=1 layer=3 type=line
+# create unique categories for each road in layer 3
+v.category in=myroads_net out=myroads_net_time opt=add cat=1 layer=3 type=line
 
-    # add new table for layer 3
-    v.db.addtable myroads_net_time layer=3 col="cat integer,label varchar(43),length double precision,speed double precision,cost double precision,bcost double precision"
+# add new table for layer 3
+v.db.addtable myroads_net_time layer=3 col="cat integer,label varchar(43),length double precision,speed double precision,cost double precision,bcost double precision"
 
-    # copy road type to layer 3
-    v.to.db myroads_net_time layer=3 qlayer=1 opt=query qcolumn=label columns=label
+# copy road type to layer 3
+v.to.db myroads_net_time layer=3 qlayer=1 opt=query qcolumn=label columns=label
 
-    # upload road length in miles
-    v.to.db myroads_net_time layer=3 type=line option=length col=length unit=miles
+# upload road length in miles
+v.to.db myroads_net_time layer=3 type=line option=length col=length unit=miles
 
-    # set speed limits in miles / hour
-    v.db.update myroads_net_time layer=3 col=speed val="5.0"
-    v.db.update myroads_net_time layer=3 col=speed val="75.0" where="label='interstate'"
-    v.db.update myroads_net_time layer=3 col=speed val="75.0" where="label='primary highway, hard surface'"
-    v.db.update myroads_net_time layer=3 col=speed val="50.0" where="label='secondary highway, hard surface'"
-    v.db.update myroads_net_time layer=3 col=speed val="25.0" where="label='light-duty road, improved surface'"
-    v.db.update myroads_net_time layer=3 col=speed val="5.0" where="label='unimproved road'"
+# set speed limits in miles / hour
+v.db.update myroads_net_time layer=3 col=speed val="5.0"
+v.db.update myroads_net_time layer=3 col=speed val="75.0" where="label='interstate'"
+v.db.update myroads_net_time layer=3 col=speed val="75.0" where="label='primary highway, hard surface'"
+v.db.update myroads_net_time layer=3 col=speed val="50.0" where="label='secondary highway, hard surface'"
+v.db.update myroads_net_time layer=3 col=speed val="25.0" where="label='light-duty road, improved surface'"
+v.db.update myroads_net_time layer=3 col=speed val="5.0" where="label='unimproved road'"
 
-    # define traveling costs as traveling time in minutes:
+# define traveling costs as traveling time in minutes:
 
-    # set forward costs
-    v.db.update myroads_net_time layer=3 col=cost val="length / speed * 60"
-    # set backward costs
-    v.db.update myroads_net_time layer=3 col=bcost val="length / speed * 60"
+# set forward costs
+v.db.update myroads_net_time layer=3 col=cost val="length / speed * 60"
+# set backward costs
+v.db.update myroads_net_time layer=3 col=bcost val="length / speed * 60"
 
-    # ... the 'start' and 'end' nodes have category number 1 and 2
+# ... the 'start' and 'end' nodes have category number 1 and 2
 
-    # Shortest path: ID as first number, then cat1 and cat2
-    echo "1 1 2" | v.net.path myroads_net_time arc_layer=3 node_layer=2 out=mypath
+# Shortest path: ID as first number, then cat1 and cat2
+echo "1 1 2" | v.net.path myroads_net_time arc_layer=3 node_layer=2 out=mypath
 
-    # Fastest path: ID as first number, then cat1 and cat2
-    echo "1 1 2" | v.net.path myroads_net_time arc_layer=3 node_layer=2 arc_column=cost arc_backward_column=bcost out=mypath_time
-:::
+# Fastest path: ID as first number, then cat1 and cat2
+echo "1 1 2" | v.net.path myroads_net_time arc_layer=3 node_layer=2 arc_column=cost arc_backward_column=bcost out=mypath_time
+```
 
 To display the result, run for example:
 
-::: code
-    g.region vector=myroads_net
-    d.mon x0
-    d.vect myroads_net
-    # show shortest path
-    d.vect mypath col=red width=2
-    # show fastest path
-    d.vect mypath_time col=blue width=2
+```
+g.region vector=myroads_net
+d.mon x0
+d.vect myroads_net
+# show shortest path
+d.vect mypath col=red width=2
+# show fastest path
+d.vect mypath_time col=blue width=2
 
-    # start and end point
-    d.vect myroads_net icon=basic/triangle fcol=green size=12 layer=2
-    d.font font=Vera
-    d.vect startend disp=cat type=point lsize=14 layer=2
-:::
+# start and end point
+d.vect myroads_net icon=basic/triangle fcol=green size=12 layer=2
+d.font font=Vera
+d.vect startend disp=cat type=point lsize=14 layer=2
+```
 
 ## SEE ALSO
 

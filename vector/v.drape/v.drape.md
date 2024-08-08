@@ -23,31 +23,31 @@ raster data for display in [POVRAY](http://www.povray.org/).
 
 Spearfish example:
 
-::: code
-    v.drape in=roads elevation=elevation.10m method=bilinear out=roads3d
-    v.info roads3d
-:::
+```
+v.drape in=roads elevation=elevation.10m method=bilinear out=roads3d
+v.info roads3d
+```
 
 Create 3D vector roads map containing only \"unimproved\" roads. Set
 road height to 1000 m for all parts without height information.
 
-::: code
-    v.drape input=roads type=line elevation=elevation.dem output=roads_3d \
-            method=nearest scale=1.0 where='cat=5' layer=1 null_value=1000
-:::
+```
+v.drape input=roads type=line elevation=elevation.dem output=roads_3d \
+        method=nearest scale=1.0 where='cat=5' layer=1 null_value=1000
+```
 
 ### POVRAY example
 
-::: code
-    #export the vector data
-    v.drape in=roads out=roads3d elevation=elevation.10m
-    v.out.pov roads3d out=roads3d.pov
-    #export the raster data
-    r.out.pov elevation.10m tga=elevation.tga
-    r.out.png landcover.30m out=landcover30m.png
+```
+#export the vector data
+v.drape in=roads out=roads3d elevation=elevation.10m
+v.out.pov roads3d out=roads3d.pov
+#export the raster data
+r.out.pov elevation.10m tga=elevation.tga
+r.out.png landcover.30m out=landcover30m.png
 
-    # now write a complete povray-script and launch povray
-:::
+# now write a complete povray-script and launch povray
+```
 
 ## SEE ALSO
 

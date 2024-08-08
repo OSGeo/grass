@@ -113,13 +113,13 @@ with those maps.
 Generate a random surface (using extent of North Carolina sample
 dataset):
 
-::: code
-    g.region raster=elevation res=100 -p
-    r.surf.random output=randomsurf min=10 max=100
+```
+g.region raster=elevation res=100 -p
+r.surf.random output=randomsurf min=10 max=100
 
-    # verify distribution
-    r.univar -e map=randomsurf
-:::
+# verify distribution
+r.univar -e map=randomsurf
+```
 
 ::: {align="center" style="margin: 10px"}
 [![r.random.surface example (n_min: 10; n_max:

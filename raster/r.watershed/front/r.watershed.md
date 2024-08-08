@@ -283,9 +283,9 @@ no_data).
 Problem areas, i.e. those parts of a basin with a likely underestimate
 of flow accumulation, can be easily identified with e.g.
 
-::: code
-      r.mapcalc "problems = if(flow_acc < 0, basin, null())"
-:::
+```
+  r.mapcalc "problems = if(flow_acc < 0, basin, null())"
+```
 
 If the region of interest contains such problem areas, and this is not
 desired, the computational region must be expanded until the catchment
@@ -333,9 +333,9 @@ region should be replaced by NULL (`null()` in
 *[r.mapcalc](r.mapcalc.html)*). The following command performs these
 replacements:
 
-::: code
-    r.mapcalc "drainage_degrees = if(drainage > 0, 45. * drainage, null())"
-:::
+```
+r.mapcalc "drainage_degrees = if(drainage > 0, 45. * drainage, null())"
+```
 
 Alternatively, the user can use the **-a** flag or later the `abs()`
 function in *[r.mapcalc](r.mapcalc.html)* if the runoff is leaving the
@@ -352,35 +352,35 @@ create lots of catchment basins, as only one stream is presented per
 catchment. The `r.to.vect -v` flag preserves the catchment ID as the
 vector category number.
 
-::: code
-      r.watershed elev=elevation.dem stream=rwater.stream
-      r.to.vect -v in=rwater.stream out=rwater_stream
-:::
+```
+  r.watershed elev=elevation.dem stream=rwater.stream
+  r.to.vect -v in=rwater.stream out=rwater_stream
+```
 
 Set a different color table for the accumulation map:
 
-::: code
-      MAP=rwater.accum
-      r.watershed elev=elevation.dem accum=$MAP
+```
+  MAP=rwater.accum
+  r.watershed elev=elevation.dem accum=$MAP
 
-      eval `r.univar -g "$MAP"`
-      stddev_x_2=`echo $stddev | awk '{print $1 * 2}'`
-      stddev_div_2=`echo $stddev | awk '{print $1 / 2}'`
+  eval `r.univar -g "$MAP"`
+  stddev_x_2=`echo $stddev | awk '{print $1 * 2}'`
+  stddev_div_2=`echo $stddev | awk '{print $1 / 2}'`
 
-      r.colors $MAP col=rules << EOF
-        0% red
-        -$stddev_x_2 red
-        -$stddev yellow
-        -$stddev_div_2 cyan
-        -$mean_of_abs blue
-        0 white
-        $mean_of_abs blue
-        $stddev_div_2 cyan
-        $stddev yellow
-        $stddev_x_2 red
-        100% red
-      EOF
-:::
+  r.colors $MAP col=rules << EOF
+    0% red
+    -$stddev_x_2 red
+    -$stddev yellow
+    -$stddev_div_2 cyan
+    -$mean_of_abs blue
+    0 white
+    $mean_of_abs blue
+    $stddev_div_2 cyan
+    $stddev yellow
+    $stddev_x_2 red
+    100% red
+  EOF
+```
 
 Create a more detailed stream map using the accumulation map and convert
 it to a vector output map. The accumulation cut-off, and therefore
@@ -389,40 +389,40 @@ number of upstream catchment cells (calculated in the above example by
 *[r.univar](r.univar.html)*) as the cut-off value. This only works with
 SFD, not with MFD.
 
-::: code
-      r.watershed elev=elevation.dem accum=rwater.accum
+```
+  r.watershed elev=elevation.dem accum=rwater.accum
 
-      r.mapcalc 'MASK = if(!isnull(elevation.dem))'
-      r.mapcalc "rwater.course = \
-       if( abs(rwater.accum) > $mean_of_abs, \
-           abs(rwater.accum), \
-           null() )"
-      r.colors -g rwater.course col=bcyr
-      g.remove -f type=raster name=MASK
+  r.mapcalc 'MASK = if(!isnull(elevation.dem))'
+  r.mapcalc "rwater.course = \
+   if( abs(rwater.accum) > $mean_of_abs, \
+       abs(rwater.accum), \
+       null() )"
+  r.colors -g rwater.course col=bcyr
+  g.remove -f type=raster name=MASK
 
-      # Thinning is required before converting raster lines to vector
-      r.thin in=rwater.course out=rwater.course.Thin
-      r.colors -gn rwater.course.Thin color=grey
-      r.to.vect in=rwater.course.Thin out=rwater_course type=line
-      v.db.dropcolumn map=rwater_course column=label
-:::
+  # Thinning is required before converting raster lines to vector
+  r.thin in=rwater.course out=rwater.course.Thin
+  r.colors -gn rwater.course.Thin color=grey
+  r.to.vect in=rwater.course.Thin out=rwater_course type=line
+  v.db.dropcolumn map=rwater_course column=label
+```
 
 ### Create watershed basins map and convert to a vector polygon map
 
-::: code
-      r.watershed elev=elevation.dem basin=rwater.basin thresh=15000
-      r.to.vect -s in=rwater.basin out=rwater_basins type=area
-      v.db.dropcolumn map=rwater_basins column=label
-      v.db.renamecolumn map=rwater_basins column=value,catchment
-:::
+```
+  r.watershed elev=elevation.dem basin=rwater.basin thresh=15000
+  r.to.vect -s in=rwater.basin out=rwater_basins type=area
+  v.db.dropcolumn map=rwater_basins column=label
+  v.db.renamecolumn map=rwater_basins column=value,catchment
+```
 
 Display output in a nice way
 
-::: code
-      r.relief map=elevation.dem
-      d.shade shade=elevation.dem.shade color=rwater.basin bright=40
-      d.vect rwater_course color=orange
-:::
+```
+  r.relief map=elevation.dem
+  d.shade shade=elevation.dem.shade color=rwater.basin bright=40
+  d.vect rwater_course color=orange
+```
 
 ## REFERENCES
 

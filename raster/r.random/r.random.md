@@ -65,9 +65,9 @@ To decide on the number of points *r.random* will create, use
 number of non-NULL cells and NULL cells in a raster map given the
 current computational region and raster mask:
 
-::: code
-    r.univar map=inputmap
-:::
+```
+r.univar map=inputmap
+```
 
 The text output contains total number of null and non-null cells (called
 `cells` in the machine-readable shell script style output), total null
@@ -75,10 +75,10 @@ cells (`null_cells`), and number of non-null cells (`n`). Alternatively,
 you can use the following to examine the computational region and the
 raster map:
 
-::: code
-    g.region -p
-    r.report map=inputmap units=c null="*" nsteps=1
-:::
+```
+g.region -p
+r.report map=inputmap units=c null="*" nsteps=1
+```
 
 To create random vector point locations within some, but not all,
 categories of a integer input raster map (aka CELL raster map), the user
@@ -94,12 +94,12 @@ map as input to *r.random*.
 Random vector elevation points sampled from elevation map in the North
 Carolina sample dataset region, result stored in 2D vector map:
 
-::: code
-    g.region raster=elevation -p
-    r.random elevation vector=elevrand n=100
-    v.db.select elevrand
-    v.univar elevrand col=value type=point
-:::
+```
+g.region raster=elevation -p
+r.random elevation vector=elevrand n=100
+v.db.select elevrand
+v.univar elevrand col=value type=point
+```
 
 ### Random 3D vector elevation points
 
@@ -107,19 +107,19 @@ Random vector elevation points sampled from elevation map in the North
 Carolina sample dataset region with collocated values sampled from
 landuse map, result stored in 3D vector map:
 
-::: code
-    g.region raster=elevation -p
-    r.random -z elevation cover=landclass96 vector=luserand3d n=100
+```
+g.region raster=elevation -p
+r.random -z elevation cover=landclass96 vector=luserand3d n=100
 
-    # data output (value: elevation, covervalue: landuse class):
-    v.db.select luserand3d
-    cat|value|covervalue
-    1|111.229591|5
-    2|71.093758|1
-    3|122.51075|5
-    4|146.17395|4
-    ...
-:::
+# data output (value: elevation, covervalue: landuse class):
+v.db.select luserand3d
+cat|value|covervalue
+1|111.229591|5
+2|71.093758|1
+3|122.51075|5
+4|146.17395|4
+...
+```
 
 ## SEE ALSO
 

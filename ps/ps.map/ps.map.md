@@ -49,9 +49,9 @@ in this encoding. If you normally work in a different encoding
 environment (such as `UTF-8`), you have to transform your file to the
 `ISO-8859-1` encoding, for example by using the `iconv` utility:
 
-::: code
-    iconv -f UTF-8 -t ISO_8859-1 utf_file > iso_file
-:::
+```
+iconv -f UTF-8 -t ISO_8859-1 utf_file > iso_file
+```
 
 ## MAPPING INSTRUCTIONS
 
@@ -123,12 +123,12 @@ different main instructions are:
 
 Controls the border which is drawn around the map area.
 
-::: code
-    USAGE:  border [y|n]
-        color color
-        width #
-        end
-:::
+```
+USAGE:  border [y|n]
+    color color
+    width #
+    end
+```
 
 The **color** may be either a standard GRASS color, a R:G:B triplet, or
 \"none\". The width is specified in points, unless followed by an \"i\"
@@ -141,13 +141,13 @@ main command will be treated as a single line instruction.
 
 This example would create a grey border 0.1\" wide.
 
-::: code
-    EXAMPLE:
-        border
-        color grey
-        width 0.1i
-        end
-:::
+```
+EXAMPLE:
+    border
+    color grey
+    width 0.1i
+    end
+```
 
 []{#colortable}
 
@@ -156,22 +156,22 @@ This example would create a grey border 0.1\" wide.
 Prints the color table legend for the raster map layer anywhere on the
 page.
 
-::: code
-    USAGE:  colortable [y|n]
-        where x y
-        raster raster map
-        range minimum maximum
-        width table width
-        height table height (FP legend only)
-        cols table columns
-        font font name
-        fontsize font size
-        color text color
-        nodata [Y|n]
-        tickbar [y|N]
-        discrete [y|n]
-        end
-:::
+```
+USAGE:  colortable [y|n]
+    where x y
+    raster raster map
+    range minimum maximum
+    width table width
+    height table height (FP legend only)
+    cols table columns
+    font font name
+    fontsize font size
+    color text color
+    nodata [Y|n]
+    tickbar [y|N]
+    discrete [y|n]
+    end
+```
 
 For a categorical (CELL) map the color table will create a legend
 displaying the colors for each of a raster map\'s category values along
@@ -228,13 +228,13 @@ range bands instead of a continuous gradient. You must use the
 This example would print a color table immediately below any other map
 legend information, starting at the left margin, with 4 columns:
 
-::: code
-    EXAMPLE:
-        colortable y
-            cols 4
-            width 4
-            end
-:::
+```
+EXAMPLE:
+    colortable y
+        cols 4
+        width 4
+        end
+```
 
 []{#comments}
 
@@ -242,14 +242,14 @@ legend information, starting at the left margin, with 4 columns:
 
 Prints comments anywhere on the page.
 
-::: code
-    USAGE:  comments commentfile
-        where x y
-        font font name
-        fontsize font size
-        color text color
-        end
-:::
+```
+USAGE:  comments commentfile
+    where x y
+    font font name
+    fontsize font size
+    color text color
+    end
+```
 
 The default location is immediately below the last item item printed,
 starting at the left margin. The default text color is black.
@@ -262,16 +262,16 @@ This example prints in blue whatever is in the file *veg.comments*
 starting at 1.5 inches from the left edge of the page and 7.25 inches
 from the top of the page, using a 15/72 inch Helvetica Bold font.
 
-::: code
-    EXAMPLE:
-        raster vegetation
-        comments veg.comments
-        where 1.5 7.25
-        font Helvetica Bold
-        fontsize 15
-        color blue
-        end
-:::
+```
+EXAMPLE:
+    raster vegetation
+    comments veg.comments
+    where 1.5 7.25
+    font Helvetica Bold
+    fontsize 15
+    color blue
+    end
+```
 
 Presumably, the file *veg.comments* contain comments pertaining to the
 raster map layer *vegetation*, such as \"This map was created by
@@ -283,9 +283,9 @@ classifying a LANDSAT TM image\".
 
 Specifies the number of copies to be printed.
 
-::: code
-    USAGE:  copies n
-:::
+```
+USAGE:  copies n
+```
 
 Each page will be printed n times.
 
@@ -297,15 +297,15 @@ This instruction is identical to the *copies* command line parameter.
 
 Places EPS (Encapsulated PostScript) pictures on the output map.
 
-::: code
-    USAGE:  eps east north
-        eps x% y%
-        epsfile EPS file
-        scale #
-        rotate #
-        masked [y|n]
-        end
-:::
+```
+USAGE:  eps east north
+    eps x% y%
+    epsfile EPS file
+    scale #
+    rotate #
+    masked [y|n]
+    end
+```
 
 The EPS picture location is entered in the main instruction line by
 giving either the map coordinates or by using percentages of the
@@ -321,15 +321,15 @@ This example would place a EPS file ./epsf/logo.eps at the point
 3 times bigger than in original file and would not be masked by the
 current mask.
 
-::: code
-    EXAMPLE:
-        eps 456000 7890000
-        epsfile ./epsf/logo.eps
-        scale 3
-        rotate 20
-        masked n
-        end
-:::
+```
+EXAMPLE:
+    eps 456000 7890000
+    epsfile ./epsf/logo.eps
+    scale 3
+    rotate 20
+    masked n
+    end
+```
 
 Of course, multiple EPS pictures may be drawn with multiple *eps*
 instructions.
@@ -340,15 +340,15 @@ instructions.
 
 Overlays a geographic grid onto the output map.
 
-::: code
-    USAGE:  geogrid spacing unit
-        color color
-        numbers # [color]
-        font font name
-        fontsize font size
-        width #
-        end
-:::
+```
+USAGE:  geogrid spacing unit
+    color color
+    numbers # [color]
+    font font name
+    fontsize font size
+    width #
+    end
+```
 
 The **spacing** and spacing unit of the geographic grid is given on the
 main instruction line. The **spacing** unit is given as one of **d** for
@@ -368,13 +368,13 @@ This example would overlay a blue geographic grid with a spacing of 30
 minutes onto the output map. Alternate grid lines would be numbered with
 yellow numbers.
 
-::: code
-    EXAMPLE:
-        geogrid 30 m
-        color blue
-        numbers 2 yellow
-        end
-:::
+```
+EXAMPLE:
+    geogrid 30 m
+    color blue
+    numbers 2 yellow
+    end
+```
 
 []{#greyrast}
 
@@ -382,9 +382,9 @@ yellow numbers.
 
 Selects a raster map layer for output in shades of grey.
 
-::: code
-    USAGE:  greyrast mapname
-:::
+```
+USAGE:  greyrast mapname
+```
 
 For each *ps.map* run, only one raster map layer can be requested (using
 either the *greyrast* or the *raster* instruction).
@@ -395,16 +395,16 @@ either the *greyrast* or the *raster* instruction).
 
 Overlays a coordinate grid onto the output map.
 
-::: code
-    USAGE:  grid spacing
-        color color
-        numbers # [color]
-        cross cross size
-        font font name
-        fontsize font size
-        width #
-        end
-:::
+```
+USAGE:  grid spacing
+    color color
+    numbers # [color]
+    cross cross size
+    font font name
+    fontsize font size
+    width #
+    end
+```
 
 The **spacing** of the grid is given (in the geographic coordinate
 system units) on the main instruction line. The subsection instructions
@@ -420,13 +420,13 @@ This example would overlay a green grid with a spacing of 10000 meters
 (for a metered database, like UTM) onto the output map. Alternate grid
 lines would be numbered with red numbers.
 
-::: code
-    EXAMPLE:
-        grid 10000
-        color green
-        numbers 2 red
-        end
-:::
+```
+EXAMPLE:
+    grid 10000
+    color green
+    numbers 2 red
+    end
+```
 
 []{#group}
 
@@ -434,9 +434,9 @@ lines would be numbered with red numbers.
 
 Selects an RGB imagery group for output.
 
-::: code
-    USAGE:  group groupname
-:::
+```
+USAGE:  group groupname
+```
 
 This is similar to *raster*, except that it uses an imagery group
 instead of a raster map layer. The group must contain three raster map
@@ -448,14 +448,14 @@ layers, comprising the red, green and blue bands of the image.
 
 Prints the map header above the map.
 
-::: code
-    USAGE:  header
-        file header file
-        font font name
-        fontsize font size
-        color text color
-        end
-:::
+```
+USAGE:  header
+    file header file
+    font font name
+    fontsize font size
+    color text color
+    end
+```
 
 If the *file* sub-instruction is absent the header will consist of the
 map\'s title and the project\'s description. The text will be centered
@@ -478,31 +478,31 @@ text in the text file specified, with some special formatting keys:
 
 Example header file:
 
-::: code
-    %_
-    LOCATION: %-27l  DATE: %d
-    MAPSET:   %-27m  USER: %u
+```
+%_
+LOCATION: %-27l  DATE: %d
+MAPSET:   %-27m  USER: %u
 
-    RASTER MAP: %c
-    MASK:     %x
-    %_
-    Produced by: US Army CERL, Champaign Illinois
-    Software:    GRASS
-    %_
-:::
+RASTER MAP: %c
+MASK:     %x
+%_
+Produced by: US Army CERL, Champaign Illinois
+Software:    GRASS
+%_
+```
 
 This example prints (in red) whatever is in the file *soils.hdr* above
 the map, using a 20/72 inch `Courier` font.
 
-::: code
-    EXAMPLE:
-        header
-        file soils.hdr
-        font Courier
-        fontsize 20
-        color red
-        end
-:::
+```
+EXAMPLE:
+    header
+    file soils.hdr
+    font Courier
+    fontsize 20
+    color red
+    end
+```
 
 []{#labels}
 
@@ -511,11 +511,11 @@ the map, using a 20/72 inch `Courier` font.
 Selects a labels file for output (see manual entry for
 *[v.label](v.label.html) ).*
 
-::: code
-    USAGE:  labels  labelfile
-        font font name
-        end
-:::
+```
+USAGE:  labels  labelfile
+    font font name
+    end
+```
 
 NOTE: ps.map can read new option \'ROTATE:\' from labels file, which
 specifies counter clockwise rotation in degrees.
@@ -524,11 +524,11 @@ This example would paint labels from the labels file called
 *town.names*. Presumably, these labels would indicate the names of towns
 on the map.
 
-::: code
-    EXAMPLE:
-        labels town.names
-        end
-:::
+```
+EXAMPLE:
+    labels town.names
+    end
+```
 
 []{#line}
 
@@ -536,14 +536,14 @@ on the map.
 
 Draws lines on the output map.
 
-::: code
-    USAGE:  line east north east north
-        line x% y% x% y%
-        color color
-        width #
-        masked [y|n]
-        end
-:::
+```
+USAGE:  line east north east north
+    line x% y% x% y%
+    color color
+    width #
+    masked [y|n]
+    end
+```
 
 The beginning and ending points of the line are entered on the main
 instruction. These points can be defined either by map coordinates or by
@@ -559,14 +559,14 @@ This example would draw a yellow line from the point x=10% y=80% to the
 point x=30% y=70%. This line would be 2 points wide (2/72\") and would
 appear even if there is a mask.
 
-::: code
-    EXAMPLE:
-        line 10% 80% 30% 70%
-        color yellow
-        width 2
-        masked n
-        end
-:::
+```
+EXAMPLE:
+    line 10% 80% 30% 70%
+    color yellow
+    width 2
+    masked n
+    end
+```
 
 Of course, multiple lines may be drawn with multiple *line*
 instructions.
@@ -578,16 +578,16 @@ instructions.
 Prints the portion of the map legend containing the scale, grid and
 region information, on or below the map.
 
-::: code
-    USAGE:  mapinfo
-        where x y
-        font font name
-        fontsize font size
-        color text color
-        background box color|none
-        border color|none
-        end
-:::
+```
+USAGE:  mapinfo
+    where x y
+    font font name
+    fontsize font size
+    color text color
+    background box color|none
+    border color|none
+    end
+```
 
 The default location is immediately below the map, starting at the left
 edge of the map. The default text color is black. The default background
@@ -600,15 +600,15 @@ This example prints (in brown) the scale, grid and region information
 immediately below the map and starting 1.5 inches from the left edge of
 the page, using a 12/72 inch `Courier` font.
 
-::: code
-    EXAMPLE:
-        mapinfo
-        where 1.5 0
-        font Courier
-        fontsize 12
-        color brown
-        end
-:::
+```
+EXAMPLE:
+    mapinfo
+    where 1.5 0
+    font Courier
+    fontsize 12
+    color brown
+    end
+```
 
 []{#maploc}
 
@@ -616,9 +616,9 @@ the page, using a 12/72 inch `Courier` font.
 
 Positions the map on the page.
 
-::: code
-    USAGE:  maploc  x y [width height]
-:::
+```
+USAGE:  maploc  x y [width height]
+```
 
 The upper left corner of the map will be positioned *x* inches from the
 left edge of the page and *y* inches from the top of the page. If
@@ -628,10 +628,10 @@ if necessary, to fit.
 This example positions the upper left corner of the map 2.0 inches from
 the left edge and 3.5 inches from the top edge of the map.
 
-::: code
-    EXAMPLE:
-        maploc 2.0 3.5
-:::
+```
+EXAMPLE:
+    maploc 2.0 3.5
+```
 
 []{#maskcolor}
 
@@ -639,9 +639,9 @@ the left edge and 3.5 inches from the top edge of the map.
 
 Color to be used for mask.
 
-::: code
-    USAGE:  maskcolor  color
-:::
+```
+USAGE:  maskcolor  color
+```
 
 []{#outline}
 
@@ -649,12 +649,12 @@ Color to be used for mask.
 
 Outlines the areas of a raster map layer with a specified color.
 
-::: code
-    USAGE:  outline
-        color  color
-        width  width of line in points
-        end
-:::
+```
+USAGE:  outline
+    color  color
+    width  width of line in points
+    end
+```
 
 Distinct areas of the raster map will be separated from each other
 visually by drawing a border (or outline) in the specified **color**
@@ -667,14 +667,14 @@ other than the one currently being painted may be placed on the map.)
 This example would outline the category areas of the *soils* raster map
 layer in grey.
 
-::: code
-    EXAMPLE:
-        raster soils
-        outline
-        color grey
-        width 2
-        end
-:::
+```
+EXAMPLE:
+    raster soils
+    outline
+    color grey
+    width 2
+    end
+```
 
 []{#paper}
 
@@ -682,16 +682,16 @@ layer in grey.
 
 Specifies paper size and margins.
 
-::: code
-    USAGE:  paper paper name
-        height #
-        width #
-        left #
-        right #
-        bottom #
-        top #
-        end
-:::
+```
+USAGE:  paper paper name
+    height #
+    width #
+    left #
+    right #
+    bottom #
+    top #
+    end
+```
 
 **paper** may select predefined paper name
 (a4,a3,a2,a1,a0,us-legal,us-letter,us-tabloid). Default paper size is
@@ -700,23 +700,23 @@ a4. The measures are defined in *inches*. **left**, **right**,
 the **-r** command line flag, measures are applied to the *rotated*
 page.
 
-::: code
-    EXAMPLE:
-        paper a3
-        end
-:::
+```
+EXAMPLE:
+    paper a3
+    end
+```
 
-::: code
-    EXAMPLE:
-        paper
-        width 10
-        height 10
-        left 2
-        right 2
-        bottom 2
-        top 2
-        end
-:::
+```
+EXAMPLE:
+    paper
+    width 10
+    height 10
+    left 2
+    right 2
+    bottom 2
+    top 2
+    end
+```
 
 []{#point}
 
@@ -724,18 +724,18 @@ page.
 
 Places additional points or icons on the output map.
 
-::: code
-    USAGE:  point east north
-        point x% y%
-        color color
-        fcolor color
-        symbol symbol group/name
-        size #
-        width #
-        rotate #
-        masked [y|n]
-        end
-:::
+```
+USAGE:  point east north
+    point x% y%
+    color color
+    fcolor color
+    symbol symbol group/name
+    size #
+    width #
+    rotate #
+    masked [y|n]
+    end
+```
 
 The point location is entered in the main instruction line by giving
 either the map coordinates or by using percentages of the geographic
@@ -752,16 +752,16 @@ This example would place a purple diamond (from icon file *diamond*) at
 the point (E456000 N7890000). This diamond would be the the size of a 15
 points and would not be masked by the current mask.
 
-::: code
-    EXAMPLE:
-        point 456000 7890000
-        fcolor purple
-        color black
-        symbol basic/diamond
-        size 15
-        masked n
-        end
-:::
+```
+EXAMPLE:
+    point 456000 7890000
+    fcolor purple
+    color black
+    symbol basic/diamond
+    size 15
+    masked n
+    end
+```
 
 Of course, multiple points may be drawn with multiple *point*
 instructions.
@@ -777,16 +777,16 @@ the correct directory or specify the full path on the **psfile**
 instruction. (Note to /bin/csh users: \~ won\'t work with this
 instruction).
 
-::: code
-    USAGE:  psfile filename
-:::
+```
+USAGE:  psfile filename
+```
 
 This example copies the file \"logo.ps\" into the output file.
 
-::: code
-    EXAMPLE:
-        psfile logo.ps
-:::
+```
+EXAMPLE:
+    psfile logo.ps
+```
 
 []{#raster}
 
@@ -794,9 +794,9 @@ This example copies the file \"logo.ps\" into the output file.
 
 Selects a raster map layer for output.
 
-::: code
-    USAGE:  raster mapname
-:::
+```
+USAGE:  raster mapname
+```
 
 For each *ps.map* run, only one raster map layer (or set of layers or
 imagery group; see below) can be requested. If no raster map layer is
@@ -813,10 +813,10 @@ title, which in turn may be set with the *r.support* module.
 
 This example would paint a map of the raster map layer *soils*.
 
-::: code
-    EXAMPLE:
-        raster soils
-:::
+```
+EXAMPLE:
+    raster soils
+```
 
 []{#read}
 
@@ -824,9 +824,9 @@ This example would paint a map of the raster map layer *soils*.
 
 Provides *ps.map* with a previously prepared input stream.
 
-::: code
-    USAGE:  read previously prepared UNIX file
-:::
+```
+USAGE:  read previously prepared UNIX file
+```
 
 Mapping instructions can be placed into a file and read into *ps.map.*
 
@@ -839,10 +839,10 @@ This example reads the UNIX file *pmap.roads* into *ps.map*. This file
 may contain all the *ps.map* instructions for placing the vector map
 layer *roads* onto the output map.
 
-::: code
-    EXAMPLE:
-        read pmap.roads
-:::
+```
+EXAMPLE:
+    read pmap.roads
+```
 
 The user may have created this file because this vector map layer is
 particularly useful for many *ps.map* outputs. By using the **read**
@@ -856,15 +856,15 @@ correct instructions.
 
 Draws rectangle on the output map.
 
-::: code
-    USAGE:  rectangle east north east north
-        rectangle x% y% x% y%
-        color color
-        fcolor fill color
-        width #
-        masked [y|n]
-        end
-:::
+```
+USAGE:  rectangle east north east north
+    rectangle x% y% x% y%
+    color color
+    fcolor fill color
+    width #
+    masked [y|n]
+    end
+```
 
 The two corners of the rectangle are entered on the main instruction.
 These points can be defined either by map coordinates or by using
@@ -883,15 +883,15 @@ This example would draw a yellow rectangle filled by green from the
 point x=10% y=80% to the point x=30% y=70%. The border line would be
 1/16\" wide and would appear even if there is a mask.
 
-::: code
-    EXAMPLE:
-        rectangle 10% 80% 30% 70%
-        color yellow
-        fcolor green
-        width 0.0625i
-        masked n
-        end
-:::
+```
+EXAMPLE:
+    rectangle 10% 80% 30% 70%
+    color yellow
+    fcolor green
+    width 0.0625i
+    masked n
+    end
+```
 
 []{#region}
 
@@ -899,12 +899,12 @@ point x=10% y=80% to the point x=30% y=70%. The border line would be
 
 Places the outline of a smaller geographic region on the output.
 
-::: code
-    USAGE:  region regionfile
-        color color
-        width #
-        end
-:::
+```
+USAGE:  region regionfile
+    color color
+    width #
+    end
+```
 
 Geographic region settings are created and saved using *the
 [g.region](g.region.html)* module. The *ps.map* *region* option can be
@@ -920,13 +920,13 @@ geographic region called *fire.zones* onto the output map. This
 geographic region would have been created and saved using
 *[g.region](g.region.html)*.
 
-::: code
-    EXAMPLE:
-        region fire.zones
-        color white
-        width 2
-        end
-:::
+```
+EXAMPLE:
+    region fire.zones
+    color white
+    width 2
+    end
+```
 
 []{#rgb}
 
@@ -934,9 +934,9 @@ geographic region would have been created and saved using
 
 Selects three raster map layers for output as an RGB color image.
 
-::: code
-    USAGE:  rgb red green blue
-:::
+```
+USAGE:  rgb red green blue
+```
 
 This is similar to *raster*, except that it uses three raster map layers
 instead of a single layer. The three layers are composed to form a color
@@ -953,9 +953,9 @@ or if each layer\'s color table uses the hue appropriate to the layer.
 
 Selects a scale for the output map.
 
-::: code
-    USAGE:  scale scale
-:::
+```
+USAGE:  scale scale
+```
 
 The scale can be selected either as:
 
@@ -970,10 +970,10 @@ The scale can be selected either as:
 
 This example would set the scale of the map to 1 unit = 25000 units.
 
-::: code
-    EXAMPLE:
-        scale 1:25000
-:::
+```
+EXAMPLE:
+    scale 1:25000
+```
 
 []{#scalebar}
 
@@ -981,18 +981,18 @@ This example would set the scale of the map to 1 unit = 25000 units.
 
 Draws a scalebar on the map.
 
-::: code
-    USAGE:  scalebar [f|s]
-        where x y
-        length overall distance in map units
-        units [auto|meters|kilometers|feet|miles|nautmiles]
-        height scale height in inches
-        segment number of segments
-        numbers #
-        fontsize font size
-        background [Y|n]
-        end
-:::
+```
+USAGE:  scalebar [f|s]
+    where x y
+    length overall distance in map units
+    units [auto|meters|kilometers|feet|miles|nautmiles]
+    height scale height in inches
+    segment number of segments
+    numbers #
+    fontsize font size
+    background [Y|n]
+    end
+```
 
 Draw one of two types of scale bar. Fancy (f) draws alternating black
 and white scale boxes. Simple (s) draws a plain line scale. The default
@@ -1016,16 +1016,16 @@ database, like UTM) long, with tics every 200 meters, labeled every
 second tic. The scalebar is drawn 5 inches from the top and 4 inches
 from the left and is 0.25 inches high.
 
-::: code
-    EXAMPLE:
-        scalebar s
-        where 4 5
-        length 1000
-        height 0.25
-        segment 5
-        numbers 2
-        end
-:::
+```
+EXAMPLE:
+    scalebar s
+    where 4 5
+    length 1000
+    height 0.25
+    segment 5
+    numbers 2
+    end
+```
 
 []{#setcolor}
 
@@ -1034,20 +1034,20 @@ from the left and is 0.25 inches high.
 Overrides the color assigned to one or more categories of the raster map
 layer.
 
-::: code
-    USAGE:  setcolor cat(s) color
-:::
+```
+USAGE:  setcolor cat(s) color
+```
 
 This example would set the color for categories 2,5 and 8 of the raster
 map layer *watersheds* to white and category 10 to green. (**NOTE**: no
 spaces are inserted between the category values.)
 
-::: code
-    EXAMPLE:
-        raster watersheds
-        setcolor 2,5,8 white
-        setcolor 10 green
-:::
+```
+EXAMPLE:
+    raster watersheds
+    setcolor 2,5,8 white
+    setcolor 10 green
+```
 
 Of course, *setcolor* can be requested more than once to override the
 default color for additional categories. More than one category can be
@@ -1062,25 +1062,25 @@ out-of-range) color may also be reassigned.
 
 Places text on the map.
 
-::: code
-    USAGE:  text  east north text
-        text  x% y% text
-        font fontname
-        color color|none
-        width #
-        hcolor color|none
-        hwidth #
-        background color|none
-        border color|none
-        fontsize font size
-        size #
-        ref reference point
-        rotate degrees CCW
-        xoffset #
-        yoffset #
-        opaque [y|n]
-        end
-:::
+```
+USAGE:  text  east north text
+    text  x% y% text
+    font fontname
+    color color|none
+    width #
+    hcolor color|none
+    hwidth #
+    background color|none
+    border color|none
+    fontsize font size
+    size #
+    ref reference point
+    rotate degrees CCW
+    xoffset #
+    yoffset #
+    opaque [y|n]
+    end
+```
 
 The user specifies where the text will be placed by providing map
 coordinates or percentages of the geographic region. The text follows
@@ -1141,21 +1141,21 @@ background enclosed in a red box, and be 500 meters in size. The lower
 right corner of the text would be centered over the coordinates
 provided. All vectors on the map would stop at the border of this text.
 
-::: code
-    EXAMPLE:
-        text 650000 7365000 SPEARFISH LAND COVER
-        font romand
-        color red
-        width 2
-        hcolor black
-        hwidth 1
-        background white
-        border red
-        size 500
-        ref lower left
-        opaque y
-        end
-:::
+```
+EXAMPLE:
+    text 650000 7365000 SPEARFISH LAND COVER
+    font romand
+    color red
+    width 2
+    hcolor black
+    hwidth 1
+    background white
+    border red
+    size 500
+    ref lower left
+    opaque y
+    end
+```
 
 []{#vareas}
 
@@ -1163,23 +1163,23 @@ provided. All vectors on the map would stop at the border of this text.
 
 Selects a vector map layer for output and plots areas.
 
-::: code
-    USAGE:  vareas vectormap
-        layer # (layer number used with cats/where option)
-        cats list of categories (e.g. 1,3,5-7)
-        where SQL where statement
-        masked [y|n]
-        color color
-        fcolor color
-        rgbcolumn column
-        width #
-        label label to use in legend
-        lpos position in legend
-        pat pattern file
-        pwidth #
-        scale #
-        end
-:::
+```
+USAGE:  vareas vectormap
+    layer # (layer number used with cats/where option)
+    cats list of categories (e.g. 1,3,5-7)
+    where SQL where statement
+    masked [y|n]
+    color color
+    fcolor color
+    rgbcolumn column
+    width #
+    label label to use in legend
+    lpos position in legend
+    pat pattern file
+    pwidth #
+    scale #
+    end
+```
 
 The user can specify:
 
@@ -1222,29 +1222,29 @@ standard hatching patterns are provided in
 You can also create your own custom pattern files in a text editor.
 Example of pattern file:
 
-::: code
-    %!PS-Adobe-2.0 EPSF-1.2
-    %%BoundingBox: 0 0 10 10
-    newpath
-    5 0 moveto
-    5 10 lineto
-    stroke
-:::
+```
+%!PS-Adobe-2.0 EPSF-1.2
+%%BoundingBox: 0 0 10 10
+newpath
+5 0 moveto
+5 10 lineto
+stroke
+```
 
 **scale** - pattern scale
 
 **pwidth** - pattern line width, width is used by pattern until the
 width is overwritten in pattern file.
 
-::: code
-    EXAMPLE:
-        vareas forest
-        color blue
-        width 1
-        masked y
-        cats 2,5-7
-        end
-:::
+```
+EXAMPLE:
+    vareas forest
+    color blue
+    width 1
+    masked y
+    cats 2,5-7
+    end
+```
 
 []{#vlines}
 
@@ -1252,28 +1252,28 @@ width is overwritten in pattern file.
 
 Selects a vector map layer for output and plots lines.
 
-::: code
-    USAGE:  vlines vectormap
-        type line and/or boundary
-        layer # (layer number used with cats/where option)
-        cats list of categories (e.g. 1,3,5-7)
-        where SQL where statement like: vlastnik = 'Cimrman'
-        masked [y|n]
-        color color
-        rgbcolumn column
-        width #
-        cwidth #
-        hcolor color
-        hwidth #
-        offset #
-        coffset #
-        ref left|right
-        style 00001111
-        linecap style
-        label label
-        lpos #
-        end
-:::
+```
+USAGE:  vlines vectormap
+    type line and/or boundary
+    layer # (layer number used with cats/where option)
+    cats list of categories (e.g. 1,3,5-7)
+    where SQL where statement like: vlastnik = 'Cimrman'
+    masked [y|n]
+    color color
+    rgbcolumn column
+    width #
+    cwidth #
+    hcolor color
+    hwidth #
+    offset #
+    coffset #
+    ref left|right
+    style 00001111
+    linecap style
+    label label
+    lpos #
+    end
+```
 
 The user can specify:
 
@@ -1334,18 +1334,18 @@ map(mapset);
 vector is omitted in legend. If more vectors used the same lpos then
 their symbols in legend are merged and label for first vector is used.
 
-::: code
-    EXAMPLE:
-        vlines streams
-        color blue
-        width 2
-        hcolor white
-        hwidth 1
-        masked y
-        cats 2
-        label Streams - category 2
-        end
-:::
+```
+EXAMPLE:
+    vlines streams
+    color blue
+    width 2
+    hcolor white
+    hwidth 1
+    masked y
+    cats 2
+    label Streams - category 2
+    end
+```
 
 []{#vpoints}
 
@@ -1353,28 +1353,28 @@ their symbols in legend are merged and label for first vector is used.
 
 Selects vector point data to be placed on the output map
 
-::: code
-    USAGE:  vpoints vectormap
-        type point and/or centroid
-        layer # (layer number used with cats/where/sizecol options)
-        cats list of categories (e.g. 1,3,5-7)
-        where SQL where statement like: vlastnik = 'Cimrman'
-        masked [y|n]
-        color color
-        fcolor color
-        rgbcolumn column
-        width #
-        eps epsfile
-        symbol symbol group/name
-        size #
-        sizecolumn attribute column used for symbol sizing
-        scale scaling factor for sizecolumn values
-        rotate #
-        rotatecolumn column
-        label legend label
-        lpos position in legend
-        end
-:::
+```
+USAGE:  vpoints vectormap
+    type point and/or centroid
+    layer # (layer number used with cats/where/sizecol options)
+    cats list of categories (e.g. 1,3,5-7)
+    where SQL where statement like: vlastnik = 'Cimrman'
+    masked [y|n]
+    color color
+    fcolor color
+    rgbcolumn column
+    width #
+    eps epsfile
+    symbol symbol group/name
+    size #
+    sizecolumn attribute column used for symbol sizing
+    scale scaling factor for sizecolumn values
+    rotate #
+    rotatecolumn column
+    label legend label
+    lpos position in legend
+    end
+```
 
 The user may specify the the **color** of the sites (see section on
 [NAMED COLORS](#NAMED_COLORS)); either the GRASS **symbol** or the
@@ -1390,14 +1390,14 @@ may be scaled by using the **scale** factor setting (default scaling is
 1.0). In a similar manner symbol color can be read from **rgbcolumn**
 and the rotation angle read from **rotatecolumn**.
 
-::: code
-    EXAMPLE:
-        vpoints windmills
-        color blue
-        symbol mills/windmill
-        size 10
-        end
-:::
+```
+EXAMPLE:
+    vpoints windmills
+    color blue
+    symbol mills/windmill
+    size 10
+    end
+```
 
 []{#vlegend}
 
@@ -1406,17 +1406,17 @@ and the rotation angle read from **rotatecolumn**.
 Prints the portion of the map legend containing the vector information,
 on or below the map.
 
-::: code
-    USAGE:  vlegend
-        where x y
-        font font name
-        fontsize font size
-        width width of color symbol
-        cols number of columns to print
-        span column separation
-        border color|none
-        end
-:::
+```
+USAGE:  vlegend
+    where x y
+    font font name
+    fontsize font size
+    width width of color symbol
+    cols number of columns to print
+    span column separation
+    border color|none
+    end
+```
 
 The default location is immediately below the legend containing the
 scale, grid and region information, starting at the left edge of the
@@ -1450,14 +1450,14 @@ This example prints the vector legend immediately below the map and
 starting 4.5 inches from the left edge of the page, using a 12/72 inch
 Helvetica font.
 
-::: code
-    EXAMPLE:
-        vlegend
-        where 4.5 0
-        font Courier
-        fontsize 12
-        end
-:::
+```
+EXAMPLE:
+    vlegend
+    where 4.5 0
+    font Courier
+    fontsize 12
+    end
+```
 
 []{#end}
 
@@ -1465,9 +1465,9 @@ Helvetica font.
 
 Terminates input and begin painting the map.
 
-::: code
-    USAGE:  end
-:::
+```
+USAGE:  end
+```
 
 \
 
@@ -1479,24 +1479,24 @@ The following are examples of *ps.map* script files.
 
 The file has been named *simple_map.txt*:
 
-::: code
-    # this ps.map example draws a map of Wake county, NC
-    raster elevation
-    vlines roadsmajor
-      color 30:144:255
-      width 2
-      end
-    text 50% 105% Wake County Terrain and Roads
-       size 550
-       end
-    end
-:::
+```
+# this ps.map example draws a map of Wake county, NC
+raster elevation
+vlines roadsmajor
+  color 30:144:255
+  width 2
+  end
+text 50% 105% Wake County Terrain and Roads
+   size 550
+   end
+end
+```
 
 Generate map as Postsript file:
 
-::: code
-    ps.map input=simple_map.txt output=simple_map.ps
-:::
+```
+ps.map input=simple_map.txt output=simple_map.ps
+```
 
 ![](ps_map_basic.png)
 
@@ -1507,75 +1507,75 @@ example*
 
 The following is content of a file named *elevation_map.txt*:
 
-::: code
-    # this ps.map example draws a map of Wake county, NC
-    raster elevation
-    colortable y
-      where 1 6.0
-      cols 4
-      width 4
-      font Helvetica
-      end
-    setcolor 6,8,9 white
-    setcolor 10 green
-    vlines streams
-      width 0.1
-      color blue
-      masked n
-      label streams
-      end
-    vlines roadsmajor
-      width 1.5
-      style 1111
-      color grey
-      masked n
-      label major roads
-      end
-    vlegend
-      where 4.5 0
-      font Courier
-      fontsize 8
-      end
-    text 30% 100% Wake County Terrain
-      color black
-      width 1
-      background white
-      size 550
-      ref lower left
-      end
-    text 92% -25% meters
-      color black
-      width 1
-      background white
-      size 550
-      ref lower left
-      end
-    scale 1:125000
-    scalebar f
-      where 1.5 5.5
-      length 5000
-      height 0.05
-      segment 5
-      numbers 5
-      end
-    geogrid 60 s
-      color gray
-      numbers 2 black
-      end
-    paper a4
-       end
-    end
-:::
+```
+# this ps.map example draws a map of Wake county, NC
+raster elevation
+colortable y
+  where 1 6.0
+  cols 4
+  width 4
+  font Helvetica
+  end
+setcolor 6,8,9 white
+setcolor 10 green
+vlines streams
+  width 0.1
+  color blue
+  masked n
+  label streams
+  end
+vlines roadsmajor
+  width 1.5
+  style 1111
+  color grey
+  masked n
+  label major roads
+  end
+vlegend
+  where 4.5 0
+  font Courier
+  fontsize 8
+  end
+text 30% 100% Wake County Terrain
+  color black
+  width 1
+  background white
+  size 550
+  ref lower left
+  end
+text 92% -25% meters
+  color black
+  width 1
+  background white
+  size 550
+  ref lower left
+  end
+scale 1:125000
+scalebar f
+  where 1.5 5.5
+  length 5000
+  height 0.05
+  segment 5
+  numbers 5
+  end
+geogrid 60 s
+  color gray
+  numbers 2 black
+  end
+paper a4
+   end
+end
+```
 
 This script file can be entered at the command line:
 
-::: code
-    # First set the region
-    g.region raster=elevation
+```
+# First set the region
+g.region raster=elevation
 
-    # Generate map as Postsript file
-    ps.map input=elevation_map.txt output=elevation.ps
-:::
+# Generate map as Postsript file
+ps.map input=elevation_map.txt output=elevation.ps
+```
 
 ![](ps_map.png)
 

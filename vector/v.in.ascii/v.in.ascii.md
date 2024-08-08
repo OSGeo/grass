@@ -90,13 +90,13 @@ Although *v.in.ascii* doesn\'t have an option to specify which columns
 should be imported, you can use a shell filter to achieve the same
 effect, e.g.:
 
-::: code
-    # Print out the column number for each field, supposing the file has a header
-    head -1 input_file | tr '<the_field_separator_character>' '\n' | cat -n
-    # From the listing, select the columns you want and feed them to v.in.ascii
-    # use input=- to read from stdin
-    cut -d<the_field_separator_character> -f<comma-separated_list_of_columns> input_file | v.in.ascii in=- <your_options>
-:::
+```
+# Print out the column number for each field, supposing the file has a header
+head -1 input_file | tr '<the_field_separator_character>' '\n' | cat -n
+# From the listing, select the columns you want and feed them to v.in.ascii
+# use input=- to read from stdin
+cut -d<the_field_separator_character> -f<comma-separated_list_of_columns> input_file | v.in.ascii in=- <your_options>
+```
 
 ## EXAMPLES
 
@@ -107,36 +107,36 @@ areas will be assigned categories 20 and 21. For details on the
 structure of standard format data files see the second reference at the
 bottom of this page.
 
-::: code
-    echo "ORGANIZATION: GRASS Development Team
-    DIGIT DATE:   1/9/2005
-    DIGIT NAME:   -
-    MAP NAME:     test
-    MAP DATE:     2005
-    MAP SCALE:    10000
-    OTHER INFO:   Test polygons
-    ZONE:  0
-    MAP THRESH:   0.500000
-    VERTI:
-    B  6
-     5958812.48844435 3400828.84221011
-     5958957.29887089 3400877.11235229
-     5959021.65906046 3400930.7458436
-     5959048.47580612 3400973.65263665
-     5959069.92920264 3401032.64947709
-     5958812.48844435 3400828.84221011
-    C  1 1
-     5958952.42189184 3400918.23126419
-     1 20
-    B  4
-     5959010.9323622 3401338.36037757
-     5959096.7459483 3401370.54047235
-     5959091.38259917 3401450.99070932
-     5959010.9323622 3401338.36037757
-    C  1 1
-     5959063.08352122 3401386.98533277
-     1 21" | v.in.ascii in=- format=standard output=test_polygons
-:::
+```
+echo "ORGANIZATION: GRASS Development Team
+DIGIT DATE:   1/9/2005
+DIGIT NAME:   -
+MAP NAME:     test
+MAP DATE:     2005
+MAP SCALE:    10000
+OTHER INFO:   Test polygons
+ZONE:  0
+MAP THRESH:   0.500000
+VERTI:
+B  6
+ 5958812.48844435 3400828.84221011
+ 5958957.29887089 3400877.11235229
+ 5959021.65906046 3400930.7458436
+ 5959048.47580612 3400973.65263665
+ 5959069.92920264 3401032.64947709
+ 5958812.48844435 3400828.84221011
+C  1 1
+ 5958952.42189184 3400918.23126419
+ 1 20
+B  4
+ 5959010.9323622 3401338.36037757
+ 5959096.7459483 3401370.54047235
+ 5959091.38259917 3401450.99070932
+ 5959010.9323622 3401338.36037757
+C  1 1
+ 5959063.08352122 3401386.98533277
+ 1 21" | v.in.ascii in=- format=standard output=test_polygons
+```
 
 ### Example 1b) - standard format mode
 
@@ -147,15 +147,15 @@ header should be expected from the input file. The first line in this
 example specifies that the line (L) has 5 vertices and 1 category. The
 last line specifies the layer (1) and the category value (321).
 
-::: code
-    echo "L 5 1
-    591336 4927369 1224
-    594317 4925341 1292
-    599356 4925162 1469
-    602396 4926653 1235
-    607524 4925431 1216
-    1 321 " | v.in.ascii -zn in=- out=line3d format=standard
-:::
+```
+echo "L 5 1
+591336 4927369 1224
+594317 4925341 1292
+599356 4925162 1469
+602396 4926653 1235
+607524 4925431 1216
+1 321 " | v.in.ascii -zn in=- out=line3d format=standard
+```
 
 This can be used to create a vector line of a GPS track: the GPS points
 have to be stored into a file with a preceding \'L\' and the number of
@@ -165,19 +165,19 @@ points (per line).
 
 Generate a 2D points vector map \'coords.txt\' as ASCII file:
 
-::: code
-    1664619|5103481
-    1664473|5095782
-    1664273|5101919
-    1663427|5105234
-    1663709|5102614
-:::
+```
+1664619|5103481
+1664473|5095782
+1664273|5101919
+1663427|5105234
+1663709|5102614
+```
 
 Import into GRASS:
 
-::: code
-    v.in.ascii input=coords.txt output=mymap
-:::
+```
+v.in.ascii input=coords.txt output=mymap
+```
 
 As the **cat** option is set to 0 by default, an extra column \'cat\'
 containing the category numbers will be auto-generated.
@@ -186,20 +186,20 @@ containing the category numbers will be auto-generated.
 
 Generate a 2D points vector map \'points.dat\' as ASCII file:
 
-::: code
-    1|1664619|5103481|studna
-    2|1664473|5095782|kadibudka
-    3|1664273|5101919|hruska
-    4|1663427|5105234|mysi dira
-    5|1663709|5102614|mineralni pramen
-:::
+```
+1|1664619|5103481|studna
+2|1664473|5095782|kadibudka
+3|1664273|5101919|hruska
+4|1663427|5105234|mysi dira
+5|1663709|5102614|mineralni pramen
+```
 
 Import into GRASS:
 
-::: code
-    cat points.dat | v.in.ascii in=- out=mypoints x=2 y=3 cat=1 \
-        columns='cat int, x double precision, y double precision, label varchar(20)'
-:::
+```
+cat points.dat | v.in.ascii in=- out=mypoints x=2 y=3 cat=1 \
+    columns='cat int, x double precision, y double precision, label varchar(20)'
+```
 
 The module is reading from standard input, using the default \'\|\'
 (pipe) delimiter.
@@ -208,35 +208,35 @@ The module is reading from standard input, using the default \'\|\'
 
 Import of a 3D points CSV table (\'points3d.csv\') with attributes:
 
-::: code
-    "num","X","Y","Z","T"
-    1,2487491.643,5112118.33,120.5,18.62
-    2,2481985.459,5109162.78,123.9,18.46
-    3,2478284.289,5105331.04,98.3,19.61
-:::
+```
+"num","X","Y","Z","T"
+1,2487491.643,5112118.33,120.5,18.62
+2,2481985.459,5109162.78,123.9,18.46
+3,2478284.289,5105331.04,98.3,19.61
+```
 
 Import into GRASS:
 
-::: code
-    # import: skipping the header line, categories generated automatically,
-    # column names defined with type:
-    v.in.ascii -z in=points3d.csv out=mypoints3D separator=comma \
-      columns="num integer, x double precision, y double precision, z double precision, temp double precision" \
-      x=2 y=3 z=4 skip=1
-    # verify column types
-    v.info -c mypoints3D
-    # verify table content
-    v.db.select mypoints3D
-:::
+```
+# import: skipping the header line, categories generated automatically,
+# column names defined with type:
+v.in.ascii -z in=points3d.csv out=mypoints3D separator=comma \
+  columns="num integer, x double precision, y double precision, z double precision, temp double precision" \
+  x=2 y=3 z=4 skip=1
+# verify column types
+v.info -c mypoints3D
+# verify table content
+v.db.select mypoints3D
+```
 
 ### Example 5 - point format mode
 
 Generating a 3D points vector map from DBMS (idcol must be an integer
 column):\
 
-::: code
-    echo "select east,north,elev,idcol from mytable" | db.select -c | v.in.ascii in=- -z out=mymap
-:::
+```
+echo "select east,north,elev,idcol from mytable" | db.select -c | v.in.ascii in=- -z out=mymap
+```
 
 With **in=-**, the module is reading from standard input, using the
 default \'\|\' (pipe) delimiter.\
@@ -248,40 +248,40 @@ flag).
 Generate a 3D points vector map \'points3d.dat\' with attributes as
 ASCII file:
 
-::: code
-    593493.1|4914730.2|123.1|studna|well
-    591950.2|4923000.5|222.3|kadibudka|outhouse
-    589860.5|4922000.0|232.3|hruska|pear
-    590400.5|4922820.8|143.2|mysi dira|mouse hole
-    593549.3|4925500.7|442.6|mineralni pramen|mineral spring
-    600375.7|4925235.6|342.2|kozi stezka|goat path
-:::
+```
+593493.1|4914730.2|123.1|studna|well
+591950.2|4923000.5|222.3|kadibudka|outhouse
+589860.5|4922000.0|232.3|hruska|pear
+590400.5|4922820.8|143.2|mysi dira|mouse hole
+593549.3|4925500.7|442.6|mineralni pramen|mineral spring
+600375.7|4925235.6|342.2|kozi stezka|goat path
+```
 
 Import into GRASS:
 
-::: code
-    #As the 'cat' option is set to 0 by default, an extra column 'cat'
-    #containing the IDs will be auto-generated (no need to define that):
-    cat points3d.dat | v.in.ascii in=- -z z=3 cat=0 out=mypoints3D \
-        columns='x double precision, y double precision, z double precision, \
-        label_cz varchar(20), label_en varchar(20)'
-    v.info -c mypoints3D
-    v.info mypoints3D
-:::
+```
+#As the 'cat' option is set to 0 by default, an extra column 'cat'
+#containing the IDs will be auto-generated (no need to define that):
+cat points3d.dat | v.in.ascii in=- -z z=3 cat=0 out=mypoints3D \
+    columns='x double precision, y double precision, z double precision, \
+    label_cz varchar(20), label_en varchar(20)'
+v.info -c mypoints3D
+v.info mypoints3D
+```
 
 ### Example 7 - point format mode
 
 Generate points file by clicking onto the map:
 
-::: code
-    #For LatLong projects:
-    d.where -d -l | awk '{printf "%f|%f|point\n", $1, $2}' | v.in.ascii in=- out=points \
-        columns='x double precision, y double precision, label varchar(20)'
+```
+#For LatLong projects:
+d.where -d -l | awk '{printf "%f|%f|point\n", $1, $2}' | v.in.ascii in=- out=points \
+    columns='x double precision, y double precision, label varchar(20)'
 
-    #For other projections:
-    d.where | awk '{printf "%f|%f|point\n", $1, $2}' | v.in.ascii in=- out=points \
-        columns='x double precision, y double precision, label varchar(20)'
-:::
+#For other projections:
+d.where | awk '{printf "%f|%f|point\n", $1, $2}' | v.in.ascii in=- out=points \
+    columns='x double precision, y double precision, label varchar(20)'
+```
 
 The \'point\' string (or some similar entry) is required to generate a
 database table. When simply piping the coordinates (and optionally
@@ -292,11 +292,11 @@ map geometry will be generated.
 
 Convert ground control points into vector points:
 
-::: code
-    cat $MAPSET/group/$GROUP/POINTS | v.in.ascii in=- out=$GROUP_gcp separator=space skip=3 \
-        col='x double precision, y double precision, x_target double precision, \
-        y_target double precision, ok int'
-:::
+```
+cat $MAPSET/group/$GROUP/POINTS | v.in.ascii in=- out=$GROUP_gcp separator=space skip=3 \
+    col='x double precision, y double precision, x_target double precision, \
+    y_target double precision, ok int'
+```
 
 ## REFERENCES
 

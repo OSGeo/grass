@@ -26,12 +26,12 @@ included in the calculation of all of the destination cells.
 Resample elevation raster map to a lower resolution (from 6m to 20m;
 North Carolina sample dataset):
 
-::: code
-    g.region raster=el_D782_6m -p
-    g.region res=20 -ap
-    # from 6m to 20m: weighted resampling -w
-    r.resamp.stats -w input=el_D782_6m output=el_D782_20m
-:::
+```
+g.region raster=el_D782_6m -p
+g.region res=20 -ap
+# from 6m to 20m: weighted resampling -w
+r.resamp.stats -w input=el_D782_6m output=el_D782_20m
+```
 
 ![GRASS r.resamp.stats result
 (subset)](r_resamp_stats_6m_20m.png){border="0"}\

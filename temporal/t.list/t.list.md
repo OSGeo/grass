@@ -25,59 +25,59 @@ are in the user\'s current mapset search path (managed with
 
 Obtain the list of space time raster dataset(s):
 
-::: code
-    t.list strds
-    ----------------------------------------------
-    Space time raster datasets with absolute time available in mapset <climate_2000_2012>:
-    tempmean_monthly@climate_2000_2012
-:::
+```
+t.list strds
+----------------------------------------------
+Space time raster datasets with absolute time available in mapset <climate_2000_2012>:
+tempmean_monthly@climate_2000_2012
+```
 
 Obtain the list of space time raster datasets in a specific mapset (Note
 that the target mapset must be in the user\'s search path):
 
-::: code
-    # strds in PERMANENT
-    t.list strds where="mapset = 'PERMANENT'"
-    ----------------------------------------------
+```
+# strds in PERMANENT
+t.list strds where="mapset = 'PERMANENT'"
+----------------------------------------------
 
-    # strds in climate_2000_2012
-    t.list strds where="mapset = 'climate_2000_2012'"
-    ----------------------------------------------
-    Space time raster datasets with absolute time available in mapset <climate_2000_2012>:
-    precip_abs@climate_2000_2012
-    precipitation@climate_2000_2012
-    tempmean@climate_2000_2012
-:::
+# strds in climate_2000_2012
+t.list strds where="mapset = 'climate_2000_2012'"
+----------------------------------------------
+Space time raster datasets with absolute time available in mapset <climate_2000_2012>:
+precip_abs@climate_2000_2012
+precipitation@climate_2000_2012
+tempmean@climate_2000_2012
+```
 
 The *where* option can also be used to list the stds with a certain
 pattern in their name, i.e. as the pattern option in
 [g.list](g.list.html).
 
-::: code
-    # strds whose name start with "precip"
-    t.list type=strds where="name LIKE 'precip%'"
-    ----------------------------------------------
-    Space time raster datasets with absolute time available in mapset <climate_1970_2012>:
-    precip_abs@climate_1970_2012
-    precipitation@climate_1970_2012
-:::
+```
+# strds whose name start with "precip"
+t.list type=strds where="name LIKE 'precip%'"
+----------------------------------------------
+Space time raster datasets with absolute time available in mapset <climate_1970_2012>:
+precip_abs@climate_1970_2012
+precipitation@climate_1970_2012
+```
 
 The user can also obtain the list of time stamped raster maps. These
 maps might be registered in strds or not. The output of the following
 command can vary according to the accessible mapsets specified through
 [g.mapsets](g.mapsets.html).
 
-::: code
-    t.list raster
-    Time stamped raster maps with absolute time available in mapset <climate_2000_2012>:
-    2009_01_tempmean@climate_2000_2012
-    2009_02_tempmean@climate_2000_2012
-    2009_03_tempmean@climate_2000_2012
-    ...
-    2012_10_tempmean@climate_2000_2012
-    2012_11_tempmean@climate_2000_2012
-    2012_12_tempmean@climate_2000_2012
-:::
+```
+t.list raster
+Time stamped raster maps with absolute time available in mapset <climate_2000_2012>:
+2009_01_tempmean@climate_2000_2012
+2009_02_tempmean@climate_2000_2012
+2009_03_tempmean@climate_2000_2012
+...
+2012_10_tempmean@climate_2000_2012
+2012_11_tempmean@climate_2000_2012
+2012_12_tempmean@climate_2000_2012
+```
 
 ## SEE ALSO
 

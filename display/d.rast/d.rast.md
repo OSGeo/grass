@@ -7,9 +7,9 @@ on the graphics monitor.
 
 Display raster map \"elevation\":
 
-::: code
-    d.rast map=elevation
-:::
+```
+d.rast map=elevation
+```
 
 ::: {align="center" style="margin: 10px"}
 ![d.rast elevation](d_rast_elevation.png){border="0"}\
@@ -19,9 +19,9 @@ Display raster map \"elevation\":
 Display raster map \"elevation\" but only the raster cells with values
 between 75 and 80 meters:
 
-::: code
-    d.rast map=elevation values=75-80
-:::
+```
+d.rast map=elevation values=75-80
+```
 
 ::: {align="center" style="margin: 10px"}
 ![d.rast elevation with
@@ -31,9 +31,9 @@ values](d_rast_elevation_values.png){border="0"}\
 
 Display raster map \"landuse96_28m\" but only categories 1 and 2:
 
-::: code
-    d.rast landuse96_28m values=1,2
-:::
+```
+d.rast landuse96_28m values=1,2
+```
 
 ::: {align="center" style="margin: 10px"}
 ![d.rast landuse](d_rast_landuse.png){border="0"}\

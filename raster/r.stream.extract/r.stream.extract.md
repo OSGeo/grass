@@ -145,33 +145,33 @@ Carolina sample dataset and uses valleys determined with
 *[r.param.scale](r.param.scale.html)* to weigh an accumulation map
 produced with *[r.watershed](r.watershed.html)*.
 
-::: code
-    # set region
-    g.region -p raster=elev_ned_30m@PERMANENT
+```
+# set region
+g.region -p raster=elev_ned_30m@PERMANENT
 
-    # calculate flow accumulation
-    r.watershed ele=elev_ned_30m@PERMANENT acc=elev_ned_30m.acc
+# calculate flow accumulation
+r.watershed ele=elev_ned_30m@PERMANENT acc=elev_ned_30m.acc
 
-    # curvature to get narrow valleys
-    r.param.scale input=elev_ned_30m@PERMANENT output=tangential_curv_5 size=5 method=crosc
+# curvature to get narrow valleys
+r.param.scale input=elev_ned_30m@PERMANENT output=tangential_curv_5 size=5 method=crosc
 
-    # curvature to get a bit broader valleys
-    r.param.scale input=elev_ned_30m@PERMANENT output=tangential_curv_7 size=7 method=crosc
+# curvature to get a bit broader valleys
+r.param.scale input=elev_ned_30m@PERMANENT output=tangential_curv_7 size=7 method=crosc
 
-    # curvature to get broad valleys
-    r.param.scale input=elev_ned_30m@PERMANENT output=tangential_curv_11 size=11 method=crosc
+# curvature to get broad valleys
+r.param.scale input=elev_ned_30m@PERMANENT output=tangential_curv_11 size=11 method=crosc
 
-    # create weight map
-    r.mapcalc "weight = if(tangential_curv_5 < 0, -100 * tangential_curv_5, \
-                        if(tangential_curv_7 < 0, -100 * tangential_curv_7, \
-                        if(tangential_curv_11 < 0, -100 * tangential_curv_11, 0.000001)))"
+# create weight map
+r.mapcalc "weight = if(tangential_curv_5 < 0, -100 * tangential_curv_5, \
+                    if(tangential_curv_7 < 0, -100 * tangential_curv_7, \
+                    if(tangential_curv_11 < 0, -100 * tangential_curv_11, 0.000001)))"
 
-    # weigh accumulation map
-    r.mapcalc expr="elev_ned_30m.acc.weighed = elev_ned_30m.acc * weight"
+# weigh accumulation map
+r.mapcalc expr="elev_ned_30m.acc.weighed = elev_ned_30m.acc * weight"
 
-    # copy color table from original accumulation map
-    r.colors map=elev_ned_30m.acc.weighed raster=elev_ned_30m.acc
-:::
+# copy color table from original accumulation map
+r.colors map=elev_ned_30m.acc.weighed raster=elev_ned_30m.acc
+```
 
 [![](r_stream_extract_weights_zoom.png){width="400"}](r_stream_extract_weights_zoom.png)\
 Weight map (spatial subset with lake in the southern half)
@@ -187,21 +187,21 @@ half)
 Display both the original and the weighed accumulation map. Compare them
 and proceed if the weighed accumulation map makes sense.
 
-::: code
-    # extract streams using the original accumulation map
-    r.stream.extract elevation=elev_ned_30m@PERMANENT \
-                     accumulation=elev_ned_30m.acc \
-                     threshold=1000 \
-                     stream_rast=elev_ned_30m.streams.noweight
+```
+# extract streams using the original accumulation map
+r.stream.extract elevation=elev_ned_30m@PERMANENT \
+                 accumulation=elev_ned_30m.acc \
+                 threshold=1000 \
+                 stream_rast=elev_ned_30m.streams.noweight
 
-    # extract streams from weighed map
-    # note that the weighed map is a bit smaller than the original map
+# extract streams from weighed map
+# note that the weighed map is a bit smaller than the original map
 
-    r.stream.extract elevation=elev_ned_30m@PERMANENT \
-                     accumulation=elev_ned_30m.acc.weighed \
-                     threshold=1000 \
-                     stream_rast=elev_ned_30m.streams
-:::
+r.stream.extract elevation=elev_ned_30m@PERMANENT \
+                 accumulation=elev_ned_30m.acc.weighed \
+                 threshold=1000 \
+                 stream_rast=elev_ned_30m.streams
+```
 
 Now display both stream maps and decide which one is more realistic.
 

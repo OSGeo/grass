@@ -53,19 +53,19 @@ Reading values from raster map at position of vector points, writing
 these values into a column of the attribute table connected to the
 vector map:
 
-::: code
-    # work on copy of original geodetic points map
-    g.copy vector=geodetic_pts,mygeodetic_pts
+```
+# work on copy of original geodetic points map
+g.copy vector=geodetic_pts,mygeodetic_pts
 
-    # set computational region to raster map to be queried
-    g.region raster=elev_state_500m -p
+# set computational region to raster map to be queried
+g.region raster=elev_state_500m -p
 
-    # query raster cells (a new column will be added to existing table)
-    v.what.rast map=mygeodetic_pts raster=elev_state_500m column=height
+# query raster cells (a new column will be added to existing table)
+v.what.rast map=mygeodetic_pts raster=elev_state_500m column=height
 
-    # compare official geodetic heights to those of elevation model
-    v.db.select map=mygeodetic_pts columns=Z_VALUE,height separator=comma
-:::
+# compare official geodetic heights to those of elevation model
+v.db.select map=mygeodetic_pts columns=Z_VALUE,height separator=comma
+```
 
 ### Transferring raster values into new vector points map
 
@@ -73,24 +73,24 @@ In case of a vector map without attached attribute table, first add a
 new attribute table. This table is then populated with values queried
 from the raster map:
 
-::: code
-    # create new random vector points map
-    v.random pnts n=100
+```
+# create new random vector points map
+v.random pnts n=100
 
-    # add new table, link to map
-    v.db.addtable map=pnts column="height double precision"
+# add new table, link to map
+v.db.addtable map=pnts column="height double precision"
 
-    # set computational region to raster map to be queried
-    g.region raster=elevation -p
-    # query raster map and upload values to vector table into specified column
-    v.what.rast map=pnts raster=elevation column=height
+# set computational region to raster map to be queried
+g.region raster=elevation -p
+# query raster map and upload values to vector table into specified column
+v.what.rast map=pnts raster=elevation column=height
 
-    # verify new attribute table:
-    v.db.select pnts
+# verify new attribute table:
+v.db.select pnts
 
-    # verify statistics of uploaded values:
-    v.univar map=pnts column=height type=point
-:::
+# verify statistics of uploaded values:
+v.univar map=pnts column=height type=point
+```
 
 ## SEE ALSO
 

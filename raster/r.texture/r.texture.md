@@ -156,36 +156,75 @@ contain a value. The output will thus appear cropped at the margins.
 
 Importantly, the input raster map cannot have more than 255 categories.
 
+### Performance
+
+To enable parallel processing, the user can specify the number of
+threads to be used with the **nprocs** parameter (default 1). Figures
+below show benchmark results running on Intel® Core™ i9-10940X CPU @
+3.30GHz. See benchmark scripts in the source code for more details.
+
+::: {align="center" style="margin: 10px"}
+![time benchmark for r.texture with different map
+sizes](r_texture_mapsize_time.png){border="0"}\
+
+Figure 1: Benchmark shows execution time for different number of cells
+(1M, 2M, 4M, and 8M) and the fixed size of window (3×3).
+:::
+
+::: {align="center" style="margin: 10px"}
+![efficiency benchmark for r.texture with different map
+sizes](r_texture_mapsize_efficiency.png){border="0"}\
+
+Figure 2: Benchmark shows efficiency for different numbers of cells (1M,
+2M, 4M, and 8M) and the fixed size of window (3×3).
+:::
+
+::: {align="center" style="margin: 10px"}
+![time benchmark for r.texture with different window
+sizes](r_texture_window_time.png){border="0"}\
+
+Figure 3: Benchmark shows execution time for different sizes of windows
+(3×3, 9×9, 15×15, and 27×27) and the fixed number of cells (1M).
+:::
+
+::: {align="center" style="margin: 10px"}
+![efficiency benchmark for r.texture with different window
+sizes](r_texture_window_efficiency.png){border="0"}\
+
+Figure 4: Benchmark shows efficiency for different sizes of windows
+(3×3, 9×9, 15×15, and 27×27) and the fixed number of cells (1M).
+:::
+
 ## EXAMPLE
 
 Calculation of Angular Second Moment of B/W orthophoto (North Carolina
 data set):
 
-::: code
-    g.region raster=ortho_2001_t792_1m -p
-    # set grey level color table 0% black 100% white
-    r.colors ortho_2001_t792_1m color=grey
-    # extract grey levels
-    r.mapcalc "ortho_2001_t792_1m.greylevel = ortho_2001_t792_1m"
-    # texture analysis
-    r.texture ortho_2001_t792_1m.greylevel output=ortho_texture method=asm -s
-    # display
-    g.region n=221461 s=221094 w=638279 e=638694
-    d.shade color=ortho_texture_ASM_0 shade=ortho_2001_t792_1m
-:::
+```
+g.region raster=ortho_2001_t792_1m -p
+# set grey level color table 0% black 100% white
+r.colors ortho_2001_t792_1m color=grey
+# extract grey levels
+r.mapcalc "ortho_2001_t792_1m.greylevel = ortho_2001_t792_1m"
+# texture analysis
+r.texture ortho_2001_t792_1m.greylevel output=ortho_texture method=asm -s
+# display
+g.region n=221461 s=221094 w=638279 e=638694
+d.shade color=ortho_texture_ASM_0 shade=ortho_2001_t792_1m
+```
 
 This calculates four maps (requested texture at four orientations):
 ortho_texture_ASM_0, ortho_texture_ASM_45, ortho_texture_ASM_90,
 ortho_texture_ASM_135. Reducing the number of gray levels
 (equal-probability quantizing):
 
-::: code
-    g.region -p raster=ortho_2001_t792_1m
+```
+g.region -p raster=ortho_2001_t792_1m
 
-    # enter as one line or with \
-    r.quantile input=ortho_2001_t792_1m quantiles=16 -r | r.recode \
-               input=ortho_2001_t792_1m output=ortho_2001_t792_1m_q16 rules=-
-:::
+# enter as one line or with \
+r.quantile input=ortho_2001_t792_1m quantiles=16 -r | r.recode \
+           input=ortho_2001_t792_1m output=ortho_2001_t792_1m_q16 rules=-
+```
 
 The recoded raster map can then be used as input for *r.texture* as
 before.
@@ -193,32 +232,32 @@ before.
 Second example: analysis of IDM (homogeneity) on a simple raster with
 North-South line pattern.
 
-::: code
-    # import raster
-    r.in.ascii in=- output=lines << EOF
-    north: 9
-    south: 0
-    east: 9
-    west: 0
-    rows: 9
-    cols: 9
-    0 0 0 1 0 0 0 1 0
-    0 0 0 1 0 0 0 1 0
-    0 0 0 1 0 0 0 1 0
-    0 0 0 1 0 0 0 1 0
-    0 0 0 1 0 0 0 1 0
-    0 0 0 1 0 0 0 1 0
-    0 0 0 1 0 0 0 1 0
-    0 0 0 1 0 0 0 1 0
-    0 0 0 1 0 0 0 1 0
-    EOF
+```
+# import raster
+r.in.ascii in=- output=lines << EOF
+north: 9
+south: 0
+east: 9
+west: 0
+rows: 9
+cols: 9
+0 0 0 1 0 0 0 1 0
+0 0 0 1 0 0 0 1 0
+0 0 0 1 0 0 0 1 0
+0 0 0 1 0 0 0 1 0
+0 0 0 1 0 0 0 1 0
+0 0 0 1 0 0 0 1 0
+0 0 0 1 0 0 0 1 0
+0 0 0 1 0 0 0 1 0
+0 0 0 1 0 0 0 1 0
+EOF
 
-    # adjust region to raster
-    g.region raster=lines
+# adjust region to raster
+g.region raster=lines
 
-    # calculate IDM (homogeneity) in all directions
-    r.texture -s lines method=idm output=text_lines
-:::
+# calculate IDM (homogeneity) in all directions
+r.texture -s lines method=idm output=text_lines
+```
 
 The following image shows the original map, the result in East-West
 direction and the result in North-South direction, showing how texture
@@ -230,11 +269,6 @@ measures output maps are cropped at the margins.
 
 ![](r_texture_directions_example.png){border="1"}\
 *IDM textures according to direction*
-
-## KNOWN ISSUES
-
-The program can run incredibly slow for large raster maps and large
-moving windows (*size* option).
 
 ## REFERENCES
 

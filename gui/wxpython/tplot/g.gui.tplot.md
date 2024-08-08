@@ -10,11 +10,15 @@ Supported features:
 
 -   show simple linear regression model line with calculated formula
 
-        y = a + b*x (y is dependent variable, a is intercept, b is slope, x is explanatory variable)
+    ```
+    y = a + b*x (y is dependent variable, a is intercept, b is slope, x is explanatory variable)
+    ```
 
     and
 
-        r-squared (parameter of goodness-of-fit measure for linear regression model)
+    ```
+    r-squared (parameter of goodness-of-fit measure for linear regression model)
+    ```
 
 -   pop-up annotations with values information,
 
@@ -32,7 +36,9 @@ Supported features:
     [LibreOffice](https://www.libreoffice.org/) etc., you will obtain a
     different calculated formula
 
-        y = a + b*x
+    ```
+    y = a + b*x
+    ```
 
     because these software packages use a reference date other than the
     UNIX Epoch time (00:00:00 UTC on 1 January 1970)).

@@ -109,17 +109,17 @@ The sample LAS data are in the file \"Serpent Mound Model LAS
 Data.las\", available at
 [appliedimagery.com](http://www.appliedimagery.com/downloads/sampledata/Serpent%20Mound%20Model%20LAS%20Data.las)
 
-::: code
-      # print LAS file info
-      v.in.lidar -p input="Serpent Mound Model LAS Data.las"
+```
+  # print LAS file info
+  v.in.lidar -p input="Serpent Mound Model LAS Data.las"
 
-      # create a project with CRS information of the LAS data
-      v.in.lidar -i input="Serpent Mound Model LAS Data.las" project=Serpent_Mound
+  # create a project with CRS information of the LAS data
+  v.in.lidar -i input="Serpent Mound Model LAS Data.las" project=Serpent_Mound
 
-      # quit and restart GRASS in the newly created project "Serpent_Mound"
-      # real import of LiDAR LAS data, without topology and without attribute table
-      v.in.lidar -tb input="Serpent Mound Model LAS Data.las" output=Serpent_Mound_Model_pts
-:::
+  # quit and restart GRASS in the newly created project "Serpent_Mound"
+  # real import of LiDAR LAS data, without topology and without attribute table
+  v.in.lidar -tb input="Serpent Mound Model LAS Data.las" output=Serpent_Mound_Model_pts
+```
 
 ## REFERENCES
 

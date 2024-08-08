@@ -79,59 +79,59 @@ are no longer supported.
 Specification of map names only (*increment* option and **-i** flag
 supported):
 
-::: code
-    terra_lst_day20020113
-    terra_lst_day20020114
-    terra_lst_day20020115
-    terra_lst_day20020116
-    terra_lst_day20020117
-:::
+```
+terra_lst_day20020113
+terra_lst_day20020114
+terra_lst_day20020115
+terra_lst_day20020116
+terra_lst_day20020117
+```
 
 Specification of map names and absolute start time (date) of the time
 instances (no support for *increment* option nor **-i** flag):
 
-::: code
-    terra_lst_day20020113|2002-01-13
-    terra_lst_day20020114|2002-01-14
-    terra_lst_day20020115|2002-01-15
-    terra_lst_day20020116|2002-01-16
-    terra_lst_day20020117|2002-01-17
-:::
+```
+terra_lst_day20020113|2002-01-13
+terra_lst_day20020114|2002-01-14
+terra_lst_day20020115|2002-01-15
+terra_lst_day20020116|2002-01-16
+terra_lst_day20020117|2002-01-17
+```
 
 Specification of map names and absolute start time (datetime) of the
 time instances (no support for *increment* option nor **-i** flag):
 
-::: code
-    terra_lst_day20020113|2002-01-13 10:30
-    terra_lst_day20020114|2002-01-14 10:30
-    terra_lst_day20020115|2002-01-15 10:30
-    terra_lst_day20020116|2002-01-16 10:30
-    terra_lst_day20020117|2002-01-17 10:30
-:::
+```
+terra_lst_day20020113|2002-01-13 10:30
+terra_lst_day20020114|2002-01-14 10:30
+terra_lst_day20020115|2002-01-15 10:30
+terra_lst_day20020116|2002-01-16 10:30
+terra_lst_day20020117|2002-01-17 10:30
+```
 
 Specification of map names and absolute time interval with start and end
 time (no support for *increment* option nor **-i** flag):
 
-::: code
-    prec_1|2001-01-01|2001-04-01
-    prec_2|2001-04-01|2001-07-01
-    prec_3|2001-07-01|2001-10-01
-    prec_4|2001-10-01|2002-01-01
-    prec_5|2002-01-01|2002-04-01
-    prec_6|2002-04-01|2002-07-01
-:::
+```
+prec_1|2001-01-01|2001-04-01
+prec_2|2001-04-01|2001-07-01
+prec_3|2001-07-01|2001-10-01
+prec_4|2001-10-01|2002-01-01
+prec_5|2002-01-01|2002-04-01
+prec_6|2002-04-01|2002-07-01
+```
 
 Same as above but with fully qualified map names (no support for
 *increment* option nor **-i** flag):
 
-::: code
-    prec_1@PERMANENT|2001-01-01|2001-04-01
-    prec_2@PERMANENT|2001-04-01|2001-07-01
-    prec_3@PERMANENT|2001-07-01|2001-10-01
-    prec_4@PERMANENT|2001-10-01|2002-01-01
-    prec_5@PERMANENT|2002-01-01|2002-04-01
-    prec_6@PERMANENT|2002-04-01|2002-07-01
-:::
+```
+prec_1@PERMANENT|2001-01-01|2001-04-01
+prec_2@PERMANENT|2001-04-01|2001-07-01
+prec_3@PERMANENT|2001-07-01|2001-10-01
+prec_4@PERMANENT|2001-10-01|2002-01-01
+prec_5@PERMANENT|2002-01-01|2002-04-01
+prec_6@PERMANENT|2002-04-01|2002-07-01
+```
 
 ### Support for semantic labels
 
@@ -141,20 +141,20 @@ For more information about semantic labels and image collections see
 Specification of map names and absolute start time (datetime) of the
 time instances. The last column indicates related semantic label.
 
-::: code
-    T33UYP_20190331T094039_B01|2019-03-31 09:40:39|S2_1
-    T33UYP_20190331T094039_B10|2019-03-31 09:40:39|S2_10
-    T33UYP_20190331T094039_B02|2019-03-31 09:40:39|S2_2
-    T33UYP_20190331T094039_B05|2019-03-31 09:40:39|S2_5
-    T33UYP_20190331T094039_B11|2019-03-31 09:40:39|S2_11
-    T33UYP_20190331T094039_B08|2019-03-31 09:40:39|S2_8
-    T33UYP_20190331T094039_B12|2019-03-31 09:40:39|S2_12
-    T33UYP_20190331T094039_B8A|2019-03-31 09:40:39|S2_8A
-    T33UYP_20190331T094039_B06|2019-03-31 09:40:39|S2_6
-    T33UYP_20190331T094039_B04|2019-03-31 09:40:39|S2_4
-    T33UYP_20190331T094039_B03|2019-03-31 09:40:39|S2_3
-    T33UYP_20190331T094039_B09|2019-03-31 09:40:39|S2_9
-:::
+```
+T33UYP_20190331T094039_B01|2019-03-31 09:40:39|S2_1
+T33UYP_20190331T094039_B10|2019-03-31 09:40:39|S2_10
+T33UYP_20190331T094039_B02|2019-03-31 09:40:39|S2_2
+T33UYP_20190331T094039_B05|2019-03-31 09:40:39|S2_5
+T33UYP_20190331T094039_B11|2019-03-31 09:40:39|S2_11
+T33UYP_20190331T094039_B08|2019-03-31 09:40:39|S2_8
+T33UYP_20190331T094039_B12|2019-03-31 09:40:39|S2_12
+T33UYP_20190331T094039_B8A|2019-03-31 09:40:39|S2_8A
+T33UYP_20190331T094039_B06|2019-03-31 09:40:39|S2_6
+T33UYP_20190331T094039_B04|2019-03-31 09:40:39|S2_4
+T33UYP_20190331T094039_B03|2019-03-31 09:40:39|S2_3
+T33UYP_20190331T094039_B09|2019-03-31 09:40:39|S2_9
+```
 
 In this case *t.register* assigns to given raster maps a semantic label
 similarly as *[r.semantic.label](r.semantic.label.html)* does. Such
@@ -175,24 +175,24 @@ versions of TGIS DB are not supported.* TGIS DB version can be checked
 Register maps in an absolute space time dataset, creating a time
 interval
 
-::: code
-    # first:  prepare a text file with a list of input maps (see above)
-    # second: register maps
-    t.register -i type=raster input=precipitation_monthly \
-        file=list_of_input_maps.txt start="2009-01-01" \
-        increment="1 months"
-:::
+```
+# first:  prepare a text file with a list of input maps (see above)
+# second: register maps
+t.register -i type=raster input=precipitation_monthly \
+    file=list_of_input_maps.txt start="2009-01-01" \
+    increment="1 months"
+```
 
 #### Using *g.list* to generate the input
 
 Register maps in an absolute space time dataset, creating a time
 interval
 
-::: code
-    t.register -i type=raster input=precipitation_monthly \
-        maps=`g.list raster pattern="*precip*" sep=comma` start="2009-01-01" \
-        increment="1 months"
-:::
+```
+t.register -i type=raster input=precipitation_monthly \
+    maps=`g.list raster pattern="*precip*" sep=comma` start="2009-01-01" \
+    increment="1 months"
+```
 
 #### Register a vector map with layers representing time steps
 
@@ -200,11 +200,11 @@ Assume a vector map of points that represent meteorological stations and
 it is connected to different layers depicting daily time steps. In this
 example, only the fifth layer of the vector map will be registered.
 
-::: code
-    # the layer is specified behind the colon
-    t.register type=vector input=meteo_stations_nc_daily \
-        maps=meteo_stations_nc:5 start="2009-01-05"
-:::
+```
+# the layer is specified behind the colon
+t.register type=vector input=meteo_stations_nc_daily \
+    maps=meteo_stations_nc:5 start="2009-01-05"
+```
 
 ### Synthetic maps
 
@@ -215,54 +215,54 @@ provided *increment*. The generated timestamps will be inspected using
 *r.timestamp* and *t.rast.list*. We will register an additional map with
 a timestamp that was set with *r.timestamp*.
 
-::: code
-    r.mapcalc expression="prec_1 = 100"
-    r.mapcalc expression="prec_2 = 200"
-    r.mapcalc expression="prec_3 = 300"
-    r.mapcalc expression="prec_4 = 400"
-    r.mapcalc expression="prec_5 = 500"
-    r.mapcalc expression="prec_6 = 600"
+```
+r.mapcalc expression="prec_1 = 100"
+r.mapcalc expression="prec_2 = 200"
+r.mapcalc expression="prec_3 = 300"
+r.mapcalc expression="prec_4 = 400"
+r.mapcalc expression="prec_5 = 500"
+r.mapcalc expression="prec_6 = 600"
 
-    t.create type=strds temporaltype=absolute \
-        output=precip_abs title="Example" \
-        descr="Example"
+t.create type=strds temporaltype=absolute \
+    output=precip_abs title="Example" \
+    descr="Example"
 
-    t.register -i type=raster input=precip_abs \
-        maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 \
-        start="2001-01-01" increment="1 months"
+t.register -i type=raster input=precip_abs \
+    maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 \
+    start="2001-01-01" increment="1 months"
 
-    r.timestamp prec_1
-    1 Jan 2001 00:00:00 / 1 Feb 2001 00:00:00
+r.timestamp prec_1
+1 Jan 2001 00:00:00 / 1 Feb 2001 00:00:00
 
-    r.timestamp prec_2
-    1 Feb 2001 00:00:00 / 1 Mar 2001 00:00:00
+r.timestamp prec_2
+1 Feb 2001 00:00:00 / 1 Mar 2001 00:00:00
 
-    t.rast.list input=precip_abs
+t.rast.list input=precip_abs
 
-    name|mapset|start_time|end_time
-    prec_1|PERMANENT|2001-01-01 00:00:00|2001-02-01 00:00:00
-    prec_2|PERMANENT|2001-02-01 00:00:00|2001-03-01 00:00:00
-    prec_3|PERMANENT|2001-03-01 00:00:00|2001-04-01 00:00:00
-    prec_4|PERMANENT|2001-04-01 00:00:00|2001-05-01 00:00:00
-    prec_5|PERMANENT|2001-05-01 00:00:00|2001-06-01 00:00:00
-    prec_6|PERMANENT|2001-06-01 00:00:00|2001-07-01 00:00:00
+name|mapset|start_time|end_time
+prec_1|PERMANENT|2001-01-01 00:00:00|2001-02-01 00:00:00
+prec_2|PERMANENT|2001-02-01 00:00:00|2001-03-01 00:00:00
+prec_3|PERMANENT|2001-03-01 00:00:00|2001-04-01 00:00:00
+prec_4|PERMANENT|2001-04-01 00:00:00|2001-05-01 00:00:00
+prec_5|PERMANENT|2001-05-01 00:00:00|2001-06-01 00:00:00
+prec_6|PERMANENT|2001-06-01 00:00:00|2001-07-01 00:00:00
 
-    r.mapcalc expression="prec_7 = 700"
-    r.timestamp map=prec_7 date="1 jul 2001 / 1 aug 2001"
+r.mapcalc expression="prec_7 = 700"
+r.timestamp map=prec_7 date="1 jul 2001 / 1 aug 2001"
 
-    t.register type=raster input=precip_abs maps=prec_7
+t.register type=raster input=precip_abs maps=prec_7
 
-    t.rast.list input=precip_abs
+t.rast.list input=precip_abs
 
-    name|mapset|start_time|end_time
-    prec_1|PERMANENT|2001-01-01 00:00:00|2001-02-01 00:00:00
-    prec_2|PERMANENT|2001-02-01 00:00:00|2001-03-01 00:00:00
-    prec_3|PERMANENT|2001-03-01 00:00:00|2001-04-01 00:00:00
-    prec_4|PERMANENT|2001-04-01 00:00:00|2001-05-01 00:00:00
-    prec_5|PERMANENT|2001-05-01 00:00:00|2001-06-01 00:00:00
-    prec_6|PERMANENT|2001-06-01 00:00:00|2001-07-01 00:00:00
-    prec_7|PERMANENT|2001-07-01 00:00:00|2001-08-01 00:00:00
-:::
+name|mapset|start_time|end_time
+prec_1|PERMANENT|2001-01-01 00:00:00|2001-02-01 00:00:00
+prec_2|PERMANENT|2001-02-01 00:00:00|2001-03-01 00:00:00
+prec_3|PERMANENT|2001-03-01 00:00:00|2001-04-01 00:00:00
+prec_4|PERMANENT|2001-04-01 00:00:00|2001-05-01 00:00:00
+prec_5|PERMANENT|2001-05-01 00:00:00|2001-06-01 00:00:00
+prec_6|PERMANENT|2001-06-01 00:00:00|2001-07-01 00:00:00
+prec_7|PERMANENT|2001-07-01 00:00:00|2001-08-01 00:00:00
+```
 
 ### Importing and registering ECA&D climatic data
 
@@ -274,39 +274,39 @@ ECA&D information. Download and decompress mean temperature data from:
 accepting their [Terms of
 use](http://eca.knmi.nl/download/ensembles/ensembles.php).
 
-::: code
-    # import E-OBS V12 into a lat-long project (alternatively, use r.external)
-    r.in.gdal -oe input=tg_0.25deg_reg_1950-1964_v12.0.nc \
-      output=temperature_mean offset=0
-    r.in.gdal -oe input=tg_0.25deg_reg_1965-1979_v12.0.nc \
-      output=temperature_mean offset=5479 --o
-    r.in.gdal -oe input=tg_0.25deg_reg_1980-1994_v12.0.nc \
-      output=temperature_mean offset=10957 --o
-    r.in.gdal -oe input=tg_0.25deg_reg_1995-2015_v12.0.nc \
-      output=temperature_mean offset=16436 --o
+```
+# import E-OBS V12 into a lat-long project (alternatively, use r.external)
+r.in.gdal -oe input=tg_0.25deg_reg_1950-1964_v12.0.nc \
+  output=temperature_mean offset=0
+r.in.gdal -oe input=tg_0.25deg_reg_1965-1979_v12.0.nc \
+  output=temperature_mean offset=5479 --o
+r.in.gdal -oe input=tg_0.25deg_reg_1980-1994_v12.0.nc \
+  output=temperature_mean offset=10957 --o
+r.in.gdal -oe input=tg_0.25deg_reg_1995-2015_v12.0.nc \
+  output=temperature_mean offset=16436 --o
 
-    # create STRDS
-    t.create type=strds output=temperature_mean_1950_2015_daily \
-      temporaltype=absolute semantictype=mean \
-      title="European mean temperature 1950-2015" \
-      description="The European daily mean temperature from ECAD"
+# create STRDS
+t.create type=strds output=temperature_mean_1950_2015_daily \
+  temporaltype=absolute semantictype=mean \
+  title="European mean temperature 1950-2015" \
+  description="The European daily mean temperature from ECAD"
 
-    # create text file with all temperature_mean rasters, one per line,
-    # a) using a shell script
-    for i in `seq 1 23922` ; do
-        echo temperature_mean.$i >> map_list.txt
-    done
+# create text file with all temperature_mean rasters, one per line,
+# a) using a shell script
+for i in `seq 1 23922` ; do
+    echo temperature_mean.$i >> map_list.txt
+done
 
-    # b) using a Python script
-    file = open("map_list.txt", "w")
-    for i in range(23922):
-        file.write("temperature_mean.%i\n" % (i + 1))
-    file.close()
+# b) using a Python script
+file = open("map_list.txt", "w")
+for i in range(23922):
+    file.write("temperature_mean.%i\n" % (i + 1))
+file.close()
 
-    # register daily maps using the file created above
-    t.register -i type=raster input=temperature_mean_1950_2015_daily \
-                  file=map_list.txt start="1950-01-01" increment="1 days"
-:::
+# register daily maps using the file created above
+t.register -i type=raster input=temperature_mean_1950_2015_daily \
+              file=map_list.txt start="1950-01-01" increment="1 days"
+```
 
 ## SEE ALSO
 

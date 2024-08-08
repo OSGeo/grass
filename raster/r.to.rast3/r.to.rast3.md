@@ -27,22 +27,22 @@ the top.
 
 This example shows how to convert 6 maps into one 3D map with 6 layers.\
 
-::: code
-    # Mapset data in dataset slovakia3d
-    g.region raster=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 -p
-    g.region b=0 t=600 tbres=100 res3=100 -p3
-    r.to.rast3 input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 output=new_3dmap
-:::
+```
+# Mapset data in dataset slovakia3d
+g.region raster=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 -p
+g.region b=0 t=600 tbres=100 res3=100 -p3
+r.to.rast3 input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 output=new_3dmap
+```
 
 ### EXAMPLE 2
 
 This example shows how to convert 3 maps into one 3D map with 6 layers.\
 
-::: code
-    # Mapset data in dataset slovakia3d
-    g.region b=0 t=600 tbres=100 res3=100 -p3
-    r.to.rast3 input=prec_1,prec_2,prec_3 output=new_3dmap
-:::
+```
+# Mapset data in dataset slovakia3d
+g.region b=0 t=600 tbres=100 res3=100 -p3
+r.to.rast3 input=prec_1,prec_2,prec_3 output=new_3dmap
+```
 
 ## SEE ALSO
 

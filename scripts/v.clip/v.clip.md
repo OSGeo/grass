@@ -28,19 +28,19 @@ performed with *[v.select](v.select.html).*
 Clip railroads by counties Wake and Johnston in North Carolina (North
 Carolina data set).
 
-::: code
-    v.extract input=boundary_county where="NAME='WAKE' OR NAME='JOHNSTON'" output=county_WAKE_JOHNSTON
-    v.clip input=railroads clip=county_WAKE_JOHNSTON output=railroads_WAKE_JOHNSTON
-:::
+```
+v.extract input=boundary_county where="NAME='WAKE' OR NAME='JOHNSTON'" output=county_WAKE_JOHNSTON
+v.clip input=railroads clip=county_WAKE_JOHNSTON output=railroads_WAKE_JOHNSTON
+```
 
 ![v.clip example](v_clip_poly.png){height="255" width="600"}\
 *Figure: v.clip example - basic use*
 
 ### Retain boundaries of clip map
 
-::: code
-    v.clip -d input=railroads clip=county_WAKE_JOHNSTON output=railroads_WAKE_JOHNSTON
-:::
+```
+v.clip -d input=railroads clip=county_WAKE_JOHNSTON output=railroads_WAKE_JOHNSTON
+```
 
 ### Clip by current computational region
 
@@ -49,10 +49,10 @@ Johnston in North Carolina (North Carolina data set). It is not
 obligatory to enter name of clip map. In case it is stated, the clip map
 will be omitted.
 
-::: code
-    v.extract input=boundary_county where="NAME='WAKE' OR NAME='JOHNSTON'" output=county_WAKE_JOHNSTON
-    v.clip -r input=hospitals output=hospitals_clip
-:::
+```
+v.extract input=boundary_county where="NAME='WAKE' OR NAME='JOHNSTON'" output=county_WAKE_JOHNSTON
+v.clip -r input=hospitals output=hospitals_clip
+```
 
 ![v.clip example](v_clip_region.png){height="259" width="600"}\
 *Figure: v.clip example - clip by computational region*

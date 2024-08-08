@@ -12,10 +12,10 @@ Some more detailed notes go here.
 
 Label all vectors with value 1 (North Carolina sample dataset):
 
-::: code
-    v.example input=zipcodes_wake output=newmap
-    v.category newmap option=report
-:::
+```
+v.example input=zipcodes_wake output=newmap
+v.category newmap option=report
+```
 
 ## SEE ALSO
 

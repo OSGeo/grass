@@ -125,17 +125,17 @@ maximization (EM) algorithm \[[2](#dempster77),[3](#redner84)\].
 
 If warnings like this occur, reducing the remaining classes to 0:
 
-::: code
-    ...
-    WARNING: Removed a singular subsignature number 1 (4 remain)
-    WARNING: Removed a singular subsignature number 1 (3 remain)
-    WARNING: Removed a singular subsignature number 1 (2 remain)
-    WARNING: Removed a singular subsignature number 1 (1 remain)
-    WARNING: Unreliable clustering. Try a smaller initial number of clusters
-    WARNING: Removed a singular subsignature number 1 (-1 remain)
-    WARNING: Unreliable clustering. Try a smaller initial number of clusters
-    Number of subclasses is 0
-:::
+```
+...
+WARNING: Removed a singular subsignature number 1 (4 remain)
+WARNING: Removed a singular subsignature number 1 (3 remain)
+WARNING: Removed a singular subsignature number 1 (2 remain)
+WARNING: Removed a singular subsignature number 1 (1 remain)
+WARNING: Unreliable clustering. Try a smaller initial number of clusters
+WARNING: Removed a singular subsignature number 1 (-1 remain)
+WARNING: Unreliable clustering. Try a smaller initial number of clusters
+Number of subclasses is 0
+```
 
 then the user should check for:
 

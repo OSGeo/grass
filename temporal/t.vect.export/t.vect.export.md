@@ -36,83 +36,83 @@ space time vector dataset named *random_locations*. Each vector map
 represents random locations within the boundary of the state taken at 1
 month intervals.
 
-::: code
-    t.vect.export input=shoreline output=shoreline_nc.tar.bzip2
+```
+t.vect.export input=shoreline output=shoreline_nc.tar.bzip2
 
-    tar xvfj shoreline_nc.tar.bzip2
-    shoreline_1849_1873.xml
-    shoreline_1849_1873.xsd
-    shoreline_1925_1946.xml
-    shoreline_1925_1946.xsd
-    shoreline_1970_1988.xml
-    shoreline_1970_1988.xsd
-    shoreline_1997.xml
-    shoreline_1997.xsd
-    shoreline_1998.xml
-    shoreline_1998.xsd
-    shoreline_2003.xml
-    shoreline_2003.xsd
-    shoreline_2004.xml
-    shoreline_2004.xsd
-    shoreline_2009.xml
-    shoreline_2009.xsd
-    list.txt
-    proj.txt
-    init.txt
-    readme.txt
-    metadata.txt
-
-
-    cat init.txt
-    stds_type=stvds
-    format=GML
-    temporal_type=relative
-    semantic_type=mean
-    relative_time_unit=years
-    number_of_maps=8
-    north=1039175.31479
-    south=9403.301982
-    east=3052352.00337
-    west=651481.84739
-
-    cat proj.txt
-    +proj=lcc
-    +lat_1=36.16666666666666
-    +lat_2=34.33333333333334
-    +lat_0=33.75
-    +lon_0=-79
-    +x_0=609601.22
-    +y_0=0
-    +no_defs
-    +a=6378137
-    +rf=298.257222101
-    +towgs84=0.000,0.000,0.000
-    +to_meter=1
+tar xvfj shoreline_nc.tar.bzip2
+shoreline_1849_1873.xml
+shoreline_1849_1873.xsd
+shoreline_1925_1946.xml
+shoreline_1925_1946.xsd
+shoreline_1970_1988.xml
+shoreline_1970_1988.xsd
+shoreline_1997.xml
+shoreline_1997.xsd
+shoreline_1998.xml
+shoreline_1998.xsd
+shoreline_2003.xml
+shoreline_2003.xsd
+shoreline_2004.xml
+shoreline_2004.xsd
+shoreline_2009.xml
+shoreline_2009.xsd
+list.txt
+proj.txt
+init.txt
+readme.txt
+metadata.txt
 
 
-    cat list.txt
-    shoreline_1849_1873|1849|1873
-    shoreline_1925_1946|1925|1946
-    shoreline_1970_1988|1970|1988
-    shoreline_1997|1997|1997
-    shoreline_1998|1998|1998
-    shoreline_2003|2003|2003
-    shoreline_2004|2004|2004
-    shoreline_2009|2009|2009
+cat init.txt
+stds_type=stvds
+format=GML
+temporal_type=relative
+semantic_type=mean
+relative_time_unit=years
+number_of_maps=8
+north=1039175.31479
+south=9403.301982
+east=3052352.00337
+west=651481.84739
+
+cat proj.txt
++proj=lcc
++lat_1=36.16666666666666
++lat_2=34.33333333333334
++lat_0=33.75
++lon_0=-79
++x_0=609601.22
++y_0=0
++no_defs
++a=6378137
++rf=298.257222101
++towgs84=0.000,0.000,0.000
++to_meter=1
 
 
-    cat readme.txt
-    This space time vector dataset was exported with t.vect.export of GRASS GIS 7
+cat list.txt
+shoreline_1849_1873|1849|1873
+shoreline_1925_1946|1925|1946
+shoreline_1970_1988|1970|1988
+shoreline_1997|1997|1997
+shoreline_1998|1998|1998
+shoreline_2003|2003|2003
+shoreline_2004|2004|2004
+shoreline_2009|2009|2009
 
-    Files:
-           *.xml  -- Vector GML files
-         proj.txt -- Projection information in PROJ format
-         init.txt -- GRASS GIS space time vector dataset information
-         list.txt -- Time series file, lists all maps by name with interval
-                     time stamps in ISO-Format. Field separator is |
-     metadata.txt -- The output of t.info
-       readme.txt -- This file
-:::
+
+cat readme.txt
+This space time vector dataset was exported with t.vect.export of GRASS GIS 7
+
+Files:
+       *.xml  -- Vector GML files
+     proj.txt -- Projection information in PROJ format
+     init.txt -- GRASS GIS space time vector dataset information
+     list.txt -- Time series file, lists all maps by name with interval
+                 time stamps in ISO-Format. Field separator is |
+ metadata.txt -- The output of t.info
+   readme.txt -- This file
+```
 
 ## SEE ALSO
 

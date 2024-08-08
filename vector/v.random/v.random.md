@@ -44,62 +44,62 @@ All examples are based on the North Carolina sample dataset.
 
 Generate 20 random points with binary attributes (only 0 or 1):
 
-::: code
-    v.random output=binary_random npoints=20 zmin=0 zmax=1 column='binary'
-    v.db.select binary_random
-    cat|binary
-    1|0.63495
-    2|0.233421
-    3|0.489302
-    4|0.748264
-    5|0.505556
-    6|0.32975
-    [...]
+```
+v.random output=binary_random npoints=20 zmin=0 zmax=1 column='binary'
+v.db.select binary_random
+cat|binary
+1|0.63495
+2|0.233421
+3|0.489302
+4|0.748264
+5|0.505556
+6|0.32975
+[...]
 
-    v.univar -d binary_random
-    Calculating geometric distances between 20 primitives...
-    [...]
-    minimum: 148.515
-    maximum: 16572.8
-    [...]
-:::
+v.univar -d binary_random
+Calculating geometric distances between 20 primitives...
+[...]
+minimum: 148.515
+maximum: 16572.8
+[...]
+```
 
 ### Generating random points in 2D with binary attributes
 
 Generate 20 random points with binary attributes (only 0 or 1):
 
-::: code
-    v.random output=binary_random npoints=20 zmin=0 zmax=1 column='binary' column_type=integer
-    v.db.select binary_random
-    cat|binary
-    1|0
-    2|0
-    3|0
-    4|0
-    5|1
-    6|0
-    [...]
-:::
+```
+v.random output=binary_random npoints=20 zmin=0 zmax=1 column='binary' column_type=integer
+v.db.select binary_random
+cat|binary
+1|0
+2|0
+3|0
+4|0
+5|1
+6|0
+[...]
+```
 
 ### Generating random points in 3D
 
 Generate 20 random 3D points using a specific random seed:
 
-::: code
-    v.random seed=52 output=height_random npoints=40 zmin=110 zmax=170 -z
-    v.univar -d height_random
-    Calculating geometric distances between 40 primitives...
-    [...]
-    minimum: 334.889
-    maximum: 18351.9
-    range: 18017
-    sum: 5.38425e+06
-    mean: 7266.2
-    mean of absolute values: 7266.2
-    population standard deviation: 3563.95
-    [...]
-    skewness: 0.34703
-:::
+```
+v.random seed=52 output=height_random npoints=40 zmin=110 zmax=170 -z
+v.univar -d height_random
+Calculating geometric distances between 40 primitives...
+[...]
+minimum: 334.889
+maximum: 18351.9
+range: 18017
+sum: 5.38425e+06
+mean: 7266.2
+mean of absolute values: 7266.2
+population standard deviation: 3563.95
+[...]
+skewness: 0.34703
+```
 
 ![](vrandom_z.png){border="1"}\
 Random points with different X, Y, and Z coordinates
@@ -109,15 +109,15 @@ Random points with different X, Y, and Z coordinates
 Generate 3 random points only in selected areas (\"RALEIGH\" related ZIP
 code areas):
 
-::: code
-    v.random restrict=zipcodes_wake output=zipcodes_local_random_n3 npoints=3 where="ZIPNAME = 'RALEIGH'" -a
+```
+v.random restrict=zipcodes_wake output=zipcodes_local_random_n3 npoints=3 where="ZIPNAME = 'RALEIGH'" -a
 
-    # visualization
-    d.mon wx0
-    d.vect zipcodes_wake
-    d.vect zipcodes_wake fcolor=yellow where="ZIPNAME = 'RALEIGH'"
-    d.vect zipcodes_local_random_n3 color=red icon=basic/circle
-:::
+# visualization
+d.mon wx0
+d.vect zipcodes_wake
+d.vect zipcodes_wake fcolor=yellow where="ZIPNAME = 'RALEIGH'"
+d.vect zipcodes_local_random_n3 color=red icon=basic/circle
+```
 
 ::: {align="center" style="margin: 10px"}
 [![v.random example](v_random_points_in_polygon.png){width="400"
@@ -130,17 +130,17 @@ height="368" border="0"}](v_random_points_in_polygon.png)\
 To generate random adjacent areas, first the centroids are generated as
 points, then a triangulation is run (North Carolina sample dataset:
 
-::: code
-    g.region vector=nc_state
-    v.random output=randpoints6k npoints=6000
-    v.voronoi input=randpoints6k output=randareas6k
-    v.info -t randareas6k
-    v.category randareas6k option=print
+```
+g.region vector=nc_state
+v.random output=randpoints6k npoints=6000
+v.voronoi input=randpoints6k output=randareas6k
+v.info -t randareas6k
+v.category randareas6k option=print
 
-    # plot vector areas
-    d.mon wx0
-    d.vect randareas6k -c
-:::
+# plot vector areas
+d.mon wx0
+d.vect randareas6k -c
+```
 
 ![](vrandom_polygons.png){border="1"}\
 Random adjacent areas from random points (here: used as centroids)
@@ -150,65 +150,65 @@ with *[v.extract](v.extract.html)*.
 
 These vector areas can also be rasterized:
 
-::: code
-    # rasterize areas
-    # note: rastermaps must result in at least 6k pixel in this example
-    g.region vector=nc_state res=500 -p -a
-    v.to.rast randareas6k out=randareas6k use=cat
-    r.colors randareas6k color=random
-    d.rast randareas6k
-:::
+```
+# rasterize areas
+# note: rastermaps must result in at least 6k pixel in this example
+g.region vector=nc_state res=500 -p -a
+v.to.rast randareas6k out=randareas6k use=cat
+r.colors randareas6k color=random
+d.rast randareas6k
+```
 
 ### Random sampling from raster map
 
 Generate 20 random samples from a raster map:
 
-::: code
-    g.region -p raster=elevation
-    v.random output=random_samples npoints=20
-    v.db.addtable map=random_samples columns='cat INTEGER, sample DOUBLE PRECISION'
-    v.what.rast map=random_samples raster=elevation column=sample
-    v.db.select random_samples
-    cat|sample
-    1|103.9935
-    2|129.1266
-    3|96.01388
-    [...]
-:::
+```
+g.region -p raster=elevation
+v.random output=random_samples npoints=20
+v.db.addtable map=random_samples columns='cat INTEGER, sample DOUBLE PRECISION'
+v.what.rast map=random_samples raster=elevation column=sample
+v.db.select random_samples
+cat|sample
+1|103.9935
+2|129.1266
+3|96.01388
+[...]
+```
 
 ### Random sampling from vector map
 
 Generate 20 random points and sample attribute data from geology
 (vector) map:
 
-::: code
-    g.region -p vector=geology
-    v.random output=random_samples npoints=20
-    v.db.addtable map=random_samples columns='cat integer, geology varchar(100)'
-    v.what.vect map=random_samples column=geology query_map=geology query_layer=1 query_column=GEO_NAME
-    v.db.select random_samples
-    cat|geology
-    1|PzZm
-    2|
-    3|Zatm
-    [...]
-:::
+```
+g.region -p vector=geology
+v.random output=random_samples npoints=20
+v.db.addtable map=random_samples columns='cat integer, geology varchar(100)'
+v.what.vect map=random_samples column=geology query_map=geology query_layer=1 query_column=GEO_NAME
+v.db.select random_samples
+cat|geology
+1|PzZm
+2|
+3|Zatm
+[...]
+```
 
 ### Stratified random sampling: Random sampling from vector map by attribute
 
 Generate 20 random points restricted to forested areas:
 
-::: code
-    g.region -p raster=landclass96
-    r.to.vect -v input=landclass96 output=landclass96 type=area
-    v.random restrict=landclass96 output=random_samples npoints=20 where="label = 'forest'" layer=1
-    v.db.select map=random_samples
-    cat|landclass96_cat|landclass96_label
-    1|5|forest
-    2|5|forest
-    3|5|forest
-    ...
-:::
+```
+g.region -p raster=landclass96
+r.to.vect -v input=landclass96 output=landclass96 type=area
+v.random restrict=landclass96 output=random_samples npoints=20 where="label = 'forest'" layer=1
+v.db.select map=random_samples
+cat|landclass96_cat|landclass96_label
+1|5|forest
+2|5|forest
+3|5|forest
+...
+```
 
 ![](vrandom_restricted_attr.png){border="1"}\
 Random points only sampled in forested areas (stratified random
@@ -219,11 +219,11 @@ sampling)
 Generating n points for each individual area: in this example two random
 points in each water body:
 
-::: code
-    g.region -p raster=landclass96
-    r.to.vect -v input=landclass96 output=landclass96 type=area
-    v.random restrict=landclass96 output=random_samples npoints=2 where="label = 'water'" layer=1 -a
-:::
+```
+g.region -p raster=landclass96
+r.to.vect -v input=landclass96 output=landclass96 type=area
+v.random restrict=landclass96 output=random_samples npoints=2 where="label = 'water'" layer=1 -a
+```
 
 ![](vrandom_restricted_area.png){border="1"}\
 Two random points sampled in each individual water body (stratified

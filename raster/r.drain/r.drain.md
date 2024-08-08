@@ -48,25 +48,25 @@ starting points can be input from a combination of the
 
 Consider the following example:
 
-::: code
-    Input:                          Output:
-      ELEVATION SURFACE               LEAST COST PATH
-    . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 19. 20. 18. 19. 16. 15. 15.    .   .   .   .   .   .   .   .
-    . .  ---  . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 20| 19| 17. 16. 17. 16. 16.    .   . 1 . 1 . 1 .   .   .   .
-    . .  ---  . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 18. 18. 24. 18. 15. 12. 11.    .   .   .   .   . 1 .   .   .
-    . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 22. 16. 16. 18. 10. 10. 10.    .   .   .   .   . 1 .   .   .
-    . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 17. 15. 15. 15. 10. 8 . 8 .    .   .   .   .   .   . 1 .   .
-    . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 24. 16. 8 . 7 . 8 . 0 . 12.    .   .   .   .   .   . 1 .   .
-    . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 17. 9 . 8 . 7 . 8 . 6 . 12.    .   .   .   .   .   .   .   .
-    . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
-:::
+```
+Input:                          Output:
+  ELEVATION SURFACE               LEAST COST PATH
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 19. 20. 18. 19. 16. 15. 15.    .   .   .   .   .   .   .   .
+. .  ---  . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 20| 19| 17. 16. 17. 16. 16.    .   . 1 . 1 . 1 .   .   .   .
+. .  ---  . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 18. 18. 24. 18. 15. 12. 11.    .   .   .   .   . 1 .   .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 22. 16. 16. 18. 10. 10. 10.    .   .   .   .   . 1 .   .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 17. 15. 15. 15. 10. 8 . 8 .    .   .   .   .   .   . 1 .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 24. 16. 8 . 7 . 8 . 0 . 12.    .   .   .   .   .   . 1 .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 17. 9 . 8 . 7 . 8 . 6 . 12.    .   .   .   .   .   .   .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+```
 
 The user-provided starting location in the above example is the boxed
 **19** in the left-hand map. The path in the output shows the least-cost
@@ -76,84 +76,84 @@ landscape.
 
 With the **-c** *(copy)* flag, you get the following result:
 
-::: code
-    Input:                          Output:
-      ELEVATION SURFACE               LEAST COST PATH
-    . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 19. 20. 18. 19. 16. 15. 15.    .   .   .   .   .   .   .   .
-    . .  ---  . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 20| 19| 17. 16. 17. 16. 16.    .   . 19. 17. 16.   .   .   .
-    . .  ---  . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 18. 18. 24. 18. 15. 12. 11.    .   .   .   .   . 15.   .   .
-    . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 22. 16. 16. 18. 10. 10. 10.    .   .   .   .   . 10.   .   .
-    . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 17. 15. 15. 15. 10. 8 . 8 .    .   .   .   .   .   . 8 .   .
-    . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 24. 16. 8 . 7 . 8 . 0 .12 .    .   .   .   .   .   . 0 .   .
-    . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 17. 9 . 8 . 7 . 8 . 6 .12 .    .   .   .   .   .   .   .   .
-    . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+```
+Input:                          Output:
+  ELEVATION SURFACE               LEAST COST PATH
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 19. 20. 18. 19. 16. 15. 15.    .   .   .   .   .   .   .   .
+. .  ---  . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 20| 19| 17. 16. 17. 16. 16.    .   . 19. 17. 16.   .   .   .
+. .  ---  . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 18. 18. 24. 18. 15. 12. 11.    .   .   .   .   . 15.   .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 22. 16. 16. 18. 10. 10. 10.    .   .   .   .   . 10.   .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 17. 15. 15. 15. 10. 8 . 8 .    .   .   .   .   .   . 8 .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 24. 16. 8 . 7 . 8 . 0 .12 .    .   .   .   .   .   . 0 .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 17. 9 . 8 . 7 . 8 . 6 .12 .    .   .   .   .   .   .   .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
 
-    Note that the last 0 will not be put in the null values map.
-:::
+Note that the last 0 will not be put in the null values map.
+```
 
 With the **-a** *(accumulate)* flag, you get the following result:
 
-::: code
-    Input:                          Output:
-      ELEVATION SURFACE               LEAST COST PATH
-    . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 19. 20. 18. 19. 16. 15. 15.    .   .   .   .   .   .   .   .
-    . .  ---  . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 20| 19| 17. 16. 17. 16. 16.    .   . 19. 36. 52.   .   .   .
-    . .  ---  . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 18. 18. 24. 18. 15. 12. 11.    .   .   .   .   . 67.   .   .
-    . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 22. 16. 16. 18. 10. 10. 10.    .   .   .   .   . 77.   .   .
-    . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 17. 15. 15. 15. 10. 8 . 8 .    .   .   .   .   .   . 85.   .
-    . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 24. 16. 8 . 7 . 8 . 0 .12 .    .   .   .   .   .   . 85.   .
-    . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 17. 9 . 8 . 7 . 8 . 6 .12 .    .   .   .   .   .   .   .   .
-    . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
-:::
+```
+Input:                          Output:
+  ELEVATION SURFACE               LEAST COST PATH
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 19. 20. 18. 19. 16. 15. 15.    .   .   .   .   .   .   .   .
+. .  ---  . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 20| 19| 17. 16. 17. 16. 16.    .   . 19. 36. 52.   .   .   .
+. .  ---  . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 18. 18. 24. 18. 15. 12. 11.    .   .   .   .   . 67.   .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 22. 16. 16. 18. 10. 10. 10.    .   .   .   .   . 77.   .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 17. 15. 15. 15. 10. 8 . 8 .    .   .   .   .   .   . 85.   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 24. 16. 8 . 7 . 8 . 0 .12 .    .   .   .   .   .   . 85.   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 17. 9 . 8 . 7 . 8 . 6 .12 .    .   .   .   .   .   .   .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+```
 
 With the **-n** *(number)* flag, you get the following result:
 
-::: code
-    Input:                          Output:
-      ELEVATION SURFACE               LEAST COST PATH
-    . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 19. 20. 18. 19. 16. 15. 15.    .   .   .   .   .   .   .   .
-    . .  ---  . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 20| 19| 17. 16. 17. 16. 16.    .   . 1 . 2 . 3 .   .   .   .
-    . .  ---  . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 18. 18. 24. 18. 15. 12. 11.    .   .   .   .   . 4 .   .   .
-    . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 22. 16. 16. 18. 10. 10. 10.    .   .   .   .   . 5 .   .   .
-    . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 17. 15. 15. 15. 10. 8 . 8 .    .   .   .   .   .   . 6 .   .
-    . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 24. 16. 8 . 7 . 8 . 0 .12 .    .   .   .   .   .   . 7 .   .
-    . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
-    . 17. 9 . 8 . 7 . 8 . 6 .12 .    .   .   .   .   .   .   .   .
-    . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
-:::
+```
+Input:                          Output:
+  ELEVATION SURFACE               LEAST COST PATH
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 19. 20. 18. 19. 16. 15. 15.    .   .   .   .   .   .   .   .
+. .  ---  . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 20| 19| 17. 16. 17. 16. 16.    .   . 1 . 2 . 3 .   .   .   .
+. .  ---  . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 18. 18. 24. 18. 15. 12. 11.    .   .   .   .   . 4 .   .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 22. 16. 16. 18. 10. 10. 10.    .   .   .   .   . 5 .   .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 17. 15. 15. 15. 10. 8 . 8 .    .   .   .   .   .   . 6 .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 24. 16. 8 . 7 . 8 . 0 .12 .    .   .   .   .   .   . 7 .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 17. 9 . 8 . 7 . 8 . 6 .12 .    .   .   .   .   .   .   .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+```
 
 With the **-d** *(direction)* flag, the direction raster is used for the
 input, rather than the elevation surface. The output is then created
 according to one of the **-can** flags.
 
-::: code
-    The directions are recorded as degrees CCW from East:
-           112.5     67.5         i.e. a cell with the value 135
-    157.5  135   90  45   22.5    means the next cell is to the North-West
-           180   x   0
-    202.5  225  270  315  337.5
-           247.5     292.5
-:::
+```
+The directions are recorded as degrees CCW from East:
+       112.5     67.5         i.e. a cell with the value 135
+157.5  135   90  45   22.5    means the next cell is to the North-West
+       180   x   0
+202.5  225  270  315  337.5
+       247.5     292.5
+```
 
 ## NOTES
 
@@ -185,35 +185,35 @@ from a text file using *[v.in.ascii](v.in.ascii.html)* module (here the
 text file is CSV and we are using unix here-file syntax with EOF, in GUI
 just enter the values directly for the parameter input):
 
-::: code
-    v.in.ascii input=- output=start format=point separator=comma <<EOF
-    638667.15686275,220610.29411765
-    638610.78431373,220223.03921569
-    EOF
-:::
+```
+v.in.ascii input=- output=start format=point separator=comma <<EOF
+638667.15686275,220610.29411765
+638610.78431373,220223.03921569
+EOF
+```
 
 Now we compute the drainage path:
 
-::: code
-    r.drain input=elev_lid792_1m output=drain_path drain=drain start_points=start
-:::
+```
+r.drain input=elev_lid792_1m output=drain_path drain=drain start_points=start
+```
 
 Before we visualize the result, we set a color table for the elevation
 we are using and we create a shaded relief map:
 
-::: code
-    r.colors map=elev_lid792_1m color=elevation
-    r.relief input=elev_lid792_1m output=relief
-:::
+```
+r.colors map=elev_lid792_1m color=elevation
+r.relief input=elev_lid792_1m output=relief
+```
 
 Finally we visualize all the input and output data:
 
-::: code
-    d.shade shade=relief color=elev_lid792_1m
-    d.vect map=drain_path color=0:0:61 width=4 legend_label="drainage paths"
-    d.vect map=start color=none fill_color=224:0:0 icon=basic/circle size=15 legend_label=origins
-    d.legend.vect -b
-:::
+```
+d.shade shade=relief color=elev_lid792_1m
+d.vect map=drain_path color=0:0:61 width=4 legend_label="drainage paths"
+d.vect map=start color=none fill_color=224:0:0 icon=basic/circle size=15 legend_label=origins
+d.legend.vect -b
+```
 
 ::: {align="center"}
 [![drainage using r.watershed](r_drain.png){width="300"
@@ -229,31 +229,31 @@ direction raster map which will tell the *r.drain* module how to
 continue from the depression. To get these directions, we use the
 *[r.watershed](r.watershed.html)* module:
 
-::: code
-    r.watershed elevation=elev_lid792_1m accumulation=accum drainage=drain_dir
-:::
+```
+r.watershed elevation=elev_lid792_1m accumulation=accum drainage=drain_dir
+```
 
 The directions are categorical and we convert them to degrees using
 raster algebra:
 
-::: code
-    r.mapcalc "drain_deg = if(drain_dir != 0, 45. * abs(drain_dir), null())"
-:::
+```
+r.mapcalc "drain_deg = if(drain_dir != 0, 45. * abs(drain_dir), null())"
+```
 
 Together with directions, we need to provide the *r.drain* module with
 cost values. We don\'t have any cost to assign to specific cells, so we
 create a constant surface:
 
-::: code
-    r.mapcalc "const1 = 1"
-:::
+```
+r.mapcalc "const1 = 1"
+```
 
 Now we are ready to compute the drainage paths. We are using the two
 points from the previous example.
 
-::: code
-    r.drain -d input=const1 direction=drain_deg output=drain_path_2 drain=drain_2 start_points=start
-:::
+```
+r.drain -d input=const1 direction=drain_deg output=drain_path_2 drain=drain_2 start_points=start
+```
 
 We visualize the result in the same way as in the previous example.
 

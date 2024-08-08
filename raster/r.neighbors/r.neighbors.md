@@ -29,43 +29,43 @@ output map. This may useful to smooth only parts of an elevation map
 *Example how to use a selection map with method=average:*\
 input map:
 
-::: code
-    1 1  1 1 1
-    1 1  1 1 1
-    1 1 10 1 1
-    1 1  1 1 1
-    1 1  1 1 1
-:::
+```
+1 1  1 1 1
+1 1  1 1 1
+1 1 10 1 1
+1 1  1 1 1
+1 1  1 1 1
+```
 
 selection map, NULL values are marked as \*:
 
-::: code
-    * * * * *
-    * * 1 * *
-    * 1 1 1 *
-    * * 1 * *
-    * * * * *
-:::
+```
+* * * * *
+* * 1 * *
+* 1 1 1 *
+* * 1 * *
+* * * * *
+```
 
 The output map:
 
-::: code
-    1 1 1 1 1
-    1 1 2 1 1
-    1 2 2 2 1
-    1 1 2 1 1
-    1 1 1 1 1
-:::
+```
+1 1 1 1 1
+1 1 2 1 1
+1 2 2 2 1
+1 1 2 1 1
+1 1 1 1 1
+```
 
 Without using the selection map, the output map would look like this:
 
-::: code
-    1 1 1 1 1
-    1 2 2 2 1
-    1 2 2 2 1
-    1 2 2 2 1
-    1 1 1 1 1
-:::
+```
+1 1 1 1 1
+1 2 2 2 1
+1 2 2 2 1
+1 2 2 2 1
+1 1 1 1 1
+```
 
 It is also possible to weigh cells within the neighborhood. This can be
 either done with a custom weights matrix or by specifying a weighting
@@ -114,20 +114,22 @@ window moves from cell to cell throughout the map layer.
 ***r.neighbors*** can perform the following operations:
 
 **average**
+
 :   The average value within the neighborhood. In the following example,
     the result would be:\
     (7\*4 + 6 + 5 + 4\*3)/9 = 5.6667\
     The result is rounded to the nearest integer (in this case 6).
-    ::: code
-           Raw Data     Operation     New Data
-           +---+---+---+          +---+---+---+
-           | 7 | 7 | 5 |          |   |   |   |
-           +---+---+---+ average  +---+---+---+
-           | 4 | 7 | 4 |--------->|   | 6 |   |
-           +---+---+---+          +---+---+---+
-           | 7 | 6 | 4 |          |   |   |   |
-           +---+---+---+          +---+---+---+
-    :::
+
+    ```
+       Raw Data     Operation     New Data
+       +---+---+---+          +---+---+---+
+       | 7 | 7 | 5 |          |   |   |   |
+       +---+---+---+ average  +---+---+---+
+       | 4 | 7 | 4 |--------->|   | 6 |   |
+       +---+---+---+          +---+---+---+
+       | 7 | 6 | 4 |          |   |   |   |
+       +---+---+---+          +---+---+---+
+    ```
 
 **median**
 :   The value found half-way through a list of the neighborhood\'s
@@ -187,12 +189,13 @@ surrounding any given cell fall into the neighborhood for that cell. The
 moving window edges in cells. For example, a size value of 3 will result
 in
 
-::: code
-                                  _ _ _
-                                 |_|_|_|
-        3 x 3 neighborhood --->  |_|_|_|
-                                 |_|_|_|
-:::
+```
+                              _ _ _
+                             |_|_|_|
+    3 x 3 neighborhood --->  |_|_|_|
+                             |_|_|_|
+
+```
 
 *Matrix weights:* A custom matrix can be used if none of the
 neighborhood operation methods are desirable by using the **weight**.
@@ -202,41 +205,41 @@ specify the matrix size and *file* needs to be specified as
 text file. For example, to calculate the focal mean with a matrix
 **size** of 3,
 
-::: code
-    r.neigbors in=input.map out=output.map size=3 weighting_function=file \
-    weight=weights.txt
-:::
+```
+r.neigbors in=input.map out=output.map size=3 weighting_function=file \
+weight=weights.txt
+```
 
 The contents of the weight.txt file:
 
-::: code
-    3 3 3
-    1 4 8
-    9 5 3
-:::
+```
+3 3 3
+1 4 8
+9 5 3
+```
 
 This corresponds to the following 3x3 matrix:
 
-::: code
-    +-+-+-+
-    |3|3|3|
-    +-+-+-+
-    |1|4|8|
-    +-+-+-+
-    |9|5|3|
-    +-+-+-+
-:::
+```
++-+-+-+
+|3|3|3|
++-+-+-+
+|1|4|8|
++-+-+-+
+|9|5|3|
++-+-+-+
+```
 
 To calculate an annulus shaped neighborhood the contents of weight.txt
 file may be e.g. for size=5:
 
-::: code
-     0 1 1 1 0
-     1 0 0 0 1
-     1 0 0 0 1
-     1 0 0 0 1
-     0 1 1 1 0
-:::
+```
+ 0 1 1 1 0
+ 1 0 0 0 1
+ 1 0 0 0 1
+ 1 0 0 0 1
+ 0 1 1 1 0
+```
 
 The way that weights are used depends upon the specific aggregate
 (**method**) being used. However, most of the aggregates have the
@@ -247,9 +250,9 @@ equivalent to N occurrences of the cell value, and having all weights
 equal to one produces the same result as when weights are not used. When
 weights are used, the calculation for **method=average** is:
 
-::: code
-      sum(w[i]*x[i]) / sum(w[i])
-:::
+```
+  sum(w[i]*x[i]) / sum(w[i])
+```
 
 In the case where all weights are zero, this will end up with both the
 numerator and denominator to zero, which produces a NULL result.
@@ -272,27 +275,27 @@ numerator and denominator to zero, which produces a NULL result.
 
     The exact masks for the first few neighborhood sizes are as follows:
 
-    ::: code
-        3x3     . X .       5x5 . . X . .   7x7 . . . X . . .
-                X O X           . X X X .       . X X X X X .
-                . X .           X X O X X       . X X X X X .
-                        . X X X .       X X X O X X X
-                        . . X . .       . X X X X X .
-                                    . X X X X X .
-                                        . . . X . . .
+    ```
+    3x3     . X .       5x5 . . X . .   7x7 . . . X . . .
+            X O X           . X X X .       . X X X X X .
+            . X .           X X O X X       . X X X X X .
+                    . X X X .       X X X O X X X
+                    . . X . .       . X X X X X .
+                                . X X X X X .
+                                    . . . X . . .
 
-        9x9 . . . . X . . . .       11x11   . . . . . X . . . . .
-            . . X X X X X . .           . . X X X X X X X . .
-                . X X X X X X X .           . X X X X X X X X X .
-                . X X X X X X X .           . X X X X X X X X X .
-                X X X X O X X X X           . X X X X X X X X X .
-                . X X X X X X X .           X X X X X O X X X X X
-                . X X X X X X X .           . X X X X X X X X X .
-                . . X X X X X . .           . X X X X X X X X X .
-                . . . . X . . . .           . X X X X X X X X X .
-                                    . . X X X X X X X . .
-                                    . . . . . X . . . . .
-    :::
+    9x9 . . . . X . . . .       11x11   . . . . . X . . . . .
+        . . X X X X X . .           . . X X X X X X X . .
+            . X X X X X X X .           . X X X X X X X X X .
+            . X X X X X X X .           . X X X X X X X X X .
+            X X X X O X X X X           . X X X X X X X X X .
+            . X X X X X X X .           X X X X X O X X X X X
+            . X X X X X X X .           . X X X X X X X X X .
+            . . X X X X X . .           . X X X X X X X X X .
+            . . . . X . . . .           . X X X X X X X X X .
+                                . . X X X X X X X . .
+                                . . . . . X . . . . .
+    ```
 
 ## NOTES
 
@@ -340,9 +343,9 @@ two factors affecting the output type:
 
 These combine to create four possibilities:
 
-  input type/weight   integer             float
+  input type/weight   integer             float     
   ------------------- --------- --------- --------- ---------
-  no                  yes       no        yes
+  no                  yes       no        yes       
   average             float     float     float     float
   median              \[1\]     \[1\]     float     float
   mode                integer   integer   \[2\]     \[2\]
@@ -407,28 +410,28 @@ compiled with OpenMP enabled.
 
 Set up 10x10 computational region to aid visual inspection of results
 
-::: code
-    g.region rows=10 cols=10
-:::
+```
+g.region rows=10 cols=10
+```
 
 Fill 50% of computational region with randomly located cells.
 \"distance=0\" will allow filling adjacent cells.
 
-::: code
-    r.random.cells output=random_cells distance=0 ncells=50
-:::
+```
+r.random.cells output=random_cells distance=0 ncells=50
+```
 
 Count non-empty (not NULL) cells in 3x3 neighborhood
 
-::: code
-    r.neighbors input=random_cells output=counts method=count
-:::
+```
+r.neighbors input=random_cells output=counts method=count
+```
 
 Optionally - exclude centre cell from the count (= only look around)
 
-::: code
-    r.mapcalc "count_around = if( isnull(random_cells), counts, counts - 1)"
-:::
+```
+r.mapcalc "count_around = if( isnull(random_cells), counts, counts - 1)"
+```
 
 ## SEE ALSO
 

@@ -17,46 +17,46 @@ high byte, GREEN = low byte, BLUE = empty.
 
 An example Povray script file may look like this:
 
-::: code
-    #include "shapes.inc"
-    #include "colors.inc"
-    #include "textures.inc"
+```
+#include "shapes.inc"
+#include "colors.inc"
+#include "textures.inc"
 
-    #declare Scale = 7;
+#declare Scale = 7;
 
-    light_source { <40000, Scale*3000, 5000> color MainLight }
+light_source { <40000, Scale*3000, 5000> color MainLight }
 
-    camera {
-       location < 23000, Scale*2000, 0>
-       angle  90
-       look_at < 23000, Scale*1400, 5000>
-    }
+camera {
+   location < 23000, Scale*2000, 0>
+   angle  90
+   look_at < 23000, Scale*1400, 5000>
+}
 
-    height_field  {
-       tga "dem.lr.tga"
-       smooth
-       water_level 0.11  // 726 / 6553.6 = 0.111
-        texture {
-          pigment {
-              image_map { // image is always projected from -z, with front facing  +z, top to +Y
-                 ppm "map.lr.ppm"
-                 once
-              }
-              rotate x*90 // align map to height_field
+height_field  {
+   tga "dem.lr.tga"
+   smooth
+   water_level 0.11  // 726 / 6553.6 = 0.111
+    texture {
+      pigment {
+          image_map { // image is always projected from -z, with front facing  +z, top to +Y
+             ppm "map.lr.ppm"
+             once
           }
-        }
-       finish {
-              ambient 0.2         // Very dark shadows
-              diffuse 0.8         // Whiten the whites
-              phong 0.2           // shiny
-              phong_size 100.0    // with tight highlights
-              specular 0.5
-              roughness 0.05
-       }
-       scale < 14500, Scale*6553.6, 13000 >
-       translate <18300, 0, 1100>
+          rotate x*90 // align map to height_field
+      }
     }
-:::
+   finish {
+          ambient 0.2         // Very dark shadows
+          diffuse 0.8         // Whiten the whites
+          phong 0.2           // shiny
+          phong_size 100.0    // with tight highlights
+          specular 0.5
+          roughness 0.05
+   }
+   scale < 14500, Scale*6553.6, 13000 >
+   translate <18300, 0, 1100>
+}
+```
 
 ## AUTHOR
 

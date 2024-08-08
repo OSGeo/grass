@@ -28,10 +28,10 @@ coordinates):
 
 ## EXAMPLE
 
-::: code
-    g.region raster=soilsID
-    r.object.geometry input=soilsID output=soils_geom.txt
-:::
+```
+g.region raster=soilsID
+r.object.geometry input=soilsID output=soils_geom.txt
+```
 
 ## SEE ALSO
 

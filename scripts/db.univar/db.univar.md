@@ -12,15 +12,15 @@ specified, the default values set in *db.connect* will be used.
 In this example, random points are sampled from the elevation map (North
 Carolina sample dataset) and univariate statistics performed:
 
-::: code
-    g.region raster=elevation -p
-    v.random output=samples n=100
-    v.db.addtable samples column="heights double precision"
-    v.what.rast samples raster=elevation column=heights
-    v.db.select samples
+```
+g.region raster=elevation -p
+v.random output=samples n=100
+v.db.addtable samples column="heights double precision"
+v.what.rast samples raster=elevation column=heights
+v.db.select samples
 
-    db.univar samples column=heights
-:::
+db.univar samples column=heights
+```
 
 ## SEE ALSO
 

@@ -70,51 +70,51 @@ and cores. See benchmark scripts in source code.*
 In this example, the raster map `elevation` in the North Carolina sample
 dataset is used to calculate univariate statistics:
 
-::: code
-    g.region raster=elevation -p
+```
+g.region raster=elevation -p
 
-    # standard output, along with extended statistics
-    r.univar -e elevation percentile=98
-    total null and non-null cells: 2025000
-    total null cells: 0
+# standard output, along with extended statistics
+r.univar -e elevation percentile=98
+total null and non-null cells: 2025000
+total null cells: 0
 
-    Of the non-null cells:
-    ----------------------
-    n: 2025000
-    minimum: 55.5788
-    maximum: 156.33
-    range: 100.751
-    mean: 110.375
-    mean of absolute values: 110.375
-    standard deviation: 20.3153
-    variance: 412.712
-    variation coefficient: 18.4057 %
-    sum: 223510266.558102
-    1st quartile: 94.79
-    median (even number of cells): 108.88
-    3rd quartile: 126.792
-    98th percentile: 147.727
+Of the non-null cells:
+----------------------
+n: 2025000
+minimum: 55.5788
+maximum: 156.33
+range: 100.751
+mean: 110.375
+mean of absolute values: 110.375
+standard deviation: 20.3153
+variance: 412.712
+variation coefficient: 18.4057 %
+sum: 223510266.558102
+1st quartile: 94.79
+median (even number of cells): 108.88
+3rd quartile: 126.792
+98th percentile: 147.727
 
 
-    # script style output, along with extended statistics
-    r.univar -ge elevation percentile=98
-    n=2025000
-    null_cells=0
-    cells=2025000
-    min=55.5787925720215
-    max=156.329864501953
-    range=100.751071929932
-    mean=110.375440275606
-    mean_of_abs=110.375440275606
-    stddev=20.3153233205981
-    variance=412.712361620436
-    coeff_var=18.4056555243368
-    sum=223510266.558102
-    first_quartile=94.79
-    median=108.88
-    third_quartile=126.792
-    percentile_98=147.727
-:::
+# script style output, along with extended statistics
+r.univar -ge elevation percentile=98
+n=2025000
+null_cells=0
+cells=2025000
+min=55.5787925720215
+max=156.329864501953
+range=100.751071929932
+mean=110.375440275606
+mean_of_abs=110.375440275606
+stddev=20.3153233205981
+variance=412.712361620436
+coeff_var=18.4056555243368
+sum=223510266.558102
+first_quartile=94.79
+median=108.88
+third_quartile=126.792
+percentile_98=147.727
+```
 
 ### Zonal statistics
 
@@ -122,65 +122,65 @@ In this example, the raster polygon map `basins` in the North Carolina
 sample dataset is used to calculate raster statistics for zones for
 `elevation` raster map:
 
-::: code
-    g.region raster=basins -p
-:::
+```
+g.region raster=basins -p
+```
 
 This will set and print computational region in the format:
 
-::: code
-    projection: 99 (Lambert Conformal Conic)
-    zone:       0
-    datum:      nad83
-    ellipsoid:  a=6378137 es=0.006694380022900787
-    north:      228500
-    south:      215000
-    west:       630000
-    east:       645000
-    nsres:      10
-    ewres:      10
-    rows:       1350
-    cols:       1500
-    cells:      2025000
-:::
+```
+projection: 99 (Lambert Conformal Conic)
+zone:       0
+datum:      nad83
+ellipsoid:  a=6378137 es=0.006694380022900787
+north:      228500
+south:      215000
+west:       630000
+east:       645000
+nsres:      10
+ewres:      10
+rows:       1350
+cols:       1500
+cells:      2025000
+```
 
 Check basin\'s IDs using:
 
-::: code
-    r.category basins
-:::
+```
+r.category basins
+```
 
 This will print them in the format:
 
-::: code
-    2
-    4
-    6
-    8
-    10
-    12
-    14
-    16
-    18
-    20
-    22
-    24
-    26
-    28
-    30
-:::
+```
+2
+4
+6
+8
+10
+12
+14
+16
+18
+20
+22
+24
+26
+28
+30
+```
 
 Visualization of them underlying elevation map can be created as:
 
-::: code
-    d.mon wx0
-    d.rast map=elevation
-    r.colors map=elevation color=grey
-    d.rast map=basins
-    r.colors map=basins color=bgyr
-    d.legend raster=basins use=2,4,6,8,10,12,14,16,18,20,22,24,26,28,30
-    d.barscale
-:::
+```
+d.mon wx0
+d.rast map=elevation
+r.colors map=elevation color=grey
+d.rast map=basins
+r.colors map=basins color=bgyr
+d.legend raster=basins use=2,4,6,8,10,12,14,16,18,20,22,24,26,28,30
+d.barscale
+```
 
 ::: {align="center" style="margin: 10px"}
 [![r.univar basins and their IDs](runivar_basins.png){width="600"
@@ -192,26 +192,26 @@ underlying elevation map for North Carolina sample dataset.*
 Then statistics for elevation can be calculated separately for every
 zone, i.e. basin found in the **zones** parameter:
 
-::: code
-    r.univar -t map=elevation zones=basins separator=comma \
-             output=basin_elev_zonal.csv
-:::
+```
+r.univar -t map=elevation zones=basins separator=comma \
+         output=basin_elev_zonal.csv
+```
 
 This will print information in the format:
 
-::: code
-    zone,label,non_null_cells,null_cells,min,max,range,mean,mean_of_abs,
-    stddev,variance,coeff_var,sum,sum_abs2,,116975,0,55.5787925720215,
-    133.147018432617,77.5682258605957,92.1196971445722,92.1196971445722,
-    15.1475301152556,229.447668592576,16.4433129773355,10775701.5734863,
-    10775701.57348634,,75480,0,61.7890930175781,110.348838806152,
-    48.5597457885742,83.7808205765268,83.7808205765268,11.6451777476995,
-    135.610164775515,13.8995747088232,6323776.33711624,6323776.33711624
-    6,,1137,0,66.9641571044922,83.2070922851562,16.2429351806641,
-    73.1900814395257,73.1900814395257,4.15733292896409,17.2834170822492,
-    5.68018623179036,83217.1225967407,83217.12259674078,,80506,
-    0,67.4670791625977,147.161514282227, ...
-:::
+```
+zone,label,non_null_cells,null_cells,min,max,range,mean,mean_of_abs,
+stddev,variance,coeff_var,sum,sum_abs2,,116975,0,55.5787925720215,
+133.147018432617,77.5682258605957,92.1196971445722,92.1196971445722,
+15.1475301152556,229.447668592576,16.4433129773355,10775701.5734863,
+10775701.57348634,,75480,0,61.7890930175781,110.348838806152,
+48.5597457885742,83.7808205765268,83.7808205765268,11.6451777476995,
+135.610164775515,13.8995747088232,6323776.33711624,6323776.33711624
+6,,1137,0,66.9641571044922,83.2070922851562,16.2429351806641,
+73.1900814395257,73.1900814395257,4.15733292896409,17.2834170822492,
+5.68018623179036,83217.1225967407,83217.12259674078,,80506,
+0,67.4670791625977,147.161514282227, ...
+```
 
 Comma Separated Values (CSV) file is best viewed through a spreadsheet
 program such as Microsoft Excel, Libre/Open Office Calc or Google Docs:
@@ -224,6 +224,46 @@ border="0"}\
 (basins, North Carolina sample dataset) viewed through Libre/Open Office
 Calc.*
 :::
+
+### JSON Output
+
+```
+r.univar -e elevation percentile=98 format=json
+```
+
+will output the results in JSON format:
+
+```
+[
+    {
+        "n": 2025000,
+        "null_cells": 0,
+        "cells": 2025000,
+        "min": 55.578792572021484,
+        "max": 156.32986450195312,
+        "range": 100.75107192993164,
+        "mean": 110.37544027560575,
+        "mean_of_abs": 110.37544027560575,
+        "stddev": 20.315323320598083,
+        "variance": 412.7123616204363,
+        "coeff_var": 18.40565552433679,
+        "sum": 223510266.55810165,
+        "first_quartile": 94.789985656738281,
+        "median": 108.87990570068359,
+        "third_quartile": 126.79196929931641,
+         "percentiles": [
+            {
+                "percentile": 98,
+                "value": 147.7265625
+            },
+            {
+                "percentile": 9,
+                "value": 83.494270324707031
+            }
+        ]
+    }
+]
+```
 
 ## TODO
 

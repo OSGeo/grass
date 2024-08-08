@@ -18,10 +18,10 @@ It assumes MODIS product surface reflectance in \[0;10000\].
 The following example creates the raster map \"albedo_lsat7_1987\" from
 the LANDSAT-TM5 bands in the North Carolina dataset:
 
-::: code
-    g.region raster=lsat5_1987_10 -p
-    i.albedo -l input=lsat5_1987_10,lsat5_1987_20,lsat5_1987_30,lsat5_1987_40,lsat5_1987_50,lsat5_1987_70 output=albedo_lsat7_1987
-:::
+```
+g.region raster=lsat5_1987_10 -p
+i.albedo -l input=lsat5_1987_10,lsat5_1987_20,lsat5_1987_30,lsat5_1987_40,lsat5_1987_50,lsat5_1987_70 output=albedo_lsat7_1987
+```
 
 ![i.albedo LANDSAT-TM5 1987 example](i_albedo_landsat5.png)\
 *Figure: Resulting albedo map from LANDSAT 5*
@@ -29,10 +29,10 @@ the LANDSAT-TM5 bands in the North Carolina dataset:
 The following example creates the raster map \"albedo_lsat7_2000\" from
 the LANDSAT-TM7 bands in the North Carolina dataset:
 
-::: code
-    g.region raster=lsat7_2000_10 -p
-    i.albedo -l input=lsat7_2000_10,lsat7_2000_20,lsat7_2000_30,lsat7_2000_40,lsat7_2000_50,lsat7_2000_70 output=albedo_lsat7_2000
-:::
+```
+g.region raster=lsat7_2000_10 -p
+i.albedo -l input=lsat7_2000_10,lsat7_2000_20,lsat7_2000_30,lsat7_2000_40,lsat7_2000_50,lsat7_2000_70 output=albedo_lsat7_2000
+```
 
 ![i.albedo LANDSAT-TM7 2000 example](i_albedo_landsat7.png)\
 *Figure: Resulting albedo map from LANDSAT 7*

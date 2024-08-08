@@ -21,9 +21,9 @@ will notice that this path might go through a vertex of a line. If this
 is not what you wanted you might need to process the map in
 *[v.buffer](v.buffer.html)*, initially with a small value. Example:
 
-::: code
-    v.buffer input=map output=bufferedmap buffer=1 type=point,line,area,boundary
-:::
+```
+v.buffer input=map output=bufferedmap buffer=1 type=point,line,area,boundary
+```
 
 The first argument is the input map. It supports lines, boundaries (so,
 areas) and points. For the algorithm was written to work with lines and
@@ -34,9 +34,9 @@ map.
 If you need to add additional points to compute a shortest path between
 them afterwards you can use the **coordinates** parameter, e.g.:
 
-::: code
-    coordinates=25556200,6686400,25556400,6686600
-:::
+```
+coordinates=25556200,6686400,25556400,6686600
+```
 
 where 25556200,6686400 are the coordinate of the first point and
 25556400,6686600 are the coordinates of the second point. Of course you
@@ -48,10 +48,10 @@ vis will be the computed visibility graph and the output the new
 visibility graph which will be the vis + the new points given with
 coordinate (edges will be computed as well).
 
-::: code
-    v.net.visibility input=map visibility=vis_map output=new_vis_map \
-          coordinates=25556200,6686400,25556400,6686600
-:::
+```
+v.net.visibility input=map visibility=vis_map output=new_vis_map \
+      coordinates=25556200,6686400,25556400,6686600
+```
 
 ## EXAMPLES
 
@@ -60,38 +60,38 @@ coordinate (edges will be computed as well).
 A simple example (North Carolina sample data) showing how to use the
 module:
 
-::: code
-    v.extract input=zipcodes_wake output=areas_7_11_25 cats=7,11,25
-    g.region vector=zipcodes_wake
-    d.mon wx0
-    d.vect areas_7_11_25
-    v.net.visibility input=areas_7_11_25 output=graph
-    d.vect graph
-    d.vect areas_7_11_25 color=red type=boundary
-:::
+```
+v.extract input=zipcodes_wake output=areas_7_11_25 cats=7,11,25
+g.region vector=zipcodes_wake
+d.mon wx0
+d.vect areas_7_11_25
+v.net.visibility input=areas_7_11_25 output=graph
+d.vect graph
+d.vect areas_7_11_25 color=red type=boundary
+```
 
 ### Example 2
 
 An example on how to use *[v.buffer](v.buffer.html)* along with the
 module:
 
-::: code
-    v.buffer input=lines output=buffered_lines buffer=1
-    v.net.visibility input=buffered_lines output=graph
-    d.vect graph
-    d.vect lines col=red
-:::
+```
+v.buffer input=lines output=buffered_lines buffer=1
+v.net.visibility input=buffered_lines output=graph
+d.vect graph
+d.vect lines col=red
+```
 
 ### Example 3
 
 An example on how to use the coordinate parameter. This will compute the
 visibility graph of the vector map lines with the point 2555678,6686343:
 
-::: code
-    v.net.visibility input=lines output=graph coordinates=2555678,6686343
-    d.vect graph
-    d.vect lines col=red
-:::
+```
+v.net.visibility input=lines output=graph coordinates=2555678,6686343
+d.vect graph
+d.vect lines col=red
+```
 
 ### Example 4
 
@@ -100,32 +100,32 @@ parameter with the vis parameter. Here the vector map graph is computed
 then a new visibility graph is computed from it with the point
 669547.97,208348.20 extra:
 
-::: code
-    v.extract input=zipcodes_wake output=areas_7_11_25 cats=7,11,25
-    g.region vector=zipcodes_wake
-    d.mon wx0
-    d.vect areas_7_11_25
-    v.net.visibility input=areas_7_11_25 output=graph
-    v.net.visibility input=areas_7_11_25 visibility=graph output=new_graph \
-          coordinates=669547.97,208348.20
-    d.erase
-    d.vect areas_7_11_25
-    echo "symbol basic/star 20 669547.97 208348.20 black red" | d.graph -m
-    d.vect new_graph
-    d.vect areas_7_11_25 color=red type=boundary
-:::
+```
+v.extract input=zipcodes_wake output=areas_7_11_25 cats=7,11,25
+g.region vector=zipcodes_wake
+d.mon wx0
+d.vect areas_7_11_25
+v.net.visibility input=areas_7_11_25 output=graph
+v.net.visibility input=areas_7_11_25 visibility=graph output=new_graph \
+      coordinates=669547.97,208348.20
+d.erase
+d.vect areas_7_11_25
+echo "symbol basic/star 20 669547.97 208348.20 black red" | d.graph -m
+d.vect new_graph
+d.vect areas_7_11_25 color=red type=boundary
+```
 
 ### Example 5
 
 An example for connections of points (Spearfish):
 
-::: code
-    v.net.visibility input=archsites output=graph
-    g.region vector=archsites
-    d.mon wx0
-    d.vect graph
-    d.vect archsites col=red
-:::
+```
+v.net.visibility input=archsites output=graph
+g.region vector=archsites
+d.mon wx0
+d.vect graph
+d.vect archsites col=red
+```
 
 ### Example 6
 
@@ -136,63 +136,63 @@ Here is an example with artificial data.
 Load data using here document syntax (Bash and unix-like commands lines
 only):
 
-::: code
-    v.in.ascii input=- output=simple format=standard <<EOF
-    VERTI:
-    B  6
-     82.19908257  75.21788991
-     81.67889908  71.40321101
-     83.58623853  71.72522936
-     84.3293578   75.21788991
-     82.24862385  76.06009174
-     82.19908257  75.21788991
-    C  1 1
-     82.88897401  73.66318782
-     1     1
-    C  1 1
-     90.72645705  75.61248675
-     1     2
-    C  1 1
-     89.37944702  69.51012912
-     1     3
-    C  1 1
-     81.60108979  67.78669725
-     1     4
-    B  5
-     89.92752294  73.95458716
-     92.37981651  75.11880734
-     91.56238532  77.29862385
-     88.96146789  75.88669725
-     89.92752294  73.95458716
-    B  10
-     88.54036697  70.70963303
-     87.92192518  70.04087417
-     87.89633028  69.00045872
-     88.66460807  68.13372867
-     90.15108904  68.23290821
-     90.9426344   68.97588202
-     90.86880734  70.11513761
-     90.00144697  70.78336312
-     89.06055046  70.95733945
-     88.54036697  70.70963303
-    B  9
-     78.73119266  71.35366972
-     80.76238532  68.90137615
-     84.20550459  66.91972477
-     89.87798165  65.35917431
-     83.23494031  66.27685175
-     80.34278748  68.00837238
-     78.38484005  71.40292009
-     78.40917431  72.27018349
-     78.73119266  71.35366972
-    EOF
-:::
+```
+v.in.ascii input=- output=simple format=standard <<EOF
+VERTI:
+B  6
+ 82.19908257  75.21788991
+ 81.67889908  71.40321101
+ 83.58623853  71.72522936
+ 84.3293578   75.21788991
+ 82.24862385  76.06009174
+ 82.19908257  75.21788991
+C  1 1
+ 82.88897401  73.66318782
+ 1     1
+C  1 1
+ 90.72645705  75.61248675
+ 1     2
+C  1 1
+ 89.37944702  69.51012912
+ 1     3
+C  1 1
+ 81.60108979  67.78669725
+ 1     4
+B  5
+ 89.92752294  73.95458716
+ 92.37981651  75.11880734
+ 91.56238532  77.29862385
+ 88.96146789  75.88669725
+ 89.92752294  73.95458716
+B  10
+ 88.54036697  70.70963303
+ 87.92192518  70.04087417
+ 87.89633028  69.00045872
+ 88.66460807  68.13372867
+ 90.15108904  68.23290821
+ 90.9426344   68.97588202
+ 90.86880734  70.11513761
+ 90.00144697  70.78336312
+ 89.06055046  70.95733945
+ 88.54036697  70.70963303
+B  9
+ 78.73119266  71.35366972
+ 80.76238532  68.90137615
+ 84.20550459  66.91972477
+ 89.87798165  65.35917431
+ 83.23494031  66.27685175
+ 80.34278748  68.00837238
+ 78.38484005  71.40292009
+ 78.40917431  72.27018349
+ 78.73119266  71.35366972
+EOF
+```
 
 Compute the graph:
 
-::: code
-    v.net.visibility input=simple output=graph
-:::
+```
+v.net.visibility input=simple output=graph
+```
 
 ## KNOWN ISSUES
 

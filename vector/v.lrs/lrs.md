@@ -23,28 +23,28 @@ This feature gives a possibility to continue to use most of old
 mileposts if only small part of linear object in real world has changed.
 Example:
 
-::: code
-    --- road (linear feature)
-     +   MP (milepost, point, distance from the beginning in km)
-:::
+```
+--- road (linear feature)
+ +   MP (milepost, point, distance from the beginning in km)
+```
 
 Old situation:
 
-::: code
-    +----+----+----+----+----+
-    0    2    3    4    5    6
-:::
+```
++----+----+----+----+----+
+0    2    3    4    5    6
+```
 
 New situation (for example a new bypass around the village)
 
-::: code
-              ?    ?
-              +----+
-              |    |
-              |    |
-    +----+----+    +----+----+
-    0    2    3    4    5    6
-:::
+```
+          ?    ?
+          +----+
+          |    |
+          |    |
++----+----+    +----+----+
+0    2    3    4    5    6
+```
 
 The segment between km 3 and 4 is now longer, it is now 3 km not 1 km as
 in old version. It would be expensive to change also all MP \>= 4, but
@@ -52,15 +52,15 @@ we cannot use km 4 twice. It is possible to use another notation for the
 new segment, we reference the segment from the kilometer 3, using only
 offset.
 
-::: code
-          3+1000  3+2000
-              +----+
-              |    |
-              |    |
-    +----+----+    +----+----+
-    0    2    3  3+3000 5    6
-                   4
-:::
+```
+      3+1000  3+2000
+          +----+
+          |    |
+          |    |
++----+----+    +----+----+
+0    2    3  3+3000 5    6
+               4
+```
 
 This way, there is no ambiguity and minimal changes are needed. But the
 MP 4 is no more the end of segment 3 - 4 but the end of segment 3+2000 -
@@ -72,12 +72,12 @@ optional MP attributes:
 
 In this case original MP on km 4 will have these attributes:
 
-::: code
-    start_mp:  4
-    start_off: 0
-    end_mp:    3
-    end_off:   3000
-:::
+```
+start_mp:  4
+start_off: 0
+end_mp:    3
+end_off:   3000
+```
 
 Because each MP can keep 2 values (start, end) it is called \'double\'
 referenced LRS.
@@ -134,10 +134,10 @@ by line_cat and map_offset, not by coordinates in map.
 
 It can happen that one offset appears on 2 different lines:
 
-::: code
-    ------1-------     --------2------
-    +0.0            +1.0              +2.0
-:::
+```
+------1-------     --------2------
++0.0            +1.0              +2.0
+```
 
 In this case, the module gives error because the position results in 2
 points.
@@ -145,15 +145,15 @@ points.
 It can be also intended, for example a part of the road is shared with
 another one, but MP are used only for one:
 
-::: code
-     + road1/km15         + road1/km22
-      \                  /
-       \ road1/km17     / road1/km20
-        +--------------+
-       / road2/km52     \ road2/km52
-      /                  \
-     + road2/km50         + road2/km54
-:::
+```
+ + road1/km15         + road1/km22
+  \                  /
+   \ road1/km17     / road1/km20
+    +--------------+
+   / road2/km52     \ road2/km52
+  /                  \
+ + road2/km50         + road2/km54
+```
 
 ## NOTES
 

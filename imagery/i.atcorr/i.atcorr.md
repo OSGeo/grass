@@ -20,16 +20,16 @@ The satellite overpass time has to be specified in Greenwich Mean Time
 
 An example of the 6S parameters could be:
 
-::: code
-    8                            - geometrical conditions=Landsat ETM+
-    2 19 13.00 -47.410 -20.234   - month day hh.ddd longitude latitude ("hh.ddd" is in decimal hours GMT)
-    1                            - atmospheric model=tropical
-    1                            - aerosols model=continental
-    15                           - visibility [km] (aerosol model concentration)
-    -0.600                       - mean target elevation above sea level [km] (here 600 m asl)
-    -1000                        - sensor height (here, sensor on board a satellite)
-    64                           - 4th band of ETM+ Landsat 7
-:::
+```
+8                            - geometrical conditions=Landsat ETM+
+2 19 13.00 -47.410 -20.234   - month day hh.ddd longitude latitude ("hh.ddd" is in decimal hours GMT)
+1                            - atmospheric model=tropical
+1                            - aerosols model=continental
+15                           - visibility [km] (aerosol model concentration)
+-0.600                       - mean target elevation above sea level [km] (here 600 m asl)
+-1000                        - sensor height (here, sensor on board a satellite)
+64                           - 4th band of ETM+ Landsat 7
+```
 
 If the position is not available in longitude-latitude (WGS84), the
 *[m.proj](m.proj.html)* conversion module can be used to reproject from
@@ -262,8 +262,8 @@ a different reference system.
   3                       urban model              
 
   4                       shettle model for        
-                          background desert
-                          aerosol
+                          background desert       
+                          aerosol                 
 
   5                       biomass burning          
 
@@ -331,10 +331,10 @@ visibility and in a following line enter the aerosol optical depth at
 550nm (iaer means \'i\' for input and \'aer\' for aerosol), for
 example:\
 
-::: code
-    0                            - visibility
-    0.112                        - aerosol optical depth at 550 nm
-:::
+```
+0                            - visibility
+0.112                        - aerosol optical depth at 550 nm
+```
 
 NOTE: if iaer is 0, enter -1 for visibility.
 
@@ -684,9 +684,9 @@ following information:
     decimal coordinates. To obtain the coordinates of the centre, we can
     run:
 
-    ::: code
-        g.region -bg
-    :::
+    ```
+    g.region -bg
+    ```
 
     The longitude and latitude of the centre are stored in *ll_clon* and
     *ll_clat*. In our case, `ll_clon=-78.691` and `ll_clat=35.749`.\
@@ -720,9 +720,9 @@ following information:
     of the computational region. You can estimate it from the digital
     elevation model, e.g. by running:
 
-    ::: code
-        r.univar -g elevation
-    :::
+    ```
+    r.univar -g elevation
+    ```
 
     The mean elevation is stored in *mean*. In our case, `mean=110`. In
     the 6S file it will be displayed in \[-km\], i.e., `-0.110`.\
@@ -743,17 +743,17 @@ Finally, here is what the 6S file would look like for Band 02 of our
 scene. In order to use it in the *i.atcorr* module, we can save it in a
 text file, for example `params_B02.txt`.
 
-::: code
-    25
-    10 28 15.901 -78.691 35.749
-    2
-    1
-    0
-    0.07
-    -0.110
-    -1000
-    167
-:::
+```
+25
+10 28 15.901 -78.691 35.749
+2
+1
+0
+0.07
+-0.110
+-1000
+167
+```
 
 **Compute atmospheric correction**
 
@@ -778,9 +778,9 @@ well:
 Finally, this is how the command would look like to apply atmospheric
 correction to band *B02*:
 
-::: code
-    i.atcorr input=B02 parameters=params_B02.txt output=B02.atcorr range=1,10000 rescale=0,255 elevation=elevation
-:::
+```
+i.atcorr input=B02 parameters=params_B02.txt output=B02.atcorr range=1,10000 rescale=0,255 elevation=elevation
+```
 
 To apply atmospheric correction to the remaining bands, only the last
 line in the 6S parameters file (i.e., the sensor band) needs to be
@@ -799,9 +799,9 @@ This example is also based on the North Carolina sample dataset (GMT -5
 hours). First we set the computational region to the satellite map, e.g.
 band 4:
 
-::: code
-    g.region raster=lsat7_2002_40 -p
-:::
+```
+g.region raster=lsat7_2002_40 -p
+```
 
 It is important to verify the available metadata for the sun position
 which has to be defined for the atmospheric correction. An option is to
@@ -813,9 +813,9 @@ North Carolina sample dataset). In the case of the North Carolina sample
 dataset, these values have been stored for each channel and can be
 retrieved with:
 
-::: code
-    r.info lsat7_2002_40
-:::
+```
+r.info lsat7_2002_40
+```
 
 In this case, we have: SUN_AZIMUTH = 120.8810347, SUN_ELEVATION =
 64.7730999.
@@ -824,10 +824,10 @@ If the sun position metadata are unavailable, we can also calculate them
 from the overpass time as follows (*[r.sunmask](r.sunmask.html)* uses
 [SOLPOS](http://www.nrel.gov/midc/solpos/solpos.html)):
 
-::: code
-    r.sunmask -s elev=elevation out=dummy year=2002 month=5 day=24 hour=10 min=42 sec=7 timezone=-5
-    # .. reports: sun azimuth: 121.342461, sun angle above horz.(refraction corrected): 65.396652
-:::
+```
+r.sunmask -s elev=elevation out=dummy year=2002 month=5 day=24 hour=10 min=42 sec=7 timezone=-5
+# .. reports: sun azimuth: 121.342461, sun angle above horz.(refraction corrected): 65.396652
+```
 
 If the overpass time is unknown, use the [NASA LaRC Satellite Overpass
 Predictor](http://cloudsgate2.larc.nasa.gov/cgi-bin/predict/predict.cgi).
@@ -842,10 +842,10 @@ In case of different satellites, the conversion of DN (digital number =
 pixel values) to radiance at top-of-atmosphere (TOA) can also be done
 manually, using e.g. the formula:
 
-::: code
-    # formula depends on satellite sensor, see respective metadata
-    Lλ = ((LMAXλ - LMINλ)/(QCALMAX-QCALMIN)) * (QCAL-QCALMIN) + LMINλ
-:::
+```
+# formula depends on satellite sensor, see respective metadata
+Lλ = ((LMAXλ - LMINλ)/(QCALMAX-QCALMIN)) * (QCAL-QCALMIN) + LMINλ
+```
 
 where,
 
@@ -874,22 +874,22 @@ value for every separate pixel in the Landsat image.
 We extract the coefficients and apply them in order to obtain the
 radiance map:
 
-::: code
-    CHAN=4
-    r.info lsat7_2002_${CHAN}0 -h | tr '\n' ' ' | sed 's+ ++g' | tr ':' '\n' | grep "LMIN_BAND${CHAN}\|LMAX_BAND${CHAN}"
-    LMAX_BAND4=241.100,p016r035_7x20020524.met
-    LMIN_BAND4=-5.100,p016r035_7x20020524.met
-    QCALMAX_BAND4=255.0,p016r035_7x20020524.met
-    QCALMIN_BAND4=1.0,p016r035_7x20020524.met
-:::
+```
+CHAN=4
+r.info lsat7_2002_${CHAN}0 -h | tr '\n' ' ' | sed 's+ ++g' | tr ':' '\n' | grep "LMIN_BAND${CHAN}\|LMAX_BAND${CHAN}"
+LMAX_BAND4=241.100,p016r035_7x20020524.met
+LMIN_BAND4=-5.100,p016r035_7x20020524.met
+QCALMAX_BAND4=255.0,p016r035_7x20020524.met
+QCALMIN_BAND4=1.0,p016r035_7x20020524.met
+```
 
 Conversion to radiance (this calculation is done for band 4, for the
 other bands, the numbers will need to be replaced with their related
 values):
 
-::: code
-    r.mapcalc "lsat7_2002_40_rad = ((241.1 - (-5.1)) / (255.0 - 1.0)) * (lsat7_2002_40 - 1.0) + (-5.1)"
-:::
+```
+r.mapcalc "lsat7_2002_40_rad = ((241.1 - (-5.1)) / (255.0 - 1.0)) * (lsat7_2002_40 - 1.0) + (-5.1)"
+```
 
 Again, the *r.mapcalc* calculation is only needed when working with
 satellite data other than Landsat or ASTER.
@@ -904,23 +904,23 @@ metadata. For the overpass time, we need to define decimal hours:
 10:42:07 NC local time = 10.70 decimal hours (decimal minutes: 42 \* 100
 / 60) which is 15.70 GMT.
 
-::: code
-    8                            - geometrical conditions=Landsat ETM+
-    5 24 15.70 -78.691 35.749    - month day hh.ddd longitude latitude ("hh.ddd" is in GMT decimal hours)
-    2                            - atmospheric model=midlatitude summer
-    1                            - aerosols model=continental
-    50                           - visibility [km] (aerosol model concentration)
-    -0.110                       - mean target elevation above sea level [km]
-    -1000                        - sensor on board a satellite
-    64                           - 4th band of ETM+ Landsat 7
-:::
+```
+8                            - geometrical conditions=Landsat ETM+
+5 24 15.70 -78.691 35.749    - month day hh.ddd longitude latitude ("hh.ddd" is in GMT decimal hours)
+2                            - atmospheric model=midlatitude summer
+1                            - aerosols model=continental
+50                           - visibility [km] (aerosol model concentration)
+-0.110                       - mean target elevation above sea level [km]
+-1000                        - sensor on board a satellite
+64                           - 4th band of ETM+ Landsat 7
+```
 
 Finally, run the atmospheric correction (-r for reflectance input map;
 -a for date \> July 2000):
 
-::: code
-    i.atcorr -r -a lsat7_2002_40_rad elevation=elevation parameters=icnd_lsat4.txt output=lsat7_2002_40_atcorr
-:::
+```
+i.atcorr -r -a lsat7_2002_40_rad elevation=elevation parameters=icnd_lsat4.txt output=lsat7_2002_40_atcorr
+```
 
 Note that the altitude value from \'icnd_lsat4.txt\' file is read at the
 beginning to compute the initial transform. Therefore, it is necessary

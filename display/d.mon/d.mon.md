@@ -60,9 +60,9 @@ control output size etc.
 To start the interactive *[wxGUI map
 display](wxGUI.html#map-display-window)*, run
 
-::: code
-    d.mon start=wx0
-:::
+```
+d.mon start=wx0
+```
 
 ::: {style="margin: 10px" align="center"}
 ![Blank wx0 display](d_mon_wx0.png){border="0"}\
@@ -71,10 +71,10 @@ display](wxGUI.html#map-display-window)*, run
 
 All subsequently displayed data will be rendered on monitor `wx0`.
 
-::: code
-    g.region raster=elevation -p
-    d.rast map=elevation
-:::
+```
+g.region raster=elevation -p
+d.rast map=elevation
+```
 
 ::: {style="margin: 10px" align="center"}
 ![Display wx0 with raster map](d_mon_wx0_raster.png){border="0"}\
@@ -85,9 +85,9 @@ All subsequently displayed data will be rendered on monitor `wx0`.
 
 A CAIRO monitor can be started (and selected) by
 
-::: code
-    d.mon start=cairo output=out.pdf
-:::
+```
+d.mon start=cairo output=out.pdf
+```
 
 From this moment on all displayed data will be rendered into file
 `output.pdf`.
@@ -96,40 +96,40 @@ From this moment on all displayed data will be rendered into file
 
 To list the currently running monitors, use
 
-::: code
-    d.mon -l
+```
+d.mon -l
 
-    List of running monitors:
-    wx0
-    cairo
-:::
+List of running monitors:
+wx0
+cairo
+```
 
 ### Show currently selected monitor
 
 To identify the currently selected monitor, use
 
-::: code
-    d.mon -p
+```
+d.mon -p
 
-    cairo
-:::
+cairo
+```
 
 ### Switching between monitors
 
 To switch back to interactive display mode, here to an earlier started
 and still running wxGUI monitor, use
 
-::: code
-    d.mon select=wx0
-:::
+```
+d.mon select=wx0
+```
 
 ### Stopping a monitor
 
 To close the wxGUI monitor, run
 
-::: code
-    d.mon stop=wx0
-:::
+```
+d.mon stop=wx0
+```
 
 ## SEE ALSO
 

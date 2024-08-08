@@ -11,28 +11,28 @@ example from *v.lrs.create*).
 In this example, the \'route_lrs\' shall be queried for unknown
 positions (points, stored in the map *newpoints*) along the LRS:
 
-::: code
-    # generate query points
-    echo "590866.15|4926737.0
-    590933|4927133" | v.in.ascii out=newpoints
+```
+# generate query points
+echo "590866.15|4926737.0
+590933|4927133" | v.in.ascii out=newpoints
 
-    v.lrs.where lines=route_lrs points=newpoints rstable=route_lrs
-    pcat|lid|mpost|offset
-    pcat|lid|mpost|offset
-    1|22|4.000000+212.091461
-    2|22|6.000000+188.112093
+v.lrs.where lines=route_lrs points=newpoints rstable=route_lrs
+pcat|lid|mpost|offset
+pcat|lid|mpost|offset
+1|22|4.000000+212.091461
+2|22|6.000000+188.112093
 
-    # verification
-    g.region vector=route_lrs n=n+100 s=s-100 -p
-    d.erase
-    d.vect route_lrs
-    d.vect busstops disp=attr attr=cat size=10 bg=white lcol=blue yref=bottom
-    d.vect busstops icon=basic/circle fcol=blue
-    d.vect newpoints col=red
+# verification
+g.region vector=route_lrs n=n+100 s=s-100 -p
+d.erase
+d.vect route_lrs
+d.vect busstops disp=attr attr=cat size=10 bg=white lcol=blue yref=bottom
+d.vect busstops icon=basic/circle fcol=blue
+d.vect newpoints col=red
 
-    # measure distance to previous bus stop:
-    # use measuring tool in graphical user interface
-:::
+# measure distance to previous bus stop:
+# use measuring tool in graphical user interface
+```
 
 ## SEE ALSO
 

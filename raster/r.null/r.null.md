@@ -32,9 +32,9 @@ reclassified maps (products of *r.reclass*).\
 As a workaround, the way to recode such a map is: The user creates a
 raster map out of the reclassified map by copying it:\
 
-::: code
-    r.mapcalc "newmap = reclass"
-:::
+```
+r.mapcalc "newmap = reclass"
+```
 
 ### NULL data compression
 
@@ -59,15 +59,15 @@ NULL (`if()` condition).
 
 Set specific values of a classified map to NULL:\
 
-::: code
-    r.null map=landcover.30m setnull=21,22
-:::
+```
+r.null map=landcover.30m setnull=21,22
+```
 
 Set NULL-values of a map to a specific value:\
 
-::: code
-    r.null map=fields null=99
-:::
+```
+r.null map=fields null=99
+```
 
 ## SEE ALSO
 

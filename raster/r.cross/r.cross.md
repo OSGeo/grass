@@ -26,27 +26,27 @@ of the category values from these existing *input* map layers.
 For example, suppose that, using two raster map layers, the following
 combinations occur:
 
-::: code
-              map1   map2
-              ___________
-              NULL    1
-              NULL    2
-               1      1
-               1      2
-               2      4
-:::
+```
+          map1   map2
+          ___________
+          NULL    1
+          NULL    2
+           1      1
+           1      2
+           2      4
+```
 
 *r.cross* would produce a new raster map layer with 5 categories:
 
-::: code
-              map1   map2   output
-              ____________________
-              NULL    1       0
-              NULL    2       1
-               1      1       2
-               1      2       3
-               2      4       4
-:::
+```
+          map1   map2   output
+          ____________________
+          NULL    1       0
+          NULL    2       1
+           1      1       2
+           1      2       3
+           2      4       4
+```
 
 Note: The actual category value assigned to a particular combination in
 the *result* map layer is dependent on the order in which the
@@ -59,16 +59,16 @@ The category file created for the *output* raster map layer describes
 the combinations of input map layer category values which generated each
 category. In the above example, the category labels would be:
 
-::: code
-              category   category
-              value      label
-              ______________________________
-                 0       layer1(0) layer2(1)
-                 1       layer1(0) layer2(2)
-                 2       layer1(1) layer2(1)
-                 3       layer1(1) layer2(2)
-                 4       layer1(2) layer2(4)
-:::
+```
+          category   category
+          value      label
+          ______________________________
+             0       layer1(0) layer2(1)
+             1       layer1(0) layer2(2)
+             2       layer1(1) layer2(1)
+             3       layer1(1) layer2(2)
+             4       layer1(2) layer2(4)
+```
 
 A random color table is also generated for the *output* map layer.
 

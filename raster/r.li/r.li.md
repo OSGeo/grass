@@ -67,45 +67,53 @@ the Spearfish sample dataset, using a 5x5 moving window:
 1.  CREATE A NEW CONFIGURATION FILE
     1.  run
 
-        ::: code
-              g.gui.rlisetup
-        :::
+        ```
+          g.gui.rlisetup
+        ```
+
     2.  The main *g.gui.rlisetup* window is displayed, click on \"New\"
+
     3.  The new configuration window is now displayed, enter the
         configuration file name (e.g., \"my_conf\", do not use absolute
         paths) Now the new configuration window is displayed. Enter the
         configuration file name (e.g., \"my_conf\", do not use absolute
         paths) and the name of raster map (e.g., \"geology\"). The other
         fields are not needed for this configuration.
+
     4.  Click on \"Setup sampling frame\", select \"Whole map layer\"
         and click \"OK\"
+
     5.  Click on \"Setup sampling areas\", select \"Moving window\" and
         click \"OK\"
+
     6.  Click on \"Use keyboard to enter moving window dimension\"
+
     7.  Select \"Rectangle\" and enter 5 in the \"height\" and \"width\"
         fields
+
     8.  Click on \"Save settings\"
+
     9.  Close the *g.gui.rlisetup* window
 2.  CALCULATE PATCHDENSITY INDEX
     1.  set the region settings to the \"`geology`\" raster map:
 
-        ::: code
-              g.region raster=geology -p
-        :::
+        ```
+          g.region raster=geology -p
+        ```
+
     2.  run *r.li.patchdensity*:
 
-        ::: code
-              r.li.patchdensity input=geology conf=my_conf out=patchdens
-        :::
+        ```
+          r.li.patchdensity input=geology conf=my_conf out=patchdens
+        ```
 
 The resulting patch density is stored in \"`patchdens`\" raster map. You
 can verify the result for example with contour lines:
-
-::: code
-      r.contour in=patchdens out=patchdens step=5
-      d.rast patchdens
-      d.vect -c patchdens
-:::
+```
+  r.contour in=patchdens out=patchdens step=5
+  d.rast patchdens
+  d.vect -c patchdens
+```
 
 Note that if you want to run another index with the same area
 configuration, you don\'t have to create another configuration file. You
@@ -186,7 +194,7 @@ about development.
 -   McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
     analysis program for quantifying landscape structure. USDA For.
     Serv. Gen. Tech. Rep. PNW-351
-    ([PDF](http://www.fs.fed.us/pnw/pubs/gtr_351.pdf)).
+    ([PDF](https://research.fs.usda.gov/treesearch/3064)).
 -   Baker, W.L. and Y. Cai. 1992. The r.le programs for multiscale
     analysis of landscape structure using the GRASS geographical
     information system. Landscape Ecology 7(4):291-302.

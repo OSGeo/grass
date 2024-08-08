@@ -146,10 +146,10 @@ raster data (CELL maps).
 Example for small area in North Carolina sample dataset to calculate
 flow accumulation:
 
-::: code
-    g.region raster=elev_lid792_1m
-    r.terraflow elevation=elev_lid792_1m accumulation=elev_lid792_1m_accumulation
-:::
+```
+g.region raster=elev_lid792_1m
+r.terraflow elevation=elev_lid792_1m accumulation=elev_lid792_1m_accumulation
+```
 
 ::: {align="center" style="margin: 10px"}
 ![](rterraflow_accumulation.png){border="0"}\
@@ -158,20 +158,20 @@ flow accumulation:
 
 Spearfish sample data set:
 
-::: code
-    g.region raster=elevation.10m -p
-    r.terraflow elev=elevation.10m filled=elevation10m.filled \
-        dir=elevation10m.mfdir swatershed=elevation10m.watershed \
-        accumulation=elevation10m.accu tci=elevation10m.tci
-:::
+```
+g.region raster=elevation.10m -p
+r.terraflow elev=elevation.10m filled=elevation10m.filled \
+    dir=elevation10m.mfdir swatershed=elevation10m.watershed \
+    accumulation=elevation10m.accu tci=elevation10m.tci
+```
 
-::: code
-    g.region raster=elevation.10m -p
-    r.terraflow elev=elevation.10m filled=elevation10m.filled \
-        dir=elevation10m.mfdir swatershed=elevation10m.watershed \
-        accumulation=elevation10m.accu tci=elevation10m.tci d8cut=500 memory=800 \
-        stats=elevation10mstats.txt
-:::
+```
+g.region raster=elevation.10m -p
+r.terraflow elev=elevation.10m filled=elevation10m.filled \
+    dir=elevation10m.mfdir swatershed=elevation10m.watershed \
+    accumulation=elevation10m.accu tci=elevation10m.tci d8cut=500 memory=800 \
+    stats=elevation10mstats.txt
+```
 
 ## REFERENCES
 

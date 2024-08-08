@@ -37,33 +37,33 @@ delimiter and three numbers after decimal separator for distance. Output
 file will contain data for all points, that are within 500 m range to
 profiling line.
 
-::: code
-    v.profile input=geonames@PERMANENT output=/home/user/NC_96_geonames.csv\
-      separator=comma dp=3 buffer=500 profile_map=roadsmajor@PERMANENT profile_where=cat=56
+```
+v.profile input=geonames@PERMANENT output=/home/user/NC_96_geonames.csv\
+  separator=comma dp=3 buffer=500 profile_map=roadsmajor@PERMANENT profile_where=cat=56
 
-    # Now lets see the output:
-    cat NC_96_geonames.csv
-    Number,Distance,cat,GEONAMEID,NAME,ASCIINAME,ALTERNATEN,FEATURECLA,FEATURECOD,COUNTRYCOD,CC2,ADMIN1,POPULATION,ELEVATION,GTOPO30,TIMEZONE,MODIFICATI,PPLKEY,SRC_ID,MAINT_ID
-    1,360.719,26881,4482019,"New Zebulon Elementary School","New Zebulon Elementary School","","S","SCH","US","","NC",0,106,91,"America/Iqaluit","2006-01-15 00:00:00",0,0,0
-    2,846.806,22026,4476596,"Little River, Township of","Little River, Township of","","A","ADMD","US","","NC",0,0,91,"America/Iqaluit","2006-01-15 00:00:00",0,0,0
-    3,2027.918,16681,4470608,"Hendricks Pond","Hendricks Pond","","H","RSV","US","","NC",0,0,91,"America/Iqaluit","2006-01-15 00:00:00",0,0,0
-    4,2027.918,16690,4470622,"Hendricks Dam","Hendricks Dam","","S","DAM","US","","NC",0,0,91,"America/Iqaluit","2006-01-15 00:00:00",0,0,0
-    5,2999.214,39338,4496159,"Union Chapel","Union Chapel","","","","US","","NC",0,0,96,"America/Iqaluit","2006-01-15 00:00:00",0,0,0
-    6,3784.992,43034,4500325,"Zebulon Airport","Zebulon Airport","","S","AIRP","US","","NC",0,108,98,"America/Iqaluit","2006-01-15 00:00:00",0,0,0
-:::
+# Now lets see the output:
+cat NC_96_geonames.csv
+Number,Distance,cat,GEONAMEID,NAME,ASCIINAME,ALTERNATEN,FEATURECLA,FEATURECOD,COUNTRYCOD,CC2,ADMIN1,POPULATION,ELEVATION,GTOPO30,TIMEZONE,MODIFICATI,PPLKEY,SRC_ID,MAINT_ID
+1,360.719,26881,4482019,"New Zebulon Elementary School","New Zebulon Elementary School","","S","SCH","US","","NC",0,106,91,"America/Iqaluit","2006-01-15 00:00:00",0,0,0
+2,846.806,22026,4476596,"Little River, Township of","Little River, Township of","","A","ADMD","US","","NC",0,0,91,"America/Iqaluit","2006-01-15 00:00:00",0,0,0
+3,2027.918,16681,4470608,"Hendricks Pond","Hendricks Pond","","H","RSV","US","","NC",0,0,91,"America/Iqaluit","2006-01-15 00:00:00",0,0,0
+4,2027.918,16690,4470622,"Hendricks Dam","Hendricks Dam","","S","DAM","US","","NC",0,0,91,"America/Iqaluit","2006-01-15 00:00:00",0,0,0
+5,2999.214,39338,4496159,"Union Chapel","Union Chapel","","","","US","","NC",0,0,96,"America/Iqaluit","2006-01-15 00:00:00",0,0,0
+6,3784.992,43034,4500325,"Zebulon Airport","Zebulon Airport","","S","AIRP","US","","NC",0,108,98,"America/Iqaluit","2006-01-15 00:00:00",0,0,0
+```
 
 Create river valley crossection and provide river marker (Spearfish
 dataset):
 
-::: code
-    # Take elevation samples
-    r.profile input=elevation.dem@PERMANENT output=/home/user/elevation.profile \
-      profile=600570.27364,4920613.41838,600348.034348,4920840.38617
+```
+# Take elevation samples
+r.profile input=elevation.dem@PERMANENT output=/home/user/elevation.profile \
+  profile=600570.27364,4920613.41838,600348.034348,4920840.38617
 
-    # Now get distance to place where river marker should be set
-    v.profile input=streams@PERMANENT output=/home/user/river_profile.csv \
-      east_north=600570.27364,4920613.41838,600348.034348,4920840.38617
-:::
+# Now get distance to place where river marker should be set
+v.profile input=streams@PERMANENT output=/home/user/river_profile.csv \
+  east_north=600570.27364,4920613.41838,600348.034348,4920840.38617
+```
 
 ## BUGS
 

@@ -25,23 +25,23 @@ options will be ignored.
 Example of *v.hull* 3D output (using two random 3D point clouds, North
 Carolina sample data set):
 
-::: code
-    g.region rural_1m -p
-    r.mapcalc "zero = 0"
-    v.random -z output=random3d_a n=10 zmin=0 zmax=200
-    v.random -z output=random3d_b n=15 zmin=400 zmax=600
-    v.hull input=random3d_a output=random3d_a_hull
-    v.hull input=random3d_b output=random3d_b_hull
+```
+g.region rural_1m -p
+r.mapcalc "zero = 0"
+v.random -z output=random3d_a n=10 zmin=0 zmax=200
+v.random -z output=random3d_b n=15 zmin=400 zmax=600
+v.hull input=random3d_a output=random3d_a_hull
+v.hull input=random3d_b output=random3d_b_hull
 
-    d.mon wx0
-    d.vect random3d_a_hull
-    d.vect random3d_a color=red
+d.mon wx0
+d.vect random3d_a_hull
+d.vect random3d_a color=red
 
-    d.vect random3d_b_hull
-    d.vect random3d_b color=red
+d.vect random3d_b_hull
+d.vect random3d_b color=red
 
-    # 3D view in wxGUI (g.gui)
-:::
+# 3D view in wxGUI (g.gui)
+```
 
 ![](v_hull_3d.png){border="1"}\
 Fig: Convex hull in 3D from 3D points created with *v.hull*

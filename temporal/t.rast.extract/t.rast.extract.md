@@ -23,33 +23,33 @@ data duplication.
 The *r.mapcalc* sub-expression should not contain the left side
 `"map ="` of a full *r.mapcalc* expression, only the right side, eg.:
 
-::: code
-    t.rast.extract input=tempmean_monthly where="start_time > '2010-01-05'" \
-                   output=selected_tempmean_monthly basename=new_tmean_month \
-                   expression="if(tempmean_monthly < 0, null(), tempmean_monthly)"
+```
+t.rast.extract input=tempmean_monthly where="start_time > '2010-01-05'" \
+               output=selected_tempmean_monthly basename=new_tmean_month \
+               expression="if(tempmean_monthly < 0, null(), tempmean_monthly)"
 
 
-    EXAMPLE
+EXAMPLE
 
 
-    t.rast.extract input=tempmean_monthly output=tempmean_monthly_later_2012 \
-                   where="start_time >= '2012-01-01'"
+t.rast.extract input=tempmean_monthly output=tempmean_monthly_later_2012 \
+               where="start_time >= '2012-01-01'"
 
-    t.rast.list tempmean_monthly_later_2012
-    name|mapset|start_time|end_time
-    2012_01_tempmean|climate_2000_2012|2012-01-01 00:00:00|2012-02-01 00:00:00
-    2012_02_tempmean|climate_2000_2012|2012-02-01 00:00:00|2012-03-01 00:00:00
-    2012_03_tempmean|climate_2000_2012|2012-03-01 00:00:00|2012-04-01 00:00:00
-    2012_04_tempmean|climate_2000_2012|2012-04-01 00:00:00|2012-05-01 00:00:00
-    2012_05_tempmean|climate_2000_2012|2012-05-01 00:00:00|2012-06-01 00:00:00
-    2012_06_tempmean|climate_2000_2012|2012-06-01 00:00:00|2012-07-01 00:00:00
-    2012_07_tempmean|climate_2000_2012|2012-07-01 00:00:00|2012-08-01 00:00:00
-    2012_08_tempmean|climate_2000_2012|2012-08-01 00:00:00|2012-09-01 00:00:00
-    2012_09_tempmean|climate_2000_2012|2012-09-01 00:00:00|2012-10-01 00:00:00
-    2012_10_tempmean|climate_2000_2012|2012-10-01 00:00:00|2012-11-01 00:00:00
-    2012_11_tempmean|climate_2000_2012|2012-11-01 00:00:00|2012-12-01 00:00:00
-    2012_12_tempmean|climate_2000_2012|2012-12-01 00:00:00|2013-01-01 00:00:00
-:::
+t.rast.list tempmean_monthly_later_2012
+name|mapset|start_time|end_time
+2012_01_tempmean|climate_2000_2012|2012-01-01 00:00:00|2012-02-01 00:00:00
+2012_02_tempmean|climate_2000_2012|2012-02-01 00:00:00|2012-03-01 00:00:00
+2012_03_tempmean|climate_2000_2012|2012-03-01 00:00:00|2012-04-01 00:00:00
+2012_04_tempmean|climate_2000_2012|2012-04-01 00:00:00|2012-05-01 00:00:00
+2012_05_tempmean|climate_2000_2012|2012-05-01 00:00:00|2012-06-01 00:00:00
+2012_06_tempmean|climate_2000_2012|2012-06-01 00:00:00|2012-07-01 00:00:00
+2012_07_tempmean|climate_2000_2012|2012-07-01 00:00:00|2012-08-01 00:00:00
+2012_08_tempmean|climate_2000_2012|2012-08-01 00:00:00|2012-09-01 00:00:00
+2012_09_tempmean|climate_2000_2012|2012-09-01 00:00:00|2012-10-01 00:00:00
+2012_10_tempmean|climate_2000_2012|2012-10-01 00:00:00|2012-11-01 00:00:00
+2012_11_tempmean|climate_2000_2012|2012-11-01 00:00:00|2012-12-01 00:00:00
+2012_12_tempmean|climate_2000_2012|2012-12-01 00:00:00|2013-01-01 00:00:00
+```
 
 ## SEE ALSO
 

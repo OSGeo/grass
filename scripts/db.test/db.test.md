@@ -7,10 +7,10 @@ queries. Database must exist and connection must be set by db.connect.
 
 Test current SQL backend driver:
 
-::: code
-    db.connect -p
-    db.test test=test1
-:::
+```
+db.connect -p
+db.test test=test1
+```
 
 ## SEE ALSO
 

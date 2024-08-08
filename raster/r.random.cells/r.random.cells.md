@@ -34,10 +34,10 @@ of spatial autocorrelation for the map being studied.
 
 North Carolina sample dataset example:
 
-::: code
-    g.region n=228500 s=215000 w=630000 e=645000 res=100 -p
-    r.random.cells output=random_500m distance=500
-:::
+```
+g.region n=228500 s=215000 w=630000 e=645000 res=100 -p
+r.random.cells output=random_500m distance=500
+```
 
 ### Limited number of random points
 
@@ -45,23 +45,23 @@ Here is another example where we will create given number of vector
 points with the given minimal distances. Let\'s star with setting the
 region (we use large cells here):
 
-::: code
-    g.region raster=elevation
-    g.region rows=20 cols=20 -p
-:::
+```
+g.region raster=elevation
+g.region rows=20 cols=20 -p
+```
 
 Then we generate random cells and we limit their count to 20:
 
-::: code
-    r.random.cells output=random_cells distance=1500 ncells=20 seed=200
-:::
+```
+r.random.cells output=random_cells distance=1500 ncells=20 seed=200
+```
 
 Finally, we convert the raster cells to points using
 *[r.to.vect](r.to.vect.html)* module:
 
-::: code
-    r.to.vect input=random_cells output=random_points type=point
-:::
+```
+r.to.vect input=random_cells output=random_points type=point
+```
 
 An example of the result is at the Figure below on the left in
 comparison with the result without the cell limit on the right.
@@ -71,9 +71,9 @@ random spatial deviation to their position so that they are not
 perfectly aligned with the grid. We cannot perturb the points too much,
 otherwise we might seriously break the minimal distance we set earlier.
 
-::: code
-    v.perturb input=random_points output=random_points_moved parameters=50 seed=200
-:::
+```
+v.perturb input=random_points output=random_points_moved parameters=50 seed=200
+```
 
 In the above examples, we were using fixed seed. This is advantageous
 when we want to generate (pseudo) random data, but we want to get
