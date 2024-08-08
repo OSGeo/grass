@@ -116,7 +116,7 @@ def main():
             self._mapObj = self.GetMap()
 
             # load raster map
-            self._addLayer(name=new_map if new_map else edit_map)
+            self._addLayer(name=new_map or edit_map)
 
             # switch toolbar
             self.AddToolbar("rdigit", fixed=True)
@@ -199,23 +199,22 @@ def main():
             )
         else:
             kwargs["edit_map"] = edit_map
-    else:
-        if kwargs["base_map"]:
-            base_map = gs.find_file(
-                name=kwargs["base_map"],
-                element="raster",
-                mapset=mapset,
-            )["fullname"]
-            if not base_map:
-                gs.fatal(
-                    _(
-                        "Base raster map <{}> not found in "
-                        "current mapset.".format(
-                            options["base"],
-                        ),
+    elif kwargs["base_map"]:
+        base_map = gs.find_file(
+            name=kwargs["base_map"],
+            element="raster",
+            mapset=mapset,
+        )["fullname"]
+        if not base_map:
+            gs.fatal(
+                _(
+                    "Base raster map <{}> not found in "
+                    "current mapset.".format(
+                        options["base"],
                     ),
-                )
-            kwargs["base_map"] = base_map
+                ),
+            )
+        kwargs["base_map"] = base_map
 
     # allow immediate rendering
     driver = UserSettings.Get(

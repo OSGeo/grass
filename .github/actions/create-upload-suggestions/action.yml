@@ -177,7 +177,7 @@ runs:
         echo "diff-file-name=${INPUT_DIFF_FILE_NAME}" >> "${GITHUB_OUTPUT}"
       env:
         INPUT_DIFF_FILE_NAME: ${{ steps.tool-name-safe.outputs.diff-file-name }}
-    - uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
+    - uses: actions/upload-artifact@89ef406dd8d7e03cfd12d9e0a4a378f454709029 # v4.3.5
       id: upload-diff
       if: >-
         ${{ (steps.files_changed.outputs.files_changed == 'true') &&
@@ -200,7 +200,7 @@ runs:
           echo 'Suggestions can only be added near to lines changed in this PR.'
           echo 'If any fixes can be added as code suggestions, they will be added shortly from another workflow.'
         } >> "${GITHUB_STEP_SUMMARY}"
-    - uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
+    - uses: actions/upload-artifact@89ef406dd8d7e03cfd12d9e0a4a378f454709029 # v4.3.5
       id: upload-changes
       if: >-
         ${{ always() &&

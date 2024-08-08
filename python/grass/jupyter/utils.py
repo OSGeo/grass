@@ -10,6 +10,11 @@
 #            for details.
 
 """Utility functions warpping existing processes in a suitable way"""
+import tempfile
+import json
+import os
+import multiprocessing
+
 from pathlib import Path
 import grass.script as gs
 
@@ -113,8 +118,7 @@ def estimate_resolution(raster, mapset, location, dbase, env):
     output = gs.parse_key_val(output, val_type=float)
     cell_ns = (output["n"] - output["s"]) / output["rows"]
     cell_ew = (output["e"] - output["w"]) / output["cols"]
-    estimate = (cell_ew + cell_ns) / 2.0
-    return estimate
+    return (cell_ew + cell_ns) / 2.0
 
 
 def setup_location(name, path, epsg, src_env):
@@ -200,6 +204,64 @@ def get_rendering_size(region, width, height, default_width=600, default_height=
     if region_height > region_width:
         return (round(default_height * region_width / region_height), default_height)
     return (default_width, round(default_width * region_height / region_width))
+
+
+def save_vector(name, geo_json):
+    """
+    Saves the user drawn vector.
+
+    :param geo_json: name of the geojson file to be saved
+    :param name: name with which vector should be saved
+    """
+    with tempfile.NamedTemporaryFile(
+        suffix=".geojson", delete=False, mode="w"
+    ) as temp_file:
+        temp_filename = temp_file.name
+        for each in geo_json["features"]:
+            each["properties"].clear()
+        json.dump(geo_json, temp_file)
+    gs.run_command("v.import", input=temp_filename, output=name)
+    os.remove(temp_filename)
+
+
+def get_number_of_cores(requested, env=None):
+    """Get the number of cores to use for multiprocessing."""
+    nprocs = gs.gisenv(env).get("NPROCS")
+    if nprocs is not None:
+        return int(nprocs)
+
+    try:
+        num_cores = len(os.sched_getaffinity(0))
+    except AttributeError:
+        num_cores = multiprocessing.cpu_count()
+    return min(requested, max(1, num_cores - 1))
+
+
+def get_region_bounds_latlon():
+    """Gets the current computational region bounds in latlon."""
+    region = gs.parse_command("g.region", flags="gbp")
+    return [
+        (float(region["ll_s"]), float(region["ll_w"])),
+        (float(region["ll_n"]), float(region["ll_e"])),
+    ]
+
+
+def update_region(region):
+    """Updates the computational region bounds.
+
+    :return: the new region
+    """
+    current = gs.region()
+    return gs.parse_command(
+        "g.region",
+        flags="ga",
+        n=region["north"],
+        s=region["south"],
+        e=region["east"],
+        w=region["west"],
+        nsres=current["nsres"],
+        ewres=current["ewres"],
+    )
 
 
 def save_gif(

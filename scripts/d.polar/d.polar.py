@@ -480,7 +480,7 @@ def main():
     freq = {}
     for line in rawf:
         line = line.rstrip("\r\n")
-        if line in ["*", undef]:
+        if line in {"*", undef}:
             continue
         nvals += 1
         x = float(line)
@@ -510,7 +510,7 @@ def main():
     occurrences = sorted([(math.radians(x), freq[x]) for x in freq])
 
     # find the maximum value
-    maxradius = max([f for a, f in occurrences])
+    maxradius = max(f for a, f in occurrences)
 
     # now do cos() sin()
     sine_cosine = [(math.cos(a) * f, math.sin(a) * f) for a, f in occurrences]

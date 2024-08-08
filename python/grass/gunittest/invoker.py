@@ -11,6 +11,7 @@ for details.
 
 import collections
 import os
+from pathlib import Path
 import shutil
 import subprocess
 import sys
@@ -39,8 +40,7 @@ maketrans = str.maketrans
 # TODO: this might be more extend then update
 def update_keyval_file(filename, module, returncode):
     if os.path.exists(filename):
-        with open(filename, "r") as keyval_file:
-            keyval = text_to_keyvalue(keyval_file.read(), sep="=")
+        keyval = text_to_keyvalue(Path(filename).read_text(), sep="=")
     else:
         keyval = {}
 
@@ -62,8 +62,7 @@ def update_keyval_file(filename, module, returncode):
     keyval["returncode"] = returncode
     keyval["test_file_authors"] = test_file_authors
 
-    with open(filename, "w") as keyval_file:
-        keyval_file.write(keyvalue_to_text(keyval))
+    Path(filename).write_text(keyvalue_to_text(keyval))
     return keyval
 
 
@@ -196,8 +195,7 @@ class GrassTestFilesInvoker:
                 args,
                 cwd=cwd,
                 env=env,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
+                capture_output=True,
                 timeout=timeout,
                 check=False,
             )
@@ -244,16 +242,14 @@ class GrassTestFilesInvoker:
         stdout = try_decode(stdout, encodings=encodings)
         stderr = try_decode(stderr, encodings=encodings)
 
-        with open(stdout_path, "w") as stdout_file:
-            stdout_file.write(stdout)
+        Path(stdout_path).write_text(stdout)
         with open(stderr_path, "w") as stderr_file:
             if type(stderr) == "bytes":
                 stderr_file.write(decode(stderr))
+            elif isinstance(stderr, str):
+                stderr_file.write(stderr)
             else:
-                if isinstance(stderr, str):
-                    stderr_file.write(stderr)
-                else:
-                    stderr_file.write(stderr.encode("utf8"))
+                stderr_file.write(stderr.encode("utf8"))
         self._file_anonymizer.anonymize([stdout_path, stderr_path])
 
         test_summary = update_keyval_file(
@@ -305,7 +301,7 @@ class GrassTestFilesInvoker:
                     main_page_name="testfiles.html",
                 ),
                 GrassTestFilesKeyValueReporter(
-                    info=dict(location=location, location_type=location_type)
+                    info={"location": location, "location_type": location_type}
                 ),
             ]
         )
@@ -338,18 +334,17 @@ class GrassTestFilesInvoker:
 
         # TODO: move this to some (new?) reporter
         # TODO: add basic summary of linked files so that the page is not empty
-        with open(os.path.join(results_dir, "index.html"), "w") as main_index:
-            main_index.write(
-                "<html><body>"
-                "<h1>Tests for &lt;{location}&gt;"
-                " using &lt;{type}&gt; type tests</h1>"
-                "<ul>"
-                '<li><a href="testsuites.html">Results by testsuites</a>'
-                " (testsuite directories)</li>"
-                '<li><a href="testfiles.html">Results by test files</a></li>'
-                "<ul>"
-                "</body></html>".format(location=location, type=location_type)
-            )
+        Path(os.path.join(results_dir, "index.html")).write_text(
+            "<html><body>"
+            "<h1>Tests for &lt;{location}&gt;"
+            " using &lt;{type}&gt; type tests</h1>"
+            "<ul>"
+            '<li><a href="testsuites.html">Results by testsuites</a>'
+            " (testsuite directories)</li>"
+            '<li><a href="testfiles.html">Results by test files</a></li>'
+            "<ul>"
+            "</body></html>".format(location=location, type=location_type)
+        )
 
         testsuite_dir_reporter = TestsuiteDirReporter(
             main_page_name="testsuites.html",

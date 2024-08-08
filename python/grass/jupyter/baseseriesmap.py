@@ -1,13 +1,16 @@
 """Base class for SeriesMap and TimeSeriesMap"""
 
 import os
+from pathlib import Path
 import tempfile
 import weakref
 import shutil
+import multiprocessing
 
 import grass.script as gs
 
 from .map import Map
+from .utils import get_number_of_cores
 
 
 class BaseSeriesMap:
@@ -73,12 +76,11 @@ class BaseSeriesMap:
         def wrapper(**kwargs):
             if not self._baseseries_added:
                 self._base_layer_calls.append((grass_module, kwargs))
+            elif self._base_calls is not None:
+                for row in self._base_calls:
+                    row.append((grass_module, kwargs))
             else:
-                if self._base_calls is not None:
-                    for row in self._base_calls:
-                        row.append((grass_module, kwargs))
-                else:
-                    self._base_calls.append((grass_module, kwargs))
+                self._base_calls.append((grass_module, kwargs))
 
         return wrapper
 
@@ -87,7 +89,7 @@ class BaseSeriesMap:
         for grass_module, kwargs in self._base_layer_calls:
             img.run(grass_module, **kwargs)
 
-    def _render(self):
+    def _render(self, tasks):
         """
         Renders the base image for the dataset.
 
@@ -121,6 +123,14 @@ class BaseSeriesMap:
         self._render_baselayers(img)
 
         # Render layers in respective classes
+        cores = get_number_of_cores(len(tasks), env=self._env)
+        with multiprocessing.Pool(processes=cores) as pool:
+            results = pool.starmap(self._render_worker, tasks)
+
+        for i, filename in results:
+            self._base_filename_dict[i] = filename
+
+        self._layers_rendered = True
 
     def show(self, slider_width=None):
         """Create interactive timeline slider.
@@ -177,8 +187,7 @@ class BaseSeriesMap:
         # Display image associated with datetime
         def change_image(index):
             filename = self._base_filename_dict[index]
-            with open(filename, "rb") as rfile:
-                out_img.value = rfile.read()
+            out_img.value = Path(filename).read_bytes()
 
         widgets.interactive_output(change_image, {"index": slider})
 

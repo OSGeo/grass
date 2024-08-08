@@ -8,6 +8,7 @@ for details.
 """
 
 import datetime
+
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -90,7 +91,6 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
 
     def tearDown(self):
         self.runModule("t.remove", flags="rf", inputs="R", quiet=True)
-        pass
 
     @classmethod
     def tearDownClass(cls):

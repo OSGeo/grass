@@ -30,7 +30,7 @@ jobs:
           git config --global core.autocrlf false
           git config --global core.eol lf
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      - uses: msys2/setup-msys2@d0e80f58dffbc64f6a3a1f43527d469b4fc7b6c8 # v2.23.0
+      - uses: msys2/setup-msys2@ddf331adaebd714795f1042345e6ca57bd66cea8 # v2.24.1
         with:
           path-type: inherit
           location: D:\
@@ -83,7 +83,7 @@ jobs:
 
       - name: Make HTML test report available
         if: ${{ always() }}
-        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
+        uses: actions/upload-artifact@89ef406dd8d7e03cfd12d9e0a4a378f454709029 # v4.3.5
         with:
           name: testreport-${{ matrix.os }}
           path: testreport

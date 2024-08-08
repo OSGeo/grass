@@ -774,4 +774,3 @@ class CheckListFeature(ListCtrl, listmix.ListCtrlAutoWidthMixin, CheckListCtrlMi
 
     def OnCheckItem(self, index, flag):
         """Mapset checked/unchecked"""
-        pass

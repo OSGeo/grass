@@ -29,9 +29,9 @@ from core.settings import UserSettings
 from gui_core.wrap import Menu, NewId
 
 try:
-    import matplotlib
+    import matplotlib as mpl
 
-    matplotlib.use("WXAgg")
+    mpl.use("WXAgg")
     from matplotlib.figure import Figure
     from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigCanvas
     from matplotlib.lines import Line2D
@@ -47,7 +47,7 @@ except ImportError as e:
         ).format(e)
     )
 
-import grass.script as grass
+import grass.script as gs
 from grass.pydispatch.signal import Signal
 
 
@@ -241,8 +241,9 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
             aspect="equal",
         )
 
-        callafter_list.append([self.axes.draw_artist, [img]])
-        callafter_list.append([grass.try_remove, [merged_img.filename]])
+        callafter_list.extend(
+            ([self.axes.draw_artist, [img]], [gs.try_remove, [merged_img.filename]])
+        )
 
         for cat_id in cats_order:
             if cat_id == 0:
@@ -448,7 +449,7 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
 
     init = True
     merged_img = None
-    merge_tmp = grass.tempfile()
+    merge_tmp = gs.tempfile()
     for cat_id in cats_order:
         if cat_id not in scatts:
             continue
@@ -496,7 +497,7 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
                 rend_dt[cat_id]["color"] = styles[cat_id]["color"]
 
             rend_dt[cat_id]["dt"] = np.memmap(
-                grass.tempfile(), dtype="uint8", mode="w+", shape=(sh[0], sh[1], 4)
+                gs.tempfile(), dtype="uint8", mode="w+", shape=(sh[0], sh[1], 4)
             )
 
             # colored_cat = np.zeros(dtype='uint8', )
@@ -564,7 +565,7 @@ def _rendDtFilesToMemmaps(rend_dt):
             del rend_dt[k]["sh"]
 
 
-def _renderCat(cat_id, rend_dt, scatt, styles):
+def _renderCat(cat_id, rend_dt, scatt, styles) -> bool:
     return True
 
     if cat_id not in rend_dt:
@@ -573,14 +574,11 @@ def _renderCat(cat_id, rend_dt, scatt, styles):
         return False
     if scatt["render"]:
         return True
-    if cat_id != 0 and rend_dt[cat_id]["color"] != styles[cat_id]["color"]:
-        return True
-
-    return False
+    return bool(cat_id != 0 and rend_dt[cat_id]["color"] != styles[cat_id]["color"])
 
 
 def _getColorMap(cat_id, styles):
-    cmap = matplotlib.cm.jet
+    cmap = mpl.cm.jet
     if cat_id == 0:
         cmap.set_bad("w", 1.0)
         cmap._init()
@@ -710,8 +708,7 @@ class PolygonDrawer:
         if self.empty_pol:
             return None
 
-        coords = deepcopy(self.pol.xy)
-        return coords
+        return deepcopy(self.pol.xy)
 
     def SetEmpty(self):
         self._setEmptyPol(True)
@@ -1035,7 +1032,7 @@ def imshow(
     if norm is not None:
         assert isinstance(norm, mcolors.Normalize)
     if aspect is None:
-        aspect = matplotlib.rcParams["image.aspect"]
+        aspect = mpl.rcParams["image.aspect"]
     axes.set_aspect(aspect)
 
     if extent:
