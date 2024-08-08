@@ -173,7 +173,7 @@ def resolve_mapset_path(path, location=None, mapset=None) -> MapsetPath:
         from grass.grassdb.checks import is_mapset_valid
 
         if not is_mapset_valid(path) and is_mapset_valid(path / default_mapset):
-            path = path / default_mapset
+            path /= default_mapset
         parts = path.parts
         if len(parts) < 3:
             raise ValueError(

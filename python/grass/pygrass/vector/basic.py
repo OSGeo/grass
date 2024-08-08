@@ -461,8 +461,7 @@ class Cats:
         """
         if cat:
             self.n_del = libvect.Vect_field_cat_del(self.c_cats, layer, cat)
-            err_msg = "Layer(%d)/category(%d) number does not exist"
-            err_msg = err_msg % (layer, cat)
+            err_msg = "Layer(%d)/category(%d) number does not exist" % (layer, cat)
         else:
             self.n_del = libvect.Vect_cat_del(self.c_cats, layer)
             err_msg = "Layer: %r does not exist" % layer

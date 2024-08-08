@@ -171,9 +171,9 @@ class WSPanel(wx.Panel):
 
         style = wx.TR_DEFAULT_STYLE | wx.TR_HAS_BUTTONS | wx.TR_FULL_ROW_HIGHLIGHT
         if self.drv_props["req_multiple_layers"]:
-            style = style | wx.TR_MULTIPLE
+            style |= wx.TR_MULTIPLE
         if "WMS" not in self.ws:
-            style = style | wx.TR_HIDE_ROOT
+            style |= wx.TR_HIDE_ROOT
 
         self.list = LayersList(
             parent=self.req_page_panel, web_service=self.ws, style=style

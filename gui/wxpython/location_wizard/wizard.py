@@ -2332,7 +2332,7 @@ class SummaryPage(TitledPage):
             finishButton = wx.FindWindowById(wx.ID_FORWARD)
             if ret == 0:
                 if datum != "":
-                    projlabel = projlabel + "+datum=%s" % datum
+                    projlabel += "+datum=%s" % datum
                 self.lproj4string.SetLabel(projlabel.replace(" +", os.linesep + "+"))
                 finishButton.Enable(True)
             else:

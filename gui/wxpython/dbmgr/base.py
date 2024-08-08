@@ -3018,7 +3018,7 @@ class TableListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
                 str(self.table[column]["type"]),
                 int(self.table[column]["length"]),
             )
-            i = i + 1
+            i += 1
 
         self.SendSizeEvent()
 

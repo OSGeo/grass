@@ -353,7 +353,7 @@ class PyStc(stc.StyledTextCtrl):
                 if expanding:
                     self.SetFoldExpanded(lineNum, True)
                     lineNum = self.Expand(lineNum, True)
-                    lineNum = lineNum - 1
+                    lineNum -= 1
                 else:
                     lastChild = self.GetLastChild(lineNum, -1)
                     self.SetFoldExpanded(lineNum, False)
@@ -361,11 +361,11 @@ class PyStc(stc.StyledTextCtrl):
                     if lastChild > lineNum:
                         self.HideLines(lineNum + 1, lastChild)
 
-            lineNum = lineNum + 1
+            lineNum += 1
 
     def Expand(self, line, doExpand, force=False, visLevels=0, level=-1):
         lastChild = self.GetLastChild(line, level)
-        line = line + 1
+        line += 1
 
         while line <= lastChild:
             if force:
@@ -392,6 +392,6 @@ class PyStc(stc.StyledTextCtrl):
                 else:
                     line = self.Expand(line, False, force, visLevels - 1)
             else:
-                line = line + 1
+                line += 1
 
         return line

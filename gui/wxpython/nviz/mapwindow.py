@@ -308,8 +308,8 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         else:
             my = 0.0
 
-        mx = mx / (1.0 - dx)
-        my = my / (1.0 - dy)
+        mx /= 1.0 - dx
+        my /= 1.0 - dy
 
         # Quadratic seems smoother
         mx *= abs(mx)

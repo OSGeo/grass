@@ -1731,7 +1731,7 @@ class TemporalAlgebraParser:
                                 if count > 0:
                                     condition_value_list.append(aggregate)
                                 condition_value_list.append(boolean)
-                                count = count + 1
+                                count += 1
 
                         if self.debug:
                             print(

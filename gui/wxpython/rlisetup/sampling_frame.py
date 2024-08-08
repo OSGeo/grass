@@ -264,7 +264,7 @@ class RLiSetupMapPanel(wx.Panel):
 
         catbuf = "=%d a\n" % self.catId
         polyfile.write(catbuf)
-        self.catId = self.catId + 1
+        self.catId += 1
 
         polyfile.close()
         region_settings = grass.parse_command("g.region", flags="p", delimiter=":")

@@ -297,7 +297,7 @@ class MeasureDistanceController(AnalysisControllerBase):
             #   the mathematical theta convention (CCW from +x axis)
             # angle = 90 - angle
             if angle < 0:
-                angle = 360 + angle
+                angle += 360
 
             mstring = "%s = %s %s\n%s = %s %s\n%s = %d %s\n%s" % (
                 _("segment"),
