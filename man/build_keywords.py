@@ -42,10 +42,11 @@ if len(sys.argv) >= 2:
 year = os.getenv("VERSION_DATE")
 
 
-def get_module_man_file_path(module):
+def get_module_man_file_path(module, addons_man_files):
     """Get module manual HTML file path
 
     :param str module: module manual HTML file name e.g. v.surf.rst.html
+    :param addons_man_files: list of HTML manual files
 
     :return str module_path: core/addon module manual HTML file path
     """
@@ -125,7 +126,7 @@ def build_keywords(ext):
     if ext == "html":
         keywordsfile.write(
             header1_tmpl.substitute(
-                title="GRASS GIS %s Reference " "Manual: Keywords index" % grass_version
+                title="GRASS GIS %s Reference Manual: Keywords index" % grass_version
             )
         )
     keywordsfile.write(headerkeywords_tmpl)
@@ -143,15 +144,13 @@ def build_keywords(ext):
         else:
             keyword_line = f"### **{key}**\n"
         for value in sorted(keywords[key]):
+            man_file_path = get_module_man_file_path(value, addons_man_files)
             if ext == "html":
                 keyword_line += (
-                    f' <a href="{get_module_man_file_path(value)}">'
-                    f'{value.replace(".{ext}", "")}</a>,'
+                    f' <a href="{man_file_path}">' f'{value.replace(".{ext}", "")}</a>,'
                 )
             else:
-                keyword_line += (
-                    f' [{value.rsplit(".", 1)[0]}]({get_module_man_file_path(value)}),'
-                )
+                keyword_line += f' [{value.rsplit(".", 1)[0]}]({man_file_path}),'
         keyword_line = keyword_line.rstrip(",")
         if ext == "html":
             keyword_line += "</dd>"
