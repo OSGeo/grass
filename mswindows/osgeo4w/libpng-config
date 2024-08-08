@@ -14,7 +14,7 @@
 
 prefix="${OSGEO4W_ROOT_MSYS}"
 version="$(sed '/^#define PNG_LIBPNG_VER_STRING/!d; s/^[^"]*"\|"//g' ${prefix}/include/libpng*/png.h)"
-dll_version="$(sed '/^#define PNG_LIBPNG_VER_DLLNUM/!d; s/^[^0-9]*\|[^0-9]*$//g' ${prefix}/include/libpng*/png.h)"
+dll_version="$(sed '/^#define PNG_LIBPNG_VER_SHAREDLIB/!d; s/^[^0-9]*\|[^0-9]*$//g' ${prefix}/include/libpng*/png.h)"
 exec_prefix="${prefix}"
 libdir="${prefix}/lib"
 includedir="${prefix}/include/libpng${dll_version}"
