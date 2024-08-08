@@ -681,7 +681,7 @@ class WSPropertiesDialog(WSDialogBase):
 
     def _setRevertCapFiles(self, ws_cap_files):
         for ws, f in ws_cap_files.items():
-            if os.path.isfile(ws_cap_files[ws]):
+            if os.path.isfile(f):
                 shutil.copyfile(f, self.revert_ws_cap_files[ws])
             else:
                 # delete file content

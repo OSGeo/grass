@@ -40,7 +40,7 @@ from grass.grassdb.manage import resolve_mapset_path
 
 # subprocess wrapper that uses shell on Windows
 class Popen(subprocess.Popen):
-    _builtin_exts = set([".com", ".exe", ".bat", ".cmd"])
+    _builtin_exts = {".com", ".exe", ".bat", ".cmd"}
 
     @staticmethod
     def _escape_for_shell(arg):

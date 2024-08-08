@@ -593,19 +593,18 @@ def create_test_stream_network_map(map_name="streams"):
 
 if __name__ == "__main__":
     import doctest
-    from grass.pygrass import utils
     from grass.script.core import run_command
 
-    utils.create_test_vector_map(test_vector_name)
+    create_test_vector_map(test_vector_name)
     run_command("g.region", n=50, s=0, e=60, w=0, res=1)
     run_command("r.mapcalc", expression="%s = 1" % (test_raster_name), overwrite=True)
 
     doctest.testmod()
 
-    """Remove the generated vector map, if exist"""
-    mset = utils.get_mapset_vector(test_vector_name, mapset="")
+    # Remove the generated vector map, if exist
+    mset = get_mapset_vector(test_vector_name, mapset="")
     if mset:
         run_command("g.remove", flags="f", type="vector", name=test_vector_name)
-    mset = utils.get_mapset_raster(test_raster_name, mapset="")
+    mset = get_mapset_raster(test_raster_name, mapset="")
     if mset:
         run_command("g.remove", flags="f", type="raster", name=test_raster_name)
