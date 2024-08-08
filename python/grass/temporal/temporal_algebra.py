@@ -1193,10 +1193,10 @@ class TemporalAlgebraParser:
             for map in self.removable_maps.values():
                 map_names[map.get_type()].append(map.get_name())
 
-        for key in map_names.keys():
-            if map_names[key]:
+        for key, value in map_names.items():
+            if value:
                 self.msgr.message(_("Removing un-needed or empty %s maps" % (key)))
-                self._remove_maps(map_names[key], key)
+                self._remove_maps(value, key)
 
     def _remove_maps(self, namelist, map_type):
         """Remove maps of specific type

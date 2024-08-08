@@ -474,11 +474,8 @@ class Instruction:
                     for line in text:
                         if line.find("# north arrow") >= 0:
                             commentFound = True
-                    if (
-                        i == "image"
-                        and commentFound
-                        or i == "northArrow"
-                        and not commentFound
+                    if (i == "image" and commentFound) or (
+                        i == "northArrow" and not commentFound
                     ):
                         continue
                     newInstr = myInstrDict[i](id, settings=self, env=self.env)
@@ -573,7 +570,6 @@ class InstructionObject:
 
     def Read(self, instruction, text, **kwargs):
         """Read instruction and save them"""
-        pass
 
     def PercentToReal(self, e, n):
         """Converts text coordinates from percent of region to map coordinates"""
