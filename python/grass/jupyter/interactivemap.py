@@ -571,8 +571,7 @@ class InteractiveRegionController:
         self.region_rectangle = self._ipyleaflet.Rectangle(
             bounds=region_bounds,
             color="red",
-            fill_color="red",
-            fill_opacity=0.3,
+            fill_opacity=0,
             opacity=0.5,
             draggable=True,
             transform=True,
@@ -673,9 +672,9 @@ class InteractiveDrawController:
 
     def deactivate(self):
         """Deactivates the interactive drawing."""
+        self.draw_control.clear()
         if self.draw_control in self.map.controls:
             self.map.remove(self.draw_control)
-        self.draw_control.clear()
         self.drawn_geometries.clear()
         self._hide_interface()
 
