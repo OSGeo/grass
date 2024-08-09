@@ -867,8 +867,8 @@ def _parse_opts(lines):
             break
         try:
             var, val = line.split(b"=", 1)
-        except ValueError:
-            raise SyntaxError("invalid output from g.parser: {}".format(line))
+        except ValueError as err:
+            raise SyntaxError("invalid output from g.parser: {}".format(line)) from err
         try:
             var = decode(var)
             val = decode(val)
@@ -877,7 +877,7 @@ def _parse_opts(lines):
                 "invalid output from g.parser ({error}): {line}".format(
                     error=error, line=line
                 )
-            )
+            ) from error
         if var.startswith("flag_"):
             flags[var[5:]] = bool(int(val))
         elif var.startswith("opt_"):
@@ -1883,7 +1883,7 @@ def _set_location_description(path, location, text):
             fd.write(os.linesep)
         fd.close()
     except OSError as e:
-        raise ScriptError(repr(e))
+        raise ScriptError(repr(e)) from e
 
 
 def _create_location_xy(database, location):
@@ -1934,7 +1934,7 @@ def _create_location_xy(database, location):
 
         os.chdir(cur_dir)
     except OSError as e:
-        raise ScriptError(repr(e))
+        raise ScriptError(repr(e)) from e
 
 
 # interface to g.version
