@@ -466,7 +466,7 @@ def compute_absolute_time_granularity(maps):
         # start time is required in TGIS and expected to be present
         if end:
             map_datetime_delta = compute_datetime_delta(start, end)
-            for time_unit in granularity_units:
+            for time_unit in granularity_units.keys():  # noqa: PLC0206
                 if (
                     time_unit in map_datetime_delta
                     and map_datetime_delta[time_unit] > 0
@@ -484,7 +484,7 @@ def compute_absolute_time_granularity(maps):
             else:
                 gap_datetime_delta = compute_datetime_delta(previous_start, start)
             # Add to the set of the smallest granularity in the granularity_units dict
-            for time_unit in granularity_units:
+            for time_unit in granularity_units.keys():  # noqa: PLC0206
                 if (
                     time_unit in gap_datetime_delta
                     and gap_datetime_delta[time_unit] > 0

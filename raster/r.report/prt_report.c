@@ -13,83 +13,12 @@ int print_report(int unit1, int unit2)
     int i;
     int divider_level;
     int after_header;
-    int need_format;
     int with_stats;
     char *cp;
     int spacing;
     char dot;
 
-    /* examine units, determine output format */
-    for (i = unit1; i <= unit2; i++) {
-        need_format = 1;
-        unit[i].label[0] = "";
-        unit[i].label[1] = "";
-
-        switch (unit[i].type) {
-        case CELL_COUNTS:
-            need_format = 0;
-            unit[i].len = 5;
-            unit[i].label[0] = " cell";
-            unit[i].label[1] = "count";
-            ns = 0;
-            sprintf(num, "%ld", count_sum(&ns, -1));
-            len = strlen(num);
-            if (len > unit[i].len)
-                unit[i].len = len;
-            break;
-
-        case PERCENT_COVER:
-            need_format = 0;
-            unit[i].dp = 2;
-            unit[i].len = 6;
-            unit[i].label[0] = "  %  ";
-            unit[i].label[1] = "cover";
-            unit[i].eformat = 0;
-            break;
-
-        case SQ_METERS:
-            unit[i].label[0] = "square";
-            unit[i].label[1] = "meters";
-            unit[i].factor = 1.0;
-            break;
-
-        case SQ_KILOMETERS:
-            unit[i].label[0] = "  square  ";
-            unit[i].label[1] = "kilometers";
-            unit[i].factor = 1.0e-6;
-            break;
-
-        case ACRES:
-            unit[i].label[0] = "";
-            unit[i].label[1] = "acres";
-            unit[i].factor = 2.47105381467165e-4; /* 640 acres in a sq mile */
-            break;
-
-        case HECTARES:
-            unit[i].label[0] = "";
-            unit[i].label[1] = "hectares";
-            unit[i].factor = 1.0e-4;
-            break;
-
-        case SQ_MILES:
-            unit[i].label[0] = "square";
-            unit[i].label[1] = " miles";
-            unit[i].factor = 3.86102158542446e-7; /* 1 / ( (0.0254m/in * 12in/ft
-                                                   * 5280ft/mi)^2 ) */
-            break;
-
-        default:
-            G_fatal_error("Unit %d not yet supported", unit[i].type);
-        }
-        if (need_format) {
-            unit[i].dp = 6;
-            unit[i].len = 10;
-            unit[i].eformat = 0;
-            ns = 0;
-            format_parms(area_sum(&ns, -1) * unit[i].factor, &unit[i].len,
-                         &unit[i].dp, &(unit[i].eformat), e_format);
-        }
-    }
+    compute_unit_format(unit1, unit2, PLAIN);
 
     /* figure out how big the category numbers are when printed */
     for (nl = 0; nl < nlayers; nl++)

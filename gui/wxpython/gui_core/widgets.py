@@ -80,7 +80,7 @@ except ImportError:  # not sure about TGBTButton version
     from wx.lib.buttons import GenBitmapTextButton as BitmapTextButton
 
 if wxPythonPhoenix:
-    from wx import Validator as Validator
+    from wx import Validator
 else:
     from wx import PyValidator as Validator
 
@@ -348,7 +348,6 @@ class GNotebook(FN.FlatNotebook):
 
     def SetPageImage(self, page, index):
         """Does nothing because we don't want images for this style"""
-        pass
 
     def __getattr__(self, name):
         return getattr(self.controller, name)

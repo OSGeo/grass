@@ -2230,9 +2230,7 @@ class PsMapBufferedWindow(wx.Window):
                 zoomFactor = 1
             # when zooming to full extent, in some cases, there was zoom
             # 1.01..., which causes problem
-            if abs(zoomFactor - 1) > 0.01:
-                zoomFactor = zoomFactor
-            else:
+            if abs(zoomFactor - 1) <= 0.01:
                 zoomFactor = 1.0
 
             if self.mouse["use"] == "zoomout":
@@ -2716,11 +2714,8 @@ class PsMapBufferedWindow(wx.Window):
     def OnSize(self, event):
         """Init image size to match window size"""
         # not zoom all when notebook page is changed
-        if (
-            self.preview
-            and self.parent.currentPage == 1
-            or not self.preview
-            and self.parent.currentPage == 0
+        if (self.preview and self.parent.currentPage == 1) or (
+            not self.preview and self.parent.currentPage == 0
         ):
             self.ZoomAll()
         self.OnIdle(None)

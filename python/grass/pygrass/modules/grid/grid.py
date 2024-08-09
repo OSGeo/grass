@@ -42,7 +42,7 @@ def select(parms, ptype):
     """
     for k in parms:
         par = parms[k]
-        if par.type == ptype or par.typedesc == ptype and par.value:
+        if par.type == ptype or (par.typedesc == ptype and par.value):
             if par.multiple:
                 yield from par.value
             else:
@@ -346,8 +346,8 @@ def get_cmd(cmdd):
             if isinstance(vals, list)
         )
     )
-    cmd.extend(("-%s" % (flg) for flg in cmdd["flags"] if len(flg) == 1))
-    cmd.extend(("--%s" % (flg[0]) for flg in cmdd["flags"] if len(flg) > 1))
+    cmd.extend(f"-{flg}" for flg in cmdd["flags"] if len(flg) == 1)
+    cmd.extend(f"--{flg[0]}" for flg in cmdd["flags"] if len(flg) > 1)
     return cmd
 
 
