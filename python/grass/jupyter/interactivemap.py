@@ -12,17 +12,22 @@
 #            for details.
 
 """Interactive visualizations map with folium or ipyleaflet"""
-
+import os
 import base64
 import json
 from pathlib import Path
 from .reprojection_renderer import ReprojectionRenderer
+
 from .utils import (
     get_region_bounds_latlon,
     reproject_region,
     update_region,
     get_location_proj_string,
     save_vector,
+    get_region,
+    query_raster,
+    query_vector,
+    reproject_latlon,
 )
 
 
@@ -293,6 +298,13 @@ class InteractiveMap:
         self.height = height
         self._controllers = {}
 
+        # Store vector and raster name
+        self.raster_name = []
+        self.vector_name = []
+
+        # Store Region
+        self.region = None
+
         if self._ipyleaflet:
             basemap = xyzservices.providers.query_name(tiles)
             if API_key and basemap.get("accessToken"):
@@ -326,6 +338,7 @@ class InteractiveMap:
         :param str title: vector name for layer control
         :**kwargs: keyword arguments passed to GeoJSON overlay
         """
+        self.vector_name.append(name)
         Vector(name, title=title, renderer=self._renderer, **kwargs).add_to(self.map)
 
     def add_raster(self, name, title=None, **kwargs):
@@ -344,6 +357,7 @@ class InteractiveMap:
         :param str title: raster name for layer control
         :**kwargs: keyword arguments passed to image overlay
         """
+        self.raster_name.append(name)
         Raster(name, title=title, renderer=self._renderer, **kwargs).add_to(self.map)
 
     def add_layer_control(self, **kwargs):
@@ -385,21 +399,37 @@ class InteractiveMap:
             controller_class=InteractiveRegionController,
         )
 
+    def setup_query_interface(self):
+        """Sets up the query button interface.
+
+        This includes creating a toggle button to activate the
+        query mode, and instantiating an InteractiveQueryController to
+        handle the user query.
+        """
+        return self._create_toggle_button(
+            icon="info",
+            tooltip=_("Click to query raster and vector maps"),
+            controller_class=InteractiveQueryController,
+        )
+
     def _create_toggle_button(self, icon, tooltip, controller_class):
         button = self._ipywidgets.ToggleButton(
             icon=icon,
             value=False,
             tooltip=tooltip,
             description="",
-            layout=self._ipywidgets.Layout(
-                width="43px", margin="0px", border="2px solid darkgrey"
-            ),
+            # layout=self._ipywidgets.Layout(
+            #     width="43px", margin="0px", #border="2px solid darkgrey"
+            # ),
         )
         controller = controller_class(
             map_object=self.map,
             ipyleaflet=self._ipyleaflet,
             ipywidgets=self._ipywidgets,
             toggle_button=button,
+            rasters=self.raster_name,
+            vectors=self.vector_name,
+            width=self.width,
         )
         self._controllers[button] = controller
         button.observe(self._toggle_mode, names="value")
@@ -423,11 +453,12 @@ class InteractiveMap:
         added after calling show()."""
         if self._ipyleaflet:
             toggle_buttons = [
+                self.setup_query_interface(),
                 self.setup_computational_region_interface(),
                 self.setup_drawing_interface(),
             ]
             button_box = self._ipywidgets.HBox(
-                toggle_buttons, layout=self._ipywidgets.Layout(align_items="flex-start")
+                toggle_buttons, layout=self._ipywidgets.Layout(width="150px")
             )
             self.map.add(
                 self._ipyleaflet.WidgetControl(widget=button_box, position="topright")
@@ -462,7 +493,7 @@ class InteractiveRegionController:
     """A controller for interactive region selection on a map.
 
     Attributes:
-        map: The ipyleaflet.Map object.
+        map: The map object.
         region_rectangle: The rectangle representing the selected region.
         _ipyleaflet: The ipyleaflet module.
         _ipywidgets: The ipywidgets module.
@@ -476,7 +507,7 @@ class InteractiveRegionController:
     ):  # pylint: disable=unused-argument
         """Initializes the InteractiveRegionController.
 
-        :param ipyleaflet.Map map_object: The map object.
+        :param map_object: The map object.
         :param ipyleaflet: The ipyleaflet module.
         :param ipywidgets: The ipywidgets module.
         """
@@ -540,8 +571,8 @@ class InteractiveRegionController:
         self.region_rectangle = self._ipyleaflet.Rectangle(
             bounds=region_bounds,
             color="red",
-            fill_color="red",
-            fill_opacity=0.5,
+            fill_opacity=0,
+            opacity=0.5,
             draggable=True,
             transform=True,
             rotation=False,
@@ -589,27 +620,32 @@ class InteractiveDrawController:
     """A controller for interactive drawing on a map.
 
     Attributes:
-        map: The ipyleaflet.Map object.
+        map: The map object.
         _ipyleaflet: The ipyleaflet module.
         draw_control: The draw control.
         drawn_geometries: The list of drawn geometries.
+        self.vector_layers: List of vector layers
         geo_json_layers: The dictionary of GeoJSON layers.
         save_button_control: The save button control.
         toggle_button: The toggle button activating/deactivating drawing.
     """
 
-    def __init__(self, map_object, ipyleaflet, ipywidgets, toggle_button):
+    def __init__(
+        self, map_object, ipyleaflet, ipywidgets, toggle_button, vectors, **kwargs
+    ):  # pylint: disable=unused-argument
         """Initializes the InteractiveDrawController.
 
-        :param ipyleaflet.Map map_object: The map object.
+        :param map_object: The map object.
         :param ipyleaflet: The ipyleaflet module.
         :param ipywidgets: The ipywidgets module.
         :param toggle_button: The toggle button activating/deactivating drawing.
+        :param vectors: List of vector layers.
         """
         self.map = map_object
         self._ipyleaflet = ipyleaflet
         self._ipywidgets = ipywidgets
         self.toggle_button = toggle_button
+        self.vector_layers = vectors
         self.draw_control = self._ipyleaflet.DrawControl(edit=False, remove=False)
         self.drawn_geometries = []
         self.geo_json_layers = {}
@@ -618,7 +654,7 @@ class InteractiveDrawController:
         self.name_input = self._ipywidgets.Text(
             description=_("New vector map name:"),
             style={"description_width": "initial"},
-            layout=self._ipywidgets.Layout(width="80%", margin="1px 1px 1px 1px"),
+            layout=self._ipywidgets.Layout(width="80%", margin="1px 1px 1px 5px"),
         )
 
         self.save_button = self._ipywidgets.Button(
@@ -636,9 +672,9 @@ class InteractiveDrawController:
 
     def deactivate(self):
         """Deactivates the interactive drawing."""
+        self.draw_control.clear()
         if self.draw_control in self.map.controls:
             self.map.remove(self.draw_control)
-        self.draw_control.clear()
         self.drawn_geometries.clear()
         self._hide_interface()
 
@@ -693,6 +729,115 @@ class InteractiveDrawController:
             save_vector(name, geo_json)
             geo_json_layer = self._ipyleaflet.GeoJSON(data=geo_json, name=name)
             self.geo_json_layers[name] = geo_json_layer
+            self.vector_layers.append(name)
             self.map.add_layer(geo_json_layer)
             self.deactivate()
             self.toggle_button.value = False
+
+
+class InteractiveQueryController:
+    """A controller for interactive querying on a map.
+
+    Attributes:
+        map: The ipyleaflet.Map object.
+        _ipyleaflet: The ipyleaflet module.
+        _ipywidgets: The ipywidgets module.
+        raster_name: The name of the raster layer.
+        vector_name: The name of the vector layer.
+        width: The width of the map.
+        query_control: The query control.
+
+    """
+
+    def __init__(
+        self, map_object, ipyleaflet, ipywidgets, rasters, vectors, width, **kwargs
+    ):  # pylint: disable=unused-argument
+        """Initializes the InteractiveQueryController.
+
+        :param map: The map object.
+        :param ipyleaflet: The ipyleaflet module.
+        :param ipywidgets: The ipywidgets module.
+        """
+        self.map = map_object
+        self._ipyleaflet = ipyleaflet
+        self._ipywidgets = ipywidgets
+        self.raster_name = rasters
+        self.vector_name = vectors
+        self.width = width
+        self.query_control = None
+
+    def activate(self):
+        """Activates the interactive querying."""
+        self.map.on_interaction(self.handle_interaction)
+        self.map.default_style = {"cursor": "crosshair"}
+
+    def deactivate(self):
+        """Deactivates the interactive querying."""
+        self.map.default_style = {"cursor": "default"}
+        self.map.on_interaction(self.handle_interaction, remove=True)
+        self.clear_popups()
+
+    def handle_interaction(self, **kwargs):
+        """Handles the map interaction event.
+
+        :param kwargs: The event arguments.
+        """
+        if kwargs.get("type") != "click":
+            return
+
+        lonlat = kwargs.get("coordinates")
+        reprojected_coordinates = reproject_latlon(lonlat)
+        raster_output = self.query_raster(reprojected_coordinates)
+        vector_output = self.query_vector(reprojected_coordinates)
+        self.show_popup(lonlat, raster_output + vector_output)
+
+    def query_raster(self, coordinates):
+        """Queries the raster layer.
+
+        :param coordinates: The coordinates.
+        :return: The raster output.
+        """
+        return query_raster(coordinates, self.raster_name)
+
+    def query_vector(self, coordinates):
+        """Queries the vector layer.
+
+        :param coordinates: The coordinates.
+        :return: The vector output.
+        """
+        region = get_region(env=os.environ.copy())
+        return query_vector(
+            coordinates,
+            self.vector_name,
+            10.0 * ((region["east"] - region["west"]) / self.width),
+        )
+
+    def show_popup(self, lonlat, message_content):
+        """Shows a popup with the query result.
+
+        :param lonlat: The latitude and longitude coordinates.
+        :param message_content: The message content.
+        """
+        scrollable_container = self._ipywidgets.HTML(
+            value=(
+                "<div style='max-height: 300px; max-width: 300px; "
+                "overflow-y: auto; overflow-x: auto;'>"
+                f"{message_content}"
+                "</div>"
+            )
+        )
+
+        popup = self._ipyleaflet.Popup(
+            location=lonlat,
+            child=scrollable_container,
+            close_button=False,
+            auto_close=True,
+            close_on_escape_key=False,
+        )
+        self.map.add(popup)
+
+    def clear_popups(self):
+        """Clears the popups."""
+        for item in reversed(list(self.map.layers)):
+            if isinstance(item, self._ipyleaflet.Popup):
+                self.map.remove(item)
