@@ -63,6 +63,7 @@
 #include <string.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <errno.h>
 #include "binio.h"
 #include "v5d.h"
 #include "vis5d.h"
@@ -1966,7 +1967,9 @@ int v5dReadCompressedGrid(v5dstruct *v, int time, int var, float *ga, float *gb,
 
     /* move to position in file */
     pos = grid_position(v, time, var);
-    lseek(v->FileDesc, pos, SEEK_SET);
+    if (lseek(v->FileDesc, pos, SEEK_SET) == -1) {
+        G_fatal_error("Seek error: %s", strerror(errno));
+    }
 
     /* read ga, gb arrays */
     read_float4_array(v->FileDesc, ga, v->Nl[var]);
