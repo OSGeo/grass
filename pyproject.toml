@@ -161,7 +161,6 @@ ignore = [
     "PIE794",  # duplicate-class-field-definition
     "PIE808",  # unnecessary-range-start
     "PIE810",  # multiple-starts-ends-with
-    "PLC0206", # dict-index-missing-items
     "PLC0415", # import-outside-top-level
     "PLC1901", # compare-to-empty-string
     "PLC2701", # import-private-name
@@ -240,7 +239,6 @@ ignore = [
     "RUF013",  # unnecessary-iterable-allocation-for-first-element
     "RUF015",  # unnecessary-iterable-allocation-for-first-element
     "RUF019",  # unnecessary-key-check
-    "RUF021",  # parenthesize-chained-operators
     "RUF027",  # missing-f-string-syntax
     "RUF100",  # unused-noqa
     "S101",    #assert
@@ -290,7 +288,6 @@ ignore = [
     "UP030",   # format-literals
     "UP031",   # printf-string-formatting
     "UP032",   # f-string
-    "UP034",   # extraneous-parentheses
     "UP036",   # outdated-version-block
     "W605",    # invalid-escape-sequence
     "YTT204",  # sys-version-info-minor-cmp-int

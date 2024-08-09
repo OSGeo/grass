@@ -2716,11 +2716,8 @@ class PsMapBufferedWindow(wx.Window):
     def OnSize(self, event):
         """Init image size to match window size"""
         # not zoom all when notebook page is changed
-        if (
-            self.preview
-            and self.parent.currentPage == 1
-            or not self.preview
-            and self.parent.currentPage == 0
+        if (self.preview and self.parent.currentPage == 1) or (
+            not self.preview and self.parent.currentPage == 0
         ):
             self.ZoomAll()
         self.OnIdle(None)
