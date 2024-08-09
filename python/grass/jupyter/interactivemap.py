@@ -1,6 +1,7 @@
 #
 # AUTHOR(S): Caitlin Haedrich <caitlin DOT haedrich AT gmail>
 #            Anna Petrasova <kratochanna AT gmail>
+#            Riya Saxena <29riyasaxena AT gmail>
 #
 # PURPOSE:   This module contains functions for interactive visualizations
 #            in Jupyter Notebooks.

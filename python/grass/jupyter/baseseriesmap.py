@@ -1,3 +1,15 @@
+#
+# AUTHOR(S): Riya Saxena <29riyasaxena AT gmail>
+#
+# PURPOSE:   This module contains functions for interactive visualizations
+#            in Jupyter Notebooks.
+#
+# COPYRIGHT: (C) 2024 Riya Saxena, and by the GRASS Development Team
+#
+#            This program is free software under the GNU General Public
+#            License (>=v2). Read the file COPYING that comes with GRASS
+#            for details.
+
 """Base class for SeriesMap and TimeSeriesMap"""
 
 import os
