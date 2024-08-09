@@ -413,7 +413,7 @@ class InteractiveMap:
             controller_class=InteractiveQueryController,
         )
 
-    def _create_toggle_button(self, icon, tooltip, controller_class, *args, **kwargs):
+    def _create_toggle_button(self, icon, tooltip, controller_class):
         button = self._ipywidgets.ToggleButton(
             icon=icon,
             value=False,
@@ -774,19 +774,13 @@ class InteractiveQueryController:
 
     def deactivate(self):
         """Deactivates the interactive querying."""
-        self.hide_interface()
         self.query_mode = False
         self.map.default_style = {"cursor": "default"}
-        self.map.on_interaction(None)
         self.clear_popups()
 
     def show_interface(self):
         """Shows the interface for interactive querying."""
         self.map.on_interaction(self.handle_interaction)
-
-    def hide_interface(self):
-        """Hides the interface for interactive querying."""
-        self.map.on_interaction(None)
 
     def on_toggle_change(self, change):
         """Handles the toggle button change event.
@@ -807,18 +801,10 @@ class InteractiveQueryController:
             return
 
         lonlat = kwargs.get("coordinates")
-        reprojected_coordinates = self.reproject_latlon(lonlat)
+        reprojected_coordinates = reproject_latlon(lonlat)
         raster_output = self.query_raster(reprojected_coordinates)
         vector_output = self.query_vector(reprojected_coordinates)
         self.show_popup(lonlat, raster_output + vector_output)
-
-    def reproject_latlon(self, lonlat):
-        """Reprojects the latitude and longitude coordinates.
-
-        :param lonlat: The latitude and longitude coordinates.
-        :return: The reprojected coordinates.
-        """
-        return reproject_latlon(lonlat)
 
     def query_raster(self, coordinates):
         """Queries the raster layer.
