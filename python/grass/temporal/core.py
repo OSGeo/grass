@@ -479,7 +479,6 @@ def get_available_temporal_mapsets():
     tgis_mapsets = {}
 
     for mapset in mapsets:
-        mapset = mapset
         driver = c_library_interface.get_driver_name(mapset)
         database = c_library_interface.get_database_name(mapset)
 
