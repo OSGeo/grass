@@ -7757,7 +7757,7 @@ msgstr "Rozloží společné hranice "
 #: ../gui/wxpython/menustrings.py:572 ../gui/wxpython/menustrings.py:1537
 #, fuzzy
 msgid ""
-"Dissolves adjacent or overlaping features sharing a common category number "
+"Dissolves adjacent or overlapping features sharing a common category number "
 "or attribute."
 msgstr ""
 "Rozloží hranice mezi sousedícími plochami, sdílejícími společné číslo "
