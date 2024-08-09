@@ -301,7 +301,6 @@ class InteractiveMap:
         # Store vector and raster name
         self.raster_name = []
         self.vector_name = []
-        self.query_mode = False
 
         # Store Region
         self.region = None
@@ -400,7 +399,7 @@ class InteractiveMap:
             controller_class=InteractiveRegionController,
         )
 
-    def setup_query_button(self):
+    def setup_query_interface(self):
         """Sets up the query button interface.
 
         This includes creating a toggle button to activate the
@@ -409,7 +408,7 @@ class InteractiveMap:
         """
         return self._create_toggle_button(
             icon="info",
-            tooltip=_("Click to activate/deactivate query mode"),
+            tooltip=_("Click to query raster and vector maps"),
             controller_class=InteractiveQueryController,
         )
 
@@ -419,15 +418,18 @@ class InteractiveMap:
             value=False,
             tooltip=tooltip,
             description="",
-            layout=self._ipywidgets.Layout(
-                width="43px", margin="0px", border="2px solid darkgrey"
-            ),
+            # layout=self._ipywidgets.Layout(
+            #     width="43px", margin="0px", #border="2px solid darkgrey"
+            # ),
         )
         controller = controller_class(
-            map_object=self,
+            map_object=self.map,
             ipyleaflet=self._ipyleaflet,
             ipywidgets=self._ipywidgets,
             toggle_button=button,
+            rasters=self.raster_name,
+            vectors=self.vector_name,
+            width=self.width,
         )
         self._controllers[button] = controller
         button.observe(self._toggle_mode, names="value")
@@ -451,12 +453,12 @@ class InteractiveMap:
         added after calling show()."""
         if self._ipyleaflet:
             toggle_buttons = [
+                self.setup_query_interface(),
                 self.setup_computational_region_interface(),
                 self.setup_drawing_interface(),
-                self.setup_query_button(),
             ]
             button_box = self._ipywidgets.HBox(
-                toggle_buttons, layout=self._ipywidgets.Layout(align_items="flex-start")
+                toggle_buttons, layout=self._ipywidgets.Layout(width="150px")
             )
             self.map.add(
                 self._ipyleaflet.WidgetControl(widget=button_box, position="topright")
@@ -509,7 +511,7 @@ class InteractiveRegionController:
         :param ipyleaflet: The ipyleaflet module.
         :param ipywidgets: The ipywidgets module.
         """
-        self.map = map_object.map
+        self.map = map_object
         self.region_rectangle = None
         self._ipyleaflet = ipyleaflet
         self._ipywidgets = ipywidgets
@@ -570,7 +572,8 @@ class InteractiveRegionController:
             bounds=region_bounds,
             color="red",
             fill_color="red",
-            fill_opacity=0.5,
+            fill_opacity=0.3,
+            opacity=0.5,
             draggable=True,
             transform=True,
             rotation=False,
@@ -622,23 +625,28 @@ class InteractiveDrawController:
         _ipyleaflet: The ipyleaflet module.
         draw_control: The draw control.
         drawn_geometries: The list of drawn geometries.
+        self.vector_layers: List of vector layers
         geo_json_layers: The dictionary of GeoJSON layers.
         save_button_control: The save button control.
         toggle_button: The toggle button activating/deactivating drawing.
     """
 
-    def __init__(self, map_object, ipyleaflet, ipywidgets, toggle_button):
+    def __init__(
+        self, map_object, ipyleaflet, ipywidgets, toggle_button, vectors, **kwargs
+    ):  # pylint: disable=unused-argument
         """Initializes the InteractiveDrawController.
 
         :param map_object: The map object.
         :param ipyleaflet: The ipyleaflet module.
         :param ipywidgets: The ipywidgets module.
         :param toggle_button: The toggle button activating/deactivating drawing.
+        :param vectors: List of vector layers.
         """
-        self.map = map_object.map
+        self.map = map_object
         self._ipyleaflet = ipyleaflet
         self._ipywidgets = ipywidgets
         self.toggle_button = toggle_button
+        self.vector_layers = vectors
         self.draw_control = self._ipyleaflet.DrawControl(edit=False, remove=False)
         self.drawn_geometries = []
         self.geo_json_layers = {}
@@ -647,7 +655,7 @@ class InteractiveDrawController:
         self.name_input = self._ipywidgets.Text(
             description=_("New vector map name:"),
             style={"description_width": "initial"},
-            layout=self._ipywidgets.Layout(width="80%", margin="1px 1px 1px 1px"),
+            layout=self._ipywidgets.Layout(width="80%", margin="1px 1px 1px 5px"),
         )
 
         self.save_button = self._ipywidgets.Button(
@@ -722,6 +730,7 @@ class InteractiveDrawController:
             save_vector(name, geo_json)
             geo_json_layer = self._ipyleaflet.GeoJSON(data=geo_json, name=name)
             self.geo_json_layers[name] = geo_json_layer
+            self.vector_layers.append(name)
             self.map.add_layer(geo_json_layer)
             self.deactivate()
             self.toggle_button.value = False
@@ -731,73 +740,50 @@ class InteractiveQueryController:
     """A controller for interactive querying on a map.
 
     Attributes:
-        map_object: The map object.
         map: The ipyleaflet.Map object.
         _ipyleaflet: The ipyleaflet module.
         _ipywidgets: The ipywidgets module.
-        toggle_button: The toggle button activating/deactivating querying.
         raster_name: The name of the raster layer.
         vector_name: The name of the vector layer.
         width: The width of the map.
-        query_mode: A flag indicating whether the query mode is active.
         query_control: The query control.
-        popups: A list of popups.
 
     """
 
-    def __init__(self, map_object, ipyleaflet, ipywidgets, toggle_button):
+    def __init__(
+        self, map_object, ipyleaflet, ipywidgets, rasters, vectors, width, **kwargs
+    ):  # pylint: disable=unused-argument
         """Initializes the InteractiveQueryController.
 
-        :param map_object: The map object.
+        :param map: The map object.
         :param ipyleaflet: The ipyleaflet module.
         :param ipywidgets: The ipywidgets module.
-        :param toggle_button: The toggle button activating/deactivating querying.
         """
-        self.map_object = map_object
-        self.map = map_object.map
+        self.map = map_object
         self._ipyleaflet = ipyleaflet
         self._ipywidgets = ipywidgets
-        self.toggle_button = toggle_button
-        self.raster_name = map_object.raster_name
-        self.vector_name = map_object.vector_name
-        self.width = map_object.width
-        self.query_mode = False
+        self.raster_name = rasters
+        self.vector_name = vectors
+        self.width = width
         self.query_control = None
-        self.popups = []
-
-        self.toggle_button.observe(self.on_toggle_change, names="value")
 
     def activate(self):
         """Activates the interactive querying."""
-        self.show_interface()
         self.map.on_interaction(self.handle_interaction)
+        self.map.default_style = {"cursor": "crosshair"}
 
     def deactivate(self):
         """Deactivates the interactive querying."""
-        self.query_mode = False
         self.map.default_style = {"cursor": "default"}
+        self.map.on_interaction(self.handle_interaction, remove=True)
         self.clear_popups()
-
-    def show_interface(self):
-        """Shows the interface for interactive querying."""
-        self.map.on_interaction(self.handle_interaction)
-
-    def on_toggle_change(self, change):
-        """Handles the toggle button change event.
-
-        :param change: The change event.
-        """
-        self.query_mode = change["new"]
-        self.map.default_style = {
-            "cursor": "crosshair" if self.query_mode else "default"
-        }
 
     def handle_interaction(self, **kwargs):
         """Handles the map interaction event.
 
         :param kwargs: The event arguments.
         """
-        if not self.query_mode or kwargs.get("type") != "click":
+        if kwargs.get("type") != "click":
             return
 
         lonlat = kwargs.get("coordinates")
@@ -850,18 +836,9 @@ class InteractiveQueryController:
             close_on_escape_key=False,
         )
         self.map.add(popup)
-        self.popups.append(popup)
 
     def clear_popups(self):
         """Clears the popups."""
-        for popup in self.popups:
-            self.map.remove(popup)
-        self.popups.clear()
-
-    def on_toggle_popup_change(self, change):
-        """Handles the toggle popup change event.
-
-        :param change: The change event.
-        """
-        if not change["new"]:
-            self.clear_popups()
+        for item in reversed(list(self.map.layers)):
+            if isinstance(item, self._ipyleaflet.Popup):
+                self.map.remove(item)
