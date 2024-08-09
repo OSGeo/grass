@@ -91,7 +91,7 @@ if ENCODING is None:
 if "GISBASE" in os.environ and len(os.getenv("GISBASE")) > 0:
     GISBASE = os.path.normpath(os.environ["GISBASE"])
 else:
-    GISBASE = os.path.normpath("@GISBASE@")
+    GISBASE = os.path.normpath("@SET_GISBASE@")
     os.environ["GISBASE"] = GISBASE
 CMD_NAME = "@START_UP@"
 GRASS_VERSION = "@GRASS_VERSION_NUMBER@"

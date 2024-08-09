@@ -23,7 +23,7 @@
 #include <errno.h>
 #include <sys/types.h>
 
-#ifndef __MINGW32__
+#ifndef _WIN32
 #include <sys/wait.h>
 #else
 #include <windows.h>
@@ -68,7 +68,7 @@ struct signal {
     int action;
     int signum;
     int valid;
-#ifndef __MINGW32__
+#ifndef _WIN32
     struct sigaction old_act;
     sigset_t old_mask;
 #endif
@@ -95,7 +95,7 @@ struct spawn {
 static void parse_arglist(struct spawn *sp, va_list va);
 static void parse_argvec(struct spawn *sp, const char **va);
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 
 struct buffer {
     char *str;
@@ -937,7 +937,7 @@ int G_spawn(const char *command, ...)
 
     status =
         G_spawn_ex(command,
-#ifndef __MINGW32__
+#ifndef _WIN32
                    SF_SIGNAL, SST_PRE, SSA_IGNORE, SIGINT, SF_SIGNAL, SST_PRE,
                    SSA_IGNORE, SIGQUIT, SF_SIGNAL, SST_PRE, SSA_BLOCK, SIGCHLD,
 #endif
@@ -948,7 +948,7 @@ int G_spawn(const char *command, ...)
 
 int G_wait(int i_pid)
 {
-#ifdef __MINGW32__
+#ifdef _WIN32
     DWORD rights = PROCESS_QUERY_INFORMATION | SYNCHRONIZE;
     HANDLE hProcess = OpenProcess(rights, FALSE, (DWORD)i_pid);
     DWORD exitcode;

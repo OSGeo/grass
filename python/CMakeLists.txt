@@ -1,0 +1,2 @@
+add_subdirectory(grass)
+add_subdirectory(libgrass_interface_generator)

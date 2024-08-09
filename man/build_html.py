@@ -9,6 +9,7 @@
 
 import os
 import string
+import sys
 from datetime import datetime
 
 # TODO: better fix this in include/Make/Html.make, see bug RT #5361
@@ -508,15 +509,20 @@ def to_title(name):
 
 
 ############################################################################
+arch_dist_dir = None
+try:
+    arch_dist_dir = os.environ["ARCH_DISTDIR"]
+except KeyError:
+    html_dir = os.environ["HTMLDIR"]
 
-arch_dist_dir = os.environ["ARCH_DISTDIR"]
-html_dir = os.path.join(arch_dist_dir, "docs", "html")
+if arch_dist_dir:
+    html_dir = os.path.join(arch_dist_dir, "docs", "html")
 gisbase = os.environ["GISBASE"]
 grass_version = os.getenv("VERSION_NUMBER", "unknown")
 grass_version_major = grass_version.split(".")[0]
 grass_version_minor = grass_version.split(".")[1]
 grass_mmver = ".".join(grass_version.split(".")[0:2])
-macosx = "darwin" in os.environ["ARCH"].lower()
+macosx = sys.platform.startswith("darwin")
 default_year = os.getenv("VERSION_DATE")
 if not default_year:
     default_year = str(datetime.now().year)
