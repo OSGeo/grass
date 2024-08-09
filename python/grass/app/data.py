@@ -19,6 +19,8 @@ import subprocess
 import sys
 from shutil import copytree, ignore_patterns
 from pathlib import Path
+
+import grass.script as gs
 import grass.grassdb.config as cfg
 
 from grass.grassdb.checks import is_location_valid
@@ -170,22 +172,24 @@ class MapsetLockingException(Exception):
     pass
 
 
-def lock_mapset(install_path, mapset_path, force_gislock_removal, user):
+def lock_mapset(
+    install_path, mapset_path, force_gislock_removal, user, message_callback
+):
     """Lock the mapset and return name of the lock file
 
     Behavior on error must be changed somehow; now it fatals but GUI case is
     unresolved.
     """
     if not os.path.exists(mapset_path):
-        raise MapsetLockingException(_("Path '%s' doesn't exist") % mapset_path)
+        raise MapsetLockingException(_("Path '{}' doesn't exist").format(mapset_path))
     if not os.access(mapset_path, os.W_OK):
-        error = _("Path '%s' not accessible.") % mapset_path
+        error = _("Path '{}' not accessible.").format(mapset_path)
         stat_info = os.stat(mapset_path)
         mapset_uid = stat_info.st_uid
         if mapset_uid != os.getuid():
-            error = "%s\n%s" % (
-                error,
-                _("You are not the owner of '%s'.") % mapset_path,
+            error = "{error}\n{detail}".format(
+                error=error,
+                detail=_("You are not the owner of '{}'.").format(mapset_path),
             )
         raise MapsetLockingException(error)
     # Check for concurrent use
@@ -200,28 +204,24 @@ def lock_mapset(install_path, mapset_path, force_gislock_removal, user):
             lockfile = Path(lockfile)
             msg = _(
                 "{user} is currently running GRASS in selected mapset"
-                " (file {file} found). Concurrent use not allowed.\n"
+                " (file {file} found). Concurrent use of one mapset not allowed.\n"
                 "You can force launching GRASS using -f flag"
-                " (note that you need permission for this operation)."
-                " Have another look in the processor "
-                "manager just to be sure...".format(
-                    user=lockfile.owner(), file=lockfile
-                )
-            )
+                " (assuming your have sufficient access permissions)."
+                " Confirm in a process manager "
+                "that there is no other process using the mapset."
+            ).format(user=lockfile.owner(), file=lockfile)
         else:
-            try_remove(lockfile)
-            message(
+            gs.try_remove(lockfile)
+            message_callback(
                 _(
-                    "%(user)s is currently running GRASS in selected mapset"
-                    " (file %(file)s found). Forcing to launch GRASS..."
-                    % {"user": user, "file": lockfile}
-                )
+                    "{user} is currently running GRASS in selected mapset"
+                    " (file %(file)s found), but forcing to launch GRASS anyway..."
+                ).format(user=lockfile.owner(), file=lockfile)
             )
     elif ret != 0:
-        msg = (
-            _("Unable to properly access '%s'.\nPlease notify system personnel.")
-            % lockfile
-        )
+        msg = _(
+            "Unable to properly access '{}'.\nPlease notify your system administrator."
+        ).format(lockfile)
 
     if msg:
         raise MapsetLockingException(msg)

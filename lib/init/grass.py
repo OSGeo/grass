@@ -2391,6 +2391,7 @@ def main():
             mapset_path=mapset_settings.full_mapset,
             user=user,
             force_gislock_removal=params.force_gislock_removal,
+            message_callback=message,
         )
     except MapsetLockingException as e:
         fatal(e.args[0])
