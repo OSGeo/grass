@@ -49,7 +49,7 @@ class RasterRowImgTestCase(TestCase):
         region.adjust()
 
         tmpfile = tempfile(False)
-        tmpfile = tmpfile + ".png"
+        tmpfile += ".png"
 
         a = raster2numpy_img(self.name, region)
 
@@ -67,7 +67,7 @@ class RasterRowImgTestCase(TestCase):
         region.adjust()
 
         tmpfile = tempfile(False)
-        tmpfile = tmpfile + ".png"
+        tmpfile += ".png"
 
         # With array as argument
         array = np.ndarray((region.rows * region.cols * 4), np.uint8)
@@ -88,7 +88,7 @@ class RasterRowImgTestCase(TestCase):
         region.adjust()
 
         tmpfile = tempfile(False)
-        tmpfile = tmpfile + ".png"
+        tmpfile += ".png"
 
         # With array as argument
         array = np.ndarray((region.rows * region.cols * 4), np.uint8)
@@ -109,7 +109,7 @@ class RasterRowImgTestCase(TestCase):
         region.adjust()
 
         tmpfile = tempfile(False)
-        tmpfile = tmpfile + ".png"
+        tmpfile += ".png"
 
         # With array as argument
         array = np.ndarray((region.rows * region.cols * 4), np.uint8)
@@ -130,7 +130,7 @@ class RasterRowImgTestCase(TestCase):
         region.adjust()
 
         tmpfile = tempfile(False)
-        tmpfile = tmpfile + ".png"
+        tmpfile += ".png"
 
         array = raster2numpy_img(rastname=self.name, region=region, color="RGB")
 

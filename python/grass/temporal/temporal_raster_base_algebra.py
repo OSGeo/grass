@@ -478,7 +478,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                             if count > 0:
                                 cmd_value_list.append(aggregate + aggregate)
                             cmd_value_list.append(relationmap.cmd_list)
-                            count = count + 1
+                            count += 1
                         if self.debug:
                             print(
                                 "compare_cmd_value",

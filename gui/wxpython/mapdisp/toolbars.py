@@ -252,7 +252,7 @@ class MapToolbar(BaseToolbar):
             ),
         )
         if self.parent.IsDockable():
-            data = data + (
+            data += (
                 (
                     ("docking", BaseIcons["docking"].label),
                     BaseIcons["docking"],

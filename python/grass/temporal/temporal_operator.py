@@ -199,7 +199,7 @@ class TemporalOperatorLexer:
     )
 
     # Build the token list
-    tokens = tokens + tuple(relations.values())
+    tokens += tuple(relations.values())
 
     # Regular expression rules for simple tokens
     t_T_SELECT = r":"
@@ -647,7 +647,7 @@ class TemporalOperatorParser:
         rel_list = []
         rel_list.append(t[1])
         if isinstance(t[3], list):
-            rel_list = rel_list + t[3]
+            rel_list += t[3]
         else:
             rel_list.append(t[3])
         t[0] = rel_list

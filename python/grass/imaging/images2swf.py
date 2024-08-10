@@ -65,6 +65,7 @@ sources and tools:
   of a watermark in the upper left corner.
 
 """
+from __future__ import annotations
 
 import os
 import zlib
@@ -224,7 +225,7 @@ def intToUint8(i):
     return int(i).to_bytes(1, "little")
 
 
-def intToBits(i, n=None):
+def intToBits(i: int, n: int | None = None) -> BitArray:
     """convert int to a string of bits (0's and 1's in a string),
     pad to n elements. Convert back using int(ss,2)."""
     ii = i
@@ -233,7 +234,7 @@ def intToBits(i, n=None):
     bb = BitArray()
     while ii > 0:
         bb += str(ii % 2)
-        ii = ii >> 1
+        ii >>= 1
     bb.Reverse()
 
     # justify
@@ -295,7 +296,7 @@ def getTypeAndLen(bb):
     return type, L, L2
 
 
-def signedIntToBits(i, n=None):
+def signedIntToBits(i: int, n: int | None = None) -> BitArray:
     """convert signed int to a string of bits (0's and 1's in a string),
     pad to n elements. Negative numbers are stored in 2's complement bit
     patterns, thus positive numbers always start with a 0.
@@ -311,7 +312,7 @@ def signedIntToBits(i, n=None):
     bb = BitArray()
     while ii > 0:
         bb += str(ii % 2)
-        ii = ii >> 1
+        ii >>= 1
     bb.Reverse()
 
     # justify
@@ -489,7 +490,7 @@ class SetBackgroundTag(ControlTag):
         for i in range(3):
             clr = self.rgb[i]
             if isinstance(clr, float):
-                clr = clr * 255
+                clr *= 255
             bb += intToUint8(clr)
         self.bytes = bb
 

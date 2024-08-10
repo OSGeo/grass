@@ -471,7 +471,7 @@ class GifWriter:
                     fp.write(d)
 
             # Prepare for next round
-            frames = frames + 1
+            frames += 1
 
         fp.write(";")  # end gif
         return frames

@@ -628,7 +628,7 @@ class GridModule:
             if inm.type in {"raster", "vector"} and inm.value:
                 if "@" not in inm.value:
                     mset = get_mapset_raster(inm.value)
-                    inm.value = inm.value + "@%s" % mset
+                    inm.value += "@%s" % mset
 
     def run(self, patch=True, clean=True):
         """Run the GRASS command

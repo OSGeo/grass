@@ -5860,8 +5860,8 @@ class PositionWindow(Window):
         w, h = self.GetClientSize()
         x, y = pos
         if scale:
-            x = x * w
-            y = y * h
+            x *= w
+            y *= h
         self.pdc.Clear()
         self.pdc.BeginDrawing()
         self.pdc.DrawLine(w // 2, h // 2, int(x), int(y))

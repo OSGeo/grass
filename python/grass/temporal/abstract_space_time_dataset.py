@@ -1134,7 +1134,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             if self.is_time_absolute():
                 end = increment_datetime_by_string(end, gran)
             else:
-                end = end + gran
+                end += gran
 
         maplist = AbstractSpaceTimeDataset.resample_maplist_by_granularity(
             maps, start, end, gran
@@ -1997,9 +1997,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     end = increment_datetime_by_string(end, gran)
                 map.set_absolute_time(start, end)
             elif map.is_time_relative():
-                start = start + int(gran)
+                start += int(gran)
                 if end is not None:
-                    end = end + int(gran)
+                    end += int(gran)
                 map.set_relative_time(start, end, map.get_relative_time_unit())
 
         return maps
@@ -2048,9 +2048,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 if end is not None:
                     end = increment_datetime_by_string(end, gran)
             elif self.is_time_relative():
-                start = start + int(gran)
+                start += int(gran)
                 if end is not None:
-                    end = end + int(gran)
+                    end += int(gran)
 
             date_list.append((start, end))
 

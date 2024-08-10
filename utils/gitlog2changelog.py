@@ -98,7 +98,7 @@ for line in fin:
         elif len(line) == 4:
             messageFound = True
         elif len(message) == 0:
-            message = message + line.strip()
+            message += line.strip()
         else:
             message = message + " " + line.strip()
     # If this line is hit all of the files have been stored for this commit

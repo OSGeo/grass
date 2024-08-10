@@ -557,7 +557,7 @@ def assign_valid_time_to_map(
             end_time = int(end)
 
         if increment:
-            start_time = start_time + mult * int(increment)
+            start_time += mult * int(increment)
             if interval:
                 end_time = start_time + int(increment)
 

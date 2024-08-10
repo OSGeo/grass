@@ -59,8 +59,8 @@ class MapPrint(wx.Printout):
         marginY = 10
 
         # Add the margin to the graphic size
-        maxX = maxX + (2 * marginX)
-        maxY = maxY + (2 * marginY)
+        maxX += 2 * marginX
+        maxY += 2 * marginY
 
         # Get the size of the DC in pixels
         (w, h) = dc.GetSizeTuple()
