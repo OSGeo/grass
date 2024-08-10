@@ -55,7 +55,7 @@ jobs:
       - name: Add the bin directory to PATH
         run: echo "$HOME/install/bin" >> $GITHUB_PATH
       - name: Check installed version
-        if: always()
+        if: ${{ !cancelled() }}
         shell: bash -l {0}
         run: source ./.github/workflows/print_versions.sh
 
@@ -90,7 +90,7 @@ jobs:
           SampleData: "https://grass.osgeo.org/sampledata/north_carolina/\
                        nc_spm_full_v2alpha2.tar.gz"
       - name: Make HTML test report available
-        if: ${{ always() }}
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@89ef406dd8d7e03cfd12d9e0a4a378f454709029 # v4.3.5
         with:
           name: testreport-macOS
