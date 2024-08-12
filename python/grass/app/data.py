@@ -172,8 +172,7 @@ class MapsetLockingException(Exception):
     pass
 
 
-def lock_mapset(mapset_path, force_gislock_removal, message_callback
-):
+def lock_mapset(mapset_path, force_gislock_removal, message_callback):
     """Acquire a lock for a mapset and return name of new lock file
 
     Raises MapsetLockingException when it is not possible to acquire a lock for the
