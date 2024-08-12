@@ -172,12 +172,16 @@ class MapsetLockingException(Exception):
     pass
 
 
-def lock_mapset(mapset_path, force_gislock_removal, message_callback):
+def lock_mapset(mapset_path, force_lock_removal, message_callback):
     """Acquire a lock for a mapset and return name of new lock file
 
     Raises MapsetLockingException when it is not possible to acquire a lock for the
     given mapset either becuase of existing lock or due to insufficient permissions.
     A corresponding localized message is given in the exception.
+
+    A *message_callback* is a function which will be called to report messages about
+    certain states. Specifically, the funtion is called when forcibly unlocking the
+    mapset.
 
     Assumes that the runtime is setup (GISBASE).
     """
@@ -195,14 +199,13 @@ def lock_mapset(mapset_path, force_gislock_removal, message_callback):
         raise MapsetLockingException(error)
     # Check for concurrent use
     lockfile = os.path.join(mapset_path, ".gislock")
-    install_path = Path(os.environ["GISBASE"])
+    locker_path = os.path.join(os.environ["GISBASE"], "etc", "lock")
     ret = subprocess.run(
-        [install_path / "etc" / "lock", lockfile, "%d" % os.getpid()], check=False
+        [locker_path, lockfile, "%d" % os.getpid()], check=False
     ).returncode
     msg = None
     if ret == 2:
-        if not force_gislock_removal:
-            lockfile = Path(lockfile)
+        if not force_lock_removal:
             msg = _(
                 "{user} is currently running GRASS in selected mapset"
                 " (file {file} found). Concurrent use of one mapset not allowed.\n"
@@ -210,15 +213,15 @@ def lock_mapset(mapset_path, force_gislock_removal, message_callback):
                 " (assuming your have sufficient access permissions)."
                 " Confirm in a process manager "
                 "that there is no other process using the mapset."
-            ).format(user=lockfile.owner(), file=lockfile)
+            ).format(user=Path(lockfile).owner(), file=lockfile)
         else:
-            gs.try_remove(lockfile)
             message_callback(
                 _(
                     "{user} is currently running GRASS in selected mapset"
                     " (file {file} found), but forcing to launch GRASS anyway..."
-                ).format(user=lockfile.owner(), file=lockfile)
+                ).format(user=Path(lockfile).owner(), file=lockfile)
             )
+            gs.try_remove(lockfile)
     elif ret != 0:
         msg = _(
             "Unable to properly access '{}'.\nPlease notify your system administrator."

@@ -2388,7 +2388,7 @@ def main():
         # check and create .gislock file
         lock_mapset(
             mapset_path=mapset_settings.full_mapset,
-            force_gislock_removal=params.force_gislock_removal,
+            force_lock_removal=params.force_gislock_removal,
             message_callback=message,
         )
     except MapsetLockingException as e:
