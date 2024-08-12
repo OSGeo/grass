@@ -172,13 +172,15 @@ class MapsetLockingException(Exception):
     pass
 
 
-def lock_mapset(
-    install_path, mapset_path, force_gislock_removal, user, message_callback
+def lock_mapset(mapset_path, force_gislock_removal, message_callback
 ):
-    """Lock the mapset and return name of the lock file
+    """Acquire a lock for a mapset and return name of new lock file
 
-    Behavior on error must be changed somehow; now it fatals but GUI case is
-    unresolved.
+    Raises MapsetLockingException when it is not possible to acquire a lock for the
+    given mapset either becuase of existing lock or due to insufficient permissions.
+    A corresponding localized message is given in the exception.
+
+    Assumes that the runtime is setup (GISBASE).
     """
     if not os.path.exists(mapset_path):
         raise MapsetLockingException(_("Path '{}' doesn't exist").format(mapset_path))
@@ -194,7 +196,7 @@ def lock_mapset(
         raise MapsetLockingException(error)
     # Check for concurrent use
     lockfile = os.path.join(mapset_path, ".gislock")
-    install_path = Path(install_path)
+    install_path = Path(os.environ["GISBASE"])
     ret = subprocess.run(
         [install_path / "etc" / "lock", lockfile, "%d" % os.getpid()], check=False
     ).returncode
@@ -215,7 +217,7 @@ def lock_mapset(
             message_callback(
                 _(
                     "{user} is currently running GRASS in selected mapset"
-                    " (file %(file)s found), but forcing to launch GRASS anyway..."
+                    " (file {file} found), but forcing to launch GRASS anyway..."
                 ).format(user=lockfile.owner(), file=lockfile)
             )
     elif ret != 0:
