@@ -2387,9 +2387,7 @@ def main():
     try:
         # check and create .gislock file
         lock_mapset(
-            install_path=GISBASE,
             mapset_path=mapset_settings.full_mapset,
-            user=user,
             force_gislock_removal=params.force_gislock_removal,
             message_callback=message,
         )
