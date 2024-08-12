@@ -215,12 +215,11 @@ class GifWriter:
             # (the extension interprets zero loops
             # to mean an infinite number of loops)
             # Mmm, does not seem to work
-        if True:
-            bb = "\x21\xFF\x0B"  # application extension
-            bb += "NETSCAPE2.0"
-            bb += "\x03\x01"
-            bb += intToBin(loops)
-            bb += "\x00"  # end
+        bb = "\x21\xFF\x0B"  # application extension
+        bb += "NETSCAPE2.0"
+        bb += "\x03\x01"
+        bb += intToBin(loops)
+        bb += "\x00"  # end
         return bb
 
     def getGraphicsControlExt(self, duration=0.1, dispose=2):
@@ -446,33 +445,29 @@ class GifWriter:
                 # Next frame is not the first
                 firstFrame = False
 
-            if True:
-                # Write palette and image data
+            # Write palette and image data
+            # Gather info
+            data = getdata(im)
+            imdes, data = data[0], data[1:]
+            graphext = self.getGraphicsControlExt(durations[frames], disposes[frames])
+            # Make image descriptor suitable for using 256 local color palette
+            lid = self.getImageDescriptor(im, xys[frames])
 
-                # Gather info
-                data = getdata(im)
-                imdes, data = data[0], data[1:]
-                graphext = self.getGraphicsControlExt(
-                    durations[frames], disposes[frames]
-                )
-                # Make image descriptor suitable for using 256 local color palette
-                lid = self.getImageDescriptor(im, xys[frames])
+            # Write local header
+            if (palette != globalPalette) or (disposes[frames] != 2):
+                # Use local color palette
+                fp.write(graphext)
+                fp.write(lid)  # write suitable image descriptor
+                fp.write(palette)  # write local color table
+                fp.write("\x08")  # LZW minimum size code
+            else:
+                # Use global color palette
+                fp.write(graphext)
+                fp.write(imdes)  # write suitable image descriptor
 
-                # Write local header
-                if (palette != globalPalette) or (disposes[frames] != 2):
-                    # Use local color palette
-                    fp.write(graphext)
-                    fp.write(lid)  # write suitable image descriptor
-                    fp.write(palette)  # write local color table
-                    fp.write("\x08")  # LZW minimum size code
-                else:
-                    # Use global color palette
-                    fp.write(graphext)
-                    fp.write(imdes)  # write suitable image descriptor
-
-                # Write image data
-                for d in data:
-                    fp.write(d)
+            # Write image data
+            for d in data:
+                fp.write(d)
 
             # Prepare for next round
             frames += 1
