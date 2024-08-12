@@ -255,7 +255,7 @@ int print_node_count(void)
 }
 
 int print_cell_stats(char *fmt, int with_percents, int with_counts,
-                     int with_areas, int with_labels, char *fs, char **names,
+                     int with_areas, int with_labels, char *fs,
                      enum OutputFormat format, JSON_Array *array)
 {
     int i, n, nulls_found;

@@ -394,14 +394,12 @@ int main(int argc, char *argv[])
     else
         sprintf(fmt, "%%.%dlf", dp);
 
-    char **names_copy = option.cell->answers;
-
     if (raw_data)
-        raw_stats(fd, with_coordinates, with_xy, with_labels, names_copy,
-                  format, root_array);
+        raw_stats(fd, with_coordinates, with_xy, with_labels, format,
+                  root_array);
     else
         cell_stats(fd, with_percents, with_counts, with_areas, do_sort,
-                   with_labels, fmt, names_copy, format, root_array);
+                   with_labels, fmt, format, root_array);
 
     if (format == JSON) {
         char *serialized_string = NULL;

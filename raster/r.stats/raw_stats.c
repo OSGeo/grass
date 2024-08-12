@@ -6,7 +6,7 @@
 #include "global.h"
 
 int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
-              char **names, enum OutputFormat format, JSON_Array *array)
+              enum OutputFormat format, JSON_Array *array)
 {
     CELL null_cell;
     void **rast, **rastp;
@@ -86,11 +86,16 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
             }
             switch (format) {
             case JSON:
-                json_object_set_number(object, "easting",
-                                       Rast_col_to_easting(col + .5, &window));
-                json_object_set_number(object, "northing", northing);
-                json_object_set_number(object, "col", col + 1);
-                json_object_set_number(object, "row", row + 1);
+                if (with_coordinates) {
+                    json_object_set_number(
+                        object, "easting",
+                        Rast_col_to_easting(col + .5, &window));
+                    json_object_set_number(object, "northing", northing);
+                }
+                if (with_xy) {
+                    json_object_set_number(object, "col", col + 1);
+                    json_object_set_number(object, "row", row + 1);
+                }
                 break;
             case PLAIN:
                 if (with_coordinates) {
@@ -113,11 +118,10 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
                 if (Rast_is_null_value(rastp[i], map_type[i])) {
                     switch (format) {
                     case JSON:
-                        json_object_set_null(category, "value");
+                        json_object_set_null(category, "category");
                         json_object_set_string(
                             category, "label",
                             Rast_get_c_cat(&null_cell, &labels[i]));
-                        json_object_set_string(category, "name", names[i]);
                         break;
                     case PLAIN:
                         fprintf(stdout, "%s%s", i ? fs : "", no_data_str);
@@ -130,12 +134,13 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
                 else if (map_type[i] == CELL_TYPE) {
                     switch (format) {
                     case JSON:
-                        json_object_set_number(category, "value",
+                        json_object_set_number(category, "category",
                                                (long)*((CELL *)rastp[i]));
-                        json_object_set_string(
-                            category, "label",
-                            Rast_get_c_cat((CELL *)rastp[i], &labels[i]));
-                        json_object_set_string(category, "name", names[i]);
+                        if (with_labels && !is_fp[i]) {
+                            json_object_set_string(
+                                category, "label",
+                                Rast_get_c_cat((CELL *)rastp[i], &labels[i]));
+                        }
                         break;
                     case PLAIN:
                         fprintf(stdout, "%s%ld", i ? fs : "",
@@ -150,12 +155,11 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
                 else if (map_type[i] == FCELL_TYPE) {
                     switch (format) {
                     case JSON:
-                        json_object_set_number(category, "value",
+                        json_object_set_number(category, "category",
                                                *((FCELL *)rastp[i]));
                         json_object_set_string(
                             category, "label",
                             Rast_get_f_cat((FCELL *)rastp[i], &labels[i]));
-                        json_object_set_string(category, "name", names[i]);
                         break;
                     case PLAIN:
                         sprintf(str1, "%.8g", *((FCELL *)rastp[i]));
@@ -172,12 +176,11 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
                 else if (map_type[i] == DCELL_TYPE) {
                     switch (format) {
                     case JSON:
-                        json_object_set_number(category, "value",
+                        json_object_set_number(category, "category",
                                                *((DCELL *)rastp[i]));
                         json_object_set_string(
                             category, "label",
                             Rast_get_d_cat((DCELL *)rastp[i], &labels[i]));
-                        json_object_set_string(category, "name", names[i]);
                         break;
                     case PLAIN:
                         sprintf(str1, "%.16g", *((DCELL *)rastp[i]));
@@ -201,9 +204,10 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
                 rastp[i] =
                     G_incr_void_ptr(rastp[i], Rast_cell_size(map_type[i]));
             }
+
             switch (format) {
             case JSON:
-                json_object_set_value(object, "labels", categories_value);
+                json_object_set_value(object, "categories", categories_value);
                 json_array_append_value(array, object_value);
                 break;
             case PLAIN:
