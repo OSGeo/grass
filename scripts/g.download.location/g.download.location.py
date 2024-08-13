@@ -102,8 +102,8 @@ def main(options, unused_flags):
 
     if destination.exists():
         gs.fatal(
-            _("Location named <{}> already exists in <{}>, download canceled").format(
-                name, destination
+            _("Location named <{name}> already exists in <{directory}>, download canceled").format(
+                name=name, directory=database
             )
         )
 
