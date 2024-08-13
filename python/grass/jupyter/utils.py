@@ -228,7 +228,7 @@ def get_number_of_cores(requested, env=None):
     """Get the number of cores to use for multiprocessing.
 
     :param int requested: Desired number of cores.
-    :param dict env: Optional environment dictionary with an "NPROCS" key.
+    :param dict env: Optional process environment.
 
     :return int: Number of cores to use, constrained by system availability.
     """
