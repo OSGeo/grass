@@ -803,7 +803,7 @@ def check_datetime_string(time_string, use_dateutil=True):
         return time_object
 
     # BC is not supported
-    if "bc" in time_string > 0:
+    if "bc" in time_string:
         return _("Dates Before Christ (BC) are not supported")
 
     # BC is not supported
