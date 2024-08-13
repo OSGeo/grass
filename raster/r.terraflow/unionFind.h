@@ -20,9 +20,13 @@
 #define __UNION_FIND
 
 #include <assert.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 #include <iostream>
+
+extern "C" {
+#include <grass/glocale.h>
+}
 
 /* initial range guesstimate */
 #define UNION_INITIAL_SIZE 2000
@@ -68,10 +72,10 @@ unionFind<T>::unionFind()
 {
     maxsize = UNION_INITIAL_SIZE;
     /*  parent = new (long)[maxsize]; */
-    parent = (T *)calloc(maxsize, sizeof(T));
+    parent = static_cast<T *>(calloc(maxsize, sizeof(T)));
     assert(parent);
     /*  rank = new (long)[maxsize]; */
-    rank = (T *)calloc(maxsize, sizeof(T));
+    rank = static_cast<T *>(calloc(maxsize, sizeof(T)));
     assert(rank);
 }
 
@@ -126,24 +130,20 @@ inline void unionFind<T>::makeSet(T x)
     if (x >= maxsize) {
         /* reallocate parent */
         cout << "UnionFind::makeSet: reallocate double " << maxsize << "\n";
-        T *new_parent = (T *)realloc(parent, 2 * maxsize * sizeof(T));
-        if (!new_parent) {
-            fprintf(stderr, "Memory reallocation failed for parent\n");
-            exit(EXIT_FAILURE);
+        if (void *new_parent = std::realloc(parent, 2 * maxsize * sizeof(T))) {
+            parent = static_cast<T *>(new_parent);
+            std::memset(parent + maxsize, 0, maxsize * sizeof(T));
         }
         else {
-            parent = new_parent;
-            memset(parent + maxsize, 0, maxsize * sizeof(T));
+            G_fatal_error(_("Not enough memory for %s"), "parent");
         }
         /* reallocate rank */
-        T *new_rank = (T *)realloc(rank, 2 * maxsize * sizeof(T));
-        if (!new_rank) {
-            fprintf(stderr, "Memory reallocation failed for rank\n");
-            exit(EXIT_FAILURE);
+        if (void *new_rank = std::realloc(rank, 2 * maxsize * sizeof(T))) {
+            rank = static_cast<T *>(new_rank);
+            std::memset(rank + maxsize, 0, maxsize * sizeof(T));
         }
         else {
-            rank = new_rank;
-            memset(rank + maxsize, 0, maxsize * sizeof(T));
+            G_fatal_error(_("Not enough memory for %s"), "rank");
         }
         /*update maxsize */
         maxsize *= 2;
