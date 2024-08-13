@@ -104,7 +104,7 @@ def main():
 
     # fixes trunk r64459
     s = s.split(":")[1]
-    f = tuple([float(x) for x in s.split()])
+    f = tuple(float(x) for x in s.split())
 
     gs.run_command("d.erase")
     os.environ["GRASS_RENDER_FILE_READ"] = "TRUE"
