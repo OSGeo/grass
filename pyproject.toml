@@ -180,10 +180,8 @@ ignore = [
     "PLR1704", # redefined-argument-from-local
     "PLR1733", # unnecessary-dict-index-lookup
     "PLR2004", # magic-value-comparison
-    "PLR6104", # non-augmented-assignment
     "PLR6201", # literal-membership
     "PLR6301", # no-self-use
-    "PLW0127", # self-assigning-variable
     "PLW0406", # import-self
     "PLW0602", # global-variable-not-assigned
     "PLW0603", # global-statement

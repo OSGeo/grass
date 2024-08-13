@@ -320,7 +320,7 @@ def main():
             holename = prefix + "hole_" + cat
             # GTC Hole is a NULL area in a raster map
             gs.message(_("Filling hole %s of %s") % (hole_n, len(cat_list)))
-            hole_n = hole_n + 1
+            hole_n += 1
             # cut out only CAT hole for processing
             try:
                 gs.run_command(
