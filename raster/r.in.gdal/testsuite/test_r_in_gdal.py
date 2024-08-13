@@ -140,7 +140,7 @@ class TestGdalImport(TestCase):
             "Import netCDF Format",
             input="data/elevation3d.nc",
             num_digits="3",
-            flags="o",
+            overwrite=True,
             output="test_gdal_import_map",
         )
 
@@ -180,7 +180,7 @@ class TestGdalImport(TestCase):
             input="data/elevation3d.nc",
             num_digits=0,
             offset=100,
-            flags="o",
+            overwrite=True,
             output="test_gdal_import_map",
         )
 
@@ -220,7 +220,7 @@ class TestGdalImport(TestCase):
             input="data/elevation3d.nc",
             num_digits=5,
             offset=100,
-            flags="o",
+            overwrite=True,
             output="test_gdal_import_map",
         )
 
@@ -259,7 +259,7 @@ class TestGdalImport(TestCase):
             "Import netCDF Format",
             input="data/elevation3d.nc",
             num_digits="3",
-            flags="o",
+            overwrite=True,
             band=2,
             output="test_gdal_import_map",
         )
@@ -290,7 +290,7 @@ class TestGdalImport(TestCase):
             input="data/elevation3d.nc",
             num_digits=10,
             offset=100,
-            flags="o",
+            overwrite=True,
             map_names_file="map_names_file.txt",
             output="test_gdal_import_map",
         )

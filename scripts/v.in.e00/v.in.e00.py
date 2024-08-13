@@ -147,7 +147,7 @@ def main():
     try:
         gcore.run_command(
             "v.in.ogr",
-            flags="o",
+            overwrite=True,
             input=e00shortname,
             layer=layer[type],
             type=itype[type],

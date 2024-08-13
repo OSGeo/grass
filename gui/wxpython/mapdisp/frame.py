@@ -823,7 +823,6 @@ class MapPanel(SingleMapPanel, MainPageBase):
             # import back as red, green, blue rasters
             returncode, messages = RunCommand(
                 "r.in.gdal",
-                flags="o",
                 input=pngFile,
                 output=tmpName,
                 quiet=True,

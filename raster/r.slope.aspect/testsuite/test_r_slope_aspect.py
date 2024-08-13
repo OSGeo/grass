@@ -173,7 +173,10 @@ class TestSlopeAspectAgainstReference(TestCase):
     def test_slope(self):
         # TODO: using gdal instead of ascii because of cannot seek error
         self.runModule(
-            "r.in.gdal", flags="o", input="data/gdal_slope.grd", output=self.ref_slope
+            "r.in.gdal",
+            overwrite=True,
+            input="data/gdal_slope.grd",
+            output=self.ref_slope,
         )
         self.assertModule("r.slope.aspect", elevation=self.elevation, slope=self.slope)
         self.assertModule(
@@ -208,7 +211,10 @@ class TestSlopeAspectAgainstReference(TestCase):
     def test_aspect(self):
         # TODO: using gdal instead of ascii because of cannot seek error
         self.runModule(
-            "r.in.gdal", flags="o", input="data/gdal_aspect.grd", output=self.ref_aspect
+            "r.in.gdal",
+            overwrite=True,
+            input="data/gdal_aspect.grd",
+            output=self.ref_aspect,
         )
         self.assertModule(
             "r.slope.aspect", elevation=self.elevation, aspect=self.aspect

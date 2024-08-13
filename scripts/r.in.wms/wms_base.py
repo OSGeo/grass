@@ -595,7 +595,6 @@ class GRASSImporter:
             # do not use -o flag !
             gs.run_command(
                 "r.in.gdal",
-                flags="o",
                 quiet=True,
                 overwrite=True,
                 input=raster,

@@ -81,7 +81,7 @@ class BinningTest(TestCase):
             "r.in.pdal",
             input=self.las_file,
             output=self.bin_raster,
-            flags="o",
+            overwrite=True,
             quiet=True,
             method="n",
         )
@@ -103,7 +103,7 @@ class BinningTest(TestCase):
             "r.in.pdal",
             input=self.las_file,
             output=self.bin_raster,
-            flags="o",
+            overwrite=True,
             quiet=True,
             method="min",
         )
@@ -125,7 +125,7 @@ class BinningTest(TestCase):
             "r.in.pdal",
             input=self.las_file,
             output=self.bin_raster,
-            flags="o",
+            overwrite=True,
             quiet=True,
             method="max",
         )
@@ -147,7 +147,7 @@ class BinningTest(TestCase):
             "r.in.pdal",
             input=self.las_file,
             output=self.bin_raster,
-            flags="o",
+            overwrite=True,
             quiet=True,
             method="range",
         )
@@ -169,7 +169,7 @@ class BinningTest(TestCase):
             "r.in.pdal",
             input=self.las_file,
             output=self.bin_raster,
-            flags="o",
+            overwrite=True,
             quiet=True,
             method="sum",
         )
@@ -191,7 +191,7 @@ class BinningTest(TestCase):
             "r.in.pdal",
             input=self.las_file,
             output=self.bin_raster,
-            flags="o",
+            overwrite=True,
             quiet=True,
             method="mean",
         )
@@ -213,7 +213,7 @@ class BinningTest(TestCase):
             "r.in.pdal",
             input=self.las_file,
             output=self.bin_raster,
-            flags="o",
+            overwrite=True,
             quiet=True,
             method="stddev",
         )
@@ -235,7 +235,7 @@ class BinningTest(TestCase):
             "r.in.pdal",
             input=self.las_file,
             output=self.bin_raster,
-            flags="o",
+            overwrite=True,
             quiet=True,
             method="variance",
         )
@@ -257,7 +257,7 @@ class BinningTest(TestCase):
             "r.in.pdal",
             input=self.las_file,
             output=self.bin_raster,
-            flags="o",
+            overwrite=True,
             quiet=True,
             method="coeff_var",
         )
@@ -279,7 +279,7 @@ class BinningTest(TestCase):
             "r.in.pdal",
             input=self.las_file,
             output=self.bin_raster,
-            flags="o",
+            overwrite=True,
             quiet=True,
             method="median",
         )
@@ -301,7 +301,7 @@ class BinningTest(TestCase):
             "r.in.pdal",
             input=self.las_file,
             output=self.bin_raster,
-            flags="o",
+            overwrite=True,
             quiet=True,
             method="mode",
         )
@@ -323,7 +323,7 @@ class BinningTest(TestCase):
             "r.in.pdal",
             input=self.las_file,
             output=self.bin_raster,
-            flags="o",
+            overwrite=True,
             quiet=True,
             method="sidnmax",
         )
@@ -345,7 +345,7 @@ class BinningTest(TestCase):
             "r.in.pdal",
             input=self.las_file,
             output=self.bin_raster,
-            flags="o",
+            overwrite=True,
             quiet=True,
             method="sidnmin",
         )
