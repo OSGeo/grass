@@ -11,6 +11,7 @@ gettext
 ghostscript
 giflib
 git
+ipython
 krb5
 lapack
 lastools
@@ -44,6 +45,7 @@ pytest-timeout
 pytest-xdist
 python
 python.app
+pyyaml
 setuptools
 six
 sqlite
