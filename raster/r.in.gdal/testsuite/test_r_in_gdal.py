@@ -140,7 +140,7 @@ class TestGdalImport(TestCase):
             "Import netCDF Format",
             input="data/elevation3d.nc",
             num_digits="3",
-            overwrite=True,
+            flags="o",
             output="test_gdal_import_map",
         )
 

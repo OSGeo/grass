@@ -128,7 +128,7 @@ def main():
     try:
         gs.run_command(
             "v.in.ogr",
-            overwrite=True,
+            flags="o",
             input=input,
             gdal_config=gdal_config,
             gdal_doo=gdal_doo,

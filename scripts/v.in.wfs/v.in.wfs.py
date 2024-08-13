@@ -220,13 +220,13 @@ def main():
         if options["layer"]:
             grass.run_command(
                 "v.in.ogr",
-                overwrite=True,
+                flags="o",
                 input=tmpxml,
                 output=out,
                 layer=options["layer"],
             )
         else:
-            grass.run_command("v.in.ogr", overwrite=True, input=tmpxml, output=out)
+            grass.run_command("v.in.ogr", flags="o", input=tmpxml, output=out)
         grass.message(_("Vector map <%s> imported from WFS.") % out)
     except Exception:
         grass.message(_("WFS import failed"))

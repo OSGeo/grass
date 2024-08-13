@@ -139,7 +139,7 @@ class TestGdalImport(TestCase):
             "r.external",
             "Register netCDF Format",
             input="data/elevation3d.nc",
-            overwrite=True,
+            flags="o",
             output="test_external_map",
         )
 
@@ -177,7 +177,7 @@ class TestGdalImport(TestCase):
             "r.external",
             "Register netCDF Format",
             input="data/elevation3d.nc",
-            overwrite=True,
+            flags="o",
             output="test_external_map",
         )
 
@@ -215,7 +215,7 @@ class TestGdalImport(TestCase):
             "r.external",
             "Register netCDF Format",
             input="data/elevation3d.nc",
-            overwrite=True,
+            flags="o",
             band=2,
             output="test_external_map",
         )
