@@ -1,7 +1,7 @@
 blas
 cairo
-clang_osx-arm64
 clangxx_osx-arm64
+clang_osx-arm64
 cmake
 fftw
 flex
