@@ -589,11 +589,11 @@ class LookUp:
         if type_ == "bar":
             self.data[yrange] = {"name": datasetName}
             for i, (start, end) in enumerate(xranges):
-                self.data[yrange][(start, end)] = i
+                self.data[yrange][start, end] = i
         elif type_ == "point":
-            self.data[(yrange, yrange)] = {"name": datasetName}
+            self.data[yrange, yrange] = {"name": datasetName}
             for i, start in enumerate(xranges):
-                self.data[(yrange, yrange)][(start, start)] = i
+                self.data[yrange, yrange][start, start] = i
 
     def GetInformation(self, x, y):
         keys = None

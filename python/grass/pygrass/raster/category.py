@@ -97,7 +97,7 @@ class Category(list):
         diz = {}
         for cat in self.__iter__():
             label, min_cat, max_cat = cat
-            diz[(min_cat, max_cat)] = label
+            diz[min_cat, max_cat] = label
         return diz
 
     def __repr__(self):
