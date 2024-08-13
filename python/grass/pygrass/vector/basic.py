@@ -215,7 +215,7 @@ class BoxList:
         3
 
         """
-        indx = self.__len__()
+        indx = len(self)
         libvect.Vect_boxlist_append(self.c_boxlist, indx, box.c_bbox)
 
     #    def extend(self, boxlist):

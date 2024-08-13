@@ -1028,7 +1028,7 @@ class Line(Geo):
 
         ..
         """
-        for indx, point in enumerate(self.__iter__()):
+        for indx, point in enumerate(iter(self)):
             if pnt == point:
                 libvect.Vect_line_delete_point(self.c_points, indx)
                 return
@@ -1086,7 +1086,7 @@ class Line(Geo):
 
         ..
         """
-        return [pnt.coords() for pnt in self.__iter__()]
+        return [pnt.coords() for pnt in iter(self)]
 
     def to_array(self):
         """Return an array of coordinates. ::
@@ -1112,10 +1112,7 @@ class Line(Geo):
         ..
         """
         return "LINESTRING(%s)" % ", ".join(
-            [
-                " ".join(["%f" % coord for coord in pnt.coords()])
-                for pnt in self.__iter__()
-            ]
+            [" ".join(["%f" % coord for coord in pnt.coords()]) for pnt in iter(self)]
         )
 
     def from_wkt(self, wkt):
@@ -1592,7 +1589,7 @@ class Isles:
         """Return the id of isles"""
         return [
             libvect.Vect_get_area_isle(self.c_mapinfo, self.area_id, i)
-            for i in range(self.__len__())
+            for i in range(len(self))
         ]
 
     @mapinfo_must_be_set
