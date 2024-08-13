@@ -1,11 +1,12 @@
 # MODULE:    grass.jupyter.seriesmap
 #
 # AUTHOR(S): Caitlin Haedrich <caitlin DOT haedrich AT gmail>
+#            Riya Saxena <29riyasaxena AT gmail>
 #
 # PURPOSE:   This module contains functions for visualizing series of rasters in
 #            Jupyter Notebooks
 #
-# COPYRIGHT: (C) 2022 Caitlin Haedrich, and by the GRASS Development Team
+# COPYRIGHT: (C) 2022-2024 Caitlin Haedrich, and by the GRASS Development Team
 #
 #           This program is free software under the GNU General Public
 #           License (>=v2). Read the file COPYING that comes with GRASS
