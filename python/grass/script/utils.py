@@ -233,7 +233,7 @@ def text_to_string(text, encoding=None):
     return decode(text, encoding=encoding)
 
 
-def parse_key_val(s, sep="=", dflt=None, val_type=None, vsep=None):
+def parse_key_val(s, sep="=", dflt=None, val_type=None, vsep=None) -> KeyValue:
     """Parse a string into a dictionary, where entries are separated
     by newlines and the key and value are separated by `sep` (default: `=`)
 
