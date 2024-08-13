@@ -1677,9 +1677,9 @@ class DataCatalogTree(TreeView):
             all_names.append(name)
         # if self.selected_location[0].data['name'] == gisenv()['LOCATION_NAME'] and
         # self.selected_mapset[0]:
-        for ltype in names:
-            if names[ltype]:
-                self._giface.lmgr.AddMaps(list(reversed(names[ltype])), ltype, True)
+        for ltype, value in names.items():
+            if value:
+                self._giface.lmgr.AddMaps(list(reversed(value)), ltype, True)
 
         if len(self._giface.GetLayerList()) == 1:
             # zoom to map if there is only one map layer

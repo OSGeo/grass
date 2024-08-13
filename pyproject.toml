@@ -157,7 +157,6 @@ ignore = [
     "PIE794",  # duplicate-class-field-definition
     "PIE808",  # unnecessary-range-start
     "PIE810",  # multiple-starts-ends-with
-    "PLC0206", # dict-index-missing-items
     "PLC0415", # import-outside-top-level
     "PLC1901", # compare-to-empty-string
     "PLC2701", # import-private-name
@@ -174,10 +173,8 @@ ignore = [
     "PLR1702", # too-many-nested-blocks
     "PLR1704", # redefined-argument-from-local
     "PLR2004", # magic-value-comparison
-    "PLR6104", # non-augmented-assignment
     "PLR6201", # literal-membership
     "PLR6301", # no-self-use
-    "PLW0127", # self-assigning-variable
     "PLW0602", # global-variable-not-assigned
     "PLW0603", # global-statement
     "PLW0604", # global-at-module-level
@@ -230,7 +227,6 @@ ignore = [
     "RUF012",  # mutable-class-default
     "RUF015",  # unnecessary-iterable-allocation-for-first-element
     "RUF019",  # unnecessary-key-check
-    "RUF021",  # parenthesize-chained-operators
     "RUF027",  # missing-f-string-syntax
     "RUF100",  # unused-noqa
     "S101",    # assert
@@ -279,7 +275,6 @@ ignore = [
     "UP030",   # format-literals
     "UP031",   # printf-string-formatting
     "UP032",   # f-string
-    "UP034",   # extraneous-parentheses
     "UP036",   # outdated-version-block
     "W605",    # invalid-escape-sequence
 ]

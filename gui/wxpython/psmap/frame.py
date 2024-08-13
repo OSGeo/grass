@@ -569,7 +569,7 @@ class PsMapFrame(wx.Frame):
             filename = dlg.GetPath()
             suffix = suffix[dlg.GetFilterIndex()]
             if not os.path.splitext(filename)[1]:
-                filename = filename + suffix
+                filename += suffix
             elif suffix not in {os.path.splitext(filename)[1], ""}:
                 filename = os.path.splitext(filename)[0] + suffix
 
@@ -1509,8 +1509,8 @@ class PsMapBufferedWindow(wx.Window):
 
         if self.currScale is None:
             self.currScale = min(cW / pW, cH / pH)
-        pW = pW * self.currScale
-        pH = pH * self.currScale
+        pW *= self.currScale
+        pH *= self.currScale
 
         x = cW / 2 - pW / 2
         y = cH / 2 - pH / 2
@@ -2230,9 +2230,7 @@ class PsMapBufferedWindow(wx.Window):
                 zoomFactor = 1
             # when zooming to full extent, in some cases, there was zoom
             # 1.01..., which causes problem
-            if abs(zoomFactor - 1) > 0.01:
-                zoomFactor = zoomFactor
-            else:
+            if abs(zoomFactor - 1) <= 0.01:
                 zoomFactor = 1.0
 
             if self.mouse["use"] == "zoomout":
@@ -2259,10 +2257,10 @@ class PsMapBufferedWindow(wx.Window):
         """Zoom to specified region, scroll view, redraw"""
         if not self.currScale:
             return
-        self.currScale = self.currScale * zoomFactor
+        self.currScale *= zoomFactor
 
         if self.currScale > 10 or self.currScale < 0.1:
-            self.currScale = self.currScale / zoomFactor
+            self.currScale /= zoomFactor
             return
         if not self.preview:
             # redraw paper
@@ -2608,8 +2606,8 @@ class PsMapBufferedWindow(wx.Window):
         iW, iH = img.GetWidth(), img.GetHeight()
 
         self.currScale = min(float(cW) / iW, float(cH) / iH)
-        iW = iW * self.currScale
-        iH = iH * self.currScale
+        iW *= self.currScale
+        iH *= self.currScale
         x = cW / 2 - iW / 2
         y = cH / 2 - iH / 2
         return Rect(int(x), int(y), int(iW), int(iH))
@@ -2716,11 +2714,8 @@ class PsMapBufferedWindow(wx.Window):
     def OnSize(self, event):
         """Init image size to match window size"""
         # not zoom all when notebook page is changed
-        if (
-            self.preview
-            and self.parent.currentPage == 1
-            or not self.preview
-            and self.parent.currentPage == 0
+        if (self.preview and self.parent.currentPage == 1) or (
+            not self.preview and self.parent.currentPage == 0
         ):
             self.ZoomAll()
         self.OnIdle(None)
