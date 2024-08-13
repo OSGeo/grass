@@ -806,11 +806,12 @@ class TaskFrame(wx.Frame):
             # was closed also when aborted but better is leave it open
             wx.CallLater(2000, self.Close)
 
-    def OnMapCreated(self, name, ltype):
+    def OnMapCreated(self, name, ltype, add=None):
         """Map created or changed
 
         :param name: map name
         :param ltype: layer type (prompt value)
+        :param add: whether to display layer or not
         """
         if hasattr(self, "addbox") and self.addbox.IsChecked():
             add = True
