@@ -806,7 +806,7 @@ def check_datetime_string(time_string, use_dateutil=True):
     if "bc" in time_string:
         return _("Dates Before Christ (BC) are not supported")
 
-    # BC is not supported
+    # Time zones are not supported
     if "+" in time_string:
         return _("Time zones are not supported")
 
