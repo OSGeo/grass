@@ -958,7 +958,7 @@ class Line(Geo):
             indx += self.c_points.contents.n_points
         if indx >= self.c_points.contents.n_points:
             raise IndexError("Index out of range")
-        pnt = self.__getitem__(indx)
+        pnt = self[indx]
         libvect.Vect_line_delete_point(self.c_points, indx)
         return pnt
 

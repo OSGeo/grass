@@ -196,13 +196,13 @@ class Category(list):
         libraster.Rast_free_cats(ctypes.byref(self.c_cats))
 
     def get_cat(self, index):
-        return self.__getitem__(index)
+        return self[index]
 
     def set_cat(self, index, value):
         if index is None:
             self.append(value)
         elif index < (len(self)):
-            self.__setitem__(index, value)
+            self[index] = value
         else:
             raise TypeError("Index outside range.")
 
