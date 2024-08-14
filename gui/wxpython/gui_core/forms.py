@@ -806,7 +806,7 @@ class TaskFrame(wx.Frame):
             # was closed also when aborted but better is leave it open
             wx.CallLater(2000, self.Close)
 
-    def OnMapCreated(self, name, ltype, add=None):
+    def OnMapCreated(self, name, ltype, add: bool | None = None):
         """Map created or changed
 
         :param name: map name

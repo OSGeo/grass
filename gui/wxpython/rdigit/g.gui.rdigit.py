@@ -163,7 +163,7 @@ def main():
                 render=True,
             )
 
-        def OnMapCreated(self, name, ltype, add=None):
+        def OnMapCreated(self, name, ltype, add: bool | None = None):
             """Add new created raster layer into map
 
             :param str name: map name
