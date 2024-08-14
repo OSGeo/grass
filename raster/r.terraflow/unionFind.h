@@ -23,7 +23,6 @@
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
-#include <cassert>
 
 extern "C" {
 #include <grass/glocale.h>
