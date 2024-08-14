@@ -896,7 +896,7 @@ class TestCase(unittest.TestCase):
         If statistics is not given ``dict(min=-precision, max=precision)``
         is used.
 
-        Be ware – comparison is performed on overall statistics and thus
+        Beware - comparison is performed on overall statistics and thus
         differences in individual cell values not changing overall
         statistics might go unnoticed. Use `assertRastersEqual()`
         for cell to cell equivalence testing.
@@ -943,7 +943,7 @@ class TestCase(unittest.TestCase):
 
         This method should not be used to test r.mapcalc or r.univar.
 
-        Be ware – comparison is performed on overall statistics and thus
+        Beware - comparison is performed on overall statistics and thus
         differences in individual cell values not changing overall
         statistics might go unnoticed. Use `assertRastersEqual()`
         for cell to cell equivalence testing.

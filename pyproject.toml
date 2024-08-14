@@ -100,11 +100,7 @@ ignore = [
     "B904",    # raise-without-from-inside-except
     "B909",    # loop-iterator-mutation
     "BLE001",  # blind-except
-    "C400",    # unnecessary-generator-list
-    "C401",    # unnecessary-generator-set
-    "C403",    # unnecessary-list-comprehension-set
     "C404",    # unnecessary-list-comprehension-dict
-    "C405",    # unnecessary-literal-set
     "C414",    # unnecessary-double-cast-or-process
     "C416",    # unnecessary-comprehension
     "COM812",  # missing-trailing-comma
@@ -166,8 +162,6 @@ ignore = [
     "PLC2701", # import-private-name
     "PLC2801", # unnecessary-dunder-call
     "PLE0704", # misplaced-bare-raise
-    "PLR0124", # comparison-with-itself
-    "PLR0202", # no-classmethod-decorator
     "PLR0904", # too-many-public-methods
     "PLR0911", # too-many-return-statements
     "PLR0912", # too-many-branches
@@ -178,11 +172,9 @@ ignore = [
     "PLR0917", # too-many-positional
     "PLR1702", # too-many-nested-blocks
     "PLR1704", # redefined-argument-from-local
-    "PLR1733", # unnecessary-dict-index-lookup
     "PLR2004", # magic-value-comparison
     "PLR6201", # literal-membership
     "PLR6301", # no-self-use
-    "PLW0406", # import-self
     "PLW0602", # global-variable-not-assigned
     "PLW0603", # global-statement
     "PLW0604", # global-at-module-level
@@ -191,7 +183,7 @@ ignore = [
     "PLW1514", # unspecified-encoding
     "PLW1641", # eq-without-hash
     "PLW2901", # redefined-loop-name
-    "PLW3201", # nested-min-max
+    "PLW3201", # bad-dunder-method-name
     "PT001",   # pytest-fixture-incorrect-parentheses-style
     "PT004",   # pytest-missing-fixture-name-underscore
     "PT006",   # pytest-parametrize-names-wrong-type
@@ -230,16 +222,14 @@ ignore = [
     "RET507",  # superfluous-else-continue
     "RET508",  # superfluous-else-break
     "RSE102",  # unnecessary-paren-on-raise-exception
-    "RUF002",  # ambiguous-unicode-character-docstring
     "RUF003",  # ambiguous-unicode-character-comment
     "RUF005",  # collection-literal-concatenation
     "RUF012",  # mutable-class-default
-    "RUF013",  # unnecessary-iterable-allocation-for-first-element
     "RUF015",  # unnecessary-iterable-allocation-for-first-element
     "RUF019",  # unnecessary-key-check
     "RUF027",  # missing-f-string-syntax
     "RUF100",  # unused-noqa
-    "S101",    #assert
+    "S101",    # assert
     "S108",    # hardcoded-temp-file
     "S110",    # try-except-pass
     "S112",    # try-except-continue
@@ -282,13 +272,11 @@ ignore = [
     "TRY300",  # try-consider-else
     "TRY301",  # raise-within-try
     "UP015",   # redundant-open-modes
-    "UP018",   # native-literals
     "UP030",   # format-literals
     "UP031",   # printf-string-formatting
     "UP032",   # f-string
     "UP036",   # outdated-version-block
     "W605",    # invalid-escape-sequence
-    "YTT204",  # sys-version-info-minor-cmp-int
 ]
 
 
