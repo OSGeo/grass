@@ -188,7 +188,8 @@ template <class T>
 inline void unionFind<T>::makeUnion(T x, T y)
 {
     if (!inSet(x) || !inSet(y)) {
-        G_fatal_error(_("One or both elements (%d, %d) are not in the set"), x, y);
+        G_fatal_error(_("One or both elements (%d, %d) are not in the set"), x,
+                      y);
     }
     T setx = findSet(x);
     T sety = findSet(y);
@@ -197,7 +198,8 @@ inline void unionFind<T>::makeUnion(T x, T y)
 
     /* union by rank heuristic */
     if (!inSet(x) || !inSet(y)) {
-        G_fatal_error(_("One or both elements (%d, %d) are not in the set"), x, y);
+        G_fatal_error(_("One or both elements (%d, %d) are not in the set"), x,
+                      y);
     }
     if (rank[setx] > rank[sety]) {
         /* hook sety onto setx */
@@ -213,7 +215,8 @@ inline void unionFind<T>::makeUnion(T x, T y)
     }
     /* this does not have side effects.. */
     if (findSet(x) != findSet(y)) {
-        G_fatal_error(_("Elements %d and %d are not in the same set after union"), x, y);
+        G_fatal_error(
+            _("Elements %d and %d are not in the same set after union"), x, y);
     }
 }
 
