@@ -73,17 +73,17 @@ unionFind<T>::unionFind()
     maxsize = UNION_INITIAL_SIZE;
     /*  parent = new (long)[maxsize]; */
     if (void *new_parent = std::calloc(maxsize, sizeof(T))) {
-    parent = static_cast<T *>(new_parent);
+        parent = static_cast<T *>(new_parent);
     }   
     else {
-    G_fatal_error(_("Not enough memory for %s"), "parent");
+        G_fatal_error(_("Not enough memory for %s"), "parent");
     }
     /*  rank = new (long)[maxsize]; */
     if (void *new_rank = std::calloc(maxsize, sizeof(T))) {
-    rank = static_cast<T *>(new_rank);
+        rank = static_cast<T *>(new_rank);
     } 
     else {
-    G_fatal_error(_("Not enough memory for %s"), "rank");
+        G_fatal_error(_("Not enough memory for %s"), "rank");
     }
 }
 
