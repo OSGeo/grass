@@ -81,7 +81,7 @@ unionFind<T>::unionFind()
     /*  rank = new (long)[maxsize]; */
     if (void *new_rank = std::calloc(maxsize, sizeof(T))) {
         rank = static_cast<T *>(new_rank);
-    } 
+    }
     else {
         G_fatal_error(_("Not enough memory for %s"), "rank");
     }
