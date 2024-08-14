@@ -53,6 +53,7 @@
 # % required: create, edit
 # % requires: base, create
 # %end
+from __future__ import annotations
 
 import os
 

@@ -45,6 +45,7 @@ COPYING coming with GRASS for details.
 @author Luca Delucchi <lucadeluge@gmail.com>
 @author Stepan Turek <stepan.turek seznam.cz> (CoordinatesSelect)
 """
+from __future__ import annotations
 
 import sys
 import textwrap
