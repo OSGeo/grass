@@ -298,7 +298,7 @@ def main():
                 try:
                     gs.run_command(
                         "v.db.connect",
-                        flags="o",
+                        overwrite=True,
                         quiet=True,
                         map=vect,
                         layer=layer,
