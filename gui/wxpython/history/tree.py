@@ -65,6 +65,14 @@ class HistoryBrowserNode(DictFilterNode):
         else:
             return self.data["name"]
 
+    @property
+    def time_sort(self):
+        if "day" in self.data.keys():
+            return self.data["day"]
+        if "timestamp" in self.data.keys():
+            return self.data["timestamp"]
+        return None
+
     def dayToLabel(self, day):
         """
         Convert day (midnight timestamp) to a day node label.
@@ -93,9 +101,39 @@ class HistoryBrowserNode(DictFilterNode):
             return _("{base_date}, {year}").format(base_date=base_date, year=day.year)
 
 
+class HistoryTreeModel(TreeModel):
+    """Customized tree model defined in core/treemodel.py."""
+
+    def __init__(self, nodeClass):
+        """Constructor creates root node.
+
+        :param nodeClass: class which is used for creating nodes
+        """
+        super().__init__(nodeClass=nodeClass)
+
+    def SortChildren(self, node):
+        """
+        Sort children chronologically based on time_sort property.
+        Leave out day nodes that include commands with missing info.
+
+        :param node: node whose children are sorted
+        """
+        if node.children and node.time_sort != OLD_DATE:
+            node.children.sort(key=lambda node: node.time_sort, reverse=True)
+
+    def UpdateNode(self, node, **kwargs):
+        """Update node attributes.
+
+        :param node: node to be updated
+        :param kwargs: key-value pairs of attributes to update
+        """
+        for key, value in kwargs.items():
+            node.data[key] = value
+
+
 class HistoryBrowserTree(CTreeView):
     """Tree structure visualizing and managing history of executed commands.
-    Uses virtual tree and model defined in core/treemodel.py.
+    Uses customized virtual tree and model.
     """
 
     def __init__(
@@ -110,7 +148,7 @@ class HistoryBrowserTree(CTreeView):
         | wx.TR_FULL_ROW_HIGHLIGHT,
     ):
         """History Browser Tree constructor."""
-        self._model = TreeModel(HistoryBrowserNode)
+        self._model = HistoryTreeModel(HistoryBrowserNode)
         self._orig_model = self._model
         super().__init__(parent=parent, model=self._model, id=wx.ID_ANY, style=style)
 
@@ -148,19 +186,6 @@ class HistoryBrowserTree(CTreeView):
         self.selectionChanged.connect(self.OnItemSelected)
         self.itemActivated.connect(self.OnDoubleClick)
         self.contextMenu.connect(self.OnRightClick)
-
-    def _sortDays(self):
-        """Sort day nodes from earliest to oldest."""
-        if self._model.root.children:
-            self._model.root.children.sort(
-                key=lambda node: node.data["day"], reverse=True
-            )
-
-    def _refreshTree(self):
-        """Refresh tree models"""
-        self._sortDays()
-        self.SetModel(copy.deepcopy(self._model))
-        self._orig_model = self._model
 
     def _resetSelectVariables(self):
         """Reset variables related to item selection."""
@@ -209,92 +234,115 @@ class HistoryBrowserTree(CTreeView):
         self.PopupMenu(menu)
         menu.Destroy()
 
-    def _timestampToDay(self, timestamp=None):
+    def _timestampToDay(self, datetime_timestamp=None):
         """
-        Convert timestamp to datetime.date object with time set to midnight.
-        :param str timestamp: Timestamp as a string in ISO format.
+        Convert a timestamp to datetime.date object with time set to midnight.
+
+        :param datetime.datetime datetime_timestamp: Command timestamp
         :return datetime.date day_midnight: midnight of a day.
         """
-        if not timestamp:
+        if not datetime_timestamp:
             return OLD_DATE
 
-        timestamp_datetime = datetime.datetime.fromisoformat(timestamp)
         return datetime.datetime(
-            timestamp_datetime.year, timestamp_datetime.month, timestamp_datetime.day
+            datetime_timestamp.year, datetime_timestamp.month, datetime_timestamp.day
         ).date()
 
+    def _timestampToISO(self, datetime_timestamp=None):
+        """
+        Convert a datetime timestamp to ISO format.
+
+        :param str datetime_timestamp: datetime.datetime object
+        :return: Command timestamp in ISO format or None if datetime_timestamp is None.
+        """
+        return (
+            datetime.datetime.isoformat(datetime_timestamp)
+            if datetime_timestamp
+            else None
+        )
+
+    def _timestampToDatetime(self, iso_timestamp=None):
+        """
+        Convert an ISO format timestamp string to a datetime object.
+
+        :param str iso_timestamp: Command timestamp in ISO format.
+        :return: datetime.datetime object or None if iso_timestamp is None.
+        """
+        return datetime.datetime.fromisoformat(iso_timestamp) if iso_timestamp else None
+
+    def _reloadNode(self, node):
+        """Reload the model of a specific node."""
+        self._model.SortChildren(node)
+        self._orig_model = copy.deepcopy(self._model)
+        if node == self._model.root:
+            self.RefreshItems()
+        else:
+            self.RefreshNode(node, recursive=True)
+
+    def _populateDayItem(self, day_node, entry):
+        """
+        Populate a day item with a command info node.
+
+        :param entry dict: entry with 'command' and 'command_info' keys
+        :return: The newly created command node.
+        """
+        # Determine command timestamp
+        command_info = entry.get("command_info", {})
+        timestamp = command_info.get("timestamp") if command_info else None
+
+        # Determine command status
+        status = (
+            command_info.get("status")
+            if command_info and command_info.get("status") is not None
+            else Status.UNKNOWN.value
+        )
+
+        # Add command node to day node
+        return self._model.AppendNode(
+            parent=day_node,
+            data={
+                "type": COMMAND,
+                "name": entry["command"].strip(),
+                "timestamp": (
+                    self._timestampToDatetime(timestamp) if timestamp else None
+                ),
+                "status": status,
+            },
+        )
+
     def _initHistoryModel(self):
-        """Fill tree history model based on the current history log."""
-        content_list = self.ReadFromHistory()
+        """
+        Populate the tree history model based on the current history log.
+        """
+        for entry in self.ReadFromHistory():
 
-        for entry in content_list:
-            timestamp = None
-            if entry["command_info"]:
-                # Find day node for entries with command info
-                timestamp = entry["command_info"].get("timestamp")
-                if timestamp:
-                    day = self._model.SearchNodes(
-                        parent=self._model.root,
-                        day=self._timestampToDay(timestamp),
-                        type=TIME_PERIOD,
-                    )
-            else:
-                # Find day node prepared for entries without any command info
-                day = self._model.SearchNodes(
-                    parent=self._model.root,
-                    day=self._timestampToDay(),
-                    type=TIME_PERIOD,
-                )
+            # Get history day node
+            day_node = self.GetHistoryNode(entry)
 
-            if day:
-                day = day[0]
-            # Create time period node if not found
-            elif not entry["command_info"]:
-                # Prepare it for entries without command info
-                day = self._model.AppendNode(
-                    parent=self._model.root,
-                    data={"type": TIME_PERIOD, "day": self._timestampToDay()},
-                )
-            else:
-                day = self._model.AppendNode(
-                    parent=self._model.root,
-                    data={
-                        "type": TIME_PERIOD,
-                        "day": self._timestampToDay(entry["command_info"]["timestamp"]),
-                    },
-                )
+            if not day_node:
+                # Create the day node if it doesn't exist
+                day_node = self.InsertDay(entry)
 
-            # Determine status and create command node
-            status = (
-                entry["command_info"].get("status")
-                if entry.get("command_info")
-                and entry["command_info"].get("status") is not None
-                else Status.UNKNOWN.value
-            )
+            # Populate the day node with the command entry
+            self._populateDayItem(day_node, entry)
 
-            # Add command to time period node
-            self._model.AppendNode(
-                parent=day,
-                data={
-                    "type": COMMAND,
-                    "name": entry["command"].strip(),
-                    "timestamp": timestamp or None,
-                    "status": status,
-                },
-            )
+            # Sort command nodes inside the day node from newest to oldest
+            self._model.SortChildren(day_node)
 
         # Refresh the tree view
-        self._refreshTree()
+        self._reloadNode(self._model.root)
 
     def _getIndexFromFile(self, command_node):
-        """Get index of command node in the corresponding history log file."""
+        """
+        Get index of command node in the corresponding history log file.
+        """
         if not command_node.data["timestamp"]:
             return self._model.GetIndexOfNode(command_node)[1]
         else:
             return history.filter(
                 json_data=self.ReadFromHistory(),
                 command=command_node.data["name"],
-                timestamp=command_node.data["timestamp"],
+                timestamp=self._timestampToISO(command_node.data["timestamp"]),
             )
 
     def ReadFromHistory(self):
@@ -334,6 +382,43 @@ class HistoryBrowserTree(CTreeView):
             GError(str(e))
         return command_info
 
+    def GetHistoryNode(self, entry, command_index=None):
+        """
+        Get node representing time/command or None if not found.
+
+        :param entry dict: entry with 'command' and 'command_info' keys
+        :param int command_index: index of the command from the particular day
+        :return: Node representing the time/command or None if not found.
+        """
+        if entry["command_info"]:
+            # Find the day node for entries with command info
+            timestamp = entry["command_info"].get("timestamp")
+            day = self._timestampToDay(self._timestampToDatetime(timestamp))
+        else:
+            # Find the day node for entries without command info
+            day = self._timestampToDay()
+
+        # Search for day nodes matching the given day and type
+        day_nodes = self._model.SearchNodes(
+            parent=self._model.root,
+            day=day,
+            type=TIME_PERIOD,
+        )
+
+        if day_nodes:
+            if command_index is None:
+                # If no command index is specified, return the first found day node
+                return day_nodes[0]
+            else:
+                # Search for command nodes under the first day node
+                command_nodes = self._model.SearchNodes(
+                    parent=day_nodes[0], type=COMMAND
+                )
+                if 0 <= command_index < len(command_nodes):
+                    return command_nodes[command_index]
+
+        return None
+
     def DefineItems(self, selected):
         """Set selected items."""
         self._resetSelectVariables()
@@ -369,66 +454,95 @@ class HistoryBrowserTree(CTreeView):
         self._initHistoryModel()
         self.infoPanel.hideCommandInfo()
 
-    def InsertCommand(self, entry):
-        """Insert command node to the model and refresh the tree.
+    def InsertDay(self, entry):
+        """Insert a node representing the time period into the model.
 
         :param entry dict: entry with 'command' and 'command_info' keys
+        :return: Node representing the day.
         """
-        # Check if today time period node exists or create it
-        today = self._timestampToDay(entry["command_info"]["timestamp"])
-        today_nodes = self._model.SearchNodes(
-            parent=self._model.root, day=today, type=TIME_PERIOD
-        )
-        if not today_nodes:
+        if entry.get("command_info"):
+            # Create time period node
+            day = self._model.AppendNode(
+                parent=self._model.root,
+                data={
+                    "type": TIME_PERIOD,
+                    "day": self._timestampToDay(
+                        self._timestampToDatetime(
+                            entry["command_info"].get("timestamp")
+                        )
+                    ),
+                },
+            )
+        else:
+            # Create time period node for entries with missing timestamp info
+            day = self._model.AppendNode(
+                parent=self._model.root,
+                data={
+                    "type": TIME_PERIOD,
+                    "day": self._timestampToDay(),
+                },
+            )
+
+        return day
+
+    def InsertCommand(self, entry):
+        """Insert command node to the model and reload it.
+
+        :param entry dict: Dictionary with 'command' and 'command_info' keys
+        """
+        # Check if time period node exists or create it
+        today_node = self.GetHistoryNode(entry=entry)
+        command_info = entry["command_info"]
+
+        if not today_node:
             today_node = self._model.AppendNode(
                 parent=self._model.root,
                 data={
                     "type": TIME_PERIOD,
-                    "day": today,
+                    "day": self._timestampToDay(
+                        self._timestampToDatetime(command_info["timestamp"])
+                    ),
                 },
             )
-        else:
-            today_node = today_nodes[0]
+            self._model.SortChildren(self._model.root)
 
-        # Create the command node under today time period node
-        command_node = self._model.AppendNode(
-            parent=today_node,
-            data={
-                "type": COMMAND,
-                "name": entry["command"].strip(),
-                "timestamp": entry["command_info"]["timestamp"],
-                "status": entry["command_info"].get("status", Status.UNKNOWN.value),
-            },
-        )
-
-        # Refresh the tree
-        self._refreshTree()
+        # Populate today's node by executed command
+        command_node = self._populateDayItem(today_node, entry)
+        self._reloadNode(today_node)
 
         # Select and expand the newly added command node
         self.Select(command_node)
         self.ExpandNode(command_node)
 
         # Show command info in info panel
-        self.infoPanel.showCommandInfo(entry["command_info"])
+        self.infoPanel.showCommandInfo(command_info)
 
     def UpdateCommand(self, entry):
-        """Update last node in the model and refresh the tree.
+        """Update first command node in the model and refresh it.
 
         :param entry dict: entry with 'command' and 'command_info' keys
         """
-        # Get node of last command
-        today = self._timestampToDay(entry["command_info"]["timestamp"])
-        today_node = self._model.SearchNodes(
-            parent=self._model.root, day=today, type=TIME_PERIOD
-        )[0]
-        command_nodes = self._model.SearchNodes(parent=today_node, type=COMMAND)
-        last_node = command_nodes[-1]
+        # Get node of first command
+        first_node = self.GetHistoryNode(entry=entry, command_index=0)
 
-        # Remove last node
-        self._model.RemoveNode(last_node)
+        # Extract command info
+        command_info = entry["command_info"]
+        status = command_info["status"]
+        timestamp = command_info["timestamp"]
 
-        # Add new command node to the model
-        self.InsertCommand(entry)
+        # Convert timestamp to datetime object
+        datetime_timestamp = self._timestampToDatetime(timestamp)
+
+        # Update command node
+        self._model.UpdateNode(
+            first_node,
+            status=status,
+            timestamp=datetime_timestamp,
+        )
+        self._reloadNode(first_node.parent)
+
+        # Show command info in info panel
+        self.infoPanel.showCommandInfo(command_info)
 
     def Run(self, node=None):
         """Parse selected history command into list and launch module dialog."""
@@ -508,7 +622,8 @@ class HistoryBrowserTree(CTreeView):
         if selected_day and len(selected_day.children) == 0:
             self._model.RemoveNode(selected_day)
 
-        self._refreshTree()
+        # Reload day node
+        self._reloadNode(selected_day)
         self.showNotification.emit(message=_("<{}> removed").format(command))
 
     def OnItemSelected(self, node):
