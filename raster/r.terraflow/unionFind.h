@@ -74,7 +74,7 @@ unionFind<T>::unionFind()
     /*  parent = new (long)[maxsize]; */
     if (void *new_parent = std::calloc(maxsize, sizeof(T))) {
         parent = static_cast<T *>(new_parent);
-    }   
+    }
     else {
         G_fatal_error(_("Not enough memory for %s"), "parent");
     }
