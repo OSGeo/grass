@@ -274,7 +274,10 @@ class HistoryBrowserTree(CTreeView):
         """Reload the model of a specific node."""
         self._model.SortChildren(node)
         self._orig_model = copy.deepcopy(self._model)
-        self.RefreshItems()
+        if node == self._model.root:
+            self.RefreshItems()
+        else:
+            self.RefreshNode(node, recursive=True)
 
     def _populateDayItem(self, day_node, entry):
         """
@@ -536,7 +539,7 @@ class HistoryBrowserTree(CTreeView):
             status=status,
             timestamp=datetime_timestamp,
         )
-        self._reloadNode(first_node)
+        self._reloadNode(first_node.parent)
 
         # Show command info in info panel
         self.infoPanel.showCommandInfo(command_info)
