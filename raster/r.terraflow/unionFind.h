@@ -22,6 +22,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
+#include <cassert>
 
 extern "C" {
 #include <grass/glocale.h>
@@ -71,14 +72,18 @@ unionFind<T>::unionFind()
 {
     maxsize = UNION_INITIAL_SIZE;
     /*  parent = new (long)[maxsize]; */
-    parent = static_cast<T *>(calloc(maxsize, sizeof(T)));
-    if (!parent) {
-        G_fatal_error(_("Not enough memory for %s"), "parent");
+    if (void *new_parent = std::calloc(maxsize, sizeof(T))) {
+    parent = static_cast<T *>(new_parent);
+    }   
+    else {
+    G_fatal_error(_("Not enough memory for %s"), "parent");
     }
     /*  rank = new (long)[maxsize]; */
-    rank = static_cast<T *>(calloc(maxsize, sizeof(T)));
-    if (!rank) {
-        G_fatal_error(_("Not enough memory for %s"), "rank");
+    if (void *new_rank = std::calloc(maxsize, sizeof(T))) {
+    rank = static_cast<T *>(new_rank);
+    } 
+    else {
+    G_fatal_error(_("Not enough memory for %s"), "rank");
     }
 }
 
@@ -129,9 +134,7 @@ template <class T>
 inline void unionFind<T>::makeSet(T x)
 {
     /* cout << "makeSet " << x << "\n"; print(); */
-    if (x <= 0) {
-        G_fatal_error(_("Invalid set element: %d"), x);
-    }
+    assert(x > 0);
     if (x >= maxsize) {
         /* reallocate parent */
         cout << "UnionFind::makeSet: reallocate double " << maxsize << "\n";
@@ -155,9 +158,7 @@ inline void unionFind<T>::makeSet(T x)
     }
     /*since x is disjoint we require x not be already in the set; should
       relax this..*/
-    if (inSet(x)) {
-        G_fatal_error(_("Element %d is already in the set"), x);
-    }
+    assert(!inSet(x));
     parent[x] = x;
     rank[x] = 0;
 }
@@ -168,17 +169,13 @@ template <class T>
 inline T unionFind<T>::findSet(T x)
 {
     /* valid entry */
-    if (!inSet(x)) {
-        G_fatal_error(_("Element %d is not in the set"), x);
-    }
+    assert(inSet(x));
     if (parent[x] != x) {
         /* path compression heuristic */
         parent[x] = findSet(parent[x]);
     }
     /* parent[x] must be a root */
-    if (parent[parent[x]] != parent[x]) {
-        G_fatal_error(_("Parent of element %d is not a root"), x);
-    }
+    assert(parent[parent[x]] == parent[x]);
     return parent[x];
 }
 
@@ -187,20 +184,14 @@ inline T unionFind<T>::findSet(T x)
 template <class T>
 inline void unionFind<T>::makeUnion(T x, T y)
 {
-    if (!inSet(x) || !inSet(y)) {
-        G_fatal_error(_("One or both elements (%d, %d) are not in the set"), x,
-                      y);
-    }
+    assert(inSet(x) && inSet(y));
     T setx = findSet(x);
     T sety = findSet(y);
     if (setx == sety)
         return;
 
     /* union by rank heuristic */
-    if (!inSet(x) || !inSet(y)) {
-        G_fatal_error(_("One or both elements (%d, %d) are not in the set"), x,
-                      y);
-    }
+    assert(inSet(x) && inSet(y));
     if (rank[setx] > rank[sety]) {
         /* hook sety onto setx */
         parent[sety] = setx;
@@ -214,10 +205,7 @@ inline void unionFind<T>::makeUnion(T x, T y)
         }
     }
     /* this does not have side effects.. */
-    if (findSet(x) != findSet(y)) {
-        G_fatal_error(
-            _("Elements %d and %d are not in the same set after union"), x, y);
-    }
+    assert(findSet(x) == findSet(y));
 }
 
 /************************************************************/
