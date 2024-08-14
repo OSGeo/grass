@@ -19,6 +19,7 @@
 #ifndef __UNION_FIND
 #define __UNION_FIND
 
+#include <cassert>
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
