@@ -53,6 +53,7 @@
 # % required: create, edit
 # % requires: base, create
 # %end
+from __future__ import annotations
 
 import os
 
@@ -163,11 +164,12 @@ def main():
                 render=True,
             )
 
-        def OnMapCreated(self, name, ltype):
+        def OnMapCreated(self, name, ltype, add: bool | None = None):
             """Add new created raster layer into map
 
             :param str name: map name
             :param str ltype: layer type
+            :param bool add: unused
             """
             self._mapObj.Clean()
             self._addLayer(name=name, ltype=ltype)
