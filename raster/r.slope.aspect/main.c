@@ -1042,7 +1042,7 @@ int main(int argc, char *argv[])
 #pragma omp atomic update
                 computed++;
             } /* end row loop */
-        }     /* end parallel region */
+        } /* end parallel region */
 
         /* write the computed buffer chunk to disk */
         written = end;

@@ -520,9 +520,9 @@ int region_growing(struct globals *globals)
                             }
                         }
                     } /* end if < threshold */
-                }     /* end pathflag */
-            }         /* next col */
-        }             /* next row */
+                } /* end pathflag */
+            } /* next col */
+        } /* next row */
         G_percent(1, 1, 1);
 
         /* finished one pass for processing candidate pixels */
@@ -844,7 +844,7 @@ static int find_best_neighbor(struct ngbr_stats *Ri, struct reg_stats *Ri_rs,
                     }
                 }
             }
-        } while (n--);                     /* end do loop - next neighbor */
+        } while (n--); /* end do loop - next neighbor */
     } while (rclist_drop(&rilist, &next)); /* while there are cells to check */
 
     /* clean up */

@@ -1355,7 +1355,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
             Rast_put_row(cfR, cellReal, data_type);
             Rast_put_row(cfI, cellImg, data_type);
         }
-    }                     /* end of complex */
+    } /* end of complex */
     else if (l1bdriver) { /* AVHRR */
         /* AVHRR - read from south to north to match GCPs */
         /* AVHRR - as for other formats, read from north to south to match GCPs

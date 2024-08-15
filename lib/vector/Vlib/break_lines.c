@@ -572,7 +572,7 @@ int break_lines(struct Map_info *Map, struct ilist *List_break,
             nlines = Vect_get_num_lines(Map);
         }
         G_debug(3, "nlines =  %d", nlines);
-    }                             /* for each line */
+    } /* for each line */
     G_percent(nlines, nlines, 1); /* finish it */
 
     G_verbose_message(_("Intersections: %d"), nbreaks);

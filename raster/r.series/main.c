@@ -617,7 +617,7 @@ int main(int argc, char *argv[])
 
                 computed++;
             } /* end for loop */
-        }     /* end parallel region */
+        } /* end parallel region */
 
         /* write output buffer to disk */
         for (i = 0; i < num_outputs; i++) {

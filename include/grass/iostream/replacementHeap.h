@@ -51,7 +51,7 @@ public:
     T value;
     AMI_STREAM<T> *run;
 
-    HeapElement() : run(NULL){};
+    HeapElement() : run(NULL) {};
 
     friend ostream &operator<<(ostream &s, const HeapElement &p)
     {

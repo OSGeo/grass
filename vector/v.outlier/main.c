@@ -454,7 +454,7 @@ int main(int argc, char *argv[])
                             "Consider increasing spline step values."));
             }
         } /*! END WHILE; last_column = TRUE */
-    }     /*! END WHILE; last_row = TRUE */
+    } /*! END WHILE; last_row = TRUE */
 
     /* Drop auxiliary table */
     if (npoints > 0) {

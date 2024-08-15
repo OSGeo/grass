@@ -536,7 +536,7 @@ static int find_best_neighbour(struct globals *globals, int row, int col,
                     }
                 }
             }
-        } while (n--);                     /* end do loop - next neighbor */
+        } while (n--); /* end do loop - next neighbor */
     } while (rclist_drop(&rilist, &next)); /* while there are cells to check */
 
     rclist_destroy(&rilist);
@@ -671,7 +671,7 @@ static int update_rid(struct globals *globals, int row, int col, int new_id)
                     Segment_put(&globals->rid_seg, (void *)&new_id, rown, coln);
                 }
             }
-        } while (n--);                     /* end do loop - next neighbor */
+        } while (n--); /* end do loop - next neighbor */
     } while (rclist_drop(&rilist, &next)); /* while there are cells to check */
 
     rclist_destroy(&rilist);

@@ -103,7 +103,7 @@ int G_math_findzc(double conv[], int size, double zc[], double thresh,
                     break; /* quit looking at neighbors */
                 }
             } /* for ni */
-        }     /* for p */
+        } /* for p */
     }
 
     return 0;

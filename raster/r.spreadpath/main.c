@@ -247,7 +247,7 @@ int main(int argc, char **argv)
                     insert(&PRESENT_PT, row, col, backrow, backcol);
                 }
             } /* loop over cols */
-        }     /* loop over rows */
+        } /* loop over rows */
 
         Rast_close(path_fd);
     }

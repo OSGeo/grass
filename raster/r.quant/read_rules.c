@@ -161,7 +161,7 @@ int read_rules(const char *filename)
                 G_warning(_("%s is not a valid rule"), buf);
             break;
         } /* switch */
-    }     /* loop */
+    } /* loop */
 
     if (fp != stdin)
         fclose(fp);

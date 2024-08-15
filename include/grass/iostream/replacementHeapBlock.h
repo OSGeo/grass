@@ -52,7 +52,7 @@ public:
     T value;
     MEM_STREAM<T> *run;
 
-    BlockHeapElement() : run(NULL){};
+    BlockHeapElement() : run(NULL) {};
 
     friend ostream &operator<<(ostream &s, const BlockHeapElement &p)
     {

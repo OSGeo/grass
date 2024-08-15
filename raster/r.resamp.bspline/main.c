@@ -725,7 +725,7 @@ int main(int argc, char *argv[])
                                 "Consider increasing the spline step."));
             }
         } /*! END WHILE; last_column = TRUE */
-    }     /*! END WHILE; last_row = TRUE */
+    } /*! END WHILE; last_row = TRUE */
 
     Segment_close(&in_seg); /* release memory  */
 

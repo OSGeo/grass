@@ -2039,7 +2039,7 @@ int gsd_norm_arrows(geosurf *surf)
                 cnt++;
             }
         } /* ea col */
-    }     /* ea row */
+    } /* ea row */
     gsd_popmatrix();
 
     return (1);
@@ -2355,7 +2355,7 @@ int gsd_surf_map(geosurf *surf)
             } /* close ii loop */
             gsd_endtfan();
         } /* end col */
-    }     /* end row */
+    } /* end row */
 
     gsd_popmatrix();
     gsd_blend(0);

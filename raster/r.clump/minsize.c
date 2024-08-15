@@ -316,7 +316,7 @@ static int find_best_neighbour(int bfd, int nin, DCELL *rng, int cfd, int csize,
                     }
                 }
             }
-        } while (n--);                     /* end do loop - next neighbor */
+        } while (n--); /* end do loop - next neighbor */
     } while (rclist_drop(&rilist, &next)); /* while there are cells to check */
 
     if (Rbest)

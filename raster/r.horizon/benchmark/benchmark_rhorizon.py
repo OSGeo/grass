@@ -20,7 +20,7 @@ def main():
         benchmark(
             size=int(mapsize**0.5),
             step=0,
-            label=f"r.horizon_{int(mapsize/1e6)}M",
+            label=f"r.horizon_{int(mapsize / 1e6)}M",
             results=results,
         )
 

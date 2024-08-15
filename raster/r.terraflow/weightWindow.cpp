@@ -219,8 +219,8 @@ void weightWindow::compute(const dimension_type i, const dimension_type j,
             if (dirwin.get(di, dj) == true) {
                 computeWeight(di, dj, elev_crt, elev_neighb);
             }
-        }        /* for dj */
-    }            /* for di */
+        } /* for dj */
+    } /* for di */
     normalize(); /* normalize the weights */
 
 #ifdef CHECK_WEIGHTS

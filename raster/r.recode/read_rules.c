@@ -129,7 +129,7 @@ int read_rules(FILE *fp)
                 G_message(_("%s is not a valid rule"), buf);
             break;
         } /* switch */
-    }     /* loop */
+    } /* loop */
     return nrules;
 }
 
