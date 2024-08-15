@@ -88,7 +88,7 @@ jobs:
         shell: bash -el {0}
         run: |
           grass --tmp-project XY --exec \
-              g.download.location url=${{ env.SampleData }} path=$HOME
+              g.download.project url=${{ env.SampleData }} path=$HOME
           grass --tmp-project XY --exec \
               python3 -m grass.gunittest.main \
               --grassdata $HOME --location nc_spm_full_v2alpha2 --location-type nc \
