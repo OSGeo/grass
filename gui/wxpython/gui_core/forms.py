@@ -46,6 +46,8 @@ COPYING coming with GRASS for details.
 @author Stepan Turek <stepan.turek seznam.cz> (CoordinatesSelect)
 """
 
+from __future__ import annotations
+
 import sys
 import textwrap
 import os
@@ -170,7 +172,7 @@ class UpdateThread(Thread):
                 prompt = p.get("element", "")
                 if prompt == "vector":
                     name = p.get("name", "")
-                    if name in ("map", "input"):
+                    if name in {"map", "input"}:
                         self.eventId = p["wxId"][0]
             if self.eventId is None:
                 return
@@ -197,7 +199,7 @@ class UpdateThread(Thread):
             map = None
 
         # avoid running db.describe several times
-        cparams = dict()
+        cparams = {}
         cparams[map] = {
             "dbInfo": None,
             "layers": None,
@@ -254,7 +256,7 @@ class UpdateThread(Thread):
 
             map = layer = None
             driver = db = None
-            if name in ("LayerSelect", "ColumnSelect", "SqlWhereSelect"):
+            if name in {"LayerSelect", "ColumnSelect", "SqlWhereSelect"}:
                 if p.get("element", "") == "vector":  # -> vector
                     # get map name
                     map = p.get("value", "")
@@ -265,7 +267,7 @@ class UpdateThread(Thread):
                         if not p:
                             continue
 
-                        if p.get("element", "") in ["layer", "layer_all"]:
+                        if p.get("element", "") in {"layer", "layer_all"}:
                             layer = p.get("value", "")
                             if layer != "":
                                 layer = p.get("value", "")
@@ -273,7 +275,7 @@ class UpdateThread(Thread):
                                 layer = p.get("default", "")
                             break
 
-                elif p.get("element", "") in ["layer", "layer_all"]:  # -> layer
+                elif p.get("element", "") in {"layer", "layer_all"}:  # -> layer
                     # get layer
                     layer = p.get("value", "")
                     if layer != "":
@@ -322,16 +324,12 @@ class UpdateThread(Thread):
                             native = False
                             break
                 # TODO: update only if needed
-                if native:
-                    if map:
-                        self.data[win.InsertLayers] = {"vector": map}
-                    else:
-                        self.data[win.InsertLayers] = {}
+                if map:
+                    self.data[win.InsertLayers] = (
+                        {"vector": map} if native else {"dsn": map.rstrip("@OGR")}
+                    )
                 else:
-                    if map:
-                        self.data[win.InsertLayers] = {"dsn": map.rstrip("@OGR")}
-                    else:
-                        self.data[win.InsertLayers] = {}
+                    self.data[win.InsertLayers] = {}
 
             elif name == "TableSelect":
                 self.data[win.InsertTables] = {"driver": driver, "database": db}
@@ -351,17 +349,17 @@ class UpdateThread(Thread):
                         "layer": layer,
                         "dbInfo": cparams[map]["dbInfo"],
                     }
-                else:  # table
-                    if driver and db:
-                        self.data[win.GetParent().InsertTableColumns] = {
-                            "table": pTable.get("value"),
-                            "driver": driver,
-                            "database": db,
-                        }
-                    elif pTable:
-                        self.data[win.GetParent().InsertTableColumns] = {
-                            "table": pTable.get("value")
-                        }
+                # table
+                elif driver and db:
+                    self.data[win.GetParent().InsertTableColumns] = {
+                        "table": pTable.get("value"),
+                        "driver": driver,
+                        "database": db,
+                    }
+                elif pTable:
+                    self.data[win.GetParent().InsertTableColumns] = {
+                        "table": pTable.get("value")
+                    }
 
             elif name == "SubGroupSelect":
                 self.data[win.Insert] = {"group": p.get("value", "")}
@@ -665,11 +663,11 @@ class TaskFrame(wx.Frame):
         if self._giface and self._giface.GetLayerTree():
             addLayer = False
             for p in self.task.params:
-                if p.get("age", "old") == "new" and p.get("prompt", "") in (
+                if p.get("age", "old") == "new" and p.get("prompt", "") in {
                     "raster",
                     "vector",
                     "raster_3d",
-                ):
+                }:
                     addLayer = True
 
             if addLayer:
@@ -810,11 +808,12 @@ class TaskFrame(wx.Frame):
             # was closed also when aborted but better is leave it open
             wx.CallLater(2000, self.Close)
 
-    def OnMapCreated(self, name, ltype):
+    def OnMapCreated(self, name, ltype, add: bool | None = None):
         """Map created or changed
 
         :param name: map name
         :param ltype: layer type (prompt value)
+        :param add: whether to display layer or not
         """
         if hasattr(self, "addbox") and self.addbox.IsChecked():
             add = True
@@ -917,21 +916,21 @@ class TaskFrame(wx.Frame):
         if (
             self.get_dcmd
             and self.parent
-            and self.parent.GetName() in ("LayerTree", "MapWindow")
+            and self.parent.GetName() in {"LayerTree", "MapWindow"}
         ):
             Debug.msg(1, "TaskFrame.OnCancel(): known parent")
             # display decorations and
             # pressing OK or cancel after setting layer properties
             if (
                 self.task.name
-                in [
+                in {
                     "d.barscale",
                     "d.legend",
                     "d.northarrow",
                     "d.histogram",
                     "d.text",
                     "d.legend.vect",
-                ]
+                }
                 or len(self.parent.GetLayerInfo(self.layer, key="cmd")) >= 1
             ):
                 # TODO: do this through policy
@@ -997,7 +996,7 @@ class CmdPanel(wx.Panel):
         not_hidden = [
             p
             for p in self.task.params + self.task.flags
-            if not p.get("hidden", False) is True
+            if p.get("hidden", False) is not True
         ]
 
         self.label_id = []  # wrap titles on resize
@@ -1059,7 +1058,7 @@ class CmdPanel(wx.Panel):
         # flags
         #
         visible_flags = [
-            f for f in self.task.flags if not f.get("hidden", False) is True
+            f for f in self.task.flags if f.get("hidden", False) is not True
         ]
         for f in visible_flags:
             # we don't want another help (checkbox appeared in r58783)
@@ -1109,7 +1108,7 @@ class CmdPanel(wx.Panel):
                 parChk.Bind(wx.EVT_CHECKBOX, self.OnSetValue)
                 which_sizer.Add(parChk, proportion=0, flag=wx.LEFT, border=20)
 
-            if f["name"] in ("verbose", "quiet"):
+            if f["name"] in {"verbose", "quiet"}:
                 chk.Bind(wx.EVT_CHECKBOX, self.OnVerbosity)
                 vq = UserSettings.Get(group="cmd", key="verbosity", subkey="selection")
                 if f["name"] == vq:
@@ -1126,7 +1125,7 @@ class CmdPanel(wx.Panel):
         # parameters
         #
         visible_params = [
-            p for p in self.task.params if not p.get("hidden", False) is True
+            p for p in self.task.params if p.get("hidden", False) is not True
         ]
 
         try:
@@ -1216,7 +1215,7 @@ class CmdPanel(wx.Panel):
                         isEnabled[defval] = "yes"
                         # for multi checkboxes, this is an array of all wx IDs
                         # for each individual checkbox
-                        p["wxId"] = list()
+                        p["wxId"] = []
                     idx = 0
                     for val in valuelist:
                         try:
@@ -1301,7 +1300,7 @@ class CmdPanel(wx.Panel):
                         title_txt.SetLabel(title + ":")
                         value = self._getValue(p)
 
-                        if p["name"] in ("icon", "icon_area", "icon_line"):  # symbols
+                        if p["name"] in {"icon", "icon_area", "icon_line"}:  # symbols
                             bitmap = wx.Bitmap(
                                 os.path.join(globalvar.SYMBDIR, value) + ".png"
                             )
@@ -1363,7 +1362,7 @@ class CmdPanel(wx.Panel):
 
             # text entry
             if (
-                p.get("type", "string") in ("string", "integer", "float")
+                p.get("type", "string") in {"string", "integer", "float"}
                 and len(p.get("values", [])) == 0
                 and p.get("gisprompt", False) is False
                 and p.get("prompt", "") != "color"
@@ -1446,7 +1445,7 @@ class CmdPanel(wx.Panel):
             if p.get("gisprompt", False):
                 title_txt.SetLabel(title + ":")
                 # GIS element entry
-                if p.get("prompt", "") not in (
+                if p.get("prompt", "") not in {
                     "color",
                     "cat",
                     "cats",
@@ -1471,7 +1470,7 @@ class CmdPanel(wx.Panel):
                     "datasource",
                     "datasource_layer",
                     "sql_query",
-                ):
+                }:
                     multiple = p.get("multiple", False)
                     if p.get("age", "") == "new":
                         mapsets = [
@@ -1480,7 +1479,7 @@ class CmdPanel(wx.Panel):
                     else:
                         mapsets = None
                     if (
-                        self.task.name in ("r.proj", "v.proj")
+                        self.task.name in {"r.proj", "v.proj"}
                         and p.get("name", "") == "input"
                     ):
                         selection = gselect.ProjSelect(
@@ -1494,7 +1493,7 @@ class CmdPanel(wx.Panel):
                     else:
                         elem = p.get("element", None)
                         # hack for t.* modules
-                        if elem in ("stds", "map"):
+                        if elem in {"stds", "map"}:
                             orig_elem = elem
                             type_param = self.task.get_param(
                                 "type", element="name", raiseError=False
@@ -1655,7 +1654,7 @@ class CmdPanel(wx.Panel):
                             border=5,
                         )
                     else:
-                        if prompt in ("stds", "strds", "stvds", "str3ds"):
+                        if prompt in {"stds", "strds", "stvds", "str3ds"}:
                             showButton = True
                             try:
                                 # if matplotlib is there
@@ -1800,7 +1799,7 @@ class CmdPanel(wx.Panel):
                     )
 
                 # layer, dbdriver, dbname, dbcolumn, dbtable entry
-                elif prompt in (
+                elif prompt in {
                     "dbdriver",
                     "dbname",
                     "dbtable",
@@ -1809,7 +1808,7 @@ class CmdPanel(wx.Panel):
                     "location",
                     "mapset",
                     "dbase",
-                ):
+                }:
                     if p.get("multiple", "no") == "yes":
                         win = TextCtrl(
                             parent=which_panel,
@@ -2195,7 +2194,7 @@ class CmdPanel(wx.Panel):
                         border=5,
                     )
 
-                elif prompt in ("cat", "cats"):
+                elif prompt in {"cat", "cats"}:
                     # interactive selection of vector categories if layer
                     # manager is accessible
                     if self._giface:
@@ -2224,7 +2223,7 @@ class CmdPanel(wx.Panel):
                         border=5,
                     )
 
-                elif prompt in ("colortable", "barscale", "northarrow"):
+                elif prompt in {"colortable", "barscale", "northarrow"}:
                     if prompt == "colortable":
                         cb = ColorTablesComboBox(
                             parent=which_panel,
@@ -2303,7 +2302,7 @@ class CmdPanel(wx.Panel):
                         p["wxId"] = [self.win1.GetId()]
 
                         def OnCheckItem(index=None, flag=None, event=None):
-                            layers = list()
+                            layers = []
                             geometry = None
                             for layer, match, listId in self.win1.GetLayers():
                                 if "|" in layer:
@@ -2404,16 +2403,16 @@ class CmdPanel(wx.Panel):
                     pOpt = self.task.get_param(opt, element="name", raiseError=False)
                     if pOpt and id:
                         if "wxId-bind" not in p:
-                            p["wxId-bind"] = list()
+                            p["wxId-bind"] = []
                         p["wxId-bind"] += pOpt["wxId"]
                 continue
             if p.get("gisprompt", False) is False:
                 continue
 
             prompt = p.get("prompt", "")
-            if prompt in ("raster", "vector"):
+            if prompt in {"raster", "vector"}:
                 name = p.get("name", "")
-                if name in ("map", "input"):
+                if name in {"map", "input"}:
                     pMap = p
             elif prompt == "layer":
                 pLayer.append(p)
@@ -2492,7 +2491,7 @@ class CmdPanel(wx.Panel):
             tab[section].SetupScrolling(True, True, 10, 10)
             tab[section].Layout()
             minsecsizes = tabsizer[section].GetSize()
-            maxsizes = list(map(lambda x: max(maxsizes[x], minsecsizes[x]), (0, 1)))
+            maxsizes = [max(maxsizes[x], minsecsizes[x]) for x in (0, 1)]
 
         # TODO: be less arbitrary with these 600
         self.panelMinHeight = 100
@@ -2574,7 +2573,7 @@ class CmdPanel(wx.Panel):
     def OnFileLoad(self, event):
         """Load file to interactive input"""
         me = event.GetId()
-        win = dict()
+        win = {}
         for p in self.task.params:
             if "wxId" in p and me in p["wxId"]:
                 win["file"] = self.FindWindowById(p["wxId"][0])
@@ -2764,14 +2763,12 @@ class CmdPanel(wx.Panel):
         verbose = self.FindWindowById(self.task.get_flag("verbose")["wxId"][0])
         quiet = self.FindWindowById(self.task.get_flag("quiet")["wxId"][0])
         if event.IsChecked():
-            if event.GetId() == verbose.GetId():
-                if quiet.IsChecked():
-                    quiet.SetValue(False)
-                    self.task.get_flag("quiet")["value"] = False
-            else:
-                if verbose.IsChecked():
-                    verbose.SetValue(False)
-                    self.task.get_flag("verbose")["value"] = False
+            if event.GetId() == verbose.GetId() and quiet.IsChecked():
+                quiet.SetValue(False)
+                self.task.get_flag("quiet")["value"] = False
+            elif verbose.IsChecked():
+                verbose.SetValue(False)
+                self.task.get_flag("verbose")["value"] = False
 
         event.Skip()
 
@@ -2858,7 +2855,6 @@ class CmdPanel(wx.Panel):
         needed. It's a hook, actually.  Beware of what is 'self' in
         the method def, though. It will be called with no arguments.
         """
-        pass
 
     def OnCheckBoxMulti(self, event):
         """Fill the values as a ','-separated string according to
@@ -2927,15 +2923,14 @@ class CmdPanel(wx.Panel):
             pLayer = self.task.get_param("layer", element="name", raiseError=False)
             if pLayer:
                 pLayer["value"] = ""
+        elif isinstance(me, SpinCtrl):
+            porf["value"] = str(me.GetValue())
+        elif isinstance(me, wx.ComboBox):
+            porf["value"] = me.GetValue()
+        elif isinstance(me, wx.Choice):
+            porf["value"] = me.GetStringSelection()
         else:
-            if isinstance(me, SpinCtrl):
-                porf["value"] = str(me.GetValue())
-            elif isinstance(me, wx.ComboBox):
-                porf["value"] = me.GetValue()
-            elif isinstance(me, wx.Choice):
-                porf["value"] = me.GetStringSelection()
-            else:
-                porf["value"] = me.GetValue()
+            porf["value"] = me.GetValue()
 
         self.OnUpdateValues(event)
 
@@ -3064,8 +3059,7 @@ class CmdPanel(wx.Panel):
             image = wx.Image(iconSectionDict[section]).Scale(
                 16, 16, wx.IMAGE_QUALITY_HIGH
             )
-            idx = imageList.Add(BitmapFromImage(image))
-            return idx
+            return imageList.Add(BitmapFromImage(image))
 
         return -1
 
@@ -3091,7 +3085,7 @@ class GUI:
         self.checkError = checkError
 
         self.grass_task = None
-        self.cmd = list()
+        self.cmd = []
 
         global _blackList
         if self.parent:
@@ -3137,7 +3131,7 @@ class GUI:
             if "flags" in dcmd_params:
                 self.grass_task.flags = dcmd_params["flags"]
 
-        err = list()
+        err = []
         # update parameters if needed && validate command
         if len(cmd) > 1:
             i = 0
@@ -3231,14 +3225,14 @@ class GUI:
             self.grass_task = gtask.processTask(tree).get_task()
 
             for p in self.grass_task.params:
-                if p.get("name", "") in ("input", "map"):
+                if p.get("name", "") in {"input", "map"}:
                     age = p.get("age", "")
                     prompt = p.get("prompt", "")
                     element = p.get("element", "")
                     if (
                         age == "old"
-                        and element in ("cell", "grid3", "vector")
-                        and prompt in ("raster", "raster_3d", "vector")
+                        and element in {"cell", "grid3", "vector"}
+                        and prompt in {"raster", "raster_3d", "vector"}
                     ):
                         return p.get("name", None)
         return None

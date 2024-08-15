@@ -1,3 +1,7 @@
+[project]
+name = "grass"
+requires-python = ">=3.9"
+
 [tool.black]
 required-version = '24'
 line-length = 88
@@ -8,6 +12,406 @@ extend-exclude = '''
     python/libgrass_interface_generator/
 )
 '''
+
+[tool.ruff]
+required-version = ">=0.5.0"
+
+builtins = ["_"]
+
+# In addition to the standard set of exclusions, omit the following files or folders.
+extend-exclude = ["python/libgrass_interface_generator"]
+# In addition to the standard set of inclusions, include `.ipynb` files.
+extend-include = ["*.ipynb"]
+
+[tool.ruff.lint]
+# See https://docs.astral.sh/ruff/rules/
+select = [
+    "A",      # flake8-builtins (A)
+    "AIR",    # Airflow (AIR)
+    "ANN",    # flake8-annotations (ANN)
+    "ARG",    # flake8-unused-arguments (ARG)
+    "B",      # flake8-bugbear (B)
+    "BLE",    # flake8-blind-except (BLE)
+    "C4",     # flake8-comprehensions (C4)
+    "COM",    # flake8-commas (COM)
+    "D",      # pydocstyle (D)
+    "DTZ",    # flake8-datetimez (DTZ)
+    "E4",     # pycodestyle (E, W)
+    "E7",     # pycodestyle (E, W)
+    "E9",     # pycodestyle (E, W)
+    "F",      # Pyflakes (F)
+    "FA",     # flake8-future-annotations (FA)
+    "FBT",    # flake8-boolean-trap (FBT)
+    "FLY",    # flynt (FLY)
+    "FURB",   # refurb (FURB)
+    "G",      # flake8-logging-format (G)
+    "I",      # isort (I)
+    "ICN",    # flake8-import-conventions (ICN)
+    "INT",    # flake8-gettext (INT)
+    "ISC",    # flake8-implicit-str-concat (ISC)
+    "LOG",    # flake8-logging (LOG)
+    "NPY",    # NumPy-specific rules (NPY)
+    "PERF",   # Perflint (PERF)
+    "PGH",    # pygrep-hooks (PGH)
+    "PIE",    # flake8-pie (PIE)
+    "PLC",    # Pylint (PL) Convention (C)
+    "PLE",    # Pylint (PL) Error (E)
+    "PLR",    # Pylint (PL) Refactor (R)
+    "PLW",    # Pylint (PL) Warning (W)
+    "PT",     # flake8-pytest-style (PT)
+    "PTH",    # flake8-use-pathlib (PTH)
+    "PTH105", # flake8-use-pathlib (PTH)
+    "PYI",    # flake8-pyi (PYI)
+    "Q",      # flake8-quotes (Q)
+    "RET",    # flake8-return (RET)
+    "RSE",    # flake8-raise (RSE)
+    "RUF",    # Ruff-specific rules (RUF)
+    "S",      # flake8-bandit (S)
+    "SIM",    # flake8-simplify (SIM)
+    "SLF",    # flake8-self (SLF)
+    "SLOT",   # flake8-slots (SLOT)
+    "T10",    # flake8-debugger (T10)
+    "TCH",    # flake8-type-checking (TCH)
+    "TID",    # flake8-tidy-imports (TID)
+    "TRY",    # tryceratops (TRY)
+    "UP",     # pyupgrade (UP)
+    "W",      # pycodestyle (E, W)
+    "YTT",    # flake8-2020 (YTT)
+]
+
+ignore = [
+    # See https://docs.astral.sh/ruff/rules/
+    # *GRASS TODO: fix the issues, or use https://docs.astral.sh/ruff/settings/#lint_per-file-ignores
+    "A001",    # builtin-variable-shadowing
+    "A002",    # builtin-argument-shadowing
+    "ANN",     # flake8-annotations (ANN)
+    "ARG001",  # unused-function-argument
+    "ARG002",  # unused-method-argument
+    "ARG005",  # unused-lambda-argument
+    "B004",    # unreliable-callable-check
+    "B006",    # mutable-argument-default
+    "B007",    # unused-loop-control-variable
+    "B008",    # function-call-in-default-argument
+    "B015",    # useless-comparison
+    "B023",    # function-uses-loop-variable
+    "B026",    # star-arg-unpacking-after-keyword-arg
+    "B028",    # no-explicit-stacklevel
+    "B034",    # re-sub-positional-args
+    "B904",    # raise-without-from-inside-except
+    "B909",    # loop-iterator-mutation
+    "BLE001",  # blind-except
+    "C404",    # unnecessary-list-comprehension-dict
+    "C414",    # unnecessary-double-cast-or-process
+    "C416",    # unnecessary-comprehension
+    "COM812",  # missing-trailing-comma
+    "COM818",  # trailing-comma-on-bare-tuple
+    "D1",
+    "D2",
+    "D300",    # triple-single-quotes
+    "D301",    # escape-sequence-in-docstring
+    "D400",    # ends-in-period
+    "D401",    # non-imperative-mood
+    "D402",    # no-signature
+    "D403",    # first-line-capitalized
+    "D404",    # docstring-starts-with-this
+    "D405",    # capitalize-section-name
+    "D406",    # new-line-after-section-name
+    "D407",    # dashed-underline-after-section
+    "D409",    # section-underline-matches-section-length
+    "D411",    # no-blank-line-before-section
+    "D412",    # blank-lines-between-header-and-content
+    "D413",    # blank-line-after-last-section
+    "D415",    # ends-in-punctuation
+    "D416",    # section-name-ends-in-colon
+    "D419",    # empty-docstring
+    "DTZ001",  # call-datetime-without-tzinfo
+    "DTZ002",  # call-datetime-today
+    "DTZ005",  # call-datetime-now-without-tzinfo
+    "DTZ006",  # call-datetime-fromtimestamp
+    "DTZ007",  # call-datetime-strptime-without-zone
+    "DTZ011",  # call-date-today
+    "E401",    # multiple-imports-on-one-line
+    "E402",    # module-import-not-at-top-of-file
+    "E721",    # type-comparison
+    "E722",    # bare-except
+    "E731",    # lambda-assignment
+    "E741",    # ambiguous-variable-name
+    "F401",    # unused-import
+    "F403",    # undefined-local-with-import-star
+    "F405",    # undefined-local-with-import-star-usage
+    "F601",    # multi-value-repeated-key-literal
+    "F811",    # redefined-while-unused
+    "F821",    # undefined-name
+    "F822",    # undefined-export
+    "F841",    # unused-variable,
+    "FBT001",  # boolean-type-hint-positional-argument
+    "FBT002",  # boolean-default-value-positional-argument
+    "FBT003",  # boolean-positional-value-in-call
+    "FURB118", # reimplemented-operator
+    "I001",    # unsorted-imports
+    "ISC003",  # explicit-string-concatenation
+    "PERF203", # try-except-in-loop
+    "PERF401", # manual-list-comprehension
+    "PERF402", # manual-list-copy
+    "PERF403", # manual-dict-comprehension
+    "PIE794",  # duplicate-class-field-definition
+    "PIE808",  # unnecessary-range-start
+    "PIE810",  # multiple-starts-ends-with
+    "PLC0415", # import-outside-top-level
+    "PLC1901", # compare-to-empty-string
+    "PLC2701", # import-private-name
+    "PLC2801", # unnecessary-dunder-call
+    "PLE0704", # misplaced-bare-raise
+    "PLR0904", # too-many-public-methods
+    "PLR0911", # too-many-return-statements
+    "PLR0912", # too-many-branches
+    "PLR0913", # too-many-arguments
+    "PLR0914", # too-many-locals
+    "PLR0915", # too-many-statements
+    "PLR0916", # too-many-boolean-expressions
+    "PLR0917", # too-many-positional
+    "PLR1702", # too-many-nested-blocks
+    "PLR1704", # redefined-argument-from-local
+    "PLR2004", # magic-value-comparison
+    "PLR6201", # literal-membership
+    "PLR6301", # no-self-use
+    "PLW0602", # global-variable-not-assigned
+    "PLW0603", # global-statement
+    "PLW0604", # global-at-module-level
+    "PLW1508", # invalid-envvar-default
+    "PLW1510", # subprocess-run-without-check
+    "PLW1514", # unspecified-encoding
+    "PLW1641", # eq-without-hash
+    "PLW2901", # redefined-loop-name
+    "PLW3201", # bad-dunder-method-name
+    "PT001",   # pytest-fixture-incorrect-parentheses-style
+    "PT004",   # pytest-missing-fixture-name-underscore
+    "PT006",   # pytest-parametrize-names-wrong-type
+    "PT009",   # pytest-unittest-assertion
+    "PT011",   # pytest-raises-too-broad
+    "PT018",   # pytest-composite-assertion
+    "PT023",   # pytest-incorrect-mark-parentheses-style
+    "PTH100",  # os-path-abspath
+    "PTH101",  # os-chmod
+    "PTH102",  # os-mkdir
+    "PTH103",  # os-makedirs
+    "PTH104",  # os-rename
+    "PTH106",  # os-rmdir
+    "PTH107",  # os-remove
+    "PTH108",  # os-unlink
+    "PTH109",  # os-getcwd
+    "PTH110",  # os-path-exists
+    "PTH111",  # os-path-expanduser
+    "PTH112",  # os-path-isdir
+    "PTH113",  # os-path-isfile
+    "PTH116",  # os-stat
+    "PTH117",  # os-path-isabs
+    "PTH118",  # os-path-join
+    "PTH119",  # os-path-basename
+    "PTH120",  # os-path-dirname
+    "PTH122",  # os-path-splitext
+    "PTH123",  # builtin-open
+    "PTH202",  # os-path-getsize
+    "PTH204",  # os-path-getmtime
+    "PTH207",  # glob
+    "RET501",  # unnecessary-return-none
+    "RET502",  # implicit-return-value
+    "RET503",  # implicit-return
+    "RET505",  # superfluous-else-return
+    "RET506",  # superfluous-else-raise
+    "RET507",  # superfluous-else-continue
+    "RET508",  # superfluous-else-break
+    "RSE102",  # unnecessary-paren-on-raise-exception
+    "RUF003",  # ambiguous-unicode-character-comment
+    "RUF005",  # collection-literal-concatenation
+    "RUF012",  # mutable-class-default
+    "RUF015",  # unnecessary-iterable-allocation-for-first-element
+    "RUF019",  # unnecessary-key-check
+    "RUF027",  # missing-f-string-syntax
+    "RUF100",  # unused-noqa
+    "S101",    # assert
+    "S108",    # hardcoded-temp-file
+    "S110",    # try-except-pass
+    "S112",    # try-except-continue
+    "S113",    # request-without-timeout
+    "S202",    # tarfile-unsafe-members
+    "S307",    # suspicious-eval-usage
+    "S310",    # suspicious-url-open-usage
+    "S311",    # suspicious-non-cryptographic-random-usage
+    "S314",    # suspicious-xml-element-tree-usage
+    "S324",    # hashlib-insecure-hash-function
+    "S403",    # suspicious-pickle-import
+    "S404",    # suspicious-subprocess-import
+    "S405",    # suspicious-xml-etree-import
+    "S406",    # suspicious-xml-sax-import
+    "S602",    # subprocess-popen-with-shell-equals-true
+    "S603",    # subprocess-without-shell-equals-true
+    "S604",    # call-with-shell-equals-true
+    "S606",    # start-process-with-no-shell
+    "S607",    # start-process-with-partial-path
+    "S608",    # hardcoded-sql-expression
+    "SIM101",  # duplicate-isinstance-call
+    "SIM102",  # collapsible-if
+    "SIM105",  # suppressible-exception
+    "SIM108",  # if-else-block-instead-of-if-exp
+    "SIM109",  # compare-with-tuple
+    "SIM110",  # reimplemented-builtin
+    "SIM113",  # enumerate-for-loop
+    "SIM114",  # if-with-same-arms
+    "SIM115",  # open-file-with-context-handler
+    "SIM116",  # if-else-block-instead-of-dict-lookup
+    "SIM118",  # in-dict-keys
+    "SIM201",  # negate-equal-op
+    "SIM223",  # expr-and-false
+    "SIM401",  # if-else-block-instead-of-dict-get
+    "SLF001",  # private-member-access
+    "TRY002",  # raise-vanilla-class
+    "TRY003",  # raise-vanilla-args
+    "TRY004",  # type-check-without-type-error
+    "TRY201",  # verbose-raise
+    "TRY300",  # try-consider-else
+    "TRY301",  # raise-within-try
+    "UP015",   # redundant-open-modes
+    "UP030",   # format-literals
+    "UP031",   # printf-string-formatting
+    "UP032",   # f-string
+    "UP036",   # outdated-version-block
+    "W605",    # invalid-escape-sequence
+]
+
+
+[tool.ruff.lint.per-file-ignores]
+# See https://docs.astral.sh/ruff/settings/#lint_per-file-ignores
+# "A005", # builtin-module-shadowing
+# "INT002", # f-string-in-get-text-func-call
+# "INT001", # format-in-get-text-func-call
+# "INT003", # printf-in-get-text-func-call
+# "PLW0108", # unnecessary-lambda
+# Ignore `E402` (import violations) in all `__init__.py` files
+"*/testsuite/**.py" = ["PT009", "PT027"]
+"__init__.py" = ["E402"]
+"general/g.parser/test.py" = ["INT003"]
+"gui/**" = ["PLW0108"] # See https://github.com/OSGeo/grass/issues/4124
+"gui/wxpython/animation/dialogs.py" = ["INT002"]
+"gui/wxpython/animation/temporal_manager.py" = ["INT003"]
+"gui/wxpython/core/debug.py" = ["INT002"]
+"gui/wxpython/core/render.py" = ["INT003"]
+"gui/wxpython/gcp/manager.py" = ["INT002"]
+"gui/wxpython/gmodeler/model.py" = ["INT001"]
+"gui/wxpython/gmodeler/panels.py" = ["INT002", "INT003"]
+"gui/wxpython/gui_core/ghelp.py" = ["INT003"]
+"gui/wxpython/gui_core/gselect.py" = ["INT002"]
+"gui/wxpython/gui_core/pyedit.py" = ["INT002"]
+"gui/wxpython/gui_core/pystc.py" = ["INT002"]
+"gui/wxpython/gui_core/query.py" = ["INT003"]
+"gui/wxpython/history/browser.py" = ["INT002"]
+"gui/wxpython/iclass/dialogs.py" = ["INT003"]
+"gui/wxpython/iclass/frame.py" = ["FLY002", "INT003"]
+"gui/wxpython/iclass/plots.py" = ["INT003"]
+"gui/wxpython/iclass/statistics.py" = ["A005"]
+"gui/wxpython/image2target/ii2t_gis_set.py" = ["INT003"]
+"gui/wxpython/iscatt/controllers.py" = ["INT003"]
+"gui/wxpython/iscatt/dialogs.py" = ["INT003"]
+"gui/wxpython/iscatt/frame.py" = ["INT003"]
+"gui/wxpython/iscatt/iscatt_core.py" = ["INT003"]
+"gui/wxpython/iscatt/plots.py" = ["PLW0108"]
+"gui/wxpython/lmgr/frame.py" = ["INT003"]
+"gui/wxpython/lmgr/workspace.py" = ["INT002"]
+"gui/wxpython/location_wizard/dialogs.py" = ["INT003"]
+"gui/wxpython/location_wizard/wizard.py" = ["INT003"]
+"gui/wxpython/main_window/frame.py" = ["INT003"]
+"gui/wxpython/mapdisp/frame.py" = ["INT003"]
+"gui/wxpython/mapdisp/test_mapdisp.py" = ["INT003"]
+"gui/wxpython/mapwin/analysis.py" = ["INT003"]
+"gui/wxpython/psmap/utils.py" = ["PGH004"]
+"gui/wxpython/rdigit/g.gui.rdigit.py" = ["INT002"]
+"gui/wxpython/rlisetup/frame.py" = ["INT002"]
+"gui/wxpython/rlisetup/functions.py" = ["INT003"]
+"gui/wxpython/rlisetup/wizard.py" = ["INT003"]
+"gui/wxpython/startup/locdownload.py" = ["INT002"]
+"gui/wxpython/timeline/frame.py" = ["FLY002", "INT003"]
+"gui/wxpython/tplot/frame.py" = ["FLY002", "INT002", "INT003"]
+"gui/wxpython/vnet/vnet_data.py" = ["INT003"]
+"gui/wxpython/web_services/dialogs.py" = ["INT003"]
+"gui/wxpython/web_services/widgets.py" = ["INT003"]
+"gui/wxpython/wxgui.py" = ["INT002"]
+"gui/wxpython/wxplot/profile.py" = ["A005"]
+"lib/imagery/testsuite/test_imagery_sigsetfile.py" = ["FURB152"]
+"lib/init/grass.py" = ["INT003"]
+"python/grass/__init__.py" = ["PYI056"]
+"python/grass/exp*/tests/grass_script_mapset_session_test.py" = ["SIM117"]
+"python/grass/exp*/tests/grass_script_tmp_mapset_session_test.py" = ["SIM117"]
+"python/grass/gunittest/loader.py" = ["PYI024"]
+"python/grass/gunittest/multireport.py" = ["PYI024"]
+"python/grass/gunittest/testsu*/d*/s*/s*/subsub*/t*/test_segfaut.py" = ["B018"]
+"python/grass/gunittest/testsuite/test_assertions_rast3d.py" = ["FLY002"]
+"python/grass/jupyter/tests/reprojection_renderer_test.py" = ["PT013"]
+"python/grass/jupyter/testsuite/interactivemap_test.py" = ["PGH004"]
+"python/grass/jupyter/testsuite/map_test.py" = ["PGH004"]
+"python/grass/pydispatch/signal.py" = ["A005"]
+"python/grass/pygrass/raster/category.py" = ["INT002"]
+"python/grass/pygrass/vector/__init__.py" = ["INT003"]
+"python/grass/pygrass/vector/geometry.py" = ["PYI024"]
+"python/grass/pygrass/vector/sql.py" = ["FLY002"]
+"python/grass/pygrass/vector/testsuite/test_table.py" = ["PLW0108"]
+"python/grass/script/array.py" = ["A005"]
+"python/grass/script/raster.py" = ["INT003"]
+"python/grass/temporal/abstract_space_time_dataset.py" = ["INT003"]
+"python/grass/temporal/aggregation.py" = ["INT003"]
+"python/grass/temporal/c_libraries_interface.py" = ["INT003"]
+"python/grass/temporal/core.py" = ["INT002", "INT003"]
+"python/grass/temporal/datetime_math.py" = ["INT003"]
+"python/grass/temporal/mapcalc.py" = ["INT003"]
+"python/grass/temporal/space_time_datasets.py" = ["INT003"]
+"python/grass/temporal/stds_export.py" = ["INT003"]
+"python/grass/temporal/stds_import.py" = ["INT003"]
+"python/grass/temporal/temporal_algebra.py" = ["INT003"]
+"python/grass/temporal/temporal_raster_base_algebra.py" = ["INT003"]
+"python/grass/temporal/univar_statistics.py" = ["INT002"]
+"raster3d/r3.flow/testsuite/r3flow_test.py" = ["FLY002"]
+"raster3d/r3.gradient/testsuite/r3gradient_test.py" = ["FLY002"]
+"scripts/d.polar/d.polar.py" = ["FURB154", "INT002"]
+"scripts/g.extension.all/g.extension.all.py" = ["INT002"]
+"scripts/g.extension/g.extension.py" = ["INT002"]
+"scripts/i.oif/i.oif.py" = ["INT003"]
+"scripts/i.pansharpen/i.pansharpen.py" = ["FLY002", "INT003"]
+"scripts/i.spectral/i.spectral.py" = ["FLY002", "INT002"]
+"scripts/r.in.srtm/r.in.srtm.py" = ["FLY002"]
+"scripts/r.in.wms/wms_base.py" = ["INT003"]
+"scripts/r.in.wms/wms_cap_parsers.py" = ["INT003"]
+"scripts/r.in.wms/wms_drv.py" = ["INT003"]
+"scripts/r.in.wms/wms_gdal_drv.py" = ["INT003"]
+"scripts/r.pack/r.pack.py" = ["INT003"]
+"scripts/r.tileset/r.tileset.py" = ["INT003"]
+"scripts/r.unpack/r.unpack.py" = ["INT002"]
+"scripts/v.rast.stats/v.rast.stats.py" = ["INT002"]
+"scripts/v.to.lines/v.to.lines.py" = ["INT003"]
+"scripts/v.unpack/v.unpack.py" = ["INT002", "INT003"]
+"scripts/v.what.strds/v.what.strds.py" = ["INT003"]
+"temporal/t.rast.accdetect/t.rast.accdetect.py" = ["INT003"]
+"temporal/t.rast.accumulate/t.rast.accumulate.py" = ["INT003"]
+"temporal/t.rast.algebra/testsu*/*_algebra_arithmetic.py" = ["FLY002"]
+"temporal/t.rast.export/t.rast.export.py" = ["INT002"]
+"temporal/t.rast.gapfill/t.rast.gapfill.py" = ["INT003"]
+"temporal/t.rast.list/t.rast.list.py" = ["INT002"]
+"temporal/t.rast.out.vtk/t.rast.out.vtk.py" = ["INT003"]
+"temporal/t.rast.series/t.rast.series.py" = ["INT002"]
+"temporal/t.rast.to.rast3/t.rast.to.rast3.py" = ["INT003"]
+"temporal/t.rast.what/t.rast.what.py" = ["INT003"]
+"temporal/t.register/testsu*/*_raster_different_local.py" = ["FLY002"]
+"temporal/t.register/testsu*/*_raster_mapmetadata.py" = ["FLY002"]
+"temporal/t.register/testsuite/test_t_register_raster.py" = ["FLY002"]
+"temporal/t.register/testsuite/test_t_register_raster_file.py" = ["FLY002"]
+"temporal/t.remove/t.remove.py" = ["INT002", "INT003"]
+"temporal/t.unregister/t.unregister.py" = ["INT003"]
+"temporal/t.vect.observe.strds/t.vect.observe.strds.py" = ["INT003"]
+"utils/generate_release_notes.py" = ["PGH004"]
+"utils/mkhtml.py" = ["INT002"]
+"vector/v.fill.holes/examples.ipynb" = ["PTH201"]
+
+[tool.ruff.lint.flake8-import-conventions.extend-aliases]
+# Declare a custom aliases, checked with rule ICN001
+"grass.script" = "gs"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
@@ -28,5 +432,10 @@ markers = [
 
 
 [tool.bandit]
-exclude_dirs = ["./testsuite", "*/tests/*", "*/testsuite/*", "utils/test_generate_last_commit_file.py"]
-skips = ["B324","B110", "B101", "B112", "B311", "B404", "B603"]
+exclude_dirs = [
+    "./testsuite",
+    "*/tests/*",
+    "*/testsuite/*",
+    "utils/test_generate_last_commit_file.py",
+]
+skips = ["B324", "B110", "B101", "B112", "B311", "B404", "B603"]

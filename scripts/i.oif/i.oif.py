@@ -107,7 +107,7 @@ def main():
                     if not proc[bandp].stdout.closed:
                         pout[bandp] = proc[bandp].communicate()[0]
                     proc[bandp].wait()
-            n = n + 1
+            n += 1
 
         # wait for jobs to finish, collect the output
         for band in bands:
@@ -141,7 +141,7 @@ def main():
     oif.sort(reverse=True)
 
     grass.verbose(
-        _("The Optimum Index Factor analysis result " "(best combination shown first):")
+        _("The Optimum Index Factor analysis result (best combination shown first):")
     )
 
     if shell:

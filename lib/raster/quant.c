@@ -680,7 +680,7 @@ CELL Rast_quant_get_cell_value(struct Quant *q, DCELL dcellVal)
                     return NO_DATA;
             }
         } /* while */
-    }     /* looking up in fp_lookup */
+    } /* looking up in fp_lookup */
 
     if (!NO_FINITE_RULE) {
         p = Rast__quant_get_rule_for_d_raster_val(q, dcellVal);

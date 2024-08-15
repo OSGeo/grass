@@ -42,7 +42,7 @@ def select(parms, ptype):
     """
     for k in parms:
         par = parms[k]
-        if par.type == ptype or par.typedesc == ptype and par.value:
+        if par.type == ptype or (par.typedesc == ptype and par.value):
             if par.multiple:
                 yield from par.value
             else:
@@ -183,7 +183,7 @@ def copy_groups(groups, gisrc_src, gisrc_dst, region=None):
 
     src = read_gisrc(gisrc_src)
     dst = read_gisrc(gisrc_dst)
-    rm = True if src[2] != dst[2] else False
+    rm = src[2] != dst[2]
     all_rasts = [r[0] for r in findmaps("raster", location=dst[1], gisdbase=dst[2])]
     for grp in groups:
         # change gisdbase to src
@@ -346,8 +346,8 @@ def get_cmd(cmdd):
             if isinstance(vals, list)
         )
     )
-    cmd.extend(("-%s" % (flg) for flg in cmdd["flags"] if len(flg) == 1))
-    cmd.extend(("--%s" % (flg[0]) for flg in cmdd["flags"] if len(flg) > 1))
+    cmd.extend(f"-{flg}" for flg in cmdd["flags"] if len(flg) == 1)
+    cmd.extend(f"--{flg[0]}" for flg in cmdd["flags"] if len(flg) > 1)
     return cmd
 
 
@@ -376,7 +376,7 @@ def cmd_exe(args):
     src, dst = get_mapset(gisrc_src, gisrc_dst)
     env = os.environ.copy()
     env["GISRC"] = gisrc_dst
-    shell = True if sys.platform == "win32" else False
+    shell = sys.platform == "win32"
     if mapnames:
         inputs = dict(cmd["inputs"])
         # reset the inputs to
@@ -469,7 +469,7 @@ class GridModule:
         self.height = height
         self.overlap = overlap
         self.processes = processes
-        self.region = region if region else Region()
+        self.region = region or Region()
         self.start_row = start_row
         self.start_col = start_col
         self.out_prefix = out_prefix
@@ -479,7 +479,7 @@ class GridModule:
         # if overlap > 0, r.patch won't work properly
         if not patch_backend:
             self.patch_backend = "RasterRow"
-        elif patch_backend not in ("r.patch", "RasterRow"):
+        elif patch_backend not in {"r.patch", "RasterRow"}:
             raise RuntimeError(
                 _("Parameter patch_backend must be 'r.patch' or 'RasterRow'")
             )
@@ -625,10 +625,10 @@ class GridModule:
         """Add the mapset information to the input maps"""
         for inmap in self.module.inputs:
             inm = self.module.inputs[inmap]
-            if inm.type in ("raster", "vector") and inm.value:
+            if inm.type in {"raster", "vector"} and inm.value:
                 if "@" not in inm.value:
                     mset = get_mapset_raster(inm.value)
-                    inm.value = inm.value + "@%s" % mset
+                    inm.value += "@%s" % mset
 
     def run(self, patch=True, clean=True):
         """Run the GRASS command

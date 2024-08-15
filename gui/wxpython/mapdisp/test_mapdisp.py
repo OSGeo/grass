@@ -53,7 +53,7 @@ import os
 import sys
 import wx
 
-import grass.script as grass
+import grass.script as gs
 
 from grass.script.setup import set_gui_path
 
@@ -88,9 +88,9 @@ class MapdispGrassInterface(StandaloneGrassInterface):
 # this is a copy of method from some frame class
 def copyOfInitMap(map_, width, height):
     """Initialize map display, set dimensions and map region"""
-    if not grass.find_program("g.region", "--help"):
+    if not gs.find_program("g.region", "--help"):
         sys.exit(
-            _("GRASS module '%s' not found. Unable to start map " "display window.")
+            _("GRASS module '%s' not found. Unable to start map display window.")
             % "g.region"
         )
     map_.ChangeMapSize((width, height))
@@ -306,7 +306,7 @@ def main():
     # TODO: should messages here be translatable?
     # (for test its great, for translator not)
 
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     test = options["test"]
 
     app = wx.App()
@@ -356,9 +356,7 @@ def main():
         tester.testMapWindowRlisetup(map_)
     else:
         # TODO: this should not happen but happens
-        import grass.script as sgrass
-
-        sgrass.fatal(_("Unknown value %s of test parameter." % test))
+        gs.fatal(_("Unknown value %s of test parameter." % test))
 
     app.MainLoop()
 

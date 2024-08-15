@@ -68,17 +68,18 @@
 # % description: Assign the space time raster dataset start and end time to the output map
 # %end
 
-import sys
 import copy
-import grass.script as grass
+import sys
+
+import grass.script as gs
 
 ############################################################################
 
 
 def main():
     # lazy imports
-    import grass.temporal as tgis
     import grass.pygrass.modules as pymod
+    import grass.temporal as tgis
 
     # Get the options
     input = options["input"]
@@ -87,7 +88,7 @@ def main():
     nprocs = options["nprocs"]
     tsuffix = options["suffix"]
 
-    mapset = grass.gisenv()["MAPSET"]
+    mapset = gs.gisenv()["MAPSET"]
 
     # Make sure the temporal database exists
     tgis.init()
@@ -105,7 +106,7 @@ def main():
     # Configure the r.to.vect module
     gapfill_module = pymod.Module(
         "r.series.interp",
-        overwrite=grass.overwrite(),
+        overwrite=gs.overwrite(),
         quiet=True,
         run_=False,
         finish_=False,
@@ -121,7 +122,7 @@ def main():
     for _map in maps:
         if _map.get_id() is None:
             count += 1
-            if sp.get_temporal_type() == "absolute" and tsuffix in ["gran", "time"]:
+            if sp.get_temporal_type() == "absolute" and tsuffix in {"gran", "time"}:
                 _id = "{ba}@{ma}".format(ba=base, ma=mapset)
             else:
                 map_name = tgis.create_numeric_suffix(base, num + count, tsuffix)
@@ -131,7 +132,7 @@ def main():
             gap_list.append(_map)
 
     if len(gap_list) == 0:
-        grass.message(_("No gaps found"))
+        gs.message(_("No gaps found"))
         return
 
     # Build the temporal topology
@@ -141,15 +142,15 @@ def main():
     # Do some checks before computation
     for _map in gap_list:
         if not _map.get_precedes() or not _map.get_follows():
-            grass.fatal(_("Unable to determine successor " "and predecessor of a gap."))
+            gs.fatal(_("Unable to determine successor and predecessor of a gap."))
 
         if len(_map.get_precedes()) > 1:
-            grass.warning(
-                _("More than one successor of the gap found. " "Using the first found.")
+            gs.warning(
+                _("More than one successor of the gap found. Using the first found.")
             )
 
         if len(_map.get_follows()) > 1:
-            grass.warning(
+            gs.warning(
                 _(
                     "More than one predecessor of the gap found. "
                     "Using the first found."
@@ -203,16 +204,15 @@ def main():
 
             overwrite_flags[new_id] = False
             if new_map.map_exists() or new_map.is_in_db(dbif):
-                if not grass.overwrite():
-                    grass.fatal(
+                if not gs.overwrite():
+                    gs.fatal(
                         _(
                             "Map with name <%s> already exists. "
                             "Please use another base name." % (_id)
                         )
                     )
-                else:
-                    if new_map.is_in_db(dbif):
-                        overwrite_flags[new_id] = True
+                elif new_map.is_in_db(dbif):
+                    overwrite_flags[new_id] = True
 
             map_names.append(new_map.get_name())
             map_positions.append(position)
@@ -263,17 +263,17 @@ def main():
 
 def run_interp(inputs, dpos, output, outpos):
     """Helper function to run r.series.interp in parallel"""
-    return grass.run_command(
+    return gs.run_command(
         "r.series.interp",
         input=inputs,
         datapos=dpos,
         output=output,
         samplingpos=outpos,
-        overwrite=grass.overwrite(),
+        overwrite=gs.overwrite(),
         quiet=True,
     )
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

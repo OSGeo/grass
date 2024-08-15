@@ -47,8 +47,7 @@
 # % key: s
 # % description: Print spatio-temporal topological relationships and exit
 # %end
-import grass.script as grass
-
+import grass.script as gs
 
 ############################################################################
 
@@ -163,5 +162,5 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()
