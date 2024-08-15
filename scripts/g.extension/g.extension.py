@@ -155,7 +155,7 @@ import tempfile
 import json
 import xml.etree.ElementTree as etree
 
-if sys.version_info.major == 3 and sys.version_info.minor < 8:
+if sys.version_info < (3, 8):
     from distutils.dir_util import copy_tree
 else:
     from functools import partial
@@ -766,7 +766,7 @@ def list_available_extensions(url):
 def get_available_toolboxes(url):
     """Return toolboxes available in the repository"""
     tdict = {}
-    url = url + "toolboxes.xml"
+    url += "toolboxes.xml"
     try:
         tree = etree_fromurl(url)
         for tnode in tree.findall("toolbox"):
@@ -798,7 +798,7 @@ def get_toolbox_extensions(url, name):
     # dictionary of extensions
     edict = {}
 
-    url = url + "toolboxes.xml"
+    url += "toolboxes.xml"
 
     try:
         tree = etree_fromurl(url)
@@ -1275,7 +1275,7 @@ def get_toolboxes_metadata(url):
 def install_toolbox_xml(url, name):
     """Update local toolboxes metadata file"""
     # read metadata from remote server (toolboxes)
-    url = url + "toolboxes.xml"
+    url += "toolboxes.xml"
     data = get_toolboxes_metadata(url)
     if not data:
         gs.warning(_("No addons metadata available"))
@@ -1461,7 +1461,7 @@ def get_multi_addon_addons_which_install_only_html_man_page():
         rf".*{options['extension']}*.",
         get_addons_paths(gg_addons_base_dir=options["prefix"]),
     )
-    addon_dir_paths = set([os.path.dirname(i) for i in addon_paths])
+    addon_dir_paths = {os.path.dirname(i) for i in addon_paths}
     for addon_dir in addon_dir_paths:
         addon_src_files = list(
             re.finditer(rf"{addon_dir}/(.*py)|(.*c)\n", "\n".join(addon_paths)),
@@ -2487,7 +2487,7 @@ def resolve_install_prefix(path, to_system):
     # ensure dir sep at the end for cases where path is used as URL and pasted
     # together with file names
     if not path.endswith(os.path.sep):
-        path = path + os.path.sep
+        path += os.path.sep
     os.environ["GRASS_PREFIX_ADDON_BASE"] = os.path.abspath(
         path
     )  # make likes absolute paths
@@ -2516,7 +2516,7 @@ def resolve_xmlurl_prefix(url, source=None):
     # the exact action depends on subsequent code (somewhere)
 
     if not url.endswith("/"):
-        url = url + "/"
+        url += "/"
     return url
 
 

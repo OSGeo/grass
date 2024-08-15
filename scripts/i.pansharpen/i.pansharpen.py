@@ -732,7 +732,7 @@ def matchhist(original, target, matched):
         stats = gs.decode(stats_out.communicate()[0]).split("\n")[:-1]
         stats_dict = dict(s.split(":", 1) for s in stats)
         total_cells = 0  # total non-null cells
-        for j in stats_dict:
+        for j in stats_dict.keys():  # noqa: PLC0206
             stats_dict[j] = int(stats_dict[j])
             if j != "*":
                 total_cells += stats_dict[j]

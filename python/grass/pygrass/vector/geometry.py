@@ -1137,7 +1137,7 @@ class Line(Geo):
         if match:
             self.reset()
             for coord in match.groups()[0].strip().split(","):
-                self.append(tuple([float(e) for e in coord.split(" ")]))
+                self.append(tuple(float(e) for e in coord.split(" ")))
         else:
             return None
 
