@@ -101,7 +101,7 @@ void Init(void)
         for (i = 0; (Number = SeedStuff->answers[i]) && i < NumMaps; i++) {
             sscanf(Number, "%d", &(Seeds[i]));
         } /* /for */
-    }     /* /else */
+    } /* /else */
 
     CellBuffer = Rast_allocate_c_buf();
     CatInfo.NumValue = (int *)G_malloc(CatInfo.NumCat * sizeof(int));

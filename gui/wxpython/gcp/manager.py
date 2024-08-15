@@ -1243,7 +1243,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         """Disable GCP manager mode"""
         # leaving the method here but was used only to delete gcpmanagement
         # from layer manager which is now not needed
-        pass
 
     def CreateGCPList(self):
         """Create GCP List Control"""
@@ -2377,7 +2376,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 self.resize = False
             elif self.resize:
                 event.RequestMore()
-        pass
 
 
 class GCPDisplay(FrameMixin, GCPPanel):

@@ -127,7 +127,7 @@ def main():
     wfs_url += request_base
 
     if options["name"]:
-        if tuple([int(x) for x in version_num.split(".")]) >= (2, 0, 0):
+        if tuple(int(x) for x in version_num.split(".")) >= (2, 0, 0):
             wfs_url += "&TYPENAMES=" + options["name"]
         else:
             wfs_url += "&TYPENAME=" + options["name"]

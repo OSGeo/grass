@@ -56,7 +56,7 @@ class RDigitToolbar(BaseToolbar):
         self._color.SetToolTip(_("Set drawing color (not raster cell color)"))
         self.InsertControl(4, self._color)
 
-        self._cellValues = set(["1"])
+        self._cellValues = {"1"}
         # validator does not work with combobox, SetBackgroundColor is not
         # working
         self._valueCombo = wx.ComboBox(
