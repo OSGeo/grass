@@ -50,7 +50,7 @@
 #endif
 
 #ifndef WAIT_ANY
-#define WAIT_ANY ((pid_t)-1)
+#define WAIT_ANY ((pid_t) - 1)
 #endif
 
 GLuint Material_1_Dlist;
