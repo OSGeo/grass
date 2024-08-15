@@ -40,7 +40,7 @@ def keyvalue_to_text(keyvalue, sep="=", vsep="\n", isep=",", last_vertical=None)
         items.append("{key}{sep}{value}".format(key=key, sep=sep, value=value))
     text = vsep.join(items)
     if last_vertical:
-        text = text + vsep
+        text += vsep
     return text
 
 

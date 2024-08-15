@@ -95,6 +95,7 @@ int main(int argc, char **argv)
     struct Flag *conv;
     int i;
     int *sdimp, longdim, r_out;
+    size_t len;
 
     G_gisinit(argv[0]);
 
@@ -144,7 +145,10 @@ int main(int argc, char **argv)
     parse_command(viewopts, vfiles, &numviews, &frames);
 
     /* output file */
-    strcpy(outfile, out->answer);
+    len = G_strlcpy(outfile, out->answer, sizeof(outfile));
+    if (len >= sizeof(outfile)) {
+        G_fatal_error(_("Name <%s> is too long"), out->answer);
+    }
 
     r_out = 0;
     if (conv->answer)
@@ -395,9 +399,9 @@ static void mlist(const char *element, const char *wildarg, const char *outfile)
         if (strcmp(mapset, ".") == 0)
             mapset = G_mapset();
 
-        sprintf(type_arg, "type=%s", element);
-        sprintf(pattern_arg, "pattern=%s", wildarg);
-        sprintf(mapset_arg, "mapset=%s", mapset);
+        snprintf(type_arg, sizeof(type_arg), "type=%s", element);
+        snprintf(pattern_arg, sizeof(pattern_arg), "pattern=%s", wildarg);
+        snprintf(mapset_arg, sizeof(mapset_arg), "mapset=%s", mapset);
 
         G_spawn_ex("g.list", "g.list", type_arg, pattern_arg, mapset_arg,
                    SF_REDIRECT_FILE, SF_STDOUT, SF_MODE_APPEND, outfile, NULL);

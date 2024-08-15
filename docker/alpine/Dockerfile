@@ -202,6 +202,9 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
 COPY --from=build /usr/local/bin/grass /usr/local/bin/grass
 COPY --from=build /usr/local/grass* /usr/local/grass/
 COPY --from=build /usr/lib/gdalplugins/*_GRASS.so /usr/lib/gdalplugins/
+# Set GISBASE
+ENV GISBASE /usr/local/grass
+
 # run simple LAZ test
 COPY docker/testdata/simple.laz /tmp/
 COPY docker/testdata/test_grass_python.py docker/testdata/test_grass_session.py docker/alpine/grass_tests.sh /scripts/

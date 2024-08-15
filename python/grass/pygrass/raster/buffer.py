@@ -4,11 +4,11 @@ import numpy as np
 
 
 _CELL = ("int", "intp", "int8", "int16", "int32", "int64")
-CELL = tuple([getattr(np, attr) for attr in _CELL if hasattr(np, attr)])
+CELL = tuple(getattr(np, attr) for attr in _CELL if hasattr(np, attr))
 _FCELL = "float", "float16", "float32"
-FCELL = tuple([getattr(np, attr) for attr in _FCELL if hasattr(np, attr)])
+FCELL = tuple(getattr(np, attr) for attr in _FCELL if hasattr(np, attr))
 _DCELL = "float64", "float128"
-DCELL = tuple([getattr(np, attr) for attr in _DCELL if hasattr(np, attr)])
+DCELL = tuple(getattr(np, attr) for attr in _DCELL if hasattr(np, attr))
 
 
 class Buffer(np.ndarray):

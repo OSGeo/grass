@@ -544,7 +544,7 @@ int gsd_wire_arrows(geosurf *surf)
 
             gsd_arrow(pt, curcolor, xres * 2, n, sz, surf);
         } /* ea col */
-    }     /* ea row */
+    } /* ea row */
 
     gsd_popmatrix();
     gsd_colormode(CM_DIFFUSE);

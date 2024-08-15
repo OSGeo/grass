@@ -308,8 +308,8 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         else:
             my = 0.0
 
-        mx = mx / (1.0 - dx)
-        my = my / (1.0 - dy)
+        mx /= 1.0 - dx
+        my /= 1.0 - dy
 
         # Quadratic seems smoother
         mx *= abs(mx)
@@ -2472,7 +2472,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                     cmd += mode[3]
                 if "wire" in mode[4]:
                     cmd += mode[4]
-                if "coarse" in mode[0] or "both" in mode[0] and "wire" in mode[3]:
+                if "coarse" in mode[0] or ("both" in mode[0] and "wire" in mode[3]):
                     cmd += mode[5]
             #
             # attributes
@@ -2751,8 +2751,6 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
     def DisactivateWin(self):
         """Use when the class instance is hidden in MapFrame."""
-        pass
 
     def ActivateWin(self):
         """Used when the class instance is activated in MapFrame."""
-        pass
