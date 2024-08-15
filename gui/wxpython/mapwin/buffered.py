@@ -31,7 +31,7 @@ import wx
 from grass.pydispatch.signal import Signal
 
 from core.globalvar import wxPythonPhoenix
-import grass.script as grass
+import grass.script as gs
 
 from gui_core.dialogs import SavedRegion
 from gui_core.wrap import (
@@ -664,7 +664,7 @@ class BufferedMapWindow(MapWindowBase, Window):
     def OnSize(self, event):
         """Scale map image so that it is the same size as the Window"""
         # re-render image on idle
-        self.resize = grass.clock()
+        self.resize = gs.clock()
 
     def OnIdle(self, event):
         """Only re-render a composite map image from GRASS during
@@ -673,7 +673,7 @@ class BufferedMapWindow(MapWindowBase, Window):
 
         # use OnInternalIdle() instead ?
 
-        if self.resize and self.resize + 0.2 < grass.clock():
+        if self.resize and self.resize + 0.2 < gs.clock():
             Debug.msg(3, "BufferedWindow.OnSize():")
 
             # set size of the input image
@@ -1072,11 +1072,15 @@ class BufferedMapWindow(MapWindowBase, Window):
             reg = dispReg if utils.isInRegion(dispReg, compReg) else compReg
 
             regionCoords = []
-            regionCoords.append((reg["w"], reg["n"]))
-            regionCoords.append((reg["e"], reg["n"]))
-            regionCoords.append((reg["e"], reg["s"]))
-            regionCoords.append((reg["w"], reg["s"]))
-            regionCoords.append((reg["w"], reg["n"]))
+            regionCoords.extend(
+                (
+                    (reg["w"], reg["n"]),
+                    (reg["e"], reg["n"]),
+                    (reg["e"], reg["s"]),
+                    (reg["w"], reg["s"]),
+                    (reg["w"], reg["n"]),
+                )
+            )
 
             # draw region extent
             self.polypen = wx.Pen(
@@ -1123,7 +1127,7 @@ class BufferedMapWindow(MapWindowBase, Window):
 
     def DragItem(self, id, coords):
         """Drag an overlay decoration item"""
-        if id == 99 or id == "" or id is None:
+        if id in (99, "") or id is None:
             return
         Debug.msg(5, "BufferedWindow.DragItem(): id=%d" % id)
         x, y = self.lastpos
@@ -1526,7 +1530,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             self.mouse["end"] = event.GetPosition()
             if event.LeftIsDown() and not (
                 digitToolbar
-                and digitToolbar.GetAction() in {"moveLine"}
+                and digitToolbar.GetAction() == "moveLine"
                 and len(self.digit.GetDisplay().GetSelected()) > 0
             ):
                 self.MouseDraw(pdc=self.pdcTmp)
@@ -2129,7 +2133,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             return
 
         region = dlg.GetName()
-        if not grass.find_file(name=region, element="windows")["name"]:
+        if not gs.find_file(name=region, element="windows")["name"]:
             GError(
                 parent=self,
                 message=_("Region <%s> not found. Operation canceled.") % region,
@@ -2171,7 +2175,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             return
 
         # test to see if it already exists and ask permission to overwrite
-        if grass.find_file(name=dlg.GetName(), element="windows")["name"]:
+        if gs.find_file(name=dlg.GetName(), element="windows")["name"]:
             overwrite = wx.MessageBox(
                 parent=self,
                 message=_(

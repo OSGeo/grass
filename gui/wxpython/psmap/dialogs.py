@@ -49,7 +49,7 @@ if globalvar.wxPythonPhoenix:
 else:
     from wx import PyValidator as Validator
 
-import grass.script as grass
+import grass.script as gs
 
 from core.utils import PilImageToWxImage
 from dbmgr.vinfo import VectorDBInfo
@@ -891,7 +891,7 @@ class MapDialog(PsmapDialog):
                         self.mPanel.drawMap.SetValue(True)
                     else:
                         self.mPanel.drawMap.SetValue(False)
-            else:
+            else:  # noqa: PLR5501
                 if "vector" in self.parent.openDialogs:
                     found = False
                     for each in self.parent.openDialogs["vector"].vPanel.vectorList:
@@ -1376,7 +1376,7 @@ class MapFramePanel(Panel):
 
                 if mapFrameDict["drawMap"]:
                     if mapFrameDict["mapType"] == "raster":
-                        mapFile = grass.find_file(mapFrameDict["map"], element="cell")
+                        mapFile = gs.find_file(mapFrameDict["map"], element="cell")
                         if mapFile["file"] == "":
                             GMessage("Raster %s not found" % mapFrameDict["map"])
                             return False
@@ -1390,7 +1390,7 @@ class MapFramePanel(Panel):
                             self.instruction.AddInstruction(raster)
 
                     elif mapFrameDict["mapType"] == "vector":
-                        mapFile = grass.find_file(mapFrameDict["map"], element="vector")
+                        mapFile = gs.find_file(mapFrameDict["map"], element="vector")
                         if mapFile["file"] == "":
                             GMessage("Vector %s not found" % mapFrameDict["map"])
                             return False
@@ -1402,7 +1402,7 @@ class MapFramePanel(Panel):
                                 if each[0] == mapFrameDict["map"]:
                                     isAdded = True
                         if not isAdded:
-                            topoInfo = grass.vector_info_topo(map=mapFrameDict["map"])
+                            topoInfo = gs.vector_info_topo(map=mapFrameDict["map"])
                             if topoInfo:
                                 if bool(topoInfo["areas"]):
                                     topoType = "areas"
@@ -1449,7 +1449,7 @@ class MapFramePanel(Panel):
                 mapFrameDict["center"] = self.center[0]
                 # set region
                 if self.mapType == "raster":
-                    self.env["GRASS_REGION"] = grass.region_env(
+                    self.env["GRASS_REGION"] = gs.region_env(
                         raster=mapFrameDict["map"], env=self.env
                     )
                 if self.mapType == "vector":
@@ -1460,13 +1460,13 @@ class MapFramePanel(Panel):
                         rasterId = None
 
                     if rasterId:
-                        self.env["GRASS_REGION"] = grass.region_env(
+                        self.env["GRASS_REGION"] = gs.region_env(
                             vector=mapFrameDict["map"],
                             raster=self.instruction[rasterId]["raster"],
                             env=self.env,
                         )
                     else:
-                        self.env["GRASS_REGION"] = grass.region_env(
+                        self.env["GRASS_REGION"] = gs.region_env(
                             vector=mapFrameDict["map"], env=self.env
                         )
 
@@ -1499,7 +1499,7 @@ class MapFramePanel(Panel):
                 mapFrameDict["scale"] = self.scale[1]
                 mapFrameDict["center"] = self.center[1]
                 # set region
-                self.env["GRASS_REGION"] = grass.region_env(
+                self.env["GRASS_REGION"] = gs.region_env(
                     region=mapFrameDict["region"], env=self.env
                 )
             else:
@@ -1525,7 +1525,7 @@ class MapFramePanel(Panel):
 
             mapFrameDict["scale"] = self.scale[2]
             mapFrameDict["center"] = self.center[2]
-            region = grass.region(env=None)
+            region = gs.region(env=None)
 
             raster = self.instruction.FindInstructionByType("raster")
             if raster:
@@ -1534,7 +1534,7 @@ class MapFramePanel(Panel):
                 rasterId = None
 
             if rasterId:  # because of resolution
-                self.env["GRASS_REGION"] = grass.region_env(
+                self.env["GRASS_REGION"] = gs.region_env(
                     n=region["n"],
                     s=region["s"],
                     e=region["e"],
@@ -1543,7 +1543,7 @@ class MapFramePanel(Panel):
                     env=self.env,
                 )
             else:
-                self.env["GRASS_REGION"] = grass.region_env(
+                self.env["GRASS_REGION"] = gs.region_env(
                     n=region["n"],
                     s=region["s"],
                     e=region["e"],
@@ -1888,13 +1888,13 @@ class VectorPanel(Panel):
     def OnVector(self, event):
         """Gets info about toplogy and enables/disables choices point/line/area"""
         vmap = self.select.GetValue()
-        if not grass.find_file(
+        if not gs.find_file(
             vmap,
             element="vector",
         )["name"]:
             return
 
-        topoInfo = grass.vector_info_topo(map=vmap)
+        topoInfo = gs.vector_info_topo(map=vmap)
         if topoInfo:
             self.vectorType.EnableItem(2, bool(topoInfo["areas"]))
             self.vectorType.EnableItem(
@@ -2053,9 +2053,8 @@ class VectorPanel(Panel):
                 vLayer["label"] = item[4]
                 vLayer["lpos"] = item[3]
 
-        else:
-            if self.id in self.instruction:
-                del self.instruction[self.id]
+        elif self.id in self.instruction:
+            del self.instruction[self.id]
 
         if "map" in self.parent.parent.openDialogs:
             self.parent.parent.openDialogs["map"].updateDialog()
@@ -2086,11 +2085,9 @@ class RasterDialog(PsmapDialog):
         self.id = self.rPanel.getId()
         self._layout(self.rPanel)
 
-    def update(self):
+    def update(self) -> bool:
         ok = self.rPanel.update()
-        if ok:
-            return True
-        return False
+        return bool(ok)
 
     def OnApply(self, event):
         ok = self.update()
@@ -2106,7 +2103,6 @@ class RasterDialog(PsmapDialog):
 
     def updateDialog(self):
         """Update information (not used)"""
-        pass
 
 
 # if "map" in self.parent.openDialogs:
@@ -2152,7 +2148,6 @@ class MainVectorDialog(PsmapDialog):
 
     def updateDialog(self):
         """Update information (not used)"""
-        pass
 
 
 class VPropertiesDialog(Dialog):
@@ -2178,7 +2173,7 @@ class VPropertiesDialog(Dialog):
         try:
             self.mapDBInfo = VectorDBInfo(self.vectorName)
             self.layers = self.mapDBInfo.layers.keys()
-        except grass.ScriptError:
+        except gs.ScriptError:
             self.connection = False
             self.layers = []
         if not self.layers:
@@ -3200,8 +3195,7 @@ class VPropertiesDialog(Dialog):
         else:
             cols = []
 
-        choice = Choice(parent=parent, id=wx.ID_ANY, choices=cols)
-        return choice
+        return Choice(parent=parent, id=wx.ID_ANY, choices=cols)
 
     def update(self):
         # feature type
@@ -3540,7 +3534,7 @@ class LegendDialog(PsmapDialog):
             self.ticks.SetValue(False)
         # range
         if self.rasterId and self.instruction[self.rasterId]["raster"]:
-            rinfo = grass.raster_info(self.instruction[self.rasterId]["raster"])
+            rinfo = gs.raster_info(self.instruction[self.rasterId]["raster"])
             self.minim, self.maxim = rinfo["min"], rinfo["max"]
         else:
             self.minim, self.maxim = 0, 0
@@ -3979,7 +3973,7 @@ class LegendDialog(PsmapDialog):
         if page == 0 or event is None:
             children = self.panelRaster.GetChildren()
             if self.isRLegend.GetValue():
-                for i, widget in enumerate(children):
+                for widget in children:
                     widget.Enable()
                 self.OnRaster(None)
                 self.OnRange(None)
@@ -3991,7 +3985,7 @@ class LegendDialog(PsmapDialog):
         if page == 1 or event is None:
             children = self.panelVector.GetChildren()
             if self.isVLegend.GetValue():
-                for i, widget in enumerate(children):
+                for widget in children:
                     widget.Enable()
                 self.OnSpan(None)
                 self.OnBorder(None)
@@ -4284,7 +4278,7 @@ class LegendDialog(PsmapDialog):
                 else:
                     self.rLegendDict["range"] = False
 
-        if not self.id[0] in self.instruction:
+        if self.id[0] not in self.instruction:
             rasterLegend = RasterLegend(self.id[0], env=self.env)
             self.instruction.AddInstruction(rasterLegend)
         self.instruction[self.id[0]].SetInstruction(self.rLegendDict)
@@ -4404,7 +4398,7 @@ class LegendDialog(PsmapDialog):
                 else:
                     self.vLegendDict["border"] = "none"
 
-        if not self.id[1] in self.instruction:
+        if self.id[1] not in self.instruction:
             vectorLegend = VectorLegend(self.id[1], env=self.env)
             self.instruction.AddInstruction(vectorLegend)
         self.instruction[self.id[1]].SetInstruction(self.vLegendDict)
@@ -4412,12 +4406,10 @@ class LegendDialog(PsmapDialog):
             self.parent.objectId.append(self.id[1])
         return True
 
-    def update(self):
+    def update(self) -> bool:
         okR = self.updateRasterLegend()
         okV = self.updateVectorLegend()
-        if okR and okV:
-            return True
-        return False
+        return bool(okR and okV)
 
     def updateDialog(self):
         """Update legend coordinates after moving"""
@@ -4905,20 +4897,19 @@ class ScalebarDialog(PsmapDialog):
         unitName = self.unitConv.findName(self.scalebarDict["unitsLength"])
         if unitName:
             self.unitsLength.SetStringSelection(unitName)
-        else:
-            if self.scalebarDict["unitsLength"] == "auto":
-                self.unitsLength.SetSelection(0)
-            elif self.scalebarDict["unitsLength"] == "nautmiles":
-                self.unitsLength.SetStringSelection(
-                    self.unitConv.findName("nautical miles")
-                )
+        elif self.scalebarDict["unitsLength"] == "auto":
+            self.unitsLength.SetSelection(0)
+        elif self.scalebarDict["unitsLength"] == "nautmiles":
+            self.unitsLength.SetStringSelection(
+                self.unitConv.findName("nautical miles")
+            )
         self.unitsHeight.SetStringSelection(
             self.unitConv.findName(self.scalebarDict["unitsHeight"])
         )
         if self.scalebarDict["length"]:
             self.lengthTextCtrl.SetValue(str(self.scalebarDict["length"]))
         else:  # estimate default
-            reg = grass.region(env=self.env)
+            reg = gs.region(env=self.env)
             w = int((reg["e"] - reg["w"]) / 3)
             w = round(w, -len(str(w)) + 2)  # 12345 -> 12000
             self.lengthTextCtrl.SetValue(str(w))
@@ -6736,7 +6727,6 @@ class RectangleDialog(PsmapDialog):
 
     def updateDialog(self):
         """Update text coordinates, after moving"""
-        pass
 
 
 class LabelsDialog(PsmapDialog):

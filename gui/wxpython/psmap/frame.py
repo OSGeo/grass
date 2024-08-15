@@ -28,7 +28,7 @@ try:
 except ImportError:
     import wx.lib.flatnotebook as FN
 
-import grass.script as grass
+import grass.script as gs
 
 from core import globalvar
 from gui_core.menu import Menu
@@ -170,8 +170,8 @@ class PsMapFrame(wx.Frame):
         self.getInitMap()
 
         # image path
-        env = grass.gisenv()
-        self.imgName = grass.tempfile()
+        env = gs.gisenv()
+        self.imgName = gs.tempfile()
 
         # canvas for preview
         self.previewCanvas = PsMapBufferedWindow(
@@ -310,7 +310,7 @@ class PsMapFrame(wx.Frame):
         """Generate PDF from PS with ps2pdf if available"""
         if not sys.platform == "win32":
             try:
-                p = grass.Popen(["ps2pdf"], stderr=grass.PIPE)
+                p = gs.Popen(["ps2pdf"], stderr=gs.PIPE)
                 p.stderr.close()
 
             except OSError:
@@ -333,7 +333,7 @@ class PsMapFrame(wx.Frame):
 
     def PSFile(self, filename=None, pdf=False):
         """Create temporary instructions file and run ps.map with output = filename"""
-        instrFile = grass.tempfile()
+        instrFile = gs.tempfile()
         instrFileFd = open(instrFile, mode="wb")
         content = self.InstructionFile()
         if not content:
@@ -343,7 +343,7 @@ class PsMapFrame(wx.Frame):
         instrFileFd.close()
 
         temp = False
-        regOld = grass.region(env=self.env)
+        regOld = gs.region(env=self.env)
 
         if pdf:
             pdfname = filename
@@ -352,7 +352,7 @@ class PsMapFrame(wx.Frame):
         # preview or pdf
         if not filename or (filename and pdf):
             temp = True
-            filename = grass.tempfile()
+            filename = gs.tempfile()
             if not pdf:  # lower resolution for preview
                 if self.instruction.FindInstructionByType("map"):
                     mapId = self.instruction.FindInstructionByType("map").id
@@ -368,8 +368,7 @@ class PsMapFrame(wx.Frame):
             cmd.append("-e")
         if self.instruction[self.pageId]["Orientation"] == "Landscape":
             cmd.append("-r")
-        cmd.append("input=%s" % instrFile)
-        cmd.append("output=%s" % filename)
+        cmd.extend(("input=%s" % instrFile, "output=%s" % filename))
         if pdf:
             self.SetStatusText(_("Generating PDF..."), 0)
         elif not temp:
@@ -398,9 +397,9 @@ class PsMapFrame(wx.Frame):
                 message=_("Ps.map exited with return code %s") % event.returncode,
             )
 
-            grass.try_remove(event.userData["instrFile"])
+            gs.try_remove(event.userData["instrFile"])
             if event.userData["temp"]:
-                grass.try_remove(event.userData["filename"])
+                gs.try_remove(event.userData["filename"])
             return
 
         if event.userData["pdfname"]:
@@ -452,7 +451,7 @@ class PsMapFrame(wx.Frame):
                     " Please install it to create PDF.\n\n "
                 ).format(pdf_rendering_prog)
             try:
-                proc = grass.Popen(command)
+                proc = gs.Popen(command)
                 ret = proc.wait()
                 if ret > 0:
                     GMessage(
@@ -483,7 +482,7 @@ class PsMapFrame(wx.Frame):
 
         # show preview only when user doesn't want to create ps or pdf
         if havePILImage and event.userData["temp"] and not event.userData["pdfname"]:
-            self.env["GRASS_REGION"] = grass.region_env(
+            self.env["GRASS_REGION"] = gs.region_env(
                 cols=event.userData["regionOld"]["cols"],
                 rows=event.userData["regionOld"]["rows"],
                 env=self.env,
@@ -530,9 +529,9 @@ class PsMapFrame(wx.Frame):
             del busy
             self.SetStatusText(_("Preview generated"), 0)
 
-        grass.try_remove(event.userData["instrFile"])
+        gs.try_remove(event.userData["instrFile"])
         if event.userData["temp"]:
-            grass.try_remove(event.userData["filename"])
+            gs.try_remove(event.userData["filename"])
 
         self.delayedCall = wx.CallLater(
             4000,
@@ -570,8 +569,8 @@ class PsMapFrame(wx.Frame):
             filename = dlg.GetPath()
             suffix = suffix[dlg.GetFilterIndex()]
             if not os.path.splitext(filename)[1]:
-                filename = filename + suffix
-            elif os.path.splitext(filename)[1] != suffix and suffix != "":
+                filename += suffix
+            elif suffix not in {os.path.splitext(filename)[1], ""}:
                 filename = os.path.splitext(filename)[0] + suffix
 
         dlg.Destroy()
@@ -724,7 +723,7 @@ class PsMapFrame(wx.Frame):
                     )
                     self.openDialogs["mapNotebook"] = dlg
                 self.openDialogs["mapNotebook"].Show()
-            else:
+            else:  # noqa: PLR5501
                 if "mapNotebook" in self.openDialogs:
                     self.openDialogs["mapNotebook"].notebook.ChangeSelection(0)
                 else:
@@ -1066,7 +1065,7 @@ class PsMapFrame(wx.Frame):
     def getInitMap(self):
         """Create default map frame when no map is selected, needed for coordinates in
         map units"""
-        instrFile = grass.tempfile()
+        instrFile = gs.tempfile()
         instrFileFd = open(instrFile, mode="wb")
         content = self.InstructionFile()
         if not content:
@@ -1079,9 +1078,9 @@ class PsMapFrame(wx.Frame):
         mapInitRect = GetMapBounds(
             instrFile, portrait=(page["Orientation"] == "Portrait"), env=self.env
         )
-        grass.try_remove(instrFile)
+        gs.try_remove(instrFile)
 
-        region = grass.region(env=self.env)
+        region = gs.region(env=self.env)
         units = UnitConversion(self)
         realWidth = units.convert(
             value=abs(region["w"] - region["e"]), fromUnit="meter", toUnit="inch"
@@ -1246,11 +1245,11 @@ class PsMapFrame(wx.Frame):
             if itype in {"map", "vector", "raster", "labels"}:
                 if itype == "raster":  # set resolution
                     try:
-                        info = grass.raster_info(self.instruction[id]["raster"])
-                        self.env["GRASS_REGION"] = grass.region_env(
+                        info = gs.raster_info(self.instruction[id]["raster"])
+                        self.env["GRASS_REGION"] = gs.region_env(
                             nsres=info["nsres"], ewres=info["ewres"], env=self.env
                         )
-                    except grass.CalledModuleError:  # fails after switching location
+                    except gs.CalledModuleError:  # fails after switching location
                         pass
                     # change current raster in raster legend
 
@@ -1353,7 +1352,7 @@ class PsMapFrame(wx.Frame):
             os.remove(self.imgName)
         except OSError:
             pass
-        grass.set_raise_on_error(False)
+        gs.set_raise_on_error(False)
         if hasattr(self, "delayedCall") and self.delayedCall.IsRunning():
             self.delayedCall.Stop()
         self.Destroy()
@@ -1510,8 +1509,8 @@ class PsMapBufferedWindow(wx.Window):
 
         if self.currScale is None:
             self.currScale = min(cW / pW, cH / pH)
-        pW = pW * self.currScale
-        pH = pH * self.currScale
+        pW *= self.currScale
+        pH *= self.currScale
 
         x = cW / 2 - pW / 2
         y = cH / 2 - pH / 2
@@ -1691,11 +1690,10 @@ class PsMapBufferedWindow(wx.Window):
                 self.SetCursor(self.cursors["sizenwse"])
                 self.parent.SetStatusText(_("Click and drag to resize object"), 0)
                 self.showResizeHelp = True
-            else:
-                if self.showResizeHelp:
-                    self.parent.SetStatusText("", 0)
-                    self.SetCursor(self.cursors["default"])
-                    self.showResizeHelp = False
+            elif self.showResizeHelp:
+                self.parent.SetStatusText("", 0)
+                self.SetCursor(self.cursors["default"])
+                self.showResizeHelp = False
 
     def OnLeftDown(self, event):
         """Left mouse button pressed.
@@ -2232,9 +2230,7 @@ class PsMapBufferedWindow(wx.Window):
                 zoomFactor = 1
             # when zooming to full extent, in some cases, there was zoom
             # 1.01..., which causes problem
-            if abs(zoomFactor - 1) > 0.01:
-                zoomFactor = zoomFactor
-            else:
+            if abs(zoomFactor - 1) <= 0.01:
                 zoomFactor = 1.0
 
             if self.mouse["use"] == "zoomout":
@@ -2261,10 +2257,10 @@ class PsMapBufferedWindow(wx.Window):
         """Zoom to specified region, scroll view, redraw"""
         if not self.currScale:
             return
-        self.currScale = self.currScale * zoomFactor
+        self.currScale *= zoomFactor
 
         if self.currScale > 10 or self.currScale < 0.1:
-            self.currScale = self.currScale / zoomFactor
+            self.currScale /= zoomFactor
             return
         if not self.preview:
             # redraw paper
@@ -2610,13 +2606,11 @@ class PsMapBufferedWindow(wx.Window):
         iW, iH = img.GetWidth(), img.GetHeight()
 
         self.currScale = min(float(cW) / iW, float(cH) / iH)
-        iW = iW * self.currScale
-        iH = iH * self.currScale
+        iW *= self.currScale
+        iH *= self.currScale
         x = cW / 2 - iW / 2
         y = cH / 2 - iH / 2
-        imageRect = Rect(int(x), int(y), int(iW), int(iH))
-
-        return imageRect
+        return Rect(int(x), int(y), int(iW), int(iH))
 
     def RedrawSelectBox(self, id):
         """Redraws select box when selected object changes its size"""
@@ -2720,11 +2714,8 @@ class PsMapBufferedWindow(wx.Window):
     def OnSize(self, event):
         """Init image size to match window size"""
         # not zoom all when notebook page is changed
-        if (
-            self.preview
-            and self.parent.currentPage == 1
-            or not self.preview
-            and self.parent.currentPage == 0
+        if (self.preview and self.parent.currentPage == 1) or (
+            not self.preview and self.parent.currentPage == 0
         ):
             self.ZoomAll()
         self.OnIdle(None)

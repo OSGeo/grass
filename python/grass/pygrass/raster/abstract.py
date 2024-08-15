@@ -431,8 +431,8 @@ class RasterAbstractBase:
         if self.name:
             if self.mapset == "":
                 mapset = utils.get_mapset_raster(self.name, self.mapset)
-                self.mapset = mapset if mapset else ""
-                return True if mapset else False
+                self.mapset = mapset or ""
+                return bool(mapset)
             return bool(utils.get_mapset_raster(self.name, self.mapset))
         else:
             return False
@@ -445,7 +445,7 @@ class RasterAbstractBase:
         False
 
         """
-        return True if self._fd is not None and self._fd >= 0 else False
+        return bool(self._fd is not None and self._fd >= 0)
 
     @must_be_open
     def close(self):

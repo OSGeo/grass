@@ -107,16 +107,14 @@ class SbManager:
         """
         return self.statusbarItems[name].GetValue()
 
-    def HasProperty(self, name):
+    def HasProperty(self, name) -> bool:
         """Checks whether property is represented by one of contained SbItems
 
         :param name: name of SbItem (from name attribute)
 
         :return: True if particular SbItem is contained, False otherwise
         """
-        if name in self.statusbarItems:
-            return True
-        return False
+        return name in self.statusbarItems
 
     def AddStatusbarItem(self, item):
         """Adds item to statusbar"""
@@ -637,20 +635,19 @@ class SbGoTo(SbItem):
                         return "%.*f; %.*f" % (precision, coord[0], precision, coord[1])
                 else:
                     raise SbException(_("Error in projection (check the settings)"))
+        elif self.mapFrame.GetMap().projinfo["proj"] == "ll" and format == "DMS":
+            return "%s" % utils.Deg2DMS(
+                region["center_easting"],
+                region["center_northing"],
+                precision=precision,
+            )
         else:
-            if self.mapFrame.GetMap().projinfo["proj"] == "ll" and format == "DMS":
-                return "%s" % utils.Deg2DMS(
-                    region["center_easting"],
-                    region["center_northing"],
-                    precision=precision,
-                )
-            else:
-                return "%.*f; %.*f" % (
-                    precision,
-                    region["center_easting"],
-                    precision,
-                    region["center_northing"],
-                )
+            return "%.*f; %.*f" % (
+                precision,
+                region["center_easting"],
+                precision,
+                region["center_northing"],
+            )
 
     def SetCenter(self):
         """Set current map center as item value"""
@@ -813,11 +810,10 @@ class SbCoordinates(SbTextItem):
                         return "%.*f; %.*f" % (precision, e, precision, n)
                 else:
                     raise SbException(_("Error in projection (check the settings)"))
+        elif self.mapFrame.GetMap().projinfo["proj"] == "ll" and format == "DMS":
+            return utils.Deg2DMS(e, n, precision=precision)
         else:
-            if self.mapFrame.GetMap().projinfo["proj"] == "ll" and format == "DMS":
-                return utils.Deg2DMS(e, n, precision=precision)
-            else:
-                return "%.*f; %.*f" % (precision, e, precision, n)
+            return "%.*f; %.*f" % (precision, e, precision, n)
 
 
 class SbRegionExtent(SbTextItem):
@@ -930,25 +926,24 @@ class SbRegionExtent(SbTextItem):
                 else:
                     raise SbException(_("Error in projection (check the settings)"))
 
+        elif self.mapFrame.GetMap().projinfo["proj"] == "ll" and format == "DMS":
+            w, s = utils.Deg2DMS(
+                region["w"], region["s"], string=False, precision=precision
+            )
+            e, n = utils.Deg2DMS(
+                region["e"], region["n"], string=False, precision=precision
+            )
+            ewres, nsres = utils.Deg2DMS(
+                region["ewres"], region["nsres"], string=False, precision=precision
+            )
+            return self._formatRegion(w=w, s=s, e=e, n=n, ewres=ewres, nsres=nsres)
         else:
-            if self.mapFrame.GetMap().projinfo["proj"] == "ll" and format == "DMS":
-                w, s = utils.Deg2DMS(
-                    region["w"], region["s"], string=False, precision=precision
-                )
-                e, n = utils.Deg2DMS(
-                    region["e"], region["n"], string=False, precision=precision
-                )
-                ewres, nsres = utils.Deg2DMS(
-                    region["ewres"], region["nsres"], string=False, precision=precision
-                )
-                return self._formatRegion(w=w, s=s, e=e, n=n, ewres=ewres, nsres=nsres)
-            else:
-                w, s = region["w"], region["s"]
-                e, n = region["e"], region["n"]
-                ewres, nsres = region["ewres"], region["nsres"]
-                return self._formatRegion(
-                    w=w, s=s, e=e, n=n, ewres=ewres, nsres=nsres, precision=precision
-                )
+            w, s = region["w"], region["s"]
+            e, n = region["e"], region["n"]
+            ewres, nsres = region["ewres"], region["nsres"]
+            return self._formatRegion(
+                w=w, s=s, e=e, n=n, ewres=ewres, nsres=nsres, precision=precision
+            )
 
 
 class SbCompRegionExtent(SbRegionExtent):

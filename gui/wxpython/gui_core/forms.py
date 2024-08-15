@@ -46,6 +46,8 @@ COPYING coming with GRASS for details.
 @author Stepan Turek <stepan.turek seznam.cz> (CoordinatesSelect)
 """
 
+from __future__ import annotations
+
 import sys
 import textwrap
 import os
@@ -322,16 +324,12 @@ class UpdateThread(Thread):
                             native = False
                             break
                 # TODO: update only if needed
-                if native:
-                    if map:
-                        self.data[win.InsertLayers] = {"vector": map}
-                    else:
-                        self.data[win.InsertLayers] = {}
+                if map:
+                    self.data[win.InsertLayers] = (
+                        {"vector": map} if native else {"dsn": map.rstrip("@OGR")}
+                    )
                 else:
-                    if map:
-                        self.data[win.InsertLayers] = {"dsn": map.rstrip("@OGR")}
-                    else:
-                        self.data[win.InsertLayers] = {}
+                    self.data[win.InsertLayers] = {}
 
             elif name == "TableSelect":
                 self.data[win.InsertTables] = {"driver": driver, "database": db}
@@ -351,17 +349,17 @@ class UpdateThread(Thread):
                         "layer": layer,
                         "dbInfo": cparams[map]["dbInfo"],
                     }
-                else:  # table
-                    if driver and db:
-                        self.data[win.GetParent().InsertTableColumns] = {
-                            "table": pTable.get("value"),
-                            "driver": driver,
-                            "database": db,
-                        }
-                    elif pTable:
-                        self.data[win.GetParent().InsertTableColumns] = {
-                            "table": pTable.get("value")
-                        }
+                # table
+                elif driver and db:
+                    self.data[win.GetParent().InsertTableColumns] = {
+                        "table": pTable.get("value"),
+                        "driver": driver,
+                        "database": db,
+                    }
+                elif pTable:
+                    self.data[win.GetParent().InsertTableColumns] = {
+                        "table": pTable.get("value")
+                    }
 
             elif name == "SubGroupSelect":
                 self.data[win.Insert] = {"group": p.get("value", "")}
@@ -568,7 +566,9 @@ class TaskFrame(wx.Frame):
             self._gconsole.mapCreated.connect(self.OnMapCreated)
         self.goutput = self.notebookpanel.goutput
         if self.goutput:
-            self.goutput.showNotification.connect(self.SetStatusText)
+            self.goutput.showNotification.connect(
+                lambda message: self.SetStatusText(message)
+            )
 
         self.notebookpanel.OnUpdateValues = self.updateValuesHook
         guisizer.Add(self.notebookpanel, proportion=1, flag=wx.EXPAND)
@@ -808,11 +808,12 @@ class TaskFrame(wx.Frame):
             # was closed also when aborted but better is leave it open
             wx.CallLater(2000, self.Close)
 
-    def OnMapCreated(self, name, ltype):
+    def OnMapCreated(self, name, ltype, add: bool | None = None):
         """Map created or changed
 
         :param name: map name
         :param ltype: layer type (prompt value)
+        :param add: whether to display layer or not
         """
         if hasattr(self, "addbox") and self.addbox.IsChecked():
             add = True
@@ -995,7 +996,7 @@ class CmdPanel(wx.Panel):
         not_hidden = [
             p
             for p in self.task.params + self.task.flags
-            if not p.get("hidden", False) is True
+            if p.get("hidden", False) is not True
         ]
 
         self.label_id = []  # wrap titles on resize
@@ -1057,7 +1058,7 @@ class CmdPanel(wx.Panel):
         # flags
         #
         visible_flags = [
-            f for f in self.task.flags if not f.get("hidden", False) is True
+            f for f in self.task.flags if f.get("hidden", False) is not True
         ]
         for f in visible_flags:
             # we don't want another help (checkbox appeared in r58783)
@@ -1124,7 +1125,7 @@ class CmdPanel(wx.Panel):
         # parameters
         #
         visible_params = [
-            p for p in self.task.params if not p.get("hidden", False) is True
+            p for p in self.task.params if p.get("hidden", False) is not True
         ]
 
         try:
@@ -2490,7 +2491,7 @@ class CmdPanel(wx.Panel):
             tab[section].SetupScrolling(True, True, 10, 10)
             tab[section].Layout()
             minsecsizes = tabsizer[section].GetSize()
-            maxsizes = list(map(lambda x: max(maxsizes[x], minsecsizes[x]), (0, 1)))
+            maxsizes = [max(maxsizes[x], minsecsizes[x]) for x in (0, 1)]
 
         # TODO: be less arbitrary with these 600
         self.panelMinHeight = 100
@@ -2762,14 +2763,12 @@ class CmdPanel(wx.Panel):
         verbose = self.FindWindowById(self.task.get_flag("verbose")["wxId"][0])
         quiet = self.FindWindowById(self.task.get_flag("quiet")["wxId"][0])
         if event.IsChecked():
-            if event.GetId() == verbose.GetId():
-                if quiet.IsChecked():
-                    quiet.SetValue(False)
-                    self.task.get_flag("quiet")["value"] = False
-            else:
-                if verbose.IsChecked():
-                    verbose.SetValue(False)
-                    self.task.get_flag("verbose")["value"] = False
+            if event.GetId() == verbose.GetId() and quiet.IsChecked():
+                quiet.SetValue(False)
+                self.task.get_flag("quiet")["value"] = False
+            elif verbose.IsChecked():
+                verbose.SetValue(False)
+                self.task.get_flag("verbose")["value"] = False
 
         event.Skip()
 
@@ -2856,7 +2855,6 @@ class CmdPanel(wx.Panel):
         needed. It's a hook, actually.  Beware of what is 'self' in
         the method def, though. It will be called with no arguments.
         """
-        pass
 
     def OnCheckBoxMulti(self, event):
         """Fill the values as a ','-separated string according to
@@ -2925,15 +2923,14 @@ class CmdPanel(wx.Panel):
             pLayer = self.task.get_param("layer", element="name", raiseError=False)
             if pLayer:
                 pLayer["value"] = ""
+        elif isinstance(me, SpinCtrl):
+            porf["value"] = str(me.GetValue())
+        elif isinstance(me, wx.ComboBox):
+            porf["value"] = me.GetValue()
+        elif isinstance(me, wx.Choice):
+            porf["value"] = me.GetStringSelection()
         else:
-            if isinstance(me, SpinCtrl):
-                porf["value"] = str(me.GetValue())
-            elif isinstance(me, wx.ComboBox):
-                porf["value"] = me.GetValue()
-            elif isinstance(me, wx.Choice):
-                porf["value"] = me.GetStringSelection()
-            else:
-                porf["value"] = me.GetValue()
+            porf["value"] = me.GetValue()
 
         self.OnUpdateValues(event)
 
@@ -3062,8 +3059,7 @@ class CmdPanel(wx.Panel):
             image = wx.Image(iconSectionDict[section]).Scale(
                 16, 16, wx.IMAGE_QUALITY_HIGH
             )
-            idx = imageList.Add(BitmapFromImage(image))
-            return idx
+            return imageList.Add(BitmapFromImage(image))
 
         return -1
 

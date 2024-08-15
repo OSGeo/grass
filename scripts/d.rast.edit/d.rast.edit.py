@@ -77,7 +77,7 @@
 import sys
 import math
 import atexit
-import grass.script as grass
+import grass.script as gs
 
 from grass.script.setup import set_gui_path
 
@@ -91,7 +91,7 @@ except ImportError:
         if len(sys.argv) == 2:
             arg = sys.argv[1]
             if arg[0:2] == "--" or arg in {"help", "-help"}:
-                grass.parser()
+                gs.parser()
     # Either we didn't call g.parser, or it returned
     # At this point, there's nothing to be done except re-raise the exception
     raise
@@ -114,7 +114,7 @@ gray12_bits = (
 
 
 def run(cmd, **kwargs):
-    grass.run_command(cmd, quiet=True, **kwargs)
+    gs.run_command(cmd, quiet=True, **kwargs)
 
 
 def wxGUI():
@@ -137,7 +137,7 @@ def wxGUI():
             run("r.out.ppm", input=app.inmap, output=app.tempfile)
 
             self.image = wx.Bitmap(wx.Image(app.tempfile))
-            grass.try_remove(app.tempfile)
+            gs.try_remove(app.tempfile)
 
             app.force_window()
 
@@ -475,19 +475,19 @@ def wxGUI():
             wx.App.__init__(self)
 
         def initialize(self):
-            grass.use_temp_region()
+            gs.use_temp_region()
 
             run("g.region", raster=self.inmap)
 
-            reg = grass.region()
+            reg = gs.region()
             for k, f in wind_keys.values():
                 self.total[k] = (f)(reg[k])
 
             self.cols = min(self.cols, self.total["cols"])
             self.rows = min(self.rows, self.total["rows"])
 
-            tempbase = grass.tempfile()
-            grass.try_remove(tempbase)
+            tempbase = gs.tempfile()
+            gs.try_remove(tempbase)
 
             self.tempfile = tempbase + ".ppm"
             self.tempmap = "tmp.d.rast.edit"
@@ -498,7 +498,7 @@ def wxGUI():
             run("r.colors", map=self.outmap, rast=self.inmap)
 
         def cleanup(self):
-            grass.try_remove(self.tempfile)
+            gs.try_remove(self.tempfile)
             run("g.remove", flags="f", type="raster", name=self.tempmap)
 
         def finalize(self):
@@ -506,28 +506,28 @@ def wxGUI():
             sys.exit(0)
 
         def save_map(self):
-            p = grass.feed_command(
+            p = gs.feed_command(
                 "r.in.ascii", input="-", output=self.tempmap, quiet=True, overwrite=True
             )
             outf = p.stdin
-            outf.write(grass.encode("north: %f\n" % self.wind["n"]))
-            outf.write(grass.encode("south: %f\n" % self.wind["s"]))
-            outf.write(grass.encode("east: %f\n" % self.wind["e"]))
-            outf.write(grass.encode("west: %f\n" % self.wind["w"]))
-            outf.write(grass.encode("rows: %d\n" % self.wind["rows"]))
-            outf.write(grass.encode("cols: %d\n" % self.wind["cols"]))
-            outf.write(grass.encode("null: *\n"))
+            outf.write(gs.encode("north: %f\n" % self.wind["n"]))
+            outf.write(gs.encode("south: %f\n" % self.wind["s"]))
+            outf.write(gs.encode("east: %f\n" % self.wind["e"]))
+            outf.write(gs.encode("west: %f\n" % self.wind["w"]))
+            outf.write(gs.encode("rows: %d\n" % self.wind["rows"]))
+            outf.write(gs.encode("cols: %d\n" % self.wind["cols"]))
+            outf.write(gs.encode("null: *\n"))
 
             for row in range(self.wind["rows"]):
                 for col in range(self.wind["cols"]):
                     if col > 0:
-                        outf.write(grass.encode(" "))
+                        outf.write(gs.encode(" "))
                     val = self.values[row][col]
                     if val and self.changed[row][col]:
-                        outf.write(grass.encode("%s" % val))
+                        outf.write(gs.encode("%s" % val))
                     else:
-                        outf.write(grass.encode("*"))
-                outf.write(grass.encode("\n"))
+                        outf.write(gs.encode("*"))
+                outf.write(gs.encode("\n"))
 
             outf.close()
             p.wait()
@@ -545,7 +545,7 @@ def wxGUI():
         def read_header(self, infile):
             wind = {}
             for i in range(6):
-                line = grass.decode(infile.readline()).rstrip("\r\n")
+                line = gs.decode(infile.readline()).rstrip("\r\n")
                 f = line.split(":")
                 key = f[0]
                 val = f[1].strip()
@@ -556,14 +556,14 @@ def wxGUI():
         def read_data(self, infile):
             values = []
             for row in range(self.wind["rows"]):
-                line = grass.decode(infile.readline()).rstrip("\r\n")
+                line = gs.decode(infile.readline()).rstrip("\r\n")
                 values.append(line.split())
             return values
 
         def load_map(self):
             run("g.region", **self.wind)
 
-            p = grass.pipe_command("r.out.ascii", input=self.inmap, quiet=True)
+            p = gs.pipe_command("r.out.ascii", input=self.inmap, quiet=True)
             self.wind = self.read_header(p.stdout)
             self.values = self.read_data(p.stdout)
             self.changed = [[False for c in row] for row in self.values]
@@ -573,7 +573,7 @@ def wxGUI():
 
             run("r.out.ppm", input=self.inmap, output=self.tempfile)
             colorimg = wx.Image(self.tempfile)
-            grass.try_remove(self.tempfile)
+            gs.try_remove(self.tempfile)
 
             for row in range(self.wind["rows"]):
                 for col in range(self.wind["cols"]):
@@ -592,7 +592,7 @@ def wxGUI():
             if not self.aspect:
                 return
 
-            p = grass.pipe_command("r.out.ascii", input=self.aspect, quiet=True)
+            p = gs.pipe_command("r.out.ascii", input=self.aspect, quiet=True)
             self.read_header(p.stdout)
             self.angles = self.read_data(p.stdout)
             p.wait()
@@ -653,7 +653,7 @@ def wxGUI():
             run("g.remove", flags="f", type="raster", name=self.tempmap)
 
             tempimg = wx.Image(self.tempfile)
-            grass.try_remove(self.tempfile)
+            gs.try_remove(self.tempfile)
 
             rgb = tempimg.get(0, 0)
             color = "#%02x%02x%02x" % rgb
@@ -721,7 +721,7 @@ def wxGUI():
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
 
     from gui_core.wrap import ClientDC, Menu, Panel
 
