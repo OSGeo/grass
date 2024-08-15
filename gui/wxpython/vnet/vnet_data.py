@@ -562,8 +562,7 @@ class VNETPointsData:
         cols_data = deepcopy(self.cols)
 
         hidden_cols = []
-        hidden_cols.append(self.cols["name"].index("e"))
-        hidden_cols.append(self.cols["name"].index("n"))
+        hidden_cols.extend((self.cols["name"].index("e"), self.cols["name"].index("n")))
 
         analysis, valid = self.an_params.GetParam("analysis")
         if only_relevant and len(self.an_data[analysis]["cmdParams"]["cats"]) <= 1:
@@ -667,8 +666,7 @@ class VNETAnalysisParameters:
                 vectMaps = grass.list_grouped("vector")[mapSet]
 
         if not params["input"] or mapName not in vectMaps:
-            invParams = list(params.keys())[:]
-            return invParams
+            return list(params.keys())[:]
 
         # check arc/node layer
         layers = utils.GetVectorNumberOfLayers(params["input"])
@@ -1073,7 +1071,7 @@ class VectMap:
         )
         try:
             head = open(headPath, "r")
-            for line in head.readlines():
+            for line in head:
                 i = line.find(
                     "MAP DATE:",
                 )
@@ -1202,11 +1200,10 @@ class History:
                 else:
                     newHist.write("%s%s%s" % ("\n", line, "\n"))
                     self.histStepsNum = newHistStepsNum
+            elif newHistStepsNum >= self.maxHistSteps:
+                self._parseLine(line, removedHistStep)
             else:
-                if newHistStepsNum >= self.maxHistSteps:
-                    self._parseLine(line, removedHistStep)
-                else:
-                    newHist.write("%s" % line)
+                newHist.write("%s" % line)
 
         return removedHistData
 
@@ -1253,8 +1250,7 @@ class History:
                     value[0] == "[" and value[-1] == "]"
                 ):  # TODO, possible wrong interpretation
                     value = value[1:-1].split(",")
-                    value = map(self._castValue, value)
-                    return value
+                    return map(self._castValue, value)
 
             if value == "True":
                 value = True
@@ -1275,9 +1271,9 @@ class History:
                         value = float(value)
                     except ValueError:
                         pass
-        else:  # -> write data
-            if isinstance(value, type(())):  # -> color
-                value = str(value[0]) + ":" + str(value[1]) + ":" + str(value[2])
+        # -> write data
+        elif isinstance(value, type(())):  # -> color
+            value = str(value[0]) + ":" + str(value[1]) + ":" + str(value[2])
 
         return value
 
@@ -1300,7 +1296,7 @@ class History:
 
         newHistStep = False
         isSearchedHistStep = False
-        for line in hist.readlines():
+        for line in hist:
             if not line.strip() and isSearchedHistStep:
                 break
             elif not line.strip():
@@ -1468,13 +1464,11 @@ class VNETGlobalTurnsData:
         remove_to_angle = self.turn_data[row][2]
         self.turn_data[prev_row][2] = remove_to_angle
 
-    def IsInInterval(self, from_angle, to_angle, angle):
+    def IsInInterval(self, from_angle, to_angle, angle) -> bool:
         """Test if a direction includes or not includes a value"""
         if to_angle < from_angle:
             to_angle = math.pi * 2 + to_angle
         if angle < from_angle:
             angle = math.pi * 2 + angle
 
-        if angle > from_angle and angle < to_angle:
-            return True
-        return False
+        return bool(angle > from_angle and angle < to_angle)

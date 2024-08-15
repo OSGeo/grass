@@ -145,17 +145,16 @@ class HistogramPlotFrame(BasePlotFrame):
         #
         if self.maptype == "group":
             self.ptitle = _("Histogram of image group <%s>") % self.group
+        elif len(self.rasterList) == 1:
+            self.ptitle = _("Histogram of raster map <%s>") % self.rasterList[0]
         else:
-            if len(self.rasterList) == 1:
-                self.ptitle = _("Histogram of raster map <%s>") % self.rasterList[0]
-            else:
-                self.ptitle = _("Histogram of selected raster maps")
+            self.ptitle = _("Histogram of selected raster maps")
 
         #
         # set xlabel based on first raster map in list to be histogrammed
         #
         units = self.raster[self.rasterList[0]]["units"]
-        if units != "" and units != "(none)" and units is not None:
+        if units not in ("", "(none)") and units is not None:
             self.xlabel = _("Raster cell values %s") % units
         else:
             self.xlabel = _("Raster cell values")

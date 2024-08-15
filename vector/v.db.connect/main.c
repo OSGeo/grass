@@ -203,7 +203,7 @@ int main(int argc, char **argv)
                         }
                     }
                 }
-            }      /* end print */
+            } /* end print */
             else { /* columns */
                 char *database_novar;
 
@@ -241,8 +241,8 @@ int main(int argc, char **argv)
                 db_close_database(driver);
                 db_shutdown_driver(driver);
             }
-        }  /* end else num_dblinks */
-    }      /* end print/columns */
+        } /* end else num_dblinks */
+    } /* end print/columns */
     else { /* define new dbln settings or delete */
 
         if (delete->answer) {

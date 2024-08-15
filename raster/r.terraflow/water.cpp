@@ -208,7 +208,7 @@ private:
     AMI_STREAM<waterWindowType> *waterWindows;
 
 public:
-    waterWindower(AMI_STREAM<waterWindowType> *str) : waterWindows(str){};
+    waterWindower(AMI_STREAM<waterWindowType> *str) : waterWindows(str) {};
     void processWindow(dimension_type i, dimension_type j, waterGridType &point,
                        waterWindowBaseType *a, waterWindowBaseType *b,
                        waterWindowBaseType *c);
@@ -405,7 +405,7 @@ private:
 public:
     boundaryDetector(AMI_STREAM<boundaryType> *str, const dimension_type gnrows,
                      const dimension_type gncols)
-        : nrows(gnrows), ncols(gncols), boundaryStr(str){};
+        : nrows(gnrows), ncols(gncols), boundaryStr(str) {};
 
     void processWindow(dimension_type i, dimension_type j, labelElevType &point,
                        labelElevType *a, labelElevType *b, labelElevType *c);

@@ -347,6 +347,6 @@ void pushFlow(const sweepItem &swit, const flowValue &flow,
                 } /* if (!is_nodata(elev_neighb)) */
             }
         } /* for dj */
-    }     /* for di */
+    } /* for di */
     return;
 }

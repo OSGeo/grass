@@ -891,7 +891,7 @@ class MapDialog(PsmapDialog):
                         self.mPanel.drawMap.SetValue(True)
                     else:
                         self.mPanel.drawMap.SetValue(False)
-            else:
+            else:  # noqa: PLR5501
                 if "vector" in self.parent.openDialogs:
                     found = False
                     for each in self.parent.openDialogs["vector"].vPanel.vectorList:
@@ -2053,9 +2053,8 @@ class VectorPanel(Panel):
                 vLayer["label"] = item[4]
                 vLayer["lpos"] = item[3]
 
-        else:
-            if self.id in self.instruction:
-                del self.instruction[self.id]
+        elif self.id in self.instruction:
+            del self.instruction[self.id]
 
         if "map" in self.parent.parent.openDialogs:
             self.parent.parent.openDialogs["map"].updateDialog()
@@ -2086,11 +2085,9 @@ class RasterDialog(PsmapDialog):
         self.id = self.rPanel.getId()
         self._layout(self.rPanel)
 
-    def update(self):
+    def update(self) -> bool:
         ok = self.rPanel.update()
-        if ok:
-            return True
-        return False
+        return bool(ok)
 
     def OnApply(self, event):
         ok = self.update()
@@ -2106,7 +2103,6 @@ class RasterDialog(PsmapDialog):
 
     def updateDialog(self):
         """Update information (not used)"""
-        pass
 
 
 # if "map" in self.parent.openDialogs:
@@ -2152,7 +2148,6 @@ class MainVectorDialog(PsmapDialog):
 
     def updateDialog(self):
         """Update information (not used)"""
-        pass
 
 
 class VPropertiesDialog(Dialog):
@@ -3200,8 +3195,7 @@ class VPropertiesDialog(Dialog):
         else:
             cols = []
 
-        choice = Choice(parent=parent, id=wx.ID_ANY, choices=cols)
-        return choice
+        return Choice(parent=parent, id=wx.ID_ANY, choices=cols)
 
     def update(self):
         # feature type
@@ -3979,7 +3973,7 @@ class LegendDialog(PsmapDialog):
         if page == 0 or event is None:
             children = self.panelRaster.GetChildren()
             if self.isRLegend.GetValue():
-                for i, widget in enumerate(children):
+                for widget in children:
                     widget.Enable()
                 self.OnRaster(None)
                 self.OnRange(None)
@@ -3991,7 +3985,7 @@ class LegendDialog(PsmapDialog):
         if page == 1 or event is None:
             children = self.panelVector.GetChildren()
             if self.isVLegend.GetValue():
-                for i, widget in enumerate(children):
+                for widget in children:
                     widget.Enable()
                 self.OnSpan(None)
                 self.OnBorder(None)
@@ -4412,12 +4406,10 @@ class LegendDialog(PsmapDialog):
             self.parent.objectId.append(self.id[1])
         return True
 
-    def update(self):
+    def update(self) -> bool:
         okR = self.updateRasterLegend()
         okV = self.updateVectorLegend()
-        if okR and okV:
-            return True
-        return False
+        return bool(okR and okV)
 
     def updateDialog(self):
         """Update legend coordinates after moving"""
@@ -4905,13 +4897,12 @@ class ScalebarDialog(PsmapDialog):
         unitName = self.unitConv.findName(self.scalebarDict["unitsLength"])
         if unitName:
             self.unitsLength.SetStringSelection(unitName)
-        else:
-            if self.scalebarDict["unitsLength"] == "auto":
-                self.unitsLength.SetSelection(0)
-            elif self.scalebarDict["unitsLength"] == "nautmiles":
-                self.unitsLength.SetStringSelection(
-                    self.unitConv.findName("nautical miles")
-                )
+        elif self.scalebarDict["unitsLength"] == "auto":
+            self.unitsLength.SetSelection(0)
+        elif self.scalebarDict["unitsLength"] == "nautmiles":
+            self.unitsLength.SetStringSelection(
+                self.unitConv.findName("nautical miles")
+            )
         self.unitsHeight.SetStringSelection(
             self.unitConv.findName(self.scalebarDict["unitsHeight"])
         )
@@ -6736,7 +6727,6 @@ class RectangleDialog(PsmapDialog):
 
     def updateDialog(self):
         """Update text coordinates, after moving"""
-        pass
 
 
 class LabelsDialog(PsmapDialog):

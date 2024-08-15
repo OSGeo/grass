@@ -85,8 +85,8 @@ class SwipeMapPanel(DoubleMapPanel):
         self.secondMapWindow.mapQueried.connect(self.Query)
 
         # bind tracking cursosr to mirror it
-        self.firstMapWindow.Bind(wx.EVT_MOTION, self.TrackCursor)
-        self.secondMapWindow.Bind(wx.EVT_MOTION, self.TrackCursor)
+        self.firstMapWindow.Bind(wx.EVT_MOTION, lambda evt: self.TrackCursor(evt))
+        self.secondMapWindow.Bind(wx.EVT_MOTION, lambda evt: self.TrackCursor(evt))
 
         self.MapWindow = self.firstMapWindow  # current by default
         self.firstMapWindow.zoomhistory = self.secondMapWindow.zoomhistory
@@ -424,12 +424,11 @@ class SwipeMapPanel(DoubleMapPanel):
             self._inputDialog = dlg
             dlg.CentreOnParent()
             dlg.Show()
+        elif self._inputDialog.IsShown():
+            self._inputDialog.Raise()
+            self._inputDialog.SetFocus()
         else:
-            if self._inputDialog.IsShown():
-                self._inputDialog.Raise()
-                self._inputDialog.SetFocus()
-            else:
-                self._inputDialog.Show()
+            self._inputDialog.Show()
 
     def _connectSimpleLmgr(self, lmgr, renderer):
         converter = LayerListToRendererConverter(renderer)
@@ -569,7 +568,7 @@ class SwipeMapPanel(DoubleMapPanel):
                         im1 = wx.Image(filename1).GetSubImage((0, 0, -x, height))
                         im.Paste(im1, 0, 0)
                         im.Paste(wx.Image(filename2), -x + lineWidth, -y)
-                else:
+                else:  # noqa: PLR5501
                     if self.splitter.GetSplitMode() == wx.SPLIT_HORIZONTAL:
                         im1 = wx.Image(filename1)
                         im.Paste(im1, 0, 0)
@@ -660,7 +659,6 @@ class SwipeMapPanel(DoubleMapPanel):
 
         So far not implemented.
         """
-        pass
 
     def SetViewMode(self, mode):
         """Sets view mode.
@@ -785,7 +783,9 @@ class SwipeMapPanel(DoubleMapPanel):
         else:
             self._queryDialog = QueryDialog(parent=self, data=result)
             self._queryDialog.Bind(wx.EVT_CLOSE, self._oncloseQueryDialog)
-            self._queryDialog.redirectOutput.connect(self._giface.WriteLog)
+            self._queryDialog.redirectOutput.connect(
+                lambda output: self._giface.WriteLog(output)
+            )
             self._queryDialog.Show()
 
     def _oncloseQueryDialog(self, event):

@@ -206,7 +206,9 @@ class ModelSearchDialog(wx.Dialog):
             parent=self, giface=giface, menuModel=menuModel.GetModel()
         )
         self.cmd_prompt.promptRunCmd.connect(self.OnCommand)
-        self.cmd_prompt.commandSelected.connect(self.label.SetValue)
+        self.cmd_prompt.commandSelected.connect(
+            lambda command: self.label.SetValue(command)
+        )
         self.search = SearchModuleWidget(
             parent=self.panel, model=menuModel.GetModel(), showTip=True
         )
@@ -542,7 +544,6 @@ class ModelItemDialog(wx.Dialog):
 
     def _layout(self):
         """Do layout (virtual method)"""
-        pass
 
     def GetCondition(self):
         """Get loop condition"""
@@ -775,7 +776,6 @@ class ModelListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEditMi
 
     def OnEndEdit(self, event):
         """Finish editing of item"""
-        pass
 
     def GetListCtrl(self):
         """Used by ColumnSorterMixin"""
@@ -944,15 +944,11 @@ class ItemListCtrl(ModelListCtrl):
             items = self.frame.GetModel().GetItems(objType=ModelAction)
             if isinstance(self.shape, ModelCondition):
                 if self.GetLabel() == "ElseBlockList":
-                    shapeItems = map(
-                        lambda x: x.GetId(), self.shape.GetItems(items)["else"]
-                    )
+                    shapeItems = (x.GetId() for x in self.shape.GetItems(items)["else"])
                 else:
-                    shapeItems = map(
-                        lambda x: x.GetId(), self.shape.GetItems(items)["if"]
-                    )
+                    shapeItems = (x.GetId() for x in self.shape.GetItems(items)["if"])
             else:
-                shapeItems = map(lambda x: x.GetId(), self.shape.GetItems(items))
+                shapeItems = (x.GetId() for x in self.shape.GetItems(items))
         else:
             shapeItems = []
 

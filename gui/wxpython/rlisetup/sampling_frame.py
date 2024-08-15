@@ -264,7 +264,7 @@ class RLiSetupMapPanel(wx.Panel):
 
         catbuf = "=%d a\n" % self.catId
         polyfile.write(catbuf)
-        self.catId = self.catId + 1
+        self.catId += 1
 
         polyfile.close()
         region_settings = grass.parse_command("g.region", flags="p", delimiter=":")
@@ -385,8 +385,7 @@ class RLiSetupMapPanel(wx.Panel):
         grass.use_temp_region()
         grass.run_command("g.region", zoom=rasterName)
         region = grass.region()
-        marea = MaskedArea(region, rasterName, circle.radius)
-        return marea
+        return MaskedArea(region, rasterName, circle.radius)
 
     def _rectangleDrawn(self):
         """When drawing finished, get region values"""

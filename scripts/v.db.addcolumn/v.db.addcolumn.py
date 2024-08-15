@@ -42,6 +42,7 @@
 
 import atexit
 import os
+from pathlib import Path
 import re
 
 from grass.exceptions import CalledModuleError
@@ -124,8 +125,7 @@ def main():
     sql_file = gs.tempfile()
     rm_files.append(sql_file)
     cols_add_str = ",".join([col[0] for col in columns])
-    with open(sql_file, "w") as write_file:
-        write_file.write(add_str)
+    Path(sql_file).write_text(add_str)
     try:
         gs.run_command(
             "db.execute",

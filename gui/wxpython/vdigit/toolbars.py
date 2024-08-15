@@ -565,9 +565,9 @@ class VDigitToolbar(BaseToolbar):
         menuItems = []
         if not self.tools or "addArea" in self.tools:
             menuItems.append((self.icons["addArea"], self.OnAddArea))
-        if not self.fType and not self.tools or "addBoundary" in self.tools:
+        if (not self.fType and not self.tools) or "addBoundary" in self.tools:
             menuItems.append((self.icons["addBoundary"], self.OnAddBoundary))
-        if not self.fType and not self.tools or "addCentroid" in self.tools:
+        if (not self.fType and not self.tools) or "addCentroid" in self.tools:
             menuItems.append((self.icons["addCentroid"], self.OnAddCentroid))
 
         self._onMenu(menuItems)
@@ -672,16 +672,12 @@ class VDigitToolbar(BaseToolbar):
         """
         self._enableTool(self.redo, enable)
 
-    def _enableTool(self, tool, enable):
+    def _enableTool(self, tool, enable: bool):
         if not self.FindById(tool):
             return
 
-        if enable:
-            if self.GetToolEnabled(tool) is False:
-                self.EnableTool(tool, True)
-        else:
-            if self.GetToolEnabled(tool) is True:
-                self.EnableTool(tool, False)
+        if self.GetToolEnabled(tool) is not bool(enable):
+            self.EnableTool(tool, bool(enable))
 
     def GetAction(self, type="desc"):
         """Get current action info"""

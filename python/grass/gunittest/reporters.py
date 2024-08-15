@@ -11,6 +11,7 @@ for details.
 
 import os
 import datetime
+from pathlib import Path
 from xml.sax import saxutils
 import xml.etree.ElementTree as et
 import subprocess
@@ -18,7 +19,7 @@ import collections
 import re
 from collections.abc import Iterable
 
-from .utils import ensure_dir
+from .utils import add_gitignore_to_dir, ensure_dir
 from .checkers import text_to_keyvalue
 
 
@@ -39,7 +40,7 @@ def keyvalue_to_text(keyvalue, sep="=", vsep="\n", isep=",", last_vertical=None)
         items.append("{key}{sep}{value}".format(key=key, sep=sep, value=value))
     text = vsep.join(items)
     if last_vertical:
-        text = text + vsep
+        text += vsep
     return text
 
 
@@ -295,7 +296,7 @@ def get_html_test_authors_table(directory, tests_authors):
     if not not_testing_authors:
         not_testing_authors = ["all recent authors contributed tests"]
 
-    test_authors = (
+    return (
         "<h3>Code and test authors</h3>"
         '<p style="font-size: 60%"><em>'
         "Note that determination of authors is approximate and only"
@@ -311,7 +312,6 @@ def get_html_test_authors_table(directory, tests_authors):
             not_testing=", ".join(sorted(not_testing_authors)),
         )
     )
-    return test_authors
 
 
 class GrassTestFilesMultiReporter:
@@ -330,9 +330,10 @@ class GrassTestFilesMultiReporter:
 
     def start(self, results_dir):
         # TODO: no directory cleaning (self.clean_before)? now cleaned by caller
-        # TODO: perhaps only those whoe need it should do it (even multiple times)
+        # TODO: perhaps only those who need it should do it (even multiple times)
         # and there is also the delete problem
         ensure_dir(os.path.abspath(results_dir))
+        add_gitignore_to_dir(os.path.abspath(results_dir))
         for reporter in self.reporters:
             try:
                 reporter.start(results_dir)
@@ -907,9 +908,8 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
             summary[key] = value
 
         summary_filename = os.path.join(self.result_dir, "test_keyvalue_result.txt")
-        with open(summary_filename, "w") as summary_file:
-            text = keyvalue_to_text(summary, sep="=", vsep="\n", isep=",")
-            summary_file.write(text)
+        text = keyvalue_to_text(summary, sep="=", vsep="\n", isep=",")
+        Path(summary_filename).write_text(text)
 
     def end_file_test(
         self, module, cwd, returncode, stdout, stderr, test_summary, timed_out=None
@@ -1026,8 +1026,7 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
             width = 72
             self._stream.write(width * "=")
             self._stream.write("\n")
-            with open(stderr) as text:
-                self._stream.write(text.read())
+            self._stream.write(Path(stderr).read_text())
             self._stream.write(width * "=")
             self._stream.write("\n")
             self._stream.write(f"FAILED {module.file_path}")
@@ -1117,8 +1116,7 @@ class TestsuiteDirReporter:
                 root, directory, test_file_name, "test_keyvalue_result.txt"
             )
             # if os.path.exists(summary_filename):
-            with open(summary_filename, "r") as keyval_file:
-                summary = text_to_keyvalue(keyval_file.read(), sep="=")
+            summary = text_to_keyvalue(Path(summary_filename).read_text(), sep="=")
             # else:
             # TODO: write else here
             #    summary = None
@@ -1212,7 +1210,7 @@ class TestsuiteDirReporter:
         page.close()
 
         status = success_to_html_text(total=file_total, successes=file_successes)
-        row = (
+        return (
             "<tr>"
             '<td><a href="{d}/{page}">{d}</a></td><td>{status}</td>'
             "<td>{nfiles}</td><td>{sfiles}</td><td>{pfiles}</td>"
@@ -1231,7 +1229,6 @@ class TestsuiteDirReporter:
                 ptests=dir_pass_per,
             )
         )
-        return row
 
     def report_for_dirs(self, root, directories):
         # TODO: this will need changes according to potential changes in

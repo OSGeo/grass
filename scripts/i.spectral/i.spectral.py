@@ -92,7 +92,7 @@ def write2textf(what, output):
     outf = open(output, "w")
     i = 0
     for row in enumerate(what):
-        i = i + 1
+        i += 1
         outf.write("%d, %s\n" % (i, row))
     outf.close()
 
@@ -211,7 +211,7 @@ def draw_linegraph(what):
             )
         )
     with open(gcore.parse_command("d.mon", flags="g", quiet=True)["env"]) as f:
-        for line in f.readlines():
+        for line in f:
             if "GRASS_RENDER_FILE=" in line:
                 gcore.info(
                     _(

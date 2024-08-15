@@ -92,7 +92,7 @@ def main():
     where = options["where"]
     columns = options["columns"]
 
-    if where == "" or where == " " or where == "\n":
+    if where in {"", " ", "\n"}:
         where = None
 
     overwrite = gs.overwrite()

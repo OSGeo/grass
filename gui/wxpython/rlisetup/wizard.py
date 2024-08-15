@@ -362,7 +362,7 @@ class RLIWizard:
             fil.write("\nMOVINGWINDOW\n")
         # KUNITSC = samplingtype=units, regionbox=keyboard, shape=cirlce
         # KUNITSR = samplingtype=units, regionbox=keyboard, shape=rectangle
-        elif samtype == SamplingType.KUNITSC or samtype == SamplingType.KUNITSR:
+        elif samtype in {SamplingType.KUNITSC, SamplingType.KUNITSR}:
             if samtype == SamplingType.KUNITSC:
                 self._circle(self.units.width, self.units.height)
                 cl = float(self.CIR_CL) / float(self.rasterinfo["cols"])
@@ -1115,7 +1115,7 @@ class SamplingAreasPage(TitledPage):
             self.sizer.Hide(self.areaPanel)
             self.sizer.Hide(self.calculatingAreas)
             self.sizer.Show(self.regionNumPanel)
-        elif samtype == SamplingType.UNITS or samtype == SamplingType.MVWIN:
+        elif samtype in {SamplingType.UNITS, SamplingType.MVWIN}:
             self.sizer.Hide(self.regionNumPanel)
             self.sizer.Hide(self.areaPanel)
             self.sizer.Hide(self.calculatingAreas)
@@ -1217,7 +1217,7 @@ class DrawRegionsPage(TitledPage):
         if marea:
             self.parent.msAreaList.append(marea)
 
-        self.regioncount = self.regioncount + 1
+        self.regioncount += 1
         numregions = int(self.parent.samplingareapage.numregions)
 
         if self.regioncount > numregions:
@@ -1715,7 +1715,7 @@ class DrawSampleUnitsPage(TitledPage):
         # region = self.GetSampleUnitRegion()
         if region:
             self.parent.msAreaList.append(region)
-        self.regioncount = self.regioncount + 1
+        self.regioncount += 1
 
         drawtype = self.parent.drawunits.drawtype
         if self.regioncount > self.numregions:
@@ -1780,7 +1780,6 @@ class DrawSampleUnitsPage(TitledPage):
 
     def OnExitPage(self, event=None):
         """Function during exiting"""
-        pass
 
         # if event.GetDirection():
         #    self.SetNext(self.parent.samplingareapage)
@@ -1814,7 +1813,7 @@ class VectorAreasPage(TitledPage):
 
     def afterRegionDrawn(self):
         """Function to update the title and the number of selected area"""
-        self.areascount = self.areascount + 1
+        self.areascount += 1
         if self.areascount == self.areanum:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
             self.areaOK.Enable(False)

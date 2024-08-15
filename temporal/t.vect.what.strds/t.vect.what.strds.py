@@ -86,7 +86,7 @@ def main():
     tempwhere = options["t_where"]
     sampling = options["sampling"]
 
-    if where == "" or where == " " or where == "\n":
+    if where in {"", " ", "\n"}:
         where = None
 
     # Make sure the temporal database exists
@@ -151,7 +151,7 @@ def main():
                     False,
                     dbif,
                 )
-                aggreagated_map_name = aggreagated_map_name + "_0"
+                aggreagated_map_name += "_0"
                 if new_map is None:
                     continue
                 # We overwrite the raster_maps list

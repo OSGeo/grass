@@ -298,7 +298,7 @@ def main():
                 try:
                     gs.run_command(
                         "v.db.connect",
-                        flags="o",
+                        overwrite=True,
                         quiet=True,
                         map=vect,
                         layer=layer,
@@ -316,16 +316,15 @@ def main():
                         % (table, vect, str(layer))
                     )
 
-            else:
-                if database != new_database_subst:
-                    gs.warning(
-                        _(
-                            "Layer <%d> will not be reconnected "
-                            "because database or schema do not "
-                            "match."
-                        )
-                        % layer
+            elif database != new_database_subst:
+                gs.warning(
+                    _(
+                        "Layer <%d> will not be reconnected "
+                        "because database or schema do not "
+                        "match."
                     )
+                    % layer
+                )
     return 0
 
 

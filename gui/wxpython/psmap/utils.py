@@ -402,8 +402,7 @@ def getRasterType(map):
         map = ""
     file = gs.find_file(name=map, element="cell")
     if file.get("file"):
-        rasterType = gs.raster_info(map)["datatype"]
-        return rasterType
+        return gs.raster_info(map)["datatype"]
     else:
         return None
 
