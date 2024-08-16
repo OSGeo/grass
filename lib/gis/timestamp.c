@@ -425,11 +425,11 @@ int G_has_vector_timestamp(const char *name, const char *layer,
     char ele[GNAME_MAX];
 
     if (layer != NULL)
-        G_snprintf(ele, GNAME_MAX, "%s_%s", GV_TIMESTAMP_ELEMENT, layer);
+        snprintf(ele, GNAME_MAX, "%s_%s", GV_TIMESTAMP_ELEMENT, layer);
     else
-        G_snprintf(ele, GNAME_MAX, "%s_1", GV_TIMESTAMP_ELEMENT);
+        snprintf(ele, GNAME_MAX, "%s_1", GV_TIMESTAMP_ELEMENT);
 
-    G_snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
+    snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
     G_file_name(path, dir, ele, mapset);
 
     G_debug(1, "Check for timestamp <%s>", path);
@@ -466,11 +466,11 @@ int G_read_vector_timestamp(const char *name, const char *layer,
         return 0;
 
     if (layer != NULL)
-        G_snprintf(ele, GNAME_MAX, "%s_%s", GV_TIMESTAMP_ELEMENT, layer);
+        snprintf(ele, GNAME_MAX, "%s_%s", GV_TIMESTAMP_ELEMENT, layer);
     else
-        G_snprintf(ele, GNAME_MAX, "%s_1", GV_TIMESTAMP_ELEMENT);
+        snprintf(ele, GNAME_MAX, "%s_1", GV_TIMESTAMP_ELEMENT);
 
-    G_snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
+    snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
 
     G_debug(1, "Read timestamp <%s/%s>", dir, ele);
 
@@ -511,11 +511,11 @@ int G_write_vector_timestamp(const char *name, const char *layer,
     char ele[GNAME_MAX];
 
     if (layer != NULL)
-        G_snprintf(ele, GNAME_MAX, "%s_%s", GV_TIMESTAMP_ELEMENT, layer);
+        snprintf(ele, GNAME_MAX, "%s_%s", GV_TIMESTAMP_ELEMENT, layer);
     else
-        G_snprintf(ele, GNAME_MAX, "%s_1", GV_TIMESTAMP_ELEMENT);
+        snprintf(ele, GNAME_MAX, "%s_1", GV_TIMESTAMP_ELEMENT);
 
-    G_snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
+    snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
 
     G_debug(1, "Write timestamp <%s/%s>", dir, ele);
 
@@ -554,11 +554,11 @@ int G_remove_vector_timestamp(const char *name, const char *layer)
     char ele[GNAME_MAX];
 
     if (layer)
-        G_snprintf(ele, GNAME_MAX, "%s_%s", GV_TIMESTAMP_ELEMENT, layer);
+        snprintf(ele, GNAME_MAX, "%s_%s", GV_TIMESTAMP_ELEMENT, layer);
     else
-        G_snprintf(ele, GNAME_MAX, "%s_1", GV_TIMESTAMP_ELEMENT);
+        snprintf(ele, GNAME_MAX, "%s_1", GV_TIMESTAMP_ELEMENT);
 
-    G_snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
+    snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
     return G_remove(dir, ele);
 }
 

@@ -291,7 +291,7 @@ int main(int argc, char *argv[])
         outfile = parm.output->answer;
     else {
         outfile = G_malloc(strlen(name) + 4 + 1);
-        G_snprintf(outfile, sizeof(outfile), "%s.bin", name);
+        snprintf(outfile, sizeof(outfile), "%s.bin", name);
     }
 
     if (G_strcasecmp(parm.order->answer, "big") == 0)
