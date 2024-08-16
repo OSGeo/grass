@@ -289,7 +289,7 @@ int main(int argc, char *argv[])
 
     if (snprintf(outfile, sizeof(outfile), "%s%s",
                  (parm.output->answer ? parm.output->answer : name),
-                 (parm.output->answer ? "" : ".bin")) >= sizeof(outfile)) {
+                 (parm.output->answer ? "" : ".bin")) >= (int)sizeof(outfile)) {
         G_fatal_error(_("Output map name too long."));
     }
 
