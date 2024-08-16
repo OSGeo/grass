@@ -76,8 +76,10 @@
  * \author Soeren Gebbert, vector timestamp implementation update
  */
 
+#include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+
 #include <grass/gis.h>
 #include <grass/vect/dig_defines.h>
 #include <grass/glocale.h>
