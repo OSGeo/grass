@@ -352,8 +352,8 @@ int main(int argc, char *argv[])
             fprintf(out_fp, "%d%s", min + i, sep);
             fprintf(out_fp, "%f%s", obj_geos[i].area, sep);
             fprintf(out_fp, "%f%s", obj_geos[i].perimeter, sep);
-            fprintf(out_fp, "%f%s", compact_circle, sep);
             fprintf(out_fp, "%f%s", compact_square, sep);
+            fprintf(out_fp, "%f%s", compact_circle, sep);
             fprintf(out_fp, "%f%s", fd, sep);
             fprintf(out_fp, "%f%s", mean_x, sep);
             fprintf(out_fp, "%f", mean_y);
@@ -364,8 +364,8 @@ int main(int argc, char *argv[])
             json_object_set_number(object, "category", min + i);
             json_object_set_number(object, "area", obj_geos[i].area);
             json_object_set_number(object, "perimeter", obj_geos[i].perimeter);
-            json_object_set_number(object, "compact_circle", compact_circle);
             json_object_set_number(object, "compact_square", compact_square);
+            json_object_set_number(object, "compact_circle", compact_circle);
             json_object_set_number(object, "fd", fd);
             json_object_set_number(object, "mean_x", mean_x);
             json_object_set_number(object, "mean_y", mean_y);

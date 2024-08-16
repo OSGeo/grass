@@ -12,6 +12,8 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import call_module
 
+from grass.gunittest.gmodules import SimpleModule
+
 testraster1 = """\
 north:   250000
 south:   200000
@@ -34,31 +36,25 @@ class TestObjectGeometryPixel(TestCase):
     test_objects1 = "test_objects1"
     output_file_pixel = "output_file_pixel.csv"
 
-    @classmethod
-    def setUpClass(cls):
+    def setUp(self):
         """Imports test raster(s), ensures expected computational region and setup"""
-        cls.runModule(
+        self.runModule(
             "r.in.ascii",
             input="-",
             type="CELL",
             stdin_=testraster1,
-            output=cls.test_objects1,
+            output=self.test_objects1,
         )
-        cls.use_temp_region()
-        cls.runModule("g.region", raster=cls.test_objects1)
-
-    @classmethod
-    def tearDownClass(cls):
-        """Remove the temporary region"""
-        cls.del_temp_region()
+        self.use_temp_region()
+        self.runModule("g.region", raster=self.test_objects1)
 
     def tearDown(self):
-        """Remove the outputs created from the object geometry module
-
+        """Remove the outputs created from the object geometry module and the temporary region
         This is executed after each test run.
         """
         if os.path.isfile(self.output_file_pixel):
             os.remove(self.output_file_pixel)
+        self.del_temp_region()
         self.runModule("g.remove", flags="f", type="raster", name=self.test_objects1)
 
     def test_object_geometry_pixel(self):
@@ -69,7 +65,6 @@ class TestObjectGeometryPixel(TestCase):
         )
         # check to see if output file exists
         self.assertFileExists(self.output_file_pixel, msg="Output file does not exist")
-        print(open(self.output_file_pixel).read(), file=stderr)
         # check if the output file is equal to the reference file
         self.assertFilesEqualMd5(
             self.output_file_pixel,
@@ -111,10 +106,12 @@ class TestObjectGeometryPixel(TestCase):
                 "mean_y": 212500,
             },
         ]
-        output = call_module(
+        module = SimpleModule(
             "r.object.geometry", input=self.test_objects1, format="json"
         )
-        self.assertCountEqual(reference, json.loads(output))
+        self.runModule(module)
+        data = json.loads(module.outputs.stdout)
+        self.assertCountEqual(reference, data)
 
 
 class TestObjectGeometryMeter(TestCase):
