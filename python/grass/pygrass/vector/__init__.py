@@ -107,10 +107,6 @@ class Vector(Info):
         )
 
     @must_be_open
-    def next(self):
-        return next(self)
-
-    @must_be_open
     def rewind(self):
         """Rewind vector map to cause reads to start at beginning."""
         if libvect.Vect_rewind(self.c_mapinfo) == -1:
