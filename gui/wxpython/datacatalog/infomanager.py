@@ -38,9 +38,9 @@ class DataCatalogInfoManager:
         ]
         message = _(
             "GRASS GIS helps you organize your data using Projects (locations) "
-            "which contain Mapsets (subprojects). All data in one Project is "
+            "which contain mapsets (subprojects). All data in one Project is "
             "in the same coordinate reference system (CRS).\n\n"
-            "You are currently in Mapset PERMANENT in default Project {loc} "
+            "You are currently in mapset PERMANENT in default Project {loc} "
             "which uses WGS 84 (EPSG:4326). "
             "Consider creating a new Project with a CRS "
             "specific to your area. You can do it now or anytime later from "
@@ -56,9 +56,9 @@ class DataCatalogInfoManager:
         ]
         message = _(
             "You have successfully created a new Project {loc}. "
-            "Currently you are in its PERMANENT Mapset which is used for "
+            "Currently you are in its PERMANENT mapset which is used for "
             "storing your base maps to make them readily available in other "
-            "Mapsets. You can create new Mapsets for different tasks by right "
+            "mapsets. You can create new mapsets for different tasks by right "
             "clicking on the Project name.\n\n"
             "To import data, go to the toolbar above or use the buttons below."
         ).format(loc=gisenv()["LOCATION_NAME"])
