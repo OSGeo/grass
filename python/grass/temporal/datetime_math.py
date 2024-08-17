@@ -141,7 +141,7 @@ def decrement_datetime_by_string(mydate, increment, mult=1):
     :param mult: A multiplier, default is 1
     :return: The new datetime object or none in case of an error
     """
-    return modify_datetime_by_string(mydate, increment, mult, sign=int(-1))
+    return modify_datetime_by_string(mydate, increment, mult, sign=-1)
 
 
 ###############################################################################
@@ -803,10 +803,10 @@ def check_datetime_string(time_string, use_dateutil=True):
         return time_object
 
     # BC is not supported
-    if "bc" in time_string > 0:
+    if "bc" in time_string:
         return _("Dates Before Christ (BC) are not supported")
 
-    # BC is not supported
+    # Time zones are not supported
     if "+" in time_string:
         return _("Time zones are not supported")
 
