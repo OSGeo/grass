@@ -14,14 +14,12 @@ extend-exclude = '''
 '''
 
 [tool.ruff]
-required-version = ">=0.5.0"
+required-version = ">=0.6.0"
 
 builtins = ["_"]
 
 # In addition to the standard set of exclusions, omit the following files or folders.
 extend-exclude = ["python/libgrass_interface_generator"]
-# In addition to the standard set of inclusions, include `.ipynb` files.
-extend-include = ["*.ipynb"]
 
 [tool.ruff.lint]
 # See https://docs.astral.sh/ruff/rules/
