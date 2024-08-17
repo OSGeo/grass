@@ -25,7 +25,7 @@ except:
         )
     )
 
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
 
 from wms_base import WMSBase, GetSRSParamVal
 
@@ -58,65 +58,65 @@ class WMSGdalDrv(WMSBase):
         """
         self._debug("_createXML", "started")
 
-        gdal_wms = etree.Element("GDAL_WMS")
-        service = etree.SubElement(gdal_wms, "Service")
-        name = etree.Element("name")
+        gdal_wms = ET.Element("GDAL_WMS")
+        service = ET.SubElement(gdal_wms, "Service")
+        name = ET.Element("name")
         service.set("name", "WMS")
 
-        version = etree.SubElement(service, "Version")
+        version = ET.SubElement(service, "Version")
         version.text = self.params["wms_version"]
 
-        server_url = etree.SubElement(service, "ServerUrl")
+        server_url = ET.SubElement(service, "ServerUrl")
         server_url.text = self.params["url"]
 
-        srs = etree.SubElement(service, self.params["proj_name"])
+        srs = ET.SubElement(service, self.params["proj_name"])
         srs.text = GetSRSParamVal(self.params["srs"])
 
-        image_format = etree.SubElement(service, "ImageFormat")
+        image_format = ET.SubElement(service, "ImageFormat")
         image_format.text = self.params["format"]
 
-        image_format = etree.SubElement(service, "Transparent")
+        image_format = ET.SubElement(service, "Transparent")
         image_format.text = self.params["transparent"]
 
-        layers = etree.SubElement(service, "Layers")
+        layers = ET.SubElement(service, "Layers")
         layers.text = self.params["layers"]
 
-        styles = etree.SubElement(service, "Styles")
+        styles = ET.SubElement(service, "Styles")
         styles.text = self.params["styles"]
 
-        data_window = etree.SubElement(gdal_wms, "DataWindow")
+        data_window = ET.SubElement(gdal_wms, "DataWindow")
 
-        upper_left_x = etree.SubElement(data_window, "UpperLeftX")
+        upper_left_x = ET.SubElement(data_window, "UpperLeftX")
         upper_left_x.text = str(self.bbox["minx"])
 
-        upper_left_y = etree.SubElement(data_window, "UpperLeftY")
+        upper_left_y = ET.SubElement(data_window, "UpperLeftY")
         upper_left_y.text = str(self.bbox["maxy"])
 
-        lower_right_x = etree.SubElement(data_window, "LowerRightX")
+        lower_right_x = ET.SubElement(data_window, "LowerRightX")
         lower_right_x.text = str(self.bbox["maxx"])
 
-        lower_right_y = etree.SubElement(data_window, "LowerRightY")
+        lower_right_y = ET.SubElement(data_window, "LowerRightY")
         lower_right_y.text = str(self.bbox["miny"])
 
-        size_x = etree.SubElement(data_window, "SizeX")
+        size_x = ET.SubElement(data_window, "SizeX")
         size_x.text = str(self.region["cols"])
 
-        size_y = etree.SubElement(data_window, "SizeY")
+        size_y = ET.SubElement(data_window, "SizeY")
         size_y.text = str(self.region["rows"])
 
         # RGB + alpha
         self.temp_map_bands_num = 4
-        block_size_x = etree.SubElement(gdal_wms, "BandsCount")
+        block_size_x = ET.SubElement(gdal_wms, "BandsCount")
         block_size_x.text = str(self.temp_map_bands_num)
 
-        block_size_x = etree.SubElement(gdal_wms, "BlockSizeX")
+        block_size_x = ET.SubElement(gdal_wms, "BlockSizeX")
         block_size_x.text = str(self.tile_size["cols"])
 
-        block_size_y = etree.SubElement(gdal_wms, "BlockSizeY")
+        block_size_y = ET.SubElement(gdal_wms, "BlockSizeY")
         block_size_y.text = str(self.tile_size["rows"])
 
         if self.params["username"] and self.params["password"]:
-            user_password = etree.SubElement(gdal_wms, "UserPwd")
+            user_password = ET.SubElement(gdal_wms, "UserPwd")
             user_password.text = "%s:%s" % (
                 self.params["username"],
                 self.params["password"],
@@ -124,7 +124,7 @@ class WMSGdalDrv(WMSBase):
 
         xml_file = self._tempfile()
 
-        etree.ElementTree(gdal_wms).write(xml_file)
+        ET.ElementTree(gdal_wms).write(xml_file)
 
         self._debug("_createXML", "finished -> %s" % xml_file)
 

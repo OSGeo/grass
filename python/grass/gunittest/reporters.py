@@ -13,7 +13,7 @@ import os
 import datetime
 from pathlib import Path
 from xml.sax import saxutils
-import xml.etree.ElementTree as et
+import xml.etree.ElementTree as ET
 import subprocess
 import collections
 import re
@@ -199,7 +199,7 @@ def get_svn_info():
         rc = p.poll()
         info = {}
         if not rc:
-            root = et.fromstring(stdout)
+            root = ET.fromstring(stdout)
             # TODO: get also date if this make sense
             # expecting only one <entry> element
             entry = root.find("entry")
@@ -257,7 +257,7 @@ def get_svn_path_authors(path, from_date=None):
         stdout, stderr = p.communicate()
         rc = p.poll()
         if not rc:
-            root = et.fromstring(stdout)
+            root = ET.fromstring(stdout)
             # TODO: get also date if this make sense
             # expecting only one <entry> element
             author_nodes = root.iterfind("*/author")

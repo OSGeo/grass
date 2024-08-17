@@ -17,7 +17,7 @@ from pathlib import Path
 import sys
 import copy
 import shutil
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
 from xml.parsers import expat
 
 import grass.script.task as gtask
@@ -25,7 +25,7 @@ import grass.script.core as gcore
 from grass.script.utils import try_remove, decode
 from grass.exceptions import ScriptError, CalledModuleError
 
-ETREE_EXCEPTIONS = (etree.ParseError, expat.ExpatError)
+ETREE_EXCEPTIONS = (ET.ParseError, expat.ExpatError)
 
 # duplicating code from core/globalvar.py
 # if this will become part of grass Python library or module, this should be
@@ -270,19 +270,19 @@ def createTree(distributionRootFile, userRootFile, userDefined=True):
     :return: ElementTree instance
     """
     if userDefined and userRootFile:
-        mainMenu = etree.parse(userRootFile)
+        mainMenu = ET.parse(userRootFile)
     else:
-        mainMenu = etree.parse(distributionRootFile)
+        mainMenu = ET.parse(distributionRootFile)
 
-    toolboxes = etree.parse(toolboxesFile)
+    toolboxes = ET.parse(toolboxesFile)
 
     if userDefined and _getUserToolboxesFile():
-        userToolboxes = etree.parse(_getUserToolboxesFile())
+        userToolboxes = ET.parse(_getUserToolboxesFile())
     else:
         userToolboxes = None
 
-    wxguiItems = etree.parse(wxguiItemsFile)
-    moduleItems = etree.parse(moduleItemsFile)
+    wxguiItems = ET.parse(wxguiItemsFile)
+    moduleItems = ET.parse(moduleItemsFile)
 
     return toolboxes2menudata(
         mainMenu=mainMenu,
@@ -463,11 +463,11 @@ def _expandUserToolboxesItem(node, toolboxes):
     for n in node.findall("./items/user-toolboxes-list"):
         items = node.find("./items")
         idx = list(items).index(n)
-        el = etree.Element("toolbox", attrib={"name": "GeneratedUserToolboxesList"})
+        el = ET.Element("toolbox", attrib={"name": "GeneratedUserToolboxesList"})
         items.insert(idx, el)
-        label = etree.SubElement(el, "label")
+        label = ET.SubElement(el, "label")
         label.text = _("Custom toolboxes")
-        it = etree.SubElement(el, "items")
+        it = ET.SubElement(el, "items")
         for toolbox in tboxes:
             it.append(copy.deepcopy(toolbox))
         items.remove(n)
@@ -551,15 +551,15 @@ def _expandAddonsItem(node):
         idx = list(items).index(n)
         # do not set name since it is already in menudata file
         # attib={'name': 'AddonsList'}
-        el = etree.Element("menu")
+        el = ET.Element("menu")
         items.insert(idx, el)
-        label = etree.SubElement(el, "label")
+        label = ET.SubElement(el, "label")
         label.text = _("Addons")
-        it = etree.SubElement(el, "items")
+        it = ET.SubElement(el, "items")
         for addon in addons:
-            addonItem = etree.SubElement(it, "module-item")
+            addonItem = ET.SubElement(it, "module-item")
             addonItem.attrib = {"name": addon}
-            addonLabel = etree.SubElement(addonItem, "label")
+            addonLabel = ET.SubElement(addonItem, "label")
             addonLabel.text = addon
         items.remove(n)
 
@@ -613,7 +613,7 @@ def _expandRuntimeModules(node, loadMetadata=True):
     for module in modules:
         name = module.get("name")
         if module.find("module") is None:
-            n = etree.SubElement(module, "module")
+            n = ET.SubElement(module, "module")
             n.text = name
 
         if module.find("description") is None:
@@ -627,9 +627,9 @@ def _expandRuntimeModules(node, loadMetadata=True):
                     desc, keywords = _("Module not installed"), ""
             else:
                 desc, keywords = "", ""
-            n = etree.SubElement(module, "description")
+            n = ET.SubElement(module, "description")
             n.text = _escapeXML(desc)
-            n = etree.SubElement(module, "keywords")
+            n = ET.SubElement(module, "keywords")
             n.text = _escapeXML(",".join(keywords))
 
     if hasErrors:
@@ -672,13 +672,13 @@ def _addHandlers(node):
     """Add missing handlers to modules"""
     for n in node.findall(".//module-item"):
         if n.find("handler") is None:
-            handlerNode = etree.SubElement(n, "handler")
+            handlerNode = ET.SubElement(n, "handler")
             handlerNode.text = "OnMenuCmd"
 
     # e.g. g.region -p
     for n in node.findall(".//wxgui-item"):
         if n.find("command") is not None:
-            handlerNode = etree.SubElement(n, "handler")
+            handlerNode = ET.SubElement(n, "handler")
             handlerNode.text = "RunMenuCmd"
 
 
@@ -751,7 +751,7 @@ def _getXMLString(root):
 
     :return: XML as string
     """
-    xml = etree.tostring(root, encoding="UTF-8")
+    xml = ET.tostring(root, encoding="UTF-8")
     return xml.replace(
         b"<?xml version='1.0' encoding='UTF-8'?>\n",
         b"<?xml version='1.0' encoding='UTF-8'?>\n"
@@ -820,12 +820,12 @@ def module_test():
     wxguiItemsFile = os.path.join(WXGUIDIR, "xml", "wxgui_items.xml")
     moduleItemsFile = os.path.join(WXGUIDIR, "xml", "module_items.xml")
 
-    toolboxes = etree.parse(toolboxesFile)
-    userToolboxes = etree.parse(userToolboxesFile)
-    menu = etree.parse(menuFile)
+    toolboxes = ET.parse(toolboxesFile)
+    userToolboxes = ET.parse(userToolboxesFile)
+    menu = ET.parse(menuFile)
 
-    wxguiItems = etree.parse(wxguiItemsFile)
-    moduleItems = etree.parse(moduleItemsFile)
+    wxguiItems = ET.parse(wxguiItemsFile)
+    moduleItems = ET.parse(moduleItemsFile)
 
     tree = toolboxes2menudata(
         mainMenu=menu,
@@ -868,7 +868,7 @@ def module_test():
 
 def validate_file(filename):
     try:
-        etree.parse(filename)
+        ET.parse(filename)
     except ETREE_EXCEPTIONS as error:
         print(
             "XML file <{name}> is not well formed: {error}".format(
