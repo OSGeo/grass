@@ -369,6 +369,9 @@ class LayerList:
         self._index += 1
         return result
 
+    def next(self):
+        return next(self)
+
     def GetSelectedLayers(self, checkedOnly=True):
         # hidden and selected vs checked and selected
         items = self._map.GetListOfLayers()
