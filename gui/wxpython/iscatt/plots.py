@@ -45,7 +45,7 @@ except ImportError as e:
             'The Scatterplot Tool needs the "matplotlib" '
             "(python-matplotlib) package to be installed. {0}"
         ).format(e)
-    )
+    ) from e
 
 import grass.script as gs
 from grass.pydispatch.signal import Signal

@@ -110,8 +110,8 @@ class Category(list):
         if type(index) == str:
             try:
                 index = self.labels().index(index)
-            except ValueError:
-                raise KeyError(index)
+            except ValueError as error:
+                raise KeyError(index) from error
         return index
 
     def _chk_value(self, value):
