@@ -76,7 +76,7 @@ def safe_repr(obj, short=False):
     try:
         result = repr(obj)
     except Exception:
-        result = object.__repr__(obj)
+        result = object.__repr__(obj)  # noqa: PLC2801
     if not short or len(result) < _MAX_LENGTH:
         return result
     return result[:_MAX_LENGTH] + " [truncated]..."

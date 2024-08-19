@@ -370,7 +370,7 @@ class LayerList:
         return result
 
     def next(self):
-        return self.__next__()
+        return next(self)
 
     def GetSelectedLayers(self, checkedOnly=True):
         # hidden and selected vs checked and selected

@@ -297,7 +297,7 @@ class Columns:
             [
                 "?",
             ]
-            * self.__len__()
+            * (len(self))
         )
         kv = ",".join(["%s=?" % k for k in self.odict.keys() if k != self.key])
         where = "%s=?" % self.key

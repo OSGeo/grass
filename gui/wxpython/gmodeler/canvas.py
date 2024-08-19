@@ -85,10 +85,10 @@ class ModelCanvas(ogl.ShapeCanvas):
             remList, upList = self.parent.GetModel().RemoveItem(shape)
             shape.Select(False)
             diagram.RemoveShape(shape)
-            shape.__del__()
+            shape.__del__()  # noqa: PLC2801, C2801
             for item in remList:
                 diagram.RemoveShape(item)
-                item.__del__()
+                item.__del__()  # noqa: PLC2801, C2801
 
             for item in upList:
                 item.Update()

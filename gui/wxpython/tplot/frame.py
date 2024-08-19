@@ -140,7 +140,10 @@ class TplotFrame(wx.Frame):
         if self._giface.GetMapDisplay():
             self.coorval.OnClose()
             self.cats.OnClose()
-        self.__del__()
+
+        # __del__() and del keyword seem to have differences,
+        # how can self.Destroy(), called after del, work otherwise
+        self.__del__()  # noqa: PLC2801, C2801
         self.Destroy()
 
     def _layout(self):
