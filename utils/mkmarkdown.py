@@ -723,6 +723,8 @@ def header(pgm):
     if desc:
         pgm = desc.group(2).strip()
         header_tmpl = string.Template(header_base + header_nopgm)
+    elif not pgm_desc:
+        header_tmpl = string.Template(header_base + header_pgm)
     else:
         if not pgm_desc:
             header_tmpl = string.Template(header_base + header_pgm)
