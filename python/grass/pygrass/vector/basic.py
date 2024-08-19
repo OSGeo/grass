@@ -137,7 +137,7 @@ class Bbox:
         )
 
     def items(self):
-        return [(k, self.__getattribute__(k)) for k in self.keys()]
+        return [(k, getattr(self, k)) for k in self.keys()]
 
     def nsewtb(self, tb=True):
         """Return a list of values from bounding box
@@ -215,7 +215,7 @@ class BoxList:
         3
 
         """
-        indx = self.__len__()
+        indx = len(self)
         libvect.Vect_boxlist_append(self.c_boxlist, indx, box.c_bbox)
 
     #    def extend(self, boxlist):
