@@ -21,9 +21,9 @@
 
 /* cast to float, otherwise doesn't seem to handle neg. values */
 
-#define SCALE_ATT(att, val, low, high)                                      \
-    ((val) <= att->max_nz && (val) >= att->min_nz && att->range_nz          \
-         ? (((val)-att->min_nz) / att->range_nz) * ((high) - (low)) + (low) \
+#define SCALE_ATT(att, val, low, high)                                        \
+    ((val) <= att->max_nz && (val) >= att->min_nz && att->range_nz            \
+         ? (((val) - att->min_nz) / att->range_nz) * ((high) - (low)) + (low) \
          : 0)
 
 #define GET_MAPATT(buff, offset, att) (get_mapatt(buff, offset, &(att)))

@@ -38,7 +38,7 @@ import re
 import mimetypes
 import time
 
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
 from xml.sax import saxutils
 
 import wx
@@ -323,7 +323,7 @@ class Model:
         """
         # parse workspace file
         try:
-            gxmXml = ProcessModelFile(etree.parse(filename))
+            gxmXml = ProcessModelFile(ET.parse(filename))
         except Exception as e:
             raise GException("{}".format(e))
 

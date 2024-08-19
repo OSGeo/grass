@@ -1,3 +1,18 @@
+#
+# AUTHOR(S): Riya Saxena <29riyasaxena AT gmail>
+#
+# PURPOSE:   This module provides the base class for interactive visualizations
+#            used by `TimeSeriesMap` and `SeriesMap` in Jupyter Notebooks. It
+#            includes methods for rendering visualizations and creating interactive
+#            sliders to navigate through time-series or series data, while reducing
+#            redundancy and enhancing functionality.
+#
+# COPYRIGHT: (C) 2024 Riya Saxena, and by the GRASS Development Team
+#
+#            This program is free software under the GNU General Public
+#            License (>=v2). Read the file COPYING that comes with GRASS
+#            for details.
+
 """Base class for SeriesMap and TimeSeriesMap"""
 
 import os

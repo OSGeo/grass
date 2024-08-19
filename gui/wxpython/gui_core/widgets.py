@@ -1798,7 +1798,7 @@ class LayersList(GListCtrl, listmix.TextEditMixin):
         colLocs = [0]
         loc = 0
         for n in range(self.GetColumnCount()):
-            loc = loc + self.GetColumnWidth(n)
+            loc += self.GetColumnWidth(n)
             colLocs.append(loc)
 
         col = bisect(colLocs, x + self.GetScrollPos(wx.HORIZONTAL)) - 1
