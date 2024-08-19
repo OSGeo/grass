@@ -337,7 +337,7 @@ def check_for_desc_override(basename):
 
 def read_file(name):
     with open(name, "r") as f:
-        s = f.read()
+        return f.read()
 
     return s
 
