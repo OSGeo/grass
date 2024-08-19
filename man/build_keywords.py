@@ -67,8 +67,10 @@ def build_keywords(ext):
     files = glob.glob(os.path.join(path, f"*.{ext}"))
     # TODO: add markdown support
     if addons_path:
-        addons_man_files = glob.glob(os.path.join(addons_path, "*.html"))
+        addons_man_files = glob.glob(os.path.join(addons_path, f"*.{ext}"))
         files.extend(addons_man_files)
+    else:
+        addons_man_files = []
 
     char_list = {}
 
