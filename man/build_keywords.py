@@ -147,7 +147,7 @@ def build_keywords(ext):
             man_file_path = get_module_man_file_path(value, addons_man_files)
             if ext == "html":
                 keyword_line += (
-                    f' <a href="{man_file_path}">' f'{value.replace(".{ext}", "")}</a>,'
+                    f' <a href="{man_file_path}">{value.replace(".{ext}", "")}</a>,'
                 )
             else:
                 keyword_line += f' [{value.rsplit(".", 1)[0]}]({man_file_path}),'
