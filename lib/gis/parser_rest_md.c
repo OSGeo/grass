@@ -312,10 +312,12 @@ void print_flag(const char *key, const char *label, const char *description,
             fprintf(stdout, MD_NEWLINE);
         fprintf(stdout, "\n");
     }
-    if (rest)
-        fprintf(stdout, "| ");
-    print_escaped(stdout, "\t", rest);
-    print_escaped(stdout, description, rest);
+    if (description != NULL) {
+        if (rest)
+            fprintf(stdout, "| ");
+        print_escaped(stdout, "\t", rest);
+        print_escaped(stdout, description, rest);
+    }
 }
 
 void print_option(const struct Option *opt, bool rest, char *image_spec_rest)
