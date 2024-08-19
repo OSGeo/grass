@@ -112,8 +112,7 @@ def has_src_code_git(src_dir):
                 f"--format=%H,{COMMIT_DATE_FORMAT}",
                 src_dir,
             ],
-            stderr=subprocess.PIPE,
-            stdout=subprocess.PIPE,
+            capture_output=True,
         )  # --format=%H,COMMIT_DATE_FORMAT commit hash,author date
         os.chdir(actual_dir)
         return process_result if process_result.returncode == 0 else None
