@@ -47,8 +47,7 @@ HTTP_STATUS_CODES = list(http.HTTPStatus)
 def read_file(name):
     try:
         with open(name) as f:
-            s = f.read()
-        return s
+            return f.read()
     except OSError:
         return ""
 
