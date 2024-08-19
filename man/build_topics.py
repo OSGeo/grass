@@ -54,7 +54,7 @@ def build_topics(ext):
     if ext == "html":
         topicsfile.write(
             header1_tmpl.substitute(
-                title="GRASS GIS " "%s Reference Manual: Topics index" % grass_version
+                title="GRASS GIS %s Reference Manual: Topics index" % grass_version
             )
         )
     topicsfile.write(headertopics_tmpl)
