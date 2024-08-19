@@ -726,10 +726,7 @@ def header(pgm):
     elif not pgm_desc:
         header_tmpl = string.Template(header_base + header_pgm)
     else:
-        if not pgm_desc:
-            header_tmpl = string.Template(header_base + header_pgm)
-        else:
-            header_tmpl = string.Template(header_base + header_pgm_desc)
+        header_tmpl = string.Template(header_base + header_pgm_desc)
 
     return header_tmpl.substitute(PGM=pgm, PGM_DESC=pgm_desc)
 
