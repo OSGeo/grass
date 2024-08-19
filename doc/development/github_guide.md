@@ -122,6 +122,33 @@ a PR.
 Alternatively, you can explore GitHub CLI tool (_gh_) which allows you
 to do `git push` and create a PR in one step with `gh pr create -fw`.
 
+## Guidelines for writing a meaningful pull request
+
+A well-written pull request (PR) is critical because it improves collaboration
+and efficiency within a project. It allows reviewers to quickly understand the
+purpose and impact of the changes, making it easier to assess the quality,
+compatibility, and necessity of the code. Clear PRs reduce the risk of
+misunderstandings, help track progress, and ensure that changes are aligned with
+the project's goals. They also facilitate faster merges and better documentation,
+resulting in more stable and maintainable software.
+
+### PR Title
+
+The title should be descriptive and clearly summarize the main purpose or change
+in the pull request. Start the title with the tool name or a keyword (e.g.:
+`tool X: add functionality Y for Z`. Keep it short, i.e. aim for concise titles,
+typically under 50-60 characters.
+
+### PR Content
+
+- Summary: Briefly describe the changes and their purpose.
+- Details: Outline the most important changes, focusing on impact.
+- Screenshots or logs: If the changes involve GUI or logs, provide relevant
+  screenshots or logs.
+- Tests: Provide steps or mention tests for validation or reproducibility.
+- References: Link to related issues (e.g., "Fixes #1234") or previous
+  discussions.
+
 ## After creating a PR
 
 GRASS GIS maintainers will now review your PR.
