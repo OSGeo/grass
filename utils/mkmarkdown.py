@@ -140,6 +140,14 @@ def get_last_git_commit(src_dir, top_dir, addon_path, major_version):
             commit=process_result.stdout.decode(),
             src_dir=src_dir,
         )
+    elif gs:
+        # Addons installation
+        return get_git_commit_from_rest_api_for_addon_repo(
+            addon_path=addon_path,
+            src_dir=src_dir,
+            major_version=major_version,
+        )
+    # During GRASS GIS compilation from source code without Git
     else:
         if gs:
             # Addons installation
