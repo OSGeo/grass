@@ -232,4 +232,6 @@ $(MDDIR)/source/grassdocs.css: mkdocs/grassdocs.css
 	$(INSTALL_DATA) $< $@
 
 build-mkdocs:
-	@cd $(MDDIR) ; SITE_NAME="GRASS GIS $(GRASS_VERSION_NUMBER) Reference Manual" mkdocs build
+	@cd $(MDDIR) ; SITE_NAME="GRASS GIS $(GRASS_VERSION_NUMBER) Reference Manual" \
+	COPYRIGHT="<a href=\"index.html\">Main index</a> | <a href=\"topics.html\">Topics index</a> | <a href=\"keywords.html\">Keywords index</a> | <a href=\"graphical_index.html\">Graphical index</a> | <a href=\"full_index.html\">Full index</a><br>© 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS GIS $(GRASS_VERSION_NUMBER) Reference Manual" \
+	mkdocs build

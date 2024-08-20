@@ -10,8 +10,10 @@ theme:
   logo: grass_logo.png
   features:
     - content.code.copy
+    - navigation.footer
   palette:
     primary: custom
+copyright: !ENV COPYRIGHT
 extra_css:
   - grassdocs.css    
 plugins:

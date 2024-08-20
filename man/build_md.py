@@ -160,20 +160,22 @@ overview_tmpl = string.Template(
 """
 )
 
-footer_tmpl = string.Template(
-    r"""
-____
-[Main index](${index_url}) |
-[Topics index](topics.md) |
-[Keywords index](keywords.md) |
-[Graphical index](graphical_index.md) |
-[Full index](full_index.md)
+# footer_tmpl = string.Template(
+#     r"""
+# ____
+# [Main index](${index_url}) |
+# [Topics index](topics.md) |
+# [Keywords index](keywords.md) |
+# [Graphical index](graphical_index.md) |
+# [Full index](full_index.md)
 
-&copy; 2003-${year}
-[GRASS Development Team](https://grass.osgeo.org),
-GRASS GIS ${grass_version} Reference Manual
-"""
-)
+# &copy; 2003-${year}
+# [GRASS Development Team](https://grass.osgeo.org),
+# GRASS GIS ${grass_version} Reference Manual
+# """
+# )
+# replaced by footer
+footer_tmpl = string.Template("")
 
 cmd2_tmpl = string.Template(
     r"""
