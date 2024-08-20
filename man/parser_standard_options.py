@@ -137,7 +137,7 @@ class OptTable:
         """Return a Markdown table with the options"""
         # write header
         md = ["| " + " | ".join(self.columns) + " |"]
-        md.append("| " + " | ".join(map(lambda x: len(x) * '-', self.columns)) + " |")
+        md.append("| " + " | ".join(len(x) * "-" for x in self.columns) + " |")
 
         # write body
         for optname, options in self.options:
