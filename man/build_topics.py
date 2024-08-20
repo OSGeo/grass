@@ -111,7 +111,7 @@ def build_topics(ext):
 if __name__ == "__main__":
     from build import (
         grass_version,
-        write_footer,        
+        write_footer,
     )
 
     from build_html import (
