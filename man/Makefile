@@ -209,4 +209,4 @@ $(MDDIR)/source/grassdocs.css: mkdocs/grassdocs.css
 	$(INSTALL_DATA) $< $@
 
 build-mkdocs:
-	@cd $(MDDIR) ; mkdocs build
+	@cd $(MDDIR) ; SITE_NAME="GRASS GIS $(GRASS_VERSION_NUMBER) Reference Manual" mkdocs build

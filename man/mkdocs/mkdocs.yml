@@ -1,5 +1,5 @@
 ---
-site_name: GRASS GIS manual
+site_name: !ENV SITE_NAME
 site_url: https://grass.osgeo.org/grass-stable/manuals/
 docs_dir: source
 extra:
