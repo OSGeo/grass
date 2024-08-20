@@ -65,7 +65,8 @@ def build_full_index(ext):
             if desc is None:
                 desc = get_desc(cmd)
             f.write(desc1_tmpl.substitute(cmd=cmd, basename=basename, desc=desc))
-        f.write("</table>\n")
+        if ext == "html":
+            f.write("</table>\n")
 
     write_footer(f, f"index.{ext}", year, template=ext)
 
