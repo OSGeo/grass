@@ -38,7 +38,7 @@ IDXSRC = full_index index topics keywords graphical_index manual_gallery class_g
 INDICES := $(patsubst %,$(HTMLDIR)/%.html,$(IDXSRC))
 
 # TODO: rename to INDICES_MD
-IDXSRC_MD = full_index index topics keywords graphical_index $(IDXCATS)
+IDXSRC_MD = full_index index topics keywords graphical_index manual_gallery $(IDXCATS)
 INDICES_MD := $(patsubst %,$(MDDIR)/source/%.md,$(IDXSRC_MD))
 
 ALL_HTML := $(wildcard $(HTMLDIR)/*.*.html)
@@ -95,7 +95,7 @@ endef
 define build_manual_gallery
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
-	$(PYTHON) ./build_manual_gallery.py $(HTMLDIR)
+	$(PYTHON) ./build_manual_gallery.py
 endef
 
 define build_pso
@@ -156,6 +156,9 @@ $(MDDIR)/source/graphical_index.md: $(ALL_MD)
 	touch $@
 
 $(HTMLDIR)/manual_gallery.html: $(ALL_HTML)
+	$(call build_manual_gallery)
+
+$(MDDIR)/source/manual_gallery.md: $(ALL_MD)
 	$(call build_manual_gallery)
 
 $(HTMLDIR)/parser_standard_options.html: $(ALL_HTML)
