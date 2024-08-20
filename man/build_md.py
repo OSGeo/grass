@@ -5,7 +5,7 @@ import string
 
 header1_tmpl = string.Template(
     r"""---
-title: ${title} - GRASS GIS Manual
+title: ${title}
 author: GRASS Development Team
 ---
 
