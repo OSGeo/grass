@@ -599,9 +599,9 @@ def parse_source():
         url_log = url_source.replace(tree, commits)
 
     git_commit = get_last_git_commit(
-        src_dir=cur_dir if addon_path else top_dir,
+        src_dir=cur_dir,
         top_dir=top_dir,
-        addon_path=addon_path if addon_path else None,
+        addon_path=addon_path or None,
         major_version=major,
     )
     if git_commit["commit"] == "unknown":
