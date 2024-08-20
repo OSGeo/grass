@@ -94,7 +94,7 @@ def build_keywords(ext):
         else:
             keys = []
             for line in lines:
-                if "meta page module keywords" in line:
+                if "keywords:" in line:
                     keys = [x.strip() for x in line.split(":", 1)[1].rstrip("-->\n").split(",")]
                     break
 
