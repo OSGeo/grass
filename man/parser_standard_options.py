@@ -133,6 +133,21 @@ class OptTable:
             )
         return endline.join(csv)
 
+    def markdown(self, endline="\n"):
+        """Return a Markdown table with the options"""
+        # write header
+        md = ["| " + " | ".join(self.columns) + " |"]
+        md.append("| " + " | ".join(map(lambda x: len(x) * '-', self.columns)) + " |")
+
+        # write body
+        for optname, options in self.options:
+            row = "| {0} ".format(optname)
+            for col in self.columns:
+                row += "| {0} ".format(options.get(col, ""))
+            md.append(row + "|")
+
+        return endline.join(md)
+
     def html(self, endline="\n", indent="  ", toptions="border=1"):
         """Return a HTML table with the options"""
         html = ["<table{0}>".format(" " + toptions if toptions else "")]
@@ -162,8 +177,7 @@ class OptTable:
 
 if __name__ == "__main__":
     URL = (
-        "https://trac.osgeo.org/grass/browser/grass/"
-        "trunk/lib/gis/parser_standard_options.c?format=txt"
+        "https://raw.githubusercontent.com/OSGeo/grass/main/lib/gis/parser_standard_options.c"
     )
     parser = argparse.ArgumentParser(
         description="Extract GRASS default options from link."
@@ -173,7 +187,7 @@ if __name__ == "__main__":
         "--format",
         default="html",
         dest="format",
-        choices=["html", "csv", "grass"],
+        choices=["html", "csv", "grass", "markdown"],
         help="Define the output format",
     )
     parser.add_argument(
@@ -221,7 +235,7 @@ if __name__ == "__main__":
 
     options = OptTable(parse_options(cfile.readlines(), startswith=args.startswith))
     outform = args.format
-    if outform in {"csv", "html"}:
+    if outform in ("csv", "html", "markdown"):
         print(getattr(options, outform)(), file=args.output)
         args.output.close()
     else:

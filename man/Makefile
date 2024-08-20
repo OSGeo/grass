@@ -38,7 +38,7 @@ IDXSRC = full_index index topics keywords graphical_index manual_gallery class_g
 INDICES := $(patsubst %,$(HTMLDIR)/%.html,$(IDXSRC))
 
 # TODO: rename to INDICES_MD
-IDXSRC_MD = full_index index topics keywords graphical_index manual_gallery $(IDXCATS)
+IDXSRC_MD = full_index index topics keywords graphical_index manual_gallery parser_standard_options $(IDXCATS)
 INDICES_MD := $(patsubst %,$(MDDIR)/source/%.md,$(IDXSRC_MD))
 
 ALL_HTML := $(wildcard $(HTMLDIR)/*.*.html)
@@ -105,6 +105,13 @@ GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	-f "grass" -o "$(HTMLDIR)/parser_standard_options.html" -p 'id="opts_table" class="scroolTable"'
 endef
 
+define build_pso_md
+GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
+	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
+	$(PYTHON) ./parser_standard_options.py -t "$(GRASS_HOME)/lib/gis/parser_standard_options.c" \
+	-f "markdown" -o "$(MDDIR)/source/parser_standard_options.md"
+endef
+
 $(HTMLDIR)/topics.html: $(ALL_HTML)
 
 $(MDDIR)/source/topics.md: $(ALL_MD)
@@ -163,6 +170,10 @@ $(MDDIR)/source/manual_gallery.md: $(ALL_MD)
 
 $(HTMLDIR)/parser_standard_options.html: $(ALL_HTML)
 	$(call build_pso)
+	touch $@
+
+$(MDDIR)/source/parser_standard_options.md: $(ALL_MD)
+	$(call build_pso_md)
 	touch $@
 
 # TODO: this should be done in the same way as category_rule
