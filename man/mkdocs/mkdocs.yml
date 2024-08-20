@@ -2,6 +2,8 @@
 site_name: GRASS GIS manual
 site_url: https://grass.osgeo.org/grass-stable/manuals/
 docs_dir: source
+extra:
+  homepage: ./index.html
 theme: 
   name: material
   language: en
