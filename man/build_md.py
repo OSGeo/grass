@@ -8,6 +8,7 @@ header1_tmpl = string.Template(
 title: ${title} - GRASS GIS Manual
 author: GRASS Development Team
 ---
+
 """
 )
 

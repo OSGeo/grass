@@ -57,7 +57,7 @@ def main(ext):
     with open(os.path.join(man_dir, output_name + f".{ext}"), "w") as output:
         output.write(
             header1_tmpl.substitute(
-                title=f"GRASS GIS {grass_version} Reference Manual: Graphical index"
+                title=f"GRASS GIS {grass_version} Reference Manual - Graphical index"
             )
         )
         output.write(header_graphical_index_tmpl)

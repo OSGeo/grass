@@ -15,7 +15,6 @@ def build_topics(ext):
     keywords = {}
 
     files = glob.glob1(man_dir, f"*.{ext}")
-
     for fname in files:
         fil = open(os.path.join(man_dir, fname))
         # TODO maybe move to Python re (regex)
@@ -51,12 +50,11 @@ def build_topics(ext):
             keywords[key][fname] = desc
 
     topicsfile = open(os.path.join(man_dir, f"topics.{ext}"), "w")
-    if ext == "html":
-        topicsfile.write(
-            header1_tmpl.substitute(
-                title="GRASS GIS %s Reference Manual: Topics index" % grass_version
-            )
+    topicsfile.write(
+        header1_tmpl.substitute(
+            title="GRASS GIS %s Reference Manual - Topics index" % grass_version
         )
+    )
     topicsfile.write(headertopics_tmpl)
 
     for key, values in sorted(keywords.items(), key=lambda s: s[0].lower()):
@@ -127,7 +125,7 @@ if __name__ == "__main__":
 
     build_topics("html")
 
-    from build_html import (
+    from build_md import (
         header1_tmpl,
         headertopics_tmpl,
         headerkey_tmpl,

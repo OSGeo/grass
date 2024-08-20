@@ -32,7 +32,9 @@ def build_full_index(ext):
     }
 
     classes = []
-    for cmd in get_files(man_dir, "*"):
+    print(man_dir)
+    for cmd in get_files(man_dir, "*", extension=ext):
+        print(cmd)
         prefix = cmd.split(".")[0]
         if prefix not in [item[0] for item in classes]:
             classes.append((prefix, class_labels.get(prefix, prefix)))
@@ -43,7 +45,7 @@ def build_full_index(ext):
     f = open(filename + ".tmp", "w")
 
     write_header(
-        f, "GRASS GIS {} Reference Manual: Full index".format(grass_version),
+        f, "GRASS GIS {} Reference Manual - Full index".format(grass_version),
         body_width="80%", template=ext
     )
 
@@ -57,7 +59,7 @@ def build_full_index(ext):
     for cls, cls_label in classes:
         f.write(cmd2_tmpl.substitute(cmd_label=to_title(cls_label), cmd=cls))
         # for all modules:
-        for cmd in get_files(man_dir, cls):
+        for cmd in get_files(man_dir, cls, extension=ext):
             basename = os.path.splitext(cmd)[0]
             desc = check_for_desc_override(basename)
             if desc is None:
@@ -91,7 +93,7 @@ if __name__ == "__main__":
         toc,
     )
     
-    build_full_index("html")
+    # build_full_index("html")
 
     from build_md import (
         man_dir,

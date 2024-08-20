@@ -65,6 +65,7 @@ def build_keywords(ext):
     keywords = {}
 
     files = glob.glob(os.path.join(man_dir, f"*.{ext}"))
+    print(files)
     # TODO: add markdown support
     if addons_path:
         addons_man_files = glob.glob(os.path.join(addons_path, f"*.{ext}"))
@@ -127,7 +128,7 @@ def build_keywords(ext):
     keywordsfile = open(os.path.join(man_dir, f"keywords.{ext}"), "w")
     keywordsfile.write(
         header1_tmpl.substitute(
-            title=f"GRASS GIS {grass_version} Reference Manual: Keywords index"
+            title=f"GRASS GIS {grass_version} Reference Manual - Keywords index"
         )
     )
     keywordsfile.write(headerkeywords_tmpl)
@@ -199,6 +200,7 @@ if __name__ == "__main__":
     from build_md import (
         header1_tmpl,
         headerkeywords_tmpl,
+        man_dir,
     )
 
     build_keywords("md")
