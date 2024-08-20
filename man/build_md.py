@@ -258,15 +258,16 @@ modclass_intro_tmpl = string.Template(
 # "
 
 modclass_tmpl = string.Template(
-    r"""Go <a href="index.html">back to help overview</a>
-<h3>${modclass} commands:</h3>
-<table>
+    r"""Go [back to help overview](index.md)</a>
+### ${modclass} commands:
+| Module | Description |
+|--------|-------------|
 """
 )
 # "
 
 desc2_tmpl = string.Template(
-    r"""<tr><td valign="top"><a href="${cmd}">${basename}</a></td> <td>${desc}</td></tr>
+    r"""| [${basename}](${cmd}) | ${desc} |
 """
 )
 # "

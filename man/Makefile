@@ -38,7 +38,7 @@ IDXSRC = full_index index topics keywords graphical_index manual_gallery class_g
 INDICES := $(patsubst %,$(HTMLDIR)/%.html,$(IDXSRC))
 
 # TODO: rename to INDICES_MD
-IDXSRC_MD = index
+IDXSRC_MD = full_index index topics keywords graphical_index $(IDXCATS)
 INDICES_MD := $(patsubst %,$(MDDIR)/source/%.md,$(IDXSRC_MD))
 
 ALL_HTML := $(wildcard $(HTMLDIR)/*.*.html)
@@ -52,7 +52,7 @@ SPHINXBUILD   = sphinx-build
 endif
 
 default: $(DSTFILES)
-	@echo "Generating HTML manual pages index (help system)..."
+	@echo "Generating manual pages index (help system)..."
 	$(MAKE) $(INDICES)
 	$(call build,check)
 	$(MAKE) manpages
@@ -174,6 +174,15 @@ $$(HTMLDIR)/$(2).html: $$(wildcard $$(HTMLDIR)/$(1).*.html) build_class.py build
 endef
 
 $(foreach cat,$(categories),$(eval $(call category_rule,$(firstword $(subst :, ,$(cat))),$(lastword $(subst :, ,$(cat))))))
+
+define category_rule_md
+$$(MDDIR)/source/$(2).md: $$(wildcard $$(MDDIR)/source/$(1).*.md) build_class.py build_md.py
+	$$(call build,class,$(1) $(2))
+	touch $$@
+endef
+
+$(foreach cat,$(categories),$(eval $(call category_rule_md,$(firstword $(subst :, ,$(cat))),$(lastword $(subst :, ,$(cat))))))
+
 
 $(HTMLDIR)/grassdocs.css: grassdocs.css
 	$(INSTALL_DATA) $< $@
