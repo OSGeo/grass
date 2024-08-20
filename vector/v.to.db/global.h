@@ -105,6 +105,7 @@ int print_stat(void);
 
 /* units.c */
 int conv_units(void);
+void get_unit_name(char *);
 
 /* update.c */
 int update(struct Map_info *);

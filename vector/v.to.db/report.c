@@ -8,12 +8,17 @@ int report(enum OutputFormat format)
     JSON_Value *records_value, *record_value, *root_value;
     JSON_Array *records_array;
     JSON_Object *record, *root_object;
+    // todo: add measurement unit
 
     if (format == JSON) {
         root_value = json_value_init_object();
         root_object = json_object(root_value);
         records_value = json_value_init_array();
         records_array = json_array(records_value);
+
+        char unit_name[20];
+        get_unit_name(unit_name);
+        json_object_set_string(root_object, "unit", unit_name);
     }
 
     int i, print_header = G_verbose() > G_verbose_min() || options.print_header;
