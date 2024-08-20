@@ -160,7 +160,7 @@ overview_tmpl = string.Template(
 """
 )
 
-footer_tmpl = string.Template( 
+footer_tmpl = string.Template(
     r"""
 ____
 [Main index](${index_url}) |
