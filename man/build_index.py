@@ -9,39 +9,36 @@
 import sys
 import os
 
-from build_html import (
-    write_html_header,
-    write_html_cmd_overview,
-    write_html_footer,
+from build import (
+    write_header,
+    write_cmd_overview,
+    write_footer,
     replace_file,
-    html_dir,
     grass_version,
-)
-from build_md import (
-    write_md_header,
-    write_md_cmd_overview,
-    write_md_footer,
-    md_dir,
 )
 
 year = None
 if len(sys.argv) > 1:
     year = sys.argv[1]
 
+def build_index(ext):
+    filename = f"index.{ext}"
+    os.chdir(man_dir)
+    with open(filename + ".tmp", "w") as f:
+        write_header(f, f"GRASS GIS {grass_version} Reference Manual", True, template=ext)
+        write_cmd_overview(f)
+        write_footer(f, f"index.{ext}", year, template=ext)
+    replace_file(filename)
 
-# HTML - to be removed
-filename = "index.html"
-os.chdir(html_dir)
-with open(filename + ".tmp", "w") as f:
-    write_html_header(f, "GRASS GIS %s Reference Manual" % grass_version, True)
-    write_html_cmd_overview(f)
-    write_html_footer(f, "index.html", year)
-replace_file(filename)
+if __name__ == "__main__":
+    from build_html import (
+        man_dir,
+    )
 
-filename = "index.md"
-os.chdir(md_dir)
-with open(filename + ".tmp", "w") as f:
-    write_md_header(f, "GRASS GIS %s Reference Manual" % grass_version, True)
-    write_md_cmd_overview(f)
-    write_md_footer(f, "index.md", year)
-replace_file(filename)
+    build_index("html")
+
+    from build_md import (
+        man_dir,
+    )
+
+    build_index("md")

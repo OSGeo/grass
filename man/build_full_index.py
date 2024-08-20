@@ -15,7 +15,7 @@ if len(sys.argv) > 1:
 
 
 def build_full_index(ext):
-    os.chdir(path)
+    os.chdir(man_dir)
 
     # TODO: create some master function/dict somewhere
     class_labels = {
@@ -32,7 +32,7 @@ def build_full_index(ext):
     }
 
     classes = []
-    for cmd in get_files("*"):
+    for cmd in get_files(man_dir, "*"):
         prefix = cmd.split(".")[0]
         if prefix not in [item[0] for item in classes]:
             classes.append((prefix, class_labels.get(prefix, prefix)))
@@ -43,7 +43,8 @@ def build_full_index(ext):
     f = open(filename + ".tmp", "w")
 
     write_header(
-        f, "GRASS GIS %s Reference Manual: Full index" % grass_version, body_width="80%"
+        f, "GRASS GIS {} Reference Manual: Full index".format(grass_version),
+        body_width="80%", template=ext
     )
 
     # generate main index of all modules:
@@ -56,7 +57,7 @@ def build_full_index(ext):
     for cls, cls_label in classes:
         f.write(cmd2_tmpl.substitute(cmd_label=to_title(cls_label), cmd=cls))
         # for all modules:
-        for cmd in get_files(cls):
+        for cmd in get_files(man_dir, cls):
             basename = os.path.splitext(cmd)[0]
             desc = check_for_desc_override(basename)
             if desc is None:
@@ -64,39 +65,38 @@ def build_full_index(ext):
             f.write(desc1_tmpl.substitute(cmd=cmd, basename=basename, desc=desc))
         f.write("</table>\n")
 
-    write_footer(f, f"index.{ext}", year)
+    write_footer(f, f"index.{ext}", year, template=ext)
 
     f.close()
     replace_file(filename)
 
 
 if __name__ == "__main__":
-    from build_html import (
-        html_dir as path,
-        html_files as get_files,
-        write_html_footer as write_footer,
-        write_html_header as write_header,
-        grass_version,
-        full_index_header,
-        toc,
-        cmd2_tmpl,
+    from build import (
+        get_files,
+        write_footer,
+        write_header,
         to_title,
+        grass_version,
         check_for_desc_override,
-        get_desc,
-        desc1_tmpl,
         replace_file,
     )
 
+    from build_html import (
+        man_dir,
+        full_index_header,
+        cmd2_tmpl,
+        desc1_tmpl,
+        get_desc,
+        toc,
+    )
+    
     build_full_index("html")
 
     from build_md import (
-        md_dir as path,
-        md_files as get_files,
-        write_md_footer as write_footer,
-        write_md_header as write_header,
+        man_dir,
         full_index_header,
         cmd2_tmpl,
-        to_title,
         desc1_tmpl,
         get_desc,
     )

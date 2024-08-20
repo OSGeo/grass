@@ -54,14 +54,12 @@ index_items = [
 
 
 def main(ext):
-    with open(os.path.join(path, output_name + f".{ext}"), "w") as output:
-        if ext == "html":
-            output.write(
-                header1_tmpl.substitute(
-                    title="GRASS GIS %s Reference "
-                    "Manual: Graphical index" % grass_version
-                )
+    with open(os.path.join(man_dir, output_name + f".{ext}"), "w") as output:
+        output.write(
+            header1_tmpl.substitute(
+                title=f"GRASS GIS {grass_version} Reference Manual: Graphical index"
             )
+        )
         output.write(header_graphical_index_tmpl)
         if ext == "html":
             output.write('<ul class="img-list">\n')
@@ -84,25 +82,27 @@ def main(ext):
 
         if ext == "html":
             output.write("</ul>")
-        write_footer(output, f"index.{ext}", year)
+        write_footer(output, f"index.{ext}", year, template=ext)
 
 
 if __name__ == "__main__":
-    from build_html import (
-        write_html_footer as write_footer,
+    from build import (
+        write_footer,
         grass_version,
+    )
+
+    from build_html import (
         header1_tmpl,
         header_graphical_index_tmpl,
-        html_dir as path,
+        man_dir,
     )
 
     main("html")
 
     from build_md import (
-        write_md_footer as write_footer,
-        grass_version,
+        header1_tmpl,
         header_graphical_index_tmpl,
-        md_dir as path,
+        man_dir,
     )
 
     main("md")

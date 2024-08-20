@@ -64,7 +64,7 @@ def get_module_man_file_path(module, addons_man_files):
 def build_keywords(ext):
     keywords = {}
 
-    files = glob.glob(os.path.join(path, f"*.{ext}"))
+    files = glob.glob(os.path.join(man_dir, f"*.{ext}"))
     # TODO: add markdown support
     if addons_path:
         addons_man_files = glob.glob(os.path.join(addons_path, f"*.{ext}"))
@@ -124,13 +124,12 @@ def build_keywords(ext):
             if key.lower() < char_list[str(firstchar)].lower():
                 char_list[str(firstchar.lower())] = key
 
-    keywordsfile = open(os.path.join(path, f"keywords.{ext}"), "w")
-    if ext == "html":
-        keywordsfile.write(
-            header1_tmpl.substitute(
-                title="GRASS GIS %s Reference Manual: Keywords index" % grass_version
-            )
+    keywordsfile = open(os.path.join(man_dir, f"keywords.{ext}"), "w")
+    keywordsfile.write(
+        header1_tmpl.substitute(
+            title=f"GRASS GIS {grass_version} Reference Manual: Keywords index"
         )
+    )
     keywordsfile.write(headerkeywords_tmpl)
     if ext == "html":
         keywordsfile.write("<dl>")
@@ -179,26 +178,27 @@ def build_keywords(ext):
         toc += "</p></div>\n"
         keywordsfile.write(toc)
 
-    write_footer(keywordsfile, f"index.{ext}", year)
+    write_footer(keywordsfile, f"index.{ext}", year, template=ext)
     keywordsfile.close()
 
 
 if __name__ == "__main__":
+    from build import (
+        grass_version,
+        write_footer,
+    )
+
     from build_html import (
         header1_tmpl,
-        grass_version,
         headerkeywords_tmpl,
-        write_html_footer as write_footer,
-        html_dir as path,
+        man_dir
     )
 
     build_keywords("html")
 
     from build_md import (
-        grass_version,
+        header1_tmpl,
         headerkeywords_tmpl,
-        write_md_footer as write_footer,
-        md_dir as path,
     )
 
     build_keywords("md")

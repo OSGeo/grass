@@ -1,45 +1,30 @@
-#!/usr/bin/env python3
-
-# utilities for generating Markdown indices
-# inspired by build_md.py
-# (C) 2003-2024 Markus Neteler and the GRASS Development Team
-# Authors:
-#   Markus Neteler
-#   Glynn Clements
-#   Luca Delucchi
-#   Martin Landa
-
 import os
 import string
-from datetime import datetime
-
-# TODO: better fix this in include/Make/Html.make, see bug RT #5361
-
-# exclude following list of modules from help index:
-
-exclude_mods = [
-    "i.find",
-    "r.watershed.ram",
-    "r.watershed.seg",
-    "v.topo.check",
-    "helptext.html",
-]
-
-# these modules don't use G_parser()
-
-desc_override = {
-    "g.parser": "Provides automated parser, GUI, and help support for GRASS scipts.",
-    "r.li.daemon": "Support module for r.li landscape index calculations.",
-}
 
 # File template pieces follow
+
+header1_tmpl = string.Template(
+    r"""---
+title: ${title} - GRASS GIS Manual
+author: GRASS Development Team
+---
+"""
+)
+
+macosx_tmpl = string.Template(
+    r"""
+AppleTitle: GRASS GIS ${grass_version}
+AppleIcon: GRASS-${grass_mmver}/grass_icon.png
+"""
+)
 
 header2_tmpl = string.Template(
     r"""# GRASS GIS ${grass_version} Reference Manual
 
 **Geographic Resources Analysis Support System**, commonly
 referred to as [GRASS GIS](https://grass.osgeo.org), is a
-[Geographic Information System](https://en.wikipedia.org/wiki/Geographic_information_system) (GIS) used for geospatial data management and
+[Geographic Information System](https://en.wikipedia.org/wiki/Geographic_information_system)
+(GIS) used for geospatial data management and
 analysis, image processing, graphics/maps production, spatial
 modeling, and visualization. GRASS is currently used in academic and
 commercial settings around the world, as well as by many governmental
@@ -53,6 +38,7 @@ processing and geographic information system (GIS).
 """
 )
 
+# TODO: avoid HTML tags
 overview_tmpl = string.Template(
     r"""<!-- the files grass${grass_version_major}.html & helptext.html file live in lib/init/ -->
 
@@ -172,33 +158,8 @@ overview_tmpl = string.Template(
 </table>
 """
 )
-# "
 
-footer_tmpl = string.Template(  # TODO: https://trac.osgeo.org/grass/ticket/3987
-    # r"""<a name="wxGUI"></a>
-    # <h3>wxGUI: Graphical user interface</h3>
-    # <table><tbody>
-    # <tr><td valign="top"><a href="wxGUI.html">wxGUI Graphical User Interface</a></td> <td>wxGUI Graphical User Interface</td></tr>
-    # <tr><td valign="top"><a href="wxGUI.nviz.html">3D visualization suite</a></td>    <td>wxGUI.nviz 3D visualization suite</td></tr>
-    # </tbody></table>
-    # <p>
-    # <a name="further"></a>
-    # <h3>Further pages</h3>
-    # <table><tbody>
-    # <tr><td valign="top"><a href="databaseintro.html">database intro</a></td> <td>database intro</td></tr>
-    # <tr><td valign="top"><a href="imageryintro.html">imagery intro</a></td> <td>imagery intro</td></tr>
-    # <tr><td valign="top"><a href="projectionintro.html">projection intro</a></td> <td>projection intro</td></tr>
-    # <tr><td valign="top"><a href="raster3dintro.html">raster3D intro</a></td> <td>raster3D intro</td></tr>
-    # <tr><td valign="top"><a href="rasterintro.html">raster intro</a></td> <td>raster intro</td></tr>
-    # <tr><td valign="top"><a href="temporalintro.html">temporal intro</a></td> <td>temporal intro</td></tr>
-    # <tr><td valign="top"><a href="vectorintro.html">vector intro</a></td> <td>vector intro</td></tr>
-    # <tr><td valign="top"> </td> <td> </td></tr>
-    # <tr><td valign="top"><a href="sql.html">SQL</a></td> <td>SQL</td></tr>
-    # <tr><td valign="top"><a href="variables.html">Variables</a></td> <td>Variables</td></tr>
-    # </tbody></table>
-    #
-    # <p>
-    # <hr class="header">
+footer_tmpl = string.Template( 
     r"""
 ____
 [Main index](${index_url}) |
@@ -212,7 +173,6 @@ ____
 GRASS GIS ${grass_version} Reference Manual
 """
 )
-# "
 
 cmd2_tmpl = string.Template(
     r"""
@@ -222,37 +182,14 @@ cmd2_tmpl = string.Template(
 |--------|-------------|
 """
 )
-# "
 
 desc1_tmpl = string.Template(
     r"""| [${basename}](${cmd}) | ${desc} |
 """
 )
-# "
-
-toc = r"""
-<div class="toc">
-<h4 class="toc">Table of contents</h4>
-<ul class="toc">
-<li class="toc"><a class="toc" href="full_index.html#d">Display commands (d.*)</a></li>
-<li class="toc"><a class="toc" href="full_index.html#db">Database commands (db.*)</a></li>
-<li class="toc"><a class="toc" href="full_index.html#g">General commands (g.*)</a></li>
-<li class="toc"><a class="toc" href="full_index.html#i">Imagery commands (i.*)</a></li>
-<li class="toc"><a class="toc" href="full_index.html#m">Miscellaneous commands (m.*)</a></li>
-<li class="toc"><a class="toc" href="full_index.html#ps">PostScript commands (ps.*)</a></li>
-<li class="toc"><a class="toc" href="full_index.html#r">Raster commands (r.*)</a></li>
-<li class="toc"><a class="toc" href="full_index.html#r3">3D raster commands (r3.*)</a></li>
-<li class="toc"><a class="toc" href="full_index.html#t">Temporal commands (t.*)</a></li>
-<li class="toc"><a class="toc" href="full_index.html#v">Vector commands (v.*)</a></li>
-<li class="toc"><a class="toc" href="full_index.html#wxGUI">wxGUI Graphical User Interface</a></li>
-<li class="toc"><a class="toc" href="full_index.html#further">Further pages</a></li>
-</ul>
-</div>
-"""
-# "
 
 modclass_intro_tmpl = string.Template(
-    r"""Go to <a href="${modclass_lower}intro.html">${modclass} introduction</a> | <a href="topics.html">topics</a> <p>
+    r"""Go to [${modclass} introduction](${modclass_lower}intro.html) | [topics](topics.html)
 """
 )
 # "
@@ -264,27 +201,14 @@ modclass_tmpl = string.Template(
 |--------|-------------|
 """
 )
-# "
 
 desc2_tmpl = string.Template(
     r"""| [${basename}](${cmd}) | ${desc} |
 """
 )
-# "
-
 
 full_index_header = r"""Go [back to help overview](index.md)
 """
-# "
-
-
-message_tmpl = string.Template(
-    r"""Generated HTML docs in ${md_dir}/index.html
-----------------------------------------------------------------------
-Following modules are missing the 'modulename.html' file in src code:
-"""
-)
-# "
 
 moduletopics_tmpl = string.Template(
     r"""
@@ -297,7 +221,6 @@ headertopics_tmpl = r"""# Topics
 
 headerkeywords_tmpl = r"""# Keywords - Index of GRASS GIS modules
 """
-# "
 
 headerkey_tmpl = string.Template(
     r"""# Topic: ${keyword}
@@ -309,115 +232,13 @@ headerkey_tmpl = string.Template(
 
 
 headerpso_tmpl = r"""
-<link rel="stylesheet" href="grassdocs.css" type="text/css">
-<link rel="stylesheet" href="parser_standard_options.css" type="text/css">
-<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-<script type="text/javascript" src="jquery.fixedheadertable.min.js"></script>
-<script type="text/javascript" src="parser_standard_options.js"></script>
-</head>
-<body style="width: 99%">
-<div id="container">
-
-<a href="index.html"><img src="grass_logo.png" alt="GRASS logo"></a>
-<hr class="header">
-<h2>Parser standard options</h2>
-<ul>
+## Parser standard options
 """
-# "
-
 
 header_graphical_index_tmpl = """# Graphical index of GRASS GIS modules
 """
 
 ############################################################################
-
-
-def check_for_desc_override(basename):
-    return desc_override.get(basename)
-
-
-def read_file(name):
-    with open(name, "r") as f:
-        return f.read()
-
-    return s
-
-
-def write_file(name, contents):
-    with open(name, "w") as f:
-        f.write(contents)
-
-
-def try_mkdir(path):
-    try:
-        os.mkdir(path)
-    except OSError:
-        pass
-
-
-# TODO: comment-out when build_html is removed
-# def replace_file(name):
-#     temp = name + ".tmp"
-#     if (
-#         os.path.exists(name)
-#         and os.path.exists(temp)
-#         and read_file(name) == read_file(temp)
-#     ):
-#         os.remove(temp)
-#     else:
-#         try:
-#             os.remove(name)
-#         except OSError:
-#             pass
-#         os.rename(temp, name)
-
-
-def copy_file(src, dst):
-    write_file(dst, read_file(src))
-
-
-def md_files(cls=None, ignore_gui=True):
-    for cmd in sorted(os.listdir(md_dir)):
-        if (
-            cmd.endswith(".md")
-            and (cls in [None, "*"] or cmd.startswith(cls + "."))
-            and (cls != "*" or len(cmd.split(".")) >= 3)
-            and cmd not in ["full_index.md", "index.md"]
-            and cmd not in exclude_mods
-            and ((ignore_gui and not cmd.startswith("wxGUI.")) or not ignore_gui)
-        ):
-            yield cmd
-
-
-def write_md_header(f, title, ismain=False, body_width="99%"):
-    # f.write(header1_tmpl.substitute(title=title))
-    # if ismain and macosx:
-    #     f.write(
-    #         macosx_tmpl.substitute(grass_version=grass_version,
-    #                                grass_mmver=grass_mmver)
-    #     )
-    f.write(header2_tmpl.substitute(grass_version=grass_version, body_width=body_width))
-
-
-def write_md_cmd_overview(f):
-    f.write(
-        overview_tmpl.substitute(
-            grass_version_major=grass_version_major,
-            grass_version_minor=grass_version_minor,
-        )
-    )
-
-
-def write_md_footer(f, index_url, year=None):
-    if year is None:
-        cur_year = default_year
-    else:
-        cur_year = year
-    f.write(
-        footer_tmpl.substitute(
-            grass_version=grass_version, index_url=index_url, year=cur_year
-        )
-    )
 
 
 def get_desc(cmd):
@@ -427,28 +248,15 @@ def get_desc(cmd):
             line = f.readline()
             if not line:
                 return desc
-            if "meta page module description" in line:
-                desc = line.split(":", 1)[1].rstrip("-->\n").strip()
+            if "description:" in line:
+                desc = line.split(":", 1)[1].strip()
                 break
 
     return desc
 
 
-def to_title(name):
-    """Convert name of command class/family to form suitable for title"""
-    if name == "PostScript":
-        return name
-    return name.capitalize()
+############################################################################
 
+man_dir = os.path.join(os.environ["ARCH_DISTDIR"], "docs", "markdown", "source")
 
-arch_dist_dir = os.environ["ARCH_DISTDIR"]
-md_dir = os.path.join(arch_dist_dir, "docs", "markdown", "source")
-gisbase = os.environ["GISBASE"]
-grass_version = os.getenv("VERSION_NUMBER", "unknown")
-grass_version_major = grass_version.split(".")[0]
-grass_version_minor = grass_version.split(".")[1]
-grass_mmver = ".".join(grass_version.split(".")[0:2])
-macosx = "darwin" in os.environ["ARCH"].lower()
-default_year = os.getenv("VERSION_DATE")
-if not default_year:
-    default_year = str(datetime.now().year)
+############################################################################    

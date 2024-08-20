@@ -10,14 +10,6 @@ import sys
 
 from urllib.request import urlopen
 
-from build_html import (
-    header1_tmpl,
-    grass_version,
-    headerpso_tmpl,
-    write_html_footer,
-)
-
-
 def parse_options(lines, startswith="Opt"):
     def split_in_groups(lines):
         def count_par_diff(line):
@@ -242,14 +234,37 @@ if __name__ == "__main__":
         year = os.getenv("VERSION_DATE")
         name = args.output.name
         args.output.close()
-        topicsfile = open(name, "w")
-        topicsfile.write(
-            header1_tmpl.substitute(
-                title="GRASS GIS "
-                "%s Reference Manual: Parser standard options index" % grass_version
-            )
+
+        def write_output(ext):
+            with open(name, "w") as outfile:
+                outfile.write(
+                    header1_tmpl.substitute(
+                        title=f"GRASS GIS {grass_version} Reference Manual: Parser standard options index"
+                    )
+                )
+                outfile.write(headerpso_tmpl)
+                if ext == "html":
+                    outfile.write(options.html(toptions=args.htmlparmas))
+                else:
+                    outfile.write(options.markdown())
+                write_footer(outfile, f"index.{ext}", year, template=ext)
+
+        from build import (
+            grass_version,
+            write_footer,
         )
-        topicsfile.write(headerpso_tmpl)
-        topicsfile.write(options.html(toptions=args.htmlparmas))
-        write_html_footer(topicsfile, "index.html", year)
-        topicsfile.close()
+
+        ext = os.path.splitext(name)[1][1:]
+
+        if ext == "html":
+            from build_html import (
+                header1_tmpl,
+                headerpso_tmpl,
+            )
+        else:
+            from build_md import (
+                header1_tmpl,
+                headerpso_tmpl,
+            )
+
+        write_output(ext) # html or md

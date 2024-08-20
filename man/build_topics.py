@@ -14,10 +14,10 @@ min_num_modules_for_topic = 3
 def build_topics(ext):
     keywords = {}
 
-    files = glob.glob1(path, f"*.{ext}")
+    files = glob.glob1(man_dir, f"*.{ext}")
 
     for fname in files:
-        fil = open(os.path.join(path, fname))
+        fil = open(os.path.join(man_dir, fname))
         # TODO maybe move to Python re (regex)
         lines = fil.readlines()
         try:
@@ -50,7 +50,7 @@ def build_topics(ext):
         elif fname not in keywords[key]:
             keywords[key][fname] = desc
 
-    topicsfile = open(os.path.join(path, f"topics.{ext}"), "w")
+    topicsfile = open(os.path.join(man_dir, f"topics.{ext}"), "w")
     if ext == "html":
         topicsfile.write(
             header1_tmpl.substitute(
@@ -60,7 +60,7 @@ def build_topics(ext):
     topicsfile.write(headertopics_tmpl)
 
     for key, values in sorted(keywords.items(), key=lambda s: s[0].lower()):
-        keyfile = open(os.path.join(path, f"topic_%s.{ext}" % key), "w")
+        keyfile = open(os.path.join(man_dir, f"topic_%s.{ext}" % key), "w")
         if ext == "html":
             keyfile.write(
                 header1_tmpl.substitute(
@@ -103,35 +103,37 @@ def build_topics(ext):
                 " for additional references.*\n".format(key=key.replace("_", " "))
             )
 
-        write_footer(keyfile, f"index.{ext}", year)
+        write_footer(keyfile, f"index.{ext}", year, template=ext)
     if ext == "html":
         topicsfile.write("</ul>\n")
-    write_footer(topicsfile, f"index.{ext}", year)
+    write_footer(topicsfile, f"index.{ext}", year, template=ext)
     topicsfile.close()
 
 
 if __name__ == "__main__":
+    from build import (
+        grass_version,
+        write_footer,        
+    )
+
     from build_html import (
         header1_tmpl,
-        grass_version,
         headertopics_tmpl,
         headerkey_tmpl,
         desc1_tmpl,
-        write_html_footer as write_footer,
         moduletopics_tmpl,
-        html_dir as path,
+        man_dir,
     )
 
     build_topics("html")
 
-    from build_md import (
-        grass_version,
+    from build_html import (
+        header1_tmpl,
         headertopics_tmpl,
         headerkey_tmpl,
         desc1_tmpl,
-        write_md_footer as write_footer,
         moduletopics_tmpl,
-        md_dir as path,
+        man_dir,
     )
 
     build_topics("md")

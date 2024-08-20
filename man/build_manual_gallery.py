@@ -146,28 +146,28 @@ def main(ext):
     output_name = f"manual_gallery.{ext}"
 
     man_files = get_files(
-        path,
+        man_dir,
         [f"*.{ext}"],
         exclude_patterns=[output_name, f"*_graphical.{ext}", f"graphical_index.{ext}"],
     )
     img_files = {}
 
-    for filename in os.listdir(path):
+    for filename in os.listdir(man_dir):
         if filename in img_blacklist:
             continue
         if file_matches(filename, img_patterns):
             for man_filename in man_files:
-                if img_in_file(os.path.join(path, man_filename), filename, ext):
+                if img_in_file(os.path.join(man_dir, man_filename), filename, ext):
                     img_files[filename] = man_filename
                     # for now suppose one image per manual filename
 
-    with open(os.path.join(path, output_name), "w") as output:
-        if ext == "html":
-            output.write(
-                header1_tmpl.substitute(
-                    title="GRASS GIS %s Reference Manual: Manual gallery" % grass_version
-                )
+    with open(os.path.join(man_dir, output_name), "w") as output:
+        output.write(
+            header1_tmpl.substitute(
+                title="GRASS GIS %s Reference Manual: Manual gallery" % grass_version
             )
+        )
+        if ext == "html":
             output.write(header_graphical_index_tmpl)
             output.write('<ul class="img-list">\n')
         for image, filename in sorted(img_files.items()):
@@ -193,19 +193,21 @@ def main(ext):
     return img_files
 
 if __name__ == "__main__":
-    from build_html import (
-        write_html_footer as write_footer,
+    from build import (
+        write_footer,
         grass_version,
+    )
+    
+    from build_html import (
         header1_tmpl,
-        html_dir as path
+        man_dir,
     )
 
     img_files_html = main("html")
 
     from build_md import (
-        write_md_footer as write_footer,
-        grass_version,
-        md_dir as path
+        header1_tmpl,
+        man_dir,
     )
 
     img_files_md = main("md")

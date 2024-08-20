@@ -12,7 +12,7 @@ import os
 no_intro_page_classes = ["display", "general", "miscellaneous", "postscript"]
 
 def build_class(ext):
-    os.chdir(path)
+    os.chdir(man_dir)
 
     filename = modclass + f".{ext}"
     f = open(filename + ".tmp", "w")
@@ -20,7 +20,8 @@ def build_class(ext):
     write_header(
         f,
         "{} modules - GRASS GIS {} Reference Manual".format(
-            modclass.capitalize(), grass_version)
+            modclass.capitalize(), grass_version),
+        template=ext
     )
     modclass_lower = modclass.lower()
     modclass_visible = modclass
@@ -36,7 +37,7 @@ def build_class(ext):
     f.write(modclass_tmpl.substitute(modclass=to_title(modclass_visible)))
 
     # for all modules:
-    for cmd in get_files(cls):
+    for cmd in get_files(man_dir, cls):
         basename = os.path.splitext(cmd)[0]
         desc = check_for_desc_override(basename)
         if desc is None:
@@ -45,7 +46,7 @@ def build_class(ext):
     if ext == "html":
         f.write("</table>\n")
 
-    write_footer(f, f"index.{ext}", year)
+    write_footer(f, f"index.{ext}", year, template=ext)
 
     f.close()
     replace_file(filename)
@@ -58,35 +59,32 @@ if __name__ == "__main__":
     if len(sys.argv) > 3:
         year = sys.argv[3]
 
-    from build_html import (
+    from build import (
         grass_version,
-        modclass_tmpl,
         to_title,
         check_for_desc_override,
+        replace_file,
+        get_files,
+        write_header,
+        write_footer,
+    )
+        
+    from build_html import (
+        modclass_tmpl,
         get_desc,
         desc2_tmpl,
-        replace_file,
         modclass_intro_tmpl,
-        html_files as get_files,
-        write_html_header as write_header,
-        write_html_footer as write_footer,
-        html_dir as path,
+        man_dir,
     )
 
     build_class("html")
 
     from build_md import (
-        grass_version,
         modclass_tmpl,
-        to_title,
-        check_for_desc_override,
         get_desc,
         desc2_tmpl,
         modclass_intro_tmpl,
-        md_files as get_files,
-        write_md_header as write_header,
-        write_md_footer as write_footer,
-        md_dir as path,
+        man_dir,
     )
 
     build_class("md")

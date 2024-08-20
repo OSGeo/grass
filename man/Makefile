@@ -109,7 +109,7 @@ define build_pso_md
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./parser_standard_options.py -t "$(GRASS_HOME)/lib/gis/parser_standard_options.c" \
-	-f "markdown" -o "$(MDDIR)/source/parser_standard_options.md"
+	-f "grass" -o "$(MDDIR)/source/parser_standard_options.md"
 endef
 
 $(HTMLDIR)/topics.html: $(ALL_HTML)
