@@ -197,7 +197,6 @@ if __name__ == "__main__":
         write_footer,
         grass_version,
     )
-    
     from build_html import (
         header1_tmpl,
         man_dir,
