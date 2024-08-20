@@ -33,16 +33,16 @@ class DataCatalogInfoManager:
     def ShowDataStructureInfo(self, onCreateLocationHandler):
         """Show info about the data hierarchy focused on the first-time user"""
         buttons = [
-            (_("Create new Location"), onCreateLocationHandler),
+            (_("Create new project"), onCreateLocationHandler),
             (_("Learn more"), self._onLearnMore),
         ]
         message = _(
-            "GRASS GIS helps you organize your data using Locations (projects) "
-            "which contain Mapsets (subprojects). All data in one Location is "
+            "GRASS GIS helps you organize your data using projects (locations) "
+            "which contain mapsets (subprojects). All data in one project is "
             "in the same coordinate reference system (CRS).\n\n"
-            "You are currently in Mapset PERMANENT in default Location {loc} "
+            "You are currently in mapset PERMANENT in default project {loc} "
             "which uses WGS 84 (EPSG:4326). "
-            "Consider creating a new Location with a CRS "
+            "Consider creating a new project with a CRS "
             "specific to your area. You can do it now or anytime later from "
             "the toolbar above."
         ).format(loc=gisenv()["LOCATION_NAME"])
@@ -55,11 +55,11 @@ class DataCatalogInfoManager:
             (_("Import raster data"), OnImportGdalLayersHandler),
         ]
         message = _(
-            "You have successfully created a new Location {loc}. "
-            "Currently you are in its PERMANENT Mapset which is used for "
+            "You have successfully created a new project {loc}. "
+            "Currently you are in its PERMANENT mapset which is used for "
             "storing your base maps to make them readily available in other "
-            "Mapsets. You can create new Mapsets for different tasks by right "
-            "clicking on the Location name.\n\n"
+            "mapsets. You can create new mapsets for different tasks by right "
+            "clicking on the project name.\n\n"
             "To import data, go to the toolbar above or use the buttons below."
         ).format(loc=gisenv()["LOCATION_NAME"])
         self.infoBar.ShowMessage(message, wx.ICON_INFORMATION, buttons)
@@ -81,8 +81,8 @@ class DataCatalogInfoManager:
         """Show info when last used mapset is not usable"""
         string = self._text_from_reason_id(reason_id)
         message = _(
-            "{string} GRASS GIS has started in a temporary Location. "
-            "To continue, use Data Catalog below to switch to a different Location."
+            "{string} GRASS GIS has started in a temporary project. "
+            "To continue, use Data Catalog below to switch to a different project."
         ).format(
             string=string,
         )
@@ -94,8 +94,8 @@ class DataCatalogInfoManager:
         buttons = [(_("Switch to last used mapset"), OnSwitchMapsetHandler)]
         message = _(
             "Last used mapset in path '{mapsetpath}' is currently in use. "
-            "GRASS GIS has started in a temporary Location. "
-            "To continue, use Data Catalog below to switch to a different Location "
+            "GRASS GIS has started in a temporary project. "
+            "To continue, use Data Catalog below to switch to a different project "
             "or remove lock file and switch to the last used mapset."
         ).format(mapsetpath=last_used_mapset_path)
         self.infoBar.ShowMessage(message, wx.ICON_INFORMATION, buttons)
