@@ -68,7 +68,6 @@ if __name__ == "__main__":
         write_header,
         write_footer,
     )
-        
     from build_html import (
         modclass_tmpl,
         get_desc,
