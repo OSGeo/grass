@@ -158,7 +158,6 @@ ignore = [
     "PLC0415", # import-outside-top-level
     "PLC1901", # compare-to-empty-string
     "PLC2701", # import-private-name
-    "PLC2801", # unnecessary-dunder-call
     "PLE0704", # misplaced-bare-raise
     "PLR0904", # too-many-public-methods
     "PLR0911", # too-many-return-statements
