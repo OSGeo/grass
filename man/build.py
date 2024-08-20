@@ -142,7 +142,6 @@ def to_title(name):
     if name == "PostScript":
         return name
     return name.capitalize()
-    
 ############################################################################
 
 arch_dist_dir = os.environ["ARCH_DISTDIR"]
