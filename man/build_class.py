@@ -27,7 +27,7 @@ def build_class(ext):
     modclass_visible = modclass
     if modclass_lower not in no_intro_page_classes:
         if modclass_visible == "raster3d":
-            # covert keyword to nice form
+            # convert keyword to nice form
             modclass_visible = "3D raster"
         f.write(
             modclass_intro_tmpl.substitute(
@@ -37,7 +37,7 @@ def build_class(ext):
     f.write(modclass_tmpl.substitute(modclass=to_title(modclass_visible)))
 
     # for all modules:
-    for cmd in get_files(man_dir, cls):
+    for cmd in get_files(man_dir, cls, extension=ext):
         basename = os.path.splitext(cmd)[0]
         desc = check_for_desc_override(basename)
         if desc is None:
