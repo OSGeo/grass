@@ -6,6 +6,7 @@ extra:
   homepage: ./index.html
 theme: 
   name: material
+  custom_dir: overrides
   language: en
   logo: grass_logo.png
   features:
