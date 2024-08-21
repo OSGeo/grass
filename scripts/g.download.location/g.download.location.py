@@ -47,7 +47,7 @@ import grass.script as gs
 
 def main(options, unused_flags):
     """Download and copy project to destination"""
-    gs.run_command("g.dowload.project", **options)
+    gs.run_command("g.download.project", **options)
 
 
 if __name__ == "__main__":
