@@ -16,7 +16,7 @@ import os
 import base64
 import json
 from pathlib import Path
-from .reprojection_renderer import ReprojectionRenderer
+from .reprojection_renderer import ReprojectionRenderer, CustomRenderer
 
 from .utils import (
     get_region_bounds_latlon,
@@ -213,6 +213,7 @@ class InteractiveMap:
         use_region=False,
         saved_region=None,
         map_backend=None,
+        crs=None,
     ):
         """Creates a blank folium/ipyleaflet map centered on g.region.
 
@@ -311,7 +312,7 @@ class InteractiveMap:
                 basemap["accessToken"] = API_key
             layout = self._ipywidgets.Layout(width=f"{width}px", height=f"{height}px")
             self.map = self._ipyleaflet.Map(
-                basemap=basemap, layout=layout, scroll_wheel_zoom=True
+                basemap=basemap, layout=layout, scroll_wheel_zoom=True, crs=crs
             )
 
         else:
@@ -325,9 +326,14 @@ class InteractiveMap:
         self.layer_control_object = None
         self.region_rectangle = None
 
-        self._renderer = ReprojectionRenderer(
-            use_region=use_region, saved_region=saved_region
-        )
+        if crs:
+            self._renderer = CustomRenderer(
+                crs=crs, use_region=use_region, saved_region=saved_region
+            )
+        else:
+            self._renderer = ReprojectionRenderer(
+                use_region=use_region, saved_region=saved_region
+            )
 
     def add_vector(self, name, title=None, **kwargs):
         """Imports vector into temporary WGS84 location, re-formats to a GeoJSON and

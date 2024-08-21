@@ -18,6 +18,7 @@ import os
 import tempfile
 import weakref
 from pathlib import Path
+
 import grass.script as gs
 from .map import Map
 from .utils import (
@@ -168,3 +169,60 @@ class ReprojectionRenderer:
         )
 
         return json_file
+
+
+class CustomRenderer(ReprojectionRenderer):
+    """Class for handling layers with a custom CRS without reprojection."""
+
+    def __init__(self, crs, use_region=False, saved_region=None, work_dir=None):
+        """
+        Initialize CustomRenderer.
+
+        param str crs: CRS string (EPSG code or Proj4 definition)
+        param str work_dir: Path to directory where files should be written
+        """
+        self.crs = crs
+
+        super().__init__(
+            use_region=use_region, saved_region=saved_region, work_dir=work_dir
+        )
+
+        self._rcfile_custom, self._custom_env = setup_location(
+            "custom_location", self._tmp_dir.name, self.crs, self._src_env
+        )
+
+    def render_raster(self, name):
+        """
+        Render a raster layer in its native CRS and save it as a PNG.
+
+        param str name: Name of the raster
+        """
+
+        gs.run_command("g.region", raster=name, env=self._custom_env)
+        filename = os.path.join(self._tmp_dir.name, f"{name}.png")
+        raster_info = gs.raster_info(name, env=self._custom_env)
+        img = Map(
+            width=int(raster_info["cols"]),
+            height=int(raster_info["rows"]),
+            env=self._custom_env,
+            filename=filename,
+            use_region=True,
+        )
+        img.run("d.rast", map=name)
+        return filename, self.get_bbox()
+
+    def render_vector(self, name):
+        """
+        Render a vector layer in its native CRS and save it as a GeoJSON.
+
+        param str name: Name of the vector
+        """
+        filename = os.path.join(self._tmp_dir.name, f"{name}.geojson")
+        gs.run_command(
+            "v.out.ogr",
+            input=name,
+            output=filename,
+            format="GeoJSON",
+            env=self._custom_env,
+        )
+        return filename
