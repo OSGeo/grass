@@ -163,7 +163,7 @@ def main(options, flags):
         return
 
     # Check the new stvds
-    new_sp = tgis.check_new_stds(output, "stvds", dbif=dbif, overwrite=overwrite)
+    tgis.check_new_stds(output, "stvds", dbif=dbif, overwrite=overwrite)
 
     # Setup the flags
     flags = ""
