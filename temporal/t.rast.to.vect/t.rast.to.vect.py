@@ -189,6 +189,7 @@ def main(options, flags):
         type=method,
         overwrite=overwrite,
         quiet=True,
+        column=column,
     )
 
     # The module queue for parallel execution, except if attribute tables should
