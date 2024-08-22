@@ -10,6 +10,7 @@
 import os
 import string
 from datetime import datetime
+from pathlib import Path
 
 # TODO: better fix this in include/Make/Html.make, see bug RT #5361
 
@@ -47,13 +48,11 @@ def check_for_desc_override(basename):
 
 
 def read_file(name):
-    with open(name, "r") as f:
-        return f.read()
+    return Path(name).read_text()
 
 
 def write_file(name, contents):
-    with open(name, "w") as f:
-        f.write(contents)
+    Path(name).write_text(contents)
 
 
 def try_mkdir(path):

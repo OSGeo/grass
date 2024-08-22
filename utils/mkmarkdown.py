@@ -46,8 +46,7 @@ HTTP_STATUS_CODES = list(http.HTTPStatus)
 
 def read_file(name):
     try:
-        with open(name) as f:
-            return f.read()
+        return Path(name).read_text()
     except OSError:
         return ""
 
@@ -307,12 +306,11 @@ def download_git_commit(url, response_format, *args, **kwargs):
             desc = HTTP_STATUS_CODES[index].description
             gs.fatal(
                 _(
-                    "Download commit from <{url}>, return status code "
-                    "{code}, {desc}".format(
-                        url=url,
-                        code=response.code,
-                        desc=desc,
-                    ),
+                    "Download commit from <{url}>, return status code " "{code}, {desc}"
+                ).format(
+                    url=url,
+                    code=response.code,
+                    desc=desc,
                 ),
             )
         if response_format not in response.getheader("Content-Type"):
@@ -320,10 +318,10 @@ def download_git_commit(url, response_format, *args, **kwargs):
                 _(
                     "Wrong downloaded commit file format. "
                     "Check url <{url}>. Allowed file format is "
-                    "{response_format}.".format(
-                        url=url,
-                        response_format=response_format,
-                    ),
+                    "{response_format}."
+                ).format(
+                    url=url,
+                    response_format=response_format,
                 ),
             )
         return response
@@ -333,16 +331,16 @@ def download_git_commit(url, response_format, *args, **kwargs):
                 "The download of the commit from the GitHub API "
                 "server wasn't successful, <{}>. Commit and commit "
                 "date will not be included in the <{}> addon html manual "
-                "page.".format(err.msg, pgm)
-            ),
+                "page."
+            ).format(err.msg, pgm)
         )
     except URLError:
         gs.warning(
             _(
                 "Download file from <{url}>, failed. Check internet "
                 "connection. Commit and commit date will not be included "
-                "in the <{pgm}> addon manual page.".format(url=url, pgm=pgm)
-            ),
+                "in the <{pgm}> addon manual page."
+            ).format(url=url, pgm=pgm)
         )
 
 
