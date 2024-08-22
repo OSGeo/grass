@@ -42,8 +42,8 @@ int main(int argc, char **argv)
     char buf[1024];
     dbString stmt;
 
-    JSON_Object *root_object, *col_object;
-    JSON_Value *root_value, *cols_value, *col_value;
+    JSON_Object *root_object = NULL, *col_object = NULL;
+    JSON_Value *root_value = NULL, *cols_value = NULL, *col_value = NULL;
     JSON_Array *cols_array = NULL;
 
     parse_command_line(argc, argv);
