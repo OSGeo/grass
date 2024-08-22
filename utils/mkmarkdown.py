@@ -23,7 +23,7 @@ import string
 import json
 import subprocess
 import http
-import pathlib
+from pathlib import Path
 from datetime import datetime
 from urllib import request as urlrequest
 import urllib.parse as urlparse
@@ -638,7 +638,7 @@ def get_addon_path(base_url, major_version):
     """
     addons_base_dir = os.getenv("GRASS_ADDON_BASE")
     if addons_base_dir and major_version:
-        grass_addons_dir = pathlib.Path(addons_base_dir) / "grass-addons"
+        grass_addons_dir = Path(addons_base_dir) / "grass-addons"
         if gs:
             call = gs.call
             popen = gs.Popen
@@ -651,8 +651,8 @@ def get_addon_path(base_url, major_version):
             major_version=major_version,
             addons_git_repo_url=urlparse.urljoin(base_url, "grass-addons/"),
         )
-        if not pathlib.Path(addons_base_dir).exists():
-            pathlib.Path(addons_base_dir).mkdir(parents=True, exist_ok=True)
+        if not Path(addons_base_dir).exists():
+            Path(addons_base_dir).mkdir(parents=True, exist_ok=True)
         if not grass_addons_dir.exists():
             call(
                 [
@@ -700,7 +700,7 @@ def get_addon_path(base_url, major_version):
             gs.decode(addons_file_list) if gs else addons_file_list.decode(),
         )
         for addon_path in addon_paths:
-            if pgm == pathlib.Path(addon_path).name:
+            if pgm == Path(addon_path).name:
                 return addon_path
 
 
