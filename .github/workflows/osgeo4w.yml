@@ -18,6 +18,8 @@ jobs:
       cancel-in-progress: true
 
     runs-on: ${{ matrix.os }}
+    env:
+      PYTHONWARNINGS: always
     strategy:
       matrix:
         os:
