@@ -41,6 +41,7 @@ Following modules are missing the 'modulename.html' file in src code:
 
 ############################################################################
 
+
 def check_for_desc_override(basename):
     return desc_override.get(basename)
 
@@ -142,6 +143,8 @@ def to_title(name):
     if name == "PostScript":
         return name
     return name.capitalize()
+
+
 ############################################################################
 
 arch_dist_dir = os.environ["ARCH_DISTDIR"]

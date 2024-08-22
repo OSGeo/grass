@@ -10,6 +10,7 @@ import sys
 
 from urllib.request import urlopen
 
+
 def parse_options(lines, startswith="Opt"):
     def split_in_groups(lines):
         def count_par_diff(line):
@@ -168,9 +169,7 @@ class OptTable:
 
 
 if __name__ == "__main__":
-    URL = (
-        "https://raw.githubusercontent.com/OSGeo/grass/main/lib/gis/parser_standard_options.c"
-    )
+    URL = "https://raw.githubusercontent.com/OSGeo/grass/main/lib/gis/parser_standard_options.c"
     parser = argparse.ArgumentParser(
         description="Extract GRASS default options from link."
     )
@@ -267,4 +266,4 @@ if __name__ == "__main__":
                 headerpso_tmpl,
             )
 
-        write_output(ext) # html or md
+        write_output(ext)  # html or md

@@ -45,8 +45,10 @@ def build_full_index(ext):
     f = open(filename + ".tmp", "w")
 
     write_header(
-        f, "GRASS GIS {} Reference Manual - Full index".format(grass_version),
-        body_width="80%", template=ext
+        f,
+        "GRASS GIS {} Reference Manual - Full index".format(grass_version),
+        body_width="80%",
+        template=ext,
     )
 
     # generate main index of all modules:
@@ -93,6 +95,7 @@ if __name__ == "__main__":
         get_desc,
         toc,
     )
+
     # build_full_index("html")
 
     from build_md import (

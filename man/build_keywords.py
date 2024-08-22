@@ -96,7 +96,10 @@ def build_keywords(ext):
             keys = []
             for line in lines:
                 if "keywords:" in line:
-                    keys = [x.strip() for x in line.split(":", 1)[1].rstrip("-->\n").split(",")]
+                    keys = [
+                        x.strip()
+                        for x in line.split(":", 1)[1].rstrip("-->\n").split(",")
+                    ]
                     break
 
         for key in keys:
@@ -189,11 +192,7 @@ if __name__ == "__main__":
         write_footer,
     )
 
-    from build_html import (
-        header1_tmpl,
-        headerkeywords_tmpl,
-        man_dir
-    )
+    from build_html import header1_tmpl, headerkeywords_tmpl, man_dir
 
     build_keywords("html")
 

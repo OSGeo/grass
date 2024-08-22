@@ -183,14 +183,13 @@ def main(ext):
                     "</li>\n".format(fn=filename, img=image, title=title, name=name)
                 )
             else:
-                output.write(
-                    f'[![{name}]({image} "{title}")]({filename})\n'
-                )
+                output.write(f'[![{name}]({image} "{title}")]({filename})\n')
         if ext == "html":
             output.write("</ul>")
         write_footer(output, f"index.{ext}", year)
 
     return img_files
+
 
 if __name__ == "__main__":
     from build import (

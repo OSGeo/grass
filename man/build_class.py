@@ -11,6 +11,7 @@ import os
 
 no_intro_page_classes = ["display", "general", "miscellaneous", "postscript"]
 
+
 def build_class(ext):
     os.chdir(man_dir)
 
@@ -20,8 +21,9 @@ def build_class(ext):
     write_header(
         f,
         "{} modules - GRASS GIS {} Reference Manual".format(
-            modclass.capitalize(), grass_version),
-        template=ext
+            modclass.capitalize(), grass_version
+        ),
+        template=ext,
     )
     modclass_lower = modclass.lower()
     modclass_visible = modclass
@@ -50,6 +52,7 @@ def build_class(ext):
 
     f.close()
     replace_file(filename)
+
 
 if __name__ == "__main__":
     # for all module groups:
