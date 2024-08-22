@@ -840,7 +840,7 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
 #pragma omp parallel for schedule(static) default(none)                        \
     shared(settings, geometry, horizons, shadow_angles, origin_points,         \
                point_count, printCount, angle_direction, printangle_direction, \
-               dfr_rad) collapse(2)
+               dfr_rad, twopi, rad2deg) collapse(2)
     for (int i = 0; i < point_count;
          ++i) { /* computational loop for each origin point */
         for (int j = 0; j < printCount;
