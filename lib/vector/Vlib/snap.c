@@ -507,7 +507,7 @@ static void Vect_snap_lines_list_kdtree(struct Map_info *Map,
                 Vect_write_line(Err, ltype, Points, Cats);
             }
         }
-    }                                             /* for each line */
+    } /* for each line */
     G_percent(line_idx, List_lines->n_values, 2); /* finish it */
 
     Vect_destroy_line_struct(Points);
@@ -864,7 +864,7 @@ static void Vect_snap_lines_list_rtree(struct Map_info *Map,
                 Vect_write_line(Err, ltype, Points, Cats);
             }
         }
-    }                                             /* for each line */
+    } /* for each line */
     G_percent(line_idx, List_lines->n_values, 2); /* finish it */
 
     Vect_destroy_line_struct(Points);

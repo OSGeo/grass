@@ -167,7 +167,7 @@ skewness: 0.801646"""
             self.assertAlmostEqual(p1["value"], p2["value"])
 
         self.assertCountEqual(list(expected.keys()), list(results.keys()))
-        for key in expected:
+        for key in expected.keys():  # noqa: PLC0206
             self.assertAlmostEqual(expected[key], results[key])
 
 

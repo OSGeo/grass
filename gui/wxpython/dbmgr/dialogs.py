@@ -189,7 +189,6 @@ class DisplayAttributesDialog(wx.Dialog):
 
     def OnSQLStatement(self, event):
         """Update SQL statement"""
-        pass
 
     def IsFound(self):
         """Check for status

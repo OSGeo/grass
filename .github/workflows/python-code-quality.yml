@@ -30,13 +30,13 @@ jobs:
       # renovate: datasource=pypi depName=black
       BLACK_VERSION: "24.8.0"
       # renovate: datasource=pypi depName=flake8
-      FLAKE8_VERSION: "7.1.0"
+      FLAKE8_VERSION: "7.1.1"
       # renovate: datasource=pypi depName=pylint
       PYLINT_VERSION: "2.12.2"
       # renovate: datasource=pypi depName=bandit
       BANDIT_VERSION: "1.7.9"
       # renovate: datasource=pypi depName=ruff
-      RUFF_VERSION: "0.5.6"
+      RUFF_VERSION: "0.6.2"
 
     runs-on: ${{ matrix.os }}
     permissions:
@@ -129,13 +129,13 @@ jobs:
           bandit -c pyproject.toml -iii -r . -f sarif -o bandit.sarif --exit-zero
 
       - name: Upload Bandit Scan Results
-        uses: actions/upload-artifact@89ef406dd8d7e03cfd12d9e0a4a378f454709029 # v4.3.5
+        uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4.3.6
         with:
           name: bandit.sarif
           path: bandit.sarif
 
       - name: Upload SARIF File into Security Tab
-        uses: github/codeql-action/upload-sarif@afb54ba388a7dca6ecae48f608c4ff05ff4cc77a # v3.25.15
+        uses: github/codeql-action/upload-sarif@f0f3afee809481da311ca3a6ff1ff51d81dbeb24 # v3.26.4
         with:
           sarif_file: bandit.sarif
 
@@ -147,7 +147,7 @@ jobs:
         run: |
           echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
 
-      - uses: rui314/setup-mold@2e332a0b602c2fc65d2d3995941b1b29a5f554a0 # v1
+      - uses: rui314/setup-mold@0bf4f07ef9048ec62a45f9dbf2f098afa49695f0 # v1
       - name: Build
         run: .github/workflows/build_${{ matrix.os }}.sh $HOME/install
 
@@ -201,7 +201,7 @@ jobs:
           cp -rp dist.$ARCH/docs/html/libpython sphinx-grass
 
       - name: Make Sphinx documentation available
-        uses: actions/upload-artifact@89ef406dd8d7e03cfd12d9e0a4a378f454709029 # v4.3.5
+        uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4.3.6
         with:
           name: sphinx-grass
           path: sphinx-grass

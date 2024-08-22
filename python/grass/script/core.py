@@ -40,7 +40,7 @@ from grass.grassdb.manage import resolve_mapset_path
 
 # subprocess wrapper that uses shell on Windows
 class Popen(subprocess.Popen):
-    _builtin_exts = set([".com", ".exe", ".bat", ".cmd"])
+    _builtin_exts = {".com", ".exe", ".bat", ".cmd"}
 
     @staticmethod
     def _escape_for_shell(arg):
@@ -178,7 +178,7 @@ def get_commands(*, env=None):
     gui_path = os.path.join(gisbase, "etc", "gui", "scripts")
     if os.path.exists(gui_path):
         os.environ["PATH"] = os.getenv("PATH") + os.pathsep + gui_path
-        cmd = cmd + os.listdir(gui_path)
+        cmd += os.listdir(gui_path)
 
     return set(cmd), scripts
 
