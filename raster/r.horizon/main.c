@@ -817,8 +817,9 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
     }
 
     /* preprocess origin points */
-#pragma omp parallel for schedule(static) default(none) shared( \
-        geometry, xcoords, ycoords, z, settings, origin_points, point_count)
+#pragma omp parallel for schedule(static) default(none)            \
+    shared(geometry, xcoords, ycoords, z, settings, origin_points, \
+               point_count, deg2rad)
     for (int i = 0; i < point_count; i++) {
         int xindex = (int)((xcoords[i] - geometry->xmin) / geometry->stepx);
         int yindex = (int)((ycoords[i] - geometry->ymin) / geometry->stepy);
