@@ -353,7 +353,7 @@ class PyStc(stc.StyledTextCtrl):
                 if expanding:
                     self.SetFoldExpanded(lineNum, True)
                     lineNum = self.Expand(lineNum, True)
-                    lineNum = lineNum - 1
+                    lineNum -= 1
                 else:
                     lastChild = self.GetLastChild(lineNum, -1)
                     self.SetFoldExpanded(lineNum, False)
@@ -361,11 +361,11 @@ class PyStc(stc.StyledTextCtrl):
                     if lastChild > lineNum:
                         self.HideLines(lineNum + 1, lastChild)
 
-            lineNum = lineNum + 1
+            lineNum += 1
 
     def Expand(self, line, doExpand, force=False, visLevels=0, level=-1):
         lastChild = self.GetLastChild(line, level)
-        line = line + 1
+        line += 1
 
         while line <= lastChild:
             if force:
@@ -373,9 +373,8 @@ class PyStc(stc.StyledTextCtrl):
                     self.ShowLines(line, line)
                 else:
                     self.HideLines(line, line)
-            else:
-                if doExpand:
-                    self.ShowLines(line, line)
+            elif doExpand:
+                self.ShowLines(line, line)
 
             if level == -1:
                 level = self.GetFoldLevel(line)
@@ -388,12 +387,11 @@ class PyStc(stc.StyledTextCtrl):
                         self.SetFoldExpanded(line, False)
 
                     line = self.Expand(line, doExpand, force, visLevels - 1)
+                elif doExpand and self.GetFoldExpanded(line):
+                    line = self.Expand(line, True, force, visLevels - 1)
                 else:
-                    if doExpand and self.GetFoldExpanded(line):
-                        line = self.Expand(line, True, force, visLevels - 1)
-                    else:
-                        line = self.Expand(line, False, force, visLevels - 1)
+                    line = self.Expand(line, False, force, visLevels - 1)
             else:
-                line = line + 1
+                line += 1
 
         return line

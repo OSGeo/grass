@@ -14,14 +14,12 @@ extend-exclude = '''
 '''
 
 [tool.ruff]
-required-version = ">=0.5.0"
+required-version = ">=0.6.0"
 
 builtins = ["_"]
 
 # In addition to the standard set of exclusions, omit the following files or folders.
 extend-exclude = ["python/libgrass_interface_generator"]
-# In addition to the standard set of inclusions, include `.ipynb` files.
-extend-include = ["*.ipynb"]
 
 [tool.ruff.lint]
 # See https://docs.astral.sh/ruff/rules/
@@ -92,10 +90,7 @@ ignore = [
     "B006",    # mutable-argument-default
     "B007",    # unused-loop-control-variable
     "B008",    # function-call-in-default-argument
-    "B009",    # get-attr-with-constant
     "B015",    # useless-comparison
-    "B018",    # useless-expression
-    "B020",    # loop-variable-overrides-iterator
     "B023",    # function-uses-loop-variable
     "B026",    # star-arg-unpacking-after-keyword-arg
     "B028",    # no-explicit-stacklevel
@@ -103,15 +98,9 @@ ignore = [
     "B904",    # raise-without-from-inside-except
     "B909",    # loop-iterator-mutation
     "BLE001",  # blind-except
-    "C400",    # unnecessary-generator-list
-    "C401",    # unnecessary-generator-set
-    "C403",    # unnecessary-list-comprehension-set
     "C404",    # unnecessary-list-comprehension-dict
-    "C405",    # unnecessary-literal-set
     "C414",    # unnecessary-double-cast-or-process
     "C416",    # unnecessary-comprehension
-    "C417",    # unnecessary-map
-    "C419",    # unnecessary-comprehension-in-call
     "COM812",  # missing-trailing-comma
     "COM818",  # trailing-comma-on-bare-tuple
     "D1",
@@ -141,8 +130,6 @@ ignore = [
     "DTZ011",  # call-date-today
     "E401",    # multiple-imports-on-one-line
     "E402",    # module-import-not-at-top-of-file
-    "E713",    # not-in-test
-    "E714",    # not-is-test
     "E721",    # type-comparison
     "E722",    # bare-except
     "E731",    # lambda-assignment
@@ -151,7 +138,6 @@ ignore = [
     "F403",    # undefined-local-with-import-star
     "F405",    # undefined-local-with-import-star-usage
     "F601",    # multi-value-repeated-key-literal
-    "F632",    # is-literal
     "F811",    # redefined-while-unused
     "F821",    # undefined-name
     "F822",    # undefined-export
@@ -159,47 +145,20 @@ ignore = [
     "FBT001",  # boolean-type-hint-positional-argument
     "FBT002",  # boolean-default-value-positional-argument
     "FBT003",  # boolean-positional-value-in-call
-    "FURB101", # read-whole-file
-    "FURB103", # write-whole-file.
-    "FURB105", # print-empty-string
-    "FURB110", # if-exp-instead-of-or-operator
-    "FURB113", # repeated-append
-    "FURB116", # f-string-number-format
-    "FURB116", # f-string-number-format
     "FURB118", # reimplemented-operator
-    "FURB129", # readlines-in-for
-    "FURB131", # delete-full-slice
-    "FURB136", # if-expr-min-max
-    "FURB140", # reimplemented-starmap
-    "FURB142", # for-loop-set-mutations
-    "FURB148", # unnecessary-enumerate
-    "FURB152", # math-constant
-    "FURB154", # repeated-global
-    "FURB171", # single-item-membership-test
-    "FURB192", # sorted-min-max
-    "G002",    # logging-percent-format
-    "G003",    # logging-string-concat
     "I001",    # unsorted-imports
-    "ICN001",  # unconventional-import-alias
     "ISC003",  # explicit-string-concatenation
-    "PERF102", # incorrect-dict-iterator
     "PERF203", # try-except-in-loop
     "PERF401", # manual-list-comprehension
     "PERF402", # manual-list-copy
     "PERF403", # manual-dict-comprehension
-    "PIE790",  # unnecessary-placeholder
     "PIE794",  # duplicate-class-field-definition
     "PIE808",  # unnecessary-range-start
     "PIE810",  # multiple-starts-ends-with
-    "PLC0206", # dict-index-missing-items
-    "PLC0414", # useless-import-alias
     "PLC0415", # import-outside-top-level
     "PLC1901", # compare-to-empty-string
     "PLC2701", # import-private-name
-    "PLC2801", # unnecessary-dunder-call
     "PLE0704", # misplaced-bare-raise
-    "PLR0124", # comparison-with-itself
-    "PLR0202", # no-classmethod-decorator
     "PLR0904", # too-many-public-methods
     "PLR0911", # too-many-return-statements
     "PLR0912", # too-many-branches
@@ -210,16 +169,9 @@ ignore = [
     "PLR0917", # too-many-positional
     "PLR1702", # too-many-nested-blocks
     "PLR1704", # redefined-argument-from-local
-    "PLR1714", # repeated-equality-comparison
-    "PLR1733", # unnecessary-dict-index-lookup
     "PLR2004", # magic-value-comparison
-    "PLR2044", # empty-comment
-    "PLR5501", # collapsible-else-if
-    "PLR6104", # non-augmented-assignment
     "PLR6201", # literal-membership
     "PLR6301", # no-self-use
-    "PLW0127", # self-assigning-variable
-    "PLW0406", # import-self
     "PLW0602", # global-variable-not-assigned
     "PLW0603", # global-statement
     "PLW0604", # global-at-module-level
@@ -228,7 +180,7 @@ ignore = [
     "PLW1514", # unspecified-encoding
     "PLW1641", # eq-without-hash
     "PLW2901", # redefined-loop-name
-    "PLW3201", # nested-min-max
+    "PLW3201", # bad-dunder-method-name
     "PT001",   # pytest-fixture-incorrect-parentheses-style
     "PT004",   # pytest-missing-fixture-name-underscore
     "PT006",   # pytest-parametrize-names-wrong-type
@@ -259,19 +211,22 @@ ignore = [
     "PTH202",  # os-path-getsize
     "PTH204",  # os-path-getmtime
     "PTH207",  # glob
-    "RET50",   # flake8-return (RET)
+    "RET501",  # unnecessary-return-none
+    "RET502",  # implicit-return-value
+    "RET503",  # implicit-return
+    "RET505",  # superfluous-else-return
+    "RET506",  # superfluous-else-raise
+    "RET507",  # superfluous-else-continue
+    "RET508",  # superfluous-else-break
     "RSE102",  # unnecessary-paren-on-raise-exception
-    "RUF002",  # ambiguous-unicode-character-docstring
     "RUF003",  # ambiguous-unicode-character-comment
     "RUF005",  # collection-literal-concatenation
     "RUF012",  # mutable-class-default
-    "RUF013",  # unnecessary-iterable-allocation-for-first-element
     "RUF015",  # unnecessary-iterable-allocation-for-first-element
     "RUF019",  # unnecessary-key-check
-    "RUF021",  # parenthesize-chained-operators
     "RUF027",  # missing-f-string-syntax
     "RUF100",  # unused-noqa
-    "S101",    #assert
+    "S101",    # assert
     "S108",    # hardcoded-temp-file
     "S110",    # try-except-pass
     "S112",    # try-except-continue
@@ -294,7 +249,6 @@ ignore = [
     "S608",    # hardcoded-sql-expression
     "SIM101",  # duplicate-isinstance-call
     "SIM102",  # collapsible-if
-    "SIM103",  # needless-bool
     "SIM105",  # suppressible-exception
     "SIM108",  # if-else-block-instead-of-if-exp
     "SIM109",  # compare-with-tuple
@@ -303,13 +257,9 @@ ignore = [
     "SIM114",  # if-with-same-arms
     "SIM115",  # open-file-with-context-handler
     "SIM116",  # if-else-block-instead-of-dict-lookup
-    "SIM117",  # multiple-with-statements
     "SIM118",  # in-dict-keys
     "SIM201",  # negate-equal-op
-    "SIM210",  # if-expr-with-true-false
-    "SIM211",  # if-expr-with-false-true
     "SIM223",  # expr-and-false
-    "SIM300",  # yoda-conditions
     "SIM401",  # if-else-block-instead-of-dict-get
     "SLF001",  # private-member-access
     "TRY002",  # raise-vanilla-class
@@ -318,30 +268,27 @@ ignore = [
     "TRY201",  # verbose-raise
     "TRY300",  # try-consider-else
     "TRY301",  # raise-within-try
-    "TRY302",  # useless-try-except
     "UP015",   # redundant-open-modes
-    "UP018",   # native-literals
-    "UP022",   # replace-stdout-stderr
     "UP030",   # format-literals
     "UP031",   # printf-string-formatting
     "UP032",   # f-string
-    "UP034",   # extraneous-parentheses
     "UP036",   # outdated-version-block
-    "W391",    # too-many-newlines-at-end-of-file
     "W605",    # invalid-escape-sequence
-    "YTT204",  # sys-version-info-minor-cmp-int
 ]
 
 
 [tool.ruff.lint.per-file-ignores]
 # See https://docs.astral.sh/ruff/settings/#lint_per-file-ignores
+# "A005", # builtin-module-shadowing
 # "INT002", # f-string-in-get-text-func-call
 # "INT001", # format-in-get-text-func-call
 # "INT003", # printf-in-get-text-func-call
+# "PLW0108", # unnecessary-lambda
 # Ignore `E402` (import violations) in all `__init__.py` files
 "*/testsuite/**.py" = ["PT009", "PT027"]
 "__init__.py" = ["E402"]
 "general/g.parser/test.py" = ["INT003"]
+"gui/**" = ["PLW0108"] # See https://github.com/OSGeo/grass/issues/4124
 "gui/wxpython/animation/dialogs.py" = ["INT002"]
 "gui/wxpython/animation/temporal_manager.py" = ["INT003"]
 "gui/wxpython/core/debug.py" = ["INT002"]
@@ -358,6 +305,7 @@ ignore = [
 "gui/wxpython/iclass/dialogs.py" = ["INT003"]
 "gui/wxpython/iclass/frame.py" = ["FLY002", "INT003"]
 "gui/wxpython/iclass/plots.py" = ["INT003"]
+"gui/wxpython/iclass/statistics.py" = ["A005"]
 "gui/wxpython/image2target/ii2t_gis_set.py" = ["INT003"]
 "gui/wxpython/iscatt/controllers.py" = ["INT003"]
 "gui/wxpython/iscatt/dialogs.py" = ["INT003"]
@@ -384,23 +332,26 @@ ignore = [
 "gui/wxpython/web_services/dialogs.py" = ["INT003"]
 "gui/wxpython/web_services/widgets.py" = ["INT003"]
 "gui/wxpython/wxgui.py" = ["INT002"]
-"gui/wxpython/wxplot/profile.py" = ["NPY001"]
+"gui/wxpython/wxplot/profile.py" = ["A005"]
+"lib/imagery/testsuite/test_imagery_sigsetfile.py" = ["FURB152"]
 "lib/init/grass.py" = ["INT003"]
 "python/grass/__init__.py" = ["PYI056"]
+"python/grass/exp*/tests/grass_script_mapset_session_test.py" = ["SIM117"]
+"python/grass/exp*/tests/grass_script_tmp_mapset_session_test.py" = ["SIM117"]
 "python/grass/gunittest/loader.py" = ["PYI024"]
 "python/grass/gunittest/multireport.py" = ["PYI024"]
+"python/grass/gunittest/testsu*/d*/s*/s*/subsub*/t*/test_segfaut.py" = ["B018"]
 "python/grass/gunittest/testsuite/test_assertions_rast3d.py" = ["FLY002"]
 "python/grass/jupyter/tests/reprojection_renderer_test.py" = ["PT013"]
 "python/grass/jupyter/testsuite/interactivemap_test.py" = ["PGH004"]
 "python/grass/jupyter/testsuite/map_test.py" = ["PGH004"]
-"python/grass/pygrass/raster/__init__.py" = ["NPY002"]
+"python/grass/pydispatch/signal.py" = ["A005"]
 "python/grass/pygrass/raster/category.py" = ["INT002"]
-"python/grass/pygrass/raster/testsuite/test_numpy.py" = ["NPY002"]
 "python/grass/pygrass/vector/__init__.py" = ["INT003"]
 "python/grass/pygrass/vector/geometry.py" = ["PYI024"]
 "python/grass/pygrass/vector/sql.py" = ["FLY002"]
-"python/grass/pygrass/vector/testsuite/test_table.py" = ["NPY002", "PLW0108"]
-"python/grass/pygrass/vector/testsuite/test_vector3d.py" = ["NPY002"]
+"python/grass/pygrass/vector/testsuite/test_table.py" = ["PLW0108"]
+"python/grass/script/array.py" = ["A005"]
 "python/grass/script/raster.py" = ["INT003"]
 "python/grass/temporal/abstract_space_time_dataset.py" = ["INT003"]
 "python/grass/temporal/aggregation.py" = ["INT003"]
@@ -416,7 +367,7 @@ ignore = [
 "python/grass/temporal/univar_statistics.py" = ["INT002"]
 "raster3d/r3.flow/testsuite/r3flow_test.py" = ["FLY002"]
 "raster3d/r3.gradient/testsuite/r3gradient_test.py" = ["FLY002"]
-"scripts/d.polar/d.polar.py" = ["INT002"]
+"scripts/d.polar/d.polar.py" = ["FURB154", "INT002"]
 "scripts/g.extension.all/g.extension.all.py" = ["INT002"]
 "scripts/g.extension/g.extension.py" = ["INT002"]
 "scripts/i.oif/i.oif.py" = ["INT003"]

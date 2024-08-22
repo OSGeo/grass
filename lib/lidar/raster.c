@@ -313,6 +313,6 @@ int P_Regular_Points(struct Cell_head *Elaboration, struct Cell_head *Original,
                 Segment_put(out_seg, &dval, row, col);
             }
         } /* END COL */
-    }     /* END ROW */
+    } /* END ROW */
     return 1;
 }

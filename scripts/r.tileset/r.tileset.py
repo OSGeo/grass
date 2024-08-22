@@ -120,10 +120,14 @@ from grass.exceptions import CalledModuleError
 def bboxToPoints(bbox):
     """Make points that are the corners of a bounding box"""
     points = []
-    points.append((bbox["w"], bbox["s"]))
-    points.append((bbox["w"], bbox["n"]))
-    points.append((bbox["e"], bbox["n"]))
-    points.append((bbox["e"], bbox["s"]))
+    points.extend(
+        (
+            (bbox["w"], bbox["s"]),
+            (bbox["w"], bbox["n"]),
+            (bbox["e"], bbox["n"]),
+            (bbox["e"], bbox["s"]),
+        )
+    )
 
     return points
 
@@ -213,7 +217,7 @@ def sideLengths(points, xmetric, ymetric):
     return {"x": (ret[1], ret[3]), "y": (ret[0], ret[2])}
 
 
-def bboxesIntersect(bbox_1, bbox_2):
+def bboxesIntersect(bbox_1, bbox_2) -> bool:
     """Determine if two bounding boxes intersect"""
     bi_a1 = (bbox_1["w"], bbox_1["s"])
     bi_a2 = (bbox_1["e"], bbox_1["n"])
@@ -229,10 +233,7 @@ def bboxesIntersect(bbox_1, bbox_2):
         ):
             cin[i] = True
 
-    if cin[0] and cin[1]:
-        return True
-
-    return False
+    return bool(cin[0] and cin[1])
 
 
 def main():
@@ -344,8 +345,9 @@ def main():
     # points later.
 
     bigger = []
-    bigger.append(max(source_bbox_dest_lengths["x"]))
-    bigger.append(max(source_bbox_dest_lengths["y"]))
+    bigger.extend(
+        (max(source_bbox_dest_lengths["x"]), max(source_bbox_dest_lengths["y"]))
+    )
     maxdim = (max_cols, max_rows)
 
     # Compute the number and size of tiles to use in each direction

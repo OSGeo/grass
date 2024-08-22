@@ -189,7 +189,6 @@ class DisplayAttributesDialog(wx.Dialog):
 
     def OnSQLStatement(self, event):
         """Update SQL statement"""
-        pass
 
     def IsFound(self):
         """Check for status
@@ -250,21 +249,19 @@ class DisplayAttributesDialog(wx.Dialog):
                             )
                             sqlCommands.append(None)
                             continue
-                    else:
-                        if self.action == "add":
-                            continue
+                    elif self.action == "add":
+                        continue
 
                     if newvalue != value:
                         updatedColumns.append(name)
                         if newvalue == "":
                             updatedValues.append("NULL")
+                        elif ctype != str:
+                            updatedValues.append(str(newvalue))
                         else:
-                            if ctype != str:
-                                updatedValues.append(str(newvalue))
-                            else:
-                                updatedValues.append(
-                                    "'" + newvalue.replace("'", "''") + "'"
-                                )
+                            updatedValues.append(
+                                "'" + newvalue.replace("'", "''") + "'"
+                            )
                         columns[name]["values"][idx] = newvalue
 
                 if self.action != "add" and len(updatedValues) == 0:

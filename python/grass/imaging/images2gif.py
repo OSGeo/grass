@@ -72,7 +72,7 @@ try:
 
     pillow = True
     try:
-        PIL.__version__  # test if user has Pillow or PIL
+        PIL_version = PIL.__version__  # test if user has Pillow or PIL
     except AttributeError:
         pillow = False
     from PIL.GifImagePlugin import getheader, getdata
@@ -471,7 +471,7 @@ class GifWriter:
                     fp.write(d)
 
             # Prepare for next round
-            frames = frames + 1
+            frames += 1
 
         fp.write(";")  # end gif
         return frames
@@ -857,14 +857,14 @@ class NeuQuant:
 
     def geta(self, alpha, rad):
         try:
-            return self.a_s[(alpha, rad)]
+            return self.a_s[alpha, rad]
         except KeyError:
             length = rad * 2 - 1
             mid = length / 2
             q = np.array(list(range(mid - 1, -1, -1)) + list(range(-1, mid)))
             a = alpha * (rad * rad - q * q) / (rad * rad)
             a[mid] = 0
-            self.a_s[(alpha, rad)] = a
+            self.a_s[alpha, rad] = a
             return a
 
     def alterneigh(self, alpha, rad, i, b, g, r):
@@ -1105,8 +1105,7 @@ class NeuQuant:
     def inxsearch(self, r, g, b):
         """Search for BGR values 0..255 and return colour index"""
         dists = self.colormap[:, :3] - np.array([r, g, b])
-        a = np.argmin((dists * dists).sum(1))
-        return a
+        return np.argmin((dists * dists).sum(1))
 
 
 if __name__ == "__main__":

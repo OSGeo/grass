@@ -39,9 +39,9 @@ class TestFlag(TestCase):
         """Test magic __bool__ method"""
         flag = Flag(diz={"name": "a"})
         flag.value = True
-        self.assertTrue(True if flag else False)
+        self.assertTrue(bool(flag))
         flag.value = False
-        self.assertFalse(True if flag else False)
+        self.assertFalse(bool(flag))
 
 
 if __name__ == "__main__":

@@ -25,15 +25,15 @@ import numpy as np
 import wx
 from grass.pygrass.modules import Module
 
-import grass.script as grass
+import grass.script as gs
 from functools import reduce
 
 try:
-    import matplotlib
+    import matplotlib as mpl
 
     # The recommended way to use wx with mpl is with the WXAgg
     # backend.
-    matplotlib.use("WXAgg")
+    mpl.use("WXAgg")
     from matplotlib.figure import Figure
     from matplotlib.backends.backend_wxagg import (
         FigureCanvasWxAgg as FigCanvas,
@@ -74,19 +74,16 @@ COLORS = ["b", "g", "r", "c", "m", "y", "k"]
 LINEAR_REG_LINE_COLOR = (0.56, 0.00, 1.00)
 
 
-def check_version(*version):
+def check_version(*version) -> bool:
     """Checks if given version or newer is installed"""
     versionInstalled = []
-    for i in matplotlib.__version__.split("."):
+    for i in mpl.__version__.split("."):
         try:
             v = int(i)
             versionInstalled.append(v)
         except ValueError:
             versionInstalled.append(0)
-    if versionInstalled < list(version):
-        return False
-    else:
-        return True
+    return not versionInstalled < list(version)
 
 
 def findBetween(s, first, last):
@@ -143,7 +140,10 @@ class TplotFrame(wx.Frame):
         if self._giface.GetMapDisplay():
             self.coorval.OnClose()
             self.cats.OnClose()
-        self.__del__()
+
+        # __del__() and del keyword seem to have differences,
+        # how can self.Destroy(), called after del, work otherwise
+        self.__del__()  # noqa: PLC2801, C2801
         self.Destroy()
 
     def _layout(self):
@@ -513,7 +513,7 @@ class TplotFrame(wx.Frame):
 
     def _getExistingCategories(self, mapp, cats):
         """Get a list of categories for a vector map"""
-        vdb = grass.read_command("v.category", input=mapp, option="print")
+        vdb = gs.read_command("v.category", input=mapp, option="print")
         categories = vdb.splitlines()
         if not cats:
             return categories
@@ -613,7 +613,7 @@ class TplotFrame(wx.Frame):
                 self.plotNameListV.append(name)
                 # TODO set an appropriate distance, right now a big one is set
                 # to return the closer point to the selected one
-                out = grass.vector_what(
+                out = gs.vector_what(
                     map="pois_srvds",
                     coord=self.poi.coords(),
                     distance=10000000000000000,
@@ -673,7 +673,7 @@ class TplotFrame(wx.Frame):
                             ),
                         )
                         return
-                    vals = grass.vector_db_select(
+                    vals = gs.vector_db_select(
                         map=row["name"],
                         layer=lay,
                         where=wherequery.format(key=catkey),
@@ -739,11 +739,10 @@ class TplotFrame(wx.Frame):
         """Function to set the right labels"""
         if self.drawX != "":
             self.axes2d.set_xlabel(self.drawX)
+        elif self.temporalType == "absolute":
+            self.axes2d.set_xlabel(_("Temporal resolution: %s" % x))
         else:
-            if self.temporalType == "absolute":
-                self.axes2d.set_xlabel(_("Temporal resolution: %s" % x))
-            else:
-                self.axes2d.set_xlabel(_("Time [%s]") % self.unit)
+            self.axes2d.set_xlabel(_("Time [%s]") % self.unit)
         if self.drawY != "":
             self.axes2d.set_ylabel(self.drawY)
         else:
@@ -1268,7 +1267,7 @@ class TplotFrame(wx.Frame):
             except:
                 self.coorval.SetValue(",".join(coors))
         if self.datasetsV:
-            vdatas = ",".join(map(lambda x: x[0] + "@" + x[1], self.datasetsV))
+            vdatas = ",".join(f"{x[0]}@{x[1]}" for x in self.datasetsV)
             self.datasetSelectV.SetValue(vdatas)
             if attr:
                 self.attribute.SetValue(attr)
@@ -1276,7 +1275,7 @@ class TplotFrame(wx.Frame):
                 self.cats.SetValue(cats)
         if self.datasetsR:
             self.datasetSelectR.SetValue(
-                ",".join(map(lambda x: x[0] + "@" + x[1], self.datasetsR))
+                ",".join(f"{x[0]}@{x[1]}" for x in self.datasetsR)
             )
         if title:
             self.title.SetValue(title)
@@ -1306,7 +1305,7 @@ class TplotFrame(wx.Frame):
                 break
         if found:
             try:
-                vect_list = grass.read_command(
+                vect_list = gs.read_command(
                     "t.vect.list", flags="u", input=dataset, column="name"
                 )
             except Exception:
@@ -1368,8 +1367,9 @@ def InfoFormat(timeData, values):
         elif etype == "str3ds":
             text.append(_("Space time 3D raster dataset: %s") % key)
 
-        text.append(_("Value for {date} is {val}".format(date=val[0], val=val[1])))
-        text.append("\n")
+        text.extend(
+            (_("Value for {date} is {val}".format(date=val[0], val=val[1])), "\n")
+        )
     text.append(_("Press Del to dismiss."))
 
     return "\n".join(text)
@@ -1413,8 +1413,8 @@ class DataCursor:
             artists = [artists]
         self.artists = artists
         self.convert = convert
-        self.axes = tuple(set(art.axes for art in self.artists))
-        self.figures = tuple(set(ax.figure for ax in self.axes))
+        self.axes = tuple({art.axes for art in self.artists})
+        self.figures = tuple({ax.figure for ax in self.axes})
 
         self.annotations = {}
         for ax in self.axes:

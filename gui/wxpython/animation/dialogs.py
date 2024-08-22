@@ -671,9 +671,8 @@ class InputDialog(wx.Dialog):
 
             if not self.legend.IsChecked():
                 self.legend.SetValue(True)
-        else:
-            if not self._tmpLegendCmd and not self.animationData.legendCmd:
-                self.legend.SetValue(False)
+        elif not self._tmpLegendCmd and not self.animationData.legendCmd:
+            self.legend.SetValue(False)
 
     def _update(self):
         if self.nDChoice.GetSelection() == 1 and len(self._layerList) > 1:
@@ -901,7 +900,7 @@ class EditDialog(wx.Dialog):
         return self.result
 
     def OnOk(self, event):
-        indices = set([anim.windowIndex for anim in self.animationData])
+        indices = {anim.windowIndex for anim in self.animationData}
         if len(indices) != len(self.animationData):
             GError(
                 parent=self,
@@ -1623,9 +1622,8 @@ class AnimSimpleLayerManager(SimpleLayerManager):
             else:
                 signal = self.cmdChanged
             signal.emit(index=self._layerList.GetLayerIndex(layer), layer=layer)
-        else:
-            if hidden:
-                self._layerList.RemoveLayer(layer)
+        elif hidden:
+            self._layerList.RemoveLayer(layer)
         dlg.Destroy()
         self._update()
         self.anyChange.emit()

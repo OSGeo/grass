@@ -315,57 +315,56 @@ class DisplayDriver:
                     pdc.SetId(dcId)
                     dcId += 2
                 self._drawCross(pdc, p)
-        else:
-            if dcId > 0 and self._drawSegments:
-                self.fisrtNode = True
-                self.lastNodeId = robj.npoints * 2 - 1
-                dcId = 2  # first segment
-                i = 0
-                while i < robj.npoints - 1:
-                    point_beg = wx.Point(robj.point[i].x, robj.point[i].y)
-                    point_end = wx.Point(robj.point[i + 1].x, robj.point[i + 1].y)
-                    # set unique id & set bbox for each segment
-                    pdc.SetId(dcId)
-                    pdc.SetPen(pen)
-                    pdc.SetIdBounds(dcId - 1, Rect(point_beg.x, point_beg.y, 0, 0))
-                    pdc.SetIdBounds(
-                        dcId,
-                        Rect(
-                            point_beg.x,
-                            point_beg.y,
-                            point_end.x - point_beg.x,
-                            point_end.y - point_beg.y,
-                        ),
-                    )
-                    pdc.DrawLine(point_beg.x, point_beg.y, point_end.x, point_end.y)
-                    i += 1
-                    dcId += 2
+        elif dcId > 0 and self._drawSegments:
+            self.fisrtNode = True
+            self.lastNodeId = robj.npoints * 2 - 1
+            dcId = 2  # first segment
+            i = 0
+            while i < robj.npoints - 1:
+                point_beg = wx.Point(robj.point[i].x, robj.point[i].y)
+                point_end = wx.Point(robj.point[i + 1].x, robj.point[i + 1].y)
+                # set unique id & set bbox for each segment
+                pdc.SetId(dcId)
+                pdc.SetPen(pen)
+                pdc.SetIdBounds(dcId - 1, Rect(point_beg.x, point_beg.y, 0, 0))
                 pdc.SetIdBounds(
-                    dcId - 1,
+                    dcId,
                     Rect(
-                        robj.point[robj.npoints - 1].x,
-                        robj.point[robj.npoints - 1].y,
-                        0,
-                        0,
+                        point_beg.x,
+                        point_beg.y,
+                        point_end.x - point_beg.x,
+                        point_end.y - point_beg.y,
                     ),
                 )
-            else:
-                points = []
-                for i in range(robj.npoints):
-                    p = robj.point[i]
-                    points.append(wx.Point(p.x, p.y))
-                if len(points) <= 1:
-                    self.log.write(
-                        _(
-                            "WARNING: Zero-length line or boundary drawing skipped. "
-                            "Use v.clean to remove it."
-                        )
+                pdc.DrawLine(point_beg.x, point_beg.y, point_end.x, point_end.y)
+                i += 1
+                dcId += 2
+            pdc.SetIdBounds(
+                dcId - 1,
+                Rect(
+                    robj.point[robj.npoints - 1].x,
+                    robj.point[robj.npoints - 1].y,
+                    0,
+                    0,
+                ),
+            )
+        else:
+            points = []
+            for i in range(robj.npoints):
+                p = robj.point[i]
+                points.append(wx.Point(p.x, p.y))
+            if len(points) <= 1:
+                self.log.write(
+                    _(
+                        "WARNING: Zero-length line or boundary drawing skipped. "
+                        "Use v.clean to remove it."
                     )
-                    return
-                if robj.type == TYPE_AREA:
-                    pdc.DrawPolygon(points)
-                else:
-                    pdc.DrawLines(points)
+                )
+                return
+            if robj.type == TYPE_AREA:
+                pdc.DrawPolygon(points)
+            else:
+                pdc.DrawLines(points)
 
     def _definePen(self, rtype):
         """Define pen/brush based on rendered object)
@@ -457,7 +456,7 @@ class DisplayDriver:
 
         return ret
 
-    def _isSelected(self, line, force=False):
+    def _isSelected(self, line, force=False) -> bool:
         """Check if vector object selected?
 
         :param line: feature id
@@ -465,10 +464,7 @@ class DisplayDriver:
         :return: True if vector object is selected
         :return: False if vector object is not selected
         """
-        if line in self.selected["ids"]:
-            return True
-
-        return False
+        return line in self.selected["ids"]
 
     def _isDuplicated(self, line):
         """Check for already marked duplicates
@@ -557,7 +553,7 @@ class DisplayDriver:
 
         return ftype
 
-    def _validLine(self, line):
+    def _validLine(self, line) -> bool:
         """Check if feature id is valid
 
         :param line: feature id
@@ -565,10 +561,7 @@ class DisplayDriver:
         :return: True valid feature id
         :return: False invalid
         """
-        if line > 0 and line <= Vect_get_num_lines(self.poMapInfo):
-            return True
-
-        return False
+        return bool(line > 0 and line <= Vect_get_num_lines(self.poMapInfo))
 
     def SelectLinesByBox(self, bbox, ltype=None, drawSeg=False, poMapInfo=None):
         """Select vector objects by given bounding box
@@ -878,10 +871,9 @@ class DisplayDriver:
             if idx == 0:
                 minDist = dist
                 Gid = idx
-            else:
-                if minDist > dist:
-                    minDist = dist
-                    Gid = idx
+            elif minDist > dist:
+                minDist = dist
+                Gid = idx
 
             vx, vy = self._cell2Pixel(points.x[idx], points.y[idx], points.z[idx])
             rect = Rect(vx, vy, 0, 0)
@@ -925,7 +917,7 @@ class DisplayDriver:
             if area > 0 and area <= nareas:
                 if not Vect_get_area_box(self.poMapInfo, area, byref(lineBox)):
                     continue
-            else:
+            else:  # noqa: PLR5501
                 if not Vect_get_line_box(self.poMapInfo, line, byref(lineBox)):
                     continue
 
@@ -997,7 +989,7 @@ class DisplayDriver:
                 open_fn = Vect_open_tmp_update
             else:
                 open_fn = Vect_open_update
-        else:
+        else:  # noqa: PLR5501
             if tmp:
                 open_fn = Vect_open_tmp_old
             else:

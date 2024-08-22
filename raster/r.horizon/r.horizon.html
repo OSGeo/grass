@@ -121,7 +121,9 @@ be in meters. The buffer parameters must be in the same units as the
 raster coordinates (e.g., for latitude-longitude buffers are
 measured in degrees).
 
-<h2>METHOD</h2>
+<h2>NOTES</h2>
+
+<h3>Method</h3>
 
 The calculation method is based on the method used in <b>r.sun</b>
 to calculate shadows. It starts at a very shallow angle and walks
@@ -144,6 +146,34 @@ The output with the <b>-d</b> flag is azimuth degree (-90 to 90, where
 
 <p> All horizon values are positive (or zero). While negative values are
 in theory possible, <b>r.horizon</b> currently does not support them.
+
+
+<h3>Performance</h3>
+Parallel processing is implemented for the raster mode.
+To enable parallel processing, the user can specify the number of threads
+to be used with the <b>nprocs</b> parameter.
+Figures below show benchmark results running on
+Intel® Core™ i5-13600K CPU @ 3.5GHz.
+See benchmark scripts
+in the source code for more details.
+
+<p>
+The iterations of the algorithm used in <b>r.horizon</b>
+depends on the topography. As a result, the benchmark results may vary
+depending on the topography of the study area.
+
+<div align="center" style="margin: 10px">
+  <img src="rhorizon_raster_time.png"
+  alt="time for r.horizon with different map sizes" border="0">
+  <img src="rhorizon_raster_speedup.png"
+  alt="speedup for r.horizon with different map sizes" border="0">
+  <img src="rhorizon_raster_efficiency.png"
+  alt="efficiency for r.horizon with different map sizes" border="0">
+  <br>
+  <i>Figure: Benchmark shows execution time, parallel speedup and
+    efficiency for different numbers of cells (1M, 2M, 4M, and 8M).</i>
+</div>
+
 
 <h2>EXAMPLES</h2>
 

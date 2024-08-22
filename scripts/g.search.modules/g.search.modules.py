@@ -69,7 +69,7 @@ import sys
 from grass.script import core as grass
 from grass.exceptions import CalledModuleError
 
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
 
 COLORIZE = False
 
@@ -201,7 +201,7 @@ def _search_module(
     filename = os.path.join(WXGUIDIR, "xml", "module_items.xml")
     menudata_file = open(filename, "r")
 
-    menudata = etree.parse(menudata_file)
+    menudata = ET.parse(menudata_file)
     menudata_file.close()
 
     items = menudata.findall("module-item")
@@ -211,7 +211,7 @@ def _search_module(
         filename_addons = os.path.join(os.getenv("GRASS_ADDON_BASE"), "modules.xml")
         if os.path.isfile(filename_addons):
             addon_menudata_file = open(filename_addons, "r")
-            addon_menudata = etree.parse(addon_menudata_file)
+            addon_menudata = ET.parse(addon_menudata_file)
             addon_menudata_file.close()
             addon_items = addon_menudata.findall("task")
             items.extend(addon_items)
@@ -220,7 +220,7 @@ def _search_module(
     filename_addons_s = os.path.join(os.getenv("GISBASE"), "modules.xml")
     if os.path.isfile(filename_addons_s):
         addon_menudata_file_s = open(filename_addons_s, "r")
-        addon_menudata_s = etree.parse(addon_menudata_file_s)
+        addon_menudata_s = ET.parse(addon_menudata_file_s)
         addon_menudata_file_s.close()
         addon_items_s = addon_menudata_s.findall("task")
         items.extend(addon_items_s)
@@ -286,23 +286,22 @@ def _search_module(
     return sorted(found_modules, key=lambda k: k["name"])
 
 
-def _basic_search(pattern, name, description, module_keywords):
+def _basic_search(pattern, name, description, module_keywords) -> bool:
     """Search for a string in all the provided strings.
 
     This lowercases the strings before searching in them, so the pattern
     string should be lowercased too.
     """
-    if name and description and module_keywords:
-        if (
+    return bool(
+        name
+        and description
+        and module_keywords
+        and (
             name.lower().find(pattern) > -1
             or description.lower().find(pattern) > -1
             or module_keywords.lower().find(pattern) > -1
-        ):
-            return True
-        else:
-            return False
-    else:
-        return False
+        )
+    )
 
 
 def _exact_search(keyword, module_keywords):

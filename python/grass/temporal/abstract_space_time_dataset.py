@@ -98,10 +98,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         uuid_rand = str(uuid.uuid4()).replace("-", "")
 
-        table_name = (
-            self.get_new_map_instance(None).get_type() + "_map_register_" + uuid_rand
-        )
-        return table_name
+        return self.get_new_map_instance(None).get_type() + "_map_register_" + uuid_rand
 
     @abstractmethod
     def get_new_map_instance(self, ident=None):
@@ -590,7 +587,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         map_time = self.get_map_time()
 
-        if map_time == "interval" or map_time == "mixed":
+        if map_time in {"interval", "mixed"}:
             if "equal" in relations and relations["equal"] > 0:
                 return False
             if "during" in relations and relations["during"] > 0:
@@ -966,9 +963,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     use_during = True
                 if name == "overlap":
                     use_overlap = True
-                if name == "contain" or name == "contains":
+                if name in {"contain", "contains"}:
                     use_contain = True
-                if name == "equal" or name == "equals":
+                if name in {"equal", "equals"}:
                     use_equal = True
                 if name == "follows":
                     use_follows = True
@@ -1137,7 +1134,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             if self.is_time_absolute():
                 end = increment_datetime_by_string(end, gran)
             else:
-                end = end + gran
+                end += gran
 
         maplist = AbstractSpaceTimeDataset.resample_maplist_by_granularity(
             maps, start, end, gran
@@ -1554,7 +1551,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         # use all columns
         rows = self.get_registered_maps(
-            None, where, order, dbif, spatial_extent, spatial_relation
+            columns=None,
+            where=where,
+            order=order,
+            dbif=dbif,
+            spatial_extent=spatial_extent,
+            spatial_relation=spatial_relation,
         )
 
         if rows:
@@ -1995,9 +1997,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     end = increment_datetime_by_string(end, gran)
                 map.set_absolute_time(start, end)
             elif map.is_time_relative():
-                start = start + int(gran)
+                start += int(gran)
                 if end is not None:
-                    end = end + int(gran)
+                    end += int(gran)
                 map.set_relative_time(start, end, map.get_relative_time_unit())
 
         return maps
@@ -2046,9 +2048,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 if end is not None:
                     end = increment_datetime_by_string(end, gran)
             elif self.is_time_relative():
-                start = start + int(gran)
+                start += int(gran)
                 if end is not None:
-                    end = end + int(gran)
+                    end += int(gran)
 
             date_list.append((start, end))
 
@@ -2154,7 +2156,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     maps[i].set_relative_time(
                         start, start_next, maps[i].get_relative_time_unit()
                     )
-            else:
+            else:  # noqa: PLR5501
                 if maps[i].is_time_absolute():
                     maps[i].set_absolute_time(start, end)
                 elif maps[i].is_time_relative():
@@ -2406,7 +2408,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             self.msgr.debug(
                 1, _("Drop map register table: %s") % (self.get_map_register())
             )
-            rows = self.get_registered_maps("id", None, None, dbif)
+            rows = self.get_registered_maps(
+                columns="id", where=None, order=None, dbif=dbif
+            )
             # Unregister each registered map in the table
             if rows is not None:
                 for row in rows:

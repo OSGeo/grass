@@ -35,7 +35,7 @@ import locale
 import wx
 from wx.lib.newevent import NewEvent
 
-import grass.script as grass
+import grass.script as gs
 from grass.script import task as gtask
 
 from grass.pydispatch.signal import Signal
@@ -401,7 +401,7 @@ class GConsole(wx.EvtHandler):
 
     def Redirect(self):
         """Redirect stdout/stderr"""
-        if Debug.GetLevel() == 0 and grass.debug_level(force=True) == 0:
+        if Debug.GetLevel() == 0 and gs.debug_level(force=True) == 0:
             # don't redirect when debugging is enabled
             sys.stdout = self.cmdStdOut
             sys.stderr = self.cmdStdErr
@@ -585,8 +585,23 @@ class GConsole(wx.EvtHandler):
 
                 if len(command) == 1:
                     if command[0].startswith("g.gui."):
-                        import imp
                         import inspect
+                        import importlib.util
+                        import importlib.machinery
+
+                        def load_source(modname, filename):
+                            loader = importlib.machinery.SourceFileLoader(
+                                modname, filename
+                            )
+                            spec = importlib.util.spec_from_file_location(
+                                modname, filename, loader=loader
+                            )
+                            module = importlib.util.module_from_spec(spec)
+                            # Module is always executed and not cached in sys.modules.
+                            # Uncomment the following line to cache the module.
+                            # sys.modules[module.__name__] = module
+                            loader.exec_module(module)
+                            return module
 
                         pyFile = command[0]
                         if sys.platform == "win32":
@@ -601,7 +616,7 @@ class GConsole(wx.EvtHandler):
                                 parent=self._guiparent,
                                 message=_("Module <%s> not found.") % command[0],
                             )
-                        pymodule = imp.load_source(command[0].replace(".", "_"), pyPath)
+                        pymodule = load_source(command[0].replace(".", "_"), pyPath)
                         pymain = inspect.getfullargspec(pymodule.main)
                         if pymain and "giface" in pymain.args:
                             pymodule.main(self._giface)
@@ -664,7 +679,7 @@ class GConsole(wx.EvtHandler):
             if os.path.splitext(command[0])[1] in {".py", ".sh"}:
                 try:
                     with open(command[0], "r") as sfile:
-                        for line in sfile.readlines():
+                        for line in sfile:
                             if len(line) < 3:
                                 continue
                             if line.startswith(("#%", "# %")):
@@ -825,12 +840,12 @@ class GConsole(wx.EvtHandler):
                         lnames = [p.get("value")]
                     for lname in lnames:
                         if "@" not in lname:
-                            lname += "@" + grass.gisenv()["MAPSET"]
-                        if grass.find_file(lname, element=p.get("element"))["fullname"]:
+                            lname += "@" + gs.gisenv()["MAPSET"]
+                        if gs.find_file(lname, element=p.get("element"))["fullname"]:
                             self.mapCreated.emit(
                                 name=lname, ltype=prompt, add=event.addLayer
                             )
-                            gisenv = grass.gisenv()
+                            gisenv = gs.gisenv()
                             self._giface.grassdbChanged.emit(
                                 grassdb=gisenv["GISDBASE"],
                                 location=gisenv["LOCATION_NAME"],
@@ -844,7 +859,7 @@ class GConsole(wx.EvtHandler):
             for p in task.get_options()["flags"]:
                 if p.get("name") == "r" and p.get("value"):
                     action = "delete"
-            gisenv = grass.gisenv()
+            gisenv = gs.gisenv()
             self._giface.grassdbChanged.emit(
                 grassdb=gisenv["GISDBASE"],
                 location=gisenv["LOCATION_NAME"],
