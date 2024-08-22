@@ -815,6 +815,13 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
        xg0 = xx0 = xindex*stepx -0.5*stepx;
        yg0 = yy0 = yindex*stepy -0.5*stepy;
      */
+
+    int printCount = 360. / fabs(settings->step);
+
+    if (printCount < 1)
+        printCount = 1;
+    double dfr_rad = settings->step * deg2rad;
+
     OriginPoint origin_point;
     int xindex = (int)((xcoord - geometry->xmin) / geometry->stepx);
     int yindex = (int)((ycoord - geometry->ymin) / geometry->stepy);
@@ -823,8 +830,6 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
     origin_point.coslatsq = 0;
     if ((G_projection() == PROJECTION_LL)) {
         ll_correction = true;
-    }
-    if (ll_correction) {
         double coslat = cos(deg2rad * (geometry->ymin + origin_point.yg0));
         origin_point.coslatsq = coslat * coslat;
     }
@@ -833,24 +838,57 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
     G_debug(1, "yindex: %d, xindex %d, z_orig %.2f", yindex, xindex,
             origin_point.z_orig);
 
-    int printCount = 360. / fabs(settings->step);
-
-    if (printCount < 1)
-        printCount = 1;
-    double dfr_rad = settings->step * deg2rad;
-
     double xp = geometry->xmin + origin_point.xg0;
     double yp = geometry->ymin + origin_point.yg0;
 
-    double angle = (settings->single_direction * deg2rad) + pihalf;
-    double printangle = settings->single_direction;
+    double angle_direction = (settings->single_direction * deg2rad) + pihalf;
+    double printangle_direction = settings->single_direction;
 
     origin_point.maxlength = settings->fixedMaxLength;
+
+    HorizonProperties *horizons;
+    double *shadow_angles;
+    horizons =
+        (HorizonProperties *)G_calloc(printCount, sizeof(HorizonProperties));
+    shadow_angles = (double *)G_calloc(printCount, sizeof(double));
+
+    for (int i = 0; i < printCount; i++) {
+
+        OriginAngle origin_angle;
+
+        double angle = angle_direction + dfr_rad * i;
+        double printangle = printangle_direction + settings->step * i;
+
+        /* make sure the angle range from 0 to 2pi */
+        if (angle < 0.)
+            angle += twopi;
+        else if (angle > twopi)
+            angle -= twopi;
+
+        /* make sure the printangle range from 0 to 360 degree */
+        if (printangle < 0.)
+            printangle += 360;
+        else if (printangle > 360.)
+            printangle -= 360;
+
+        com_par(geometry, &origin_angle, angle, xp, yp);
+
+        horizons[i] = horizon_height(geometry, &origin_point, &origin_angle);
+        shadow_angles[i] = (settings->degreeOutput)
+                               ? atan(horizons[i].tanh0) * rad2deg
+                               : atan(horizons[i].tanh0);
+    } /* end of for loop over angles */
+
+    /* Write out the results */
     /* JSON variables and formating */
-
     JSON_Value *horizons_value;
-    JSON_Array *horizons;
+    JSON_Array *horizons_json;
+    JSON_Value *value;
+    JSON_Object *object;
 
+    double tmpangle, printangle;
+
+    /* Write out header */
     switch (format) {
     case PLAIN:
         fprintf(fp, "azimuth,horizon_height");
@@ -862,78 +900,58 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
         json_object_set_number(json_origin, "x", xcoord);
         json_object_set_number(json_origin, "y", ycoord);
         horizons_value = json_value_init_array();
-        horizons = json_value_get_array(horizons_value);
+        horizons_json = json_value_get_array(horizons_value);
         break;
     }
 
+    /* Write out computed values */
     for (int i = 0; i < printCount; i++) {
-        JSON_Value *value;
-        JSON_Object *object;
-        OriginAngle origin_angle;
-        com_par(geometry, &origin_angle, angle, xp, yp);
+        printangle = printangle_direction + settings->step * i;
+        if (printangle < 0.)
+            printangle += 360;
+        else if (printangle > 360.)
+            printangle -= 360;
 
-        HorizonProperties horizon =
-            horizon_height(geometry, &origin_point, &origin_angle);
-        double shadow_angle = atan(horizon.tanh0);
-
-        if (settings->degreeOutput) {
-            shadow_angle *= rad2deg;
-        }
         if (format == JSON) {
             value = json_value_init_object();
             object = json_object(value);
         }
         if (settings->compassOutput) {
-            double tmpangle;
-
             tmpangle = 360. - printangle + 90.;
             if (tmpangle >= 360.)
                 tmpangle = tmpangle - 360.;
             switch (format) {
             case PLAIN:
-                fprintf(fp, "%lf,%lf", tmpangle, shadow_angle);
+                fprintf(fp, "%lf,%lf", tmpangle, shadow_angles[i]);
                 if (settings->horizonDistance)
-                    fprintf(fp, ",%lf", horizon.length);
+                    fprintf(fp, ",%lf", horizons[i].length);
                 fprintf(fp, "\n");
                 break;
             case JSON:
                 json_object_set_number(object, "azimuth", tmpangle);
-                json_object_set_number(object, "angle", shadow_angle);
-                json_object_set_number(object, "distance", horizon.length);
-                json_array_append_value(horizons, value);
+                json_object_set_number(object, "angle", shadow_angles[i]);
+                json_object_set_number(object, "distance", horizons[i].length);
+                json_array_append_value(horizons_json, value);
                 break;
             }
         }
         else {
             switch (format) {
             case PLAIN:
-                fprintf(fp, "%lf,%lf", printangle, shadow_angle);
+                fprintf(fp, "%lf,%lf", printangle, shadow_angles[i]);
                 if (settings->horizonDistance)
-                    fprintf(fp, ",%lf", horizon.length);
+                    fprintf(fp, ",%lf", horizons[i].length);
                 fprintf(fp, "\n");
                 break;
             case JSON:
                 json_object_set_number(object, "azimuth", printangle);
-                json_object_set_number(object, "angle", shadow_angle);
-                json_object_set_number(object, "distance", horizon.length);
-                json_array_append_value(horizons, value);
+                json_object_set_number(object, "angle", shadow_angles[i]);
+                json_object_set_number(object, "distance", horizons[i].length);
+                json_array_append_value(horizons_json, value);
                 break;
             }
         }
-
-        angle += dfr_rad;
-        printangle += settings->step;
-
-        if (angle < 0.)
-            angle += twopi;
-        else if (angle > twopi)
-            angle -= twopi;
-
-        if (printangle < 0.)
-            printangle += 360;
-        else if (printangle > 360.)
-            printangle -= 360;
-    } /* end of for loop over angles */
+    }
 
     if (format == JSON) {
         json_object_set_value(json_origin, "horizons", horizons_value);
