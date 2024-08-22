@@ -306,7 +306,7 @@ def download_git_commit(url, response_format, *args, **kwargs):
             desc = HTTP_STATUS_CODES[index].description
             gs.fatal(
                 _(
-                    "Download commit from <{url}>, return status code " "{code}, {desc}"
+                    "Download commit from <{url}>, return status code {code}, {desc}"
                 ).format(
                     url=url,
                     code=response.code,
