@@ -30,9 +30,10 @@ def test_e_flag():
     output = gs.read_command("g.version", flags="e").strip()
 
     for key in expected_keys:
-        assert key in output, (
-            f"Expected key '{key}' in g.version -e output, but it was not found."
-        )
+        assert (
+            key in output
+        ), f"Expected key '{key}' in g.version -e output, but it was not found."
+
 
 def test_b_flag():
     """Test that g.version -b output contains the word 'GRASS'."""
