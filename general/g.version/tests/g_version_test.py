@@ -37,7 +37,7 @@ def test_e_flag():
 
 def test_b_flag():
     """Test that g.version -b output contains the word 'GRASS'."""
-    output = gs.read_command("g.version", flags='b').strip()
+    output = gs.read_command("g.version", flags="b").strip()
 
     assert "GRASS" in output, (
         "Expected 'GRASS' in g.version -b output, but it was not found."
