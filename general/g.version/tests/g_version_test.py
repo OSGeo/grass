@@ -90,7 +90,7 @@ def test_x_flag():
     "url = {https://grass.osgeo.org},"
     ]
 
-    output = gs.read_command("g.version", flags='x').strip()
+    output = gs.read_command("g.version", flags="x").strip()
 
     for item in expected:
         assert item in output, (
