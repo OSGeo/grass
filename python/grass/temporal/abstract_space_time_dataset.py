@@ -2803,8 +2803,6 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         use_start_time = False
 
         # Get basic info
-        self.base.get_name()
-        self.base.get_mapset()
         sql_path = get_sql_template_path()
         stds_register_table = self.get_map_register()
 
