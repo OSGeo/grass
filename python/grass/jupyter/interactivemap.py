@@ -249,6 +249,7 @@ class InteractiveMap:
         :param bool use_region: use computational region of current mapset
         :param str saved_region: name of saved computation region
         :param str map_backend: "ipyleaflet" or "folium" or None
+        :param str crs: custom CRS to use for rendering (default None)
         """
         self._ipyleaflet = None
         self._folium = None
@@ -306,14 +307,41 @@ class InteractiveMap:
         # Store Region
         self.region = None
 
+        if crs:
+            if crs.lower().startswith("epsg"):
+                crs_code = crs[4:]
+                crs_dict = {"name": crs_code, "custom": False}
+            else:
+                # Assume custom CRS, get current CRS from g.proj
+                import subprocess
+
+                result = subprocess.run(
+                    ["g.proj", "-jf"],
+                    capture_output=True,
+                    text=True,
+                    check=True,
+                )
+                crs_proj4 = result.stdout.strip()
+                crs_dict = {"name": "Custom", "custom": True, "proj4def": crs_proj4}
+            self._renderer = CustomRenderer(crs=crs_dict)
+        else:
+            self._renderer = ReprojectionRenderer(
+                use_region=use_region, saved_region=saved_region
+            )
+
         if self._ipyleaflet:
             basemap = xyzservices.providers.query_name(tiles)
             if API_key and basemap.get("accessToken"):
                 basemap["accessToken"] = API_key
             layout = self._ipywidgets.Layout(width=f"{width}px", height=f"{height}px")
-            self.map = self._ipyleaflet.Map(
-                basemap=basemap, layout=layout, scroll_wheel_zoom=True, crs=crs
-            )
+            if crs:
+                self.map = self._ipyleaflet.Map(
+                    basemap=basemap, layout=layout, scroll_wheel_zoom=True, crs=crs_dict
+                )
+            else:
+                self.map = self._ipyleaflet.Map(
+                    basemap=basemap, layout=layout, scroll_wheel_zoom=True
+                )
 
         else:
             self.map = self._folium.Map(
@@ -325,15 +353,6 @@ class InteractiveMap:
         # Set LayerControl default
         self.layer_control_object = None
         self.region_rectangle = None
-
-        if crs:
-            self._renderer = CustomRenderer(
-                crs=crs, use_region=use_region, saved_region=saved_region
-            )
-        else:
-            self._renderer = ReprojectionRenderer(
-                use_region=use_region, saved_region=saved_region
-            )
 
     def add_vector(self, name, title=None, **kwargs):
         """Imports vector into temporary WGS84 location, re-formats to a GeoJSON and

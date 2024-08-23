@@ -331,7 +331,7 @@ def estimate_resolution(raster, mapset, location, dbase, env):
     return (cell_ew + cell_ns) / 2.0
 
 
-def setup_location(name, path, epsg, src_env):
+def setup_location(name, path, src_env, epsg=None, proj4=None):
     """Setup temporary location with different projection but
     same computational region as source location
 
@@ -346,7 +346,10 @@ def setup_location(name, path, epsg, src_env):
     # Create new environment
     rcfile, new_env = gs.create_environment(path, name, "PERMANENT")
     # Location and mapset
-    gs.create_location(path, name, epsg=epsg, overwrite=True)
+    if proj4:
+        gs.create_location(path, name, proj4=proj4, overwrite=True)
+    elif epsg:
+        gs.create_location(path, name, epsg=epsg, overwrite=True)
     # Reproject region
     set_target_region(src_env, new_env)
     return rcfile, new_env
