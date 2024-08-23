@@ -26,7 +26,6 @@ def test_c_flag():
 
 def test_e_flag():
     """Test that g.version -e contains the expected keys."""
-    
     expected_keys = ["PROJ:", "GDAL/OGR:", "SQLite:"]
 
     output = gs.read_command("g.version", flags='e').strip()
