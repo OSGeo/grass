@@ -34,7 +34,6 @@ def test_e_flag():
         assert key in output, (
             f"Expected key '{key}' in g.version -e output, but it was not found."
         )
-     
 
 def test_b_flag():
     """Test that g.version -b output contains the word 'GRASS'."""
