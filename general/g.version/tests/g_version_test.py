@@ -18,9 +18,9 @@ def test_c_flag():
 
     output = gs.read_command("g.version", flags="c").strip()
 
-    assert expected_text in output, (
-        f"Expected '{expected_text}' in g.version -c output, but got: '{output}'"
-    )
+    assert (
+        expected_text in output
+    ), f"Expected '{expected_text}' in g.version -c output, but got: '{output}'"
 
 
 def test_e_flag():
