@@ -52,7 +52,7 @@ def test_g_flag():
         "revision=",
         "build_date=",
         "build_platform=",
-        "build_off_t_size="
+        "build_off_t_size=",
     ]
 
     output = gs.read_command("g.version", flags="g").strip()
