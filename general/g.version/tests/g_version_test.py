@@ -65,10 +65,7 @@ def test_g_flag():
 
 def test_r_flag():
     """Test that g.version -r contains the expected keys."""
-    expected_keys = [
-        "libgis revision:",
-        "libgis date:"
-    ]
+    expected_keys = ["libgis revision:", "libgis date:"]
 
     output = gs.read_command("g.version", flags="r").strip()
 
