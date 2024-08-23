@@ -58,9 +58,9 @@ def test_g_flag():
     output = gs.read_command("g.version", flags="g").strip()
 
     for key in expected_keys:
-        assert key in output, (
-            f"Expected key '{key}' in g.version -g output, but it was not found."
-        )
+        assert (
+            key in output
+        ), f"Expected key '{key}' in g.version -g output, but it was not found."
 
 
 def test_r_flag():
