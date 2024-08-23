@@ -78,13 +78,13 @@ def test_r_flag():
 def test_x_flag():
     """Test that g.version -x output contains the correct citation information."""
     expected = [
-    "@Manual{GRASS_GIS_software,",
-    "title = {Geographic Resources Analysis Support System (GRASS) Software, Version X.Y},",
-    "author = {{GRASS Development Team}},",
-    "organization = {Open Source Geospatial Foundation},",
-    "address = {USA},",
-    "year = {YEAR},",
-    "url = {https://grass.osgeo.org},"
+        "@Manual{GRASS_GIS_software,",
+        "title = {Geographic Resources Analysis Support System (GRASS) Software, Version X.Y},",
+        "author = {{GRASS Development Team}},",
+        "organization = {Open Source Geospatial Foundation},",
+        "address = {USA},",
+        "year = {YEAR},",
+        "url = {https://grass.osgeo.org},",
     ]
 
     output = gs.read_command("g.version", flags="x").strip()
