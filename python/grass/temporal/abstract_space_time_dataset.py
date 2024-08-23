@@ -2549,7 +2549,6 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         # Get basic info
         map_id = map.base.get_id()
-        map.base.get_mapset()
         map_rel_time_unit = map.get_relative_time_unit()
         map_ttype = map.get_temporal_type()
 

@@ -511,7 +511,6 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         """
 
         temporal_relations = map_i.get_temporal_relations()
-        map_i.get_spatial_relations()
 
         # Build comandlist list with elements from related maps and given relation
         # operator.
@@ -2038,7 +2037,6 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 for obj in map_i.map_value:
                     if isinstance(obj, GlobalTemporalVar):
                         n_maps = obj.td
-                map_i.get_id()
                 # Create r.mapcalc expression string for the operation.
                 cmdstring = "(%s)" % (n_maps)
                 # Append module command.
