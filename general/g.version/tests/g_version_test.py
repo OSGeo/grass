@@ -55,7 +55,7 @@ def test_g_flag():
         "build_off_t_size="
     ]
 
-    output = gs.read_command("g.version", flags='g').strip()
+    output = gs.read_command("g.version", flags="g").strip()
 
     for key in expected_keys:
         assert key in output, (
