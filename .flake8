@@ -177,7 +177,7 @@ per-file-ignores =
     # Line too long (esp. module interface definitions)
     scripts/*/*.py: E501
     # local variable 'column' is assigned to but never used
-    temporal/t.rast.to.vect/t.rast.to.vect.py: F841, E501
+    temporal/t.rast.to.vect/t.rast.to.vect.py: E501
     # local variable 'stdstype' is assigned to but never used
     temporal/t.vect.algebra/t.vect.algebra.py: F841, E501
     # ## used (##% key: r etc)
