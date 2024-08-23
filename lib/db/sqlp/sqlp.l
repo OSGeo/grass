@@ -273,7 +273,7 @@ void yyerror( const char *s )
  * of this func anyway so we can avoid the link dependency.
  *
  **********************************************************************/
-int yywrap()
+int yywrap(void)
 {
         return 1;
 }
