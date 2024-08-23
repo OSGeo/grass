@@ -15,8 +15,8 @@ def test_c_flag():
 
     expected_text = "Copyright and License Statement"
 
-    output = gs.read_command("g.version", flags='c').strip()
-    
+    output = gs.read_command("g.version", flags="c").strip()
+
     assert expected_text in output, (
         f"Expected '{expected_text}' in g.version -c output, "
         f"but got: '{output}'"
