@@ -1,6 +1,7 @@
 import pytest
 import grass.script as gs
 
+
 def test_g_version_no_flag():
     """Test that g.version output contains the word 'GRASS'."""
     output = gs.read_command("g.version").strip()
