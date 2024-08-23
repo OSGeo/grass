@@ -90,6 +90,6 @@ def test_x_flag():
     output = gs.read_command("g.version", flags="x").strip()
 
     for item in expected:
-        assert item in output, (
-            f"Expected '{item}' in g.version -x output, but it was not found."
-        )
+        assert (
+            item in output
+        ), f"Expected '{item}' in g.version -x output, but it was not found."
