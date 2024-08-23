@@ -17,6 +17,7 @@ import os
 import base64
 import json
 from pathlib import Path
+import grass.script as gs
 from .reprojection_renderer import ReprojectionRenderer
 
 from .utils import (
@@ -745,7 +746,7 @@ class InteractiveQueryController:
         _ipywidgets: The ipywidgets module.
         raster_name: The name of the raster layer.
         vector_name: The name of the vector layer.
-        width: The width of the map.
+        width: The width of the map as an int.
         query_control: The query control.
 
     """
@@ -764,8 +765,13 @@ class InteractiveQueryController:
         self._ipywidgets = ipywidgets
         self.raster_name = rasters
         self.vector_name = vectors
-        self.width = width
         self.query_control = None
+
+        try:
+            self.width = int(width)
+        except (ValueError, TypeError):
+            gs.warning(_("Invalid width value, using default width of 300px."))
+            self.width = 300
 
     def activate(self):
         """Activates the interactive querying."""
