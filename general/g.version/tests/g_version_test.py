@@ -70,7 +70,7 @@ def test_r_flag():
         "libgis date:"
     ]
 
-    output = gs.read_command("g.version", flags='r').strip()
+    output = gs.read_command("g.version", flags="r").strip()
 
     for key in expected_keys:
         assert key in output, (
