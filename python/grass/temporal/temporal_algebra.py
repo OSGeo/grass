@@ -2143,7 +2143,6 @@ class TemporalAlgebraParser:
 
         :return: List of maps from maplist with added conditional boolean values.
         """
-        boollist = []
         # Loop over maps of input map list.
         for map_i in maplist:
             # Get dictionary with temporal variables for the map.
@@ -2248,7 +2247,6 @@ class TemporalAlgebraParser:
             # self.msgr.fatal("Condition list is not complete. Elements missing")
             for iter in range(len(tvarexpr)):
                 expr = tvarexpr[iter]
-                operator = tvarexpr[iter + 1]
                 relexpr = tvarexpr[iter + 2]
                 if all(issubclass(type(ele), list) for ele in [expr, relexpr]):
                     resultlist = self.build_spatio_temporal_topology_list(expr, relexpr)

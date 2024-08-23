@@ -96,12 +96,12 @@ def check_granularity_string(granularity, temporal_type):
             return False
 
         try:
-            integer = int(num)
+            int(num)
         except:
             return False
     elif temporal_type == "relative":
         try:
-            integer = int(granularity)
+            int(granularity)
         except:
             return False
     else:
