@@ -26,6 +26,7 @@ cols=250
 cells=41250"""
 
 src_project = "nc_spm_full_v2alpha2"
+dst_project = "nc_latlong"
 
 
 class TestRasterreport(TestCase):
@@ -33,13 +34,14 @@ class TestRasterreport(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.runModule("g.proj", project="nc_latlong", epsg="4326", flags="c")
-        cls.runModule("g.mapset", mapset="PERMANENT", project="nc_latlong")
+        cls.runModule("g.proj", project=dst_project, epsg="4326", flags="c")
+        cls.runModule("g.mapset", mapset="PERMANENT", project=dst_project)
 
     @classmethod
     def tearDownClass(cls):
+        cls.runModule("g.mapset", mapset="PERMANENT", project=src_project)
         dbase = call_module("g.gisenv", get="GISDBASE")
-        os.system(f"rm -rf {dbase}/nc_latlong")
+        os.system(f"rm -rf {dbase}/{dst_project}")
 
     def run_rproj_test(self, method, statics):
         """The main function to run r.proj check rsults according to the method
@@ -94,11 +96,11 @@ class TestRasterreport(TestCase):
         """Testing method nearest"""
         ## Set up variables and validation values
         method = "nearest"
-        statics = """n=40929
+        statics = """n=40930
         min=55.5787925720215
         max=156.038833618164
-        mean=110.377588991481
-        variance=412.79107041757"""
+        mean=110.377538633405
+        variance=412.751942806146"""
 
         self.run_rproj_test(method, statics)
 
@@ -106,11 +108,11 @@ class TestRasterreport(TestCase):
         """Testing method bilinear"""
         ## Set up variables and validation values
         method = "bilinear"
-        statics = """n=40846
-        min=56.4586868286133
-        max=156.053405761719
-        mean=110.388441504306
-        variance=411.490915468646"""
+        statics = """n=40845
+        min=56.3932914733887
+        max=156.053298950195
+        mean=110.389074372679
+        variance=411.487781666933"""
 
         self.run_rproj_test(method, statics)
 
@@ -118,11 +120,11 @@ class TestRasterreport(TestCase):
         """Testing method bicubic"""
         ## Set up variables and validation values
         method = "bicubic"
-        statics = """n=40678
-        min=56.2927856445312
-        max=156.06169128418
-        mean=110.417365826772
-        variance=411.302683091198"""
+        statics = """n=40677
+        min=56.2407836914062
+        max=156.061599731445
+        mean=110.41701776258
+        variance=411.382636894393"""
 
         self.run_rproj_test(method, statics)
 
@@ -130,11 +132,11 @@ class TestRasterreport(TestCase):
         """Testing method lanczos"""
         ## Set up variables and validation values
         method = "lanczos"
-        statics = """n=40587
-        min=56.2883224487305
-        max=156.066925048828
-        mean=110.423209871101
-        variance=411.631827344207"""
+        statics = """n=40585
+        min=56.2350921630859
+        max=156.066345214844
+        mean=110.421826400841
+        variance=411.6875834341575"""
 
         self.run_rproj_test(method, statics)
 
@@ -142,11 +144,11 @@ class TestRasterreport(TestCase):
         """Testing method bilinear_f"""
         ## Set up variables and validation values
         method = "bilinear_f"
-        statics = """n=40929
+        statics = """n=40930
         min=55.5787925720215
-        max=156.053405761719
-        mean=110.376596053808
-        variance=412.568369942694"""
+        max=156.053298950195
+        mean=110.376211041027
+        variance=412.553041205029"""
 
         self.run_rproj_test(method, statics)
 
@@ -154,11 +156,11 @@ class TestRasterreport(TestCase):
         """Testing method bicubic_f"""
         ## Set up variables and validation values
         method = "bicubic_f"
-        statics = """n=40929
+        statics = """n=40930
         min=55.5787925720215
-        max=156.06169128418
-        mean=110.37642902228
-        variance=412.706934718806"""
+        max=156.061599731445
+        mean=110.375897704515
+        variance=412.693308000461"""
 
         self.run_rproj_test(method, statics)
 
@@ -166,11 +168,11 @@ class TestRasterreport(TestCase):
         """Testing method lanczos_f"""
         ## Set up variables and validation values
         method = "lanczos_f"
-        statics = """n=40929
+        statics = """n=40930
         min=55.5787925720215
-        max=156.066925048828
-        mean=110.376264598194
-        variance=412.710534286582"""
+        max=156.066345214844
+        mean=110.375715222838
+        variance=412.695433658258"""
 
         self.run_rproj_test(method, statics)
 
