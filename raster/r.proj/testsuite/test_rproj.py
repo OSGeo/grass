@@ -25,6 +25,8 @@ rows=165
 cols=250
 cells=41250"""
 
+src_project = "nc_spm_full_v2alpha2"
+
 
 class TestRasterreport(TestCase):
     input = "elevation"
@@ -53,7 +55,7 @@ class TestRasterreport(TestCase):
         ## Get the boundary and set up region for the projected map
         stdout = call_module(
             "r.proj",
-            project="nc_spm_08_grass7",
+            project=src_project,
             mapset="PERMANENT",
             input=self.input,
             method=method,
@@ -76,7 +78,7 @@ class TestRasterreport(TestCase):
         ## Project the map
         self.assertModule(
             "r.proj",
-            project="nc_spm_08_grass7",
+            project=src_project,
             mapset="PERMANENT",
             input=self.input,
             output=output,
