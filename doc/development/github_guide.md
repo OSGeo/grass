@@ -137,13 +137,8 @@ typically under 50-60 characters.
 
 ### PR Content
 
-- Summary: Briefly describe the changes and their purpose.
-- Details: Outline the most important changes, focusing on impact.
-- Screenshots or logs: If the changes involve GUI or logs, provide relevant
-  screenshots or logs.
-- Tests: Provide steps or mention tests for validation or reproducibility.
-- References: Link to related issues (e.g., "Fixes #1234") or previous
-  discussions.
+A pull request requires an abstract, change details, and more. When you create
+the new PR, you are presented with a template to help standardize the content.
 
 ## After creating a PR
 
