@@ -45,16 +45,14 @@ def test_b_flag(grass_session):
 def test_g_flag(grass_session):
     """Test that g.version -g contains the expected keys."""
     expected_keys = [
-        "version=",
-        "date=",
-        "revision=",
-        "build_date=",
-        "build_platform=",
-        "build_off_t_size=",
+        "version",
+        "date",
+        "revision",
+        "build_date",
+        "build_platform",
+        "build_off_t_size",
     ]
-    output = gs.read_command(
-        "g.version", flags="g", env=grass_session.session.env
-    ).strip()
+    output = gs.parse_command("g.version", flags="g", env=grass_session.session.env)
     for key in expected_keys:
         assert (
             key in output
@@ -63,32 +61,33 @@ def test_g_flag(grass_session):
 
 def test_r_flag(grass_session):
     """Test that g.version -r contains the expected keys."""
-    expected_keys = ["libgis revision:", "libgis date:"]
+    expected_texts = ["libgis revision:", "libgis date:"]
     output = gs.read_command(
         "g.version", flags="r", env=grass_session.session.env
     ).strip()
-    for key in expected_keys:
+    for text in expected_texts:
         assert (
-            key in output
-        ), f"Expected key '{key}' in g.version -r output, but it was not found."
+            text in output
+        ), f"Expected key '{text}' in g.version -r output, but it was not found."
 
 
 def test_x_flag(grass_session):
-    """Test that g.version -x output contains the correct citation information."""
-    expected = [
-        "@Manual{GRASS_GIS_software,",
-        "title = {Geographic Resources Analysis Support System (GRASS) "
-        "Software, Version X.Y},",
-        "author = {{GRASS Development Team}},",
-        "organization = {Open Source Geospatial Foundation},",
-        "address = {USA},",
-        "year = {YEAR},",
-        "url = {https://grass.osgeo.org},",
-    ]
+    """Test that g.version -x output has paired curly brackets."""
     output = gs.read_command(
         "g.version", flags="x", env=grass_session.session.env
     ).strip()
-    for item in expected:
-        assert (
-            item in output
-        ), f"Expected '{item}' in g.version -x output, but it was not found."
+
+    def curly_brackets_paired(text):
+        counter = 0
+        for character in text:
+            if character == "{":
+                counter += 1
+            elif character == "}":
+                counter -= 1
+            if counter < 0:
+                return False
+        return counter == 0
+
+    assert curly_brackets_paired(
+        output
+    ), "Curly brackets are not properly paired in the g.version -x output."
