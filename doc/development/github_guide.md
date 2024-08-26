@@ -138,7 +138,8 @@ typically under 50-60 characters.
 ### PR Content
 
 A pull request requires an abstract, change details, and more. When you create
-the new PR, you are presented with a template to help standardize the content.
+the new PR, you are presented with a [template](../../.github/PULL_REQUEST_TEMPLATE/pull_request_template.md)
+to help standardize the content.
 
 ## After creating a PR
 
