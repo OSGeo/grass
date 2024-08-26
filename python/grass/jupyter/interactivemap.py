@@ -17,7 +17,6 @@ import os
 import base64
 import json
 from pathlib import Path
-import grass.script as gs
 from .reprojection_renderer import ReprojectionRenderer
 
 from .utils import (
@@ -296,8 +295,8 @@ class InteractiveMap:
             import xyzservices  # pylint: disable=import-outside-toplevel
 
         # Store height and width
-        self.width = width
-        self.height = height
+        self.width = int(width)
+        self.height = int(height)
         self._controllers = {}
 
         # Store vector and raster name
@@ -766,12 +765,7 @@ class InteractiveQueryController:
         self.raster_name = rasters
         self.vector_name = vectors
         self.query_control = None
-
-        try:
-            self.width = int(width)
-        except (ValueError, TypeError):
-            gs.warning(_("Invalid width value, using default width of 300px."))
-            self.width = 300
+        self.width = width
 
     def activate(self):
         """Activates the interactive querying."""
