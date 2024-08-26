@@ -1,4 +1,3 @@
-import pytest
 import grass.script as gs
 
 
@@ -78,7 +77,8 @@ def test_x_flag(grass_session):
     """Test that g.version -x output contains the correct citation information."""
     expected = [
         "@Manual{GRASS_GIS_software,",
-        "title = {Geographic Resources Analysis Support System (GRASS) Software, Version X.Y},",
+        "title = {Geographic Resources Analysis Support System (GRASS) "
+        "Software, Version X.Y},",
         "author = {{GRASS Development Team}},",
         "organization = {Open Source Geospatial Foundation},",
         "address = {USA},",
