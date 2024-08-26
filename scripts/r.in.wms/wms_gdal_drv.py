@@ -60,7 +60,6 @@ class WMSGdalDrv(WMSBase):
 
         gdal_wms = ET.Element("GDAL_WMS")
         service = ET.SubElement(gdal_wms, "Service")
-        name = ET.Element("name")
         service.set("name", "WMS")
 
         version = ET.SubElement(service, "Version")
