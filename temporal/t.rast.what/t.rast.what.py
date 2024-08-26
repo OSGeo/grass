@@ -454,7 +454,6 @@ def one_point_per_col_output(
     Each row represents a single raster map, hence a single time stamp
     """
     # open the output file for writing
-    # out_file = open(output, "w") if output != "-" else sys.stdout
 
     first = True
     with open(output, "w") if output != "-" else sys.stdout as out_file:
@@ -531,7 +530,6 @@ def one_point_per_col_output(
                     )
                 out_file.write("\n")
 
-            in_file.close()
 
 
 ############################################################################
