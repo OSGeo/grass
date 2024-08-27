@@ -41,6 +41,7 @@
 # % description: Print name of current frame and exit
 # % suppress_required: yes
 # %end
+# ss
 # %flag
 # % key: a
 # % description: Print names of all frames including 'at' position and exit
