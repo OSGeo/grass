@@ -132,13 +132,13 @@ proposed changes.
 The title should be descriptive and clearly summarize the main purpose or change
 in the pull request. Start the title with the tool name or a
 [keyword](https://github.com/OSGeo/grass/blob/main/utils/release.yml) (e.g.:
-`tool X: add functionality Y for Z`. Keep it short, i.e. aim for concise titles,
+`tool name: Add functionality Y for Z`. Keep it short, i.e. aim for concise titles,
 typically under 50-60 characters.
 
 ### PR Content
 
 A pull request requires an abstract, change details, and more. When you create
-the new PR, you are presented with a [template](../../.github/PULL_REQUEST_TEMPLATE/pull_request_template.md)
+the new PR, you are presented with a [template](https://github.com/OSGeo/grass/blob/main/.github/PULL_REQUEST_TEMPLATE/pull_request_template.md)
 to help standardize the content.
 
 ## After creating a PR
