@@ -57,6 +57,7 @@ import argparse
 import json
 from pathlib import Path
 
+
 # mechanism meant for debugging this script (only)
 # private global to store if we are debugging
 _DEBUG = None
@@ -167,10 +168,7 @@ def fatal(msg):
 
 def readfile(path):
     debug("Reading %s" % path)
-    f = open(path, "r")
-    s = f.read()
-    f.close()
-    return s
+    return Path(path).read_text()
 
 
 def writefile(path, s):
