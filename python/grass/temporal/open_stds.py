@@ -269,8 +269,6 @@ def open_new_map_dataset(
 
     """
 
-    mapset = get_current_mapset()
-
     dbif, connection_state_changed = init_dbif(dbif)
     new_map = check_new_map_dataset(name, layer, type, overwrite, dbif)
 

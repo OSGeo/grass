@@ -20,15 +20,16 @@ jobs:
         os:
           - ubuntu-22.04
         python-version:
-          - '3.8'
-          - '3.10'
+          - '3.9'
           - '3.12'
+          - '3.13'
       fail-fast: true
 
     runs-on: ${{ matrix.os }}
     env:
       FORCE_COLOR: 1 # for software including pip: https://force-color.org/
       CLICOLOR_FORCE: 1 # for other software including ninja: https://bixense.com/clicolors/
+      PYTHONWARNINGS: always
 
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
@@ -38,6 +39,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
+          allow-prereleases: true
 
       - name: Install non-Python dependencies
         run: |
