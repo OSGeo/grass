@@ -32,6 +32,7 @@ for details.
 
 # import traceback
 import os
+from pathlib import Path
 
 import grass.script as gs
 from grass.pygrass import messages
@@ -813,7 +814,7 @@ def _create_temporal_database_views(dbif):
 
     :param dbif: The database interface to be used
     """
-    template_path = get_sql_template_path()
+    template_path = Path(get_sql_template_path())
 
     for sql_filename in (
         "raster_views",
@@ -823,9 +824,7 @@ def _create_temporal_database_views(dbif):
         "str3ds_views",
         "stvds_views",
     ):
-        sql_filepath = open(
-            os.path.join(template_path, sql_filename + ".sql"), "r"
-        ).read()
+        sql_filepath = (template_path / f"{sql_filename}.sql").read_text()
         dbif.execute_transaction(sql_filepath)
 
 
@@ -839,34 +838,18 @@ def create_temporal_database(dbif):
     """
     global tgis_backend, tgis_version, tgis_db_version, tgis_database_string
 
-    template_path = get_sql_template_path()
+    template_path = Path(get_sql_template_path())
     msgr = get_tgis_message_interface()
 
     # Read all SQL scripts and templates
-    map_tables_template_sql = open(
-        os.path.join(template_path, "map_tables_template.sql"), "r"
-    ).read()
-    raster_metadata_sql = open(
-        os.path.join(get_sql_template_path(), "raster_metadata_table.sql"), "r"
-    ).read()
-    raster3d_metadata_sql = open(
-        os.path.join(template_path, "raster3d_metadata_table.sql"), "r"
-    ).read()
-    vector_metadata_sql = open(
-        os.path.join(template_path, "vector_metadata_table.sql"), "r"
-    ).read()
-    stds_tables_template_sql = open(
-        os.path.join(template_path, "stds_tables_template.sql"), "r"
-    ).read()
-    strds_metadata_sql = open(
-        os.path.join(template_path, "strds_metadata_table.sql"), "r"
-    ).read()
-    str3ds_metadata_sql = open(
-        os.path.join(template_path, "str3ds_metadata_table.sql"), "r"
-    ).read()
-    stvds_metadata_sql = open(
-        os.path.join(template_path, "stvds_metadata_table.sql"), "r"
-    ).read()
+    map_tables_template_sql = (template_path / "map_tables_template.sql").read_text()
+    raster_metadata_sql = (template_path / "raster_metadata_table.sql").read_text()
+    raster3d_metadata_sql = (template_path / "raster3d_metadata_table.sql").read_text()
+    vector_metadata_sql = (template_path / "vector_metadata_table.sql").read_text()
+    stds_tables_template_sql = (template_path / "stds_tables_template.sql").read_text()
+    strds_metadata_sql = (template_path / "strds_metadata_table.sql").read_text()
+    str3ds_metadata_sql = (template_path / "str3ds_metadata_table.sql").read_text()
+    stvds_metadata_sql = (template_path / "stvds_metadata_table.sql").read_text()
 
     # Create the raster, raster3d and vector tables SQL statements
     raster_tables_sql = map_tables_template_sql.replace("GRASS_MAP", "raster")
@@ -898,21 +881,15 @@ def create_temporal_database(dbif):
 
         # Set up the trigger that takes care of
         # the correct deletion of entries across the different tables
-        delete_trigger_sql = open(
-            os.path.join(template_path, "sqlite3_delete_trigger.sql"), "r"
-        ).read()
-        indexes_sql = open(
-            os.path.join(template_path, "sqlite3_indexes.sql"), "r"
-        ).read()
+        delete_trigger_sql = (template_path / "sqlite3_delete_trigger.sql").read_text()
+        indexes_sql = (template_path / "sqlite3_indexes.sql").read_text()
     else:
         # Set up the trigger that takes care of
         # the correct deletion of entries across the different tables
-        delete_trigger_sql = open(
-            os.path.join(template_path, "postgresql_delete_trigger.sql"), "r"
-        ).read()
-        indexes_sql = open(
-            os.path.join(template_path, "postgresql_indexes.sql"), "r"
-        ).read()
+        delete_trigger_sql = (
+            template_path / "postgresql_delete_trigger.sql"
+        ).read_text()
+        indexes_sql = (template_path / "postgresql_indexes.sql").read_text()
 
     # Connect now to the database
     if dbif.connected is not True:
@@ -989,22 +966,19 @@ def upgrade_temporal_database(dbif):
         dbif.close()
         return
 
-    template_path = get_sql_template_path()
+    template_path = Path(get_sql_template_path())
     try:
-        upgrade_db_sql = open(
-            os.path.join(
-                template_path,
-                "upgrade_db_%s_to_%s.sql" % (upgrade_db_from, tgis_db_version),
-            ),
-            "r",
-        ).read()
+        upgrade_db_sql = (
+            template_path
+            / "upgrade_db_{}_to_{}.sql".format(upgrade_db_from, tgis_db_version)
+        ).read_text()
     except FileNotFoundError:
         msgr.fatal(
             _("Unsupported TGIS DB upgrade scenario: from version %s to %s")
             % (upgrade_db_from, tgis_db_version)
         )
 
-    drop_views_sql = open(os.path.join(template_path, "drop_views.sql"), "r").read()
+    drop_views_sql = (template_path / "drop_views.sql").read_text()
 
     msgr.message(
         _("Upgrading temporal database <%s> from version %s to %s...")
