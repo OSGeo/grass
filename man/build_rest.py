@@ -333,26 +333,26 @@ def write_rest_footer(f, index_url):
 
 
 def get_desc(cmd):
-    f = open(cmd, "r")
-    while True:
-        line = f.readline()
-        if not line:
-            return ""
-        if "NAME" in line:
-            break
+    with Path(cmd).open() as f:
+        while True:
+            line = f.readline()
+            if not line:
+                return ""
+            if "NAME" in line:
+                break
 
-    while True:
-        line = f.readline()
-        if not line:
-            return ""
-        if "SYNOPSIS" in line:
-            break
-        if "*" in line:
-            sp = line.split("-", 1)
-            if len(sp) > 1:
-                return sp[1].strip()
-            else:
-                return None
+        while True:
+            line = f.readline()
+            if not line:
+                return ""
+            if "SYNOPSIS" in line:
+                break
+            if "*" in line:
+                sp = line.split("-", 1)
+                if len(sp) > 1:
+                    return sp[1].strip()
+                else:
+                    return None
 
     return ""
 
