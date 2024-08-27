@@ -1,19 +1,22 @@
-"""
-Name:       r.texture test
-Purpose:    Tests r.texture and its flags/options.
+#!/usr/bin/env python
 
-Author:     Sunveer Singh, Google Code-in 2017
-            Chung-Yuan Liang, modified in 2024
-Copyright:  (C) 2017 by Sunveer Singh and the GRASS Development Team
-Licence:    This program is free software under the GNU General Public
-            License (>=v2). Read the file COPYING that comes with GRASS
-            for details.
-"""
+##############################################################################
+# MODULE:    r.proj
+#
+# AUTHOR(S): Chung-Yuan Liang <cyliang368 AT gmail.com>
+#
+# PURPOSE:   Unit tests for r.proj
+#
+# COPYRIGHT: (C) 2024 Chung-Yuan Liang and the GRASS Development Team
+#
+#            This program is free software under the GNU General Public
+#            License (>=v2). Read the file COPYING that comes with GRASS
+#            for details.
+##############################################################################
 
 from grass.gunittest.case import TestCase
-from grass.gunittest.checkers import text_to_keyvalue
 from grass.gunittest.gmodules import call_module
-import os
+import shutil
 
 raster_info = """north=35.8096296297222
 south=35.6874074075
@@ -41,7 +44,7 @@ class TestRasterreport(TestCase):
     def tearDownClass(cls):
         cls.runModule("g.mapset", mapset="PERMANENT", project=src_project)
         dbase = call_module("g.gisenv", get="GISDBASE")
-        os.system(f"rm -rf {dbase}/{dst_project}")
+        shutil.rmtree(f"{dbase}/{dst_project}")
 
     def run_rproj_test(self, method, statics):
         """The main function to run r.proj check rsults according to the method
@@ -89,8 +92,8 @@ class TestRasterreport(TestCase):
         )
 
         ## Validate the output
-        self.assertRasterFitsUnivar(output, reference=statics, precision=1e-2)
-        self.assertRasterFitsInfo(output, reference=raster_info, precision=1e-2)
+        self.assertRasterFitsUnivar(output, reference=statics, precision=1e-7)
+        self.assertRasterFitsInfo(output, reference=raster_info, precision=1e-7)
 
     def test_nearest(self):
         """Testing method nearest"""
