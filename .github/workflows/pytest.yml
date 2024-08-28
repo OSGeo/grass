@@ -40,9 +40,10 @@ jobs:
           cache: pip
           allow-prereleases: true
 
-      - name: Upgrade pip, setuptools, and wheel
+      - name: Upgrade pip and install compatible setuptools and wheel
         run: |
-          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install --upgrade pip
+          python -m pip install setuptools==68.2.2 wheel==0.41.2
 
       - name: Install non-Python dependencies
         run: |
@@ -56,7 +57,6 @@ jobs:
       - name: Update dependencies to remove pkg_resources usage
         run: |
           pip install packaging importlib_resources importlib_metadata
-          pip install --upgrade setuptools pip wheel
           
           # Update your requirements files to use newer versions of dependencies
           sed -i 's/pkg-resources.*/packaging/' .github/workflows/python_requirements.txt
