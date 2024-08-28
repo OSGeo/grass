@@ -40,10 +40,10 @@ jobs:
           cache: pip
           allow-prereleases: true
 
-      - name: Upgrade pip and install compatible setuptools and wheel
+      - name: Install compatible setuptools and wheel, then upgrade pip
         run: |
+          python -m pip install --no-deps setuptools==68.2.2 wheel==0.41.2
           python -m pip install --upgrade pip
-          python -m pip install setuptools==68.2.2 wheel==0.41.2
 
       - name: Install non-Python dependencies
         run: |
@@ -67,6 +67,7 @@ jobs:
           pip install -r .github/workflows/python_requirements.txt
           pip install -r .github/workflows/optional_requirements.txt
           pip install pytest pytest-timeout pytest-github-actions-annotate-failures pytest-xdist pytest-cov
+
 
       - name: Create installation directory
         run: |
