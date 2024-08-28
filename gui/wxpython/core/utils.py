@@ -827,7 +827,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
     if os.path.exists(envFile):
         try:
             fd = open(envFile)
-        except OSError as e:
+        except OSError:
             sys.stderr.write(_("Unable to open file '%s'\n") % envFile)
             return
         for line in fd:
@@ -857,7 +857,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
     # write update env file
     try:
         fd = open(envFile, "w")
-    except OSError as e:
+    except OSError:
         sys.stderr.write(_("Unable to create file '%s'\n") % envFile)
         return
     if windows:
