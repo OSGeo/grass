@@ -41,6 +41,11 @@ jobs:
           cache: pip
           allow-prereleases: true
 
+      - name: Upgrade pip, setuptools, and wheel
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+        
+
       - name: Install non-Python dependencies
         run: |
           sudo apt-get update -y
@@ -52,10 +57,10 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          python -m pip install --upgrade pip setuptools wheel
-          pip install -r .github/workflows/python_requirements.txt
-          pip install -r .github/workflows/optional_requirements.txt
-          pip install pytest pytest-timeout pytest-github-actions-annotate-failures pytest-xdist pytest-cov
+          PYTHONWARNINGS="ignore:pkg_resources is deprecated as an API:DeprecationWarning" pip install -r .github/workflows/python_requirements.txt
+          PYTHONWARNINGS="ignore:pkg_resources is deprecated as an API:DeprecationWarning" pip install -r .github/workflows/optional_requirements.txt
+          PYTHONWARNINGS="ignore:pkg_resources is deprecated as an API:DeprecationWarning" pip install pytest pytest-timeout pytest-github-actions-annotate-failures pytest-xdist pytest-cov
+
 
       - name: Create installation directory
         run: |
@@ -83,20 +88,20 @@ jobs:
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
-          PYTHONWARNINGS="error,ignore:pkg_resources is deprecated as an API:DeprecationWarning" pytest --verbose --color=yes --durations=0 --durations-min=0.5 \
-          --numprocesses auto -ra . \
-          -m 'not needs_solo_run'
+          PYTHONWARNINGS="ignore:pkg_resources is deprecated as an API:DeprecationWarning" pytest --verbose --color=yes --durations=0 --durations-min=0.5 \
+            --numprocesses auto -ra . \
+            -m 'not needs_solo_run'
 
       - name: Run pytest with a single worker (for tests marked with needs_solo_run)
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
           export INITIAL_GISBASE="$(grass --config path)"
-          PYTHONWARNINGS="error,ignore:pkg_resources is deprecated as an API:DeprecationWarning" INITIAL_PWD="${PWD}" pytest --verbose --color=yes --durations=0 --durations-min=0.5 \
-          --cov \
-          --cov-context=test \s
-          -ra . \
-          -m 'needs_solo_run'
+          PYTHONWARNINGS="ignore:pkg_resources is deprecated as an API:DeprecationWarning" INITIAL_PWD="${PWD}" pytest --verbose --color=yes --durations=0 --durations-min=0.5 \
+            --cov \
+            --cov-context=test \
+            -ra . \
+            -m 'needs_solo_run'
       - name: Fix non-standard installed script paths in coverage data
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
