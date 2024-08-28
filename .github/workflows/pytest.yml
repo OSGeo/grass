@@ -40,10 +40,9 @@ jobs:
           cache: pip
           allow-prereleases: true
 
-      - name: Install compatible setuptools and wheel, then upgrade pip
+      - name: Upgrade pip, setuptools, and wheel
         run: |
-          python -m pip install --no-deps setuptools==68.2.2 wheel==0.41.2
-          python -m pip install --upgrade pip
+          python -m pip install --upgrade pip setuptools wheel
 
       - name: Install non-Python dependencies
         run: |
@@ -54,20 +53,11 @@ jobs:
 
       - uses: rui314/setup-mold@v1
 
-      - name: Update dependencies to remove pkg_resources usage
-        run: |
-          pip install packaging importlib_resources importlib_metadata
-          
-          # Update your requirements files to use newer versions of dependencies
-          sed -i 's/pkg-resources.*/packaging/' .github/workflows/python_requirements.txt
-          sed -i 's/pkg-resources.*/packaging/' .github/workflows/optional_requirements.txt
-
       - name: Install Python dependencies
         run: |
           pip install -r .github/workflows/python_requirements.txt
           pip install -r .github/workflows/optional_requirements.txt
           pip install pytest pytest-timeout pytest-github-actions-annotate-failures pytest-xdist pytest-cov
-
 
       - name: Create installation directory
         run: |
