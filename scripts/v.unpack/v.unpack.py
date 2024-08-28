@@ -216,9 +216,7 @@ def main():
         dbconn = grassdb.db_connection(force=True)
         todb = dbconn["database"]
         # return all tables
-        list_fromtable = grass.read_command(
-            "db.tables", driver="sqlite", database=fromdb
-        ).splitlines()
+        grass.read_command("db.tables", driver="sqlite", database=fromdb).splitlines()
 
         # return the list of old connection for extract layer number and key
         dbln = open(os.path.join(new_dir, "dbln"), "r")
