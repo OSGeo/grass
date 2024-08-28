@@ -764,8 +764,8 @@ class InteractiveQueryController:
         self._ipywidgets = ipywidgets
         self.raster_name = rasters
         self.vector_name = vectors
-        self.query_control = None
         self.width = width
+        self.query_control = None
 
     def activate(self):
         """Activates the interactive querying."""
