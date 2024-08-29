@@ -965,7 +965,6 @@ class DbMgrNotebookBase(GNotebook):
             pass
 
         if idCol:
-            self.FindWindowById(idCol)
             table = self.dbMgrData["mapDBInfo"].layers[self.selLayer]["table"]
             self.dbMgrData["mapDBInfo"].GetColumns(table)
 

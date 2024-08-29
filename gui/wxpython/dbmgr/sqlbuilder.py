@@ -414,10 +414,6 @@ class SQLBuilder(wx.Frame):
 
         idx = selection[0]
         value = self.list_values.GetString(idx)
-        idx = self.list_columns.GetSelections()[0]
-        column = self.list_columns.GetString(idx)
-
-        self.dbInfo.GetTableDesc(self.dbInfo.GetTable(self.layer))[column]["type"]
 
         self._add(element="value", value=value)
 
