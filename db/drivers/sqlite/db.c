@@ -35,6 +35,7 @@ int db__driver_open_database(dbHandle *handle)
     const char *name;
     char name3[GPATH_MAX + 14], *env_nolock;
     int i;
+    size_t len;
 
     G_debug(3, "\ndb_driver_open_database()");
 
@@ -78,7 +79,10 @@ int db__driver_open_database(dbHandle *handle)
         G_free_tokens(tokens);
     }
     else {
-        strcpy(name2, name);
+        len = G_strlcpy(name2, name, sizeof(name2));
+        if (len >= sizeof(name2)) {
+            G_warning(_("Database name <%s> is too long"), name);
+        }
     }
 
     G_debug(2, "name2 = '%s'", name2);
@@ -114,11 +118,18 @@ int db__driver_open_database(dbHandle *handle)
         else {
             G_warning(_("The sqlite config option '%s' is not supported"),
                       "SQLITE_CONFIG_URI");
-            strcpy(name3, name2);
+            len = G_strlcpy(name3, name2, sizeof(name3));
+            if (len >= sizeof(name3)) {
+                G_warning(_("Database name <%s> is too long"), name2);
+            }
         }
     }
-    else
-        strcpy(name3, name2);
+    else {
+        len = G_strlcpy(name3, name2, sizeof(name3));
+        if (len >= sizeof(name3)) {
+            G_warning(_("Database name <%s> is too long"), name2);
+        }
+    }
     if (sqlite3_open(name3, &sqlite) != SQLITE_OK) {
         db_d_append_error("%s %s\n%s", _("Unable to open database:"), name3,
                           (char *)sqlite3_errmsg(sqlite));
@@ -184,11 +195,18 @@ int db__driver_create_database(dbHandle *handle)
         else {
             G_warning(_("The sqlite config option '%s' is not supported"),
                       "SQLITE_CONFIG_URI");
-            strcpy(name2, name);
+            len = G_strlcpy(name2, name, sizeof(name2));
+            if (len >= sizeof(name2)) {
+                G_warning(_("Database name <%s> is too long"), name);
+            }
         }
     }
-    else
-        strcpy(name2, name);
+    else {
+        len = G_strlcpy(name2, name, sizeof(name2));
+        if (len >= sizeof(name2)) {
+            G_warning(_("Database name <%s> is too long"), name);
+        }
+    }
     if (sqlite3_open(name2, &sqlite) != SQLITE_OK) {
         db_d_append_error("%s %s\n%s", _("Unable to create database:"), name,
                           (char *)sqlite3_errmsg(sqlite));
