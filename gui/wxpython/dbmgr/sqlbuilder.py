@@ -356,7 +356,6 @@ class SQLBuilder(wx.Frame):
 
     def OnUniqueValues(self, event, justsample=False):
         """Get unique values"""
-        vals = []
         try:
             idx = self.list_columns.GetSelections()[0]
             column = self.list_columns.GetString(idx)
@@ -418,9 +417,7 @@ class SQLBuilder(wx.Frame):
         idx = self.list_columns.GetSelections()[0]
         column = self.list_columns.GetString(idx)
 
-        ctype = self.dbInfo.GetTableDesc(self.dbInfo.GetTable(self.layer))[column][
-            "type"
-        ]
+        self.dbInfo.GetTableDesc(self.dbInfo.GetTable(self.layer))[column]["type"]
 
         self._add(element="value", value=value)
 

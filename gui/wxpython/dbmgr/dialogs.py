@@ -305,7 +305,6 @@ class DisplayAttributesDialog(wx.Dialog):
             columns = self.mapDBInfo.tables[table]
             for idx in range(len(columns[key]["values"])):
                 for name in columns.keys():
-                    type = columns[name]["type"]
                     value = columns[name]["values"][idx]
                     if value is None:
                         value = ""
