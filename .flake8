@@ -58,17 +58,14 @@ per-file-ignores =
     gui/wxpython/dbmgr/manager.py: E722
     gui/wxpython/dbmgr/vinfo.py: F841
     gui/wxpython/docs/wxgui_sphinx/conf.py: E402, W291
-    gui/wxpython/gcp/g.gui.gcp.py: F841
-    gui/wxpython/gcp/manager.py: F841, E722
-    gui/wxpython/gcp/mapdisplay.py: F841
-    gui/wxpython/gui_core/*: F841, E266, E722
-    gui/wxpython/gui_core/dialogs.py: E722, F841
-    gui/wxpython/gui_core/forms.py: E722, F841
+    gui/wxpython/gcp/manager.py: E722
+    gui/wxpython/gui_core/*: E266, E722
+    gui/wxpython/gui_core/dialogs.py: E722
+    gui/wxpython/gui_core/forms.py: E722
     gui/wxpython/gui_core/ghelp.py: E722
-    gui/wxpython/gui_core/gselect.py: F841, E266, E722
-    gui/wxpython/gui_core/preferences.py: E266, F841
-    gui/wxpython/gui_core/treeview.py: F841
-    gui/wxpython/gui_core/widgets.py: F841, E722, E266
+    gui/wxpython/gui_core/gselect.py: E266, E722
+    gui/wxpython/gui_core/preferences.py: E266
+    gui/wxpython/gui_core/widgets.py: E722, E266
     gui/wxpython/image2target/*: F841, E722, E265
     gui/wxpython/image2target/g.gui.image2target.py: E501, E265, F841
     gui/wxpython/iscatt/*: F841, E722, F405, F403
