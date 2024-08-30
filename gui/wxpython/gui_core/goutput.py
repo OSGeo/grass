@@ -620,7 +620,7 @@ class GStc(stc.StyledTextCtrl):
                     self.linePos -= 1
                 else:
                     if c == "\r":
-                        pos = self.GetCurLine()[1]
+                        self.GetCurLine()[1]
                         # self.SetCurrentPos(pos)
                     else:
                         self.SetCurrentPos(self.linePos)

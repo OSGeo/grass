@@ -180,7 +180,7 @@ class LocationDialog(SimpleDialog):
             dbase = grass.gisenv()["GISDBASE"]
             self.element2.UpdateItems(dbase=dbase, location=location)
             self.element2.SetSelection(0)
-            mapset = self.element2.GetStringSelection()
+            self.element2.GetStringSelection()
 
     def GetValues(self):
         """Get location, mapset"""

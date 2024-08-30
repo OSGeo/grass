@@ -144,7 +144,7 @@ class MenuBase:
         id = event.GetMenuId()
         item = self.FindItemById(id)
         if item:
-            help = item.GetHelp()
+            item.GetHelp()
 
         # but in this case just call Skip so the default is done
         event.Skip()
