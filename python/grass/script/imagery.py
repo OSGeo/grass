@@ -63,9 +63,9 @@ def group_to_dict(
 
     :param str imagery_group_name: Name of the imagery group to process (or None)
     :param str subgroup: Name of the imagery sub-group to process (or None)
-    :param str dict_keys: What to use as key for dictionary. Can bei either
+    :param str dict_keys: What to use as key for dictionary. It can be either
                          "semantic_labels" (default), "map_names" or "indices"
-    :param str dict_values: What to use as values for dictionary. Can bei either
+    :param str dict_values: What to use as values for dictionary. It can be either
                            "map_names" (default), "semanic_labels", "indices" or
                            "metadata" (to return dictionaries with full map metadata)
     :param bool fill_semantic_label: If maps in a group do not have a semantic
