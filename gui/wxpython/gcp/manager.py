@@ -1826,7 +1826,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             else:
                 flags = "a"
 
-            busy = wx.BusyInfo(_("Rectifying images, please wait..."), parent=self)
+            wx.BusyInfo(_("Rectifying images, please wait..."), parent=self)
             wx.GetApp().Yield()
 
             ret, msg = RunCommand(
@@ -1886,7 +1886,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 )
                 ret = msg = ""
 
-                busy = wx.BusyInfo(
+                wx.BusyInfo(
                     _("Rectifying vector map <%s>, please wait...") % vect, parent=self
                 )
                 wx.GetApp().Yield()
@@ -2028,7 +2028,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         elif self.gr_order == 2:
             minNumOfItems = 6
-            diff = 6 - numOfItems
             # self.SetStatusText(
             # _('Insufficient points, 6+ points needed for 2nd order'))
 
@@ -2331,7 +2330,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
     def OnZoomMenuGCP(self, event):
         """Popup Zoom menu"""
-        point = wx.GetMousePosition()
         zoommenu = Menu()
         # Add items to the menu
 
@@ -3433,7 +3431,6 @@ class GrSettingsDialog(wx.Dialog):
         srcrenderVector = False
         tgtrender = False
         tgtrenderVector = False
-        reload_target = False
         if self.new_src_map != src_map:
             # remove old layer
             layers = self.parent.grwiz.SrcMap.GetListOfLayers()
@@ -3471,7 +3468,6 @@ class GrSettingsDialog(wx.Dialog):
                 del layers[0]
                 layers = self.parent.grwiz.TgtMap.GetListOfLayers()
             # self.parent.grwiz.TgtMap.DeleteAllLayers()
-            reload_target = True
             tgt_map["raster"] = self.new_tgt_map["raster"]
             tgt_map["vector"] = self.new_tgt_map["vector"]
 
