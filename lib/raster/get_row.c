@@ -22,10 +22,6 @@
 
 #include "R.h"
 
-#ifndef GDT_Int8
-#define GDT_Int8 14
-#endif
-
 static void embed_nulls(int, void *, int, RASTER_MAP_TYPE, int, int);
 
 static int compute_window_row(int fd, int row, int *cellRow)
@@ -372,9 +368,12 @@ static void gdal_values_int(int fd, const unsigned char *data,
         case GDT_Byte:
             c[i] = *(GByte *)d;
             break;
+/* GDT_Int8 was introduced in GDAL 3.7 */
+#if GDAL_VERSION_NUM >= GDAL_COMPUTE_VERSION(3, 7, 0)
         case GDT_Int8:
-            c[i] = *(GInt16 *)d;
+            c[i] = *(signed char *)d;
             break;
+#endif
         case GDT_Int16:
             c[i] = *(GInt16 *)d;
             break;
