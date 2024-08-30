@@ -817,7 +817,7 @@ class VariableListCtrl(ModelListCtrl):
 
     def Populate(self, data):
         """Populate the list"""
-        self.itemDataMap = dict()
+        self.DeleteAllItems()
         i = 0
         for name, values in data.items():
             self.itemDataMap[i] = [
@@ -826,19 +826,15 @@ class VariableListCtrl(ModelListCtrl):
                 values.get("value", ""),
                 values.get("description", ""),
             ]
-            i += 1
-
-        self.itemCount = len(self.itemDataMap.keys())
-        self.DeleteAllItems()
-        i = 0
-        for name, vtype, value, desc in self.itemDataMap.values():
             index = self.InsertItem(i, name)
             self.SetItem(index, 0, name)
-            self.SetItem(index, 1, vtype)
-            self.SetItem(index, 2, value)
-            self.SetItem(index, 3, desc)
+            self.SetItem(index, 1, values["type"])
+            self.SetItem(index, 2, values.get("value", ""))
+            self.SetItem(index, 3, values.get("description", ""))
             self.SetItemData(index, i)
             i += 1
+
+        self.itemCount = len(data)
 
     def Append(self, name, vtype, value, desc):
         """Append new item to the list
