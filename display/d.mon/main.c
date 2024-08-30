@@ -32,6 +32,8 @@
 
 #include "proto.h"
 
+#define MONITOR_NAME_LIMIT 256
+
 int main(int argc, char *argv[])
 {
     struct GModule *module;
@@ -176,7 +178,7 @@ int main(int argc, char *argv[])
         if (list_flag->answer)
             G_warning(_("Flag -%c ignored"), list_flag->key);
         mon = G_getenv_nofatal("MONITOR");
-        if (mon) {
+        if (mon && strlen(mon) < MONITOR_NAME_LIMIT) {
             if (selected_flag->answer) {
                 G_verbose_message(_("Currently selected monitor:"));
                 fprintf(stdout, "%s\n", mon);
@@ -194,8 +196,12 @@ int main(int argc, char *argv[])
                 ret = stop_mon(mon);
             }
         }
-        else
+        else if (!mon) {
             G_important_message(_("No monitor selected"));
+        }
+        else {
+            G_important_message(_("Monitor name is too long"));
+        }
 
         exit(EXIT_SUCCESS);
     }
