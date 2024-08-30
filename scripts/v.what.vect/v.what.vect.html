@@ -12,7 +12,7 @@ examples). The script is based on <em>v.distance</em>.
 The upload <b>column</b> into which the query results are stored must be
 present in <b>map</b>. Use <em>v.db.addcolumn</em> to add one if needed.
 <p>Use the <b>dmax</b> parameter to control the query distance tolerance, i.e.,
-how far <b>map</b>'s points/centroids can be from the <b>query_map</b> features. 
+how far <b>map</b>'s points/centroids can be from the <b>query_map</b> features.
 For further options, use <em>v.distance</em>.
 <p>In case of a multipoint input <b>map</b> with several points having the
 same category number, it can happen that the query result is NULL if the same
@@ -20,14 +20,14 @@ category number falls into different <b>query_map</b> polygons.
 <p>When transferring attributes from a point map into a polygon map,
 <b>dmax</b> has to be larger than zero, i.e., it will be determined by the
 distance between query points and polygon centroids. Importantly, distance
-is in meters for latitude-longitude locations.
-<p>In case that one or both input vector maps are 3D, features need to 
+is in meters for latitude-longitude projects.
+<p>In case that one or both input vector maps are 3D, features need to
 touch also in the 3rd dimension (z coordinate) in order to transfer
 attributes.
 
 <h2>EXAMPLES</h2>
 
-In this example, the 'hospitals' point map in the North Carolina location is
+In this example, the 'hospitals' point map in the North Carolina dataset is
 copied to the current mapset, a new attribute column is added and the urban
 names from the 'urbanarea' polygon map are transferred to hospital points
 locations in 'myhospitals' map:
@@ -50,7 +50,7 @@ projected beforehand.
 <div class="code"><pre>
 # extract populated places from geonames
 v.extract geonames_IT where="featurecla='P'" output=geonames_IT_cities
-# add new column 
+# add new column
 v.db.addcol corine_code111_112_cities column="gnameid double precision"
 # transfer geonameid (3000m maximal distance between points and centroids)
 v.what.vect corine_code111_112_cities query_map=geonames_IT_cities column=gnameid \
@@ -71,12 +71,6 @@ v.what.vect corine_code111_112_cities query_map=geonames_IT_cities column=gnamei
 <a href="v.vect.stats.html">v.vect.stats</a>
 </em>
 
-
 <h2>AUTHOR</h2>
 
 Markus Neteler
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

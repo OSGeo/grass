@@ -11,7 +11,7 @@ One line for each known projection. A sample entry:
 
 	AEA:Albers Equal Area:LAT0=ask,23.0;LAT1=ask,29.5;LAT2=ask,45.5;LON0=ask,-96.0;X0=ask,0.0;Y0=ask,0.0
 
-The first field is the projection name, as used by the old geo.h file. 
+The first field is the projection name, as used by the old geo.h file.
 AFAICT, the corresponding +proj= parameter is identical except in
 lower case.
 
@@ -65,4 +65,3 @@ hacks. Some of those are useful-but-not-essential (e.g. automatically
 selecting the correct ellipsoid for certain projections), while others
 are necessary (e.g. the zone= and south parameters for UTM need to go
 into the WIND/DEFAULT_WIND files as well as the PROJ_INFO file).
-

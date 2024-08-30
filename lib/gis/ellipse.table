@@ -2,24 +2,24 @@
 # format of the file is
 #  name  "description"	a=value   x=value
 #
-# where name is a single word elliposid name, 
-# description is a text enclosed in double quotes, 
+# where name is a single word elliposid name,
+# description is a text enclosed in double quotes,
 # a is the equatorial radius
 # and x is one of
 #   b polar radius, f flattening, or e eccentricity squared
 #
 # x should be a defining parameter (as opposed to a derived parameter)
 # note: accuracy should be sufficient with a derived parameter.
-# All newer sources state only f as a parameter, even if it is derived.  
-# b / a = 1 - f = sqrt( 1 - e2 ) = 1 / sqrt ( 1 + e'2 ) 
-# 
+# All newer sources state only f as a parameter, even if it is derived.
+# b / a = 1 - f = sqrt( 1 - e2 ) = 1 / sqrt ( 1 + e'2 )
+#
 # no spaces before or after the =
 # PLEASE ALWAYS ADD NEW DEFINITIONS TO THE END OF THE FILE AND INCLUDE
 # A COMMENT DESCRIBING THE SOURCE OF THE DEFINITION
 
 # the following parameters are from NIMA document TR8350.2:
 # old values commented
-# Airy 1830 
+# Airy 1830
 # airy						a=6377563.396	e=.006670540
 airy		"Airy 1830"			a=6377563.396	f=1/299.3249646
 # Australian National
@@ -38,7 +38,7 @@ clark80		"Clarke 1880"			a=6378249.145	f=1/293.465
 # everest					a=6377276.345	e=.0066378466
 everest		"Everest 1830, India"		a=6377276.345	f=1/300.8017
 evrst30  	"Everest 1830, India"		a=6377276.345	f=1/300.8017
-# Everest 1948, W. Malaysia and Singapore 
+# Everest 1948, W. Malaysia and Singapore
 evrst48  	"Everest 1948"			a=6377304.063	f=1/300.8017
 # Everest 1956, India
 evrst56		"Everest 1956, India"		a=6377301.243	f=1/300.8017
@@ -92,9 +92,9 @@ delmbr		"Delambre 1810"			a=6376428.0	f=1/311.5
 engelis		"Engelis 1985"			a=6378136.05	f=1/298.2566
 # Fischer (Mercury Datum) 1960
 fschr60		"Fischer (Mercury Datum) 1960"	a=6378166.000 	f=1/298.3
-# Mercury (same as Fischer 1960). Included only for reference. 
+# Mercury (same as Fischer 1960). Included only for reference.
 # mercury		"Mercury"		a=6378166.0	b=6356784.283666
-# modif_merc is a synonym to Modified Fischer 1960 (fschr60m). Included only for reference.  
+# modif_merc is a synonym to Modified Fischer 1960 (fschr60m). Included only for reference.
 # modif_merc	"Modified Mercury"		a=6378150.0	b=6356768.337303
 # Modified Fischer 1960
 fschr60m	"Modified Fischer 1960"		a=6378155.000 	f=1/298.30

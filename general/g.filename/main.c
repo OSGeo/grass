@@ -1,10 +1,9 @@
-
 /****************************************************************************
  *
  * MODULE:       g.filename
  * AUTHOR(S):    Michael Shapiro CERL (original contributor)
  *               Markus Neteler <neteler itc.it>,
- *               Bernhard Reiter <bernhard intevation.de>, 
+ *               Bernhard Reiter <bernhard intevation.de>,
  *               Glynn Clements <glynn gclements.plus.com>,
  *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
@@ -16,6 +15,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -32,6 +32,7 @@ int main(int argc, char *argv[])
     struct Option *opt1;
     struct Option *opt2;
     struct Option *opt3;
+    struct Flag *flag_create;
 
     G_gisinit(argv[0]);
 
@@ -61,22 +62,36 @@ int main(int argc, char *argv[])
     opt2->required = NO;
     opt2->description = _("Name of a mapset (default: current)");
 
+    flag_create = G_define_flag();
+    flag_create->key = 'c';
+    flag_create->label = _("Create element directory in the current mapset");
+    flag_create->description =
+        _("If element directory for database file does not exist, create it");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     element = opt1->answer;
     name = opt3->answer;
 
     if (opt2->answer)
-	mapset = opt2->answer;
+        mapset = opt2->answer;
     else
-	mapset = G_mapset();
+        mapset = G_mapset();
 
     if (strcmp(mapset, ".") == 0 || strcmp(mapset, "") == 0)
-	mapset = G_mapset();
+        mapset = G_mapset();
 
-    G_make_mapset_element(element);
+    /* Create element directory if requested and in current mapset. */
+    if (flag_create) {
+        if (strcmp(mapset, G_mapset()) != 0) {
+            G_fatal_error("Cannot create <%s> (flag -%c):"
+                          " <%s> is not the current mapset (%s)",
+                          element, flag_create->key, mapset, G_mapset());
+        }
+        G_make_mapset_object_group(element);
+    }
+
     G_file_name(path, element, name, mapset);
 
     fprintf(stdout, "file='%s'\n", path);

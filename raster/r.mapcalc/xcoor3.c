@@ -1,4 +1,3 @@
-
 #include <grass/gis.h>
 #include <grass/raster3d.h>
 #include "globals.h"
@@ -20,16 +19,16 @@ int f_x(int argc, const int *argt, void **args)
     int i;
 
     if (argc > 0)
-	return E_ARG_HI;
+        return E_ARG_HI;
 
     if (argt[0] != DCELL_TYPE)
-	return E_RES_TYPE;
+        return E_RES_TYPE;
 
     x = window->west + 0.5 * window->ew_res;
 
     for (i = 0; i < columns; i++) {
-	res[i] = x;
-	x += window->ew_res;
+        res[i] = x;
+        x += window->ew_res;
     }
 
     return 0;
@@ -43,15 +42,15 @@ int f_y(int argc, const int *argt, void **args)
     int i;
 
     if (argc > 0)
-	return E_ARG_HI;
+        return E_ARG_HI;
 
     if (argt[0] != DCELL_TYPE)
-	return E_RES_TYPE;
+        return E_RES_TYPE;
 
     y = window->north - (current_row + 0.5) * window->ns_res;
 
     for (i = 0; i < columns; i++)
-	res[i] = y;
+        res[i] = y;
 
     return 0;
 }
@@ -64,15 +63,15 @@ int f_z(int argc, const int *argt, void **args)
     int i;
 
     if (argc > 0)
-	return E_ARG_HI;
+        return E_ARG_HI;
 
     if (argt[0] != DCELL_TYPE)
-	return E_RES_TYPE;
+        return E_RES_TYPE;
 
     z = window->bottom + ((current_depth) + 0.5) * window->tb_res;
 
     for (i = 0; i < columns; i++)
-	res[i] = z;
+        res[i] = z;
 
     return 0;
 }

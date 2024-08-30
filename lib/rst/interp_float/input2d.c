@@ -1,4 +1,3 @@
-
 /*!
  * \file input2d.c
  *
@@ -17,7 +16,6 @@
  * for details.
  */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -28,7 +26,6 @@
 #include <grass/linkm.h>
 #include <grass/interpf.h>
 #include <grass/glocale.h>
-
 
 /*!
  * Creates a bitmap mask from given raster map
@@ -45,83 +42,82 @@ struct BM *IL_create_bitmask(struct interp_params *params)
     struct BM *bitmask;
 
     if ((MASKfd = Rast_maskfd()) >= 0)
-	MASK = Rast_allocate_c_buf();
+        MASK = Rast_allocate_c_buf();
     else
-	MASK = NULL;
+        MASK = NULL;
 
     if (params->maskmap != NULL || MASK != NULL) {
-	bitmask = BM_create(params->nsizc, params->nsizr);
+        bitmask = BM_create(params->nsizc, params->nsizr);
 
-	if (params->maskmap != NULL) {
-	    mapsetm = G_find_raster2(params->maskmap, "");
-	    if (!mapsetm)
-		G_fatal_error(_("Mask raster map <%s> not found"),
-			      params->maskmap);
+        if (params->maskmap != NULL) {
+            mapsetm = G_find_raster2(params->maskmap, "");
+            if (!mapsetm)
+                G_fatal_error(_("Mask raster map <%s> not found"),
+                              params->maskmap);
 
-	    cellmask = Rast_allocate_c_buf();
-	    cfmask = Rast_open_old(params->maskmap, mapsetm);
-	}
-	else
-	    cellmask = NULL;
+            cellmask = Rast_allocate_c_buf();
+            cfmask = Rast_open_old(params->maskmap, mapsetm);
+        }
+        else
+            cellmask = NULL;
 
-	for (i = 0; i < params->nsizr; i++) {
-	    irev = params->nsizr - i - 1;
-	    if (cellmask)
-		Rast_get_c_row(cfmask, cellmask, i);
-	    if (MASK)
-		Rast_get_c_row(MASKfd, MASK, i);
-	    for (j = 0; j < params->nsizc; j++) {
-		if ((cellmask && (cellmask[j] == 0 || Rast_is_c_null_value(&cellmask[j]))) || 
-		    (MASK && (MASK[j] == 0 || Rast_is_c_null_value(&MASK[j]))))
-		    BM_set(bitmask, j, irev, 0);
-		else
-		    BM_set(bitmask, j, irev, 1);
-	    }
-	}
-	G_message(_("Bitmap mask created"));
+        for (i = 0; i < params->nsizr; i++) {
+            irev = params->nsizr - i - 1;
+            if (cellmask)
+                Rast_get_c_row(cfmask, cellmask, i);
+            if (MASK)
+                Rast_get_c_row(MASKfd, MASK, i);
+            for (j = 0; j < params->nsizc; j++) {
+                if ((cellmask && (cellmask[j] == 0 ||
+                                  Rast_is_c_null_value(&cellmask[j]))) ||
+                    (MASK && (MASK[j] == 0 || Rast_is_c_null_value(&MASK[j]))))
+                    BM_set(bitmask, j, irev, 0);
+                else
+                    BM_set(bitmask, j, irev, 1);
+            }
+        }
+        G_message(_("Bitmap mask created"));
     }
     else
-	bitmask = NULL;
+        bitmask = NULL;
 
     if (cfmask >= 0)
-	Rast_close(cfmask);
+        Rast_close(cfmask);
 
     return bitmask;
 }
 
-int translate_quad(struct multtree *tree,
-		   double numberx,
-		   double numbery, double numberz, int n_leafs)
+int translate_quad(struct multtree *tree, double numberx, double numbery,
+                   double numberz, int n_leafs)
 {
     int total = 0, i, ii;
 
     if (tree == NULL)
-	return 0;
+        return 0;
     if (tree->data == NULL)
-	return 0;
+        return 0;
 
     if (tree->leafs != NULL) {
-	((struct quaddata *)(tree->data))->x_orig -= numberx;
-	((struct quaddata *)(tree->data))->y_orig -= numbery;
-	((struct quaddata *)(tree->data))->xmax -= numberx;
-	((struct quaddata *)(tree->data))->ymax -= numbery;
-	for (ii = 0; ii < n_leafs; ii++)
-	    total +=
-		translate_quad(tree->leafs[ii], numberx, numbery, numberz,
-			       n_leafs);
+        ((struct quaddata *)(tree->data))->x_orig -= numberx;
+        ((struct quaddata *)(tree->data))->y_orig -= numbery;
+        ((struct quaddata *)(tree->data))->xmax -= numberx;
+        ((struct quaddata *)(tree->data))->ymax -= numbery;
+        for (ii = 0; ii < n_leafs; ii++)
+            total += translate_quad(tree->leafs[ii], numberx, numbery, numberz,
+                                    n_leafs);
     }
     else {
-	((struct quaddata *)(tree->data))->x_orig -= numberx;
-	((struct quaddata *)(tree->data))->y_orig -= numbery;
-	((struct quaddata *)(tree->data))->xmax -= numberx;
-	((struct quaddata *)(tree->data))->ymax -= numbery;
-	for (i = 0; i < ((struct quaddata *)(tree->data))->n_points; i++) {
-	    ((struct quaddata *)(tree->data))->points[i].x -= numberx;
-	    ((struct quaddata *)(tree->data))->points[i].y -= numbery;
-	    ((struct quaddata *)(tree->data))->points[i].z -= numberz;
-	}
+        ((struct quaddata *)(tree->data))->x_orig -= numberx;
+        ((struct quaddata *)(tree->data))->y_orig -= numbery;
+        ((struct quaddata *)(tree->data))->xmax -= numberx;
+        ((struct quaddata *)(tree->data))->ymax -= numbery;
+        for (i = 0; i < ((struct quaddata *)(tree->data))->n_points; i++) {
+            ((struct quaddata *)(tree->data))->points[i].x -= numberx;
+            ((struct quaddata *)(tree->data))->points[i].y -= numbery;
+            ((struct quaddata *)(tree->data))->points[i].z -= numberz;
+        }
 
-	return 1;
+        return 1;
     }
 
     return total;

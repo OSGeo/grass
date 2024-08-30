@@ -28,97 +28,97 @@ int header(int unit1, int unit2)
 
     nlines = page_length;
     if (date == NULL)
-	date = G_date();
+        date = G_date();
 
     divider("+");
     page++;
 
     if (page == 1 && with_headers) {
-	lcr("", "RASTER MAP CATEGORY REPORT", "", buf, page_width - 2);
-	pbuf(buf);
-	sprintf(tbuf1, "LOCATION: %s", G_location());
-	if (with_headers && (page_length > 0))
-	    sprintf(tbuf2, "Page %d", page);
-	else
-	    *tbuf2 = 0;
-	lcr(tbuf1, tbuf2, date, buf, page_width - 2);
-	pbuf(buf);
+        lcr("", "RASTER MAP CATEGORY REPORT", "", buf, page_width - 2);
+        pbuf(buf);
+        sprintf(tbuf1, "PROJECT: %s", G_location());
+        if (with_headers && (page_length > 0))
+            sprintf(tbuf2, "Page %d", page);
+        else
+            *tbuf2 = 0;
+        lcr(tbuf1, tbuf2, date, buf, page_width - 2);
+        pbuf(buf);
 
-	divider("|");
+        divider("|");
 
-	G_format_northing(window.north, north, window.proj);
-	G_format_easting(window.east, east, window.proj);
-	G_format_northing(window.south, south, window.proj);
-	G_format_easting(window.west, west, window.proj);
-	G_format_resolution(window.ns_res, ns_res, window.proj);
-	G_format_resolution(window.ew_res, ew_res, window.proj);
-	len1 = max(strlen(north), strlen(south));
-	len1 = max(len1, strlen(ns_res));
-	len2 = max(strlen(east), strlen(west));
-	len2 = max(len2, strlen(ew_res));
+        G_format_northing(window.north, north, window.proj);
+        G_format_easting(window.east, east, window.proj);
+        G_format_northing(window.south, south, window.proj);
+        G_format_easting(window.west, west, window.proj);
+        G_format_resolution(window.ns_res, ns_res, window.proj);
+        G_format_resolution(window.ew_res, ew_res, window.proj);
+        len1 = max(strlen(north), strlen(south));
+        len1 = max(len1, strlen(ns_res));
+        len2 = max(strlen(east), strlen(west));
+        len2 = max(len2, strlen(ew_res));
 
-	sprintf(buf, "%-9s north: %*s    east: %*s",
-		"", len1, north, len2, east);
-	pbuf(buf);
+        sprintf(buf, "%-9s north: %*s    east: %*s", "", len1, north, len2,
+                east);
+        pbuf(buf);
 
-	sprintf(buf, "%-9s south: %*s    west: %*s",
-		"REGION", len1, south, len2, west);
-	pbuf(buf);
+        sprintf(buf, "%-9s south: %*s    west: %*s", "REGION", len1, south,
+                len2, west);
+        pbuf(buf);
 
-	sprintf(buf, "%-9s res:   %*s    res:  %*s",
-		"", len1, ns_res, len2, ew_res);
-	pbuf(buf);
+        sprintf(buf, "%-9s res:   %*s    res:  %*s", "", len1, ns_res, len2,
+                ew_res);
+        pbuf(buf);
 
-	divider("|");
+        divider("|");
 
-	mask = maskinfo();
-	label = "MASK:";
-	len1 = strlen(label) + 1;
-	while (mask) {
-	    fprintf(stdout, "|%-*s", len1, label);
-	    label = "";
-	    mask = print_label(mask, page_width - len1 - 2, 1, 0, ' ');
-	    fprintf(stdout, "|");
-	    newline();
-	}
-	divider("|");
+        mask = maskinfo();
+        label = "MASK:";
+        len1 = strlen(label) + 1;
+        while (mask) {
+            fprintf(stdout, "|%-*s", len1, label);
+            label = "";
+            mask = print_label(mask, page_width - len1 - 2, 1, 0, ' ');
+            fprintf(stdout, "|");
+            newline();
+        }
+        divider("|");
 
-	/*if title is available, print it, otherwise, print (untitled). in
-	   either case, print later name immediately following
-	 */
+        /*if title is available, print it, otherwise, print (untitled). in
+           either case, print later name immediately following
+         */
 
-	label = nlayers > 1 ? "MAPS:" : "MAP:";
-	len1 = strlen(label) + 1;
-	for (i = 0; i < nlayers; i++) {
-	    char *title;
+        label = nlayers > 1 ? "MAPS:" : "MAP:";
+        len1 = strlen(label) + 1;
+        for (i = 0; i < nlayers; i++) {
+            char *title;
 
-	    title = Rast_get_cats_title(&(layers[i].labels));
-	    if (title)
-		G_strip(title);
-	    if (title == NULL || *title == 0)
-		title = "(untitled)";
-	    sprintf(buf, "%-*s%*s%s (%s in %s)", len1, label,
-		    i * 2, "", title, layers[i].name, layers[i].mapset);
+            title = Rast_get_cats_title(&(layers[i].labels));
+            if (title)
+                G_strip(title);
+            if (title == NULL || *title == 0)
+                title = "(untitled)";
+            sprintf(buf, "%-*s%*s%s (%s in %s)", len1, label, i * 2, "", title,
+                    layers[i].name, layers[i].mapset);
 
-	    pbuf(buf);
-	    label = "";
-	}
-	divider("|");
+            pbuf(buf);
+            label = "";
+        }
+        divider("|");
     }
 
     len1 = layers[0].clen + layers[0].nlen;
     for (k = 0; k < 2; k++) {
-	if (k == 0)
-	    lcr("", "Category Information", "", buf, len1);
-	else {
-	    sprintf(tbuf1, "%*s|description", layers[0].nlen, "#");
-	    lcr(tbuf1, "", "", buf, len1);
-	}
-	fprintf(stdout, "|%s ", buf);
-	for (i = unit1; i <= unit2; i++)
-	    fprintf(stdout, "|%*s", unit[i].len, unit[i].label[k]);
-	fprintf(stdout, "|");
-	newline();
+        if (k == 0)
+            lcr("", "Category Information", "", buf, len1);
+        else {
+            sprintf(tbuf1, "%*s|description", layers[0].nlen, "#");
+            lcr(tbuf1, "", "", buf, len1);
+        }
+        fprintf(stdout, "|%s ", buf);
+        for (i = unit1; i <= unit2; i++)
+            fprintf(stdout, "|%*s", unit[i].len, unit[i].label[k]);
+        fprintf(stdout, "|");
+        newline();
     }
     divider("|");
 
@@ -132,7 +132,7 @@ int divider(char *edge)
     fprintf(stdout, "%s", edge);
     n = page_width - 2;
     while (--n >= 0)
-	fprintf(stdout, "-");
+        fprintf(stdout, "-");
     fprintf(stdout, "%s", edge);
     newline();
 
@@ -148,9 +148,9 @@ int trailer(void)
 {
     divider("+");
     while (nlines > 0)
-	newline();
+        newline();
     if (use_formfeed)
-	fprintf(stdout, "\f");
+        fprintf(stdout, "\f");
 
     return 0;
 }
@@ -163,7 +163,8 @@ int newline(void)
     return 0;
 }
 
-int lcr(const char *left, const char *center, const char *right, char *buf, int n)
+int lcr(const char *left, const char *center, const char *right, char *buf,
+        int n)
 {
     int ll, lc, lr;
     int sc, sr;
@@ -174,11 +175,9 @@ int lcr(const char *left, const char *center, const char *right, char *buf, int 
 
     sc = (n - lc) / 2 - ll;
     sr = n - lr - lc - (n - lc) / 2;
-    
-    sprintf(buf, "%s%*s%s%*s%s",
-	    left,
-	    sc > 0 ? sc : 0, "", center,
-	    sc > 0 ? sr : sr + sc , "", right);
+
+    sprintf(buf, "%s%*s%s%*s%s", left, sc > 0 ? sc : 0, "", center,
+            sc > 0 ? sr : sr + sc, "", right);
 
     return 0;
 }

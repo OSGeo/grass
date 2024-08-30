@@ -42,7 +42,7 @@ Several environment variables affect the operation of the PNG driver:
   </li>
   <li><b>GRASS_RENDER_FILE=filename</b><br>
      the filename to put the resulting image in, default is <tt>map.png</tt>.
-     If you set GRASS_RENDER_FILE to a filename which ends in ".ppm", a PPM 
+     If you set GRASS_RENDER_FILE to a filename which ends in ".ppm", a PPM
      file will be created (with alpha channel stored in a PGM image, if applicable).
      If you set GRASS_RENDER_FILE to a filename which ends in ".bmp", a 32-bpp
      BMP file will be created (these are not readable by some older viewers).
@@ -74,7 +74,7 @@ d.vect roadsmajor color=red
 
 This writes a file named <tt>map.png</tt> in your current directory.
 
-<h2>NOTES</h2> 
+<h2>NOTES</h2>
 
 The PNG driver uses the libpng (see
 the <a href="http://www.libpng.org/pub/png/">libpng</a> home page) and
@@ -93,6 +93,7 @@ images) can be done with <tt>pnmquant</tt> of
 the <a href="http://netpbm.sourceforge.net/">netpbm</a> tools.
 
 <h2>SEE ALSO</h2>
+
 <em>
   <a href="cairodriver.html">Cairo driver</a>,
   <a href="psdriver.html">PS driver</a>,
@@ -106,14 +107,9 @@ the <a href="http://netpbm.sourceforge.net/">netpbm</a> tools.
   <a href="d.redraw.html">d.redraw</a>
 </em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
 Original version: Per Henrik Johansen &lt;<i>phj (at)
 norgit.no</i>&gt; <!-- broken link <I><a href="http://www.norgit.no">NORGIT AS</a></i> -->
 <br>
 Rewritten by: Glynn Clements, 2003
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

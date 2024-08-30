@@ -17,11 +17,11 @@ to interpolate or <i>z-coordinates</i> if the input vector map is 3D.
 <h2>NOTES</h2>
 
 <p>The amount of memory used by this program is related to the number
-of vector points in the current region.  If the vector point map is 
+of vector points in the current region.  If the vector point map is
 very dense (i.e., contains many data points), the program may
 not be able to get all the memory it needs from the
-system.  The time required to execute is related to the 
-resolution of the current region, after an initial delay 
+system.  The time required to execute is related to the
+resolution of the current region, after an initial delay
 determined by the time taken to read the input vector points map.
 
 <p>
@@ -70,7 +70,7 @@ The <b>power</b> parameter defines an exponential distance weight.
 Greater values assign greater influence to values closer to the
 point to be interpolated. The interpolation function peaks sharply over
 the given data points for 0 &lt; <em>p</em> &lt; 1 and more smoothly for
-larger values. The default value for the power parameter is 2.  
+larger values. The default value for the power parameter is 2.
 
 <p>
 By setting <b>npoints</b>=1, the module can be used to calculate
@@ -93,14 +93,9 @@ Overview: <a href="https://grasswiki.osgeo.org/wiki/Interpolation">Interpolation
 
 <h2>AUTHORS</h2>
 
-Michael Shapiro,  
-U.S. Army Construction Engineering 
+Michael Shapiro,
+U.S. Army Construction Engineering
 Research Laboratory
 <br>
 Improved algorithm (indexes points according to cell and ignores
 points outside current region) by Paul Kelly
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

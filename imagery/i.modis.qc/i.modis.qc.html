@@ -170,7 +170,6 @@ Added MOD09GA support in 2016, it follows MOD09A1 and its StateQA, but does not 
  <li>[1]= class 1: Snow</li>
 </ul>
 
-
 <h3>MOD11A1</h3>
 <pre>
 <em>MOD11A1: Mandatory QA Flags bits=[0-1]</em>
@@ -208,7 +207,7 @@ Added MOD09GA support in 2016, it follows MOD09A1 and its StateQA, but does not 
 <ul>
  <li>[00]= class 0: Average LST error &le; 1</li>
  <li>[01]= class 1: Average LST error &le; 2</li>
- <li>[10]= class 2: Average LST error &le; 3</li> 
+ <li>[10]= class 2: Average LST error &le; 3</li>
  <li>[11]= class 3: Average LST error &gt; 3</li>
 </ul>
 
@@ -249,7 +248,7 @@ Added MOD09GA support in 2016, it follows MOD09A1 and its StateQA, but does not 
 <ul>
  <li>[00]= class 0: Average LST error &le; 1</li>
  <li>[01]= class 1: Average LST error &le; 2</li>
- <li>[10]= class 2: Average LST error &le; 3</li> 
+ <li>[10]= class 2: Average LST error &le; 3</li>
  <li>[11]= class 3: Average LST error &gt; 3</li>
 </ul>
 
@@ -435,7 +434,7 @@ Added MOD09GA support in 2016, it follows MOD09A1 and its StateQA, but does not 
 <ul>
  <li>[0]= class 0: No</li>
  <li>[1]= class 1: Yes</li>
-</ul> 
+</ul>
 
 <h3>MCD43B2</h3>
 <pre>
@@ -484,33 +483,42 @@ bits[0-3][4-7][8-11][12-15][16-19][20-23][24-27]<br>
 <ul>
  <li>[0000]= class 0: best quality, 75% or more with best full inversions</li>
  <li>[0001]= class 1: good quality, 75% or more with full inversions</li>
- <li>[0010]= class 2: Mixed, 50% or less full inversions and 25% or less fill values</li> 
- <li>[0011]= class 3: All magnitude inversions or 50% or less fill values</li> 
- <li>[0100]= class 4: 75% or more fill values</li> 
+ <li>[0010]= class 2: Mixed, 50% or less full inversions and 25% or less fill values</li>
+ <li>[0011]= class 3: All magnitude inversions or 50% or less fill values</li>
+ <li>[0100]= class 4: 75% or more fill values</li>
  <li>Classes 5-14: Not Used</li>
  <li>[1111]= class 15: Fill Value</li>
 </ul>
 
-
 <h2>NOTES</h2>
+
 In MOD09A1: It seems that cloud related info is not filled properly in the
 standard QC (MOD09A1 in this module) since version 3, State-QA 500m images
 (MOD09A1s in this module) should be used (see Vermote et al., 2008).
 
-MOD11A2 quality control (QC) bands do not have a FillValue (No-data) according 
-to <a href="https://lpdaac.usgs.gov/dataset_discovery/modis/modis_products_table/mod11a2_v006">MODIS Land Products site</a>. 
-However, the metadata of the QC bands (i.e.: <tt>gdalinfo QC_band</tt>) shows <tt>No-data=0</tt>. 
-This value is then transformed into GRASS NULLs when data is imported through 
+MOD11A2 quality control (QC) bands do not have a FillValue (No-data) according
+to <a href="https://lpdaac.usgs.gov/dataset_discovery/modis/modis_products_table/mod11a2_v006">MODIS Land Products site</a>.
+However, the metadata of the QC bands (i.e.: <tt>gdalinfo QC_band</tt>) shows <tt>No-data=0</tt>.
+This value is then transformed into GRASS NULLs when data is imported through
 <a href="r.in.gdal.html">r.in.gdal</a>. Applying <em>i.modis.qc</em> on those QC bands
-will not give the expected range of values in the different QC bits. Therefore, 
-before using <em>i.modis.qc</em>, the user needs to set the NULL value in QC bands 
-back to zero (i.e.: <tt>r.null map=QC_band null=0</tt>) or just edit the metadata with GDAL 
-utilities before importing into GRASS GIS. This is a known issue for MOD11A2 
+will not give the expected range of values in the different QC bits. Therefore,
+before using <em>i.modis.qc</em>, the user needs to set the NULL value in QC bands
+back to zero (i.e.: <tt>r.null map=QC_band null=0</tt>) or just edit the metadata with GDAL
+utilities before importing into GRASS GIS. This is a known issue for MOD11A2
 (8-day LST product), but other MODIS products might be affected as well.
 
-
 <h2>TODO</h2>
+
 Add more daily products.
+
+<h2>REFERENCES</h2>
+
+<ul>
+<li> <a href="https://lpdaac.usgs.gov/dataset_discovery/modis/modis_products_table">MODIS Products</a>
+<li> Vermote E.F., Kotchenova S.Y., Ray J.P. MODIS Surface Reflectance User's Guide.
+ Version 1.2. June 2008. MODIS Land Surface Reflectance Science Computing Facility.
+ <a href="http://modis-sr.ltdri.org">Homepage</a>
+</ul>
 
 <h2>SEE ALSO</h2>
 
@@ -518,19 +526,6 @@ Add more daily products.
 <a href="i.vi.html">i.vi</a>
 </em>
 
-<h2>REFERENCES</h2>
-
-<ul>
-<li> <a href="https://lpdaac.usgs.gov/dataset_discovery/modis/modis_products_table">MODIS Products</a>
-<li> Vermote E.F., Kotchenova S.Y., Ray J.P. MODIS Surface Reflectance User's Guide. 
- Version 1.2. June 2008. MODIS Land Surface Reflectance Science Computing Facility.
- <a href="http://modis-sr.ltdri.org">Homepage</a>
-</ul>
-
 <h2>AUTHOR</h2>
-Yann Chemin
 
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+Yann Chemin

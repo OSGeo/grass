@@ -7,4 +7,3 @@
 <!ELEMENT description (#PCDATA)>
 <!ELEMENT module (#PCDATA)>
 <!ELEMENT keywords (#PCDATA)>
-

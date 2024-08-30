@@ -1,4 +1,3 @@
-
 /**********************************************************************
  *
  *  Rast3d_read_history (name, mapset, hist)
@@ -35,13 +34,13 @@
 #include <grass/raster.h>
 
 /*simple error message */
-void SimpleErrorMessage(FILE * fd, const char *name, const char *mapset)
+void SimpleErrorMessage(FILE *fd, const char *name, const char *mapset)
 {
     if (fd != NULL)
-	fclose(fd);
+        fclose(fd);
 
-    G_warning(_("can't get history information for [%s] in mapset [%s]"),
-	      name, mapset);
+    G_warning(_("can't get history information for [%s] in mapset [%s]"), name,
+              mapset);
     return;
 }
 
@@ -61,23 +60,24 @@ void SimpleErrorMessage(FILE * fd, const char *name, const char *mapset)
  *  \return int
  */
 
-int Rast3d_read_history(const char *name, const char *mapset, struct History *hist)
+int Rast3d_read_history(const char *name, const char *mapset,
+                        struct History *hist)
 {
     FILE *fp;
 
     G_zero(hist, sizeof(struct History));
 
-    fp = G_fopen_old_misc(RASTER3D_DIRECTORY, RASTER3D_HISTORY_ELEMENT, name, mapset);
+    fp = G_fopen_old_misc(RASTER3D_DIRECTORY, RASTER3D_HISTORY_ELEMENT, name,
+                          mapset);
     if (!fp)
-	return -2;
+        return -2;
 
     if (Rast__read_history(hist, fp) == 0)
-	return 0;
+        return 0;
 
     SimpleErrorMessage(fp, name, mapset);
     return -1;
 }
-
 
 /*!
  * \brief write raster3d History file
@@ -97,9 +97,10 @@ int Rast3d_read_history(const char *name, const char *mapset, struct History *hi
 int Rast3d_write_history(const char *name, struct History *hist)
 /* This function is adapted from Rast_write_history */
 {
-    FILE *fp = G_fopen_new_misc(RASTER3D_DIRECTORY, RASTER3D_HISTORY_ELEMENT, name);
+    FILE *fp =
+        G_fopen_new_misc(RASTER3D_DIRECTORY, RASTER3D_HISTORY_ELEMENT, name);
     if (!fp)
-	return -1;
+        return -1;
 
     Rast__write_history(hist, fp);
     return 0;

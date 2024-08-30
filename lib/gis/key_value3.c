@@ -25,18 +25,20 @@
    \return 0 success
    \return 1 error writing
  */
-void G_write_key_value_file(const char *file,
-			    const struct Key_Value *kv)
+void G_write_key_value_file(const char *file, const struct Key_Value *kv)
 {
     FILE *fp = fopen(file, "w");
+
     if (!fp)
-	G_fatal_error(_("Unable to open output file <%s>: %s"), file, strerror(errno));
+        G_fatal_error(_("Unable to open output file <%s>: %s"), file,
+                      strerror(errno));
 
     if (G_fwrite_key_value(fp, kv) != 0)
-	G_fatal_error(_("Error writing file <%s>: %s"), file, strerror(errno));
+        G_fatal_error(_("Error writing file <%s>: %s"), file, strerror(errno));
 
     if (fclose(fp) != 0)
-	G_fatal_error(_("Error closing output file <%s>: %s"), file, strerror(errno));
+        G_fatal_error(_("Error closing output file <%s>: %s"), file,
+                      strerror(errno));
 }
 
 /*!
@@ -57,14 +59,16 @@ struct Key_Value *G_read_key_value_file(const char *file)
 
     fp = fopen(file, "r");
     if (!fp)
-	G_fatal_error(_("Unable to open input file <%s>: %s"), file, strerror(errno));
+        G_fatal_error(_("Unable to open input file <%s>: %s"), file,
+                      strerror(errno));
 
     kv = G_fread_key_value(fp);
     if (!kv)
-	G_fatal_error(_("Error reading file <%s>: %s"), file, strerror(errno));
+        G_fatal_error(_("Error reading file <%s>: %s"), file, strerror(errno));
 
     if (fclose(fp) != 0)
-	G_fatal_error(_("Error closing input file <%s>: %s"), file, strerror(errno));
+        G_fatal_error(_("Error closing input file <%s>: %s"), file,
+                      strerror(errno));
 
     return kv;
 }

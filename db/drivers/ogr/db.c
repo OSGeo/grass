@@ -1,15 +1,15 @@
 /*!
-  \file db/drivers/db.c
-  
-  \brief Low level OGR SQL driver
- 
-  (C) 2004-2009 by the GRASS Development Team
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
-  
-  \author Radim Blazek
-  \author Some updates by Martin Landa <landa.martin gmail.com>
-*/
+   \file db/drivers/db.c
+
+   \brief Low level OGR SQL driver
+
+   (C) 2004-2009 by the GRASS Development Team
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
+
+   \author Radim Blazek
+   \author Some updates by Martin Landa <landa.martin gmail.com>
+ */
 
 #include <stdlib.h>
 #include <string.h>
@@ -24,14 +24,14 @@
 #include "proto.h"
 
 /*!
-  \brief Open database (OGR datasource)
+   \brief Open database (OGR datasource)
 
-  \param handle pointer to dbHandle (db name and schema)
+   \param handle pointer to dbHandle (db name and schema)
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
-*/
-int db__driver_open_database(dbHandle * handle)
+   \return DB_OK on success
+   \return DB_FAILED on failure
+ */
+int db__driver_open_database(dbHandle *handle)
 {
     const char *name;
     dbConnection connection;
@@ -41,7 +41,7 @@ int db__driver_open_database(dbHandle * handle)
 
     /* if name is empty use connection.databaseName */
     if (strlen(name) == 0)
-	name = connection.databaseName;
+        name = connection.databaseName;
 
     G_debug(3, "db_driver_open_database() name = '%s'", name);
 
@@ -57,9 +57,9 @@ int db__driver_open_database(dbHandle * handle)
     }
 
     if (hDs == NULL) {
-	db_d_append_error(_("Unable to open OGR data source"));
-	db_d_report_error();
-	return DB_FAILED;
+        db_d_append_error(_("Unable to open OGR data source"));
+        db_d_report_error();
+        return DB_FAILED;
     }
 
     G_debug(3, "Datasource opened");
@@ -68,12 +68,12 @@ int db__driver_open_database(dbHandle * handle)
 }
 
 /*!
-  \brief Close open database
+   \brief Close open database
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
-*/
-int db__driver_close_database()
+   \return DB_OK on success
+   \return DB_FAILED on failure
+ */
+int db__driver_close_database(void)
 {
     G_debug(3, "db_driver_close_database()");
 

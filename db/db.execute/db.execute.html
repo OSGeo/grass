@@ -1,18 +1,18 @@
 <h2>DESCRIPTION</h2>
 
-<em>db.execute</em> allows the user to execute SQL statements.  
+<em>db.execute</em> allows the user to execute SQL statements.
 
 <h2>NOTES</h2>
 
-<em>db.execute</em> only executes SQL statements and does not return 
-any data. If you need data returned from the database, use 
+<em>db.execute</em> only executes SQL statements and does not return
+any data. If you need data returned from the database, use
 <em><a href="db.select.html">db.select</a></em>.
 <p>
 If parameters for database connection are already set with
 <em><a href="db.connect.html">db.connect</a></em>, they are taken as default
 values and do not need to be specified each time.
 <p>
-If you have a large number of SQL commands to process, it is much much
+If you have a large number of SQL commands to process, it is much
 faster to place all the SQL statements into a text file and
 use <b>input</b> file parameter than it is to process each statement
 individually in a loop. If multiple instruction lines are given, each
@@ -80,7 +80,7 @@ Update attribute with multiple SQL instructions in file
 <div class="code"><pre>
 UPDATE roads SET travelcost=5 WHERE cat=1;
 UPDATE roads SET travelcost=2 WHERE cat=2;
- 
+
 db.execute input=file.sql
 </pre></div>
 
@@ -109,8 +109,3 @@ db.execute sql="UPDATE extratab SET names=(SELECT label FROM myroads WHERE extra
 <h2>AUTHOR</h2>
 
 CERL
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

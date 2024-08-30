@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 <em>v.segment</em> generates segments or points from input lines and from
-positions read from a text file or '<tt>stdin</tt>'. It includes the creation 
+positions read from a text file or '<tt>stdin</tt>'. It includes the creation
 of parallel lines or points in given destination from the line.
 
 <p>The format is:
@@ -25,7 +25,6 @@ P 4 510 -20%
 </pre></div>
 (pipe or redirect from file into the command).<br>
 
-
 <h2>NOTES</h2>
 
 A segment is only created for the first line found of the specified category.
@@ -44,10 +43,9 @@ of the line length, if followed by a % character.
 <em>v.to.db</em> module may be used to find the line's length. Then half of
 that distance can be used as the along-line offset.
 
-
 <h2>EXAMPLES</h2>
 
-The examples are based on the North Carolina sample location.
+The examples are based on the North Carolina sample dataset.
 
 <h3>Extraction of a line segment</h3>
 
@@ -168,9 +166,9 @@ tracks from the end of the line up to the middle point, offset 500m to the right
 </center>
 
 <h2>KNOWN ISSUES</h2>
+
 There is a problem with side-offset parallel line generation for inside corners.
 <!-- in Vect_line_parallel(), v.parallel is also affected -->
-
 
 <h2>SEE ALSO</h2>
 
@@ -188,8 +186,3 @@ There is a problem with side-offset parallel line generation for inside corners.
 <h2>AUTHOR</h2>
 
 Radim Blazek, ITC-Irst, Trento, Italy
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

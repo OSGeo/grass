@@ -6,32 +6,32 @@ a user-specified raster map layer.
 <p>
 <em><b>r.describe</b></em> ignores the current geographic region and mask, and
 reads the full extent of the input raster map.  This functionality is useful if the
-user intends to <em>reclassify</em> or <em>rescale</em> the data, 
+user intends to <em>reclassify</em> or <em>rescale</em> the data,
 since these functions (<em><a href="r.reclass.html">r.reclass</a></em> and
-<em><a href="r.rescale.html">r.rescale</a></em>) 
+<em><a href="r.rescale.html">r.rescale</a></em>)
 also ignore the current <em>geographic region</em>
 and <em>mask</em>.
 
-<p>The <em><b>nv</b></em> parameter sets the string to be used to represent <tt>NULL</tt> 
+<p>The <em><b>nv</b></em> parameter sets the string to be used to represent <tt>NULL</tt>
 values in the module output; the default is '*'.
 
-<p>The <em><b>nsteps</b></em> parameter sets the number of quantisation steps to divide into 
+<p>The <em><b>nsteps</b></em> parameter sets the number of quantisation steps to divide into
 the input raster map.
 
 <h2>NOTES</h2>
 
 <h3>FLAGS</h3>
 
-If the user selects the <b>-r</b> flag, a range of category values found in 
-the raster map layer will be printed. The range is divided into three groups: 
-negative, positive, and zero. If negative values occur, the minimum and maximum 
-negative values will be printed. If positive values occur, the minimum and maximum 
-positive values will be printed. If zero occurs, this will be indicated. The range 
+If the user selects the <b>-r</b> flag, a range of category values found in
+the raster map layer will be printed. The range is divided into three groups:
+negative, positive, and zero. If negative values occur, the minimum and maximum
+negative values will be printed. If positive values occur, the minimum and maximum
+positive values will be printed. If zero occurs, this will be indicated. The range
 report will generally run faster than the full list (the default output).
 
 <p>
 The <b>-d</b> flag can be used to force <em>r.describe</em> to respect the current region
-extents when repoting raster map categories. The default behavior is to read the full 
+extents when repoting raster map categories. The default behavior is to read the full
 extent of the input raster map.
 
 <p>If the <b>-1</b> flag is specified, the output appears with one category value/range per line.
@@ -40,12 +40,12 @@ extent of the input raster map.
 
 <h2>EXAMPLES</h2>
 
-The following examples are from the Spearfish60 sample Location:
+The following examples are from the Spearfish60 sample dataset:
 
 <p>
 # Print the full list of raster map categories:
 <div class="code"><pre>
-r.describe landcover.30m 
+r.describe landcover.30m
 * 11 21-23 31 32 41-43 51 71 81-83 85 91 92
 </pre></div>
 <p>
@@ -58,13 +58,13 @@ r.describe -r landcover.30m
 
 # Print raster map category range, suppressing nulls:
 <div class="code"><pre>
-r.describe -n landcover.30m 
+r.describe -n landcover.30m
 11 21-23 31 32 41-43 51 71 81-83 85 91 92
 </pre></div>
 <p>
 # Print raster map categories, one category per line:
 <div class="code"><pre>
-r.describe -1 geology 
+r.describe -1 geology
 
 *
 1
@@ -88,14 +88,8 @@ r.describe -1 geology
 <a href="r.rescale.html">r.rescale</a>,
 <a href="r.stats.html">r.stats</a>,
 <a href="r.univar.html">r.univar</a>
-
 </em>
 
 <h2>AUTHOR</h2>
 
 Michael Shapiro, U.S. Army Construction Engineering Research Laboratory
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

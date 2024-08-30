@@ -5,7 +5,7 @@
 #include "method.h"
 
 int o_max(const char *basemap, const char *covermap, const char *outputmap,
-	  int usecats, struct Categories *cats)
+          int usecats, struct Categories *cats)
 {
     struct Popen stats_child, reclass_child;
     FILE *stats, *reclass;
@@ -18,32 +18,32 @@ int o_max(const char *basemap, const char *covermap, const char *outputmap,
     first = 1;
 
     while (fscanf(stats, "%ld %ld", &basecat, &covercat) == 2) {
-	if (first) {
-	    first = 0;
-	    catb = basecat;
-	    catc = covercat;
-	}
+        if (first) {
+            first = 0;
+            catb = basecat;
+            catc = covercat;
+        }
 
-	if (basecat != catb) {
-	  write_reclass(reclass, catb, catc, Rast_get_c_cat((CELL *) &catc, cats),
-			  usecats);
-	    catb = basecat;
-	    catc = covercat;
-	}
+        if (basecat != catb) {
+            write_reclass(reclass, catb, catc,
+                          Rast_get_c_cat((CELL *)&catc, cats), usecats);
+            catb = basecat;
+            catc = covercat;
+        }
 
-	if (covercat > catc)
-	    catc = covercat;
+        if (covercat > catc)
+            catc = covercat;
     }
 
     if (first) {
-	catb = catc = 0;
+        catb = catc = 0;
     }
 
-    write_reclass(reclass, catb, catc, Rast_get_c_cat((CELL *) &catc, cats), usecats);
+    write_reclass(reclass, catb, catc, Rast_get_c_cat((CELL *)&catc, cats),
+                  usecats);
 
     G_popen_close(&stats_child);
     G_popen_close(&reclass_child);
 
     return 0;
 }
-

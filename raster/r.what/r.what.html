@@ -23,7 +23,6 @@ and, for each user-named raster map layer, the category value, and (if
 the <b>-f</b> label flag is specified) the category label associated with
 the cell(s) at this geographic location.
 
-
 <h2>EXAMPLES</h2>
 
 <h3>Input coordinates given as an option</h3>
@@ -73,7 +72,6 @@ r.what map=boundary_county_500m points=comm_colleges -v
 ...
 </pre></div>
 
-
 <h3>Input coordinates given as a vector points map, output into CSV file</h3>
 
 Coordinates can be read from existing vector points map by
@@ -85,8 +83,8 @@ row. Example: query North Carolina county number for each community college:
 g.region raster=boundary_county_500m -p
 r.what map=boundary_county_500m points=comm_colleges \
        separator=comma output=result.csv -n
-       
-cat result.csv 
+
+cat result.csv
 easting,northing,site_name,boundary_county_500m
 145096.859150,154534.264884,,39
 616341.437150,146049.750884,,51
@@ -98,11 +96,11 @@ easting,northing,site_name,boundary_county_500m
 
 The contents of an ASCII text file can be redirected to <em>r.what</em>
 as follows. If we have a file called <i>input_coord.txt</i> containing the
-whitespace separated coordinates and optionally labels, the resulting 
+whitespace separated coordinates and optionally labels, the resulting
 raster map values are extracted:
 
 <div class="code"><pre>
-cat input_coord.txt 
+cat input_coord.txt
 633614.08 224125.12 site 1
 632972.36 225382.87 site 2
 
@@ -138,7 +136,7 @@ echo "633614.08 224125.12" | r.what map=landuse96_28m,aspect
 The input coordinates may be "piped" from the standard output
 (<tt>stdout</tt>) of another program. In the next example, vector
 point coordinates are piped from the
-<em><a href="v.out.ascii.html">v.out.ascii</a></em> module. 
+<em><a href="v.out.ascii.html">v.out.ascii</a></em> module.
 
 <div class="code"><pre>
 v.out.ascii comm_colleges separator=space | r.what map=boundary_county_500m
@@ -188,11 +186,7 @@ The maximum number of raster map layers that can be queried at one time is 400.
 <a href="v.what.vect.html">v.what.vect</a>
 </em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
+
 Michael Shapiro, U.S. Army Construction Engineering Research Laboratory<br>
 Vector point input added by Martin Landa, Czech Technical University in Prague, Czech Republic
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

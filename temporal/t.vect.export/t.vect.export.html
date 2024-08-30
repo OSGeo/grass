@@ -9,8 +9,8 @@ for each map one row. The name of the map, the start time and the
 end time are written. In case of a time instance, the start time is
 equal to the end time. The "init.txt" file stores the temporal type,
 the number of maps, the chosen export format and some other
-metadata. The "proj.txt" file stores the projection information as a
-proj4 string of the location the space time vector dataset was
+metadata. The "proj.txt" file stores the coordinate reference system information as a
+proj4 string of the project the space time vector dataset was
 exported from. The file "readme.txt" describes the file format. The
 output of <em>v.info</em> for each vector map in the space time dataset is
 stored in "metadata.txt".
@@ -23,6 +23,7 @@ with <em>t.vect.export</em> can be imported with
 <em><a href="t.vect.import.html">t.vect.import</a></em>.
 
 <h2>NOTES</h2>
+
 The name of output file has to carry the suffix of the archive type, the
 following suffix can be used:
 <ul>
@@ -30,7 +31,6 @@ following suffix can be used:
 <li><b>.tar.bzip2</b> in the case of <b>compress=bzip2</b></li>
 <li><b>.tar.gzip</b> in the case of <b>compress=gzip</b></li>
 </ul>
-
 
 <h2>EXAMPLE</h2>
 
@@ -131,8 +131,3 @@ Files:
 <h2>AUTHOR</h2>
 
 S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

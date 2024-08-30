@@ -19,7 +19,8 @@ are useful both for importing and exporting vector maps between GRASS
 and other software, and for transferring data between machines.
 
 <h2>NOTES</h2>
- 
+
+
 The input is read from the file specified by the <b>input</b> option or
 from standard input.
 
@@ -98,11 +99,10 @@ head -1 input_file | tr '&lt;the_field_separator_character&gt;' '\n' | cat -n
 cut -d&lt;the_field_separator_character&gt; -f&lt;comma-separated_list_of_columns&gt; input_file | v.in.ascii in=- &lt;your_options&gt;
 </pre></div>
 
-
 <h2>EXAMPLES</h2>
 
 <h3>Example 1a) - standard format mode</h3>
-Sample ASCII polygon vector map for 'standard' format mode. 
+Sample ASCII polygon vector map for 'standard' format mode.
 The two areas will be assigned categories 20 and 21. For details on the structure of
 standard format data files see the second reference at the bottom of this page.
 
@@ -143,6 +143,9 @@ Sample ASCII 3D line vector map for 'standard' format mode with simplified input
 (note the space field separator).
 Note the <b>-z</b> flag indicating 3D vector input, and the <b>-n</b> flag
 indicating no vector header should be expected from the input file.
+
+The first line in this example specifies that the line (L) has 5 vertices and 1 category.
+The last line specifies the layer (1) and the category value (321).
 
 <div class="code"><pre>
 echo "L 5 1
@@ -227,7 +230,6 @@ With <b>in=-</b>, the module is reading from standard input, using the default '
 <br>
 The import works for 2D maps as well (no elev column and no '-z' flag).
 
-
 <h3>Example 6 - point format mode</h3>
 
 Generate a 3D points vector map 'points3d.dat' with attributes as ASCII file:
@@ -250,12 +252,11 @@ v.info -c mypoints3D
 v.info mypoints3D
 </pre></div>
 
-
 <h3>Example 7 - point format mode</h3>
 
 Generate points file by clicking onto the map:
 <div class="code"><pre>
-#For LatLong locations:
+#For LatLong projects:
 d.where -d -l | awk '{printf "%f|%f|point\n", $1, $2}' | v.in.ascii in=- out=points \
     columns='x double precision, y double precision, label varchar(20)'
 
@@ -265,7 +266,7 @@ d.where | awk '{printf "%f|%f|point\n", $1, $2}' | v.in.ascii in=- out=points \
 </pre></div>
 
 The 'point' string (or some similar entry) is required to generate a database table.
-When simply piping the coordinates (and optionally height) without additional column(s) 
+When simply piping the coordinates (and optionally height) without additional column(s)
 into <em>v.in.ascii</em>, only the vector map geometry will be generated.
 
 <h3>Example 8 - point format mode</h3>
@@ -305,13 +306,8 @@ cat $MAPSET/group/$GROUP/POINTS | v.in.ascii in=- out=$GROUP_gcp separator=space
 <h2>AUTHORS</h2>
 
 Michael Higgins,
-U.S.Army Construction Engineering 
+U.S.Army Construction Engineering
 Research Laboratory<br>
-James Westervelt, U.S.Army Construction Engineering 
+James Westervelt, U.S.Army Construction Engineering
 Research Laboratory<br>
 Radim Blazek, ITC-Irst, Trento, Italy
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

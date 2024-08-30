@@ -14,10 +14,10 @@ This program is derived from r.out.ascii with a few modifications.
 Author: Bob Covill <bcovill@tekmap.ns.ca>
 
 
-If exported data is moved between platforms byte swapping 
+If exported data is moved between platforms byte swapping
 may be required.
 
-The exported data can be converted to netCDF GMT format with 
+The exported data can be converted to netCDF GMT format with
 xyz2grd .... -ZTLf -F
 
 TODO:
@@ -25,10 +25,10 @@ TODO:
 - Add byte swapping export routine.
 
 --------------------
-The source for r.out.bin which writes a binary array to            
-standard output. The source is taken from r.out.ascii with a few minor          
-changes. Depending on the data type the program will output a integer,          
-float, or double array, unless "-i" is specified, then it will be forced        
-to integer. The region parameters are printed to stderr. This file is           
-compatible with the generic mapping tools (GMT) program xyz2grd if the   
-user wants to convert to netCDF. 
+The source for r.out.bin which writes a binary array to
+standard output. The source is taken from r.out.ascii with a few minor
+changes. Depending on the data type the program will output a integer,
+float, or double array, unless "-i" is specified, then it will be forced
+to integer. The region parameters are printed to stderr. This file is
+compatible with the generic mapping tools (GMT) program xyz2grd if the
+user wants to convert to netCDF.

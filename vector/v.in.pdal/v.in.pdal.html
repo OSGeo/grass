@@ -1,15 +1,8 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.in.pdal</em> supports the following PDAL filters:
+<p>Imports a point cloud (e.g. from a LAS file) as vector points with the PDAL library.
 
-<ul>
-<li>groud detection with Point Cloud Library (PCL) Progressive Morphological Filter (Zhang 2003)
-    (<a href="http://www.pdal.io/stages/filters.ground.html">filters.ground</a>)
-<li><a href="http://www.pdal.io/stages/filters.height.html">filters.height</a>
-    (requires PCL)
-</ul>
-
-<em>v.in.pdal</em> supports the following filters natively:
+<em>v.in.pdal</em> supports the following filters:
 
 <ul>
 <li>2D region filter
@@ -21,21 +14,11 @@
 <h2>EXAMPLES</h2>
 
 Import only XYZ coordinates of points, limit the import to the current
-computational region and reproject to the Location projection during
-the import:
+computational region and reproject to the current project's coordinate reference
+system during the import:
 <div class="code"><pre>
 v.in.pdal input=points.las output=points -c -r -w
 </pre></div>
-
-<h2>SEE ALSO</h2>
-
-<em>
-<a href="r.in.lidar.html">r.in.lidar</a>,
-<a href="r3.in.lidar.html">r3.in.lidar</a>,
-<a href="g.region.html">g.region</a>,
-<a href="v.vect.stats.html">v.vect.stats</a>
-<a href="v.in.ogr.html">v.in.ogr</a>,
-</em>
 
 <h2>REFERENCES</h2>
 
@@ -46,19 +29,18 @@ v.in.pdal input=points.las output=points -c -r -w
     XXIII ISPRS Congress 2016
     [<a href="http://www.int-arch-photogramm-remote-sens-spatial-inf-sci.net/XLI-B7/945/2016/">ISPRS Archives</a>,
     <a href="https://www.researchgate.net/publication/304340172_Processing_UAV_and_lidar_point_clouds_in_GRASS_GIS">ResearchGate</a>]
-<li>Zhang, Keqi, et al.
-    <em>A progressive morphological filter for removing nonground
-    measurements from airborne LIDAR data.</em>
-    Geoscience and Remote Sensing,
-    IEEE Transactions on 41.4 (2003): 872-882.
 </ul>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.in.pdal.html">r.in.pdal</a>,
+<a href="g.region.html">g.region</a>,
+<a href="v.vect.stats.html">v.vect.stats</a>
+<a href="v.in.ogr.html">v.in.ogr</a>,
+</em>
 
 <h2>AUTHOR</h2>
 
 Vaclav Petras,
 <a href="http://geospatial.ncsu.edu/osgeorel/">NCSU GeoForAll Lab</a>
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

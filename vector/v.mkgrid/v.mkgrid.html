@@ -1,35 +1,33 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.mkgrid</em> creates a vector map representation of a regular 
+<em>v.mkgrid</em> creates a vector map representation of a regular
 coordinate grid. Point, line, and area vector grids can be created.
-
 
 <h2>NOTES</h2>
 
-Grid points created with the <b>type=point</b> option will be placed at 
-the <i>center</i> of each grid cell, like centroids with the default 
-<b>type=area</b> option. 
+Grid points created with the <b>type=point</b> option will be placed at
+the <i>center</i> of each grid cell, like centroids with the default
+<b>type=area</b> option.
 <p>
-Grid lines created with the <b>type=line</b> option will be identical to 
-the edges of each grid cell, like boundaries with the default 
-<b>type=area</b> option. 
+Grid lines created with the <b>type=line</b> option will be identical to
+the edges of each grid cell, like boundaries with the default
+<b>type=area</b> option.
 <p>
-The resultant grid can be rotated around the origin (center of the 
+The resultant grid can be rotated around the origin (center of the
 grid) with the <b>angle</b> option.
 <p>
-Optionally hexagons can be created with the <b>-h</b> flag. Hexagons 
-are by default symmetric. Asymmetric hexagons can be allowed with the 
+Optionally hexagons can be created with the <b>-h</b> flag. Hexagons
+are by default symmetric. Asymmetric hexagons can be allowed with the
 <b>-a</b> flag.
 <p>
-This module is NOT to be used to generate a vector map of USGS 
+This module is NOT to be used to generate a vector map of USGS
 quadrangles, because USGS quads are not exact rectangles.
-
 
 <h2>EXAMPLES</h2>
 
 <h3>Creating a global grid in a latitude-longitude</h3>
 
-To be run in a latitude-longitude location (WGS84)
+To be run in a latitude-longitude project (WGS84)
 <div class="code"><pre>
 # set the region:
 g.region n=90 s=-90 w=-180 e=180 res=10 -p
@@ -66,9 +64,10 @@ v.mkgrid map=coro_grid grid=4,3 position=coor coordinates=2716500,6447000 box=20
 
 Creating a 10x12 lat/lon grid, cells 2 arc-min a side, with lower left corner
 at 167deg 52min east, 47deg 6min south. For use with e.g. QGIS you can then
-pull this grid into a projected location with <em>v.proj</em> before
+pull this grid into a project with projected coordinate reference system (CRS)
+using <em>v.proj</em> before
 exporting as a Shapefile with <em>v.out.ogr</em> (within GRASS GIS you could
-just use <em>d.grid -w</em> from the projected location for the same effect):
+just use <em>d.grid -w</em> from the projec with projected CRS for the same effect):
 
 <div class="code"><pre>
 v.mkgrid map=p2min_grid grid=10,12 position=coor coordinates=167:52E,47:06S box=0:02,0:02
@@ -187,11 +186,7 @@ Point density in a hexagonal grid
 <h2>AUTHORS</h2>
 
 Michael Higgins,
-U.S.Army Construction Engineering 
+U.S.Army Construction Engineering
 Research Laboratory
-<p>Update for new vectors Radim Blazek 10/2004 
-
-<!--
 <p>
-<i>Last changed: $Date$</i>
--->
+Update for new vectors Radim Blazek 10/2004

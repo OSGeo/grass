@@ -18,7 +18,7 @@ int draw_n_arrow(double east, double north, double rotation, char *lbl,
 {
     double x_pos, y_pos;
     double t, b, l, r;
-    double tt, tb, tl, tr;      /* text box */
+    double tt, tb, tl, tr; /* text box */
 
     SYMBOL *Symb;
     RGBA_Color *line_color, *fill_color;
@@ -26,7 +26,6 @@ int draw_n_arrow(double east, double north, double rotation, char *lbl,
     double x0, y0;
     char icon[64];
     double symbol_size;
-
 
     /* Establish text size */
     if (fontsize > 0)
@@ -121,7 +120,6 @@ int draw_n_arrow(double east, double north, double rotation, char *lbl,
     line_color->g = (unsigned char)G;
     line_color->b = (unsigned char)B;
 
-
     if (D_color_number_to_RGB(bg_color, &R, &G, &B) == 0)
         fill_color->a = RGBA_COLOR_TRANSPARENT;
     else
@@ -201,7 +199,6 @@ int draw_n_arrow(double east, double north, double rotation, char *lbl,
 
     S_stroke(Symb, symbol_size, rotation * (180 / M_PI), 0);
     D_symbol(Symb, x0, y0, line_color, fill_color);
-
 
     if (line_width > 0)
         D_line_width(0);

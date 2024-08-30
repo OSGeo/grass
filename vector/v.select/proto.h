@@ -13,8 +13,7 @@
 #define OP_RELATE     9
 
 struct GParm {
-    struct Option *input[2], *output, *type[2], *field[2],
-	*operator, *relate;
+    struct Option *input[2], *output, *type[2], *field[2], *operator, * relate;
 };
 struct GFlag {
     struct Flag *table, *reverse, *cat;
@@ -24,21 +23,19 @@ struct GFlag {
 void parse_options(struct GParm *, struct GFlag *);
 
 /* copy_tabs.c */
-void copy_tabs(struct Map_info *, struct Map_info *,
-	       int, int *, int *, int **);
+void copy_tabs(struct Map_info *, struct Map_info *, int, int *, int *, int **);
 
 #ifdef HAVE_GEOS
 /* geos.c */
-int line_relate_geos(struct Map_info *, const GEOSGeometry *,
-		     int, int, const char *);
-int area_relate_geos(struct Map_info *, const GEOSGeometry *,
-		     int, int, const char *);
+int line_relate_geos(struct Map_info *, const GEOSGeometry *, int, int,
+                     const char *);
+int area_relate_geos(struct Map_info *, const GEOSGeometry *, int, int,
+                     const char *);
 #endif
 
 /* select.c */
-int select_lines(struct Map_info *, int, int,
-                  struct Map_info *, int, int,
-                  int, int, const char *, int *, int*, int*);
+int select_lines(struct Map_info *, int, int, struct Map_info *, int, int, int,
+                 int, const char *, int *, int *, int *);
 
 /* overlap.c */
 void add_aarea(struct Map_info *, int, int *, int *);
@@ -47,6 +44,5 @@ int line_overlap_area(struct line_pnts *, struct line_pnts *,
 
 /* write.c */
 void write_lines(struct Map_info *, struct field_info *, int *, int *,
-		 struct Map_info *, int, int,
-		 int, int *, int *, int **);
+                 struct Map_info *, int, int, int, int *, int *, int **);
 #endif /* PROTO_H */

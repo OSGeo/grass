@@ -59,7 +59,7 @@ Real Linear Systems:
  - vmul()
 
  - vnrm()
-     
+
  - matprt()
 
  - fmatprt()

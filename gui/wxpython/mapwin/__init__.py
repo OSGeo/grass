@@ -1,7 +1,7 @@
 all = [
-    'graphics',
-    'buffered',
-    'analysis',
-    'decorations',
-    'base',
+    "graphics",
+    "buffered",
+    "analysis",
+    "decorations",
+    "base",
 ]

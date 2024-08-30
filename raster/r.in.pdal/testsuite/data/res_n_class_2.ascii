@@ -1,0 +1,11 @@
+north: 18
+south:  0
+east:  18
+west:   0
+rows:   3
+cols:   3
+type:   int
+
+1 0 3
+20 4 4
+6 0 2

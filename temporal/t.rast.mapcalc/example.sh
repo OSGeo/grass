@@ -35,4 +35,3 @@ t.rast.mapcalc --o --v input=A,B output=C base=c method=equal \
 
 t.info type=strds input=C
 t.rast.list -h input=C columns=name,start_time,min,max
-

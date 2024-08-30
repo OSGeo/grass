@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.buffer
@@ -17,15 +16,14 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
-****************************************************************************/
+ ****************************************************************************/
 
 #ifndef __DISTANCE_H__
 #define __DISTANCE_H__
 
 #include <grass/gis.h>
 
-struct Distance
-{
+struct Distance {
     int ncols;
     int prev_ncols;
     double dist;
@@ -50,11 +48,11 @@ extern double meters_to_grid;
 extern double ns_to_ew_squared;
 extern int count_rows_with_data;
 
-#define MAPINDEX(r,c) ((size_t)(r) * window.cols + (c))
-#define ZONE_INCR 2
+#define MAPINDEX(r, c)       ((size_t)(r) * window.cols + (c))
+#define ZONE_INCR            2
 
-#define FEET_TO_METERS 0.3048
-#define MILES_TO_METERS 1609.344
+#define FEET_TO_METERS       0.3048
+#define MILES_TO_METERS      1609.344
 #define NAUT_MILES_TO_METERS 1852.0
 #define KILOMETERS_TO_METERS 1000.0
 

@@ -2,7 +2,7 @@
 # This is a test to list vecter maps of a space time vecter dataset
 
 # We need to set a specific region in the
-# @preprocess step of this test. 
+# @preprocess step of this test.
 # The region setting should work for UTM and LL test locations
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
@@ -15,7 +15,7 @@ v.random -z output=lidar_4 n=20 zmin=0 zmax=100 column=height
 v.random -z output=lidar_5 n=20 zmin=0 zmax=100 column=height
 v.random -z output=lidar_6 n=20 zmin=0 zmax=100 column=height
 
-n1=`g.tempfile pid=1 -d` 
+n1=`g.tempfile pid=1 -d`
 n2=`g.tempfile pid=2 -d`
 n3=`g.tempfile pid=3 -d`
 n4=`g.tempfile pid=4 -d`

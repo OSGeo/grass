@@ -8,18 +8,17 @@ perpendicular to the direction of the slope.  The algorithm
 used for edge detection is one of the "zero-crossing"
 algorithms and is discussed briefly below.
 
-
 <h2>NOTES</h2>
 
 The procedure to find the "edges" in the image is as follows:
 
 <ol>
-<li> The Fourier transform of the image is taken, 
-<li> The Fourier transform of the Laplacian of a two-dimensional 
-Gaussian function is used to filter the transformed image, 
+<li> The Fourier transform of the image is taken,
+<li> The Fourier transform of the Laplacian of a two-dimensional
+Gaussian function is used to filter the transformed image,
 <li> The result is run through an inverse Fourier transform,
 <li> The resulting image is traversed in search of places where the image
-changes from positive to negative or from negative to positive, 
+changes from positive to negative or from negative to positive,
 <li> Each cell in the map where the value crosses zero
 (with a change in value greater than the threshold value)
 is marked as an edge and an orientation is assigned to it.
@@ -63,10 +62,5 @@ when reading the input map.
 
 <h2>AUTHOR</h2>
 
-David Satnik, GIS Laboratory, 
+David Satnik, GIS Laboratory,
 Central Washington University
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

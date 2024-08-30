@@ -5,7 +5,7 @@
  *
  * (C) 2007-2009 Glynn Clements and the GRASS Development Team
  *
- * This program is free software under the GNU General Public License 
+ * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author Glynn Clements <glynn@gclements.plus.com>
@@ -197,8 +197,7 @@ void Rast_make_grey_scale_colors(struct Colors *colors, CELL min, CELL max)
  * \param min minimum value
  * \param max maximum value
  */
-void Rast_make_grey_scale_fp_colors(struct Colors *colors, DCELL min,
-				    DCELL max)
+void Rast_make_grey_scale_fp_colors(struct Colors *colors, DCELL min, DCELL max)
 {
     Rast_make_fp_colors(colors, "grey", min, max);
 }

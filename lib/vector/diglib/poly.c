@@ -1,8 +1,7 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
- * MODULE:       Vector library 
- *              
+ * MODULE:       Vector library
+ *
  * AUTHOR(S):    Original author CERL, probably Dave Gerdes.
  *               Update to GRASS 5.7 Radim Blazek.
  *               Update to GRASS 7.0 Markus Metz
@@ -16,9 +15,9 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <math.h>
 #include <grass/vector.h>
-
 
 #ifndef HUGE_VAL
 #define HUGE_VAL 9999999999999.0
@@ -27,16 +26,15 @@
 /*
  * fills BPoints (must be inited previously) by points from input
  * array LPoints
- * 
+ *
  * each input LPoints[i] must have at least 2 points
- *  
+ *
  * returns number of points or -1 on error
  */
 
-
 int dig_get_poly_points(int n_lines, struct line_pnts **LPoints,
-	    int *direction,	/* line direction: > 0 or < 0 */
-	    struct line_pnts *BPoints)
+                        int *direction, /* line direction: > 0 or < 0 */
+                        struct line_pnts *BPoints)
 {
     register int i, j, point, start, end, inc;
     struct line_pnts *Points;
@@ -45,40 +43,40 @@ int dig_get_poly_points(int n_lines, struct line_pnts **LPoints,
     BPoints->n_points = 0;
 
     if (n_lines < 1) {
-	return 0;
+        return 0;
     }
 
     /* Calc required space */
     n_points = 0;
     for (i = 0; i < n_lines; i++) {
-	Points = LPoints[i];
-	n_points += Points->n_points - 1;  /* each line from first to last - 1 */
+        Points = LPoints[i];
+        n_points += Points->n_points - 1; /* each line from first to last - 1 */
     }
-    n_points++;			/* last point */
+    n_points++; /* last point */
 
     if (0 > dig_alloc_points(BPoints, n_points))
-	return (-1);
+        return (-1);
 
     point = 0;
     j = 0;
     for (i = 0; i < n_lines; i++) {
-	Points = LPoints[i];
-	if (direction[i] > 0) {
-	    start = 0;
-	    end = Points->n_points - 1;
-	    inc = 1;
-	}
-	else {
-	    start = Points->n_points - 1;
-	    end = 0;
-	    inc = -1;
-	}
+        Points = LPoints[i];
+        if (direction[i] > 0) {
+            start = 0;
+            end = Points->n_points - 1;
+            inc = 1;
+        }
+        else {
+            start = Points->n_points - 1;
+            end = 0;
+            inc = -1;
+        }
 
-	for (j = start; j != end; j += inc) {
-	    BPoints->x[point] = Points->x[j];
-	    BPoints->y[point] = Points->y[j];
-	    point++;
-	}
+        for (j = start; j != end; j += inc) {
+            BPoints->x[point] = Points->x[j];
+            BPoints->y[point] = Points->y[j];
+            point++;
+        }
     }
     /* last point */
     BPoints->x[point] = Points->x[j];
@@ -111,7 +109,7 @@ int dig_find_area_poly(struct line_pnts *Points, double *totalarea)
      * fp precision limit errors, and *Points would need to be pruned */
     tot_area = 0.0;
     for (i = 1; i < Points->n_points; i++) {
-	tot_area += (x[i] - x[i - 1]) * (y[i] + y[i - 1]);
+        tot_area += (x[i] - x[i - 1]) * (y[i] + y[i - 1]);
     }
     *totalarea = 0.5 * tot_area;
 
@@ -147,18 +145,19 @@ double dig_find_poly_orientation(struct line_pnts *Points)
 
     /* first find leftmost highest vertex of the polygon */
     for (pnext = 1; pnext < lastpoint; pnext++) {
-	if (y[pnext] < y[pcur])
-	    continue;
-	else if (y[pnext] == y[pcur]) {    /* just as high */
-	    if (x[pnext] > x[pcur])   	   /* but to the right */
-		continue;
-	    if (x[pnext] == x[pcur]) {   /* duplicate point, self-intersecting polygon ? */
-		pprev = (pcur == 0 ? lastpoint - 1 : pcur - 1);
-		if (y[pnext - 1] < y[pprev])
-		    continue;
-	    }
-	}
-	pcur = pnext;          /* a new leftmost highest vertex */
+        if (y[pnext] < y[pcur])
+            continue;
+        else if (y[pnext] == y[pcur]) { /* just as high */
+            if (x[pnext] > x[pcur])     /* but to the right */
+                continue;
+            if (x[pnext] ==
+                x[pcur]) { /* duplicate point, self-intersecting polygon ? */
+                pprev = (pcur == 0 ? lastpoint - 1 : pcur - 1);
+                if (y[pnext - 1] < y[pprev])
+                    continue;
+            }
+        }
+        pcur = pnext; /* a new leftmost highest vertex */
     }
 
     /* Points are not pruned, so ... */
@@ -167,44 +166,45 @@ double dig_find_poly_orientation(struct line_pnts *Points)
 
     /* find next distinct point */
     do {
-	if (pnext < lastpoint - 1)
-	    pnext++;
-	else
-	    pnext = 0;
+        if (pnext < lastpoint - 1)
+            pnext++;
+        else
+            pnext = 0;
     } while (pnext != pcur && x[pcur] == x[pnext] && y[pcur] == y[pnext]);
 
     /* find previous distinct point */
     do {
-	if (pprev > 0)
-	    pprev--;
-	else
-	    pprev = lastpoint - 1;
+        if (pprev > 0)
+            pprev--;
+        else
+            pprev = lastpoint - 1;
     } while (pprev != pcur && x[pcur] == x[pprev] && y[pcur] == y[pprev]);
-    
+
     /* orientation at vertex pcur == signed area for triangle pprev, pcur, pnext
      * rather use robust determinant of Olivier Devillers? */
-    orientation =  (x[pnext] - x[pprev]) * (y[pcur] - y[pprev])
-         - (x[pcur] - x[pprev]) * (y[pnext] - y[pprev]);
+    orientation = (x[pnext] - x[pprev]) * (y[pcur] - y[pprev]) -
+                  (x[pcur] - x[pprev]) * (y[pnext] - y[pprev]);
 
     if (orientation)
-	return orientation;
+        return orientation;
 
     /* orientation is 0, can happen with dirty boundaries, next check */
     /* find rightmost highest vertex of the polygon */
     pcur = 0;
     for (pnext = 1; pnext < lastpoint; pnext++) {
-	if (y[pnext] < y[pcur])
-	    continue;
-	else if (y[pnext] == y[pcur]) {    /* just as high */
-	    if (x[pnext] < x[pcur])   	/* but to the left */
-		continue;
-	    if (x[pnext] == x[pcur]) {   /* duplicate point, self-intersecting polygon ? */
-		pprev = (pcur == 0 ? lastpoint - 1 : pcur - 1);
-		if (y[pnext - 1] < y[pprev])
-		    continue;
-	    }
-	}
-	pcur = pnext;          /* a new rightmost highest vertex */
+        if (y[pnext] < y[pcur])
+            continue;
+        else if (y[pnext] == y[pcur]) { /* just as high */
+            if (x[pnext] < x[pcur])     /* but to the left */
+                continue;
+            if (x[pnext] ==
+                x[pcur]) { /* duplicate point, self-intersecting polygon ? */
+                pprev = (pcur == 0 ? lastpoint - 1 : pcur - 1);
+                if (y[pnext - 1] < y[pprev])
+                    continue;
+            }
+        }
+        pcur = pnext; /* a new rightmost highest vertex */
     }
 
     /* Points are not pruned, so ... */
@@ -213,44 +213,45 @@ double dig_find_poly_orientation(struct line_pnts *Points)
 
     /* find next distinct point */
     do {
-	if (pnext < lastpoint - 1)
-	    pnext++;
-	else
-	    pnext = 0;
+        if (pnext < lastpoint - 1)
+            pnext++;
+        else
+            pnext = 0;
     } while (pnext != pcur && x[pcur] == x[pnext] && y[pcur] == y[pnext]);
 
     /* find previous distinct point */
     do {
-	if (pprev > 0)
-	    pprev--;
-	else
-	    pprev = lastpoint - 1;
+        if (pprev > 0)
+            pprev--;
+        else
+            pprev = lastpoint - 1;
     } while (pprev != pcur && x[pcur] == x[pprev] && y[pcur] == y[pprev]);
-    
+
     /* orientation at vertex pcur == signed area for triangle pprev, pcur, pnext
      * rather use robust determinant of Olivier Devillers? */
-    orientation =  (x[pnext] - x[pprev]) * (y[pcur] - y[pprev])
-         - (x[pcur] - x[pprev]) * (y[pnext] - y[pprev]);
+    orientation = (x[pnext] - x[pprev]) * (y[pcur] - y[pprev]) -
+                  (x[pcur] - x[pprev]) * (y[pnext] - y[pprev]);
 
     if (orientation)
-	return orientation;
+        return orientation;
 
     /* orientation is 0, next check */
     /* find leftmost lowest vertex of the polygon */
     pcur = 0;
     for (pnext = 1; pnext < lastpoint; pnext++) {
-	if (y[pnext] > y[pcur])
-	    continue;
-	else if (y[pnext] == y[pcur]) {    /* just as low */
-	    if (x[pnext] > x[pcur])   	/* but to the right */
-		continue;
-	    if (x[pnext] == x[pcur]) {   /* duplicate point, self-intersecting polygon ? */
-		pprev = (pcur == 0 ? lastpoint - 1 : pcur - 1);
-		if (y[pnext - 1] > y[pprev])
-		    continue;
-	    }
-	}
-	pcur = pnext;          /* a new leftmost lowest vertex */
+        if (y[pnext] > y[pcur])
+            continue;
+        else if (y[pnext] == y[pcur]) { /* just as low */
+            if (x[pnext] > x[pcur])     /* but to the right */
+                continue;
+            if (x[pnext] ==
+                x[pcur]) { /* duplicate point, self-intersecting polygon ? */
+                pprev = (pcur == 0 ? lastpoint - 1 : pcur - 1);
+                if (y[pnext - 1] > y[pprev])
+                    continue;
+            }
+        }
+        pcur = pnext; /* a new leftmost lowest vertex */
     }
 
     /* Points are not pruned, so ... */
@@ -259,44 +260,45 @@ double dig_find_poly_orientation(struct line_pnts *Points)
 
     /* find next distinct point */
     do {
-	if (pnext < lastpoint - 1)
-	    pnext++;
-	else
-	    pnext = 0;
+        if (pnext < lastpoint - 1)
+            pnext++;
+        else
+            pnext = 0;
     } while (pnext != pcur && x[pcur] == x[pnext] && y[pcur] == y[pnext]);
 
     /* find previous distinct point */
     do {
-	if (pprev > 0)
-	    pprev--;
-	else
-	    pprev = lastpoint - 1;
+        if (pprev > 0)
+            pprev--;
+        else
+            pprev = lastpoint - 1;
     } while (pprev != pcur && x[pcur] == x[pprev] && y[pcur] == y[pprev]);
-    
+
     /* orientation at vertex pcur == signed area for triangle pprev, pcur, pnext
      * rather use robust determinant of Olivier Devillers? */
-    orientation =  (x[pnext] - x[pprev]) * (y[pcur] - y[pprev])
-         - (x[pcur] - x[pprev]) * (y[pnext] - y[pprev]);
+    orientation = (x[pnext] - x[pprev]) * (y[pcur] - y[pprev]) -
+                  (x[pcur] - x[pprev]) * (y[pnext] - y[pprev]);
 
     if (orientation)
-	return orientation;
+        return orientation;
 
     /* orientation is 0, last check */
     /* find rightmost lowest vertex of the polygon */
     pcur = 0;
     for (pnext = 1; pnext < lastpoint; pnext++) {
-	if (y[pnext] > y[pcur])
-	    continue;
-	else if (y[pnext] == y[pcur]) {    /* just as low */
-	    if (x[pnext] < x[pcur])   	/* but to the left */
-		continue;
-	    if (x[pnext] == x[pcur]) {   /* duplicate point, self-intersecting polygon ? */
-		pprev = (pcur == 0 ? lastpoint - 1 : pcur - 1);
-		if (y[pnext - 1] > y[pprev])
-		    continue;
-	    }
-	}
-	pcur = pnext;          /* a new rightmost lowest vertex */
+        if (y[pnext] > y[pcur])
+            continue;
+        else if (y[pnext] == y[pcur]) { /* just as low */
+            if (x[pnext] < x[pcur])     /* but to the left */
+                continue;
+            if (x[pnext] ==
+                x[pcur]) { /* duplicate point, self-intersecting polygon ? */
+                pprev = (pcur == 0 ? lastpoint - 1 : pcur - 1);
+                if (y[pnext - 1] > y[pprev])
+                    continue;
+            }
+        }
+        pcur = pnext; /* a new rightmost lowest vertex */
     }
 
     /* Points are not pruned, so ... */
@@ -305,24 +307,24 @@ double dig_find_poly_orientation(struct line_pnts *Points)
 
     /* find next distinct point */
     do {
-	if (pnext < lastpoint - 1)
-	    pnext++;
-	else
-	    pnext = 0;
+        if (pnext < lastpoint - 1)
+            pnext++;
+        else
+            pnext = 0;
     } while (pnext != pcur && x[pcur] == x[pnext] && y[pcur] == y[pnext]);
 
     /* find previous distinct point */
     do {
-	if (pprev > 0)
-	    pprev--;
-	else
-	    pprev = lastpoint - 1;
+        if (pprev > 0)
+            pprev--;
+        else
+            pprev = lastpoint - 1;
     } while (pprev != pcur && x[pcur] == x[pprev] && y[pcur] == y[pprev]);
-    
+
     /* orientation at vertex pcur == signed area for triangle pprev, pcur, pnext
      * rather use robust determinant of Olivier Devillers? */
-    orientation =  (x[pnext] - x[pprev]) * (y[pcur] - y[pprev])
-         - (x[pcur] - x[pprev]) * (y[pnext] - y[pprev]);
+    orientation = (x[pnext] - x[pprev]) * (y[pcur] - y[pprev]) -
+                  (x[pcur] - x[pprev]) * (y[pnext] - y[pprev]);
 
-    return orientation;   /* 0 for degenerate */
+    return orientation; /* 0 for degenerate */
 }

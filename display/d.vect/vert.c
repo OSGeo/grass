@@ -11,8 +11,8 @@ int display_vert(struct Map_info *Map, int type, LATTR *lattr, double dsize)
     double msize;
     struct line_pnts *Points;
 
-    msize = dsize * (D_d_to_u_col(2.0) - D_d_to_u_col(1.0));	/* do it better */
-    
+    msize = dsize * (D_d_to_u_col(2.0) - D_d_to_u_col(1.0)); /* do it better */
+
     G_debug(1, "display vertices:");
     Points = Vect_new_line_struct();
 
@@ -20,18 +20,18 @@ int display_vert(struct Map_info *Map, int type, LATTR *lattr, double dsize)
 
     Vect_rewind(Map);
     Vect_set_constraint_type(Map, type);
-    while(TRUE) {
+    while (TRUE) {
         ltype = Vect_read_next_line(Map, Points, NULL);
-	switch (ltype) {
-	case -1:
-	    G_fatal_error(_("Unable to read vector map"));
-	case -2:		/* EOF */
-	    return 0;
-	}
+        switch (ltype) {
+        case -1:
+            G_fatal_error(_("Unable to read vector map"));
+        case -2: /* EOF */
+            return 0;
+        }
 
         if (!(ltype & GV_LINES))
             continue;
-        
+
         for (i = 0; i < Points->n_points; i++) {
             D_plot_icon(Points->x[i], Points->y[i], G_ICON_CROSS, 0, msize);
         }

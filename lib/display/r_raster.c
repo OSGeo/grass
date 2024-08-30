@@ -50,25 +50,26 @@ static void init(void)
     D_font(font ? font : "romans");
 
     if (fenc)
-	D_encoding(fenc);
+        D_encoding(fenc);
 
     if (line_width)
-	COM_Line_width(atof(line_width));
+        COM_Line_width(atof(line_width));
 
     if (text_size) {
-	double s = atof(text_size);
-	D_text_size(s, s);
+        double s = atof(text_size);
+        D_text_size(s, s);
     }
 
     D_text_rotation(0);
 
     COM_Get_window(&screen.t, &screen.b, &screen.l, &screen.r);
     if (frame_str) {
-	sscanf(frame_str, "%lf,%lf,%lf,%lf", &frame.t, &frame.b, &frame.l, &frame.r);
-	COM_Set_window(frame.t, frame.b, frame.l, frame.r);
+        sscanf(frame_str, "%lf,%lf,%lf,%lf", &frame.t, &frame.b, &frame.l,
+               &frame.r);
+        COM_Set_window(frame.t, frame.b, frame.l, frame.r);
     }
     else
-	frame = screen;
+        frame = screen;
 }
 
 /*!
@@ -82,31 +83,30 @@ int D_open_driver(void)
 {
     const char *p, *c, *m;
     const struct driver *drv;
-    
+
     G_debug(1, "D_open_driver():");
     p = getenv("GRASS_RENDER_IMMEDIATE");
     c = getenv("GRASS_RENDER_COMMAND");
     m = G_getenv_nofatal("MONITOR");
-    
+
     if (!p && (m || c)) {
         char *cmd;
         char progname[GPATH_MAX];
 
         cmd = G_recreate_command();
-        
+
         if (c && m) {
             G_warning(_("Both %s and %s are defined. "
                         "%s will be ignored."),
-                      "GRASS_RENDER_COMMAND", "MONITOR",
-                      "MONITOR");
+                      "GRASS_RENDER_COMMAND", "MONITOR", "MONITOR");
             m = NULL;
         }
-        
-        if (c) 
+
+        if (c)
             sprintf(progname, "%s", c);
         else { /* monitors managed by d.mon -> call default renderer */
             char element[GPATH_MAX];
-            
+
             G_temp_element(element);
             strcat(element, "/");
             strcat(element, "MONITORS");
@@ -119,35 +119,34 @@ int D_open_driver(void)
         /* assuming Python script here (could be extended in the future) */
         G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), progname,
                    cmd, NULL);
-        
+
         G_free(cmd);
-        
+
         /* force exiting GRASS command, leave rendering on
          * GRASS_RENDER_COMMAND program */
         exit(0);
     }
 
     if (!p)
-	G_fatal_error(_("Neither %s (managed by d.mon command) nor %s "
+        G_fatal_error(_("Neither %s (managed by d.mon command) nor %s "
                         "(used for direct rendering) defined"),
-		      "MONITOR", "GRASS_RENDER_IMMEDIATE");
+                      "MONITOR", "GRASS_RENDER_IMMEDIATE");
 
     if (p && G_strcasecmp(p, "default") == 0)
-	p = NULL;
-    
-    drv =
-	(p && G_strcasecmp(p, "png")   == 0) ? PNG_Driver() :
-	(p && G_strcasecmp(p, "ps")    == 0) ? PS_Driver() :
-	(p && G_strcasecmp(p, "html")  == 0) ? HTML_Driver() :
+        p = NULL;
+
+    drv = (p && G_strcasecmp(p, "png") == 0)    ? PNG_Driver()
+          : (p && G_strcasecmp(p, "ps") == 0)   ? PS_Driver()
+          : (p && G_strcasecmp(p, "html") == 0) ? HTML_Driver()
+                                                :
 #ifdef USE_CAIRO
-	(p && G_strcasecmp(p, "cairo") == 0) ? Cairo_Driver() :
-	Cairo_Driver();
+                                                Cairo_Driver();
 #else
-	PNG_Driver();
+                                                PNG_Driver();
 #endif
-	
+
     if (p && G_strcasecmp(drv->name, p) != 0)
-	G_warning(_("Unknown display driver <%s>"), p);
+        G_warning(_("Unknown display driver <%s>"), p);
     G_verbose_message(_("Using display driver <%s>..."), drv->name);
     LIB_init(drv);
 
@@ -167,8 +166,8 @@ void D_close_driver(void)
 
     COM_Graph_close();
 
-    if (cmd)
-	system(cmd);
+    if (cmd && system(cmd) == -1)
+        G_warning(_("GRASS_NOTIFY command <%s> failed"), cmd);
 }
 
 /*!
@@ -176,7 +175,7 @@ void D_close_driver(void)
 
   \todo To be removed
 */
-int D_save_command(const char *cmd)
+int D_save_command(const char *cmd UNUSED)
 {
     return 0;
 }
@@ -191,7 +190,7 @@ void D__erase(void)
 
 /*!
   \brief Set text size (width and height)
- 
+
   \param width text pixel width
   \param height text pixel height
 */
@@ -212,10 +211,10 @@ void D_text_rotation(double rotation)
 
 /*!
   \brief Draw text
-  
+
   Writes <em>text</em> in the current color and font, at the current text
   width and height, starting at the current screen location.
-  
+
   \param text text to be drawn
 */
 void D_text(const char *text)
@@ -225,9 +224,9 @@ void D_text(const char *text)
 
 /*!
   \brief Choose font
- 
+
   Set current font to <em>font name</em>.
-  
+
   \param name font name
 */
 void D_font(const char *name)
@@ -299,10 +298,14 @@ void D_get_clip_window(double *t, double *b, double *l, double *r)
 
 void D_set_clip_window(double t, double b, double l, double r)
 {
-    if (t < frame.t) t = frame.t;
-    if (b > frame.b) b = frame.b;
-    if (l < frame.l) l = frame.l;
-    if (r > frame.r) r = frame.r;
+    if (t < frame.t)
+        t = frame.t;
+    if (b > frame.b)
+        b = frame.b;
+    if (l < frame.l)
+        l = frame.l;
+    if (r > frame.r)
+        r = frame.r;
 
     COM_Set_window(t, b, l, r);
 }
@@ -359,9 +362,8 @@ void D_get_screen(double *t, double *b, double *l, double *r)
 
 void D_set_clip_window_to_map_window(void)
 {
-    D_set_clip_window(
-	D_get_d_north(), D_get_d_south(),
-	D_get_d_west(), D_get_d_east());
+    D_set_clip_window(D_get_d_north(), D_get_d_south(), D_get_d_west(),
+                      D_get_d_east());
 }
 
 /*!
@@ -378,4 +380,3 @@ void D_set_clip_window_to_screen_window(void)
 {
     COM_Set_window(frame.t, frame.b, frame.l, frame.r);
 }
-

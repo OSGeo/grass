@@ -16,7 +16,7 @@ r.mapcalc --o expr="elev_4 = 35"
 r.mapcalc --o expr="elev_5 = 45"
 r.mapcalc --o expr="elev_NAN = 50"
 r.mapcalc --o expr="elev_cross = float(col()* 5)"
-# Now create a voxel map with value = col + row + depth. 
+# Now create a voxel map with value = col + row + depth.
 r3.mapcalc --o expr="volume = col() + row() + depth()"
 # Add null value information
 r3.mapcalc --o expr="volume_null = if(row() == 1 || row() == 5, null(), volume)"
@@ -34,12 +34,12 @@ r3.cross.rast --o input=volume_null elevation=elev_NAN output=test_cross_section
 r3.cross.rast --o input=volume_null elevation=elev_cross output=test_cross_section_result
 
 # Export of the text files
-for i in `g.list type=raster pattern=test_cross_section_*` ; do 
-    r.out.ascii input=$i output=${i}.txt; 
+for i in `g.list type=raster pattern=test_cross_section_*` ; do
+    r.out.ascii input=$i output=${i}.txt;
 done
 
 # Comparison of references and text files
-for i in `ls *.ref` ; do 
-    diff $i "`basename $i .ref`.txt" ; 
+for i in `ls *.ref` ; do
+    diff $i "`basename $i .ref`.txt" ;
 done
 rm *.txt

@@ -22,12 +22,12 @@ the contour line may backtrack on itself, causing illegal arcs to be produced
 in the output vector map.
 
 <p>The optional <b>cut</b> parameter allows the user to specify a minimum number of
-raster cells eligilble to be included in a contour line written to the <b>output</b> 
+raster cells eligilble to be included in a contour line written to the <b>output</b>
 vector map. It acts like a filter, omitting spurs, single points, etc., making the output more generalized.
 
 <h2>EXAMPLES</h2>
 
-In the Spearfish location, produce a vector contour map from input raster <i>elevation.dem</i> 
+In the Spearfish dataset, produce a vector contour map from input raster <i>elevation.dem</i>
 with contour levels from 1000m to 2000m, 100m contour step, and a minimum of 200 input raster
 points contributing to the contour line:
 
@@ -70,9 +70,3 @@ r.contour input=elev_lid792_1m output=elev_lid792_1m_contours \
 
 Terry Baker, U.S. Army Construction Engineering Research Laboratory<br>
 3/2001: cut parameter and fixes by Andrea Aime (aaime@libero.it)
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
-

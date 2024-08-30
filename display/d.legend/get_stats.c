@@ -5,7 +5,6 @@
 #include <grass/spawn.h>
 #include "local_proto.h"
 
-
 void run_stats(const char *mapname, int nsteps, const char *tempfile,
                int map_type)
 {
@@ -41,17 +40,17 @@ void run_stats(const char *mapname, int nsteps, const char *tempfile,
 void get_stats(const char *mapname, struct stat_list *dist_stats, int nsteps,
                int map_type)
 {
-    char buf[1024];             /* input buffer for reading stats */
+    char buf[1024]; /* input buffer for reading stats */
     int done = FALSE;
-    char *tempfile;             /* temp file name */
-    FILE *fd;                   /* temp file pointer */
+    char *tempfile; /* temp file name */
+    FILE *fd;       /* temp file pointer */
 
     /*
        int is_fp;
        struct FPRange fp_range;
      */
-    long int cat;               /* a category value */
-    long int stat;              /* a category stat value */
+    long int cat;  /* a category value */
+    long int stat; /* a category stat value */
     struct stat_node *ptr = NULL;
     int first;
 
@@ -125,19 +124,19 @@ void get_stats(const char *mapname, struct stat_list *dist_stats, int nsteps,
                 /* put it in the list */
                 if (dist_stats->ptr == NULL) {
                     /* first in list */
-                    dist_stats->ptr = (struct stat_node *)
-                        G_malloc(sizeof(struct stat_node));
+                    dist_stats->ptr =
+                        (struct stat_node *)G_malloc(sizeof(struct stat_node));
                     dist_stats->ptr->cat = cat;
                     dist_stats->ptr->stat = stat;
                     dist_stats->ptr->next = NULL;
                     ptr = dist_stats->ptr;
                 }
                 else {
-                    ptr->next = (struct stat_node *)
-                        G_malloc(sizeof(struct stat_node));
+                    ptr->next =
+                        (struct stat_node *)G_malloc(sizeof(struct stat_node));
                     ptr->next->cat = cat;
                     ptr->next->stat = stat;
-                    ptr->next->next = NULL;     /* mod: shapiro */
+                    ptr->next->next = NULL; /* mod: shapiro */
                     ptr = ptr->next;
                 }
             }

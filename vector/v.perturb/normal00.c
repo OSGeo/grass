@@ -6,9 +6,9 @@
  * Read the file GPL.TXT coming with GRASS for details.
  */
 
-#include<stdio.h>
-#include<math.h>
-#include"zufall.h"
+#include <stdio.h>
+#include <math.h>
+#include "zufall.h"
 
 int normal00(void)
 {
@@ -22,12 +22,12 @@ int normal00(void)
     /* VOCL LOOP, TEMP(r1,r2,t1,t2), NOVREC(xbuff) */
 
     for (i = 1; i <= 1024; i += 2) {
-	r1 = twopi * klotz1_1.xbuff[i - 1];
-	t1 = cos(r1);
-	t2 = sin(r1);
-	r2 = sqrt(log((double)1. - klotz1_1.xbuff[i]) * (double)-2.);
-	klotz1_1.xbuff[i - 1] = t1 * r2;
-	klotz1_1.xbuff[i] = t2 * r2;
+        r1 = twopi * klotz1_1.xbuff[i - 1];
+        t1 = cos(r1);
+        t2 = sin(r1);
+        r2 = sqrt(log((double)1. - klotz1_1.xbuff[i]) * (double)-2.);
+        klotz1_1.xbuff[i - 1] = t1 * r2;
+        klotz1_1.xbuff[i] = t2 * r2;
     }
     return 0;
-}				/* normal00 */
+} /* normal00 */

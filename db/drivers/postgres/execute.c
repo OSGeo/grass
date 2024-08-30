@@ -1,12 +1,12 @@
 /*!
-  \file db/driver/postgres/execute.c
-  
-  \brief DBMI - Low Level PostgreSQL database driver - execute statemets
-  
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
-  
-  \author Radim Blazek
+   \file db/driver/postgres/execute.c
+
+   \brief DBMI - Low Level PostgreSQL database driver - execute statemets
+
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
+
+   \author Radim Blazek
  */
 
 #include <stdlib.h>
@@ -18,7 +18,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_execute_immediate(dbString * sql)
+int db__driver_execute_immediate(dbString *sql)
 {
     PGresult *res;
     char *str;
@@ -38,19 +38,17 @@ int db__driver_execute_immediate(dbString * sql)
     res = PQexec(pg_conn, str);
 
     if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-	db_d_append_error("%s\n%s\n%s",
-			  _("Unable to execute:"),
-			  str,
-			  PQerrorMessage(pg_conn));
-	db_d_report_error();
-	PQclear(res);
-	if (str)
-	    G_free(str);
-	return DB_FAILED;
+        db_d_append_error("%s\n%s\n%s", _("Unable to execute:"), str,
+                          PQerrorMessage(pg_conn));
+        db_d_report_error();
+        PQclear(res);
+        if (str)
+            G_free(str);
+        return DB_FAILED;
     }
 
     if (str)
-	G_free(str);
+        G_free(str);
     PQclear(res);
 
     return DB_OK;
@@ -65,10 +63,10 @@ int db__driver_begin_transaction(void)
     res = PQexec(pg_conn, "BEGIN");
 
     if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-	db_d_append_error(_("Unable to 'BEGIN' transaction"));
-	db_d_report_error();
-	PQclear(res);
-	return DB_FAILED;
+        db_d_append_error(_("Unable to 'BEGIN' transaction"));
+        db_d_report_error();
+        PQclear(res);
+        return DB_FAILED;
     }
 
     PQclear(res);
@@ -85,10 +83,10 @@ int db__driver_commit_transaction(void)
     res = PQexec(pg_conn, "COMMIT");
 
     if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-	db_d_append_error(_("Unable to 'COMMIT' transaction"));
-	db_d_report_error();
-	PQclear(res);
-	return DB_FAILED;
+        db_d_append_error(_("Unable to 'COMMIT' transaction"));
+        db_d_report_error();
+        PQclear(res);
+        return DB_FAILED;
     }
 
     PQclear(res);

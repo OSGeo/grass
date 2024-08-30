@@ -4,10 +4,9 @@
 #include <grass/glocale.h>
 #include "globals.h"
 
-
-void openfiles(char *r_name, char *g_name, char *b_name,
-	       char *h_name, char *i_name, char *s_name,
-	       int fd_input[3], int fd_output[3], CELL * rowbuf[3])
+void openfiles(char *r_name, char *g_name, char *b_name, char *h_name,
+               char *i_name, char *s_name, int fd_input[3], int fd_output[3],
+               CELL *rowbuf[3])
 {
     fd_input[0] = Rast_open_old(r_name, "");
     fd_input[1] = Rast_open_old(g_name, "");

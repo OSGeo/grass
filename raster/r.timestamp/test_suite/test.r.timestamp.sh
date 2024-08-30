@@ -11,41 +11,41 @@ r.mapcalc --o expr="map = 1"
 
 # The first @test uses several different absolute datum formats
 r.timestamp map=map date=none
-r.timestamp map=map 
+r.timestamp map=map
 r.timestamp map=map date="2003"
-r.timestamp map=map 
+r.timestamp map=map
 r.timestamp map=map date="Jul 2003"
-r.timestamp map=map 
+r.timestamp map=map
 r.timestamp map=map date="14 Jul 2003"
-r.timestamp map=map 
+r.timestamp map=map
 r.timestamp map=map date="14 Jul 2003 10"
-r.timestamp map=map 
+r.timestamp map=map
 r.timestamp map=map date="14 Jul 2003 10:30 +0700"
-r.timestamp map=map 
+r.timestamp map=map
 r.timestamp map=map date="14 Jul 2003 10:30:25"
-r.timestamp map=map 
+r.timestamp map=map
 r.timestamp map=map date="14 Jul 2003 10:30:25 +0700 / 15 Jul 2003 11:35:12 +0700"
-r.timestamp map=map 
+r.timestamp map=map
 r.timestamp map=map date="14 Jul 2003 10:30:25 +0700 / 15 Jul 2003"
-r.timestamp map=map 
+r.timestamp map=map
 r.timestamp map=map date=none
-r.timestamp map=map 
+r.timestamp map=map
 
 # The second @test uses several different relative datum formats
 r.timestamp map=map date=none
-r.timestamp map=map 
+r.timestamp map=map
 r.timestamp map=map date="2 years"
-r.timestamp map=map 
+r.timestamp map=map
 r.timestamp map=map date="2 years 3 months"
-r.timestamp map=map 
+r.timestamp map=map
 r.timestamp map=map date="5 days"
-r.timestamp map=map 
+r.timestamp map=map
 r.timestamp map=map date="3 hours"
-r.timestamp map=map 
+r.timestamp map=map
 r.timestamp map=map date="5 minutes 30 seconds"
-r.timestamp map=map 
+r.timestamp map=map
 r.timestamp map=map date="2 years 2 months / 5 years 8 months"
-r.timestamp map=map 
+r.timestamp map=map
 r.timestamp map=map date=none
 
 # The third @test to check @failure with wrong time stamps
@@ -54,4 +54,3 @@ r.timestamp map=map date="2 years 3 months 8 days"
 r.timestamp map=map date="1 month 5 days"
 r.timestamp map=map date="July 2003"
 r.timestamp map=map date="14 Jul 2003 +0700"
-

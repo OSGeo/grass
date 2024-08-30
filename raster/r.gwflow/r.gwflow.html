@@ -1,9 +1,10 @@
 <h2>DESCRIPTION</h2>
+
 This numerical program calculates implicit transient, confined and
-unconfined groundwater flow in two dimensions based on  
+unconfined groundwater flow in two dimensions based on
 raster maps and the current region settings.
-All initial and boundary conditions must be provided as 
-raster maps. The unit in the location must be meters.
+All initial and boundary conditions must be provided as
+raster maps. The unit of the current project's coordinate reference system must be meters.
 <p>This module is sensitive to mask settings. All cells which are outside the mask
 are ignored and handled as no flow boundaries.
 <p><center>
@@ -15,16 +16,16 @@ are ignored and handled as no flow boundaries.
 </table>
 </center>
 <p>
-<em>r.gwflow</em> calculates the piezometric head and optionally 
+<em>r.gwflow</em> calculates the piezometric head and optionally
 the water budget and the filter velocity field,
-based on the hydraulic conductivity and the piezometric head. 
+based on the hydraulic conductivity and the piezometric head.
 The vector components can be visualized with paraview if they are exported
 with <em>r.out.vtk</em>.
 <br>
 <br>
-The groundwater flow will always be calculated transient. 
+The groundwater flow will always be calculated transient.
 For stady state computation set the timestep
-to a large number (billions of seconds) or set the 
+to a large number (billions of seconds) or set the
 storativity/ effective porosity raster map to zero.
 <br>
 <br>
@@ -56,9 +57,9 @@ differential equation is of the following form:
 is handled differently in case of unconfined flow. Instead of the storativity, the effective porosity is expected.
 <p>To compute unconfined groundwater flow, a simple Picard based linearization scheme is used to
 solve the resulting non-linear equation system.
-<p>Two different boundary conditions are implemented, 
+<p>Two different boundary conditions are implemented,
 the Dirichlet and Neumann conditions. By default the calculation area is surrounded by homogeneous Neumann boundary conditions.
-The calculation and boundary status of single cells must be set with a status map, 
+The calculation and boundary status of single cells must be set with a status map,
 the following states are supportet:
 
 <ul>
@@ -77,11 +78,12 @@ The resulting linear equation system <i>Ax = b</i> can be solved with several so
 An iterative solvers with sparse and quadratic matrices support is implemented.
 The conjugate gradients method with (pcg) and without (cg) precondition.
 Additionally a direct Cholesky solver is available. This direct solver
-only work with normal quadratic matrices, so be careful using them with large maps 
+only work with normal quadratic matrices, so be careful using them with large maps
 (maps of size 10.000 cells will need more than one gigabyte of RAM).
 Always prefer a sparse matrix solver.
 
 <h2>EXAMPLE</h2>
+
 Use this small script to create a working
 groundwater flow area and data. Make sure you are not in a lat/lon projection.
 It includes drainage and river input as well.
@@ -147,12 +149,8 @@ paraview --data=/tmp/gwdata_unconf2d.vtk &amp;
 </em>
 
 <h2>AUTHOR</h2>
+
 S&ouml;ren Gebbert
 <p>This work is based on the Diploma Thesis of S&ouml;ren Gebbert available
 <a href="https://grass.osgeo.org/gdp/hydrology/gebbert2007_diplom_stroemung_grass_gis.pdf">here</a>
 at Technical University Berlin in Germany.
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

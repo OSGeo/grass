@@ -21,7 +21,6 @@
 #include <grass/dbmi.h>
 #include <grass/neta.h>
 
-
 /*!
    \brief Writes point
 
@@ -32,8 +31,8 @@
    \param node node id
    \param Cats pointer to line_cats structures
  */
-void NetA_add_point_on_node(struct Map_info *In, struct Map_info *Out,
-			    int node, struct line_cats *Cats)
+void NetA_add_point_on_node(struct Map_info *In, struct Map_info *Out, int node,
+                            struct line_cats *Cats)
 {
     static struct line_pnts *Points;
     double x, y, z;
@@ -47,7 +46,8 @@ void NetA_add_point_on_node(struct Map_info *In, struct Map_info *Out,
 }
 
 /* Returns the list of all points with the given category and field */
-/*void NetA_get_points_by_category(struct Map_info *In, int field, int cat, struct ilist *point_list)
+/*void NetA_get_points_by_category(struct Map_info *In, int field, int cat,
+ * struct ilist *point_list)
  * {
  * int i, nlines;
  * struct line_cats *Cats;
@@ -57,7 +57,7 @@ void NetA_add_point_on_node(struct Map_info *In, struct Map_info *Out,
  * int type = Vect_read_line(In, NULL, Cats, i);
  * if(type!=GV_POINT)continue;
  * }
- * 
+ *
  * Vect_destroy_cats_struct(Cats);
  * }
  */
@@ -76,9 +76,10 @@ void NetA_points_to_nodes(struct Map_info *In, struct ilist *point_list)
     struct line_pnts *Points = Vect_new_line_struct();
 
     for (i = 0; i < point_list->n_values; i++) {
-	/* Vect_get_line_nodes(In, point_list->value[i], &node, NULL); */
-	node = Vect_find_node(In, Points->x[0], Points->y[0], Points->z[0], 0, 0);
-	point_list->value[i] = node;
+        /* Vect_get_line_nodes(In, point_list->value[i], &node, NULL); */
+        node =
+            Vect_find_node(In, Points->x[0], Points->y[0], Points->z[0], 0, 0);
+        point_list->value[i] = node;
     }
     Vect_destroy_line_struct(Points);
 }
@@ -91,7 +92,7 @@ void NetA_points_to_nodes(struct Map_info *In, struct ilist *point_list)
    the array node_costs. If there is no point with a category,
    node_costs=0.
 
-   node_costs are multiplied by the graph's cost multiplier and  
+   node_costs are multiplied by the graph's cost multiplier and
    truncated to integers (as is done in Vect_net_build_graph)
 
    \param In pointer to Map_info structure
@@ -103,7 +104,7 @@ void NetA_points_to_nodes(struct Map_info *In, struct ilist *point_list)
    \return 0 on failure
  */
 int NetA_get_node_costs(struct Map_info *In, int layer, char *column,
-			int *node_costs)
+                        int *node_costs)
 {
     int i, nlines, nnodes;
     dbCatValArray vals;
@@ -114,45 +115,53 @@ int NetA_get_node_costs(struct Map_info *In, int layer, char *column,
     struct field_info *Fi;
 
     Fi = Vect_get_field(In, layer);
+    if (Fi == NULL)
+        G_fatal_error(_("Database connection not defined for layer %d"), layer);
+
     driver = db_start_driver_open_database(Fi->driver, Fi->database);
     if (driver == NULL)
-	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-		      Fi->database, Fi->driver);
+        G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+                      Fi->database, Fi->driver);
 
     nlines = Vect_get_num_lines(In);
     nnodes = Vect_get_num_nodes(In);
-    Cats = Vect_new_cats_struct();
-    Points = Vect_new_line_struct();
     for (i = 1; i <= nnodes; i++)
-	node_costs[i] = 0;
+        node_costs[i] = 0;
 
     db_CatValArray_init(&vals);
+    int nvals =
+        db_select_CatValArray(driver, Fi->table, Fi->key, column, NULL, &vals);
 
-    if (db_select_CatValArray(driver, Fi->table, Fi->key, column, NULL, &vals)
-	== -1)
-	return 0;
+    db_close_database_shutdown_driver(driver);
+    Vect_destroy_field_info(Fi);
+
+    if (nvals == -1)
+        return 0;
+
+    Cats = Vect_new_cats_struct();
+    Points = Vect_new_line_struct();
     for (i = 1; i <= nlines; i++) {
-	int type = Vect_read_line(In, Points, Cats, i);
+        int type = Vect_read_line(In, Points, Cats, i);
 
-	if (type == GV_POINT) {
-	    int node, cat;
-	    double value;
+        if (type == GV_POINT) {
+            int node, cat;
+            double value;
 
-	    if (!Vect_cat_get(Cats, layer, &cat))
-		continue;
-	    Vect_get_line_nodes(In, i, &node, NULL);
-	    if (db_CatValArray_get_value_double(&vals, cat, &value) == DB_OK) {
-		if (value < 0)
-		    node_costs[node] = -1;
-		else
-		    node_costs[node] = value * In->dgraph.cost_multip;
-	    }
-	}
+            if (!Vect_cat_get(Cats, layer, &cat))
+                continue;
+            Vect_get_line_nodes(In, i, &node, NULL);
+            if (db_CatValArray_get_value_double(&vals, cat, &value) == DB_OK) {
+                if (value < 0)
+                    node_costs[node] = -1;
+                else
+                    node_costs[node] = value * In->dgraph.cost_multip;
+            }
+        }
     }
 
     Vect_destroy_cats_struct(Cats);
+    Vect_destroy_line_struct(Points);
     db_CatValArray_free(&vals);
-    db_close_database_shutdown_driver(driver);
     return 1;
 }
 
@@ -163,7 +172,7 @@ int NetA_get_node_costs(struct Map_info *In, int layer, char *column,
    nodes_to_features contains the index of a feature adjacent to each
    node or -1 if no such feature specified by varray
    exists. Nodes_to_features might be NULL, in which case it is left
-   unitialised. Nodes_to_features will be wrong if several lines connect 
+   unitialised. Nodes_to_features will be wrong if several lines connect
    to the same node.
 
    \param map pointer to Map_info structure
@@ -172,7 +181,7 @@ int NetA_get_node_costs(struct Map_info *In, int layer, char *column,
    \param[out] nodes_to_features maps nodes to features
  */
 void NetA_varray_to_nodes(struct Map_info *map, struct varray *varray,
-			  struct ilist *nodes, int *nodes_to_features)
+                          struct ilist *nodes, int *nodes_to_features)
 {
     int nlines, nnodes, i;
     struct line_pnts *Points = Vect_new_line_struct();
@@ -180,35 +189,36 @@ void NetA_varray_to_nodes(struct Map_info *map, struct varray *varray,
     nlines = Vect_get_num_lines(map);
     nnodes = Vect_get_num_nodes(map);
     if (nodes_to_features)
-	for (i = 1; i <= nnodes; i++)
-	    nodes_to_features[i] = -1;
+        for (i = 1; i <= nnodes; i++)
+            nodes_to_features[i] = -1;
 
     for (i = 1; i <= nlines; i++) {
-	if (varray->c[i]) {
-	    int type = Vect_read_line(map, Points, NULL, i);
+        if (varray->c[i]) {
+            int type = Vect_read_line(map, Points, NULL, i);
 
-	    if (type == GV_POINT) {
-		int node;
+            if (type == GV_POINT) {
+                int node;
 
-		node = Vect_find_node(map, Points->x[0], Points->y[0], Points->z[0], 0, 0);
-		if (node) {
-		    Vect_list_append(nodes, node);
-		    if (nodes_to_features)
-			nodes_to_features[node] = i;
-		}
-		else
-		    G_warning(_("Point %d is not connected!"), i);
-	    }
-	    else {
-		int node1, node2;
+                node = Vect_find_node(map, Points->x[0], Points->y[0],
+                                      Points->z[0], 0, 0);
+                if (node) {
+                    Vect_list_append(nodes, node);
+                    if (nodes_to_features)
+                        nodes_to_features[node] = i;
+                }
+                else
+                    G_warning(_("Point %d is not connected!"), i);
+            }
+            else {
+                int node1, node2;
 
-		Vect_get_line_nodes(map, i, &node1, &node2);
-		Vect_list_append(nodes, node1);
-		Vect_list_append(nodes, node2);
-		if (nodes_to_features)
-		    nodes_to_features[node1] = nodes_to_features[node2] = i;
-	    }
-	}
+                Vect_get_line_nodes(map, i, &node1, &node2);
+                Vect_list_append(nodes, node1);
+                Vect_list_append(nodes, node2);
+                if (nodes_to_features)
+                    nodes_to_features[node1] = nodes_to_features[node2] = i;
+            }
+        }
     }
     Vect_destroy_line_struct(Points);
 }
@@ -227,54 +237,56 @@ void NetA_varray_to_nodes(struct Map_info *map, struct varray *varray,
    \return -1 on error
  */
 int NetA_initialise_varray(struct Map_info *In, int layer, int mask_type,
-			   char *where, char *cat, struct varray **varray)
+                           char *where, char *cat, struct varray **varray)
 {
     int n, ni;
-    
+
     if (layer < 1)
-	G_fatal_error(_("'%s' must be > 0"), "layer");
+        G_fatal_error(_("'%s' must be > 0"), "layer");
 
     n = Vect_get_num_lines(In);
     *varray = Vect_new_varray(n);
     ni = 0;
-    
+
     /* parse filter option and select appropriate lines */
     if (where) {
-	if (cat)
-	    G_warning(_("'where' and 'cats' parameters were supplied, cat will be ignored"));
-	ni = Vect_set_varray_from_db(In, layer, where, mask_type, 1, *varray);
-	if (ni == -1) {
-	    G_warning(_("Unable to load data from database"));
-	}
-	return ni;
+        if (cat)
+            G_warning(_("'where' and 'cats' parameters were supplied, cat will "
+                        "be ignored"));
+        ni = Vect_set_varray_from_db(In, layer, where, mask_type, 1, *varray);
+        if (ni == -1) {
+            G_warning(_("Unable to load data from database"));
+        }
+        return ni;
     }
     else if (cat) {
-	ni = Vect_set_varray_from_cat_string(In, layer, cat, mask_type, 1, *varray);
-	if (ni == -1) {
-	    G_warning(_("Problem loading category values"));
-	}
-	return ni;
+        ni = Vect_set_varray_from_cat_string(In, layer, cat, mask_type, 1,
+                                             *varray);
+        if (ni == -1) {
+            G_warning(_("Problem loading category values"));
+        }
+        return ni;
     }
     else { /* all features of given layer */
-	int i, cat;
-	int ltype;			/* line type */
-	struct line_cats *Cats;
+        int i, cat;
+        int ltype; /* line type */
+        struct line_cats *Cats;
 
-	Cats = Vect_new_cats_struct();
+        Cats = Vect_new_cats_struct();
 
-	for (i = 1; i <= n; i++) {
-	    ltype = Vect_read_line(In, NULL, Cats, i);
+        for (i = 1; i <= n; i++) {
+            ltype = Vect_read_line(In, NULL, Cats, i);
 
-	    if (!(ltype & mask_type))
-		continue;	/* is not specified type */
+            if (!(ltype & mask_type))
+                continue; /* is not specified type */
 
-	    if (Vect_cat_get(Cats, layer, &cat)) {
-		(*varray)->c[i] = 1;
-		ni++;
-	    }
-	}
-	Vect_destroy_cats_struct(Cats);
+            if (Vect_cat_get(Cats, layer, &cat)) {
+                (*varray)->c[i] = 1;
+                ni++;
+            }
+        }
+        Vect_destroy_cats_struct(Cats);
 
-	return ni;
+        return ni;
     }
 }

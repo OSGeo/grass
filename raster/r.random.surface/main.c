@@ -1,16 +1,15 @@
-
 /****************************************************************************
  *
  * MODULE:       r.random.surface
- * AUTHOR(S):    Charles Ehlschlaeger, Michael Goodchild, and Chih-chang Lin; 
- *                      (National Center for Geographic Information and 
+ * AUTHOR(S):    Charles Ehlschlaeger, Michael Goodchild, and Chih-chang Lin;
+ *                      (National Center for Geographic Information and
  *                      Analysis, University of California, Santa Barbara)
  *                      (original contributors)
- *               Markus Neteler <neteler itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Brad Douglas <rez touchofmadness.com>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
- *               Jachym Cepicky <jachym les-ejk.cz>, 
+ *               Markus Neteler <neteler itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Brad Douglas <rez touchofmadness.com>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Jachym Cepicky <jachym les-ejk.cz>,
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      generates a spatially dependent random surface
  * COPYRIGHT:    (C) 2000-2008 by the GRASS Development Team
@@ -58,7 +57,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("surface"));
     G_add_keyword(_("random"));
     module->description =
-	_("Generates random surface(s) with spatial dependence.");
+        _("Generates random surface(s) with spatial dependence.");
 
     Output = G_define_option();
     Output->key = "output";
@@ -74,7 +73,7 @@ int main(int argc, char **argv)
     Distance->required = NO;
     Distance->multiple = NO;
     Distance->description =
-	_("Maximum distance of spatial correlation (value >= 0.0)");
+        _("Maximum distance of spatial correlation (value >= 0.0)");
     Distance->answer = "0.0";
 
     Exponent = G_define_option();
@@ -91,15 +90,14 @@ int main(int argc, char **argv)
     Weight->multiple = NO;
     Weight->required = NO;
     Weight->description =
-	_("Distance filter remains flat before beginning exponent");
+        _("Distance filter remains flat before beginning exponent");
     Weight->answer = "0.0";
 
     SeedStuff = G_define_option();
     SeedStuff->key = "seed";
     SeedStuff->type = TYPE_INTEGER;
     SeedStuff->required = NO;
-    SeedStuff->description =
-	_("Random seed, default [random]");
+    SeedStuff->description = _("Random seed, default [random]");
 
     range_high_stuff = G_define_option();
     range_high_stuff->key = "high";
@@ -113,41 +111,42 @@ int main(int argc, char **argv)
     Uniform->description = _("Uniformly distributed cell values");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     Init();
 
     if (Uniform->answer)
-	GenNorm();
+        GenNorm();
 
     CalcSD();
 
     for (DoMap = 0; DoMap < NumMaps; DoMap++) {
-	OutFD = Rast_open_c_new(OutNames[DoMap]);
+        OutFD = Rast_open_c_new(OutNames[DoMap]);
 
-	G_message(_("Generating raster map <%s>..."), OutNames[DoMap]);
+        G_message(_("Generating raster map <%s>..."), OutNames[DoMap]);
 
-	if (Seeds[DoMap] < 0)
-	    G_srand48_auto();
-	else
-	    G_srand48(Seeds[DoMap]);
+        if (Seeds[DoMap] < 0)
+            G_srand48_auto();
+        else
+            G_srand48(Seeds[DoMap]);
 
-	MapSeed = Seed = Seeds[DoMap];
-	ZeroMapCells();
+        MapSeed = Seed = Seeds[DoMap];
+        ZeroMapCells();
 
-	for (DoFilter = 0; DoFilter < NumFilters; DoFilter++) {
-	    CopyFilter(&Filter, AllFilters[DoFilter]);
-	    G_debug(1,
-		    "Starting filter #%d, distance: %.*lf, exponent: %.*lf, flat: %.*lf",
-		    DoFilter, Digits(2.0 * Filter.MaxDist, 6),
-		    2.0 * Filter.MaxDist, Digits(1.0 / Filter.Exp, 6),
-		    1.0 / Filter.Exp, Digits(Filter.Mult, 6), Filter.Mult);
+        for (DoFilter = 0; DoFilter < NumFilters; DoFilter++) {
+            CopyFilter(&Filter, AllFilters[DoFilter]);
+            G_debug(1,
+                    "Starting filter #%d, distance: %.*lf, exponent: %.*lf, "
+                    "flat: %.*lf",
+                    DoFilter, Digits(2.0 * Filter.MaxDist, 6),
+                    2.0 * Filter.MaxDist, Digits(1.0 / Filter.Exp, 6),
+                    1.0 / Filter.Exp, Digits(Filter.Mult, 6), Filter.Mult);
 
-	    MakeBigF();
-	    CalcSurface();
-	}
+            MakeBigF();
+            CalcSurface();
+        }
 
-	SaveMap(DoMap, MapSeed);
+        SaveMap(DoMap, MapSeed);
     }
 
     G_done_msg(" ");

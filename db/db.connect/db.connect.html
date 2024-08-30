@@ -4,21 +4,20 @@
 These parameters are then taken as default values by modules so that the
 user does not need to enter the parameters each time.
 <p>
-The default database backend in GRASS GIS 7
-is <a href="grass-sqlite.html">SQLite</a>.
+The default database backend in GRASS GIS
+is <a href="grass-sqlite.html">SQLite</a> (since version 7).
 
 <h2>NOTES</h2>
 
 Values are stored in the mapset's <tt>VAR</tt> file;
 the connection is not tested for validity.
-<p>The <b>-p</b> flag will display the current connection parameters. 
+<p>The <b>-p</b> flag will display the current connection parameters.
 <p>The <b>-c</b> flag will silently check if the connection parameters have
 been set, and if not will set them to use GRASS's default values.
 (useful in scripts before you attempt to create a new database table)
 <p>To connect a vector map to a database table,
 use <em><a href="v.db.connect.html">v.db.connect</a></em> or
 <em><a href="v.db.addtable.html">v.db.addtable</a></em>.
-
 
 <h2>EXAMPLES</h2>
 
@@ -85,12 +84,12 @@ db.connect -p
 db.tables -p
 </pre></div>
 <p>See <a href="grass-mysql.html">MySQL</a> database driver for details.
-  
+
 <h3>ODBC</h3>
 
 Network storage, database tables stored in database "mydb"
 (may require the use of <em><a href=db.login.html>db.login</a></em>):
-<br> 
+<br>
 <div class="code"><pre>
 db.connect driver=odbc database=mydb
 db.login user=myname pass=secret
@@ -109,7 +108,7 @@ db.connect driver=dbf database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'
 db.tables -p
 </pre></div>
 <p>See <a href="grass-dbf.html">DBF</a> database driver for details.
-  
+
 <h2>SEE ALSO</h2>
 
 <em>
@@ -129,8 +128,3 @@ db.tables -p
 
 Main author: Radim Blazek, ITC-Irst, Trento, Italy<br>
 GRASS 7 improvements: Martin Landa, Markus Metz
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

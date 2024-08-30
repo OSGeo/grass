@@ -4,24 +4,24 @@ The module <em>t.vect.observe.strds</em> is used to observe specific
 locations in a space time raster dataset over a period of time using
 vector points.
 
-The first input is a vector map layer with vector points. The second 
-input is one or several space time raster datasets (STRDS) that should 
-be sampled over time at the vector point positions. The space time 
-raster dataset will be sampled over its whole temporal extent (from 
+The first input is a vector map layer with vector points. The second
+input is one or several space time raster datasets (STRDS) that should
+be sampled over time at the vector point positions. The space time
+raster dataset will be sampled over its whole temporal extent (from
 start to end). A column name must be specified for each input space
 time raster dataset.
 <p>
 The result is a new space time vector dataset that contains a single
 (new) vector map which links to as many time-stamped attribute tables
-as raster map layers are present in the input space time raster dataset. 
-Hence, for each time step in the space time raster dataset a new 
-attribute table is created. The GRASS GIS Temporal Framework allows 
-to time stamp attribute tables that can be linked to a single vector 
+as raster map layers are present in the input space time raster dataset.
+Hence, for each time step in the space time raster dataset a new
+attribute table is created. The GRASS GIS Temporal Framework allows
+to time stamp attribute tables that can be linked to a single vector
 map layer.
 <p>
-The module <em>v.what.rast</em> is used internally for sampling the 
-time stamped raster map layers. All sampled values of a single time 
-stamped raster map layer are written into a new time stamped attribute 
+The module <em>v.what.rast</em> is used internally for sampling the
+time stamped raster map layers. All sampled values of a single time
+stamped raster map layer are written into a new time stamped attribute
 table.
 <p>
 Use <em>t.vect.db.select</em> to print attribute values of the space
@@ -94,7 +94,7 @@ v.info precip_stations_monthly
  +----------------------------------------------------------------------------+
  | Name:            precip_stations_monthly                                   |
  | Mapset:          climate_2009_2012                                         |
- | Location:        nc_spm_temporal_workshop                                  |
+ | Project:        nc_spm_temporal_workshop                                  |
  | Database:        /grassdata                                                |
  | Title:           North Carolina 30 year precipitation normals (3D)         |
  | Map scale:       1:1                                                       |
@@ -140,8 +140,3 @@ v.info precip_stations_monthly
 <h2>AUTHOR</h2>
 
 S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

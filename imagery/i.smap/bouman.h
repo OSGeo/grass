@@ -1,11 +1,11 @@
 #include <math.h>
 #include <string.h>
 #include <grass/raster.h>
+#include <grass/imagery.h>
 
 #define LIKELIHOOD float
 
-struct files
-{
+struct files {
     int output_fd;
     int goodness_fd;
     struct Categories output_labels;
@@ -18,8 +18,7 @@ struct files
     char *isdata;
 };
 
-struct parms
-{
+struct parms {
     char *output_map;
     char *goodness_map;
     char *group;
@@ -36,7 +35,7 @@ int parse(int, char *[], struct parms *);
 int closefiles(struct parms *, struct files *);
 
 /* openfiles.c */
-int openfiles(struct parms *, struct files *);
+int openfiles(struct parms *, struct files *, struct SigSet *);
 
 /* Suboutines in alpha_max.c */
 void alpha_max(double ***, double *, int, double);
@@ -61,15 +60,12 @@ int invert(double **, int);
 #ifdef GRASS_IMAGERY_H
 int segment(struct SigSet *, struct parms *, struct files *);
 
-/* read_sig.c */
-int read_signatures(struct parms *, struct SigSet *);
-
 /* labels.c */
 int create_output_labels(struct SigSet *, struct files *);
 
 /* write_img.c */
-int write_img(unsigned char **, float **, int, int, struct SigSet *, struct parms *,
-	      struct files *);
+int write_img(unsigned char **, float **, int, int, struct SigSet *,
+              struct parms *, struct files *);
 #endif
 
 /*  Look for prototypes that use the Region structure in region.h */

@@ -1,15 +1,15 @@
 %{
 /*****************************************************************************
 *
-* MODULE:       SQL statement parser library 
-*   	    	
+* MODULE:       SQL statement parser library
+*
 * AUTHOR(S):    lex.l and yac.y were originally taken from unixODBC and
 *               probably written by Peter Harvey <pharvey@codebydesigns.com>,
 *               modifications and other code by Radim Blazek
 *
-* PURPOSE:      Parse input string containing SQL statement to 
+* PURPOSE:      Parse input string containing SQL statement to
 *               SQLPSTMT structure.
-*               SQL parser may be used by simple database drivers. 
+*               SQL parser may be used by simple database drivers.
 *
 * COPYRIGHT:    (C) 2000 by the GRASS Development Team
 *
@@ -62,7 +62,7 @@
 [Uu][Pp][Dd][Aa][Tt][Ee]	{ return UPDATE; }
 [Vv][Aa][Ll][Uu][Ee][Ss]	{ return VALUES; }
 [Ww][Hh][Ee][Rr][Ee]		{ return WHERE; }
-[Aa][Nn][Dd]			{ return AND; } 
+[Aa][Nn][Dd]			{ return AND; }
 [Cc][Rr][Ee][Aa][Tt][Ee]	{ return CREATE; }
 [Dd][Rr][Oo][Pp]		{ return DROP; }
 [Tt][Aa][Bb][Ll][Ee]		{ return TABLE; }
@@ -103,7 +103,7 @@
 "<"	|
 ">"	|
 "<="	|
-">="	|	
+">="	|
 "~" 	 	{
 			yylval.strval = (char*)strdup(yytext);
 			return COMPARISON_OPERATOR;
@@ -161,7 +161,7 @@
 			char	*Buffer, *ptra, *ptrb;
 			int 	c = input();
 			int     len;
-			
+
 			Buffer = (char*)strdup(yytext);	/* store here because we lose it when unput() */
 			unput( c ); /* just peeking - checking for a double quote... embedded quote */
 
@@ -173,10 +173,10 @@
                                 ptrb = Buffer + 1;
                                 while ( (ptra = strchr(ptrb, '\'')) != NULL ) {
                                     ptra++; ptrb = ptra;
-                                    while ( ptra[1] != 0 ) { ptra[0] = ptra[1]; ptra++; } 
+                                    while ( ptra[1] != 0 ) { ptra[0] = ptra[1]; ptra++; }
                                     ptra[0] = 0;
                                 }
-                                    
+
 				yylval.strval = (char*)strdup(Buffer+1);
 				free( Buffer );
 				return STRING;
@@ -185,9 +185,9 @@
 			{
 				free( Buffer );
 				yymore();
-			}				
+			}
 		}
-%{		
+%{
  /***************************************
   * STRINGS (unterminated)
   ***************************************/
@@ -245,8 +245,8 @@ int my_yyinput(char *buf, int max_size)
 		memcpy( buf, sqlpStmt->cur, n );
 		sqlpStmt->cur += n;
 	}
-		
-	return n;		
+
+	return n;
 }
 
 /**********************************************************************
@@ -260,7 +260,7 @@ void yyerror( const char *s )
 {
 	snprintf( sqlpStmt->errmsg, 500, "%s processing '%s'", s, yytext );
 
-#ifdef YY_CURRENT_BUFFER	
+#ifdef YY_CURRENT_BUFFER
 	yy_flush_buffer(YY_CURRENT_BUFFER);
 #endif
 
@@ -273,8 +273,7 @@ void yyerror( const char *s )
  * of this func anyway so we can avoid the link dependency.
  *
  **********************************************************************/
-int yywrap()
+int yywrap(void)
 {
         return 1;
 }
-

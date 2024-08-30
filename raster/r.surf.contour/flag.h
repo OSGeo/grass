@@ -4,7 +4,7 @@
  ** FLAG *
  ** flag_create(nrows,ncols)
  ** int nrows, ncols;
- **     opens the structure flag.  
+ **     opens the structure flag.
  **     The flag structure will be a two dimensional array of bits the
  **     size of nrows by ncols.  Will initialize flags to zero (unset).
  **
@@ -37,21 +37,22 @@
  ** April 03, 1989
  */
 #include <stdio.h>
-#define FLAG	struct _f_l_a_g_
+#define FLAG struct _f_l_a_g_
 
-FLAG {
+FLAG
+{
     int nrows, ncols, leng;
     unsigned char **array;
 };
 
-#define FLAG_UNSET(flags,row,col) \
-	(flags)->array[(row)][(col)>>3] &= ~(1<<((col) & 7))
+#define FLAG_UNSET(flags, row, col) \
+    (flags)->array[(row)][(col) >> 3] &= ~(1 << ((col) & 7))
 
-#define FLAG_SET(flags,row,col) \
-	(flags)->array[(row)][(col)>>3] |= (1<<((col) & 7))
+#define FLAG_SET(flags, row, col) \
+    (flags)->array[(row)][(col) >> 3] |= (1 << ((col) & 7))
 
-#define FLAG_GET(flags,row,col) \
-	(flags)->array[(row)][(col)>>3] & (1<<((col) & 7))
+#define FLAG_GET(flags, row, col) \
+    (flags)->array[(row)][(col) >> 3] & (1 << ((col) & 7))
 
 /* flag_clr_all.c */
 int flag_clear_all(FLAG *);

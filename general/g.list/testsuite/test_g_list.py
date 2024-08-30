@@ -21,36 +21,36 @@ class GMlistWrongParamertersTest(TestCase):
 
     def test_pt_flags(self):
         """Test that -p and -t flags are exclusive"""
-        module = SimpleModule('g.list', flags='pt', type='raster')
+        module = SimpleModule("g.list", flags="pt", type="raster")
         self.assertModuleFail(module)
         stderr = module.outputs.stderr
-        self.assertIn('-p', stderr)
-        self.assertIn('-t', stderr)
+        self.assertIn("-p", stderr)
+        self.assertIn("-t", stderr)
 
     def test_ft_flags(self):
         """Test that -f and -t flags are exclusive"""
-        module = SimpleModule('g.list', flags='ft', type='raster')
+        module = SimpleModule("g.list", flags="ft", type="raster")
         self.assertModuleFail(module)
         stderr = module.outputs.stderr
-        self.assertIn('-f', stderr)
-        self.assertIn('-t', stderr)
+        self.assertIn("-f", stderr)
+        self.assertIn("-t", stderr)
 
     def test_pf_flags(self):
         """Test that -p and -f flags are exclusive"""
-        module = SimpleModule('g.list', flags='pf', type='raster')
+        module = SimpleModule("g.list", flags="pf", type="raster")
         self.assertModuleFail(module)
         stderr = module.outputs.stderr
-        self.assertIn('-p', stderr)
-        self.assertIn('-f', stderr)
+        self.assertIn("-p", stderr)
+        self.assertIn("-f", stderr)
 
     def test_re_flags(self):
         """Test that -r and -e flags are exclusive"""
-        module = SimpleModule('g.list', flags='re', type='raster')
+        module = SimpleModule("g.list", flags="re", type="raster")
         self.assertModuleFail(module)
         stderr = module.outputs.stderr
-        self.assertIn('-r', stderr)
-        self.assertIn('-e', stderr)
+        self.assertIn("-r", stderr)
+        self.assertIn("-e", stderr)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()

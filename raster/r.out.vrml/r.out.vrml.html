@@ -12,9 +12,9 @@ currently only support VRML 1.0.
 If the extension "wrl" (world) is not present in the he
 <em>output</em> parameter, it will be added.
 
-
 <h2>WARNING</h2>
-VRML is not well suited for large geometrys which can result from even
+
+VRML is not well suited for large geometries which can result from even
 a small geographic region.  Most viewers seem to bog down with more
 than 12,000 polygons, depending on your hardware &amp; specific
 viewer.  Each grid cell results in two polygons, so a reasonable size
@@ -23,19 +23,20 @@ performance and smaller file size, leave off a color map.  Since VRML
 is ascii text, gzip works very well to significantly compress file
 size.<p>
 
-<h2>NOTE</h2>
+<h2>NOTES</h2>
+
 This is a preliminary release of "<em>r.out.vrml</em>".
 
-For further information about VRML and available viewers for various platforms, see:<p><a href="http://www.w3.org/MarkUp/VRML/">VRML Virtual Reality Modeling Language</a>
+For further information about VRML and available viewers for various
+platforms, see:<p><a href="http://www.w3.org/MarkUp/VRML/">VRML Virtual Reality Modeling Language</a>
 
+<h2>BUGS</h2>
 
-<h2>BUGS:</h2>
 Currently the region is transformed to a unit size, so real geographic
-location is lost.  Side effects when working in a lat-lon location are
+location is lost.  Side effects when working in a lat-lon project are
 that besides general distortion due to projection, a very small
 exaggeration factor (on order of .001) must be used to compensate for
 vertical units expected to be the same as map units.
-
 
 <h2>TODO</h2>
 
@@ -49,18 +50,14 @@ vector maps and using the new sites format available in floating
 point GRASS to embed WWW links into site objects. It will also be
 upgraded to support VRML 2.0 and will allow entering multiple preset
 "views" using the existing GRASS 3d_view file format.<p>
-Other possible additions: 
+Other possible additions:
 <ul>
-    <li> Allow animation of elevation, color, or sites based on 
+    <li> Allow animation of elevation, color, or sites based on
       user interaction.
     <li> Degradation of the raster to produce TINs for improved
       performance.
 </ul>
 
 <h2>AUTHOR</h2>
-  Bill Brown, US Army Construction Engineering Research Laboratory
 
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+Bill Brown, US Army Construction Engineering Research Laboratory

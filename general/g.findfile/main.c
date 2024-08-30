@@ -1,10 +1,9 @@
-
 /****************************************************************************
  *
  * MODULE:       g.findfile
  * AUTHOR(S):    Michael Shapiro CERL (original contributor)
  *               Markus Neteler <neteler itc.it>,
- *               Bernhard Reiter <bernhard intevation.de>, 
+ *               Bernhard Reiter <bernhard intevation.de>,
  *               Glynn Clements <glynn gclements.plus.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
  *               Martin landa <landa.martin gmail.com>
@@ -16,6 +15,7 @@
  *               comes with GRASS for details.
  *
  *****************************************************************************/
+
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -33,14 +33,14 @@ int main(int argc, char *argv[])
     struct Option *mapset_opt;
     struct Option *file_opt;
     struct Flag *n_flag, *l_flag;
+    size_t len;
 
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("map management"));
     G_add_keyword(_("scripts"));
-    module->description =
-	_("Searches for GRASS data base files "
-	  "and sets variables for the shell.");
+    module->description = _("Searches for GRASS data base files "
+                            "and sets variables for the shell.");
 
     G_gisinit(argv[0]);
 
@@ -75,58 +75,64 @@ int main(int argc, char *argv[])
     l_flag->suppress_required = YES;
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     if (l_flag->answer) {
-	list_elements();
-	return EXIT_SUCCESS;
+        list_elements();
+        return EXIT_SUCCESS;
     }
 
     search_mapset = mapset_opt->answer;
     if (!search_mapset) {
-	search_mapset = G_store("");
+        search_mapset = G_store("");
     }
     if (strcmp(".", search_mapset) == 0)
-	search_mapset = G_mapset();
-    
-    if (mapset_opt->answer && strlen(mapset_opt->answer) > 0) {
-	char **map_mapset = G_tokenize(file_opt->answer, "@");
+        search_mapset = G_mapset();
 
-	if (G_number_of_tokens(map_mapset) > 1) {
-	    if (strcmp(map_mapset[1], mapset_opt->answer))
-		G_fatal_error(_("Parameter 'file' contains reference to <%s> mapset, "
-				"but mapset parameter <%s> does not correspond"),
-			      map_mapset[1], mapset_opt->answer);
-	    else
-		strcpy(name, file_opt->answer);
-	}
-	if (G_number_of_tokens(map_mapset) == 1)
-	    strcpy(name, file_opt->answer);
-	G_free_tokens(map_mapset);
+    if (mapset_opt->answer && strlen(mapset_opt->answer) > 0) {
+        char **map_mapset = G_tokenize(file_opt->answer, "@");
+
+        if (G_number_of_tokens(map_mapset) > 1) {
+            if (strcmp(map_mapset[1], mapset_opt->answer))
+                G_fatal_error(
+                    _("Parameter 'file' contains reference to <%s> mapset, "
+                      "but mapset parameter <%s> does not correspond"),
+                    map_mapset[1], mapset_opt->answer);
+            else
+                strcpy(name, file_opt->answer);
+        }
+        if (G_number_of_tokens(map_mapset) == 1)
+            strcpy(name, file_opt->answer);
+        G_free_tokens(map_mapset);
     }
-    else
-	strcpy(name, file_opt->answer);
+    else {
+        len = G_strlcpy(name, file_opt->answer, sizeof(name));
+        if (len >= sizeof(name)) {
+            G_fatal_error(_("Name <%s> is too long"), file_opt->answer);
+        }
+    }
 
     mapset = G_find_file2(elem_opt->answer, name, search_mapset);
     if (mapset) {
-	char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
-	const char *qchar = n_flag->answer ? "" : "'";
-	const char *qual = G_fully_qualified_name(name, mapset);
-	G_unqualified_name(name, mapset, xname, xmapset);
-	G_file_name(file, elem_opt->answer, name, mapset);
-	fprintf(stdout, "name=%s%s%s\n", qchar, xname, qchar);
-	fprintf(stdout, "mapset=%s%s%s\n", qchar, xmapset, qchar);
-	fprintf(stdout, "fullname=%s%s%s\n", qchar, qual, qchar);
-	fprintf(stdout, "file=%s%s%s\n", qchar, file, qchar);
+        char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+        const char *qchar = n_flag->answer ? "" : "'";
+        const char *qual = G_fully_qualified_name(name, mapset);
 
-	return EXIT_SUCCESS;
+        G_unqualified_name(name, mapset, xname, xmapset);
+        G_file_name(file, elem_opt->answer, name, mapset);
+        fprintf(stdout, "name=%s%s%s\n", qchar, xname, qchar);
+        fprintf(stdout, "mapset=%s%s%s\n", qchar, xmapset, qchar);
+        fprintf(stdout, "fullname=%s%s%s\n", qchar, qual, qchar);
+        fprintf(stdout, "file=%s%s%s\n", qchar, file, qchar);
+
+        return EXIT_SUCCESS;
     }
     else {
-	fprintf(stdout, "name=\n");
-	fprintf(stdout, "mapset=\n");
-	fprintf(stdout, "fullname=\n");
-	fprintf(stdout, "file=\n");
+        fprintf(stdout, "name=\n");
+        fprintf(stdout, "mapset=\n");
+        fprintf(stdout, "fullname=\n");
+        fprintf(stdout, "file=\n");
     }
-    
+
     return EXIT_FAILURE;
 }

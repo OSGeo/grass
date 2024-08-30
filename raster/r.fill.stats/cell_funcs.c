@@ -1,4 +1,3 @@
-
 /***************************************************************************
  *
  * MODULE:    r.fill.stats
@@ -27,7 +26,6 @@
 
 #include "cell_funcs.h"
 
-
 RASTER_MAP_TYPE IN_TYPE;
 RASTER_MAP_TYPE OUT_TYPE;
 
@@ -37,10 +35,10 @@ unsigned char CELL_OUT_SIZE;
 unsigned char CELL_OUT_PTR_SIZE;
 unsigned char CELL_ERR_SIZE;
 
-void (*WRITE_CELL_VAL) (void *, void *);
-void (*WRITE_DOUBLE_VAL) (void *, double);
-int (*IS_NULL) (void *);
-void (*SET_NULL) (void *, unsigned long);
+void (*WRITE_CELL_VAL)(void *, void *);
+void (*WRITE_DOUBLE_VAL)(void *, double);
+int (*IS_NULL)(void *);
+void (*SET_NULL)(void *, unsigned long);
 
 /*
  * Write cell values.
@@ -63,65 +61,60 @@ void write_cell_value_d(void *cell_output, void *cell_input)
                      OUT_TYPE);
 }
 
-
 /*
  * Write a double value into a cell (truncates for CELL type output).
  */
 
 void write_double_value_c(void *cell, double val)
 {
-    Rast_set_c_value(cell, (CELL) val, OUT_TYPE);
+    Rast_set_c_value(cell, (CELL)val, OUT_TYPE);
 }
 
 void write_double_value_f(void *cell, double val)
 {
-    Rast_set_f_value(cell, (FCELL) val, OUT_TYPE);
+    Rast_set_f_value(cell, (FCELL)val, OUT_TYPE);
 }
 
 void write_double_value_d(void *cell, double val)
 {
-    Rast_set_d_value(cell, (DCELL) val, OUT_TYPE);
+    Rast_set_d_value(cell, (DCELL)val, OUT_TYPE);
 }
-
-
 
 /*
  * Check for "no data".
  */
 int is_null_value_c(void *cell)
 {
-    return (Rast_is_c_null_value((CELL *) cell));
+    return (Rast_is_c_null_value((CELL *)cell));
 }
 
 int is_null_value_f(void *cell)
 {
-    return (Rast_is_f_null_value((FCELL *) cell));
+    return (Rast_is_f_null_value((FCELL *)cell));
 }
 
 int is_null_value_d(void *cell)
 {
-    return (Rast_is_d_null_value((DCELL *) cell));
+    return (Rast_is_d_null_value((DCELL *)cell));
 }
-
 
 /*
  * Set consecutive cells to "no data".
  */
 void set_null_c(void *cells, unsigned long count)
 {
-    Rast_set_c_null_value((CELL *) cells, count);
+    Rast_set_c_null_value((CELL *)cells, count);
 }
 
 void set_null_f(void *cells, unsigned long count)
 {
-    Rast_set_f_null_value((FCELL *) cells, count);
+    Rast_set_f_null_value((FCELL *)cells, count);
 }
 
 void set_null_d(void *cells, unsigned long count)
 {
-    Rast_set_d_null_value((DCELL *) cells, count);
+    Rast_set_d_null_value((DCELL *)cells, count);
 }
-
 
 /*
  * Call this init function once it is clear which input
@@ -129,7 +122,7 @@ void set_null_d(void *cells, unsigned long count)
  * I.e. right after IN_TYPE and OUT_TYPE have been set
  * to valid values;
  */
-void init_cell_funcs()
+void init_cell_funcs(void)
 {
 
     CELL_ERR_SIZE = sizeof(FCELL);

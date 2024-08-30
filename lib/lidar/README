@@ -12,7 +12,7 @@ r.resamp.bspline
 
 when modifying the lidar library, the above modules might need adjustment
 
-All the above modules use similar routines and are currently in sync. 
+All the above modules use similar routines and are currently in sync.
 If a bug is detected in one of the modules, the bug might be
 present in the other modules as well, please check these as well
 

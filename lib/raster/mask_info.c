@@ -40,14 +40,14 @@ char *Rast_mask_info(void)
 
     switch (Rast__mask_info(name, mapset)) {
     case 1:
-	sprintf(text, _("<%s> in mapset <%s>"), name, mapset);
-	break;
+        sprintf(text, _("<%s> in mapset <%s>"), name, mapset);
+        break;
     case -1:
-	strcpy(text, _("none"));
-	break;
+        strcpy(text, _("none"));
+        break;
     default:
-	strcpy(text, _("not known"));
-	break;
+        strcpy(text, _("not known"));
+        break;
     }
 
     return G_store(text);
@@ -61,11 +61,11 @@ int Rast__mask_info(char *name, char *mapset)
     strcpy(mapset, G_mapset());
 
     if (!G_find_raster(name, mapset))
-	return -1;
+        return -1;
 
     if (Rast_is_reclass(name, mapset, rname, rmapset) > 0) {
-	strcpy(name, rname);
-	strcpy(mapset, rmapset);
+        strcpy(name, rname);
+        strcpy(mapset, rmapset);
     }
 
     return 1;

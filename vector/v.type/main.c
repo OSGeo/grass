@@ -1,12 +1,12 @@
 /***************************************************************
  *
  * MODULE:       v.type
- * 
+ *
  * AUTHOR(S):    Radim Blazek
- *               OGR support by Martin Landa <landa.martin gmail.com>               
+ *               OGR support by Martin Landa <landa.martin gmail.com>
  *
  * PURPOSE:      Feature type manipulations
- *               
+ *
  * COPYRIGHT:    (C) 2001-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
-    
+
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
 
     from_opt = G_define_standard_option(G_OPT_V_TYPE);
@@ -64,63 +64,60 @@ int main(int argc, char *argv[])
     to_opt->multiple = NO;
     to_opt->description = _("Feature type to convert to");
     to_opt->answer = "boundary";
-    
+
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     Vect_check_input_output_name(in_opt->answer, out_opt->answer, G_FATAL_EXIT);
-			    
+
     switch (from_opt->answer[0]) {
     case 'p':
-	from_type = GV_POINT;
-	break;
+        from_type = GV_POINT;
+        break;
     case 'l':
-	from_type = GV_LINE;
-	break;
+        from_type = GV_LINE;
+        break;
     case 'b':
-	from_type = GV_BOUNDARY;
-	break;
+        from_type = GV_BOUNDARY;
+        break;
     case 'c':
-	from_type = GV_CENTROID;
-	break;
+        from_type = GV_CENTROID;
+        break;
     case 'f':
-	from_type = GV_FACE;
-	break;
+        from_type = GV_FACE;
+        break;
     case 'k':
-	from_type = GV_KERNEL;
-	break;
+        from_type = GV_KERNEL;
+        break;
     }
     switch (to_opt->answer[0]) {
     case 'p':
-	to_type = GV_POINT;
-	break;
+        to_type = GV_POINT;
+        break;
     case 'l':
-	to_type = GV_LINE;
-	break;
+        to_type = GV_LINE;
+        break;
     case 'b':
-	to_type = GV_BOUNDARY;
-	break;
+        to_type = GV_BOUNDARY;
+        break;
     case 'c':
-	to_type = GV_CENTROID;
-	break;
+        to_type = GV_CENTROID;
+        break;
     case 'f':
-	to_type = GV_FACE;
-	break;
+        to_type = GV_FACE;
+        break;
     case 'k':
-	to_type = GV_KERNEL;
-	break;
+        to_type = GV_KERNEL;
+        break;
     }
     /* check type compatibility */
     if (((from_type & (GV_POINT | GV_CENTROID | GV_KERNEL)) &&
-	 (to_type & (GV_LINE | GV_BOUNDARY | GV_FACE))
-	) || ((from_type & (GV_LINE | GV_BOUNDARY | GV_FACE)) &&
-	      (to_type & (GV_POINT | GV_CENTROID | GV_KERNEL))
-	)
-	)
-	G_fatal_error(_("Incompatible types"));
+         (to_type & (GV_LINE | GV_BOUNDARY | GV_FACE))) ||
+        ((from_type & (GV_LINE | GV_BOUNDARY | GV_FACE)) &&
+         (to_type & (GV_POINT | GV_CENTROID | GV_KERNEL))))
+        G_fatal_error(_("Incompatible types"));
 
-    Vect_check_input_output_name(in_opt->answer, out_opt->answer,
-				 G_FATAL_EXIT);
+    Vect_check_input_output_name(in_opt->answer, out_opt->answer, G_FATAL_EXIT);
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
@@ -128,13 +125,13 @@ int main(int argc, char *argv[])
     /* open input vector */
     Vect_set_open_level(1);
     if (Vect_open_old2(&In, in_opt->answer, "", field_opt->answer) < 0)
-	G_fatal_error(_("Unable to open vector map <%s>"), in_opt->answer);
+        G_fatal_error(_("Unable to open vector map <%s>"), in_opt->answer);
 
     field = Vect_get_field_number(&In, field_opt->answer);
-    
+
     if (0 > Vect_open_new(&Out, out_opt->answer, Vect_is_3d(&In))) {
-	Vect_close(&In);
-	exit(EXIT_FAILURE);
+        Vect_close(&In);
+        exit(EXIT_FAILURE);
     }
 
     Vect_copy_head_data(&In, &Out);
@@ -142,13 +139,13 @@ int main(int argc, char *argv[])
     Vect_hist_command(&Out);
 
     while ((type = Vect_read_next_line(&In, Points, Cats)) > 0) {
-	if (type == from_type)
-	    type = to_type;
+        if (type == from_type)
+            type = to_type;
 
-	if (field != -1 && !Vect_cat_get(Cats, field, NULL))
-	    continue;
+        if (field != -1 && !Vect_cat_get(Cats, field, NULL))
+            continue;
 
-	Vect_write_line(&Out, type, Points, Cats);
+        Vect_write_line(&Out, type, Points, Cats);
     }
 
     if (Vect_copy_tables(&In, &Out, 0))

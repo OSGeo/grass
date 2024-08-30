@@ -34,7 +34,7 @@ const char *G_home(void)
     const char *home = G__home();
 
     if (home)
-	return home;
+        return home;
 
     G_fatal_error(_("Unable to determine user's home directory"));
 
@@ -56,24 +56,24 @@ const char *G__home(void)
     static const char *home = 0;
 
     if (G_is_initialized(&initialized))
-	return home;
+        return home;
 
 #ifdef __MINGW32__
     {
-	char buf[GPATH_MAX];
+        char buf[GPATH_MAX];
 
-	/* TODO: we should probably check if the dir exists */
-	home = getenv("USERPROFILE");
+        /* TODO: we should probably check if the dir exists */
+        home = getenv("USERPROFILE");
 
-	if (!home) {
-	    sprintf(buf, "%s%s", getenv("HOMEDRIVE"), getenv("HOMEPATH"));
+        if (!home) {
+            sprintf(buf, "%s%s", getenv("HOMEDRIVE"), getenv("HOMEPATH"));
 
-	    if (strlen(buf) >= 0)
-		home = G_store(buf);
-	}
+            if (strlen(buf) >= 0)
+                home = G_store(buf);
+        }
 
-	if (!home)
-	    home = getenv("HOME");
+        if (!home)
+            home = getenv("HOME");
     }
 #else
     home = getenv("HOME");
@@ -100,24 +100,30 @@ const char *G_config_path(void)
     static int initialized_config;
     static const char *config_path = 0;
     char buf[GPATH_MAX];
-    
+    static const char *config_dir = NULL;
+
     if (G_is_initialized(&initialized_config))
         return config_path;
-    
+
+    config_dir = getenv("GRASS_CONFIG_DIR");
+    if (!config_dir)
 #ifdef __MINGW32__
-    sprintf(buf, "%s%c%s", getenv("APPDATA"), HOST_DIRSEP, CONFIG_DIR);
-#else    
-    sprintf(buf, "%s%c%s", G_home(), HOST_DIRSEP, CONFIG_DIR);
+        config_dir = getenv("APPDATA");
+#else
+        config_dir = G_home();
 #endif
+
+    snprintf(buf, GPATH_MAX, "%s%c%s", config_dir, HOST_DIRSEP, CONFIG_DIR);
     config_path = G_store(buf);
 
 #if 0
     /* create it if it doesn't exist */
 #include <errno.h>
     int ret;
+
     ret = G_mkdir(rcpath);
     if (ret == -1 && errno != EEXIST)
-	G_fatal_error(_("Failed to create directory [%s]"), rcpath);
+        G_fatal_error(_("Failed to create directory [%s]"), rcpath);
 #endif
 
     G_initialize_done(&initialized_config);

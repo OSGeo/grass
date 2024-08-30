@@ -20,7 +20,6 @@ its documentation apply also for <em>r3.in.lidar</em>.
 100% red
 -->
 
-
 <h2>NOTES</h2>
 
 <ul>
@@ -30,8 +29,7 @@ its documentation apply also for <em>r3.in.lidar</em>.
         Please report issues on the mailing list or in the bug tracker.
     <li>
         No reprojection is performed, you need to reproject ahead or
-        use GRASS Location which has the right coordinate system
-        which fits with the data.
+        use a GRASS project with the coordinate system that matches that of the data.
     <li>
         Some temporary maps are created but not cleaned up. Use of
         <b>--overwrite</b> might be necessary even when not desired.
@@ -41,9 +39,7 @@ its documentation apply also for <em>r3.in.lidar</em>.
         when the intensity is not present but the outputs were requested.
 </ul>
 
-
 <h2>EXAMPLES</h2>
-
 
 <h3>Basic import of the data</h3>
 
@@ -62,7 +58,6 @@ r3.in.lidar input=points.las n=points_n sum=points_sum \
     mean=points_mean proportional_n=points_n_prop \
     proportional_sum=points_sum_prop
 </pre></div>
-
 
 <h3>Point density vertical structure reduced to the terrain</h3>
 
@@ -87,7 +82,6 @@ r3.in.lidar input=points.las n=points_n sum=points_sum \
     proportional_sum=points_sum_prop \
     base_raster=ground
 </pre></div>
-
 
 <h3>Complete workflow for vertical structure analysis</h3>
 <!-- TODO: needs review and pictures -->
@@ -120,7 +114,7 @@ computational region extent and resolution:
 g.region raster=points_n -p3
 </pre></div>
 
-<tt>class_filter=2</tt> is used to limit 
+<tt>class_filter=2</tt> is used to limit
 
 <div class="code"><pre>
 r.in.lidar input=points.las output=ground_mean method=mean class_filter=2
@@ -172,20 +166,6 @@ cell (voxel):
 r3.in.lidar input=points.las n=n class_filter=3,4,5 base_raster=ground -d
 </pre></div>
 
-
-<h2>SEE ALSO</h2>
-
-<em>
-<a href="r3.in.xyz.html">r3.in.xyz</a>,
-<a href="r.in.lidar.html">r.in.lidar</a>,
-<a href="v.in.lidar.html">v.in.lidar</a>,
-<a href="r.to.rast3.html">r.to.rast3</a>,
-<a href="r3.to.rast.html">r3.to.rast</a>,
-<a href="r3.mapcalc.html">r3.mapcalc</a>,
-<a href="g.region.html">g.region</a>
-</em>
-
-
 <h2>REFERENCES</h2>
 
 <ul>
@@ -204,11 +184,18 @@ ASPRS LAS format</a>
 <a href="http://test.liblas.org/doxygen/liblas_8h.htm">LAS library C API</a> documentation
 </ul>
 
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r3.in.xyz.html">r3.in.xyz</a>,
+<a href="r.in.lidar.html">r.in.lidar</a>,
+<a href="v.in.lidar.html">v.in.lidar</a>,
+<a href="r.to.rast3.html">r.to.rast3</a>,
+<a href="r3.to.rast.html">r3.to.rast</a>,
+<a href="r3.mapcalc.html">r3.mapcalc</a>,
+<a href="g.region.html">g.region</a>
+</em>
+
 <h2>AUTHOR</h2>
 
 Vaclav Petras, <a href="https://geospatial.ncsu.edu/geoforall/">NCSU GeoForAll Lab</a>
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

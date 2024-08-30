@@ -15,17 +15,17 @@ int read_rgb(char *key, char *data)
     int i;
 
     if (sscanf(data, "%s %s %s", names[0], names[1], names[2]) != 3) {
-	error(key, data, "illegal request (rgb)");
-	return 0;
+        error(key, data, "illegal request (rgb)");
+        return 0;
     }
 
     PS.do_raster = 0;
     PS.do_colortable = 0;
     if (PS.cell_fd >= 0) {
-	Rast_close(PS.cell_fd);
-	G_free(PS.cell_name);
-	Rast_free_colors(&PS.colors);
-	PS.cell_fd = -1;
+        Rast_close(PS.cell_fd);
+        G_free(PS.cell_name);
+        Rast_free_colors(&PS.colors);
+        PS.cell_fd = -1;
     }
 
     /* initialize group structure (for compatibility with PS_raster_plot()) */
@@ -43,36 +43,37 @@ int read_rgb(char *key, char *data)
     /* get file names for R, G, & B */
 
     for (i = 0; i < 3; i++) {
-	const char *mapset, *name;
-	char *p;
+        const char *mapset, *name;
+        char *p;
 
-	name = names[i];
+        name = names[i];
 
-	p = strchr(name, '@');
-	if (p) {
-	    *p = '\0';
-	    mapset = p + 1;
-	}
-	else {
-	    mapset = G_find_file2("cell", name, "");
-	    if (!mapset) {
-		error(name, "", "not found");
-		return 0;
-	    }
-	}
+        p = strchr(name, '@');
+        if (p) {
+            *p = '\0';
+            mapset = p + 1;
+        }
+        else {
+            mapset = G_find_file2("cell", name, "");
+            if (!mapset) {
+                error(name, "", "not found");
+                return 0;
+            }
+        }
 
-	grp.name[i] = G_store(name);
-	grp.mapset[i] = G_store(mapset);
+        grp.name[i] = G_store(name);
+        grp.mapset[i] = G_store(mapset);
 
-	/* read in colors */
-	if (Rast_read_colors(grp.name[i], grp.mapset[i], &(grp.colors[i])) == -1) {
-	    sprintf(fullname, "%s in %s", grp.name[i], grp.mapset[i]);
-	    error(fullname, "", "can't read color table");
-	    return 0;
-	}
+        /* read in colors */
+        if (Rast_read_colors(grp.name[i], grp.mapset[i], &(grp.colors[i])) ==
+            -1) {
+            sprintf(fullname, "%s in %s", grp.name[i], grp.mapset[i]);
+            error(fullname, "", "can't read color table");
+            return 0;
+        }
 
-	/* open raster maps for reading */
-	grp.fd[i] = Rast_open_old(grp.name[i], grp.mapset[i]);
+        /* open raster maps for reading */
+        grp.fd[i] = Rast_open_old(grp.name[i], grp.mapset[i]);
     }
 
     strcpy(PS.celltitle, grp.group_name);

@@ -25,14 +25,14 @@ int main(int argc, char *argv[])
     any = 0;
 
     for (i = 1; i < argc; i++)
-	if (strcmp(argv[i], "-n") == 0)
-	    newline = 0;
-	else if (strcmp(argv[i], "-e") == 0)
-	    stream = stderr;
-	else
-	    fprintf(stream, "%s%s", any++ ? " " : "", argv[i]);
+        if (strcmp(argv[i], "-n") == 0)
+            newline = 0;
+        else if (strcmp(argv[i], "-e") == 0)
+            stream = stderr;
+        else
+            fprintf(stream, "%s%s", any++ ? " " : "", argv[i]);
     if (any && newline)
-	fprintf(stream, "\n");
+        fprintf(stream, "\n");
 
     exit(0);
 }

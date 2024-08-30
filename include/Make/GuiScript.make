@@ -29,12 +29,12 @@ endif
 
 $(HTMLDIR)/g.gui.%.html: g.gui.%.html g.gui.%.tmp.html | $(HTMLDIR)
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) MODULE_TOPDIR=$(MODULE_TOPDIR) \
-        $(PYTHON) $(GISBASE)/tools/mkhtml.py g.gui.$* $(GRASS_VERSION_DATE) > $@
+        $(PYTHON) $(GISBASE)/utils/mkhtml.py g.gui.$* $(GRASS_VERSION_DATE) > $@
 
 $(HTMLDIR)/wxGUI.%.html: g.gui.%.html | $(HTMLDIR)
 	-rm -f g.gui.$*.tmp.html
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) MODULE_TOPDIR=$(MODULE_TOPDIR) \
-        $(PYTHON) $(GISBASE)/tools/mkhtml.py g.gui.$* $(GRASS_VERSION_DATE) > $@
+        $(PYTHON) $(GISBASE)/utils/mkhtml.py g.gui.$* $(GRASS_VERSION_DATE) > $@
 
 g.gui.%.tmp.html: $(SCRIPTDIR)/g.gui.%
 	$(call htmldesc,$<,$@)

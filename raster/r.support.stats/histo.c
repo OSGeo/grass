@@ -1,5 +1,4 @@
-/*
- **********************************************************************
+/***********************************************************************
  *
  * MODULE:        r.support.stats
  *
@@ -19,8 +18,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-
-/* 
+/*
  * do_histogram() - Creates histogram for CELL
  *
  * RETURN: 0 on success / 1 on failure
@@ -47,23 +45,23 @@ int do_histogram(const char *name)
 
     /* Update statistics for each row */
     for (row = 0; row < nrows; row++) {
-	G_percent(row, nrows, 2);
+        G_percent(row, nrows, 2);
 
-	Rast_get_c_row_nomask(fd, cell, row);
+        Rast_get_c_row_nomask(fd, cell, row);
 
-	Rast_update_cell_stats(cell, ncols, &statf);
+        Rast_update_cell_stats(cell, ncols, &statf);
     }
 
     /* Write histogram if it made it through the loop */
     if (row == nrows)
-	Rast_write_histogram_cs(name, &statf);
+        Rast_write_histogram_cs(name, &statf);
 
     Rast_free_cell_stats(&statf);
     Rast_close(fd);
     G_free(cell);
 
     if (row == nrows)
-	return 0;
+        return 0;
 
     return 1;
 }

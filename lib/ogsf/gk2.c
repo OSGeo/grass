@@ -3,12 +3,12 @@
 
    \brief OGSF library - setting and manipulating keyframes animation
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -37,7 +37,7 @@ static int Interpmode = KF_SPLINE;
 static int Fmode = 0;
 
 /* next & prior already initialized to NULL */
-static int _add_key(Keylist * newk, int force_replace, float precis)
+static int _add_key(Keylist *newk, int force_replace, float precis)
 {
     Keylist *k, *tempk, *prev;
     int found;
@@ -47,82 +47,82 @@ static int _add_key(Keylist * newk, int force_replace, float precis)
 
     /* if(Viewsteps) precis = 0.5/Viewsteps; */
     for (k = Keys; k; k = k->next) {
-	if (k->pos >= newk->pos - precis && k->pos <= newk->pos + precis) {
-	    if (force_replace) {
+        if (k->pos >= newk->pos - precis && k->pos <= newk->pos + precis) {
+            if (force_replace) {
 
-		if (k->prior) {
-		    k->prior->next = newk;
-		    newk->prior = prev;
-		}
-		else {
-		    Keys = newk;
-		}
+                if (k->prior) {
+                    k->prior->next = newk;
+                    newk->prior = prev;
+                }
+                else {
+                    Keys = newk;
+                }
 
-		newk->next = k->next;
-		newk->prior = k->prior;
-		tempk = k;
-		k = newk;
-		free(tempk);
-	    }
-	    else {
-		free(newk);
-	    }
+                newk->next = k->next;
+                newk->prior = k->prior;
+                tempk = k;
+                k = newk;
+                free(tempk);
+            }
+            else {
+                free(newk);
+            }
 
-	    return (-1);
-	}
+            return (-1);
+        }
     }
 
     if (Keys) {
-	if (newk->pos < Keys->pos) {
-	    /* new will be first */
-	    newk->next = Keys;
-	    Keys->prior = newk;
-	    Keys = newk;
-	}
-	else {
-	    prev = k = Keys;
-	    while (k && !found) {
-		if (k->pos > newk->pos) {
-		    prev->next = newk;
-		    newk->next = k;
-		    newk->prior = prev;
-		    k->prior = newk;
-		    found = 1;
-		}
+        if (newk->pos < Keys->pos) {
+            /* new will be first */
+            newk->next = Keys;
+            Keys->prior = newk;
+            Keys = newk;
+        }
+        else {
+            prev = k = Keys;
+            while (k && !found) {
+                if (k->pos > newk->pos) {
+                    prev->next = newk;
+                    newk->next = k;
+                    newk->prior = prev;
+                    k->prior = newk;
+                    found = 1;
+                }
 
-		prev = k;
-		k = k->next;
-	    }
-	    if (!found) {
-		Keytail = prev->next = newk;
-		newk->prior = prev;
-	    }
-	}
+                prev = k;
+                k = k->next;
+            }
+            if (!found) {
+                Keytail = prev->next = newk;
+                newk->prior = prev;
+            }
+        }
     }
     else {
-	Keys = Keytail = newk;
+        Keys = Keytail = newk;
     }
 
     ++Numkeys;
     return (1);
 }
 
-static void _remove_key(Keylist * k)
+static void _remove_key(Keylist *k)
 {
     if (k->prior) {
-	k->prior->next = k->next;
-	if (k->next) {
-	    k->next->prior = k->prior;
-	}
-	else {
-	    Keytail = k->prior;
-	}
+        k->prior->next = k->next;
+        if (k->next) {
+            k->next->prior = k->prior;
+        }
+        else {
+            Keytail = k->prior;
+        }
     }
     else {
-	Keys = k->next;
-	if (k->next) {
-	    k->next->prior = NULL;
-	}
+        Keys = k->next;
+        if (k->next) {
+            k->next->prior = NULL;
+        }
     }
     k->next = k->prior = NULL;
 
@@ -130,7 +130,7 @@ static void _remove_key(Keylist * k)
 }
 
 /*!
-   \brief Set interpolation mode 
+   \brief Set interpolation mode
 
    \param mode interpolation mode (KF_LINEAR or KF_SPLINE)
 
@@ -140,15 +140,15 @@ static void _remove_key(Keylist * k)
 int GK_set_interpmode(int mode)
 {
     if (KF_LEGAL_MODE(mode)) {
-	Interpmode = mode;
-	return (1);
+        Interpmode = mode;
+        return (1);
     }
 
     return (-1);
 }
 
 /*!
-   \brief Set value for tension when interpmode is KF_SPLINE. 
+   \brief Set value for tension when interpmode is KF_SPLINE.
 
    \param tens value tens should be between 0.0; 1.0.
  */
@@ -158,15 +158,15 @@ void GK_set_tension(float tens)
 
     /* for now */
     if (Views) {
-	GK_update_frames();
-	GS_set_draw(GSD_BACK);
-	GS_ready_draw();
-	GS_clear(GS_background_color());
-	GS_alldraw_wire();
+        GK_update_frames();
+        GS_set_draw(GSD_BACK);
+        GS_ready_draw();
+        GS_clear(GS_background_color());
+        GS_alldraw_wire();
 
-	gk_draw_path(Views, Viewsteps, Keys);
+        gk_draw_path(Views, Viewsteps, Keys);
 
-	GS_done_draw();
+        GS_done_draw();
     }
 
     return;
@@ -195,7 +195,7 @@ void GK_showtension_stop(void)
 void GK_update_tension(void)
 {
     if (Views) {
-	GK_update_frames();
+        GK_update_frames();
     }
 
     return;
@@ -213,25 +213,27 @@ void GK_print_keys(const char *name)
     int cnt = 1;
 
     if (NULL == (fp = fopen(name, "w"))) {
-	G_fatal_error(_("Unable to open file <%s> for writing"), name);
+        G_fatal_error(_("Unable to open file <%s> for writing"), name);
     }
     /* write a default frame rate of 30 at top of file */
     fprintf(fp, "30 \n");
 
     for (k = Keys; k; k = k->next) {
 
-	fprintf(fp,
-		"{%f {{FromX %f} {FromY %f} {FromZ %f} {DirX %f} {DirY %f} {DirZ %f} {FOV %f} {TWIST %f} {cplane-0 {{pos_x 0.000000} {pos_y 0.000000} {pos_z 0.000000} {blend_type OFF} {rot 0.000000} {tilt 0.000000}}}} keyanimtag%d 0} ",
-		k->pos, k->fields[KF_FROMX], k->fields[KF_FROMY],
-		k->fields[KF_FROMZ], k->fields[KF_DIRX], k->fields[KF_DIRY],
-		k->fields[KF_DIRZ], k->fields[KF_FOV] / 10.,
-		k->fields[KF_TWIST], cnt);
-	cnt++;
+        fprintf(fp,
+                "{%f {{FromX %f} {FromY %f} {FromZ %f} {DirX %f} {DirY %f} "
+                "{DirZ %f} {FOV %f} {TWIST %f} {cplane-0 {{pos_x 0.000000} "
+                "{pos_y 0.000000} {pos_z 0.000000} {blend_type OFF} {rot "
+                "0.000000} {tilt 0.000000}}}} keyanimtag%d 0} ",
+                k->pos, k->fields[KF_FROMX], k->fields[KF_FROMY],
+                k->fields[KF_FROMZ], k->fields[KF_DIRX], k->fields[KF_DIRY],
+                k->fields[KF_DIRZ], k->fields[KF_FOV] / 10.,
+                k->fields[KF_TWIST], cnt);
+        cnt++;
     }
 
     fclose(fp);
     return;
-
 }
 
 /*!
@@ -246,44 +248,44 @@ void GK_update_frames(void)
     int loop = 0;
 
     if (Keys) {
-	if (Numkeys > 1) {
-	    k = Keytail;
-	    Keyendpos = k->pos;
+        if (Numkeys > 1) {
+            k = Keytail;
+            Keyendpos = k->pos;
 
-	    if (k->fields[KF_FROMX] == Keys->fields[KF_FROMX] &&
-		k->fields[KF_FROMY] == Keys->fields[KF_FROMY] &&
-		k->fields[KF_FROMZ] == Keys->fields[KF_FROMZ]) {
-		loop = 1;
-	    }
-	}
+            if (k->fields[KF_FROMX] == Keys->fields[KF_FROMX] &&
+                k->fields[KF_FROMY] == Keys->fields[KF_FROMY] &&
+                k->fields[KF_FROMZ] == Keys->fields[KF_FROMZ]) {
+                loop = 1;
+            }
+        }
 
-	Keystartpos = Keys->pos;
+        Keystartpos = Keys->pos;
     }
 
     if (Interpmode == KF_LINEAR && Numkeys > 1) {
-	if (Views) {
-	    free(Views);
-	    Views = NULL;
-	}
+        if (Views) {
+            free(Views);
+            Views = NULL;
+        }
 
-	Views = gk_make_linear_framesfromkeys(Keys, Numkeys, Viewsteps, loop);
+        Views = gk_make_linear_framesfromkeys(Keys, Numkeys, Viewsteps, loop);
 
-	if (!Views) {
-	    G_warning(_("Check no. of frames requested and keyframes marked"));
-	}
+        if (!Views) {
+            G_warning(_("Check no. of frames requested and keyframes marked"));
+        }
     }
     else if (Numkeys > 2) {
-	if (Views) {
-	    free(Views);
-	    Views = NULL;
-	}
+        if (Views) {
+            free(Views);
+            Views = NULL;
+        }
 
-	Views = gk_make_framesfromkeys
-	    (Keys, Numkeys, Viewsteps, loop, 1.0 - Tension);
+        Views = gk_make_framesfromkeys(Keys, Numkeys, Viewsteps, loop,
+                                       1.0 - Tension);
 
-	if (!Views) {
-	    G_warning(_("Check no. of frames requested and keyframes marked"));
-	}
+        if (!Views) {
+            G_warning(_("Check no. of frames requested and keyframes marked"));
+        }
     }
 
     return;
@@ -338,13 +340,13 @@ int GK_move_key(float oldpos, float precis, float newpos)
     Keylist *k;
 
     for (k = Keys; k; k = k->next) {
-	if (k->pos >= oldpos - precis && k->pos <= oldpos + precis) {
-	    _remove_key(k);
-	    k->pos = newpos;
-	    _add_key(k, 1, precis);
-	    GK_update_frames();
-	    return (1);
-	}
+        if (k->pos >= oldpos - precis && k->pos <= oldpos + precis) {
+            _remove_key(k);
+            k->pos = newpos;
+            _add_key(k, 1, precis);
+            GK_update_frames();
+            return (1);
+        }
     }
 
     return (0);
@@ -370,18 +372,18 @@ int GK_delete_key(float pos, float precis, int justone)
     int cnt;
 
     for (cnt = 0, k = Keys; k;) {
-	next = k->next;
+        next = k->next;
 
-	if (k->pos >= pos - precis && k->pos <= pos + precis) {
-	    cnt++;
-	    _remove_key(k);
-	    free(k);
-	    if (justone) {
-		break;
-	    }
-	}
+        if (k->pos >= pos - precis && k->pos <= pos + precis) {
+            cnt++;
+            _remove_key(k);
+            free(k);
+            if (justone) {
+                break;
+            }
+        }
 
-	k = next;
+        k = next;
     }
 
     GK_update_frames();
@@ -395,21 +397,21 @@ int GK_delete_key(float pos, float precis, int justone)
    particular keyframe - used to compare relative distance to neighboring
    keyframes, it can be any floating point value.
 
-   The fmask value can be any of the following or'd together:    
-   - KF_FROMX_MASK    
-   - KF_FROMY_MASK    
-   - KF_FROMZ_MASK    
-   - KF_FROM_MASK (KF_FROMX_MASK | KF_FROMY_MASK | KF_FROMZ_MASK) 
+   The fmask value can be any of the following or'd together:
+   - KF_FROMX_MASK
+   - KF_FROMY_MASK
+   - KF_FROMZ_MASK
+   - KF_FROM_MASK (KF_FROMX_MASK | KF_FROMY_MASK | KF_FROMZ_MASK)
 
-   - KF_DIRX_MASK    
-   - KF_DIRY_MASK    
-   - KF_DIRZ_MASK    
-   - KF_DIR_MASK (KF_DIRX_MASK | KF_DIRY_MASK | KF_DIRZ_MASK) 
+   - KF_DIRX_MASK
+   - KF_DIRY_MASK
+   - KF_DIRZ_MASK
+   - KF_DIR_MASK (KF_DIRX_MASK | KF_DIRY_MASK | KF_DIRZ_MASK)
 
-   - KF_FOV_MASK    
-   - KF_TWIST_MASK    
+   - KF_FOV_MASK
+   - KF_TWIST_MASK
 
-   - KF_ALL_MASK (KF_FROM_MASK | KF_DIR_MASK | KF_FOV_MASK | KF_TWIST_MASK) 
+   - KF_ALL_MASK (KF_FROM_MASK | KF_DIR_MASK | KF_FOV_MASK | KF_TWIST_MASK)
 
    Other fields will be added later.
 
@@ -426,15 +428,14 @@ int GK_delete_key(float pos, float precis, int justone)
    \return 1 if key is added
    \return -1 key not added
  */
-int GK_add_key(float pos, unsigned long fmask, int force_replace,
-	       float precis)
+int GK_add_key(float pos, unsigned long fmask, int force_replace, float precis)
 {
     Keylist *newk;
     float tmp[3];
 
-    if (NULL == (newk = (Keylist *) malloc(sizeof(Keylist)))) {
-	fprintf(stderr, "Out of memory\n");
-	return (-1);
+    if (NULL == (newk = (Keylist *)malloc(sizeof(Keylist)))) {
+        fprintf(stderr, "Out of memory\n");
+        return (-1);
     }
 
     /* All fields set, don't use mask until making Views */
@@ -467,8 +468,8 @@ int GK_add_key(float pos, unsigned long fmask, int force_replace,
     newk->prior = NULL;
 
     if (0 < _add_key(newk, force_replace, precis)) {
-	GK_update_frames();
-	return (1);
+        GK_update_frames();
+        return (1);
     }
 
     return (-1);
@@ -486,9 +487,9 @@ int GK_add_key(float pos, unsigned long fmask, int force_replace,
 void GK_do_framestep(int step, int render)
 {
     if (Views) {
-	if (step > 0 && step <= Viewsteps) {
-	    gk_follow_frames(Views, Viewsteps, Keys, step, 1, render, Fmode);
-	}
+        if (step > 0 && step <= Viewsteps) {
+            gk_follow_frames(Views, Viewsteps, Keys, step, 1, render, Fmode);
+        }
     }
 
     return;
@@ -502,20 +503,19 @@ void GK_do_framestep(int step, int render)
 void GK_show_path(int flag)
 {
     if (flag) {
-	Fmode |= FM_PATH;
+        Fmode |= FM_PATH;
 
-	if (Views) {
-	    GS_set_draw(GSD_FRONT);
-	    GS_ready_draw();
+        if (Views) {
+            GS_set_draw(GSD_FRONT);
+            GS_ready_draw();
 
-	    gk_draw_path(Views, Viewsteps, Keys);
+            gk_draw_path(Views, Viewsteps, Keys);
 
-	    GS_done_draw();
-
-	}
+            GS_done_draw();
+        }
     }
     else {
-	Fmode &= ~FM_PATH;
+        Fmode &= ~FM_PATH;
     }
 
     return;
@@ -529,19 +529,19 @@ void GK_show_path(int flag)
 void GK_show_vect(int flag)
 {
     if (flag) {
-	Fmode |= FM_VECT;
-	if (Views) {
+        Fmode |= FM_VECT;
+        if (Views) {
 
-	    GS_set_draw(GSD_FRONT);
-	    GS_ready_draw();
+            GS_set_draw(GSD_FRONT);
+            GS_ready_draw();
 
-	    GV_alldraw_vect();
+            GV_alldraw_vect();
 
-	    GS_done_draw();
-	}
+            GS_done_draw();
+        }
     }
     else {
-	Fmode &= ~FM_VECT;
+        Fmode &= ~FM_VECT;
     }
 
     return;
@@ -555,21 +555,20 @@ void GK_show_vect(int flag)
 void GK_show_site(int flag)
 {
     if (flag) {
-	Fmode |= FM_SITE;
+        Fmode |= FM_SITE;
 
-	if (Views) {
+        if (Views) {
 
-	    GS_set_draw(GSD_FRONT);
-	    GS_ready_draw();
+            GS_set_draw(GSD_FRONT);
+            GS_ready_draw();
 
-	    GP_alldraw_site();
+            GP_alldraw_site();
 
-	    GS_done_draw();
-
-	}
+            GS_done_draw();
+        }
     }
     else {
-	Fmode &= ~FM_SITE;
+        Fmode &= ~FM_SITE;
     }
 
     return;
@@ -583,21 +582,20 @@ void GK_show_site(int flag)
 void GK_show_vol(int flag)
 {
     if (flag) {
-	Fmode |= FM_VOL;
+        Fmode |= FM_VOL;
 
-	if (Views) {
+        if (Views) {
 
-	    GS_set_draw(GSD_FRONT);
-	    GS_ready_draw();
+            GS_set_draw(GSD_FRONT);
+            GS_ready_draw();
 
-	    GVL_alldraw_vol();
+            GVL_alldraw_vol();
 
-	    GS_done_draw();
-
-	}
+            GS_done_draw();
+        }
     }
     else {
-	Fmode &= ~FM_VOL;
+        Fmode &= ~FM_VOL;
     }
 
     return;
@@ -611,14 +609,14 @@ void GK_show_vol(int flag)
 void GK_show_list(int flag)
 {
     if (flag) {
-	Fmode |= FM_LABEL;
+        Fmode |= FM_LABEL;
 
-	if (Views) {
-	    GS_draw_all_list();
-	}
+        if (Views) {
+            GS_draw_all_list();
+        }
     }
     else {
-	Fmode &= ~FM_LABEL;
+        Fmode &= ~FM_LABEL;
     }
 
     return;

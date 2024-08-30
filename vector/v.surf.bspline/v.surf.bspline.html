@@ -11,22 +11,22 @@ of <b>output</b> vector points.
 
 <h2>NOTES</h2>
 
-<p>From a theoretical perspective, the interpolating procedure takes 
-place in two parts: the first is an estimate of the linear coefficients 
-of a spline function is derived from the observation points using a 
-least squares regression; the second is the computation of the 
-interpolated surface (or interpolated vector points). As used here, the 
-splines are 2D piece-wise non-zero polynomial functions calculated 
-within a limited, 2D area. The length (in mapping units) of each spline 
-step is defined by <b>ew_step</b> for the east-west direction and 
-<b>ns_step</b> for the north-south direction. For optimal performance, 
-the length of spline step should be no less than the distance between 
-observation points. Each vector point observation is modeled as a 
-linear function of the non-zero splines in the area around the 
-observation. The least squares regression predicts the the coefficients 
-of these linear functions. Regularization, avoids the need to have one 
-observation and one coefficient for each spline (in order to avoid 
-instability). 
+<p>From a theoretical perspective, the interpolating procedure takes
+place in two parts: the first is an estimate of the linear coefficients
+of a spline function is derived from the observation points using a
+least squares regression; the second is the computation of the
+interpolated surface (or interpolated vector points). As used here, the
+splines are 2D piece-wise non-zero polynomial functions calculated
+within a limited, 2D area. The length (in mapping units) of each spline
+step is defined by <b>ew_step</b> for the east-west direction and
+<b>ns_step</b> for the north-south direction. For optimal performance,
+the length of spline step should be no less than the distance between
+observation points. Each vector point observation is modeled as a
+linear function of the non-zero splines in the area around the
+observation. The least squares regression predicts the the coefficients
+of these linear functions. Regularization, avoids the need to have one
+observation and one coefficient for each spline (in order to avoid
+instability).
 
 <p>With regularly distributed data points, a spline step corresponding
 to the maximum distance between two points in both the east and north
@@ -88,7 +88,6 @@ true point value and the estimated from the interpolation for a fixed
 series of <b>lambda_i</b> values. No vector nor raster output will be
 created when cross-validation is selected.
 
-
 <h2>EXAMPLES</h2>
 
 <h3>Basic interpolation</h3>
@@ -113,7 +112,7 @@ current region resolution.
 <h3>Estimation of lambda_i parameter with a cross validation process</h3>
 
 <div class="code"><pre>
-v.surf.bspline -c input=point_vector 
+v.surf.bspline -c input=point_vector
 </pre></div>
 
 <h3>Estimation on sparse points</h3>
@@ -135,14 +134,13 @@ v.surf.bspline input=point_vector raster=interpolate_surface layer=1 \
 The interpolation will be done using the values
 in <i>attrib_column</i>, in the table associated with layer 1.
 
-<h3>North carolina location example using z-coordinates for interpolation</h3>
+<h3>North Carolina dataset example using z-coordinates for interpolation</h3>
 
 <div class="code"><pre>
 g.region region=rural_1m res=2 -p
 v.surf.bspline input=elev_lid792_bepts raster=elev_lid792_rast \
   ew_step=5 ns_step=5 method=bicubic lambda_i=0.1
 </pre></div>
-
 
 <h2>KNOWN ISSUES</h2>
 
@@ -169,7 +167,7 @@ no problems with the raster map output from the DBF driver.
   <li>Brovelli M. A e Longoni U.M., 2003, Software per il filtraggio di
     dati LIDAR, Rivista dell'Agenzia del Territorio, n. 3-2003, pp. 11-22
     (ISSN 1593-2192)</li>
-  <li>Antolin R. and Brovelli M.A., 2007, LiDAR data Filtering with GRASS GIS for the 
+  <li>Antolin R. and Brovelli M.A., 2007, LiDAR data Filtering with GRASS GIS for the
     Determination of Digital Terrain Models. Proceedings of Jornadas de SIG Libre,
     Girona, Espa&ntilde;a. CD ISBN: 978-84-690-3886-9</li>
 </ul>
@@ -189,8 +187,3 @@ Overview: <a href="https://grasswiki.osgeo.org/wiki/Interpolation">Interpolation
 Original version (s.bspline.reg) in GRASS 5.4:
 Maria Antonia Brovelli, Massimiliano Cannata, Ulisse Longoni, Mirko Reguzzoni<br>
 Update for GRASS 6 and improvements: Roberto Antolin
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

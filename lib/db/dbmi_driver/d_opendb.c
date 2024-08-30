@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_opendb.c
- * 
+ *
  * \brief DBMI Library (driver) - open database connection
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -18,10 +18,10 @@
 #include "dbstubs.h"
 
 /*!
-  \brief Open database connection
+   \brief Open database connection
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
 int db_d_open_database(void)
 {
@@ -34,9 +34,9 @@ int db_d_open_database(void)
 
     /* see if there is a database already open */
     if (db__test_database_open()) {
-	db_error("Multiple open databases not allowed");
-	DB_SEND_FAILURE();
-	return DB_OK;
+        db_error("Multiple open databases not allowed");
+        DB_SEND_FAILURE();
+        return DB_OK;
     }
 
     /* call the procedure */
@@ -44,15 +44,15 @@ int db_d_open_database(void)
 
     /* send the return code */
     if (stat != DB_OK) {
-	db_free_handle(&handle);
-	DB_SEND_FAILURE();
-	return DB_OK;
+        db_free_handle(&handle);
+        DB_SEND_FAILURE();
+        return DB_OK;
     }
     DB_SEND_SUCCESS();
 
     /* record the open in the driver state */
     db__mark_database_open(db_get_handle_dbname(&handle),
-			   db_get_handle_dbschema(&handle));
+                           db_get_handle_dbschema(&handle));
     /* DO NOT free the handle since we saved the pointers to the name,path */
 
     /* no results */

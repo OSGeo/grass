@@ -12,5 +12,3 @@ default: lib $(ARCH_INCDIR)/lrs.h
 
 $(ARCH_INCDIR)/lrs.h: lrs.h
 	$(INSTALL_DATA) lrs.h $(ARCH_INCDIR)/lrs.h
-
-

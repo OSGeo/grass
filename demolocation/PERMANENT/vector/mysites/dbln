@@ -1,1 +1,0 @@
-1 mysites cat $GISDBASE/$LOCATION_NAME/$MAPSET/dbf/ dbf

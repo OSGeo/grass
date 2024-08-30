@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/driver_state.c
- * 
+ *
  * \brief DBMI Library (driver) - drivers state
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -16,44 +16,43 @@
 #include <grass/dbmi.h>
 #include "dbstubs.h"
 
-
 static dbDriverState state;
 
 /*!
-  \brief Initialize driver state
-*/
+   \brief Initialize driver state
+ */
 void db__init_driver_state(void)
 {
     db_zero((void *)&state, sizeof(state));
 }
 
 /*!
-  \brief Get driver state
+   \brief Get driver state
 
-  \return pointer to dbDriverState
-*/
+   \return pointer to dbDriverState
+ */
 dbDriverState *db__get_driver_state(void)
 {
     return &state;
 }
 
 /*!
-  \brief Test database connection
+   \brief Test database connection
 
-  \return 1 opened
-  \return 0 closed
-*/
+   \return 1 opened
+   \return 0 closed
+ */
 int db__test_database_open(void)
 {
     return state.open ? 1 : 0;
 }
 
 /*!
-  \brief Mark database as opened
+   \brief Mark database as opened
 
-  \param dbname database name
-  \param dbschema database schema name
-*/
+   \param dbname database name
+   \param dbschema database schema name
+ */
 void db__mark_database_open(const char *dbname, const char *dbschema)
 {
     state.dbname = db_store(dbname);
@@ -62,8 +61,8 @@ void db__mark_database_open(const char *dbname, const char *dbschema)
 }
 
 /*!
-  \brief Mark database as closed
-*/
+   \brief Mark database as closed
+ */
 void db__mark_database_closed(void)
 {
     db_free(state.dbname);
@@ -72,11 +71,11 @@ void db__mark_database_closed(void)
 }
 
 /*!
-  \brief Add cursor do driver state
+   \brief Add cursor do driver state
 
-  \param cursor db cursor to be added
-*/
-void db__add_cursor_to_driver_state(dbCursor * cursor)
+   \param cursor db cursor to be added
+ */
+void db__add_cursor_to_driver_state(dbCursor *cursor)
 {
     dbCursor **list;
     int i;
@@ -84,18 +83,17 @@ void db__add_cursor_to_driver_state(dbCursor * cursor)
     /* find an empty slot in the cursor list */
     list = state.cursor_list;
     for (i = 0; i < state.ncursors; i++)
-	if (list[i] == NULL)
-	    break;
+        if (list[i] == NULL)
+            break;
 
     /* if not found, extend list */
     if (i >= state.ncursors) {
-	list =
-	    (dbCursor **) db_realloc((void *)list,
-				     (i + 1) * sizeof(dbCursor *));
-	if (list == NULL)
-	    return;
-	state.cursor_list = list;
-	state.ncursors = i + 1;
+        list =
+            (dbCursor **)db_realloc((void *)list, (i + 1) * sizeof(dbCursor *));
+        if (list == NULL)
+            return;
+        state.cursor_list = list;
+        state.ncursors = i + 1;
     }
 
     /* add it in */
@@ -103,32 +101,32 @@ void db__add_cursor_to_driver_state(dbCursor * cursor)
 }
 
 /*!
-  \brief Drop cursor from driver state
+   \brief Drop cursor from driver state
 
-  \param cursor db cursor to be dropped
-*/
-void db__drop_cursor_from_driver_state(dbCursor * cursor)
+   \param cursor db cursor to be dropped
+ */
+void db__drop_cursor_from_driver_state(dbCursor *cursor)
 {
     int i;
 
     for (i = 0; i < state.ncursors; i++)
-	if (state.cursor_list[i] == cursor)
-	    state.cursor_list[i] = NULL;
+        if (state.cursor_list[i] == cursor)
+            state.cursor_list[i] = NULL;
 }
 
 /*!
-  \brief Close all cursors
-*/
+   \brief Close all cursors
+ */
 void db__close_all_cursors(void)
 {
     int i;
 
     for (i = 0; i < state.ncursors; i++)
-	if (state.cursor_list[i])
-	    db_driver_close_cursor(state.cursor_list[i]);
+        if (state.cursor_list[i])
+            db_driver_close_cursor(state.cursor_list[i]);
 
     if (state.cursor_list)
-	db_free(state.cursor_list);
+        db_free(state.cursor_list);
 
     state.ncursors = 0;
     state.cursor_list = NULL;

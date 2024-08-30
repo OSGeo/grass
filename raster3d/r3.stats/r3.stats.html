@@ -2,7 +2,7 @@
 
 <em>r3.stats</em> calculates volume statistics for 3D raster maps.
 Volumes are created on base of value subranges or groups of equal values.
-The default number of subranges is 20 and can vary from 1 to infinite. 
+The default number of subranges is 20 and can vary from 1 to infinite.
 Larger number of subranges will result in larger memory consumption.
 The volumes are calculated in qubic meters. Null values are marked with "*".
 If the flag <em>-e</em> is set, the number of subranges will be ignored.
@@ -13,19 +13,20 @@ As with most GRASS 3D raster map modules, <em>r3.stats</em> operates on the cell
 array defined by the current 3D region settings, not the original extent and
 resolution of the input map. See <em>g.region</em>.
 <p>The region setting will not effect the memory consumption of this module.
-The number of subranges in case of value range calculation or the number of 
+The number of subranges in case of value range calculation or the number of
 equal value groups effect the memory consumption and the calculation time.
 The user can expect a huge time consumption to calculate the equal value
 groups (flag <em>-e</em>) if large region settings occur for maps which
 have many equal value groups (> 100000).
 
 <h2>EXAMPLES</h2>
+
 <h3>Lausanne FOSS4G 2006 3D demo dataset example</h3>
 
-The 3D raster map <em>geology</em> has three values. Each value represents 
+The 3D raster map <em>geology</em> has three values. Each value represents
 a specific geological layer, clay = 1, sand = 2 and bedrock = 3. To calculate
 the volume of each geological layer, we can use the flag <em>-e</em> to group
-equal values into single volumes. 
+equal values into single volumes.
 <em>r3.stats geology -e</em> will produce the following output:
 
 <p><div class="code"><pre>
@@ -94,11 +95,6 @@ Sum of all cells:
 <a href="v.univar.html">v.univar</a>
 </em>
 
-
 <h2>AUTHOR</h2>
-S&ouml;ren Gebbert
 
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+S&ouml;ren Gebbert

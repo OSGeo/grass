@@ -34,18 +34,18 @@ static void rdwr_gridatb(const char *iname, const char *file)
     fprintf(fp, "%d %d %lf\n", cellhd.cols, cellhd.rows, cellhd.ns_res);
 
     for (row = 0; row < cellhd.rows; row++) {
-	G_percent(row, cellhd.rows, 2);
+        G_percent(row, cellhd.rows, 2);
 
-	Rast_get_d_row(fd, dcell, row);
+        Rast_get_d_row(fd, dcell, row);
 
-	for (col = 0; col < cellhd.cols; col++) {
-	    if (Rast_is_d_null_value(&dcell[col]))
-		fprintf(fp, "  9999.00 ");
-	    else
-		fprintf(fp, "%9.2f", (double) dcell[col]);
-	    if (!((col + 1) % 8) || col == cellhd.cols - 1)
-		fprintf(fp, "\n");
-	}
+        for (col = 0; col < cellhd.cols; col++) {
+            if (Rast_is_d_null_value(&dcell[col]))
+                fprintf(fp, "  9999.00 ");
+            else
+                fprintf(fp, "%9.2f", (double)dcell[col]);
+            if (!((col + 1) % 8) || col == cellhd.cols - 1)
+                fprintf(fp, "\n");
+        }
     }
 
     Rast_close(fd);
@@ -54,10 +54,9 @@ static void rdwr_gridatb(const char *iname, const char *file)
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct
-    {
-	struct Option *input;
-	struct Option *output;
+    struct {
+        struct Option *input;
+        struct Option *output;
     } params;
 
     G_gisinit(argv[0]);
@@ -68,17 +67,16 @@ int main(int argc, char **argv)
     G_add_keyword(_("export"));
     G_add_keyword(_("output"));
     module->description =
-	_("Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL).");
+        _("Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL).");
 
     params.input = G_define_standard_option(G_OPT_R_INPUT);
 
     params.output = G_define_standard_option(G_OPT_F_OUTPUT);
 
     if (G_parser(argc, argv))
-	exit(1);
+        exit(1);
 
     rdwr_gridatb(params.input->answer, params.output->answer);
 
     return EXIT_SUCCESS;
 }
-

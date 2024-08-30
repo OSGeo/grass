@@ -1,5 +1,4 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       v.vol.rst: program for 3D (volume) interpolation and geometry
  *               analysis from scattered point data using regularized spline
@@ -13,7 +12,7 @@
  *
  * PURPOSE:      v.vol.rst interpolates the values to 3-dimensional grid from
  *               point data (climatic stations, drill holes etc.) given in a
- *               3D vector point input. Output grid3 file is elev. 
+ *               3D vector point input. Output grid3 file is elev.
  *               Regularized spline with tension is used for the
  *               interpolation.
  *
@@ -46,10 +45,6 @@
 #include "points.h"
 
 int point_save(double xmm, double ymm, double zmm, double err)
-
-
-
-
 /*
    c  saves point deviations
    c
@@ -75,9 +70,9 @@ int point_save(double xmm, double ymm, double zmm, double err)
     G_debug(3, "%s", db_get_string(&sql));
 
     if (db_execute_immediate(driver, &sql) != DB_OK) {
-	db_close_database(driver);
-	db_shutdown_driver(driver);
-	G_fatal_error(_("Cannot insert new row: %s"), db_get_string(&sql));
+        db_close_database(driver);
+        db_shutdown_driver(driver);
+        G_fatal_error(_("Cannot insert new row: %s"), db_get_string(&sql));
     }
     count++;
 

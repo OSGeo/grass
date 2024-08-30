@@ -1,5 +1,5 @@
 all = [
-    'wizard',
-    'base',
-    'dialogs',
+    "wizard",
+    "base",
+    "dialogs",
 ]

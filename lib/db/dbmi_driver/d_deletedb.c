@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_deletedb.c
- * 
+ *
  * \brief DBMI Library (driver) - delete database
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -18,10 +18,10 @@
 #include "dbstubs.h"
 
 /*!
-  \brief Delete database
-  
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \brief Delete database
+
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
 int db_d_delete_database(void)
 {
@@ -38,8 +38,8 @@ int db_d_delete_database(void)
 
     /* send the return code */
     if (stat != DB_OK) {
-	DB_SEND_FAILURE();
-	return DB_OK;
+        DB_SEND_FAILURE();
+        return DB_OK;
     }
     DB_SEND_SUCCESS();
 

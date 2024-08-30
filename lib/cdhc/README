@@ -4,9 +4,9 @@
  * AUTHOR(S):    Darrell McCauley, <mccauley ecn.purdue.edu>
  *               Brad Douglas <rez touchofmadness.com>,
  *               Markus Neteler <neteler itc.it>,
- *               Bernhard Reiter <bernhard intevation.de>, 
+ *               Bernhard Reiter <bernhard intevation.de>,
  *               Radim Blazek <radim.blazek gmail.com>
- *               Glynn Clements <glynn gclements.plus.com>, 
+ *               Glynn Clements <glynn gclements.plus.com>,
  * PURPOSE:      library for testing normality & exponentiality
  * COPYRIGHT:    (C) 2002-2014 by the GRASS Development Team
  *

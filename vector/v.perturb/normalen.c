@@ -6,11 +6,11 @@
  * Read the file GPL.TXT coming with GRASS for details.
  */
 
-#include<stdio.h>
-#include<math.h>
-#include"zufall.h"
+#include <stdio.h>
+#include <math.h>
+#include "zufall.h"
 
-  /* Box-Muller method for Gaussian random numbers */
+/* Box-Muller method for Gaussian random numbers */
 
 int normalen(int n, double *x)
 {
@@ -23,29 +23,29 @@ int normalen(int n, double *x)
 
     nn = n;
     if (nn <= 0)
-	return 0;
+        return 0;
 
     if (klotz1_1.first == 0) {
-	normal00();
-	klotz1_1.first = 1;
+        normal00();
+        klotz1_1.first = 1;
     }
     ptr = 0;
 
-  L1:
+L1:
     left = buffsz - klotz1_1.xptr;
     if (nn < left) {
-	for (i = 1; i <= nn; ++i)
-	    x[i + ptr] = klotz1_1.xbuff[klotz1_1.xptr + i - 1];
-	klotz1_1.xptr += nn;
-	return 0;
+        for (i = 1; i <= nn; ++i)
+            x[i + ptr] = klotz1_1.xbuff[klotz1_1.xptr + i - 1];
+        klotz1_1.xptr += nn;
+        return 0;
     }
     else {
-	for (i = 1; i <= left; ++i)
-	    x[i + ptr] = klotz1_1.xbuff[klotz1_1.xptr + i - 1];
-	klotz1_1.xptr = 0;
-	ptr += left;
-	nn -= left;
-	normal00();
-	goto L1;
+        for (i = 1; i <= left; ++i)
+            x[i + ptr] = klotz1_1.xbuff[klotz1_1.xptr + i - 1];
+        klotz1_1.xptr = 0;
+        ptr += left;
+        nn -= left;
+        normal00();
+        goto L1;
     }
-}				/* normalen */
+} /* normalen */

@@ -32,10 +32,9 @@
 #define MAX_CATS 256
 
 /*! Point of area perimeter */
-typedef struct
-{
-    int x;			/*!< column */
-    int y;			/*!< row */
+typedef struct {
+    int x; /*!< column */
+    int y; /*!< row */
 
 } IClass_point;
 
@@ -44,62 +43,58 @@ typedef struct
    Perimeter is represented by rasterized area outline
    (not only vertices).
  */
-typedef struct
-{
+typedef struct {
     int npoints;
     IClass_point *points;
 
 } IClass_perimeter;
 
 /*! Holds perimeters of training areas. */
-typedef struct
-{
+typedef struct {
     int nperimeters;
     IClass_perimeter *perimeters;
 
 } IClass_perimeter_list;
 
 /* iclass_statistics.c */
-void alloc_statistics(IClass_statistics * statistics, int nbands);
+void alloc_statistics(IClass_statistics *statistics, int nbands);
 
-int make_statistics(IClass_statistics * statistics,
-		    IClass_perimeter * perimeter, CELL ** band_buffer,
-		    int *band_fd);
-int make_all_statistics(IClass_statistics * statistics,
-			IClass_perimeter_list * perimeters,
-			CELL ** band_buffer, int *band_fd);
-void create_raster(IClass_statistics * statistics, CELL ** band_buffer,
-		   int *band_fd, const char *raster_name);
+int make_statistics(IClass_statistics *statistics, IClass_perimeter *perimeter,
+                    CELL **band_buffer, int *band_fd);
+int make_all_statistics(IClass_statistics *statistics,
+                        IClass_perimeter_list *perimeters, CELL **band_buffer,
+                        int *band_fd);
+void create_raster(IClass_statistics *statistics, CELL **band_buffer,
+                   int *band_fd, const char *raster_name);
 void band_range(IClass_statistics *, int);
 
-float mean(IClass_statistics * statistics, int band);
+float mean(IClass_statistics *statistics, int band);
 
-float stddev(IClass_statistics * statistics, int band);
+float stddev(IClass_statistics *statistics, int band);
 
-float var(IClass_statistics * statistics, int band1, int band2);
+float var(IClass_statistics *statistics, int band1, int band2);
 
-float var_signature(IClass_statistics * statistics, int band1, int band2);
+float var_signature(IClass_statistics *statistics, int band1, int band2);
 
 /* iclass_bands.c */
-void open_band_files(struct Ref *refer, CELL *** band_buffer, int **band_fd);
+void open_band_files(struct Ref *refer, CELL ***band_buffer, int **band_fd);
 
-void close_band_files(struct Ref *refer, CELL ** band_buffer, int *band_fd);
+void close_band_files(struct Ref *refer, CELL **band_buffer, int *band_fd);
 
-void read_band_row(CELL ** band_buffer, int *band_fd, int nbands, int row);
+void read_band_row(CELL **band_buffer, int *band_fd, int nbands, int row);
 
 /* iclass_perimeter.c */
-int vector2perimeters(struct Map_info *, const char *layer_name,
-		      int category, IClass_perimeter_list * perimeters,
-		      struct Cell_head *band_region);
-int make_perimeter(struct line_pnts *points, IClass_perimeter * perimeter,
-		   struct Cell_head *band_region);
-int edge2perimeter(IClass_perimeter * perimeter, int x0, int y0, int x1,
-		   int y1);
-void perimeter_add_point(IClass_perimeter * perimeter, int x, int y);
+int vector2perimeters(struct Map_info *, const char *layer_name, int category,
+                      IClass_perimeter_list *perimeters,
+                      struct Cell_head *band_region);
+int make_perimeter(struct line_pnts *points, IClass_perimeter *perimeter,
+                   struct Cell_head *band_region);
+int edge2perimeter(IClass_perimeter *perimeter, int x0, int y0, int x1, int y1);
+void perimeter_add_point(IClass_perimeter *perimeter, int x, int y);
 
 int edge_order(const void *aa, const void *bb);
 
-void free_perimeters(IClass_perimeter_list * perimeters);
+void free_perimeters(IClass_perimeter_list *perimeters);
 
 /* iclass.c */
 int init_group(const char *group_name, struct Ref *refer);

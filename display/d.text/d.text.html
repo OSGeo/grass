@@ -12,14 +12,14 @@ invokes <em>d.text</em> without options on the command
 line, and then assigns values to these options on lines
 within the standard input).
 
-<h3>Commands:</h3> 
+<h3>Commands:</h3>
 
 <dl>
 
-<dt><b>.C</b> <em>color</em> 
+<dt><b>.C</b> <em>color</em>
 <dd>
-(where <em>color</em> is one of the available colors) causes text appearing on 
-subsequent lines to be drawn in that color. 
+(where <em>color</em> is one of the available colors) causes text appearing on
+subsequent lines to be drawn in that color.
 
 
 <dt><b>.G</b> <em>color</em>
@@ -37,14 +37,14 @@ drawing of 2 lines.
 
 <p><dt><b>.F</b> <em>font</em>
 <dd>
-(where <em>font</em> is one of the fonts known by the GRASS program 
+(where <em>font</em> is one of the fonts known by the GRASS program
 <em><a href="d.font.html">d.font</a></em>) manipulates
-the font type. Available fonts are listed in the GRASS manual entry for 
-<em><a href="d.font.html">d.font</a></em>. 
-The default font type used (if unspecified by the user) 
+the font type. Available fonts are listed in the GRASS manual entry for
+<em><a href="d.font.html">d.font</a></em>.
+The default font type used (if unspecified by the user)
 is <em>romans</em>.
-<!-- Run the GRASS macro 
-<em><A  HREF="show.fonts.sh.html">show.fonts.sh</a></em> 
+<!-- Run the GRASS macro
+<em><A  HREF="show.fonts.sh.html">show.fonts.sh</a></em>
 to see what these fonts look like. -->
 
 <dt><b>.R </b> <em>rotation</em>
@@ -57,8 +57,8 @@ to rotate the text.
 This command means <em>bold on</em>.
 
 <dt><b>.B 0</b>
-<dd> turns <em>bold off</em> of all text appearing on lines beneath 
-     it. (<em>Bold off</em> is used by default, if unspecified by the user.) 
+<dd> turns <em>bold off</em> of all text appearing on lines beneath
+     it. (<em>Bold off</em> is used by default, if unspecified by the user.)
 
 </dl>
 
@@ -75,12 +75,12 @@ active frame's vertical space per line:
 <b>d.text</b> &lt;&lt; EOF
 .C yellow
 .G grey
-.S 4 
+.S 4
 .B 1
 This is a test of d.text
 EOF
 </pre></div>
-The user presses <em>control-d</em> 
+The user presses <em>control-d</em>
 (the "Ctrl" and "d" keys) to end input to <em>d.text</em> (equal to EOF).
 -->
 
@@ -96,8 +96,8 @@ d.text text="This is a test of d.text" color=yellow bgcolor=gray size=4
 
 <h2>NOTES</h2>
 
-Note that the GRASS command 
-<em><a href="d.title.html">d.title</a></em> creates map TITLEs in a format 
+Note that the GRASS command
+<em><a href="d.title.html">d.title</a></em> creates map TITLEs in a format
 suitable for input to <em>d.text</em>.
 
 <p>
@@ -106,20 +106,15 @@ within lines to change colors, boldness, and perhaps size.
 
 <h2>SEE ALSO</h2>
 
-<em><a href="d.font.html">d.font</a></em><br>
-<em><a href="d.title.html">d.title</a></em><br>
-<!-- <em><a href="show.fonts.sh.html">show.fonts.sh</a></em><br> -->
-<em><a href="d.labels.html">d.labels</a></em><br>
+<em>
+<a href="d.font.html">d.font</a>,
+<a href="d.title.html">d.title</a>,
+<a href="d.labels.html">d.labels</a>
+</em>
 
+<h2>AUTHORS</h2>
 
-<h2>AUTHOR</h2>
-
-James Westervelt, 
-U.S. Army Construction Engineering 
+James Westervelt,
+U.S. Army Construction Engineering
 Research Laboratory
 <p>Updates by Huidae Cho
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

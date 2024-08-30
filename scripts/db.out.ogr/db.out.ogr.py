@@ -14,46 +14,46 @@
 #
 #############################################################################
 
-#%module
-#% description: Exports attribute tables into various formats.
-#% keyword: database
-#% keyword: export
-#% keyword: output
-#% keyword: attribute table
-#%end
+# %module
+# % description: Exports attribute tables into various formats.
+# % keyword: database
+# % keyword: export
+# % keyword: output
+# % keyword: attribute table
+# %end
 
-#%option G_OPT_V_INPUT
-#% key: input
-#% label: GRASS table name
-#% required: yes
-#%end
+# %option G_OPT_V_INPUT
+# % key: input
+# % label: GRASS table name
+# % required: yes
+# %end
 
-#%option G_OPT_F_OUTPUT
-#% key: output
-#% description: Output table file name or DB connection string
-#% required : yes
-#%end
+# %option G_OPT_F_OUTPUT
+# % key: output
+# % description: Output table file name or DB connection string
+# % required : yes
+# %end
 
-#%option G_OPT_V_FIELD
-#% required: no
-#%end
+# %option G_OPT_V_FIELD
+# % required: no
+# %end
 
-#%option
-#% key: format
-#% type: string
-#% description: Table format
-#% required: yes
-#% options: CSV,DBF,GML,MySQL,PostgreSQL,SQLite
-#% answer: CSV
-#%end
+# %option
+# % key: format
+# % type: string
+# % description: Table format
+# % required: yes
+# % options: CSV,DBF,GML,MySQL,PostgreSQL,SQLite
+# % answer: CSV
+# %end
 
-#%option
-#% key: table
-#% type: string
-#% key_desc: name
-#% description: Name for output table (default: input name)
-#% required: no
-#%end
+# %option
+# % key: table
+# % type: string
+# % key_desc: name
+# % description: Name for output table (default: input name)
+# % required: no
+# %end
 
 import os
 
@@ -63,58 +63,72 @@ from grass.exceptions import CalledModuleError
 
 
 def main():
-    input = options['input']
-    layer = options['layer']
-    format = options['format']
-    output = options['output']
-    table = options['table']
+    input = options["input"]
+    layer = options["layer"]
+    format = options["format"]
+    output = options["output"]
+    table = options["table"]
 
-    if format.lower() == 'dbf':
+    if format.lower() == "dbf":
         format = "ESRI_Shapefile"
 
-    if format.lower() == 'csv':
-        olayer = basename(output, 'csv')
+    if format.lower() == "csv":
+        olayer = basename(output, "csv")
     else:
         olayer = None
 
     # is there a simpler way of testing for --overwrite?
-    dbffile = input + '.dbf'
+    dbffile = input + ".dbf"
     if os.path.exists(dbffile) and not gcore.overwrite():
         gcore.fatal(_("File <%s> already exists") % dbffile)
 
     if olayer:
         try:
-            gcore.run_command('v.out.ogr', quiet=True, input=input,
-                              layer=layer, output=output, format=format,
-                              type='point,line,area', olayer=olayer)
+            gcore.run_command(
+                "v.out.ogr",
+                quiet=True,
+                input=input,
+                layer=layer,
+                output=output,
+                format=format,
+                type="point,line,area",
+                olayer=olayer,
+            )
         except CalledModuleError:
-            gcore.fatal(_("Module <%s> failed") % 'v.out.ogr')
+            gcore.fatal(_("Module <%s> failed") % "v.out.ogr")
 
     else:
         try:
-            gcore.run_command('v.out.ogr', quiet=True, input=input,
-                              layer=layer, output=output,
-                              format=format, type='point,line,area')
+            gcore.run_command(
+                "v.out.ogr",
+                quiet=True,
+                input=input,
+                layer=layer,
+                output=output,
+                format=format,
+                type="point,line,area",
+            )
         except CalledModuleError:
-            gcore.fatal(_("Module <%s> failed") % 'v.out.ogr')
+            gcore.fatal(_("Module <%s> failed") % "v.out.ogr")
 
     if format == "ESRI_Shapefile":
-        exts = ['shp', 'shx', 'prj']
-        if output.endswith('.dbf'):
-            outname = basename(output, 'dbf')
+        exts = ["shp", "shx", "prj"]
+        if output.endswith(".dbf"):
+            outname = basename(output, "dbf")
             for ext in exts:
                 try_remove("%s.%s" % (outname, ext))
-            outname += '.dbf'
+            outname += ".dbf"
         else:
             for ext in exts:
                 try_remove(os.path.join(output, "%s.%s" % (input, ext)))
             outname = os.path.join(output, input + ".dbf")
-    elif format.lower() == 'csv':
-        outname = output + '.csv'
+    elif format.lower() == "csv":
+        outname = output + ".csv"
     else:
         outname = input
 
     gcore.message(_("Exported table <%s>") % outname)
+
 
 if __name__ == "__main__":
     options, flags = gcore.parser()

@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       i.landsat.acca
@@ -11,8 +10,8 @@
  * COPYRIGHT:    (C) 2008, 2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	 for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
 
@@ -52,9 +51,9 @@ int check_raster(char *raster_name)
 {
     RASTER_MAP_TYPE map_type;
     int raster_fd;
-    
+
     if ((raster_fd = Rast_open_old(raster_name, "")) < 0) {
-	G_fatal_error(_("Unable to open raster map <%s>"), raster_name);
+        G_fatal_error(_("Unable to open raster map <%s>"), raster_name);
     }
     /* Uncomment to work in full raster map
        if (G_get_cellhd(raster_name, mapset, &cellhd) < 0) {
@@ -67,8 +66,9 @@ int check_raster(char *raster_name)
        }
      */
     if ((map_type = Rast_get_map_type(raster_fd)) != DCELL_TYPE) {
-	G_fatal_error(_("Input raster map <%s> is not floating point "
-			"(process DN using i.landsat.toar to radiance first)"), raster_name);
+        G_fatal_error(_("Input raster map <%s> is not floating point "
+                        "(process DN using i.landsat.toar to radiance first)"),
+                      raster_name);
     }
 
     return raster_fd;
@@ -90,28 +90,29 @@ int main(int argc, char *argv[])
     char *in_name, *out_name;
     struct Categories cats;
 
-    CELL cell_shadow = IS_SHADOW, cell_cold_cloud = IS_COLD_CLOUD, cell_warm_cloud = IS_WARM_CLOUD;
+    CELL cell_shadow = IS_SHADOW, cell_cold_cloud = IS_COLD_CLOUD,
+         cell_warm_cloud = IS_WARM_CLOUD;
     Gfile band[5], out;
 
     char title[1024];
-    
+
     /* initialize GIS environment */
     G_gisinit(argv[0]);
 
     /* initialize module */
     module = G_define_module();
     module->description =
-	_("Performs Landsat TM/ETM+ Automatic Cloud Cover Assessment (ACCA).");
+        _("Performs Landsat TM/ETM+ Automatic Cloud Cover Assessment (ACCA).");
     G_add_keyword(_("imagery"));
     G_add_keyword("ACCA");
     G_add_keyword(_("cloud detection"));
     G_add_keyword(_("satellite"));
     G_add_keyword(_("Landsat"));
-    
+
     band_prefix = G_define_standard_option(G_OPT_R_BASENAME_INPUT);
     band_prefix->label = _("Base name of input raster bands");
     band_prefix->description = _("Example: 'B.' for B.1, B.2, ...");
-    
+
     output = G_define_standard_option(G_OPT_R_OUTPUT);
 
     b56c = G_define_option();
@@ -133,10 +134,10 @@ int main(int argc, char *argv[])
     hist->type = TYPE_INTEGER;
     hist->required = NO;
     hist->description =
-	_("Number of classes in the cloud temperature histogram");
+        _("Number of classes in the cloud temperature histogram");
     hist->answer = "100";
     hist->guisection = _("Cloud settings");
-    
+
     sat5 = G_define_flag();
     sat5->key = '5';
     sat5->label = _("Data is Landsat-5 TM");
@@ -145,7 +146,7 @@ int main(int argc, char *argv[])
     filter = G_define_flag();
     filter->key = 'f';
     filter->description =
-	_("Apply post-processing filter to remove small holes");
+        _("Apply post-processing filter to remove small holes");
 
     csig = G_define_flag();
     csig->key = 'x';
@@ -154,8 +155,8 @@ int main(int argc, char *argv[])
 
     pass2 = G_define_flag();
     pass2->key = '2';
-    pass2->description =
-	_("Bypass second-pass processing, and merge warm (not ambiguous) and cold clouds");
+    pass2->description = _("Bypass second-pass processing, and merge warm (not "
+                           "ambiguous) and cold clouds");
     pass2->guisection = _("Cloud settings");
 
     shadow = G_define_flag();
@@ -164,56 +165,53 @@ int main(int argc, char *argv[])
     shadow->guisection = _("Cloud settings");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     /* stores OPTIONS and FLAGS to variables */
 
     hist_n = atoi(hist->answer);
     if (hist_n < 10)
-	hist_n = 10;
+        hist_n = 10;
 
     in_name = band_prefix->answer;
 
     for (i = BAND2; i <= BAND6; i++) {
-	sprintf(band[i].name, "%s%d%c", in_name, i + 2,
-		 (i == BAND6 && !sat5->answer ? '1' : '\0'));
-	band[i].fd = check_raster(band[i].name);
-	band[i].rast = Rast_allocate_buf(DCELL_TYPE);
+        band[i].name[0] = '\0';
+        sprintf(band[i].name, "%s%d%c", in_name, i + 2,
+                (i == BAND6 && !sat5->answer ? '1' : '\0'));
+        band[i].fd = check_raster(band[i].name);
+        band[i].rast = Rast_allocate_buf(DCELL_TYPE);
     }
 
     out_name = output->answer;
 
     sprintf(out.name, "%s", out_name);
     if (G_legal_filename(out_name) < 0)
-	G_fatal_error(_("<%s> is an illegal file name"), out.name);
+        G_fatal_error(_("<%s> is an illegal file name"), out.name);
 
     /* --------------------------------------- */
     th_4 = atof(b56c->answer);
     th_7 = atof(b45r->answer);
-    acca_algorithm(&out, band, pass2->answer, shadow->answer,
-		   csig->answer);
+    acca_algorithm(&out, band, pass2->answer, shadow->answer, csig->answer);
 
     if (filter->answer)
-	filter_holes(&out);
+        filter_holes(&out);
     /* --------------------------------------- */
 
     for (i = BAND2; i <= BAND6; i++) {
-	G_free(band[i].rast);
-	Rast_close(band[i].fd);
+        G_free(band[i].rast);
+        Rast_close(band[i].fd);
     }
 
     /* write out map title and category labels */
     Rast_init_cats("", &cats);
     sprintf(title, "LANDSAT-%s Automatic Cloud Cover Assessment",
-	    sat5->answer ? "5 TM" : "7 ETM+");
+            sat5->answer ? "5 TM" : "7 ETM+");
     Rast_set_cats_title(title, &cats);
 
-    Rast_set_c_cat(&cell_shadow, &cell_shadow,
-		   "Shadow", &cats);
-    Rast_set_c_cat(&cell_cold_cloud, &cell_cold_cloud,
-		   "Cold cloud", &cats);
-    Rast_set_c_cat(&cell_warm_cloud, &cell_warm_cloud,
-		   "Warm cloud", &cats);
+    Rast_set_c_cat(&cell_shadow, &cell_shadow, "Shadow", &cats);
+    Rast_set_c_cat(&cell_cold_cloud, &cell_cold_cloud, "Cold cloud", &cats);
+    Rast_set_c_cat(&cell_warm_cloud, &cell_warm_cloud, "Warm cloud", &cats);
 
     Rast_write_cats(out.name, &cats);
     Rast_free_cats(&cats);

@@ -1,15 +1,15 @@
 /*!
-  \file lib/gis/put_window.c
+   \file lib/gis/put_window.c
 
-  \brief GIS Library - Modify window (i.e. GRASS region)
+   \brief GIS Library - Modify window (i.e. GRASS region)
 
-  (C) 2001-2009 by the GRASS Development Team
+   (C) 2001-2009 by the GRASS Development Team
 
-  This program is free software under the GNU General Public License
-  (>=v2).  Read the file COPYING that comes with GRASS for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
-  \author Original author CERL
-*/
+   \author Original author CERL
+ */
 
 #include <stdlib.h>
 #include <grass/gis.h>
@@ -48,16 +48,16 @@ int G_put_window(const struct Cell_head *window)
     char *wind = getenv("WIND_OVERRIDE");
 
     return wind ? G_put_element_window(window, "windows", wind)
-	: G_put_element_window(window, "", "WIND");
+                : G_put_element_window(window, "", "WIND");
 }
 
 /*!
  * \brief Write the region
  *
  * Writes the region file (WIND) in the user's current mapset
- * from region. 
+ * from region.
 
- * <b>Warning:</b> Since this routine actually changes the 
+ * <b>Warning:</b> Since this routine actually changes the
  * region, it should only be called by modules which the user knows
  * will change the region. It is probably fair to say that only the
  * <tt>g.region</tt> should call this routine.
@@ -71,12 +71,13 @@ int G_put_window(const struct Cell_head *window)
  *
  * \sa G_put_window()
  */
-int G_put_element_window(const struct Cell_head *window, const char *dir, const char *name)
+int G_put_element_window(const struct Cell_head *window, const char *dir,
+                         const char *name)
 {
     FILE *fd;
 
     if (!(fd = G_fopen_new(dir, name)))
-	return -1;
+        return -1;
 
     G__write_Cell_head3(fd, window, 0);
     fclose(fd);

@@ -3,11 +3,10 @@
 #include <math.h>
 #include "local_proto.h"
 
-
 /*-
  * driver program for AS 181: Royston's extension of the Shapiro-Wilk
  * W statistic to n=2000
- * needs as181.c as177.c as241.c Cdhc_dcmp.c as66.c 
+ * needs as181.c as177.c as241.c Cdhc_dcmp.c as66.c
  */
 
 double *Cdhc_royston(double *x, int n)
@@ -20,42 +19,42 @@ double *Cdhc_royston(double *x, int n)
 
 #ifndef lint
     if ((a = (double *)malloc(n2 * sizeof(double))) == NULL) {
-	fprintf(stderr, "Memory error in royston\n");
-	exit(EXIT_FAILURE);
+        fprintf(stderr, "Memory error in royston\n");
+        exit(EXIT_FAILURE);
     }
     if ((xcopy = (double *)malloc(n * sizeof(double))) == NULL) {
-	fprintf(stderr, "Memory error in royston\n");
-	exit(EXIT_FAILURE);
+        fprintf(stderr, "Memory error in royston\n");
+        exit(EXIT_FAILURE);
     }
 #endif /* lint */
 
     for (i = 0; i < n; ++i) {
-	xcopy[i] = x[i];
-	mean += x[i];
+        xcopy[i] = x[i];
+        mean += x[i];
     }
     mean /= n;
 
     qsort(xcopy, n, sizeof(double), Cdhc_dcmp);
 
     for (i = 0; i < n; ++i)
-	ssq += (mean - x[i]) * (mean - x[i]);
+        ssq += (mean - x[i]) * (mean - x[i]);
 
     wcoef(a, n, n2, &eps, &ifault);
 
     if (ifault == 0)
-	wext(xcopy, n, ssq, a, n2, eps, &w, &pw, &ifault);
+        wext(xcopy, n, ssq, a, n2, eps, &w, &pw, &ifault);
     else {
-	fprintf(stderr, "Error in wcoef()\n");
-	return (double *)NULL;
+        fprintf(stderr, "Error in wcoef()\n");
+        return (double *)NULL;
     }
 
     if (ifault == 0) {
-	y[0] = w;
-	y[1] = pw;
+        y[0] = w;
+        y[1] = pw;
     }
     else {
-	fprintf(stderr, "Error in wcoef()\n");
-	return (double *)NULL;
+        fprintf(stderr, "Error in wcoef()\n");
+        return (double *)NULL;
     }
 
     free(a);

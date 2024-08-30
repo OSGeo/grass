@@ -4,7 +4,7 @@
 first and second order partial derivatives from a raster map of true
 elevation values. The user must specify the input <b>elevation</b> raster map
 and at least one output raster maps. The user can also specify the
-<b>format</b> for slope (degrees, percent; default=degrees), and the 
+<b>format</b> for slope (degrees, percent; default=degrees), and the
 <b>zscale</b>: multiplicative factor to convert elevation units to horizontal units;
 (default 1.0).
 
@@ -18,12 +18,12 @@ For example, if both your vertical and horizontal units are feet,
 parameter <b>zscale</b> must not be used</em>.
 
 <p>
-The <b>aspect</b> output raster map indicates the direction that slopes 
-are facing counterclockwise from East: 90 degrees is North, 180 is 
-West, 270 is South, 360 is East. Zero aspect indicates flat areas with 
-zero slope. Category and color table files are also generated for the 
-aspect raster map. <br> Note: These values can be transformed to 
-azimuth values (90 is East, 180 is South, 270 is West, 360 is North) 
+The <b>aspect</b> output raster map indicates the direction that slopes
+are facing counterclockwise from East: 90 degrees is North, 180 is
+West, 270 is South, 360 is East. Zero aspect indicates flat areas with
+zero slope. Category and color table files are also generated for the
+aspect raster map. <br> Note: These values can be transformed to
+azimuth values (90 is East, 180 is South, 270 is West, 360 is North)
 using <a href="r.mapcalc.html">r.mapcalc</a>:
 
 <div class="code"><pre>
@@ -34,19 +34,19 @@ r.mapcalc "azimuth_aspect = if(ccw_aspect == 0, 0, \
                             450 - ccw_aspect)))"
 </pre></div>
 
-Alternatively, the <b>-n</b> flag can be used to produce aspect as 
-degrees CW from North. Aspect for flat areas is then set to -9999 
+Alternatively, the <b>-n</b> flag can be used to produce aspect as
+degrees CW from North. Aspect for flat areas is then set to -9999
 (default: 0). Note: The reason for using -9999 is to be compliant with
 <b>gdaldem</b> which uses -9999 by default as the nodata value.
 
 <p>
-The aspect for slope equal to zero (flat areas) is set to zero (-9999 
-with <b>-n</b> flag). Thus, most cells with a very small slope end up 
-having category 0, 45, ..., 360 in <b>aspect</b> output. It is possible 
-to reduce the bias in these directions by filtering out the aspect in 
-areas where the terrain is almost flat. A option <b>min_slope</b> can 
-be used to specify the minimum slope for which aspect is computed. For 
-all cells with slope&nbsp;&lt;&nbsp;<b>min_slope</b>, both slope and 
+The aspect for slope equal to zero (flat areas) is set to zero (-9999
+with <b>-n</b> flag). Thus, most cells with a very small slope end up
+having category 0, 45, ..., 360 in <b>aspect</b> output. It is possible
+to reduce the bias in these directions by filtering out the aspect in
+areas where the terrain is almost flat. A option <b>min_slope</b> can
+be used to specify the minimum slope for which aspect is computed. For
+all cells with slope&nbsp;&lt;&nbsp;<b>min_slope</b>, both slope and
 aspect are set to zero.
 
 <center>
@@ -145,7 +145,6 @@ reclassification is given below:
              6       255      0       0
              7         0      0       0</pre></div>
 
-
 <h2>NOTES</h2>
 
 To ensure that the raster elevation map is not inappropriately resampled,
@@ -160,12 +159,12 @@ resampled to the current region resolution, the <b>-a</b> flag should be specifi
 The current mask is ignored.
 
 <p>
-The algorithm used to determine slope and aspect uses a 3x3 
-neighborhood around each cell in the raster elevation map. Thus, 
-slope and aspect are not determineed for cells adjacent to 
-the edges and NULL cells in the elevation map layer. These cells are 
-by default set to nodata in output raster maps. With the <b>-e</b> flag, 
-output values are estimated for these cells, avoiding cropping along 
+The algorithm used to determine slope and aspect uses a 3x3
+neighborhood around each cell in the raster elevation map. Thus,
+slope and aspect are not determineed for cells adjacent to
+the edges and NULL cells in the elevation map layer. These cells are
+by default set to nodata in output raster maps. With the <b>-e</b> flag,
+output values are estimated for these cells, avoiding cropping along
 the edges.
 
 <p>
@@ -177,6 +176,25 @@ Only when using integer elevation models, the aspect is biased in 0,
 of aspect categories is very uneven, with peaks at 0, 45,..., 360 categories.
 When working with floating point elevation models, no such aspect bias occurs.
 
+<h3>PERFORMANCE</h3>
+To enable parallel processing, the user can specify the number of threads to be
+used with the <b>nprocs</b> parameter (default 1). The <b>memory</b> parameter
+(default 300) can also be provided to determine the size of the buffer for
+computation.
+
+<div align="center" style="margin: 10px">
+     <img src="r_slope_aspect_benchmark_size.png" alt="benchmark for number of cells" border="0">
+     <img src="r_slope_aspect_benchmark_memory.png" alt="benchmark for memory size" border="0">
+     <br>
+     <i>Figure: Benchmark on the left shows execution time for different
+     number of cells, benchmark on the right shows execution time
+     for different memory size for 5000x5000 raster. See benchmark scripts in source code.
+     (Intel Core i9-10940X CPU @ 3.30GHz x 28) </i>
+     </div>
+
+<p>To reduce the memory requirements to minimum, set option <b>memory</b> to zero.
+To take advantage of the parallelization, GRASS GIS
+needs to compiled with OpenMP enabled.
 
 <h2>EXAMPLES</h2>
 
@@ -212,7 +230,7 @@ In the following example (based on the North Carolina sample dataset)
 we first generate the standard aspect map (oriented CCW from East), then
 convert it to compass orientation, and finally classify four major aspect
 directions (N, E, S, W):
- 
+
 <div class="code"><pre>
 g.region raster=elevation -p
 
@@ -264,7 +282,6 @@ Developments in Soil Science, vol. 33, Elsevier, 387-410 pp,
 <a href="http://www.geomorphometry.org">http://www.geomorphometry.org</a>
 </ul>
 
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -274,13 +291,7 @@ Developments in Soil Science, vol. 33, Elsevier, 387-410 pp,
   <a href="r.rescale.html">r.rescale</a>
 </em>
 
-
 <h2>AUTHORS</h2>
 
 Michael Shapiro, U.S.Army Construction Engineering Research Laboratory<br>
 Olga Waupotitsch, U.S.Army Construction Engineering Research Laboratory
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

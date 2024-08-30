@@ -1,0 +1,4 @@
+folium
+jupyter
+PyVirtualDisplay
+ipyleaflet

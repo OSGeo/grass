@@ -1,12 +1,12 @@
-FUNCTIONS STATE: 
+FUNCTIONS STATE:
 
 - db_driver_add_column
 - db_driver_bind_update
 + db_driver_close_cursor
 + db_driver_close_database
-x db_driver_create_database 
+x db_driver_create_database
 - db_driver_create_index
-- db_driver_create_table 
+- db_driver_create_table
 - db_driver_delete
 x db_driver_delete_database
 P db_driver_describe_table     - add table and column privileges

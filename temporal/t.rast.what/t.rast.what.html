@@ -11,7 +11,7 @@ Three layouts can be specified:
     <li><em>row</em> - Row order, one vector sample point value per row</li>
     <li><em>col</em> - Column order, create a column for each vector sample
      point of a single time step/raster layer</li>
-    <li><em>timerow</em> - Time order, create a column for each time step, 
+    <li><em>timerow</em> - Time order, create a column for each time step,
      this order is the original <em>r.what</em> output, except that the column
      names are the timestamps</li>
 </ul>
@@ -26,10 +26,10 @@ end of the processing.
 Coordinates can be provided as vector map using the <em>points</em> option
 or as comma separated coordinate list with the <em>coordinates </em>option.
 <p>
-An output file can be specified using the <em>output</em> option. 
-Stdout will be used if no output is specified or if the 
+An output file can be specified using the <em>output</em> option.
+Stdout will be used if no output is specified or if the
 <em>output</em> option is set to "-".
-    
+
 <h2>EXAMPLES</h2>
 
 <h3>Data preparation</h3>
@@ -105,7 +105,7 @@ start|end|115.0043586274;36.3593955783|79.6816763826;45.2391522853|97.4892579600
 1990-03-01 00:00:00|1990-04-01 00:00:00|3|3|3
 1990-04-01 00:00:00|1990-05-01 00:00:00|4|4|4
 
-# Timerow layout, one time series per row 
+# Timerow layout, one time series per row
 # using the where statement to select a subset of the STRDS
 # and stdout as output
 t.rast.what strds=A points=points \
@@ -130,12 +130,6 @@ x|y|1990-03-01 00:00:00;1990-04-01 00:00:00|1990-04-01 00:00:00;1990-05-01 00:00
 <a href="v.what.strds.html">v.what.strds</a>
 </em>
 
-
 <h2>AUTHOR</h2>
 
 S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

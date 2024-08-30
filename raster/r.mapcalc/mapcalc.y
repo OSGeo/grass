@@ -283,4 +283,3 @@ expr_list *parse_stream(FILE *fp)
 		fputs("\n", stderr);
 	return e;
 }
-

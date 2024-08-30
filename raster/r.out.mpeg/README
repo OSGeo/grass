@@ -7,18 +7,18 @@ available from Berkeley:
 or "ppmtompeg" from the netpbm package:
     http://netpbm.sourceforge.net
 
-Both source code and binaries for several platforms are available. 
+Both source code and binaries for several platforms are available.
 
 ## old:
 After successful compilation, put the executable named "mpeg_encode" in
-a bin/ directory that any users of GRASS have in their path 
+a bin/ directory that any users of GRASS have in their path
 (I put it in /usr/local/bin or you could put it in $(GISBASE)/bin)
 If you intend to use ppmtompeg, make sure you make a soft link to it:
     ln -s /usr/bin/ppmtompeg /usr/local/bin/mpeg_encode
 ## /old
 
 ## new:
-Make sure the "mpeg_encode" or "ppmtompeg" binary executable is somewhere 
+Make sure the "mpeg_encode" or "ppmtompeg" binary executable is somewhere
 in the PATH.
 ## /new
 
@@ -71,7 +71,7 @@ set your region carefully before using this option.
 
 ***************************************************************************
 Bill Brown				e-mail: brown@zorro.cecer.army.mil
-USACERL - ECS				
+USACERL - ECS
 PO Box 9005
 Champaign, IL  61826-9005
 

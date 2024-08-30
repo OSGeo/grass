@@ -1,5 +1,6 @@
 <!-- meta page description: LRS (Linear Referencing System) -->
 <h2>DESCRIPTION</h2>
+
 A Linear Referencing System (LRS) is a system
 where features (points or segments) are localized by a measure along a linear element.
 The LRS can be used to reference events for any network of linear
@@ -10,18 +11,18 @@ composed from more features in the input map.  Events can be either
 points or lines (segments).
 
 <p>
-LRS is created from input lines and points in vector map. 
-Points - MP (mileposts) must have attached attributes specifying 
-line and distance. 
+LRS is created from input lines and points in vector map.
+Points - MP (mileposts) must have attached attributes specifying
+line and distance.
 The distances from the beginning of the linear feature in real world
-are specified by MP+offset. 
+are specified by MP+offset.
 Typically, MP is in kilometers and offset in meters.
 
 <p>
 The implementation of LRS in GRASS has some particularities.
 
 <h3>Double referenced system</h3>
-This feature gives a possibility to continue to use most of 
+This feature gives a possibility to continue to use most of
 old mileposts if only small part of linear object in real world
 has changed. Example:
 <div class="code"><pre>
@@ -32,7 +33,7 @@ has changed. Example:
 Old situation:
 
 <div class="code"><pre>
-+----+----+----+----+----+ 
++----+----+----+----+----+
 0    2    3    4    5    6
 </pre></div>
 
@@ -43,14 +44,14 @@ New situation (for example a new bypass around the village)
           +----+
           |    |
           |    |
-+----+----+    +----+----+ 
++----+----+    +----+----+
 0    2    3    4    5    6
 </pre></div>
 
-The segment between km 3 and 4 is now longer, it is now 3 km 
-not 1 km as in old version. It would be expensive to change also 
+The segment between km 3 and 4 is now longer, it is now 3 km
+not 1 km as in old version. It would be expensive to change also
 all MP &gt;= 4, but we cannot use km 4 twice.
-It is possible to use another notation for the new segment, 
+It is possible to use another notation for the new segment,
 we reference the segment from the kilometer 3, using only offset.
 
 <div class="code"><pre>
@@ -58,13 +59,13 @@ we reference the segment from the kilometer 3, using only offset.
           +----+
           |    |
           |    |
-+----+----+    +----+----+ 
++----+----+    +----+----+
 0    2    3  3+3000 5    6
                4
 </pre></div>
 
-This way, there is no ambiguity and minimal changes are needed. 
-But the MP 4 is no more the end of segment 3 - 4 but 
+This way, there is no ambiguity and minimal changes are needed.
+But the MP 4 is no more the end of segment 3 - 4 but
 the end of segment 3+2000 - 3+3000. This information
 must be entered to the system and it is done by optional MP attributes:
 
@@ -82,15 +83,15 @@ end_off:   3000
 
 Because each MP can keep 2 values (start, end) it is called 'double' referenced LRS.
 <p>
-To avoid potential confusion, MP values are limited to integers only. 
-It would be ambiguous to have for example segments 3.500 - 3.500+200 
-and 3.600 - 3.600+200. The position 3+650 would fall into 2 segments, 
-correct would be 3.600+50. 
-That means, that MP must be the beginning of antonomous segment 
-and all parts which becomes longer then before must be referenced 
+To avoid potential confusion, MP values are limited to integers only.
+It would be ambiguous to have for example segments 3.500 - 3.500+200
+and 3.600 - 3.600+200. The position 3+650 would fall into 2 segments,
+correct would be 3.600+50.
+That means, that MP must be the beginning of antonomous segment
+and all parts which becomes longer then before must be referenced
 from the last not changed MP.
 <p>
-The MP <em>start_mp</em> and <em>end_mp</em> columns must be decimal, but 
+The MP <em>start_mp</em> and <em>end_mp</em> columns must be decimal, but
 <em>v.lrs.create</em> takes only the decimal part, and adds its value to
 offset and prints a warning.
 <p>
@@ -124,7 +125,7 @@ for given points in vector map using linear referencing system.
 </ul>
 
 <h3>Input lines for v.lrs.segment and v.lrs.label</h3>
-<em>v.lrs.create</em> joins all connected lines of the same line ID into one line, 
+<em>v.lrs.create</em> joins all connected lines of the same line ID into one line,
 the LRS library and other modules using LRS expect this!
 LR_get_nearest_offset in the LRS library checks duplicate segments only
 by line_cat and map_offset, not by coordinates in map.
@@ -145,10 +146,10 @@ with another one, but MP are used only for one:
  + road1/km15         + road1/km22
   \                  /
    \ road1/km17     / road1/km20
-    +--------------+ 
+    +--------------+
    / road2/km52     \ road2/km52
   /                  \
- + road2/km50         + road2/km54 
+ + road2/km50         + road2/km54
 </pre></div>
 
 <h2>NOTES</h2>
@@ -175,12 +176,7 @@ Explanations of selected options:
 <em><a href="v.lrs.where.html">v.lrs.where</a></em>,
 <em><a href="v.lrs.label.html">v.lrs.label</a></em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
 Radim Blazek, ITC-irst/MPA Solutions Trento<br>
 Documentation update (based on above journal article and available fragments): Markus Neteler
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

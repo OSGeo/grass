@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_client/delete_tab.c
- * 
+ *
  * \brief DBMI Library (client) - delete table
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -17,29 +17,30 @@
 #include "macros.h"
 
 /*!
-  \brief Delete table
+   \brief Delete table
 
-  \param drvname driver name
-  \param dbname database name
-  \param tblname table name
+   \param drvname driver name
+   \param dbname database name
+   \param tblname table name
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
-int db_delete_table(const char *drvname, const char *dbname, const char *tblname)
+int db_delete_table(const char *drvname, const char *dbname,
+                    const char *tblname)
 {
     dbDriver *driver;
     dbString sql;
 
-    G_debug(3, "db_delete_table(): driver = %s, db = %s, table = %s\n",
-	    drvname, dbname, tblname);
+    G_debug(3, "db_delete_table(): driver = %s, db = %s, table = %s\n", drvname,
+            dbname, tblname);
 
     /* Open driver and database */
     driver = db_start_driver_open_database(drvname, dbname);
     if (driver == NULL) {
-	G_warning(_("Unable open database <%s> by driver <%s>"), dbname,
-		  drvname);
-	return DB_FAILED;
+        G_warning(_("Unable open database <%s> by driver <%s>"), dbname,
+                  drvname);
+        return DB_FAILED;
     }
 
     /* Delete table */
@@ -50,10 +51,9 @@ int db_delete_table(const char *drvname, const char *dbname, const char *tblname
     G_debug(3, "%s", db_get_string(&sql));
 
     if (db_execute_immediate(driver, &sql) != DB_OK) {
-	G_warning(_("Unable to drop table: '%s'"),
-		  db_get_string(&sql));
-	db_close_database_shutdown_driver(driver);
-	return DB_FAILED;
+        G_warning(_("Unable to drop table: '%s'"), db_get_string(&sql));
+        db_close_database_shutdown_driver(driver);
+        return DB_FAILED;
     }
 
     db_close_database_shutdown_driver(driver);

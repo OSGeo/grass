@@ -6,27 +6,26 @@
  */
 #include <grass/datetime.h>
 
-
 /*!
- * \brief 
+ * \brief
  *
- * Returns:  
- * 1 if the Datetime is positive  
+ * Returns:
+ * 1 if the Datetime is positive
  * 0 otherwise
  *
  *  \param dt
  *  \return int
  */
 
-int datetime_is_positive(const DateTime * dt)
+int datetime_is_positive(const DateTime *dt)
 {
     return dt->positive != 0;
 }
 
 /*!
- * \brief 
+ * \brief
  *
- * Returns:  
+ * Returns:
  * 1 if the DateTime is negative
  * 0 otherwise
  *
@@ -34,14 +33,13 @@ int datetime_is_positive(const DateTime * dt)
  *  \return int
  */
 
-int datetime_is_negative(const DateTime * dt)
+int datetime_is_negative(const DateTime *dt)
 {
     return dt->positive == 0;
 }
 
-
 /*!
- * \brief 
+ * \brief
  *
  * Makes the DateTime positive. (A.D. for ABSOLUTE DateTimes)
  *
@@ -49,14 +47,13 @@ int datetime_is_negative(const DateTime * dt)
  *  \return void
  */
 
-void datetime_set_positive(DateTime * dt)
+void datetime_set_positive(DateTime *dt)
 {
     dt->positive = 1;
 }
 
-
 /*!
- * \brief 
+ * \brief
  *
  * Makes the DateTime negative. (B.C. for ABSOLUTE DateTimes)
  *
@@ -64,20 +61,19 @@ void datetime_set_positive(DateTime * dt)
  *  \return void
  */
 
-void datetime_set_negative(DateTime * dt)
+void datetime_set_negative(DateTime *dt)
 {
     dt->positive = 0;
 }
 
-
 /*!
- * \brief 
+ * \brief
  *
  *  \param dt
  *  \return void
  */
 
-void datetime_invert_sign(DateTime * dt)
+void datetime_invert_sign(DateTime *dt)
 {
     dt->positive = !dt->positive;
 }

@@ -14,10 +14,10 @@ the 2D resolution will be adjusted to the 3D resolution.
 </table>
 </center>
 
-
 <h2>NOTES</h2>
+
 Every 2D raster map is copied as one slice to the raster3D map. Slices
-are counted from bottom to the top, so the bottom slice has to be number 1. 
+are counted from bottom to the top, so the bottom slice has to be number 1.
 <br><br>
 If less number of 2D raster maps are provided than defined depths, the
 last given 2D map is used to fill up the remaining raster3D slices to
@@ -31,7 +31,7 @@ This example shows how to convert 6 maps into one 3D map with 6 layers.
 <br>
 
 <div class="code"><pre>
-# Mapset data in Location slovakia3d
+# Mapset data in dataset slovakia3d
 g.region raster=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 -p
 g.region b=0 t=600 tbres=100 res3=100 -p3
 r.to.rast3 input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 output=new_3dmap
@@ -42,10 +42,10 @@ This example shows how to convert 3 maps into one 3D map with 6 layers.
 <br>
 
 <div class="code"><pre>
-# Mapset data in Location slovakia3d
+# Mapset data in dataset slovakia3d
 g.region b=0 t=600 tbres=100 res3=100 -p3
 r.to.rast3 input=prec_1,prec_2,prec_3 output=new_3dmap
-</pre></div>                                                                           
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
@@ -56,9 +56,5 @@ r.to.rast3 input=prec_1,prec_2,prec_3 output=new_3dmap
 </em>
 
 <h2>AUTHOR</h2>
-Soeren Gebbert
 
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+Soeren Gebbert

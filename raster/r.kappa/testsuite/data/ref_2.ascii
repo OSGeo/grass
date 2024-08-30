@@ -1,0 +1,14 @@
+north:  5
+south:  0
+east:   5
+west:   0
+rows:   5
+cols:   5
+null:   n
+type:   int
+
+0 1 2 1 0
+1 2 3 2 1
+2 3 4 3 2
+1 2 3 2 1
+0 1 2 1 0

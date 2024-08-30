@@ -12,11 +12,11 @@ void trnm(double *a, int n)
     int i, j, e;
 
     for (i = 0, e = n - 1; i < n - 1; ++i, --e, a += n + 1) {
-	for (p = a + 1, q = a + n, j = 0; j < e; ++j) {
-	    s = *p;
-	    *p++ = *q;
-	    *q = s;
-	    q += n;
-	}
+        for (p = a + 1, q = a + n, j = 0; j < e; ++j) {
+            s = *p;
+            *p++ = *q;
+            *q = s;
+            q += n;
+        }
     }
 }

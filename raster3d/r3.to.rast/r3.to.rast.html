@@ -1,9 +1,9 @@
 <h2>DESCRIPTION</h2>
 
-Converts one 3D raster map into several 2D raster maps (depends on depths). 
-If the 2D and 3D region settings are different, the 3D resolution will be 
+Converts one 3D raster map into several 2D raster maps (depends on depths).
+If the 2D and 3D region settings are different, the 3D resolution will be
 adjusted to the 2D resolution (the depths are not touched).
-The user can force <em>r3.to.rast</em> to use the 2D resolution of the input 
+The user can force <em>r3.to.rast</em> to use the 2D resolution of the input
 3D raster map for the output maps, independently from the current region settings.
 
 <center>
@@ -26,8 +26,7 @@ the <b>type</b> option.
 The <b>type</b> option is especially advantageous when the 3D raster
 map stores categories (which need to be stored as floating point numbers)
 and the 2D raster map should be also categorical, i.e. use integers.
-The type is set to <tt>CELL</tt> in this case. 
-
+The type is set to <tt>CELL</tt> in this case.
 
 <h3>Modifying the values</h3>
 
@@ -46,12 +45,11 @@ and <em>y</em> is the new value. When <b>multiply</b> is not provided,
 the value of <em>a</em> is 1. When <b>add</b> is not provided, the value
 of <em>b</em> is 0.
 
-
 <h2>NOTES</h2>
 
 Every slice of the 3D raster map is copied to one 2D raster map. The maps
 are named like <b>output</b><em>_slicenumber</em>. Slices are counted from bottom
-to the top, so the bottom slice has number 1. 
+to the top, so the bottom slice has number 1.
 
 <p>
 The number of slices is equal to the number of depths.
@@ -69,11 +67,7 @@ the <b>add</b> option should be set to 0.5.
 <a href="g.region.html">g.region</a>
 </em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
+
 S&ouml;ren Gebbert
 Vaclav Petras, <a href="http://geospatial.ncsu.edu/osgeorel/">NCSU GeoForAll Lab</a>
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

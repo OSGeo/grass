@@ -7,7 +7,7 @@
 #include <grass/gis.h>
 
 #ifdef SIGPIPE
-static RETSIGTYPE (*sigpipe)(int);
+static void (*sigpipe)(int);
 #endif
 
 FILE *G_open_pager(struct Popen *pager)
@@ -18,10 +18,10 @@ FILE *G_open_pager(struct Popen *pager)
     G_popen_clear(pager);
 
     if (!program)
-	return stdout;
+        return stdout;
 
     if (!isatty(STDOUT_FILENO))
-	return stdout;
+        return stdout;
 
 #ifdef SIGPIPE
     sigpipe = signal(SIGPIPE, SIG_IGN);
@@ -38,7 +38,7 @@ void G_close_pager(struct Popen *pager)
 
 #ifdef SIGPIPE
     if (sigpipe)
-	signal(SIGPIPE, sigpipe);
+        signal(SIGPIPE, sigpipe);
 #endif
 }
 
@@ -51,7 +51,7 @@ FILE *G_open_mail(struct Popen *mail)
     G_popen_clear(mail);
 
     if (!user || !*user)
-	return NULL;
+        return NULL;
 
     argv[0] = "mail";
     argv[1] = user;
@@ -66,4 +66,3 @@ void G_close_mail(struct Popen *mail)
 {
     G_popen_close(mail);
 }
-

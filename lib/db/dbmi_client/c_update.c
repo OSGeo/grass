@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_client/c_update.c
- * 
+ *
  * \brief DBMI Library (client) - update statemets
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -16,14 +16,14 @@
 #include "macros.h"
 
 /*!
-  \brief ?
+   \brief ?
 
-  \param cursor db cursor
+   \param cursor db cursor
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
-*/
-int db_update(dbCursor * cursor)
+   \return DB_OK on success
+   \return DB_FAILED on failure
+ */
+int db_update(dbCursor *cursor)
 {
     int ret_code;
 
@@ -39,7 +39,7 @@ int db_update(dbCursor * cursor)
     DB_RECV_RETURN_CODE(&ret_code);
 
     if (ret_code != DB_OK)
-	return ret_code;	/* ret_code SHOULD == DB_FAILED */
+        return ret_code; /* ret_code SHOULD == DB_FAILED */
 
     /* no results */
     return DB_OK;

@@ -15,7 +15,7 @@ another program).
 <p>Before using <em>r.reclass</em> the user must know the following:
 
 <ol>
-<li>The new categories desired;  and, which old categories fit into 
+<li>The new categories desired;  and, which old categories fit into
 which new categories.
 <li>The names of the new categories.
 </ol>
@@ -38,7 +38,7 @@ the raster values down to the next integer.
 which is based on another <em>r.reclass</em> map,
 the new <em>r.reclass</em> map will be stored in GRASS as a reclass
 of the <em>original</em> raster map on which the first reclassed map was
-based.  Therefore, while GRASS allows the user to provide <em>r.reclass</em> 
+based.  Therefore, while GRASS allows the user to provide <em>r.reclass</em>
 map layer information which is based on an already reclassified map
 (for the user's convenience), no <em>r.reclass</em> map layer
 (i.e., <em>reclass table</em>) will ever be <em>stored</em>
@@ -47,7 +47,7 @@ as a <em>r.reclass</em> of a <em>r.reclass</em>.
 <p>To convert a reclass map to a regular raster map layer, set your
 geographic region settings to match the settings in the header for the
 reclass map (with "<tt>g.region&nbsp;raster=reclass_map</tt>", or
-viewable by running <em><a href="r.info.html">r.info</a></em>) 
+viewable by running <em><a href="r.info.html">r.info</a></em>)
 and then run <em><a href="r.resample.html">r.resample</a></em>.
 
 <p><em><a href="r.mapcalc.html">r.mapcalc</a></em> can be used to convert
@@ -68,7 +68,7 @@ no longer be accessible if the original raster map layer, upon which
 it was based, is later removed. Therefore, attempting to remove a
 raster map layer from which a <em>r.reclass</em> has been derived
 is only possible if the original map is removed first.
-Alternatively, a <em>r.reclass</em> map can be removed including 
+Alternatively, a <em>r.reclass</em> map can be removed including
 its base map by using <p><em><a href="g.remove.html">g.remove</a></em>'s
 <b>-b</b> flag.
 
@@ -80,7 +80,6 @@ from which they were generated. Alternatively <em>r.recode</em> can be used.
 
 <p>Category values which are not explicitly reclassified to a new value
 by the user will be reclassified to NULL.
-
 
 <h3>Reclass Rules</h3>
 
@@ -103,14 +102,13 @@ word "thru" must be present.
 <p>To include all (remaining) values the asterix "*" can be used. This
 rule has to be set as last rule. No further rules are accepted after
 setting this rule. The special rule "<tt>* = *</tt>" specifies
-that all categories not expicitly set by one of the above rules
+that all categories not explicitly set by one of the above rules
 should be passed through unaltered instead of being set to NULL.
 <p>Categories to become no data are specified by setting the output
 category value to "<tt>NULL</tt>".
 <p>
 A line containing only the word <b>end</b> terminates the
 input.
-
 
 <h2>EXAMPLES</h2>
 
@@ -143,7 +141,7 @@ All other values are reclassified to NULL.
 
 <p>
 The following example reclassifies input raster map layer categories
-1 thru 10 to output 
+1 thru 10 to output
 map layer category 1, input map layer categories 11 thru 20 to output map layer
 category 2, and input map layer categories 21 thru 30 to output map layer
 category 3, all without labels. The range from 30 to 40 is reclassified as
@@ -187,11 +185,10 @@ or as:
 
 <p>
 The final example was given to show how the labels are handled.  If a new
-category value appears in more than one rule (as is the case with new 
+category value appears in more than one rule (as is the case with new
 category values 1 and 2),
 the last label which was specified becomes the label for that category.
 In this case the labels are assigned exactly as in the two previous examples.
-
 
 <h3>Usage example</h3>
 
@@ -241,14 +238,8 @@ r.category landuse96_recl
 <a href="r.rescale.html">r.rescale</a>
 </em>
 
-
 <h2>AUTHORS</h2>
 
 James Westervelt,<br>
 Michael Shapiro<br>
 U.S.Army Construction Engineering Research Laboratory
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

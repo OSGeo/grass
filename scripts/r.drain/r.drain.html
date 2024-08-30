@@ -3,11 +3,11 @@
 <em>r.drain</em> traces a flow through a least-cost path in an
 elevation model or cost surface. For cost surfaces, a movement
 direction map must be specified with the
-<b>direction</b> option and the <b>-d</b> flag to trace a flow path following 
-the given directions. Such a movement direction map can be generated with 
-<em><a href="r.walk.html">r.walk</a></em>, 
-<em><a href="r.cost.html">r.cost</a></em>, 
-<em><a href="r.slope.aspect.html">r.slope.aspect</a></em> or 
+<b>direction</b> option and the <b>-d</b> flag to trace a flow path following
+the given directions. Such a movement direction map can be generated with
+<em><a href="r.walk.html">r.walk</a></em>,
+<em><a href="r.cost.html">r.cost</a></em>,
+<em><a href="r.slope.aspect.html">r.slope.aspect</a></em> or
 <em><a href="r.watershed.html">r.watershed</a></em>
 provided that the direction is in degrees, measured counterclockwise
 from east.
@@ -37,22 +37,22 @@ accurately accounts for the variable scale in lat-lon projections. For
 a cost surface, the path is calculated by following the movement
 direction surface back to the start point given
 in <em><a href="r.walk.html">r.walk</a></em> or
-<em><a href="r.cost.html">r.cost</a></em>. The path search stops 
-as soon as a region border or a neighboring NULL cell is encountered, 
-because in these cases the direction can not be determined (the path 
+<em><a href="r.cost.html">r.cost</a></em>. The path search stops
+as soon as a region border or a neighboring NULL cell is encountered,
+because in these cases the direction can not be determined (the path
 could continue outside the current region).
 
 <p>The <b>start_coordinates</b> parameter consists of map E and N grid coordinates of
 a starting point. Each x,y pair is the easting and northing (respectively) of
 a starting point from which a least-cost corridor will be developed.
-The <b>start_points</b> parameter can take multiple vector maps containing 
+The <b>start_points</b> parameter can take multiple vector maps containing
 additional starting points.
 Up to 1024 starting points can be input from a combination of the
 <b>start_coordinates</b> and <b>start_points</b> parameters.
 
 <h3>Explanation of output values</h3>
 
-Consider the following example: 
+Consider the following example:
 
 <div class="code"><pre>
 Input:                          Output:
@@ -75,10 +75,10 @@ Input:                          Output:
 </pre></div>
 
 <p>
-The user-provided starting location in the above example is 
-the boxed <b>19</b> in the left-hand map. The path in the output 
-shows the least-cost corridor for moving from the starting 
-box to the lowest (smallest) possible point. This is the path a raindrop 
+The user-provided starting location in the above example is
+the boxed <b>19</b> in the left-hand map. The path in the output
+shows the least-cost corridor for moving from the starting
+box to the lowest (smallest) possible point. This is the path a raindrop
 would take in this landscape.
 <p>
 With the <b>-c</b> <em>(copy)</em> flag, you get the following result:
@@ -151,14 +151,14 @@ Input:                          Output:
 . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
 </pre></div>
 
-With the <b>-d</b> <em>(direction)</em> flag, the direction raster is used 
-for the input, rather than the elevation surface. The output is then created 
+With the <b>-d</b> <em>(direction)</em> flag, the direction raster is used
+for the input, rather than the elevation surface. The output is then created
 according to one of the <b>-can</b> flags.
 <div class="code"><pre>
 The directions are recorded as degrees CCW from East:
-       112.5     67.5         i.e. a cell with the value 135 
-157.5  135   90  45   22.5    means the next cell is to the North-West 
-       180   x   0            
+       112.5     67.5         i.e. a cell with the value 135
+157.5  135   90  45   22.5    means the next cell is to the North-West
+       180   x   0
 202.5  225  270  315  337.5
        247.5     292.5
 </pre></div>
@@ -180,8 +180,8 @@ with <em>r.drain</em>.
 
 <p>
 <em>r.drain</em> will not give sane results at the region boundary. On outer rows
-and columns bordering the edge of the region, the flow direction is always directly out 
-of the map. In this case, the user could try adjusting the region extents slightly with 
+and columns bordering the edge of the region, the flow direction is always directly out
+of the map. In this case, the user could try adjusting the region extents slightly with
 <em>g.region</em> to allow additional outlet paths for <em>r.drain</em>.
 
 <h2>EXAMPLES</h2>
@@ -278,7 +278,7 @@ r.watershed were used</i>
 <h2>KNOWN ISSUES</h2>
 
 <p>Sometimes, when the differences among integer cell category values in the
-<em><a href="r.cost.html">r.cost</a></em> cumulative cost surface output are 
+<em><a href="r.cost.html">r.cost</a></em> cumulative cost surface output are
 small, this cumulative cost output cannot accurately be used as input to
 <em>r.drain</em> (<em>r.drain</em> will output bad results).
 This problem can be circumvented by making the differences
@@ -290,7 +290,6 @@ before running <em>r.cost</em>. This can be done using
 <em><a href="r.mapcalc.html">r.mapcalc</a></em>. The map resolution can be
 found using <em><a href="g.region.html">g.region</a></em>.
 This problem doesn't arise with floating point maps.
-
 
 <h2>SEE ALSO</h2>
 
@@ -311,8 +310,3 @@ Completely rewritten by Roger S. Miller, 2001<br>
 July 2004 at WebValley 2004, error checking and vector points added by
 Matteo Franchi (Liceo Leonardo Da Vinci, Trento) and
 Roberto Flor (ITC-irst, Trento, Italy)
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

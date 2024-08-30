@@ -1,7 +1,7 @@
 #!/bin/sh
 # Space time raster dataset temporal snapping with absolute time
 # We need to set a specific region in the
-# @preprocess step of this test. 
+# @preprocess step of this test.
 # The region setting should work for UTM and LL test locations
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
@@ -13,7 +13,7 @@ r.mapcalc --o expr="prec_4 = rand(0, 510)" -s
 r.mapcalc --o expr="prec_5 = rand(0, 300)" -s
 r.mapcalc --o expr="prec_6 = rand(0, 650)" -s
 
-n1=`g.tempfile pid=1 -d` 
+n1=`g.tempfile pid=1 -d`
 
 cat > "${n1}" << EOF
 prec_1|2001-01-01|2001-07-01
@@ -32,7 +32,7 @@ t.register --o type=raster input=precip_abs maps=prec_1,prec_2,prec_3,prec_4,pre
 t.info type=strds input=precip_abs
 t.rast.list input=precip_abs
 
-t.snap --o input=precip_abs 
+t.snap --o input=precip_abs
 
 t.info type=strds input=precip_abs
 t.rast.list input=precip_abs
@@ -44,7 +44,7 @@ t.register --o type=raster input=precip_abs file=${n1}
 t.rast.list input=precip_abs
 t.topology input=precip_abs
 
-t.snap --o input=precip_abs 
+t.snap --o input=precip_abs
 
 t.rast.list input=precip_abs
 t.topology input=precip_abs

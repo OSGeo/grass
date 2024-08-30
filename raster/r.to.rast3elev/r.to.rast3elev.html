@@ -13,15 +13,16 @@ the 2d resolution will be adjust to the 3d resolution.
 </table>
 </center>
 
-
 <h2>NOTES</h2>
-The hight of the 2D elevation maps will be used to verify the position 
-within the 3D region. If the cell value of the elevation raster maps is located within the 3D region, the 
+
+The height of the 2D elevation maps will be used to verify the position
+within the 3D region. If the cell value of the elevation raster maps is located within the 3D region, the
 cell value of the appropriate 2D input raster maps will be written to the associated 3D cell.
 There are flags and options to fill the upper and lower 3D cells with a specific value, or the
 input raster maps values.
 
-<h2>Example</h2>
+<h2>EXAMPLES</h2>
+
 Simple Spearfish sample data set example
 
 <div class="code"><pre>
@@ -46,9 +47,9 @@ r.to.rast3elev in=soils elev=elevation.10m out=volev_u -u
 # Example with multiple elevation maps.
 ## first we need three support maps
 
-r.mapcalc expression="one = 1" 
-r.mapcalc expression="two = 2" 
-r.mapcalc expression="three = 3" 
+r.mapcalc expression="one = 1"
+r.mapcalc expression="two = 2"
+r.mapcalc expression="three = 3"
 
 ## Now we generate the new evelation maps
 
@@ -60,17 +61,17 @@ r.mapcalc expression="elev_bottom = elevation.10m - 1000"
 r.to.rast3elev -l input=one,two,three elevation=elevation.10m,elev_mid,elev_bottom output=threelayer
 
 ## Export the map for visualization with paraview (http://www.paraview.org)
-## By default the null value is -9999.99, we adjust it to 0.0 for 
-## better visualization 
+## By default the null value is -9999.99, we adjust it to 0.0 for
+## better visualization
 r3.out.vtk null=0.0 input=threelayer output=/tmp/threelayer.vtk
 
-# Start paraview 
+# Start paraview
 
 paraview --data=/tmp/threelayer.vtk
 
-# Note: First you need to choose the surface representation style and 
+# Note: First you need to choose the surface representation style and
 # then color by "threelayer" in paraview.
-</pre></div>                                                                           
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
@@ -81,9 +82,5 @@ paraview --data=/tmp/threelayer.vtk
 </em>
 
 <h2>AUTHOR</h2>
-Soeren Gebbert
 
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+Soeren Gebbert

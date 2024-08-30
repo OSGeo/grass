@@ -9,23 +9,23 @@ int ruinv(double *a, int n)
 {
     int j;
 
-    double fabs();
+    double fabs(double);
 
     double tt, z, *p, *q, *r, *s, *t;
 
     for (j = 0, tt = 0., p = a; j < n; ++j, p += n + 1)
-	if ((z = fabs(*p)) > tt)
-	    tt = z;
+        if ((z = fabs(*p)) > tt)
+            tt = z;
     tt *= 1.e-16;
     for (j = 0, p = a; j < n; ++j, p += n + 1) {
-	if (fabs(*p) < tt)
-	    return -1;
-	*p = 1. / *p;
-	for (q = a + j, t = a; q < p; t += n + 1, q += n) {
-	    for (s = q, r = t, z = 0.; s < p; s += n)
-		z -= *s * *r++;
-	    *q = z * *p;
-	}
+        if (fabs(*p) < tt)
+            return -1;
+        *p = 1. / *p;
+        for (q = a + j, t = a; q < p; t += n + 1, q += n) {
+            for (s = q, r = t, z = 0.; s < p; s += n)
+                z -= *s * *r++;
+            *q = z * *p;
+        }
     }
     return 0;
 }

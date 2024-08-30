@@ -2,17 +2,30 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-struct _gstats_
-{
+struct _gstats_ {
     long *cats;
     long count;
 };
 
-struct _layer_
-{
+struct _layer_ {
     const char *name;
     const char *mapset;
     struct Categories labels;
+};
+
+struct _metrics_ {
+    long observations;
+    long correct;
+    long *matrix;
+    long *row_sum;
+    long *col_sum;
+    double overall_accuracy;
+    double *producers_accuracy;
+    double *users_accuracy;
+    double kappa;
+    double kappa_variance;
+    double *conditional_kappa;
+    double mcc;
 };
 
 extern struct Cell_head window;
@@ -32,3 +45,8 @@ extern int nlayers;
 #define GSTATS struct _gstats_
 extern GSTATS *Gstats;
 extern size_t nstats;
+
+#define METRICS struct _metrics_
+extern METRICS *metrics;
+
+static const double na_value = -999.0;

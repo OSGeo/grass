@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       display
@@ -21,9 +20,8 @@
 #include <grass/glocale.h>
 
 static void symbol(const SYMBOL *Symb, double x0, double y0,
-		   const RGBA_Color *fill_color,
-		   const RGBA_Color *line_color,
-		   const RGBA_Color *string_color)
+                   const RGBA_Color *fill_color, const RGBA_Color *line_color,
+                   const RGBA_Color *string_color)
 {
     int i, j, k;
     const SYMBPART *part;
@@ -36,91 +34,90 @@ static void symbol(const SYMBOL *Symb, double x0, double y0,
     G_debug(2, "D_symbol(): %d parts", Symb->count);
 
     for (i = 0; i < Symb->count; i++) {
-	part = Symb->part[i];
+        part = Symb->part[i];
 
-	switch (part->type) {
+        switch (part->type) {
 
-	case S_POLYGON:
-	    /* draw background fills */
-	    if ((part->fcolor.color == S_COL_DEFAULT &&
-		 fill_color->a != RGBA_COLOR_NONE) ||
-		part->fcolor.color == S_COL_DEFINED) {
-		if (part->fcolor.color == S_COL_DEFAULT)
-		    D_RGB_color(fill_color->r, fill_color->g, fill_color->b);
-		else
-		    D_RGB_color(part->fcolor.r, part->fcolor.g,
-				part->fcolor.b);
+        case S_POLYGON:
+            /* draw background fills */
+            if ((part->fcolor.color == S_COL_DEFAULT &&
+                 fill_color->a != RGBA_COLOR_NONE) ||
+                part->fcolor.color == S_COL_DEFINED) {
+                if (part->fcolor.color == S_COL_DEFAULT)
+                    D_RGB_color(fill_color->r, fill_color->g, fill_color->b);
+                else
+                    D_RGB_color(part->fcolor.r, part->fcolor.g, part->fcolor.b);
 
-		for (j = 0; j < part->count; j++) {	/* for each component polygon */
-		    chain = part->chain[j];
+                for (j = 0; j < part->count;
+                     j++) { /* for each component polygon */
+                    chain = part->chain[j];
 
-		    x = G_malloc(sizeof(double) * chain->scount);
-		    y = G_malloc(sizeof(double) * chain->scount);
+                    x = G_malloc(sizeof(double) * chain->scount);
+                    y = G_malloc(sizeof(double) * chain->scount);
 
-		    for (k = 0; k < chain->scount; k++) {
-			x[k] = x0 + sx * chain->sx[k];
-			y[k] = y0 - sy * chain->sy[k];
-		    }
-		    D_polygon_abs(x, y, chain->scount);
+                    for (k = 0; k < chain->scount; k++) {
+                        x[k] = x0 + sx * chain->sx[k];
+                        y[k] = y0 - sy * chain->sy[k];
+                    }
+                    D_polygon_abs(x, y, chain->scount);
 
-		    G_free(x);
-		    G_free(y);
-		}
+                    G_free(x);
+                    G_free(y);
+                }
+            }
+            /* again, to draw the lines */
+            if ((part->color.color == S_COL_DEFAULT &&
+                 line_color->a != RGBA_COLOR_NONE) ||
+                part->color.color == S_COL_DEFINED) {
+                if (part->color.color == S_COL_DEFAULT)
+                    D_RGB_color(line_color->r, line_color->g, line_color->b);
+                else
+                    D_RGB_color(part->color.r, part->color.g, part->color.b);
 
-	    }
-	    /* again, to draw the lines */
-	    if ((part->color.color == S_COL_DEFAULT &&
-		 line_color->a != RGBA_COLOR_NONE) ||
-		part->color.color == S_COL_DEFINED) {
-		if (part->color.color == S_COL_DEFAULT)
-		    D_RGB_color(line_color->r, line_color->g, line_color->b);
-		else
-		    D_RGB_color(part->color.r, part->color.g, part->color.b);
+                for (j = 0; j < part->count; j++) {
+                    chain = part->chain[j];
 
-		for (j = 0; j < part->count; j++) {
-		    chain = part->chain[j];
+                    D_begin();
+                    for (k = 0; k < chain->scount; k++) {
+                        xp = x0 + sx * chain->sx[k];
+                        yp = y0 - sy * chain->sy[k];
+                        if (k == 0)
+                            D_move_abs(xp, yp);
+                        else
+                            D_cont_abs(xp, yp);
+                    }
+                    D_end();
+                    D_stroke();
+                }
+            }
+            break;
 
-		    D_begin();
-		    for (k = 0; k < chain->scount; k++) {
-			xp = x0 + sx * chain->sx[k];
-			yp = y0 - sy * chain->sy[k];
-			if (k == 0)
-			    D_move_abs(xp, yp);
-			else
-			    D_cont_abs(xp, yp);
-		    }
-		    D_end();
-		    D_stroke();
-		}
-	    }
-	    break;
+        case S_STRING:
+            if (part->color.color == S_COL_NONE)
+                break;
+            else if (part->color.color == S_COL_DEFAULT &&
+                     string_color->a != RGBA_COLOR_NONE)
+                D_RGB_color(string_color->r, string_color->g, string_color->b);
+            else
+                D_RGB_color(part->color.r, part->color.g, part->color.b);
 
-	case S_STRING:
-	    if (part->color.color == S_COL_NONE)
-		break;
-	    else if (part->color.color == S_COL_DEFAULT &&
-		     string_color->a != RGBA_COLOR_NONE)
-		D_RGB_color(string_color->r, string_color->g, string_color->b);
-	    else
-		D_RGB_color(part->color.r, part->color.g, part->color.b);
+            chain = part->chain[0];
 
-	    chain = part->chain[0];
+            D_begin();
+            for (j = 0; j < chain->scount; j++) {
+                xp = x0 + sx * chain->sx[j];
+                yp = y0 - sy * chain->sy[j];
+                if (j == 0)
+                    D_move_abs(xp, yp);
+                else
+                    D_cont_abs(xp, yp);
+            }
+            D_end();
+            D_stroke();
+            break;
 
-	    D_begin();
-	    for (j = 0; j < chain->scount; j++) {
-		xp = x0 + sx * chain->sx[j];
-		yp = y0 - sy * chain->sy[j];
-		if (j == 0)
-		    D_move_abs(xp, yp);
-		else
-		    D_cont_abs(xp, yp);
-	    }
-	    D_end();
-	    D_stroke();
-	    break;
-
-	}			/* switch */
-    }				/* for loop */
+        } /* switch */
+    } /* for loop */
 }
 
 /*!
@@ -151,12 +148,10 @@ static void symbol(const SYMBOL *Symb, double x0, double y0,
  */
 
 void D_symbol(const SYMBOL *Symb, double x0, double y0,
-	      const RGBA_Color *line_color,
-	      const RGBA_Color *fill_color)
+              const RGBA_Color *line_color, const RGBA_Color *fill_color)
 {
     symbol(Symb, x0, y0, fill_color, line_color, line_color);
 }
-
 
 /*!
  * \brief draw a symbol at pixel coordinates (alternate)
@@ -175,8 +170,8 @@ void D_symbol(const SYMBOL *Symb, double x0, double y0,
  *  \return void
  */
 void D_symbol2(const SYMBOL *Symb, double x0, double y0,
-	       const RGBA_Color *primary_color,
-	       const RGBA_Color *secondary_color)
+               const RGBA_Color *primary_color,
+               const RGBA_Color *secondary_color)
 {
     symbol(Symb, x0, y0, primary_color, secondary_color, primary_color);
 }

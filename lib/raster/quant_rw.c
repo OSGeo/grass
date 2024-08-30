@@ -1,6 +1,6 @@
 /*!
  * \file lib/raster/quant_rw.c
- * 
+ *
  * \brief Raster Library - Quantization rules (read/write).
  *
  * (C) 1999-2009 by the GRASS Development Team
@@ -69,7 +69,7 @@ void Rast_round_fp_map(const char *name, const char *mapset)
  * Make a rule for map \<name\> that maps floating range (d_min, d_max)
  * into integer range (min, max)
  * This function is useful when the quant rule doesn't depend of the
- * range of produced float data, for example the slope map whould
+ * range of produced float data, for example the slope map would
  * want to have a quant rule: 0.0, 90.0 -> 0 , 90
  * no matter what the min and max slope of this map is.
 
@@ -78,19 +78,19 @@ void Rast_round_fp_map(const char *name, const char *mapset)
  * \param cmin minimum value
  * \param cmax maximum value
  */
-void Rast_quantize_fp_map(const char *name, const char *mapset,
-			  CELL min, CELL max)
+void Rast_quantize_fp_map(const char *name, const char *mapset, CELL min,
+                          CELL max)
 {
     DCELL d_min, d_max;
     struct FPRange fp_range;
 
     if (Rast_read_fp_range(name, mapset, &fp_range) < 0)
-	G_fatal_error(_("Unable to read fp range for raster map <%s>"),
-		      G_fully_qualified_name(name, mapset));
+        G_fatal_error(_("Unable to read fp range for raster map <%s>"),
+                      G_fully_qualified_name(name, mapset));
     Rast_get_fp_range_min_max(&fp_range, &d_min, &d_max);
     if (Rast_is_d_null_value(&d_min) || Rast_is_d_null_value(&d_max))
-	G_fatal_error(_("Raster map <%s> is empty"),
-		      G_fully_qualified_name(name, mapset));
+        G_fatal_error(_("Raster map <%s> is empty"),
+                      G_fully_qualified_name(name, mapset));
     Rast_quantize_fp_map_range(name, mapset, d_min, d_max, min, max);
 }
 
@@ -110,7 +110,7 @@ void Rast_quantize_fp_map(const char *name, const char *mapset,
  * Make a rule for map \<name\> that maps floating range (d_min, d_max)
  * into integer range (min, max)
  * This function is useful when the quant rule doesn't depend of the
- * range of produced float data, for example the slope map whould
+ * range of produced float data, for example the slope map would
  * want to have a quant rule: 0.0, 90.0 -> 0 , 90
  * no matter what the min and max slope of this map is.
  *
@@ -122,7 +122,7 @@ void Rast_quantize_fp_map(const char *name, const char *mapset,
  * \param max maximum value
  */
 void Rast_quantize_fp_map_range(const char *name, const char *mapset,
-				DCELL d_min, DCELL d_max, CELL min, CELL max)
+                                DCELL d_min, DCELL d_max, CELL min, CELL max)
 {
     struct Quant quant;
 
@@ -148,39 +148,40 @@ void Rast_quantize_fp_map_range(const char *name, const char *mapset,
  * \param quant pointer to Quant structure which hold quant rules info
  */
 void Rast_write_quant(const char *name, const char *mapset,
-		      const struct Quant *quant)
+                      const struct Quant *quant)
 {
     CELL cell_min, cell_max;
     DCELL d_min, d_max;
 
     if (Rast_map_type(name, mapset) == CELL_TYPE) {
-	G_warning(_("Unable to write quant rules: raster map <%s> is integer"),
-		  name);
-	return;
+        G_warning(_("Unable to write quant rules: raster map <%s> is integer"),
+                  name);
+        return;
     }
 
     Rast_quant_get_limits(quant, &d_min, &d_max, &cell_min, &cell_max);
 
     /* first actually write the rules */
     if (Rast__quant_export(name, mapset, quant) < 0)
-	G_fatal_error(_("Unable to write quant rules for raster map <%s>"), name);
+        G_fatal_error(_("Unable to write quant rules for raster map <%s>"),
+                      name);
 }
 
 /*!
- * \brief 
+ * \brief
  *
  * Reads quantization rules for <i>name</i> in <i>mapset</i> and
  * stores them in the quantization structure. If the map is in another
  * mapset, first checks for quant2 table for this map in current
- * mapset. 
+ * mapset.
  *  \param name
  *  \param mapset
  *  \param q
  *
  * \return -2 if raster map is of type integer
  * \return -1 if (!G_name_is_fully_qualified())
- * \return 0 if quantization file does not exist, or the file is empty or has wrong format
- * \return 1 if non-empty quantization file exists
+ * \return 0 if quantization file does not exist, or the file is empty or has
+ * wrong format \return 1 if non-empty quantization file exists
  *
  */
 int Rast_read_quant(const char *name, const char *mapset, struct Quant *quant)

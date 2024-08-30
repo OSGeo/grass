@@ -1,14 +1,13 @@
-
 /****************************************************************
  *
  * MODULE:       d.grid
- * 
+ *
  * AUTHOR(S):    James Westervelt, U.S. Army CERL
  *               Geogrid support: Bob Covill, www.tekmap.ns.ca
- *               
+ *
  * PURPOSE:      Draw the coordinate grid the user wants displayed on
  *               top of the current image
- *               
+ *
  * COPYRIGHT:    (C) 1999-2008, 2013 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -27,14 +26,13 @@
 
 #include "local_proto.h"
 
-
 int main(int argc, char **argv)
 {
     int colorg = 0;
     int colorb = 0;
     int colort = 0;
     int colorbg = 0;
-    double size = 0., gsize = 0.;       /* initialize to zero */
+    double size = 0., gsize = 0.; /* initialize to zero */
     double east, north;
     int do_text, fontsize, mark_type, line_width, dirn;
     struct GModule *module;
@@ -42,7 +40,7 @@ int main(int argc, char **argv)
         *direction, *bgcolor;
     struct Flag *noborder, *notext, *geogrid, *nogrid, *wgs84, *cross,
         *fiducial, *dot, *align;
-    struct pj_info info_in, info_out, info_trans;     /* Proj structures */
+    struct pj_info info_in, info_out, info_trans; /* Proj structures */
     struct Cell_head wind;
 
     /* Initialize the GIS calls */
@@ -63,10 +61,9 @@ int main(int argc, char **argv)
     opt2->type = TYPE_STRING;
     opt2->required = YES;
     opt2->label = _("Size of grid to be drawn (in map units)");
-    opt2->description =
-        _("0 for north-south resolution of the current region. "
-          "In map units or DDD:MM:SS format. "
-          "Example: \"1000\" or \"0:10\"");
+    opt2->description = _("0 for north-south resolution of the current region. "
+                          "In map units or DDD:MM:SS format. "
+                          "Example: \"1000\" or \"0:10\"");
 
     opt3 = G_define_standard_option(G_OPT_M_COORDS);
     opt3->key = "origin";
@@ -171,16 +168,17 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-
     /* do some checking */
     if (nogrid->answer && noborder->answer)
         G_fatal_error(_("Both grid and border drawing are disabled"));
     if (wgs84->answer)
-        geogrid->answer = 1;    /* -w implies -g */
+        geogrid->answer = 1; /* -w implies -g */
     if (geogrid->answer && G_projection() == PROJECTION_LL)
-        G_fatal_error(_("Geo-grid option not available for LL projection, use without -g/-w"));
+        G_fatal_error(_("Geo-grid option not available for LL projection, use "
+                        "without -g/-w"));
     if (geogrid->answer && G_projection() == PROJECTION_XY)
-        G_fatal_error(_("Geo-grid option not available for XY projection, use without -g/-w"));
+        G_fatal_error(_("Geo-grid option not available for XY projection, use "
+                        "without -g/-w"));
 
     if (notext->answer)
         do_text = FALSE;
@@ -245,25 +243,21 @@ int main(int argc, char **argv)
 
         G_get_set_window(&w);
         east =
-            wind.west +
-            (int)((w.west - wind.west) / wind.ew_res) * wind.ew_res;
-        north =
-            wind.south +
-            (int)((w.south - wind.south) / wind.ns_res) * wind.ns_res;
+            wind.west + (int)((w.west - wind.west) / wind.ew_res) * wind.ew_res;
+        north = wind.south +
+                (int)((w.south - wind.south) / wind.ns_res) * wind.ns_res;
     }
     else {
         /* get grid easting start */
         if (!G_scan_easting(opt3->answers[0], &east, G_projection())) {
             G_usage();
-            G_fatal_error(_("Illegal east coordinate <%s>"),
-                          opt3->answers[0]);
+            G_fatal_error(_("Illegal east coordinate <%s>"), opt3->answers[0]);
         }
 
         /* get grid northing start */
         if (!G_scan_northing(opt3->answers[1], &north, G_projection())) {
             G_usage();
-            G_fatal_error(_("Illegal north coordinate <%s>"),
-                          opt3->answers[1]);
+            G_fatal_error(_("Illegal north coordinate <%s>"), opt3->answers[1]);
         }
     }
 
@@ -279,7 +273,6 @@ int main(int argc, char **argv)
     /* Parse and select background color */
     colorbg = D_parse_color(bgcolor->answer, TRUE);
 
-
     D_setup(0);
 
     /* draw grid */
@@ -287,9 +280,9 @@ int main(int argc, char **argv)
         if (geogrid->answer) {
             /* initialzie proj stuff */
             init_proj(&info_in, &info_out, &info_trans, wgs84->answer);
-            plot_geogrid(gsize, &info_in, &info_out, &info_trans,
-	                 do_text, colorg, colort, colorbg, fontsize,
-			 mark_type, line_width, dirn);
+            plot_geogrid(gsize, &info_in, &info_out, &info_trans, do_text,
+                         colorg, colort, colorbg, fontsize, mark_type,
+                         line_width, dirn);
         }
         else {
             /* Do the grid plotting */

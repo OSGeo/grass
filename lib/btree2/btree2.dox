@@ -39,28 +39,28 @@ Create and initialize tree:
 Insert items to tree:
 
     struct mydatastruct data = <some data>;
-    
+
     if (rbtree_insert(mytree, &data) == 0)
         G_warning("could not insert data");
 
 Find item in tree:
 
     struct mydatastruct data = <some data>;
-    
+
     if (rbtree_find(mytree, &data) == 0)
         G_message("data not found");
 
 Delete item from tree:
 
     struct mydatastruct data = <some data>;
-    
+
     if (rbtree_remove(mytree, &data) == 0)
         G_warning("could not find data in tree");
 
 Traverse tree (get all items in tree in ascending order):
 
     struct RB_TRAV trav;
-    
+
     rbtree_init_trav(&trav, tree);
     while ((data = rbtree_traverse(&trav)) != NULL) {
         if (my_compare_fn(data, threshold_data) == 0) break;
@@ -71,7 +71,7 @@ Get a selection of items: all data > data1 and < data2.
 Start in tree where data is last smaller or first larger compared to data1:
 
     struct RB_TRAV trav;
-    
+
     rbtree_init_trav(&trav, tree);
     data = rbtree_traverse_start(&trav, &data1);
     // do something with data
@@ -79,11 +79,11 @@ Start in tree where data is last smaller or first larger compared to data1:
         if (data > data2) break;
             // do something with data
     }
- 
+
 Destroy tree:
 
     rbtree_destroy(mytree);
- 
+
 Debug the whole tree with:
 
     rbtree_debug(mytree, mytree->root);
@@ -112,7 +112,7 @@ radius to a given coordinate).
 Include and linking
 -------------------
 
-Include: 
+Include:
 
     #include <grass/kdtree.h>
 

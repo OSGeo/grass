@@ -11,17 +11,16 @@ void cairo_read_xid(void)
 
     fp = fopen(ca.file_name, "r");
     if (!fp)
-	G_fatal_error(_("Unable to open input file <%s>"), ca.file_name);
+        G_fatal_error(_("Unable to open input file <%s>"), ca.file_name);
 
     if (!fgets(buf, sizeof(buf), fp))
-	G_fatal_error(_("Unable to read input file <%s>"), ca.file_name);
+        G_fatal_error(_("Unable to read input file <%s>"), ca.file_name);
 
     if (sscanf(buf, "%lx", &xid) != 1)
-	G_fatal_error(_("Unable to parse input file <%s>"), ca.file_name);
+        G_fatal_error(_("Unable to parse input file <%s>"), ca.file_name);
 
     fclose(fp);
 
-    ca.win = (Drawable) xid;
+    ca.win = (Drawable)xid;
 #endif
 }
-

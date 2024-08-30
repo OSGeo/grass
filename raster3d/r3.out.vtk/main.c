@@ -1,20 +1,20 @@
-
 /****************************************************************************
  *
- * MODULE:       r3.out.vtk  
- *   	    	
- * AUTHOR(S):    Original author 
+ * MODULE:       r3.out.vtk
+ *
+ * AUTHOR(S):    Original author
  *               Soeren Gebbert soerengebbert at gmx de
- * 		27 Feb 2006 Berlin
- * PURPOSE:      Converts 3D raster maps (RASTER3D) into the VTK-Ascii format  
+ *                 27 Feb 2006 Berlin
+ * PURPOSE:      Converts 3D raster maps (RASTER3D) into the VTK-Ascii format
  *
  * COPYRIGHT:    (C) 2005 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *   	    	License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -25,7 +25,6 @@
 
 #include "globalDefs.h"
 #include "parameters.h"
-
 
 #include "writeVTKData.h"
 #include "writeVTKHead.h"
@@ -39,12 +38,12 @@ double y_extent;
 /** prototypes ***************************************************************/
 
 /*Open the rgb voxel maps and write the data to the output */
-static void open_write_rgb_maps(input_maps * in, RASTER3D_Region region, FILE * fp,
-                                int dp);
+static void open_write_rgb_maps(input_maps *in, RASTER3D_Region region,
+                                FILE *fp, int dp);
 
 /*Open the rgb voxel maps and write the data to the output */
-static void open_write_vector_maps(input_maps * in, RASTER3D_Region region,
-                                   FILE * fp, int dp);
+static void open_write_vector_maps(input_maps *in, RASTER3D_Region region,
+                                   FILE *fp, int dp);
 
 /*opens a raster input map */
 static int open_input_map(const char *name, const char *mapset);
@@ -55,8 +54,6 @@ static void check_input_maps(void);
 /*Initiate the input maps structure */
 static input_maps *create_input_maps_struct(void);
 
-
-
 /* ************************************************************************* */
 /* Open the raster input map *********************************************** */
 
@@ -65,7 +62,7 @@ input_maps *create_input_maps_struct(void)
 {
     input_maps *in;
 
-    in = (input_maps *) calloc(1, sizeof (input_maps));
+    in = (input_maps *)calloc(1, sizeof(input_maps));
 
     in->map = NULL;
     in->map_r = NULL;
@@ -100,7 +97,6 @@ int open_input_map(const char *name, const char *mapset)
     return Rast_open_old(name, mapset);
 }
 
-
 /* ************************************************************************* */
 /* Check the input maps **************************************************** */
 
@@ -122,7 +118,7 @@ void check_input_maps(void)
         mapset = G_find_raster2(name, "");
         if (mapset == NULL) {
             Rast3d_fatal_error(_("Top cell map <%s> not found"),
-                           param.top->answer);
+                               param.top->answer);
         }
 
         mapset = NULL;
@@ -131,7 +127,7 @@ void check_input_maps(void)
         mapset = G_find_raster2(name, "");
         if (mapset == NULL) {
             Rast3d_fatal_error(_("Bottom cell map <%s> not found"),
-                           param.bottom->answer);
+                               param.bottom->answer);
         }
     }
 
@@ -140,7 +136,7 @@ void check_input_maps(void)
         for (i = 0; param.input->answers[i] != NULL; i++) {
             if (NULL == G_find_raster3d(param.input->answers[i], ""))
                 Rast3d_fatal_error(_("3D raster map <%s> not found"),
-                               param.input->answers[i]);
+                                   param.input->answers[i]);
         }
     }
 
@@ -149,10 +145,13 @@ void check_input_maps(void)
         for (i = 0; i < 3; i++) {
             if (param.rgbmaps->answers[i] != NULL) {
                 if (NULL == G_find_raster3d(param.rgbmaps->answers[i], ""))
-                    Rast3d_fatal_error(_("3D raster map RGB map <%s> not found"),
-                                   param.rgbmaps->answers[i]);
-            } else {
-                Rast3d_fatal_error(_("Please provide three RGB 3D raster maps"));
+                    Rast3d_fatal_error(
+                        _("3D raster map RGB map <%s> not found"),
+                        param.rgbmaps->answers[i]);
+            }
+            else {
+                Rast3d_fatal_error(
+                    _("Please provide three RGB 3D raster maps"));
             }
         }
     }
@@ -163,27 +162,29 @@ void check_input_maps(void)
             if (param.vectormaps->answers[i] != NULL) {
                 if (NULL == G_find_raster3d(param.vectormaps->answers[i], ""))
                     Rast3d_fatal_error(_("3D vector map <%s> not found"),
-                                   param.vectormaps->answers[i]);
-            } else {
-                Rast3d_fatal_error(_("Please provide three 3D raster maps for the xyz-vector maps [x,y,z]"));
+                                       param.vectormaps->answers[i]);
+            }
+            else {
+                Rast3d_fatal_error(_("Please provide three 3D raster maps for "
+                                     "the xyz-vector maps [x,y,z]"));
             }
         }
     }
 
     if (param.input->answers == NULL && param.rgbmaps->answers == NULL &&
         param.vectormaps->answers == NULL) {
-        G_warning(_("No 3D raster data, RGB or xyz-vector maps are provided! Will only write the geometry."));
+        G_warning(_("No 3D raster data, RGB or xyz-vector maps are provided! "
+                    "Will only write the geometry."));
     }
 
     return;
 }
 
-
 /* ************************************************************************* */
 /* Prepare the VTK RGB voxel data for writing ****************************** */
 
 /* ************************************************************************* */
-void open_write_rgb_maps(input_maps * in, RASTER3D_Region region, FILE * fp,
+void open_write_rgb_maps(input_maps *in, RASTER3D_Region region, FILE *fp,
                          int dp)
 {
     int i, changemask[3] = {0, 0, 0};
@@ -198,11 +199,10 @@ void open_write_rgb_maps(input_maps * in, RASTER3D_Region region, FILE * fp,
 
             maprgb = NULL;
             /*Open the map */
-            maprgb =
-                Rast3d_open_cell_old(param.rgbmaps->answers[i],
-                                G_find_raster3d(param.rgbmaps->answers[i], ""),
-                                &region, RASTER3D_TILE_SAME_AS_FILE,
-                                RASTER3D_USE_CACHE_DEFAULT);
+            maprgb = Rast3d_open_cell_old(
+                param.rgbmaps->answers[i],
+                G_find_raster3d(param.rgbmaps->answers[i], ""), &region,
+                RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
             if (maprgb == NULL) {
                 G_warning(_("Unable to open 3D raster map <%s>"),
                           param.rgbmaps->answers[i]);
@@ -228,7 +228,6 @@ void open_write_rgb_maps(input_maps * in, RASTER3D_Region region, FILE * fp,
                 in->map_b = maprgb;
         }
 
-
         G_debug(3, "Writing VTK VoxelData");
         write_vtk_rgb_data(in->map_r, in->map_g, in->map_b, fp, "RGB_Voxel",
                            region, dp);
@@ -252,7 +251,8 @@ void open_write_rgb_maps(input_maps * in, RASTER3D_Region region, FILE * fp,
                 fatal_error(_("Unable to close 3D raster map"), in);
             }
 
-            /*Set the pointer to null so we noe later that these files are already closed */
+            /*Set the pointer to null so we know later that these files are
+             * already closed */
             if (i == 0)
                 in->map_r = NULL;
             if (i == 1)
@@ -268,7 +268,7 @@ void open_write_rgb_maps(input_maps * in, RASTER3D_Region region, FILE * fp,
 /* Prepare the VTK vector data for writing ********************************* */
 
 /* ************************************************************************* */
-void open_write_vector_maps(input_maps * in, RASTER3D_Region region, FILE * fp,
+void open_write_vector_maps(input_maps *in, RASTER3D_Region region, FILE *fp,
                             int dp)
 {
     int i, changemask[3] = {0, 0, 0};
@@ -283,11 +283,10 @@ void open_write_vector_maps(input_maps * in, RASTER3D_Region region, FILE * fp,
 
             mapvect = NULL;
             /*Open the map */
-            mapvect =
-                Rast3d_open_cell_old(param.vectormaps->answers[i],
-                                G_find_raster3d(param.vectormaps->answers[i],
-                                             ""), &region,
-                                RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
+            mapvect = Rast3d_open_cell_old(
+                param.vectormaps->answers[i],
+                G_find_raster3d(param.vectormaps->answers[i], ""), &region,
+                RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
             if (mapvect == NULL) {
                 G_warning(_("Unable to open 3D raster map <%s>"),
                           param.vectormaps->answers[i]);
@@ -313,7 +312,6 @@ void open_write_vector_maps(input_maps * in, RASTER3D_Region region, FILE * fp,
                 in->map_z = mapvect;
         }
 
-
         G_debug(3, "Writing VTK Vector Data");
         write_vtk_vector_data(in->map_x, in->map_y, in->map_z, fp,
                               "Vector_Data", region, dp);
@@ -337,7 +335,8 @@ void open_write_vector_maps(input_maps * in, RASTER3D_Region region, FILE * fp,
             if (!Rast3d_close(mapvect)) {
                 fatal_error(_("Unable to close 3D raster map"), in);
             }
-            /*Set the pointer to null so we know later that these files are already closed */
+            /*Set the pointer to null so we know later that these files are
+             * already closed */
             if (i == 0)
                 in->map_x = NULL;
             if (i == 1)
@@ -348,7 +347,6 @@ void open_write_vector_maps(input_maps * in, RASTER3D_Region region, FILE * fp,
     }
     return;
 }
-
 
 /* ************************************************************************* */
 /* Main function, opens most of the input and output files ***************** */
@@ -393,8 +391,10 @@ int main(int argc, char *argv[])
             G_fatal_error(_("failed to interpret dp as an integer"));
         if (dp > 20 || dp < 0)
             G_fatal_error(_("dp has to be from 0 to 20"));
-    } else {
-        dp = 8; /*This value is taken from the lib settings in G_format_easting */
+    }
+    else {
+        dp = 8; /*This value is taken from the lib settings in G_format_easting
+                 */
     }
 
     /*Check the input */
@@ -402,13 +402,14 @@ int main(int argc, char *argv[])
 
     /*Correct the coordinates, so the precision of VTK is not hurt :( */
     if (param.coorcorr->answer) {
-        /*Get the default region for coordiante correction */
+        /*Get the default region for coordinate correction */
         G_get_default_window(&default_region);
 
         /*Use the center of the current region as extent */
         y_extent = (default_region.north + default_region.south) / 2;
         x_extent = (default_region.west + default_region.east) / 2;
-    } else {
+    }
+    else {
         x_extent = 0;
         y_extent = 0;
     }
@@ -420,7 +421,8 @@ int main(int argc, char *argv[])
             perror(param.output->answer);
             G_fatal_error(_("Unable to open file <%s>"), param.output->answer);
         }
-    } else
+    }
+    else
         fp = stdout;
 
     /* Figure out the region from the map */
@@ -429,7 +431,6 @@ int main(int argc, char *argv[])
 
     /*initiate the input mpas structure */
     in = create_input_maps_struct();
-
 
     /* read and compute the scale factor */
     sscanf(param.elevscale->answer, "%lf", &scale);
@@ -448,8 +449,9 @@ int main(int argc, char *argv[])
 
         /*If not equal, set the 2D windows correct */
         if (rows != region.rows || cols != region.cols) {
-			G_message(_("The 2D and 3D region settings are different. "
-						"Using the 2D window settings to adjust the 2D part of the 3D region."));
+            G_message(_("The 2D and 3D region settings are different. "
+                        "Using the 2D window settings to adjust the 2D part of "
+                        "the 3D region."));
             G_get_set_window(&window2d);
             window2d.ns_res = region.ns_res;
             window2d.ew_res = region.ew_res;
@@ -478,7 +480,8 @@ int main(int argc, char *argv[])
         if (param.point->answer) {
             write_vtk_structured_grid_header(fp, output, region);
             write_vtk_points(in, fp, region, dp, 1, scale);
-        } else {
+        }
+        else {
             write_vtk_unstructured_grid_header(fp, output, region);
             write_vtk_points(in, fp, region, dp, 0, scale);
             write_vtk_unstructured_grid_cells(fp, region);
@@ -491,7 +494,8 @@ int main(int argc, char *argv[])
         Rast_close(in->bottom);
 
         in->bottom = -1;
-    } else {
+    }
+    else {
         /* Write the structured point vtk-header */
         write_vtk_structured_point_header(fp, output, region, dp, scale);
     }
@@ -504,11 +508,10 @@ int main(int argc, char *argv[])
             G_debug(3, "Open 3D raster map <%s>", param.input->answers[i]);
 
             /*Open the map */
-            in->map =
-                Rast3d_open_cell_old(param.input->answers[i],
-                                G_find_raster3d(param.input->answers[i], ""),
-                                &region, RASTER3D_TILE_SAME_AS_FILE,
-                                RASTER3D_USE_CACHE_DEFAULT);
+            in->map = Rast3d_open_cell_old(
+                param.input->answers[i],
+                G_find_raster3d(param.input->answers[i], ""), &region,
+                RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
             if (in->map == NULL) {
                 G_warning(_("Unable to open 3D raster map <%s>"),
                           param.input->answers[i]);
@@ -539,7 +542,8 @@ int main(int argc, char *argv[])
             /* Close the 3d raster map */
             if (!Rast3d_close(in->map)) {
                 in->map = NULL;
-                fatal_error(_("Unable to close 3D raster map, the VTK file may be incomplete"),
+                fatal_error(_("Unable to close 3D raster map, the VTK file may "
+                              "be incomplete"),
                             in);
             }
 

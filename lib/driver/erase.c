@@ -4,5 +4,5 @@
 void COM_Erase(void)
 {
     if (driver->Erase)
-	(*driver->Erase)();
+        (*driver->Erase)();
 }

@@ -3,12 +3,12 @@
 
    \brief OGSF library - loading and manipulating surfaces
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -18,7 +18,7 @@
 
 #include <grass/ogsf.h>
 
-void (*Cxl_func) ();
+void (*Cxl_func)(void);
 
 static int Cxl = 0;
 
@@ -49,7 +49,7 @@ void GS_set_cancel(int c)
 
    \param pointer to function
  */
-void GS_set_cxl_func(void (*f) (void))
+void GS_set_cxl_func(void (*f)(void))
 {
     Cxl_func = f;
 

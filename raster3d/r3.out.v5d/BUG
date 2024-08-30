@@ -10,7 +10,6 @@ Date: 2004-11-09
 
 
 RASTER3D library bug?
-        Rast3d_getValueRegion (map, x, y, z, d1p, typeIntern);                  
+        Rast3d_getValueRegion (map, x, y, z, d1p, typeIntern);
      produces output with different orientation comparing to:
-        Rast3d_getValue(map, x, y, z, d1p, typeIntern); 
-
+        Rast3d_getValue(map, x, y, z, d1p, typeIntern);

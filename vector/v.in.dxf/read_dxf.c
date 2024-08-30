@@ -13,7 +13,7 @@ struct dxf_file *dxf_open(char *file)
 
     dxf->name = G_store(file);
     if (!(dxf->fp = fopen(file, "r")))
-	return NULL;
+        return NULL;
 
     /* get the file size */
     G_fseek(dxf->fp, 0L, SEEK_END);
@@ -23,11 +23,11 @@ struct dxf_file *dxf_open(char *file)
     dxf->pos = 0;
 
     if (dxf->size < 500000)
-	dxf->percent = 10;
+        dxf->percent = 10;
     else if (dxf->size < 800000)
-	dxf->percent = 5;
+        dxf->percent = 5;
     else
-	dxf->percent = 2;
+        dxf->percent = 2;
 
     /* initialize G_percent() */
     G_percent(0, 100, dxf->percent);
@@ -48,10 +48,9 @@ void dxf_close(struct dxf_file *dxf)
 int dxf_find_header(struct dxf_file *dxf)
 {
     while (dxf_get_code(dxf) != -2) {
-	/* some dxf files will not have header information */
-	if (strcmp(dxf_buf, "HEADER") == 0 ||
-	    strcmp(dxf_buf, "ENTITIES") == 0)
-	    return strcmp(dxf_buf, "HEADER") == 0;
+        /* some dxf files will not have header information */
+        if (strcmp(dxf_buf, "HEADER") == 0 || strcmp(dxf_buf, "ENTITIES") == 0)
+            return strcmp(dxf_buf, "HEADER") == 0;
     }
 
     G_fatal_error(_("end of file while looking for HEADER"));
@@ -66,18 +65,18 @@ int dxf_find_header(struct dxf_file *dxf)
 int dxf_read_code(struct dxf_file *dxf, char *buf, int size)
 {
     if (!dxf_fgets(buf, size, dxf))
-	return -2;
+        return -2;
 
     if (buf[0] >= '0' && buf[0] <= '9') {
-	int code = atoi(buf);
+        int code = atoi(buf);
 
-	if (!dxf_fgets(buf, size, dxf))
-	    return -2;
+        if (!dxf_fgets(buf, size, dxf))
+            return -2;
 
-	return code;
+        return code;
     }
 
-    return -1;			/* not numeric */
+    return -1; /* not numeric */
 }
 
 static char *dxf_fgets(char *buf, int size, struct dxf_file *dxf)
@@ -86,10 +85,10 @@ static char *dxf_fgets(char *buf, int size, struct dxf_file *dxf)
     double perc;
 
     if ((p = fgets(buf, size, dxf->fp))) {
-	dxf->pos += strlen(p);
-	perc = (double) dxf->pos / dxf->size;
-	G_percent((int) (perc * 100.0), 100, dxf->percent);
-	G_squeeze(buf);
+        dxf->pos += strlen(p);
+        perc = (double)dxf->pos / dxf->size;
+        G_percent((int)(perc * 100.0), 100, dxf->percent);
+        G_squeeze(buf);
     }
 
     return p;

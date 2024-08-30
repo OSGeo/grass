@@ -6,13 +6,13 @@ int haf_basin_side(int updir, int downdir, int thisdir)
 
     newup = updir - downdir;
     if (newup < 0)
-	newup += 8;
+        newup += 8;
     newthis = thisdir - downdir;
     if (newthis < 0)
-	newthis += 8;
+        newthis += 8;
     if (newthis < newup)
-	return (LEFT);
+        return (LEFT);
     if (newthis > newup)
-	return (RITE);
+        return (RITE);
     return (NEITHER);
 }

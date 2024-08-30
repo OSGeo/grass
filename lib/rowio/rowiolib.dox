@@ -1,6 +1,6 @@
 /*! \page rowiolib GRASS Row Input/Output Library
 
-by GRASS Development Team (http://grass.osgeo.org)
+by GRASS Development Team (https://grass.osgeo.org)
 
 This library is used for reading/writing raster rows.
 

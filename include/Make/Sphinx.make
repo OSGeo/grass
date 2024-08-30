@@ -24,30 +24,31 @@ checksphinx:
 	@(type $(SPHINXBUILD) > /dev/null || (echo "ERROR: Install 'sphinx-build' software first (get from http://sphinx-doc.org)" && exit 1))
 	@(type $(SPHINXAPIDOC) > /dev/null || (echo "ERROR: Install 'sphinx-apidoc' software first (get from http://sphinx-doc.org)" && exit 1))
 
+DOCSDIR = $(MODULE_TOPDIR)/python/grass/docs/
+
 cleansphinx:
 	$(MAKE) -C $(MODULE_TOPDIR)/gui/wxpython/docs/wxgui_sphinx/ wxguiclean
-	$(MAKE) -C $(MODULE_TOPDIR)/lib/python/docs libpythonclean
+	$(MAKE) -C $(DOCSDIR) libpythonclean
 
 sphinxdoc: checksphinx cleansphinx
 	$(MAKE) -C $(MODULE_TOPDIR)/gui/wxpython/docs/wxgui_sphinx/ wxguiapidoc
 	$(MAKE) -C $(MODULE_TOPDIR)/gui/wxpython/docs/wxgui_sphinx/ wxguihtml
-	$(MAKE) -C $(MODULE_TOPDIR)/lib/python/docs/ libpythonapidoc
-	$(MAKE) -C $(MODULE_TOPDIR)/lib/python/docs/ libpythonhtml
+	$(MAKE) -C $(DOCSDIR) libpythonapidoc
+	$(MAKE) -C $(DOCSDIR) libpythonhtml
 
 sphinxman:checksphinx cleansphinx
 	$(MAKE) -C $(MODULE_TOPDIR)/gui/wxpython/docs/wxgui_sphinx/ wxguiapidoc
 	$(MAKE) -C $(MODULE_TOPDIR)/gui/wxpython/docs/wxgui_sphinx/ wxguiman
-	$(MAKE) -C $(MODULE_TOPDIR)/lib/python/docs/ libpythonapidoc
-	$(MAKE) -C $(MODULE_TOPDIR)/lib/python/docs/ libpythonman
+	$(MAKE) -C $(DOCSDIR) libpythonapidoc
+	$(MAKE) -C $(DOCSDIR) libpythonman
 
 cleansphinxlib:
-	$(MAKE) -C $(MODULE_TOPDIR)/lib/python/docs libpythonclean
+	$(MAKE) -C $(DOCSDIR) libpythonclean
 
 sphinxdoclib: checksphinx cleansphinxlib
-	$(MAKE) -C $(MODULE_TOPDIR)/lib/python/docs/ libpythonapidoc
-	$(MAKE) -C $(MODULE_TOPDIR)/lib/python/docs/ libpythonhtml
+	$(MAKE) -C $(DOCSDIR) libpythonapidoc
+	$(MAKE) -C $(DOCSDIR) libpythonhtml
 
 sphinxmanlib:checksphinx cleansphinxlib
-	$(MAKE) -C $(MODULE_TOPDIR)/lib/python/docs/ libpythonapidoc
-	$(MAKE) -C $(MODULE_TOPDIR)/lib/python/docs/ libpythonman
-
+	$(MAKE) -C $(DOCSDIR) libpythonapidoc
+	$(MAKE) -C $(DOCSDIR) libpythonman

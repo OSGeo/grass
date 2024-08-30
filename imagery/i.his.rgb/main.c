@@ -1,12 +1,11 @@
-
 /****************************************************************************
  *
  * MODULE:       i.his.rgb
  *
  * AUTHOR(S):    David Satnik, GIS Laboratory, Central Washington University
  *               with acknowledgements to Ali Vali,
- *               Univ. of Texas Space Research Center, for the core routine. 
- *               
+ *               Univ. of Texas Space Research Center, for the core routine.
+ *
  * PURPOSE:      Hue-intensity-saturation (his) to red-green-blue (rgb)
  *               raster map color transformation function.
  *
@@ -48,9 +47,9 @@ int main(int argc, char **argv)
     G_add_keyword("RGB");
     G_add_keyword("HIS");
     G_add_keyword("IHS");
-    module->description =
-	_("Transforms raster maps from HIS (Hue-Intensity-Saturation) color space to "
-	  "RGB (Red-Green-Blue) color space.");
+    module->description = _("Transforms raster maps from HIS "
+                            "(Hue-Intensity-Saturation) color space to "
+                            "RGB (Red-Green-Blue) color space.");
 
     /* Define the different options */
     opt_hue = G_define_standard_option(G_OPT_R_INPUT);
@@ -78,36 +77,36 @@ int main(int argc, char **argv)
     opt_blue->description = _("Name for output raster map (blue)");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     /* get dimension of the image */
     rows = Rast_window_rows();
     cols = Rast_window_cols();
 
     openfiles(opt_hue->answer, opt_int->answer, opt_sat->answer,
-	      opt_red->answer, opt_green->answer, opt_blue->answer,
-	      fd_input, fd_output, rowbuffer);
+              opt_red->answer, opt_green->answer, opt_blue->answer, fd_input,
+              fd_output, rowbuffer);
 
     for (i = 0; i < rows; i++) {
-	int band;
+        int band;
 
-	G_percent(i, rows, 2);
+        G_percent(i, rows, 2);
 
-	/* read in a row from each cell map */
-	for (band = 0; band < 3; band++)
-	    Rast_get_c_row(fd_input[band], rowbuffer[band], i);
+        /* read in a row from each cell map */
+        for (band = 0; band < 3; band++)
+            Rast_get_c_row(fd_input[band], rowbuffer[band], i);
 
-	/* process this row of the map */
-	his2rgb(rowbuffer, cols);
+        /* process this row of the map */
+        his2rgb(rowbuffer, cols);
 
-	/* write out the new row for each cell map */
-	for (band = 0; band < 3; band++)
-	    Rast_put_row(fd_output[band], rowbuffer[band], CELL_TYPE);
+        /* write out the new row for each cell map */
+        for (band = 0; band < 3; band++)
+            Rast_put_row(fd_output[band], rowbuffer[band], CELL_TYPE);
     }
     G_percent(1, 1, 1);
-    
-    closefiles(opt_red->answer, opt_green->answer, opt_blue->answer,
-	       fd_output, rowbuffer);
+
+    closefiles(opt_red->answer, opt_green->answer, opt_blue->answer, fd_output,
+               rowbuffer);
 
     exit(EXIT_SUCCESS);
 }

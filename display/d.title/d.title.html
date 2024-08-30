@@ -2,7 +2,7 @@
 
 <em>d.title</em> generates to standard output a string which can be used by
 <em><a href="d.text.html">d.text</a></em> to draw a TITLE for the raster map
-layer <em>name</em> in the active display frame on the graphics monitor. 
+layer <em>name</em> in the active display frame on the graphics monitor.
 Output created by <em>d.title</em> can be redirected into a file, or piped
 directly into <em><a href="d.text.html">d.text</a></em> to display the map
 TITLE created by <em>d.title</em>.  The map TITLE created will include the
@@ -12,52 +12,44 @@ If the <b>-d</b> draw flag is used, then <em>d.title</em> will call
 <em>d.text</em> for you and the title will be automatically rendered
 to the display.
 
-
 <h2>NOTES</h2>
 
-The text created with 
-<em><a href="d.text.html">d.text</a></em> 
-will not necessarily fit within the 
-active display frame on the graphics monitor; 
-the user should choose a text size appropriate to this frame. 
-
+The text created with
+<em><a href="d.text.html">d.text</a></em>
+will not necessarily fit within the
+active display frame on the graphics monitor;
+the user should choose a text size appropriate to this frame.
 
 <h2>EXAMPLES</h2>
 
-For example, a user wishing to create a suitable TITLE for the 
-Spearfish, SD <em>soils</em> map layer and to display this TITLE in the 
-active display frame on the graphics monitor might type the following: 
+For example, a user wishing to create a suitable TITLE for the
+Spearfish, SD <em>soils</em> map layer and to display this TITLE in the
+active display frame on the graphics monitor might type the following:
 <dl>
 <dd> <b>d.title map=</b><em>soils</em> <b>color=</b><em>red</em> <b>size=</b><em>5</em> <b>&gt; TITLE.file</b>
-<dd> <b><a href="d.text.html">d.text</a> &lt; TITLE.file</b> 
+<dd> <b><a href="d.text.html">d.text</a> &lt; TITLE.file</b>
 </dl>
-Alternately, the user might pipe <em>d.title</em> output directly 
-into <em><a href="d.text.html">d.text</a>:</em> 
+Alternately, the user might pipe <em>d.title</em> output directly
+into <em><a href="d.text.html">d.text</a>:</em>
 <dl>
 <dd>
-<b>d.title map=</b><em>soils</em> <b>color=</b><em>red</em> <b>size=</b><em>5</em> | 
+<b>d.title map=</b><em>soils</em> <b>color=</b><em>red</em> <b>size=</b><em>5</em> |
 <a href="d.text.html">d.text</a>
 </dl>
 
-<p>A file created by <em>d.title</em> can be displayed 
+<p>A file created by <em>d.title</em> can be displayed
 with <em><a href="d.text.html">d.text</a></em>.
-Information contained in this file takes precedence over the 
-<em>color</em> and <em>size</em> parameters for 
+Information contained in this file takes precedence over the
+<em>color</em> and <em>size</em> parameters for
 <em><a href="d.text.html">d.text</a></em>.
-
 
 <h2>SEE ALSO</h2>
 
 <em><a href="d.font.html">d.font</a></em><br>
 <em><a href="d.text.html">d.text</a></em><br>
 
-
 <h2>AUTHOR</h2>
-James Westervelt, 
-U.S. Army Construction Engineering 
-Research Laboratory
 
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+James Westervelt,
+U.S. Army Construction Engineering
+Research Laboratory

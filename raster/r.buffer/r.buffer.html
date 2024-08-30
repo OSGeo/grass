@@ -6,26 +6,26 @@ cells that contain non-NULL category values in an existing
 raster map. The distances of buffer zones from cells with
 non-zero category values are user-chosen and must be positive value(s).
 Suppose, for example, that you want to place buffer zones around
-roads.  This program could create the raster map 
+roads.  This program could create the raster map
 shown below on the right based on road information
 contained in the raster map shown on the left.
 
 <div class="code"><pre>
-      000000000000000000000000 222233333333333333444444 
-      111000000000000000000000 111222222222223333333333 
-      000111111111100000000000 222111111111122223333333 
-      000000001000011100000000 332222221222211122222222 
-      000000001000000011111111 333333321233222211111111 
-      000000001000000000000000 433333321233333222222222 
-      000000001000000000000000 444443321233333333333333 
-      000000001000000000000000 444443321233443333333333 
-      000000001000000000000000 444443321233444444444444 
+      000000000000000000000000 222233333333333333444444
+      111000000000000000000000 111222222222223333333333
+      000111111111100000000000 222111111111122223333333
+      000000001000011100000000 332222221222211122222222
+      000000001000000011111111 333333321233222211111111
+      000000001000000000000000 433333321233333222222222
+      000000001000000000000000 444443321233333333333333
+      000000001000000000000000 444443321233443333333333
+      000000001000000000000000 444443321233444444444444
 
       Category 0: No roads
-      Category 1: Road location 
-      Category 2: Buffer Zone 1 around roads 
-      Category 3: Buffer Zone 2 around roads 
-      Category 4: Buffer Zone 3 around roads 
+      Category 1: Road location
+      Category 2: Buffer Zone 1 around roads
+      Category 3: Buffer Zone 2 around roads
+      Category 4: Buffer Zone 3 around roads
 </pre></div>
 
 <h2>NOTES</h2>
@@ -51,16 +51,16 @@ category values of interest spread throughout the area.
 <p>
 <em>r.buffer</em> measures distances from center of cell to
 center of cell using Euclidean distance measure for
-planimetric locations (like UTM) and using ellipsoidal
-geodesic distance measure for latitude/longitude locations.
+planimetric coordinate reference systems (like UTM) and using ellipsoidal
+geodesic distance measure for latitude/longitude CRS.
 <p>
 <em>r.buffer</em> calculates distance zones from all cells having
 non-NULL category values in the <b>input</b> map. If the user wishes
 to calculate distances from only selected <b>input</b> map category
 values, the user should run (for example)
-<em><a href="r.reclass.html">r.reclass</a></em> prior to 
-<em>r.buffer</em>, to reclass all categories from which distance zones 
-are not desired to be calculated into category NULL. 
+<em><a href="r.reclass.html">r.reclass</a></em> prior to
+<em>r.buffer</em>, to reclass all categories from which distance zones
+are not desired to be calculated into category NULL.
 <p>
 The <b>-z</b> flag can be used to ignore raster values of zero instead of NULL
 values in the input raster map.
@@ -72,7 +72,6 @@ slower, but will work with minimal memory requirements. The
 classic <em>r.buffer</em> should be able to deal with raster maps of
 32000x32000 size on a system with 1 GB RAM, and rasters of 90000x90000
 on a system with 8 GB RAM without going into swap.
-
 
 <h2>EXAMPLE</h2>
 
@@ -122,13 +121,8 @@ r.category input=roads.buf
 
 <h2>AUTHORS</h2>
 
-Michael Shapiro, U.S. Army Construction Engineering 
+Michael Shapiro, U.S. Army Construction Engineering
 Research Laboratory
 <br>
-James Westervelt, U.S. Army Construction Engineering 
+James Westervelt, U.S. Army Construction Engineering
 Research Laboratory
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

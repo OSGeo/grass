@@ -1,14 +1,13 @@
-
 /***************************************************************
  *
  * MODULE:       v.parallel
- * 
+ *
  * AUTHOR(S):    Radim Blazek
  *               Upgraded by Rosen Matev (Google Summer of Code 2008)
  *               OGR support by Martin Landa <landa.martin gmail.com>
- *               
+ *
  * PURPOSE:      Create parallel lines
- *               
+ *
  * COPYRIGHT:    (C) 2008-2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -35,7 +34,7 @@ int main(int argc, char *argv[])
     struct Map_info In, Out;
     struct line_pnts *Points, *Points2, *oPoints, **iPoints;
     struct line_cats *Cats;
-    
+
     char *desc;
 
     int line, nlines, inner_count, j;
@@ -53,11 +52,10 @@ int main(int argc, char *argv[])
     module->description = _("Creates parallel line to input vector lines.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
-    
-    layer_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
-    
-    out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
 
+    layer_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
+
+    out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
 
     dista_opt = G_define_option();
     dista_opt->key = "distance";
@@ -81,7 +79,9 @@ int main(int argc, char *argv[])
     angle_opt->required = NO;
     angle_opt->answer = "0";
     angle_opt->multiple = NO;
-    angle_opt->description = _("Angle of major axis in degrees"); /* CW or CCW? does this even work?? */
+    angle_opt->description =
+        _("Angle of major axis in degrees"); /* CW or CCW? does
+                                              this even work?? */
 
     side_opt = G_define_option();
     side_opt->key = "side";
@@ -92,11 +92,9 @@ int main(int argc, char *argv[])
     side_opt->options = "left,right,both";
     side_opt->description = _("Side");
     desc = NULL;
-    G_asprintf(&desc,
-	       "left;%s;right;%s;both;%s",
-	       _("Parallel line is on the left"),
-	       _("Parallel line is on the right"),
-	       _("Parallel lines on both sides"));
+    G_asprintf(
+        &desc, "left;%s;right;%s;both;%s", _("Parallel line is on the left"),
+        _("Parallel line is on the right"), _("Parallel lines on both sides"));
     side_opt->descriptions = desc;
 
     tol_opt = G_define_option();
@@ -116,42 +114,42 @@ int main(int argc, char *argv[])
     buf_flag->description = _("Create buffer-like parallel lines");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     da = atof(dista_opt->answer);
 
     if (distb_opt->answer)
-	db = atof(distb_opt->answer);
+        db = atof(distb_opt->answer);
     else
-	db = da;
+        db = da;
 
     if (angle_opt->answer)
-	dalpha = atof(angle_opt->answer);
+        dalpha = atof(angle_opt->answer);
     else
-	dalpha = 0;
+        dalpha = 0;
 
     if (tol_opt->answer)
-	tolerance = atof(tol_opt->answer);
+        tolerance = atof(tol_opt->answer);
     else
-	tolerance = ((db < da) ? db : da) / 100.;
+        tolerance = ((db < da) ? db : da) / 100.;
 
     if (strcmp(side_opt->answer, "right") == 0)
-	side = 1;
+        side = 1;
     else if (strcmp(side_opt->answer, "left") == 0)
-	side = -1;
+        side = -1;
     else
-	side = 0;
+        side = 0;
 
     Vect_set_open_level(2);
 
     if (Vect_open_old2(&In, in_opt->answer, "", layer_opt->answer) < 0)
-	G_fatal_error(_("Unable to open vector map <%s>"), in_opt->answer);
+        G_fatal_error(_("Unable to open vector map <%s>"), in_opt->answer);
 
     layer = Vect_get_field_number(&In, layer_opt->answer);
 
     if (Vect_open_new(&Out, out_opt->answer, 0) < 0)
-	G_fatal_error(_("Unable to create vector map <%s>"), out_opt->answer);
-    
+        G_fatal_error(_("Unable to create vector map <%s>"), out_opt->answer);
+
     Vect_copy_head_data(&In, &Out);
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
@@ -163,47 +161,43 @@ int main(int argc, char *argv[])
     nlines = Vect_get_num_lines(&In);
 
     for (line = 1; line <= nlines; line++) {
-	int ltype;
+        int ltype;
 
-	G_percent(line, nlines, 1);
+        G_percent(line, nlines, 1);
 
-	ltype = Vect_read_line(&In, Points, Cats, line);
+        ltype = Vect_read_line(&In, Points, Cats, line);
 
-	if (layer != -1 && !Vect_cat_get(Cats, layer, NULL))
-	    continue;
-	
-	if (ltype & GV_LINES) {
-	    if (!(buf_flag->answer)) {
-		if (side != 0) {
-		    Vect_line_parallel2(Points, da, db, dalpha, side,
-					round_flag->answer, tolerance,
-					Points2);
-		    Vect_write_line(&Out, ltype, Points2, Cats);
-		}
-		else {
-		    Vect_line_parallel2(Points, da, db, dalpha, 1,
-					round_flag->answer, tolerance,
-					Points2);
-		    Vect_write_line(&Out, ltype, Points2, Cats);
-		    Vect_line_parallel2(Points, da, db, dalpha, -1,
-					round_flag->answer, tolerance,
-					Points2);
-		    Vect_write_line(&Out, ltype, Points2, Cats);
-		}
-	    }
-	    else {
-		Vect_line_buffer2(Points, da, db, dalpha, round_flag->answer,
-				  1, tolerance, &oPoints, &iPoints,
-				  &inner_count);
-		Vect_write_line(&Out, ltype, oPoints, Cats);
-		for (j = 0; j < inner_count; j++) {
-		    Vect_write_line(&Out, ltype, iPoints[j], Cats);
-		}
-	    }
-	}
-	else {
-	    Vect_write_line(&Out, ltype, Points, Cats);
-	}
+        if (layer != -1 && !Vect_cat_get(Cats, layer, NULL))
+            continue;
+
+        if (ltype & GV_LINES) {
+            if (!(buf_flag->answer)) {
+                if (side != 0) {
+                    Vect_line_parallel2(Points, da, db, dalpha, side,
+                                        round_flag->answer, tolerance, Points2);
+                    Vect_write_line(&Out, ltype, Points2, Cats);
+                }
+                else {
+                    Vect_line_parallel2(Points, da, db, dalpha, 1,
+                                        round_flag->answer, tolerance, Points2);
+                    Vect_write_line(&Out, ltype, Points2, Cats);
+                    Vect_line_parallel2(Points, da, db, dalpha, -1,
+                                        round_flag->answer, tolerance, Points2);
+                    Vect_write_line(&Out, ltype, Points2, Cats);
+                }
+            }
+            else {
+                Vect_line_buffer2(Points, da, db, dalpha, round_flag->answer, 1,
+                                  tolerance, &oPoints, &iPoints, &inner_count);
+                Vect_write_line(&Out, ltype, oPoints, Cats);
+                for (j = 0; j < inner_count; j++) {
+                    Vect_write_line(&Out, ltype, iPoints[j], Cats);
+                }
+            }
+        }
+        else {
+            Vect_write_line(&Out, ltype, Points, Cats);
+        }
     }
 
     /*    Vect_build_partial(&Out, GV_BUILD_BASE);

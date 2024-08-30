@@ -1,20 +1,21 @@
-
 /****************************************************************************
  *
- * MODULE:       r.to.rast3elev 
- *   	    	
- * AUTHOR(S):    Original author 
+ * MODULE:       r.to.rast3elev
+ *
+ * AUTHOR(S):    Original author
  *               Soeren Gebbert soerengebbert@gmx.de
- * 		07 08 2006 Berlin
- * PURPOSE:      Creates a 3D volume map based on 2D elevation and value raster maps
+ *                 07 08 2006 Berlin
+ * PURPOSE:      Creates a 3D volume map based on 2D elevation and value raster
+ *               maps
  *
  * COPYRIGHT:    (C) 2006 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *   	    	License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -33,29 +34,31 @@ typedef struct {
 /*Data to be used */
 typedef struct {
     int mapnum; /*The umber of input maps */
-    int count; /*3d raster map access counter */
-    void *map; /*The 3d voxel output map */
-    int input; /*The current raster value map pointer */
-    int elev; /*The current raster elevation map pointer */
+    int count;  /*3d raster map access counter */
+    void *map;  /*The 3d voxel output map */
+    int input;  /*The current raster value map pointer */
+    int elev;   /*The current raster elevation map pointer */
     int inputmaptype;
     int elevmaptype;
-    double upper; /*The upper value */
-    double lower; /*The lower value */
-    int useUpperVal; /*0 = use upper value, 1 = use map value to fill upper cells */
-    int useLowerVal; /*0 = use lower value, 1 = use map value to fill lower cells */
+    double upper;    /*The upper value */
+    double lower;    /*The lower value */
+    int useUpperVal; /*0 = use upper value, 1 = use map value to fill upper
+                        cells */
+    int useLowerVal; /*0 = use lower value, 1 = use map value to fill lower
+                        cells */
 } Database;
 
 paramType param; /*params */
 
 /*- prototypes --------------------------------------------------------------*/
 void fatal_error(Database db, char *errorMsg); /*Simple Error message */
-void set_params(); /*Fill the paramType structure */
-void elev_raster_to_g3d(Database db, RASTER3D_Region region); /*Write the raster */
-int open_input_raster_map(const char *name); /*opens the outputmap */
-void close_input_raster_map(int fd); /*close the map */
+void set_params(void);                         /*Fill the paramType structure */
+void elev_raster_to_g3d(Database db,
+                        RASTER3D_Region region); /*Write the raster */
+int open_input_raster_map(const char *name);     /*opens the outputmap */
+void close_input_raster_map(int fd);             /*close the map */
 double get_raster_value_as_double(int maptype, void *ptr, double nullval);
-void check_input_maps(Database * db); /*Check input maps */
-
+void check_input_maps(Database *db); /*Check input maps */
 
 /* ************************************************************************* */
 /* Get the value of the current raster pointer as double ******************* */
@@ -67,10 +70,14 @@ double get_raster_value_as_double(int MapType, void *ptr, double nullval)
         return nullval;
 
     switch (MapType) {
-        case CELL_TYPE: return *(CELL *) ptr;
-        case FCELL_TYPE: return *(FCELL *) ptr;
-        case DCELL_TYPE: return *(DCELL *) ptr;
-        default: return nullval;
+    case CELL_TYPE:
+        return *(CELL *)ptr;
+    case FCELL_TYPE:
+        return *(FCELL *)ptr;
+    case DCELL_TYPE:
+        return *(DCELL *)ptr;
+    default:
+        return nullval;
     }
 }
 
@@ -78,7 +85,7 @@ double get_raster_value_as_double(int MapType, void *ptr, double nullval)
 /* Check the input maps **************************************************** */
 
 /* ************************************************************************* */
-void check_input_maps(Database * db)
+void check_input_maps(Database *db)
 {
     int i;
     int elevcount = 0, inputcount = 0;
@@ -131,7 +138,8 @@ void fatal_error(Database db, char *errorMsg)
 {
     /* Close files and exit */
     if (db.map != NULL) {
-        /* should unopen map here! but this functionality is not jet implemented */
+        /* should unopen map here! but this functionality is not jet implemented
+         */
         if (!Rast3d_close(db.map))
             Rast3d_fatal_error(_("Could not close the map"));
     }
@@ -150,7 +158,7 @@ void fatal_error(Database db, char *errorMsg)
 /* Set up the arguments **************************************************** */
 
 /* ************************************************************************* */
-void set_params()
+void set_params(void)
 {
 
     param.input = G_define_standard_option(G_OPT_R_INPUTS);
@@ -172,7 +180,8 @@ void set_params()
         _("The value to fill the lower cells, default is null");
 
     param.tilesize = G_define_option();
-    param.tilesize->description = _("The maximum tile size in kilo bytes. Default is 32KB.");
+    param.tilesize->description =
+        _("The maximum tile size in kilo bytes. Default is 32KB.");
     param.tilesize->key = "tilesize";
     param.tilesize->answer = "32";
     param.tilesize->type = TYPE_INTEGER;
@@ -191,13 +200,15 @@ void set_params()
 
     param.mask = G_define_flag();
     param.mask->key = 'm';
-    param.mask->description = _("Use 3D raster mask (if exists) with input map");
+    param.mask->description =
+        _("Use 3D raster mask (if exists) with input map");
 
     return;
 }
 
 /* ************************************************************************* */
-/* Write the raster maps into the RASTER3D map *********************************** */
+/* Write the raster maps into the RASTER3D map
+ * *********************************** */
 
 /* ************************************************************************* */
 void elev_raster_to_g3d(Database db, RASTER3D_Region region)
@@ -226,9 +237,9 @@ void elev_raster_to_g3d(Database db, RASTER3D_Region region)
 
     Rast3d_set_null_value(&null, 1, DCELL_TYPE);
 
-
     G_debug(3,
-            "elev_raster_to_g3d: Writing 3D raster map with depths %i rows %i cols %i and count %i.",
+            "elev_raster_to_g3d: Writing 3D raster map with depths %i rows %i "
+            "cols %i and count %i.",
             depths, rows, cols, db.count);
 
     /*The mainloop */
@@ -238,26 +249,26 @@ void elev_raster_to_g3d(Database db, RASTER3D_Region region)
         Rast_get_row(db.input, input_rast, y, db.inputmaptype);
         Rast_get_row(db.elev, elev_rast, y, db.elevmaptype);
 
-        for (x = 0, input_ptr = input_rast, elev_ptr = elev_rast; x < cols;
-            x++, input_ptr =
-            G_incr_void_ptr(input_ptr, Rast_cell_size(db.inputmaptype)),
-            elev_ptr =
-            G_incr_void_ptr(elev_ptr, Rast_cell_size(db.elevmaptype))) {
+        for (x = 0, input_ptr = input_rast, elev_ptr = elev_rast; x < cols; x++,
+            input_ptr = G_incr_void_ptr(input_ptr,
+                                        Rast_cell_size(db.inputmaptype)),
+            elev_ptr = G_incr_void_ptr(elev_ptr,
+                                       Rast_cell_size(db.elevmaptype))) {
 
             /*Get the elevation and the input map value */
             inval =
                 get_raster_value_as_double(db.inputmaptype, input_ptr, null);
-            height =
-                get_raster_value_as_double(db.elevmaptype, elev_ptr, null);
+            height = get_raster_value_as_double(db.elevmaptype, elev_ptr, null);
 
-            G_debug(4,
-                    "Caluclating position in 3d region -> height %g with value %g",
-                    height, inval);
+            G_debug(
+                4,
+                "Calculating position in 3d region -> height %g with value %g",
+                height, inval);
 
-            /* Calculate if the RASTER3D cell is lower or upper the elevation map
-             *  and set the value.*/
+            /* Calculate if the RASTER3D cell is lower or upper the elevation
+             * map and set the value.*/
             if (db.count == 0) {
-                /*Use this method if the 3d raster map was not touched befor */
+                /*Use this method if the 3d raster map was not touched before */
                 for (z = 0; z < depths; z++) {
 
                     /*Upper cells */
@@ -284,9 +295,11 @@ void elev_raster_to_g3d(Database db, RASTER3D_Region region)
 
                     /*Write the value to the 3D map */
                     if (Rast3d_put_double(db.map, x, y, z, value) < 0)
-                        fatal_error(db, _("Error writing 3D raster double data"));
+                        fatal_error(db,
+                                    _("Error writing 3D raster double data"));
                 }
-            } else {
+            }
+            else {
                 /*Use this method for every following 3d raster maps access */
                 for (z = 0; z < depths; z++) {
                     /*Upper cells */
@@ -317,8 +330,8 @@ void elev_raster_to_g3d(Database db, RASTER3D_Region region)
 
                     /*Write the value to the 3D map */
                     if (Rast3d_put_double(db.map, x, y, z, value) < 0)
-                        fatal_error(db, _("Error writing 3D raster double data"));
-
+                        fatal_error(db,
+                                    _("Error writing 3D raster double data"));
                 }
             }
         }
@@ -333,7 +346,8 @@ void elev_raster_to_g3d(Database db, RASTER3D_Region region)
 }
 
 /* ************************************************************************* */
-/* Main function, open the raster maps and create the RASTER3D raster maps ****** */
+/* Main function, open the raster maps and create the RASTER3D raster maps
+ * ****** */
 
 /* ************************************************************************* */
 int main(int argc, char *argv[])
@@ -362,8 +376,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("conversion"));
     G_add_keyword(_("raster3d"));
     G_add_keyword(_("voxel"));
-    module->description =
-        _("Creates a 3D volume map based on 2D elevation and value raster maps.");
+    module->description = _(
+        "Creates a 3D volume map based on 2D elevation and value raster maps.");
 
     /* Get parameters from user */
     set_params();
@@ -398,7 +412,8 @@ int main(int argc, char *argv[])
             db.useUpperVal = 2;
         else
             G_fatal_error(_("The upper value is not valid"));
-    } else {
+    }
+    else {
         Rast3d_set_null_value(&db.upper, 1, DCELL_TYPE);
     }
 
@@ -408,7 +423,8 @@ int main(int argc, char *argv[])
             db.useLowerVal = 2;
         else
             G_fatal_error(_("The lower value is not valid"));
-    } else {
+    }
+    else {
         Rast3d_set_null_value(&db.lower, 1, DCELL_TYPE);
     }
 
@@ -424,7 +440,8 @@ int main(int argc, char *argv[])
 
     /*If not equal, set the 2D windows correct */
     if (rows != region.rows || cols != region.cols) {
-        G_message(_("The 2D and 3D region settings are different. I will use the 3D region settings to adjust the 2D region."));
+        G_message(_("The 2D and 3D region settings are different. I will use "
+                    "the 3D region settings to adjust the 2D region."));
         G_get_set_window(&window2d);
         window2d.ns_res = region.ns_res;
         window2d.ew_res = region.ew_res;
@@ -437,11 +454,12 @@ int main(int argc, char *argv[])
 
     /*open RASTER3D output map */
     db.map = NULL;
-    db.map = Rast3d_open_new_opt_tile_size(param.output->answer, RASTER3D_USE_CACHE_XY, &region, DCELL_TYPE, maxSize);
+    db.map = Rast3d_open_new_opt_tile_size(param.output->answer,
+                                           RASTER3D_USE_CACHE_XY, &region,
+                                           DCELL_TYPE, maxSize);
 
     if (db.map == NULL)
         fatal_error(db, _("Error opening 3D raster map"));
-
 
     /*if requested set the Mask on */
     if (param.mask->answer) {

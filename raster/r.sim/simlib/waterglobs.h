@@ -1,9 +1,9 @@
 #ifndef __WATERGLOBS_H__
 #define __WATERGLOBS_H__
 
-#define EPS     1.e-7
-#define MAXW    7000000
-#define UNDEF	-9999
+#define EPS   1.e-7
+#define MAXW  7000000
+#define UNDEF -9999
 
 #include <grass/raster.h>
 
@@ -38,31 +38,27 @@ extern char *rainval;
 extern char *maninval;
 extern char *infilval;
 
-struct seed
-{
+struct seed {
     long int is1, is2;
 };
 
 extern struct seed seed;
 
-struct _points
-{
-    double *x; /* x coor for each point */
-    double *y; /* y coor for each point*/
-    int *cats; /* Category for each point */
-    int npoints; /* Number of observation points */
+struct _points {
+    double *x;         /* x coor for each point */
+    double *y;         /* y coor for each point */
+    int *cats;         /* Category for each point */
+    int npoints;       /* Number of observation points */
     int npoints_alloc; /* Number of allocated points */
-    FILE *output; /* Output file descriptor */
-    int is_open; /* Set to 1 if open, 0 if closed */
+    FILE *output;      /* Output file descriptor */
+    int is_open;       /* Set to 1 if open, 0 if closed */
 };
 
-struct point2D
-{
+struct point2D {
     double x;
     double y;
 };
-struct point3D
-{
+struct point3D {
     double x;
     double y;
     double m;
@@ -78,7 +74,7 @@ extern double amax1(double, double);
 extern double amin1(double, double);
 extern int min(int, int);
 extern int max(int, int);
-extern void create_observation_points();
+extern void create_observation_points(void);
 
 extern double xmin, ymin, xmax, ymax;
 extern double mayy, miyy, maxx, mixx;
@@ -110,7 +106,7 @@ extern double rwalk, bresx, bresy, xrand, yrand;
 extern double stepx, stepy, xp0, yp0;
 extern double chmean, si0, deltap, deldif, cch, hhc, halpha;
 extern double eps;
-extern int maxwab, nstack; 
+extern int maxwab, nstack;
 extern int iterout, mx2o, my2o;
 extern int miter, nwalka;
 extern double timec;
@@ -120,6 +116,6 @@ extern double rain_val;
 extern double manin_val;
 extern double infil_val;
 
-extern struct History history;	/* holds meta-data (title, comments,..) */
+extern struct History history; /* holds meta-data (title, comments,..) */
 
 #endif /* __WATERGLOBS_H__ */

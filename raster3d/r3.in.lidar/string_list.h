@@ -11,14 +11,12 @@
  *
  */
 
-
 #ifndef __STRING_LIST_H__
 #define __STRING_LIST_H__
 
 /* multiple files */
 
-struct StringList
-{
+struct StringList {
     int num_items;
     int max_items;
     char **items;

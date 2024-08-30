@@ -65,7 +65,7 @@ Several environment variables affect the operation of the Cairo driver:
      </ul>
      (Note: Some formats may not be available, depending on your platform and
      the Cairo library that GRASS was built with.)
-  </li> 
+  </li>
   <li><b>GRASS_RENDER_FILE_READ</b><br>
      if <tt>TRUE</tt>, the Cairo driver will initialize the image from
     the contents of GRASS_RENDER_FILE.<br>
@@ -134,7 +134,6 @@ g.region raster=elevation
 d.rast map=elevation
 </pre></div>
 
-
 <h3>SVG Example</h3>
 
 Example: using the driver to generate a SVG vector file with a vector
@@ -148,8 +147,7 @@ g.region vector=roadsmajor
 d.vect map=roadsmajor -c
 </pre></div>
 
-
-<h2>NOTES</h2> 
+<h2>NOTES</h2>
 
 The driver is still in development. Enable it by specifying
 <code>--with-cairo</code> when configuring GRASS. This
@@ -171,6 +169,7 @@ fall back on rendering a bitmap representation of the image wrapped in
 the selected vector format.
 
 <h2>SEE ALSO</h2>
+
 <em>
 <a href="pngdriver.html">PNG driver</a>,
 <a href="psdriver.html">PS driver</a>,
@@ -187,10 +186,6 @@ the selected vector format.
 </em>
 
 <h2>AUTHOR</h2>
+
 Lars Ahlzen &lt;<i>lars (at) ahlzen.com</i>&gt;<br>
 and the GRASS Development Team.
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

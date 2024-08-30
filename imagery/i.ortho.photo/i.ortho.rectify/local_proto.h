@@ -25,10 +25,12 @@ int exec_rectify(struct Ortho_Image_Group *, int *, char *, char *, char *);
 
 /* get_wind.c */
 int get_ref_window(struct Ref *, int *, struct Cell_head *);
-int georef_window(struct Ortho_Image_Group *, struct Cell_head *, struct Cell_head *, double);
+int georef_window(struct Ortho_Image_Group *, struct Cell_head *,
+                  struct Cell_head *, double);
 
 /* rectify.c */
-int rectify(struct Ortho_Image_Group *, char *, char *, struct cache *, double, char *, char *);
+int rectify(struct Ortho_Image_Group *, char *, char *, struct cache *, double,
+            char *, char *);
 
 /* readcell.c */
 struct cache *readcell(int, int, int);
@@ -44,21 +46,21 @@ int get_target(char *);
 /* declare resampling methods */
 /* bilinear.c */
 extern void p_bilinear(struct cache *, void *, int, double *, double *,
-		       struct Cell_head *);
+                       struct Cell_head *);
 /* cubic.c */
 extern void p_cubic(struct cache *, void *, int, double *, double *,
-		    struct Cell_head *);
+                    struct Cell_head *);
 /* nearest.c */
 extern void p_nearest(struct cache *, void *, int, double *, double *,
-		      struct Cell_head *);
+                      struct Cell_head *);
 /* bilinear_f.c */
 extern void p_bilinear_f(struct cache *, void *, int, double *, double *,
-		       struct Cell_head *);
+                         struct Cell_head *);
 /* cubic_f.c */
 extern void p_cubic_f(struct cache *, void *, int, double *, double *,
-		    struct Cell_head *);
+                      struct Cell_head *);
 /* lanczos.c */
 extern void p_lanczos(struct cache *, void *, int, double *, double *,
-		    struct Cell_head *);
+                      struct Cell_head *);
 extern void p_lanczos_f(struct cache *, void *, int, double *, double *,
-		    struct Cell_head *);
+                        struct Cell_head *);

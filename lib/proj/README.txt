@@ -7,7 +7,7 @@ gdal-config --datadir
 
 The datum shift grids are also used from GDAL/PROJ (proj-nad package).
 
-TODO: It is recommended to rely on PROJ4's proj-nad package. For doing so, 
+TODO: It is recommended to rely on PROJ4's proj-nad package. For doing so,
       there would be some changes needed to lib/proj/get_proj.c - the call
       to pj_set_finder() should be removed so that PROJ looks in its default
       locations for the files.
@@ -48,4 +48,3 @@ PROJ_DEBUG=ON CPL_DEBUG=ON m.proj proj_in="+init=epsg:4326" proj_out="+proj=long
 -99.99959418|39.99999410|0.00000000
 
 The resulting values need to be identical (note: m.proj prints with less precision)
-

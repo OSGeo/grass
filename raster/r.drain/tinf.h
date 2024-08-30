@@ -69,21 +69,21 @@ void prod_d(void *, void *);
 /* to add a new multitype function, add a pointer for the function and
  * its argument list to the list below */
 
-extern int (*is_null) (void *);
-extern void (*set_null_value) (void *, int);
-extern int (*bpe) ();
-extern void *(*get_max) (void *, void *);
-extern void *(*get_min) (void *, void *);
-extern void (*get_row) (int, void *, int);
-extern void *(*get_buf) ();
-extern void (*put_row) (int, void *);
-extern double (*slope) (void *, void *, double);
-extern void (*set_min) (void *);
-extern void (*set_max) (void *);
-extern void (*diff) (void *, void *);
-extern void (*sum) (void *, void *);
-extern void (*quot) (void *, void *);
-extern void (*prod) (void *, void *);
+extern int (*is_null)(void *);
+extern void (*set_null_value)(void *, int);
+extern int (*bpe)();
+extern void *(*get_max)(void *, void *);
+extern void *(*get_min)(void *, void *);
+extern void (*get_row)(int, void *, int);
+extern void *(*get_buf)();
+extern void (*put_row)(int, void *);
+extern double (*slope)(void *, void *, double);
+extern void (*set_min)(void *);
+extern void (*set_max)(void *);
+extern void (*diff)(void *, void *);
+extern void (*sum)(void *, void *);
+extern void (*quot)(void *, void *);
+extern void (*prod)(void *, void *);
 
 /* probably not something of general interest */
 
@@ -91,11 +91,10 @@ double slope_c(void *, void *, double);
 double slope_f(void *, void *, double);
 double slope_d(void *, void *, double);
 
-struct band3
-{
-    int ns;			/* samples per line */
-    off_t sz;			/* bytes per line */
-    char *b[3];			/* pointers to start of each line */
+struct band3 {
+    int ns;     /* samples per line */
+    off_t sz;   /* bytes per line */
+    char *b[3]; /* pointers to start of each line */
 };
 
 int advance_band3(int, struct band3 *);

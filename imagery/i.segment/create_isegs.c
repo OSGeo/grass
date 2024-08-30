@@ -10,8 +10,8 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/raster.h>
-#include <grass/segment.h>	/* segmentation library */
-#include <grass/rbtree.h>	/* Red Black Tree library functions */
+#include <grass/segment.h> /* segmentation library */
+#include <grass/rbtree.h>  /* Red Black Tree library functions */
 #include "iseg.h"
 
 int create_isegs(struct globals *globals)
@@ -22,105 +22,103 @@ int create_isegs(struct globals *globals)
     CELL current_bound, bounds_val;
 
     if (globals->bounds_map == NULL) {
-	/* just one time through loop */
-	successflag = globals->method_fn(globals);
+        /* just one time through loop */
+        successflag = globals->method_fn(globals);
     }
     else {
-	/* outer processing loop for polygon constraints */
-	for (current_bound = globals->lower_bound;
-	     current_bound <= globals->upper_bound; current_bound++) {
+        /* outer processing loop for polygon constraints */
+        for (current_bound = globals->lower_bound;
+             current_bound <= globals->upper_bound; current_bound++) {
 
-	    G_debug(1, "current_bound = %d", current_bound);
+            G_debug(1, "current_bound = %d", current_bound);
 
-	    have_bound = 0;
+            have_bound = 0;
 
-	    /* get min/max row/col to narrow the processing window */
-	    globals->row_min = globals->nrows;
-	    globals->row_max = 0;
-	    globals->col_min = globals->ncols;
-	    globals->col_max = 0;
-	    for (row = 0; row < globals->nrows; row++) {
-		for (col = 0; col < globals->ncols; col++) {
-		    FLAG_SET(globals->null_flag, row, col);
-		    Segment_get(&globals->bounds_seg, &bounds_val,
-				row, col);
+            /* get min/max row/col to narrow the processing window */
+            globals->row_min = globals->nrows;
+            globals->row_max = 0;
+            globals->col_min = globals->ncols;
+            globals->col_max = 0;
+            for (row = 0; row < globals->nrows; row++) {
+                for (col = 0; col < globals->ncols; col++) {
+                    FLAG_SET(globals->null_flag, row, col);
+                    Segment_get(&globals->bounds_seg, &bounds_val, row, col);
 
-		    if (!Rast_is_c_null_value(&bounds_val)
-		        && bounds_val == current_bound) {
+                    if (!Rast_is_c_null_value(&bounds_val) &&
+                        bounds_val == current_bound) {
 
-			Segment_get(&globals->rid_seg, &rid, row, col);
-			if (!Rast_is_c_null_value(&rid)) {
-			    have_bound = 1;
+                        Segment_get(&globals->rid_seg, &rid, row, col);
+                        if (!Rast_is_c_null_value(&rid)) {
+                            have_bound = 1;
 
-			    FLAG_UNSET(globals->null_flag, row, col);
+                            FLAG_UNSET(globals->null_flag, row, col);
 
-			    if (globals->row_min > row)
-				globals->row_min = row;
-			    if (globals->row_max < row)
-				globals->row_max = row;
-			    if (globals->col_min > col)
-				globals->col_min = col;
-			    if (globals->col_max < col)
-				globals->col_max = col;
-			}
-		    }
-		}
-	    }
-	    globals->row_max++;
-	    globals->col_max++;
+                            if (globals->row_min > row)
+                                globals->row_min = row;
+                            if (globals->row_max < row)
+                                globals->row_max = row;
+                            if (globals->col_min > col)
+                                globals->col_min = col;
+                            if (globals->col_max < col)
+                                globals->col_max = col;
+                        }
+                    }
+                }
+            }
+            globals->row_max++;
+            globals->col_max++;
 
-	    if (have_bound)
-		successflag = globals->method_fn(globals);
-	}    /* end outer loop for processing polygons */
+            if (have_bound)
+                successflag = globals->method_fn(globals);
+        } /* end outer loop for processing polygons */
 
-	/* restore NULL flag */
-	flag_clear_all(globals->null_flag);
-	for (row = 0; row < globals->nrows; row++) {
-	    for (col = 0; col < globals->ncols; col++) {
-		Segment_get(&globals->rid_seg, &rid, row, col);
-		if (Rast_is_c_null_value(&rid))
-		    FLAG_SET(globals->null_flag, row, col);
-	    }
-	}
+        /* restore NULL flag */
+        flag_clear_all(globals->null_flag);
+        for (row = 0; row < globals->nrows; row++) {
+            for (col = 0; col < globals->ncols; col++) {
+                Segment_get(&globals->rid_seg, &rid, row, col);
+                if (Rast_is_c_null_value(&rid))
+                    FLAG_SET(globals->null_flag, row, col);
+            }
+        }
     }
 
     if (globals->method == ORM_RG) {
-	/* renumber */
-	int i, *new_id, max_id;
+        /* renumber */
+        int i, *new_id, max_id;
 
-	G_debug(1, "Largest assigned ID: %d", globals->max_rid);
+        G_debug(1, "Largest assigned ID: %d", globals->max_rid);
 
-	new_id = G_malloc((globals->max_rid + 1) * sizeof(int));
-	
-	for (i = 0; i <= globals->max_rid; i++)
-	    new_id[i] = 0;
+        new_id = G_malloc((globals->max_rid + 1) * sizeof(int));
 
-	for (row = 0; row < globals->nrows; row++) {
-	    for (col = 0; col < globals->ncols; col++) {
-		Segment_get(&globals->rid_seg, &rid, row, col);
-		if (!Rast_is_c_null_value(&rid))
-		    new_id[rid]++;
-	    }
-	}
+        for (i = 0; i <= globals->max_rid; i++)
+            new_id[i] = 0;
 
-	max_id = 0;
-	for (i = 0; i <= globals->max_rid; i++) {
-	    if (new_id[i] > 0) {
-		max_id++;
-		new_id[i] = max_id;
-	    }
-	}
-	globals->max_rid = max_id;
-	G_debug(1, "Largest renumbered ID: %d", globals->max_rid);
-	
-	globals->new_id = new_id;
+        for (row = 0; row < globals->nrows; row++) {
+            for (col = 0; col < globals->ncols; col++) {
+                Segment_get(&globals->rid_seg, &rid, row, col);
+                if (!Rast_is_c_null_value(&rid))
+                    new_id[rid]++;
+            }
+        }
+
+        max_id = 0;
+        for (i = 0; i <= globals->max_rid; i++) {
+            if (new_id[i] > 0) {
+                max_id++;
+                new_id[i] = max_id;
+            }
+        }
+        globals->max_rid = max_id;
+        G_debug(1, "Largest renumbered ID: %d", globals->max_rid);
+
+        globals->new_id = new_id;
     }
 
     return successflag;
 }
 
-void find_four_neighbors(int p_row, int p_col,
-			        int neighbors[8][2])
+void find_four_neighbors(int p_row, int p_col, int neighbors[8][2])
 {
     /* north */
     neighbors[0][0] = p_row - 1;
@@ -141,8 +139,7 @@ void find_four_neighbors(int p_row, int p_col,
     return;
 }
 
-void find_eight_neighbors(int p_row, int p_col,
-			         int neighbors[8][2])
+void find_eight_neighbors(int p_row, int p_col, int neighbors[8][2])
 {
     /* get the 4 orthogonal neighbors */
     find_four_neighbors(p_row, p_col, neighbors);
@@ -167,33 +164,38 @@ void find_eight_neighbors(int p_row, int p_col,
     return;
 }
 
-/* similarity / distance between two points based on their input raster values */
-/* assumes first point values already saved in files->bands_seg - only run Segment_get once for that value... */
-/* TODO: Segment_get already happened for a[] values in the main function.  Could remove a[] from these parameters */
+/* similarity / distance between two points based on their input raster values
+ */
+/* assumes first point values already saved in files->bands_seg - only run
+ * Segment_get once for that value... */
+/* TODO: Segment_get already happened for a[] values in the main function. Could
+ * remove a[] from these parameters */
 double calculate_euclidean_similarity(struct ngbr_stats *Ri,
                                       struct ngbr_stats *Rk,
-				      struct globals *globals)
+                                      struct globals *globals)
 {
     double val = 0., diff;
     int n = globals->nbands - 1;
 
-    /* squared euclidean distance, sum the square differences for each dimension */
+    /* squared euclidean distance, sum the square differences for each dimension
+     */
     do {
-	diff = Ri->mean[n] - Rk->mean[n];
-	    
-	val += diff * diff;
+        diff = Ri->mean[n] - Rk->mean[n];
+
+        val += diff * diff;
     } while (n--);
 
     /* the return value should always be in the range 0 - 1 */
     if (val <= 0)
-	return 0.;
+        return 0.;
 
     val /= globals->max_diff;
 
 #ifdef _OR_SHAPE_
     if (globals->shape_weight < 1)
-	val = val * globals->shape_weight + (1 - globals->shape_weight) *
-	      calculate_shape(rsi, rsk, nshared, globals);
+        val = val * globals->shape_weight +
+              (1 - globals->shape_weight) *
+                  calculate_shape(rsi, rsk, nshared, globals);
 #endif
 
     return val;
@@ -201,26 +203,27 @@ double calculate_euclidean_similarity(struct ngbr_stats *Ri,
 
 double calculate_manhattan_similarity(struct ngbr_stats *Ri,
                                       struct ngbr_stats *Rk,
-				      struct globals *globals)
+                                      struct globals *globals)
 {
     double val = 0.;
     int n = globals->nbands - 1;
 
     /* squared manhattan distance, sum the differences for each dimension */
     do {
-	val += fabs(Ri->mean[n] - Rk->mean[n]);
+        val += fabs(Ri->mean[n] - Rk->mean[n]);
     } while (n--);
 
     /* the return value should always be in the range 0 - 1 */
     if (val <= 0)
-	return 0.;
+        return 0.;
 
     val /= globals->max_diff;
 
 #ifdef _OR_SHAPE_
     if (globals->shape_weight < 1)
-	val = val * globals->shape_weight + (1 - globals->shape_weight) *
-	      calculate_shape(rsi, rsk, nshared, globals);
+        val = val * globals->shape_weight +
+              (1 - globals->shape_weight) *
+                  calculate_shape(rsi, rsk, nshared, globals);
 #endif
 
     return val;

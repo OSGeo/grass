@@ -4,8 +4,8 @@
 #include "globals.h"
 #include "dbdriver.h"
 
-SQLHENV ODenvi;			/* Handle ODBC environment */
-SQLHDBC ODconn;			/* Handle connection  */
+SQLHENV ODenvi; /* Handle ODBC environment */
+SQLHDBC ODconn; /* Handle connection  */
 
 int main(int argc, char **argv)
 {

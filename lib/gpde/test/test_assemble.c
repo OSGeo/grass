@@ -1,21 +1,18 @@
-
 /*****************************************************************************
-*
-* MODULE:       Grass PDE Numerical Library
-* AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
-* 		soerengebbert <at> gmx <dot> de
-*               
-* PURPOSE:      Unit tests for matrix assembling
-*
-* COPYRIGHT:    (C) 2000 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*
-*****************************************************************************/
-
-
+ *
+ * MODULE:       Grass PDE Numerical Library
+ * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
+ *                 soerengebbert <at> gmx <dot> de
+ *
+ * PURPOSE:      Unit tests for matrix assembling
+ *
+ * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,7 +29,7 @@ static N_array_2d *create_value_array_2d(void);
 static N_array_3d *create_value_array_3d(void);
 
 /* *************************************************************** */
-/* Performe the les assmbling tests ****************************** */
+/* Perform the les assmbling tests ****************************** */
 /* *************************************************************** */
 int unit_test_assemble(void)
 {
@@ -47,9 +44,9 @@ int unit_test_assemble(void)
     sum += test_matrix_assemble_3d();
 
     if (sum > 0)
-	G_warning("\n-- Assembling unit tests failure --");
+        G_warning("\n-- Assembling unit tests failure --");
     else
-	G_message("\n-- Assembling unit tests finished successfully --");
+        G_message("\n-- Assembling unit tests finished successfully --");
 
     return sum;
 }
@@ -64,17 +61,17 @@ N_array_2d *create_status_array_2d(void)
 
     data = N_alloc_array_2d(TEST_N_NUM_COLS, TEST_N_NUM_ROWS, 1, CELL_TYPE);
 
-#pragma omp parallel for private (i, j) shared (data)
+#pragma omp parallel for private(i, j) shared(data)
     for (j = 0; j < TEST_N_NUM_ROWS; j++) {
-	for (i = 0; i < TEST_N_NUM_COLS; i++) {
+        for (i = 0; i < TEST_N_NUM_COLS; i++) {
 
-	    if (j == 1) {
-		N_put_array_2d_c_value(data, i, j, 2);
-	    }
-	    else {
-      	N_put_array_2d_c_value(data, i, j, 1);
-	    }
-	}
+            if (j == 1) {
+                N_put_array_2d_c_value(data, i, j, 2);
+            }
+            else {
+                N_put_array_2d_c_value(data, i, j, 1);
+            }
+        }
     }
     return data;
 }
@@ -89,17 +86,17 @@ N_array_2d *create_value_array_2d(void)
 
     data = N_alloc_array_2d(TEST_N_NUM_COLS, TEST_N_NUM_ROWS, 1, DCELL_TYPE);
 
-#pragma omp parallel for private (i, j) shared (data)
+#pragma omp parallel for private(i, j) shared(data)
     for (j = 0; j < TEST_N_NUM_ROWS; j++) {
-	for (i = 0; i < TEST_N_NUM_COLS; i++) {
+        for (i = 0; i < TEST_N_NUM_COLS; i++) {
 
-	    if (j == 1) {
-		N_put_array_2d_d_value(data, i, j, 50);
-	    }
-	    else {
-      	N_put_array_2d_d_value(data, i, j, 1);
-	    }
-	}
+            if (j == 1) {
+                N_put_array_2d_d_value(data, i, j, 50);
+            }
+            else {
+                N_put_array_2d_d_value(data, i, j, 1);
+            }
+        }
     }
     return data;
 }
@@ -112,27 +109,25 @@ N_array_3d *create_status_array_3d(void)
     N_array_3d *data;
     int i, j, k;
 
-    data =
-	N_alloc_array_3d(TEST_N_NUM_COLS, TEST_N_NUM_ROWS, TEST_N_NUM_DEPTHS, 1,
-			 FCELL_TYPE);
+    data = N_alloc_array_3d(TEST_N_NUM_COLS, TEST_N_NUM_ROWS, TEST_N_NUM_DEPTHS,
+                            1, FCELL_TYPE);
 
-#pragma omp parallel for private (i, j, k) shared (data)
+#pragma omp parallel for private(i, j, k) shared(data)
     for (k = 0; k < TEST_N_NUM_DEPTHS; k++)
-	for (j = 0; j < TEST_N_NUM_ROWS; j++) {
-	    for (i = 0; i < TEST_N_NUM_COLS; i++) {
+        for (j = 0; j < TEST_N_NUM_ROWS; j++) {
+            for (i = 0; i < TEST_N_NUM_COLS; i++) {
 
-		if (i == 0 && j == 1) {
-		    N_put_array_3d_f_value(data, i, j, k, 2.0);
-		}
-		else {
+                if (i == 0 && j == 1) {
+                    N_put_array_3d_f_value(data, i, j, k, 2.0);
+                }
+                else {
 
-      	    N_put_array_3d_f_value(data, i, j, k, 1.0);
-		}
-	    }
-	}
+                    N_put_array_3d_f_value(data, i, j, k, 1.0);
+                }
+            }
+        }
 
     return data;
-
 }
 
 /* *************************************************************** */
@@ -143,28 +138,25 @@ N_array_3d *create_value_array_3d(void)
     N_array_3d *data;
     int i, j, k;
 
-    data =
-	N_alloc_array_3d(TEST_N_NUM_COLS, TEST_N_NUM_ROWS, TEST_N_NUM_DEPTHS, 1,
-			 DCELL_TYPE);
+    data = N_alloc_array_3d(TEST_N_NUM_COLS, TEST_N_NUM_ROWS, TEST_N_NUM_DEPTHS,
+                            1, DCELL_TYPE);
 
-#pragma omp parallel for private (i, j, k) shared (data)
+#pragma omp parallel for private(i, j, k) shared(data)
     for (k = 0; k < TEST_N_NUM_DEPTHS; k++)
-	for (j = 0; j < TEST_N_NUM_ROWS; j++) {
-	    for (i = 0; i < TEST_N_NUM_COLS; i++) {
+        for (j = 0; j < TEST_N_NUM_ROWS; j++) {
+            for (i = 0; i < TEST_N_NUM_COLS; i++) {
 
+                if (i == 0 && j == 1) {
+                    N_put_array_3d_f_value(data, i, j, k, 50);
+                }
+                else {
 
-		if (i == 0 && j == 1) {
-		    N_put_array_3d_f_value(data, i, j, k, 50);
-		}
-		else {
-
-      	    N_put_array_3d_f_value(data, i, j, k, 1);
-		}
-	    }
-	}
+                    N_put_array_3d_f_value(data, i, j, k, 1);
+                }
+            }
+        }
 
     return data;
-
 }
 
 /* *************************************************************** */
@@ -177,7 +169,6 @@ int test_matrix_assemble_3d(void)
     N_les_callback_3d *call;
     N_array_3d *status;
     N_array_3d *start_val;
-
 
     /*set the callback to default */
     call = N_alloc_les_callback_3d();
@@ -200,17 +191,21 @@ int test_matrix_assemble_3d(void)
     /*Assemble the matrix */
     les = N_assemble_les_3d(N_SPARSE_LES, geom, status, start_val, NULL, call);
     N_free_les(les);
-    les = N_assemble_les_3d_active(N_SPARSE_LES, geom, status, start_val, NULL, call);
+    les = N_assemble_les_3d_active(N_SPARSE_LES, geom, status, start_val, NULL,
+                                   call);
     N_free_les(les);
-    les = N_assemble_les_3d_dirichlet(N_SPARSE_LES, geom, status, start_val, NULL, call);
+    les = N_assemble_les_3d_dirichlet(N_SPARSE_LES, geom, status, start_val,
+                                      NULL, call);
     N_les_integrate_dirichlet_3d(les, geom, status, start_val);
     N_free_les(les);
 
     les = N_assemble_les_3d(N_NORMAL_LES, geom, status, start_val, NULL, call);
     N_free_les(les);
-    les = N_assemble_les_3d_active(N_NORMAL_LES, geom, status, start_val, NULL, call);
+    les = N_assemble_les_3d_active(N_NORMAL_LES, geom, status, start_val, NULL,
+                                   call);
     N_free_les(les);
-    les = N_assemble_les_3d_dirichlet(N_NORMAL_LES, geom, status, start_val, NULL, call);
+    les = N_assemble_les_3d_dirichlet(N_NORMAL_LES, geom, status, start_val,
+                                      NULL, call);
     N_les_integrate_dirichlet_3d(les, geom, status, start_val);
     N_free_les(les);
 
@@ -219,7 +214,6 @@ int test_matrix_assemble_3d(void)
 
     return 0;
 }
-
 
 /* *************************************************************** */
 /* Test the matrix assembling with 2d array data ***************** */
@@ -252,17 +246,21 @@ int test_matrix_assemble_2d(void)
     /*Assemble the matrix */
     les = N_assemble_les_2d(N_SPARSE_LES, geom, status, start_val, NULL, call);
     N_free_les(les);
-    les = N_assemble_les_2d_active(N_SPARSE_LES, geom, status, start_val, NULL, call);
+    les = N_assemble_les_2d_active(N_SPARSE_LES, geom, status, start_val, NULL,
+                                   call);
     N_free_les(les);
-    les = N_assemble_les_2d_dirichlet(N_SPARSE_LES, geom, status, start_val, NULL, call);
+    les = N_assemble_les_2d_dirichlet(N_SPARSE_LES, geom, status, start_val,
+                                      NULL, call);
     N_les_integrate_dirichlet_2d(les, geom, status, start_val);
     N_free_les(les);
 
     les = N_assemble_les_2d(N_NORMAL_LES, geom, status, start_val, NULL, call);
     N_free_les(les);
-    les = N_assemble_les_2d_active(N_NORMAL_LES, geom, status, start_val, NULL, call);
+    les = N_assemble_les_2d_active(N_NORMAL_LES, geom, status, start_val, NULL,
+                                   call);
     N_free_les(les);
-    les = N_assemble_les_2d_dirichlet(N_NORMAL_LES, geom, status, start_val, NULL, call);
+    les = N_assemble_les_2d_dirichlet(N_NORMAL_LES, geom, status, start_val,
+                                      NULL, call);
     N_les_integrate_dirichlet_2d(les, geom, status, start_val);
     N_free_les(les);
 

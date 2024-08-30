@@ -1,7 +1,7 @@
 /* cpfilter.c                                                           */
 #include "ransurf.h"
 
-void CopyFilter(FILTER * FPtr, FILTER Filter)
+void CopyFilter(FILTER *FPtr, FILTER Filter)
 {
     G_debug(2, "CopyFilter()");
 

@@ -14,7 +14,6 @@ the registered time stamped raster map layers.
 Gaps between raster map layer in the STRDS will
 be represented by NULL values in the voxel map layer.
 
-
 <h2>NOTES</h2>
 
 The reference time for all space time voxel cubes is
@@ -28,10 +27,10 @@ based granularity as well. This may result in millions of space time
 voxel cube layers!
 
 <h3>Management of open file limits</h3>
-The maximum number of raster maps that can be processed is given by the 
+The maximum number of raster maps that can be processed is given by the
 per-user limit of the operating system. For example, both the the hard and soft
-limit for users is typically 1024. The soft limit can be changed with e.g. 
-ulimit -n 4096 (UNIX-based operating systems) but not higher than the 
+limit for users is typically 1024. The soft limit can be changed with e.g.
+ulimit -n 4096 (UNIX-based operating systems) but not higher than the
 hard limit. If the latter is too low, you can as superuser add an entry in
 
 <div class="code"><pre>
@@ -40,15 +39,15 @@ hard limit. If the latter is too low, you can as superuser add an entry in
 your_username  hard    nofile          4096
 </pre></div>
 
-This will raise the hard limit to 4096 files. Also have a look at the overall 
+This will raise the hard limit to 4096 files. Also have a look at the overall
 limit of the operating system
 <div class="code"><pre>
 cat /proc/sys/fs/file-max
 </pre></div>
 which, on modern Linux systems, is several 100,000 files.
 
-
 <h2>EXAMPLE</h2>
+
 To create a voxel map layer from a subset of the <em>tempmean_monthly</em>
 space time dataset, run:
 
@@ -102,7 +101,7 @@ r3.info tempmean_monthly_2012
  +----------------------------------------------------------------------------+
  | Layer:    tempmean_monthly_2012          Date: Fri Nov 28 11:10:50 2014    |
  | Mapset:   climate_2009_2012              Login of Creator: lucadelu        |
- | Location: nc_spm_temporal_workshop                                         |
+ | Project: nc_spm_temporal_workshop                                         |
  | DataBase: /grassdata                                                       |
  | Title:    Space time voxel cube                                            |
  | Units:    none                                                             |
@@ -159,9 +158,3 @@ r3.info tempmean_monthly_2012
 <h2>AUTHOR</h2>
 
 S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
-

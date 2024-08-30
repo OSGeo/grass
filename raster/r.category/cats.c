@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.cats
@@ -46,14 +45,14 @@ int get_cats(const char *name, const char *mapset)
     /* read the raster map */
     G_verbose_message(_("Reading <%s> in <%s>"), name, mapset);
     for (row = 0; row < nrows; row++) {
-	if (G_verbose() > G_verbose_std())
-	    G_percent(row, nrows, 2);
-	Rast_get_c_row_nomask(fd, cell, row);
-	Rast_update_cell_stats(cell, ncols, &statf);
+        if (G_verbose() > G_verbose_std())
+            G_percent(row, nrows, 2);
+        Rast_get_c_row_nomask(fd, cell, row);
+        Rast_update_cell_stats(cell, ncols, &statf);
     }
     /* done */
     if (G_verbose() > G_verbose_std())
-	G_percent(row, nrows, 2);
+        G_percent(row, nrows, 2);
     Rast_close(fd);
     G_free(cell);
     Rast_rewind_cell_stats(&statf);
@@ -67,8 +66,8 @@ int next_cat(long *x)
     CELL cat;
 
     if (Rast_next_cell_stat(&cat, &count, &statf)) {
-	*x = cat;
-	return 1;
+        *x = cat;
+        return 1;
     }
 
     return 0;

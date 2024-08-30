@@ -20,7 +20,6 @@ or, with a slight modification, in a Python script.
   <img src="wxGUI_modules_parameters.png" border="0" alt="r.neighbors dialog">
 </center>
 
-
 <h3>Tabs</h3>
 Module parameters and flags are organized in tabs. Their names can depend on a module,
 however every module has <i>Command output</i> tab where the progress can be observed,
@@ -29,7 +28,7 @@ The last <i>Manual</i> tab contains description of module's parameters
 and examples. The same information can be found in the online manual as well.
 
 <p>
-The style of the tabs can be changed through <i>GUI settings</i> - 
+The style of the tabs can be changed through <i>GUI settings</i> -
 <i>Appearance</i> - <i>Module dialog style</i>. Note that the style appearance
 depends on the platform and some styles might be more suitable
 for different platforms.
@@ -71,7 +70,7 @@ Certain modules require a file as input or output.
 Either the full path to the file needs to be specified
 or a path relative
 to the current working directory is enough, for example only the name of the file.
-<b>Current working directory</b> is a directory where GRASS would look 
+<b>Current working directory</b> is a directory where GRASS would look
 for or output files to if the full path is not specified.
 By default working directory is user's home folder.
 It can be changed in wxGUI menu
@@ -86,7 +85,6 @@ This applies to external files such as text files or GeoTiff files.
 This does not apply to raster maps, vector maps
 and other geospatial data stored in GRASS database
 which do not need any path to be specified.
-
 
 <h3>Special widgets</h3>
 For raster, vector or 3D raster input, there is a special
@@ -110,7 +108,7 @@ of creating a new file in a text editor and saving it.
 A temporary file is created in this case. By pressing the <i>Save as</i>
 button, the content of the box is then saved into user specified file,
 so that user's workflow can be reproduced later. With <i>Load</i>
-button we can display the content of selected file and edit it 
+button we can display the content of selected file and edit it
 directly in the box.
 
 <center>
@@ -122,8 +120,8 @@ directly in the box.
       into the box below, however the rules will not be stored permanently.
 </center>
 
-
 <h2>NOTES</h2>
+
 Dialogs are generated automatically based on module interface defined using <a href="g.parser.html">g.parser</a>.
 Command line interface can be obtained when running the module with a <i>--help</i>
 flag. The options and flags are the same as in the module GUI.
@@ -181,12 +179,7 @@ count,variance,diversity,interspersion,quart1,quart3,
 </em>
 
 <h2>AUTHORS</h2>
+
 GRASS Development Team<br>
 manual by Anna Petrasova, OSGeoREL, Faculty of Civil Engineering, Czech Technical University in Prague<br>
-Vaclav Petras, OSGeoREL, Faculty of Civil Engineering, Czech Technical University in Prague<br>
-
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+Vaclav Petras, OSGeoREL, Faculty of Civil Engineering, Czech Technical University in Prague

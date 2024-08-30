@@ -3,12 +3,12 @@
 
    \brief OGSF library - label management (lower level functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -36,10 +36,10 @@ GLuint label_id;
    \param fontbase fontbase settings
    \param size font size
    \param color font color
-   \param pt 
+   \param pt
  */
 void gs_put_label(const char *text, GLuint fontbase, int size,
-		  unsigned long color, int *pt)
+                  unsigned long color, int *pt)
 {
     int txt_width;
     GLint tmp[4];
@@ -47,16 +47,16 @@ void gs_put_label(const char *text, GLuint fontbase, int size,
     int t, l, b, r;
 
     if (!first) {
-	/* initialize display list */
-	label_base = glGenLists(MAX_LIST);
-	glListBase(label_base);
-	label_id = label_base;
-	first = 1;
+        /* initialize display list */
+        label_base = glGenLists(MAX_LIST);
+        glListBase(label_base);
+        label_id = label_base;
+        first = 1;
     }
 
     if (label_id > (label_base + MAX_LIST)) {
-	G_warning(_("Max. number of labels reached!"));
-	return;
+        G_warning(_("Max. number of labels reached!"));
+        return;
     }
 
     glNewList(label_id, GL_COMPILE_AND_EXECUTE);
@@ -74,12 +74,10 @@ void gs_put_label(const char *text, GLuint fontbase, int size,
 
     gsd_bgn_legend_viewport(l, b, r, t);
 
-
     /* Set text color */
     gsd_color_func(color);
 
     do_label_display(fontbase, labpt, text);
-
 
     gsd_end_legend_viewport();
 
@@ -90,20 +88,18 @@ void gs_put_label(const char *text, GLuint fontbase, int size,
     return;
 }
 
-
 /*!
-   \brief Remove current label 
+   \brief Remove current label
  */
 void gsd_remove_curr(void)
 {
     if (label_id) {
-	glDeleteLists(label_id - 1, 1);
-	label_id--;
+        glDeleteLists(label_id - 1, 1);
+        label_id--;
     }
 
     return;
 }
-
 
 /*!
    \brief Remove all labels from display list
@@ -117,15 +113,16 @@ void gsd_remove_all(void)
 }
 
 /*!
-   \brief Call display list and draw defined labels -- called from gsd_prim (gsd_call_lists)
+   \brief Call display list and draw defined labels -- called from gsd_prim
+   (gsd_call_lists)
  */
 void gsd_call_label(void)
 {
     int i;
 
     for (i = 0; i < MAX_LIST; i++) {
-	glCallList(i + label_base);
-	glFlush();
+        glCallList(i + label_base);
+        glFlush();
     }
     return;
 }
