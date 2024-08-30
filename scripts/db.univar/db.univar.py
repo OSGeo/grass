@@ -68,23 +68,23 @@ import atexit
 import json
 import math
 
-import grass.script as gscript
+import grass.script as gs
 
 
 def cleanup():
     for ext in ["", ".sort"]:
-        gscript.try_remove(tmp + ext)
+        gs.try_remove(tmp + ext)
 
 
 def sortfile(infile, outfile):
     inf = open(infile, "r")
     outf = open(outfile, "w")
 
-    if gscript.find_program("sort", "--help"):
-        gscript.run_command("sort", flags="n", stdin=inf, stdout=outf)
+    if gs.find_program("sort", "--help"):
+        gs.run_command("sort", flags="n", stdin=inf, stdout=outf)
     else:
         # FIXME: we need a large-file sorting function
-        gscript.warning(_("'sort' not found: sorting in memory"))
+        gs.warning(_("'sort' not found: sorting in memory"))
         lines = inf.readlines()
         for i in range(len(lines)):
             lines[i] = float(lines[i].rstrip("\r\n"))
@@ -103,7 +103,7 @@ def main():
     # as well as pushing the limit of how long the function can be.
     # pylint: disable=too-many-branches
     global tmp
-    tmp = gscript.tempfile()
+    tmp = gs.tempfile()
 
     extend = flags["e"]
     shellstyle = flags["g"]
@@ -125,25 +125,23 @@ def main():
     elif shellstyle:
         # This can be a message or warning in future versions.
         # In version 9, -g may be removed.
-        gscript.verbose(_("The format option is used and -g flag ignored"))
+        gs.verbose(_("The format option is used and -g flag ignored"))
 
-    desc_table = gscript.db_describe(table, database=database, driver=driver)
+    desc_table = gs.db_describe(table, database=database, driver=driver)
     if not desc_table:
-        gscript.fatal(_("Unable to describe table <%s>") % table)
+        gs.fatal(_("Unable to describe table <%s>") % table)
     found = False
     for cname, ctype, cwidth in desc_table["cols"]:
         if cname == column:
             found = True
-            if ctype not in ("INTEGER", "DOUBLE PRECISION"):
-                gscript.fatal(_("Column <%s> is not numeric") % cname)
+            if ctype not in {"INTEGER", "DOUBLE PRECISION"}:
+                gs.fatal(_("Column <%s> is not numeric") % cname)
     if not found:
-        gscript.fatal(_("Column <%s> not found in table <%s>") % (column, table))
+        gs.fatal(_("Column <%s> not found in table <%s>") % (column, table))
 
     if output_format == "plain":
-        gscript.verbose(
-            _("Calculation for column <%s> of table <%s>...") % (column, table)
-        )
-        gscript.message(_("Reading column values..."))
+        gs.verbose(_("Calculation for column <%s> of table <%s>...") % (column, table))
+        gs.message(_("Reading column values..."))
 
     sql = "SELECT %s FROM %s" % (column, table)
     if where:
@@ -156,7 +154,7 @@ def main():
         driver = None
 
     tmpf = open(tmp, "w")
-    gscript.run_command(
+    gs.run_command(
         "db.select",
         flags="c",
         table=table,
@@ -170,13 +168,13 @@ def main():
     # check if result is empty
     tmpf = open(tmp)
     if tmpf.read(1) == "":
-        if output_format in ["plain", "shell"]:
-            gscript.fatal(_("Table <%s> contains no data.") % table)
+        if output_format in {"plain", "shell"}:
+            gs.fatal(_("Table <%s> contains no data.") % table)
         tmpf.close()
 
     # calculate statistics
     if output_format == "plain":
-        gscript.verbose(_("Calculating statistics..."))
+        gs.verbose(_("Calculating statistics..."))
 
     N = 0
     sum = 0.0
@@ -200,8 +198,8 @@ def main():
     tmpf.close()
 
     if N <= 0:
-        if output_format in ["plain", "shell"]:
-            gscript.fatal(_("No non-null values found"))
+        if output_format in {"plain", "shell"}:
+            gs.fatal(_("No non-null values found"))
         else:
             # We produce valid JSON with a value for n even when the query returned
             # no rows or when all values are nulls.
@@ -313,23 +311,23 @@ def main():
         pval[i] = 0
 
     inf = open(tmp + ".sort")
-    l = 1
+    line_number = 1
     for line in inf:
         line = line.rstrip("\r\n")
         if len(line) == 0:
             continue
-        if l == q25pos:
+        if line_number == q25pos:
             q25 = float(line)
-        if l == q50apos:
+        if line_number == q50apos:
             q50a = float(line)
-        if l == q50bpos:
+        if line_number == q50bpos:
             q50b = float(line)
-        if l == q75pos:
+        if line_number == q75pos:
             q75 = float(line)
         for i in range(len(ppos)):
-            if l == ppos[i]:
+            if line_number == ppos[i]:
                 pval[i] = float(line)
-        l += 1
+        line_number += 1
 
     q50 = (q50a + q50b) / 2
 
@@ -379,6 +377,6 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
     atexit.register(cleanup)
     main()

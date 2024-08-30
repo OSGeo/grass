@@ -702,12 +702,10 @@ class SelectTransformDialog(wx.Dialog):
             height += h
             width = max(width, w)
 
-        height = height + 5
-        if height > 400:
-            height = 400
-        width = width + 5
-        if width > 400:
-            width = 400
+        height += 5
+        height = min(height, 400)
+        width += 5
+        width = min(width, 400)
 
         #
         # VListBox for displaying and selecting transformations
@@ -748,22 +746,22 @@ class SelectTransformDialog(wx.Dialog):
     def ClickTrans(self, event):
         """Get the number of the datum transform to use in g.proj"""
         self.transnum = event.GetSelection()
-        self.transnum = self.transnum - 1
+        self.transnum -= 1
 
     def GetTransform(self):
         """Get the number of the datum transform to use in g.proj"""
         self.transnum = self.translist.GetSelection()
-        self.transnum = self.transnum - 1
+        self.transnum -= 1
         return self.transnum
 
 
 def testRegionDef():
     import wx.lib.inspection
-    import grass.script as gscript
+    import grass.script as gs
 
     app = wx.App()
 
-    dlg = RegionDef(None, location=gscript.gisenv()["LOCATION_NAME"])
+    dlg = RegionDef(None, location=gs.gisenv()["LOCATION_NAME"])
     dlg.Show()
     wx.lib.inspection.InspectionTool().Show()
     app.MainLoop()

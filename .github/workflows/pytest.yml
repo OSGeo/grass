@@ -20,24 +20,26 @@ jobs:
         os:
           - ubuntu-22.04
         python-version:
-          - '3.8'
-          - '3.10'
+          - '3.9'
           - '3.12'
+          - '3.13'
       fail-fast: true
 
     runs-on: ${{ matrix.os }}
     env:
       FORCE_COLOR: 1 # for software including pip: https://force-color.org/
       CLICOLOR_FORCE: 1 # for other software including ninja: https://bixense.com/clicolors/
+      PYTHONWARNINGS: always
 
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
       - name: Set up Python
-        uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
+        uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3 # v5.2.0
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
+          allow-prereleases: true
 
       - name: Install non-Python dependencies
         run: |
@@ -46,14 +48,14 @@ jobs:
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
 
-      - uses: rui314/setup-mold@8de9eea54963d01c1a6c200606257d65bd53bea1 # v1
+      - uses: rui314/setup-mold@0bf4f07ef9048ec62a45f9dbf2f098afa49695f0 # v1
 
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r .github/workflows/python_requirements.txt
           pip install -r .github/workflows/optional_requirements.txt
-          pip install pytest pytest-timeout pytest-github-actions-annotate-failures pytest-xdist
+          pip install pytest pytest-timeout pytest-github-actions-annotate-failures pytest-xdist pytest-cov
 
       - name: Create installation directory
         run: |
@@ -70,18 +72,56 @@ jobs:
         run: |
           echo "$HOME/install/bin" >> $GITHUB_PATH
 
-      - name: Test executing of the grass command
-        run: .github/workflows/test_simple.sh
-
-      - name: Run pytest
-        run: |
-          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
-          pytest --verbose --color=yes --durations=0 --durations-min=0.5 --numprocesses auto -ra .
-
       - name: Print installed versions
         if: always()
         run: .github/workflows/print_versions.sh
+
+      - name: Test executing of the grass command
+        run: .github/workflows/test_simple.sh
+
+      - name: Run pytest with multiple workers in parallel
+        run: |
+          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
+          pytest --verbose --color=yes --durations=0 --durations-min=0.5 \
+            --numprocesses auto -ra . \
+            -m 'not needs_solo_run'
+
+      - name: Run pytest with a single worker (for tests marked with needs_solo_run)
+        run: |
+          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
+          export INITIAL_GISBASE="$(grass --config path)"
+          INITIAL_PWD="${PWD}" pytest --verbose --color=yes --durations=0 --durations-min=0.5 \
+            --cov \
+            --cov-context=test \
+            -ra . \
+            -m 'needs_solo_run'
+      - name: Fix non-standard installed script paths in coverage data
+        run: |
+          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
+          export INITIAL_GISBASE="$(grass --config path)"
+          export INITIAL_PWD="${PWD}"
+          python utils/coverage_mapper.py
+          coverage combine
+          coverage html
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@e28ff129e5465c2c0dcc6f003fc735cb6ae0c673 # v4.5.0
+        with:
+          verbose: true
+          flags: pytest-python-${{ matrix.python-version }}
+          name: pytest-python-${{ matrix.python-version }}
+          token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Make python-only code coverage test report available
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4.3.6
+        with:
+          name: python-codecoverage-report-${{ matrix.os }}-${{ matrix.python-version }}
+          path: coverage_html_report
+          retention-days: 1
+
   pytest-success:
     name: pytest Result
     needs:

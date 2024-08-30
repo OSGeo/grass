@@ -11,13 +11,10 @@ for details.
 """
 
 from abc import ABCMeta, abstractmethod
-from .core import (
-    get_tgis_message_interface,
-    init_dbif,
-    get_current_mapset,
-)
-from .temporal_topology_dataset_connector import TemporalTopologyDatasetConnector
+
+from .core import get_current_mapset, get_tgis_message_interface, init_dbif
 from .spatial_topology_dataset_connector import SpatialTopologyDatasetConnector
+from .temporal_topology_dataset_connector import TemporalTopologyDatasetConnector
 
 ###############################################################################
 
@@ -304,7 +301,7 @@ class AbstractDataset(
         """
         return self.relative_time.get_unit()
 
-    def check_relative_time_unit(self, unit):
+    def check_relative_time_unit(self, unit) -> bool:
         """Check if unit is of type  year(s), month(s), day(s), hour(s),
         minute(s) or second(s)
 
@@ -326,9 +323,7 @@ class AbstractDataset(
             "second",
             "seconds",
         ]
-        if unit not in units:
-            return False
-        return True
+        return not unit not in units
 
     def get_temporal_type(self):
         """Return the temporal type of this dataset

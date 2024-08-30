@@ -126,10 +126,10 @@ class OverlayController:
 
     dialog = property(fget=GetDialog, fset=SetDialog)
 
-    def IsShown(self):
-        if self._overlay and self._overlay.IsActive() and self._overlay.IsRendered():
-            return True
-        return False
+    def IsShown(self) -> bool:
+        return bool(
+            self._overlay and self._overlay.IsActive() and self._overlay.IsRendered()
+        )
 
     def Show(self, show=True):
         """Activate or deactivate overlay."""
@@ -168,7 +168,7 @@ class OverlayController:
     def _update(self):
         self._renderer.ChangeOverlay(id=self._id, command=self._cmd)
 
-    def CmdIsValid(self):
+    def CmdIsValid(self) -> bool:
         """If command is valid"""
         return True
 
@@ -205,18 +205,15 @@ class DtextController(OverlayController):
         self._defaultAt = "at=50,50"
         self._cmd = ["d.text", self._defaultAt]
 
-    def CmdIsValid(self):
+    def CmdIsValid(self) -> bool:
         inputs = 0
         for param in self._cmd[1:]:
             param = param.split("=")
             if len(param) == 1:
                 inputs += 1
-            else:
-                if param[0] == "text" and len(param) == 2:
-                    inputs += 1
-        if inputs >= 1:
-            return True
-        return False
+            elif param[0] == "text" and len(param) == 2:
+                inputs += 1
+        return inputs >= 1
 
 
 class BarscaleController(OverlayController):
@@ -312,20 +309,17 @@ class LegendController(OverlayController):
 
             return x, y
 
-    def CmdIsValid(self):
+    def CmdIsValid(self) -> bool:
         inputs = 0
         for param in self._cmd[1:]:
             param = param.split("=")
             if len(param) == 1:
                 inputs += 1
-            else:
-                if param[0] == "raster" and len(param) == 2:
-                    inputs += 1
-                elif param[0] == "raster_3d" and len(param) == 2:
-                    inputs += 1
-        if inputs == 1:
-            return True
-        return False
+            elif param[0] == "raster" and len(param) == 2:
+                inputs += 1
+            elif param[0] == "raster_3d" and len(param) == 2:
+                inputs += 1
+        return inputs == 1
 
     def ResizeLegend(self, begin, end, screenSize):
         """Resize legend according to given bbox coordinates."""

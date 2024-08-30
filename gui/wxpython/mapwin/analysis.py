@@ -20,7 +20,7 @@ import os
 import math
 import wx
 
-import core.units as units
+from core import units
 from core.gcmd import RunCommand
 from core.giface import Notification
 
@@ -297,7 +297,7 @@ class MeasureDistanceController(AnalysisControllerBase):
             #   the mathematical theta convention (CCW from +x axis)
             # angle = 90 - angle
             if angle < 0:
-                angle = 360 + angle
+                angle += 360
 
             mstring = "%s = %s %s\n%s = %s %s\n%s = %d %s\n%s" % (
                 _("segment"),

@@ -280,7 +280,7 @@ def main():
             try:
                 grass.run_command(
                     "v.db.connect",
-                    flags="o",
+                    overwrite=True,
                     quiet=True,
                     driver=dbconn["driver"],
                     database=todb,
