@@ -31,10 +31,6 @@
 #include <gdal.h>
 #endif
 
-#ifndef GDT_Int8
-#define GDT_Int8 14
-#endif
-
 /*!
    \brief Initialization
 
@@ -129,7 +125,10 @@ struct GDAL_link *Rast_get_gdal_link(const char *name, const char *mapset)
 
     switch (type) {
     case GDT_Byte:
+/* GDT_Int8 was introduced in GDAL 3.7 */
+#if GDAL_VERSION_NUM >= GDAL_COMPUTE_VERSION(3, 7, 0)
     case GDT_Int8:
+#endif
     case GDT_Int16:
     case GDT_UInt16:
     case GDT_Int32:
