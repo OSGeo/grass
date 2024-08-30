@@ -5,10 +5,6 @@
 
 #include "proto.h"
 
-#ifndef GDT_Int8
-#define GDT_Int8 14
-#endif
-
 void query_band(GDALRasterBandH hBand, const char *output,
                 struct Cell_head *cellhd, struct band_info *info)
 {
@@ -34,10 +30,13 @@ void query_band(GDALRasterBandH hBand, const char *output,
         cellhd->format = 0;
         break;
 
+/* GDT_Int8 was introduced in GDAL 3.7 */
+#if GDAL_VERSION_NUM >= GDAL_COMPUTE_VERSION(3, 7, 0)
     case GDT_Int8:
         info->data_type = CELL_TYPE;
         cellhd->format = 1;
         break;
+#endif
 
     case GDT_Int16:
     case GDT_UInt16:
