@@ -371,7 +371,7 @@ static void gdal_values_int(int fd, const unsigned char *data,
 /* GDT_Int8 was introduced in GDAL 3.7 */
 #if GDAL_VERSION_NUM >= GDAL_COMPUTE_VERSION(3, 7, 0)
         case GDT_Int8:
-            c[i] = *(signed char *)d;
+            c[i] = *(int8_t *)d;
             break;
 #endif
         case GDT_Int16:
