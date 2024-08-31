@@ -306,6 +306,32 @@ test_gdal_import_map.0000000105
 
         self.assertLooksLike(map_list, text_from_file)
 
+    def test_int8_data(self):
+        """Test that Int8 VRTs are imported"""
+
+        self.assertModule(
+            "r.in.gdal",
+            input="data/int8.vrt",
+            output="test_gdal_import_map",
+        )
+
+        # Output of r.info
+        info_string = """north=24
+                       south=0
+                       east=24
+                       west=0
+                       nsres=1
+                       ewres=1
+                       rows=24
+                       cols=24
+                       cells=576
+                       datatype=CELL
+                       ncats=0"""
+
+        self.assertRasterFitsInfo(
+            raster="test_gdal_import_map", reference=info_string, precision=3
+        )
+
 
 class TestGdalImportFails(TestCase):
     def test_error_handling_1(self):
