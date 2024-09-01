@@ -18,7 +18,7 @@ notes:
       example: 'doc:'
 
     - title: Libraries and General Functionality
-      regexp: '(grass_|lib|TGIS|tgis|raster|vector)[^ ]*: '
+      regexp: '(grass_|lib|TGIS|tgis|raster|vector)[^ ]*: |[DGIRSV]_[^ ]*(): '
       example: 'grass_btree: or lib/btree:'
 
     - title: Startup, Initialization, and Environment
