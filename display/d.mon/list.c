@@ -139,6 +139,9 @@ void list_files(const char *name, FILE *fd_out)
     strcat(tmpdir, "MONITORS");
     strcat(tmpdir, "/");
     strcat(tmpdir, name);
+    if (strlen(tmpdir) >= GPATH_MAX) {
+        G_fatal_error(_("The path for monitor <%s> is too long."), name);
+    }
 
     G_file_name(mon_path, tmpdir, NULL, G_mapset());
     fprintf(fd_out, "path=%s\n", mon_path);
