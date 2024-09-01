@@ -113,15 +113,9 @@ void D_show_conversions(void)
     fprintf(stderr, " U_w %10.1f  U_e %10.1f  U_s %10.1f  U_n %10.1f\n\n",
             U.west, U.east, U.south, U.north);
 
-    fprintf(stderr,
-            " D_x %10.1f  D_y %10.1f\n",
-            D.size.x, D.size.y);
-    fprintf(stderr,
-            " A_x %10.1f  A_y %10.1f\n",
-            A.size.x, A.size.y);
-    fprintf(stderr,
-            " U_x %10.1f  U_y %10.f\n\n",
-            U.size.x, U.size.y);
+    fprintf(stderr, " D_x %10.1f  D_y %10.1f\n", D.size.x, D.size.y);
+    fprintf(stderr, " A_x %10.1f  A_y %10.1f\n", A.size.x, A.size.y);
+    fprintf(stderr, " U_x %10.1f  U_y %10.1f\n\n", U.size.x, U.size.y);
 
     fprintf(stderr, " D_to_A_conv.x %10.1f D_to_A_conv.y %10.1f\n",
             D_to_A_conv.x, D_to_A_conv.y);
