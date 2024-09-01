@@ -3,6 +3,10 @@
 @author Soeren Gebbert
 """
 
+import unittest
+
+import osgeo
+
 from grass.gunittest.case import TestCase
 
 
@@ -306,6 +310,10 @@ test_gdal_import_map.0000000105
 
         self.assertLooksLike(map_list, text_from_file)
 
+    @unittest.skipIf(
+        osgeo.gdal_version[0:2] < (3, 7),
+        "GDAL version too old. Int8 support was introduced in GDAL 3.7",
+    )
     def test_int8_data(self):
         """Test that Int8 VRTs are imported"""
 
