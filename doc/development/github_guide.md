@@ -39,10 +39,10 @@ git remote -v
 1. You should see something like:
 
 ```bash
-origin  https://github.com/your_GH_account/grass.git (fetch)
-origin  https://github.com/your_GH_account/grass.git (push)
-upstream  https://github.com/OSGeo/grass (fetch)
-upstream  https://github.com/OSGeo/grass (push)
+origin  git@github.com:your_GH_account/grass.git (fetch)
+origin  git@github.com:your_GH_account/grass.git (push)
+upstream  git@github.com:OSGeo/grass (fetch)
+upstream  git@github.com:OSGeo/grass (push)
 
 ```
 
