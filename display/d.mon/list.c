@@ -105,6 +105,9 @@ int check_mon(const char *name)
 /* list related commands for given monitor */
 void list_cmd(const char *name, FILE *fd_out)
 {
+    if (strlen(name) >= GPATH_MAX) {
+        G_fatal_error(_("Monitor name <%s> is too long."), name);
+    }
     char *mon_path;
     char cmd_file[GPATH_MAX], buf[4096];
     FILE *fd;

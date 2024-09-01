@@ -32,7 +32,7 @@
 
 #include "proto.h"
 
-#define MONITOR_NAME_LIMIT 256
+#define MONITOR_NAME_LIMIT (GPATH_MAX - strlen("/MONITORS/") - 1)
 
 int main(int argc, char *argv[])
 {
