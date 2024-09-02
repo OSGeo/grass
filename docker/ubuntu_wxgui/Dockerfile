@@ -54,6 +54,7 @@ RUN apt-get update && apt-get upgrade -y && \
     libglu1-mesa-dev \
     libgsl0-dev \
     libgtk-3-0 \
+    libgtk-3-dev \
     libjpeg-dev \
     libjsoncpp-dev \
     libnetcdf-dev \
@@ -93,6 +94,7 @@ RUN apt-get update && apt-get upgrade -y && \
     python3-ply \
     python3-setuptools \
     python3-venv \
+    python3-wxgtk4.0 \
     software-properties-common \
     sqlite3 \
     subversion \
