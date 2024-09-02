@@ -94,6 +94,7 @@ RUN apt-get update && apt-get upgrade -y && \
     python3-ply \
     python3-setuptools \
     python3-venv \
+    python3-wxgtk4.0 \
     software-properties-common \
     sqlite3 \
     subversion \
