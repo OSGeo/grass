@@ -54,6 +54,7 @@ RUN apt-get update && apt-get upgrade -y && \
     libglu1-mesa-dev \
     libgsl0-dev \
     libgtk-3-0 \
+    libgtk-3-dev \
     libjpeg-dev \
     libjsoncpp-dev \
     libnetcdf-dev \
