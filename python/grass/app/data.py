@@ -122,7 +122,7 @@ def _copy_startup_location(startup_location, location_in_grassdb):
     return False
 
 
-def create_startup_location_in_grassdb(grassdatabase, startup_location_name):
+def create_startup_location_in_grassdb(grassdatabase, startup_location_name) -> bool:
     """Create a new startup location in the given GRASS database.
 
     Returns True if a new startup location successfully created
@@ -137,9 +137,7 @@ def create_startup_location_in_grassdb(grassdatabase, startup_location_name):
 
     # Copy the simple startup_location with some data to GRASS database
     location_in_grassdb = os.path.join(grassdatabase, startup_location_name)
-    if _copy_startup_location(startup_location, location_in_grassdb):
-        return True
-    return False
+    return bool(_copy_startup_location(startup_location, location_in_grassdb))
 
 
 def ensure_default_data_hierarchy():

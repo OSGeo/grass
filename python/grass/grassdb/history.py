@@ -53,8 +53,7 @@ def get_history_file_extension(history_path):
     :return str extension: None (plain text) or .json
     """
     file_path = Path(history_path)
-    extension = file_path.suffix
-    return extension
+    return file_path.suffix
 
 
 def ensure_history_file(history_path):
@@ -80,14 +79,13 @@ def _read_from_plain_text(history_path):
     with 'command' and 'command_info' keys
     'command_info' is always empty since plain text history file
     stores only executed commands."""
-    content_list = list()
+    content_list = []
     try:
         with open(
             history_path, encoding="utf-8", mode="r", errors="replace"
         ) as file_history:
             content_list = [
-                {"command": line.strip(), "command_info": None}
-                for line in file_history.readlines()
+                {"command": line.strip(), "command_info": None} for line in file_history
             ]
     except OSError as e:
         raise OSError(
@@ -103,29 +101,26 @@ def _read_from_JSON(history_path):
     :return content_list: list of dictionaries
     with 'command' and 'command_info' keys
     """
-    content_list = list()
+    content_list = []
     try:
-        with open(
-            history_path, encoding="utf-8", mode="r", errors="replace"
-        ) as file_history:
-            content = file_history.read()
-            if content:
-                try:
-                    history_entries = json.loads(content)
-                except ValueError as ve:
-                    raise ValueError(
-                        _("Error decoding content of JSON history file {}").format(
-                            history_path
-                        )
-                    ) from ve
-                # Process the content as a list of dictionaries
-                content_list = [
-                    {
-                        "command": entry["command"],
-                        "command_info": entry["command_info"],
-                    }
-                    for entry in history_entries
-                ]
+        content = Path(history_path).read_text(encoding="utf-8", errors="replace")
+        if content:
+            try:
+                history_entries = json.loads(content)
+            except ValueError as ve:
+                raise ValueError(
+                    _("Error decoding content of JSON history file {}").format(
+                        history_path
+                    )
+                ) from ve
+            # Process the content as a list of dictionaries
+            content_list = [
+                {
+                    "command": entry["command"],
+                    "command_info": entry["command_info"],
+                }
+                for entry in history_entries
+            ]
     except OSError as e:
         raise OSError(
             _("Unable to read from JSON history file {}").format(history_path)
@@ -164,7 +159,7 @@ def filter(json_data, command, timestamp):
     return None
 
 
-def _remove_entry_from_plain_text(history_path, index):
+def _remove_entry_from_plain_text(history_path, index: int):
     """Remove entry from plain text history file.
 
     :param str history_path: path to the history log file
@@ -176,7 +171,7 @@ def _remove_entry_from_plain_text(history_path, index):
             file_history.seek(0)
             file_history.truncate()
             for number, line in enumerate(lines):
-                if number not in [index]:
+                if number != index:
                     file_history.write(line)
     except OSError as e:
         raise OSError(
@@ -186,7 +181,7 @@ def _remove_entry_from_plain_text(history_path, index):
         ) from e
 
 
-def _remove_entry_from_JSON(history_path, index):
+def _remove_entry_from_JSON(history_path, index: int):
     """Remove entry from JSON history file.
 
     :param str history_path: path to the history log file
@@ -216,7 +211,7 @@ def _remove_entry_from_JSON(history_path, index):
         ) from e
 
 
-def remove_entry(history_path, index):
+def remove_entry(history_path, index: int):
     """Remove entry from history file.
 
     :param str history_path: path to the history log file
@@ -276,14 +271,13 @@ def get_initial_command_info(env_run):
     region_settings = gs.region(env=env_run)
 
     # Finalize the command info dictionary
-    cmd_info = {
+    return {
         "timestamp": exec_time,
         "mask2d": mask2d_present,
         "mask3d": mask3d_present,
         "region": region_settings,
         "status": Status.RUNNING.value,
     }
-    return cmd_info
 
 
 def _add_entry_to_JSON(history_path, entry):

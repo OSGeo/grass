@@ -80,7 +80,7 @@ except ImportError:  # not sure about TGBTButton version
     from wx.lib.buttons import GenBitmapTextButton as BitmapTextButton
 
 if wxPythonPhoenix:
-    from wx import Validator as Validator
+    from wx import Validator
 else:
     from wx import PyValidator as Validator
 
@@ -348,7 +348,6 @@ class GNotebook(FN.FlatNotebook):
 
     def SetPageImage(self, page, index):
         """Does nothing because we don't want images for this style"""
-        pass
 
     def __getattr__(self, name):
         return getattr(self.controller, name)
@@ -538,7 +537,7 @@ class SymbolButton(BitmapTextButton):
         elif usage == "pause":
             self.DrawPause(dc, size)
 
-        if sys.platform not in ("win32", "darwin"):
+        if sys.platform not in {"win32", "darwin"}:
             buffer.SetMaskColour(maskColor)
         self.SetBitmapLabel(buffer)
         dc.SelectObject(wx.NullBitmap)
@@ -1338,11 +1337,7 @@ class SearchModuleWidget(wx.Panel):
         nodes.sort(key=lambda node: self._model.GetIndexOfNode(node))
         self._results = nodes
         self._resultIndex = -1
-        commands = sorted(
-            [node.data["command"] for node in nodes if node.data["command"]]
-        )
-
-        return commands
+        return sorted([node.data["command"] for node in nodes if node.data["command"]])
 
     def OnSelectModule(self, event=None):
         """Module selected from choice, update command prompt"""
@@ -1567,7 +1562,7 @@ class ManageSettingsWidget(wx.Panel):
         :return: empty dict on error
         """
 
-        data = dict()
+        data = {}
         if not os.path.exists(self.settingsFile):
             return data
 
@@ -1602,7 +1597,7 @@ class ManageSettingsWidget(wx.Panel):
         :return: parsed dict
         :return: empty dict on error
         """
-        data = dict()
+        data = {}
 
         for line in fd_lines[1:]:
             try:
@@ -1657,7 +1652,7 @@ class ManageSettingsWidget(wx.Panel):
         :return: parsed dict
         :return: empty dict on error
         """
-        data = dict()
+        data = {}
 
         for line in fd_lines:
             try:
@@ -1803,7 +1798,7 @@ class LayersList(GListCtrl, listmix.TextEditMixin):
         colLocs = [0]
         loc = 0
         for n in range(self.GetColumnCount()):
-            loc = loc + self.GetColumnWidth(n)
+            loc += self.GetColumnWidth(n)
             colLocs.append(loc)
 
         col = bisect(colLocs, x + self.GetScrollPos(wx.HORIZONTAL)) - 1

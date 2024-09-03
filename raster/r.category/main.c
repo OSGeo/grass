@@ -22,6 +22,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
+#include <grass/parson.h>
 #include "local_proto.h"
 
 static struct Categories cats;
@@ -39,9 +40,13 @@ int main(int argc, char *argv[])
     int from_stdin = FALSE;
     struct GModule *module;
 
+    enum OutputFormat format;
+    JSON_Value *root_value;
+    JSON_Array *root_array;
+
     struct {
         struct Option *map, *fs, *cats, *vals, *raster, *file, *fmt_str,
-            *fmt_coeff;
+            *fmt_coeff, *format;
     } parm;
 
     G_gisinit(argv[0]);
@@ -103,8 +108,24 @@ int main(int argc, char *argv[])
     parm.fmt_coeff->description =
         _("Two pairs of category multiplier and offsets, for $1 and $2");
 
+    parm.format = G_define_standard_option(G_OPT_F_FORMAT);
+    parm.format->key = "output_format";
+    parm.format->guisection = _("Print");
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
+
+    if (strcmp(parm.format->answer, "json") == 0) {
+        format = JSON;
+        root_value = json_value_init_array();
+        if (root_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
+        root_array = json_array(root_value);
+    }
+    else {
+        format = PLAIN;
+    }
 
     name = parm.map->answer;
 
@@ -282,7 +303,10 @@ int main(int argc, char *argv[])
         if (map_type == CELL_TYPE) {
             get_cats(name, mapset);
             while (next_cat(&x))
-                print_label(x);
+                print_label(x, format, root_array);
+            if (format == JSON) {
+                print_json(root_value);
+            }
             exit(EXIT_SUCCESS);
         }
     }
@@ -300,7 +324,10 @@ int main(int argc, char *argv[])
             for (i = 0; parm.cats->answers[i]; i++) {
                 scan_cats(parm.cats->answers[i], &x, &y);
                 while (x <= y)
-                    print_label(x++);
+                    print_label(x++, format, root_array);
+            }
+            if (format == JSON) {
+                print_json(root_value);
             }
             exit(EXIT_SUCCESS);
         }
@@ -315,31 +342,76 @@ int main(int argc, char *argv[])
         }
     for (i = 0; parm.vals->answers[i]; i++) {
         scan_vals(parm.vals->answers[i], &dx);
-        print_d_label(dx);
+        print_d_label(dx, format, root_array);
     }
+
+    if (format == JSON) {
+        print_json(root_value);
+    }
+
     exit(EXIT_SUCCESS);
 }
 
-int print_label(long x)
+void print_json(JSON_Value *root_value)
+{
+    char *serialized_string = NULL;
+    serialized_string = json_serialize_to_string_pretty(root_value);
+    if (serialized_string == NULL) {
+        G_fatal_error(_("Failed to initialize pretty JSON string."));
+    }
+    puts(serialized_string);
+    json_free_serialized_string(serialized_string);
+    json_value_free(root_value);
+}
+
+int print_label(long x, enum OutputFormat format, JSON_Array *root_array)
 {
     char *label;
+    JSON_Value *category_value;
+    JSON_Object *category;
 
     G_squeeze(label = Rast_get_c_cat((CELL *)&x, &cats));
-    fprintf(stdout, "%ld%s%s\n", x, fs, label);
+
+    switch (format) {
+    case PLAIN:
+        fprintf(stdout, "%ld%s%s\n", x, fs, label);
+        break;
+    case JSON:
+        category_value = json_value_init_object();
+        category = json_object(category_value);
+        json_object_set_number(category, "category", x);
+        json_object_set_string(category, "description", label);
+        json_array_append_value(root_array, category_value);
+        break;
+    }
 
     return 0;
 }
 
-int print_d_label(double x)
+int print_d_label(double x, enum OutputFormat format, JSON_Array *root_array)
 {
     char *label, tmp[40];
     DCELL dtmp;
+    JSON_Value *category_value;
+    JSON_Object *category;
 
     dtmp = x;
     G_squeeze(label = Rast_get_d_cat(&dtmp, &cats));
-    sprintf(tmp, "%.10f", x);
-    G_trim_decimal(tmp);
-    fprintf(stdout, "%s%s%s\n", tmp, fs, label);
+
+    switch (format) {
+    case PLAIN:
+        sprintf(tmp, "%.10f", x);
+        G_trim_decimal(tmp);
+        fprintf(stdout, "%s%s%s\n", tmp, fs, label);
+        break;
+    case JSON:
+        category_value = json_value_init_object();
+        category = json_object(category_value);
+        json_object_set_number(category, "category", x);
+        json_object_set_string(category, "description", label);
+        json_array_append_value(root_array, category_value);
+        break;
+    }
 
     return 0;
 }

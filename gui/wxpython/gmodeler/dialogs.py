@@ -287,7 +287,7 @@ class ModelSearchDialog(wx.Dialog):
     def _getCmd(self):
         line = self.cmd_prompt.GetCurLine()[0].strip()
         if len(line) == 0:
-            cmd = list()
+            cmd = []
         else:
             cmd = utils.split(str(line))
         return cmd
@@ -305,7 +305,7 @@ class ModelSearchDialog(wx.Dialog):
             GError(
                 parent=self,
                 message=_(
-                    "Command not defined.\n\n" "Unable to add new action to the model."
+                    "Command not defined.\n\nUnable to add new action to the model."
                 ),
             )
             return False
@@ -458,7 +458,7 @@ class ModelRelationDialog(wx.Dialog):
             GError(
                 parent=self.parent,
                 message=_(
-                    "Relation doesn't start with data item.\n" "Unable to add relation."
+                    "Relation doesn't start with data item.\nUnable to add relation."
                 ),
             )
             return items
@@ -483,7 +483,7 @@ class ModelRelationDialog(wx.Dialog):
         if not items:
             GError(
                 parent=self.parent,
-                message=_("No relevant option found.\n" "Unable to add relation."),
+                message=_("No relevant option found.\nUnable to add relation."),
             )
         return items
 
@@ -544,7 +544,6 @@ class ModelItemDialog(wx.Dialog):
 
     def _layout(self):
         """Do layout (virtual method)"""
-        pass
 
     def GetCondition(self):
         """Get loop condition"""
@@ -777,7 +776,6 @@ class ModelListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEditMi
 
     def OnEndEdit(self, event):
         """Finish editing of item"""
-        pass
 
     def GetListCtrl(self):
         """Used by ColumnSorterMixin"""
@@ -801,7 +799,7 @@ class VariableListCtrl(ModelListCtrl):
 
     def Populate(self, data):
         """Populate the list"""
-        self.itemDataMap = dict()
+        self.itemDataMap = {}
         i = 0
         for name, values in data.items():
             self.itemDataMap[i] = [
@@ -867,7 +865,7 @@ class VariableListCtrl(ModelListCtrl):
         """Remove all variable(s) from the model"""
         dlg = wx.MessageBox(
             parent=self,
-            message=_("Do you want to delete all variables from " "the model?"),
+            message=_("Do you want to delete all variables from the model?"),
             caption=_("Delete variables"),
             style=wx.YES_NO | wx.CENTRE,
         )
@@ -875,7 +873,7 @@ class VariableListCtrl(ModelListCtrl):
             return
 
         self.DeleteAllItems()
-        self.itemDataMap = dict()
+        self.itemDataMap = {}
 
         self.parent.UpdateModelVariables()
 
@@ -926,7 +924,7 @@ class ItemListCtrl(ModelListCtrl):
         self.disablePopup = disablePopup
 
         ModelListCtrl.__init__(self, parent, columns, frame, **kwargs)
-        self.itemIdMap = list()
+        self.itemIdMap = []
 
         self.SetColumnWidth(0, 100)
         self.SetColumnWidth(1, 75)
@@ -939,28 +937,24 @@ class ItemListCtrl(ModelListCtrl):
 
     def Populate(self, data):
         """Populate the list"""
-        self.itemDataMap = dict()
-        self.itemIdMap = list()
+        self.itemDataMap = {}
+        self.itemIdMap = []
 
         if self.shape:
             items = self.frame.GetModel().GetItems(objType=ModelAction)
             if isinstance(self.shape, ModelCondition):
                 if self.GetLabel() == "ElseBlockList":
-                    shapeItems = map(
-                        lambda x: x.GetId(), self.shape.GetItems(items)["else"]
-                    )
+                    shapeItems = (x.GetId() for x in self.shape.GetItems(items)["else"])
                 else:
-                    shapeItems = map(
-                        lambda x: x.GetId(), self.shape.GetItems(items)["if"]
-                    )
+                    shapeItems = (x.GetId() for x in self.shape.GetItems(items)["if"])
             else:
-                shapeItems = map(lambda x: x.GetId(), self.shape.GetItems(items))
+                shapeItems = (x.GetId() for x in self.shape.GetItems(items))
         else:
-            shapeItems = list()
+            shapeItems = []
 
         i = 0
         if len(self.columns) == 2:  # ItemCheckList
-            checked = list()
+            checked = []
         for action in data:
             if isinstance(action, ModelData) or action == self.shape:
                 continue
@@ -1065,7 +1059,7 @@ class ItemListCtrl(ModelListCtrl):
             return
 
         if not hasattr(self, "popupId"):
-            self.popupID = dict()
+            self.popupID = {}
             self.popupID["remove"] = NewId()
             self.popupID["reload"] = NewId()
             self.Bind(wx.EVT_MENU, self.OnRemove, id=self.popupID["remove"])
@@ -1103,8 +1097,8 @@ class ItemListCtrl(ModelListCtrl):
 
         model = self.frame.GetModel()
         modelActions = model.GetItems(objType=ModelAction)
-        idxList = dict()
-        itemsToSelect = list()
+        idxList = {}
+        itemsToSelect = []
         for i in items:
             if up:
                 idx = i - 1
@@ -1154,7 +1148,7 @@ class ItemCheckListCtrl(ItemListCtrl, CheckListCtrlMixin):
 
     def GetItems(self):
         """Get list of selected actions"""
-        ids = {"checked": list(), "unchecked": list()}
+        ids = {"checked": [], "unchecked": []}
 
         # action ids start at 1
         for i in range(self.GetItemCount()):

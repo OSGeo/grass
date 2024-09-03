@@ -40,11 +40,11 @@ import signal
 import struct
 import sys
 import time
-import numpy
+import numpy as np
 
 import wx
 
-import grass.script as grass
+import grass.script as gs
 from grass.script.setup import set_gui_path
 
 set_gui_path()
@@ -83,7 +83,7 @@ class Frame(wx.Frame):
         dc = wx.PaintDC(self)
         data = app.imgbuf.reshape((app.i_height, app.i_width, 4))
         data = data[::, ::, 2::-1]
-        fn = getattr(data, "tobytes", getattr(data, "tostring"))
+        fn = getattr(data, "tobytes", data.tostring)
         image = wx.Image(app.i_width, app.i_height, fn())
         dc.DrawBitmap(BitmapFromImage(image), x0, y0, False)
 
@@ -116,7 +116,7 @@ class Application(wx.App):
     def read_bmp_header(self, header):
         magic, bmfh, bmih = struct.unpack("2s12s40s10x", header)
 
-        if grass.decode(magic) != "BM":
+        if gs.decode(magic) != "BM":
             raise SyntaxError("Invalid magic number")
 
         size, res1, res2, hsize = struct.unpack("<IHHI", bmfh)
@@ -161,7 +161,7 @@ class Application(wx.App):
         header = f.read(self.HEADER_SIZE)
         self.read_bmp_header(header)
 
-        self.imgbuf = numpy.memmap(f, mode="r", offset=self.HEADER_SIZE)
+        self.imgbuf = np.memmap(f, mode="r", offset=self.HEADER_SIZE)
 
     def signal_handler(self, sig, frame):
         wx.CallAfter(self.mainwin.Refresh)

@@ -12,7 +12,7 @@ from core import globalvar
 
 iconPath = os.path.join(globalvar.ICONDIR, "grass")
 
-iconSet = dict()
+iconSet = {}
 
 for icon in os.listdir(iconPath):
     name, ext = os.path.splitext(icon)

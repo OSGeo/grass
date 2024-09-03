@@ -119,7 +119,7 @@ private:
     AMI_STREAM<sweepItem> *sweep_str;
 
 public:
-    flow_waterWindower(AMI_STREAM<sweepItem> *str) : sweep_str(str){};
+    flow_waterWindower(AMI_STREAM<sweepItem> *str) : sweep_str(str) {};
     void processWindow(dimension_type i, dimension_type j,
                        waterWindowBaseType *a, waterWindowBaseType *b,
                        waterWindowBaseType *c);

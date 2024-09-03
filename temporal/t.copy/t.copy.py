@@ -46,8 +46,7 @@
 # %end
 
 
-import grass.script as gscript
-
+import grass.script as gs
 
 ############################################################################
 
@@ -75,7 +74,7 @@ def main():
     tgis.init()
 
     # Get the current mapset to create the id of the space time dataset
-    mapset = gscript.gisenv()["MAPSET"]
+    mapset = gs.gisenv()["MAPSET"]
 
     inname = input
     inmapset = mapset
@@ -87,7 +86,7 @@ def main():
     if "@" in output:
         outname, outmapset = output.split("@")
         if outmapset != mapset:
-            gscript.fatal(
+            gs.fatal(
                 _("The output dataset <%s> must be in the current mapset<%s>.")
                 % (input, mapset)
             )
@@ -102,19 +101,19 @@ def main():
 
     if not old_maps:
         dbif.close()
-        gscript.warning(
+        gs.warning(
             _("Empty space-time %s dataset <%s>, nothing to copy") % (maptype, input)
         )
         return
 
-    overwrite = gscript.overwrite()
+    overwrite = gs.overwrite()
 
     # Check the new stds
     new_sp = tgis.check_new_stds(output, stdstype, dbif, overwrite)
 
     new_maps = None
     if copy_maps:
-        gscript.message(_("Copying %s maps to the current mapset...") % maptype)
+        gs.message(_("Copying %s maps to the current mapset...") % maptype)
         new_maps = []
         num_maps = len(old_maps)
         count = 0
@@ -128,18 +127,18 @@ def main():
                 map_name, map_mapset = map_id.split("@")
 
             if map_mapset != mapset:
-                found = gscript.find_file(name=map_name, element=element, mapset=mapset)
+                found = gs.find_file(name=map_name, element=element, mapset=mapset)
                 if found["name"] is not None and len(found["name"]) > 0:
-                    gscript.fatal(
+                    gs.fatal(
                         _("A %s map <%s> exists already in the current mapset <%s>.")
                         % (maptype, map_name, mapset)
                     )
 
                 kwargs = {maptype: "%s,%s" % (map_id, map_name)}
-                gscript.run_command("g.copy", **kwargs)
+                gs.run_command("g.copy", **kwargs)
             else:
                 # the map is already in the current mapset
-                gscript.message(
+                gs.message(
                     _("The %s map <%s> is already in the current mapset, not copying")
                     % (maptype, map_name)
                 )
@@ -182,7 +181,7 @@ def main():
         description,
         semantic_type,
         dbif,
-        gscript.overwrite(),
+        gs.overwrite(),
     )
 
     # Register the maps in the database
@@ -210,5 +209,5 @@ def main():
 ###############################################################################
 
 if __name__ == "__main__":
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
     main()

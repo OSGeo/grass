@@ -65,6 +65,7 @@ sources and tools:
   of a watermark in the upper left corner.
 
 """
+from __future__ import annotations
 
 import os
 import zlib
@@ -224,7 +225,7 @@ def intToUint8(i):
     return int(i).to_bytes(1, "little")
 
 
-def intToBits(i, n=None):
+def intToBits(i: int, n: int | None = None) -> BitArray:
     """convert int to a string of bits (0's and 1's in a string),
     pad to n elements. Convert back using int(ss,2)."""
     ii = i
@@ -233,7 +234,7 @@ def intToBits(i, n=None):
     bb = BitArray()
     while ii > 0:
         bb += str(ii % 2)
-        ii = ii >> 1
+        ii >>= 1
     bb.Reverse()
 
     # justify
@@ -253,7 +254,7 @@ def bitsToInt(bb, n=8):
     # Get value in bits
     for i in range(len(bb)):
         b = bb[i : i + 1]
-        tmp = bin(ord(b))[2:]
+        tmp = f"{ord(b):b}"
         # value += tmp.rjust(8,'0')
         value = tmp.rjust(8, "0") + value
 
@@ -271,7 +272,7 @@ def getTypeAndLen(bb):
     # Get first 16 bits
     for i in range(2):
         b = bb[i : i + 1]
-        tmp = bin(ord(b))[2:]
+        tmp = f"{ord(b):b}"
         # value += tmp.rjust(8,'0')
         value = tmp.rjust(8, "0") + value
 
@@ -285,7 +286,7 @@ def getTypeAndLen(bb):
         value = ""
         for i in range(2, 6):
             b = bb[i : i + 1]  # becomes a single-byte bytes() on both PY3 and PY2
-            tmp = bin(ord(b))[2:]
+            tmp = f"{ord(b):b}"
             # value += tmp.rjust(8,'0')
             value = tmp.rjust(8, "0") + value
         L = int(value, 2)
@@ -295,7 +296,7 @@ def getTypeAndLen(bb):
     return type, L, L2
 
 
-def signedIntToBits(i, n=None):
+def signedIntToBits(i: int, n: int | None = None) -> BitArray:
     """convert signed int to a string of bits (0's and 1's in a string),
     pad to n elements. Negative numbers are stored in 2's complement bit
     patterns, thus positive numbers always start with a 0.
@@ -311,7 +312,7 @@ def signedIntToBits(i, n=None):
     bb = BitArray()
     while ii > 0:
         bb += str(ii % 2)
-        ii = ii >> 1
+        ii >>= 1
     bb.Reverse()
 
     # justify
@@ -341,8 +342,7 @@ def twitsToBits(arr):
     maxlen = 1
     for i in arr:
         tmp = len(signedIntToBits(i * 20))
-        if tmp > maxlen:
-            maxlen = tmp
+        maxlen = max(tmp, maxlen)
 
     # build array
     bits = intToBits(maxlen, 5)
@@ -490,7 +490,7 @@ class SetBackgroundTag(ControlTag):
         for i in range(3):
             clr = self.rgb[i]
             if isinstance(clr, float):
-                clr = clr * 255
+                clr *= 255
             bb += intToUint8(clr)
         self.bytes = bb
 
@@ -829,8 +829,6 @@ def writeSwf(filename, images, duration=0.1, repeat=True):
     fp = open(filename, "wb")
     try:
         buildFile(fp, taglist, nframes=nframes, framesize=wh, fps=fps)
-    except Exception:
-        raise
     finally:
         fp.close()
 
