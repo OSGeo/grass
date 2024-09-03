@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
@@ -238,8 +239,7 @@ int reclass(const char *old_name, const char *old_mapset, const char *new_name,
         G_fatal_error(_("Cannot create reclass file of <%s>"), new_name);
 
     if (!title) {
-        G_snprintf(buf, sizeof(buf), "Reclass of %s in %s", new.name,
-                   new.mapset);
+        snprintf(buf, sizeof(buf), "Reclass of %s in %s", new.name, new.mapset);
         title = buf;
     }
 
