@@ -30,7 +30,6 @@
  * \return DB_OK on success
  */
 
-size_t len;
 
 int db__driver_open_database(dbHandle *handle)
 {
@@ -38,6 +37,7 @@ int db__driver_open_database(dbHandle *handle)
     const char *name;
     char name3[GPATH_MAX + 14], *env_nolock;
     int i;
+    size_t len;
 
     G_debug(3, "\ndb_driver_open_database()");
 
@@ -175,6 +175,7 @@ int db__driver_create_database(dbHandle *handle)
 {
     const char *name;
     char name2[GPATH_MAX], *env_nolock;
+    size_t len;
 
     name = db_get_handle_dbname(handle);
 
