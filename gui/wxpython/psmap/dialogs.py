@@ -2103,7 +2103,6 @@ class RasterDialog(PsmapDialog):
 
     def updateDialog(self):
         """Update information (not used)"""
-        pass
 
 
 # if "map" in self.parent.openDialogs:
@@ -2149,7 +2148,6 @@ class MainVectorDialog(PsmapDialog):
 
     def updateDialog(self):
         """Update information (not used)"""
-        pass
 
 
 class VPropertiesDialog(Dialog):
@@ -6729,7 +6727,6 @@ class RectangleDialog(PsmapDialog):
 
     def updateDialog(self):
         """Update text coordinates, after moving"""
-        pass
 
 
 class LabelsDialog(PsmapDialog):

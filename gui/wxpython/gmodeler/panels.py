@@ -156,7 +156,9 @@ class ModelerPanel(wx.Panel, MainPageBase):
         self.goutput = GConsoleWindow(
             parent=self, giface=giface, gconsole=self._gconsole
         )
-        self.goutput.showNotification.connect(self.SetStatusText)
+        self.goutput.showNotification.connect(
+            lambda message: self.SetStatusText(message)
+        )
 
         # here events are binded twice
         self._gconsole.Bind(
@@ -540,7 +542,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
                         remList, upList = self.model.RemoveItem(data, layer)
                         for item in remList:
                             self.canvas.diagram.RemoveShape(item)
-                            item.__del__()
+                            item.__del__()  # noqa: PLC2801, C2801
 
                         for item in upList:
                             item.Update()

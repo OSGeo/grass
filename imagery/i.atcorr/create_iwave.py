@@ -155,17 +155,28 @@ def interpolate_band(values, step=2.5):
 def plot_filter(values):
     """Plot wl response values and interpolated
     filter function. This is just for checking...
-    value is a 2 column numpy array
+    value is a 2-column numpy array
     function has to be used inside Spyder python environment
     """
+    import matplotlib.pyplot as plt
+
     filter_f, limits = interpolate_band(values)
 
     # removing nodata
     w = values[:, 1] >= 0
     response = values[w]
 
-    plot(response[:, 0], response[:, 1], "ro")
-    plot(arange(limits[0], limits[1], 2.5), filter_f)
+    fig = plt.figure()
+    ax1 = fig.add_subplot(2, 1, 1)
+    ax2 = fig.add_subplot(2, 1, 2)
+
+    ax1.plot(response[:, 0], response[:, 1], "ro")
+    rounded = np.arange(limits[0], limits[1], 0.0025) * 1000
+    if len(rounded) == len(filter_f):
+        ax2.plot(rounded, filter_f)
+    else:
+        ax2.plot(rounded[:-1], filter_f)
+    plt.show()
 
 
 def pretty_print(filter_f):
@@ -217,12 +228,12 @@ def write_cpp(bands, values, sensor, folder):
         # Get minimum wavelength with spectral response
         c = maxresponse_idx
         while c > 0 and fi[c - 1] > rthresh:
-            c = c - 1
+            c -= 1
         min_wavelength = np.ceil(li[0] * 1000 + (2.5 * c))
         # Get maximum wavelength with spectral response
         c = maxresponse_idx
         while c < len(fi) - 1 and fi[c + 1] > rthresh:
-            c = c + 1
+            c += 1
         max_wavelength = np.floor(li[0] * 1000 + (2.5 * c))
         print("   %s (%inm - %inm)" % (bands[b], min_wavelength, max_wavelength))
 
@@ -239,12 +250,12 @@ def write_cpp(bands, values, sensor, folder):
             # Get minimum wavelength with spectral response
             c = maxresponse_idx
             while c > 0 and fi[c - 1] > rthresh:
-                c = c - 1
+                c -= 1
             min_wavelength = np.ceil(li[0] * 1000 + (2.5 * c))
             # Get maximum wavelength with spectral response
             c = maxresponse_idx
             while c < len(fi) - 1 and fi[c + 1] > rthresh:
-                c = c + 1
+                c += 1
             max_wavelength = np.floor(li[0] * 1000 + (2.5 * c))
             print("   %s (%inm - %inm)" % (bands[b], min_wavelength, max_wavelength))
 

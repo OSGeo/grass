@@ -494,7 +494,7 @@ class WMSRequestMgr(BaseRequestMgr):
         self.last_tile_x = False
         if self.last_tile_x_size != 0:
             self.last_tile_x = True
-            self.num_tiles_x = self.num_tiles_x + 1
+            self.num_tiles_x += 1
 
         self.num_tiles_y = rows // self.tile_rows
         self.last_tile_y_size = rows % self.tile_rows
@@ -507,7 +507,7 @@ class WMSRequestMgr(BaseRequestMgr):
         self.last_tile_y = False
         if self.last_tile_y_size != 0:
             self.last_tile_y = True
-            self.num_tiles_y = self.num_tiles_y + 1
+            self.num_tiles_y += 1
 
         self.tile_bbox = dict(self.bbox)
         self.tile_bbox["maxx"] = self.bbox["minx"] + self.tile_length_x
@@ -816,7 +816,7 @@ class WMTSRequestMgr(BaseRequestMgr):
                     mat_num_bbox[i[0]] = int(i_tag.text)
 
                     if i[0] in {"max_row", "max_col"}:
-                        mat_num_bbox[i[0]] = mat_num_bbox[i[0]] - 1
+                        mat_num_bbox[i[0]] -= 1
 
                 break
         return mat_num_bbox

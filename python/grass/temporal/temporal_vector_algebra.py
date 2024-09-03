@@ -232,19 +232,6 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
             "STARTED",
             "FINISHED",
         ]
-        complementdict = {
-            "EQUAL": "EQUAL",
-            "FOLLOWS": "PRECEDES",
-            "PRECEDES": "FOLLOWS",
-            "OVERLAPS": "OVERLAPPED",
-            "OVERLAPPED": "OVERLAPS",
-            "DURING": "CONTAINS",
-            "CONTAINS": "DURING",
-            "STARTS": "STARTED",
-            "STARTED": "STARTS",
-            "FINISHES": "FINISHED",
-            "FINISHED": "FINISHES",
-        }
         resultdict = {}
         # Check if given temporal relation are valid.
         for topo in topolist:
@@ -314,14 +301,14 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         mapainput = map_i.get_id()
         # Append command list of given map to result command list.
         if "cmd_list" in dir(map_i):
-            resultlist = resultlist + map_i.cmd_list
+            resultlist += map_i.cmd_list
         for topo in topolist:
             if topo.upper() in tbrelations.keys():
                 relationmaplist = tbrelations[topo.upper()]
                 for relationmap in relationmaplist:
                     # Append command list of given map to result command list.
                     if "cmd_list" in dir(relationmap):
-                        resultlist = resultlist + relationmap.cmd_list
+                        resultlist += relationmap.cmd_list
                     # Generate an intermediate name
                     name = self.generate_map_name()
                     # Put it into the removalbe map list
@@ -577,7 +564,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                         # Register map in result space time dataset.
                         if self.debug:
                             print(map_i.get_temporal_extent_as_tuple())
-                        success = resultstds.register_map(map_i, dbif=dbif)
+                        resultstds.register_map(map_i, dbif=dbif)
                     resultstds.update_from_registered_maps(dbif)
 
             # Remove intermediate maps

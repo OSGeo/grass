@@ -788,11 +788,11 @@ int main(int argc, char *argv[])
 
             /* Generate the suffix */
             if (num_digits > 0) {
-                G_snprintf(suffix, num_digits + 1, "%0*d", num_digits,
-                           nBand + offset);
+                snprintf(suffix, num_digits + 1, "%0*d", num_digits,
+                         nBand + offset);
             }
             else {
-                G_snprintf(suffix, 65, "%d", nBand + offset);
+                snprintf(suffix, 65, "%d", nBand + offset);
             }
 
             G_debug(3, "Import raster band %d", nBand);
@@ -1355,7 +1355,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
             Rast_put_row(cfR, cellReal, data_type);
             Rast_put_row(cfI, cellImg, data_type);
         }
-    }                     /* end of complex */
+    } /* end of complex */
     else if (l1bdriver) { /* AVHRR */
         /* AVHRR - read from south to north to match GCPs */
         /* AVHRR - as for other formats, read from north to south to match GCPs
@@ -1954,7 +1954,7 @@ static int dump_rat(GDALRasterBandH hBand, char *outrat, int nBand)
 
     field_type = G_malloc(ncols * sizeof(GDALRATFieldType));
 
-    G_snprintf(fname, GNAME_MAX, "%s_%d.csv", outrat, nBand);
+    snprintf(fname, GNAME_MAX, "%s_%d.csv", outrat, nBand);
     if (!(fp = fopen(fname, "w"))) {
         int err = errno;
 
