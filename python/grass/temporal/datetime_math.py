@@ -141,7 +141,7 @@ def decrement_datetime_by_string(mydate, increment, mult=1):
     :param mult: A multiplier, default is 1
     :return: The new datetime object or none in case of an error
     """
-    return modify_datetime_by_string(mydate, increment, mult, sign=int(-1))
+    return modify_datetime_by_string(mydate, increment, mult, sign=-1)
 
 
 ###############################################################################
@@ -791,7 +791,7 @@ def check_datetime_string(time_string, use_dateutil=True):
         # relative time. dateutil will interpret a single number as a valid
         # time string, so we have to catch this case beforehand
         try:
-            value = int(time_string)
+            int(time_string)
             return _("Time string seems to specify relative time")
         except ValueError:
             pass

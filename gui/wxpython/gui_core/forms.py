@@ -65,7 +65,7 @@ import wx.lib.colourselect as csel
 import wx.lib.filebrowsebutton as filebrowse
 from wx.lib.newevent import NewEvent
 
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
 
 # needed when started from command line and for testing
 if __name__ == "__main__":
@@ -2766,7 +2766,7 @@ class CmdPanel(wx.Panel):
             if event.GetId() == verbose.GetId() and quiet.IsChecked():
                 quiet.SetValue(False)
                 self.task.get_flag("quiet")["value"] = False
-            elif verbose.IsChecked():
+            elif event.GetId() == quiet.GetId() and verbose.IsChecked():
                 verbose.SetValue(False)
                 self.task.get_flag("verbose")["value"] = False
 
@@ -3221,7 +3221,7 @@ class GUI:
         """
         # parse the interface description
         if not self.grass_task:
-            tree = etree.fromstring(gtask.get_interface_description(cmd))
+            tree = ET.fromstring(gtask.get_interface_description(cmd))
             self.grass_task = gtask.processTask(tree).get_task()
 
             for p in self.grass_task.params:

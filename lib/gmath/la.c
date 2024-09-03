@@ -1265,7 +1265,7 @@ double G_vector_norm_maxval(vec_struct *vc, int vflag)
                     xval = *curpt;
             }
             } /* switch */
-        }     /* if(curpt != startpt) */
+        } /* if(curpt != startpt) */
 
         curpt += incr;
         ncells--;
