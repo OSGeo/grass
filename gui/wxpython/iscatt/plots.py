@@ -15,8 +15,8 @@ This program is free software under the GNU General Public License
 
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
+
 import wx
-import six
 import numpy as np
 from math import ceil
 from multiprocessing import Process, Queue
@@ -29,9 +29,9 @@ from core.settings import UserSettings
 from gui_core.wrap import Menu, NewId
 
 try:
-    import matplotlib
+    import matplotlib as mpl
 
-    matplotlib.use("WXAgg")
+    mpl.use("WXAgg")
     from matplotlib.figure import Figure
     from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigCanvas
     from matplotlib.lines import Line2D
@@ -47,7 +47,7 @@ except ImportError as e:
         ).format(e)
     )
 
-import grass.script as grass
+import grass.script as gs
 from grass.pydispatch.signal import Signal
 
 
@@ -241,8 +241,9 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
             aspect="equal",
         )
 
-        callafter_list.append([self.axes.draw_artist, [img]])
-        callafter_list.append([grass.try_remove, [merged_img.filename]])
+        callafter_list.extend(
+            ([self.axes.draw_artist, [img]], [gs.try_remove, [merged_img.filename]])
+        )
 
         for cat_id in cats_order:
             if cat_id == 0:
@@ -315,7 +316,6 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
 
     def CleanUp(self):
         self.plotClosed.emit(scatt_id=self.scatt_id)
-        self.Destroy()
 
     def ZoomWheel(self, event):
         # get the current x and y limits
@@ -449,7 +449,7 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
 
     init = True
     merged_img = None
-    merge_tmp = grass.tempfile()
+    merge_tmp = gs.tempfile()
     for cat_id in cats_order:
         if cat_id not in scatts:
             continue
@@ -497,7 +497,7 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
                 rend_dt[cat_id]["color"] = styles[cat_id]["color"]
 
             rend_dt[cat_id]["dt"] = np.memmap(
-                grass.tempfile(), dtype="uint8", mode="w+", shape=(sh[0], sh[1], 4)
+                gs.tempfile(), dtype="uint8", mode="w+", shape=(sh[0], sh[1], 4)
             )
 
             # colored_cat = np.zeros(dtype='uint8', )
@@ -518,44 +518,54 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
             MergeArrays(merged_img, rend_dt[cat_id]["dt"], styles[cat_id]["opacity"])
 
         """
-                #c_img_a = np.memmap(grass.tempfile(), dtype="uint16", mode='w+', shape = shape)
-                c_img_a = colored_cat.astype('uint16')[:,:,3] * styles[cat_id]['opacity']
+            # c_img_a = np.memmap(
+            #     grass.tempfile(), dtype="uint16", mode="w+", shape=shape
+            # )
+            c_img_a = colored_cat.astype("uint16")[:, :, 3] * styles[cat_id]["opacity"]
 
-                #TODO apply strides and there will be no need for loop
-                #b = as_strided(a, strides=(0, a.strides[3], a.strides[3], a.strides[3]), shape=(3, a.shape[0], a.shape[1]))
+            # TODO apply strides and there will be no need for loop
+            # b = as_strided(
+            #     a,
+            #     strides=(0, a.strides[3], a.strides[3], a.strides[3]),
+            #     shape=(3, a.shape[0], a.shape[1]),
+            # )
 
-                for i in range(3):
-                    merged_img[:,:,i] = (merged_img[:,:,i] * (255 - c_img_a) + colored_cat[:,:,i] * c_img_a) / 255;
-                merged_img[:,:,3] = (merged_img[:,:,3] * (255 - c_img_a) + 255 * c_img_a) / 255;
+            for i in range(3):
+                merged_img[:, :, i] = (
+                    merged_img[:, :, i] * (255 - c_img_a)
+                    + colored_cat[:, :, i] * c_img_a
+                ) / 255
+            merged_img[:, :, 3] = (
+                merged_img[:, :, 3] * (255 - c_img_a) + 255 * c_img_a
+            ) / 255
 
-                del c_img_a
-            """
-
+            del c_img_a
+        """
     _rendDtMemmapsToFiles(rend_dt)
 
     merged_img = {"dt": merged_img.filename, "sh": merged_img.shape}
     output_queue.put((merged_img, full_extend, rend_dt))
 
 
-# _rendDtMemmapsToFiles and _rendDtFilesToMemmaps are workarounds for older numpy versions,
-# where memmap objects are not pickable
+# _rendDtMemmapsToFiles and _rendDtFilesToMemmaps are workarounds for older numpy
+# versions, where memmap objects are not pickable
 
 
 def _rendDtMemmapsToFiles(rend_dt):
-    for k, v in six.iteritems(rend_dt):
+    for k, v in rend_dt.items():
         if "dt" in v:
             rend_dt[k]["sh"] = v["dt"].shape
             rend_dt[k]["dt"] = v["dt"].filename
 
 
 def _rendDtFilesToMemmaps(rend_dt):
-    for k, v in six.iteritems(rend_dt):
+    for k, v in rend_dt.items():
         if "dt" in v:
             rend_dt[k]["dt"] = np.memmap(filename=v["dt"], shape=v["sh"])
             del rend_dt[k]["sh"]
 
 
-def _renderCat(cat_id, rend_dt, scatt, styles):
+def _renderCat(cat_id, rend_dt, scatt, styles) -> bool:
     return True
 
     if cat_id not in rend_dt:
@@ -564,14 +574,11 @@ def _renderCat(cat_id, rend_dt, scatt, styles):
         return False
     if scatt["render"]:
         return True
-    if cat_id != 0 and rend_dt[cat_id]["color"] != styles[cat_id]["color"]:
-        return True
-
-    return False
+    return bool(cat_id != 0 and rend_dt[cat_id]["color"] != styles[cat_id]["color"])
 
 
 def _getColorMap(cat_id, styles):
-    cmap = matplotlib.cm.jet
+    cmap = mpl.cm.jet
     if cat_id == 0:
         cmap.set_bad("w", 1.0)
         cmap._init()
@@ -619,7 +626,8 @@ class ScatterPlotContextMenu:
     def ShowMenu(self, menu):
         self.plot.PopupMenu(menu)
         menu.Destroy()
-        self.plot.ReleaseMouse()
+        if self.plot.HasCapture():
+            self.plot.ReleaseMouse()
 
 
 class PolygonDrawer:
@@ -630,7 +638,8 @@ class PolygonDrawer:
     def __init__(self, ax, pol, empty_pol):
         if pol.figure is None:
             raise RuntimeError(
-                "You must first add the polygon to a figure or canvas before defining the interactor"
+                "You must first add the polygon to a figure or canvas before defining "
+                "the interactor"
             )
         self.ax = ax
         self.canvas = pol.figure.canvas
@@ -699,8 +708,7 @@ class PolygonDrawer:
         if self.empty_pol:
             return None
 
-        coords = deepcopy(self.pol.xy)
-        return coords
+        return deepcopy(self.pol.xy)
 
     def SetEmpty(self):
         self._setEmptyPol(True)
@@ -918,7 +926,7 @@ class ModestImage(mi.AxesImage):
         self.minx = minx
         self.miny = miny
 
-        super(ModestImage, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def set_data(self, A):
         """
@@ -929,7 +937,7 @@ class ModestImage(mi.AxesImage):
         self._full_res = A
         self._A = A
 
-        if self._A.dtype != np.uint8 and not np.can_cast(self._A.dtype, np.float):
+        if self._A.dtype != np.uint8 and not np.can_cast(self._A.dtype, float):
             raise TypeError("Image data can not convert to float")
 
         if self._A.ndim not in (2, 3) or (
@@ -991,7 +999,7 @@ class ModestImage(mi.AxesImage):
 
     def draw(self, renderer, *args, **kwargs):
         self._scale_to_res()
-        super(ModestImage, self).draw(renderer, *args, **kwargs)
+        super().draw(renderer, *args, **kwargs)
 
 
 def imshow(
@@ -1020,12 +1028,11 @@ def imshow(
     @author: Chris Beaumont <beaumont@hawaii.edu>
     """
 
-    if not axes._hold:
-        axes.cla()
+    axes.cla()
     if norm is not None:
         assert isinstance(norm, mcolors.Normalize)
     if aspect is None:
-        aspect = matplotlib.rcParams["image.aspect"]
+        aspect = mpl.rcParams["image.aspect"]
     axes.set_aspect(aspect)
 
     if extent:
@@ -1070,7 +1077,7 @@ def imshow(
     # to tightly fit the image, regardless of dataLim.
     im.set_extent(im.get_extent())
 
-    axes.images.append(im)
+    axes.add_image(im)
     im._remove_method = lambda h: axes.images.remove(h)
 
     return im

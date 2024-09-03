@@ -694,12 +694,12 @@ struct Option *G_define_standard_option(int opt)
         break;
 
     case G_OPT_M_LOCATION:
-        Opt->key = "location";
+        Opt->key = "project";
         Opt->type = TYPE_STRING;
         Opt->required = NO;
         Opt->multiple = NO;
-        Opt->label = _("Location name");
-        Opt->description = _("Location name (not location path)");
+        Opt->label = _("Project (location) name");
+        Opt->description = _("Project name (not path to project)");
         Opt->gisprompt = "old,location,location";
         Opt->key_desc = "name";
         break;
@@ -942,6 +942,17 @@ struct Option *G_define_standard_option(int opt)
         Opt->options = "start,during,overlap,contain,equal,follows,precedes";
         Opt->description =
             _("The method to be used for sampling the input dataset");
+        break;
+    case G_OPT_F_FORMAT:
+        Opt->key = "format";
+        Opt->type = TYPE_STRING;
+        Opt->key_desc = "name";
+        Opt->required = YES;
+        Opt->label = _("Output format");
+        Opt->answer = "plain";
+        Opt->options = "plain,json";
+        Opt->descriptions = _("plain;Plain text output;"
+                              "json;JSON (JavaScript Object Notation);");
         break;
     }
 

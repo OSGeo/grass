@@ -3,6 +3,7 @@ Created on Mon Nov 26 11:48:03 2012
 
 @author: lucadelu
 """
+
 import wx
 import os
 import sys
@@ -64,15 +65,12 @@ def retRLiPath():
         return rlipath
 
 
-def checkMapExists(name, typ="raster"):
+def checkMapExists(name, typ="raster") -> bool:
     """Check if a map already exist in the working mapset"""
     env = grass.gisenv()
     mapset = env["MAPSET"]
     mapp = grass.find_file(name, typ, mapset)
-    if mapp.name != "":
-        return True
-    else:
-        return False
+    return bool(mapp.name != "")
 
 
 def convertFeature(vect, outrast, cat, origrast, layer="1", overwrite=False):
@@ -97,7 +95,7 @@ def convertFeature(vect, outrast, cat, origrast, layer="1", overwrite=False):
         input=tmp_vect,
         type="area",
         layer=layer,
-        use="val",
+        use="value",
         value=cat,
         output=outrast,
         overwrite=overwrite,

@@ -3,6 +3,7 @@ Created on Thu Jun 19 14:13:53 2014
 
 @author: pietro
 """
+
 import sys
 import unittest
 import numpy as np
@@ -59,11 +60,11 @@ class GeometryAttrsTestCase(TestCase):
         newvalue = 100.0
         newpairs = ("setitem_point_2", 1000.0)
 
-        self.attrs.__setitem__("name", newname)
+        self.attrs.__setitem__("name", newname)  # noqa: PLC2801
         self.assertEqual(self.attrs["name"], newname)
-        self.attrs.__setitem__("value", newvalue)
+        self.attrs.__setitem__("value", newvalue)  # noqa: PLC2801
         self.assertEqual(self.attrs["value"], newvalue)
-        self.attrs.__setitem__(("name", "value"), newpairs)
+        self.attrs.__setitem__(("name", "value"), newpairs)  # noqa: PLC2801
         self.assertEqual(self.attrs["name", "value"], newpairs)
 
 

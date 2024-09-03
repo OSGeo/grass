@@ -7,7 +7,7 @@
 #               Glynn Clements
 #               Martin Landa <landa.martin gmail.com>
 # PURPOSE:      Create HTML manual page snippets
-# COPYRIGHT:    (C) 2007-2023 by Glynn Clements
+# COPYRIGHT:    (C) 2007-2024 by Glynn Clements
 #                and the GRASS Development Team
 #
 #               This program is free software under the GNU General
@@ -26,6 +26,7 @@ import locale
 import json
 import pathlib
 import subprocess
+from pathlib import Path
 
 from html.parser import HTMLParser
 
@@ -47,18 +48,69 @@ HEADERS = {
 HTTP_STATUS_CODES = list(http.HTTPStatus)
 
 
+def get_version_branch(major_version, addons_git_repo_url):
+    """Check if version branch for the current GRASS version exists,
+    if not, take branch for the previous version
+    For the official repo we assume that at least one version branch is present
+
+    :param major_version int: GRASS GIS major version
+    :param addons_git_repo_url str: Addons Git ropository URL
+
+    :return version_branch str: version branch
+    """
+    version_branch = f"grass{major_version}"
+    if gs:
+        branch = gs.Popen(
+            [
+                "git",
+                "ls-remote",
+                "--heads",
+                addons_git_repo_url,
+                f"refs/heads/{version_branch}",
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        branch, stderr = branch.communicate()
+        if stderr:
+            gs.fatal(
+                _(
+                    "Failed to get branch from the Git repository"
+                    " <{repo_path}>.\n{error}"
+                ).format(
+                    repo_path=addons_git_repo_url,
+                    error=gs.decode(stderr),
+                )
+            )
+        if version_branch not in gs.decode(branch):
+            version_branch = "grass{}".format(int(major_version) - 1)
+    return version_branch
+
+
 grass_version = os.getenv("VERSION_NUMBER", "unknown")
 trunk_url = ""
 addons_url = ""
 grass_git_branch = "main"
+major, minor, patch = None, None, None
 if grass_version != "unknown":
     major, minor, patch = grass_version.split(".")
-    base_url = "https://github.com/OSGeo"
-    trunk_url = "{base_url}/grass/tree/{branch}/".format(
-        base_url=base_url, branch=grass_git_branch
+    base_url = "https://github.com/OSGeo/"
+    trunk_url = urlparse.urljoin(
+        base_url,
+        urlparse.urljoin(
+            "grass/tree/",
+            grass_git_branch + "/",
+        ),
     )
-    addons_url = "{base_url}/grass-addons/tree/grass{major}/".format(
-        base_url=base_url, major=major
+    addons_url = urlparse.urljoin(
+        base_url,
+        urlparse.urljoin(
+            "grass-addons/tree/",
+            get_version_branch(
+                major,
+                urlparse.urljoin(base_url, "grass-addons/"),
+            ),
+        ),
     )
 
 
@@ -240,25 +292,26 @@ def get_git_commit_from_rest_api_for_addon_repo(
     # Accessed date time if getting commit from GitHub REST API wasn't successful
     if not git_log:
         git_log = get_default_git_log(src_dir=src_dir)
-    grass_addons_url = (
-        "https://api.github.com/repos/osgeo/grass-addons/commits?"
-        "path={path}&page=1&per_page=1&sha=grass{major}".format(
-            path=addon_path,
-            major=major,
-        )
-    )  # sha=git_branch_name
-
-    response = download_git_commit(
-        url=grass_addons_url,
-        response_format="application/json",
-    )
-    if response:
-        commit = json.loads(response.read())
-        if commit:
-            git_log["commit"] = commit[0]["sha"]
-            git_log["date"] = format_git_commit_date_from_rest_api(
-                commit_datetime=commit[0]["commit"]["author"]["date"],
+    if addon_path is not None:
+        grass_addons_url = (
+            "https://api.github.com/repos/osgeo/grass-addons/commits?"
+            "path={path}&page=1&per_page=1&sha=grass{major}".format(
+                path=addon_path,
+                major=major,
             )
+        )  # sha=git_branch_name
+
+        response = download_git_commit(
+            url=grass_addons_url,
+            response_format="application/json",
+        )
+        if response:
+            commit = json.loads(response.read())
+            if commit:
+                git_log["commit"] = commit[0]["sha"]
+                git_log["date"] = format_git_commit_date_from_rest_api(
+                    commit_datetime=commit[0]["commit"]["author"]["date"],
+                )
     return git_log
 
 
@@ -290,9 +343,18 @@ def format_git_commit_date_from_local_git(
 
     :return str: output formatted commit datetime
     """
-    return datetime.fromisoformat(
-        commit_datetime,
-    ).strftime(datetime_format)
+    try:
+        date = datetime.fromisoformat(
+            commit_datetime,
+        )
+    except ValueError:
+        if commit_datetime.endswith("Z"):
+            # Python 3.10 and older does not support Z in time, while recent versions
+            # of Git (2.45.1) use it. Try to help the parsing if Z is in the string.
+            date = datetime.fromisoformat(commit_datetime[:-1] + "+00:00")
+        else:
+            raise
+    return date.strftime(datetime_format)
 
 
 def has_src_code_git(src_dir, is_addon):
@@ -319,8 +381,7 @@ def has_src_code_git(src_dir, is_addon):
                 f"--format=%H,{COMMIT_DATE_FORMAT}",
                 src_dir,
             ],
-            stderr=subprocess.PIPE,
-            stdout=subprocess.PIPE,
+            capture_output=True,
         )  # --format=%H,COMMIT_DATE_FORMAT commit hash,author date
         os.chdir(actual_dir)
         return process_result if process_result.returncode == 0 else None
@@ -346,23 +407,18 @@ def get_last_git_commit(src_dir, addon_path, is_addon):
             commit=process_result.stdout.decode(),
             src_dir=src_dir,
         )
+    elif gs:
+        # Addons installation
+        return get_git_commit_from_rest_api_for_addon_repo(
+            addon_path=addon_path,
+            src_dir=src_dir,
+        )
+    # During GRASS GIS compilation from source code without Git
     else:
-        if gs:
-            # Addons installation
-            return get_git_commit_from_rest_api_for_addon_repo(
-                addon_path=addon_path,
-                src_dir=src_dir,
-            )
-        # During GRASS GIS compilation from source code without Git
-        else:
-            return get_git_commit_from_file(src_dir=src_dir)
+        return get_git_commit_from_file(src_dir=src_dir)
 
 
-html_page_footer_pages_path = (
-    os.getenv("HTML_PAGE_FOOTER_PAGES_PATH")
-    if os.getenv("HTML_PAGE_FOOTER_PAGES_PATH")
-    else ""
-)
+html_page_footer_pages_path = os.getenv("HTML_PAGE_FOOTER_PAGES_PATH") or ""
 
 pgm = sys.argv[1]
 
@@ -398,7 +454,8 @@ header_pgm_desc = """<h2>NAME</h2>
 """
 
 sourcecode = string.Template(
-    """<h2>SOURCE CODE</h2>
+    """
+<h2>SOURCE CODE</h2>
 <p>
   Available at:
   <a href="${URL_SOURCE}">${PGM} source code</a>
@@ -456,10 +513,8 @@ GRASS GIS ${GRASS_VERSION} Reference Manual
 
 def read_file(name):
     try:
-        with open(name) as f:
-            s = f.read()
-        return s
-    except IOError:
+        return Path(name).read_text()
+    except OSError:
         return ""
 
 
@@ -627,31 +682,78 @@ def update_toc(data):
 def get_addon_path():
     """Check if pgm is in the addons list and get addon path
 
-    return: pgm path if pgm is addon else None
+    Make or update list of the official addons source
+    code paths g.extension prefix parameter plus /grass-addons directory
+    using Git repository
+
+    :return str|None: pgm path if pgm is addon else None
     """
-    addon_base = os.getenv("GRASS_ADDON_BASE")
-    if addon_base:
-        # addons_paths.json is file created during install extension
-        # check get_addons_paths() function in the g.extension.py file
-        addons_file = "addons_paths.json"
-        addons_paths = os.path.join(addon_base, addons_file)
-        if not os.path.exists(addons_paths):
-            # Compiled addon has own dir e.g. ~/.grass8/addons/db.join/
-            # with bin/ docs/ etc/ scripts/ subdir, required for compilation
-            # addons on osgeo lxd container server and generation of
-            # modules.xml file (build-xml.py script), when addons_paths.json
-            # file is stored one level dir up
-            addons_paths = os.path.join(
-                os.path.abspath(os.path.join(addon_base, "..")),
-                addons_file,
+    addons_base_dir = os.getenv("GRASS_ADDON_BASE")
+    if addons_base_dir and major:
+        grass_addons_dir = pathlib.Path(addons_base_dir) / "grass-addons"
+        if gs:
+            call = gs.call
+            popen = gs.Popen
+            fatal = gs.fatal
+        else:
+            call = subprocess.call
+            popen = subprocess.Popen
+            fatal = sys.stderr.write
+        addons_branch = get_version_branch(
+            major_version=major,
+            addons_git_repo_url=urlparse.urljoin(base_url, "grass-addons/"),
+        )
+        if not pathlib.Path(addons_base_dir).exists():
+            pathlib.Path(addons_base_dir).mkdir(parents=True, exist_ok=True)
+        if not grass_addons_dir.exists():
+            call(
+                [
+                    "git",
+                    "clone",
+                    "-q",
+                    "--no-checkout",
+                    f"--branch={addons_branch}",
+                    "--filter=blob:none",
+                    urlparse.urljoin(base_url, "grass-addons/"),
+                ],
+                cwd=addons_base_dir,
             )
-            if not os.path.exists(addons_paths):
-                return
-        with open(addons_paths) as f:
-            addons_paths = json.load(f)
-        for addon in addons_paths["tree"]:
-            if pgm == pathlib.Path(addon["path"]).name:
-                return addon["path"]
+        addons_file_list = popen(
+            ["git", "ls-tree", "--name-only", "-r", addons_branch],
+            cwd=grass_addons_dir,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        addons_file_list, stderr = addons_file_list.communicate()
+        if stderr:
+            message = (
+                "Failed to get addons files list from the"
+                " Git repository <{repo_path}>.\n{error}"
+            )
+            if gs:
+                fatal(
+                    _(
+                        message,
+                    ).format(
+                        repo_path=grass_addons_dir,
+                        error=gs.decode(stderr),
+                    )
+                )
+            else:
+                message += "\n"
+                fatal(
+                    message.format(
+                        repo_path=grass_addons_dir,
+                        error=stderr.decode(),
+                    )
+                )
+        addon_paths = re.findall(
+            rf".*{pgm}*.",
+            gs.decode(addons_file_list) if gs else addons_file_list.decode(),
+        )
+        for addon_path in addon_paths:
+            if pgm == pathlib.Path(addon_path).name:
+                return addon_path
 
 
 # process header
@@ -669,11 +771,10 @@ desc = re.search("(<!-- meta page description:)(.*)(-->)", src_data, re.IGNORECA
 if desc:
     pgm = desc.group(2).strip()
     header_tmpl = string.Template(header_base + header_nopgm)
+elif not pgm_desc:
+    header_tmpl = string.Template(header_base + header_pgm)
 else:
-    if not pgm_desc:
-        header_tmpl = string.Template(header_base + header_pgm)
-    else:
-        header_tmpl = string.Template(header_base + header_pgm_desc)
+    header_tmpl = string.Template(header_base + header_pgm_desc)
 
 if not re.search("<html>", src_data, re.IGNORECASE):
     tmp_data = read_file(tmp_file)
@@ -807,36 +908,39 @@ else:
 if sys.platform == "win32":
     url_source = url_source.replace(os.path.sep, "/")
 
+# Process Source code section
+branches = "branches"
+tree = "tree"
+commits = "commits"
+
+if branches in url_source:
+    url_log = url_source.replace(branches, commits)
+    url_source = url_source.replace(branches, tree)
+else:
+    url_log = url_source.replace(tree, commits)
+
+git_commit = get_last_git_commit(
+    src_dir=curdir,
+    addon_path=addon_path or None,
+    is_addon=bool(addon_path),
+)
+if git_commit["commit"] == "unknown":
+    date_tag = "Accessed: {date}".format(date=git_commit["date"])
+else:
+    date_tag = "Latest change: {date} in commit: {commit}".format(
+        date=git_commit["date"], commit=git_commit["commit"]
+    )
+sys.stdout.write(
+    sourcecode.substitute(
+        URL_SOURCE=url_source,
+        PGM=pgm,
+        URL_LOG=url_log,
+        DATE_TAG=date_tag,
+    )
+)
+
+# Process footer
 if index_name:
-    branches = "branches"
-    tree = "tree"
-    commits = "commits"
-
-    if branches in url_source:
-        url_log = url_source.replace(branches, commits)
-        url_source = url_source.replace(branches, tree)
-    else:
-        url_log = url_source.replace(tree, commits)
-
-    git_commit = get_last_git_commit(
-        src_dir=curdir,
-        addon_path=addon_path if addon_path else None,
-        is_addon=True if addon_path else False,
-    )
-    if git_commit["commit"] == "unknown":
-        date_tag = "Accessed: {date}".format(date=git_commit["date"])
-    else:
-        date_tag = "Latest change: {date} in commit: {commit}".format(
-            date=git_commit["date"], commit=git_commit["commit"]
-        )
-    sys.stdout.write(
-        sourcecode.substitute(
-            URL_SOURCE=url_source,
-            PGM=pgm,
-            URL_LOG=url_log,
-            DATE_TAG=date_tag,
-        )
-    )
     sys.stdout.write(
         footer_index.substitute(
             INDEXNAME=index_name,

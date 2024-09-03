@@ -20,7 +20,7 @@ import platform
 import os
 
 import wx
-import wx.lib.agw.aui as aui
+from wx.lib.agw import aui
 
 from core import globalvar
 from core.debug import Debug
@@ -83,6 +83,7 @@ BaseIcons = {
     "mapDispSettings": MetaIcon(
         img="monitor-settings", label=_("Map Display Settings")
     ),
+    "docking": MetaIcon(img="monitor-dock", label=_("(Un)dock")),
 }
 
 
@@ -172,13 +173,11 @@ class ToolbarController:
             if isinstance(tool[0], tuple):
                 if tool[0][0] == "":  # separator
                     continue
-                else:
-                    internal_label = tool[0][0]
+                internal_label = tool[0][0]
             else:
                 if tool[0] == "":  # separator
                     continue
-                else:
-                    internal_label = tool[0]
+                internal_label = tool[0]
 
             label = vars(self.widget)[internal_label]
             if enable:
@@ -244,7 +243,7 @@ class ToolbarController:
 
     def _getToolbarData(self, data):
         """Define tool"""
-        retData = list()
+        retData = []
         for args in data:
             retData.append(self._defineTool(*args))
         return retData

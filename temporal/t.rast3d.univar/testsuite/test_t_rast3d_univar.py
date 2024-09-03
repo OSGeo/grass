@@ -150,9 +150,9 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000
                 res_line = res.split("|", 1)[1]
                 self.assertLooksLike(ref_line, res_line)
 
-    def test_error_handling_empty_strds(self):
+    def test_handling_empty_strds(self):
         # Empty str3ds
-        self.assertModuleFail(
+        self.assertModule(
             "t.rast3d.univar",
             input="A",
             output="univar_output.txt",

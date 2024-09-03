@@ -13,8 +13,8 @@ This program is free software under the GNU General Public License
 
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
+
 import wx
-import six
 
 from gui_core.treeview import TreeListView
 from gui_core.wrap import Button, StaticText, Menu, NewId
@@ -127,9 +127,13 @@ class QueryDialog(wx.Dialog):
             col1 = "\n".join([val[1] for val in values if val[1]])
             col2 = "\n".join([val[0] for val in values if val[0]])
             table = "\n".join([val[0] + ": " + val[1] for val in values])
-            texts.append((_("Copy from '%s' column") % self._colNames[1], col1))
-            texts.append((_("Copy from '%s' column") % self._colNames[0], col2))
-            texts.append((_("Copy selected lines"), table))
+            texts.extend(
+                (
+                    (_("Copy from '%s' column") % self._colNames[1], col1),
+                    (_("Copy from '%s' column") % self._colNames[0], col2),
+                    (_("Copy selected lines"), table),
+                )
+            )
         else:
             label1 = nodes[0].label
             texts.append((_("Copy '%s'" % self._cutLabel(label1)), label1))
@@ -144,7 +148,9 @@ class QueryDialog(wx.Dialog):
             id = NewId()
             ids.append(id)
             self.Bind(
-                wx.EVT_MENU, lambda evt, t=text[1], id=id: self._copyText(t), id=id
+                wx.EVT_MENU,
+                lambda evt, t=text[1], id=id: self._copyText(t),  # noqa: A006
+                id=id,
             )
 
             menu.Append(id, text[0])
@@ -203,12 +209,12 @@ def QueryTreeBuilder(data, column):
     """
 
     def addNode(parent, data, model):
-        for k, v in six.iteritems(data):
+        for k, v in data.items():
             if isinstance(v, dict):
                 node = model.AppendNode(parent=parent, data={"label": k})
                 addNode(parent=node, data=v, model=model)
             else:
-                if not isinstance(v, six.string_types):
+                if not isinstance(v, str):
                     v = str(v)
                 node = model.AppendNode(parent=parent, data={"label": k, column: v})
 

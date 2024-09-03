@@ -53,8 +53,7 @@ map and uploads statistics to new attribute columns, see
 <p>
 <em>r.univar</em> supports parallel processing using OpenMP. The user
 can specify the number of threads to be used with the <b>nprocs</b> parameter.
-However, parallelization is disabled when the <b>-e</b> extended statistics
-flag is used.
+However, parallelization is disabled when the MASK is set.
 
 <p>
 Due to the differences in summation order, users may encounter small floating points
@@ -238,6 +237,44 @@ program such as Microsoft Excel, Libre/Open Office Calc or Google Docs:
 <i>Figure: Raster statistics for zones (basins, North Carolina sample
 dataset) viewed through Libre/Open Office Calc.</i>
 </div>
+
+<h3>JSON Output</h3>
+<div class="code"><pre>
+r.univar -e elevation percentile=98 format=json
+</pre></div>
+will output the results in JSON format:
+
+<div class="code"><pre>
+[
+    {
+        "n": 2025000,
+        "null_cells": 0,
+        "cells": 2025000,
+        "min": 55.578792572021484,
+        "max": 156.32986450195312,
+        "range": 100.75107192993164,
+        "mean": 110.37544027560575,
+        "mean_of_abs": 110.37544027560575,
+        "stddev": 20.315323320598083,
+        "variance": 412.7123616204363,
+        "coeff_var": 18.40565552433679,
+        "sum": 223510266.55810165,
+        "first_quartile": 94.789985656738281,
+        "median": 108.87990570068359,
+        "third_quartile": 126.79196929931641,
+         "percentiles": [
+            {
+                "percentile": 98,
+                "value": 147.7265625
+            },
+            {
+                "percentile": 9,
+                "value": 83.494270324707031
+            }
+        ]
+    }
+]
+</pre></div>
 
 <h2>TODO</h2>
 

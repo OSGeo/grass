@@ -17,10 +17,8 @@ for details.
 .. sectionauthor:: Glynn Clements
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
-from __future__ import absolute_import
 
 import os
-import sys
 import string
 import time
 
@@ -37,10 +35,6 @@ from .core import (
 )
 from grass.exceptions import CalledModuleError
 from .utils import encode, float_or_dms, parse_key_val, try_remove
-
-
-if sys.version_info.major >= 3:
-    unicode = str
 
 
 def raster_history(map, overwrite=False, env=None):
@@ -150,7 +144,7 @@ def mapcalc(
             overwrite=overwrite,
         )
     except CalledModuleError:
-        fatal(_("An error occurred while running r.mapcalc" " with expression: %s") % e)
+        fatal(_("An error occurred while running r.mapcalc with expression: %s") % e)
 
 
 def mapcalc_start(
@@ -225,12 +219,12 @@ def raster_what(map, coord, env=None, localized=False):
                        query
     :param env:
     """
-    if isinstance(map, (bytes, unicode)):
+    if isinstance(map, (bytes, str)):
         map_list = [map]
     else:
         map_list = map
 
-    coord_list = list()
+    coord_list = []
     if isinstance(coord, tuple):
         coord_list.append("%f,%f" % (coord[0], coord[1]))
     else:
@@ -250,7 +244,7 @@ def raster_what(map, coord, env=None, localized=False):
         quiet=True,
         env=env,
     )
-    data = list()
+    data = []
     if not ret:
         return data
 

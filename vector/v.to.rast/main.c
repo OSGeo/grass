@@ -71,10 +71,10 @@ int main(int argc, char *argv[])
     use_opt->type = TYPE_STRING;
     use_opt->required = YES;
     use_opt->multiple = NO;
-    use_opt->options = "attr,cat,val,z,dir";
+    use_opt->options = "attr,cat,value,z,dir";
     use_opt->description = _("Source of raster values");
     desc = NULL;
-    G_asprintf(&desc, "attr;%s;cat;%s;val;%s;z;%s;dir;%s",
+    G_asprintf(&desc, "attr;%s;cat;%s;value;%s;z;%s;dir;%s",
                _("read values from attribute table"), _("use category values"),
                _("use value specified by value option"),
                _("use z coordinate (points or contours only)"),
@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
     val_opt->required = NO;
     val_opt->multiple = NO;
     val_opt->answer = "1";
-    val_opt->description = _("Raster value (for use=val)");
+    val_opt->description = _("Raster value (for use=value)");
 
     memory = G_define_standard_option(G_OPT_MEMORYMB);
 

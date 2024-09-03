@@ -5,7 +5,7 @@
 
 #include "local_proto.h"
 
-int scan_attr(const struct Map_info *Map, int layer, const char *column_name,
+int scan_attr(struct Map_info *Map, int layer, const char *column_name,
               const char *style, const char *rules, const struct FPRange *range,
               struct Colors *colors, struct Colors *rcolors, int invert)
 {

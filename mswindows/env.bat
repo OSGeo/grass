@@ -3,7 +3,7 @@ REM Environmental variables for GRASS stand-alone installer
 REM
 
 set GRASS_PYTHON=%GISBASE%\extrabin\python3.exe
-set PYTHONHOME=%GISBASE%\Python39
+set PYTHONHOME=%GISBASE%\Python312
 
 set GRASS_PROJSHARE=%GISBASE%\share\proj
 
@@ -12,7 +12,7 @@ set GDAL_DATA=%GISBASE%\share\gdal
 
 set FONTCONFIG_FILE=%GISBASE%\etc\fonts.conf
 
-set PATH=%GISBASE%\extrabin;%GISBASE%\bin;%PYTHONHOME%;%PATH%
+set PATH=%GISBASE%\extrabin;%PYTHONHOME%;%PATH%
 
 REM set RStudio temporarily to %PATH% if it exists
 

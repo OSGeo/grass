@@ -18,7 +18,6 @@ for details.
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 .. sectionauthor:: Soeren Gebbert <soeren.gebbert gmail.com>
 """
-from __future__ import absolute_import
 
 import os
 import time
@@ -110,6 +109,4 @@ def mapcalc3d(
             overwrite=overwrite,
         )
     except CalledModuleError:
-        fatal(
-            _("An error occurred while running r3.mapcalc" " with expression: %s") % e
-        )
+        fatal(_("An error occurred while running r3.mapcalc with expression: %s") % e)

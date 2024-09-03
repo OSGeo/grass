@@ -8,7 +8,7 @@
  *               Markus Neteler <neteler itc.it>,
  *               Martin Landa <landa.martin gmail.com> (bbox)
  * PURPOSE:
- * COPYRIGHT:    (C) 2002-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2024 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -416,7 +416,7 @@ int main(int argc, char *argv[])
             Vect_copy_head_data(&InMap, &OutMap);
 
         if (do_table) {
-            add_cat = maxcat + 1;
+            add_cat = maxcat;
         }
         else {
             add_cat = 0;
