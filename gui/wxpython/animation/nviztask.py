@@ -14,7 +14,7 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
 
 from core.workspace import ProcessWorkspaceFile
 from core.gcmd import RunCommand, GException
@@ -33,7 +33,7 @@ class NvizTask:
         self.task = gtask.grassTask("m.nviz.image")
         self.filename = filename
         try:
-            gxwXml = ProcessWorkspaceFile(etree.parse(self.filename))
+            gxwXml = ProcessWorkspaceFile(ET.parse(self.filename))
         except Exception:
             raise GException(
                 _(
@@ -285,11 +285,8 @@ class NvizTask:
         toJoin = filter(self._ignore, toJoin)
         return delim.join(map(str, toJoin))
 
-    def _ignore(self, value):
-        if value == "" or value is None:
-            return False
-        else:
-            return True
+    def _ignore(self, value) -> bool:
+        return not (value == "" or value is None)
 
     def ListMapParameters(self):
         # params = self.task.get_list_params()

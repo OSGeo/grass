@@ -171,9 +171,9 @@ class WSPanel(wx.Panel):
 
         style = wx.TR_DEFAULT_STYLE | wx.TR_HAS_BUTTONS | wx.TR_FULL_ROW_HIGHLIGHT
         if self.drv_props["req_multiple_layers"]:
-            style = style | wx.TR_MULTIPLE
+            style |= wx.TR_MULTIPLE
         if "WMS" not in self.ws:
-            style = style | wx.TR_HIDE_ROOT
+            style |= wx.TR_HIDE_ROOT
 
         self.list = LayersList(
             parent=self.req_page_panel, web_service=self.ws, style=style
@@ -1088,18 +1088,18 @@ class LayersList(TreeCtrl):
         """
 
         def checknext(root_item, l_st_list, items_to_sel):
-            def compare(item, l_name, st_name):
+            def compare(item, l_name, st_name) -> bool:
                 it_l_name = self.GetItemData(item)["layer"].GetLayerData("name")
                 it_st = self.GetItemData(item)["style"]
                 it_type = self.GetItemData(item)["type"]
 
-                if it_l_name == l_name and (
-                    (not it_st and not st_name)
-                    or (it_st and it_st["name"] == st_name and it_type == "style")
-                ):
-                    return True
-
-                return False
+                return bool(
+                    it_l_name == l_name
+                    and (
+                        (not it_st and not st_name)
+                        or (it_st and it_st["name"] == st_name and it_type == "style")
+                    )
+                )
 
             (child, cookie) = self.GetFirstChild(root_item)
             while child.IsOk():

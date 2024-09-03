@@ -716,12 +716,9 @@ class VirtualAttributeList(
     def OnGetItemImage(self, item):
         return -1
 
-    def IsEmpty(self):
+    def IsEmpty(self) -> bool:
         """Check if list if empty"""
-        if self.columns:
-            return False
-
-        return True
+        return not self.columns
 
     def _updateColSortFlag(self):
         """
@@ -2965,7 +2962,6 @@ class DbMgrLayersPage(wx.Panel):
 
     def OnLayerRightUp(self, event):
         """Layer description area, context menu"""
-        pass
 
 
 class TableListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
@@ -3022,7 +3018,7 @@ class TableListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
                 str(self.table[column]["type"]),
                 int(self.table[column]["length"]),
             )
-            i = i + 1
+            i += 1
 
         self.SendSizeEvent()
 

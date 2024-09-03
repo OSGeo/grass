@@ -1134,7 +1134,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             if self.is_time_absolute():
                 end = increment_datetime_by_string(end, gran)
             else:
-                end = end + gran
+                end += gran
 
         maplist = AbstractSpaceTimeDataset.resample_maplist_by_granularity(
             maps, start, end, gran
@@ -1551,7 +1551,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         # use all columns
         rows = self.get_registered_maps(
-            None, where, order, dbif, spatial_extent, spatial_relation
+            columns=None,
+            where=where,
+            order=order,
+            dbif=dbif,
+            spatial_extent=spatial_extent,
+            spatial_relation=spatial_relation,
         )
 
         if rows:
@@ -1992,9 +1997,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     end = increment_datetime_by_string(end, gran)
                 map.set_absolute_time(start, end)
             elif map.is_time_relative():
-                start = start + int(gran)
+                start += int(gran)
                 if end is not None:
-                    end = end + int(gran)
+                    end += int(gran)
                 map.set_relative_time(start, end, map.get_relative_time_unit())
 
         return maps
@@ -2043,9 +2048,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 if end is not None:
                     end = increment_datetime_by_string(end, gran)
             elif self.is_time_relative():
-                start = start + int(gran)
+                start += int(gran)
                 if end is not None:
-                    end = end + int(gran)
+                    end += int(gran)
 
             date_list.append((start, end))
 
@@ -2403,7 +2408,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             self.msgr.debug(
                 1, _("Drop map register table: %s") % (self.get_map_register())
             )
-            rows = self.get_registered_maps("id", None, None, dbif)
+            rows = self.get_registered_maps(
+                columns="id", where=None, order=None, dbif=dbif
+            )
             # Unregister each registered map in the table
             if rows is not None:
                 for row in rows:
@@ -2542,7 +2549,6 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         # Get basic info
         map_id = map.base.get_id()
-        map_mapset = map.base.get_mapset()
         map_rel_time_unit = map.get_relative_time_unit()
         map_ttype = map.get_temporal_type()
 
@@ -2797,8 +2803,6 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         use_start_time = False
 
         # Get basic info
-        stds_name = self.base.get_name()
-        stds_mapset = self.base.get_mapset()
         sql_path = get_sql_template_path()
         stds_register_table = self.get_map_register()
 

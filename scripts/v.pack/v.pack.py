@@ -40,7 +40,7 @@ import atexit
 
 from grass.script.utils import try_rmdir, try_remove
 from grass.script import core as grass
-from grass.script import vector as vector
+from grass.script import vector
 
 
 def cleanup():

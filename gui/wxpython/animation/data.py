@@ -89,7 +89,7 @@ class AnimationData:
                     timeseriesList.append((layer.name, layer.mapType))
                     self._firstStdsNameType = layer.name, layer.mapType
                 else:
-                    mapSeriesList.append((layer.maps))
+                    mapSeriesList.append(layer.maps)
         if not timeseriesList:
             self._firstStdsNameType = None, None
         # this throws GException

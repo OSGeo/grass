@@ -108,7 +108,7 @@ class Vector(Info):
 
     @must_be_open
     def next(self):
-        return self.__next__()
+        return next(self)
 
     @must_be_open
     def rewind(self):

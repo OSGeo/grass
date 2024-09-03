@@ -370,7 +370,7 @@ class Region:
 
     def items(self):
         """Return a list of tuple with key and value."""
-        return [(k, self.__getattribute__(k)) for k in self.keys()]
+        return [(k, getattr(self, k)) for k in self.keys()]
 
     # ----------METHODS----------
     def zoom(self, raster_name):

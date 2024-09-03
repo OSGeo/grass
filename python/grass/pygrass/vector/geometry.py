@@ -79,7 +79,6 @@ def read_WKT(string):
 
 def read_WKB(buff):
     """Read the binary buffer and return a geometry object"""
-    pass
 
 
 def intersects(lineA, lineB, with_z=False):
@@ -940,7 +939,6 @@ class Line(Geo):
         """
         # TODO: add this method.
         # libvect.Vect_get_line_cat(self.c_mapinfo, self.id, self.field)
-        pass
 
     def pop(self, indx):
         """Return the point in the index position and remove from the Line.
@@ -960,7 +958,7 @@ class Line(Geo):
             indx += self.c_points.contents.n_points
         if indx >= self.c_points.contents.n_points:
             raise IndexError("Index out of range")
-        pnt = self.__getitem__(indx)
+        pnt = self[indx]
         libvect.Vect_line_delete_point(self.c_points, indx)
         return pnt
 
@@ -1030,7 +1028,7 @@ class Line(Geo):
 
         ..
         """
-        for indx, point in enumerate(self.__iter__()):
+        for indx, point in enumerate(iter(self)):
             if pnt == point:
                 libvect.Vect_line_delete_point(self.c_points, indx)
                 return
@@ -1088,7 +1086,7 @@ class Line(Geo):
 
         ..
         """
-        return [pnt.coords() for pnt in self.__iter__()]
+        return [pnt.coords() for pnt in iter(self)]
 
     def to_array(self):
         """Return an array of coordinates. ::
@@ -1114,10 +1112,7 @@ class Line(Geo):
         ..
         """
         return "LINESTRING(%s)" % ", ".join(
-            [
-                " ".join(["%f" % coord for coord in pnt.coords()])
-                for pnt in self.__iter__()
-            ]
+            [" ".join(["%f" % coord for coord in pnt.coords()]) for pnt in iter(self)]
         )
 
     def from_wkt(self, wkt):
@@ -1139,7 +1134,7 @@ class Line(Geo):
         if match:
             self.reset()
             for coord in match.groups()[0].strip().split(","):
-                self.append(tuple([float(e) for e in coord.split(" ")]))
+                self.append(tuple(float(e) for e in coord.split(" ")))
         else:
             return None
 
@@ -1594,7 +1589,7 @@ class Isles:
         """Return the id of isles"""
         return [
             libvect.Vect_get_area_isle(self.c_mapinfo, self.area_id, i)
-            for i in range(self.__len__())
+            for i in range(len(self))
         ]
 
     @mapinfo_must_be_set
@@ -1807,7 +1802,6 @@ class Area(Geo):
 
         ..warning: Not implemented
         """
-        pass
 
     @mapinfo_must_be_set
     def contains_point(self, point, bbox=None):

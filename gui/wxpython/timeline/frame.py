@@ -57,7 +57,7 @@ ALPHA = 1
 COLORS = ["b", "g", "r", "c", "m", "y", "k"]
 
 
-def check_version(*version):
+def check_version(*version) -> bool:
     """Checks if given version or newer is installed"""
     versionInstalled = []
     for i in mpl.__version__.split("."):
@@ -66,10 +66,7 @@ def check_version(*version):
             versionInstalled.append(v)
         except ValueError:
             versionInstalled.append(0)
-    if versionInstalled < list(version):
-        return False
-    else:
-        return True
+    return versionInstalled >= list(version)
 
 
 class TimelineFrame(wx.Frame):
@@ -592,11 +589,11 @@ class LookUp:
         if type_ == "bar":
             self.data[yrange] = {"name": datasetName}
             for i, (start, end) in enumerate(xranges):
-                self.data[yrange][(start, end)] = i
+                self.data[yrange][start, end] = i
         elif type_ == "point":
-            self.data[(yrange, yrange)] = {"name": datasetName}
+            self.data[yrange, yrange] = {"name": datasetName}
             for i, start in enumerate(xranges):
-                self.data[(yrange, yrange)][(start, start)] = i
+                self.data[yrange, yrange][start, start] = i
 
     def GetInformation(self, x, y):
         keys = None
