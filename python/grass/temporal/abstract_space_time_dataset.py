@@ -2549,7 +2549,6 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         # Get basic info
         map_id = map.base.get_id()
-        map_mapset = map.base.get_mapset()
         map_rel_time_unit = map.get_relative_time_unit()
         map_ttype = map.get_temporal_type()
 
@@ -2804,8 +2803,6 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         use_start_time = False
 
         # Get basic info
-        stds_name = self.base.get_name()
-        stds_mapset = self.base.get_mapset()
         sql_path = get_sql_template_path()
         stds_register_table = self.get_map_register()
 

@@ -55,6 +55,7 @@ import uuid
 import unicodedata
 import argparse
 import json
+from pathlib import Path
 
 
 # mechanism meant for debugging this script (only)
@@ -167,17 +168,12 @@ def fatal(msg):
 
 def readfile(path):
     debug("Reading %s" % path)
-    f = open(path, "r")
-    s = f.read()
-    f.close()
-    return s
+    return Path(path).read_text()
 
 
 def writefile(path, s):
     debug("Writing %s" % path)
-    f = open(path, "w")
-    f.write(s)
-    f.close()
+    Path(path).write_text(s)
 
 
 def call(cmd, **kwargs):

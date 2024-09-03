@@ -7,6 +7,13 @@ import pytest
 
 import grass.script as gs
 
+xfail_mp_spawn = pytest.mark.xfail(
+    multiprocessing.get_start_method() == "spawn",
+    reason="Multiprocessing using 'spawn' start method requires pickable functions",
+    raises=AttributeError,
+    strict=True,
+)
+
 
 # This is useful when we want to ensure that function like init does
 # not change the global environment.
@@ -50,6 +57,7 @@ def test_with_same_path(tmp_path):
     assert srid == "EPSG:3358"
 
 
+@xfail_mp_spawn
 def test_with_init_in_subprocess(tmp_path):
     """Check creation when running in a subprocess"""
 
