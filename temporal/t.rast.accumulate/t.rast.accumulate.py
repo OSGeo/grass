@@ -244,14 +244,6 @@ def main():
 
     # The lower threshold space time raster dataset
     if lower:
-        if not range:
-            dbif.close()
-            gs.fatal(
-                _(
-                    "You need to set the range to compute the occurrence"
-                    " space time raster dataset"
-                )
-            )
 
         if lower.find("@") >= 0:
             lower_id = lower
@@ -280,7 +272,7 @@ def main():
             )
 
         if upper.find("@") >= 0:
-            upper = upper
+            upper_id = upper
         else:
             upper_id = upper + "@" + mapset
 
@@ -352,7 +344,7 @@ def main():
                 map.set_relative_time(
                     gran_start, gran_end, input_strds.get_relative_time_unit()
                 )
-                gran_start = gran_start + granularity
+                gran_start += granularity
             gran_list.append(copy(map))
             gran_list_low.append(copy(map))
             gran_list_up.append(copy(map))

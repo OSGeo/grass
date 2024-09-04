@@ -4,11 +4,12 @@
 #       Changes to this file must be copied over to the other file.
 
 ARG GUI=without
-#ARG LDFLAGS="-s -Wl,--no-undefined -lblas"
-#ARG CFLAGS="-O2 -std=gnu99 -m64"
-#ARG CXXFLAGS=""
-#ARG PYTHONPATH="$PYTHONPATH"
-#ARG LD_LIBRARY_PATH="/usr/local/lib"
+# Have build parameters as build arguments?
+# ARG LDFLAGS="-s -Wl,--no-undefined -lblas"
+# ARG CFLAGS="-O2 -std=gnu99 -m64"
+# ARG CXXFLAGS=""
+# ARG PYTHONPATH="$PYTHONPATH"
+# ARG LD_LIBRARY_PATH="/usr/local/lib"
 ARG BUILD_DATE="$(date +'%Y-%m-%dT%H:%M:%S%:z')"
 ARG REVISION="$(git log -n 1 --pretty=format:'%h')"
 ARG BRANCH="$(git branch --show-current)"
@@ -26,7 +27,7 @@ ARG DOCUMENTATION="https://github.com/OSGeo/grass/tree/${BRANCH}/docker/README.m
 ARG REF_NAME="grass-gis"
 ARG DIGEST="sha256:340d9b015b194dc6e2a13938944e0d016e57b9679963fdeb9ce021daac430221"
 
-FROM ubuntu:22.04@sha256:340d9b015b194dc6e2a13938944e0d016e57b9679963fdeb9ce021daac430221 AS common_start
+FROM ubuntu:22.04@sha256:adbb90115a21969d2fe6fa7f9af4253e16d45f8d4c1e930182610c4731962658 AS common_start
 
 ARG BUILD_DATE
 ARG REVISION

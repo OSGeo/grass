@@ -55,6 +55,7 @@ import uuid
 import unicodedata
 import argparse
 import json
+from pathlib import Path
 
 
 # mechanism meant for debugging this script (only)
@@ -167,17 +168,12 @@ def fatal(msg):
 
 def readfile(path):
     debug("Reading %s" % path)
-    f = open(path, "r")
-    s = f.read()
-    f.close()
-    return s
+    return Path(path).read_text()
 
 
 def writefile(path, s):
     debug("Writing %s" % path)
-    f = open(path, "w")
-    f.write(s)
-    f.close()
+    Path(path).write_text(s)
 
 
 def call(cmd, **kwargs):
@@ -1237,10 +1233,8 @@ def set_language(grass_config_dir):
                         # If we got so far, attempts to set up language and locale have
                         # failed on this system.
                         sys.stderr.write(
-                            (
-                                "Failed to enforce user specified language "
-                                f"'{language}' with error: '{e}'\n"
-                            )
+                            "Failed to enforce user specified language "
+                            f"'{language}' with error: '{e}'\n"
                         )
                         sys.stderr.write(
                             "A LANGUAGE environmental variable has been set.\n"

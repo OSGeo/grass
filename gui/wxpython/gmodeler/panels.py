@@ -542,7 +542,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
                         remList, upList = self.model.RemoveItem(data, layer)
                         for item in remList:
                             self.canvas.diagram.RemoveShape(item)
-                            item.__del__()
+                            item.__del__()  # noqa: PLC2801, C2801
 
                         for item in upList:
                             item.Update()
