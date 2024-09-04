@@ -52,11 +52,10 @@ per-file-ignores =
     gui/wxpython/core/settings.py: E722
     gui/wxpython/core/watchdog.py: E402
     gui/wxpython/datacatalog/tree.py: E731, E402
-    gui/wxpython/dbmgr/base.py: E722, F841
-    gui/wxpython/dbmgr/dialogs.py: F841, E722
-    gui/wxpython/dbmgr/sqlbuilder.py: E722, F841
+    gui/wxpython/dbmgr/base.py: E722
+    gui/wxpython/dbmgr/dialogs.py: E722
+    gui/wxpython/dbmgr/sqlbuilder.py: E722
     gui/wxpython/dbmgr/manager.py: E722
-    gui/wxpython/dbmgr/vinfo.py: F841
     gui/wxpython/docs/wxgui_sphinx/conf.py: E402, W291
     gui/wxpython/gcp/g.gui.gcp.py: F841
     gui/wxpython/gcp/manager.py: F841, E722
