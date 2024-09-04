@@ -2,17 +2,17 @@
 
 ############################################################################
 #
-# MODULE:	v.in.wfs
-# AUTHOR(S):	Markus Neteler. neteler itc it
+# MODULE:    v.in.wfs
+# AUTHOR(S):    Markus Neteler. neteler itc it
 #               Hamish Bowman
 #               Converted to Python by Glynn Clements
 #               German ALKIS support added by Veronica Köß
-# PURPOSE:	WFS support
-# COPYRIGHT:	(C) 2006-2024 Markus Neteler and the GRASS Development Team
+# PURPOSE:    WFS support
+# COPYRIGHT:    (C) 2006-2024 Markus Neteler and the GRASS Development Team
 #
-# 		This program is free software under the GNU General
-# 		Public License (>=v2). Read the file COPYING that
-# 		comes with GRASS for details.
+#         This program is free software under the GNU General
+#         Public License (>=v2). Read the file COPYING that
+#         comes with GRASS for details.
 #
 # GetFeature example:
 # http://mapserver.gdf-hannover.de/cgi-bin/grassuserwfs?REQUEST=GetFeature&SERVICE=WFS&VERSION=1.0.0
@@ -117,55 +117,6 @@ def main():
     out = options["output"]
     wfs_url = options["url"]
     version_num = options["version"]
-
-    this_wfs = wfs11 = WebFeatureService(url=wfs_url, version=version_num)
-    print(f'Connected to {this_wfs.identification.title}.')
-
-    if 'GetCapabilities' in list(this_wfs.operations):
-        if flags["l"]:
-            wfs_url = wfs.getcapabilities().geturl()
-
-        print(wfs_url)
-
-        tmp = grass.tempfile()
-        tmpxml = tmp + ".xml"
-
-        grass.debug(wfs_url)
-
-        # GTC Downloading WFS features
-        grass.message(_("Retrieving data..."))
-        try:
-            inf = wfs.getcapabilities() #get capabilities at this stage
-        except HTTPError as e:
-            # GTC WFS request HTTP failure
-            grass.fatal(_("Server couldn't fulfill the request.\nError code: %s") % e.code)
-        except URLError as e:
-            # GTC WFS request network failure
-            grass.fatal(_("Failed to reach the server.\nReason: %s") % e.reason)
-
-        outf = open(tmpxml, "wb")
-        while True:
-            s = inf.read()
-            if not s:
-                break
-            outf.write(s)
-        inf.close()
-        outf.close()
-
-        if flags["l"]:
-            import shutil
-
-            if os.path.exists("wms_capabilities.xml"): #wfs_capabilities?
-                grass.fatal(_('A file called "wms_capabilities.xml" already exists here'))
-            # os.move() might fail if the temp file is on another volume, so we copy instead
-            shutil.copy(tmpxml, "wms_capabilities.xml")
-            try_remove(tmpxml)
-            sys.exit(0)
-    else:
-        grass.message(_("Get capabilities not supported by server..."))
-
-
-    """set the variable stuff here"""
     if options["name"]:
         if ',' in options["name"]: #multiple layers separated by ,
             bulk_download = True
@@ -201,7 +152,73 @@ def main():
         
     this_bbox = None
     if flags["r"]:
-        this_bbox = grass.read_command("g.region", flags="w").split("=")[1]
+        this_bbox = grass.read_command("g.region", flags="w").split("=")[1]                                                    
+                                  
+
+    user = None
+    pw = None
+    # Set user and password if given
+    if options["username"] and options["password"]:
+        grass.message(_("Setting username and password..."))
+        if os.path.isfile(options["username"]):
+            filecontent = Path(options["username"]).read_text()
+            user = filecontent.strip()
+        elif options["username"] in os.environ:
+            user = os.environ[options["username"]]
+        else:
+            user = options["username"]
+        if os.path.isfile(options["password"]):
+            filecontent = Path(options["password"]).read_text()
+            pw = filecontent.strip()
+        elif options["password"] in os.environ:
+            pw = os.environ[options["password"]]
+        else:
+            pw = options["password"]                            
+    
+    this_wfs = WebFeatureService(url=wfs_url, version=version_num, username=user, password=pw)
+    print(f'Connected to {this_wfs.identification.title}.')
+    if 'GetCapabilities' in list(this_wfs.operations):
+        if flags["l"]:
+            wfs_url = wfs.getcapabilities().geturl()
+            print(wfs_url)        
+            grass.debug(wfs_url)                                           
+        
+        # GTC Downloading WFS features
+        grass.message(_("Retrieving data..."))
+        try:
+            inf = wfs.getcapabilities() #get capabilities at this stage
+        except HTTPError as e:
+            # GTC WFS request HTTP failure
+            grass.fatal(_("Server couldn't fulfill the request.\nError code: %s") % e.code)
+        except URLError as e:
+            # GTC WFS request network failure
+            grass.fatal(_("Failed to reach the server.\nReason: %s") % e.reason)
+        
+    tmp = grass.tempfile()
+    tmpxml = tmp + ".xml"
+    outf = open(tmpxml, "wb")
+    while True:
+        s = inf.read()
+        if not s:
+            break
+        outf.write(s)
+    inf.close()
+    outf.close()
+
+    if flags["l"]:
+        import shutil
+
+        if os.path.exists("wms_capabilities.xml"): #wfs_capabilities?
+            grass.fatal(_('A file called "wms_capabilities.xml" already exists here'))
+        # os.move() might fail if the temp file is on another volume, so we copy instead
+        shutil.copy(tmpxml, "wms_capabilities.xml")
+        try_remove(tmpxml)
+        sys.exit(0)
+    else:
+        grass.message(_("Get capabilities not supported by server..."))
+
+
+    
 
     if 'GetFeature' in this_wfs.operations :
         grass.message(_("Importing data..."))
@@ -214,10 +231,20 @@ def main():
                         maxfeatures=this_max_features,
                         startindex=this_start_index)
                     if response:
-                        file_out = open(out, 'wb')
-                        file_out.write(bytes(response.read(), 'UTF-8'))
-                        file_out.close()
+                        tmp = grass.tempfile()
+                        tmpxml = tmp + ".xml"
+                        outf = open(tmpxml, "wb")
+                        while True:
+                            s = response.read()
+                            if not s:
+                                break
+                            outf.write(s)
+                        inf.close()
+                        outf.close()
             else:
+                """
+                Let grass ogr handle the bulk download
+                """
                 grass.run_command(
                     "v.in.ogr",
                     flags="o",
