@@ -7,7 +7,7 @@
 #               Hamish Bowman
 #               Converted to Python by Glynn Clements
 #               German ALKIS support added by Veronica Köß
-                V1 migration to OWSLib by Karunakar Kintada
+#               V1 migration to OWSLib by Karunakar Kintada
 # PURPOSE:    WFS support
 # COPYRIGHT:    (C) 2006-2024 Markus Neteler and the GRASS Development Team
 #
