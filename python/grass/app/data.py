@@ -180,10 +180,10 @@ def lock_mapset(mapset_path, force_lock_removal, message_callback):
     A corresponding localized message is given in the exception.
 
     A *message_callback* is a function which will be called to report messages about
-    certain states. Specifically, the funtion is called when forcibly unlocking the
+    certain states. Specifically, the function is called when forcibly unlocking the
     mapset.
 
-    Assumes that the runtime is setup (GISBASE).
+    Assumes that the runtime is set up (GISBASE).
     """
     if not os.path.exists(mapset_path):
         raise MapsetLockingException(_("Path '{}' doesn't exist").format(mapset_path))
