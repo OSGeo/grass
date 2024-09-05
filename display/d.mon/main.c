@@ -32,8 +32,6 @@
 
 #include "proto.h"
 
-#define MONITOR_NAME_LIMIT (GPATH_MAX - strlen("/MONITORS/") - 1)
-
 int main(int argc, char *argv[])
 {
     struct GModule *module;
@@ -178,7 +176,7 @@ int main(int argc, char *argv[])
         if (list_flag->answer)
             G_warning(_("Flag -%c ignored"), list_flag->key);
         mon = G_getenv_nofatal("MONITOR");
-        if (mon && strlen(mon) < MONITOR_NAME_LIMIT) {
+        if (mon && strlen(mon) < GNAME_MAX) {
             if (selected_flag->answer) {
                 G_verbose_message(_("Currently selected monitor:"));
                 fprintf(stdout, "%s\n", mon);

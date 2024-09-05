@@ -14,10 +14,6 @@ static int stop(const char *);
 
 int stop_mon(const char *name)
 {
-    if (strlen(name) >= GPATH_MAX) {
-        G_fatal_error(_("Monitor name <%s> is too long."), name);
-    }
-
     if (!check_mon(name)) {
         G_fatal_error(_("Monitor <%s> is not running"), name);
     }
