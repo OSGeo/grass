@@ -25,7 +25,7 @@ echo "MAKEFLAGS is '$MAKEFLAGS'"
             --with-geos \
             --with-lapack \
             --with-netcdf \
-            --with-blas \
+            --with-blas=openblas \
             --with-sqlite \
             --with-zstd \
             --enable-largefile \
