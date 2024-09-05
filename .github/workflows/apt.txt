@@ -7,6 +7,7 @@ libfftw3-dev
 libgdal-dev
 libgl1-mesa-dev
 libglu1-mesa-dev
+liblapacke-dev
 libnetcdf-dev
 libopenblas-dev
 libpdal-dev
