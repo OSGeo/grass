@@ -12,7 +12,7 @@
 char *get_path(const char *name, int fpath)
 {
     char tmpdir[GPATH_MAX];
-    int available_space;
+    size_t available_space;
 
     G_temp_element(tmpdir);
     available_space = GPATH_MAX - strlen(tmpdir) - 1;
@@ -157,7 +157,7 @@ void list_files(const char *name, FILE *fd_out)
     char tmpdir[GPATH_MAX], mon_path[GPATH_MAX];
     struct dirent *dp;
     DIR *dirp;
-    int available_space;
+    size_t available_space;
 
     G_temp_element(tmpdir);
     available_space = GPATH_MAX - strlen(tmpdir) - 1;
