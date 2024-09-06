@@ -21,7 +21,7 @@ char *get_path(const char *name, int fpath)
             _("Insufficient space to append /MONITORS to the path for <%s>."),
             name);
     }
-    strncat(tmpdir, "/MONITORS", available_space);
+    strcat(tmpdir, "/MONITORS");
     available_space -= strlen("/MONITORS");
     if (name) {
         if (available_space < strlen("/")) {
@@ -29,7 +29,7 @@ char *get_path(const char *name, int fpath)
                 _("Insufficient space to append / to the path for <%s>."),
                 name);
         }
-        strncat(tmpdir, "/", available_space);
+        strcat(tmpdir, "/");
         available_space -= strlen("/");
 
         if (available_space < strlen(name)) {
@@ -37,7 +37,7 @@ char *get_path(const char *name, int fpath)
                             "<%s> to the path."),
                           name);
         }
-        strncat(tmpdir, name, available_space);
+        strcat(tmpdir, name);
         available_space -= strlen(name);
     }
 
@@ -159,14 +159,14 @@ void list_files(const char *name, FILE *fd_out)
             _("Insufficient space to append /MONITORS to the path for <%s>."),
             name);
     }
-    strncat(tmpdir, "/MONITORS", available_space);
+    strcat(tmpdir, "/MONITORS");
     available_space -= strlen("/MONITORS");
 
     if (available_space < strlen("/")) {
         G_fatal_error(_("Insufficient space to append / to the path for <%s>."),
                       name);
     }
-    strncat(tmpdir, "/", available_space);
+    strcat(tmpdir, "/");
     available_space -= strlen("/");
 
     if (available_space < strlen(name)) {
@@ -174,7 +174,7 @@ void list_files(const char *name, FILE *fd_out)
                         "the path."),
                       name);
     }
-    strncat(tmpdir, name, available_space);
+    strcat(tmpdir, name);
     available_space -= strlen(name);
 
     G_file_name(mon_path, tmpdir, NULL, G_mapset());
