@@ -74,6 +74,7 @@ skewness=4.86561
 
         # Remove temporary location
         env = gs.parse_command("g.gisenv")
+        # Quotes and separator in environment variable string must be removed
         dbase = env["GISDBASE"].replace("'", "").replace(";", "")
         rmtree(f"{dbase}/{self.temp_location}", ignore_errors=True)
 
@@ -143,6 +144,7 @@ skewness=4.86561
         )
 
         # Create new session to avoid temporary region
+        # Quotes and separator in environment variable string must be removed
         self.session_file, env_new = gs.core.create_environment(
             env_orig["GISDBASE"].replace("'", "").replace(";", ""),
             self.temp_location,
