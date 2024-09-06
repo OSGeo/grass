@@ -9,7 +9,6 @@ libgl1-mesa-dev
 libglu1-mesa-dev
 liblapacke-dev
 libnetcdf-dev
-libopenblas-dev
 libpdal-dev
 libpng-dev
 libproj-dev

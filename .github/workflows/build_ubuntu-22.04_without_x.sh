@@ -35,7 +35,7 @@ export INSTALL_PREFIX=$1
     --with-cxx \
     --with-zstd \
     --with-bzlib \
-    --with-blas=openblas \
+    --with-blas \
     --with-lapack \
     --with-readline \
     --without-openmp \
