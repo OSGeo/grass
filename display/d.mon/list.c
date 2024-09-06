@@ -16,13 +16,20 @@ char *get_path(const char *name, int fpath)
 
     G_temp_element(tmpdir);
     available_space = GPATH_MAX - strlen(tmpdir) - 1;
-    if (available_space < strlen("/MONITORS")) {
+    if (available_space < strlen("/")) {
         G_fatal_error(
-            _("Insufficient space to append /MONITORS to the path for <%s>."),
+            _("Insufficient space to append / to the path for <%s>."),
             name);
     }
-    strcat(tmpdir, "/MONITORS");
-    available_space -= strlen("/MONITORS");
+    strcat(tmpdir, "/");
+    available_space -= strlen("/");
+    if (available_space < strlen("MONITORS")) {
+        G_fatal_error(
+            _("Insufficient space to append MONITORS to the path for <%s>."),
+            name);
+    }
+    strcat(tmpdir, "MONITORS");
+    available_space -= strlen("MONITORS");
     if (name) {
         if (available_space < strlen("/")) {
             G_fatal_error(
@@ -154,13 +161,20 @@ void list_files(const char *name, FILE *fd_out)
 
     G_temp_element(tmpdir);
     available_space = GPATH_MAX - strlen(tmpdir) - 1;
-    if (available_space < strlen("/MONITORS")) {
+    if (available_space < strlen("/")) {
         G_fatal_error(
-            _("Insufficient space to append /MONITORS to the path for <%s>."),
+            _("Insufficient space to append / to the path for <%s>."),
             name);
     }
-    strcat(tmpdir, "/MONITORS");
-    available_space -= strlen("/MONITORS");
+    strcat(tmpdir, "/");
+    available_space -= strlen("/");
+    if (available_space < strlen("MONITORS")) {
+        G_fatal_error(
+            _("Insufficient space to append MONITORS to the path for <%s>."),
+            name);
+    }
+    strcat(tmpdir, "MONITORS");
+    available_space -= strlen("MONITORS");
 
     if (available_space < strlen("/")) {
         G_fatal_error(_("Insufficient space to append / to the path for <%s>."),
