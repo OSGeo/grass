@@ -162,9 +162,8 @@ void list_files(const char *name, FILE *fd_out)
     G_temp_element(tmpdir);
     available_space = GPATH_MAX - strlen(tmpdir) - 1;
     if (available_space < strlen("/")) {
-        G_fatal_error(
-            _("Insufficient space to append / to the path for <%s>."),
-            name);
+        G_fatal_error(_("Insufficient space to append / to the path for <%s>."),
+                      name);
     }
     strcat(tmpdir, "/");
     available_space -= strlen("/");
