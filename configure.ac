@@ -1591,7 +1591,8 @@ AC_MSG_RESULT([$with_blas])
 BLASLIB=
 BLASINC=
 USE_BLAS=
-BLAS_PKG=cblas
+BLAS_PKGS="cblas blas-netlib openblas blas-atlas"
+BLAS_PKG=
 
 case "$with_blas" in
   no)
@@ -1601,7 +1602,7 @@ case "$with_blas" in
     ;;
   *)
     USE_BLAS=yes
-    BLAS_PKG="$with_blas"
+    BLAS_PKGS="$with_blas"
     ;;
 esac
 
@@ -1609,9 +1610,19 @@ if test -n "$USE_BLAS"; then
 
   blas_ok=no
 
-  if ! ${PKG_CONFIG} --exists ${BLAS_PKG} ; then
-    AC_MSG_ERROR([*** Unable to locate (C)BLAS pkg-conf package "${BLAS_PKG}".
-                      Perhaps you need to set PKG_CONFIG_PATH.])
+  for blas_chk in ${BLAS_PKGS}
+  do
+    if ! ${PKG_CONFIG} --exists ${blas_chk} ; then
+      continue
+    else
+      BLAS_PKG=${blas_chk}
+      break
+    fi
+  done
+
+  if test -z "$BLAS_PKG" ; then
+    AC_MSG_ERROR([*** Unable to locate (C)BLAS pkg-conf package(s)
+                  "${BLAS_PKGS}". Perhaps you need to set PKG_CONFIG_PATH.])
   fi
 
   BLASLIB=$(${PKG_CONFIG} --libs ${BLAS_PKG})
@@ -1620,14 +1631,16 @@ if test -n "$USE_BLAS"; then
   save_CFLAGS="$CFLAGS"; CFLAGS="$BLASINC $CFLAGS"
   save_LIBS="$LIBS"; LIBS="$BLASLIB"
 
-  AC_CHECK_HEADERS([cblas.h cblas-atlas.h])
+  AC_CHECK_HEADERS([cblas.h],,
+    AC_CHECK_HEADERS([cblas-atlas.h],,
+      AC_MSG_ERROR([*** Failed to find either "cblas.h" or "cblas-atlas.h" with "$CFLAGS"])))
 
   AC_MSG_CHECKING([for linking to (C)BLAS])
   AC_LINK_IFELSE([AC_LANG_PROGRAM(
     [[char cblas_dgemm();]], [[return cblas_dgemm();]])],
     [blas_ok=yes] , [
     AC_MSG_ERROR([*** Unable to link to (C)BLAS library with "$LIBS".])])
-  AC_MSG_RESULT([$blas_ok])
+  AC_MSG_RESULT([$BLAS_PKG])
 
   CFLAGS="$save_CFLAGS"
   LIBS="$save_LIBS"
@@ -1649,7 +1662,8 @@ AC_MSG_RESULT([$with_lapack])
 LAPACKLIB=
 LAPACKINC=
 USE_LAPACK=
-LAPACK_PKG=lapacke
+LAPACK_PKGS="lapacke openblas"
+LAPACK_PKG=
 
 case "$with_lapack" in
   no)
@@ -1668,9 +1682,19 @@ if test -n "$USE_BLAS" && test -n "$USE_LAPACK"; then
 
   lapack_ok=no
 
-  if ! ${PKG_CONFIG} --exists ${LAPACK_PKG} ; then
-    AC_MSG_ERROR([*** Unable to locate LAPACK(E) pkg-conf package "$LAPACK_PKG".
-                      Perhaps you need to set PKG_CONFIG_PATH.])
+  for lapack_chk in ${LAPACK_PKGS}
+  do
+    if ! ${PKG_CONFIG} --exists ${lapack_chk} ; then
+      continue
+    else
+      LAPACK_PKG=${lapack_chk}
+      break
+    fi
+  done
+
+  if test -z "$LAPACK_PKG" ; then
+    AC_MSG_ERROR([*** Unable to locate LAPACK(E) pkg-conf package(s)
+                     "$LAPACK_PKGS". Perhaps you need to set PKG_CONFIG_PATH.])
   fi
 
   LAPACKLIB=`${PKG_CONFIG} --libs ${LAPACK_PKG}`
@@ -1686,9 +1710,8 @@ if test -n "$USE_BLAS" && test -n "$USE_LAPACK"; then
   AC_LINK_IFELSE([AC_LANG_PROGRAM(
     [[char LAPACKE_dgesv();]], [[return LAPACKE_dgesv(); ]])],
     [lapack_ok=yes] , [
-    AC_MSG_ERROR([*** Unable to link to LAPACK(E) library with "$LIBS".])]
-  )
-  AC_MSG_RESULT([$lapack_ok])
+    AC_MSG_ERROR([*** Unable to link to LAPACK(E) library with "$LIBS".])])
+  AC_MSG_RESULT([$LAPACK_PKG])
 
   CFLAGS="$save_CFLAGS"
   LIBS="$save_LIBS"

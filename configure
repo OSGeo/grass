@@ -13754,7 +13754,8 @@ printf "%s\n" "$with_blas" >&6; }
 BLASLIB=
 BLASINC=
 USE_BLAS=
-BLAS_PKG=cblas
+BLAS_PKGS="cblas blas-netlib openblas blas-atlas"
+BLAS_PKG=
 
 case "$with_blas" in
   no)
@@ -13764,7 +13765,7 @@ case "$with_blas" in
     ;;
   *)
     USE_BLAS=yes
-    BLAS_PKG="$with_blas"
+    BLAS_PKGS="$with_blas"
     ;;
 esac
 
@@ -13772,9 +13773,19 @@ if test -n "$USE_BLAS"; then
 
   blas_ok=no
 
-  if ! ${PKG_CONFIG} --exists ${BLAS_PKG} ; then
-    as_fn_error $? "*** Unable to locate (C)BLAS pkg-conf package \"${BLAS_PKG}\".
-                      Perhaps you need to set PKG_CONFIG_PATH." "$LINENO" 5
+  for blas_chk in ${BLAS_PKGS}
+  do
+    if ! ${PKG_CONFIG} --exists ${blas_chk} ; then
+      continue
+    else
+      BLAS_PKG=${blas_chk}
+      break
+    fi
+  done
+
+  if test -z "$BLAS_PKG" ; then
+    as_fn_error $? "*** Unable to locate (C)BLAS pkg-conf package(s)
+                  \"${BLAS_PKGS}\". Perhaps you need to set PKG_CONFIG_PATH." "$LINENO" 5
   fi
 
   BLASLIB=$(${PKG_CONFIG} --libs ${BLAS_PKG})
@@ -13783,19 +13794,29 @@ if test -n "$USE_BLAS"; then
   save_CFLAGS="$CFLAGS"; CFLAGS="$BLASINC $CFLAGS"
   save_LIBS="$LIBS"; LIBS="$BLASLIB"
 
+         for ac_header in cblas.h
+do :
   ac_fn_c_check_header_compile "$LINENO" "cblas.h" "ac_cv_header_cblas_h" "$ac_includes_default"
 if test "x$ac_cv_header_cblas_h" = xyes
 then :
   printf "%s\n" "#define HAVE_CBLAS_H 1" >>confdefs.h
 
-fi
-ac_fn_c_check_header_compile "$LINENO" "cblas-atlas.h" "ac_cv_header_cblas_atlas_h" "$ac_includes_default"
+else $as_nop
+         for ac_header in cblas-atlas.h
+do :
+  ac_fn_c_check_header_compile "$LINENO" "cblas-atlas.h" "ac_cv_header_cblas_atlas_h" "$ac_includes_default"
 if test "x$ac_cv_header_cblas_atlas_h" = xyes
 then :
   printf "%s\n" "#define HAVE_CBLAS_ATLAS_H 1" >>confdefs.h
 
+else $as_nop
+  as_fn_error $? "*** Failed to find either \"cblas.h\" or \"cblas-atlas.h\" with \"$CFLAGS\"" "$LINENO" 5
 fi
 
+done
+fi
+
+done
 
   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for linking to (C)BLAS" >&5
 printf %s "checking for linking to (C)BLAS... " >&6; }
@@ -13819,8 +13840,8 @@ else $as_nop
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.beam \
     conftest$ac_exeext conftest.$ac_ext
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $blas_ok" >&5
-printf "%s\n" "$blas_ok" >&6; }
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $BLAS_PKG" >&5
+printf "%s\n" "$BLAS_PKG" >&6; }
 
   CFLAGS="$save_CFLAGS"
   LIBS="$save_LIBS"
@@ -13846,7 +13867,8 @@ printf "%s\n" "$with_lapack" >&6; }
 LAPACKLIB=
 LAPACKINC=
 USE_LAPACK=
-LAPACK_PKG=lapacke
+LAPACK_PKGS="lapacke openblas"
+LAPACK_PKG=
 
 case "$with_lapack" in
   no)
@@ -13865,9 +13887,19 @@ if test -n "$USE_BLAS" && test -n "$USE_LAPACK"; then
 
   lapack_ok=no
 
-  if ! ${PKG_CONFIG} --exists ${LAPACK_PKG} ; then
-    as_fn_error $? "*** Unable to locate LAPACK(E) pkg-conf package \"$LAPACK_PKG\".
-                      Perhaps you need to set PKG_CONFIG_PATH." "$LINENO" 5
+  for lapack_chk in ${LAPACK_PKGS}
+  do
+    if ! ${PKG_CONFIG} --exists ${lapack_chk} ; then
+      continue
+    else
+      LAPACK_PKG=${lapack_chk}
+      break
+    fi
+  done
+
+  if test -z "$LAPACK_PKG" ; then
+    as_fn_error $? "*** Unable to locate LAPACK(E) pkg-conf package(s)
+                     \"$LAPACK_PKGS\". Perhaps you need to set PKG_CONFIG_PATH." "$LINENO" 5
   fi
 
   LAPACKLIB=`${PKG_CONFIG} --libs ${LAPACK_PKG}`
@@ -13908,12 +13940,11 @@ then :
 else $as_nop
 
     as_fn_error $? "*** Unable to link to LAPACK(E) library with \"$LIBS\"." "$LINENO" 5
-
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.beam \
     conftest$ac_exeext conftest.$ac_ext
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $lapack_ok" >&5
-printf "%s\n" "$lapack_ok" >&6; }
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $LAPACK_PKG" >&5
+printf "%s\n" "$LAPACK_PKG" >&6; }
 
   CFLAGS="$save_CFLAGS"
   LIBS="$save_LIBS"
