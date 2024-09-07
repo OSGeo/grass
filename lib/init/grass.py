@@ -484,7 +484,7 @@ def create_gisrc(tmpdir, gisrcrc):
         if "UNKNOWN" in s:
             try_remove(gisrcrc)
             s = None
-    except:
+    except Exception:
         s = None
 
     # Copy the global grassrc file to the session grassrc file
@@ -1162,7 +1162,7 @@ def set_language(grass_config_dir):
                 encoding = "UTF-8"
                 normalized = locale.normalize("%s.%s" % (language, encoding))
                 locale.setlocale(locale.LC_ALL, normalized)
-            except locale.Error as e:
+            except locale.Error:
                 if language == "en":
                     # A workaround for Python Issue30755
                     # https://bugs.python.org/issue30755
@@ -1188,7 +1188,7 @@ def set_language(grass_config_dir):
                     # See bugs #3441 and #3423
                     try:
                         locale.setlocale(locale.LC_ALL, "C.UTF-8")
-                    except locale.Error as e:
+                    except locale.Error:
                         # All lost. Setting to C as much as possible.
                         # We can not call locale.normalize on C as it
                         # will transform it to en_US and we already know
@@ -1571,7 +1571,7 @@ def say_hello():
 
             revision = linerev.split(" ")[1]
             sys.stderr.write(" (" + revision + ")")
-        except:
+        except Exception:
             pass
 
 
@@ -1937,7 +1937,7 @@ def print_params(params):
             try:
                 revision = linerev.split(" ")[1]
                 sys.stdout.write("%s\n" % revision[1:])
-            except:
+            except Exception:
                 sys.stdout.write("No SVN revision defined\n")
         elif arg == "version":
             sys.stdout.write("%s\n" % GRASS_VERSION)

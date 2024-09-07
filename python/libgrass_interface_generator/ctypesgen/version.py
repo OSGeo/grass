@@ -23,18 +23,17 @@ def version_tuple(v):
 
 
 def read_file_version():
-    f = open(VERSION_FILE)
-    v = f.readline()
-    f.close()
+    with open(VERSION_FILE) as f:
+            v = f.readline()
     return v.strip()
 
 
 def version():
     try:
         args = {"cwd": THIS_DIR}
-        devnull = open(os.devnull, "w")
-        p = Popen(["git", "describe"], stdout=PIPE, stderr=devnull, **args)
-        out, err = p.communicate()
+        with open(os.devnull, "w") as devnull:
+            p = Popen(["git", "describe"], stdout=PIPE, stderr=devnull, **args)
+            out, err = p.communicate()
         if p.returncode:
             raise RuntimeError("no version defined?")
         git_tag = out.strip().decode()
@@ -60,9 +59,8 @@ def compatible(v0, v1):
 def write_version_file(v=None):
     if v is None:
         v = version()
-    f = open(VERSION_FILE, "w")
-    f.write(v)
-    f.close()
+    with open(VERSION_FILE, "w") as f:
+        f.write(v)
 
 
 VERSION = version()
