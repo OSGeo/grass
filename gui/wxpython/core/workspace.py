@@ -1608,7 +1608,7 @@ class WriteWorkspaceFile:
         if constants:
             self.file.write("%s<constant_planes>\n" % (" " * self.indent))
             self.indent += 4
-            for idx, plane in enumerate(constants):
+            for plane in constants:
                 self.file.write("%s<plane>\n" % (" " * self.indent))
                 self.indent += 4
                 self.__writeTagWithValue("height", plane["constant"]["value"])
