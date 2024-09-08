@@ -17,7 +17,7 @@ The GitHub repositories are:
 - GRASS GIS Add-ons: <https://github.com/OSGeo/grass-addons>
 - GRASS GIS promotional material: <https://github.com/OSGeo/grass-promo>
 - GRASS GIS Website (Hugo site): <https://github.com/OSGeo/grass-website>
-- Github mirror at OSGeo (daily updated): <https://git.osgeo.org/gitea/grass_gis/grass>
+- Github mirror at OSGeo (updated daily): <https://git.osgeo.org/gitea/grass_gis/grass>
 
 Git usage:
 
