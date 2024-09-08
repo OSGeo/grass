@@ -1611,12 +1611,12 @@ class WriteWorkspaceFile:
             for idx, plane in enumerate(constants):
                 self.file.write("%s<plane>\n" % (" " * self.indent))
                 self.indent += 4
-                self.__writeTagWithValue("height", constants[idx]["constant"]["value"])
+                self.__writeTagWithValue("height", plane["constant"]["value"])
                 self.__writeTagWithValue(
-                    "fine_resolution", constants[idx]["constant"]["resolution"]
+                    "fine_resolution", plane["constant"]["resolution"]
                 )
                 self.__writeTagWithValue(
-                    "color", constants[idx]["constant"]["color"], format="s"
+                    "color", plane["constant"]["color"], format="s"
                 )
                 self.indent -= 4
                 self.file.write("%s</plane>\n" % (" " * self.indent))
