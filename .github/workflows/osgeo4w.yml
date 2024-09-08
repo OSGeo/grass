@@ -49,12 +49,30 @@ jobs:
         uses: echoix/setup-OSGeo4W@17deecd39e077a80bf1081443998ea8edd6f15bf  # v0.1.0
         with:
           package-dir: "D:/OSGeo4W_pkg"
-          packages: >-
-            proj-devel,gdal-devel,geos-devel,libtiff-devel,libpng-devel,\
-            pdal-devel,netcdf-devel,cairo-devel,fftw,freetype-devel,gdal-ecw,\
-            gdal-mrsid,liblas-devel,libxdr,libpq-devel,pdcurses,\
-            python3-matplotlib,python3-numpy,python3-ply,python3-pywin32,\
-            python3-wxpython,regex-devel,zstd-devel
+          packages: |
+            cairo-devel
+            fftw
+            freetype-devel
+            gdal-devel
+            gdal-ecw
+            gdal-mrsid
+            geos-devel
+            liblas-devel
+            libpng-devel
+            libpq-devel
+            libtiff-devel
+            libxdr
+            netcdf-devel
+            pdal-devel
+            pdcurses
+            proj-devel
+            python3-matplotlib
+            python3-numpy
+            python3-ply
+            python3-pywin32
+            python3-wxpython
+            regex-devel
+            zstd-devel
 
       - name: Set number of cores for compilation
         run: |
