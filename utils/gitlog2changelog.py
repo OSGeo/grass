@@ -67,7 +67,7 @@ for line in fin:
             author = author[0 : len(author) - 1]
             authorFound = True
         except Exception as e:
-            print(f"Could not parse authorList = '{line}'. Error: {str(e)}")
+            print(f"Could not parse authorList = '{line}'. Error: {e!s}")
 
     # Match the date line
     elif line.startswith("Date:"):
