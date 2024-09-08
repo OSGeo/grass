@@ -9,7 +9,7 @@ THIS_DIR = path.dirname(__file__)
 VERSION_FILE = path.join(THIS_DIR, "VERSION")
 DEFAULT_PREFIX = "ctypesgen"
 
-__all__ = ["VERSION", "version_tuple", "version", "compatible"]
+__all__ = ["VERSION", "compatible", "version", "version_tuple"]
 
 
 def version_tuple(v):
@@ -48,7 +48,8 @@ def version():
 
 
 def version_number():
-    return version().partition("-")[-1]
+    v = version()
+    return v.partition("-")[-1]
 
 
 def compatible(v0, v1):
