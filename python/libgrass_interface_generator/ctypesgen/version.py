@@ -60,8 +60,6 @@ def compatible(v0, v1):
 def write_version_file(v=None):
     if v is None:
         v = version()
-    # with open(VERSION_FILE, "w") as f:
-    #     f.write(v)
     Path(VERSION_FILE).write_text(v)
 
 
