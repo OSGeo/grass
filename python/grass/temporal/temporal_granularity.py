@@ -96,12 +96,12 @@ def check_granularity_string(granularity, temporal_type):
             return False
 
         try:
-            integer = int(num)
+            int(num)
         except:
             return False
     elif temporal_type == "relative":
         try:
-            integer = int(granularity)
+            int(granularity)
         except:
             return False
     else:
@@ -150,7 +150,7 @@ def get_time_tuple_function(maps):
         return _get_row_time_tuple
 
 
-def _is_after(start, start1, end1):
+def _is_after(start, start1, end1) -> bool:
     """Helper function that checks if start timestamp is
     temporally after the start1 and end1, where start1 and end1
     represent a temporal extent.
@@ -177,15 +177,9 @@ def _is_after(start, start1, end1):
 
     """
     if end1 is None:
-        if start > start1:
-            return True
-        else:
-            return False
+        return start > start1
 
-    if start > end1:
-        return True
-    else:
-        return False
+    return start > end1
 
 
 def compute_relative_time_granularity(maps):
@@ -472,7 +466,7 @@ def compute_absolute_time_granularity(maps):
         # start time is required in TGIS and expected to be present
         if end:
             map_datetime_delta = compute_datetime_delta(start, end)
-            for time_unit in granularity_units:
+            for time_unit in granularity_units.keys():  # noqa: PLC0206
                 if (
                     time_unit in map_datetime_delta
                     and map_datetime_delta[time_unit] > 0
@@ -490,7 +484,7 @@ def compute_absolute_time_granularity(maps):
             else:
                 gap_datetime_delta = compute_datetime_delta(previous_start, start)
             # Add to the set of the smallest granularity in the granularity_units dict
-            for time_unit in granularity_units:
+            for time_unit in granularity_units.keys():  # noqa: PLC0206
                 if (
                     time_unit in gap_datetime_delta
                     and gap_datetime_delta[time_unit] > 0
@@ -1257,7 +1251,7 @@ def gran_to_gran(from_gran, to_gran="days", shell=False):
                 return _return(output, tounit, shell)
             if k == myunit:
                 num, myunit = v.split(" ")
-                output = output * ast.literal_eval(num)
+                output *= ast.literal_eval(num)
             if tounit == "second" and myunit == tounit:
                 return _return(output, tounit, shell)
         print(_("Probably you need to invert 'from_gran' and 'to_gran'"))

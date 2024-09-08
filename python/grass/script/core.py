@@ -40,7 +40,7 @@ from grass.grassdb.manage import resolve_mapset_path
 
 # subprocess wrapper that uses shell on Windows
 class Popen(subprocess.Popen):
-    _builtin_exts = set([".com", ".exe", ".bat", ".cmd"])
+    _builtin_exts = {".com", ".exe", ".bat", ".cmd"}
 
     @staticmethod
     def _escape_for_shell(arg):
@@ -178,7 +178,7 @@ def get_commands(*, env=None):
     gui_path = os.path.join(gisbase, "etc", "gui", "scripts")
     if os.path.exists(gui_path):
         os.environ["PATH"] = os.getenv("PATH") + os.pathsep + gui_path
-        cmd = cmd + os.listdir(gui_path)
+        cmd += os.listdir(gui_path)
 
     return set(cmd), scripts
 
@@ -1192,7 +1192,7 @@ def gisenv(env=None):
 # interface to g.region
 
 
-def locn_is_latlong(env=None):
+def locn_is_latlong(env=None) -> bool:
     """Tests if location is lat/long. Value is obtained
     by checking the "g.region -pu" projection code.
 
@@ -1200,10 +1200,7 @@ def locn_is_latlong(env=None):
     """
     s = read_command("g.region", flags="pu", env=env)
     kv = parse_key_val(s, ":")
-    if kv["projection"].split(" ")[0] == "3":
-        return True
-    else:
-        return False
+    return kv["projection"].split(" ")[0] == "3"
 
 
 def region(region3d=False, complete=False, env=None):

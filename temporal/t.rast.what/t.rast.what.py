@@ -597,9 +597,9 @@ def one_point_per_timerow_output(
                     matrix.append(cols[:2])
 
             if vcat:
-                matrix[i] = matrix[i] + cols[4:]
+                matrix[i] += cols[4:]
             else:
-                matrix[i] = matrix[i] + cols[3:]
+                matrix[i] += cols[3:]
 
         first = False
 

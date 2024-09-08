@@ -28,16 +28,35 @@ def get_grass_config_dir(major_version, minor_version, env):
 
     Determines path of GRASS GIS user configuration directory.
     """
-    # The code is in sync with grass.app.runtime (but not the same).
+    if env.get("GRASS_CONFIG_DIR"):
+        # use GRASS_CONFIG_DIR environmental variable is defined
+        env_dirname = "GRASS_CONFIG_DIR"
+    else:
+        env_dirname = "APPDATA" if WINDOWS else "HOME"
+
+    config_dir = env.get(env_dirname)
+    if config_dir is None:
+        raise RuntimeError(
+            f"The {env_dirname} variable is not set, ask your operating"
+            " system support"
+        )
+
+    if not os.path.isdir(config_dir):
+        raise NotADirectoryError(
+            f"The {env_dirname} variable points to directory which does"
+            " not exist, ask your operating system support"
+        )
+
     if WINDOWS:
         config_dirname = f"GRASS{major_version}"
-        return os.path.join(env.get("APPDATA"), config_dirname)
     elif MACOS:
-        version = f"{major_version}.{minor_version}"
-        return os.path.join(env.get("HOME"), "Library", "GRASS", version)
+        config_dirname = os.path.join(
+            "Library", "GRASS", f"{major_version}.{minor_version}"
+        )
     else:
         config_dirname = f".grass{major_version}"
-        return os.path.join(env.get("HOME"), config_dirname)
+
+    return os.path.join(config_dir, config_dirname)
 
 
 def append_left_main_executable_paths(paths, install_path):
@@ -110,6 +129,7 @@ def set_paths(install_path, grass_config_dir, ld_library_path_variable_name):
     # retrieving second time, but now it is always set
     addon_base = os.getenv("GRASS_ADDON_BASE")
     set_man_path(install_path=install_path, addon_base=addon_base, env=os.environ)
+    set_isis()
 
 
 def set_man_path(install_path, addon_base, env):
@@ -253,6 +273,25 @@ def set_browser(install_path):
         browser = "xdg-open"
 
     os.environ["GRASS_HTML_BROWSER"] = browser
+
+
+def set_isis():
+    """Enable a mixed ISIS-GRASS environment
+
+    ISIS is Integrated Software for Imagers and Spectrometers by USGS.
+    """
+    if os.getenv("ISISROOT"):
+        isis = os.getenv("ISISROOT")
+        os.environ["ISIS_LIB"] = isis + os.sep + "lib"
+        os.environ["ISIS_3RDPARTY"] = isis + os.sep + "3rdParty" + os.sep + "lib"
+        os.environ["QT_PLUGIN_PATH"] = isis + os.sep + "3rdParty" + os.sep + "plugins"
+        # os.environ['ISIS3DATA'] = isis + "$ISIS3DATA"
+        libpath = os.getenv("LD_LIBRARY_PATH", "")
+        isislibpath = os.getenv("ISIS_LIB")
+        isis3rdparty = os.getenv("ISIS_3RDPARTY")
+        os.environ["LD_LIBRARY_PATH"] = (
+            libpath + os.pathsep + isislibpath + os.pathsep + isis3rdparty
+        )
 
 
 def ensure_home():

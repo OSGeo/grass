@@ -206,7 +206,9 @@ class ModelSearchDialog(wx.Dialog):
             parent=self, giface=giface, menuModel=menuModel.GetModel()
         )
         self.cmd_prompt.promptRunCmd.connect(self.OnCommand)
-        self.cmd_prompt.commandSelected.connect(self.label.SetValue)
+        self.cmd_prompt.commandSelected.connect(
+            lambda command: self.label.SetValue(command)
+        )
         self.search = SearchModuleWidget(
             parent=self.panel, model=menuModel.GetModel(), showTip=True
         )
@@ -542,7 +544,6 @@ class ModelItemDialog(wx.Dialog):
 
     def _layout(self):
         """Do layout (virtual method)"""
-        pass
 
     def GetCondition(self):
         """Get loop condition"""
@@ -775,7 +776,6 @@ class ModelListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEditMi
 
     def OnEndEdit(self, event):
         """Finish editing of item"""
-        pass
 
     def GetListCtrl(self):
         """Used by ColumnSorterMixin"""

@@ -46,6 +46,8 @@ COPYING coming with GRASS for details.
 @author Stepan Turek <stepan.turek seznam.cz> (CoordinatesSelect)
 """
 
+from __future__ import annotations
+
 import sys
 import textwrap
 import os
@@ -63,7 +65,7 @@ import wx.lib.colourselect as csel
 import wx.lib.filebrowsebutton as filebrowse
 from wx.lib.newevent import NewEvent
 
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
 
 # needed when started from command line and for testing
 if __name__ == "__main__":
@@ -564,7 +566,9 @@ class TaskFrame(wx.Frame):
             self._gconsole.mapCreated.connect(self.OnMapCreated)
         self.goutput = self.notebookpanel.goutput
         if self.goutput:
-            self.goutput.showNotification.connect(self.SetStatusText)
+            self.goutput.showNotification.connect(
+                lambda message: self.SetStatusText(message)
+            )
 
         self.notebookpanel.OnUpdateValues = self.updateValuesHook
         guisizer.Add(self.notebookpanel, proportion=1, flag=wx.EXPAND)
@@ -804,11 +808,12 @@ class TaskFrame(wx.Frame):
             # was closed also when aborted but better is leave it open
             wx.CallLater(2000, self.Close)
 
-    def OnMapCreated(self, name, ltype):
+    def OnMapCreated(self, name, ltype, add: bool | None = None):
         """Map created or changed
 
         :param name: map name
         :param ltype: layer type (prompt value)
+        :param add: whether to display layer or not
         """
         if hasattr(self, "addbox") and self.addbox.IsChecked():
             add = True
@@ -2761,7 +2766,7 @@ class CmdPanel(wx.Panel):
             if event.GetId() == verbose.GetId() and quiet.IsChecked():
                 quiet.SetValue(False)
                 self.task.get_flag("quiet")["value"] = False
-            elif verbose.IsChecked():
+            elif event.GetId() == quiet.GetId() and verbose.IsChecked():
                 verbose.SetValue(False)
                 self.task.get_flag("verbose")["value"] = False
 
@@ -2850,7 +2855,6 @@ class CmdPanel(wx.Panel):
         needed. It's a hook, actually.  Beware of what is 'self' in
         the method def, though. It will be called with no arguments.
         """
-        pass
 
     def OnCheckBoxMulti(self, event):
         """Fill the values as a ','-separated string according to
@@ -3217,7 +3221,7 @@ class GUI:
         """
         # parse the interface description
         if not self.grass_task:
-            tree = etree.fromstring(gtask.get_interface_description(cmd))
+            tree = ET.fromstring(gtask.get_interface_description(cmd))
             self.grass_task = gtask.processTask(tree).get_task()
 
             for p in self.grass_task.params:
