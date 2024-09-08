@@ -53,7 +53,8 @@ char **format_list(int *count, size_t *len)
     }
 
     /* order formats by name */
-    qsort(list, *count, sizeof(char *), cmp);
+    if (list)
+        qsort(list, *count, sizeof(char *), cmp);
 #endif
 #if defined HAVE_POSTGRES && !defined HAVE_OGR
     list = G_realloc(list, ((*count) + 1) * sizeof(char *));

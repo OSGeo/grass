@@ -228,7 +228,7 @@ class VirtualAttributeList(
 
         if sql:
             cmdParams.update({"sql": sql, "output": outFile.name, "overwrite": True})
-            ret = RunCommand("db.select", **cmdParams)
+            RunCommand("db.select", **cmdParams)
             self.sqlFilter = {"sql": sql}
         else:
             cmdParams.update(
@@ -246,7 +246,7 @@ class VirtualAttributeList(
                 # Enclose column name with SQL standard double quotes
                 cmdParams.update({"columns": ",".join([f'"{col}"' for col in columns])})
 
-            ret = RunCommand("v.db.select", **cmdParams)
+            RunCommand("v.db.select", **cmdParams)
 
         # These two should probably be passed to init more cleanly
         # setting the numbers of items = number of elements in the dictionary
@@ -296,7 +296,7 @@ class VirtualAttributeList(
                 record = (
                     decode(outFile.readline(), encoding=enc).strip().replace("\n", "")
                 )
-            except UnicodeDecodeError as e:
+            except UnicodeDecodeError:
                 record = (
                     outFile.readline()
                     .decode(encoding=enc, errors="replace")
@@ -965,7 +965,6 @@ class DbMgrNotebookBase(GNotebook):
             pass
 
         if idCol:
-            winCol = self.FindWindowById(idCol)
             table = self.dbMgrData["mapDBInfo"].layers[self.selLayer]["table"]
             self.dbMgrData["mapDBInfo"].GetColumns(table)
 
@@ -2687,7 +2686,6 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         tlist = self.FindWindowById(self.layerPage[self.selLayer]["tableData"])
 
         item = tlist.GetFirstSelected()
-        countSelected = tlist.GetSelectedItemCount()
         if UserSettings.Get(group="atm", key="askOnDeleteRec", subkey="enabled"):
             # if the user select more columns to delete, all the columns name
             # will appear the the warning dialog

@@ -202,8 +202,7 @@ int main(int argc, char **argv)
             G_fatal_error(buff);
         }
         if ((Headfax.dspfinfp = G_fopen_old(buff, dsp, mapset)) == NULL) {
-            fprintf(stderr, "Unable to open <%s> for reading\n",
-                    Headfax.dspfinfp);
+            fprintf(stderr, "Unable to open <%s> for reading\n", dsp);
             exit(EXIT_FAILURE);
         }
 

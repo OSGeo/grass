@@ -869,10 +869,10 @@ static void wps_print_literal_input_output(
             strcmp(datatype, "float") == 0) {
             str = strtok((char *)choices[0], "-");
             if (str != NULL) {
-                G_snprintf(range[0], 24, "%s", str);
+                snprintf(range[0], 24, "%s", str);
                 str = strtok(NULL, "-");
                 if (str != NULL) {
-                    G_snprintf(range[1], 24, "%s", str);
+                    snprintf(range[1], 24, "%s", str);
                     type = TYPE_RANGE;
                 }
             }

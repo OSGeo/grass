@@ -257,8 +257,6 @@ def main():
     f.write("GUI: text\n")
     f.close()
 
-    tgtsrs = gs.read_command("g.proj", flags="j", quiet=True)
-
     # create temp location from input without import
     gs.verbose(_("Creating temporary project for <%s>...") % OGRdatasource)
     try:

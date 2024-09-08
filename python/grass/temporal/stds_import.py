@@ -32,6 +32,7 @@ for details.
 import os
 import os.path
 import tarfile
+from pathlib import Path
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
@@ -302,16 +303,12 @@ def import_stds(
         # from other programs than g.proj into
         # new line format so that the grass file comparison function
         # can be used to compare the projections
-        proj_name_tmp = temp_name + "_in_projection"
-        proj_file = open(proj_name, "r")
-        proj_content = proj_file.read()
+        proj_content = Path(proj_name).read_text()
         proj_content = proj_content.replace(" +", "\n+")
         proj_content = proj_content.replace("\t+", "\n+")
-        proj_file.close()
 
-        proj_file = open(proj_name_tmp, "w")
-        proj_file.write(proj_content)
-        proj_file.close()
+        proj_name_tmp = f"{temp_name}_in_projection"
+        Path(proj_name_tmp).write_text(proj_content)
 
         p = gs.start_command("g.proj", flags="j", stdout=temp_file)
         p.communicate()
@@ -336,7 +333,7 @@ def import_stds(
     old_env = gs.gisenv()
     if location:
         try:
-            proj4_string = open(proj_file_name, "r").read()
+            proj4_string = Path(proj_file_name).read_text()
             gs.create_location(
                 dbase=old_env["GISDBASE"], location=location, proj4=proj4_string
             )

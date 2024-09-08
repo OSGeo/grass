@@ -369,8 +369,10 @@ int main(int argc, char *argv[])
     /* G_free (info_ptr); */
     png_destroy_write_struct(&png_ptr, &info_ptr); /* al 11/2000 */
 
-    if (fp)
+    if (fp) {
         fclose(fp);
+        fp = NULL;
+    }
 
     if (wld_flag->answer) {
         if (do_stdout)

@@ -62,7 +62,7 @@ def print_map_semantic_label(name, label_reader):
                 label_reader.print_info(semantic_label=semantic_label)
             else:
                 gs.info(_("No semantic label assigned to <{}>").format(name))
-    except OpenError as e:
+    except OpenError:
         gs.error(_("Map <{}> not found").format(name))
 
 
@@ -94,7 +94,7 @@ def manage_map_semantic_label(name, semantic_label):
             except GrassError as e:
                 gs.error(_("Unable to assign/dissociate semantic label. {}").format(e))
                 return 1
-    except OpenError as e:
+    except OpenError:
         gs.error(_("Map <{}> not found in current mapset").format(name))
         return 1
 

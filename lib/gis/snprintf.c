@@ -19,11 +19,9 @@
  * \date 2006-2008
  */
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <stdarg.h>
-#include <unistd.h>
-#include <assert.h>
+#include <stdio.h>
+
 #include <grass/gis.h>
 
 /**
@@ -32,6 +30,8 @@
  * <b>Note:</b> The use of <i>snprintf()</i>/<i>G_snprintf()</i> is
  * discouraged in favour of calculating how long the string will be and
  * allocating enough memory!
+ *
+ * \deprecated Use C99 standard function snprintf() instead.
  *
  * \param[in] str input string
  * \param[in] size length of string
@@ -47,10 +47,6 @@ int G_snprintf(char *str, size_t size, const char *fmt, ...)
     va_start(ap, fmt);
     count = vsnprintf(str, size, fmt, ap);
     va_end(ap);
-
-    /* Windows' vsnprintf() doesn't always NUL-terminate the buffer */
-    if (count >= 0 && (unsigned int)count == size)
-        str[--count] = '\0';
 
     return count;
 }

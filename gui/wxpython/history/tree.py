@@ -505,6 +505,7 @@ class HistoryBrowserTree(CTreeView):
                 },
             )
             self._model.SortChildren(self._model.root)
+            self.RefreshItems()
 
         # Populate today's node by executed command
         command_node = self._populateDayItem(today_node, entry)
@@ -621,9 +622,9 @@ class HistoryBrowserTree(CTreeView):
         selected_day = selected_command.parent
         if selected_day and len(selected_day.children) == 0:
             self._model.RemoveNode(selected_day)
-
-        # Reload day node
-        self._reloadNode(selected_day)
+            self._reloadNode(self._model.root)
+        else:
+            self._reloadNode(selected_day)
         self.showNotification.emit(message=_("<{}> removed").format(command))
 
     def OnItemSelected(self, node):

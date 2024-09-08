@@ -528,9 +528,9 @@ int main(int argc, char **argv)
                         prof_int("format_version_major", 0);
                         prof_int("format_version_minor", 9);
                         prof_utc("timestamp", time(NULL));
-                        G_snprintf(buf, sizeof(buf),
-                                   "r.geomorphon GRASS GIS %s [%s]",
-                                   GRASS_VERSION_STRING, GRASS_HEADERS_VERSION);
+                        snprintf(buf, sizeof(buf),
+                                 "r.geomorphon GRASS GIS %s [%s]",
+                                 GRASS_VERSION_STRING, GRASS_HEADERS_VERSION);
                         prof_str("generator", buf);
 
                         oneoff_done =

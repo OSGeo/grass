@@ -2766,7 +2766,7 @@ class CmdPanel(wx.Panel):
             if event.GetId() == verbose.GetId() and quiet.IsChecked():
                 quiet.SetValue(False)
                 self.task.get_flag("quiet")["value"] = False
-            elif verbose.IsChecked():
+            elif event.GetId() == quiet.GetId() and verbose.IsChecked():
                 verbose.SetValue(False)
                 self.task.get_flag("verbose")["value"] = False
 

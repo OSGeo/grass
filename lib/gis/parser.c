@@ -1812,7 +1812,7 @@ const char *get_renamed_option(const char *key)
         /* read renamed options from file (renamed_options) */
         char path[GPATH_MAX];
 
-        G_snprintf(path, GPATH_MAX, "%s/etc/renamed_options", G_gisbase());
+        snprintf(path, GPATH_MAX, "%s/etc/renamed_options", G_gisbase());
         st->renamed_options = G_read_key_value_file(path);
     }
 

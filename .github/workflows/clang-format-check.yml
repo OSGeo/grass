@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           persist-credentials: false
-      - uses: DoozyX/clang-format-lint-action@caa179272c6ee7f1d25dfb503ee0c410c26ebd98 # v0.18.1
+      - uses: DoozyX/clang-format-lint-action@c71d0bf4e21876ebec3e5647491186f8797fde31 # v0.18.2
         with:
           source: "."
           clangFormatVersion: 18.1.8

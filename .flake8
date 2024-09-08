@@ -52,11 +52,10 @@ per-file-ignores =
     gui/wxpython/core/settings.py: E722
     gui/wxpython/core/watchdog.py: E402
     gui/wxpython/datacatalog/tree.py: E731, E402
-    gui/wxpython/dbmgr/base.py: E722, F841
-    gui/wxpython/dbmgr/dialogs.py: F841, E722
-    gui/wxpython/dbmgr/sqlbuilder.py: E722, F841
+    gui/wxpython/dbmgr/base.py: E722
+    gui/wxpython/dbmgr/dialogs.py: E722
+    gui/wxpython/dbmgr/sqlbuilder.py: E722
     gui/wxpython/dbmgr/manager.py: E722
-    gui/wxpython/dbmgr/vinfo.py: F841
     gui/wxpython/docs/wxgui_sphinx/conf.py: E402, W291
     gui/wxpython/gcp/g.gui.gcp.py: F841
     gui/wxpython/gcp/manager.py: F841, E722
@@ -159,12 +158,12 @@ per-file-ignores =
     scripts/r.in.wms/wms_cap_parsers.py: F841
     scripts/r.in.wms/wms_drv.py: E402, E722
     scripts/r.in.wms/srs.py: E722
-    scripts/r.semantic.label/r.semantic.label.py: F841, E501
-    scripts/v.report/v.report.py: F841, E721
+    scripts/r.semantic.label/r.semantic.label.py: E501
+    scripts/v.report/v.report.py: E721
     scripts/db.out.ogr/db.out.ogr.py: F841
     scripts/g.extension/g.extension.py: F841, E722, E501
-    scripts/v.unpack/v.unpack.py: F841, E722, E501
-    scripts/v.import/v.import.py: F841, E722, E501
+    scripts/v.unpack/v.unpack.py: E722, E501
+    scripts/v.import/v.import.py: E722, E501
     scripts/db.univar/db.univar.py: E501
     scripts/d.frame/d.frame.py: E722
     scripts/i.pansharpen/i.pansharpen.py: E722, E501
