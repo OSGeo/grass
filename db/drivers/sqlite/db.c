@@ -30,14 +30,12 @@
  * \return DB_OK on success
  */
 
-
 int db__driver_open_database(dbHandle *handle)
 {
     char name2[GPATH_MAX], *path;
     const char *name;
     char name3[GPATH_MAX + 14], *env_nolock;
     int i;
-    size_t len;
 
     G_debug(3, "\ndb_driver_open_database()");
 
@@ -81,8 +79,7 @@ int db__driver_open_database(dbHandle *handle)
         G_free_tokens(tokens);
     }
     else {
-        len = G_strlcpy(name2, name, sizeof(name2));
-        if (len >= sizeof(name2)) {
+        if (G_strlcpy(name2, name, sizeof(name2)) >= sizeof(name2)) {
             G_warning(_("Database name <%s> is too long"), name);
         }
     }
@@ -120,15 +117,13 @@ int db__driver_open_database(dbHandle *handle)
         else {
             G_warning(_("The sqlite config option '%s' is not supported"),
                       "SQLITE_CONFIG_URI");
-            len = G_strlcpy(name3, name2, sizeof(name3));
-            if (len >= sizeof(name3)) {
+            if (G_strlcpy(name3, name2, sizeof(name3)) >= sizeof(name3)) {
                 G_warning(_("Database name <%s> is too long"), name2);
             }
         }
     }
     else {
-        len = G_strlcpy(name3, name2, sizeof(name3));
-        if (len >= sizeof(name3)) {
+        if (G_strlcpy(name3, name2, sizeof(name3)) >= sizeof(name3)) {
             G_warning(_("Database name <%s> is too long"), name2);
         }
     }
@@ -175,7 +170,6 @@ int db__driver_create_database(dbHandle *handle)
 {
     const char *name;
     char name2[GPATH_MAX], *env_nolock;
-    size_t len;
 
     name = db_get_handle_dbname(handle);
 
@@ -198,15 +192,13 @@ int db__driver_create_database(dbHandle *handle)
         else {
             G_warning(_("The sqlite config option '%s' is not supported"),
                       "SQLITE_CONFIG_URI");
-            len = G_strlcpy(name2, name, sizeof(name2));
-            if (len >= sizeof(name2)) {
+            if (G_strlcpy(name2, name, sizeof(name2)) >= sizeof(name2)) {
                 G_warning(_("Database name <%s> is too long"), name);
             }
         }
     }
     else {
-        len = G_strlcpy(name2, name, sizeof(name2));
-        if (len >= sizeof(name2)) {
+        if (G_strlcpy(name2, name, sizeof(name2)) >= sizeof(name2)) {
             G_warning(_("Database name <%s> is too long"), name);
         }
     }
