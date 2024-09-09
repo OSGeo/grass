@@ -1232,8 +1232,8 @@ void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
                     horizon_raster[j - buffer_s][i - buffer_w] = shadow_angle;
 
                 } /* undefs */
-            }     /* end of loop over columns */
-        }         /* end of parallel section */
+            } /* end of loop over columns */
+        } /* end of parallel section */
 
         G_debug(1, "OUTGR() starts...");
         OUTGR(settings, shad_filename, cellhd);

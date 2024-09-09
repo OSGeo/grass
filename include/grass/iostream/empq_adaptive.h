@@ -57,7 +57,7 @@ private:
 public:
     /* start in INMEM regim by allocating im of size precisely twice the
        size of the (pqueue within) the em_pqueue; */
-    EMPQueueAdaptive(long N UNUSED) : EMPQueueAdaptive(){};
+    EMPQueueAdaptive(long N UNUSED) : EMPQueueAdaptive() {};
     EMPQueueAdaptive();
     EMPQueueAdaptive(size_t inMem);
     ~EMPQueueAdaptive();

@@ -565,9 +565,9 @@ class VDigitToolbar(BaseToolbar):
         menuItems = []
         if not self.tools or "addArea" in self.tools:
             menuItems.append((self.icons["addArea"], self.OnAddArea))
-        if not self.fType and not self.tools or "addBoundary" in self.tools:
+        if (not self.fType and not self.tools) or "addBoundary" in self.tools:
             menuItems.append((self.icons["addBoundary"], self.OnAddBoundary))
-        if not self.fType and not self.tools or "addCentroid" in self.tools:
+        if (not self.fType and not self.tools) or "addCentroid" in self.tools:
             menuItems.append((self.icons["addCentroid"], self.OnAddCentroid))
 
         self._onMenu(menuItems)

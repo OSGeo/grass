@@ -184,7 +184,7 @@ def rmarea(infile, outfile, thresh, coef):
 
     # transform user input from hectares to meters because currently v.clean
     # rmarea accept only meters as threshold
-    thresh = thresh * 10000.0
+    thresh *= 10000.0
     vectfile = "%s_vect_%s" % (infile.split("@")[0], outfile)
     TMPRAST.append(vectfile)
     gs.run_command("r.to.vect", input=infile, output=vectfile, type="area")

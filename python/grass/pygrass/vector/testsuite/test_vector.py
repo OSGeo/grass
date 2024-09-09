@@ -37,9 +37,9 @@ class VectorTopoTestCase(TestCase):
         """Test that getitem handle correctly the slice starting from 1"""
         vcoords = ((10.0, 6.0), (12.0, 6.0))
         with VectorTopo(self.tmpname, mode="r") as vect:
-            coords = tuple([pnt.coords() for pnt in vect[:3]])
+            coords = tuple(pnt.coords() for pnt in vect[:3])
             self.assertTupleEqual(vcoords, coords)
-            coords = tuple([pnt.coords() for pnt in vect[1:3]])
+            coords = tuple(pnt.coords() for pnt in vect[1:3])
             self.assertTupleEqual(vcoords, coords)
             self.vect.close()
 
