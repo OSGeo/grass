@@ -19,8 +19,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-struct Parameters
-{
+struct Parameters {
     struct Option *format;
     struct Flag *like_test;
 };
@@ -92,7 +91,7 @@ int report_status(struct Parameters *params)
         Rast_mask_status(name, mapset, &is_mask_reclass, reclass_name, reclass_mapset);
     // bool present = Rast_mask_present(name, mapset);  // This would check the map presence rather than the automasking state in the library.
 
-    //printf("%s", Rast_mask_info());
+    // printf("%s", Rast_mask_info());
 
     if (params->like_test->answer) {
         if (present)
@@ -121,7 +120,7 @@ int report_status(struct Parameters *params)
     else if (strcmp(params->format->answer, "bash") == 0) {
         printf("present=");
         if (present)
-            printf("1");        // Good choice here or not?
+            printf("1"); // Good choice here or not?
         else
             printf("0");
         printf("\nfull_name=");
@@ -138,7 +137,7 @@ int report_status(struct Parameters *params)
             printf("false");
         printf("\nfull_name: ");
         if (present)
-            printf("|-\n  MASK@%s", G_mapset());        // MASK or MASK@current_mapset
+            printf("|-\n  MASK@%s", G_mapset()); // MASK or MASK@current_mapset
         else
             printf("null");
         printf("\nis_reclass_of: ");

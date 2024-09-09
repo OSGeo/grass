@@ -22,8 +22,8 @@
 /**
  * @brief Get a printable text with information about raster mask
  *
- * Determines if 2D raster mask is present and returns textual information about the
- * mask suitable for end-user display. The resulting text is translated.
+ * Determines if 2D raster mask is present and returns textual information about
+ * the mask suitable for end-user display. The resulting text is translated.
  * Caller is responsible for freeing the memory of the returned string.
  *
  * @return New string with textual information
@@ -65,8 +65,8 @@ bool Rast_mask_status(char *name, char *mapset, bool *is_mask_reclass,
 
     if (is_mask_reclass && reclass_name && reclass_mapset) {
         if (present) {
-            *is_mask_reclass =
-                Rast_is_reclass("MASK", G_mapset(), reclass_name, reclass_mapset) > 0;
+            *is_mask_reclass = Rast_is_reclass("MASK", G_mapset(), reclass_name,
+                                               reclass_mapset) > 0;
         }
         else {
             *is_mask_reclass = false;
