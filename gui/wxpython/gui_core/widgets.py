@@ -43,10 +43,11 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
 @author Enhancements by Michael Barton <michael.barton asu.edu>
 @author Anna Kratochvilova <kratochanna gmail.com> (Google SoC 2011)
-@author Stepan Turek <stepan.turek seznam.cz> (ManageSettingsWidget - created from GdalSelect)
-@author Matej Krejci <matejkrejci gmail.com> (Google GSoC 2014; EmailValidator, TimeISOValidator)
-@author Tomas Zigo <tomas.zigo slovanet.sk> (LayersListValidator,
-PlacementValidator)
+@author Stepan Turek <stepan.turek seznam.cz> (ManageSettingsWidget - created from
+        GdalSelect)
+@author Matej Krejci <matejkrejci gmail.com> (Google GSoC 2014; EmailValidator,
+        TimeISOValidator)
+@author Tomas Zigo <tomas.zigo slovanet.sk> (LayersListValidator, PlacementValidator)
 """
 
 import os
@@ -79,7 +80,7 @@ except ImportError:  # not sure about TGBTButton version
     from wx.lib.buttons import GenBitmapTextButton as BitmapTextButton
 
 if wxPythonPhoenix:
-    from wx import Validator as Validator
+    from wx import Validator
 else:
     from wx import PyValidator as Validator
 
@@ -347,7 +348,6 @@ class GNotebook(FN.FlatNotebook):
 
     def SetPageImage(self, page, index):
         """Does nothing because we don't want images for this style"""
-        pass
 
     def __getattr__(self, name):
         return getattr(self.controller, name)
@@ -441,10 +441,10 @@ class NumTextCtrl(TextCtrl):
         )
 
     def SetValue(self, value):
-        super(NumTextCtrl, self).SetValue(str(value))
+        super().SetValue(str(value))
 
     def GetValue(self):
-        val = super(NumTextCtrl, self).GetValue()
+        val = super().GetValue()
         if val == "":
             val = "0"
         try:
@@ -474,10 +474,10 @@ class FloatSlider(Slider):
             while abs(value) < 1:
                 value *= 100
                 self.coef *= 100
-            super(FloatSlider, self).SetRange(
+            super().SetRange(
                 self.minValueOrig * self.coef, self.maxValueOrig * self.coef
             )
-        super(FloatSlider, self).SetValue(value)
+        super().SetValue(value)
 
         Debug.msg(4, "FloatSlider.SetValue(): value = %f" % value)
 
@@ -492,10 +492,8 @@ class FloatSlider(Slider):
                 minValue *= 100
                 maxValue *= 100
                 self.coef *= 100
-            super(FloatSlider, self).SetValue(
-                super(FloatSlider, self).GetValue() * self.coef
-            )
-        super(FloatSlider, self).SetRange(minValue, maxValue)
+            super().SetValue(super().GetValue() * self.coef)
+        super().SetRange(minValue, maxValue)
         Debug.msg(
             4,
             "FloatSlider.SetRange(): minValue = %f, maxValue = %f"
@@ -503,7 +501,7 @@ class FloatSlider(Slider):
         )
 
     def GetValue(self):
-        val = super(FloatSlider, self).GetValue()
+        val = super().GetValue()
         Debug.msg(4, "FloatSlider.GetValue(): value = %f" % (val / self.coef))
         return val / self.coef
 
@@ -539,7 +537,7 @@ class SymbolButton(BitmapTextButton):
         elif usage == "pause":
             self.DrawPause(dc, size)
 
-        if sys.platform not in ("win32", "darwin"):
+        if sys.platform not in {"win32", "darwin"}:
             buffer.SetMaskColour(maskColor)
         self.SetBitmapLabel(buffer)
         dc.SelectObject(wx.NullBitmap)
@@ -1252,7 +1250,7 @@ class SearchModuleWidget(wx.Panel):
 
         if self._showTip:
             self._searchTip = StaticWrapText(
-                parent=self, id=wx.ID_ANY, label="Choose a tool", size=(-1, 35)
+                parent=self, id=wx.ID_ANY, label="Choose a tool", size=(-1, 40)
             )
 
         if self._showChoice:
@@ -1317,9 +1315,9 @@ class SearchModuleWidget(wx.Panel):
                 self._searchChoice.SetSelection(0)
                 self.OnSelectModule()
 
-        label = _("%d tools match") % len(commands)
+        label = _("{} tools matched").format(len(commands))
         if self._showTip:
-            self._searchTip.SetLabel(label)
+            self._searchTip.SetLabel(self._searchTip.GetLabel() + " [{}]".format(label))
 
         self.showNotification.emit(message=label)
 
@@ -1339,11 +1337,7 @@ class SearchModuleWidget(wx.Panel):
         nodes.sort(key=lambda node: self._model.GetIndexOfNode(node))
         self._results = nodes
         self._resultIndex = -1
-        commands = sorted(
-            [node.data["command"] for node in nodes if node.data["command"]]
-        )
-
-        return commands
+        return sorted([node.data["command"] for node in nodes if node.data["command"]])
 
     def OnSelectModule(self, event=None):
         """Module selected from choice, update command prompt"""
@@ -1552,7 +1546,7 @@ class ManageSettingsWidget(wx.Panel):
                         fd.write("%s;" % (v))
                 fd.write("\n")
 
-        except IOError:
+        except OSError:
             GError(parent=self, message=_("Unable to save settings"))
             return -1
         fd.close()
@@ -1568,13 +1562,13 @@ class ManageSettingsWidget(wx.Panel):
         :return: empty dict on error
         """
 
-        data = dict()
+        data = {}
         if not os.path.exists(self.settingsFile):
             return data
 
         try:
             fd = open(self.settingsFile, "r")
-        except IOError:
+        except OSError:
             return data
 
         fd_lines = fd.readlines()
@@ -1603,7 +1597,7 @@ class ManageSettingsWidget(wx.Panel):
         :return: parsed dict
         :return: empty dict on error
         """
-        data = dict()
+        data = {}
 
         for line in fd_lines[1:]:
             try:
@@ -1658,7 +1652,7 @@ class ManageSettingsWidget(wx.Panel):
         :return: parsed dict
         :return: empty dict on error
         """
-        data = dict()
+        data = {}
 
         for line in fd_lines:
             try:
@@ -1804,7 +1798,7 @@ class LayersList(GListCtrl, listmix.TextEditMixin):
         colLocs = [0]
         loc = 0
         for n in range(self.GetColumnCount()):
-            loc = loc + self.GetColumnWidth(n)
+            loc += self.GetColumnWidth(n)
             colLocs.append(loc)
 
         col = bisect(colLocs, x + self.GetScrollPos(wx.HORIZONTAL)) - 1

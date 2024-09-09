@@ -54,7 +54,7 @@ class TestCase(unittest.TestCase):
     readable_names = False  # prefer shorter but unreadable map and file names
 
     def __init__(self, methodName):
-        super(TestCase, self).__init__(methodName)
+        super().__init__(methodName)
         self.grass_modules = []
         self.supplementary_files = []
         # Python unittest doc is saying that strings use assertMultiLineEqual
@@ -176,9 +176,7 @@ class TestCase(unittest.TestCase):
                 first = first.replace(os.linesep, "\n")
             if os.linesep in second:
                 second = second.replace(os.linesep, "\n")
-        return super(TestCase, self).assertMultiLineEqual(
-            first=first, second=second, msg=msg
-        )
+        return super().assertMultiLineEqual(first=first, second=second, msg=msg)
 
     def assertLooksLike(self, actual, reference, msg=None):
         r"""Test that ``actual`` text is the same as ``reference`` with ellipses.
@@ -487,7 +485,7 @@ class TestCase(unittest.TestCase):
         flag and few other, use `assertModuleKeyValue` for the full interface
         of arbitrary module.
         """
-        parameters = dict(map=map, column=column, flags="g")
+        parameters = {"map": map, "column": column, "flags": "g"}
         if layer:
             parameters.update(layer=layer)
         if type:
@@ -577,7 +575,7 @@ class TestCase(unittest.TestCase):
             self.fail(self._formatMessage(msg, stdmsg))
 
     def _get_detailed_message_about_no_map(self, name, type):
-        msg = "There is no map <{n}> of type <{t}>" " in the current mapset".format(
+        msg = "There is no map <{n}> of type <{t}> in the current mapset".format(
             n=name, t=type
         )
         related = call_module(
@@ -898,14 +896,14 @@ class TestCase(unittest.TestCase):
         If statistics is not given ``dict(min=-precision, max=precision)``
         is used.
 
-        Be ware – comparison is performed on overall statistics and thus
+        Beware - comparison is performed on overall statistics and thus
         differences in individual cell values not changing overall
         statistics might go unnoticed. Use `assertRastersEqual()`
         for cell to cell equivalence testing.
         """
         if statistics is None or sorted(statistics.keys()) == ["max", "min"]:
             if statistics is None:
-                statistics = dict(min=-precision, max=precision)
+                statistics = {"min": -precision, "max": precision}
             diff = self._compute_difference_raster(
                 reference, actual, "assertRastersNoDifference"
             )
@@ -945,7 +943,7 @@ class TestCase(unittest.TestCase):
 
         This method should not be used to test r.mapcalc or r.univar.
 
-        Be ware – comparison is performed on overall statistics and thus
+        Beware - comparison is performed on overall statistics and thus
         differences in individual cell values not changing overall
         statistics might go unnoticed. Use `assertRastersEqual()`
         for cell to cell equivalence testing.
@@ -972,7 +970,7 @@ class TestCase(unittest.TestCase):
         """
         if statistics is None or sorted(statistics.keys()) == ["max", "min"]:
             if statistics is None:
-                statistics = dict(min=-precision, max=precision)
+                statistics = {"min": -precision, "max": precision}
             diff = self._compute_difference_raster3d(
                 reference, actual, "assertRasters3dNoDifference"
             )
@@ -1252,9 +1250,7 @@ class TestCase(unittest.TestCase):
         if remove_files:
             os.remove(actual)
             os.remove(reference)
-        stdmsg = (
-            "There is a difference between vectors when compared as" " ASCII files.\n"
-        )
+        stdmsg = "There is a difference between vectors when compared as ASCII files.\n"
 
         output = StringIO()
         # TODO: there is a diff size constant which we can use
@@ -1272,11 +1268,14 @@ class TestCase(unittest.TestCase):
         # a difference (always a iterator object is returned)
         if i > 0:
             # do HTML diff only if there is not too many lines
-            # TODO: this might be tough to do with some more sophisticated way of reports
+            # TODO: this might be tough to do with some more sophisticated way of
+            # reports
             if self.html_reports and i < maxlines:
-                # TODO: this might be here and somehow stored as file or done in reporter again if right information is stored
+                # TODO: this might be here and somehow stored as file or done in
+                # reporter again if right information is stored
                 # i.e., files not deleted or the whole strings passed
-                # alternative is make_table() which is the same but creates just a table not a whole document
+                # alternative is make_table() which is the same but creates just a table
+                # not a whole document
                 # TODO: all HTML files might be collected by the main reporter
                 # TODO: standardize the format of name of HTML file
                 # for one test id there is only one possible file of this name
@@ -1359,7 +1358,8 @@ class TestCase(unittest.TestCase):
     # should be done by some other function
     # TODO: this should be the function used for valgrind or profiling or debug
     # TODO: it asserts the rc but it does much more, so testModule?
-    # TODO: do we need special function for testing module failures or just add parameter returncode=0?
+    # TODO: do we need special function for testing module failures or just add
+    # parameter returncode=0?
     # TODO: consider not allowing to call this method more than once
     # the original idea was to run this method just once for test method
     # but for "integration" tests  (script-like tests with more than one module)
@@ -1450,9 +1450,7 @@ def _module_from_parameters(module, **kwargs):
         if not isinstance(module, str):
             raise ValueError("module can be only string or PyGRASS Module")
         if isinstance(module, Module):
-            raise ValueError(
-                "module can be only string if other" " parameters are given"
-            )
+            raise ValueError("module can be only string if other parameters are given")
             # allow passing all parameters in one dictionary called parameters
         if list(kwargs.keys()) == ["parameters"]:
             kwargs = kwargs["parameters"]

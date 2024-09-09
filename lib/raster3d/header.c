@@ -32,31 +32,105 @@ int xdrLength;
 
 /*---------------------------------------------------------------------------*/
 
-static int Rast3d_readWriteHeader(
-    struct Key_Value *headerKeys, int doRead, int *proj, int *zone,
-    double *north, double *south, double *east, double *west, double *top,
-    double *bottom, int *rows, int *cols, int *depths, double *ew_res,
-    double *ns_res, double *tb_res, int *tileX, int *tileY, int *tileZ,
-    int *type, int *compression, int *useRle, int *useLzw, int *precision,
-    int *dataOffset, int *useXdr, int *hasIndex, char **unit,
-    int *vertical_unit, int *version)
+static int Rast3d__readHeader(
+    struct Key_Value *headerKeys, int *proj, int *zone, double *north,
+    double *south, double *east, double *west, double *top, double *bottom,
+    int *rows, int *cols, int *depths, double *ew_res, double *ns_res,
+    double *tb_res, int *tileX, int *tileY, int *tileZ, int *type,
+    int *compression, int *useRle, int *useLzw, int *precision, int *dataOffset,
+    int *useXdr, int *hasIndex, char **unit, int *vertical_unit, int *version)
 {
     int returnVal;
-    int (*headerInt)(), (*headerDouble)(), (*headerValue)();
-    int (*headerString)();
+    int (*headerInt)(struct Key_Value *, const char *, int *),
+        (*headerDouble)(struct Key_Value *, const char *, double *),
+        (*headerValue)(struct Key_Value *, const char *, char *, char *, int,
+                       int, int *);
+    int (*headerString)(struct Key_Value *, const char *, char **);
 
-    if (doRead) {
-        headerDouble = Rast3d_key_get_double;
-        headerInt = Rast3d_key_get_int;
-        headerString = Rast3d_key_get_string;
-        headerValue = Rast3d_key_get_value;
+    headerDouble = Rast3d_key_get_double;
+    headerInt = Rast3d_key_get_int;
+    headerString = Rast3d_key_get_string;
+    headerValue = Rast3d_key_get_value;
+
+    returnVal = 1;
+    returnVal &= headerInt(headerKeys, RASTER3D_REGION_PROJ, proj);
+    returnVal &= headerInt(headerKeys, RASTER3D_REGION_ZONE, zone);
+
+    returnVal &= headerDouble(headerKeys, RASTER3D_REGION_NORTH, north);
+    returnVal &= headerDouble(headerKeys, RASTER3D_REGION_SOUTH, south);
+    returnVal &= headerDouble(headerKeys, RASTER3D_REGION_EAST, east);
+    returnVal &= headerDouble(headerKeys, RASTER3D_REGION_WEST, west);
+    returnVal &= headerDouble(headerKeys, RASTER3D_REGION_TOP, top);
+    returnVal &= headerDouble(headerKeys, RASTER3D_REGION_BOTTOM, bottom);
+
+    returnVal &= headerInt(headerKeys, RASTER3D_REGION_ROWS, rows);
+    returnVal &= headerInt(headerKeys, RASTER3D_REGION_COLS, cols);
+    returnVal &= headerInt(headerKeys, RASTER3D_REGION_DEPTHS, depths);
+
+    returnVal &= headerDouble(headerKeys, RASTER3D_REGION_NSRES, ns_res);
+    returnVal &= headerDouble(headerKeys, RASTER3D_REGION_EWRES, ew_res);
+    returnVal &= headerDouble(headerKeys, RASTER3D_REGION_TBRES, tb_res);
+
+    returnVal &= headerInt(headerKeys, RASTER3D_HEADER_TILEX, tileX);
+    returnVal &= headerInt(headerKeys, RASTER3D_HEADER_TILEY, tileY);
+    returnVal &= headerInt(headerKeys, RASTER3D_HEADER_TILEZ, tileZ);
+
+    returnVal &= headerValue(headerKeys, RASTER3D_HEADER_TYPE, "double",
+                             "float", DCELL_TYPE, FCELL_TYPE, type);
+    returnVal &= headerValue(headerKeys, RASTER3D_HEADER_COMPRESSION, "0", "1",
+                             0, 1, compression);
+    returnVal &=
+        headerValue(headerKeys, RASTER3D_HEADER_USERLE, "0", "1", 0, 1, useRle);
+    returnVal &=
+        headerValue(headerKeys, RASTER3D_HEADER_USELZW, "0", "1", 0, 1, useLzw);
+
+    returnVal &= headerInt(headerKeys, RASTER3D_HEADER_PRECISION, precision);
+    returnVal &= headerInt(headerKeys, RASTER3D_HEADER_DATA_OFFSET, dataOffset);
+
+    returnVal &=
+        headerValue(headerKeys, RASTER3D_HEADER_USEXDR, "0", "1", 0, 1, useXdr);
+    returnVal &= headerValue(headerKeys, RASTER3D_HEADER_HASINDEX, "0", "1", 0,
+                             1, hasIndex);
+    returnVal &= headerString(headerKeys, RASTER3D_HEADER_UNIT, unit);
+    /* New format and API changes */
+    if (!headerInt(headerKeys, RASTER3D_HEADER_VERTICAL_UNIT, vertical_unit))
+        G_warning("You are using an old raster3d data format, the vertical "
+                  "unit is undefined. "
+                  "Please use r3.support to define the vertical unit to avoid "
+                  "this warning.");
+    /* New format and API changes */
+    if (!headerInt(headerKeys, RASTER3D_HEADER_VERSION, version)) {
+        G_warning("You are using an old raster3d data format, the version is "
+                  "undefined.");
+        *version = 1;
     }
-    else {
-        headerDouble = Rast3d_key_set_double;
-        headerInt = Rast3d_key_set_int;
-        headerString = Rast3d_key_set_string;
-        headerValue = Rast3d_key_set_value;
-    }
+
+    if (returnVal)
+        return 1;
+
+    Rast3d_error("Rast3d_readWriteHeader: error reading/writing header");
+    return 0;
+}
+
+static int Rast3d__writeHeader(
+    struct Key_Value *headerKeys, int *proj, int *zone, double *north,
+    double *south, double *east, double *west, double *top, double *bottom,
+    int *rows, int *cols, int *depths, double *ew_res, double *ns_res,
+    double *tb_res, int *tileX, int *tileY, int *tileZ, int *type,
+    int *compression, int *useRle, int *useLzw, int *precision, int *dataOffset,
+    int *useXdr, int *hasIndex, char **unit, int *vertical_unit, int *version)
+{
+    int returnVal;
+    int (*headerInt)(struct Key_Value *, const char *, const int *),
+        (*headerDouble)(struct Key_Value *, const char *, const double *),
+        (*headerValue)(struct Key_Value *, const char *, const char *,
+                       const char *, int, int, const int *);
+    int (*headerString)(struct Key_Value *, const char *, char *const *);
+
+    headerDouble = Rast3d_key_set_double;
+    headerInt = Rast3d_key_set_int;
+    headerString = Rast3d_key_set_string;
+    headerValue = Rast3d_key_set_value;
 
     returnVal = 1;
     returnVal &= headerInt(headerKeys, RASTER3D_REGION_PROJ, proj);
@@ -141,11 +215,11 @@ int Rast3d_read_header(RASTER3D_Map *map, int *proj, int *zone, double *north,
 
     headerKeys = G_read_key_value_file(path);
 
-    if (!Rast3d_readWriteHeader(
-            headerKeys, 1, proj, zone, north, south, east, west, top, bottom,
-            rows, cols, depths, ew_res, ns_res, tb_res, tileX, tileY, tileZ,
-            type, compression, useRle, useLzw, precision, dataOffset, useXdr,
-            hasIndex, unit, vertical_unit, version)) {
+    if (!Rast3d__readHeader(headerKeys, proj, zone, north, south, east, west,
+                            top, bottom, rows, cols, depths, ew_res, ns_res,
+                            tb_res, tileX, tileY, tileZ, type, compression,
+                            useRle, useLzw, precision, dataOffset, useXdr,
+                            hasIndex, unit, vertical_unit, version)) {
         Rast3d_error(
             "Rast3d_read_header: error extracting header key(s) of file %s",
             path);
@@ -172,8 +246,8 @@ int Rast3d_write_header(RASTER3D_Map *map, int proj, int zone, double north,
 
     headerKeys = G_create_key_value();
 
-    if (!Rast3d_readWriteHeader(
-            headerKeys, 0, &proj, &zone, &north, &south, &east, &west, &top,
+    if (!Rast3d__writeHeader(
+            headerKeys, &proj, &zone, &north, &south, &east, &west, &top,
             &bottom, &rows, &cols, &depths, &ew_res, &ns_res, &tb_res, &tileX,
             &tileY, &tileZ, &type, &compression, &useRle, &useLzw, &precision,
             &dataOffset, &useXdr, &hasIndex, &unit, &vertical_unit, &version)) {

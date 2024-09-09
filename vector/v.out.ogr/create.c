@@ -6,25 +6,21 @@ void create_ogr_layer(const char *dsn, const char *format, const char *layer,
                       unsigned int wkbtype, char **papszDSCO, char **papszLCO)
 {
     char *pszDriverName;
-    dr_t hDriver;
-    ds_t hDS;
+    GDALDriverH hDriver;
+    GDALDatasetH hDS;
     OGRLayerH hLayer;
 
     pszDriverName = G_store(format);
     G_strchg(pszDriverName, '_', ' '); /* '_' -> ' ' */
 
     /* start driver */
-    hDriver = get_driver_by_name(pszDriverName);
+    hDriver = GDALGetDriverByName(pszDriverName);
     if (hDriver == NULL) {
         G_fatal_error(_("OGR driver <%s> not available"), pszDriverName);
     }
 
     /* create datasource */
-#if GDAL_VERSION_NUM >= 2020000
     hDS = GDALCreate(hDriver, dsn, 0, 0, 0, GDT_Unknown, papszDSCO);
-#else
-    hDS = OGR_Dr_CreateDataSource(hDriver, dsn, papszDSCO);
-#endif
     if (hDS == NULL) {
         G_fatal_error(_("Creation of output OGR datasource <%s> failed"), dsn);
     }
@@ -33,16 +29,12 @@ void create_ogr_layer(const char *dsn, const char *format, const char *layer,
 
     /* create layer */
     /* todo: SRS */
-#if GDAL_VERSION_NUM >= 2020000
     hLayer = GDALDatasetCreateLayer(hDS, layer, NULL, wkbtype, papszLCO);
-#else
-    hLayer = OGR_DS_CreateLayer(hDS, layer, NULL, wkbtype, papszLCO);
-#endif
     if (hLayer == NULL) {
         G_fatal_error(_("Creation of OGR layer <%s> failed"), layer);
     }
 
-    ds_close(hDS);
+    GDALClose(hDS);
 }
 
 OGRwkbGeometryType get_multi_wkbtype(OGRwkbGeometryType wkbtype)

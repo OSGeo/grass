@@ -59,7 +59,7 @@ from grass.script import core as grass
 def start_browser(entry):
     if (
         browser
-        and browser not in ("xdg-open", "start")
+        and browser not in {"xdg-open", "start"}
         and not grass.find_program(browser)
     ):
         grass.fatal(_("Browser '%s' not found") % browser)
@@ -89,20 +89,20 @@ def start_browser(entry):
 
         url_path = "file://" + path
 
-    if browser and browser not in ("xdg-open", "start"):
+    if browser and browser not in {"xdg-open", "start"}:
         webbrowser.register(browser_name, None)
 
     grass.verbose(
-        _("Starting browser '%(browser)s' for manual" " entry '%(entry)s'...")
-        % dict(browser=browser_name, entry=entry)
+        _("Starting browser '%(browser)s' for manual entry '%(entry)s'...")
+        % {"browser": browser_name, "entry": entry}
     )
 
     try:
         webbrowser.open(url_path)
     except Exception:
         grass.fatal(
-            _("Error starting browser '%(browser)s' for HTML file" " '%(path)s'")
-            % dict(browser=browser, path=path)
+            _("Error starting browser '%(browser)s' for HTML file '%(path)s'")
+            % {"browser": browser, "path": path}
         )
 
 

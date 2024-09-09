@@ -9,9 +9,6 @@ on:
       - main
       - releasebranch_*
   pull_request:
-    branches:
-      - main
-      - releasebranch_*
 env:
   CACHE_NUMBER: 0
 concurrency:
@@ -20,40 +17,43 @@ concurrency:
 jobs:
   macos_build:
     name: macOS build
-    runs-on: macos-latest
+    runs-on: macos-14
+    env:
+      PYTHONWARNINGS: always
     steps:
-      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
-      - name: Setup Mambaforge
-        uses: conda-incubator/setup-miniconda@v2
+      - name: Info
+        run: |
+          echo "macOS version $(sw_vers -productVersion)"
+          echo "architecture $(uname -a)"
+      - name: Disabling Spotlight
+        run: sudo mdutil -a -i off
+      - name: Uninstalling Homebrew
+        run: |
+          echo "Moving directories..."
+          sudo mkdir /opt/local-off /opt/homebrew-off
+          test ! -d /usr/local || /usr/bin/sudo /usr/bin/find /usr/local \
+            -mindepth 1 -maxdepth 1 -type d -print -exec /bin/mv {} \
+            /opt/local-off/ \;
+          test ! -d /opt/homebrew || /usr/bin/sudo /usr/bin/find /opt/homebrew \
+            -mindepth 1 -maxdepth 1 -type d -print -exec /bin/mv {} \
+            /opt/homebrew-off/ \;
+          echo "Removing files..."
+          test ! -d /usr/local || /usr/bin/sudo /usr/bin/find /usr/local \
+            -mindepth 1 -maxdepth 1 -type f -print -delete
+          test ! -d /opt/homebrew || /usr/bin/sudo /usr/bin/find /opt/homebrew \
+            -mindepth 1 -maxdepth 1 -type f -print -delete
+          # Rehash to forget about the deleted files
+          hash -r
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - name: Setup Mamba
+        uses: mamba-org/setup-micromamba@f8b8a1e23a26f60a44c853292711bacfd3eac822 # v1.9.0
         with:
-          channels: conda-forge
-          miniforge-variant: Mambaforge
-          miniforge-version: latest
-          activate-environment: grass-env
-          use-mamba: true
-      - name: Get cache date
-        id: get-date
-        run: echo "today=$(/bin/date -u '+%Y%m%d')" >> $GITHUB_OUTPUT
-        shell: bash
-      - name: Cache conda environment
-        uses: actions/cache@v3
-        with:
-          path: ~/miniconda3/envs/grass-env
-          key: conda-macos-x86_64-${{
-            steps.get-date.outputs.today }}-${{
-            hashFiles('.github/workflows/macos_dependencies.txt') }}-${{
-            env.CACHE_NUMBER }}
-        id: cache
-      - name: Update environment
-        run: mamba env update -n grass-env -f .github/workflows/macos_dependencies.txt
-        if: steps.cache.outputs.cache-hit != 'true'
-      - name: Conda info
+          init-shell: bash
+          environment-file: .github/workflows/macos_dependencies.txt
+          environment-name: grass-env
+      - name: Environment info
         shell: bash -el {0}
         run: |
-          conda info
-          conda list
-          conda config --show-sources
-          conda config --show
           printenv | sort
           $CC --version
       - name: Create installation directory
@@ -64,14 +64,34 @@ jobs:
       - name: Add the bin directory to PATH
         run: echo "$HOME/install/bin" >> $GITHUB_PATH
       - name: Check installed version
+        if: ${{ !cancelled() }}
         shell: bash -l {0}
         run: source ./.github/workflows/print_versions.sh
-      - name: Run tests
+
+      - name: Run pytest with multiple workers in parallel
         shell: bash -el {0}
-        run: >
-          grass --tmp-location XY --exec \
-              g.download.location url=${{ env.SampleData }} path=$HOME
-          grass --tmp-location XY --exec \
+        run: |
+          export PYTHONPATH=$(grass --config python_path):$PYTHONPATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
+          pytest --verbose --color=yes --durations=0 --durations-min=0.5 \
+            --numprocesses auto \
+            -ra . \
+            -m 'not needs_solo_run'
+      - name: Run pytest with a single worker (for tests marked with needs_solo_run)
+        shell: bash -el {0}
+        run: |
+          export PYTHONPATH=$(grass --config python_path):$PYTHONPATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
+          pytest --verbose --color=yes --durations=0 --durations-min=0.5 \
+            -ra . \
+            -m 'needs_solo_run'
+
+      - name: Run gunittest tests
+        shell: bash -el {0}
+        run: |
+          grass --tmp-project XY --exec \
+              g.download.project url=${{ env.SampleData }} path=$HOME
+          grass --tmp-project XY --exec \
               python3 -m grass.gunittest.main \
               --grassdata $HOME --location nc_spm_full_v2alpha2 --location-type nc \
               --min-success 100 --config .github/workflows/macos_gunittest.cfg
@@ -79,8 +99,8 @@ jobs:
           SampleData: "https://grass.osgeo.org/sampledata/north_carolina/\
                        nc_spm_full_v2alpha2.tar.gz"
       - name: Make HTML test report available
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v3
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
         with:
           name: testreport-macOS
           path: testreport

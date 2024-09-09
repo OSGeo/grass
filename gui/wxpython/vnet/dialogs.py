@@ -100,8 +100,8 @@ class VNETDialog(wx.Dialog):
         self.mapWin = giface.GetMapWindow()
         self.giface = giface
 
-        # contains current analysis result (do not have to be last one, when history is browsed),
-        # it is instance of VectMap class
+        # contains current analysis result (do not have to be last one, when history
+        # is browsed), it is instance of VectMap class
         self.tmp_result = None
 
         self.defIsecTurnsHndlrReg = False
@@ -388,7 +388,8 @@ class VNETDialog(wx.Dialog):
             ["arc_layer", "Arc layer number or name:", LayerSelect],
             ["node_layer", "Node layer number or name:", LayerSelect],
             # ['turn_layer', "Layer with turntable:", LayerSelect],
-            # ['turn_cat_layer', "Layer with unique categories for turntable:", LayerSelect],
+            # ['turn_cat_layer',
+            # "Layer with unique categories for turntable:", LayerSelect],
             ["arc_column", "", ColumnSelect],
             ["arc_backward_column", "", ColumnSelect],
             ["node_column", "", ColumnSelect],
@@ -581,8 +582,12 @@ class VNETDialog(wx.Dialog):
         """Tab switched"""
         if event.GetEventObject() == self.notebook:
             dbMgrIndxs = []
-            dbMgrIndxs.append(self.notebook.GetPageIndexByName("inputDbMgr"))
-            dbMgrIndxs.append(self.notebook.GetPageIndexByName("resultDbMgr"))
+            dbMgrIndxs.extend(
+                (
+                    self.notebook.GetPageIndexByName("inputDbMgr"),
+                    self.notebook.GetPageIndexByName("resultDbMgr"),
+                )
+            )
             if self.notebook.GetSelection() in dbMgrIndxs:
                 self.stBar.AddStatusItem(
                     text=_("Loading tables..."),
@@ -737,7 +742,8 @@ class VNETDialog(wx.Dialog):
         self.stBar.RemoveStatusItem("ttb")
 
     def OnVectSel(self, event):
-        """When vector map is selected it populates other comboboxes in Parameters tab (layer selects, columns selects)"""
+        """When vector map is selected it populates other comboboxes in Parameters
+        tab (layer selects, columns selects)"""
         if self.vnet_mgr.IsSnappingActive():  # TODO should be in vnet_mgr
             self.vnet_mgr.Snapping(activate=True)
 
@@ -798,7 +804,8 @@ class VNETDialog(wx.Dialog):
             self.inputData[k].SetValue(params[k])
 
     def OnALayerSel(self, event):
-        """When arc layer from vector map is selected, populates corespondent columns selects"""
+        """When arc layer from vector map is selected, populates corespondent columns
+        selects"""
         self.inputData["arc_column"].InsertColumns(
             vector=self.inputData["input"].GetValue(),
             layer=self.inputData["arc_layer"].GetValue(),
@@ -813,7 +820,8 @@ class VNETDialog(wx.Dialog):
         self._setInputData()
 
     def OnNLayerSel(self, event):
-        """When node layer from vector map is selected, populates corespondent column select"""
+        """When node layer from vector map is selected, populates corespondent column
+        select"""
         if self.vnet_mgr.IsSnappingActive():
             self.vnet_mgr.Snapping(activate=True)
 
@@ -898,7 +906,10 @@ class VNETDialog(wx.Dialog):
         if ["turn_layer", "turn_cat_layer"] in err_params:
             GMessage(
                 parent=self,
-                message="Please choose existing turntable layer and unique categories layer in Parameters tab.",
+                message=(
+                    "Please choose existing turntable layer and unique "
+                    "categories layer in Parameters tab."
+                ),
             )
 
         cat = GetNearestNodeCat(
@@ -1137,7 +1148,7 @@ class PtsList(PointsList):
                 if not item[1]:
                     self.CheckItem(iItem, False)
 
-        else:
+        else:  # noqa: PLR5501
             if self.IsShown("type"):
                 self.HideColumn("type")
 
@@ -1322,7 +1333,8 @@ class SettingsDialog(wx.Dialog):
         self.btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
         self.btnSave.SetToolTip(
             _(
-                "Apply and save changes to user settings file (default for next sessions)"
+                "Apply and save changes to user settings file "
+                "(default for next sessions)"
             )
         )
         self.btnClose.Bind(wx.EVT_BUTTON, self.OnClose)
@@ -1533,7 +1545,7 @@ class CreateTtbDialog(wx.Dialog):
 
         for dataSel in dataSelects:
             selPanels[dataSel[0]] = Panel(parent=self)
-            if dataSel[0] in ["input", "output"]:
+            if dataSel[0] in {"input", "output"}:
                 self.inputData[dataSel[0]] = dataSel[2](
                     parent=selPanels[dataSel[0]], size=(-1, -1), type="vector"
                 )
@@ -1619,7 +1631,8 @@ class CreateTtbDialog(wx.Dialog):
         return selSizer
 
     def InputSel(self):
-        """When vector map is selected it populates other comboboxes in Parameters tab (layer selects, columns selects)"""
+        """When vector map is selected it populates other comboboxes in Parameters tab
+        (layer selects, columns selects)"""
         vectMapName, mapSet = self._parseMapStr(self.inputData["input"].GetValue())
         vectorMap = vectMapName + "@" + mapSet
 
@@ -1711,7 +1724,8 @@ class OutputVectorDialog(wx.Dialog):
 
 
 class VnetStatusbar(wx.StatusBar):
-    """Extends wx.StatusBar class with functionality to show multiple messages with the highest priority"""
+    """Extends wx.StatusBar class with functionality to show multiple messages with
+    the highest priority"""
 
     def __init__(self, parent, style, id=wx.ID_ANY, **kwargs):
         wx.StatusBar.__init__(self, parent, id, style, **kwargs)
@@ -1733,8 +1747,7 @@ class VnetStatusbar(wx.StatusBar):
             if item["key"] == statusTextItem["key"]:
                 self.statusItems.remove(item)
         self.statusItems.append(statusTextItem)
-        if self.maxPriority < statusTextItem["priority"]:
-            self.maxPriority = statusTextItem["priority"]
+        self.maxPriority = max(self.maxPriority, statusTextItem["priority"])
         self._updateStatus()
 
     def _updateStatus(self):
@@ -1760,8 +1773,7 @@ class VnetStatusbar(wx.StatusBar):
         if update:
             for item in self.statusItems:
                 self.maxPriority = 0
-                if self.maxPriority < item["priority"]:
-                    self.maxPriority = item["priority"]
+                self.maxPriority = max(self.maxPriority, item["priority"])
             self._updateStatus()
 
 
@@ -1925,18 +1937,18 @@ class TurnAnglesList(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEditM
 
     def OnGetItemText(self, item, col):
         val = self.data.GetValue(item, col)
-        if col in [1, 2]:
+        if col in {1, 2}:
             val = RadiansToDegrees(val)
         return str(val)
 
     def SetVirtualData(self, row, column, text):
         """Set data to table"""
-        if column in [1, 2, 3]:
+        if column in {1, 2, 3}:
             try:
                 text = float(text)
             except ValueError:
                 return
-        if column in [1, 2]:
+        if column in {1, 2}:
             text = DegreesToRadians(text)
 
             # Tested allowed range of values

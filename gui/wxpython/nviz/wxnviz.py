@@ -47,17 +47,13 @@ except KeyError as e:
     print("wxnviz.py: {}".format(e), file=sys.stderr)
 
 try:
-    WindowsError
-except NameError:
-    WindowsError = OSError
-try:
     from grass.lib.gis import *
     from grass.lib.raster3d import *
     from grass.lib.vector import *
     from grass.lib.ogsf import *
     from grass.lib.nviz import *
     from grass.lib.raster import *
-except (ImportError, WindowsError, TypeError) as e:
+except (ImportError, OSError, TypeError) as e:
     print("wxnviz.py: {}".format(e), file=sys.stderr)
 
 from core.debug import Debug
@@ -65,7 +61,7 @@ from core.utils import autoCropImageFromFile
 from core.gcmd import DecodeString
 from core.globalvar import wxPythonPhoenix
 from gui_core.wrap import Rect
-import grass.script as grass
+import grass.script as gs
 
 log = None
 progress = None
@@ -105,7 +101,7 @@ except NameError:
     pass
 
 
-class Nviz(object):
+class Nviz:
     def __init__(self, glog, gprogress):
         """Initialize Nviz class instance
 
@@ -2127,7 +2123,7 @@ class Nviz(object):
         Nviz_flythrough(self.data, fly, exag, mode)
 
 
-class Texture(object):
+class Texture:
     """Class representing OpenGL texture"""
 
     def __init__(self, filepath, overlayId, coords):
@@ -2166,7 +2162,7 @@ class Texture(object):
         """Delete texture"""
         if self.textureId:
             Nviz_del_texture(self.textureId)
-        grass.try_remove(self.path)
+        gs.try_remove(self.path)
 
     def Resize(self):
         """Resize image to match 2^n"""
@@ -2216,9 +2212,7 @@ class Texture(object):
                     ]
         wx.EndBusyCursor()
 
-        id = Nviz_load_image(im, self.width, self.height, self.image.HasAlpha())
-
-        return id
+        return Nviz_load_image(im, self.width, self.height, self.image.HasAlpha())
 
     def Draw(self):
         """Draw texture as an image"""

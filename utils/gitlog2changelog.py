@@ -4,18 +4,32 @@
 # Distributed under the terms of the GNU General Public License v2 or later
 
 import re
-import os
 from textwrap import TextWrapper
 import sys
+import subprocess
 
 rev_range = ""
+
+
+# Define the git command and its arguments as a list
+git_command = [
+    "git",
+    "log",
+    "--summary",
+    "--stat",
+    "--no-merges",
+    "--date=short",
+]
 
 if len(sys.argv) > 1:
     base = sys.argv[1]
     rev_range = "%s..HEAD" % base
+    git_command.append(rev_range)
 
 # Execute git log with the desired command line options.
-fin = os.popen("git log --summary --stat --no-merges --date=short %s" % rev_range, "r")
+process = subprocess.Popen(git_command, stdout=subprocess.PIPE, encoding="utf8")
+fin = process.stdout
+
 # Create a ChangeLog file in the current directory.
 fout = open("ChangeLog", "w")
 
@@ -74,7 +88,7 @@ for line in fin:
     elif "Signed-off-by" in line:
         continue
     # Extract the actual commit message for this commit
-    elif authorFound & dateFound & messageFound == False:
+    elif authorFound & dateFound & messageFound is False:
         # Find the commit message if we can
         if len(line) == 1:
             if messageNL:
@@ -83,18 +97,17 @@ for line in fin:
                 messageNL = True
         elif len(line) == 4:
             messageFound = True
+        elif len(message) == 0:
+            message += line.strip()
         else:
-            if len(message) == 0:
-                message = message + line.strip()
-            else:
-                message = message + " " + line.strip()
+            message = message + " " + line.strip()
     # If this line is hit all of the files have been stored for this commit
     elif re.search("files? changed", line):
         filesFound = True
         continue
     # Collect the files for this commit. FIXME: Still need to add +/- to files
     elif authorFound & dateFound & messageFound:
-        fileList = re.split(" \| ", line, 2)
+        fileList = re.split(r" \| ", line, 2)
         if len(fileList) > 1:
             if len(files) > 0:
                 files = files + ", " + fileList[0].strip()

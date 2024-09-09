@@ -40,34 +40,55 @@
 # % key_desc: name type
 # %end
 
-import grass.script as grass
-from grass.script.utils import encode
+import atexit
+import os
+from pathlib import Path
+import re
+
+from grass.exceptions import CalledModuleError
+import grass.script as gs
+
+rm_files = []
+
+
+def cleanup():
+    for file in rm_files:
+        if os.path.isfile(file):
+            try:
+                os.remove(file)
+            except Exception as e:
+                gs.warning(
+                    _("Unable to remove file {file}: {message}").format(
+                        file=file, message=e
+                    )
+                )
 
 
 def main():
+    global rm_files
     map = options["map"]
     layer = options["layer"]
     columns = options["columns"]
     columns = [col.strip() for col in columns.split(",")]
 
     # does map exist in CURRENT mapset?
-    mapset = grass.gisenv()["MAPSET"]
-    exists = bool(grass.find_file(map, element="vector", mapset=mapset)["file"])
+    mapset = gs.gisenv()["MAPSET"]
+    exists = bool(gs.find_file(map, element="vector", mapset=mapset)["file"])
 
     if not exists:
-        grass.fatal(_("Vector map <%s> not found in current mapset") % map)
+        gs.fatal(_("Vector map <{}> not found in current mapset").format(map))
 
     try:
-        f = grass.vector_db(map)[int(layer)]
+        f = gs.vector_db(map)[int(layer)]
     except KeyError:
-        if grass.vector_db(map):
-            grass.fatal(
+        if gs.vector_db(map):
+            gs.fatal(
                 _(
                     "There is no table connected to layer <{layer}> of <{name}>. "
                     "Run v.db.connect or v.db.addtable first."
                 ).format(name=map, layer=layer)
             )
-        grass.fatal(
+        gs.fatal(
             _(
                 "There is no table connected to <{name}>. "
                 "Run v.db.connect or v.db.addtable first."
@@ -77,30 +98,48 @@ def main():
     table = f["table"]
     database = f["database"]
     driver = f["driver"]
-    column_existing = grass.vector_columns(map, int(layer)).keys()
+    column_existing = gs.vector_columns(map, int(layer)).keys()
 
+    add_str = "BEGIN TRANSACTION\n"
+    pattern = re.compile(r"\s+")
     for col in columns:
         if not col:
-            grass.fatal(_("There is an empty column. Did you leave a trailing comma?"))
-        col_name = col.split(" ")[0].strip()
+            gs.fatal(_("There is an empty column. Did you leave a trailing comma?"))
+        whitespace = re.search(pattern, col)
+        if not whitespace:
+            gs.fatal(
+                _(
+                    "Incorrect new column(s) format, use"
+                    " <'name type [,name type, ...]'> format, please."
+                )
+            )
+        col_name, col_type = col.split(whitespace.group(0), 1)
         if col_name in column_existing:
-            grass.error(_("Column <%s> is already in the table. Skipping.") % col_name)
+            gs.error(
+                _("Column <{}> is already in the table. Skipping.").format(col_name)
+            )
             continue
-        grass.verbose(_("Adding column <%s> to the table") % col_name)
-        p = grass.feed_command(
-            "db.execute", input="-", database=database, driver=driver
+        gs.verbose(_("Adding column <{}> to the table").format(col_name))
+        add_str += f'ALTER TABLE {table} ADD COLUMN "{col_name}" {col_type};\n'
+    add_str += "END TRANSACTION"
+    sql_file = gs.tempfile()
+    rm_files.append(sql_file)
+    cols_add_str = ",".join([col[0] for col in columns])
+    Path(sql_file).write_text(add_str)
+    try:
+        gs.run_command(
+            "db.execute",
+            input=sql_file,
+            database=database,
+            driver=driver,
         )
-        res = "ALTER TABLE {} ADD COLUMN {}".format(table, col)
-        p.stdin.write(encode(res))
-        grass.debug(res)
-        p.stdin.close()
-        if p.wait() != 0:
-            grass.fatal(_("Unable to add column <%s>.") % col)
-
+    except CalledModuleError:
+        gs.fatal(_("Error adding columns {}").format(cols_add_str))
     # write cmd history:
-    grass.vector_history(map)
+    gs.vector_history(map)
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
+    atexit.register(cleanup)
     main()

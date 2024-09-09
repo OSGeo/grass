@@ -7,9 +7,6 @@ on:
       - main
       - releasebranch_*
   pull_request:
-    branches:
-      - main
-      - releasebranch_*
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
@@ -21,18 +18,35 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      packages: read
+      # To report GitHub Actions status checks
+      statuses: write
+
     steps:
-      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        with:
+          # super-linter needs the full git history to get the
+          # list of files that changed across commits
+          fetch-depth: 0
       - name: Lint code base
-        uses: github/super-linter@v5
+        uses: super-linter/super-linter/slim@b92721f792f381cedc002ecdbb9847a15ece5bb8 # v7.1.0
         env:
+          DEFAULT_BRANCH: main
+          # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # By default, super-linter expect all linters to have their config
+          # files inside .github/linters.
+          # Setting it to the root of the repo for easier configuration here.
+          LINTER_RULES_PATH: .
           # Listed but commented out linters would be nice to have.
           # (see https://github.com/github/super-linter#environment-variables)
           #
           # Python (supported using Pylint) and C/C++ (not supported) are
           # handled separately due to the complexity of the settings.
           # VALIDATE_BASH: true
+          VALIDATE_BASH_EXEC: true
           # VALIDATE_CSS: true
           # VALIDATE_DOCKER: true
           VALIDATE_JAVASCRIPT_ES: true
@@ -42,3 +56,5 @@ jobs:
           VALIDATE_POWERSHELL: true
           # VALIDATE_XML: true
           VALIDATE_YAML: true
+          MARKDOWN_CONFIG_FILE: .markdownlint.yml
+          YAML_CONFIG_FILE: .yamllint

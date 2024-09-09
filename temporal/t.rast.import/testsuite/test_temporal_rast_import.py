@@ -15,8 +15,9 @@ for details.
 @author: lucadelu
 """
 
-from grass.gunittest.case import TestCase
 import os
+
+from grass.gunittest.case import TestCase
 
 
 class TestRasterImport(TestCase):
