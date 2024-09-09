@@ -102,9 +102,6 @@ class VectorDBInfo(VectorDBInfoBase):
         """Get attributes by coordinates (all available layers)
 
         Return line id or None if no line is found"""
-        line = None
-        nselected = 0
-
         try:
             data = gs.vector_what(
                 map=self.map,
