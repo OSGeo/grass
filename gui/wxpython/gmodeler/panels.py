@@ -1641,9 +1641,7 @@ class PythonPanel(wx.Panel):
         bodySizer.Add(self.body, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)
 
         btnSizer.Add(
-            StaticText(
-                parent=self, id=wx.ID_ANY, label="%s:" % _("Python script type")
-            ),
+            StaticText(parent=self, id=wx.ID_ANY, label=_("Python script type:")),
             flag=wx.ALIGN_CENTER_VERTICAL,
         )
         btnSizer.Add(self.script_type_box, proportion=0, flag=wx.RIGHT, border=5)
