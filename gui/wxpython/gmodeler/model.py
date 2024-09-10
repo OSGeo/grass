@@ -2821,7 +2821,7 @@ class WriteActiniaFile(WriteScriptFile):
                     "Module {task_name} in your model contains "
                     "parameterized flags. actinia does not support "
                     "parameterized flags. The following flags are therefore "
-                    "not being written in the generated json: {flags}"
+                    "not being written in the generated JSON: {flags}"
                 ).format(task_name=task.get_name(), flags=itemParameterizedFlags),
                 caption=_("Warning"),
                 style=wx.OK_DEFAULT | wx.ICON_WARNING,
