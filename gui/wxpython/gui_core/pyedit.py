@@ -506,9 +506,9 @@ class PyEditController:
         """
         if not file_exists:
             GError(
-                _("File <{path}> doesn't exist. It was probably moved or deleted.").format(
-                    path=path
-                ),
+                _(
+                    "File <{path}> doesn't exist. It was probably moved or deleted."
+                ).format(path=path),
                 parent=self.guiparent,
             )
             return
