@@ -65,11 +65,9 @@ def compute_univar_stats(registered_map_info, stats_module, fs, rast_region=Fals
 
     if not univar_stats:
         gs.warning(
-            _("Unable to get statistics for raster map <{rmap}>").format(rmap=id)
+            _("Unable to get statistics for raster map <%s>") % id
             if stats_module.name == "r.univar"
-            else _("Unable to get statistics for 3D raster map <{rmap}>").format(
-                rmap=id
-            )
+            else _("Unable to get statistics for 3d raster map <%s>") % id
         )
         return None
     eol = ""
