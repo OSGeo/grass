@@ -186,7 +186,7 @@ int do_scalebar(void)
         if (G_strlcpy(num, G_database_unit_name(TRUE), sizeof(num)) >=
             sizeof(num)) {
             G_fatal_error(_("Unit name <%s> is too long"),
-            G_database_unit_name(TRUE));
+                          G_database_unit_name(TRUE));
         }
     }
     else if (sb.units == SB_UNITS_METERS)
