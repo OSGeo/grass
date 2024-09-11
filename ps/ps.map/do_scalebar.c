@@ -189,7 +189,6 @@ int do_scalebar(void)
             G_database_unit_name(TRUE));
         }
     }
-        strcpy(num, G_database_unit_name(TRUE));
     else if (sb.units == SB_UNITS_METERS)
         strcpy(num, _("meters"));
     else if (sb.units == SB_UNITS_KM)
