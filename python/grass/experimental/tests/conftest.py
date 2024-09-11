@@ -6,7 +6,7 @@ import os
 import pytest
 
 import grass.script as gs
-import grass.experimental as experimental
+from grass import experimental
 
 
 @pytest.fixture

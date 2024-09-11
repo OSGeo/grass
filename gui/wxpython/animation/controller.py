@@ -36,6 +36,7 @@ from animation.utils import (
     HashCmds,
 )
 from animation.data import AnimationData
+from itertools import starmap
 
 
 class AnimationController(wx.EvtHandler):
@@ -119,7 +120,7 @@ class AnimationController(wx.EvtHandler):
             if self.timer.IsRunning():
                 self.timer.Stop()
                 self.DisableSliderIfNeeded()
-        else:
+        else:  # noqa: PLR5501
             if not self.timer.IsRunning():
                 self.timer.Start(int(self.timeTick))
                 self.DisableSliderIfNeeded()
@@ -368,10 +369,7 @@ class AnimationController(wx.EvtHandler):
                 if anim.viewMode == "3d":
                     regions = [None] * len(regions)
                 self.animations[i].SetFrames(
-                    [
-                        HashCmds(cmdList, region)
-                        for cmdList, region in zip(anim.cmdMatrix, regions)
-                    ]
+                    list(starmap(HashCmds, zip(anim.cmdMatrix, regions)))
                 )
                 self.animations[i].SetActive(True)
         else:
@@ -460,7 +458,7 @@ class AnimationController(wx.EvtHandler):
         for anim in animationData:
             for layer in anim.layerList:
                 if layer.active and hasattr(layer, "maps"):
-                    if layer.mapType in ("strds", "stvds", "str3ds"):
+                    if layer.mapType in {"strds", "stvds", "str3ds"}:
                         stds += 1
                     else:
                         maps += 1
@@ -557,9 +555,8 @@ class AnimationController(wx.EvtHandler):
                     if frameId is not None:
                         bitmap = self.bitmapProvider.GetBitmap(frameId)
                         lastBitmaps[i] = bitmap
-                    else:
-                        if i not in lastBitmaps:
-                            lastBitmaps[i] = wx.NullBitmap()
+                    elif i not in lastBitmaps:
+                        lastBitmaps[i] = wx.NullBitmap()
                 else:
                     bitmap = self.bitmapProvider.GetBitmap(frameId)
                     lastBitmaps[i] = bitmap
@@ -595,17 +592,15 @@ class AnimationController(wx.EvtHandler):
                             "dash": "\u2013",
                             "to": timeLabel[1],
                         }
+                    elif (
+                        self.temporalManager.GetTemporalType() == TemporalType.ABSOLUTE
+                    ):
+                        text = timeLabel[0]
                     else:
-                        if (
-                            self.temporalManager.GetTemporalType()
-                            == TemporalType.ABSOLUTE
-                        ):
-                            text = timeLabel[0]
-                        else:
-                            text = _("%(start)s %(unit)s") % {
-                                "start": timeLabel[0],
-                                "unit": timeLabel[2],
-                            }
+                        text = _("%(start)s %(unit)s") % {
+                            "start": timeLabel[0],
+                            "unit": timeLabel[2],
+                        }
 
                     decImage = RenderText(
                         text, decoration["font"], bgcolor, fgcolor
@@ -672,5 +667,5 @@ class AnimationController(wx.EvtHandler):
             del self.busy
             GError(parent=self.frame, message=str(e))
             return
-        if exportInfo["method"] in ("sequence", "gif", "swf"):
+        if exportInfo["method"] in {"sequence", "gif", "swf"}:
             del self.busy

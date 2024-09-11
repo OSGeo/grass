@@ -182,10 +182,7 @@ class WMSLayer(LayerBase):
         name = self.xml_ns.Ns("Name")
         name_node = self.layer_node.find(name)
 
-        if name_node is not None:
-            return True
-        else:
-            return False
+        return name_node is not None
 
 
 class WMTSCapabilities(CapabilitiesBase, WMTSCapabilitiesTree):
@@ -229,7 +226,7 @@ class WMTSLayer(LayerBase):
         title = self.xml_ns.NsOws("Title")
         name = self.xml_ns.NsOws("Identifier")
 
-        if self.layer_node is None and param in ["title", "name"]:
+        if self.layer_node is None and param in {"title", "name"}:
             return None
         elif self.layer_node is None:
             return []
@@ -307,12 +304,9 @@ class WMTSLayer(LayerBase):
                 layer_projs.append(mat_set_srs)
         return layer_projs
 
-    def IsRequestable(self):
+    def IsRequestable(self) -> bool:
         """Is it possible to use the layer for WMTS request?"""
-        if self.layer_node is None:
-            return False
-        else:
-            return True
+        return self.layer_node is not None
 
 
 class OnEarthCapabilities(CapabilitiesBase, OnEarthCapabilitiesTree):
@@ -364,16 +358,13 @@ class OnEarthLayer(LayerBase):
         self.child_layers = []
         self.parent_layer = parent_layer
 
-    def IsRequestable(self):
+    def IsRequestable(self) -> bool:
         """Is it possible to use the layer for NASA OnEarth GetMap request?"""
-        if self.layer_node is None or self.layer_node.tag == "TiledGroups":
-            return False
-        else:
-            return True
+        return not (self.layer_node is None or self.layer_node.tag == "TiledGroups")
 
     def GetLayerData(self, param):
         """Get layer data"""
-        if self.layer_node is None and param in ["title", "name"]:
+        if self.layer_node is None and param in {"title", "name"}:
             return None
         elif self.layer_node is None:
             return []

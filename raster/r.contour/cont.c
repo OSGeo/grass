@@ -124,9 +124,9 @@ void contour(double levels[], int nlevels, struct Map_info Map, DCELL **z,
                         }
                         Vect_reset_line(Points);
                     } /* if checkedge */
-                }     /* if ! hit */
-            }         /* for columns */
-        }             /* for rows */
+                } /* if ! hit */
+            } /* for columns */
+        } /* for rows */
 
         /* check right and left borders (each row of first and last column) */
         for (startcol = 0; startcol <= ncol - 2; startcol += (ncol - 2)) {
@@ -162,9 +162,9 @@ void contour(double levels[], int nlevels, struct Map_info Map, DCELL **z,
                         }
                         Vect_reset_line(Points);
                     } /* if checkedge */
-                }     /* if ! hit */
-            }         /* for rows */
-        }             /* for columns */
+                } /* if ! hit */
+            } /* for rows */
+        } /* for columns */
 
         /* check each interior Cell */
         for (startrow = 1; startrow <= nrow - 3; startrow++) {
@@ -202,10 +202,10 @@ void contour(double levels[], int nlevels, struct Map_info Map, DCELL **z,
                         }
                         Vect_reset_line(Points);
                     } /* if checkedge */
-                }     /* if ! hit */
-            }         /* for rows */
-        }             /* for columns */
-    }                 /* for levels */
+                } /* if ! hit */
+            } /* for rows */
+        } /* for columns */
+    } /* for levels */
 
     if (ncrossing > 0) {
         G_warning(n_("%d crossing found", "%d crossings found", ncrossing),
