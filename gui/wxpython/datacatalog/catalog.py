@@ -72,6 +72,10 @@ class DataCatalog(wx.Panel):
         # tree with layers
         self.tree = DataCatalogTree(self, giface=giface)
         self.tree.showNotification.connect(self.showNotification)
+        self.tree.showDownloadingNewLocationInfoMessage.connect(
+            self.showDownloadingNewLocationInfoMessage
+        )
+        self.tree.dismissShowInfoBarMessage.connect(self.dismissInfobar)
 
         # infobar for data catalog
         delay = 2000
@@ -136,6 +140,18 @@ class DataCatalog(wx.Panel):
     def showImportDataInfo(self):
         self.infoManager.ShowImportDataInfo(
             self.OnImportOgrLayers, self.OnImportGdalLayers
+        )
+
+    def showDownloadingNewLocationInfoMessage(self, message, buttons):
+        """Show progress of downloading new location info message
+
+        :param str message: text message
+        :param list buttons: list of info bar widget buttons
+                             [(button_label, button_click_event_handler),...]
+        """
+        self.infoManager.ShowDownloadingNewLocationInfo(
+            message=message,
+            buttons=buttons,
         )
 
     def LoadItems(self):
