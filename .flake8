@@ -21,13 +21,6 @@ per-file-ignores =
     # E741 ambiguous variable name 'l'
     __init__.py: F401, F403
     lib/init/grass.py: E722, F821, F841
-    man/build_class_rest.py: F403, F405
-    man/build_check.py: F403, F405
-    man/build_full_index.py: F403, F405
-    man/build_index.py: F403, F405
-    man/build_index_rest.py: F403, F405
-    man/build_keywords.py: F403, F405, E722
-    man/build_topics.py: F403, F405, E722
     man/build_html.py: E501
     imagery/i.atcorr/create_iwave.py: F632, F821, W293
     doc/python/raster_example_ctypes.py: F403, F405
