@@ -183,8 +183,8 @@ int do_scalebar(void)
 
     /* draw units label */
     if (sb.units == SB_UNITS_AUTO) {
-        if (G_strlcpy(num, G_database_unit_name(TRUE), sizeof(num))
-            >= sizeof(num)) {
+        if (G_strlcpy(num, G_database_unit_name(TRUE), sizeof(num)) >=
+            sizeof(num)) {
             G_fatal_error(_("Unit name <%s> is too long"),
             G_database_unit_name(TRUE));
         }
