@@ -190,15 +190,15 @@ int do_scalebar(void)
         }
     }
     else if (sb.units == SB_UNITS_METERS)
-        strcpy(num, _("meters"));
+        (void)G_strlcpy(num, _("meters"), sizeof(num));
     else if (sb.units == SB_UNITS_KM)
-        strcpy(num, _("kilometers"));
+        (void)G_strlcpy(num, _("kilometers"), sizeof(num));
     else if (sb.units == SB_UNITS_FEET)
-        strcpy(num, _("feet"));
+        (void)G_strlcpy(num, _("feet"), sizeof(num));
     else if (sb.units == SB_UNITS_MILES)
-        strcpy(num, _("miles"));
+        (void)G_strlcpy(num, _("miles"), sizeof(num));
     else if (sb.units == SB_UNITS_NMILES)
-        strcpy(num, _("nautical miles"));
+        (void)G_strlcpy(num, _("nautical miles"), sizeof(num));
 
     text_box_path(72.0 * (x + length / 2),
                   72.0 * (PS.page_height - (sb.y + 0.075)), CENTER, UPPER, num,
