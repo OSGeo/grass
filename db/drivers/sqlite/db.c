@@ -29,7 +29,6 @@
  * \return DB_FAILED on error
  * \return DB_OK on success
  */
-
 int db__driver_open_database(dbHandle *handle)
 {
     char name2[GPATH_MAX], *path;
