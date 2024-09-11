@@ -38,7 +38,7 @@ import re
 import mimetypes
 import time
 
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
 from xml.sax import saxutils
 
 import wx
@@ -323,7 +323,7 @@ class Model:
         """
         # parse workspace file
         try:
-            gxmXml = ProcessModelFile(etree.parse(filename))
+            gxmXml = ProcessModelFile(ET.parse(filename))
         except Exception as e:
             raise GException("{}".format(e))
 
@@ -475,12 +475,9 @@ class Model:
         #     item.SetId(i)
         #     i += 1
 
-    def IsValid(self):
+    def IsValid(self) -> bool:
         """Return True if model is valid"""
-        if self.Validate():
-            return False
-
-        return True
+        return not self.Validate()
 
     def Validate(self):
         """Validate model, return None if model is valid otherwise
@@ -820,12 +817,9 @@ class Model:
         for item in self.items:
             item.Update()
 
-    def IsParameterized(self):
+    def IsParameterized(self) -> bool:
         """Return True if model is parameterized"""
-        if self.Parameterize():
-            return True
-
-        return False
+        return bool(self.Parameterize())
 
     def Parameterize(self):
         """Return parameterized options"""
@@ -1396,7 +1390,6 @@ class ModelData(ModelObject):
         :param width, height: dimension of the shape
         :param x, y: position of the shape
         """
-        pass
 
     def IsIntermediate(self):
         """Checks if data item is intermediate"""
@@ -1584,7 +1577,7 @@ class ModelDataSingle(ModelData, ogl.EllipseShape):
         :param width, height: dimension of the shape
         :param x, y: position of the shape
         """
-        ogl.EllipseShape.__init__(self, width, height)
+        ogl.EllipseShape(self, width, height)
         if self.parent.GetCanvas():
             self.SetCanvas(self.parent.GetCanvas())
 
@@ -1599,7 +1592,7 @@ class ModelDataSeries(ModelData, ogl.CompositeShape):
         :param width, height: dimension of the shape
         :param x, y: position of the shape
         """
-        ogl.CompositeShape.__init__(self)
+        ogl.CompositeShape(self)
         if self.parent.GetCanvas():
             self.SetCanvas(self.parent.GetCanvas())
 
@@ -2263,7 +2256,7 @@ class ProcessModelFile:
             pos, size = self._getDim(node)
             text = self._filterValue(self._getNodeText(node, "condition")).strip()
             aid = {"if": [], "else": []}
-            for b in aid.keys():
+            for b in aid.keys():  # noqa: PLC0206
                 bnode = node.find(b)
                 if bnode is None:
                     continue
@@ -3494,7 +3487,7 @@ def cleanup():
                 r"""    %s("g.remove", flags="f", type="vector",
                 name=%s)
 """
-                % (run_command, ",".join(('"' + x + '"' for x in vect)))
+                % (run_command, ",".join(f'"{x}"' for x in vect))
             )
         if rast3d:
             self.fd.write(
@@ -3785,9 +3778,6 @@ class ModelParamDialog(wx.Dialog):
 
         return errList
 
-    def DeleteIntermediateData(self):
+    def DeleteIntermediateData(self) -> bool:
         """Check if to detele intermediate data"""
-        if self.interData.IsShown() and self.interData.IsChecked():
-            return True
-
-        return False
+        return bool(self.interData.IsShown() and self.interData.IsChecked())

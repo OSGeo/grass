@@ -167,9 +167,11 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self._loadHistory()
         if giface:
             giface.currentMapsetChanged.connect(self._loadHistory)
-            giface.entryToHistoryAdded.connect(self._addEntryToCmdHistoryBuffer)
+            giface.entryToHistoryAdded.connect(
+                lambda entry: self._addEntryToCmdHistoryBuffer(entry)
+            )
             giface.entryFromHistoryRemoved.connect(
-                self._removeEntryFromCmdHistoryBuffer
+                lambda index: self._removeEntryFromCmdHistoryBuffer(index)
             )
         #
         # bindings
@@ -431,7 +433,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             else:
                 delimiter = char
             parts.append(delimiter + textLeft.rpartition(char)[2])
-        return min(parts, key=len)
+        return min(parts, key=lambda x: len(x))
 
     def ShowList(self):
         """Show sorted auto-completion list if it is not empty"""
@@ -475,9 +477,9 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
 
             # move through command history list index values
             if event.GetKeyCode() == wx.WXK_UP:
-                self.cmdindex = self.cmdindex - 1
+                self.cmdindex -= 1
             if event.GetKeyCode() == wx.WXK_DOWN:
-                self.cmdindex = self.cmdindex + 1
+                self.cmdindex += 1
             self.cmdindex = max(self.cmdindex, 0)
             self.cmdindex = min(self.cmdindex, len(self.cmdbuffer) - 1)
 

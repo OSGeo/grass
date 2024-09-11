@@ -370,7 +370,7 @@ class LayerList:
         return result
 
     def next(self):
-        return self.__next__()
+        return next(self)
 
     def GetSelectedLayers(self, checkedOnly=True):
         # hidden and selected vs checked and selected
@@ -579,8 +579,8 @@ class MapApp(wx.App):
             ),
         )
 
-        self.Map.saveToFile.connect(self.mapDisplay.DOutFile)
-        self.Map.dToRast.connect(self.mapDisplay.DToRast)
+        self.Map.saveToFile.connect(lambda cmd: self.mapDisplay.DOutFile(cmd))
+        self.Map.dToRast.connect(lambda cmd: self.mapDisplay.DToRast(cmd))
         self.Map.query.connect(
             lambda ltype, maps: self.mapDisplay.SetQueryLayersAndActivate(
                 ltype=ltype, maps=maps

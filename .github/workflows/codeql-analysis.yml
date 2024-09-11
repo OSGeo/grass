@@ -42,7 +42,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: Set up Python
-        uses: actions/setup-python@39cd14951b08e74b54015e9e001cdefcf80e669f # v5.1.1
+        uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3 # v5.2.0
         with:
           python-version: '3.x'
       - name: Install non-Python dependencies
@@ -52,11 +52,11 @@ jobs:
           sudo apt-get install -y wget git gawk findutils
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
-      - uses: rui314/setup-mold@2e332a0b602c2fc65d2d3995941b1b29a5f554a0 # v1
+      - uses: rui314/setup-mold@0bf4f07ef9048ec62a45f9dbf2f098afa49695f0 # v1
         if: ${{ matrix.language == 'c-cpp' }}
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@4fa2a7953630fd2f3fb380f21be14ede0169dd4f # v3.25.12
+        uses: github/codeql-action/init@4dd16135b69a43b6c8efb853346f8437d92d3c93 # v3.26.6
         with:
           languages: ${{ matrix.language }}
           config-file: ./.github/codeql/codeql-config.yml
@@ -81,6 +81,6 @@ jobs:
         run: .github/workflows/build_ubuntu-22.04.sh "${HOME}/install"
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@4fa2a7953630fd2f3fb380f21be14ede0169dd4f # v3.25.12
+        uses: github/codeql-action/analyze@4dd16135b69a43b6c8efb853346f8437d92d3c93 # v3.26.6
         with:
           category: "/language:${{matrix.language}}"

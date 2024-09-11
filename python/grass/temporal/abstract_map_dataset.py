@@ -1240,7 +1240,6 @@ class AbstractMapDataset(AbstractDataset):
         Currently only implemented in RasterDataset. Otherwise
         silently pass.
         """
-        pass
 
     def set_semantic_label(self, semantic_label):
         """Set semantic label identifier

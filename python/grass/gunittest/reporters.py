@@ -13,13 +13,13 @@ import os
 import datetime
 from pathlib import Path
 from xml.sax import saxutils
-import xml.etree.ElementTree as et
+import xml.etree.ElementTree as ET
 import subprocess
 import collections
 import re
 from collections.abc import Iterable
 
-from .utils import ensure_dir
+from .utils import add_gitignore_to_dir, ensure_dir
 from .checkers import text_to_keyvalue
 
 
@@ -40,7 +40,7 @@ def keyvalue_to_text(keyvalue, sep="=", vsep="\n", isep=",", last_vertical=None)
         items.append("{key}{sep}{value}".format(key=key, sep=sep, value=value))
     text = vsep.join(items)
     if last_vertical:
-        text = text + vsep
+        text += vsep
     return text
 
 
@@ -199,7 +199,7 @@ def get_svn_info():
         rc = p.poll()
         info = {}
         if not rc:
-            root = et.fromstring(stdout)
+            root = ET.fromstring(stdout)
             # TODO: get also date if this make sense
             # expecting only one <entry> element
             entry = root.find("entry")
@@ -257,7 +257,7 @@ def get_svn_path_authors(path, from_date=None):
         stdout, stderr = p.communicate()
         rc = p.poll()
         if not rc:
-            root = et.fromstring(stdout)
+            root = ET.fromstring(stdout)
             # TODO: get also date if this make sense
             # expecting only one <entry> element
             author_nodes = root.iterfind("*/author")
@@ -330,9 +330,10 @@ class GrassTestFilesMultiReporter:
 
     def start(self, results_dir):
         # TODO: no directory cleaning (self.clean_before)? now cleaned by caller
-        # TODO: perhaps only those whoe need it should do it (even multiple times)
+        # TODO: perhaps only those who need it should do it (even multiple times)
         # and there is also the delete problem
         ensure_dir(os.path.abspath(results_dir))
+        add_gitignore_to_dir(os.path.abspath(results_dir))
         for reporter in self.reporters:
             try:
                 reporter.start(results_dir)

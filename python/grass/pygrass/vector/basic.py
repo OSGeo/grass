@@ -137,7 +137,7 @@ class Bbox:
         )
 
     def items(self):
-        return [(k, self.__getattribute__(k)) for k in self.keys()]
+        return [(k, getattr(self, k)) for k in self.keys()]
 
     def nsewtb(self, tb=True):
         """Return a list of values from bounding box
@@ -215,7 +215,7 @@ class BoxList:
         3
 
         """
-        indx = self.__len__()
+        indx = len(self)
         libvect.Vect_boxlist_append(self.c_boxlist, indx, box.c_bbox)
 
     #    def extend(self, boxlist):
@@ -461,8 +461,7 @@ class Cats:
         """
         if cat:
             self.n_del = libvect.Vect_field_cat_del(self.c_cats, layer, cat)
-            err_msg = "Layer(%d)/category(%d) number does not exist"
-            err_msg = err_msg % (layer, cat)
+            err_msg = "Layer(%d)/category(%d) number does not exist" % (layer, cat)
         else:
             self.n_del = libvect.Vect_cat_del(self.c_cats, layer)
             err_msg = "Layer: %r does not exist" % layer

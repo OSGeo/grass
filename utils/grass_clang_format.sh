@@ -22,7 +22,7 @@ set -eu
 #    It is also possible to format the content in a (one) given directory:
 #      ./utils/grass_clang_format.sh ./lib/raster
 #
-# COPYRIGHT: (C) 2023 by the GRASS Development Team
+# COPYRIGHT: (C) 2023-2024 by the GRASS Development Team
 #
 #            This program is free software under the GNU General Public
 #            License (>=v2). Read the file COPYING that comes with GRASS
@@ -30,8 +30,19 @@ set -eu
 #
 ###############################################################################
 
+# Check if variable is integer (POSIX compliant)
+# based on https://unix.stackexchange.com/a/598047
+is_integer ()
+{
+    case "${1#[+-]}" in
+        (*[!0123456789]*) echo 1 ;;
+        ('')              echo 1 ;;
+        (*)               echo 0 ;;
+    esac
+}
+
 # Required clang-format version
-req_cf_v="15"
+req_cf_v="18"
 
 # No need to continue if the .clang-format file isn't found
 if [ ! -f .clang-format ]; then
@@ -50,6 +61,17 @@ fi
 if ! (${fmt} --version >/dev/null); then
     echo "clang-format not available."
     exit 1
+fi
+
+# Try extract ClangFormat version from pre-commit config file
+pre_commit_config_file=".pre-commit-config.yaml"
+pre_commit_version=$(grep -A 1 --regex "repo:.*clang-format" \
+    "${pre_commit_config_file}" | sed -En 's/.*rev: v([0-9]+)\..*/\1/p')
+if [ "$(is_integer "$pre_commit_version")" -eq "1" ]; then
+    echo "Warning: failed to retrieve ClangFormat version number from"
+    echo "  ${pre_commit_config_file}. Falling back to version {$req_cf_v}."
+else
+    req_cf_v="${pre_commit_version}"
 fi
 
 clang_version_full=$(${fmt} --version)

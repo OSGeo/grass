@@ -4,3 +4,5 @@ default: true
 
 # Fix any fixable errors (depending on the markdownlint wrapper tool used)
 fix: true
+
+MD041: false # first-line-h1

@@ -36,7 +36,7 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import copy
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
 
 import wx
 
@@ -62,7 +62,7 @@ class MenuTreeModelBuilder:
             group="appearance", key="menustyle", subkey="selection"
         )
 
-        xmlTree = etree.parse(filename)
+        xmlTree = ET.parse(filename)
         if expandAddons:
             expAddons(xmlTree)
             for message in getToolboxMessages():

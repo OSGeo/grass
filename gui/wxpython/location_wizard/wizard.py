@@ -293,11 +293,9 @@ class DatabasePage(TitledPage):
         ).format(ctrl.GetValue(), "/\"'@,=*~")
         GError(parent=self, message=message, caption=_("Invalid name"))
 
-    def _checkLocationNotExists(self, text):
+    def _checkLocationNotExists(self, text) -> bool:
         """Check whether user's input location exists or not."""
-        if location_exists(self.tgisdbase.GetLabel(), text):
-            return False
-        return True
+        return not location_exists(self.tgisdbase.GetLabel(), text)
 
     def _locationAlreadyExists(self, ctrl):
         message = _(
@@ -2334,7 +2332,7 @@ class SummaryPage(TitledPage):
             finishButton = wx.FindWindowById(wx.ID_FORWARD)
             if ret == 0:
                 if datum != "":
-                    projlabel = projlabel + "+datum=%s" % datum
+                    projlabel += "+datum=%s" % datum
                 self.lproj4string.SetLabel(projlabel.replace(" +", os.linesep + "+"))
                 finishButton.Enable(True)
             else:

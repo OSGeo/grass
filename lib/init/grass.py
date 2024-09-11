@@ -55,6 +55,7 @@ import uuid
 import unicodedata
 import argparse
 import json
+from pathlib import Path
 
 
 # mechanism meant for debugging this script (only)
@@ -167,17 +168,12 @@ def fatal(msg):
 
 def readfile(path):
     debug("Reading %s" % path)
-    f = open(path, "r")
-    s = f.read()
-    f.close()
-    return s
+    return Path(path).read_text()
 
 
 def writefile(path, s):
     debug("Writing %s" % path)
-    f = open(path, "w")
-    f.write(s)
-    f.close()
+    Path(path).write_text(s)
 
 
 def call(cmd, **kwargs):
@@ -306,6 +302,7 @@ Geographic Resources Analysis Support System (GRASS GIS).
   FLAG                           {standard_flags}
 
 {env_vars}:
+  GRASS_CONFIG_DIR               {config_dir_var}
   GRASS_GUI                      {gui_var}
   GRASS_HTML_BROWSER             {html_var}
   GRASS_ADDON_PATH               {addon_path_var}
@@ -349,6 +346,7 @@ def help_message(default_gui):
             mapset=_("initial GRASS mapset"),
             full_mapset=_("fully qualified initial mapset directory"),
             env_vars=_("Environment variables relevant for startup"),
+            config_dir_var=_("set root path for configuration directory"),
             gui_var=_("select GUI (text, gui, gtext)"),
             html_var=_("set html web browser for help pages"),
             addon_path_var=_(
@@ -379,8 +377,8 @@ def help_message(default_gui):
     sys.stderr.write(s)
 
 
-def get_grass_config_dir():
-    """Get configuration directory
+def create_grass_config_dir():
+    """Create configuration directory
 
     Determines path of GRASS GIS user configuration directory and creates
     it if it does not exist.
@@ -388,41 +386,25 @@ def get_grass_config_dir():
     Configuration directory is for example used for grass env file
     (the one which caries mapset settings from session to session).
     """
-    # The code is in sync with grass.app.runtime (but not the same).
-    if WINDOWS:
-        grass_config_dirname = f"GRASS{GRASS_VERSION_MAJOR}"
-        win_conf_path = os.getenv("APPDATA")
-        # this can happen with some strange settings
-        if not win_conf_path:
-            fatal(
-                _(
-                    "The APPDATA variable is not set, ask your operating"
-                    " system support"
-                )
-            )
-        if not os.path.exists(win_conf_path):
-            fatal(
-                _(
-                    "The APPDATA variable points to directory which does"
-                    " not exist, ask your operating system support"
-                )
-            )
-        directory = os.path.join(win_conf_path, grass_config_dirname)
-    elif MACOS:
-        version = f"{GRASS_VERSION_MAJOR}.{GRASS_VERSION_MINOR}"
-        return os.path.join(os.getenv("HOME"), "Library", "GRASS", version)
-    else:
-        grass_config_dirname = f".grass{GRASS_VERSION_MAJOR}"
-        directory = os.path.join(os.getenv("HOME"), grass_config_dirname)
+    from grass.app.runtime import get_grass_config_dir
+
+    try:
+        directory = get_grass_config_dir(
+            GRASS_VERSION_MAJOR, GRASS_VERSION_MINOR, os.environ
+        )
+    except (RuntimeError, NotADirectoryError) as e:
+        fatal(f"{e}")
+
     if not os.path.isdir(directory):
         try:
-            os.mkdir(directory)
+            os.makedirs(directory)
         except OSError as e:
             # Can happen as a race condition
             if not e.errno == errno.EEXIST or not os.path.isdir(directory):
                 fatal(
-                    _("Failed to create configuration directory '%s' with error: %s")
-                    % (directory, e.strerror)
+                    _(
+                        "Failed to create configuration directory '{}' with error: {}"
+                    ).format(directory, e.strerror)
                 )
     return directory
 
@@ -730,12 +712,10 @@ def create_location(gisdbase, location, geostring):
         fatal(err.value.strip('"').strip("'").replace("\\n", os.linesep))
 
 
-def can_create_location(gisdbase, location):
+def can_create_location(gisdbase, location) -> bool:
     """Checks if location can be created"""
     path = os.path.join(gisdbase, location)
-    if os.path.exists(path):
-        return False
-    return True
+    return not os.path.exists(path)
 
 
 def cannot_create_location_reason(gisdbase, location):
@@ -1093,20 +1073,6 @@ def load_env(grass_env_file):
         # create a new environment variable
         os.environ[k] = v
 
-    # Allow for mixed ISIS-GRASS Environment
-    if os.getenv("ISISROOT"):
-        isis = os.getenv("ISISROOT")
-        os.environ["ISIS_LIB"] = isis + os.sep + "lib"
-        os.environ["ISIS_3RDPARTY"] = isis + os.sep + "3rdParty" + os.sep + "lib"
-        os.environ["QT_PLUGIN_PATH"] = isis + os.sep + "3rdParty" + os.sep + "plugins"
-        # os.environ['ISIS3DATA'] = isis + "$ISIS3DATA"
-        libpath = os.getenv("LD_LIBRARY_PATH", "")
-        isislibpath = os.getenv("ISIS_LIB")
-        isis3rdparty = os.getenv("ISIS_3RDPARTY")
-        os.environ["LD_LIBRARY_PATH"] = (
-            libpath + os.pathsep + isislibpath + os.pathsep + isis3rdparty
-        )
-
 
 def install_notranslation():
     # If locale is not supported, _ function might be missing
@@ -1253,10 +1219,8 @@ def set_language(grass_config_dir):
                         # If we got so far, attempts to set up language and locale have
                         # failed on this system.
                         sys.stderr.write(
-                            (
-                                "Failed to enforce user specified language "
-                                f"'{language}' with error: '{e}'\n"
-                            )
+                            "Failed to enforce user specified language "
+                            f"'{language}' with error: '{e}'\n"
                         )
                         sys.stderr.write(
                             "A LANGUAGE environmental variable has been set.\n"
@@ -2235,7 +2199,8 @@ def main():
     # This has to be called before any _() function call!
     # Subsequent functions are using _() calls and
     # thus must be called only after Language has been set.
-    grass_config_dir = get_grass_config_dir()
+    find_grass_python_package()
+    grass_config_dir = create_grass_config_dir()
     set_language(grass_config_dir)
 
     # Set default GUI
@@ -2297,8 +2262,6 @@ def main():
 
     # Create the session grassrc file
     gisrc = create_gisrc(tmpdir, gisrcrc)
-
-    find_grass_python_package()
 
     from grass.app.runtime import (
         ensure_home,

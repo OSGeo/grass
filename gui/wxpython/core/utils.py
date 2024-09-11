@@ -3,7 +3,7 @@
 
 @brief Misc utilities for wxGUI
 
-(C) 2007-2015 by the GRASS Development Team
+(C) 2007-2024 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -23,10 +23,11 @@ import operator
 
 from grass.script import core as grass
 from grass.script import task as gtask
+from grass.app.runtime import get_grass_config_dir
 
 from core.gcmd import RunCommand
 from core.debug import Debug
-from core.globalvar import ETCDIR, wxPythonPhoenix
+from core.globalvar import wxPythonPhoenix
 
 
 def cmp(a, b):
@@ -796,19 +797,8 @@ vectorFormatExtension = {
 
 def GetSettingsPath():
     """Get full path to the settings directory"""
-    try:
-        verFd = open(os.path.join(ETCDIR, "VERSIONNUMBER"))
-        version = int(verFd.readlines()[0].split(" ")[0].split(".")[0])
-    except (OSError, ValueError, TypeError, IndexError) as e:
-        sys.exit(_("ERROR: Unable to determine GRASS version. Details: %s") % e)
-
-    verFd.close()
-
-    # keep location of settings files rc and wx in sync with lib/init/grass.py
-    if sys.platform == "win32":
-        return os.path.join(os.getenv("APPDATA"), "GRASS%d" % version)
-
-    return os.path.join(os.getenv("HOME"), ".grass%d" % version)
+    version_major, version_minor, _ = grass.version()["version"].split(".")
+    return get_grass_config_dir(version_major, version_minor, os.environ)
 
 
 def StoreEnvVariable(key, value=None, envFile=None):
@@ -1077,7 +1067,7 @@ def autoCropImageFromFile(filename):
         return wx.Image(filename)
 
 
-def isInRegion(regionA, regionB):
+def isInRegion(regionA, regionB) -> bool:
     """Tests if 'regionA' is inside of 'regionB'.
 
     For example, region A is a display region and region B is some reference
@@ -1097,15 +1087,12 @@ def isInRegion(regionA, regionB):
     :return: True if region A is inside of region B
     :return: False otherwise
     """
-    if (
+    return bool(
         regionA["s"] >= regionB["s"]
         and regionA["n"] <= regionB["n"]
         and regionA["w"] >= regionB["w"]
         and regionA["e"] <= regionB["e"]
-    ):
-        return True
-
-    return False
+    )
 
 
 def do_doctest_gettext_workaround():
@@ -1187,11 +1174,9 @@ def get_shell_pid(env=None):
         return None
 
 
-def is_shell_running():
+def is_shell_running() -> bool:
     """Return True if a separate shell is registered in the GIS environment"""
-    if get_shell_pid() is None:
-        return False
-    return True
+    return get_shell_pid() is not None
 
 
 def parse_mapcalc_cmd(command):

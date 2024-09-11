@@ -86,7 +86,7 @@ class PointTestCase(TestCase):
         point1 = Point(1, 0)
         self.assertFalse(point0 == point1)
         self.assertFalse(point0 == (1, 0))
-        self.assertTrue(point0 == point0)
+        self.assertTrue(point0 == point0)  # noqa: PLR0124
         self.assertTrue(point0 == (0, 0))
 
     def test_repr(self):
@@ -98,7 +98,6 @@ class PointTestCase(TestCase):
     def test_buffer(self):
         """Test buffer method"""
         # TODO: verify if the buffer depends from the mapset's projection
-        pass
 
 
 class LineTestCase(TestCase):
