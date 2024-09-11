@@ -13,7 +13,7 @@ from build_html import (
     headerkey_tmpl,
     desc1_tmpl,
     moduletopics_tmpl,
-    write_html_footer
+    write_html_footer,
 )
 
 path = sys.argv[1]
