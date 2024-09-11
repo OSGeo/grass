@@ -22,7 +22,7 @@ from build_html import (
     full_index_header,
     toc,
     cmd2_tmpl,
-    desc1_tmpl
+    desc1_tmpl,
 )
 
 year = None
