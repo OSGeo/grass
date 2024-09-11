@@ -20,7 +20,7 @@ from build_rest import (
     rest_files,
     check_for_desc_override,
     get_desc,
-    replace_file
+    replace_file,
 )
 
 os.chdir(rest_dir)
