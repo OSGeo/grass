@@ -15,7 +15,7 @@ from build_rest import (
     write_rest_header,
     write_rest_cmd_overview,
     write_rest_footer,
-    replace_file
+    replace_file,
 )
 
 os.chdir(rest_dir)
