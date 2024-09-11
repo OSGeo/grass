@@ -20,7 +20,6 @@ per-file-ignores =
     # F841 local variable assigned to but never used
     # E741 ambiguous variable name 'l'
     __init__.py: F401, F403
-    utils/gitlog2changelog.py: E722, E712
     man/build_check_rest.py: F403, F405
     man/build_full_index_rest.py: F403, F405
     man/parser_standard_options.py: F403, F405
@@ -152,9 +151,7 @@ per-file-ignores =
     python/grass/*/*/__init__.py: F401, F403
     python/grass/*/*/*/__init__.py: F401, F403
     # E402 module level import not at top of file
-    scripts/d.polar/d.polar.py: F841
-    scripts/r.in.wms/wms_gdal_drv.py: F841, E722
-    scripts/r.in.wms/wms_cap_parsers.py: F841
+    scripts/r.in.wms/wms_gdal_drv.py: E722
     scripts/r.in.wms/wms_drv.py: E402, E722
     scripts/r.in.wms/srs.py: E722
     scripts/r.semantic.label/r.semantic.label.py: E501
