@@ -80,7 +80,9 @@ int db__driver_open_database(dbHandle *handle)
     }
     else {
         if (G_strlcpy(name2, name, sizeof(name2)) >= sizeof(name2)) {
-            G_warning(_("Database name <%s> is too long"), name);
+            db_d_append_error(_("Database name <%s> is too long"), name);
+            db_d_report_error();
+            return DB_FAILED;
         }
     }
 
@@ -118,13 +120,17 @@ int db__driver_open_database(dbHandle *handle)
             G_warning(_("The sqlite config option '%s' is not supported"),
                       "SQLITE_CONFIG_URI");
             if (G_strlcpy(name3, name2, sizeof(name3)) >= sizeof(name3)) {
-                G_warning(_("Database name <%s> is too long"), name2);
+                db_d_append_error(_("Database name <%s> is too long"), name2);
+                db_d_report_error();
+                return DB_FAILED;
             }
         }
     }
     else {
         if (G_strlcpy(name3, name2, sizeof(name3)) >= sizeof(name3)) {
-            G_warning(_("Database name <%s> is too long"), name2);
+            db_d_append_error(_("Database name <%s> is too long"), name2);
+            db_d_report_error();
+            return DB_FAILED;
         }
     }
     if (sqlite3_open(name3, &sqlite) != SQLITE_OK) {
@@ -193,13 +199,17 @@ int db__driver_create_database(dbHandle *handle)
             G_warning(_("The sqlite config option '%s' is not supported"),
                       "SQLITE_CONFIG_URI");
             if (G_strlcpy(name2, name, sizeof(name2)) >= sizeof(name2)) {
-                G_warning(_("Database name <%s> is too long"), name);
+                db_d_append_error(_("Database name <%s> is too long"), name);
+                db_d_report_error();
+                return DB_FAILED;
             }
         }
     }
     else {
         if (G_strlcpy(name2, name, sizeof(name2)) >= sizeof(name2)) {
-            G_warning(_("Database name <%s> is too long"), name);
+            db_d_append_error(_("Database name <%s> is too long"), name);
+            db_d_report_error();
+            return DB_FAILED;
         }
     }
     if (sqlite3_open(name2, &sqlite) != SQLITE_OK) {
