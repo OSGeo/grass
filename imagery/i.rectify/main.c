@@ -75,7 +75,6 @@ int main(int argc, char *argv[])
                            nearest neighbor, bilinear, cubic */
     struct Flag *c, *a, *t;
     struct GModule *module;
-    size_t len;
 
     G_gisinit(argv[0]);
 
@@ -153,12 +152,12 @@ int main(int argc, char *argv[])
     interpolate = menu[method].method;
 
     G_strip(grp->answer);
-    len = G_strlcpy(group.name, grp->answer, sizeof(group.name));
-    if (len >= sizeof(group.name)) {
+    if (G_strlcpy(group.name, grp->answer, sizeof(group.name)) >=
+        sizeof(group.name)) {
         G_fatal_error(_("Group name <%s> is too long"), grp->answer);
     }
-    len = G_strlcpy(extension, ext->answer, sizeof(extension));
-    if (len >= sizeof(extension)) {
+    if (G_strlcpy(extension, ext->answer, sizeof(extension)) >=
+        sizeof(extension)) {
         G_fatal_error(_("Extension <%s> is too long"), ext->answer);
     }
     order = atoi(val->answer);
