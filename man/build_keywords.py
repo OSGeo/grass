@@ -25,7 +25,7 @@ from build_html import (
     grass_version,
     header1_tmpl,
     headerkeywords_tmpl,
-    write_html_footer
+    write_html_footer,
 )
 
 
