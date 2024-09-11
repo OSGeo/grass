@@ -9,9 +9,18 @@
 import os
 
 from build_rest import (
-    rest_dir, rest_files, write_rest_header, grass_version,
-    full_index_header, sections, cmd2_tmpl, check_for_desc_override,
-    get_desc, desc1_tmpl, write_rest_footer, replace_file
+    rest_dir,
+    rest_files,
+    write_rest_header,
+    grass_version,
+    full_index_header,
+    sections,
+    cmd2_tmpl,
+    check_for_desc_override,
+    get_desc,
+    desc1_tmpl,
+    write_rest_footer,
+    replace_file,
 )
 
 os.chdir(rest_dir)
