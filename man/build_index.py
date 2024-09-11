@@ -15,7 +15,7 @@ from build_html import (
     write_html_header,
     write_html_cmd_overview,
     write_html_footer,
-    replace_file
+    replace_file,
 )
 
 os.chdir(html_dir)
