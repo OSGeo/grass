@@ -466,7 +466,6 @@ def one_point_per_col_output(
     for count in range(len(output_files)):
         file_name = output_files[count]
         gs.verbose(_("Transforming r.what output file %s" % (file_name)))
-        map_list = output_time_list[count]
         in_file = open(file_name, "r")
         lines = in_file.readlines()
 
