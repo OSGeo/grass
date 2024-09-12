@@ -75,7 +75,7 @@ flake8 --ignore=E203,E266,E501 --max-line-length=88 python_file.py
 
 C and C++ code is formatted with
 [ClangFormat](https://clang.llvm.org/docs/ClangFormat.html). Contributions are
-expected to be formatted with `clang-format` (currently with version 15+). The
+expected to be formatted with `clang-format` (currently with version 18+). The
 most convenient method to install clang-format and format files is
 [using pre-commit](#using-pre-commit).
 
@@ -952,9 +952,10 @@ htmldocs` or `make pdfdocs`.
 
 #### Use GRASS library functions
 
-Use the GRASS library functions instead of the standard C functions. The reason
-for this is that the following functions ensure good programming practice (e.g.
-always checking if memory was allocated) and/or improves portability.
+Use the GRASS library functions, when available, instead of the standard C
+functions. The reason for this is that the following functions ensure good
+programming practice (e.g. always checking if memory was allocated) and/or
+improves portability.
 
 - Memory management: `G_malloc()`, `G_calloc()`, `G_realloc()`, `G_free()`
 - Environmental variables: `G_getenv()`, `G_setenv()`, `G_unsetenv()`
