@@ -2,10 +2,10 @@
 
 #include <string.h>
 #include <math.h>
+#include <grass/gis.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 #include "distance.h"
-#include <grass/gis.h>
 
 #define LEFT   0
 #define RIGHT  1
@@ -182,13 +182,8 @@ int do_scalebar(void)
     }
 
     /* draw units label */
-    if (sb.units == SB_UNITS_AUTO) {
-        if (G_strlcpy(num, G_database_unit_name(TRUE), sizeof(num))
-            >= sizeof(num)) {
-            G_fatal_error(_("Unit name <%s> is too long"),
-            G_database_unit_name(TRUE));
-        }
-    }
+    if (sb.units == SB_UNITS_AUTO)
+        (void)G_strlcpy(num, G_database_unit_name(TRUE), sizeof(num));
     else if (sb.units == SB_UNITS_METERS)
         (void)G_strlcpy(num, _("meters"), sizeof(num));
     else if (sb.units == SB_UNITS_KM)
