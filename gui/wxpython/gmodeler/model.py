@@ -1577,7 +1577,7 @@ class ModelDataSingle(ModelData, ogl.EllipseShape):
         :param width, height: dimension of the shape
         :param x, y: position of the shape
         """
-        ogl.EllipseShape(self, width, height)
+        ogl.EllipseShape.__init__(self, width, height)  # noqa: PLC2801, C2801
         if self.parent.GetCanvas():
             self.SetCanvas(self.parent.GetCanvas())
 
@@ -1592,7 +1592,7 @@ class ModelDataSeries(ModelData, ogl.CompositeShape):
         :param width, height: dimension of the shape
         :param x, y: position of the shape
         """
-        ogl.CompositeShape(self)
+        ogl.CompositeShape.__init__(self)  # noqa: PLC2801, C2801
         if self.parent.GetCanvas():
             self.SetCanvas(self.parent.GetCanvas())
 
