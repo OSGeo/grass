@@ -141,9 +141,7 @@ per-file-ignores =
     python/grass/*/*/__init__.py: F401, F403
     python/grass/*/*/*/__init__.py: F401, F403
     # E402 module level import not at top of file
-    scripts/d.polar/d.polar.py: F841
-    scripts/r.in.wms/wms_gdal_drv.py: F841, E722
-    scripts/r.in.wms/wms_cap_parsers.py: F841
+    scripts/r.in.wms/wms_gdal_drv.py: E722
     scripts/r.in.wms/wms_drv.py: E402, E722
     scripts/r.in.wms/srs.py: E722
     scripts/r.semantic.label/r.semantic.label.py: E501
