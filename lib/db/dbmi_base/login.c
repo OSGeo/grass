@@ -253,27 +253,6 @@ static int set_login(const char *driver, const char *database, const char *user,
 /*!
    \brief Set login parameters for driver/database
 
-   \deprecated Use db_set_login2() instead.
-
-   \todo: GRASS 8: to be replaced by db_set_login2().
-
-   \param driver driver name
-   \param database database name
-   \param user user name
-   \param password password string
-
-   \return DB_OK on success
-   \return DB_FAILED on failure
- */
-int db_set_login(const char *driver, const char *database, const char *user,
-                 const char *password)
-{
-    return set_login(driver, database, user, password, NULL, NULL, FALSE);
-}
-
-/*!
-   \brief Set login parameters for driver/database
-
    \param driver driver name
    \param database database name
    \param user user name
@@ -285,9 +264,9 @@ int db_set_login(const char *driver, const char *database, const char *user,
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db_set_login2(const char *driver, const char *database, const char *user,
-                  const char *password, const char *host, const char *port,
-                  int overwrite)
+int db_set_login(const char *driver, const char *database, const char *user,
+                 const char *password, const char *host, const char *port,
+                 int overwrite)
 {
     return set_login(driver, database, user, password, host, port, overwrite);
 }
