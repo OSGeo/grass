@@ -1,7 +1,7 @@
 file(GLOB dbmibase_SRCS "./dbmi_base/*.c")
 if(MSVC)
-  set(dbmibase_INCLUDES "./dbmi_base" "./dbmi_base/msvc")
-  list(APPEND dbmibase_SRCS "./dbmi_base/msvc/dirent.c")
+  set(dbmibase_INCLUDES "./dbmi_base" "../../msvc")
+  list(APPEND dbmibase_SRCS "../../msvc/dirent.c")
 endif()
 
 build_library_in_subdir(
