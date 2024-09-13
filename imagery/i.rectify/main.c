@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "global.h"
+
 #include <grass/gis.h>
 
 int seg_mb_img;
