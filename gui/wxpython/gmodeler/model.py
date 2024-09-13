@@ -2819,7 +2819,7 @@ class WriteActiniaFile(WriteScriptFile):
                 self.model.canvas,
                 message=_(
                     "Module {task_name} in your model contains "
-                    "parameterized flags. actinia does not support "
+                    "parameterized flags. Actinia does not support "
                     "parameterized flags. The following flags are therefore "
                     "not being written in the generated JSON: {flags}"
                 ).format(task_name=task.get_name(), flags=itemParameterizedFlags),
