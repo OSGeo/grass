@@ -1,18 +1,20 @@
 NEWS
 
 GRASS GIS 8
- o https://trac.osgeo.org/grass/wiki/Grass8/NewFeatures80
- o https://trac.osgeo.org/grass/wiki/Grass8/NewFeatures82
+ - https://github.com/OSGeo/grass/tags
+ - https://trac.osgeo.org/grass/wiki/Grass8/NewFeatures80
+ - https://trac.osgeo.org/grass/wiki/Grass8/NewFeatures82
 
 GRASS GIS 7
- o https://trac.osgeo.org/grass/wiki/Grass7/NewFeatures78
- o https://trac.osgeo.org/grass/wiki/Grass7/NewFeatures76
- o https://trac.osgeo.org/grass/wiki/Grass7/NewFeatures74
- o https://trac.osgeo.org/grass/wiki/Grass7/NewFeatures72
- o https://trac.osgeo.org/grass/wiki/Grass7/NewFeatures
+ - https://trac.osgeo.org/grass/wiki/Grass7/NewFeatures78
+ - https://trac.osgeo.org/grass/wiki/Grass7/NewFeatures76
+ - https://trac.osgeo.org/grass/wiki/Grass7/NewFeatures74
+ - https://trac.osgeo.org/grass/wiki/Grass7/NewFeatures72
+ - https://trac.osgeo.org/grass/wiki/Grass7/NewFeatures
 
  List of releases
- o https://trac.osgeo.org/grass/wiki/Release
+ - https://github.com/OSGeo/grass/releases (GRASS GIS 7 and later)
+ - https://trac.osgeo.org/grass/wiki/Release (full list)
 
 GRASS GIS 1-6
- o List of older releases, starting in 1984 (!), see https://grass.osgeo.org/about/history/releases/
+ - List of older releases, starting in 1984 (!), see https://grass.osgeo.org/about/history/releases/

@@ -206,7 +206,7 @@ make
 make install
 ```
 
-For details, see <https://trac.osgeo.org/grass/wiki/HowToGit>
+For details, see <https://github.com/OSGeo/grass/blob/main/doc/development/github_guide.md>
 
 ## (H) COMPILING INDIVIDUAL MODULES - OWN MODULES
 
@@ -327,8 +327,10 @@ Please see the README file and the files at:
 
 ## (M) CONTRIBUTING CODE AND PATCHES
 
-Please see ./SUBMITTING in this directory, or better,
-<https://trac.osgeo.org/grass/wiki/Submitting>
+Please see
+
+- <https://github.com/OSGeo/grass/blob/main/doc/development/style_guide.md>
+- <https://github.com/OSGeo/grass/blob/main/doc/development/github_guide.md>
 
 ## Authors
 

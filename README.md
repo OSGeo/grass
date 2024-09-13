@@ -34,7 +34,7 @@ GRASS GIS. See [CONTRIBUTING file](CONTRIBUTING.md) for more details.
 How to get write access here
 
 Want to become a core developer? See
-[Procedure for gaining Git write access](https://trac.osgeo.org/grass/wiki/HowToContribute#WriteaccesstotheGRASScorerepository)
+[Contributing](https://github.com/OSGeo/grass/blob/main/CONTRIBUTING.md)
 
 ## How to compile GRASS
 

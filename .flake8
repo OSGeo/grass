@@ -53,6 +53,7 @@ per-file-ignores =
     gui/wxpython/gui_core/ghelp.py: E722
     gui/wxpython/gui_core/gselect.py: F841, E266, E722
     gui/wxpython/gui_core/preferences.py: E266, F841
+    gui/wxpython/gui_core/pyedit.py: E501
     gui/wxpython/gui_core/treeview.py: F841
     gui/wxpython/gui_core/widgets.py: F841, E722, E266
     gui/wxpython/image2target/*: F841, E722, E265
