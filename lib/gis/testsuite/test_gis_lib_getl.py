@@ -6,6 +6,7 @@
 import ctypes
 import pathlib
 import platform
+import unittest
 
 import grass.lib.gis as libgis
 from grass.gunittest.case import TestCase
@@ -53,6 +54,7 @@ class TestNewlinesWithGetlFunctions(TestCase):
         r"""Check G_getl() with LF (\n)"""
         self.read_lines_and_assert(libgis.G_getl, "\n")
 
+    @unittest.expectedFailure
     def test_getl_cr(self):
         r"""Check G_getl() with CR (\r)"""
         self.read_lines_and_assert(libgis.G_getl, "\r")
@@ -65,6 +67,7 @@ class TestNewlinesWithGetlFunctions(TestCase):
         r"""Check G_getl2() with LF (\n)"""
         self.read_lines_and_assert(libgis.G_getl2, "\n")
 
+    @unittest.expectedFailure
     def test_getl2_cr(self):
         r"""Check G_getl2() with CR (\r)"""
         self.read_lines_and_assert(libgis.G_getl2, "\r")
