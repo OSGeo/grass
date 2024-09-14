@@ -1785,11 +1785,10 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             return wx.MessageDialog(
                 self.GetParent(),
                 message=_(
-                    "The {map_type} map {map_name} exists. "
-                    "Do you want to overwrite?".format(
-                        map_type=maptype,
-                        map_name=map_name,
-                    ),
+                    "The {map_type} map {map_name} exists. Do you want to overwrite?"
+                ).format(
+                    map_type=maptype,
+                    map_name=map_name,
                 ),
                 caption=_("Overwrite?"),
                 style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,

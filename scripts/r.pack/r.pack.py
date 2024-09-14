@@ -180,7 +180,7 @@ def main():
 
     os.chdir(olddir)
 
-    grass.verbose(_("Raster map saved to '%s'" % outfile))
+    grass.verbose(_("Raster map saved to '%s'") % outfile)
 
 
 if __name__ == "__main__":

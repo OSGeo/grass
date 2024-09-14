@@ -1314,16 +1314,17 @@ def lock_mapset(mapset_path, force_gislock_removal, user):
                 "You can force launching GRASS using -f flag"
                 " (note that you need permission for this operation)."
                 " Have another look in the processor "
-                "manager just to be sure..." % {"user": user, "file": lockfile}
-            )
+                "manager just to be sure..."
+            ) % {"user": user, "file": lockfile}
+
         else:
             try_remove(lockfile)
             message(
                 _(
                     "%(user)s is currently running GRASS in selected mapset"
                     " (file %(file)s found). Forcing to launch GRASS..."
-                    % {"user": user, "file": lockfile}
                 )
+                % {"user": user, "file": lockfile}
             )
     elif ret != 0:
         msg = (
