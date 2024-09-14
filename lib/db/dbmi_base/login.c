@@ -264,6 +264,27 @@ static int set_login(const char *driver, const char *database, const char *user,
    \return DB_OK on success
    \return DB_FAILED on failure
  */
+int db_set_login2(const char *driver, const char *database, const char *user,
+                  const char *password, const char *host, const char *port,
+                  int overwrite)
+{
+    return db_set_login(driver, database, user, password, host, port, overwrite);
+}
+
+/*!
+   \brief Set login parameters for driver/database
+
+   \param driver driver name
+   \param database database name
+   \param user user name
+   \param password password string
+   \param host host name
+   \param port
+   \param overwrite TRUE to overwrite existing connections
+
+   \return DB_OK on success
+   \return DB_FAILED on failure
+ */
 int db_set_login(const char *driver, const char *database, const char *user,
                  const char *password, const char *host, const char *port,
                  int overwrite)
