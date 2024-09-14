@@ -73,6 +73,14 @@ void trans2d(struct Map_info *In, struct Map_info *Out, int type, double height,
         G_debug(3, "%d records selected", cvarr.n_values);
 
         db_close_database_shutdown_driver(driver);
+        if (Fi) {
+            G_free(Fi->name);
+            G_free(Fi->driver);
+            G_free(Fi->database);
+            G_free(Fi->table);
+            G_free(Fi->key);
+            G_free(Fi);
+        }
     }
 
     G_message(_("Transforming features..."));
