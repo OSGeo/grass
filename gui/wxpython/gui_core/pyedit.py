@@ -635,12 +635,12 @@ class PyEditController:
 
     def OnSubmittingHelp(self, event):
         open_url(
-            "https://github.com/OSGeo/grass/blob/main/doc/development/style_guide.md#python"
+            "https://github.com/OSGeo/grass/blob/main/doc/development/style_guide.md#python"  # noqa: E501
         )
 
     def OnAddonsHelp(self, event):
         open_url(
-            "https://github.com/OSGeo/grass/blob/main/doc/development/style_guide.md#developing-grass-addons"
+            "https://github.com/OSGeo/grass/blob/main/doc/development/style_guide.md#developing-grass-addons"  # noqa: E501
         )
 
     def OnSupport(self, event):
