@@ -9,6 +9,8 @@ for details.
 :authors: Vaclav Petras
 """
 
+from __future__ import annotations
+
 import os
 import fnmatch
 import unittest
@@ -25,17 +27,13 @@ def fnmatch_exclude_with_base(files, base, exclude):
     :param exclude: list of fnmatch glob patterns for exclusion
     """
     not_excluded = []
-    patterns = []
+    patterns = {str(PurePath(pat)) for pat in exclude}
     base_path = PurePath(base)
-    # Make all dir separators slashes and drop leading current dir
-    # for both patterns and (later) for files.
-    for pattern in exclude:
-        patterns.append(PurePath(pattern))
     for filename in files:
         test_filename: PurePath = base_path / filename
         matches = False
         for pattern in patterns:
-            if fnmatch.fnmatch(str(test_filename), str(pattern)):
+            if fnmatch.fnmatch(str(test_filename), pattern):
                 matches = True
                 break
         if not matches:
