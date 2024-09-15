@@ -59,7 +59,7 @@ jobs:
       - name: Create installation directory
         run: mkdir $HOME/install
       - name: Build and install
-        shell: bash -l {0}
+        shell: micromamba-shell {0}
         run: source ./.github/workflows/macos_install.sh $HOME/install
       - name: Add the bin directory to PATH
         run: echo "$HOME/install/bin" >> $GITHUB_PATH
