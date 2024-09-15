@@ -11,11 +11,11 @@ for details.
 
 from __future__ import annotations
 
-import os
-import fnmatch
-import unittest
 import collections
+import fnmatch
+import os
 import re
+import unittest
 from pathlib import PurePath
 from typing import TYPE_CHECKING
 
