@@ -66,7 +66,8 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *out_opt, *in_opt;
     struct Flag *z_flag, *circle_flag, *l_flag, *int_flag;
-    char buf[2000];
+    const size_t BUFSIZE = 2000;
+    char buf[BUFSIZE];
 
     /* DWG */
     char path[2000];
@@ -135,10 +136,13 @@ int main(int argc, char *argv[])
     /* Init OpenDWG */
     sprintf(path, "%s/etc/adinit.dat", G_gisbase());
     if (!adInitAd2(path, &initerror)) {
-        sprintf(buf, _("Unable to initialize OpenDWG Toolkit, error: %d: %s."),
-                initerror, adErrorStr(initerror));
+        snprintf(buf, BUFSIZE,
+                 _("Unable to initialize OpenDWG Toolkit, error: %d: %s."),
+                 initerror, adErrorStr(initerror));
+        size_t buflen = strlen(buf);
         if (initerror == AD_UNABLE_TO_OPEN_INIT_FILE)
-            sprintf(buf, _("%s Cannot open %s"), buf, path);
+            snprintf(buf + buflen, BUFSIZE - buflen, _(" Cannot open %s"),
+                     path);
         G_fatal_error(buf);
     }
     adSetupDwgRead();
