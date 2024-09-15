@@ -9,7 +9,19 @@
 import sys
 import os
 
-from build_rest import *
+from build_rest import (
+    rest_dir,
+    grass_version,
+    modclass_intro_tmpl,
+    modclass_tmpl,
+    desc2_tmpl,
+    write_rest_header,
+    write_rest_footer,
+    rest_files,
+    check_for_desc_override,
+    get_desc,
+    replace_file,
+)
 
 os.chdir(rest_dir)
 

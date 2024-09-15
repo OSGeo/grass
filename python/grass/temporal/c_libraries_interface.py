@@ -815,7 +815,7 @@ def _read_raster3d_info(name, mapset):
     )
 
     if not g3map:
-        logging.error(_("Unable to open 3D raster map <%s>" % (name)))
+        logging.error(_("Unable to open 3D raster map <%s>"), (name))
         return None
 
     maptype = libraster3d.Rast3d_file_type_map(g3map)
@@ -830,7 +830,7 @@ def _read_raster3d_info(name, mapset):
     max = libgis.DCELL()
     ret = libraster3d.Rast3d_range_load(g3map)
     if not ret:
-        logging.error(_("Unable to load range of 3D raster map <%s>" % (name)))
+        logging.error(_("Unable to load range of 3D raster map <%s>"), (name))
         return None
     libraster3d.Rast3d_range_min_max(g3map, byref(min), byref(max))
 
@@ -844,7 +844,7 @@ def _read_raster3d_info(name, mapset):
         kvp["max"] = float(max.value)
 
     if not libraster3d.Rast3d_close(g3map):
-        logging.error(_("Unable to close 3D raster map <%s>" % (name)))
+        logging.error(_("Unable to close 3D raster map <%s>"), (name))
         return None
 
     return kvp
@@ -887,10 +887,8 @@ def _read_vector_info(name, mapset):
         with_topo = False
         if libvector.Vect_open_old2(byref(Map), name, mapset, "1") < 1:
             logging.error(
-                _(
-                    "Unable to open vector map <%s>"
-                    % (libvector.Vect_get_full_name(byref(Map)))
-                )
+                _("Unable to open vector map <%s>"),
+                (libvector.Vect_get_full_name(byref(Map))),
             )
             return None
 

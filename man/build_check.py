@@ -9,7 +9,7 @@
 import sys
 import os
 
-from build_html import *
+from build_html import html_dir, message_tmpl, html_files, read_file
 
 os.chdir(html_dir)
 

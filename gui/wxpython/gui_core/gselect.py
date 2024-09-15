@@ -921,7 +921,7 @@ class VectorDBInfo:
         :param layer: vector layer number
         """
         if layer not in self.layers:
-            raise GException(_("No table linked to layer <{}>.".format(layer)))
+            raise GException(_("No table linked to layer <{}>.").format(layer))
         return self.layers[layer]["table"]
 
     def GetDbSettings(self, layer):
@@ -2259,18 +2259,18 @@ class GdalSelect(wx.Panel):
                         message=_(
                             "Getting raster <{table}> SRID from PostgreSQL"
                             " DB <{db}>, host <{host}> failed."
-                            " {error}.".format(
-                                table=table,
-                                db=self._getPDDBConnectionParam(
-                                    dsn,
-                                    conn_param="dbname",
-                                ),
-                                host=self._getPDDBConnectionParam(
-                                    dsn,
-                                    conn_param="host",
-                                ),
-                                error=gs.utils.decode(error),
+                            " {error}."
+                        ).format(
+                            table=table,
+                            db=self._getPDDBConnectionParam(
+                                dsn,
+                                conn_param="dbname",
                             ),
+                            host=self._getPDDBConnectionParam(
+                                dsn,
+                                conn_param="host",
+                            ),
+                            error=gs.utils.decode(error),
                         ),
                     )
                 if ret:
@@ -2522,17 +2522,17 @@ class GdalSelect(wx.Panel):
                 parent=self,
                 message=_(
                     "Getting list of tables from PostgreSQL DB <{db}>,"
-                    " host <{host}> failed. {error}.".format(
-                        db=self._getPGDBConnectionParam(
-                            dsn,
-                            conn_param="dbname",
-                        ),
-                        host=self._getPGDBConnectionParam(
-                            dsn,
-                            conn_param="host",
-                        ),
-                        error=gs.utils.decode(error),
+                    " host <{host}> failed. {error}."
+                ).format(
+                    db=self._getPGDBConnectionParam(
+                        dsn,
+                        conn_param="dbname",
                     ),
+                    host=self._getPGDBConnectionParam(
+                        dsn,
+                        conn_param="host",
+                    ),
+                    error=gs.utils.decode(error),
                 ),
             )
         if ret:
@@ -2614,17 +2614,17 @@ class GdalSelect(wx.Panel):
                         message=_(
                             "Getting list of tables columns data types"
                             " from PostGIS DB <{db}>, host <{host}> failed."
-                            " {error}.".format(
-                                db=self._getPGDBConnectionParam(
-                                    dsn,
-                                    conn_param="dbname",
-                                ),
-                                host=self._getPGDBConnectionParam(
-                                    dsn,
-                                    conn_param="host",
-                                ),
-                                error=gs.utils.decode(error),
+                            " {error}."
+                        ).format(
+                            db=self._getPGDBConnectionParam(
+                                dsn,
+                                conn_param="dbname",
                             ),
+                            host=self._getPGDBConnectionParam(
+                                dsn,
+                                conn_param="host",
+                            ),
+                            error=gs.utils.decode(error),
                         ),
                     )
                 if ret:
@@ -2644,8 +2644,8 @@ class GdalSelect(wx.Panel):
                 parent=self,
                 message=_(
                     "PostgreSQL DB <{psql}> program was not found."
-                    " Please, install it.".format(psql=self._psql)
-                ),
+                    " Please, install it."
+                ).format(psql=self._psql),
             )
         Debug.msg(3, f"GdalSelect._getPGDBRasters(): return {rasters}")
         return rasters

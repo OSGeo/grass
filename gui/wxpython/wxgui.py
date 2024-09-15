@@ -100,10 +100,10 @@ class GMApp(wx.App):
                     warning(
                         _(
                             "Current version of wxPython {} is lower than "
-                            "minimum required version {}".format(
-                                wx.__version__,
-                                ".".join(map(str, min_required_wx_version)),
-                            )
+                            "minimum required version {}"
+                        ).format(
+                            wx.__version__,
+                            ".".join(map(str, min_required_wx_version)),
                         )
                     )
                 else:

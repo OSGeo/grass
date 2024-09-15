@@ -2723,7 +2723,7 @@ class LocationWizard(wx.Object):
                 if not self.filepage.georeffile or not os.path.isfile(
                     self.filepage.georeffile
                 ):
-                    return _("File <%s> not found." % self.filepage.georeffile)
+                    return _("File <%s> not found.") % self.filepage.georeffile
 
                 grass.create_location(
                     dbase=self.startpage.grassdatabase,

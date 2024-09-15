@@ -323,7 +323,7 @@ def main():
         where = "start_time >= '%s' AND start_time < '%s'" % (str(start), str(end))
         input_maps = input_strds.get_registered_maps_as_objects(where=where, dbif=dbif)
 
-        gs.message(_("Processing cycle %s - %s" % (str(start), str(end))))
+        gs.message(_("Processing cycle %s - %s") % (str(start), str(end)))
 
         if len(input_maps) == 0:
             continue
@@ -483,7 +483,6 @@ def main():
             if method:
                 accmod.inputs["method"].value = method
 
-            print(accmod)
             accmod.run()
 
             if accmod.returncode != 0:

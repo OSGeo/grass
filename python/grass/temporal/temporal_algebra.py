@@ -1195,7 +1195,7 @@ class TemporalAlgebraParser:
 
         for key, value in map_names.items():
             if value:
-                self.msgr.message(_("Removing un-needed or empty %s maps" % (key)))
+                self.msgr.message(_("Removing un-needed or empty %s maps") % (key))
                 self._remove_maps(value, key)
 
     def _remove_maps(self, namelist, map_type):
@@ -2392,8 +2392,8 @@ class TemporalAlgebraParser:
                                     _(
                                         "The resulting space time dataset type <%(a)s> "
                                         "is different from the requested type <%(b)s>"
-                                        % ({"a": maps_stds_type, "b": self.stdstype})
                                     )
+                                    % ({"a": maps_stds_type, "b": self.stdstype})
                                 )
                         else:
                             map_type_2 = map_i.get_type()

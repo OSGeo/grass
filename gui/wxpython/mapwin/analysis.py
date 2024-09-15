@@ -262,11 +262,7 @@ class MeasureDistanceController(AnalysisControllerBase):
                 self._useCtypes = True
             except ImportError as e:
                 self._giface.WriteWarning(
-                    _(
-                        "Geodesic distance calculation "
-                        "is not available.\n"
-                        "Reason: %s" % e
-                    )
+                    _("Geodesic distance calculation is not available.\nReason: %s") % e
                 )
 
     def MeasureDist(self, beginpt, endpt):

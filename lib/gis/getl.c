@@ -19,8 +19,7 @@
  * \brief Gets a line of text from a file
  *
  * This routine runs fgets() to fetch a line of text from a file
- * (advancing file pointer) and removes trailing newline. fgets() does
- * not recognize '<code>\\r</code>' as an EOL and will read past * it.
+ * (advancing file pointer) and removes trailing newline.
  *
  * \param buf string buffer to receive read data
  * \param n maximum number of bytes to read
@@ -28,23 +27,18 @@
  *
  * \return 1 on success
  * \return 0 EOF
+ *
+ * \see G_getl2()
  */
 int G_getl(char *buf, int n, FILE *fd)
 {
-    if (!fgets(buf, n, fd))
-        return 0;
-
-    for (; *buf && *buf != '\n'; buf++)
-        ;
-    *buf = 0;
-
-    return 1;
+    return G_getl2(buf, n, fd);
 }
 
 /*!
  * \brief Gets a line of text from a file of any pedigree
  *
- * This routine is like G_getl() but is more portable.  It supports
+ * This routine supports
  * text files created on various platforms (UNIX, MacOS9, DOS),
  * i.e. <code>\\n (\\012)</code>, <code>\\r (\\015)</code>, and
  * <code>\\r\\n (\\015\\012)</code> style newlines.

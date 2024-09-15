@@ -108,7 +108,13 @@ def message_option_value_excludes_option_value(
     return _(
         "Combining {option_name}={option_value} and "
         "{excluded_option_name}={excluded_option_value} is not allowed. {reason}"
-    ).format(**locals())
+    ).format(
+        option_name=option_name,
+        option_value=option_value,
+        excluded_option_name=excluded_option_name,
+        excluded_option_value=excluded_option_value,
+        reason=reason,
+    )
 
 
 def message_option_value_excludes_option(
@@ -117,13 +123,23 @@ def message_option_value_excludes_option(
     return _(
         "The option {excluded_option_name} is not allowed with "
         "{option_name}={option_value}. {reason}"
-    ).format(**locals())
+    ).format(
+        excluded_option_name=excluded_option_name,
+        option_name=option_name,
+        option_value=option_value,
+        reason=reason,
+    )
 
 
 def message_option_value_excludes_flag(option_name, option_value, flag_name, reason):
     return _(
         "The flag -{flag_name} is not allowed with {option_name}={option_value}."
-        " {reason}".format(**locals())
+        " {reason}"
+    ).format(
+        flag_name=flag_name,
+        option_name=option_name,
+        option_value=option_value,
+        reason=reason,
     )
 
 

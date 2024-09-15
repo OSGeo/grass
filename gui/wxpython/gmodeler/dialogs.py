@@ -56,17 +56,10 @@ class ModelDataDialog(SimpleDialog):
         self.parent = parent
         self.shape = shape
 
-        label, etype = self._getLabel()
-        self.etype = etype
+        label, self.etype = self._getLabel()
         SimpleDialog.__init__(self, parent, title)
 
-        self.element = Select(
-            parent=self.panel,
-            type=self.shape.GetPrompt(),
-            validator=SimpleValidator(callback=self.ValidatorCallback),
-        )
-        if shape.GetValue():
-            self.element.SetValue(shape.GetValue())
+        self.element = self._createElementControl(shape)
 
         self.Bind(wx.EVT_BUTTON, self.OnOK, self.btnOK)
         self.Bind(wx.EVT_BUTTON, self.OnCancel, self.btnCancel)
@@ -85,6 +78,18 @@ class ModelDataDialog(SimpleDialog):
 
         self._layout()
         self.SetMinSize(self.GetSize())
+
+    def _createElementControl(self, shape):
+        """Create Select element and set its value."""
+        element = Select(
+            parent=self.panel,
+            type=self.shape.GetPrompt(),
+            validator=SimpleValidator(callback=self.ValidatorCallback),
+        )
+        if shape.GetValue():
+            element.SetValue(shape.GetValue())
+
+        return element
 
     def _getLabel(self):
         etype = False
@@ -549,6 +554,11 @@ class ModelItemDialog(wx.Dialog):
         """Get loop condition"""
         return self.condText.GetValue()
 
+    def SetSizes(self):
+        """Set default and minimal size."""
+        self.SetMinSize(self.GetSize())
+        self.SetSize((500, 400))
+
 
 class ModelLoopDialog(ModelItemDialog):
     """Loop properties dialog"""
@@ -573,8 +583,7 @@ class ModelLoopDialog(ModelItemDialog):
         self.btnSeries.Bind(wx.EVT_BUTTON, self.OnSeries)
 
         self._layout()
-        self.SetMinSize(self.GetSize())
-        self.SetSize((500, 400))
+        self.SetSizes()
 
     def _layout(self):
         """Do layout"""
@@ -664,8 +673,7 @@ class ModelConditionDialog(ModelItemDialog):
         self.itemListElse.Populate(self.parent.GetModel().GetItems())
 
         self._layout()
-        self.SetMinSize(self.GetSize())
-        self.SetSize((500, 400))
+        self.SetSizes()
 
     def _layout(self):
         """Do layout"""
@@ -745,20 +753,26 @@ class ModelListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEditMi
         listmix.ListCtrlAutoWidthMixin.__init__(self)
         listmix.TextEditMixin.__init__(self)
 
-        i = 0
-        for col in columns:
-            self.InsertColumn(i, col)
-            self.SetColumnWidth(i, wx.LIST_AUTOSIZE_USEHEADER)
-            i += 1
+        self.InsertColumns(columns)
 
         self.itemDataMap = {}  # requested by sorter
         self.itemCount = 0
 
+        self.BindButtons()
+
+    def BindButtons(self):
+        """Bind signals to buttons."""
         self.Bind(wx.EVT_LIST_BEGIN_LABEL_EDIT, self.OnBeginEdit)
         self.Bind(wx.EVT_LIST_END_LABEL_EDIT, self.OnEndEdit)
         self.Bind(wx.EVT_LIST_COL_CLICK, self.OnColClick)
         self.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.OnRightUp)  # wxMSW
         self.Bind(wx.EVT_RIGHT_UP, self.OnRightUp)  # wxGTK
+
+    def InsertColumns(self, columns):
+        """INsert columns and set their width."""
+        for i, col in enumerate(columns):
+            self.InsertColumn(i, col)
+            self.SetColumnWidth(i, wx.LIST_AUTOSIZE_USEHEADER)
 
     def OnBeginEdit(self, event):
         """Editing of item started"""
@@ -799,7 +813,7 @@ class VariableListCtrl(ModelListCtrl):
 
     def Populate(self, data):
         """Populate the list"""
-        self.itemDataMap = {}
+        self.DeleteAllItems()
         i = 0
         for name, values in data.items():
             self.itemDataMap[i] = [
@@ -808,19 +822,15 @@ class VariableListCtrl(ModelListCtrl):
                 values.get("value", ""),
                 values.get("description", ""),
             ]
-            i += 1
-
-        self.itemCount = len(self.itemDataMap.keys())
-        self.DeleteAllItems()
-        i = 0
-        for name, vtype, value, desc in self.itemDataMap.values():
             index = self.InsertItem(i, name)
             self.SetItem(index, 0, name)
-            self.SetItem(index, 1, vtype)
-            self.SetItem(index, 2, value)
-            self.SetItem(index, 3, desc)
+            self.SetItem(index, 1, values["type"])
+            self.SetItem(index, 2, values.get("value", ""))
+            self.SetItem(index, 3, values.get("description", ""))
             self.SetItemData(index, i)
             i += 1
+
+        self.itemCount = len(data)
 
     def Append(self, name, vtype, value, desc):
         """Append new item to the list
@@ -1140,11 +1150,12 @@ class ItemCheckListCtrl(ItemListCtrl, CheckListCtrlMixin):
 
     def OnCheckItem(self, index, flag):
         """Item checked/unchecked"""
-        name = self.GetLabel()
-        if name == "IfBlockList" and self.window:
-            self.window.OnCheckItemIf(index, flag)
-        elif name == "ElseBlockList" and self.window:
-            self.window.OnCheckItemElse(index, flag)
+        if self.window:
+            name = self.GetLabel()
+            if name == "IfBlockList":
+                self.window.OnCheckItemIf(index, flag)
+            elif name == "ElseBlockList":
+                self.window.OnCheckItemElse(index, flag)
 
     def GetItems(self):
         """Get list of selected actions"""

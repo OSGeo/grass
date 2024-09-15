@@ -564,15 +564,15 @@ class AboutWindow(wx.Frame):
         """Return string for the status of translation"""
         allStr = "%s :" % k.upper()
         try:
-            allStr += _("   %d translated" % v["good"])
+            allStr += _("   %d translated") % v["good"]
         except:
             pass
         try:
-            allStr += _("   %d fuzzy" % v["fuzzy"])
+            allStr += _("   %d fuzzy") % v["fuzzy"]
         except:
             pass
         try:
-            allStr += _("   %d untranslated" % v["bad"])
+            allStr += _("   %d untranslated") % v["bad"]
         except:
             pass
         return allStr
@@ -584,7 +584,7 @@ class AboutWindow(wx.Frame):
         langBox.Add(tkey)
         try:
             tgood = StaticText(
-                parent=par, id=wx.ID_ANY, label=_("%d translated" % v["good"])
+                parent=par, id=wx.ID_ANY, label=_("%d translated") % v["good"]
             )
             tgood.SetForegroundColour(wx.Colour(35, 142, 35))
             langBox.Add(tgood)
@@ -593,7 +593,7 @@ class AboutWindow(wx.Frame):
             langBox.Add(tgood)
         try:
             tfuzzy = StaticText(
-                parent=par, id=wx.ID_ANY, label=_("   %d fuzzy" % v["fuzzy"])
+                parent=par, id=wx.ID_ANY, label=_("   %d fuzzy") % v["fuzzy"]
             )
             tfuzzy.SetForegroundColour(wx.Colour(255, 142, 0))
             langBox.Add(tfuzzy)
@@ -602,7 +602,7 @@ class AboutWindow(wx.Frame):
             langBox.Add(tfuzzy)
         try:
             tbad = StaticText(
-                parent=par, id=wx.ID_ANY, label=_("   %d untranslated" % v["bad"])
+                parent=par, id=wx.ID_ANY, label=_("   %d untranslated") % v["bad"]
             )
             tbad.SetForegroundColour(wx.Colour(255, 0, 0))
             langBox.Add(tbad)

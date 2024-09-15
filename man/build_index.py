@@ -9,7 +9,14 @@
 import sys
 import os
 
-from build_html import *
+from build_html import (
+    html_dir,
+    grass_version,
+    write_html_header,
+    write_html_cmd_overview,
+    write_html_footer,
+    replace_file,
+)
 
 os.chdir(html_dir)
 

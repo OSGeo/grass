@@ -9,7 +9,21 @@
 import sys
 import os
 
-from build_html import *
+from build_html import (
+    html_dir,
+    grass_version,
+    html_files,
+    write_html_header,
+    write_html_footer,
+    check_for_desc_override,
+    get_desc,
+    replace_file,
+    to_title,
+    full_index_header,
+    toc,
+    cmd2_tmpl,
+    desc1_tmpl,
+)
 
 year = None
 if len(sys.argv) > 1:

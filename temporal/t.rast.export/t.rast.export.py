@@ -127,10 +127,10 @@ def main():
     }
 
     if not directory or not os.path.exists(directory):
-        gs.fatal(_("Directory {} not found".format(directory)))
+        gs.fatal(_("Directory {} not found").format(directory))
 
     if not os.access(directory, os.W_OK):
-        gs.fatal(_("Directory {} is not writable".format(directory)))
+        gs.fatal(_("Directory {} is not writable").format(directory))
 
     if _type and _format in {"pack", "AAIGrid"}:
         gs.warning(

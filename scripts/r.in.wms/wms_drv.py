@@ -286,7 +286,7 @@ class WMSDrv(WMSBase):
         # open source file
         src_ds = gdal.Open(src_filename)
         if src_ds is None:
-            gs.fatal(_("Unable to open %s " % src_filename))
+            gs.fatal(_("Unable to open %s ") % src_filename)
 
         src_band = src_ds.GetRasterBand(band_number)
 

@@ -92,6 +92,7 @@ int interp_call(struct octtree *root, struct octtree *tree)
     int skip_index, segtest;
     double xx, yy, zz /*, ww */;
 
+    skip_point.x = skip_point.y = skip_point.z = skip_point.w = 0.0;
     if (tree == NULL)
         return -1;
     if (tree->data == NULL)

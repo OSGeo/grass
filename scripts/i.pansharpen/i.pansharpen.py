@@ -402,7 +402,7 @@ def main():
     gs.run_command("g.region", res=panres, align=pan)
 
     # Select sharpening method
-    gs.message(_("Performing pan sharpening with hi res pan image: %f" % panres))
+    gs.message(_("Performing pan sharpening with hi res pan image: %f") % panres)
     if sharpen == "brovey":
         brovey(pan, ms1, ms2, ms3, out, pid, sproc)
     elif sharpen == "ihs":
@@ -437,8 +437,8 @@ def main():
     for ch in ["red", "green", "blue"]:
         gs.verbose(_("%s_%s") % (out, ch))
 
-    gs.verbose(_("To visualize output, run: g.region -p raster=%s_red" % out))
-    gs.verbose(_("d.rgb r=%s_red g=%s_green b=%s_blue" % (out, out, out)))
+    gs.verbose(_("To visualize output, run: g.region -p raster=%s_red") % out)
+    gs.verbose(_("d.rgb r=%s_red g=%s_green b=%s_blue") % (out, out, out))
     gs.verbose(
         _("If desired, combine channels into a single RGB map with 'r.composite'.")
     )

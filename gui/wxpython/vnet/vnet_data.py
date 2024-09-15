@@ -154,7 +154,7 @@ class VNETData:
         if flags["t"] and "turn_layer" not in relevant_params:
             GMessage(
                 parent=self.guiparent,
-                message=_("Module <%s> does not support turns costs." % analysis),
+                message=_("Module <%s> does not support turns costs.") % analysis,
             )
             return False
 

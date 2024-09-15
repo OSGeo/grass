@@ -828,7 +828,7 @@ def check_datetime_string(time_string, use_dateutil=True):
     try:
         return datetime.strptime(time_string, time_format)
     except:
-        return _("Unable to parse time string: %s" % time_string)
+        return _("Unable to parse time string: %s") % time_string
 
 
 ###############################################################################

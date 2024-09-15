@@ -43,7 +43,8 @@ char *OGR_list_write_drivers(void)
         len += strlen(buf) + 1; /* + ',' */
     }
 
-    qsort(list, count, sizeof(char *), cmp);
+    if (list)
+        qsort(list, count, sizeof(char *), cmp);
 
     if (len > 0) {
         ret = G_malloc((len + 1) * sizeof(char)); /* \0 */

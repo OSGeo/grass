@@ -765,8 +765,9 @@ SOCKLIB
 ICONVLIB
 DLLIB
 MATHLIB
-HAVE_ASPRINTF
 HAVE_STRLCPY
+HAVE_STRLCAT
+HAVE_ASPRINTF
 DBMIEXTRALIB
 USE_X11
 XTLIB
@@ -8312,12 +8313,26 @@ then :
 
 fi
 
+
+
+ac_fn_c_check_func "$LINENO" "strlcat" "ac_cv_func_strlcat"
+if test "x$ac_cv_func_strlcat" = xyes
+then :
+  printf "%s\n" "#define HAVE_STRLCAT 1" >>confdefs.h
+
+fi
+
+
+
+# Test if strlcpy exists
+# This is a function part of *BSD libc (optionally available on Linux via libbsd)
 ac_fn_c_check_func "$LINENO" "strlcpy" "ac_cv_func_strlcpy"
 if test "x$ac_cv_func_strlcpy" = xyes
 then :
   printf "%s\n" "#define HAVE_STRLCPY 1" >>confdefs.h
 
 fi
+
 
 
 # Test if mathlib needs -lm flag or is included with libc
