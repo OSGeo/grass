@@ -17,9 +17,17 @@ import unittest
 import collections
 import re
 from pathlib import PurePath
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
 
 
-def fnmatch_exclude_with_base(files, base, exclude):
+def fnmatch_exclude_with_base(
+    files: Iterable[str],
+    base: str | os.PathLike,
+    exclude: Iterable[str | os.PathLike | PurePath],
+) -> list[str]:
     """Return list of files not matching any exclusion pattern
 
     :param files: list of file names
