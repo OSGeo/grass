@@ -117,6 +117,7 @@ def discover_modules(
             full = os.path.join(root, testsuite_dir)
 
             all_files = os.listdir(full)
+            files = [f for f in all_files]
             if file_pattern:
                 files = fnmatch.filter(all_files, file_pattern)
             if file_regexp:
