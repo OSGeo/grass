@@ -30,16 +30,12 @@ def fnmatch_exclude_with_base(files, base, exclude):
     # Make all dir separators slashes and drop leading current dir
     # for both patterns and (later) for files.
     for pattern in exclude:
-        pattern = pattern.replace(os.sep, "/")
-        if pattern.startswith("./"):
-            patterns.append(pattern[2:])
-        else:
-            patterns.append(pattern)
+        patterns.append(PurePath(pattern))
     for filename in files:
         test_filename: PurePath = base_path / filename
         matches = False
         for pattern in patterns:
-            if fnmatch.fnmatch(str(test_filename), pattern):
+            if fnmatch.fnmatch(str(test_filename), str(pattern)):
                 matches = True
                 break
         if not matches:
