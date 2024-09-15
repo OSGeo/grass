@@ -34,6 +34,7 @@ build_program_in_subdir(
   grass_raster
   grass_raster3d
   grass_gmath
+  grass_parson
   PROJ
   GDAL
   LIBM)

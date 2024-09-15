@@ -33,7 +33,7 @@ build_program_in_subdir(db.createdb DEPENDS grass_gis grass_dbmibase
 add_dependencies(db.createdb ${db_drivers})
 
 build_program_in_subdir(db.describe DEPENDS grass_gis grass_dbmibase
-                        grass_dbmiclient grass_dbmidriver)
+                        grass_dbmiclient grass_dbmidriver grass_parson)
 add_dependencies(db.describe ${db_drivers})
 
 build_program_in_subdir(db.connect DEPENDS grass_gis grass_dbmibase

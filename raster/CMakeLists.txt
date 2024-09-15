@@ -164,7 +164,7 @@ build_program_in_subdir(
   GDAL
   LIBM)
 
-build_program_in_subdir(r.category DEPENDS grass_gis grass_raster)
+build_program_in_subdir(r.category DEPENDS grass_gis grass_raster grass_parson)
 
 build_program_in_subdir(r.circle DEPENDS grass_gis grass_raster)
 
@@ -319,7 +319,7 @@ build_program_in_subdir(
 
 build_program_in_subdir(r.null DEPENDS grass_gis grass_raster)
 
-build_program_in_subdir(r.object.geometry DEPENDS grass_gis grass_raster LIBM)
+build_program_in_subdir(r.object.geometry DEPENDS grass_gis grass_raster grass_parson LIBM)
 
 build_program_in_subdir(r.out.ascii DEPENDS grass_gis grass_raster)
 
@@ -423,7 +423,7 @@ build_program_in_subdir(r.regression.line DEPENDS grass_gis grass_raster LIBM)
 
 build_program_in_subdir(r.regression.multi DEPENDS grass_gis grass_raster LIBM)
 
-build_program_in_subdir(r.report DEPENDS grass_gis grass_raster)
+build_program_in_subdir(r.report DEPENDS grass_gis grass_raster grass_parson)
 
 build_program_in_subdir(
   r.resamp.bspline
