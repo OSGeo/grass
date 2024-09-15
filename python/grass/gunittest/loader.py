@@ -127,7 +127,7 @@ def discover_modules(
                 files = fnmatch_exclude_with_base(files, full, exclude)
             files = sorted(files)
             # get test/module name without .py
-            # extpecting all files to end with .py
+            # expecting all files to end with .py
             # this will not work for invoking bat files but it works fine
             # as long as we handle only Python files (and using Python
             # interpreter for invoking)
