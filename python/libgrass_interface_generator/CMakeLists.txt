@@ -79,9 +79,6 @@ foreach(module ${MODULES})
     message(FATAL_ERROR "${${module}_TARGET_NAME} is not set")
   endif()
 
-  set(LIBS_VERSIONED ${${module}_LIBS})
-  list(TRANSFORM LIBS_VERSIONED APPEND .${GRASS_VERSION_NUMBER})
-
   set(output_file "${OUTDIR}/${GRASS_INSTALL_PYDIR}/grass/lib/${module}.py")
   add_custom_command(
     OUTPUT ${output_file}
@@ -89,7 +86,7 @@ foreach(module ${MODULES})
     COMMAND
       ${CMAKE_COMMAND} -DCTYPESGEN_PY=${CMAKE_CURRENT_SOURCE_DIR}/run.py
       -DPython_EXECUTABLE=${Python_EXECUTABLE} -DCOMPILER=${CMAKE_C_COMPILER}
-      "-DHDRS=${${module}_HDRS}" "-DLIBS=${LIBS_VERSIONED}" -DOUTDIR=${OUTDIR}
+      "-DHDRS=${${module}_HDRS}" "-DLIBS=${${module}_LIBS}" -DOUTDIR=${OUTDIR}
       -DGRASS_INSTALL_INCLUDEDIR=${GRASS_INSTALL_INCLUDEDIR}
       -DGRASS_INSTALL_SCRIPTDIR=${GRASS_INSTALL_SCRIPTDIR}
       -DGRASS_INSTALL_DEMODIR=${GRASS_INSTALL_DEMODIR}
