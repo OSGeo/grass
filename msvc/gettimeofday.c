@@ -1,4 +1,7 @@
 /*
+ * Copied and clang-formatted from
+ * https://github.com/postgres/postgres/blob/master/src/port/win32gettimeofday.c
+ *
  * win32gettimeofday.c
  *	  Win32 gettimeofday() replacement
  *
