@@ -65,7 +65,7 @@ jobs:
         run: echo "$HOME/install/bin" >> $GITHUB_PATH
       - name: Check installed version
         if: ${{ !cancelled() }}
-        shell: bash -l {0}
+        shell: bash -le {0}
         run: source ./.github/workflows/print_versions.sh
 
       - name: Run pytest with multiple workers in parallel
