@@ -39,9 +39,8 @@ static const unsigned __int64 epoch = UINT64CONST(116444736000000000);
  * FILETIME represents the number of 100-nanosecond intervals since
  * January 1, 1601 (UTC).
  */
-#define FILETIME_UNITS_PER_SEC	10000000L
+#define FILETIME_UNITS_PER_SEC  10000000L
 #define FILETIME_UNITS_PER_USEC 10
-
 
 /*
  * timezone information is stored outside the kernel so tzp isn't used anymore.
@@ -49,27 +48,26 @@ static const unsigned __int64 epoch = UINT64CONST(116444736000000000);
  * Note: this function is not for Win32 high precision timing purposes. See
  * elapsed_time().
  */
-int
-gettimeofday(struct timeval *tp, void *tzp)
+int gettimeofday(struct timeval *tp, void *tzp)
 {
-	FILETIME	file_time;
-	ULARGE_INTEGER ularge;
+    FILETIME file_time;
+    ULARGE_INTEGER ularge;
 
-	/*
-	 * POSIX declines to define what tzp points to, saying "If tzp is not a
-	 * null pointer, the behavior is unspecified".  Let's take this
-	 * opportunity to verify that noplace in Postgres tries to use any
-	 * unportable behavior.
-	 */
-	Assert(tzp == NULL);
+    /*
+     * POSIX declines to define what tzp points to, saying "If tzp is not a
+     * null pointer, the behavior is unspecified".  Let's take this
+     * opportunity to verify that noplace in Postgres tries to use any
+     * unportable behavior.
+     */
+    Assert(tzp == NULL);
 
-	GetSystemTimePreciseAsFileTime(&file_time);
-	ularge.LowPart = file_time.dwLowDateTime;
-	ularge.HighPart = file_time.dwHighDateTime;
+    GetSystemTimePreciseAsFileTime(&file_time);
+    ularge.LowPart = file_time.dwLowDateTime;
+    ularge.HighPart = file_time.dwHighDateTime;
 
-	tp->tv_sec = (long) ((ularge.QuadPart - epoch) / FILETIME_UNITS_PER_SEC);
-	tp->tv_usec = (long) (((ularge.QuadPart - epoch) % FILETIME_UNITS_PER_SEC)
-						  / FILETIME_UNITS_PER_USEC);
+    tp->tv_sec = (long)((ularge.QuadPart - epoch) / FILETIME_UNITS_PER_SEC);
+    tp->tv_usec = (long)(((ularge.QuadPart - epoch) % FILETIME_UNITS_PER_SEC) /
+                         FILETIME_UNITS_PER_USEC);
 
-	return 0;
+    return 0;
 }
