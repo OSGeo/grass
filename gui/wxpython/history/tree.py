@@ -557,14 +557,12 @@ class HistoryBrowserTree(CTreeView):
         selected_command = self.selected_command[0]
         command = selected_command.data["name"]
 
-        lst = re.split(r"\s+", command)
         if (
             globalvar.ignoredCmdPattern
             and re.compile(globalvar.ignoredCmdPattern).search(command)
             and "--help" not in command
             and "--ui" not in command
         ):
-            self.runIgnoredCmdPattern.emit(cmd=lst)
             self.runIgnoredCmdPattern.emit(cmd=split(command))
             return
         if re.compile(r"^r[3]?\.mapcalc").search(command):
