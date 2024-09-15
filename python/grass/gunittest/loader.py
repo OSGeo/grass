@@ -14,7 +14,7 @@ import fnmatch
 import unittest
 import collections
 import re
-from pathlib import Path
+from pathlib import PurePath
 
 
 def fnmatch_exclude_with_base(files, base, exclude):
@@ -26,7 +26,7 @@ def fnmatch_exclude_with_base(files, base, exclude):
     """
     not_excluded = []
     patterns = []
-    base_path = Path(base)
+    base_path = PurePath(base)
     # Make all dir separators slashes and drop leading current dir
     # for both patterns and (later) for files.
     for pattern in exclude:
@@ -36,7 +36,7 @@ def fnmatch_exclude_with_base(files, base, exclude):
         else:
             patterns.append(pattern)
     for filename in files:
-        test_filename: Path = base_path / filename
+        test_filename: PurePath = base_path / filename
         matches = False
         for pattern in patterns:
             if fnmatch.fnmatch(str(test_filename), pattern):
