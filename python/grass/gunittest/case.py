@@ -10,6 +10,7 @@ for details.
 """
 
 import os
+from pathlib import Path
 import shutil
 import subprocess
 import hashlib
@@ -1290,8 +1291,7 @@ class TestCase(unittest.TestCase):
                     numlines=context_lines,
                     charset="utf-8",
                 )
-                with open(htmldiff_file_name, "w", encoding="utf-8") as htmldiff_file:
-                    htmldiff_file.write(htmldiff)
+                Path(htmldiff_file_name).write_text(htmldiff, encoding="utf-8")
 
             self.fail(self._formatMessage(msg, stdmsg))
 
