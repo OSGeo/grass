@@ -6,6 +6,7 @@
 import os
 import sys
 import glob
+from pathlib import Path
 from build_html import (
     grass_version,
     header1_tmpl,
