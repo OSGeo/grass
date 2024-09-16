@@ -9,7 +9,20 @@
 import sys
 import os
 
-from build_html import *
+from build_html import (
+    html_dir,
+    write_html_header,
+    grass_version,
+    modclass_intro_tmpl,
+    modclass_tmpl,
+    to_title,
+    html_files,
+    check_for_desc_override,
+    get_desc,
+    desc2_tmpl,
+    write_html_footer,
+    replace_file,
+)
 
 
 no_intro_page_classes = ["display", "general", "miscellaneous", "postscript"]

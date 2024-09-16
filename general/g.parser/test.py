@@ -53,10 +53,10 @@ def main():
 
     # test if parameter present:
     if option1:
-        gs.message(_("Value of option1 option: '%s'" % option1))
+        gs.message(_("Value of option1 option: '%s'") % option1)
 
-    gs.message(_("Value of raster option: '%s'" % raster))
-    gs.message(_("Value of vector option: '%s'" % vector))
+    gs.message(_("Value of raster option: '%s'") % raster)
+    gs.message(_("Value of vector option: '%s'") % vector)
 
     # End of your main code here
 

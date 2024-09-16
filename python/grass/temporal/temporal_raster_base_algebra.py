@@ -873,7 +873,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                             process_queue.put(m)
 
                     else:
-                        self.msgr.error(_("Error computing map <%s>" % map_i.get_id()))
+                        self.msgr.error(_("Error computing map <%s>") % map_i.get_id())
                     count += 1
 
                 if self.dry_run is False:
