@@ -25,7 +25,7 @@ vulnerability, please follow these steps:
 
 ## Supported Versions
 
-Please refer to our [Roadmap](https://grass.osgeo.org/about/roadmap/)
+Please refer to our [download section](https://grass.osgeo.org/download/)
 for details on which versions are currently supported.
 
 ## Security Measures

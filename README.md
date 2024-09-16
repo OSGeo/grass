@@ -106,6 +106,11 @@ this issue, clean all the compiled files from the source code:
 make distclean
 ```
 
+## Further documents
+
+- [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md)
+- [Roadmap](https://grass.osgeo.org/about/roadmap/)
+
 ## Thanks to all contributors ❤
 
 [![GRASS contributors](https://contrib.rocks/image?repo=OSGeo/grass "GRASS contributors")](https://github.com/OSGeo/grass/graphs/contributors)
