@@ -1288,8 +1288,9 @@ class TestCase(unittest.TestCase):
                     "actual",
                     context=True,
                     numlines=context_lines,
+                    charset="utf-8",
                 )
-                with open(htmldiff_file_name, "w") as htmldiff_file:
+                with open(htmldiff_file_name, "w", encoding="utf-8") as htmldiff_file:
                     for line in htmldiff:
                         htmldiff_file.write(line)
 
