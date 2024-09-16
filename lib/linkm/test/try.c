@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
     exit(0);
 }
 
-int add_link_rev(struct link *List, struct link *link)
+void add_link_rev(struct link *List, struct link *link)
 {
     struct link *p;
 
@@ -70,7 +70,7 @@ int add_link_rev(struct link *List, struct link *link)
     link->next = p;
 }
 
-int add_link(struct link *List, struct link *link)
+void add_link(struct link *List, struct link *link)
 {
     struct link *p;
 
@@ -81,7 +81,7 @@ int add_link(struct link *List, struct link *link)
     link->next = NULL;
 }
 
-int dumplist(struct link *List)
+void dumplist(struct link *List)
 {
     struct link *p;
 
