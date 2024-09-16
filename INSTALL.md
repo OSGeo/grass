@@ -41,7 +41,7 @@ GRASS source code is currently distributed in 2 forms:
 ### Officially released source code
 
 The full source code version contains all the GRASS source code
-required for compilation. It is distributed as one file (*.tar.gz
+required for compilation. It is distributed as one file (`*.tar.gz`
 package) and the version is composed of 3 numbers, e.g. 3.7.0, 3.7.1
 etc. See
 <https://github.com/OSGeo/grass/releases>.
@@ -52,7 +52,7 @@ This version of the source code can be acquired either from the GitHub
 repository (<https://github.com/OSGeo/grass/>) or as a auto-generated snapshot
 (`*.tar.gz` package) of the GitHub repository. The snapshot name
 contains the date when the snapshot was created (checked out from
-the GitHub repository), e.g. grass-3.7.git_src_snapshot_2022_04_27.tar.gz
+the GitHub repository), e.g. `grass-3.7.git_src_snapshot_2022_04_27.tar.gz`
 from <https://grass.osgeo.org/grass-devel/source/snapshot/>
 
 ## (B) COMPILATION
@@ -72,7 +72,7 @@ Detailed Wiki notes for various operating systems (MS-Windows, GNU/Linux
 distributions, FreeBSD, AIX, etc) are available at:
 <https://grasswiki.osgeo.org/wiki/Compile_and_Install>
 
-First step of the compilation (-g for debugging, or -O2 for optimization):
+First step of the compilation (`-g` for debugging, or `-O2` for optimization):
 
 ```bash
 CFLAGS="-g -Wall" ./configure
@@ -108,7 +108,7 @@ make
 Note for Solaris users (see also Wiki page above):
 
 To configure GRASS correctly on a system which doesn't have a suitable
-install program (AC_PROG_INSTALL ignores versions which are known to
+install program (`AC_PROG_INSTALL` ignores versions which are known to
 have problems), you need to ensure that $srcdir is an absolute path,
 by using e.g.:
 
@@ -136,7 +136,7 @@ CC=cc CPP=cpp ./configure ...
 ## (C) COMPILATION NOTES for 64bit platforms
 
 To successfully compile GRASS on 64bit platforms, the required
-FFTW2 library has to be compiled with -fPIC flag:
+FFTW2 library has to be compiled with `-fPIC` flag:
 
 ```bash
 #this applies to FFTW3, not to GRASS GIS:
@@ -175,7 +175,7 @@ grass
 
 ## (E) INSTALLATION ON MACOSX
 
-See the ReadMe.rtf in the ./macosx/ folder and the Wiki page above.
+See the `ReadMe.rtf` in the `./macosx/` folder and the Wiki page above.
 
 ## (F) RUNNING GRASS GIS
 
@@ -258,8 +258,8 @@ setenv CFLAGS -O
 ./configure
 ```
 
-whichever works on your shell. Use -O2 instead of -O if your compiler
-supports this (note: O is the letter, not zero). Using the "gcc" compiler,
+whichever works on your shell. Use `-O2` instead of `-O` if your compiler
+supports this (note: `O` is the letter, not zero). Using the "gcc" compiler,
 you can also specify processor specific flags (examples, please suggest
 better settings to us):
 
@@ -272,7 +272,7 @@ CFLAGS="-O2 -msse -msse2 -mfpmath=sse \
 CFLAGS="-mtune=nocona -m64 -minline-all-stringops" # Intel Pentium 64bit processor
 ```
 
-Note: As of version 4.3.0, GCC offers the -march=native switch that
+Note: As of version 4.3.0, GCC offers the `-march=native` switch that
 enables CPU auto-detection and automatically selects optimizations supported
 by the local machine at GCC runtime including -mtune.
 
