@@ -1291,8 +1291,7 @@ class TestCase(unittest.TestCase):
                     charset="utf-8",
                 )
                 with open(htmldiff_file_name, "w", encoding="utf-8") as htmldiff_file:
-                    for line in htmldiff:
-                        htmldiff_file.write(line)
+                    htmldiff_file.write(htmldiff)
 
             self.fail(self._formatMessage(msg, stdmsg))
 
