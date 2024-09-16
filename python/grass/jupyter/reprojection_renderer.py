@@ -27,7 +27,7 @@ from .utils import (
     reproject_region,
     setup_location,
 )
-from .region import RegionManagerForInteractiveMap
+from .region import RegionManagerForInteractiveMap, RegionManagerForDirectRenderer
 
 
 class ReprojectionRenderer:
@@ -69,10 +69,10 @@ class ReprojectionRenderer:
         # We need two because folium uses WGS84 for vectors and coordinates
         # and Pseudo-Mercator for raster overlays
         self._rcfile_psmerc, self._psmerc_env = setup_location(
-            "psmerc", self._tmp_dir.name, "3857", self._src_env
+            "psmerc", self._tmp_dir.name, self._src_env, epsg="3857"
         )
         self._rcfile_wgs84, self._wgs84_env = setup_location(
-            "wgs84", self._tmp_dir.name, "4326", self._src_env
+            "wgs84", self._tmp_dir.name, self._src_env, epsg="4326"
         )
 
         # region handling
@@ -171,104 +171,43 @@ class ReprojectionRenderer:
         return json_file
 
 
-class CustomRenderer:
-    """Class for handling layers with a custom CRS without reprojection."""
-
+class DirectRenderer:
     def __init__(self, crs, use_region=False, saved_region=None, work_dir=None):
-        """
-        Initialize CustomRenderer.
 
-        param str crs: CRS string (EPSG code or Proj4 definition)
-        param str work_dir: Path to directory where files should be written
-        """
-        self.crs = crs
-
-        # Temporary folder for all our files
         if not work_dir:
-            # Resource managed by weakref.finalize.
-            self._tmp_dir = (
-                # pylint: disable=consider-using-with
-                tempfile.TemporaryDirectory()
-            )
-
-            def cleanup(tmpdir):
-                tmpdir.cleanup()
-
-            weakref.finalize(self, cleanup, self._tmp_dir)
+            self._tmp_dir = tempfile.TemporaryDirectory()
         else:
             self._tmp_dir = work_dir
 
-        # Set up the environment and location
         self._src_env = os.environ.copy()
-        if not crs.get("custom"):
-            self._rcfile_custom, self._custom_env = setup_location(
-                "custom_location", self._tmp_dir.name, self._src_env, epsg=crs["name"]
-            )
-        else:
-            # If custom, pass the Proj4 string
-            self._rcfile_custom, self._custom_env = setup_location(
-                "custom_location",
-                self._tmp_dir.name,
-                src_env=self._src_env,
-                proj4=crs["proj4def"],
-            )
-
-        self._region_manager = RegionManagerForInteractiveMap(
-            use_region, saved_region, self._src_env, self._custom_env
+        self._proj_string = get_location_proj_string(env=self._src_env)
+        self._crs = crs
+        self._region_manager = RegionManagerForDirectRenderer(
+            use_region, saved_region, self._src_env
         )
 
     def get_bbox(self):
-        """Return bounding box of computation region in WGS84"""
         return self._region_manager.bbox
 
     def render_raster(self, name):
-        """
-        Render a raster layer in its native CRS and save it as a PNG.
-
-        :param name: Name of the raster
-        :type name: str
-        :return: Path to the PNG file and the reprojected bounds
-        :rtype: tuple
-        """
         file_info = gs.find_file(name, element="cell", env=self._src_env)
         full_name = file_info["fullname"]
-        name = file_info["name"]
-        mapset = file_info["mapset"]
 
-        # Set region based on the raster's native bounds
         self._region_manager.set_region_from_raster(full_name)
-
-        # Reproject raster into the custom CRS location
-        env_info = gs.gisenv(env=self._src_env)
-        tgt_name = full_name.replace("@", "_")
-        gs.run_command(
-            "r.proj",
-            input=full_name,
-            output=tgt_name,
-            mapset=mapset,
-            location=env_info["LOCATION_NAME"],
-            dbase=env_info["GISDBASE"],
-            resolution=self._region_manager.resolution,
-            env=self._custom_env,
+        raster_info = gs.raster_info(full_name, env=self._src_env)
+        filename = os.path.join(
+            self._tmp_dir.name, f"{full_name.replace('@', '_')}.png"
         )
-
-        # Wite the raster to a PNG file using Map
-        raster_info = gs.raster_info(tgt_name, env=self._custom_env)
-        filename = os.path.join(self._tmp_dir.name, f"{tgt_name}.png")
         img = Map(
             width=int(raster_info["cols"]),
             height=int(raster_info["rows"]),
-            env=self._custom_env,
+            env=self._src_env,
             filename=filename,
             use_region=True,
         )
-        img.run("d.rast", map=tgt_name)
+        img.run("d.rast", map=full_name)
 
-        # Reproject the raster's bounds to WGS84 for overlaying the PNG
-        old_bounds = get_region(self._src_env)
-        from_proj = get_location_proj_string(env=self._src_env)
-        to_proj = get_location_proj_string(env=self._custom_env)
-        bounds = reproject_region(old_bounds, from_proj, to_proj)
+        bounds = get_region(self._src_env)
         new_bounds = [
             [bounds["north"], bounds["west"]],
             [bounds["south"], bounds["east"]],
@@ -277,37 +216,18 @@ class CustomRenderer:
         return filename, new_bounds
 
     def render_vector(self, name):
-        """Reproject vector to WGS84 and save geoJSON in working directory. Return
-        geoJSON filename.
-
-        param str name: name of vector"""
-        # Find full name of vector
         file_info = gs.find_file(name, element="vector")
         full_name = file_info["fullname"]
-        name = file_info["name"]
-        mapset = file_info["mapset"]
-        new_name = full_name.replace("@", "_")
-        # set bbox
+
         self._region_manager.set_bbox_vector(full_name)
-        # Reproject vector into WGS84 Location
-        env_info = gs.gisenv(env=self._src_env)
-        gs.run_command(
-            "v.proj",
-            input=name,
-            output=new_name,
-            mapset=mapset,
-            project=env_info["LOCATION_NAME"],
-            dbase=env_info["GISDBASE"],
-            env=self._custom_env,
-        )
-        # Convert to GeoJSON
-        json_file = Path(self._tmp_dir.name) / f"{new_name}.json"
+
+        json_file = Path(self._tmp_dir.name) / f"{full_name.replace('@', '_')}.json"
         gs.run_command(
             "v.out.ogr",
-            input=new_name,
+            input=full_name,
             output=json_file,
             format="GeoJSON",
-            env=self._custom_env,
+            env=self._src_env,
         )
 
         return json_file
