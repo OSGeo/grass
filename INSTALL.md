@@ -29,8 +29,8 @@ directory.
 Installation order:
 
 1. PROJ
-2. GDAL-OGR (compiled without GRASS support)
-3. optionally: databases such as PostgreSQL, MySQL, sqlite
+2. GDAL/OGR (compiled without GRASS support)
+3. optionally: databases such as PostgreSQL, MySQL, SQLite
 4. GRASS GIS
 5. optionally: GDAL-OGR-GRASS plugin
 
@@ -136,7 +136,7 @@ CC=cc CPP=cpp ./configure ...
 ## (C) COMPILATION NOTES for 64bit platforms
 
 To successfully compile GRASS on 64bit platforms, the required
-FFTW2 library has to be compiled with `-fPIC` flag:
+FFTW library has to be compiled with `-fPIC` flag:
 
 ```bash
 #this applies to FFTW3, not to GRASS GIS:
@@ -151,13 +151,13 @@ make install
 After compilation, the resulting code is stored in the directory
 
 ```bash
-./dist.$ARCH
+./dist.$ARCH/
 ```
 
-and the scripts (grass, ...) in
+and the script (`grass`) in
 
 ```bash
-./bin.$ARCH
+./bin.$ARCH/
 ```
 
 To run GRASS, simply start
@@ -240,7 +240,7 @@ gmake
 
 Note: If you keep your module source code outside the standard GRASS
 source code directory structure, you will have to change the relative
-path(s) in the Makefile to absolute path(s).
+path(s) in the `Makefile` to absolute path(s).
 
 ## (I) CODE OPTIMIZATION
 
@@ -274,9 +274,9 @@ CFLAGS="-mtune=nocona -m64 -minline-all-stringops" # Intel Pentium 64bit process
 
 Note: As of version 4.3.0, GCC offers the `-march=native` switch that
 enables CPU auto-detection and automatically selects optimizations supported
-by the local machine at GCC runtime including -mtune.
+by the local machine at GCC runtime including `-mtune`.
 
-To find out optional CFLAGS for your platform, enter:
+To find out optional `CFLAGS` for your platform, enter:
 
 ```bash
 gcc -dumpspecs
@@ -285,7 +285,7 @@ gcc -dumpspecs
 See also: <https://gcc.gnu.org/>
 
 A real fast GRASS version (and small binaries) will be created with
-LDFLAGS set to "stripping" (but this disables debugging):
+`LDFLAGS` set to "stripping" (but this disables debugging):
 
 ```bash
 CFLAGS="-O2 -mcpu=<cpu_see_above> -Wall" LDFLAGS="-s" ./configure
@@ -296,7 +296,7 @@ CFLAGS="-O2 -mcpu=<cpu_see_above> -Wall" LDFLAGS="-s" ./configure
 The `LDFLAGS=""` part must be undefined as `-s` will strip the debugging
 information.
 
-Don't use `-O` for CFLAGS if you want to be able to step through function
+Don't use `-O` for `CFLAGS` if you want to be able to step through function
 bodies. When optimisation is enabled, the compiler will re-order statements
 and re-arrange expressions, resulting in object code which barely resembles
 the source code.
@@ -307,7 +307,7 @@ The `-g` and `-Wall` compiler flags are often useful for assisting debugging:
 CFLAGS="-g -Wall" ./configure
 ```
 
-See also the file ./doc/debugging.txt and the Wiki page
+See also the file `./doc/debugging.txt` and the Wiki page
 <https://grasswiki.osgeo.org/wiki/GRASS_Debugging>
 
 ## (K) SUPPORT
@@ -322,7 +322,7 @@ developers mailing list. See <https://grass.osgeo.org/development/>
 ## (L) GRASS PROGRAMMER'S MANUAL
 
 The Programmer's manual is generated with doxygen from the source code.
-Please see the README file and the files at:
+Please see the [README](doc/development/README.md) file and the files at:
 <https://grass.osgeo.org/programming8/>
 
 ## (M) CONTRIBUTING CODE AND PATCHES
