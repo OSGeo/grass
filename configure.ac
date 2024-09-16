@@ -312,7 +312,6 @@ LOC_ARG_WITH(cairo, Cairo)
 LOC_ARG_WITH(freetype, FreeType)
 LOC_ARG_WITH(nls, NLS, no)
 LOC_ARG_WITH(readline, Readline, no)
-LOC_ARG_WITH(opendwg, openDWG, no)
 LOC_ARG_WITH(regex, regex)
 LOC_ARG_WITH(pthread, POSIX threads, no)
 LOC_ARG_WITH(openmp, OpenMP, no)
@@ -410,9 +409,6 @@ LOC_ARG_WITH_LIB(freetype, FreeType)
 LOC_ARG_WITH_INC(proj, External PROJ.4)
 LOC_ARG_WITH_LIB(proj, External PROJ.4)
 LOC_ARG_WITH_SHARE(proj, External PROJ.4)
-
-LOC_ARG_WITH_INC(opendwg, openDWG)
-LOC_ARG_WITH_LIB(opendwg, openDWG)
 
 LOC_ARG_WITH_INC(regex, regex)
 LOC_ARG_WITH_LIB(regex, regex)
@@ -1860,44 +1856,6 @@ fi
 AC_SUBST(INTLLIB)
 AC_SUBST(HAVE_NLS)
 
-# Enable openDWG option
-
-LOC_CHECK_USE(opendwg,openDWG,USE_OPENDWG)
-
-OPENDWGINCPATH=
-OPENDWGLIBPATH=
-OPENDWGLIB=
-
-if test -n "${USE_OPENDWG}"; then
-
-# With OPENDWG includes directory
-
-LOC_CHECK_INC_PATH(opendwg,openDGW,OPENDWGINCPATH)
-
-LOC_CHECK_INCLUDES(ad2.h,openDWG,$OPENDWGINCPATH)
-
-# With OPENDWG library directory
-
-LOC_CHECK_LIB_PATH(opendwg,openDWG,OPENDWGLIBPATH)
-
-#search for ad2.a, ad3.a ... in openDWG toolkit directory:
-#FIX ME  how to program this test??
-#LOC_CHECK_LIBS(ad?.a,adSeekLayer,openDWG,$OPENDWGLIBPATH,OPENDWGLIB,,)
-#
-#for now hack (but working):
-TRUEOPENDWGLIBPATH=`echo "$OPENDWGLIBPATH" | cut -b3-`
-adlib=`ls -1 "$TRUEOPENDWGLIBPATH"/ad?.a | tail -1`
-OPENDWGLIB="$adlib"
-
-fi # $USE_OPENDWG
-
-AC_SUBST(OPENDWGINCPATH)
-AC_SUBST(OPENDWGLIBPATH)
-AC_SUBST(OPENDWGLIB)
-AC_SUBST(USE_OPENDWG)
-
-# Done checking OPENDWG
-
 # Enable pthread option
 
 LOC_CHECK_USE(pthread,POSIX threads,USE_PTHREAD)
@@ -2072,7 +2030,6 @@ LOC_MSG_USE(BLAS support,USE_BLAS)
 LOC_MSG_USE(BZIP2 support,USE_BZIP2)
 LOC_MSG_USE(C++ support,USE_CXX)
 LOC_MSG_USE(Cairo support,USE_CAIRO)
-LOC_MSG_USE(DWG support,USE_OPENDWG)
 LOC_MSG_USE(FFTW support,USE_FFTW)
 LOC_MSG_USE(FreeType support,USE_FREETYPE)
 LOC_MSG_USE(GDAL support,USE_GDAL)
