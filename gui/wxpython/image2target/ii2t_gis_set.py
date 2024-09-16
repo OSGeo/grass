@@ -547,7 +547,7 @@ class GRASSStartup(wx.Frame):
                         key, val = line.split(":", 1)
                     except ValueError as e:
                         sys.stderr.write(
-                            _("Invalid line in GISRC file (%s):%s\n" % (e, line))
+                            _("Invalid line in GISRC file (%s):%s\n") % (e, line)
                         )
                     grassrc[key.strip()] = DecodeString(val.strip())
             finally:

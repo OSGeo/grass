@@ -306,14 +306,14 @@ class PyEditController:
             GError(
                 message=_(
                     "Permission denied <{}>. Please change file "
-                    "permission for reading.".format(file_path)
-                ),
+                    "permission for reading."
+                ).format(file_path),
                 parent=self.guiparent,
                 showTraceback=False,
             )
         except OSError:
             GError(
-                message=_("Couldn't read file <{}>.".format(file_path)),
+                message=_("Couldn't read file <{}>.").format(file_path),
                 parent=self.guiparent,
             )
 
@@ -333,20 +333,18 @@ class PyEditController:
             GError(
                 message=_(
                     "Permission denied <{}>. Please change file "
-                    "permission for writing.{}".format(
-                        file_path,
-                        additional_err_message,
-                    ),
+                    "permission for writing.{}"
+                ).format(
+                    file_path,
+                    additional_err_message,
                 ),
                 parent=self.guiparent,
                 showTraceback=False,
             )
         except OSError:
             GError(
-                message=_(
-                    "Couldn't write file <{}>.{}".format(
-                        file_path, additional_err_message
-                    ),
+                message=_("Couldn't write file <{}>.{}").format(
+                    file_path, additional_err_message
                 ),
                 parent=self.guiparent,
             )
@@ -359,7 +357,7 @@ class PyEditController:
             file_is_written = self._writeFile(
                 file_path=self.filename,
                 content=self.body.GetText(),
-                additional_err_message=" Unable to launch Python script.",
+                additional_err_message=_(" Unable to launch Python script."),
             )
             if file_is_written:
                 mode = stat.S_IMODE(os.lstat(self.filename)[stat.ST_MODE])
@@ -369,7 +367,7 @@ class PyEditController:
             file_is_written = self._writeFile(
                 file_path=self.filename,
                 content=self.body.GetText(),
-                additional_err_message=" Unable to launch Python script.",
+                additional_err_message=_(" Unable to launch Python script."),
             )
             if file_is_written:
                 # set executable file
@@ -509,9 +507,8 @@ class PyEditController:
         if not file_exists:
             GError(
                 _(
-                    "File <{}> doesn't exist."
-                    "It was probably moved or deleted.".format(path)
-                ),
+                    "File <{path}> doesn't exist. It was probably moved or deleted."
+                ).format(path=path),
                 parent=self.guiparent,
             )
             return

@@ -133,7 +133,7 @@ class PointsList(
         # initialize column sorter
         self.itemDataMap = []
         ncols = self.GetColumnCount()
-        ColumnSorterMixin.__init__(self, ncols)
+        ColumnSorterMixin.__init__(self, ncols)  # noqa: PLC2801, C2801
 
         # init to ascending sort on first click
         self._colSortFlag = [1] * ncols
