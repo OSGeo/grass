@@ -31,11 +31,6 @@ In general: you don't really need write access as you can simply open
 a [pull request](https://github.com/OSGeo/grass/pulls) to contribute to
 GRASS GIS. See [CONTRIBUTING file](CONTRIBUTING.md) for more details.
 
-How to get write access here
-
-Want to become a core developer? See
-[Contributing](https://github.com/OSGeo/grass/blob/main/CONTRIBUTING.md)
-
 ## How to compile GRASS
 
 > See the INSTALL.md file.

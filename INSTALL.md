@@ -206,7 +206,7 @@ make
 make install
 ```
 
-For details, see <https://github.com/OSGeo/grass/blob/main/doc/development/github_guide.md>
+For details, see [Guide to contributing on GitHub](./doc/development/github_guide.md).
 
 ## (H) COMPILING INDIVIDUAL MODULES - OWN MODULES
 
@@ -329,8 +329,8 @@ Please see the README file and the files at:
 
 Please see
 
-- <https://github.com/OSGeo/grass/blob/main/doc/development/style_guide.md>
-- <https://github.com/OSGeo/grass/blob/main/doc/development/github_guide.md>
+- [GRASS Programming Style Guide](./doc/development/style_guide.md)
+- [Guide to contributing on GitHub](./doc/development/github_guide.md)
 
 ## Authors
 
