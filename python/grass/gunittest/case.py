@@ -1289,10 +1289,9 @@ class TestCase(unittest.TestCase):
                     context=True,
                     numlines=context_lines,
                 )
-                htmldiff_file = open(htmldiff_file_name, "w")
-                for line in htmldiff:
-                    htmldiff_file.write(line)
-                htmldiff_file.close()
+                with open(htmldiff_file_name, "w") as htmldiff_file:
+                    for line in htmldiff:
+                        htmldiff_file.write(line)
 
             self.fail(self._formatMessage(msg, stdmsg))
 
