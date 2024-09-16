@@ -117,12 +117,11 @@ def discover_modules(
             dirs.remove(testsuite_dir)  # do not recurse to testsuite
             full = os.path.join(root, testsuite_dir)
 
-            all_files = os.listdir(full)
-            files = [f for f in all_files]
+            files = os.listdir(full)
             if file_pattern:
-                files = fnmatch.filter(all_files, file_pattern)
+                files = fnmatch.filter(files, file_pattern)
             if file_regexp:
-                files = [f for f in all_files if re.match(file_regexp, f)]
+                files = [f for f in files if re.match(file_regexp, f)]
             if exclude:
                 files = fnmatch_exclude_with_base(files, full, exclude)
             files = sorted(files)
