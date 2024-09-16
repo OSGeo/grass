@@ -35,7 +35,7 @@ def fnmatch_exclude_with_base(
     :param exclude: list of fnmatch glob patterns for exclusion
     """
     not_excluded = []
-    patterns = {str(PurePath(pat)) for pat in exclude}
+    patterns = {str(PurePath(item)) for item in exclude}
     base_path = PurePath(base)
     for filename in files:
         test_filename: PurePath = base_path / filename
