@@ -7,11 +7,11 @@ import grass.script as gs
 def session(tmp_path_factory):
     """Set up a GRASS session for the tests."""
     tmp_path = tmp_path_factory.mktemp("grass_session")
-    location = "test_location"
+    project = "test_project"
 
     # Create a test location
-    gs.core._create_location_xy(tmp_path, location)
+    gs.create_project(tmp_path, project)
 
     # Initialize the GRASS session
-    with gs.setup.init(tmp_path / location, env=os.environ.copy()) as session:
+    with gs.setup.init(tmp_path / project, env=os.environ.copy()) as session:
         yield session
