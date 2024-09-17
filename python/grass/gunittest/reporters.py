@@ -728,8 +728,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         )
 
         file_index_path = os.path.join(cwd, "index.html")
-        file_index = open(file_index_path, "w")
-        file_index.write(
+        header = (
             '<!DOCTYPE html><html><head><meta charset="utf-8"></head><body>'
             "<h1>{m.name}</h1>"
             "<h2>{m.tested_dir} &ndash; {m.name}</h2>"
@@ -768,7 +767,6 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
                 dur=self.file_time,
             )
         )
-        file_index.write(summary_section)
 
         modules = test_summary.get("tested_modules", None)
         if modules:
@@ -777,12 +775,6 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             # alternatively a link to module test summary
             if type(modules) is not list:
                 modules = [modules]
-            file_index.write(
-                "<tr><td>Tested modules</td><td>{0}</td></tr>".format(
-                    ", ".join(sorted(set(modules)))
-                )
-            )
-        file_index.write("</tbody></table>")
 
         # here we would have also links to coverage, profiling, ...
         # '<li><a href="testcodecoverage/index.html">code coverage</a></li>'
@@ -792,7 +784,6 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             '<li><a href="stdout.html">standard output (stdout)</a></li>'
             '<li><a href="stderr.html">standard error output (stderr)</a></li>'
         )
-        file_index.write(files_section)
 
         supplementary_files = test_summary.get("supplementary_files", None)
         if supplementary_files:
@@ -804,17 +795,31 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             # moreover something can be shared with other explicitly
             # using constructors as seems advantageous for counting
             self._file_anonymizer.anonymize(supplementary_files)
-            for f in supplementary_files:
-                file_index.write('<li><a href="{f}">{f}</a></li>'.format(f=f))
 
-        file_index.write("</ul>")
+        with open(file_index_path, "w") as file_index:
+            file_index.write(header)
+            file_index.write(summary_section)
+            if modules:
+                file_index.write(
+                    "<tr><td>Tested modules</td><td>{0}</td></tr>".format(
+                        ", ".join(sorted(set(modules)))
+                    )
+                )
+            file_index.write("</tbody></table>")
 
-        if returncode:
-            file_index.write("<h3>Standard error output (stderr)</h3>")
-            file_index.write(html_file_preview(stderr))
+            file_index.write(files_section)
 
-        file_index.write("</body></html>")
-        file_index.close()
+            if supplementary_files:
+                for f in supplementary_files:
+                    file_index.write('<li><a href="{f}">{f}</a></li>'.format(f=f))
+
+            file_index.write("</ul>")
+
+            if returncode:
+                file_index.write("<h3>Standard error output (stderr)</h3>")
+                file_index.write(html_file_preview(stderr))
+
+            file_index.write("</body></html>")
 
         if returncode:
             pass
