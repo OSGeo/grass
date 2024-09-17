@@ -477,7 +477,7 @@ def html_file_preview(filename):
     elif size < 10 * max_size:
 
         def tail(filename, n):
-            return collections.deque(open(filename), n)
+            return collections.deque(open(filename), n)  # noqa: SIM115
 
         html.write("... (lines omitted)\n")
         for line in tail(filename, 50):
@@ -559,7 +559,8 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         super().start(results_dir)
         # having all variables public although not really part of API
         main_page_name = os.path.join(results_dir, self._main_page_name)
-        self.main_index = open(main_page_name, "w")
+        # TODO: Ensure file is closed in all situations
+        self.main_index = open(main_page_name, "w")  # noqa: SIM115
 
         # TODO: this can be moved to the counter class
         self.failures = 0
