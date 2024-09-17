@@ -126,48 +126,47 @@ for key in sorted(keywords.keys()):
         if key.lower() < char_list[str(firstchar)].lower():
             char_list[str(firstchar.lower())] = key
 
-keywordsfile = open(os.path.join(path, "keywords.html"), "w")
-keywordsfile.write(
-    header1_tmpl.substitute(
-        title="GRASS GIS %s Reference Manual: Keywords index" % grass_version
-    )
-)
-keywordsfile.write(headerkeywords_tmpl)
-keywordsfile.write("<dl>")
-
-sortedKeys = sorted(keywords.keys(), key=lambda s: s.lower())
-
-for key in sortedKeys:
-    keyword_line = '<dt><b><a name="%s" class="urlblack">%s</a></b></dt><dd>' % (
-        key,
-        key,
-    )
-    for value in sorted(keywords[key]):
-        keyword_line += (
-            f' <a href="{get_module_man_html_file_path(value)}">'
-            f'{value.replace(".html", "")}</a>,'
+with open(os.path.join(path, "keywords.html"), "w") as keywordsfile:
+    keywordsfile.write(
+        header1_tmpl.substitute(
+            title="GRASS GIS %s Reference Manual: Keywords index" % grass_version
         )
-    keyword_line = keyword_line.rstrip(",")
-    keyword_line += "</dd>\n"
-    keywordsfile.write(keyword_line)
-keywordsfile.write("</dl>\n")
-# create toc
-toc = '<div class="toc">\n<h4 class="toc">Table of contents</h4><p class="toc">'
-test_length = 0
-all_keys = len(char_list.keys())
-for k in sorted(char_list.keys()):
-    test_length += 1
-    #    toc += '<li><a href="#%s" class="toc">%s</a></li>' % (char_list[k], k)
-    if test_length % 4 == 0 and not test_length == all_keys:
-        toc += '\n<a href="#%s" class="toc">%s</a>, ' % (char_list[k], k)
-    elif test_length % 4 == 0 and test_length == all_keys:
-        toc += '\n<a href="#%s" class="toc">%s</a>' % (char_list[k], k)
-    elif test_length == all_keys:
-        toc += '<a href="#%s" class="toc">%s</a>' % (char_list[k], k)
-    else:
-        toc += '<a href="#%s" class="toc">%s</a>, ' % (char_list[k], k)
-toc += "</p></div>\n"
-keywordsfile.write(toc)
+    )
+    keywordsfile.write(headerkeywords_tmpl)
+    keywordsfile.write("<dl>")
 
-write_html_footer(keywordsfile, "index.html", year)
-keywordsfile.close()
+    sortedKeys = sorted(keywords.keys(), key=lambda s: s.lower())
+
+    for key in sortedKeys:
+        keyword_line = '<dt><b><a name="%s" class="urlblack">%s</a></b></dt><dd>' % (
+            key,
+            key,
+        )
+        for value in sorted(keywords[key]):
+            keyword_line += (
+                f' <a href="{get_module_man_html_file_path(value)}">'
+                f'{value.replace(".html", "")}</a>,'
+            )
+        keyword_line = keyword_line.rstrip(",")
+        keyword_line += "</dd>\n"
+        keywordsfile.write(keyword_line)
+    keywordsfile.write("</dl>\n")
+    # create toc
+    toc = '<div class="toc">\n<h4 class="toc">Table of contents</h4><p class="toc">'
+    test_length = 0
+    all_keys = len(char_list.keys())
+    for k in sorted(char_list.keys()):
+        test_length += 1
+        #    toc += '<li><a href="#%s" class="toc">%s</a></li>' % (char_list[k], k)
+        if test_length % 4 == 0 and not test_length == all_keys:
+            toc += '\n<a href="#%s" class="toc">%s</a>, ' % (char_list[k], k)
+        elif test_length % 4 == 0 and test_length == all_keys:
+            toc += '\n<a href="#%s" class="toc">%s</a>' % (char_list[k], k)
+        elif test_length == all_keys:
+            toc += '<a href="#%s" class="toc">%s</a>' % (char_list[k], k)
+        else:
+            toc += '<a href="#%s" class="toc">%s</a>, ' % (char_list[k], k)
+    toc += "</p></div>\n"
+    keywordsfile.write(toc)
+
+    write_html_footer(keywordsfile, "index.html", year)

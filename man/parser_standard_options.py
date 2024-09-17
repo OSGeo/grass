@@ -6,6 +6,7 @@ Created on Fri Jun 26 19:10:58 2015
 
 import argparse
 import os
+from pathlib import Path
 import sys
 
 from urllib.request import urlopen
@@ -227,14 +228,13 @@ if __name__ == "__main__":
         year = os.getenv("VERSION_DATE")
         name = args.output.name
         args.output.close()
-        topicsfile = open(name, "w")
-        topicsfile.write(
-            header1_tmpl.substitute(
-                title="GRASS GIS "
-                "%s Reference Manual: Parser standard options index" % grass_version
+        with Path(name).open("w") as topicsfile:
+            topicsfile.write(
+                header1_tmpl.substitute(
+                    title="GRASS GIS "
+                    "%s Reference Manual: Parser standard options index" % grass_version
+                )
             )
-        )
-        topicsfile.write(headerpso_tmpl)
-        topicsfile.write(options.html(toptions=args.htmlparmas))
-        write_html_footer(topicsfile, "index.html", year)
-        topicsfile.close()
+            topicsfile.write(headerpso_tmpl)
+            topicsfile.write(options.html(toptions=args.htmlparmas))
+            write_html_footer(topicsfile, "index.html", year)

@@ -10,6 +10,7 @@
 import os
 import string
 from datetime import datetime
+from pathlib import Path
 
 # TODO: better fix this in include/Make/Html.make, see bug RT #5361
 
@@ -393,16 +394,11 @@ def check_for_desc_override(basename):
 
 
 def read_file(name):
-    f = open(name, "r")
-    s = f.read()
-    f.close()
-    return s
+    return Path(name).read_text()
 
 
 def write_file(name, contents):
-    f = open(name, "w")
-    f.write(contents)
-    f.close()
+    Path(name).write_text(contents)
 
 
 def try_mkdir(path):
@@ -476,26 +472,26 @@ def write_html_footer(f, index_url, year=None):
 
 
 def get_desc(cmd):
-    f = open(cmd, "r")
-    while True:
-        line = f.readline()
-        if not line:
-            return ""
-        if "NAME" in line:
-            break
+    with Path(cmd).open() as f:
+        while True:
+            line = f.readline()
+            if not line:
+                return ""
+            if "NAME" in line:
+                break
 
-    while True:
-        line = f.readline()
-        if not line:
-            return ""
-        if "SYNOPSIS" in line:
-            break
-        if "<em>" in line:
-            sp = line.split("-", 1)
-            if len(sp) > 1:
-                return sp[1].strip()
-            else:
-                return None
+        while True:
+            line = f.readline()
+            if not line:
+                return ""
+            if "SYNOPSIS" in line:
+                break
+            if "<em>" in line:
+                sp = line.split("-", 1)
+                if len(sp) > 1:
+                    return sp[1].strip()
+                else:
+                    return None
 
     return ""
 
