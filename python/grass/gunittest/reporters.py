@@ -452,13 +452,11 @@ def percent_to_html(percent):
 def wrap_stdstream_to_html(infile, outfile, module, stream):
     before = "<html><body><h1>%s</h1><pre>" % (module.name + " " + stream)
     after = "</pre></body></html>"
-    html = open(outfile, "w")
-    html.write(before)
-    with open(infile) as text:
+    with open(outfile, "w") as html, open(infile) as text:
+        html.write(before)
         for line in text:
             html.write(color_error_line(html_escape(line)))
-    html.write(after)
-    html.close()
+        html.write(after)
 
 
 def html_file_preview(filename):
