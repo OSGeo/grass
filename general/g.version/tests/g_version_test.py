@@ -12,9 +12,7 @@ def test_g_version_no_flag(session):
 def test_c_flag(session):
     """Test the output of g.version -c for Copyright and License Statement."""
     expected_text = "Copyright and License Statement"
-    output = gs.read_command(
-        "g.version", flags="c", env=session.env
-    ).strip()
+    output = gs.read_command("g.version", flags="c", env=session.env).strip()
     assert (
         expected_text in output
     ), f"Expected '{expected_text}' in g.version -c output, but got: '{output}'"
