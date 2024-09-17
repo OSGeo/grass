@@ -1254,18 +1254,18 @@ class TestCase(unittest.TestCase):
             os.remove(reference)
         stdmsg = "There is a difference between vectors when compared as ASCII files.\n"
 
-        output = StringIO()
         # TODO: there is a diff size constant which we can use
         # we are setting it unlimited but we can just set it large
         maxlines = 100
         i = 0
-        for line in diff:
-            if i >= maxlines:
-                break
-            output.write(line)
-            i += 1
-        stdmsg += output.getvalue()
-        output.close()
+        with StringIO() as output:
+            for line in diff:
+                if i >= maxlines:
+                    break
+                output.write(line)
+                i += 1
+            stdmsg += output.getvalue()
+
         # it seems that there is not better way of asking whether there was
         # a difference (always a iterator object is returned)
         if i > 0:
