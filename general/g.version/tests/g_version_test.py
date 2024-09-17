@@ -30,9 +30,7 @@ def test_e_flag(session):
 
 def test_b_flag(session):
     """Test that g.version -b output contains the word 'GRASS'."""
-    output = gs.read_command(
-        "g.version", flags="b", env=session.env
-    ).strip()
+    output = gs.read_command("g.version", flags="b", env=session.env).strip()
     assert (
         "GRASS" in output
     ), "Expected 'GRASS' in g.version -b output, but it was not found."
