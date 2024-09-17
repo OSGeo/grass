@@ -1093,7 +1093,7 @@ class TestsuiteDirReporter:
             os.path.join(root, directory)
         ) == os.path.abspath(root):
             page_name = os.path.join(root, self.top_level_testsuite_page_name)
-        page = open(page_name, "w")
+
         # TODO: should we use forward slashes also for the HTML because
         # it is simpler are more consistent with the rest on MS Windows?
         head = "<html><body><h1>{name} testsuite results</h1>".format(name=directory)
@@ -1106,106 +1106,108 @@ class TestsuiteDirReporter:
             "<th>Failed</th><th>Percent successful</th>"
             "</tr></thead><tbody>"
         )
-        page.write(head)
-        page.write(tests_table_head)
-        for test_file_name in test_files:
-            # TODO: put keyvalue fine name to constant
-            summary_filename = os.path.join(
-                root, directory, test_file_name, "test_keyvalue_result.txt"
+        with open(page_name, "w") as page:
+            page.write(head)
+            page.write(tests_table_head)
+            for test_file_name in test_files:
+                # TODO: put keyvalue fine name to constant
+                summary_filename = os.path.join(
+                    root, directory, test_file_name, "test_keyvalue_result.txt"
+                )
+                # if os.path.exists(summary_filename):
+                summary = text_to_keyvalue(Path(summary_filename).read_text(), sep="=")
+                # else:
+                # TODO: write else here
+                #    summary = None
+
+                if "total" not in summary:
+                    bad_ones = successes = UNKNOWN_NUMBER_HTML
+                    total = None
+                else:
+                    bad_ones = summary["failures"] + summary["errors"]
+                    successes = summary["successes"]
+                    total = summary["total"]
+
+                    self.failures += summary["failures"]
+                    self.errors += summary["errors"]
+                    self.skipped += summary["skipped"]
+                    self.successes += summary["successes"]
+                    self.expected_failures += summary["expected_failures"]
+                    self.unexpected_successes += summary["unexpected_successes"]
+                    self.total += summary["total"]
+
+                    dir_failures += summary["failures"]
+                    dir_errors += summary["failures"]
+                    dir_skipped += summary["skipped"]
+                    dir_successes += summary["successes"]
+                    dir_expected_failures += summary["expected_failures"]
+                    dir_unexpected_success += summary["unexpected_successes"]
+                    dir_total += summary["total"]
+
+                # TODO: keyvalue method should have types for keys function
+                # perhaps just the current post processing function is enough
+                test_file_authors = summary.get("test_file_authors")
+                if not test_file_authors:
+                    test_file_authors = []
+                if type(test_file_authors) is not list:
+                    test_file_authors = [test_file_authors]
+                test_files_authors.extend(test_file_authors)
+
+                file_total += 1
+                # Use non-zero return code in case it is missing.
+                # (This can happen when the test has timed out.)
+                return_code = summary.get("returncode", 1)
+                file_successes += 0 if return_code else 1
+
+                pass_per = success_to_html_percent(total=total, successes=successes)
+                row = (
+                    "<tr>"
+                    '<td><a href="{f}/index.html">{f}</a></td>'
+                    "<td>{status}</td>"
+                    "<td>{ntests}</td><td>{stests}</td>"
+                    "<td>{ftests}</td><td>{ptests}</td>"
+                    "<tr>".format(
+                        f=test_file_name,
+                        status=returncode_to_html_text(return_code),
+                        stests=successes,
+                        ftests=bad_ones,
+                        ntests=total,
+                        ptests=pass_per,
+                    )
+                )
+                page.write(row)
+
+            self.testsuites += 1
+            self.testsuites_successes += 1 if file_successes == file_total else 0
+            self.files += file_total
+            self.files_successes += file_successes
+
+            dir_pass_per = success_to_html_percent(
+                total=dir_total, successes=dir_successes
             )
-            # if os.path.exists(summary_filename):
-            summary = text_to_keyvalue(Path(summary_filename).read_text(), sep="=")
-            # else:
-            # TODO: write else here
-            #    summary = None
-
-            if "total" not in summary:
-                bad_ones = successes = UNKNOWN_NUMBER_HTML
-                total = None
-            else:
-                bad_ones = summary["failures"] + summary["errors"]
-                successes = summary["successes"]
-                total = summary["total"]
-
-                self.failures += summary["failures"]
-                self.errors += summary["errors"]
-                self.skipped += summary["skipped"]
-                self.successes += summary["successes"]
-                self.expected_failures += summary["expected_failures"]
-                self.unexpected_successes += summary["unexpected_successes"]
-                self.total += summary["total"]
-
-                dir_failures += summary["failures"]
-                dir_errors += summary["failures"]
-                dir_skipped += summary["skipped"]
-                dir_successes += summary["successes"]
-                dir_expected_failures += summary["expected_failures"]
-                dir_unexpected_success += summary["unexpected_successes"]
-                dir_total += summary["total"]
-
-            # TODO: keyvalue method should have types for keys function
-            # perhaps just the current post processing function is enough
-            test_file_authors = summary.get("test_file_authors")
-            if not test_file_authors:
-                test_file_authors = []
-            if type(test_file_authors) is not list:
-                test_file_authors = [test_file_authors]
-            test_files_authors.extend(test_file_authors)
-
-            file_total += 1
-            # Use non-zero return code in case it is missing.
-            # (This can happen when the test has timed out.)
-            return_code = summary.get("returncode", 1)
-            file_successes += 0 if return_code else 1
-
-            pass_per = success_to_html_percent(total=total, successes=successes)
-            row = (
-                "<tr>"
-                '<td><a href="{f}/index.html">{f}</a></td>'
+            file_pass_per = success_to_html_percent(
+                total=file_total, successes=file_successes
+            )
+            tests_table_foot = (
+                "</tbody><tfoot><tr>"
+                "<td>Summary</td>"
                 "<td>{status}</td>"
                 "<td>{ntests}</td><td>{stests}</td>"
                 "<td>{ftests}</td><td>{ptests}</td>"
-                "<tr>".format(
-                    f=test_file_name,
-                    status=returncode_to_html_text(return_code),
-                    stests=successes,
-                    ftests=bad_ones,
-                    ntests=total,
-                    ptests=pass_per,
+                "</tr></tfoot></table>".format(
+                    status=file_pass_per,
+                    stests=dir_successes,
+                    ftests=dir_failures + dir_errors,
+                    ntests=dir_total,
+                    ptests=dir_pass_per,
                 )
             )
-            page.write(row)
-
-        self.testsuites += 1
-        self.testsuites_successes += 1 if file_successes == file_total else 0
-        self.files += file_total
-        self.files_successes += file_successes
-
-        dir_pass_per = success_to_html_percent(total=dir_total, successes=dir_successes)
-        file_pass_per = success_to_html_percent(
-            total=file_total, successes=file_successes
-        )
-        tests_table_foot = (
-            "</tbody><tfoot><tr>"
-            "<td>Summary</td>"
-            "<td>{status}</td>"
-            "<td>{ntests}</td><td>{stests}</td>"
-            "<td>{ftests}</td><td>{ptests}</td>"
-            "</tr></tfoot></table>".format(
-                status=file_pass_per,
-                stests=dir_successes,
-                ftests=dir_failures + dir_errors,
-                ntests=dir_total,
-                ptests=dir_pass_per,
+            page.write(tests_table_foot)
+            test_authors = get_html_test_authors_table(
+                directory=directory, tests_authors=test_files_authors
             )
-        )
-        page.write(tests_table_foot)
-        test_authors = get_html_test_authors_table(
-            directory=directory, tests_authors=test_files_authors
-        )
-        page.write(test_authors)
-        page.write("</body></html>")
-        page.close()
+            page.write(test_authors)
+            page.write("</body></html>")
 
         status = success_to_html_text(total=file_total, successes=file_successes)
         return (
