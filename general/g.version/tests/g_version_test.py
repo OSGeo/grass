@@ -58,9 +58,7 @@ def test_g_flag(session):
 def test_r_flag(session):
     """Test that g.version -r contains the expected keys."""
     expected_texts = ["libgis revision:", "libgis date:"]
-    output = gs.read_command(
-        "g.version", flags="r", env=session.env
-    ).strip()
+    output = gs.read_command("g.version", flags="r", env=session.env).strip()
     for text in expected_texts:
         assert (
             text in output
