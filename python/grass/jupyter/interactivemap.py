@@ -19,7 +19,6 @@ import json
 from pathlib import Path
 import grass.script as gs
 from .reprojection_renderer import ReprojectionRenderer, DirectRenderer
-
 from .utils import (
     get_region_bounds_latlon,
     reproject_region,
@@ -215,7 +214,6 @@ class InteractiveMap:
         use_region=False,
         saved_region=None,
         map_backend=None,
-        crs=None,
     ):
         """Creates a blank folium/ipyleaflet map centered on g.region.
 
@@ -308,9 +306,14 @@ class InteractiveMap:
         # Store Region
         self.region = None
 
-        if crs:
-            proj = gs.read_command("g.proj", flags="jf", srid=crs)
-            crs_dict = {"name": "crs", "proj4def": proj}
+        # if crs:
+        proj = gs.parse_command("g.proj", flags="g")
+        srid = proj["srid"]
+        if srid in ["Earth", "EPSG:3395", "EPSG:3857", "EPSG:4326", "Base", "Simple"]:
+            custom_crs = self._ipyleaflet.projections.get(srid)
+        else:
+            proj4def = gs.read_command("g.proj", flags="jf", srid=srid)
+            crs_dict = {"name": "crs", "proj4def": proj4def}
             self._renderer = DirectRenderer(
                 crs=crs_dict, use_region=use_region, saved_region=saved_region
             )
@@ -322,30 +325,30 @@ class InteractiveMap:
                 "proj4def": crs_dict,
                 "bounds": self.bounds,
                 "origin": self.origin,
-                "resolutions": self.origin,
+                "resolutions": self.resolution,
             }
 
-        else:
-            self._renderer = ReprojectionRenderer(
-                use_region=use_region, saved_region=saved_region
-            )
+        # else:
+        #     self._renderer = ReprojectionRenderer(
+        #         use_region=use_region, saved_region=saved_region
+        #     )
 
         if self._ipyleaflet:
             basemap = xyzservices.providers.query_name(tiles)
             if API_key and basemap.get("accessToken"):
                 basemap["accessToken"] = API_key
             layout = self._ipywidgets.Layout(width=f"{width}px", height=f"{height}px")
-            if crs:
-                self.map = self._ipyleaflet.Map(
-                    basemap=basemap,
-                    layout=layout,
-                    scroll_wheel_zoom=True,
-                    crs=custom_crs,
-                )
-            else:
-                self.map = self._ipyleaflet.Map(
-                    basemap=basemap, layout=layout, scroll_wheel_zoom=True
-                )
+            # if crs:
+            self.map = self._ipyleaflet.Map(
+                basemap=basemap,
+                layout=layout,
+                scroll_wheel_zoom=True,
+                crs=custom_crs,
+            )
+            # else:
+            #     self.map = self._ipyleaflet.Map(
+            #         basemap=basemap, layout=layout, scroll_wheel_zoom=True
+            #     )
 
         else:
             self.map = self._folium.Map(
