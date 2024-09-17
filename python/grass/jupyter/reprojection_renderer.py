@@ -189,6 +189,12 @@ class DirectRenderer:
     def get_bbox(self):
         return self._region_manager.bbox
 
+    def get_resolution(self):
+        return self._region_manager.resolution
+
+    def get_origin(self):
+        return self._region_manager.origin
+
     def render_raster(self, name):
         file_info = gs.find_file(name, element="cell", env=self._src_env)
         full_name = file_info["fullname"]

@@ -17,7 +17,7 @@ import os
 import base64
 import json
 from pathlib import Path
-from pyproj import CRS
+import grass.script as gs
 from .reprojection_renderer import ReprojectionRenderer, DirectRenderer
 
 from .utils import (
@@ -309,15 +309,21 @@ class InteractiveMap:
         self.region = None
 
         if crs:
-            if isinstance(crs, str):
-                crs_n = CRS.from_string(crs)
-                crs_dict = {"name": crs_n.to_epsg(), "custom": False}
-            else:
-                crs_dict = crs
-
+            proj = gs.read_command("g.proj", flags="jf", srid=crs)
+            crs_dict = {"name": "crs", "proj4def": proj}
             self._renderer = DirectRenderer(
                 crs=crs_dict, use_region=use_region, saved_region=saved_region
             )
+            self.bounds = self._renderer.get_bbox()
+            self.resolution = self._renderer.get_resolution()
+            self.origin = self._renderer.get_origin()
+            custom_crs = {
+                "name": "custom",
+                "proj4def": crs_dict,
+                "bounds": self.bounds,
+                "origin": self.origin,
+                "resolutions": self.origin,
+            }
 
         else:
             self._renderer = ReprojectionRenderer(
@@ -325,20 +331,18 @@ class InteractiveMap:
             )
 
         if self._ipyleaflet:
+            basemap = xyzservices.providers.query_name(tiles)
+            if API_key and basemap.get("accessToken"):
+                basemap["accessToken"] = API_key
+            layout = self._ipywidgets.Layout(width=f"{width}px", height=f"{height}px")
             if crs:
-                layout = self._ipywidgets.Layout(
-                    width=f"{width}px", height=f"{height}px"
-                )
                 self.map = self._ipyleaflet.Map(
-                    crs=crs_dict, layout=layout, scroll_wheel_zoom=True
+                    basemap=basemap,
+                    layout=layout,
+                    scroll_wheel_zoom=True,
+                    crs=custom_crs,
                 )
             else:
-                basemap = xyzservices.providers.query_name(tiles)
-                if API_key and basemap.get("accessToken"):
-                    basemap["accessToken"] = API_key
-                layout = self._ipywidgets.Layout(
-                    width=f"{width}px", height=f"{height}px"
-                )
                 self.map = self._ipyleaflet.Map(
                     basemap=basemap, layout=layout, scroll_wheel_zoom=True
                 )
@@ -350,6 +354,7 @@ class InteractiveMap:
                 tiles=tiles,
                 API_key=API_key,  # pylint: disable=invalid-name
             )
+
         # Set LayerControl default
         self.layer_control_object = None
         self.region_rectangle = None
