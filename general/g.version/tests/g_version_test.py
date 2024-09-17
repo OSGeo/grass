@@ -67,9 +67,7 @@ def test_r_flag(session):
 
 def test_x_flag(session):
     """Test that g.version -x output has paired curly brackets."""
-    output = gs.read_command(
-        "g.version", flags="x", env=session.env
-    ).strip()
+    output = gs.read_command("g.version", flags="x", env=session.env).strip()
 
     def curly_brackets_paired(text):
         counter = 0
