@@ -1228,7 +1228,6 @@ class TestsuiteDirReporter:
         # absolute/relative paths
 
         page_name = os.path.join(root, self.main_page_name)
-        page = open(page_name, "w")
         head = "<html><body><h1>Testsuites results</h1>"
         tests_table_head = (
             "<table>"
@@ -1241,14 +1240,6 @@ class TestsuiteDirReporter:
             "<th>Failed</th><th>Percent successful</th>"
             "</tr></thead><tbody>"
         )
-        page.write(head)
-        page.write(tests_table_head)
-
-        for directory, test_files in directories.items():
-            row = self.report_for_dir(
-                root=root, directory=directory, test_files=test_files
-            )
-            page.write(row)
 
         pass_per = success_to_html_percent(total=self.total, successes=self.successes)
         file_pass_per = success_to_html_percent(
@@ -1276,5 +1267,16 @@ class TestsuiteDirReporter:
                 ptests=pass_per,
             )
         )
-        page.write(tests_table_foot)
-        page.write("</body></html>")
+
+        with open(page_name, "w") as page:
+            page.write(head)
+            page.write(tests_table_head)
+
+            for directory, test_files in directories.items():
+                row = self.report_for_dir(
+                    root=root, directory=directory, test_files=test_files
+                )
+                page.write(row)
+
+            page.write(tests_table_foot)
+            page.write("</body></html>")
