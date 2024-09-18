@@ -321,9 +321,42 @@ developers mailing list. See <https://grass.osgeo.org/development/>
 
 ## (L) GRASS PROGRAMMER'S MANUAL
 
-The Programmer's manual is generated with doxygen from the source code.
-Please see the [README](doc/development/README.md) file and the files at:
-<https://grass.osgeo.org/programming8/>
+The Programmer's manual <https://grass.osgeo.org/programming8/> is
+generated from the source code. This requires the installation of
+`doxygen` (<http://www.doxygen.nl>) and optionally Graphviz `dot`
+(<https://graphviz.org/doc/info/command.html>).
+
+To locally generate the 'Programmer's Manual', run
+
+```sh
+make htmldocs
+```
+
+To generate documentation as a single html file
+(recommended for simple reading)
+
+```sh
+make htmldocs-single
+```
+
+This process takes some time. The result will be found in
+the file `lib/html/index.html` which itself refers to further
+document repositories in
+
+```text
+lib/vector/html/index.html
+lib/db/html/index.html
+lib/gis/html/index.html
+```
+
+The master file is: `./grasslib.dox` where all sub-documents have to
+be linked to.
+
+To generate the 'Programmer's Manual' in PDF format, run
+
+```sh
+make pdfdocs
+```
 
 ## (M) CONTRIBUTING CODE AND PATCHES
 
