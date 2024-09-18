@@ -50,23 +50,23 @@ jobs:
           environment-file: .github/workflows/macos_dependencies.txt
           environment-name: grass-env
       - name: Environment info
-        shell: bash -el {0}
+        shell: micromamba-shell {0}
         run: |
           printenv | sort
           $CC --version
       - name: Create installation directory
         run: mkdir $HOME/install
       - name: Build and install
-        shell: bash -l {0}
+        shell: micromamba-shell {0}
         run: source ./.github/workflows/macos_install.sh $HOME/install
       - name: Add the bin directory to PATH
         run: echo "$HOME/install/bin" >> $GITHUB_PATH
       - name: Check installed version
         if: always()
-        shell: bash -l {0}
+        shell: micromamba-shell {0}
         run: source ./.github/workflows/print_versions.sh
       - name: Run tests
-        shell: bash -el {0}
+        shell: micromamba-shell {0}
         run: >
           grass --tmp-project XY --exec \
               g.download.project url=${{ env.SampleData }} path=$HOME
