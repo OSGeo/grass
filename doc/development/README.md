@@ -5,7 +5,7 @@ The API documentation is available in the appropriate places,
 but here is the information relevant to contributing to and
 maintaining GRASS GIS.
 
-## Style guide and GitHub guide
+## Style and GitHub guide
 
 - [GRASS Programming Style Guide](style_guide.md)
 - [Guide to contributing on GitHub](github_guide.md)
