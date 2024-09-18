@@ -14,16 +14,10 @@ char *get_path(const char *name, int fpath)
     char tmpdir[GPATH_MAX];
 
     G_temp_element(tmpdir);
-    if (G_strlcat(tmpdir, "/", sizeof(tmpdir)) >= sizeof(tmpdir)) {
-        G_fatal_error(_("Failed to append '/' to path"));
-    }
-    if (G_strlcat(tmpdir, "MONITORS", sizeof(tmpdir)) >= sizeof(tmpdir)) {
-        G_fatal_error(_("Failed to append 'MONITORS' to path"));
-    }
+    (void)G_strlcat(tmpdir, "/", sizeof(tmpdir));
+    (void)G_strlcat(tmpdir, "MONITORS", sizeof(tmpdir));
     if (name) {
-        if (G_strlcat(tmpdir, "/", sizeof(tmpdir)) >= sizeof(tmpdir)) {
-            G_fatal_error(_("Failed to append '/' to path"));
-        }
+        (void)G_strlcat(tmpdir, "/", sizeof(tmpdir));
         if (G_strlcat(tmpdir, name, sizeof(tmpdir)) >= sizeof(tmpdir)) {
             G_fatal_error(_("Failed to append <%s> to path"), name);
         }
@@ -140,16 +134,9 @@ void list_files(const char *name, FILE *fd_out)
     DIR *dirp;
 
     G_temp_element(tmpdir);
-    if (G_strlcat(tmpdir, "/", sizeof(tmpdir)) >= sizeof(tmpdir)) {
-        G_fatal_error(_("Failed to append '/' to path"));
-    }
-    if (G_strlcat(tmpdir, "MONITORS", sizeof(tmpdir)) >= sizeof(tmpdir)) {
-        G_fatal_error(_("Failed to append 'MONITORS' to path"));
-    }
-
-    if (G_strlcat(tmpdir, "/", sizeof(tmpdir)) >= sizeof(tmpdir)) {
-        G_fatal_error(_("Failed to append '/' to path"));
-    }
+    (void)G_strlcat(tmpdir, "/", sizeof(tmpdir));
+    (void)G_strlcat(tmpdir, "MONITORS", sizeof(tmpdir));
+    (void)G_strlcat(tmpdir, "/", sizeof(tmpdir));
 
     if (G_strlcat(tmpdir, name, sizeof(tmpdir)) >= sizeof(tmpdir)) {
         G_fatal_error(_("Failed to append <%s> to path"), name);

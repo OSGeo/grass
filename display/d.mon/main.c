@@ -176,7 +176,7 @@ int main(int argc, char *argv[])
         if (list_flag->answer)
             G_warning(_("Flag -%c ignored"), list_flag->key);
         mon = G_getenv_nofatal("MONITOR");
-        if (mon && strlen(mon) < GNAME_MAX) {
+        if (mon) {
             if (selected_flag->answer) {
                 G_verbose_message(_("Currently selected monitor:"));
                 fprintf(stdout, "%s\n", mon);
@@ -194,12 +194,8 @@ int main(int argc, char *argv[])
                 ret = stop_mon(mon);
             }
         }
-        else if (!mon) {
+        else
             G_important_message(_("No monitor selected"));
-        }
-        else {
-            G_important_message(_("Monitor name is too long"));
-        }
 
         exit(EXIT_SUCCESS);
     }
