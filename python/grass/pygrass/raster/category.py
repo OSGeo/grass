@@ -68,7 +68,7 @@ class Category(list):
 
     def _set_mtype(self, mtype):
         if mtype.upper() not in {"CELL", "FCELL", "DCELL"}:
-            raise ValueError(_("Raster type: {0} not supported".format(mtype)))
+            raise ValueError(_("Raster type: {0} not supported").format(mtype))
         self._mtype = mtype
         self._gtype = RTYPE[self.mtype]["grass type"]
 
@@ -97,7 +97,7 @@ class Category(list):
         diz = {}
         for cat in self.__iter__():
             label, min_cat, max_cat = cat
-            diz[(min_cat, max_cat)] = label
+            diz[min_cat, max_cat] = label
         return diz
 
     def __repr__(self):
@@ -196,13 +196,13 @@ class Category(list):
         libraster.Rast_free_cats(ctypes.byref(self.c_cats))
 
     def get_cat(self, index):
-        return self.__getitem__(index)
+        return self[index]
 
     def set_cat(self, index, value):
         if index is None:
             self.append(value)
-        elif index < self.__len__():
-            self.__setitem__(index, value)
+        elif index < (len(self)):
+            self[index] = value
         else:
             raise TypeError("Index outside range.")
 
@@ -221,7 +221,7 @@ class Category(list):
         # reset only the C struct
         libraster.Rast_init_cats("", ctypes.byref(self.c_cats))
         # write to the c struct
-        for cat in self.__iter__():
+        for cat in iter(self):
             label, min_cat, max_cat = cat
             if max_cat is None:
                 max_cat = min_cat
@@ -273,7 +273,7 @@ class Category(list):
         self._read_cats()
 
     def ncats(self):
-        return self.__len__()
+        return len(self)
 
     def set_cats_fmt(self, fmt, m1, a1, m2, a2):
         """Not implemented yet.
@@ -327,7 +327,7 @@ class Category(list):
         :param str sep: the separator used to divide values and category
         """
         cats = []
-        for cat in self.__iter__():
+        for cat in iter(self):
             if cat[-1] is None:
                 cat = cat[:-1]
             cats.append(sep.join([str(i) for i in cat]))

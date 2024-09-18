@@ -21,11 +21,11 @@ import pathlib
 
 from xml.etree.ElementTree import ParseError
 
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
 import grass.script as gs
 
 
-class BaseCapabilitiesTree(etree.ElementTree):
+class BaseCapabilitiesTree(ET.ElementTree):
     def __init__(self, cap_file):
         """!Initialize xml.etree.ElementTree"""
         is_file = False
@@ -40,16 +40,16 @@ class BaseCapabilitiesTree(etree.ElementTree):
                 raise
         if is_file:
             try:
-                etree.ElementTree.__init__(self, file=cap_file)
+                ET.ElementTree.__init__(self, file=cap_file)
             except ParseError:
                 raise ParseError(_("Unable to parse XML file"))
             except OSError as error:
                 raise ParseError(
-                    _("Unable to open XML file '%s'.\n%s\n" % (cap_file, error))
+                    _("Unable to open XML file '%s'.\n%s\n") % (cap_file, error)
                 )
         else:
             try:
-                etree.ElementTree.__init__(self, element=etree.fromstring(cap_file))
+                ET.ElementTree.__init__(self, element=ET.fromstring(cap_file))
             except ParseError:
                 raise ParseError(_("Unable to parse XML file"))
 
@@ -131,7 +131,7 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
         """!Check if format element is defined."""
         request = self._find(capability, "Request")
         get_map = self._find(request, "GetMap")
-        formats = self._findall(get_map, "Format")
+        self._findall(get_map, "Format")
 
     def _checkLayerTree(self, parent_layer, first=True):
         """!Recursively check layer tree and manage inheritance in the tree"""

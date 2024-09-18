@@ -21,14 +21,14 @@ for details.
 import os
 import re
 import sys
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
 from xml.parsers import expat
 
 from grass.exceptions import ScriptError
 from .utils import decode, split
 from .core import Popen, PIPE, get_real_command
 
-ETREE_EXCEPTIONS = (etree.ParseError, expat.ExpatError)
+ETREE_EXCEPTIONS = (ET.ParseError, expat.ExpatError)
 
 
 class grassTask:
@@ -63,7 +63,7 @@ class grassTask:
         if path is not None:
             try:
                 processTask(
-                    tree=etree.fromstring(get_interface_description(path)), task=self
+                    tree=ET.fromstring(get_interface_description(path)), task=self
                 )
             except ScriptError as e:
                 self.errorMsg = e.value
@@ -523,7 +523,7 @@ def parse_interface(name, parser=processTask, blackList=None):
     :param blackList:
     """
     try:
-        tree = etree.fromstring(get_interface_description(name))
+        tree = ET.fromstring(get_interface_description(name))
     except ETREE_EXCEPTIONS as error:
         raise ScriptError(
             _("Cannot parse interface description of<{name}> module: {error}").format(

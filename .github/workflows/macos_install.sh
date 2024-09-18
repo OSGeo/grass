@@ -69,7 +69,7 @@ export CPPFLAGS="-isystem${CONDA_PREFIX}/include"
 
 ./configure $CONFIGURE_FLAGS
 
-EXEMPT="-Wno-error=deprecated-non-prototype -Wno-error=strict-prototypes"
+EXEMPT=""
 make -j$(sysctl -n hw.ncpu) CFLAGS="$CFLAGS -Werror $EXEMPT" \
   CXXFLAGS="$CXXFLAGS -Werror $EXEMPT"
 

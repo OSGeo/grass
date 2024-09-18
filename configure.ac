@@ -595,6 +595,9 @@ AC_SUBST(DBMIEXTRALIB)
 AC_CHECK_FUNCS(asprintf)
 AC_SUBST(HAVE_ASPRINTF)
 
+AC_CHECK_FUNCS(strlcat)
+AC_SUBST(HAVE_STRLCAT)
+
 # Test if strlcpy exists
 # This is a function part of *BSD libc (optionally available on Linux via libbsd)
 AC_CHECK_FUNCS(strlcpy)

@@ -38,7 +38,7 @@ import re
 import mimetypes
 import time
 
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
 from xml.sax import saxutils
 
 import wx
@@ -323,7 +323,7 @@ class Model:
         """
         # parse workspace file
         try:
-            gxmXml = ProcessModelFile(etree.parse(filename))
+            gxmXml = ProcessModelFile(ET.parse(filename))
         except Exception as e:
             raise GException("{}".format(e))
 
@@ -941,8 +941,9 @@ class ModelObject:
 
         result = []
         for rel in self.rels:
-            if fdir == "from" and rel.GetFrom() == self:
-                result.append(rel)
+            if fdir == "from":
+                if rel.GetFrom() == self:
+                    result.append(rel)
             elif rel.GetTo() == self:
                 result.append(rel)
 
@@ -1577,7 +1578,7 @@ class ModelDataSingle(ModelData, ogl.EllipseShape):
         :param width, height: dimension of the shape
         :param x, y: position of the shape
         """
-        ogl.EllipseShape.__init__(self, width, height)
+        ogl.EllipseShape.__init__(self, width, height)  # noqa: PLC2801, C2801
         if self.parent.GetCanvas():
             self.SetCanvas(self.parent.GetCanvas())
 
@@ -1592,7 +1593,7 @@ class ModelDataSeries(ModelData, ogl.CompositeShape):
         :param width, height: dimension of the shape
         :param x, y: position of the shape
         """
-        ogl.CompositeShape.__init__(self)
+        ogl.CompositeShape.__init__(self)  # noqa: PLC2801, C2801
         if self.parent.GetCanvas():
             self.SetCanvas(self.parent.GetCanvas())
 
@@ -2818,12 +2819,11 @@ class WriteActiniaFile(WriteScriptFile):
             dlg = wx.MessageDialog(
                 self.model.canvas,
                 message=_(
-                    f"Module {task.get_name()} in your model contains "
-                    f"parameterized flags. actinia does not support "
-                    f"parameterized flags. The following flags are therefore "
-                    f"not being written in the generated json: "
-                    f"{itemParameterizedFlags}"
-                ),
+                    "Module {task_name} in your model contains "
+                    "parameterized flags. Actinia does not support "
+                    "parameterized flags. The following flags are therefore "
+                    "not being written in the generated JSON: {flags}"
+                ).format(task_name=task.get_name(), flags=itemParameterizedFlags),
                 caption=_("Warning"),
                 style=wx.OK_DEFAULT | wx.ICON_WARNING,
             )

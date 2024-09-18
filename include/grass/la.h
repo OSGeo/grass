@@ -44,7 +44,7 @@ typedef long int __g77_longint;
 typedef unsigned long int __g77_ulongint;
 
 #include <g2c.h>
-#else  /* for gcc4+ */
+#else /* for gcc4+ */
 typedef int integer;
 typedef unsigned int uinteger;
 typedef char *address;
@@ -67,6 +67,14 @@ typedef unsigned long ulongint;
 /* IO stuff */
 typedef int ftnlen;
 
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wstrict-prototypes"
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstrict-prototypes"
+#endif
+
 /* procedure parameter types for -A */
 typedef int (*U_fp)();
 typedef shortint (*J_fp)();
@@ -79,6 +87,12 @@ typedef logical (*L_fp)();
 typedef shortlogical (*K_fp)();
 typedef void (*H_fp)();
 typedef int (*S_fp)();
+
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
 /* E_fp is for real functions when -R is not specified */
 typedef void C_f;       /* complex function                    */

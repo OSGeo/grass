@@ -1,7 +1,7 @@
 #
 # AUTHOR(S): Caitlin Haedrich <caitlin DOT haedrich AT gmail>
 #            Anna Petrasova <kratochanna AT gmail>
-#            Riya <29riyasaxena AT gmail>
+#            Riya Saxena <29riyasaxena AT gmail>
 #
 # PURPOSE:   This module contains functions for interactive visualizations
 #            in Jupyter Notebooks.
@@ -297,8 +297,8 @@ class InteractiveMap:
             import xyzservices  # pylint: disable=import-outside-toplevel
 
         # Store height and width
-        self.width = width
-        self.height = height
+        self.width = int(width)
+        self.height = int(height)
         self._controllers = {}
 
         # Store vector and raster name
@@ -775,7 +775,7 @@ class InteractiveQueryController:
         _ipywidgets: The ipywidgets module.
         raster_name: The name of the raster layer.
         vector_name: The name of the vector layer.
-        width: The width of the map.
+        width: The width of the map as an int.
         query_control: The query control.
 
     """

@@ -1,9 +1,10 @@
 #
 # AUTHOR(S): Caitlin Haedrich <caitlin DOT haedrich AT gmail>
+#            Riya Saxena <29riyasaxena AT gmail>
 #
 # PURPOSE:   This module contains utility functions for InteractiveMap.
 #
-# COPYRIGHT: (C) 2021-2022 Caitlin Haedrich, and by the GRASS Development Team
+# COPYRIGHT: (C) 2021-2024 Caitlin Haedrich, and by the GRASS Development Team
 #
 #            This program is free software under the GNU General Public
 #            License (>=v2). Read the file COPYING that comes with GRASS
@@ -420,8 +421,7 @@ def get_rendering_size(region, width, height, default_width=600, default_height=
 
 
 def save_vector(name, geo_json):
-    """
-    Saves the user drawn vector.
+    """Saves the user drawn vector.
 
     :param geo_json: name of the geojson file to be saved
     :param name: name with which vector should be saved
@@ -438,7 +438,13 @@ def save_vector(name, geo_json):
 
 
 def get_number_of_cores(requested, env=None):
-    """Get the number of cores to use for multiprocessing."""
+    """Get the number of cores to use for multiprocessing.
+
+    :param int requested: Desired number of cores.
+    :param dict env: Optional process environment.
+
+    :return int: Number of cores to use, constrained by system availability.
+    """
     nprocs = gs.gisenv(env).get("NPROCS")
     if nprocs is not None:
         return int(nprocs)
@@ -451,7 +457,11 @@ def get_number_of_cores(requested, env=None):
 
 
 def get_region_bounds_latlon():
-    """Gets the current computational region bounds in latlon."""
+    """Gets the current computational region bounds in latlon.
+
+    :return list of tuples: represent the southwest and northeast
+                            corners of the region in (latitude, longitude) format.
+    """
     region = gs.parse_command("g.region", flags="gbp")
     return [
         (float(region["ll_s"]), float(region["ll_w"])),
@@ -462,6 +472,7 @@ def get_region_bounds_latlon():
 def update_region(region):
     """Updates the computational region bounds.
 
+    :param dict region: region dictionary
     :return: the new region
     """
     current = gs.region()
@@ -487,8 +498,7 @@ def save_gif(
     text_size=12,
     text_color="gray",
 ):
-    """
-    Creates a GIF animation
+    """Creates a GIF animation
 
     param list input_files: list of paths to source
     param str output_filename: destination gif filename

@@ -13,7 +13,7 @@ import os
 import datetime
 from pathlib import Path
 from xml.sax import saxutils
-import xml.etree.ElementTree as et
+import xml.etree.ElementTree as ET
 import subprocess
 import collections
 import re
@@ -172,8 +172,7 @@ def get_svn_revision():
     rc = p.poll()
     if not rc:
         stdout = stdout.strip()
-        if stdout.endswith("M"):
-            stdout = stdout[:-1]
+        stdout = stdout.removesuffix("M")
         if ":" in stdout:
             # the first one is the one of source code
             stdout = stdout.split(":")[0]
@@ -199,7 +198,7 @@ def get_svn_info():
         rc = p.poll()
         info = {}
         if not rc:
-            root = et.fromstring(stdout)
+            root = ET.fromstring(stdout)
             # TODO: get also date if this make sense
             # expecting only one <entry> element
             entry = root.find("entry")
@@ -211,8 +210,7 @@ def get_svn_info():
             if relurl is not None:
                 relurl = relurl.text
                 # relative path has ^ at the beginning in SVN version 1.8.8
-                if relurl.startswith("^"):
-                    relurl = relurl[1:]
+                relurl = relurl.removeprefix("^")
             else:
                 # SVN version 1.8.8 supports relative-url but older do not
                 # so, get relative part from absolute URL
@@ -257,7 +255,7 @@ def get_svn_path_authors(path, from_date=None):
         stdout, stderr = p.communicate()
         rc = p.poll()
         if not rc:
-            root = et.fromstring(stdout)
+            root = ET.fromstring(stdout)
             # TODO: get also date if this make sense
             # expecting only one <entry> element
             author_nodes = root.iterfind("*/author")

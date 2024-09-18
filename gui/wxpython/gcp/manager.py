@@ -1272,7 +1272,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         # initialize column sorter
         self.itemDataMap = self.mapcoordlist
         ncols = self.list.GetColumnCount()
-        ColumnSorterMixin.__init__(self, ncols)
+        ColumnSorterMixin.__init__(self, ncols)  # noqa: PLC2801, C2801
         # init to ascending sort on first click
         self._colSortFlag = [1] * ncols
 
@@ -1785,11 +1785,10 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             return wx.MessageDialog(
                 self.GetParent(),
                 message=_(
-                    "The {map_type} map {map_name} exists. "
-                    "Do you want to overwrite?".format(
-                        map_type=maptype,
-                        map_name=map_name,
-                    ),
+                    "The {map_type} map {map_name} exists. Do you want to overwrite?"
+                ).format(
+                    map_type=maptype,
+                    map_name=map_name,
                 ),
                 caption=_("Overwrite?"),
                 style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,

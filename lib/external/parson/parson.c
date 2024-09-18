@@ -96,7 +96,7 @@
 #define IS_NUMBER_INVALID(x) (((x) * 0.0) != 0.0)
 #endif
 
-#define OBJECT_INVALID_IX ((size_t)-1)
+#define OBJECT_INVALID_IX ((size_t) - 1)
 
 static JSON_Malloc_Function parson_malloc = malloc;
 static JSON_Free_Function parson_free = free;

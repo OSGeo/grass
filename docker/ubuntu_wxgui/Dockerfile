@@ -1,4 +1,4 @@
-FROM ubuntu:22.04@sha256:340d9b015b194dc6e2a13938944e0d016e57b9679963fdeb9ce021daac430221
+FROM ubuntu:22.04@sha256:58b87898e82351c6cf9cf5b9f3c20257bb9e2dcf33af051e12ce532d7f94e3fe
 
 LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann,Tomas Zigo"
 LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
@@ -54,6 +54,7 @@ RUN apt-get update && apt-get upgrade -y && \
     libglu1-mesa-dev \
     libgsl0-dev \
     libgtk-3-0 \
+    libgtk-3-dev \
     libjpeg-dev \
     libjsoncpp-dev \
     libnetcdf-dev \
@@ -93,6 +94,7 @@ RUN apt-get update && apt-get upgrade -y && \
     python3-ply \
     python3-setuptools \
     python3-venv \
+    python3-wxgtk4.0 \
     software-properties-common \
     sqlite3 \
     subversion \
