@@ -326,6 +326,9 @@ generated from the source code. This requires the installation of
 `doxygen` (<http://www.doxygen.nl>) and optionally Graphviz `dot`
 (<https://graphviz.org/doc/info/command.html>).
 
+The main file is: `./grasslib.dox` where all sub-documents have
+to be linked to.
+
 To locally generate the 'Programmer's Manual', run
 
 ```sh
@@ -340,17 +343,7 @@ make htmldocs-single
 ```
 
 This process takes some time. The result will be found in
-the file `lib/html/index.html` which itself refers to further
-document repositories in
-
-```text
-lib/vector/html/index.html
-lib/db/html/index.html
-lib/gis/html/index.html
-```
-
-The master file is: `./grasslib.dox` where all sub-documents have to
-be linked to.
+the file `lib/html/index.html`.
 
 To generate the 'Programmer's Manual' in PDF format, run
 
