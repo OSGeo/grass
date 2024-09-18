@@ -1,76 +1,40 @@
-/*
- * Copied and clang-formatted from
- * https://github.com/postgres/postgres/blob/master/src/port/win32gettimeofday.c
- *
- * win32gettimeofday.c
- *	  Win32 gettimeofday() replacement
- *
- * src/port/win32gettimeofday.c
- *
- * Copyright (c) 2003 SRA, Inc.
- * Copyright (c) 2003 SKC, Inc.
- *
- * Permission to use, copy, modify, and distribute this software and
- * its documentation for any purpose, without fee, and without a
- * written agreement is hereby granted, provided that the above
- * copyright notice and this paragraph and the following two
- * paragraphs appear in all copies.
- *
- * IN NO EVENT SHALL THE AUTHOR BE LIABLE TO ANY PARTY FOR DIRECT,
- * INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING
- * LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS
- * DOCUMENTATION, EVEN IF THE UNIVERSITY OF CALIFORNIA HAS BEEN ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * THE AUTHOR SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE.  THE SOFTWARE PROVIDED HEREUNDER IS ON AN "AS
- * IS" BASIS, AND THE AUTHOR HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE,
- * SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+/* Adopted from GPL-3 SDRangel
+ * https://github.com/f4exb/sdrangel/blob/master/custom/windows/windows_time.h
  */
 
-#include "c.h"
-
-#include <sysinfoapi.h>
-
-#include <sys/time.h>
-
-/* FILETIME of Jan 1 1970 00:00:00, the PostgreSQL epoch */
-static const unsigned __int64 epoch = UINT64CONST(116444736000000000);
-
 /*
- * FILETIME represents the number of 100-nanosecond intervals since
- * January 1, 1601 (UTC).
+ * missing gettimeofday implementation
+ * for windows; based on postgresql
  */
-#define FILETIME_UNITS_PER_SEC  10000000L
-#define FILETIME_UNITS_PER_USEC 10
 
-/*
- * timezone information is stored outside the kernel so tzp isn't used anymore.
- *
- * Note: this function is not for Win32 high precision timing purposes. See
- * elapsed_time().
- */
-int gettimeofday(struct timeval *tp, void *tzp)
+#define WIN32_LEAN_AND_MEAN    /* stops windows.h including winsock.h; timeval \
+                                  redefine */
+#include <Windows.h>
+#include <stdint.h> /* portable: uint64_t   MSVC: __int64 */
+
+/* MSVC defines this in winsock2.h!? */
+typedef struct timeval {
+    long tv_sec;
+    long tv_usec;
+} timeval;
+
+int gettimeofday(struct timeval *tp, struct timezone *tzp)
 {
+    /* Note: some broken versions only have 8 trailing zero's, the correct epoch
+     * has 9 trailing zero's This magic number is the number of 100 nanosecond
+     * intervals since January 1, 1601 (UTC) until 00:00:00 January 1, 1970 */
+    static const uint64_t EPOCH = ((uint64_t)116444736000000000ULL);
+
+    SYSTEMTIME system_time;
     FILETIME file_time;
-    ULARGE_INTEGER ularge;
+    uint64_t time;
 
-    /*
-     * POSIX declines to define what tzp points to, saying "If tzp is not a
-     * null pointer, the behavior is unspecified".  Let's take this
-     * opportunity to verify that noplace in Postgres tries to use any
-     * unportable behavior.
-     */
-    Assert(tzp == NULL);
+    GetSystemTime(&system_time);
+    SystemTimeToFileTime(&system_time, &file_time);
+    time = ((uint64_t)file_time.dwLowDateTime);
+    time += ((uint64_t)file_time.dwHighDateTime) << 32;
 
-    GetSystemTimePreciseAsFileTime(&file_time);
-    ularge.LowPart = file_time.dwLowDateTime;
-    ularge.HighPart = file_time.dwHighDateTime;
-
-    tp->tv_sec = (long)((ularge.QuadPart - epoch) / FILETIME_UNITS_PER_SEC);
-    tp->tv_usec = (long)(((ularge.QuadPart - epoch) % FILETIME_UNITS_PER_SEC) /
-                         FILETIME_UNITS_PER_USEC);
-
+    tp->tv_sec = (long)((time - EPOCH) / 10000000L);
+    tp->tv_usec = (long)(system_time.wMilliseconds * 1000);
     return 0;
 }
