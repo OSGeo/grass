@@ -537,7 +537,6 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             or event.GetKeyCode() == wx.WXK_SUBTRACT
         ):
             self.autoCompList = []
-            self.GetTextLeft()
             self.InsertText(pos, "-")
             self.CharRight()
             self.toComplete = self.EntityToComplete()
