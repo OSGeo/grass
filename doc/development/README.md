@@ -5,6 +5,15 @@ The API documentation is available in the appropriate places,
 but here is the information relevant to contributing to and
 maintaining GRASS GIS.
 
-- [GRASS Programming Style Guide](./doc/development/style_guide.md)
-- [Guide to contributing on GitHub](./doc/development/github_guide.md)
+## Style guide and GitHub guide
+
+- [GRASS Programming Style Guide](style_guide.md)
+- [Guide to contributing on GitHub](github_guide.md)
+
+## Python API
+
+- ["grass" Python package documentation](https://grass.osgeo.org/grass-devel/manuals/libpython/)
+
+## C API
+
 - [GRASS Programmer's manual](https://grass.osgeo.org/programming8/)
