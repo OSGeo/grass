@@ -218,7 +218,7 @@ void P_Sparse_Correction(struct Map_info *In UNUSED, struct Map_info *Out,
                 }
             }
         } /* if in General box */
-    }     /* while */
+    } /* while */
     G_percent(num_points, num_points, 2);
     Vect_destroy_line_struct(point);
     Vect_destroy_cats_struct(cats);

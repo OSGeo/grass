@@ -159,7 +159,11 @@ class SimpleLayerManager(wx.Panel):
         ]
         for label, text in zip(labels, texts):
             id = NewId()
-            self.Bind(wx.EVT_MENU, lambda evt, t=text, id=id: self._copyText(t), id=id)
+            self.Bind(
+                wx.EVT_MENU,
+                lambda evt, t=text, id=id: self._copyText(t),  # noqa: A006
+                id=id,
+            )
 
             menu.Append(id, label)
 

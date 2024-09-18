@@ -16,10 +16,9 @@ PyQt and other frameworks. As the underlying library, we have chosen
 PyDispatcher because it provides very general API which enables to
 implement Signal API, wide and robust functionality which makes
 implementation and use of Signals easier.
-
-PyDispatcher metadata:
-
-:version: 2.0.3
-:author: Patrick K. O'Brien
-:license: BSD-style, see license.txt for details
 """
+
+__version__ = "2.0.8"
+__author__ = "Patrick K. O'Brien"
+__maintainer__ = "Mike C. Fletcher"
+__license__ = "BSD"

@@ -1,3 +1,18 @@
+#
+# AUTHOR(S): Riya Saxena <29riyasaxena AT gmail>
+#
+# PURPOSE:   This module provides the base class for interactive visualizations
+#            used by `TimeSeriesMap` and `SeriesMap` in Jupyter Notebooks. It
+#            includes methods for rendering visualizations and creating interactive
+#            sliders to navigate through time-series or series data, while reducing
+#            redundancy and enhancing functionality.
+#
+# COPYRIGHT: (C) 2024 Riya Saxena, and by the GRASS Development Team
+#
+#            This program is free software under the GNU General Public
+#            License (>=v2). Read the file COPYING that comes with GRASS
+#            for details.
+
 """Base class for SeriesMap and TimeSeriesMap"""
 
 import os
@@ -5,10 +20,12 @@ from pathlib import Path
 import tempfile
 import weakref
 import shutil
+import multiprocessing
 
 import grass.script as gs
 
 from .map import Map
+from .utils import get_number_of_cores
 
 
 class BaseSeriesMap:
@@ -87,7 +104,7 @@ class BaseSeriesMap:
         for grass_module, kwargs in self._base_layer_calls:
             img.run(grass_module, **kwargs)
 
-    def _render(self):
+    def _render(self, tasks):
         """
         Renders the base image for the dataset.
 
@@ -121,6 +138,14 @@ class BaseSeriesMap:
         self._render_baselayers(img)
 
         # Render layers in respective classes
+        cores = get_number_of_cores(len(tasks), env=self._env)
+        with multiprocessing.Pool(processes=cores) as pool:
+            results = pool.starmap(self._render_worker, tasks)
+
+        for i, filename in results:
+            self._base_filename_dict[i] = filename
+
+        self._layers_rendered = True
 
     def show(self, slider_width=None):
         """Create interactive timeline slider.

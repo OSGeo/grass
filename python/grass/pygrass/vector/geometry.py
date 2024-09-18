@@ -79,7 +79,6 @@ def read_WKT(string):
 
 def read_WKB(buff):
     """Read the binary buffer and return a geometry object"""
-    pass
 
 
 def intersects(lineA, lineB, with_z=False):
@@ -940,7 +939,6 @@ class Line(Geo):
         """
         # TODO: add this method.
         # libvect.Vect_get_line_cat(self.c_mapinfo, self.id, self.field)
-        pass
 
     def pop(self, indx):
         """Return the point in the index position and remove from the Line.
@@ -1139,7 +1137,7 @@ class Line(Geo):
         if match:
             self.reset()
             for coord in match.groups()[0].strip().split(","):
-                self.append(tuple([float(e) for e in coord.split(" ")]))
+                self.append(tuple(float(e) for e in coord.split(" ")))
         else:
             return None
 
@@ -1807,7 +1805,6 @@ class Area(Geo):
 
         ..warning: Not implemented
         """
-        pass
 
     @mapinfo_must_be_set
     def contains_point(self, point, bbox=None):

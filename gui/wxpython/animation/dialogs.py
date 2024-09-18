@@ -900,7 +900,7 @@ class EditDialog(wx.Dialog):
         return self.result
 
     def OnOk(self, event):
-        indices = set([anim.windowIndex for anim in self.animationData])
+        indices = {anim.windowIndex for anim in self.animationData}
         if len(indices) != len(self.animationData):
             GError(
                 parent=self,
