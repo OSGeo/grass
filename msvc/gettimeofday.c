@@ -7,8 +7,8 @@
  * for windows; based on postgresql
  */
 
-#define WIN32_LEAN_AND_MEAN    /* stops windows.h including winsock.h; timeval \
-                                  redefine */
+#define WIN32_LEAN_AND_MEAN  /* stops windows.h including winsock.h; \
+                              * timeval redefine */
 #include <Windows.h>
 #include <stdint.h> /* portable: uint64_t   MSVC: __int64 */
 
