@@ -172,8 +172,7 @@ def get_svn_revision():
     rc = p.poll()
     if not rc:
         stdout = stdout.strip()
-        if stdout.endswith("M"):
-            stdout = stdout[:-1]
+        stdout = stdout.removesuffix("M")
         if ":" in stdout:
             # the first one is the one of source code
             stdout = stdout.split(":")[0]
@@ -211,8 +210,7 @@ def get_svn_info():
             if relurl is not None:
                 relurl = relurl.text
                 # relative path has ^ at the beginning in SVN version 1.8.8
-                if relurl.startswith("^"):
-                    relurl = relurl[1:]
+                relurl = relurl.removeprefix("^")
             else:
                 # SVN version 1.8.8 supports relative-url but older do not
                 # so, get relative part from absolute URL

@@ -20,19 +20,6 @@ per-file-ignores =
     # F841 local variable assigned to but never used
     # E741 ambiguous variable name 'l'
     __init__.py: F401, F403
-    lib/init/grass.py: E722, F821, F841
-    utils/gitlog2changelog.py: E722, E712
-    man/build_check_rest.py: F403, F405
-    man/build_full_index_rest.py: F403, F405
-    man/parser_standard_options.py: F403, F405
-    man/build_class.py: F403, F405
-    man/build_class_rest.py: F403, F405
-    man/build_check.py: F403, F405
-    man/build_full_index.py: F403, F405
-    man/build_index.py: F403, F405
-    man/build_index_rest.py: F403, F405
-    man/build_keywords.py: F403, F405, E722
-    man/build_topics.py: F403, F405, E722
     man/build_html.py: E501
     imagery/i.atcorr/create_iwave.py: F632, F821, W293
     doc/python/raster_example_ctypes.py: F403, F405
@@ -153,9 +140,7 @@ per-file-ignores =
     python/grass/*/*/__init__.py: F401, F403
     python/grass/*/*/*/__init__.py: F401, F403
     # E402 module level import not at top of file
-    scripts/d.polar/d.polar.py: F841
-    scripts/r.in.wms/wms_gdal_drv.py: F841, E722
-    scripts/r.in.wms/wms_cap_parsers.py: F841
+    scripts/r.in.wms/wms_gdal_drv.py: E722
     scripts/r.in.wms/wms_drv.py: E402, E722
     scripts/r.in.wms/srs.py: E722
     scripts/r.semantic.label/r.semantic.label.py: E501
@@ -173,13 +158,10 @@ per-file-ignores =
     scripts/v.what.strds/v.what.strds.py: E722, E501
     # Line too long (esp. module interface definitions)
     scripts/*/*.py: E501
-    # local variable 'column' is assigned to but never used
     temporal/t.rast.to.vect/t.rast.to.vect.py: E501
-    # local variable 'stdstype' is assigned to but never used
-    temporal/t.vect.algebra/t.vect.algebra.py: F841, E501
+    temporal/t.vect.algebra/t.vect.algebra.py: E501
     # ## used (##% key: r etc)
-    # local variable 'map_list' is assigned to but never used
-    temporal/t.rast.what/t.rast.what.py: E265, E266, F841, E501
+    temporal/t.rast.what/t.rast.what.py: E265, E266, E501
     # Line too long (esp. module interface definitions)
     temporal/*/*.py: E501
 

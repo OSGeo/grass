@@ -706,7 +706,7 @@ class RenderMapMgr(wx.EvtHandler):
                 self._rendering = False
                 if wx.IsBusy():
                     wx.EndBusyCursor()
-                raise GException(_("Rendering failed: %s" % msg))
+                raise GException(_("Rendering failed: %s") % msg)
 
         stop = time.time()
         Debug.msg(
