@@ -45,9 +45,10 @@ jobs:
           # Rehash to forget about the deleted files
           hash -r
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      - name: Get current date
+      - name: Get current date cache key segment
         id: date
-        run: echo "date=$(date +%Y-%m-%d)" >> "${GITHUB_OUTPUT}"
+        # Year and week of year so cache key changes weekly
+        run: echo "date=$(date +%Y-%U)" >> "${GITHUB_OUTPUT}"
       - name: Setup Mamba
         uses: mamba-org/setup-micromamba@f8b8a1e23a26f60a44c853292711bacfd3eac822 # v1.9.0
         with:
