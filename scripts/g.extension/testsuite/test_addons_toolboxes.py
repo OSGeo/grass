@@ -19,7 +19,6 @@ from grass.gunittest.utils import xfail_windows
 
 import os
 
-from python.grass.gunittest.utils import xfail_windows
 
 FULL_TOOLBOXES_OUTPUT = """\
 Hydrology (HY)
