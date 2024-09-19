@@ -14,10 +14,10 @@ from grass.gunittest.main import test
 from grass.gunittest.utils import xfail_windows
 
 
-@xfail_windows
 class TestNewlinesWithGetlFunctions(TestCase):
     """Test C functions G_getl() and G_getl2() from gis library"""
 
+    @xfail_windows
     @classmethod
     def setUpClass(cls):
         cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
