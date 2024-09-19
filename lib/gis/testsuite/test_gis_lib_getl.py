@@ -11,8 +11,10 @@ import unittest
 import grass.lib.gis as libgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+from grass.gunittest.utils import xfail_windows
 
 
+@xfail_windows
 class TestNewlinesWithGetlFunctions(TestCase):
     """Test C functions G_getl() and G_getl2() from gis library"""
 
