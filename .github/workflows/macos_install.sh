@@ -47,8 +47,6 @@ CONFIGURE_FLAGS="\
   --with-bzlib-libs=${CONDA_PREFIX}/lib \
   --with-bzlib-includes=${CONDA_PREFIX}/include \
   --with-netcdf=${CONDA_PREFIX}/bin/nc-config \
-  --with-blas=openblas \
-  --with-lapack=openblas \
   --with-netcdf=${CONDA_PREFIX}/bin/nc-config \
   --with-nls \
   --with-libs=${CONDA_PREFIX}/lib \
