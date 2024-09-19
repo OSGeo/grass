@@ -12,7 +12,7 @@ maintaining GRASS GIS.
 
 ## Python API
 
-- ["grass" Python package documentation](https://grass.osgeo.org/grass-devel/manuals/libpython/)
+- ["grass" Python package documentation](https://grass.osgeo.org/grass-stable/manuals/libpython/)
 
 ## C API
 
