@@ -18,7 +18,6 @@ from unittest import expectedFailure
 import warnings
 
 
-
 def ensure_dir(directory):
     """Create all directories in the given path if needed."""
     if not os.path.exists(directory):
