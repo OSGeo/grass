@@ -2021,8 +2021,6 @@ class PreferencesDialog(PreferencesBaseDialog):
 
     def OnLoadEpsgCodes(self, event):
         """Load EPSG codes from the file"""
-        win = self.FindWindowById(self.winId["projection:statusbar:projFile"])
-        path = win.GetValue()
         epsgCombo = self.FindWindowById(self.winId["projection:statusbar:epsg"])
         wx.BeginBusyCursor()
         try:

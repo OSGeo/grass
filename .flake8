@@ -29,13 +29,11 @@ per-file-ignores =
     locale/grass_po_stats.py: E122, E128, E231, E401, E722
     gui/scripts/d.wms.py: E501
     gui/wxpython/core/gcmd.py: E402
-    gui/wxpython/core/gthread.py: F841
     gui/wxpython/core/gconsole.py: E722
     gui/wxpython/core/toolboxes.py: E722
-    gui/wxpython/core/utils.py: E722, F841
+    gui/wxpython/core/utils.py: E722
     gui/wxpython/core/workspace.py: E722
-    gui/wxpython/core/render.py: E722, F841
-    gui/wxpython/core/ws.py: F841
+    gui/wxpython/core/render.py: E722
     gui/wxpython/core/settings.py: E722
     gui/wxpython/core/watchdog.py: E402
     gui/wxpython/datacatalog/tree.py: E731, E402
@@ -44,17 +42,14 @@ per-file-ignores =
     gui/wxpython/dbmgr/sqlbuilder.py: E722
     gui/wxpython/dbmgr/manager.py: E722
     gui/wxpython/docs/wxgui_sphinx/conf.py: E402, W291
-    gui/wxpython/gcp/g.gui.gcp.py: F841
-    gui/wxpython/gcp/manager.py: F841, E722
-    gui/wxpython/gcp/mapdisplay.py: F841
-    gui/wxpython/gui_core/*: F841, E266, E722
-    gui/wxpython/gui_core/dialogs.py: E722, F841
-    gui/wxpython/gui_core/forms.py: E722, F841
+    gui/wxpython/gcp/manager.py: E722
+    gui/wxpython/gui_core/*: E266, E722
+    gui/wxpython/gui_core/dialogs.py: E722
+    gui/wxpython/gui_core/forms.py: E722
     gui/wxpython/gui_core/ghelp.py: E722
-    gui/wxpython/gui_core/gselect.py: F841, E266, E722
-    gui/wxpython/gui_core/preferences.py: E266, F841
-    gui/wxpython/gui_core/treeview.py: F841
-    gui/wxpython/gui_core/widgets.py: F841, E722, E266
+    gui/wxpython/gui_core/gselect.py: E266, E722
+    gui/wxpython/gui_core/preferences.py: E266
+    gui/wxpython/gui_core/widgets.py: E722, E266
     gui/wxpython/image2target/*: F841, E722, E265
     gui/wxpython/image2target/g.gui.image2target.py: E501, E265, F841
     gui/wxpython/iscatt/*: F841, E722, F405, F403
@@ -71,8 +66,6 @@ per-file-ignores =
     gui/wxpython/vnet/*: F841
     gui/wxpython/wxgui.py: F841
     gui/wxpython/animation/g.gui.animation.py: E501
-    gui/wxpython/animation/mapwindow.py: F841
-    gui/wxpython/animation/provider.py: F841
     gui/wxpython/tplot/frame.py: F841, E722
     gui/wxpython/tplot/g.gui.tplot.py: E501
     gui/wxpython/rdigit/g.gui.rdigit.py: F841
