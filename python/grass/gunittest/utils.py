@@ -92,7 +92,7 @@ def xfail_windows(test_item):
     if not sys.platform.startswith("win"):
         return lambda func: func
     warnings.warn(
-        "Once the test is fixed and passing, remove the " "@xfail_windows decorator",
-        stacklevel=3,
+        "Once the test is fixed and passing, remove the @xfail_windows decorator",
+        stacklevel=2,
     )
     return expectedFailure(test_item)
