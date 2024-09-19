@@ -666,10 +666,6 @@ USE_PTHREAD
 PTHREADLIB
 PTHREADLIBPATH
 PTHREADINCPATH
-USE_OPENDWG
-OPENDWGLIB
-OPENDWGLIBPATH
-OPENDWGINCPATH
 HAVE_NLS
 INTLLIB
 FTLIB
@@ -912,7 +908,6 @@ with_cairo
 with_freetype
 with_nls
 with_readline
-with_opendwg
 with_regex
 with_pthread
 with_openmp
@@ -964,8 +959,6 @@ with_freetype_libs
 with_proj_includes
 with_proj_libs
 with_proj_share
-with_opendwg_includes
-with_opendwg_libs
 with_regex_includes
 with_regex_libs
 with_pthread_includes
@@ -1647,7 +1640,6 @@ Optional Packages:
   --with-freetype         support FreeType functionality (default: yes)
   --with-nls              support NLS functionality (default: no)
   --with-readline         support Readline functionality (default: no)
-  --with-opendwg          support openDWG functionality (default: no)
   --with-regex            support regex functionality (default: yes)
   --with-pthread          support POSIX threads functionality (default: no)
   --with-openmp           support OpenMP functionality (default: no)
@@ -1734,10 +1726,6 @@ Optional Packages:
                           External PROJ.4 include files are in DIRS
   --with-proj-libs=DIRS   External PROJ.4 library files are in DIRS
   --with-proj-share=DIR   External PROJ.4 data files are in DIR
-  --with-opendwg-includes=DIRS
-                          openDWG include files are in DIRS
-  --with-opendwg-libs=DIRS
-                          openDWG library files are in DIRS
   --with-regex-includes=DIRS
                           regex include files are in DIRS
   --with-regex-libs=DIRS  regex library files are in DIRS
@@ -5566,17 +5554,6 @@ fi
 
 
 
-# Check whether --with-opendwg was given.
-if test ${with_opendwg+y}
-then :
-  withval=$with_opendwg;
-else $as_nop
-  with_opendwg=no
-fi
-
-
-
-
 # Check whether --with-regex was given.
 if test ${with_regex+y}
 then :
@@ -6063,25 +6040,6 @@ fi
 if test ${with_proj_share+y}
 then :
   withval=$with_proj_share;
-fi
-
-
-
-
-
-# Check whether --with-opendwg-includes was given.
-if test ${with_opendwg_includes+y}
-then :
-  withval=$with_opendwg_includes;
-fi
-
-
-
-
-# Check whether --with-opendwg-libs was given.
-if test ${with_opendwg_libs+y}
-then :
-  withval=$with_opendwg_libs;
 fi
 
 
@@ -15207,113 +15165,6 @@ fi
 
 
 
-# Enable openDWG option
-
-
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether to use openDWG" >&5
-printf %s "checking whether to use openDWG... " >&6; }
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: \"$with_opendwg\"" >&5
-printf "%s\n" "\"$with_opendwg\"" >&6; }
-case "$with_opendwg" in
-	"no")	USE_OPENDWG=	;;
-	"yes")	USE_OPENDWG="1"	;;
-	*)	as_fn_error $? "*** You must answer yes or no." "$LINENO" 5	;;
-esac
-
-
-
-OPENDWGINCPATH=
-OPENDWGLIBPATH=
-OPENDWGLIB=
-
-if test -n "${USE_OPENDWG}"; then
-
-# With OPENDWG includes directory
-
-
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of openDGW includes" >&5
-printf %s "checking for location of openDGW includes... " >&6; }
-case "$with_opendwg_includes" in
-y | ye | yes | n | no)
-	as_fn_error $? "*** You must supply a directory to --with-opendwg-includes." "$LINENO" 5
-	;;
-esac
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $with_opendwg_includes" >&5
-printf "%s\n" "$with_opendwg_includes" >&6; }
-
-if test -n "$with_opendwg_includes" ; then
-    for dir in $with_opendwg_includes; do
-        if test -d "$dir"; then
-            OPENDWGINCPATH="$OPENDWGINCPATH -I$dir"
-        else
-            as_fn_error $? "*** openDGW includes directory $dir does not exist." "$LINENO" 5
-        fi
-    done
-fi
-
-
-
-ac_save_cppflags="$CPPFLAGS"
-CPPFLAGS="$OPENDWGINCPATH $CPPFLAGS"
-       for ac_header in ad2.h
-do :
-  ac_fn_c_check_header_compile "$LINENO" "ad2.h" "ac_cv_header_ad2_h" "$ac_includes_default"
-if test "x$ac_cv_header_ad2_h" = xyes
-then :
-  printf "%s\n" "#define HAVE_AD2_H 1" >>confdefs.h
-
-else $as_nop
-
-    as_fn_error $? "*** Unable to locate openDWG includes." "$LINENO" 5
-
-fi
-
-done
-CPPFLAGS=$ac_save_cppflags
-
-
-# With OPENDWG library directory
-
-
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of openDWG library" >&5
-printf %s "checking for location of openDWG library... " >&6; }
-case "$with_opendwg_libs" in
-y | ye | yes | n | no)
-	as_fn_error $? "*** You must supply a directory to --with-opendwg-libs." "$LINENO" 5
-	;;
-esac
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $with_opendwg_libs" >&5
-printf "%s\n" "$with_opendwg_libs" >&6; }
-
-if test -n "$with_opendwg_libs"; then
-    for dir in $with_opendwg_libs; do
-        if test -d "$dir"; then
-            OPENDWGLIBPATH="$OPENDWGLIBPATH -L$dir"
-        else
-            as_fn_error $? "*** openDWG library directory $dir does not exist." "$LINENO" 5
-        fi
-    done
-fi
-
-
-#search for ad2.a, ad3.a ... in openDWG toolkit directory:
-#FIX ME  how to program this test??
-#LOC_CHECK_LIBS(ad?.a,adSeekLayer,openDWG,$OPENDWGLIBPATH,OPENDWGLIB,,)
-#
-#for now hack (but working):
-TRUEOPENDWGLIBPATH=`echo "$OPENDWGLIBPATH" | cut -b3-`
-adlib=`ls -1 "$TRUEOPENDWGLIBPATH"/ad?.a | tail -1`
-OPENDWGLIB="$adlib"
-
-fi # $USE_OPENDWG
-
-
-
-
-
-
-# Done checking OPENDWG
-
 # Enable pthread option
 
 
@@ -17687,8 +17538,6 @@ echo "  BZIP2 support:              `if test -n "${USE_BZIP2}" ; then echo yes ;
 echo "  C++ support:                `if test -n "${USE_CXX}" ; then echo yes ; else echo no ; fi`"
 
 echo "  Cairo support:              `if test -n "${USE_CAIRO}" ; then echo yes ; else echo no ; fi`"
-
-echo "  DWG support:                `if test -n "${USE_OPENDWG}" ; then echo yes ; else echo no ; fi`"
 
 echo "  FFTW support:               `if test -n "${USE_FFTW}" ; then echo yes ; else echo no ; fi`"
 
