@@ -18,6 +18,8 @@ jobs:
   macos_build:
     name: macOS build
     runs-on: macos-14
+    env:
+      PYTHONWARNINGS: always
     steps:
       - name: Info
         run: |
@@ -57,17 +59,17 @@ jobs:
       - name: Create installation directory
         run: mkdir $HOME/install
       - name: Build and install
-        shell: bash -l {0}
+        shell: micromamba-shell {0}
         run: source ./.github/workflows/macos_install.sh $HOME/install
       - name: Add the bin directory to PATH
         run: echo "$HOME/install/bin" >> $GITHUB_PATH
       - name: Check installed version
         if: ${{ !cancelled() }}
-        shell: bash -l {0}
+        shell: micromamba-shell {0}
         run: source ./.github/workflows/print_versions.sh
 
       - name: Run pytest with multiple workers in parallel
-        shell: bash -el {0}
+        shell: micromamba-shell {0}
         run: |
           export PYTHONPATH=$(grass --config python_path):$PYTHONPATH
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
@@ -76,7 +78,7 @@ jobs:
             -ra . \
             -m 'not needs_solo_run'
       - name: Run pytest with a single worker (for tests marked with needs_solo_run)
-        shell: bash -el {0}
+        shell: micromamba-shell {0}
         run: |
           export PYTHONPATH=$(grass --config python_path):$PYTHONPATH
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
@@ -85,10 +87,10 @@ jobs:
             -m 'needs_solo_run'
 
       - name: Run gunittest tests
-        shell: bash -el {0}
+        shell: micromamba-shell {0}
         run: |
           grass --tmp-project XY --exec \
-              g.download.location url=${{ env.SampleData }} path=$HOME
+              g.download.project url=${{ env.SampleData }} path=$HOME
           grass --tmp-project XY --exec \
               python3 -m grass.gunittest.main \
               --grassdata $HOME --location nc_spm_full_v2alpha2 --location-type nc \
@@ -98,7 +100,7 @@ jobs:
                        nc_spm_full_v2alpha2.tar.gz"
       - name: Make HTML test report available
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4.3.6
+        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
         with:
           name: testreport-macOS
           path: testreport

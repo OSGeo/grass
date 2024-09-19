@@ -9,8 +9,12 @@
 import sys
 import os
 
+<<<<<<< markdown_docs
 from build import message_tmpl, get_files, read_file
 from build_html import man_dir
+=======
+from build_html import html_dir, message_tmpl, html_files, read_file
+>>>>>>> main
 
 os.chdir(man_dir)
 

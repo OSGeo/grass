@@ -216,9 +216,6 @@ def main():
     if not flags["c"]:
         sys.stdout.write(fs.join(colnames + extracolnames) + "\n")
 
-    # make and print the table:
-    numcols = len(colnames) + len(extracolnames)
-
     # calculate percents if requested
     if units == "percent" and option != "coor":
         # calculate total value

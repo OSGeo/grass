@@ -98,7 +98,6 @@ class PyStc(stc.StyledTextCtrl):
             9, wx.FONTFAMILY_MODERN, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL
         )
         face = font.GetFaceName()
-        size = font.GetPointSize()
 
         # setting the monospace here to not mess with the rest of the code
         # TODO: review the whole styling
@@ -262,10 +261,8 @@ class PyStc(stc.StyledTextCtrl):
             self.modified = True
             if self.statusbar:
                 self.statusbar.SetStatusText(
-                    _(
-                        "{} script contains local modifications".format(
-                            self.script_type
-                        )
+                    _("{} script contains local modifications").format(
+                        self.script_type
                     ),
                     0,
                 )

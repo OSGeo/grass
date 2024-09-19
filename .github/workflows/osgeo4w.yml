@@ -18,6 +18,8 @@ jobs:
       cancel-in-progress: true
 
     runs-on: ${{ matrix.os }}
+    env:
+      PYTHONWARNINGS: always
     strategy:
       matrix:
         os:
@@ -37,7 +39,7 @@ jobs:
           update: true
           msystem: MINGW64
           install: tar libintl make bison flex diffutils git dos2unix zip mingw-w64-x86_64-toolchain
-            mingw-w64-x86_64-fftw mingw-w64-x86_64-lapack mingw-w64-x86_64-pkgconf
+            mingw-w64-x86_64-fftw mingw-w64-x86_64-openblas mingw-w64-x86_64-pkgconf
             mingw-w64-x86_64-gcc mingw-w64-x86_64-ccache mingw-w64-x86_64-zlib mingw-w64-x86_64-libiconv
             mingw-w64-x86_64-bzip2 mingw-w64-x86_64-gettext mingw-w64-x86_64-libsystre
             mingw-w64-x86_64-libtre-git mingw-w64-x86_64-libwinpthread-git mingw-w64-x86_64-libpng
@@ -64,7 +66,10 @@ jobs:
 
       - name: Compile GRASS GIS
         shell: msys2 {0}
-        run: .github/workflows/build_osgeo4w.sh
+        run: |
+          export CFLAGS="${CFLAGS} -pipe"
+          export CXXFLAGS="${CXXFLAGS} -pipe"
+          .github/workflows/build_osgeo4w.sh
 
       - name: Print installed versions
         if: always()
@@ -83,7 +88,7 @@ jobs:
 
       - name: Make HTML test report available
         if: ${{ always() }}
-        uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4.3.6
+        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
         with:
           name: testreport-${{ matrix.os }}
           path: testreport

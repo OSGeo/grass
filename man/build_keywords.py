@@ -21,6 +21,16 @@ python man/build_keywords.py <dir_path_to_core_modules_html_man_files>
 import os
 import sys
 import glob
+<<<<<<< markdown_docs
+=======
+from build_html import (
+    grass_version,
+    header1_tmpl,
+    headerkeywords_tmpl,
+    write_html_footer,
+)
+
+>>>>>>> main
 
 blacklist = [
     "Display",
@@ -61,6 +71,7 @@ def get_module_man_file_path(module, addons_man_files):
     return module_path
 
 
+<<<<<<< markdown_docs
 def build_keywords(ext):
     keywords = {}
 
@@ -190,6 +201,61 @@ if __name__ == "__main__":
     from build import (
         grass_version,
         write_footer,
+=======
+for html_file in htmlfiles:
+    fname = os.path.basename(html_file)
+    with open(html_file) as f:
+        lines = f.readlines()
+    # TODO maybe move to Python re (regex)
+    # remove empty lines
+    lines = [x for x in lines if x != "\n"]
+    try:
+        index_keys = lines.index("<h2>KEYWORDS</h2>\n") + 1
+        index_desc = lines.index("<h2>NAME</h2>\n") + 1
+    except Exception:
+        continue
+    try:
+        keys = lines[index_keys].split(",")
+    except Exception:
+        continue
+    for key in keys:
+        key = key.strip()
+        try:
+            key = key.split(">")[1].split("<")[0]
+        except Exception:
+            pass
+        if not key:
+            sys.exit("Empty keyword from file %s line: %s" % (fname, lines[index_keys]))
+        if key not in keywords.keys():
+            keywords[key] = []
+            keywords[key].append(fname)
+        elif fname not in keywords[key]:
+            keywords[key].append(fname)
+
+for black in blacklist:
+    try:
+        del keywords[black]
+    except Exception:
+        try:
+            del keywords[black.lower()]
+        except Exception:
+            continue
+
+for key in sorted(keywords.keys()):
+    # this list it is useful to create the TOC using only the first
+    # character for keyword
+    firstchar = key[0].lower()
+    if firstchar not in char_list.keys():
+        char_list[str(firstchar)] = key
+    elif firstchar in char_list.keys():
+        if key.lower() < char_list[str(firstchar)].lower():
+            char_list[str(firstchar.lower())] = key
+
+keywordsfile = open(os.path.join(path, "keywords.html"), "w")
+keywordsfile.write(
+    header1_tmpl.substitute(
+        title="GRASS GIS %s Reference Manual: Keywords index" % grass_version
+>>>>>>> main
     )
 
     from build_html import header1_tmpl, headerkeywords_tmpl, man_dir
