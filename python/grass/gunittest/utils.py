@@ -87,7 +87,6 @@ def safe_repr(obj, short=False):
 
 def xfail_windows(test_item):
     """Marks a test as an expected failure or error only on Windows
-    
     Equivalent to applying @unittest.expectedFailure only when running
     on Windows.
     """
