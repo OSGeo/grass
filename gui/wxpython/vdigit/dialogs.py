@@ -591,7 +591,7 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdi
                 self.SetItem(index, 1, str(cat))
                 self.SetItemData(index, i)
                 itemData[i] = (str(layer), str(cat))
-                i = i + 1
+                i += 1
 
         if not update:
             self.SetColumnWidth(0, 100)
@@ -774,4 +774,3 @@ class CheckListFeature(ListCtrl, listmix.ListCtrlAutoWidthMixin, CheckListCtrlMi
 
     def OnCheckItem(self, index, flag):
         """Mapset checked/unchecked"""
-        pass

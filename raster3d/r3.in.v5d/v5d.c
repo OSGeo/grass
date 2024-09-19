@@ -470,7 +470,7 @@ static void compute_ga_gb(int nr, int nc, int nl, const float data[],
     /*
      * Compute ga, gb values for whole grid.
      */
-    int i, lev, allmissing, num;
+    int i, allmissing, num;
     float min, max, a, b;
 
     min = 1.0e30;
@@ -552,7 +552,6 @@ static void compute_ga_gb(int nr, int nc, int nl, const float data[],
 
         delt = (gridmax - gridmin) / 100000.0;
         if (ABS(gridmin) < delt && gridmin != 0.0 && compressmode != 4) {
-            float min, max;
 
             for (j = 0; j < nrncnl; j++) {
                 if (!IS_MISSING(data[j]) && data[j] < delt)

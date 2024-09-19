@@ -238,7 +238,7 @@ def main():
                 )
             )
         if indicator.find("@") >= 0:
-            indicator = indicator
+            indicator_id = indicator
         else:
             indicator_id = indicator + "@" + mapset
 

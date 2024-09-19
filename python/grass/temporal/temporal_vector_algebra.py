@@ -314,14 +314,14 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         mapainput = map_i.get_id()
         # Append command list of given map to result command list.
         if "cmd_list" in dir(map_i):
-            resultlist = resultlist + map_i.cmd_list
+            resultlist += map_i.cmd_list
         for topo in topolist:
             if topo.upper() in tbrelations.keys():
                 relationmaplist = tbrelations[topo.upper()]
                 for relationmap in relationmaplist:
                     # Append command list of given map to result command list.
                     if "cmd_list" in dir(relationmap):
-                        resultlist = resultlist + relationmap.cmd_list
+                        resultlist += relationmap.cmd_list
                     # Generate an intermediate name
                     name = self.generate_map_name()
                     # Put it into the removalbe map list

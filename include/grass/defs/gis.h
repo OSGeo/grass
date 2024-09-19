@@ -548,6 +548,9 @@ int G_name_is_fully_qualified(const char *, char *, char *);
 char *G_fully_qualified_name(const char *, const char *);
 int G_unqualified_name(const char *, const char *, char *, char *);
 
+/* omp_threads.c */
+int G_set_omp_num_threads(struct Option *);
+
 /* open.c */
 int G_open_new(const char *, const char *);
 int G_open_old(const char *, const char *, const char *);
