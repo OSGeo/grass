@@ -55,7 +55,7 @@ jobs:
           init-shell: bash
           environment-file: .github/workflows/macos_dependencies.txt
           environment-name: grass-env
-          # persist on the same day.
+          # Persist on the same period (date).
           cache-environment-key: environment-${{ steps.date.outputs.date }}
 
       - name: Environment info
