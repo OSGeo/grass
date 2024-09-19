@@ -12,11 +12,16 @@ mat_struct *G_matrix_subtract(mat_struct *, mat_struct *);
 mat_struct *G_matrix_scale(mat_struct *, const double);
 mat_struct *G__matrix_add(mat_struct *, mat_struct *, const double,
                           const double);
+
+#if defined(HAVE_LIBBLAS)
 mat_struct *G_matrix_product(mat_struct *, mat_struct *);
+#endif
 mat_struct *G_matrix_transpose(mat_struct *);
+#if defined(HAVE_LIBBLAS) && defined(HAVE_LIBLAPACK)
 int G_matrix_LU_solve(const mat_struct *, mat_struct **, const mat_struct *,
                       mat_type);
 mat_struct *G_matrix_inverse(mat_struct *);
+#endif
 void G_matrix_free(mat_struct *);
 void G_matrix_print(mat_struct *);
 int G_matrix_set_element(mat_struct *, int, int, double);
@@ -34,7 +39,9 @@ int G_matvect_retrieve_matrix(vec_struct *);
 
 vec_struct *G_vector_init(int, int, vtype);
 int G_vector_set(vec_struct *, int, int, vtype, int);
+#if defined(HAVE_LIBBLAS)
 double G_vector_norm_euclid(vec_struct *);
+#endif
 double G_vector_norm_maxval(vec_struct *, int);
 vec_struct *G_vector_copy(const vec_struct *, int);
 vec_struct *G_vector_product(vec_struct *, vec_struct *, vec_struct *);
