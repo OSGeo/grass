@@ -107,10 +107,7 @@ def build_keywords(ext):
             keys = []
             for line in lines:
                 if "keywords:" in line:
-                    keys = [
-                        x.strip()
-                        for x in line.split(":", 1)[1].strip().split(",")
-                    ]
+                    keys = [x.strip() for x in line.split(":", 1)[1].strip().split(",")]
                     break
 
         for key in keys:
