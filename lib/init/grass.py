@@ -1057,9 +1057,7 @@ def load_env(grass_env_file):
             v = v.strip('"')
             # we'll keep expand=True to expand $var's inside "value" because
             # they are within double quotes
-        elif (
-            v.startswith("'") or v.endswith("'") or v.startswith('"') or v.endswith('"')
-        ):
+        elif v.startswith(("'", '"')) or v.endswith(("'", '"')):
             # here, let's try to ignore unmatching single/double quotes, which
             # might be a multi-line variable or just a user error
             debug("Ignoring multi-line environmental variable {0}".format(k))

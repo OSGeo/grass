@@ -470,9 +470,10 @@ def replace_shebang_win(python_file):
     cur_dir = os.path.dirname(python_file)
     tmp_name = os.path.join(cur_dir, gs.tempname(12))
 
-    with codecs.open(python_file, "r", encoding="utf8") as in_file, codecs.open(
-        tmp_name, "w", encoding="utf8"
-    ) as out_file:
+    with (
+        codecs.open(python_file, "r", encoding="utf8") as in_file,
+        codecs.open(tmp_name, "w", encoding="utf8") as out_file,
+    ):
         for line in in_file:
             new_line = line.replace(
                 "#!/usr/bin/env python\n", "#!/usr/bin/env python3\n"

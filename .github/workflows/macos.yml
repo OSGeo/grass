@@ -45,12 +45,19 @@ jobs:
           # Rehash to forget about the deleted files
           hash -r
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - name: Get current date cache key segment
+        id: date
+        # Year and week of year so cache key changes weekly
+        run: echo "date=$(date +%Y-%U)" >> "${GITHUB_OUTPUT}"
       - name: Setup Mamba
         uses: mamba-org/setup-micromamba@f8b8a1e23a26f60a44c853292711bacfd3eac822 # v1.9.0
         with:
           init-shell: bash
           environment-file: .github/workflows/macos_dependencies.txt
           environment-name: grass-env
+          # Persist on the same period (date).
+          cache-environment-key: environment-${{ steps.date.outputs.date }}
+
       - name: Environment info
         shell: bash -el {0}
         run: |
