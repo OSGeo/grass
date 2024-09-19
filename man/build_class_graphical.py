@@ -102,9 +102,7 @@ def starts_with_module(string, module) -> bool:
     # module = module.replace('wxGUI.', 'g.gui.')
     # TODO: matches g.mapsets images for g.mapset and d.rast.num for d.rast
     return bool(
-        string.startswith(module.replace(".", "_"))
-        or string.startswith(module.replace(".", ""))
-        or string.startswith(module)
+        string.startswith((module.replace(".", "_"), module.replace(".", ""), module))
     )
 
 
