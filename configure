@@ -5611,7 +5611,7 @@ if test ${with_blas+y}
 then :
   withval=$with_blas;
 else $as_nop
-  with-blas="no"
+  with_blas=no
 fi
 
 
@@ -5621,7 +5621,7 @@ if test ${with_lapack+y}
 then :
   withval=$with_lapack;
 else $as_nop
-  with-lapack="no"
+  with_lapack=no
 fi
 
 
@@ -13719,10 +13719,10 @@ case "$with_blas" in
   no)
     ;;
   yes)
-    USE_BLAS="$with_blas"
+    USE_BLAS=1
     ;;
   *)
-    USE_BLAS=yes
+    USE_BLAS=1
     BLAS_PKGS="$with_blas"
     ;;
 esac
@@ -13832,15 +13832,21 @@ case "$with_lapack" in
   no)
     ;;
   yes)
-    USE_LAPACK="$with_lapack"
+    USE_LAPACK=1
     ;;
   *)
-    USE_LAPACK=yes
+    USE_LAPACK=1
     LAPACK_PKG="$with_lapack"
     ;;
 esac
 
 # LAPACK is useless without BLAS
+if test -z "$USE_BLAS" && test -n "$USE_LAPACK"; then
+  USE_LAPACK=
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: LAPACK is disabled, BLAS configuration is missing" >&5
+printf "%s\n" "$as_me: WARNING: LAPACK is disabled, BLAS configuration is missing" >&2;}
+fi
+
 if test -n "$USE_BLAS" && test -n "$USE_LAPACK"; then
 
   lapack_ok=no

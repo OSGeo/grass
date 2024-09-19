@@ -323,13 +323,13 @@ AC_ARG_WITH([blas],
   [AS_HELP_STRING([--with-blas=pkg-config-package],
     [enable BLAS support with by adding name of pkg-config package name
      for CBLAS library, e.g. '--with-lapack-package=openblas',
-     default: cblas])],, [with-blas="no"])
+     default: cblas])],, [with_blas=no])
 
 AC_ARG_WITH([lapack],
   [AS_HELP_STRING([--with-lapack=pkg-config-package],
     [enable LAPACK support with by adding name of pkg-config package name
      for LAPACKE library, e.g. '--with-lapack-package=openblas',
-     default: lapacke])],, [with-lapack="no"])
+     default: lapacke])],, [with_lapack=no])
 
 AC_ARG_WITH(libpng,
 [  --with-libpng[=path/libpng-config]
@@ -1594,10 +1594,10 @@ case "$with_blas" in
   no)
     ;;
   yes)
-    USE_BLAS="$with_blas"
+    USE_BLAS=1
     ;;
   *)
-    USE_BLAS=yes
+    USE_BLAS=1
     BLAS_PKGS="$with_blas"
     ;;
 esac
@@ -1665,15 +1665,20 @@ case "$with_lapack" in
   no)
     ;;
   yes)
-    USE_LAPACK="$with_lapack"
+    USE_LAPACK=1
     ;;
   *)
-    USE_LAPACK=yes
+    USE_LAPACK=1
     LAPACK_PKG="$with_lapack"
     ;;
 esac
 
 # LAPACK is useless without BLAS
+if test -z "$USE_BLAS" && test -n "$USE_LAPACK"; then
+  USE_LAPACK=
+  AC_MSG_WARN([LAPACK is disabled, BLAS configuration is missing])
+fi
+
 if test -n "$USE_BLAS" && test -n "$USE_LAPACK"; then
 
   lapack_ok=no
