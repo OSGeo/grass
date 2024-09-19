@@ -269,6 +269,10 @@ endif()
 
 if(WITH_OPENMP)
   find_package(OpenMP REQUIRED)
+  if(MSVC AND OPENMP_FOUND)
+    # for min/max reduction
+    add_compile_options(-openmp:llvm)
+  endif()
 endif()
 
 # Data format options
