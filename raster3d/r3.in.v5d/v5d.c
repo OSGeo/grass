@@ -2487,7 +2487,7 @@ int v5dCloseFile(v5dstruct *v)
             return 0;
         }
         status = write_v5d_header(v);
-        if (lseek(v->FileDesc, 0, SEEK_SET) == -1) {
+        if (lseek(v->FileDesc, 0, SEEK_END) == -1) {
             G_warning(_("Unable to seek: %s"), strerror(errno));
             return 0;
         }
