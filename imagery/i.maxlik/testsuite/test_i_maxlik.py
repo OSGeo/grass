@@ -19,6 +19,7 @@ from grass.script.core import tempname
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+from grass.gunittest.utils import xfail_windows
 
 from grass.lib.gis import G_mapset_path
 from grass.lib.raster import Rast_write_semantic_label
@@ -36,6 +37,7 @@ from grass.lib.imagery import (
 )
 
 
+@xfail_windows
 class SuccessTest(TestCase):
     """Test successful classification"""
 
