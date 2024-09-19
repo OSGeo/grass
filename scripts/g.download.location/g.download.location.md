@@ -8,6 +8,26 @@ contains a project, the module will recognize that and use the project
 automatically. The first directory which is a project is used. Other
 projects or any other files are ignored.
 
+## EXAMPLES
+
+### Download the full GRASS GIS sample project within a running session
+
+Download and unpack the full North Carolina sample project into the
+user\'s HOME directory:
+
+```
+g.download.location url=https://grass.osgeo.org/sampledata/north_carolina/nc_spm_full_v2alpha2.tar.gz path=$HOME
+```
+
+### Download the full GRASS GIS sample project in a temporary session
+
+In a temporary session, download and unpack the full North Carolina
+sample project into the user\'s HOME directory:
+
+```
+grass --tmp-location XY --exec g.download.location url=https://grass.osgeo.org/sampledata/north_carolina/nc_spm_full_v2alpha2.tar.gz path=$HOME
+```
+
 ## SEE ALSO
 
 *[g.mapset](g.mapset.html), [g.mapsets](g.mapsets.html),
