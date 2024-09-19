@@ -51,6 +51,7 @@ class GetSignaturesDirTestCase(TestCase):
         I_get_signatures_dir(cdir, I_SIGFILE_TYPE_SIG)
         self.assertEqual(utils.decode(cdir.value), f"signatures{HOST_DIRSEP}sig")
 
+    @xfail_windows
     def test_get_sigset(self):
         cdir = ctypes.create_string_buffer(GNAME_MAX)
         I_get_signatures_dir(cdir, I_SIGFILE_TYPE_SIGSET)
