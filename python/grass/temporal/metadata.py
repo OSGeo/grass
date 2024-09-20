@@ -897,7 +897,6 @@ class VectorMetadata(SQLDatabaseInterface):
 
     def print_info(self):
         """Print information about this class in human readable style"""
-        #      0123456789012345678901234567890
         print(
             " +-------------------- Metadata information ----------------------------------+"  # noqa: E501
         )
