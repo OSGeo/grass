@@ -34,7 +34,7 @@
 #else
 #include <cblas.h>
 #endif
-#endif /* HAVE_LIBLAPACK && HAVE_LIBBLAS */
+#endif
 
 #include <math.h>
 #include <stdio.h>
@@ -386,7 +386,7 @@ mat_struct *G_matrix_product(mat_struct *mt1, mat_struct *mt2)
     return mt3;
 }
 
-#endif /* HAVE_LIBBLAS */
+#endif /* defined(HAVE_LIBBLAS) */
 
 /*!
  * \fn mat_struct *G_matrix_transpose (mat_struct *mt)
@@ -442,7 +442,7 @@ mat_struct *G_matrix_transpose(mat_struct *mt)
     return mt1;
 }
 
-#if defined(HAVE_LIBLAPACK)
+#if defined(HAVE_LIBBLAS) && defined(HAVE_LIBLAPACK)
 
 /*!
  * \fn int G_matrix_LU_solve (const mat_struct *mt1, mat_struct **xmat0,
@@ -578,6 +578,10 @@ int G_matrix_LU_solve(const mat_struct *mt1, mat_struct **xmat0,
     return 0;
 }
 
+#endif /* defined(HAVE_LIBBLAS) && defined(HAVE_LIBLAPACK) */
+
+#if defined(HAVE_LIBBLAS) && defined(HAVE_LIBLAPACK)
+
 /*!
  * \fn mat_struct *G_matrix_inverse (mat_struct *mt)
  *
@@ -633,7 +637,7 @@ mat_struct *G_matrix_inverse(mat_struct *mt)
     }
 }
 
-#endif /* HAVE_LIBLAPACK */
+#endif /* defined(HAVE_LIBBLAS) && defined(HAVE_LIBLAPACK) */
 
 /*!
  * \fn void G_matrix_free (mat_struct *mt)
@@ -1188,7 +1192,7 @@ double G_vector_norm_euclid(vec_struct *vc)
     return cblas_dnrm2(Nval, startpt, incr);
 }
 
-#endif /* HAVE_LIBBLAS */
+#endif /* defined(HAVE_LIBBLAS) */
 
 /*!
  * \fn double G_vector_norm_maxval (vec_struct *vc, int vflag)
