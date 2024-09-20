@@ -12,11 +12,11 @@ from grass.gunittest.gmodules import SimpleModule
 class TestVDToLines(TestCase):
     """Test v.to.lines script"""
 
-    inputMap = "boundary_state"
-    outputMap = "boundary_state_lines"
+    inputMap = "boundary_municp"
+    outputMap = "boundary_municp_lines"
 
-    inputMap2 = "schools"
-    outputMap2 = "schools_lines"
+    inputMap2 = "geodetic_pts"
+    outputMap2 = "geodetic_pts_lines"
 
     @classmethod
     def tearDownClass(cls):

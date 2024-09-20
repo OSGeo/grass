@@ -17,7 +17,7 @@ class TestVRandom(TestCase):
     output = "test01"
     output2 = "test02"
     npoints = 100
-    state = "boundary_state"
+    state = "nc_state"
     zmin = 10
     zmax = 120
 

@@ -72,7 +72,7 @@ class TestProfiling(TestCase):
     to_remove = []
     points = "test_v_profile_points"
     multiline = "test_v_profile_multiline"
-    in_points = "points_of_interest"
+    in_points = "poi_names_wake"
     in_map = "roadsmajor"
     where = "cat='354'"
     prof_ponts = (647952, 236176, 647950, 236217)
