@@ -18,6 +18,8 @@ jobs:
       cancel-in-progress: true
 
     runs-on: ${{ matrix.os }}
+    env:
+      PYTHONWARNINGS: always
     strategy:
       matrix:
         os:
@@ -30,14 +32,14 @@ jobs:
           git config --global core.autocrlf false
           git config --global core.eol lf
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      - uses: msys2/setup-msys2@d0e80f58dffbc64f6a3a1f43527d469b4fc7b6c8 # v2.23.0
+      - uses: msys2/setup-msys2@ddf331adaebd714795f1042345e6ca57bd66cea8 # v2.24.1
         with:
           path-type: inherit
           location: D:\
           update: true
           msystem: MINGW64
           install: tar libintl make bison flex diffutils git dos2unix zip mingw-w64-x86_64-toolchain
-            mingw-w64-x86_64-fftw mingw-w64-x86_64-lapack mingw-w64-x86_64-pkgconf
+            mingw-w64-x86_64-fftw mingw-w64-x86_64-openblas mingw-w64-x86_64-pkgconf
             mingw-w64-x86_64-gcc mingw-w64-x86_64-ccache mingw-w64-x86_64-zlib mingw-w64-x86_64-libiconv
             mingw-w64-x86_64-bzip2 mingw-w64-x86_64-gettext mingw-w64-x86_64-libsystre
             mingw-w64-x86_64-libtre-git mingw-w64-x86_64-libwinpthread-git mingw-w64-x86_64-libpng
@@ -64,7 +66,10 @@ jobs:
 
       - name: Compile GRASS GIS
         shell: msys2 {0}
-        run: .github/workflows/build_osgeo4w.sh
+        run: |
+          export CFLAGS="${CFLAGS} -pipe"
+          export CXXFLAGS="${CXXFLAGS} -pipe"
+          .github/workflows/build_osgeo4w.sh
 
       - name: Print installed versions
         if: always()
@@ -83,7 +88,7 @@ jobs:
 
       - name: Make HTML test report available
         if: ${{ always() }}
-        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
+        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
         with:
           name: testreport-${{ matrix.os }}
           path: testreport

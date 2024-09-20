@@ -37,6 +37,16 @@ def can_import_folium():
         return False
 
 
+def can_import_ipyleaflet():
+    """Test ipyleaflet import to see if test can be run."""
+    try:
+        import ipyleaflet  # noqa
+
+        return True
+    except ImportError:
+        return False
+
+
 class TestDisplay(TestCase):
     # Setup variables
     files = []
@@ -87,6 +97,30 @@ class TestDisplay(TestCase):
         self.files.append(filename)
         interactive_map.save(filename)
         self.assertFileExists(filename)
+
+    @unittest.skipIf(not can_import_ipyleaflet(), "Cannot import ipyleaflet")
+    def test_query_button(self):
+        # Create InteractiveMap with ipyleaflet backend
+        interactive_map = gj.InteractiveMap(map_backend="ipyleaflet")
+        interactive_map.add_raster("elevation")
+        interactive_map.add_vector("roadsmajor")
+        interactive_map.add_query_button()
+        self.assertIsNotNone(interactive_map.map)
+        self.assertTrue(interactive_map.query_mode is False)
+        # Toggle query button to activate
+        interactive_map.query_mode = True
+        self.assertTrue(interactive_map.query_mode)
+        # Toggle query button to deactivate
+        interactive_map.query_mode = False
+        self.assertFalse(interactive_map.query_mode)
+
+    @unittest.skipIf(not can_import_ipyleaflet(), "Cannot import ipyleaflet")
+    def test_draw_computational_region(self):
+        """Test the draw_computational_region method."""
+        # Create InteractiveMap
+        interactive_map = gj.InteractiveMap()
+        interactive_map.draw_computational_region()
+        self.assertTrue(callable(interactive_map.draw_computational_region))
 
 
 if __name__ == "__main__":

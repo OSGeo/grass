@@ -38,7 +38,7 @@ export ARCH=x86_64-w64-mingw32
     --with-nls \
     --with-readline \
     --with-blas \
-    --with-lapack-includes=/mingw64/include/lapack \
+    --with-lapack \
     --with-freetype \
     --with-freetype-includes=${OSGEO4W_ROOT_MSYS}/include/freetype2 \
     --with-proj-share=${OSGEO4W_ROOT_MSYS}/share/proj \

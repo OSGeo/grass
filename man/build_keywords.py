@@ -21,7 +21,13 @@ python man/build_keywords.py <dir_path_to_core_modules_html_man_files>
 import os
 import sys
 import glob
-from build_html import *
+from build_html import (
+    grass_version,
+    header1_tmpl,
+    headerkeywords_tmpl,
+    write_html_footer,
+)
+
 
 blacklist = [
     "Display",
@@ -81,20 +87,20 @@ for html_file in htmlfiles:
     try:
         index_keys = lines.index("<h2>KEYWORDS</h2>\n") + 1
         index_desc = lines.index("<h2>NAME</h2>\n") + 1
-    except:
+    except Exception:
         continue
     try:
         keys = lines[index_keys].split(",")
-    except:
+    except Exception:
         continue
     for key in keys:
         key = key.strip()
         try:
             key = key.split(">")[1].split("<")[0]
-        except:
+        except Exception:
             pass
         if not key:
-            exit("Empty keyword from file %s line: %s" % (fname, lines[index_keys]))
+            sys.exit("Empty keyword from file %s line: %s" % (fname, lines[index_keys]))
         if key not in keywords.keys():
             keywords[key] = []
             keywords[key].append(fname)
@@ -104,10 +110,10 @@ for html_file in htmlfiles:
 for black in blacklist:
     try:
         del keywords[black]
-    except:
+    except Exception:
         try:
             del keywords[black.lower()]
-        except:
+        except Exception:
             continue
 
 for key in sorted(keywords.keys()):
@@ -123,7 +129,7 @@ for key in sorted(keywords.keys()):
 keywordsfile = open(os.path.join(path, "keywords.html"), "w")
 keywordsfile.write(
     header1_tmpl.substitute(
-        title="GRASS GIS %s Reference " "Manual: Keywords index" % grass_version
+        title="GRASS GIS %s Reference Manual: Keywords index" % grass_version
     )
 )
 keywordsfile.write(headerkeywords_tmpl)
@@ -132,7 +138,7 @@ keywordsfile.write("<dl>")
 sortedKeys = sorted(keywords.keys(), key=lambda s: s.lower())
 
 for key in sortedKeys:
-    keyword_line = '<dt><b><a name="%s" class="urlblack">%s</a></b></dt>' "<dd>" % (
+    keyword_line = '<dt><b><a name="%s" class="urlblack">%s</a></b></dt><dd>' % (
         key,
         key,
     )

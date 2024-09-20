@@ -50,7 +50,7 @@ class MenuBase:
         """
         self.parent = parent
         self.model = model
-        self.menucmd = dict()
+        self.menucmd = {}
         self.bmpsize = (16, 16)
         self.class_handler = class_handler if class_handler is not None else parent
 
@@ -67,8 +67,6 @@ class MenuBase:
                 data.pop("label")
 
                 self._createMenuItem(menu, label=child.label, **data)
-
-        self.parent.Bind(wx.EVT_MENU_HIGHLIGHT_ALL, self.OnMenuHighlight)
 
         return menu
 
@@ -135,19 +133,6 @@ class MenuBase:
         :return: dictionary of commands
         """
         return self.menucmd
-
-    def OnMenuHighlight(self, event):
-        """
-        Default menu help handler
-        """
-        # Show how to get menu item info from this event handler
-        id = event.GetMenuId()
-        item = self.FindItemById(id)
-        if item:
-            help = item.GetHelp()
-
-        # but in this case just call Skip so the default is done
-        event.Skip()
 
 
 class Menu(MenuBase, wx.MenuBar):

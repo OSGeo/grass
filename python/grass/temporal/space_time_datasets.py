@@ -11,51 +11,52 @@ for details.
 
 import getpass
 from datetime import datetime
+
+import grass.script.array as garray
+
 from .abstract_map_dataset import AbstractMapDataset
 from .abstract_space_time_dataset import AbstractSpaceTimeDataset
 from .base import (
     Raster3DBase,
-    RasterBase,
-    VectorBase,
-    STR3DSBase,
-    STVDSBase,
-    STRDSBase,
-    VectorSTDSRegister,
     Raster3DSTDSRegister,
+    RasterBase,
     RasterSTDSRegister,
+    STR3DSBase,
+    STRDSBase,
+    STVDSBase,
+    VectorBase,
+    VectorSTDSRegister,
 )
 from .metadata import (
     Raster3DMetadata,
     RasterMetadata,
-    VectorMetadata,
-    STRDSMetadata,
     STR3DSMetadata,
+    STRDSMetadata,
     STVDSMetadata,
+    VectorMetadata,
 )
 from .spatial_extent import (
-    RasterSpatialExtent,
     Raster3DSpatialExtent,
-    VectorSpatialExtent,
-    STRDSSpatialExtent,
+    RasterSpatialExtent,
     STR3DSSpatialExtent,
+    STRDSSpatialExtent,
     STVDSSpatialExtent,
+    VectorSpatialExtent,
 )
 from .temporal_extent import (
-    RasterAbsoluteTime,
-    RasterRelativeTime,
     Raster3DAbsoluteTime,
     Raster3DRelativeTime,
-    VectorAbsoluteTime,
-    VectorRelativeTime,
-    STRDSAbsoluteTime,
-    STRDSRelativeTime,
+    RasterAbsoluteTime,
+    RasterRelativeTime,
     STR3DSAbsoluteTime,
     STR3DSRelativeTime,
+    STRDSAbsoluteTime,
+    STRDSRelativeTime,
     STVDSAbsoluteTime,
     STVDSRelativeTime,
+    VectorAbsoluteTime,
+    VectorRelativeTime,
 )
-import grass.script.array as garray
-
 
 GRASS_TIMESTAMP_FMT = "%a %b  %d %H:%M:%S %Y"
 
@@ -287,10 +288,8 @@ class RasterDataset(AbstractMapDataset):
 
         if check < 1:
             self.msgr.error(
-                _(
-                    "Unable to read timestamp file "
-                    "for raster map <%s>" % (self.get_map_id())
-                )
+                _("Unable to read timestamp file for raster map <%s>")
+                % (self.get_map_id())
             )
             return False
 
@@ -315,19 +314,15 @@ class RasterDataset(AbstractMapDataset):
 
         if check == -1:
             self.msgr.error(
-                _(
-                    "Unable to create timestamp file "
-                    "for raster map <%s>" % (self.get_map_id())
-                )
+                _("Unable to create timestamp file for raster map <%s>")
+                % (self.get_map_id())
             )
             return False
 
         if check == -2:
             self.msgr.error(
-                _(
-                    "Invalid datetime in timestamp for raster map "
-                    "<%s>" % (self.get_map_id())
-                )
+                _("Invalid datetime in timestamp for raster map <%s>")
+                % (self.get_map_id())
             )
             return False
 
@@ -349,7 +344,7 @@ class RasterDataset(AbstractMapDataset):
 
         if check == -1:
             self.msgr.error(
-                _("Unable to remove timestamp for raster map <%s>" % (self.get_name()))
+                _("Unable to remove timestamp for raster map <%s>") % (self.get_name())
             )
             return False
 
@@ -389,10 +384,8 @@ class RasterDataset(AbstractMapDataset):
         )
         if check == -1:
             self.msgr.error(
-                _(
-                    "Unable to write semantic label for raster map <%s>"
-                    % (self.get_name())
-                )
+                _("Unable to write semantic label for raster map <%s>")
+                % (self.get_name())
             )
             return False
 
@@ -740,10 +733,8 @@ class Raster3DDataset(AbstractMapDataset):
 
         if check < 1:
             self.msgr.error(
-                _(
-                    "Unable to read timestamp file "
-                    "for 3D raster map <%s>" % (self.get_map_id())
-                )
+                _("Unable to read timestamp file for 3D raster map <%s>")
+                % (self.get_map_id())
             )
             return False
 
@@ -768,19 +759,15 @@ class Raster3DDataset(AbstractMapDataset):
 
         if check == -1:
             self.msgr.error(
-                _(
-                    "Unable to create timestamp file "
-                    "for 3D raster map <%s>" % (self.get_map_id())
-                )
+                _("Unable to create timestamp file for 3D raster map <%s>")
+                % (self.get_map_id())
             )
             return False
 
         if check == -2:
             self.msgr.error(
-                _(
-                    "Invalid datetime in timestamp for 3D raster "
-                    "map <%s>" % (self.get_map_id())
-                )
+                _("Invalid datetime in timestamp for 3D raster map <%s>")
+                % (self.get_map_id())
             )
             return False
 
@@ -801,10 +788,7 @@ class Raster3DDataset(AbstractMapDataset):
 
         if check == -1:
             self.msgr.error(
-                _(
-                    "Unable to remove timestamp for raster map "
-                    "<%s>" % (self.get_name())
-                )
+                _("Unable to remove timestamp for raster map <%s>") % (self.get_name())
             )
             return False
 
@@ -1090,10 +1074,8 @@ class VectorDataset(AbstractMapDataset):
 
         if check < 1:
             self.msgr.error(
-                _(
-                    "Unable to read timestamp file "
-                    "for vector map <%s>" % (self.get_map_id())
-                )
+                _("Unable to read timestamp file for vector map <%s>")
+                % (self.get_map_id())
             )
             return False
 
@@ -1119,19 +1101,15 @@ class VectorDataset(AbstractMapDataset):
 
         if check == -1:
             self.msgr.error(
-                _(
-                    "Unable to create timestamp file "
-                    "for vector map <%s>" % (self.get_map_id())
-                )
+                _("Unable to create timestamp file for vector map <%s>")
+                % (self.get_map_id())
             )
             return False
 
         if check == -2:
             self.msgr.error(
-                _(
-                    "Invalid datetime in timestamp for vector "
-                    "map <%s>" % (self.get_map_id())
-                )
+                _("Invalid datetime in timestamp for vector map <%s>")
+                % (self.get_map_id())
             )
             return False
 
@@ -1147,9 +1125,8 @@ class VectorDataset(AbstractMapDataset):
 
         if check == -1:
             self.msgr.error(
-                _(
-                    "Unable to remove timestamp for vector "
-                    "map <%s>" % (self.get_name())
+                _("Unable to remove timestamp for vector map <%s>").format(
+                    self.get_name()
                 )
             )
             return False

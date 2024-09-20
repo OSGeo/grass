@@ -22,7 +22,7 @@ import wx
 from gui_core.gselect import Select
 import wx.lib.colourselect as csel
 
-import grass.script as grass
+import grass.script as gs
 
 from core import globalvar
 from core.gcmd import GMessage
@@ -286,7 +286,7 @@ class ExportCategoryRaster(wx.Dialog):
         self.vectorNameCtrl = Select(
             parent=self.panel,
             type="raster",
-            mapsets=[grass.gisenv()["MAPSET"]],
+            mapsets=[gs.gisenv()["MAPSET"]],
             size=globalvar.DIALOG_GSELECT_SIZE,
         )
         if self.rasterName:
@@ -322,15 +322,15 @@ class ExportCategoryRaster(wx.Dialog):
         """Checks if map exists and can be overwritten."""
         overwrite = UserSettings.Get(group="cmd", key="overwrite", subkey="enabled")
         rast_name = self.GetRasterName()
-        res = grass.find_file(rast_name, element="cell")
+        res = gs.find_file(rast_name, element="cell")
         if res["fullname"] and overwrite is False:
             qdlg = wx.MessageDialog(
                 parent=self,
                 message=_(
-                    "Raster map <%s> already exists."
-                    " Do you want to overwrite it?" % rast_name
-                ),
-                caption=_("Raster <%s> exists" % rast_name),
+                    "Raster map <%s> already exists. Do you want to overwrite it?"
+                )
+                % rast_name,
+                caption=_("Raster <%s> exists") % rast_name,
                 style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
             )
             if qdlg.ShowModal() == wx.ID_YES:
@@ -428,7 +428,7 @@ class SettingsDialog(wx.Dialog):
         gridSizer = wx.GridBagSizer(vgap=1, hgap=1)
 
         row = 0
-        setts = dict()
+        setts = {}
         setts.update(self.colorsSetts)
         setts.update(self.sizeSetts)
 

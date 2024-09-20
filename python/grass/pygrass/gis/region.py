@@ -7,7 +7,7 @@ Created on Fri May 25 12:57:10 2012
 import ctypes
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
-import grass.script as grass
+import grass.script as gs
 
 from grass.pygrass.errors import GrassError
 from grass.pygrass.shell.conversion import dict2html
@@ -113,7 +113,7 @@ class Region:
         return ctypes.pointer(self.c_region)
 
     def _set_param(self, key, value):
-        grass.run_command("g.region", **{key: value})
+        gs.run_command("g.region", **{key: value})
 
     # ----------LIMITS----------
     def _get_n(self):
@@ -370,7 +370,7 @@ class Region:
 
     def items(self):
         """Return a list of tuple with key and value."""
-        return [(k, self.__getattribute__(k)) for k in self.keys()]
+        return [(k, getattr(self, k)) for k in self.keys()]
 
     # ----------METHODS----------
     def zoom(self, raster_name):

@@ -65,12 +65,9 @@ def compute_univar_stats(registered_map_info, stats_module, fs, rast_region=Fals
 
     if not univar_stats:
         gs.warning(
-            _(
-                "Unable to get statistics for {voxel}raster map "
-                "<{rmap}>".format(
-                    rmap=id, voxel="" if stats_module.name == "r.univar" else "3d "
-                )
-            )
+            _("Unable to get statistics for raster map <%s>") % id
+            if stats_module.name == "r.univar"
+            else _("Unable to get statistics for 3d raster map <%s>") % id
         )
         return None
     eol = ""
@@ -351,7 +348,7 @@ def print_vector_dataset_univar_statistics(
             + fs
         )
         string += "min" + fs + "max" + fs + "range"
-        if type in ("point", "centroid"):
+        if type in {"point", "centroid"}:
             string += (
                 fs
                 + "mean"
@@ -440,7 +437,7 @@ def print_vector_dataset_univar_statistics(
         else:
             string += fs + fs + fs
 
-        if type == "point" or type == "centroid":
+        if type in {"point", "centroid"}:
             if "mean" in stats:
                 string += (
                     fs

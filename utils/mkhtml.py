@@ -26,6 +26,7 @@ import locale
 import json
 import pathlib
 import subprocess
+from pathlib import Path
 
 from html.parser import HTMLParser
 
@@ -163,12 +164,11 @@ def download_git_commit(url, response_format, *args, **kwargs):
             desc = HTTP_STATUS_CODES[index].description
             gs.fatal(
                 _(
-                    "Download commit from <{url}>, return status code "
-                    "{code}, {desc}".format(
-                        url=url,
-                        code=response.code,
-                        desc=desc,
-                    ),
+                    "Download commit from <{url}>, return status code {code}, {desc}"
+                ).format(
+                    url=url,
+                    code=response.code,
+                    desc=desc,
                 ),
             )
         if response_format not in response.getheader("Content-Type"):
@@ -176,10 +176,10 @@ def download_git_commit(url, response_format, *args, **kwargs):
                 _(
                     "Wrong downloaded commit file format. "
                     "Check url <{url}>. Allowed file format is "
-                    "{response_format}.".format(
-                        url=url,
-                        response_format=response_format,
-                    ),
+                    "{response_format}."
+                ).format(
+                    url=url,
+                    response_format=response_format,
                 ),
             )
         return response
@@ -189,16 +189,16 @@ def download_git_commit(url, response_format, *args, **kwargs):
                 "The download of the commit from the GitHub API "
                 "server wasn't successful, <{}>. Commit and commit "
                 "date will not be included in the <{}> addon html manual "
-                "page.".format(err.msg, pgm)
-            ),
+                "page."
+            ).format(err.msg, pgm),
         )
     except URLError:
         gs.warning(
             _(
                 "Download file from <{url}>, failed. Check internet "
                 "connection. Commit and commit date will not be included "
-                "in the <{pgm}> addon manual page.".format(url=url, pgm=pgm)
-            ),
+                "in the <{pgm}> addon manual page."
+            ).format(url=url, pgm=pgm),
         )
 
 
@@ -380,8 +380,7 @@ def has_src_code_git(src_dir, is_addon):
                 f"--format=%H,{COMMIT_DATE_FORMAT}",
                 src_dir,
             ],
-            stderr=subprocess.PIPE,
-            stdout=subprocess.PIPE,
+            capture_output=True,
         )  # --format=%H,COMMIT_DATE_FORMAT commit hash,author date
         os.chdir(actual_dir)
         return process_result if process_result.returncode == 0 else None
@@ -407,23 +406,18 @@ def get_last_git_commit(src_dir, addon_path, is_addon):
             commit=process_result.stdout.decode(),
             src_dir=src_dir,
         )
+    elif gs:
+        # Addons installation
+        return get_git_commit_from_rest_api_for_addon_repo(
+            addon_path=addon_path,
+            src_dir=src_dir,
+        )
+    # During GRASS GIS compilation from source code without Git
     else:
-        if gs:
-            # Addons installation
-            return get_git_commit_from_rest_api_for_addon_repo(
-                addon_path=addon_path,
-                src_dir=src_dir,
-            )
-        # During GRASS GIS compilation from source code without Git
-        else:
-            return get_git_commit_from_file(src_dir=src_dir)
+        return get_git_commit_from_file(src_dir=src_dir)
 
 
-html_page_footer_pages_path = (
-    os.getenv("HTML_PAGE_FOOTER_PAGES_PATH")
-    if os.getenv("HTML_PAGE_FOOTER_PAGES_PATH")
-    else ""
-)
+html_page_footer_pages_path = os.getenv("HTML_PAGE_FOOTER_PAGES_PATH") or ""
 
 pgm = sys.argv[1]
 
@@ -518,9 +512,7 @@ GRASS GIS ${GRASS_VERSION} Reference Manual
 
 def read_file(name):
     try:
-        with open(name) as f:
-            s = f.read()
-        return s
+        return Path(name).read_text()
     except OSError:
         return ""
 
@@ -778,11 +770,10 @@ desc = re.search("(<!-- meta page description:)(.*)(-->)", src_data, re.IGNORECA
 if desc:
     pgm = desc.group(2).strip()
     header_tmpl = string.Template(header_base + header_nopgm)
+elif not pgm_desc:
+    header_tmpl = string.Template(header_base + header_pgm)
 else:
-    if not pgm_desc:
-        header_tmpl = string.Template(header_base + header_pgm)
-    else:
-        header_tmpl = string.Template(header_base + header_pgm_desc)
+    header_tmpl = string.Template(header_base + header_pgm_desc)
 
 if not re.search("<html>", src_data, re.IGNORECASE):
     tmp_data = read_file(tmp_file)
@@ -929,8 +920,8 @@ else:
 
 git_commit = get_last_git_commit(
     src_dir=curdir,
-    addon_path=addon_path if addon_path else None,
-    is_addon=True if addon_path else False,
+    addon_path=addon_path or None,
+    is_addon=bool(addon_path),
 )
 if git_commit["commit"] == "unknown":
     date_tag = "Accessed: {date}".format(date=git_commit["date"])

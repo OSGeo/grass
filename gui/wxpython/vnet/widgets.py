@@ -133,7 +133,7 @@ class PointsList(
         # initialize column sorter
         self.itemDataMap = []
         ncols = self.GetColumnCount()
-        ColumnSorterMixin.__init__(self, ncols)
+        ColumnSorterMixin.__init__(self, ncols)  # noqa: PLC2801, C2801
 
         # init to ascending sort on first click
         self._colSortFlag = [1] * ncols
@@ -532,7 +532,7 @@ class PointsList(
 
         return False
 
-    def IsShown(self, colName):
+    def IsShown(self, colName) -> bool:
         """Is column shown
 
         :param colName: name of column
@@ -542,10 +542,7 @@ class PointsList(
         :return: False - if is not shown
         """
 
-        if self._getColumnNum(colName) == -1:
-            return False
-        else:
-            return True
+        return not self._getColumnNum(colName) == -1
 
 
 class EditItem(wx.Dialog):

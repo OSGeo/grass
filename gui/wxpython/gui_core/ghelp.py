@@ -37,7 +37,7 @@ except ImportError:
     from wx import AboutDialogInfo
     from wx import AboutBox
 
-import grass.script as grass
+import grass.script as gs
 from grass.exceptions import CalledModuleError
 
 # needed just for testing
@@ -111,7 +111,7 @@ class AboutWindow(wx.Frame):
     def _pageInfo(self):
         """Info page"""
         # get version and web site
-        vInfo = grass.version()
+        vInfo = gs.version()
         if not vInfo:
             sys.stderr.write(_("Unable to get GRASS version\n"))
 
@@ -245,7 +245,7 @@ class AboutWindow(wx.Frame):
             pos=(row, 0),
             flag=wx.ALIGN_RIGHT,
         )
-        self.langUsed = grass.gisenv().get("LANG", None)
+        self.langUsed = gs.gisenv().get("LANG", None)
         if not self.langUsed:
             import locale
 
@@ -329,10 +329,7 @@ class AboutWindow(wx.Frame):
     def _pageCitation(self):
         """Citation information"""
         try:
-            # import only when needed
-            import grass.script as gscript
-
-            text = gscript.read_command("g.version", flags="x")
+            text = gs.read_command("g.version", flags="x")
         except CalledModuleError as error:
             text = _(
                 "Unable to provide citation suggestion,"
@@ -387,8 +384,8 @@ class AboutWindow(wx.Frame):
             contribfile = os.path.join(os.getenv("GISBASE"), "contributors.csv")
         if os.path.exists(contribfile):
             contribFile = codecs.open(contribfile, encoding="utf-8", mode="r")
-            contribs = list()
-            errLines = list()
+            contribs = []
+            errLines = []
             for line in contribFile.readlines()[1:]:
                 line = line.rstrip("\n")
                 try:
@@ -472,8 +469,8 @@ class AboutWindow(wx.Frame):
         translatorsfile = os.path.join(os.getenv("GISBASE"), "translators.csv")
         if os.path.exists(translatorsfile):
             translatorsFile = codecs.open(translatorsfile, encoding="utf-8", mode="r")
-            translators = dict()
-            errLines = list()
+            translators = {}
+            errLines = []
             for line in translatorsFile.readlines()[1:]:
                 line = line.rstrip("\n")
                 try:
@@ -483,7 +480,7 @@ class AboutWindow(wx.Frame):
                     continue
                 for language in languages.split(" "):
                     if language not in translators:
-                        translators[language] = list()
+                        translators[language] = []
                     translators[language].append((name, email))
             translatorsFile.close()
 
@@ -567,15 +564,15 @@ class AboutWindow(wx.Frame):
         """Return string for the status of translation"""
         allStr = "%s :" % k.upper()
         try:
-            allStr += _("   %d translated" % v["good"])
+            allStr += _("   %d translated") % v["good"]
         except:
             pass
         try:
-            allStr += _("   %d fuzzy" % v["fuzzy"])
+            allStr += _("   %d fuzzy") % v["fuzzy"]
         except:
             pass
         try:
-            allStr += _("   %d untranslated" % v["bad"])
+            allStr += _("   %d untranslated") % v["bad"]
         except:
             pass
         return allStr
@@ -587,7 +584,7 @@ class AboutWindow(wx.Frame):
         langBox.Add(tkey)
         try:
             tgood = StaticText(
-                parent=par, id=wx.ID_ANY, label=_("%d translated" % v["good"])
+                parent=par, id=wx.ID_ANY, label=_("%d translated") % v["good"]
             )
             tgood.SetForegroundColour(wx.Colour(35, 142, 35))
             langBox.Add(tgood)
@@ -596,7 +593,7 @@ class AboutWindow(wx.Frame):
             langBox.Add(tgood)
         try:
             tfuzzy = StaticText(
-                parent=par, id=wx.ID_ANY, label=_("   %d fuzzy" % v["fuzzy"])
+                parent=par, id=wx.ID_ANY, label=_("   %d fuzzy") % v["fuzzy"]
             )
             tfuzzy.SetForegroundColour(wx.Colour(255, 142, 0))
             langBox.Add(tfuzzy)
@@ -605,7 +602,7 @@ class AboutWindow(wx.Frame):
             langBox.Add(tfuzzy)
         try:
             tbad = StaticText(
-                parent=par, id=wx.ID_ANY, label=_("   %d untranslated" % v["bad"])
+                parent=par, id=wx.ID_ANY, label=_("   %d untranslated") % v["bad"]
             )
             tbad.SetForegroundColour(wx.Colour(255, 0, 0))
             langBox.Add(tbad)
@@ -633,7 +630,7 @@ class AboutWindow(wx.Frame):
         # panel.Collapse(True)
         pageSizer = wx.BoxSizer(wx.VERTICAL)
         for k, v in js.items():
-            if k != "total" and k != "name":
+            if k not in {"total", "name"}:
                 box = self._langBox(win, k, v)
                 pageSizer.Add(box, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)
 
@@ -747,7 +744,7 @@ class HelpWindow(HtmlWindow):
         HtmlWindow.__init__(self, parent=parent, **kwargs)
 
         self.loaded = False
-        self.history = list()
+        self.history = []
         self.historyIdx = 0
         self.fspath = os.path.join(os.getenv("GISBASE"), "docs", "html")
 
@@ -812,7 +809,7 @@ class HelpWindow(HtmlWindow):
         try:
             contents = []
             skip = False
-            for line in open(htmlFile, "rb").readlines():
+            for line in open(htmlFile, "rb"):
                 if "DESCRIPTION" in line:
                     skip = False
                 if not skip:
@@ -973,7 +970,7 @@ def ShowAboutDialog(prgName, startYear):
 
 def _grassDevTeam(start):
     try:
-        end = grass.version()["date"]
+        end = gs.version()["date"]
     except KeyError:
         sys.stderr.write(_("Unable to get GRASS version\n"))
 
