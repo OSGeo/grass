@@ -25,7 +25,7 @@
 
 # %module
 # % label: Finds the distance between two or more points.
-# % description: If the projection is latitude-longitude, this distance is measured along the geodesic.
+# % description: If the projection is lat-long, distance measured along the geodesic.
 # % keyword: miscellaneous
 # % keyword: distance
 # % keyword: measure
@@ -45,10 +45,15 @@
 # %end
 
 import sys
+from ctypes import byref, c_double
 
 import grass.script as gs
-
-from grass.lib.gis import *
+from grass.lib.gis import (
+    G_gisinit, G_begin_distance_calculations, G_scan_easting, G_scan_northing,
+    G_distance, G_begin_polygon_area_calculations, G_area_of_polygon,
+    G_database_units_to_meters_factor, G_database_unit_name,
+    PROJECTION_LL
+)
 
 
 def main():
