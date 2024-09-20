@@ -235,7 +235,7 @@ def write_cpp(bands, values, sensor, folder):
         while c < len(fi) - 1 and fi[c + 1] > rthresh:
             c += 1
         max_wavelength = np.floor(li[0] * 1000 + (2.5 * c))
-        print("   %s (%inm - %inm)" % (bands[b], min_wavelength, max_wavelength))
+        print("   %s (%inm - %inm)" % (bands[0], min_wavelength, max_wavelength))
 
     else:
         filter_f = []
