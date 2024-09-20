@@ -21,7 +21,6 @@ per-file-ignores =
     # E741 ambiguous variable name 'l'
     __init__.py: F401, F403
     man/build_html.py: E501
-    imagery/i.atcorr/create_iwave.py: F632, F821, W293
     doc/python/raster_example_ctypes.py: F403, F405
     doc/python/vector_example_ctypes.py: F403, F405
     doc/python/m.distance.py: F403, F405, E501
