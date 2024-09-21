@@ -8,6 +8,7 @@ for details.
 @author Soeren Gebbert
 """
 
+from pathlib import Path
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 
@@ -243,7 +244,7 @@ a_2@testing||2001-04-01 00:00:00|2001-07-01 00:00:00|200|200|200|200|0|0|0|19200
 a_3@testing||2001-07-01 00:00:00|2001-10-01 00:00:00|300|300|300|300|0|0|0|2880000|0|9600|9600
 a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|3840000|0|9600|9600
 """
-        univar_output = open("univar_output.txt", "r").read()
+        univar_output = Path("univar_output.txt").read_text()
 
         for ref, res in zip(univar_text.split("\n"), univar_output.split("\n")):
             if ref and res:
@@ -269,7 +270,7 @@ a_2@m2||2001-04-01 00:00:00|2001-07-01 00:00:00|200|200|200|200|0|0|0|1920000|0|
 a_3@m2||2001-07-01 00:00:00|2001-10-01 00:00:00|300|300|300|300|0|0|0|2880000|0|9600|9600|300|300|300|300|300
 a_4@m2||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|3840000|0|9600|9600|400|400|400|400|400
 """
-        univar_output = open("univar_output.txt", "r").read()
+        univar_output = Path("univar_output.txt").read_text()
 
         for ref, res in zip(univar_text.split("\n"), univar_output.split("\n")):
             if ref and res:
@@ -292,7 +293,7 @@ a_4@m2||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|3840000|0|
 a_3@testing||2001-07-01 00:00:00|2001-10-01 00:00:00|300|300|300|300|0|0|0|2880000|0|9600|9600
 a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|3840000|0|9600|9600
 """
-        univar_output = open("univar_output.txt", "r").read()
+        univar_output = Path("univar_output.txt").read_text()
 
         for ref, res in zip(univar_text.split("\n"), univar_output.split("\n")):
             if ref and res:

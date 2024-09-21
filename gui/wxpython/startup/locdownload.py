@@ -73,8 +73,8 @@ LOCATIONS = [
     },
     {
         "label": "Natural Earth Dataset in WGS84",
-        "url": "https://zenodo.org/record/3968936/files/natural-earth-dataset.tar.gz",
-        "size": "207 MB",
+        "url": "https://zenodo.org/records/13370131/files/natural_earth_dataset.zip",
+        "size": "121.3 MB",
         "epsg": "4326",
         "license": "ODC Public Domain Dedication and License 1.0",
         "maintainer": "Brendan Harmon (brendan.harmon@gmail.com)",
@@ -156,12 +156,12 @@ def reporthook(count, block_size, total_size):
     sys.stdout.write(
         _(
             "Download in progress, wait until it is finished "
-            "{0}%, {1} MB, {2} KB/s, {3:.0f} seconds passed".format(
-                percent,
-                progress_size / (1024 * 1024),
-                speed,
-                duration,
-            ),
+            "{0}%, {1} MB, {2} KB/s, {3:.0f} seconds passed"
+        ).format(
+            percent,
+            progress_size / (1024 * 1024),
+            speed,
+            duration,
         ),
     )
 

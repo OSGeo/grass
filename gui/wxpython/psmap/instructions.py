@@ -1936,11 +1936,7 @@ class Vector(InstructionObject):
         instr = {}
 
         for line in text:
-            if (
-                line.startswith("vpoints")
-                or line.startswith("vlines")
-                or line.startswith("vareas")
-            ):
+            if line.startswith(("vpoints", "vlines", "vareas")):
                 # subtype
                 if line.startswith("vpoints"):
                     subType = "points"

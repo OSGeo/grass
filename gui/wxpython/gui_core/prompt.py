@@ -511,7 +511,6 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         # complete command after pressing '.'
         if event.GetKeyCode() == 46:
             self.autoCompList = []
-            entry = self.GetTextLeft()
             self.InsertText(pos, ".")
             self.CharRight()
             self.toComplete = self.EntityToComplete()
@@ -538,7 +537,6 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             or event.GetKeyCode() == wx.WXK_SUBTRACT
         ):
             self.autoCompList = []
-            entry = self.GetTextLeft()
             self.InsertText(pos, "-")
             self.CharRight()
             self.toComplete = self.EntityToComplete()

@@ -63,7 +63,7 @@ def main():
     grass.debug("tmp_dir = {tmpdir}".format(tmpdir=tmp_dir))
 
     if not os.path.exists(infile):
-        grass.fatal(_("File {name} not found.".format(name=infile)))
+        grass.fatal(_("File {name} not found.").format(name=infile))
 
     gisenv = grass.gisenv()
     mset_dir = os.path.join(
@@ -87,7 +87,7 @@ def main():
                 f = tar.extractfile("{}/{}".format(data_names[0], fname))
                 sys.stdout.write(f.read().decode())
         except KeyError:
-            grass.fatal(_("Pack file unreadable: file '{}' missing".format(fname)))
+            grass.fatal(_("Pack file unreadable: file '{}' missing").format(fname))
         tar.close()
 
         return 0
@@ -100,13 +100,11 @@ def main():
     gfile = grass.find_file(name=map_name, element="cell", mapset=".")
     if gfile["file"]:
         if os.environ.get("GRASS_OVERWRITE", "0") != "1":
-            grass.fatal(_("Raster map <{name}> already exists".format(name=map_name)))
+            grass.fatal(_("Raster map <{name}> already exists").format(name=map_name))
         else:
             grass.warning(
-                _(
-                    "Raster map <{name}> already exists and will be overwritten".format(
-                        name=map_name
-                    )
+                _("Raster map <{name}> already exists and will be overwritten").format(
+                    name=map_name
                 )
             )
 
@@ -132,9 +130,10 @@ def main():
         grass.fatal(
             _(
                 "This GRASS GIS pack file contains vector data. Use "
-                "v.unpack to unpack <{name}>".format(name=map_name)
-            )
+                "v.unpack to unpack <{name}>"
+            ).format(name=map_name)
         )
+
     else:
         grass.fatal(_("Pack file unreadable"))
 
@@ -246,7 +245,7 @@ def main():
             files = "\n".join(maps)
             Path(vrt_file).write_text(files)
 
-    grass.message(_("Raster map <{name}> unpacked".format(name=map_name)))
+    grass.message(_("Raster map <{name}> unpacked").format(name=map_name))
 
 
 if __name__ == "__main__":

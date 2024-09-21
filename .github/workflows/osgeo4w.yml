@@ -39,25 +39,21 @@ jobs:
           update: true
           msystem: MINGW64
           install: tar libintl make bison flex diffutils git dos2unix zip mingw-w64-x86_64-toolchain
-            mingw-w64-x86_64-fftw mingw-w64-x86_64-lapack mingw-w64-x86_64-pkgconf
+            mingw-w64-x86_64-fftw mingw-w64-x86_64-openblas mingw-w64-x86_64-pkgconf
             mingw-w64-x86_64-gcc mingw-w64-x86_64-ccache mingw-w64-x86_64-zlib mingw-w64-x86_64-libiconv
             mingw-w64-x86_64-bzip2 mingw-w64-x86_64-gettext mingw-w64-x86_64-libsystre
             mingw-w64-x86_64-libtre-git mingw-w64-x86_64-libwinpthread-git
             mingw-w64-x86_64-pcre
 
-
-      - name: Install OSGeo4W
-        run: |
-          $exe = 'osgeo4w-setup.exe'
-          $url = 'http://download.osgeo.org/osgeo4w/v2/' + $exe
-          (New-Object System.Net.WebClient).DownloadFile($url, $exe)
-          Start-Process ('.\'+$exe) -ArgumentList '-A -g -k -q \
-            -s http://download.osgeo.org/osgeo4w/v2/ -P ${{ env.Deps }}' -Wait
-        env:
-          Deps: "gdal-devel,proj-devel,geos-devel,netcdf-devel,libjpeg-turbo-devel,\
+      - name: Setup OSGeo4W environment
+        uses: echoix/setup-OSGeo4W@17deecd39e077a80bf1081443998ea8edd6f15bf  # v0.1.0
+        with:
+          package-dir: "D:/OSGeo4W_pkg"
+          packages: |
+            gdal-devel,proj-devel,geos-devel,netcdf-devel,libjpeg-turbo-devel,\
             libpq-devel,libpng-devel,libtiff-devel,sqlite3-devel,zstd-devel,python3-ply,\
             python3-core,python3-six,python3-pywin32,python3-wxpython,liblas-devel,\
-            cairo-devel,freetype-devel,python3-numpy"
+            cairo-devel,freetype-devel,python3-numpy
 
       - name: Set number of cores for compilation
         run: |
@@ -66,7 +62,10 @@ jobs:
 
       - name: Compile GRASS GIS
         shell: msys2 {0}
-        run: .github/workflows/build_osgeo4w.sh
+        run: |
+          export CFLAGS="${CFLAGS} -pipe"
+          export CXXFLAGS="${CXXFLAGS} -pipe"
+          .github/workflows/build_osgeo4w.sh
 
       - name: Print installed versions
         if: always()
@@ -85,7 +84,7 @@ jobs:
 
       - name: Make HTML test report available
         if: ${{ always() }}
-        uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4.3.6
+        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
         with:
           name: testreport-${{ matrix.os }}
           path: testreport
