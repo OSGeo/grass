@@ -1236,6 +1236,7 @@ class Map:
             Debug.msg(3, "Map.SetRegion(): %s" % grass_region)
 
             return grass_region
+
         except:
             return None
 
