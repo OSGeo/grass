@@ -219,11 +219,11 @@ def getMenudataFile(userRootFile, newFile, fallback):
                     ),
                 )
                 return fallback
-            except Exception as e:
+            except:
                 _debug(
                     2,
                     (
-                        f"toolboxes.getMenudataFile: Unexpected error: {e!s}"
+                        "toolboxes.getMenudataFile: Unexpected error"
                         "Returning fallback file."
                     ),
                 )
