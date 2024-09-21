@@ -26,14 +26,12 @@ per-file-ignores =
     doc/gui/wxpython/example/dialogs.py: F401
     locale/grass_po_stats.py: E122, E128, E231, E401, E722
     gui/scripts/d.wms.py: E501
-    gui/wxpython/core/gcmd.py: E402
     gui/wxpython/core/gconsole.py: E722
+    gui/wxpython/core/render.py: E722
+    gui/wxpython/core/settings.py: E722
     gui/wxpython/core/toolboxes.py: E722
     gui/wxpython/core/utils.py: E722
     gui/wxpython/core/workspace.py: E722
-    gui/wxpython/core/render.py: E722
-    gui/wxpython/core/settings.py: E722
-    gui/wxpython/core/watchdog.py: E402
     gui/wxpython/datacatalog/tree.py: E731, E402
     gui/wxpython/dbmgr/base.py: E722
     gui/wxpython/dbmgr/dialogs.py: E722
