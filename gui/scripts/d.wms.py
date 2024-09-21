@@ -75,7 +75,10 @@
 # % key: driver
 # % type:string
 # % description: Driver used to communication with server
-# % descriptions: WMS_GDAL;Download data using GDAL WMS driver;WMS_GRASS;Download data using native GRASS-WMS driver;WMTS_GRASS;Download data using native GRASS-WMTS driver;OnEarth_GRASS;Download data using native GRASS-OnEarth driver;
+# % descriptions: WMS_GDAL;Download data using GDAL WMS driver;
+# % descriptions: WMS_GRASS;Download data using native GRASS-WMS driver;
+# % descriptions: WMTS_GRASS;Download data using native GRASS-WMTS driver;
+# % descriptions: OnEarth_GRASS;Download data using native GRASS-OnEarth driver;
 # % options:WMS_GDAL, WMS_GRASS, WMTS_GRASS, OnEarth_GRASS
 # % answer:WMS_GRASS
 # % guisection: Connection
@@ -146,7 +149,8 @@
 # %option G_OPT_F_BIN_INPUT
 # % key: capfile
 # % required: no
-# % description: Capabilities file to parse (input). It is relevant for WMTS_GRASS and OnEarth_GRASS drivers
+# % description: Capabilities file to parse (input).
+# % description: It is relevant for WMTS_GRASS and OnEarth_GRASS drivers
 # %end
 
 # %flag
