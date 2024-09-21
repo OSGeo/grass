@@ -144,7 +144,7 @@ def writejson(stats, outfile):
     fout.close()
     try:
         os.remove("messages.mo")
-    except:
+    except OSError:
         pass
 
 
