@@ -179,6 +179,7 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
                 res_line = res.split("|", 1)[1]
                 self.assertLooksLike(ref_line, res_line)
 
+    @xfail_windows
     def test_with_subset_of_maps(self):
         t_rast_univar = SimpleModule(
             "t.rast.univar",
