@@ -209,12 +209,22 @@ def getMenudataFile(userRootFile, newFile, fallback):
                 fh.write(xml)
                 fh.close()
                 return menudataFile
-            except:
+            except OSError as e:
                 _debug(
                     2,
                     (
-                        "toolboxes.getMenudataFile: writing menudata failed, "
-                        "returning fallback file"
+                        "toolboxes.getMenudataFile: writing menudata failed."
+                        f"Error: {e!s}"
+                        "Returning fallback file."
+                    ),
+                )
+                return fallback
+            except Exception as e:
+                _debug(
+                    2,
+                    (
+                        f"toolboxes.getMenudataFile: Unexpected error: {e!s}"
+                        "Returning fallback file."
                     ),
                 )
                 return fallback

@@ -24,6 +24,7 @@ import wx
 from core.utils import normalize_whitespace
 from core.settings import UserSettings
 from core.gcmd import EncodeString, GetDefaultEncoding
+from core.debug import Debug
 from nviz.main import NvizSettings
 
 from grass.script import core as gcore
@@ -123,8 +124,8 @@ class ProcessWorkspaceFile:
                 try:
                     self.layerManager["pos"] = (posVal[0], posVal[1])
                     self.layerManager["size"] = (posVal[2], posVal[3])
-                except:
-                    pass
+                except Exception as e:
+                    Debug.msg(1, f"Error setting layer manager position/size: {e}")
             # current working directory
             cwdPath = self.__getNodeText(node_lm, "cwd")
             if cwdPath:
@@ -155,7 +156,8 @@ class ProcessWorkspaceFile:
                 try:
                     pos = (posVal[0], posVal[1])
                     size = (posVal[2], posVal[3])
-                except:
+                except Exception as e:
+                    Debug.msg(1, f"Error setting layer manager position/size: {e}")
                     pos = None
                     size = None
                 # this happens on Windows when mapwindow is minimized when
@@ -2019,7 +2021,14 @@ class ProcessGrcFile:
         """Get value of element"""
         try:
             return line.strip(" ").split(" ")[1].strip(" ")
-        except:
+        except IndexError:
+            print("Error: Line does not contain at least two words")
+            return ""
+        except AttributeError:
+            print("Error: Input is not a string")
+            return ""
+        except Exception as e:
+            print(f"Unexpected error: {e}")
             return ""
 
     def _get_element(self, line):

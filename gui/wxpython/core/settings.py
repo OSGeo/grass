@@ -110,8 +110,9 @@ class Settings:
             self.locs.sort()
             # Add a default choice to not override system locale
             self.locs.insert(0, "system")
-        except:
-            # No NLS
+        except Exception as e:
+            # Catch any other unexpected exceptions
+            print(f"Unexpected error generating locales: {e}")
             self.locs = ["system"]
 
         return "system"
@@ -992,8 +993,8 @@ class Settings:
         if not os.path.exists(dirPath):
             try:
                 os.mkdir(dirPath)
-            except:
-                GError(_("Unable to create settings directory"))
+            except OSError as e:
+                GError(_("Unable to create settings directory: {}").format(str(e)))
                 return
         try:
             with open(self.filePath, "w") as f:
