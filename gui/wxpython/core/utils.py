@@ -77,11 +77,7 @@ def GetTempfile(pref=None):
             return os.path.join(pref, file)
         else:
             return tempfile
-    except (AttributeError, TypeError) as e:
-        print(f"Error splitting tempfile path: {e}")
-        return None
-    except Exception as e:
-        print(f"Unexpected error in GetTempfile: {e}")
+    except:
         return None
 
 
@@ -259,11 +255,7 @@ def ListOfCatsToRange(cats):
 
     try:
         cats = list(map(int, cats))
-    except ValueError as e:
-        print(f"Error converting cats to integers: {e}")
-        return catstr
-    except TypeError as e:
-        print(f"Invalid type for cats: {e}")
+    except:
         return catstr
 
     i = 0
@@ -587,10 +579,8 @@ def GetListOfLocations(dbase):
                 os.path.join(location, "*")
             ):
                 listOfLocations.append(os.path.basename(location))
-        except OSError as e:
-            print(f"Error accessing database directory: {e}")
-        except Exception as e:
-            print(f"Unexpected error in GetListOfLocations: {e}")
+        except:
+            pass
 
     ListSortLower(listOfLocations)
 
@@ -642,8 +632,7 @@ def _getGDALFormats():
     """Get dictionary of available GDAL drivers"""
     try:
         ret = grass.read_command("r.in.gdal", quiet=True, flags="f")
-    except Exception as e:
-        print(f"Unexpected error in _getGDALFormats: {e}")
+    except:
         ret = None
 
     return _parseFormats(ret), _parseFormats(ret, writableOnly=True)
@@ -653,8 +642,7 @@ def _getOGRFormats():
     """Get dictionary of available OGR drivers"""
     try:
         ret = grass.read_command("v.in.ogr", quiet=True, flags="f")
-    except Exception as e:
-        print(f"Unexpected error in _getOGRFormats: {e}")
+    except:
         ret = None
 
     return _parseFormats(ret), _parseFormats(ret, writableOnly=True)
