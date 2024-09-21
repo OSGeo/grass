@@ -45,19 +45,34 @@ jobs:
             mingw-w64-x86_64-libtre-git mingw-w64-x86_64-libwinpthread-git mingw-w64-x86_64-libpng
             mingw-w64-x86_64-pcre
 
-      - name: Install OSGeo4W
-        run: |
-          $exe = 'osgeo4w-setup.exe'
-          $url = 'http://download.osgeo.org/osgeo4w/v2/' + $exe
-          (New-Object System.Net.WebClient).DownloadFile($url, $exe)
-          Start-Process ('.\'+$exe) -ArgumentList '-A -g -k -q \
-            -s http://download.osgeo.org/osgeo4w/v2/ -P ${{ env.Deps }}' -Wait
-        env:
-          Deps: "proj-devel,gdal-devel,geos-devel,libtiff-devel,libpng-devel,\
-            pdal-devel,netcdf-devel,cairo-devel,fftw,freetype-devel,gdal-ecw,\
-            gdal-mrsid,liblas-devel,libxdr,libpq-devel,pdcurses,\
-            python3-matplotlib,python3-numpy,python3-ply,python3-pywin32,\
-            python3-wxpython,regex-devel,zstd-devel"
+      - name: Setup OSGeo4W environment
+        uses: echoix/setup-OSGeo4W@17deecd39e077a80bf1081443998ea8edd6f15bf  # v0.1.0
+        with:
+          package-dir: "D:/OSGeo4W_pkg"
+          packages: |
+            cairo-devel
+            fftw
+            freetype-devel
+            gdal-devel
+            gdal-ecw
+            gdal-mrsid
+            geos-devel
+            liblas-devel
+            libpng-devel
+            libpq-devel
+            libtiff-devel
+            libxdr
+            netcdf-devel
+            pdal-devel
+            pdcurses
+            proj-devel
+            python3-matplotlib
+            python3-numpy
+            python3-ply
+            python3-pywin32
+            python3-wxpython
+            regex-devel
+            zstd-devel
 
       - name: Set number of cores for compilation
         run: |
