@@ -5,7 +5,6 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.utils import xfail_windows
 
-
 from grass.pygrass.raster import raster2numpy_img
 from grass.pygrass.gis.region import Region
 from grass.script.core import tempfile
