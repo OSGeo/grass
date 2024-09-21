@@ -14,17 +14,24 @@ for details.
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
-import wx
-
 # i18n is taken care of in the grass library code.
 # So we need to import it before any of the GUI code.
 # NOTE: in this particular case, we don't really need the grass library;
 # NOTE: we import it just for the side effects of gettext.install()
-import grass
-
+import os
+import sys
+import wx
+import gettext
 from core import globalvar
 from gui_core.dialogs import SimpleDialog
 from gui_core import gselect
+
+# this enables to run application standalone (> python example/frame.py )
+if __name__ == "__main__":
+    sys.path.append(os.path.join(os.environ["GISBASE"], "etc", "gui", "wxpython"))
+
+# Instead of importing grass, we directly import the gettext function
+gettext.install("grasswxpy", localedir=None, unicode=True)
 
 
 class ExampleMapDialog(SimpleDialog):
