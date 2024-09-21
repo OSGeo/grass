@@ -691,8 +691,7 @@ class GConsole(wx.EvtHandler):
             if len(command) == 1 and not skipInterface:
                 try:
                     task = gtask.parse_interface(command[0])
-                except Exception as e:
-                    print(f"Exception occured: {e}")
+                except:
                     task = None
             else:
                 task = None

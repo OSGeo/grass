@@ -1236,12 +1236,7 @@ class Map:
             Debug.msg(3, "Map.SetRegion(): %s" % grass_region)
 
             return grass_region
-
-        except KeyError as e:
-            Debug.msg(1, f"Map.SetRegion(): KeyError - {e!s}")
-            return None
-        except Exception as e:
-            Debug.msg(1, f"Map.SetRegion(): Unexpected error - {e!s}")
+        except:
             return None
 
     def GetListOfLayers(
