@@ -66,9 +66,11 @@ jobs:
             pdal-devel
             pdcurses
             proj-devel
+            python3-core
             python3-jupyter
             python3-matplotlib
             python3-numpy
+            python3-pip
             python3-ply
             python3-pytest
             python3-pywin32
