@@ -67,7 +67,6 @@ class TestSnapAbsoluteSTRDS(TestCase):
         cls.runModule("g.remove", flags="f", type="raster", name="series_minimum_2")
         cls.runModule("g.remove", flags="f", type="raster", name="series_quantile")
 
-    @xfail_windows
     def test_time_stamp(self):
         self.assertModule(
             "t.rast.series",

@@ -13,7 +13,7 @@ from pathlib import Path
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
-from grass.gunittest.utils import silent_rmtree, xfail_windows
+from grass.gunittest.utils import silent_rmtree
 
 
 class TestRasterExtraction(TestCase):
@@ -254,7 +254,6 @@ class TestRasterExtraction(TestCase):
             module=info, reference=tinfo_string, precision=2, sep="="
         )
 
-    @xfail_windows
     def test_raster_info(self):
         self.runModule("g.mapset", mapset="test3")
         tinfo_string = """id=a1@test1
