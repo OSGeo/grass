@@ -20,6 +20,7 @@ import shutil
 import subprocess
 from grass.gunittest.utils import xfail_windows
 
+
 # Note that unlike rest of GRASS GIS, here we are using unittest package
 # directly. The grass.gunittest machinery for mapsets is not needed here.
 # How this plays out together with the rest of testing framework is yet to be
