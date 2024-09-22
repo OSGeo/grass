@@ -48,6 +48,9 @@ int dig_spidx_init(struct Plus_head *Plus)
         filename = G_tempfile();
         fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
         Plus->Node_spidx = RTreeCreateTree(fd, 0, ndims);
+        if (fd != -1) {
+            close(fd);
+        }
         if (remove(filename) != 0) {
             G_fatal_error(_("Unable to remove file %s"), filename);
         }
@@ -56,6 +59,9 @@ int dig_spidx_init(struct Plus_head *Plus)
         filename = G_tempfile();
         fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
         Plus->Line_spidx = RTreeCreateTree(fd, 0, ndims);
+        if (fd != -1) {
+            close(fd);
+        }
         if (remove(filename) != 0) {
             G_fatal_error(_("Unable to remove file %s"), filename);
         }
@@ -64,6 +70,9 @@ int dig_spidx_init(struct Plus_head *Plus)
         filename = G_tempfile();
         fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
         Plus->Area_spidx = RTreeCreateTree(fd, 0, ndims);
+        if (fd != -1) {
+            close(fd);
+        }
         if (remove(filename) != 0) {
             G_fatal_error(_("Unable to remove file %s"), filename);
         }
@@ -72,6 +81,9 @@ int dig_spidx_init(struct Plus_head *Plus)
         filename = G_tempfile();
         fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
         Plus->Isle_spidx = RTreeCreateTree(fd, 0, ndims);
+        if (fd != -1) {
+            close(fd);
+        }
         if (remove(filename) != 0) {
             G_fatal_error(_("Unable to remove file %s"), filename);
         }
@@ -133,6 +145,9 @@ void dig_spidx_free_nodes(struct Plus_head *Plus)
         filename = G_tempfile();
         fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
         Plus->Node_spidx = RTreeCreateTree(fd, 0, ndims);
+        if (fd != -1) {
+            close(fd);
+        }
         if (remove(filename) != 0) {
             G_fatal_error(_("Unable to remove file %s"), filename);
         }
@@ -168,6 +183,9 @@ void dig_spidx_free_lines(struct Plus_head *Plus)
         filename = G_tempfile();
         fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
         Plus->Line_spidx = RTreeCreateTree(fd, 0, ndims);
+        if (fd != -1) {
+            close(fd);
+        }
         if (remove(filename) != 0) {
             G_fatal_error(_("Unable to remove file %s"), filename);
         }
@@ -203,6 +221,9 @@ void dig_spidx_free_areas(struct Plus_head *Plus)
         filename = G_tempfile();
         fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
         Plus->Area_spidx = RTreeCreateTree(fd, 0, ndims);
+        if (fd != -1) {
+            close(fd);
+        }
         if (remove(filename) != 0) {
             G_fatal_error(_("Unable to remove file %s"), filename);
         }
@@ -238,6 +259,9 @@ void dig_spidx_free_isles(struct Plus_head *Plus)
         filename = G_tempfile();
         fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
         Plus->Isle_spidx = RTreeCreateTree(fd, 0, ndims);
+        if (fd != -1) {
+            close(fd);
+        }
         if (remove(filename) != 0) {
             G_fatal_error(_("Unable to remove file %s"), filename);
         }
