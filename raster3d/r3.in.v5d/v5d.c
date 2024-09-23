@@ -1340,8 +1340,8 @@ static int read_comp_header(int f, v5dstruct *v)
 
                 /* skip ahead by 'gridsize' bytes */
                 if (lseek(f, gridsize, SEEK_CUR) == -1) {
-                    G_warning(_("Error:  Unexpected end of file, "));
-                    G_warning(_("file may be corrupted.\n"));
+                    G_warning(_("Error: Unexpected end of file, file may be "
+                                "corrupted."));
                     return 0;
                 }
                 min = -(125.0 + gb) / ga;
@@ -2366,7 +2366,9 @@ int v5dWriteCompressedGrid(const v5dstruct *v, int time, int var,
     pos = grid_position(v, time, var);
     if (lseek(v->FileDesc, pos, SEEK_SET) < 0) {
         /* lseek failed, return error */
-        G_warning(_("Error in v5dWrite[Compressed]Grid: seek failed, disk full?\n"));
+        G_warning(
+            _("Error in v5dWrite[Compressed]Grid: seek failed, disk full? %s"),
+            strerror(errno));
         return 0;
     }
 
