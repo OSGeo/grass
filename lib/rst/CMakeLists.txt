@@ -34,7 +34,7 @@ build_library_in_subdir(
   grass_qtree
   grass_interpdata
   GDAL
-  LIBM
+  ${LIBM}
   OPTIONAL_DEPENDS
   OPENMP
   HEADERS

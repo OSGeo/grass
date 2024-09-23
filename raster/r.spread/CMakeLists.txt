@@ -23,4 +23,4 @@ build_program(
   grass_gis
   grass_raster
   grass_display
-  LIBM)
+  ${LIBM})

@@ -33,10 +33,10 @@ build_program_in_subdir(
   grass_gis
   grass_gmath
   grass_raster
-  LIBM)
+  ${LIBM})
 
 build_program_in_subdir(i.ortho.target DEPENDS grass_iortho grass_imagery
                         grass_gis)
 
 build_program_in_subdir(i.ortho.transform DEPENDS grass_iortho grass_imagery
-                        grass_gis grass_gmath LIBM)
+                        grass_gis grass_gmath ${LIBM})

@@ -27,7 +27,7 @@ int format_double(double v, char *buf, int n)
     sprintf(fmt, "%%%d.2lf", n);
     sprintf(buf, fmt, v);
 
-    for (k = n; (ssize_t)strlen(buf) > n; k--) {
+    for (k = n; (size_t)strlen(buf) > n; k--) {
         sprintf(fmt, "%%%d.%dg", n, k);
         sprintf(buf, fmt, v);
     }

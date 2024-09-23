@@ -9,7 +9,7 @@ build_library_in_subdir(
   grass_vector
   grass_gmath
   GDAL
-  LIBM
+  ${LIBM}
   OPTIONAL_DEPENDS
   OPENMP
   HEADERS

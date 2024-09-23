@@ -5,7 +5,7 @@ build_program_in_subdir(
   grass_raster
   grass_btree2
   grass_gmath
-  LIBM
+  ${LIBM}
   RUNTIME_OUTPUT_DIR
   ${GRASS_INSTALL_ETCBINDIR}/r.watershed
   NO_DOCS)
@@ -17,7 +17,7 @@ build_program_in_subdir(
   grass_raster
   grass_gmath
   grass_segment
-  LIBM
+  ${LIBM}
   RUNTIME_OUTPUT_DIR
   ${GRASS_INSTALL_ETCBINDIR}/r.watershed
   NO_DOCS)

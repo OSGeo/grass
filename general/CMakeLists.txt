@@ -37,7 +37,7 @@ build_program_in_subdir(
   grass_parson
   PROJ
   GDAL
-  LIBM)
+  ${LIBM})
 
 build_program_in_subdir(g.rename DEPENDS grass_gis grass_manage grass_raster)
 build_program_in_subdir(g.tempfile DEPENDS grass_gis)

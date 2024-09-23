@@ -62,7 +62,7 @@ install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/barscales
 build_program_in_subdir(d.colorlist DEPENDS grass_gis grass_display
                         grass_raster)
 build_program_in_subdir(d.colortable DEPENDS grass_gis grass_display
-                        grass_raster LIBM)
+                        grass_raster ${LIBM})
 build_program_in_subdir(d.erase DEPENDS grass_gis grass_display)
 if(NOT MSVC)
   build_program_in_subdir(d.font DEPENDS grass_gis grass_display grass_raster)
@@ -81,19 +81,19 @@ if(WITH_DOCS)
           DESTINATION ${GRASS_INSTALL_DOCDIR})
 endif()
 build_program_in_subdir(d.grid DEPENDS grass_gis grass_symb grass_gproj
-                        grass_display GDAL LIBM)
+                        grass_display GDAL ${LIBM})
 build_program_in_subdir(d.his DEPENDS grass_gis grass_display grass_raster)
 build_program_in_subdir(d.histogram DEPENDS grass_gis grass_display
-                        grass_raster LIBM)
+                        grass_raster ${LIBM})
 build_program_in_subdir(d.info DEPENDS grass_gis grass_display)
-build_program_in_subdir(d.labels DEPENDS grass_gis grass_display LIBM)
+build_program_in_subdir(d.labels DEPENDS grass_gis grass_display ${LIBM})
 build_program_in_subdir(d.legend DEPENDS grass_gis grass_display grass_raster
-                        grass_raster3d LIBM)
+                        grass_raster3d ${LIBM})
 build_program_in_subdir(d.legend.vect DEPENDS grass_gis grass_display
-                        grass_symb LIBM)
+                        grass_symb ${LIBM})
 build_program_in_subdir(d.linegraph DEPENDS grass_gis grass_display grass_symb
                         grass_raster)
-build_program_in_subdir(d.northarrow DEPENDS grass_gis grass_display grass_symb LIBM)
+build_program_in_subdir(d.northarrow DEPENDS grass_gis grass_display grass_symb ${LIBM})
 if(WITH_DOCS)
   file(MAKE_DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/northarrows)
   file(GLOB d_northarrow_png
@@ -104,15 +104,15 @@ if(WITH_DOCS)
           DESTINATION ${GRASS_INSTALL_DOCDIR})
 endif()
 build_program_in_subdir(d.path DEPENDS grass_gis grass_display grass_vector GDAL)
-build_program_in_subdir(d.profile DEPENDS grass_gis grass_display grass_raster LIBM)
+build_program_in_subdir(d.profile DEPENDS grass_gis grass_display grass_raster ${LIBM})
 build_program_in_subdir(d.rast DEPENDS grass_gis grass_display grass_raster)
 build_program_in_subdir(d.rast.arrow DEPENDS grass_gis grass_raster
-                        grass_display LIBM)
+                        grass_display ${LIBM})
 build_program_in_subdir(d.rast.num DEPENDS grass_gis grass_display grass_raster)
 build_program_in_subdir(d.redraw DEPENDS grass_gis grass_display)
 build_program_in_subdir(d.rgb DEPENDS grass_gis grass_display grass_raster)
 build_program_in_subdir(d.rhumbline DEPENDS grass_gis grass_display)
-build_program_in_subdir(d.text DEPENDS grass_gis grass_display LIBM)
+build_program_in_subdir(d.text DEPENDS grass_gis grass_display ${LIBM})
 build_program_in_subdir(d.title DEPENDS grass_gis grass_display grass_raster)
 build_program_in_subdir(
   d.vect
@@ -126,7 +126,7 @@ build_program_in_subdir(
   grass_symb
   grass_vector
   GDAL
-  LIBM)
+  ${LIBM})
 build_program_in_subdir(
   d.vect.chart
   DEPENDS
@@ -138,7 +138,7 @@ build_program_in_subdir(
   grass_symb
   grass_vector
   GDAL
-  LIBM)
+  ${LIBM})
 build_program_in_subdir(
   d.vect.thematic
   DEPENDS

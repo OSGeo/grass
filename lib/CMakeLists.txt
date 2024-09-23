@@ -194,7 +194,7 @@ build_library_in_subdir(
   grass_raster
   grass_raster3d
   grass_gmath
-  LIBM
+  ${LIBM}
   OPTIONAL_DEPENDS
   OPENMP)
 

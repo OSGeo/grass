@@ -20,7 +20,7 @@ build_program_in_subdir(
   grass_dbmiclient
   grass_dbmidriver
   GDAL
-  LIBM)
+  ${LIBM})
 
 build_program_in_subdir(
   v.lrs.segment
@@ -32,7 +32,7 @@ build_program_in_subdir(
   grass_dbmiclient
   grass_dbmidriver
   GDAL
-  LIBM)
+  ${LIBM})
 
 build_program_in_subdir(
   v.lrs.label
@@ -44,7 +44,7 @@ build_program_in_subdir(
   grass_dbmiclient
   grass_dbmidriver
   GDAL
-  LIBM)
+  ${LIBM})
 
 build_program_in_subdir(
   v.lrs.where

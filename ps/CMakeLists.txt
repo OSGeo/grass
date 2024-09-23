@@ -12,7 +12,7 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_symb
   GDAL
-  LIBM)
+  ${LIBM})
 
 add_custom_command(
   TARGET ps.map

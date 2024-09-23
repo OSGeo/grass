@@ -35,4 +35,4 @@ build_module(
   grass_gis
   grass_rtree
   GDAL
-  LIBM)
+  ${LIBM})

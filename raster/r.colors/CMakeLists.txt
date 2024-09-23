@@ -10,7 +10,7 @@ build_program(
   grass_gis
   grass_raster
   grass_raster3d
-  LIBM)
+  ${LIBM})
 
 build_program(
   NAME
@@ -21,4 +21,4 @@ build_program(
   grass_gis
   grass_raster
   grass_raster3d
-  LIBM)
+  ${LIBM})

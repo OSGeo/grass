@@ -75,7 +75,7 @@ install(
 install(FILES colors.desc renamed_options DESTINATION ${GRASS_INSTALL_ETCDIR})
 
 if(UNIX)
-  target_link_libraries(grass_gis PRIVATE LIBM)
+  target_link_libraries(grass_gis PRIVATE ${LIBM})
 endif()
 
 if(MSVC)
