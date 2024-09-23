@@ -24,7 +24,6 @@ per-file-ignores =
     imagery/i.atcorr/create_iwave.py: F632, F821, W293
     doc/python/m.distance.py: E501
     doc/gui/wxpython/example/dialogs.py: F401
-    locale/grass_po_stats.py: E122, E128, E231, E401, E722
     gui/scripts/d.wms.py: E501
     gui/wxpython/core/gconsole.py: E722
     gui/wxpython/core/render.py: E722
