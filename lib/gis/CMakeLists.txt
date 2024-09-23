@@ -7,11 +7,15 @@ endif()
 set(grass_gis_DEFS "-DGRASS_VERSION_DATE=\"${GRASS_VERSION_DATE}\"")
 if(MSVC)
   set(grass_gis_DEFS "${grass_gis_DEFS};-D_USE_MATH_DEFINES=1")
+  set(gislib_INCLUDES "../../msvc")
+  list(APPEND gislib_SRCS "../../msvc/dirent.c")
 endif()
 
 build_module(
   NAME
   grass_gis
+  INCLUDES
+  ${gislib_INCLUDES}
   SOURCES
   "${gislib_SRCS}"
   DEPENDS
