@@ -632,7 +632,7 @@ def _getGDALFormats():
     """Get dictionary of available GDAL drivers"""
     try:
         ret = grass.read_command("r.in.gdal", quiet=True, flags="f")
-    except Exception:
+    except grass.CalledModuleError:
         ret = None
 
     return _parseFormats(ret), _parseFormats(ret, writableOnly=True)
