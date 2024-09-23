@@ -15,9 +15,6 @@
 
 import os
 import shutil
-import sys
-
-import pytest
 
 import grass.script as gs
 
@@ -316,10 +313,6 @@ class TimeSeriesMap(BaseSeriesMap):
             tasks.append((date, layer, filename))
         self._render(tasks)
 
-    @pytest.mark.xfail(
-        sys.platform == "win32",
-        reason="DejaVuSans.ttf file isn't found and not installed with GRASS",
-    )
     def save(
         self,
         filename,
