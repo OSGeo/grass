@@ -1379,7 +1379,7 @@ class DataCatalogTree(TreeView):
                     if not new_name:
                         continue
 
-                def _callback(
+                def callback(
                     gisrc2=gisrc2,
                     gisrc=gisrc,
                     cLayer=self.copy_layer[i],
@@ -1392,7 +1392,6 @@ class DataCatalogTree(TreeView):
                         env2, gisrc2, gisrc, cLayer, cMapset, cMode, sMapset, name
                     )
 
-                callback = _callback
                 dlg = CatalogReprojectionDialog(
                     self,
                     self._giface,
