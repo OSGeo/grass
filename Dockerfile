@@ -41,6 +41,7 @@ ARG GRASS_RUN_PACKAGES="build-essential \
     libgsl27 \
     libjpeg-turbo8 \
     libjsoncpp-dev \
+    liblapacke-dev \
     libmagic1 \
     libmagic-mgc \
     libncurses5 \
