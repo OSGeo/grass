@@ -209,7 +209,7 @@ def getMenudataFile(userRootFile, newFile, fallback):
                 fh.write(xml)
                 fh.close()
                 return menudataFile
-            except:
+            except Exception:
                 _debug(
                     2,
                     (
