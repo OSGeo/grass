@@ -262,11 +262,7 @@ class MeasureDistanceController(AnalysisControllerBase):
                 self._useCtypes = True
             except ImportError as e:
                 self._giface.WriteWarning(
-                    _(
-                        "Geodesic distance calculation "
-                        "is not available.\n"
-                        "Reason: %s" % e
-                    )
+                    _("Geodesic distance calculation is not available.\nReason: %s") % e
                 )
 
     def MeasureDist(self, beginpt, endpt):
@@ -297,7 +293,7 @@ class MeasureDistanceController(AnalysisControllerBase):
             #   the mathematical theta convention (CCW from +x axis)
             # angle = 90 - angle
             if angle < 0:
-                angle = 360 + angle
+                angle += 360
 
             mstring = "%s = %s %s\n%s = %s %s\n%s = %d %s\n%s" % (
                 _("segment"),

@@ -108,7 +108,7 @@ class Vector(Info):
 
     @must_be_open
     def next(self):
-        return self.__next__()
+        return next(self)
 
     @must_be_open
     def rewind(self):
@@ -855,7 +855,7 @@ class VectorTopo(Vector):
                 if not barray:
                     if error == -1:
                         raise GrassError(
-                            _("Unable to read line of feature %i" % (f_id))
+                            _("Unable to read line of feature %i") % (f_id)
                         )
                     if error == -2:
                         print("Empty feature %i" % (f_id))
@@ -947,7 +947,7 @@ class VectorTopo(Vector):
                     self.c_mapinfo, a_id, ctypes.byref(size)
                 )
                 if not barray:
-                    raise GrassError(_("Unable to read area with id %i" % (a_id)))
+                    raise GrassError(_("Unable to read area with id %i") % (a_id))
 
                 pcat = None
                 c_ok = libvect.Vect_get_area_cats(

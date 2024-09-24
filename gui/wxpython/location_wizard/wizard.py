@@ -2332,7 +2332,7 @@ class SummaryPage(TitledPage):
             finishButton = wx.FindWindowById(wx.ID_FORWARD)
             if ret == 0:
                 if datum != "":
-                    projlabel = projlabel + "+datum=%s" % datum
+                    projlabel += "+datum=%s" % datum
                 self.lproj4string.SetLabel(projlabel.replace(" +", os.linesep + "+"))
                 finishButton.Enable(True)
             else:
@@ -2723,7 +2723,7 @@ class LocationWizard(wx.Object):
                 if not self.filepage.georeffile or not os.path.isfile(
                     self.filepage.georeffile
                 ):
-                    return _("File <%s> not found." % self.filepage.georeffile)
+                    return _("File <%s> not found.") % self.filepage.georeffile
 
                 grass.create_location(
                     dbase=self.startpage.grassdatabase,

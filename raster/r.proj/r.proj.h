@@ -10,7 +10,7 @@
 #define L2BSIZE (2 * (L2BDIM))
 #define BSIZE   (1 << (L2BSIZE))
 #define HI(i)   ((i) >> (L2BDIM))
-#define LO(i)   ((i) & ((BDIM)-1))
+#define LO(i)   ((i) & ((BDIM) - 1))
 
 typedef FCELL block[BDIM][BDIM];
 

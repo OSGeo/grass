@@ -47,7 +47,7 @@ from grass.script import core as grass
 
 
 def oifcalc(sdev, corr, k1, k2, k3):
-    grass.debug(_("Calculating OIF for combination: %s, %s, %s" % (k1, k2, k3)), 1)
+    grass.debug(_("Calculating OIF for combination: %s, %s, %s") % (k1, k2, k3), 1)
     # calculate SUM of Stddeviations:
     ssdev = [sdev[k1], sdev[k2], sdev[k3]]
     numer = sum(ssdev)
@@ -107,7 +107,7 @@ def main():
                     if not proc[bandp].stdout.closed:
                         pout[bandp] = proc[bandp].communicate()[0]
                     proc[bandp].wait()
-            n = n + 1
+            n += 1
 
         # wait for jobs to finish, collect the output
         for band in bands:

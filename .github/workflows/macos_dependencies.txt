@@ -1,4 +1,3 @@
-blas
 cairo
 clangxx_osx-arm64
 clang_osx-arm64
@@ -11,9 +10,8 @@ gettext
 ghostscript
 giflib
 git
-libjpeg-turbo
+ipython
 krb5
-lapack
 lastools
 libgdal-arrow-parquet
 libgdal-core
@@ -32,6 +30,7 @@ libtiff
 llvm-openmp
 matplotlib
 numpy<2
+openblas
 pandoc
 pdal
 pillow
@@ -39,8 +38,13 @@ pkg-config
 ply
 postgresql
 proj
+pytest
+pytest-github-actions-annotate-failures
+pytest-timeout
+pytest-xdist
 python
 python.app
+pyyaml
 setuptools
 six
 sqlite

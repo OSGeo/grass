@@ -171,9 +171,9 @@ class WSPanel(wx.Panel):
 
         style = wx.TR_DEFAULT_STYLE | wx.TR_HAS_BUTTONS | wx.TR_FULL_ROW_HIGHLIGHT
         if self.drv_props["req_multiple_layers"]:
-            style = style | wx.TR_MULTIPLE
+            style |= wx.TR_MULTIPLE
         if "WMS" not in self.ws:
-            style = style | wx.TR_HIDE_ROOT
+            style |= wx.TR_HIDE_ROOT
 
         self.list = LayersList(
             parent=self.req_page_panel, web_service=self.ws, style=style
@@ -538,10 +538,8 @@ class WSPanel(wx.Panel):
         if event.returncode != 0:
             if self.cmd_err_str:
                 self.cmd_err_str = (
-                    _(
-                        "Unable to download %s capabilities file\nfrom <%s>:\n"
-                        % (self.ws.replace("_", " "), self.conn["url"])
-                    )
+                    _("Unable to download %s capabilities file\nfrom <%s>:\n")
+                    % (self.ws.replace("_", " "), self.conn["url"])
                     + self.cmd_err_str
                 )
             self._postCapParsedEvt(error_msg=self.cmd_err_str)
@@ -559,8 +557,9 @@ class WSPanel(wx.Panel):
         except (OSError, ParseError) as error:
             error_msg = _(
                 "%s web service was not found in fetched capabilities file from "
-                "<%s>:\n%s\n" % (self.ws, self.conn["url"], str(error))
-            )
+                "<%s>:\n%s\n"
+            ) % (self.ws, self.conn["url"], str(error))
+
             if Debug.GetLevel() != 0:
                 Debug.msg(1, error_msg)
                 self._postCapParsedEvt(None)

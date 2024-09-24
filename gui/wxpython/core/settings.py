@@ -110,7 +110,7 @@ class Settings:
             self.locs.sort()
             # Add a default choice to not override system locale
             self.locs.insert(0, "system")
-        except:
+        except Exception:
             # No NLS
             self.locs = ["system"]
 
@@ -992,7 +992,7 @@ class Settings:
         if not os.path.exists(dirPath):
             try:
                 os.mkdir(dirPath)
-            except:
+            except OSError:
                 GError(_("Unable to create settings directory"))
                 return
         try:

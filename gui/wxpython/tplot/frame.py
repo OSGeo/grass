@@ -140,7 +140,10 @@ class TplotFrame(wx.Frame):
         if self._giface.GetMapDisplay():
             self.coorval.OnClose()
             self.cats.OnClose()
-        self.__del__()
+
+        # __del__() and del keyword seem to have differences,
+        # how can self.Destroy(), called after del, work otherwise
+        self.__del__()  # noqa: PLC2801, C2801
         self.Destroy()
 
     def _layout(self):
@@ -666,8 +669,8 @@ class TplotFrame(wx.Frame):
                             showTraceback=False,
                             message=_(
                                 "No connection between vector map {vmap} "
-                                "and layer {la}".format(vmap=row["name"], la=lay)
-                            ),
+                                "and layer {la}"
+                            ).format(vmap=row["name"], la=lay),
                         )
                         return
                     vals = gs.vector_db_select(
@@ -737,7 +740,7 @@ class TplotFrame(wx.Frame):
         if self.drawX != "":
             self.axes2d.set_xlabel(self.drawX)
         elif self.temporalType == "absolute":
-            self.axes2d.set_xlabel(_("Temporal resolution: %s" % x))
+            self.axes2d.set_xlabel(_("Temporal resolution: %s") % x)
         else:
             self.axes2d.set_xlabel(_("Time [%s]") % self.unit)
         if self.drawY != "":
@@ -914,8 +917,8 @@ class TplotFrame(wx.Frame):
                     message=_(
                         "Problem getting data from vector temporal"
                         " dataset. Empty list of values for cat "
-                        "{ca}.".format(ca=name_cat[1].replace("cat", ""))
-                    ),
+                        "{ca}."
+                    ).format(ca=name_cat[1].replace("cat", "")),
                 )
                 continue
             self.lookUp.AddDataset(yranges=ydata, xranges=xdata, datasetName=name)
@@ -1004,9 +1007,8 @@ class TplotFrame(wx.Frame):
         if os.path.exists(self.csvpath) and not self.overwrite:
             dlg = wx.MessageDialog(
                 self,
-                _(
-                    "{pa} already exists, do you want "
-                    "to overwrite?".format(pa=self.csvpath)
+                _("{pa} already exists, do you want to overwrite?").format(
+                    pa=self.csvpath
                 ),
                 _("File exists"),
                 wx.OK | wx.CANCEL | wx.ICON_QUESTION,
@@ -1182,7 +1184,7 @@ class TplotFrame(wx.Frame):
             elif len(indices) >= 2:
                 dlg = wx.SingleChoiceDialog(
                     self,
-                    message=_("Please specify the space time dataset <%s>." % dataset),
+                    message=_("Please specify the space time dataset <%s>.") % dataset,
                     caption=_("Ambiguous dataset name"),
                     choices=[
                         (
@@ -1365,7 +1367,7 @@ def InfoFormat(timeData, values):
             text.append(_("Space time 3D raster dataset: %s") % key)
 
         text.extend(
-            (_("Value for {date} is {val}".format(date=val[0], val=val[1])), "\n")
+            (_("Value for {date} is {val}").format(date=val[0], val=val[1]), "\n")
         )
     text.append(_("Press Del to dismiss."))
 
@@ -1410,8 +1412,8 @@ class DataCursor:
             artists = [artists]
         self.artists = artists
         self.convert = convert
-        self.axes = tuple(set(art.axes for art in self.artists))
-        self.figures = tuple(set(ax.figure for ax in self.axes))
+        self.axes = tuple({art.axes for art in self.artists})
+        self.figures = tuple({ax.figure for ax in self.axes})
 
         self.annotations = {}
         for ax in self.axes:

@@ -1195,7 +1195,7 @@ class TemporalAlgebraParser:
 
         for key, value in map_names.items():
             if value:
-                self.msgr.message(_("Removing un-needed or empty %s maps" % (key)))
+                self.msgr.message(_("Removing un-needed or empty %s maps") % (key))
                 self._remove_maps(value, key)
 
     def _remove_maps(self, namelist, map_type):
@@ -1731,7 +1731,7 @@ class TemporalAlgebraParser:
                                 if count > 0:
                                     condition_value_list.append(aggregate)
                                 condition_value_list.append(boolean)
-                                count = count + 1
+                                count += 1
 
                         if self.debug:
                             print(
@@ -2143,7 +2143,6 @@ class TemporalAlgebraParser:
 
         :return: List of maps from maplist with added conditional boolean values.
         """
-        boollist = []
         # Loop over maps of input map list.
         for map_i in maplist:
             # Get dictionary with temporal variables for the map.
@@ -2248,7 +2247,6 @@ class TemporalAlgebraParser:
             # self.msgr.fatal("Condition list is not complete. Elements missing")
             for iter in range(len(tvarexpr)):
                 expr = tvarexpr[iter]
-                operator = tvarexpr[iter + 1]
                 relexpr = tvarexpr[iter + 2]
                 if all(issubclass(type(ele), list) for ele in [expr, relexpr]):
                     resultlist = self.build_spatio_temporal_topology_list(expr, relexpr)
@@ -2394,8 +2392,8 @@ class TemporalAlgebraParser:
                                     _(
                                         "The resulting space time dataset type <%(a)s> "
                                         "is different from the requested type <%(b)s>"
-                                        % ({"a": maps_stds_type, "b": self.stdstype})
                                     )
+                                    % ({"a": maps_stds_type, "b": self.stdstype})
                                 )
                         else:
                             map_type_2 = map_i.get_type()

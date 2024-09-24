@@ -16,7 +16,7 @@ for details.
 import os
 import tempfile
 
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
 
 import wx
 import wx.aui
@@ -171,7 +171,7 @@ class WorkspaceManager:
         """
         # parse workspace file
         try:
-            gxwXml = ProcessWorkspaceFile(etree.parse(filename))
+            gxwXml = ProcessWorkspaceFile(ET.parse(filename))
         except Exception as e:
             GError(
                 parent=self.lmgr,
@@ -548,9 +548,8 @@ class WorkspaceManager:
         """
         if not file_exists:
             GError(
-                _(
-                    "File <{}> doesn't exist."
-                    " It was probably moved or deleted.".format(path)
+                _("File <{}> doesn't exist. It was probably moved or deleted.").format(
+                    path
                 ),
                 parent=self.lmgr,
             )

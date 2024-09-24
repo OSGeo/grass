@@ -96,12 +96,12 @@ def check_granularity_string(granularity, temporal_type):
             return False
 
         try:
-            integer = int(num)
+            int(num)
         except:
             return False
     elif temporal_type == "relative":
         try:
-            integer = int(granularity)
+            int(granularity)
         except:
             return False
     else:
@@ -1251,7 +1251,7 @@ def gran_to_gran(from_gran, to_gran="days", shell=False):
                 return _return(output, tounit, shell)
             if k == myunit:
                 num, myunit = v.split(" ")
-                output = output * ast.literal_eval(num)
+                output *= ast.literal_eval(num)
             if tounit == "second" and myunit == tounit:
                 return _return(output, tounit, shell)
         print(_("Probably you need to invert 'from_gran' and 'to_gran'"))

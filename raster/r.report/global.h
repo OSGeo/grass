@@ -121,7 +121,7 @@ int print_unit(int, int, int);
 JSON_Value *make_units(int, int);
 JSON_Value *make_category(int, int, JSON_Value *);
 JSON_Value *make_categories(int, int, int);
-void print_json();
+void print_json(void);
 
 /* report.c */
 int report(void);

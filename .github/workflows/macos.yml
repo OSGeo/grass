@@ -18,6 +18,8 @@ jobs:
   macos_build:
     name: macOS build
     runs-on: macos-14
+    env:
+      PYTHONWARNINGS: always
     steps:
       - name: Info
         run: |
@@ -28,20 +30,34 @@ jobs:
       - name: Uninstalling Homebrew
         run: |
           echo "Moving directories..."
-          sudo mkdir /opt/off
-          /usr/bin/sudo /usr/bin/find /usr/local /opt/homebrew -mindepth 1 -maxdepth 1 \
-            -type d -print -exec /bin/mv {} /opt/off/ \;
+          sudo mkdir /opt/local-off /opt/homebrew-off
+          test ! -d /usr/local || /usr/bin/sudo /usr/bin/find /usr/local \
+            -mindepth 1 -maxdepth 1 -type d -print -exec /bin/mv {} \
+            /opt/local-off/ \;
+          test ! -d /opt/homebrew || /usr/bin/sudo /usr/bin/find /opt/homebrew \
+            -mindepth 1 -maxdepth 1 -type d -print -exec /bin/mv {} \
+            /opt/homebrew-off/ \;
           echo "Removing files..."
-          /usr/bin/sudo /usr/bin/find /usr/local /opt/homebrew -mindepth 1 -maxdepth 1 \
-            -type f -print -delete
+          test ! -d /usr/local || /usr/bin/sudo /usr/bin/find /usr/local \
+            -mindepth 1 -maxdepth 1 -type f -print -delete
+          test ! -d /opt/homebrew || /usr/bin/sudo /usr/bin/find /opt/homebrew \
+            -mindepth 1 -maxdepth 1 -type f -print -delete
+          # Rehash to forget about the deleted files
           hash -r
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - name: Get current date cache key segment
+        id: date
+        # Year and week of year so cache key changes weekly
+        run: echo "date=$(date +%Y-%U)" >> "${GITHUB_OUTPUT}"
       - name: Setup Mamba
         uses: mamba-org/setup-micromamba@f8b8a1e23a26f60a44c853292711bacfd3eac822 # v1.9.0
         with:
           init-shell: bash
           environment-file: .github/workflows/macos_dependencies.txt
           environment-name: grass-env
+          # Persist on the same period (date).
+          cache-environment-key: environment-${{ steps.date.outputs.date }}
+
       - name: Environment info
         shell: bash -el {0}
         run: |
@@ -50,19 +66,38 @@ jobs:
       - name: Create installation directory
         run: mkdir $HOME/install
       - name: Build and install
-        shell: bash -l {0}
+        shell: micromamba-shell {0}
         run: source ./.github/workflows/macos_install.sh $HOME/install
       - name: Add the bin directory to PATH
         run: echo "$HOME/install/bin" >> $GITHUB_PATH
       - name: Check installed version
-        if: always()
-        shell: bash -l {0}
+        if: ${{ !cancelled() }}
+        shell: micromamba-shell {0}
         run: source ./.github/workflows/print_versions.sh
-      - name: Run tests
-        shell: bash -el {0}
-        run: >
+
+      - name: Run pytest with multiple workers in parallel
+        shell: micromamba-shell {0}
+        run: |
+          export PYTHONPATH=$(grass --config python_path):$PYTHONPATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
+          pytest --verbose --color=yes --durations=0 --durations-min=0.5 \
+            --numprocesses auto \
+            -ra . \
+            -m 'not needs_solo_run'
+      - name: Run pytest with a single worker (for tests marked with needs_solo_run)
+        shell: micromamba-shell {0}
+        run: |
+          export PYTHONPATH=$(grass --config python_path):$PYTHONPATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
+          pytest --verbose --color=yes --durations=0 --durations-min=0.5 \
+            -ra . \
+            -m 'needs_solo_run'
+
+      - name: Run gunittest tests
+        shell: micromamba-shell {0}
+        run: |
           grass --tmp-project XY --exec \
-              g.download.location url=${{ env.SampleData }} path=$HOME
+              g.download.project url=${{ env.SampleData }} path=$HOME
           grass --tmp-project XY --exec \
               python3 -m grass.gunittest.main \
               --grassdata $HOME --location nc_spm_full_v2alpha2 --location-type nc \
@@ -71,8 +106,8 @@ jobs:
           SampleData: "https://grass.osgeo.org/sampledata/north_carolina/\
                        nc_spm_full_v2alpha2.tar.gz"
       - name: Make HTML test report available
-        if: ${{ always() }}
-        uses: actions/upload-artifact@89ef406dd8d7e03cfd12d9e0a4a378f454709029 # v4.3.5
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
         with:
           name: testreport-macOS
           path: testreport

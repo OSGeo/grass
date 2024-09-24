@@ -288,26 +288,23 @@ class TemporalManager:
                     followsPoint = True
                     lastTimeseries = series
                     end = None
-                else:
-                    end = end
-                    # interval data
-                    if series:
-                        # map exists, stop point mode
-                        listOfMaps.append(series)
-                        afterPoint = False
-                    elif afterPoint:
-                        # check point mode
-                        if followsPoint:
-                            # skip this one, already there
-                            followsPoint = False
-                            continue
-                        else:
-                            # append the last one (of point time)
-                            listOfMaps.append(lastTimeseries)
-                            end = None
+                elif series:
+                    # map exists, stop point mode
+                    listOfMaps.append(series)
+                    afterPoint = False
+                elif afterPoint:
+                    # check point mode
+                    if followsPoint:
+                        # skip this one, already there
+                        followsPoint = False
+                        continue
                     else:
-                        # append series which is None
-                        listOfMaps.append(series)
+                        # append the last one (of point time)
+                        listOfMaps.append(lastTimeseries)
+                        end = None
+                else:
+                    # append series which is None
+                    listOfMaps.append(series)
                 timeLabels.append((start, end, unit))
 
         return timeLabels, listOfMaps
@@ -345,7 +342,7 @@ class TemporalManager:
         maps = sp.get_registered_maps_as_objects()
 
         if not sp.check_temporal_topology(maps):
-            raise GException(_("Topology of Space time dataset %s is invalid." % id))
+            raise GException(_("Topology of Space time dataset %s is invalid.") % id)
 
         timeseriesList.append(id)
         infoDict[id] = {}
