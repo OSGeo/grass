@@ -1565,9 +1565,9 @@ class ExportDialog(wx.Dialog):
                     self.GetParent(),
                     message=_(
                         "Exported animation file <{file}> exists. "
-                        "Do you want to overwrite it?".format(
-                            file=file_path,
-                        ),
+                        "Do you want to overwrite it?"
+                    ).format(
+                        file=file_path,
                     ),
                     caption=_("Overwrite?"),
                     style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,

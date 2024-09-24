@@ -484,7 +484,7 @@ def create_gisrc(tmpdir, gisrcrc):
         if "UNKNOWN" in s:
             try_remove(gisrcrc)
             s = None
-    except:
+    except Exception:
         s = None
 
     # Copy the global grassrc file to the session grassrc file
@@ -1057,9 +1057,7 @@ def load_env(grass_env_file):
             v = v.strip('"')
             # we'll keep expand=True to expand $var's inside "value" because
             # they are within double quotes
-        elif (
-            v.startswith("'") or v.endswith("'") or v.startswith('"') or v.endswith('"')
-        ):
+        elif v.startswith(("'", '"')) or v.endswith(("'", '"')):
             # here, let's try to ignore unmatching single/double quotes, which
             # might be a multi-line variable or just a user error
             debug("Ignoring multi-line environmental variable {0}".format(k))
@@ -1162,7 +1160,7 @@ def set_language(grass_config_dir):
                 encoding = "UTF-8"
                 normalized = locale.normalize("%s.%s" % (language, encoding))
                 locale.setlocale(locale.LC_ALL, normalized)
-            except locale.Error as e:
+            except locale.Error:
                 if language == "en":
                     # A workaround for Python Issue30755
                     # https://bugs.python.org/issue30755
@@ -1188,7 +1186,7 @@ def set_language(grass_config_dir):
                     # See bugs #3441 and #3423
                     try:
                         locale.setlocale(locale.LC_ALL, "C.UTF-8")
-                    except locale.Error as e:
+                    except locale.Error:
                         # All lost. Setting to C as much as possible.
                         # We can not call locale.normalize on C as it
                         # will transform it to en_US and we already know
@@ -1314,16 +1312,17 @@ def lock_mapset(mapset_path, force_gislock_removal, user):
                 "You can force launching GRASS using -f flag"
                 " (note that you need permission for this operation)."
                 " Have another look in the processor "
-                "manager just to be sure..." % {"user": user, "file": lockfile}
-            )
+                "manager just to be sure..."
+            ) % {"user": user, "file": lockfile}
+
         else:
             try_remove(lockfile)
             message(
                 _(
                     "%(user)s is currently running GRASS in selected mapset"
                     " (file %(file)s found). Forcing to launch GRASS..."
-                    % {"user": user, "file": lockfile}
                 )
+                % {"user": user, "file": lockfile}
             )
     elif ret != 0:
         msg = (
@@ -1571,7 +1570,7 @@ def say_hello():
 
             revision = linerev.split(" ")[1]
             sys.stderr.write(" (" + revision + ")")
-        except:
+        except Exception:
             pass
 
 
@@ -1937,7 +1936,7 @@ def print_params(params):
             try:
                 revision = linerev.split(" ")[1]
                 sys.stdout.write("%s\n" % revision[1:])
-            except:
+            except Exception:
                 sys.stdout.write("No SVN revision defined\n")
         elif arg == "version":
             sys.stdout.write("%s\n" % GRASS_VERSION)
