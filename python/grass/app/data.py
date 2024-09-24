@@ -183,7 +183,8 @@ def lock_mapset(mapset_path, force_lock_removal, message_callback):
     certain states. Specifically, the function is called when forcibly unlocking the
     mapset.
 
-    Assumes that the runtime is setup (specifically that GISBASE is in the environment).
+    Assumes that the runtime is set up (specifically that GISBASE is in
+    the environment).
     """
     if not os.path.exists(mapset_path):
         raise MapsetLockingException(_("Path '{}' doesn't exist").format(mapset_path))
