@@ -99,12 +99,26 @@ jobs:
           }}:g' .gunittest.cfg > .gunittest.extra.cfg
           cat .gunittest.extra.cfg
 
+      - name: Set up Python
+        if: ${{ matrix.config == 'ubuntu-22.04' }}
+        uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3 # v5.2.0
+        with:
+          python-version: 3.13
+          cache: pip
+          allow-prereleases: true
+
       - name: Get dependencies
         run: |
           sudo apt-get update -y
           sudo apt-get install -y wget git gawk findutils
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
+
+      - name: Install Python dependencies
+        if: ${{ matrix.config == 'ubuntu-22.04' }}
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r .github/workflows/python_requirements.txt
 
       - name: Create installation directory
         run: |
@@ -132,7 +146,6 @@ jobs:
           # TODO: -pedantic-errors here won't compile
           CXXFLAGS: -fPIC
         run: .github/workflows/build_${{ matrix.config }}.sh $HOME/install -Werror
-
       - name: Add the bin directory to PATH
         run: |
           echo "$HOME/install/bin" >> $GITHUB_PATH
