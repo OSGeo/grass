@@ -176,14 +176,14 @@ def lock_mapset(mapset_path, force_lock_removal, message_callback):
     """Acquire a lock for a mapset and return name of new lock file
 
     Raises MapsetLockingException when it is not possible to acquire a lock for the
-    given mapset either becuase of existing lock or due to insufficient permissions.
+    given mapset either because of existing lock or due to insufficient permissions.
     A corresponding localized message is given in the exception.
 
     A *message_callback* is a function which will be called to report messages about
-    certain states. Specifically, the funtion is called when forcibly unlocking the
+    certain states. Specifically, the function is called when forcibly unlocking the
     mapset.
 
-    Assumes that the runtime is setup (GISBASE).
+    Assumes that the runtime is setup (specifically that GISBASE is in the environment).
     """
     if not os.path.exists(mapset_path):
         raise MapsetLockingException(_("Path '{}' doesn't exist").format(mapset_path))
@@ -224,8 +224,9 @@ def lock_mapset(mapset_path, force_lock_removal, message_callback):
             gs.try_remove(lockfile)
     elif ret != 0:
         msg = _(
-            "Unable to properly access '{}'.\nPlease notify your system administrator."
-        ).format(lockfile)
+            "Unable to properly access lock file '{name}'.\n"
+            "Please resolve this with your system administrator."
+        ).format(name=lockfile)
 
     if msg:
         raise MapsetLockingException(msg)
