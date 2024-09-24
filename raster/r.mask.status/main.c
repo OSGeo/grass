@@ -15,7 +15,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+
 #include <grass/gis.h>
+#include <grass/parson.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
@@ -67,6 +69,7 @@ char *min_json_escape(const char *str)
     return tmp2;
 }
 
+// We are using this in shell script style output.
 void json_print_name_mapset(const char *name, const char *mapset)
 {
     // Being paranoid about what is in the name.
@@ -101,24 +104,37 @@ int report_status(struct Parameters *params)
             return 1;
     }
     else if (strcmp(params->format->answer, "json") == 0) {
-        printf("{\"present\":");
+        JSON_Value *root_value = json_value_init_object();
+        JSON_Object *root_object = json_object(root_value);
+        json_object_set_boolean(root_object, "present", present);
+        size_t full_name_size = GNAME_MAX + GMAPSET_MAX + 2;
+        char full[full_name_size];
+        // Mask raster
+        // TODO: Too much mask details here, refactor this to the library.
+        // Specifics about mask name and mapset should be in the library,
+        // but that's better done in #2392 (mask from env variable).
+        // (Same applies to the other formats.)
+        G_strlcat(full, "MASK", full_name_size);
+        G_strlcat(full, "@", full_name_size);
+        G_strlcat(full, G_mapset(), full_name_size);
+        // Is sprintf a better choice for the above?
         if (present)
-            printf("true");
+            json_object_set_string(root_object, "full_name", full);
         else
-            printf("false");
-        printf(",\n\"full_name\":");
-        if (present)
-            json_print_name_mapset("MASK",
-                                   G_mapset()); // Too much mask details here,
-                                                // move this to the library.
-        else
-            printf("null");
-        printf(",\n\"is_reclass_of\": ");
+            json_object_set_null(root_object, "full_name");
+        // Underlying raster if applicable
+        full[0] = '\0';
+        G_strlcat(full, reclass_name, full_name_size);
+        G_strlcat(full, "@", full_name_size);
+        G_strlcat(full, reclass_mapset, full_name_size);
         if (is_mask_reclass)
-            json_print_name_mapset(name, mapset);
+            json_object_set_string(root_object, "is_reclass_of", full);
         else
-            printf("null");
-        printf("}\n");
+            json_object_set_null(root_object, "is_reclass_of");
+        char *serialized_string = json_serialize_to_string_pretty(root_value);
+        puts(serialized_string);
+        json_free_serialized_string(serialized_string);
+        json_value_free(root_value);
     }
     else if (strcmp(params->format->answer, "bash") == 0) {
         printf("present=");
@@ -150,9 +166,8 @@ int report_status(struct Parameters *params)
         else
             printf("null");
         // true if MASK in current mapset and is reclass, false otherwise,
-        // then also outputting mask cats is needed to inform user about the portion of the map
-        // printf("\nmask_reclass: ");
-        // if (is_mask_reclass)
+        // then also outputting mask cats is needed to inform user about the
+        // portion of the map printf("\nmask_reclass: "); if (is_mask_reclass)
         //     printf("true");
         // else
         //     printf("false");
