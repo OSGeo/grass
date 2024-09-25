@@ -5,6 +5,8 @@
  **************************************************************/
 #include <grass/gis.h>
 
+#define ELEMENT_BUFFER_SIZE 80
+
 int I_find_initial(char *group)
 {
     char *element;
@@ -14,10 +16,9 @@ int I_find_initial(char *group)
         return 0;
     }
 
-    element = (char *)G_malloc(80 * sizeof(char));
+    element = (char *)G_malloc(ELEMENT_BUFFER_SIZE * sizeof(char));
 
-    
-    sprintf(element, "group/%s", group);
+    snprintf(element, ELEMENT_BUFFER_SIZE, "group/%s", group);
     file_exists = G_find_file(element, "INIT_EXP", G_mapset()) != NULL;
     G_free(element);
     return file_exists;
