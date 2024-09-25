@@ -107,26 +107,19 @@ int report_status(struct Parameters *params)
         JSON_Value *root_value = json_value_init_object();
         JSON_Object *root_object = json_object(root_value);
         json_object_set_boolean(root_object, "present", present);
-        size_t full_name_size = GNAME_MAX + GMAPSET_MAX + 2;
-        char full[full_name_size];
         // Mask raster
         // TODO: Too much mask details here, refactor this to the library.
         // Specifics about mask name and mapset should be in the library,
         // but that's better done in #2392 (mask from env variable).
         // (Same applies to the other formats.)
-        G_strlcat(full, "MASK", full_name_size);
-        G_strlcat(full, "@", full_name_size);
-        G_strlcat(full, G_mapset(), full_name_size);
+        char *full = G_fully_qualified_name("MASK", G_mapset());
         // Is sprintf a better choice for the above?
         if (present)
             json_object_set_string(root_object, "full_name", full);
         else
             json_object_set_null(root_object, "full_name");
         // Underlying raster if applicable
-        full[0] = '\0';
-        G_strlcat(full, reclass_name, full_name_size);
-        G_strlcat(full, "@", full_name_size);
-        G_strlcat(full, reclass_mapset, full_name_size);
+        full = G_fully_qualified_name(reclass_name, reclass_mapset);
         if (is_mask_reclass)
             json_object_set_string(root_object, "is_reclass_of", full);
         else
@@ -135,6 +128,7 @@ int report_status(struct Parameters *params)
         puts(serialized_string);
         json_free_serialized_string(serialized_string);
         json_value_free(root_value);
+        G_free(full);
     }
     else if (strcmp(params->format->answer, "bash") == 0) {
         printf("present=");
