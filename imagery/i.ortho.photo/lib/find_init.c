@@ -16,7 +16,6 @@ int I_find_initial(char *group)
 
     element = (char *)G_malloc(80 * sizeof(char));
 
-    
     sprintf(element, "group/%s", group);
     file_exists = G_find_file(element, "INIT_EXP", G_mapset()) != NULL;
     G_free(element);
