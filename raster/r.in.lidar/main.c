@@ -104,6 +104,10 @@ int main(int argc, char *argv[])
 
     unsigned int n_filtered;
 
+    G_zero(&region, sizeof(struct Cell_head));
+    G_zero(&input_region, sizeof(struct Cell_head));
+    G_zero(&cellhd, sizeof(struct Cell_head));
+    G_zero(&loc_wind, sizeof(struct Cell_head));
     G_gisinit(argv[0]);
 
     module = G_define_module();

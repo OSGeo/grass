@@ -83,6 +83,9 @@ int main(int argc, char *argv[])
 
     struct Cell_head loc_wind;
 
+    G_zero(&region, sizeof(struct Cell_head));
+    G_zero(&input_region, sizeof(struct Cell_head));
+    G_zero(&loc_wind, sizeof(struct Cell_head));
     G_gisinit(argv[0]);
 
     GModule *module = G_define_module();

@@ -147,6 +147,7 @@ int main(int argc, char *argv[])
     struct Option *trim_opt, *pth_opt;
     struct Flag *scan_flag, *shell_style, *skipline;
 
+    G_zero(&region, sizeof(struct Cell_head));
     G_gisinit(argv[0]);
 
     module = G_define_module();
