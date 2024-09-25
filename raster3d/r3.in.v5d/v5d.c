@@ -2366,9 +2366,7 @@ int v5dWriteCompressedGrid(const v5dstruct *v, int time, int var,
     pos = grid_position(v, time, var);
     if (lseek(v->FileDesc, pos, SEEK_SET) < 0) {
         /* lseek failed, return error */
-        G_warning(
-            _("Error in v5dWrite[Compressed]Grid: seek failed, disk full? %s"),
-            strerror(errno));
+        G_warning(_("Unable to seek: %s"), strerror(errno));
         return 0;
     }
 
