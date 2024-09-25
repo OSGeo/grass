@@ -3865,8 +3865,8 @@ class LayerBook(wx.Notebook):
             layer = int(event.GetString())
         except ValueError:
             try:
-                layer = self.mapDBInfo.layers.keys()[0]
-            except KeyError:
+                layer = list(self.mapDBInfo.layers.keys())[0]
+            except IndexError:
                 return
 
         if self.GetCurrentPage() == self.modifyPanel:
