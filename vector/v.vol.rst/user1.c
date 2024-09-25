@@ -382,6 +382,7 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
         }
         G_message(_("Bitmap mask created"));
     }
+    Vect_destroy_field_info(Fi);
 
     return 1;
 }
