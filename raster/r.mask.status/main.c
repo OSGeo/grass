@@ -3,7 +3,7 @@
  * MODULE:       r.mask.status
  * AUTHORS:      Vaclav Petras
  * PURPOSE:      Report status of raster mask
- * COPYRIGHT:    (C) 2022 by Vaclav Petras and the GRASS Development Team
+ * COPYRIGHT:    (C) 2024 by Vaclav Petras and the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -32,17 +32,17 @@ void parse_parameters(struct Parameters *params, int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("mask"));
     G_add_keyword(_("reclassification"));
-    module->label = _("Reclassify raster map based on category values.");
+    module->label = _("Reports presence or absence of a raster mask");
     module->description =
-        _("Creates a new raster map whose category values are based "
-          "upon a reclassification of the categories in an existing "
-          "raster map.");
+        _("Provides information about present of a 2D raster mask"
+          "as text output or return code");
 
     params->format = G_define_option();
     params->format->key = "format";
     params->format->type = TYPE_STRING;
-    params->format->required = NO;
+    params->format->required = YES;
     params->format->answer = "yaml";
     params->format->options = "yaml,json,bash";
     params->format->description = _("Format for reporting");
@@ -53,8 +53,7 @@ void parse_parameters(struct Parameters *params, int argc, char **argv)
         _("Return code 0 when mask present, 1 otherwise");
     params->like_test->description =
         _("Behave like the test utility, 0 for true, 1 for false, no output");
-    // flags.like_test->guisection = _("");
-    // suppress_required
+    // suppress_required is not required given the default value for format.
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -69,14 +68,8 @@ int report_status(struct Parameters *params)
     char reclass_mapset[GMAPSET_MAX];
 
     bool is_mask_reclass;
-    // TODO: Review need the new function. Can it be made more universal now?
-    // (to avoid need to repeat MASK here anyway)
     bool present = Rast_mask_status(name, mapset, &is_mask_reclass,
                                     reclass_name, reclass_mapset);
-    // bool present = Rast_mask_present(name, mapset);  // This would check the
-    // map presence rather than the automasking state in the library.
-
-    // printf("%s", Rast_mask_info());
 
     // This does not have to be exclusive with the printing, but perhaps there
     // is a different boolean flag which does the return code and printing and
@@ -89,10 +82,7 @@ int report_status(struct Parameters *params)
     }
 
     // Mask raster
-    // TODO: Too much mask details here, refactor this to the library.
-    // Specifics about mask name and mapset should be in the library,
-    // but that's likely better done in #2392 (mask from env variable).
-    char *full_mask = G_fully_qualified_name("MASK", G_mapset());
+    char *full_mask = G_fully_qualified_name(name, mapset);
     // Underlying raster if applicable
     char *full_underlying = NULL;
     if (is_mask_reclass)
@@ -131,6 +121,7 @@ int report_status(struct Parameters *params)
         printf("\n");
     }
     else {
+        // Using YAML as the human-readable default format. How does that work?
         printf("present: ");
         if (present)
             printf("true");
@@ -141,8 +132,12 @@ int report_status(struct Parameters *params)
             printf("|-\n  %s", full_mask);
         else
             printf("null");
+        // Null values in YAML can be an empty (no) value (rather than null),
+        // so we could use that.
         printf("\nis_reclass_of: ");
         // Using block scalar with |- to avoid need for escaping.
+        // Alternatively, we could check mapset naming limits against YAML
+        // escaping needs for different types of strings.
         if (is_mask_reclass)
             printf("|-\n  %s", full_underlying);
         else

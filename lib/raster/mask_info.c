@@ -3,7 +3,7 @@
  *
  * \brief Raster Library - Get mask information
  *
- * (C) 1999-2022 by Vaclav Petras and the GRASS Development Team
+ * (C) 1999-2024 by Vaclav Petras and the GRASS Development Team
  *
  * This program is free software under the GNU General Public
  * License (>=v2). Read the file COPYING that comes with GRASS
@@ -67,6 +67,10 @@ bool Rast_mask_status(char *name, char *mapset, bool *is_mask_reclass,
         if (present) {
             *is_mask_reclass = Rast_is_reclass("MASK", G_mapset(), reclass_name,
                                                reclass_mapset) > 0;
+            // The original mask values are overwritten, put back the original
+            // values, so that we can report them to the caller.
+            strcpy(name, "MASK");
+            strcpy(mapset, G_mapset());
         }
         else {
             *is_mask_reclass = false;
@@ -89,14 +93,14 @@ bool Rast_mask_status(char *name, char *mapset, bool *is_mask_reclass,
  * the name and mapset of the underlying reclassed raster are returned.
  *
  * The name and mapset is written to the parameter which need to be defined
- * with a suffient size, least as `char name[GNAME_MAX], mapset[GMAPSET_MAX]`.
+ * with a sufficient size, least as `char name[GNAME_MAX], mapset[GMAPSET_MAX]`.
  *
  * When the masking is not active, -1 is returned and name and mapset are
  * undefined. When the masking is active, 1 is returned and name and mapset
  * will hold the name and mapset of the underlying raster.
  *
  * @param[out] name Name of the raster map used as mask
- * @param[out] mapset Mapset name of the map
+ * @param[out] mapset Name of the map's mapset
  *
  * @return 1 if mask is present, -1 otherwise
  */
