@@ -891,8 +891,8 @@ class DispMapPage(TitledPage):
             if p.returncode == 0:
                 print("returncode = ", str(p.returncode))
                 self.parent.Map.region = self.parent.Map.GetRegion()
-        except:
-            pass
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
     def OnTgtRastSelection(self, event):
         """Source map to display selected"""
