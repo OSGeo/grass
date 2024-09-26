@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.net.connectivity
@@ -24,12 +23,11 @@
 #include <grass/dbmi.h>
 #include <grass/neta.h>
 
-
 int main(int argc, char *argv[])
 {
     struct Map_info In, Out;
     struct line_cats *Cats;
-    struct GModule *module;	/* GRASS module for parsing arguments */
+    struct GModule *module; /* GRASS module for parsing arguments */
     struct Option *map_in, *map_out;
     struct Option *afield_opt, *nfield_opt, *abcol, *afcol, *ncol;
     struct Option *catset1_opt, *whereset1_opt;
@@ -45,15 +43,16 @@ int main(int argc, char *argv[])
     dglGraph_s vg;
 
     /* initialize GIS environment */
-    G_gisinit(argv[0]);		/* reads grass env, stores program name to G_program_name() */
+    G_gisinit(
+        argv[0]); /* reads grass env, stores program name to G_program_name() */
 
     /* initialize module */
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("network"));
     G_add_keyword(_("connectivity"));
-    module->description =
-	_("Computes vertex connectivity between two sets of nodes in the network.");
+    module->description = _("Computes vertex connectivity between two sets of "
+                            "nodes in the network.");
 
     /* Define the different options as defined in gis.h */
     map_in = G_define_standard_option(G_OPT_V_INPUT);
@@ -74,7 +73,7 @@ int main(int argc, char *argv[])
     afcol->key = "arc_column";
     afcol->required = NO;
     afcol->description =
-	_("Arc forward/both direction(s) cost column (number)");
+        _("Arc forward/both direction(s) cost column (number)");
     afcol->guisection = _("Cost");
 
     abcol = G_define_standard_option(G_OPT_DB_COLUMN);
@@ -99,7 +98,7 @@ int main(int argc, char *argv[])
     whereset1_opt = G_define_standard_option(G_OPT_DB_WHERE);
     whereset1_opt->key = "set1_where";
     whereset1_opt->label =
-	_("Set1 WHERE conditions of SQL statement without 'where' keyword");
+        _("Set1 WHERE conditions of SQL statement without 'where' keyword");
     whereset1_opt->guisection = _("Set1");
 
     catset2_opt = G_define_standard_option(G_OPT_V_CATS);
@@ -110,49 +109,46 @@ int main(int argc, char *argv[])
     whereset2_opt = G_define_standard_option(G_OPT_DB_WHERE);
     whereset2_opt->key = "set2_where";
     whereset2_opt->label =
-	_("Set2 WHERE conditions of SQL statement without 'where' keyword");
+        _("Set2 WHERE conditions of SQL statement without 'where' keyword");
     whereset2_opt->guisection = _("Set2");
 
     /* options and flags parser */
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     /* TODO: make an option for this */
     mask_type = GV_LINE | GV_BOUNDARY;
 
     Cats = Vect_new_cats_struct();
 
-    Vect_check_input_output_name(map_in->answer, map_out->answer,
-				 G_FATAL_EXIT);
+    Vect_check_input_output_name(map_in->answer, map_out->answer, G_FATAL_EXIT);
 
     Vect_set_open_level(2);
 
     if (1 > Vect_open_old(&In, map_in->answer, ""))
-	G_fatal_error(_("Unable to open vector map <%s>"), map_in->answer);
+        G_fatal_error(_("Unable to open vector map <%s>"), map_in->answer);
 
     with_z = Vect_is_3d(&In);
 
     if (0 > Vect_open_new(&Out, map_out->answer, with_z)) {
-	Vect_close(&In);
-	G_fatal_error(_("Unable to create vector map <%s>"), map_out->answer);
+        Vect_close(&In);
+        G_fatal_error(_("Unable to create vector map <%s>"), map_out->answer);
     }
 
     /* parse filter option and select appropriate lines */
     afield = Vect_get_field_number(&In, afield_opt->answer);
     nfield = Vect_get_field_number(&In, nfield_opt->answer);
 
-    if (NetA_initialise_varray
-	(&In, nfield, GV_POINT, whereset1_opt->answer,
-	 catset1_opt->answer, &varray_set1) <= 0) {
-	G_fatal_error(_("No features for %s selected. "
-			"Please check options '%s', '%s'."),
-			"set1", catset1_opt->key, whereset1_opt->key);
+    if (NetA_initialise_varray(&In, nfield, GV_POINT, whereset1_opt->answer,
+                               catset1_opt->answer, &varray_set1) <= 0) {
+        G_fatal_error(_("No features for %s selected. "
+                        "Please check options '%s', '%s'."),
+                      "set1", catset1_opt->key, whereset1_opt->key);
     }
-    if (NetA_initialise_varray
-	(&In, nfield, GV_POINT, whereset2_opt->answer,
-	 catset2_opt->answer, &varray_set2) <= 0) {
-	G_fatal_error(_("No features for %s selected. "
-			"Please check options '%s', '%s'."),
-			"set2", catset2_opt->key, whereset2_opt->key);
+    if (NetA_initialise_varray(&In, nfield, GV_POINT, whereset2_opt->answer,
+                               catset2_opt->answer, &varray_set2) <= 0) {
+        G_fatal_error(_("No features for %s selected. "
+                        "Please check options '%s', '%s'."),
+                      "set2", catset2_opt->key, whereset2_opt->key);
     }
 
     set1_list = Vect_new_list();
@@ -164,10 +160,10 @@ int main(int argc, char *argv[])
     nnodes = Vect_get_num_nodes(&In);
 
     if (set1_list->n_values == 0)
-	G_fatal_error(_("%s is empty"), "set1");
+        G_fatal_error(_("%s is empty"), "set1");
 
     if (set2_list->n_values == 0)
-	G_fatal_error(_("%s is empty"), "set2");
+        G_fatal_error(_("%s is empty"), "set2");
 
     Vect_copy_head_data(&In, &Out);
     Vect_hist_copy(&In, &Out);
@@ -175,31 +171,32 @@ int main(int argc, char *argv[])
 
     if (0 != Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
                                   abcol->answer, ncol->answer, 0, 0))
-        G_fatal_error(_("Unable to build graph for vector map <%s>"), Vect_get_full_name(&In));
+        G_fatal_error(_("Unable to build graph for vector map <%s>"),
+                      Vect_get_full_name(&In));
 
     graph = Vect_net_get_graph(&In);
 
     /*build new graph */
     if (ncol->answer) {
-	node_costs = (int *)G_calloc(nnodes + 1, sizeof(int));
-	if (!node_costs)
-	    G_fatal_error(_("Out of memory"));
-	NetA_get_node_costs(&In, nfield, ncol->answer, node_costs);
-	nedges = NetA_split_vertices(graph, &vg, node_costs);
-	G_free(node_costs);
+        node_costs = (int *)G_calloc(nnodes + 1, sizeof(int));
+        if (!node_costs)
+            G_fatal_error(_("Out of memory"));
+        NetA_get_node_costs(&In, nfield, ncol->answer, node_costs);
+        nedges = NetA_split_vertices(graph, &vg, node_costs);
+        G_free(node_costs);
     }
     else
-	nedges = NetA_split_vertices(graph, &vg, NULL);
+        nedges = NetA_split_vertices(graph, &vg, NULL);
     graph = &vg;
 
     for (i = 0; i < set1_list->n_values; i++)
-	set1_list->value[i] = set1_list->value[i] * 2;	/*out vertex */
+        set1_list->value[i] = set1_list->value[i] * 2; /*out vertex */
     for (i = 0; i < set2_list->n_values; i++)
-	set2_list->value[i] = set2_list->value[i] * 2 - 1;	/*in vertex */
+        set2_list->value[i] = set2_list->value[i] * 2 - 1; /*in vertex */
 
     flow = (int *)G_calloc(nedges + 1, sizeof(int));
     if (!flow)
-	G_fatal_error(_("Out of memory"));
+        G_fatal_error(_("Out of memory"));
 
     total_flow = NetA_flow(graph, set1_list, set2_list, flow);
     G_debug(3, "Connectivity: %d", total_flow);
@@ -208,7 +205,7 @@ int main(int argc, char *argv[])
 
     /*TODO: copy old points */
     for (i = 0; i < cut->n_values; i++)
-	NetA_add_point_on_node(&In, &Out, cut->value[i], Cats);
+        NetA_add_point_on_node(&In, &Out, cut->value[i], Cats);
 
     Vect_destroy_list(cut);
 

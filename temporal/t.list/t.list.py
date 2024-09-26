@@ -52,7 +52,7 @@
 # % guisection: Formatting
 # % required: no
 # % multiple: yes
-# % options: id,name,band_reference,creator,mapset,number_of_maps,creation_time,start_time,end_time,interval,north,south,west,east,granularity
+# % options: id,name,semantic_label,creator,mapset,number_of_maps,creation_time,start_time,end_time,interval,north,south,west,east,granularity
 # % answer: id
 # %end
 
@@ -64,7 +64,7 @@
 # % guisection: Selection
 # % required: no
 # % multiple: yes
-# % options: id,name,band_reference,creator,mapset,number_of_maps,creation_time,start_time,end_time,north,south,west,east,granularity,all
+# % options: id,name,semantic_label,creator,mapset,number_of_maps,creation_time,start_time,end_time,north,south,west,east,granularity,all
 # % answer: id
 # %end
 
@@ -87,9 +87,9 @@
 # % guisection: Formatting
 # %end
 
-from __future__ import print_function
-import grass.script as gscript
 import sys
+
+import grass.script as gs
 
 ############################################################################
 
@@ -104,7 +104,7 @@ def main():
     columns = options["columns"]
     order = options["order"]
     where = options["where"]
-    separator = gscript.separator(options["separator"])
+    separator = gs.separator(options["separator"])
     outpath = options["output"]
     colhead = flags["c"]
 
@@ -116,7 +116,7 @@ def main():
     dbif.connect()
     first = True
 
-    if gscript.verbosity() > 0 and not outpath:
+    if gs.verbosity() > 0 and not outpath:
         sys.stderr.write("----------------------------------------------\n")
 
     if outpath:
@@ -140,18 +140,20 @@ def main():
                 rows = stds_list[key]
 
                 if rows:
-                    if gscript.verbosity() > 0 and not outpath:
+                    if gs.verbosity() > 0 and not outpath:
                         if issubclass(sp.__class__, tgis.AbstractMapDataset):
                             sys.stderr.write(
                                 _(
-                                    "Time stamped %s maps with %s available in mapset <%s>:\n"
+                                    "Time stamped %s maps with %s available in mapset "
+                                    "<%s>:\n"
                                 )
                                 % (sp.get_type(), time, key)
                             )
                         else:
                             sys.stderr.write(
                                 _(
-                                    "Space time %s datasets with %s available in mapset <%s>:\n"
+                                    "Space time %s datasets with %s available in "
+                                    "mapset <%s>:\n"
                                 )
                                 % (sp.get_new_map_instance(None).get_type(), time, key)
                             )
@@ -191,5 +193,5 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
     main()

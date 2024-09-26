@@ -53,6 +53,7 @@
 # % required: create, edit
 # % requires: base, create
 # %end
+from __future__ import annotations
 
 import os
 
@@ -73,35 +74,50 @@ def main():
     set_gui_path()
 
     from core.render import Map
-    from mapdisp.frame import MapFrame
+    from core.globalvar import ICONDIR
+    from mapdisp.frame import MapPanel
+    from gui_core.mapdisp import FrameMixin
     from mapdisp.main import DMonGrassInterface
     from core.settings import UserSettings
 
     # define classes which needs imports as local
     # for longer definitions, a separate file would be a better option
-    class RDigitMapFrame(MapFrame):
+    class RDigitMapDisplay(FrameMixin, MapPanel):
+        """Map display for wrapping map panel with r.digit mathods and frame methods"""
+
         def __init__(
             self,
+            parent,
             new_map=None,
             base_map=None,
             edit_map=None,
             map_type=None,
         ):
-            MapFrame.__init__(
-                self,
-                parent=None,
-                Map=Map(),
-                giface=DMonGrassInterface(None),
-                title=_("Raster Digitizer - GRASS GIS"),
-                size=(850, 600),
+            MapPanel.__init__(
+                self, parent=parent, Map=Map(), giface=DMonGrassInterface(None)
             )
+
+            # set system icon
+            parent.SetIcon(
+                wx.Icon(os.path.join(ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO)
+            )
+
+            # bindings
+            parent.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
+
+            # extend shortcuts and create frame accelerator table
+            self.shortcuts_table.append(
+                (self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11)
+            )
+            self._initShortcuts()
+
             # this giface issue not solved yet, we must set mapframe afterwards
             self._giface._mapframe = self
             self._giface.mapCreated.connect(self.OnMapCreated)
             self._mapObj = self.GetMap()
 
             # load raster map
-            self._addLayer(name=new_map if new_map else edit_map)
+            self._addLayer(name=new_map or edit_map)
 
             # switch toolbar
             self.AddToolbar("rdigit", fixed=True)
@@ -122,6 +138,15 @@ def main():
             else:
                 rdigit._mapSelectionCombo.SetSelection(n=1)
                 rdigit.OnMapSelection()
+            # use Close instead of QuitRDigit for standalone tool
+            self.rdigit.quitDigitizer.disconnect(self.QuitRDigit)
+            self.rdigit.quitDigitizer.connect(lambda: self.Close())
+
+            # add Map Display panel to Map Display frame
+            sizer = wx.BoxSizer(wx.VERTICAL)
+            sizer.Add(self, proportion=1, flag=wx.EXPAND)
+            parent.SetSizer(sizer)
+            parent.Layout()
 
         def _addLayer(self, name, ltype="raster"):
             """Add layer into map
@@ -139,11 +164,12 @@ def main():
                 render=True,
             )
 
-        def OnMapCreated(self, name, ltype):
+        def OnMapCreated(self, name, ltype, add: bool | None = None):
             """Add new created raster layer into map
 
             :param str name: map name
             :param str ltype: layer type
+            :param bool add: unused
             """
             self._mapObj.Clean()
             self._addLayer(name=name, ltype=ltype)
@@ -167,31 +193,25 @@ def main():
 
         if not edit_map:
             gs.fatal(
-                _(
-                    "Raster map <{}> not found in current mapset.".format(
-                        options["edit"],
-                    ),
+                _("Raster map <{}> not found in current mapset.").format(
+                    options["edit"],
                 ),
             )
         else:
             kwargs["edit_map"] = edit_map
-    else:
-        if kwargs["base_map"]:
-            base_map = gs.find_file(
-                name=kwargs["base_map"],
-                element="raster",
-                mapset=mapset,
-            )["fullname"]
-            if not base_map:
-                gs.fatal(
-                    _(
-                        "Base raster map <{}> not found in "
-                        "current mapset.".format(
-                            options["base"],
-                        ),
-                    ),
-                )
-            kwargs["base_map"] = base_map
+    elif kwargs["base_map"]:
+        base_map = gs.find_file(
+            name=kwargs["base_map"],
+            element="raster",
+            mapset=mapset,
+        )["fullname"]
+        if not base_map:
+            gs.fatal(
+                _("Base raster map <{}> not found in current mapset.").format(
+                    options["base"],
+                ),
+            )
+        kwargs["base_map"] = base_map
 
     # allow immediate rendering
     driver = UserSettings.Get(
@@ -205,7 +225,14 @@ def main():
         os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
 
     app = wx.App()
-    frame = RDigitMapFrame(**kwargs)
+    frame = wx.Frame(
+        None,
+        id=wx.ID_ANY,
+        size=(850, 600),
+        style=wx.DEFAULT_FRAME_STYLE,
+        title=_("Raster Digitizer - GRASS GIS"),
+    )
+    frame = RDigitMapDisplay(parent=frame, **kwargs)
     frame.Show()
 
     app.MainLoop()

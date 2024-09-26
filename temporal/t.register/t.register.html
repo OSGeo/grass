@@ -22,6 +22,13 @@ database in a different stds, there is no need to pass information regarding
 start and end time, <em>t.register</em> will read timestamps from the temporal
 database (i.e., in this case only passing map names will be enough).
 <p>
+Maps can be specified both with their fully qualified map name, meaning e.g.
+<i>map@mapset</i> and without the mapset name included. If the mapset
+name is not provided in the input, <em>t.register</em> will look for
+the given map on the current search path and assign the matching mapset.
+If the map is not found on the current search path the module will fail.
+Thus, registering maps with fully qualified map name is slightly faster.
+<p>
 The module <em>t.register</em> supports absolute and relative time. The absolute temporal type
 refers to a fixed date while the relative temporal type refers to data
 without fixed timestamps (e.g., sequential maps used to calculate
@@ -34,8 +41,8 @@ increment are mutually exclusive. The user can register single maps or a
 list of maps at once. Maps can be registered in several space time
 datasets using the same timestamp. For the case of vector time series,
 the user can also register a single vector map connected to different
-layers representing time steps using the <b>map:layer</b> notation (See 
-example below). 
+layers representing time steps using the <b>map:layer</b> notation (See
+example below).
 <p>
 The <em>increment</em> option and the <b>-i</b> flag (to create time intervals)
 work only in conjunction with the <b>start</b> option.
@@ -113,14 +120,26 @@ prec_5|2002-01-01|2002-04-01
 prec_6|2002-04-01|2002-07-01
 </pre></div>
 
-<h3>Support for band references</h3>
+<p>
+Same as above but with fully qualified map names
+(no support for <em>increment</em> option nor <b>-i</b> flag):
+<div class="code"><pre>
+prec_1@PERMANENT|2001-01-01|2001-04-01
+prec_2@PERMANENT|2001-04-01|2001-07-01
+prec_3@PERMANENT|2001-07-01|2001-10-01
+prec_4@PERMANENT|2001-10-01|2002-01-01
+prec_5@PERMANENT|2002-01-01|2002-04-01
+prec_6@PERMANENT|2002-04-01|2002-07-01
+</pre></div>
 
-For more information about band references and image collections
-see <em><a href="g.bands.html">g.bands</a></em> module.
+<h3>Support for semantic labels</h3>
+
+For more information about semantic labels and image collections
+see <em><a href="i.band.library.html">i.band.library</a></em> module.
 
 <p>
 Specification of map names and absolute start time (datetime) of the time
-instances. The last column indicates related band references.
+instances. The last column indicates related semantic label.
 
 <div class="code"><pre>
 T33UYP_20190331T094039_B01|2019-03-31 09:40:39|S2_1
@@ -137,16 +156,16 @@ T33UYP_20190331T094039_B03|2019-03-31 09:40:39|S2_3
 T33UYP_20190331T094039_B09|2019-03-31 09:40:39|S2_9
 </pre></div>
 
-In this case <em>t.register</em> assignes to given raster maps band
-references similarly as
-<em><a href="i.band.html">i.band</a></em> does.
+In this case <em>t.register</em> assigns to given raster maps
+a semantic label similarly as
+<em><a href="r.semantic.label.html">r.semantic.label</a></em> does.
 
 Such registered raster maps is possible
-to <a href="t.rast.list.html#filtering-the-result-by-band-references">filter
-by a band references</a>.
+to <a href="t.rast.list.html#filtering-the-result-by-semantic-label">filter
+by a semantic label</a>.
 
 <p>
-Please note that raster maps with band references assigned can be
+Please note that raster maps with semantic labels assigned can be
 registered only in STRDS created in TGIS DB version 3 or
 higher. <i>Older versions of TGIS DB are not supported.</i> TGIS DB
 version can be checked <em><a href="t.connect.html">t.connect</a></em>
@@ -261,7 +280,7 @@ by accepting their
 <a href="http://eca.knmi.nl/download/ensembles/ensembles.php">Terms of use</a>.
 
 <div class="code"><pre>
-# import E-OBS V12 into a lat-long location (alternatively, use r.external)
+# import E-OBS V12 into a lat-long project (alternatively, use r.external)
 r.in.gdal -oe input=tg_0.25deg_reg_1950-1964_v12.0.nc \
   output=temperature_mean offset=0
 r.in.gdal -oe input=tg_0.25deg_reg_1965-1979_v12.0.nc \
@@ -308,9 +327,3 @@ t.register -i type=raster input=temperature_mean_1950_2015_daily \
 <h2>AUTHOR</h2>
 
 S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
-

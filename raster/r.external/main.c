@@ -1,10 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       r.external
- *               
+ *
  * AUTHOR(S):    Glynn Clements, based on r.in.gdal
- *               List GDAL layers by Martin Landa <landa.martin gmail.com> 8/2011
+ *               List GDAL layers by Martin Landa <landa.martin gmail.com>
+ *               8/2011
  *
  * PURPOSE:      Link raster map into GRASS utilizing the GDAL library.
  *
@@ -16,6 +16,7 @@
  *
  *****************************************************************************/
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <math.h>
@@ -41,10 +42,10 @@ int main(int argc, char *argv[])
     GDALRasterBandH hBand;
     struct GModule *module;
     struct {
-	struct Option *input, *source, *output, *band, *title;
+        struct Option *input, *source, *output, *band, *title;
     } parm;
     struct {
-	struct Flag *o, *j, *f, *e, *h, *v, *t, *a, *r;
+        struct Flag *o, *j, *f, *e, *h, *v, *t, *a, *m, *r;
     } flag;
     int min_band, max_band, band;
     struct band_info info;
@@ -58,7 +59,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("import"));
     G_add_keyword(_("external"));
     module->description =
-	_("Links GDAL supported raster data as a pseudo GRASS raster map.");
+        _("Links GDAL supported raster data as a pseudo GRASS raster map.");
 
     parm.input = G_define_standard_option(G_OPT_F_INPUT);
     parm.input->description = _("Name of raster file to be linked");
@@ -72,9 +73,9 @@ int main(int argc, char *argv[])
     parm.source->type = TYPE_STRING;
     parm.source->key_desc = "name";
     parm.source->guisection = _("Input");
-    
+
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
-    
+
     parm.band = G_define_option();
     parm.band->key = "band";
     parm.band->type = TYPE_INTEGER;
@@ -98,26 +99,26 @@ int main(int argc, char *argv[])
 
     flag.o = G_define_flag();
     flag.o->key = 'o';
-    flag.o->label =
-	_("Override projection check (use current location's projection)");
-    flag.o->description =
-	_("Assume that the dataset has same projection as the current location");
+    flag.o->label = _("Override projection check (use current project's CRS)");
+    flag.o->description = _("Assume that the dataset has the same coordinate "
+                            "reference system as the current project");
 
     flag.j = G_define_flag();
     flag.j->key = 'j';
-    flag.j->description =
-	_("Perform projection check only and exit");
+    flag.j->description = _("Perform projection check only and exit");
     flag.j->suppress_required = YES;
 
     flag.e = G_define_flag();
     flag.e->key = 'e';
     flag.e->label = _("Extend region extents based on new dataset");
-    flag.e->description = _("Also updates the default region if in the PERMANENT mapset");
+    flag.e->description =
+        _("Also updates the default region if in the PERMANENT mapset");
 
     flag.a = G_define_flag();
     flag.a->key = 'a';
     flag.a->label = _("Auto-adjustment for lat/lon");
-    flag.a->description = _("Attempt to fix small precision errors in resolution and extents");
+    flag.a->description =
+        _("Attempt to fix small precision errors in resolution and extents");
 
     flag.h = G_define_flag();
     flag.h->key = 'h';
@@ -135,19 +136,26 @@ int main(int argc, char *argv[])
     flag.t->guisection = _("Print");
     flag.t->suppress_required = YES;
 
+    flag.m = G_define_flag();
+    flag.m->key = 'm';
+    flag.m->label = _("Read data range from metadata");
+    flag.m->description = _(
+        "WARNING: metadata are sometimes approximations with wrong data range");
+
     flag.r = G_define_flag();
     flag.r->key = 'r';
     flag.r->label = _("Create fast link without data range");
-    flag.r->description = _("WARNING: some modules do not work correctly without known data range");
+    flag.r->description = _(
+        "WARNING: some modules do not work correctly without known data range");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     GDALAllRegister();
 
     if (flag.f->answer) {
-	list_formats();
-	exit(EXIT_SUCCESS);
+        list_formats();
+        exit(EXIT_SUCCESS);
     }
 
     input = parm.input->answer;
@@ -156,42 +164,43 @@ int main(int argc, char *argv[])
 
     flip = 0;
     if (flag.h->answer)
-	flip |= FLIP_H;
+        flip |= FLIP_H;
     if (flag.v->answer)
-	flip |= FLIP_V;
+        flip |= FLIP_V;
 
     if (parm.title->answer) {
-	title = G_store(parm.title->answer);
-	G_strip(title);
+        title = G_store(parm.title->answer);
+        G_strip(title);
     }
     else
-	title = NULL;
+        title = NULL;
 
     if (!input && !source)
-	G_fatal_error(_("%s= or %s= must be given"),
-		      parm.input->key, parm.source->key);
+        G_fatal_error(_("%s= or %s= must be given"), parm.input->key,
+                      parm.source->key);
 
     if (input && source)
-	G_fatal_error(_("%s= and %s= are mutually exclusive"),
-		      parm.input->key, parm.source->key);
-    
+        G_fatal_error(_("%s= and %s= are mutually exclusive"), parm.input->key,
+                      parm.source->key);
+
     if (input && !G_is_absolute_path(input)) {
-	char path[GPATH_MAX], *cwd;
-	cwd = CPLGetCurrentDir();
-	if (!cwd)
-	    G_fatal_error(_("Unable to get current working directory"));
-	
-	G_snprintf(path, GPATH_MAX, "%s%c%s", cwd, HOST_DIRSEP, input);
-	input = G_store(path);
-	CPLFree(cwd);
+        char path[GPATH_MAX], *cwd;
+
+        cwd = CPLGetCurrentDir();
+        if (!cwd)
+            G_fatal_error(_("Unable to get current working directory"));
+
+        snprintf(path, GPATH_MAX, "%s%c%s", cwd, HOST_DIRSEP, input);
+        input = G_store(path);
+        CPLFree(cwd);
     }
 
     if (!input)
-	input = source;
+        input = source;
 
     hDS = GDALOpen(input, GA_ReadOnly);
     if (hDS == NULL)
-	return 1;
+        return 1;
 
     setup_window(&cellhd, hDS, &flip);
 
@@ -205,68 +214,71 @@ int main(int argc, char *argv[])
     check_projection(&cellhd, hDS, NULL, 0, flag.o->answer, flag.j->answer);
 
     if (flag.a->answer && cellhd.proj == PROJECTION_LL) {
-	G_adjust_Cell_head(&cellhd, 1, 1);
-	G_adjust_window_ll(&cellhd);
+        G_adjust_Cell_head(&cellhd, 1, 1);
+        G_adjust_window_ll(&cellhd);
     }
 
     Rast_set_window(&cellhd);
 
     if (parm.band->answer)
-	min_band = max_band = atoi(parm.band->answer);
+        min_band = max_band = atoi(parm.band->answer);
     else
-	min_band = 1, max_band = GDALGetRasterCount(hDS);
+        min_band = 1, max_band = GDALGetRasterCount(hDS);
 
     G_verbose_message(_("Proceeding with import..."));
 
     if (max_band > min_band) {
-	if (I_find_group(output) == 1)
-	    G_warning(_("Imagery group <%s> already exists and will be overwritten."), output);
-	I_init_group_ref(&reference);
+        if (I_find_group(output) == 1)
+            G_warning(
+                _("Imagery group <%s> already exists and will be overwritten."),
+                output);
+        I_init_group_ref(&reference);
     }
 
     info.have_minmax = !flag.r->answer;
+    if (info.have_minmax && flag.m->answer)
+        info.have_minmax = 2;
     for (band = min_band; band <= max_band; band++) {
-	char *output2, *title2 = NULL;
+        char *output2, *title2 = NULL;
 
-	G_message(_("Reading band %d of %d..."),
-		  band, GDALGetRasterCount( hDS ));
+        G_message(_("Reading band %d of %d..."), band, GDALGetRasterCount(hDS));
 
-	hBand = GDALGetRasterBand(hDS, band);
-	if (!hBand)
-	    G_fatal_error(_("Selected band (%d) does not exist"), band);
+        hBand = GDALGetRasterBand(hDS, band);
+        if (!hBand)
+            G_fatal_error(_("Selected band (%d) does not exist"), band);
 
-	if (max_band > min_band) {
-	    G_asprintf(&output2, "%s.%d", output, band);
-	    if (title)
-		G_asprintf(&title2, "%s (band %d)", title, band);
-	    G_debug(1, "Adding raster map <%s> to group <%s>", output2, output);
-	    I_add_file_to_group_ref(output2, G_mapset(), &reference);
-	}
-	else {
-	    output2 = G_store(output);
-	    if (title)
-		title2 = G_store(title);
-	}
+        if (max_band > min_band) {
+            G_asprintf(&output2, "%s.%d", output, band);
+            if (title)
+                G_asprintf(&title2, "%s (band %d)", title, band);
+            G_debug(1, "Adding raster map <%s> to group <%s>", output2, output);
+            I_add_file_to_group_ref(output2, G_mapset(), &reference);
+        }
+        else {
+            output2 = G_store(output);
+            if (title)
+                title2 = G_store(title);
+        }
 
-	query_band(hBand, output2, &cellhd, &info);
-	create_map(input, band, output2, &cellhd, &info, title, flip);
+        query_band(hBand, output2, &cellhd, &info);
+        create_map(input, band, output2, &cellhd, &info, title, flip);
         transfer_colormap(hBand, output2);
 
-	G_free(output2);
-	G_free(title2);
+        G_free(output2);
+        G_free(title2);
     }
 
     /* close the GDALDataset to avoid segfault in libgdal */
     GDALClose(hDS);
 
     if (flag.e->answer)
-	update_default_window(&cellhd);
+        update_default_window(&cellhd);
 
     /* Create the imagery group if multiple bands are imported */
     if (max_band > min_band) {
-    	I_put_group_ref(output, &reference);
-	I_put_group(output);
-	G_message(_("Imagery group <%s> created"), output);
+        I_put_group_ref(output, &reference);
+        I_put_group(output);
+        G_message(_("Imagery group <%s> created"), output);
     }
 
     exit(EXIT_SUCCESS);

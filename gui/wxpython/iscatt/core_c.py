@@ -12,7 +12,6 @@ This program is free software under the GNU General Public License
 """
 
 import sys
-import six
 import numpy as np
 from multiprocessing import Process, Queue
 
@@ -48,7 +47,6 @@ def Rasterize(polygon, rast, region, value):
 
 
 def ApplyColormap(vals, vals_mask, colmap, out_vals):
-
     c_uint8_p = POINTER(c_uint8)
 
     vals_p = vals.ctypes.data_as(c_uint8_p)
@@ -60,7 +58,7 @@ def ApplyColormap(vals, vals_mask, colmap, out_vals):
     colmap_p = colmap.ctypes.data_as(c_uint8_p)
     out_vals_p = out_vals.ctypes.data_as(c_uint8_p)
 
-    vals_size = vals.reshape((-1)).shape[0]
+    vals_size = vals.reshape(-1).shape[0]
     I_apply_colormap(vals_p, vals_mask_p, vals_size, colmap_p, out_vals_p)
 
 
@@ -108,14 +106,13 @@ def ComputeScatts(
 
 
 def _memmapToFileNames(data):
-
-    for k, v in six.iteritems(data):
+    for k, v in data.items():
         if "np_vals" in v:
             data[k]["np_vals"] = v["np_vals"].filename()
 
 
 def _fileNamesToMemmap(data):
-    for k, v in six.iteritems(data):
+    for k, v in data.items():
         if "np_vals" in v:
             data[k]["np_vals"] = np.memmap(filename=v["np_vals"])
 
@@ -145,7 +142,6 @@ def _computeScattsProcess(
     cats_rasts,
     output_queue,
 ):
-
     _fileNamesToMemmap(scatts)
     _fileNamesToMemmap(scatt_conds)
 
@@ -198,8 +194,8 @@ def _regionToCellHead(region):
         "ewres": "ew_res",
     }
 
-    for k, v in six.iteritems(region):
-        if k in ["rows", "cols", "cells", "zone"]:  # zone added in r65224
+    for k, v in region.items():
+        if k in {"rows", "cols", "cells", "zone"}:  # zone added in r65224
             v = int(v)
         else:
             v = float(v)
@@ -213,7 +209,6 @@ def _regionToCellHead(region):
 
 
 def _stringListToCharArr(str_list):
-
     arr = c_char_p * len(str_list)
     char_arr = arr()
     for i, st in enumerate(str_list):
@@ -226,18 +221,17 @@ def _stringListToCharArr(str_list):
 
 
 def _getComputationStruct(cats, cats_rasts, cats_type, n_bands):
-
     sccats = struct_scCats()
     I_sc_init_cats(pointer(sccats), c_int(n_bands), c_int(cats_type))
 
     refs = []
     cats_rasts_core = []
 
-    for cat_id, scatt_ids in six.iteritems(cats):
+    for cat_id, scatt_ids in cats.items():
         cat_c_id = I_sc_add_cat(pointer(sccats))
         cats_rasts_core.append(cats_rasts[cat_id])
 
-        for scatt_id, dt in six.iteritems(scatt_ids):
+        for scatt_id, dt in scatt_ids.items():
             # if key is missing condition is always True (full scatter plor is
             # computed)
             vals = dt["np_vals"]

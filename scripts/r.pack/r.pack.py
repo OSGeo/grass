@@ -94,10 +94,12 @@ def main():
             vrt = os.path.join(map_file["file"], "vrt")
             if os.path.exists(vrt):
                 with open(vrt, "r") as f:
-                    for r in f.readlines():
+                    for r in f:
                         map, mapset = r.split("@")
                         map_basedir = os.path.sep.join(
-                            os.path.normpath(map_file["file"],).split(
+                            os.path.normpath(
+                                map_file["file"],
+                            ).split(
                                 os.path.sep
                             )[:-2],
                         )
@@ -128,11 +130,11 @@ def main():
 
         # Copy vrt files
         if vrt_files:
-            for f in vrt_files.keys():
+            for f, value in vrt_files.items():
                 f_tmp_dir = os.path.join(tmp, f)
                 if not os.path.exists(f_tmp_dir):
                     os.mkdir(f_tmp_dir)
-                path = os.path.join(vrt_files[f], element, f)
+                path = os.path.join(value, element, f)
                 if os.path.exists(path):
                     grass.debug("copying vrt file {}".format(path))
                     if os.path.isfile(path):
@@ -178,7 +180,7 @@ def main():
 
     os.chdir(olddir)
 
-    grass.verbose(_("Raster map saved to '%s'" % outfile))
+    grass.verbose(_("Raster map saved to '%s'") % outfile)
 
 
 if __name__ == "__main__":

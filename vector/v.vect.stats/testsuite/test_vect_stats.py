@@ -1,13 +1,14 @@
 """
 Name:       v.vect.stats test
 Purpose:    Tests v.vect.stats and its flags/options.
-	
+
 Author:     Sunveer Singh, Google Code-in 2017
 Copyright:  (C) 2017 by Sunveer Singh and the GRASS Development Team
 Licence:    This program is free software under the GNU General Public
 	            License (>=v2). Read the file COPYING that comes with GRASS
 	            for details.
 """
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
@@ -156,7 +157,7 @@ class Testrr(TestCase):
         self.assertLooksLike(reference=string, actual=v_vect_stats.outputs.stdout)
 
     def test_mode(self):
-        """Testing method mode """
+        """Testing method mode"""
         string = """area_cat|count|mode
         1|0|null
         2|0|null

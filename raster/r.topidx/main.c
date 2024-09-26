@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.topidx
@@ -27,10 +26,9 @@
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct
-    {
-	struct Option *input;
-	struct Option *output;
+    struct {
+        struct Option *input;
+        struct Option *output;
     } params;
 
     G_gisinit(argv[0]);
@@ -40,22 +38,24 @@ int main(int argc, char **argv)
     G_add_keyword(_("hydrology"));
     G_add_keyword(_("wetness"));
     G_add_keyword(_("topographic index"));
-    module->description =
-	_("Creates a topographic index (wetness index) raster map from an elevation raster map.");
+    module->description = _("Creates a topographic index (wetness index) "
+                            "raster map from an elevation raster map.");
 
     params.input = G_define_standard_option(G_OPT_R_ELEV);
     params.input->key = "input";
 
     params.output = G_define_standard_option(G_OPT_R_OUTPUT);
-    params.output->description = _("Name for output topographic index raster map");
+    params.output->description =
+        _("Name for output topographic index raster map");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     /* Make sure that the current projection is not lat/long */
     if (G_projection() == PROJECTION_LL)
-	G_fatal_error(_("Lat/Long location is not supported by %s. Please reproject map first."),
-		      G_program_name());
+        G_fatal_error(_("Lat/Long project is not supported by %s. Please "
+                        "reproject map first."),
+                      G_program_name());
 
     input = params.input->answer;
     output = params.output->answer;

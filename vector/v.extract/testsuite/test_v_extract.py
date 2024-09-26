@@ -1,13 +1,14 @@
 """
 Name:       v.extract test
 Purpose:    Tests v.extract and its flags/options.
-	
+
 Author:     Sunveer Singh, Google Code-in 2017
 Copyright:  (C) 2017 by Sunveer Singh and the GRASS Development Team
 Licence:    This program is free software under the GNU General Public
 	            License (>=v2). Read the file COPYING that comes with GRASS
 	            for details.
 """
+
 import os
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
@@ -57,7 +58,7 @@ class TestRasterreport(TestCase):
         cls.runModule("g.remove", flags="f", type="vector", name=cls.output)
 
     def test_flagd(self):
-        """Testing flag d """
+        """Testing flag d"""
         self.assertModule(
             "v.extract", input=self.input, output=self.output, cats="1,2,3,4"
         )
@@ -69,7 +70,7 @@ class TestRasterreport(TestCase):
         )
 
     def test_cats2(self):
-        """Testing cats=2 """
+        """Testing cats=2"""
         self.assertModule(
             "v.extract",
             input=self.geology,
@@ -85,13 +86,13 @@ class TestRasterreport(TestCase):
         )
 
     def test_flagt(self):
-        """Testing Falg T"""
+        """Testing Flag T"""
         self.assertModule(
             "v.extract", input=self.input, output=self.output, flags="t", cats=1
         )
 
     def test_flatr(self):
-        """Testing flag r """
+        """Testing flag r"""
         self.assertModule(
             "v.extract", input=self.geology, output=self.output, flags="r", cats=1
         )

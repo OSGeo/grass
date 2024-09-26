@@ -14,13 +14,12 @@
 #
 #############################################################################
 
-from __future__ import print_function
-
-import os, sys
-import subprocess
-import json
-import glob
 import codecs
+import glob
+import json
+import os
+import subprocess
+import sys
 
 
 def read_po_files(inputdirpath):
@@ -73,9 +72,9 @@ def read_msgfmt_statistics(msg, lgood, lfuzzy, lbad):
 
 def langDefinition(fil):
     f = codecs.open(fil, encoding="utf-8", errors="replace", mode="r")
-    for l in f.readlines():
-        if '"Language-Team:' in l:
-            lang = l.split(" ")[1:-1]
+    for line in f.readlines():
+        if '"Language-Team:' in line:
+            lang = line.split(" ")[1:-1]
             break
     f.close()
     if len(lang) == 2:
@@ -108,7 +107,6 @@ def get_stats(languages, directory):
         lbad = 0
         # for each file
         for flang in pofilelist:
-
             fpref = flang.split("_")[0]
             # run msgfmt for statistics
             # TODO check if it's working on windows
@@ -138,7 +136,7 @@ def writejson(stats, outfile):
     # load dictionary into json format
     fjson = json.dumps(stats, sort_keys=True, indent=4)
     # write a string with pretty style
-    outjson = os.linesep.join([l.rstrip() for l in fjson.splitlines()])
+    outjson = os.linesep.join([line.rstrip() for line in fjson.splitlines()])
     # write out file
     fout = open(outfile, "w")
     fout.write(outjson)
@@ -146,7 +144,7 @@ def writejson(stats, outfile):
     fout.close()
     try:
         os.remove("messages.mo")
-    except:
+    except OSError:
         pass
 
 

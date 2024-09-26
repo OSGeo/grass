@@ -65,9 +65,9 @@ sources and tools:
   of a watermark in the upper left corner.
 
 """
+from __future__ import annotations
 
 import os
-import sys
 import zlib
 
 try:
@@ -80,10 +80,6 @@ try:
 except ImportError:
     PIL = None
 
-
-# True if we are running on Python 3.
-# Code taken from six.py by Benjamin Peterson (MIT licensed)
-PY3 = sys.version_info[0] == 3
 
 string_types = (str,)
 integer_types = (int,)
@@ -105,7 +101,7 @@ def checkImages(images):
 
     for im in images:
         if PIL and isinstance(im, PIL.Image.Image):
-            # We assume PIL images are allright
+            # We assume PIL images are alright
             images2.append(im)
 
         elif np and isinstance(im, np.ndarray):
@@ -175,7 +171,6 @@ class BitArray:
         return self
 
     def Append(self, bits):
-
         # check input
         if isinstance(bits, BitArray):
             bits = str(bits)
@@ -191,7 +186,7 @@ class BitArray:
             self._checkSize()
 
     def Reverse(self):
-        """ In-place reverse. """
+        """In-place reverse."""
         tmp = self.data[: self._len].copy()
         self.data[: self._len] = np.flipud(tmp)
 
@@ -230,7 +225,7 @@ def intToUint8(i):
     return int(i).to_bytes(1, "little")
 
 
-def intToBits(i, n=None):
+def intToBits(i: int, n: int | None = None) -> BitArray:
     """convert int to a string of bits (0's and 1's in a string),
     pad to n elements. Convert back using int(ss,2)."""
     ii = i
@@ -239,7 +234,7 @@ def intToBits(i, n=None):
     bb = BitArray()
     while ii > 0:
         bb += str(ii % 2)
-        ii = ii >> 1
+        ii >>= 1
     bb.Reverse()
 
     # justify
@@ -259,7 +254,7 @@ def bitsToInt(bb, n=8):
     # Get value in bits
     for i in range(len(bb)):
         b = bb[i : i + 1]
-        tmp = bin(ord(b))[2:]
+        tmp = f"{ord(b):b}"
         # value += tmp.rjust(8,'0')
         value = tmp.rjust(8, "0") + value
 
@@ -277,7 +272,7 @@ def getTypeAndLen(bb):
     # Get first 16 bits
     for i in range(2):
         b = bb[i : i + 1]
-        tmp = bin(ord(b))[2:]
+        tmp = f"{ord(b):b}"
         # value += tmp.rjust(8,'0')
         value = tmp.rjust(8, "0") + value
 
@@ -291,7 +286,7 @@ def getTypeAndLen(bb):
         value = ""
         for i in range(2, 6):
             b = bb[i : i + 1]  # becomes a single-byte bytes() on both PY3 and PY2
-            tmp = bin(ord(b))[2:]
+            tmp = f"{ord(b):b}"
             # value += tmp.rjust(8,'0')
             value = tmp.rjust(8, "0") + value
         L = int(value, 2)
@@ -301,7 +296,7 @@ def getTypeAndLen(bb):
     return type, L, L2
 
 
-def signedIntToBits(i, n=None):
+def signedIntToBits(i: int, n: int | None = None) -> BitArray:
     """convert signed int to a string of bits (0's and 1's in a string),
     pad to n elements. Negative numbers are stored in 2's complement bit
     patterns, thus positive numbers always start with a 0.
@@ -317,7 +312,7 @@ def signedIntToBits(i, n=None):
     bb = BitArray()
     while ii > 0:
         bb += str(ii % 2)
-        ii = ii >> 1
+        ii >>= 1
     bb.Reverse()
 
     # justify
@@ -347,8 +342,7 @@ def twitsToBits(arr):
     maxlen = 1
     for i in arr:
         tmp = len(signedIntToBits(i * 20))
-        if tmp > maxlen:
-            maxlen = tmp
+        maxlen = max(tmp, maxlen)
 
     # build array
     bits = intToBits(maxlen, 5)
@@ -371,7 +365,7 @@ def floatsToBits(arr):
         i1 = int(i)
         i2 = i - i1
         bits += intToBits(i1, 15)
-        bits += intToBits(i2 * 2 ** 16, 16)
+        bits += intToBits(i2 * 2**16, 16)
     return bits
 
 
@@ -397,11 +391,11 @@ class Tag:
         self.tagtype = -1
 
     def ProcessTag(self):
-        """ Implement this to create the tag. """
+        """Implement this to create the tag."""
         raise NotImplementedError()
 
     def GetTag(self):
-        """ Calls processTag and attaches the header. """
+        """Calls processTag and attaches the header."""
         self.ProcessTag()
 
         # tag to binary
@@ -425,7 +419,6 @@ class Tag:
         return twitsToBits([xmin, xmax, ymin, ymax])
 
     def MakeMatrixRecord(self, scale_xy=None, rot_xy=None, trans_xy=None):
-
         # empty matrix?
         if scale_xy is None and rot_xy is None and trans_xy is None:
             return "0" * 8
@@ -484,7 +477,7 @@ class ShowFrameTag(ControlTag):
 
 
 class SetBackgroundTag(ControlTag):
-    """ Set the color in 0-255, or 0-1 (if floats given). """
+    """Set the color in 0-255, or 0-1 (if floats given)."""
 
     def __init__(self, *rgb):
         self.tagtype = 9
@@ -497,7 +490,7 @@ class SetBackgroundTag(ControlTag):
         for i in range(3):
             clr = self.rgb[i]
             if isinstance(clr, float):
-                clr = clr * 255
+                clr *= 255
             bb += intToUint8(clr)
         self.bytes = bb
 
@@ -573,7 +566,6 @@ class BitmapTag(DefinitionTag):
         self.imshape = im.shape
 
     def ProcessTag(self):
-
         # build tag
         bb = binary_type()
         bb += intToUint16(self.id)  # CharacterID
@@ -621,7 +613,7 @@ class ShapeTag(DefinitionTag):
         self.wh = wh
 
     def ProcessTag(self):
-        """ Returns a defineshape tag. with a bitmap fill """
+        """Returns a defineshape tag. with a bitmap fill"""
 
         bb = binary_type()
         bb += intToUint16(self.id)
@@ -675,7 +667,6 @@ class ShapeTag(DefinitionTag):
         # self.bytes = bb
 
     def MakeStyleChangeRecord(self, lineStyle=None, fillStyle=None, moveTo=None):
-
         # first 6 flags
         # Note that we use FillStyle1. If we don't flash (at least 8) does not
         # recognize the frames properly when importing to library.
@@ -743,7 +734,7 @@ class ShapeTag(DefinitionTag):
 
 
 def buildFile(fp, taglist, nframes=1, framesize=(500, 500), fps=10, version=8):
-    """ Give the given file (as bytes) a header. """
+    """Give the given file (as bytes) a header."""
 
     # compose header
     bb = binary_type()
@@ -838,8 +829,6 @@ def writeSwf(filename, images, duration=0.1, repeat=True):
     fp = open(filename, "wb")
     try:
         buildFile(fp, taglist, nframes=nframes, framesize=wh, fps=fps)
-    except Exception:
-        raise
     finally:
         fp.close()
 
@@ -905,7 +894,7 @@ def readSwf(filename, asNumpy=True):
 
     # Check whether it exists
     if not os.path.isfile(filename):
-        raise IOError("File not found: " + str(filename))
+        raise OSError("File not found: " + str(filename))
 
     # Check PIL
     if (not asNumpy) and (PIL is None):
@@ -931,7 +920,7 @@ def readSwf(filename, asNumpy=True):
             # Decompress movie
             bb = bb[:8] + zlib.decompress(bb[8:])
         else:
-            raise IOError("Not a valid SWF file: " + str(filename))
+            raise OSError("Not a valid SWF file: " + str(filename))
 
         # Set filepointer at first tag (skipping framesize RECT and two uin16's
         i = 8

@@ -17,8 +17,6 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com> (menu customization)
 """
 
-from __future__ import print_function
-
 import os
 import sys
 import getopt
@@ -26,10 +24,11 @@ import getopt
 # i18n is taken care of in the grass library code.
 # So we need to import it before any of the GUI code.
 from grass.exceptions import Usage
-from grass.script.core import set_raise_on_error
+from grass.script.core import set_raise_on_error, warning, error
 
 from core import globalvar
 from core.utils import registerPid, unregisterPid
+from core.settings import UserSettings
 
 import wx
 
@@ -71,50 +70,49 @@ class GMApp(wx.App):
         introImagePath = os.path.join(globalvar.IMGDIR, "splash_screen.png")
         introImage = wx.Image(introImagePath, wx.BITMAP_TYPE_PNG)
         introBmp = introImage.ConvertToBitmap()
-        if SC and sys.platform != "darwin":
-            # AdvancedSplash is buggy on the Mac as of 2.8.12.1
-            # and raises annoying (though seemingly harmless) errors everytime
-            # the GUI is started
-            splash = SC.AdvancedSplash(
-                bitmap=introBmp, timeout=2000, parent=None, id=wx.ID_ANY
-            )
-            splash.SetText(_("Starting GRASS GUI..."))
-            splash.SetTextColour(wx.Colour(45, 52, 27))
-            splash.SetTextFont(
-                wx.Font(
-                    pointSize=15, family=wx.DEFAULT, style=wx.NORMAL, weight=wx.BOLD
-                )
-            )
-            splash.SetTextPosition((150, 430))
-        else:
-            if globalvar.wxPythonPhoenix:
-                import wx.adv as wxadv
-
-                wxadv.SplashScreen(
-                    bitmap=introBmp,
-                    splashStyle=wxadv.SPLASH_CENTRE_ON_SCREEN | wxadv.SPLASH_TIMEOUT,
-                    milliseconds=2000,
-                    parent=None,
-                    id=wx.ID_ANY,
-                )
-            else:
-                wx.SplashScreen(
-                    bitmap=introBmp,
-                    splashStyle=wx.SPLASH_CENTRE_ON_SCREEN | wx.SPLASH_TIMEOUT,
-                    milliseconds=2000,
-                    parent=None,
-                    id=wx.ID_ANY,
-                )
+        wx.adv.SplashScreen(
+            bitmap=introBmp,
+            splashStyle=wx.adv.SPLASH_CENTRE_ON_SCREEN | wx.adv.SPLASH_TIMEOUT,
+            milliseconds=3000,
+            parent=None,
+            id=wx.ID_ANY,
+        )
 
         wx.GetApp().Yield()
 
-        # create and show main frame
-        from lmgr.frame import GMFrame
+        def show_main_gui():
+            # create and show main frame
+            single = UserSettings.Get(
+                group="appearance", key="singleWindow", subkey="enabled"
+            )
+            if single:
+                from main_window.frame import GMFrame
+            else:
+                from lmgr.frame import GMFrame
+            try:
+                mainframe = GMFrame(
+                    parent=None, id=wx.ID_ANY, workspace=self.workspaceFile
+                )
+            except Exception as err:
+                min_required_wx_version = [4, 2, 0]
+                if not globalvar.CheckWxVersion(min_required_wx_version):
+                    error(err)
+                    warning(
+                        _(
+                            "Current version of wxPython {} is lower than "
+                            "minimum required version {}"
+                        ).format(
+                            wx.__version__,
+                            ".".join(map(str, min_required_wx_version)),
+                        )
+                    )
+                else:
+                    raise
+            else:
+                mainframe.Show()
+                self.SetTopWindow(mainframe)
 
-        mainframe = GMFrame(parent=None, id=wx.ID_ANY, workspace=self.workspaceFile)
-
-        mainframe.Show()
-        self.SetTopWindow(mainframe)
+        wx.CallAfter(show_main_gui)
 
         return True
 
@@ -125,7 +123,7 @@ class GMApp(wx.App):
 
 
 def printHelp():
-    """ Print program help"""
+    """Print program help"""
     print("Usage:", file=sys.stderr)
     print(" python wxgui.py [options]", file=sys.stderr)
     print("%sOptions:" % os.linesep, file=sys.stderr)
@@ -134,13 +132,13 @@ def printHelp():
 
 
 def process_opt(opts, args):
-    """ Process command-line arguments"""
+    """Process command-line arguments"""
     workspaceFile = None
     for o, a in opts:
-        if o in ("-h", "--help"):
+        if o in {"-h", "--help"}:
             printHelp()
 
-        elif o in ("-w", "--workspace"):
+        elif o in {"-w", "--workspace"}:
             if a != "":
                 workspaceFile = str(a)
             else:
@@ -150,7 +148,6 @@ def process_opt(opts, args):
 
 
 def main(argv=None):
-
     if argv is None:
         argv = sys.argv
     try:

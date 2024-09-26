@@ -10,28 +10,29 @@ for details.
 :authors: Soeren Gebbert
 """
 
-from grass.exceptions import FatalError
-import sys
-from multiprocessing import Process, Lock, Pipe
 import logging
-from ctypes import byref, cast, c_char_p, c_int, c_void_p, CFUNCTYPE, POINTER
+import sys
+from ctypes import CFUNCTYPE, POINTER, byref, c_int, c_void_p, cast
 from datetime import datetime
+from multiprocessing import Lock, Pipe, Process
+
+import grass.lib.date as libdate
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
-import grass.lib.vector as libvector
-import grass.lib.date as libdate
 import grass.lib.raster3d as libraster3d
 import grass.lib.temporal as libtgis
-from grass.pygrass.rpc.base import RPCServerBase
+import grass.lib.vector as libvector
+from grass.exceptions import FatalError
 from grass.pygrass.raster import RasterRow
+from grass.pygrass.rpc.base import RPCServerBase
+from grass.pygrass.utils import decode
 from grass.pygrass.vector import VectorTopo
 from grass.script.utils import encode
-from grass.pygrass.utils import decode
 
 ###############################################################################
 
 
-class RPCDefs(object):
+class RPCDefs:
     # Function identifier and index
     STOP = 0
     HAS_TIMESTAMP = 1
@@ -48,9 +49,10 @@ class RPCDefs(object):
     G_LOCATION = 12
     G_GISDBASE = 13
     READ_MAP_FULL_INFO = 14
-    WRITE_BAND_REFERENCE = 15
-    READ_BAND_REFERENCE = 16
-    REMOVE_BAND_REFERENCE = 17
+    WRITE_SEMANTIC_LABEL = 15
+    READ_SEMANTIC_LABEL = 16
+    REMOVE_SEMANTIC_LABEL = 17
+    READ_MAP_HISTORY = 18
     G_FATAL_ERROR = 49
 
     TYPE_RASTER = 0
@@ -78,8 +80,6 @@ def _read_map_full_info(lock, conn, data):
             info = _read_raster_full_info(name, mapset)
         elif maptype == RPCDefs.TYPE_VECTOR:
             info = _read_vector_full_info(name, mapset)
-    except:
-        raise
     finally:
         conn.send(info)
 
@@ -293,8 +293,6 @@ def _get_database_name(lock, conn, data):
             dbstring = dbstring.replace(encode("$GISDBASE"), libgis.G_gisdbase())
             dbstring = dbstring.replace(encode("$LOCATION_NAME"), libgis.G_location())
             dbstring = dbstring.replace(encode("$MAPSET"), mapset)
-    except:
-        raise
     finally:
         conn.send(decode(dbstring))
 
@@ -351,8 +349,6 @@ def _available_mapsets(lock, conn, data):
         mapset_list.reverse()
         mapset_list.append(current_mapset)
         mapset_list.reverse()
-    except:
-        raise
     finally:
         conn.send(mapset_list)
 
@@ -385,8 +381,6 @@ def _has_timestamp(lock, conn, data):
         elif maptype == RPCDefs.TYPE_RASTER3D:
             if libgis.G_has_raster3d_timestamp(name, mapset) == 1:
                 check = True
-    except:
-        raise
     finally:
         conn.send(check)
 
@@ -435,8 +429,6 @@ def _read_timestamp(lock, conn, data):
             check = libgis.G_read_raster3d_timestamp(name, mapset, byref(ts))
 
         dates = _convert_timestamp_from_grass(ts)
-    except:
-        raise
     finally:
         conn.send((check, dates))
 
@@ -463,14 +455,16 @@ def _write_timestamp(lock, conn, data):
     try:
         maptype = data[1]
         name = data[2]
-        mapset = data[3]
+        # mapset = data[3]
         layer = data[4]
         timestring = data[5]
         ts = libgis.TimeStamp()
         check = libgis.G_scan_timestamp(byref(ts), timestring)
 
         if check != 1:
-            logging.error("Unable to convert the timestamp: " + timestring)
+            logging.error(
+                "Unable to convert the timestamp: {timestring}", timestring=timestring
+            )
             return -2
 
         if maptype == RPCDefs.TYPE_RASTER:
@@ -479,8 +473,6 @@ def _write_timestamp(lock, conn, data):
             check = libgis.G_write_vector_timestamp(name, layer, byref(ts))
         elif maptype == RPCDefs.TYPE_RASTER3D:
             check = libgis.G_write_raster3d_timestamp(name, byref(ts))
-    except:
-        raise
     finally:
         conn.send(check)
 
@@ -516,8 +508,6 @@ def _remove_timestamp(lock, conn, data):
             check = libgis.G_remove_vector_timestamp(name, layer, mapset)
         elif maptype == RPCDefs.TYPE_RASTER3D:
             check = libgis.G_remove_raster3d_timestamp(name, mapset)
-    except:
-        raise
     finally:
         conn.send(check)
 
@@ -525,15 +515,12 @@ def _remove_timestamp(lock, conn, data):
 ###############################################################################
 
 
-def _read_band_reference(lock, conn, data):
+def _read_semantic_label(lock, conn, data):
     """Read the file based GRASS band identifier
     the result using the provided pipe.
 
-    The tuple to be send via pipe: (return value of
-    Rast_read_band_reference).
-
-    Please have a look at the documentation of
-    Rast_read_band_reference, for the return values description.
+    The result to be sent via pipe is the return value of
+    Rast_read_semantic_label: either a semantic label string or None.
 
     :param lock: A multiprocessing.Lock instance
     :param conn: A multiprocessing.Pipe instance used to send True or False
@@ -541,46 +528,37 @@ def _read_band_reference(lock, conn, data):
                  mapset, layer, timestring]
 
     """
-    check = False
-    band_ref = None
+    semantic_label = None
     try:
         maptype = data[1]
         name = data[2]
         mapset = data[3]
-        layer = data[4]
+        # layer = data[4]
 
         if maptype == RPCDefs.TYPE_RASTER:
-            p_filename = c_char_p()
-            p_band_ref = c_char_p()
-            check = libraster.Rast_read_band_reference(
-                name, mapset, byref(p_filename), byref(p_band_ref)
-            )
-            if check:
-                band_ref = decode(p_band_ref.value)
-                libgis.G_free(p_filename)
-                libgis.G_free(p_band_ref)
+            # Must use temporary variable to work around
+            # ValueError: ctypes objects containing pointers cannot be pickled
+            ret = libraster.Rast_read_semantic_label(name, mapset)
+            if ret:
+                semantic_label = decode(ret)
         else:
             logging.error(
-                "Unable to read band reference. " "Unsupported map type %s" % maptype
+                "Unable to read semantic label. Unsupported map type {maptype}",
+                maptype=maptype,
             )
             return -1
-    except:
-        raise
     finally:
-        conn.send((check, band_ref))
+        conn.send(semantic_label)
 
 
 ###############################################################################
 
 
-def _write_band_reference(lock, conn, data):
-    """Write the file based GRASS band identifier
-    the return values of the called C-functions using the provided pipe.
+def _write_semantic_label(lock, conn, data):
+    """Write the file based GRASS band identifier.
 
-    The value to be send via pipe is the return value of Rast_write_band_reference.
-
-    Please have a look at the documentation of
-    Rast_write_band_reference, for the return values description.
+    Rises ValueError on invalid semantic label.
+    Always sends back True.
 
     :param lock: A multiprocessing.Lock instance
     :param conn: A multiprocessing.Pipe instance used to send True or False
@@ -588,44 +566,34 @@ def _write_band_reference(lock, conn, data):
                  mapset, layer, timestring]
 
     """
-    check = -3
     try:
         maptype = data[1]
         name = data[2]
-        mapset = data[3]
-        layer = data[4]
-        band_reference = data[5]
+        # mapset = data[3]
+        # layer = data[4]
+        semantic_label = data[5]
 
         if maptype == RPCDefs.TYPE_RASTER:
-            from grass.bandref import BandReferenceReader
-
-            reader = BandReferenceReader()
-            # determine filename (assuming that band_reference is unique!)
-            filename = reader.find_file(band_reference)
-
-            check = libraster.Rast_write_band_reference(name, filename, band_reference)
+            if libraster.Rast_legal_semantic_label(semantic_label) is False:
+                raise ValueError(_("Invalid semantic label"))
+            libraster.Rast_write_semantic_label(name, semantic_label)
         else:
             logging.error(
-                "Unable to write band reference. " "Unsupported map type %s" % maptype
+                "Unable to write semantic label. Unsupported map type {maptype}",
+                maptype=maptype,
             )
             return -2
-    except:
-        raise
     finally:
-        conn.send(check)
+        conn.send(True)
 
 
 ###############################################################################
 
 
-def _remove_band_reference(lock, conn, data):
-    """Remove the file based GRASS band identifier
-    the return values of the called C-functions using the provided pipe.
+def _remove_semantic_label(lock, conn, data):
+    """Remove the file based GRASS band identifier.
 
-    The value to be send via pipe is the return value of Rast_remove_band_reference.
-
-    Please have a look at the documentation of
-    Rast_remove_band_reference, for the return values description.
+    The value to be send via pipe is the return value of G_remove_misc.
 
     :param lock: A multiprocessing.Lock instance
     :param conn: A multiprocessing.Pipe instance used to send True or False
@@ -637,18 +605,17 @@ def _remove_band_reference(lock, conn, data):
     try:
         maptype = data[1]
         name = data[2]
-        mapset = data[3]
-        layer = data[4]
+        # mapset = data[3]
+        # layer = data[4]
 
         if maptype == RPCDefs.TYPE_RASTER:
-            check = libraster.Rast_remove_band_reference(name)
+            check = libgis.G_remove_misc("cell_misc", "semantic_label", name)
         else:
             logging.error(
-                "Unable to remove band reference. " "Unsupported map type %s" % maptype
+                "Unable to remove semantic label. Unsupported map type {maptype}",
+                maptype=maptype,
             )
             return -2
-    except:
-        raise
     finally:
         conn.send(check)
 
@@ -681,8 +648,6 @@ def _map_exists(lock, conn, data):
 
         if mapset:
             check = True
-    except:
-        raise
     finally:
         conn.send(check)
 
@@ -709,8 +674,6 @@ def _read_map_info(lock, conn, data):
             kvp = _read_vector_info(name, mapset)
         elif maptype == RPCDefs.TYPE_RASTER3D:
             kvp = _read_raster3d_info(name, mapset)
-    except:
-        raise
     finally:
         conn.send(kvp)
 
@@ -764,9 +727,11 @@ def _read_raster_info(name, mapset):
         libraster.Rast_init_fp_range(byref(range))
         ret = libraster.Rast_read_fp_range(name, mapset, byref(range))
         if ret < 0:
-            logging.error(_("Unable to read range file"))
-            return None
-        if ret == 2:
+            logging.warning(_("Unable to read range file"))
+            kvp["min"] = None
+            kvp["max"] = None
+        elif ret == 2:
+            logging.info(_("Raster range file is empty"))
             kvp["min"] = None
             kvp["max"] = None
         else:
@@ -780,9 +745,11 @@ def _read_raster_info(name, mapset):
         libraster.Rast_init_range(byref(range))
         ret = libraster.Rast_read_range(name, mapset, byref(range))
         if ret < 0:
-            logging.error(_("Unable to read range file"))
-            return None
-        if ret == 2:
+            logging.warning(_("Unable to read range file"))
+            kvp["min"] = None
+            kvp["max"] = None
+        elif ret == 2:
+            logging.info(_("Raster range file is empty"))
             kvp["min"] = None
             kvp["max"] = None
         else:
@@ -848,7 +815,7 @@ def _read_raster3d_info(name, mapset):
     )
 
     if not g3map:
-        logging.error(_("Unable to open 3D raster map <%s>" % (name)))
+        logging.error(_("Unable to open 3D raster map <%s>"), (name))
         return None
 
     maptype = libraster3d.Rast3d_file_type_map(g3map)
@@ -863,7 +830,7 @@ def _read_raster3d_info(name, mapset):
     max = libgis.DCELL()
     ret = libraster3d.Rast3d_range_load(g3map)
     if not ret:
-        logging.error(_("Unable to load range of 3D raster map <%s>" % (name)))
+        logging.error(_("Unable to load range of 3D raster map <%s>"), (name))
         return None
     libraster3d.Rast3d_range_min_max(g3map, byref(min), byref(max))
 
@@ -877,7 +844,7 @@ def _read_raster3d_info(name, mapset):
         kvp["max"] = float(max.value)
 
     if not libraster3d.Rast3d_close(g3map):
-        logging.error(_("Unable to close 3D raster map <%s>" % (name)))
+        logging.error(_("Unable to close 3D raster map <%s>"), (name))
         return None
 
     return kvp
@@ -920,10 +887,8 @@ def _read_vector_info(name, mapset):
         with_topo = False
         if libvector.Vect_open_old2(byref(Map), name, mapset, "1") < 1:
             logging.error(
-                _(
-                    "Unable to open vector map <%s>"
-                    % (libvector.Vect_get_full_name(byref(Map)))
-                )
+                _("Unable to open vector map <%s>"),
+                (libvector.Vect_get_full_name(byref(Map))),
             )
             return None
 
@@ -989,6 +954,140 @@ def _read_vector_info(name, mapset):
         kvp["holes"] = None
         kvp["volumes"] = None
 
+    libvector.Vect_close(byref(Map))
+
+    return kvp
+
+
+###############################################################################
+
+
+def _read_map_history(lock, conn, data):
+    """Read map history from the spatial database using C-library functions
+
+    :param lock: A multiprocessing.Lock instance
+    :param conn: A multiprocessing.Pipe instance used to send True or False
+    :param data: The list of data entries [function_id, maptype, name, mapset]
+    """
+    kvp = None
+    try:
+        maptype = data[1]
+        name = data[2]
+        mapset = data[3]
+        if maptype == RPCDefs.TYPE_RASTER:
+            kvp = _read_raster_history(name, mapset)
+        elif maptype == RPCDefs.TYPE_VECTOR:
+            kvp = _read_vector_history(name, mapset)
+        elif maptype == RPCDefs.TYPE_RASTER3D:
+            kvp = _read_raster3d_history(name, mapset)
+    finally:
+        conn.send(kvp)
+
+
+###############################################################################
+
+
+def _read_raster_history(name, mapset):
+    """Read the raster history from the file system and store the content
+    into a dictionary
+
+    This method uses the ctypes interface to the gis and raster libraries
+    to read the map history
+
+    :param name: The name of the map
+    :param mapset: The mapset of the map
+    :returns: The key value pairs of the map specific metadata, or None in
+              case of an error
+    """
+
+    kvp = {}
+
+    if not libgis.G_find_raster(name, mapset):
+        return None
+
+    # Read the raster history
+    hist = libraster.History()
+    ret = libraster.Rast_read_history(name, mapset, byref(hist))
+    if ret < 0:
+        logging.warning(_("Unable to read history file"))
+        return None
+    else:
+        kvp["creation_time"] = decode(
+            libraster.Rast_get_history(byref(hist), libraster.HIST_MAPID)
+        )
+        kvp["creator"] = decode(
+            libraster.Rast_get_history(byref(hist), libraster.HIST_CREATOR)
+        )
+
+    return kvp
+
+
+###############################################################################
+
+
+def _read_raster3d_history(name, mapset):
+    """Read the 3D raster map info from the file system and store the content
+    into a dictionary
+
+    This method uses the ctypes interface to the gis and raster3d libraries
+    to read the map metadata information
+
+    :param name: The name of the map
+    :param mapset: The mapset of the map
+    :returns: The key value pairs of the map specific metadata, or None in
+              case of an error
+    """
+
+    kvp = {}
+
+    if not libgis.G_find_raster3d(name, mapset):
+        return None
+
+    # Read the region information
+    hist = libraster.History()
+    ret = libraster3d.Rast3d_read_history(name, mapset, byref(hist))
+    if ret < 0:
+        logging.warning(_("Unable to read history file"))
+        return None
+    else:
+        kvp["creation_time"] = decode(
+            libraster.Rast_get_history(byref(hist), libraster3d.HIST_MAPID)
+        )
+        kvp["creator"] = decode(
+            libraster.Rast_get_history(byref(hist), libraster3d.HIST_CREATOR)
+        )
+
+    return kvp
+
+
+###############################################################################
+
+
+def _read_vector_history(name, mapset):
+    """Read the vector history from the file system and store the content
+    into a dictionary
+
+    This method uses the ctypes interface to the gis and raster libraries
+    to read the map history
+
+    :param name: The name of the map
+    :param mapset: The mapset of the map
+    :returns: The key value pairs of the map specific metadata, or None in
+              case of an error
+    """
+
+    kvp = {}
+
+    if not libgis.G_find_vector(name, mapset):
+        return None
+
+    # Read the vector history
+    Map = libvector.Map_info()
+    if libvector.Vect_open_old(byref(Map), name, mapset, "1") > 0:
+        kvp["creation_time"] = decode(libvector.Vect_get_map_date(byref(Map)))
+        kvp["creator"] = decode(libvector.Vect_get_person(byref(Map)))
+    else:
+        kvp = None
     libvector.Vect_close(byref(Map))
 
     return kvp
@@ -1137,9 +1236,10 @@ def c_library_server(lock, conn):
     functions[RPCDefs.G_LOCATION] = _get_location
     functions[RPCDefs.G_GISDBASE] = _get_gisdbase
     functions[RPCDefs.READ_MAP_FULL_INFO] = _read_map_full_info
-    functions[RPCDefs.WRITE_BAND_REFERENCE] = _write_band_reference
-    functions[RPCDefs.READ_BAND_REFERENCE] = _read_band_reference
-    functions[RPCDefs.REMOVE_BAND_REFERENCE] = _remove_band_reference
+    functions[RPCDefs.WRITE_SEMANTIC_LABEL] = _write_semantic_label
+    functions[RPCDefs.READ_SEMANTIC_LABEL] = _read_semantic_label
+    functions[RPCDefs.REMOVE_SEMANTIC_LABEL] = _remove_semantic_label
+    functions[RPCDefs.READ_MAP_HISTORY] = _read_map_history
     functions[RPCDefs.G_FATAL_ERROR] = _fatal_error
 
     libgis.G_gisinit("c_library_server")
@@ -1175,21 +1275,54 @@ class CLibrariesInterface(RPCServerBase):
         >>> import grass.script as gscript
         >>> import grass.temporal as tgis
         >>> gscript.use_temp_region()
-        >>> gscript.run_command("g.region", n=80.0, s=0.0, e=120.0, w=0.0,
-        ... t=1.0, b=0.0, res=10.0, res3=10.0)
+        >>> gscript.run_command(
+        ...     "g.region",
+        ...     n=80.0,
+        ...     s=0.0,
+        ...     e=120.0,
+        ...     w=0.0,
+        ...     t=1.0,
+        ...     b=0.0,
+        ...     res=10.0,
+        ...     res3=10.0,
+        ... )
         0
         >>> tgis.init()
-        >>> gscript.run_command("r.mapcalc", expression="test = 1", overwrite=True, quiet=True)
+        >>> gscript.run_command(
+        ...     "r.mapcalc", expression="test = 1", overwrite=True, quiet=True
+        ... )
         0
-        >>> gscript.run_command("r3.mapcalc", expression="test = 1", overwrite=True, quiet=True)
+        >>> gscript.run_command(
+        ...     "r3.mapcalc", expression="test = 1", overwrite=True, quiet=True
+        ... )
         0
-        >>> gscript.run_command("v.random", output="test", n=10, overwrite=True, quiet=True)
+        >>> gscript.run_command(
+        ...     "v.random", output="test", n=10, overwrite=True, quiet=True
+        ... )
         0
-        >>> gscript.run_command("r.timestamp", map="test", date='12 Mar 1995 10:34:40', overwrite=True, quiet=True)
+        >>> gscript.run_command(
+        ...     "r.timestamp",
+        ...     map="test",
+        ...     date="12 Mar 1995 10:34:40",
+        ...     overwrite=True,
+        ...     quiet=True,
+        ... )
         0
-        >>> gscript.run_command("r3.timestamp", map="test", date='12 Mar 1995 10:34:40', overwrite=True, quiet=True)
+        >>> gscript.run_command(
+        ...     "r3.timestamp",
+        ...     map="test",
+        ...     date="12 Mar 1995 10:34:40",
+        ...     overwrite=True,
+        ...     quiet=True,
+        ... )
         0
-        >>> gscript.run_command("v.timestamp", map="test", date='12 Mar 1995 10:34:40', overwrite=True, quiet=True)
+        >>> gscript.run_command(
+        ...     "v.timestamp",
+        ...     map="test",
+        ...     date="12 Mar 1995 10:34:40",
+        ...     overwrite=True,
+        ...     quiet=True,
+        ... )
         0
 
         # Check mapsets
@@ -1201,13 +1334,13 @@ class CLibrariesInterface(RPCServerBase):
         # Raster map
         >>> ciface = tgis.CLibrariesInterface()
         >>> check = ciface.raster_map_exists("test", tgis.get_current_mapset())
-        >>> print check
+        >>> print(check)
         True
         >>> ciface.read_raster_info("test", tgis.get_current_mapset())
         {'rows': 12, 'north': 80.0, 'min': 1, 'datatype': 'CELL', 'max': 1, 'ewres': 10.0, 'cols': 8, 'west': 0.0, 'east': 120.0, 'nsres': 10.0, 'south': 0.0}
 
         >>> info = ciface.read_raster_full_info("test", tgis.get_current_mapset())
-        >>> info           # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+        >>> info  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
         {u'tbres': 1.0, ... 'keyword': 'generated by r.mapcalc',
          u'bottom': 0.0, 'end_time': None, 'title': 'test', u'south': 0.0}
 
@@ -1216,18 +1349,21 @@ class CLibrariesInterface(RPCServerBase):
         >>> info["end_time"]
 
         >>> check = ciface.has_raster_timestamp("test", tgis.get_current_mapset())
-        >>> print check
+        >>> print(check)
         True
         >>> if check:
         ...     res = ciface.read_raster_timestamp("test", tgis.get_current_mapset())
         ...     if res[0]:
-        ...         print str(res[1][0]), str(res[1][0])
+        ...         print(str(res[1][0]), str(res[1][0]))
         ...         ciface.remove_raster_timestamp("test", tgis.get_current_mapset())
+        ...
         1995-03-12 10:34:40 1995-03-12 10:34:40
         1
         >>> ciface.has_raster_timestamp("test", tgis.get_current_mapset())
         False
-        >>> ciface.write_raster_timestamp("test", tgis.get_current_mapset(), "13 Jan 1999 14:30:05")
+        >>> ciface.write_raster_timestamp(
+        ...     "test", tgis.get_current_mapset(), "13 Jan 1999 14:30:05"
+        ... )
         1
         >>> ciface.has_raster_timestamp("test", tgis.get_current_mapset())
         True
@@ -1235,23 +1371,26 @@ class CLibrariesInterface(RPCServerBase):
 
         # 3D raster map
         >>> check = ciface.raster3d_map_exists("test", tgis.get_current_mapset())
-        >>> print check
+        >>> print(check)
         True
         >>> ciface.read_raster3d_info("test", tgis.get_current_mapset())
         {'tbres': 1.0, 'rows': 12, 'north': 80.0, 'bottom': 0.0, 'datatype': 'DCELL', 'max': 1.0, 'top': 1.0, 'min': 1.0, 'cols': 8, 'depths': 1, 'west': 0.0, 'ewres': 10.0, 'east': 120.0, 'nsres': 10.0, 'south': 0.0}
         >>> check = ciface.has_raster3d_timestamp("test", tgis.get_current_mapset())
-        >>> print check
+        >>> print(check)
         True
         >>> if check:
         ...     res = ciface.read_raster3d_timestamp("test", tgis.get_current_mapset())
         ...     if res[0]:
-        ...         print str(res[1][0]), str(res[1][0])
+        ...         print(str(res[1][0]), str(res[1][0]))
         ...         ciface.remove_raster3d_timestamp("test", tgis.get_current_mapset())
+        ...
         1995-03-12 10:34:40 1995-03-12 10:34:40
         1
         >>> ciface.has_raster3d_timestamp("test", tgis.get_current_mapset())
         False
-        >>> ciface.write_raster3d_timestamp("test", tgis.get_current_mapset(), "13 Jan 1999 14:30:05")
+        >>> ciface.write_raster3d_timestamp(
+        ...     "test", tgis.get_current_mapset(), "13 Jan 1999 14:30:05"
+        ... )
         1
         >>> ciface.has_raster3d_timestamp("test", tgis.get_current_mapset())
         True
@@ -1259,42 +1398,45 @@ class CLibrariesInterface(RPCServerBase):
 
         # Vector map
         >>> check = ciface.vector_map_exists("test", tgis.get_current_mapset())
-        >>> print check
+        >>> print(check)
         True
         >>> kvp = ciface.read_vector_info("test", tgis.get_current_mapset())
-        >>> kvp['points']
+        >>> kvp["points"]
         10
 
         >>> kvp = ciface.read_vector_full_info("test", tgis.get_current_mapset())
-        >>> print kvp['points']
+        >>> print(kvp["points"])
         10
-        >>> kvp['point']
+        >>> kvp["point"]
         10
-        >>> kvp['area']
+        >>> kvp["area"]
         0
-        >>> kvp['lines']
+        >>> kvp["lines"]
         0
-        >>> kvp['line']
+        >>> kvp["line"]
         0
-        >>> 'columns' in kvp
+        >>> "columns" in kvp
         False
         >>> kvp["start_time"]
         datetime.datetime(1995, 3, 12, 10, 34, 40)
         >>> kvp["end_time"]
 
         >>> check = ciface.has_vector_timestamp("test", tgis.get_current_mapset(), None)
-        >>> print check
+        >>> print(check)
         True
         >>> if check:
         ...     res = ciface.read_vector_timestamp("test", tgis.get_current_mapset())
         ...     if res[0]:
-        ...         print str(res[1][0]), str(res[1][0])
+        ...         print(str(res[1][0]), str(res[1][0]))
         ...         ciface.remove_vector_timestamp("test", tgis.get_current_mapset())
+        ...
         1995-03-12 10:34:40 1995-03-12 10:34:40
         1
         >>> ciface.has_vector_timestamp("test", tgis.get_current_mapset())
         False
-        >>> ciface.write_vector_timestamp("test", tgis.get_current_mapset(), "13 Jan 1999 14:30:05")
+        >>> ciface.write_vector_timestamp(
+        ...     "test", tgis.get_current_mapset(), "13 Jan 1999 14:30:05"
+        ... )
         1
         >>> ciface.has_vector_timestamp("test", tgis.get_current_mapset())
         True
@@ -1308,22 +1450,22 @@ class CLibrariesInterface(RPCServerBase):
         >>> location = ciface.get_location()
         >>> gisdbase = ciface.get_gisdbase()
 
-        >>> ciface.fatal_error() # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
+        >>> ciface.fatal_error()  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
         Traceback (most recent call last):
             raise FatalError("Exception raised: " + str(e) + " Message: " + message)
         FatalError: Exception raised:  ...
 
-        >>> ciface.fatal_error() # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
+        >>> ciface.fatal_error()  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
         Traceback (most recent call last):
             raise FatalError("Exception raised: " + str(e) + " Message: " + message)
         FatalError: Exception raised:  ...
 
-        >>> ciface.fatal_error() # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
+        >>> ciface.fatal_error()  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
         Traceback (most recent call last):
             raise FatalError("Exception raised: " + str(e) + " Message: " + message)
         FatalError: Exception raised:  ...
 
-        >>> ciface.fatal_error() # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
+        >>> ciface.fatal_error()  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
         Traceback (most recent call last):
             raise FatalError("Exception raised: " + str(e) + " Message: " + message)
         FatalError: Exception raised:  ...
@@ -1332,7 +1474,7 @@ class CLibrariesInterface(RPCServerBase):
 
         >>> gscript.del_temp_region()
 
-    """
+    """  # noqa: E501
 
     def __init__(self):
         RPCServerBase.__init__(self)
@@ -1389,6 +1531,21 @@ class CLibrariesInterface(RPCServerBase):
             [RPCDefs.READ_MAP_FULL_INFO, RPCDefs.TYPE_RASTER, name, mapset, None]
         )
         return self.safe_receive("read_raster_full_info")
+
+    def read_raster_history(self, name, mapset):
+        """Read the raster map history from the file system and store the content
+        into a dictionary
+
+        :param name: The name of the map
+        :param mapset: The mapset of the map
+        :returns: The key value pairs of the map history (creation, creation_time),
+                  or None in case of an error
+        """
+        self.check_server()
+        self.client_conn.send(
+            [RPCDefs.READ_MAP_HISTORY, RPCDefs.TYPE_RASTER, name, mapset, None]
+        )
+        return self.safe_receive("read_raster_history")
 
     def has_raster_timestamp(self, name, mapset):
         """Check if a file based raster timestamp exists
@@ -1469,64 +1626,57 @@ class CLibrariesInterface(RPCServerBase):
         )
         return self.safe_receive("write_raster_timestamp")
 
-    def remove_raster_band_reference(self, name, mapset):
-        """Remove a file based raster band reference
-
-        Please have a look at the documentation Rast_remove_band_reference
-        for the return values description.
+    def remove_raster_semantic_label(self, name, mapset):
+        """Remove a file based raster semantic label
 
         :param name: The name of the map
         :param mapset: The mapset of the map
-        :returns: The return value of Rast_remove_band_reference
+        :returns: The return value of G_remove_misc
         """
         self.check_server()
         self.client_conn.send(
-            [RPCDefs.REMOVE_BAND_REFERENCE, RPCDefs.TYPE_RASTER, name, mapset, None]
+            [RPCDefs.REMOVE_SEMANTIC_LABEL, RPCDefs.TYPE_RASTER, name, mapset, None]
         )
-        return self.safe_receive("remove_raster_timestamp")
+        return self.safe_receive("remove_raster_semantic_label")
 
-    def read_raster_band_reference(self, name, mapset):
-        """Read a file based raster band reference
+    def read_raster_semantic_label(self, name, mapset):
+        """Read a file based raster semantic label
 
-        Please have a look at the documentation Rast_read_band_reference
-        for the return values description.
+        Returns semantic label or None
 
         :param name: The name of the map
         :param mapset: The mapset of the map
-        :returns: The return value of Rast_read_band_reference
+        :returns: The return value of Rast_read_semantic_label
         """
         self.check_server()
         self.client_conn.send(
-            [RPCDefs.READ_BAND_REFERENCE, RPCDefs.TYPE_RASTER, name, mapset, None]
+            [RPCDefs.READ_SEMANTIC_LABEL, RPCDefs.TYPE_RASTER, name, mapset, None]
         )
-        return self.safe_receive("read_raster_band_reference")
+        return self.safe_receive("read_raster_semantic_label")
 
-    def write_raster_band_reference(self, name, mapset, band_reference):
-        """Write a file based raster band reference
-
-        Please have a look at the documentation Rast_write_band_reference
-        for the return values description.
+    def write_raster_semantic_label(self, name, mapset, semantic_label):
+        """Write a file based raster semantic label
 
         Note:
-            Only band references of maps from the current mapset can written.
+            Only semantic labels of maps from the current mapset can be written.
 
         :param name: The name of the map
         :param mapset: The mapset of the map
-        :param band_reference: band reference identifier
-        :returns: The return value of Rast_write_band_reference
+        :param semantic_label: semantic label
+        :returns: always True
         """
         self.check_server()
         self.client_conn.send(
             [
-                RPCDefs.WRITE_BAND_REFERENCE,
+                RPCDefs.WRITE_SEMANTIC_LABEL,
                 RPCDefs.TYPE_RASTER,
                 name,
                 mapset,
                 None,
-                band_reference,
+                semantic_label,
             ]
         )
-        return self.safe_receive("write_raster_band_reference")
+        return self.safe_receive("write_raster_semantic_label")
 
     def raster3d_map_exists(self, name, mapset):
         """Check if a 3D raster map exists in the spatial database
@@ -1555,6 +1705,21 @@ class CLibrariesInterface(RPCServerBase):
             [RPCDefs.READ_MAP_INFO, RPCDefs.TYPE_RASTER3D, name, mapset, None]
         )
         return self.safe_receive("read_raster3d_info")
+
+    def read_raster3d_history(self, name, mapset):
+        """Read the 3D raster map history from the file system and store the content
+        into a dictionary
+
+        :param name: The name of the map
+        :param mapset: The mapset of the map
+        :returns: The key value pairs of the map history (creation, creation_time),
+                  or None in case of an error
+        """
+        self.check_server()
+        self.client_conn.send(
+            [RPCDefs.READ_MAP_HISTORY, RPCDefs.TYPE_RASTER3D, name, mapset, None]
+        )
+        return self.safe_receive("read_raster3d_history")
 
     def has_raster3d_timestamp(self, name, mapset):
         """Check if a file based 3D raster timestamp exists
@@ -1677,6 +1842,21 @@ class CLibrariesInterface(RPCServerBase):
             [RPCDefs.READ_MAP_FULL_INFO, RPCDefs.TYPE_VECTOR, name, mapset, None]
         )
         return self.safe_receive("read_vector_full_info")
+
+    def read_vector_history(self, name, mapset):
+        """Read the vector map history from the file system and store the content
+        into a dictionary
+
+        :param name: The name of the map
+        :param mapset: The mapset of the map
+        :returns: The key value pairs of the map history (creation, creation_time),
+                  or None in case of an error
+        """
+        self.check_server()
+        self.client_conn.send(
+            [RPCDefs.READ_MAP_HISTORY, RPCDefs.TYPE_VECTOR, name, mapset, None]
+        )
+        return self.safe_receive("read_vector_history")
 
     def has_vector_timestamp(self, name, mapset, layer=None):
         """Check if a file based vector timestamp exists

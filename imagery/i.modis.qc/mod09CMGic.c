@@ -1,11 +1,11 @@
 /* high clouds unsigned int bits[2]
  * 0 -> class 0: no
  * 1 -> class 1: yes
- */  
+ */
 
 #include <grass/raster.h>
 
-CELL mod09CMGic(CELL pixel) 
+CELL mod09CMGic(CELL pixel)
 {
     CELL qctemp;
 
@@ -14,5 +14,3 @@ CELL mod09CMGic(CELL pixel)
 
     return qctemp;
 }
-
-

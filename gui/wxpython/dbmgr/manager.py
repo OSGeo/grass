@@ -19,7 +19,8 @@ This program is free software under the GNU General Public License
 
 @author Jachym Cepicky <jachym.cepicky gmail.com>
 @author Martin Landa <landa.martin gmail.com>
-@author Refactoring by Stepan Turek <stepan.turek seznam.cz> (GSoC 2012, mentor: Martin Landa)
+@author Refactoring by Stepan Turek <stepan.turek seznam.cz>
+        (GSoC 2012, mentor: Martin Landa)
 """
 
 import os
@@ -69,7 +70,7 @@ class AttributeManager(wx.Frame, DbMgrBase):
         self.parent = parent
         try:
             mapdisplay = self.parent.GetMapDisplay()
-        except:
+        except AttributeError:
             mapdisplay = None
 
         DbMgrBase.__init__(
@@ -131,14 +132,12 @@ class AttributeManager(wx.Frame, DbMgrBase):
         self.notebook.AddPage(
             page=self.pages["browse"], text=_("Browse data"), name="browse"
         )
-        self.pages["browse"].SetTabAreaColour(globalvar.FNPageColor)
 
         self.CreateDbMgrPage(parent=self, pageName="manageTable")
 
         self.notebook.AddPage(
             page=self.pages["manageTable"], text=_("Manage tables"), name="table"
         )
-        self.pages["manageTable"].SetTabAreaColour(globalvar.FNPageColor)
 
         self.CreateDbMgrPage(parent=self, pageName="manageLayer")
         self.notebook.AddPage(

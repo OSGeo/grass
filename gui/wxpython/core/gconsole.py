@@ -18,9 +18,8 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 @author Vaclav Petras <wenzeslaus gmail.com> (refactoring)
 @author Anna Kratochvilova <kratochanna gmail.com> (refactoring)
+@author Wolf Bergenheim <wolf bergenheim.net> (#962)
 """
-
-from __future__ import print_function
 
 import os
 import sys
@@ -28,10 +27,7 @@ import re
 import time
 import threading
 
-if sys.version_info.major == 2:
-    import Queue
-else:
-    import queue as Queue
+import queue as Queue
 
 import codecs
 import locale
@@ -39,10 +35,13 @@ import locale
 import wx
 from wx.lib.newevent import NewEvent
 
-import grass.script as grass
+import grass.script as gs
 from grass.script import task as gtask
 
 from grass.pydispatch.signal import Signal
+
+from grass.grassdb import history
+from grass.grassdb.history import Status
 
 from core import globalvar
 from core.gcmd import CommandThread, GError, GException
@@ -86,7 +85,7 @@ class CmdThread(threading.Thread):
         else:
             self.resultQ = resultQ
 
-        self.setDaemon(True)
+        self.daemon = True
 
         self.requestCmd = None
 
@@ -355,13 +354,13 @@ gIgnoredCmdRun, EVT_IGNORED_CMD_RUN = NewEvent()
 
 
 class GConsole(wx.EvtHandler):
-    """"""
+    """Backend for command execution, esp. interactive command execution"""
 
     def __init__(self, guiparent=None, giface=None, ignoredCmdPattern=None):
-        """
+        r"""
         :param guiparent: parent window for created GUI objects
         :param lmgr: layer manager window (TODO: replace by giface)
-        :param ignoredCmdPattern: regular expression specifying commads
+        :param ignoredCmdPattern: regular expression specifying commands
                                   to be ignored (e.g. @c '^d\..*' for
                                   display commands)
         """
@@ -370,8 +369,6 @@ class GConsole(wx.EvtHandler):
         # Signal when some map is created or updated by a module.
         # attributes: name: map name, ltype: map type,
         self.mapCreated = Signal("GConsole.mapCreated")
-        # emitted when map display should be re-render
-        self.updateMap = Signal("GConsole.updateMap")
         # emitted when log message should be written
         self.writeLog = Signal("GConsole.writeLog")
         # emitted when command log message should be written
@@ -404,20 +401,20 @@ class GConsole(wx.EvtHandler):
 
     def Redirect(self):
         """Redirect stdout/stderr"""
-        if Debug.GetLevel() == 0 and grass.debug_level(force=True) == 0:
+        if Debug.GetLevel() == 0 and gs.debug_level(force=True) == 0:
             # don't redirect when debugging is enabled
             sys.stdout = self.cmdStdOut
             sys.stderr = self.cmdStdErr
         else:
-            enc = locale.getdefaultlocale()[1]
+            try:
+                # Python >= 3.11
+                enc = locale.getencoding()
+            except AttributeError:
+                enc = locale.getdefaultlocale()[1]
             if enc:
-                if sys.version_info.major == 2:
-                    sys.stdout = codecs.getwriter(enc)(sys.__stdout__)
-                    sys.stderr = codecs.getwriter(enc)(sys.__stderr__)
-                else:
-                    # https://stackoverflow.com/questions/4374455/how-to-set-sys-stdout-encoding-in-python-3
-                    sys.stdout = codecs.getwriter(enc)(sys.__stdout__.detach())
-                    sys.stderr = codecs.getwriter(enc)(sys.__stderr__.detach())
+                # https://stackoverflow.com/questions/4374455/how-to-set-sys-stdout-encoding-in-python-3
+                sys.stdout = codecs.getwriter(enc)(sys.__stdout__.detach())
+                sys.stderr = codecs.getwriter(enc)(sys.__stderr__.detach())
             else:
                 sys.stdout = sys.__stdout__
                 sys.stderr = sys.__stderr__
@@ -450,6 +447,26 @@ class GConsole(wx.EvtHandler):
         """Write message in error style"""
         self.writeError.emit(text=text)
 
+    def UpdateHistory(self, status, runtime=None):
+        """Update command history.
+        :param enum status: status of command run
+        :param int runtime: duration of command run
+        """
+        if runtime:
+            cmd_info = {"runtime": runtime, "status": status.value}
+        else:
+            cmd_info = {"status": status.value}
+        try:
+            history_path = history.get_current_mapset_gui_history_path()
+            history.update_entry(history_path, cmd_info)
+
+            # update history model
+            if self._giface:
+                entry = history.read(history_path)[-1]
+                self._giface.entryInHistoryUpdated.emit(entry=entry)
+        except (OSError, ValueError) as e:
+            GError(str(e))
+
     def RunCmd(
         self,
         command,
@@ -477,6 +494,10 @@ class GConsole(wx.EvtHandler):
         For example, see layer manager which handles d.* on its own.
 
         :param command: command given as a list (produced e.g. by utils.split())
+        or dict with key 'cmd' with list value (command list produced
+        e.g. by utils.split()) and key 'cmdString' with original cmd
+        string with preserved quotation marks (for sql param arg, where
+        param arg, r.mapcalc...) to save to a history file
         :param compReg: True use computation region
         :param notification: form of notification
         :param bool skipInterface: True to do not launch GRASS interface
@@ -487,12 +508,36 @@ class GConsole(wx.EvtHandler):
         :param addLayer: to be passed in the mapCreated signal
         :param userData: data defined for the command
         """
+        if isinstance(command, dict):
+            cmd_save_to_history = command["cmdString"]
+            command = command["cmd"]
+        else:
+            cmd_save_to_history = " ".join(command)
+
         if len(command) == 0:
             Debug.msg(2, "GPrompt:RunCmd(): empty command")
             return
 
-        # update history file
-        self.UpdateHistoryFile(" ".join(command))
+        # convert plain text history file to JSON format if needed
+        history_path = history.get_current_mapset_gui_history_path()
+        if history.get_history_file_extension(history_path) != ".json":
+            history.convert_plain_text_to_JSON(history_path)
+
+        # add entry to command history log
+        command_info = history.get_initial_command_info(env)
+        entry = {
+            "command": cmd_save_to_history,
+            "command_info": command_info,
+        }
+        try:
+            history_path = history.get_current_mapset_gui_history_path()
+            history.add_entry(history_path, entry)
+        except (OSError, ValueError) as e:
+            GError(str(e))
+
+        # update command prompt and history model
+        if self._giface:
+            self._giface.entryToHistoryAdded.emit(entry=entry)
 
         if command[0] in globalvar.grassCmd:
             # send GRASS command without arguments to GUI command interface
@@ -540,8 +585,23 @@ class GConsole(wx.EvtHandler):
 
                 if len(command) == 1:
                     if command[0].startswith("g.gui."):
-                        import imp
                         import inspect
+                        import importlib.util
+                        import importlib.machinery
+
+                        def load_source(modname, filename):
+                            loader = importlib.machinery.SourceFileLoader(
+                                modname, filename
+                            )
+                            spec = importlib.util.spec_from_file_location(
+                                modname, filename, loader=loader
+                            )
+                            module = importlib.util.module_from_spec(spec)
+                            # Module is always executed and not cached in sys.modules.
+                            # Uncomment the following line to cache the module.
+                            # sys.modules[module.__name__] = module
+                            loader.exec_module(module)
+                            return module
 
                         pyFile = command[0]
                         if sys.platform == "win32":
@@ -556,11 +616,8 @@ class GConsole(wx.EvtHandler):
                                 parent=self._guiparent,
                                 message=_("Module <%s> not found.") % command[0],
                             )
-                        pymodule = imp.load_source(command[0].replace(".", "_"), pyPath)
-                        try:  # PY3
-                            pymain = inspect.getfullargspec(pymodule.main)
-                        except AttributeError:
-                            pymain = inspect.getargspec(pymodule.main)
+                        pymodule = load_source(command[0].replace(".", "_"), pyPath)
+                        pymain = inspect.getfullargspec(pymodule.main)
                         if pymain and "giface" in pymain.args:
                             pymodule.main(self._giface)
                             return
@@ -572,6 +629,7 @@ class GConsole(wx.EvtHandler):
                             GUI(
                                 parent=self._guiparent, giface=self._giface
                             ).ParseCommand(command)
+                            self.UpdateHistory(status=Status.SUCCESS)
                         except GException as e:
                             print(e, file=sys.stderr)
 
@@ -618,23 +676,22 @@ class GConsole(wx.EvtHandler):
                 return
 
             skipInterface = True
-            if os.path.splitext(command[0])[1] in (".py", ".sh"):
+            if os.path.splitext(command[0])[1] in {".py", ".sh"}:
                 try:
-                    sfile = open(command[0], "r")
-                    for line in sfile.readlines():
-                        if len(line) < 2:
-                            continue
-                        if line[0] == "#" and line[1] == "%":
-                            skipInterface = False
-                            break
-                    sfile.close()
-                except IOError:
+                    with open(command[0], "r") as sfile:
+                        for line in sfile:
+                            if len(line) < 3:
+                                continue
+                            if line.startswith(("#%", "# %")):
+                                skipInterface = False
+                                break
+                except OSError:
                     pass
 
             if len(command) == 1 and not skipInterface:
                 try:
                     task = gtask.parse_interface(command[0])
-                except:
+                except Exception:
                     task = None
             else:
                 task = None
@@ -642,6 +699,7 @@ class GConsole(wx.EvtHandler):
             if task:
                 # process GRASS command without argument
                 GUI(parent=self._guiparent, giface=self._giface).ParseCommand(command)
+                self.UpdateHistory(status=Status.SUCCESS)
             else:
                 self.cmdThread.RunCmd(
                     command,
@@ -704,7 +762,7 @@ class GConsole(wx.EvtHandler):
                     "sec": int(ctime - (mtime * 60)),
                 }
         except KeyError:
-            # stopped deamon
+            # stopped daemon
             stime = _("unknown")
 
         if event.aborted:
@@ -716,8 +774,18 @@ class GConsole(wx.EvtHandler):
                 )
             )
             msg = _("Command aborted")
+            status = Status.ABORTED
+        elif event.returncode != 0:
+            msg = _("Command ended with non-zero return code {returncode}").format(
+                returncode=event.returncode
+            )
+            status = Status.FAILED
         else:
             msg = _("Command finished")
+            status = Status.SUCCESS
+
+        # update command history log by status and runtime duration
+        self.UpdateHistory(status=status, runtime=int(ctime))
 
         self.WriteCmdLog(
             "(%s) %s (%s)" % (str(time.ctime()), msg, stime),
@@ -752,14 +820,14 @@ class GConsole(wx.EvtHandler):
         name = task.get_name()
         for p in task.get_options()["params"]:
             prompt = p.get("prompt", "")
-            if prompt in ("raster", "vector", "raster_3d") and p.get("value", None):
-                if p.get("age", "old") == "new" or name in (
+            if prompt in {"raster", "vector", "raster_3d"} and p.get("value", None):
+                if p.get("age", "old") == "new" or name in {
                     "r.colors",
                     "r3.colors",
                     "v.colors",
                     "v.proj",
                     "r.proj",
-                ):
+                }:
                     # if multiple maps (e.g. r.series.interp), we need add each
                     if p.get("multiple", False):
                         lnames = p.get("value").split(",")
@@ -772,12 +840,12 @@ class GConsole(wx.EvtHandler):
                         lnames = [p.get("value")]
                     for lname in lnames:
                         if "@" not in lname:
-                            lname += "@" + grass.gisenv()["MAPSET"]
-                        if grass.find_file(lname, element=p.get("element"))["fullname"]:
+                            lname += "@" + gs.gisenv()["MAPSET"]
+                        if gs.find_file(lname, element=p.get("element"))["fullname"]:
                             self.mapCreated.emit(
                                 name=lname, ltype=prompt, add=event.addLayer
                             )
-                            gisenv = grass.gisenv()
+                            gisenv = gs.gisenv()
                             self._giface.grassdbChanged.emit(
                                 grassdb=gisenv["GISDBASE"],
                                 location=gisenv["LOCATION_NAME"],
@@ -787,37 +855,21 @@ class GConsole(wx.EvtHandler):
                                 element=prompt,
                             )
         if name == "r.mask":
-            self.updateMap.emit()
+            action = "new"
+            for p in task.get_options()["flags"]:
+                if p.get("name") == "r" and p.get("value"):
+                    action = "delete"
+            gisenv = gs.gisenv()
+            self._giface.grassdbChanged.emit(
+                grassdb=gisenv["GISDBASE"],
+                location=gisenv["LOCATION_NAME"],
+                mapset=gisenv["MAPSET"],
+                action=action,
+                map="MASK",
+                element="raster",
+            )
 
         event.Skip()
 
     def OnProcessPendingOutputWindowEvents(self, event):
         wx.GetApp().ProcessPendingEvents()
-
-    def UpdateHistoryFile(self, command):
-        """Update history file
-
-        :param command: the command given as a string
-        """
-        env = grass.gisenv()
-        try:
-            filePath = os.path.join(
-                env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"], ".bash_history"
-            )
-            fileHistory = codecs.open(filePath, encoding="utf-8", mode="a")
-        except IOError as e:
-            GError(
-                _("Unable to write file '%(filePath)s'.\n\nDetails: %(error)s")
-                % {"filePath": filePath, "error": e},
-                parent=self._guiparent,
-            )
-            return
-
-        try:
-            fileHistory.write(command + os.linesep)
-        finally:
-            fileHistory.close()
-
-        # update wxGUI prompt
-        if self._giface:
-            self._giface.UpdateCmdHistory(command)

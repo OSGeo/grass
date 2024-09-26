@@ -9,14 +9,14 @@ for details.
 @author: lucadelu
 """
 
-from grass.gunittest.case import TestCase
-import grass.script as gscript
 import os
+
+import grass.script as gs
+from grass.gunittest.case import TestCase
 
 
 class TestRasterExport(TestCase):
-
-    tmp = gscript.tempdir()
+    tmp = gs.tempdir()
     float_ = os.path.join(tmp, "geotiffloat")
     int_ = os.path.join(tmp, "geotifint")
     grid = os.path.join(tmp, "grid")
@@ -62,7 +62,7 @@ class TestRasterExport(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule("t.remove", flags="rf", inputs="A")
+        cls.runModule("t.remove", flags="df", inputs="A")
 
     def test_simple_geotif(self):
         self.assertModule(

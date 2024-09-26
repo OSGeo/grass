@@ -9,7 +9,7 @@ List of classes:
  - dialogs::WSPropertiesDialog
  - dialogs::SaveWMSLayerDialog
 
-(C) 2009-2013 by the GRASS Development Team
+(C) 2009-2021 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -21,12 +21,11 @@ This program is free software under the GNU General Public License
 import wx
 
 import os
-import six
 import shutil
 
 from copy import deepcopy
 
-import grass.script as grass
+import grass.script as gs
 from grass.script.task import cmdlist_to_tuple, cmdtuple_to_list
 
 from core import globalvar
@@ -51,7 +50,6 @@ class WSDialogBase(wx.Dialog):
         style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
         **kwargs,
     ):
-
         wx.Dialog.__init__(self, parent, id, style=style, **kwargs)
 
         self.parent = parent
@@ -66,14 +64,18 @@ class WSDialogBase(wx.Dialog):
 
         # TODO: should be in file
         self.default_servers = {
-            "OSM-WMS-EUROPE": [
-                "http://watzmann-geog.urz.uni-heidelberg.de/cached/osm",
+            "OSM-WMS": [
+                "https://ows.terrestris.de/osm/service?",
                 "",
                 "",
             ],
-            "irs.gis-lab.info (OSM)": ["http://irs.gis-lab.info", "", ""],
             "NASA GIBS WMTS": [
                 "http://gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi",
+                "",
+                "",
+            ],
+            "tiles.maps.eox.at (Sentinel-2)": [
+                "https://tiles.maps.eox.at/wms",
                 "",
                 "",
             ],
@@ -93,7 +95,6 @@ class WSDialogBase(wx.Dialog):
         self._doLayout()
 
     def _createWidgets(self):
-
         settingsFile = os.path.join(GetSettingsPath(), "wxWS")
 
         self.settsManager = WSManageSettingsWidget(
@@ -138,7 +139,7 @@ class WSDialogBase(wx.Dialog):
         )
         self.layerName = TextCtrl(parent=self.reqDataPanel, id=wx.ID_ANY)
 
-        for ws in six.iterkeys(self.ws_panels):
+        for ws in self.ws_panels.keys():
             # set class WSPanel argument layerNameTxtCtrl
             self.ws_panels[ws]["panel"] = WSPanel(
                 parent=self.reqDataPanel, web_service=ws
@@ -168,7 +169,6 @@ class WSDialogBase(wx.Dialog):
         self.layerName.SetValue(title)
 
     def _doLayout(self):
-
         dialogSizer = wx.BoxSizer(wx.VERTICAL)
 
         dialogSizer.Add(
@@ -224,7 +224,7 @@ class WSDialogBase(wx.Dialog):
             self.ch_ws_sizer, proportion=0, flag=wx.TOP | wx.EXPAND, border=5
         )
 
-        for ws in six.iterkeys(self.ws_panels):
+        for ws in self.ws_panels.keys():
             reqDataSizer.Add(
                 self.ws_panels[ws]["panel"],
                 proportion=1,
@@ -331,14 +331,13 @@ class WSDialogBase(wx.Dialog):
 
     def OnClose(self, event):
         """Close the dialog"""
-        """Close dialog"""
         if not self.IsModal():
             self.Destroy()
         event.Skip()
 
     def _getCapFiles(self):
         ws_cap_files = {}
-        for v in six.itervalues(self.ws_panels):
+        for v in self.ws_panels.values():
             ws_cap_files[v["panel"].GetWebService()] = v["panel"].GetCapFile()
 
         return ws_cap_files
@@ -359,7 +358,7 @@ class WSDialogBase(wx.Dialog):
     def OnOutputLayerName(self, event):
         """Update layer name to web service panel"""
         lname = event.GetString()
-        for v in six.itervalues(self.ws_panels):
+        for v in self.ws_panels.values():
             v["panel"].SetOutputLayerName(lname.strip())
 
     def OnConnect(self, event):
@@ -378,12 +377,12 @@ class WSDialogBase(wx.Dialog):
             self.Fit()
 
         self.statusbar.SetStatusText(
-            _("Connecting to <%s>..." % self.server.GetValue().strip())
+            _("Connecting to <$s>...") % self.server.GetValue().strip()
         )
 
         # number of panels already connected
         self.finished_panels_num = 0
-        for ws in six.iterkeys(self.ws_panels):
+        for ws in self.ws_panels.keys():
             self.ws_panels[ws]["panel"].ConnectToServer(
                 url=server,
                 username=self.username.GetValue(),
@@ -414,17 +413,19 @@ class WSDialogBase(wx.Dialog):
 
     def _getConnectedWS(self):
         """
-        :return: list of found web services on server (identified as keys in self.ws_panels)
+        :return: list of found web services on server (identified as keys in
+                 self.ws_panels)
         """
         conn_ws = []
-        for ws, data in six.iteritems(self.ws_panels):
+        for ws, data in self.ws_panels.items():
             if data["panel"].IsConnected():
                 conn_ws.append(ws)
 
         return conn_ws
 
     def UpdateDialogAfterConnection(self):
-        """Update dialog after all web service panels downloaded and parsed capabilities data."""
+        """Update dialog after all web service panels downloaded and parsed
+        capabilities data."""
         avail_ws = {}
         conn_ws = self._getConnectedWS()
 
@@ -440,7 +441,6 @@ class WSDialogBase(wx.Dialog):
             self.rb_order = ["WMS_1.1.1", "WMS_1.3.0", "WMTS", "OnEarth"]
 
             for ws in self.rb_order:
-
                 if ws in avail_ws:
                     self.web_service_sel.append(ws)
                     self.rb_choices.append(avail_ws[ws]["label"])
@@ -463,14 +463,14 @@ class WSDialogBase(wx.Dialog):
             )
             self._showWsPanel(self.web_service_sel[self.choose_ws_rb.GetSelection()])
             self.statusbar.SetStatusText(
-                _("Connected to <%s>" % self.server.GetValue().strip())
+                _("Connected to <%s>") % self.server.GetValue().strip()
             )
             for btn in self.run_btns:
                 btn.Enable(True)
         # no web service found on server
         else:
             self.statusbar.SetStatusText(
-                _("Unable to connect to <%s>" % self.server.GetValue().strip())
+                _("Unable to connect to <%s>") % self.server.GetValue().strip()
             )
             for btn in self.run_btns:
                 btn.Enable(False)
@@ -479,8 +479,8 @@ class WSDialogBase(wx.Dialog):
 
     def OnChooseWs(self, event):
         """Show panel corresponding to selected web service."""
-        choosen_r = event.GetInt()
-        self._showWsPanel(self.web_service_sel[choosen_r])
+        chosen_r = event.GetInt()
+        self._showWsPanel(self.web_service_sel[chosen_r])
 
     def _showWsPanel(self, ws):
         """Helper function"""
@@ -517,7 +517,6 @@ class AddWSDialog(WSDialogBase):
         style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
         **kwargs,
     ):
-
         WSDialogBase.__init__(
             self,
             parent,
@@ -533,7 +532,6 @@ class AddWSDialog(WSDialogBase):
         self.btn_connect.SetDefault()
 
     def _createWidgets(self):
-
         WSDialogBase._createWidgets(self)
 
         self.btn_add = Button(parent=self, id=wx.ID_ANY, label=_("&Add layer"))
@@ -545,7 +543,6 @@ class AddWSDialog(WSDialogBase):
         self.run_btns.append(self.btn_add)
 
     def _doLayout(self):
-
         WSDialogBase._doLayout(self)
 
         self.btnsizer.Add(
@@ -589,7 +586,7 @@ class AddWSDialog(WSDialogBase):
         active_ws = self.active_ws_panel.GetWebService()
         if "WMS" not in active_ws:
             cap_file = self.active_ws_panel.GetCapFile()
-            cmd_cap_file = grass.tempfile()
+            cmd_cap_file = gs.tempfile()
             shutil.copyfile(cap_file, cmd_cap_file)
             lcmd.append("capfile=" + cmd_cap_file)
 
@@ -663,14 +660,14 @@ class WSPropertiesDialog(WSDialogBase):
         self.revert_cmd = cmd
 
         ws_cap = self._getWSfromCmd(cmd)
-        for ws in six.iterkeys(self.ws_panels):
-            # cap file used in cmd will be deleted, thnaks to the dialogs
+        for ws in self.ws_panels.keys():
+            # cap file used in cmd will be deleted, thanks to the dialogs
             # destructor
             if ws == ws_cap and "capfile" in cmd[1]:
                 self.revert_ws_cap_files[ws] = cmd[1]["capfile"]
                 del ws_cap_files[ws]
             else:
-                self.revert_ws_cap_files[ws] = grass.tempfile()
+                self.revert_ws_cap_files[ws] = gs.tempfile()
 
         self._setRevertCapFiles(ws_cap_files)
 
@@ -678,13 +675,12 @@ class WSPropertiesDialog(WSDialogBase):
         self.btn_ok.SetDefault()
 
     def __del__(self):
-        for f in six.itervalues(self.revert_ws_cap_files):
-            grass.try_remove(f)
+        for f in self.revert_ws_cap_files.values():
+            gs.try_remove(f)
 
     def _setRevertCapFiles(self, ws_cap_files):
-
-        for ws, f in six.iteritems(ws_cap_files):
-            if os.path.isfile(ws_cap_files[ws]):
+        for ws, f in ws_cap_files.items():
+            if os.path.isfile(f):
                 shutil.copyfile(f, self.revert_ws_cap_files[ws])
             else:
                 # delete file content
@@ -692,7 +688,6 @@ class WSPropertiesDialog(WSDialogBase):
                 f_o.close()
 
     def _createWidgets(self):
-
         WSDialogBase._createWidgets(self)
 
         self.btn_apply = Button(parent=self, id=wx.ID_ANY, label=_("&Apply"))
@@ -706,7 +701,6 @@ class WSPropertiesDialog(WSDialogBase):
         self.run_btns.append(self.btn_ok)
 
     def _doLayout(self):
-
         WSDialogBase._doLayout(self)
 
         self.btnsizer.Add(
@@ -740,7 +734,7 @@ class WSPropertiesDialog(WSDialogBase):
 
         self.layerName.SetValue(cmd[1]["map"])
 
-        for ws, data in six.iteritems(self.ws_panels):
+        for ws, data in self.ws_panels.items():
             cap_file = None
 
             if ws in ws_cap_files:
@@ -757,7 +751,7 @@ class WSPropertiesDialog(WSDialogBase):
         """Get url/server/passwod from cmd tuple"""
         conn = {"url": "", "username": "", "password": ""}
 
-        for k in six.iterkeys(conn):
+        for k in conn.keys():
             if k in cmd[1]:
                 conn[k] = cmd[1][k]
         return conn
@@ -842,7 +836,6 @@ class SaveWMSLayerDialog(wx.Dialog):
     """
 
     def __init__(self, parent, layer, giface):
-
         wx.Dialog.__init__(
             self,
             parent=parent,
@@ -861,7 +854,6 @@ class SaveWMSLayerDialog(wx.Dialog):
         self._createWidgets()
 
     def _createWidgets(self):
-
         self.labels = {}
         self.params = {}
 
@@ -872,7 +864,7 @@ class SaveWMSLayerDialog(wx.Dialog):
         self.params["output"] = Select(
             parent=self,
             type="raster",
-            mapsets=[grass.gisenv()["MAPSET"]],
+            mapsets=[gs.gisenv()["MAPSET"]],
             size=globalvar.DIALOG_GSELECT_SIZE,
         )
 
@@ -890,13 +882,13 @@ class SaveWMSLayerDialog(wx.Dialog):
         )
         self.region_types["named"] = RadioButton(parent=self, label=_("Named region"))
         self.region_types["display"].SetToolTip(
-            _("Extent and resolution" " are based on Map Display geometry.")
+            _("Extent and resolution are based on Map Display geometry.")
         )
         self.region_types["comp"].SetToolTip(
-            _("Extent and resolution" " are based on computational region.")
+            _("Extent and resolution are based on computational region.")
         )
         self.region_types["named"].SetToolTip(
-            _("Extent and resolution" " are based on named region.")
+            _("Extent and resolution are based on named region.")
         )
         self.region_types["display"].SetValue(True)  # set default as map display
 
@@ -929,7 +921,6 @@ class SaveWMSLayerDialog(wx.Dialog):
         self._layout()
 
     def _layout(self):
-
         self._border = wx.BoxSizer(wx.VERTICAL)
         dialogSizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -1001,7 +992,7 @@ class SaveWMSLayerDialog(wx.Dialog):
         selSizer.Add(
             sel,
             proportion=1,
-            flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER_VERTICAL,
+            flag=wx.EXPAND | wx.ALL,
             border=5,
         )
 
@@ -1020,7 +1011,7 @@ class SaveWMSLayerDialog(wx.Dialog):
     def OnSave(self, event):
         """Import WMS raster data into GRASS as raster layer."""
         self.thread.abort(abortall=True)
-        currmapset = grass.gisenv()["MAPSET"]
+        currmapset = gs.gisenv()["MAPSET"]
 
         self.output = self.params["output"].GetValue().strip()
         l_spl = self.output.strip().split("@")
@@ -1035,9 +1026,9 @@ class SaveWMSLayerDialog(wx.Dialog):
 
         elif (
             not self.overwrite.IsChecked()
-            and grass.find_file(self.output, "cell", ".")["fullname"]
+            and gs.find_file(self.output, "cell", ".")["fullname"]
         ):
-            msg = _("Output map <%s> already exists" % self.output)
+            msg = _("Output map <%s> already exists") % self.output
 
         if msg:
             GMessage(parent=self, message=msg)
@@ -1054,9 +1045,9 @@ class SaveWMSLayerDialog(wx.Dialog):
             reg_mapset = reg_spl[1]
 
         if self.region_types["named"].GetValue():
-            if not grass.find_file(reg_spl[0], "windows", reg_mapset)["fullname"]:
-                msg = _(
-                    "Region <%s> does not exist." % self.params["region"].GetValue()
+            if not gs.find_file(reg_spl[0], "windows", reg_mapset)["fullname"]:
+                msg = (
+                    _("Region <%s> does not exist.") % self.params["region"].GetValue()
                 )
                 GWarning(parent=self, message=msg)
                 return

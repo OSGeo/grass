@@ -1,12 +1,11 @@
 <h2>DESCRIPTION</h2>
 
 <em>d.legend</em> displays a legend for a user-specified raster map or
-3D raster map layer in the active frame on the graphics monitor.  
+3D raster map layer in the active frame on the graphics monitor.
 <p>
 The legend's default size is based on the dimensions of the
 active frame, specifically its height.  <em>d.legend</em> will only
 obscure those portions of the active frame that directly underlie the legend.
-
 
 <h2>NOTES</h2>
 
@@ -20,21 +19,21 @@ with inverted y-values or an inverted <b>range</b>, the legend will automaticall
 flip. If this is not the desired result, the <b>-f</b> flag may be used to flip
 it back.
 <p>
-If the user attempts to display a very long legend in a relatively short 
+If the user attempts to display a very long legend in a relatively short
 display frame, the legend may appear in unreadably small text, or even revert
 to a smooth gradient legend. Use the <b>lines</b>, <b>thin</b>, <b>use</b>, <b>range</b>,
 and/or <b>-n</b> options to reduce the number of categories to be displayed,
-or the <b>-s</b> flag to force a smooth gradient legend. 
+or the <b>-s</b> flag to force a smooth gradient legend.
 <p>
 The <b>lines</b> option will display the first number of categories, as defined
 by <em>value</em>, contained in the raster map. When used with the <b>-n</b> flag,
 it takes on a new meaning: "up to category #". When used with both
 <b>thin</b> and the <b>-n</b> flag, its meaning becomes more obscure. When
-using <b>lines</b>, auto-scaled text similar to "4 of 16 categories" will be placed at 
+using <b>lines</b>, auto-scaled text similar to "4 of 16 categories" will be placed at
 the bottom of the legend.
 <p>
 The <b>thin</b> option sets the thinning factor. For raster maps with a 0th
-category, <b>thin=</b><em>10</em> gives cats [0,10,20,...]. For raster maps 
+category, <b>thin=</b><em>10</em> gives cats [0,10,20,...]. For raster maps
 starting at category 1, <b>thin=</b><em>10</em> gives cats [1,11,21,...].
 <p>
 The <b>use</b> option lets the user create a legend made up of arbitrary category
@@ -76,11 +75,11 @@ If the histogram appears empty, check your region settings.
 If the raster map's <i>units</i> metadata has been set with the
 <em>r.support</em> module then it will be displayed along side the legend.
 <p>
-The option <b>title</b> will display the custom title at the top of the legend. 
+The option <b>title</b> will display the custom title at the top of the legend.
 In case of vertical legend the title is aligned to the left edge of legend, in case
 of horizontal legend the title is aligned to the center. <b>title_fontsize</b> can
 be used to set the size of legend title. By default the legend title font size is
-the same as labels font size. 
+the same as labels font size.
 <p>
 There are different options to customize displayed labels. The <b>labelnum</b> set
 the number of labels which are displayed in regular intervals. The <b>label_values</b>
@@ -134,7 +133,6 @@ d.legend raster=flowacc -t -l label_step=1
 </center>
 
 
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -151,14 +149,9 @@ d.legend raster=flowacc -t -l label_step=1
 <a href="r3.stats.html">r3.stats</a>
 </em>
 
-
 <h2>AUTHORS</h2>
+
 Bill Brown, U.S. Army Construction Engineering Research Laboratories
 <br>Late 2002: Rewrite of much of the code. Hamish Bowman,
  Otago University, New Zealand
 <br>Additional improvements from various authors
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

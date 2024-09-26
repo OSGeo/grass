@@ -23,13 +23,13 @@ A list of recently active contributors is available at
 https://github.com/OSGeo/grass/graphs/contributors
 
 A list of contributors with write access is available in
-https://github.com/OSGeo/grass/blob/master/contributors.csv
+https://github.com/OSGeo/grass/blob/main/contributors.csv
 
 A list of contributors without write access is available in
-https://github.com/OSGeo/grass/blob/master/contributors_extra.csv
+https://github.com/OSGeo/grass/blob/main/contributors_extra.csv
 
 A list of translators is available in
-https://github.com/OSGeo/grass/blob/master/translators.csv
+https://github.com/OSGeo/grass/blob/main/translators.csv
 
 (note: email addresses below have been spam-proofed to protect the innocent;
 add "@" and "." as needed.)
@@ -152,7 +152,7 @@ DOCUMENTATION
 
 GUI
  - Radim Blazek <blazek itc it>: primary author of d.m and v.digit
- - Michael Barton <michael.barton asu edu>: tcltkgrass menu system 
+ - Michael Barton <michael.barton asu edu>: tcltkgrass menu system
    partial rewrite and integration into d.m
  - Multibyte FreeType Font Support: www.FOSS4G.org team
 
@@ -168,7 +168,7 @@ INTERNATIONALIZATION
     - Arabic: Dr. Alaa Masoud
     - Chinese: Zhang Jun
     - Czech: Martin Landa, Jachym Cepicky, Michal Bil, Radim Blazek
-    - German: Stephan Holl 
+    - German: Stephan Holl
     - French: Emmanuel Saracco, Daniel Calvelo, Laurent Courty
     - Italian: Maurizio Napolitano, Luciano Montanaro, Lorenzo Moretti
     - Japanese: Susumu Nonogaki
@@ -221,7 +221,7 @@ VECTOR
  - Radim Blazek <blazek itc it>: vector engine core developer
  - David D Gray: vector engine contributions
  - modules: see individual authors and ./contributors.csv
- 
+
 DBMI
  - based on original code from GRASS 5.0 (developer unknown, CERL?)
  - Radim Blazek <blazek itc it>: core developer of 5.7 enhancements
@@ -233,7 +233,7 @@ DGLib: vector networking
      network analysis
 
 FORMS library
- - Radim Blazek <blazek itc it>: core developer 
+ - Radim Blazek <blazek itc it>: core developer
 
 RASTER
  - Modules: see 5.4 authors below + individual modules
@@ -273,8 +273,8 @@ GRASS GIS 5.4 Author List
 Please check additionally the GRASS 1.x-5.0 credits list at:
  https://grass.osgeo.org/about/credits/
 
-While it is impossible for us to give credit to everyone (past 
-and present) who has contributed to GRASS, the following is the 
+While it is impossible for us to give credit to everyone (past
+and present) who has contributed to GRASS, the following is the
 incomplete official list for GRASS 5.0-5.4:
 
 Institutions:
@@ -285,31 +285,31 @@ Institutions:
 
 GRASS 5 Core Team (most have CVS write access):
  Michael Barton  <michael.barton asu edu>      (tcltkgrass menus)
- Roger Bivand    <Roger.Bivand nhh.no>         ("R" statistical language 
+ Roger Bivand    <Roger.Bivand nhh.no>         ("R" statistical language
                                                 support)
  Radim Blazek    <blazek itc.it>               (DBMS support, ps.map, d.dm)
  Hamish Bowman   <hamish.bowman otago.ac.nz>   (ps.map,display,rasters, ...)
  Huidae Cho      <grass4u gmail.com>           (FreeType,r.topmodel,r.topidx, ..)
  Glynn Clements  <glynn gclements.plus.com>    (Code portability, ...)
- Bob Covill      <bcovill tekmap.ns.ca>        (NVIZ export formats, 
+ Bob Covill      <bcovill tekmap.ns.ca>        (NVIZ export formats,
                                                 r.in|out.bin)
  Jaro Hofierka   <hofierka geomodel.sk>        (NVIZ port, grid3D and related)
  Paul Kelly      <paul-grass stjohnspoint.co.uk> (PROJ4, datum trafo, IRIX ...)
  Lubos Mitas     <lmitas ncsa.uiuc.edu>        (multivariate spline
-                                                interpolation (RST) 
+                                                interpolation (RST)
                                                 and erosion modeling)
  Helena Mitasova <hmitaso unity.ncsu.edu>      (interpolation modules, NVIZ,
                                                 RASTER3D, erosion modelling)
- Eric G. Miller  <egm2 jps.net>                (sites format, new autoconf 
+ Eric G. Miller  <egm2 jps.net>                (sites format, new autoconf
                                                 system, bugfixes etc.)
  Roger S. Miller <rgrmill rt66.com>            (raster modules, r.drain etc.)
  Markus Neteler  <neteler itc.it>              (GRASS 5 coordination, this&that ...)
  Bernhard Reiter <bernhard intevation.de>      (License, CVS, Bugfixes, RT)
  Alexander Shevlakov <sixote yahoo.com>        (PostgreSQL/GRASS interface)
  Mike Thomas <miketh brisbane.paradigmgeo.com> (generic Windows driver)
- Jan-Oliver Wagner   <jan intevation.de>       (XML-support, 
+ Jan-Oliver Wagner   <jan intevation.de>       (XML-support,
                                                 Module descriptions)
- Frank Warmerdam     <warmerdam pobox.com>     (GDAL, SHAPE implementation, 
+ Frank Warmerdam     <warmerdam pobox.com>     (GDAL, SHAPE implementation,
                                                 new GRASS I/O library)
  Michel Wurtz        <mw teledetection.fr>     (ESRI E00 support)
 
@@ -320,11 +320,11 @@ Former programmers (GRASS 5.0):
  Malcolm Blue        <mblue nb.sympatico.ca>     (Windows NT/Cygnus port)
  Jacques Bouchard    <bouchard onera.fr>         (tcltkgrass, bugfixes)
  David D. Gray       <ddgray armadce.demon.co.uk>(Vector, SQL support)
- Justin Hickey       <jhickey hpcc.nectec.or.th> (GRASS initialization, 
+ Justin Hickey       <jhickey hpcc.nectec.or.th> (GRASS initialization,
 						  new env var handling, SGI)
  John Huddleston     <jhudd lamar.colostate.edu> (Windows NT/Cygnus port)
  Bill Hughes         <bhughes grasshoppernet.com> (64bit compliance)
- Andreas Lange       <Andreas.Lange Rhein-Main.de> (SGI/Irix compliance, 
+ Andreas Lange       <Andreas.Lange Rhein-Main.de> (SGI/Irix compliance,
 						   Proj/Datum support)
  Brook Milligan      <brook trillium.NMSU.Edu>    (initial autoconf implementation)
  Phisan Santitamnont <fsvpss eng.chula.ac.th>     (initial Linux compilation
@@ -364,12 +364,12 @@ Former GRASS 4 development (1984 to 1995):
 Former Institutions
  - University of Illinois at Urbana-Champaign, USA
    Helena Mitasova <hmitaso unity.ncsu.edu> (interpolation modules, NVIZ, RASTER3D)
-   William Brown   <brown gis.uiuc.edu>     (libraries, interpolation modules, 
+   William Brown   <brown gis.uiuc.edu>     (libraries, interpolation modules,
 					     NVIZ, RASTER3D)
 
  - National Center for Supercomputing Applications, USA
    Lubos Mitas (multivariate spline interpolation (RST) and erosion modeling)
- 
+
  - High Performance Computing Center, Thailand
    National Electronics and Computer Technology Center
    Bangkok, Thailand
@@ -386,9 +386,9 @@ development team, listed below, as many are still active in the
 project and GRASS GIS owes much of itself to the generosity of their
 bright minds.
 
-GRASS 6.0 was made up of entirely new code for much of the vector and 
-database management subsystems. The raster, display, and projection 
-subsystems are largely directly inherited from GRASS 5.4 without change. 
+GRASS 6.0 was made up of entirely new code for much of the vector and
+database management subsystems. The raster, display, and projection
+subsystems are largely directly inherited from GRASS 5.4 without change.
 The core GIS, GUI, and build subsystems are a hybrid of old and new code.
 
 
@@ -407,7 +407,7 @@ Contact
  GRASS Development Team
  c/o Markus Neteler
  mundialis GmbH & Co. KG
- Kölnstrasse 99
+ Koelnstrasse 99
  53111 Bonn, Germany
  neteler AT osgeo.org
 

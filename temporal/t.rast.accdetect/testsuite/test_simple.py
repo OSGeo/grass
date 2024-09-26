@@ -8,9 +8,10 @@ for details.
 :authors: Luca Delucchi
 """
 
+import os
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
-import os
 
 
 class TestRasterExtraction(TestCase):
@@ -57,12 +58,12 @@ class TestRasterExtraction(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule("t.remove", flags="rf", type="strds", inputs="A")
+        cls.runModule("t.remove", flags="df", type="strds", inputs="A")
 
     def tearDown(self):
         """Remove generated data"""
-        self.runModule("t.remove", flags="rf", type="strds", inputs="B")
-        self.runModule("t.remove", flags="rf", type="strds", inputs="C")
+        self.runModule("t.remove", flags="df", type="strds", inputs="B")
+        self.runModule("t.remove", flags="df", type="strds", inputs="C")
 
     def test_simple(self):
         self.assertModule(

@@ -16,9 +16,9 @@ char *getfree(struct Freelist *fl)
     struct Freenode *t;
 
     if (fl->head == (struct Freenode *)NULL) {
-	t = (struct Freenode *)G_malloc(sqrt_nsites * fl->nodesize);
-	for (i = 0; i < sqrt_nsites; i++)
-	    makefree((struct Freenode *)((char *)t + i * fl->nodesize), fl);
+        t = (struct Freenode *)G_malloc(sqrt_nsites * fl->nodesize);
+        for (i = 0; i < sqrt_nsites; i++)
+            makefree((struct Freenode *)((char *)t + i * fl->nodesize), fl);
     }
     t = fl->head;
     fl->head = (fl->head)->nextfree;

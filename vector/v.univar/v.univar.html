@@ -2,11 +2,11 @@
 
 <em>v.univar</em> calculates univariate statistics on (by default) an attribute
 of, or, through the <b>-d</b> flag on distance between, vector map features.
-Attributes are read per feature and per category value. This means that if the 
-map contains several features with the same category value, the attribute is 
-read as many times as there are features. On the other hand, if a feature has 
-more than one category value, each attribute value linked to each of the 
-category values of the feature is read. For statistics on one attribute 
+Attributes are read per feature and per category value. This means that if the
+map contains several features with the same category value, the attribute is
+read as many times as there are features. On the other hand, if a feature has
+more than one category value, each attribute value linked to each of the
+category values of the feature is read. For statistics on one attribute
 per category value, instead of one attribute per feature and per category,
 see <a href="v.db.univar.html">v.db.univar</a>.
 
@@ -15,12 +15,12 @@ percentile to the output.
 
 <h2>NOTES</h2>
 
-When using the <b>-d</b> flag, univariate statistics of distances 
-between vector features are calculated. The distances from all features 
-to all other features are used. Since the distance from feature A to 
-feature B is the same like the distance from feature B to feature A, 
-that distance is considered only once, i.e. all pairwise distances 
-between features are used. Depending on the selected vector 
+When using the <b>-d</b> flag, univariate statistics of distances
+between vector features are calculated. The distances from all features
+to all other features are used. Since the distance from feature A to
+feature B is the same like the distance from feature B to feature A,
+that distance is considered only once, i.e. all pairwise distances
+between features are used. Depending on the selected vector
 <b>type</b>, distances are calculated as follows:
 
 <ul>
@@ -49,7 +49,7 @@ v.db.select map=samples
 
 <div class="code"><pre>
 v.univar -e samples column=heights type=point
-    
+
 number of features with non NULL attribute: 100
 number of missing attributes: 0
 number of NULL attributes: 0
@@ -121,6 +121,41 @@ kurtosis: -0.605406
 skewness: 0.238688
 </pre></div>
 
+<h3>Output in JSON format</h3>
+<div class="code"><pre>
+v.univar -e samples column=heights type=point format=json
+</pre></div>
+will output the results in JSON format:
+<div class="code"><pre>
+{
+    "n": 1832,
+    "missing": 0,
+    "nnull": 0,
+    "min": 166.946991,
+    "max": 2729482.25,
+    "range": 2729315.3030090001,
+    "sum": 78876146.145385057,
+    "mean": 43054.664926520229,
+    "mean_abs": 43054.664926520229,
+    "population_stddev": 132689.08650029532,
+    "population_variance": 17606393676.282852,
+    "population_coeff_variation": 3.0818747916573215,
+    "sample_stddev": 132725.31560308655,
+    "sample_variance": 17616009401.938931,
+    "kurtosis": 139.15698418811229,
+    "skewness": 9.7065048189730767,
+    "first_quartile": 3699.3234859999998,
+    "median": 10308.4453125,
+    "third_quartile": 29259.074218999998,
+    "percentiles": [
+        {
+            "percentile": 90,
+            "value": 86449.734375
+        }
+    ]
+}
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>
@@ -132,16 +167,10 @@ skewness: 0.238688
 <a href="v.qcount.html">v.qcount</a>
 </em>
 
-
 <h2>AUTHORS</h2>
 
 Radim Blazek, ITC-irst
 <p>
 extended by:<br>
 Hamish Bowman, University of Otago, New Zealand<br>
-Martin Landa 
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+Martin Landa

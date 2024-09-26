@@ -24,8 +24,10 @@ int I_find_group_file2(const char *, const char *, const char *);
 int I_find_subgroup(const char *, const char *);
 int I_find_subgroup2(const char *, const char *, const char *);
 int I_find_subgroup_file(const char *, const char *, const char *);
-int I_find_subgroup_file2(const char *, const char *, const char *, const char *);
-int I_find_signature_file(const char *, const char *, const char *, const char *);
+int I_find_subgroup_file2(const char *, const char *, const char *,
+                          const char *);
+const char *I_find_signature(I_SIGFILE_TYPE, char *, const char *);
+const char *I_find_signature2(I_SIGFILE_TYPE, const char *, const char *);
 
 /* fopen.c */
 FILE *I_fopen_group_file_new(const char *, const char *);
@@ -35,17 +37,18 @@ FILE *I_fopen_group_file_old2(const char *, const char *, const char *);
 FILE *I_fopen_subgroup_file_new(const char *, const char *, const char *);
 FILE *I_fopen_subgroup_file_append(const char *, const char *, const char *);
 FILE *I_fopen_subgroup_file_old(const char *, const char *, const char *);
-FILE *I_fopen_subgroup_file_old2(const char *, const char *, const char *, const char *);
+FILE *I_fopen_subgroup_file_old2(const char *, const char *, const char *,
+                                 const char *);
 
 /* georef.c */
 int I_compute_georef_equations(struct Control_Points *, double *, double *,
-			       double *, double *, int);
+                               double *, double *, int);
 int I_georef(double, double, double *, double *, double *, double *, int);
 
 /* georef_tps.c */
-int I_compute_georef_equations_tps(struct Control_Points *, double **, double **,
-			       double **, double **);
-int I_georef_tps(double, double, double *, double *, double *, double *, 
+int I_compute_georef_equations_tps(struct Control_Points *, double **,
+                                   double **, double **, double **);
+int I_georef_tps(double, double, double *, double *, double *, double *,
                  struct Control_Points *, int);
 
 /* group.c */
@@ -67,7 +70,8 @@ int I_free_group_ref(struct Ref *);
 
 /* iclass.c */
 struct Map_info;
-int I_iclass_analysis(IClass_statistics *, struct Ref *, struct Map_info *, const char *, const char *, const char *);
+int I_iclass_analysis(IClass_statistics *, struct Ref *, struct Map_info *,
+                      const char *, const char *, const char *);
 int I_iclass_init_group(const char *, const char *, struct Ref *);
 void I_iclass_create_raster(IClass_statistics *, struct Ref *, const char *);
 
@@ -88,21 +92,23 @@ void I_iclass_statistics_get_nstd(IClass_statistics *, float *);
 void I_iclass_statistics_set_nstd(IClass_statistics *, float);
 int I_iclass_statistics_get_histo(IClass_statistics *, int, int, int *);
 int I_iclass_statistics_get_product(IClass_statistics *, int, int, float *);
-void I_iclass_init_statistics(IClass_statistics *, int, const char *, const char *, float);
+void I_iclass_init_statistics(IClass_statistics *, int, const char *,
+                              const char *, float);
 void I_iclass_free_statistics(IClass_statistics *);
 
 /* iclass_signatures.c */
 int I_iclass_init_signatures(struct Signature *, struct Ref *);
 void I_iclass_add_signature(struct Signature *, IClass_statistics *);
-int I_iclass_write_signatures(struct Signature *, const char *, const char *, const char *);
+int I_iclass_write_signatures(struct Signature *, const char *);
 
 /* list_gp.c */
 int I_list_group(const char *, const struct Ref *, FILE *);
 int I_list_group_simple(const struct Ref *, FILE *);
+void I__list_group_name_fit(char *, const char *, const char *);
 
 /* list_subgp.c */
-char ** I_list_subgroups(const char *, int *);
-char ** I_list_subgroups2(const char *, const char *, int *);
+char **I_list_subgroups(const char *, int *);
+char **I_list_subgroups2(const char *, const char *, int *);
 int I_list_subgroup(const char *, const char *, const struct Ref *, FILE *);
 int I_list_subgroup_simple(const struct Ref *, FILE *);
 
@@ -110,8 +116,8 @@ int I_list_subgroup_simple(const struct Ref *, FILE *);
 char *I_location_info(const char *);
 
 /* points.c */
-int I_new_control_point(struct Control_Points *, double, double, double,
-			double, int);
+int I_new_control_point(struct Control_Points *, double, double, double, double,
+                        int);
 int I_get_control_points(const char *, struct Control_Points *);
 int I_put_control_points(const char *, const struct Control_Points *);
 
@@ -132,18 +138,30 @@ int I_sc_insert_scatt_data(struct scCats *, struct scdScattData *, int, int);
 void I_scd_init_scatt_data(struct scdScattData *, int, int, void *);
 
 /* iscatt_core.c */
-int I_compute_scatts(struct Cell_head *, struct scCats *, const char **, 
-	                 const char **, int, struct scCats *, const char **);
+int I_compute_scatts(struct Cell_head *, struct scCats *, const char **,
+                     const char **, int, struct scCats *, const char **);
 
 int I_create_cat_rast(struct Cell_head *, const char *);
-int I_insert_patch_to_cat_rast(const char *, struct Cell_head *,  const char *);
+int I_insert_patch_to_cat_rast(const char *, struct Cell_head *, const char *);
 
 int I_id_scatt_to_bands(const int, const int, int *, int *);
 int I_bands_to_id_scatt(const int, const int, const int, int *);
 
-int I_merge_arrays(unsigned char *, unsigned char *, unsigned, unsigned, double);
-int I_apply_colormap(unsigned char *, unsigned char *, unsigned,  unsigned char *, unsigned char *);
-int I_rasterize(double *, int, unsigned char, struct Cell_head *, unsigned char *);
+int I_merge_arrays(unsigned char *, unsigned char *, unsigned, unsigned,
+                   double);
+int I_apply_colormap(unsigned char *, unsigned char *, unsigned,
+                     unsigned char *, unsigned char *);
+int I_rasterize(double *, int, unsigned char, struct Cell_head *,
+                unsigned char *);
+
+/* manage_signatures.c */
+void I_get_signatures_dir(char *, I_SIGFILE_TYPE);
+void I_make_signatures_dir(I_SIGFILE_TYPE);
+int I_signatures_remove(I_SIGFILE_TYPE, const char *);
+int I_signatures_copy(I_SIGFILE_TYPE, const char *, const char *, const char *);
+int I_signatures_rename(I_SIGFILE_TYPE, const char *, const char *);
+int I_signatures_list_by_type(I_SIGFILE_TYPE, const char *, char ***);
+void I_free_signatures_list(int, char ***);
 
 /* sig.c */
 int I_init_signatures(struct Signature *, int);
@@ -152,16 +170,17 @@ int I_free_signatures(struct Signature *);
 int I_read_one_signature(FILE *, struct Signature *);
 int I_read_signatures(FILE *, struct Signature *);
 int I_write_signatures(FILE *, struct Signature *);
+char **I_sort_signatures_by_semantic_label(struct Signature *,
+                                           const struct Ref *);
 
 /* sigfile.c */
-FILE *I_fopen_signature_file_new(const char *, const char *, const char *);
-FILE *I_fopen_signature_file_old(const char *, const char *, const char *);
+FILE *I_fopen_signature_file_new(const char *);
+FILE *I_fopen_signature_file_old(const char *);
 
 /* sigset.c */
 int I_SigSetNClasses(struct SigSet *);
 struct ClassData *I_AllocClassData(struct SigSet *, struct ClassSig *, int);
-int I_InitSigSet(struct SigSet *);
-int I_SigSetNBands(struct SigSet *, int);
+int I_InitSigSet(struct SigSet *, int);
 struct ClassSig *I_NewClassSig(struct SigSet *);
 struct SubSig *I_NewSubSig(struct SigSet *, struct ClassSig *);
 int I_ReadSigSet(FILE *, struct SigSet *) WARN_UNUSED_RESULT;
@@ -170,10 +189,11 @@ const char *I_GetSigTitle(const struct SigSet *);
 int I_SetClassTitle(struct ClassSig *, const char *);
 const char *I_GetClassTitle(const struct ClassSig *);
 int I_WriteSigSet(FILE *, const struct SigSet *);
+char **I_SortSigSetBySemanticLabel(struct SigSet *, const struct Ref *);
 
 /* sigsetfile.c */
-FILE *I_fopen_sigset_file_new(const char *, const char *, const char *);
-FILE *I_fopen_sigset_file_old(const char *, const char *, const char *);
+FILE *I_fopen_sigset_file_new(const char *);
+FILE *I_fopen_sigset_file_old(const char *);
 
 /* target.c */
 int I_get_target(const char *, char *, char *);

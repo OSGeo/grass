@@ -1,4 +1,5 @@
 <h2>DESCRIPTION</h2>
+
 <em>r.mapcalc</em> performs arithmetic on raster map layers.
 New raster map layers can be created which are arithmetic expressions
 involving existing raster map layers, integer or floating point constants,
@@ -147,7 +148,6 @@ Division by 0 and modulus by 0 are acceptable and give a NULL result.
 The logical operators give a 1 result if the comparison is true, 0 otherwise.
 <p><p>
 
-
 <h3>Raster map layer names</h3>
 
 Anything in the expression which is not a number, operator, or function name
@@ -199,7 +199,6 @@ result = x@PERMANENT / y@SOILS
 (This method of overriding the mapset search path is common to all
 GRASS commands, not just <em>r.mapcalc</em>.)
 <p>
-
 
 <h3>The neighborhood modifier</h3>
 
@@ -254,7 +253,6 @@ If the category label is integer, it will be represented by
 a floating point number. I the category label does not start
 with a number or is missing, it will be represented by NULL
 (no data) in the resulting raster map.
-
 
 <h3>Grey scale equivalents and color separates</h3>
 
@@ -318,7 +316,6 @@ red
 </pre></div>
 <p>
 
-
 <h3>Functions</h3>
 
 The functions currently supported are listed in the table below.
@@ -359,6 +356,7 @@ log(x,b)                log of x base b                                 F
 max(x,y[,z...])         largest value of those listed                   *
 median(x,y[,z...])      median value of those listed                    *
 min(x,y[,z...])         smallest value of those listed                  *
+mod(x,y)                return the modulus (the remainder) of x/y       *
 mode(x,y[,z...])        mode value of those listed                      *
 nmax(x,y[,z...])        largest value of those listed, excluding NULLs  *
 nmedian(x,y[,z...])     median value of those listed, excluding NULLs   *
@@ -391,6 +389,34 @@ Internal variables:
 </pre></div>
 Note, that the row() and col() indexing starts with 1.
 
+<h3>Data types and their precision</h3>
+
+There are three data types that can be used within the mapcalc expression. They
+are defined with certain precision and within certain value range. The
+following table reports precision and value range info on AMD64 (x86-64)
+architectures compiled with GCC/CLANG. Note that although this setting is the
+most frequent one, the ranges could differ for different architectures.
+
+<p><div class="code"><pre>
+data type               precision and value range info
+-------------------------------------------------------------------------------
+ int                    a 32-bit integer with a range from -2,147,483,647 to
+                        +2,147,483,647. The value -2,147,483,648 is reserved
+                        for NODATA.
+ float                  a 32-bit float (Float32) with a range from -3.4E38 to
+                        3.4E38. However, the integer precision can be only
+                        ensured between -16,777,216 and 16,777,216. If your
+                        raster overpasses this range, it is strongly suggested
+                        to use the type double instead.
+ double                 a 64-bit float (Float64) with a range from -1.79E308 to
+                        1.79E308. It is 8 bytes, 15-17 digits precision.
+ null                   NULL value. Refer to section "NULL support" below.
+</pre></div>
+
+Note that the value counter wraps around when the value overflows its range.
+E.g., if your expression is <tt>a = int(2147483648)</tt>, you will get NULL
+value. For expression <tt>a = int(2147483649)</tt>, you will reach the lowest
+value possible instead, i.e. -2147483647.
 
 <h3>Floating point values in the expression</h3>
 
@@ -415,7 +441,6 @@ produce a floating-point result, as will using float():
 <div class="code"><pre>
       r.mapcalc "ndvi = float(lsat.4 - lsat.3) / (lsat.4 + lsat.3)"
 </pre></div>
-
 
 <h3>NULL support</h3>
 
@@ -517,7 +542,6 @@ The behaviour makes sense if the user considers NULL as representing an
 unknown quantity. E.g. if x and y are both unknown, then the values of
 "x == y" and "x != y" are also unknown; if they both have unknown
 values, the user doesn't know whether or not they both have the same value.
-
 
 <h2>NOTES</h2>
 
@@ -674,11 +698,10 @@ being used each time.
 can be seen using <em>r.info</em>.
 <p>If you want other people to be able to verify your results, it's
 preferable to use the <b>seed</b> option to supply a seed which is
-either specified in the script or generated from a determenistic process
+either specified in the script or generated from a deterministic process
 such as a pseudo-random number generator given an explicit seed.
 <p>Note that the rand() function will generate a fatal error if neither
 the <b>seed</b> option nor the <b>-s</b> flag are given.
-
 
 <h2>EXAMPLES</h2>
 
@@ -762,7 +785,6 @@ X (map) values supplied and y (newmap) values returned:
 100, 50
 </pre></div>
 
-
 <h2>KNOWN ISSUES</h2>
 
 The <em>result</em> variable on the left hand side of the equation should not
@@ -800,19 +822,6 @@ separable by white space.
 <p><em>r.mapcalc</em> does not print a warning in case of operations on
 NULL cells. It is left to the user to utilize the <tt>isnull()</tt> function.
 
-
-<h2>SEE ALSO</h2>
-
-<em>
-<a href="g.region.html">g.region</a>,
-<a href="r.bitpattern.html">r.bitpattern</a>,
-<a href="r.blend.html">r.blend</a>,
-<a href="r.colors.html">r.colors</a>,
-<a href="r.fillnulls.html">r.fillnulls</a>,
-<a href="r.mapcalc.simple.html">r.mapcalc.simple</a>
-</em>
-
-
 <h2>REFERENCES</h2>
 
 <b><a href="https://grass.osgeo.org/gdp/raster/mapcalc-algebra.pdf">r.mapcalc: An Algebra for GIS and Image
@@ -827,13 +836,19 @@ Tweddale, U.S. Army Construction Engineering Research Laboratory (December
 luminance.  See "Fundamentals of Digital Image Processing,"
 by Anil K. Jain (Prentice Hall, NJ, 1989; p 67).
 
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="g.region.html">g.region</a>,
+<a href="r.bitpattern.html">r.bitpattern</a>,
+<a href="r.blend.html">r.blend</a>,
+<a href="r.colors.html">r.colors</a>,
+<a href="r.fillnulls.html">r.fillnulls</a>,
+<a href="r.mapcalc.simple.html">r.mapcalc.simple</a>
+</em>
 
 <h2>AUTHORS</h2>
+
 Michael Shapiro, U.S.Army Construction Engineering
 Research Laboratory
 <p>Glynn Clements
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

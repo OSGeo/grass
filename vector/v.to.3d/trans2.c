@@ -15,8 +15,8 @@
    \param field layer number
    \param column attribute column used for height
  */
-void trans2d(struct Map_info *In, struct Map_info *Out, int type,
-	    double height, const char *field_name, const char *column)
+void trans2d(struct Map_info *In, struct Map_info *Out, int type, double height,
+             const char *field_name, const char *column)
 {
     int i, ltype, line, field;
     int cat;
@@ -33,100 +33,100 @@ void trans2d(struct Map_info *In, struct Map_info *Out, int type,
     db_CatValArray_init(&cvarr);
 
     field = Vect_get_field_number(In, field_name);
-    
-    if (column) {
-	struct field_info *Fi;
 
-	dbDriver *driver;
+    if (column) {
+        struct field_info *Fi;
+
+        dbDriver *driver;
 
         if (field == -1) {
             G_warning(_("Invalid layer number %d, assuming 1"), field);
             field = 1;
         }
 
-	Fi = Vect_get_field(In, field);
-	if (!Fi) {
-	    G_fatal_error(_("Database connection not defined for layer <%s>"),
+        Fi = Vect_get_field(In, field);
+        if (!Fi) {
+            G_fatal_error(_("Database connection not defined for layer <%s>"),
                           field_name);
-	}
+        }
 
-	driver = db_start_driver_open_database(Fi->driver, Fi->database);
-	if (!driver) {
-	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+        driver = db_start_driver_open_database(Fi->driver, Fi->database);
+        if (!driver) {
+            G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                           Fi->database, Fi->driver);
-	}
+        }
         db_set_error_handler_driver(driver);
-        
-	/* column type must numeric */
-	ctype = db_column_Ctype(driver, Fi->table, column);
-	if (ctype == -1) {
-	    G_fatal_error(_("Column <%s> not found in table <%s>"),
-                          column, Fi->table);
-	}
-	if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE) {
-	    G_fatal_error(_("Column must be numeric"));
-	}
+
+        /* column type must numeric */
+        ctype = db_column_Ctype(driver, Fi->table, column);
+        if (ctype == -1) {
+            G_fatal_error(_("Column <%s> not found in table <%s>"), column,
+                          Fi->table);
+        }
+        if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE) {
+            G_fatal_error(_("Column must be numeric"));
+        }
 
         G_message(_("Fetching height from <%s> column..."), column);
-	db_select_CatValArray(driver, Fi->table, Fi->key,
-			      column, NULL, &cvarr);
+        db_select_CatValArray(driver, Fi->table, Fi->key, column, NULL, &cvarr);
 
-	G_debug(3, "%d records selected", cvarr.n_values);
+        G_debug(3, "%d records selected", cvarr.n_values);
 
-	db_close_database_shutdown_driver(driver);
+        db_close_database_shutdown_driver(driver);
+        Vect_destroy_field_info(Fi);
     }
 
     G_message(_("Transforming features..."));
     line = 1;
     while (1) {
-	ltype = Vect_read_next_line(In, Points, Cats);
-	if (ltype == -1) {
-	    G_fatal_error(_("Unable to read vector map"));
-	}
-	if (ltype == -2) {	/* EOF */
-	    break;
-	}
+        ltype = Vect_read_next_line(In, Points, Cats);
+        if (ltype == -1) {
+            G_fatal_error(_("Unable to read vector map"));
+        }
+        if (ltype == -2) { /* EOF */
+            break;
+        }
 
         G_progress(line, 1000);
-        
-	if (!(ltype & type))
-	    continue;
 
-	if (field != -1 && !Vect_cat_get(Cats, field, &cat))
-	    continue;
-	
-	if (column) {
-	    Vect_cat_get(Cats, field, &cat);
-	    if (cat < 0) {
-		G_warning(_("Skipping feature without category"));
-		continue;
-	    }
+        if (!(ltype & type))
+            continue;
 
-	    if (ctype == DB_C_TYPE_DOUBLE)
-		ret = db_CatValArray_get_value_double(&cvarr, cat, &height);
-	    else {		/* integer */
+        if (field != -1 && !Vect_cat_get(Cats, field, &cat))
+            continue;
 
-		int height_i;
+        if (column) {
+            Vect_cat_get(Cats, field, &cat);
+            if (cat < 0) {
+                G_warning(_("Skipping feature without category"));
+                continue;
+            }
 
-		ret = db_CatValArray_get_value_int(&cvarr, cat, &height_i);
-		height = (double)height_i;
-	    }
+            if (ctype == DB_C_TYPE_DOUBLE)
+                ret = db_CatValArray_get_value_double(&cvarr, cat, &height);
+            else { /* integer */
 
-	    if (ret != DB_OK)
-		G_warning(_("Unable to get height for feature category %d"),
-			  cat);
-	}
+                int height_i;
 
-	for (i = 0; i < Points->n_points; i++) {
-	    Points->z[i] = height;
-	}
+                ret = db_CatValArray_get_value_int(&cvarr, cat, &height_i);
+                height = (double)height_i;
+            }
 
-	Vect_write_line(Out, ltype, Points, Cats);
+            if (ret != DB_OK)
+                G_warning(_("Unable to get height for feature category %d"),
+                          cat);
+        }
 
-	line++;
+        for (i = 0; i < Points->n_points; i++) {
+            Points->z[i] = height;
+        }
+
+        Vect_write_line(Out, ltype, Points, Cats);
+
+        line++;
     }
     G_progress(1, 1);
-    
+
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);
 }

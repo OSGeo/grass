@@ -37,9 +37,11 @@
 
 # %option G_OPT_M_DIR
 # % key: directory
-# % description: Path to the work directory, default is /tmp
+# % label: Path to the directory where output is written
+# % description: If not given, the default is the current working directory
 # % required: no
-# % answer: /tmp
+# % multiple: no
+# % answer: ./
 # %end
 
 # %option
@@ -102,7 +104,9 @@
 # %option G_OPT_T_WHERE
 # %end
 
-import grass.script as grass
+import os
+
+import grass.script as gs
 
 
 ############################################################################
@@ -122,12 +126,18 @@ def main():
         key: options[key] for key in ("createopt", "metaopt", "nodata") if options[key]
     }
 
-    if _type and _format in ["pack", "AAIGrid"]:
-        grass.warning(
-            _("Type options is not working with pack format, " "it will be skipped")
+    if not directory or not os.path.exists(directory):
+        gs.fatal(_("Directory {} not found").format(directory))
+
+    if not os.access(directory, os.W_OK):
+        gs.fatal(_("Directory {} is not writable").format(directory))
+
+    if _type and _format in {"pack", "AAIGrid"}:
+        gs.warning(
+            _("Type options is not working with pack format, it will be skipped")
         )
         if kws:
-            grass.warning(
+            gs.warning(
                 _(
                     "Createopt, metaopt and nodata options are not "
                     "working with pack and AAIGrid formats, "
@@ -144,5 +154,5 @@ def main():
 
 ############################################################################
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

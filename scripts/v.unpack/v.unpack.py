@@ -32,8 +32,8 @@
 # %end
 # %flag
 # % key: o
-# % label: Override projection check (use current location's projection)
-# % description: Assume that the dataset has same projection as the current location
+# % label: Override projection check (use current projects's CRS)
+# % description: Assume that the dataset has same coordinate reference system as the current project
 # % guisection: Output settings
 # %end
 # %flag
@@ -87,7 +87,7 @@ def main():
                 f = tar.extractfile(fname)
                 sys.stdout.write(f.read().decode())
         except KeyError:
-            grass.fatal(_("Pack file unreadable: file '{}' missing".format(fname)))
+            grass.fatal(_("Pack file unreadable: file '{}' missing").format(fname))
         tar.close()
 
         return 0
@@ -120,7 +120,18 @@ def main():
         shutil.rmtree(new_dir, True)
 
     # extract data
-    tar.extractall()
+    # Extraction filters were added in Python 3.12,
+    # and backported to 3.8.17, 3.9.17, 3.10.12, and 3.11.4
+    # See https://docs.python.org/3.12/library/tarfile.html#tarfile-extraction-filter
+    # and https://peps.python.org/pep-0706/
+    # In Python 3.12, using `filter=None` triggers a DepreciationWarning,
+    # and in Python 3.14, `filter='data'` will be the default
+    if hasattr(tarfile, "data_filter"):
+        tar.extractall(filter="data")
+    else:
+        # Remove this when no longer needed
+        grass.warning(_("Extracting may be unsafe; consider updating Python"))
+        tar.extractall()
     tar.close()
     if os.path.exists(os.path.join(data_name, "coor")):
         pass
@@ -128,8 +139,9 @@ def main():
         grass.fatal(
             _(
                 "This GRASS GIS pack file contains raster data. Use "
-                "r.unpack to unpack <%s>" % map_name
+                "r.unpack to unpack <%s>"
             )
+            % map_name
         )
     else:
         grass.fatal(_("Pack file unreadable"))
@@ -143,7 +155,8 @@ def main():
         if os.path.exists(loc_proj):
             grass.fatal(
                 _(
-                    "PROJ_INFO file is missing, unpack vector map in XY (unprojected) location."
+                    "PROJ_INFO file is missing, unpack vector map in XY (unprojected) "
+                    "project."
                 )
             )
         skip_projection_check = True  # XY location
@@ -174,22 +187,23 @@ def main():
                     grass.warning(
                         _(
                             "Difference between PROJ_INFO file of packed map "
-                            "and of current location:\n{diff}"
+                            "and of current project:\n{diff}"
                         ).format(diff="".join(diff_result_1))
                     )
                 if diff_result_2:
                     grass.warning(
                         _(
                             "Difference between PROJ_UNITS file of packed map "
-                            "and of current location:\n{diff}"
+                            "and of current project:\n{diff}"
                         ).format(diff="".join(diff_result_2))
                     )
                 grass.fatal(
                     _(
-                        "Projection of dataset does not appear to match current location."
-                        " In case of no significant differences in the projection definitions,"
+                        "Coordinate reference system of dataset does not"
+                        " appear to match current project."
+                        " In case of no significant differences in the CRS definitions,"
                         " use the -o flag to ignore them and use"
-                        " current location definition."
+                        " current project definition."
                     )
                 )
 
@@ -202,10 +216,6 @@ def main():
         # the db connection in the output mapset
         dbconn = grassdb.db_connection(force=True)
         todb = dbconn["database"]
-        # return all tables
-        list_fromtable = grass.read_command(
-            "db.tables", driver="sqlite", database=fromdb
-        ).splitlines()
 
         # return the list of old connection for extract layer number and key
         dbln = open(os.path.join(new_dir, "dbln"), "r")
@@ -267,7 +277,7 @@ def main():
             try:
                 grass.run_command(
                     "v.db.connect",
-                    flags="o",
+                    overwrite=True,
                     quiet=True,
                     driver=dbconn["driver"],
                     database=todb,

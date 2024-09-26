@@ -53,16 +53,20 @@
 
 # %flag
 # % key: r
-# % description: Remove all registered maps from the temporal and also from the spatial database
+# % description: Remove stds and unregister maps from temporal database
 # %end
 
 # %flag
 # % key: f
-# % description: Force recursive removing
+# % description: Force removal (required for actual deletion of files)
 # %end
 
-import grass.script as grass
+# %flag
+# % key: d
+# % description: Remove stds, unregister maps from temporal database and delete them from mapset
+# %end
 
+import grass.script as gs
 
 # lazy imports at the end of the file
 
@@ -76,16 +80,10 @@ def main():
     type = options["type"]
     recursive = flags["r"]
     force = flags["f"]
-
-    if recursive and not force:
-        grass.fatal(
-            _(
-                "The recursive flag works only in conjunction with the force flag: use -rf"
-            )
-        )
+    clean = flags["d"]
 
     if datasets and file:
-        grass.fatal(_("%s= and %s= are mutually exclusive") % ("input", "file"))
+        gs.fatal(_("%s= and %s= are mutually exclusive") % ("input", "file"))
 
     # Make sure the temporal database exists
     tgis.init()
@@ -121,12 +119,33 @@ def main():
     # Create the pygrass Module object for g.remove
     remove = pyg.Module("g.remove", quiet=True, flags="f", run_=False)
 
+    if not force:
+        gs.message(_("The following data base element files will be deleted:"))
+
     for name in dataset_list:
         name = name.strip()
         sp = tgis.open_old_stds(name, type, dbif)
+        if not force:
+            gs.message(
+                _("{stds}: {gid}").format(stds=sp.get_type().upper(), gid=sp.get_id())
+            )
+        if recursive or clean:
+            if not force:
+                if recursive:
+                    msg = _(
+                        "The following maps of {stds} {gid} will be "
+                        "unregistered from temporal database:"
+                    )
+                elif clean:
+                    msg = _(
+                        "The following maps of {stds} {gid} will be "
+                        "unregistered from temporal database and removed "
+                        "from spatial database:"
+                    )
 
-        if recursive and force:
-            grass.message(_("Removing registered maps and %s" % type))
+                if recursive or clean:
+                    gs.message(msg.format(stds=sp.get_type(), gid=sp.get_id()))
+
             maps = sp.get_registered_maps_as_objects(dbif=dbif)
             map_statement = ""
             count = 1
@@ -134,55 +153,60 @@ def main():
             for map in maps:
                 map.select(dbif)
                 # We may have multiple layer for a single map, hence we need
-                # to avoid multiple deletation of the same map,
+                # to avoid multiple deletions of the same map,
                 # but the database entries are still present and must be removed
-                if map.get_name() not in name_list:
-                    name_list.append(str(map.get_name()))
+                if not force:
+                    gs.message(_("- %s") % map.get_name())
+                    continue
+                if clean and force:
+                    if map.get_name() not in name_list:
+                        name_list.append(str(map.get_name()))
                 map_statement += map.delete(dbif=dbif, execute=False)
 
                 count += 1
                 # Delete every 100 maps
                 if count % 100 == 0:
                     dbif.execute_transaction(map_statement)
-                    if type == "strds":
-                        remove(type="raster", name=name_list, run_=True)
-                    if type == "stvds":
-                        remove(type="vector", name=name_list, run_=True)
-                    if type == "str3ds":
-                        remove(type="raster_3d", name=name_list, run_=True)
+                    if clean:
+                        if type == "strds":
+                            remove(type="raster", name=name_list, run_=True)
+                        if type == "stvds":
+                            remove(type="vector", name=name_list, run_=True)
+                        if type == "str3ds":
+                            remove(type="raster_3d", name=name_list, run_=True)
                     map_statement = ""
                     name_list = []
 
             if map_statement:
                 dbif.execute_transaction(map_statement)
-            if name_list:
+            if clean and name_list:
                 if type == "strds":
                     remove(type="raster", name=name_list, run_=True)
                 if type == "stvds":
                     remove(type="vector", name=name_list, run_=True)
                 if type == "str3ds":
                     remove(type="raster_3d", name=name_list, run_=True)
-        else:
-            grass.message(
-                _(
-                    "Note: registered maps themselves have not been removed, only the %s"
-                    % type
-                )
-            )
+        if force:
+            statement += sp.delete(dbif=dbif, execute=False)
 
-        statement += sp.delete(dbif=dbif, execute=False)
-
-    # Execute the collected SQL statenents
-    dbif.execute_transaction(statement)
-
-    dbif.close()
+    if not force:
+        gs.message(
+            _(
+                "Nothing removed. You must use the force flag (-{flag}) to actually "
+                "remove them."
+            ).format(flag="f")
+        )
+    else:
+        # Execute the collected SQL statenents
+        dbif.execute_transaction(statement)
+        dbif.close()
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
 
     # lazy imports
-    import grass.temporal as tgis
     import grass.pygrass.modules as pyg
+    import grass.temporal as tgis
 
     tgis.profile_function(main)

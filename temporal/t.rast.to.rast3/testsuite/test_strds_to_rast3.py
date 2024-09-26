@@ -8,8 +8,9 @@ for details.
 @author Soeren Gebbert
 """
 
-import grass.pygrass.modules as pymod
 import subprocess
+
+import grass.pygrass.modules as pymod
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 
@@ -102,7 +103,7 @@ class TestSTRDSToRast3(TestCase):
     def tearDown(self):
         """Remove generated data"""
         self.runModule(
-            "t.remove", flags="rf", type="strds", inputs="precip_i,precip_f,precip_d"
+            "t.remove", flags="df", type="strds", inputs="precip_i,precip_f,precip_d"
         )
         self.runModule("g.remove", type="raster", pattern="prec_*", flags="f")
         self.runModule("g.remove", type="raster_3d", pattern="precip_*", flags="f")
@@ -286,7 +287,7 @@ class TestSTRDSToRast3MultiGran(TestCase):
     @classmethod
     def tearDownClass(cls):
         """Remove generated data"""
-        cls.runModule("t.remove", flags="rf", type="strds", inputs="precip_d")
+        cls.runModule("t.remove", flags="df", type="strds", inputs="precip_d")
         cls.runModule("g.remove", type="raster", pattern="prec_*", flags="f")
         cls.del_temp_region()
 

@@ -62,6 +62,18 @@ all watersheds have a flow path outside the terrain. Flooding produces
 a sink-less terrain in which every cell has a downslope flow path
 leading outside the terrain and therefore every cell in the terrain
 can be assigned SFD/MFD flow directions as above.
+Flow directions are encoded using powers of two clockwise starting from
+2<sup>0</sup> for east to 2<sup>7</sup> for north-east.
+
+<div align="center">
+<a href="rterraflow_direction_encoding.png">
+<img src="rterraflow_direction_encoding.png" width="200" height="200" border="0" alt="r.terraflow direction encoding">
+</a><br>
+Flow direction encoding clockwise starting from 2<sup>0</sup> for east to
+2<sup>7</sup> for north-east; 0 for undetermined (sinks) and 1 for undefined
+(null cells)
+(<a href="https://idea.isnew.info/how-to-import-arcgis-flow-direction-into-grass-gis.html">source</a>)
+</div>
 
 <p>Once flow directions are computed for every cell in the terrain,
 <em>r.terraflow</em> computes flow accumulation by routing water using
@@ -81,7 +93,6 @@ index, defined as the logarithm of the ratio of flow accumulation and
 local slope).
 
 <p>For more details on the algorithms see [1,2,3] below.
-
 
 <h2>NOTES</h2>
 
@@ -143,7 +154,6 @@ of <em>r.terraflow</em> on floating point raster data.
 The outputs of <em>r.terraflow (short)</em> and <em>r.terraflow</em> are
 identical for integer raster data (CELL maps).
 
-
 <h2>EXAMPLES</h2>
 
 Example for small area in North Carolina sample dataset to calculate flow accumulation:
@@ -182,9 +192,8 @@ g.region raster=elevation.10m -p
 r.terraflow elev=elevation.10m filled=elevation10m.filled \
     dir=elevation10m.mfdir swatershed=elevation10m.watershed \
     accumulation=elevation10m.accu tci=elevation10m.tci d8cut=500 memory=800 \
-    stats=elevation10mstats.txt 
+    stats=elevation10mstats.txt
 </pre></div>
-
 
 <h2>REFERENCES</h2>
 
@@ -196,7 +205,7 @@ r.terraflow elev=elevation.10m filled=elevation10m.filled \
        terrains</a>.  Lars Arge, Laura Toma, and Jeffrey S. Vitter. In
        <em>Proc. Workshop on Algorithm Engineering and Experimentation</em>,
        2000. To appear in <em>Journal of Experimental Algorithms</em>.
-       
+
   <li><A NAME="terraflow:acmgis01"
        HREF="http://www.cs.duke.edu/geo*/terraflow/papers/acmgis01_terraflow.pdf">
        Flow computation on massive grids</a>.
@@ -204,7 +213,7 @@ r.terraflow elev=elevation.10m filled=elevation10m.filled \
        Jeffrey S. Vitter, Dean Urban and Rajiv Wickremesinghe. In
        <em>Proc. ACM Symposium on Advances in Geographic Information
        Systems</em>, 2001.
-       
+
   <li><A NAME="terraflow:geoinformatica"
        HREF="http://www.cs.duke.edu/geo*/terraflow/papers/journal_terraflow.pdf">
        Flow computation on massive grid terrains</a>.
@@ -240,16 +249,11 @@ r.terraflow elev=elevation.10m filled=elevation10m.filled \
         <a href="http://www.env.duke.edu/faculty/bios/urban.html">Dean Urban</a>,
         <a href="http://www.science.purdue.edu/jsv/">Jeff Vitter</a>,
         Rajiv Wickremesinghe.
-       
+
   <dt>Porting to GRASS GIS, 2002:
     <dd> <a href="http://www.daimi.au.dk/~large/">Lars Arge</a>,
-	     <a href="http://www4.ncsu.edu/~hmitaso/index.html">Helena Mitasova,</a>
-		 <a href="http://www.bowdoin.edu/~ltoma/">Laura Toma</a>. 
-	   
+	     <a href="http://fatra.cnr.ncsu.edu/~hmitaso/index.html">Helena Mitasova,</a>
+		 <a href="http://www.bowdoin.edu/~ltoma/">Laura Toma</a>.
+
 	<dt>Contact: <a href="mailto:ltoma@bowdoin.edu "> Laura Toma</a></dt>
 </dl>
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

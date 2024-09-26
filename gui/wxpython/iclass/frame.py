@@ -5,7 +5,8 @@
 for spectral signature analysis.
 
 Classes:
- - frame::IClassMapFrame
+ - frame::IClassMapPanel
+ - frame::IClassMapDisplay
  - frame::MapManager
 
 (C) 2006-2013 by the GRASS Development Team
@@ -18,7 +19,6 @@ for details.
 """
 
 import os
-import six
 import copy
 import tempfile
 
@@ -36,17 +36,18 @@ except ImportError as e:
     haveIClass = False
     errMsg = _("Loading imagery lib failed.\n%s") % e
 
-import grass.script as grass
+import grass.script as gs
 
 from mapdisp import statusbar as sb
+from mapdisp.main import StandaloneMapDisplayGrassInterface
 from mapwin.buffered import BufferedMapWindow
 from vdigit.toolbars import VDigitToolbar
-from gui_core.mapdisp import DoubleMapFrame
+from gui_core.mapdisp import DoubleMapPanel, FrameMixin
+from core import globalvar
 from core.render import Map
 from core.gcmd import RunCommand, GMessage, GError
 from gui_core.dialogs import SetOpacityDialog
 from gui_core.wrap import Menu
-from mapwin.base import MapWindowProperties
 from dbmgr.vinfo import VectorDBInfo
 
 from iclass.digit import IClassVDigitWindow, IClassVDigit
@@ -69,7 +70,7 @@ from iclass.plots import PlotPanel
 from grass.pydispatch.signal import Signal
 
 
-class IClassMapFrame(DoubleMapFrame):
+class IClassMapPanel(DoubleMapPanel):
     """wxIClass main frame
 
     It has two map windows one for digitizing training areas and one for
@@ -93,10 +94,11 @@ class IClassMapFrame(DoubleMapFrame):
         """
         :param parent: (no parent is expected)
         :param title: window title
-        :param toolbars: dictionary of active toolbars (defalult value represents all toolbars)
+        :param toolbars: dictionary of active toolbars (default value represents all
+                         toolbars)
         :param size: default size
         """
-        DoubleMapFrame.__init__(
+        DoubleMapPanel.__init__(
             self,
             parent=parent,
             title=title,
@@ -105,22 +107,25 @@ class IClassMapFrame(DoubleMapFrame):
             secondMap=Map(),
             **kwargs,
         )
-        self._giface = giface
+        if giface:
+            self.giface = giface
+        else:
+            self.giface = StandaloneMapDisplayGrassInterface(self)
         self.tree = None
-        self.mapWindowProperties = MapWindowProperties()
-        self.mapWindowProperties.setValuesFromUserSettings()
-        # show computation region by defaut
+
+        # show computation region by default
         self.mapWindowProperties.showRegion = True
+        self.mapWindowProperties.autoRenderChanged.connect(self.OnAutoRenderChanged)
 
         self.firstMapWindow = IClassVDigitWindow(
             parent=self,
-            giface=self._giface,
+            giface=self.giface,
             properties=self.mapWindowProperties,
             map=self.firstMap,
         )
         self.secondMapWindow = BufferedMapWindow(
             parent=self,
-            giface=self._giface,
+            giface=self.giface,
             properties=self.mapWindowProperties,
             Map=self.secondMap,
         )
@@ -149,8 +154,8 @@ class IClassMapFrame(DoubleMapFrame):
         # Signals
         #
 
-        self.groupSet = Signal("IClassMapFrame.groupSet")
-        self.categoryChanged = Signal("IClassMapFrame.categoryChanged")
+        self.groupSet = Signal("IClassMapPanel.groupSet")
+        self.categoryChanged = Signal("IClassMapPanel.categoryChanged")
 
         self.InitStatistics()
 
@@ -163,42 +168,6 @@ class IClassMapFrame(DoubleMapFrame):
 
         self.GetMapToolbar().GetActiveMapTool().Bind(wx.EVT_CHOICE, self.OnUpdateActive)
 
-        #
-        # Add statusbar
-        #
-
-        # items for choice
-        self.statusbarItems = [
-            sb.SbCoordinates,
-            sb.SbRegionExtent,
-            sb.SbCompRegionExtent,
-            sb.SbShowRegion,
-            sb.SbAlignExtent,
-            sb.SbResolution,
-            sb.SbDisplayGeometry,
-            sb.SbMapScale,
-            sb.SbGoTo,
-            sb.SbProjection,
-        ]
-
-        # create statusbar and its manager
-        statusbar = self.CreateStatusBar(number=4, style=0)
-        statusbar.SetStatusWidths([-5, -2, -1, -1])
-        self.statusbarManager = sb.SbManager(mapframe=self, statusbar=statusbar)
-
-        # fill statusbar manager
-        self.statusbarManager.AddStatusbarItemsByClass(
-            self.statusbarItems, mapframe=self, statusbar=statusbar
-        )
-        self.statusbarManager.AddStatusbarItem(
-            sb.SbMask(self, statusbar=statusbar, position=2)
-        )
-        self.statusbarManager.AddStatusbarItem(
-            sb.SbRender(self, statusbar=statusbar, position=3)
-        )
-
-        self.statusbarManager.Update()
-
         self.trainingMapManager = MapManager(
             self, mapWindow=self.GetFirstWindow(), Map=self.GetFirstMap()
         )
@@ -210,7 +179,7 @@ class IClassMapFrame(DoubleMapFrame):
         self.exportVector = None
 
         # dialogs
-        self.dialogs = dict()
+        self.dialogs = {}
         self.dialogs["classManager"] = None
         self.dialogs["scatt_plot"] = None
         # just to make digitizer happy
@@ -218,10 +187,18 @@ class IClassMapFrame(DoubleMapFrame):
         self.dialogs["category"] = None
 
         # PyPlot init
-        self.plotPanel = PlotPanel(
-            self, giface=self._giface, stats_data=self.stats_data
-        )
+        self.plotPanel = PlotPanel(self, giface=self.giface, stats_data=self.stats_data)
 
+        # statusbar items
+        statusbarItems = [
+            sb.SbCoordinates,
+            sb.SbRegionExtent,
+            sb.SbCompRegionExtent,
+            sb.SbDisplayGeometry,
+            sb.SbMapScale,
+            sb.SbGoTo,
+        ]
+        self.statusbar = self.CreateStatusbar(statusbarItems)
         self._addPanes()
         self._mgr.Update()
 
@@ -233,17 +210,9 @@ class IClassMapFrame(DoubleMapFrame):
 
         wx.CallAfter(self.AddTrainingAreaMap)
 
-        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
         self.Bind(wx.EVT_SIZE, self.OnSize)
 
         self.SendSizeEvent()
-
-    def OnCloseWindow(self, event):
-        self.GetFirstWindow().GetDigit().CloseMap()
-        self.plotPanel.CloseWindow()
-        self._cleanup()
-        self._mgr.UnInit()
-        self.Destroy()
 
     def _cleanup(self):
         """Frees C structs and removes vector map and all raster maps."""
@@ -256,15 +225,26 @@ class IClassMapFrame(DoubleMapFrame):
         for i in self.stats_data.GetCategories():
             self.RemoveTempRaster(self.stats_data.GetStatistics(i).rasterName)
 
-    def OnHelp(self, event):
-        """Show help page"""
-        self._giface.Help(entry="wxGUI.iclass")
-
     def _getTempVectorName(self):
         """Return new name for temporary vector map (training areas)"""
-        vectorPath = grass.tempfile(create=False)
+        vectorPath = gs.tempfile(create=False)
 
         return "trAreas" + os.path.basename(vectorPath).replace(".", "")
+
+    def OnAutoRenderChanged(self, value):
+        """Auto rendering state changed."""
+        self.OnRender(event=None)
+
+    def OnCloseWindow(self, event):
+        self.GetFirstWindow().GetDigit().CloseMap()
+        self.plotPanel.CloseWindow()
+        self._cleanup()
+        self._mgr.UnInit()
+        self.Destroy()
+
+    def OnHelp(self, event):
+        """Show help page"""
+        self.giface.Help(entry="wxGUI.iclass")
 
     def SetGroup(self, group, subgroup):
         """Set group and subgroup manually"""
@@ -285,7 +265,7 @@ class IClassMapFrame(DoubleMapFrame):
 
         return vectorName
 
-    def RemoveTempVector(self):
+    def RemoveTempVector(self) -> bool:
         """Removes temporary vector map with training areas"""
         ret = RunCommand(
             prog="g.remove",
@@ -294,20 +274,16 @@ class IClassMapFrame(DoubleMapFrame):
             type="vector",
             name=self.trainingAreaVector,
         )
-        if ret != 0:
-            return False
-        return True
+        return bool(ret == 0)
 
-    def RemoveTempRaster(self, raster):
+    def RemoveTempRaster(self, raster) -> bool:
         """Removes temporary raster maps"""
         self.GetFirstMap().Clean()
         self.GetSecondMap().Clean()
         ret = RunCommand(
             prog="g.remove", parent=self, flags="f", type="raster", name=raster
         )
-        if ret != 0:
-            return False
-        return True
+        return bool(ret == 0)
 
     def AddToolbar(self, name):
         """Add defined toolbar to the window
@@ -321,7 +297,8 @@ class IClassMapFrame(DoubleMapFrame):
          Toolbars 'iClassPreviewMapManager' are added in _addPanes().
         """
         if name == "iClassMap":
-            self.toolbars[name] = IClassMapToolbar(self, self._toolSwitcher)
+            if "iClassMap" not in self.toolbars:
+                self.toolbars[name] = IClassMapToolbar(self, self._toolSwitcher)
 
             self._mgr.AddPane(
                 self.toolbars[name],
@@ -338,11 +315,12 @@ class IClassMapFrame(DoubleMapFrame):
                 .Layer(2)
                 .Row(1)
                 .Position(0)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
         if name == "iClass":
-            self.toolbars[name] = IClassToolbar(self, stats_data=self.stats_data)
+            if "iClass" not in self.toolbars:
+                self.toolbars[name] = IClassToolbar(self, stats_data=self.stats_data)
 
             self._mgr.AddPane(
                 self.toolbars[name],
@@ -359,11 +337,12 @@ class IClassMapFrame(DoubleMapFrame):
                 .Layer(2)
                 .Row(2)
                 .Position(0)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
         if name == "iClassMisc":
-            self.toolbars[name] = IClassMiscToolbar(self)
+            if "iClassMisc" not in self.toolbars:
+                self.toolbars[name] = IClassMiscToolbar(self)
 
             self._mgr.AddPane(
                 self.toolbars[name],
@@ -380,29 +359,31 @@ class IClassMapFrame(DoubleMapFrame):
                 .Layer(2)
                 .Row(1)
                 .Position(1)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
         if name == "vdigit":
-            self.toolbars[name] = VDigitToolbar(
-                parent=self,
-                toolSwitcher=self._toolSwitcher,
-                MapWindow=self.GetFirstWindow(),
-                digitClass=IClassVDigit,
-                giface=self._giface,
-                tools=[
-                    "addArea",
-                    "moveVertex",
-                    "addVertex",
-                    "removeVertex",
-                    "editLine",
-                    "moveLine",
-                    "deleteArea",
-                    "undo",
-                    "redo",
-                    "settings",
-                ],
-            )
+            if "vdigit" not in self.toolbars:
+                self.toolbars[name] = VDigitToolbar(
+                    parent=self,
+                    toolSwitcher=self._toolSwitcher,
+                    MapWindow=self.GetFirstWindow(),
+                    digitClass=IClassVDigit,
+                    giface=self.giface,
+                    tools=[
+                        "addArea",
+                        "moveVertex",
+                        "addVertex",
+                        "removeVertex",
+                        "editLine",
+                        "moveLine",
+                        "deleteArea",
+                        "undo",
+                        "redo",
+                        "settings",
+                    ],
+                )
+
             self._mgr.AddPane(
                 self.toolbars[name],
                 wx.aui.AuiPaneInfo()
@@ -418,11 +399,13 @@ class IClassMapFrame(DoubleMapFrame):
                 .Layer(2)
                 .Row(2)
                 .Position(1)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
+        self._mgr.Update()
+
     def _addPanes(self):
-        """Add mapwindows and toolbars to aui manager"""
+        """Add mapwindows, toolbars and statusbar to aui manager"""
         self._addPaneMapWindow(name="training", position=0)
         self._addPaneToolbar(name="iClassTrainingMapManager", position=1)
         self._addPaneMapWindow(name="preview", position=2)
@@ -444,6 +427,9 @@ class IClassMapFrame(DoubleMapFrame):
             .BestSize((335, -1)),
         )
 
+        # statusbar
+        self.AddStatusbarPane()
+
     def _addPaneToolbar(self, name, position):
         if name == "iClassPreviewMapManager":
             parent = self.previewMapManager
@@ -461,7 +447,7 @@ class IClassMapFrame(DoubleMapFrame):
             .Center()
             .Layer(0)
             .Position(position)
-            .BestSize((self.toolbars[name].GetBestSize())),
+            .BestSize(self.toolbars[name].GetBestSize()),
         )
 
     def _addPaneMapWindow(self, name, position):
@@ -485,14 +471,10 @@ class IClassMapFrame(DoubleMapFrame):
             .Position(position),
         )
 
-    def IsStandalone(self):
-        """Check if Map display is standalone"""
-        return True
-
     def OnUpdateActive(self, event):
         """
         .. todo::
-            move to DoubleMapFrame?
+            move to DoubleMapPanel?
         """
         if self.GetMapToolbar().GetActiveMap() == 0:
             self.MapWindow = self.firstMapWindow
@@ -509,24 +491,24 @@ class IClassMapFrame(DoubleMapFrame):
     def UpdateActive(self, win):
         """
         .. todo::
-            move to DoubleMapFrame?
+            move to DoubleMapPanel?
         """
         mapTb = self.GetMapToolbar()
         # optionally disable tool zoomback tool
         mapTb.Enable("zoomBack", enable=(len(self.MapWindow.zoomhistory) > 1))
 
         if mapTb.GetActiveMap() != (win == self.secondMapWindow):
-            mapTb.SetActiveMap((win == self.secondMapWindow))
+            mapTb.SetActiveMap(win == self.secondMapWindow)
         self.StatusbarUpdate()
 
     def ActivateFirstMap(self, event=None):
-        DoubleMapFrame.ActivateFirstMap(self, event)
+        DoubleMapPanel.ActivateFirstMap(self, event)
         self.GetMapToolbar().Enable(
             "zoomBack", enable=(len(self.MapWindow.zoomhistory) > 1)
         )
 
     def ActivateSecondMap(self, event=None):
-        DoubleMapFrame.ActivateSecondMap(self, event)
+        DoubleMapPanel.ActivateSecondMap(self, event)
         self.GetMapToolbar().Enable(
             "zoomBack", enable=(len(self.MapWindow.zoomhistory) > 1)
         )
@@ -547,7 +529,7 @@ class IClassMapFrame(DoubleMapFrame):
         return "0:0:0"
 
     def OnZoomMenu(self, event):
-        """Popup Zoom menu """
+        """Popup Zoom menu"""
         zoommenu = Menu()
         # Add items to the menu
 
@@ -586,7 +568,7 @@ class IClassMapFrame(DoubleMapFrame):
         zoommenu.Destroy()
 
     def OnZoomToTraining(self, event):
-        """Set preview display to match extents of training display """
+        """Set preview display to match extents of training display"""
 
         if not self.MapWindow == self.GetSecondWindow():
             self.MapWindow = self.GetSecondWindow()
@@ -599,7 +581,7 @@ class IClassMapFrame(DoubleMapFrame):
         self.Render(self.GetSecondWindow())
 
     def OnZoomToPreview(self, event):
-        """Set preview display to match extents of training display """
+        """Set preview display to match extents of training display"""
 
         if not self.MapWindow == self.GetFirstWindow():
             self.MapWindow = self.GetFirstWindow()
@@ -617,10 +599,9 @@ class IClassMapFrame(DoubleMapFrame):
 
         while True:
             if dlg.ShowModal() == wx.ID_OK:
-
                 if dlg.GetGroupBandsErr(parent=self):
                     g, s = dlg.GetData()
-                    group = grass.find_file(name=g, element="group")
+                    group = gs.find_file(name=g, element="group")
                     self.g["group"] = group["name"]
                     self.g["subgroup"] = s
                     self.groupSet.emit(
@@ -638,7 +619,7 @@ class IClassMapFrame(DoubleMapFrame):
         if self.GetAreasCount() or self.stats_data.GetCategories():
             qdlg = wx.MessageDialog(
                 parent=self,
-                message=_("All changes will be lost. " "Do you want to continue?"),
+                message=_("All changes will be lost. Do you want to continue?"),
                 style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
             )
             if qdlg.ShowModal() == wx.ID_NO:
@@ -661,15 +642,18 @@ class IClassMapFrame(DoubleMapFrame):
 
         :return: warning message (empty if topology is ok)
         """
-        topo = grass.vector_info_topo(map=vector)
+        topo = gs.vector_info_topo(map=vector)
 
         warning = ""
         if topo["areas"] == 0:
-            warning = _("No areas in vector map <%s>.\n" % vector)
+            warning = _("No areas in vector map <%s>.\n") % vector
         if topo["points"] or topo["lines"]:
-            warning += _(
-                "Vector map <%s> contains points or lines, "
-                "these features are ignored." % vector
+            warning += (
+                _(
+                    "Vector map <%s> contains points or lines, "
+                    "these features are ignored."
+                )
+                % vector
             )
 
         return warning
@@ -834,7 +818,7 @@ class IClassMapFrame(DoubleMapFrame):
                     parent=self,
                 )
 
-    def ExportAreas(self, vectorName, withTable):
+    def ExportAreas(self, vectorName, withTable) -> bool:
         """Export training areas to new vector map (with attribute table).
 
         :param str vectorName: name of exported vector map
@@ -874,14 +858,15 @@ class IClassMapFrame(DoubleMapFrame):
                     % {"band": i + 1, "stat": statistic, "format": format}
                 )
 
-        if 0 != RunCommand(
-            "v.db.addtable", map=vectorName, columns=columns, parent=self
+        if (
+            RunCommand("v.db.addtable", map=vectorName, columns=columns, parent=self)
+            != 0
         ):
             wx.EndBusyCursor()
             return False
 
         try:
-            dbInfo = grass.vector_db(vectorName)[1]
+            dbInfo = gs.vector_db(vectorName)[1]
         except KeyError:
             wx.EndBusyCursor()
             return False
@@ -946,9 +931,7 @@ class IClassMapFrame(DoubleMapFrame):
         )
         wx.EndBusyCursor()
         os.remove(dbFile.name)
-        if ret != 0:
-            return False
-        return True
+        return bool(ret == 0)
 
     def _runDBUpdate(self, tmpFile, table, column, value, cat):
         """Helper function for UPDATE statement
@@ -975,9 +958,8 @@ class IClassMapFrame(DoubleMapFrame):
             dlg.CenterOnParent()
             dlg.Show()
             self.dialogs["classManager"] = dlg
-        else:
-            if not self.dialogs["classManager"].IsShown():
-                self.dialogs["classManager"].Show()
+        elif not self.dialogs["classManager"].IsShown():
+            self.dialogs["classManager"].Show()
 
     def CategoryChanged(self, currentCat):
         """Updates everything which depends on current category.
@@ -1131,7 +1113,17 @@ class IClassMapFrame(DoubleMapFrame):
             return False
 
         I_free_signatures(self.signatures)
-        I_iclass_init_signatures(self.signatures, self.refer)
+        ret = I_iclass_init_signatures(self.signatures, self.refer)
+        if not ret:
+            GMessage(
+                parent=self,
+                message=_(
+                    "There was an error initializing signatures. "
+                    "Check GUI console for any error messages."
+                ),
+            )
+            I_free_signatures(self.signatures)
+            return False
 
         # why create copy
         # cats = self.statisticsList[:]
@@ -1215,9 +1207,16 @@ class IClassMapFrame(DoubleMapFrame):
                 qdlg.Destroy()
                 return
 
-        dlg = IClassSignatureFileDialog(
-            self, group=self.g["group"], subgroup=self.g["subgroup"], file=self.sigFile
-        )
+        if not self.signatures.contents.nsigs:
+            GMessage(
+                parent=self,
+                message=_(
+                    "Signatures are not valid. Recalculate them and then try again."
+                ),
+            )
+            return
+
+        dlg = IClassSignatureFileDialog(self, file=self.sigFile)
 
         if dlg.ShowModal() == wx.ID_OK:
             if os.path.exists(dlg.GetFileName(fullPath=True)):
@@ -1237,9 +1236,7 @@ class IClassMapFrame(DoubleMapFrame):
                     qdlg.Destroy()
                     return
             self.sigFile = dlg.GetFileName()
-            self.WriteSignatures(
-                self.signatures, self.g["group"], self.g["subgroup"], self.sigFile
-            )
+            self.WriteSignatures(self.signatures, self.sigFile)
 
         dlg.Destroy()
 
@@ -1262,14 +1259,13 @@ class IClassMapFrame(DoubleMapFrame):
         self.refer = pointer(refer_obj)
         I_init_group_ref(self.refer)  # must be freed on exit
 
-    def WriteSignatures(self, signatures, group, subgroup, filename):
+    def WriteSignatures(self, signatures, filename):
         """Writes current signatures to signature file
 
         :param signatures: signature (c structure)
-        :param group: imagery group
         :param filename: signature file name
         """
-        I_iclass_write_signatures(signatures, group, subgroup, filename)
+        I_iclass_write_signatures(signatures, filename)
 
     def CheckInput(self, group, vector):
         """Check if input is valid"""
@@ -1278,7 +1274,7 @@ class IClassMapFrame(DoubleMapFrame):
         if not group:
             GMessage(
                 parent=self,
-                message=_("No imagery group selected. " "Operation canceled."),
+                message=_("No imagery group selected. Operation canceled."),
             )
             return False
 
@@ -1298,25 +1294,25 @@ class IClassMapFrame(DoubleMapFrame):
 
         # check if vector has any areas
         if self.GetAreasCount() == 0:
-            GMessage(parent=self, message=_("No areas given. " "Operation canceled."))
+            GMessage(parent=self, message=_("No areas given. Operation canceled."))
             return False
 
         # check if vector is inside raster
         regionBox = bound_box()
         Vect_get_map_box(self.poMapInfo, byref(regionBox))
 
-        rasterInfo = grass.raster_info(groupLayers[0])
+        rasterInfo = gs.raster_info(groupLayers[0])
 
         if (
-            regionBox.N > rasterInfo["north"]
-            or regionBox.S < rasterInfo["south"]
-            or regionBox.E > rasterInfo["east"]
-            or regionBox.W < rasterInfo["west"]
+            rasterInfo["north"] < regionBox.N
+            or rasterInfo["south"] > regionBox.S
+            or rasterInfo["east"] < regionBox.E
+            or rasterInfo["west"] > regionBox.W
         ):
             GMessage(
                 parent=self,
                 message=_(
-                    "Vector features are outside raster layers. " "Operation canceled."
+                    "Vector features are outside raster layers. Operation canceled."
                 ),
             )
             return False
@@ -1361,17 +1357,17 @@ class IClassMapFrame(DoubleMapFrame):
 
     def OnZoomIn(self, event):
         """Enable zooming for plots"""
-        super(IClassMapFrame, self).OnZoomIn(event)
+        super().OnZoomIn(event)
         self.plotPanel.EnableZoom(type=1)
 
     def OnZoomOut(self, event):
         """Enable zooming for plots"""
-        super(IClassMapFrame, self).OnZoomOut(event)
+        super().OnZoomOut(event)
         self.plotPanel.EnableZoom(type=-1)
 
     def OnPan(self, event):
         """Enable panning for plots"""
-        super(IClassMapFrame, self).OnPan(event)
+        super().OnPan(event)
         self.plotPanel.EnablePan()
 
     def OnPointer(self, event):
@@ -1389,6 +1385,38 @@ class IClassMapFrame(DoubleMapFrame):
         :return: trainingMapManager, previewMapManager
         """
         return self.trainingMapManager, self.previewMapManager
+
+
+class IClassMapDisplay(FrameMixin, IClassMapPanel):
+    """Map display for wrapping map panel with frame methods"""
+
+    def __init__(self, parent, giface, **kwargs):
+        # init map panel
+        IClassMapPanel.__init__(
+            self,
+            parent=parent,
+            giface=giface,
+            **kwargs,
+        )
+        # set system icon
+        parent.SetIcon(
+            wx.Icon(
+                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
+            )
+        )
+
+        # bindings
+        parent.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
+
+        # extend shortcuts and create frame accelerator table
+        self.shortcuts_table.append((self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11))
+        self._initShortcuts()
+
+        # add Map Display panel to Map Display frame
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(self, proportion=1, flag=wx.EXPAND)
+        parent.SetSizer(sizer)
+        parent.Layout()
 
 
 class MapManager:
@@ -1420,7 +1448,8 @@ class MapManager:
         """Adds layer to Map and update toolbar
 
         :param str name: layer (raster) name
-        :param str resultsLayer: True if layer is temp. raster showing the results of computation
+        :param str resultsLayer: True if layer is temp. raster showing the results of
+                                 computation
         """
         if resultsLayer and name in [
             layer.GetName() for layer in self.map.GetListOfLayers(name=name)
@@ -1508,7 +1537,7 @@ class MapManager:
     def Render(self):
         """
         .. todo::
-            giface shoud be used instead of this method"""
+            giface should be used instead of this method"""
         self.frame.Render(self.mapWindow)
 
     def RemoveLayer(self, name, idx):
@@ -1571,7 +1600,7 @@ class MapManager:
 
     def GetAlias(self, name):
         """Returns alias for layer"""
-        name = [k for k, v in six.iteritems(self.layerName) if v == name]
+        name = [k for k, v in self.layerName.items() if v == name]
         if name:
             return name[0]
         return None
@@ -1589,7 +1618,12 @@ class MapManager:
 def test():
     app = wx.App()
 
-    frame = IClassMapFrame()
+    frame = wx.Frame(
+        parent=None,
+        size=globalvar.MAP_WINDOW_SIZE,
+        title=_("Supervised Classification Tool"),
+    )
+    frame = IClassMapDisplay(parent=frame)
     frame.Show()
     app.MainLoop()
 

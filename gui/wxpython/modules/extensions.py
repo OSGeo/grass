@@ -47,7 +47,7 @@ class InstallExtensionWindow(wx.Frame):
     ):
         self.parent = parent
         self._giface = giface
-        self.options = dict()  # list of options
+        self.options = {}  # list of options
 
         wx.Frame.__init__(self, parent=parent, id=id, title=title, **kwargs)
         self.SetIcon(
@@ -84,8 +84,7 @@ class InstallExtensionWindow(wx.Frame):
         task = gtask.parse_interface("g.extension")
         ignoreFlags = ["l", "c", "g", "a", "f", "t", "help", "quiet"]
         if sys.platform == "win32":
-            ignoreFlags.append("d")
-            ignoreFlags.append("i")
+            ignoreFlags.extend(("d", "i"))
 
         for f in task.get_options()["flags"]:
             name = f.get("name", "")
@@ -110,11 +109,11 @@ class InstallExtensionWindow(wx.Frame):
 
         # self.btnFetch = Button(parent=self.panel, id=wx.ID_ANY,
         #                        label=_("&Fetch"))
-        # self.btnFetch.SetToolTip(_("Fetch list of available modules "
+        # self.btnFetch.SetToolTip(_("Fetch list of available tools "
         #                            "from GRASS Addons repository"))
         self.btnClose = Button(parent=self.panel, id=wx.ID_CLOSE)
         self.btnInstall = Button(parent=self.panel, id=wx.ID_ANY, label=_("&Install"))
-        self.btnInstall.SetToolTip(_("Install selected add-ons GRASS module"))
+        self.btnInstall.SetToolTip(_("Install selected add-ons GRASS tool"))
         self.btnInstall.Enable(False)
         self.btnHelp = Button(parent=self.panel, id=wx.ID_HELP)
         self.btnHelp.SetToolTip(_("Show g.extension manual page"))
@@ -190,7 +189,7 @@ class InstallExtensionWindow(wx.Frame):
 
         name = item[0].data["command"]
 
-        flags = list()
+        flags = []
         for key in self.options.keys():
             if self.options[key].IsChecked():
                 if len(key) == 1:
@@ -209,7 +208,7 @@ class InstallExtensionWindow(wx.Frame):
         """Fetch list of available extensions"""
         wx.BeginBusyCursor()
         self.SetStatusText(
-            _("Fetching list of modules from GRASS-Addons (be patient)..."), 0
+            _("Fetching list of tools from GRASS-Addons (be patient)..."), 0
         )
         try:
             self.thread.Run(
@@ -240,7 +239,7 @@ class InstallExtensionWindow(wx.Frame):
 
     def OnContextMenu(self, node):
         if not hasattr(self, "popupID"):
-            self.popupID = dict()
+            self.popupID = {}
             for key in ("install", "help"):
                 self.popupID[key] = NewId()
 
@@ -301,7 +300,7 @@ class ExtensionTreeModelBuilder:
     """Tree model of available extensions."""
 
     def __init__(self):
-        self.mainNodes = dict()
+        self.mainNodes = {}
         self.model = TreeModel(ModuleNode)
         for prefix in (
             "display",
@@ -386,9 +385,8 @@ class ExtensionTreeModelBuilder:
                     mainNode = self.mainNodes[self._expandPrefix(prefix)]
                     currentNode = self.model.AppendNode(parent=mainNode, label=value)
                     currentNode.data = {"command": value}
-                else:
-                    if currentNode is not None:
-                        currentNode.data[key] = value
+                elif currentNode is not None:
+                    currentNode.data[key] = value
             else:
                 try:
                     prefix, name = line.strip().split(".", 1)
@@ -474,7 +472,7 @@ class ManageExtensionWindow(wx.Frame):
     def _getSelectedExtensions(self):
         eList = self.extList.GetExtensions()
         if not eList:
-            GMessage(_("No extension selected. " "Operation canceled."), parent=self)
+            GMessage(_("No extension selected. Operation canceled."), parent=self)
             return []
 
         return eList
@@ -557,7 +555,7 @@ class CheckListExtension(GListCtrl):
 
     def GetExtensions(self):
         """Get extensions to be un-installed"""
-        extList = list()
+        extList = []
         for i in range(self.GetItemCount()):
             if self.IsItemChecked(i):
                 name = self.GetItemText(i)

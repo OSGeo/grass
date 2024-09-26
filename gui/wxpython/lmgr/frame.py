@@ -42,6 +42,11 @@ from grass.script.utils import decode
 from core.gcmd import RunCommand, GError, GMessage
 from core.settings import UserSettings, GetDisplayVectSettings
 from core.utils import SetAddOnPath, GetLayerNameFromCmd, command2ltype, get_shell_pid
+from core.watchdog import (
+    EVT_UPDATE_MAPSET,
+    EVT_CURRENT_MAPSET_CHANGED,
+    MapsetWatchdog,
+)
 from gui_core.preferences import MapsetAccess, PreferencesDialog
 from lmgr.layertree import LayerTree, LMIcons
 from lmgr.menudata import LayerManagerMenuData, LayerManagerModuleTree
@@ -62,10 +67,13 @@ from gui_core.menu import Menu as GMenu
 from core.debug import Debug
 from lmgr.toolbars import LMWorkspaceToolbar, LMToolsToolbar
 from lmgr.toolbars import LMMiscToolbar, LMNvizToolbar, DisplayPanelToolbar
+from lmgr.statusbar import SbMain
 from lmgr.workspace import WorkspaceManager
 from lmgr.pyshell import PyShellWindow
 from lmgr.giface import LayerManagerGrassInterface
+from mapdisp.frame import MapDisplay
 from datacatalog.catalog import DataCatalog
+from history.browser import HistoryBrowser
 from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog
 from startup.guiutils import (
@@ -75,6 +83,7 @@ from startup.guiutils import (
     create_location_interactively,
 )
 from grass.grassdb.checks import is_first_time_user
+from grass.grassdb.history import Status
 
 
 class GMFrame(wx.Frame):
@@ -129,7 +138,7 @@ class GMFrame(wx.Frame):
         def show_menu_errors(messages):
             if messages:
                 self._gconsole.WriteError(
-                    _("There were some issues when loading menu" " or Modules tab:")
+                    _("There were some issues when loading menu or Tools tab:")
                 )
                 for message in messages:
                     self._gconsole.WriteError(message)
@@ -141,19 +150,23 @@ class GMFrame(wx.Frame):
         self._auimgr = wx.aui.AuiManager(self)
 
         # list of open dialogs
-        self.dialogs = dict()
+        self.dialogs = {}
         self.dialogs["preferences"] = None
         self.dialogs["nvizPreferences"] = None
-        self.dialogs["atm"] = list()
+        self.dialogs["atm"] = []
 
         # create widgets
         self._createMenuBar()
-        self.statusbar = self.CreateStatusBar(number=1)
+        self.workspace_manager.CreateRecentFilesMenu(
+            menu=self.menubar,
+        )
+        self.statusbar = SbMain(parent=self, giface=self._giface)
         self.notebook = self._createNotebook()
         self._createDataCatalog(self.notebook)
         self._createDisplay(self.notebook)
         self._createSearchModule(self.notebook)
         self._createConsole(self.notebook)
+        self._createHistoryBrowser(self.notebook)
         self._createPythonShell(self.notebook)
         self._addPagesToNotebook()
         self.toolbars = {
@@ -191,10 +204,27 @@ class GMFrame(wx.Frame):
                 .TopDockable(True)
                 .CloseButton(False)
                 .Layer(2)
-                .BestSize((self.toolbars[toolbar].GetBestSize())),
+                .BestSize(self.toolbars[toolbar].GetBestSize()),
             )
 
         self._auimgr.GetPane("toolbarNviz").Hide()
+
+        # Add statusbar
+        self._auimgr.AddPane(
+            self.statusbar.GetWidget(),
+            wx.aui.AuiPaneInfo()
+            .Bottom()
+            .MinSize(30, 30)
+            .Fixed()
+            .Name("statusbar")
+            .CloseButton(False)
+            .DestroyOnClose(True)
+            .ToolbarPane()
+            .Dockable(False)
+            .PaneBorder(False)
+            .Gripper(False),
+        )
+
         # bindings
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindowOrExit)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
@@ -230,6 +260,13 @@ class GMFrame(wx.Frame):
             try:
                 x, y = map(int, dim.split(",")[0:2])
                 w, h = map(int, dim.split(",")[2:4])
+                client_disp = wx.ClientDisplayRect()
+                if x == 1:
+                    # Get client display x offset (OS panel)
+                    x = client_disp[0]
+                if y == 1:
+                    # Get client display y offset (OS panel)
+                    y = client_disp[1]
                 self.SetPosition((x, y))
                 self.SetSize((w, h))
             except:
@@ -249,13 +286,26 @@ class GMFrame(wx.Frame):
             # start default initial display
             self.NewDisplay(show=False)
 
-        # show map display widnow
+        # show map display window
         # -> OnSize() -> UpdateMap()
-        for mapdisp in self.GetMapDisplay(onlyCurrent=False):
+        for mapdisp in self.GetAllMapDisplays():
             mapdisp.Show()
 
         # redirect stderr to log area
         self._gconsole.Redirect()
+
+        #  mapset watchdog
+        self._mapset_watchdog = MapsetWatchdog(
+            elements_dirs=(("raster", "cell"),),
+            evt_handler=self,
+            giface=self._giface,
+        )
+        self._mapset_watchdog.ScheduleWatchCurrentMapset()
+        self.Bind(
+            EVT_UPDATE_MAPSET,
+            lambda evt: self._onMapsetWatchdog(evt.src_path, evt.dest_path),
+        )
+        self.Bind(EVT_CURRENT_MAPSET_CHANGED, self._onMapsetChanged)
 
         # fix goutput's pane size (required for Mac OSX)`
         self.goutput.SetSashPosition(int(self.GetSize()[1] * 0.8))
@@ -313,30 +363,6 @@ class GMFrame(wx.Frame):
 
         return menu
 
-    def _createDisplayPanel(self, parent):
-        """Creates display panel"""
-        # create superior display panel
-        displayPanel = wx.Panel(parent, id=wx.ID_ANY)
-        # create display toolbar
-        dmgrToolbar = DisplayPanelToolbar(guiparent=displayPanel, parent=self)
-        # create display notebook
-        notebookLayers = GNotebook(parent=displayPanel, style=globalvar.FNPageStyle)
-        notebookLayers.SetTabAreaColour(globalvar.FNPageColor)
-        menu = self._createTabMenu()
-        notebookLayers.SetRightClickMenu(menu)
-
-        # layout
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(dmgrToolbar, proportion=0, flag=wx.EXPAND)
-        sizer.Add(notebookLayers, proportion=1, flag=wx.EXPAND)
-
-        displayPanel.SetAutoLayout(True)
-        displayPanel.SetSizer(sizer)
-        displayPanel.Fit()
-        displayPanel.Layout()
-
-        return displayPanel, notebookLayers
-
     def _setCopyingOfSelectedText(self):
         copy = UserSettings.Get(
             group="manager", key="copySelectedTextToClipboard", subkey="enabled"
@@ -348,6 +374,10 @@ class GMFrame(wx.Frame):
         if self._auimgr.GetPane(name).IsOk():
             return self._auimgr.GetPane(name).IsShown()
         return False
+
+    def SetStatusText(self, *args):
+        """Override SbMain statusbar method"""
+        self.statusbar.SetStatusText(*args)
 
     def _createNotebook(self):
         """Initialize notebook widget"""
@@ -365,7 +395,10 @@ class GMFrame(wx.Frame):
 
     def _createDisplay(self, parent):
         """Initialize Display widget"""
-        self.displayPanel, self.notebookLayers = self._createDisplayPanel(parent)
+        # create display notebook
+        self.notebookLayers = GNotebook(parent=parent, style=globalvar.FNPageStyle)
+        menu = self._createTabMenu()
+        self.notebookLayers.SetRightClickMenu(menu)
         # bindings
         self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnCBPageChanged)
         self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING, self.OnCBPageClosing)
@@ -391,10 +424,7 @@ class GMFrame(wx.Frame):
         self._gconsole = GConsole(
             guiparent=self,
             giface=self._giface,
-            ignoredCmdPattern="^d\..*|^r[3]?\.mapcalc$|^i.group$|^r.import$|"
-            "^r.external$|^r.external.out$|"
-            "^v.import$|^v.external$|^v.external.out$|"
-            "^cd$|^cd .*",
+            ignoredCmdPattern=globalvar.ignoredCmdPattern,
         )
         # create 'console' widget
         self.goutput = GConsoleWindow(
@@ -415,6 +445,19 @@ class GMFrame(wx.Frame):
 
         self._setCopyingOfSelectedText()
 
+    def _createHistoryBrowser(self, parent):
+        """Initialize history browser widget"""
+        if not UserSettings.Get(group="manager", key="hideTabs", subkey="history"):
+            self.history = HistoryBrowser(parent=parent, giface=self._giface)
+            self.history.showNotification.connect(
+                lambda message: self.SetStatusText(message)
+            )
+            self.history.runIgnoredCmdPattern.connect(
+                lambda cmd: self.RunSpecialCmd(command=cmd),
+            )
+        else:
+            self.history = None
+
     def _createPythonShell(self, parent):
         """Initialize Python shell widget"""
         if not UserSettings.Get(group="manager", key="hideTabs", subkey="pyshell"):
@@ -426,23 +469,181 @@ class GMFrame(wx.Frame):
         else:
             self.pyshell = None
 
+    def OnNewDisplay(self, event=None):
+        """Create new layer tree and map display window instance"""
+        self.NewDisplay()
+
+    def NewDisplay(self, name=None, show=True):
+        """Create new layer tree structure and associated map display and
+        add it to display notebook tab
+        :param name: name of new map display window
+        :param show: show map display window if True
+        """
+        Debug.msg(1, "GMFrame.NewDisplay(): idx=%d" % self.displayIndex)
+        if not name:
+            name = _("Map Display {number}").format(number=self.displayIndex + 1)
+
+        # make a new page in the bookcontrol for the layer tree (on page 0 of
+        # the notebook)
+        self.pg_panel = wx.Panel(
+            self.notebookLayers, id=wx.ID_ANY, style=wx.BORDER_NONE
+        )
+        # create display toolbar
+        dmgrToolbar = DisplayPanelToolbar(guiparent=self.pg_panel, parent=self)
+        # add page to notebook
+        self.notebookLayers.AddPage(page=self.pg_panel, text=name, select=True)
+        self.currentPage = self.notebookLayers.GetCurrentPage()
+
+        def CreateNewMapDisplay(giface, layertree):
+            """Callback function which creates a new Map Display window
+            :param giface: giface for map display
+            :param layertree: layer tree object
+            :return: reference to mapdisplay instance
+            """
+            # count map display frame position
+            pos = wx.Point((self.displayIndex + 1) * 25, (self.displayIndex + 1) * 25)
+
+            # create superior Map Display frame
+            mapframe = wx.Frame(
+                layertree,
+                id=wx.ID_ANY,
+                pos=pos,
+                size=globalvar.MAP_WINDOW_SIZE,
+                style=wx.DEFAULT_FRAME_STYLE,
+                title=name,
+            )
+
+            # create Map Display
+            mapdisplay = MapDisplay(
+                parent=mapframe,
+                giface=giface,
+                id=wx.ID_ANY,
+                size=globalvar.MAP_WINDOW_SIZE,
+                tree=layertree,
+                lmgr=self,
+                idx=self.displayIndex,
+                Map=layertree.Map,
+                title=name,
+            )
+
+            # set map display properties
+            self._setUpMapDisplay(mapdisplay)
+
+            # show map display if requested
+            if show:
+                mapdisplay.Show()
+            return mapdisplay
+
+        # create layer tree (tree control for managing GIS layers)  and put on
+        # new notebook page and new map display frame
+        self.currentPage.maptree = LayerTree(
+            parent=self.currentPage,
+            giface=self._giface,
+            createNewMapDisplay=CreateNewMapDisplay,
+            id=wx.ID_ANY,
+            pos=wx.DefaultPosition,
+            size=wx.DefaultSize,
+            style=wx.TR_HAS_BUTTONS
+            | wx.TR_LINES_AT_ROOT
+            | wx.TR_HIDE_ROOT
+            | wx.TR_DEFAULT_STYLE
+            | wx.NO_BORDER
+            | wx.FULL_REPAINT_ON_RESIZE,
+            lmgr=self,
+            notebook=self.notebookLayers,
+            title=name,
+        )
+
+        # layout for controls
+        cb_boxsizer = wx.BoxSizer(wx.VERTICAL)
+        cb_boxsizer.Add(dmgrToolbar, proportion=0, flag=wx.EXPAND)
+        cb_boxsizer.Add(self.GetLayerTree(), proportion=1, flag=wx.EXPAND, border=1)
+        self.currentPage.SetSizer(cb_boxsizer)
+        self.currentPage.Fit()
+        self.currentPage.Layout()
+
+        self.displayIndex += 1
+
+        return self.GetMapDisplay()
+
+    def _setUpMapDisplay(self, mapdisplay):
+        """Set up Map Display properties"""
+        page = self.currentPage
+
+        def CanCloseDisplay(askIfSaveWorkspace):
+            """Callback to check if user wants to close display.
+
+            :return dict/None pgnum_dict/None: dict "layers" key represent
+                                               map display notebook layers
+                                               tree page index
+            """
+            pgnum_dict = {}
+            pgnum_dict["layers"] = self.notebookLayers.GetPageIndex(page)
+            name = self.notebookLayers.GetPageText(pgnum_dict["layers"])
+            caption = _("Close Map Display {}").format(name)
+            if not askIfSaveWorkspace or (
+                askIfSaveWorkspace and self.workspace_manager.CanClosePage(caption)
+            ):
+                return pgnum_dict
+            return None
+
+        mapdisplay.canCloseCallback = CanCloseDisplay
+
+        # bind various events
+        mapdisplay.BindToFrame(
+            wx.EVT_ACTIVATE,
+            lambda event, page=self.currentPage: self._onMapDisplayFocus(page),
+        )
+
+        mapdisplay.starting3dMode.connect(
+            lambda firstTime, mapDisplayPage=self.currentPage: (
+                self._onMapDisplayStarting3dMode(mapDisplayPage)
+            )
+        )
+        mapdisplay.starting3dMode.connect(self.AddNvizTools)
+        mapdisplay.ending3dMode.connect(self.RemoveNvizTools)
+        mapdisplay.closingPage.connect(self._closePageNoEvent)
+
+        # set default properties
+        mapdisplay.SetProperties(
+            render=UserSettings.Get(
+                group="display", key="autoRendering", subkey="enabled"
+            ),
+            mode=UserSettings.Get(
+                group="display", key="statusbarMode", subkey="selection"
+            ),
+            alignExtent=UserSettings.Get(
+                group="display", key="alignExtent", subkey="enabled"
+            ),
+            constrainRes=UserSettings.Get(
+                group="display", key="compResolution", subkey="enabled"
+            ),
+            showCompExtent=UserSettings.Get(
+                group="display", key="showCompExtent", subkey="enabled"
+            ),
+        )
+
     def _addPagesToNotebook(self):
         """Add pages to notebook widget"""
         # add 'data catalog' widget to main notebook page
         self.notebook.AddPage(page=self.datacatalog, text=_("Data"), name="catalog")
 
         # add 'display' widget to main notebook page
-        self.notebook.AddPage(page=self.displayPanel, text=_("Display"), name="layers")
+        self.notebook.AddPage(page=self.notebookLayers, text=_("Layers"), name="layers")
 
-        # add 'modules' widget to main notebook page
+        # add 'tools' widget to main notebook page
         if self.search:
-            self.notebook.AddPage(page=self.search, text=_("Modules"), name="search")
+            self.notebook.AddPage(page=self.search, text=_("Tools"), name="search")
 
         # add 'console' widget to main notebook page and add connect switch page signal
         self.notebook.AddPage(page=self.goutput, text=_("Console"), name="output")
         self.goutput.contentChanged.connect(
             lambda notification: self._switchPage(notification)
         )
+
+        # add 'history module' widget to main notebook page
+        if self.history:
+            self.notebook.AddPage(page=self.history, text=_("History"), name="history")
 
         # add 'python shell' widget to main notebook page
         if self.pyshell:
@@ -515,7 +716,7 @@ class GMFrame(wx.Frame):
         )
         self.notebook.SetSelectionByName("nviz")
 
-        # this is a bit strange here since a new window is created everytime
+        # this is a bit strange here since a new window is created every time
         if not firstTime:
             for page in ("view", "light", "fringe", "constant", "cplane", "animation"):
                 self.nviz.UpdatePage(page)
@@ -575,9 +776,9 @@ class GMFrame(wx.Frame):
 
     def OnGModeler(self, event=None, cmd=None):
         """Launch Graphical Modeler. See OnIClass documentation"""
-        from gmodeler.frame import ModelFrame
+        from gmodeler.frame import ModelerFrame
 
-        win = ModelFrame(parent=self, giface=self._giface)
+        win = ModelerFrame(parent=self, giface=self._giface)
         win.CentreOnScreen()
         win.Show()
 
@@ -591,9 +792,15 @@ class GMFrame(wx.Frame):
 
     def OnMapSwipe(self, event=None, cmd=None):
         """Launch Map Swipe. See OnIClass documentation"""
-        from mapswipe.frame import SwipeMapFrame
+        from mapswipe.frame import SwipeMapDisplay
 
-        win = SwipeMapFrame(parent=self, giface=self._giface)
+        frame = wx.Frame(
+            parent=None, size=globalvar.MAP_WINDOW_SIZE, title=_("Map Swipe Tool")
+        )
+        win = SwipeMapDisplay(
+            parent=frame,
+            giface=self._giface,
+        )
 
         rasters = []
         tree = self.GetLayerTree()
@@ -710,12 +917,19 @@ class GMFrame(wx.Frame):
 
         event.Skip()
 
-    def _closePageNoEvent(self, page_index):
-        """Close page and destroy map display without
-        generating notebook page closing event"""
+    def _closePageNoEvent(self, pgnum_dict):
+        """Close page and destroy map display without generating notebook
+        page closing event.
+
+        :param dict pgnum_dict: dict "layers" key represent map display
+                                notebook layers tree page index
+        """
         self.notebookLayers.Unbind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING)
-        self.notebookLayers.DeletePage(page_index)
-        self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING, self.OnCBPageClosing)
+        self.notebookLayers.DeletePage(pgnum_dict["layers"])
+        self.notebookLayers.Bind(
+            FN.EVT_FLATNOTEBOOK_PAGE_CLOSING,
+            self.OnCBPageClosing,
+        )
 
     def _switchPageHandler(self, event, notification):
         self._switchPage(notification=notification)
@@ -734,9 +948,10 @@ class GMFrame(wx.Frame):
 
     def RunSpecialCmd(self, command):
         """Run command from command line, check for GUI wrappers"""
-        if re.compile("^d\..*").search(command[0]):
-            self.RunDisplayCmd(command)
-        elif re.compile("r[3]?\.mapcalc").search(command[0]):
+        result = True
+        if re.compile(r"^d\..*").search(command[0]):
+            result = self.RunDisplayCmd(command)
+        elif re.compile(r"r[3]?\.mapcalc").search(command[0]):
             self.OnMapCalculator(event=None, cmd=command)
         elif command[0] == "i.group":
             self.OnEditImageryGroups(event=None, cmd=command)
@@ -755,15 +970,21 @@ class GMFrame(wx.Frame):
         elif command[0] == "cd":
             self.OnChangeCWD(event=None, cmd=command)
         else:
+            result = False
             raise ValueError(
                 "Layer Manager special command (%s)"
                 " not supported." % " ".join(command)
             )
+        if result:
+            self._gconsole.UpdateHistory(status=Status.SUCCESS)
+        else:
+            self._gconsole.UpdateHistory(status=Status.FAILED)
 
     def RunDisplayCmd(self, command):
         """Handles display commands.
 
         :param command: command in a list
+        :return int: False if failed, True if succcess
         """
         if not self.currentPage:
             self.NewDisplay(show=True)
@@ -771,7 +992,7 @@ class GMFrame(wx.Frame):
         if command[0] == "d.erase":
             # rest of d.erase is ignored
             self.GetLayerTree().DeleteAllLayers()
-            return
+            return False
         try:
             # display GRASS commands
             layertype = command2ltype[command[0]]
@@ -784,7 +1005,7 @@ class GMFrame(wx.Frame):
                 )
                 % command[0],
             )
-            return
+            return False
 
         if layertype == "barscale":
             if len(command) > 1:
@@ -838,6 +1059,7 @@ class GMFrame(wx.Frame):
                 lname=lname,
                 lcmd=command,
             )
+        return True
 
     def GetLayerNotebook(self):
         """Get Layers Notebook"""
@@ -868,7 +1090,7 @@ class GMFrame(wx.Frame):
             else:
                 return None
         else:  # -> return list of all mapdisplays
-            mlist = list()
+            mlist = []
             for idx in range(0, self.notebookLayers.GetPageCount()):
                 mlist.append(self.notebookLayers.GetPage(idx).maptree.GetMapDisplay())
 
@@ -906,7 +1128,7 @@ class GMFrame(wx.Frame):
 
         # check list of dummy commands for GUI modules that do not have GRASS
         # bin modules or scripts.
-        if cmd in ["vcolors", "r.mapcalc", "r3.mapcalc"]:
+        if cmd in {"vcolors", "r.mapcalc", "r3.mapcalc"}:
             return cmdlist
 
         try:
@@ -1015,7 +1237,7 @@ class GMFrame(wx.Frame):
         if not os.path.exists(filename):
             GError(
                 parent=self,
-                message=_("Script file '%s' doesn't exist. " "Operation canceled.")
+                message=_("Script file '%s' doesn't exist. Operation canceled.")
                 % filename,
             )
             return
@@ -1029,8 +1251,8 @@ class GMFrame(wx.Frame):
                     "Do you want to set the permissions "
                     "that allows you to run this script "
                     "(note that you must be the owner of the file)?"
-                    % os.path.basename(filename)
-                ),
+                )
+                % os.path.basename(filename),
                 caption=_("Set permission?"),
                 style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
             )
@@ -1145,6 +1367,7 @@ class GMFrame(wx.Frame):
         :param event: to be able to serve as a handler of wx event
         :param cmd: command as a list (must start with 'cd')
         """
+
         # local functions
         def write_beginning(parameter=None, command=None):
             if parameter:
@@ -1162,9 +1385,7 @@ class GMFrame(wx.Frame):
             self._giface.WriteCmdLog(" ")
 
         def write_help():
-            self._giface.WriteLog(
-                _("Changes current working directory" " for this GUI.")
-            )
+            self._giface.WriteLog(_("Changes current working directory for this GUI."))
             self._giface.WriteLog(_("Usage: cd [directory]"))
             self._giface.WriteLog(_("Without parameters it opens a dialog."))
             # TODO: the following is longer then 80 chars
@@ -1197,7 +1418,7 @@ class GMFrame(wx.Frame):
         # use chdir or dialog
         if cmd and len(cmd) == 2:
             write_beginning(parameter=cmd[1])
-            if cmd[1] in ["-h", "--h", "--help", "help"]:
+            if cmd[1] in {"-h", "--h", "--help", "help"}:
                 write_help()
                 write_end()
                 return
@@ -1266,7 +1487,7 @@ class GMFrame(wx.Frame):
         # which appears in the platform.platform() string
         platform_ = decode(platform.platform())
         self._gconsole.WriteLog(
-            "%s: %s\n" "%s: %s\n" "%s: %s\n" "%s: %s\n"
+            "%s: %s\n%s: %s\n%s: %s\n%s: %s\n"
             # "%s: %s (%s)\n"
             "GDAL: %s\n"
             "PROJ: %s\n"
@@ -1463,16 +1684,21 @@ class GMFrame(wx.Frame):
             This documentation is actually documentation of some
             component related to gui_core/menu.py file.
         """
-        from iclass.frame import IClassMapFrame, haveIClass, errMsg
+        from iclass.frame import IClassMapDisplay, haveIClass, errMsg
 
         if not haveIClass:
             GError(
-                _('Unable to launch "Supervised Classification Tool".\n\n' "Reason: %s")
+                _('Unable to launch "Supervised Classification Tool".\n\nReason: %s')
                 % errMsg
             )
             return
 
-        win = IClassMapFrame(parent=self, giface=self._giface)
+        frame = wx.Frame(
+            parent=None,
+            size=globalvar.MAP_WINDOW_SIZE,
+            title=_("Supervised Classification Tool"),
+        )
+        win = IClassMapDisplay(parent=frame, giface=self._giface)
         win.CentreOnScreen()
 
         win.Show()
@@ -1544,14 +1770,6 @@ class GMFrame(wx.Frame):
             except KeyError:
                 cmd = ["r.mapcalc"]
         win = MapCalcFrame(parent=self, giface=self._giface, cmd=cmd[0])
-        win.CentreOnScreen()
-        win.Show()
-
-    def OnVectorCleaning(self, event, cmd=""):
-        """Init interactive vector cleaning"""
-        from modules.vclean import VectorCleaningFrame
-
-        win = VectorCleaningFrame(parent=self)
         win.CentreOnScreen()
         win.Show()
 
@@ -1672,109 +1890,6 @@ class GMFrame(wx.Frame):
         # show ATM window
         dbmanager.Show()
 
-    def OnNewDisplay(self, event=None):
-        """Create new layer tree and map display instance"""
-        self.NewDisplay()
-
-    def NewDisplay(self, name=None, show=True):
-        """Create new layer tree, which will
-        create an associated map display frame
-
-        :param name: name of new map display
-        :param show: show map display window if True
-
-        :return: reference to mapdisplay intance
-        """
-        Debug.msg(1, "GMFrame.NewDisplay(): idx=%d" % self.displayIndex)
-
-        # make a new page in the bookcontrol for the layer tree (on page 0 of
-        # the notebook)
-        self.pg_panel = wx.Panel(self.notebookLayers, id=wx.ID_ANY, style=wx.EXPAND)
-        if name:
-            dispName = name
-        else:
-            dispName = _("Map Display {number}").format(number=self.displayIndex + 1)
-        self.notebookLayers.AddPage(page=self.pg_panel, text=dispName, select=True)
-        self.currentPage = self.notebookLayers.GetCurrentPage()
-
-        # create layer tree (tree control for managing GIS layers)  and put on
-        # new notebook page
-        self.currentPage.maptree = LayerTree(
-            self.currentPage,
-            giface=self._giface,
-            id=wx.ID_ANY,
-            pos=wx.DefaultPosition,
-            size=wx.DefaultSize,
-            style=wx.TR_HAS_BUTTONS
-            | wx.TR_LINES_AT_ROOT
-            | wx.TR_HIDE_ROOT
-            | wx.TR_DEFAULT_STYLE
-            | wx.NO_BORDER
-            | wx.FULL_REPAINT_ON_RESIZE,
-            idx=self.displayIndex,
-            lmgr=self,
-            notebook=self.notebookLayers,
-            showMapDisplay=show,
-            title=dispName,
-        )
-
-        # layout for controls
-        cb_boxsizer = wx.BoxSizer(wx.VERTICAL)
-        cb_boxsizer.Add(self.GetLayerTree(), proportion=1, flag=wx.EXPAND, border=1)
-        self.currentPage.SetSizer(cb_boxsizer)
-        cb_boxsizer.Fit(self.GetLayerTree())
-        self.currentPage.Layout()
-        self.GetLayerTree().Layout()
-
-        mapdisplay = self.currentPage.maptree.mapdisplay
-        mapdisplay.Bind(
-            wx.EVT_ACTIVATE,
-            lambda event, page=self.currentPage: self._onMapDisplayFocus(page),
-        )
-        mapdisplay.starting3dMode.connect(
-            lambda firstTime, mapDisplayPage=self.currentPage: self._onMapDisplayStarting3dMode(
-                mapDisplayPage
-            )
-        )
-        mapdisplay.starting3dMode.connect(self.AddNvizTools)
-        mapdisplay.ending3dMode.connect(self.RemoveNvizTools)
-        mapdisplay.closingDisplay.connect(self._closePageNoEvent)
-
-        # use default window layout
-        if UserSettings.Get(group="general", key="defWindowPos", subkey="enabled"):
-            dim = UserSettings.Get(group="general", key="defWindowPos", subkey="dim")
-            idx = 4 + self.displayIndex * 4
-            try:
-                x, y = map(int, dim.split(",")[idx : idx + 2])
-                w, h = map(int, dim.split(",")[idx + 2 : idx + 4])
-                self.GetMapDisplay().SetPosition((x, y))
-                self.GetMapDisplay().SetSize((w, h))
-            except:
-                pass
-
-        # set default properties
-        mapdisplay.SetProperties(
-            render=UserSettings.Get(
-                group="display", key="autoRendering", subkey="enabled"
-            ),
-            mode=UserSettings.Get(
-                group="display", key="statusbarMode", subkey="selection"
-            ),
-            alignExtent=UserSettings.Get(
-                group="display", key="alignExtent", subkey="enabled"
-            ),
-            constrainRes=UserSettings.Get(
-                group="display", key="compResolution", subkey="enabled"
-            ),
-            showCompExtent=UserSettings.Get(
-                group="display", key="showCompExtent", subkey="enabled"
-            ),
-        )
-
-        self.displayIndex += 1
-
-        return self.GetMapDisplay()
-
     def _onMapDisplayFocus(self, notebookLayerPage):
         """Changes bookcontrol page to page associated with display."""
         # moved from mapdisp/frame.py
@@ -1868,7 +1983,7 @@ class GMFrame(wx.Frame):
     def AddOrUpdateMap(self, mapName, ltype):
         """Add map layer or update"""
         # start new map display if no display is available
-        if ltype not in ["raster", "raster_3d", "vector"]:
+        if ltype not in {"raster", "raster_3d", "vector"}:
             GError(parent=self, message=_("Unsupported map layer type <%s>.") % ltype)
             return
 
@@ -1876,8 +1991,8 @@ class GMFrame(wx.Frame):
             self.AddMaps([mapName], ltype, check=True)
         else:
             display = self.GetMapDisplay()
-            mapLayers = map(
-                lambda x: x.GetName(), display.GetMap().GetListOfLayers(ltype=ltype)
+            mapLayers = (
+                x.GetName() for x in display.GetMap().GetListOfLayers(ltype=ltype)
             )
             if mapName in mapLayers:
                 display.GetWindow().UpdateMap(render=True)
@@ -2021,8 +2136,13 @@ class GMFrame(wx.Frame):
             dlg.Destroy()
 
         # region = tree.GetMap().GetCurrentRegion()
-        # if region['cells'] > 10000:
-        #   GMessage(message = "Cell values can only be displayed for regions of < 10,000 cells.", parent = self)
+        # if region["cells"] > 10000:
+        # GMessage(
+        #     message=(
+        #     "Cell values can only be displayed for regions of < 10,000 cells."
+        #     ),
+        #     parent=self,
+        # )
         self.GetLayerTree().AddLayer("rastnum")
 
     def OnAddCommand(self, event):
@@ -2090,8 +2210,7 @@ class GMFrame(wx.Frame):
         # redraw map if auto-rendering is enabled
         # seems little too low level for this place
         # no redraw when Render is unchecked
-        if mapdisp.IsAutoRendered():
-            mapdisp.GetMapWindow().UpdateMap(render=False)
+        mapdisp.GetMapWindow().UpdateMap(render=False)
 
     def OnDeleteLayer(self, event):
         """Remove selected map layer from the current layer Tree"""
@@ -2112,12 +2231,12 @@ class GMFrame(wx.Frame):
 
             if len(layerName) > 2:  # <>
                 message = (
-                    _("Do you want to remove map layer(s)\n%s\n" "from layer tree?")
+                    _("Do you want to remove map layer(s)\n%s\nfrom layer tree?")
                     % layerName
                 )
             else:
                 message = _(
-                    "Do you want to remove selected map layer(s) " "from layer tree?"
+                    "Do you want to remove selected map layer(s) from layer tree?"
                 )
 
             dlg = wx.MessageDialog(
@@ -2156,26 +2275,14 @@ class GMFrame(wx.Frame):
                 else:
                     self.notebook.SetSelectionByName("layers")
 
-        try:
-            ckc = chr(kc)
-        except ValueError:
-            event.Skip()
-            return
-
-        if event.CtrlDown():
-            if kc == "R":
-                self.OnAddRaster(None)
-            elif kc == "V":
-                self.OnAddVector(None)
-
         event.Skip()
 
     def OnCloseWindow(self, event):
-        """Cleanup when wxGUI is quitted"""
+        """Cleanup when wxGUI is quit"""
         self._closeWindow(event)
 
     def OnCloseWindowOrExit(self, event):
-        """Cleanup when wxGUI is quitted
+        """Cleanup when wxGUI is quit
 
         Ask user also to quit GRASS including terminal
         """
@@ -2189,10 +2296,6 @@ class GMFrame(wx.Frame):
 
     def _closeWindow(self, event):
         """Close wxGUI"""
-        # save command protocol if actived
-        if self.goutput.btnCmdProtocol.GetValue():
-            self.goutput.CmdProtocolSave()
-
         if not self.currentPage:
             self._auimgr.UnInit()
             self.Destroy()
@@ -2243,10 +2346,23 @@ class GMFrame(wx.Frame):
         )
         if limitText:
             message += "\n\n%s" % _(limitText)
-        dlg = wx.MessageDialog(
+        return wx.MessageDialog(
             parent=self,
             message=message,
             caption=_("Constrain map to region geometry?"),
             style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
         )
-        return dlg
+
+    def _onMapsetWatchdog(self, map_path, map_dest):
+        """Current mapset watchdog event handler
+
+        :param str map_path: map path (map that is changed)
+        :param str map_dest: new map path
+        """
+        self.statusbar.mask.dbChanged(
+            map=os.path.basename(map_path) if map_path else map_path,
+            newname=os.path.basename(map_dest) if map_dest else map_dest,
+        )
+
+    def _onMapsetChanged(self, event):
+        self._mapset_watchdog.ScheduleWatchCurrentMapset()

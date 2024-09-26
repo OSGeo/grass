@@ -8,7 +8,6 @@ from grass.gunittest.case import TestCase
 
 
 class TestTerraflow(TestCase):
-
     elevation = "elevation"
     testdir = os.path.join(tempfile.gettempdir(), "terraflow_test")
     teststats = os.path.join(tempfile.gettempdir(), "terraflow_test_stats.txt")

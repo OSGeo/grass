@@ -53,8 +53,8 @@ class ImportDialog(wx.Dialog):
         self.parent = parent  # GMFrame
         self._giface = giface  # used to add layers
         self.importType = itype
-        self.options = dict()  # list of options
-        self.options_par = dict()
+        self.options = {}  # list of options
+        self.options_par = {}
 
         self.commandId = -1  # id of running command
 
@@ -138,7 +138,6 @@ class ImportDialog(wx.Dialog):
         self.createSettingsPage()
 
     def createSettingsPage(self):
-
         self._blackList = {
             "enabled": True,
             "items": {
@@ -275,7 +274,6 @@ class ImportDialog(wx.Dialog):
 
     def OnRun(self, event):
         """Import/Link data (each layes as separate vector map)"""
-        pass
 
     def OnCheckOverwrite(self, event):
         """Check/uncheck overwrite checkbox widget"""
@@ -345,11 +343,9 @@ class ImportDialog(wx.Dialog):
         .. todo::
             not yet implemented
         """
-        pass
 
     def OnCmdDone(self, event):
         """Do what has to be done after importing"""
-        pass
 
     def _getLayersToReprojetion(self, projMatch_idx, grassName_idx):
         """If there are layers with different projection from loation projection,
@@ -358,7 +354,6 @@ class ImportDialog(wx.Dialog):
         data = self.list.GetData(checked=True)
 
         for itm in data:
-
             layerId = itm[-1]
 
             # select only layers with different projetion
@@ -371,7 +366,6 @@ class ImportDialog(wx.Dialog):
         if (
             not self.link and differentProjLayers and not self.override.IsChecked()
         ):  # '-o' not in self.getSettingsPageCmd():
-
             dlg = ReprojectionDialog(
                 parent=self, giface=self._giface, data=differentProjLayers
             )
@@ -379,7 +373,6 @@ class ImportDialog(wx.Dialog):
             ret = dlg.ShowModal()
 
             if ret == wx.ID_OK:
-
                 # do not import unchecked layers
                 for itm in reversed(list(dlg.GetData(checked=False))):
                     idx = itm[-1]
@@ -390,7 +383,6 @@ class ImportDialog(wx.Dialog):
         return layers
 
     def getSettingsPageCmd(self):
-
         return self.advancedPagePanel.createCmd(ignoreErrors=True, ignoreRequired=True)
 
 
@@ -443,7 +435,6 @@ class GdalImportDialog(ImportDialog):
         self.doLayout()
 
     def reload(self, data, listData):
-
         self.list.LoadData(listData)
         self.list.SelectAll(select=True)
         self.layersData = data
@@ -466,6 +457,8 @@ class GdalImportDialog(ImportDialog):
             return
 
         dsn = self.dsnInput.GetDsn()
+        if not dsn:
+            return
         ext = self.dsnInput.GetFormatExt()
 
         for layer, output, listId in data:
@@ -473,6 +466,25 @@ class GdalImportDialog(ImportDialog):
 
             if self.dsnInput.GetType() == "dir":
                 idsn = os.path.join(dsn, layer)
+            elif self.dsnInput.GetType() == "db":
+                idsn = dsn
+                if "PG:" in dsn:
+                    idsn = f"{dsn} table={layer}"
+                elif os.path.exists(idsn):
+                    try:
+                        from osgeo import gdal
+                    except ImportError:
+                        GError(
+                            parent=self,
+                            message=_(
+                                "The Python GDAL package is missing."
+                                " Please install it."
+                            ),
+                        )
+                        return
+                    dataset = gdal.Open(dsn)
+                    if "Rasterlite" in dataset.GetDriver().ShortName:
+                        idsn = f"RASTERLITE:{dsn},table={layer}"
             else:
                 idsn = dsn
 
@@ -585,7 +597,6 @@ class OgrImportDialog(ImportDialog):
         self.doLayout()
 
     def reload(self, data, listData):
-
         self.list.LoadData(listData)
         self.list.SelectAll(select=True)
         self.layersData = data
@@ -608,13 +619,19 @@ class OgrImportDialog(ImportDialog):
             return
 
         dsn = self.dsnInput.GetDsn()
+        if not dsn:
+            return
         ext = self.dsnInput.GetFormatExt()
 
         # determine data driver for PostGIS links
         self.popOGR = False
         if (
             self.dsnInput.GetType() == "db"
-            and self.dsnInput.GetFormat() == "PostgreSQL"
+            and self.dsnInput.GetFormat()
+            in {
+                "PostgreSQL",
+                "PostgreSQL/PostGIS",
+            }
             and "GRASS_VECTOR_OGR" not in os.environ
         ):
             self.popOGR = True
@@ -776,14 +793,25 @@ class GdalOutputDialog(wx.Dialog):
             RunCommand("v.external.out", parent=self, flags="r")
         else:
             dsn = self.dsnInput.GetDsn()
-            frmt = self.dsnInput.GetFormat()
+            frmt = self.dsnInput.GetFormat(getFormatAbbreviation=True)
+            extension = self.dsnInput.GetFormatExt()
             options = self.dsnInput.GetOptions()
             if not dsn:
                 GMessage(_("No data source selected."), parent=self)
                 return
-
+            if self.ogr:
+                cmd, params = "v.external.out", {"output": dsn}
+            else:
+                cmd, params = (
+                    "r.external.out",
+                    {"directory": dsn, "extension": extension},
+                )
             RunCommand(
-                "v.external.out", parent=self, output=dsn, format=frmt, options=options
+                cmd,
+                parent=self,
+                format=frmt,
+                options=options,
+                **params,
             )
         self.Close()
 
@@ -838,7 +866,6 @@ class DxfImportDialog(ImportDialog):
         inputDxf = self.dsnInput.GetValue()
 
         for layer, output, itemId in data:
-
             cmd = self.getSettingsPageCmd()
             cmd.append("input=%s" % inputDxf)
             cmd.append("layer=%s" % layer)
@@ -872,7 +899,7 @@ class DxfImportDialog(ImportDialog):
         if not path:
             return
 
-        data = list()
+        data = []
         ret = RunCommand(
             "v.in.dxf", quiet=True, parent=self, read=True, flags="l", input=path
         )
@@ -945,7 +972,8 @@ class ReprojectionDialog(wx.Dialog):
             parent=self.panel,
             id=wx.ID_ANY,
             label=_(
-                "Projection of following layers do not match with projection of current location. "
+                "Projection of following layers do not match with projection of "
+                "current location. "
             ),
         )
 
@@ -1010,5 +1038,4 @@ class ReprojectionDialog(wx.Dialog):
         self.Layout()
 
     def GetData(self, checked):
-
         return self.list.GetData(checked)

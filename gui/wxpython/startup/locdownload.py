@@ -16,30 +16,18 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail com>
 """
 
-from __future__ import print_function
-
 import os
 import sys
-import tempfile
 import shutil
 import textwrap
 import time
 
-try:
-    from urllib2 import HTTPError, URLError
-    from urllib import request, urlretrieve
-except ImportError:
-    # there is also HTTPException, perhaps change to list
-    from urllib.error import HTTPError, URLError
-    from urllib.request import urlretrieve
-    from urllib import request
-
 import wx
 from wx.lib.newevent import NewEvent
 
-from grass.script import debug
-from grass.script.utils import try_rmdir
-
+from grass.script.utils import try_rmdir, legalize_vector_name
+from grass.utils.download import download_and_extract, name_from_url, DownloadError
+from grass.grassdb.checks import is_location_valid
 from grass.script.setup import set_gui_path
 
 set_gui_path()
@@ -52,27 +40,27 @@ from gui_core.wrap import Button, StaticText
 # TODO: labels (and descriptions) translatable?
 LOCATIONS = [
     {
-        "label": "Complete NC location",
-        "url": "https://grass.osgeo.org/sampledata/north_carolina/nc_spm_08_grass7.tar.gz",
+        "label": "Complete North Carolina dataset",
+        "url": "https://grass.osgeo.org/sampledata/north_carolina/nc_spm_08_grass7.tar.gz",  # noqa: E501
     },
     {
-        "label": "Basic NC location",
-        "url": "https://grass.osgeo.org/sampledata/north_carolina/nc_basic_spm_grass7.tar.gz",
+        "label": "Basic North Carolina dataset",
+        "url": "https://grass.osgeo.org/sampledata/north_carolina/nc_basic_spm_grass7.tar.gz",  # noqa: E501
     },
     {
-        "label": "World location in LatLong/WGS84",
+        "label": "World dataset in LatLong/WGS84",
         "url": "https://grass.osgeo.org/sampledata/worldlocation.tar.gz",
     },
     {
-        "label": "Spearfish (SD) location",
+        "label": "Spearfish (SD) dataset",
         "url": "https://grass.osgeo.org/sampledata/spearfish_grass70data-0.3.tar.gz",
     },
     {
-        "label": "Piemonte, Italy data set",
-        "url": "http://geodati.fmach.it/gfoss_geodata/libro_gfoss/grassdata_piemonte_utm32n_wgs84_grass7.tar.gz",
+        "label": "Piemonte, Italy dataset",
+        "url": "https://grass.osgeo.org/sampledata/grassdata_piemonte_utm32n_wgs84_grass7.tar.gz",  # noqa: E501
     },
     {
-        "label": "Slovakia 3D precipitation voxel data set",
+        "label": "Slovakia 3D precipitation voxel dataset",
         "url": "https://grass.osgeo.org/sampledata/slovakia3d_grass7.tar.gz",
     },
     {
@@ -80,13 +68,13 @@ LOCATIONS = [
         "url": "https://grass.osgeo.org/sampledata/fire_grass6data.tar.gz",
     },
     {
-        "label": "GISMentors location, Czech Republic",
+        "label": "GISMentors dataset, Czech Republic",
         "url": "http://training.gismentors.eu/geodata/grass/gismentors.zip",
     },
     {
         "label": "Natural Earth Dataset in WGS84",
-        "url": "https://zenodo.org/record/3968936/files/natural-earth-dataset.tar.gz",
-        "size": "207 MB",
+        "url": "https://zenodo.org/records/13370131/files/natural_earth_dataset.zip",
+        "size": "121.3 MB",
         "epsg": "4326",
         "license": "ODC Public Domain Dedication and License 1.0",
         "maintainer": "Brendan Harmon (brendan.harmon@gmail.com)",
@@ -94,13 +82,7 @@ LOCATIONS = [
 ]
 
 
-class DownloadError(Exception):
-    """Error happened during download or when processing the file"""
-
-    pass
-
-
-class RedirectText(object):
+class RedirectText:
     def __init__(self, window):
         self.out = window
 
@@ -139,8 +121,7 @@ class RedirectText(object):
         n_lines = string.count("\n")
         attr = self.out.GetClassDefaultAttributes()
         font_size = attr.font.GetPointSize()
-        heigth = int((n_lines + 2) * font_size // 0.75)  # 1 px = 0.75 pt
-        return heigth
+        return int((n_lines + 2) * font_size // 0.75)  # 1 px = 0.75 pt
 
     def _resize(self, heigth=-1):
         """Resize widget heigth
@@ -155,83 +136,9 @@ class RedirectText(object):
         )
 
 
-# copy from g.extension, potentially move to library
-def move_extracted_files(extract_dir, target_dir, files):
-    """Fix state of extracted file by moving them to different diretcory
-
-    When extracting, it is not clear what will be the root directory
-    or if there will be one at all. So this function moves the files to
-    a different directory in the way that if there was one directory extracted,
-    the contained files are moved.
-    """
-    debug("move_extracted_files({0})".format(locals()))
-    if len(files) == 1:
-        shutil.copytree(os.path.join(extract_dir, files[0]), target_dir)
-    else:
-        if not os.path.exists(target_dir):
-            os.mkdir(target_dir)
-        for file_name in files:
-            actual_file = os.path.join(extract_dir, file_name)
-            if os.path.isdir(actual_file):
-                # copy_tree() from distutils failed to create
-                # directories before copying files time to time
-                # (when copying to recently deleted directory)
-                shutil.copytree(actual_file, os.path.join(target_dir, file_name))
-            else:
-                shutil.copy(actual_file, os.path.join(target_dir, file_name))
-
-
-# copy from g.extension, potentially move to library
-def extract_zip(name, directory, tmpdir):
-    """Extract a ZIP file into a directory"""
-    debug(
-        "extract_zip(name={name}, directory={directory},"
-        " tmpdir={tmpdir})".format(name=name, directory=directory, tmpdir=tmpdir),
-        3,
-    )
-    try:
-        import zipfile
-
-        zip_file = zipfile.ZipFile(name, mode="r")
-        file_list = zip_file.namelist()
-        # we suppose we can write to parent of the given dir
-        # (supposing a tmp dir)
-        extract_dir = os.path.join(tmpdir, "extract_dir")
-        os.mkdir(extract_dir)
-        for subfile in file_list:
-            # this should be safe in Python 2.7.4
-            zip_file.extract(subfile, extract_dir)
-        files = os.listdir(extract_dir)
-        move_extracted_files(extract_dir=extract_dir, target_dir=directory, files=files)
-    except zipfile.BadZipfile as error:
-        raise DownloadError(_("ZIP file is unreadable: {0}").format(error))
-
-
-# copy from g.extension, potentially move to library
-def extract_tar(name, directory, tmpdir):
-    """Extract a TAR or a similar file into a directory"""
-    debug(
-        "extract_tar(name={name}, directory={directory},"
-        " tmpdir={tmpdir})".format(name=name, directory=directory, tmpdir=tmpdir),
-        3,
-    )
-    try:
-        import tarfile  # we don't need it anywhere else
-
-        tar = tarfile.open(name)
-        extract_dir = os.path.join(tmpdir, "extract_dir")
-        os.mkdir(extract_dir)
-        tar.extractall(path=extract_dir)
-        files = os.listdir(extract_dir)
-        move_extracted_files(extract_dir=extract_dir, target_dir=directory, files=files)
-    except tarfile.TarError as error:
-        raise DownloadError(_("Archive file is unreadable: {0}").format(error))
-
-
-extract_tar.supported_formats = ["tar.gz", "gz", "bz2", "tar", "gzip", "targz"]
-
-
-# based on https://blog.shichao.io/2012/10/04/progress_speed_indicator_for_urlretrieve_in_python.html
+# based on
+# https://blog.shichao.io/2012/10/04/
+# progress_speed_indicator_for_urlretrieve_in_python.html
 def reporthook(count, block_size, total_size):
     global start_time
     if count == 0:
@@ -249,72 +156,14 @@ def reporthook(count, block_size, total_size):
     sys.stdout.write(
         _(
             "Download in progress, wait until it is finished "
-            "{0}%, {1} MB, {2} KB/s, {3:.0f} seconds passed".format(
-                percent,
-                progress_size / (1024 * 1024),
-                speed,
-                duration,
-            ),
+            "{0}%, {1} MB, {2} KB/s, {3:.0f} seconds passed"
+        ).format(
+            percent,
+            progress_size / (1024 * 1024),
+            speed,
+            duration,
         ),
     )
-
-
-# based on g.extension, potentially move to library
-def download_and_extract(source):
-    """Download a file (archive) from URL and uncompress it"""
-    tmpdir = tempfile.mkdtemp()
-    Debug.msg(1, "Tmpdir: {}".format(tmpdir))
-    directory = os.path.join(tmpdir, "location")
-    http_error_message = _("Download file from <{url}>, " "return status code {code}, ")
-    url_error_message = _(
-        "Download file from <{url}>, " "failed. Check internet connection."
-    )
-    if source.endswith(".zip"):
-        archive_name = os.path.join(tmpdir, "location.zip")
-        try:
-            filename, headers = urlretrieve(source, archive_name, reporthook)
-        except HTTPError as err:
-            raise DownloadError(
-                http_error_message.format(
-                    url=source,
-                    code=err,
-                ),
-            )
-        except URLError:
-            raise DownloadError(url_error_message.format(url=source))
-        if headers.get("content-type", "") != "application/zip":
-            raise DownloadError(
-                _(
-                    "Download of <{url}> failed" " or file <{name}> is not a ZIP file"
-                ).format(url=source, name=filename)
-            )
-        extract_zip(name=archive_name, directory=directory, tmpdir=tmpdir)
-    elif (
-        source.endswith(".tar.gz")
-        or source.rsplit(".", 1)[1] in extract_tar.supported_formats
-    ):
-        if source.endswith(".tar.gz"):
-            ext = "tar.gz"
-        else:
-            ext = source.rsplit(".", 1)[1]
-        archive_name = os.path.join(tmpdir, "location." + ext)
-        try:
-            urlretrieve(source, archive_name, reporthook)
-        except HTTPError as err:
-            raise DownloadError(
-                http_error_message.format(
-                    url=source,
-                    code=err,
-                ),
-            )
-        except URLError:
-            raise DownloadError(url_error_message.format(url=source))
-        extract_tar(name=archive_name, directory=directory, tmpdir=tmpdir)
-    else:
-        # probably programmer error
-        raise DownloadError(_("Unknown format '{0}'.").format(source))
-    assert os.path.isdir(directory)
-    return directory
 
 
 def download_location(url, name, database):
@@ -325,10 +174,10 @@ def download_location(url, name, database):
     try:
         # TODO: the unpacking could go right to the path (but less
         # robust) or replace copytree here with move
-        directory = download_and_extract(source=url)
+        directory = download_and_extract(source=url, reporthook=reporthook)
         destination = os.path.join(database, name)
         if not is_location_valid(directory):
-            return _("Downloaded location is not valid")
+            return _("Downloaded project is not valid")
         shutil.copytree(src=directory, dst=destination)
         try_rmdir(directory)
     except DownloadError as error:
@@ -336,23 +185,9 @@ def download_location(url, name, database):
     return None
 
 
-# based on grass.py (to be moved to future "grass.init")
-def is_location_valid(location):
-    """Return True if GRASS Location is valid
-
-    :param location: path of a Location
-    """
-    # DEFAULT_WIND file should not be required until you do something
-    # that actually uses them. The check is just a heuristic; a directory
-    # containing a PERMANENT/DEFAULT_WIND file is probably a GRASS
-    # location, while a directory lacking it probably isn't.
-    # TODO: perhaps we can relax this and require only permanent
-    return os.access(os.path.join(location, "PERMANENT", "DEFAULT_WIND"), os.F_OK)
-
-
 def location_name_from_url(url):
     """Create location name from URL"""
-    return url.rsplit("/", 1)[1].split(".", 1)[0].replace("-", "_").replace(" ", "_")
+    return legalize_vector_name(name_from_url(url))
 
 
 DownloadDoneEvent, EVT_DOWNLOAD_DONE = NewEvent()
@@ -387,10 +222,10 @@ class LocationDownloadPanel(wx.Panel):
         self.database = database
         self.locations = locations
         self._abort_btn_label = _("Abort")
-        self._abort_btn_tooltip = _("Abort download location")
+        self._abort_btn_tooltip = _("Abort download")
 
         self.label = StaticText(
-            parent=self, label=_("Select sample location to download:")
+            parent=self, label=_("Select sample project to download:")
         )
 
         choices = []
@@ -409,7 +244,8 @@ class LocationDownloadPanel(wx.Panel):
 
         # It is not clear if all wx versions supports color, so try-except.
         # The color itself may not be correct for all platforms/system settings
-        # but in http://xoomer.virgilio.it/infinity77/wxPython/Widgets/wx.SystemSettings.html
+        # but in
+        # http://xoomer.virgilio.it/infinity77/wxPython/Widgets/wx.SystemSettings.html
         # there is no 'warning' color.
         try:
             self.message.SetForegroundColour(wx.Colour(255, 0, 0))
@@ -455,7 +291,7 @@ class LocationDownloadPanel(wx.Panel):
         self.SetMinSize(self.GetBestSize())
 
     def _change_download_btn_label(
-        self, label=_("Do&wnload"), tooltip=_("Download selected location")
+        self, label=_("Do&wnload"), tooltip=_("Download selected project")
     ):
         """Change download button label/tooltip"""
         if self.parent.download_button:
@@ -465,7 +301,7 @@ class LocationDownloadPanel(wx.Panel):
     def OnDownload(self, event):
         """Handle user-initiated action of download"""
         button_label = self.parent.download_button.GetLabel()
-        if button_label in (_("Download"), _("Do&wnload")):
+        if button_label in {_("Download"), _("Do&wnload")}:
             self._change_download_btn_label(
                 label=self._abort_btn_label,
                 tooltip=self._abort_btn_tooltip,
@@ -487,7 +323,9 @@ class LocationDownloadPanel(wx.Panel):
         destination = os.path.join(self.database, dirname)
         if os.path.exists(destination):
             self._error(
-                _("Location named <%s> already exists," " download canceled") % dirname
+                _(
+                    "Project name {name} already exists in {path}, download canceled"
+                ).format(name=dirname, path=self.database)
             )
             self._change_download_btn_label()
             return
@@ -501,13 +339,17 @@ class LocationDownloadPanel(wx.Panel):
                 self._last_downloaded_location_name = dirname
                 self._warning(
                     _(
-                        "Download completed. The downloaded sample data is listed "
-                        "in the location/mapset tabs upon closing of this window"
+                        "Download completed. The downloaded sample data is available "
+                        "now in the data tree"
                     )
                 )
             self._change_download_btn_label()
 
         def terminate_download_callback(event):
+            # Clean up after urllib urlretrieve which is used internally
+            # in grass.utils.
+            from urllib import request  # pylint: disable=import-outside-toplevel
+
             self._download_in_progress = False
             request.urlcleanup()
             sys.stdout.write("Download aborted")
@@ -538,7 +380,9 @@ class LocationDownloadPanel(wx.Panel):
         destination = os.path.join(self.database, dirname)
         if os.path.exists(destination):
             self._warning(
-                _("Location named <%s> already exists," " rename it first") % dirname
+                _("Project named {name} already exists, rename it first").format(
+                    name=dirname
+                )
             )
             self.parent.download_button.SetLabel(label=_("Download"))
             return
@@ -591,15 +435,15 @@ class LocationDownloadDialog(wx.Dialog):
     Contains the panel and Cancel button.
     """
 
-    def __init__(self, parent, database, title=_("Location Download")):
+    def __init__(self, parent, database, title=_("Dataset Download")):
         """
-        :param database: database to download the location to
+        :param database: database to download the project (location) to
         :param title: window title if the default is not appropriate
         """
         wx.Dialog.__init__(self, parent=parent, title=title)
         cancel_button = Button(self, id=wx.ID_CANCEL)
         self.download_button = Button(parent=self, id=wx.ID_ANY, label=_("Do&wnload"))
-        self.download_button.SetToolTip(_("Download selected location"))
+        self.download_button.SetToolTip(_("Download selected dataset"))
         self.panel = LocationDownloadPanel(parent=self, database=database)
         cancel_button.Bind(wx.EVT_BUTTON, self.OnCancel)
         self.Bind(wx.EVT_CLOSE, self.OnCancel)
@@ -642,7 +486,7 @@ class LocationDownloadDialog(wx.Dialog):
             # running thread
             dlg = wx.MessageDialog(
                 parent=self,
-                message=_("Do you want to cancel location download?"),
+                message=_("Do you want to cancel dataset download?"),
                 caption=_("Abort download"),
                 style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
             )

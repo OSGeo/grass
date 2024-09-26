@@ -2,7 +2,7 @@
 
 <em>i.in.spotvgt</em> imports SPOT Vegetation (1km, global) NDVI data sets.
 After import the digital numbers (DN) are remapped to VEGETATION NDVI
-values and the NDVI color table is applied. The imported DN map is 
+values and the NDVI color table is applied. The imported DN map is
 removed after remapping.
 <p>Apparently missing raster cells due to bad pixel quality are reconstructed
 by the SPOT operating team in the NDVI file. The differences between the
@@ -47,8 +47,3 @@ r.out.gdal 0001_NDV format=GTiff out=spotndvi.tif
 <h2>AUTHOR</h2>
 
 Markus Neteler
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

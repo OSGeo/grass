@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 @author Jachym Cepicky
 @author Martin Landa <landa.martin gmail.com>
 """
+
 import os
 
 import wx
@@ -166,7 +167,7 @@ class RegionDef(BaseClass, wx.Dialog):
         self.cells3 = int(region["cells3"])
 
         #
-        # 3D box collapsable
+        # 3D box collapsible
         #
         self.infoCollapseLabelExp = _("Click here to show 3D settings")
         self.infoCollapseLabelCol = _("Click here to hide 3D settings")
@@ -238,10 +239,12 @@ class RegionDef(BaseClass, wx.Dialog):
         self.ttbres = TextCtrl(
             parent=pane, id=wx.ID_ANY, value=str(self.tbres), size=(150, -1)
         )
-        #         self.tnsres3 = wx.TextCtrl(parent = pane, id = wx.ID_ANY, value = str(self.nsres3),
-        #                                    size = (150, -1))
-        #         self.tewres3  =  wx.TextCtrl(parent = pane, id = wx.ID_ANY, value = str(self.ewres3),
-        #                                    size = (150, -1))
+        # self.tnsres3 = wx.TextCtrl(
+        #     parent=pane, id=wx.ID_ANY, value=str(self.nsres3), size=(150, -1)
+        # )
+        # self.tewres3 = wx.TextCtrl(
+        #     parent=pane, id=wx.ID_ANY, value=str(self.ewres3), size=(150, -1)
+        # )
 
         # labels
         self.ldepth = StaticText(parent=pane, label=_("Depth: %d") % self.depth)
@@ -279,20 +282,30 @@ class RegionDef(BaseClass, wx.Dialog):
         )
 
         # res
-        #         gridSizer.Add(item = wx.StaticText(parent = pane, label = _("3D N-S resolution")),
-        #                       flag = wx.ALIGN_CENTER |
-        #                       wx.LEFT | wx.RIGHT | wx.TOP, border = 5,
-        #                       pos = (2, 1))
-        #         gridSizer.Add(item = self.tnsres3,
-        #                       flag = wx.ALIGN_CENTER_HORIZONTAL |
-        #                       wx.ALL, border = 5, pos = (3, 1))
-        #         gridSizer.Add(item = wx.StaticText(parent = pane, label = _("3D E-W resolution")),
-        #                       flag = wx.ALIGN_CENTER |
-        #                       wx.LEFT | wx.RIGHT | wx.TOP, border = 5,
-        #                       pos = (2, 3))
-        #         gridSizer.Add(item = self.tewres3,
-        #                       flag = wx.ALIGN_CENTER_HORIZONTAL |
-        #                       wx.ALL, border = 5, pos = (3, 3))
+        # gridSizer.Add(
+        #     item=wx.StaticText(parent=pane, label=_("3D N-S resolution")),
+        #     flag=wx.ALIGN_CENTER | wx.LEFT | wx.RIGHT | wx.TOP,
+        #     border=5,
+        #     pos=(2, 1),
+        # )
+        # gridSizer.Add(
+        #     item=self.tnsres3,
+        #     flag=wx.ALIGN_CENTER_HORIZONTAL | wx.ALL,
+        #     border=5,
+        #     pos=(3, 1),
+        # )
+        # gridSizer.Add(
+        #     item=wx.StaticText(parent=pane, label=_("3D E-W resolution")),
+        #     flag=wx.ALIGN_CENTER | wx.LEFT | wx.RIGHT | wx.TOP,
+        #     border=5,
+        #     pos=(2, 3),
+        # )
+        # gridSizer.Add(
+        #     item=self.tewres3,
+        #     flag=wx.ALIGN_CENTER_HORIZONTAL | wx.ALL,
+        #     border=5,
+        #     pos=(3, 3),
+        # )
 
         # rows/cols/cells
         gridSizer.Add(
@@ -526,10 +539,10 @@ class RegionDef(BaseClass, wx.Dialog):
                 self.top = float(event.GetString())
             elif event.GetId() == self.tbottom.GetId():
                 self.bottom = float(event.GetString())
-            #             elif event.GetId() == self.tnsres3.GetId():
-            #                 self.nsres3 = float(event.GetString())
-            #             elif event.GetId() == self.tewres3.GetId():
-            #                 self.ewres3 = float(event.GetString())
+            # elif event.GetId() == self.tnsres3.GetId():
+            #     self.nsres3 = float(event.GetString())
+            # elif event.GetId() == self.tewres3.GetId():
+            #     self.ewres3 = float(event.GetString())
             elif event.GetId() == self.ttbres.GetId():
                 self.tbres = float(event.GetString())
 
@@ -581,8 +594,8 @@ class RegionDef(BaseClass, wx.Dialog):
         self.lcols.SetLabel(_("Cols: %d") % self.cols)
         self.lcells.SetLabel(_("Cells: %d") % self.cells)
         # 3D
-        self.ldepth.SetLabel(_("Depth: %d" % self.depth))
-        self.lcells3.SetLabel(_("3D Cells: %d" % self.cells3))
+        self.ldepth.SetLabel(_("Depth: %d") % self.depth)
+        self.lcells3.SetLabel(_("3D Cells: %d") % self.cells3)
 
     def OnSetButton(self, event=None):
         """Set default region"""
@@ -648,7 +661,6 @@ class SelectTransformDialog(wx.Dialog):
         size=wx.DefaultSize,
         style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
     ):
-
         wx.Dialog.__init__(self, parent, wx.ID_ANY, title, pos, size, style)
 
         global transformlist
@@ -690,12 +702,10 @@ class SelectTransformDialog(wx.Dialog):
             height += h
             width = max(width, w)
 
-        height = height + 5
-        if height > 400:
-            height = 400
-        width = width + 5
-        if width > 400:
-            width = 400
+        height += 5
+        height = min(height, 400)
+        width += 5
+        width = min(width, 400)
 
         #
         # VListBox for displaying and selecting transformations
@@ -736,22 +746,22 @@ class SelectTransformDialog(wx.Dialog):
     def ClickTrans(self, event):
         """Get the number of the datum transform to use in g.proj"""
         self.transnum = event.GetSelection()
-        self.transnum = self.transnum - 1
+        self.transnum -= 1
 
     def GetTransform(self):
         """Get the number of the datum transform to use in g.proj"""
         self.transnum = self.translist.GetSelection()
-        self.transnum = self.transnum - 1
+        self.transnum -= 1
         return self.transnum
 
 
 def testRegionDef():
     import wx.lib.inspection
-    import grass.script as gscript
+    import grass.script as gs
 
     app = wx.App()
 
-    dlg = RegionDef(None, location=gscript.gisenv()["LOCATION_NAME"])
+    dlg = RegionDef(None, location=gs.gisenv()["LOCATION_NAME"])
     dlg.Show()
     wx.lib.inspection.InspectionTool().Show()
     app.MainLoop()

@@ -59,7 +59,7 @@ class Animation:
 
     def Start(self):
         """Start recording/playing"""
-        self.timer.Start(self.GetInterval())
+        self.timer.Start(int(self.GetInterval()))
 
     def Pause(self):
         """Pause recording/playing"""
@@ -171,13 +171,13 @@ class Animation:
         self.stopSaving = True
 
     def IsSaved(self):
-        """"Test if animation has been saved (to images)"""
+        """Test if animation has been saved (to images)"""
         return self.animationSaved
 
     def SaveAnimationFile(self, path, prefix, format):
         """Generate image files
 
-        :param path: path to direcory
+        :param path: path to directory
         :param prefix: file prefix
         :param format: index of image file format
         """

@@ -79,7 +79,7 @@ NvizIcons = {
 class MapToolbar(BaseToolbar):
     """Map Display toolbar"""
 
-    def __init__(self, parent, toolSwitcher):
+    def __init__(self, parent, toolSwitcher, giface):
         """Map Display constructor
 
         :param parent: reference to MapFrame
@@ -88,6 +88,7 @@ class MapToolbar(BaseToolbar):
 
         self.InitToolbar(self._toolbarData())
         self._default = self.pointer
+        self._giface = giface
 
         # optional tools
         toolNum = 0
@@ -96,9 +97,6 @@ class MapToolbar(BaseToolbar):
         ]
         self.toolId = {"2d": toolNum}
         toolNum += 1
-        if self.parent.GetLayerManager():
-            log = self.parent.GetLayerManager().GetLogWindow()
-
         if haveNviz:
             choices.append(_("3D view"))
             self.toolId["3d"] = toolNum
@@ -106,9 +104,8 @@ class MapToolbar(BaseToolbar):
         else:
             from nviz.main import errorMsg
 
-            if self.parent.GetLayerManager():
-                log.WriteCmdLog(_("3D view mode not available"))
-                log.WriteWarning(_("Reason: %s") % str(errorMsg))
+            self._giface.WriteCmdLog(_("3D view mode not available"))
+            self._giface.WriteWarning(_("Reason: %s") % str(errorMsg))
 
             self.toolId["3d"] = -1
 
@@ -119,18 +116,18 @@ class MapToolbar(BaseToolbar):
         else:
             from vdigit.main import errorMsg
 
-            if self.parent.GetLayerManager():
-                log.WriteCmdLog(_("Vector digitizer not available"))
-                log.WriteWarning(_("Reason: %s") % errorMsg)
-                log.WriteLog(
-                    _(
-                        "Note that the wxGUI's vector digitizer is disabled in this installation. "
-                        "Please keep an eye out for updated versions of GRASS. "
-                        'In the meantime you can use "v.edit" for non-interactive editing '
-                        "from the Develop vector map menu."
-                    ),
-                    wrap=60,
-                )
+            self._giface.WriteCmdLog(_("Vector digitizer not available"))
+            self._giface.WriteWarning(_("Reason: %s") % errorMsg)
+            self._giface.WriteLog(
+                _(
+                    "Note that the wxGUI's vector digitizer is disabled in this "
+                    "installation."
+                    "Please keep an eye out for updated versions of GRASS. "
+                    'In the meantime you can use "v.edit" for non-interactive editing '
+                    "from the Develop vector map menu."
+                ),
+                wrap=60,
+            )
 
             self.toolId["vdigit"] = -1
         choices.append(_("Raster digitizer"))
@@ -171,24 +168,99 @@ class MapToolbar(BaseToolbar):
 
     def _toolbarData(self):
         """Toolbar data"""
-        return self._getToolbarData(
+        data = (
             (
-                ("renderMap", BaseIcons["render"], self.parent.OnRender),
-                ("pointer", BaseIcons["pointer"], self.parent.OnPointer, wx.ITEM_CHECK),
-                ("select", MapIcons["select"], self.parent.OnSelect, wx.ITEM_CHECK),
-                ("query", MapIcons["query"], self.parent.OnQuery, wx.ITEM_CHECK),
-                ("pan", BaseIcons["pan"], self.parent.OnPan, wx.ITEM_CHECK),
-                ("zoomIn", BaseIcons["zoomIn"], self.parent.OnZoomIn, wx.ITEM_CHECK),
-                ("zoomOut", BaseIcons["zoomOut"], self.parent.OnZoomOut, wx.ITEM_CHECK),
-                ("zoomExtent", BaseIcons["zoomExtent"], self.parent.OnZoomToMap),
-                ("zoomRegion", BaseIcons["zoomRegion"], self.parent.OnZoomToWind),
-                ("zoomBack", BaseIcons["zoomBack"], self.parent.OnZoomBack),
-                ("zoomMenu", BaseIcons["zoomMenu"], self.parent.OnZoomMenu),
-                ("analyze", MapIcons["analyze"], self.OnAnalyze),
-                ("overlay", BaseIcons["overlay"], self.OnDecoration),
-                ("saveFile", BaseIcons["saveFile"], self.parent.SaveToFile),
-            )
+                ("renderMap", BaseIcons["render"].label),
+                BaseIcons["render"],
+                self.parent.OnRender,
+            ),
+            (
+                ("pointer", BaseIcons["pointer"].label),
+                BaseIcons["pointer"],
+                self.parent.OnPointer,
+                wx.ITEM_CHECK,
+            ),
+            (
+                ("select", MapIcons["select"].label),
+                MapIcons["select"],
+                self.parent.OnSelect,
+                wx.ITEM_CHECK,
+            ),
+            (
+                ("query", MapIcons["query"].label),
+                MapIcons["query"],
+                self.parent.OnQuery,
+                wx.ITEM_CHECK,
+            ),
+            (
+                ("pan", BaseIcons["pan"].label),
+                BaseIcons["pan"],
+                self.parent.OnPan,
+                wx.ITEM_CHECK,
+            ),
+            (
+                ("zoomIn", BaseIcons["zoomIn"].label),
+                BaseIcons["zoomIn"],
+                self.parent.OnZoomIn,
+                wx.ITEM_CHECK,
+            ),
+            (
+                ("zoomOut", BaseIcons["zoomOut"].label),
+                BaseIcons["zoomOut"],
+                self.parent.OnZoomOut,
+                wx.ITEM_CHECK,
+            ),
+            (
+                ("zoomExtent", BaseIcons["zoomExtent"].label),
+                BaseIcons["zoomExtent"],
+                self.parent.OnZoomToMap,
+            ),
+            (
+                ("zoomRegion", BaseIcons["zoomRegion"].label),
+                BaseIcons["zoomRegion"],
+                self.parent.OnZoomToWind,
+            ),
+            (
+                ("zoomBack", BaseIcons["zoomBack"].label),
+                BaseIcons["zoomBack"],
+                self.parent.OnZoomBack,
+            ),
+            (
+                ("zoomMenu", BaseIcons["zoomMenu"].label),
+                BaseIcons["zoomMenu"],
+                self.parent.OnZoomMenu,
+            ),
+            (
+                ("analyze", MapIcons["analyze"].label),
+                MapIcons["analyze"],
+                self.OnAnalyze,
+            ),
+            (
+                ("overlay", BaseIcons["overlay"].label),
+                BaseIcons["overlay"],
+                self.OnDecoration,
+            ),
+            (
+                ("saveFile", BaseIcons["saveFile"].label),
+                BaseIcons["saveFile"],
+                self.parent.SaveToFile,
+            ),
+            (
+                ("mapDispSettings", BaseIcons["mapDispSettings"].label),
+                BaseIcons["mapDispSettings"],
+                self.parent.OnMapDisplayProperties,
+            ),
         )
+        if self.parent.IsDockable():
+            data += (
+                (
+                    ("docking", BaseIcons["docking"].label),
+                    BaseIcons["docking"],
+                    self.parent.OnDockUndock,
+                    wx.ITEM_CHECK,
+                ),
+            )
+        return self._getToolbarData(data)
 
     def InsertTool(self, data):
         """Insert tool to toolbar
@@ -217,12 +289,12 @@ class MapToolbar(BaseToolbar):
             icons = BaseIcons
         else:
             icons = NvizIcons
-        for i, data in enumerate(self._data):
+        for i, data in enumerate(self.controller.data):
             for tool in ("zoomIn", "zoomOut"):
                 if data[0] == tool:
                     tmp = list(data)
                     tmp[4] = icons[tool].GetDesc()
-                    self._data[i] = tuple(tmp)
+                    self.controller.data[i] = tuple(tmp)
 
     def OnSelectTool(self, event):
         """Select / enable tool available in tools list"""
@@ -231,12 +303,14 @@ class MapToolbar(BaseToolbar):
         if tool == self.toolId["2d"]:
             self.ExitToolbars()
             self.Enable2D(True)
+            self.parent.MapWindow.SetFocus()
 
         elif tool == self.toolId["3d"] and not (
             self.parent.MapWindow3D and self.parent.IsPaneShown("3d")
         ):
             self.ExitToolbars()
-            self.parent.AddNviz()
+            self.parent.AddToolbar("nviz")
+            self.parent.MapWindow.SetFocus()
 
         elif tool == self.toolId["vdigit"] and not self.parent.GetToolbar("vdigit"):
             self.ExitToolbars()
@@ -245,7 +319,8 @@ class MapToolbar(BaseToolbar):
 
         elif tool == self.toolId["rdigit"]:
             self.ExitToolbars()
-            self.parent.AddRDigit()
+            self.parent.AddToolbar("rdigit")
+            self.parent.MapWindow.SetFocus()
 
     def OnAnalyze(self, event):
         """Analysis tools menu"""
@@ -256,7 +331,7 @@ class MapToolbar(BaseToolbar):
                 (MapIcons["profile"], self.parent.OnProfile),
                 (MapIcons["scatter"], self.parent.OnScatterplot),
                 (MapIcons["histogram"], self.parent.OnHistogramPyPlot),
-                (BaseIcons["histogramD"], self.parent.OnHistogram),
+                (BaseIcons["histogram"], self.parent.OnHistogram),
                 (MapIcons["vnet"], self.parent.OnVNet),
             )
         )
@@ -276,10 +351,7 @@ class MapToolbar(BaseToolbar):
     def ExitToolbars(self):
         if self.parent.GetToolbar("vdigit"):
             self.parent.toolbars["vdigit"].OnExit()
-        if self.parent.GetLayerManager() and self.parent.GetLayerManager().IsPaneShown(
-            "toolbarNviz"
-        ):
-            self.parent.RemoveNviz()
+        self.parent.RemoveNviz()
         if self.parent.GetToolbar("rdigit"):
             self.parent.QuitRDigit()
 

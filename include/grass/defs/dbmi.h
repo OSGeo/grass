@@ -7,7 +7,7 @@ int db_add_column(dbDriver *, dbString *, dbColumn *);
 void db__add_cursor_to_driver_state(dbCursor *);
 int db_alloc_cursor_column_flags(dbCursor *);
 int db_alloc_cursor_table(dbCursor *, int);
-int db_append_table_column(dbTable * , dbColumn *);
+int db_append_table_column(dbTable *, dbColumn *);
 dbDirent *db_alloc_dirent_array(int);
 dbHandle *db_alloc_handle_array(int);
 dbIndex *db_alloc_index_array(int);
@@ -27,8 +27,7 @@ void db_CatValArray_sort(dbCatValArray *);
 int db_CatValArray_sort_by_value(dbCatValArray *);
 int db_CatValArray_get_value(dbCatValArray *, int, dbCatVal **);
 int db_CatValArray_get_value_int(dbCatValArray *, int, int *);
-int db_CatValArray_get_value_double(dbCatValArray *, int,
-				    double *);
+int db_CatValArray_get_value_double(dbCatValArray *, int, double *);
 void db_char_to_lowercase(char *);
 void db_char_to_uppercase(char *);
 void db_clear_error(void);
@@ -39,41 +38,31 @@ int db_close_database(dbDriver *);
 int db_close_database_shutdown_driver(dbDriver *);
 int db_column_sqltype(dbDriver *, const char *, const char *);
 int db_column_Ctype(dbDriver *, const char *, const char *);
-int db_convert_Cstring_to_column_default_value(const char *,
-					       dbColumn *);
-int db_convert_Cstring_to_column_value(const char *,
-				       dbColumn *);
-int db_convert_Cstring_to_value(const char *, int,
-				dbValue *);
-int db_convert_Cstring_to_value_datetime(const char *, int,
-					 dbValue *);
-int db_convert_column_default_value_to_string(dbColumn *,
-					      dbString *);
+int db_convert_Cstring_to_column_default_value(const char *, dbColumn *);
+int db_convert_Cstring_to_column_value(const char *, dbColumn *);
+int db_convert_Cstring_to_value(const char *, int, dbValue *);
+int db_convert_Cstring_to_value_datetime(const char *, int, dbValue *);
+int db_convert_column_default_value_to_string(dbColumn *, dbString *);
 int db_convert_column_value_to_string(dbColumn *, dbString *);
-int db_convert_value_datetime_into_string(dbValue *, int,
-					  dbString *);
-int db_convert_value_to_string(dbValue *, int,
-			       dbString *);
+int db_convert_value_datetime_into_string(dbValue *, int, dbString *);
+int db_convert_value_to_string(dbValue *, int, dbString *);
 dbColumn *db_copy_column(dbColumn *, dbColumn *);
 void db_copy_dbmscap_entry(dbDbmscap *, dbDbmscap *);
 int db_copy_string(dbString *, const dbString *);
 int db_table_to_sql(dbTable *, dbString *);
 int db_copy_table(const char *, const char *, const char *, const char *,
-		  const char *, const char *);
-int db_copy_table_where(const char *, const char *, const char *,
-			const char *, const char *, const char *,
-			const char *);
-int db_copy_table_select(const char *, const char *, const char *,
-			 const char *, const char *, const char *,
-			 const char *);
+                  const char *, const char *);
+int db_copy_table_where(const char *, const char *, const char *, const char *,
+                        const char *, const char *, const char *);
+int db_copy_table_select(const char *, const char *, const char *, const char *,
+                         const char *, const char *, const char *);
 int db_copy_table_by_ints(const char *, const char *, const char *,
-			  const char *, const char *, const char *,
-			  const char *, int *, int);
+                          const char *, const char *, const char *,
+                          const char *, int *, int);
 void db_copy_value(dbValue *, dbValue *);
 int db_create_database(dbDriver *, dbHandle *);
 int db_create_index(dbDriver *, dbIndex *);
-int db_create_index2(dbDriver *, const char *,
-		     const char *);
+int db_create_index2(dbDriver *, const char *, const char *);
 int db_create_table(dbDriver *, dbTable *);
 int db_d_add_column(void);
 int db_d_bind_update(void);
@@ -105,8 +94,7 @@ int db_d_get_num_rows(void);
 int db_d_grant_on_table(void);
 int db_d_insert(void);
 void db_d_init_error(const char *);
-void db_d_append_error(const char *, ...)
-    __attribute__ ((format(printf, 1, 2)));
+void db_d_append_error(const char *, ...) __attribute__((format(printf, 1, 2)));
 void db_d_report_error(void);
 dbDirent *db_dirent(const char *, int *);
 int db_d_list_databases(void);
@@ -120,8 +108,7 @@ void db_double_quote_string(dbString *);
 int db_driver(int, char **);
 
 int db_driver_mkdir(const char *, int, int);
-int db_drop_column(dbDriver *, dbString *,
-		   dbString *);
+int db_drop_column(dbDriver *, dbString *, dbString *);
 void db__drop_cursor_from_driver_state(dbCursor *);
 int db_drop_index(dbDriver *, dbString *);
 int db_drop_table(dbDriver *, dbString *);
@@ -149,8 +136,7 @@ void db_free_index_array(dbIndex *, int);
 void db_free_string(dbString *);
 void db_free_string_array(dbString *, int);
 void db_free_table(dbTable *);
-int db_get_column(dbDriver *, const char *, const char *,
-		  dbColumn **);
+int db_get_column(dbDriver *, const char *, const char *, dbColumn **);
 dbValue *db_get_column_default_value(dbColumn *);
 const char *db_get_column_description(dbColumn *);
 int db_get_column_host_type(dbColumn *);
@@ -183,7 +169,7 @@ const char *db_get_index_table_name(dbIndex *);
 int db_get_num_rows(dbCursor *);
 char *db_get_string(const dbString *);
 dbColumn *db_get_table_column(dbTable *, int);
-dbColumn *db_get_table_column_by_name(dbTable *, const char*);
+dbColumn *db_get_table_column_by_name(dbTable *, const char *);
 int db_get_table_delete_priv(dbTable *);
 const char *db_get_table_description(dbTable *);
 int db_get_table_insert_priv(dbTable *);
@@ -202,8 +188,7 @@ int db_get_value_month(dbValue *);
 double db_get_value_seconds(dbValue *);
 const char *db_get_value_string(dbValue *);
 int db_get_value_year(dbValue *);
-int db_grant_on_table(dbDriver *, const char *, int,
-		      int);
+int db_grant_on_table(dbDriver *, const char *, int, int);
 int db_has_dbms(void);
 void db_init_column(dbColumn *);
 void db_init_cursor(dbCursor *);
@@ -216,13 +201,10 @@ int db_insert(dbCursor *);
 void db_interval_range(int, int *, int *);
 int db_isdir(const char *);
 int db_legal_tablename(const char *);
-int db_list_databases(dbDriver *, dbString *, int,
-		      dbHandle **, int *);
+int db_list_databases(dbDriver *, dbString *, int, dbHandle **, int *);
 const char *db_list_drivers(void);
-int db_list_indexes(dbDriver *, dbString *, dbIndex **,
-		    int *);
-int db_list_tables(dbDriver *, dbString **, int *,
-		   int);
+int db_list_indexes(dbDriver *, dbString *, dbIndex **, int *);
+int db_list_tables(dbDriver *, dbString **, int *, int);
 void *db_malloc(int);
 void db__mark_database_closed(void);
 void db__mark_database_open(const char *, const char *);
@@ -232,10 +214,9 @@ int db_nocase_compare(const char *, const char *);
 void db_noproc_error(int);
 int db_open_database(dbDriver *, dbHandle *);
 int db_open_insert_cursor(dbDriver *, dbCursor *);
-int db_open_select_cursor(dbDriver *, dbString *,
-			  dbCursor *, int);
-int db_open_update_cursor(dbDriver *, dbString *_name,
-			  dbString *, dbCursor *, int);
+int db_open_select_cursor(dbDriver *, dbString *, dbCursor *, int);
+int db_open_update_cursor(dbDriver *, dbString *_name, dbString *, dbCursor *,
+                          int);
 void db_print_column_definition(FILE *, dbColumn *);
 void db_print_error(void);
 void db_print_index(FILE *, dbIndex *);
@@ -295,13 +276,11 @@ int db__send_table_data(dbTable *);
 int db__send_table_definition(dbTable *);
 int db__send_token(dbToken *);
 int db__send_value(dbValue *, int);
-int db_select_CatValArray(dbDriver *, const char *, const char *,
-			  const char *, const char *,
-			  dbCatValArray *);
-int db_select_int(dbDriver *, const char *, const char *,
-		  const char *, int **);
-int db_select_value(dbDriver *, const char *, const char *,
-		    int, const char *, dbValue *);
+int db_select_CatValArray(dbDriver *, const char *, const char *, const char *,
+                          const char *, dbCatValArray *);
+int db_select_int(dbDriver *, const char *, const char *, const char *, int **);
+int db_select_value(dbDriver *, const char *, const char *, int, const char *,
+                    dbValue *);
 int db_set_column_description(dbColumn *, const char *);
 void db_set_column_has_defined_default_value(dbColumn *);
 void db_set_column_has_undefined_default_value(dbColumn *);
@@ -333,8 +312,7 @@ void db_set_error_who(const char *);
 int db_set_handle(dbHandle *, const char *, const char *);
 void db_set_error_handler_driver(dbDriver *);
 void db_unset_error_handler_driver(dbDriver *);
-int db_set_index_column_name(dbIndex *, int,
-			     const char *);
+int db_set_index_column_name(dbIndex *, int, const char *);
 int db_set_index_name(dbIndex *, const char *);
 int db_set_index_table_name(dbIndex *, const char *);
 int db_set_index_type_non_unique(dbIndex *);
@@ -375,8 +353,7 @@ int db__start_procedure_call(int);
 char *db_store(const char *);
 void db_strip(char *);
 void db_syserror(const char *);
-int db_table_exists(const char *, const char *,
-		    const char *);
+int db_table_exists(const char *, const char *, const char *);
 int db_test_column_has_default_value(dbColumn *);
 int db_test_column_has_defined_default_value(dbColumn *);
 int db_test_column_has_undefined_default_value(dbColumn *);
@@ -404,8 +381,7 @@ void db_unset_cursor_mode(dbCursor *);
 void db_unset_cursor_mode_insensitive(dbCursor *);
 void db_unset_cursor_mode_scroll(dbCursor *);
 int db_update(dbCursor *);
-int db_gversion(dbDriver *, dbString *,
-		dbString *);
+int db_gversion(dbDriver *, dbString *, dbString *);
 const char *db_whoami(void);
 void db_zero(void *, int);
 void db_zero_string(dbString *);

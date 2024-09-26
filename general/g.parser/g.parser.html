@@ -2,9 +2,11 @@
 <!-- meta page name description: Provides full parser support for GRASS scripts. -->
 
 <h2>KEYWORDS</h2>
+
 <a href="general.html">general</a>, <a href="topic_support.html">support</a>, <a href="keywords.html#scripts">scripts</a>
 
 <h2>SYNOPSIS</h2>
+
 <b>g.parser --help</b><br>
 <b>g.parser</b> [-<b>s</b>] [-<b>t</b>]  [-<b>n</b>] <em>filename</em> [<em>argument</em>,...]
 
@@ -24,7 +26,6 @@ The <em>g.parser</em> module provides full parser support for GRASS
 scripts, including an auto-generated GUI interface, help page
 template, and command line option checking. In this way a simple
 script can very quickly be made into a full-fledged GRASS module.
-
 
 <h2>OPTIONS</h2>
 
@@ -139,7 +140,7 @@ following line:
 
 While this will only directly change the <i>Usage</i> section of the help
 screen, the option's environmental string may be easily parsed from within
-a script. For example, individual comma separated identities for an option 
+a script. For example, individual comma separated identities for an option
 named "input" can be parsed with the following Bash shell code:
 
 <div class="code"><pre>IFS=,
@@ -241,7 +242,6 @@ to any GRASS command. Example:
 v.in.db --script
 </pre></div>
 
-
 <h2>Help page template (HTML)</h2>
 
 The flag <b>--html-description</b> added to a GRASS command
@@ -250,7 +250,6 @@ generates a related help page template in HTML. Example:
 <div class="code"><pre>
 v.in.db --html-description
 </pre></div>
-
 
 <h2>GUI window parser (XML)</h2>
 
@@ -323,7 +322,6 @@ g.parser -t somescriptfile
 standard output, one per line, and exit. This is for internal use within
 the build system to prepare GRASS scripts for translation.
 
-
 <h2>EXAMPLES</h2>
 
 All examples below autogenerate the graphical user interface when invoked
@@ -337,7 +335,7 @@ without parameters of flags:
 <p>
 To run properly, the script needs to be copied into a directory listed
 in <tt>$GRASS_ADDON_PATH</tt> environmental variable with the
-executable flag being set. 
+executable flag being set.
 
 <p>
 The script will provide a GUI (as above) and the following usage help
@@ -664,7 +662,6 @@ if __name__ == "__main__":
     sys.exit(main())
 </pre></div>
 
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -676,7 +673,7 @@ if __name__ == "__main__":
 <p>
 Overview table: <a href="parser_standard_options.html">Parser standard options</a>
 <p>
-<a href="http://trac.osgeo.org/grass/wiki/Submitting/Python">Submitting rules for Python</a>
+<a href="https://github.com/OSGeo/grass/blob/main/doc/development/style_guide.md#developing-python-scripts">Style Guide: Developing Python scripts</a>
 
 <p>
 Related Wiki pages:
@@ -685,8 +682,3 @@ Related Wiki pages:
 <h2>AUTHOR</h2>
 
 Glynn Clements
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

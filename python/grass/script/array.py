@@ -3,7 +3,6 @@ Functions to use GRASS 2D and 3D rasters with NumPy.
 
 Usage:
 
->>> from __future__ import print_function
 >>> import grass.script as gs
 >>> from grass.script import array as garray
 >>>
@@ -102,7 +101,7 @@ Usage:
 ... map3d_2.write(mapname="map3d_2", overwrite=True)
 0
 
-(C) 2010-2012 by Glynn Clements and the GRASS Development Team
+(C) 2010-2021 by Glynn Clements and the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -110,10 +109,7 @@ for details.
 .. sectionauthor:: Glynn Clements
 """
 
-from __future__ import absolute_import
-import sys
-
-import numpy
+import numpy as np
 
 from .utils import try_remove
 from . import core as gcore
@@ -123,7 +119,7 @@ from grass.exceptions import CalledModuleError
 ###############################################################################
 
 
-class _tempfile(object):
+class _tempfile:
     def __init__(self, env=None):
         self.filename = gcore.tempfile(env=env)
 
@@ -134,8 +130,8 @@ class _tempfile(object):
 ###############################################################################
 
 
-class array(numpy.memmap):
-    def __new__(cls, mapname=None, null=None, dtype=numpy.double, env=None):
+class array(np.memmap):
+    def __new__(cls, mapname=None, null=None, dtype=np.double, env=None):
         """Define new numpy array
 
         :param cls:
@@ -149,8 +145,8 @@ class array(numpy.memmap):
 
         tempfile = _tempfile(env)
         if mapname:
-            kind = numpy.dtype(dtype).kind
-            size = numpy.dtype(dtype).itemsize
+            kind = np.dtype(dtype).kind
+            size = np.dtype(dtype).itemsize
 
             if kind == "f":
                 flags = "f"
@@ -159,7 +155,7 @@ class array(numpy.memmap):
             else:
                 raise ValueError(_("Invalid kind <%s>") % kind)
 
-            if size not in [1, 2, 4, 8]:
+            if size not in {1, 2, 4, 8}:
                 raise ValueError(_("Invalid size <%d>") % size)
 
             gcore.run_command(
@@ -174,7 +170,7 @@ class array(numpy.memmap):
                 env=env,
             )
 
-        self = numpy.memmap.__new__(
+        self = np.memmap.__new__(
             cls, filename=tempfile.filename, dtype=dtype, mode="r+", shape=shape
         )
 
@@ -183,62 +179,13 @@ class array(numpy.memmap):
         self._env = env
         return self
 
-    def read(self, mapname, null=None):
-        """Read raster map into array
-
-        :param str mapname: name of raster map to be read
-        :param null: null value
-
-        :return: 0 on success
-        :return: non-zero code on failure
-
-        .. deprecated:: 7.1
-        Instead reading the map after creating the array,
-        pass the map name in the array constructor.
-        """
-        if sys.platform == "win32":
-            gcore.warning(
-                _(
-                    "grass.script.array.read is deprecated and does not"
-                    " work on MS Windows, pass raster name in the constructor"
-                )
-            )
-        kind = self.dtype.kind
-        size = self.dtype.itemsize
-
-        if kind == "f":
-            flags = "f"
-        elif kind in "biu":
-            flags = "i"
-        else:
-            raise ValueError(_("Invalid kind <%s>") % kind)
-
-        if size not in [1, 2, 4, 8]:
-            raise ValueError(_("Invalid size <%d>") % size)
-
-        try:
-            gcore.run_command(
-                "r.out.bin",
-                flags=flags,
-                input=mapname,
-                output=self.filename,
-                bytes=size,
-                null=null,
-                quiet=True,
-                overwrite=True,
-            )
-        except CalledModuleError:
-            return 1
-        else:
-            return 0
-
     def write(self, mapname, title=None, null=None, overwrite=None, quiet=None):
         """Write array into raster map
 
         :param str mapname: name for raster map
         :param str title: title for raster map
         :param null: null value
-        :param bool overwrite: True for overwritting existing raster maps
+        :param bool overwrite: True for overwriting existing raster maps
 
         :return: 0 on success
         :return: non-zero code on failure
@@ -255,11 +202,14 @@ class array(numpy.memmap):
                 raise ValueError(_("Invalid FP size <%d>") % size)
             size = None
         elif kind in "biu":
-            if size not in [1, 2, 4]:
+            if size not in {1, 2, 4}:
                 raise ValueError(_("Invalid integer size <%d>") % size)
             flags = None
         else:
             raise ValueError(_("Invalid kind <%s>") % kind)
+
+        # ensure all array content is written to the file
+        self.flush()
 
         reg = gcore.region(env=self._env)
 
@@ -291,8 +241,8 @@ class array(numpy.memmap):
 ###############################################################################
 
 
-class array3d(numpy.memmap):
-    def __new__(cls, mapname=None, null=None, dtype=numpy.double, env=None):
+class array3d(np.memmap):
+    def __new__(cls, mapname=None, null=None, dtype=np.double, env=None):
         """Define new 3d numpy array
 
         :param cls:
@@ -307,8 +257,8 @@ class array3d(numpy.memmap):
 
         tempfile = _tempfile()
         if mapname:
-            kind = numpy.dtype(dtype).kind
-            size = numpy.dtype(dtype).itemsize
+            kind = np.dtype(dtype).kind
+            size = np.dtype(dtype).itemsize
 
             if kind == "f":
                 flags = None  # default is double
@@ -317,7 +267,7 @@ class array3d(numpy.memmap):
             else:
                 raise ValueError(_("Invalid kind <%s>") % kind)
 
-            if size not in [1, 2, 4, 8]:
+            if size not in {1, 2, 4, 8}:
                 raise ValueError(_("Invalid size <%d>") % size)
 
             gcore.run_command(
@@ -332,7 +282,7 @@ class array3d(numpy.memmap):
                 env=env,
             )
 
-        self = numpy.memmap.__new__(
+        self = np.memmap.__new__(
             cls, filename=tempfile.filename, dtype=dtype, mode="r+", shape=shape
         )
 
@@ -341,55 +291,6 @@ class array3d(numpy.memmap):
         self._env = env
 
         return self
-
-    def read(self, mapname, null=None):
-        """Read 3D raster map into array
-
-        :param str mapname: name of 3D raster map to be read
-        :param null: null value
-
-        :return: 0 on success
-        :return: non-zero code on failure
-
-        .. deprecated:: 7.1
-        Instead reading the map after creating the array,
-        pass the map name in the array constructor.
-        """
-        if sys.platform == "win32":
-            gcore.warning(
-                _(
-                    "grass.script.array3d.read is deprecated and does not"
-                    " work on MS Windows, pass 3D raster name in the constructor"
-                )
-            )
-        kind = self.dtype.kind
-        size = self.dtype.itemsize
-
-        if kind == "f":
-            flags = None  # default is double
-        elif kind in "biu":
-            flags = "i"
-        else:
-            raise ValueError(_("Invalid kind <%s>") % kind)
-
-        if size not in [1, 2, 4, 8]:
-            raise ValueError(_("Invalid size <%d>") % size)
-
-        try:
-            gcore.run_command(
-                "r3.out.bin",
-                flags=flags,
-                input=mapname,
-                output=self.filename,
-                bytes=size,
-                null=null,
-                quiet=True,
-                overwrite=True,
-            )
-        except CalledModuleError:
-            return 1
-        else:
-            return 0
 
     def write(self, mapname, null=None, overwrite=None, quiet=None):
         """Write array into 3D raster map
@@ -406,14 +307,17 @@ class array3d(numpy.memmap):
         flags = None
 
         if kind == "f":
-            if size != 4 and size != 8:
+            if size not in {4, 8}:
                 raise ValueError(_("Invalid FP size <%d>") % size)
         elif kind in "biu":
-            if size not in [1, 2, 4, 8]:
+            if size not in {1, 2, 4, 8}:
                 raise ValueError(_("Invalid integer size <%d>") % size)
             flags = "i"
         else:
             raise ValueError(_("Invalid kind <%s>") % kind)
+
+        # ensure all array content is written to the file
+        self.flush()
 
         reg = gcore.region(True, env=self._env)
 

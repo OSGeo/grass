@@ -1,12 +1,11 @@
-
 /***********************************************************
-* I_fopen_group_init_new (group)
-* I_fopen_group_init_old (group)
-*
-* fopen() the imagery group reference file (containing the number
-* of files and the names of the raster maps which comprise
-* the group)
-**********************************************************/
+ * I_fopen_group_init_new (group)
+ * I_fopen_group_init_old (group)
+ *
+ * fopen() the imagery group reference file (containing the number
+ * of files and the names of the raster maps which comprise
+ * the group)
+ **********************************************************/
 #include <grass/imagery.h>
 
 FILE *I_fopen_group_init_new(char *group)

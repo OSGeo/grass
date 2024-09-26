@@ -19,8 +19,8 @@ import sys
 
 import wx
 
-import grass.script as grass
-import wx.lib.plot as plot
+import grass.script as gs
+from wx.lib import plot
 from gui_core.wrap import StockCursor
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from wxplot.base import BasePlotFrame, PlotIcons
@@ -129,7 +129,7 @@ class HistogramPlotFrame(BasePlotFrame):
         dlg.Destroy()
 
     def SetupHistogram(self):
-        """Build data list for ploting each raster"""
+        """Build data list for plotting each raster"""
 
         #
         # populate raster dictionary
@@ -145,17 +145,16 @@ class HistogramPlotFrame(BasePlotFrame):
         #
         if self.maptype == "group":
             self.ptitle = _("Histogram of image group <%s>") % self.group
+        elif len(self.rasterList) == 1:
+            self.ptitle = _("Histogram of raster map <%s>") % self.rasterList[0]
         else:
-            if len(self.rasterList) == 1:
-                self.ptitle = _("Histogram of raster map <%s>") % self.rasterList[0]
-            else:
-                self.ptitle = _("Histogram of selected raster maps")
+            self.ptitle = _("Histogram of selected raster maps")
 
         #
         # set xlabel based on first raster map in list to be histogrammed
         #
         units = self.raster[self.rasterList[0]]["units"]
-        if units != "" and units != "(none)" and units is not None:
+        if units not in ("", "(none)") and units is not None:
             self.xlabel = _("Raster cell values %s") % units
         else:
             self.xlabel = _("Raster cell values")
@@ -259,7 +258,7 @@ class HistogramPlotFrame(BasePlotFrame):
         title = _("Statistics for Map(s) Histogrammed")
 
         for rast in self.rasterList:
-            ret = grass.read_command("r.univar", map=rast, flags="e", quiet=True)
+            ret = gs.read_command("r.univar", map=rast, flags="e", quiet=True)
             stats = _("Statistics for raster map <%s>") % rast + ":\n%s\n" % ret
             message.append(stats)
 
@@ -288,19 +287,63 @@ class HistogramPlotToolbar(BaseToolbar):
         """Toolbar data"""
         return self._getToolbarData(
             (
-                ("addraster", BaseIcons["addRast"], self.parent.OnSelectRaster),
+                (
+                    ("addraster", BaseIcons["addRast"].label),
+                    BaseIcons["addRast"],
+                    self.parent.OnSelectRaster,
+                ),
                 (None,),
-                ("draw", PlotIcons["draw"], self.parent.OnCreateHist),
-                ("erase", BaseIcons["erase"], self.parent.OnErase),
-                ("drag", BaseIcons["pan"], self.parent.OnDrag),
-                ("zoom", BaseIcons["zoomIn"], self.parent.OnZoom),
-                ("unzoom", BaseIcons["zoomExtent"], self.parent.OnRedraw),
+                (
+                    ("draw", PlotIcons["draw"].label),
+                    PlotIcons["draw"],
+                    self.parent.OnCreateHist,
+                ),
+                (
+                    ("erase", BaseIcons["erase"].label),
+                    BaseIcons["erase"],
+                    self.parent.OnErase,
+                ),
+                (
+                    ("drag", BaseIcons["pan"].label),
+                    BaseIcons["pan"],
+                    self.parent.OnDrag,
+                ),
+                (
+                    ("zoom", BaseIcons["zoomIn"].label),
+                    BaseIcons["zoomIn"],
+                    self.parent.OnZoom,
+                ),
+                (
+                    ("unzoom", BaseIcons["zoomExtent"].label),
+                    BaseIcons["zoomExtent"],
+                    self.parent.OnRedraw,
+                ),
                 (None,),
-                ("statistics", PlotIcons["statistics"], self.parent.OnStats),
-                ("image", BaseIcons["saveFile"], self.parent.SaveToFile),
-                ("print", BaseIcons["print"], self.parent.PrintMenu),
+                (
+                    ("statistics", PlotIcons["statistics"].label),
+                    PlotIcons["statistics"],
+                    self.parent.OnStats,
+                ),
+                (
+                    ("image", BaseIcons["saveFile"].label),
+                    BaseIcons["saveFile"],
+                    self.parent.SaveToFile,
+                ),
+                (
+                    ("print", BaseIcons["print"].label),
+                    BaseIcons["print"],
+                    self.parent.PrintMenu,
+                ),
                 (None,),
-                ("settings", PlotIcons["options"], self.parent.PlotOptionsMenu),
-                ("quit", PlotIcons["quit"], self.parent.OnQuit),
+                (
+                    ("settings", PlotIcons["options"].label),
+                    PlotIcons["options"],
+                    self.parent.PlotOptionsMenu,
+                ),
+                (
+                    ("quit", PlotIcons["quit"].label),
+                    PlotIcons["quit"],
+                    self.parent.OnQuit,
+                ),
             )
         )

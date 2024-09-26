@@ -15,19 +15,18 @@ This program is free software under the GNU General Public License
 
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
-import os
+
 import wx
-import string
 from math import ceil, floor, sin, cos, pi
 
 try:
-    from PIL import Image as PILImage
+    from PIL import Image as PILImage  # noqa
 
     havePILImage = True
 except ImportError:
     havePILImage = False
 
-import grass.script as grass
+import grass.script as gs
 from core.gcmd import RunCommand, GError
 
 
@@ -90,7 +89,7 @@ class Rect2DPS(Rect2D):
 
 
 class UnitConversion:
-    """ Class for converting units"""
+    """Class for converting units"""
 
     def __init__(self, parent=None):
         self.parent = parent
@@ -154,7 +153,7 @@ def convertRGB(rgb):
     or named color/r:g:b string to wx.Colour, depending on input"""
     # transform a wx.Colour tuple into an r:g:b string
     if isinstance(rgb, wx.Colour):
-        for name, color in grass.named_colors.items():
+        for name, color in gs.named_colors.items():
             if (
                 rgb.Red() == int(color[0] * 255)
                 and rgb.Green() == int(color[1] * 255)
@@ -165,9 +164,9 @@ def convertRGB(rgb):
     # transform a GRASS named color or an r:g:b string into a wx.Colour tuple
     else:
         color = (
-            int(grass.parse_color(rgb)[0] * 255),
-            int(grass.parse_color(rgb)[1] * 255),
-            int(grass.parse_color(rgb)[2] * 255),
+            int(gs.parse_color(rgb)[0] * 255),
+            int(gs.parse_color(rgb)[1] * 255),
+            int(gs.parse_color(rgb)[2] * 255),
         )
         color = wx.Colour(*color)
         if color.IsOk():
@@ -183,7 +182,7 @@ def PaperMapCoordinates(mapInstr, x, y, paperToMap=True, env=None):
     :param x,y: paper coords in inches or mapcoords in map units
     :param paperToMap: specify conversion direction
     """
-    region = grass.region(env=env)
+    region = gs.region(env=env)
     mapWidthPaper = mapInstr["rect"].GetWidth()
     mapHeightPaper = mapInstr["rect"].GetHeight()
     mapWidthEN = region["e"] - region["w"]
@@ -223,24 +222,22 @@ def AutoAdjust(self, scaleType, rect, env, map=None, mapType=None, region=None):
             res = ""
             if mapType == "raster":
                 try:
-                    res = grass.read_command(
-                        "g.region", flags="gu", raster=map, env=env
-                    )
-                except grass.ScriptError:
+                    res = gs.read_command("g.region", flags="gu", raster=map, env=env)
+                except gs.ScriptError:
                     pass
             elif mapType == "vector":
-                res = grass.read_command("g.region", flags="gu", vector=map, env=env)
-            currRegionDict = grass.parse_key_val(res, val_type=float)
+                res = gs.read_command("g.region", flags="gu", vector=map, env=env)
+            currRegionDict = gs.parse_key_val(res, val_type=float)
         elif scaleType == 1 and region:  # saved region
-            res = grass.read_command("g.region", flags="gu", region=region, env=env)
-            currRegionDict = grass.parse_key_val(res, val_type=float)
+            res = gs.read_command("g.region", flags="gu", region=region, env=env)
+            currRegionDict = gs.parse_key_val(res, val_type=float)
         elif scaleType == 2:  # current region
-            currRegionDict = grass.region(env=None)
+            currRegionDict = gs.region(env=None)
 
         else:
             return None, None, None
     # fails after switching location
-    except (grass.ScriptError, grass.CalledModuleError):
+    except (gs.ScriptError, gs.CalledModuleError):
         pass
 
     if not currRegionDict:
@@ -291,11 +288,11 @@ def SetResolution(dpi, width, height, env):
     :param width: map frame width
     :param height: map frame height
     """
-    region = grass.region(env=env)
+    region = gs.region(env=env)
     if region["cols"] > width * dpi or region["rows"] > height * dpi:
         rows = height * dpi
         cols = width * dpi
-        env["GRASS_REGION"] = grass.region_env(rows=rows, cols=cols, env=env)
+        env["GRASS_REGION"] = gs.region_env(rows=rows, cols=cols, env=env)
 
 
 def ComputeSetRegion(self, mapDict, env):
@@ -336,7 +333,7 @@ def ComputeSetRegion(self, mapDict, env):
             rasterId = None
 
         if rasterId:
-            env["GRASS_REGION"] = grass.region_env(
+            env["GRASS_REGION"] = gs.region_env(
                 n=ceil(centerN + rectHalfMeter[1]),
                 s=floor(centerN - rectHalfMeter[1]),
                 e=ceil(centerE + rectHalfMeter[0]),
@@ -345,7 +342,7 @@ def ComputeSetRegion(self, mapDict, env):
                 env=env,
             )
         else:
-            env["GRASS_REGION"] = grass.region_env(
+            env["GRASS_REGION"] = gs.region_env(
                 n=ceil(centerN + rectHalfMeter[1]),
                 s=floor(centerN - rectHalfMeter[1]),
                 e=ceil(centerE + rectHalfMeter[0]),
@@ -362,7 +359,7 @@ def projInfo():
         "g.proj",
         flags="g",
         read=True,
-        parse=grass.parse_key_val,
+        parse=gs.parse_key_val,
     )
 
     return (
@@ -376,7 +373,7 @@ def GetMapBounds(filename, env, portrait=True):
     """Run ps.map -b to get information about map bounding box
 
     :param filename: psmap input file
-    :param env: enironment with GRASS_REGION defined
+    :param env: environment with GRASS_REGION defined
     :param portrait: page orientation"""
     orient = ""
     if not portrait:
@@ -385,7 +382,7 @@ def GetMapBounds(filename, env, portrait=True):
         bb = list(
             map(
                 float,
-                grass.read_command(
+                gs.read_command(
                     "ps.map", flags="b" + orient, quiet=True, input=filename, env=env
                 )
                 .strip()
@@ -393,7 +390,7 @@ def GetMapBounds(filename, env, portrait=True):
                 .split(","),
             )
         )
-    except (grass.ScriptError, IndexError):
+    except (gs.ScriptError, IndexError):
         GError(message=_("Unable to run `ps.map -b`"))
         return None
     return Rect2D(bb[0], bb[3], bb[2] - bb[0], bb[1] - bb[3])
@@ -403,10 +400,9 @@ def getRasterType(map):
     """Returns type of raster map (CELL, FCELL, DCELL)"""
     if map is None:
         map = ""
-    file = grass.find_file(name=map, element="cell")
+    file = gs.find_file(name=map, element="cell")
     if file.get("file"):
-        rasterType = grass.raster_info(map)["datatype"]
-        return rasterType
+        return gs.raster_info(map)["datatype"]
     else:
         return None
 
@@ -452,66 +448,3 @@ def BBoxAfterRotation(w, h, angle):
     width = int(ceil(abs(x_max) + abs(x_min)))
     height = int(ceil(abs(y_max) + abs(y_min)))
     return width, height
-
-
-# hack for Windows, loading EPS works only on Unix
-# these functions are taken from EpsImagePlugin.py
-
-
-def loadPSForWindows(self):
-    # Load EPS via Ghostscript
-    if not self.tile:
-        return
-    self.im = GhostscriptForWindows(self.tile, self.size, self.fp)
-    self.mode = self.im.mode
-    self.size = self.im.size
-    self.tile = []
-
-
-def GhostscriptForWindows(tile, size, fp):
-    """Render an image using Ghostscript (Windows only)"""
-    # Unpack decoder tile
-    decoder, tile, offset, data = tile[0]
-    length, bbox = data
-
-    import tempfile
-
-    file = tempfile.mkstemp()[1]
-
-    # Build ghostscript command - for Windows
-    command = [
-        "gswin32c",
-        "-q",  # quite mode
-        "-g%dx%d" % size,  # set output geometry (pixels)
-        "-dNOPAUSE -dSAFER",  # don't pause between pages, safe mode
-        "-sDEVICE=ppmraw",  # ppm driver
-        "-sOutputFile=%s" % file,  # output file
-    ]
-
-    command = string.join(command)
-
-    # push data through ghostscript
-    try:
-        gs = os.popen(command, "w")
-        # adjust for image origin
-        if bbox[0] != 0 or bbox[1] != 0:
-            gs.write("%d %d translate\n" % (-bbox[0], -bbox[1]))
-        fp.seek(offset)
-        while length > 0:
-            s = fp.read(8192)
-            if not s:
-                break
-            length = length - len(s)
-            gs.write(s)
-        status = gs.close()
-        if status:
-            raise IOError("gs failed (status %d)" % status)
-        im = PILImage.core.open_ppm(file)
-
-    finally:
-        try:
-            os.unlink(file)
-        except:
-            pass
-
-    return im

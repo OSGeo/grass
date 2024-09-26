@@ -12,7 +12,7 @@ or 3D space and are independent of the GIS's computation region.
 
 <h3>Attribute management</h3>
 
-The default database driver used by GRASS GIS 8 is SQLite. GRASS GIS 
+The default database driver used by GRASS GIS 8 is SQLite. GRASS GIS
 handles multiattribute vector data by default. The <em>db.*</em> set of
 commands  provides basic SQL support for attribute management, while the
 <em>v.db.*</em> set of commands operates on vector maps.
@@ -26,12 +26,12 @@ distributions of GRASS GIS, for details see
 
 The <a href="v.in.ogr.html">v.in.ogr</a> module offers a common
 interface for many different vector formats. Additionally, it
-offers options such as on-the-fly creation of new locations or extension of
+offers options such as on-the-fly creation of new projects or extension of
 the default region to match the extent of the imported vector map.
 For special cases, other import modules are available, e.g.
-<a href="v.in.ascii.html">v.in.ascii</a> for input from a text file 
-containing coordinate and attribute data, and 
-<a href="v.in.db.html">v.in.db</a> for input from a database containing 
+<a href="v.in.ascii.html">v.in.ascii</a> for input from a text file
+containing coordinate and attribute data, and
+<a href="v.in.db.html">v.in.db</a> for input from a database containing
 coordinate and attribute data.
 
 With <a href="v.external.html">v.external</a> external maps can be
@@ -43,7 +43,7 @@ and export only attribute tables, use <a href="db.in.ogr.html">db.in.ogr</a>
 and <a href="db.out.ogr.html">db.out.ogr</a>.
 
 <p>
-GRASS GIS vector map exchange between different locations (same projection)
+GRASS GIS vector map exchange between different projects (same projection)
 can be done in a lossless way using the <a href="v.pack.html">v.pack</a>
 and <a href="v.unpack.html">v.unpack</a> modules.
 
@@ -87,7 +87,7 @@ modules allow for working level 1 (non-topological) data within
 GRASS. The <a href="v.in.ascii.html">v.in.ascii</a> module allows
 users to input points without building topology. This is very useful
 for large files where memory restrictions may cause difficulties. The
-other module which works with level 1 data is 
+other module which works with level 1 data is
 <a href="v.surf.rst.html">v.surf.rst</a> which enables spatial
 approximation and topographic analysis from a point or isoline file.
 
@@ -108,7 +108,7 @@ Lines and boundaries can be composed of multiple vertices.
 <p>
 Area topology also holds information about isles. These isles are located
 within that area, not touching the boundaries of the outer area. Isles
-are holes inside the area, and can consist of one or more areas. They are used 
+are holes inside the area, and can consist of one or more areas. They are used
 internally to maintain correct topology for areas.
 
 <p>
@@ -128,13 +128,13 @@ Adjacent polygons can be found by <a href="v.to.db.html">v.to.db</a>
 <p>
 Many operations including extraction, queries, overlay, and export will
 only act on features which have been assigned a category number. Typically
-a centroid will hold the attribute data for the area with which the centroid is 
+a centroid will hold the attribute data for the area with which the centroid is
 associated. Boundaries are not typically given a category ID as it would be
 ambiguous as to which area either side of it the attribute data would belong
 to. An exception might be when the boundary between two crop-fields is the
 center-line of a road, and the category information is an index to the road
 name. For everyday use boundaries and centroids can be treated as internal
-data types and the user can work directly and more simply with the "area" 
+data types and the user can work directly and more simply with the "area"
 type.
 
 
@@ -159,53 +159,53 @@ information about categories not present in the vector geometry file.
 This means that e.g. an attribute table can be populated first and then
 vector objects can be added to the geometry file with category numbers.
 Using <a href="v.category.html">v.category</a>, category numbers can be
-printed or maintained. 
+printed or maintained.
 <br><br></li>
 
 <li><b>Layers</b><br>
-Layers are a characteristic of the vector feature (geometries) file. 
-As mentioned above, categories allow the user to give either a 
-unique id to each feature or to group similar features by giving 
-them all the same id. Layers allow several parallel, but different 
-groupings of features in a same map. The practical benefit of this 
-system is that it allows placement of thematically distinct but 
-topologically related objects into a single map, or for linking time 
-series attribute data to a series of locations that did not change 
+Layers are a characteristic of the vector feature (geometries) file.
+As mentioned above, categories allow the user to give either a
+unique id to each feature or to group similar features by giving
+them all the same id. Layers allow several parallel, but different
+groupings of features in a same map. The practical benefit of this
+system is that it allows placement of thematically distinct but
+topologically related objects into a single map, or for linking time
+series attribute data to a series of locations that did not change
 over time.
 <br>
-For example, one can have roads with one layer 
-containing the unique id of each road and another layer with ids for 
-specific routes that one might take, combining several roads by 
-assigning the same id. While this example can also be dealt with in 
+For example, one can have roads with one layer
+containing the unique id of each road and another layer with ids for
+specific routes that one might take, combining several roads by
+assigning the same id. While this example can also be dealt with in
 an attribute table, another example of the use of layers that shows
-their specific advantage is the possibility to identify the same geometrical 
-features as representing different thematic objects. For example, 
-in a map with a series of polygons representing fields in 
-which at the same time the boundaries of these fields have a meaning 
-as linear features, e.g. as paths, one can give a unique id to each 
-field as area in layer 1, and a unique id in layer 2 to those 
-boundary lines that are paths. If the paths will always depend on 
-the field boundaries (and might change if these boundaries 
-change) then keeping them in the same map can be helpful. Trying 
-to reproduce the same functionality through attributes is much more 
+their specific advantage is the possibility to identify the same geometrical
+features as representing different thematic objects. For example,
+in a map with a series of polygons representing fields in
+which at the same time the boundaries of these fields have a meaning
+as linear features, e.g. as paths, one can give a unique id to each
+field as area in layer 1, and a unique id in layer 2 to those
+boundary lines that are paths. If the paths will always depend on
+the field boundaries (and might change if these boundaries
+change) then keeping them in the same map can be helpful. Trying
+to reproduce the same functionality through attributes is much more
 complicated.
 <br>
-If a vector object has zero categories in a layer, then it does not 
-appear in that layer. In this fashion some vector objects may appear 
-in some layers but not in others. Taking the example of the fields 
-and paths, only some boundaries, but not all, might have a category 
-value in layer 2. With <em>option=report</em>, 
+If a vector object has zero categories in a layer, then it does not
+appear in that layer. In this fashion some vector objects may appear
+in some layers but not in others. Taking the example of the fields
+and paths, only some boundaries, but not all, might have a category
+value in layer 2. With <em>option=report</em>,
 <a href="v.category.html">v.category</a> lists available categories
 in each layer.
 <br>
-Optionally, each layer can (but does not have 
-to) be linked to an attribute table. The link is made by the 
-category values of the features in that layer which have to have 
-corresponding entries in the specified key column of the table. 
-Using <a href="v.db.connect.html">v.db.connect</a> connections 
+Optionally, each layer can (but does not have
+to) be linked to an attribute table. The link is made by the
+category values of the features in that layer which have to have
+corresponding entries in the specified key column of the table.
+Using <a href="v.db.connect.html">v.db.connect</a> connections
 between layers and attribute tables can be listed or maintained.
 <br>
-In most modules, the first layer (<em>layer=1</em>) is active by 
+In most modules, the first layer (<em>layer=1</em>) is active by
 default. Using <em>layer=-1</em> one can access all layers.
 </li>
 
@@ -261,11 +261,11 @@ If needed, the spatial position of vector points can be perturbed by
 <a href="v.perturb.html">v.perturb</a>.
 
 The <a href="v.type.html">v.type</a> command changes between vector
-types (see list above). 
+types (see list above).
 
 Projected vector maps can be reprojected with <a href="v.proj.html">v.proj</a>.
 Unprojected maps can be geocoded with <a href="v.transform.html">v.transform</a>.
-Based on the control points, <a href="v.rectify.html">v.rectify</a> rectifies a 
+Based on the control points, <a href="v.rectify.html">v.rectify</a> rectifies a
 vector map by computing a coordinate transformation for each vector object.
 
 Triangulation and point-to-polygon conversions can be done with <a
@@ -309,7 +309,7 @@ Vector maps can be queried with <a href="v.what.html">v.what</a> and
 
 <h3>Vector-Raster queries</h3>
 
-Raster values can be transferred to vector maps with 
+Raster values can be transferred to vector maps with
  <a href="v.what.rast.html">v.what.rast</a> and
 <a href="v.rast.stats">v.rast.stats</a>.
 
@@ -320,7 +320,7 @@ are implemented:
 
 <ul>
 <li> Network preparation and maintenance: <a href="v.net.html">v.net</a></li>
-<li> Shortest path: <a href="d.path.html">d.path</a> and 
+<li> Shortest path: <a href="d.path.html">d.path</a> and
      <a href="v.net.path.html">v.net.path</a></li>
 <li> Shortest path between all pairs of nodes <a href="v.net.allpairs.html">v.net.allpairs</a>
 <li> Allocation of sources (create subnetworks, e.g. police station zones):
@@ -348,10 +348,10 @@ to assign attribute columns to the forward and backward direction.
 LRS uses linear features and distance measured along those features to
 positionate objects. There are the commands
 <a href="v.lrs.create.html">v.lrs.create</a> to create a linear reference system,
-<a href="v.lrs.label.html">v.lrs.label</a> to create stationing on the LRS, 
+<a href="v.lrs.label.html">v.lrs.label</a> to create stationing on the LRS,
 <a href="v.lrs.segment.html">v.lrs.segment</a> to create points/segments on LRS,
  and
-<a href="v.lrs.where.html">v.lrs.where</a> to find line id and real km+offset 
+<a href="v.lrs.where.html">v.lrs.where</a> to find line id and real km+offset
 for given points in vector map using linear reference system.
 <p>
 The <a href="lrs.html">LRS tutorial</a> explains further details.
@@ -369,10 +369,10 @@ approximation (also called interpolation):
 
 <h3>Lidar data processing</h3>
 
-Lidar point clouds (first and last return) are imported from text files 
+Lidar point clouds (first and last return) are imported from text files
 with <a href="v.in.ascii.html">v.in.ascii</a> or from LAS files with
-<a href="v.in.lidar.html"> v.in.lidar</a>. Both modules recognize the 
--b flag to not build topology. Outlier detection is done with 
+<a href="v.in.lidar.html"> v.in.lidar</a>. Both modules recognize the
+-b flag to not build topology. Outlier detection is done with
 <a href="v.outlier.html">v.outlier</a> on both first and last return data.
 Then, with <a href="v.lidar.edgedetection.html">v.lidar.edgedetection</a>,
 edges are detected from last return data. The building are generated by

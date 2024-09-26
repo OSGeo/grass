@@ -8,6 +8,7 @@ for details.
 """
 
 import datetime
+
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -126,7 +127,7 @@ class TestTemporalRasterAlgebra(TestCase):
         cls.del_temp_region()
 
     def test_temporal_extent1(self):
-        """Testing the temporal extent operators. """
+        """Testing the temporal extent operators."""
         ta = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         ta.parse(expression="R = A {:,during,r} C", basename="r", overwrite=True)
 
@@ -608,7 +609,7 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
 
     def test_tmap_function1(self):
-        """Testing the tmap function. """
+        """Testing the tmap function."""
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         tra.parse(expression="R = tmap(singletmap)", basename="r", overwrite=True)
 
@@ -625,7 +626,7 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_tmap_function2(self):
-        """Testing the tmap function. """
+        """Testing the tmap function."""
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         tra.parse(expression="R = tmap(singletmap) + 1", basename="r", overwrite=True)
 
@@ -642,7 +643,7 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_map_function1(self):
-        """Testing the map function. """
+        """Testing the map function."""
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         tra.parse(expression="R = map(singlemap) + A", basename="r", overwrite=True)
 
@@ -659,7 +660,7 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_map_function2(self):
-        """Testing the map function. """
+        """Testing the map function."""
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         tra.parse(expression="R =  A * map(singlemap)", basename="r", overwrite=True)
 
@@ -676,7 +677,7 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_temporal_select(self):
-        """Testing the temporal select operator. """
+        """Testing the temporal select operator."""
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         tra.parse(expression="R = A : A", basename="r", overwrite=True)
 
@@ -692,7 +693,7 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_temporal_select(self):
-        """Testing the temporal select operator. """
+        """Testing the temporal select operator."""
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         tra.parse(expression="R = A : D", basename="r", overwrite=True)
 
@@ -708,7 +709,7 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_temporal_select_operators1(self):
-        """Testing the temporal select operator. Including temporal relations. """
+        """Testing the temporal select operator. Including temporal relations."""
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         tra.parse(expression="R = A : D", basename="r", overwrite=True)
 
@@ -724,7 +725,7 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_temporal_select_operators2(self):
-        """Testing the temporal select operator. Including temporal relations. """
+        """Testing the temporal select operator. Including temporal relations."""
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         tra.parse(expression="R = A {!:,during} C", basename="r", overwrite=True)
 
@@ -779,7 +780,7 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "2 days")
 
     def test_temporal_hash_operator1(self):
-        """Testing the temporal hash operator in the raster algebra. """
+        """Testing the temporal hash operator in the raster algebra."""
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         tra.parse(expression="R = if(A # D == 1, A)", basename="r", overwrite=True)
 
@@ -795,7 +796,7 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_temporal_hash_operator2(self):
-        """Testing the temporal hash operator in the raster algebra. """
+        """Testing the temporal hash operator in the raster algebra."""
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         tra.parse(expression="R = A # D", basename="r", overwrite=True)
 
@@ -811,7 +812,7 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_temporal_hash_operator3(self):
-        """Testing the temporal hash operator in the raster algebra. """
+        """Testing the temporal hash operator in the raster algebra."""
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         tra.parse(expression="R = C {#,contains} A", basename="r", overwrite=True)
 
@@ -827,7 +828,7 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "2 days")
 
     def test_temporal_hash_operator4(self):
-        """Testing the temporal hash operator in the raster algebra. """
+        """Testing the temporal hash operator in the raster algebra."""
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         tra.parse(
             expression="R = if({contains},A # D == 1, C {#,contains} A)",

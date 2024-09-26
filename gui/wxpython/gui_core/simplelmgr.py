@@ -104,7 +104,7 @@ class SimpleLayerManager(wx.Panel):
             .Name("checklist")
             .CenterPane()
             .CloseButton(False)
-            .BestSize((self._checkList.GetBestSize())),
+            .BestSize(self._checkList.GetBestSize()),
         )
         paneInfo = (
             wx.aui.AuiPaneInfo()
@@ -114,7 +114,7 @@ class SimpleLayerManager(wx.Panel):
             .CloseButton(False)
             .Layer(1)
             .Gripper(False)
-            .BestSize((self._toolbar.GetBestSize()))
+            .BestSize(self._toolbar.GetBestSize())
         )
         if self._style & SIMPLE_LMGR_TB_LEFT:
             paneInfo.Left()
@@ -159,7 +159,11 @@ class SimpleLayerManager(wx.Panel):
         ]
         for label, text in zip(labels, texts):
             id = NewId()
-            self.Bind(wx.EVT_MENU, lambda evt, t=text, id=id: self._copyText(t), id=id)
+            self.Bind(
+                wx.EVT_MENU,
+                lambda evt, t=text, id=id: self._copyText(t),  # noqa: A006
+                id=id,
+            )
 
             menu.Append(id, label)
 
@@ -377,31 +381,27 @@ class SimpleLayerManager(wx.Panel):
 
     def AddRaster(self, name, cmd, hidden, dialog):
         """Ads new raster layer."""
-        layer = self._layerList.AddNewLayer(
+        return self._layerList.AddNewLayer(
             name=name, mapType="raster", active=True, cmd=cmd, hidden=hidden
         )
-        return layer
 
     def AddRast3d(self, name, cmd, hidden, dialog):
         """Ads new raster3d layer."""
-        layer = self._layerList.AddNewLayer(
+        return self._layerList.AddNewLayer(
             name=name, mapType="raster_3d", active=True, cmd=cmd, hidden=hidden
         )
-        return layer
 
     def AddVector(self, name, cmd, hidden, dialog):
         """Ads new vector layer."""
-        layer = self._layerList.AddNewLayer(
+        return self._layerList.AddNewLayer(
             name=name, mapType="vector", active=True, cmd=cmd, hidden=hidden
         )
-        return layer
 
     def AddRGB(self, name, cmd, hidden, dialog):
         """Ads new vector layer."""
-        layer = self._layerList.AddNewLayer(
+        return self._layerList.AddNewLayer(
             name=name, mapType="rgb", active=True, cmd=cmd, hidden=hidden
         )
-        return layer
 
     def GetLayerInfo(self, layer, key):
         """Just for compatibility, should be removed in the future"""
@@ -441,22 +441,70 @@ class SimpleLmgrToolbar(BaseToolbar):
     def _toolbarData(self):
         """Toolbar data"""
         data = [
-            ("edit", icons["edit"], self.parent.OnLayerChangeProperties),
-            ("remove", icons["remove"], self.parent.OnRemove),
+            (
+                ("edit", icons["edit"].label),
+                icons["edit"],
+                self.parent.OnLayerChangeProperties,
+            ),
+            (
+                ("remove", icons["remove"].label),
+                icons["remove"],
+                self.parent.OnRemove,
+            ),
             (None,),
-            ("up", icons["up"], self.parent.OnLayerUp),
-            ("down", icons["down"], self.parent.OnLayerDown),
+            (
+                ("up", icons["up"].label),
+                icons["up"],
+                self.parent.OnLayerUp,
+            ),
+            (
+                ("down", icons["down"].label),
+                icons["down"],
+                self.parent.OnLayerDown,
+            ),
             (None,),
-            ("opacity", icons["opacity"], self.parent.OnLayerChangeOpacity),
+            (
+                ("opacity", icons["opacity"].label),
+                icons["opacity"],
+                self.parent.OnLayerChangeOpacity,
+            ),
         ]
         if self._style & SIMPLE_LMGR_RASTER3D:
-            data.insert(0, ("addRaster3d", icons["addRast3d"], self.parent.OnAddRast3d))
+            data.insert(
+                0,
+                (
+                    ("addRaster3d", icons["addRast3d"].label),
+                    icons["addRast3d"],
+                    self.parent.OnAddRast3d,
+                ),
+            )
         if self._style & SIMPLE_LMGR_RGB:
-            data.insert(0, ("addRGB", icons["addRGB"], self.parent.OnAddRGB))
+            data.insert(
+                0,
+                (
+                    ("addRGB", icons["addRGB"].label),
+                    icons["addRGB"],
+                    self.parent.OnAddRGB,
+                ),
+            )
         if self._style & SIMPLE_LMGR_VECTOR:
-            data.insert(0, ("addVector", BaseIcons["addVect"], self.parent.OnAddVector))
+            data.insert(
+                0,
+                (
+                    ("addVector", BaseIcons["addVect"].label),
+                    BaseIcons["addVect"],
+                    self.parent.OnAddVector,
+                ),
+            )
         if self._style & SIMPLE_LMGR_RASTER:
-            data.insert(0, ("addRaster", BaseIcons["addRast"], self.parent.OnAddRaster))
+            data.insert(
+                0,
+                (
+                    ("addRaster", BaseIcons["addRast"].label),
+                    BaseIcons["addRast"],
+                    self.parent.OnAddRaster,
+                ),
+            )
 
         return data
 

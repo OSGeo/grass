@@ -3,6 +3,7 @@ Created on Mon Jun 11 18:02:27 2012
 
 @author: pietro
 """
+
 import ctypes
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
@@ -10,7 +11,7 @@ import grass.lib.segment as libseg
 from grass.pygrass.raster.raster_type import TYPE as RTYPE
 
 
-class Segment(object):
+class Segment:
     def __init__(self, srows=64, scols=64, maxmem=100):
         self.srows = srows
         self.scols = scols
@@ -124,7 +125,7 @@ class Segment(object):
         libseg.Segment_flush(self.c_seg)
 
     def close(self):
-        """Free memory allocated to segment and delete temp file.  """
+        """Free memory allocated to segment and delete temp file."""
         libseg.Segment_close(self.c_seg)
 
     def release(self):

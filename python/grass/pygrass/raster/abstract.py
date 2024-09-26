@@ -3,15 +3,7 @@ Created on Fri Aug 17 16:05:25 2012
 
 @author: pietro
 """
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
+
 import ctypes
 
 #
@@ -51,13 +43,13 @@ proj: {proj}
 """
 
 
-class Info(object):
+class Info:
     def __init__(self, name, mapset=""):
         """Read the information for a raster map. ::
 
         >>> info = Info(test_raster_name)
         >>> info.read()
-        >>> info          # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+        >>> info  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
         abstract_test_map@
         rows: 4
         cols: 4
@@ -162,63 +154,51 @@ class Info(object):
     def mtype(self):
         return RTYPE_STR[libraster.Rast_map_type(self.name, self.mapset)]
 
-    def _get_band_reference(self):
-        """Get band reference identifier.
+    def _get_semantic_label(self):
+        """Get semantic label identifier.
 
-        :return str: band identifier (eg. S2_1) or None
+        :return str: semantic label (eg. S2_1) or None
         """
-        band_ref = None
-        p_filename = ctypes.c_char_p()
-        p_band_ref = ctypes.c_char_p()
-        ret = libraster.Rast_read_band_reference(
-            self.name, self.mapset, ctypes.byref(p_filename), ctypes.byref(p_band_ref)
-        )
-        if ret:
-            band_ref = utils.decode(p_band_ref.value)
-            libgis.G_free(p_filename)
-            libgis.G_free(p_band_ref)
 
-        return band_ref
+        semantic_label = libraster.Rast_read_semantic_label(self.name, self.mapset)
+        if semantic_label:
+            return utils.decode(semantic_label)
+        return None
 
     @must_be_in_current_mapset
-    def _set_band_reference(self, band_reference):
-        """Set/Unset band reference identifier.
+    def _set_semantic_label(self, semantic_label):
+        """Set/Unset semantic label identifier.
 
-        :param str band_reference: band reference to assign or None to remove (unset)
+        :param str semantic_label: semantic label to assign or None to remove (unset)
         """
-        if band_reference:
-            # assign
-            from grass.bandref import BandReferenceReader, BandReferenceReaderError
-
-            reader = BandReferenceReader()
-            # determine filename (assuming that band_reference is unique!)
-            try:
-                filename = reader.find_file(band_reference)
-            except BandReferenceReaderError as e:
-                fatal("{}".format(e))
-                raise
-            if not filename:
-                fatal("Band reference <{}> not found".format(band_reference))
-                raise
-
-            # write band reference
-            libraster.Rast_write_band_reference(self.name, filename, band_reference)
+        if semantic_label:
+            if libraster.Rast_legal_semantic_label(semantic_label) is False:
+                raise ValueError(_("Invalid semantic label"))
+            libraster.Rast_write_semantic_label(self.name, semantic_label)
         else:
-            libraster.Rast_remove_band_reference(self.name)
+            libgis.G_remove_misc("cell_misc", "semantic_label", self.name)
 
-    band_reference = property(fget=_get_band_reference, fset=_set_band_reference)
+    semantic_label = property(_get_semantic_label, _set_semantic_label)
 
     def _get_units(self):
-        return libraster.Rast_read_units(self.name, self.mapset)
+        units = libraster.Rast_read_units(self.name, self.mapset)
+        if units:
+            return utils.decode(units)
+        return None
 
+    @must_be_in_current_mapset
     def _set_units(self, units):
         libraster.Rast_write_units(self.name, units)
 
     units = property(_get_units, _set_units)
 
     def _get_vdatum(self):
-        return libraster.Rast_read_vdatum(self.name, self.mapset)
+        vdatum = libraster.Rast_read_vdatum(self.name, self.mapset)
+        if vdatum:
+            return utils.decode(vdatum)
+        return None
 
+    @must_be_in_current_mapset
     def _set_vdatum(self, vdatum):
         libraster.Rast_write_vdatum(self.name, vdatum)
 
@@ -267,16 +247,16 @@ class Info(object):
         ]
 
     def items(self):
-        return [(k, self.__getattribute__(k)) for k in self.keys()]
+        return [(k, getattr(self, k)) for k in self.keys()]
 
     def __iter__(self):
-        return ((k, self.__getattribute__(k)) for k in self.keys())
+        return ((k, getattr(self, k)) for k in self.keys())
 
     def _repr_html_(self):
         return dict2html(dict(self.items()), keys=self.keys(), border="1", kdec="b")
 
 
-class RasterAbstractBase(object):
+class RasterAbstractBase:
     """Raster_abstract_base: The base class from which all sub-classes
     inherit. It does not implement any row or map access methods:
 
@@ -343,7 +323,7 @@ class RasterAbstractBase(object):
 
     def _set_mtype(self, mtype):
         """Private method to change the Raster type"""
-        if mtype.upper() not in ("CELL", "FCELL", "DCELL"):
+        if mtype.upper() not in {"CELL", "FCELL", "DCELL"}:
             str_err = "Raster type: {0} not supported ('CELL','FCELL','DCELL')"
             raise ValueError(_(str_err).format(mtype))
         self._mtype = mtype
@@ -355,7 +335,7 @@ class RasterAbstractBase(object):
         return self._mode
 
     def _set_mode(self, mode):
-        if mode.upper() not in ("R", "W"):
+        if mode.upper() not in {"R", "W"}:
             str_err = _("Mode type: {0} not supported ('r', 'w')")
             raise ValueError(str_err.format(mode))
         self._mode = mode
@@ -366,7 +346,7 @@ class RasterAbstractBase(object):
         return self._overwrite
 
     def _set_overwrite(self, overwrite):
-        if overwrite not in (True, False):
+        if overwrite not in {True, False}:
             str_err = _("Overwrite type: {0} not supported (True/False)")
             raise ValueError(str_err.format(overwrite))
         self._overwrite = overwrite
@@ -451,8 +431,8 @@ class RasterAbstractBase(object):
         if self.name:
             if self.mapset == "":
                 mapset = utils.get_mapset_raster(self.name, self.mapset)
-                self.mapset = mapset if mapset else ""
-                return True if mapset else False
+                self.mapset = mapset or ""
+                return bool(mapset)
             return bool(utils.get_mapset_raster(self.name, self.mapset))
         else:
             return False
@@ -465,7 +445,7 @@ class RasterAbstractBase(object):
         False
 
         """
-        return True if self._fd is not None and self._fd >= 0 else False
+        return bool(self._fd is not None and self._fd >= 0)
 
     @must_be_open
     def close(self):
@@ -559,7 +539,8 @@ class RasterAbstractBase(object):
     def get_value(self, point, region=None):
         """This method returns the pixel value of a given pair of coordinates:
 
-        :param point: pair of coordinates in tuple object or class object with coords() method
+        :param point: pair of coordinates in tuple object or class object with coords()
+            method
         """
         # Check for tuple
         if not isinstance(point, list) and not isinstance(point, tuple):
@@ -641,7 +622,6 @@ class RasterAbstractBase(object):
 
 
 if __name__ == "__main__":
-
     import doctest
     from grass.pygrass.modules import Module
 

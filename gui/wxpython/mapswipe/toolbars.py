@@ -25,7 +25,6 @@ from icons.icon import MetaIcon
 
 swipeIcons = {
     "tools": MetaIcon(img="tools", label=_("Tools")),
-    "quit": BaseIcons["quit"].SetLabel(_("Quit Map Swipe")),
     "addRast": BaseIcons["addRast"].SetLabel(_("Select raster maps")),
     "query": MetaIcon(
         img="info",
@@ -60,25 +59,70 @@ class SwipeMapToolbar(BaseToolbar):
         icons = BaseIcons
         return self._getToolbarData(
             (
-                ("rendermap", icons["render"], self.parent.OnRender),
-                ("pointer", icons["pointer"], self.parent.OnPointer, wx.ITEM_CHECK),
-                ("query", swipeIcons["query"], self.parent.OnQuery, wx.ITEM_CHECK),
-                ("pan", icons["pan"], self.parent.OnPan, wx.ITEM_CHECK),  # toggle tool
-                ("zoomIn", icons["zoomIn"], self.parent.OnZoomIn, wx.ITEM_CHECK),
-                ("zoomOut", icons["zoomOut"], self.parent.OnZoomOut, wx.ITEM_CHECK),
+                (
+                    ("rendermap", icons["render"].label),
+                    icons["render"],
+                    self.parent.OnRender,
+                ),
+                (
+                    ("pointer", icons["pointer"].label),
+                    icons["pointer"],
+                    self.parent.OnPointer,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("query", swipeIcons["query"].label),
+                    swipeIcons["query"],
+                    self.parent.OnQuery,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("pan", icons["pan"].label),
+                    icons["pan"],
+                    self.parent.OnPan,
+                    wx.ITEM_CHECK,
+                ),  # toggle tool
+                (
+                    ("zoomIn", icons["zoomIn"].label),
+                    icons["zoomIn"],
+                    self.parent.OnZoomIn,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomOut", icons["zoomOut"].label),
+                    icons["zoomOut"],
+                    self.parent.OnZoomOut,
+                    wx.ITEM_CHECK,
+                ),
                 (None,),
-                ("zoomBack", icons["zoomBack"], self.parent.OnZoomBack),
-                ("zoomToMap", icons["zoomExtent"], self.parent.OnZoomToMap),
+                (
+                    ("zoomBack", icons["zoomBack"].label),
+                    icons["zoomBack"],
+                    self.parent.OnZoomBack,
+                ),
+                (
+                    ("zoomToMap", icons["zoomExtent"].label),
+                    icons["zoomExtent"],
+                    self.parent.OnZoomToMap,
+                ),
                 (None,),
-                ("saveFile", icons["saveFile"], self.parent.SaveToFile),
+                (
+                    ("saveFile", icons["saveFile"].label),
+                    icons["saveFile"],
+                    self.parent.SaveToFile,
+                ),
+                (
+                    ("mapDispSettings", BaseIcons["mapDispSettings"].label),
+                    BaseIcons["mapDispSettings"],
+                    self.parent.OnMapDisplayProperties,
+                ),
             )
         )
 
     def SetActiveMap(self, index):
         """Set currently selected map.
-        Unused, needed because of DoubleMapFrame API.
+        Unused, needed because of DoubleMapPanel API.
         """
-        pass
 
 
 class SwipeMainToolbar(BaseToolbar):
@@ -115,9 +159,17 @@ class SwipeMainToolbar(BaseToolbar):
         """Toolbar data"""
         return self._getToolbarData(
             (
-                ("addRaster", swipeIcons["addRast"], self.parent.OnSelectLayers),
+                (
+                    ("addRaster", swipeIcons["addRast"].label),
+                    swipeIcons["addRast"],
+                    self.parent.OnSelectLayers,
+                ),
                 (None,),
-                ("tools", swipeIcons["tools"], self.OnToolMenu),
+                (
+                    ("tools", swipeIcons["tools"].label),
+                    swipeIcons["tools"],
+                    self.OnToolMenu,
+                ),
             )
         )
 
@@ -172,8 +224,20 @@ class SwipeMiscToolbar(BaseToolbar):
         """Toolbar data"""
         return self._getToolbarData(
             (
-                ("settings", BaseIcons["settings"], self.parent.OnPreferences),
-                ("help", BaseIcons["help"], self.parent.OnHelp),
-                ("quit", swipeIcons["quit"], self.parent.OnCloseWindow),
+                (
+                    ("settings", BaseIcons["settings"].label),
+                    BaseIcons["settings"],
+                    self.parent.OnPreferences,
+                ),
+                (
+                    ("help", BaseIcons["help"].label),
+                    BaseIcons["help"],
+                    self.parent.OnHelp,
+                ),
+                (
+                    ("quit", BaseIcons["quit"].label),
+                    BaseIcons["quit"],
+                    self.parent.OnCloseWindow,
+                ),
             )
         )

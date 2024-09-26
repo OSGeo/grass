@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_execute.c
- * 
+ *
  * \brief DBMI Library (driver) - execute SQL statements
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -18,10 +18,10 @@
 #include "dbstubs.h"
 
 /*!
-  \brief Execute SQL statements
+   \brief Execute SQL statements
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
 int db_d_execute_immediate(void)
 {
@@ -38,8 +38,8 @@ int db_d_execute_immediate(void)
 
     /* send the return code */
     if (stat != DB_OK) {
-	DB_SEND_FAILURE();
-	return DB_OK;
+        DB_SEND_FAILURE();
+        return DB_OK;
     }
     DB_SEND_SUCCESS();
 
@@ -48,10 +48,10 @@ int db_d_execute_immediate(void)
 }
 
 /*!
-  \brief Begin transaction
+   \brief Begin transaction
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
 int db_d_begin_transaction(void)
 {
@@ -62,8 +62,8 @@ int db_d_begin_transaction(void)
 
     /* send the return code */
     if (stat != DB_OK) {
-	DB_SEND_FAILURE();
-	return DB_OK;
+        DB_SEND_FAILURE();
+        return DB_OK;
     }
     DB_SEND_SUCCESS();
 
@@ -72,12 +72,12 @@ int db_d_begin_transaction(void)
 }
 
 /*!
-  \brief Commit transaction
-  
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \brief Commit transaction
+
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
-int db_d_commit_transaction()
+int db_d_commit_transaction(void)
 {
     int stat;
 
@@ -86,8 +86,8 @@ int db_d_commit_transaction()
 
     /* send the return code */
     if (stat != DB_OK) {
-	DB_SEND_FAILURE();
-	return DB_OK;
+        DB_SEND_FAILURE();
+        return DB_OK;
     }
     DB_SEND_SUCCESS();
 

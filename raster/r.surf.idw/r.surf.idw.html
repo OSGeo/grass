@@ -9,11 +9,11 @@ to determined the interpolated value of a cell can be
 specified by the user (default: 12 nearest data points).
 
 <p>
-If there is a current working mask, it applies to the output 
-raster map. Only those cells falling within the mask will be 
-assigned interpolated values. The search procedure for the 
-selection of nearest neighboring points will consider all 
-input data, without regard to the mask. 
+If there is a current working mask, it applies to the output
+raster map. Only those cells falling within the mask will be
+assigned interpolated values. The search procedure for the
+selection of nearest neighboring points will consider all
+input data, without regard to the mask.
 
 The <b>-e</b> flag is the error analysis option that interpolates values
 only for those cells of the input raster map which have non-zero values and
@@ -42,10 +42,10 @@ calculated. Execution speed is therefore a function of the search effort,
 and does not increase appreciably with the number of input data points.
 
 <p>
-<em>r.surf.idw</em> will generally outperform 
+<em>r.surf.idw</em> will generally outperform
 <em>r.surf.idw2</em> except when the input data
 layer contains few non-zero data, i.e. when the cost of the search exceeds
-the cost of the additional distance calculations performed by 
+the cost of the additional distance calculations performed by
 <em>r.surf.idw2</em>. The relative performance
 of these utilities will depend on the comparative speed of boolean, integer
 and floating point operations on a particular platform.
@@ -100,6 +100,7 @@ r.colors map=elev_diff color=differences
 -->
 
 <h2>KNOWN ISSUES</h2>
+
 Module <em>r.surf.idw</em> works only for integer (CELL) raster maps.
 
 <h2>SEE ALSO</h2>
@@ -122,9 +123,4 @@ Greg Koerper <br>
 Global Climate Research Project <br>
 U.S. EPA Environmental Research Laboratory <br>
 200 S.W. 35th Street, JSB <br>
-Corvallis, OR 97333 
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+Corvallis, OR 97333

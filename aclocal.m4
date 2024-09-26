@@ -122,7 +122,7 @@ ac_save_libs="$LIBS"
 AC_MSG_CHECKING(for $4 library)
 LDFLAGS="$5 $LDFLAGS"
 LIBS="-l$1 $7 $8"
-AC_TRY_LINK([$2],[$3],[
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[$2]], [[$3]])],[
 AC_MSG_RESULT(found)
 $6="$$6 -l$1 $8"
 ],[
@@ -214,19 +214,16 @@ AC_DEFUN([LOC_CHECK_VERSION_STRING],[
 AC_MSG_CHECKING($3 version)
 ac_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$5 $CPPFLAGS"
-AC_TRY_RUN([
-#include <stdio.h> 
+AC_RUN_IFELSE([AC_LANG_SOURCE([[
+#include <stdio.h>
 #include <$1>
 int main(void) {
  FILE *fp = fopen("conftestdata","w");
  fputs($2, fp);
  return 0;
 }
-],
-[   $4=`cat conftestdata`
-    AC_MSG_RESULT($$4)],
-[   AC_MSG_ERROR([*** Could not determine $3 version.]) ],
-[   $4=$6
+]])],[   $4=`cat conftestdata`
+    AC_MSG_RESULT($$4)],[   AC_MSG_ERROR([*** Could not determine $3 version.]) ],[   $4=$6
     AC_MSG_RESULT([unknown (cross-compiling)]) ])
 CPPFLAGS=$ac_save_cppflags
 ])
@@ -241,7 +238,7 @@ AC_DEFUN([LOC_CHECK_VERSION_INT],[
 AC_MSG_CHECKING($3 version)
 ac_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$5 $CPPFLAGS"
-AC_TRY_RUN([
+AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #include <stdio.h>
 #include <$1>
 int main(void) {
@@ -249,11 +246,8 @@ int main(void) {
  fprintf(fp, "%d", $2);
  return 0;
 }
-    ],
-    [   $4=`cat conftestdata`
-        AC_MSG_RESULT($$4)],
-    [   AC_MSG_ERROR([*** Could not determine $3 version.]) ],
-    [   $4=$6
+    ]])],[   $4=`cat conftestdata`
+        AC_MSG_RESULT($$4)],[   AC_MSG_ERROR([*** Could not determine $3 version.]) ],[   $4=$6
         AC_MSG_RESULT([unknown (cross-compiling)]) ])
 CPPFLAGS=$ac_save_cppflags
 ])
@@ -261,7 +255,7 @@ CPPFLAGS=$ac_save_cppflags
 dnl autoconf undefines "eval", so use "builtin([eval], ...)"
 
 AC_DEFUN([LOC_PAD],[$1[]ifelse(builtin([eval],len($1) > 23),1,[
-                          ],substr([                        ],len($1)))])
+                          ],m4_substr([                        ],len($1)))])
 
 AC_DEFUN([LOC_ARG_WITH],[
 AC_ARG_WITH($1,
@@ -322,14 +316,11 @@ int main(void) {
 
 AC_DEFUN([LOC_CHECK_FP_INF_NAN],[
 AC_MSG_CHECKING([for full floating-point support]$1)
-AC_TRY_RUN(LOC_FP_TEST,
-[   AC_MSG_RESULT(yes)
-    $2],
-[   AC_MSG_RESULT(no)
-    $3],
-[   AC_MSG_RESULT([unknown (cross-compiling)])
-    $4]
-)
+AC_RUN_IFELSE([AC_LANG_SOURCE([LOC_FP_TEST])],[   AC_MSG_RESULT(yes)
+    $2],[   AC_MSG_RESULT(no)
+    $3],[   AC_MSG_RESULT([unknown (cross-compiling)])
+    $4
+])
 ])
 
 dnl check whether the compiler supports the -mieee switch
@@ -338,10 +329,8 @@ AC_DEFUN([LOC_CHECK_CC_MIEEE],[
 AC_MSG_CHECKING(whether "cc -mieee" works)
 ac_save_cflags=${CFLAGS}
 CFLAGS="$CFLAGS -mieee"
-AC_TRY_COMPILE(,,
-    [   AC_MSG_RESULT(yes)
-        IEEEFLAG="-mieee"],
-    [   AC_MSG_RESULT(no)])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[]])],[   AC_MSG_RESULT(yes)
+        IEEEFLAG="-mieee"],[   AC_MSG_RESULT(no)])
 CFLAGS=${ac_save_cflags}
 ])
 
@@ -349,16 +338,23 @@ AC_DEFUN([LOC_MSG],[
 echo "$1"
 ])
 
-AC_DEFUN([LOC_PAD_26],[substr([                           ],len($1))])
+AC_DEFUN([LOC_PAD_26],[m4_substr([                           ],len($1))])
 
 AC_DEFUN([LOC_YES_NO],[if test -n "${$1}" ; then echo yes ; else echo no ; fi])
 
 AC_DEFUN([LOC_MSG_USE],[
 [echo "  $1:]LOC_PAD_26($1)`LOC_YES_NO($2)`"])
 
-AC_DEFUN(LOC_EXEEXT,
-[AC_REQUIRE([AC_CYGWIN])
-AC_REQUIRE([AC_MINGW32])
+AC_DEFUN(LOC_EXEEXT,[
+[case $host_os in
+  *cygwin* ) CYGWIN=yes;;
+esac
+]
+
+[case $host_os in
+  *mingw32* ) MINGW32=yes;;
+esac
+]
 AC_MSG_CHECKING([for executable suffix])
 AC_CACHE_VAL(ac_cv_exeext,
 [if test "$CYGWIN" = yes || test "$MINGW32" = yes; then
@@ -380,7 +376,7 @@ AC_SUBST(EXEEXT)])
 #
 # Arguments:
 #	none
-#	
+#
 # Results:
 #
 #	Adds the following arguments to configure:
@@ -414,7 +410,7 @@ AC_DEFUN([SC_ENABLE_SHARED], [
     else
 	AC_MSG_RESULT([static])
 	SHARED_BUILD=0
-	AC_DEFINE(STATIC_BUILD)
+	AC_DEFINE(STATIC_BUILD, 1, [Define to 1 for Windows static build.])
 	GRASS_LIBRARY_TYPE='stlib'
     fi
     AC_SUBST(GRASS_LIBRARY_TYPE)
@@ -452,8 +448,11 @@ AC_DEFUN([SC_ENABLE_SHARED], [
 #                       code, among other things).
 #       SHLIB_LD -      Base command to use for combining object files
 #                       into a shared library.
+#       SHLIB_LDX -     Base command to use for combining object files
+#                       into a shared C++ library.  Make sure "IS_CXX = yes"
+#                       is set in the library's Makefile.
 #       SHLIB_LD_FLAGS -Flags to pass when building a shared library. This
-#                       differes from the SHLIB_CFLAGS as it is not used
+#                       differs from the SHLIB_CFLAGS as it is not used
 #                       when building object files or executables.
 #       SHLIB_LD_LIBS - Dependent libraries for the linker to scan when
 #                       creating shared libraries.  This symbol typically
@@ -477,6 +476,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
     SHLIB_LD_FLAGS=""
     SHLIB_SUFFIX=""
     SHLIB_LD=""
+    SHLIB_LDX=""
     STLIB_LD='${AR} cr'
     STLIB_SUFFIX='.a'
     GRASS_TRIM_DOTS='`echo ${LIB_VER} | tr -d .`'
@@ -491,8 +491,9 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
             SHLIB_LD_FLAGS="-Wl,-soname,\$(notdir \$[@])"
 	    SHLIB_SUFFIX=".so"
 	    SHLIB_LD="${CC} -shared"
+            SHLIB_LDX="${CXX} -shared"
             LDFLAGS="-Wl,--export-dynamic"
-            LD_SEARCH_FLAGS='-Wl,-rpath-link,${LIB_RUNTIME_DIR}'
+            LD_SEARCH_FLAGS='-Wl,-rpath-link,${LIB_RUNTIME_DIR} -Wl,-rpath,${INST_DIR}/lib'
             LD_LIBRARY_PATH_VAR="LD_LIBRARY_PATH"
             ;;
         *-pc-cygwin)
@@ -504,6 +505,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
         *-pc-mingw32 | *-w64-mingw32 | *-pc-msys)
             SHLIB_SUFFIX=".dll"
             SHLIB_LD="${CC} -shared"
+            SHLIB_LDX="${CXX} -shared"
             LDFLAGS="-Wl,--export-dynamic,--enable-runtime-pseudo-reloc"
             LD_LIBRARY_PATH_VAR="PATH"
             ;;
@@ -511,14 +513,15 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
             SHLIB_CFLAGS="-fno-common"
             SHLIB_SUFFIX=".dylib"
             SHLIB_LD="${CC} -dynamiclib -compatibility_version \${GRASS_VERSION_MAJOR}.\${GRASS_VERSION_MINOR} -current_version \${GRASS_VERSION_MAJOR}.\${GRASS_VERSION_MINOR} -install_name @rpath/lib\${LIB_NAME}\${SHLIB_SUFFIX}"
+            SHLIB_LDX="${CXX} -dynamiclib -compatibility_version \${GRASS_VERSION_MAJOR}.\${GRASS_VERSION_MINOR} -current_version \${GRASS_VERSION_MAJOR}.\${GRASS_VERSION_MINOR} -install_name @rpath/lib\${LIB_NAME}\${SHLIB_SUFFIX}"
             LDFLAGS="-Wl,-rpath,${INSTDIR}/lib,-rpath,\${GISBASE}/lib"
             LD_LIBRARY_PATH_VAR="LD_RUN_PATH"
             ;;
 	*-sun-solaris*)
 	    # Note: If _REENTRANT isn't defined, then Solaris
 	    # won't define thread-safe library routines.
-	    AC_DEFINE(_REENTRANT)
-	    AC_DEFINE(_POSIX_PTHREAD_SEMANTICS)
+	    AC_DEFINE(_REENTRANT, 1, [Define to 1 for _REENTRANT flag (for SunOS).])
+	    AC_DEFINE(_POSIX_PTHREAD_SEMANTICS, 1, [Define to 1 to enable threading extensions on Solaris.])
 	    # Note: need the LIBS below, otherwise Tk won't find Tcl's
 	    # symbols when dynamically loaded into tclsh.
             if test "$GCC" = "yes" ; then
@@ -535,13 +538,13 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    ;;
 	*-solaris2*)
 	    # Note: Solaris is as of 2010 Oracle Solaris, not Sun Solaris
-	    #       Oracle Solaris derives from Solaris 2 
-	    #       derives from SunOS 5 
+	    #       Oracle Solaris derives from Solaris 2
+	    #       derives from SunOS 5
 	    #       derives from UNIX System V Release 4
 	    # Note: If _REENTRANT isn't defined, then Solaris
 	    # won't define thread-safe library routines.
-	    AC_DEFINE(_REENTRANT)
-	    AC_DEFINE(_POSIX_PTHREAD_SEMANTICS)
+	    AC_DEFINE(_REENTRANT, 1, [Define to 1 for _REENTRANT flag (for SunOS).])
+	    AC_DEFINE(_POSIX_PTHREAD_SEMANTICS, 1, [Define to 1 to enable threading extensions on Solaris.])
 	    # Note: need the LIBS below, otherwise Tk won't find Tcl's
 	    # symbols when dynamically loaded into tclsh.
             if test "$GCC" = "yes" ; then
@@ -562,25 +565,27 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    SHLIB_CFLAGS="-fPIC"
 	    #SHLIB_LD="ld -Bshareable -x"
 	    SHLIB_LD="${CC} -shared"
+            SHLIB_LDX="${CXX} -shared"
             SHLIB_LD_FLAGS="-Wl,-soname,\$(notdir \$[@])"
 	    SHLIB_SUFFIX=".so"
-	    LDFLAGS="-export-dynamic"
+	    LDFLAGS="-Wl,--export-dynamic"
 	    #LD_SEARCH_FLAGS='-rpath ${LIB_RUNTIME_DIR}'
-	    LD_SEARCH_FLAGS='-Wl,-rpath-link,${LIB_RUNTIME_DIR}'
-	    # TODO: add optional pthread support with any combination of: 
+	    LD_SEARCH_FLAGS='-Wl,-rpath-link,${LIB_RUNTIME_DIR} -Wl,-rpath,${INST_DIR}/lib'
+	    # TODO: add optional pthread support with any combination of:
 	    # CFLAGS="$CFLAGS -pthread"
 	    # LDFLAGS="$LDFLAGS -lpthread"
-	    # AC_DEFINE(_REENTRANT)
-	    # AC_DEFINE(_POSIX_PTHREAD_SEMANTICS)
+	    # AC_DEFINE(_REENTRANT, 1, [Define to 1 for _REENTRANT flag (for SunOS).])
+	    # AC_DEFINE(_POSIX_PTHREAD_SEMANTICS, 1, [Define to 1 to enable threading extensions on Solaris.])
 	    ;;
 	*-netbsd*)
 	    # NetBSD has ELF.
 	    SHLIB_CFLAGS="-fPIC"
 	    SHLIB_LD="${CC} -shared"
+            SHLIB_LDX="${CXX} -shared"
 	    SHLIB_LD_LIBS="${LIBS}"
 	    LDFLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR} -export-dynamic'
 	    SHLIB_LD_FLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR} -export-dynamic'
-	    LD_SEARCH_FLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR} -L${LIB_RUNTIME_DIR}'
+	    LD_SEARCH_FLAGS='-Wl,-rpath,${INST_DIR}/lib -L${LIB_RUNTIME_DIR}'
 	    # some older NetBSD versions do not handle version numbers with dots.
 	    #STLIB_SUFFIX='${GRASS_TRIM_DOTS}.a'
 	    #SHLIB_SUFFIX='${GRASS_TRIM_DOTS}.so'
@@ -588,11 +593,11 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    # NetBSD 6 does handle version numbers with dots.
 	    STLIB_SUFFIX=".a"
 	    SHLIB_SUFFIX=".so"
-	    # TODO: add optional pthread support with any combination of: 
+	    # TODO: add optional pthread support with any combination of:
 	    # CFLAGS="$CFLAGS -pthread"
 	    # LDFLAGS="$LDFLAGS -lpthread"
-	    # AC_DEFINE(_REENTRANT)
-	    # AC_DEFINE(_POSIX_PTHREAD_SEMANTICS)
+	    # AC_DEFINE(_REENTRANT, 1, [Define to 1 for _REENTRANT flag (for SunOS).])
+	    # AC_DEFINE(_POSIX_PTHREAD_SEMANTICS, 1, [Define to 1 to enable threading extensions on Solaris.])
 	    ;;
 	*aix*)
 		# NOTE: do we need to support aix < 6 ?
@@ -624,6 +629,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
     AC_SUBST(LD_LIBRARY_PATH_VAR)
 
     AC_SUBST(SHLIB_LD)
+    AC_SUBST(SHLIB_LDX)
     AC_SUBST(SHLIB_LD_FLAGS)
     AC_SUBST(SHLIB_CFLAGS)
     AC_SUBST(SHLIB_SUFFIX)
@@ -633,7 +639,145 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 ])
 
 
-dnl XXXX Begin Stolen from cdrtools-2.01 
+dnl -------------------- OpenMP -----------------------------------------------
+dnl OpenMP code borrowed and modified from Autoconf 2.71 (AC_OPENMP)
+dnl to enable Clang detection
+
+# _LOC_LANG_OPENMP
+# ---------------
+# Expands to some language dependent source code for testing the presence of
+# OpenMP.
+AC_DEFUN([_LOC_LANG_OPENMP],
+[AC_LANG_SOURCE([_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])])
+
+# _LOC_LANG_OPENMP(C)
+# ------------------
+m4_define([_LOC_LANG_OPENMP(C)],
+[
+#ifndef _OPENMP
+#error "OpenMP not supported"
+#endif
+#include <omp.h>
+int main (void) { return omp_get_num_threads (); }
+])
+
+# _LOC_LANG_OPENMP(C++)
+# --------------------
+m4_copy([_LOC_LANG_OPENMP(C)], [_LOC_LANG_OPENMP(C++)])
+
+# _LOC_LANG_OPENMP(Fortran 77)
+# ---------------------------
+m4_define([_LOC_LANG_OPENMP(Fortran 77)],
+[
+      program main
+      implicit none
+!$    integer tid
+      tid = 42
+      call omp_set_num_threads(2)
+      end
+])
+
+# _LOC_LANG_OPENMP(Fortran)
+# ------------------------
+m4_copy([_LOC_LANG_OPENMP(Fortran 77)], [_LOC_LANG_OPENMP(Fortran)])
+
+# LOC_OPENMP
+# ---------
+# Check which options need to be passed to the C compiler to support OpenMP.
+# Set the OPENMP_CFLAGS / OPENMP_CXXFLAGS / OPENMP_FFLAGS variable to these
+# options.
+# The options are necessary at compile time (so the #pragmas are understood)
+# and at link time (so the appropriate library is linked with).
+# This macro takes care to not produce redundant options if $CC $CFLAGS already
+# supports OpenMP.
+#
+# For each candidate option, we do a compile test first, then a link test;
+# if the compile test succeeds but the link test fails, that means we have
+# found the correct option but it doesn't work because the libraries are
+# broken.  (This can happen, for instance, with SunPRO C and a bad combination
+# of operating system patches.)
+#
+# Several of the options in our candidate list can be misinterpreted by
+# compilers that don't use them to activate OpenMP support; for example,
+# many compilers understand "-openmp" to mean "write output to a file
+# named 'penmp'" rather than "enable OpenMP".  We can't completely avoid
+# the possibility of clobbering files named 'penmp' or 'mp' in configure's
+# working directory; therefore, this macro will bomb out if any such file
+# already exists when it's invoked.
+AC_DEFUN([LOC_OPENMP],
+[AC_REQUIRE([_LOC_OPENMP_SAFE_WD])]dnl
+[AC_ARG_ENABLE([openmp],
+   [AS_HELP_STRING([--disable-openmp], [do not use OpenMP])])]dnl
+[
+  OPENMP_[]_AC_LANG_PREFIX[]FLAGS=
+  if test "$enable_openmp" != no; then
+    AC_CACHE_CHECK([for $[]_AC_CC[] option to support OpenMP],
+      [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp],
+      [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp='not found'
+      dnl Try these flags:
+      dnl   (on by default)      ''
+      dnl   GCC >= 4.2           -fopenmp
+      dnl   SunPRO C             -xopenmp
+      dnl   Intel C              -openmp
+      dnl   SGI C, PGI C         -mp
+      dnl   Tru64 Compaq C       -omp
+      dnl   IBM XL C (AIX, Linux) -qsmp=omp
+      dnl   Cray CCE             -homp
+      dnl   NEC SX               -Popenmp
+      dnl   Lahey Fortran (Linux)  --openmp
+      dnl   Clang (Apple)        -Xclang -fopenmp
+      for ac_option in '' -fopenmp -xopenmp -openmp -mp -omp -qsmp=omp -homp \
+                       -Popenmp --openmp '-Xclang -fopenmp'; do
+
+        ac_save_[]_AC_LANG_PREFIX[]FLAGS=$[]_AC_LANG_PREFIX[]FLAGS
+        _AC_LANG_PREFIX[]FLAGS="$[]_AC_LANG_PREFIX[]FLAGS $ac_option"
+        AC_COMPILE_IFELSE([_LOC_LANG_OPENMP],
+          [AC_LINK_IFELSE([_LOC_LANG_OPENMP],
+            [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp=$ac_option],
+            [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp='unsupported'])])
+        _AC_LANG_PREFIX[]FLAGS=$ac_save_[]_AC_LANG_PREFIX[]FLAGS
+
+        if test "$ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp" != 'not found'; then
+          break
+        fi
+      done
+      if test "$ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp" = 'not found'; then
+        ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp='unsupported'
+      elif test "$ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp" = ''; then
+        ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp='none needed'
+      fi
+      dnl _AC_OPENMP_SAFE_WD checked that these files did not exist before we
+      dnl started probing for OpenMP support, so if they exist now, they were
+      dnl created by the probe loop and it's safe to delete them.
+      rm -f penmp mp])
+    if test "$ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp" != 'unsupported' && \
+       test "$ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp" != 'none needed'; then
+      OPENMP_[]_AC_LANG_PREFIX[]FLAGS="$ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp"
+    fi
+  fi
+  AC_SUBST([OPENMP_]_AC_LANG_PREFIX[FLAGS])
+])
+
+# _AC_OPENMP_SAFE_WD
+# ------------------
+# AC_REQUIREd by AC_OPENMP.  Checks both at autoconf time and at
+# configure time for files that AC_OPENMP clobbers.
+AC_DEFUN([_LOC_OPENMP_SAFE_WD],
+[m4_syscmd([test ! -e penmp && test ! -e mp])]dnl
+[m4_if(sysval, [0], [], [m4_fatal(m4_normalize(
+  [LOC_OPENMP clobbers files named 'mp' and 'penmp'.
+   To use LOC_OPENMP you must not have either of these files
+   at the top level of your source tree.]))])]dnl
+[if test -e penmp || test -e mp; then
+  AC_MSG_ERROR(m4_normalize(
+    [AC@&t@_OPENMP clobbers files named 'mp' and 'penmp'.
+     Aborting configure because one of these files already exists.]))
+fi])
+
+dnl -------------------- / OpenMP ---------------------------------------------
+
+
+dnl XXXX Begin Stolen from cdrtools-2.01
 dnl XXXX by Joerg Schilling <schilling fokus fraunhofer de> et al. XXXXXXXXX
 
 dnl XXXXXXXXX Begin Stolen (but modified) from GNU tar XXXXXXXXXXXXXXXXXXXXX
@@ -676,14 +820,9 @@ dnl AC_SYS_LARGEFILE_MACRO_VALUE(C-MACRO, VALUE, CACHE-VAR, COMMENT, INCLUDES, F
 AC_DEFUN([AC_SYS_LARGEFILE_MACRO_VALUE],
   [AC_CACHE_CHECK([for $1 value needed for large files], $3,
      [$3=no
-      AC_TRY_COMPILE([$5],
-	[$6], 
-	,
-	[AC_TRY_COMPILE([#define $1 $2]
-[$5]
-	   ,
-	   [$6],
-	   [$3=$2])])])
+      AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[$5]], [[$6]])],[],[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#define $1 $2
+$5
+	   ]], [[$6]])],[$3=$2],[])])])
    if test "[$]$3" != no; then
      AC_DEFINE_UNQUOTED([$1], [$]$3, [$4])
 
@@ -713,11 +852,9 @@ AC_DEFUN([AC_SYS_LARGEFILE],
         if test "$GCC" != yes; then
 	  # IRIX 6.2 and later do not support large files by default,
 	  # so use the C compiler's -n32 option if that helps.
-	  AC_TRY_COMPILE(AC_SYS_LARGEFILE_TEST_INCLUDES, , ,
-	    [ac_save_CC="${CC-cc}"
+	  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_SYS_LARGEFILE_TEST_INCLUDES], [[]])],[],[ac_save_CC="${CC-cc}"
 	     CC="$CC -n32"
-	     AC_TRY_COMPILE(AC_SYS_LARGEFILE_TEST_INCLUDES, ,
-	       ac_cv_sys_largefile_CC=' -n32')
+	     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_SYS_LARGEFILE_TEST_INCLUDES], [[]])],[ac_cv_sys_largefile_CC=' -n32'],[])
 	     CC="$ac_save_CC"])
         fi])
      if test "$ac_cv_sys_largefile_CC" != no; then
@@ -761,9 +898,7 @@ AC_DEFUN([AC_FUNC_FSEEKO],
 
    AC_CACHE_CHECK([for fseeko], ac_cv_func_fseeko,
      [ac_cv_func_fseeko=no
-      AC_TRY_LINK([#include <stdio.h>],
-        [return fseeko && fseeko (stdin, 0, 0);],
-	[ac_cv_func_fseeko=yes])])
+      AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>]], [[return fseeko && fseeko (stdin, 0, 0);]])],[ac_cv_func_fseeko=yes],[])])
    if test $ac_cv_func_fseeko != no; then
      AC_DEFINE(HAVE_FSEEKO, 1,
        [Define if fseeko (and presumably ftello) exists and is declared.])
@@ -774,9 +909,8 @@ dnl XXXXXXXXXXXXXXXXXX End Stolen (but modified) from GNU tar XXXXXXXXXXXXXX
 
 AC_DEFUN([AC_HAVE_LARGEFILES],
 [AC_CACHE_CHECK([if system supports Large Files at all], ac_cv_largefiles,
-     	[AC_TRY_COMPILE([#include <stdio.h>
-#include <sys/types.h>],
-     		[
+     	[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>
+#include <sys/types.h>]], [[
 /*
  * Check that off_t can represent 2**63 - 1 correctly.
  * We can't simply "#define LARGE_OFF_T 9223372036854775807",
@@ -800,11 +934,9 @@ return !ftello64;
 #else
 return !fseeko;
 return !ftello;
-#endif],
-     		[ac_cv_largefiles=yes],
-     		[ac_cv_largefiles=no])])
+#endif]])],[ac_cv_largefiles=yes],[ac_cv_largefiles=no])])
 	if test $ac_cv_largefiles = yes; then
-		AC_DEFINE(HAVE_LARGEFILES)
+		AC_DEFINE(HAVE_LARGEFILES, 1, [define if we have LFS])
 	  USE_LARGEFILES=1
 	else
 	  USE_LARGEFILES=
@@ -819,12 +951,9 @@ dnl and whether there is a prototype for fseeko()
 dnl Defines HAVE_FSEEKO on success.
 AC_DEFUN([AC_SMALL_FSEEKO],
 [AC_CACHE_CHECK([for fseeko()], ac_cv_func_fseeko,
-                [AC_TRY_LINK([#include <stdio.h>],
-[return !fseeko;],
-                [ac_cv_func_fseeko=yes],
-                [ac_cv_func_fseeko=no])])
+                [AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>]], [[return !fseeko;]])],[ac_cv_func_fseeko=yes],[ac_cv_func_fseeko=no])])
 if test $ac_cv_func_fseeko = yes; then
-  AC_DEFINE(HAVE_FSEEKO)
+  AC_DEFINE(HAVE_FSEEKO, 1, [define if fseeko() exists])
 fi])
 
 dnl Checks for whether ftello() is available in non large file mode
@@ -832,13 +961,9 @@ dnl and whether there is a prototype for ftello()
 dnl Defines HAVE_FTELLO on success.
 AC_DEFUN([AC_SMALL_FTELLO],
 [AC_CACHE_CHECK([for ftello()], ac_cv_func_ftello,
-                [AC_TRY_LINK([#include <stdio.h>],
-[return !ftello;],
-                [ac_cv_func_ftello=yes],
-                [ac_cv_func_ftello=no])])
+                [AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>]], [[return !ftello;]])],[ac_cv_func_ftello=yes],[ac_cv_func_ftello=no])])
 if test $ac_cv_func_ftello = yes; then
-  AC_DEFINE(HAVE_FTELLO)
+  AC_DEFINE(HAVE_FTELLO, 1, [define if ftello() exists])
 fi])
 
 dnl XXXXXXXXXXX End Stolen from cdrtools-2.01 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-

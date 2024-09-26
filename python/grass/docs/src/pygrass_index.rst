@@ -63,4 +63,3 @@ Code 2012
     * :ref:`genindex`
     * :ref:`modindex`
     * :ref:`search`
-

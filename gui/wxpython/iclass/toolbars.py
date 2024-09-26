@@ -18,8 +18,6 @@ for details.
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
-from __future__ import print_function
-
 import wx
 
 from gui_core.toolbars import BaseToolbar, BaseIcons
@@ -28,7 +26,7 @@ from iclass.dialogs import IClassMapDialog, ContrastColor
 from gui_core.forms import GUI
 from gui_core.wrap import StaticText
 
-import grass.script as grass
+import grass.script as gs
 
 iClassIcons = {
     "opacity": MetaIcon(img="layer-opacity", label=_("Set opacity level")),
@@ -100,18 +98,66 @@ class IClassMapToolbar(BaseToolbar):
         icons = BaseIcons
         return self._getToolbarData(
             (
-                ("displaymap", icons["display"], self.parent.OnDraw),
-                ("rendermap", icons["render"], self.parent.OnRender),
-                ("erase", icons["erase"], self.parent.OnErase),
+                (
+                    ("displaymap", icons["display"].label),
+                    icons["display"],
+                    self.parent.OnDraw,
+                ),
+                (
+                    ("rendermap", icons["render"].label),
+                    icons["render"],
+                    self.parent.OnRender,
+                ),
+                (
+                    ("erase", icons["erase"].label),
+                    icons["erase"],
+                    self.parent.OnErase,
+                ),
                 (None,),
-                ("pan", icons["pan"], self.parent.OnPan, wx.ITEM_CHECK),
-                ("zoomIn", icons["zoomIn"], self.parent.OnZoomIn, wx.ITEM_CHECK),
-                ("zoomOut", icons["zoomOut"], self.parent.OnZoomOut, wx.ITEM_CHECK),
-                ("zoomRegion", icons["zoomRegion"], self.parent.OnZoomToWind),
-                ("zoomMenu", icons["zoomMenu"], self.parent.OnZoomMenu),
+                (
+                    ("pan", icons["pan"].label),
+                    icons["pan"],
+                    self.parent.OnPan,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomIn", icons["zoomIn"].label),
+                    icons["zoomIn"],
+                    self.parent.OnZoomIn,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomOut", icons["zoomOut"].label),
+                    icons["zoomOut"],
+                    self.parent.OnZoomOut,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomRegion", icons["zoomRegion"].label),
+                    icons["zoomRegion"],
+                    self.parent.OnZoomToWind,
+                ),
+                (
+                    ("zoomMenu", icons["zoomMenu"].label),
+                    icons["zoomMenu"],
+                    self.parent.OnZoomMenu,
+                ),
                 (None,),
-                ("zoomBack", icons["zoomBack"], self.parent.OnZoomBack),
-                ("zoomToMap", icons["zoomExtent"], self.parent.OnZoomToMap),
+                (
+                    ("zoomBack", icons["zoomBack"].label),
+                    icons["zoomBack"],
+                    self.parent.OnZoomBack,
+                ),
+                (
+                    ("zoomToMap", icons["zoomExtent"].label),
+                    icons["zoomExtent"],
+                    self.parent.OnZoomToMap,
+                ),
+                (
+                    ("mapDispSettings", BaseIcons["mapDispSettings"].label),
+                    BaseIcons["mapDispSettings"],
+                    self.parent.OnMapDisplayProperties,
+                ),
             )
         )
 
@@ -159,18 +205,38 @@ class IClassToolbar(BaseToolbar):
         return self._getToolbarData(
             (
                 (
-                    "selectGroup",
+                    ("selectGroup", icons["selectGroup"].label),
                     icons["selectGroup"],
                     lambda event: self.parent.AddBands(),
                 ),
                 (None,),
-                ("classManager", icons["classManager"], self.parent.OnCategoryManager),
+                (
+                    ("classManager", icons["classManager"].label),
+                    icons["classManager"],
+                    self.parent.OnCategoryManager,
+                ),
                 (None,),
-                ("runAnalysis", icons["run"], self.parent.OnRunAnalysis),
+                (
+                    ("runAnalysis", icons["run"].label),
+                    icons["run"],
+                    self.parent.OnRunAnalysis,
+                ),
                 (None,),
-                ("importAreas", icons["importAreas"], self.parent.OnImportAreas),
-                ("exportAreas", icons["exportAreas"], self.parent.OnExportAreas),
-                ("sigFile", icons["sigFile"], self.parent.OnSaveSigFile),
+                (
+                    ("importAreas", icons["importAreas"].label),
+                    icons["importAreas"],
+                    self.parent.OnImportAreas,
+                ),
+                (
+                    ("exportAreas", icons["exportAreas"].label),
+                    icons["exportAreas"],
+                    self.parent.OnExportAreas,
+                ),
+                (
+                    ("sigFile", icons["sigFile"].label),
+                    icons["sigFile"],
+                    self.parent.OnSaveSigFile,
+                ),
             )
         )
 
@@ -185,7 +251,6 @@ class IClassToolbar(BaseToolbar):
         self.parent.CategoryChanged(currentCat=cat)
 
     def _updateColor(self, cat):
-
         if cat:
             stat = self.stats_data.GetStatistics(cat)
             back_c = wx.Colour([int(x) for x in stat.color.split(":")])
@@ -303,10 +368,26 @@ class IClassMapManagerToolbar(BaseToolbar):
         """Toolbar data"""
         return self._getToolbarData(
             (
-                ("addRast", BaseIcons["addRast"], self.OnAddRast),
-                ("addRgb", iClassIcons["addRgb"], self.OnAddRGB),
-                ("delRast", iClassIcons["delCmd"], self.OnDelRast),
-                ("setOpacity", iClassIcons["opacity"], self.OnSetOpacity),
+                (
+                    ("addRast", BaseIcons["addRast"].label),
+                    BaseIcons["addRast"],
+                    self.OnAddRast,
+                ),
+                (
+                    ("addRgb", iClassIcons["addRgb"].label),
+                    iClassIcons["addRgb"],
+                    self.OnAddRGB,
+                ),
+                (
+                    ("delRast", iClassIcons["delCmd"].label),
+                    iClassIcons["delCmd"],
+                    self.OnDelRast,
+                ),
+                (
+                    ("setOpacity", iClassIcons["opacity"].label),
+                    iClassIcons["opacity"],
+                    self.OnSetOpacity,
+                ),
             )
         )
 
@@ -317,7 +398,7 @@ class IClassMapManagerToolbar(BaseToolbar):
     def OnAddRast(self, event):
         dlg = IClassMapDialog(self, title=_("Add raster map"), element="raster")
         if dlg.ShowModal() == wx.ID_OK:
-            raster = grass.find_file(name=dlg.GetMap(), element="cell")
+            raster = gs.find_file(name=dlg.GetMap(), element="cell")
             if raster["fullname"]:
                 self.mapManager.AddLayer(name=raster["fullname"])
 
@@ -362,7 +443,15 @@ class IClassMiscToolbar(BaseToolbar):
         icons = BaseIcons
         return self._getToolbarData(
             (
-                ("help", icons["help"], self.parent.OnHelp),
-                ("quit", icons["quit"], self.parent.OnCloseWindow),
+                (
+                    ("help", icons["help"].label),
+                    icons["help"],
+                    self.parent.OnHelp,
+                ),
+                (
+                    ("quit", icons["quit"].label),
+                    icons["quit"],
+                    self.parent.OnCloseWindow,
+                ),
             )
         )

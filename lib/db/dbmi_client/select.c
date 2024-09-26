@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_client/select.c
- * 
+ *
  * \brief DBMI Library (client) - select records from table
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -24,58 +24,58 @@ static int cmp(const void *pa, const void *pb)
     int *p2 = (int *)pb;
 
     if (*p1 < *p2)
-	return -1;
+        return -1;
     if (*p1 > *p2)
-	return 1;
+        return 1;
     return 0;
 }
 
 static int cmpcat(const void *pa, const void *pb)
 {
-    dbCatVal *p1 = (dbCatVal *) pa;
-    dbCatVal *p2 = (dbCatVal *) pb;
+    dbCatVal *p1 = (dbCatVal *)pa;
+    dbCatVal *p2 = (dbCatVal *)pb;
 
     if (p1->cat < p2->cat)
-	return -1;
+        return -1;
     if (p1->cat > p2->cat)
-	return 1;
+        return 1;
     return 0;
 }
 
 static int cmpcatkey(const void *pa, const void *pb)
 {
     int *p1 = (int *)pa;
-    dbCatVal *p2 = (dbCatVal *) pb;
+    dbCatVal *p2 = (dbCatVal *)pb;
 
     if (*p1 < p2->cat)
-	return -1;
+        return -1;
     if (*p1 > p2->cat)
-	return 1;
+        return 1;
     return 0;
 }
 
 static int cmpvalueint(const void *pa, const void *pb)
 {
-    dbCatVal *p1 = (dbCatVal *) pa;
-    dbCatVal *p2 = (dbCatVal *) pb;
+    dbCatVal *p1 = (dbCatVal *)pa;
+    dbCatVal *p2 = (dbCatVal *)pb;
 
     if (p1->val.i < p2->val.i)
-	return -1;
+        return -1;
     if (p1->val.i > p2->val.i)
-	return 1;
+        return 1;
 
     return 0;
 }
 
 static int cmpvaluedouble(const void *pa, const void *pb)
 {
-    dbCatVal *p1 = (dbCatVal *) pa;
-    dbCatVal *p2 = (dbCatVal *) pb;
+    dbCatVal *p1 = (dbCatVal *)pa;
+    dbCatVal *p2 = (dbCatVal *)pb;
 
     if (p1->val.d < p2->val.d)
-	return -1;
+        return -1;
     if (p1->val.d > p2->val.d)
-	return 1;
+        return 1;
 
     return 0;
 }
@@ -89,19 +89,19 @@ static int cmpvaluestring(const void *pa, const void *pb)
 }
 
 /*!
-  \brief Select array of ordered integers from table/column
+   \brief Select array of ordered integers from table/column
 
-  \param driver DB driver
-  \param tab table name
-  \param col column name
-  \param where where statement
-  \param[out] pval array of ordered integer values
+   \param driver DB driver
+   \param tab table name
+   \param col column name
+   \param where where statement
+   \param[out] pval array of ordered integer values
 
-  \return number of selected values
-  \return -1 on error
-*/
-int db_select_int(dbDriver * driver, const char *tab, const char *col,
-		  const char *where, int **pval)
+   \return number of selected values
+   \return -1 on error
+ */
+int db_select_int(dbDriver *driver, const char *tab, const char *col,
+                  const char *where, int **pval)
 {
     int type, more, alloc, count;
     int *val;
@@ -116,8 +116,8 @@ int db_select_int(dbDriver * driver, const char *tab, const char *col,
     G_debug(3, "db_select_int()");
 
     if (col == NULL || strlen(col) == 0) {
-	G_warning(_("Missing column name"));
-	return -1;
+        G_warning(_("Missing column name"));
+        return -1;
     }
 
     /* allocate */
@@ -125,9 +125,9 @@ int db_select_int(dbDriver * driver, const char *tab, const char *col,
     val = (int *)G_malloc(alloc * sizeof(int));
 
     if (where == NULL || strlen(where) == 0)
-	G_asprintf(&buf, "SELECT %s FROM %s", col, tab);
+        G_asprintf(&buf, "SELECT %s FROM %s", col, tab);
     else
-	G_asprintf(&buf, "SELECT %s FROM %s WHERE %s", col, tab, where);
+        G_asprintf(&buf, "SELECT %s FROM %s WHERE %s", col, tab, where);
 
     G_debug(3, "  SQL: %s", buf);
 
@@ -136,12 +136,12 @@ int db_select_int(dbDriver * driver, const char *tab, const char *col,
     G_free(buf);
 
     if (db_open_select_cursor(driver, &stmt, &cursor, DB_SEQUENTIAL) != DB_OK)
-	return (-1);
+        return (-1);
 
     table = db_get_cursor_table(&cursor);
-    column = db_get_table_column(table, 0);	/* first column */
+    column = db_get_table_column(table, 0); /* first column */
     if (column == NULL) {
-	return -1;
+        return -1;
     }
     value = db_get_column_value(column);
     type = db_get_column_sqltype(column);
@@ -150,32 +150,32 @@ int db_select_int(dbDriver * driver, const char *tab, const char *col,
     /* fetch the data */
     count = 0;
     while (1) {
-	if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
-	    return (-1);
+        if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
+            return (-1);
 
-	if (!more)
-	    break;
+        if (!more)
+            break;
 
-	if (count == alloc) {
-	    alloc += 1000;
-	    val = (int *)G_realloc(val, alloc * sizeof(int));
-	}
+        if (count == alloc) {
+            alloc += 1000;
+            val = (int *)G_realloc(val, alloc * sizeof(int));
+        }
 
-	switch (type) {
-	case (DB_C_TYPE_INT):
-	    val[count] = db_get_value_int(value);
-	    break;
-	case (DB_C_TYPE_STRING):
-	    sval = db_get_value_string(value);
-	    val[count] = atoi(sval);
-	    break;
-	case (DB_C_TYPE_DOUBLE):
-	    val[count] = (int)db_get_value_double(value);
-	    break;
-	default:
-	    return (-1);
-	}
-	count++;
+        switch (type) {
+        case (DB_C_TYPE_INT):
+            val[count] = db_get_value_int(value);
+            break;
+        case (DB_C_TYPE_STRING):
+            sval = db_get_value_string(value);
+            val[count] = atoi(sval);
+            break;
+        case (DB_C_TYPE_DOUBLE):
+            val[count] = (int)db_get_value_double(value);
+            break;
+        default:
+            return (-1);
+        }
+        count++;
     }
 
     db_close_cursor(&cursor);
@@ -189,20 +189,20 @@ int db_select_int(dbDriver * driver, const char *tab, const char *col,
 }
 
 /*!
-  \brief Select one (first) value from table/column for key/id
+   \brief Select one (first) value from table/column for key/id
 
-  \param driver DB driver
-  \param tab table name
-  \param key key column name
-  \param id identifier in key column
-  \param col name of column to select the value from
-  \param[out] val dbValue to store within
+   \param driver DB driver
+   \param tab table name
+   \param key key column name
+   \param id identifier in key column
+   \param col name of column to select the value from
+   \param[out] val dbValue to store within
 
-  \return number of selected values
-  \return -1 on error
+   \return number of selected values
+   \return -1 on error
  */
-int db_select_value(dbDriver * driver, const char *tab, const char *key,
-		    int id, const char *col, dbValue * val)
+int db_select_value(dbDriver *driver, const char *tab, const char *key, int id,
+                    const char *col, dbValue *val)
 {
     int more, count;
     char *buf = NULL;
@@ -213,13 +213,13 @@ int db_select_value(dbDriver * driver, const char *tab, const char *key,
     dbTable *table;
 
     if (key == NULL || strlen(key) == 0) {
-	G_warning(_("Missing key column name"));
-	return -1;
+        G_warning(_("Missing key column name"));
+        return -1;
     }
 
     if (col == NULL || strlen(col) == 0) {
-	G_warning(_("Missing column name"));
-	return -1;
+        G_warning(_("Missing column name"));
+        return -1;
     }
 
     G_zero(val, sizeof(dbValue));
@@ -229,23 +229,23 @@ int db_select_value(dbDriver * driver, const char *tab, const char *key,
     G_free(buf);
 
     if (db_open_select_cursor(driver, &stmt, &cursor, DB_SEQUENTIAL) != DB_OK)
-	return (-1);
+        return (-1);
 
     table = db_get_cursor_table(&cursor);
-    column = db_get_table_column(table, 0);	/* first column */
+    column = db_get_table_column(table, 0); /* first column */
     value = db_get_column_value(column);
 
     /* fetch the data */
     count = 0;
     while (1) {
-	if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
-	    return (-1);
+        if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
+            return (-1);
 
-	if (!more)
-	    break;
-	if (count == 0)
-	    db_copy_value(val, value);
-	count++;
+        if (!more)
+            break;
+        if (count == 0)
+            db_copy_value(val, value);
+        count++;
     }
     db_close_cursor(&cursor);
     db_free_string(&stmt);
@@ -254,20 +254,21 @@ int db_select_value(dbDriver * driver, const char *tab, const char *key,
 }
 
 /*!
-  \brief Select pairs key/value to array, values are sorted by key (must be integer)
+   \brief Select pairs key/value to array, values are sorted by key (must be
+   integer)
 
-  \param driver DB driver
-  \param tab table name
-  \param key key column name
-  \param col value column name
-  \param[out] cvarr dbCatValArray to store within
+   \param driver DB driver
+   \param tab table name
+   \param key key column name
+   \param col value column name
+   \param[out] cvarr dbCatValArray to store within
 
-  \return number of selected values
-  \return -1 on error
+   \return number of selected values
+   \return -1 on error
  */
-int db_select_CatValArray(dbDriver * driver, const char *tab, const char *key,
-			  const char *col, const char *where,
-			  dbCatValArray * cvarr)
+int db_select_CatValArray(dbDriver *driver, const char *tab, const char *key,
+                          const char *col, const char *where,
+                          dbCatValArray *cvarr)
 {
     int i, type, more, nrows, ncols;
     char *buf = NULL;
@@ -280,44 +281,44 @@ int db_select_CatValArray(dbDriver * driver, const char *tab, const char *key,
     G_debug(3, "db_select_CatValArray ()");
 
     if (key == NULL || strlen(key) == 0) {
-	G_warning(_("Missing key column name"));
-	return -1;
+        G_warning(_("Missing key column name"));
+        return -1;
     }
 
     if (col == NULL || strlen(col) == 0) {
-	G_warning(_("Missing column name"));
-	return -1;
+        G_warning(_("Missing column name"));
+        return -1;
     }
     db_init_string(&stmt);
 
     if (strcmp(key, col) == 0) {
-	ncols = 1;
-	G_asprintf(&buf, "SELECT %s FROM %s", key, tab);
+        ncols = 1;
+        G_asprintf(&buf, "SELECT %s FROM %s", key, tab);
     }
     else {
-	ncols = 2;
-	G_asprintf(&buf, "SELECT %s, %s FROM %s", key, col, tab);
+        ncols = 2;
+        G_asprintf(&buf, "SELECT %s, %s FROM %s", key, col, tab);
     }
     db_set_string(&stmt, buf);
     G_free(buf);
 
     if (where != NULL && strlen(where) > 0) {
-	db_append_string(&stmt, " WHERE ");
-	db_append_string(&stmt, where);
+        db_append_string(&stmt, " WHERE ");
+        db_append_string(&stmt, where);
     }
 
     G_debug(3, "  SQL: %s", db_get_string(&stmt));
 
     if (db_open_select_cursor(driver, &stmt, &cursor, DB_SEQUENTIAL) != DB_OK)
-	return (-1);
+        return (-1);
 
     nrows = db_get_num_rows(&cursor);
     G_debug(3, "  %d rows selected", nrows);
     if (nrows < 0) {
-	G_warning(_("Unable select records from table <%s>"), tab);
-	db_close_cursor(&cursor);
-	db_free_string(&stmt);
-	return -1;
+        G_warning(_("Unable select records from table <%s>"), tab);
+        db_close_cursor(&cursor);
+        db_free_string(&stmt);
+        return -1;
     }
 
     db_CatValArray_alloc(cvarr, nrows);
@@ -330,75 +331,74 @@ int db_select_CatValArray(dbDriver * driver, const char *tab, const char *key,
     G_debug(3, "  key type = %d", type);
 
     if (type != DB_C_TYPE_INT) {
-	G_warning(_("Key column type is not integer"));
-	db_close_cursor(&cursor);
-	db_free_string(&stmt);
-	return -1;
+        G_warning(_("Key column type is not integer"));
+        db_close_cursor(&cursor);
+        db_free_string(&stmt);
+        return -1;
     }
 
     if (ncols == 2) {
-	column = db_get_table_column(table, 1);
-	type = db_sqltype_to_Ctype(db_get_column_sqltype(column));
-	G_debug(3, "  col type = %d", type);
+        column = db_get_table_column(table, 1);
+        type = db_sqltype_to_Ctype(db_get_column_sqltype(column));
+        G_debug(3, "  col type = %d", type);
 
-	/*
-	  if ( type != DB_C_TYPE_INT && type != DB_C_TYPE_DOUBLE ) {
-	  G_fatal_error ( "Column type not supported by db_select_to_array()" );
-	  }
-	*/
+        /*
+           if ( type != DB_C_TYPE_INT && type != DB_C_TYPE_DOUBLE ) {
+           G_fatal_error ( "Column type not supported by db_select_to_array()"
+           );
+           }
+         */
     }
     cvarr->ctype = type;
 
     /* fetch the data */
     for (i = 0; i < nrows; i++) {
-	if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
-	    return (-1);
+        if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
+            return (-1);
 
-	column = db_get_table_column(table, 0);	/* first column */
-	value = db_get_column_value(column);
-	cvarr->value[i].cat = db_get_value_int(value);
+        column = db_get_table_column(table, 0); /* first column */
+        value = db_get_column_value(column);
+        cvarr->value[i].cat = db_get_value_int(value);
 
-	if (ncols == 2) {
-	    column = db_get_table_column(table, 1);
-	    value = db_get_column_value(column);
-	}
-	cvarr->value[i].isNull = value->isNull;
-	switch (type) {
-	case (DB_C_TYPE_INT):
-	    if (value->isNull)
-		cvarr->value[i].val.i = 0;
-	    else
-		cvarr->value[i].val.i = db_get_value_int(value);
-	    break;
+        if (ncols == 2) {
+            column = db_get_table_column(table, 1);
+            value = db_get_column_value(column);
+        }
+        cvarr->value[i].isNull = value->isNull;
+        switch (type) {
+        case (DB_C_TYPE_INT):
+            if (value->isNull)
+                cvarr->value[i].val.i = 0;
+            else
+                cvarr->value[i].val.i = db_get_value_int(value);
+            break;
 
-	case (DB_C_TYPE_DOUBLE):
-	    if (value->isNull)
-		cvarr->value[i].val.d = 0.0;
-	    else
-		cvarr->value[i].val.d = db_get_value_double(value);
-	    break;
+        case (DB_C_TYPE_DOUBLE):
+            if (value->isNull)
+                cvarr->value[i].val.d = 0.0;
+            else
+                cvarr->value[i].val.d = db_get_value_double(value);
+            break;
 
-	case (DB_C_TYPE_STRING):
-	    cvarr->value[i].val.s = (dbString *) malloc(sizeof(dbString));
-	    db_init_string(cvarr->value[i].val.s);
+        case (DB_C_TYPE_STRING):
+            cvarr->value[i].val.s = (dbString *)malloc(sizeof(dbString));
+            db_init_string(cvarr->value[i].val.s);
 
-	    if (!(value->isNull))
-		db_set_string(cvarr->value[i].val.s,
-			      db_get_value_string(value));
-	    break;
+            if (!(value->isNull))
+                db_set_string(cvarr->value[i].val.s,
+                              db_get_value_string(value));
+            break;
 
-	case (DB_C_TYPE_DATETIME):
-	    cvarr->value[i].val.t =
-		(dbDateTime *) calloc(1, sizeof(dbDateTime));
+        case (DB_C_TYPE_DATETIME):
+            cvarr->value[i].val.t = (dbDateTime *)calloc(1, sizeof(dbDateTime));
 
-	    if (!(value->isNull))
-		memcpy(cvarr->value[i].val.t, &(value->t),
-		       sizeof(dbDateTime));
-	    break;
+            if (!(value->isNull))
+                memcpy(cvarr->value[i].val.t, &(value->t), sizeof(dbDateTime));
+            break;
 
-	default:
-	    return (-1);
-	}
+        default:
+            return (-1);
+        }
     }
     cvarr->n_values = nrows;
 
@@ -411,67 +411,65 @@ int db_select_CatValArray(dbDriver * driver, const char *tab, const char *key,
 }
 
 /*!
-  \brief Sort key/value array by key
-  \param[in,out] arr dbCatValArray (key/value array)
-*/
-void db_CatValArray_sort(dbCatValArray * arr)
+   \brief Sort key/value array by key
+   \param[in,out] arr dbCatValArray (key/value array)
+ */
+void db_CatValArray_sort(dbCatValArray *arr)
 {
     qsort((void *)arr->value, arr->n_values, sizeof(dbCatVal), cmpcat);
 }
 
 /*!
-  \brief Sort key/value array by value
-  
-  \param[in,out] arr dbCatValArray (key/value array)
-  
-  \return DB_OK on success
-  \return DB_FAILED on error
+   \brief Sort key/value array by value
+
+   \param[in,out] arr dbCatValArray (key/value array)
+
+   \return DB_OK on success
+   \return DB_FAILED on error
  */
-int db_CatValArray_sort_by_value(dbCatValArray * arr)
+int db_CatValArray_sort_by_value(dbCatValArray *arr)
 {
     switch (arr->ctype) {
     case (DB_C_TYPE_INT):
-	qsort((void *)arr->value, arr->n_values, sizeof(dbCatVal),
-	      cmpvalueint);
-	break;
+        qsort((void *)arr->value, arr->n_values, sizeof(dbCatVal), cmpvalueint);
+        break;
     case (DB_C_TYPE_DOUBLE):
-	qsort((void *)arr->value, arr->n_values, sizeof(dbCatVal),
-	      cmpvaluedouble);
-	break;
+        qsort((void *)arr->value, arr->n_values, sizeof(dbCatVal),
+              cmpvaluedouble);
+        break;
     case (DB_C_TYPE_STRING):
-	qsort((void *)arr->value, arr->n_values, sizeof(dbCatVal),
-	      cmpvaluestring);
-	break;
-    case (DB_C_TYPE_DATETIME):	/* is cmpvaluestring right here ? */
-	qsort((void *)arr->value, arr->n_values, sizeof(dbCatVal),
-	      cmpvaluestring);
-	break;
+        qsort((void *)arr->value, arr->n_values, sizeof(dbCatVal),
+              cmpvaluestring);
+        break;
+    case (DB_C_TYPE_DATETIME): /* is cmpvaluestring right here ? */
+        qsort((void *)arr->value, arr->n_values, sizeof(dbCatVal),
+              cmpvaluestring);
+        break;
     default:
-	return (DB_FAILED);
+        return (DB_FAILED);
     }
 
     return (DB_OK);
 }
 
 /*!
-  \brief Find value by key
+   \brief Find value by key
 
-  \param arr dbCatValArray (key/value array)
-  \param key key value
-  \param[out] cv dbCatVal structure (key/value) to store within
+   \param arr dbCatValArray (key/value array)
+   \param key key value
+   \param[out] cv dbCatVal structure (key/value) to store within
 
-  \return DB_OK on success
-  \return DB_FAILED on error
+   \return DB_OK on success
+   \return DB_FAILED on error
  */
-int db_CatValArray_get_value(dbCatValArray * arr, int key, dbCatVal ** cv)
+int db_CatValArray_get_value(dbCatValArray *arr, int key, dbCatVal **cv)
 {
     dbCatVal *catval;
 
-    catval =
-	bsearch((void *)&key, arr->value, arr->n_values, sizeof(dbCatVal),
-		cmpcat);
+    catval = bsearch((void *)&key, arr->value, arr->n_values, sizeof(dbCatVal),
+                     cmpcat);
     if (catval == NULL) {
-	return DB_FAILED;
+        return DB_FAILED;
     }
 
     *cv = catval;
@@ -480,24 +478,23 @@ int db_CatValArray_get_value(dbCatValArray * arr, int key, dbCatVal ** cv)
 }
 
 /*!
-  \brief Find value (integer) by key
+   \brief Find value (integer) by key
 
-  \param arr dbCatValArray (key/value array)
-  \param key key value
-  \param[out] val found value (integer)
+   \param arr dbCatValArray (key/value array)
+   \param key key value
+   \param[out] val found value (integer)
 
-  \return DB_OK on success
-  \return DB_FAILED on error
+   \return DB_OK on success
+   \return DB_FAILED on error
  */
-int db_CatValArray_get_value_int(dbCatValArray * arr, int key, int *val)
+int db_CatValArray_get_value_int(dbCatValArray *arr, int key, int *val)
 {
     dbCatVal *catval;
 
-    catval =
-	bsearch((void *)&key, arr->value, arr->n_values, sizeof(dbCatVal),
-		cmpcat);
+    catval = bsearch((void *)&key, arr->value, arr->n_values, sizeof(dbCatVal),
+                     cmpcat);
     if (catval == NULL) {
-	return DB_FAILED;
+        return DB_FAILED;
     }
 
     *val = catval->val.i;
@@ -506,26 +503,25 @@ int db_CatValArray_get_value_int(dbCatValArray * arr, int key, int *val)
 }
 
 /*!
-  \brief Find value (double) by key
-  
-  \param arr dbCatValArray (key/value array)
-  \param key key value
-  \param[out] val found value (double)
+   \brief Find value (double) by key
 
-  \return DB_OK on success
-  \return DB_FAILED on error
-*/
-int db_CatValArray_get_value_double(dbCatValArray * arr, int key, double *val)
+   \param arr dbCatValArray (key/value array)
+   \param key key value
+   \param[out] val found value (double)
+
+   \return DB_OK on success
+   \return DB_FAILED on error
+ */
+int db_CatValArray_get_value_double(dbCatValArray *arr, int key, double *val)
 {
     dbCatVal *catval;
 
     G_debug(3, "db_CatValArray_get_value_double(), key = %d", key);
 
-    catval =
-	bsearch((void *)&key, arr->value, arr->n_values, sizeof(dbCatVal),
-		cmpcatkey);
+    catval = bsearch((void *)&key, arr->value, arr->n_values, sizeof(dbCatVal),
+                     cmpcatkey);
     if (catval == NULL) {
-	return DB_FAILED;
+        return DB_FAILED;
     }
 
     *val = catval->val.d;

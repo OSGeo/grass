@@ -6,20 +6,61 @@ This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS GIS
 for details.
 
-:authors: Vaclav Petras
+:authors: Vaclav Petras, Edouard Choinière
 """
 
-import os
-import fnmatch
-import unittest
+from __future__ import annotations
+
 import collections
+import fnmatch
+import os
 import re
+import unittest
+from pathlib import PurePath
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+
+
+def fnmatch_exclude_with_base(
+    files: Iterable[str],
+    base: str | os.PathLike,
+    exclude: Iterable[str | os.PathLike | PurePath],
+) -> list[str]:
+    """Return list of files not matching any exclusion pattern
+
+    :param files: list of file names
+    :param base: directory (path) where the files are
+    :param exclude: list of fnmatch glob patterns for exclusion
+    """
+    not_excluded = []
+    patterns = {str(PurePath(item)) for item in exclude}
+    base_path = PurePath(base)
+    for filename in files:
+        test_filename: PurePath = base_path / filename
+        matches = False
+        for pattern in patterns:
+            if fnmatch.fnmatch(str(test_filename), pattern):
+                matches = True
+                break
+        if not matches:
+            not_excluded.append(filename)
+    return not_excluded
 
 
 # TODO: resolve test file versus test module
 GrassTestPythonModule = collections.namedtuple(
     "GrassTestPythonModule",
-    ["name", "module", "file_type", "tested_dir", "file_dir", "abs_file_path"],
+    [
+        "name",
+        "module",
+        "file_type",
+        "tested_dir",
+        "file_dir",
+        "file_path",
+        "abs_file_path",
+    ],
 )
 
 
@@ -35,6 +76,7 @@ def discover_modules(
     add_failed_imports=True,
     file_pattern=None,
     file_regexp=None,
+    exclude=None,
 ):
     """Find all test files (modules) in a directory tree.
 
@@ -75,14 +117,16 @@ def discover_modules(
             dirs.remove(testsuite_dir)  # do not recurse to testsuite
             full = os.path.join(root, testsuite_dir)
 
-            all_files = os.listdir(full)
+            files = os.listdir(full)
             if file_pattern:
-                files = fnmatch.filter(all_files, file_pattern)
+                files = fnmatch.filter(files, file_pattern)
             if file_regexp:
-                files = [f for f in all_files if re.match(file_regexp, f)]
+                files = [f for f in files if re.match(file_regexp, f)]
+            if exclude:
+                files = fnmatch_exclude_with_base(files, full, exclude)
             files = sorted(files)
             # get test/module name without .py
-            # extpecting all files to end with .py
+            # expecting all files to end with .py
             # this will not work for invoking bat files but it works fine
             # as long as we handle only Python files (and using Python
             # interpreter for invoking)
@@ -146,6 +190,7 @@ def discover_modules(
                             tested_dir=root,
                             file_dir=full,
                             abs_file_path=abs_file_path,
+                            file_path=os.path.join(full, file_name),
                             file_type=file_type,
                         )
                     )
@@ -158,13 +203,14 @@ def discover_modules(
 class GrassTestLoader(unittest.TestLoader):
     """Class handles GRASS-specific loading of test modules."""
 
-    skip_dirs = [".svn", "dist.*", "bin.*", "OBJ.*"]
+    skip_dirs = [".git", ".svn", "dist.*", "bin.*", "OBJ.*"]
     testsuite_dir = "testsuite"
     files_in_testsuite = "*.py"
     all_tests_value = "all"
     universal_tests_value = "universal"
 
     def __init__(self, grass_location):
+        super().__init__()
         self.grass_location = grass_location
 
     # TODO: what is the purpose of top_level_dir, can it be useful?

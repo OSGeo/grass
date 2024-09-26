@@ -54,7 +54,7 @@ def checkImages(images):
 
     for im in images:
         if PIL and isinstance(im, PIL.Image.Image):
-            # We assume PIL images are allright
+            # We assume PIL images are alright
             images2.append(im)
 
         elif np and isinstance(im, np.ndarray):
@@ -97,7 +97,6 @@ def _getFilenameParts(filename):
 
 
 def _getFilenameWithFormatter(filename, N):
-
     # Determine sequence number formatter
     formatter = "%04i"
     if N < 10:
@@ -197,7 +196,7 @@ def readIms(filename, asNumpy=True):
 
     # Check dir exists
     if not os.path.isdir(dirname):
-        raise IOError("Directory not found: " + str(dirname))
+        raise OSError("Directory not found: " + str(dirname))
 
     # Get two parts of the filename
     part1, part2 = _getFilenameParts(filename)

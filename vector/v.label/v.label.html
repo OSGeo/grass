@@ -4,15 +4,14 @@
 with labels created from attributes in the attached table.
 If no label file name is given, the name of the source map is used.
 
-
 <h2>NOTES</h2>
 
 If the <em>fontsize</em> option is given then the <em>space</em> option
-is determined automatically <em>from the current display window</em>, 
+is determined automatically <em>from the current display window</em>,
 otherwise the <em>space</em> option should be set roughly the same
 as the <em>size</em> option.
 <p>
-A description of the labels file follows.<p> 
+A description of the labels file follows.<p>
 The file is located in <tt>$MAPSET/paint/labels/</tt>.
 The file is a plain-text ASCII file containing the following fields:
 
@@ -24,7 +23,7 @@ The label information that must be provided in the <em>labels</em> file is:
 
 <dd><!--Up to four lines of text.-->
 Lines in multiple line labels will appear one above the next.
-More than one line of text can be specified by notating the end of a 
+More than one line of text can be specified by notating the end of a
 line with a '<b><tt>\n</tt></b>'.<br>
 (e.g. <tt>SPEARFISH<b>\n</b>SOUTH DAKOTA)</tt>.
 
@@ -40,12 +39,12 @@ not printed.
 
 <dd>Determines where the text will be located on the
 image.  The user specifies the easting and northing, and
-(optionally) specifies a vertical and horizontal 
-offset from the specified easting/northing. 
+(optionally) specifies a vertical and horizontal
+offset from the specified easting/northing.
 These offsets are provided to allow finer placement of labels and
-are measured in local pixels. Thus in 
-<a href="d.labels.html"><i>d.labels</i></a> the offset is 
-measured in screen pixels, and in <a href="ps.map.html"><i>ps.map</i></a> 
+are measured in local pixels. Thus in
+<a href="d.labels.html"><i>d.labels</i></a> the offset is
+measured in screen pixels, and in <a href="ps.map.html"><i>ps.map</i></a>
 the offset is measured in PostScript points (i.e. 1/72" steps).
 
 
@@ -83,7 +82,7 @@ may be specified as:
 </pre></div>
 <p>Alternatively the path to a FreeType (.ttf) font may be given.
 (for <em>d.labels</em> only)
-<p>The word <em>standard</em> can be used to specify the default font 
+<p>The word <em>standard</em> can be used to specify the default font
 (which is <em>romans</em>).
 <p>Note <a href="ps.map.html"><em>ps.map</em></a> can override this setting
 to use other fonts. Its default font is Helvetica.
@@ -118,12 +117,12 @@ for example: <tt>128:100:200</tt>
 <li>As red, green, blue percentages.
 for example: .5 .4 .7
 <br>
-(This form is not supported by 
+(This form is not supported by
 <em><a href="d.labels.html">d.labels</a></em>.)
 
 <li>By printer color number to get the exact printer color.
 <br>
-(This form is not supported by 
+(This form is not supported by
 <em><a href="d.labels.html">d.labels</a></em>.)
 -->
 
@@ -207,21 +206,15 @@ cd $MAPSET/paint/labels/
 cat file1 file2 file3 file4 > file_all
 </pre></div>
 
-
 <h2>SEE ALSO</h2>
+
 <em>
 <a href="d.labels.html">d.labels</a>,
 <a href="ps.map.html">ps.map</a>
 </em>
-
 
 <h2>AUTHORS</h2>
 
 Philip Verhagen (original s.label)<br>
 Radim Blazek (GRASS 6 port)<br>
 Hamish Bowman (enhancements)
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

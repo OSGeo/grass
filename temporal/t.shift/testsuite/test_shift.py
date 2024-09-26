@@ -7,7 +7,9 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 import os
+
 import grass.pygrass.modules as pymod
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
@@ -51,10 +53,9 @@ class TestShiftAbsoluteSTRDS(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule("t.remove", flags="rf", type="strds", inputs="A")
+        cls.runModule("t.remove", flags="df", type="strds", inputs="A")
 
     def test_1(self):
-
         A = tgis.open_old_stds("A", type="strds")
         A.select()
         self.assertEqual(A.get_map_time(), "point")
@@ -156,10 +157,9 @@ class TestShiftRelativeSTRDS(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule("t.remove", flags="rf", type="strds", inputs="A")
+        cls.runModule("t.remove", flags="df", type="strds", inputs="A")
 
     def test_1(self):
-
         A = tgis.open_old_stds("A", type="strds")
         A.select()
         self.assertEqual(A.get_map_time(), "point")
@@ -210,10 +210,9 @@ class TestShiftAbsoluteSTR3DS(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule("t.remove", flags="rf", type="str3ds", inputs="A")
+        cls.runModule("t.remove", flags="df", type="str3ds", inputs="A")
 
     def test_1(self):
-
         A = tgis.open_old_stds("A", type="str3ds")
         A.select()
         self.assertEqual(A.get_map_time(), "point")
@@ -314,10 +313,9 @@ class TestShiftRelativeSTR3DS(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule("t.remove", flags="rf", type="str3ds", inputs="A")
+        cls.runModule("t.remove", flags="df", type="str3ds", inputs="A")
 
     def test_1(self):
-
         A = tgis.open_old_stds("A", type="str3ds")
         A.select()
         self.assertEqual(A.get_map_time(), "point")
@@ -369,10 +367,9 @@ class TestShiftAbsoluteSTVDS(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule("t.remove", flags="rf", type="stvds", inputs="A")
+        cls.runModule("t.remove", flags="df", type="stvds", inputs="A")
 
     def test_1(self):
-
         A = tgis.open_old_stds("A", type="stvds")
         A.select()
         self.assertEqual(A.get_map_time(), "interval")
@@ -475,10 +472,9 @@ class TestShiftRelativeSTVDS(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule("t.remove", flags="rf", type="stvds", inputs="A")
+        cls.runModule("t.remove", flags="df", type="stvds", inputs="A")
 
     def test_1(self):
-
         A = tgis.open_old_stds("A", type="stvds")
         A.select()
         self.assertEqual(A.get_map_time(), "interval")
@@ -530,7 +526,7 @@ class TestShiftAbsoluteError(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule("t.remove", flags="rf", type="strds", inputs="A")
+        cls.runModule("t.remove", flags="df", type="strds", inputs="A")
 
     def test_1(self):
         pass

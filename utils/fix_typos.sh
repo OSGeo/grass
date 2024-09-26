@@ -57,6 +57,8 @@ EXCLUDED_FILES="*/.svn*,configure,config.status,config.sub,*/autom4te.cache/*"
 EXCLUDED_FILES="$EXCLUDED_FILES,*/lib/cdhc/doc/goodness.ps,*/lib/cdhc/doc/goodness.tex,*/macosx/pkg/resources/ReadMe.rtf"
 EXCLUDED_FILES="$EXCLUDED_FILES,*/lib/gis/FIPS.code,*/lib/gis/projection,*/lib/proj/parms.table,*/lib/proj/units.table,*/lib/proj/desc.table"
 EXCLUDED_FILES="$EXCLUDED_FILES,*/locale/po/*.po"
+EXCLUDED_FILES="$EXCLUDED_FILES,*/doc/notebooks/*.ipynb,*/*/*/*.ipynb"
+EXCLUDED_FILES="$EXCLUDED_FILES,*/doc/*.svg,*/gui/icons/grass/*.svg,*/gui/images/*.svg,*/macosx/app/*.svg,*/man/*.svg,*/raster/*/*.svg"
 EXCLUDED_FILES="$EXCLUDED_FILES,*/fix_typos/*,fix_typos.sh,*.eps,geopackage_aspatial.html"
 EXCLUDED_FILES="$EXCLUDED_FILES,PROVENANCE.TXT,libtool,ltmain.sh,libtool.m4"
 WORDS_WHITE_LIST="poSession,FIDN,TRAFIC,HTINK,repID,oCurr,INTREST,oPosition"
@@ -64,7 +66,7 @@ WORDS_WHITE_LIST="$WORDS_WHITE_LIST,CPL_SUPRESS_CPLUSPLUS,SRP_NAM,ADRG_NAM,'SRP_
 # libtiff
 WORDS_WHITE_LIST="$WORDS_WHITE_LIST,THRESHHOLD_BILEVEL,THRESHHOLD_HALFTONE,THRESHHOLD_ERRORDIFFUSE"
 # GRASS GIS
-WORDS_WHITE_LIST="$WORDS_WHITE_LIST,thru"
+WORDS_WHITE_LIST="$WORDS_WHITE_LIST,thru,parm,parms"
 
 MYPATH=$(pwd)
 
@@ -72,4 +74,3 @@ touch $MYPATH/fix_typos/typos_whitelist.txt
 python3 $MYPATH/fix_typos/codespell/codespell.py -w -i 3 -q 2 -S $EXCLUDED_FILES \
        -x $MYPATH/fix_typos/typos_whitelist.txt --words-white-list=$WORDS_WHITE_LIST \
        -D $MYPATH/fix_typos/grassgis_dict.txt  .
-

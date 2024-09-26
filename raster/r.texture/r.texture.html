@@ -1,8 +1,8 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.texture</em> creates raster maps with textural features from a
-user-specified raster map layer. The module calculates textural features 
-based on spatial dependence matrices at 0, 45, 90, and 135 
+user-specified raster map layer. The module calculates textural features
+based on spatial dependence matrices at 0, 45, 90, and 135
 degrees.
 
 <p>
@@ -29,32 +29,31 @@ recommended that the user recode the data using equal-probability quantization.
 Quantization rules for <em>r.recode</em> can be generated with <em>r.quantile
 -r</em> using e.g 16 or 32 quantiles (see example below).
 
-
 <h2>NOTES</h2>
 
 <p>
 Texture is a feature of specific land cover classes in satellite imagery.
 It is particularly useful in situations where spectral differences between
-classes are small, but classes are distinguishable by their organisation on the 
+classes are small, but classes are distinguishable by their organisation on the
 ground, often opposing natural to human-made spaces: cultivated fields vs meadows
 or golf courses, palm tree plantations vs natural rain forest, but texture can
 also be a natural phenomen: dune fields, different canopies due to different
-tree species. The usefulness and use of texture is highly dependent on the 
-resolution of satellite imagery and on the scale of the human intervention or 
-the phenomenon that created the texture (also see the discussion of scale 
+tree species. The usefulness and use of texture is highly dependent on the
+resolution of satellite imagery and on the scale of the human intervention or
+the phenomenon that created the texture (also see the discussion of scale
 dependency below). The user should observe the phenomenon visually in order to
 determine an adequat setting of the <em>size</em> parameter.
 
 <p>
-The output of <em>r.texture</em> can constitute very useful additional variables 
-as input for image classification or image segmentation (object recognition). 
-It can be used in supervised classification algorithms such as 
+The output of <em>r.texture</em> can constitute very useful additional variables
+as input for image classification or image segmentation (object recognition).
+It can be used in supervised classification algorithms such as
 <a href="i.maxlik.html">i.maxlik</a> or <a href="i.smap.html">i.smap</a>,
 or for the identification of objects in <a href="i.segment.html">i.segment</a>,
-and/or for the characterization of these objects and thus, for example, as one 
-of the raster inputs of the 
-<a href="https://grass.osgeo.org/grass8/manuals/addons/i.segment.stats.html">
-	i.segment.stats</a> addon.
+and/or for the characterization of these objects and thus, for example, as one
+of the raster inputs of the
+<a href="https://grass.osgeo.org/grass-stable/manuals/addons/i.segment.stats.html">i.segment.stats</a>
+addon.
 
 <p>
 In general, several variables constitute texture: differences in grey level values,
@@ -64,37 +63,66 @@ properties) and structure (spatial relationships). Since textures are highly sca
 dependent, hierarchical textures may occur.
 
 <p>
-<em>r.texture</em> uses the common texture model based on the so-called grey 
-level co-occurrence matrix as described by Haralick et al (1973). This matrix 
-is a two-dimensional histogram of grey levels for a pair of pixels which are 
-separated by a fixed spatial relationship. The matrix approximates the joint 
-probability distribution of a pair of pixels. Several texture measures are 
-directly computed from the grey level co-occurrence matrix. 
+<em>r.texture</em> uses the common texture model based on the so-called grey
+level co-occurrence matrix as described by Haralick et al (1973). This matrix
+is a two-dimensional histogram of grey levels for a pair of pixels which are
+separated by a fixed spatial relationship. The matrix approximates the joint
+probability distribution of a pair of pixels. Several texture measures are
+directly computed from the Grey Level Co-occurrence Matrix (GLCM).
+
+The provided measures can be categorized under first-order and
+second-order statistics, with each playing a unique role in texture
+analysis. First-order statistics consider the distribution of
+individual pixel values without regard to spatial relationships, while
+second-order statistics, particularly those derived from the Grey Level
+Co-occurrence Matrix (GLCM), consider the spatial relationship of
+pixels.
 
 <p>
-The following part offers brief explanations of the Haralick et al texture 
+The following part offers brief explanations of the Haralick et al texture
 measures (after Jensen 1996).
 
 <h3>First-order statistics in the spatial domain</h3>
 <ul>
-<li> Sum Average (SA)</li>
+<li> Sum Average (SA):
+ Sum Average measures the average gray level intensity of the sum of
+ pixel pairs within the moving window. It reflects the average intensity
+ of pixel pairs at specific distances and orientations, highlighting the
+ overall brightness level within the area.</li>
 
 <li> Entropy (ENT):
  This measure analyses the randomness. It is high when the values of the
  moving window have similar values. It is low when the values are close
- to either 0 or 1 (i.e. when the pixels in the local window are uniform).</li>
+ to either 0 or 1 (i.e. when the pixels in the local window are
+ uniform).</li>
 
-<li> Difference Entropy (DE)</li>
+<li> Difference Entropy (DE):
+ This metric quantifies the randomness or unpredictability in the
+ distribution of differences between the grey levels of pixel pairs. It
+ is a measure of the entropy of the pixel-pair difference histogram,
+ capturing texture granularity.</li>
 
-<li> Sum Entropy (SE)</li>
+<li> Sum Entropy (SE): Similar to Difference Entropy, Sum Entropy measures
+ the randomness or unpredictability, but in the context of the sum of the
+ grey levels of pixel pairs. It evaluates the entropy of the pixel-pair
+ sum distribution, providing insight into the complexity of texture in
+ terms of intensity variation.</li>
 
 <li> Variance (VAR):
-  A measure of gray tone variance within the moving window (second-order
-moment about the mean)</li>
+ A measure of gray tone variance within the moving window (second-order
+ moment about the mean)</li>
 
-<li> Difference Variance (DV)</li>
+<li> Difference Variance (DV):
+ This is a measure of the variance or spread of the differences in grey
+ levels between pairs of pixels within the moving window. It quantifies
+ the contrast variability between pixels, indicating texture smoothness
+ or roughness.</li>
 
-<li> Sum Variance (SV)</li>
+<li> Sum Variance (SV):
+ In contrast to Difference Variance, Sum Variance measures the variance
+ of the sum of grey levels of pixel pairs. It assesses the variability
+ in the intensity levels of pairs of pixels, contributing to an
+ understanding of texture brightness or intensity variation.</li>
 </ul>
 
 Note that measures "mean", "kurtosis", "range", "skewness", and "standard
@@ -129,25 +157,79 @@ level co-occurrence matrices (GLCM; after Haralick 1979).
  pixels. Typically high, when the scale of local texture is larger than the
  <em>distance</em>.</li>
 
-<li> Information Measures of Correlation (MOC)</li>
+<li> Information Measures of Correlation (MOC):
+ These measures evaluate the complexity of the texture in terms of the
+ mutual dependence between the grey levels of pixel pairs. They
+ quantify how one pixel value informs or correlates with another,
+ offering insight into pattern predictability and structure regularity.</li>
 
-<li> Maximal Correlation Coefficient (MCC)</li>
+<li> Maximal Correlation Coefficient (MCC):
+ This statistic measures the highest correlation between any two
+ features of the texture, providing a single value that summarizes the
+ degree of linear dependency between grey levels in the texture. It's
+ often used to assess the overall correlation in the image, indicating
+ how predictable the texture patterns are from one pixel to the
+ next.</li>
 </ul>
 
 <p>
-The computational region should be set to the input map with 
-<b>g.region raster=&lt;input map&gt;</b>, or aligned to the input map 
-with <b>g.region align=&lt;input map&gt;</b> if only a subregion 
+The computational region should be set to the input map with
+<b>g.region raster=&lt;input map&gt;</b>, or aligned to the input map
+with <b>g.region align=&lt;input map&gt;</b> if only a subregion
 should be analyzed.
 
 <p>
-Note that the output of <em>r.texture</em> will always be smaller than 
-the current region as only cells for which there are no null cells and 
-for which all cells of the moving window are within the current region 
+Note that the output of <em>r.texture</em> will always be smaller than
+the current region as only cells for which there are no null cells and
+for which all cells of the moving window are within the current region
 will contain a value. The output will thus appear cropped at the margins.
 
 <p>
 Importantly, the input raster map cannot have more than 255 categories.
+
+<h3>Performance</h3>
+To enable parallel processing, the user can specify the number of threads
+to be used with the <b>nprocs</b> parameter (default 1).
+Figures below show benchmark results running on
+Intel® Core™ i9-10940X CPU @ 3.30GHz. See benchmark scripts
+in the source code for more details.
+
+<div align="center" style="margin: 10px">
+  <img src="r_texture_mapsize_time.png"
+  alt="time benchmark for r.texture with different map sizes" border="0">
+  <br>
+  <i>Figure 1: Benchmark shows execution time for different
+    number of cells (1M, 2M, 4M, and 8M) and
+    the fixed size of window (3<span>&#215</span>3).
+</div>
+<div align="center" style="margin: 10px">
+  <img src="r_texture_mapsize_efficiency.png"
+  alt="efficiency benchmark for r.texture with different map sizes" border="0">
+  <br>
+  <i>Figure 2: Benchmark shows efficiency for different
+    numbers of cells (1M, 2M, 4M, and 8M) and
+    the fixed size of window (3<span>&#215</span>3).
+</div>
+<div align="center" style="margin: 10px">
+  <img src="r_texture_window_time.png"
+  alt="time benchmark for r.texture with different window sizes" border="0">
+  <br>
+  <i>Figure 3: Benchmark shows execution time for different
+    sizes of windows
+    (3<span>&#215</span>3, 9<span>&#215</span>9,
+    15<span>&#215</span>15, and 27<span>&#215</span>27)
+    and the fixed number of cells (1M).
+</div>
+<div align="center" style="margin: 10px">
+  <img src="r_texture_window_efficiency.png"
+  alt="efficiency benchmark for r.texture with different window sizes"  border="0">
+  <br>
+  <i>Figure 4: Benchmark shows efficiency for different
+    sizes of windows (3<span>&#215</span>3, 9<span>&#215</span>9,
+    15<span>&#215</span>15, and 27<span>&#215</span>27)
+    and the fixed number of cells (1M).
+</div>
+
 
 <h2>EXAMPLE</h2>
 
@@ -160,7 +242,7 @@ r.colors ortho_2001_t792_1m color=grey
 # extract grey levels
 r.mapcalc "ortho_2001_t792_1m.greylevel = ortho_2001_t792_1m"
 # texture analysis
-r.texture ortho_2001_t792_1m.greylevel prefix=ortho_texture method=asm -s 
+r.texture ortho_2001_t792_1m.greylevel output=ortho_texture method=asm -s
 # display
 g.region n=221461 s=221094 w=638279 e=638694
 d.shade color=ortho_texture_ASM_0 shade=ortho_2001_t792_1m
@@ -182,7 +264,7 @@ r.quantile input=ortho_2001_t792_1m quantiles=16 -r | r.recode \
 The recoded raster map can then be used as input for <em>r.texture</em> as before.
 
 <p>
-Second example: analysis of IDM (homogeneity) on a simple raster with 
+Second example: analysis of IDM (homogeneity) on a simple raster with
 North-South line pattern.
 
 <div class="code"><pre>
@@ -215,9 +297,9 @@ r.texture -s lines method=idm output=text_lines
 <p>
 The following image shows the original map, the result in East-West direction
 and the result in North-South direction, showing how texture can depend on
-direction, with texture perfectly homogeneous (value=1) in the North-South 
-direction, but quite heterogeneous in East-West direction, except for those 
-areas where there are three columns of equal values (as size=3). 
+direction, with texture perfectly homogeneous (value=1) in the North-South
+direction, but quite heterogeneous in East-West direction, except for those
+areas where there are three columns of equal values (as size=3).
 The overlaid grid highlights that the texture measures output maps
 are cropped at the margins.
 
@@ -226,11 +308,6 @@ are cropped at the margins.
 	<i>IDM textures according to direction</i>
 </center>
 
-
-<h2>KNOWN ISSUES</h2>
-The program can run incredibly slow for large raster maps and large 
-moving windows (<em>size</em> option).
-
 <h2>REFERENCES</h2>
 
 The algorithm was implemented after Haralick et al., 1973 and 1979.
@@ -238,11 +315,11 @@ The algorithm was implemented after Haralick et al., 1973 and 1979.
 <p>
 The original code was taken by permission from <em>pgmtexture</em>, part of
 PBMPLUS (Copyright 1991, Jef Poskanser and Texas Agricultural Experiment
-Station, employer for hire of James Darrell McCauley). Manual page 
+Station, employer for hire of James Darrell McCauley). Manual page
 of <a href="http://netpbm.sourceforge.net/doc/pgmtexture.html">pgmtexture</a>.
 Over the years, the source code of <em>r.texture</em> was further improved.
 
-<ul> 
+<ul>
 <li>Haralick, R.M., K. Shanmugam, and I. Dinstein (1973). Textural features for
     image classification. <em>IEEE Transactions on Systems, Man, and
     Cybernetics</em>, SMC-3(6):610-621.</li>
@@ -271,13 +348,9 @@ Over the years, the source code of <em>r.texture</em> was further improved.
 </em>
 
 <h2>AUTHORS</h2>
+
 <a href="mailto:antoniol@ieee.org">G. Antoniol</a> - RCOST (Research Centre on Software Technology - Viale Traiano - 82100 Benevento)<br>
 C. Basco -  RCOST (Research Centre on Software Technology - Viale Traiano - 82100 Benevento)<br>
 M. Ceccarelli - Facolta di Scienze, Universita del Sannio, Benevento<br>
 Markus Metz (correction and optimization of the initial version)<br>
 Moritz Lennert (documentation)
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

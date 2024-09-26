@@ -8,8 +8,9 @@ for details.
 @author Soeren Gebbert
 """
 
-import grass.pygrass.modules as pymod
 import subprocess
+
+import grass.pygrass.modules as pymod
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 
@@ -85,7 +86,7 @@ class TestRasterExtraction(TestCase):
 
     def tearDown(self):
         """Remove generated data"""
-        self.runModule("t.remove", flags="rf", type="strds", inputs="precip_abs2")
+        self.runModule("t.remove", flags="df", type="strds", inputs="precip_abs2")
 
     def test_selection(self):
         """Perform a simple selection by datetime"""

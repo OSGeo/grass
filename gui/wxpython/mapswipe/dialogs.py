@@ -55,7 +55,6 @@ class SwipeMapDialog(wx.Dialog):
         firstLayerList=None,
         secondLayerList=None,
     ):
-
         wx.Dialog.__init__(
             self,
             parent=parent,
@@ -245,10 +244,8 @@ class SwipeMapDialog(wx.Dialog):
         else:
             return (self._firstLayerList, self._secondLayerList)
 
-    def IsSimpleMode(self):
-        if self._switchSizer.IsShown(self._firstPanel):
-            return True
-        return False
+    def IsSimpleMode(self) -> bool:
+        return bool(self._switchSizer.IsShown(self._firstPanel))
 
     def GetFirstSimpleLmgr(self):
         return self._firstLmgr

@@ -31,7 +31,7 @@ the directory tree. The report is placed in ``testreport`` by default.
 Open file ``testreport/index.html`` in you web browser to inspect it.
 
 To execute just part of the tests when fixing something, ``cd`` into some
-subdirectory, e.g. ``lib`` and execute the same command as above. 
+subdirectory, e.g. ``lib`` and execute the same command as above.
 gain, it will execute all tests in all ``testsuite`` subdirectories and
 create a report.
 
@@ -52,7 +52,7 @@ Then run the file as a Python script::
 
 If the file is a ``gunittest``-based or ``unittest``-based test,
 you will receive a textual output with failed individual tests (test methods).
-If the file is a general Python scriptyou need to examine the output carefully
+If the file is a general Python script you need to examine the output carefully
 as well as source code itself to see what is expected behavior.
 
 The same as for general Python scripts, applies also to Shell scripts,
@@ -78,9 +78,29 @@ use::
 
     python -m grass.gunittest.main ... --min-success 60
 
-If all tests should succeed, use ``--min-success 100``. If you want
+If all tests should succeed, use ``--min-success 100`` (the default). If you want
 to run the test and ``grass.gunittest.main`` returning zero return code
 even if some tests fail, use ``--min-success 0``
+
+
+Excluding test files from testing
+---------------------------------
+
+Test files which would be otherwise collected and executed can be excluded
+from the testing using the ``exclude`` key in the ``.gunittest.cfg``
+configuration file under the ``.gunittest`` section.
+The value of ``exclude`` is whitespace-separated list of exclude files
+possibly with wildcards (from Python fnmatch).
+Directory separators are converted to ``/`` for the matching.
+Paths are relative to the directory the testing was started from.
+
+For example, to exclude the whole directory ``vector`` and one specific file,
+you would use::
+
+    [gunittest]
+    exclude =
+        vector/*
+        raster/r.contour/testsuite/test_broken.py
 
 
 Running tests and creating report
@@ -107,7 +127,7 @@ Example Bash script to run be used as a cron job
     # here we suppose default compilation settings of GRASS and no make install
     GRASSBIN="$GRASSSRC/bin.../grass"
     GRASSDIST="$GRASSSRC/dist..."
-    
+
     # necessary hardcoded GRASS paths
     GRASSDIST_PYTHON="$GRASSDIST/etc/python"
     GRASS_MULTI_RUNNER="$GRASSSRC/python/grass/gunittest/multirunner.py"

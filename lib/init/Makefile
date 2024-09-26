@@ -25,12 +25,14 @@ FILES = \
 	$(ETC)/echo$(EXE) \
 	$(ETC)/license \
 	$(ETC)/VERSIONNUMBER \
-	$(HTMLDIR)/help_loc_struct.png \
-	$(HTMLDIR)/circle_1.png \
-	$(HTMLDIR)/circle_2.png \
-	$(HTMLDIR)/circle_3.png \
-	$(HTMLDIR)/circle_4.png \
-	$(HTMLDIR)/circle_5.png \
+	$(HTMLDIR)/help_project_structure.png \
+	$(HTMLDIR)/grassdb.png \
+	$(HTMLDIR)/location.png \
+	$(HTMLDIR)/location-add.png \
+	$(HTMLDIR)/location-download.png \
+	$(HTMLDIR)/mapset.png \
+	$(HTMLDIR)/raster-import.png \
+	$(HTMLDIR)/vector-import.png \
 	$(HTMLDIR)/grass_start.png
 
 ifeq ($(findstring darwin,$(ARCH)),darwin)
@@ -68,6 +70,8 @@ endif
 	sed \
 	-e 's#@GISBASE@#$(RUN_GISBASE)#' \
 	-e 's#@GRASS_VERSION_NUMBER@#$(GRASS_VERSION_NUMBER)#' \
+	-e 's#@GRASS_VERSION_MAJOR@#$(GRASS_VERSION_MAJOR)#' \
+	-e 's#@GRASS_VERSION_MINOR@#$(GRASS_VERSION_MINOR)#' \
 	-e 's#@GRASS_VERSION_GIT@#$(GRASS_VERSION_GIT)#' \
 	-e 's#@LD_LIBRARY_PATH_VAR@#$(LD_LIBRARY_PATH_VAR)#' \
 	-e 's#@START_UP@#$(START_UP)#' \
@@ -79,6 +83,8 @@ $(ARCH_DISTDIR)/$(START_UP).tmp: grass.py
 	rm -f $@
 	sed \
 	-e 's#@GRASS_VERSION_NUMBER@#$(GRASS_VERSION_NUMBER)#' \
+	-e 's#@GRASS_VERSION_MAJOR@#$(GRASS_VERSION_MAJOR)#' \
+	-e 's#@GRASS_VERSION_MINOR@#$(GRASS_VERSION_MINOR)#' \
 	-e 's#@GRASS_VERSION_GIT@#$(GRASS_VERSION_GIT)#' \
 	-e 's#@START_UP@#$(START_UP)#' \
 	-e 's#@GRASS_CONFIG_DIR@#$(GRASS_CONFIG_DIR)#' \

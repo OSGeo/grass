@@ -5,8 +5,8 @@ radians. It reads a raster of elevation data and outputs the horizon
 outline in one of two modes:
 
 <ul>
-<li> single point: as a series of horizon 
-heights in the specified directions from the given point. The results are
+<li> point: as a series of horizon
+heights in the specified directions from the given point(s). The results are
 written to the stdout.
 <li> raster: in this case the output is
 one or more raster maps, with each point in a raster giving the horizon
@@ -23,23 +23,27 @@ geographic projection and not the coordinate system given by the rows
 and columns of the raster map. This correction implies that the
 resulting cardinal directions represent true orientation towards the
 East, North, West and South. The only exception of this feature is
-LOCATION with x,y coordinate system, where this correction is
+x,y coordinate system, where this correction is
 not applied.
 
 <p>
 Using the <b>-c</b> flag, the azimuthal angles will be printed in compass
 orientation (North=0, clockwise).
 
+<p>
+Activating the <b>-l</b> flag allows to additionally print the distance
+to each horizon angle.
+
 <h3>Input parameters:</h3>
 <p>The <i>elevation</i> parameter is an input elevation raster map. If
 the buffer options are used (see below), this raster should extend
 over the area that accommodate the presently defined region plus
-defined buffer zones. 
+defined buffer zones.
 
 <p>The <i>step</i> parameter gives the angle step (in degrees)
 between successive azimuthal directions for the calculation of the
 horizon. Thus, a value of 5 for the <i>step</i> will give a total of
-360/5=72 directions (72 raster maps if used in the raster map mode). 
+360/5=72 directions (72 raster maps if used in the raster map mode).
 
 <p>The <i>start</i> parameter gives the angle start (in degrees)
 for the calculation of the horizon. The default value is 0 (East with
@@ -65,7 +69,7 @@ search for horizon along the line of sight. The default value is 1.0
 meaning that the step size will be taken from the raster resolution.
 Setting the value below 1.0 might slightly improve results for
 directions apart from the cardinal ones, but increasing the
-processing load of the search algorithm. 
+processing load of the search algorithm.
 
 <p>The <i>maxdistance</i> value gives a maximum distance to move away
 from the origin along the line of sight in order to search for the
@@ -78,11 +82,12 @@ the higher the risk that you may miss a terrain feature that can
 contribute significantly to the horizon outline. Note that a viewshed
 can be calculated with <em>r.viewshed</em>.
 
-<p>The <i>coordinate</i> parameter takes a pair of easting-northing values
+<p>The <i>coordinate</i> parameter takes one or
+multiple pairs of easting-northing values
 in the current coordinate system and calculates the values of angular
-height of the horizon around this point. To achieve the
+height of the horizon around each point. To achieve the
 consistency of the results, the point coordinate is
-aligned to the midpoint of the closest elevation raster cell. 
+aligned to the midpoint of the closest elevation raster cell.
 
 <p>If an analyzed point (or raster cell) lies close to the edge of
 the defined region, the horizon calculation may not be realistic,
@@ -102,21 +107,23 @@ area specified by the current region definition.
 horizon raster maps. The raster name of each horizon direction
 raster will be constructed as <i>basename_</i>ANGLE, where ANGLE
 is the angle in degrees with the direction. If you use <b>r.horizon</b>
-in the single point mode this option will be ignored. 
+in the point mode this option will be ignored.
 
 <p>The <i>file</i> parameter allows saving the resulting horizon
-angles in a comma separated ASCII file (single point mode only). If
+angles in a comma separated ASCII file with option <b>format=plain</b>
+or in a JSON file with option <b>format=json</b> (point mode only). If
 you use <b>r.horizon</b> in the raster map mode this option will be ignored.
 
-<p>At the moment the elevation and maximum distance must be measured in meters, 
-even if you use geographical coordinates (longitude/latitude). If your 
-projection is based on distance (easting and northing), these too must 
-be in meters. The buffer parameters must be in the same units as the 
-raster coordinates (e.g., for latitude-longitude locations buffers are
-measured in degree unit).
+<p>At the moment the elevation and maximum distance must be measured in meters,
+even if you use geographical coordinates (longitude/latitude). If your
+projection is based on distance (easting and northing), these too must
+be in meters. The buffer parameters must be in the same units as the
+raster coordinates (e.g., for latitude-longitude buffers are
+measured in degrees).
 
+<h2>NOTES</h2>
 
-<h2>METHOD</h2>
+<h3>Method</h3>
 
 The calculation method is based on the method used in <b>r.sun</b>
 to calculate shadows. It starts at a very shallow angle and walks
@@ -126,24 +133,53 @@ allow the line of sight to pass just above the terrain at that point.
 This is continued until the line of sight reaches a height that is
 higher than any point in the region or until it reaches the border of
 the region (see also the <i>bufferzone,e_buff</i>, <i>n_buff</i>,
-<i>s_buff</i>, and <i>w_buff</i>). The the number of lines of sight (azimuth 
+<i>s_buff</i>, and <i>w_buff</i>). The number of lines of sight (azimuth
 directions) is determined from the <i>direction</i> and
 <i>step</i> parameters. The method takes into account the curvature
 of the Earth whereby remote features will seem to be lower than they
 actually are. It also accounts for the changes of angles towards
-cardinal directions caused by the projection (see above). 
+cardinal directions caused by the projection (see above).
 
 <p>
 The output with the <b>-d</b> flag is azimuth degree (-90 to 90, where
-0 is parallel with the focal cell). In case of negative horizon values
-obtained this indicates that the horizon height is below the cell it is
-computed from.
+0 is parallel with the focal cell).
+
+<p> All horizon values are positive (or zero). While negative values are
+in theory possible, <b>r.horizon</b> currently does not support them.
+
+
+<h3>Performance</h3>
+Parallel processing is implemented for the raster mode.
+To enable parallel processing, the user can specify the number of threads
+to be used with the <b>nprocs</b> parameter.
+Figures below show benchmark results running on
+Intel® Core™ i5-13600K CPU @ 3.5GHz.
+See benchmark scripts
+in the source code for more details.
+
+<p>
+The iterations of the algorithm used in <b>r.horizon</b>
+depends on the topography. As a result, the benchmark results may vary
+depending on the topography of the study area.
+
+<div align="center" style="margin: 10px">
+  <img src="rhorizon_raster_time.png"
+  alt="time for r.horizon with different map sizes" border="0">
+  <img src="rhorizon_raster_speedup.png"
+  alt="speedup for r.horizon with different map sizes" border="0">
+  <img src="rhorizon_raster_efficiency.png"
+  alt="efficiency for r.horizon with different map sizes" border="0">
+  <br>
+  <i>Figure: Benchmark shows execution time, parallel speedup and
+    efficiency for different numbers of cells (1M, 2M, 4M, and 8M).</i>
+</div>
+
 
 <h2>EXAMPLES</h2>
 
 The examples are intended for the North Carolina sample dataset.
 
-<h3>Single point mode</h3>
+<h3>Point mode</h3>
 
 <b>Example 1</b>: determine horizon angle in 225 degree direction (output
 of horizon angles CCW from East):
@@ -154,7 +190,7 @@ r.horizon elevation=elevation direction=215 step=0 bufferzone=200 \
     coordinates=638871.6,223384.4 maxdistance=5000
 </pre></div>
 <p>
-<b>Example 2</b>: determine horizon values starting at 90 deg (North), 
+<b>Example 2</b>: determine horizon values starting at 90 deg (North),
 step size of 5 deg, saving result as CSV file:
 
 <div class="code"><pre>
@@ -214,21 +250,21 @@ r.horizon elevation=elevation step=30 start=90 end=300 \
     bufferzone=200 output=horangle maxdistance=5000
 </pre></div>
 
-
 <h2>REFERENCES</h2>
+
 <p>Hofierka J., 1997. Direct solar radiation modelling within an
 open GIS environment. Proceedings of JEC-GI'97 conference in Vienna,
-Austria, IOS Press Amsterdam, 575-584 
+Austria, IOS Press Amsterdam, 575-584
 
-<p>Hofierka J., Huld T., Cebecauer T., Suri M., 2007. Open Source Solar 
+<p>Hofierka J., Huld T., Cebecauer T., Suri M., 2007. Open Source Solar
 Radiation Tools for Environmental and Renewable Energy Applications,
-<a href="http://www.isess.org/papers.asp?year=2007">International Symposium on 
+<a href="http://www.isess.org/papers.asp?year=2007">International Symposium on
 Environmental Software Systems</a>, Prague, 2007
 <p>Neteler M., Mitasova H., 2004. Open Source GIS: A GRASS GIS
 Approach, <a href="http://www.springer.com/geography/gis+cartography/book/978-0-387-35767-6">Springer</a>, New York.
-ISBN: 1-4020-8064-6, 2nd Edition 2004 (reprinted 2005), 424 pages 
+ISBN: 1-4020-8064-6, 2nd Edition 2004 (reprinted 2005), 424 pages
 
-<p>Project <a href="http://re.jrc.ec.europa.eu/pvgis/">PVGIS</a>, European 
+<p>Project <a href="http://re.jrc.ec.europa.eu/pvgis/">PVGIS</a>, European
 Commission, DG Joint Research Centre 2001-2007
 <p>Suri M., Hofierka J., 2004.
 A New GIS-based Solar Radiation Model and Its Application for
@@ -244,25 +280,19 @@ in GIS</a>, 8(2), 175-190
 </em>
 
 <h2>AUTHORS</h2>
-<p>Thomas Huld, Joint Research Centre of
-the European Commission, Ispra, Italy 
+
+Thomas Huld, Joint Research Centre of
+the European Commission, Ispra, Italy
 <br>
 <p>Tomas Cebecauer, Joint Research Centre
-of the European Commission, Ispra, Italy 
+of the European Commission, Ispra, Italy
 <br>
 <p>Jaroslav Hofierka, GeoModel s.r.o.,
 Bratislava, Slovakia <br>Marcel Suri, Joint Research Centre of the
 European Commission, Ispra, Italy
-<p>&copy; 2007, Thomas Huld, Tomas Cebecauer, Jaroslav Hofierka, Marcel Suri 
+<p>&copy; 2007, Thomas Huld, Tomas Cebecauer, Jaroslav Hofierka, Marcel Suri
 
-
-<ADDRESS STYLE="margin-bottom: 0.2in"><a href="mailto:Thomas.Huld@jrc.it">Thomas.Huld@jrc.it</a>
+<a href="mailto:Thomas.Huld@jrc.it">Thomas.Huld@jrc.it</a>
 <a href="mailto:Tomas.Cebecauer@jrc.it">Tomas.Cebecauer@jrc.it</a>
 <a href="mailto:hofi@geomodel.sk">hofierka@geomodel.sk</a>
-<a href="mailto:Marcel.Suri@jrc.it">Marcel.Suri@jrc.it</a> 
-</ADDRESS>
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
---> 
+<a href="mailto:Marcel.Suri@jrc.it">Marcel.Suri@jrc.it</a>

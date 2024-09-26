@@ -6,7 +6,7 @@
 #include "proto.h"
 
 void query_band(GDALRasterBandH hBand, const char *output,
-		struct Cell_head *cellhd, struct band_info *info)
+                struct Cell_head *cellhd, struct band_info *info)
 {
     info->gdal_type = GDALGetRasterDataType(hBand);
 
@@ -16,68 +16,91 @@ void query_band(GDALRasterBandH hBand, const char *output,
 
     switch (info->gdal_type) {
     case GDT_Float32:
-	info->data_type = FCELL_TYPE;
-	cellhd->format = -1;
-	break;
+        info->data_type = FCELL_TYPE;
+        cellhd->format = -1;
+        break;
 
     case GDT_Float64:
-	info->data_type = DCELL_TYPE;
-	cellhd->format = -1;
-	break;
+        info->data_type = DCELL_TYPE;
+        cellhd->format = -1;
+        break;
 
     case GDT_Byte:
-	info->data_type = CELL_TYPE;
-	cellhd->format = 0;
-	break;
+        info->data_type = CELL_TYPE;
+        cellhd->format = 0;
+        break;
+
+/* GDT_Int8 was introduced in GDAL 3.7 */
+#if GDAL_VERSION_NUM >= GDAL_COMPUTE_VERSION(3, 7, 0)
+    case GDT_Int8:
+        info->data_type = CELL_TYPE;
+        cellhd->format = 1;
+        break;
+#endif
 
     case GDT_Int16:
     case GDT_UInt16:
-	info->data_type = CELL_TYPE;
-	cellhd->format = 1;
-	break;
+        info->data_type = CELL_TYPE;
+        cellhd->format = 1;
+        break;
 
     case GDT_Int32:
     case GDT_UInt32:
-	info->data_type = CELL_TYPE;
-	cellhd->format = 3;
-	break;
+        info->data_type = CELL_TYPE;
+        cellhd->format = 3;
+        break;
 
     default:
-	G_fatal_error(_("Complex types not supported"));
-	break;
+        G_fatal_error(_("Complex types not supported"));
+        break;
     }
 
-    if (info->have_minmax)
-	GDALComputeRasterMinMax(hBand, 0, info->minmax);
+    if (info->have_minmax == 1) {
+        GDALComputeRasterMinMax(hBand, 0, info->minmax);
+    }
+    else if (info->have_minmax == 2) {
+        double min, max, mean, stddev;
+
+        G_warning(_("Statistics in metadata are sometimes approximations: min "
+                    "and max can be wrong!"));
+
+        if (GDALGetRasterStatistics(hBand, false, true, &min, &max, &mean,
+                                    &stddev) != CE_None) {
+            G_fatal_error(_("Unable to get raster band statistics"));
+        }
+        info->minmax[0] = min;
+        info->minmax[1] = max;
+    }
 
     Rast_init_colors(&info->colors);
 
     if (GDALGetRasterColorTable(hBand) != NULL) {
-	GDALColorTableH hCT;
-	int count, i;
+        GDALColorTableH hCT;
+        int count, i;
 
-	G_verbose_message(_("Copying color table for %s"), output);
+        G_verbose_message(_("Copying color table for %s"), output);
 
-	hCT = GDALGetRasterColorTable(hBand);
-	count = GDALGetColorEntryCount(hCT);
+        hCT = GDALGetRasterColorTable(hBand);
+        count = GDALGetColorEntryCount(hCT);
 
-	for (i = 0; i < count; i++) {
-	    GDALColorEntry sEntry;
+        for (i = 0; i < count; i++) {
+            GDALColorEntry sEntry;
 
-	    GDALGetColorEntryAsRGB(hCT, i, &sEntry);
-	    if (sEntry.c4 == 0)
-		continue;
+            GDALGetColorEntryAsRGB(hCT, i, &sEntry);
+            if (sEntry.c4 == 0)
+                continue;
 
-	    Rast_set_c_color(i, sEntry.c1, sEntry.c2, sEntry.c3, &info->colors);
-	}
+            Rast_set_c_color(i, sEntry.c1, sEntry.c2, sEntry.c3, &info->colors);
+        }
     }
     else {
-	if (info->gdal_type == GDT_Byte) {
-	    /* set full 0..255 range to grey scale: */
-	    G_verbose_message(_("Setting grey color table for <%s> (full 8bit range)"),
-			      output);
-	    Rast_make_grey_scale_colors(&info->colors, 0, 255);
-	}
+        if (info->gdal_type == GDT_Byte) {
+            /* set full 0..255 range to grey scale: */
+            G_verbose_message(
+                _("Setting grey color table for <%s> (full 8bit range)"),
+                output);
+            Rast_make_grey_scale_colors(&info->colors, 0, 255);
+        }
     }
 }
 
@@ -87,22 +110,22 @@ void make_cell(const char *output, const struct band_info *info)
 
     fp = G_fopen_new("cell", output);
     if (!fp)
-	G_fatal_error(_("Unable to create cell/%s file"), output);
+        G_fatal_error(_("Unable to create cell/%s file"), output);
 
     fclose(fp);
 
     if (info->data_type == CELL_TYPE)
-	return;
+        return;
 
     fp = G_fopen_new("fcell", output);
     if (!fp)
-	G_fatal_error(_("Unable to create fcell/%s file"), output);
+        G_fatal_error(_("Unable to create fcell/%s file"), output);
 
     fclose(fp);
 }
 
 void make_link(const char *input, const char *output, int band,
-	       const struct band_info *info, int flip)
+               const struct band_info *info, int flip)
 {
     struct Key_Value *key_val = G_create_key_value();
     char null_str[256], type_str[8], band_str[8];
@@ -111,13 +134,13 @@ void make_link(const char *input, const char *output, int band,
     sprintf(band_str, "%d", band);
 
     if (info->has_null) {
-	if (info->data_type == CELL_TYPE)
-	    sprintf(null_str, "%d", (int) info->null_val);
-	else
-	    sprintf(null_str, "%.22g", info->null_val);
+        if (info->data_type == CELL_TYPE)
+            sprintf(null_str, "%d", (int)info->null_val);
+        else
+            sprintf(null_str, "%.22g", info->null_val);
     }
     else
-	strcpy(null_str, "none");
+        strcpy(null_str, "none");
 
     sprintf(type_str, "%d", info->gdal_type);
 
@@ -126,16 +149,16 @@ void make_link(const char *input, const char *output, int band,
     G_set_key_value("null", null_str, key_val);
     G_set_key_value("type", type_str, key_val);
     if (flip & FLIP_H)
-	G_set_key_value("hflip", "yes", key_val);
+        G_set_key_value("hflip", "yes", key_val);
     if (flip & FLIP_V)
-	G_set_key_value("vflip", "yes", key_val);
+        G_set_key_value("vflip", "yes", key_val);
 
     fp = G_fopen_new_misc("cell_misc", "gdal", output);
     if (!fp)
-	G_fatal_error(_("Unable to create cell_misc/%s/gdal file"), output);
+        G_fatal_error(_("Unable to create cell_misc/%s/gdal file"), output);
 
     if (G_fwrite_key_value(fp, key_val) < 0)
-	G_fatal_error(_("Error writing cell_misc/%s/gdal file"), output);
+        G_fatal_error(_("Error writing cell_misc/%s/gdal file"), output);
 
     fclose(fp);
 }
@@ -147,23 +170,21 @@ void write_fp_format(const char *output, const struct band_info *info)
     FILE *fp;
 
     if (info->data_type == CELL_TYPE)
-	return;
+        return;
 
     key_val = G_create_key_value();
 
-    type = (info->data_type == FCELL_TYPE)
-	? "float"
-	: "double";
+    type = (info->data_type == FCELL_TYPE) ? "float" : "double";
     G_set_key_value("type", type, key_val);
 
     G_set_key_value("byte_order", "xdr", key_val);
 
     fp = G_fopen_new_misc("cell_misc", "f_format", output);
     if (!fp)
-	G_fatal_error(_("Unable to create cell_misc/%s/f_format file"), output);
+        G_fatal_error(_("Unable to create cell_misc/%s/f_format file"), output);
 
     if (G_fwrite_key_value(fp, key_val) < 0)
-	G_fatal_error(_("Error writing cell_misc/%s/f_format file"), output);
+        G_fatal_error(_("Error writing cell_misc/%s/f_format file"), output);
 
     fclose(fp);
 
@@ -181,8 +202,8 @@ void write_fp_quant(const char *output)
 }
 
 void create_map(const char *input, int band, const char *output,
-		struct Cell_head *cellhd, struct band_info *info,
-		const char *title, int flip)
+                struct Cell_head *cellhd, struct band_info *info,
+                const char *title, int flip)
 {
     struct History history;
     struct Categories cats;
@@ -195,8 +216,8 @@ void create_map(const char *input, int band, const char *output,
     make_link(input, output, band, info, flip);
 
     if (info->data_type != CELL_TYPE) {
-	write_fp_format(output, info);
-	write_fp_quant(output);
+        write_fp_format(output, info);
+        write_fp_quant(output);
     }
 
     G_verbose_message(_("Creating support files for %s"), output);
@@ -211,25 +232,25 @@ void create_map(const char *input, int band, const char *output,
     Rast_write_cats((char *)output, &cats);
 
     if (title)
-	Rast_put_cell_title(output, title);
+        Rast_put_cell_title(output, title);
 
     if (info->have_minmax) {
-	if (info->data_type == CELL_TYPE) {
-	    struct Range range;
+        if (info->data_type == CELL_TYPE) {
+            struct Range range;
 
-	    Rast_init_range(&range);
-	    Rast_update_range((CELL)info->minmax[0], &range);
-	    Rast_update_range((CELL)info->minmax[1], &range);
-	    Rast_write_range(output, &range);
-	}
-	else {
-	    struct FPRange fprange;
+            Rast_init_range(&range);
+            Rast_update_range((CELL)info->minmax[0], &range);
+            Rast_update_range((CELL)info->minmax[1], &range);
+            Rast_write_range(output, &range);
+        }
+        else {
+            struct FPRange fprange;
 
-	    Rast_init_fp_range(&fprange);
-	    Rast_update_fp_range(info->minmax[0], &fprange);
-	    Rast_update_fp_range(info->minmax[1], &fprange);
-	    Rast_write_fp_range(output, &fprange);
-	}
+            Rast_init_fp_range(&fprange);
+            Rast_update_fp_range(info->minmax[0], &fprange);
+            Rast_update_fp_range(info->minmax[1], &fprange);
+            Rast_write_fp_range(output, &fprange);
+        }
     }
 
     G_message(_("Link to raster map <%s> created."), output);

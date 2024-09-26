@@ -1,5 +1,4 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       g.proj
  * AUTHOR(S):    Paul Kelly - paul-grass@stjohnspoint.co.uk
@@ -25,9 +24,9 @@
 #include <grass/config.h>
 
 #ifdef HAVE_OGR
-#  include <gdal.h>
-#  include <ogr_api.h>
-#  include <cpl_csv.h>
+#include <gdal.h>
+#include <ogr_api.h>
+#include <cpl_csv.h>
 #endif
 
 #include "local_proto.h"
@@ -45,10 +44,10 @@ void input_currloc(void)
 {
     G_get_default_window(&cellhd);
     if (cellhd.proj != PROJECTION_XY) {
-	projsrid = G_get_projsrid();
-	projwkt = G_get_projwkt();
-	projinfo = G_get_projinfo();
-	projunits = G_get_projunits();
+        projsrid = G_get_projsrid();
+        projwkt = G_get_projwkt();
+        projinfo = G_get_projinfo();
+        projunits = G_get_projunits();
         /* projepsg = G_get_projepsg(); */
     }
 
@@ -83,7 +82,6 @@ static void set_default_region(void)
     return;
 }
 
-
 #ifdef HAVE_OGR
 static void set_gdal_region(GDALDatasetH);
 static void set_authnamecode(OGRSpatialReferenceH);
@@ -112,63 +110,63 @@ int input_wkt(char *wktfile)
     int ret;
 
     if (strcmp(wktfile, "-") == 0)
-	infd = stdin;
+        infd = stdin;
     else
-	infd = fopen(wktfile, "r");
+        infd = fopen(wktfile, "r");
 
     if (infd) {
-	size_t wktlen;
+        size_t wktlen;
 
-	wktlen = fread(buff, 1, sizeof(buff), infd);
-	if (wktlen == sizeof(buff))
-	    G_fatal_error(_("Input WKT definition is too long"));
-	if (ferror(infd))
-	    G_fatal_error(_("Error reading WKT definition"));
-	else
-	    fclose(infd);
-	/* terminate WKT string */
-	buff[wktlen] = '\0';
-	/* Get rid of newlines */
-	G_squeeze(buff);
+        wktlen = fread(buff, 1, sizeof(buff), infd);
+        if (wktlen == sizeof(buff))
+            G_fatal_error(_("Input WKT definition is too long"));
+        if (ferror(infd))
+            G_fatal_error(_("Error reading WKT definition"));
+        else
+            fclose(infd);
+        /* terminate WKT string */
+        buff[wktlen] = '\0';
+        /* Get rid of newlines */
+        G_squeeze(buff);
     }
     else
-	G_fatal_error(_("Unable to open file '%s' for reading"), wktfile);
+        G_fatal_error(_("Unable to open file '%s' for reading"), wktfile);
 
     projwkt = G_store(buff);
 
 #if PROJ_VERSION_MAJOR >= 6
     /* validate input WKT */
     {
-	PROJ_STRING_LIST wkt_warnings, wkt_grammar_errors;
-	PJ *obj;
+        PROJ_STRING_LIST wkt_warnings, wkt_grammar_errors;
+        PJ *obj;
 
-	wkt_warnings = NULL;
-	wkt_grammar_errors = NULL;
+        wkt_warnings = NULL;
+        wkt_grammar_errors = NULL;
 
-	/* no strict validation */
-	obj = proj_create_from_wkt(NULL, buff, NULL, &wkt_warnings,
-	                           &wkt_grammar_errors);
+        /* no strict validation */
+        obj = proj_create_from_wkt(NULL, buff, NULL, &wkt_warnings,
+                                   &wkt_grammar_errors);
 
-	if (wkt_warnings) {
-	    int i;
+        if (wkt_warnings) {
+            int i;
 
-	    G_warning(_("WKT validation warnings:"));
-	    for (i = 0; wkt_warnings[i]; i++)
-		G_warning("%s", wkt_warnings[i]);
+            G_warning(_("WKT validation warnings:"));
+            for (i = 0; wkt_warnings[i]; i++)
+                G_warning("%s", wkt_warnings[i]);
 
-	    proj_string_list_destroy(wkt_warnings);
-	}
+            proj_string_list_destroy(wkt_warnings);
+        }
 
-	if (wkt_grammar_errors) {
-	    int i;
+        if (wkt_grammar_errors) {
+            int i;
 
-	    G_warning(_("WKT validation grammar errors:"));
-	    for (i = 0; wkt_grammar_errors[i]; i++)
-		G_warning("%s", wkt_grammar_errors[i]);
+            G_warning(_("WKT validation grammar errors:"));
+            for (i = 0; wkt_grammar_errors[i]; i++)
+                G_warning("%s", wkt_grammar_errors[i]);
 
-	    proj_string_list_destroy(wkt_grammar_errors);
-	}
-	proj_destroy(obj);
+            proj_string_list_destroy(wkt_grammar_errors);
+        }
+        proj_destroy(obj);
     }
 #endif
 
@@ -176,7 +174,7 @@ int input_wkt(char *wktfile)
     /* NOTE: GPJ_wkt_to_grass() converts any WKT version to WKT1 */
     ret = GPJ_wkt_to_grass(&cellhd, &projinfo, &projunits, buff, 0);
     if (ret < 2)
-	G_fatal_error(_("WKT not recognized: %s"), buff);
+        G_fatal_error(_("WKT not recognized: %s"), buff);
 
     set_default_region();
 
@@ -228,19 +226,24 @@ int input_proj4(char *proj4params)
     /* TEST: use PROJ proj_create(), convert to WKT,
      *       OSRImportFromWkt  */
     if (strcmp(proj4params, "-") == 0) {
-	infd = stdin;
-	fgets(buff, sizeof(buff), infd);
+        infd = stdin;
+        if (fgets(buff, sizeof(buff), infd) == NULL)
+            G_warning(_("Failed to read PROJ.4 parameter from stdin"));
     }
-    else
-	strcpy(buff, proj4params);
+    else {
+        if (G_strlcpy(buff, proj4params, sizeof(buff)) >= sizeof(buff)) {
+            G_fatal_error(_("PROJ.4 parameter string is too long: %s"),
+                          proj4params);
+        }
+    }
 
 #if PROJ_VERSION_MAJOR >= 6
-	if (!strstr(buff, "+type=crs"))
-	    G_asprintf(&proj4string, "%s +no_defs +type=crs", buff);
-	else
-	    G_asprintf(&proj4string, "%s +no_defs", buff);
+    if (!strstr(buff, "+type=crs"))
+        G_asprintf(&proj4string, "%s +no_defs +type=crs", buff);
+    else
+        G_asprintf(&proj4string, "%s +no_defs", buff);
 #else
-	G_asprintf(&proj4string, "%s +no_defs", buff);
+    G_asprintf(&proj4string, "%s +no_defs", buff);
 #endif
 
     /* Set finder function for locating OGR csv co-ordinate system tables */
@@ -248,7 +251,7 @@ int input_proj4(char *proj4params)
 
     hSRS = OSRNewSpatialReference(NULL);
     if (OSRImportFromProj4(hSRS, proj4string) != OGRERR_NONE)
-	G_fatal_error(_("Can't parse PROJ.4-style parameter string"));
+        G_fatal_error(_("Can't parse PROJ.4-style parameter string"));
 
     G_free(proj4string);
 
@@ -293,12 +296,12 @@ int input_srid(char *srid)
     /* GDAL alternative: OSRSetFromUserInput() */
     obj = proj_create(NULL, srid);
     if (!obj)
-	G_fatal_error(_("SRID <%s> not recognized by PROJ"), srid);
+        G_fatal_error(_("SRID <%s> not recognized by PROJ"), srid);
 
     tmpwkt = proj_as_wkt(NULL, obj, PJ_WKT2_LATEST, NULL);
     hSRS = OSRNewSpatialReference(tmpwkt);
     if (!hSRS)
-	G_fatal_error(_("WKT for SRID <%s> not recognized by GDAL"), srid);
+        G_fatal_error(_("WKT for SRID <%s> not recognized by GDAL"), srid);
 
     projsrid = G_store(srid);
 
@@ -306,8 +309,9 @@ int input_srid(char *srid)
     papszOptions[0] = G_store("MULTILINE=YES");
     papszOptions[1] = G_store("FORMAT=WKT2");
     papszOptions[2] = NULL;
-    if (OSRExportToWktEx(hSRS, &projwkt, (const char **)papszOptions) != OGRERR_NONE)
-	G_warning(_("Unable to convert srid to WKT"));
+    if (OSRExportToWktEx(hSRS, &projwkt, (const char **)papszOptions) !=
+        OGRERR_NONE)
+        G_warning(_("Unable to convert srid to WKT"));
     G_free(papszOptions[0]);
     G_free(papszOptions[1]);
     /* GRASS proj info + units */
@@ -352,7 +356,7 @@ int input_epsg(int epsg_num)
 
     hSRS = OSRNewSpatialReference(NULL);
     if (OSRImportFromEPSG(hSRS, epsg_num) != OGRERR_NONE)
-	G_fatal_error(_("Unable to translate EPSG code"));
+        G_fatal_error(_("Unable to translate EPSG code"));
 
     /* GRASS proj info + units */
     ret = GPJ_osr_to_grass(&cellhd, &projinfo, &projunits, hSRS, 0);
@@ -369,8 +373,9 @@ int input_epsg(int epsg_num)
     papszOptions[0] = G_store("MULTILINE=YES");
     papszOptions[1] = G_store("FORMAT=WKT2");
     papszOptions[2] = NULL;
-    if (OSRExportToWktEx(hSRS, &projwkt, (const char **)papszOptions) != OGRERR_NONE)
-	G_warning(_("Unable to convert EPSG code to WKT"));
+    if (OSRExportToWktEx(hSRS, &projwkt, (const char **)papszOptions) !=
+        OGRERR_NONE)
+        G_warning(_("Unable to convert EPSG code to WKT"));
 
     G_free(papszOptions[0]);
     G_free(papszOptions[1]);
@@ -404,7 +409,7 @@ int input_epsg(int epsg_num)
 
 int input_georef(char *geofile)
 {
-/* GDAL >= 3 */
+    /* GDAL >= 3 */
 #if GDAL_VERSION_MAJOR >= 3
     GDALDatasetH hDS = NULL;
     OGRSpatialReferenceH hSRS = NULL;
@@ -417,79 +422,84 @@ int input_georef(char *geofile)
 
     /* Try opening as vector */
     G_debug(1, "Trying to open <%s> as vector...", geofile);
-    if ((hDS = GDALOpenEx(geofile, GDAL_OF_VECTOR, NULL, NULL, NULL))
-        && GDALDatasetGetLayerCount(hDS) > 0) {
+    if ((hDS = GDALOpenEx(geofile, GDAL_OF_VECTOR, NULL, NULL, NULL)) &&
+        GDALDatasetGetLayerCount(hDS) > 0) {
 
-	OGRLayerH ogr_layer;
+        OGRLayerH ogr_layer;
 
-	ogr_layer = GDALDatasetGetLayer(hDS, 0);
-	hSRS = OGR_L_GetSpatialRef(ogr_layer);
+        ogr_layer = GDALDatasetGetLayer(hDS, 0);
+        hSRS = OGR_L_GetSpatialRef(ogr_layer);
 
-	if (hSRS)
-	    set_default_region();
+        if (hSRS)
+            set_default_region();
     }
     else {
-	/* Try opening as raster */
-	G_debug(1, "Trying to open <%s> as raster...", geofile);
+        /* Try opening as raster */
+        G_debug(1, "Trying to open <%s> as raster...", geofile);
 
-	if ((hDS = GDALOpen(geofile, GA_ReadOnly))) {
-	    char **sds;
+        if ((hDS = GDALOpen(geofile, GA_ReadOnly))) {
+            char **sds;
 
-	    /* does the dataset include subdatasets? */
-	    sds = GDALGetMetadata(hDS, "SUBDATASETS");
-	    if (sds && *sds) {
-		G_warning(_("Input dataset <%s> contains subdatasets. "
-		            "Please select a subdataset."), geofile);
-	    }
-	    else {
-		hSRS = GDALGetSpatialRef(hDS);
+            /* does the dataset include subdatasets? */
+            sds = GDALGetMetadata(hDS, "SUBDATASETS");
+            if (sds && *sds) {
+                G_warning(_("Input dataset <%s> contains subdatasets. "
+                            "Please select a subdataset."),
+                          geofile);
+            }
+            else {
+                hSRS = GDALGetSpatialRef(hDS);
 
-		if (hSRS)
-		    set_gdal_region(hDS);
-	    }
-	}
-	else {
-	    int namelen;
+                if (hSRS)
+                    set_gdal_region(hDS);
+            }
+        }
+        else {
+            int namelen;
 
-	    namelen = strlen(geofile);
-	    if (namelen > 4 && G_strcasecmp(geofile + (namelen - 4), ".prj") == 0) {
-		G_warning(_("<%s> is not a GDAL dataset, trying to open it as ESRI WKT"),
-			  geofile);
+            namelen = strlen(geofile);
+            if (namelen > 4 &&
+                G_strcasecmp(geofile + (namelen - 4), ".prj") == 0) {
+                G_warning(_("<%s> is not a GDAL dataset, trying to open it as "
+                            "ESRI WKT"),
+                          geofile);
 
-		return input_wkt(geofile);
-	    }
-	    else {
-		G_fatal_error(_("Unable to read georeferenced file <%s> using "
-				"GDAL library"), geofile);
-	    }
-	}
+                return input_wkt(geofile);
+            }
+            else {
+                G_fatal_error(_("Unable to read georeferenced file <%s> using "
+                                "GDAL library"),
+                              geofile);
+            }
+        }
     }
     if (hSRS) {
-	char **papszOptions = NULL;
+        char **papszOptions = NULL;
 
-	ret = GPJ_osr_to_grass(&cellhd, &projinfo, &projunits, hSRS, 0);
+        ret = GPJ_osr_to_grass(&cellhd, &projinfo, &projunits, hSRS, 0);
 
-	if (cellhd.proj == PROJECTION_XY)
-	    G_warning(_("Read of file %s was successful, but it did not contain "
-			"projection information. 'XY (unprojected)' will be used"),
-		      geofile);
+        if (cellhd.proj == PROJECTION_XY)
+            G_warning(
+                _("Read of file %s was successful, but it did not contain "
+                  "projection information. 'XY (unprojected)' will be used"),
+                geofile);
 
-	papszOptions = G_calloc(3, sizeof(char *));
-	papszOptions[0] = G_store("MULTILINE=YES");
-	papszOptions[1] = G_store("FORMAT=WKT2");
-	OSRExportToWktEx(hSRS, &projwkt, (const char **)papszOptions);
-	G_free(papszOptions[0]);
-	G_free(papszOptions[1]);
-	G_free(papszOptions);
+        papszOptions = G_calloc(3, sizeof(char *));
+        papszOptions[0] = G_store("MULTILINE=YES");
+        papszOptions[1] = G_store("FORMAT=WKT2");
+        OSRExportToWktEx(hSRS, &projwkt, (const char **)papszOptions);
+        G_free(papszOptions[0]);
+        G_free(papszOptions[1]);
+        G_free(papszOptions);
 
-	set_authnamecode(hSRS);
+        set_authnamecode(hSRS);
     }
     if (hDS)
-	GDALClose(hDS);
+        GDALClose(hDS);
 
     return ret;
 
-/* GDAL < 3 */
+    /* GDAL < 3 */
 #else
     OGRDataSourceH ogr_ds;
     OGRSpatialReferenceH hSRS;
@@ -503,68 +513,69 @@ int input_georef(char *geofile)
     ogr_ds = NULL;
     hSRS = NULL;
     /* Try opening with OGR */
-    if ((ogr_ds = OGROpen(geofile, FALSE, NULL))
-	&& (OGR_DS_GetLayerCount(ogr_ds) > 0)) {
-	OGRLayerH ogr_layer;
+    if ((ogr_ds = OGROpen(geofile, FALSE, NULL)) &&
+        (OGR_DS_GetLayerCount(ogr_ds) > 0)) {
+        OGRLayerH ogr_layer;
 
-	G_debug(1, "...succeeded.");
-	/* Get the first layer */
-	ogr_layer = OGR_DS_GetLayer(ogr_ds, 0);
-	hSRS = OGR_L_GetSpatialRef(ogr_layer);
-	ret = GPJ_osr_to_grass(&cellhd, &projinfo, &projunits, hSRS, 0);
-	OSRExportToWkt(hSRS, &projwkt);
-	set_default_region();
+        G_debug(1, "...succeeded.");
+        /* Get the first layer */
+        ogr_layer = OGR_DS_GetLayer(ogr_ds, 0);
+        hSRS = OGR_L_GetSpatialRef(ogr_layer);
+        ret = GPJ_osr_to_grass(&cellhd, &projinfo, &projunits, hSRS, 0);
+        OSRExportToWkt(hSRS, &projwkt);
+        set_default_region();
     }
     else {
-	/* Try opening with GDAL */
-	GDALDatasetH gdal_ds;
+        /* Try opening with GDAL */
+        GDALDatasetH gdal_ds;
 
-	G_debug(1, "Trying to open with GDAL...");
-	GDALAllRegister();
+        G_debug(1, "Trying to open with GDAL...");
+        GDALAllRegister();
 
-	if ((gdal_ds = GDALOpen(geofile, GA_ReadOnly))) {
-	    char *wktstring;
+        if ((gdal_ds = GDALOpen(geofile, GA_ReadOnly))) {
+            char *wktstring;
 
-	    G_debug(1, "...succeeded.");
-	    /* TODO: change for GDAL 3+ */
-	    wktstring = (char *)GDALGetProjectionRef(gdal_ds);
-	    projwkt = G_store(wktstring);
-	    ret =
-		GPJ_wkt_to_grass(&cellhd, &projinfo, &projunits, projwkt,
-				 0);
+            G_debug(1, "...succeeded.");
+            /* TODO: change for GDAL 3+ */
+            wktstring = (char *)GDALGetProjectionRef(gdal_ds);
+            projwkt = G_store(wktstring);
+            ret = GPJ_wkt_to_grass(&cellhd, &projinfo, &projunits, projwkt, 0);
 
-	    set_gdal_region(gdal_ds);
-	    hSRS = OSRNewSpatialReference(projwkt);
-	    GDALClose(gdal_ds);
-	}
-	else {
-	    int namelen;
+            set_gdal_region(gdal_ds);
+            hSRS = OSRNewSpatialReference(projwkt);
+            GDALClose(gdal_ds);
+        }
+        else {
+            int namelen;
 
-	    namelen = strlen(geofile);
-	    if (namelen > 4 && G_strcasecmp(geofile + (namelen - 4), ".prj") == 0) {
-		G_warning(_("<%s> is not a GDAL dataset, trying to open it as ESRI WKT"),
-			  geofile);
+            namelen = strlen(geofile);
+            if (namelen > 4 &&
+                G_strcasecmp(geofile + (namelen - 4), ".prj") == 0) {
+                G_warning(_("<%s> is not a GDAL dataset, trying to open it as "
+                            "ESRI WKT"),
+                          geofile);
 
-		return input_wkt(geofile);
-	    }
-	    else {
-		G_fatal_error(_("Unable to read georeferenced file <%s> using "
-				"GDAL library"), geofile);
-	    }
-	}
+                return input_wkt(geofile);
+            }
+            else {
+                G_fatal_error(_("Unable to read georeferenced file <%s> using "
+                                "GDAL library"),
+                              geofile);
+            }
+        }
     }
 
     if (cellhd.proj == PROJECTION_XY)
-	G_warning(_("Read of file %s was successful, but it did not contain "
-		    "projection information. 'XY (unprojected)' will be used"),
-		  geofile);
+        G_warning(_("Read of file %s was successful, but it did not contain "
+                    "projection information. 'XY (unprojected)' will be used"),
+                  geofile);
 
     set_authnamecode(hSRS);
 
     if (ogr_ds)
-	OGR_DS_Destroy(ogr_ds);
+        OGR_DS_Destroy(ogr_ds);
     else
-	OSRDestroySpatialReference(hSRS);
+        OSRDestroySpatialReference(hSRS);
 
     return ret;
 #endif
@@ -591,29 +602,29 @@ static void set_gdal_region(GDALDatasetH hDS)
     cellhd.rows3 = cellhd.rows;
     cellhd.cols3 = cellhd.cols;
 
-    if (GDALGetGeoTransform(hDS, adfGeoTransform) == CE_None
-	&& adfGeoTransform[5] < 0.0) {
-	if (adfGeoTransform[2] != 0.0 || adfGeoTransform[4] != 0.0) {
-	    /* Map is rotated. Calculation of north/south extents and
-	     * resolution more complicated.
-	     * TODO: do it anyway */
+    if (GDALGetGeoTransform(hDS, adfGeoTransform) == CE_None &&
+        adfGeoTransform[5] < 0.0) {
+        if (adfGeoTransform[2] != 0.0 || adfGeoTransform[4] != 0.0) {
+            /* Map is rotated. Calculation of north/south extents and
+             * resolution more complicated.
+             * TODO: do it anyway */
 
-	    return;
-	}
+            return;
+        }
 
-	cellhd.north = adfGeoTransform[3];
-	cellhd.ns_res = fabs(adfGeoTransform[5]);
-	cellhd.south = cellhd.north - cellhd.ns_res * cellhd.rows;
-	cellhd.west = adfGeoTransform[0];
-	cellhd.ew_res = adfGeoTransform[1];
-	cellhd.east = cellhd.west + cellhd.cols * cellhd.ew_res;
+        cellhd.north = adfGeoTransform[3];
+        cellhd.ns_res = fabs(adfGeoTransform[5]);
+        cellhd.south = cellhd.north - cellhd.ns_res * cellhd.rows;
+        cellhd.west = adfGeoTransform[0];
+        cellhd.ew_res = adfGeoTransform[1];
+        cellhd.east = cellhd.west + cellhd.cols * cellhd.ew_res;
 
-	cellhd.ns_res3 = cellhd.ns_res;
-	cellhd.ew_res3 = cellhd.ew_res;
+        cellhd.ns_res3 = cellhd.ns_res;
+        cellhd.ew_res3 = cellhd.ew_res;
     }
     else {
-	cellhd.north = cellhd.rows;
-	cellhd.east = cellhd.cols;
+        cellhd.north = cellhd.rows;
+        cellhd.east = cellhd.cols;
     }
 
     return;
@@ -624,27 +635,27 @@ void set_authnamecode(OGRSpatialReferenceH hSRS)
     const char *authkey, *authname, *authcode;
 
     if (!hSRS)
-	return;
+        return;
 
     authkey = NULL;
     if (OSRIsProjected(hSRS))
-	authkey = "PROJCS";
+        authkey = "PROJCS";
     else if (OSRIsGeographic(hSRS))
-	authkey = "GEOGCS";
+        authkey = "GEOGCS";
 
     if (authkey) {
-	authname = OSRGetAuthorityName(hSRS, authkey);
-	if (authname && *authname) {
-	    authcode = OSRGetAuthorityCode(hSRS, authkey);
-	    if (authcode && *authcode) {
-		G_asprintf(&projsrid, "%s:%s", authname, authcode);
-		/* for backwards compatibility; remove ? */
-		if (strcmp(authname, "EPSG") == 0) {
-		    projepsg = G_create_key_value();
-		    G_set_key_value("epsg", authcode, projepsg);
-		}
-	    }
-	}
+        authname = OSRGetAuthorityName(hSRS, authkey);
+        if (authname && *authname) {
+            authcode = OSRGetAuthorityCode(hSRS, authkey);
+            if (authcode && *authcode) {
+                G_asprintf(&projsrid, "%s:%s", authname, authcode);
+                /* for backwards compatibility; remove ? */
+                if (strcmp(authname, "EPSG") == 0) {
+                    projepsg = G_create_key_value();
+                    G_set_key_value("epsg", authcode, projepsg);
+                }
+            }
+        }
     }
 }
 

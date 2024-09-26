@@ -73,7 +73,7 @@ use these routines is to look at the source code for GRASS modules
 which use them.
 
 Note: All routines start with one of following prefixes Vect_, V1_,
-V2_ or dig_. To avoid name conficts, programmers should not create
+V2_ or dig_. To avoid name conflicts, programmers should not create
 variables or routines in their own modules which use this prefix.
 
 The Vect_*() functions are the programmer's API for GRASS vector
@@ -793,11 +793,11 @@ programming. The programmer should use only routines with this prefix.
 \subsection vlibAsciiFn Vector ASCII functions
 
  - Vect_read_ascii()
- 
+
  - Vect_read_ascii_head()
 
  - Vect_write_ascii()
- 
+
  - Vect_write_ascii_head()
 
 \subsection vlibSFAFn Vector Simple Feature Access API

@@ -7,8 +7,9 @@ Classes:
  - mapdisp::DMonMap
  - mapdisp::Layer
  - mapdisp::LayerList
+ - mapdisp::StandaloneMapDisplayGrassInterface
  - mapdisp::DMonGrassInterface
- - mapdisp::DMonFrame
+ - mapdisp::DMonDisplay
  - mapdisp::MapApp
 
 Usage:
@@ -22,15 +23,12 @@ This program is free software under the GNU General Public License
 @author Michael Barton
 @author Jachym Cepicky
 @author Martin Landa <landa.martin gmail.com>
-@author Vaclav Petras <wenzeslaus gmail.com> (MapFrameBase)
-@author Anna Kratochvilova <kratochanna gmail.com> (MapFrameBase)
-"""
-
-from __future__ import print_function
+@author Vaclav Petras <wenzeslaus gmail.com> (MapPanelBase)
+@author Anna Kratochvilova <kratochanna gmail.com> (MapPanelBase)
+"""  # noqa: E501
 
 import os
 import sys
-import six
 import time
 import shutil
 import fileinput
@@ -52,7 +50,8 @@ from core import utils  # noqa: E402
 from core.giface import StandaloneGrassInterface  # noqa: E402
 from core.gcmd import RunCommand  # noqa: E402
 from core.render import Map, MapLayer, RenderMapMgr  # noqa: E402
-from mapdisp.frame import MapFrame  # noqa: E402
+from mapdisp.frame import MapPanel  # noqa: E402
+from gui_core.mapdisp import FrameMixin  # noqa: E402
 from core.debug import Debug  # noqa: E402
 from core.settings import UserSettings  # noqa: E402
 
@@ -79,7 +78,7 @@ class DMonMap(Map):
         self._giface = giface
 
         # environment settings
-        self.env = dict()
+        self.env = {}
 
         self.cmdfile = cmdfile
 
@@ -170,7 +169,7 @@ class DMonMap(Map):
             # next number in rendering order
             next_layer = 0
             mapFile = None
-            render_env = dict()
+            render_env = {}
             for line in lines:
                 if line.startswith("#"):
                     if "GRASS_RENDER_FILE" in line:
@@ -197,7 +196,7 @@ class DMonMap(Map):
 
                 args = {}
 
-                if ltype in ("barscale", "rastleg", "northarrow", "text", "vectleg"):
+                if ltype in {"barscale", "rastleg", "northarrow", "text", "vectleg"}:
                     # TODO: this is still not optimal
                     # it is there to prevent adding the same overlay multiple times
                     if cmd in self.oldOverlays:
@@ -228,7 +227,8 @@ class DMonMap(Map):
                         if layersOrder[i] == -1:
                             layersOrder[i] = next_layer
                             next_layer += 1
-                        # layer must be put higher in render order (same cmd was insered more times)
+                        # layer must be put higher in render order (same cmd was
+                        # insered more times)
                         # TODO delete rendurant cmds from cmd file?
                         else:
                             for j, l_order in enumerate(layersOrder):
@@ -254,7 +254,7 @@ class DMonMap(Map):
                 )
                 if render_env:
                     mapLayer.GetRenderMgr().UpdateRenderEnv(render_env)
-                    render_env = dict()
+                    render_env = {}
 
                 newLayer = self._addLayer(mapLayer)
 
@@ -268,7 +268,6 @@ class DMonMap(Map):
 
             reorderedLayers = [-1] * next_layer
             for i, layer in enumerate(existingLayers):
-
                 # owned layer was not found in cmd file -> is deleted
                 if layersOrder[i] == -1 and layer in self.ownedLayers:
                     self.ownedLayers.remove(layer)
@@ -285,7 +284,7 @@ class DMonMap(Map):
 
             self.SetLayers(reorderedLayers)
 
-        except IOError as e:
+        except OSError as e:
             grass.warning(
                 _("Unable to read cmdfile '%(cmd)s'. Details: %(det)s")
                 % {"cmd": self.cmdfile, "det": e}
@@ -326,7 +325,7 @@ class DMonMap(Map):
         return layer
 
 
-class Layer(object):
+class Layer:
     """@implements core::giface::Layer"""
 
     def __init__(self, maplayer):
@@ -347,7 +346,7 @@ class Layer(object):
             # elif name == 'propwin':
 
 
-class LayerList(object):
+class LayerList:
     """@implements core::giface::LayerList"""
 
     def __init__(self, map, giface):
@@ -371,7 +370,7 @@ class LayerList(object):
         return result
 
     def next(self):
-        return self.__next__()
+        return next(self)
 
     def GetSelectedLayers(self, checkedOnly=True):
         # hidden and selected vs checked and selected
@@ -437,7 +436,7 @@ class LayerList(object):
         return None
 
 
-class DMonGrassInterface(StandaloneGrassInterface):
+class StandaloneMapDisplayGrassInterface(StandaloneGrassInterface):
     """@implements GrassInterface"""
 
     def __init__(self, mapframe):
@@ -456,44 +455,42 @@ class DMonGrassInterface(StandaloneGrassInterface):
     def GetProgress(self):
         return self._mapframe.GetProgressBar()
 
-    def ShowStatusbar(self, show=True):
-        if not self._mapframe.statusbarManager:
-            self._mapframe.CreateStatusbar()
 
-        self._mapframe.statusbarManager.Show(show)
+class DMonGrassInterface(StandaloneMapDisplayGrassInterface):
+    """@implements GrassInterface"""
 
-    def IsStatusbarShown(self):
-        if not self._mapframe.statusbarManager:
-            return False
-
-        return self._mapframe.statusbarManager.IsShown()
-
-    def ShowAllToolbars(self, show=True):
-        if not show:  # hide
-            action = self._mapframe.RemoveToolbar
-        else:
-            action = self._mapframe.AddToolbar
-        toolbars = list(self._mapframe.GetToolbarNames())
-        if not toolbars:
-            toolbars.append("map")
-        for toolbar in toolbars:
-            action(toolbar)
-
-    def AreAllToolbarsShown(self):
-        toolbar = self._mapframe.GetMapToolbar()
-        if toolbar is None:
-            return False
-
-        return toolbar.IsShown()
+    def __init__(self, mapframe):
+        StandaloneMapDisplayGrassInterface.__init__(self, mapframe)
 
 
-class DMonFrame(MapFrame):
-    def OnZoomToMap(self, event):
-        layers = self.MapWindow.GetMap().GetListOfLayers()
-        self.MapWindow.ZoomToMap(layers=layers)
+class DMonDisplay(FrameMixin, MapPanel):
+    """Map display for wrapping map panel with d.mon mathods and frame methods"""
 
-    def OnSize(self, event):
-        super(DMonFrame, self).OnSize(event)
+    def __init__(self, parent, giface, id, Map, title, toolbars, statusbar):
+        # init map panel
+        MapPanel.__init__(
+            self,
+            parent=parent,
+            id=id,
+            title=title,
+            Map=Map,
+            giface=giface,
+            toolbars=toolbars,
+            statusbar=statusbar,
+        )
+        # set system icon
+        parent.SetIcon(
+            wx.Icon(
+                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
+            )
+        )
+
+        # bindings
+        parent.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
+
+        # extend shortcuts and create frame accelerator table
+        self.shortcuts_table.append((self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11))
+        self._initShortcuts()
 
         # update env file
         width, height = self.MapWindow.GetClientSize()
@@ -505,6 +502,16 @@ class DMonFrame(MapFrame):
             else:
                 print(line.rstrip("\n"))
 
+        # add Map Display panel to Map Display frame
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(self, proportion=1, flag=wx.EXPAND)
+        parent.SetSizer(sizer)
+        parent.Layout()
+
+    def OnZoomToMap(self, event):
+        layers = self.MapWindow.GetMap().GetListOfLayers()
+        self.MapWindow.ZoomToMap(layers=layers)
+
 
 class MapApp(wx.App):
     def OnInit(self):
@@ -515,7 +522,7 @@ class MapApp(wx.App):
 
         return True
 
-    def CreateMapFrame(self, name, decorations=True):
+    def CreateMapDisplay(self, name, decorations=True):
         toolbars = []
         if decorations:
             toolbars.append("map")
@@ -534,24 +541,27 @@ class MapApp(wx.App):
         else:
             self.Map = None
 
-        self.mapFrm = DMonFrame(
-            parent=None,
+        mapframe = wx.Frame(
+            None, id=wx.ID_ANY, size=monSize, style=wx.DEFAULT_FRAME_STYLE, title=name
+        )
+
+        self.mapDisplay = DMonDisplay(
+            parent=mapframe,
             id=wx.ID_ANY,
             title=name,
             Map=self.Map,
             giface=self._giface,
-            size=monSize,
             toolbars=toolbars,
             statusbar=decorations,
         )
 
         # FIXME: hack to solve dependency
-        self._giface._mapframe = self.mapFrm
+        self._giface._mapframe = self.mapDisplay
 
-        self.mapFrm.GetMapWindow().SetAlwaysRenderEnabled(False)
+        self.mapDisplay.GetMapWindow().SetAlwaysRenderEnabled(False)
 
         # set default properties
-        self.mapFrm.SetProperties(
+        self.mapDisplay.SetProperties(
             render=UserSettings.Get(
                 group="display", key="autoRendering", subkey="enabled"
             ),
@@ -569,15 +579,15 @@ class MapApp(wx.App):
             ),
         )
 
-        self.Map.saveToFile.connect(lambda cmd: self.mapFrm.DOutFile(cmd))
-        self.Map.dToRast.connect(lambda cmd: self.mapFrm.DToRast(cmd))
+        self.Map.saveToFile.connect(lambda cmd: self.mapDisplay.DOutFile(cmd))
+        self.Map.dToRast.connect(lambda cmd: self.mapDisplay.DToRast(cmd))
         self.Map.query.connect(
-            lambda ltype, maps: self.mapFrm.SetQueryLayersAndActivate(
+            lambda ltype, maps: self.mapDisplay.SetQueryLayersAndActivate(
                 ltype=ltype, maps=maps
             )
         )
 
-        return self.mapFrm
+        return self.mapDisplay
 
     def OnExit(self):
         if __name__ == "__main__":
@@ -585,7 +595,7 @@ class MapApp(wx.App):
             if self.timer.IsRunning:
                 self.timer.Stop()
             # terminate thread
-            for f in six.itervalues(monFile):
+            for f in monFile.values():
                 try_remove(f)
         return True
 
@@ -601,7 +611,7 @@ class MapApp(wx.App):
         # try:
         # GISBASE and other system environmental variables can not be used
         # since the process inherited them from GRASS
-        # raises exception when vaiable does not exists
+        # raises exception when viable does not exists
         # grass.gisenv()['GISDBASE']
         # except KeyError:
         #    self.timer.Stop()
@@ -613,15 +623,15 @@ class MapApp(wx.App):
             if currentCmdFileTime > self.cmdTimeStamp:
                 self.timer.Stop()
                 self.cmdTimeStamp = currentCmdFileTime
-                self.mapFrm.GetMap().GetLayersFromCmdFile()
+                self.mapDisplay.GetMap().GetLayersFromCmdFile()
                 self.timer.Start(mtime)
         except OSError as e:
             grass.warning("%s" % e)
             self.timer.Stop()
 
-    def GetMapFrame(self):
-        """Get Map Frame instance"""
-        return self.mapFrm
+    def GetMapDisplay(self):
+        """Get Map Display instance"""
+        return self.mapDisplay
 
 
 if __name__ == "__main__":
@@ -656,8 +666,8 @@ if __name__ == "__main__":
 
     start = time.time()
     gmMap = MapApp(0)
-    mapFrame = gmMap.CreateMapFrame(monName, monDecor)
-    mapFrame.Show()
+    mapDisplay = gmMap.CreateMapDisplay(monName, monDecor)
+    mapDisplay.Show()
     Debug.msg(1, "WxMonitor started in %.6f sec" % (time.time() - start))
 
     gmMap.MainLoop()

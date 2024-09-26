@@ -45,11 +45,11 @@
 # %end
 
 import os
-import grass.script as gscript
+import grass.script as gs
 
 
 def main():
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
 
     import wx
 
@@ -59,7 +59,8 @@ def main():
 
     from core.settings import UserSettings
     from core.giface import StandaloneGrassInterface
-    from mapswipe.frame import SwipeMapFrame
+    from core import globalvar
+    from mapswipe.frame import SwipeMapDisplay
 
     driver = UserSettings.Get(group="display", key="driver", subkey="type")
     if driver == "png":
@@ -73,16 +74,21 @@ def main():
 
     for mapName in [first, second]:
         if mapName:
-            gfile = gscript.find_file(name=mapName)
+            gfile = gs.find_file(name=mapName)
             if not gfile["name"]:
-                gscript.fatal(_("Raster map <%s> not found") % mapName)
+                gs.fatal(_("Raster map <%s> not found") % mapName)
 
     app = wx.App()
 
-    frame = SwipeMapFrame(
+    # show main frame
+    frame = wx.Frame(
         parent=None,
+        size=globalvar.MAP_WINDOW_SIZE,
+        title=_("Map Swipe Tool - GRASS GIS"),
+    )
+    frame = SwipeMapDisplay(
+        parent=frame,
         giface=StandaloneGrassInterface(),
-        title=_("Temporal Plot Tool - GRASS GIS"),
     )
 
     if first:

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # utilities for generating HTML indices
-# (C) 2003-2021 Markus Neteler and the GRASS Development Team
+# (C) 2003-2024 Markus Neteler and the GRASS Development Team
 # Authors:
 #   Markus Neteler
 #   Glynn Clements
@@ -36,9 +36,11 @@ header1_tmpl = string.Template(
     r"""<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
- <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
  <title>${title} - GRASS GIS Manual</title>
  <meta name="Author" content="GRASS Development Team">
+ <meta http-equiv="content-language" content="en-us">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
 """
 )
 
@@ -122,7 +124,7 @@ overview_tmpl = string.Template(
       </td>
       <td width="33%" valign="top" class="box"><h3>&nbsp;General</h3>
        <ul>
-        <li class="box"><a href="grass${grass_version_major}.html">GRASS GIS startup manual</a></li>
+        <li class="box"><a href="grass.html">GRASS GIS startup manual</a></li>
         <li class="box"><a href="general.html">General commands manual</a></li>
        </ul>
         <h3>&nbsp;Addons</h3>
@@ -191,6 +193,7 @@ overview_tmpl = string.Template(
        <ul>
         <li class="box"><a href="https://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/index.html">GRASS GIS Python library documentation</a></li>
         <li class="box"><a href="https://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/pygrass_index.html">PyGRASS documentation</a></li>
+        <li class="box"><a href="https://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/grass.jupyter.html">GRASS GIS in Jupyter Notebooks</a></li>
        </ul>
       </td>
     </tr>
@@ -433,11 +436,11 @@ def html_files(cls=None, ignore_gui=True):
     for cmd in sorted(os.listdir(html_dir)):
         if (
             cmd.endswith(".html")
-            and (cls in [None, "*"] or cmd.startswith(cls + "."))
+            and (cls in {None, "*"} or cmd.startswith(cls + "."))
             and (cls != "*" or len(cmd.split(".")) >= 3)
-            and cmd not in ["full_index.html", "index.html"]
+            and cmd not in {"full_index.html", "index.html"}
             and cmd not in exclude_mods
-            and (ignore_gui and not cmd.startswith("wxGUI.") or not ignore_gui)
+            and ((ignore_gui and not cmd.startswith("wxGUI.")) or not ignore_gui)
         ):
             yield cmd
 

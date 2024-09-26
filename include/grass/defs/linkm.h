@@ -16,7 +16,6 @@ void link_cleanup(struct link_head *);
 /* new.c */
 VOID_T *link_new(struct link_head *);
 
-
 /* for internal use only */
 /* next.c */
 VOID_T *link__get_next(VOID_T *);

@@ -3,14 +3,14 @@
 
    \brief OGSF library - loading and manipulating surfaces
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    \todo This file needs to be re-written in OpenGL
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -57,13 +57,12 @@ int gsd_get_txtheight(int size)
     height = size / 2;
 
     return (height);
-
 }
 
 /*!
    \brief Get text descender
 
-   yorig ?? 
+   yorig ??
 
    Is this defined somewhere ?
 

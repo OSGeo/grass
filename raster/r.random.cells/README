@@ -1,12 +1,12 @@
 /****************************************************************************
  *
  * MODULE:       r.random.cells
- * AUTHOR(S):    Charles Ehlschlaeger; National Center for Geographic 
+ * AUTHOR(S):    Charles Ehlschlaeger; National Center for Geographic
  *               Information and Analysis, University of California, Santa
  *               Barbara (original contributor)
  *               Markus Neteler <neteler itc.it>
  *               Roberto Flor <flor itc.it>,
- *               Brad Douglas <rez touchofmadness.com>, 
+ *               Brad Douglas <rez touchofmadness.com>,
  *               Glynn Clements <glynn gclements.plus.com>Markus Neteler <neteler itc.it> (original contributor)
  *               Bernhard Reiter <bernhard intevation.de>
  * PURPOSE:      generates a random sets of cells that are at least
@@ -37,7 +37,7 @@ of the chosen cell's buffer of radius \fIdistance\fR.
 
 -distance
 Input value(s) [default 0.0]: distance determines the minimum distance
-the centers of the random cells will be apart. 
+the centers of the random cells will be apart.
 
 -seed
 Input value [default: random]: Specifies the random seed that
@@ -48,6 +48,3 @@ NOTES
 The original purpose for this program was to generate independent random
 samples of cells in a study area.  The distancevalue is the amount
 of spatial autocorrelation for the map being studied.
-
-
-

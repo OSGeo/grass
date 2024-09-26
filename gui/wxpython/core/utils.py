@@ -3,7 +3,7 @@
 
 @brief Misc utilities for wxGUI
 
-(C) 2007-2015 by the GRASS Development Team
+(C) 2007-2024 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -19,14 +19,15 @@ import glob
 import shlex
 import re
 import inspect
-import six
+import operator
 
 from grass.script import core as grass
 from grass.script import task as gtask
+from grass.app.runtime import get_grass_config_dir
 
 from core.gcmd import RunCommand
 from core.debug import Debug
-from core.globalvar import ETCDIR, wxPythonPhoenix
+from core.globalvar import wxPythonPhoenix
 
 
 def cmp(a, b):
@@ -40,7 +41,7 @@ def normalize_whitespace(text):
 
 
 def split(s):
-    """Platform spefic shlex.split"""
+    """Platform specific shlex.split"""
     try:
         if sys.platform == "win32":
             return shlex.split(s.replace("\\", r"\\"))
@@ -76,7 +77,7 @@ def GetTempfile(pref=None):
             return os.path.join(pref, file)
         else:
             return tempfile
-    except:
+    except Exception:
         return None
 
 
@@ -100,7 +101,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None, layerType=None):
     if len(dcmd) < 1:
         return mapname, False
 
-    if "d.grid" == dcmd[0]:
+    if dcmd[0] == "d.grid":
         mapname = "grid"
     elif "d.geodesic" in dcmd[0]:
         mapname = "geodesic"
@@ -109,7 +110,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None, layerType=None):
     elif "d.graph" in dcmd[0]:
         mapname = "graph"
     else:
-        params = list()
+        params = []
         for idx in range(len(dcmd)):
             try:
                 p, v = dcmd[idx].split("=", 1)
@@ -121,7 +122,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None, layerType=None):
                 break
 
             # this does not use types, just some (incomplete subset of?) names
-            if p in (
+            if p in {
                 "map",
                 "input",
                 "layer",
@@ -133,7 +134,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None, layerType=None):
                 "intensity",
                 "shade",
                 "labels",
-            ):
+            }:
                 params.append((idx, p, v))
 
         if len(params) < 1:
@@ -161,9 +162,9 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None, layerType=None):
             mapname = v
             mapset = ""
             if fullyQualified and "@" not in mapname:
-                if layerType in ("raster", "vector", "raster_3d", "rgb", "his"):
+                if layerType in {"raster", "vector", "raster_3d", "rgb", "his"}:
                     try:
-                        if layerType in ("raster", "rgb", "his"):
+                        if layerType in {"raster", "rgb", "his"}:
                             findType = "cell"
                         elif layerType == "raster_3d":
                             findType = "grid3"
@@ -186,7 +187,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None, layerType=None):
             if i in mapsets and mapsets[i]:
                 dcmd[i] += "@" + mapsets[i]
 
-        maps = list()
+        maps = []
         ogr = False
         for i, p, v in params:
             if v.lower().rfind("@ogr") > -1:
@@ -226,8 +227,10 @@ def GetValidLayerName(name):
         cIdx += 1
     retName = "".join(retNameList)
 
-    if not (retName[0] >= "A" and retName[0] <= "Z") and not (
-        retName[0] >= "a" and retName[0] <= "z"
+    if (
+        retName
+        and not (retName[0] >= "A" and retName[0] <= "Z")
+        and not (retName[0] >= "a" and retName[0] <= "z")
     ):
         retName = "x" + retName[1:]
 
@@ -252,7 +255,7 @@ def ListOfCatsToRange(cats):
 
     try:
         cats = list(map(int, cats))
-    except:
+    except ValueError:
         return catstr
 
     i = 0
@@ -277,38 +280,39 @@ def ListOfCatsToRange(cats):
 
 
 def ListOfMapsets(get="ordered"):
-    """Get list of available/accessible mapsets
+    """Get list of available/accessible mapsets.
+    Option 'ordered' returns list of all mapsets, first accessible
+    then not accessible. Raises ValueError for wrong paramater value.
 
     :param str get: method ('all', 'accessible', 'ordered')
 
     :return: list of mapsets
-    :return: None on error
+    :return: [] on error
     """
-    mapsets = []
-
-    if get == "all" or get == "ordered":
+    if get in {"all", "ordered"}:
         ret = RunCommand("g.mapsets", read=True, quiet=True, flags="l", sep="newline")
+        if not ret:
+            return []
+        mapsets_all = ret.splitlines()
+        ListSortLower(mapsets_all)
+        if get == "all":
+            return mapsets_all
 
-        if ret:
-            mapsets = ret.splitlines()
-            ListSortLower(mapsets)
-        else:
-            return None
-
-    if get == "accessible" or get == "ordered":
+    if get in {"accessible", "ordered"}:
         ret = RunCommand("g.mapsets", read=True, quiet=True, flags="p", sep="newline")
-        if ret:
-            if get == "accessible":
-                mapsets = ret.splitlines()
-            else:
-                mapsets_accessible = ret.splitlines()
-                for mapset in mapsets_accessible:
-                    mapsets.remove(mapset)
-                mapsets = mapsets_accessible + mapsets
-        else:
-            return None
+        if not ret:
+            return []
+        mapsets_accessible = ret.splitlines()
+        if get == "accessible":
+            return mapsets_accessible
 
-    return mapsets
+        mapsets_ordered = mapsets_accessible.copy()
+        for mapset in mapsets_all:
+            if mapset not in mapsets_accessible:
+                mapsets_ordered.append(mapset)
+        return mapsets_ordered
+
+    raise ValueError("Invalid value for 'get' parameter of ListOfMapsets()")
 
 
 def ListSortLower(list):
@@ -318,7 +322,7 @@ def ListSortLower(list):
 
 def GetVectorNumberOfLayers(vector):
     """Get list of all vector layers"""
-    layers = list()
+    layers = []
     if not vector:
         return layers
 
@@ -474,11 +478,11 @@ def __ll_parts(value, reverse=False, precision=3):
                 except ValueError:
                     raise ValueError
 
-        if hs not in ("N", "S", "E", "W"):
+        if hs not in {"N", "S", "E", "W"}:
             raise ValueError
 
         coef = 1.0
-        if hs in ("S", "W"):
+        if hs in {"S", "W"}:
             coef = -1.0
 
         fm = int(m) / 60.0
@@ -511,7 +515,7 @@ def ReadEpsgCodes():
 
     :return: dictionary of EPSG code
     """
-    epsgCodeDict = dict()
+    epsgCodeDict = {}
 
     ret = RunCommand("g.proj", read=True, list_codes="EPSG")
 
@@ -549,7 +553,7 @@ def ReprojectCoordinates(coord, projOut, projIn=None, flags=""):
             proj = projOut.split(" ")[0].split("=")[1]
         except IndexError:
             proj = ""
-        if proj in ("ll", "latlong", "longlat") and "d" not in flags:
+        if proj in {"ll", "latlong", "longlat"} and "d" not in flags:
             return (proj, (e, n))
         else:
             try:
@@ -567,19 +571,16 @@ def GetListOfLocations(dbase):
 
     :return: list of locations (sorted)
     """
-    listOfLocations = list()
+    listOfLocations = []
 
-    try:
-        for location in glob.glob(os.path.join(dbase, "*")):
-            try:
-                if os.path.join(location, "PERMANENT") in glob.glob(
-                    os.path.join(location, "*")
-                ):
-                    listOfLocations.append(os.path.basename(location))
-            except:
-                pass
-    except (UnicodeEncodeError, UnicodeDecodeError) as e:
-        raise e
+    for location in glob.glob(os.path.join(dbase, "*")):
+        try:
+            if os.path.join(location, "PERMANENT") in glob.glob(
+                os.path.join(location, "*")
+            ):
+                listOfLocations.append(os.path.basename(location))
+        except OSError:
+            pass
 
     ListSortLower(listOfLocations)
 
@@ -595,11 +596,11 @@ def GetListOfMapsets(dbase, location, selectable=False):
 
     :return: list of mapsets - sorted (PERMANENT first)
     """
-    listOfMapsets = list()
+    listOfMapsets = []
 
     if selectable:
         ret = RunCommand(
-            "g.mapset", read=True, flags="l", location=location, dbase=dbase
+            "g.mapset", read=True, flags="l", project=location, dbase=dbase
         )
 
         if not ret:
@@ -622,7 +623,7 @@ def GetColorTables():
     """Get list of color tables"""
     ret = RunCommand("r.colors", read=True, flags="l")
     if not ret:
-        return list()
+        return []
 
     return ret.splitlines()
 
@@ -631,7 +632,7 @@ def _getGDALFormats():
     """Get dictionary of available GDAL drivers"""
     try:
         ret = grass.read_command("r.in.gdal", quiet=True, flags="f")
-    except:
+    except grass.CalledModuleError:
         ret = None
 
     return _parseFormats(ret), _parseFormats(ret, writableOnly=True)
@@ -641,7 +642,7 @@ def _getOGRFormats():
     """Get dictionary of available OGR drivers"""
     try:
         ret = grass.read_command("v.in.ogr", quiet=True, flags="f")
-    except:
+    except grass.CalledModuleError:
         ret = None
 
     return _parseFormats(ret), _parseFormats(ret, writableOnly=True)
@@ -649,26 +650,27 @@ def _getOGRFormats():
 
 def _parseFormats(output, writableOnly=False):
     """Parse r.in.gdal/v.in.ogr -f output"""
-    formats = {"file": list(), "database": list(), "protocol": list()}
+    formats = {"file": {}, "database": {}, "protocol": {}}
 
     if not output:
         return formats
 
     patt = None
     if writableOnly:
-        patt = re.compile("\(rw\+?\)$", re.IGNORECASE)
+        patt = re.compile(r"\(rw\+?\)$", re.IGNORECASE)
 
     for line in output.splitlines():
-        key, name = map(lambda x: x.strip(), line.strip().split(":", 1))
-
+        key, name = (x.strip() for x in line.strip().split(":", 1))
         if writableOnly and not patt.search(key):
             continue
 
-        if name in ("Memory", "Virtual Raster", "In Memory Raster"):
+        if name in {"Memory", "Virtual Raster", "In Memory Raster"}:
             continue
-        if name in (
+        if name in {
             "PostgreSQL",
+            "PostgreSQL/PostGIS",
             "SQLite",
+            "SQLite / Spatialite",
             "ODBC",
             "ESRI Personal GeoDatabase",
             "Rasterlite",
@@ -677,22 +679,22 @@ def _parseFormats(output, writableOnly=False):
             "CouchDB",
             "MSSQLSpatial",
             "FileGDB",
-        ):
-            formats["database"].append(name)
-        elif name in (
+        }:
+            formats["database"][key.split(" ")[0]] = name
+        elif name in {
             "GeoJSON",
             "OGC Web Coverage Service",
             "OGC Web Map Service",
             "WFS",
             "GeoRSS",
             "HTTP Fetching Wrapper",
-        ):
-            formats["protocol"].append(name)
+        }:
+            formats["protocol"][key.split(" ")[0]] = name
         else:
-            formats["file"].append(name)
+            formats["file"][key.split(" ")[0]] = name
 
-    for items in six.itervalues(formats):
-        items.sort()
+    for k, v in formats.items():
+        formats[k] = dict(sorted(v.items(), key=operator.itemgetter(1)))
 
     return formats
 
@@ -795,19 +797,8 @@ vectorFormatExtension = {
 
 def GetSettingsPath():
     """Get full path to the settings directory"""
-    try:
-        verFd = open(os.path.join(ETCDIR, "VERSIONNUMBER"))
-        version = int(verFd.readlines()[0].split(" ")[0].split(".")[0])
-    except (IOError, ValueError, TypeError, IndexError) as e:
-        sys.exit(_("ERROR: Unable to determine GRASS version. Details: %s") % e)
-
-    verFd.close()
-
-    # keep location of settings files rc and wx in sync with lib/init/grass.py
-    if sys.platform == "win32":
-        return os.path.join(os.getenv("APPDATA"), "GRASS%d" % version)
-
-    return os.path.join(os.getenv("HOME"), ".grass%d" % version)
+    version_major, version_minor, _ = grass.version()["version"].split(".")
+    return get_grass_config_dir(version_major, version_minor, os.environ)
 
 
 def StoreEnvVariable(key, value=None, envFile=None):
@@ -831,21 +822,25 @@ def StoreEnvVariable(key, value=None, envFile=None):
             )
 
     # read env file
-    environ = dict()
-    lineSkipped = list()
+    environ = {}
+    lineSkipped = []
     if os.path.exists(envFile):
         try:
             fd = open(envFile)
-        except IOError as e:
-            sys.stderr.write(_("Unable to open file '%s'\n") % envFile)
+        except OSError as error:
+            sys.stderr.write(
+                _("Unable to open file '{name}': {error}\n").format(
+                    name=envFile, error=error
+                )
+            )
             return
-        for line in fd.readlines():
+        for line in fd:
             line = line.rstrip(os.linesep)
             try:
-                k, v = map(lambda x: x.strip(), line.split(" ", 1)[1].split("=", 1))
+                k, v = (x.strip() for x in line.split(" ", 1)[1].split("=", 1))
             except Exception as e:
                 sys.stderr.write(
-                    _("%s: line skipped - unable to parse '%s'\n" "Reason: %s\n")
+                    _("%s: line skipped - unable to parse '%s'\nReason: %s\n")
                     % (envFile, line, e)
                 )
                 lineSkipped.append(line)
@@ -866,15 +861,19 @@ def StoreEnvVariable(key, value=None, envFile=None):
     # write update env file
     try:
         fd = open(envFile, "w")
-    except IOError as e:
-        sys.stderr.write(_("Unable to create file '%s'\n") % envFile)
+    except OSError as error:
+        sys.stderr.write(
+            _("Unable to create file '{name}': {error}\n").format(
+                name=envFile, error=error
+            )
+        )
         return
     if windows:
         expCmd = "set"
     else:
         expCmd = "export"
 
-    for key, value in six.iteritems(environ):
+    for key, value in environ.items():
         fd.write("%s %s=%s\n" % (expCmd, key, value))
 
     # write also skipped lines
@@ -931,7 +930,7 @@ str2rgb = {
     "yellow": (255, 255, 0),
 }
 rgb2str = {}
-for (s, r) in str2rgb.items():
+for s, r in str2rgb.items():
     rgb2str[r] = s
 # ensure that gray value has 'gray' string and not 'grey'
 rgb2str[str2rgb["gray"]] = "gray"
@@ -987,7 +986,7 @@ command2ltype = {
     "d.legend.vect": "vectleg",
 }
 ltype2command = {}
-for (cmd, ltype) in command2ltype.items():
+for cmd, ltype in command2ltype.items():
     ltype2command[ltype] = cmd
 
 
@@ -1076,7 +1075,7 @@ def autoCropImageFromFile(filename):
         return wx.Image(filename)
 
 
-def isInRegion(regionA, regionB):
+def isInRegion(regionA, regionB) -> bool:
     """Tests if 'regionA' is inside of 'regionB'.
 
     For example, region A is a display region and region B is some reference
@@ -1094,17 +1093,14 @@ def isInRegion(regionA, regionB):
     :param regionB: input region B as dictionary
 
     :return: True if region A is inside of region B
-    :return: False othewise
+    :return: False otherwise
     """
-    if (
+    return bool(
         regionA["s"] >= regionB["s"]
         and regionA["n"] <= regionB["n"]
         and regionA["w"] >= regionB["w"]
         and regionA["e"] <= regionB["e"]
-    ):
-        return True
-
-    return False
+    )
 
 
 def do_doctest_gettext_workaround():
@@ -1130,9 +1126,9 @@ def do_doctest_gettext_workaround():
 
     sys.displayhook = new_displayhook
 
-    import __builtin__
+    import builtins
 
-    __builtin__._ = new_translator
+    builtins.__dict__["_"] = new_translator
 
 
 def doc_test():
@@ -1178,8 +1174,7 @@ def unregisterPid(pid):
 def get_shell_pid(env=None):
     """Get shell PID from the GIS environment or None"""
     try:
-        shell_pid = int(grass.gisenv(env=env)["PID"])
-        return shell_pid
+        return int(grass.gisenv(env=env)["PID"])
     except (KeyError, ValueError) as error:
         Debug.msg(
             1, "No PID for GRASS shell (assuming no shell running): {}".format(error)
@@ -1187,11 +1182,172 @@ def get_shell_pid(env=None):
         return None
 
 
-def is_shell_running():
+def is_shell_running() -> bool:
     """Return True if a separate shell is registered in the GIS environment"""
-    if get_shell_pid() is None:
-        return False
-    return True
+    return get_shell_pid() is not None
+
+
+def parse_mapcalc_cmd(command):
+    """Parse r.mapcalc/r3.mapcalc module command
+
+    >>> parse_mapcalc_cmd(command="r.mapcalc map = 1")
+    "r.mapcalc expression='map = 1'"
+
+    >>> parse_mapcalc_cmd(command="r.mapcalc map =    1")
+    "r.mapcalc expression='map = 1'"
+
+    >>> parse_mapcalc_cmd(command="r.mapcalc map=1")
+    "r.mapcalc expression='map=1'"
+
+    >>> parse_mapcalc_cmd(command="r.mapcalc map = a - b")
+    "r.mapcalc expression='map = a - b'"
+
+    >>> parse_mapcalc_cmd(command="r.mapcalc expression=map = a - b")
+    "r.mapcalc expression='map = a - b'"
+
+    >>> parse_mapcalc_cmd(command="r.mapcalc expression=map = a -     b")
+    "r.mapcalc expression='map = a - b'"
+
+    >>> cmd = "r.mapcalc expr='map = a - b' region=clip --overwrite"
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite expr='map = a - b' region=clip"
+
+    >>> cmd = 'r.mapcalc expr="map = a - b" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite expr='map = a - b' region=clip"
+
+    >>> cmd = "r.mapcalc -s map = (a - b) / c region=clip --overwrite --verbose"
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc -s --overwrite --verbose expression='map = (a - b) / c' region=clip"
+
+    >>> cmd = 'r.mapcalc e="map = 1" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite e='map = 1' region=clip"
+
+    >>> cmd = 'r.mapcalc ex="map = 1" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite ex='map = 1' region=clip"
+
+    >>> cmd = 'r.mapcalc exp="map = 1" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite exp='map = 1' region=clip"
+
+    >>> cmd = 'r.mapcalc expr="map = 1" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite expr='map = 1' region=clip"
+
+    >>> cmd = 'r.mapcalc expre="map = 1" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite expre='map = 1' region=clip"
+
+    >>> cmd = 'r.mapcalc expres="map = 1" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite expres='map = 1' region=clip"
+
+    >>> cmd = 'r.mapcalc express="map = 1" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite express='map = 1' region=clip"
+
+    >>> cmd = 'r.mapcalc expressi="map = 1" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite expressi='map = 1' region=clip"
+
+    >>> cmd = 'r.mapcalc expressio="map = 1" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite expressio='map = 1' region=clip"
+
+    >>> cmd = 'r.mapcalc expression="map = 1" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite expression='map = 1' region=clip"
+
+    >>> cmd = 'r.mapcalc exp="map = a + e" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite exp='map = a + e' region=clip"
+
+    >>> cmd = 'r.mapcalc exp="map = a + exp(5)" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite exp='map = a + exp(5)' region=clip"
+
+    :param str command: r.mapcalc command string
+
+    :return str: parsed r.mapcalc command string
+    """
+    flags = []
+    others_params_args = []
+    expr_param_regex = re.compile(r"e.*?=")
+    flag_regex = re.compile(
+        r"^-[a-z]|^--overwrite|^--quiet|^--verbose|^--help|^--o|^--q|^--v|^--h",
+    )
+
+    command = split(command)
+    module = command.pop(0)
+
+    for arg in command[:]:
+        flag = flag_regex.search(arg)
+        if flag:
+            flags.append(command.pop(command.index(flag.group())))
+        elif "region=" in arg or "file=" in arg or "seed=" in arg:
+            others_params_args.append(command.pop(command.index(arg)))
+
+    cmd = " ".join(command)
+    expr_param = expr_param_regex.search(cmd)
+    if not expr_param:
+        expr_param_name = "expression="
+    else:
+        # Remove expression param
+        command = split(cmd.replace(expr_param.group(), ""))
+        expr_param_name = expr_param.group()
+    # Add quotes
+    if "'" not in cmd or '"' not in cmd:
+        cmd = f"'{' '.join(command)}'"
+    expression_param_arg = f"{expr_param_name}{cmd}"
+
+    return " ".join(
+        [
+            module,
+            *flags,
+            expression_param_arg,
+            *others_params_args,
+        ]
+    )
+
+
+def replace_module_cmd_special_flags(command):
+    """Replace module command special flags short version with
+    full version
+
+    Flags:
+
+    --o -> --overwrite
+    --q -> --quiet
+    --v -> --verbose
+    --h -> --help
+
+    >>> cmd = "r.mapcalc -s --o --v expression='map = 1' region=clip"
+    >>> replace_module_cmd_special_flags(command=cmd)
+    "r.mapcalc -s --overwrite --verbose expression='map = 1' region=clip"
+
+    >>> cmd = "r.mapcalc -s --o --q expression='map = 1' region=clip"
+    >>> replace_module_cmd_special_flags(command=cmd)
+    "r.mapcalc -s --overwrite --quiet expression='map = 1' region=clip"
+
+    :param str command: module command string
+
+    :return str: module command string with replaced flags
+    """
+    flags_regex = re.compile(
+        r"(--o(\s+|$))|(--q(\s+|$))|(--v(\s+|$))|(--h(\s+|$))",
+    )
+    replace = {
+        "--o": "--overwrite ",
+        "--q": "--quiet ",
+        "--v": "--verbose ",
+        "--h": "--help ",
+    }
+    return flags_regex.sub(
+        lambda flag: replace[flag.group().strip()],
+        command,
+    )
 
 
 if __name__ == "__main__":

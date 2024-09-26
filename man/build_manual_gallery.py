@@ -14,6 +14,7 @@
 #############################################################################
 
 import os
+from pathlib import Path
 import sys
 import fnmatch
 import re
@@ -93,14 +94,11 @@ header_graphical_index_tmpl = """\
 """
 
 
-def img_in_html(filename, imagename):
+def img_in_html(filename, imagename) -> bool:
     # for some reason, calling search just once is much faster
     # than calling it on every line (time is spent in _compile)
     pattern = re.compile("<img .*src=.{0}.*>".format(imagename))
-    with open(filename) as file:
-        if re.search(pattern, file.read()):
-            return True
-    return False
+    return bool(re.search(pattern, Path(filename).read_text()))
 
 
 def file_matches(filename, patterns):
@@ -123,8 +121,7 @@ def remove_module_name(string, module):
     string = string.replace(module.replace("wxGUI.", "g.gui."), "")
     string = string.replace(module.replace(".", "_"), "")  # using _
     string = string.replace(module.replace(".", ""), "")  # using nothing
-    string = string.replace(module, "")  # using original dots
-    return string
+    return string.replace(module, "")  # using original dots
 
 
 def title_from_names(module_name, img_name):
@@ -168,7 +165,7 @@ def main():
     with open(os.path.join(html_dir, output_name), "w") as output:
         output.write(
             header1_tmpl.substitute(
-                title="GRASS GIS %s Reference " "Manual: Manual gallery" % grass_version
+                title="GRASS GIS %s Reference Manual: Manual gallery" % grass_version
             )
         )
         output.write(header_graphical_index_tmpl)

@@ -19,8 +19,8 @@ import sys
 
 import wx
 
-import grass.script as grass
-import wx.lib.plot as plot
+import grass.script as gs
+from wx.lib import plot
 from wxplot.base import BasePlotFrame, PlotIcons
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from gui_core.wrap import StockCursor
@@ -29,7 +29,8 @@ from core.gcmd import RunCommand, GException, GError, GMessage
 
 
 class ScatterFrame(BasePlotFrame):
-    """Mainframe for displaying bivariate scatter plot of two raster maps. Uses wx.lib.plot."""
+    """Mainframe for displaying bivariate scatter plot of two raster maps. Uses
+    wx.lib.plot."""
 
     def __init__(
         self,
@@ -132,7 +133,7 @@ class ScatterFrame(BasePlotFrame):
         dlg.Destroy()
 
     def SetupScatterplot(self):
-        """Build data list for ploting each raster"""
+        """Build data list for plotting each raster"""
 
         #
         # initialize title string
@@ -274,13 +275,13 @@ class ScatterFrame(BasePlotFrame):
             rast1, rast2 = rpair
             rast1 = rast1.split("@")[0]
             rast2 = rast2.split("@")[0]
-            ret = grass.parse_command(
+            ret = gs.parse_command(
                 "r.regression.line",
                 mapx=rast1,
                 mapy=rast2,
                 flags="g",
                 quiet=True,
-                parse=(grass.parse_key_val, {"sep": "="}),
+                parse=(gs.parse_key_val, {"sep": "="}),
             )
             eqtitle = _(
                 "Regression equation for raster map <%(rast1)s> vs. <%(rast2)s>:\n\n"
@@ -318,19 +319,63 @@ class ScatterToolbar(BaseToolbar):
         """Toolbar data"""
         return self._getToolbarData(
             (
-                ("addraster", BaseIcons["addRast"], self.parent.OnSelectRaster),
+                (
+                    ("addraster", BaseIcons["addRast"].label),
+                    BaseIcons["addRast"],
+                    self.parent.OnSelectRaster,
+                ),
                 (None,),
-                ("draw", PlotIcons["draw"], self.parent.OnCreateScatter),
-                ("erase", BaseIcons["erase"], self.parent.OnErase),
-                ("drag", BaseIcons["pan"], self.parent.OnDrag),
-                ("zoom", BaseIcons["zoomIn"], self.parent.OnZoom),
-                ("unzoom", BaseIcons["zoomBack"], self.parent.OnRedraw),
+                (
+                    ("draw", PlotIcons["draw"].label),
+                    PlotIcons["draw"],
+                    self.parent.OnCreateScatter,
+                ),
+                (
+                    ("erase", BaseIcons["erase"].label),
+                    BaseIcons["erase"],
+                    self.parent.OnErase,
+                ),
+                (
+                    ("drag", BaseIcons["pan"].label),
+                    BaseIcons["pan"],
+                    self.parent.OnDrag,
+                ),
+                (
+                    ("zoom", BaseIcons["zoomIn"].label),
+                    BaseIcons["zoomIn"],
+                    self.parent.OnZoom,
+                ),
+                (
+                    ("unzoom", BaseIcons["zoomBack"].label),
+                    BaseIcons["zoomBack"],
+                    self.parent.OnRedraw,
+                ),
                 (None,),
-                ("statistics", PlotIcons["statistics"], self.parent.OnRegression),
-                ("image", BaseIcons["saveFile"], self.parent.SaveToFile),
-                ("print", BaseIcons["print"], self.parent.PrintMenu),
+                (
+                    ("statistics", PlotIcons["statistics"].label),
+                    PlotIcons["statistics"],
+                    self.parent.OnRegression,
+                ),
+                (
+                    ("image", BaseIcons["saveFile"].label),
+                    BaseIcons["saveFile"],
+                    self.parent.SaveToFile,
+                ),
+                (
+                    ("print", BaseIcons["print"].label),
+                    BaseIcons["print"],
+                    self.parent.PrintMenu,
+                ),
                 (None,),
-                ("settings", PlotIcons["options"], self.parent.PlotOptionsMenu),
-                ("quit", PlotIcons["quit"], self.parent.OnQuit),
+                (
+                    ("settings", PlotIcons["options"].label),
+                    PlotIcons["options"],
+                    self.parent.PlotOptionsMenu,
+                ),
+                (
+                    ("quit", PlotIcons["quit"].label),
+                    PlotIcons["quit"],
+                    self.parent.OnQuit,
+                ),
             )
         )

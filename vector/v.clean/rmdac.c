@@ -1,19 +1,19 @@
-/* ***************************************************************
- * *
- * * MODULE:       v.clean
- * * 
- * * AUTHOR(S):    Radim Blazek
- * *               
- * * PURPOSE:      Clean lines - remove duplicate centroids
- * *               
- * * COPYRIGHT:    (C) 2001 by the GRASS Development Team
- * *
- * *               This program is free software under the 
- * *               GNU General Public License (>=v2). 
- * *               Read the file COPYING that comes with GRASS
- * *               for details.
- * *
- * **************************************************************/
+/***************************************************************
+ *
+ * MODULE:       v.clean
+ *
+ * AUTHOR(S):    Radim Blazek
+ *
+ * PURPOSE:      Clean lines - remove duplicate centroids
+ *
+ * COPYRIGHT:    (C) 2001 by the GRASS Development Team
+ *
+ *               This program is free software under the
+ *               GNU General Public License (>=v2).
+ *               Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ **************************************************************/
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/vector.h>
@@ -36,25 +36,25 @@ int rmdac(struct Map_info *Out, struct Map_info *Err)
     ndupl = 0;
 
     for (i = 1; i <= nlines; i++) {
-	G_percent(i, nlines, 2);
-	if (!Vect_line_alive(Out, i))
-	    continue;
+        G_percent(i, nlines, 2);
+        if (!Vect_line_alive(Out, i))
+            continue;
 
-	type = Vect_read_line(Out, Points, Cats, i);
-	if (!(type & GV_CENTROID))
-	    continue;
+        type = Vect_read_line(Out, Points, Cats, i);
+        if (!(type & GV_CENTROID))
+            continue;
 
-	area = Vect_get_centroid_area(Out, i);
-	G_debug(3, "  area = %d", area);
+        area = Vect_get_centroid_area(Out, i);
+        G_debug(3, "  area = %d", area);
 
-	if (area < 0) {
-	    Vect_delete_line(Out, i);
-	    ndupl++;
+        if (area < 0) {
+            Vect_delete_line(Out, i);
+            ndupl++;
 
-	    if (Err) {
-		Vect_write_line(Err, type, Points, Cats);
-	    }
-	}
+            if (Err) {
+                Vect_write_line(Err, type, Points, Cats);
+            }
+        }
     }
 
     G_verbose_message(_("Duplicate area centroids: %d"), ndupl);

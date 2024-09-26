@@ -14,12 +14,7 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
-from __future__ import print_function
-
-try:
-    import xml.etree.ElementTree as etree
-except ImportError:
-    import elementtree.ElementTree as etree  # Python <= 2.4
+import xml.etree.ElementTree as ET
 
 from core.workspace import ProcessWorkspaceFile
 from core.gcmd import RunCommand, GException
@@ -38,7 +33,7 @@ class NvizTask:
         self.task = gtask.grassTask("m.nviz.image")
         self.filename = filename
         try:
-            gxwXml = ProcessWorkspaceFile(etree.parse(self.filename))
+            gxwXml = ProcessWorkspaceFile(ET.parse(self.filename))
         except Exception:
             raise GException(
                 _(
@@ -116,11 +111,10 @@ class NvizTask:
                     mapname = surface["attribute"][attr]["value"]
                 else:
                     const = surface["attribute"][attr]["value"]
-            else:
-                if attr == "transp":
-                    const = 0
-                elif attr == "color":
-                    mapname = mapName
+            elif attr == "transp":
+                const = 0
+            elif attr == "color":
+                mapname = mapName
 
             if mapname:
                 self._setMultiTaskParam(params[0], mapname)
@@ -199,21 +193,19 @@ class NvizTask:
                             mapname = isosurface[attr]["value"]
                         else:
                             const = float(isosurface[attr]["value"])
-                    else:
-                        if attr == "transp":
-                            const = 0
-                        elif attr == "color":
-                            mapname = mapName
+                    elif attr == "transp":
+                        const = 0
+                    elif attr == "color":
+                        mapname = mapName
 
                     if mapname:
                         self._setMultiTaskParam(params[0], mapname)
+                    elif attr == "topo":
+                        # TODO: we just assume it's the first volume, what
+                        # to do else?
+                        self._setMultiTaskParam(params[1], "1:" + str(const))
                     else:
-                        if attr == "topo":
-                            # TODO: we just assume it's the first volume, what
-                            # to do else?
-                            self._setMultiTaskParam(params[1], "1:" + str(const))
-                        else:
-                            self._setMultiTaskParam(params[1], const)
+                        self._setMultiTaskParam(params[1], const)
                 if isosurface["inout"]["value"]:
                     self.task.set_flag("n", True)
         # slices
@@ -293,11 +285,8 @@ class NvizTask:
         toJoin = filter(self._ignore, toJoin)
         return delim.join(map(str, toJoin))
 
-    def _ignore(self, value):
-        if value == "" or value is None:
-            return False
-        else:
-            return True
+    def _ignore(self, value) -> bool:
+        return not (value == "" or value is None)
 
     def ListMapParameters(self):
         # params = self.task.get_list_params()
@@ -364,5 +353,4 @@ def test():
 
 
 if __name__ == "__main__":
-
     test()

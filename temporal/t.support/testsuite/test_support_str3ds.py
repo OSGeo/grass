@@ -7,7 +7,9 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 import os
+
 import grass.pygrass.modules as pymod
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
@@ -52,7 +54,7 @@ class TestSupportAbsoluteSTR3DS(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule("t.remove", flags="rf", type="str3ds", inputs="A")
+        cls.runModule("t.remove", flags="df", type="str3ds", inputs="A")
 
     def test_1_metadata(self):
         """Set title, description and aggregation"""

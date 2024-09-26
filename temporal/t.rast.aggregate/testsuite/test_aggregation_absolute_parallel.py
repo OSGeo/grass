@@ -7,14 +7,14 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
 
 import os
+from datetime import datetime
+
 import grass.pygrass.modules as pymod
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
-from datetime import datetime
 
 
 class TestAggregationAbsoluteParallel(TestCase):
@@ -58,11 +58,11 @@ class TestAggregationAbsoluteParallel(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule("t.remove", flags="rf", type="strds", inputs="A")
+        cls.runModule("t.remove", flags="df", type="strds", inputs="A")
 
     def tearDown(self):
         """Remove generated data"""
-        self.runModule("t.remove", flags="rf", type="strds", inputs="B")
+        self.runModule("t.remove", flags="df", type="strds", inputs="B")
 
     def test_aggregation_12hours(self):
         """Aggregation one month"""

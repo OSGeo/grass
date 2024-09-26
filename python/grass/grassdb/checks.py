@@ -9,77 +9,96 @@ for details.
 .. sectionauthor:: Vaclav Petras <wenzeslaus gmail com>
 """
 
+import datetime
+import glob
 import os
 import sys
-import datetime
 from pathlib import Path
-from grass.script import gisenv
-import grass.script as gs
-import glob
 
 import grass.grassdb.config as cfg
+import grass.script as gs
+from grass.script import gisenv
 
 
-def mapset_exists(database, location, mapset):
-    """Returns True whether mapset path exists."""
-    location_path = os.path.join(database, location)
-    mapset_path = os.path.join(location_path, mapset)
-    if os.path.exists(mapset_path):
-        return True
-    return False
+def mapset_exists(path, location=None, mapset=None):
+    """Returns True whether mapset path exists.
+
+    Either only *path* is provided or all three parameters need to be provided.
+
+    :param path: Path to a Mapset or to a GRASS GIS database directory
+    :param location: name of a Location if not part of *path*
+    :param mapset: name of a Mapset if not part of *path*
+    """
+    if location and mapset:
+        path = os.path.join(path, location, mapset)
+    elif location or mapset:
+        raise ValueError(_("Provide only path or all three parameters, not two"))
+    return os.path.exists(path)
 
 
-def location_exists(database, location):
-    """Returns True whether location path exists."""
-    location_path = os.path.join(database, location)
-    if os.path.exists(location_path):
-        return True
-    return False
+def location_exists(path, location=None):
+    """Returns True whether location path exists.
+
+    :param path: Path to a Location or to a GRASS GIS database directory
+    :param location: name of a Location if not part of *path*
+    """
+    if location:
+        path = os.path.join(path, location)
+    return os.path.exists(path)
 
 
 # TODO: distinguish between valid for getting maps and usable as current
 # https://lists.osgeo.org/pipermail/grass-dev/2016-September/082317.html
 # interface created according to the current usage
-def is_mapset_valid(mapset_path):
-    """Return True if GRASS Mapset is valid"""
+def is_mapset_valid(path, location=None, mapset=None):
+    """Return True if GRASS Mapset is valid
+
+    Either only *path* is provided or all three parameters need to be provided.
+
+    :param path: Path to a Mapset or to a GRASS GIS database directory
+    :param location: name of a Location if not part of *path*
+    :param mapset: name of a Mapset if not part of *path*
+    """
     # WIND is created from DEFAULT_WIND by `g.region -d` and functions
     # or modules which create a new mapset. Most modules will fail if
     # WIND doesn't exist (assuming that neither GRASS_REGION nor
     # WIND_OVERRIDE environmental variables are set).
-    return os.access(os.path.join(mapset_path, "WIND"), os.R_OK)
+    if location and mapset:
+        path = os.path.join(path, location, mapset)
+    elif location or mapset:
+        raise ValueError(_("Provide only path or all three parameters, not two"))
+    return os.access(os.path.join(path, "WIND"), os.R_OK)
 
 
-def is_location_valid(database, location):
+def is_location_valid(path, location=None):
     """Return True if GRASS Location is valid
 
-    :param database: Path to GRASS GIS database directory
-    :param location: name of a Location
+    :param path: Path to a Location or to a GRASS GIS database directory
+    :param location: name of a Location if not part of *path*
     """
     # DEFAULT_WIND file should not be required until you do something
     # that actually uses them. The check is just a heuristic; a directory
     # containing a PERMANENT/DEFAULT_WIND file is probably a GRASS
     # location, while a directory lacking it probably isn't.
-    return os.access(
-        os.path.join(database, location, "PERMANENT", "DEFAULT_WIND"), os.F_OK
-    )
+    if location:
+        path = os.path.join(path, location)
+    return os.access(os.path.join(path, "PERMANENT", "DEFAULT_WIND"), os.F_OK)
 
 
-def is_mapset_current(database, location, mapset):
+def is_mapset_current(database, location, mapset) -> bool:
+    """Return True if the given GRASS Mapset is the current mapset"""
     genv = gisenv()
-    if (
+    return bool(
         database == genv["GISDBASE"]
         and location == genv["LOCATION_NAME"]
         and mapset == genv["MAPSET"]
-    ):
-        return True
-    return False
+    )
 
 
-def is_location_current(database, location):
+def is_location_current(database, location) -> bool:
+    """Return True if the given GRASS Location is the current location"""
     genv = gisenv()
-    if database == genv["GISDBASE"] and location == genv["LOCATION_NAME"]:
-        return True
-    return False
+    return bool(database == genv["GISDBASE"] and location == genv["LOCATION_NAME"])
 
 
 def is_current_user_mapset_owner(mapset_path):
@@ -184,15 +203,13 @@ def get_mapset_lock_info(mapset_path):
     return info
 
 
-def can_start_in_mapset(mapset_path, ignore_lock=False):
+def can_start_in_mapset(mapset_path, ignore_lock: bool = False) -> bool:
     """Check if a mapset from a gisrc file is usable for new session"""
-    if not is_mapset_valid(mapset_path):
-        return False
-    if not is_current_user_mapset_owner(mapset_path):
-        return False
-    if not ignore_lock and is_mapset_locked(mapset_path):
-        return False
-    return True
+    return not (
+        (not is_mapset_valid(mapset_path))
+        or (not is_current_user_mapset_owner(mapset_path))
+        or (not ignore_lock and is_mapset_locked(mapset_path))
+    )
 
 
 def get_reason_id_mapset_not_usable(mapset_path):
@@ -310,7 +327,7 @@ def get_location_invalid_reason(database, location, none_for_no_reason=False):
     # directory
     if not os.path.exists(location_path):
         return _("Location <%s> doesn't exist") % location_path
-    # permament mapset
+    # permanent mapset
     if "PERMANENT" not in os.listdir(location_path):
         return (
             _(
@@ -582,9 +599,7 @@ def get_reasons_grassdb_not_removable(grassdb):
     locations = []
     for g_location in g_locations:
         locations.append((grassdb, g_location))
-    messages = get_reasons_locations_not_removable(locations)
-
-    return messages
+    return get_reasons_locations_not_removable(locations)
 
 
 def get_list_of_locations(dbase):
@@ -594,7 +609,7 @@ def get_list_of_locations(dbase):
 
     :return: list of locations (sorted)
     """
-    locations = list()
+    locations = []
     for location in glob.glob(os.path.join(dbase, "*")):
         if os.path.join(location, "PERMANENT") in glob.glob(
             os.path.join(location, "*")

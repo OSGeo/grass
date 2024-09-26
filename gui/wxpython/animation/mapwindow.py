@@ -61,7 +61,7 @@ class BufferedWindow(wx.Window):
     def OnPaint(self, event):
         Debug.msg(5, "BufferedWindow.OnPaint()")
         # All that is needed here is to draw the buffer to screen
-        dc = wx.BufferedPaintDC(self, self._Buffer)
+        wx.BufferedPaintDC(self, self._Buffer)
 
     def OnSize(self, event):
         Debug.msg(5, "BufferedWindow.OnSize()")
@@ -213,7 +213,7 @@ class AnimationWindow(BufferedWindow):
         self.UpdateDrawing()
 
     def ClearOverlay(self):
-        """Clear overlay (legend) """
+        """Clear overlay (legend)"""
         Debug.msg(3, "AnimationWindow.ClearOverlay()")
         self._overlay = None
         self.bitmap_overlay = None

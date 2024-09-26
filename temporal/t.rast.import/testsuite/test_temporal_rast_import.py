@@ -15,19 +15,19 @@ for details.
 @author: lucadelu
 """
 
-from grass.gunittest.case import TestCase
 import os
+
+from grass.gunittest.case import TestCase
 
 
 class TestRasterImport(TestCase):
-
     input_ = os.path.join("data", "precip_2000.tar.bzip2")
 
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule("t.remove", flags="rf", inputs="A")
+        cls.runModule("t.remove", flags="df", inputs="A")
 
     def test_import(self):
         self.assertModule(

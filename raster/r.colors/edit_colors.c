@@ -17,14 +17,13 @@
  *
  ***************************************************************************/
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
 #include "local_proto.h"
 
-
-struct colordesc
-{
+struct colordesc {
     char *name;
     char *desc;
     char *type;
@@ -32,14 +31,14 @@ struct colordesc
 
 int cmp_clrname(const void *a, const void *b)
 {
-    struct colordesc *ca = (struct colordesc *) a;
-    struct colordesc *cb = (struct colordesc *) b;
+    struct colordesc *ca = (struct colordesc *)a;
+    struct colordesc *cb = (struct colordesc *)b;
 
     return (strcmp(ca->name, cb->name));
 }
 
 int edit_colors(int argc, char **argv, int type, const char *maptype,
-		const char* Maptype)
+                const char *Maptype)
 {
     int overwrite;
     int is_from_stdin;
@@ -64,23 +63,24 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
 
     struct {
         struct Flag *r, *w, *l, *d, *g, *a, *n, *e;
-    } flag; 
+    } flag;
 
     struct {
-        struct Option *maps, *colr, *rast, *volume, *rules, *file,
-		      *scale, *offset;
+        struct Option *maps, *colr, *rast, *volume, *rules, *file, *scale,
+            *offset;
     } opt;
-    
+
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    
+
     if (type == RASTER3D_TYPE) {
-	G_add_keyword(_("raster3d"));
-        module->description =
-            _("Creates/modifies the color table associated with a 3D raster map.");
-    } else {
-	G_add_keyword(_("raster"));
+        G_add_keyword(_("raster3d"));
+        module->description = _("Creates/modifies the color table associated "
+                                "with a 3D raster map.");
+    }
+    else {
+        G_add_keyword(_("raster"));
         module->description =
             _("Creates/modifies the color table associated with a raster map.");
     }
@@ -88,7 +88,8 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
 
     if (type == RASTER3D_TYPE) {
         opt.maps = G_define_standard_option(G_OPT_R3_MAPS);
-    } else {
+    }
+    else {
         opt.maps = G_define_standard_option(G_OPT_R_MAPS);
     }
     opt.maps->required = NO;
@@ -97,12 +98,11 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
     opt.file = G_define_standard_option(G_OPT_F_INPUT);
     opt.file->key = "file";
     opt.file->required = NO;
-    opt.file->label =
-        _("Input file with one map name per line");
+    opt.file->label = _("Input file with one map name per line");
     opt.file->description =
         _("Input map names can be defined in an input file in case a large"
-        		" amount of maps must be specified. This option is mutual"
-        		" exclusive to the map option.");
+          " amount of maps must be specified. This option is mutual"
+          " exclusive to the map option.");
     opt.file->required = NO;
     opt.file->guisection = _("Map");
 
@@ -112,15 +112,13 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
     opt.rast = G_define_standard_option(G_OPT_R_INPUT);
     opt.rast->key = "raster";
     opt.rast->required = NO;
-    opt.rast->description =
-        _("Raster map from which to copy color table");
+    opt.rast->description = _("Raster map from which to copy color table");
     opt.rast->guisection = _("Define");
 
     opt.volume = G_define_standard_option(G_OPT_R3_INPUT);
     opt.volume->key = "raster_3d";
     opt.volume->required = NO;
-    opt.volume->description =
-        _("3D raster map from which to copy color table");
+    opt.volume->description = _("3D raster map from which to copy color table");
     opt.volume->guisection = _("Define");
 
     opt.rules = G_define_standard_option(G_OPT_F_INPUT);
@@ -168,7 +166,8 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
     flag.d = G_define_flag();
     flag.d->key = 'd';
     flag.d->label = _("List available rules with description then exit");
-    flag.d->description = _("If a color rule is given, only this rule is listed");
+    flag.d->description =
+        _("If a color rule is given, only this rule is listed");
     flag.d->suppress_required = YES;
     flag.d->guisection = _("Print");
 
@@ -195,7 +194,8 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
     G_option_exclusive(opt.maps, opt.file, flag.l, NULL);
     G_option_required(opt.maps, opt.file, flag.l, flag.d, NULL);
     G_option_exclusive(opt.rast, opt.volume, NULL);
-    G_option_required(opt.rast, opt.volume, opt.colr, opt.rules, flag.r, flag.l, flag.d, NULL);
+    G_option_required(opt.rast, opt.volume, opt.colr, opt.rules, flag.r, flag.l,
+                      flag.d, NULL);
     G_option_exclusive(opt.colr, opt.rules, opt.rast, opt.volume, NULL);
     G_option_exclusive(flag.g, flag.a, NULL);
 
@@ -203,13 +203,13 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
         exit(EXIT_FAILURE);
 
     if (flag.l->answer) {
-	G_list_color_rules(stdout);
+        G_list_color_rules(stdout);
 
         return EXIT_SUCCESS;
     }
 
     if (flag.d->answer) {
-	G_list_color_rules_description_type(stdout, opt.colr->answer);
+        G_list_color_rules_description_type(stdout, opt.colr->answer);
 
         return EXIT_SUCCESS;
     }
@@ -234,129 +234,145 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
 
     /* Read the map names from the infile */
     if (file) {
-	FILE *in;
-	int num_maps = 0;
-	int max_maps = 0;
+        FILE *in;
+        int num_maps = 0;
+        int max_maps = 0;
 
-	in = fopen(file, "r");
-	if (!in)
-		G_fatal_error(_("Unable to open %s file <%s>"), maptype, file);
+        in = fopen(file, "r");
+        if (!in)
+            G_fatal_error(_("Unable to open %s file <%s>"), maptype, file);
 
-	input_maps.names = (char **)G_calloc(100, sizeof(char *));
-	input_maps.mapsets = (char **)G_calloc(100, sizeof(char *));
-	input_maps.map_types = (int*)G_calloc(100, sizeof(int));
-	input_maps.min = (DCELL*)G_calloc(100, sizeof(DCELL));
-	input_maps.max = (DCELL*)G_calloc(100, sizeof(DCELL));
+        input_maps.names = (char **)G_calloc(100, sizeof(char *));
+        input_maps.mapsets = (char **)G_calloc(100, sizeof(char *));
+        input_maps.map_types = (int *)G_calloc(100, sizeof(int));
+        input_maps.min = (DCELL *)G_calloc(100, sizeof(DCELL));
+        input_maps.max = (DCELL *)G_calloc(100, sizeof(DCELL));
 
-	for (;;) {
-	    char buf[GNAME_MAX]; /* Name */
+        for (;;) {
+            char buf[GNAME_MAX]; /* Name */
 
-	    if (!G_getl2(buf, sizeof(buf), in))
-		break;
+            if (!G_getl2(buf, sizeof(buf), in))
+                break;
 
-	    name = G_chop(buf);
+            name = G_chop(buf);
 
-	    /* Ignore empty lines */
-	    if (!*name)
-		continue;
+            /* Ignore empty lines */
+            if (!*name)
+                continue;
 
-	    /* Reallocate memory */
-	    if (num_maps >= max_maps) {
-		max_maps += 100;
-		input_maps.names = (char **)G_realloc(input_maps.names, max_maps * sizeof(char *));
-		input_maps.mapsets = (char **)G_realloc(input_maps.mapsets, max_maps * sizeof(char *));
-		input_maps.map_types = (int*)G_realloc(input_maps.map_types, max_maps * sizeof(int));
-		input_maps.min = (DCELL*)G_realloc(input_maps.min, max_maps * sizeof(DCELL));
-		input_maps.max = (DCELL*)G_realloc(input_maps.max, max_maps * sizeof(DCELL));
-	    }
+            /* Reallocate memory */
+            if (num_maps >= max_maps) {
+                max_maps += 100;
+                input_maps.names = (char **)G_realloc(
+                    input_maps.names, max_maps * sizeof(char *));
+                input_maps.mapsets = (char **)G_realloc(
+                    input_maps.mapsets, max_maps * sizeof(char *));
+                input_maps.map_types = (int *)G_realloc(input_maps.map_types,
+                                                        max_maps * sizeof(int));
+                input_maps.min = (DCELL *)G_realloc(input_maps.min,
+                                                    max_maps * sizeof(DCELL));
+                input_maps.max = (DCELL *)G_realloc(input_maps.max,
+                                                    max_maps * sizeof(DCELL));
+            }
 
-	    /* Store the map name */
-	    input_maps.names[num_maps] = G_store(name);
+            /* Store the map name */
+            input_maps.names[num_maps] = G_store(name);
 
-	    /* Switch between raster and volume */
-	    if (type == RASTER3D_TYPE) {
-		input_maps.mapsets[num_maps] = G_store(G_find_raster3d(input_maps.names[num_maps], ""));
-	    }
-	    else {
-		input_maps.mapsets[num_maps] = G_store(G_find_raster2(input_maps.names[num_maps], ""));
-	    }
-	    if (input_maps.mapsets[num_maps] == NULL)
-		G_fatal_error(_("%s map <%s> not found"), Maptype, input_maps.names[num_maps]);
+            /* Switch between raster and volume */
+            if (type == RASTER3D_TYPE) {
+                input_maps.mapsets[num_maps] =
+                    G_store(G_find_raster3d(input_maps.names[num_maps], ""));
+            }
+            else {
+                input_maps.mapsets[num_maps] =
+                    G_store(G_find_raster2(input_maps.names[num_maps], ""));
+            }
+            if (input_maps.mapsets[num_maps] == NULL)
+                G_fatal_error(_("%s map <%s> not found"), Maptype,
+                              input_maps.names[num_maps]);
 
-	    num_maps++;
-	}
+            num_maps++;
+        }
 
         if (num_maps < 1)
-            G_fatal_error(_("No %s map name found in input file <%s>"), maptype, file);
+            G_fatal_error(_("No %s map name found in input file <%s>"), maptype,
+                          file);
 
-	input_maps.num = num_maps;
+        input_maps.num = num_maps;
 
         fclose(in);
     }
     else if (opt.maps->answer) {
-	input_maps.num = 0;
-	while (opt.maps->answers[input_maps.num]) {
-		input_maps.num++;
-	}
-	input_maps.names = (char **)G_calloc(input_maps.num, sizeof(char *));
-	input_maps.mapsets = (char **)G_calloc(input_maps.num, sizeof(char *));
-	input_maps.map_types = (int*)G_calloc(input_maps.num, sizeof(int));
-	input_maps.min = (DCELL*)G_calloc(input_maps.num, sizeof(DCELL));
-	input_maps.max = (DCELL*)G_calloc(input_maps.num, sizeof(DCELL));
+        input_maps.num = 0;
+        while (opt.maps->answers[input_maps.num]) {
+            input_maps.num++;
+        }
+        input_maps.names = (char **)G_calloc(input_maps.num, sizeof(char *));
+        input_maps.mapsets = (char **)G_calloc(input_maps.num, sizeof(char *));
+        input_maps.map_types = (int *)G_calloc(input_maps.num, sizeof(int));
+        input_maps.min = (DCELL *)G_calloc(input_maps.num, sizeof(DCELL));
+        input_maps.max = (DCELL *)G_calloc(input_maps.num, sizeof(DCELL));
 
-	for (i = 0; i < input_maps.num; i++) {
-		input_maps.names[i] = G_store(opt.maps->answers[i]);
+        for (i = 0; i < input_maps.num; i++) {
+            input_maps.names[i] = G_store(opt.maps->answers[i]);
 
-	    /* Switch between raster and volume */
-	    if (type == RASTER3D_TYPE) {
-		input_maps.mapsets[i] = G_store(G_find_raster3d(input_maps.names[i], ""));
-	    }
-	    else {
-		input_maps.mapsets[i] = G_store(G_find_raster2(input_maps.names[i], ""));
-	    }
-	    if (input_maps.mapsets[i] == NULL)
-		G_fatal_error(_("%s map <%s> not found"), Maptype, input_maps.names[i]);
-	}
+            /* Switch between raster and volume */
+            if (type == RASTER3D_TYPE) {
+                input_maps.mapsets[i] =
+                    G_store(G_find_raster3d(input_maps.names[i], ""));
+            }
+            else {
+                input_maps.mapsets[i] =
+                    G_store(G_find_raster2(input_maps.names[i], ""));
+            }
+            if (input_maps.mapsets[i] == NULL)
+                G_fatal_error(_("%s map <%s> not found"), Maptype,
+                              input_maps.names[i]);
+        }
     }
 
     if (remove) {
-    	for (i = 0; i < input_maps.num; i++) {
-	    name = input_maps.names[i];
-	    mapset = input_maps.mapsets[i];
+        for (i = 0; i < input_maps.num; i++) {
+            name = input_maps.names[i];
+            mapset = input_maps.mapsets[i];
 
-	    if (type == RASTER3D_TYPE) {
-		    stat = Rast3d_remove_color(name);
-	    } else {
-		    stat = Rast_remove_colors(name, mapset);
-	    }
-	    if (stat < 0)
-		    G_fatal_error(_("Unable to remove color table of %s map <%s>"), maptype, name);
-	    if (stat == 0)
-		    G_warning(_("Color table of %s map <%s> not found"), maptype, name);
-    	}
+            if (type == RASTER3D_TYPE) {
+                stat = Rast3d_remove_color(name);
+            }
+            else {
+                stat = Rast_remove_colors(name, mapset);
+            }
+            if (stat < 0)
+                G_fatal_error(_("Unable to remove color table of %s map <%s>"),
+                              maptype, name);
+            if (stat == 0)
+                G_warning(_("Color table of %s map <%s> not found"), maptype,
+                          name);
+        }
         return EXIT_SUCCESS;
     }
 
     G_suppress_warnings(TRUE);
 
     for (i = 0; i < input_maps.num; i++) {
-	name = input_maps.names[i];
-	mapset = input_maps.mapsets[i];
+        name = input_maps.names[i];
+        mapset = input_maps.mapsets[i];
 
-	if (type == RASTER3D_TYPE) {
-	    have_colors = Rast3d_read_colors(name, mapset, &colors);
-	}
-	else {
-	    have_colors = Rast_read_colors(name, mapset, &colors);
-	}
-	/*
-	  if (have_colors >= 0)
-	  Rast_free_colors(&colors);
-	 */
+        if (type == RASTER3D_TYPE) {
+            have_colors = Rast3d_read_colors(name, mapset, &colors);
+        }
+        else {
+            have_colors = Rast_read_colors(name, mapset, &colors);
+        }
+        /*
+           if (have_colors >= 0)
+           Rast_free_colors(&colors);
+         */
 
-	if (have_colors > 0 && !overwrite) {
-	    G_fatal_error(_("Color table exists for %s map <%s>. Exiting."), maptype, name);
-	}
+        if (have_colors > 0 && !overwrite) {
+            G_fatal_error(_("Color table exists for %s map <%s>. Exiting."),
+                          maptype, name);
+        }
     }
 
     G_suppress_warnings(FALSE);
@@ -365,107 +381,121 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
     has_cell_type = 0;
     min = max = 0;
     for (i = 0; i < input_maps.num; i++) {
-	name = input_maps.names[i];
-	mapset = input_maps.mapsets[i];
+        name = input_maps.names[i];
+        mapset = input_maps.mapsets[i];
 
-	if (type == RASTER3D_TYPE) {
-	    input_maps.map_types[i] = 1; /* 3D raster maps are always floating point */
-	    has_fcell_type = 1;
-	    Rast3d_read_range(name, mapset, &range);
-	}
-	else {
-	    input_maps.map_types[i] = Rast_map_is_fp(name, mapset);
-	    if(input_maps.map_types[i] == 1)
-		has_fcell_type = 1;
-	    else
-		has_cell_type = 1;
+        if (type == RASTER3D_TYPE) {
+            input_maps.map_types[i] =
+                1; /* 3D raster maps are always floating point */
+            has_fcell_type = 1;
+            Rast3d_read_range(name, mapset, &range);
+        }
+        else {
+            input_maps.map_types[i] = Rast_map_is_fp(name, mapset);
+            if (input_maps.map_types[i] == 1)
+                has_fcell_type = 1;
+            else
+                has_cell_type = 1;
 
-	    Rast_read_fp_range(name, mapset, &range);
-	}
+            Rast_read_fp_range(name, mapset, &range);
+        }
 
-	if (i > 0) {
-	    if (has_fcell_type && has_cell_type) {
-		G_fatal_error("Input maps must have the same cell type. "
-				"Mixing of integer and floating point maps is not supported.");
-	    }
-	}
+        if (i > 0) {
+            if (has_fcell_type && has_cell_type) {
+                G_fatal_error("Input maps must have the same cell type. "
+                              "Mixing of integer and floating point maps is "
+                              "not supported.");
+            }
+        }
 
-	Rast_get_fp_range_min_max(&range, &input_maps.min[i], &input_maps.max[i]);
+        Rast_get_fp_range_min_max(&range, &input_maps.min[i],
+                                  &input_maps.max[i]);
 
-	/* Compute min, max of all maps*/
-	if (i == 0) {
-	    min = input_maps.min[i];
-	    max = input_maps.max[i];
-	}
-	else {
-	    if(input_maps.min[i] < min)
-		min = input_maps.min[i];
-	    if(input_maps.max[i] > max)
-		max = input_maps.max[i];
-	}
+        /* Compute min, max of all maps */
+        if (i == 0) {
+            min = input_maps.min[i];
+            max = input_maps.max[i];
+        }
+        else {
+            if (input_maps.min[i] < min)
+                min = input_maps.min[i];
+            if (input_maps.max[i] > max)
+                max = input_maps.max[i];
+        }
     }
 
     rule_is_percent = 0;
     do_scale = 0;
     if (is_from_stdin) {
-        if (!read_color_rules(stdin, &colors, min, max, has_fcell_type, &rule_is_percent))
+        if (!read_color_rules(stdin, &colors, min, max, has_fcell_type,
+                              &rule_is_percent))
             exit(EXIT_FAILURE);
-	do_scale = 1;
+        do_scale = 1;
     }
     else if (style) {
-        /* 
-         * here the predefined color-table color-styles are created by GRASS library calls. 
+        /*
+         * here the predefined color-table color-styles are created by GRASS
+         * library calls.
          */
         if (strcmp(style, "random") == 0) {
             if (has_fcell_type)
-                G_fatal_error(_("Color table 'random' is not supported for floating point %s map"), maptype);
-            Rast_make_random_colors(&colors, (CELL) min, (CELL) max);
+                G_fatal_error(_("Color table 'random' is not supported for "
+                                "floating point %s map"),
+                              maptype);
+            Rast_make_random_colors(&colors, (CELL)min, (CELL)max);
         }
-	else if (strcmp(style, "grey.eq") == 0) {
+        else if (strcmp(style, "grey.eq") == 0) {
             if (has_fcell_type)
-                G_fatal_error(_("Color table 'grey.eq' is not supported for floating point %s map"), maptype);
+                G_fatal_error(_("Color table 'grey.eq' is not supported for "
+                                "floating point %s map"),
+                              maptype);
             if (!have_stats)
                 have_stats = get_stats(&input_maps, &statf);
             Rast_make_histogram_eq_colors(&colors, &statf);
         }
-	else if (strcmp(style, "grey.log") == 0) {
+        else if (strcmp(style, "grey.log") == 0) {
             if (has_fcell_type)
-                G_fatal_error(_("Color table 'grey.log' is not supported for floating point %s map"), maptype);
+                G_fatal_error(_("Color table 'grey.log' is not supported for "
+                                "floating point %s map"),
+                              maptype);
             if (!have_stats)
                 have_stats = get_stats(&input_maps, &statf);
-            Rast_make_histogram_log_colors(&colors, &statf, (CELL) min,
-                                           (CELL) max);
+            Rast_make_histogram_log_colors(&colors, &statf, (CELL)min,
+                                           (CELL)max);
         }
-	else if (G_find_color_rule(style)) {
-	    char path[GPATH_MAX];
+        else if (G_find_color_rule(style)) {
+            char path[GPATH_MAX];
 
             Rast_make_fp_colors(&colors, style, min, max);
 
-	    /* check if this style is a percentage style */
-            /* don't bother with native dirsep as not needed for backwards compatibility */
-            G_snprintf(path, GPATH_MAX, "%s/etc/colors/%s", G_gisbase(), style);
-	    rule_is_percent = check_percent_rule(path);
-	    do_scale = 1;
-	}
+            /* check if this style is a percentage style */
+            /* don't bother with native dirsep as not needed for backwards
+             * compatibility */
+            snprintf(path, GPATH_MAX, "%s/etc/colors/%s", G_gisbase(), style);
+            rule_is_percent = check_percent_rule(path);
+            do_scale = 1;
+        }
         else
             G_fatal_error(_("Unknown color request '%s'"), style);
     }
     else if (rules) {
-	do_scale = 1;
-	/* check if these rules are percentage rules */
+        do_scale = 1;
+        /* check if these rules are percentage rules */
         if (Rast_load_fp_colors(&colors, rules, min, max)) {
-	    rule_is_percent = check_percent_rule(rules);
-	}
-	else {
-            /* for backwards compatibility try as std name; remove for GRASS 7 */
+            rule_is_percent = check_percent_rule(rules);
+        }
+        else {
+            /* for backwards compatibility try as std name; remove for GRASS 7
+             */
             char path[GPATH_MAX];
 
-            /* don't bother with native dirsep as not needed for backwards compatibility */
-            G_snprintf(path, GPATH_MAX, "%s/etc/colors/%s", G_gisbase(), rules);
+            /* don't bother with native dirsep as not needed for backwards
+             * compatibility */
+            snprintf(path, GPATH_MAX, "%s/etc/colors/%s", G_gisbase(), rules);
 
             if (!Rast_load_fp_colors(&colors, path, min, max))
                 G_fatal_error(_("Unable to load rules file <%s>"), rules);
-	    rule_is_percent = check_percent_rule(path);
+            rule_is_percent = check_percent_rule(path);
         }
     }
     else {
@@ -476,15 +506,18 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
                 G_fatal_error(_("Raster map <%s> not found"), cmap);
 
             if (Rast_read_colors(cmap, cmapset, &colors) < 0)
-                G_fatal_error(_("Unable to read color table for raster map <%s>"), cmap);
+                G_fatal_error(
+                    _("Unable to read color table for raster map <%s>"), cmap);
         }
-	else {
+        else {
             cmapset = G_find_raster3d(cmap, "");
             if (cmapset == NULL)
                 G_fatal_error(_("3D raster map <%s> not found"), cmap);
 
             if (Rast3d_read_colors(cmap, cmapset, &colors) < 0)
-                G_fatal_error(_("Unable to read color table for 3D raster map <%s>"), cmap);
+                G_fatal_error(
+                    _("Unable to read color table for 3D raster map <%s>"),
+                    cmap);
         }
     }
 
@@ -492,8 +525,8 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
         Rast_mark_colors_as_fp(&colors);
 
     if (do_scale && !rule_is_percent && (offset != 0 || scale != 1)) {
-	rescale_colors(&colors_tmp, &colors, offset, scale);
-	colors = colors_tmp;
+        rescale_colors(&colors_tmp, &colors, offset, scale);
+        colors = colors_tmp;
     }
 
     if (flag.n->answer)
@@ -503,10 +536,11 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
         if (has_fcell_type && !has_cell_type) {
             struct FP_stats fpstats;
 
-            get_fp_stats(&input_maps, &fpstats, min, max, flag.g->answer, flag.a->answer, type);
+            get_fp_stats(&input_maps, &fpstats, min, max, flag.g->answer,
+                         flag.a->answer, type);
             Rast_histogram_eq_fp_colors(&colors_tmp, &colors, &fpstats);
         }
-	else {
+        else {
             if (!have_stats)
                 have_stats = get_stats(&input_maps, &statf);
             Rast_histogram_eq_colors(&colors_tmp, &colors, &statf);
@@ -525,20 +559,22 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
     }
 
     for (i = 0; i < input_maps.num; i++) {
-	name = input_maps.names[i];
-	mapset = input_maps.mapsets[i];
+        name = input_maps.names[i];
+        mapset = input_maps.mapsets[i];
 
-	if (input_maps.map_types[i])
-	    Rast_mark_colors_as_fp(&colors);
-	if (type == RASTER3D_TYPE) {
-	    Rast3d_write_colors(name, mapset, &colors);
-	}
-	else {
-	    Rast_write_colors(name, mapset, &colors);
-	}
-	G_message(_("Color table for %s map <%s> set to '%s'"), maptype, name,
-		  is_from_stdin ? "rules" : style ? style : rules ? rules :
-		  cmap);
+        if (input_maps.map_types[i])
+            Rast_mark_colors_as_fp(&colors);
+        if (type == RASTER3D_TYPE) {
+            Rast3d_write_colors(name, mapset, &colors);
+        }
+        else {
+            Rast_write_colors(name, mapset, &colors);
+        }
+        G_message(_("Color table for %s map <%s> set to '%s'"), maptype, name,
+                  is_from_stdin ? "rules"
+                  : style       ? style
+                  : rules       ? rules
+                                : cmap);
     }
 
     exit(EXIT_SUCCESS);

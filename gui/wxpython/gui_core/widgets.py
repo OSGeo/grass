@@ -43,17 +43,17 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
 @author Enhancements by Michael Barton <michael.barton asu.edu>
 @author Anna Kratochvilova <kratochanna gmail.com> (Google SoC 2011)
-@author Stepan Turek <stepan.turek seznam.cz> (ManageSettingsWidget - created from GdalSelect)
-@author Matej Krejci <matejkrejci gmail.com> (Google GSoC 2014; EmailValidator, TimeISOValidator)
-@author Tomas Zigo <tomas.zigo slovanet.sk> (LayersListValidator,
-PlacementValidator)
+@author Stepan Turek <stepan.turek seznam.cz> (ManageSettingsWidget - created from
+        GdalSelect)
+@author Matej Krejci <matejkrejci gmail.com> (Google GSoC 2014; EmailValidator,
+        TimeISOValidator)
+@author Tomas Zigo <tomas.zigo slovanet.sk> (LayersListValidator, PlacementValidator)
 """
 
 import os
 import sys
 import string
 import re
-import six
 from bisect import bisect
 from datetime import datetime
 from core.globalvar import wxPythonPhoenix
@@ -80,7 +80,7 @@ except ImportError:  # not sure about TGBTButton version
     from wx.lib.buttons import GenBitmapTextButton as BitmapTextButton
 
 if wxPythonPhoenix:
-    from wx import Validator as Validator
+    from wx import Validator
 else:
     from wx import PyValidator as Validator
 
@@ -94,6 +94,7 @@ from core.debug import Debug
 from gui_core.wrap import (
     Button,
     SearchCtrl,
+    Slider,
     StaticText,
     StaticBox,
     TextCtrl,
@@ -131,32 +132,55 @@ class NotebookController:
         """Binds page changed event."""
         self.widget.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnRemoveHighlight)
 
-    def AddPage(self, **kwargs):
-        """Add a new page"""
+    def AddPage(self, *args, **kwargs):
+        """Add a new page
+
+        :param str name: use this param if notebooks has ability to
+                         change position and then you must use page name
+                         param arg to correctly delete notebook page.
+                         If you do not use this parameter, make sure that
+                         the notebooks does not have the ability to change
+                         position, because in that case the deletion of
+                         the page based on the position index would not
+                         work correctly.
+        """
         if "name" in kwargs:
             self.notebookPages[kwargs["name"]] = kwargs["page"]
             del kwargs["name"]
 
-        self.classObject.AddPage(self.widget, **kwargs)
+        self.classObject.AddPage(self.widget, *args, **kwargs)
 
-    def InsertPage(self, **kwargs):
-        """Insert a new page"""
+    def InsertPage(self, *args, **kwargs):
+        """Insert a new page
+
+        :param str name: use this param if notebooks has ability to
+                         change position and then you must use page name
+                         param arg to correctly delete notebook page.
+                         If you do not use this parameter, make sure that
+                         the notebooks does not have the ability to change
+                         position, because in that case the deletion of
+                         the page based on the position index would not
+                         work correctly.
+        """
         if "name" in kwargs:
             self.notebookPages[kwargs["name"]] = kwargs["page"]
             del kwargs["name"]
 
         try:
-            self.classObject.InsertPage(self.widget, **kwargs)
-        except TypeError as e:  # documentation says 'index', but certain versions of wx require 'n'
+            self.classObject.InsertPage(self.widget, *args, **kwargs)
+        except (
+            TypeError
+        ):  # documentation says 'index', but certain versions of wx require 'n'
             kwargs["n"] = kwargs["index"]
             del kwargs["index"]
-            self.classObject.InsertPage(self.widget, **kwargs)
+            self.classObject.InsertPage(self.widget, *args, **kwargs)
 
     def DeletePage(self, page):
         """Delete page
 
-        :param page: name
-        :return: True if page was deleted, False if not exists
+        :param str|int page: page name or page index position
+
+        :return bool: True if page was deleted, False if not exists
         """
         delPageIndex = self.GetPageIndexByName(page)
         if delPageIndex != -1:
@@ -213,8 +237,12 @@ class NotebookController:
     def GetPageIndexByName(self, page):
         """Get notebook page index
 
-        :param page: name
+        :param str|int page: page name or page index position
+
+        :return int: page index
         """
+        if not self.notebookPages:
+            return page
         if page not in self.notebookPages:
             return -1
         for pageIndex in range(self.classObject.GetPageCount(self.widget)):
@@ -257,14 +285,18 @@ class FlatNotebookController(NotebookController):
     def GetPageIndexByName(self, page):
         """Get notebook page index
 
-        :param page: name
+        :param str|int page: page name or page index position
+
+        :return int: page index
         """
+        if not self.notebookPages:
+            return page
         if page not in self.notebookPages:
             return -1
 
         return self.classObject.GetPageIndex(self.widget, self.notebookPages[page])
 
-    def InsertPage(self, **kwargs):
+    def InsertPage(self, *args, **kwargs):
         """Insert a new page"""
         if "name" in kwargs:
             self.notebookPages[kwargs["name"]] = kwargs["page"]
@@ -272,14 +304,14 @@ class FlatNotebookController(NotebookController):
 
         kwargs["indx"] = kwargs["index"]
         del kwargs["index"]
-        self.classObject.InsertPage(self.widget, **kwargs)
+        self.classObject.InsertPage(self.widget, *args, **kwargs)
 
 
 class GNotebook(FN.FlatNotebook):
     """Generic notebook widget.
 
     Enables advanced style settings.
-    Problems with hidden tabs and does not respect system colors (native look).
+    Problems with hidden tabs. Uses system colours for active tabs.
     """
 
     def __init__(self, parent, style, **kwargs):
@@ -293,14 +325,18 @@ class GNotebook(FN.FlatNotebook):
         self.controller = FlatNotebookController(
             classObject=FN.FlatNotebook, widget=self
         )
+        self.SetActiveTabColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
+        self.SetActiveTabTextColour(
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
+        )
 
-    def AddPage(self, **kwargs):
+    def AddPage(self, *args, **kwargs):
         """@copydoc NotebookController::AddPage()"""
-        self.controller.AddPage(**kwargs)
+        self.controller.AddPage(*args, **kwargs)
 
-    def InsertNBPage(self, **kwargs):
+    def InsertNBPage(self, *args, **kwargs):
         """@copydoc NotebookController::InsertPage()"""
-        self.controller.InsertPage(**kwargs)
+        self.controller.InsertPage(*args, **kwargs)
 
     def DeleteNBPage(self, page):
         """@copydoc NotebookController::DeletePage()"""
@@ -312,7 +348,6 @@ class GNotebook(FN.FlatNotebook):
 
     def SetPageImage(self, page, index):
         """Does nothing because we don't want images for this style"""
-        pass
 
     def __getattr__(self, name):
         return getattr(self.controller, name)
@@ -328,13 +363,13 @@ class FormNotebook(wx.Notebook):
         wx.Notebook.__init__(self, parent, id=wx.ID_ANY, style=style)
         self.controller = NotebookController(classObject=wx.Notebook, widget=self)
 
-    def AddPage(self, **kwargs):
+    def AddPage(self, *args, **kwargs):
         """@copydoc NotebookController::AddPage()"""
-        self.controller.AddPage(**kwargs)
+        self.controller.AddPage(*args, **kwargs)
 
-    def InsertNBPage(self, **kwargs):
+    def InsertNBPage(self, *args, **kwargs):
         """@copydoc NotebookController::InsertPage()"""
-        self.controller.InsertPage(**kwargs)
+        self.controller.InsertPage(*args, **kwargs)
 
     def DeleteNBPage(self, page):
         """@copydoc NotebookController::DeletePage()"""
@@ -362,13 +397,13 @@ class FormListbook(wx.Listbook):
         wx.Listbook.__init__(self, parent, id=wx.ID_ANY, style=style)
         self.controller = NotebookController(classObject=wx.Listbook, widget=self)
 
-    def AddPage(self, **kwargs):
+    def AddPage(self, *args, **kwargs):
         """@copydoc NotebookController::AddPage()"""
-        self.controller.AddPage(**kwargs)
+        self.controller.AddPage(*args, **kwargs)
 
-    def InsertPage_(self, **kwargs):
+    def InsertPage_(self, *args, **kwargs):
         """@copydoc NotebookController::InsertPage()"""
-        self.controller.InsertPage(**kwargs)
+        self.controller.InsertPage(*args, **kwargs)
 
     def DeletePage(self, page):
         """@copydoc NotebookController::DeletePage()"""
@@ -400,16 +435,15 @@ class NumTextCtrl(TextCtrl):
     """Class derived from wx.TextCtrl for numerical values only"""
 
     def __init__(self, parent, **kwargs):
-        ##        self.precision = kwargs.pop('prec')
         TextCtrl.__init__(
             self, parent=parent, validator=NTCValidator(flag="DIGIT_ONLY"), **kwargs
         )
 
     def SetValue(self, value):
-        super(NumTextCtrl, self).SetValue(str(value))
+        super().SetValue(str(value))
 
     def GetValue(self):
-        val = super(NumTextCtrl, self).GetValue()
+        val = super().GetValue()
         if val == "":
             val = "0"
         try:
@@ -422,12 +456,12 @@ class NumTextCtrl(TextCtrl):
         pass
 
 
-class FloatSlider(wx.Slider):
+class FloatSlider(Slider):
     """Class derived from wx.Slider for floats"""
 
     def __init__(self, **kwargs):
         Debug.msg(1, "FloatSlider.__init__()")
-        wx.Slider.__init__(self, **kwargs)
+        Slider.__init__(self, **kwargs)
         self.coef = 1.0
         # init range
         self.minValueOrig = 0
@@ -439,10 +473,10 @@ class FloatSlider(wx.Slider):
             while abs(value) < 1:
                 value *= 100
                 self.coef *= 100
-            super(FloatSlider, self).SetRange(
+            super().SetRange(
                 self.minValueOrig * self.coef, self.maxValueOrig * self.coef
             )
-        super(FloatSlider, self).SetValue(value)
+        super().SetValue(value)
 
         Debug.msg(4, "FloatSlider.SetValue(): value = %f" % value)
 
@@ -457,10 +491,8 @@ class FloatSlider(wx.Slider):
                 minValue *= 100
                 maxValue *= 100
                 self.coef *= 100
-            super(FloatSlider, self).SetValue(
-                super(FloatSlider, self).GetValue() * self.coef
-            )
-        super(FloatSlider, self).SetRange(minValue, maxValue)
+            super().SetValue(super().GetValue() * self.coef)
+        super().SetRange(minValue, maxValue)
         Debug.msg(
             4,
             "FloatSlider.SetRange(): minValue = %f, maxValue = %f"
@@ -468,7 +500,7 @@ class FloatSlider(wx.Slider):
         )
 
     def GetValue(self):
-        val = super(FloatSlider, self).GetValue()
+        val = super().GetValue()
         Debug.msg(4, "FloatSlider.GetValue(): value = %f" % (val / self.coef))
         return val / self.coef
 
@@ -504,7 +536,7 @@ class SymbolButton(BitmapTextButton):
         elif usage == "pause":
             self.DrawPause(dc, size)
 
-        if sys.platform not in ("win32", "darwin"):
+        if sys.platform not in {"win32", "darwin"}:
             buffer.SetMaskColour(maskColor)
         self.SetBitmapLabel(buffer)
         dc.SelectObject(wx.NullBitmap)
@@ -512,7 +544,7 @@ class SymbolButton(BitmapTextButton):
     def DrawRecord(self, dc, size):
         """Draw record symbol"""
         dc.SetBrush(wx.Brush(wx.Colour(255, 0, 0)))
-        dc.DrawCircle(size[0] / 2, size[1] / 2, size[0] / 2)
+        dc.DrawCircle(size[0] // 2, size[1] // 2, size[0] // 2)
 
     def DrawStop(self, dc, size):
         """Draw stop symbol"""
@@ -522,14 +554,14 @@ class SymbolButton(BitmapTextButton):
     def DrawPlay(self, dc, size):
         """Draw play symbol"""
         dc.SetBrush(wx.Brush(wx.Colour(0, 255, 0)))
-        points = (wx.Point(0, 0), wx.Point(0, size[1]), wx.Point(size[0], size[1] / 2))
+        points = (wx.Point(0, 0), wx.Point(0, size[1]), wx.Point(size[0], size[1] // 2))
         dc.DrawPolygon(points)
 
     def DrawPause(self, dc, size):
         """Draw pause symbol"""
         dc.SetBrush(wx.Brush(wx.Colour(50, 50, 50)))
-        dc.DrawRectangle(0, 0, 2 * size[0] / 5, size[1])
-        dc.DrawRectangle(3 * size[0] / 5, 0, 2 * size[0] / 5, size[1])
+        dc.DrawRectangle(0, 0, 2 * size[0] // 5, size[1])
+        dc.DrawRectangle(3 * size[0] // 5, 0, 2 * size[0] // 5, size[1])
 
 
 class StaticWrapText(GenStaticText):
@@ -1132,7 +1164,6 @@ class GListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin, CheckListCtrlMixin):
 
         item = -1
         while True:
-
             row = []
             item = self.GetNextItem(item)
             if item == -1:
@@ -1198,7 +1229,7 @@ class SearchModuleWidget(wx.Panel):
         wx.Panel.__init__(self, parent=parent, id=wx.ID_ANY, **kwargs)
 
         #        self._box = wx.StaticBox(parent = self, id = wx.ID_ANY,
-        # label = " %s " % _("Find module - (press Enter for next match)"))
+        # label = " %s " % _("Find tool - (press Enter for next match)"))
 
         if sys.platform == "win32":
             self._search = TextCtrl(
@@ -1210,7 +1241,7 @@ class SearchModuleWidget(wx.Panel):
             )
             self._search.SetDescriptiveText(_("Fulltext search"))
             self._search.SetToolTip(
-                _("Type to search in all modules. Press Enter for next match.")
+                _("Type to search in all tools. Press Enter for next match.")
             )
 
         self._search.Bind(wx.EVT_TEXT, self.OnSearchModule)
@@ -1218,7 +1249,7 @@ class SearchModuleWidget(wx.Panel):
 
         if self._showTip:
             self._searchTip = StaticWrapText(
-                parent=self, id=wx.ID_ANY, label="Choose a module", size=(-1, 35)
+                parent=self, id=wx.ID_ANY, label="Choose a tool", size=(-1, 40)
             )
 
         if self._showChoice:
@@ -1281,10 +1312,11 @@ class SearchModuleWidget(wx.Panel):
             self._searchChoice.SetItems(commands)
             if commands:
                 self._searchChoice.SetSelection(0)
+                self.OnSelectModule()
 
-        label = _("%d modules match") % len(commands)
+        label = _("{} tools matched").format(len(commands))
         if self._showTip:
-            self._searchTip.SetLabel(label)
+            self._searchTip.SetLabel(self._searchTip.GetLabel() + " [{}]".format(label))
 
         self.showNotification.emit(message=label)
 
@@ -1304,13 +1336,9 @@ class SearchModuleWidget(wx.Panel):
         nodes.sort(key=lambda node: self._model.GetIndexOfNode(node))
         self._results = nodes
         self._resultIndex = -1
-        commands = sorted(
-            [node.data["command"] for node in nodes if node.data["command"]]
-        )
+        return sorted([node.data["command"] for node in nodes if node.data["command"]])
 
-        return commands
-
-    def OnSelectModule(self, event):
+    def OnSelectModule(self, event=None):
         """Module selected from choice, update command prompt"""
         cmd = self._searchChoice.GetStringSelection()
         self.moduleSelected.emit(name=cmd)
@@ -1325,7 +1353,7 @@ class SearchModuleWidget(wx.Panel):
         """Reset widget"""
         self._search.SetValue("")
         if self._showTip:
-            self._searchTip.SetLabel("Choose a module")
+            self._searchTip.SetLabel("Choose a tool")
 
 
 class ManageSettingsWidget(wx.Panel):
@@ -1380,7 +1408,6 @@ class ManageSettingsWidget(wx.Panel):
         self.settingsSizer.Fit(self)
 
     def _layout(self):
-
         self.settingsSizer = wx.StaticBoxSizer(self.settingsBox, wx.HORIZONTAL)
         self.settingsSizer.Add(
             StaticText(parent=self, id=wx.ID_ANY, label=_("Load:")),
@@ -1465,7 +1492,7 @@ class ManageSettingsWidget(wx.Panel):
     def SetSettings(self, settings):
         """Set settings
 
-        :param settings: - dict with all settigs {nameofsetting : settingdata, ....}
+        :param settings: - dict with all settings {nameofsetting : settingdata, ....}
         """
         self._settings = settings
         self._saveSettings()
@@ -1473,7 +1500,7 @@ class ManageSettingsWidget(wx.Panel):
     def AddSettings(self, settings):
         """Add settings
 
-        :param settings: - dict with all settigs {nameofsetting : settingdata, ....}
+        :param settings: - dict with all settings {nameofsetting : settingdata, ....}
         """
         self._settings.update(settings)
         self._saveSettings()
@@ -1500,7 +1527,7 @@ class ManageSettingsWidget(wx.Panel):
         try:
             fd = open(self.settingsFile, "w")
             fd.write("format_version=2.0\n")
-            for key, values in six.iteritems(self._settings):
+            for key, values in self._settings.items():
                 first = True
                 for v in values:
                     # escaping characters
@@ -1518,7 +1545,7 @@ class ManageSettingsWidget(wx.Panel):
                         fd.write("%s;" % (v))
                 fd.write("\n")
 
-        except IOError:
+        except OSError:
             GError(parent=self, message=_("Unable to save settings"))
             return -1
         fd.close()
@@ -1534,13 +1561,13 @@ class ManageSettingsWidget(wx.Panel):
         :return: empty dict on error
         """
 
-        data = dict()
+        data = {}
         if not os.path.exists(self.settingsFile):
             return data
 
         try:
             fd = open(self.settingsFile, "r")
-        except IOError:
+        except OSError:
             return data
 
         fd_lines = fd.readlines()
@@ -1569,7 +1596,7 @@ class ManageSettingsWidget(wx.Panel):
         :return: parsed dict
         :return: empty dict on error
         """
-        data = dict()
+        data = {}
 
         for line in fd_lines[1:]:
             try:
@@ -1582,7 +1609,6 @@ class ManageSettingsWidget(wx.Panel):
                     if idx < 0:
                         break
                     elif idx != 0:
-
                         # find out whether it is separator
                         # $$$$; - it is separator
                         # $$$$$; - it is not separator
@@ -1625,7 +1651,7 @@ class ManageSettingsWidget(wx.Panel):
         :return: parsed dict
         :return: empty dict on error
         """
-        data = dict()
+        data = {}
 
         for line in fd_lines:
             try:
@@ -1667,14 +1693,14 @@ class PictureComboBox(OwnerDrawnComboBox):
         # for painting the items in the popup
         bitmap = self.GetPictureBitmap(self.GetString(item))
         if bitmap:
-            dc.DrawBitmap(bitmap, r.x, r.y + (r.height - bitmap.GetHeight()) / 2)
+            dc.DrawBitmap(bitmap, r.x, r.y + (r.height - bitmap.GetHeight()) // 2)
             width = bitmap.GetWidth() + 10
         else:
             width = 0
         dc.DrawText(
             self.GetString(item),
             r.x + width,
-            (r.y + 0) + (r.height - dc.GetCharHeight()) / 2,
+            (r.y + 0) + (r.height - dc.GetCharHeight()) // 2,
         )
 
     def OnMeasureItem(self, item):
@@ -1771,7 +1797,7 @@ class LayersList(GListCtrl, listmix.TextEditMixin):
         colLocs = [0]
         loc = 0
         for n in range(self.GetColumnCount()):
-            loc = loc + self.GetColumnWidth(n)
+            loc += self.GetColumnWidth(n)
             colLocs.append(loc)
 
         col = bisect(colLocs, x + self.GetScrollPos(wx.HORIZONTAL)) - 1
@@ -1788,7 +1814,6 @@ class LayersList(GListCtrl, listmix.TextEditMixin):
         data = self.GetData(checked=True)
 
         for itm in data:
-
             layer = itm[1]
             ftype = itm[2]
             if "/" in ftype:

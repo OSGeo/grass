@@ -9,6 +9,7 @@ for details.
 """
 
 import subprocess
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 
@@ -49,12 +50,12 @@ class TestRasterToVector(TestCase):
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region"""
-        cls.runModule("t.remove", flags="rf", type="strds", inputs="A")
+        cls.runModule("t.remove", flags="df", type="strds", inputs="A")
         cls.del_temp_region()
 
     def tearDown(self):
         """Remove generated data"""
-        self.runModule("t.remove", flags="rf", type="stvds", inputs="result")
+        self.runModule("t.remove", flags="df", type="stvds", inputs="result")
 
     def test_simple_points(self):
         self.assertModule(
@@ -63,7 +64,6 @@ class TestRasterToVector(TestCase):
             output="result",
             type="point",
             flags="n",
-            column="values",
             basename="test",
             nprocs=1,
             overwrite=True,
@@ -92,7 +92,6 @@ class TestRasterToVector(TestCase):
             output="result",
             type="area",
             flags="n",
-            column="values",
             basename="test",
             nprocs=1,
             overwrite=True,
@@ -126,7 +125,6 @@ class TestRasterToVector(TestCase):
             output="result",
             type="area",
             flags="s",
-            column="values",
             basename="test",
             nprocs=1,
             overwrite=True,
@@ -159,7 +157,6 @@ class TestRasterToVector(TestCase):
             output="result",
             type="point",
             flags="t",
-            column="values",
             basename="test",
             nprocs=4,
             overwrite=True,
@@ -187,7 +184,6 @@ class TestRasterToVector(TestCase):
             output="result",
             type="point",
             flags="t",
-            column="values",
             basename="test",
             suffix="num%03",
             nprocs=4,
@@ -203,7 +199,6 @@ class TestRasterToVector(TestCase):
             output="result",
             type="point",
             flags="t",
-            column="values",
             basename="test",
             suffix="time",
             nprocs=4,
@@ -245,7 +240,7 @@ class TestRasterToVectorFails(TestCase):
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region"""
-        cls.runModule("t.remove", flags="rf", type="strds", inputs="A")
+        cls.runModule("t.remove", flags="df", type="strds", inputs="A")
         cls.del_temp_region()
 
     def test_error_handling(self):
@@ -260,7 +255,6 @@ class TestRasterToVectorFails(TestCase):
             output="result",
             type="point",
             flags="n",
-            column="values",
             basename="test",
             where="start_time > '2010-01-01'",
             nprocs=1,

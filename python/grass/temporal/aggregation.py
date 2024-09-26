@@ -7,7 +7,9 @@ Usage:
 
     import grass.temporal as tgis
 
-    tgis.aggregate_raster_maps(dataset, mapset, inputs, base, start, end, count, method, register_null, dbif)
+    tgis.aggregate_raster_maps(
+        dataset, mapset, inputs, base, start, end, count, method, register_null, dbif
+    )
 
 (C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -17,13 +19,16 @@ for details.
 :author: Soeren Gebbert
 """
 
-import grass.script as gscript
+import grass.script as gs
 from grass.exceptions import CalledModuleError
-from .space_time_datasets import RasterDataset
-from .datetime_math import create_suffix_from_datetime
-from .datetime_math import create_time_suffix
-from .datetime_math import create_numeric_suffix
+
 from .core import get_current_mapset, get_tgis_message_interface, init_dbif
+from .datetime_math import (
+    create_numeric_suffix,
+    create_suffix_from_datetime,
+    create_time_suffix,
+)
+from .space_time_datasets import RasterDataset
 from .spatio_temporal_relationships import (
     SpatioTemporalTopologyBuilder,
     create_temporal_relation_sql_where_statement,
@@ -122,7 +127,7 @@ def aggregate_raster_maps(
                absolute
     :param count: The number to be attached to the basename of the new
                  created raster map
-    :param method: The aggreation method to be used by r.series
+    :param method: The aggregation method to be used by r.series
     :param register_null: If true null maps will be registered in the space
                          time raster dataset, if false not
     :param dbif: The temporal database interface to use
@@ -140,7 +145,7 @@ def aggregate_raster_maps(
 
     # Check if new map is in the temporal database
     if new_map.is_in_db(dbif):
-        if gscript.overwrite() is True:
+        if gs.overwrite() is True:
             # Remove the existing temporal database entry
             new_map.delete(dbif)
             new_map = RasterDataset(map_id)
@@ -149,20 +154,18 @@ def aggregate_raster_maps(
                 _(
                     "Raster map <%(name)s> is already in temporal "
                     "database, use overwrite flag to overwrite"
-                    % ({"name": new_map.get_name()})
                 )
+                % ({"name": new_map.get_name()})
             )
             return
 
     msgr.verbose(
-        _(
-            "Computing aggregation of maps between %(st)s - %(end)s"
-            % {"st": str(start), "end": str(end)}
-        )
+        _("Computing aggregation of maps between %(st)s - %(end)s")
+        % {"st": str(start), "end": str(end)}
     )
 
     # Create the r.series input file
-    filename = gscript.tempfile(True)
+    filename = gs.tempfile(True)
     file = open(filename, "w")
 
     for name in inputs:
@@ -173,20 +176,20 @@ def aggregate_raster_maps(
     # Run r.series
     try:
         if len(inputs) > 1000:
-            gscript.run_command(
+            gs.run_command(
                 "r.series",
                 flags="z",
                 file=filename,
                 output=output,
-                overwrite=gscript.overwrite(),
+                overwrite=gs.overwrite(),
                 method=method,
             )
         else:
-            gscript.run_command(
+            gs.run_command(
                 "r.series",
                 file=filename,
                 output=output,
-                overwrite=gscript.overwrite(),
+                overwrite=gs.overwrite(),
                 method=method,
             )
 
@@ -200,7 +203,7 @@ def aggregate_raster_maps(
     # In case of a null map continue, do not register null maps
     if new_map.metadata.get_min() is None and new_map.metadata.get_max() is None:
         if not register_null:
-            gscript.run_command("g.remove", flags="f", type="raster", name=output)
+            gs.run_command("g.remove", flags="f", type="raster", name=output)
             return None
 
     return new_map
@@ -253,8 +256,9 @@ def aggregate_by_topology(
     :return: A list of RasterDataset objects that contain the new map names
              and the temporal extent for map registration
     """
-    import grass.pygrass.modules as pymod
     import copy
+
+    import grass.pygrass.modules as pymod
 
     msgr = get_tgis_message_interface()
 
@@ -319,7 +323,7 @@ def aggregate_by_topology(
 
         if aggregation_list:
             msgr.verbose(
-                _("Aggregating %(len)i raster maps from %(start)s to" " %(end)s")
+                _("Aggregating %(len)i raster maps from %(start)s to %(end)s")
                 % (
                     {
                         "len": len(aggregation_list),
@@ -350,15 +354,16 @@ def aggregate_by_topology(
                     _(
                         "Unable to perform aggregation. Output raster "
                         "map <%(name)s> exists and overwrite flag was "
-                        "not set" % ({"name": output_name})
+                        "not set"
                     )
+                    % ({"name": output_name})
                 )
 
             output_list.append(map_layer)
 
             if len(aggregation_list) > 1:
                 # Create the r.series input file
-                filename = gscript.tempfile(True)
+                filename = gs.tempfile(True)
                 file = open(filename, "w")
                 for name in aggregation_list:
                     string = "%s\n" % (name)
@@ -374,8 +379,8 @@ def aggregate_by_topology(
                             "reached (%i). The module r.series will "
                             "be run with flag z, to avoid open "
                             "files limit exceeding."
-                            % (int(file_limit), len(aggregation_list))
                         )
+                        % (int(file_limit), len(aggregation_list))
                     )
                     mod(flags="z")
                 process_queue.put(mod)
