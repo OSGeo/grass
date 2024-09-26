@@ -30,7 +30,6 @@ per-file-ignores =
     gui/wxpython/dbmgr/sqlbuilder.py: E722
     gui/wxpython/dbmgr/manager.py: E722
     gui/wxpython/docs/wxgui_sphinx/conf.py: E402, W291
-    gui/wxpython/gcp/manager.py: E722
     gui/wxpython/gui_core/*: E266, E722
     gui/wxpython/gui_core/dialogs.py: E722
     gui/wxpython/gui_core/forms.py: E722
