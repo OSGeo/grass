@@ -213,13 +213,14 @@ set(THUMBNAILS_PY ${CMAKE_BINARY_DIR}/utils/thumbnails.py)
 set(HTML2MAN VERSION_NUMBER=${GRASS_VERSION_NUMBER} ${PYTHON_EXECUTABLE}
              ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/g.html2man.py)
 
+set(env_path "$ENV{PATH}")
+
 if(WIN32)
   set(sep "\;")
+  string(REPLACE ";" "${sep}" env_path "${env_path}")
 else()
   set(sep ":")
 endif()
-
-set(env_path "$ENV{PATH}")
 
 set(grass_env_command
     ${CMAKE_COMMAND} -E env "PATH=${BIN_DIR}${sep}${SCRIPTS_DIR}${sep}${env_path}"
