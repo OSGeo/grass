@@ -25,9 +25,6 @@ per-file-ignores =
     doc/python/m.distance.py: E501
     doc/gui/wxpython/example/dialogs.py: F401
     gui/scripts/d.wms.py: E501
-    gui/wxpython/dbmgr/base.py: E722
-    gui/wxpython/dbmgr/sqlbuilder.py: E722
-    gui/wxpython/dbmgr/manager.py: E722
     gui/wxpython/docs/wxgui_sphinx/conf.py: E402, W291
     gui/wxpython/gcp/manager.py: E722
     gui/wxpython/gui_core/*: E722
