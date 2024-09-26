@@ -19,9 +19,6 @@
 * dbfopen.c
    around line 1229: GDAL bug [ticket-#809](http://trac.osgeo.org/gdal/ticket/809)
 
-* safileio.c
-   SHP_CVSID: ISO C does not allow extra ‘;’ outside of a function
-
 ## Full fix
 
 ```diff
@@ -42,18 +39,5 @@ index 5380e3e20b..5151148d33 100644
      else
          return( FTInteger );
      }
-diff --git a/lib/external/shapelib/safileio.c b/lib/external/shapelib/safileio.c
-index 289d347eaf..7a614a5806 100644
---- a/lib/external/shapelib/safileio.c
-+++ b/lib/external/shapelib/safileio.c
-@@ -74,7 +74,7 @@
- #include <string.h>
- #include <stdio.h>
-
--SHP_CVSID("$Id: safileio.c,v 1.6 2018-06-15 19:56:32 erouault Exp $");
-+SHP_CVSID("$Id: safileio.c,v 1.6 2018-06-15 19:56:32 erouault Exp $")
-
- #ifdef SHPAPI_UTF8_HOOKS
- #   ifdef SHPAPI_WINDOWS
 
 ```
