@@ -172,7 +172,7 @@ class WMSGdalDrv(WMSBase):
 
         driver = gdal.GetDriverByName(self.gdal_drv_format)
         if driver is None:
-            gs.fatal(_("Unable to find %s driver" % format))
+            gs.fatal(_("Unable to find %s driver") % self.gdal_drv_format)
 
         metadata = driver.GetMetadata()
         if (

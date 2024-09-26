@@ -1057,9 +1057,7 @@ def load_env(grass_env_file):
             v = v.strip('"')
             # we'll keep expand=True to expand $var's inside "value" because
             # they are within double quotes
-        elif (
-            v.startswith("'") or v.endswith("'") or v.startswith('"') or v.endswith('"')
-        ):
+        elif v.startswith(("'", '"')) or v.endswith(("'", '"')):
             # here, let's try to ignore unmatching single/double quotes, which
             # might be a multi-line variable or just a user error
             debug("Ignoring multi-line environmental variable {0}".format(k))
@@ -1281,64 +1279,6 @@ def set_language(grass_config_dir):
 
     # From now on enforce the new language
     gettext.install("grasslibs", gpath("locale"))
-
-
-def lock_mapset(mapset_path, force_gislock_removal, user):
-    """Lock the mapset and return name of the lock file
-
-    Behavior on error must be changed somehow; now it fatals but GUI case is
-    unresolved.
-    """
-    if not os.path.exists(mapset_path):
-        fatal(_("Path '%s' doesn't exist") % mapset_path)
-    if not os.access(mapset_path, os.W_OK):
-        error = _("Path '%s' not accessible.") % mapset_path
-        stat_info = os.stat(mapset_path)
-        mapset_uid = stat_info.st_uid
-        if mapset_uid != os.getuid():
-            # GTC %s is mapset's folder path
-            error = "%s\n%s" % (
-                error,
-                _("You are not the owner of '%s'.") % mapset_path,
-            )
-        fatal(error)
-    # Check for concurrent use
-    lockfile = os.path.join(mapset_path, ".gislock")
-    ret = call([gpath("etc", "lock"), lockfile, "%d" % os.getpid()])
-    msg = None
-    if ret == 2:
-        if not force_gislock_removal:
-            msg = _(
-                "%(user)s is currently running GRASS in selected mapset"
-                " (file %(file)s found). Concurrent use not allowed.\n"
-                "You can force launching GRASS using -f flag"
-                " (note that you need permission for this operation)."
-                " Have another look in the processor "
-                "manager just to be sure..." % {"user": user, "file": lockfile}
-            )
-        else:
-            try_remove(lockfile)
-            message(
-                _(
-                    "%(user)s is currently running GRASS in selected mapset"
-                    " (file %(file)s found). Forcing to launch GRASS..."
-                    % {"user": user, "file": lockfile}
-                )
-            )
-    elif ret != 0:
-        msg = (
-            _("Unable to properly access '%s'.\nPlease notify system personnel.")
-            % lockfile
-        )
-
-    if msg:
-        raise Exception(msg)
-    debug(
-        "Mapset <{mapset}> locked using '{lockfile}'".format(
-            mapset=mapset_path, lockfile=lockfile
-        )
-    )
-    return lockfile
 
 
 # TODO: the gisrcrc here does not make sense, remove it from load_gisrc
@@ -2422,14 +2362,16 @@ def main():
 
     location = mapset_settings.full_mapset
 
+    from grass.app.data import lock_mapset, MapsetLockingException
+
     try:
         # check and create .gislock file
         lock_mapset(
-            mapset_settings.full_mapset,
-            user=user,
-            force_gislock_removal=params.force_gislock_removal,
+            mapset_path=mapset_settings.full_mapset,
+            force_lock_removal=params.force_gislock_removal,
+            message_callback=message,
         )
-    except Exception as e:
+    except MapsetLockingException as e:
         fatal(e.args[0])
         sys.exit(_("Exiting..."))
 

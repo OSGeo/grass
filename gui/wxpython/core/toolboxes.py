@@ -209,7 +209,7 @@ def getMenudataFile(userRootFile, newFile, fallback):
                 fh.write(xml)
                 fh.close()
                 return menudataFile
-            except:
+            except Exception:
                 _debug(
                     2,
                     (
@@ -855,7 +855,7 @@ def module_test():
 
     someDiff = False
     for line in result:
-        if line.startswith("+") or line.startswith("-"):
+        if line.startswith(("+", "-")):
             sys.stdout.write(line)
             someDiff = True
     if someDiff:

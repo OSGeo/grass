@@ -387,7 +387,7 @@ def one_point_per_row_output(
 
     for count in range(len(output_files)):
         file_name = output_files[count]
-        gs.verbose(_("Transforming r.what output file %s" % (file_name)))
+        gs.verbose(_("Transforming r.what output file %s") % (file_name))
         map_list = output_time_list[count]
         in_file = open(file_name, "r")
         for line in in_file:
@@ -465,7 +465,7 @@ def one_point_per_col_output(
     first = True
     for count in range(len(output_files)):
         file_name = output_files[count]
-        gs.verbose(_("Transforming r.what output file %s" % (file_name)))
+        gs.verbose(_("Transforming r.what output file %s") % (file_name))
         in_file = open(file_name, "r")
         lines = in_file.readlines()
 
@@ -607,7 +607,7 @@ def one_point_per_timerow_output(
     if write_header:
         out_file.write(header + "\n")
 
-    gs.verbose(_("Writing the output file <%s>" % (output)))
+    gs.verbose(_("Writing the output file <%s>") % (output))
     for row in matrix:
         first = True
         for col in row:
@@ -663,15 +663,13 @@ def process_loop(
         output_time_list.append(map_list)
 
         gs.verbose(
-            _(
-                "Process maps %(samp_start)i to %(samp_end)i (of %(total)i)"
-                % (
-                    {
-                        "samp_start": count - len(map_names) + 1,
-                        "samp_end": count,
-                        "total": len(maps),
-                    }
-                )
+            _("Process maps %(samp_start)i to %(samp_end)i (of %(total)i)")
+            % (
+                {
+                    "samp_start": count - len(map_names) + 1,
+                    "samp_end": count,
+                    "total": len(maps),
+                }
             )
         )
         mod = copy.deepcopy(r_what)

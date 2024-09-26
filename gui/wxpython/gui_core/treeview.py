@@ -303,17 +303,19 @@ def main():
     root = tree.root
     n1 = tree.AppendNode(parent=root, data={"label": "node1"})
     n2 = tree.AppendNode(parent=root, data={"label": "node2"})
-    n3 = tree.AppendNode(parent=root, data={"label": "node3"})  # pylint: disable=W0612
+    n3 = tree.AppendNode(  # noqa: F841 # pylint: disable=W0612
+        parent=root, data={"label": "node3"}
+    )
     n11 = tree.AppendNode(parent=n1, data={"label": "node11", "xxx": "A"})
-    n12 = tree.AppendNode(
+    n12 = tree.AppendNode(  # noqa: F841 # pylint: disable=W0612
         parent=n1, data={"label": "node12", "xxx": "B"}
-    )  # pylint: disable=W0612
-    n21 = tree.AppendNode(
+    )
+    n21 = tree.AppendNode(  # noqa: F841 # pylint: disable=W0612
         parent=n2, data={"label": "node21", "xxx": "A"}
-    )  # pylint: disable=W0612
-    n111 = tree.AppendNode(
+    )
+    n111 = tree.AppendNode(  # noqa: F841 # pylint: disable=W0612
         parent=n11, data={"label": "node111", "xxx": "A"}
-    )  # pylint: disable=W0612
+    )
 
     app = wx.App()
     frame = TreeFrame(model=tree)
