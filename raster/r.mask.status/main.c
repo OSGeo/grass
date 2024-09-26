@@ -37,7 +37,7 @@ void parse_parameters(struct Parameters *params, int argc, char **argv)
     module->label = _("Reports presence or absence of a raster mask");
     module->description =
         _("Provides information about present of a 2D raster mask"
-          "as text output or return code");
+          " as text output or return code");
 
     params->format = G_define_option();
     params->format->key = "format";
