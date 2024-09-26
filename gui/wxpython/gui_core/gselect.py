@@ -1289,7 +1289,7 @@ class MapsetSelect(wx.ComboBox):
         style = 0
         # disabled, read-only widget has no TextCtrl children (TODO: rewrite)
         # if not new and not multiple:
-        ###     style = wx.CB_READONLY
+        #     style = wx.CB_READONLY
 
         wx.ComboBox.__init__(self, parent, id, size=size, style=style, **kwargs)
         self.searchPath = searchPath

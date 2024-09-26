@@ -435,7 +435,7 @@ class NumTextCtrl(TextCtrl):
     """Class derived from wx.TextCtrl for numerical values only"""
 
     def __init__(self, parent, **kwargs):
-        ##        self.precision = kwargs.pop('prec')
+        #        self.precision = kwargs.pop('prec')
         TextCtrl.__init__(
             self, parent=parent, validator=NTCValidator(flag="DIGIT_ONLY"), **kwargs
         )
