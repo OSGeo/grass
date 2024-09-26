@@ -1,12 +1,13 @@
 # Update history of SHAPELIB copy
 
-* files `shpopen.c`, `shapefil.h`, `dbfopen.c`
+* files `shpopen.c`, `shapefil.h`, `dbfopen.c`, `shapefil_private.h`
    from GDAL [ogr/ogrsf_frmts/shape/](https://github.com/OSGeo/gdal/tree/master/ogr/ogrsf_frmts/shape)
 * file `safileio.c`
    from [SHAPELIB](http://download.osgeo.org/shapelib/)
 
 ## Last update
 
+* taken from GDAL 3.9.2 and SHAPELIB 1.6.0 (Sep 2024)
 * taken from GDAL 3.5.3 and SHAPELIB 1.5.0 (Dec 2022)
 * taken from GDAL 2.1.2 and SHAPELIB 1.3.0 (Thu Nov 24 10:45:41 CET 2016)
 * taken from GDAL 1.5.1-SVN (Sun Mar 30 11:20:43 CEST 2008)
