@@ -414,7 +414,7 @@ class ListCtrlComboPopup(ComboPopup):
             self.multiple = kargs["multiple"]
         if "onPopup" in kargs:
             self.onPopup = kargs["onPopup"]
-        if kargs.get("layerTree", None):
+        if kargs.get("layerTree"):
             self.filterItems = []  # reset
             ltype = kargs["type"]
             for layer in kargs["layerTree"].GetVisibleLayers(skipDigitized=True):
