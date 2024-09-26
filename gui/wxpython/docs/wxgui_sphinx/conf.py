@@ -15,10 +15,6 @@ import string
 from shutil import copy
 from grass.script import core
 
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-
 footer_tmpl = string.Template(
     r"""
 {% block footer %}<hr class="header">
