@@ -129,8 +129,10 @@ static wchar_t *Utf8ToWideChar(const char *pszFilename)
 /*                           SAUtf8WFOpen                               */
 /************************************************************************/
 
-SAFile SAUtf8WFOpen(const char *pszFilename, const char *pszAccess)
+static SAFile SAUtf8WFOpen(const char *pszFilename, const char *pszAccess,
+                           void *pvUserData)
 {
+    (void)pvUserData;
     SAFile file = NULL;
     wchar_t *pwszFileName = Utf8ToWideChar(pszFilename);
     wchar_t *pwszAccess = Utf8ToWideChar(pszAccess);
@@ -142,8 +144,9 @@ SAFile SAUtf8WFOpen(const char *pszFilename, const char *pszAccess)
     return file;
 }
 
-int SAUtf8WRemove(const char *pszFilename)
+static int SAUtf8WRemove(const char *pszFilename, void *pvUserData)
 {
+    (void)pvUserData;
     wchar_t *pwszFileName = Utf8ToWideChar(pszFilename);
     int rc = -1;
     if (pwszFileName != NULL) {
