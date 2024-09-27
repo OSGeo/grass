@@ -10,10 +10,10 @@ by programs that failed to remove them before terminating.
 
 <p>
 <em>g.tempfile</em>
-creates an unique file and prints the name. The user is required to provide
-a process-id which will be used as part of the name of the file.
-Most Unix shells provide a way to get the process id of the current shell.
-For /bin/sh and /bin/csh this is $$.
+creates an unique file or directory (<b>-f</b>) and prints the name.
+The user is required to provide a process-id which will be used as part of
+the name of the file or directory. Most Unix shells provide a way to get the
+process id of the current shell. For /bin/sh and /bin/csh this is $$.
 It is recommended that $$ be specified as the process-id for
 <em>g.tempfile</em>.
 
@@ -23,6 +23,11 @@ For /bin/sh scripts the following syntax should be used:
 <div class="code"><pre>
 temp1=`g.tempfile pid=$$`
 temp2=`g.tempfile pid=$$`
+# Get the tempile path but do not create it
+temp3=`g.tempfile -d pid=$$`
+# Create a temporary directory
+temp3=`g.tempfile -f pid=$$`
+
 </pre></div>
 For /bin/csh scripts, the following can be used:
 <div class="code"><pre>

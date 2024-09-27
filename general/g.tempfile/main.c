@@ -29,6 +29,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *pid;
     struct Flag *dry_run;
+    struct Flag *directory;
     char *tempfile;
     int p;
 
@@ -52,6 +53,13 @@ int main(int argc, char *argv[])
     dry_run->description =
         _("Dry run - don't create a file, just prints it's file name");
 
+    directory = G_define_flag();
+    directory->key = 'f';
+    directory->description =
+        _("Folder mode - create a temporary directory, not a file");
+
+    G_option_exclusive(dry_run, directory, NULL);
+
     G_disable_interactive();
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -63,8 +71,12 @@ int main(int argc, char *argv[])
     tempfile = G_tempfile_pid(p);
 
     /* create tempfile so next run of this program will create a unique name */
-    if (!dry_run->answer)
-        close(creat(tempfile, 0666));
+    if (!dry_run->answer) {
+        if (!directory->answer)
+            mkdir(tempfile, 0666);
+        else
+            close(creat(tempfile, 0666));
+    }
     fprintf(stdout, "%s\n", tempfile);
 
     exit(EXIT_SUCCESS);
