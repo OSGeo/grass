@@ -16,30 +16,5 @@
 
 ## Summary of fixes
 
-* dbfopen.c
-   around line 1229: GDAL bug [ticket-#809](http://trac.osgeo.org/gdal/ticket/809)
 * safileio.c
    [shapelib commit 316ff87](https://github.com/OSGeo/shapelib/commit/316ff872566ea0d91d6b62fe01bfe39931db39aa#diff-f068bc465ca1a32e1b9c214d4eb9504ef9e0f3c4cabc1aa4bab8aa41e2248cc6R153)
-
-## Full fix
-
-```diff
-diff --git a/lib/external/shapelib/dbfopen.c b/lib/external/shapelib/dbfopen.c
-index 5380e3e20b..5151148d33 100644
---- a/lib/external/shapelib/dbfopen.c
-+++ b/lib/external/shapelib/dbfopen.c
-@@ -1226,9 +1226,10 @@ DBFGetFieldInfo( DBFHandle psDBF, int iField, char * pszFieldName,
-     else if( psDBF->pachFieldType[iField] == 'N'
-              || psDBF->pachFieldType[iField] == 'F' )
-     {
--    if( psDBF->panFieldDecimals[iField] > 0
--            || psDBF->panFieldSize[iField] >= 10 )
-+    if( psDBF->panFieldDecimals[iField] > 0 ) {
-+        /* || psDBF->panFieldSize[iField] >= 10 ) */ /* GDAL bug #809 */
-         return( FTDouble );
-+    }
-     else
-         return( FTInteger );
-     }
-
-```
