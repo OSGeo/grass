@@ -414,7 +414,7 @@ class ListCtrlComboPopup(ComboPopup):
             self.multiple = kargs["multiple"]
         if "onPopup" in kargs:
             self.onPopup = kargs["onPopup"]
-        if kargs.get("layerTree", None):
+        if kargs.get("layerTree"):
             self.filterItems = []  # reset
             ltype = kargs["type"]
             for layer in kargs["layerTree"].GetVisibleLayers(skipDigitized=True):
@@ -1289,7 +1289,7 @@ class MapsetSelect(wx.ComboBox):
         style = 0
         # disabled, read-only widget has no TextCtrl children (TODO: rewrite)
         # if not new and not multiple:
-        ###     style = wx.CB_READONLY
+        #     style = wx.CB_READONLY
 
         wx.ComboBox.__init__(self, parent, id, size=size, style=style, **kwargs)
         self.searchPath = searchPath

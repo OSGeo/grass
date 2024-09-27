@@ -2419,7 +2419,7 @@ class CheckListMapset(ListCtrl, listmix.ListCtrlAutoWidthMixin, CheckListCtrlMix
         """Load data into list"""
         self.InsertColumn(0, _("Mapset"))
         self.InsertColumn(1, _("Owner"))
-        ### self.InsertColumn(2, _('Group'))
+        # self.InsertColumn(2, _('Group'))
         gisenv = gs.gisenv()
         locationPath = os.path.join(gisenv["GISDBASE"], gisenv["LOCATION_NAME"])
 
@@ -2433,14 +2433,14 @@ class CheckListMapset(ListCtrl, listmix.ListCtrlAutoWidthMixin, CheckListCtrlMix
                 except KeyError:
                     self.SetItem(index, 1, "nobody")
                 # FIXME: get group name
-                ### self.SetStringItem(index, 2, "%-8s" % stat_info.st_gid)
+                # self.SetStringItem(index, 2, "%-8s" % stat_info.st_gid)
             else:
                 # FIXME: no pwd under MS Windows (owner: 0, group: 0)
                 self.SetItem(index, 1, "%-8s" % stat_info.st_uid)
-                ### self.SetStringItem(index, 2, "%-8s" % stat_info.st_gid)
+                # self.SetStringItem(index, 2, "%-8s" % stat_info.st_gid)
 
         self.SetColumnWidth(col=0, width=wx.LIST_AUTOSIZE)
-        ### self.SetColumnWidth(col = 1, width = wx.LIST_AUTOSIZE)
+        # self.SetColumnWidth(col = 1, width = wx.LIST_AUTOSIZE)
 
     def OnCheckItem(self, index, flag):
         """Mapset checked/unchecked"""

@@ -736,9 +736,7 @@ class WMTSRequestMgr(BaseRequestMgr):
 
             best_diff = best_scale_den - scale_den
             mat_diff = mat_scale_den - scale_den
-            if (best_diff < mat_diff and mat_diff < 0) or (
-                best_diff > mat_diff and best_diff > 0
-            ):
+            if (best_diff < mat_diff < 0) or (best_diff > mat_diff and best_diff > 0):
                 best_t_mat = t_mat
                 best_scale_den = mat_scale_den
 
@@ -1020,9 +1018,7 @@ class OnEarthRequestMgr(BaseRequestMgr):
             best_diff = best_res - res[comp_res]
             tile_diff = t_res[comp_res] - res[comp_res]
 
-            if (best_diff < tile_diff and tile_diff < 0) or (
-                best_diff > tile_diff and best_diff > 0
-            ):
+            if (best_diff < tile_diff < 0) or (best_diff > tile_diff and best_diff > 0):
                 best_res = t_res[comp_res]
                 best_patt = pattern
 
