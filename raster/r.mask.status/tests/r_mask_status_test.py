@@ -54,7 +54,7 @@ def test_json_with_g_copy(session_with_data):
     assert not data["is_reclass_of"]
 
 
-def test_shell_with_r_mask(session_with_data):
+def test_shell(session_with_data):
     """Check shell format for the r.mask case"""
     session = session_with_data
     gs.run_command("r.mask", raster="a", env=session.env)
@@ -71,7 +71,7 @@ def test_shell_with_r_mask(session_with_data):
 
 
 @pytest.mark.skipif(yaml is None, reason="PyYAML package not available")
-def test_yaml_with_r_mask(session_with_data):
+def test_yaml(session_with_data):
     """Check YAML format for the r.mask case"""
     session = session_with_data
     gs.run_command("r.mask", raster="a", env=session.env)
@@ -89,7 +89,7 @@ def test_yaml_with_r_mask(session_with_data):
     assert not data["is_reclass_of"]
 
 
-def test_plain_with_r_mask(session_with_data):
+def test_plain(session_with_data):
     """Check plain text format for the r.mask case"""
     session = session_with_data
     gs.run_command("r.mask", raster="a", env=session.env)
@@ -108,3 +108,19 @@ def test_without_parameters(session_no_data):
     session = session_no_data
     text = gs.read_command("r.mask.status", env=session.env)
     assert text
+
+
+def test_behavior_mimicking_test_program(session_with_data):
+    """Check test program like behavior for the r.mask case"""
+    session = session_with_data
+    gs.run_command("r.mask", raster="a", env=session.env)
+    returncode = gs.run_command(
+        "r.mask.status", flags="t", env=session.env, errors="status"
+    )
+    assert returncode == 0
+    # Now remove the mask.
+    gs.run_command("r.mask", flags="r", env=session.env)
+    returncode = gs.run_command(
+        "r.mask.status", flags="t", env=session.env, errors="status"
+    )
+    assert returncode == 1
