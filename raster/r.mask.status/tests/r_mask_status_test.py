@@ -87,3 +87,24 @@ def test_yaml_with_r_mask(session_with_data):
     assert data["present"] is False
     assert not data["full_name"]
     assert not data["is_reclass_of"]
+
+
+def test_plain_with_r_mask(session_with_data):
+    """Check plain text format for the r.mask case"""
+    session = session_with_data
+    gs.run_command("r.mask", raster="a", env=session.env)
+    text = gs.read_command("r.mask.status", format="plain", env=session.env)
+    assert text
+    assert "MASK@PERMANENT" in text
+    assert "a@PERMANENT" in text
+    # Now remove the mask.
+    gs.run_command("r.mask", flags="r", env=session.env)
+    text = gs.read_command("r.mask.status", format="plain", env=session.env)
+    assert text
+
+
+def test_without_parameters(session_no_data):
+    """Check output is generated with no parameters"""
+    session = session_no_data
+    text = gs.read_command("r.mask.status", env=session.env)
+    assert text

@@ -42,9 +42,9 @@ void parse_parameters(struct Parameters *params, int argc, char **argv)
     params->format = G_define_option();
     params->format->key = "format";
     params->format->type = TYPE_STRING;
-    params->format->required = YES;
-    params->format->answer = "yaml";
-    params->format->options = "yaml,json,bash";
+    params->format->required = NO;
+    params->format->answer = "plain";
+    params->format->options = "plain,json,bash,yaml";
     params->format->description = _("Format for reporting");
 
     params->like_test = G_define_flag();
@@ -120,8 +120,7 @@ int report_status(struct Parameters *params)
             printf("%s", full_underlying);
         printf("\n");
     }
-    else {
-        // Using YAML as the human-readable default format. How does that work?
+    else if (strcmp(params->format->answer, "yaml") == 0) {
         printf("present: ");
         if (present)
             printf("true");
@@ -151,6 +150,22 @@ int report_status(struct Parameters *params)
         // We could also outputting mask cats to inform user about the
         // relevant portion of the map, but that should be done by accessing
         // the actual mask anyway.
+        printf("\n");
+    }
+    else {
+        if (present)
+            printf(_("Mask is active"));
+        else
+            printf(_("Mask is not present"));
+        if (present) {
+            printf("\n");
+            printf(_("Mask name: %s"), full_mask);
+        }
+        if (is_mask_reclass) {
+            printf("\n");
+            printf(_("Mask is a raster reclassified from: %s"),
+                   full_underlying);
+        }
         printf("\n");
     }
 
