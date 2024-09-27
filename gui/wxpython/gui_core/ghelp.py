@@ -588,12 +588,10 @@ class AboutWindow(wx.Frame):
             )
             tgood.SetForegroundColour(wx.Colour(35, 142, 35))
             langBox.Add(tgood)
-        except KeyError as e:
-            print(f"Key 'good' not found in dictionary: {e}")
+        except KeyError:
             tgood = StaticText(parent=par, id=wx.ID_ANY, label="")
             langBox.Add(tgood)
-        except Exception as e:
-            print(f"Unexpected error occurred: {e}")
+        except Exception:
             tgood = StaticText(parent=par, id=wx.ID_ANY, label="")
             langBox.Add(tgood)
         try:
@@ -602,12 +600,10 @@ class AboutWindow(wx.Frame):
             )
             tfuzzy.SetForegroundColour(wx.Colour(255, 142, 0))
             langBox.Add(tfuzzy)
-        except KeyError as e:
-            print(f"Key 'fuzzy' not found in dictionary: {e}")
+        except KeyError:
             tfuzzy = StaticText(parent=par, id=wx.ID_ANY, label="")
             langBox.Add(tfuzzy)
-        except Exception as e:
-            print(f"Unexpected error occurred: {e}")
+        except Exception:
             tfuzzy = StaticText(parent=par, id=wx.ID_ANY, label="")
             langBox.Add(tfuzzy)
         try:
@@ -616,12 +612,10 @@ class AboutWindow(wx.Frame):
             )
             tbad.SetForegroundColour(wx.Colour(255, 0, 0))
             langBox.Add(tbad)
-        except KeyError as e:
-            print(f"Key 'bad' not found in dictionary: {e}")
+        except KeyError:
             tbad = StaticText(parent=par, id=wx.ID_ANY, label="")
             langBox.Add(tbad)
-        except Exception as e:
-            print(f"Unexpected error occurred: {e}")
+        except Exception:
             tbad = StaticText(parent=par, id=wx.ID_ANY, label="")
             langBox.Add(tbad)
         return langBox
