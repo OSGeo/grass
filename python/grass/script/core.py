@@ -955,11 +955,11 @@ def tempfile(create=True, env=None):
 
 
 def tempdir(env=None):
-    """Returns the name of a temporary dir, created with g.tempfile.
+    """Returns the name of a temporary directory, created with g.tempfile.
 
     :param env: environment
 
-    :return: path to a tmp file
+    :return: path to a temporary directory
     """
     return read_command("g.tempfile", flags="f", pid=os.getpid(), env=env).strip()
 
