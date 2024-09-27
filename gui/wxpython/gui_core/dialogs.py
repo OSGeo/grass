@@ -1656,8 +1656,8 @@ class MapLayersDialogBase(wx.Dialog):
             try:
                 if re.compile(event.GetString()).search(layer):
                     list.append(layer)
-            except re.error as e:
-                print(f"Error compiling regex pattern: {e}")
+            except re.error:
+                pass
         list = naturally_sorted(list)
 
         self.layers.Set(list)
