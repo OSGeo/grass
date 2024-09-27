@@ -603,7 +603,7 @@ class AboutWindow(wx.Frame):
             tfuzzy.SetForegroundColour(wx.Colour(255, 142, 0))
             langBox.Add(tfuzzy)
         except KeyError as e:
-            print(f"Key 'good' not found in dictionary: {e}")
+            print(f"Key 'fuzzy' not found in dictionary: {e}")
             tfuzzy = StaticText(parent=par, id=wx.ID_ANY, label="")
             langBox.Add(tfuzzy)
         except Exception as e:
@@ -617,7 +617,7 @@ class AboutWindow(wx.Frame):
             tbad.SetForegroundColour(wx.Colour(255, 0, 0))
             langBox.Add(tbad)
         except KeyError as e:
-            print(f"Key 'good' not found in dictionary: {e}")
+            print(f"Key 'bad' not found in dictionary: {e}")
             tbad = StaticText(parent=par, id=wx.ID_ANY, label="")
             langBox.Add(tbad)
         except Exception as e:
