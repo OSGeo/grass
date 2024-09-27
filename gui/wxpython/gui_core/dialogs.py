@@ -1213,8 +1213,8 @@ class GroupDialog(wx.Dialog):
             try:
                 if re.compile(self.flt_pattern).search(dt):
                     flt_data.append(dt)
-            except re.error as e:
-                print(f"Error compiling regex pattern: {e}")
+            except re.error:
+                pass
 
         return flt_data
 
