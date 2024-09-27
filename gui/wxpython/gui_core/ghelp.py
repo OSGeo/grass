@@ -591,9 +591,6 @@ class AboutWindow(wx.Frame):
         except KeyError:
             tgood = StaticText(parent=par, id=wx.ID_ANY, label="")
             langBox.Add(tgood)
-        except Exception:
-            tgood = StaticText(parent=par, id=wx.ID_ANY, label="")
-            langBox.Add(tgood)
         try:
             tfuzzy = StaticText(
                 parent=par, id=wx.ID_ANY, label=_("   %d fuzzy") % v["fuzzy"]
@@ -603,9 +600,6 @@ class AboutWindow(wx.Frame):
         except KeyError:
             tfuzzy = StaticText(parent=par, id=wx.ID_ANY, label="")
             langBox.Add(tfuzzy)
-        except Exception:
-            tfuzzy = StaticText(parent=par, id=wx.ID_ANY, label="")
-            langBox.Add(tfuzzy)
         try:
             tbad = StaticText(
                 parent=par, id=wx.ID_ANY, label=_("   %d untranslated") % v["bad"]
@@ -613,9 +607,6 @@ class AboutWindow(wx.Frame):
             tbad.SetForegroundColour(wx.Colour(255, 0, 0))
             langBox.Add(tbad)
         except KeyError:
-            tbad = StaticText(parent=par, id=wx.ID_ANY, label="")
-            langBox.Add(tbad)
-        except Exception:
             tbad = StaticText(parent=par, id=wx.ID_ANY, label="")
             langBox.Add(tbad)
         return langBox
