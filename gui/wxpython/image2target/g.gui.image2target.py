@@ -177,7 +177,8 @@ def main():
     #            srcloc=src_loc,srcmpt=src_mpt,srcgrp=src_grp,srcras=src_ras,
     #            tgtras=tgt_ras,camera=camera, order=order, extension=extension)
 
-    wizard = GCPWizard(parent=None, giface=StandaloneGrassInterface())
+    # wizard = GCPWizard(parent=None, giface=StandaloneGrassInterface())
+    GCPWizard(parent=None, giface=StandaloneGrassInterface())
     app.MainLoop()
 
 
