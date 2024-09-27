@@ -26,12 +26,6 @@ per-file-ignores =
     doc/gui/wxpython/example/dialogs.py: F401
     gui/scripts/d.wms.py: E501
     gui/wxpython/gcp/manager.py: E722
-    gui/wxpython/gui_core/*: E722
-    gui/wxpython/gui_core/dialogs.py: E722
-    gui/wxpython/gui_core/forms.py: E722
-    gui/wxpython/gui_core/ghelp.py: E722
-    gui/wxpython/gui_core/gselect.py: E722
-    gui/wxpython/gui_core/widgets.py: E722
     gui/wxpython/image2target/*: F841, E722, E265
     gui/wxpython/image2target/g.gui.image2target.py: E501, E265, F841
     gui/wxpython/iscatt/*: F841, E722, F405, F403
