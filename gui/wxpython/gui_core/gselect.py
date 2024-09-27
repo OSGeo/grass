@@ -482,8 +482,8 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             try:
                 self.seltree.EnsureVisible(item)
                 self.seltree.SelectItem(item)
-            except:
-                pass
+            except Exception as e:
+                print(f"Unexpected error occurred: {e}")
 
     def _getElementList(self, element, mapsets=None, elements=None, exclude=False):
         """Get list of GIS elements in accessible mapsets and display as tree

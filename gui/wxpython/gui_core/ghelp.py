@@ -565,15 +565,15 @@ class AboutWindow(wx.Frame):
         allStr = "%s :" % k.upper()
         try:
             allStr += _("   %d translated") % v["good"]
-        except:
+        except KeyError:
             pass
         try:
             allStr += _("   %d fuzzy") % v["fuzzy"]
-        except:
+        except KeyError:
             pass
         try:
             allStr += _("   %d untranslated") % v["bad"]
-        except:
+        except KeyError:
             pass
         return allStr
 
@@ -588,7 +588,12 @@ class AboutWindow(wx.Frame):
             )
             tgood.SetForegroundColour(wx.Colour(35, 142, 35))
             langBox.Add(tgood)
-        except:
+        except KeyError as e:
+            print(f"Key 'good' not found in dictionary: {e}")
+            tgood = StaticText(parent=par, id=wx.ID_ANY, label="")
+            langBox.Add(tgood)
+        except Exception as e:
+            print(f"Unexpected error occurred: {e}")
             tgood = StaticText(parent=par, id=wx.ID_ANY, label="")
             langBox.Add(tgood)
         try:
@@ -597,18 +602,28 @@ class AboutWindow(wx.Frame):
             )
             tfuzzy.SetForegroundColour(wx.Colour(255, 142, 0))
             langBox.Add(tfuzzy)
-        except:
-            tfuzzy = StaticText(parent=par, id=wx.ID_ANY, label="")
-            langBox.Add(tfuzzy)
+        except KeyError as e:
+            print(f"Key 'fuzzy' not found in dictionary: {e}")
+            tgood = StaticText(parent=par, id=wx.ID_ANY, label="")
+            langBox.Add(tgood)
+        except Exception as e:
+            print(f"Unexpected error occurred: {e}")
+            tgood = StaticText(parent=par, id=wx.ID_ANY, label="")
+            langBox.Add(tgood)
         try:
             tbad = StaticText(
                 parent=par, id=wx.ID_ANY, label=_("   %d untranslated") % v["bad"]
             )
             tbad.SetForegroundColour(wx.Colour(255, 0, 0))
             langBox.Add(tbad)
-        except:
-            tbad = StaticText(parent=par, id=wx.ID_ANY, label="")
-            langBox.Add(tbad)
+        except KeyError as e:
+            print(f"Key 'bad' not found in dictionary: {e}")
+            tgood = StaticText(parent=par, id=wx.ID_ANY, label="")
+            langBox.Add(tgood)
+        except Exception as e:
+            print(f"Unexpected error occurred: {e}")
+            tgood = StaticText(parent=par, id=wx.ID_ANY, label="")
+            langBox.Add(tgood)
         return langBox
 
     def _langPanel(self, lang, js):
@@ -843,7 +858,7 @@ class HelpWindow(HtmlWindow):
                             contents.append(line)
             self.SetPage("".join(contents))
             self.loaded = True
-        except:  # The Manual file was not found
+        except Exception:  # The Manual file was not found
             self.loaded = False
 
 

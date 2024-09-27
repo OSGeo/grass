@@ -1213,8 +1213,8 @@ class GroupDialog(wx.Dialog):
             try:
                 if re.compile(self.flt_pattern).search(dt):
                     flt_data.append(dt)
-            except:
-                pass
+            except re.error as e:
+                print(f"Error compiling regex pattern: {e}")
 
         return flt_data
 
@@ -1656,8 +1656,8 @@ class MapLayersDialogBase(wx.Dialog):
             try:
                 if re.compile(event.GetString()).search(layer):
                     list.append(layer)
-            except:
-                pass
+            except re.error as e:
+                print(f"Error compiling regex pattern: {e}")
         list = naturally_sorted(list)
 
         self.layers.Set(list)
