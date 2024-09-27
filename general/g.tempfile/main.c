@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
     /* create tempfile so next run of this program will create a unique name */
     if (!dry_run->answer) {
         if (directory->answer)
-            mkdir(tempfile, 0666);
+            mkdir(tempfile, 0777);
         else
             close(creat(tempfile, 0666));
     }
