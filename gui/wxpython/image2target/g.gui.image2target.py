@@ -30,70 +30,70 @@
 # % keyword: GCP
 # %end
 
-##%option G_OPT_M_LOCATION
-##% key: source_project
-##% label: The name of the source project (has no projection)
-##% description: The source project (location) has no CRS
-###% section: source
-##% required: yes
-##%end
+# %option G_OPT_M_LOCATION
+# % key: source_project
+# % label: The name of the source project (has no projection)
+# % description: The source project (location) has no CRS
+# % section: source
+# % required: yes
+# %end
 
-##%option G_OPT_M_MAPSET
-##% key: source_mapset
-##% label: The name of the source mapset (has no projection)
-##% description: The name of the source mapset (has no projection)
-###% section: source
-##% required: yes
-##%end
+# %option G_OPT_M_MAPSET
+# % key: source_mapset
+# % label: The name of the source mapset (has no projection)
+# % description: The name of the source mapset (has no projection)
+# % section: source
+# % required: yes
+# %end
 
-##%option G_OPT_I_GROUP
-##% key: source_group
-##% required: yes
-##% section: source
-##%end
+# %option G_OPT_I_GROUP
+# % key: source_group
+# % required: yes
+# % section: source
+# %end
 
-##%option G_OPT_R_INPUT
-##% key: source_image
-##% required: yes
-###% section: source
-##%end
+# %option G_OPT_R_INPUT
+# % key: source_image
+# % required: yes
+# % section: source
+# %end
 
-##%option G_OPT_R_INPUT
-##% key: target_image
-##% label: The name of the image that is already georeferenced used to find location of GCPs
-##% description: The name of the image that is already georeferenced used to find the location of GCPs
-###% section: target
-##% required: no
-##%end
+# %option G_OPT_R_INPUT
+# % key: target_image
+# % label: The name of the image that is already georeferenced used to find location of GCPs
+# % description: The name of the image that is already georeferenced used to find the location of GCPs
+# % section: target
+# % required: no
+# %end
 
-##%option
-##% key: camera
-##% type: string
-##% label: The name of the camera (generated in i.ortho.camera)
-##% description: The name of the camera (generated in i.ortho.camera)
-##% required: yes
-###% section: parameters
-##%end
+# %option
+# % key: camera
+# % type: string
+# % label: The name of the camera (generated in i.ortho.camera)
+# % description: The name of the camera (generated in i.ortho.camera)
+# % required: yes
+# % section: parameters
+# %end
 
-##%option
-##% key: order
-##% type: string
-##% label: The rectification order
-##% description: The rectification order
-##% required: yes
-##% answer: 1
-###% section: parameters
-##%end
+# %option
+# % key: order
+# % type: string
+# % label: The rectification order
+# % description: The rectification order
+# % required: yes
+# % answer: 1
+# % section: parameters
+# %end
 
-##%option
-##% key: extension
-##% type: string
-##% label: The name of the output files extension
-##% description: The name of the output files extension
-##% required: yes
-##% answer: _ii2t_out
-##% section: target
-##%end
+# %option
+# % key: extension
+# % type: string
+# % label: The name of the output files extension
+# % description: The name of the output files extension
+# % required: yes
+# % answer: _ii2t_out
+# % section: target
+# %end
 
 
 """
