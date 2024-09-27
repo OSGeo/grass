@@ -603,13 +603,13 @@ class AboutWindow(wx.Frame):
             tfuzzy.SetForegroundColour(wx.Colour(255, 142, 0))
             langBox.Add(tfuzzy)
         except KeyError as e:
-            print(f"Key 'fuzzy' not found in dictionary: {e}")
-            tgood = StaticText(parent=par, id=wx.ID_ANY, label="")
-            langBox.Add(tgood)
+            print(f"Key 'good' not found in dictionary: {e}")
+            tfuzzy = StaticText(parent=par, id=wx.ID_ANY, label="")
+            langBox.Add(tfuzzy)
         except Exception as e:
             print(f"Unexpected error occurred: {e}")
-            tgood = StaticText(parent=par, id=wx.ID_ANY, label="")
-            langBox.Add(tgood)
+            tfuzzy = StaticText(parent=par, id=wx.ID_ANY, label="")
+            langBox.Add(tfuzzy)
         try:
             tbad = StaticText(
                 parent=par, id=wx.ID_ANY, label=_("   %d untranslated") % v["bad"]
@@ -617,13 +617,13 @@ class AboutWindow(wx.Frame):
             tbad.SetForegroundColour(wx.Colour(255, 0, 0))
             langBox.Add(tbad)
         except KeyError as e:
-            print(f"Key 'bad' not found in dictionary: {e}")
-            tgood = StaticText(parent=par, id=wx.ID_ANY, label="")
-            langBox.Add(tgood)
+            print(f"Key 'good' not found in dictionary: {e}")
+            tbad = StaticText(parent=par, id=wx.ID_ANY, label="")
+            langBox.Add(tbad)
         except Exception as e:
             print(f"Unexpected error occurred: {e}")
-            tgood = StaticText(parent=par, id=wx.ID_ANY, label="")
-            langBox.Add(tgood)
+            tbad = StaticText(parent=par, id=wx.ID_ANY, label="")
+            langBox.Add(tbad)
         return langBox
 
     def _langPanel(self, lang, js):
