@@ -22,6 +22,7 @@ This program is free software under the GNU General Public License
 @author Lukas Bocan <silent_bob centrum.cz> (turn costs support)
 @author Eliska Kyzlikova <eliska.kyzlikova gmail.com> (turn costs support)
 """
+
 import os
 import math
 from copy import deepcopy
@@ -142,7 +143,8 @@ class VNETData:
     def InputsErrorMsgs(
         self, msg, analysis, params, flags, inv_params, relevant_params
     ):
-        """Checks input data in Parameters tab and shows messages if some value is not valid
+        """Checks input data in Parameters tab and shows messages if some value is
+        not valid
 
         :param str msg: message added to start of message string
         :return: True if checked inputs are OK
@@ -152,7 +154,7 @@ class VNETData:
         if flags["t"] and "turn_layer" not in relevant_params:
             GMessage(
                 parent=self.guiparent,
-                message=_("Module <%s> does not support turns costs." % analysis),
+                message=_("Module <%s> does not support turns costs.") % analysis,
             )
             return False
 
@@ -175,7 +177,7 @@ class VNETData:
             "turn_cat_layer": _("unique categories layer"),
         }
         for layer, layerLabel in vals.items():
-            if layer in ["turn_layer", "turn_cat_layer"] and not flags["t"]:
+            if layer in {"turn_layer", "turn_cat_layer"} and not flags["t"]:
                 continue
             if layer in inv_params:
                 if params[layer]:
@@ -192,7 +194,8 @@ class VNETData:
         for col in ["arc_column", "arc_backward_column", "node_column"]:
             if params[col] and col in inv_params and col in relevant_params:
                 errColStr += _(
-                    "Chosen column '%s' does not exist in attribute table of layer '%s' of vector map '%s'.\n"
+                    "Chosen column '%s' does not exist in attribute table of layer "
+                    "'%s' of vector map '%s'.\n"
                 ) % (params[col], params[layer], params["input"])
 
         if errColStr:
@@ -407,7 +410,8 @@ class VNETPointsData:
                 self._vnetPathUpdateUsePoints(None)
 
     def _updateTypeCol(self):
-        """Rename category values when module is changed. Expample: Start point -> Sink point"""
+        """Rename category values when module is changed. Example: Start point
+        -> Sink point"""
         colValues = [""]
         analysis, valid = self.an_params.GetParam("analysis")
         anParamsCats = self.an_data[analysis]["cmdParams"]["cats"]
@@ -558,8 +562,7 @@ class VNETPointsData:
         cols_data = deepcopy(self.cols)
 
         hidden_cols = []
-        hidden_cols.append(self.cols["name"].index("e"))
-        hidden_cols.append(self.cols["name"].index("n"))
+        hidden_cols.extend((self.cols["name"].index("e"), self.cols["name"].index("n")))
 
         analysis, valid = self.an_params.GetParam("analysis")
         if only_relevant and len(self.an_data[analysis]["cmdParams"]["cats"]) <= 1:
@@ -629,7 +632,7 @@ class VNETAnalysisParameters:
 
     def GetParam(self, param):
         invParams = []
-        if param in [
+        if param in {
             "input",
             "arc_layer",
             "node_layer",
@@ -638,7 +641,7 @@ class VNETAnalysisParameters:
             "node_column",
             "turn_layer",
             "turn_cat_layer",
-        ]:
+        }:
             invParams = self._getInvalidParams(self.params)
 
         if invParams:
@@ -663,8 +666,7 @@ class VNETAnalysisParameters:
                 vectMaps = grass.list_grouped("vector")[mapSet]
 
         if not params["input"] or mapName not in vectMaps:
-            invParams = list(params.keys())[:]
-            return invParams
+            return list(params.keys())[:]
 
         # check arc/node layer
         layers = utils.GetVectorNumberOfLayers(params["input"])
@@ -690,14 +692,14 @@ class VNETAnalysisParameters:
                 except (KeyError, ValueError):
                     table = None
 
-            if not table or not params[col] in list(columnchoices.keys()):
+            if not table or params[col] not in list(columnchoices.keys()):
                 invParams.append(col)
                 continue
 
-            if columnchoices[params[col]]["type"] not in [
+            if columnchoices[params[col]]["type"] not in {
                 "integer",
                 "double precision",
-            ]:
+            }:
                 invParams.append(col)
                 continue
 
@@ -736,7 +738,8 @@ class VNETAnalysesProperties:
                 },
                 "resultProps": {
                     "singleColor": None,
-                    "dbMgr": True,  # TODO delete this property, this information can be get from result
+                    "dbMgr": True,  # TODO delete this property, this information can
+                    # be get from result
                 },
                 "turns_support": True,
             },
@@ -1068,7 +1071,7 @@ class VectMap:
         )
         try:
             head = open(headPath, "r")
-            for line in head.readlines():
+            for line in head:
                 i = line.find(
                     "MAP DATE:",
                 )
@@ -1078,12 +1081,13 @@ class VectMap:
 
             head.close()
             return ""
-        except IOError:
+        except OSError:
             return ""
 
 
 class History:
-    """Class which reads and saves history data (based on gui.core.settings Settings class file save/load)
+    """Class which reads and saves history data (based on gui.core.settings Settings
+    class file save/load)
 
     .. todo::
         Maybe it could be useful for other GRASS wxGUI tools.
@@ -1196,11 +1200,10 @@ class History:
                 else:
                     newHist.write("%s%s%s" % ("\n", line, "\n"))
                     self.histStepsNum = newHistStepsNum
+            elif newHistStepsNum >= self.maxHistSteps:
+                self._parseLine(line, removedHistStep)
             else:
-                if newHistStepsNum >= self.maxHistSteps:
-                    self._parseLine(line, removedHistStep)
-                else:
-                    newHist.write("%s" % line)
+                newHist.write("%s" % line)
 
         return removedHistData
 
@@ -1247,8 +1250,7 @@ class History:
                     value[0] == "[" and value[-1] == "]"
                 ):  # TODO, possible wrong interpretation
                     value = value[1:-1].split(",")
-                    value = map(self._castValue, value)
-                    return value
+                    return map(self._castValue, value)
 
             if value == "True":
                 value = True
@@ -1269,9 +1271,9 @@ class History:
                         value = float(value)
                     except ValueError:
                         pass
-        else:  # -> write data
-            if isinstance(value, type(())):  # -> color
-                value = str(value[0]) + ":" + str(value[1]) + ":" + str(value[2])
+        # -> write data
+        elif isinstance(value, type(())):  # -> color
+            value = str(value[0]) + ":" + str(value[1]) + ":" + str(value[2])
 
         return value
 
@@ -1294,7 +1296,7 @@ class History:
 
         newHistStep = False
         isSearchedHistStep = False
-        for line in hist.readlines():
+        for line in hist:
             if not line.strip() and isSearchedHistStep:
                 break
             elif not line.strip():
@@ -1392,7 +1394,7 @@ class VNETGlobalTurnsData:
     def DataValidator(self, row, col, value):
         """Angle recalculation due to value changing"""
 
-        if col not in [1, 2]:
+        if col not in {1, 2}:
             return
 
         if col == 1:
@@ -1462,13 +1464,11 @@ class VNETGlobalTurnsData:
         remove_to_angle = self.turn_data[row][2]
         self.turn_data[prev_row][2] = remove_to_angle
 
-    def IsInInterval(self, from_angle, to_angle, angle):
+    def IsInInterval(self, from_angle, to_angle, angle) -> bool:
         """Test if a direction includes or not includes a value"""
         if to_angle < from_angle:
             to_angle = math.pi * 2 + to_angle
         if angle < from_angle:
             angle = math.pi * 2 + angle
 
-        if angle > from_angle and angle < to_angle:
-            return True
-        return False
+        return bool(angle > from_angle and angle < to_angle)

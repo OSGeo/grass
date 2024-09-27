@@ -9,7 +9,7 @@ Created on Thu Aug  9 14:04:12 2012
 """
 # utilities for generating REST indices
 # utilities for generating HTML indices
-# (C) 2003-2023 by Luca Delucchi and the GRASS Development Team
+# (C) 2003-2024 by Luca Delucchi and the GRASS Development Team
 
 import os
 import string
@@ -169,8 +169,8 @@ footer_tmpl = string.Template(
 --------------
 
 :doc:`Manual main page <index>` \| :doc:`Full Index <full_index>`
- 2003-2023 `GRASS Development Team <https://grass.osgeo.org>`_, GRASS GIS ${grass_version} Reference Manual
-"""
+ 2003-2024 `GRASS Development Team <https://grass.osgeo.org>`_, GRASS GIS ${grass_version} Reference Manual
+"""  # noqa: E501
 )
 
 cmd1_tmpl = string.Template(r"""*`$cmd.\* <${cmd}>` *""")
@@ -314,9 +314,9 @@ def rest_files(cls=None):
     for cmd in sorted(os.listdir(rest_dir)):
         if (
             cmd.endswith(".txt")
-            and (cls in [None, "*"] or cmd.startswith(cls + "."))
+            and (cls in {None, "*"} or cmd.startswith(cls + "."))
             and (cls != "*" or len(cmd.split(".")) >= 3)
-            and cmd not in ["full_index.txt", "index.txt"]
+            and cmd not in {"full_index.txt", "index.txt"}
             and cmd not in exclude_mods
             and not cmd.startswith("wxGUI.")
         ):

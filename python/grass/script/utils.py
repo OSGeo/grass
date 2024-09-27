@@ -18,7 +18,6 @@ for details.
 """
 
 import os
-import sys
 import shutil
 import locale
 import shlex
@@ -42,7 +41,7 @@ def float_or_dms(s):
 
     :return: float value
     """
-    if s[-1] in ["E", "W", "N", "S"]:
+    if s[-1] in {"E", "W", "N", "S"}:
         s = s[:-1]
     return sum(float(x) / 60**n for (n, x) in enumerate(s.split(":")))
 
@@ -72,9 +71,9 @@ def separator(sep):
         return ","
     elif sep == "space":
         return " "
-    elif sep == "tab" or sep == "\\t":
+    elif sep in {"tab", "\\t"}:
         return "\t"
-    elif sep == "newline" or sep == "\\n":
+    elif sep in {"newline", "\\n"}:
         return "\n"
     return sep
 
@@ -92,8 +91,7 @@ def diff_files(filename_a, filename_b):
     differ = difflib.Differ()
     fh_a = open(filename_a, "r")
     fh_b = open(filename_b, "r")
-    result = list(differ.compare(fh_a.readlines(), fh_b.readlines()))
-    return result
+    return list(differ.compare(fh_a.readlines(), fh_b.readlines()))
 
 
 def try_remove(path):
@@ -306,8 +304,27 @@ def get_num_suffix(number, max_number):
 
 
 def split(s):
-    """!Platform specific shlex.split"""
-    return shlex.split(s, posix=(sys.platform != "win32"))
+    """Same shlex.split() func on all OS platforms
+
+    We don't use parameter posix=True on the OS MS Windows due to incorrectly
+    splitting command line parameters:
+
+    e.g. d.vect where="cat < 10"
+
+    is split incorrectly as follows:
+
+    'where="cat', '<', '10"'
+
+    Should be:
+
+    'where=cat < 10'
+
+
+    :param str s: cmd string
+
+    return list: cmd list
+    """
+    return shlex.split(s)
 
 
 # source:

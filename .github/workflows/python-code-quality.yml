@@ -7,69 +7,114 @@ on:
       - main
       - releasebranch_*
   pull_request:
-    branches:
-      - main
-      - releasebranch_*
 
 jobs:
   python-checks:
-    name: Python Code Quality
+    name: Python Code Quality Checks
 
     concurrency:
-      group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{
-        matrix.pylint-version }}
+      group: ${{ github.workflow }}-${{ github.job }}-${{
+        github.event_name == 'pull_request' &&
+        github.head_ref || github.sha }}
       cancel-in-progress: true
 
-    # Using matrix just to get variables which are not environmental variables
-    # and also to sync with other workflows which use matrix.
     strategy:
       matrix:
         include:
           - os: ubuntu-22.04
-            python-version: '3.10'
-            min-python-version: '3.7'
-            black-version: '23.1.0'
-            flake8-version: '3.9.2'
-            pylint-version: '2.12.2'
+
+    env:
+      # renovate: datasource=python-version depName=python
+      PYTHON_VERSION: "3.10"
+      MIN_PYTHON_VERSION: "3.8"
+      # renovate: datasource=pypi depName=black
+      BLACK_VERSION: "24.8.0"
+      # renovate: datasource=pypi depName=flake8
+      FLAKE8_VERSION: "7.1.1"
+      # renovate: datasource=pypi depName=pylint
+      PYLINT_VERSION: "2.12.2"
+      # renovate: datasource=pypi depName=bandit
+      BANDIT_VERSION: "1.7.10"
+      # renovate: datasource=pypi depName=ruff
+      RUFF_VERSION: "0.6.8"
 
     runs-on: ${{ matrix.os }}
+    permissions:
+      security-events: write
 
     steps:
       - name: Versions
         run: |
           echo OS: ${{ matrix.os }}
-          echo Python: ${{ matrix.python-version }}
-          echo Minimimal Python version: ${{ matrix.min-python-version }}
-          echo Black: ${{ matrix.black-version }}
-          echo Flake8: ${{ matrix.flake8-version }}
-          echo Pylint: ${{ matrix.pylint-version }}
+          echo Python: ${{ env.PYTHON_VERSION }}
+          echo Minimal Python version: ${{ env.MIN_PYTHON_VERSION }}
+          echo Black: ${{ env.BLACK_VERSION }}
+          echo Flake8: ${{ env.FLAKE8_VERSION }}
+          echo Pylint: ${{ env.PYLINT_VERSION }}
+          echo Bandit: ${{ env.BANDIT_VERSION }}
+          echo Ruff: ${{ env.RUFF_VERSION }}
 
-      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
+      - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3 # v5.2.0
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+
+      - name: Install Ruff
+        run: pip install ruff==${{ env.RUFF_VERSION }}
+      - name: Run Ruff (output annotations on fixable errors)
+        run: ruff check --output-format=github . --preview --unsafe-fixes
+        continue-on-error: true
+      - name: Run Ruff (apply fixes for suggestions)
+        run: ruff check . --preview --fix --unsafe-fixes
+      - name: Create and uploads code suggestions to apply for Ruff
+        # Will fail fast here if there are changes required
+        id: diff-ruff
+        # To run after ruff step exits with failure when rules don't have fixes available
+        if: ${{ !cancelled() }}
+        uses: ./.github/actions/create-upload-suggestions
+        with:
+          tool-name: ruff
+          # To keep repo's file structure in formatted changes artifact
+          extra-upload-changes: pyproject.toml
+
+      - name: Install Black only
+        run: pip install black[jupyter]==${{ env.BLACK_VERSION }}
+
+      - name: Run Black
+        run: black .
+
+      - name: Create and uploads code suggestions to apply for Black
+        # Will fail fast here if there are changes required
+        id: diff-black
+        uses: ./.github/actions/create-upload-suggestions
+        with:
+          tool-name: black
+          # To keep repo's file structure in formatted changes artifact
+          extra-upload-changes: .clang-format
 
       - name: Install non-Python dependencies
         run: |
           sudo apt-get update -y
           sudo apt-get install -y wget git gawk findutils
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
-              sudo apt-get install -y --no-install-recommends --no-install-suggests
+          sudo apt-get install -y --no-install-recommends --no-install-suggests
 
       - name: Install Python dependencies
         run: |
-          python -m pip install --upgrade pip
           pip install -r .github/workflows/python_requirements.txt
           pip install -r .github/workflows/optional_requirements.txt
-          pip install black==${{ matrix.black-version }}
-          pip install flake8==${{ matrix.flake8-version }}
-          pip install pylint==${{ matrix.pylint-version }}
-
-      - name: Run Black
-        run: |
-          black --check --diff .
+          pip install --user pipx
+          pipx ensurepath
+          pipx install flake8==${{ env.FLAKE8_VERSION }}
+          pipx install pylint==${{ env.PYLINT_VERSION }}
+          pipx inject pylint -r .github/workflows/python_requirements.txt -r .github/workflows/optional_requirements.txt
+          # The extra toml is only needed before Python 3.11
+          pipx install bandit[sarif,toml]==${{ env.BANDIT_VERSION }}
 
       - name: Run Flake8
         run: |
@@ -79,6 +124,21 @@ jobs:
         run: |
           flake8 --count --statistics --show-source --jobs=$(nproc) python/grass/{script,jupyter}/testsuite/
 
+      - name: Bandit Vulnerability Scan
+        run: |
+          bandit -c pyproject.toml -iii -r . -f sarif -o bandit.sarif --exit-zero
+
+      - name: Upload Bandit Scan Results
+        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
+        with:
+          name: bandit.sarif
+          path: bandit.sarif
+
+      - name: Upload SARIF File into Security Tab
+        uses: github/codeql-action/upload-sarif@461ef6c76dfe95d5c364de2f431ddbd31a417628 # v3.26.9
+        with:
+          sarif_file: bandit.sarif
+
       - name: Create installation directory
         run: |
           mkdir $HOME/install
@@ -87,6 +147,7 @@ jobs:
         run: |
           echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
 
+      - uses: rui314/setup-mold@0bf4f07ef9048ec62a45f9dbf2f098afa49695f0 # v1
       - name: Build
         run: .github/workflows/build_${{ matrix.os }}.sh $HOME/install
 
@@ -94,29 +155,31 @@ jobs:
         run: |
           echo "$HOME/install/bin" >> $GITHUB_PATH
 
-      - name: Test executing of the grass command
-        run: .github/workflows/test_simple.sh
-
       - name: Run Pylint on grass package
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$HOME/install/grass84/lib:$LD_LIBRARY_PATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
           cd python
-          pylint --persistent=no --py-version=${{ matrix.min-python-version }} --jobs=$(nproc) grass
+          pylint --persistent=no --py-version=${{ env.MIN_PYTHON_VERSION }} --jobs=$(nproc) grass
 
       - name: Run Pylint on wxGUI
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$HOME/install/grass84/lib:$LD_LIBRARY_PATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
           cd gui/wxpython
-          pylint --persistent=no --py-version=${{ matrix.min-python-version }} --jobs=$(nproc) *
+          pylint --persistent=no --py-version=${{ env.MIN_PYTHON_VERSION }} --jobs=$(nproc) *
 
       - name: Run Pylint on other files using pytest
         run: |
-          pip install pytest pytest-pylint==0.19
-          echo "::warning file=.github/workflows/python-code-quality.yml,line=116,col=42,endColumn=48::Temporarily downgraded pytest-pylint to allow merging other PRs. The errors reported with a newer version seem legitimite and should be fixed (2023-10-18, see https://github.com/OSGeo/grass/pull/3205)"
+          pipx inject --include-apps pylint pytest==7.4.4
+          pipx inject pylint pytest-pylint==0.19 pytest-github-actions-annotate-failures
+          echo "::warning file=.github/workflows/python-code-quality.yml,line=149,col=42,endColumn=48::\
+            Temporarily downgraded pytest-pylint and pytest to allow merging other PRs.\
+            The errors reported with a newer version seem legitimite and should be fixed \
+            (2023-10-18, see https://github.com/OSGeo/grass/pull/3205)\
+            (2024-01-28, see https://github.com/OSGeo/grass/issues/3380)"
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$HOME/install/grass84/lib:$LD_LIBRARY_PATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
           pytest --pylint -m pylint --pylint-rcfile=.pylintrc --pylint-jobs=$(nproc) \
             --pylint-ignore-patterns="${{ env.PylintIgnore }}"
         env:
@@ -138,8 +201,17 @@ jobs:
           cp -rp dist.$ARCH/docs/html/libpython sphinx-grass
 
       - name: Make Sphinx documentation available
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
         with:
           name: sphinx-grass
           path: sphinx-grass
           retention-days: 3
+
+  python-success:
+    name: Python Code Quality Result
+    needs:
+      - python-checks
+    if: ${{ always() }}
+    uses: ./.github/workflows/verify-success.yml
+    with:
+      needs_context: ${{ toJson(needs) }}

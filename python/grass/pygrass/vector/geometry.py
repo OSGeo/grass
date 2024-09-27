@@ -3,6 +3,7 @@ Created on Wed Jul 18 10:46:25 2012
 
 @author: pietro
 """
+
 import ctypes
 import re
 from collections import namedtuple
@@ -24,8 +25,8 @@ test_vector_name = "geometry_doctest_map"
 LineDist = namedtuple("LineDist", "point dist spdist sldist")
 
 WKT = {
-    "POINT\((.*)\)": "point",  # 'POINT\(\s*([+-]*\d+\.*\d*)+\s*\)'
-    "LINESTRING\((.*)\)": "line",
+    r"POINT\((.*)\)": "point",  # 'POINT\(\s*([+-]*\d+\.*\d*)+\s*\)'
+    r"LINESTRING\((.*)\)": "line",
 }
 
 
@@ -78,7 +79,6 @@ def read_WKT(string):
 
 def read_WKB(buff):
     """Read the binary buffer and return a geometry object"""
-    pass
 
 
 def intersects(lineA, lineB, with_z=False):
@@ -125,19 +125,18 @@ def get_xyz(pnt):
             z = 0.0
         else:
             x, y, z = pnt.x, pnt.y, pnt.z
+    elif len(pnt) == 2:
+        x, y = pnt
+        z = 0.0
+    elif len(pnt) == 3:
+        x, y, z = pnt
     else:
-        if len(pnt) == 2:
-            x, y = pnt
-            z = 0.0
-        elif len(pnt) == 3:
-            x, y, z = pnt
-        else:
-            str_error = "The the format of the point is not supported: {0!r}"
-            raise ValueError(str_error.format(pnt))
+        str_error = "The the format of the point is not supported: {0!r}"
+        raise ValueError(str_error.format(pnt))
     return x, y, z
 
 
-class Attrs(object):
+class Attrs:
     def __init__(self, cat, table, writeable=False):
         self._cat = None
         self.cond = ""
@@ -267,7 +266,7 @@ class Attrs(object):
         self.table.conn.commit()
 
 
-class Geo(object):
+class Geo:
     """
     Base object for different feature types
     """
@@ -454,11 +453,11 @@ class Point(Geo):
     gtype = libvect.GV_POINT
 
     def __init__(self, x=0, y=0, z=None, **kargs):
-        super(Point, self).__init__(**kargs)
+        super().__init__(**kargs)
         if self.id and self.c_mapinfo:
             self.read()
         else:
-            self.is2D = True if z is None else False
+            self.is2D = z is None
             z = z if z is not None else 0
             libvect.Vect_append_point(self.c_points, x, y, z)
 
@@ -642,7 +641,7 @@ class Line(Geo):
     gtype = libvect.GV_LINE
 
     def __init__(self, points=None, **kargs):
-        super(Line, self).__init__(**kargs)
+        super().__init__(**kargs)
         if points is not None:
             for pnt in points:
                 self.append(pnt)
@@ -791,7 +790,7 @@ class Line(Geo):
 
         ..
         """
-        bbox = bbox if bbox else Bbox()
+        bbox = bbox or Bbox()
         libvect.Vect_line_box(self.c_points, bbox.c_bbox)
         return bbox
 
@@ -940,7 +939,6 @@ class Line(Geo):
         """
         # TODO: add this method.
         # libvect.Vect_get_line_cat(self.c_mapinfo, self.id, self.field)
-        pass
 
     def pop(self, indx):
         """Return the point in the index position and remove from the Line.
@@ -960,7 +958,7 @@ class Line(Geo):
             indx += self.c_points.contents.n_points
         if indx >= self.c_points.contents.n_points:
             raise IndexError("Index out of range")
-        pnt = self.__getitem__(indx)
+        pnt = self[indx]
         libvect.Vect_line_delete_point(self.c_points, indx)
         return pnt
 
@@ -1030,7 +1028,7 @@ class Line(Geo):
 
         ..
         """
-        for indx, point in enumerate(self.__iter__()):
+        for indx, point in enumerate(iter(self)):
             if pnt == point:
                 libvect.Vect_line_delete_point(self.c_points, indx)
                 return
@@ -1088,7 +1086,7 @@ class Line(Geo):
 
         ..
         """
-        return [pnt.coords() for pnt in self.__iter__()]
+        return [pnt.coords() for pnt in iter(self)]
 
     def to_array(self):
         """Return an array of coordinates. ::
@@ -1114,10 +1112,7 @@ class Line(Geo):
         ..
         """
         return "LINESTRING(%s)" % ", ".join(
-            [
-                " ".join(["%f" % coord for coord in pnt.coords()])
-                for pnt in self.__iter__()
-            ]
+            [" ".join(["%f" % coord for coord in pnt.coords()]) for pnt in iter(self)]
         )
 
     def from_wkt(self, wkt):
@@ -1135,11 +1130,11 @@ class Line(Geo):
 
         ..
         """
-        match = re.match("LINESTRING\((.*)\)", wkt)
+        match = re.match(r"LINESTRING\((.*)\)", wkt)
         if match:
             self.reset()
             for coord in match.groups()[0].strip().split(","):
-                self.append(tuple([float(e) for e in coord.split(" ")]))
+                self.append(tuple(float(e) for e in coord.split(" ")))
         else:
             return None
 
@@ -1244,7 +1239,7 @@ class Line(Geo):
             return (Node(n1.value, self.c_mapinfo), Node(n2.value, self.c_mapinfo))
 
 
-class Node(object):
+class Node:
     """Node class for topological analysis of line neighbors.
 
     Objects of this class will be returned by the node() function
@@ -1350,7 +1345,7 @@ class Boundary(Line):
     gtype = libvect.GV_BOUNDARY
 
     def __init__(self, **kargs):
-        super(Boundary, self).__init__(**kargs)
+        super().__init__(**kargs)
         v_id = kargs.get("v_id", 0)
         # not sure what it means that v_id is None
         v_id = 0 if v_id is None else v_id
@@ -1375,12 +1370,11 @@ class Boundary(Line):
     def _centroid(self, side, idonly=False):
         if side > 0:
             v_id = libvect.Vect_get_area_centroid(self.c_mapinfo, side)
-            v_id = v_id if v_id else None
+            v_id = v_id or None
             if idonly:
                 return v_id
             else:
-                cntr = Centroid(v_id=v_id, c_mapinfo=self.c_mapinfo)
-                return cntr
+                return Centroid(v_id=v_id, c_mapinfo=self.c_mapinfo)
 
     def left_centroid(self, idonly=False):
         """Return left centroid
@@ -1445,7 +1439,7 @@ class Centroid(Point):
     gtype = libvect.GV_CENTROID
 
     def __init__(self, area_id=None, **kargs):
-        super(Centroid, self).__init__(**kargs)
+        super().__init__(**kargs)
         self.area_id = area_id
         if self.id and self.c_mapinfo and self.area_id is None:
             self.area_id = self._area_id()
@@ -1480,7 +1474,7 @@ class Isle(Geo):
     """An Isle is an area contained by another area."""
 
     def __init__(self, **kargs):
-        super(Isle, self).__init__(**kargs)
+        super().__init__(**kargs)
         # self.area_id = area_id
 
     def __repr__(self):
@@ -1496,7 +1490,7 @@ class Isle(Geo):
     @mapinfo_must_be_set
     def bbox(self, bbox=None):
         """Return bounding box of Isle"""
-        bbox = bbox if bbox else Bbox()
+        bbox = bbox or Bbox()
         libvect.Vect_get_isle_box(self.c_mapinfo, self.id, bbox.c_bbox)
         return bbox
 
@@ -1568,7 +1562,7 @@ class Isle(Geo):
         return libvect.Vect_line_geodesic_length(border.c_points)
 
 
-class Isles(object):
+class Isles:
     def __init__(self, c_mapinfo, area_id=None):
         self.c_mapinfo = c_mapinfo
         self.area_id = area_id
@@ -1595,7 +1589,7 @@ class Isles(object):
         """Return the id of isles"""
         return [
             libvect.Vect_get_area_isle(self.c_mapinfo, self.area_id, i)
-            for i in range(self.__len__())
+            for i in range(len(self))
         ]
 
     @mapinfo_must_be_set
@@ -1632,7 +1626,7 @@ class Area(Geo):
     gtype = libvect.GV_AREA
 
     def __init__(self, **kargs):
-        super(Area, self).__init__(**kargs)
+        super().__init__(**kargs)
 
         # set the attributes
         # if self.attrs and self.cat:
@@ -1682,7 +1676,7 @@ class Area(Geo):
 
     @mapinfo_must_be_set
     def area(self):
-        """Returns area of area without areas of isles.
+        r"""Returns area of area without areas of isles.
         double Vect_get_area_area (const struct Map_info \*Map, int area)
         """
         return libvect.Vect_get_area_area(self.c_mapinfo, self.id)
@@ -1699,7 +1693,7 @@ class Area(Geo):
         :param bbox: a Bbox object to fill with info from bounding box of area
         :type bbox: a Bbox object
         """
-        bbox = bbox if bbox else Bbox()
+        bbox = bbox or Bbox()
         libvect.Vect_get_area_box(self.c_mapinfo, self.id, bbox.c_bbox)
         return bbox
 
@@ -1763,7 +1757,7 @@ class Area(Geo):
 
     @mapinfo_must_be_set
     def boundaries(self, ilist=False):
-        """Creates list of boundaries for given area.
+        r"""Creates list of boundaries for given area.
 
         int Vect_get_area_boundaries(const struct Map_info \*Map,
                                      int area, struct ilist \*List)
@@ -1797,18 +1791,17 @@ class Area(Geo):
         :param cats: a Cats object to fill with info with area categories
         :type cats: a Cats object
         """
-        cats = cats if cats else Cats()
+        cats = cats or Cats()
         libvect.Vect_get_area_cats(self.c_mapinfo, self.id, cats.c_cats)
         return cats
 
     def get_first_cat(self):
-        """Find FIRST category of given field and area.
+        r"""Find FIRST category of given field and area.
 
         int Vect_get_area_cat(const struct Map_info \*Map, int area, int field)
 
         ..warning: Not implemented
         """
-        pass
 
     @mapinfo_must_be_set
     def contains_point(self, point, bbox=None):
@@ -1819,7 +1812,7 @@ class Area(Geo):
         :param bbox: the bounding box where run the analysis
         :type bbox: a Bbox object
         """
-        bbox = bbox if bbox else self.bbox()
+        bbox = bbox or self.bbox()
         return bool(
             libvect.Vect_point_in_area(
                 point.x, point.y, self.c_mapinfo, self.id, bbox.c_bbox
@@ -1828,7 +1821,7 @@ class Area(Geo):
 
     @mapinfo_must_be_set
     def perimeter(self):
-        """Calculate area perimeter.
+        r"""Calculate area perimeter.
 
         :return: double Vect_area_perimeter (const struct line_pnts \*Points)
 
@@ -1896,8 +1889,8 @@ def read_next_line(
     if c_cats is None:
         free_cats = True
 
-    c_points = c_points if c_points else ctypes.pointer(libvect.line_pnts())
-    c_cats = c_cats if c_cats else ctypes.pointer(libvect.line_cats())
+    c_points = c_points or ctypes.pointer(libvect.line_pnts())
+    c_cats = c_cats or ctypes.pointer(libvect.line_cats())
     ftype, v_id, c_points, c_cats = c_read_next_line(c_mapinfo, c_points, c_cats)
     return GV_TYPE[ftype]["obj"](
         v_id=v_id,
@@ -1944,8 +1937,8 @@ def read_line(
     if c_cats is None:
         free_cats = True
 
-    c_points = c_points if c_points else ctypes.pointer(libvect.line_pnts())
-    c_cats = c_cats if c_cats else ctypes.pointer(libvect.line_cats())
+    c_points = c_points or ctypes.pointer(libvect.line_pnts())
+    c_cats = c_cats or ctypes.pointer(libvect.line_cats())
     feature_id, ftype, c_points, c_cats = c_read_line(
         feature_id, c_mapinfo, c_points, c_cats
     )

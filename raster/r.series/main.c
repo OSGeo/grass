@@ -227,7 +227,10 @@ int main(int argc, char *argv[])
                     "threads setting."));
     nprocs = 1;
 #endif
-
+    if (nprocs > 1 && G_find_raster("MASK", G_mapset()) != NULL) {
+        G_warning(_("Parallel processing disabled due to active MASK."));
+        nprocs = 1;
+    }
     lo = -INFINITY;
     hi = INFINITY;
     if (parm.range->answer) {
@@ -614,7 +617,7 @@ int main(int argc, char *argv[])
 
                 computed++;
             } /* end for loop */
-        }     /* end parallel region */
+        } /* end parallel region */
 
         /* write output buffer to disk */
         for (i = 0; i < num_outputs; i++) {

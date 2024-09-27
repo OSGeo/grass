@@ -127,7 +127,8 @@ class VNETManager:
             return False
 
         # for case there is some map with same name
-        # (when analysis does not produce any map, this map would have been shown as result)
+        # (when analysis does not produce any map, this map would have been shown
+        # as result)
         RunCommand(
             "g.remove",
             flags="f",
@@ -484,11 +485,13 @@ class VNETAnalyses:
         else:
             cmdParams.append("input=" + params["input"])
 
-        cmdParams.append("file=" + self.coordsTmpFile)
-
-        cmdParams.append("dmax=" + str(params["max_dist"]))
-
-        cmdParams.append("--overwrite")
+        cmdParams.extend(
+            (
+                "file=" + self.coordsTmpFile,
+                "dmax=" + str(params["max_dist"]),
+                "--overwrite",
+            )
+        )
         self._prepareCmd(cmd=cmdParams)
 
         if flags["t"]:
@@ -604,10 +607,11 @@ class VNETAnalyses:
             # if angle < from_angle:
             #    angle = math.pi * 2  + angle
 
-            where = " WHERE (((angle < {0}) AND ({2} + angle >= {0} AND {2} + angle < {1})) OR \
-                            ((angle >= {0}) AND (angle >= {0} AND angle < {1}))) AND cost==0.0 ".format(
-                str(from_angle), str(to_angle), str(math.pi * 2)
-            )
+            where = (
+                " WHERE (((angle < {0}) AND ({2} + angle >= {0} AND {2} + angle < {1}))"
+                " OR ((angle >= {0}) AND (angle >= {0} AND angle < {1})))"
+                " AND cost==0.0 "
+            ).format(str(from_angle), str(to_angle), str(math.pi * 2))
 
             stm = ("UPDATE %s SET cost=%f " % (table, cost)) + where + ";\n"
             sqlFile_f.write(stm)
@@ -695,8 +699,9 @@ class VNETAnalyses:
         if not self.tmpInPtsConnected:
             return False
 
-        cmdParams.append("input=" + self.tmpInPtsConnected.GetVectMapName())
-        cmdParams.append("--overwrite")
+        cmdParams.extend(
+            ("input=" + self.tmpInPtsConnected.GetVectMapName(), "--overwrite")
+        )
 
         self._setCmdForSpecificAn(cmdParams)
 
@@ -753,7 +758,8 @@ class VNETAnalyses:
     def _setInputParams(self, analysis, params, flags):
         """Return list of chosen values (vector map, layers).
 
-        The list items are in form to be used in command for analysis e.g. 'arc_layer=1'.
+        The list items are in form to be used in command for analysis
+        e.g. 'arc_layer=1'.
         """
 
         inParams = []
@@ -766,7 +772,7 @@ class VNETAnalyses:
             inParams.append(col + "=" + params[colInptF])
 
         for layer in ["arc_layer", "node_layer", "turn_layer", "turn_cat_layer"]:
-            if not flags["t"] and layer in ["turn_layer", "turn_cat_layer"]:
+            if not flags["t"] and layer in {"turn_layer", "turn_cat_layer"}:
                 continue
             # TODO
             if flags["t"] and layer == "node_layer":
@@ -1024,8 +1030,7 @@ def AddTmpMapAnalysisMsg(mapName, tmp_maps):  # TODO
         "Temporary map %s  already exists.\n"
         + "Do you want to continue in analysis and overwrite it?"
     ) % (mapName + "@" + grass.gisenv()["MAPSET"])
-    tmpMap = tmp_maps.AddTmpVectMap(mapName, msg)
-    return tmpMap
+    return tmp_maps.AddTmpVectMap(mapName, msg)
 
 
 class SnappingNodes(wx.EvtHandler):

@@ -21,6 +21,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 from .base import SQLDatabaseInterface
 from .core import SQLDatabaseInterfaceConnection, get_tgis_db_version_from_metadata
 
@@ -35,9 +36,18 @@ class RasterMetadataBase(SQLDatabaseInterface):
     .. code-block:: python
 
         >>> init()
-        >>> meta = RasterMetadataBase(table="metadata", ident="soil@PERMANENT",
-        ... datatype="CELL", cols=100, rows=100, number_of_cells=10000, nsres=0.1,
-        ... ewres=0.1, min=0, max=100)
+        >>> meta = RasterMetadataBase(
+        ...     table="metadata",
+        ...     ident="soil@PERMANENT",
+        ...     datatype="CELL",
+        ...     cols=100,
+        ...     rows=100,
+        ...     number_of_cells=10000,
+        ...     nsres=0.1,
+        ...     ewres=0.1,
+        ...     min=0,
+        ...     max=100,
+        ... )
         >>> meta.datatype
         'CELL'
         >>> meta.cols
@@ -241,6 +251,26 @@ class RasterMetadataBase(SQLDatabaseInterface):
     min = property(fget=get_min, fset=set_min)
     max = property(fget=get_max, fset=set_max)
 
+    def print_info(self):
+        """Print information about this class in human readable style"""
+        self._print_info_body(shell=False)
+
+    def print_shell_info(self):
+        """Print information about this class in shell style"""
+        self._print_info_body(shell=True)
+
+    def _print_info_head(self, shell=False):
+        """Print information about this class (head part).
+
+        No header printed in shell style mode.
+
+        :param bool shell: True for human readable style otherwise shell style
+        """
+        if not shell:
+            print(
+                " +-------------------- Metadata information ----------------------------------+"  # noqa: E501
+            )
+
     def _print_info_body(self, shell=False):
         """Print information about this class (body part).
 
@@ -284,9 +314,17 @@ class RasterMetadata(RasterMetadataBase):
     .. code-block:: python
 
         >>> init()
-        >>> meta = RasterMetadata(ident="soil@PERMANENT",
-        ... datatype="CELL", cols=100, rows=100, number_of_cells=10000, nsres=0.1,
-        ... ewres=0.1, min=0, max=100)
+        >>> meta = RasterMetadata(
+        ...     ident="soil@PERMANENT",
+        ...     datatype="CELL",
+        ...     cols=100,
+        ...     rows=100,
+        ...     number_of_cells=10000,
+        ...     nsres=0.1,
+        ...     ewres=0.1,
+        ...     min=0,
+        ...     max=100,
+        ... )
         >>> meta.datatype
         'CELL'
         >>> meta.cols
@@ -313,6 +351,7 @@ class RasterMetadata(RasterMetadataBase):
          | East-west resolution:....... 0.1
          | Minimum value:.............. 0.0
          | Maximum value:.............. 100.0
+         | Semantic label:............. None
         >>> meta.print_shell_info()
         datatype=CELL
         cols=100
@@ -322,6 +361,7 @@ class RasterMetadata(RasterMetadataBase):
         ewres=0.1
         min=0.0
         max=100.0
+        semantic_label=None
 
     """
 
@@ -352,9 +392,6 @@ class RasterMetadata(RasterMetadataBase):
             max,
         )
 
-        if get_tgis_db_version_from_metadata() > 2:
-            self.set_semantic_label(semantic_label)
-
     def set_semantic_label(self, semantic_label):
         """Set the semantic label identifier"""
         self.D["semantic_label"] = semantic_label
@@ -369,17 +406,19 @@ class RasterMetadata(RasterMetadataBase):
 
     semantic_label = property(fget=get_semantic_label, fset=set_semantic_label)
 
-    def _print_info_body(self, shell=False):
-        """Print information about this class (body part).
-
-        :param bool shell: True for human readable style otherwise shell style
-        """
-        super()._print_info_body(shell)
+    def print_info(self):
+        """Print information about this class."""
+        self._print_info_head(shell=False)
+        self._print_info_body(shell=False)
         # semantic label section (raster specific only)
-        if shell:
-            print("semantic_label=" + str(self.get_semantic_label()))
-        else:
-            print(" | Semantic label:............. " + str(self.get_semantic_label()))
+        print(" | Semantic label:............. " + str(self.get_semantic_label()))
+
+    def print_shell_info(self):
+        """Print information about this class in shell style"""
+        self._print_info_head(shell=True)
+        self._print_info_body(shell=True)
+        # semantic label section (raster specific only)
+        print("semantic_label=" + str(self.get_semantic_label()))
 
 
 ###############################################################################
@@ -401,10 +440,19 @@ class Raster3DMetadata(RasterMetadataBase):
     .. code-block:: python
 
         >>> init()
-        >>> meta = Raster3DMetadata(ident="soil@PERMANENT",
-        ... datatype="FCELL", cols=100, rows=100, depths=100,
-        ... number_of_cells=1000000, nsres=0.1, ewres=0.1, tbres=0.1,
-        ... min=0, max=100)
+        >>> meta = Raster3DMetadata(
+        ...     ident="soil@PERMANENT",
+        ...     datatype="FCELL",
+        ...     cols=100,
+        ...     rows=100,
+        ...     depths=100,
+        ...     number_of_cells=1000000,
+        ...     nsres=0.1,
+        ...     ewres=0.1,
+        ...     tbres=0.1,
+        ...     min=0,
+        ...     max=100,
+        ... )
         >>> meta.datatype
         'FCELL'
         >>> meta.cols
@@ -515,18 +563,19 @@ class Raster3DMetadata(RasterMetadataBase):
     depths = property(fget=get_depths, fset=set_depths)
     tbres = property(fget=get_tbres, fset=set_tbres)
 
-    def _print_info_body(self, shell=False):
-        """Print information about this class (body part).
+    def print_info(self):
+        """Print information about this class."""
+        self._print_info_head(shell=False)
+        self._print_info_body(shell=False)
+        print(" | Number of depths:........... " + str(self.get_depths()))
+        print(" | Top-Bottom resolution:...... " + str(self.get_tbres()))
 
-        :param bool shell: True for human readable style otherwise shell style
-        """
-        super()._print_info_body(shell)
-        if shell:
-            print("depths=" + str(self.get_depths()))
-            print("tbres=" + str(self.get_tbres()))
-        else:
-            print(" | Number of depths:........... " + str(self.get_depths()))
-            print(" | Top-Bottom resolution:...... " + str(self.get_tbres()))
+    def print_shell_info(self):
+        """Print information about this class in shell style"""
+        self._print_info_head(shell=True)
+        self._print_info_body(shell=True)
+        print("depths=" + str(self.get_depths()))
+        print("tbres=" + str(self.get_tbres()))
 
 
 ###############################################################################
@@ -544,11 +593,22 @@ class VectorMetadata(SQLDatabaseInterface):
     .. code-block:: python
 
         >>> init()
-        >>> meta = VectorMetadata(ident="lidar@PERMANENT", is_3d=True,
-        ... number_of_points=1, number_of_lines=2, number_of_boundaries=3,
-        ... number_of_centroids=4, number_of_faces=5, number_of_kernels=6,
-        ... number_of_primitives=7, number_of_nodes=8, number_of_areas=9,
-        ... number_of_islands=10, number_of_holes=11, number_of_volumes=12)
+        >>> meta = VectorMetadata(
+        ...     ident="lidar@PERMANENT",
+        ...     is_3d=True,
+        ...     number_of_points=1,
+        ...     number_of_lines=2,
+        ...     number_of_boundaries=3,
+        ...     number_of_centroids=4,
+        ...     number_of_faces=5,
+        ...     number_of_kernels=6,
+        ...     number_of_primitives=7,
+        ...     number_of_nodes=8,
+        ...     number_of_areas=9,
+        ...     number_of_islands=10,
+        ...     number_of_holes=11,
+        ...     number_of_volumes=12,
+        ... )
         >>> meta.id
         'lidar@PERMANENT'
         >>> meta.is_3d
@@ -835,53 +895,40 @@ class VectorMetadata(SQLDatabaseInterface):
     number_of_holes = property(fget=get_number_of_holes, fset=set_number_of_holes)
     number_of_volumes = property(fget=get_number_of_volumes, fset=set_number_of_volumes)
 
-    def _print_info_body(self, shell=False):
-        """Print information about this class (body part).
+    def print_info(self):
+        """Print information about this class in human readable style"""
+        print(
+            " +-------------------- Metadata information ----------------------------------+"  # noqa: E501
+        )
+        print(" | Is map 3d .................. " + str(self.get_3d_info()))
+        print(" | Number of points ........... " + str(self.get_number_of_points()))
+        print(" | Number of lines ............ " + str(self.get_number_of_lines()))
+        print(" | Number of boundaries ....... " + str(self.get_number_of_boundaries()))
+        print(" | Number of centroids ........ " + str(self.get_number_of_centroids()))
+        print(" | Number of faces ............ " + str(self.get_number_of_faces()))
+        print(" | Number of kernels .......... " + str(self.get_number_of_kernels()))
+        print(" | Number of primitives ....... " + str(self.get_number_of_primitives()))
+        print(" | Number of nodes ............ " + str(self.get_number_of_nodes()))
+        print(" | Number of areas ............ " + str(self.get_number_of_areas()))
+        print(" | Number of islands .......... " + str(self.get_number_of_islands()))
+        print(" | Number of holes ............ " + str(self.get_number_of_holes()))
+        print(" | Number of volumes .......... " + str(self.get_number_of_volumes()))
 
-        :param bool shell: True for human readable style otherwise shell style
-        """
-        if shell:
-            print("is_3d=" + str(self.get_3d_info()))
-            print("points=" + str(self.get_number_of_points()))
-            print("lines=" + str(self.get_number_of_lines()))
-            print("boundaries=" + str(self.get_number_of_boundaries()))
-            print("centroids=" + str(self.get_number_of_centroids()))
-            print("faces=" + str(self.get_number_of_faces()))
-            print("kernels=" + str(self.get_number_of_kernels()))
-            print("primitives=" + str(self.get_number_of_primitives()))
-            print("nodes=" + str(self.get_number_of_nodes()))
-            print("areas=" + str(self.get_number_of_areas()))
-            print("islands=" + str(self.get_number_of_islands()))
-            print("holes=" + str(self.get_number_of_holes()))
-            print("volumes=" + str(self.get_number_of_volumes()))
-        else:
-            print(" | Is map 3d .................. " + str(self.get_3d_info()))
-            print(" | Number of points ........... " + str(self.get_number_of_points()))
-            print(" | Number of lines ............ " + str(self.get_number_of_lines()))
-            print(
-                " | Number of boundaries ....... "
-                + str(self.get_number_of_boundaries())
-            )
-            print(
-                " | Number of centroids ........ " + str(self.get_number_of_centroids())
-            )
-            print(" | Number of faces ............ " + str(self.get_number_of_faces()))
-            print(
-                " | Number of kernels .......... " + str(self.get_number_of_kernels())
-            )
-            print(
-                " | Number of primitives ....... "
-                + str(self.get_number_of_primitives())
-            )
-            print(" | Number of nodes ............ " + str(self.get_number_of_nodes()))
-            print(" | Number of areas ............ " + str(self.get_number_of_areas()))
-            print(
-                " | Number of islands .......... " + str(self.get_number_of_islands())
-            )
-            print(" | Number of holes ............ " + str(self.get_number_of_holes()))
-            print(
-                " | Number of volumes .......... " + str(self.get_number_of_volumes())
-            )
+    def print_shell_info(self):
+        """Print information about this class in shell style"""
+        print("is_3d=" + str(self.get_3d_info()))
+        print("points=" + str(self.get_number_of_points()))
+        print("lines=" + str(self.get_number_of_lines()))
+        print("boundaries=" + str(self.get_number_of_boundaries()))
+        print("centroids=" + str(self.get_number_of_centroids()))
+        print("faces=" + str(self.get_number_of_faces()))
+        print("kernels=" + str(self.get_number_of_kernels()))
+        print("primitives=" + str(self.get_number_of_primitives()))
+        print("nodes=" + str(self.get_number_of_nodes()))
+        print("areas=" + str(self.get_number_of_areas()))
+        print("islands=" + str(self.get_number_of_islands()))
+        print("holes=" + str(self.get_number_of_holes()))
+        print("volumes=" + str(self.get_number_of_volumes()))
 
 
 ###############################################################################
@@ -897,8 +944,9 @@ class STDSMetadataBase(SQLDatabaseInterface):
      .. code-block:: python
 
          >>> init()
-         >>> meta = STDSMetadataBase(ident="soils@PERMANENT",
-         ... title="Soils", description="Soils 1950 - 2010")
+         >>> meta = STDSMetadataBase(
+         ...     ident="soils@PERMANENT", title="Soils", description="Soils 1950 - 2010"
+         ... )
          >>> meta.id
          'soils@PERMANENT'
          >>> meta.title
@@ -998,13 +1046,11 @@ class STDSMetadataBase(SQLDatabaseInterface):
 
     def print_info(self):
         """Print information about this class in human readable style"""
-        self._print_info_head(shell=False)
         self._print_info_body(shell=False)
         self._print_info_tail(shell=False)
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
-        self._print_info_head(shell=True)
         self._print_info_body(shell=True)
         self._print_info_tail(shell=True)
 
@@ -1017,8 +1063,14 @@ class STDSMetadataBase(SQLDatabaseInterface):
         """
         if not shell:
             print(
-                " +-------------------- Metadata information ----------------------------------+"
+                " +-------------------- Metadata information ----------------------------------+"  # noqa: E501
             )
+
+    def _print_info_body(self, shell=False):
+        """Print information about this class (body part).
+
+        :param bool shell: True for human readable style otherwise shell style
+        """
 
     def _print_info_tail(self, shell=False):
         """Print information about this class (tail part).
@@ -1088,8 +1140,9 @@ class STDSRasterMetadataBase(STDSMetadataBase):
     .. code-block:: python
 
         >>> init()
-        >>> meta = STDSRasterMetadataBase(ident="soils@PERMANENT",
-        ... title="Soils", description="Soils 1950 - 2010")
+        >>> meta = STDSRasterMetadataBase(
+        ...     ident="soils@PERMANENT", title="Soils", description="Soils 1950 - 2010"
+        ... )
         >>> meta.id
         'soils@PERMANENT'
         >>> meta.title
@@ -1306,8 +1359,9 @@ class STRDSMetadata(STDSRasterMetadataBase):
     .. code-block:: python
 
         >>> init()
-        >>> meta = STRDSMetadata(ident="soils@PERMANENT",
-        ... title="Soils", description="Soils 1950 - 2010")
+        >>> meta = STRDSMetadata(
+        ...     ident="soils@PERMANENT", title="Soils", description="Soils 1950 - 2010"
+        ... )
         >>> meta.id
         'soils@PERMANENT'
         >>> meta.title
@@ -1438,6 +1492,16 @@ class STRDSMetadata(STDSRasterMetadataBase):
     number_of_semantic_labels = property(fget=get_number_of_semantic_labels)
     semantic_labels = property(fget=get_semantic_labels)
 
+    def print_info(self):
+        """Print information about this class in human readable style"""
+        self._print_info_head(shell=False)
+        super().print_info()
+
+    def print_shell_info(self):
+        """Print information about this class in shell style"""
+        self._print_info_head(shell=True)
+        super().print_shell_info()
+
     def _print_info_body(self, shell=False):
         """Print information about this class (body part).
 
@@ -1480,8 +1544,9 @@ class STR3DSMetadata(STDSRasterMetadataBase):
     .. code-block:: python
 
         >>> init()
-        >>> meta = STR3DSMetadata(ident="soils@PERMANENT",
-        ... title="Soils", description="Soils 1950 - 2010")
+        >>> meta = STR3DSMetadata(
+        ...     ident="soils@PERMANENT", title="Soils", description="Soils 1950 - 2010"
+        ... )
         >>> meta.id
         'soils@PERMANENT'
         >>> meta.title
@@ -1523,6 +1588,8 @@ class STR3DSMetadata(STDSRasterMetadataBase):
          | Command history:
         >>> meta.print_shell_info()
         raster3d_register=None
+        tbres_min=None
+        tbres_max=None
         nsres_min=None
         nsres_max=None
         ewres_min=None
@@ -1531,8 +1598,6 @@ class STR3DSMetadata(STDSRasterMetadataBase):
         min_max=None
         max_min=None
         max_max=None
-        tbres_min=None
-        tbres_max=None
         aggregation_type=None
         number_of_maps=None
 
@@ -1585,6 +1650,16 @@ class STR3DSMetadata(STDSRasterMetadataBase):
     tbres_min = property(fget=get_tbres_min)
     tbres_max = property(fget=get_tbres_max)
 
+    def print_info(self):
+        """Print information about this class in human readable style"""
+        self._print_info_head(shell=False)
+        super().print_info()
+
+    def print_shell_info(self):
+        """Print information about this class in shell style"""
+        self._print_info_head(shell=True)
+        super().print_shell_info()
+
     def _print_info_body(self, shell=False):
         """Print information about this class (body part).
 
@@ -1622,8 +1697,11 @@ class STVDSMetadata(STDSMetadataBase):
      .. code-block:: python
 
          >>> init()
-         >>> meta = STVDSMetadata(ident="lidars@PERMANENT",
-         ... title="LIDARS", description="LIDARS 2008 - 2010")
+         >>> meta = STVDSMetadata(
+         ...     ident="lidars@PERMANENT",
+         ...     title="LIDARS",
+         ...     description="LIDARS 2008 - 2010",
+         ... )
          >>> meta.id
          'lidars@PERMANENT'
          >>> meta.title
@@ -1846,6 +1924,16 @@ class STVDSMetadata(STDSMetadataBase):
     number_of_islands = property(fget=get_number_of_islands)
     number_of_holes = property(fget=get_number_of_holes)
     number_of_volumes = property(fget=get_number_of_volumes)
+
+    def print_info(self):
+        """Print information about this class in human readable style"""
+        self._print_info_head(shell=False)
+        super().print_info()
+
+    def print_shell_info(self):
+        """Print information about this class in shell style"""
+        self._print_info_head(shell=True)
+        super().print_shell_info()
 
     def _print_info_body(self, shell=False):
         """Print information about this class (body part).

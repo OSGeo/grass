@@ -3,6 +3,7 @@ Created on Fri Aug 17 17:24:03 2012
 
 @author: pietro
 """
+
 import ctypes
 import datetime
 import grass.lib.vector as libvect
@@ -19,10 +20,7 @@ test_vector_name = "abstract_doctest_map"
 
 def is_open(c_mapinfo):
     """Return if the Vector is open"""
-    return (
-        c_mapinfo.contents.open != 0
-        and c_mapinfo.contents.open != libvect.VECT_CLOSED_CODE
-    )
+    return c_mapinfo.contents.open not in {0, libvect.VECT_CLOSED_CODE}
 
 
 # =============================================
@@ -30,7 +28,7 @@ def is_open(c_mapinfo):
 # =============================================
 
 
-class Info(object):
+class Info:
     """Basic vector info.
     To get access to the vector info the map must be opened. ::
 
@@ -298,8 +296,8 @@ class Info(object):
         if self.name:
             if self.mapset == "":
                 mapset = utils.get_mapset_vector(self.name, self.mapset)
-                self.mapset = mapset if mapset else ""
-                return True if mapset else False
+                self.mapset = mapset or ""
+                return bool(mapset)
             return bool(utils.get_mapset_vector(self.name, self.mapset))
         else:
             return False
@@ -357,7 +355,7 @@ class Info(object):
         See more examples in the documentation of the ``read`` and ``write``
         methods
         """
-        self.mode = mode if mode else self.mode
+        self.mode = mode or self.mode
         with_z = libvect.WITH_Z if with_z else libvect.WITHOUT_Z
         # check if map exists or not
         if not self.exist() and self.mode != "w":
@@ -367,11 +365,11 @@ class Info(object):
         # update the overwrite attribute
         self.overwrite = overwrite if overwrite is not None else self.overwrite
         # check if the mode is valid
-        if self.mode not in ("r", "rw", "w"):
+        if self.mode not in {"r", "rw", "w"}:
             raise ValueError("Mode not supported. Use one of: 'r', 'rw', 'w'.")
 
         # check if the map exist
-        if self.exist() and self.mode in ("r", "rw"):
+        if self.exist() and self.mode in {"r", "rw"}:
             # open in READ mode
             if self.mode == "r":
                 openvect = libvect.Vect_open_old2(
@@ -391,12 +389,12 @@ class Info(object):
             openvect = libvect.Vect_open_new(self.c_mapinfo, self.name, with_z)
             self.dblinks = DBlinks(self.c_mapinfo)
 
-        if self.mode in ("w", "rw") and tab_cols:
+        if self.mode in {"w", "rw"} and tab_cols:
             # create a link
             link = Link(
                 layer,
-                link_name if link_name else self.name,
-                tab_name if tab_name else self.name,
+                link_name or self.name,
+                tab_name or self.name,
                 link_key,
                 link_db,
                 link_driver,
@@ -464,8 +462,8 @@ class Info(object):
                 str_err = "Error when trying to close the map with Vect_close"
                 raise GrassError(str_err)
             if (
-                self.c_mapinfo.contents.mode == libvect.GV_MODE_RW
-                or self.c_mapinfo.contents.mode == libvect.GV_MODE_WRITE
+                self.c_mapinfo.contents.mode
+                in {libvect.GV_MODE_RW, libvect.GV_MODE_WRITE}
             ) and build:
                 self.build()
 
