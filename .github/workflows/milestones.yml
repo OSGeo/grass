@@ -42,3 +42,8 @@ jobs:
         run: echo "${MILESTONE}"
         env:
           MILESTONE: ${{ steps.milestone.outputs.title }}
+      - run: gh pr edit ${{ github.event.pull_request.html_url }} --milestone "${MILESTONE}"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          MILESTONE: ${{ steps.milestone.outputs.title }}
