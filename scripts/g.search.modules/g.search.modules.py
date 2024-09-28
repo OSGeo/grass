@@ -311,7 +311,7 @@ def _exact_search(keyword, module_keywords):
     :param module_keywords: comma separated list of keywords
     """
     module_keywords = module_keywords.split(",")
-    return any(keyword == current for current in module_keywords)
+    return keyword in module_keywords
 
 
 def _manpage_search(pattern, name):
