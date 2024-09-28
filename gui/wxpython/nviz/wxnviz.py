@@ -83,7 +83,7 @@ def print_progress(value):
     """Redirect progress info"""
     global progress
     if progress:
-        if not progress.GetRange() == 100:
+        if progress.GetRange() != 100:
             progress.SetRange(100)
         progress.SetValue(value)
     else:

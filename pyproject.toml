@@ -256,7 +256,6 @@ ignore = [
     "SIM114",  # if-with-same-arms
     "SIM116",  # if-else-block-instead-of-dict-lookup
     "SIM118",  # in-dict-keys
-    "SIM201",  # negate-equal-op
     "SIM223",  # expr-and-false
     "SIM401",  # if-else-block-instead-of-dict-get
     "SLF001",  # private-member-access

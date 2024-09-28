@@ -400,7 +400,7 @@ def create_grass_config_dir():
             os.makedirs(directory)
         except OSError as e:
             # Can happen as a race condition
-            if not e.errno == errno.EEXIST or not os.path.isdir(directory):
+            if e.errno != errno.EEXIST or not os.path.isdir(directory):
                 fatal(
                     _(
                         "Failed to create configuration directory '{}' with error: {}"
@@ -1631,7 +1631,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
 
     # save command history in mapset dir and remember more
     # bash history file handled in specific_addition
-    if not sh == "bash":
+    if sh != "bash":
         os.environ["HISTFILE"] = os.path.join(location, sh_history)
 
     # instead of changing $HOME, start bash with:
