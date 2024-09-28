@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged || true
     steps:
-      - run: gh pr view --json milestone
+      - run: gh pr view ${{ github.event.pull_request.html_url }} --json milestone
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
