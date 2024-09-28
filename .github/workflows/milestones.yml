@@ -25,10 +25,12 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-      - run: echo "Has milestone gh cli"
+      - name: PR already has a milestone
+        run: echo "PR already has a milestone"
         if: ${{ steps.current-milestone.outputs.milestone }}
-      - run: echo "Does not have a milestone gh cli"
-        if: ${{ !steps.current-milestone.outputs.milestone}}
+      - name: PR does not have a milestone
+        run: echo "PR does not have a milestone"
+        if: ${{ !steps.current-milestone.outputs.milestone }}
       - name: Get VERSION file
         id: version-file
         run: |
