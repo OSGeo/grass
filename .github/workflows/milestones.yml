@@ -32,13 +32,13 @@ jobs:
         env:
           VERSIONFILE: ${{ steps.version-file.outputs.version }}
       - name: Get milestone title from VERSION file
-        id: version
+        id: milestone
         run: |
           version=$(echo "$VERSIONFILE" | head -n 3 | xargs | sed 's/ /./g' | sed 's/\(RC\|dev\)//g')
-          echo "version=$version" >> "${GITHUB_OUTPUT}"
+          echo "title=$version" >> "${GITHUB_OUTPUT}"
         env:
           VERSIONFILE: ${{ steps.version-file.outputs.version }}
       - name: Show milestone title
-        run: echo "${VERSION}"
+        run: echo "${MILESTONE}"
         env:
-          VERSION: ${{ steps.version.outputs.version }}
+          MILESTONE: ${{ steps.milestone.outputs.title }}
