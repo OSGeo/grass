@@ -159,7 +159,7 @@ def is_first_time_user():
     genv = gisenv()
     if "LAST_MAPSET_PATH" in genv.keys():
         return genv["LAST_MAPSET_PATH"] == os.path.join(
-            os.getcwd(), cfg.unknown_location, cfg.unknown_mapset
+            Path.cwd(), cfg.unknown_location, cfg.unknown_mapset
         )
     return False
 

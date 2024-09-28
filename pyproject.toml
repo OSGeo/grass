@@ -195,7 +195,6 @@ ignore = [
     "PTH106",  # os-rmdir
     "PTH107",  # os-remove
     "PTH108",  # os-unlink
-    "PTH109",  # os-getcwd
     "PTH110",  # os-path-exists
     "PTH111",  # os-path-expanduser
     "PTH112",  # os-path-isdir

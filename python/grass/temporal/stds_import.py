@@ -286,7 +286,7 @@ def import_stds(
     # We use a new list file name for map registration
     new_list_file_name = list_file_name + "_new"
     # Save current working directory path
-    old_cwd = os.getcwd()
+    old_cwd = Path.cwd()
 
     # Switch into the data directory
     os.chdir(directory)

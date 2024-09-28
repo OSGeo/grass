@@ -20,6 +20,7 @@ This program is free software under the GNU General Public License
 """
 import os
 from itertools import cycle
+from pathlib import Path
 import numpy as np
 
 import wx
@@ -371,7 +372,7 @@ class TplotFrame(wx.Frame):
             labelText="",
             dialogTitle=_("CVS path"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             fileMode=wx.FD_SAVE,
         )
         self.headerLabel = StaticText(

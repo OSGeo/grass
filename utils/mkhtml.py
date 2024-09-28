@@ -366,7 +366,7 @@ def has_src_code_git(src_dir, is_addon):
                                                  if core module or addon
                                                  source code has Git
     """
-    actual_dir = os.getcwd()
+    actual_dir = Path.cwd()
     if is_addon:
         os.chdir(src_dir)
     else:

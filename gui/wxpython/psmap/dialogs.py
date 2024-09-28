@@ -37,6 +37,7 @@ This program is free software under the GNU General Public License
 import os
 import string
 from copy import deepcopy
+from pathlib import Path
 
 import wx
 import wx.lib.agw.floatspin as fs
@@ -5965,7 +5966,7 @@ class ImageDialog(PsmapDialog):
 
     def _getImageDirectory(self):
         """Default image directory"""
-        return os.getcwd()
+        return str(Path.cwd())
 
     def _addConvergence(self, panel, gridBagSizer):
         pass
