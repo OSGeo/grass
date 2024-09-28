@@ -192,7 +192,7 @@ int main(int argc, char *argv[])
     sscanf(param.nprocs->answer, "%d", &nprocs);
     if (nprocs < 1)
         G_fatal_error(_("<%d> is not valid number of nprocs."), nprocs);
-    if (nprocs > 1 && Rast_mask_is_present()) != NULL) {
+    if (nprocs > 1 && Rast_mask_is_present()) {
         G_warning(_("Parallel processing disabled due to active mask."));
         nprocs = 1;
     }
