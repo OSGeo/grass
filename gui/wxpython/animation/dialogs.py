@@ -1572,7 +1572,7 @@ class ExportDialog(wx.Dialog):
                     caption=_("Overwrite?"),
                     style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
                 )
-                if not overwrite_dlg.ShowModal() == wx.ID_YES:
+                if overwrite_dlg.ShowModal() != wx.ID_YES:
                     overwrite_dlg.Destroy()
                     return False
                 overwrite_dlg.Destroy()

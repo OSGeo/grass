@@ -158,7 +158,7 @@ all_keys = len(char_list.keys())
 for k in sorted(char_list.keys()):
     test_length += 1
     #    toc += '<li><a href="#%s" class="toc">%s</a></li>' % (char_list[k], k)
-    if test_length % 4 == 0 and not test_length == all_keys:
+    if test_length % 4 == 0 and test_length != all_keys:
         toc += '\n<a href="#%s" class="toc">%s</a>, ' % (char_list[k], k)
     elif test_length % 4 == 0 and test_length == all_keys:
         toc += '\n<a href="#%s" class="toc">%s</a>' % (char_list[k], k)

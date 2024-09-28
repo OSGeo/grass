@@ -567,7 +567,7 @@ class MapPanel(SingleMapPanel):
         return self.toolbars["gcpdisp"]
 
     def _setActiveMapWindow(self, mapWindow):
-        if not self.MapWindow == mapWindow:
+        if self.MapWindow != mapWindow:
             self.MapWindow = mapWindow
             self.Map = mapWindow.Map
             self.UpdateActive(mapWindow)
