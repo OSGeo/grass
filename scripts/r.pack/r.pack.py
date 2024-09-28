@@ -37,6 +37,8 @@ import shutil
 import atexit
 import tarfile
 
+from pathlib import Path
+
 from grass.script.utils import try_rmdir, try_remove
 from grass.script import core as grass
 
@@ -80,7 +82,7 @@ def main():
 
     grass.message(_("Packing <%s> to <%s>...") % (gfile["fullname"], outfile))
     basedir = os.path.sep.join(os.path.normpath(gfile["file"]).split(os.path.sep)[:-2])
-    olddir = os.getcwd()
+    olddir = Path.cwd()
 
     # copy elements
     info = grass.parse_command("r.info", flags="e", map=infile)

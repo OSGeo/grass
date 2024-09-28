@@ -620,7 +620,7 @@ def create_initial_gisrc(filename):
 LOCATION_NAME: <UNKNOWN>
 MAPSET: <UNKNOWN>
 """
-        % os.getcwd()
+        % Path.cwd()
     )
     writefile(filename, s)
 
@@ -789,7 +789,7 @@ def set_mapset(
         # non-empty element as the last element (which is good for both mapset
         # and location split)
         if arg == ".":
-            arg = os.getcwd()
+            arg = str(Path.cwd())
         elif not os.path.isabs(arg):
             arg = os.path.abspath(arg)
         if arg.endswith(os.path.sep):
