@@ -113,7 +113,7 @@ def is_current_user_mapset_owner(mapset_path):
     # Mapset needs to be owned by user.
     if sys.platform == "win32":
         return True
-    stat_info = os.stat(mapset_path)
+    stat_info = Path(mapset_path).stat()
     mapset_uid = stat_info.st_uid
     return mapset_uid == os.getuid()
 
