@@ -11,6 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged || true
     steps:
+      # Retreiving the current milestoone from API instead of github context,
+      # so up-to-date information is used when running after being queued or for reruns
+      # Otherwise, the information should be available using
+      # ${{ github.event.pull_request.milestone.title }}
       - name: Get current milestone title
         id: current-milestone
         run: |
