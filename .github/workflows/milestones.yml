@@ -25,11 +25,13 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
       - name: Get VERSION file
+        id: version-file
         run: |
           gh api \
             -H "Accept: application/vnd.github.raw" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            "/repos/{owner}/{repo}/contents/include/VERSION" >> include/VERSION
+            "/repos/{owner}/{repo}/contents/include/VERSION" | \
+            head -n 3 | xargs | sed 's/ /./g' | sed 's/\(RC\|dev\)//g'
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
