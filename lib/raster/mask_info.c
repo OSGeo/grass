@@ -76,7 +76,7 @@ int Rast__mask_info(char *name, char *mapset)
  *
  * @return true if mask is present, false otherwise
  */
-bool Rast_mask_is_present()
+bool Rast_mask_is_present(void)
 {
     return G_find_raster("MASK", G_mapset()) != NULL;
 }
