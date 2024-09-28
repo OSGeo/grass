@@ -15,3 +15,20 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
+      - name: Get VERSION file
+        run: |
+          gh api \
+            -H "Accept: application/vnd.github.raw" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "/repos/{owner}/{repo}/contents/include/VERSION" >> include/VERSION
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+      - name: Get milestone title from VERSION file
+        id: version
+        run: |
+          version=$(head -n 3 include/VERSION | xargs | sed 's/ /./g' | sed 's/\(RC\|dev\)//g')
+          echo "version=$version" >> "${GITHUB_OUTPUT}"
+      - run: echo $VERSION
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
