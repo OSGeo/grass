@@ -811,11 +811,11 @@ class PolygonDrawer:
 
         coords = []
         for i, tup in enumerate(self.pol.xy):
-            if i == ind:
-                continue
-            elif i == 0 and ind == len(self.pol.xy) - 1:
-                continue
-            elif i == len(self.pol.xy) - 1 and ind == 0:
+            if (
+                i == ind
+                or (i == 0 and ind == len(self.pol.xy) - 1)
+                or (i == len(self.pol.xy) - 1 and ind == 0)
+            ):
                 continue
 
             coords.append(tup)

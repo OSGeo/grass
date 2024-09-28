@@ -251,7 +251,6 @@ ignore = [
     "SIM109",  # compare-with-tuple
     "SIM110",  # reimplemented-builtin
     "SIM113",  # enumerate-for-loop
-    "SIM114",  # if-with-same-arms
     "SIM116",  # if-else-block-instead-of-dict-lookup
     "SIM118",  # in-dict-keys
     "SIM223",  # expr-and-false
