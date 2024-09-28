@@ -65,7 +65,7 @@ class CurrentMapsetWatch(FileSystemEventHandler):
             self.modified_time = timestamp
             # wait to make sure file writing is done
             time.sleep(0.1)
-            with open(event.src_path, "r") as f:
+            with open(event.src_path) as f:
                 gisrc = {}
                 for line in f:
                     key, val = line.split(":")

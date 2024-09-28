@@ -118,7 +118,7 @@ class GCPWizard:
         self.source_gisrc = os.environ["GISRC"]
         self.gisrc_dict = {}
         try:
-            f = open(self.target_gisrc, "r")
+            f = open(self.target_gisrc)
             for line in f:
                 line = line.replace("\n", "").strip()
                 if len(line) < 1:
@@ -429,7 +429,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         import re
 
         try:
-            fc = open(self.file["camera"], mode="r")
+            fc = open(self.file["camera"])
             fc_count = 0
             for line in fc:
                 fc_count += 1
@@ -438,7 +438,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                     numberOfFiducial = int(line.split()[-1])
             dataFiducialX = []
             dataFiducialY = []
-            fc = open(self.file["camera"], mode="r")
+            fc = open(self.file["camera"])
             fc_count = 0
             for line in fc:
                 fc_count += 1
@@ -955,7 +955,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             GError(parent=self, message=_("target mapwin not defined"))
 
         try:
-            f = open(self.file["points"], "r")
+            f = open(self.file["points"])
             GCPcnt = 0
 
             for line in f:
