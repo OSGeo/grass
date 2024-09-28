@@ -244,7 +244,6 @@ ignore = [
     "S606",    # start-process-with-no-shell
     "S607",    # start-process-with-partial-path
     "S608",    # hardcoded-sql-expression
-    "SIM101",  # duplicate-isinstance-call
     "SIM102",  # collapsible-if
     "SIM105",  # suppressible-exception
     "SIM108",  # if-else-block-instead-of-if-exp
