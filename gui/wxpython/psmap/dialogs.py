@@ -38,6 +38,7 @@ import os
 import string
 from copy import deepcopy
 from operator import itemgetter
+from pathlib import Path
 
 import wx
 import wx.lib.agw.floatspin as fs
@@ -5964,7 +5965,7 @@ class ImageDialog(PsmapDialog):
 
     def _getImageDirectory(self):
         """Default image directory"""
-        return os.getcwd()
+        return str(Path.cwd())
 
     def _addConvergence(self, panel, gridBagSizer):
         pass

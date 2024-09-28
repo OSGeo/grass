@@ -831,7 +831,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 overwrite=overwrite,
                 getErrorMsg=True,
             )
-            if not returncode == 0:
+            if returncode != 0:
                 self._giface.WriteError(_("Failed to run d.to.rast:\n") + messages)
                 return
             # set region for composite
@@ -839,7 +839,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
             returncode, messages = RunCommand(
                 "g.region", raster=tmpName + ".red", quiet=True, getErrorMsg=True
             )
-            if not returncode == 0:
+            if returncode != 0:
                 gs.del_temp_region()
                 self._giface.WriteError(_("Failed to run d.to.rast:\n") + messages)
                 return
@@ -862,7 +862,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 quiet=True,
                 name=[tmpName + ".red", tmpName + ".green", tmpName + ".blue"],
             )
-            if not returncode == 0:
+            if returncode != 0:
                 self._giface.WriteError(_("Failed to run d.to.rast:\n") + messages)
                 gs.try_remove(pngFile)
                 return
