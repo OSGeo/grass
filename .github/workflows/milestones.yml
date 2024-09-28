@@ -32,6 +32,7 @@ jobs:
         run: echo "PR does not have a milestone"
         if: ${{ !steps.current-milestone.outputs.milestone }}
       - name: Get VERSION file
+        if: ${{ !steps.current-milestone.outputs.milestone }}
         id: version-file
         run: |
           echo "version<<EOF" >> "${GITHUB_OUTPUT}"
@@ -44,10 +45,12 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
       - name: Show version file
+        if: ${{ !steps.current-milestone.outputs.milestone }}
         run: echo "${VERSIONFILE}"
         env:
           VERSIONFILE: ${{ steps.version-file.outputs.version }}
       - name: Get milestone title from VERSION file
+        if: ${{ !steps.current-milestone.outputs.milestone }}
         id: milestone
         run: |
           version=$(echo "$VERSIONFILE" | head -n 3 | xargs | sed 's/ /./g' | sed 's/\(RC\|dev\)//g')
@@ -55,10 +58,13 @@ jobs:
         env:
           VERSIONFILE: ${{ steps.version-file.outputs.version }}
       - name: Show milestone title
+        if: ${{ !steps.current-milestone.outputs.milestone }}
         run: echo "${MILESTONE}"
         env:
           MILESTONE: ${{ steps.milestone.outputs.title }}
-      - run: gh pr edit ${{ github.event.pull_request.html_url }} --milestone "${MILESTONE}"
+      - name: Set PR milestone
+        if: ${{ !steps.current-milestone.outputs.milestone }}
+        run: gh pr edit ${{ github.event.pull_request.html_url }} --milestone "${MILESTONE}"
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
