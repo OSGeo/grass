@@ -68,6 +68,7 @@ import wx.lib.filebrowsebutton as filebrowse
 
 from gui_core.widgets import GNotebook
 from gui_core.wrap import CheckBox, TextCtrl, Button, StaticText
+from operator import add
 
 ALPHA = 0.5
 COLORS = ["b", "g", "r", "c", "m", "y", "k"]
@@ -1152,9 +1153,7 @@ class TplotFrame(wx.Frame):
         ]
         # flatten this list
         if allDatasets:
-            allDatasets = reduce(
-                lambda x, y: x + y, reduce(lambda x, y: x + y, allDatasets)
-            )
+            allDatasets = reduce(add, reduce(add, allDatasets))
             mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
             allDatasets = [
                 i

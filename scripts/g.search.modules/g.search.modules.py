@@ -66,6 +66,8 @@
 import os
 import sys
 
+from operator import itemgetter
+
 from grass.script import core as grass
 from grass.exceptions import CalledModuleError
 
@@ -283,7 +285,7 @@ def _search_module(
                 }
             )
 
-    return sorted(found_modules, key=lambda k: k["name"])
+    return sorted(found_modules, key=itemgetter("name"))
 
 
 def _basic_search(pattern, name, description, module_keywords) -> bool:

@@ -37,6 +37,7 @@ This program is free software under the GNU General Public License
 import os
 import string
 from copy import deepcopy
+from operator import itemgetter
 
 import wx
 import wx.lib.agw.floatspin as fs
@@ -3622,9 +3623,7 @@ class LegendDialog(PsmapDialog):
         self.vectorListCtrl.InsertColumn(0, _("Vector map"))
         self.vectorListCtrl.InsertColumn(1, _("Label"))
         if self.vectorId:
-            vectors = sorted(
-                self.instruction[self.vectorId]["list"], key=lambda x: x[3]
-            )
+            vectors = sorted(self.instruction[self.vectorId]["list"], key=itemgetter(3))
 
             for vector in vectors:
                 index = self.vectorListCtrl.InsertItem(
@@ -4455,7 +4454,7 @@ class LegendDialog(PsmapDialog):
         if self.instruction.FindInstructionByType("vector"):
             vectors = sorted(
                 self.instruction.FindInstructionByType("vector")["list"],
-                key=lambda x: x[3],
+                key=itemgetter(3),
             )
             self.vectorListCtrl.DeleteAllItems()
             for vector in vectors:
