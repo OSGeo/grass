@@ -183,7 +183,7 @@ class SigSetFileTestCase(TestCase):
 
         # Write signatures to file
         p_new_sigfile = I_fopen_sigset_file_new(self.sig_name)
-        sig_stat = Path(self.sig_dir, sig).stat()
+        sig_stat = Path(self.sig_dir, "sig").stat()
         self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
         I_WriteSigSet(p_new_sigfile, ctypes.byref(So))
         self.libc.fclose(p_new_sigfile)
