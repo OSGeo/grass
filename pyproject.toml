@@ -246,8 +246,6 @@ ignore = [
     "SIM102",  # collapsible-if
     "SIM105",  # suppressible-exception
     "SIM108",  # if-else-block-instead-of-if-exp
-    "SIM109",  # compare-with-tuple
-    "SIM110",  # reimplemented-builtin
     "SIM113",  # enumerate-for-loop
     "SIM116",  # if-else-block-instead-of-dict-lookup
     "SIM118",  # in-dict-keys
