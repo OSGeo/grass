@@ -127,9 +127,8 @@ def db_connection(force=False, env=None):
     :return: parsed output of db.connect
     """  # noqa: E501
     try:
-        nuldev = open(os.devnull, "w")
-        conn = parse_command("db.connect", flags="g", stderr=nuldev, env=env)
-        nuldev.close()
+        with open(os.devnull, "w") as nuldev:
+            conn = parse_command("db.connect", flags="g", stderr=nuldev, env=env)
     except CalledModuleError:
         conn = None
 
