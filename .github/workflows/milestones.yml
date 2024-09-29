@@ -2,14 +2,13 @@
 name: Assign Milestone
 
 on:
-  pull_request:
   pull_request_target:
     types: [closed]
 
 jobs:
   assign-milestone:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged || true
+    if: github.event.pull_request.merged
     steps:
       # Retreiving the current milestoone from API instead of github context,
       # so up-to-date information is used when running after being queued or for reruns
