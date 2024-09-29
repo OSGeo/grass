@@ -52,7 +52,7 @@ jobs:
         if: ${{ !steps.current-milestone.outputs.milestone }}
         id: milestone
         run: |
-          version=$(echo "$VERSIONFILE" | head -n 3 | xargs | sed 's/ /./g' | sed 's/\(RC\|dev\)//g')
+          version=$(echo "$VERSIONFILE" | head -n 3 | xargs | sed 's/ /./g; s/\(RC[0-9]*\|dev\)//g')
           echo "title=$version" >> "${GITHUB_OUTPUT}"
         env:
           VERSIONFILE: ${{ steps.version-file.outputs.version }}
