@@ -1,18 +1,24 @@
 <h2>DESCRIPTION</h2>
 
 <em>g.tempfile</em>
-is designed for shell scripts that need to use large temporary files.
-GRASS provides a mechanism for temporary files that does not depend on
-/tmp. GRASS temporary files are created in the data base with the assumption
-that there will be enough space under the data base for large files.
+creates a unique temporary file or directory (<b>-f</b>) and prints the path.
+It is designed for shell scripts that need to use large temporary files.
+GRASS provides a mechanism for temporary files or directories that does not
+depend on /tmp. GRASS temporary files and directories are created in the
+GRASS GIS database with the assumption that there will be enough space for
+large files. The base directory is: $PROJECT/$MAPSET/.tmp/$HOSTNAME/
+
+<p>
 GRASS periodically removes temporary files that have been left behind
 by programs that failed to remove them before terminating.
 
 <p>
-<em>g.tempfile</em>
-creates an unique file or directory (<b>-f</b>) and prints the name.
-The user is required to provide a process-id which will be used as part of
-the name of the file or directory. Most Unix shells provide a way to get the
+<em>g.tempfile</em> requires the user to provide an integer number,
+usually a process-id (<b>pid</b>), which will be used as part of the file or
+directory name of the resulting path, suffixed by a dot and the 0-indexed
+number of temporary files with that PID.
+
+Most Unix shells provide a way to get the
 process id of the current shell. For /bin/sh and /bin/csh this is $$.
 It is recommended that $$ be specified as the process-id for
 <em>g.tempfile</em>.
@@ -41,12 +47,30 @@ Each call to <em>g.tempfile</em>
 creates a different (i.e. unique) name.
 
 Although GRASS does eventually get around to removing
-tempfiles that have been left behind, the programmer should
-make every effort to remove these files. They often get
-large and take up disk space. If you write /bin/sh scripts,
-learn to use the /bin/sh <em>trap</em> command. If you
-write /bin/csh scripts, learn to use the /bin/csh
-<em>onintr</em> command.
+temporary files and directories that have been left behind,
+the programmer should make every effort to remove these files.
+They often get large and take up disk space. If you write /bin/sh
+scripts, learn to use the /bin/sh <em>trap</em> command. If you
+write /bin/csh scripts, learn to use the /bin/csh <em>onintr</em>
+command. In Python, use an <em>atexit</em> procedure.
+
+<p>
+If the size of temporary files is not an issue, it is recommended
+to use <i>NamedTemporaryFile</i> with a context manager to create a
+temporary file in Python.<br>
+In this example below, we open a temporary file for writing,
+write something and then we can use it in another tool.
+Once we do not need it anymore, we need to delete it ourselves.
+
+<div class="code"><pre>
+import tempfile
+
+with tempfile.NamedTemporaryFile(mode="w", delete=False) as tmp_file:
+    file_path = tmp_file.name
+    tmp_file.write(...)
+
+gs.try_remove(file_path)
+</pre></div>
 
 <h2>AUTHOR</h2>
 
