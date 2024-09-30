@@ -32,6 +32,7 @@ per-file-ignores =
     gui/wxpython/gui_core/ghelp.py: E722
     gui/wxpython/gui_core/gselect.py: E722
     gui/wxpython/gui_core/widgets.py: E722
+    gui/wxpython/image2target/*: F841, E722
     gui/wxpython/iscatt/*: F841, E722, F405, F403
     gui/wxpython/lmgr/frame.py: F841, E722
     # layertree still includes some formatting issues (it is ignored by Black)
