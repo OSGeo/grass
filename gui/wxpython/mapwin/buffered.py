@@ -28,6 +28,8 @@ import sys
 
 import wx
 
+from operator import itemgetter
+
 from grass.pydispatch.signal import Signal
 
 from core.globalvar import wxPythonPhoenix
@@ -462,10 +464,10 @@ class BufferedMapWindow(MapWindowBase, Window):
                     brush = wx.TRANSPARENT_BRUSH
                 pdc.SetBrush(brush)
                 pdc.DrawPolygon(points=coords)
-                x = min(coords, key=lambda x: x[0])[0]
-                y = min(coords, key=lambda x: x[1])[1]
-                w = max(coords, key=lambda x: x[0])[0] - x
-                h = max(coords, key=lambda x: x[1])[1] - y
+                x = min(coords, key=itemgetter(0))[0]
+                y = min(coords, key=itemgetter(1))[1]
+                w = max(coords, key=itemgetter(0))[0] - x
+                h = max(coords, key=itemgetter(1))[1] - y
                 pdc.SetIdBounds(drawid, Rect(x, y, w, h))
 
         elif pdctype == "circle":  # draw circle

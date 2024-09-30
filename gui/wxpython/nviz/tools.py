@@ -23,6 +23,8 @@ import os
 import sys
 import copy
 
+from pathlib import Path
+
 import wx
 import wx.lib.colourselect as csel
 import wx.lib.scrolledpanel as SP
@@ -668,7 +670,7 @@ class NvizToolWindow(GNotebook):
         vSizer = wx.BoxSizer(wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap=5, hgap=10)
 
-        pwd = os.getcwd()
+        pwd = str(Path.cwd())
         dir = filebrowse.DirBrowseButton(
             parent=panel,
             id=wx.ID_ANY,

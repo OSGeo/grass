@@ -25,6 +25,7 @@ import textwrap
 import sys
 import wx
 from wx.html import HtmlWindow
+from operator import itemgetter
 
 try:
     from wx.lib.agw.hyperlink import HyperLinkCtrl
@@ -450,7 +451,7 @@ class AboutWindow(wx.Frame):
                 text = StaticText(parent=contribwin, id=wx.ID_ANY, label=item)
                 text.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
                 contribBox.Add(text)
-            for vals in sorted(contribs, key=lambda x: x[0]):
+            for vals in sorted(contribs, key=itemgetter(0)):
                 for item in vals:
                     contribBox.Add(
                         StaticText(parent=contribwin, id=wx.ID_ANY, label=item)

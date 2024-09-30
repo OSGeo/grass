@@ -55,6 +55,8 @@
 
 import sys
 import os
+from operator import itemgetter
+
 import grass.script as gs
 from grass.script.utils import separator, decode
 
@@ -134,7 +136,7 @@ def main():
         if p.returncode != 0:
             sys.exit(1)
 
-        records1.sort(key=lambda r: r[catcol])
+        records1.sort(key=itemgetter(catcol))
 
         if len(records1) == 0:
             try:

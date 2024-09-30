@@ -25,6 +25,8 @@ import stat
 import platform
 import re
 
+from pathlib import Path
+
 from core import globalvar
 
 try:
@@ -971,7 +973,7 @@ class GMFrame(wx.Frame):
         dlg = wx.FileDialog(
             parent=self,
             message=_("Choose model to run"),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             wildcard=_("GRASS Model File (*.gxm)|*.gxm"),
         )
         if dlg.ShowModal() == wx.ID_OK:
@@ -1374,7 +1376,7 @@ class GMFrame(wx.Frame):
         dlg = wx.FileDialog(
             parent=self,
             message=_("Choose script file to run"),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             wildcard=_("Python script (*.py)|*.py|Bash script (*.sh)|*.sh"),
         )
 
@@ -1528,9 +1530,7 @@ class GMFrame(wx.Frame):
                 self._giface.WriteCmdLog(" ".join(command))
 
         def write_changed():
-            self._giface.WriteLog(
-                _('Working directory changed to:\n"%s"') % os.getcwd()
-            )
+            self._giface.WriteLog(_('Working directory changed to:\n"%s"') % Path.cwd())
 
         def write_end():
             self._giface.WriteCmdLog(" ")
@@ -1584,7 +1584,7 @@ class GMFrame(wx.Frame):
             dlg = wx.DirDialog(
                 parent=self,
                 message=_("Choose a working directory"),
-                defaultPath=os.getcwd(),
+                defaultPath=str(Path.cwd()),
             )
 
             if dlg.ShowModal() == wx.ID_OK:

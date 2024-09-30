@@ -542,7 +542,7 @@ class PointsList(
         :return: False - if is not shown
         """
 
-        return not self._getColumnNum(colName) == -1
+        return self._getColumnNum(colName) != -1
 
 
 class EditItem(wx.Dialog):

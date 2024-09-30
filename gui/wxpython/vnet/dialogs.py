@@ -1952,9 +1952,7 @@ class TurnAnglesList(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEditM
             text = DegreesToRadians(text)
 
             # Tested allowed range of values
-            if text > math.pi:
-                text = 0.0
-            elif text < -math.pi:
+            if text > math.pi or text < -math.pi:
                 text = 0.0
 
         self.data.SetValue(text, row, column)

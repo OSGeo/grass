@@ -114,7 +114,7 @@ class NewRasterDialog(wx.Dialog):
                     caption=_("Overwrite?"),
                     style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
                 )
-                if not dlgOverwrite.ShowModal() == wx.ID_YES:
+                if dlgOverwrite.ShowModal() != wx.ID_YES:
                     dlgOverwrite.Destroy()
                     return
                 else:
