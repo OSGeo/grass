@@ -47,6 +47,8 @@ import sys
 import glob
 import ctypes
 
+from pathlib import Path
+
 import wx
 
 from core import globalvar
@@ -1558,7 +1560,7 @@ class GdalSelect(wx.Panel):
             labelText=_("File:"),
             dialogTitle=_("Choose file to import"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             changeCallback=self.OnUpdate,
             fileMask=fileMask,
         )
@@ -1575,7 +1577,7 @@ class GdalSelect(wx.Panel):
             labelText=_("Directory:"),
             dialogTitle=_("Choose input directory"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             changeCallback=self.OnUpdate,
         )
         browse.GetChildren()[1].SetName("GdalSelectDataSource")
@@ -1628,7 +1630,7 @@ class GdalSelect(wx.Panel):
             labelText=_("Name:"),
             dialogTitle=_("Choose file"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             changeCallback=self.OnUpdate,
         )
         browse.GetChildren()[1].SetName("GdalSelectDataSource")
@@ -1663,7 +1665,7 @@ class GdalSelect(wx.Panel):
             labelText=_("Directory:"),
             dialogTitle=_("Choose input directory"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             changeCallback=self.OnUpdate,
         )
         self.dbWidgets["dirbrowse"] = browse

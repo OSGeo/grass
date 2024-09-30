@@ -68,7 +68,6 @@
 
 """
 Module to run GCP management tool as stadalone application.
-@author Vaclav Petras  <wenzeslaus gmail.com> (standalone module)
 """
 import os
 import grass.script as gs

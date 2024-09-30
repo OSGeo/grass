@@ -145,7 +145,6 @@ ignore = [
     "FBT001",  # boolean-type-hint-positional-argument
     "FBT002",  # boolean-default-value-positional-argument
     "FBT003",  # boolean-positional-value-in-call
-    "FURB118", # reimplemented-operator
     "I001",    # unsorted-imports
     "ISC003",  # explicit-string-concatenation
     "PERF203", # try-except-in-loop
@@ -195,12 +194,10 @@ ignore = [
     "PTH106",  # os-rmdir
     "PTH107",  # os-remove
     "PTH108",  # os-unlink
-    "PTH109",  # os-getcwd
     "PTH110",  # os-path-exists
     "PTH111",  # os-path-expanduser
     "PTH112",  # os-path-isdir
     "PTH113",  # os-path-isfile
-    "PTH116",  # os-stat
     "PTH117",  # os-path-isabs
     "PTH118",  # os-path-join
     "PTH119",  # os-path-basename
@@ -246,17 +243,12 @@ ignore = [
     "S606",    # start-process-with-no-shell
     "S607",    # start-process-with-partial-path
     "S608",    # hardcoded-sql-expression
-    "SIM101",  # duplicate-isinstance-call
     "SIM102",  # collapsible-if
     "SIM105",  # suppressible-exception
     "SIM108",  # if-else-block-instead-of-if-exp
-    "SIM109",  # compare-with-tuple
-    "SIM110",  # reimplemented-builtin
     "SIM113",  # enumerate-for-loop
-    "SIM114",  # if-with-same-arms
     "SIM116",  # if-else-block-instead-of-dict-lookup
     "SIM118",  # in-dict-keys
-    "SIM201",  # negate-equal-op
     "SIM223",  # expr-and-false
     "SIM401",  # if-else-block-instead-of-dict-get
     "SLF001",  # private-member-access

@@ -308,7 +308,7 @@ class PsMapFrame(wx.Frame):
 
     def OnPDFFile(self, event):
         """Generate PDF from PS with ps2pdf if available"""
-        if not sys.platform == "win32":
+        if sys.platform != "win32":
             try:
                 p = gs.Popen(["ps2pdf"], stderr=gs.PIPE)
                 p.stderr.close()

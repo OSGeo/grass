@@ -18,6 +18,8 @@ import tempfile
 
 import xml.etree.ElementTree as ET
 
+from pathlib import Path
+
 import wx
 import wx.aui
 
@@ -103,7 +105,7 @@ class WorkspaceManager:
         dlg = wx.FileDialog(
             parent=self.lmgr,
             message=_("Choose workspace file"),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             wildcard=_("GRASS Workspace File (*.gxw)|*.gxw"),
         )
 
@@ -362,7 +364,7 @@ class WorkspaceManager:
         dlg = wx.FileDialog(
             parent=self.lmgr,
             message=_("Choose file to save current workspace"),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             wildcard=_("GRASS Workspace File (*.gxw)|*.gxw"),
             style=wx.FD_SAVE,
         )
