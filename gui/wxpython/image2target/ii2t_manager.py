@@ -895,7 +895,7 @@ class DispMapPage(TitledPage):
             if p.returncode == 0:
                 print("returncode = ", str(p.returncode))
                 self.parent.Map.region = self.parent.Map.GetRegion()
-        except Exception:
+        except:
             pass
 
     def OnTgtRastSelection(self, event):
