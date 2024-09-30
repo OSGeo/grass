@@ -70,3 +70,13 @@ int Rast__mask_info(char *name, char *mapset)
 
     return 1;
 }
+
+/**
+ * @brief Check presence of 2D raster mask
+ *
+ * @return true if mask is present, false otherwise
+ */
+bool Rast_mask_is_present(void)
+{
+    return G_find_raster("MASK", G_mapset()) != NULL;
+}
