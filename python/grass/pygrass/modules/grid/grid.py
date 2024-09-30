@@ -121,7 +121,7 @@ def read_gisrc(gisrc):
     ...                                      genv['GISDBASE']))
     True
     """
-    with open(gisrc, "r") as gfile:
+    with open(gisrc) as gfile:
         gis = dict(
             [(k.strip(), v.strip()) for k, v in [row.split(":", 1) for row in gfile]]
         )

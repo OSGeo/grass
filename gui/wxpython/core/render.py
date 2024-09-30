@@ -896,7 +896,7 @@ class Map:
             env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"], "WIND"
         )
         try:
-            windfile = open(filename, "r")
+            windfile = open(filename)
         except OSError as e:
             sys.exit(
                 _("Error: Unable to open '%(file)s'. Reason: %(ret)s. wxGUI exited.\n")

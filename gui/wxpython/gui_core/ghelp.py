@@ -274,7 +274,7 @@ class AboutWindow(wx.Frame):
         """Copyright information"""
         copyfile = os.path.join(os.getenv("GISBASE"), "COPYING")
         if os.path.exists(copyfile):
-            copyrightFile = open(copyfile, "r")
+            copyrightFile = open(copyfile)
             copytext = copyrightFile.read()
             copyrightFile.close()
         else:
@@ -303,7 +303,7 @@ class AboutWindow(wx.Frame):
         """Licence about"""
         licfile = os.path.join(os.getenv("GISBASE"), "GPL.TXT")
         if os.path.exists(licfile):
-            licenceFile = open(licfile, "r")
+            licenceFile = open(licfile)
             license = "".join(licenceFile.readlines())
             licenceFile.close()
         else:
