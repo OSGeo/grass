@@ -209,9 +209,7 @@ class DtextController(OverlayController):
         inputs = 0
         for param in self._cmd[1:]:
             param = param.split("=")
-            if len(param) == 1:
-                inputs += 1
-            elif param[0] == "text" and len(param) == 2:
+            if len(param) == 1 or (param[0] == "text" and len(param) == 2):
                 inputs += 1
         return inputs >= 1
 
@@ -313,11 +311,11 @@ class LegendController(OverlayController):
         inputs = 0
         for param in self._cmd[1:]:
             param = param.split("=")
-            if len(param) == 1:
-                inputs += 1
-            elif param[0] == "raster" and len(param) == 2:
-                inputs += 1
-            elif param[0] == "raster_3d" and len(param) == 2:
+            if (
+                len(param) == 1
+                or (param[0] == "raster" and len(param) == 2)
+                or (param[0] == "raster_3d" and len(param) == 2)
+            ):
                 inputs += 1
         return inputs == 1
 

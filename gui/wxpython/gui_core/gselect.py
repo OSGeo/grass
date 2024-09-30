@@ -47,6 +47,8 @@ import sys
 import glob
 import ctypes
 
+from pathlib import Path
+
 import wx
 
 from core import globalvar
@@ -414,7 +416,7 @@ class ListCtrlComboPopup(ComboPopup):
             self.multiple = kargs["multiple"]
         if "onPopup" in kargs:
             self.onPopup = kargs["onPopup"]
-        if kargs.get("layerTree", None):
+        if kargs.get("layerTree"):
             self.filterItems = []  # reset
             ltype = kargs["type"]
             for layer in kargs["layerTree"].GetVisibleLayers(skipDigitized=True):
@@ -1289,7 +1291,7 @@ class MapsetSelect(wx.ComboBox):
         style = 0
         # disabled, read-only widget has no TextCtrl children (TODO: rewrite)
         # if not new and not multiple:
-        ###     style = wx.CB_READONLY
+        #     style = wx.CB_READONLY
 
         wx.ComboBox.__init__(self, parent, id, size=size, style=style, **kwargs)
         self.searchPath = searchPath
@@ -1558,7 +1560,7 @@ class GdalSelect(wx.Panel):
             labelText=_("File:"),
             dialogTitle=_("Choose file to import"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             changeCallback=self.OnUpdate,
             fileMask=fileMask,
         )
@@ -1575,7 +1577,7 @@ class GdalSelect(wx.Panel):
             labelText=_("Directory:"),
             dialogTitle=_("Choose input directory"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             changeCallback=self.OnUpdate,
         )
         browse.GetChildren()[1].SetName("GdalSelectDataSource")
@@ -1628,7 +1630,7 @@ class GdalSelect(wx.Panel):
             labelText=_("Name:"),
             dialogTitle=_("Choose file"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             changeCallback=self.OnUpdate,
         )
         browse.GetChildren()[1].SetName("GdalSelectDataSource")
@@ -1663,7 +1665,7 @@ class GdalSelect(wx.Panel):
             labelText=_("Directory:"),
             dialogTitle=_("Choose input directory"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             changeCallback=self.OnUpdate,
         )
         self.dbWidgets["dirbrowse"] = browse

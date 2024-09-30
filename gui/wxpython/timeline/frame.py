@@ -22,6 +22,7 @@ import numpy as np
 
 import wx
 from functools import reduce
+from operator import add
 
 try:
     import matplotlib as mpl
@@ -495,9 +496,7 @@ class TimelineFrame(wx.Frame):
         ]
         # flatten this list
         if allDatasets:
-            allDatasets = reduce(
-                lambda x, y: x + y, reduce(lambda x, y: x + y, allDatasets)
-            )
+            allDatasets = reduce(add, reduce(add, allDatasets))
             mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
             allDatasets = [
                 i

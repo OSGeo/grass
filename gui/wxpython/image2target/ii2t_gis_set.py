@@ -27,6 +27,8 @@ import copy
 import platform
 import getpass
 
+from pathlib import Path
+
 from core import globalvar
 import wx
 import wx.lib.mixins.listctrl as listmix
@@ -315,7 +317,7 @@ class GRASSStartup(wx.Frame):
             if os.path.isdir(os.getenv("HOME")):
                 self.gisdbase = os.getenv("HOME")
             else:
-                self.gisdbase = os.getcwd()
+                self.gisdbase = str(Path.cwd())
         try:
             self.tgisdbase.SetValue(self.gisdbase)
         except UnicodeDecodeError:

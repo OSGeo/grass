@@ -27,6 +27,8 @@ import shutil
 import copy
 import tempfile
 
+from pathlib import Path
+
 import wx
 import wx.lib.colourselect as csel
 import wx.lib.scrolledpanel as scrolled
@@ -448,7 +450,7 @@ class ColorTable(wx.Frame):
             dialogTitle=_("Choose file to load color table"),
             buttonText=_("Load"),
             toolTip=_("Type filename or click to choose file and load color table"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             fileMode=wx.FD_OPEN,
             changeCallback=self.OnLoadRulesFile,
         )
@@ -460,7 +462,7 @@ class ColorTable(wx.Frame):
             dialogTitle=_("Choose file to save color table"),
             toolTip=_("Type filename or click to choose file and save color table"),
             buttonText=_("Save"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             fileMode=wx.FD_SAVE,
             changeCallback=self.OnSaveRulesFile,
         )

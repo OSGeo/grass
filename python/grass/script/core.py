@@ -1894,7 +1894,7 @@ def _create_location_xy(database, location):
     :param database: GRASS database where to create new location
     :param location: location name
     """
-    cur_dir = os.getcwd()
+    cur_dir = Path.cwd()
     try:
         os.chdir(database)
         os.mkdir(location)
