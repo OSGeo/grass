@@ -24,6 +24,9 @@ import os
 import wx
 import copy
 import datetime
+
+from pathlib import Path
+
 import wx.lib.filebrowsebutton as filebrowse
 import wx.lib.scrolledpanel as SP
 import wx.lib.colourselect as csel
@@ -488,7 +491,7 @@ class InputDialog(wx.Dialog):
             labelText=_("Workspace file:"),
             dialogTitle=_("Choose workspace file to import 3D view parameters"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             fileMode=0,
             fileMask="GRASS Workspace File (*.gxw)|*.gxw",
         )
@@ -1089,7 +1092,7 @@ class ExportDialog(wx.Dialog):
             labelText=_("Image file:"),
             dialogTitle=_("Choose image file"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             fileMode=wx.FD_OPEN,
             changeCallback=self.OnSetImage,
         )
@@ -1191,7 +1194,7 @@ class ExportDialog(wx.Dialog):
             labelText=_("Directory:"),
             dialogTitle=_("Choose directory for export"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
         )
 
         dirGridSizer = wx.GridBagSizer(hgap=5, vgap=5)
@@ -1219,7 +1222,7 @@ class ExportDialog(wx.Dialog):
             labelText=_("GIF file:"),
             dialogTitle=_("Choose file to save animation"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             fileMode=wx.FD_SAVE,
         )
         gifGridSizer = wx.GridBagSizer(hgap=5, vgap=5)
@@ -1242,7 +1245,7 @@ class ExportDialog(wx.Dialog):
             labelText=_("SWF file:"),
             dialogTitle=_("Choose file to save animation"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             fileMode=wx.FD_SAVE,
         )
         swfGridSizer = wx.GridBagSizer(hgap=5, vgap=5)
@@ -1273,7 +1276,7 @@ class ExportDialog(wx.Dialog):
             labelText=_("AVI file:"),
             dialogTitle=_("Choose file to save animation"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             fileMode=wx.FD_SAVE,
         )
         encodingLabel = StaticText(
@@ -1572,7 +1575,7 @@ class ExportDialog(wx.Dialog):
                     caption=_("Overwrite?"),
                     style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
                 )
-                if not overwrite_dlg.ShowModal() == wx.ID_YES:
+                if overwrite_dlg.ShowModal() != wx.ID_YES:
                     overwrite_dlg.Destroy()
                     return False
                 overwrite_dlg.Destroy()

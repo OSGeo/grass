@@ -695,7 +695,7 @@ class TestCase(unittest.TestCase):
             actual = text_file_md5(filename)
         else:
             actual = file_md5(filename)
-        if not actual == md5:
+        if actual != md5:
             standardMsg = (
                 "File <{name}> does not have the right MD5 sum.\n"
                 "Expected is <{expected}>,"

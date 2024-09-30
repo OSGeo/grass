@@ -400,7 +400,7 @@ def create_grass_config_dir():
             os.makedirs(directory)
         except OSError as e:
             # Can happen as a race condition
-            if not e.errno == errno.EEXIST or not os.path.isdir(directory):
+            if e.errno != errno.EEXIST or not os.path.isdir(directory):
                 fatal(
                     _(
                         "Failed to create configuration directory '{}' with error: {}"
@@ -620,7 +620,7 @@ def create_initial_gisrc(filename):
 LOCATION_NAME: <UNKNOWN>
 MAPSET: <UNKNOWN>
 """
-        % os.getcwd()
+        % Path.cwd()
     )
     writefile(filename, s)
 
@@ -789,7 +789,7 @@ def set_mapset(
         # non-empty element as the last element (which is good for both mapset
         # and location split)
         if arg == ".":
-            arg = os.getcwd()
+            arg = str(Path.cwd())
         elif not os.path.isabs(arg):
             arg = os.path.abspath(arg)
         if arg.endswith(os.path.sep):
@@ -1631,7 +1631,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
 
     # save command history in mapset dir and remember more
     # bash history file handled in specific_addition
-    if not sh == "bash":
+    if sh != "bash":
         os.environ["HISTFILE"] = os.path.join(location, sh_history)
 
     # instead of changing $HOME, start bash with:

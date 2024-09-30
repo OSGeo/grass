@@ -86,10 +86,7 @@ class Instruction:
 
     def __contains__(self, id):
         """Test if instruction is included"""
-        for each in self.instruction:
-            if each.id == id:
-                return True
-        return False
+        return any(each.id == id for each in self.instruction)
 
     def __delitem__(self, id):
         """Delete instruction"""

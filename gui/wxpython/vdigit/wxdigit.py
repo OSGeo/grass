@@ -1084,7 +1084,7 @@ class IVDigit:
         # apply snapping (node or vertex)
         snap = self._getSnapMode()
         if snap != NO_SNAP:
-            modeSnap = not (snap == SNAP)
+            modeSnap = snap != SNAP
             Vedit_snap_line(
                 self.poMapInfo,
                 self.popoBgMapInfo,
@@ -1889,7 +1889,7 @@ class IVDigit:
 
         if snap != NO_SNAP:
             # apply snapping (node or vertex)
-            modeSnap = not (snap == SNAP)
+            modeSnap = snap != SNAP
             Vedit_snap_line(
                 self.poMapInfo,
                 self.popoBgMapInfo,
