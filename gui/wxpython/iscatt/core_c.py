@@ -15,10 +15,29 @@ import sys
 import numpy as np
 from multiprocessing import Process, Queue
 
-from ctypes import *
+import ctypes
+from ctypes import POINTER, c_uint8, c_double, c_int, c_char_p, pointer
 
 try:
-    from grass.lib.imagery import *
+    from grass.lib.imagery import (
+        I_apply_colormap,
+        I_merge_arrays,
+        I_create_cat_rast,
+        SC_SCATT_DATA,
+        SC_SCATT_CONDITIONS,
+        I_compute_scatts,
+        I_sc_free_cats,
+        struct_Range,
+        struct_Cell_head,
+        struct_scCats,
+        I_sc_init_cats,
+        I_sc_add_cat,
+        scdScattData,
+        I_scd_init_scatt_data,
+        I_sc_insert_scatt_data,
+        I_insert_patch_to_cat_rast,
+        I_rasterize,
+    )
     from grass.lib.gis import G_get_window
 except ImportError as e:
     sys.stderr.write(_("Loading ctypes libs failed"))
