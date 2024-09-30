@@ -9,7 +9,6 @@
 import sys
 import os
 
-<<<<<<< markdown_docs
 from build import (
     write_header,
     write_cmd_overview,
@@ -17,21 +16,6 @@ from build import (
     replace_file,
     grass_version,
 )
-=======
-from build_html import (
-    html_dir,
-    grass_version,
-    write_html_header,
-    write_html_cmd_overview,
-    write_html_footer,
-    replace_file,
-)
-
-os.chdir(html_dir)
-
-filename = "index.html"
-f = open(filename + ".tmp", "w")
->>>>>>> main
 
 year = None
 if len(sys.argv) > 1:

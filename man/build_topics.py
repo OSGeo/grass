@@ -5,61 +5,11 @@
 
 import os
 import glob
-<<<<<<< markdown_docs
-=======
-from build_html import (
-    grass_version,
-    header1_tmpl,
-    headertopics_tmpl,
-    headerkey_tmpl,
-    desc1_tmpl,
-    moduletopics_tmpl,
-    write_html_footer,
-)
->>>>>>> main
 
 year = os.getenv("VERSION_DATE")
 
 min_num_modules_for_topic = 3
 
-<<<<<<< markdown_docs
-=======
-keywords = {}
-
-htmlfiles = glob.glob1(path, "*.html")
-
-for fname in htmlfiles:
-    fil = open(os.path.join(path, fname))
-    # TODO maybe move to Python re (regex)
-    lines = fil.readlines()
-    try:
-        index_keys = lines.index("<h2>KEYWORDS</h2>\n") + 1
-        index_desc = lines.index("<h2>NAME</h2>\n") + 1
-    except Exception:
-        continue
-    try:
-        key = lines[index_keys].split(",")[1].strip().replace(" ", "_")
-        key = key.split(">")[1].split("<")[0]
-    except Exception:
-        continue
-    try:
-        desc = lines[index_desc].split("-", 1)[1].strip()
-    except Exception:
-        desc.strip()
-    if key not in keywords.keys():
-        keywords[key] = {}
-        keywords[key][fname] = desc
-    elif fname not in keywords[key]:
-        keywords[key][fname] = desc
-
-topicsfile = open(os.path.join(path, "topics.html"), "w")
-topicsfile.write(
-    header1_tmpl.substitute(
-        title="GRASS GIS %s Reference Manual: Topics index" % grass_version
-    )
-)
-topicsfile.write(headertopics_tmpl)
->>>>>>> main
 
 def build_topics(ext):
     keywords = {}
