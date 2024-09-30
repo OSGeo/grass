@@ -31,6 +31,7 @@ Use PIL to create a series of images.
 """
 
 import os
+from operator import itemgetter
 
 try:
     import numpy as np
@@ -214,7 +215,7 @@ def readIms(filename, asNumpy=True):
             images.append((im.copy(), nr))
 
     # Sort images
-    images.sort(key=lambda x: x[1])
+    images.sort(key=itemgetter(1))
     images = [im[0] for im in images]
 
     # Convert to numpy if needed

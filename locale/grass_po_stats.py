@@ -21,10 +21,12 @@ import os
 import subprocess
 import sys
 
+from pathlib import Path
+
 
 def read_po_files(inputdirpath):
     """Return a dictionary with for each language the list of *.po files"""
-    originalpath = os.getcwd()
+    originalpath = Path.cwd()
     os.chdir(inputdirpath)
     languages = {}
     for pofile in sorted(glob.glob("*.po")):

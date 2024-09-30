@@ -2641,7 +2641,7 @@ class WriteScriptFile(ABC):
             self._writePythonAction(
                 item, variables, self.model.GetIntermediateData()[:3]
             )
-        elif isinstance(item, ModelLoop) or isinstance(item, ModelCondition):
+        elif isinstance(item, (ModelLoop, ModelCondition)):
             # substitute condition
             cond = item.GetLabel()
             for variable in self.model.GetVariables():

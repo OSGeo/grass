@@ -828,9 +828,7 @@ class VNETAnalyses:
             if c.find("=") == -1:
                 continue
             v = c.split("=")
-            if len(v) != 2:
-                cmd.remove(c)
-            elif not v[1].strip():
+            if len(v) != 2 or not v[1].strip():
                 cmd.remove(c)
 
     def _setCmdForSpecificAn(self, cmdParams):

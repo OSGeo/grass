@@ -58,6 +58,7 @@ import queue as Queue
 import codecs
 
 from threading import Thread
+from pathlib import Path
 
 import wx
 
@@ -2034,7 +2035,7 @@ class CmdPanel(wx.Panel):
                         dialogTitle=_("Choose %s")
                         % p.get("description", _("file")).lower(),
                         buttonText=_("Browse"),
-                        startDirectory=os.getcwd(),
+                        startDirectory=str(Path.cwd()),
                         fileMode=fmode,
                         changeCallback=self.OnSetValue,
                     )
@@ -2145,7 +2146,7 @@ class CmdPanel(wx.Panel):
                         dialogTitle=_("Choose %s")
                         % p.get("description", _("Directory")),
                         buttonText=_("Browse"),
-                        startDirectory=os.getcwd(),
+                        startDirectory=str(Path.cwd()),
                         newDirectory=True,
                         changeCallback=self.OnSetValue,
                     )
@@ -2624,7 +2625,7 @@ class CmdPanel(wx.Panel):
         dlg = wx.FileDialog(
             parent=self,
             message=_("Save input as..."),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
         )
 
