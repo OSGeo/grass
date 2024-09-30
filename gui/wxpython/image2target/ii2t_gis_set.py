@@ -824,7 +824,7 @@ class GRASSStartup(wx.Frame):
                 shutil.rmtree(os.path.join(self.gisdbase, location, mapset))
                 self.OnSelectLocation(None)
                 self.lbmapsets.SetSelection(0)
-            except (OSError, shutil.Error) as e:
+            except (OSError, shutil.Error, FileNotFoundError) as e:
                 wx.MessageBox(message=_("Unable to delete mapset: %s") % str(e))
 
         dlg.Destroy()
