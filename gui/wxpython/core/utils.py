@@ -77,7 +77,7 @@ def GetTempfile(pref=None):
             return os.path.join(pref, file)
         else:
             return tempfile
-    except:
+    except Exception:
         return None
 
 
@@ -255,7 +255,7 @@ def ListOfCatsToRange(cats):
 
     try:
         cats = list(map(int, cats))
-    except:
+    except ValueError:
         return catstr
 
     i = 0
@@ -579,7 +579,7 @@ def GetListOfLocations(dbase):
                 os.path.join(location, "*")
             ):
                 listOfLocations.append(os.path.basename(location))
-        except:
+        except OSError:
             pass
 
     ListSortLower(listOfLocations)
@@ -632,7 +632,7 @@ def _getGDALFormats():
     """Get dictionary of available GDAL drivers"""
     try:
         ret = grass.read_command("r.in.gdal", quiet=True, flags="f")
-    except:
+    except grass.CalledModuleError:
         ret = None
 
     return _parseFormats(ret), _parseFormats(ret, writableOnly=True)
@@ -642,7 +642,7 @@ def _getOGRFormats():
     """Get dictionary of available OGR drivers"""
     try:
         ret = grass.read_command("v.in.ogr", quiet=True, flags="f")
-    except:
+    except grass.CalledModuleError:
         ret = None
 
     return _parseFormats(ret), _parseFormats(ret, writableOnly=True)

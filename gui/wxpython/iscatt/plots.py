@@ -168,7 +168,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         return self.polygon_drawer.SetEmpty()
 
     def OnRelease(self, event):
-        if not self.mode == "zoom":
+        if self.mode != "zoom":
             return
         self.zoom_rect.set_visible(False)
         self.ZoomRectangle(event)
@@ -348,7 +348,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
 
     def ZoomRectangle(self, event):
         # get the current x and y limits
-        if not self.mode == "zoom":
+        if self.mode != "zoom":
             return
         if event.inaxes is None:
             return
@@ -394,7 +394,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
 
     def PanMotion(self, event):
         "on mouse movement"
-        if not self.mode == "pan":
+        if self.mode != "pan":
             return
         if event.inaxes is None:
             return
@@ -426,7 +426,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         self.canvas.draw()
 
     def ZoomRectMotion(self, event):
-        if not self.mode == "zoom":
+        if self.mode != "zoom":
             return
         if event.inaxes is None:
             return
@@ -811,11 +811,11 @@ class PolygonDrawer:
 
         coords = []
         for i, tup in enumerate(self.pol.xy):
-            if i == ind:
-                continue
-            elif i == 0 and ind == len(self.pol.xy) - 1:
-                continue
-            elif i == len(self.pol.xy) - 1 and ind == 0:
+            if (
+                i == ind
+                or (i == 0 and ind == len(self.pol.xy) - 1)
+                or (i == len(self.pol.xy) - 1 and ind == 0)
+            ):
                 continue
 
             coords.append(tup)
@@ -866,7 +866,7 @@ class PolygonDrawer:
 
     def motion_notify_callback(self, event):
         "on mouse movement"
-        if not self.mode == "move_vertex":
+        if self.mode != "move_vertex":
             return
         if not self.showverts:
             return

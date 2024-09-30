@@ -23,23 +23,24 @@
  ******************************************************************************/
 
 #include <grass/config.h>
-#include <grass/gis.h>
-#include <grass/glocale.h>
-#include <grass/la.h>
 
-#if defined(HAVE_LIBLAPACK) && defined(HAVE_LIBBLAS)
-#include <lapacke.h>
-#if defined(HAVE_CBLAS_ATLAS_H)
-#include <cblas-atlas.h>
-#else
-#include <cblas.h>
-#endif
-#endif
+#if defined(HAVE_LIBBLAS) && defined(HAVE_LIBLAPACK)
 
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include <lapacke.h>
+#if defined(HAVE_CBLAS_ATLAS_H)
+#include <cblas-atlas.h>
+#else
+#include <cblas.h>
+#endif // HAVE_CBLAS_ATLAS_H
+
+#include <grass/gis.h>
+#include <grass/glocale.h>
+#include <grass/la.h>
 
 static int egcmp(const void *pa, const void *pb);
 
@@ -335,8 +336,6 @@ mat_struct *G__matrix_add(mat_struct *mt1, mat_struct *mt2, const double c1,
     return mt3;
 }
 
-#if defined(HAVE_LIBBLAS)
-
 /*!
  * \fn mat_struct *G_matrix_product (mat_struct *mt1, mat_struct *mt2)
  *
@@ -385,8 +384,6 @@ mat_struct *G_matrix_product(mat_struct *mt1, mat_struct *mt2)
 
     return mt3;
 }
-
-#endif /* defined(HAVE_LIBBLAS) */
 
 /*!
  * \fn mat_struct *G_matrix_transpose (mat_struct *mt)
@@ -441,8 +438,6 @@ mat_struct *G_matrix_transpose(mat_struct *mt)
 
     return mt1;
 }
-
-#if defined(HAVE_LIBBLAS) && defined(HAVE_LIBLAPACK)
 
 /*!
  * \fn int G_matrix_LU_solve (const mat_struct *mt1, mat_struct **xmat0,
@@ -578,10 +573,6 @@ int G_matrix_LU_solve(const mat_struct *mt1, mat_struct **xmat0,
     return 0;
 }
 
-#endif /* defined(HAVE_LIBBLAS) && defined(HAVE_LIBLAPACK) */
-
-#if defined(HAVE_LIBBLAS) && defined(HAVE_LIBLAPACK)
-
 /*!
  * \fn mat_struct *G_matrix_inverse (mat_struct *mt)
  *
@@ -636,8 +627,6 @@ mat_struct *G_matrix_inverse(mat_struct *mt)
         return res;
     }
 }
-
-#endif /* defined(HAVE_LIBBLAS) && defined(HAVE_LIBLAPACK) */
 
 /*!
  * \fn void G_matrix_free (mat_struct *mt)
@@ -1149,8 +1138,6 @@ int G_vector_set(vec_struct *A, int cells, int ldim, vtype vt, int vindx)
     return 0;
 }
 
-#if defined(HAVE_LIBBLAS)
-
 /*!
  * \fn double G_vector_norm_euclid (vec_struct *vc)
  *
@@ -1191,8 +1178,6 @@ double G_vector_norm_euclid(vec_struct *vc)
     /* Call the BLAS routine dnrm2_() */
     return cblas_dnrm2(Nval, startpt, incr);
 }
-
-#endif /* defined(HAVE_LIBBLAS) */
 
 /*!
  * \fn double G_vector_norm_maxval (vec_struct *vc, int vflag)
@@ -1655,3 +1640,7 @@ static int egcmp(const void *pa, const void *pb)
 
     return 0;
 }
+
+#endif // HAVE_LIBLAPACK HAVE_LIBBLAS
+
+typedef int suppress_empty_translation_unit_compiler_warning;

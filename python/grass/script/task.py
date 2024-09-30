@@ -247,11 +247,7 @@ class grassTask:
 
     def has_required(self):
         """Check if command has at least one required parameter"""
-        for p in self.params:
-            if p.get("required", False):
-                return True
-
-        return False
+        return any(p.get("required", False) for p in self.params)
 
     def set_param(self, aParam, aValue, element="value"):
         """Set param value/values."""
