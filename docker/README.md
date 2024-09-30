@@ -1,4 +1,4 @@
-## GRASS GIS 8.4 (current) Docker installation and usage
+## GRASS GIS Docker installation and usage
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/osgeo/grass-gis.svg)](https://grass.osgeo.org/download/docker/)
 
@@ -31,8 +31,6 @@ the required features, available disk space, and whether you need GUI support.
 
 ### Alpine-based image
 
-Image size: around 240 MB
-
 **Installation:**
 
 ```bash
@@ -46,8 +44,6 @@ docker run -it --rm osgeo/grass-gis:releasebranch_8_4-alpine grass -c EPSG:4326 
 ```
 
 ### Debian-based image
-
-Image size: around 1.20 GB
 
 **Installation:**
 
@@ -63,8 +59,6 @@ docker run -it --rm osgeo/grass-gis:releasebranch_8_4-debian grass -c EPSG:4326 
 
 ### Ubuntu-based image
 
-Image size: around 550 MB
-
 **Installation:**
 
 ```bash
@@ -78,8 +72,6 @@ docker run -it --rm osgeo/grass-gis:releasebranch_8_4-ubuntu grass -c EPSG:4326 
 ```
 
 ### Ubuntu-based image with GUI
-
-Image size: around 1.35 GB
 
 **Installation:**
 
