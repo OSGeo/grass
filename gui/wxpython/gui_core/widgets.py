@@ -1566,7 +1566,7 @@ class ManageSettingsWidget(wx.Panel):
             return data
 
         try:
-            fd = open(self.settingsFile, "r")
+            fd = open(self.settingsFile)
         except OSError:
             return data
 

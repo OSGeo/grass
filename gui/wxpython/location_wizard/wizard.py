@@ -2543,7 +2543,7 @@ class LocationWizard(wx.Object):
         """Get georeferencing information from tables in $GISBASE/etc/proj"""
 
         # read projection and parameters
-        f = open(os.path.join(globalvar.ETCDIR, "proj", "parms.table"), "r")
+        f = open(os.path.join(globalvar.ETCDIR, "proj", "parms.table"))
         self.projections = {}
         self.projdesc = {}
         for line in f:
@@ -2566,7 +2566,7 @@ class LocationWizard(wx.Object):
         f.close()
 
         # read datum definitions
-        f = open(os.path.join(globalvar.ETCDIR, "proj", "datum.table"), "r")
+        f = open(os.path.join(globalvar.ETCDIR, "proj", "datum.table"))
         self.datums = {}
         paramslist = []
         for line in f:
@@ -2584,7 +2584,7 @@ class LocationWizard(wx.Object):
         f.close()
 
         # read Earth-based ellipsiod definitions
-        f = open(os.path.join(globalvar.ETCDIR, "proj", "ellipse.table"), "r")
+        f = open(os.path.join(globalvar.ETCDIR, "proj", "ellipse.table"))
         self.ellipsoids = {}
         for line in f:
             line = line.expandtabs(1)
@@ -2600,9 +2600,7 @@ class LocationWizard(wx.Object):
         f.close()
 
         # read Planetary ellipsiod definitions
-        f = open(
-            os.path.join(globalvar.ETCDIR, "proj", "ellipse.table.solar.system"), "r"
-        )
+        f = open(os.path.join(globalvar.ETCDIR, "proj", "ellipse.table.solar.system"))
         self.planetary_ellipsoids = {}
         for line in f:
             line = line.expandtabs(1)
@@ -2618,7 +2616,7 @@ class LocationWizard(wx.Object):
         f.close()
 
         # read projection parameter description and parsing table
-        f = open(os.path.join(globalvar.ETCDIR, "proj", "desc.table"), "r")
+        f = open(os.path.join(globalvar.ETCDIR, "proj", "desc.table"))
         self.paramdesc = {}
         for line in f:
             line = line.strip()

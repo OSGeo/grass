@@ -59,7 +59,7 @@ def read_input(csvfile):
     first column is wavelength
     values are those of the discrete band filter functions
     """
-    infile = open(csvfile, "r")
+    infile = open(csvfile)
 
     # get number of bands and band names
     bands = infile.readline().split(",")

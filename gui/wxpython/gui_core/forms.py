@@ -2588,7 +2588,7 @@ class CmdPanel(wx.Panel):
 
         data = ""
         try:
-            f = open(path, "r")
+            f = open(path)
         except OSError as e:
             gcmd.GError(
                 parent=self,

@@ -700,7 +700,7 @@ class ColorTable(wx.Frame):
 
         self.rulesPanel.Clear()
 
-        fd = open(path, "r")
+        fd = open(path)
         self.ReadColorTable(ctable=fd.read())
         fd.close()
 

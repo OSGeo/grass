@@ -108,7 +108,7 @@ class DMonMap(Map):
         self.renderMgr = RenderMapMgr(self)
 
         # update legend file variable with the one d.mon uses
-        with open(monFile["env"], "r") as f:
+        with open(monFile["env"]) as f:
             lines = f.readlines()
             for line in lines:
                 if "GRASS_LEGEND_FILE" in line:
@@ -123,7 +123,7 @@ class DMonMap(Map):
 
         nlayers = 0
         try:
-            fd = open(self.cmdfile, "r")
+            fd = open(self.cmdfile)
             lines = fd.readlines()
             fd.close()
             # detect d.out.file, delete the line from the cmd file and export

@@ -1742,7 +1742,7 @@ class ProcessGrcFile:
         :return: list of map layers
         """
         try:
-            file = open(self.filename, "r")
+            file = open(self.filename)
         except OSError:
             wx.MessageBox(
                 parent=parent,
