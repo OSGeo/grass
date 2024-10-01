@@ -1070,7 +1070,7 @@ class VectMap:
             "head",
         )
         try:
-            head = open(headPath, "r")
+            head = open(headPath)
             for line in head:
                 i = line.find(
                     "MAP DATE:",

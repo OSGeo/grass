@@ -274,7 +274,7 @@ class AboutWindow(wx.Frame):
         """Copyright information"""
         copyfile = os.path.join(os.getenv("GISBASE"), "COPYING")
         if os.path.exists(copyfile):
-            copyrightFile = open(copyfile, "r")
+            copyrightFile = open(copyfile)
             copytext = copyrightFile.read()
             copyrightFile.close()
         else:
@@ -303,7 +303,7 @@ class AboutWindow(wx.Frame):
         """Licence about"""
         licfile = os.path.join(os.getenv("GISBASE"), "GPL.TXT")
         if os.path.exists(licfile):
-            licenceFile = open(licfile, "r")
+            licenceFile = open(licfile)
             license = "".join(licenceFile.readlines())
             licenceFile.close()
         else:
@@ -566,15 +566,15 @@ class AboutWindow(wx.Frame):
         allStr = "%s :" % k.upper()
         try:
             allStr += _("   %d translated") % v["good"]
-        except:
+        except KeyError:
             pass
         try:
             allStr += _("   %d fuzzy") % v["fuzzy"]
-        except:
+        except KeyError:
             pass
         try:
             allStr += _("   %d untranslated") % v["bad"]
-        except:
+        except KeyError:
             pass
         return allStr
 
@@ -589,7 +589,7 @@ class AboutWindow(wx.Frame):
             )
             tgood.SetForegroundColour(wx.Colour(35, 142, 35))
             langBox.Add(tgood)
-        except:
+        except KeyError:
             tgood = StaticText(parent=par, id=wx.ID_ANY, label="")
             langBox.Add(tgood)
         try:
@@ -598,7 +598,7 @@ class AboutWindow(wx.Frame):
             )
             tfuzzy.SetForegroundColour(wx.Colour(255, 142, 0))
             langBox.Add(tfuzzy)
-        except:
+        except KeyError:
             tfuzzy = StaticText(parent=par, id=wx.ID_ANY, label="")
             langBox.Add(tfuzzy)
         try:
@@ -607,7 +607,7 @@ class AboutWindow(wx.Frame):
             )
             tbad.SetForegroundColour(wx.Colour(255, 0, 0))
             langBox.Add(tbad)
-        except:
+        except KeyError:
             tbad = StaticText(parent=par, id=wx.ID_ANY, label="")
             langBox.Add(tbad)
         return langBox
@@ -844,7 +844,7 @@ class HelpWindow(HtmlWindow):
                             contents.append(line)
             self.SetPage("".join(contents))
             self.loaded = True
-        except:  # The Manual file was not found
+        except Exception:  # The Manual file was not found
             self.loaded = False
 
 

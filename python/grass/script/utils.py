@@ -91,8 +91,8 @@ def diff_files(filename_a, filename_b):
     import difflib
 
     differ = difflib.Differ()
-    fh_a = open(filename_a, "r")
-    fh_b = open(filename_b, "r")
+    fh_a = open(filename_a)
+    fh_b = open(filename_b)
     return list(differ.compare(fh_a.readlines(), fh_b.readlines()))
 
 

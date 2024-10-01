@@ -546,7 +546,7 @@ class Model:
 
         for finput in self.fileInput:
             # read lines
-            fd = open(finput, "r")
+            fd = open(finput)
             try:
                 data = self.fileInput[finput] = fd.read()
             finally:

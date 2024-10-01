@@ -201,7 +201,7 @@ def _search_module(
 
     WXGUIDIR = os.path.join(os.getenv("GISBASE"), "gui", "wxpython")
     filename = os.path.join(WXGUIDIR, "xml", "module_items.xml")
-    menudata_file = open(filename, "r")
+    menudata_file = open(filename)
 
     menudata = ET.parse(menudata_file)
     menudata_file.close()
@@ -212,7 +212,7 @@ def _search_module(
     if os.getenv("GRASS_ADDON_BASE"):
         filename_addons = os.path.join(os.getenv("GRASS_ADDON_BASE"), "modules.xml")
         if os.path.isfile(filename_addons):
-            addon_menudata_file = open(filename_addons, "r")
+            addon_menudata_file = open(filename_addons)
             addon_menudata = ET.parse(addon_menudata_file)
             addon_menudata_file.close()
             addon_items = addon_menudata.findall("task")
@@ -221,7 +221,7 @@ def _search_module(
     # add system-wide installed addons to modules list
     filename_addons_s = os.path.join(os.getenv("GISBASE"), "modules.xml")
     if os.path.isfile(filename_addons_s):
-        addon_menudata_file_s = open(filename_addons_s, "r")
+        addon_menudata_file_s = open(filename_addons_s)
         addon_menudata_s = ET.parse(addon_menudata_file_s)
         addon_menudata_file_s.close()
         addon_items_s = addon_menudata_s.findall("task")

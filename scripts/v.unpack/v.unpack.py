@@ -218,7 +218,7 @@ def main():
         todb = dbconn["database"]
 
         # return the list of old connection for extract layer number and key
-        dbln = open(os.path.join(new_dir, "dbln"), "r")
+        dbln = open(os.path.join(new_dir, "dbln"))
         dbnlist = dbln.readlines()
         dbln.close()
         # check if dbf or sqlite directory exists
