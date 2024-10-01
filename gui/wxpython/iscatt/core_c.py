@@ -11,34 +11,34 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
 
+import ctypes
 import sys
-import numpy as np
+from ctypes import POINTER, c_char_p, c_double, c_int, c_uint8, pointer
 from multiprocessing import Process, Queue
 
-import ctypes
-from ctypes import POINTER, c_uint8, c_double, c_int, c_char_p, pointer
+import numpy as np
 
 try:
-    from grass.lib.imagery import (
-        I_apply_colormap,
-        I_merge_arrays,
-        I_create_cat_rast,
-        SC_SCATT_DATA,
-        SC_SCATT_CONDITIONS,
-        I_compute_scatts,
-        I_sc_free_cats,
-        struct_Range,
-        struct_Cell_head,
-        struct_scCats,
-        I_sc_init_cats,
-        I_sc_add_cat,
-        scdScattData,
-        I_scd_init_scatt_data,
-        I_sc_insert_scatt_data,
-        I_insert_patch_to_cat_rast,
-        I_rasterize,
-    )
     from grass.lib.gis import G_get_window
+    from grass.lib.imagery import (
+        SC_SCATT_CONDITIONS,
+        SC_SCATT_DATA,
+        I_apply_colormap,
+        I_compute_scatts,
+        I_create_cat_rast,
+        I_insert_patch_to_cat_rast,
+        I_merge_arrays,
+        I_rasterize,
+        I_sc_add_cat,
+        I_sc_free_cats,
+        I_sc_init_cats,
+        I_sc_insert_scatt_data,
+        I_scd_init_scatt_data,
+        scdScattData,
+        struct_Cell_head,
+        struct_Range,
+        struct_scCats,
+    )
 except ImportError as e:
     sys.stderr.write(_("Loading ctypes libs failed"))
 
