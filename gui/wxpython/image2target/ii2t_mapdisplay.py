@@ -474,7 +474,6 @@ class MapPanel(SingleMapPanel):
         """
         Print options and output menu for map display
         """
-        point = wx.GetMousePosition()
         printmenu = Menu()
         # Add items to the menu
         setup = wx.MenuItem(printmenu, wx.ID_ANY, _("Page setup"))
@@ -518,7 +517,6 @@ class MapPanel(SingleMapPanel):
 
     def OnZoomMenu(self, event):
         """Popup Zoom menu"""
-        point = wx.GetMousePosition()
         zoommenu = Menu()
         # Add items to the menu
 
