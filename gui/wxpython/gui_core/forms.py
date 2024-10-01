@@ -2016,7 +2016,7 @@ class CmdPanel(wx.Panel):
                     # check wildcard
                     try:
                         fExt = os.path.splitext(p.get("key_desc", ["*.*"])[0])[1]
-                    except:
+                    except IndexError:
                         fExt = None
                     if not fExt:
                         fMask = "*"
