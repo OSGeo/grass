@@ -248,9 +248,15 @@ function(build_module)
     endif()
 
     if(RUN_HTML_DESCR)
-      set(html_descr_command
-          ${G_NAME}${PGM_EXT} --html-description < /dev/null | grep -v
-          '</body>\|</html>\|</div> <!-- end container -->')
+      if(WIN32)
+        set(html_descr_command
+            ${G_NAME}${PGM_EXT} --html-description < nul | findstr /V
+            "</body>\|</html>\|</div> <!-- end container -->")
+      else()
+        set(html_descr_command
+            ${G_NAME}${PGM_EXT} --html-description < /dev/null | grep -v
+            '</body>\|</html>\|</div> <!-- end container -->')
+      endif()
     else()
       set(html_descr_command ${CMAKE_COMMAND} -E echo)
     endif()
