@@ -546,7 +546,7 @@ class Model:
 
         for finput in self.fileInput:
             # read lines
-            fd = open(finput, "r")
+            fd = open(finput)
             try:
                 data = self.fileInput[finput] = fd.read()
             finally:
@@ -2641,7 +2641,7 @@ class WriteScriptFile(ABC):
             self._writePythonAction(
                 item, variables, self.model.GetIntermediateData()[:3]
             )
-        elif isinstance(item, ModelLoop) or isinstance(item, ModelCondition):
+        elif isinstance(item, (ModelLoop, ModelCondition)):
             # substitute condition
             cond = item.GetLabel()
             for variable in self.model.GetVariables():

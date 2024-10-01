@@ -678,7 +678,7 @@ class GConsole(wx.EvtHandler):
             skipInterface = True
             if os.path.splitext(command[0])[1] in {".py", ".sh"}:
                 try:
-                    with open(command[0], "r") as sfile:
+                    with open(command[0]) as sfile:
                         for line in sfile:
                             if len(line) < 3:
                                 continue
@@ -691,7 +691,7 @@ class GConsole(wx.EvtHandler):
             if len(command) == 1 and not skipInterface:
                 try:
                     task = gtask.parse_interface(command[0])
-                except:
+                except Exception:
                     task = None
             else:
                 task = None

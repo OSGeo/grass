@@ -119,7 +119,7 @@ class GCPWizard:
         self.target_gisrc = os.environ["GISRC"]
         self.gisrc_dict = {}
         try:
-            f = open(self.target_gisrc, "r")
+            f = open(self.target_gisrc)
             for line in f:
                 line = line.replace("\n", "").strip()
                 if len(line) < 1:
@@ -880,20 +880,6 @@ class DispMapPage(TitledPage):
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
 
-        try:
-            # set computational region to match selected map and zoom display
-            # to region
-            if maptype == "raster":
-                p = RunCommand("g.region", "raster=src_map")
-            elif maptype == "vector":
-                p = RunCommand("g.region", "vector=src_map")
-
-            if p.returncode == 0:
-                print("returncode = ", str(p.returncode))
-                self.parent.Map.region = self.parent.Map.GetRegion()
-        except:
-            pass
-
     def OnTgtRastSelection(self, event):
         """Source map to display selected"""
         global tgt_map
@@ -1603,7 +1589,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             GError(parent=self, message=_("target mapwin not defined"))
 
         try:
-            f = open(self.file["points"], "r")
+            f = open(self.file["points"])
             GCPcnt = 0
 
             for line in f:
@@ -1810,7 +1796,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 overwrite=self.overwrite,
             )
             if overwrite_dlg:
-                if not overwrite_dlg.ShowModal() == wx.ID_YES:
+                if overwrite_dlg.ShowModal() != wx.ID_YES:
                     overwrite_dlg.Destroy()
                     return
                 overwrite_dlg.Destroy()
@@ -1870,7 +1856,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                     overwrite=self.overwrite,
                 )
                 if overwrite_dlg:
-                    if not overwrite_dlg.ShowModal() == wx.ID_YES:
+                    if overwrite_dlg.ShowModal() != wx.ID_YES:
                         overwrite_dlg.Destroy()
                         return
                     overwrite_dlg.Destroy()
@@ -2300,7 +2286,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
     def OnZoomToSource(self, event):
         """Set target map window to match extents of source map window"""
 
-        if not self.MapWindow == self.TgtMapWindow:
+        if self.MapWindow != self.TgtMapWindow:
             self.MapWindow = self.TgtMapWindow
             self.Map = self.TgtMap
             self.UpdateActive(self.TgtMapWindow)
@@ -2313,7 +2299,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
     def OnZoomToTarget(self, event):
         """Set source map window to match extents of target map window"""
 
-        if not self.MapWindow == self.SrcMapWindow:
+        if self.MapWindow != self.SrcMapWindow:
             self.MapWindow = self.SrcMapWindow
             self.Map = self.SrcMap
             self.UpdateActive(self.SrcMapWindow)
@@ -3323,7 +3309,7 @@ class GrSettingsDialog(wx.Dialog):
 
         tmp_map = self.srcselection.GetValue()
 
-        if not tmp_map == "" and not tmp_map == src_map:
+        if tmp_map not in ("", src_map):
             self.new_src_map = tmp_map
 
     def OnTgtRastSelection(self, event):

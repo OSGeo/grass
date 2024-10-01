@@ -20,7 +20,6 @@ import grass.script as gs
 
 from .map import Map
 from .region import RegionManagerForTimeSeries
-from .utils import save_gif
 from .baseseriesmap import BaseSeriesMap
 
 
@@ -312,49 +311,3 @@ class TimeSeriesMap(BaseSeriesMap):
                 filename = os.path.join(self._tmpdir.name, f"{layer}.png")
             tasks.append((date, layer, filename))
         self._render(tasks)
-
-    def save(
-        self,
-        filename,
-        duration=500,
-        label=True,
-        font="DejaVuSans.ttf",
-        text_size=12,
-        text_color="gray",
-    ):
-        """
-        Creates a GIF animation of rendered layers.
-
-        Text color must be in a format accepted by PIL ImageColor module. For supported
-        formats, visit:
-        https://pillow.readthedocs.io/en/stable/reference/ImageColor.html#color-names
-
-        param str filename: name of output GIF file
-        param int duration: time to display each frame; milliseconds
-        param bool label: include date/time stamp on each frame
-        param str font: font file
-        param int text_size: size of date/time text
-        param str text_color: color to use for the text.
-        """
-
-        # Render images if they have not been already
-        if not self._layers_rendered:
-            self.render()
-
-        input_files = []
-        for date in self._labels:
-            input_files.append(self._base_filename_dict[date])
-
-        save_gif(
-            input_files,
-            filename,
-            duration=duration,
-            label=label,
-            labels=self._labels,
-            font=font,
-            text_size=text_size,
-            text_color=text_color,
-        )
-
-        # Display the GIF
-        return filename

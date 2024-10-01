@@ -435,7 +435,6 @@ class NumTextCtrl(TextCtrl):
     """Class derived from wx.TextCtrl for numerical values only"""
 
     def __init__(self, parent, **kwargs):
-        ##        self.precision = kwargs.pop('prec')
         TextCtrl.__init__(
             self, parent=parent, validator=NTCValidator(flag="DIGIT_ONLY"), **kwargs
         )
@@ -753,7 +752,7 @@ class TimeISOValidator(BaseValidator):
         if text:
             try:
                 datetime.strptime(text, "%Y-%m-%d")
-            except:
+            except ValueError:
                 self._notvalid()
                 return False
 
@@ -1567,7 +1566,7 @@ class ManageSettingsWidget(wx.Panel):
             return data
 
         try:
-            fd = open(self.settingsFile, "r")
+            fd = open(self.settingsFile)
         except OSError:
             return data
 

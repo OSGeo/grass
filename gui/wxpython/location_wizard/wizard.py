@@ -38,6 +38,8 @@ import os
 import locale
 import functools
 
+from pathlib import Path
+
 import wx
 import wx.lib.mixins.listctrl as listmix
 from core import globalvar
@@ -318,7 +320,10 @@ class DatabasePage(TitledPage):
     def OnBrowse(self, event):
         """Choose GRASS data directory"""
         dlg = wx.DirDialog(
-            self, _("Choose GRASS data directory:"), os.getcwd(), wx.DD_DEFAULT_STYLE
+            self,
+            _("Choose GRASS data directory:"),
+            str(Path.cwd()),
+            wx.DD_DEFAULT_STYLE,
         )
         if dlg.ShowModal() == wx.ID_OK:
             self.grassdatabase = dlg.GetPath()
@@ -1493,7 +1498,7 @@ class GeoreferencedFilePage(TitledPage):
     def OnBrowse(self, event):
         """Choose file"""
         dlg = wx.FileDialog(
-            self, _("Select georeferenced file"), os.getcwd(), "", "*.*", wx.FD_OPEN
+            self, _("Select georeferenced file"), str(Path.cwd()), "", "*.*", wx.FD_OPEN
         )
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
@@ -1977,7 +1982,7 @@ class IAUPage(TitledPage):
         """Define path for IAU code file"""
         path = os.path.dirname(self.tfile.GetValue())
         if not path:
-            path = os.getcwd()
+            path = str(Path.cwd())
 
         dlg = wx.FileDialog(
             parent=self,
@@ -2538,7 +2543,7 @@ class LocationWizard(wx.Object):
         """Get georeferencing information from tables in $GISBASE/etc/proj"""
 
         # read projection and parameters
-        f = open(os.path.join(globalvar.ETCDIR, "proj", "parms.table"), "r")
+        f = open(os.path.join(globalvar.ETCDIR, "proj", "parms.table"))
         self.projections = {}
         self.projdesc = {}
         for line in f:
@@ -2561,7 +2566,7 @@ class LocationWizard(wx.Object):
         f.close()
 
         # read datum definitions
-        f = open(os.path.join(globalvar.ETCDIR, "proj", "datum.table"), "r")
+        f = open(os.path.join(globalvar.ETCDIR, "proj", "datum.table"))
         self.datums = {}
         paramslist = []
         for line in f:
@@ -2579,7 +2584,7 @@ class LocationWizard(wx.Object):
         f.close()
 
         # read Earth-based ellipsiod definitions
-        f = open(os.path.join(globalvar.ETCDIR, "proj", "ellipse.table"), "r")
+        f = open(os.path.join(globalvar.ETCDIR, "proj", "ellipse.table"))
         self.ellipsoids = {}
         for line in f:
             line = line.expandtabs(1)
@@ -2595,9 +2600,7 @@ class LocationWizard(wx.Object):
         f.close()
 
         # read Planetary ellipsiod definitions
-        f = open(
-            os.path.join(globalvar.ETCDIR, "proj", "ellipse.table.solar.system"), "r"
-        )
+        f = open(os.path.join(globalvar.ETCDIR, "proj", "ellipse.table.solar.system"))
         self.planetary_ellipsoids = {}
         for line in f:
             line = line.expandtabs(1)
@@ -2613,7 +2616,7 @@ class LocationWizard(wx.Object):
         f.close()
 
         # read projection parameter description and parsing table
-        f = open(os.path.join(globalvar.ETCDIR, "proj", "desc.table"), "r")
+        f = open(os.path.join(globalvar.ETCDIR, "proj", "desc.table"))
         self.paramdesc = {}
         for line in f:
             line = line.strip()
