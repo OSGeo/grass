@@ -257,7 +257,7 @@ def _getComputationStruct(cats, cats_rasts, cats_type, n_bands):
 
             scatt_vals = scdScattData()
 
-            c_void_p = ctypes.POINTER(ctypes.c_void_p)
+            c_void_p = POINTER(ctypes.c_void_p)
 
             if cats_type == SC_SCATT_DATA:
                 vals[:] = 0
