@@ -7,7 +7,7 @@ set(wxpython_html_files
     wxGUI.toolboxes
     wxGUI.vnet)
 
-add_custom_target(wxpython_docs)
+add_custom_target(wxpython_docs DEPENDS grass_gis)
 add_dependencies(GUI_WXPYTHON wxpython_docs)
 
 foreach(html_file ${wxpython_html_files})
