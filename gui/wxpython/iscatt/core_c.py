@@ -40,7 +40,7 @@ try:
         struct_scCats,
     )
 except ImportError as e:
-    sys.stderr.write(_("Loading ctypes libs failed"))
+    sys.stderr.write(_("Loading ctypes libs failed: %s") % e)
 
 from core.gcmd import GException
 from grass.script import encode
@@ -288,7 +288,6 @@ def _updateCatRastProcess(patch_rast, region, cat_rast, output_queue):
 
 
 def _rasterize(polygon, rast, region, value, output_queue):
-    pol_size = len(polygon) * 2
     pol = np.array(polygon, dtype=float)
 
     c_uint8_p = POINTER(c_uint8)
