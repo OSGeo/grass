@@ -221,7 +221,6 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
 
         self.Bind(aui.EVT_AUI_PANE_CLOSE, self.OnPlotPaneClosed)
 
-        dlgSize = (-1, 400)
         # self.SetBestSize(dlgSize)
         # self.SetInitialSize(dlgSize)
         self.SetAutoLayout(1)
