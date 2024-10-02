@@ -400,7 +400,7 @@ def create_grass_config_dir():
             os.makedirs(directory)
         except OSError as e:
             # Can happen as a race condition
-            if not e.errno == errno.EEXIST or not os.path.isdir(directory):
+            if e.errno != errno.EEXIST or not os.path.isdir(directory):
                 fatal(
                     _(
                         "Failed to create configuration directory '{}' with error: {}"
@@ -496,7 +496,7 @@ def create_gisrc(tmpdir, gisrcrc):
 def read_gisrc(filename):
     kv = {}
     try:
-        f = open(filename, "r")
+        f = open(filename)
     except OSError:
         return kv
 
@@ -522,7 +522,7 @@ def write_gisrcrc(gisrcrc, gisrc, skip_variable=None):
     """Reads gisrc file and write to gisrcrc"""
     debug("Reading %s" % gisrc)
     number = 0
-    with open(gisrc, "r") as f:
+    with open(gisrc) as f:
         lines = f.readlines()
         for line in lines:
             if skip_variable in line:
@@ -535,7 +535,7 @@ def write_gisrcrc(gisrcrc, gisrc, skip_variable=None):
 
 def read_env_file(path):
     kv = {}
-    f = open(path, "r")
+    f = open(path)
     for line in f:
         k, v = line.split(":", 1)
         kv[k.strip()] = v.strip()
@@ -620,7 +620,7 @@ def create_initial_gisrc(filename):
 LOCATION_NAME: <UNKNOWN>
 MAPSET: <UNKNOWN>
 """
-        % os.getcwd()
+        % Path.cwd()
     )
     writefile(filename, s)
 
@@ -789,7 +789,7 @@ def set_mapset(
         # non-empty element as the last element (which is good for both mapset
         # and location split)
         if arg == ".":
-            arg = os.getcwd()
+            arg = str(Path.cwd())
         elif not os.path.isabs(arg):
             arg = os.path.abspath(arg)
         if arg.endswith(os.path.sep):
@@ -1098,7 +1098,7 @@ def set_language(grass_config_dir):
 
     # Override value is stored in wxGUI preferences file.
     try:
-        with open(os.path.join(grass_config_dir, "wx.json"), "r") as json_file:
+        with open(os.path.join(grass_config_dir, "wx.json")) as json_file:
             try:
                 language = json.load(json_file)["language"]["locale"]["lc_all"]
             except KeyError:
@@ -1631,7 +1631,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
 
     # save command history in mapset dir and remember more
     # bash history file handled in specific_addition
-    if not sh == "bash":
+    if sh != "bash":
         os.environ["HISTFILE"] = os.path.join(location, sh_history)
 
     # instead of changing $HOME, start bash with:

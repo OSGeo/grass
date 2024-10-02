@@ -22,6 +22,8 @@ This program is free software under the GNU General Public License
 
 import os
 
+from pathlib import Path
+
 import wx
 from core import globalvar
 import wx.lib.filebrowsebutton as filebrowse
@@ -836,7 +838,7 @@ class DxfImportDialog(ImportDialog):
             labelText="",
             dialogTitle=_("Choose DXF file to import"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             fileMode=0,
             changeCallback=self.OnSetDsn,
             fileMask="DXF File (*.dxf)|*.dxf",

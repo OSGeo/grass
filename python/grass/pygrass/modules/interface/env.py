@@ -13,7 +13,7 @@ def get_env():
     gisrc = os.environ.get("GISRC")
     if gisrc is None:
         raise RuntimeError("You are not in a GRASS session, GISRC not found.")
-    with open(gisrc, mode="r") as grc:
+    with open(gisrc) as grc:
         return dict(
             [
                 (k.strip(), v.strip())

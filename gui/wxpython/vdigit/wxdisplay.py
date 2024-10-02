@@ -868,10 +868,7 @@ class DisplayDriver:
                 pos[0], pos[1], 0.0, points.x[idx], points.y[idx], points.z[idx], 0
             )
 
-            if idx == 0:
-                minDist = dist
-                Gid = idx
-            elif minDist > dist:
+            if idx == 0 or minDist > dist:
                 minDist = dist
                 Gid = idx
 
