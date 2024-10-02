@@ -148,7 +148,6 @@ void filldir(int fe, int fd, int nl, struct band3 *bnd)
     if (lseek(fe, 0, SEEK_SET) == -1) {
         G_fatal_error(_("Unable to seek: %s"), strerror(errno));
     }
-        
     advance_band3(fe, bnd);
     advance_band3(fe, bnd);
     for (i = 1; i < nl - 1; i += 1) {
