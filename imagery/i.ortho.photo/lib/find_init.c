@@ -17,7 +17,7 @@ int I_find_initial(char *group)
         G_warning("Group name truncated");
         return 0;
     }
-    
+
     file_exists = G_find_file(element, "INIT_EXP", G_mapset()) != NULL;
     return file_exists;
 }
