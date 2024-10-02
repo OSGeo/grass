@@ -149,7 +149,6 @@ void filldir(int fe, int fd, int nl, struct band3 *bnd)
         G_warning(_("Unable to seek: %s"), strerror(errno));
         return 0;
     }
-        
     advance_band3(fe, bnd);
     advance_band3(fe, bnd);
     for (i = 1; i < nl - 1; i += 1) {
