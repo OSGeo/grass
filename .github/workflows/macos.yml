@@ -50,7 +50,7 @@ jobs:
         # Year and week of year so cache key changes weekly
         run: echo "date=$(date +%Y-%U)" >> "${GITHUB_OUTPUT}"
       - name: Setup Mamba
-        uses: mamba-org/setup-micromamba@59b11321ffd9186cd5165633a02c5bba47de6d13 # v1.10.0
+        uses: mamba-org/setup-micromamba@4b9113af4fba0e9e1124b252dd6497a419e7396d # v1.11.0
         with:
           init-shell: bash
           environment-file: .github/workflows/macos_dependencies.txt
