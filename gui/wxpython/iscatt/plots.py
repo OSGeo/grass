@@ -652,7 +652,6 @@ class PolygonDrawer:
         # self._update_line(pol)
 
         self.pol.add_callback(self.poly_changed)
-
         self.moving_ver_idx = None  # the active vert
 
         self.mode = None
