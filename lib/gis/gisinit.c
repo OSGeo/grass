@@ -26,12 +26,15 @@
 #include "G.h"
 #include "gis_local_proto.h"
 
+#if 0
 #ifdef GRASS_CMAKE_BUILD
 #include <export/grass_gis_export.h>
 #else
 #define GRASS_GIS_EXPORT
 #endif
-struct G__ G__;
+#endif
+
+GRASS_GIS_EXPORT struct G__ G__;
 
 /** initialized is set to 1 when engine is initialized */
 /* GRASS_GIS_EXPORT static int initialized on windows msvc throws below error.
