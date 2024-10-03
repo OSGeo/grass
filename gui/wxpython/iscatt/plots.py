@@ -650,6 +650,9 @@ class PolygonDrawer:
         self.line = Line2D(x, y, marker="o", markerfacecolor="r", animated=True)
         self.ax.add_line(self.line)
         # self._update_line(pol)
+
+        self.pol.add_callback(self.poly_changed)
+
         self.moving_ver_idx = None  # the active vert
 
         self.mode = None
