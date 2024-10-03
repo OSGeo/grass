@@ -271,7 +271,7 @@ class GMFrame(wx.Frame):
                     y = client_disp[1]
                 self.SetPosition((x, y))
                 self.SetSize((w, h))
-            except:
+            except (ValueError, IndexError):
                 pass
         else:
             # does center (of screen) make sense for lmgr?
@@ -885,7 +885,7 @@ class GMFrame(wx.Frame):
         try:
             self.GetMapDisplay().SetFocus()
             self.GetMapDisplay().Raise()
-        except:
+        except Exception:
             pass
 
         event.Skip()
@@ -1125,7 +1125,7 @@ class GMFrame(wx.Frame):
 
         try:
             cmdlist = cmd.split(" ")
-        except:  # already list?
+        except AttributeError:  # already list?
             cmdlist = cmd
 
         # check list of dummy commands for GUI modules that do not have GRASS
@@ -1137,7 +1137,7 @@ class GMFrame(wx.Frame):
             layer = self.GetLayerTree().layer_selected
             name = self.GetLayerTree().GetLayerInfo(layer, key="maplayer").name
             type = self.GetLayerTree().GetLayerInfo(layer, key="type")
-        except:
+        except (AttributeError, KeyError):
             layer = None
 
         if layer and len(cmdlist) == 1:  # only if no parameters given
@@ -1185,7 +1185,7 @@ class GMFrame(wx.Frame):
         # available only for vector map layers
         try:
             mapLayer = tree.GetLayerInfo(layer, key="maplayer")
-        except:
+        except (AttributeError, KeyError):
             mapLayer = None
 
         if not mapLayer or mapLayer.GetType() != "vector":
@@ -1862,7 +1862,7 @@ class GMFrame(wx.Frame):
         # available only for vector map layers
         try:
             maptype = tree.GetLayerInfo(layer, key="maplayer").type
-        except:
+        except (AttributeError, KeyError):
             maptype = None
 
         if not maptype or maptype != "vector":
