@@ -28,10 +28,9 @@ per-file-ignores =
     gui/wxpython/image2target/*: F841, E722
     gui/wxpython/image2target/g.gui.image2target.py: E501, F841
     gui/wxpython/iscatt/*: F841
-    gui/wxpython/lmgr/frame.py: F841, E722
+    gui/wxpython/lmgr/frame.py: E722
     # layertree still includes some formatting issues (it is ignored by Black)
-    gui/wxpython/lmgr/layertree.py: E722, E266, W504, E225
-    gui/wxpython/lmgr/workspace.py: F841
+    gui/wxpython/lmgr/layertree.py: E722
     gui/wxpython/modules/*: F841, E722
     gui/wxpython/nviz/*: F841, E266, E722, F403, F405
     gui/wxpython/photo2image/*: F841, E722, E265

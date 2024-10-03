@@ -1950,7 +1950,7 @@ class GMFrame(wx.Frame):
                 )
                 return
 
-            newItem = maptree.AddLayer(
+            maptree.AddLayer(
                 ltype=ltype,
                 lname=layerName,
                 lchecked=check,
