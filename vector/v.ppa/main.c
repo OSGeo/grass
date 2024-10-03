@@ -33,10 +33,12 @@ void calculate_f_function_values(struct kdtree *kdtree, struct Point *points,
 
 void calculate_k_function(struct kdtree *kdtree, struct Point *points, int n,
                           int num_distances, double intensity,
-                          const char *output_file);
+                          const char *output_file, enum OutputFormat format,
+                          JSON_Object *root_object);
 void calculate_l_function(struct kdtree *kdtree, struct Point *points, int n,
                           int num_distances, double intensity,
-                          const char *output_file);
+                          const char *output_file, enum OutputFormat format,
+                          JSON_Object *root_object);
 void calculate_k_function_values(struct kdtree *kdtree, struct Point *points,
                                  int n, int num_distances, double max_dist,
                                  double intensity, double *values);
@@ -76,6 +78,8 @@ int main(int argc, char *argv[])
     // Define options
     struct Option *input_opt = G_define_standard_option(G_OPT_V_INPUT);
     struct Option *output_opt = G_define_standard_option(G_OPT_F_OUTPUT);
+    output_opt->required = NO;
+
     struct Option *method_opt = G_define_option();
     method_opt->key = "method";
     method_opt->type = TYPE_STRING;
@@ -203,11 +207,11 @@ int main(int argc, char *argv[])
 
     if (strcmp(method, "k") == 0) {
         calculate_k_function(kdtree, pts, n, num_distances, intensity,
-                             output_file);
+                             output_file, format, root_object);
     }
     else if (strcmp(method, "l") == 0) {
         calculate_l_function(kdtree, pts, n, num_distances, intensity,
-                             output_file);
+                             output_file, format, root_object);
     }
     else if (strcmp(method, "f") == 0) {
         calculate_f_function(kdtree, pts, n, output_file, &box,
@@ -232,6 +236,15 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         }
         puts(serialized_string);
+        if (output_file) {
+            FILE *fp = fopen(output_file, "w");
+            if (fp == NULL) {
+                G_fatal_error(_("Unable to open output file <%s>"),
+                              output_file);
+            }
+            fputs(serialized_string, fp);
+            fclose(fp);
+        }
         json_free_serialized_string(serialized_string);
         json_value_free(root_value);
     }
@@ -383,26 +396,58 @@ double csr_g_value(double d, double i)
  */
 void calculate_l_function(struct kdtree *kdtree, struct Point *points, int n,
                           int num_distances, double intensity,
-                          const char *output_file)
+                          const char *output_file, enum OutputFormat format,
+                          JSON_Object *root_object)
 {
-
-    FILE *fp = fopen(output_file, "w");
-    if (fp == NULL) {
-        G_fatal_error(_("Unable to open output file <%s>"), output_file);
-    }
+    FILE *fp = NULL;
     double max_dist = max_distance(points, n);
     double interval = max_dist / num_distances;
     double *values = (double *)malloc(num_distances * sizeof(double));
+    if (values == NULL) {
+        G_fatal_error(_("Unable to allocate memory for values array."));
+    }
     calculate_l_function_values(kdtree, points, n, num_distances, max_dist,
                                 intensity, values);
 
-    fprintf(fp, "Distance,L-value\n");
-    for (int d = 0; d < num_distances; d++) {
-        fprintf(fp, "%f,%f\n", d * interval, values[d]);
-    }
+    switch (format) {
+    case PLAIN:
+        fp = fopen(output_file, "w");
+        if (fp == NULL) {
+            G_fatal_error(_("Unable to open output file <%s>"), output_file);
+        }
 
+        fprintf(fp, "Distance,L-value\n");
+        for (int d = 0; d < num_distances; d++) {
+            fprintf(fp, "%f,%f\n", d * interval, values[d]);
+        }
+        fclose(fp);
+        break;
+    case JSON:
+        if (root_object == NULL) {
+            G_fatal_error(_("root_object is NULL."));
+        }
+        json_object_set_null(root_object, "distance");
+        json_object_set_null(root_object, "l-value");
+        JSON_Value *distance = json_value_init_array();
+        if (distance == NULL) {
+            G_fatal_error(_("Unable to initialize JSON distance array."));
+        }
+        JSON_Array *distances = json_array(distance);
+
+        JSON_Value *l_value = json_value_init_array();
+        if (l_value == NULL) {
+            G_fatal_error(_("Unable to initialize JSON l-value array."));
+        }
+        JSON_Array *l_values = json_array(l_value);
+        for (int d = 0; d < num_distances; d++) {
+            json_array_append_number(distances, d * interval);
+            json_array_append_number(l_values, values[d]);
+        }
+        json_object_set_value(root_object, "distance", distance);
+        json_object_set_value(root_object, "l-value", l_value);
+        break;
+    }
     free(values);
-    fclose(fp);
 }
 
 /**
@@ -527,28 +572,51 @@ void calculate_g_function(struct kdtree *kdtree, struct Point *points, int n,
 
 void calculate_k_function(struct kdtree *kdtree, struct Point *points, int n,
                           int num_distances, double intensity,
-                          const char *output_file)
+                          const char *output_file, enum OutputFormat format,
+                          JSON_Object *root_object)
 {
-    FILE *fp = fopen(output_file, "w");
-    if (fp == NULL) {
-        G_fatal_error(_("Unable to open output file <%s>"), output_file);
-    }
-
     double max_dist = max_distance(points, n);
     double interval = max_dist / num_distances;
     G_message(_("Max distance: %f"), max_dist);
-
     double *values = (double *)malloc(num_distances * sizeof(double));
     calculate_k_function_values(kdtree, points, n, num_distances, max_dist,
                                 intensity, values);
 
-    fprintf(fp, "Distance,K-value\n");
-    for (int d = 0; d < num_distances; d++) {
-        fprintf(fp, "%f,%f\n", d * interval, values[d]);
-    }
+    switch (format) {
+    case PLAIN:
+        FILE *fp = fopen(output_file, "w");
+        if (fp == NULL) {
+            G_fatal_error(_("Unable to open output file <%s>"), output_file);
+        }
 
+        fprintf(fp, "Distance,K-value\n");
+        for (int d = 0; d < num_distances; d++) {
+            fprintf(fp, "%f,%f\n", d * interval, values[d]);
+        }
+        fclose(fp);
+        break;
+    case JSON:
+        JSON_Value *distance = json_value_init_array();
+        if (distance == NULL) {
+            G_fatal_error(_("Unable to initialize JSON distance array."));
+        }
+        JSON_Array *distances = json_array(distance);
+
+        JSON_Value *k_value = json_value_init_array();
+        if (k_value == NULL) {
+            G_fatal_error(_("Unable to initialize JSON k-value array."));
+        }
+        JSON_Array *k_values = json_array(k_value);
+
+        for (int d = 0; d < num_distances; d++) {
+            json_array_append_number(distances, d * interval);
+            json_array_append_number(k_values, values[d]);
+        }
+        json_object_set_value(root_object, "distance", distance);
+        json_object_set_value(root_object, "k-value", k_value);
+        break;
+    }
     free(values);
-    fclose(fp);
 }
 
 void calculate_g_function_values(struct kdtree *kdtree, struct Point *points,
@@ -609,7 +677,7 @@ void calculate_k_function_values(struct kdtree *kdtree, struct Point *points,
 
     G_percent(0, num_distances, 1);
 #pragma omp parallel for
-    for (int d = 0; d <= num_distances; d++) {
+    for (int d = 0; d < num_distances; d++) {
         double k_value = 0.0;
         double radius = d * interval;
 
@@ -649,7 +717,7 @@ void calculate_l_function_values(struct kdtree *kdtree, struct Point *points,
     calculate_k_function_values(kdtree, points, n, num_distances, max_dist,
                                 intensity, values);
 #pragma omp parallel for
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < num_distances; i++) {
         values[i] = sqrt(values[i] / M_PI);
     }
 }

@@ -12,19 +12,26 @@ from grass.gunittest.case import TestCase
 
 
 class TestPointPatternAnalysis(TestCase):
-    input = "firestations"
+    input = "crime"
 
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
+        cls.runModule(
+            "v.import",
+            input="data/raleigh_crime_2022_2024.fgb",
+            output=cls.input,
+            overwrite=True,
+        )
+        cls.runModule("g.region", vector=cls.input, res=30)
 
     @classmethod
     def tearDownClass(cls):
+        cls.runModule("g.remove", type="vector", flags="f", name=cls.input)
         cls.del_temp_region()
 
     def tearDown(cls):
         pass
-        # cls.runModule("g.remove", type="vector", flags="f", name=cls.output)
 
     def test_g_function_csv(self):
         """Testing g function csv output"""
@@ -117,6 +124,18 @@ class TestPointPatternAnalysis(TestCase):
         self.assertModule(
             "v.ppa",
             input=self.input,
+            # output=f"outputs/k_{self.input}.json",
+            method="k",
+            format="json",
+            seed=1,
+            overwrite=True,
+        )
+
+    def test_k_function_save_json_file(self):
+        """Testing k function json output"""
+        self.assertModule(
+            "v.ppa",
+            input=self.input,
             output=f"outputs/k_{self.input}.json",
             method="k",
             format="json",
@@ -131,6 +150,7 @@ class TestPointPatternAnalysis(TestCase):
             input=self.input,
             output=f"outputs/l_{self.input}.csv",
             method="l",
+            random_points=100,
             format="plain",
             seed=1,
             overwrite=True,
@@ -143,6 +163,7 @@ class TestPointPatternAnalysis(TestCase):
             input=self.input,
             output=f"outputs/l_{self.input}.json",
             method="l",
+            random_points=100,
             format="json",
             seed=1,
             overwrite=True,
