@@ -727,11 +727,11 @@ class GlobalTemporalVar:
             and self.value is not None
         ):
             return "global"
-        elif self.boolean is not None:
+        if self.boolean is not None:
             return "boolean"
-        elif self.relationop is not None and self.topology != []:
+        if self.relationop is not None and self.topology != []:
             return "operator"
-        elif self.td is not None:
+        if self.td is not None:
             return "timediff"
 
     def get_type_value(self):
@@ -2336,8 +2336,7 @@ class TemporalAlgebraParser:
                     inverselist.append(map_i)
         if inverse:
             return inverselist
-        else:
-            return resultlist
+        return resultlist
 
     def p_statement_assign(self, t):
         # The expression should always return a list of maps

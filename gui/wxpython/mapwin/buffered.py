@@ -560,8 +560,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             bbox[2], bbox[3] = w, h
             if relcoords:
                 return coords, bbox, relCoords
-            else:
-                return coords, bbox
+            return coords, bbox
 
         boxh = math.fabs(math.sin(math.radians(rotation)) * w) + h
         boxw = math.fabs(math.cos(math.radians(rotation)) * w) + h
@@ -580,8 +579,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         bbox.Inflate(h, h)
         if relcoords:
             return coords, bbox, relCoords
-        else:
-            return coords, bbox
+        return coords, bbox
 
     def OnPaint(self, event):
         """Draw PseudoDC's to buffered paint DC

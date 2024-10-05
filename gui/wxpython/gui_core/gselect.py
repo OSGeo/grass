@@ -281,8 +281,7 @@ class ListCtrlComboPopup(ComboPopup):
     def GetComboCtrl(self):
         if globalvar.wxPythonPhoenix:
             return super().GetComboCtrl()
-        else:
-            return self.GetCombo()
+        return self.GetCombo()
 
     def GetStringValue(self):
         """Get value as a string separated by commas"""
@@ -524,8 +523,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             if elem not in elementdict:
                 self.AddItem(_("Not selectable element"), node=False)
                 return
-            else:
-                renamed_elements.append(elementdict[elem])
+            renamed_elements.append(elementdict[elem])
 
         if element in {"stds", "strds", "str3ds", "stvds"}:
             if not self.tgis_error:
@@ -2805,9 +2803,9 @@ class OgrTypeSelect(wx.Panel):
         sel = self.ftype.GetSelection()
         if sel == 0:
             return "point"
-        elif sel == 1:
+        if sel == 1:
             return "line"
-        elif sel == 2:
+        if sel == 2:
             return "boundary"
 
 

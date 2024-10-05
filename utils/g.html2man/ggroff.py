@@ -253,8 +253,7 @@ class Formatter:
             for line in lines:
                 self.pp_text(line)
             return
-        else:
-            content = lines[0]
+        content = lines[0]
         if self.at_bol and not self.get("preformat"):
             content = self.strip_re.sub("", content)
         self.pp_string(content)
