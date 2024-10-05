@@ -633,7 +633,7 @@ class WSPanel(wx.Panel):
 
         # WMS standard - first layer in params is most bottom...
         # therefore layers order need to be reversed
-        l_st_list = [layer for layer in reversed(l_st_list)]
+        l_st_list = list(reversed(l_st_list))
         self.list.SelectLayers(l_st_list)
 
         params = {}

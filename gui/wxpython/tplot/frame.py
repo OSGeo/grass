@@ -1156,12 +1156,11 @@ class TplotFrame(wx.Frame):
         if allDatasets:
             allDatasets = reduce(add, reduce(add, allDatasets))
             mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
-            allDatasets = [
-                i
-                for i in sorted(
+            allDatasets = list(
+                sorted(
                     allDatasets, key=lambda dataset_info: mapsets.index(dataset_info[1])
                 )
-            ]
+            )
 
         for dataset in datasets:
             errorMsg = _("Space time dataset <%s> not found.") % dataset
