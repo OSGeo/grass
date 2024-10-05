@@ -824,7 +824,7 @@ class DisplayDriver:
 
                 found = False
                 cats = self.poCats.contents
-                for i in range(0, cats.n_cats):
+                for i in range(cats.n_cats):
                     for cat in self.selected["cats"]:
                         if cats.cat[i] == cat:
                             found = True
