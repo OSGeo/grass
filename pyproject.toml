@@ -179,13 +179,6 @@ ignore = [
     "PLW1641", # eq-without-hash
     "PLW2901", # redefined-loop-name
     "PLW3201", # bad-dunder-method-name
-    "PT001",   # pytest-fixture-incorrect-parentheses-style
-    "PT004",   # pytest-missing-fixture-name-underscore
-    "PT006",   # pytest-parametrize-names-wrong-type
-    "PT009",   # pytest-unittest-assertion
-    "PT011",   # pytest-raises-too-broad
-    "PT018",   # pytest-composite-assertion
-    "PT023",   # pytest-incorrect-mark-parentheses-style
     "PTH100",  # os-path-abspath
     "PTH101",  # os-chmod
     "PTH102",  # os-mkdir
@@ -313,12 +306,12 @@ ignore = [
 "python/grass/__init__.py" = ["PYI056"]
 "python/grass/exp*/tests/grass_script_mapset_session_test.py" = ["SIM117"]
 "python/grass/exp*/tests/grass_script_tmp_mapset_session_test.py" = ["SIM117"]
+"python/grass/gunittest/case.py" = ["PT009"]
 "python/grass/gunittest/loader.py" = ["PYI024"]
 "python/grass/gunittest/multireport.py" = ["PYI024"]
 "python/grass/gunittest/testsu*/d*/s*/s*/subsub*/t*/test_segfaut.py" = ["B018"]
 "python/grass/gunittest/testsuite/test_assertions_rast3d.py" = ["FLY002"]
 "python/grass/imaging/images2*.py" = ["SIM115"]
-"python/grass/jupyter/tests/reprojection_renderer_test.py" = ["PT013"]
 "python/grass/jupyter/testsuite/interactivemap_test.py" = ["PGH004"]
 "python/grass/jupyter/testsuite/map_test.py" = ["PGH004"]
 "python/grass/pydispatch/signal.py" = ["A005"]
