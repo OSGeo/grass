@@ -1918,10 +1918,7 @@ class IAUPage(TitledPage):
             # splitting on space alone would break for grid files with
             # space in pathname
             for projterm in projlabel.split(" +"):
-                if (
-                    projterm.find("towgs84=") != -1
-                    or projterm.find("nadgrids=") != -1
-                ):
+                if projterm.find("towgs84=") != -1 or projterm.find("nadgrids=") != -1:
                     self.custom_dtrans_string = " +%s" % projterm
                     break
 

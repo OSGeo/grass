@@ -589,9 +589,7 @@ class GConsole(wx.EvtHandler):
                     import importlib.machinery
 
                     def load_source(modname, filename):
-                        loader = importlib.machinery.SourceFileLoader(
-                            modname, filename
-                        )
+                        loader = importlib.machinery.SourceFileLoader(modname, filename)
                         spec = importlib.util.spec_from_file_location(
                             modname, filename, loader=loader
                         )
@@ -625,9 +623,9 @@ class GConsole(wx.EvtHandler):
                 if hasParams and not isinstance(self._guiparent, FormNotebook):
                     # also parent must be checked, see #3135 for details
                     try:
-                        GUI(
-                            parent=self._guiparent, giface=self._giface
-                        ).ParseCommand(command)
+                        GUI(parent=self._guiparent, giface=self._giface).ParseCommand(
+                            command
+                        )
                         self.UpdateHistory(status=Status.SUCCESS)
                     except GException as e:
                         print(e, file=sys.stderr)
@@ -657,8 +655,8 @@ class GConsole(wx.EvtHandler):
             )
             self.cmdOutputTimer.Start(50)
 
-                # we don't need to change computational region settings
-                # because we work on a copy
+            # we don't need to change computational region settings
+            # because we work on a copy
         else:
             # Send any other command to the shell. Send output to
             # console output window

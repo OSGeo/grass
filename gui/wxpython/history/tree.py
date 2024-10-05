@@ -407,9 +407,7 @@ class HistoryBrowserTree(CTreeView):
                 # If no command index is specified, return the first found day node
                 return day_nodes[0]
             # Search for command nodes under the first day node
-            command_nodes = self._model.SearchNodes(
-                parent=day_nodes[0], type=COMMAND
-            )
+            command_nodes = self._model.SearchNodes(parent=day_nodes[0], type=COMMAND)
             if 0 <= command_index < len(command_nodes):
                 return command_nodes[command_index]
 

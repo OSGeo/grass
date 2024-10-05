@@ -442,10 +442,7 @@ class AbstractMapDataset(AbstractDataset):
                 )
                 return False
             self.msgr.error(
-                _(
-                    "Start time must be of type datetime for "
-                    "%(type)s map <%(id)s>"
-                )
+                _("Start time must be of type datetime for %(type)s map <%(id)s>")
                 % {"type": self.get_type(), "id": self.get_map_id()}
             )
             return False

@@ -22,9 +22,7 @@ def mapinfo_must_be_set(method):
     def wrapper(self, *args, **kargs):
         if self.c_mapinfo:
             return method(self, *args, **kargs)
-        raise GrassError(
-            _("The self.c_mapinfo pointer must be correctly initiated")
-        )
+        raise GrassError(_("The self.c_mapinfo pointer must be correctly initiated"))
 
     return wrapper
 
@@ -34,8 +32,6 @@ def must_be_in_current_mapset(method):
     def wrapper(self, *args, **kargs):
         if self.mapset == libgis.G_mapset().decode():
             return method(self, *args, **kargs)
-        raise GrassError(
-            _("Map <{}> not found in current mapset").format(self.name)
-        )
+        raise GrassError(_("Map <{}> not found in current mapset").format(self.name))
 
     return wrapper
