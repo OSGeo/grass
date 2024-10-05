@@ -933,7 +933,7 @@ class WriteWorkspaceFile:
             file.write("{indent}</layout>\n".format(indent=" " * self.indent))
 
         # list of displays
-        for page in range(0, self.lmgr.GetLayerNotebook().GetPageCount()):
+        for page in range(self.lmgr.GetLayerNotebook().GetPageCount()):
             dispName = self.lmgr.GetLayerNotebook().GetPageText(page)
             mapTree = self.lmgr.GetLayerNotebook().GetPage(page).maptree
             region = mapTree.GetMap().GetCurrentRegion()

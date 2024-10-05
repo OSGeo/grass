@@ -138,7 +138,7 @@ class SbManager:
         :param itemClasses list of classes of items to be disabled
         """
         for itemClass in itemClasses:
-            for i in range(0, len(self.statusbarItems.values())):
+            for i in range(len(self.statusbarItems.values())):
                 item = list(self.statusbarItems.values())[i]
                 if item.__class__ == itemClass:
                     self.disabledItems[i] = item
