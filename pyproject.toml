@@ -181,7 +181,6 @@ ignore = [
     "PLW3201", # bad-dunder-method-name
     "PT001",   # pytest-fixture-incorrect-parentheses-style
     "PT004",   # pytest-missing-fixture-name-underscore
-    "PT006",   # pytest-parametrize-names-wrong-type
     "PT009",   # pytest-unittest-assertion
     "PT011",   # pytest-raises-too-broad
     "PT018",   # pytest-composite-assertion
