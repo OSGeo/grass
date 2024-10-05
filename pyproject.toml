@@ -183,7 +183,6 @@ ignore = [
     "PT004",   # pytest-missing-fixture-name-underscore
     "PT009",   # pytest-unittest-assertion
     "PT011",   # pytest-raises-too-broad
-    "PT018",   # pytest-composite-assertion
     "PT023",   # pytest-incorrect-mark-parentheses-style
     "PTH100",  # os-path-abspath
     "PTH101",  # os-chmod
