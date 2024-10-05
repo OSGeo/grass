@@ -159,7 +159,7 @@ def download_git_commit(url, response_format, *args, **kwargs):
     """
     try:
         response = urlopen(url, *args, **kwargs)
-        if not response.code == 200:
+        if response.code != 200:
             index = HTTP_STATUS_CODES.index(response.code)
             desc = HTTP_STATUS_CODES[index].description
             gs.fatal(
@@ -366,7 +366,7 @@ def has_src_code_git(src_dir, is_addon):
                                                  if core module or addon
                                                  source code has Git
     """
-    actual_dir = os.getcwd()
+    actual_dir = Path.cwd()
     if is_addon:
         os.chdir(src_dir)
     else:

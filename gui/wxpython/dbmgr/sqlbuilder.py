@@ -359,7 +359,7 @@ class SQLBuilder(wx.Frame):
         try:
             idx = self.list_columns.GetSelections()[0]
             column = self.list_columns.GetString(idx)
-        except:
+        except IndexError:
             self.list_values.Clear()
             return
 

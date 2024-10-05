@@ -19,6 +19,9 @@ This program is free software under the GNU General Public License
 
 import os
 import time
+
+from pathlib import Path
+
 import wx
 from wx.lib.newevent import NewEvent
 
@@ -59,13 +62,13 @@ class CurrentMapsetWatch(FileSystemEventHandler):
             not event.is_directory
             and os.path.basename(event.src_path) == self.rcfile_name
         ):
-            timestamp = os.stat(event.src_path).st_mtime
+            timestamp = Path(event.src_path).stat().st_mtime
             if timestamp - self.modified_time < 0.5:
                 return
             self.modified_time = timestamp
             # wait to make sure file writing is done
             time.sleep(0.1)
-            with open(event.src_path, "r") as f:
+            with open(event.src_path) as f:
                 gisrc = {}
                 for line in f:
                     key, val = line.split(":")

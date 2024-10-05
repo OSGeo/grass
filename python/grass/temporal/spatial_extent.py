@@ -875,7 +875,7 @@ class SpatialExtent(SQLDatabaseInterface):
         if eS > S and eS < N:
             edge_count += 1
 
-        return not edge_count == 0
+        return edge_count != 0
 
     def cover(self, extent) -> bool:
         """Return True if this extent covers the provided spatial
@@ -956,7 +956,7 @@ class SpatialExtent(SQLDatabaseInterface):
         if eB > B and eB < T:
             edge_count += 1
 
-        return not edge_count == 0
+        return edge_count != 0
 
     def covered_2d(self, extent):
         """Return True if this extent is covered by the provided spatial

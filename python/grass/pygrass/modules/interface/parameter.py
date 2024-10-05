@@ -216,7 +216,7 @@ class Parameter:
         #
         if "gisprompt" in diz and diz["gisprompt"]:
             self.typedesc = diz["gisprompt"].get("prompt", "")
-            self.input = not diz["gisprompt"]["age"] == "new"
+            self.input = diz["gisprompt"]["age"] != "new"
         else:
             self.input = True
 

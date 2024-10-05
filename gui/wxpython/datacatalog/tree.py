@@ -1378,15 +1378,20 @@ class DataCatalogTree(TreeView):
                     )
                     if not new_name:
                         continue
-                callback = lambda gisrc2=gisrc2, gisrc=gisrc, cLayer=self.copy_layer[
-                    i
-                ], cMapset=self.copy_mapset[
-                    i
-                ], cMode=self.copy_mode, sMapset=self.selected_mapset[
-                    0
-                ], name=new_name: self._onDoneReprojection(
-                    env2, gisrc2, gisrc, cLayer, cMapset, cMode, sMapset, name
-                )
+
+                def callback(
+                    gisrc2=gisrc2,
+                    gisrc=gisrc,
+                    cLayer=self.copy_layer[i],
+                    cMapset=self.copy_mapset[i],
+                    cMode=self.copy_mode,
+                    sMapset=self.selected_mapset[0],
+                    name=new_name,
+                ):
+                    self._onDoneReprojection(
+                        env2, gisrc2, gisrc, cLayer, cMapset, cMode, sMapset, name
+                    )
+
                 dlg = CatalogReprojectionDialog(
                     self,
                     self._giface,

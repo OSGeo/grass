@@ -791,10 +791,7 @@ class Link:
         False
         """
         attrs = ["layer", "name", "table_name", "key", "driver"]
-        for attr in attrs:
-            if getattr(self, attr) != getattr(link, attr):
-                return False
-        return True
+        return all(getattr(self, attr) == getattr(link, attr) for attr in attrs)
 
     def __ne__(self, other):
         return not self == other

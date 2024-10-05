@@ -19,8 +19,9 @@ WORKDIR /tmp
 ARG GUI
 
 # Todo: re-consider required dev packages for addons (~400MB in dev packages)
-ARG GRASS_RUN_PACKAGES="build-essential \
+ARG GRASS_RUN_PACKAGES="\
     bison \
+    build-essential \
     bzip2 \
     curl \
     flex \
@@ -28,8 +29,6 @@ ARG GRASS_RUN_PACKAGES="build-essential \
     gcc \
     gdal-bin \
     geos-bin \
-    proj-bin \
-    netcdf-bin \
     git \
     language-pack-en-base \
     libcairo2 \
@@ -38,29 +37,29 @@ ARG GRASS_RUN_PACKAGES="build-essential \
     libfftw3-dev \
     libfreetype6 \
     libgdal-dev \
+    libgeos-dev \
+    libgsl-dev \
     libgsl27 \
     libjpeg-turbo8 \
     libjsoncpp-dev \
     liblapacke-dev \
-    libmagic1 \
     libmagic-mgc \
+    libmagic1 \
     libncurses5 \
-    libopenblas-dev \
-    libopenblas-base \
-    libopenjp2-7 \
-    libomp5 \
     libomp-dev \
-    libgeos-dev \
-    libpdal-dev \
-    libproj-dev \
-    libpq-dev \
-    libgsl-dev \
+    libomp5 \
+    libopenblas-base \
+    libopenblas-dev \
+    libopenjp2-7 \
     libpdal-base13 \
+    libpdal-dev \
     libpdal-plugin-hdf \
     libpdal-plugins \
     libpdal-util13 \
     libpnglite0 \
+    libpq-dev \
     libpq5 \
+    libproj-dev \
     libpython3-all-dev \
     libreadline8 \
     libsqlite3-0 \
@@ -71,7 +70,9 @@ ARG GRASS_RUN_PACKAGES="build-essential \
     mesa-utils \
     moreutils \
     ncurses-bin \
+    netcdf-bin \
     pdal \
+    proj-bin \
     proj-data \
     python-is-python3 \
     python3 \
@@ -87,56 +88,58 @@ ARG GRASS_RUN_PACKAGES="build-essential \
 ENV GRASS_RUN_PACKAGES=${GRASS_RUN_PACKAGES}
 
 # Define build packages
-ARG GRASS_BUILD_PACKAGES="cmake \
+ARG GRASS_BUILD_PACKAGES="\
+    cmake \
     libbz2-dev \
     libcairo2-dev \
     libfreetype6-dev \
-    zlib1g-dev \
+    libjpeg-dev \
+    libncurses5-dev \
     libnetcdf-dev \
     libopenjp2-7-dev \
-    libreadline-dev \
-    libjpeg-dev \
     libpnglite-dev \
+    libreadline-dev \
     libsqlite3-dev \
     libtiff-dev \
     libzstd-dev \
-    libncurses5-dev \
     mesa-common-dev \
     zlib1g-dev \
     "
 ENV GRASS_BUILD_PACKAGES=${GRASS_BUILD_PACKAGES}
 
-ARG GRASS_CONFIG="--with-cxx \
+ARG GRASS_CONFIG="\
   --enable-largefile \
-  --with-proj-share=/usr/share/proj \
+  --with-blas \
+  --with-bzlib \
+  --with-cairo --with-cairo-ldflags=-lfontconfig \
+  --with-cxx \
+  --with-fftw \
+  --with-freetype --with-freetype-includes=/usr/include/freetype2/ \
   --with-gdal=/usr/bin/gdal-config \
   --with-geos \
-  --with-sqlite \
-  --with-cairo --with-cairo-ldflags=-lfontconfig \
-  --with-freetype --with-freetype-includes=/usr/include/freetype2/ \
-  --with-fftw \
-  --with-postgres --with-postgres-includes=/usr/include/postgresql \
-  --with-netcdf \
-  --with-zstd \
-  --with-bzlib \
-  --with-pdal \
-  --without-mysql \
-  --with-blas \
   --with-lapack \
-  --with-readline \
+  --with-netcdf \
   --with-odbc \
   --with-openmp \
+  --with-pdal \
+  --with-postgres --with-postgres-includes=/usr/include/postgresql \
+  --with-proj-share=/usr/share/proj \
+  --with-readline \
+  --with-sqlite \
+  --with-zstd \
+  --without-mysql \
   "
 
-ARG GRASS_PYTHON_PACKAGES="pip \
-    setuptools \
+ARG GRASS_PYTHON_PACKAGES="\
+    Pillow \
+    matplotlib \
+    numpy \
+    pip \
+    ply \
+    psycopg2 \
     python-dateutil \
     python-magic \
-    numpy \
-    Pillow \
-    ply \
-    matplotlib \
-    psycopg2 \
+    setuptools \
   "
 ENV GRASS_PYTHON_PACKAGES=${GRASS_PYTHON_PACKAGES}
 
@@ -148,31 +151,33 @@ ENV GRASS_CONFIG=${GRASS_CONFIG}
 
 FROM common_start as grass_with_gui
 
-ARG GRASS_RUN_PACKAGES="${GRASS_RUN_PACKAGES} adwaita-icon-theme-full \
-  libglu1-mesa \
-  libgtk-3-0 \
-  libnotify4 \
-  libsdl2-2.0-0 \
-  libxtst6 \
-  librsvg2-common \
-  gettext \
+ARG GRASS_RUN_PACKAGES="${GRASS_RUN_PACKAGES} \
+  adwaita-icon-theme-full \
   freeglut3 \
+  gettext \
+  libglu1-mesa \
   libgstreamer-plugins-base1.0 \
+  libgtk-3-0 \
   libjpeg8 \
+  libnotify4 \
   libpng16-16 \
+  librsvg2-common \
+  libsdl2-2.0-0 \
   libsm6 \
   libtiff5 \
   libwebkit2gtk-4.0 \
+  libxtst6 \
 "
 # librsvg2-common \
 # (fix error (wxgui.py:7782): Gtk-WARNING **: 19:53:09.774:
 # Could not load a pixbuf from /org/gtk/libgtk/theme/Adwaita/assets/check-symbolic.svg.
 # This may indicate that pixbuf loaders or the mime database could not be found.)
 
-ARG GRASS_BUILD_PACKAGES="${GRASS_BUILD_PACKAGES} adwaita-icon-theme-full \
+ARG GRASS_BUILD_PACKAGES="${GRASS_BUILD_PACKAGES} \
+  adwaita-icon-theme-full \
+  freeglut3-dev \
   libgl1-mesa-dev \
   libglu1-mesa-dev \
-  freeglut3-dev \
   libgstreamer-plugins-base1.0-dev \
   libgtk-3-dev \
   libjpeg-dev \
@@ -185,10 +190,11 @@ ARG GRASS_BUILD_PACKAGES="${GRASS_BUILD_PACKAGES} adwaita-icon-theme-full \
   libxtst-dev \
 "
 
-ARG GRASS_CONFIG="${GRASS_CONFIG} --with-opengl \
-  --with-x \
+ARG GRASS_CONFIG="${GRASS_CONFIG} \
   --with-nls \
+  --with-opengl \
   --with-readline \
+  --with-x \
   "
 ARG GRASS_PYTHON_PACKAGES="${GRASS_PYTHON_PACKAGES} wxPython"
 # If you do not use any Gnome Accessibility features, to suppress warning
