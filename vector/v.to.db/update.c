@@ -297,6 +297,8 @@ int update(struct Map_info *Map)
 
     db_close_database_shutdown_driver(driver);
     db_free_string(&stmt);
+    Vect_destroy_field_info(Fi);
+    Vect_destroy_field_info(qFi);
 
     return 0;
 }
