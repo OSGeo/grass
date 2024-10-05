@@ -271,7 +271,7 @@ class Location:
             [...]
 
         """
-        mapsets = list(self)
+        mapsets = [mapset for mapset in self]  # noqa: C416
         if permissions:
             mapsets = [
                 mapset
