@@ -3,6 +3,7 @@
 #include <math.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
+#include <grass/vector.h>
 #include "global.h"
 
 static int srch(const void *, const void *);
