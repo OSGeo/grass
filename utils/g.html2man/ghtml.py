@@ -95,7 +95,7 @@ head_content = ["title", "isindex", "base"]
 
 
 def setify(d):
-    return dict([(key, frozenset(val)) for key, val in d.items()])
+    return {key: frozenset(val) for key, val in d.items()}
 
 
 def omit(allowed, tags):

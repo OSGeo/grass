@@ -98,7 +98,6 @@ ignore = [
     "B904",    # raise-without-from-inside-except
     "B909",    # loop-iterator-mutation
     "BLE001",  # blind-except
-    "C404",    # unnecessary-list-comprehension-dict
     "C414",    # unnecessary-double-cast-or-process
     "C416",    # unnecessary-comprehension
     "COM812",  # missing-trailing-comma

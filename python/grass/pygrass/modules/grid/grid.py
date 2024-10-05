@@ -122,9 +122,7 @@ def read_gisrc(gisrc):
     True
     """
     with open(gisrc) as gfile:
-        gis = dict(
-            [(k.strip(), v.strip()) for k, v in [row.split(":", 1) for row in gfile]]
-        )
+        gis = {k.strip(): v.strip() for k, v in [row.split(":", 1) for row in gfile]}
     return gis["MAPSET"], gis["LOCATION_NAME"], gis["GISDBASE"]
 
 
@@ -603,7 +601,7 @@ class GridModule:
                         indx = row * cols + col
                         inms[key] = "%s@%s" % (self.inlist[key][indx], self.mset.name)
                 # set the computational region, prepare the region parameters
-                bbox = dict([(k[0], str(v)) for k, v in box.items()[:-2]])
+                bbox = {k[0]: str(v) for k, v in box.items()[:-2]}
                 bbox["nsres"] = "%f" % reg.nsres
                 bbox["ewres"] = "%f" % reg.ewres
                 new_mset = (
