@@ -265,7 +265,7 @@ class GifWriter:
                 xy = (0, 0)
             if hasattr(xy, "__len__"):
                 if len(xy) == len(images):
-                    xy = [xxyy for xxyy in xy]
+                    xy = list(xy)
                 else:
                     raise ValueError("len(xy) doesn't match amount of images.")
             else:
@@ -594,7 +594,7 @@ def writeGifVisvis(
     # Check duration
     if hasattr(duration, "__len__"):
         if len(duration) == len(images):
-            duration = [d for d in duration]
+            duration = list(duration)
         else:
             raise ValueError("len(duration) doesn't match amount of images.")
     else:

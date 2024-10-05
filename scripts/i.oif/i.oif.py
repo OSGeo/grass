@@ -122,9 +122,7 @@ def main():
 
     grass.message(_("Calculating Correlation Matrix..."))
     correlation = {}
-    s = grass.read_command(
-        "r.covar", flags="r", map=[band for band in bands], quiet=True
-    )
+    s = grass.read_command("r.covar", flags="r", map=list(bands), quiet=True)
 
     # We need to skip the first line, since r.covar prints the number of values
     lines = s.splitlines()

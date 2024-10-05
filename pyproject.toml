@@ -99,7 +99,6 @@ ignore = [
     "B909",    # loop-iterator-mutation
     "BLE001",  # blind-except
     "C414",    # unnecessary-double-cast-or-process
-    "C416",    # unnecessary-comprehension
     "COM812",  # missing-trailing-comma
     "COM818",  # trailing-comma-on-bare-tuple
     "D1",
