@@ -682,9 +682,7 @@ class TemporalAlgebraLexer:
 
     # Build the lexer
     def build(self, **kwargs):
-        self.lexer = lex.lex(
-            module=self, optimize=False, nowarn=True, debug=0, **kwargs
-        )
+        self.lexer = lex.lex(module=self, debug=0, **kwargs)
 
     # Just for testing
     def test(self, data):
