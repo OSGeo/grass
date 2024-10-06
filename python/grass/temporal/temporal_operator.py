@@ -140,10 +140,7 @@ for details.
 
 """  # noqa: E501
 
-try:
-    from ply import lex, yacc
-except ImportError:
-    pass
+from .ply import lex, yacc
 
 
 class TemporalOperatorLexer:

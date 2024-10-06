@@ -11,13 +11,9 @@ for details.
 
 """
 
-try:
-    from ply import yacc
-except ImportError:
-    pass
-
 import grass.pygrass.modules as pymod
 
+from .ply import yacc
 from .space_time_datasets import Raster3DDataset
 from .temporal_raster_base_algebra import (
     TemporalRasterAlgebraLexer,

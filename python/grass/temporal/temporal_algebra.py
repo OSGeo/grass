@@ -439,11 +439,6 @@ for details.
 
 """
 
-try:
-    from ply import lex, yacc
-except:
-    pass
-
 import copy
 import os
 from datetime import datetime
@@ -468,6 +463,7 @@ from .datetime_math import (
 )
 from .factory import dataset_factory
 from .open_stds import open_new_stds, open_old_stds
+from .ply import lex, yacc
 from .space_time_datasets import RasterDataset
 from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
 from .temporal_granularity import (
