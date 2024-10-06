@@ -944,7 +944,7 @@ class DBlinks:
             return self.by_name(item)
 
     def __repr__(self):
-        return "DBlinks(%r)" % [link for link in self.__iter__()]
+        return "DBlinks(%r)" % list(self.__iter__())
 
     def by_index(self, indx):
         """Return a Link object by index

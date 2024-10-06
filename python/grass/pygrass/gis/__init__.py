@@ -271,7 +271,7 @@ class Location:
             [...]
 
         """
-        mapsets = [mapset for mapset in self]
+        mapsets = [mapset for mapset in self]  # noqa: C416
         if permissions:
             mapsets = [
                 mapset
@@ -430,7 +430,7 @@ class VisibleMapset:
     def read(self):
         """Return the mapsets in the search path"""
         try:
-            with open(self.spath, "r") as f:
+            with open(self.spath) as f:
                 lines = f.readlines()
                 if lines:
                     return [line.strip() for line in lines]

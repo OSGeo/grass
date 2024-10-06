@@ -484,7 +484,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             try:
                 self.seltree.EnsureVisible(item)
                 self.seltree.SelectItem(item)
-            except:
+            except Exception:
                 pass
 
     def _getElementList(self, element, mapsets=None, elements=None, exclude=False):
@@ -2745,7 +2745,7 @@ class ElementSelect(wx.Choice):
         if elements:
             values = []
             valuesDesc = []
-            for idx in range(0, len(self.values)):
+            for idx in range(len(self.values)):
                 value = self.values[idx]
                 if value in elements:
                     values.append(value)

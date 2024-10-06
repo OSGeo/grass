@@ -179,9 +179,10 @@ class WorkspaceManager:
                 parent=self.lmgr,
                 message=_(
                     "Reading workspace file <%s> failed.\n"
-                    "Invalid file, unable to parse XML document."
+                    "Invalid file, unable to parse XML document.\n"
+                    "Error details: %s"
                 )
-                % filename,
+                % (filename, str(e)),
             )
             return False
 
@@ -436,7 +437,11 @@ class WorkspaceManager:
         except Exception as e:
             GError(
                 parent=self.lmgr,
-                message=_("Writing current settings to workspace file failed."),
+                message=_(
+                    "Writing current settings to workspace file <%s> failed.\n"
+                    "Error details: %s"
+                )
+                % (tmpfile, str(e)),
             )
             return False
 

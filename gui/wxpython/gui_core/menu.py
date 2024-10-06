@@ -444,7 +444,7 @@ class RecentFilesMenu:
 
     def RemoveNonExistentFiles(self):
         """Remove non existent files from the history"""
-        for i in reversed(range(0, self._filehistory.GetCount())):
+        for i in reversed(range(self._filehistory.GetCount())):
             file = self._filehistory.GetHistoryFile(index=i)
             if not os.path.exists(file):
                 self._filehistory.RemoveFileFromHistory(i=i)

@@ -86,5 +86,5 @@ def robustApply(receiver, *arguments, **named):
         )
         # fc does not have a **kwds type parameter, therefore
         # remove unacceptable arguments.
-        named = dict([(k, v) for k, v in named.items() if k in acceptable])
+        named = {k: v for k, v in named.items() if k in acceptable}
     return receiver(*arguments, **named)

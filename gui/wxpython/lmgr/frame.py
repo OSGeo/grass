@@ -1093,7 +1093,7 @@ class GMFrame(wx.Frame):
                 return None
         else:  # -> return list of all mapdisplays
             mlist = []
-            for idx in range(0, self.notebookLayers.GetPageCount()):
+            for idx in range(self.notebookLayers.GetPageCount()):
                 mlist.append(self.notebookLayers.GetPage(idx).maptree.GetMapDisplay())
 
             return mlist
@@ -1906,7 +1906,7 @@ class GMFrame(wx.Frame):
         """Disables 3D mode for all map displays except for @p mapDisplay"""
         # TODO: it should be disabled also for newly created map windows
         # moreover mapdisp.Disable3dMode() does not work properly
-        for page in range(0, self.GetLayerNotebook().GetPageCount()):
+        for page in range(self.GetLayerNotebook().GetPageCount()):
             mapdisp = self.GetLayerNotebook().GetPage(page).maptree.GetMapDisplay()
             if self.GetLayerNotebook().GetPage(page) != mapDisplayPage:
                 mapdisp.Disable3dMode()
@@ -1950,7 +1950,7 @@ class GMFrame(wx.Frame):
                 )
                 return
 
-            newItem = maptree.AddLayer(
+            maptree.AddLayer(
                 ltype=ltype,
                 lname=layerName,
                 lchecked=check,

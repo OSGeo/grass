@@ -51,7 +51,7 @@ def replace_in_file(file_path, pattern, repl):
     """
     # using tmp file to store the replaced content
     tmp_file_path = file_path + ".tmp"
-    with open(file_path, "r") as old_file, open(tmp_file_path, "w") as new_file:
+    with open(file_path) as old_file, open(tmp_file_path, "w") as new_file:
         for line in old_file:
             new_file.write(re.sub(pattern=pattern, string=line, repl=repl))
     # remove old file since it must not exist for rename/move

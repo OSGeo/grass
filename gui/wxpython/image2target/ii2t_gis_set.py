@@ -96,7 +96,7 @@ class GRASSStartup(wx.Frame):
             self.hbitmap = wx.StaticBitmap(
                 self.panel, wx.ID_ANY, wx.Bitmap(name=name, type=wx.BITMAP_TYPE_PNG)
             )
-        except:
+        except Exception:
             self.hbitmap = wx.StaticBitmap(
                 self.panel, wx.ID_ANY, BitmapFromImage(wx.EmptyImage(530, 150))
             )
@@ -543,7 +543,7 @@ class GRASSStartup(wx.Frame):
 
         if gisrc and os.path.isfile(gisrc):
             try:
-                rc = open(gisrc, "r")
+                rc = open(gisrc)
                 for line in rc:
                     try:
                         key, val = line.split(":", 1)
@@ -824,8 +824,8 @@ class GRASSStartup(wx.Frame):
                 shutil.rmtree(os.path.join(self.gisdbase, location, mapset))
                 self.OnSelectLocation(None)
                 self.lbmapsets.SetSelection(0)
-            except:
-                wx.MessageBox(message=_("Unable to delete mapset"))
+            except OSError as e:
+                wx.MessageBox(message=_("Unable to delete mapset: %s") % str(e))
 
         dlg.Destroy()
 
@@ -856,8 +856,8 @@ class GRASSStartup(wx.Frame):
                 self.lblocations.SetSelection(0)
                 self.OnSelectLocation(None)
                 self.lbmapsets.SetSelection(0)
-            except:
-                wx.MessageBox(message=_("Unable to delete location"))
+            except OSError as e:
+                wx.MessageBox(message=_("Unable to delete location: %s") % str(e))
 
         dlg.Destroy()
 
@@ -1163,7 +1163,7 @@ class GRASSStartup(wx.Frame):
             defaultName = getpass.getuser()
             # raise error if not ascii (not valid mapset name)
             defaultName.encode("ascii")
-        except:  # whatever might go wrong
+        except Exception:  # whatever might go wrong
             defaultName = "user"
 
         return defaultName

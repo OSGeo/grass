@@ -192,9 +192,7 @@ class ScattsManager:
         del self.busy
         self.data_set = True
 
-        todo = event.ret
         self.bad_bands = event.ret
-        bands = self.core.GetBands()
 
         self.bad_rasts = event.ret
         self.cats_mgr.SetData()
@@ -597,7 +595,7 @@ class PlotsRenderingManager:
                 try:
                     self.cat_ids.remove(c)
                     scatt_dt[c]["render"] = True
-                except:
+                except ValueError:
                     scatt_dt[c]["render"] = False
 
             if self.scatt_mgr.pol_sel_mode[0]:
@@ -674,7 +672,7 @@ class CategoriesManager:
 
         try:
             pos = self.cats_ids.index(cat_id)
-        except:
+        except ValueError:
             return False
 
         if pos > new_pos:
@@ -809,7 +807,6 @@ class CategoriesManager:
     def OnExportCatRastDone(self, event):
         ret, err = event.ret
         if ret == 0:
-            cat_attrs = self.GetCategoryAttrs(event.kwds["cat_id"])
             GMessage(
                 _("Scatter plot raster of class <%s> exported to raster map <%s>.")
                 % (event.userdata["name"], event.kwds["rast_name"])

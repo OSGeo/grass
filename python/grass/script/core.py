@@ -1066,7 +1066,7 @@ def _text_to_key_value_dict(
         {'a': ['Hello'], 'c': [1, 2, 3, 4, 5], 'b': [1.0], 'd': ['hello', 8, 0.1]}
 
     """
-    text = open(filename, "r").readlines()
+    text = open(filename).readlines()
     kvdict = KeyValue()
 
     for line in text:
@@ -1276,7 +1276,7 @@ def region_env(region3d=False, flags=None, env=None, **kwargs):
     windfile = os.path.join(
         gis_env["GISDBASE"], gis_env["LOCATION_NAME"], gis_env["MAPSET"], "WIND"
     )
-    with open(windfile, "r") as fd:
+    with open(windfile) as fd:
         grass_region = ""
         for line in fd:
             key, value = (x.strip() for x in line.split(":", 1))

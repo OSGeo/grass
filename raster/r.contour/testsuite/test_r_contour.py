@@ -62,7 +62,7 @@ class TestRasterWhat(TestCase):
         self.assertModule("v.db.select", map=self.output, file="testReport")
         self.assertFileExists("testReport", msg="testReport file was not created")
         if os.path.isfile("testReport"):
-            file = open("testReport", "r")
+            file = open("testReport")
             fileData = file.read()
             self.assertMultiLineEqual(fileData, self.test_ref_str)
             file.close()
@@ -87,7 +87,7 @@ class TestRasterWhat(TestCase):
         self.assertModule("v.db.select", map=self.output + "_cut", file="testReportCut")
         self.assertFileExists("testReportCut", msg="testReportCut file was not created")
         if os.path.isfile("testReportCut"):
-            file = open("testReportCut", "r")
+            file = open("testReportCut")
             fileData = file.read()
             self.assertMultiLineEqual(fileData, self.test_ref_str)
             file.close()
