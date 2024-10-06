@@ -410,7 +410,7 @@ header_graphical_index_tmpl = """\
 
 
 def get_desc(cmd):
-    f = open(cmd)
+    f = open(cmd, "r")
     while True:
         line = f.readline()
         if not line:

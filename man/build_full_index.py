@@ -9,10 +9,7 @@
 import sys
 import os
 
-year = None
-if len(sys.argv) > 1:
-    year = sys.argv[1]
-
+from operator import itemgetter
 
 def build_full_index(ext):
     os.chdir(man_dir)
@@ -38,7 +35,7 @@ def build_full_index(ext):
         prefix = cmd.split(".")[0]
         if prefix not in [item[0] for item in classes]:
             classes.append((prefix, class_labels.get(prefix, prefix)))
-    classes.sort(key=lambda tup: tup[0])
+    classes.sort(key=itemgetter(0))
 
     # begin full index:
     filename = f"full_index.{ext}"
@@ -77,6 +74,10 @@ def build_full_index(ext):
 
 
 if __name__ == "__main__":
+    year = None
+    if len(sys.argv) > 1:
+        year = sys.argv[1]
+
     from build import (
         get_files,
         write_footer,

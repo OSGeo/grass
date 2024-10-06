@@ -84,13 +84,13 @@ def build_keywords(ext):
             # TODO maybe move to Python re (regex)
             try:
                 index_keys = lines.index("<h2>KEYWORDS</h2>\n") + 1
-            except:
+            except Exception:
                 continue
             try:
                 keys = []
                 for k in lines[index_keys].split(","):
                     keys.append(k.strip().split(">")[1].split("<")[0])
-            except:
+            except Exception:
                 continue
         else:
             keys = []
@@ -109,10 +109,10 @@ def build_keywords(ext):
     for black in blacklist:
         try:
             del keywords[black]
-        except:
+        except Exception:
             try:
                 del keywords[black.lower()]
-            except:
+            except Exception:
                 continue
 
     for key in sorted(keywords.keys()):
@@ -168,7 +168,7 @@ def build_keywords(ext):
         for k in sorted(char_list.keys()):
             test_length += 1
             #    toc += '<li><a href="#%s" class="toc">%s</a></li>' % (char_list[k], k)
-            if test_length % 4 == 0 and not test_length == all_keys:
+            if test_length % 4 == 0 and test_length != all_keys:
                 toc += '\n<a href="#%s" class="toc">%s</a>, ' % (char_list[k], k)
             elif test_length % 4 == 0 and test_length == all_keys:
                 toc += '\n<a href="#%s" class="toc">%s</a>' % (char_list[k], k)
