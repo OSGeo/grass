@@ -102,10 +102,10 @@ class RPCServerBase:
         # logging.basicConfig(level=logging.DEBUG)
 
     def is_server_alive(self):
-        return self.server.is_alive()
+        return self.server.is_alive() if self.server is not None else False
 
     def is_check_thread_alive(self):
-        return self.checkThread.is_alive()
+        return self.checkThread.is_alive() if self.checkThread is not None else False
 
     def start_checker_thread(self):
         if self.checkThread is not None and self.checkThread.is_alive():
@@ -119,7 +119,8 @@ class RPCServerBase:
     def stop_checker_thread(self):
         with self.threadLock:
             self.stopThread = True
-        self.checkThread.join(None)
+        if self.checkThread is not None:
+            self.checkThread.join(None)
 
     def thread_checker(self):
         """Check every 200 micro seconds if the server process is alive"""
@@ -149,11 +150,13 @@ class RPCServerBase:
         logging.debug("Check libgis server restart")
 
         with self.threadLock:
-            if self.server.is_alive() is True:
+            if self.server is not None and self.server.is_alive() is True:
                 # self.threadLock.release()
                 return
-            self.client_conn.close()
-            self.server_conn.close()
+            if self.client_conn is not None:
+                self.client_conn.close()
+            if self.server_conn is not None:
+                self.server_conn.close()
             self.start_server()
 
             if self.stopped is not True:
@@ -188,11 +191,12 @@ class RPCServerBase:
 
         self.stop_checker_thread()
         if self.server is not None and self.server.is_alive():
-            self.client_conn.send(
-                [
-                    0,
-                ]
-            )
+            if self.client_conn is not None:
+                self.client_conn.send(
+                    [
+                        0,
+                    ]
+                )
             self.server.terminate()
         if self.client_conn is not None:
             self.client_conn.close()
