@@ -41,7 +41,6 @@ def dummy_server(lock: _LockLike, conn: Connection) -> NoReturn:
         with lock:
             if data[0] == 0:
                 conn.close()
-                # lock.release()
                 sys.exit()
             if data[0] == 1:
                 raise Exception("Server process intentionally killed by exception")
@@ -129,7 +128,6 @@ class RPCServerBase:
             self._check_restart_server(caller="Server check thread")
             with self.threadLock:
                 if self.stopThread is True:
-                    # self.threadLock.release()
                     return
 
     def start_server(self):
@@ -151,7 +149,6 @@ class RPCServerBase:
 
         with self.threadLock:
             if self.server is not None and self.server.is_alive() is True:
-                # self.threadLock.release()
                 return
             if self.client_conn is not None:
                 self.client_conn.close()
