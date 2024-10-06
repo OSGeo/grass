@@ -117,9 +117,8 @@ class RPCServerBase:
         self.checkThread.start()
 
     def stop_checker_thread(self):
-        self.threadLock.acquire()
-        self.stopThread = True
-        self.threadLock.release()
+        with self.threadLock:
+            self.stopThread = True
         self.checkThread.join(None)
 
     def thread_checker(self):
@@ -127,11 +126,10 @@ class RPCServerBase:
         while True:
             time.sleep(0.2)
             self._check_restart_server(caller="Server check thread")
-            self.threadLock.acquire()
-            if self.stopThread is True:
-                self.threadLock.release()
-                return
-            self.threadLock.release()
+            with self.threadLock:
+                if self.stopThread is True:
+                    self.threadLock.release()
+                    return
 
     def start_server(self):
         """This function must be re-implemented in the subclasses"""
@@ -150,20 +148,20 @@ class RPCServerBase:
         """Restart the server if it was terminated"""
         logging.debug("Check libgis server restart")
 
-        self.threadLock.acquire()
-        if self.server.is_alive() is True:
-            self.threadLock.release()
-            return
-        self.client_conn.close()
-        self.server_conn.close()
-        self.start_server()
+        with self.threadLock:
+            if self.server.is_alive() is True:
+                self.threadLock.release()
+                return
+            self.client_conn.close()
+            self.server_conn.close()
+            self.start_server()
 
-        if self.stopped is not True:
-            logging.warning(
-                "Needed to restart the libgis server, caller: {caller}", caller=caller
-            )
+            if self.stopped is not True:
+                logging.warning(
+                    "Needed to restart the libgis server, caller: {caller}",
+                    caller=caller,
+                )
 
-        self.threadLock.release()
         self.stopped = False
 
     def safe_receive(self, message):
