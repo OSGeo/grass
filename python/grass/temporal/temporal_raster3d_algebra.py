@@ -64,7 +64,7 @@ class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
 
         self.lexer = TemporalRasterAlgebraLexer()
         self.lexer.build()
-        self.parser = yacc.yacc(module=self, debug=self.debug, write_tables=False)
+        self.parser = yacc.yacc(module=self, debug=self.debug)
 
         self.overwrite = overwrite
         self.count = 0

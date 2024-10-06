@@ -163,7 +163,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
         self.lexer = TemporalVectorAlgebraLexer()
         self.lexer.build()
-        self.parser = yacc.yacc(module=self, debug=self.debug, write_tables=False)
+        self.parser = yacc.yacc(module=self, debug=self.debug)
 
         self.overwrite = overwrite
         self.count = 0
