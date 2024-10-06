@@ -28,7 +28,7 @@ html:
 
 else
 
-html: $(HTMLDIR)/$(PGM).html $(MANDIR)/$(PGM).$(MANSECT) $(MDDIR)/source/$(PGM).md
+html: $(HTMLDIR)/$(PGM).html $(MANDIR)/$(PGM).$(MANSECT) # $(MDDIR)/source/$(PGM).md
 
 endif
 

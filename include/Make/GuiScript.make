@@ -27,10 +27,10 @@ guiscript: $(IMGDST) $(IMGDST_MD) $(PYFILES) $(BATFILES)
 # we cannot use cross-compiled g.parser for generating html files
 ifndef CROSS_COMPILING
 	$(MAKE) $(CMDHTML)
-	$(MAKE) $(CMDMAN)
 	-rm -f g.gui.*.tmp.html
 	$(MAKE) $(GUIHTML)
-	$(MAKE) $(GUIMAN)
+# $(MAKE) $(CMDMAN)
+# $(MAKE) $(GUIMAN)
 endif
 
 $(HTMLDIR)/g.gui.%.html: g.gui.%.html g.gui.%.tmp.html | $(HTMLDIR)
