@@ -18,7 +18,7 @@ import threading
 import sys
 from multiprocessing import Process, Lock, Pipe
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, NoReturn
 
 if TYPE_CHECKING:
     from multiprocessing.connection import Connection
@@ -27,7 +27,7 @@ if TYPE_CHECKING:
 ###############################################################################
 
 
-def dummy_server(lock: _LockLike, conn: Connection):
+def dummy_server(lock: _LockLike, conn: Connection) -> NoReturn:
     """Dummy server process
 
     :param lock: A multiprocessing.Lock
@@ -88,12 +88,12 @@ class RPCServerBase:
 
     """
 
-    def __init__(self):
-        self.client_conn = None
-        self.server_conn = None
+    def __init__(self) -> None:
+        self.client_conn: Connection | None = None
+        self.server_conn: Connection | None = None
         self.queue = None
         self.server = None
-        self.checkThread = None
+        self.checkThread: threading.Thread | None = None
         self.threadLock = threading.Lock()
         self.start_server()
         self.start_checker_thread()
@@ -144,7 +144,7 @@ class RPCServerBase:
     def check_server(self):
         self._check_restart_server()
 
-    def _check_restart_server(self, caller="main thread"):
+    def _check_restart_server(self, caller="main thread") -> None:
         """Restart the server if it was terminated"""
         logging.debug("Check libgis server restart")
 
