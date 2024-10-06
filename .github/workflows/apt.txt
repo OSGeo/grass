@@ -21,7 +21,6 @@ python3-dateutil
 python3-matplotlib
 python3-numpy
 python3-pil
-python3-ply
 python3-pyvirtualdisplay
 python3-termcolor
 sqlite3

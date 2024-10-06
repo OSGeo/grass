@@ -91,7 +91,6 @@ RUN apt-get update && apt-get upgrade -y && \
     python3-numpy \
     python3-pil \
     python3-pip \
-    python3-ply \
     python3-setuptools \
     python3-venv \
     python3-wxgtk4.0 \

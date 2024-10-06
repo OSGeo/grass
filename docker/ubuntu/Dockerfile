@@ -135,7 +135,6 @@ ARG GRASS_PYTHON_PACKAGES="\
     matplotlib \
     numpy \
     pip \
-    ply \
     psycopg2 \
     python-dateutil \
     python-magic \
