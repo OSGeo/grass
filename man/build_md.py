@@ -246,7 +246,7 @@ header_graphical_index_tmpl = """# Graphical index of GRASS GIS modules
 
 def get_desc(cmd):
     desc = ""
-    with open(cmd, "r") as f:
+    with open(cmd) as f:
         while True:
             line = f.readline()
             if not line:
