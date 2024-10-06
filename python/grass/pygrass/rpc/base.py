@@ -10,17 +10,24 @@ for details.
 :authors: Soeren Gebbert
 """
 
+from __future__ import annotations
+
 from grass.exceptions import FatalError
 import time
 import threading
 import sys
 from multiprocessing import Process, Lock, Pipe
 import logging
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from multiprocessing.connection import Connection
+    from multiprocessing.synchronize import _LockLike
 
 ###############################################################################
 
 
-def dummy_server(lock, conn):
+def dummy_server(lock: _LockLike, conn: Connection):
     """Dummy server process
 
     :param lock: A multiprocessing.Lock
