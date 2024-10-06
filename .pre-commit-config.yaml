@@ -17,6 +17,7 @@ repos:
                 .*\.po$|
                 .*\.ps$|
                 .*\.svg$|
+                python/grass/temporal/ply/|
                 python/libgrass_interface_generator/ctypesgen/|
                 lib/fonts/fonts/.*
           )
@@ -32,6 +33,7 @@ repos:
                 .*\.po$|
                 .*\.ps$|
                 .*\.svg$|
+                python/grass/temporal/ply/|
                 python/libgrass_interface_generator/ctypesgen/|
                 lib/fonts/fonts/.*
           )
@@ -53,6 +55,7 @@ repos:
       - id: black-jupyter
         exclude: |
           (?x)^(
+                python/grass/temporal/ply/|
                 python/libgrass_interface_generator/
           )
   - repo: https://github.com/pycqa/flake8
@@ -61,6 +64,7 @@ repos:
       - id: flake8
         exclude: |
           (?x)^(
+                python/grass/temporal/ply/|
                 python/libgrass_interface_generator/|
                 .*/testsuite/.*
           )
