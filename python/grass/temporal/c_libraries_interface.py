@@ -10,6 +10,8 @@ for details.
 :authors: Soeren Gebbert
 """
 
+from __future__ import annotations
+
 import logging
 import sys
 from ctypes import CFUNCTYPE, POINTER, byref, c_int, c_void_p, cast
@@ -28,6 +30,11 @@ from grass.pygrass.rpc.base import RPCServerBase
 from grass.pygrass.utils import decode
 from grass.pygrass.vector import VectorTopo
 from grass.script.utils import encode
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from multiprocessing.synchronize import _LockLike
+    from multiprocessing.connection import Connection
 
 ###############################################################################
 
@@ -63,7 +70,7 @@ class RPCDefs:
 ###############################################################################
 
 
-def _read_map_full_info(lock, conn, data):
+def _read_map_full_info(lock: _LockLike, conn: Connection, data):
     """Read full map specific metadata from the spatial database using
     PyGRASS functions.
 
@@ -190,7 +197,7 @@ def _read_vector_full_info(name, mapset, layer=None):
     return info
 
 
-def _fatal_error(lock, conn, data):
+def _fatal_error(lock: _LockLike, conn: Connection, data):
     """Calls G_fatal_error()"""
     libgis.G_fatal_error("Fatal Error in C library server")
 
@@ -198,7 +205,7 @@ def _fatal_error(lock, conn, data):
 ###############################################################################
 
 
-def _get_mapset(lock, conn, data):
+def _get_mapset(lock: _LockLike, conn: Connection, data):
     """Return the current mapset
 
     :param lock: A multiprocessing.Lock instance
@@ -214,7 +221,7 @@ def _get_mapset(lock, conn, data):
 ###############################################################################
 
 
-def _get_location(lock, conn, data):
+def _get_location(lock: _LockLike, conn: Connection, data):
     """Return the current location
 
     :param lock: A multiprocessing.Lock instance
@@ -230,7 +237,7 @@ def _get_location(lock, conn, data):
 ###############################################################################
 
 
-def _get_gisdbase(lock, conn, data):
+def _get_gisdbase(lock: _LockLike, conn: Connection, data):
     """Return the current gisdatabase
 
     :param lock: A multiprocessing.Lock instance
@@ -246,7 +253,7 @@ def _get_gisdbase(lock, conn, data):
 ###############################################################################
 
 
-def _get_driver_name(lock, conn, data):
+def _get_driver_name(lock: _LockLike, conn: Connection, data):
     """Return the temporal database driver of a specific mapset
 
     :param lock: A multiprocessing.Lock instance
@@ -264,7 +271,7 @@ def _get_driver_name(lock, conn, data):
 ###############################################################################
 
 
-def _get_database_name(lock, conn, data):
+def _get_database_name(lock: _LockLike, conn: Connection, data):
     """Return the temporal database name of a specific mapset
 
     :param lock: A multiprocessing.Lock instance
@@ -293,7 +300,7 @@ def _get_database_name(lock, conn, data):
 ###############################################################################
 
 
-def _available_mapsets(lock, conn, data):
+def _available_mapsets(lock: _LockLike, conn: Connection, data):
     """Return all available mapsets the user can access as a list of strings
 
     :param lock: A multiprocessing.Lock instance
@@ -349,7 +356,7 @@ def _available_mapsets(lock, conn, data):
 ###############################################################################
 
 
-def _has_timestamp(lock, conn, data):
+def _has_timestamp(lock: _LockLike, conn: Connection, data):
     """Check if the file based GRASS timestamp is present and send
     True or False using the provided pipe.
 
@@ -381,7 +388,7 @@ def _has_timestamp(lock, conn, data):
 ###############################################################################
 
 
-def _read_timestamp(lock, conn, data):
+def _read_timestamp(lock: _LockLike, conn: Connection, data):
     """Read the file based GRASS timestamp and send
     the result using the provided pipe.
 
@@ -429,7 +436,7 @@ def _read_timestamp(lock, conn, data):
 ###############################################################################
 
 
-def _write_timestamp(lock, conn, data):
+def _write_timestamp(lock: _LockLike, conn: Connection, data):
     """Write the file based GRASS timestamp
     the return values of the called C-functions using the provided pipe.
 
@@ -473,7 +480,7 @@ def _write_timestamp(lock, conn, data):
 ###############################################################################
 
 
-def _remove_timestamp(lock, conn, data):
+def _remove_timestamp(lock: _LockLike, conn: Connection, data):
     """Remove the file based GRASS timestamp
     the return values of the called C-functions using the provided pipe.
 
@@ -508,7 +515,7 @@ def _remove_timestamp(lock, conn, data):
 ###############################################################################
 
 
-def _read_semantic_label(lock, conn, data):
+def _read_semantic_label(lock: _LockLike, conn: Connection, data):
     """Read the file based GRASS band identifier
     the result using the provided pipe.
 
@@ -547,7 +554,7 @@ def _read_semantic_label(lock, conn, data):
 ###############################################################################
 
 
-def _write_semantic_label(lock, conn, data):
+def _write_semantic_label(lock: _LockLike, conn: Connection, data):
     """Write the file based GRASS band identifier.
 
     Rises ValueError on invalid semantic label.
@@ -583,7 +590,7 @@ def _write_semantic_label(lock, conn, data):
 ###############################################################################
 
 
-def _remove_semantic_label(lock, conn, data):
+def _remove_semantic_label(lock: _LockLike, conn: Connection, data):
     """Remove the file based GRASS band identifier.
 
     The value to be send via pipe is the return value of G_remove_misc.
@@ -616,7 +623,7 @@ def _remove_semantic_label(lock, conn, data):
 ###############################################################################
 
 
-def _map_exists(lock, conn, data):
+def _map_exists(lock: _LockLike, conn: Connection, data):
     """Check if a map exists in the spatial database
 
     The value to be send via pipe is True in case the map exists and False
@@ -648,7 +655,7 @@ def _map_exists(lock, conn, data):
 ###############################################################################
 
 
-def _read_map_info(lock, conn, data):
+def _read_map_info(lock: _LockLike, conn: Connection, data):
     """Read map specific metadata from the spatial database using C-library
     functions
 
@@ -955,7 +962,7 @@ def _read_vector_info(name, mapset):
 ###############################################################################
 
 
-def _read_map_history(lock, conn, data):
+def _read_map_history(lock: _LockLike, conn: Connection, data):
     """Read map history from the spatial database using C-library functions
 
     :param lock: A multiprocessing.Lock instance
@@ -1174,7 +1181,7 @@ def _convert_timestamp_from_grass(ts):
 ###############################################################################
 
 
-def _stop(lock, conn, data):
+def _stop(lock: _LockLike, conn: Connection, data):
     libgis.G_debug(1, "Stop C-interface server")
     conn.close()
     lock.release()
@@ -1184,7 +1191,7 @@ def _stop(lock, conn, data):
 ###############################################################################
 
 
-def c_library_server(lock, conn):
+def c_library_server(lock: _LockLike, conn: Connection):
     """The GRASS C-libraries server function designed to be a target for
     multiprocessing.Process
 
