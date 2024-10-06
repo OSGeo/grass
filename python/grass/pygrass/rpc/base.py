@@ -38,14 +38,13 @@ def dummy_server(lock: _LockLike, conn: Connection):
         # Avoid busy waiting
         conn.poll(None)
         data = conn.recv()
-        lock.acquire()
-        if data[0] == 0:
-            conn.close()
-            lock.release()
-            sys.exit()
-        if data[0] == 1:
-            raise Exception("Server process intentionally killed by exception")
-        lock.release()
+        with lock:
+            if data[0] == 0:
+                conn.close()
+                lock.release()
+                sys.exit()
+            if data[0] == 1:
+                raise Exception("Server process intentionally killed by exception")
 
 
 class RPCServerBase:
