@@ -58,7 +58,7 @@ default: $(DSTFILES)
 	$(call build,check)
 	$(MAKE) manpages
 	$(MAKE) $(INDICES_MD)
-	$(MAKE) build-mkdocs
+# $(MAKE) build-mkdocs
 
 # This must be a separate target so that evaluation of $(MANPAGES)
 # is delayed until the indices have been generated
