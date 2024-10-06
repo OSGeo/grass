@@ -101,21 +101,6 @@ def main():
     granularity = flags["g"]
     dry_run = flags["d"]
 
-    # Check for PLY istallation
-    try:
-        # Intentionally unused imports
-        from ply import lex  # noqa: F401
-        from ply import yacc  # noqa: F401
-    except ImportError:
-        gs.fatal(
-            _(
-                "Please install PLY (Lex and Yacc Python implementation) to use the "
-                "temporal algebra modules. You can use t.rast.mapcalc that provides a "
-                "limited but useful alternative to t.rast.algebra without PLY "
-                "requirement."
-            )
-        )
-
     tgis.init(True)
     p = tgis.TemporalRasterAlgebraParser(
         run=True,

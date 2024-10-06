@@ -87,21 +87,6 @@ def main():
     register_null = flags["n"]
     granularity = flags["g"]
 
-    # Check for PLY istallation
-    try:
-        # Intentionally unused imports
-        from ply import lex  # noqa: F401
-        from ply import yacc  # noqa: F401
-    except ImportError:
-        gs.fatal(
-            _(
-                "Please install PLY (Lex and Yacc Python implementation) to use the "
-                "temporal algebra modules. You can use t.rast3d.mapcalc that provides "
-                "a limited but useful alternative to t.rast3d.mapcalc2 without PLY "
-                "requirement."
-            )
-        )
-
     tgis.init(True)
     p = tgis.TemporalRaster3DAlgebraParser(
         run=True,

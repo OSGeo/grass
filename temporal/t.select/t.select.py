@@ -68,19 +68,6 @@ def main():
     dry_run = flags["d"]
     stdstype = options["type"]
 
-    # Check for PLY istallation
-    try:
-        # Intentionally unused imports
-        from ply import lex  # noqa: F401
-        from ply import yacc  # noqa: F401
-    except ImportError:
-        gs.fatal(
-            _(
-                "Please install PLY (Lex and Yacc Python implementation) to use the "
-                "temporal algebra modules."
-            )
-        )
-
     tgis.init(True)
     p = tgis.TemporalAlgebraParser(
         run=True, debug=False, spatial=spatial, dry_run=dry_run
