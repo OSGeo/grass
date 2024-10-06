@@ -29,9 +29,7 @@ def build_full_index(ext):
     }
 
     classes = []
-    print(man_dir)
     for cmd in get_files(man_dir, "*", extension=ext):
-        print(cmd)
         prefix = cmd.split(".")[0]
         if prefix not in [item[0] for item in classes]:
             classes.append((prefix, class_labels.get(prefix, prefix)))
