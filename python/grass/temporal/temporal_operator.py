@@ -289,7 +289,7 @@ class TemporalOperatorParser:
     def __init__(self):
         self.lexer = TemporalOperatorLexer()
         self.lexer.build()
-        self.parser = yacc.yacc(module=self, debug=0)
+        self.parser = yacc.yacc(module=self, debug=False)
         self.relations = None  # Temporal relations (equals, contain, during, ...)
         self.temporal = None  # Temporal operation (intersect, left, right, ...)
         self.function = None  # Actual operation (+, -, /, *, ... )
