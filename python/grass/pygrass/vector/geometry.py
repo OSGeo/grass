@@ -1869,7 +1869,7 @@ def c_read_next_line(c_mapinfo, c_points, c_cats):
     v_id = v_id if v_id != 0 else None
     ftype = libvect.Vect_read_next_line(c_mapinfo, c_points, c_cats)
     if ftype == -2:
-        raise StopIteration()
+        raise StopIteration
     if ftype == -1:
         raise
     return ftype, v_id, c_points, c_cats

@@ -160,7 +160,7 @@ class gThread(threading.Thread, wx.EvtHandler):
             if event == "line":
                 # Send event
                 wx.PostEvent(self, self._terminate_evt)
-                raise SystemExit()
+                raise SystemExit
         return self.localtrace
 
     def OnTerminate(self, event):

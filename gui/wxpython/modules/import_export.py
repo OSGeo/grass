@@ -236,15 +236,15 @@ class ImportDialog(wx.Dialog):
 
     def _getCommand(self):
         """Get command"""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def _getBlackListedParameters(self):
         """Get parameters which will not be showed in Settings page"""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def _getBlackListedFlags(self):
         """Get flags which will not be showed in Settings page"""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def _nameValidationFailed(self, layers_list):
         """Output map name validation callback
