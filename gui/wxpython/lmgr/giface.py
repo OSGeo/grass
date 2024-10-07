@@ -86,9 +86,8 @@ class LayerList:
         item = self._tree.GetSelectedLayer(multi=False, checkedOnly=checkedOnly)
         if item is None:
             return None
-        else:
-            data = self._tree.GetPyData(item)
-            return Layer(item, data)
+        data = self._tree.GetPyData(item)
+        return Layer(item, data)
 
     def GetLayerInfo(self, layer):
         """For compatibility only, will be removed."""
@@ -147,12 +146,11 @@ class LayerList:
         items = self._tree.FindItemByData(key="name", value=name)
         if items is None:
             return []
-        else:
-            layers = []
-            for item in items:
-                layer = Layer(item, self._tree.GetPyData(item))
-                layers.append(layer)
-            return layers
+        layers = []
+        for item in items:
+            layer = Layer(item, self._tree.GetPyData(item))
+            layers.append(layer)
+        return layers
 
     def GetLayerByData(self, key, value):
         """Returns layer with specified.
@@ -168,8 +166,7 @@ class LayerList:
         item = self._tree.FindItemByData(key=key, value=value)
         if item is None:
             return None
-        else:
-            return Layer(item, self._tree.GetPyData(item))
+        return Layer(item, self._tree.GetPyData(item))
 
 
 class LayerManagerGrassInterface:
@@ -268,8 +265,7 @@ class LayerManagerGrassInterface:
     def GetMapWindow(self):
         if self.lmgr.GetMapDisplay(onlyCurrent=True):
             return self.lmgr.GetMapDisplay(onlyCurrent=True).GetMapWindow()
-        else:
-            return None
+        return None
 
     def GetProgress(self):
         return self.lmgr.goutput.GetProgressBar()

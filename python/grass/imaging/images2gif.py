@@ -1060,9 +1060,8 @@ class NeuQuant:
         """
         if get_cKDTree():
             return self.quantize_with_scipy(image)
-        else:
-            print("Scipy not available, falling back to slower version.")
-            return self.quantize_without_scipy(image)
+        print("Scipy not available, falling back to slower version.")
+        return self.quantize_without_scipy(image)
 
     def quantize_with_scipy(self, image):
         w, h = image.size

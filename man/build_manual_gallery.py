@@ -132,8 +132,7 @@ def title_from_names(module_name, img_name):
     img_name = img_name.strip()
     if img_name:
         return "{name} ({desc})".format(name=module_name, desc=img_name)
-    else:
-        return "{name}".format(name=module_name)
+    return "{name}".format(name=module_name)
 
 
 def get_module_name(filename):

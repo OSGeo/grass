@@ -526,8 +526,7 @@ class PsmapDialog(Dialog):
         if ok:
             self.parent.DialogDataChanged(id=self.id)
             return True
-        else:
-            return False
+        return False
 
     def OnOK(self, event):
         """Apply changes, close dialog"""

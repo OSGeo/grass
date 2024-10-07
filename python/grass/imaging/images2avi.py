@@ -137,11 +137,10 @@ def writeAvi(
                 + "\n"
                 + _("Could not write avi.")
             )
-        else:
-            # An error occurred, show
-            print(gs.decode(outPut))
-            print(gs.decode(S.stderr.read()))
-            raise RuntimeError(_("Could not write avi."))
+        # An error occurred, show
+        print(gs.decode(outPut))
+        print(gs.decode(S.stderr.read()))
+        raise RuntimeError(_("Could not write avi."))
     else:
         try:
             # Copy avi
@@ -151,8 +150,7 @@ def writeAvi(
             _cleanDir(tempDir)
             if bg_task:
                 return str(err)
-            else:
-                raise
+            raise
 
         # Clean up
         _cleanDir(tempDir)
