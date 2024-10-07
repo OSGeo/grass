@@ -4,15 +4,9 @@ Created on Thu Jun 19 14:13:53 2014
 @author: pietro
 """
 
-import sys
-import unittest
-import numpy as np
-
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
-import grass.lib.vector as libvect
-from grass.script.core import run_command
 
 from grass.pygrass.vector import VectorTopo
 

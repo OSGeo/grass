@@ -12,11 +12,10 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
 import grass.lib.vector as libvect
-from grass.script.core import run_command
 
-from grass.pygrass.vector import Vector, VectorTopo
+from grass.pygrass.vector import VectorTopo
 from grass.pygrass.vector.geometry import Point, Line, Node
-from grass.pygrass.vector.geometry import Area, Boundary, Centroid
+from grass.pygrass.vector.geometry import Area
 from grass.pygrass.vector.basic import Bbox
 
 

@@ -9,7 +9,6 @@ import grass.gunittest.main
 import grass.gunittest.utils
 
 import grass.pygrass.vector as gvector
-import grass.pygrass.utils as gutils
 
 
 # doctest does not allow changing the base classes of test case, skip test case
