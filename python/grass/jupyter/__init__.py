@@ -112,3 +112,14 @@ from .map3d import Map3D
 from .setup import init
 from .timeseriesmap import TimeSeriesMap
 from .seriesmap import SeriesMap
+
+__all__ = [
+    "InteractiveMap",
+    "Map",
+    "Map3D",
+    "Raster",
+    "SeriesMap",
+    "TimeSeriesMap",
+    "Vector",
+    "init",
+]
