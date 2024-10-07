@@ -363,11 +363,13 @@ int main(int argc, char *argv[])
     const char *projstr;
     struct Cell_head current_region;
     struct Cell_head file_region;
-
+    G_zero(&current_region, sizeof(struct Cell_head));
+    G_zero(&file_region, sizeof(struct Cell_head));
     G_get_set_window(&current_region);
 
     /* extent for all data */
     struct Cell_head data_region;
+    G_zero(&data_region, sizeof(struct Cell_head));
 
     long unsigned header_count = 0;
     int i;
