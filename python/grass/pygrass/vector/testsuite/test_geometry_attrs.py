@@ -6,8 +6,6 @@ Created on Thu Jun 19 14:13:53 2014
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-
 from grass.pygrass.vector import VectorTopo
 
 

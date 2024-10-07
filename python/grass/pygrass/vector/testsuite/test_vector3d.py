@@ -8,11 +8,9 @@ import numpy as np
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-
+from grass.pygrass.gis.region import Region
 from grass.pygrass.vector import VectorTopo
 from grass.pygrass.vector.geometry import Point
-from grass.pygrass.gis.region import Region
 
 
 def generate_coordinates(number, bbox=None, with_z=False):
