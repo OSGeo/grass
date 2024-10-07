@@ -109,9 +109,9 @@ mentored by Vaclav Petras, Stephan Blumentrath, and Helena Mitasova.
 from .interactivemap import InteractiveMap, Raster, Vector
 from .map import Map
 from .map3d import Map3D
+from .seriesmap import SeriesMap
 from .setup import init
 from .timeseriesmap import TimeSeriesMap
-from .seriesmap import SeriesMap
 
 __all__ = [
     "InteractiveMap",
