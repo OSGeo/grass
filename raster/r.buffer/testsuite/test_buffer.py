@@ -9,23 +9,28 @@ class TestRBuffer(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
-        cls.runModule("g.region", raster="elevation")
+        cls.runModule("g.region", raster="roadsmajor")
 
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
 
+    def tearDown(self):
+        # Remove temporary maps created during tests
+        gs.run_command('g.remove', type='raster',
+                       name='null_map,zero_map,buf_test,buf_no_non_null,buf_ignore_zero', flags='f')
+
     def test_buffer_creation(self):
         output = "buf_test"
         distances = [100, 200, 300, 400, 500]
 
-        module = SimpleModule("r.buffer", input="elevation", output=output,
+        module = SimpleModule("r.buffer", input="roadsmajor", output=output,
                               distances=distances, overwrite=True)
         self.assertModule(module)
 
         self.assertRasterExists(output)
 
-        expected_categories = [1] + [i + 1 for i in range(len(distances))]
+        expected_categories = [1] + [i + 1 for i in range(len(distances)+1)]
 
         self.assertRasterMinMax(
             map=output,
