@@ -756,7 +756,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     # self.popupMenu.Enable(self.popupID['bgmap'],  False)
                     self.popupMenu.Enable(self.popupID["topo"], False)
                 # else:
-                ###    self.popupMenu.Enable(self.popupID['bgmap'], True)
+                #    self.popupMenu.Enable(self.popupID['bgmap'], True)
 
             item = wx.MenuItem(
                 self.popupMenu, id=self.popupID["meta"], text=_("Metadata")
