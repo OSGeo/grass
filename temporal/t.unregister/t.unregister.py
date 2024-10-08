@@ -108,7 +108,7 @@ def main():
 
     # Read the map list from file
     if file:
-        fd = open(file, "r")
+        fd = open(file)
 
         line = True
         while True:
@@ -154,10 +154,8 @@ def main():
                 statement += map.delete(dbif=dbif, update=False, execute=False)
         else:
             gs.warning(
-                _(
-                    "Unable to find %s map <%s> in temporal database"
-                    % (map.get_type(), map.get_id())
-                )
+                _("Unable to find %s map <%s> in temporal database")
+                % (map.get_type(), map.get_id())
             )
 
         count += 1
@@ -170,7 +168,7 @@ def main():
 
     # Update space time datasets
     if input:
-        gs.message(_("Unregister maps from space time dataset <%s>" % (input)))
+        gs.message(_("Unregister maps from space time dataset <%s>") % (input))
     else:
         gs.message(_("Unregister maps from the temporal database"))
 

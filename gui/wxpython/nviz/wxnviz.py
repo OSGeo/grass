@@ -83,7 +83,7 @@ def print_progress(value):
     """Redirect progress info"""
     global progress
     if progress:
-        if not progress.GetRange() == 100:
+        if progress.GetRange() != 100:
             progress.SetRange(100)
         progress.SetValue(value)
     else:
@@ -246,8 +246,7 @@ class Nviz:
             z = c_float()
             Nviz_get_focus(self.data, byref(x), byref(y), byref(z))
             return x.value, y.value, z.value
-        else:
-            return -1, -1, -1
+        return -1, -1, -1
 
     def SetFocus(self, x, y, z):
         """Set focus"""
@@ -1873,8 +1872,7 @@ class Nviz:
             Nviz_draw_cplane(self.data, -1, -1)
             x, y, z = self.GetCPlaneTranslation()
             return x, y, z
-        else:
-            return None, None, None
+        return None, None, None
 
     def SelectCPlane(self, index):
         """Select cutting plane

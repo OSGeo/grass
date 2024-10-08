@@ -94,8 +94,7 @@ def intersects(lineA, lineB, with_z=False):
         lineA.c_points, lineB.c_points, line.c_points, int(with_z)
     ):
         return line
-    else:
-        return []
+    return []
 
 
 # =============================================
@@ -370,8 +369,7 @@ class Geo:
     def has_topology(self):
         if self.c_mapinfo is not None:
             return self.c_mapinfo.contents.level == 2
-        else:
-            return False
+        return False
 
     @mapinfo_must_be_set
     def read(self):
@@ -539,8 +537,7 @@ class Point(Geo):
         """
         if self.is2D:
             return self.x, self.y
-        else:
-            return self.x, self.y, self.z
+        return self.x, self.y, self.z
 
     def to_wkt_p(self):
         """Return a "well know text" (WKT) geometry string Python implementation. ::
@@ -577,10 +574,9 @@ class Point(Geo):
         """
         if self.is2D or pnt.is2D:
             return libvect.Vect_points_distance(self.x, self.y, 0, pnt.x, pnt.y, 0, 0)
-        else:
-            return libvect.Vect_points_distance(
-                self.x, self.y, self.z, pnt.x, pnt.y, pnt.z, 1
-            )
+        return libvect.Vect_points_distance(
+            self.x, self.y, self.z, pnt.x, pnt.y, pnt.z, 1
+        )
 
     def buffer(
         self, dist=None, dist_x=None, dist_y=None, angle=0, round_=True, tol=0.1
@@ -675,7 +671,7 @@ class Line(Geo):
                 )
                 for indx in range(*key.indices(len(self)))
             ]
-        elif isinstance(key, int):
+        if isinstance(key, int):
             if key < 0:  # Handle negative indices
                 key += self.c_points.contents.n_points
             if key >= self.c_points.contents.n_points:
@@ -685,8 +681,7 @@ class Line(Geo):
                 self.c_points.contents.y[key],
                 None if self.is2D else self.c_points.contents.z[key],
             )
-        else:
-            raise ValueError("Invalid argument type: %r." % key)
+        raise ValueError("Invalid argument type: %r." % key)
 
     def __setitem__(self, indx, pnt):
         """Change the coordinate of point. ::
@@ -1373,8 +1368,7 @@ class Boundary(Line):
             v_id = v_id or None
             if idonly:
                 return v_id
-            else:
-                return Centroid(v_id=v_id, c_mapinfo=self.c_mapinfo)
+            return Centroid(v_id=v_id, c_mapinfo=self.c_mapinfo)
 
     def left_centroid(self, idonly=False):
         """Return left centroid
@@ -1869,7 +1863,7 @@ def c_read_next_line(c_mapinfo, c_points, c_cats):
     v_id = v_id if v_id != 0 else None
     ftype = libvect.Vect_read_next_line(c_mapinfo, c_points, c_cats)
     if ftype == -2:
-        raise StopIteration()
+        raise StopIteration
     if ftype == -1:
         raise
     return ftype, v_id, c_points, c_cats
@@ -1914,8 +1908,7 @@ def c_read_line(feature_id, c_mapinfo, c_points, c_cats):
     if feature_id > 0:
         ftype = libvect.Vect_read_line(c_mapinfo, c_points, c_cats, feature_id)
         return feature_id, ftype, c_points, c_cats
-    else:
-        raise ValueError("The index must be >0, %r given." % feature_id)
+    raise ValueError("The index must be >0, %r given." % feature_id)
 
 
 def read_line(

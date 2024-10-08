@@ -47,7 +47,7 @@ from grass.script import core as grass
 
 
 def oifcalc(sdev, corr, k1, k2, k3):
-    grass.debug(_("Calculating OIF for combination: %s, %s, %s" % (k1, k2, k3)), 1)
+    grass.debug(_("Calculating OIF for combination: %s, %s, %s") % (k1, k2, k3), 1)
     # calculate SUM of Stddeviations:
     ssdev = [sdev[k1], sdev[k2], sdev[k3]]
     numer = sum(ssdev)
@@ -63,7 +63,7 @@ def oifcalc(sdev, corr, k1, k2, k3):
 
 def perms(bands):
     n = len(bands)
-    for i in range(0, n - 2):
+    for i in range(n - 2):
         for j in range(i + 1, n - 1):
             for k in range(j + 1, n):
                 yield (bands[i], bands[j], bands[k])
@@ -122,9 +122,7 @@ def main():
 
     grass.message(_("Calculating Correlation Matrix..."))
     correlation = {}
-    s = grass.read_command(
-        "r.covar", flags="r", map=[band for band in bands], quiet=True
-    )
+    s = grass.read_command("r.covar", flags="r", map=list(bands), quiet=True)
 
     # We need to skip the first line, since r.covar prints the number of values
     lines = s.splitlines()

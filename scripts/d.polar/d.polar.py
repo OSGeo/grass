@@ -112,7 +112,7 @@ def plot_dgraph():
             50 * (1 + ring * math.sin(math.radians(i))),
             50 * (1 + ring * math.cos(math.radians(i))),
         )
-        for i in range(0, 361)
+        for i in range(361)
     ]
 
     # trend vector
@@ -425,8 +425,8 @@ def main():
             gcore.fatal(
                 _(
                     "EPS output file path <{}>, doesn't exists. "
-                    "Set new output file path.".format(eps)
-                )
+                    "Set new output file path."
+                ).format(eps)
             )
         else:
             eps = basename(eps, "eps") + ".eps"
@@ -436,8 +436,8 @@ def main():
             gcore.fatal(
                 _(
                     "option <output>: <{}> exists. To overwrite, "
-                    "use the --overwrite flag.".format(eps)
-                )
+                    "use the --overwrite flag."
+                ).format(eps)
             )
 
     # check if we have xgraph (if no EPS output requested)
@@ -512,7 +512,7 @@ def main():
         outercircle = []
         outercircle.append('"All Data incl. NULLs')
         scale = 1.0 * totalnumber / totalvalidnumber * maxradius
-        for i in range(0, 361):
+        for i in range(361):
             a = math.radians(i)
             x = math.cos(a) * scale
             y = math.sin(a) * scale

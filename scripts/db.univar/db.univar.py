@@ -77,7 +77,7 @@ def cleanup():
 
 
 def sortfile(infile, outfile):
-    inf = open(infile, "r")
+    inf = open(infile)
     outf = open(outfile, "w")
 
     if gs.find_program("sort", "--help"):

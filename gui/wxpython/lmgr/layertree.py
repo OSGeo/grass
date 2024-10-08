@@ -756,7 +756,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     # self.popupMenu.Enable(self.popupID['bgmap'],  False)
                     self.popupMenu.Enable(self.popupID["topo"], False)
                 # else:
-                ###    self.popupMenu.Enable(self.popupID['bgmap'], True)
+                #    self.popupMenu.Enable(self.popupID['bgmap'], True)
 
             item = wx.MenuItem(
                 self.popupMenu, id=self.popupID["meta"], text=_("Metadata")
@@ -2336,8 +2336,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         item = self.GetFirstChild(self.root)[0]
         if key == "name":
             return self.__FindSubItemByName(item, value)
-        else:
-            return self.__FindSubItemByData(item, key, value)
+        return self.__FindSubItemByData(item, key, value)
 
     def FindItemByIndex(self, index):
         """Find item by index (starting at 0)

@@ -59,8 +59,7 @@ class SettingsJSONEncoder(json.JSONEncoder):
                 return [color(e) for e in item]
             if isinstance(item, dict):
                 return {key: color(value) for key, value in item.items()}
-            else:
-                return item
+            return item
 
         return super().iterencode(color(obj))
 
@@ -110,7 +109,7 @@ class Settings:
             self.locs.sort()
             # Add a default choice to not override system locale
             self.locs.insert(0, "system")
-        except:
+        except Exception:
             # No NLS
             self.locs = ["system"]
 
@@ -922,7 +921,7 @@ class Settings:
             return dictionary
 
         try:
-            with open(self.filePath, "r") as f:
+            with open(self.filePath) as f:
                 update = json.load(f, object_hook=settings_JSON_decode_hook)
                 update_nested_dict_by_dict(settings, update)
         except json.JSONDecodeError as e:
@@ -942,7 +941,7 @@ class Settings:
             settings = self.userSettings
 
         try:
-            fd = open(self.legacyFilePath, "r")
+            fd = open(self.legacyFilePath)
         except OSError:
             sys.stderr.write(
                 _("Unable to read settings file <%s>\n") % self.legacyFilePath
@@ -992,7 +991,7 @@ class Settings:
         if not os.path.exists(dirPath):
             try:
                 os.mkdir(dirPath)
-            except:
+            except OSError:
                 GError(_("Unable to create settings directory"))
                 return
         try:

@@ -21,7 +21,13 @@ python man/build_keywords.py <dir_path_to_core_modules_html_man_files>
 import os
 import sys
 import glob
-from build_html import *
+from build_html import (
+    grass_version,
+    header1_tmpl,
+    headerkeywords_tmpl,
+    write_html_footer,
+)
+
 
 blacklist = [
     "Display",
@@ -81,17 +87,17 @@ for html_file in htmlfiles:
     try:
         index_keys = lines.index("<h2>KEYWORDS</h2>\n") + 1
         index_desc = lines.index("<h2>NAME</h2>\n") + 1
-    except:
+    except Exception:
         continue
     try:
         keys = lines[index_keys].split(",")
-    except:
+    except Exception:
         continue
     for key in keys:
         key = key.strip()
         try:
             key = key.split(">")[1].split("<")[0]
-        except:
+        except Exception:
             pass
         if not key:
             sys.exit("Empty keyword from file %s line: %s" % (fname, lines[index_keys]))
@@ -104,10 +110,10 @@ for html_file in htmlfiles:
 for black in blacklist:
     try:
         del keywords[black]
-    except:
+    except Exception:
         try:
             del keywords[black.lower()]
-        except:
+        except Exception:
             continue
 
 for key in sorted(keywords.keys()):
@@ -152,7 +158,7 @@ all_keys = len(char_list.keys())
 for k in sorted(char_list.keys()):
     test_length += 1
     #    toc += '<li><a href="#%s" class="toc">%s</a></li>' % (char_list[k], k)
-    if test_length % 4 == 0 and not test_length == all_keys:
+    if test_length % 4 == 0 and test_length != all_keys:
         toc += '\n<a href="#%s" class="toc">%s</a>, ' % (char_list[k], k)
     elif test_length % 4 == 0 and test_length == all_keys:
         toc += '\n<a href="#%s" class="toc">%s</a>' % (char_list[k], k)

@@ -20,6 +20,7 @@ This program is free software under the GNU General Public License
 """
 import os
 from itertools import cycle
+from pathlib import Path
 import numpy as np
 
 import wx
@@ -68,6 +69,7 @@ import wx.lib.filebrowsebutton as filebrowse
 
 from gui_core.widgets import GNotebook
 from gui_core.wrap import CheckBox, TextCtrl, Button, StaticText
+from operator import add
 
 ALPHA = 0.5
 COLORS = ["b", "g", "r", "c", "m", "y", "k"]
@@ -371,7 +373,7 @@ class TplotFrame(wx.Frame):
             labelText="",
             dialogTitle=_("CVS path"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             fileMode=wx.FD_SAVE,
         )
         self.headerLabel = StaticText(
@@ -669,8 +671,8 @@ class TplotFrame(wx.Frame):
                             showTraceback=False,
                             message=_(
                                 "No connection between vector map {vmap} "
-                                "and layer {la}".format(vmap=row["name"], la=lay)
-                            ),
+                                "and layer {la}"
+                            ).format(vmap=row["name"], la=lay),
                         )
                         return
                     vals = gs.vector_db_select(
@@ -740,7 +742,7 @@ class TplotFrame(wx.Frame):
         if self.drawX != "":
             self.axes2d.set_xlabel(self.drawX)
         elif self.temporalType == "absolute":
-            self.axes2d.set_xlabel(_("Temporal resolution: %s" % x))
+            self.axes2d.set_xlabel(_("Temporal resolution: %s") % x)
         else:
             self.axes2d.set_xlabel(_("Time [%s]") % self.unit)
         if self.drawY != "":
@@ -917,8 +919,8 @@ class TplotFrame(wx.Frame):
                     message=_(
                         "Problem getting data from vector temporal"
                         " dataset. Empty list of values for cat "
-                        "{ca}.".format(ca=name_cat[1].replace("cat", ""))
-                    ),
+                        "{ca}."
+                    ).format(ca=name_cat[1].replace("cat", "")),
                 )
                 continue
             self.lookUp.AddDataset(yranges=ydata, xranges=xdata, datasetName=name)
@@ -1007,9 +1009,8 @@ class TplotFrame(wx.Frame):
         if os.path.exists(self.csvpath) and not self.overwrite:
             dlg = wx.MessageDialog(
                 self,
-                _(
-                    "{pa} already exists, do you want "
-                    "to overwrite?".format(pa=self.csvpath)
+                _("{pa} already exists, do you want to overwrite?").format(
+                    pa=self.csvpath
                 ),
                 _("File exists"),
                 wx.OK | wx.CANCEL | wx.ICON_QUESTION,
@@ -1153,16 +1154,11 @@ class TplotFrame(wx.Frame):
         ]
         # flatten this list
         if allDatasets:
-            allDatasets = reduce(
-                lambda x, y: x + y, reduce(lambda x, y: x + y, allDatasets)
-            )
+            allDatasets = reduce(add, reduce(add, allDatasets))
             mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
-            allDatasets = [
-                i
-                for i in sorted(
-                    allDatasets, key=lambda dataset_info: mapsets.index(dataset_info[1])
-                )
-            ]
+            allDatasets = sorted(
+                allDatasets, key=lambda dataset_info: mapsets.index(dataset_info[1])
+            )
 
         for dataset in datasets:
             errorMsg = _("Space time dataset <%s> not found.") % dataset
@@ -1185,7 +1181,7 @@ class TplotFrame(wx.Frame):
             elif len(indices) >= 2:
                 dlg = wx.SingleChoiceDialog(
                     self,
-                    message=_("Please specify the space time dataset <%s>." % dataset),
+                    message=_("Please specify the space time dataset <%s>.") % dataset,
                     caption=_("Ambiguous dataset name"),
                     choices=[
                         (
@@ -1368,7 +1364,7 @@ def InfoFormat(timeData, values):
             text.append(_("Space time 3D raster dataset: %s") % key)
 
         text.extend(
-            (_("Value for {date} is {val}".format(date=val[0], val=val[1])), "\n")
+            (_("Value for {date} is {val}").format(date=val[0], val=val[1]), "\n")
         )
     text.append(_("Press Del to dismiss."))
 
