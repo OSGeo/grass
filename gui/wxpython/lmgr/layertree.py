@@ -1742,7 +1742,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         try:
             item.properties.Close(True)
-        except:
+        except Exception:
             pass
 
         if item != self.root:
@@ -1758,7 +1758,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         try:
             if self.GetLayerInfo(item, key="type") != "group":
                 self.Map.DeleteLayer(self.GetLayerInfo(item, key="maplayer"))
-        except:
+        except (AttributeError, KeyError):
             pass
 
         # redraw map if auto-rendering is enabled
@@ -1999,7 +1999,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # save everything associated with item to drag
         try:
             old = dragItem  # make sure this member exists
-        except:
+        except Exception:
             return
 
         Debug.msg(4, "LayerTree.OnDrop(): layer=%s" % (self.GetItemText(dragItem)))
@@ -2046,7 +2046,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 newctrl.SetValue(
                     self.GetLayerInfo(dragItem, key="maplayer").GetCmd(string=True)
                 )
-            except:
+            except Exception:
                 pass
             newctrl.Bind(wx.EVT_TEXT_ENTER, self.OnCmdChanged)
             data = self.GetPyData(dragItem)

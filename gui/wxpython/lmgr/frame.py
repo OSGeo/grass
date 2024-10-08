@@ -885,7 +885,7 @@ class GMFrame(wx.Frame):
         try:
             self.GetMapDisplay().SetFocus()
             self.GetMapDisplay().Raise()
-        except Exception:
+        except AttributeError:
             pass
 
         event.Skip()
@@ -1137,7 +1137,7 @@ class GMFrame(wx.Frame):
             layer = self.GetLayerTree().layer_selected
             name = self.GetLayerTree().GetLayerInfo(layer, key="maplayer").name
             type = self.GetLayerTree().GetLayerInfo(layer, key="type")
-        except (AttributeError, KeyError):
+        except AttributeError:
             layer = None
 
         if layer and len(cmdlist) == 1:  # only if no parameters given
@@ -1185,7 +1185,7 @@ class GMFrame(wx.Frame):
         # available only for vector map layers
         try:
             mapLayer = tree.GetLayerInfo(layer, key="maplayer")
-        except (AttributeError, KeyError):
+        except AttributeError:
             mapLayer = None
 
         if not mapLayer or mapLayer.GetType() != "vector":
