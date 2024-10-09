@@ -116,7 +116,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
       - name: Make python-only code coverage test report available
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@604373da6381bf24206979c74d06a550515601b9 # v4.4.1
+        uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097 # v4.4.2
         with:
           name: python-codecoverage-report-${{ matrix.os }}-${{ matrix.python-version }}
           path: coverage_html_report
