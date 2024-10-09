@@ -12,7 +12,7 @@
    \author USACERL and many others
  */
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 #include <windows.h>
 #endif
 #include <stdio.h>
@@ -54,7 +54,7 @@ static int close_new(RASTER3D_Map *map)
 
     /* finally move tempfile to data file */
     Rast3d_filename(path, RASTER3D_CELL_ELEMENT, map->fileName, map->mapset);
-#ifdef __MINGW32__
+#ifdef _WIN32
     if (CopyFile(map->tempName, path, FALSE) == 0) {
 #else
     if (link(map->tempName, path) < 0) {
