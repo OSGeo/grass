@@ -346,22 +346,20 @@ static int get_login(const char *driver, const char *database,
 
    If driver/database is not found, output arguments are set to NULL.
 
-   \deprecated Use db_set_login2() instead.
-
-   \todo: GRASS 8: to be replaced by db_set_login2().
-
    \param driver driver name
    \param database database name (can be NULL)
    \param[out] user name
    \param[out] password string
+   \param[out] host name
+   \param[out] port
 
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db_get_login(const char *driver, const char *database, const char **user,
-                 const char **password)
+int db_get_login2(const char *driver, const char *database, const char **user,
+                  const char **password, const char **host, const char **port)
 {
-    return get_login(driver, database, user, password, NULL, NULL);
+    return db_get_login(driver, database, user, password, host, port);
 }
 
 /*!
@@ -379,8 +377,8 @@ int db_get_login(const char *driver, const char *database, const char **user,
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db_get_login2(const char *driver, const char *database, const char **user,
-                  const char **password, const char **host, const char **port)
+int db_get_login(const char *driver, const char *database, const char **user,
+                 const char **password, const char **host, const char **port)
 {
     return get_login(driver, database, user, password, host, port);
 }
