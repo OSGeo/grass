@@ -99,7 +99,7 @@ def has_src_code_git(src_dir):
                                                  if core module or addon
                                                  source code has Git
     """
-    actual_dir = os.getcwd()
+    actual_dir = Path.cwd()
     os.chdir(src_dir)
     try:
         process_result = subprocess.run(
