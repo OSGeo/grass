@@ -596,8 +596,7 @@ class GRASSStartup(wx.Frame):
         """Return GRASS variable (read from GISRC)"""
         if value in self.grassrc:
             return self.grassrc[value]
-        else:
-            return None
+        return None
 
     def OnWizard(self, event):
         """Location wizard started"""
@@ -1046,8 +1045,7 @@ class GRASSStartup(wx.Frame):
         if dlg.ShowModal() == wx.ID_OK:
             mapset = dlg.GetValue()
             return self.CreateNewMapset(mapset=mapset)
-        else:
-            return False
+        return False
 
     def CreateNewMapset(self, mapset):
         if mapset in self.listOfMapsets:

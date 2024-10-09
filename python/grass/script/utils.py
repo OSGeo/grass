@@ -69,13 +69,13 @@ def separator(sep):
     """
     if sep == "pipe":
         return "|"
-    elif sep == "comma":
+    if sep == "comma":
         return ","
-    elif sep == "space":
+    if sep == "space":
         return " "
-    elif sep in {"tab", "\\t"}:
+    if sep in {"tab", "\\t"}:
         return "\t"
-    elif sep in {"newline", "\\n"}:
+    if sep in {"newline", "\\n"}:
         return "\n"
     return sep
 

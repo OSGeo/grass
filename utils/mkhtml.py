@@ -406,15 +406,14 @@ def get_last_git_commit(src_dir, addon_path, is_addon):
             commit=process_result.stdout.decode(),
             src_dir=src_dir,
         )
-    elif gs:
+    if gs:
         # Addons installation
         return get_git_commit_from_rest_api_for_addon_repo(
             addon_path=addon_path,
             src_dir=src_dir,
         )
     # During GRASS GIS compilation from source code without Git
-    else:
-        return get_git_commit_from_file(src_dir=src_dir)
+    return get_git_commit_from_file(src_dir=src_dir)
 
 
 html_page_footer_pages_path = os.getenv("HTML_PAGE_FOOTER_PAGES_PATH") or ""
@@ -849,10 +848,9 @@ def to_title(name):
     """Convert name of command class/family to form suitable for title"""
     if name == "raster3d":
         return "3D raster"
-    elif name == "postscript":
+    if name == "postscript":
         return "PostScript"
-    else:
-        return name.capitalize()
+    return name.capitalize()
 
 
 index_titles = {}

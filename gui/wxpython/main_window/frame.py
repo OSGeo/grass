@@ -1240,14 +1240,13 @@ class GMFrame(wx.Frame):
         if onlyCurrent:
             if self.currentPage:
                 return self.GetLayerTree().GetMapDisplay()
-            else:
-                return None
-        else:  # -> return list of all mapdisplays
-            mlist = []
-            for idx in range(self.notebookLayers.GetPageCount()):
-                mlist.append(self.notebookLayers.GetPage(idx).maptree.GetMapDisplay())
+            return None
+        # -> return list of all mapdisplays
+        mlist = []
+        for idx in range(self.notebookLayers.GetPageCount()):
+            mlist.append(self.notebookLayers.GetPage(idx).maptree.GetMapDisplay())
 
-            return mlist
+        return mlist
 
     def GetAllMapDisplays(self):
         """Get all (open) map displays"""
