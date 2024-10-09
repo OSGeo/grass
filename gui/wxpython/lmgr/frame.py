@@ -1862,7 +1862,7 @@ class GMFrame(wx.Frame):
         # available only for vector map layers
         try:
             maptype = tree.GetLayerInfo(layer, key="maplayer").type
-        except (AttributeError, KeyError):
+        except AttributeError:
             maptype = None
 
         if not maptype or maptype != "vector":
