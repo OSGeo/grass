@@ -46,12 +46,26 @@ enum mode {
     /* change feature type (point<->centroid, line<->boundary) */
     MODE_CHTYPE,
     MODE_AREA_DEL, /* delete area */
+    MODE_BATCH,    /* batch editing */
 };
 
 struct GParams {
     struct Option *map, *in, *maxdist, *tool, *coord, *cat, *move, *bbox, *fld,
-        *poly, *type, *id, *where, *bmaps, *snap, *query, *zbulk;
+        *poly, *type, *id, *where, *bmaps, *snap, *query, *zbulk, *batch, *sep;
     struct Flag *header, *topo, *close, *reverse, *move_first, *extend_parallel;
+};
+
+struct SelectParams {
+    int layer, bglayer, type, reverse;
+    char *ids, *cats, *coords, *bbox, *polygon, *where, *query;
+    double *thresh;
+};
+
+struct EditParams {
+    FILE *input;
+    char *move, *cats, *coords, *snap, *zbulk, *bbox;
+    double *thresh;
+    int close, header, move_first, extend_parallel;
 };
 
 #include "proto.h"
