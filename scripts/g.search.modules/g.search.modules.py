@@ -184,8 +184,7 @@ def colorize(text, attrs=None, pattern=None):
 
     if pattern:
         return text.replace(pattern, colored(pattern, attrs=attrs))
-    else:
-        return colored(text, attrs=attrs)
+    return colored(text, attrs=attrs)
 
 
 def _search_module(

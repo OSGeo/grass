@@ -355,8 +355,7 @@ def get_desc(cmd):
             sp = line.split("-", 1)
             if len(sp) > 1:
                 return sp[1].strip()
-            else:
-                return None
+            return None
 
     return ""
 

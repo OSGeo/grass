@@ -1230,8 +1230,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 render=True,
                 **args,
             )
-        else:
-            return cmd
+        return cmd
 
     def OnMeasureDistance(self, event):
         self._onMeasure(MeasureDistanceController)

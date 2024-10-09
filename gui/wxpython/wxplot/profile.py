@@ -398,8 +398,7 @@ class ProfileFrame(BasePlotFrame):
 
         if len(self.plotlist) > 0:
             return self.plotlist
-        else:
-            return None
+        return None
 
     def Update(self):
         """Update profile after changing options"""

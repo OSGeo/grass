@@ -255,7 +255,6 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
             if not e:
                 continue
 
-            colors = styles[cat_id]["color"].split(":")
             if self.transpose:
                 e["theta"] = 360 - e["theta"] + 90
                 if e["theta"] >= 360:
@@ -354,9 +353,6 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
             return
         if event.button != 1:
             return
-
-        cur_xlim = self.axes.get_xlim()
-        cur_ylim = self.axes.get_ylim()
 
         x1, y1 = event.xdata, event.ydata
         x2 = deepcopy(self.zoom_rect_coords["x"])
@@ -651,13 +647,11 @@ class PolygonDrawer:
 
         x, y = zip(*self.pol.xy)
 
-        style = self._getPolygonStyle()
-
         self.line = Line2D(x, y, marker="o", markerfacecolor="r", animated=True)
         self.ax.add_line(self.line)
         # self._update_line(pol)
 
-        cid = self.pol.add_callback(self.poly_changed)
+        self.pol.add_callback(self.poly_changed)
         self.moving_ver_idx = None  # the active vert
 
         self.mode = None

@@ -98,9 +98,7 @@ ignore = [
     "B904",    # raise-without-from-inside-except
     "B909",    # loop-iterator-mutation
     "BLE001",  # blind-except
-    "C404",    # unnecessary-list-comprehension-dict
     "C414",    # unnecessary-double-cast-or-process
-    "C416",    # unnecessary-comprehension
     "COM812",  # missing-trailing-comma
     "COM818",  # trailing-comma-on-bare-tuple
     "D1",
@@ -152,7 +150,6 @@ ignore = [
     "PERF402", # manual-list-copy
     "PERF403", # manual-dict-comprehension
     "PIE794",  # duplicate-class-field-definition
-    "PIE808",  # unnecessary-range-start
     "PLC0415", # import-outside-top-level
     "PLC1901", # compare-to-empty-string
     "PLC2701", # import-private-name
@@ -179,13 +176,6 @@ ignore = [
     "PLW1641", # eq-without-hash
     "PLW2901", # redefined-loop-name
     "PLW3201", # bad-dunder-method-name
-    "PT001",   # pytest-fixture-incorrect-parentheses-style
-    "PT004",   # pytest-missing-fixture-name-underscore
-    "PT006",   # pytest-parametrize-names-wrong-type
-    "PT009",   # pytest-unittest-assertion
-    "PT011",   # pytest-raises-too-broad
-    "PT018",   # pytest-composite-assertion
-    "PT023",   # pytest-incorrect-mark-parentheses-style
     "PTH100",  # os-path-abspath
     "PTH101",  # os-chmod
     "PTH102",  # os-mkdir
@@ -210,11 +200,9 @@ ignore = [
     "RET501",  # unnecessary-return-none
     "RET502",  # implicit-return-value
     "RET503",  # implicit-return
-    "RET505",  # superfluous-else-return
     "RET506",  # superfluous-else-raise
     "RET507",  # superfluous-else-continue
     "RET508",  # superfluous-else-break
-    "RSE102",  # unnecessary-paren-on-raise-exception
     "RUF003",  # ambiguous-unicode-character-comment
     "RUF005",  # collection-literal-concatenation
     "RUF012",  # mutable-class-default
@@ -262,7 +250,6 @@ ignore = [
     "UP031",   # printf-string-formatting
     "UP032",   # f-string
     "UP036",   # outdated-version-block
-    "W605",    # invalid-escape-sequence
 ]
 
 
@@ -314,12 +301,12 @@ ignore = [
 "python/grass/__init__.py" = ["PYI056"]
 "python/grass/exp*/tests/grass_script_mapset_session_test.py" = ["SIM117"]
 "python/grass/exp*/tests/grass_script_tmp_mapset_session_test.py" = ["SIM117"]
+"python/grass/gunittest/case.py" = ["PT009"]
 "python/grass/gunittest/loader.py" = ["PYI024"]
 "python/grass/gunittest/multireport.py" = ["PYI024"]
 "python/grass/gunittest/testsu*/d*/s*/s*/subsub*/t*/test_segfaut.py" = ["B018"]
 "python/grass/gunittest/testsuite/test_assertions_rast3d.py" = ["FLY002"]
 "python/grass/imaging/images2*.py" = ["SIM115"]
-"python/grass/jupyter/tests/reprojection_renderer_test.py" = ["PT013"]
 "python/grass/jupyter/testsuite/interactivemap_test.py" = ["PGH004"]
 "python/grass/jupyter/testsuite/map_test.py" = ["PGH004"]
 "python/grass/pydispatch/signal.py" = ["A005"]

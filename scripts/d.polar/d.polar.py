@@ -112,7 +112,7 @@ def plot_dgraph():
             50 * (1 + ring * math.sin(math.radians(i))),
             50 * (1 + ring * math.cos(math.radians(i))),
         )
-        for i in range(0, 361)
+        for i in range(361)
     ]
 
     # trend vector
@@ -512,7 +512,7 @@ def main():
         outercircle = []
         outercircle.append('"All Data incl. NULLs')
         scale = 1.0 * totalnumber / totalvalidnumber * maxradius
-        for i in range(0, 361):
+        for i in range(361):
             a = math.radians(i)
             x = math.cos(a) * scale
             y = math.sin(a) * scale

@@ -140,8 +140,7 @@ def text_beautify(someString, width=70):
                 textwrap.wrap(utils.normalize_whitespace(someString), width)
             ).strip(".,;:")
         )
-    else:
-        return escape_ampersand(utils.normalize_whitespace(someString).strip(".,;:"))
+    return escape_ampersand(utils.normalize_whitespace(someString).strip(".,;:"))
 
 
 def escape_ampersand(text):
@@ -3206,8 +3205,7 @@ class GUI:
 
         if self.checkError:
             return self.grass_task, err
-        else:
-            return self.grass_task
+        return self.grass_task
 
     def GetCommandInputMapParamKey(self, cmd):
         """Get parameter key for input raster/vector map

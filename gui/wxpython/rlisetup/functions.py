@@ -60,9 +60,8 @@ def retRLiPath():
     rlipath = os.path.join(grass_config_dir, "r.li")
     if os.path.exists(rlipath):
         return rlipath
-    else:
-        os.mkdir(rlipath)
-        return rlipath
+    os.mkdir(rlipath)
+    return rlipath
 
 
 def checkMapExists(name, typ="raster") -> bool:
