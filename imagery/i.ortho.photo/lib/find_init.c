@@ -7,12 +7,17 @@
 
 int I_find_initial(char *group)
 {
-    char *element;
-
-    element = (char *)G_malloc(80 * sizeof(char));
+    char element[GNAME_MAX];
+    int file_exists;
 
     if (group == NULL || *group == 0)
         return 0;
-    sprintf(element, "group/%s", group);
-    return G_find_file(element, "INIT_EXP", G_mapset()) != NULL;
+
+    if (snprintf(element, GNAME_MAX, "group/%s", group) >= GNAME_MAX) {
+        G_warning("Group name truncated");
+        return 0;
+    }
+
+    file_exists = G_find_file(element, "INIT_EXP", G_mapset()) != NULL;
+    return file_exists;
 }
