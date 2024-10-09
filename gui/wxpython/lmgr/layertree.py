@@ -1997,10 +1997,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
     def OnDrop(self, dropTarget, dragItem):
         # save everything associated with item to drag
-        try:
-            old = dragItem  # make sure this member exists
-        except Exception:
-            return
+        old = dragItem  # make sure this member exists
 
         Debug.msg(4, "LayerTree.OnDrop(): layer=%s" % (self.GetItemText(dragItem)))
 
