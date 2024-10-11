@@ -5,7 +5,7 @@ import pytest
 import grass.script as gs
 
 
-@pytest.fixture()
+@pytest.fixture
 def session_no_data(tmp_path):
     """Set up a GRASS session for the tests."""
     project = "test_project"
@@ -14,7 +14,7 @@ def session_no_data(tmp_path):
         yield session
 
 
-@pytest.fixture()
+@pytest.fixture
 def session_with_data(tmp_path):
     """Set up a GRASS session for the tests."""
     project = tmp_path / "test_project"
