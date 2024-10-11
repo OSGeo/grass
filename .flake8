@@ -23,8 +23,7 @@ per-file-ignores =
     man/build_html.py: E501
     doc/python/m.distance.py: E501
     gui/scripts/d.wms.py: E501
-    gui/wxpython/image2target/*: F841, E722
-    gui/wxpython/image2target/g.gui.image2target.py: E501, F841
+    gui/wxpython/image2target/g.gui.image2target.py: E501
     gui/wxpython/modules/*: F841, E722
     gui/wxpython/nviz/*: F841, E266, E722, F403, F405
     gui/wxpython/photo2image/*: F841, E722, E265
