@@ -40,7 +40,6 @@ int display_attr(struct Map_info *Map, int type, char *attrcol,
         Vect_destroy_cats_struct(Cats);
         return 1;
     }
- 
     driver = db_start_driver_open_database(fi->driver, fi->database);
     if (driver == NULL)
         G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
