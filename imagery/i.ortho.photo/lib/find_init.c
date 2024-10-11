@@ -14,7 +14,7 @@ int I_find_initial(char *group)
         return 0;
 
     if (snprintf(element, GNAME_MAX, "group/%s", group) >= GNAME_MAX) {
-        G_warning(_("Group name <%s> truncated"), group);
+        G_warning(_("Group name <%s> is too long"), group);
         return 0;
     }
 
