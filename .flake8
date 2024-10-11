@@ -23,7 +23,6 @@ per-file-ignores =
     man/build_html.py: E501
     imagery/i.atcorr/create_iwave.py: F632, F821, W293
     doc/python/m.distance.py: E501
-    doc/gui/wxpython/example/dialogs.py: F401
     gui/scripts/d.wms.py: E501
     gui/wxpython/image2target/*: F841, E722
     gui/wxpython/image2target/g.gui.image2target.py: E501, F841
