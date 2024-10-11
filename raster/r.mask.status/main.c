@@ -59,6 +59,7 @@ void parse_parameters(struct Parameters *params, int argc, char **argv)
     params->like_test->description =
         _("Behave like the test utility, 0 for true, 1 for false, no output");
     // suppress_required is not required given the default value for format.
+    // Both no parameters and only -t work as expected.
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -76,10 +77,11 @@ int report_status(struct Parameters *params)
     bool present = Rast_mask_status(name, mapset, &is_mask_reclass,
                                     reclass_name, reclass_mapset);
 
-    // This does not have to be exclusive with the printing, but perhaps there
-    // is a different boolean flag which does the return code and printing and
-    // this really behaves like the test utility facilitate the primary usage of
-    // this which is prompt building (there any output would be noise).
+    // This does not have to be exclusive with the printing, but leaving this
+    // to a different boolean flag which could do the return code and printing.
+    // The current implementation really behaves like the test utility which
+    // facilitates the primary usage of this which is prompt building
+    // (and there any output would be noise).
     if (params->like_test->answer) {
         if (present)
             return 0;
@@ -114,7 +116,7 @@ int report_status(struct Parameters *params)
     else if (strcmp(params->format->answer, "shell") == 0) {
         printf("present=");
         if (present)
-            printf("1"); // Good choice here or not?
+            printf("1");
         else
             printf("0");
         printf("\nfull_name=");
@@ -137,24 +139,17 @@ int report_status(struct Parameters *params)
         else
             printf("null");
         // Null values in YAML can be an empty (no) value (rather than null),
-        // so we could use that.
+        // so we could use that, but using the explicit null as a reasonable
+        // starting point.
         printf("\nis_reclass_of: ");
         // Using block scalar with |- to avoid need for escaping.
         // Alternatively, we could check mapset naming limits against YAML
-        // escaping needs for different types of strings.
+        // escaping needs for different types of strings and do the necessary
+        // escaping here.
         if (is_mask_reclass)
             printf("|-\n  %s", full_underlying);
         else
             printf("null");
-        // We could also produce true if is reclass, false otherwise.
-        // printf("\nmask_reclass: ");
-        // if (is_mask_reclass)
-        //     printf("true");
-        // else
-        //     printf("false");
-        // We could also outputting mask cats to inform user about the
-        // relevant portion of the map, but that should be done by accessing
-        // the actual mask anyway.
         printf("\n");
     }
     else {
