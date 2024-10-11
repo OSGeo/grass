@@ -508,24 +508,23 @@ def get_version_branch(major_version):
     version_branch = f"grass{major_version}"
     if sys.platform == "win32":
         return version_branch
-    else:
-        branch = gs.Popen(
-            ["git", "ls-remote", "--heads", GIT_URL, f"refs/heads/{version_branch}"],
-            stdout=PIPE,
-            stderr=PIPE,
-        )
-        branch, stderr = branch.communicate()
-        if stderr:
-            gs.fatal(
-                _(
-                    "Failed to get branch from the Git repository <{repo_path}>.\n"
-                    "{error}"
-                ).format(
-                    repo_path=GIT_URL,
-                    error=gs.decode(stderr),
-                )
+    branch = gs.Popen(
+        ["git", "ls-remote", "--heads", GIT_URL, f"refs/heads/{version_branch}"],
+        stdout=PIPE,
+        stderr=PIPE,
+    )
+    branch, stderr = branch.communicate()
+    if stderr:
+        gs.fatal(
+            _(
+                "Failed to get branch from the Git repository <{repo_path}>.\n"
+                "{error}"
+            ).format(
+                repo_path=GIT_URL,
+                error=gs.decode(stderr),
             )
-        branch = gs.decode(branch)
+        )
+    branch = gs.decode(branch)
     if version_branch not in branch:
         version_branch = "grass{}".format(int(major_version) - 1)
     return version_branch
@@ -2595,8 +2594,7 @@ def resolve_known_host_service(url, name, branch):
         )
         gs.verbose(_("Will use the following URL for download: {0}").format(url))
         return "remote_zip", url
-    else:
-        return None, None
+    return None, None
 
 
 def validate_url(url):
@@ -2720,7 +2718,7 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
     # Handle local URLs
     if os.path.isdir(url):
         return "dir", os.path.abspath(url)
-    elif os.path.exists(url):
+    if os.path.exists(url):
         if url.endswith(".zip"):
             return "zip", os.path.abspath(url)
         for suffix in extract_tar.supported_formats:
@@ -2823,7 +2821,7 @@ def main():
         xmlurl = resolve_xmlurl_prefix(original_url, source=source)
         list_available_extensions(xmlurl)
         return 0
-    elif flags["a"]:
+    if flags["a"]:
         list_installed_extensions(toolboxes=flags["t"])
         return 0
 

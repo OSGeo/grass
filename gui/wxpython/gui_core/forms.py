@@ -58,6 +58,7 @@ import queue as Queue
 import codecs
 
 from threading import Thread
+from pathlib import Path
 
 import wx
 
@@ -139,8 +140,7 @@ def text_beautify(someString, width=70):
                 textwrap.wrap(utils.normalize_whitespace(someString), width)
             ).strip(".,;:")
         )
-    else:
-        return escape_ampersand(utils.normalize_whitespace(someString).strip(".,;:"))
+    return escape_ampersand(utils.normalize_whitespace(someString).strip(".,;:"))
 
 
 def escape_ampersand(text):
@@ -2015,7 +2015,7 @@ class CmdPanel(wx.Panel):
                     # check wildcard
                     try:
                         fExt = os.path.splitext(p.get("key_desc", ["*.*"])[0])[1]
-                    except:
+                    except IndexError:
                         fExt = None
                     if not fExt:
                         fMask = "*"
@@ -2034,7 +2034,7 @@ class CmdPanel(wx.Panel):
                         dialogTitle=_("Choose %s")
                         % p.get("description", _("file")).lower(),
                         buttonText=_("Browse"),
-                        startDirectory=os.getcwd(),
+                        startDirectory=str(Path.cwd()),
                         fileMode=fmode,
                         changeCallback=self.OnSetValue,
                     )
@@ -2145,7 +2145,7 @@ class CmdPanel(wx.Panel):
                         dialogTitle=_("Choose %s")
                         % p.get("description", _("Directory")),
                         buttonText=_("Browse"),
-                        startDirectory=os.getcwd(),
+                        startDirectory=str(Path.cwd()),
                         newDirectory=True,
                         changeCallback=self.OnSetValue,
                     )
@@ -2587,7 +2587,7 @@ class CmdPanel(wx.Panel):
 
         data = ""
         try:
-            f = open(path, "r")
+            f = open(path)
         except OSError as e:
             gcmd.GError(
                 parent=self,
@@ -2624,7 +2624,7 @@ class CmdPanel(wx.Panel):
         dlg = wx.FileDialog(
             parent=self,
             message=_("Save input as..."),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
         )
 
@@ -3205,8 +3205,7 @@ class GUI:
 
         if self.checkError:
             return self.grass_task, err
-        else:
-            return self.grass_task
+        return self.grass_task
 
     def GetCommandInputMapParamKey(self, cmd):
         """Get parameter key for input raster/vector map

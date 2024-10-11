@@ -587,7 +587,7 @@ class WMSRequestMgr(BaseRequestMgr):
         # CRS:84 and CRS:83 are exception (CRS:83 and CRS:27 need to be tested)
         if srs_param in {84, 83} or version != "1.3.0":
             return bbox
-        elif Srs(GetSRSParamVal(srs_param)).axisorder == "yx":
+        if Srs(GetSRSParamVal(srs_param)).axisorder == "yx":
             return self._flipBbox(bbox)
 
         return bbox

@@ -299,8 +299,7 @@ class Info:
                 self.mapset = mapset or ""
                 return bool(mapset)
             return bool(utils.get_mapset_vector(self.name, self.mapset))
-        else:
-            return False
+        return False
 
     def is_open(self):
         """Return if the Vector is open"""

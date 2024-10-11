@@ -756,7 +756,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     # self.popupMenu.Enable(self.popupID['bgmap'],  False)
                     self.popupMenu.Enable(self.popupID["topo"], False)
                 # else:
-                ###    self.popupMenu.Enable(self.popupID['bgmap'], True)
+                #    self.popupMenu.Enable(self.popupID['bgmap'], True)
 
             item = wx.MenuItem(
                 self.popupMenu, id=self.popupID["meta"], text=_("Metadata")
@@ -1742,7 +1742,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         try:
             item.properties.Close(True)
-        except:
+        except AttributeError:
             pass
 
         if item != self.root:
@@ -1758,7 +1758,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         try:
             if self.GetLayerInfo(item, key="type") != "group":
                 self.Map.DeleteLayer(self.GetLayerInfo(item, key="maplayer"))
-        except:
+        except AttributeError:
             pass
 
         # redraw map if auto-rendering is enabled
@@ -1997,10 +1997,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
     def OnDrop(self, dropTarget, dragItem):
         # save everything associated with item to drag
-        try:
-            old = dragItem  # make sure this member exists
-        except:
-            return
+        old = dragItem  # make sure this member exists
 
         Debug.msg(4, "LayerTree.OnDrop(): layer=%s" % (self.GetItemText(dragItem)))
 
@@ -2046,7 +2043,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 newctrl.SetValue(
                     self.GetLayerInfo(dragItem, key="maplayer").GetCmd(string=True)
                 )
-            except:
+            except Exception:
                 pass
             newctrl.Bind(wx.EVT_TEXT_ENTER, self.OnCmdChanged)
             data = self.GetPyData(dragItem)
@@ -2336,8 +2333,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         item = self.GetFirstChild(self.root)[0]
         if key == "name":
             return self.__FindSubItemByName(item, value)
-        else:
-            return self.__FindSubItemByData(item, key, value)
+        return self.__FindSubItemByData(item, key, value)
 
     def FindItemByIndex(self, index):
         """Find item by index (starting at 0)

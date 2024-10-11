@@ -202,11 +202,10 @@ class Popen(subprocess.Popen):
 
             handle = win32api.OpenProcess(1, 0, self.pid)
             return win32api.TerminateProcess(handle, 0) != 0
-        else:
-            try:
-                os.kill(-self.pid, signal.SIGTERM)  # kill whole group
-            except OSError:
-                pass
+        try:
+            os.kill(-self.pid, signal.SIGTERM)  # kill whole group
+        except OSError:
+            pass
 
     if sys.platform == "win32":
 
@@ -645,11 +644,11 @@ def _formatMsg(text):
     for line in text.splitlines():
         if len(line) == 0:
             continue
-        elif "GRASS_INFO_MESSAGE" in line:
-            message += line.split(":", 1)[1].strip() + "\n"
-        elif "GRASS_INFO_WARNING" in line:
-            message += line.split(":", 1)[1].strip() + "\n"
-        elif "GRASS_INFO_ERROR" in line:
+        elif (
+            "GRASS_INFO_MESSAGE" in line
+            or "GRASS_INFO_WARNING" in line
+            or "GRASS_INFO_ERROR" in line
+        ):
             message += line.split(":", 1)[1].strip() + "\n"
         elif "GRASS_INFO_END" in line:
             return message
@@ -750,8 +749,7 @@ def RunCommand(
     if not read:
         if not getErrorMsg:
             return ret
-        else:
-            return ret, _formatMsg(stderr)
+        return ret, _formatMsg(stderr)
 
     if stdout:
         Debug.msg(3, "gcmd.RunCommand(): return stdout\n'%s'" % stdout)

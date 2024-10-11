@@ -176,8 +176,7 @@ class MapPanelBase(wx.Panel):
         """Returns property"""
         if hasattr(self.mapWindowProperties, name):
             return getattr(self.mapWindowProperties, name)
-        else:
-            return self.statusbarManager.GetProperty(name)
+        return self.statusbarManager.GetProperty(name)
 
     def HasProperty(self, name):
         """Checks whether object has property"""

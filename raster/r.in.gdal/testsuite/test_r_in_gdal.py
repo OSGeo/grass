@@ -307,7 +307,7 @@ test_gdal_import_map.0000000104
 test_gdal_import_map.0000000105
 """
 
-        text_from_file = open("map_names_file.txt", "r").read()
+        text_from_file = open("map_names_file.txt").read()
 
         self.assertLooksLike(map_list, text_from_file)
 
