@@ -22,6 +22,39 @@
 #include "R.h"
 
 /**
+ * @brief Retrieves the name of the raster mask to use.
+ *
+ * The returned raster map name is fully qualified, i.e., in the form
+ % "name@mapset".
+ *
+ * This function checks if an environment variable "GRASS_MASK" is set.
+ * If it is set, the value of the environment variable is returned as the mask name.
+ * If it is not set, the function will default to the mask name "MASK@<mapset>",
+ * where <mapset> is the current mapset.
+ *
+ * The memory for the returned mask name is dynamically allocated.
+ * It is the caller's responsibility to free the memory with G_free when it is
+ * no longer needed.
+ *
+ * @returns A dynamically allocated string containing the mask name.
+ */
+char *Rast_mask_name(void)
+{
+    // First, see if the environment variable is defined.
+    const char *env_variable = getenv("GRASS_MASK");
+    if (env_variable != NULL && strcmp(env_variable, "") != 0) {
+        // Variable exists and is not empty.
+        return G_store(env_variable);
+    }
+
+    // Default mask name is "MASK@<current mapset>".
+    char *result = (char *)G_malloc(strlen("MASK@") + GMAPSET_MAX + 1);
+    strncpy(result, "MASK@", strlen("MASK@") + 1);
+    strncat(result, G_mapset(), GMAPSET_MAX);
+    return result;
+}
+
+/**
  * \brief Checks for auto masking.
  *
  * On first call, opens the mask file if declared and available and
@@ -31,7 +64,6 @@
  * \return 0 if mask unset or unavailable
  * \return 1 if mask set and available and ready to use
  */
-
 int Rast__check_for_auto_masking(void)
 {
     struct Cell_head cellhd;
@@ -39,7 +71,7 @@ int Rast__check_for_auto_masking(void)
     Rast__init();
 
     /* if mask is switched off (-2) return -2
-       if R__.auto_mask is not set (-1) or set (>=0) recheck the MASK */
+       if R__.auto_mask is not set (-1) or set (>=0) recheck the mask */
 
     if (R__.auto_mask < -1)
         return R__.auto_mask;
@@ -47,21 +79,16 @@ int Rast__check_for_auto_masking(void)
     /* if(R__.mask_fd > 0) G_free (R__.mask_buf); */
 
     /* Decide between default mask name and env var specified one. */
-    char *mask_name = G_store(getenv("GRASS_MASK"));
-    const char *mask_mapset = NULL;
+    char *mask_name = Rast_mask_name();
+    char *mask_mapset = "";
 
-    if (!mask_name || !strcmp(mask_name, "")) {
-        mask_name = "MASK";
-        mask_mapset = G_mapset();
-    }
-
-    /* look for the existence of the MASK file */
-    R__.auto_mask = (G_find_raster(mask_name, mask_mapset) != 0);
+    /* Check for the existence of the mask raster. */
+    R__.auto_mask = (G_find_raster2(mask_name, mask_mapset) != 0);
 
     if (R__.auto_mask <= 0)
         return 0;
 
-    /* check MASK projection/zone against current region */
+    /* Check mask raster projection/zone against current region */
     Rast_get_cellhd(mask_name, mask_mapset, &cellhd);
     if (cellhd.zone != G_zone() || cellhd.proj != G_projection()) {
         R__.auto_mask = 0;
@@ -80,6 +107,7 @@ int Rast__check_for_auto_masking(void)
     /*    R__.mask_buf = Rast_allocate_c_buf(); */
 
     R__.auto_mask = 1;
+    G_free(mask_name);
 
     return 1;
 }
