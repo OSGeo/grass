@@ -91,7 +91,7 @@ def main():
             " +----------------------------------------------------------------------------+"  # noqa: E501
         )
         return
-    elif system and not history:
+    if system and not history:
         print("dbmi_python_interface='" + str(dbif.get_dbmi().__name__) + "'")
         print("dbmi_string='" + str(tgis.get_tgis_database_string()) + "'")
         print("sql_template_path='" + str(tgis.get_sql_template_path()) + "'")

@@ -28,6 +28,8 @@ This program is free software under the GNU General Public License
 import os
 import sys
 
+from pathlib import Path
+
 try:
     import pwd
 
@@ -2425,8 +2427,7 @@ class CheckListMapset(ListCtrl, listmix.ListCtrlAutoWidthMixin, CheckListCtrlMix
 
         for mapset in self.parent.all_mapsets_ordered:
             index = self.InsertItem(self.GetItemCount(), mapset)
-            mapsetPath = os.path.join(locationPath, mapset)
-            stat_info = os.stat(mapsetPath)
+            stat_info = Path(locationPath, mapset).stat()
             if havePwd:
                 try:
                     self.SetItem(index, 1, "%s" % pwd.getpwuid(stat_info.st_uid)[0])

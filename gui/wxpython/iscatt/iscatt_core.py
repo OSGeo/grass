@@ -323,7 +323,7 @@ class CatRastUpdater:
 
         if bbox["maxy"] <= r["s"]:
             return 0
-        elif bbox["maxy"] >= r["n"]:
+        if bbox["maxy"] >= r["n"]:
             new_r["n"] = bbox["maxy"]
         else:
             new_r["n"] = (
@@ -332,7 +332,7 @@ class CatRastUpdater:
 
         if bbox["miny"] >= r["n"]:
             return 0
-        elif bbox["miny"] <= r["s"]:
+        if bbox["miny"] <= r["s"]:
             new_r["s"] = bbox["miny"]
         else:
             new_r["s"] = (
@@ -341,7 +341,7 @@ class CatRastUpdater:
 
         if bbox["maxx"] <= r["w"]:
             return 0
-        elif bbox["maxx"] >= r["e"]:
+        if bbox["maxx"] >= r["e"]:
             new_r["e"] = bbox["maxx"]
         else:
             new_r["e"] = (
@@ -350,7 +350,7 @@ class CatRastUpdater:
 
         if bbox["minx"] >= r["e"]:
             return 0
-        elif bbox["minx"] <= r["w"]:
+        if bbox["minx"] <= r["w"]:
             new_r["w"] = bbox["minx"]
         else:
             new_r["w"] = (

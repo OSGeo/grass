@@ -232,8 +232,7 @@ class AbstractMapDataset(AbstractDataset):
 
         if layer is not None:
             return f"{name}:{layer}@{mapset}"
-        else:
-            return f"{name}@{mapset}"
+        return f"{name}@{mapset}"
 
     @staticmethod
     def build_id(name, mapset, layer=None):
@@ -258,8 +257,7 @@ class AbstractMapDataset(AbstractDataset):
 
         if layer is not None:
             return f"{name}:{layer}@{mapset}"
-        else:
-            return f"{name}@{mapset}"
+        return f"{name}@{mapset}"
 
     def get_layer(self):
         """Return the layer of the map
@@ -443,15 +441,11 @@ class AbstractMapDataset(AbstractDataset):
                     }
                 )
                 return False
-            else:
-                self.msgr.error(
-                    _(
-                        "Start time must be of type datetime for "
-                        "%(type)s map <%(id)s>"
-                    )
-                    % {"type": self.get_type(), "id": self.get_map_id()}
-                )
-                return False
+            self.msgr.error(
+                _("Start time must be of type datetime for %(type)s map <%(id)s>")
+                % {"type": self.get_type(), "id": self.get_map_id()}
+            )
+            return False
 
         if end_time and not isinstance(end_time, datetime):
             if self.get_layer():
@@ -467,12 +461,11 @@ class AbstractMapDataset(AbstractDataset):
                     }
                 )
                 return False
-            else:
-                self.msgr.error(
-                    _("End time must be of type datetime for %(type)s map <%(id)s>")
-                    % {"type": self.get_type(), "id": self.get_map_id()}
-                )
-                return False
+            self.msgr.error(
+                _("End time must be of type datetime for %(type)s map <%(id)s>")
+                % {"type": self.get_type(), "id": self.get_map_id()}
+            )
+            return False
 
         if start_time is not None and end_time is not None:
             if start_time > end_time:
@@ -490,17 +483,16 @@ class AbstractMapDataset(AbstractDataset):
                         }
                     )
                     return False
-                else:
-                    self.msgr.error(
-                        _(
-                            "End time must be greater than start "
-                            "time for %(type)s map <%(id)s>"
-                        )
-                        % {"type": self.get_type(), "id": self.get_map_id()}
+                self.msgr.error(
+                    _(
+                        "End time must be greater than start "
+                        "time for %(type)s map <%(id)s>"
                     )
-                    return False
+                    % {"type": self.get_type(), "id": self.get_map_id()}
+                )
+                return False
             # Do not create an interval in case start and end time are equal
-            elif start_time == end_time:
+            if start_time == end_time:
                 end_time = None
 
         self.base.set_ttype("absolute")
@@ -618,7 +610,7 @@ class AbstractMapDataset(AbstractDataset):
                     )
                 return False
             # Do not create an interval in case start and end time are equal
-            elif start_time == end_time:
+            if start_time == end_time:
                 end_time = None
 
         self.base.set_ttype("relative")

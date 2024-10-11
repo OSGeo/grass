@@ -38,6 +38,8 @@ import sys
 import tarfile
 import atexit
 
+from pathlib import Path
+
 from grass.script.utils import try_rmdir, try_remove
 from grass.script import core as grass
 from grass.script import vector
@@ -128,7 +130,7 @@ def main():
             tar.add(path, "PROJ_" + support)
     tar.close()
 
-    grass.message(_("Pack file <%s> created") % os.path.join(os.getcwd(), outfile))
+    grass.message(_("Pack file <%s> created") % Path(outfile).resolve())
 
 
 if __name__ == "__main__":

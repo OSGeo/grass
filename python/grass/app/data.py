@@ -190,7 +190,7 @@ def lock_mapset(mapset_path, force_lock_removal, message_callback):
         raise MapsetLockingException(_("Path '{}' doesn't exist").format(mapset_path))
     if not os.access(mapset_path, os.W_OK):
         error = _("Path '{}' not accessible.").format(mapset_path)
-        stat_info = os.stat(mapset_path)
+        stat_info = Path(mapset_path).stat()
         mapset_uid = stat_info.st_uid
         if mapset_uid != os.getuid():
             error = "{error}\n{detail}".format(

@@ -95,7 +95,7 @@ head_content = ["title", "isindex", "base"]
 
 
 def setify(d):
-    return dict([(key, frozenset(val)) for key, val in d.items()])
+    return {key: frozenset(val) for key, val in d.items()}
 
 
 def omit(allowed, tags):
@@ -225,8 +225,7 @@ class HTMLParser(base.HTMLParser):
     def top(self):
         if self.tag_stack == []:
             return None
-        else:
-            return self.tag_stack[-1][0]
+        return self.tag_stack[-1][0]
 
     def pop(self):
         self.excluded = self.excluded_stack.pop()
