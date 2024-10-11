@@ -46,10 +46,10 @@ void parse_parameters(struct Parameters *params, int argc, char **argv)
     params->format->answer = "plain";
     params->format->options = "plain,json,bash,yaml";
     params->format->descriptions =
-        ("plain;Plain text output;"
-         "json;JSON (JavaScript Object Notation);"
-         "bash;Shell script style output;"
-         "yaml;YAML (human-friendly data serialization language)");
+        "plain;Plain text output;"
+        "json;JSON (JavaScript Object Notation);"
+        "bash;Shell script style output;"
+        "yaml;YAML (human-friendly data serialization language)";
     params->format->description = _("Format for reporting");
 
     params->like_test = G_define_flag();
