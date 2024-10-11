@@ -3,14 +3,13 @@
  *
  * \brief Raster Library - Auto masking routines.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2024 by Vaclav Petras and the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
- *
- * \date 1999-2008
+ * \author Vaclav Petras (environmental variable and refactoring)
  */
 
 #include <stdlib.h>
@@ -73,6 +72,7 @@ int Rast__check_for_auto_masking(void)
     /* if mask is switched off (-2) return -2
        if R__.auto_mask is not set (-1) or set (>=0) recheck the mask */
 
+    // TODO: This needs to be documented or modified accordingly.
     if (R__.auto_mask < -1)
         return R__.auto_mask;
 
