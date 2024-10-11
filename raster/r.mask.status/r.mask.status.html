@@ -1,18 +1,27 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.mask.status</em> reports presence or absence of a raster mask.
+The <em>r.mask.status</em> reports information about the 2D raster mask and its
+status. If the mask is present, the tool reports a full name of the raster (name
+including the mapset) which represents the mask. It can also report full name of
+the underlying raster if the mask is reclassified from another raster.
+
+<p></p>
+With the <b>-t</b> flag, no output is printed, instead a return code is used to
+indicate presence or absence. The convention is the same same the POSIX
+<em>test</em> utility, so <em>r.mask.status</em> returns 0 when the mask is
+present and 1 otherwise.
 
 <h2>EXAMPLES</h2>
 
 <h3>Generate JSON output</h3>
 
-To generate JSON output, use the <b>format</b> option:
+To generate JSON output in Bash, use the <b>format</b> option:
 
 <div class="code"><pre>
 r.mask.status format=json
 </pre></div>
 
-In Python:
+In Python, use:
 
 <div class="code"><pre>
 import grass.script as gs

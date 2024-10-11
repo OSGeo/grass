@@ -36,7 +36,7 @@ void parse_parameters(struct Parameters *params, int argc, char **argv)
     G_add_keyword(_("reclassification"));
     module->label = _("Reports presence or absence of a raster mask");
     module->description =
-        _("Provides information about present of a 2D raster mask"
+        _("Provides information about the presence of a 2D raster mask"
           " as text output or return code");
 
     params->format = G_define_option();
@@ -45,6 +45,11 @@ void parse_parameters(struct Parameters *params, int argc, char **argv)
     params->format->required = NO;
     params->format->answer = "plain";
     params->format->options = "plain,json,bash,yaml";
+    params->format->descriptions =
+        ("plain;Plain text output;"
+         "json;JSON (JavaScript Object Notation);"
+         "bash;Shell script style output;"
+         "yaml;YAML (human-friendly data serialization language)");
     params->format->description = _("Format for reporting");
 
     params->like_test = G_define_flag();
