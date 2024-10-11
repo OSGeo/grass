@@ -50,7 +50,8 @@ int Vect_read_colors(const char *name, const char *mapset,
         Rast_init_colors(colors);
 
     if (G_strlcpy(xname, name, sizeof(xname)) >= sizeof(xname)) {
-        G_fatal_error(_("Vector map name <%s> is too long"), name);
+        G_warning(_("Vector map name <%s> is too long"), name);
+        return -1;
     }
     mapset = G_find_vector(xname, mapset);
     if (!mapset)
@@ -60,12 +61,12 @@ int Vect_read_colors(const char *name, const char *mapset,
 
     if (strcmp(mapset, G_mapset()) == 0) {
         /* look for the regular color table */
-        snprintf(buf, sizeof(buf), "%s/%s", GV_DIRECTORY, name);
+        (void)snprintf(buf, sizeof(buf), "%s/%s", GV_DIRECTORY, name);
         ret = Rast__read_colors(buf, GV_COLR_ELEMENT, mapset, colors);
     }
     else {
         /* look for secondary color table in current mapset */
-        snprintf(buf, sizeof(buf), "%s/%s", GV_COLR2_DIRECTORY, mapset);
+        (void)snprintf(buf, sizeof(buf), "%s/%s", GV_COLR2_DIRECTORY, mapset);
         ret = Rast__read_colors(buf, name, G_mapset(), colors);
     }
     if (ret == -2)
