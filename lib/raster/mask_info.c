@@ -52,9 +52,21 @@ char *Rast_mask_info(void)
 /**
  * @brief Get raster mask status information
  *
+ * _is_mask_reclass_ is a pointer to a bool variable which
+ * will be set to true if mask raster is a reclass and false otherwise.
+ *
+ * If you are not interested in the undelying reclassified raster map,
+ * pass NULL pointers for the three reclass parameters:
+ *
+ * ```
+ * Rast_mask_status(name, mapset, NULL, NULL, NULL);
+ * ```
+ *
  * @param[out] name Name of the raster map used as mask
- * @param[out] mapset Mapset name of the map
- * @param[out] is_mask_reclass True, if MASK raster is a reclass
+ * @param[out] mapset Name of the mapset the raster is in
+ * @param[out] is_mask_reclass Will be set to true if mask raster is a reclass
+ * @param[out] reclass_name Name of the underlying reclassified raster map
+ * @param[out] reclass_mapset Name of the mapset the reclassified raster is in
  *
  * @return true if mask is present, false otherwise
  */
@@ -67,10 +79,13 @@ bool Rast_mask_status(char *name, char *mapset, bool *is_mask_reclass,
         if (present) {
             *is_mask_reclass = Rast_is_reclass("MASK", G_mapset(), reclass_name,
                                                reclass_mapset) > 0;
-            // The original mask values are overwritten, put back the original
-            // values, so that we can report them to the caller.
-            strcpy(name, "MASK");
-            strcpy(mapset, G_mapset());
+            if (*is_mask_reclass) {
+                // The original mask values were overwritten in the initial
+                // info call. Put back the original values, so that we can
+                // report them to the caller.
+                strcpy(name, "MASK");
+                strcpy(mapset, G_mapset());
+            }
         }
         else {
             *is_mask_reclass = false;
