@@ -111,5 +111,6 @@ int read_areas(struct Map_info *Map)
         G_percent(area_num, nareas, 2);
     }
 
+    Vect_destroy_cats_struct(Cats);
     return 0;
 }
