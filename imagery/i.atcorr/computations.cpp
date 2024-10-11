@@ -102,14 +102,14 @@ double trunca()
     for (i = 0; i < 83; i++) {
         if (rmu[i] > 0.8)
             break;
-        k = i - 1;
+        k = i;
     }
 
     int kk = 0;
     for (i = 0; i < 83; i++) {
         if (rmu[i] > 0.94)
             break;
-        kk = i - 1;
+        kk = i;
     }
 
     double aa =
@@ -118,7 +118,7 @@ double trunca()
     double x1 = (double)(log10(sixs_trunc.pha[kk]));
     double x2 = (double)acos(rmu[kk]);
 
-    for (i = kk + 1; i < 83; i++) {
+    for (i = kk; i < 83; i++) {
         double a;
         if (fabs(rmu[i] - 1) <= 1e-08)
             a = x1 - aa * x2;
@@ -444,7 +444,7 @@ void os(const double tamoy, const double trmoy, const double pizmoy,
     if (ntp == (snt - 1)) {
         /* compute position of the plane layer */
         double taup = tap + trp;
-        iplane = -1;
+        iplane = 0;
         for (int i = 0; i <= ntp; i++)
             if (taup >= h[i])
                 iplane = i;
@@ -1005,7 +1005,7 @@ void iso(const double tamoy, const double trmoy, const double pizmoy,
     if (ntp == (snt - 1)) {
         /* compute position of the plane layer */
         double taup = tap + trp;
-        iplane = -1;
+        iplane = 0;
         for (int i = 0; i <= ntp; i++)
             if (taup >= h[i])
                 iplane = i;
