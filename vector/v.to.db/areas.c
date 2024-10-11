@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <grass/glocale.h>
+#include <grass/vector.h>
 
 #include "global.h"
 
