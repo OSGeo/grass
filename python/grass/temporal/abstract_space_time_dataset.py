@@ -1626,8 +1626,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             try:
                 if value.startswith("0"):
                     return value.lstrip("0")
-                else:
-                    return "{0:02d}".format(int(value))
+                return "{0:02d}".format(int(value))
             except ValueError:
                 return None
 

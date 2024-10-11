@@ -570,7 +570,7 @@ class IClassMapPanel(DoubleMapPanel):
     def OnZoomToTraining(self, event):
         """Set preview display to match extents of training display"""
 
-        if not self.MapWindow == self.GetSecondWindow():
+        if self.MapWindow != self.GetSecondWindow():
             self.MapWindow = self.GetSecondWindow()
             self.Map = self.GetSecondMap()
             self.UpdateActive(self.GetSecondWindow())
@@ -583,7 +583,7 @@ class IClassMapPanel(DoubleMapPanel):
     def OnZoomToPreview(self, event):
         """Set preview display to match extents of training display"""
 
-        if not self.MapWindow == self.GetFirstWindow():
+        if self.MapWindow != self.GetFirstWindow():
             self.MapWindow = self.GetFirstWindow()
             self.Map = self.GetFirstMap()
             self.UpdateActive(self.GetFirstWindow())

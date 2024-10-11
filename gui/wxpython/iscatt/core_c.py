@@ -11,17 +11,36 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
 
+import ctypes
 import sys
-import numpy as np
+from ctypes import POINTER, c_char_p, c_double, c_int, c_uint8, pointer
 from multiprocessing import Process, Queue
 
-from ctypes import *
+import numpy as np
 
 try:
-    from grass.lib.imagery import *
     from grass.lib.gis import G_get_window
+    from grass.lib.imagery import (
+        SC_SCATT_CONDITIONS,
+        SC_SCATT_DATA,
+        I_apply_colormap,
+        I_compute_scatts,
+        I_create_cat_rast,
+        I_insert_patch_to_cat_rast,
+        I_merge_arrays,
+        I_rasterize,
+        I_sc_add_cat,
+        I_sc_free_cats,
+        I_sc_init_cats,
+        I_sc_insert_scatt_data,
+        I_scd_init_scatt_data,
+        scdScattData,
+        struct_Cell_head,
+        struct_Range,
+        struct_scCats,
+    )
 except ImportError as e:
-    sys.stderr.write(_("Loading ctypes libs failed"))
+    sys.stderr.write(_("Loading ctypes libs failed: %s") % e)
 
 from core.gcmd import GException
 from grass.script import encode
@@ -238,7 +257,7 @@ def _getComputationStruct(cats, cats_rasts, cats_type, n_bands):
 
             scatt_vals = scdScattData()
 
-            c_void_p = ctypes.POINTER(ctypes.c_void_p)
+            c_void_p = POINTER(ctypes.c_void_p)
 
             if cats_type == SC_SCATT_DATA:
                 vals[:] = 0
@@ -269,7 +288,6 @@ def _updateCatRastProcess(patch_rast, region, cat_rast, output_queue):
 
 
 def _rasterize(polygon, rast, region, value, output_queue):
-    pol_size = len(polygon) * 2
     pol = np.array(polygon, dtype=float)
 
     c_uint8_p = POINTER(c_uint8)

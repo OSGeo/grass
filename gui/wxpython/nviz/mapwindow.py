@@ -534,7 +534,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
         Used for fly-through mode.
         """
-        if not self.mouse["use"] == "fly":
+        if self.mouse["use"] != "fly":
             return
 
         key = event.GetKeyCode()
@@ -596,7 +596,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
         Used for fly-through mode.
         """
-        if not self.mouse["use"] == "fly":
+        if self.mouse["use"] != "fly":
             return
 
         key = event.GetKeyCode()
@@ -2358,10 +2358,10 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             try:
                 if type == "raster":
                     return data["surface"]["object"]["id"]
-                elif type == "vector":
+                if type == "vector":
                     if vsubtyp == "vpoint":
                         return data["vector"]["points"]["object"]["id"]
-                    elif vsubtyp == "vline":
+                    if vsubtyp == "vline":
                         return data["vector"]["lines"]["object"]["id"]
                 elif type == "raster_3d":
                     return data["volume"]["object"]["id"]

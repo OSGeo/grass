@@ -20,6 +20,7 @@ This program is free software under the GNU General Public License
 """
 import os
 from itertools import cycle
+from pathlib import Path
 import numpy as np
 
 import wx
@@ -68,6 +69,7 @@ import wx.lib.filebrowsebutton as filebrowse
 
 from gui_core.widgets import GNotebook
 from gui_core.wrap import CheckBox, TextCtrl, Button, StaticText
+from operator import add
 
 ALPHA = 0.5
 COLORS = ["b", "g", "r", "c", "m", "y", "k"]
@@ -371,7 +373,7 @@ class TplotFrame(wx.Frame):
             labelText="",
             dialogTitle=_("CVS path"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             fileMode=wx.FD_SAVE,
         )
         self.headerLabel = StaticText(
@@ -1152,16 +1154,11 @@ class TplotFrame(wx.Frame):
         ]
         # flatten this list
         if allDatasets:
-            allDatasets = reduce(
-                lambda x, y: x + y, reduce(lambda x, y: x + y, allDatasets)
-            )
+            allDatasets = reduce(add, reduce(add, allDatasets))
             mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
-            allDatasets = [
-                i
-                for i in sorted(
-                    allDatasets, key=lambda dataset_info: mapsets.index(dataset_info[1])
-                )
-            ]
+            allDatasets = sorted(
+                allDatasets, key=lambda dataset_info: mapsets.index(dataset_info[1])
+            )
 
         for dataset in datasets:
             errorMsg = _("Space time dataset <%s> not found.") % dataset

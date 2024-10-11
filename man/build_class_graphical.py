@@ -91,10 +91,7 @@ header_graphical_index_tmpl = """\
 
 
 def file_matches(filename, patterns):
-    for pattern in patterns:
-        if fnmatch.fnmatch(filename, pattern):
-            return True
-    return False
+    return any(fnmatch.fnmatch(filename, pattern) for pattern in patterns)
 
 
 def starts_with_module(string, module) -> bool:

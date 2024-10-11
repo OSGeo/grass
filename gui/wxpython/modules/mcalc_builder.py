@@ -759,7 +759,7 @@ class MapCalcFrame(wx.Frame):
                 return
 
             try:
-                fobj = open(path, "r")
+                fobj = open(path)
                 mctxt = fobj.read()
             finally:
                 fobj.close()
