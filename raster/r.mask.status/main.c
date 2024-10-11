@@ -44,11 +44,11 @@ void parse_parameters(struct Parameters *params, int argc, char **argv)
     params->format->type = TYPE_STRING;
     params->format->required = NO;
     params->format->answer = "plain";
-    params->format->options = "plain,json,bash,yaml";
+    params->format->options = "plain,json,shell,yaml";
     params->format->descriptions =
         "plain;Plain text output;"
         "json;JSON (JavaScript Object Notation);"
-        "bash;Shell script style output;"
+        "shell;Shell script style output;"
         "yaml;YAML (human-friendly data serialization language)";
     params->format->description = _("Format for reporting");
 
@@ -111,7 +111,7 @@ int report_status(struct Parameters *params)
         json_free_serialized_string(serialized_string);
         json_value_free(root_value);
     }
-    else if (strcmp(params->format->answer, "bash") == 0) {
+    else if (strcmp(params->format->answer, "shell") == 0) {
         printf("present=");
         if (present)
             printf("1"); // Good choice here or not?
