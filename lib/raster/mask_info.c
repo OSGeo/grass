@@ -55,7 +55,7 @@ char *Rast_mask_info(void)
  * _is_mask_reclass_ is a pointer to a bool variable which
  * will be set to true if mask raster is a reclass and false otherwise.
  *
- * If you are not interested in the undelying reclassified raster map,
+ * If you are not interested in the underlying reclassified raster map,
  * pass NULL pointers for the three reclass parameters:
  *
  * ```
