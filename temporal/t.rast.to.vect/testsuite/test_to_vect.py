@@ -9,6 +9,7 @@ for details.
 """
 
 import subprocess
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 
@@ -63,7 +64,6 @@ class TestRasterToVector(TestCase):
             output="result",
             type="point",
             flags="n",
-            column="values",
             basename="test",
             nprocs=1,
             overwrite=True,
@@ -92,7 +92,6 @@ class TestRasterToVector(TestCase):
             output="result",
             type="area",
             flags="n",
-            column="values",
             basename="test",
             nprocs=1,
             overwrite=True,
@@ -126,7 +125,6 @@ class TestRasterToVector(TestCase):
             output="result",
             type="area",
             flags="s",
-            column="values",
             basename="test",
             nprocs=1,
             overwrite=True,
@@ -159,7 +157,6 @@ class TestRasterToVector(TestCase):
             output="result",
             type="point",
             flags="t",
-            column="values",
             basename="test",
             nprocs=4,
             overwrite=True,
@@ -187,7 +184,6 @@ class TestRasterToVector(TestCase):
             output="result",
             type="point",
             flags="t",
-            column="values",
             basename="test",
             suffix="num%03",
             nprocs=4,
@@ -203,7 +199,6 @@ class TestRasterToVector(TestCase):
             output="result",
             type="point",
             flags="t",
-            column="values",
             basename="test",
             suffix="time",
             nprocs=4,
@@ -260,7 +255,6 @@ class TestRasterToVectorFails(TestCase):
             output="result",
             type="point",
             flags="n",
-            column="values",
             basename="test",
             where="start_time > '2010-01-01'",
             nprocs=1,

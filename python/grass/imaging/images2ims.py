@@ -31,6 +31,7 @@ Use PIL to create a series of images.
 """
 
 import os
+from operator import itemgetter
 
 try:
     import numpy as np
@@ -92,8 +93,7 @@ def checkImages(images):
 def _getFilenameParts(filename):
     if "*" in filename:
         return tuple(filename.split("*", 1))
-    else:
-        return os.path.splitext(filename)
+    return os.path.splitext(filename)
 
 
 def _getFilenameWithFormatter(filename, N):
@@ -196,7 +196,7 @@ def readIms(filename, asNumpy=True):
 
     # Check dir exists
     if not os.path.isdir(dirname):
-        raise IOError("Directory not found: " + str(dirname))
+        raise OSError("Directory not found: " + str(dirname))
 
     # Get two parts of the filename
     part1, part2 = _getFilenameParts(filename)
@@ -214,7 +214,7 @@ def readIms(filename, asNumpy=True):
             images.append((im.copy(), nr))
 
     # Sort images
-    images.sort(key=lambda x: x[1])
+    images.sort(key=itemgetter(1))
     images = [im[0] for im in images]
 
     # Convert to numpy if needed

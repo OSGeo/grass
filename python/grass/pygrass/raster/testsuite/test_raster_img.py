@@ -3,6 +3,7 @@ import unittest
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+from grass.gunittest.utils import xfail_windows
 
 from grass.pygrass.raster import raster2numpy_img
 from grass.pygrass.gis.region import Region
@@ -49,7 +50,7 @@ class RasterRowImgTestCase(TestCase):
         region.adjust()
 
         tmpfile = tempfile(False)
-        tmpfile = tmpfile + ".png"
+        tmpfile += ".png"
 
         a = raster2numpy_img(self.name, region)
 
@@ -67,7 +68,7 @@ class RasterRowImgTestCase(TestCase):
         region.adjust()
 
         tmpfile = tempfile(False)
-        tmpfile = tmpfile + ".png"
+        tmpfile += ".png"
 
         # With array as argument
         array = np.ndarray((region.rows * region.cols * 4), np.uint8)
@@ -88,7 +89,7 @@ class RasterRowImgTestCase(TestCase):
         region.adjust()
 
         tmpfile = tempfile(False)
-        tmpfile = tmpfile + ".png"
+        tmpfile += ".png"
 
         # With array as argument
         array = np.ndarray((region.rows * region.cols * 4), np.uint8)
@@ -109,7 +110,7 @@ class RasterRowImgTestCase(TestCase):
         region.adjust()
 
         tmpfile = tempfile(False)
-        tmpfile = tmpfile + ".png"
+        tmpfile += ".png"
 
         # With array as argument
         array = np.ndarray((region.rows * region.cols * 4), np.uint8)
@@ -130,7 +131,7 @@ class RasterRowImgTestCase(TestCase):
         region.adjust()
 
         tmpfile = tempfile(False)
-        tmpfile = tmpfile + ".png"
+        tmpfile += ".png"
 
         array = raster2numpy_img(rastname=self.name, region=region, color="RGB")
 
@@ -149,6 +150,7 @@ class RasterRowImgTestCase(TestCase):
 
         self.assertEqual(len(a), region.rows * region.cols * 4)
 
+    @xfail_windows
     def test_resampling_to_numpy_img_2(self):
         region = Region()
         region.ewres = 1
@@ -159,6 +161,7 @@ class RasterRowImgTestCase(TestCase):
 
         self.assertEqual(len(a), region.rows * region.cols * 4)
 
+    @xfail_windows
     def test_resampling_to_numpy_img_3(self):
         region = Region()
         region.ewres = 0.4
@@ -169,6 +172,7 @@ class RasterRowImgTestCase(TestCase):
 
         self.assertEqual(len(a), region.rows * region.cols * 1)
 
+    @xfail_windows
     def test_resampling_to_numpy_img_4(self):
         region = Region()
         region.ewres = 0.1

@@ -74,7 +74,7 @@ void Vect__init_head(struct Map_info *Map)
 
    \return 0
  */
-int Vect_copy_head_data(const struct Map_info *from, struct Map_info *to)
+int Vect_copy_head_data(struct Map_info *from, struct Map_info *to)
 {
     Vect_set_organization(to, Vect_get_organization(from));
     Vect_set_date(to, Vect_get_date(from));

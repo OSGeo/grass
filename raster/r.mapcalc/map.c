@@ -725,9 +725,9 @@ void copy_history(const char *dst, int idx)
     Rast_write_history((char *)dst, &hist);
 }
 
+#define RECORD_LEN 80
 void create_history(const char *dst, expression *e)
 {
-    int RECORD_LEN = 80;
     int WIDTH = RECORD_LEN - 12;
     struct History hist;
     char *expr = format_expression(e);

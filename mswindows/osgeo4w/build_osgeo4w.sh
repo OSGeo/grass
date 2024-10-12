@@ -18,7 +18,7 @@ set -e
 # compile
 export PATH=${OSGEO4W_ROOT_MSYS}/bin:/usr/bin:/mingw64/bin
 export C_INCLUDE_PATH=".:${OSGEO4W_ROOT_MSYS}/include:${SRC}/dist.${ARCH}/include:/c/msys64/mingw64/include"
-export PYTHONHOME=${OSGEO4W_ROOT_MSYS}/apps/Python39
+export PYTHONHOME=${OSGEO4W_ROOT_MSYS}/apps/Python312
 export ARCH=x86_64-w64-mingw32
 
 ./configure \
@@ -38,7 +38,7 @@ export ARCH=x86_64-w64-mingw32
     --with-nls \
     --with-readline \
     --with-blas \
-    --with-lapack-includes=/mingw64/include/lapack \
+    --with-lapack \
     --with-freetype \
     --with-freetype-includes=${OSGEO4W_ROOT_MSYS}/include/freetype2 \
     --with-proj-share=${OSGEO4W_ROOT_MSYS}/share/proj \
