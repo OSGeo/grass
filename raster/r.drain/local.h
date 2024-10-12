@@ -1,5 +1,4 @@
-struct metrics
-{
+struct metrics {
     double ew_res, ns_res, diag_res;
 };
 

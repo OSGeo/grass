@@ -1,4 +1,3 @@
-
 /**
    \file get_proj.c
 
@@ -25,8 +24,8 @@
 
 /* Finder function for datum transformation grids */
 #define FINDERFUNC set_proj_share
-#define PERMANENT "PERMANENT"
-#define MAX_PARGS 100
+#define PERMANENT  "PERMANENT"
+#define MAX_PARGS  100
 
 static void alloc_options(char *);
 
@@ -59,7 +58,7 @@ static int nopt;
  **/
 
 int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
-	      const struct Key_Value *in_units_keys)
+              const struct Key_Value *in_units_keys)
 {
     const char *str;
     int i;
@@ -68,6 +67,7 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     char buffa[300], factbuff[50];
     int deflen;
     char proj_in[250], *datum, *params;
+
 #ifdef HAVE_PROJ_H
     PJ *pj;
     PJ_CONTEXT *pjc;
@@ -86,158 +86,155 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
 
     str = G_find_key_value("meters", in_units_keys);
     if (str != NULL) {
-	strcpy(factbuff, str);
-	if (strlen(factbuff) > 0)
-	    sscanf(factbuff, "%lf", &(info->meters));
+        strcpy(factbuff, str);
+        if (strlen(factbuff) > 0)
+            sscanf(factbuff, "%lf", &(info->meters));
     }
     str = G_find_key_value("name", in_proj_keys);
     if (str != NULL) {
-	sprintf(proj_in, "%s", str);
+        sprintf(proj_in, "%s", str);
     }
     str = G_find_key_value("proj", in_proj_keys);
     if (str != NULL) {
-	sprintf(info->proj, "%s", str);
+        sprintf(info->proj, "%s", str);
     }
     if (strlen(info->proj) <= 0)
-	sprintf(info->proj, "ll");
+        sprintf(info->proj, "ll");
     str = G_find_key_value("init", in_proj_keys);
     if (str != NULL) {
-	info->srid = G_store(str);
+        info->srid = G_store(str);
     }
 
     nopt = 0;
     for (i = 0; i < in_proj_keys->nitems; i++) {
-	/* the name parameter is just for grasses use */
-	if (strcmp(in_proj_keys->key[i], "name") == 0) {
-	    continue;
+        /* the name parameter is just for grasses use */
+        if (strcmp(in_proj_keys->key[i], "name") == 0) {
+            continue;
 
-	    /* init is here ignored */
-	}
-	else if (strcmp(in_proj_keys->key[i], "init") == 0) {
-	    continue;
+            /* init is here ignored */
+        }
+        else if (strcmp(in_proj_keys->key[i], "init") == 0) {
+            continue;
 
-	    /* zone handled separately at end of loop */
-	}
-	else if (strcmp(in_proj_keys->key[i], "zone") == 0) {
-	    continue;
+            /* zone handled separately at end of loop */
+        }
+        else if (strcmp(in_proj_keys->key[i], "zone") == 0) {
+            continue;
 
-	    /* Datum and ellipsoid-related parameters will be handled
-	     * separately after end of this loop PK */
+            /* Datum and ellipsoid-related parameters will be handled
+             * separately after end of this loop PK */
+        }
+        else if (strcmp(in_proj_keys->key[i], "datum") == 0 ||
+                 strcmp(in_proj_keys->key[i], "dx") == 0 ||
+                 strcmp(in_proj_keys->key[i], "dy") == 0 ||
+                 strcmp(in_proj_keys->key[i], "dz") == 0 ||
+                 strcmp(in_proj_keys->key[i], "datumparams") == 0 ||
+                 strcmp(in_proj_keys->key[i], "nadgrids") == 0 ||
+                 strcmp(in_proj_keys->key[i], "towgs84") == 0 ||
+                 strcmp(in_proj_keys->key[i], "ellps") == 0 ||
+                 strcmp(in_proj_keys->key[i], "a") == 0 ||
+                 strcmp(in_proj_keys->key[i], "b") == 0 ||
+                 strcmp(in_proj_keys->key[i], "es") == 0 ||
+                 strcmp(in_proj_keys->key[i], "f") == 0 ||
+                 strcmp(in_proj_keys->key[i], "rf") == 0) {
+            continue;
 
-	}
-	else if (strcmp(in_proj_keys->key[i], "datum") == 0
-		 || strcmp(in_proj_keys->key[i], "dx") == 0
-		 || strcmp(in_proj_keys->key[i], "dy") == 0
-		 || strcmp(in_proj_keys->key[i], "dz") == 0
-		 || strcmp(in_proj_keys->key[i], "datumparams") == 0
-		 || strcmp(in_proj_keys->key[i], "nadgrids") == 0
-		 || strcmp(in_proj_keys->key[i], "towgs84") == 0
-		 || strcmp(in_proj_keys->key[i], "ellps") == 0
-		 || strcmp(in_proj_keys->key[i], "a") == 0
-		 || strcmp(in_proj_keys->key[i], "b") == 0
-		 || strcmp(in_proj_keys->key[i], "es") == 0
-		 || strcmp(in_proj_keys->key[i], "f") == 0
-		 || strcmp(in_proj_keys->key[i], "rf") == 0) {
-	    continue;
+            /* PROJ.4 uses longlat instead of ll as 'projection name' */
+        }
+        else if (strcmp(in_proj_keys->key[i], "proj") == 0) {
+            if (strcmp(in_proj_keys->value[i], "ll") == 0)
+                sprintf(buffa, "proj=longlat");
+            else
+                sprintf(buffa, "proj=%s", in_proj_keys->value[i]);
 
-	    /* PROJ.4 uses longlat instead of ll as 'projection name' */
+            /* 'One-sided' PROJ.4 flags will have the value in
+             * the key-value pair set to 'defined' and only the
+             * key needs to be passed on. */
+        }
+        else if (strcmp(in_proj_keys->value[i], "defined") == 0)
+            sprintf(buffa, "%s", in_proj_keys->key[i]);
 
-	}
-	else if (strcmp(in_proj_keys->key[i], "proj") == 0) {
-	    if (strcmp(in_proj_keys->value[i], "ll") == 0)
-		sprintf(buffa, "proj=longlat");
-	    else
-		sprintf(buffa, "proj=%s", in_proj_keys->value[i]);
+        else
+            sprintf(buffa, "%s=%s", in_proj_keys->key[i],
+                    in_proj_keys->value[i]);
 
-	    /* 'One-sided' PROJ.4 flags will have the value in
-	     * the key-value pair set to 'defined' and only the
-	     * key needs to be passed on. */
-	}
-	else if (strcmp(in_proj_keys->value[i], "defined") == 0)
-	    sprintf(buffa, "%s", in_proj_keys->key[i]);
-
-	else
-	    sprintf(buffa, "%s=%s",
-		    in_proj_keys->key[i], in_proj_keys->value[i]);
-
-	alloc_options(buffa);
+        alloc_options(buffa);
     }
 
     str = G_find_key_value("zone", in_proj_keys);
     if (str != NULL) {
-	if (sscanf(str, "%d", &(info->zone)) != 1) {
-	    G_fatal_error(_("Invalid zone %s specified"), str);
-	}
-	if (info->zone < 0) {
+        if (sscanf(str, "%d", &(info->zone)) != 1) {
+            G_fatal_error(_("Invalid zone %s specified"), str);
+        }
+        if (info->zone < 0) {
 
-	    /* if zone is negative, write abs(zone) and define south */
-	    info->zone = -info->zone;
+            /* if zone is negative, write abs(zone) and define south */
+            info->zone = -info->zone;
 
-	    if (G_find_key_value("south", in_proj_keys) == NULL) {
-		sprintf(buffa, "south");
-		alloc_options(buffa);
-	    }
-	}
-	sprintf(buffa, "zone=%d", info->zone);
-	alloc_options(buffa);
+            if (G_find_key_value("south", in_proj_keys) == NULL) {
+                sprintf(buffa, "south");
+                alloc_options(buffa);
+            }
+        }
+        sprintf(buffa, "zone=%d", info->zone);
+        alloc_options(buffa);
     }
 
-    if ((GPJ__get_ellipsoid_params(in_proj_keys, &a, &es, &rf) == 0)
-	&& (str = G_find_key_value("ellps", in_proj_keys)) != NULL) {
-	/* Default values were returned but an ellipsoid name not recognised
-	 * by GRASS is present---perhaps it will be recognised by
-	 * PROJ.4 even though it wasn't by GRASS */
-	sprintf(buffa, "ellps=%s", str);
-	alloc_options(buffa);
+    if ((GPJ__get_ellipsoid_params(in_proj_keys, &a, &es, &rf) == 0) &&
+        (str = G_find_key_value("ellps", in_proj_keys)) != NULL) {
+        /* Default values were returned but an ellipsoid name not recognised
+         * by GRASS is present---perhaps it will be recognised by
+         * PROJ.4 even though it wasn't by GRASS */
+        sprintf(buffa, "ellps=%s", str);
+        alloc_options(buffa);
     }
     else {
-	sprintf(buffa, "a=%.16g", a);
-	alloc_options(buffa);
-	/* Cannot use es directly because the OSRImportFromProj4()
-	 * function in OGR only accepts b or rf as the 2nd parameter */
-	if (es == 0)
-	    sprintf(buffa, "b=%.16g", a);
-	else
-	    sprintf(buffa, "rf=%.16g", rf);
-	alloc_options(buffa);
-
+        sprintf(buffa, "a=%.16g", a);
+        alloc_options(buffa);
+        /* Cannot use es directly because the OSRImportFromProj4()
+         * function in OGR only accepts b or rf as the 2nd parameter */
+        if (es == 0)
+            sprintf(buffa, "b=%.16g", a);
+        else
+            sprintf(buffa, "rf=%.16g", rf);
+        alloc_options(buffa);
     }
     /* Workaround to stop PROJ reading values from defaults file when
      * rf (and sometimes ellps) is not specified */
     if (G_find_key_value("no_defs", in_proj_keys) == NULL) {
-	sprintf(buffa, "no_defs");
-	alloc_options(buffa);
+        sprintf(buffa, "no_defs");
+        alloc_options(buffa);
     }
 
     /* If datum parameters are present in the PROJ_INFO keys, pass them on */
     if (GPJ__get_datum_params(in_proj_keys, &datum, &params) == 2) {
-	sprintf(buffa, "%s", params);
-	alloc_options(buffa);
-	G_free(params);
+        sprintf(buffa, "%s", params);
+        alloc_options(buffa);
+        G_free(params);
 
-	/* else if a datum name is present take it and look up the parameters
-	 * from the datum.table file */
+        /* else if a datum name is present take it and look up the parameters
+         * from the datum.table file */
     }
     else if (datum != NULL) {
 
-	if (GPJ_get_default_datum_params_by_name(datum, &params) > 0) {
-	    sprintf(buffa, "%s", params);
-	    alloc_options(buffa);
-	    returnval = 2;
-	    G_free(params);
+        if (GPJ_get_default_datum_params_by_name(datum, &params) > 0) {
+            sprintf(buffa, "%s", params);
+            alloc_options(buffa);
+            returnval = 2;
+            G_free(params);
 
-	    /* else just pass the datum name on and hope it is recognised by
-	     * PROJ.4 even though it isn't recognised by GRASS */
-	}
-	else {
-	    sprintf(buffa, "datum=%s", datum);
-	    alloc_options(buffa);
-	    returnval = 3;
-	}
-	/* else there'll be no datum transformation taking place here... */
+            /* else just pass the datum name on and hope it is recognised by
+             * PROJ.4 even though it isn't recognised by GRASS */
+        }
+        else {
+            sprintf(buffa, "datum=%s", datum);
+            alloc_options(buffa);
+            returnval = 3;
+        }
+        /* else there'll be no datum transformation taking place here... */
     }
     else {
-	returnval = 4;
+        returnval = 4;
     }
     G_free(datum);
 
@@ -256,44 +253,55 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
 
     if (!(pj = pj_init(nopt, opt_in))) {
 #endif
-	strcpy(buffa,
-	       _("Unable to initialise PROJ with the following parameter list:"));
-	for (i = 0; i < nopt; i++) {
-	    char err[50];
+        strcpy(
+            buffa,
+            _("Unable to initialise PROJ with the following parameter list:"));
+        for (i = 0; i < nopt; i++) {
+            char err[50];
 
-	    sprintf(err, " +%s", opt_in[i]);
-	    strcat(buffa, err);
-	}
-	G_warning("%s", buffa);
+            sprintf(err, " +%s", opt_in[i]);
+            strcat(buffa, err);
+        }
+        G_warning("%s", buffa);
 #ifndef HAVE_PROJ_H
-	G_warning(_("The PROJ error message: %s"), pj_strerrno(pj_errno));
+        G_warning(_("The PROJ error message: %s"), pj_strerrno(pj_errno));
 #endif
-	return -1;
+        return -1;
     }
 
 #ifdef HAVE_PROJ_H
     int perr = proj_errno(pj);
 
     if (perr)
-	G_fatal_error("PROJ 5 error %d", perr);
+        G_fatal_error("PROJ 5 error %d", perr);
+
+#if PROJ_VERSION_MAJOR >= 6
+    if (proj_get_type(pj) == PJ_TYPE_BOUND_CRS) {
+        PJ *source_crs = proj_get_source_crs(pjc, pj);
+        if (source_crs) {
+            proj_destroy(pj);
+            pj = source_crs;
+        }
+    }
+#endif
 #endif
 
     info->pj = pj;
 
     deflen = 0;
     for (i = 0; i < nopt; i++)
-	deflen += strlen(opt_in[i]) + 2;
+        deflen += strlen(opt_in[i]) + 2;
 
     info->def = G_malloc(deflen + 1);
 
-    sprintf(buffa,  "+%s ", opt_in[0]);
+    sprintf(buffa, "+%s ", opt_in[0]);
     strcpy(info->def, buffa);
     G_free(opt_in[0]);
 
     for (i = 1; i < nopt; i++) {
-	sprintf(buffa,  "+%s ", opt_in[i]);
-	strcat(info->def, buffa);
-	G_free(opt_in[i]);
+        sprintf(buffa, "+%s ", opt_in[i]);
+        strcat(info->def, buffa);
+        G_free(opt_in[i]);
     }
 
     return returnval;
@@ -334,6 +342,7 @@ int pj_get_string(struct pj_info *info, char *str)
     int i, nsize;
     char zonebuff[50], buffa[300];
     int deflen;
+
 #ifdef HAVE_PROJ_H
     PJ *pj;
     PJ_CONTEXT *pjc;
@@ -351,57 +360,58 @@ int pj_get_string(struct pj_info *info, char *str)
     nopt = 0;
 
     if ((str == NULL) || (str[0] == '\0')) {
-	/* Null Pointer or empty string is supplied for parameters,
-	 * implying latlong projection; just need to set proj
-	 * parameter and call pj_init PK */
-	sprintf(info->proj, "ll");
-	sprintf(buffa, "proj=latlong ellps=WGS84");
-	alloc_options(buffa);
+        /* Null Pointer or empty string is supplied for parameters,
+         * implying latlong projection; just need to set proj
+         * parameter and call pj_init PK */
+        sprintf(info->proj, "ll");
+        sprintf(buffa, "proj=latlong ellps=WGS84");
+        alloc_options(buffa);
     }
     else {
-	/* Parameters have been provided; parse through them but don't
-	 * bother with most of the checks in pj_get_kv; assume the
-	 * programmer knows what he / she is doing when using this
-	 * function rather than reading a PROJ_INFO file       PK */
-	s = str;
-	while (s = strtok(s, " \t\n"), s) {
-	    if (strncmp(s, "+unfact=", 8) == 0) {
-		s = s + 8;
-		info->meters = atof(s);
-	    }
-	    else {
-		if (strncmp(s, "+", 1) == 0)
-		    ++s;
-		if (nsize = strlen(s), nsize) {
-		    if (nopt >= MAX_PARGS) {
-			fprintf(stderr, "nopt = %d, s=%s\n", nopt, str);
-			G_fatal_error(_("Option input overflowed option table"));
-		    }
+        /* Parameters have been provided; parse through them but don't
+         * bother with most of the checks in pj_get_kv; assume the
+         * programmer knows what he / she is doing when using this
+         * function rather than reading a PROJ_INFO file       PK */
+        s = str;
+        while (s = strtok(s, " \t\n"), s) {
+            if (strncmp(s, "+unfact=", 8) == 0) {
+                s = s + 8;
+                info->meters = atof(s);
+            }
+            else {
+                if (strncmp(s, "+", 1) == 0)
+                    ++s;
+                if (nsize = strlen(s), nsize) {
+                    if (nopt >= MAX_PARGS) {
+                        fprintf(stderr, "nopt = %d, s=%s\n", nopt, str);
+                        G_fatal_error(
+                            _("Option input overflowed option table"));
+                    }
 
-		    if (strncmp("zone=", s, 5) == 0) {
-			sprintf(zonebuff, "%s", s + 5);
-			sscanf(zonebuff, "%d", &(info->zone));
-		    }
+                    if (strncmp("zone=", s, 5) == 0) {
+                        sprintf(zonebuff, "%s", s + 5);
+                        sscanf(zonebuff, "%d", &(info->zone));
+                    }
 
-		    if (strncmp(s, "init=", 5) == 0) {
-			info->srid = G_store(s + 6);
-		    }
+                    if (strncmp(s, "init=", 5) == 0) {
+                        info->srid = G_store(s + 6);
+                    }
 
-		    if (strncmp("proj=", s, 5) == 0) {
-			sprintf(info->proj, "%s", s + 5);
-			if (strcmp(info->proj, "ll") == 0)
-			    sprintf(buffa, "proj=latlong");
-			else
-			    sprintf(buffa, "%s", s);
-		    }
-		    else {
-			sprintf(buffa, "%s", s);
-		    }
-		    alloc_options(buffa);
-		}
-	    }
-	    s = 0;
-	}
+                    if (strncmp("proj=", s, 5) == 0) {
+                        sprintf(info->proj, "%s", s + 5);
+                        if (strcmp(info->proj, "ll") == 0)
+                            sprintf(buffa, "proj=latlong");
+                        else
+                            sprintf(buffa, "%s", s);
+                    }
+                    else {
+                        sprintf(buffa, "%s", s);
+                    }
+                    alloc_options(buffa);
+                }
+            }
+            s = 0;
+        }
     }
 
 #ifdef HAVE_PROJ_H
@@ -413,36 +423,46 @@ int pj_get_string(struct pj_info *info, char *str)
 #endif
     pjc = proj_context_create();
     if (!(pj = proj_create_argv(pjc, nopt, opt_in))) {
-	G_warning(_("Unable to initialize pj cause: %s"),
-	          proj_errno_string(proj_context_errno(pjc)));
-	return -1;
+        G_warning(_("Unable to initialize pj cause: %s"),
+                  proj_errno_string(proj_context_errno(pjc)));
+        return -1;
     }
+
+#if PROJ_VERSION_MAJOR >= 6
+    if (proj_get_type(pj) == PJ_TYPE_BOUND_CRS) {
+        PJ *source_crs = proj_get_source_crs(pjc, pj);
+        if (source_crs) {
+            proj_destroy(pj);
+            pj = source_crs;
+        }
+    }
+#endif
 #else
     /* Set finder function for locating datum conversion tables PK */
     pj_set_finder(FINDERFUNC);
 
     if (!(pj = pj_init(nopt, opt_in))) {
-	G_warning(_("Unable to initialize pj cause: %s"),
-		  pj_strerrno(pj_errno));
-	return -1;
+        G_warning(_("Unable to initialize pj cause: %s"),
+                  pj_strerrno(pj_errno));
+        return -1;
     }
 #endif
     info->pj = pj;
 
     deflen = 0;
     for (i = 0; i < nopt; i++)
-	deflen += strlen(opt_in[i]) + 2;
+        deflen += strlen(opt_in[i]) + 2;
 
     info->def = G_malloc(deflen + 1);
 
-    sprintf(buffa,  "+%s ", opt_in[0]);
+    sprintf(buffa, "+%s ", opt_in[0]);
     strcpy(info->def, buffa);
     G_free(opt_in[0]);
 
     for (i = 1; i < nopt; i++) {
-	sprintf(buffa,  "+%s ", opt_in[i]);
-	strcat(info->def, buffa);
-	G_free(opt_in[i]);
+        sprintf(buffa, "+%s ", opt_in[i]);
+        strcat(info->def, buffa);
+        G_free(opt_in[i]);
     }
 
     return 1;
@@ -450,8 +470,10 @@ int pj_get_string(struct pj_info *info, char *str)
 
 #ifndef HAVE_PROJ_H
 /* GPJ_get_equivalent_latlong(): only available with PROJ 4 API
- * with the new PROJ 5+ API, use pjold directly with PJ_FWD/PJ_INV transformation
-*/
+ * with the new PROJ 5+ API, use pjold directly with PJ_FWD/PJ_INV
+ * transformation
+ */
+
 /**
  * \brief Define a latitude / longitude co-ordinate system with the same
  *        ellipsoid and datum parameters as an existing projected system
@@ -477,7 +499,7 @@ int GPJ_get_equivalent_latlong(struct pj_info *pjnew, struct pj_info *pjold)
     pjnew->def = NULL;
     sprintf(pjnew->proj, "ll");
     if ((pjnew->pj = pj_latlong_from_proj(pjold->pj)) == NULL)
-	return -1;
+        return -1;
 
     deftmp = pj_get_def(pjnew->pj, 1);
     pjnew->def = G_store(deftmp);
@@ -502,15 +524,15 @@ const char *set_proj_share(const char *name)
 
     projshare = getenv("GRASS_PROJSHARE");
     if (!projshare)
-	return NULL;
+        return NULL;
 
     len = strlen(projshare) + strlen(name) + 2;
 
     if (buf_len < len) {
-	if (buf != NULL)
-	    G_free(buf);
-	buf_len = len + 20;
-	buf = G_malloc(buf_len);
+        if (buf != NULL)
+            G_free(buf);
+        buf_len = len + 20;
+        buf = G_malloc(buf_len);
     }
 
     sprintf(buf, "%s/%s", projshare, name);
@@ -529,32 +551,31 @@ const char *set_proj_share(const char *name)
  *         is NULL for either co-ordinate system)
  **/
 
-int pj_print_proj_params(const struct pj_info *iproj, const struct pj_info *oproj)
+int pj_print_proj_params(const struct pj_info *iproj,
+                         const struct pj_info *oproj)
 {
     char *str;
 
     if (iproj) {
-	str = iproj->def;
-	if (str != NULL) {
-	    fprintf(stderr, "%s: %s\n", _("Input Projection Parameters"),
-		    str);
-	    fprintf(stderr, "%s: %.16g\n", _("Input Unit Factor"),
-		    iproj->meters);
-	}
-	else
-	    return -1;
+        str = iproj->def;
+        if (str != NULL) {
+            fprintf(stderr, "%s: %s\n", _("Input Projection Parameters"), str);
+            fprintf(stderr, "%s: %.16g\n", _("Input Unit Factor"),
+                    iproj->meters);
+        }
+        else
+            return -1;
     }
 
     if (oproj) {
-	str = oproj->def;
-	if (str != NULL) {
-	    fprintf(stderr, "%s: %s\n", _("Output Projection Parameters"),
-		    str);
-	    fprintf(stderr, "%s: %.16g\n", _("Output Unit Factor"),
-		    oproj->meters);
-	}
-	else
-	    return -1;
+        str = oproj->def;
+        if (str != NULL) {
+            fprintf(stderr, "%s: %s\n", _("Output Projection Parameters"), str);
+            fprintf(stderr, "%s: %.16g\n", _("Output Unit Factor"),
+                    oproj->meters);
+        }
+        else
+            return -1;
     }
 
     return 1;

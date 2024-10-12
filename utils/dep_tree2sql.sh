@@ -481,7 +481,7 @@ SELECT DISTINCT a.symbol
 INTO TABLE libc
 	FROM prog_imp a, libs b
 	WHERE a.symbol = b.symbol
-	AND b.library = 'libc.so.6' 
+	AND b.library = 'libc.so.6'
 UNION
 	SELECT DISTINCT a.symbol
 	FROM imports a, libs b

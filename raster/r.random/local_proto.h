@@ -4,16 +4,14 @@
 #include <grass/raster.h>
 
 /* raster_ptr.c: From Huidae Cho ... */
-union RASTER_PTR
-{
+union RASTER_PTR {
     void *v;
     CELL *c;
     FCELL *f;
     DCELL *d;
 };
 
-struct RASTER_MAP_PTR
-{
+struct RASTER_MAP_PTR {
     RASTER_MAP_TYPE type;
     union RASTER_PTR data;
 };
@@ -29,8 +27,7 @@ typedef unsigned long gcell_count;
 #endif
 
 /* Put all the state information into a struct */
-struct rr_state
-{
+struct rr_state {
     char *inraster, *inrcover, *outraster, *outvector;
     int use_nulls, docover, fd_old, fd_cold, fd_new;
     gcell_count nCells, nNulls, nRand, cnCells, cnNulls;
@@ -39,7 +36,6 @@ struct rr_state
     int z_geometry;
     int notopol;
 };
-
 
 /* count.c */
 void get_stats(struct rr_state *);

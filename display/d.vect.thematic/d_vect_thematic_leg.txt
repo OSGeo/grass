@@ -1,6 +1,6 @@
 size 20
 symbol basic/box 25 5 10 black 228:26:28
-move 8 9 
+move 8 9
 text 64.9 - 80.4
 symbol basic/box 25 5 16 black 55:126:184
 move 8 15

@@ -12,7 +12,6 @@
  *
  */
 
-
 #include "filters.h"
 
 #include <stdlib.h>
@@ -24,7 +23,8 @@ int range_filter_from_option(struct Option *option, double *min, double *max)
 {
     if (option->answer != NULL) {
         if (option->answers[0] == NULL || option->answers[1] == NULL)
-            G_fatal_error(_("Invalid range <%s> for option %s"), option->answer, option->key);
+            G_fatal_error(_("Invalid range <%s> for option %s"), option->answer,
+                          option->key);
         sscanf(option->answers[0], "%lf", min);
         sscanf(option->answers[1], "%lf", max);
         /* for convenience, switch order to make valid input */

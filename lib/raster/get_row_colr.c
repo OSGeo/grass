@@ -1,6 +1,6 @@
 /*!
  * \file lib/raster/get_row_colr.c
- * 
+ *
  * \brief Raster Library - Get raster row (colors)
  *
  * (C) 1999-2009 by the GRASS Development Team
@@ -37,8 +37,8 @@
  *  \return void
  */
 void Rast_get_row_colors(int fd, int row, struct Colors *colors,
-			 unsigned char *red, unsigned char *grn,
-			 unsigned char *blu, unsigned char *nul)
+                         unsigned char *red, unsigned char *grn,
+                         unsigned char *blu, unsigned char *nul)
 {
     int cols = Rast_window_cols();
     int type = Rast_get_map_type(fd);
@@ -53,8 +53,8 @@ void Rast_get_row_colors(int fd, int row, struct Colors *colors,
     Rast_get_row(fd, array, row, type);
 
     if (nul)
-	for (i = 0, p = array; i < cols; i++, p = G_incr_void_ptr(p, size))
-	    nul[i] = Rast_is_null_value(p, type);
+        for (i = 0, p = array; i < cols; i++, p = G_incr_void_ptr(p, size))
+            nul[i] = Rast_is_null_value(p, type);
 
     set = G_malloc(cols);
 

@@ -42,13 +42,13 @@ def call_use_temp_region(script, size, remaining, nesting, map_name=None):
 def main():
     this_file = sys.argv[0]
     if len(sys.argv) == 1:
-        # Some resonable defaults for a trivial test to allow calling without
+        # Some reasonable defaults for a trivial test to allow calling without
         # any parameters.
         size = 100
         remaining = None
         nesting = 0
         map_name = None
-    elif len(sys.argv) not in [3, 4]:
+    elif len(sys.argv) not in {3, 4}:
         gs.fatal(
             "Usage: <script name> <size[,size,...]> <nesting level> [<map name>]\n"
             "  <script name>      The name of this file ({name})\n"

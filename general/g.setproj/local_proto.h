@@ -1,32 +1,28 @@
-
 /* exit codes */
-#define SP_FATAL     1		/* [ G_fatal_error () returns 1 ] */
-#define SP_NOCHANGE  2
-#define SP_UNKNOWN   3
+#define SP_FATAL      1 /* [ G_fatal_error () returns 1 ] */
+#define SP_NOCHANGE   2
+#define SP_UNKNOWN    3
 
 /* $GISBASE-relative locations of parameter files */
 #define STP1927PARAMS "/etc/proj/state27"
 #define STP1983PARAMS "/etc/proj/state83"
 
-#define RADIUS_DEF 6370997.
+#define RADIUS_DEF    6370997.
 
-struct proj_unit
-{
+struct proj_unit {
     const char *units;
     const char *unit;
     double fact;
 };
 
-struct proj_desc
-{
+struct proj_desc {
     const char *name;
     const char *type;
     const char *key;
     const char *desc;
 };
 
-struct proj_parm
-{
+struct proj_parm {
     const char *name;
     int ask;
     int def_exists;
@@ -40,7 +36,7 @@ int get_deg(char *, int);
 int get_double(const struct proj_parm *, const struct proj_desc *, double *);
 int get_int(const struct proj_parm *, const struct proj_desc *, int *);
 int get_LL_stuff(const struct proj_parm *, const struct proj_desc *, int,
-		 double *);
+                 double *);
 int get_zone(void);
 double prompt_num_double(char *, double, int);
 int prompt_num_int(char *, int, int);
@@ -55,12 +51,12 @@ int ask_fips(FILE *, int *, int *, int *);
 /* some global variables */
 extern int ier, proj_index, zone, snum, spath;
 
-extern double radius, kfact, mfact, msfact, nfact, qfact,
-    wfact, unit_fact, x_false, y_false, heigh, azim, tilt;
+extern double radius, kfact, mfact, msfact, nfact, qfact, wfact, unit_fact,
+    x_false, y_false, heigh, azim, tilt;
 int min1(int, int);
 
 #ifdef __GNUC_MINOR__
-int leave(int) __attribute__ ((__noreturn__));
+int leave(int) __attribute__((__noreturn__));
 #else
 int leave(int);
 #endif

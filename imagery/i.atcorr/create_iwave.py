@@ -20,9 +20,11 @@ file name is used for sensor name
 
 Updated by: Anne Ghisla, 2010
 Bug fix (9/12/2010) by Daniel:
-   1) function interpolate_band was not generating the spectral response for the last value in the filter function. Fixed
-   2) function pretty_print was not printing the 8th value of every line, cutting the filter function short.
- 
+   1) function interpolate_band was not generating the spectral response for the last
+      value in the filter function. Fixed
+   2) function pretty_print was not printing the 8th value of every line, cutting the
+      filter function short.
+
 """
 import os
 import sys
@@ -33,18 +35,15 @@ from scipy import interpolate
 def usage():
     """How to use this..."""
     print("create_iwave.py <csv file>")
-    print
     print("Generates filter function template for iwave.cpp from csv file. Note:")
     print("- csv file must have wl response for each band in each column")
     print("- first line must be a header with wl followed by band names")
     print("- all following lines will be the data.")
     print("If spectral response is null, leave field empty in csv file. Example:")
-    print
     print("WL(nm),band 1,band 2,band 3,band 4")
     print("455,0.93,,,")
     print("485,0.94,0.00,,")
     print("545,0.00,0.87,0.00,")
-    print
     print("This script will interpolate the filter functions to 2.5 nm steps")
     print("and output a cpp template file in the IWave format to be added to iwave.cpp")
 
@@ -60,7 +59,7 @@ def read_input(csvfile):
     first column is wavelength
     values are those of the discrete band filter functions
     """
-    infile = open(csvfile, "r")
+    infile = open(csvfile)
 
     # get number of bands and band names
     bands = infile.readline().split(",")
@@ -141,9 +140,10 @@ def interpolate_band(values, step=2.5):
 
     # how many spectral responses?
     expected = np.ceil((stop - start) / step)
-    assert (
-        len(filter_f) == expected
-    ), "Number of interpolated spectral responses not equal to expected number of interpolations"
+    assert len(filter_f) == expected, (
+        "Number of interpolated spectral responses not equal to expected number of "
+        "interpolations"
+    )
 
     # convert limits from nanometers to micrometers
     lowerlimit = start / 1000
@@ -155,19 +155,28 @@ def interpolate_band(values, step=2.5):
 def plot_filter(values):
     """Plot wl response values and interpolated
     filter function. This is just for checking...
-    value is a 2 column numpy array
+    value is a 2-column numpy array
     function has to be used inside Spyder python environment
     """
+    import matplotlib.pyplot as plt
+
     filter_f, limits = interpolate_band(values)
 
     # removing nodata
     w = values[:, 1] >= 0
     response = values[w]
 
-    plot(response[:, 0], response[:, 1], "ro")
-    plot(arange(limits[0], limits[1], 2.5), filter_f)
+    fig = plt.figure()
+    ax1 = fig.add_subplot(2, 1, 1)
+    ax2 = fig.add_subplot(2, 1, 2)
 
-    return
+    ax1.plot(response[:, 0], response[:, 1], "ro")
+    rounded = np.arange(limits[0], limits[1], 0.0025) * 1000
+    if len(rounded) == len(filter_f):
+        ax2.plot(rounded, filter_f)
+    else:
+        ax2.plot(rounded[:-1], filter_f)
+    plt.show()
 
 
 def pretty_print(filter_f):
@@ -177,13 +186,13 @@ def pretty_print(filter_f):
     """
     pstring = ""
     for i in range(len(filter_f) + 1):
-        if i % 8 is 0:
-            if i is not 0:
+        if i % 8 == 0:
+            if i != 0:
                 value_wo_leading_zero = ("%.4f" % (filter_f[i - 1])).lstrip("0")
                 pstring += value_wo_leading_zero
             if i > 1 and i < len(filter_f):
                 pstring += ", "
-            if i is not 1:
+            if i != 1:
                 # trim the trailing whitespace at the end of line
                 pstring = pstring.rstrip()
             pstring += "\n        "
@@ -193,8 +202,7 @@ def pretty_print(filter_f):
             if i < len(filter_f):
                 pstring += ", "
     # trim starting \n and trailing ,
-    pstring = pstring.lstrip("\n").rstrip(", ")
-    return pstring
+    return pstring.lstrip("\n").rstrip(", ")
 
 
 def write_cpp(bands, values, sensor, folder):
@@ -206,7 +214,6 @@ def write_cpp(bands, values, sensor, folder):
 
     # keep in sync with IWave::parse()
     rthresh = 0.01
-    print
     print(" > Response peaks from interpolation to 2.5 nm steps:")
 
     # getting necessary data
@@ -221,14 +228,14 @@ def write_cpp(bands, values, sensor, folder):
         # Get minimum wavelength with spectral response
         c = maxresponse_idx
         while c > 0 and fi[c - 1] > rthresh:
-            c = c - 1
+            c -= 1
         min_wavelength = np.ceil(li[0] * 1000 + (2.5 * c))
         # Get maximum wavelength with spectral response
         c = maxresponse_idx
         while c < len(fi) - 1 and fi[c + 1] > rthresh:
-            c = c + 1
+            c += 1
         max_wavelength = np.floor(li[0] * 1000 + (2.5 * c))
-        print("   %s (%inm - %inm)" % (bands[b], min_wavelength, max_wavelength))
+        print("   %s (%inm - %inm)" % (bands[0], min_wavelength, max_wavelength))
 
     else:
         filter_f = []
@@ -243,12 +250,12 @@ def write_cpp(bands, values, sensor, folder):
             # Get minimum wavelength with spectral response
             c = maxresponse_idx
             while c > 0 and fi[c - 1] > rthresh:
-                c = c - 1
+                c -= 1
             min_wavelength = np.ceil(li[0] * 1000 + (2.5 * c))
             # Get maximum wavelength with spectral response
             c = maxresponse_idx
             while c < len(fi) - 1 and fi[c + 1] > rthresh:
-                c = c + 1
+                c += 1
             max_wavelength = np.floor(li[0] * 1000 + (2.5 * c))
             print("   %s (%inm - %inm)" % (bands[b], min_wavelength, max_wavelength))
 
@@ -324,8 +331,6 @@ def write_cpp(bands, values, sensor, folder):
             outfile.write("        break;\n")
         outfile.write("    }\n}\n")
 
-    return
-
 
 def main():
     """control function"""
@@ -335,7 +340,6 @@ def main():
     # getting sensor name from full csv file name
     sensor = os.path.splitext(os.path.basename(inputfile))[0]
 
-    print
     print(" > Getting sensor name from csv file: %s" % (sensor))
 
     # getting data from file
@@ -345,7 +349,6 @@ def main():
     # consider only wavelengths with a reasonably large response
     # around the peak response, keep in sync with IWave::parse()
     rthresh = 0.01
-    print
     print(" > Response peaks from input file:")
     for b in range(1, len(bands) + 1):
         lowl = 0
@@ -373,7 +376,6 @@ def main():
     # writing file in same folder of input file
     write_cpp(bands, values, sensor, os.path.dirname(inputfile))
 
-    print
     print(
         " > Filter functions exported to %s"
         % ("sensors_csv/" + sensor + "_cpp_template.txt")
@@ -386,9 +388,6 @@ def main():
         " > Don't forget to add the necessary data to the files"
         " iwave.h, geomcond.h, geomcond.cpp, and to i.atcorr.html"
     )
-    print
-
-    return
 
 
 if __name__ == "__main__":

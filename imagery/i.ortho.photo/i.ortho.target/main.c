@@ -1,11 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       i.photo.target
  * AUTHOR(S):    Mike Baba,  DBA Systems, Inc. (original contributor)
  *               Markus Neteler <neteler itc.it>,
- *               Roberto Flor <flor itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
+ *               Roberto Flor <flor itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
  *               Glynn Clements <glynn gclements.plus.com>
  *               Hamish Bowman
  *
@@ -37,6 +36,7 @@ int main(int argc, char *argv[])
     char location[GMAPSET_MAX];
     char mapset[GMAPSET_MAX];
     char group[GNAME_MAX];
+
     /* newly defined location and maspet */
     char target_location[GMAPSET_MAX];
     char target_mapset[GMAPSET_MAX];
@@ -48,28 +48,25 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("imagery"));
     G_add_keyword(_("orthorectify"));
-    module->description =
-	_("Select or modify the imagery group target.");
+    module->description = _("Select or modify the imagery group target.");
 
     group_opt = G_define_standard_option(G_OPT_I_GROUP);
-    group_opt->description =
-	_("Name of imagery group for ortho-rectification");
+    group_opt->description = _("Name of imagery group for ortho-rectification");
 
     location_opt = G_define_standard_option(G_OPT_M_LOCATION);
-    location_opt->key = "target_location";
+    location_opt->key = "target_project";
     location_opt->required = YES;
     location_opt->description =
-	_("Name of target location for ortho-rectification");
+        _("Name of target project (location) for ortho-rectification");
 
     mapset_opt = G_define_standard_option(G_OPT_M_MAPSET);
-    mapset_opt->key = "mapset_location";
+    mapset_opt->key = "target_mapset";
     mapset_opt->required = YES;
     mapset_opt->description =
-	_("Name of target mapset for ortho-rectification");
+        _("Name of target mapset for ortho-rectification");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
-
+        exit(EXIT_FAILURE);
 
     strcpy(group, group_opt->answer);
     strcpy(target_location, location_opt->answer);
@@ -80,22 +77,24 @@ int main(int argc, char *argv[])
     G_setenv_nogisrc("LOCATION_NAME", target_location);
     stat = G_mapset_permissions(target_mapset);
     if (stat != 1) {
-	G_fatal_error(_("Unable to access target location/mapset %s/%s"),
-	              target_location, target_mapset);
+        G_fatal_error(_("Unable to access target project/mapset %s/%s"),
+                      target_location, target_mapset);
     }
 
     G_setenv_nogisrc("MAPSET", target_mapset);
     G_get_window(&target_window);
     if (target_window.proj == PROJECTION_XY)
-	G_fatal_error(_("Target locations with XY (unreferenced) are not supported"));
+        G_fatal_error(_("Target projects (locations) with XY (unreferenced) "
+                        "are not supported"));
     else if (target_window.proj == PROJECTION_LL)
-	G_fatal_error(_("Target locations with lon/lat are not supported"));
+        G_fatal_error(
+            _("Target projects (locations) with lon/lat are not supported"));
 
     G_switch_env();
     I_put_target(group, target_location, target_mapset);
 
-    G_message(_("Group [%s] targeted for location [%s], mapset [%s]"),
-	    group, target_location, target_mapset);
+    G_message(_("Group [%s] targeted for project (location) [%s], mapset [%s]"),
+              group, target_location, target_mapset);
 
     exit(EXIT_SUCCESS);
 }

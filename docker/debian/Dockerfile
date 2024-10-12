@@ -1,15 +1,16 @@
-FROM debian:10.1
+FROM debian:bookworm-20240612-slim@sha256:67f3931ad8cb1967beec602d8c0506af1e37e8d73c2a0b38b181ec5d8560d395
+
+# apt-get update && apt-get install lsb-release -y && lsb_release -a
 
 LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann"
 LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
 
 ENV DEBIAN_FRONTEND noninteractive
 
-# define versions to be used
-ARG PDAL_VERSION=1.8.0
-ARG PROJ_VERSION=5.2.0
-ARG PROJ_DATUMGRID_VERSION=1.8
-ARG LAZ_PERF_VERSION=1.3.0
+# define versions to be used (PDAL is not available on Debian, so we compile it here)
+# https://github.com/PDAL/PDAL/releases
+# renovate: datasource=github-tags depName=PDAL/PDAL
+ARG PDAL_VERSION=2.7.2
 
 SHELL ["/bin/bash", "-c"]
 
@@ -17,8 +18,8 @@ WORKDIR /tmp
 
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends --no-install-suggests \
-    build-essential \
     bison \
+    build-essential \
     bzip2 \
     cmake \
     curl \
@@ -33,20 +34,20 @@ RUN apt-get update && apt-get upgrade -y && \
     libcurl4-gnutls-dev \
     libfftw3-bin \
     libfftw3-dev \
-    libfreetype6-dev \
+    libfreetype-dev \
     libgdal-dev \
     libgeos-dev \
     libgsl0-dev \
     libjpeg-dev \
     libjsoncpp-dev \
+    libncurses-dev \
     libnetcdf-dev \
-    libncurses5-dev \
-    libopenblas-base \
     libopenblas-dev \
     libopenjp2-7 \
     libopenjp2-7-dev \
     libpnglite-dev \
     libpq-dev \
+    libproj-dev \
     libpython3-all-dev \
     libsqlite3-dev \
     libtiff-dev \
@@ -57,6 +58,9 @@ RUN apt-get update && apt-get upgrade -y && \
     moreutils \
     ncurses-bin \
     netcdf-bin \
+    proj-bin \
+    proj-data \
+    python-is-python3 \
     python3 \
     python3-dateutil \
     python3-dev \
@@ -74,35 +78,11 @@ RUN apt-get update && apt-get upgrade -y && \
     vim \
     wget \
     zip \
-    zlib1g-dev
+    zlib1g-dev \
+    && apt-get clean all && rm -rf /var/lib/apt/lists/*
 
 RUN echo LANG="en_US.UTF-8" > /etc/default/locale
 RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen && locale-gen
-
-## install a more recent projection library for GRASS GIS
-WORKDIR /src
-RUN wget -q http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz && \
-    tar xzf proj-${PROJ_VERSION}.tar.gz && \
-    cd /src/proj-${PROJ_VERSION}/ && \
-    wget -q http://download.osgeo.org/proj/proj-datumgrid-${PROJ_DATUMGRID_VERSION}.zip && \
-    cd nad && \
-    unzip ../proj-datumgrid-${PROJ_DATUMGRID_VERSION}.zip && \
-    cd .. && \
-    ./configure --prefix=/usr/ && \
-    make && \
-    make install
-
-## install laz-perf
-RUN apt-get install cmake
-WORKDIR /src
-RUN wget -q https://github.com/hobu/laz-perf/archive/${LAZ_PERF_VERSION}.tar.gz -O laz-perf-${LAZ_PERF_VERSION}.tar.gz && \
-    tar -zxf laz-perf-${LAZ_PERF_VERSION}.tar.gz && \
-    cd laz-perf-${LAZ_PERF_VERSION} && \
-    mkdir build && \
-    cd build && \
-    cmake .. && \
-    make && \
-    make install
 
 ## fetch vertical datums for PDAL and store into PROJ dir
 WORKDIR /src
@@ -120,7 +100,7 @@ RUN mkdir vdatum && \
     cd .. && \
     rm -rf vdatum
 
-## install pdal
+## compile and install PDAL (not available on Debian/Ubuntu) with laz-perf enabled
 ENV NUMTHREADS=4
 WORKDIR /src
 RUN wget -q \
@@ -143,10 +123,10 @@ RUN wget -q \
       -DHEXER_INCLUDE_DIR=/usr/include/ \
       -DBUILD_PLUGIN_NITF=OFF \
       -DBUILD_PLUGIN_ICEBRIDGE=ON \
-      -DBUILD_PLUGIN_PGPOINTCLOUD=ON \
+      -DBUILD_PLUGIN_PGPOINTCLOUD=OFF \
       -DBUILD_PGPOINTCLOUD_TESTS=OFF \
       -DBUILD_PLUGIN_SQLITE=ON \
-      -DWITH_LASZIP=ON \
+      -DWITH_LASZIP=OFF \
       -DWITH_LAZPERF=ON \
       -DWITH_TESTS=ON && \
     make -j $NUMTHREADS && \
@@ -156,6 +136,8 @@ RUN wget -q \
 WORKDIR /src
 COPY . /src/grass_build/
 WORKDIR /src/grass_build
+# Cleanup potentially leftover GISRC file with wrong path to "demolocation"
+RUN rm -f /src/grass_build/dist.*/demolocation/.grassrc*
 
 # Set environmental variables for GRASS GIS compilation, without debug symbols
 # Set gcc/g++ environmental variables for GRASS GIS compilation, without debug symbols
@@ -168,28 +150,27 @@ ENV CFLAGS "$MYCFLAGS"
 ENV CXXFLAGS "$MYCXXFLAGS"
 
 # Configure compile and install GRASS GIS
-ENV GRASS_PYTHON=/usr/bin/python3
 ENV NUMTHREADS=4
 RUN make distclean || echo "nothing to clean"
 RUN /src/grass_build/configure \
-  --with-cxx \
   --enable-largefile \
-  --with-proj-share=/usr/share/proj \
+  --with-bzlib \
+  --with-cairo --with-cairo-ldflags=-lfontconfig \
+  --with-cxx \
+  --with-fftw \
+  --with-freetype --with-freetype-includes="/usr/include/freetype2/" \
   --with-gdal=/usr/bin/gdal-config \
   --with-geos \
-  --with-sqlite \
-  --with-cairo --with-cairo-ldflags=-lfontconfig \
-  --with-freetype --with-freetype-includes="/usr/include/freetype2/" \
-  --with-fftw \
-  --with-postgres --with-postgres-includes="/usr/include/postgresql" \
   --with-netcdf \
-  --with-zstd \
-  --with-bzlib \
   --with-pdal \
+  --with-postgres --with-postgres-includes="/usr/include/postgresql" \
+  --with-proj-share=/usr/share/proj \
+  --with-sqlite \
+  --with-zstd \
   --without-mysql \
   --without-odbc \
-  --without-openmp \
   --without-opengl \
+  --without-openmp \
     && make -j $NUMTHREADS \
     && make install && ldconfig
 
@@ -208,13 +189,16 @@ ENV SHELL /bin/bash
 ENV LC_ALL "en_US.UTF-8"
 ENV GRASS_SKIP_MAPSET_OWNER_CHECK 1
 
+# https://proj.org/usage/environmentvars.html#envvar-PROJ_NETWORK
+ENV PROJ_NETWORK=ON
+
 # Create generic GRASS GIS lib name regardless of version number
-RUN ln -sf /usr/local/grass83 /usr/local/grass
+RUN ln -sf /usr/local/grass85 /usr/local/grass
 
 # show GRASS GIS, PROJ, GDAL etc versions
-RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
+RUN grass --tmp-project EPSG:4326 --exec g.version -rge && \
     pdal --version && \
-    python3 --version
+    python --version
 
 # Reduce the image size
 RUN apt-get autoremove -y
@@ -223,26 +207,23 @@ RUN rm -r /src/grass_build/.git
 
 WORKDIR /scripts
 
-# install external GRASS GIS session Python API
-RUN pip3 install grass-session
-
-# install GRASS GIS extensions
-RUN grass --tmp-location EPSG:4326 --exec g.extension extension=r.in.pdal
-
-# add GRASS GIS envs for python usage
-ENV GISBASE "/usr/local/grass/"
-ENV GRASSBIN "/usr/local/bin/grass"
-ENV PYTHONPATH "${PYTHONPATH}:$GISBASE/etc/python/"
-ENV LD_LIBRARY_PATH "$LD_LIBRARY_PATH:$GISBASE/lib"
+# enable GRASS GIS Python session support
+## grass --config python-path
+ENV PYTHONPATH "/usr/local/grass/etc/python:${PYTHONPATH}"
+# enable GRASS GIS ctypes imports
+## grass --config path
+ENV LD_LIBRARY_PATH "/usr/local/grass/lib:$LD_LIBRARY_PATH"
 
 WORKDIR /tmp
 COPY docker/testdata/simple.laz .
 WORKDIR /scripts
 COPY docker/testdata/test_grass_session.py .
-## just scan the LAZ file
-# Not yet ready for GRASS GIS 8:
-#RUN /usr/bin/python3 /scripts/test_grass_session.py
-RUN grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -s
+## run GRASS GIS python session and scan the test LAZ file
+RUN python /scripts/test_grass_session.py
+RUN rm -rf /tmp/grasstest_epsg_25832
+# test LAZ file
+RUN grass --tmp-project EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g
 
 WORKDIR /grassdb
 VOLUME /grassdb
+CMD ["$GRASSBIN", "--version"]

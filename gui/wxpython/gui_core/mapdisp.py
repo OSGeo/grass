@@ -7,6 +7,7 @@ Classes:
  - mapdisp::MapPanelBase
  - mapdisp::SingleMapPanel
  - mapdisp::DoubleMapPanel
+ - mapdisp::FrameMixin
 
 (C) 2009-2014 by the GRASS Development Team
 
@@ -20,7 +21,6 @@ This program is free software under the GNU General Public License
 """
 
 import sys
-import six
 
 import wx
 
@@ -34,7 +34,7 @@ from grass.script import core as grass
 
 
 class MapPanelBase(wx.Panel):
-    """Base class for map display window
+    r"""Base class for map display window
 
     Derived class must use (create and initialize) \c statusbarManager
     or override
@@ -42,9 +42,6 @@ class MapPanelBase(wx.Panel):
 
     Several methods has to be overridden or
     \c NotImplementedError("MethodName") will be raised.
-
-    If derived class enables and disables auto-rendering,
-    it should override IsAutoRendered method.
 
     It is expected that derived class will call _setUpMapWindow().
 
@@ -66,7 +63,7 @@ class MapPanelBase(wx.Panel):
         name="",
         **kwargs,
     ):
-        """
+        r"""
 
         .. warning::
             Use \a auimgr parameter only if you know what you are doing.
@@ -115,6 +112,7 @@ class MapPanelBase(wx.Panel):
             (self.OnCloseWindow, wx.ACCEL_CTRL, ord("W")),
             (self.OnRender, wx.ACCEL_CTRL, ord("R")),
             (self.OnRender, wx.ACCEL_NORMAL, wx.WXK_F5),
+            (self.OnEnableDisableRender, wx.ACCEL_NORMAL, wx.WXK_F6),
         ]
 
         self._initShortcuts()
@@ -132,7 +130,7 @@ class MapPanelBase(wx.Panel):
         """Initialize map display, set dimensions and map region"""
         if not grass.find_program("g.region", "--help"):
             sys.exit(
-                _("GRASS module '%s' not found. Unable to start map " "display window.")
+                _("GRASS module '%s' not found. Unable to start map display window.")
                 % "g.region"
             )
 
@@ -178,8 +176,7 @@ class MapPanelBase(wx.Panel):
         """Returns property"""
         if hasattr(self.mapWindowProperties, name):
             return getattr(self.mapWindowProperties, name)
-        else:
-            return self.statusbarManager.GetProperty(name)
+        return self.statusbarManager.GetProperty(name)
 
     def HasProperty(self, name):
         """Checks whether object has property"""
@@ -315,14 +312,6 @@ class MapPanelBase(wx.Panel):
             Debug.msg(5, "MapPanelBase.StatusbarUpdate()")
             self.statusbarManager.Update()
 
-    def IsAutoRendered(self):
-        """Check if auto-rendering is enabled"""
-        # TODO: this is now not the right place to access this attribute
-        # TODO: add mapWindowProperties to init parameters
-        # and pass the right object in the init of derived class?
-        # or do not use this method at all, let mapwindow decide
-        return self.mapWindowProperties.autoRender
-
     def CoordinatesChanged(self):
         """Shows current coordinates on statusbar."""
         # assuming that the first mode is coordinates
@@ -367,7 +356,7 @@ class MapPanelBase(wx.Panel):
         )
 
     def SetStatusText(self, *args):
-        """Overide wx.StatusBar method"""
+        """Override wx.StatusBar method"""
         self.statusbar.SetStatusText(*args)
 
     def ShowStatusbar(self, show):
@@ -386,7 +375,7 @@ class MapPanelBase(wx.Panel):
 
     def StatusbarEnableLongHelp(self, enable=True):
         """Enable/disable toolbars long help"""
-        for toolbar in six.itervalues(self.toolbars):
+        for toolbar in self.toolbars.values():
             if toolbar:
                 toolbar.EnableLongHelp(enable)
 
@@ -434,6 +423,13 @@ class MapPanelBase(wx.Panel):
     def OnRender(self, event):
         """Re-render map composition (each map layer)"""
         raise NotImplementedError("OnRender")
+
+    def OnEnableDisableRender(self, event):
+        """Enable/disable auto-rendering map composition (each map layer)"""
+        if self.MapWindow.parent.mapWindowProperties.autoRender:
+            self.MapWindow.parent.mapWindowProperties.autoRender = False
+        else:
+            self.MapWindow.parent.mapWindowProperties.autoRender = True
 
     def OnDraw(self, event):
         """Re-display current map composition"""
@@ -507,7 +503,7 @@ class MapPanelBase(wx.Panel):
 
 
 class SingleMapPanel(MapPanelBase):
-    """Panel with one map window.
+    r"""Panel with one map window.
 
     It is base class for panels which needs only one map.
 
@@ -609,11 +605,11 @@ class DoubleMapPanel(MapPanelBase):
         name=None,
         **kwargs,
     ):
-        """
+        r"""
 
         \a firstMap is set as active (by assign it to \c self.Map).
         Derived class should assging to \c self.MapWindow to make one
-        map window current by dafault.
+        map window current by default.
 
         :param parent: gui parent
         :param id: wx id
@@ -669,10 +665,10 @@ class DoubleMapPanel(MapPanelBase):
         return self.secondMapWindow
 
     def GetMap(self):
-        """Returns current map (renderer) instance
+        r"""Returns current map (renderer) instance
 
         @note Use this method to access current map renderer.
-        (It is not guarented that current map will be stored in
+        (It is not guaranteed that current map will be stored in
         \c self.Map in future versions.)
         """
         return self.Map
@@ -723,7 +719,7 @@ class DoubleMapPanel(MapPanelBase):
                 self.firstMapWindow.zoomChanged.connect(self.OnZoomChangedFirstMap)
             else:
                 self.secondMapWindow.zoomChanged.connect(self.OnZoomChangedSecondMap)
-        else:
+        else:  # noqa: PLR5501
             if self.MapWindow == self.firstMapWindow:
                 self.firstMapWindow.zoomChanged.disconnect(self.OnZoomChangedFirstMap)
             else:
@@ -776,13 +772,20 @@ class DoubleMapPanel(MapPanelBase):
 
     def OnRender(self, event):
         """Re-render map composition (each map layer)"""
-        self.Render(mapToRender=self.GetFirstWindow())
-        self.Render(mapToRender=self.GetSecondWindow())
+        kwargs = {}
+        # Handle re-render map event (mouse click on toolbar Render map
+        # tool, F5/Ctrl + R keyboard shortcut)
+        if event and event.GetEventType() == wx.EVT_TOOL.typeId:
+            kwargs = {"reRenderTool": True}
+        self.Render(mapToRender=self.GetFirstWindow(), **kwargs)
+        self.Render(mapToRender=self.GetSecondWindow(), **kwargs)
 
-    def Render(self, mapToRender):
+    def Render(self, mapToRender, reRenderTool=False):
         """Re-render map composition"""
         mapToRender.UpdateMap(
-            render=True, renderVector=mapToRender == self.GetFirstWindow()
+            render=True,
+            renderVector=mapToRender == self.GetFirstWindow(),
+            reRenderTool=reRenderTool,
         )
 
         # update statusbar
@@ -799,12 +802,17 @@ class DoubleMapPanel(MapPanelBase):
 
     def OnDraw(self, event):
         """Re-display current map composition"""
-        self.Draw(mapToDraw=self.GetFirstWindow())
-        self.Draw(mapToDraw=self.GetSecondWindow())
+        kwargs = {}
+        # Handle display map event (mouse click on toolbar Display map
+        # tool)
+        if event and event.GetEventType() == wx.EVT_TOOL.typeId:
+            kwargs = {"reRenderTool": True}
+        self.Draw(mapToDraw=self.GetFirstWindow(), **kwargs)
+        self.Draw(mapToDraw=self.GetSecondWindow(), **kwargs)
 
-    def Draw(self, mapToDraw):
+    def Draw(self, mapToDraw, reRenderTool=False):
         """Re-display current map composition"""
-        mapToDraw.UpdateMap(render=False)
+        mapToDraw.UpdateMap(render=False, reRenderTool=reRenderTool)
 
 
 class FrameMixin:
@@ -863,3 +871,12 @@ class FrameMixin:
 
     def SetPosition(self, pt):
         self.GetParent().SetPosition(pt)
+
+    def GetSize(self):
+        return self.GetParent().GetSize()
+
+    def SetSize(self, *args):
+        self.GetParent().SetSize(*args)
+
+    def Close(self):
+        self.GetParent().Close()

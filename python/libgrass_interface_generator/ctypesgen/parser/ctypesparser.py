@@ -130,6 +130,8 @@ class CtypesParser(CParser):
                 signed = False
             elif specifier == "long":
                 longs += 1
+            elif specifier == "short":
+                longs = -1
             else:
                 typename = str(specifier)
 

@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.basins.fill
@@ -14,13 +13,12 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
-****************************************************************************/
+ ****************************************************************************/
 
 #ifndef __LOCAL_PROTO_H__
 #define __LOCAL_PROTO_H__
 
 /* read_map.c */
 CELL *read_map(const char *, int, int, int);
-
 
 #endif /* __LOCAL_PROTO_H__ */

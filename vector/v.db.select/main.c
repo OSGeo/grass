@@ -1,5 +1,4 @@
-
-/*******************************************************************************
+/******************************************************************************
  *
  * MODULE:       v.db.select
  *
@@ -17,7 +16,7 @@
  *               Public License (>=v2). Read the file COPYING that
  *               comes with GRASS for details.
  *
- ******************************************************************************/
+ *****************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,12 +29,7 @@
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 
-enum OutputFormat {
-    PLAIN,
-    JSON,
-    CSV,
-    VERTICAL
-};
+enum OutputFormat { PLAIN, JSON, CSV, VERTICAL };
 
 void fatal_error_option_value_excludes_flag(struct Option *option,
                                             struct Flag *excluded,
@@ -60,8 +54,7 @@ void fatal_error_option_value_excludes_option(struct Option *option,
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *map;
         struct Option *field;
         struct Option *format;
@@ -73,8 +66,7 @@ int main(int argc, char **argv)
         struct Option *file;
         struct Option *group;
     } options;
-    struct
-    {
+    struct {
         struct Flag *region;
         struct Flag *colnames;
         struct Flag *vertical;
@@ -127,18 +119,13 @@ int main(int argc, char **argv)
         _("GROUP BY conditions of SQL statement without 'group by' keyword");
     options.group->guisection = _("Selection");
 
-    options.format = G_define_option();
-    options.format->key = "format";
-    options.format->type = TYPE_STRING;
-    options.format->required = YES;
-    options.format->label = _("Output format");
+    options.format = G_define_standard_option(G_OPT_F_FORMAT);
     options.format->options = "plain,csv,json,vertical";
     options.format->descriptions =
         "plain;Configurable plain text output;"
         "csv;CSV (Comma Separated Values);"
         "json;JSON (JavaScript Object Notation);"
         "vertical;Plain text vertical output (instead of horizontal)";
-    options.format->answer = "plain";
     options.format->guisection = _("Format");
 
     options.fsep = G_define_standard_option(G_OPT_F_SEP);
@@ -163,8 +150,8 @@ int main(int argc, char **argv)
 
     flags.region = G_define_flag();
     flags.region->key = 'r';
-    flags.region->description =
-        _("Print minimal region extent of selected vector features instead of attributes");
+    flags.region->description = _("Print minimal region extent of selected "
+                                  "vector features instead of attributes");
     flags.region->guisection = _("Region");
 
     flags.colnames = G_define_flag();
@@ -204,18 +191,21 @@ int main(int argc, char **argv)
     else
         format = PLAIN;
     if (format == JSON) {
-        fatal_error_option_value_excludes_flag(options.format, flags.escape,
-                                               _("Escaping is based on the format"));
-        fatal_error_option_value_excludes_flag(options.format, flags.colnames,
-                                               _("Column names are always included"));
-        fatal_error_option_value_excludes_option(options.format, options.fsep,
-                                                 _("Separator is part of the format"));
-        fatal_error_option_value_excludes_option(options.format, options.nullval,
-                                                 _("Null value is part of the format"));
+        fatal_error_option_value_excludes_flag(
+            options.format, flags.escape, _("Escaping is based on the format"));
+        fatal_error_option_value_excludes_flag(
+            options.format, flags.colnames,
+            _("Column names are always included"));
+        fatal_error_option_value_excludes_option(
+            options.format, options.fsep, _("Separator is part of the format"));
+        fatal_error_option_value_excludes_option(
+            options.format, options.nullval,
+            _("Null value is part of the format"));
     }
     if (format != VERTICAL) {
-        fatal_error_option_value_excludes_option(options.format, options.vsep,
-                                                 _("Only vertical output can use vertical separator"));
+        fatal_error_option_value_excludes_option(
+            options.format, options.vsep,
+            _("Only vertical output can use vertical separator"));
     }
 
     min_box = line_box = NULL;
@@ -242,12 +232,12 @@ int main(int argc, char **argv)
         }
         else if (format == PLAIN || format == VERTICAL) {
             if (flags.region->answer)
-               fsep = G_store("=");
+                fsep = G_store("=");
             else
-               fsep = G_store("|");
+                fsep = G_store("|");
         }
         else
-            fsep = NULL;  /* Something like a separator is part of the format. */
+            fsep = NULL; /* Something like a separator is part of the format. */
     }
     if (options.vsep->answer)
         vsep = G_option_to_separator(options.vsep);
@@ -266,7 +256,7 @@ int main(int argc, char **argv)
                                options.field->answer)) {
             Vect_close(&Map);
             G_fatal_error(_("Unable to open vector map <%s> at topology level. "
-                           "Flag '%c' requires topology level."),
+                            "Flag '%c' requires topology level."),
                           options.map->answer, flags.region->key);
         }
         field_number = Vect_get_field_number(&Map, options.field->answer);
@@ -325,8 +315,8 @@ int main(int argc, char **argv)
     ncols = db_get_table_number_of_columns(table);
 
     /* column names if horizontal output (ignore for -r, -c, JSON, vertical) */
-    if (!flags.region->answer && !flags.colnames->answer &&
-        format != JSON && format != VERTICAL) {
+    if (!flags.region->answer && !flags.colnames->answer && format != JSON &&
+        format != VERTICAL) {
         for (col = 0; col < ncols; col++) {
             column = db_get_table_column(table, col);
             if (col)
@@ -342,15 +332,38 @@ int main(int argc, char **argv)
     if (format == JSON) {
         if (flags.region->answer)
             fprintf(stdout, "{\"extent\":\n");
-        else
-            fprintf(stdout, "{\"records\":[\n");
+        else {
+            fprintf(stdout, "{\"info\":\n{\"columns\":[\n");
+            for (col = 0; col < ncols; col++) {
+                column = db_get_table_column(table, col);
+                if (col)
+                    fprintf(stdout, "},\n");
+                fprintf(stdout, "{\"name\":\"%s\",",
+                        db_get_column_name(column));
+                int sql_type = db_get_column_sqltype(column);
+                fprintf(stdout, "\"sql_type\":\"%s\",",
+                        db_sqltype_name(sql_type));
+
+                int c_type = db_sqltype_to_Ctype(sql_type);
+                fprintf(stdout, "\"is_number\":");
+                /* Same rules as for quoting, i.e., number only as
+                 * JSON or Python would see it and not numeric which may
+                 * include, e.g., date. */
+                if (c_type == DB_C_TYPE_INT || c_type == DB_C_TYPE_DOUBLE)
+                    fprintf(stdout, "true");
+                else
+                    fprintf(stdout, "false");
+            }
+
+            fprintf(stdout, "}\n]},\n");
+            fprintf(stdout, "\"records\":[\n");
+        }
     }
 
     /* fetch the data */
     while (1) {
         if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
-            G_fatal_error(_("Unable to fetch data from table <%s>"),
-                          Fi->table);
+            G_fatal_error(_("Unable to fetch data from table <%s>"), Fi->table);
 
         if (!more)
             break;
@@ -406,7 +419,7 @@ int main(int argc, char **argv)
             else {
                 char *str = db_get_string(&value_string);
 
-                /* Escaped charcters in different formats
+                /* Escaped characters in different formats
                  * JSON (mandatory): \" \\ \r \n \t \f \b
                  * CSV (usually none, here optional): \\ \r \n \t \f \b
                  * Plain, vertical (optional): v7: \\ \r \n, v8 also: \t \f \b
@@ -422,13 +435,14 @@ int main(int argc, char **argv)
                         str = G_str_replace(str, "\t", "\\t");
                     if (format == JSON && strchr(str, '"'))
                         str = G_str_replace(str, "\"", "\\\"");
-                    if (strchr(str, '\f'))  /* form feed, somewhat unlikely */
+                    if (strchr(str, '\f')) /* form feed, somewhat unlikely */
                         str = G_str_replace(str, "\f", "\\f");
-                    if (strchr(str, '\b'))  /* backspace, quite unlikely */
+                    if (strchr(str, '\b')) /* backspace, quite unlikely */
                         str = G_str_replace(str, "\b", "\\b");
                 }
-                /* Common CSV does not escape, but doubles quotes (and we quote all
-                 * text fields which takes care of a separator character in text). */
+                /* Common CSV does not escape, but doubles quotes (and we quote
+                 * all text fields which takes care of a separator character in
+                 * text). */
                 if (format == CSV && strchr(str, '"')) {
                     str = G_str_replace(str, "\"", "\"\"");
                 }
@@ -468,8 +482,8 @@ int main(int argc, char **argv)
                 if (Vect_get_line_type(&Map, line) == GV_CENTROID) {
                     area = Vect_get_centroid_area(&Map, line);
                     if (area > 0 && !Vect_get_area_box(&Map, area, line_box))
-                        G_fatal_error(_("Unable to get bounding box of area %d"),
-                                      area);
+                        G_fatal_error(
+                            _("Unable to get bounding box of area %d"), area);
                 }
                 else if (!Vect_get_line_box(&Map, line, line_box))
                     G_fatal_error(_("Unable to get bounding box of line %d"),

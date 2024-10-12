@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.circle
@@ -7,7 +6,7 @@
  *               Markus Neteler
  *
  * PURPOSE:      Creates a raster map containing concentric rings
- *	         around a given point.
+ *                 around a given point.
  *
  * COPYRIGHT:    (C) 2006-2008 by the GRASS Development Team
  *
@@ -24,12 +23,11 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-static double distance(double *, double *, double, double, int);
+static double distance(double[2], double[2], double, double, int);
 
 #ifndef HUGE_VAL
-#define HUGE_VAL        1.7976931348623157e+308
+#define HUGE_VAL 1.7976931348623157e+308
 #endif
-
 
 int main(int argc, char *argv[])
 {
@@ -52,9 +50,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("buffer"));
     G_add_keyword(_("geometry"));
     G_add_keyword(_("circle"));
-    module->description =
-	_("Creates a raster map containing concentric "
-	  "rings around a given point.");
+    module->description = _("Creates a raster map containing concentric "
+                            "rings around a given point.");
 
     out_file = G_define_standard_option(G_OPT_R_OUTPUT);
 
@@ -82,10 +79,12 @@ int main(int argc, char *argv[])
 
     flag = G_define_flag();
     flag->key = 'b';
-    flag->description = _("Generate binary raster map");
+    flag->label = _("Generate binary raster map");
+    flag->description =
+        _("Generate binary pattern only (useful for creating mask)");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     G_scan_easting(coord->answers[0], &east, G_projection());
     G_scan_northing(coord->answers[1], &north, G_projection());
@@ -95,31 +94,31 @@ int main(int argc, char *argv[])
     fmult = 1.0;
 
     if (min->answer)
-	sscanf(min->answer, "%lf", &fmin);
+        sscanf(min->answer, "%lf", &fmin);
     else
-	fmin = 0;
+        fmin = 0;
 
     if (max->answer)
-	sscanf(max->answer, "%lf", &fmax);
+        sscanf(max->answer, "%lf", &fmax);
     else
-	fmax = HUGE_VAL;
+        fmax = HUGE_VAL;
 
     if (fmin > fmax)
-	G_fatal_error(_("Please specify a radius in which min < max"));
+        G_fatal_error(_("Please specify a radius in which min < max"));
 
     if (mult->answer)
-	if (1 != sscanf(mult->answer, "%lf", &fmult))
-	    fmult = 1.0;
+        if (1 != sscanf(mult->answer, "%lf", &fmult))
+            fmult = 1.0;
 
     /* nonsense test */
     if (flag->answer && (!min->answer && !max->answer))
-	G_fatal_error(_("Please specify min and/or max radius when "
-			"using the binary flag"));
+        G_fatal_error(_("Please specify min and/or max radius when "
+                        "using the binary flag"));
 
     if (flag->answer)
-	binary = 1;		/* generate binary pattern only, useful for MASK */
+        binary = 1;
     else
-	binary = 0;
+        binary = 0;
 
     G_get_set_window(&w);
 
@@ -127,22 +126,21 @@ int main(int argc, char *argv[])
 
     int_buf = (int *)G_malloc(w.cols * sizeof(int));
     {
-	int c;
+        int c;
 
-	for (row = 0; row < w.rows; row++) {
-	    G_percent(row, w.rows, 2);
-	    cur[1] = Rast_row_to_northing(row + 0.5, &w);
-	    for (col = 0; col < w.cols; col++) {
-		c = col;
-		cur[0] = Rast_col_to_easting(col + 0.5, &w);
-		int_buf[c] =
-		    (int)(distance(pt, cur, fmin, fmax, binary) * fmult);
-		if (int_buf[c] == 0)
-		    Rast_set_null_value(&int_buf[c], 1, CELL_TYPE);
-	    }
-	    Rast_put_row(cellfile, int_buf, CELL_TYPE);
-
-	}
+        for (row = 0; row < w.rows; row++) {
+            G_percent(row, w.rows, 2);
+            cur[1] = Rast_row_to_northing(row + 0.5, &w);
+            for (col = 0; col < w.cols; col++) {
+                c = col;
+                cur[0] = Rast_col_to_easting(col + 0.5, &w);
+                int_buf[c] =
+                    (int)(distance(pt, cur, fmin, fmax, binary) * fmult);
+                if (int_buf[c] == 0)
+                    Rast_set_null_value(&int_buf[c], 1, CELL_TYPE);
+            }
+            Rast_put_row(cellfile, int_buf, CELL_TYPE);
+        }
     }
     G_free(int_buf);
     Rast_close(cellfile);
@@ -150,36 +148,33 @@ int main(int argc, char *argv[])
     Rast_command_history(&history);
     Rast_write_history(out_file->answer, &history);
 
-    G_done_msg(_("Raster map <%s> created."),
-	       out_file->answer);
-    
+    G_done_msg(_("Raster map <%s> created."), out_file->answer);
+
     return (EXIT_SUCCESS);
 }
-
-
 
 /*******************************************************************/
 
 static double distance(double from[2], double to[2], double min, double max,
-		       int binary)
+                       int binary)
 {
     static int first = 1;
     double dist;
 
     if (first) {
-	first = 0;
-	G_begin_distance_calculations();
+        first = 0;
+        G_begin_distance_calculations();
     }
 
     dist = G_distance(from[0], from[1], to[0], to[1]);
 
     if ((dist >= min) && (dist <= max))
-	if (!binary)
-	    return dist;
-	else
-	    return 1;
+        if (!binary)
+            return dist;
+        else
+            return 1;
     else
-	return 0;		/* should be NULL ? */
+        return 0; /* should be NULL ? */
 }
 
 /**********************************************************************/

@@ -1,7 +1,7 @@
 /*! \mainpage GRASS GIS 8 Programmer's Manual
 <!-- * doxygenized from "GRASS 5 Programmer's Manual"
        by M. Neteler 2/2004
-     * updated 8/2005, 2006-2008, 2010-2011, 2017-2022
+     * updated 8/2005, 2006-2024
   -->
 
 <a href="https://grass.osgeo.org">GRASS GIS</a> (<b>Geographic
@@ -23,7 +23,7 @@ Team</a>, an international team of programmers, GRASS module authors
 are cited within their module's source code and the contributed manual
 pages.
 
-&copy; 2000-2022 by the GRASS Development Team
+&copy; 2000-2024 by the GRASS Development Team
 
 This manual is published under <a
 href="http://www.fsf.org/copyleft/fdl.html">GNU Free Documentation
@@ -121,8 +121,8 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
 
 \subsection misclibs Miscellaneous Libraries
 
- - datetime:	\ref datetime (DateTime library) 
- - external:	\ref external (External libraries from other projects such as shapelib and \ref ccmathlib)
+ - datetime:	\ref datetime (DateTime library)
+ - external:	\ref external (External libraries from other projects such as shapelib, parson and \ref ccmathlib)
  - fonts:	\ref fonts (GRASS fonts library)
  - init:	\ref init (GRASS initialization code + scripts)
  - iostream:	\ref iostream (fast I/O library)
@@ -131,6 +131,22 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
  - manage:      \ref managelib
  - symbol:	\ref symbol (Drawing symbols for %point %vector data library)
 
+\subsection external Adding External Libraries
+
+ The following files must be added or updated when including a new external library.
+
+ - <b>add:</b> lib/external/<b>newlib</b>
+ - <b>add:</b> lib/external/<b>newlib</b>/*.c
+ - <b>add:</b> lib/external/<b>newlib</b>/*.h
+ - <b>add:</b> lib/external/<b>newlib</b>/LICENSE
+ - <b>add:</b> lib/external/<b>newlib</b>/Makefile
+ - <b>update:</b> lib/external/Makefile
+ - <b>update:</b> lib/external/README.license
+ - <b>update:</b> lib/README.md
+ - <b>update:</b> include/Make/Install.make
+ - <b>update:</b> include/Make/Grass.make
+ - <b>update:</b> Makefile
+
 \section location File structure of GRASS Location
 
 A GRASS <b>raster map</b> consists of several files in several subdirectories in a mapset,
@@ -138,7 +154,7 @@ organized as follows:
 <dl>
  <dt><b>cellhd/</b></dt>
  <dd>map header including projection code, coordinates representing
-  the spatial extent of the raster map, number of rows and columns, resolution, 
+  the spatial extent of the raster map, number of rows and columns, resolution,
   and information about map compression;</dd>
  <dt><b>cell/, fcell/ or grid3/</b></dt>
  <dd>generic matrix of values in a compressed, portable
@@ -150,7 +166,7 @@ organized as follows:
  <dt><b>cats/</b></dt>
  <dd>optional category file which contains text or numeric labels assigned
   to the raster map categories;</dd>
- <dt><b>colr/</b></dt> 
+ <dt><b>colr/</b></dt>
  <dd>optional color table;</dd>
  <dt><b>cell_misc/</b></dt>
  <dd>optional timestamp, range of values, quantization rules (for floating %point maps)
@@ -187,9 +203,9 @@ as follows:
 
 <!--
   original:
-  doc/help_loc_structure.odg
+  doc/help_project_structure.odg
 -->
-\image html "loc_struct.png" "Diagram of GRASS file structure"
+\image html "help_project_structure.png" "Diagram of GRASS file structure"
 
 \section Compiling_and_Installing_GRASS_Modules Compiling and Installing GRASS Modules
 
@@ -236,7 +252,7 @@ compilation process and requirements are discussed in more detail now.
 
 \todo Update the list.
 
-<b>GRASS Libraries</b>. The following variables name the various GRASS 
+<b>GRASS Libraries</b>. The following variables name the various GRASS
 libraries:
 
  - <i>GISLIB</i> - This names the <b>GIS Library</b>, which is the
@@ -265,7 +281,7 @@ details about this library, and \ref
 Loading_the_Display_Library for a sample <i>Makefile</i>
 which loads this library.
 
-<b>UNIX Libraries:</b> The following variables name some useful UNIX 
+<b>UNIX Libraries:</b> The following variables name some useful UNIX
 system libraries:
 
  - <i>MATHLIB</i> - This names the math library. It should be used

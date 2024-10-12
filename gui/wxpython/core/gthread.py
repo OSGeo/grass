@@ -22,10 +22,7 @@ from wx.lib.newevent import NewEvent
 
 import sys
 
-if sys.version_info.major == 2:
-    import Queue
-else:
-    import queue as Queue
+import queue as Queue
 
 from core.gconsole import EVT_CMD_DONE, wxCmdDone
 
@@ -98,8 +95,6 @@ class gThread(threading.Thread, wx.EvtHandler):
                 else:
                     vars()[key] = None
 
-            requestTime = time.time()
-
             ret = None
             exception = None
             time.sleep(0.01)
@@ -157,15 +152,14 @@ class gThread(threading.Thread, wx.EvtHandler):
     def globaltrace(self, frame, event, arg):
         if event == "call":
             return self.localtrace
-        else:
-            return None
+        return None
 
     def localtrace(self, frame, event, arg):
         if self.terminate:
             if event == "line":
                 # Send event
                 wx.PostEvent(self, self._terminate_evt)
-                raise SystemExit()
+                raise SystemExit
         return self.localtrace
 
     def OnTerminate(self, event):

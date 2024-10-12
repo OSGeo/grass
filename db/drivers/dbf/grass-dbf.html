@@ -58,16 +58,16 @@ tables.
 </pre></div>
 
 <p>
-Arithmetic expressions using constants and field values are allowed 
+Arithmetic expressions using constants and field values are allowed
 in condition clauses and in the RHS of assignments.
 <br>
-Usual precedence rules and bracketing (using '(' and ')') are supported. 
+Usual precedence rules and bracketing (using '(' and ')') are supported.
 <br>
-Type conversion is performed if necessary (experimental). 
+Type conversion is performed if necessary (experimental).
 
 <p>
-Conditions allow boolean expressions using the AND, OR and NOT operators, 
-with the usual precedence rules. 
+Conditions allow boolean expressions using the AND, OR and NOT operators,
+with the usual precedence rules.
 
 <p>
 NULLs can be tested by 'colname IS NULL' in conditions. The negation is
@@ -83,9 +83,9 @@ intended for simple table storage. DBF column names are limited to 10 characters
 (as defined in the DBF specifications). For example,
 
 <ul>
-<li> aggregate functions (sum, count, min, max,...) are <b>not</b> supported 
+<li> aggregate functions (sum, count, min, max,...) are <b>not</b> supported
 in SELECT clauses;</li>
-<li> mathematic functions (sin, cos, exp, log,...) are <b>not</b> supported 
+<li> mathematic functions (sin, cos, exp, log,...) are <b>not</b> supported
 in expressions;</li>
 <li> SQL query with IN are <b>not</b> supported.</li>
 </ul>
@@ -99,7 +99,7 @@ DBMI-DBF driver error:
 SQL parser error: syntax error, unexpected NAME processing 'IN'..
 </pre></div>
 indicates that an unsupported SQL statement (here, 'IN') was used. The only
-solution is to switch the DBMI backend to a real SQL engine (SQLite, 
+solution is to switch the DBMI backend to a real SQL engine (SQLite,
 PostgreSQL, MySQL etc.). See <a href="sql.html">SQL support in GRASS GIS</a>.
 
 <p>

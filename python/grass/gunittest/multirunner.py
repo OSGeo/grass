@@ -9,25 +9,19 @@ for details.
 :authors: Vaclav Petras
 """
 
-from __future__ import print_function
-
 import sys
 import os
 import argparse
 import subprocess
 import locale
 
-try:
-    from itertools import izip as zip
-except ImportError:  # will be 3.x series
-    pass
-
-if sys.version_info.major >= 3:
-    unicode = str
-
 
 def _get_encoding():
-    encoding = locale.getdefaultlocale()[1]
+    try:
+        # Python >= 3.11
+        encoding = locale.getencoding()
+    except AttributeError:
+        encoding = locale.getdefaultlocale()[1]
     if not encoding:
         encoding = "UTF-8"
     return encoding
@@ -36,27 +30,20 @@ def _get_encoding():
 def decode(bytes_, encoding=None):
     if isinstance(bytes_, bytes):
         return bytes_.decode(_get_encoding())
-    else:
-        return bytes_
+    return bytes_
 
 
 def encode(string, encoding=None):
-    if isinstance(string, unicode):
+    if isinstance(string, str):
         return string.encode(_get_encoding())
-    else:
-        return string
+    return string
 
 
 def text_to_string(text):
     """Convert text to str. Useful when passing text into environments,
     in Python 2 it needs to be bytes on Windows, in Python 3 in needs unicode.
     """
-    if sys.version[0] == "2":
-        # Python 2
-        return encode(text)
-    else:
-        # Python 3
-        return decode(text)
+    return decode(text)
 
 
 def main():
@@ -117,21 +104,20 @@ def main():
     # TODO: create directory according to date and revision and create reports there
 
     # some predefined variables, name of the GRASS launch script + location/mapset
-    # grass8bin = 'C:\Program Files (x86)\GRASS GIS 8.2.git\grass.bat'
-    grass8bin = args.grassbin  # TODO: can be used if pressent
+    grass_executable = args.grassbin
 
     # Software
-    # query GRASS GIS 8 itself for its GISBASE
-    # we assume that GRASS GIS' start script is available and in the PATH
+    # query GRASS GIS itself for its GISBASE
+    # we assume that the start script is available and in the PATH
     # the shell=True is here because of MS Windows? (code taken from wiki)
-    startcmd = grass8bin + " --config path"
+    startcmd = grass_executable + " --config path"
     p = subprocess.Popen(
         startcmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
     out, err = p.communicate()
     if p.returncode != 0:
         print(
-            "ERROR: Cannot find GRASS GIS 8 start script (%s):\n%s" % (startcmd, err),
+            "ERROR: Cannot find GRASS GIS start script (%s):\n%s" % (startcmd, err),
             file=sys.stderr,
         )
         return 1
@@ -150,14 +136,14 @@ def main():
     os.environ["GISDBASE"] = text_to_string(gisdb)
 
     # import GRASS Python package for initialization
-    import grass.script.setup as gsetup
+    import grass.script as gs
 
     # launch session
     # we need some location and mapset here
     # TODO: can init work without it or is there some demo location in dist?
     location = locations[0].split(":")[0]
     mapset = "PERMANENT"
-    gsetup.init(gisbase, gisdb, location, mapset)
+    gs.setup.init(gisbase, gisdb, location, mapset)
 
     reports = []
     for location, location_type in zip(locations, locations_types):

@@ -6,15 +6,12 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-
 void plot_cross(double easting, double northing, int color, double rotation)
 {
-    plot_symbol(easting, northing, color, rotation, "basic/cross1",
-                MARK_CROSS);
+    plot_symbol(easting, northing, color, rotation, "basic/cross1", MARK_CROSS);
 }
 
-void plot_fiducial(double easting, double northing, int color,
-                   double rotation)
+void plot_fiducial(double easting, double northing, int color, double rotation)
 {
     plot_symbol(easting, northing, color, rotation + 45.0, "extra/fiducial",
                 MARK_FIDUCIAL);

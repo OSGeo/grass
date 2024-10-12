@@ -11,4 +11,3 @@ EXTRA_INC = $(VECT_INC)
 EXTRA_CFLAGS = $(VECT_CFLAGS)
 
 default: cmd
-

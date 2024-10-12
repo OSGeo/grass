@@ -1,4 +1,3 @@
-
 /*!
  * \file init2d.c
  *
@@ -26,39 +25,37 @@
 #include <grass/gis.h>
 #include <grass/interpf.h>
 
-
 /*! Initializes parameters used by the library */
-void IL_init_params_2d(struct interp_params *params,
-                       FILE * inp,  /*!< input stream */
-                       int elatt,  /*!< which fp att in sites file? 1 = first */
-                       int smatt,  /*!< which fp att in sites file to use for 
-                                         * smoothing? (if zero use sm) 1 = first */
-                       double zm,  /*!< multiplier for z-values */
-                       int k1,  /*!< min number of points per segment for interpolation */
-                       int k2,  /*!< max number of points per segment */
-                       char *msk,  /*!< name of mask */
-                       int rows, int cols,  /*!< number of rows and columns */
-                       DCELL * ar1, DCELL * ar2, DCELL * ar3, DCELL * ar4, DCELL * ar5,
-                       DCELL * ar6,  /*!< arrays for interpolated values (ar1-ar6) */
-                       double tension,  /*!< tension */
-                       int k3,  /*!< max number of points for interpolation */
-                       int sc1, int sc2, int sc3,  /*!< multipliers for interpolation values */
-                       double sm,  /*!< smoothing */
-                       char *f1, char *f2, char *f3, char *f4, char *f5,
-                       char *f6,  /*!< output files (f1-f6) */
-                       double dm,  /*!< min distance between points */
-                       double x_or,  /*!< x of origin */
-                       double y_or,  /*!< y of origin */
-                       int der,  /*!< 1 if compute partial derivatives */
-                       double tet,  /*!< anisotropy angle (0 is East, counter-clockwise) */
-                       double scl,  /*!< anisotropy scaling factor */
-                       FILE * t1, FILE * t2, FILE * t3, FILE * t4, FILE * t5,
-                       FILE * t6,  /*!< temp files for writing interp. values (t1-t6) */
-                       bool create_devi,  /*!< create deviations file? */
-                       struct TimeStamp *ts,
-                       int c,  /*!< cross validation */
-                       const char *wheresql     /*!< SQL WHERE statement */
-    )
+void IL_init_params_2d(
+    struct interp_params *params, FILE *inp, /*!< input stream */
+    int elatt, /*!< which fp att in sites file? 1 = first */
+    int smatt, /*!< which fp att in sites file to use for
+                * smoothing? (if zero use sm) 1 = first */
+    double zm, /*!< multiplier for z-values */
+    int k1,    /*!< min number of points per segment for interpolation */
+    int k2,    /*!< max number of points per segment */
+    char *msk, /*!< name of mask */
+    int rows, int cols, /*!< number of rows and columns */
+    DCELL *ar1, DCELL *ar2, DCELL *ar3, DCELL *ar4, DCELL *ar5,
+    DCELL *ar6,                /*!< arrays for interpolated values (ar1-ar6) */
+    double tension,            /*!< tension */
+    int k3,                    /*!< max number of points for interpolation */
+    int sc1, int sc2, int sc3, /*!< multipliers for interpolation values */
+    double sm,                 /*!< smoothing */
+    char *f1, char *f2, char *f3, char *f4, char *f5,
+    char *f6,    /*!< output files (f1-f6) */
+    double dm,   /*!< min distance between points */
+    double x_or, /*!< x of origin */
+    double y_or, /*!< y of origin */
+    int der,     /*!< 1 if compute partial derivatives */
+    double tet,  /*!< anisotropy angle (0 is East, counter-clockwise) */
+    double scl,  /*!< anisotropy scaling factor */
+    FILE *t1, FILE *t2, FILE *t3, FILE *t4, FILE *t5,
+    FILE *t6,         /*!< temp files for writing interp. values (t1-t6) */
+    bool create_devi, /*!< create deviations file? */
+    struct TimeStamp *ts, int c, /*!< cross validation */
+    const char *wheresql         /*!< SQL WHERE statement */
+)
 {
     params->fdinp = inp;
     params->elatt = elatt;
@@ -106,15 +103,16 @@ void IL_init_params_2d(struct interp_params *params,
 }
 
 /*! Initializes functions used by the library  */
-void IL_init_func_2d(struct interp_params *params,
-                     grid_calc_fn * grid_f,  /*!< calculates grid for given segment */
-                     matrix_create_fn * matr_f,  /*!< creates matrix for a given segment */
-                     check_points_fn * point_f,  /*!< checks interpolation function at points */
-                     secpar_fn * secp_f,  /*!< calculates aspect, slope, curvature */
-                     interp_fn * interp_f,  /*!< radial basis function */
-                     interpder_fn * interpder_f,  /*!< derivatives of radial basis function */
-                     wr_temp_fn * temp_f        /*!< writes temp files */
-    )
+void IL_init_func_2d(
+    struct interp_params *params,
+    grid_calc_fn *grid_f,      /*!< calculates grid for given segment */
+    matrix_create_fn *matr_f,  /*!< creates matrix for a given segment */
+    check_points_fn *point_f,  /*!< checks interpolation function at points */
+    secpar_fn *secp_f,         /*!< calculates aspect, slope, curvature */
+    interp_fn *interp_f,       /*!< radial basis function */
+    interpder_fn *interpder_f, /*!< derivatives of radial basis function */
+    wr_temp_fn *temp_f         /*!< writes temp files */
+)
 {
     params->grid_calc = grid_f;
     params->matrix_create = matr_f;
@@ -123,5 +121,4 @@ void IL_init_func_2d(struct interp_params *params,
     params->interp = interp_f;
     params->interpder = interpder_f;
     params->wr_temp = temp_f;
-
 }

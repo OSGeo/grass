@@ -22,6 +22,7 @@ import wx
 import grass.script as gs
 
 from core.gcmd import RunCommand
+from core.watchdog import watchdog_used
 from gui_core.wrap import Button
 
 
@@ -62,7 +63,7 @@ class SbMain:
         self._repositionStatusbar()
 
     def SetStatusText(self, *args):
-        """Overide wx.StatusBar method"""
+        """Override wx.StatusBar method"""
         self.GetWidget().SetStatusText(*args)
 
 
@@ -83,11 +84,17 @@ class SbMask:
         self.widget.SetForegroundColour(wx.Colour(255, 0, 0))
         self.widget.SetToolTip(tip=_("Left mouse click to remove the MASK"))
         self.giface.currentMapsetChanged.connect(self.Refresh)
-        self.giface.grassdbChanged.connect(self._dbChanged)
+        if not watchdog_used:
+            self.giface.grassdbChanged.connect(self.dbChanged)
         self.Refresh()
 
-    def _dbChanged(self, map=None, newname=None):
-        if map == self.mask_layer or newname == self.mask_layer:
+    def dbChanged(self, map=None, newname=None):
+        """Mapset files changed
+
+        :param str map: map that is changed
+        :param str newname: new map
+        """
+        if self.mask_layer in {map, newname}:
             self.Refresh()
             self.giface.updateMap.emit()
 

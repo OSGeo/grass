@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.object.geometry
@@ -23,6 +22,9 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
+#include <grass/parson.h>
+
+enum OutputFormat { PLAIN, JSON };
 
 /* compare two cell values
  * return 0 if equal, 1 if different */
@@ -43,6 +45,7 @@ int main(int argc, char *argv[])
     struct Option *opt_in;
     struct Option *opt_out;
     struct Option *opt_sep;
+    struct Option *fmt_opt;
     struct Flag *flag_m;
     char *sep;
     FILE *out_fp;
@@ -50,16 +53,20 @@ int main(int argc, char *argv[])
     CELL cur, top, left;
     int cur_null, top_null, left_null;
     int len;
-    struct obj_geo
-    {
+    struct obj_geo {
         double area, perimeter, x, y;
         int min_row, max_row, min_col, max_col; /* bounding box */
         int num;
     } *obj_geos;
     double unit_area;
     int n_objects;
-    int planimetric, compute_areas;
+    int planimetric = 0, compute_areas = 0;
     struct Cell_head cellhd;
+
+    enum OutputFormat format;
+    JSON_Array *root_array;
+    JSON_Object *object;
+    JSON_Value *root_value, *object_value;
 
     G_gisinit(argv[0]);
 
@@ -84,9 +91,21 @@ int main(int argc, char *argv[])
     flag_m->key = 'm';
     flag_m->label = _("Use meters as units instead of cells");
 
+    fmt_opt = G_define_standard_option(G_OPT_F_FORMAT);
+    fmt_opt->guisection = _("Print");
+
     /* parse options */
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
+
+    if (strcmp(fmt_opt->answer, "json") == 0) {
+        format = JSON;
+        root_value = json_value_init_array();
+        root_array = json_array(root_value);
+    }
+    else {
+        format = PLAIN;
+    }
 
     sep = G_option_to_separator(opt_sep);
     in_fd = Rast_open_old(opt_in->answer, "");
@@ -109,8 +128,8 @@ int main(int argc, char *argv[])
 
     /* allocate CELL buffers two columns larger than current window */
     len = (ncols + 2) * sizeof(CELL);
-    prev_in = (CELL *) G_malloc(len);
-    cur_in = (CELL *) G_malloc(len);
+    prev_in = (CELL *)G_malloc(len);
+    cur_in = (CELL *)G_malloc(len);
 
     /* fake a previous row which is all NULL */
     Rast_set_c_null_value(prev_in, ncols + 2);
@@ -124,7 +143,8 @@ int main(int argc, char *argv[])
     if (Rast_is_c_null_value(&min) || Rast_is_c_null_value(&max))
         G_fatal_error(_("Empty input map <%s>"), opt_in->answer);
 
-    /* REMARK: The following is only true if object ids are continuously numbered */
+    /* REMARK: The following is only true if object ids are continuously
+     * numbered */
     n_objects = max - min + 1;
     obj_geos = G_malloc(n_objects * sizeof(struct obj_geo));
 
@@ -143,7 +163,7 @@ int main(int argc, char *argv[])
     unit_area = 0.0;
     if (flag_m->answer) {
         switch (G_begin_cell_area_calculations()) {
-        case 0:                /* areas don't make sense, but ignore this for now */
+        case 0: /* areas don't make sense, but ignore this for now */
         case 1:
             planimetric = 1;
             unit_area = G_area_of_cell_at_row(0);
@@ -201,12 +221,11 @@ int main(int argc, char *argv[])
                     double perimeter;
 
                     /* could be optimized */
-                    perimeter = G_distance(cellhd.west + col * cellhd.ew_res,
-                                           Rast_row_to_northing(row, &cellhd),
-                                           cellhd.west + (col +
-                                                          1) * cellhd.ew_res,
-                                           Rast_row_to_northing(row,
-                                                                &cellhd));
+                    perimeter =
+                        G_distance(cellhd.west + col * cellhd.ew_res,
+                                   Rast_row_to_northing(row, &cellhd),
+                                   cellhd.west + (col + 1) * cellhd.ew_res,
+                                   Rast_row_to_northing(row, &cellhd));
 
                     if (!cur_null)
                         obj_geos[cur - min].perimeter += perimeter;
@@ -225,12 +244,11 @@ int main(int argc, char *argv[])
                     double perimeter;
 
                     /* could be optimized */
-                    perimeter = G_distance(cellhd.west + col * cellhd.ew_res,
-                                           Rast_row_to_northing(row, &cellhd),
-                                           cellhd.west +
-                                           (col) * cellhd.ew_res,
-                                           Rast_row_to_northing(row + 1,
-                                                                &cellhd));
+                    perimeter =
+                        G_distance(cellhd.west + col * cellhd.ew_res,
+                                   Rast_row_to_northing(row, &cellhd),
+                                   cellhd.west + (col)*cellhd.ew_res,
+                                   Rast_row_to_northing(row + 1, &cellhd));
 
                     if (!cur_null)
                         obj_geos[cur - min].perimeter += perimeter;
@@ -250,10 +268,9 @@ int main(int argc, char *argv[])
         if (flag_m->answer) {
             double perimeter;
 
-            perimeter = G_distance(cellhd.east,
-                                   Rast_row_to_northing(row, &cellhd),
-                                   cellhd.east,
-                                   Rast_row_to_northing(row + 1, &cellhd));
+            perimeter =
+                G_distance(cellhd.east, Rast_row_to_northing(row, &cellhd),
+                           cellhd.east, Rast_row_to_northing(row + 1, &cellhd));
             if (!cur_null)
                 obj_geos[cur - min].perimeter += perimeter;
         }
@@ -298,16 +315,18 @@ int main(int argc, char *argv[])
     G_free(prev_in);
 
     G_message(_("Writing output"));
-    /* print table */
-    fprintf(out_fp, "cat%s", sep);
-    fprintf(out_fp, "area%s", sep);
-    fprintf(out_fp, "perimeter%s", sep);
-    fprintf(out_fp, "compact_square%s", sep);
-    fprintf(out_fp, "compact_circle%s", sep);
-    fprintf(out_fp, "fd%s", sep);
-    fprintf(out_fp, "mean_x%s", sep);
-    fprintf(out_fp, "mean_y");
-    fprintf(out_fp, "\n");
+    if (format == PLAIN) {
+        /* print table */
+        fprintf(out_fp, "cat%s", sep);
+        fprintf(out_fp, "area%s", sep);
+        fprintf(out_fp, "perimeter%s", sep);
+        fprintf(out_fp, "compact_square%s", sep);
+        fprintf(out_fp, "compact_circle%s", sep);
+        fprintf(out_fp, "fd%s", sep);
+        fprintf(out_fp, "mean_x%s", sep);
+        fprintf(out_fp, "mean_y");
+        fprintf(out_fp, "\n");
+    }
 
     /* print table body */
     for (i = 0; i < n_objects; i++) {
@@ -316,28 +335,49 @@ int main(int argc, char *argv[])
         if (obj_geos[i].area == 0)
             continue;
 
-        fprintf(out_fp, "%d%s", min + i, sep);
-        fprintf(out_fp, "%f%s", obj_geos[i].area, sep);
-        fprintf(out_fp, "%f%s", obj_geos[i].perimeter, sep);
-        fprintf(out_fp, "%f%s",
-                4 * sqrt(obj_geos[i].area) / obj_geos[i].perimeter, sep);
-        fprintf(out_fp, "%f%s",
-                obj_geos[i].perimeter / (2 * sqrt(M_PI * obj_geos[i].area)),
-                sep);
+        double compact_square =
+            4 * sqrt(obj_geos[i].area) / obj_geos[i].perimeter;
+        double compact_circle =
+            obj_geos[i].perimeter / (2 * sqrt(M_PI * obj_geos[i].area));
         /* log 1 = 0, so avoid that by always adding 0.001 to the area: */
-        fprintf(out_fp, "%f%s",
-                2 * log(obj_geos[i].perimeter) / log(obj_geos[i].area +
-                                                     0.001), sep);
-        if (!flag_m->answer)
+        double fd =
+            2 * log(obj_geos[i].perimeter) / log(obj_geos[i].area + 0.001);
+        if (!flag_m->answer) {
             obj_geos[i].num = obj_geos[i].area;
-        fprintf(out_fp, "%f%s", obj_geos[i].x / obj_geos[i].num, sep);
-        fprintf(out_fp, "%f", obj_geos[i].y / obj_geos[i].num);
+        }
+        double mean_x = obj_geos[i].x / obj_geos[i].num;
+        double mean_y = obj_geos[i].y / obj_geos[i].num;
+        switch (format) {
+        case PLAIN:
+            fprintf(out_fp, "%d%s", min + i, sep);
+            fprintf(out_fp, "%f%s", obj_geos[i].area, sep);
+            fprintf(out_fp, "%f%s", obj_geos[i].perimeter, sep);
+            fprintf(out_fp, "%f%s", compact_square, sep);
+            fprintf(out_fp, "%f%s", compact_circle, sep);
+            fprintf(out_fp, "%f%s", fd, sep);
+            fprintf(out_fp, "%f%s", mean_x, sep);
+            fprintf(out_fp, "%f", mean_y);
+            break;
+        case JSON:
+            object_value = json_value_init_object();
+            object = json_object(object_value);
+            json_object_set_number(object, "category", min + i);
+            json_object_set_number(object, "area", obj_geos[i].area);
+            json_object_set_number(object, "perimeter", obj_geos[i].perimeter);
+            json_object_set_number(object, "compact_square", compact_square);
+            json_object_set_number(object, "compact_circle", compact_circle);
+            json_object_set_number(object, "fd", fd);
+            json_object_set_number(object, "mean_x", mean_x);
+            json_object_set_number(object, "mean_y", mean_y);
+            break;
+        }
         /* object id: i + min */
 
         /* TODO */
         /* smoothness */
-        /* perimeter of bounding box / perimeter -> smoother objects have a higher smoothness value
-         * smoothness is in the range 0 < smoothness <= 1 */
+        /* perimeter of bounding box / perimeter -> smoother objects have a
+         * higher smoothness value smoothness is in the range 0 < smoothness <=
+         * 1 */
 
         /* bounding box perimeter */
 
@@ -345,8 +385,26 @@ int main(int argc, char *argv[])
 
         /* variance of X and Y to approximate bounding ellipsoid */
 
-        fprintf(out_fp, "\n");
+        switch (format) {
+        case PLAIN:
+            fprintf(out_fp, "\n");
+            break;
+        case JSON:
+            json_array_append_value(root_array, object_value);
+            break;
+        }
     }
+
+    if (format == JSON) {
+        char *serialized_string = json_serialize_to_string_pretty(root_value);
+        if (serialized_string == NULL) {
+            G_fatal_error(_("Failed to initialize pretty JSON string."));
+        }
+        puts(serialized_string);
+        json_free_serialized_string(serialized_string);
+        json_value_free(root_value);
+    }
+
     if (out_fp != stdout)
         fclose(out_fp);
 

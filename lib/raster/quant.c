@@ -1,6 +1,6 @@
 /*!
  * \file lib/raster/quant.c
- * 
+ *
  * \brief Raster Library - Quantization rules.
  *
  * The quantization table is stored as a linear array. Rules are added
@@ -23,15 +23,15 @@
 
 static int double_comp(const void *, const void *);
 
-#define USE_LOOKUP 1
-#define MAX_LOOKUP_TABLE_SIZE 2048
-#define NO_DATA (Rast_set_c_null_value (&tmp, 1), (CELL) tmp)
+#define USE_LOOKUP             1
+#define MAX_LOOKUP_TABLE_SIZE  2048
+#define NO_DATA                (Rast_set_c_null_value(&tmp, 1), (CELL)tmp)
 
-#define NO_LEFT_INFINITE_RULE (! q->infiniteLeftSet)
-#define NO_RIGHT_INFINITE_RULE (! q->infiniteRightSet)
-#define NO_FINITE_RULE (q->nofRules <= 0)
-#define NO_EXPLICIT_RULE (NO_FINITE_RULE && \
-			  NO_LEFT_INFINITE_RULE && NO_RIGHT_INFINITE_RULE)
+#define NO_LEFT_INFINITE_RULE  (!q->infiniteLeftSet)
+#define NO_RIGHT_INFINITE_RULE (!q->infiniteRightSet)
+#define NO_FINITE_RULE         (q->nofRules <= 0)
+#define NO_EXPLICIT_RULE \
+    (NO_FINITE_RULE && NO_LEFT_INFINITE_RULE && NO_RIGHT_INFINITE_RULE)
 
 /*!
    \brief Resets the number of defined rules and number of infinite rules to 0
@@ -57,12 +57,12 @@ void Rast_quant_free(struct Quant *q)
     Rast_quant_clear(q);
 
     if (q->maxNofRules > 0)
-	G_free(q->table);
+        G_free(q->table);
     if (q->fp_lookup.active) {
-	G_free(q->fp_lookup.vals);
-	G_free(q->fp_lookup.rules);
-	q->fp_lookup.nalloc = 0;
-	q->fp_lookup.active = 0;
+        G_free(q->fp_lookup.vals);
+        G_free(q->fp_lookup.rules);
+        q->fp_lookup.nalloc = 0;
+        q->fp_lookup.active = 0;
     }
     q->maxNofRules = 0;
 }
@@ -73,7 +73,7 @@ void Rast_quant_free(struct Quant *q)
  *  Organizes fp_lookup table for faster (logarithmic) lookup time
  *  G_quant_organize_fp_lookup() creates a list of min and max for
  *  each quant rule, sorts this list, and stores the pointer to quant
- *  rule that should be used inbetween any 2 numbers in this list.
+ *  rule that should be used in between any 2 numbers in this list.
  *  Also it stores extreme points for 2 infinite rules, if exist.
  *  After the call to G_quant_organize_fp_lookup()
  *  instead of linearly searching through list of rules to find
@@ -95,70 +95,71 @@ int Rast__quant_organize_fp_lookup(struct Quant *q)
     struct Quant_table *p;
 
     if (q->nofRules * 2 > MAX_LOOKUP_TABLE_SIZE)
-	return -1;
+        return -1;
     if (q->nofRules == 0)
-	return -1;
-    q->fp_lookup.vals = (DCELL *)
-	G_calloc(q->nofRules * 2, sizeof(DCELL));
+        return -1;
+    q->fp_lookup.vals = (DCELL *)G_calloc(q->nofRules * 2, sizeof(DCELL));
     /* 2 endpoints for each rule */
-    q->fp_lookup.rules = (struct Quant_table **)
-	G_calloc(q->nofRules * 2, sizeof(struct Quant_table *));
+    q->fp_lookup.rules = (struct Quant_table **)G_calloc(
+        q->nofRules * 2, sizeof(struct Quant_table *));
 
     /* first we organize finite rules into a table */
     if (!NO_FINITE_RULE) {
-	i = 0;
-	/* get the list of DCELL values from set of all dLows and dHighs
-	   of all rules */
-	/* NOTE: if dLow==DHigh in a rule, the value appears twice in a list 
-	   but if dLow==DHigh of the previous, rule the value appears only once */
+        i = 0;
+        /* get the list of DCELL values from set of all dLows and dHighs
+           of all rules */
+        /* NOTE: if dLow==DHigh in a rule, the value appears twice in a list
+           but if dLow==DHigh of the previous, rule the value appears only once
+         */
 
-	for (p = &(q->table[q->nofRules - 1]); p >= q->table; p--) {
-	    /* check if the min is the same as previous maximum */
-	    if (i == 0 || p->dLow != q->fp_lookup.vals[i - 1])
-		q->fp_lookup.vals[i++] = p->dLow;
-	    q->fp_lookup.vals[i++] = p->dHigh;
-	}
-	q->fp_lookup.nalloc = i;
+        for (p = &(q->table[q->nofRules - 1]); p >= q->table; p--) {
+            /* check if the min is the same as previous maximum */
+            if (i == 0 || p->dLow != q->fp_lookup.vals[i - 1])
+                q->fp_lookup.vals[i++] = p->dLow;
+            q->fp_lookup.vals[i++] = p->dHigh;
+        }
+        q->fp_lookup.nalloc = i;
 
-	/* now sort the values */
-	qsort((char *)q->fp_lookup.vals, q->fp_lookup.nalloc,
-	      sizeof(DCELL), double_comp);
+        /* now sort the values */
+        qsort((char *)q->fp_lookup.vals, q->fp_lookup.nalloc, sizeof(DCELL),
+              double_comp);
 
-	/* now find the rule to apply inbetween each 2 values in a list */
-	for (i = 0; i < q->fp_lookup.nalloc - 1; i++) {
-	    /*debug
-	       fprintf (stderr, "%lf %lf ", q->fp_lookup.vals[i], q->fp_lookup.vals[i+1]);
-	     */
-	    val = (q->fp_lookup.vals[i] + q->fp_lookup.vals[i + 1]) / 2.;
-	    q->fp_lookup.rules[i] =
-		Rast__quant_get_rule_for_d_raster_val(q, val);
-	    /* debug 
-	       if(q->fp_lookup.rules[i])
-	       fprintf (stderr, "%lf %lf %d %d\n", q->fp_lookup.rules[i]->dLow, q->fp_lookup.rules[i]->dHigh, q->fp_lookup.rules[i]->cLow, q->fp_lookup.rules[i]->cHigh); 
-	       else fprintf (stderr, "null\n");
-	     */
-
-	}
-    }				/* organizing finite rules */
+        /* now find the rule to apply in between each 2 values in a list */
+        for (i = 0; i < q->fp_lookup.nalloc - 1; i++) {
+            /*debug
+               fprintf (stderr, "%lf %lf ", q->fp_lookup.vals[i],
+               q->fp_lookup.vals[i+1]);
+             */
+            val = (q->fp_lookup.vals[i] + q->fp_lookup.vals[i + 1]) / 2.;
+            q->fp_lookup.rules[i] =
+                Rast__quant_get_rule_for_d_raster_val(q, val);
+            /* debug
+               if(q->fp_lookup.rules[i])
+               fprintf (stderr, "%lf %lf %d %d\n", q->fp_lookup.rules[i]->dLow,
+               q->fp_lookup.rules[i]->dHigh, q->fp_lookup.rules[i]->cLow,
+               q->fp_lookup.rules[i]->cHigh); else fprintf (stderr, "null\n");
+             */
+        }
+    } /* organizing finite rules */
 
     if (!NO_LEFT_INFINITE_RULE) {
-	q->fp_lookup.inf_dmin = q->infiniteDLeft;
-	q->fp_lookup.inf_min = q->infiniteCLeft;
+        q->fp_lookup.inf_dmin = q->infiniteDLeft;
+        q->fp_lookup.inf_min = q->infiniteCLeft;
     }
     else {
-	if (q->fp_lookup.nalloc)
-	    q->fp_lookup.inf_dmin = q->fp_lookup.vals[0];
-	q->fp_lookup.inf_min = NO_DATA;
+        if (q->fp_lookup.nalloc)
+            q->fp_lookup.inf_dmin = q->fp_lookup.vals[0];
+        q->fp_lookup.inf_min = NO_DATA;
     }
 
     if (!NO_RIGHT_INFINITE_RULE) {
-	if (q->fp_lookup.nalloc)
-	    q->fp_lookup.inf_dmax = q->infiniteDRight;
-	q->fp_lookup.inf_max = q->infiniteCRight;
+        if (q->fp_lookup.nalloc)
+            q->fp_lookup.inf_dmax = q->infiniteDRight;
+        q->fp_lookup.inf_max = q->infiniteCRight;
     }
     else {
-	q->fp_lookup.inf_dmax = q->fp_lookup.vals[q->fp_lookup.nalloc - 1];
-	q->fp_lookup.inf_max = NO_DATA;
+        q->fp_lookup.inf_dmax = q->fp_lookup.vals[q->fp_lookup.nalloc - 1];
+        q->fp_lookup.inf_max = NO_DATA;
     }
     q->fp_lookup.active = 1;
     return 1;
@@ -231,8 +232,8 @@ void Rast_quant_round(struct Quant *quant)
     quant->round_only = 1;
 }
 
-static void quant_set_limits(struct Quant *q,
-			     DCELL dLow, DCELL dHigh, CELL cLow, CELL cHigh)
+static void quant_set_limits(struct Quant *q, DCELL dLow, DCELL dHigh,
+                             CELL cLow, CELL cHigh)
 {
     q->dMin = dLow;
     q->dMax = dHigh;
@@ -240,13 +241,12 @@ static void quant_set_limits(struct Quant *q,
     q->cMax = cHigh;
 }
 
-static void quant_update_limits(struct Quant *q,
-				DCELL dLow, DCELL dHigh,
-				CELL cLow, DCELL cHigh)
+static void quant_update_limits(struct Quant *q, DCELL dLow, DCELL dHigh,
+                                CELL cLow, DCELL cHigh)
 {
     if (NO_EXPLICIT_RULE) {
-	quant_set_limits(q, dLow, dHigh, cLow, cHigh);
-	return;
+        quant_set_limits(q, dLow, dHigh, cLow, cHigh);
+        return;
     }
 
     q->dMin = MIN(q->dMin, MIN(dLow, dHigh));
@@ -278,16 +278,15 @@ static void quant_update_limits(struct Quant *q,
  * q is set to truncate or round map), and sets <i>dmin</i>,
  * <i>dmax</i>, <i>cmin</i>, and <i>cmax</i> to NULL.
  */
-int Rast_quant_get_limits(const struct Quant *q,
-			  DCELL * dMin, DCELL * dMax, CELL * cMin,
-			  CELL * cMax)
+int Rast_quant_get_limits(const struct Quant *q, DCELL *dMin, DCELL *dMax,
+                          CELL *cMin, CELL *cMax)
 {
     if (NO_EXPLICIT_RULE) {
-	Rast_set_c_null_value(cMin, 1);
-	Rast_set_c_null_value(cMax, 1);
-	Rast_set_d_null_value(dMin, 1);
-	Rast_set_d_null_value(dMax, 1);
-	return -1;
+        Rast_set_c_null_value(cMin, 1);
+        Rast_set_c_null_value(cMax, 1);
+        Rast_set_d_null_value(dMin, 1);
+        Rast_set_d_null_value(dMax, 1);
+        return -1;
     }
 
     *dMin = q->dMin;
@@ -325,10 +324,8 @@ int Rast_quant_nof_rules(const struct Quant *q)
    \param[out] cLow minimum value
    \param[out] cHigh maximum value
  */
-void Rast_quant_get_ith_rule(const struct Quant *q,
-			     int i,
-			     DCELL * dLow, DCELL * dHigh,
-			     CELL * cLow, CELL * cHigh)
+void Rast_quant_get_ith_rule(const struct Quant *q, int i, DCELL *dLow,
+                             DCELL *dHigh, CELL *cLow, CELL *cHigh)
 {
     *dLow = q->table[i].dLow;
     *dHigh = q->table[i].dHigh;
@@ -339,18 +336,17 @@ void Rast_quant_get_ith_rule(const struct Quant *q,
 static void quant_table_increase(struct Quant *q)
 {
     if (q->nofRules < q->maxNofRules)
-	return;
+        return;
 
     if (q->maxNofRules == 0) {
-	q->maxNofRules = 50;
-	q->table = (struct Quant_table *)
-	    G_malloc(q->maxNofRules * sizeof(struct Quant_table));
+        q->maxNofRules = 50;
+        q->table = (struct Quant_table *)G_malloc(q->maxNofRules *
+                                                  sizeof(struct Quant_table));
     }
     else {
-	q->maxNofRules += 50;
-	q->table = (struct Quant_table *)
-	    G_realloc((char *)q->table,
-		      q->maxNofRules * sizeof(struct Quant_table));
+        q->maxNofRules += 50;
+        q->table = (struct Quant_table *)G_realloc(
+            (char *)q->table, q->maxNofRules * sizeof(struct Quant_table));
     }
 }
 
@@ -373,8 +369,8 @@ void Rast_quant_set_neg_infinite_rule(struct Quant *q, DCELL dLeft, CELL c)
 
     /* update lookup table */
     if (q->fp_lookup.active) {
-	q->fp_lookup.inf_dmin = q->infiniteDLeft;
-	q->fp_lookup.inf_min = q->infiniteCLeft;
+        q->fp_lookup.inf_dmin = q->infiniteDLeft;
+        q->fp_lookup.inf_min = q->infiniteCLeft;
     }
     q->infiniteLeftSet = 1;
 }
@@ -391,11 +387,11 @@ void Rast_quant_set_neg_infinite_rule(struct Quant *q, DCELL dLeft, CELL c)
    \return 0 if this rule is not defined
    \return 1 otherwise
  */
-int Rast_quant_get_neg_infinite_rule(const struct Quant *q,
-				     DCELL * dLeft, CELL * c)
+int Rast_quant_get_neg_infinite_rule(const struct Quant *q, DCELL *dLeft,
+                                     CELL *c)
 {
     if (q->infiniteLeftSet == 0)
-	return 0;
+        return 0;
 
     *dLeft = q->infiniteDLeft;
     *c = q->infiniteCLeft;
@@ -421,8 +417,8 @@ void Rast_quant_set_pos_infinite_rule(struct Quant *q, DCELL dRight, CELL c)
 
     /* update lookup table */
     if (q->fp_lookup.active) {
-	q->fp_lookup.inf_dmax = q->infiniteDRight;
-	q->fp_lookup.inf_max = q->infiniteCRight;
+        q->fp_lookup.inf_dmax = q->infiniteDRight;
+        q->fp_lookup.inf_max = q->infiniteCRight;
     }
     q->infiniteRightSet = 1;
 }
@@ -439,11 +435,11 @@ void Rast_quant_set_pos_infinite_rule(struct Quant *q, DCELL dRight, CELL c)
    \return 0 if this rule is not defined
    \return 1 otherwise
  */
-int Rast_quant_get_pos_infinite_rule(const struct Quant *q,
-				     DCELL * dRight, CELL * c)
+int Rast_quant_get_pos_infinite_rule(const struct Quant *q, DCELL *dRight,
+                                     CELL *c)
 {
     if (q->infiniteRightSet == 0)
-	return 0;
+        return 0;
 
     *dRight = q->infiniteDRight;
     *c = q->infiniteCRight;
@@ -470,8 +466,8 @@ int Rast_quant_get_pos_infinite_rule(const struct Quant *q,
    \param cLow minimum value
    \param cHigh maximum value
  */
-void Rast_quant_add_rule(struct Quant *q,
-			 DCELL dLow, DCELL dHigh, CELL cLow, CELL cHigh)
+void Rast_quant_add_rule(struct Quant *q, DCELL dLow, DCELL dHigh, CELL cLow,
+                         CELL cHigh)
 {
     int i;
     struct Quant_table *p;
@@ -482,24 +478,24 @@ void Rast_quant_add_rule(struct Quant *q,
 
     p = &(q->table[i]);
     if (dHigh >= dLow) {
-	p->dLow = dLow;
-	p->dHigh = dHigh;
-	p->cLow = cLow;
-	p->cHigh = cHigh;
+        p->dLow = dLow;
+        p->dHigh = dHigh;
+        p->cLow = cLow;
+        p->cHigh = cHigh;
     }
     else {
-	p->dLow = dHigh;
-	p->dHigh = dLow;
-	p->cLow = cHigh;
-	p->cHigh = cLow;
+        p->dLow = dHigh;
+        p->dHigh = dLow;
+        p->cLow = cHigh;
+        p->cHigh = cLow;
     }
 
     /* destroy lookup table, it has to be rebuilt */
     if (q->fp_lookup.active) {
-	G_free(q->fp_lookup.vals);
-	G_free(q->fp_lookup.rules);
-	q->fp_lookup.active = 0;
-	q->fp_lookup.nalloc = 0;
+        G_free(q->fp_lookup.vals);
+        G_free(q->fp_lookup.rules);
+        q->fp_lookup.active = 0;
+        q->fp_lookup.nalloc = 0;
     }
 
     quant_update_limits(q, dLow, dHigh, cLow, cHigh);
@@ -523,58 +519,58 @@ void Rast_quant_reverse_rule_order(struct Quant *q)
     pRight = &(q->table[q->nofRules - 1]);
 
     while (pLeft < pRight) {
-	tmp.dLow = pLeft->dLow;
-	tmp.dHigh = pLeft->dHigh;
-	tmp.cLow = pLeft->cLow;
-	tmp.cHigh = pLeft->cHigh;
+        tmp.dLow = pLeft->dLow;
+        tmp.dHigh = pLeft->dHigh;
+        tmp.cLow = pLeft->cLow;
+        tmp.cHigh = pLeft->cHigh;
 
-	pLeft->dLow = pRight->dLow;
-	pLeft->dHigh = pRight->dHigh;
-	pLeft->cLow = pRight->cLow;
-	pLeft->cHigh = pRight->cHigh;
+        pLeft->dLow = pRight->dLow;
+        pLeft->dHigh = pRight->dHigh;
+        pLeft->cLow = pRight->cLow;
+        pLeft->cHigh = pRight->cHigh;
 
-	pRight->dLow = tmp.dLow;
-	pRight->dHigh = tmp.dHigh;
-	pRight->cLow = tmp.cLow;
-	pRight->cHigh = tmp.cHigh;
+        pRight->dLow = tmp.dLow;
+        pRight->dHigh = tmp.dHigh;
+        pRight->cLow = tmp.cLow;
+        pRight->cHigh = tmp.cHigh;
 
-	pLeft++;
-	pRight--;
+        pLeft++;
+        pRight--;
     }
 }
 
-static CELL quant_interpolate(DCELL dLow, DCELL dHigh,
-			      CELL cLow, CELL cHigh, DCELL dValue)
+static CELL quant_interpolate(DCELL dLow, DCELL dHigh, CELL cLow, CELL cHigh,
+                              DCELL dValue)
 {
     if (cLow == cHigh)
-	return cLow;
+        return cLow;
     if (dLow == dHigh)
-	return cLow;
+        return cLow;
 
-    return (CELL) ((dValue - dLow) / (dHigh - dLow) * (DCELL) (cHigh - cLow) +
-		   (DCELL) cLow);
+    return (CELL)((dValue - dLow) / (dHigh - dLow) * (DCELL)(cHigh - cLow) +
+                  (DCELL)cLow);
 }
 
 static int less_or_equal(double x, double y)
 {
     if (x <= y)
-	return 1;
+        return 1;
     else
-	return 0;
+        return 0;
 }
 
 static int less(double x, double y)
 {
     if (x < y)
-	return 1;
+        return 1;
     else
-	return 0;
+        return 0;
 }
 
 /*!
- * \brief 
+ * \brief
  *
- * 
+ *
  * Returns a CELL category for the floating-point <i>value</i> based
  * on the quantization rules in <i>q</i>. The first rule found that
  * applies is used. The rules are searched in the reverse order they
@@ -593,109 +589,112 @@ static int less(double x, double y)
  *
  * \return cell value (integer)
  */
-CELL Rast_quant_get_cell_value(struct Quant * q, DCELL dcellVal)
+CELL Rast_quant_get_cell_value(struct Quant *q, DCELL dcellVal)
 {
     CELL tmp;
     DCELL dtmp;
     int try, min_ind, max_ind;
     struct Quant_table *p;
-    int (*lower) ();
+    int (*lower)(double, double);
 
     dtmp = dcellVal;
     /* I know the functions which call me already check for null values,
        but I am a public function, and can be called from outside */
     if (Rast_is_d_null_value(&dtmp))
-	return NO_DATA;
+        return NO_DATA;
 
     if (q->truncate_only)
-	return (CELL) dtmp;
+        return (CELL)dtmp;
 
     if (q->round_only) {
-	if (dcellVal > 0)
-	    return (CELL) (dcellVal + .5);
-	return (CELL) (dcellVal - .5);
+        if (dcellVal > 0)
+            return (CELL)(dcellVal + .5);
+        return (CELL)(dcellVal - .5);
     }
 
     if (NO_EXPLICIT_RULE)
-	return NO_DATA;
+        return NO_DATA;
     if (NO_EXPLICIT_RULE)
-	return NO_DATA;
+        return NO_DATA;
 
     if (USE_LOOKUP &&
-	(q->fp_lookup.active || Rast__quant_organize_fp_lookup(q) > 0)) {
-	/* first check if values fall within range */
-	/* if value is below the range */
-	if (dcellVal < q->fp_lookup.vals[0]) {
-	    if (dcellVal <= q->fp_lookup.inf_dmin)
-		return q->fp_lookup.inf_min;
-	    else
-		return NO_DATA;
-	}
-	/* if value is below above range */
-	if (dcellVal > q->fp_lookup.vals[q->fp_lookup.nalloc - 1]) {
-	    if (dcellVal >= q->fp_lookup.inf_dmax)
-		return q->fp_lookup.inf_max;
-	    else
-		return NO_DATA;
-	}
-	/* make binary search to find which interval our value belongs to
-	   and apply the rule for this interval */
-	try = (q->fp_lookup.nalloc - 1) / 2;
-	min_ind = 0;
-	max_ind = q->fp_lookup.nalloc - 2;
-	while (1) {
-	    /* DEBUG 
-	       fprintf (stderr, "%d %d %d\n", min_ind, max_ind, try); 
-	     */
-	    /* when the ruke for the interval is NULL, we exclude the end points.
-	       when it exists, we include the end-points */
-	    if (q->fp_lookup.rules[try])
-		lower = less;
-	    else
-		lower = less_or_equal;
+        (q->fp_lookup.active || Rast__quant_organize_fp_lookup(q) > 0)) {
+        /* first check if values fall within range */
+        /* if value is below the range */
+        if (dcellVal < q->fp_lookup.vals[0]) {
+            if (dcellVal <= q->fp_lookup.inf_dmin)
+                return q->fp_lookup.inf_min;
+            else
+                return NO_DATA;
+        }
+        /* if value is below above range */
+        if (dcellVal > q->fp_lookup.vals[q->fp_lookup.nalloc - 1]) {
+            if (dcellVal >= q->fp_lookup.inf_dmax)
+                return q->fp_lookup.inf_max;
+            else
+                return NO_DATA;
+        }
+        /* make binary search to find which interval our value belongs to
+           and apply the rule for this interval */
+        try = (q->fp_lookup.nalloc - 1) / 2;
+        min_ind = 0;
+        max_ind = q->fp_lookup.nalloc - 2;
+        while (1) {
+            /* DEBUG
+               fprintf (stderr, "%d %d %d\n", min_ind, max_ind, try);
+             */
+            /* when the ruke for the interval is NULL, we exclude the end
+               points. when it exists, we include the end-points */
+            if (q->fp_lookup.rules[try])
+                lower = less;
+            else
+                lower = less_or_equal;
 
-	    if (lower(q->fp_lookup.vals[try + 1], dcellVal)) {	/* recurse to the second half */
-		min_ind = try + 1;
-		/* must be still < nalloc-1, since number is within the range */
-		try = (max_ind + min_ind) / 2;
-		continue;
-	    }
-	    if (lower(dcellVal, q->fp_lookup.vals[try])) {	/* recurse to the second half */
-		max_ind = try - 1;
-		/* must be still >= 0, since number is within the range */
-		try = (max_ind + min_ind) / 2;
-		continue;
-	    }
-	    /* the value fits into the interval! */
-	    p = q->fp_lookup.rules[try];
-	    if (p)
-		return quant_interpolate(p->dLow, p->dHigh, p->cLow, p->cHigh,
-					 dcellVal);
-	    /* otherwise when finite rule for this interval doesn't exist */
-	    else {		/* first check if maybe infinite rule applies */
-		if (dcellVal <= q->fp_lookup.inf_dmin)
-		    return q->fp_lookup.inf_min;
-		if (dcellVal >= q->fp_lookup.inf_dmax)
-		    return q->fp_lookup.inf_max;
-		else
-		    return NO_DATA;
-	    }
-	}			/* while */
-    }				/* looking up in fp_lookup */
+            if (lower(q->fp_lookup.vals[try + 1],
+                      dcellVal)) { /* recurse to the second half */
+                min_ind = try + 1;
+                /* must be still < nalloc-1, since number is within the range */
+                try = (max_ind + min_ind) / 2;
+                continue;
+            }
+            if (lower(
+                    dcellVal,
+                    q->fp_lookup.vals[try])) { /* recurse to the second half */
+                max_ind = try - 1;
+                /* must be still >= 0, since number is within the range */
+                try = (max_ind + min_ind) / 2;
+                continue;
+            }
+            /* the value fits into the interval! */
+            p = q->fp_lookup.rules[try];
+            if (p)
+                return quant_interpolate(p->dLow, p->dHigh, p->cLow, p->cHigh,
+                                         dcellVal);
+            /* otherwise when finite rule for this interval doesn't exist */
+            else { /* first check if maybe infinite rule applies */
+                if (dcellVal <= q->fp_lookup.inf_dmin)
+                    return q->fp_lookup.inf_min;
+                if (dcellVal >= q->fp_lookup.inf_dmax)
+                    return q->fp_lookup.inf_max;
+                else
+                    return NO_DATA;
+            }
+        } /* while */
+    } /* looking up in fp_lookup */
 
     if (!NO_FINITE_RULE) {
-	p = Rast__quant_get_rule_for_d_raster_val(q, dcellVal);
-	if (!p)
-	    return NO_DATA;
-	return quant_interpolate(p->dLow, p->dHigh, p->cLow, p->cHigh,
-				 dcellVal);
+        p = Rast__quant_get_rule_for_d_raster_val(q, dcellVal);
+        if (!p)
+            return NO_DATA;
+        return quant_interpolate(p->dLow, p->dHigh, p->cLow, p->cHigh,
+                                 dcellVal);
     }
 
     if ((!NO_LEFT_INFINITE_RULE) && (dcellVal <= q->infiniteDLeft))
-	return q->infiniteCLeft;
+        return q->infiniteCLeft;
 
     if ((NO_RIGHT_INFINITE_RULE) || (dcellVal < q->infiniteDRight))
-	return NO_DATA;
+        return NO_DATA;
 
     return q->infiniteCRight;
 }
@@ -705,7 +704,7 @@ CELL Rast_quant_get_cell_value(struct Quant * q, DCELL dcellVal)
 
    Returns in "cell" the quantized CELL values corresponding to the
    DCELL values stored in "dcell". the number of elements quantized
-   is n. quantization is performed by repeated application of 
+   is n. quantization is performed by repeated application of
    Rast_quant_get_cell_value().
 
    \param q pointer to Quant structure which holds quant rules info
@@ -713,16 +712,16 @@ CELL Rast_quant_get_cell_value(struct Quant * q, DCELL dcellVal)
    \param[out] cell pointer cell values array
    \param n number of cells
  */
-void Rast_quant_perform_d(struct Quant *q,
-			  const DCELL * dcell, CELL * cell, int n)
+void Rast_quant_perform_d(struct Quant *q, const DCELL *dcell, CELL *cell,
+                          int n)
 {
     int i;
 
     for (i = 0; i < n; i++, dcell++)
-	if (!Rast_is_d_null_value(dcell))
-	    *cell++ = Rast_quant_get_cell_value(q, *dcell);
-	else
-	    Rast_set_c_null_value(cell++, 1);
+        if (!Rast_is_d_null_value(dcell))
+            *cell++ = Rast_quant_get_cell_value(q, *dcell);
+        else
+            Rast_set_c_null_value(cell++, 1);
 }
 
 /*!
@@ -733,16 +732,16 @@ void Rast_quant_perform_d(struct Quant *q,
    \param[out] cell pointer cell values array
    \param n number of cells
  */
-void Rast_quant_perform_f(struct Quant *q,
-			  const FCELL * fcell, CELL * cell, int n)
+void Rast_quant_perform_f(struct Quant *q, const FCELL *fcell, CELL *cell,
+                          int n)
 {
     int i;
 
     for (i = 0; i < n; i++, fcell++)
-	if (!Rast_is_f_null_value(fcell))
-	    *cell++ = Rast_quant_get_cell_value(q, (DCELL) * fcell);
-	else
-	    Rast_set_c_null_value(cell++, 1);
+        if (!Rast_is_f_null_value(fcell))
+            *cell++ = Rast_quant_get_cell_value(q, (DCELL)*fcell);
+        else
+            Rast_set_c_null_value(cell++, 1);
 }
 
 static int double_comp(const void *xx, const void *yy)
@@ -751,13 +750,13 @@ static int double_comp(const void *xx, const void *yy)
     const DCELL *y = yy;
 
     if (Rast_is_d_null_value(x))
-	return 0;
+        return 0;
     if (*x < *y)
-	return -1;
+        return -1;
     else if (*x == *y)
-	return 0;
+        return 0;
     else
-	return 1;
+        return 1;
 }
 
 /*!
@@ -772,16 +771,16 @@ static int double_comp(const void *xx, const void *yy)
    \return pointer to the Quant_table (color rule)
    \return NULL otherwise
  */
-struct Quant_table *Rast__quant_get_rule_for_d_raster_val(const struct Quant
-							  *q, DCELL val)
+struct Quant_table *Rast__quant_get_rule_for_d_raster_val(const struct Quant *q,
+                                                          DCELL val)
 {
     const struct Quant_table *p;
 
     for (p = &(q->table[q->nofRules - 1]); p >= q->table; p--)
-	if ((val >= p->dLow) && (val <= p->dHigh))
-	    break;
+        if ((val >= p->dLow) && (val <= p->dHigh))
+            break;
     if (p >= q->table)
-	return (struct Quant_table *)p;
+        return (struct Quant_table *)p;
     else
-	return (struct Quant_table *)NULL;
+        return (struct Quant_table *)NULL;
 }

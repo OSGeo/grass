@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       GRASS GIS library - copy_file.c
@@ -20,14 +19,14 @@
 
 /**
  * \brief Copies one file to another
- * 
+ *
  * Creates a copy of a file. The destination file will be overwritten if it
  * already exists, so the calling module should check this first if it is
  * important.
- * 
+ *
  * \param infile  String containing path to source file
  * \param outfile String containing path to destination file
- * 
+ *
  * \return 1 on success; 0 if an error occurred (warning will be printed)
  **/
 

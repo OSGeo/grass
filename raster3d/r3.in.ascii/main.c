@@ -1,12 +1,12 @@
-
 /***************************************************************************
  *
  * MODULE:       r3.in.ascii
  *
- * AUTHOR(S):    Roman Waupotitsch, Michael Shapiro, Helena Mitasova, Bill Brown, 
- * 		Lubos Mitas, Jaro Hofierka, Soeren Gebbert 
+ * AUTHOR(S):    Roman Waupotitsch, Michael Shapiro, Helena Mitasova,
+ *               Bill Brown, Lubos Mitas, Jaro Hofierka, Soeren Gebbert
  *
- * PURPOSE:      Convert a 3D ASCII raster text file into a (binary) 3D raster map layer 
+ * PURPOSE:      Convert a 3D ASCII raster text file into a (binary) 3D raster
+ *               map layer
  *
  * COPYRIGHT:    (C) 2005 by the GRASS Development Team
  *
@@ -15,6 +15,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -23,8 +24,8 @@
 #include <grass/raster3d.h>
 #include <grass/glocale.h>
 
-#define ROW_ORDER_NORTH_TO_SOUTH 1
-#define ROW_ORDER_SOUTH_TO_NORTH 2
+#define ROW_ORDER_NORTH_TO_SOUTH  1
+#define ROW_ORDER_SOUTH_TO_NORTH  2
 #define DEPTH_ORDER_BOTTOM_TO_TOP 3
 #define DEPTH_ORDER_TOP_TO_BOTTOM 4
 
@@ -32,7 +33,7 @@
 
 static void fatalError(char *errorMsg); /*Simple Error message */
 
-static void setParams(); /*Fill the paramType structure */
+static void setParams(void); /*Fill the paramType structure */
 
 /*Puts the userdefined parameters into easier handable variables */
 static void getParams(char **input, char **output, int *convertNull,
@@ -42,13 +43,14 @@ static void getParams(char **input, char **output, int *convertNull,
 static int file_cpy(FILE *, FILE *);
 
 /*reads a g3d ascii-file headerfile-string */
-static void readHeaderString(FILE * fp, char *valueString, double *value);
+static void readHeaderString(FILE *fp, char *valueString, double *value);
 
-static FILE *openAscii(char *asciiFile, RASTER3D_Region * region); /*open the g3d ascii file */
+static FILE *openAscii(char *asciiFile,
+                       RASTER3D_Region *region); /*open the g3d ascii file */
 
-/*This function does all the work, it reads the values from the g3d ascii-file and put 
-   it into an g3d-map */
-static void asciiToG3d(FILE * fp, RASTER3D_Region * region, int convertNull,
+/*This function does all the work, it reads the values from the g3d ascii-file
+   and put it into an g3d-map */
+static void asciiToG3d(FILE *fp, RASTER3D_Region *region, int convertNull,
                        char *nullValue);
 
 /*---------------------------------------------------------------------------*/
@@ -57,8 +59,6 @@ static void asciiToG3d(FILE * fp, RASTER3D_Region * region, int convertNull,
 void *map = NULL;
 int rowOrder;
 int depthOrder;
-
-extern void *Rast3d_open_new_param();
 
 /*---------------------------------------------------------------------------*/
 void fatalError(char *errorMsg)
@@ -79,7 +79,7 @@ typedef struct {
 
 static paramType param;
 
-static void setParams()
+static void setParams(void)
 {
     param.input = G_define_standard_option(G_OPT_F_INPUT);
     param.input->required = YES;
@@ -90,14 +90,14 @@ static void setParams()
 
     param.nv = G_define_standard_option(G_OPT_M_NULL_VALUE);
     param.nv->answer = "*";
-    param.nv->description =  /* TODO: '*' or 'none' in the msg ?? */
-	_("String representing NULL value data cell (use 'none' if no such value)");
+    param.nv->description = /* TODO: '*' or 'none' in the msg ?? */
+        _("String representing NULL value data cell (use 'none' if no such "
+          "value)");
 }
 
 /*---------------------------------------------------------------------------*/
 
-void
-getParams(char **input, char **output, int *convertNull, char *nullValue)
+void getParams(char **input, char **output, int *convertNull, char *nullValue)
 {
     *input = param.input->answer;
     *output = param.output->answer;
@@ -111,7 +111,7 @@ getParams(char **input, char **output, int *convertNull, char *nullValue)
 
 /*---------------------------------------------------------------------------*/
 
-static int file_cpy(FILE * from, FILE * to)
+static int file_cpy(FILE *from, FILE *to)
 {
     char buf[BUFSIZ];
     size_t size;
@@ -136,13 +136,13 @@ static int file_cpy(FILE * from, FILE * to)
     return -1;
 }
 
-void readHeaderString(FILE * fp, char *valueString, double *value)
+void readHeaderString(FILE *fp, char *valueString, double *value)
 {
     static char format[100];
     char line_buff[1024];
 
     /* to avoid buffer overflows we use G_snprintf */
-    G_snprintf(format, 100, "%s %%lf", valueString);
+    snprintf(format, 100, "%s %%lf", valueString);
     G_getl2(line_buff, 1024, fp);
     if (sscanf(line_buff, format, value) != 1) {
         /* this would be ideal to merge if Rast3d_close could be solved */
@@ -153,7 +153,7 @@ void readHeaderString(FILE * fp, char *valueString, double *value)
 
 /*---------------------------------------------------------------------------*/
 
-FILE *openAscii(char *asciiFile, RASTER3D_Region * region)
+FILE *openAscii(char *asciiFile, RASTER3D_Region *region)
 {
     FILE *fp;
     char *tmp_file;
@@ -187,7 +187,7 @@ FILE *openAscii(char *asciiFile, RASTER3D_Region * region)
     /* Read the first line and check for grass version */
     G_getl2(line_buff, 1024, fp);
 
-    /* First check for new ascii format*/
+    /* First check for new ascii format */
     if (sscanf(line_buff, "version: %s", buff) == 1) {
         G_message("Found version information: %s\n", buff);
         if (G_strcasecmp(buff, "grass7") == 0) {
@@ -217,10 +217,12 @@ FILE *openAscii(char *asciiFile, RASTER3D_Region * region)
                 depthOrder = DEPTH_ORDER_TOP_TO_BOTTOM;
                 G_message("Found south -> north, top -> bottom order (sntb)");
             }
-        } else {
+        }
+        else {
             G_fatal_error(_("Unsupported GRASS version %s"), buff);
         }
-    } else {
+    }
+    else {
         /* Rewind the stream if no grass version info found */
         rewind(fp);
     }
@@ -234,19 +236,19 @@ FILE *openAscii(char *asciiFile, RASTER3D_Region * region)
     readHeaderString(fp, "top:", &(region->top));
     readHeaderString(fp, "bottom:", &(region->bottom));
     readHeaderString(fp, "rows:", &tmp);
-    region->rows = (int) tmp;
+    region->rows = (int)tmp;
     readHeaderString(fp, "cols:", &tmp);
-    region->cols = (int) tmp;
+    region->cols = (int)tmp;
     readHeaderString(fp, "levels:", &tmp);
-    region->depths = (int) tmp;
+    region->depths = (int)tmp;
 
     return fp;
 }
 
 /*---------------------------------------------------------------------------*/
 
-void
-asciiToG3d(FILE * fp, RASTER3D_Region * region, int convertNull, char *nullValue)
+void asciiToG3d(FILE *fp, RASTER3D_Region *region, int convertNull,
+                char *nullValue)
 {
     int x, y, z;
     int col, row, depth;
@@ -262,9 +264,10 @@ asciiToG3d(FILE * fp, RASTER3D_Region * region, int convertNull, char *nullValue
     G_message(_("Loading data ...  (%dx%dx%d)"), region->cols, region->rows,
               region->depths);
 
-    G_debug(3,
-            "asciiToG3d: writing the 3D raster map, with rows %i cols %i depths %i",
-            region->rows, region->cols, region->depths);
+    G_debug(
+        3,
+        "asciiToG3d: writing the 3D raster map, with rows %i cols %i depths %i",
+        region->rows, region->cols, region->depths);
 
     for (z = 0; z < region->depths; z++) {
         G_percent(z, region->depths, 1);
@@ -292,17 +295,21 @@ asciiToG3d(FILE * fp, RASTER3D_Region * region, int convertNull, char *nullValue
 
                 if (fscanf(fp, "%s", buff) != 1) {
                     if (feof(fp))
-                        G_warning(_("End of file reached while still loading data."));
+                        G_warning(
+                            _("End of file reached while still loading data."));
                     G_debug(3,
-                            "missing data at col=%d row=%d depth=%d last_value=[%.4f]",
+                            "missing data at col=%d row=%d depth=%d "
+                            "last_value=[%.4f]",
                             x + 1, y + 1, z + 1, value);
                     fatalError("asciiToG3d: read failed");
                 }
 
                 /* Check for null value */
-                if (convertNull && strncmp(buff, nullValue, strlen(nullValue)) == 0) {
+                if (convertNull &&
+                    strncmp(buff, nullValue, strlen(nullValue)) == 0) {
                     Rast3d_set_null_value(&value, 1, DCELL_TYPE);
-                } else {
+                }
+                else {
                     if (sscanf(buff, "%lf", &value) != 1) {
                         G_warning(_("Invalid value detected"
                                     " (at col=%d row=%d depth=%d): %s"),
@@ -317,7 +324,8 @@ asciiToG3d(FILE * fp, RASTER3D_Region * region, int convertNull, char *nullValue
 
     if (fscanf(fp, "%lf", &value) == 1) {
         G_warning(_("Data exists in input file after fully importing "
-                    "expected data.  [%.4f ...]"), value);
+                    "expected data.  [%.4f ...]"),
+                  value);
     }
 
     if (!Rast3d_flush_all_tiles(map))
@@ -353,8 +361,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("voxel"));
     G_add_keyword(_("conversion"));
     G_add_keyword("ASCII");
-    module->description =
-        _("Converts a 3D ASCII raster text file into a (binary) 3D raster map.");
+    module->description = _(
+        "Converts a 3D ASCII raster text file into a (binary) 3D raster map.");
 
     setParams();
     Rast3d_set_standard3d_input_params();
@@ -363,11 +371,10 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
 
     getParams(&input, &output, &convertNull, nullValue);
-    if (!Rast3d_get_standard3d_params(&useTypeDefault, &type,
-                                 &useCompressionDefault, &doCompression,
-                                 &usePrecisionDefault, &precision,
-                                 &useDimensionDefault, &tileX, &tileY,
-                                 &tileZ))
+    if (!Rast3d_get_standard3d_params(
+            &useTypeDefault, &type, &useCompressionDefault, &doCompression,
+            &usePrecisionDefault, &precision, &useDimensionDefault, &tileX,
+            &tileY, &tileZ))
         fatalError("Error getting standard parameters");
 
     Rast3d_init_defaults();
@@ -375,10 +382,9 @@ int main(int argc, char *argv[])
     fp = openAscii(input, &region);
 
     /*Open the new RASTER3D map */
-    map = Rast3d_open_new_param(output, RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_XY,
-                           &region,
-                           type, doCompression, precision, tileX, tileY,
-                           tileZ);
+    map = Rast3d_open_new_param(output, RASTER3D_TILE_SAME_AS_FILE,
+                                RASTER3D_USE_CACHE_XY, &region, type,
+                                doCompression, precision, tileX, tileY, tileZ);
 
     if (map == NULL)
         fatalError(_("Unable to open 3D raster map"));

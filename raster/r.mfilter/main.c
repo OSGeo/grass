@@ -1,10 +1,11 @@
-
 /****************************************************************************
  *
  * MODULE:       r.mfilter
  * AUTHOR(S):    Michael Shapiro, CERL (original contributor)
- *               Roberto Flor <flor itc.it>, Markus Neteler <neteler itc.it>
- *               Glynn Clements <glynn gclements.plus.com>, Jachym Cepicky <jachym les-ejk.cz>,
+ *               Roberto Flor <flor itc.it>,
+ *               Markus Neteler <neteler itc.it>
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Jachym Cepicky <jachym les-ejk.cz>,
  *               Jan-Oliver Wagner <jan intevation.de>,
  *               Aaron Saw Min Sern
  * PURPOSE:      Performs raster map matrix filter
@@ -15,6 +16,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #if defined(_OPENMP)
 #include <omp.h>
 #endif
@@ -87,7 +89,7 @@ int main(int argc, char **argv)
     opt4->answer = "1";
     opt4->description = _("Number of times to repeat the filter");
     opt4->guisection = _("Filter");
-    
+
     opt5 = G_define_option();
     opt5->key = "title";
     opt5->type = TYPE_STRING;
@@ -98,7 +100,7 @@ int main(int argc, char **argv)
 
     /* Define the different flags */
 
-    /* this isn't implemented at all 
+    /* this isn't implemented at all
        flag3 = G_define_flag() ;
        flag3->key         = 'p' ;
        flag3->description = _("Preserved edge") ;
@@ -110,7 +112,7 @@ int main(int argc, char **argv)
     flag2->guisection = _("Filter");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     /*
        preserve_edges = flag3->answer;
@@ -119,9 +121,8 @@ int main(int argc, char **argv)
 
     sscanf(opt4->answer, "%d", &repeat);
     sscanf(opt6->answer, "%d", &nprocs);
-    if (nprocs < 1)
-    {
-      G_fatal_error(_("<%d> is not valid number of threads."), nprocs);
+    if (nprocs < 1) {
+        G_fatal_error(_("<%d> is not valid number of threads."), nprocs);
     }
 #if defined(_OPENMP)
     omp_set_num_threads(nprocs);
@@ -131,7 +132,10 @@ int main(int argc, char **argv)
                     "threads setting."));
     nprocs = 1;
 #endif
-
+    if (nprocs > 1 && Rast_mask_is_present()) {
+        G_warning(_("Parallel processing disabled due to active mask."));
+        nprocs = 1;
+    }
     out_name = opt2->answer;
     filt_name = opt3->answer;
 
@@ -146,18 +150,17 @@ int main(int argc, char **argv)
 
     /* make sure filter matrix won't extend outside the raster map */
     for (i = 0; i < nfilters; i++) {
-	if (filter[i].size > ncols || filter[i].size > nrows)
-	    G_fatal_error(_("Raster map too small for the size of the filter"));
+        if (filter[i].size > ncols || filter[i].size > nrows)
+            G_fatal_error(_("Raster map too small for the size of the filter"));
     }
-
 
     /* make a title for result */
     if (opt5->answer)
-	strcpy(title, opt5->answer);
+        strcpy(title, opt5->answer);
     else {
-	if (*temp == 0)
-	    strcpy(temp, "unknown filter");
-	sprintf(title, "%s filtered using %s", in_name, temp);
+        if (*temp == 0)
+            strcpy(temp, "unknown filter");
+        sprintf(title, "%s filtered using %s", in_name, temp);
     }
 
     perform_filter(in_name, out_name, filter, nfilters, repeat);

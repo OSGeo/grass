@@ -1,11 +1,11 @@
 /* Internal Cloud Algorithm Flag unsigned int bits[10]
- * 0 -> class 0: No cloud 
+ * 0 -> class 0: No cloud
  * 1 -> class 1: Cloud
- */  
+ */
 
 #include <grass/raster.h>
 
-CELL mod09A1sf(CELL pixel) 
+CELL mod09A1sf(CELL pixel)
 {
     CELL qctemp;
 
@@ -14,5 +14,3 @@ CELL mod09A1sf(CELL pixel)
 
     return qctemp;
 }
-
-

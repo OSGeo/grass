@@ -15,12 +15,11 @@ This program is free software under the GNU General Public License
 @author Original author Michael Barton
 @author Original version improved by Martin Landa <landa.martin gmail.com>
 @author Rewritten by Markus Metz redesign georectfier -> GCP Manage
-@author Stepan Turek <stepan.turek seznam.cz> (Created PointsList from GCPList) (GSoC 2012, mentor: Martin Landa)
+@author Stepan Turek <stepan.turek seznam.cz> (Created PointsList from GCPList)
+        (GSoC 2012, mentor: Martin Landa)
 """
 
 import os
-import sys
-import six
 from copy import copy, deepcopy
 
 import wx
@@ -40,9 +39,6 @@ from gui_core.wrap import (
     TextCtrl,
     CheckListCtrlMixin,
 )
-
-if sys.version_info.major >= 3:
-    basestring = str
 
 
 class PointsList(
@@ -69,13 +65,13 @@ class PointsList(
                 Structure of list item must be this:
                -1. item: column name
                -2. item: column label
-               -3. item: If column is editable by user, it must contain convert function to convert
-                         inserted string to it's type for sorting. Use None for not editable
-                         columns. Values for insertion can be in list. This allows insert
-                         just values in the list.
-               -4. item: Default value for column cell. Value should be given in it's  type
-                         in order to sorting would work properly. If 3. item is list, it must be index
-                         of some item in the list.
+               -3. item: If column is editable by user, it must contain convert
+                         function to convert inserted string to it's type for sorting.
+                         Use None for not editable columns. Values for insertion can be
+                         in list. This allows insert just values in the list.
+               -4. item: Default value for column cell. Value should be given in it's
+                         type in order to sorting would work properly. If 3. item is
+                         list, it must be index of some item in the list.
 
         Example of cols parameter:
                  column name, column label, convert function, default val
@@ -87,8 +83,9 @@ class PointsList(
                    ['N', _('target N'), float, 0.0],
                    ['F_Err', _('Forward error'), None, 0],
                    ['B_Err', _(Backward error'), None, 0]
-                   ['type', _('type'), [_(""), _("Start point"), _("End point")], 0] # Select from 3 choices ("Start point", "End point"),
-                                                                                     # Choice with index 0 ("") is default.
+                   # Select from 3 choices ("Start point", "End point"),
+                   # Choice with index 0 ("") is default.
+                   ['type', _('type'), [_(""), _("Start point"), _("End point")], 0]
                   ]
         @endcode
         """
@@ -136,7 +133,7 @@ class PointsList(
         # initialize column sorter
         self.itemDataMap = []
         ncols = self.GetColumnCount()
-        ColumnSorterMixin.__init__(self, ncols)
+        ColumnSorterMixin.__init__(self, ncols)  # noqa: PLC2801, C2801
 
         # init to ascending sort on first click
         self._colSortFlag = [1] * ncols
@@ -185,11 +182,11 @@ class PointsList(
                 itemIndexes.append(col[iDefVal])
             else:
                 itemData.append(col[iDefVal])
-                itemIndexes.append(-1)  # not a choise column
+                itemIndexes.append(-1)  # not a choice column
 
         self.selIdxs.append(itemIndexes)
 
-        for hCol in six.itervalues(self.hiddenCols):
+        for hCol in self.hiddenCols.values():
             defVal = hCol["colsData"][iDefVal]
             if type(hCol["colsData"][iColEd]).__name__ == "list":
                 hCol["itemDataMap"].append(hCol["colsData"][iColEd][defVal])
@@ -250,7 +247,7 @@ class PointsList(
             self.selIdxs[key][colNum] = -1
 
         self.itemDataMap[key][colNum] = cellVal
-        if not isinstance(cellVal, basestring):
+        if not isinstance(cellVal, str):
             cellVal = str(cellVal)
         self.SetItem(index, colNum, cellVal)
 
@@ -270,7 +267,7 @@ class PointsList(
         index = self._findIndex(key)
 
         if index != -1:
-            if not isinstance(cellVal, basestring):
+            if not isinstance(cellVal, str):
                 cellVal = str(cellVal)
             self.SetItem(index, colNum, cellVal)
 
@@ -286,7 +283,8 @@ class PointsList(
         return -1
 
     def ChangeColEditable(self, colName, colType):
-        """Change 3. item in constructor parameter cols (see the class constructor hint)"""
+        """Change 3. item in constructor parameter cols (see the class constructor
+        hint)"""
         colNum = self._getColumnNum(colName)
         iColEd = self.dataTypes["colEditable"]
         self.colsData[colNum][iColEd] = colType
@@ -303,7 +301,7 @@ class PointsList(
         self.selIdxs.pop(key)
 
         # update hidden columns
-        for hCol in six.itervalues(self.hiddenCols):
+        for hCol in self.hiddenCols.values():
             hCol["itemDataMap"].pop(key)
             hCol["selIdxs"].pop(key)
 
@@ -408,7 +406,7 @@ class PointsList(
                 for editedCell in editedData:
                     if editedCell[1] != data[i][1]:
                         value = editedCell[1]
-                        if not isinstance(editedCell[1], basestring):
+                        if not isinstance(editedCell[1], str):
                             value = str(editedCell[1])
                         self.SetItem(index, editedCell[0], value)
                         self.itemDataMap[key][editedCell[0]] = editedCell[1]
@@ -509,7 +507,8 @@ class PointsList(
 
         :param colName: name of column
         :type colName: str
-        :param pos: zero based index of position among showed columns (including added 'use' column)
+        :param pos: zero based index of position among showed columns (including added
+                    'use' column)
 
         :return: True if column was shown
         :return: False if position is not valid or column is not hidden
@@ -533,7 +532,7 @@ class PointsList(
 
         return False
 
-    def IsShown(self, colName):
+    def IsShown(self, colName) -> bool:
         """Is column shown
 
         :param colName: name of column
@@ -543,10 +542,7 @@ class PointsList(
         :return: False - if is not shown
         """
 
-        if self._getColumnNum(colName) == -1:
-            return False
-        else:
-            return True
+        return self._getColumnNum(colName) != -1
 
 
 class EditItem(wx.Dialog):
@@ -583,7 +579,6 @@ class EditItem(wx.Dialog):
         row = 0
         iField = 0
         for cell in self.data:
-
             # Select
             if type(cell[2]).__name__ == "list":
                 self.fields.append(
@@ -618,7 +613,7 @@ class EditItem(wx.Dialog):
                         TextCtrl(parent=panel, id=wx.ID_ANY, size=(150, -1))
                     )
                     value = cell[1]
-                    if not isinstance(cell[1], basestring):
+                    if not isinstance(cell[1], str):
                         value = str(cell[1])
                     self.fields[iField].SetValue(value)
 
@@ -691,7 +686,7 @@ class EditItem(wx.Dialog):
             if type(cell[2]).__name__ == "list":
                 itemIndexes.append(self.fields[iField].GetSelection())
             else:
-                itemIndexes.append(-1)  # not a choise column
+                itemIndexes.append(-1)  # not a choice column
             if cell[2]:
                 iField += 1
 

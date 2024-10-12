@@ -62,25 +62,26 @@ void Rast_get_cellhd(const char *name, const char *mapset,
         fp = G_fopen_old("cellhd", real_name, real_mapset);
         if (!fp) {
             detail = !G_find_raster(real_name, real_mapset)
-                ? _("However, that raster map is missing."
-                    " Perhaps, it was deleted by mistake.")
-                : _("However, header file of that raster map can't be"
-                    " opened. It seems that it was corrupted after"
-                    " creating the reclass raster map.");
-            G_fatal_error(_("Unable to read header file for raster map <%s@%s>. "
-                           "It is a reclass of raster map <%s@%s>. %s"), name,
-                          mapset, real_name, real_mapset, detail);
+                         ? _("However, that raster map is missing."
+                             " Perhaps, it was deleted by mistake.")
+                         : _("However, header file of that raster map can't be"
+                             " opened. It seems that it was corrupted after"
+                             " creating the reclass raster map.");
+            G_fatal_error(
+                _("Unable to read header file for raster map <%s@%s>. "
+                  "It is a reclass of raster map <%s@%s>. %s"),
+                name, mapset, real_name, real_mapset, detail);
         }
     }
     else {
         fp = G_fopen_old("cellhd", name, mapset);
         if (!fp)
             G_fatal_error(_("Unable to open header file for raster map <%s@%s>."
-                           " It seems that some previous step failed and"
-                           " created an incomplete raster map."), name,
-                          mapset);
+                            " It seems that some previous step failed and"
+                            " created an incomplete raster map."),
+                          name, mapset);
     }
 
-    G__read_Cell_head(fp, cellhd, 1);
+    G__read_Cell_head(fp, cellhd);
     fclose(fp);
 }

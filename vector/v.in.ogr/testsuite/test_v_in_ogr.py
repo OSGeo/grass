@@ -2,6 +2,7 @@
 
 @author Markus Neteler
 """
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 
@@ -23,7 +24,6 @@ class TestOgrImport(TestCase):
         )
 
     def test_1(self):
-
         self.assertModule(
             "v.in.ogr",
             "Import GeoPackage Format",
@@ -59,7 +59,6 @@ skewness=2.82871"""
         )
 
     def test_2(self):
-
         self.assertModule(
             "v.in.ogr",
             "Import 3D SHAPE Format",

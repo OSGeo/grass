@@ -1,5 +1,5 @@
 /*! \page gislib GRASS GIS General Library (aka GIS Library)
-<!-- doxygenized from "GRASS 5 Programmer's Manual" 
+<!-- doxygenized from "GRASS 5 Programmer's Manual"
      by M. Neteler 2/2004, 2005, 2006
   -->
 
@@ -106,7 +106,7 @@ their own modules which use this prefix.
 
 \subsection init Library Initialization
 
-It is <B>mandatory</B> that the system be initialized before any other 
+It is <B>mandatory</B> that the system be initialized before any other
 library routines are called.
 
 G_gisinit() initialize GIS library.
@@ -213,7 +213,7 @@ Returns a one line title for the database location. This title is read
 from the file MYNAME in the PERMANENT mapset. See also \ref
 Permanent_Mapset for a discussion of the PERMANENT mapset.
 
- - G_gisbase() top level module directory 
+ - G_gisbase() top level module directory
 
 Returns the full path name of the top level directory for GRASS
 programs.  This directory will have subdirectories which will contain
@@ -226,10 +226,10 @@ etc  modules and data files used by GRASS commands
 html help files
 \endverbatim
 
-The use of G_gisbase() to find these subdirectories enables GRASS modules 
-to be written independently of where the GRASS system is actually installed 
-on the machine. For example, to run the module <i>sroff</i> in the GRASS 
-<tt>etc</tt> directory: 
+The use of G_gisbase() to find these subdirectories enables GRASS modules
+to be written independently of where the GRASS system is actually installed
+on the machine. For example, to run the module <i>sroff</i> in the GRASS
+<tt>etc</tt> directory:
 
 \code
 char command[200];
@@ -274,7 +274,7 @@ exit(). G_setenv_nogisrc() just returns the NULL pointer.
  - G_setenv()
 
  - G_setenv_nogisrc()
-  
+
 These routines set the the GRASS environment variable <em>name</em> to
 <em>value</em>. If <em>value</em> is NULL, the <em>name</em> is unset.
 
@@ -319,7 +319,7 @@ Creating a new map typically creates a subdirectory of cell_misc for
 that map, and some files within it (e.g. a "null" file). Any new files
 and subdirectories will be owned by their creator (not the mapset's
 owner) and will have permissions determined by the current umask. The
-result is that there's no guarantee that tha mapset's owner will be
+result is that there's no guarantee that the mapset's owner will be
 able to delete (or even access) such files or directories.
 
 In short, it's a safety mechanism against people trying to share
@@ -353,7 +353,7 @@ programs). This form of the name is known as the <em>fully qualified
 file name</em> and is built by the following routine:
 
  - G_fully_qualified_name()
-  
+
 Returns a fully qualified name for the file <i>name</i> in
 <i>mapset</i> Currently this string is in the form <i>name@mapset</i>,
 but the programmer should pretend not to know this and always call
@@ -393,7 +393,7 @@ database to find the mapset where the file resides.
 The following routines search the database for files:
 
  - G_find_file()
-  
+
 Look for the file <i>name</i> under the specified <i>element</i> in
 the database. The <i>mapset</i> parameter can either be the empty
 string "", which means search all the mapsets in the user's current
@@ -439,7 +439,7 @@ the programmer must check that the name is legal. The following
 routine checks for legal file names:
 
  - G_legal_filename()
-  
+
 \subsection Opening_an_Existing_Database_File_for_Reading Opening an Existing Database File for Reading
 
 The following routines open the file <i>name</i> in <i>mapset</i> from
@@ -504,13 +504,13 @@ The database file <i>name</i> under the <i>element</i> in the current
 mapset is created and opened for writing (but not reading).
 
  - G_open_new()
-  
+
 The UNIX open() routine is used to open the file. If the file does not
 exist, -1 is returned. Otherwise the file is positioned at the end of
 the file and the file descriptor from the open() is returned.
 
  - G_fopen_new()
-  
+
 The UNIX fopen() routine, with "w" write mode, is used to open the
 file.  If the file does not exist, the NULL pointer is
 returned. Otherwise the file is positioned at the end of the file and
@@ -525,7 +525,7 @@ mapset since GRASS does permit users to modify things in mapsets other
 than the current mapset; see \ref Database_Access_Rules).
 
  - G_rename() rename a database file
-  
+
  - G_remove() remove a database file
 
 <b>Note:</b> These functions only apply to the specific <i>element</i>
@@ -611,7 +611,7 @@ routines manage the active module region.
 
  - G_window_rows() number of rows in active region
 
- - G_window_cols() number of columns in active region 
+ - G_window_cols() number of columns in active region
 
 These routines return the number of rows and columns (respectively) in
 the active module region. Before raster files can be read or written,
@@ -632,7 +632,7 @@ for (row = 0; row < nrows; row++) {
 }
 \endcode
 
- - G_set_window() set the active region 
+ - G_set_window() set the active region
 
 This routine sets the active region from given region. Setting the
 active region does not change the WIND file in the database. It simply
@@ -846,7 +846,7 @@ equivalent, but GRASS requires the east to be bigger than the west,
 some adjustment of coordinates is necessary.
 
  - G_adjust_easting()
- 
+
 Returns east larger than west. If the region projection is
 PROJECTION_LL, then this routine returns an equivalent <i>east</i>
 that is larger, but no more than 360 degrees larger, than the
@@ -862,7 +862,7 @@ This routine should be used only with latitude-longitude coordinates.
 
  - G_shortest_way()
 
-Returns shortest way between eastings. 
+Returns shortest way between eastings.
 
 \subsection Miscellaneous Miscellaneous
 
@@ -917,7 +917,7 @@ given longitude:
 r = \frac{a (1-e^2)^{1/2}}{(1-e^2\sin^2 lon)}
 \f$
 
- - G_pole_in_polygon() 
+ - G_pole_in_polygon()
 
 For latitude-longitude coordinates, this routine determines if the
 polygon contains one of the poles.
@@ -955,7 +955,7 @@ G_begin_zone_area_on_ellipsoid().
 
  - G_begin_zone_area_on_sphere()
 
-Initializes raster area calculations for a sphere. 
+Initializes raster area calculations for a sphere.
 
  - G_area_for_zone_on_sphere()
 
@@ -993,7 +993,7 @@ planimetric and latitude-longitude projections.
 
 <B>Note.</B> If the database is planimetric with the non-meter grid,
 this routine performs the required unit conversion to produce square
-meters. 
+meters.
 
  - G_planimetric_polygon_area()
 
@@ -1023,7 +1023,7 @@ planimetric and latitude-longitude projections.
 
  - G_distance()
 
-This routine computes the distance between two points in meters. 
+This routine computes the distance between two points in meters.
 
  - G_begin_geodesic_distance()
 
@@ -1060,7 +1060,7 @@ Draws a line from one point to another using Bresenham's
 algorithm. A routine to plot points must be provided, as is defined
 as: <tt>point(x, y)</tt> plot a point at x,y.
 
-This routine does not require a previous call to G_setup_plot() to 
+This routine does not require a previous call to G_setup_plot() to
 function correctly, and is independent of all following routines.
 
  - G_setup_plot()
@@ -1151,7 +1151,7 @@ running.
 \section String_Manipulation_Functions String Manipulation Functions
 
 
-This section describes some routines which perform string manipulation. 
+This section describes some routines which perform string manipulation.
 Strings have the usual C meaning: a NULL terminated array of characters.
 
 These next 3 routines remove unwanted white space from a single string.
@@ -1179,12 +1179,28 @@ The next routines replaces character(s) from string.
 
 Replace all occurrences of character in string with new.
 
+ - G_str_to_sql()
+
+Make string SQL compliant.
+
+ - G_str_replace()
+
+Replace all occurrences of old_str in buffer with new_str.
+
 This next routine copies a string to allocated memory.
 
  - G_store()
 
 This routine allocates enough memory to hold the string, and returns a
 pointer to the allocated memory.
+
+ - G_store_lower()
+
+Copy string to allocated memory and convert copied string to lower case.
+
+ - G_store_upper()
+
+Copy string to allocated memory and convert copied string to upper case.
 
 The next 2 routines convert between upper and lower case.
 
@@ -1203,12 +1219,6 @@ equivalent.
 This routine remove trailing zeros from decimal number for example:
 23.45000 would come back as 23.45.
 
- - G_index()
-
- - G_rindex()
- 
-Get position of delimiter.
-
  - G_strcasecmp()
 
  - G_strncasecmp()
@@ -1220,11 +1230,24 @@ String compare ignoring case (upper or lower).
 Return a pointer to the first occurrence of subString in mainString,
 or NULL if no occurrences are found.
 
- - G_strdup()
+ - G_str_concat()
 
-Returns a pointer to a string that is a duplicate of the string given
-to G_strdup.  The duplicate is created using malloc. If unable to
-allocate the required space, NULL is returned.
+Concatenation of a list of strings, separated by a given character.
+
+ - G_tokenize()
+ - G_tokenize2()
+
+Tokenize string. Create array of strings from an input string split up with
+given delimiter characters.
+
+ - G_strlcat()
+
+Size-bounded string concatenation (wrapper function to strlcat()).
+
+ - G_strlcpy()
+
+Size-bounded string copying (wrapper function to strlcpy()).
+
 
 \section Enhanced_UNIX_Routines Enhanced UNIX Routines
 
@@ -1344,7 +1367,7 @@ Returns a pointer to a string which is the user's login name.
 \section GIS_Library_Data_Structures GIS Library Data Structures
 
 
-Some of the data structures, defined in the "gis.h" header file and used 
+Some of the data structures, defined in the "gis.h" header file and used
 by routines in this library, are described in the sections below.
 
 \subsection struct_Cell_head struct Cell_head
@@ -1382,7 +1405,7 @@ rule for missing labels, and a list of category labels.
 struct Categories
 {
     CELL ncats;			/* total number of categories              */
-    CELL num;			/* the highest cell values. Only exists    
+    CELL num;			/* the highest cell values. Only exists
 				   for backwards compatibility = (CELL)
 				   max_fp_values in quant rules            */
     char *title;		/* name of data layer                      */
@@ -1432,14 +1455,14 @@ struct Colors
 };
 \endcode
 
-The routines described in \ref Raster_Color_Table must be used 
+The routines described in \ref Raster_Color_Table must be used
 to store and retrieve color information using this structure.
 
 \subsection struct_History struct History
 
 The History structure is used to document raster files. The
 information contained here is for the user. It is not used in any
-operational way by GRASS. 
+operational way by GRASS.
 
 See documentation of History structure for details.
 
@@ -1526,10 +1549,10 @@ struct TimeStamp {
 };
 \endcode
 
-Using the G_*_timestamp() routines reads/writes a timestamp file in 
+Using the G_*_timestamp() routines reads/writes a timestamp file in
 the cell_misc/rastername mapset element.
 
-A TimeStamp can be one DateTime, or two DateTimes representing a 
+A TimeStamp can be one DateTime, or two DateTimes representing a
 range. When preparing to write a TimeStamp, the programmer should
 use one of:
 

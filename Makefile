@@ -8,8 +8,8 @@
 #   	    	Radim Blazek - Italy - blazek AT itc.it
 # PURPOSE:  	It provides the commands necessary to compile, install,
 #   	    	clean, and uninstall GRASS
-#   	    	See INSTALL file for explanations.
-# COPYRIGHT:    (C) 2002-2012 by the GRASS Development Team
+#   	    	See INSTALL.md file for usage.
+# COPYRIGHT:    (C) 2002-2024 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #   	    	License (>=v2). Read the file COPYING that comes with GRASS
@@ -51,7 +51,7 @@ DIRS = \
 
 SUBDIRS = $(DIRS)
 
-FILES = AUTHORS CHANGES CITING COPYING GPL.TXT INSTALL REQUIREMENTS.html contributors.csv contributors_extra.csv translators.csv
+FILES = AUTHORS CITING COPYING GPL.TXT INSTALL.md REQUIREMENTS.md contributors.csv contributors_extra.csv translators.csv
 FILES_DST = $(patsubst %,$(ARCH_DISTDIR)/%,$(FILES))
 
 default:
@@ -91,6 +91,7 @@ $(ARCH_DISTDIR)/%: %
 	$(INSTALL_DATA) $< $@
 
 LIBDIRS = \
+	lib/external/parson \
 	lib/external/shapelib \
 	lib/datetime \
 	lib/gis \
@@ -106,7 +107,7 @@ libs:
 	$(MAKE) subdirs SUBDIRS=$(LIBDIRS)
 	$(MAKE) $(FILES_DST)
 
-cleandistdirs: 
+cleandistdirs:
 	-rm -rf $(ARCH_DISTDIR)
 	-rm -rf $(ARCH_BINDIR)
 
@@ -114,10 +115,14 @@ cleandistdirs:
 cleanscriptstrings:
 	rm -f locale/scriptstrings/*.c 2>/dev/null
 
-clean: cleandistdirs cleanscriptstrings cleandocs
+clean: cleandistdirs cleanscriptstrings cleandocs code-coverage-clean
 
 libsclean: cleandistdirs
 	$(MAKE) clean-recursive SUBDIRS=$(LIBDIRS)
+
+code-coverage-clean:
+	-find . -type f \( -name "*.gcda" -o -name "*.gcno" -o -name "*.gcov" \) -delete
+	-rm -f .coverage
 
 distclean: clean
 	-rm -f config.cache config.log config.status config.status.$(ARCH) 2>/dev/null

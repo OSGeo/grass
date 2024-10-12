@@ -1,20 +1,20 @@
 /****************************************************************************
-*
-* MODULE:       v.transform
-* AUTHOR(S):    Eric G. Miller <egm2@jps.net>
-*               Upgrade to 5.7 Radim Blazek
-*               Column support & OGR support added by Martin Landa (09/2007)
-*
-* PURPOSE:      To transform a vector map's coordinates via a set of tie
-*               points.
-*
-* COPYRIGHT:    (C) 2002-2014 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       v.transform
+ * AUTHOR(S):    Eric G. Miller <egm2@jps.net>
+ *               Upgrade to 5.7 Radim Blazek
+ *               Column support & OGR support added by Martin Landa (09/2007)
+ *
+ * PURPOSE:      To transform a vector map's coordinates via a set of tie
+ *               points.
+ *
+ * COPYRIGHT:    (C) 2002-2014 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with
+ *               GRASS for details.
+ *
+ *****************************************************************************/
 /*
  *History:
  *- This takes an ascii digit file in one coordinate system and converts
@@ -44,8 +44,8 @@ int main(int argc, char *argv[])
 
     struct GModule *module;
 
-    struct Option *vold, *vnew, *xshift, *yshift, *zshift,
-	*xscale, *yscale, *zscale, *zrot, *columns, *field_opt;
+    struct Option *vold, *vnew, *xshift, *yshift, *zshift, *xscale, *yscale,
+        *zscale, *zrot, *columns, *field_opt;
     struct Flag *tozero_flag, *no_topo;
     struct Flag *swap_flag, *swap_xz_flag, *swap_yz_flag, *swap_after_flag;
 
@@ -55,13 +55,14 @@ int main(int argc, char *argv[])
     struct bound_box box;
 
     double ztozero;
-    double trans_params[7];	/* xshift, ..., xscale, ..., zrot */
+    double trans_params[7]; /* xshift, ..., xscale, ..., zrot */
 
     /* columns */
     unsigned int i;
     int idx, out3d;
     char **tokens;
-    char *columns_name[7];	/* xshift, yshift, zshift, xscale, yscale, zscale, zrot */
+    char *columns_name[7]; /* xshift, yshift, zshift, xscale, yscale, zscale,
+                              zrot */
     int field;
 
     G_gisinit(argv[0]);
@@ -72,9 +73,9 @@ int main(int argc, char *argv[])
     G_add_keyword(_("geometry"));
     G_add_keyword("GCP");
     module->description =
-	_("Performs an affine transformation (shift, scale and rotate) "
-	  "on vector map.");
-    
+        _("Performs an affine transformation (shift, scale and rotate) "
+          "on vector map.");
+
     tozero_flag = G_define_flag();
     tozero_flag->key = 't';
     tozero_flag->description = _("Shift all z values to bottom=0");
@@ -82,7 +83,7 @@ int main(int argc, char *argv[])
     swap_flag = G_define_flag();
     swap_flag->key = 'w';
     swap_flag->description =
-	_("Swap coordinates x, y and then apply other parameters");
+        _("Swap coordinates x, y and then apply other parameters");
 
     swap_xz_flag = G_define_flag();
     swap_xz_flag->key = 'x';
@@ -170,80 +171,89 @@ int main(int argc, char *argv[])
     zrot->required = NO;
     zrot->multiple = NO;
     zrot->description =
-	_("Rotation around z axis in degrees (counter-clockwise)");
+        _("Rotation around z axis in degrees (counter-clockwise)");
     zrot->answer = "0.0";
     zrot->guisection = _("Custom");
 
     columns = G_define_standard_option(G_OPT_DB_COLUMNS);
     columns->label =
-	_("Name of attribute column(s) used as transformation parameters");
+        _("Name of attribute column(s) used as transformation parameters");
     columns->description =
-	_("Format: parameter:column, e.g. xshift:xs,yshift:ys,zrot:zr");
+        _("Format: parameter:column, e.g. xshift:xs,yshift:ys,zrot:zr");
     columns->guisection = _("Custom");
 
     /* we don't define order of swapping, so only one can be used safely */
     G_option_exclusive(swap_flag, swap_xz_flag, swap_yz_flag, NULL);
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
-    strcpy(Current.name, vold->answer);
-    strcpy(Trans.name, vnew->answer);
+    if (G_strlcpy(Current.name, vold->answer, sizeof(Current.name)) >=
+        sizeof(Current.name)) {
+        G_fatal_error(_("Input vector map name <%s> is too long"),
+                      vold->answer);
+    }
+
+    if (G_strlcpy(Trans.name, vnew->answer, sizeof(Trans.name)) >=
+        sizeof(Trans.name)) {
+        G_fatal_error(_("Output vector map name <%s> is too long"),
+                      vnew->answer);
+    }
 
     Vect_check_input_output_name(vold->answer, vnew->answer, G_FATAL_EXIT);
 
     /* open input vector */
     if (Vect_open_old2(&Old, vold->answer, "", field_opt->answer) < 0)
-	G_fatal_error(_("Unable to open vector map <%s>"), vold->answer);
+        G_fatal_error(_("Unable to open vector map <%s>"), vold->answer);
 
     field = Vect_get_field_number(&Old, field_opt->answer);
     if (field < 1 && columns->answer) {
-	G_fatal_error(_("Columns require a valid layer. Please use '%s' parameter."),
-		      field_opt->key);
+        G_fatal_error(
+            _("Columns require a valid layer. Please use '%s' parameter."),
+            field_opt->key);
     }
 
     out3d = Vect_is_3d(&Old);
 
     /* tokenize columns names */
     for (i = 0; i <= IDX_ZROT; i++) {
-	columns_name[i] = NULL;
+        columns_name[i] = NULL;
     }
     i = 0;
     if (columns->answer) {
-	while (columns->answers[i]) {
-	    tokens = G_tokenize(columns->answers[i], ":");
-	    if (G_number_of_tokens(tokens) == 2) {
-		if (strcmp(tokens[0], xshift->key) == 0)
-		    idx = IDX_XSHIFT;
-		else if (strcmp(tokens[0], yshift->key) == 0)
-		    idx = IDX_YSHIFT;
-		else if (strcmp(tokens[0], zshift->key) == 0)
-		    idx = IDX_ZSHIFT;
-		else if (strcmp(tokens[0], xscale->key) == 0)
-		    idx = IDX_XSCALE;
-		else if (strcmp(tokens[0], yscale->key) == 0)
-		    idx = IDX_YSCALE;
-		else if (strcmp(tokens[0], zscale->key) == 0)
-		    idx = IDX_ZSCALE;
-		else if (strcmp(tokens[0], zrot->key) == 0)
-		    idx = IDX_ZROT;
-		else {
-		    G_warning(_("Unknown column parameter '%s'"),
-		              tokens[0]);
-		    idx = -1;
-		}
+        while (columns->answers[i]) {
+            tokens = G_tokenize(columns->answers[i], ":");
+            if (G_number_of_tokens(tokens) == 2) {
+                if (strcmp(tokens[0], xshift->key) == 0)
+                    idx = IDX_XSHIFT;
+                else if (strcmp(tokens[0], yshift->key) == 0)
+                    idx = IDX_YSHIFT;
+                else if (strcmp(tokens[0], zshift->key) == 0)
+                    idx = IDX_ZSHIFT;
+                else if (strcmp(tokens[0], xscale->key) == 0)
+                    idx = IDX_XSCALE;
+                else if (strcmp(tokens[0], yscale->key) == 0)
+                    idx = IDX_YSCALE;
+                else if (strcmp(tokens[0], zscale->key) == 0)
+                    idx = IDX_ZSCALE;
+                else if (strcmp(tokens[0], zrot->key) == 0)
+                    idx = IDX_ZROT;
+                else {
+                    G_warning(_("Unknown column parameter '%s'"), tokens[0]);
+                    idx = -1;
+                }
 
-		if (idx != -1)
-		    columns_name[idx] = G_store(tokens[1]);
+                if (idx != -1)
+                    columns_name[idx] = G_store(tokens[1]);
 
-		G_free_tokens(tokens);
-	    }
-	    else {
-		G_fatal_error(_("Unable to tokenize column string: [%s]"),
-			      columns->answers[i]);
-	    }
-	    i++;
-	}
+                G_free_tokens(tokens);
+            }
+            else {
+                G_fatal_error(_("Unable to tokenize column string: [%s]"),
+                              columns->answers[i]);
+            }
+            i++;
+        }
     }
 
     /* determine transformation parameters */
@@ -255,14 +265,14 @@ int main(int argc, char *argv[])
     trans_params[IDX_ZSCALE] = atof(zscale->answer);
     trans_params[IDX_ZROT] = atof(zrot->answer);
 
-    /* should output be 3D ? 
+    /* should output be 3D ?
      * note that z-scale and ztozero have no effect with input 2D */
     if (trans_params[IDX_ZSHIFT] != 0. || columns_name[IDX_ZSHIFT])
-	out3d = WITH_Z;
+        out3d = WITH_Z;
 
     /* open output vector */
     if (Vect_open_new(&New, vnew->answer, out3d) < 0)
-	G_fatal_error(_("Unable to create vector map <%s>"), vnew->answer);
+        G_fatal_error(_("Unable to create vector map <%s>"), vnew->answer);
 
     /* copy and set header */
     Vect_copy_head_data(&Old, &New);
@@ -288,9 +298,9 @@ int main(int argc, char *argv[])
 
     /* z to zero */
     if (tozero_flag->answer)
-	ztozero = 0 - box.B;
+        ztozero = 0 - box.B;
     else
-	ztozero = 0;
+        ztozero = 0;
 
     /* do the transformation */
     G_important_message(_("Transforming features..."));
@@ -304,11 +314,11 @@ int main(int argc, char *argv[])
         G_warning(_("Failed to copy attribute table to output map"));
     Vect_close(&Old);
     if (!no_topo->answer)
-	Vect_build(&New);
+        Vect_build(&New);
 
     Vect_get_map_box(&New, &box);
     G_verbose_message(_("New vector map <%s> boundary coordinates:"),
-		      vnew->answer);
+                      vnew->answer);
     G_verbose_message(_(" N: %-10.3f    S: %-10.3f"), box.N, box.S);
     G_verbose_message(_(" E: %-10.3f    W: %-10.3f"), box.E, box.W);
     G_verbose_message(_(" B: %6.3f    T: %6.3f"), box.B, box.T);

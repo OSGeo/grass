@@ -14,7 +14,6 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
-
 import wx
 from gui_core.widgets import FloatValidator, IntegerValidator
 from core.giface import Notification
@@ -45,7 +44,6 @@ class CatalogReprojectionDialog(wx.Dialog):
         title=_("Reprojection"),
         style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
     ):
-
         self.parent = parent
         self._giface = giface
 
@@ -174,7 +172,7 @@ class CatalogReprojectionDialog(wx.Dialog):
             read=True,
             input=self.iLayer,
             dbase=self.iGisdbase,
-            location=self.iLocation,
+            project=self.iLocation,
             mapset=self.iMapset,
             env=self.oEnv,
         ).strip()
@@ -212,13 +210,17 @@ class CatalogReprojectionDialog(wx.Dialog):
     def OnReproject(self, event):
         cmd = []
         if self.etype == "raster":
-            cmd.append("r.proj")
-            cmd.append("dbase=" + self.iGisdbase)
-            cmd.append("location=" + self.iLocation)
-            cmd.append("mapset=" + self.iMapset)
-            cmd.append("input=" + self.iLayer)
-            cmd.append("output=" + self.oLayer)
-            cmd.append("method=" + self.resampling.GetStringSelection())
+            cmd.extend(
+                (
+                    "r.proj",
+                    "dbase=" + self.iGisdbase,
+                    "project=" + self.iLocation,
+                    "mapset=" + self.iMapset,
+                    "input=" + self.iLayer,
+                    "output=" + self.oLayer,
+                    "method=" + self.resampling.GetStringSelection(),
+                )
+            )
 
             self.oEnv["GRASS_REGION"] = region_env(
                 n=self.params["n"],
@@ -230,13 +232,17 @@ class CatalogReprojectionDialog(wx.Dialog):
                 env=self.oEnv,
             )
         else:
-            cmd.append("v.proj")
-            cmd.append("dbase=" + self.iGisdbase)
-            cmd.append("location=" + self.iLocation)
-            cmd.append("mapset=" + self.iMapset)
-            cmd.append("input=" + self.iLayer)
-            cmd.append("output=" + self.oLayer)
-            cmd.append("smax=" + self.vsplit.GetValue())
+            cmd.extend(
+                (
+                    "v.proj",
+                    "dbase=" + self.iGisdbase,
+                    "project=" + self.iLocation,
+                    "mapset=" + self.iMapset,
+                    "input=" + self.iLayer,
+                    "output=" + self.oLayer,
+                    "smax=" + self.vsplit.GetValue(),
+                )
+            )
 
         self._giface.RunCmd(
             cmd,

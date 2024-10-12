@@ -1,4 +1,3 @@
-
 #ifndef _DRIVER_H
 #define _DRIVER_H
 
@@ -19,23 +18,19 @@ extern int matrix_valid;
 
 extern struct GFONT_CAP *ftcap;
 
-struct driver
-{
+struct driver {
     char *name;
 
     void (*Box)(double, double, double, double);
     void (*Erase)(void);
     int (*Graph_set)(void);
     void (*Graph_close)(void);
-    const char * (*Graph_get_file)(void);
+    const char *(*Graph_get_file)(void);
     void (*Line_width)(double);
     void (*Set_window)(double, double, double, double);
     void (*Begin_raster)(int, int[2][2], double[2][2]);
-    int (*Raster)(int, int,
-		  const unsigned char *,
-		  const unsigned char *,
-		  const unsigned char *,
-		  const unsigned char *);
+    int (*Raster)(int, int, const unsigned char *, const unsigned char *,
+                  const unsigned char *, const unsigned char *);
     void (*End_raster)(void);
     void (*Begin)(void);
     void (*Move)(double, double);
@@ -78,7 +73,8 @@ extern void COM_Font_list(char ***, int *);
 extern void COM_Font_info(char ***, int *);
 
 /* get_t_box.c */
-extern void COM_Get_text_box(const char *, double *, double *, double *, double *);
+extern void COM_Get_text_box(const char *, double *, double *, double *,
+                             double *);
 
 /* graph.c */
 extern int COM_Graph_set(void);
@@ -93,9 +89,8 @@ extern void COM_Pos_abs(double, double);
 
 /* raster.c */
 extern void COM_begin_raster(int, int[2][2], double[2][2]);
-extern int COM_raster(int, int, const unsigned char *,
-		      const unsigned char *, const unsigned char *,
-		      const unsigned char *);
+extern int COM_raster(int, int, const unsigned char *, const unsigned char *,
+                      const unsigned char *, const unsigned char *);
 extern void COM_end_raster(void);
 
 /* set_window.c */
