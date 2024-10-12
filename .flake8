@@ -21,12 +21,9 @@ per-file-ignores =
     # E741 ambiguous variable name 'l'
     __init__.py: F401, F403
     man/build_html.py: E501
-    imagery/i.atcorr/create_iwave.py: F632, F821, W293
     doc/python/m.distance.py: E501
-    doc/gui/wxpython/example/dialogs.py: F401
     gui/scripts/d.wms.py: E501
-    gui/wxpython/image2target/*: F841, E722
-    gui/wxpython/image2target/g.gui.image2target.py: E501, F841
+    gui/wxpython/image2target/g.gui.image2target.py: E501
     gui/wxpython/modules/*: F841, E722
     gui/wxpython/nviz/*: F841, E266, E722, F403, F405
     gui/wxpython/photo2image/*: F841, E722, E265
