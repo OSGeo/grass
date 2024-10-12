@@ -25,6 +25,8 @@ import tempfile
 import random
 import math
 
+from pathlib import Path
+
 import wx
 
 from wx.lib import ogl
@@ -268,19 +270,15 @@ class ModelerPanel(wx.Panel, MainPageBase):
 
             if self.pythonPanel.IsModified():
                 self.SetStatusText(
-                    _(
-                        "{} script contains local modifications".format(
-                            self.pythonPanel.body.script_type
-                        )
+                    _("{} script contains local modifications").format(
+                        self.pythonPanel.body.script_type
                     ),
                     0,
                 )
             else:
                 self.SetStatusText(
-                    _(
-                        "{} script is up-to-date".format(
-                            self.pythonPanel.body.script_type
-                        )
+                    _("{} script is up-to-date").format(
+                        self.pythonPanel.body.script_type
                     ),
                     0,
                 )
@@ -838,7 +836,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
         dlg = wx.FileDialog(
             parent=self,
             message=_("Choose model file"),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             wildcard=_("GRASS Model File (*.gxm)|*.gxm"),
         )
         if dlg.ShowModal() == wx.ID_OK:
@@ -896,7 +894,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
         dlg = wx.FileDialog(
             parent=self,
             message=_("Choose file to save current model"),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             wildcard=_("GRASS Model File (*.gxm)|*.gxm"),
             style=wx.FD_SAVE,
         )
@@ -1261,7 +1259,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
 
         dlg = wx.MessageDialog(
             parent=self,
-            message=_("Do you want to permanently delete data?%s" % msg),
+            message=_("Do you want to permanently delete data?%s") % msg,
             caption=_("Delete intermediate data?"),
             style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
         )
@@ -1645,9 +1643,7 @@ class PythonPanel(wx.Panel):
         bodySizer.Add(self.body, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)
 
         btnSizer.Add(
-            StaticText(
-                parent=self, id=wx.ID_ANY, label="%s:" % _("Python script type")
-            ),
+            StaticText(parent=self, id=wx.ID_ANY, label=_("Python script type:")),
             flag=wx.ALIGN_CENTER_VERTICAL,
         )
         btnSizer.Add(self.script_type_box, proportion=0, flag=wx.RIGHT, border=5)
@@ -1676,7 +1672,7 @@ class PythonPanel(wx.Panel):
         return ext
 
     def SetWriteObject(self, script_type):
-        """Set correct self.write_object dependng on the script type.
+        """Set correct self.write_object depending on the script type.
         :param script_type: script type name as a string
         """
         if script_type == "PyWPS":
@@ -1704,8 +1700,8 @@ class PythonPanel(wx.Panel):
                 message=_(
                     "{} script is locally modified. "
                     "Refresh will discard all changes. "
-                    "Do you really want to continue?".format(self.body.script_type)
-                ),
+                    "Do you really want to continue?"
+                ).format(self.body.script_type),
                 caption=_("Update"),
                 style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
             )
@@ -1746,7 +1742,7 @@ class PythonPanel(wx.Panel):
             parent=self,
             message=_("Choose file to save"),
             defaultFile=os.path.basename(self.parent.GetModelFile(ext=False)),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             wildcard=fn_wildcard,
             style=wx.FD_SAVE,
         )
@@ -1835,7 +1831,7 @@ class PythonPanel(wx.Panel):
         if self.RefreshScript():
             self.body.script_type = new_script_type
             self.parent.SetStatusText(
-                _("{} script is up-to-date".format(self.body.script_type)),
+                _("{} script is up-to-date").format(self.body.script_type),
                 0,
             )
 
@@ -1854,7 +1850,7 @@ class PythonPanel(wx.Panel):
         """Refresh the script."""
         if self.RefreshScript():
             self.parent.SetStatusText(
-                _("{} script is up-to-date".format(self.body.script_type)),
+                _("{} script is up-to-date").format(self.body.script_type),
                 0,
             )
         event.Skip()

@@ -102,10 +102,7 @@ def img_in_html(filename, imagename) -> bool:
 
 
 def file_matches(filename, patterns):
-    for pattern in patterns:
-        if fnmatch.fnmatch(filename, pattern):
-            return True
-    return False
+    return any(fnmatch.fnmatch(filename, pattern) for pattern in patterns)
 
 
 def get_files(directory, patterns, exclude_patterns):
@@ -135,8 +132,7 @@ def title_from_names(module_name, img_name):
     img_name = img_name.strip()
     if img_name:
         return "{name} ({desc})".format(name=module_name, desc=img_name)
-    else:
-        return "{name}".format(name=module_name)
+    return "{name}".format(name=module_name)
 
 
 def get_module_name(filename):

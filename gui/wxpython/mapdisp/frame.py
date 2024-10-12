@@ -411,8 +411,9 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 message=_(
                     "Unable to switch to 3D display mode.\nThe Nviz python extension "
                     "was not found or loaded properly.\n"
-                    "Switching back to 2D display mode.\n\nDetails: %s" % errorMsg
-                ),
+                    "Switching back to 2D display mode.\n\nDetails: %s"
+                )
+                % errorMsg,
             )
             return
 
@@ -830,7 +831,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 overwrite=overwrite,
                 getErrorMsg=True,
             )
-            if not returncode == 0:
+            if returncode != 0:
                 self._giface.WriteError(_("Failed to run d.to.rast:\n") + messages)
                 return
             # set region for composite
@@ -838,7 +839,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
             returncode, messages = RunCommand(
                 "g.region", raster=tmpName + ".red", quiet=True, getErrorMsg=True
             )
-            if not returncode == 0:
+            if returncode != 0:
                 gs.del_temp_region()
                 self._giface.WriteError(_("Failed to run d.to.rast:\n") + messages)
                 return
@@ -861,7 +862,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 quiet=True,
                 name=[tmpName + ".red", tmpName + ".green", tmpName + ".blue"],
             )
-            if not returncode == 0:
+            if returncode != 0:
                 self._giface.WriteError(_("Failed to run d.to.rast:\n") + messages)
                 gs.try_remove(pngFile)
                 return
@@ -1229,8 +1230,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 render=True,
                 **args,
             )
-        else:
-            return cmd
+        return cmd
 
     def OnMeasureDistance(self, event):
         self._onMeasure(MeasureDistanceController)

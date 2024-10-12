@@ -727,11 +727,11 @@ class GlobalTemporalVar:
             and self.value is not None
         ):
             return "global"
-        elif self.boolean is not None:
+        if self.boolean is not None:
             return "boolean"
-        elif self.relationop is not None and self.topology != []:
+        if self.relationop is not None and self.topology != []:
             return "operator"
-        elif self.td is not None:
+        if self.td is not None:
             return "timediff"
 
     def get_type_value(self):
@@ -1195,7 +1195,7 @@ class TemporalAlgebraParser:
 
         for key, value in map_names.items():
             if value:
-                self.msgr.message(_("Removing un-needed or empty %s maps" % (key)))
+                self.msgr.message(_("Removing un-needed or empty %s maps") % (key))
                 self._remove_maps(value, key)
 
     def _remove_maps(self, namelist, map_type):
@@ -1275,15 +1275,9 @@ class TemporalAlgebraParser:
                         self.temporaltype = "absolute"
                     elif map_i.is_time_relative() and self.temporaltype is None:
                         self.temporaltype = "relative"
-                    elif map_i.is_time_absolute() and self.temporaltype == "relative":
-                        self.msgr.fatal(
-                            _(
-                                "Wrong temporal type of space time dataset "
-                                "<%s> <%s> time is required"
-                            )
-                            % (id_input, self.temporaltype)
-                        )
-                    elif map_i.is_time_relative() and self.temporaltype == "absolute":
+                    elif (
+                        map_i.is_time_absolute() and self.temporaltype == "relative"
+                    ) or (map_i.is_time_relative() and self.temporaltype == "absolute"):
                         self.msgr.fatal(
                             _(
                                 "Wrong temporal type of space time dataset "
@@ -1299,13 +1293,9 @@ class TemporalAlgebraParser:
             maplist = input
             # Create map_value as empty list item.
             for map_i in maplist:
-                if "map_value" not in dir(map_i):
+                if ("map_value" not in dir(map_i)) or clear:
                     map_i.map_value = []
-                elif clear:
-                    map_i.map_value = []
-                if "condition_value" not in dir(map_i):
-                    map_i.condition_value = []
-                elif clear:
+                if ("condition_value" not in dir(map_i)) or clear:
                     map_i.condition_value = []
         else:
             self.msgr.fatal(_("Wrong type of input " + str(input)))
@@ -2143,7 +2133,6 @@ class TemporalAlgebraParser:
 
         :return: List of maps from maplist with added conditional boolean values.
         """
-        boollist = []
         # Loop over maps of input map list.
         for map_i in maplist:
             # Get dictionary with temporal variables for the map.
@@ -2248,7 +2237,6 @@ class TemporalAlgebraParser:
             # self.msgr.fatal("Condition list is not complete. Elements missing")
             for iter in range(len(tvarexpr)):
                 expr = tvarexpr[iter]
-                operator = tvarexpr[iter + 1]
                 relexpr = tvarexpr[iter + 2]
                 if all(issubclass(type(ele), list) for ele in [expr, relexpr]):
                     resultlist = self.build_spatio_temporal_topology_list(expr, relexpr)
@@ -2348,8 +2336,7 @@ class TemporalAlgebraParser:
                     inverselist.append(map_i)
         if inverse:
             return inverselist
-        else:
-            return resultlist
+        return resultlist
 
     def p_statement_assign(self, t):
         # The expression should always return a list of maps
@@ -2394,8 +2381,8 @@ class TemporalAlgebraParser:
                                     _(
                                         "The resulting space time dataset type <%(a)s> "
                                         "is different from the requested type <%(b)s>"
-                                        % ({"a": maps_stds_type, "b": self.stdstype})
                                     )
+                                    % ({"a": maps_stds_type, "b": self.stdstype})
                                 )
                         else:
                             map_type_2 = map_i.get_type()

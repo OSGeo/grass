@@ -18,6 +18,7 @@ This program is free software under the GNU General Public License
 """
 
 import datetime
+from operator import itemgetter
 
 import grass.script as gs
 import grass.temporal as tgis
@@ -195,9 +196,9 @@ class TemporalManager:
         # by a temporary dataset, I don't know how it would work with point
         # data
         if self.temporalType == TemporalType.ABSOLUTE:
-            timestamps = sorted(list(labelListSet), key=lambda x: x[0])
+            timestamps = sorted(list(labelListSet), key=itemgetter(0))
         else:
-            timestamps = sorted(list(labelListSet), key=lambda x: x[0])
+            timestamps = sorted(list(labelListSet), key=itemgetter(0))
 
         newMapLists = []
         for mapList, labelList in zip(mapLists, labelLists):
@@ -342,7 +343,7 @@ class TemporalManager:
         maps = sp.get_registered_maps_as_objects()
 
         if not sp.check_temporal_topology(maps):
-            raise GException(_("Topology of Space time dataset %s is invalid." % id))
+            raise GException(_("Topology of Space time dataset %s is invalid.") % id)
 
         timeseriesList.append(id)
         infoDict[id] = {}

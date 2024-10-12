@@ -170,7 +170,7 @@ class NotebookController:
             self.classObject.InsertPage(self.widget, *args, **kwargs)
         except (
             TypeError
-        ) as e:  # documentation says 'index', but certain versions of wx require 'n'
+        ):  # documentation says 'index', but certain versions of wx require 'n'
             kwargs["n"] = kwargs["index"]
             del kwargs["index"]
             self.classObject.InsertPage(self.widget, *args, **kwargs)
@@ -188,8 +188,7 @@ class NotebookController:
             if ret:
                 del self.notebookPages[page]
             return ret
-        else:
-            return False
+        return False
 
     def RemovePage(self, page):
         """Delete page without deleting the associated window.
@@ -203,8 +202,7 @@ class NotebookController:
             if ret:
                 del self.notebookPages[page]
             return ret
-        else:
-            return False
+        return False
 
     def SetSelectionByName(self, page):
         """Set active notebook page.
@@ -435,7 +433,6 @@ class NumTextCtrl(TextCtrl):
     """Class derived from wx.TextCtrl for numerical values only"""
 
     def __init__(self, parent, **kwargs):
-        ##        self.precision = kwargs.pop('prec')
         TextCtrl.__init__(
             self, parent=parent, validator=NTCValidator(flag="DIGIT_ONLY"), **kwargs
         )
@@ -753,7 +750,7 @@ class TimeISOValidator(BaseValidator):
         if text:
             try:
                 datetime.strptime(text, "%Y-%m-%d")
-            except:
+            except ValueError:
                 self._notvalid()
                 return False
 
@@ -815,8 +812,7 @@ class SimpleValidator(Validator):
         if len(text) == 0:
             self.callback(ctrl)
             return False
-        else:
-            return True
+        return True
 
     def TransferToWindow(self):
         """Transfer data from validator to window.
@@ -866,8 +862,7 @@ class GenericValidator(Validator):
         if not self._condition(text):
             self._callback(ctrl)
             return False
-        else:
-            return True
+        return True
 
     def TransferToWindow(self):
         """Transfer data from validator to window."""
@@ -1184,8 +1179,7 @@ class GListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin, CheckListCtrlMixin):
 
         if checked is not None:
             return tuple(data)
-        else:
-            return (tuple(data), tuple(checkedList))
+        return (tuple(data), tuple(checkedList))
 
     def LoadData(self, data=None, selectOne=True):
         """Load data into list"""
@@ -1567,7 +1561,7 @@ class ManageSettingsWidget(wx.Panel):
             return data
 
         try:
-            fd = open(self.settingsFile, "r")
+            fd = open(self.settingsFile)
         except OSError:
             return data
 

@@ -23,6 +23,8 @@ import os
 import sys
 import copy
 
+from pathlib import Path
+
 import wx
 import wx.lib.colourselect as csel
 import wx.lib.scrolledpanel as SP
@@ -668,7 +670,7 @@ class NvizToolWindow(GNotebook):
         vSizer = wx.BoxSizer(wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap=5, hgap=10)
 
-        pwd = os.getcwd()
+        pwd = str(Path.cwd())
         dir = filebrowse.DirBrowseButton(
             parent=panel,
             id=wx.ID_ANY,
@@ -2644,9 +2646,9 @@ class NvizToolWindow(GNotebook):
 
         if nvizType in {"surface", "fringe"}:
             return self._getLayerPropertiesByName(name, mapType="raster")
-        elif nvizType == "vector":
+        if nvizType == "vector":
             return self._getLayerPropertiesByName(name, mapType="vector")
-        elif nvizType == "volume":
+        if nvizType == "volume":
             return self._getLayerPropertiesByName(name, mapType="raster_3d")
 
         return None
@@ -2855,7 +2857,7 @@ class NvizToolWindow(GNotebook):
         if not prefix:
             GMessage(parent=self, message=_("No file prefix given."))
             return
-        elif not os.path.exists(dir):
+        if not os.path.exists(dir):
             GMessage(parent=self, message=_("Directory %s does not exist.") % dir)
             return
 
@@ -4574,7 +4576,7 @@ class NvizToolWindow(GNotebook):
         selection = event.GetSelection()
         if selection == -1:
             return
-        elif selection == 0:
+        if selection == 0:
             winUp.Enable(False)
             if not winDown.IsEnabled():
                 winDown.Enable()

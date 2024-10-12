@@ -16,6 +16,7 @@ import sys
 import uuid
 from abc import ABCMeta, abstractmethod
 from datetime import datetime
+from pathlib import Path
 
 from .abstract_dataset import AbstractDataset, AbstractDatasetComparisonKeyStartTime
 from .core import (
@@ -395,9 +396,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             # %s;"%(stds_register_table + "_index", stds_register_table))
 
             # Read the SQL template
-            sql = open(
-                os.path.join(sql_path, "stds_map_register_table_template.sql"), "r"
-            ).read()
+            sql = Path(sql_path, "stds_map_register_table_template.sql").read_text()
 
             # Create a raster, raster3d or vector tables
             sql = sql.replace("SPACETIME_REGISTER_TABLE", stds_register_table)
@@ -1627,8 +1626,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             try:
                 if value.startswith("0"):
                     return value.lstrip("0")
-                else:
-                    return "{0:02d}".format(int(value))
+                return "{0:02d}".format(int(value))
             except ValueError:
                 return None
 
@@ -2025,7 +2023,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             )
 
         if not check_granularity_string(gran, self.get_temporal_type()):
-            self.msgr.error(_("Wrong granularity format: %s" % (gran)))
+            self.msgr.error(_("Wrong granularity format: %s") % (gran))
             return False
 
         dbif, connection_state_changed = init_dbif(dbif)
@@ -2549,7 +2547,6 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         # Get basic info
         map_id = map.base.get_id()
-        map_mapset = map.base.get_mapset()
         map_rel_time_unit = map.get_relative_time_unit()
         map_ttype = map.get_temporal_type()
 
@@ -2804,8 +2801,6 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         use_start_time = False
 
         # Get basic info
-        stds_name = self.base.get_name()
-        stds_mapset = self.base.get_mapset()
         sql_path = get_sql_template_path()
         stds_register_table = self.get_map_register()
 
@@ -2821,13 +2816,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         )
         if old_sqlite_version:
             template_suffix = "_old"
-        sql = open(
-            os.path.join(
-                sql_path,
-                f"update_stds_spatial_temporal_extent_template{template_suffix}.sql",
-            ),
-            "r",
-        ).read()
+        sql = Path(
+            sql_path,
+            f"update_stds_spatial_temporal_extent_template{template_suffix}.sql",
+        ).read_text()
         sql = sql.replace("GRASS_MAP", self.get_new_map_instance(None).get_type())
         sql = sql.replace("SPACETIME_REGISTER_TABLE", stds_register_table)
         sql = sql.replace("SPACETIME_ID", self.base.get_id())
@@ -2837,13 +2829,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         sql_script += "\n"
 
         # Update type specific metadata
-        sql = open(
-            os.path.join(
-                sql_path,
-                f"update_{self.get_type()}_metadata_template{template_suffix}.sql",
-            ),
-            "r",
-        ).read()
+        sql = Path(
+            sql_path,
+            f"update_{self.get_type()}_metadata_template{template_suffix}.sql",
+        ).read_text()
 
         # Comment out update of semantic labels for DB version < 3
         if get_tgis_db_version_from_metadata() < 3:
@@ -2856,10 +2845,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 "-- count(distinct semantic_label)",
             )
         elif old_sqlite_version and self.get_type() == "strds":
-            semantic_label_sql = open(
-                os.path.join(sql_path, "update_strds_metadata_template_v3.sql"),
-                "r",
-            ).read()
+            semantic_label_sql = Path(
+                sql_path, "update_strds_metadata_template_v3.sql"
+            ).read_text()
             sql = sql + "\n" + semantic_label_sql
 
         sql = sql.replace("SPACETIME_REGISTER_TABLE", stds_register_table)

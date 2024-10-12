@@ -70,8 +70,7 @@ class Vector(Info):
     def __repr__(self):
         if self.exist():
             return "%s(%r, %r)" % (self._class_name, self.name, self.mapset)
-        else:
-            return "%s(%r)" % (self._class_name, self.name)
+        return "%s(%r)" % (self._class_name, self.name)
 
     def __iter__(self):
         """::
@@ -315,10 +314,9 @@ class VectorTopo(Vector):
                     key.step or 1,
                 )
             ]
-        elif isinstance(key, int):
+        if isinstance(key, int):
             return self.read(key)
-        else:
-            raise ValueError("Invalid argument type: %r." % key)
+        raise ValueError("Invalid argument type: %r." % key)
 
     @must_be_open
     def num_primitive_of(self, primitive):
@@ -392,11 +390,9 @@ class VectorTopo(Vector):
             if isinstance(_NUMOF[vtype], tuple):
                 fn, ptype = _NUMOF[vtype]
                 return fn(self.c_mapinfo, ptype)
-            else:
-                return _NUMOF[vtype](self.c_mapinfo)
-        else:
-            keys = "', '".join(sorted(_NUMOF.keys()))
-            raise ValueError("vtype not supported, use one of: '%s'" % keys)
+            return _NUMOF[vtype](self.c_mapinfo)
+        keys = "', '".join(sorted(_NUMOF.keys()))
+        raise ValueError("vtype not supported, use one of: '%s'" % keys)
 
     @must_be_open
     def num_primitives(self):
@@ -526,17 +522,16 @@ class VectorTopo(Vector):
                 )
                 for v_id in ilist
             )
-        else:
-            return [
-                read_line(
-                    feature_id=v_id,
-                    c_mapinfo=self.c_mapinfo,
-                    table=self.table,
-                    writeable=self.writeable,
-                    is2D=is2D,
-                )
-                for v_id in ilist
-            ]
+        return [
+            read_line(
+                feature_id=v_id,
+                c_mapinfo=self.c_mapinfo,
+                table=self.table,
+                writeable=self.writeable,
+                is2D=is2D,
+            )
+            for v_id in ilist
+        ]
 
     @must_be_open
     def read(self, feature_id):
@@ -855,7 +850,7 @@ class VectorTopo(Vector):
                 if not barray:
                     if error == -1:
                         raise GrassError(
-                            _("Unable to read line of feature %i" % (f_id))
+                            _("Unable to read line of feature %i") % (f_id)
                         )
                     if error == -2:
                         print("Empty feature %i" % (f_id))
@@ -947,7 +942,7 @@ class VectorTopo(Vector):
                     self.c_mapinfo, a_id, ctypes.byref(size)
                 )
                 if not barray:
-                    raise GrassError(_("Unable to read area with id %i" % (a_id)))
+                    raise GrassError(_("Unable to read area with id %i") % (a_id))
 
                 pcat = None
                 c_ok = libvect.Vect_get_area_cats(

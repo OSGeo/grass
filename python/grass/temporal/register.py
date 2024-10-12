@@ -161,7 +161,7 @@ def register_maps_in_space_time_dataset(
         if hasattr(file, "readline"):
             fd = file
         else:
-            fd = open(file, "r")
+            fd = open(file)
 
         line = True
         while True:

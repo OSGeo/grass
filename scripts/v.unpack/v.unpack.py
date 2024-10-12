@@ -87,7 +87,7 @@ def main():
                 f = tar.extractfile(fname)
                 sys.stdout.write(f.read().decode())
         except KeyError:
-            grass.fatal(_("Pack file unreadable: file '{}' missing".format(fname)))
+            grass.fatal(_("Pack file unreadable: file '{}' missing").format(fname))
         tar.close()
 
         return 0
@@ -139,8 +139,9 @@ def main():
         grass.fatal(
             _(
                 "This GRASS GIS pack file contains raster data. Use "
-                "r.unpack to unpack <%s>" % map_name
+                "r.unpack to unpack <%s>"
             )
+            % map_name
         )
     else:
         grass.fatal(_("Pack file unreadable"))
@@ -215,13 +216,9 @@ def main():
         # the db connection in the output mapset
         dbconn = grassdb.db_connection(force=True)
         todb = dbconn["database"]
-        # return all tables
-        list_fromtable = grass.read_command(
-            "db.tables", driver="sqlite", database=fromdb
-        ).splitlines()
 
         # return the list of old connection for extract layer number and key
-        dbln = open(os.path.join(new_dir, "dbln"), "r")
+        dbln = open(os.path.join(new_dir, "dbln"))
         dbnlist = dbln.readlines()
         dbln.close()
         # check if dbf or sqlite directory exists

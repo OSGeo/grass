@@ -295,7 +295,7 @@ class CatRastUpdater:
         )
 
         if ret != 0:
-            GException(_("v.build failed:\n%s" % msg))
+            GException(_("v.build failed:\n%s") % msg)
 
         environs = os.environ.copy()
         environs["GRASS_REGION"] = grass_region["GRASS_REGION"]
@@ -315,7 +315,7 @@ class CatRastUpdater:
         )
 
         if ret != 0:
-            GException(_("v.to.rast failed:\n%s" % msg))
+            GException(_("v.to.rast failed:\n{messages}").format(messages=msg))
 
     def _create_grass_region_env(self, bbox):
         r = self.an_data.GetRegion()
@@ -323,7 +323,7 @@ class CatRastUpdater:
 
         if bbox["maxy"] <= r["s"]:
             return 0
-        elif bbox["maxy"] >= r["n"]:
+        if bbox["maxy"] >= r["n"]:
             new_r["n"] = bbox["maxy"]
         else:
             new_r["n"] = (
@@ -332,7 +332,7 @@ class CatRastUpdater:
 
         if bbox["miny"] >= r["n"]:
             return 0
-        elif bbox["miny"] <= r["s"]:
+        if bbox["miny"] <= r["s"]:
             new_r["s"] = bbox["miny"]
         else:
             new_r["s"] = (
@@ -341,7 +341,7 @@ class CatRastUpdater:
 
         if bbox["maxx"] <= r["w"]:
             return 0
-        elif bbox["maxx"] >= r["e"]:
+        if bbox["maxx"] >= r["e"]:
             new_r["e"] = bbox["maxx"]
         else:
             new_r["e"] = (
@@ -350,7 +350,7 @@ class CatRastUpdater:
 
         if bbox["minx"] >= r["e"]:
             return 0
-        elif bbox["minx"] <= r["w"]:
+        if bbox["minx"] <= r["w"]:
             new_r["w"] = bbox["minx"]
         else:
             new_r["w"] = (
@@ -531,7 +531,7 @@ class ScattPlotsCondsData:
                 # if key is missing condition is always True (full scatter plor
                 # is computed)
                 if scatt_id in self.cats[cat_id]:
-                    self.cats[cat_id][scatt_id]["np_vals"] = cats[cat_id][scatt_id][
+                    self.cats[cat_id][scatt_id]["np_vals"] = scatt_ids[scatt_id][
                         "np_vals"
                     ]
 

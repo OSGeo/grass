@@ -78,16 +78,14 @@ class VNETData:
     def GetRelevantParams(self, analysis=None):
         if analysis:
             return self.an_props.GetRelevantParams(analysis)
-        else:
-            analysis, valid = self.an_params.GetParam("analysis")
-            return self.an_props.GetRelevantParams(analysis)
+        analysis, valid = self.an_params.GetParam("analysis")
+        return self.an_props.GetRelevantParams(analysis)
 
     def GetAnalysisProperties(self, analysis=None):
         if analysis:
             return self.an_props[analysis]
-        else:
-            analysis, valid = self.an_params.GetParam("analysis")
-            return self.an_props[analysis]
+        analysis, valid = self.an_params.GetParam("analysis")
+        return self.an_props[analysis]
 
     def GetParam(self, param):
         return self.an_params.GetParam(param)
@@ -154,7 +152,7 @@ class VNETData:
         if flags["t"] and "turn_layer" not in relevant_params:
             GMessage(
                 parent=self.guiparent,
-                message=_("Module <%s> does not support turns costs." % analysis),
+                message=_("Module <%s> does not support turns costs.") % analysis,
             )
             return False
 
@@ -1070,7 +1068,7 @@ class VectMap:
             "head",
         )
         try:
-            head = open(headPath, "r")
+            head = open(headPath)
             for line in head:
                 i = line.find(
                     "MAP DATE:",

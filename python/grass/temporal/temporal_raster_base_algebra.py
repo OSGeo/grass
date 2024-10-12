@@ -511,7 +511,6 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         """
 
         temporal_relations = map_i.get_temporal_relations()
-        spatial_relations = map_i.get_spatial_relations()
 
         # Build comandlist list with elements from related maps and given relation
         # operator.
@@ -728,7 +727,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 # Append map to result map list.
                 resultlist.append(map_i)
             return resultlist
-        elif isinstance(conclusionlist, list):
+        if isinstance(conclusionlist, list):
             # Build result command map list between conditions and conclusions.
             if self.debug:
                 print("build_condition_cmd_list", condition_topolist)
@@ -874,7 +873,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                             process_queue.put(m)
 
                     else:
-                        self.msgr.error(_("Error computing map <%s>" % map_i.get_id()))
+                        self.msgr.error(_("Error computing map <%s>") % map_i.get_id())
                     count += 1
 
                 if self.dry_run is False:
@@ -933,7 +932,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                         map_i.insert(dbif)
                     # Register map in result space time dataset.
                     if self.dry_run is False:
-                        success = resultstds.register_map(map_i, dbif)
+                        resultstds.register_map(map_i, dbif)
 
                 if self.dry_run is False:
                     resultstds.update_from_registered_maps(dbif)
@@ -1040,10 +1039,10 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                         break
                     if count == 0:
                         # Set map name.
-                        name = map_new.get_id()
+                        map_new.get_id()
                     else:
                         # Generate an intermediate map
-                        name = self.generate_map_name()
+                        self.generate_map_name()
 
                     # Create r.mapcalc expression string for the operation.
                     cmdstring = self.build_command_string(
@@ -1208,10 +1207,10 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                         break
                     if count == 0:
                         # Set map name.
-                        name = map_new.get_id()
+                        map_new.get_id()
                     else:
                         # Generate an intermediate map
-                        name = self.generate_map_name()
+                        self.generate_map_name()
 
                     # Create r.mapcalc expression string for the operation.
                     cmdstring = self.build_command_string(
@@ -2038,7 +2037,6 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 for obj in map_i.map_value:
                     if isinstance(obj, GlobalTemporalVar):
                         n_maps = obj.td
-                mapinput = map_i.get_id()
                 # Create r.mapcalc expression string for the operation.
                 cmdstring = "(%s)" % (n_maps)
                 # Append module command.

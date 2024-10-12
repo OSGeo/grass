@@ -96,12 +96,12 @@ def check_granularity_string(granularity, temporal_type):
             return False
 
         try:
-            integer = int(num)
+            int(num)
         except:
             return False
     elif temporal_type == "relative":
         try:
-            integer = int(granularity)
+            int(granularity)
         except:
             return False
     else:
@@ -146,8 +146,7 @@ def get_time_tuple_function(maps):
     # Check if input is list of MapDataset objects or SQLite rows
     if issubclass(maps[0].__class__, AbstractMapDataset):
         return _get_map_time_tuple
-    else:
-        return _get_row_time_tuple
+    return _get_row_time_tuple
 
 
 def _is_after(start, start1, end1) -> bool:
@@ -777,8 +776,7 @@ def compute_common_absolute_time_granularity(gran_list, start_date_list=None):
         if int(num) > 60:
             if int(num) % 60 == 0:
                 return "60 seconds"
-            else:
-                return "1 second"
+            return "1 second"
 
     if granule in {"minutes", "minute"}:
         # If the start minutes are different between the start dates
@@ -790,8 +788,7 @@ def compute_common_absolute_time_granularity(gran_list, start_date_list=None):
         if int(num) > 60:
             if int(num) % 60 == 0:
                 return "60 minutes"
-            else:
-                return "1 minute"
+            return "1 minute"
 
     if granule in {"hours", "hour"}:
         # If the start hours are different between the start dates
@@ -803,8 +800,7 @@ def compute_common_absolute_time_granularity(gran_list, start_date_list=None):
         if int(num) > 24:
             if int(num) % 24 == 0:
                 return "24 hours"
-            else:
-                return "1 hour"
+            return "1 hour"
 
     if granule in {"days", "day"}:
         # If the start days are different between the start dates
@@ -816,8 +812,7 @@ def compute_common_absolute_time_granularity(gran_list, start_date_list=None):
         if int(num) > 365:
             if int(num) % 365 == 0:
                 return "365 days"
-            else:
-                return "1 day"
+            return "1 day"
 
     if granule in {"months", "month"}:
         # If the start months are different between the start dates
@@ -829,8 +824,7 @@ def compute_common_absolute_time_granularity(gran_list, start_date_list=None):
         if int(num) > 12:
             if int(num) % 12 == 0:
                 return "12 months"
-            else:
-                return "1 month"
+            return "1 month"
 
     return common_granule
 
@@ -1125,20 +1119,18 @@ def gran_singular_unit(gran):
         output, unit = gran.split(" ")
         if unit in PLURAL_GRAN:
             return unit[:-1]
-        elif unit in SINGULAR_GRAN:
+        if unit in SINGULAR_GRAN:
             return unit
-        else:
-            lists = "{gr}".format(gr=SUPPORTED_GRAN).replace("[", "").replace("]", "")
-            print(
-                _(
-                    "Output granularity seems not to be valid. Please use "
-                    "one of the following values : {gr}"
-                ).format(gr=lists)
-            )
-            return False
-    else:
-        print(_("Invalid absolute granularity"))
+        lists = "{gr}".format(gr=SUPPORTED_GRAN).replace("[", "").replace("]", "")
+        print(
+            _(
+                "Output granularity seems not to be valid. Please use "
+                "one of the following values : {gr}"
+            ).format(gr=lists)
+        )
         return False
+    print(_("Invalid absolute granularity"))
+    return False
 
 
 #######################################################################
@@ -1170,16 +1162,15 @@ def gran_plural_unit(gran):
         output, unit = gran.split(" ")
         if unit in PLURAL_GRAN:
             return unit
-        elif unit in SINGULAR_GRAN:
+        if unit in SINGULAR_GRAN:
             return f"{unit}s"
-        else:
-            lists = ", ".join(SUPPORTED_GRAN)
-            print(
-                _(
-                    "Output granularity seems not to be valid. Please use "
-                    "one of the following values : {gr}"
-                ).format(gr=lists)
-            )
+        lists = ", ".join(SUPPORTED_GRAN)
+        print(
+            _(
+                "Output granularity seems not to be valid. Please use "
+                "one of the following values : {gr}"
+            ).format(gr=lists)
+        )
     else:
         print(_("Invalid absolute granularity"))
         return False
@@ -1234,8 +1225,7 @@ def gran_to_gran(from_gran, to_gran="days", shell=False):
 
         if output == 1:
             return f"{output} {tounit}"
-        else:
-            return f"{output} {tounit}s"
+        return f"{output} {tounit}s"
 
     # TODO check the leap second
     if check_granularity_string(from_gran, "absolute"):
@@ -1256,9 +1246,8 @@ def gran_to_gran(from_gran, to_gran="days", shell=False):
                 return _return(output, tounit, shell)
         print(_("Probably you need to invert 'from_gran' and 'to_gran'"))
         return False
-    else:
-        print(_("Invalid absolute granularity"))
-        return False
+    print(_("Invalid absolute granularity"))
+    return False
 
 
 ###############################################################################
