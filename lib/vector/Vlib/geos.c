@@ -362,15 +362,27 @@ GEOSCoordSequence *V1_read_line_geos(struct Map_info *Map, long offset,
     else
         z = NULL;
 
-    if (0 >= dig__fread_port_D(x, n_points, &(Map->dig_fp)))
+    if (0 >= dig__fread_port_D(x, n_points, &(Map->dig_fp))) {
+        G_free((void *)x);
+        G_free((void *)y);
+        G_free((void *)z);
         return NULL; /* end of file */
+    }        
 
-    if (0 >= dig__fread_port_D(y, n_points, &(Map->dig_fp)))
+    if (0 >= dig__fread_port_D(y, n_points, &(Map->dig_fp))) {
+        G_free((void *)x);
+        G_free((void *)y);
+        G_free((void *)z);
         return NULL; /* end of file */
+    }
 
     if (Map->head.with_z) {
-        if (0 >= dig__fread_port_D(z, n_points, &(Map->dig_fp)))
+        if (0 >= dig__fread_port_D(z, n_points, &(Map->dig_fp))) {
+            G_free((void *)x);
+            G_free((void *)y);
+            G_free((void *)z);
             return NULL; /* end of file */
+        }
     }
 
     for (i = 0; i < n_points; i++) {
