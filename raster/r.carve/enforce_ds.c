@@ -487,4 +487,6 @@ static void process_line_segment(const int npts, void *rbuf, Point2 *pgxypts,
         prevrow = row;
         prevcol = col;
     }
+    Vect_destroy_line_struct(points);
+    Vect_destroy_cats_struct(cats);
 }
