@@ -367,7 +367,7 @@ GEOSCoordSequence *V1_read_line_geos(struct Map_info *Map, long offset,
         G_free((void *)y);
         G_free((void *)z);
         return NULL; /* end of file */
-    }        
+    }
 
     if (0 >= dig__fread_port_D(y, n_points, &(Map->dig_fp))) {
         G_free((void *)x);
