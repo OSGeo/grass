@@ -284,7 +284,9 @@ class ImportDialog(wx.Dialog):
         self._commands_running.append(True)
 
         # disable the dialog close button
-        self.btn_close.SetToolTip(_("Dialog cannot be closed while command is running."))
+        self.btn_close.SetToolTip(
+            _("Dialog cannot be closed while command is running.")
+        )
         self.btn_close.Disable()
 
     def _removeFromCommandQueue(self):
