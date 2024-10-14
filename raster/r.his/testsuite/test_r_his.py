@@ -1,11 +1,8 @@
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
-# r.univar value for elevation shaded relief
-value = "null_cells=5696"
 
-
-class TestRHisDefault(TestCase):
+class TestRHis(TestCase):
     hue = "elevation"
     intensity = "elevation_shaded_50"
     saturation = "elevation"
@@ -33,9 +30,8 @@ class TestRHisDefault(TestCase):
         """Remove d.his generated rasters after each test method"""
         self.runModule("g.remove", type="raster", flags="f", pattern="shadedmap_*")
 
-    def test_d_his_with_bgcolor_none(self):
+    def test_bgcolor_none(self):
         """Test r.his with bgcolor 'none'"""
-
         self.runModule(
             "r.his",
             hue=self.hue,
@@ -47,13 +43,22 @@ class TestRHisDefault(TestCase):
             bgcolor=self.bgcolor,
         )
 
-        self.assertRasterFitsUnivar(raster=self.red, reference=value)
-        self.assertRasterFitsUnivar(raster=self.green, reference=value)
-        self.assertRasterFitsUnivar(raster=self.blue, reference=value)
+        red_value = "null_cells=5696\nmin=3\nmax=255\nmean=156.41168\nstddev=34.434612"
+        blue_value = "null_cells=5696\nmin=0\nmax=127\nmean=36.05560\nstddev=37.61216"
+        green_value = "null_cells=5696\nmin=1\nmax=255\nmean=129.62880\nstddev=34.48307"
 
-    def test_d_his_with_bgcolor_rgb(self):
+        self.assertRasterFitsUnivar(
+            raster=self.red, reference=red_value, precision=1e-5
+        )
+        self.assertRasterFitsUnivar(
+            raster=self.blue, reference=blue_value, precision=1e-5
+        )
+        self.assertRasterFitsUnivar(
+            raster=self.green, reference=green_value, precision=1e-5
+        )
+
+    def test_with_bgcolor_rgb(self):
         """Test r.his with bgcolor '0:0:0'"""
-        no_null = "null_cells=0"
         self.runModule(
             "r.his",
             hue=self.hue,
@@ -62,15 +67,21 @@ class TestRHisDefault(TestCase):
             red=self.red,
             green=self.green,
             blue=self.blue,
-            bgcolor="0:0:0:255",
+            bgcolor="0:0:0",
         )
 
-        # Check elevation_shaded_50 has null values
-        self.assertRasterFitsUnivar(raster=self.intensity, reference=value)
-        # Check shadedmap_r, shadedmap_g, shadedmap_b have no null values
-        self.assertRasterFitsUnivar(raster=self.red, reference=no_null)
-        self.assertRasterFitsUnivar(raster=self.green, reference=no_null)
-        self.assertRasterFitsUnivar(raster=self.blue, reference=no_null)
+        red_value = "null_cells=0\nmin=0\nmax=255\nmean=155.97172\nstddev=35.36988"
+        blue_value = "null_cells=0\nmin=0\nmax=127\nmean=35.95417\nstddev=37.60774"
+        green_value = "null_cells=0\nmin=0\nmax=255\nmean=129.26418\nstddev=35.11225"
+        self.assertRasterFitsUnivar(
+            raster=self.red, reference=red_value, precision=1e-5
+        )
+        self.assertRasterFitsUnivar(
+            raster=self.blue, reference=blue_value, precision=1e-5
+        )
+        self.assertRasterFitsUnivar(
+            raster=self.green, reference=green_value, precision=1e-5
+        )
 
 
 if __import__("__main__"):
