@@ -54,7 +54,9 @@ class LayerList:
         self._tree = tree
 
     def __len__(self):
-        return len(list(self))
+        # The list constructor calls __len__ as an optimization if available,
+        # causing a RecursionError
+        return len([layer for layer in self])  # noqa: C416
 
     def __iter__(self):
         """Iterates over the contents of the list."""
