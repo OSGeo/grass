@@ -249,4 +249,4 @@ if __name__ == "__main__":
         )
         print("Expression:", expression)
         print(len(modules))
-        print(list(module.file_path for module in modules))
+        print([module.file_path for module in modules])
