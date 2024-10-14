@@ -185,6 +185,8 @@ void write_subroute(struct segment *seg, struct line_pnts *line, int line_id)
 
     if (r < 0) {
         Vect_write_line(&Out, GV_LINE, line, Cats);
+        Vect_destroy_list(list);
+        Vect_destroy_line_struct(Points);
         return;
     }
 
