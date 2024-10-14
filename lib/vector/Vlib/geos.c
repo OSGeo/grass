@@ -391,11 +391,11 @@ GEOSCoordSequence *V1_read_line_geos(struct Map_info *Map, long offset,
 
     G_debug(3, "    off = %ld", (long)dig_ftell(&(Map->dig_fp)));
 
-    free_return:
-        G_free((void *)x);
-        G_free((void *)y);
-        if (z)
-            G_free((void *)z);
+free_return:
+    G_free((void *)x);
+    G_free((void *)y);
+    if (z)
+        G_free((void *)z);
 
     return pseq;
 }
