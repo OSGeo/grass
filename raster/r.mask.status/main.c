@@ -109,6 +109,8 @@ int report_status(struct Parameters *params)
         else
             json_object_set_null(root_object, "is_reclass_of");
         char *serialized_string = json_serialize_to_string_pretty(root_value);
+        if (!serialized_string)
+            G_fatal_error(_("Failed to initialize pretty JSON string."));
         puts(serialized_string);
         json_free_serialized_string(serialized_string);
         json_value_free(root_value);
