@@ -125,7 +125,7 @@ class ImportDialog(wx.Dialog):
         # buttons
         #
         # cancel
-        self._DEFAULT_CLOSE_BTN_TEXT = "Close dialog"
+        self._DEFAULT_CLOSE_BTN_TEXT = _("Close dialog")
         self.btn_close = CloseButton(parent=self.panel)
         self.btn_close.SetToolTip(_(self._DEFAULT_CLOSE_BTN_TEXT))
         self.btn_close.Bind(wx.EVT_BUTTON, self.OnClose)
