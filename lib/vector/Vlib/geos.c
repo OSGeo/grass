@@ -290,7 +290,7 @@ GEOSCoordSequence *V1_read_line_geos(struct Map_info *Map, long offset,
     long size;
     double *x, *y, *z;
 
-    GEOSCoordSequence *pseq;
+    GEOSCoordSequence *pseq = NULL;
 
     G_debug(3, "V1_read_line_geos(): offset = %ld", offset);
 
