@@ -353,8 +353,6 @@ GEOSCoordSequence *V1_read_line_geos(struct Map_info *Map, long offset,
     G_debug(3, "    n_points = %d dim = %d", n_points,
             (Map->head.with_z) ? 3 : 2);
 
-    pseq = GEOSCoordSeq_create(n_points, (Map->head.with_z) ? 3 : 2);
-
     x = (double *)G_malloc(n_points * sizeof(double));
     y = (double *)G_malloc(n_points * sizeof(double));
     if (Map->head.with_z)
@@ -363,24 +361,20 @@ GEOSCoordSequence *V1_read_line_geos(struct Map_info *Map, long offset,
         z = NULL;
 
     if (0 >= dig__fread_port_D(x, n_points, &(Map->dig_fp))) {
-        GEOSCoordSeq_destroy(pseq);
-        pseq = NULL;
         goto free_return;
     }
 
     if (0 >= dig__fread_port_D(y, n_points, &(Map->dig_fp))) {
-        GEOSCoordSeq_destroy(pseq);
-        pseq = NULL;
         goto free_return;
     }
 
     if (Map->head.with_z) {
         if (0 >= dig__fread_port_D(z, n_points, &(Map->dig_fp))) {
-            GEOSCoordSeq_destroy(pseq);
-            pseq = NULL;
             goto free_return;
         }
     }
+
+    pseq = GEOSCoordSeq_create(n_points, (Map->head.with_z) ? 3 : 2);
 
     for (i = 0; i < n_points; i++) {
         GEOSCoordSeq_setX(pseq, i, x[i]);
