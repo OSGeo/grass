@@ -43,7 +43,7 @@ build_program_in_subdir(
   DEPENDS
   grass_gis
   grass_dbstubs
-  grass_dbmibase # TODO: REMOVEME later because dbmidriver depends on dbmibase 
+  grass_dbmibase
   grass_dbmidriver
   grass_shape
   grass_sqlp
@@ -61,7 +61,7 @@ build_program_in_subdir(
   DEPENDS
   grass_gis
   grass_dbstubs
-  grass_dbmibase # TODO: REMOVEME later because dbmidriver depends on dbmibase
+  grass_dbmibase
   grass_dbmidriver
   grass_sqlp
   GDAL
@@ -98,7 +98,7 @@ build_program_in_subdir(
   DEPENDS
   grass_gis
   grass_dbstubs
-  grass_dbmibase # TODO: REMOVEME later because dbmidriver depends on dbmibase
+  grass_dbmibase 
   grass_dbmidriver
   grass_sqlp
   DEFS
@@ -121,7 +121,7 @@ build_program_in_subdir(
   DEPENDS
   grass_gis
   grass_dbstubs
-  grass_dbmibase # TODO: REMOVEME later because dbmidriver depends on dbmibase
+  grass_dbmibase
   grass_dbmidriver
   grass_sqlp
   DEFS
@@ -144,7 +144,7 @@ build_program_in_subdir(
   DEPENDS
   grass_gis
   grass_dbstubs
-  grass_dbmibase # TODO: REMOVEME later because dbmidriver depends on dbmibase
+  grass_dbmibase
   grass_dbmidriver
   grass_sqlp
   DEFS
