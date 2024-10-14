@@ -176,19 +176,18 @@ void write_subroute(struct segment *seg, struct line_pnts *line, int line_id)
     struct line_cats *Cats;
     struct ilist *list;
 
-    Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
-    list = Vect_new_list();
     r = seg->route;
 
     Vect_cat_set(Cats, 2, line_id);
 
     if (r < 0) {
         Vect_write_line(&Out, GV_LINE, line, Cats);
-        Vect_destroy_list(list);
-        Vect_destroy_line_struct(Points);
         return;
     }
+
+    Points = Vect_new_line_struct();
+    list = Vect_new_list();
 
     for (i = 0; i < nnodes; i++)
         edges[i] = 0;
