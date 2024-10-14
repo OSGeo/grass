@@ -22,12 +22,14 @@ def map_scripts_paths(old_path):
     if INITIAL_GISBASE is None or INITIAL_PWD is None:
         return old_path
     p = Path(old_path)
+    extension = ".py"
+    p_name = p.stem if p.suffix == extension else p.name
     temporal_base = Path(INITIAL_GISBASE) / "scripts" / "t.*"
     base = Path(INITIAL_GISBASE) / "scripts" / "*"
     if p.match(str(temporal_base)):
-        return str(Path(INITIAL_PWD) / "temporal" / (p.name) / (p.name)) + ".py"
+        return str(Path(INITIAL_PWD) / "temporal" / (p_name) / (p_name)) + extension
     if p.match(str(base)):
-        return str(Path(INITIAL_PWD) / "scripts" / (p.name) / (p.name)) + ".py"
+        return str(Path(INITIAL_PWD) / "scripts" / (p_name) / (p_name)) + extension
 
     return old_path
 
