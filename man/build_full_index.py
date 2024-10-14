@@ -11,6 +11,7 @@ import os
 
 from operator import itemgetter
 
+
 def build_full_index(ext):
     os.chdir(man_dir)
 
