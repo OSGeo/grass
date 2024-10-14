@@ -363,25 +363,22 @@ GEOSCoordSequence *V1_read_line_geos(struct Map_info *Map, long offset,
         z = NULL;
 
     if (0 >= dig__fread_port_D(x, n_points, &(Map->dig_fp))) {
-        G_free((void *)x);
-        G_free((void *)y);
-        G_free((void *)z);
-        return NULL; /* end of file */
+        GEOSCoordSeq_destroy(pseq);
+        pseq = NULL;
+        goto free_return;
     }
 
     if (0 >= dig__fread_port_D(y, n_points, &(Map->dig_fp))) {
-        G_free((void *)x);
-        G_free((void *)y);
-        G_free((void *)z);
-        return NULL; /* end of file */
+        GEOSCoordSeq_destroy(pseq);
+        pseq = NULL;
+        goto free_return;
     }
 
     if (Map->head.with_z) {
         if (0 >= dig__fread_port_D(z, n_points, &(Map->dig_fp))) {
-            G_free((void *)x);
-            G_free((void *)y);
-            G_free((void *)z);
-            return NULL; /* end of file */
+            GEOSCoordSeq_destroy(pseq);
+            pseq = NULL;
+            goto free_return;
         }
     }
 
@@ -394,10 +391,11 @@ GEOSCoordSequence *V1_read_line_geos(struct Map_info *Map, long offset,
 
     G_debug(3, "    off = %ld", (long)dig_ftell(&(Map->dig_fp)));
 
-    G_free((void *)x);
-    G_free((void *)y);
-    if (z)
-        G_free((void *)z);
+    free_return:
+        G_free((void *)x);
+        G_free((void *)y);
+        if (z)
+            G_free((void *)z);
 
     return pseq;
 }
