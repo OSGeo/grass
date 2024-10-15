@@ -757,6 +757,7 @@ int Vect_copy_table_by_cats(struct Map_info *In, struct Map_info *Out,
     if (ret == -1) {
         G_warning(_("Unable to add database link for vector map <%s>"),
                   Out->name);
+        Vect_destroy_field_info(Fi);
         return -1;
     }
 
@@ -770,6 +771,7 @@ int Vect_copy_table_by_cats(struct Map_info *In, struct Map_info *Out,
                                 Fin->table, key, cats, ncats);
     if (ret == DB_FAILED) {
         G_warning(_("Unable to copy table <%s>"), Fin->table);
+        Vect_destroy_field_info(Fi);
         return -1;
     }
 
@@ -779,22 +781,26 @@ int Vect_copy_table_by_cats(struct Map_info *In, struct Map_info *Out,
     if (!driver) {
         G_warning(_("Unable to open database <%s> with driver <%s>"),
                   Fin->database, Fin->driver);
+        Vect_destroy_field_info(Fi);
         return -1;
     }
 
     /* do not allow duplicate keys */
     if (db_create_index2(driver, Fin->table, Fi->key) != DB_OK) {
         G_warning(_("Unable to create index"));
+        Vect_destroy_field_info(Fi);
         return -1;
     }
 
     if (db_grant_on_table(driver, Fin->table, DB_PRIV_SELECT,
                           DB_GROUP | DB_PUBLIC) != DB_OK) {
         G_warning(_("Unable to grant privileges on table <%s>"), Fin->table);
+        Vect_destroy_field_info(Fi);
         return -1;
     }
 
     db_close_database_shutdown_driver(driver);
+    Vect_destroy_field_info(Fi);
 
     return 0;
 }
