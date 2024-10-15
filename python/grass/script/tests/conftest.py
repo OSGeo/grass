@@ -1,6 +1,10 @@
 """Fixtures for grass.script"""
 
+import os
+
 import pytest
+
+import grass.script as gs
 
 
 @pytest.fixture
@@ -18,3 +22,16 @@ def mock_no_session(monkeypatch):
     """
     monkeypatch.delenv("GISRC", raising=False)
     monkeypatch.delenv("GISBASE", raising=False)
+
+
+@pytest.fixture
+def session(tmp_path):
+    """Set up a GRASS session for the tests."""
+    project = tmp_path / "test_project"
+
+    # Create a test location
+    gs.create_project(project)
+
+    # Initialize the GRASS session
+    with gs.setup.init(project, env=os.environ.copy()) as session:
+        yield session

@@ -34,7 +34,14 @@ from .core import (
     fatal,
 )
 from grass.exceptions import CalledModuleError
-from .utils import encode, float_or_dms, parse_key_val, try_remove
+from .utils import (
+    encode,
+    float_or_dms,
+    parse_key_val,
+    try_remove,
+    append_node_pid,
+    append_uuid,
+)
 
 
 def raster_history(map, overwrite=False, env=None):
@@ -262,3 +269,77 @@ def raster_what(map, coord, env=None, localized=False):
             data.append(tmp_dict)
 
     return data
+
+
+class MaskManager:
+    """Context manager for setting and managing 2D raster mask.
+
+    The _mask_name_ can be a name of an existing raster map and in that case,
+    that raster map is used as mask right away. If the raster map does not exist,
+    the name will be used for the mask once it is created (with `r.mask`).
+
+    If _mask_name_ is not provided, it generates a unique name using node (computer)
+    name, PID (current process ID), and unique ID (UUID).
+    In this case, the raster map representing the mask is removed if it exists at the
+    end of the context.
+    Optionally, the context manager can remove the raster map at the end of the context
+    when _remove_ is set to `True`.
+
+    In the background, this class manages the `GRASS_MASK` environment variable and
+    possibly removal of a specified mask.
+
+    The modified environment is available as the _env_ attribute. Name of the raster
+    mask is available as the _mask_name_ attribute.
+    """
+
+    def __init__(self, mask_name=None, env=None, remove=None):
+        """
+        Initializes the MaskManager.
+
+        :param mask_name: Name of the raster mask. Generated if not provided.
+        :param env: Environment to use. Defaults to modifying os.environ.
+        :param remove: If True, the raster mask will be removed when the context exits.
+                       Defaults to True if the mask name is generated,
+                       and False if a mask name is provided.
+        """
+        self.env = env if env is not None else os.environ
+        self._original_value = None
+
+        if mask_name is None:
+            self.mask_name = append_uuid(append_node_pid("mask"))
+            self._remove = True if remove is None else remove
+        else:
+            self.mask_name = mask_name
+            self._remove = False if remove is None else remove
+
+    def __enter__(self):
+        """Set mask in the given environment.
+
+        Sets the `GRASS_MASK` environment variable to the provided or
+        generated mask name.
+
+        :return: Returns the MaskManager instance.
+        """
+        self._original_value = self.env.get("GRASS_MASK")
+        self.env["GRASS_MASK"] = self.mask_name
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Restore the previous mask state.
+
+        Restores the original value of `GRASS_MASK` and optionally removes
+        the raster mask.
+
+        :param exc_type: Exception type, if any.
+        :param exc_val: Exception value, if any.
+        :param exc_tb: Traceback, if any.
+        """
+        if self._original_value is not None:
+            self.env["GRASS_MASK"] = self._original_value
+        else:
+            self.env.pop("GRASS_MASK", None)
+
+        if self._remove:
+            run_command(
+                "g.remove", type="raster", name=self.mask_name, flags="f", env=self.env
+            )
