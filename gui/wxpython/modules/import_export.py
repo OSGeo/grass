@@ -461,7 +461,6 @@ class GdalImportDialog(ImportDialog):
         dsn = self.dsnInput.GetDsn()
         if not dsn:
             return
-        ext = self.dsnInput.GetFormatExt()
 
         for layer, output, listId in data:
             userData = {}
@@ -612,8 +611,10 @@ class OgrImportDialog(ImportDialog):
         if data is None:
             return
 
+        _ = ""
+
         if not data:
-            GMessage(_("No layers selected. Operation canceled."), parent=self)
+            GMessage(parent=self, message=_("No layers selected. Operation canceled."))
             return
 
         if not self._validateOutputMapName():
@@ -644,13 +645,7 @@ class OgrImportDialog(ImportDialog):
             if ext and layer.rfind(ext) > -1:
                 layer = layer.replace("." + ext, "")
             if "|" in layer:
-                layer, geometry = layer.split("|", 1)
-            else:
-                geometry = None
-
-                # TODO: v.import has no geometry option
-                # if geometry:
-                #    cmd.append('geometry=%s' % geometry)
+                layer, _ = layer.split("|", 1)
 
             cmd = self.getSettingsPageCmd()
             cmd.append("input=%s" % dsn)
