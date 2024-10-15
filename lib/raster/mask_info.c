@@ -124,7 +124,7 @@ int Rast__mask_info(char *name, char *mapset)
     char rname[GNAME_MAX], rmapset[GMAPSET_MAX];
 
     strcpy(rname, "MASK");
-    strcpy(rmapset, G_mapset());
+    (void)G_strlcpy(rmapset, G_mapset(), GMAPSET_MAX);
 
     if (!G_find_raster(rname, rmapset))
         return -1;

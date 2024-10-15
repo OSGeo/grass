@@ -220,7 +220,7 @@ int main(int argc, char *argv[])
     parm.logfile->required = NO;
     parm.logfile->description =
         _("Name for sampling points output text file. For each observation "
-          "vector point the time series of sediment transport is stored.");
+          "vector point the time series of water discharge is stored.");
     parm.logfile->guisection = _("Output");
 
     parm.nwalk = G_define_option();
@@ -525,6 +525,8 @@ int main(int argc, char *argv[])
         G_message(_("Using metric conversion factor %f, step=%f"), wp.conv,
                   wp.step);
 
+    wp.observation = parm.observation->answer;
+    wp.logfile = parm.logfile->answer;
     init_library_globals(&wp);
 
     if ((wp.depth == NULL) && (wp.disch == NULL) && (wp.err == NULL))
