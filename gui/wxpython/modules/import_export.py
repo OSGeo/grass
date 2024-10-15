@@ -647,7 +647,7 @@ class OgrImportDialog(ImportDialog):
             if ext and layer.rfind(ext) > -1:
                 layer = layer.replace("." + ext, "")
             if "|" in layer:
-                layer, _ = layer.split("|", 1)
+                layer = layer.split("|", 1)[0]
 
             cmd = self.getSettingsPageCmd()
             cmd.append("input=%s" % dsn)
