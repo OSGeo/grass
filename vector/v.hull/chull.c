@@ -690,14 +690,14 @@ void CleanEdges(void)
     if (edges) {
         e = edges->next;
         do {
-            if (e && e->delete) {
+            if (e->delete) {
                 t = e;
                 e = e->next;
                 DELETE(edges, t);
             }
             else
                 e = e->next;
-        } while (e != edges && e != NULL);
+        } while (e != edges);
     }
     
 }
