@@ -19,10 +19,14 @@ if [ ! -x "$(which sed)" ] ; then
     exit 1
 fi
 
-#### check if we have md5sum
-if [ ! -x "$(which md5sum)" ] ; then
-    echo "$PROG: md5sum required, please install first" 1>&2
-    exit 1
+#### check if we have md5sum or md5
+if [ -x "$(which md5sum)" ] ; then
+  MD5="md5sum | cut -d' ' -f1"
+elif [ -x "$(which md5)" ] ; then
+  MD5="md5 -q"
+else
+  echo "$PROG: md5sum or md5 required, please install first" 1>&2
+  exit 1
 fi
 
 #### check if we have cut
@@ -118,8 +122,8 @@ r.mapcalc "$TMPNAME = 1"
 check_exit_status $?
 
 echo "MD5 checksum on output of INT/CELL test."
-MD5=$(r.out.ascii "$TMPNAME" precision=15 | md5sum | cut -d' ' -f1)
-check_md5sum "549e7dabe70df893803690571d2e1503" "$MD5"
+SUM=$(r.out.ascii "$TMPNAME" precision=15 | eval "$MD5")
+check_md5sum "549e7dabe70df893803690571d2e1503" "$SUM"
 
 cleanup
 echo "INT/CELL md5sum test successful"
@@ -132,8 +136,8 @@ r.mapcalc "$TMPNAME = $VALUE"
 check_exit_status $?
 
 echo "MD5 checksum on output of FLOAT/FCELL test."
-MD5=$(r.out.ascii "$TMPNAME" precision=15 | md5sum | cut -d' ' -f1)
-check_md5sum "379f3d880b6d509051af6b4ccf470762" "$MD5"
+SUM=$(r.out.ascii "$TMPNAME" precision=15 | eval "$MD5")
+check_md5sum "379f3d880b6d509051af6b4ccf470762" "$SUM"
 
 cleanup
 echo "FLOAT/FCELL md5sum test successful"
