@@ -361,16 +361,16 @@ GEOSCoordSequence *V1_read_line_geos(struct Map_info *Map, long offset,
         z = NULL;
 
     if (0 >= dig__fread_port_D(x, n_points, &(Map->dig_fp))) {
-        goto free_return;
+        goto free_return; /* end of file */
     }
 
     if (0 >= dig__fread_port_D(y, n_points, &(Map->dig_fp))) {
-        goto free_return;
+        goto free_return; /* end of file */
     }
 
     if (Map->head.with_z) {
         if (0 >= dig__fread_port_D(z, n_points, &(Map->dig_fp))) {
-            goto free_return;
+            goto free_return; /* end of file */
         }
     }
 
