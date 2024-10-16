@@ -27,7 +27,8 @@
  % "name@mapset".
  *
  * This function checks if an environment variable "GRASS_MASK" is set.
- * If it is set, the value of the environment variable is returned as the mask name.
+ * If it is set, the value of the environment variable is returned as the mask
+ name.
  * If it is not set, the function will default to the mask name "MASK@<mapset>",
  * where <mapset> is the current mapset.
  *
