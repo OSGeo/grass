@@ -65,7 +65,7 @@ sweepOutput::sweepOutput()
 #ifdef OUTPUT_TCI
     tci = (tci_type)nodataType::ELEVATION_NODATA;
 #endif
-};
+}
 
 /* ------------------------------------------------------------ */
 /* computes output parameters of cell (i,j) given the flow value, the
@@ -347,6 +347,6 @@ void pushFlow(const sweepItem &swit, const flowValue &flow,
                 } /* if (!is_nodata(elev_neighb)) */
             }
         } /* for dj */
-    }     /* for di */
+    } /* for di */
     return;
 }

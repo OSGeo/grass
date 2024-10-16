@@ -552,99 +552,111 @@ class GConsole(wx.EvtHandler):
                 wx.PostEvent(self, event)
                 return
 
-            else:
-                # other GRASS commands (r|v|g|...)
-                try:
-                    task = GUI(show=None).ParseCommand(command)
-                except GException as e:
-                    GError(parent=self._guiparent, message=str(e), showTraceback=False)
-                    return
+            # other GRASS commands (r|v|g|...)
+            try:
+                task = GUI(show=None).ParseCommand(command)
+            except GException as e:
+                GError(parent=self._guiparent, message=str(e), showTraceback=False)
+                return
 
-                hasParams = False
-                if task:
-                    options = task.get_options()
-                    hasParams = options["params"] and options["flags"]
-                    # check for <input>=-
-                    for p in options["params"]:
-                        if (
-                            p.get("prompt", "") == "input"
-                            and p.get("element", "") == "file"
-                            and p.get("age", "new") == "old"
-                            and p.get("value", "") == "-"
-                        ):
-                            GError(
-                                parent=self._guiparent,
-                                message=_(
-                                    "Unable to run command:\n%(cmd)s\n\n"
-                                    "Option <%(opt)s>: read from standard input is not "
-                                    "supported by wxGUI"
-                                )
-                                % {"cmd": " ".join(command), "opt": p.get("name", "")},
+            hasParams = False
+            if task:
+                options = task.get_options()
+                hasParams = options["params"] and options["flags"]
+                # check for <input>=-
+                for p in options["params"]:
+                    if (
+                        p.get("prompt", "") == "input"
+                        and p.get("element", "") == "file"
+                        and p.get("age", "new") == "old"
+                        and p.get("value", "") == "-"
+                    ):
+                        GError(
+                            parent=self._guiparent,
+                            message=_(
+                                "Unable to run command:\n%(cmd)s\n\n"
+                                "Option <%(opt)s>: read from standard input is not "
+                                "supported by wxGUI"
                             )
-                            return
-
-                if len(command) == 1:
-                    if command[0].startswith("g.gui."):
-                        import imp
-                        import inspect
-
-                        pyFile = command[0]
-                        if sys.platform == "win32":
-                            pyFile += ".py"
-                        pyPath = os.path.join(os.environ["GISBASE"], "scripts", pyFile)
-                        if not os.path.exists(pyPath):
-                            pyPath = os.path.join(
-                                os.environ["GRASS_ADDON_BASE"], "scripts", pyFile
-                            )
-                        if not os.path.exists(pyPath):
-                            GError(
-                                parent=self._guiparent,
-                                message=_("Module <%s> not found.") % command[0],
-                            )
-                        pymodule = imp.load_source(command[0].replace(".", "_"), pyPath)
-                        pymain = inspect.getfullargspec(pymodule.main)
-                        if pymain and "giface" in pymain.args:
-                            pymodule.main(self._giface)
-                            return
-
-                    # no arguments given
-                    if hasParams and not isinstance(self._guiparent, FormNotebook):
-                        # also parent must be checked, see #3135 for details
-                        try:
-                            GUI(
-                                parent=self._guiparent, giface=self._giface
-                            ).ParseCommand(command)
-                            self.UpdateHistory(status=Status.SUCCESS)
-                        except GException as e:
-                            print(e, file=sys.stderr)
-
+                            % {"cmd": " ".join(command), "opt": p.get("name", "")},
+                        )
                         return
 
-                if env:
-                    env = env.copy()
-                else:
-                    env = os.environ.copy()
-                # activate computational region (set with g.region)
-                # for all non-display commands.
-                if compReg and "GRASS_REGION" in env:
-                    del env["GRASS_REGION"]
+            if len(command) == 1:
+                if command[0].startswith("g.gui."):
+                    import inspect
+                    import importlib.util
+                    import importlib.machinery
 
-                # process GRASS command with argument
-                self.cmdThread.RunCmd(
-                    command,
-                    stdout=self.cmdStdOut,
-                    stderr=self.cmdStdErr,
-                    onDone=onDone,
-                    onPrepare=onPrepare,
-                    userData=userData,
-                    addLayer=addLayer,
-                    env=env,
-                    notification=notification,
-                )
-                self.cmdOutputTimer.Start(50)
+                    def load_source(modname, filename):
+                        loader = importlib.machinery.SourceFileLoader(modname, filename)
+                        spec = importlib.util.spec_from_file_location(
+                            modname, filename, loader=loader
+                        )
+                        module = importlib.util.module_from_spec(spec)
+                        # Module is always executed and not cached in sys.modules.
+                        # Uncomment the following line to cache the module.
+                        # sys.modules[module.__name__] = module
+                        loader.exec_module(module)
+                        return module
 
-                # we don't need to change computational region settings
-                # because we work on a copy
+                    pyFile = command[0]
+                    if sys.platform == "win32":
+                        pyFile += ".py"
+                    pyPath = os.path.join(os.environ["GISBASE"], "scripts", pyFile)
+                    if not os.path.exists(pyPath):
+                        pyPath = os.path.join(
+                            os.environ["GRASS_ADDON_BASE"], "scripts", pyFile
+                        )
+                    if not os.path.exists(pyPath):
+                        GError(
+                            parent=self._guiparent,
+                            message=_("Module <%s> not found.") % command[0],
+                        )
+                    pymodule = load_source(command[0].replace(".", "_"), pyPath)
+                    pymain = inspect.getfullargspec(pymodule.main)
+                    if pymain and "giface" in pymain.args:
+                        pymodule.main(self._giface)
+                        return
+
+                # no arguments given
+                if hasParams and not isinstance(self._guiparent, FormNotebook):
+                    # also parent must be checked, see #3135 for details
+                    try:
+                        GUI(parent=self._guiparent, giface=self._giface).ParseCommand(
+                            command
+                        )
+                        self.UpdateHistory(status=Status.SUCCESS)
+                    except GException as e:
+                        print(e, file=sys.stderr)
+
+                    return
+
+            if env:
+                env = env.copy()
+            else:
+                env = os.environ.copy()
+            # activate computational region (set with g.region)
+            # for all non-display commands.
+            if compReg and "GRASS_REGION" in env:
+                del env["GRASS_REGION"]
+
+            # process GRASS command with argument
+            self.cmdThread.RunCmd(
+                command,
+                stdout=self.cmdStdOut,
+                stderr=self.cmdStdErr,
+                onDone=onDone,
+                onPrepare=onPrepare,
+                userData=userData,
+                addLayer=addLayer,
+                env=env,
+                notification=notification,
+            )
+            self.cmdOutputTimer.Start(50)
+
+            # we don't need to change computational region settings
+            # because we work on a copy
         else:
             # Send any other command to the shell. Send output to
             # console output window
@@ -663,7 +675,7 @@ class GConsole(wx.EvtHandler):
             skipInterface = True
             if os.path.splitext(command[0])[1] in {".py", ".sh"}:
                 try:
-                    with open(command[0], "r") as sfile:
+                    with open(command[0]) as sfile:
                         for line in sfile:
                             if len(line) < 3:
                                 continue
@@ -676,7 +688,7 @@ class GConsole(wx.EvtHandler):
             if len(command) == 1 and not skipInterface:
                 try:
                     task = gtask.parse_interface(command[0])
-                except:
+                except Exception:
                     task = None
             else:
                 task = None

@@ -766,7 +766,7 @@ class VNETDialog(wx.Dialog):
             for sel in ["arc_column", "arc_backward_column", "node_column"]:
                 self.inputData[sel].SetValue("")
             return
-        elif itemsLen == 1:
+        if itemsLen == 1:
             self.inputData["arc_layer"].SetSelection(0)
             self.inputData["node_layer"].SetSelection(0)
         elif itemsLen >= 1:
@@ -1648,7 +1648,7 @@ class CreateTtbDialog(wx.Dialog):
                 self._updateInputDbMgrPage(show=False)
             self.inputData["arc_layer"].SetValue("")
             return
-        elif itemsLen == 1:
+        if itemsLen == 1:
             self.inputData["arc_layer"].SetSelection(0)
         elif itemsLen >= 1:
             if "1" in items:
@@ -1952,9 +1952,7 @@ class TurnAnglesList(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEditM
             text = DegreesToRadians(text)
 
             # Tested allowed range of values
-            if text > math.pi:
-                text = 0.0
-            elif text < -math.pi:
+            if text > math.pi or text < -math.pi:
                 text = 0.0
 
         self.data.SetValue(text, row, column)

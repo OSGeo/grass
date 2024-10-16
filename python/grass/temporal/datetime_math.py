@@ -141,7 +141,7 @@ def decrement_datetime_by_string(mydate, increment, mult=1):
     :param mult: A multiplier, default is 1
     :return: The new datetime object or none in case of an error
     """
-    return modify_datetime_by_string(mydate, increment, mult, sign=int(-1))
+    return modify_datetime_by_string(mydate, increment, mult, sign=-1)
 
 
 ###############################################################################
@@ -483,9 +483,9 @@ def adjust_datetime_to_granularity(mydate, granularity):
             minutes = 0
             hours = 0
             if days > weekday:
-                days = days - weekday  # this needs to be fixed
+                days -= weekday  # this needs to be fixed
             else:
-                days = days + weekday  # this needs to be fixed
+                days += weekday  # this needs to be fixed
         elif has_months:  # Start at the first day of the month at 00:00:00
             seconds = 0
             minutes = 0
@@ -660,7 +660,7 @@ def compute_datetime_delta(start, end):
     elif start.day == 1 and end.day == 1:
         d = end.month - start.month
         if d < 0:
-            d = d + 12 * comp["year"]
+            d += 12 * comp["year"]
         elif d == 0:
             d = 12 * comp["year"]
         comp["month"] = d
@@ -678,9 +678,9 @@ def compute_datetime_delta(start, end):
     else:
         d = end.hour - start.hour
         if d < 0:
-            d = d + 24 + 24 * day_diff
+            d += 24 + 24 * day_diff
         else:
-            d = d + 24 * day_diff
+            d += 24 * day_diff
         comp["hour"] = d
 
     # Minutes
@@ -690,9 +690,9 @@ def compute_datetime_delta(start, end):
         d = end.minute - start.minute
         if d != 0:
             if comp["hour"]:
-                d = d + 60 * comp["hour"]
+                d += 60 * comp["hour"]
             else:
-                d = d + 24 * 60 * day_diff
+                d += 24 * 60 * day_diff
         elif d == 0:
             if comp["hour"]:
                 d = 60 * comp["hour"]
@@ -708,11 +708,11 @@ def compute_datetime_delta(start, end):
         d = end.second - start.second
         if d != 0:
             if comp["minute"]:
-                d = d + 60 * comp["minute"]
+                d += 60 * comp["minute"]
             elif comp["hour"]:
-                d = d + 3600 * comp["hour"]
+                d += 3600 * comp["hour"]
             else:
-                d = d + 24 * 60 * 60 * day_diff
+                d += 24 * 60 * 60 * day_diff
         elif d == 0:
             if comp["minute"]:
                 d = 60 * comp["minute"]
@@ -791,7 +791,7 @@ def check_datetime_string(time_string, use_dateutil=True):
         # relative time. dateutil will interpret a single number as a valid
         # time string, so we have to catch this case beforehand
         try:
-            value = int(time_string)
+            int(time_string)
             return _("Time string seems to specify relative time")
         except ValueError:
             pass
@@ -803,10 +803,10 @@ def check_datetime_string(time_string, use_dateutil=True):
         return time_object
 
     # BC is not supported
-    if "bc" in time_string > 0:
+    if "bc" in time_string:
         return _("Dates Before Christ (BC) are not supported")
 
-    # BC is not supported
+    # Time zones are not supported
     if "+" in time_string:
         return _("Time zones are not supported")
 
@@ -828,7 +828,7 @@ def check_datetime_string(time_string, use_dateutil=True):
     try:
         return datetime.strptime(time_string, time_format)
     except:
-        return _("Unable to parse time string: %s" % time_string)
+        return _("Unable to parse time string: %s") % time_string
 
 
 ###############################################################################

@@ -70,6 +70,7 @@
 #endif
 #include <grass/gis.h>
 #include <grass/vector.h>
+#include <grass/raster.h>
 #include <grass/linkm.h>
 #include <grass/bitmap.h>
 #include <grass/glocale.h>
@@ -380,8 +381,8 @@ int main(int argc, char *argv[])
 #else
     threads = 1;
 #endif
-    if (threads > 1 && G_find_raster("MASK", G_mapset()) != NULL) {
-        G_warning(_("Parallel processing disabled due to active MASK."));
+    if (threads > 1 && Rast_mask_is_present()) {
+        G_warning(_("Parallel processing disabled due to active mask."));
         threads = 1;
     }
     G_message(_("Number of threads: %d"), threads);
@@ -416,6 +417,8 @@ int main(int argc, char *argv[])
         G_message(_("Using metric conversion factor %f, step=%f"), wp.conv,
                   wp.step);
 
+    wp.observation = parm.observation->answer;
+    wp.logfile = parm.logfile->answer;
     init_library_globals(&wp);
 
     if ((wp.tc == NULL) && (wp.et == NULL) && (wp.conc == NULL) &&

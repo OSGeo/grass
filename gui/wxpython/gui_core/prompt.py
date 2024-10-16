@@ -477,9 +477,9 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
 
             # move through command history list index values
             if event.GetKeyCode() == wx.WXK_UP:
-                self.cmdindex = self.cmdindex - 1
+                self.cmdindex -= 1
             if event.GetKeyCode() == wx.WXK_DOWN:
-                self.cmdindex = self.cmdindex + 1
+                self.cmdindex += 1
             self.cmdindex = max(self.cmdindex, 0)
             self.cmdindex = min(self.cmdindex, len(self.cmdbuffer) - 1)
 
@@ -511,7 +511,6 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         # complete command after pressing '.'
         if event.GetKeyCode() == 46:
             self.autoCompList = []
-            entry = self.GetTextLeft()
             self.InsertText(pos, ".")
             self.CharRight()
             self.toComplete = self.EntityToComplete()
@@ -538,7 +537,6 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             or event.GetKeyCode() == wx.WXK_SUBTRACT
         ):
             self.autoCompList = []
-            entry = self.GetTextLeft()
             self.InsertText(pos, "-")
             self.CharRight()
             self.toComplete = self.EntityToComplete()

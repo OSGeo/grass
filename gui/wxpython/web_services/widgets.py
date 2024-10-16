@@ -171,9 +171,9 @@ class WSPanel(wx.Panel):
 
         style = wx.TR_DEFAULT_STYLE | wx.TR_HAS_BUTTONS | wx.TR_FULL_ROW_HIGHLIGHT
         if self.drv_props["req_multiple_layers"]:
-            style = style | wx.TR_MULTIPLE
+            style |= wx.TR_MULTIPLE
         if "WMS" not in self.ws:
-            style = style | wx.TR_HIDE_ROOT
+            style |= wx.TR_HIDE_ROOT
 
         self.list = LayersList(
             parent=self.req_page_panel, web_service=self.ws, style=style
@@ -538,10 +538,8 @@ class WSPanel(wx.Panel):
         if event.returncode != 0:
             if self.cmd_err_str:
                 self.cmd_err_str = (
-                    _(
-                        "Unable to download %s capabilities file\nfrom <%s>:\n"
-                        % (self.ws.replace("_", " "), self.conn["url"])
-                    )
+                    _("Unable to download %s capabilities file\nfrom <%s>:\n")
+                    % (self.ws.replace("_", " "), self.conn["url"])
                     + self.cmd_err_str
                 )
             self._postCapParsedEvt(error_msg=self.cmd_err_str)
@@ -559,8 +557,9 @@ class WSPanel(wx.Panel):
         except (OSError, ParseError) as error:
             error_msg = _(
                 "%s web service was not found in fetched capabilities file from "
-                "<%s>:\n%s\n" % (self.ws, self.conn["url"], str(error))
-            )
+                "<%s>:\n%s\n"
+            ) % (self.ws, self.conn["url"], str(error))
+
             if Debug.GetLevel() != 0:
                 Debug.msg(1, error_msg)
                 self._postCapParsedEvt(None)
@@ -634,7 +633,7 @@ class WSPanel(wx.Panel):
 
         # WMS standard - first layer in params is most bottom...
         # therefore layers order need to be reversed
-        l_st_list = [layer for layer in reversed(l_st_list)]
+        l_st_list.reverse()
         self.list.SelectLayers(l_st_list)
 
         params = {}
@@ -1096,11 +1095,8 @@ class LayersList(TreeCtrl):
                 return bool(
                     it_l_name == l_name
                     and (
-                        not it_st
-                        and not st_name
-                        or it_st
-                        and it_st["name"] == st_name
-                        and it_type == "style"
+                        (not it_st and not st_name)
+                        or (it_st and it_st["name"] == st_name and it_type == "style")
                     )
                 )
 

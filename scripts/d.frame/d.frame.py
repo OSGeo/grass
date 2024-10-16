@@ -91,7 +91,7 @@ def check_monitor():
 def read_monitor_file(monitor, ftype="env"):
     mfile = check_monitor_file(monitor, ftype)
     try:
-        fd = open(mfile, "r")
+        fd = open(mfile)
     except OSError as e:
         fatal(_("Unable to get monitor info. %s"), e)
 

@@ -659,7 +659,6 @@ class SwipeMapPanel(DoubleMapPanel):
 
         So far not implemented.
         """
-        pass
 
     def SetViewMode(self, mode):
         """Sets view mode.

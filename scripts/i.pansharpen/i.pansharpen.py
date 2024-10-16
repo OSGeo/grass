@@ -402,7 +402,7 @@ def main():
     gs.run_command("g.region", res=panres, align=pan)
 
     # Select sharpening method
-    gs.message(_("Performing pan sharpening with hi res pan image: %f" % panres))
+    gs.message(_("Performing pan sharpening with hi res pan image: %f") % panres)
     if sharpen == "brovey":
         brovey(pan, ms1, ms2, ms3, out, pid, sproc)
     elif sharpen == "ihs":
@@ -437,8 +437,8 @@ def main():
     for ch in ["red", "green", "blue"]:
         gs.verbose(_("%s_%s") % (out, ch))
 
-    gs.verbose(_("To visualize output, run: g.region -p raster=%s_red" % out))
-    gs.verbose(_("d.rgb r=%s_red g=%s_green b=%s_blue" % (out, out, out)))
+    gs.verbose(_("To visualize output, run: g.region -p raster=%s_red") % out)
+    gs.verbose(_("d.rgb r=%s_red g=%s_green b=%s_blue") % (out, out, out))
     gs.verbose(
         _("If desired, combine channels into a single RGB map with 'r.composite'.")
     )
@@ -732,7 +732,7 @@ def matchhist(original, target, matched):
         stats = gs.decode(stats_out.communicate()[0]).split("\n")[:-1]
         stats_dict = dict(s.split(":", 1) for s in stats)
         total_cells = 0  # total non-null cells
-        for j in stats_dict:
+        for j in stats_dict.keys():  # noqa: PLC0206
             stats_dict[j] = int(stats_dict[j])
             if j != "*":
                 total_cells += stats_dict[j]
@@ -749,7 +749,7 @@ def matchhist(original, target, matched):
             0  # cumulative total of cells for sum of current and all lower grey values
         )
 
-        for n in range(0, 256):
+        for n in range(256):
             if str(n) in stats_dict:
                 num_cells = stats_dict[str(n)]
             else:

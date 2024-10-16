@@ -40,7 +40,7 @@ from grass.grassdb.manage import resolve_mapset_path
 
 # subprocess wrapper that uses shell on Windows
 class Popen(subprocess.Popen):
-    _builtin_exts = set([".com", ".exe", ".bat", ".cmd"])
+    _builtin_exts = {".com", ".exe", ".bat", ".cmd"}
 
     @staticmethod
     def _escape_for_shell(arg):
@@ -127,8 +127,7 @@ def _make_unicode(val, enc):
 
     if enc == "default":
         return decode(val)
-    else:
-        return decode(val, encoding=enc)
+    return decode(val, encoding=enc)
 
 
 def get_commands(*, env=None):
@@ -178,7 +177,7 @@ def get_commands(*, env=None):
     gui_path = os.path.join(gisbase, "etc", "gui", "scripts")
     if os.path.exists(gui_path):
         os.environ["PATH"] = os.getenv("PATH") + os.pathsep + gui_path
-        cmd = cmd + os.listdir(gui_path)
+        cmd += os.listdir(gui_path)
 
     return set(cmd), scripts
 
@@ -349,7 +348,7 @@ def handle_errors(returncode, result, args, kwargs):
         return result
     if handler.lower() == "ignore":
         return result
-    elif handler.lower() == "fatal":
+    if handler.lower() == "fatal":
         module, code = get_module_and_code(args, kwargs)
         fatal(
             _(
@@ -1066,7 +1065,7 @@ def _text_to_key_value_dict(
         {'a': ['Hello'], 'c': [1, 2, 3, 4, 5], 'b': [1.0], 'd': ['hello', 8, 0.1]}
 
     """
-    text = open(filename, "r").readlines()
+    text = open(filename).readlines()
     kvdict = KeyValue()
 
     for line in text:
@@ -1276,7 +1275,7 @@ def region_env(region3d=False, flags=None, env=None, **kwargs):
     windfile = os.path.join(
         gis_env["GISDBASE"], gis_env["LOCATION_NAME"], gis_env["MAPSET"], "WIND"
     )
-    with open(windfile, "r") as fd:
+    with open(windfile) as fd:
         grass_region = ""
         for line in fd:
             key, value = (x.strip() for x in line.split(":", 1))
@@ -1650,8 +1649,7 @@ def verbosity():
     vbstr = os.getenv("GRASS_VERBOSE")
     if vbstr:
         return int(vbstr)
-    else:
-        return 2
+    return 2
 
 
 # Various utilities, not specific to GRASS
@@ -1894,7 +1892,7 @@ def _create_location_xy(database, location):
     :param database: GRASS database where to create new location
     :param location: location name
     """
-    cur_dir = os.getcwd()
+    cur_dir = Path.cwd()
     try:
         os.chdir(database)
         os.mkdir(location)

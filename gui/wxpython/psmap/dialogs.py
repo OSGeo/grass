@@ -37,6 +37,8 @@ This program is free software under the GNU General Public License
 import os
 import string
 from copy import deepcopy
+from operator import itemgetter
+from pathlib import Path
 
 import wx
 import wx.lib.agw.floatspin as fs
@@ -524,8 +526,7 @@ class PsmapDialog(Dialog):
         if ok:
             self.parent.DialogDataChanged(id=self.id)
             return True
-        else:
-            return False
+        return False
 
     def OnOK(self, event):
         """Apply changes, close dialog"""
@@ -2103,7 +2104,6 @@ class RasterDialog(PsmapDialog):
 
     def updateDialog(self):
         """Update information (not used)"""
-        pass
 
 
 # if "map" in self.parent.openDialogs:
@@ -2149,7 +2149,6 @@ class MainVectorDialog(PsmapDialog):
 
     def updateDialog(self):
         """Update information (not used)"""
-        pass
 
 
 class VPropertiesDialog(Dialog):
@@ -3624,9 +3623,7 @@ class LegendDialog(PsmapDialog):
         self.vectorListCtrl.InsertColumn(0, _("Vector map"))
         self.vectorListCtrl.InsertColumn(1, _("Label"))
         if self.vectorId:
-            vectors = sorted(
-                self.instruction[self.vectorId]["list"], key=lambda x: x[3]
-            )
+            vectors = sorted(self.instruction[self.vectorId]["list"], key=itemgetter(3))
 
             for vector in vectors:
                 index = self.vectorListCtrl.InsertItem(
@@ -4457,7 +4454,7 @@ class LegendDialog(PsmapDialog):
         if self.instruction.FindInstructionByType("vector"):
             vectors = sorted(
                 self.instruction.FindInstructionByType("vector")["list"],
-                key=lambda x: x[3],
+                key=itemgetter(3),
             )
             self.vectorListCtrl.DeleteAllItems()
             for vector in vectors:
@@ -5967,7 +5964,7 @@ class ImageDialog(PsmapDialog):
 
     def _getImageDirectory(self):
         """Default image directory"""
-        return os.getcwd()
+        return str(Path.cwd())
 
     def _addConvergence(self, panel, gridBagSizer):
         pass
@@ -6729,7 +6726,6 @@ class RectangleDialog(PsmapDialog):
 
     def updateDialog(self):
         """Update text coordinates, after moving"""
-        pass
 
 
 class LabelsDialog(PsmapDialog):

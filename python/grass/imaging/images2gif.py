@@ -265,7 +265,7 @@ class GifWriter:
                 xy = (0, 0)
             if hasattr(xy, "__len__"):
                 if len(xy) == len(images):
-                    xy = [xxyy for xxyy in xy]
+                    xy = list(xy)
                 else:
                     raise ValueError("len(xy) doesn't match amount of images.")
             else:
@@ -471,7 +471,7 @@ class GifWriter:
                     fp.write(d)
 
             # Prepare for next round
-            frames = frames + 1
+            frames += 1
 
         fp.write(";")  # end gif
         return frames
@@ -594,7 +594,7 @@ def writeGifVisvis(
     # Check duration
     if hasattr(duration, "__len__"):
         if len(duration) == len(images):
-            duration = [d for d in duration]
+            duration = list(duration)
         else:
             raise ValueError("len(duration) doesn't match amount of images.")
     else:
@@ -857,14 +857,14 @@ class NeuQuant:
 
     def geta(self, alpha, rad):
         try:
-            return self.a_s[(alpha, rad)]
+            return self.a_s[alpha, rad]
         except KeyError:
             length = rad * 2 - 1
             mid = length / 2
             q = np.array(list(range(mid - 1, -1, -1)) + list(range(-1, mid)))
             a = alpha * (rad * rad - q * q) / (rad * rad)
             a[mid] = 0
-            self.a_s[(alpha, rad)] = a
+            self.a_s[alpha, rad] = a
             return a
 
     def alterneigh(self, alpha, rad, i, b, g, r):
@@ -1060,9 +1060,8 @@ class NeuQuant:
         """
         if get_cKDTree():
             return self.quantize_with_scipy(image)
-        else:
-            print("Scipy not available, falling back to slower version.")
-            return self.quantize_without_scipy(image)
+        print("Scipy not available, falling back to slower version.")
+        return self.quantize_without_scipy(image)
 
     def quantize_with_scipy(self, image):
         w, h = image.size

@@ -238,7 +238,7 @@ def main():
                 )
             )
         if indicator.find("@") >= 0:
-            indicator = indicator
+            indicator_id = indicator
         else:
             indicator_id = indicator + "@" + mapset
 
@@ -341,7 +341,7 @@ def main():
         if len(input_maps) == 0:
             continue
 
-        gs.message(_("Processing cycle %s - %s" % (str(start), str(end))))
+        gs.message(_("Processing cycle %s - %s") % (str(start), str(end)))
 
         count = compute_occurrence(
             occurrence_maps,

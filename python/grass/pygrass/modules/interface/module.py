@@ -334,11 +334,11 @@ class Module:
     >>> region.flags.u = True
     >>> region.flags["3"].value = True  # set numeric flags
     >>> region.get_bash()
-    'g.region -p -3 -u'
+    'g.region format=plain -p -3 -u'
     >>> new_region = copy.deepcopy(region)
     >>> new_region.inputs.res = "10"
     >>> new_region.get_bash()
-    'g.region res=10 -p -3 -u'
+    'g.region res=10 format=plain -p -3 -u'
 
     >>> neighbors = Module("r.neighbors")
     >>> neighbors.inputs.input = "mapA"
@@ -720,12 +720,11 @@ class Module:
         #     pre name par flg special
         if flags and special:
             return "%s.%s(%s, flags=%r, %s)" % (prefix, name, params, flags, special)
-        elif flags:
+        if flags:
             return "%s.%s(%s, flags=%r)" % (prefix, name, params, flags)
-        elif special:
+        if special:
             return "%s.%s(%s, %s)" % (prefix, name, params, special)
-        else:
-            return "%s.%s(%s)" % (prefix, name, params)
+        return "%s.%s(%s)" % (prefix, name, params)
 
     def __str__(self):
         """Return the command string that can be executed in a shell"""
@@ -952,7 +951,8 @@ class MultiModule:
     ...     set_temp_region=True,
     ... )
     >>> str(mm)
-    'g.region -p ; g.region -p ; g.region -p ; g.region -p ; g.region -p'
+    'g.region format=plain -p ; g.region format=plain -p ; g.region format=plain -p ; \
+g.region format=plain -p ; g.region format=plain -p'
     >>> t = mm.run()
     >>> isinstance(t, Process)
     True
@@ -1025,16 +1025,15 @@ class MultiModule:
                 module.finish_ = True
                 module.run()
             return None
+        if self.set_temp_region is True:
+            self.p = Process(
+                target=run_modules_in_temp_region, args=[self.module_list, self.q]
+            )
         else:
-            if self.set_temp_region is True:
-                self.p = Process(
-                    target=run_modules_in_temp_region, args=[self.module_list, self.q]
-                )
-            else:
-                self.p = Process(target=run_modules, args=[self.module_list, self.q])
-            self.p.start()
+            self.p = Process(target=run_modules, args=[self.module_list, self.q])
+        self.p.start()
 
-            return self.p
+        return self.p
 
     def wait(self):
         """Wait for all processes to finish. Call this method

@@ -38,7 +38,7 @@ import re
 import mimetypes
 import time
 
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
 from xml.sax import saxutils
 
 import wx
@@ -323,7 +323,7 @@ class Model:
         """
         # parse workspace file
         try:
-            gxmXml = ProcessModelFile(etree.parse(filename))
+            gxmXml = ProcessModelFile(ET.parse(filename))
         except Exception as e:
             raise GException("{}".format(e))
 
@@ -546,7 +546,7 @@ class Model:
 
         for finput in self.fileInput:
             # read lines
-            fd = open(finput, "r")
+            fd = open(finput)
             try:
                 data = self.fileInput[finput] = fd.read()
             finally:
@@ -941,8 +941,9 @@ class ModelObject:
 
         result = []
         for rel in self.rels:
-            if fdir == "from" and rel.GetFrom() == self:
-                result.append(rel)
+            if fdir == "from":
+                if rel.GetFrom() == self:
+                    result.append(rel)
             elif rel.GetTo() == self:
                 result.append(rel)
 
@@ -1232,8 +1233,7 @@ class ModelAction(ModelObject, ogl.DividedShape):
         if string:
             if cmd is None:
                 return ""
-            else:
-                return " ".join(cmd)
+            return " ".join(cmd)
 
         return cmd
 
@@ -1390,7 +1390,6 @@ class ModelData(ModelObject):
         :param width, height: dimension of the shape
         :param x, y: position of the shape
         """
-        pass
 
     def IsIntermediate(self):
         """Checks if data item is intermediate"""
@@ -1420,8 +1419,7 @@ class ModelData(ModelObject):
             name.append(rel.GetLabel())
         if name:
             return "/".join(name) + "=" + self.value + " (" + self.prompt + ")"
-        else:
-            return self.value + " (" + self.prompt + ")"
+        return self.value + " (" + self.prompt + ")"
 
     def GetLabel(self):
         """Get list of names"""
@@ -1578,7 +1576,7 @@ class ModelDataSingle(ModelData, ogl.EllipseShape):
         :param width, height: dimension of the shape
         :param x, y: position of the shape
         """
-        ogl.EllipseShape.__init__(self, width, height)
+        ogl.EllipseShape.__init__(self, width, height)  # noqa: PLC2801, C2801
         if self.parent.GetCanvas():
             self.SetCanvas(self.parent.GetCanvas())
 
@@ -1593,7 +1591,7 @@ class ModelDataSeries(ModelData, ogl.CompositeShape):
         :param width, height: dimension of the shape
         :param x, y: position of the shape
         """
-        ogl.CompositeShape.__init__(self)
+        ogl.CompositeShape.__init__(self)  # noqa: PLC2801, C2801
         if self.parent.GetCanvas():
             self.SetCanvas(self.parent.GetCanvas())
 
@@ -1672,7 +1670,7 @@ class ModelRelation(ogl.LineShape):
         """
         if isinstance(self.fromShape, ModelData):
             return self.fromShape
-        elif isinstance(self.toShape, ModelData):
+        if isinstance(self.toShape, ModelData):
             return self.toShape
 
         return None
@@ -1743,8 +1741,7 @@ class ModelItem(ModelObject):
         """Get log info"""
         if self.label:
             return _("Condition: ") + self.label
-        else:
-            return _("Condition: not defined")
+        return _("Condition: not defined")
 
     def AddRelation(self, rel):
         """Record relation"""
@@ -2024,8 +2021,7 @@ class ProcessModelFile:
         if p is not None:
             if p.text:
                 return utils.normalize_whitespace(p.text)
-            else:
-                return ""
+            return ""
 
         return default
 
@@ -2257,7 +2253,7 @@ class ProcessModelFile:
             pos, size = self._getDim(node)
             text = self._filterValue(self._getNodeText(node, "condition")).strip()
             aid = {"if": [], "else": []}
-            for b in aid.keys():
+            for b in aid.keys():  # noqa: PLC0206
                 bnode = node.find(b)
                 if bnode is None:
                     continue
@@ -2641,7 +2637,7 @@ class WriteScriptFile(ABC):
             self._writePythonAction(
                 item, variables, self.model.GetIntermediateData()[:3]
             )
-        elif isinstance(item, ModelLoop) or isinstance(item, ModelCondition):
+        elif isinstance(item, (ModelLoop, ModelCondition)):
             # substitute condition
             cond = item.GetLabel()
             for variable in self.model.GetVariables():
@@ -2819,12 +2815,11 @@ class WriteActiniaFile(WriteScriptFile):
             dlg = wx.MessageDialog(
                 self.model.canvas,
                 message=_(
-                    f"Module {task.get_name()} in your model contains "
-                    f"parameterized flags. actinia does not support "
-                    f"parameterized flags. The following flags are therefore "
-                    f"not being written in the generated json: "
-                    f"{itemParameterizedFlags}"
-                ),
+                    "Module {task_name} in your model contains "
+                    "parameterized flags. Actinia does not support "
+                    "parameterized flags. The following flags are therefore "
+                    "not being written in the generated JSON: {flags}"
+                ).format(task_name=task.get_name(), flags=itemParameterizedFlags),
                 caption=_("Warning"),
                 style=wx.OK_DEFAULT | wx.ICON_WARNING,
             )
@@ -3323,15 +3318,15 @@ class WritePythonFile(WriteScriptFile):
         """
         if string == "raster":
             return "G_OPT_R_MAP"
-        elif string == "vector":
+        if string == "vector":
             return "G_OPT_V_MAP"
-        elif string == "mapset":
+        if string == "mapset":
             return "G_OPT_M_MAPSET"
-        elif string == "file":
+        if string == "file":
             return "G_OPT_F_INPUT"
-        elif string == "dir":
+        if string == "dir":
             return "G_OPT_M_DIR"
-        elif string == "region":
+        if string == "region":
             return "G_OPT_M_REGION"
 
         return None
@@ -3488,7 +3483,7 @@ def cleanup():
                 r"""    %s("g.remove", flags="f", type="vector",
                 name=%s)
 """
-                % (run_command, ",".join(('"' + x + '"' for x in vect)))
+                % (run_command, ",".join(f'"{x}"' for x in vect))
             )
         if rast3d:
             self.fd.write(

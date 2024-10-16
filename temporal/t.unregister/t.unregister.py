@@ -108,7 +108,7 @@ def main():
 
     # Read the map list from file
     if file:
-        fd = open(file, "r")
+        fd = open(file)
 
         line = True
         while True:
@@ -154,10 +154,8 @@ def main():
                 statement += map.delete(dbif=dbif, update=False, execute=False)
         else:
             gs.warning(
-                _(
-                    "Unable to find %s map <%s> in temporal database"
-                    % (map.get_type(), map.get_id())
-                )
+                _("Unable to find %s map <%s> in temporal database")
+                % (map.get_type(), map.get_id())
             )
 
         count += 1
@@ -170,7 +168,7 @@ def main():
 
     # Update space time datasets
     if input:
-        gs.message(_("Unregister maps from space time dataset <%s>" % (input)))
+        gs.message(_("Unregister maps from space time dataset <%s>") % (input))
     else:
         gs.message(_("Unregister maps from the temporal database"))
 
@@ -179,8 +177,7 @@ def main():
         sp.update_command_string(dbif=dbif)
     elif len(update_dict) > 0:
         count = 0
-        for key in update_dict.keys():
-            id = update_dict[key]
+        for id in update_dict.values():
             sp = tgis.open_old_stds(id, type, dbif)
             sp.update_from_registered_maps(dbif)
             gs.percent(count, len(update_dict), 1)

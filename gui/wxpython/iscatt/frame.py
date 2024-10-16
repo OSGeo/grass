@@ -221,9 +221,6 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
 
         self.Bind(aui.EVT_AUI_PANE_CLOSE, self.OnPlotPaneClosed)
 
-        dlgSize = (-1, 400)
-        # self.SetBestSize(dlgSize)
-        # self.SetInitialSize(dlgSize)
         self.SetAutoLayout(1)
         # fix goutput's pane size (required for Mac OSX)
         # if self.gwindow:
@@ -249,7 +246,7 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
             x = int(round(x))
             y = int(round(y))
             coords = True
-        except:
+        except TypeError:
             coords = False
 
         pane = self._getPane(scatt_id)
@@ -681,7 +678,7 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
         name = cat_attrs["name"]
 
         dlg = SetOpacityDialog(
-            self, opacity=value, title=_("Change opacity of class <%s>" % name)
+            self, opacity=value, title=_("Change opacity of class <%s>") % name
         )
 
         dlg.applyOpacity.connect(

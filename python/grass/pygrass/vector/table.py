@@ -65,14 +65,13 @@ def get_path(path, vect_name=None):
     """
     if "$" not in path:
         return path
-    else:
-        mapset = Mapset()
-        path = path.replace("$GISDBASE", mapset.gisdbase)
-        path = path.replace("$LOCATION_NAME", mapset.location)
-        path = path.replace("$MAPSET", mapset.name)
-        if vect_name is not None:
-            path = path.replace("$MAP", vect_name)
-        return path
+    mapset = Mapset()
+    path = path.replace("$GISDBASE", mapset.gisdbase)
+    path = path.replace("$LOCATION_NAME", mapset.location)
+    path = path.replace("$MAPSET", mapset.name)
+    if vect_name is not None:
+        path = path.replace("$MAP", vect_name)
+    return path
 
 
 class Filters:
@@ -297,7 +296,7 @@ class Columns:
             [
                 "?",
             ]
-            * self.__len__()
+            * (len(self))
         )
         kv = ",".join(["%s=?" % k for k in self.odict.keys() if k != self.key])
         where = "%s=?" % self.key
@@ -326,8 +325,7 @@ class Columns:
             return ", ".join(
                 ["%s %s" % (key, val) for key, val in self.items() if key != remove]
             )
-        else:
-            return ", ".join(["%s %s" % (key, val) for key, val in self.items()])
+        return ", ".join(["%s %s" % (key, val) for key, val in self.items()])
 
     def types(self):
         """Return a list with the column types.
@@ -372,8 +370,7 @@ class Columns:
             nams = list(self.odict.keys())
         if unicod:
             return nams
-        else:
-            return [str(name) for name in nams]
+        return [str(name) for name in nams]
 
     def items(self):
         """Return a list of tuple with column name and column type.
@@ -791,10 +788,7 @@ class Link:
         False
         """
         attrs = ["layer", "name", "table_name", "key", "driver"]
-        for attr in attrs:
-            if getattr(self, attr) != getattr(link, attr):
-                return False
-        return True
+        return all(getattr(self, attr) == getattr(link, attr) for attr in attrs)
 
     def __ne__(self, other):
         return not self == other
@@ -850,7 +844,7 @@ class Link:
             if not os.path.exists(dbdirpath):
                 os.mkdir(dbdirpath)
             return sqlite3.connect(dbpath)
-        elif driver == "pg":
+        if driver == "pg":
             try:
                 import psycopg2
 
@@ -943,11 +937,10 @@ class DBlinks:
     def __getitem__(self, item):
         if isinstance(item, int):
             return self.by_index(item)
-        else:
-            return self.by_name(item)
+        return self.by_name(item)
 
     def __repr__(self):
-        return "DBlinks(%r)" % [link for link in self.__iter__()]
+        return "DBlinks(%r)" % list(self.__iter__())
 
     def by_index(self, indx):
         """Return a Link object by index

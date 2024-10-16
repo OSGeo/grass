@@ -76,7 +76,7 @@ class AbstractDataset(
         """
         if self.is_temporal_topology_build() and not self.is_spatial_topology_build():
             return self.get_number_of_temporal_relations()
-        elif self.is_spatial_topology_build() and not self.is_temporal_topology_build():
+        if self.is_spatial_topology_build() and not self.is_temporal_topology_build():
             self.get_number_of_spatial_relations()
         else:
             return (
@@ -511,8 +511,7 @@ class AbstractDataset(
         """
         if "temporal_type" in self.base.D:
             return self.base.get_ttype() == "absolute"
-        else:
-            return None
+        return None
 
     def is_time_relative(self):
         """Return True in case the temporal type is relative
@@ -521,8 +520,7 @@ class AbstractDataset(
         """
         if "temporal_type" in self.base.D:
             return self.base.get_ttype() == "relative"
-        else:
-            return None
+        return None
 
     def get_temporal_extent(self):
         """Return the temporal extent of the correct internal type"""
