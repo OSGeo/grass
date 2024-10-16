@@ -30,7 +30,7 @@ class NvizSettings:
 
     def SetConstantDefaultProp(self):
         """Set default constant data properties"""
-        data = dict()
+        data = {}
         for key, value in UserSettings.Get(group="nviz", key="constant").items():
             data[key] = value
         color = (
@@ -47,7 +47,7 @@ class NvizSettings:
     def SetSurfaceDefaultProp(self, data=None):
         """Set default surface data properties"""
         if not data:
-            data = dict()
+            data = {}
         for sec in ("attribute", "draw", "mask", "position"):
             data[sec] = {}
 
@@ -79,7 +79,7 @@ class NvizSettings:
 
             if control == "wire-color":
                 value = str(value[0]) + ":" + str(value[1]) + ":" + str(value[2])
-            elif control in ("mode", "style", "shading"):
+            elif control in {"mode", "style", "shading"}:
                 if "mode" not in data["draw"]:
                     data["draw"]["mode"] = {}
                 continue
@@ -105,11 +105,11 @@ class NvizSettings:
 
     def SetVolumeDefaultProp(self):
         """Set default volume data properties"""
-        data = dict()
+        data = {}
         for sec in ("attribute", "draw", "position"):
-            data[sec] = dict()
+            data[sec] = {}
             for sec in ("isosurface", "slice"):
-                data[sec] = list()
+                data[sec] = []
 
         #
         # draw
@@ -172,7 +172,7 @@ class NvizSettings:
 
     def SetIsosurfaceDefaultProp(self):
         """Set default isosurface properties"""
-        data = dict()
+        data = {}
         for attr in ("shine", "topo", "transp", "color", "inout"):
             data[attr] = {}
             data[attr]["update"] = None
@@ -187,7 +187,7 @@ class NvizSettings:
 
     def SetSliceDefaultProp(self):
         """Set default slice properties"""
-        data = dict()
+        data = {}
         data["position"] = copy.deepcopy(
             UserSettings.Get(group="nviz", key="volume", subkey="slice_position")
         )
@@ -201,7 +201,7 @@ class NvizSettings:
     def SetVectorDefaultProp(self, longDim, data=None):
         """Set default vector data properties"""
         if not data:
-            data = dict()
+            data = {}
         for sec in ("lines", "points"):
             data[sec] = {}
 

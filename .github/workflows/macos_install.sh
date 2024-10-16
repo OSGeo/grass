@@ -7,9 +7,6 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-# recommended in https://gitter.im/conda-forge/conda-forge.github.io?at=5c40da7f95e17b45256960ce
-find ${CONDA_PREFIX}/lib -name '*.la' -delete
-
 CONDA_ARCH=$(uname -m)
 INSTALL_PREFIX=$1
 
@@ -50,12 +47,8 @@ CONFIGURE_FLAGS="\
   --with-bzlib-libs=${CONDA_PREFIX}/lib \
   --with-bzlib-includes=${CONDA_PREFIX}/include \
   --with-netcdf=${CONDA_PREFIX}/bin/nc-config \
-  --with-blas \
-  --with-blas-libs=${CONDA_PREFIX}/lib \
-  --with-blas-includes=${CONDA_PREFIX}/include \
-  --with-lapack
-  --with-lapack-includes=${CONDA_PREFIX}/include \
-  --with-lapack-libs=${CONDA_PREFIX}/lib \
+  --with-blas=openblas \
+  --with-lapack=openblas \
   --with-netcdf=${CONDA_PREFIX}/bin/nc-config \
   --with-nls \
   --with-libs=${CONDA_PREFIX}/lib \
@@ -72,7 +65,7 @@ export CPPFLAGS="-isystem${CONDA_PREFIX}/include"
 
 ./configure $CONFIGURE_FLAGS
 
-EXEMPT="-Wno-error=deprecated-non-prototype -Wno-error=strict-prototypes"
+EXEMPT=""
 make -j$(sysctl -n hw.ncpu) CFLAGS="$CFLAGS -Werror $EXEMPT" \
   CXXFLAGS="$CXXFLAGS -Werror $EXEMPT"
 

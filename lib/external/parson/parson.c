@@ -93,10 +93,10 @@
 #if defined(isnan) && defined(isinf)
 #define IS_NUMBER_INVALID(x) (isnan((x)) || isinf((x)))
 #else
-#define IS_NUMBER_INVALID(x) (((x)*0.0) != 0.0)
+#define IS_NUMBER_INVALID(x) (((x) * 0.0) != 0.0)
 #endif
 
-#define OBJECT_INVALID_IX ((size_t)-1)
+#define OBJECT_INVALID_IX ((size_t) - 1)
 
 static JSON_Malloc_Function parson_malloc = malloc;
 static JSON_Free_Function parson_free = free;
@@ -109,7 +109,7 @@ static JSON_Number_Serialization_Function parson_number_serialization_function =
     NULL;
 
 #define IS_CONT(b) \
-    (((unsigned char)(b)&0xC0) == 0x80) /* is utf-8 continuation byte */
+    (((unsigned char)(b) & 0xC0) == 0x80) /* is utf-8 continuation byte */
 
 typedef int parson_bool_t;
 
@@ -900,13 +900,13 @@ static JSON_Status parse_utf16(const char **unprocessed, char **processed)
     }
     else if (cp < 0x800) {
         processed_ptr[0] = ((cp >> 6) & 0x1F) | 0xC0; /* 110xxxxx */
-        processed_ptr[1] = ((cp)&0x3F) | 0x80;        /* 10xxxxxx */
+        processed_ptr[1] = ((cp) & 0x3F) | 0x80;      /* 10xxxxxx */
         processed_ptr += 1;
     }
     else if (cp < 0xD800 || cp > 0xDFFF) {
         processed_ptr[0] = ((cp >> 12) & 0x0F) | 0xE0; /* 1110xxxx */
         processed_ptr[1] = ((cp >> 6) & 0x3F) | 0x80;  /* 10xxxxxx */
-        processed_ptr[2] = ((cp)&0x3F) | 0x80;         /* 10xxxxxx */
+        processed_ptr[2] = ((cp) & 0x3F) | 0x80;       /* 10xxxxxx */
         processed_ptr += 2;
     }
     else if (cp >= 0xD800 &&
@@ -927,7 +927,7 @@ static JSON_Status parse_utf16(const char **unprocessed, char **processed)
         processed_ptr[0] = (((cp >> 18) & 0x07) | 0xF0); /* 11110xxx */
         processed_ptr[1] = (((cp >> 12) & 0x3F) | 0x80); /* 10xxxxxx */
         processed_ptr[2] = (((cp >> 6) & 0x3F) | 0x80);  /* 10xxxxxx */
-        processed_ptr[3] = (((cp)&0x3F) | 0x80);         /* 10xxxxxx */
+        processed_ptr[3] = (((cp) & 0x3F) | 0x80);       /* 10xxxxxx */
         processed_ptr += 3;
     }
     else { /* trail surrogate before lead surrogate */

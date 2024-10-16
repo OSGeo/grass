@@ -18,6 +18,7 @@ from grass.grassdb.manage import MapsetPath, resolve_mapset_path, split_mapset_p
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import call_module
 from grass.gunittest.main import test
+from grass.gunittest.utils import xfail_windows
 
 
 class TestMapsetPath(TestCase):
@@ -38,6 +39,7 @@ class TestMapsetPath(TestCase):
         self.assertEqual(mapset_path.mapset, mapset_name)
         self.assertEqual(mapset_path.path, Path(path) / location_name / mapset_name)
 
+    @xfail_windows
     def test_mapset_from_str(self):
         """Check with path from str and database directory as Path"""
         path = "does/not/exist"
@@ -60,6 +62,7 @@ class TestMapsetPath(TestCase):
 class TestSplitMapsetPath(TestCase):
     """Check that split works with different parameters"""
 
+    @xfail_windows
     def test_split_path(self):
         """Check that pathlib.Path is correctly split"""
         ref_db = "does/not/exist"
@@ -71,6 +74,7 @@ class TestSplitMapsetPath(TestCase):
         self.assertEqual(new_location, ref_location)
         self.assertEqual(new_mapset, ref_mapset)
 
+    @xfail_windows
     def test_split_str(self):
         """Check that path as str is correctly split"""
         ref_db = "does/not/exist"
@@ -82,6 +86,7 @@ class TestSplitMapsetPath(TestCase):
         self.assertEqual(new_location, ref_location)
         self.assertEqual(new_mapset, ref_mapset)
 
+    @xfail_windows
     def test_split_str_trailing_slash(self):
         """Check that path as str with a trailing slash is correctly split"""
         ref_db = "does/not/exist"

@@ -13,16 +13,12 @@ import grass.lib.rowio as librowio
 
 libgis.G_gisinit("")
 
-#
 # import pygrass modules
-#
 from grass.pygrass.errors import must_be_open
 from grass.pygrass.gis.region import Region
 from grass.pygrass import utils
 
-#
 # import raster classes
-#
 from grass.pygrass.raster.abstract import RasterAbstractBase
 from grass.pygrass.raster.raster_type import TYPE as RTYPE, RTYPE_STR
 from grass.pygrass.raster.buffer import Buffer
@@ -191,8 +187,8 @@ class RasterRow(RasterAbstractBase):
             * self._rows and self._cols
 
         """
-        self.mode = mode if mode else self.mode
-        self.mtype = mtype if mtype else self.mtype
+        self.mode = mode or self.mode
+        self.mtype = mtype or self.mtype
         self.overwrite = overwrite if overwrite is not None else self.overwrite
 
         if self.mode == "r":
@@ -211,14 +207,14 @@ class RasterRow(RasterAbstractBase):
             if self.exist():
                 if not self.overwrite:
                     str_err = _(
-                        "Raster map <{0}> already exists" " and will be not overwritten"
+                        "Raster map <{0}> already exists and will be not overwritten"
                     )
                     raise OpenError(str_err.format(self))
             if self._gtype is None:
                 raise OpenError(_("Raster type not defined"))
             self._fd = libraster.Rast_open_new(self.name, self._gtype)
         else:
-            raise OpenError("Open mode: %r not supported," " valid mode are: r, w")
+            raise OpenError("Open mode: %r not supported, valid mode are: r, w")
         # read rows and cols from the active region
         self._rows = libraster.Rast_window_rows()
         self._cols = libraster.Rast_window_cols()
@@ -317,7 +313,7 @@ class RasterSegment(RasterAbstractBase):
         return self._mode
 
     def _set_mode(self, mode):
-        if mode and mode.lower() not in ("r", "w", "rw"):
+        if mode and mode.lower() not in {"r", "w", "rw"}:
             str_err = _("Mode type: {0} not supported ('r', 'w','rw')")
             raise ValueError(str_err.format(mode))
         self._mode = mode
@@ -331,17 +327,16 @@ class RasterSegment(RasterAbstractBase):
         if isinstance(key, slice):
             # Get the start, stop, and step from the slice
             return [self.put_row(ii, row) for ii in range(*key.indices(len(self)))]
-        elif isinstance(key, tuple):
+        if isinstance(key, tuple):
             x, y = key
             return self.put(x, y, row)
-        elif isinstance(key, int):
+        if isinstance(key, int):
             if key < 0:  # Handle negative indices
                 key += self._rows
             if key >= self._rows:
                 raise IndexError(_("Index out of range: %r.") % key)
             return self.put_row(key, row)
-        else:
-            raise TypeError("Invalid argument type.")
+        raise TypeError("Invalid argument type.")
 
     @must_be_open
     def map2segment(self):
@@ -513,8 +508,8 @@ class RasterSegment(RasterAbstractBase):
         self._rows = libraster.Rast_window_rows()
         self._cols = libraster.Rast_window_cols()
 
-        self.mode = mode if mode else self.mode
-        self.mtype = mtype if mtype else self.mtype
+        self.mode = mode or self.mode
+        self.mtype = mtype or self.mtype
         self.overwrite = overwrite if overwrite is not None else self.overwrite
 
         if self.exist():
@@ -522,12 +517,12 @@ class RasterSegment(RasterAbstractBase):
             self.cats.mtype = self.mtype
             self.cats.read()
             self.hist.read()
-            if (self.mode == "w" or self.mode == "rw") and self.overwrite is False:
+            if (self.mode in {"w", "rw"}) and self.overwrite is False:
                 str_err = _("Raster map <{0}> already exists. Use overwrite.")
                 fatal(str_err.format(self))
 
             # We copy the raster map content into the segments
-            if self.mode == "rw" or self.mode == "r":
+            if self.mode in {"rw", "r"}:
                 self._fd = libraster.Rast_open_old(self.name, self.mapset)
                 self._gtype = libraster.Rast_get_map_type(self._fd)
                 self.mtype = RTYPE_STR[self._gtype]
@@ -567,7 +562,7 @@ class RasterSegment(RasterAbstractBase):
         :param rm_temp_files: if True all the segments file will be removed
         :type rm_temp_files: bool
         """
-        if self.mode == "w" or self.mode == "rw":
+        if self.mode in {"w", "rw"}:
             self.segment.flush()
             self.segment2map()
         if rm_temp_files:
@@ -584,15 +579,11 @@ class RasterSegment(RasterAbstractBase):
 def random_map_only_columns(mapname, mtype, overwrite=True, factor=100):
     region = Region()
     random_map = RasterRow(mapname)
+    rng = np.random.default_rng()
     row_buf = Buffer(
         (region.cols,),
         mtype,
-        buffer=(
-            np.random.random(
-                region.cols,
-            )
-            * factor
-        ).data,
+        buffer=(rng.random(region.cols) * factor).data,
     )
     random_map.open("w", mtype, overwrite)
     for _ in range(region.rows):
@@ -605,16 +596,12 @@ def random_map(mapname, mtype, overwrite=True, factor=100):
     region = Region()
     random_map = RasterRow(mapname)
     random_map.open("w", mtype, overwrite)
+    rng = np.random.default_rng()
     for _ in range(region.rows):
         row_buf = Buffer(
             (region.cols,),
             mtype,
-            buffer=(
-                np.random.random(
-                    region.cols,
-                )
-                * factor
-            ).data,
+            buffer=(rng.random(region.cols) * factor).data,
         )
         random_map.put_row(row_buf)
     random_map.close()

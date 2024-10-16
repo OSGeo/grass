@@ -14,7 +14,7 @@
 #define VCOLS(gs)               (int)((gs->cols - 1) / gs->x_mod)
 
 /* data row & col to offset */
-#define DRC2OFF(gs, drow, dcol) (int)((dcol) + (drow)*gs->cols)
+#define DRC2OFF(gs, drow, dcol) (int)((dcol) + (drow) * gs->cols)
 
 /* ycoord/xcoord to data row/col */
 #define Y2DROW(gs, py)          (int)((gs->yrange - (py)) / gs->yres)
@@ -32,11 +32,11 @@
 #define VCOL2DCOL(gs, vcol)     (int)(gs->x_mod * (vcol))
 
 /* data row/col to ycoord/xcoord */
-#define DROW2Y(gs, drow)        (gs->yrange - ((drow)*gs->yres))
-#define DCOL2X(gs, dcol)        ((dcol)*gs->xres)
+#define DROW2Y(gs, drow)        (gs->yrange - ((drow) * gs->yres))
+#define DCOL2X(gs, dcol)        ((dcol) * gs->xres)
 
 /* viewres row/col to ycoord/xcoord */
-#define VROW2Y(gs, vrow)        (gs->yrange - ((vrow)*gs->yres * gs->y_mod))
-#define VCOL2X(gs, vcol)        ((vcol)*gs->xres * gs->x_mod)
+#define VROW2Y(gs, vrow)        (gs->yrange - ((vrow) * gs->yres * gs->y_mod))
+#define VCOL2X(gs, vcol)        ((vcol) * gs->xres * gs->x_mod)
 
 #endif /* _ROWCOL_H */
