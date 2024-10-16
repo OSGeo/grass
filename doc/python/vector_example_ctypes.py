@@ -7,9 +7,28 @@ interface
 
 import os
 import sys
+from ctypes import pointer, byref
 
-from grass.lib.gis import *
-from grass.lib.vector import *
+# Import specific functions and classes instead of using wildcard imports
+from grass.lib.gis import G_gisinit, G_find_vector2
+from grass.lib.vector import (
+    Map_info,
+    Vect_set_open_level,
+    Vect_open_old,
+    Vect_get_full_name,
+    Vect_is_3d,
+    Vect_get_num_dblinks,
+    Vect_get_scale,
+    Vect_get_map_box,
+    Vect_point_in_box,
+    Vect_get_num_lines,
+    Vect_get_num_primitives,
+    Vect_get_num_areas,
+    Vect_close,
+    bound_box,
+    GV_POINT,
+    GV_LINE,
+)
 
 if "GISBASE" not in os.environ:
     sys.exit("You must be in GRASS GIS to run this program.")

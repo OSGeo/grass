@@ -453,7 +453,7 @@ int draw_scale(double east, double north, int length, int seg, int units,
                 xarr[1] = seg_len;
                 yarr[1] = 0;
                 xarr[2] = 0;
-                yarr[2] = (i % 2 ? ysize_checker : +ysize_checker);
+                yarr[2] = +ysize_checker;
                 xarr[3] = -seg_len;
                 yarr[3] = 0;
                 xarr[4] = 0;

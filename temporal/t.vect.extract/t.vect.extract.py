@@ -80,8 +80,7 @@
 # % description: Register empty maps
 # %end
 
-import grass.script as grass
-
+import grass.script as gs
 
 ############################################################################
 
@@ -123,5 +122,5 @@ def main():
 ###############################################################################
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

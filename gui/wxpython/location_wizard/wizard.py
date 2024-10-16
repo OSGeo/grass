@@ -33,9 +33,12 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 @author Hamish Bowman (planetary ellipsoids)
 """
+
 import os
 import locale
 import functools
+
+from pathlib import Path
 
 import wx
 import wx.lib.mixins.listctrl as listmix
@@ -74,14 +77,7 @@ from grass.script import decode
 from grass.script import core as grass
 from grass.exceptions import OpenError
 
-global coordsys
-global north
-global south
-global east
-global west
-global resolution
-global wizerror
-global translist
+global coordsys, north, south, east, west, resolution, wizerror, translist
 
 if globalvar.CheckWxVersion(version=[4, 1, 0]):
     search_cancel_evt = wx.EVT_SEARCH_CANCEL
@@ -180,7 +176,7 @@ class DatabasePage(TitledPage):
     """Wizard page for setting GIS data directory and location name"""
 
     def __init__(self, wizard, parent, grassdatabase):
-        TitledPage.__init__(self, wizard, _("Define new GRASS Location"))
+        TitledPage.__init__(self, wizard, _("Define new GRASS project"))
 
         # grid definition
         self.sizer = wx.GridBagSizer(vgap=0, hgap=0)
@@ -198,7 +194,7 @@ class DatabasePage(TitledPage):
 
         # text controls
         self.tgisdbase = self.MakeLabel(grassdatabase)
-        self.tlocation = self.MakeTextCtrl("newLocation")
+        self.tlocation = self.MakeTextCtrl("newProject")
         self.tlocation.SetFocus()
 
         checks = [
@@ -225,7 +221,7 @@ class DatabasePage(TitledPage):
         self.sizer.Add(
             self.MakeLabel(
                 "%s:" % _("Name"),
-                tooltip=_("Name of location directory in GIS Data Directory"),
+                tooltip=_("Name of project directory in GIS Data Directory"),
             ),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
@@ -247,7 +243,7 @@ class DatabasePage(TitledPage):
         self.sizer.Add(
             self.MakeLabel(
                 "%s:" % _("Description"),
-                tooltip=_("Description of location directory in GIS Data Directory"),
+                tooltip=_("Description of project directory in GIS Data Directory"),
             ),
             flag=wx.ALIGN_LEFT | wx.ALIGN_TOP | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
@@ -267,7 +263,7 @@ class DatabasePage(TitledPage):
         )
 
         self.sizer.Add(
-            self.MakeLabel(_("Location will be created in GRASS database:")),
+            self.MakeLabel(_("Project will be created in GRASS database:")),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=2,
             pos=(5, 1),
@@ -293,24 +289,22 @@ class DatabasePage(TitledPage):
 
     def _nameValidationFailed(self, ctrl):
         message = _(
-            "Name '{}' is not a valid name for location. "
+            "Name '{}' is not a valid name for project. "
             "Please use only ASCII characters excluding characters {} "
             "and space."
         ).format(ctrl.GetValue(), "/\"'@,=*~")
         GError(parent=self, message=message, caption=_("Invalid name"))
 
-    def _checkLocationNotExists(self, text):
+    def _checkLocationNotExists(self, text) -> bool:
         """Check whether user's input location exists or not."""
-        if location_exists(self.tgisdbase.GetLabel(), text):
-            return False
-        return True
+        return not location_exists(self.tgisdbase.GetLabel(), text)
 
     def _locationAlreadyExists(self, ctrl):
         message = _(
-            "Location '{}' already exists. Please consider using "
-            "another name for your location."
+            "Project '{}' already exists. Please consider using "
+            "another name for your project."
         ).format(ctrl.GetValue())
-        GError(parent=self, message=message, caption=_("Existing location path"))
+        GError(parent=self, message=message, caption=_("Existing project path"))
 
     def OnChangeName(self, event):
         """Name for new location was changed"""
@@ -326,7 +320,10 @@ class DatabasePage(TitledPage):
     def OnBrowse(self, event):
         """Choose GRASS data directory"""
         dlg = wx.DirDialog(
-            self, _("Choose GRASS data directory:"), os.getcwd(), wx.DD_DEFAULT_STYLE
+            self,
+            _("Choose GRASS data directory:"),
+            str(Path.cwd()),
+            wx.DD_DEFAULT_STYLE,
         )
         if dlg.ShowModal() == wx.ID_OK:
             self.grassdatabase = dlg.GetPath()
@@ -342,7 +339,7 @@ class DatabasePage(TitledPage):
             GWarning(
                 parent=self,
                 message=_(
-                    "Title of the location is limited only to one line and "
+                    "Title of the project is limited only to one line and "
                     "256 characters. The rest of the text will be ignored."
                 ),
             )
@@ -594,7 +591,7 @@ class ProjectionsPage(TitledPage):
                 self.tproj.SetValue(self.proj)
                 nextButton.Enable(False)
                 return
-            elif self.proj.lower() == "ll":
+            if self.proj.lower() == "ll":
                 self.p4proj = "+proj=longlat"
             else:
                 self.p4proj = "+proj=" + self.proj.lower()
@@ -742,8 +739,7 @@ class ItemList(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.ColumnSorterMix
     def OnGetItemText(self, item, col):
         """Get item text"""
         index = self.itemIndexMap[item]
-        s = str(self.itemDataMap[index][col])
-        return s
+        return str(self.itemDataMap[index][col])
 
     def OnGetItemImage(self, item):
         return -1
@@ -763,7 +759,7 @@ class ItemList(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.ColumnSorterMix
         item1 = self.itemDataMap[key1][self._col]
         item2 = self.itemDataMap[key2][self._col]
 
-        if isinstance(item1, type("")) or isinstance(item2, type("")):
+        if isinstance(item1, str) or isinstance(item2, str):
             cmpVal = locale.strcoll(str(item1), str(item2))
         else:
             cmpVal = cmp(item1, item2)
@@ -775,8 +771,7 @@ class ItemList(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.ColumnSorterMix
 
         if ascending:
             return cmpVal
-        else:
-            return -cmpVal
+        return -cmpVal
 
     def GetListCtrl(self):
         """Used by listmix.ColumnSorterMixin"""
@@ -808,13 +803,10 @@ class ItemList(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.ColumnSorterMix
         if len(data) > 0:
             if firstOnly:
                 return data[0]
-            else:
-                return data
-        else:
-            if firstOnly:
-                return None
-            else:
-                return []
+            return data
+        if firstOnly:
+            return None
+        return []
 
 
 class ProjParamsPage(TitledPage):
@@ -834,7 +826,7 @@ class ProjParamsPage(TitledPage):
         self.panel = None
         self.prjParamSizer = None
 
-        self.pparam = dict()
+        self.pparam = {}
 
         self.p4projparams = ""
         self.projdesc = ""
@@ -904,25 +896,24 @@ class ProjParamsPage(TitledPage):
         """Go to next page"""
         if event.GetDirection():
             self.p4projparams = ""
-            for id, param in self.pparam.items():
+            for param in self.pparam.values():
                 if param["type"] == "bool":
                     if param["value"] is False:
                         continue
                     else:
                         self.p4projparams += " +" + param["proj4"]
+                elif param["value"] is None:
+                    wx.MessageBox(
+                        parent=self,
+                        message=_("You must enter a value for %s") % param["desc"],
+                        caption=_("Error"),
+                        style=wx.ICON_ERROR | wx.CENTRE,
+                    )
+                    event.Veto()
                 else:
-                    if param["value"] is None:
-                        wx.MessageBox(
-                            parent=self,
-                            message=_("You must enter a value for %s") % param["desc"],
-                            caption=_("Error"),
-                            style=wx.ICON_ERROR | wx.CENTRE,
-                        )
-                        event.Veto()
-                    else:
-                        self.p4projparams += (
-                            " +" + param["proj4"] + "=" + str(param["value"])
-                        )
+                    self.p4projparams += (
+                        " +" + param["proj4"] + "=" + str(param["value"])
+                    )
 
     def OnEnterPage(self, event):
         """Page entered"""
@@ -953,7 +944,7 @@ class ProjParamsPage(TitledPage):
             self.paramSBox.SetLabel(
                 _(" Enter parameters for %s projection ") % self.projdesc
             )
-            self.pparam = dict()
+            self.pparam = {}
             row = 0
             for paramgrp in self.parent.projections[self.parent.projpage.proj][1]:
                 # get parameters
@@ -1496,16 +1487,15 @@ class GeoreferencedFilePage(TitledPage):
         if len(self.georeffile) > 0 and os.path.isfile(self.georeffile):
             if not nextButton.IsEnabled():
                 nextButton.Enable(True)
-        else:
-            if nextButton.IsEnabled():
-                nextButton.Enable(False)
+        elif nextButton.IsEnabled():
+            nextButton.Enable(False)
 
         event.Skip()
 
     def OnBrowse(self, event):
         """Choose file"""
         dlg = wx.FileDialog(
-            self, _("Select georeferenced file"), os.getcwd(), "", "*.*", wx.FD_OPEN
+            self, _("Select georeferenced file"), str(Path.cwd()), "", "*.*", wx.FD_OPEN
         )
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
@@ -1573,9 +1563,8 @@ class WKTPage(TitledPage):
         if len(self.wktstring) == 0:
             if nextButton.IsEnabled():
                 nextButton.Enable(False)
-        else:
-            if not nextButton.IsEnabled():
-                nextButton.Enable()
+        elif not nextButton.IsEnabled():
+            nextButton.Enable()
 
 
 class EPSGPage(TitledPage):
@@ -1668,29 +1657,28 @@ class EPSGPage(TitledPage):
             if not self.epsgcode:
                 event.Veto()
                 return
-            else:
-                # check for datum transforms
-                ret = RunCommand(
-                    "g.proj", read=True, epsg=self.epsgcode, datum_trans="-1", flags="t"
-                )
+            # check for datum transforms
+            ret = RunCommand(
+                "g.proj", read=True, epsg=self.epsgcode, datum_trans="-1", flags="t"
+            )
 
-                if ret != "":
-                    dtrans = ""
-                    # open a dialog to select datum transform number
-                    dlg = SelectTransformDialog(self.parent.parent, transforms=ret)
+            if ret != "":
+                dtrans = ""
+                # open a dialog to select datum transform number
+                dlg = SelectTransformDialog(self.parent.parent, transforms=ret)
 
-                    if dlg.ShowModal() == wx.ID_OK:
-                        dtrans = dlg.GetTransform()
-                        if dtrans == "":
-                            dlg.Destroy()
-                            event.Veto()
-                            return "Datum transform is required."
-                    else:
+                if dlg.ShowModal() == wx.ID_OK:
+                    dtrans = dlg.GetTransform()
+                    if dtrans == "":
                         dlg.Destroy()
                         event.Veto()
                         return "Datum transform is required."
+                else:
+                    dlg.Destroy()
+                    event.Veto()
+                    return "Datum transform is required."
 
-                    self.parent.datum_trans = dtrans
+                self.parent.datum_trans = dtrans
             self.GetNext().SetPrev(self)
 
     def EnableNext(self, enable=True):
@@ -1700,7 +1688,7 @@ class EPSGPage(TitledPage):
     def OnTextChange(self, event):
         value = self.searchb.GetValue()
         if value == "":
-            self.tlink.SetURL(str("https://epsg.io/"))
+            self.tlink.SetURL("https://epsg.io/")
             self.epsgcode = None
             self.epsgdesc = self.epsgparams = ""
             self.searchb.ChangeValue("")
@@ -1756,10 +1744,10 @@ class EPSGPage(TitledPage):
                 message=_("Unable to read EPGS codes: {0}").format(e),
                 showTraceback=False,
             )
-            self.epsglist.Populate(list(), update=True)
+            self.epsglist.Populate([], update=True)
             return
 
-        data = list()
+        data = []
         for code, val in self.epsgCodeDict.items():
             if code is not None:
                 data.append((code, val[0], val[1]))
@@ -1888,55 +1876,51 @@ class IAUPage(TitledPage):
             if not self.epsgcode:
                 event.Veto()
                 return
-            else:
-                # check for datum transforms
-                ret = RunCommand(
-                    "g.proj",
-                    read=True,
-                    proj4=self.epsgparams,
-                    datum_trans="-1",
-                    flags="t",
-                )
+            # check for datum transforms
+            ret = RunCommand(
+                "g.proj",
+                read=True,
+                proj4=self.epsgparams,
+                datum_trans="-1",
+                flags="t",
+            )
 
-                if ret != "":
-                    dtrans = ""
-                    # open a dialog to select datum transform number
-                    dlg = SelectTransformDialog(self.parent.parent, transforms=ret)
+            if ret != "":
+                dtrans = ""
+                # open a dialog to select datum transform number
+                dlg = SelectTransformDialog(self.parent.parent, transforms=ret)
 
-                    if dlg.ShowModal() == wx.ID_OK:
-                        dtrans = dlg.GetTransform()
-                        if dtrans == "":
-                            dlg.Destroy()
-                            event.Veto()
-                            return "Datum transform is required."
-                    else:
+                if dlg.ShowModal() == wx.ID_OK:
+                    dtrans = dlg.GetTransform()
+                    if dtrans == "":
                         dlg.Destroy()
                         event.Veto()
                         return "Datum transform is required."
+                else:
+                    dlg.Destroy()
+                    event.Veto()
+                    return "Datum transform is required."
 
-                    self.parent.datum_trans = dtrans
-                    self.parent.epsgcode = self.epsgcode
-                    self.parent.epsgdesc = self.epsgdesc
+                self.parent.datum_trans = dtrans
+                self.parent.epsgcode = self.epsgcode
+                self.parent.epsgdesc = self.epsgdesc
 
-                # prepare +nadgrids or +towgs84 terms for Summary page. first
-                # convert them:
-                ret, projlabel, err = RunCommand(
-                    "g.proj",
-                    flags="jft",
-                    proj4=self.epsgparams,
-                    datum_trans=self.parent.datum_trans,
-                    getErrorMsg=True,
-                    read=True,
-                )
-                # splitting on space alone would break for grid files with
-                # space in pathname
-                for projterm in projlabel.split(" +"):
-                    if (
-                        projterm.find("towgs84=") != -1
-                        or projterm.find("nadgrids=") != -1
-                    ):
-                        self.custom_dtrans_string = " +%s" % projterm
-                        break
+            # prepare +nadgrids or +towgs84 terms for Summary page. first
+            # convert them:
+            ret, projlabel, err = RunCommand(
+                "g.proj",
+                flags="jft",
+                proj4=self.epsgparams,
+                datum_trans=self.parent.datum_trans,
+                getErrorMsg=True,
+                read=True,
+            )
+            # splitting on space alone would break for grid files with
+            # space in pathname
+            for projterm in projlabel.split(" +"):
+                if projterm.find("towgs84=") != -1 or projterm.find("nadgrids=") != -1:
+                    self.custom_dtrans_string = " +%s" % projterm
+                    break
 
             self.GetNext().SetPrev(self)
 
@@ -1990,7 +1974,7 @@ class IAUPage(TitledPage):
         """Define path for IAU code file"""
         path = os.path.dirname(self.tfile.GetValue())
         if not path:
-            path = os.getcwd()
+            path = str(Path.cwd())
 
         dlg = wx.FileDialog(
             parent=self,
@@ -2032,10 +2016,10 @@ class IAUPage(TitledPage):
                 message=_("Unable to read IAU codes: {0}").format(e),
                 showTraceback=False,
             )
-            self.epsglist.Populate(list(), update=True)
+            self.epsglist.Populate([], update=True)
             return
 
-        data = list()
+        data = []
         for code, val in self.epsgCodeDict.items():
             if code is not None:
                 data.append((code, val[0], val[1]))
@@ -2167,9 +2151,8 @@ class CustomPage(TitledPage):
         if len(self.customstring) == 0:
             if nextButton.IsEnabled():
                 nextButton.Enable(False)
-        else:
-            if not nextButton.IsEnabled():
-                nextButton.Enable()
+        elif not nextButton.IsEnabled():
+            nextButton.Enable()
 
 
 class SummaryPage(TitledPage):
@@ -2235,7 +2218,7 @@ class SummaryPage(TitledPage):
             self.ldatabase, flag=wx.ALIGN_LEFT | wx.ALL, border=5, pos=(1, 1)
         )
         self.sizer.Add(
-            self.MakeLabel(_("Location Name:")),
+            self.MakeLabel(_("Project Name:")),
             flag=wx.ALIGN_LEFT | wx.ALL,
             border=5,
             pos=(2, 0),
@@ -2297,9 +2280,9 @@ class SummaryPage(TitledPage):
         global coordsys
 
         # print coordsys,proj4string
-        if coordsys in ("proj", "epsg", "iau", "wkt", "file"):
+        if coordsys in {"proj", "epsg", "iau", "wkt", "file"}:
             extra_opts = {}
-            extra_opts["location"] = "location"
+            extra_opts["project"] = "project"
             extra_opts["getErrorMsg"] = True
             extra_opts["read"] = True
 
@@ -2346,7 +2329,7 @@ class SummaryPage(TitledPage):
             finishButton = wx.FindWindowById(wx.ID_FORWARD)
             if ret == 0:
                 if datum != "":
-                    projlabel = projlabel + "+datum=%s" % datum
+                    projlabel += "+datum=%s" % datum
                 self.lproj4string.SetLabel(projlabel.replace(" +", os.linesep + "+"))
                 finishButton.Enable(True)
             else:
@@ -2392,9 +2375,7 @@ class SummaryPage(TitledPage):
                 self.parent.custompage.customstring
                 + self.parent.custompage.custom_dtrans_string
             )
-            self.lproj4string.SetLabel(
-                ("%s" % combo_str.replace(" +", os.linesep + "+"))
-            )
+            self.lproj4string.SetLabel("%s" % combo_str.replace(" +", os.linesep + "+"))
 
         self.lprojection.SetLabel(label)
 
@@ -2430,7 +2411,7 @@ class LocationWizard(wx.Object):
         # define wizard pages
         #
         self.wizard = WizardWithHelpButton(
-            parent, id=wx.ID_ANY, title=_("Define new GRASS Location")
+            parent, id=wx.ID_ANY, title=_("Define new GRASS project")
         )
         self.wizard.Bind(wiz.EVT_WIZARD_HELP, self.OnHelp)
 
@@ -2521,7 +2502,7 @@ class LocationWizard(wx.Object):
                 self.grassdatabase = self.startpage.grassdatabase
                 self.georeffile = self.filepage.georeffile
                 # FIXME here was code for setting default region, what for is this if:
-                # if self.altdb == False:
+                # if self.altdb is False:
 
             else:  # -> error
                 self.wizard.Destroy()
@@ -2529,8 +2510,8 @@ class LocationWizard(wx.Object):
                     parent=self.parent,
                     message="%s"
                     % _(
-                        "Unable to create new location. "
-                        "Location <%(loc)s> not created.\n\n"
+                        "Unable to create new project. "
+                        "Project <%(loc)s> not created.\n\n"
                         "Details: %(err)s"
                     )
                     % {"loc": self.startpage.location, "err": msg},
@@ -2541,14 +2522,7 @@ class LocationWizard(wx.Object):
         self.__cleanUp()
 
     def __cleanUp(self):
-        global coordsys
-        global north
-        global south
-        global east
-        global west
-        global resolution
-        global wizerror
-        global translist
+        global coordsys, north, south, east, west, resolution, wizerror, translist
 
         coordsys = None
         north = None
@@ -2561,10 +2535,10 @@ class LocationWizard(wx.Object):
         """Get georeferencing information from tables in $GISBASE/etc/proj"""
 
         # read projection and parameters
-        f = open(os.path.join(globalvar.ETCDIR, "proj", "parms.table"), "r")
+        f = open(os.path.join(globalvar.ETCDIR, "proj", "parms.table"))
         self.projections = {}
         self.projdesc = {}
-        for line in f.readlines():
+        for line in f:
             line = line.strip()
             try:
                 proj, projdesc, params = line.split(":")
@@ -2584,10 +2558,10 @@ class LocationWizard(wx.Object):
         f.close()
 
         # read datum definitions
-        f = open(os.path.join(globalvar.ETCDIR, "proj", "datum.table"), "r")
+        f = open(os.path.join(globalvar.ETCDIR, "proj", "datum.table"))
         self.datums = {}
         paramslist = []
-        for line in f.readlines():
+        for line in f:
             line = line.expandtabs(1)
             line = line.strip()
             if line == "" or line[0] == "#":
@@ -2602,9 +2576,9 @@ class LocationWizard(wx.Object):
         f.close()
 
         # read Earth-based ellipsiod definitions
-        f = open(os.path.join(globalvar.ETCDIR, "proj", "ellipse.table"), "r")
+        f = open(os.path.join(globalvar.ETCDIR, "proj", "ellipse.table"))
         self.ellipsoids = {}
-        for line in f.readlines():
+        for line in f:
             line = line.expandtabs(1)
             line = line.strip()
             if line == "" or line[0] == "#":
@@ -2618,11 +2592,9 @@ class LocationWizard(wx.Object):
         f.close()
 
         # read Planetary ellipsiod definitions
-        f = open(
-            os.path.join(globalvar.ETCDIR, "proj", "ellipse.table.solar.system"), "r"
-        )
+        f = open(os.path.join(globalvar.ETCDIR, "proj", "ellipse.table.solar.system"))
         self.planetary_ellipsoids = {}
-        for line in f.readlines():
+        for line in f:
             line = line.expandtabs(1)
             line = line.strip()
             if line == "" or line[0] == "#":
@@ -2636,9 +2608,9 @@ class LocationWizard(wx.Object):
         f.close()
 
         # read projection parameter description and parsing table
-        f = open(os.path.join(globalvar.ETCDIR, "proj", "desc.table"), "r")
+        f = open(os.path.join(globalvar.ETCDIR, "proj", "desc.table"))
         self.paramdesc = {}
-        for line in f.readlines():
+        for line in f:
             line = line.strip()
             try:
                 pparam, datatype, proj4term, desc = line.split(":")
@@ -2662,9 +2634,9 @@ class LocationWizard(wx.Object):
                 parent=self.wizard,
                 message="%s <%s>: %s"
                 % (
-                    _("Unable to create new location"),
+                    _("Unable to create new project"),
                     os.path.join(database, location),
-                    _("Location already exists in GRASS Database."),
+                    _("Project already exists in GRASS Database."),
                 ),
             )
             return None
@@ -2746,7 +2718,7 @@ class LocationWizard(wx.Object):
                 if not self.filepage.georeffile or not os.path.isfile(
                     self.filepage.georeffile
                 ):
-                    return _("File <%s> not found." % self.filepage.georeffile)
+                    return _("File <%s> not found.") % self.filepage.georeffile
 
                 grass.create_location(
                     dbase=self.startpage.grassdatabase,
@@ -2796,9 +2768,7 @@ class LocationWizard(wx.Object):
             for item in datumparams:
                 proj4string = "%s +%s" % (proj4string, item)
 
-        proj4string = "%s +no_defs" % proj4string
-
-        return proj4string
+        return "%s +no_defs" % proj4string
 
     def OnHelp(self, event):
         """'Help' button clicked"""

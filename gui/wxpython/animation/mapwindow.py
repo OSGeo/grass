@@ -61,7 +61,7 @@ class BufferedWindow(wx.Window):
     def OnPaint(self, event):
         Debug.msg(5, "BufferedWindow.OnPaint()")
         # All that is needed here is to draw the buffer to screen
-        dc = wx.BufferedPaintDC(self, self._Buffer)
+        wx.BufferedPaintDC(self, self._Buffer)
 
     def OnSize(self, event):
         Debug.msg(5, "BufferedWindow.OnSize()")

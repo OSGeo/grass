@@ -5,6 +5,7 @@ what arguments a given callable object can take,
 and subset the given arguments to match only
 those which are acceptable.
 """
+
 import sys
 
 if sys.hexversion >= 0x3000000:
@@ -34,27 +35,56 @@ def function(receiver):
     if hasattr(receiver, im_func):
         # an instance-method...
         return receiver, getattr(getattr(receiver, im_func), func_code), 1
-    elif not hasattr(receiver, func_code):
+    if not hasattr(receiver, func_code):
         raise ValueError("unknown receiver type %s %s" % (receiver, type(receiver)))
     return receiver, getattr(receiver, func_code), 0
 
 
+VAR_ARGS = 4
+VAR_NAMES = 8
+
+
 def robustApply(receiver, *arguments, **named):
-    """Call receiver with arguments and an appropriate subset of named"""
+    """Call receiver with arguments and an appropriate subset of named
+
+    The effect of this wrapper is to allow for specifying a large number
+    of parameters which may not exist in the final function via named
+    parameters, and have those parameters ignored in the final call.
+    """
     receiver, codeObject, startIndex = function(receiver)
-    acceptable = codeObject.co_varnames[
-        startIndex + len(arguments) : codeObject.co_argcount
+    has_varargs = bool(codeObject.co_flags & VAR_ARGS)
+    has_varnames = bool(codeObject.co_flags & VAR_NAMES)
+
+    posonly_count = getattr(codeObject, "co_posonlyargcount", 0)
+
+    posnamed_arguments = codeObject.co_varnames[posonly_count : codeObject.co_argcount]
+    named_onlyarguments = codeObject.co_varnames[
+        codeObject.co_argcount : len(codeObject.co_varnames)
+        + (-1 if has_varnames else 0)
+        + (-1 if has_varargs else 0)
     ]
-    for name in codeObject.co_varnames[startIndex : startIndex + len(arguments)]:
+
+    # Implements: You can't have a parameter in both args and keywords,
+    #             reporting an easily debugged message
+    # Implements: You can't have a posonly arg in named (as a side effect of the above)
+    for name in codeObject.co_varnames[
+        0 : min((len(arguments), codeObject.co_argcount))
+    ]:
         if name in named:
             raise TypeError(
                 """Argument %r specified both positionally and as a keyword"""
                 """ for calling %r""" % (name, receiver)
             )
-    if not (codeObject.co_flags & 8):
+    # Implements: You can only passed keyword parameters if the parameter exists and is
+    # not a positional-only parameter or a varargs or varkeywords parameter.
+    # Note that this silently drops TypeErrors for passing the name of the varargs or
+    # varkeyword variables because it only allows through the valid arg-names for
+    # the function
+    if not has_varnames:
+        acceptable = (
+            posnamed_arguments[len(arguments) - posonly_count :] + named_onlyarguments
+        )
         # fc does not have a **kwds type parameter, therefore
         # remove unacceptable arguments.
-        for arg in list(named):
-            if arg not in acceptable:
-                del named[arg]
+        named = {k: v for k, v in named.items() if k in acceptable}
     return receiver(*arguments, **named)

@@ -18,7 +18,6 @@ for details.
 """
 
 import os
-import sys
 import shutil
 import locale
 import shlex
@@ -28,6 +27,8 @@ import platform
 import uuid
 import random
 import string
+
+from pathlib import Path
 
 
 def float_or_dms(s):
@@ -42,7 +43,7 @@ def float_or_dms(s):
 
     :return: float value
     """
-    if s[-1] in ["E", "W", "N", "S"]:
+    if s[-1] in {"E", "W", "N", "S"}:
         s = s[:-1]
     return sum(float(x) / 60**n for (n, x) in enumerate(s.split(":")))
 
@@ -68,13 +69,13 @@ def separator(sep):
     """
     if sep == "pipe":
         return "|"
-    elif sep == "comma":
+    if sep == "comma":
         return ","
-    elif sep == "space":
+    if sep == "space":
         return " "
-    elif sep == "tab" or sep == "\\t":
+    if sep in {"tab", "\\t"}:
         return "\t"
-    elif sep == "newline" or sep == "\\n":
+    if sep in {"newline", "\\n"}:
         return "\n"
     return sep
 
@@ -90,10 +91,9 @@ def diff_files(filename_a, filename_b):
     import difflib
 
     differ = difflib.Differ()
-    fh_a = open(filename_a, "r")
-    fh_b = open(filename_b, "r")
-    result = list(differ.compare(fh_a.readlines(), fh_b.readlines()))
-    return result
+    fh_a = open(filename_a)
+    fh_b = open(filename_b)
+    return list(differ.compare(fh_a.readlines(), fh_b.readlines()))
 
 
 def try_remove(path):
@@ -306,8 +306,27 @@ def get_num_suffix(number, max_number):
 
 
 def split(s):
-    """!Platform specific shlex.split"""
-    return shlex.split(s, posix=(sys.platform != "win32"))
+    """Same shlex.split() func on all OS platforms
+
+    We don't use parameter posix=True on the OS MS Windows due to incorrectly
+    splitting command line parameters:
+
+    e.g. d.vect where="cat < 10"
+
+    is split incorrectly as follows:
+
+    'where="cat', '<', '10"'
+
+    Should be:
+
+    'where=cat < 10'
+
+
+    :param str s: cmd string
+
+    return list: cmd list
+    """
+    return shlex.split(s)
 
 
 # source:
@@ -354,10 +373,9 @@ def get_lib_path(modname, libname=None):
         getenv("GRASS_ADDON_BASE")
         and libname
         and isdir(join(getenv("GRASS_ADDON_BASE"), "etc", modname, libname))
-    ):
-        path = join(getenv("GRASS_ADDON_BASE"), "etc", modname)
-    elif getenv("GRASS_ADDON_BASE") and isdir(
-        join(getenv("GRASS_ADDON_BASE"), "etc", modname)
+    ) or (
+        getenv("GRASS_ADDON_BASE")
+        and isdir(join(getenv("GRASS_ADDON_BASE"), "etc", modname))
     ):
         path = join(getenv("GRASS_ADDON_BASE"), "etc", modname)
     elif getenv("GRASS_ADDON_BASE") and isdir(
@@ -366,7 +384,7 @@ def get_lib_path(modname, libname=None):
         path = join(os.getenv("GRASS_ADDON_BASE"), modname, modname)
     else:
         # used by g.extension compilation process
-        cwd = os.getcwd()
+        cwd = str(Path.cwd())
         idx = cwd.find(modname)
         if idx < 0:
             return None
@@ -446,10 +464,10 @@ def set_path(modulename, dirname=None, path="."):
     import sys
 
     # TODO: why dirname is checked first - the logic should be revised
-    pathlib = None
+    _pathlib = None
     if dirname:
-        pathlib = os.path.join(path, dirname)
-    if pathlib and os.path.exists(pathlib):
+        _pathlib = os.path.join(path, dirname)
+    if _pathlib and os.path.exists(_pathlib):
         # we are running the script from the script directory, therefore
         # we add the path to sys.path to reach the directory (dirname)
         sys.path.append(os.path.abspath(path))
@@ -460,7 +478,7 @@ def set_path(modulename, dirname=None, path="."):
             pathname = os.path.join(modulename, dirname) if dirname else modulename
             raise ImportError(
                 "Not able to find the path '%s' directory "
-                "(current dir '%s')." % (pathname, os.getcwd())
+                "(current dir '%s')." % (pathname, Path.cwd())
             )
 
         sys.path.insert(0, path)

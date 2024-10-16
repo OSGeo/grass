@@ -21,9 +21,9 @@
 
 /* cast to float, otherwise doesn't seem to handle neg. values */
 
-#define SCALE_ATT(att, val, low, high)                                      \
-    ((val) <= att->max_nz && (val) >= att->min_nz && att->range_nz          \
-         ? (((val)-att->min_nz) / att->range_nz) * ((high) - (low)) + (low) \
+#define SCALE_ATT(att, val, low, high)                                        \
+    ((val) <= att->max_nz && (val) >= att->min_nz && att->range_nz            \
+         ? (((val) - att->min_nz) / att->range_nz) * ((high) - (low)) + (low) \
          : 0)
 
 #define GET_MAPATT(buff, offset, att) (get_mapatt(buff, offset, &(att)))
@@ -48,10 +48,10 @@
    nv[Z] = (int)((i) & NZMASK) * GS_global_exag()/(float)ZMAXPOS
  */
 
-#define FNORM(i, nv)                                                  \
-    nv[X] = ((int)(((i)&NXMASK) >> 21) - XYMAXPOS) / (float)XYMAXPOS; \
-    nv[Y] = ((int)(((i)&NYMASK) >> 10) - XYMAXPOS) / (float)XYMAXPOS; \
-    nv[Z] = (int)((i)&NZMASK) / (float)ZMAXPOS
+#define FNORM(i, nv)                                                    \
+    nv[X] = ((int)(((i) & NXMASK) >> 21) - XYMAXPOS) / (float)XYMAXPOS; \
+    nv[Y] = ((int)(((i) & NYMASK) >> 10) - XYMAXPOS) / (float)XYMAXPOS; \
+    nv[Z] = (int)((i) & NZMASK) / (float)ZMAXPOS
 
 /* Pack Normal vector into int */
 #define PNORM(i, nv)                                            \

@@ -30,15 +30,13 @@ def _get_encoding():
 def decode(bytes_, encoding=None):
     if isinstance(bytes_, bytes):
         return bytes_.decode(_get_encoding())
-    else:
-        return bytes_
+    return bytes_
 
 
 def encode(string, encoding=None):
     if isinstance(string, str):
         return string.encode(_get_encoding())
-    else:
-        return string
+    return string
 
 
 def text_to_string(text):

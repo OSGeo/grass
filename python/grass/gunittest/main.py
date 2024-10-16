@@ -82,7 +82,8 @@ def test():
     """Run a test of a module."""
     # TODO: put the link to to the report only if available
     # TODO: how to disable Python code coverage for module and C tests?
-    # TODO: we probably need to have different test  functions for C, Python modules, and Python code
+    # TODO: we probably need to have different test  functions for C, Python modules,
+    # and Python code
     # TODO: combine the results using python -m coverage --help | grep combine
     # TODO: function to anonymize/beautify file names (in content and actual filenames)
     # TODO: implement coverage but only when requested by invoker and only if
@@ -171,14 +172,14 @@ def main():
         dest="location_type",
         action="store",
         default="nc",
-        help="Type of tests which should be run" " (tag corresponding to location)",
+        help="Type of tests which should be run (tag corresponding to location)",
     )
     parser.add_argument(
         "--grassdata",
         dest="gisdbase",
         action="store",
         default=None,
-        help="GRASS data(base) (GISDBASE) directory" " (current GISDBASE by default)",
+        help="GRASS data(base) (GISDBASE) directory (current GISDBASE by default)",
     )
     parser.add_argument(
         "--output",

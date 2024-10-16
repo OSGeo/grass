@@ -3,6 +3,7 @@ Created on Tue Jun 24 09:43:53 2014
 
 @author: pietro
 """
+
 from fnmatch import fnmatch
 from io import BytesIO
 
@@ -17,20 +18,6 @@ from grass.pygrass.modules.interface import Module
 SKIP = [
     "g.parser",
 ]
-
-
-# taken from six
-def with_metaclass(meta, *bases):
-    """Create a base class with a metaclass."""
-
-    # This requires a bit of explanation: the basic idea is to make a dummy
-    # metaclass for one level of class instantiation that replaces itself with
-    # the actual metaclass.
-    class metaclass(meta):
-        def __new__(cls, name, this_bases, d):
-            return meta(name, bases, d)
-
-    return type.__new__(metaclass, "temporary_class", (), {})
 
 
 class ModulesMeta(type):
@@ -52,7 +39,7 @@ class ModulesMeta(type):
         return type.__new__(mcs, name, bases, dict)
 
 
-class TestModules(with_metaclass(ModulesMeta, TestCase)):
+class TestModules(TestCase, metaclass=ModulesMeta):
     pass
 
 

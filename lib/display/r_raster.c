@@ -138,10 +138,9 @@ int D_open_driver(void)
     drv = (p && G_strcasecmp(p, "png") == 0)    ? PNG_Driver()
           : (p && G_strcasecmp(p, "ps") == 0)   ? PS_Driver()
           : (p && G_strcasecmp(p, "html") == 0) ? HTML_Driver()
-          :
+                                                :
 #ifdef USE_CAIRO
-          (p && G_strcasecmp(p, "cairo") == 0) ? Cairo_Driver()
-                                               : Cairo_Driver();
+                                                Cairo_Driver();
 #else
                                                 PNG_Driver();
 #endif

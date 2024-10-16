@@ -53,12 +53,14 @@ extern struct state *st;
 void G__usage_xml(void);
 void G__usage_html(void);
 void G__usage_rest(void);
+void G__usage_markdown(void);
 void G__usage_text(void);
 void G__script(void);
 char *G__json(void);
 void G__wps_print_process_description(void);
 int G__uses_new_gisprompt(void);
-void G__print_keywords(FILE *, void (*)(FILE *, const char *));
+void G__print_keywords(FILE *, void (*)(FILE *, const char *), int);
+
 void G__split_gisprompt(const char *, char *, char *, char *);
 
 void G__check_option_rules(void);
