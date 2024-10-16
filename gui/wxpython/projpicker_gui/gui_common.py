@@ -1,6 +1,7 @@
 """
 This module implements common functions for the gui modules.
 """
+
 # pylint: disable=not-callable
 
 import os

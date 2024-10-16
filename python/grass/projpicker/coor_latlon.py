@@ -2,6 +2,7 @@
 This module provides parsing functions for the latitude-longitude coordinate
 system for the ProjPicker API.
 """
+
 # pylint: disable=too-many-boolean-expressions
 
 import re

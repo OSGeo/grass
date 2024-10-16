@@ -1,6 +1,7 @@
 """
 This module implements the ProjPicker GUI using wxPython.
 """
+
 # pylint: disable=too-many-locals, too-many-statements, no-member
 
 import wx.lib.statbmp
