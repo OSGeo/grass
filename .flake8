@@ -115,7 +115,7 @@ per-file-ignores =
     scripts/r.in.srtm/r.in.srtm.py: E722
     scripts/r.fillnulls/r.fillnulls.py: E722
     scripts/d.rast.edit/d.rast.edit.py: E722
-    scripts/v.what.strds/v.what.strds.py: E722, E501
+    scripts/v.what.strds/v.what.strds.py: E501
     # Line too long (esp. module interface definitions)
     scripts/*/*.py: E501
     temporal/t.rast.to.vect/t.rast.to.vect.py: E501
