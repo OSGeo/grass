@@ -452,7 +452,7 @@ static int _datetime_carry(DateTime *dt, int absolute)
                 dt->month++;
 
         } /* end while */
-    }     /* end if */
+    } /* end if */
 
     /* undo giving year a SIGN, temporarily */
     if (!absolute && dt->mode == DATETIME_ABSOLUTE) {

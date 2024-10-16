@@ -20,6 +20,9 @@
  * software is provided "as is" without express or implied warranty.
  *
  *****************************************************************************/
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -86,6 +89,7 @@ int main(int argc, char *argv[])
     struct dimensions dim;
     struct output_setting out_set;
     char p[1024];
+    int threads;
 
     G_gisinit(argv[0]);
 
@@ -94,6 +98,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("algebra"));
     G_add_keyword(_("statistics"));
     G_add_keyword(_("texture"));
+    G_add_keyword(_("parallel"));
     module->description =
         _("Generate images with textural features from a raster map.");
 
@@ -307,13 +312,15 @@ int main(int argc, char *argv[])
     out_set.flag_null = flag.null;
     out_set.flag_ind = flag.ind;
 
-    execute_texture(data, &dim, measure_menu, measure_idx, &out_set);
+    threads = G_set_omp_num_threads(parm.nproc);
+    execute_texture(data, &dim, measure_menu, measure_idx, &out_set, threads);
 
     for (i = 0; i < dim.n_outputs; i++) {
         Rast_close(outfd[i]);
         Rast_short_history(mapname[i], "raster", &history);
         Rast_command_history(&history);
         Rast_write_history(mapname[i], &history);
+        Rast_free_history(&history);
     }
 
     /* Free allocated memory */

@@ -51,12 +51,12 @@
 # % guisection: Input
 # %end
 
-import grass.script as gscript
+import grass.script as gs
 from grass.exceptions import FatalError
 
 
 def main():
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
 
     # import wx only after running parser
     # to avoid issues when only interface is needed
@@ -89,7 +89,7 @@ def main():
         numInputs += 1
 
     if numInputs > 1:
-        gscript.fatal(
+        gs.fatal(
             _("%s=, %s=, %s= and %s= are mutually exclusive.")
             % ("raster", "vector", "strds", "stvds")
         )

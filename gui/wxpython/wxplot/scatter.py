@@ -19,8 +19,8 @@ import sys
 
 import wx
 
-import grass.script as grass
-import wx.lib.plot as plot
+import grass.script as gs
+from wx.lib import plot
 from wxplot.base import BasePlotFrame, PlotIcons
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from gui_core.wrap import StockCursor
@@ -275,13 +275,13 @@ class ScatterFrame(BasePlotFrame):
             rast1, rast2 = rpair
             rast1 = rast1.split("@")[0]
             rast2 = rast2.split("@")[0]
-            ret = grass.parse_command(
+            ret = gs.parse_command(
                 "r.regression.line",
                 mapx=rast1,
                 mapy=rast2,
                 flags="g",
                 quiet=True,
-                parse=(grass.parse_key_val, {"sep": "="}),
+                parse=(gs.parse_key_val, {"sep": "="}),
             )
             eqtitle = _(
                 "Regression equation for raster map <%(rast1)s> vs. <%(rast2)s>:\n\n"

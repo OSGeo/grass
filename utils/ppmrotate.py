@@ -17,7 +17,7 @@ import sys
 import os
 import atexit
 import array
-import grass.script as grass
+import grass.script as gs
 
 tmp_img = None
 
@@ -27,7 +27,7 @@ width = None
 
 def cleanup():
     if tmp_img:
-        grass.try_remove(tmp_img)
+        gs.try_remove(tmp_img)
 
 
 # def rotate(src, dst):
@@ -88,16 +88,16 @@ def flip_ppm(srcd):
 
 
 def ppmtopng(dst, src):
-    if grass.find_program("g.ppmtopng", "--help"):
-        grass.run_command("g.ppmtopng", input=src, output=dst, quiet=True)
-    elif grass.find_program("pnmtopng"):
+    if gs.find_program("g.ppmtopng", "--help"):
+        gs.run_command("g.ppmtopng", input=src, output=dst, quiet=True)
+    elif gs.find_program("pnmtopng"):
         fh = open(dst, "wb")
-        grass.call(["pnmtopng", src], stdout=fh)
+        gs.call(["pnmtopng", src], stdout=fh)
         fh.close()
-    elif grass.find_program("convert"):
-        grass.call(["convert", src, dst])
+    elif gs.find_program("convert"):
+        gs.call(["convert", src, dst])
     else:
-        grass.fatal(_("Cannot find g.ppmtopng, pnmtopng or convert"))
+        gs.fatal(_("Cannot find g.ppmtopng, pnmtopng or convert"))
 
 
 def convert_and_rotate(src, dst, flip=False):
@@ -111,7 +111,7 @@ def convert_and_rotate(src, dst, flip=False):
     if dst.lower().endswith(".png"):
         to_png = True
     if to_png:
-        tmp_img = grass.tempfile() + ".ppm"
+        tmp_img = gs.tempfile() + ".ppm"
         # TODO: clean up the file
     else:
         tmp_img = dst

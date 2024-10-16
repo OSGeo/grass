@@ -216,10 +216,10 @@ void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
                                 _("Impossible to write in the database"));
 
                     } /*else (1) */
-                }     /*else */
+                } /*else */
             }
         } /*end if obs */
-    }     /*end for */
+    } /*end for */
 
     G_percent(num_points, num_points, 2);
     G_debug(2, "P_outlier: done");
