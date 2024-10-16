@@ -2902,7 +2902,7 @@ def start(
     elif fmt == "pretty":
         # sort_dicts was added in Python 3.8, but I'm stuck with 3.7
         # https://docs.python.org/3/library/pprint.html
-        if sys.version_info.major == 3 and sys.version_info.minor >= 8:
+        if sys.version_info >= (3, 8):
             pprint.pprint(bbox_dict, f, sort_dicts=False)
         else:
             pprint.pprint(bbox_dict, f)
