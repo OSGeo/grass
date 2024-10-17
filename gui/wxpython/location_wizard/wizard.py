@@ -1604,7 +1604,7 @@ class EPSGPage(TitledPage):
             self, data=None, columns=[_("Code"), _("Description"), _("Parameters")]
         )
 
-        # spatialreference.org hyperlink
+        # A hyperlink to an CRS database
         self.tlink = HyperlinkCtrl(
             self,
             id=wx.ID_ANY,
