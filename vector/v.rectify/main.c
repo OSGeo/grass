@@ -126,7 +126,9 @@ int main(int argc, char *argv[])
 
     if (grp->answer) {
         G_strip(grp->answer);
-        strcpy(group, grp->answer);
+        if (G_strlcpy(group, grp->answer, sizeof(group)) >= sizeof(group)) {
+            G_fatal_error(_("Group name <%s> is too long"), grp->answer);
+        }
     }
     else
         group[0] = '\0';
@@ -202,7 +204,7 @@ int main(int argc, char *argv[])
         if (G_find_vector2(out_opt->answer, G_mapset())) {
             G_warning(_("The vector map <%s> already exists in"),
                       out_opt->answer);
-            G_warning(_("target LOCATION %s, MAPSET %s:"), G_location(),
+            G_warning(_("target project %s, mapset %s:"), G_location(),
                       G_mapset());
             G_fatal_error(_("Rectification cancelled."));
         }

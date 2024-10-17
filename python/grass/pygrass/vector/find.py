@@ -3,6 +3,7 @@ Created on Tue Mar 19 11:09:30 2013
 
 @author: pietro
 """
+
 import grass.lib.vector as libvect
 
 from grass.pygrass.errors import must_be_open
@@ -14,7 +15,7 @@ from grass.pygrass.vector.geometry import read_line, Isle, Area, Node
 test_vector_name = "find_doctest_map"
 
 
-class AbstractFinder(object):
+class AbstractFinder:
     def __init__(self, c_mapinfo, table=None, writeable=False):
         """Abstract finder
         -----------------
@@ -59,7 +60,7 @@ class PointFinder(AbstractFinder):
         :param writable: True or False
         :type writeable: boolean
         """
-        super(PointFinder, self).__init__(c_mapinfo, table, writeable)
+        super().__init__(c_mapinfo, table, writeable)
 
     @must_be_open
     def node(self, point, maxdist):
@@ -100,7 +101,7 @@ class PointFinder(AbstractFinder):
             self.c_mapinfo,
             point.x,
             point.y,
-            point.z if point.z else 0,
+            point.z or 0,
             float(maxdist),
             int(not point.is2D),
         )
@@ -165,7 +166,7 @@ class PointFinder(AbstractFinder):
             self.c_mapinfo,
             point.x,
             point.y,
-            point.z if point.z else 0,
+            point.z or 0,
             self.vtype[type],
             float(maxdist),
             int(not point.is2D),
@@ -256,7 +257,7 @@ class PointFinder(AbstractFinder):
             self.c_mapinfo,
             point.x,
             point.y,
-            point.z if point.z else 0,
+            point.z or 0,
             self.vtype[type],
             float(maxdist),
             int(not point.is2D),
@@ -409,7 +410,7 @@ class BboxFinder(AbstractFinder):
          :param writable: True or False
          :type writeable: boolean
         """
-        super(BboxFinder, self).__init__(c_mapinfo, table, writeable)
+        super().__init__(c_mapinfo, table, writeable)
 
     @must_be_open
     def geos(self, bbox, type="all", bboxlist_only=False):
@@ -489,11 +490,10 @@ class BboxFinder(AbstractFinder):
         ):
             if bboxlist_only:
                 return found
-            else:
-                return (
-                    read_line(f_id, self.c_mapinfo, self.table, self.writeable)
-                    for f_id in found.ids
-                )
+            return (
+                read_line(f_id, self.c_mapinfo, self.table, self.writeable)
+                for f_id in found.ids
+            )
 
     @must_be_open
     def nodes(self, bbox):
@@ -585,22 +585,21 @@ class BboxFinder(AbstractFinder):
 
         >>> test_vect.close()
         """
-        boxlist = boxlist if boxlist else BoxList()
+        boxlist = boxlist or BoxList()
         if libvect.Vect_select_areas_by_box(
             self.c_mapinfo, bbox.c_bbox, boxlist.c_boxlist
         ):
             if bboxlist_only:
                 return boxlist
-            else:
-                return (
-                    Area(
-                        v_id=a_id,
-                        c_mapinfo=self.c_mapinfo,
-                        table=self.table,
-                        writeable=self.writeable,
-                    )
-                    for a_id in boxlist.ids
+            return (
+                Area(
+                    v_id=a_id,
+                    c_mapinfo=self.c_mapinfo,
+                    table=self.table,
+                    writeable=self.writeable,
                 )
+                for a_id in boxlist.ids
+            )
 
     @must_be_open
     def islands(self, bbox, bboxlist_only=False):
@@ -651,21 +650,20 @@ class BboxFinder(AbstractFinder):
         ):
             if bboxlist_only:
                 return found
-            else:
-                return (
-                    Isle(
-                        v_id=i_id,
-                        c_mapinfo=self.c_mapinfo,
-                        table=self.table,
-                        writeable=self.writeable,
-                    )
-                    for i_id in found.ids
+            return (
+                Isle(
+                    v_id=i_id,
+                    c_mapinfo=self.c_mapinfo,
+                    table=self.table,
+                    writeable=self.writeable,
                 )
+                for i_id in found.ids
+            )
 
 
 class PolygonFinder(AbstractFinder):
     def __init__(self, c_mapinfo, table=None, writeable=False):
-        super(PolygonFinder, self).__init__(c_mapinfo, table, writeable)
+        super().__init__(c_mapinfo, table, writeable)
 
     def lines(self, polygon, isles=None):
         pass

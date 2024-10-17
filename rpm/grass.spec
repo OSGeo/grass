@@ -320,7 +320,7 @@ fi
 %{_docdir}/%{name}%{shortver}
 
 %files libs
-%license AUTHORS COPYING GPL.TXT CHANGES
+%license AUTHORS COPYING GPL.TXT
 %{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf
 %{_libdir}/%{name}%{shortver}/lib/*.so
 %dir %{_libdir}/%{name}%{shortver}/driver

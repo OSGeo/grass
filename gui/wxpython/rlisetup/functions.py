@@ -3,6 +3,7 @@ Created on Mon Nov 26 11:48:03 2012
 
 @author: lucadelu
 """
+
 import wx
 import os
 import sys
@@ -59,20 +60,16 @@ def retRLiPath():
     rlipath = os.path.join(grass_config_dir, "r.li")
     if os.path.exists(rlipath):
         return rlipath
-    else:
-        os.mkdir(rlipath)
-        return rlipath
+    os.mkdir(rlipath)
+    return rlipath
 
 
-def checkMapExists(name, typ="raster"):
+def checkMapExists(name, typ="raster") -> bool:
     """Check if a map already exist in the working mapset"""
     env = grass.gisenv()
     mapset = env["MAPSET"]
     mapp = grass.find_file(name, typ, mapset)
-    if mapp.name != "":
-        return True
-    else:
-        return False
+    return bool(mapp.name != "")
 
 
 def convertFeature(vect, outrast, cat, origrast, layer="1", overwrite=False):
@@ -97,7 +94,7 @@ def convertFeature(vect, outrast, cat, origrast, layer="1", overwrite=False):
         input=tmp_vect,
         type="area",
         layer=layer,
-        use="val",
+        use="value",
         value=cat,
         output=outrast,
         overwrite=overwrite,
@@ -155,8 +152,9 @@ def sampleAreaVector(
                     "The raster map <%s> already exists."
                     " Please remove or rename the maps "
                     "with the prefix '%s' or select the "
-                    "option to overwrite existing maps" % (rast_name, outpref)
+                    "option to overwrite existing maps"
                 )
+                % (rast_name, outpref)
             )
             return None
         convertFeature(vect, rast_name, cat, rast, layer, overwrite)

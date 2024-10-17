@@ -12,7 +12,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     struct Option *group, *seeds, *bounds, *output, *method, *similarity,
         *threshold, *min_segment_size, *hs, *hr, *bsuf,
 #ifdef _OR_SHAPE_
-        *shape_weight, *smooth_weight,
+        *smooth_weight,
 #endif
         *mem;
     struct Flag *diagonal, *weighted, *ms_a, *ms_p;

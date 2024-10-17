@@ -1,0 +1,15 @@
+---
+
+extends: default
+
+rules:
+  comments:
+    level: error
+    min-spaces-from-content: 1
+  document-start:
+    level: error
+  line-length:
+    level: error
+    max: 120
+    allow-non-breakable-inline-mappings: true
+  truthy: disable

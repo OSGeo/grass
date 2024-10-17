@@ -1071,10 +1071,10 @@ void Vect_line_buffer2(const struct line_pnts *Points, double da, double db,
    \param[out] inner_count number of holes
    \param[out] iPoints array of output polygon's holes (cw order)
  */
-void Vect_area_buffer2(const struct Map_info *Map, int area, double da,
-                       double db, double dalpha, int round, int caps,
-                       double tol, struct line_pnts **oPoints,
-                       struct line_pnts ***iPoints, int *inner_count)
+void Vect_area_buffer2(struct Map_info *Map, int area, double da, double db,
+                       double dalpha, int round, int caps, double tol,
+                       struct line_pnts **oPoints, struct line_pnts ***iPoints,
+                       int *inner_count)
 {
     struct line_pnts *tPoints, *outer;
     struct line_pnts **isles;
@@ -1135,6 +1135,8 @@ void Vect_area_buffer2(const struct Map_info *Map, int area, double da,
    \param round make corners round
    \param tol maximum distance between theoretical arc and output segments
    \param[out] oPoints output polygon outer border (ccw order)
+
+   \note Currently only handles buffers with rounded corners (round = 1)
  */
 void Vect_point_buffer2(double px, double py, double da, double db,
                         double dalpha, int round, double tol,
@@ -1144,13 +1146,13 @@ void Vect_point_buffer2(double px, double py, double da, double db,
     double angular_tol, angular_step, phi1;
     int j, nsegments;
 
-    G_debug(2, "Vect_point_buffer()");
+    G_debug(2, "%s()", __func__);
 
     *oPoints = Vect_new_line_struct();
 
     dalpha *= PI / 180; /* convert dalpha from degrees to radians */
 
-    if (round || (!round)) {
+    if (round) {
         angular_tol = angular_tolerance(tol, da, db);
 
         nsegments = (int)(2 * PI / angular_tol) + 1;
