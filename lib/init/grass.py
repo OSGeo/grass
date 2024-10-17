@@ -693,6 +693,7 @@ def create_location(gisdbase, location, geostring):
     # importing the core module installs a new _() function?
     __ = _
     from grass.script import core as gcore  # pylint: disable=E0611
+
     _ = __
 
     try:
@@ -1480,6 +1481,7 @@ def close_gui():
     # importing the core module installs a new _() function?
     __ = _
     from grass.script import core as gcore  # pylint: disable=E0611
+
     _ = __
 
     env = gcore.gisenv()
