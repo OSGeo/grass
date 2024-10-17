@@ -1604,7 +1604,7 @@ class EPSGPage(TitledPage):
             self, data=None, columns=[_("Code"), _("Description"), _("Parameters")]
         )
 
-        # A hyperlink to an CRS database
+        # A hyperlink to a CRS database (PROJ related)
         self.tlink = HyperlinkCtrl(
             self,
             id=wx.ID_ANY,
@@ -1698,9 +1698,7 @@ class EPSGPage(TitledPage):
             self.OnBrowseCodes(None)
             self.EnableNext(False)
         else:
-            self.tlink.SetURL(
-                f"https://spatialreference.org/ref/?&search={value}"
-            )
+            self.tlink.SetURL(f"https://spatialreference.org/ref/?&search={value}")
             data = self.epsglist.Search(index=[0, 1, 2], pattern=value, firstOnly=False)
             if data:
                 index = 0
