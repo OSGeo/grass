@@ -364,7 +364,7 @@ class RecentFilesConfig(wx.FileConfig):
         """
         recent_files = []
         num_of_entries = self.GetNumberOfEntries()
-        for i in range(0, num_of_entries):
+        for i in range(num_of_entries):
             entry = self.GetNextEntry(index=i)
             if entry[0]:
                 file_path = self.Read(key=entry[1])
