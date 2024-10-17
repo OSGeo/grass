@@ -65,8 +65,8 @@ def raster_history(map, overwrite=False, env=None):
         _(
             "Unable to write history for <%(map)s>. "
             "Raster map <%(map)s> not found in current mapset."
-            % {"map": map, "map": map}
         )
+        % {"map": map, "map": map}
     )
     return False
 
@@ -88,8 +88,7 @@ def raster_info(map, env=None):
     def float_or_null(s):
         if s == "NULL":
             return None
-        else:
-            return float(s)
+        return float(s)
 
     s = read_command("r.info", flags="gre", map=map, env=env)
     kv = parse_key_val(s)
@@ -144,7 +143,7 @@ def mapcalc(
             overwrite=overwrite,
         )
     except CalledModuleError:
-        fatal(_("An error occurred while running r.mapcalc" " with expression: %s") % e)
+        fatal(_("An error occurred while running r.mapcalc with expression: %s") % e)
 
 
 def mapcalc_start(
@@ -224,7 +223,7 @@ def raster_what(map, coord, env=None, localized=False):
     else:
         map_list = map
 
-    coord_list = list()
+    coord_list = []
     if isinstance(coord, tuple):
         coord_list.append("%f,%f" % (coord[0], coord[1]))
     else:
@@ -244,7 +243,7 @@ def raster_what(map, coord, env=None, localized=False):
         quiet=True,
         env=env,
     )
-    data = list()
+    data = []
     if not ret:
         return data
 

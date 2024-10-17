@@ -204,8 +204,10 @@ struct robject *draw_line(struct Map_info *Map, int line, int draw_flag)
     G_debug(3, "  draw_line(): type=%d rtype=%d npoints=%d draw=%d", state.type,
             obj->type, state.Points->n_points, draw);
 
-    if (!draw)
+    if (!draw) {
+        G_free(obj);
         return NULL;
+    }
 
     obj->npoints = state.Points->n_points;
     obj->point =

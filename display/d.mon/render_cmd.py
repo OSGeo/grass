@@ -27,8 +27,7 @@ non_rendering_modules = (
 # remove empty mapfile from non-rendering modules
 def remove_mapfile(mapfile):
     # adopted from Map.DeleteLayer() in gui/wxpython/core/render.py
-    base = os.path.split(mapfile)[0]
-    mapfile = os.path.split(mapfile)[1]
+    base, mapfile = os.path.split(mapfile)
     tempbase = mapfile.split(".")[0]
     if base == "" or tempbase == "":
         return
@@ -40,7 +39,7 @@ def remove_mapfile(mapfile):
 # read environment variables from file
 def read_env_file(env_file):
     width = height = legfile = None
-    fd = open(env_file, "r")
+    fd = open(env_file)
     if fd is None:
         grass.fatal("Unable to open file '{0}'".format(env_file))
     lines = fd.readlines()
@@ -174,7 +173,7 @@ if __name__ == "__main__":
     width, height, legfile = read_env_file(os.path.join(path, "env"))
     if mon.startswith("wx"):
         mapfile = tempfile.NamedTemporaryFile(dir=path).name
-        if cmd[0] in ("d.barscale", "d.legend", "d.northarrow", "d.legend.vect"):
+        if cmd[0] in {"d.barscale", "d.legend", "d.northarrow", "d.legend.vect"}:
             mapfile += ".png"
         else:
             mapfile += ".ppm"

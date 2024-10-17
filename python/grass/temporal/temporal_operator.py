@@ -141,8 +141,7 @@ for details.
 """  # noqa: E501
 
 try:
-    import ply.lex as lex
-    import ply.yacc as yacc
+    from ply import lex, yacc
 except ImportError:
     pass
 
@@ -200,7 +199,7 @@ class TemporalOperatorLexer:
     )
 
     # Build the token list
-    tokens = tokens + tuple(relations.values())
+    tokens += tuple(relations.values())
 
     # Regular expression rules for simple tokens
     t_T_SELECT = r":"
@@ -242,19 +241,19 @@ class TemporalOperatorLexer:
         # Check for reserved words
         if t.value in TemporalOperatorLexer.relations.keys():
             t.type = TemporalOperatorLexer.relations.get(t.value)
-        elif t.value == "l" or t.value == "left":
+        elif t.value in {"l", "left"}:
             t.value = "l"
             t.type = "LEFTREF"
-        elif t.value == "r" or t.value == "right":
+        elif t.value in {"r", "right"}:
             t.value = "r"
             t.type = "RIGHTREF"
-        elif t.value == "u" or t.value == "union":
+        elif t.value in {"u", "union"}:
             t.value = "u"
             t.type = "UNION"
-        elif t.value == "d" or t.value == "disjoint":
+        elif t.value in {"d", "disjoint"}:
             t.value = "d"
             t.type = "DISJOINT"
-        elif t.value == "i" or t.value == "intersect":
+        elif t.value in {"i", "intersect"}:
             t.value = "i"
             t.type = "INTERSECT"
         else:
@@ -648,7 +647,7 @@ class TemporalOperatorParser:
         rel_list = []
         rel_list.append(t[1])
         if isinstance(t[3], list):
-            rel_list = rel_list + t[3]
+            rel_list += t[3]
         else:
             rel_list.append(t[3])
         t[0] = rel_list

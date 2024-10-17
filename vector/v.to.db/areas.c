@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <grass/glocale.h>
+#include <grass/vector.h>
 
 #include "global.h"
 
@@ -111,5 +112,6 @@ int read_areas(struct Map_info *Map)
         G_percent(area_num, nareas, 2);
     }
 
+    Vect_destroy_cats_struct(Cats);
     return 0;
 }

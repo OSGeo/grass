@@ -130,9 +130,9 @@ def vector_columns(map, layer=None, getDict=True, env=None, **kwargs):
         "v.info", flags="c", map=map, layer=layer, quiet=True, env=env, **kwargs
     )
     if getDict:
-        result = dict()
+        result = {}
     else:
-        result = list()
+        result = []
     i = 0
     for line in s.splitlines():
         ctype, cname = line.split("|")
@@ -397,7 +397,7 @@ def vector_what(
     else:
         layer_list = ["-1"] * len(map_list)
 
-    coord_list = list()
+    coord_list = []
     if isinstance(coord, tuple):
         coord_list.append("%f,%f" % (coord[0], coord[1]))
     else:
@@ -409,14 +409,14 @@ def vector_what(
         flags += "a"
     if multiple:
         flags += "m"
-    cmdParams = dict(
-        quiet=True,
-        flags=flags,
-        map=",".join(map_list),
-        layer=",".join(layer_list),
-        coordinates=",".join(coord_list),
-        distance=float(distance),
-    )
+    cmdParams = {
+        "quiet": True,
+        "flags": flags,
+        "map": ",".join(map_list),
+        "layer": ",".join(layer_list),
+        "coordinates": ",".join(coord_list),
+        "distance": float(distance),
+    }
     if ttype:
         cmdParams["type"] = ",".join(ttype)
 
@@ -425,13 +425,12 @@ def vector_what(
     except CalledModuleError as e:
         raise ScriptError(e.msg)
 
-    data = list()
+    data = []
     if not ret:
         return data
 
     # lazy import
-    global json
-    global orderedDict
+    global json, orderedDict
     if json is None:
         import json
     if orderedDict is None:

@@ -61,7 +61,7 @@ from core.utils import autoCropImageFromFile
 from core.gcmd import DecodeString
 from core.globalvar import wxPythonPhoenix
 from gui_core.wrap import Rect
-import grass.script as grass
+import grass.script as gs
 
 log = None
 progress = None
@@ -83,7 +83,7 @@ def print_progress(value):
     """Redirect progress info"""
     global progress
     if progress:
-        if not progress.GetRange() == 100:
+        if progress.GetRange() != 100:
             progress.SetRange(100)
         progress.SetValue(value)
     else:
@@ -246,8 +246,7 @@ class Nviz:
             z = c_float()
             Nviz_get_focus(self.data, byref(x), byref(y), byref(z))
             return x.value, y.value, z.value
-        else:
-            return -1, -1, -1
+        return -1, -1, -1
 
     def SetFocus(self, x, y, z):
         """Set focus"""
@@ -1873,8 +1872,7 @@ class Nviz:
             Nviz_draw_cplane(self.data, -1, -1)
             x, y, z = self.GetCPlaneTranslation()
             return x, y, z
-        else:
-            return None, None, None
+        return None, None, None
 
     def SelectCPlane(self, index):
         """Select cutting plane
@@ -2162,7 +2160,7 @@ class Texture:
         """Delete texture"""
         if self.textureId:
             Nviz_del_texture(self.textureId)
-        grass.try_remove(self.path)
+        gs.try_remove(self.path)
 
     def Resize(self):
         """Resize image to match 2^n"""
@@ -2212,9 +2210,7 @@ class Texture:
                     ]
         wx.EndBusyCursor()
 
-        id = Nviz_load_image(im, self.width, self.height, self.image.HasAlpha())
-
-        return id
+        return Nviz_load_image(im, self.width, self.height, self.image.HasAlpha())
 
     def Draw(self):
         """Draw texture as an image"""

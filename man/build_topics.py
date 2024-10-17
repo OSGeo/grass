@@ -6,7 +6,15 @@
 import os
 import sys
 import glob
-from build_html import *
+from build_html import (
+    grass_version,
+    header1_tmpl,
+    headertopics_tmpl,
+    headerkey_tmpl,
+    desc1_tmpl,
+    moduletopics_tmpl,
+    write_html_footer,
+)
 
 path = sys.argv[1]
 year = os.getenv("VERSION_DATE")
@@ -44,7 +52,7 @@ for fname in htmlfiles:
 topicsfile = open(os.path.join(path, "topics.html"), "w")
 topicsfile.write(
     header1_tmpl.substitute(
-        title="GRASS GIS " "%s Reference Manual: Topics index" % grass_version
+        title="GRASS GIS %s Reference Manual: Topics index" % grass_version
     )
 )
 topicsfile.write(headertopics_tmpl)

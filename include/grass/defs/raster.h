@@ -392,7 +392,9 @@ int Rast_option_to_interp_type(const struct Option *);
 
 /* mask_info.c */
 char *Rast_mask_info(void);
+bool Rast_mask_status(char *, char *, bool *, char *, char *);
 int Rast__mask_info(char *, char *);
+bool Rast_mask_is_present(void);
 
 /* maskfd.c */
 int Rast_maskfd(void);
