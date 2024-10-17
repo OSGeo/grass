@@ -5,7 +5,7 @@
  * MODULE:      GRASS gis library
  * FILENAME:    cmprrle.c
  * AUTHOR(S):   Markus Metz
- * PURPOSE:     To provide generic RLE for compressing and 
+ * PURPOSE:     To provide generic RLE for compressing and
  *              decompressing data.  Its primary use is in
  *              the storage and reading of GRASS rasters.
  *
@@ -14,7 +14,7 @@
  * COPYRIGHT:   (C) 2015 by the GRASS Development Team
  *
  *              This program is free software under the GNU General Public
- *              License (version 2 or greater). Read the file COPYING that 
+ *              License (version 2 or greater). Read the file COPYING that
  *              comes with GRASS for details.
  *
  *****************************************************************************/
@@ -44,7 +44,7 @@
  *     unsigned char *src, *dst;                                    *
  * ---------------------------------------------------------------- *
  * This function decompresses data compressed with RLE.              *
- * It is equivalent to a single pass call to an external expansion  * 
+ * It is equivalent to a single pass call to an external expansion  *
  * function.                                                        *
  * If you need a continuous expansion scheme, you'll have to code   *
  * your own.                                                        *
@@ -63,28 +63,27 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-/* no fast mode if destination is large enough to hold 
- * worst case compression */ 
+/* no fast mode if destination is large enough to hold
+ * worst case compression */
 int G_rle_compress_bound(int src_sz)
 {
     return ((src_sz >> 1) * 3 + (src_sz & 1));
 }
 
-int
-G_rle_compress(unsigned char *src, int src_sz, unsigned char *dst,
-		int dst_sz)
+int G_rle_compress(unsigned char *src, int src_sz, unsigned char *dst,
+                   int dst_sz)
 {
     int i, nbytes;
-    unsigned char prev_b; 
+    unsigned char prev_b;
     int cnt;
 
     /* Catch errors early */
     if (src == NULL || dst == NULL)
-	return -1;
+        return -1;
 
     /* Don't do anything if src is empty or smaller than 4 bytes */
     if (src_sz <= 3)
-	return 0;
+        return 0;
 
     /* modified RLE:
      * unit is 1 byte, only sequences longer than 1 are encoded
@@ -93,64 +92,62 @@ G_rle_compress(unsigned char *src, int src_sz, unsigned char *dst,
      * example:
      * ABBCCC
      * is encoded as
-     * ABB2CC3 
+     * ABB2CC3
      */
- 
+
     prev_b = src[0];
     cnt = 1;
     nbytes = 0;
     for (i = 1; i < src_sz; i++) {
-	if (prev_b != src[i] || cnt == 255) {
-	    /* write to dst */
-	    if (cnt == 1) {
-		if (nbytes >= dst_sz)
-		    return -2;
-		dst[nbytes++] = prev_b;
-	    }
-	    else {
-		/* cnt > 1 */
-		if (nbytes >= dst_sz - 2)
-		    return -2;
-		dst[nbytes++] = prev_b;
-		dst[nbytes++] = prev_b;
-		dst[nbytes++] = (unsigned char) cnt;
-	    }
-	    cnt = 0;
-	}
-	prev_b = src[i];
-	cnt++;
+        if (prev_b != src[i] || cnt == 255) {
+            /* write to dst */
+            if (cnt == 1) {
+                if (nbytes >= dst_sz)
+                    return -2;
+                dst[nbytes++] = prev_b;
+            }
+            else {
+                /* cnt > 1 */
+                if (nbytes >= dst_sz - 2)
+                    return -2;
+                dst[nbytes++] = prev_b;
+                dst[nbytes++] = prev_b;
+                dst[nbytes++] = (unsigned char)cnt;
+            }
+            cnt = 0;
+        }
+        prev_b = src[i];
+        cnt++;
     }
     /* write out the last sequence */
     if (cnt == 1) {
-	if (nbytes >= dst_sz)
-	    return -2;
-	dst[nbytes++] = prev_b;
+        if (nbytes >= dst_sz)
+            return -2;
+        dst[nbytes++] = prev_b;
     }
     else {
-	if (nbytes >= dst_sz - 2)
-	    return -2;
-	dst[nbytes++] = prev_b;
-	dst[nbytes++] = prev_b;
-	dst[nbytes++] = (unsigned char) cnt;
+        if (nbytes >= dst_sz - 2)
+            return -2;
+        dst[nbytes++] = prev_b;
+        dst[nbytes++] = prev_b;
+        dst[nbytes++] = (unsigned char)cnt;
     }
 
     return nbytes;
 }
 
-int
-G_rle_expand(unsigned char *src, int src_sz, unsigned char *dst,
-		int dst_sz)
+int G_rle_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
 {
     int i, j, nbytes, cnt;
     unsigned char prev_b;
 
     /* Catch errors early */
     if (src == NULL || dst == NULL)
-	return -1;
+        return -1;
 
     /* Don't do anything if src is empty */
     if (src_sz <= 0)
-	return 0;
+        return 0;
 
     /* RLE expand */
     prev_b = src[0];
@@ -158,38 +155,38 @@ G_rle_expand(unsigned char *src, int src_sz, unsigned char *dst,
     nbytes = 0;
     i = 1;
     while (i < src_sz) {
-	/* single occurrences don't have a following count
-	 * multiple occurrences are twice in src, followed by the count */
-	if (cnt == 2) {
-	    if (i >= src_sz)
-		return -1;
-	    cnt = src[i];
-	    if (nbytes + cnt > dst_sz)
-		return -1;
-	    for (j = 0; j < cnt; j++) {
-		dst[nbytes++] = prev_b;
-	    }
-	    cnt = 0;
-	    i++;
-	    if (i >= src_sz)
-		return nbytes;
-	}
-	if (cnt == 1) {
-	    if (prev_b != src[i]) {
-		if (nbytes + cnt > dst_sz)
-		    return -1;
-		dst[nbytes++] = prev_b;
-		cnt = 0;
-	    }
-	}
-	prev_b = src[i];
-	cnt++;
-	i++;
+        /* single occurrences don't have a following count
+         * multiple occurrences are twice in src, followed by the count */
+        if (cnt == 2) {
+            if (i >= src_sz)
+                return -1;
+            cnt = src[i];
+            if (nbytes + cnt > dst_sz)
+                return -1;
+            for (j = 0; j < cnt; j++) {
+                dst[nbytes++] = prev_b;
+            }
+            cnt = 0;
+            i++;
+            if (i >= src_sz)
+                return nbytes;
+        }
+        if (cnt == 1) {
+            if (prev_b != src[i]) {
+                if (nbytes + cnt > dst_sz)
+                    return -1;
+                dst[nbytes++] = prev_b;
+                cnt = 0;
+            }
+        }
+        prev_b = src[i];
+        cnt++;
+        i++;
     }
     if (nbytes >= dst_sz)
-	return -1;
+        return -1;
     if (cnt == 1)
-	dst[nbytes++] = prev_b;
+        dst[nbytes++] = prev_b;
 
     return nbytes;
 }

@@ -249,7 +249,6 @@ int read_vpoints(char *, char *);
 /* r_wind.c */
 int read_wind(char *, char *);
 
-
 /* scale.c */
 double scale(char *);
 
@@ -296,7 +295,7 @@ int yesno(char *, char *);
 /* eps.c */
 int eps_bbox(char *, double *, double *, double *, double *);
 int eps_trans(double, double, double, double, double, double, double, double,
-	      double *, double *);
+              double *, double *);
 
 int eps_save(FILE *, char *, char *);
 int eps_draw_saved(char *, double, double, double, double);

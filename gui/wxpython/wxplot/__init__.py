@@ -1,7 +1,7 @@
 all = [
-    'scatter',
-    'base',
-    'dialogs',
-    'profile',
-    'histogram',
+    "scatter",
+    "base",
+    "dialogs",
+    "profile",
+    "histogram",
 ]

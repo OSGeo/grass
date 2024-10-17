@@ -4,7 +4,7 @@ README for zufall random number package, C version
 [NOTE: I have not done extension testing of this port.
        use at your own risk. The output of the original
        FORTRAN program is in zufall.orig.output. The
-       original FORTRAN source is at 
+       original FORTRAN source is at
        netlib.att.com:netlib/random/zufall.f.Z  --jdm]
 
 This package contains a portable random number generator set
@@ -25,9 +25,9 @@ To compile this beast, edit the Makefile and run 'make'
 External documentation, "Lagged Fibonacci Random Number Generators
 for the NEC SX-3," is to be published in the International
 Journal of High Speed Computing (1993). Otherwise, ask the
-original author: 
+original author:
 
-         W. P. Petersen 
+         W. P. Petersen
          IPS, RZ F-5
          ETHZ
          CH 8092, Zurich
@@ -43,7 +43,7 @@ UNIFORM generator routines:
 
   int zufalli(seed)    /* initializes common block containing seeds. */
     int seed;          /* if seed=0, the default value is 1802. */
-  
+
   int zufall(n,u)      /* returns set of n uniforms u[0], ..., u[n-1]. */
     int n
     double *u;
@@ -75,5 +75,5 @@ POISSON generator routine:
 
   int fische(n,mu,q)   /* assigns set of n integers q, with Poisson */
   int n, *q;           /* distribution, density p(q,mu) = exp(-mu) mu**q/q! */
-  double mu;           /* Use zufallsv and zufallrs for stop/restart 
+  double mu;           /* Use zufallsv and zufallrs for stop/restart
                        /* sequence */

@@ -1,9 +1,9 @@
-
 /****************************************************************************
  *
  * MODULE:       r.recode
  * AUTHOR(S):    CERL
- *               Bob Covill <bcovill tekmap.ns.ca>, Hamish Bowman <hamish_b yahoo.com>,
+ *               Bob Covill <bcovill tekmap.ns.ca>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      Recode categorical raster maps
  * COPYRIGHT:    (C) 1999-2011 by the GRASS Development Team
@@ -36,10 +36,9 @@ int main(int argc, char *argv[])
     char *title;
     FILE *srcfp;
     struct GModule *module;
-    struct
-    {
-	struct Option *input, *output, *title, *rules;
-	struct Flag *a, *d;
+    struct {
+        struct Option *input, *output, *title, *rules;
+        struct Flag *a, *d;
     } parm;
 
     G_gisinit(argv[0]);
@@ -52,20 +51,20 @@ int main(int argc, char *argv[])
 
     parm.input = G_define_standard_option(G_OPT_R_INPUT);
     parm.input->description = _("Name of raster map to be recoded");
-    
+
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
 
     parm.rules = G_define_standard_option(G_OPT_F_INPUT);
     parm.rules->key = "rules";
     parm.rules->label = _("File containing recode rules");
     parm.rules->description = _("'-' for standard input");
-    
+
     parm.title = G_define_option();
     parm.title->key = "title";
     parm.title->required = NO;
     parm.title->type = TYPE_STRING;
     parm.title->description = _("Title for output raster map");
-    
+
     parm.a = G_define_flag();
     parm.a->key = 'a';
     parm.a->description = _("Align the current region to the input raster map");
@@ -73,9 +72,9 @@ int main(int argc, char *argv[])
     parm.d = G_define_flag();
     parm.d->key = 'd';
     parm.d->description = _("Force output to 'double' raster map type (DCELL)");
-    
+
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     name = parm.input->answer;
     result = parm.output->answer;
@@ -85,26 +84,25 @@ int main(int argc, char *argv[])
 
     srcfp = stdin;
     if (strcmp(parm.rules->answer, "-") != 0) {
-	srcfp = fopen(parm.rules->answer, "r");
-	if (!srcfp)
-	    G_fatal_error(_("Unable to open file <%s>"),
-			  parm.rules->answer);
+        srcfp = fopen(parm.rules->answer, "r");
+        if (!srcfp)
+            G_fatal_error(_("Unable to open file <%s>"), parm.rules->answer);
     }
 
     if (!read_rules(srcfp)) {
-	if (isatty(fileno(srcfp)))
-	    G_fatal_error(_("No rules specified. Raster map <%s> not created."),
-			  result);
-	else
-	    G_fatal_error(_("No rules specified"));
+        if (isatty(fileno(srcfp)))
+            G_fatal_error(_("No rules specified. Raster map <%s> not created."),
+                          result);
+        else
+            G_fatal_error(_("No rules specified"));
     }
 
     no_mask = 0;
 
     do_recode();
 
-    if(title)
-	Rast_put_cell_title(result, title);
+    if (title)
+        Rast_put_cell_title(result, title);
 
     exit(EXIT_SUCCESS);
 }

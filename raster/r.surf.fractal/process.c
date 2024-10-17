@@ -1,13 +1,12 @@
-
 /***************************************************************************/
 
 /***                                                                     ***/
 
 /***                             process()                               ***/
 
-/***          Reads in a raster maps row by row for processing          ***/
+/***          Reads in a raster maps row by row for processing           ***/
 
-/***                  Jo Wood, V1.0, 13th September, 1994		 ***/
+/***                  Jo Wood, V1.0, 13th September, 1994                ***/
 
 /***                                                                     ***/
 
@@ -27,22 +26,21 @@ int process(void)
 
     /*-------------------------------------------------------------------*/
 
-    int nrows,			/* Will store the current number of     */
-      ncols,			/* rows and columns in the raster.      */
-      nn;			/* Size of raster to nearest power of 2. */
+    int nrows, /* Will store the current number of     */
+        ncols, /* rows and columns in the raster.      */
+        nn;    /* Size of raster to nearest power of 2. */
 
-    double *data[2];		/* Array holding complex data.          */
-
+    double *data[2]; /* Array holding complex data.          */
 
     /*------------------------------------------------------------------*/
     /*                       GET DETAILS OF INPUT RASTER                */
 
     /*------------------------------------------------------------------*/
 
-    nrows = Rast_window_rows();	/* Find out the number of rows and */
-    ncols = Rast_window_cols();	/* columns of the raster view.     */
+    nrows = Rast_window_rows(); /* Find out the number of rows and */
+    ncols = Rast_window_cols(); /* columns of the raster view.     */
 
-    nn = G_math_max_pow2(MAX(nrows, ncols));	/* Find smallest power of 2 that   */
+    nn = G_math_max_pow2(MAX(nrows, ncols)); /* Find smallest power of 2 that */
     /* largest side of raster will fit. */
 
     /*------------------------------------------------------------------*/
@@ -51,9 +49,9 @@ int process(void)
     /*------------------------------------------------------------------*/
 
     if (nn * nn * sizeof(double) < 1)
-	G_fatal_error(_("Unable to allocate data buffer. "
-			"Check current region with g.region."));
-    
+        G_fatal_error(_("Unable to allocate data buffer. "
+                        "Check current region with g.region."));
+
     data[0] = (double *)G_malloc(nn * nn * sizeof(double));
     data[1] = (double *)G_malloc(nn * nn * sizeof(double));
 
@@ -81,7 +79,7 @@ int data_reset(double *data[2], int nn)
     int total_size = nn * nn, count;
 
     for (count = 0; count < total_size; count++)
-	*dptr0++ = *dptr1++ = 0.0;
+        *dptr0++ = *dptr1++ = 0.0;
 
     return 0;
 }

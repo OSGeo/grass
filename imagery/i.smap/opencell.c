@@ -3,7 +3,6 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-
 int open_cell_old(const char *name, const char *mapset)
 {
     return Rast_open_old(name, mapset);

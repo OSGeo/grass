@@ -1,18 +1,18 @@
 /*****************************************************************************
-*
-* MODULE:	i.evapo.pt
-* AUTHOR:	Yann Chemin yann.chemin@gmail.com 
-*
-* PURPOSE:	To estimate the daily evapotranspiration by means
-*		of Prestley and Taylor method (1972).
-*
-* COPYRIGHT:	(C) 2007-2011 by the GRASS Development Team
-*
-*		This program is free software under the GNU General Public
-*		Licence (>=2). Read the file COPYING that comes with GRASS
-*		for details.
-*
-***************************************************************************/
+ *
+ * MODULE:        i.evapo.pt
+ * AUTHOR:        Yann Chemin yann.chemin@gmail.com
+ *
+ * PURPOSE:       To estimate the daily evapotranspiration by means
+ *                of Prestley and Taylor method (1972).
+ *
+ * COPYRIGHT:     (C) 2007-2011 by the GRASS Development Team
+ *
+ *                This program is free software under the GNU General Public
+ *                Licence (>=2). Read the file COPYING that comes with GRASS
+ *                for details.
+ *
+ ***************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,7 +25,7 @@
 double pt_delta(double tempka);
 double pt_ghamma(double tempka, double p_atm);
 double pt_daily_et(double alpha_pt, double delta_pt, double ghamma_pt,
-		   double rnet, double g0, double tempka);
+                   double rnet, double g0, double tempka);
 
 int main(int argc, char *argv[])
 {
@@ -50,10 +50,9 @@ int main(int argc, char *argv[])
     int nrows, ncols;
     int row, col;
 
-    /* parser stuctures definition */
+    /* parser structures definition */
     struct GModule *module;
-    struct Option *input_RNET, *input_TEMPKA, *input_PATM, *input_G0,
-	*input_PT;
+    struct Option *input_RNET, *input_TEMPKA, *input_PATM, *input_G0, *input_PT;
     struct Option *output;
     struct Flag *zero;
     struct Colors color;
@@ -65,14 +64,14 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("imagery"));
     G_add_keyword(_("evapotranspiration"));
-    module->description =
-	_("Computes evapotranspiration calculation "
-	  "Priestley and Taylor formulation, 1972.");
-    
+    module->description = _("Computes evapotranspiration calculation "
+                            "Priestley and Taylor formulation, 1972.");
+
     /* Define different options */
     input_RNET = G_define_standard_option(G_OPT_R_INPUT);
     input_RNET->key = "net_radiation";
-    input_RNET->description = _("Name of input net radiation raster map [W/m2]");
+    input_RNET->description =
+        _("Name of input net radiation raster map [W/m2]");
 
     input_G0 = G_define_standard_option(G_OPT_R_INPUT);
     input_G0->key = "soil_heatflux";
@@ -80,11 +79,13 @@ int main(int argc, char *argv[])
 
     input_TEMPKA = G_define_standard_option(G_OPT_R_INPUT);
     input_TEMPKA->key = "air_temperature";
-    input_TEMPKA->description = _("Name of input air temperature raster map [K]");
+    input_TEMPKA->description =
+        _("Name of input air temperature raster map [K]");
 
     input_PATM = G_define_standard_option(G_OPT_R_INPUT);
     input_PATM->key = "atmospheric_pressure";
-    input_PATM->description = _("Name of input atmospheric pressure raster map [millibars]");
+    input_PATM->description =
+        _("Name of input atmospheric pressure raster map [millibars]");
 
     input_PT = G_define_option();
     input_PT->key = "priestley_taylor_coeff";
@@ -94,7 +95,8 @@ int main(int argc, char *argv[])
     input_PT->answer = "1.26";
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
-    output->description = _("Name of output evapotranspiration raster map [mm/d]");
+    output->description =
+        _("Name of output evapotranspiration raster map [mm/d]");
 
     /* Define the different flags */
     zero = G_define_flag();
@@ -102,7 +104,7 @@ int main(int argc, char *argv[])
     zero->description = _("Set negative ETa to zero");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     /* get entered parameters */
     RNET = input_RNET->answer;
@@ -144,37 +146,36 @@ int main(int argc, char *argv[])
     /* start the loop through cells */
     for (row = 0; row < nrows; row++) {
 
-	G_percent(row, nrows, 2);
-	/* read input raster row into line buffer */
-	Rast_get_d_row(infd_RNET, inrast_RNET, row);
-	Rast_get_d_row(infd_TEMPKA, inrast_TEMPKA, row);
-	Rast_get_d_row(infd_PATM, inrast_PATM, row);
-	Rast_get_d_row(infd_G0, inrast_G0, row);
+        G_percent(row, nrows, 2);
+        /* read input raster row into line buffer */
+        Rast_get_d_row(infd_RNET, inrast_RNET, row);
+        Rast_get_d_row(infd_TEMPKA, inrast_TEMPKA, row);
+        Rast_get_d_row(infd_PATM, inrast_PATM, row);
+        Rast_get_d_row(infd_G0, inrast_G0, row);
 
-	for (col = 0; col < ncols; col++) {
-	    /* read current cell from line buffer */
-            d_rnet = ((DCELL *) inrast_RNET)[col];
-            d_tempka = ((DCELL *) inrast_TEMPKA)[col];
-            d_pt_patm = ((DCELL *) inrast_PATM)[col];
-            d_g0 = ((DCELL *) inrast_G0)[col];
+        for (col = 0; col < ncols; col++) {
+            /* read current cell from line buffer */
+            d_rnet = ((DCELL *)inrast_RNET)[col];
+            d_tempka = ((DCELL *)inrast_TEMPKA)[col];
+            d_pt_patm = ((DCELL *)inrast_PATM)[col];
+            d_g0 = ((DCELL *)inrast_G0)[col];
 
-	    /*Delta_pt and Ghamma_pt */
-	    d_pt_delta = pt_delta(d_tempka);
-	    d_pt_ghamma = pt_ghamma(d_tempka, d_pt_patm);
+            /*Delta_pt and Ghamma_pt */
+            d_pt_delta = pt_delta(d_tempka);
+            d_pt_ghamma = pt_ghamma(d_tempka, d_pt_patm);
 
-	    /*Calculate ET */
-	    d_daily_et =
-		pt_daily_et(d_pt_alpha, d_pt_delta, d_pt_ghamma, d_rnet, d_g0,
-			    d_tempka);
-	    if (zero->answer && d_daily_et < 0)
-		d_daily_et = 0.0;
+            /*Calculate ET */
+            d_daily_et = pt_daily_et(d_pt_alpha, d_pt_delta, d_pt_ghamma,
+                                     d_rnet, d_g0, d_tempka);
+            if (zero->answer && d_daily_et < 0)
+                d_daily_et = 0.0;
 
-	    /* write calculated ETP to output line buffer */
-	    outrast[col] = d_daily_et;
-	}
+            /* write calculated ETP to output line buffer */
+            outrast[col] = d_daily_et;
+        }
 
-	/* write output line buffer to output raster file */
-	Rast_put_d_row(outfd, outrast);
+        /* write output line buffer to output raster file */
+        Rast_put_d_row(outfd, outrast);
     }
     /* free buffers and close input maps */
 

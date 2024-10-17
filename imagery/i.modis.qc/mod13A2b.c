@@ -10,18 +10,16 @@
  * 1101 -> class 8: Quality so low that it is not useful
  * 1110 -> class 9: L1B data faulty
  * 1111 -> class 10: Not useful for any other reason/not processed
- */  
+ */
 
 #include <grass/raster.h>
 
-CELL mod13A2b(CELL pixel) 
+CELL mod13A2b(CELL pixel)
 {
     CELL qctemp;
 
-    pixel >>= 2;		/*bits [2-5] become [0-4] */
+    pixel >>= 2; /*bits [2-5] become [0-4] */
     qctemp = pixel & 0x0F;
-    
+
     return qctemp;
 }
-
-

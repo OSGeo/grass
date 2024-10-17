@@ -7,7 +7,7 @@ double DD(double Dist)
     double SmallD, SmallDist;
 
     if (Dist < Filter.Mult)
-	return ((double)1.0);
+        return ((double)1.0);
 
     SmallD = Filter.MaxDist - Filter.Mult;
     SmallDist = Dist - Filter.Mult;

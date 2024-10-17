@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.basins.fill
@@ -14,13 +13,12 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
-****************************************************************************/
+ ****************************************************************************/
 
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
-
 
 CELL *read_map(const char *name, int nomask, int nrows, int ncols)
 {
@@ -30,7 +28,7 @@ CELL *read_map(const char *name, int nomask, int nrows, int ncols)
     void (*get_row)(int, CELL *, int);
 
     /* allocate entire map */
-    map = (CELL *) G_malloc(nrows * ncols * sizeof(CELL));
+    map = (CELL *)G_malloc(nrows * ncols * sizeof(CELL));
 
     /* open the map */
     fd = Rast_open_old(name, "");
@@ -39,13 +37,13 @@ CELL *read_map(const char *name, int nomask, int nrows, int ncols)
     G_message(_("Reading <%s> ... "), name);
 
     if (nomask)
-	get_row = Rast_get_c_row_nomask;
+        get_row = Rast_get_c_row_nomask;
     else
-	get_row = Rast_get_c_row;
+        get_row = Rast_get_c_row;
 
     for (row = 0; row < nrows; row++) {
-	G_percent(row, nrows, 10);
-	(*get_row)(fd, map + row * ncols, row);
+        G_percent(row, nrows, 10);
+        (*get_row)(fd, map + row * ncols, row);
     }
     G_percent(nrows, nrows, 10);
 

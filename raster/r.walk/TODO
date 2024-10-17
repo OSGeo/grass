@@ -13,7 +13,7 @@ it would be interesting to model all the aspects that influence the
 speed movement "inside" the a,b,c,d (see the r.walk documentation)
 parameters going back to a phisical meaning (speed in a specific
 condition) of the formula (the real time in second that the subject
-nedd to move between two points).
+need to move between two points).
 
 For man walking on a marked path, a,b,c,d can be considered constant
 in space, but they can be very different for man walking in wilderness

@@ -17,7 +17,7 @@ This program is free software under the GNU General Public License
 
 import wx
 from core.debug import Debug
-from gui_core.wrap import PseudoDC, EmptyBitmap, Rect, BitmapFromImage
+from gui_core.wrap import BitmapFromImage, EmptyBitmap, ImageFromBitmap, PseudoDC, Rect
 from .utils import ComputeScaledRect
 
 
@@ -39,8 +39,10 @@ class BufferedWindow(wx.Window):
 
     def __init__(self, *args, **kwargs):
         # make sure the NO_FULL_REPAINT_ON_RESIZE style flag is set.
-        kwargs['style'] = kwargs.setdefault(
-            'style', wx.NO_FULL_REPAINT_ON_RESIZE) | wx.NO_FULL_REPAINT_ON_RESIZE
+        kwargs["style"] = (
+            kwargs.setdefault("style", wx.NO_FULL_REPAINT_ON_RESIZE)
+            | wx.NO_FULL_REPAINT_ON_RESIZE
+        )
         wx.Window.__init__(self, *args, **kwargs)
 
         Debug.msg(2, "BufferedWindow.__init__()")
@@ -59,19 +61,21 @@ class BufferedWindow(wx.Window):
     def OnPaint(self, event):
         Debug.msg(5, "BufferedWindow.OnPaint()")
         # All that is needed here is to draw the buffer to screen
-        dc = wx.BufferedPaintDC(self, self._Buffer)
+        wx.BufferedPaintDC(self, self._Buffer)
 
     def OnSize(self, event):
         Debug.msg(5, "BufferedWindow.OnSize()")
         # The Buffer init is done here, to make sure the buffer is always
         # the same size as the Window
-        #Size  = self.GetClientSizeTuple()
+        # Size  = self.GetClientSizeTuple()
         size = self.GetClientSize()
 
         # Make new offscreen bitmap: this bitmap will always have the
         # current drawing in it, so it can be used to save the image to
         # a file, or whatever.
-        self._Buffer = EmptyBitmap(*size)
+        w = max(size[0], 20)
+        h = max(size[1], 20)
+        self._Buffer = EmptyBitmap(w, h)
         self.UpdateDrawing()
         # event.Skip()
 
@@ -100,10 +104,12 @@ class BufferedWindow(wx.Window):
 
 
 class AnimationWindow(BufferedWindow):
-
-    def __init__(self, parent, id=wx.ID_ANY,
-                 style=wx.DEFAULT_FRAME_STYLE | wx.FULL_REPAINT_ON_RESIZE |
-                 wx.BORDER_RAISED):
+    def __init__(
+        self,
+        parent,
+        id=wx.ID_ANY,
+        style=wx.DEFAULT_FRAME_STYLE | wx.FULL_REPAINT_ON_RESIZE | wx.BORDER_RAISED,
+    ):
         Debug.msg(2, "AnimationWindow.__init__()")
 
         self.bitmap = EmptyBitmap(1, 1)
@@ -141,22 +147,19 @@ class AnimationWindow(BufferedWindow):
         wW, wH = self.GetClientSize()
         if abs(bW - wW) > 5 or abs(bH - wH) > 5:
             params = ComputeScaledRect((bW, bH), (wW, wH))
-            im = wx.ImageFromBitmap(bitmap)
-            im.Rescale(params['width'], params['height'])
-            self.x = params['x']
-            self.y = params['y']
+            im = ImageFromBitmap(bitmap)
+            im.Rescale(params["width"], params["height"])
+            self.x = params["x"]
+            self.y = params["y"]
             bitmap = BitmapFromImage(im)
             if self._overlay:
-                im = wx.ImageFromBitmap(self.bitmap_overlay)
+                im = ImageFromBitmap(self.bitmap_overlay)
                 im.Rescale(
-                    im.GetWidth() *
-                    params['scale'],
-                    im.GetHeight() *
-                    params['scale'])
+                    im.GetWidth() * params["scale"], im.GetHeight() * params["scale"]
+                )
                 self._setOverlay(
-                    BitmapFromImage(im),
-                    xperc=self.perc[0],
-                    yperc=self.perc[1])
+                    BitmapFromImage(im), xperc=self.perc[0], yperc=self.perc[1]
+                )
         else:
             self.x = 0
             self.y = 0
@@ -177,8 +180,9 @@ class AnimationWindow(BufferedWindow):
         self._pdc.BeginDrawing()
         self._pdc.SetId(1)
         self._pdc.DrawBitmap(bmp=self._overlay, x=x, y=y)
-        self._pdc.SetIdBounds(1, Rect(x, y, self._overlay.GetWidth(),
-                                         self._overlay.GetHeight()))
+        self._pdc.SetIdBounds(
+            1, Rect(x, y, self._overlay.GetWidth(), self._overlay.GetHeight())
+        )
         self._pdc.EndDrawing()
 
     def _setOverlay(self, bitmap, xperc, yperc):
@@ -209,7 +213,7 @@ class AnimationWindow(BufferedWindow):
         self.UpdateDrawing()
 
     def ClearOverlay(self):
-        """Clear overlay (legend) """
+        """Clear overlay (legend)"""
         Debug.msg(3, "AnimationWindow.ClearOverlay()")
         self._overlay = None
         self.bitmap_overlay = None
@@ -229,8 +233,7 @@ class AnimationWindow(BufferedWindow):
         current = event.GetPosition()
         if event.LeftDown():
             self._dragid = None
-            idlist = self._pdc.FindObjects(current[0], current[1],
-                                           radius=10)
+            idlist = self._pdc.FindObjects(current[0], current[1], radius=10)
             if 1 in idlist:
                 self._dragid = 1
             self._tmpMousePos = current

@@ -69,11 +69,11 @@ raster map can further be processed to derive slopes and other
 attributes required by other hydrological models.
 
 <p>
-As any GRASS GIS module, <em>r.fill.dir</em> is sensitive to the
-computational region settings. Thus
-the module can be used to generate a flow direction map for any 
-sub-area within the full map layer. Also, <em>r.fill.dir</em> is
-sensitive to any raster <em>MASK</em> in effect.
+As any GRASS GIS module, <em>r.fill.dir</em> respects the
+computational region settings. Thus,
+the module can be used to generate a flow direction map for any
+sub-area within the full raster map layer. Also, <em>r.fill.dir</em>
+will take into account an active raster mask.
 
 <h2>NOTES</h2>
 
@@ -102,7 +102,6 @@ The flow direction map can be visualized with
 <em><a href="d.rast.arrow.html">d.rast.arrow</a></em>.
 
 </ul>
-
 
 <h2>EXAMPLES</h2>
 
@@ -151,11 +150,10 @@ d.vect elev_lid792_1m_fill_area type=boundary color=red
 <i>Figure: Sink-filled DEM (shown as shaded terrain) with areas of filling shown as vector polygons</i>
 </div>
 
-
 <h2>REFERENCES</h2>
 
 <ul>
-<li>Beasley, D.B. and L.F. Huggins. 1982. ANSWERS (areal nonpoint source watershed environmental 
+<li>Beasley, D.B. and L.F. Huggins. 1982. ANSWERS (areal nonpoint source watershed environmental
 response simulation): User's manual. U.S. EPA-905/9-82-001, Chicago, IL, 54 p.
 <li>Jenkins, D. G., and McCauley, L. A. 2006.
     GIS, SINKS, FILL, and disappearing wetlands:
@@ -182,13 +180,9 @@ control Agency and Washington D.C., USDA-Agricultural Research Service.
 </em>
 
 <h2>AUTHORS</h2>
+
 Fortran version:
 Raghavan Srinivasan, Agricultural Engineering Department, Purdue
 University<br>
 Rewrite to C with enhancements:
 Roger S. Miller
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

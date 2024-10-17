@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_client/c_desc_table.c
- * 
+ *
  * \brief DBMI Library (client) - describe table
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -16,16 +16,16 @@
 #include "macros.h"
 
 /*!
-  \brief Describe table
-  
-  \param driver db driver
-  \param name table name
-  \param[out] table pointer to dbTable structure
+   \brief Describe table
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \param driver db driver
+   \param name table name
+   \param[out] table pointer to dbTable structure
+
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
-int db_describe_table(dbDriver * driver, dbString * name, dbTable ** table)
+int db_describe_table(dbDriver *driver, dbString *name, dbTable **table)
 {
     int ret_code;
 
@@ -40,7 +40,7 @@ int db_describe_table(dbDriver * driver, dbString * name, dbTable ** table)
     DB_RECV_RETURN_CODE(&ret_code);
 
     if (ret_code != DB_OK)
-	return ret_code;	/* ret_code SHOULD == DB_FAILED */
+        return ret_code; /* ret_code SHOULD == DB_FAILED */
 
     /* get the results */
     DB_RECV_TABLE_DEFINITION(table);

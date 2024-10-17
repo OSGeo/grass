@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.in.mat</em> will import a GRASS raster map from a Version 4 MAT-File 
+<em>r.in.mat</em> will import a GRASS raster map from a Version 4 MAT-File
 which was created with Matlab or Octave.
 Attributes such as map title and bounds will also be imported if they exist.
 <br>
@@ -18,37 +18,36 @@ Specifically, the following array variables will be read:<br>
 
 Any other variables in the MAT-file will be simply skipped over.<br>
 <br>
-The '<b>map_name</b>' variable is optional, if it exists, and is valid, the 
+The '<b>map_name</b>' variable is optional, if it exists, and is valid, the
 new map will be thus named. If it doesn't exist or a name is specified with
-the <b>output=</b> option, the raster map's name will be set to 
+the <b>output=</b> option, the raster map's name will be set to
 "<tt>MatFile</tt>" or the name specified respectively.
 (maximum 64 characters; normal GRASS naming rules apply)
 <br>
 <br>
-The '<b>map_title</b>' variable is optional, the map's title is set if it 
+The '<b>map_title</b>' variable is optional, the map's title is set if it
 exists.
 <br>
 <br>
-The '<b>map_northern_edge</b>' and like variables are mandatory unless the 
-user is importing to a "XY" non-georeferenced location
+The '<b>map_northern_edge</b>' and like variables are mandatory unless the
+user is importing to a "XY" non-georeferenced project
 (e.g. imagery data). Latitude and longitude values should be in decimal form.
-
 
 <h2>NOTES</h2>
 
-<em>r.in.mat</em> imports a Version 4 MAT-File. These files can be 
+<em>r.in.mat</em> imports a Version 4 MAT-File. These files can be
 successfully created with more modern versions of Matlab and Octave
 (see "EXAMPLES" below).<br><br>
 
-Everything should be Endian safe, so the file to be imported can be simply 
+Everything should be Endian safe, so the file to be imported can be simply
 copied between different system architectures without binary translation
 (caveat: see "TODO" below).<br><br>
 
-As there is no IEEE value for <tt>NaN</tt> in integer arrays, GRASS's null 
-value may be used to represent it within these maps. Usually Matlab will save 
-any integer based matrix with <tt>NaN</tt> values as a double-precision 
-floating point array, so this usually isn't an issue. To save space, once the 
-map is loaded into GRASS you can convert it back to an integer map with the 
+As there is no IEEE value for <tt>NaN</tt> in integer arrays, GRASS's null
+value may be used to represent it within these maps. Usually Matlab will save
+any integer based matrix with <tt>NaN</tt> values as a double-precision
+floating point array, so this usually isn't an issue. To save space, once the
+map is loaded into GRASS you can convert it back to an integer map with the
 following command:
 <div class="code"><pre>
 r.mapcalc "int_map = int(MATFile_map)"
@@ -63,7 +62,7 @@ therefore it might have problems with <i>huge</i> arrays.
 (a 3000x4000 DCELL map uses about 100mb RAM)<br><br>
 
 GRASS defines its map bounds at the outer-edge of the bounding cells, not at
-the coordinates of their centroids. Thus, the following Matlab commands may 
+the coordinates of their centroids. Thus, the following Matlab commands may
 be used to determine and check the map's resolution information will be correct:
 <div class="code"><pre>
     [rows cols] = size(map_data)
@@ -77,9 +76,9 @@ be used to determine and check the map's resolution information will be correct:
 Remember Matlab arrays are referenced as <tt>(row,column)</tt>,
 i.e. <tt>(y,x)</tt>.
 <br><br>
-In addition, <em>r.in.mat</em> and <em>r.out.mat</em> make for a nice 
-binary container format for transferring georeferenced maps around, 
-even if you don't use Matlab or Octave. 
+In addition, <em>r.in.mat</em> and <em>r.out.mat</em> make for a nice
+binary container format for transferring georeferenced maps around,
+even if you don't use Matlab or Octave.
 
 <h2>EXAMPLES</h2>
 
@@ -104,7 +103,7 @@ Robust support for mixed-Endian importation.
 Add support for importing map history, category information, color map, etc.
 if they exist.
 <br>
-Option to import a version 5 MAT-File, with map and support information 
+Option to import a version 5 MAT-File, with map and support information
 stored in a single structured array.
 
 <h2>KNOWN ISSUES</h2>
@@ -115,7 +114,7 @@ If you encounter any problems, please contact the GRASS Development Team.
 
 <em>
 <a href="r.out.mat.html">r.out.mat</a>,
-<a href="r.in.ascii.html">r.in.ascii</a>, 
+<a href="r.in.ascii.html">r.in.ascii</a>,
 <a href="r.in.bin.html">r.in.bin</a>,
 <a href="r.mapcalc.html">r.mapcalc</a>,
 <a href="r.null.html">r.null</a>.
@@ -124,16 +123,9 @@ If you encounter any problems, please contact the GRASS Development Team.
 The <a href="http://www.octave.org">Octave</a> project
 </em>
 
-
 <h2>AUTHOR</h2>
 
 Hamish Bowman<br> <i>
 Department of Marine Science<br>
 University of Otago<br>
-New Zealand</i><br>
-
-<br>
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+New Zealand</i>

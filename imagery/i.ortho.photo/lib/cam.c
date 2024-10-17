@@ -1,11 +1,10 @@
-
 /***********************************************************
-* I_fopen_group_camera_new (group)
-* I_fopen_group_camera_old (group)
-*
-* fopen() the imagery group camera reference file "CAMERA"
-* (containing the name of the camera associated with the group)
-**********************************************************/
+ * I_fopen_group_camera_new (group)
+ * I_fopen_group_camera_old (group)
+ *
+ * fopen() the imagery group camera reference file "CAMERA"
+ * (containing the name of the camera associated with the group)
+ **********************************************************/
 #include <grass/imagery.h>
 #include "orthophoto.h"
 #include <grass/ortholib.h>

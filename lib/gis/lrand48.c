@@ -52,10 +52,11 @@ static int seeded;
 
 void G_srand48(long seedval)
 {
-    uint32 x = (uint32) *(unsigned long *)&seedval;
-    x2 = (uint16) HI(x);
-    x1 = (uint16) LO(x);
-    x0 = (uint16) 0x330E;
+    uint32 x = (uint32) * (unsigned long *)&seedval;
+
+    x2 = (uint16)HI(x);
+    x1 = (uint16)LO(x);
+    x0 = (uint16)0x330E;
     seeded = 1;
 }
 
@@ -72,30 +73,35 @@ long G_srand48_auto(void)
 {
     unsigned long seed;
     char *grass_random_seed = getenv("GRASS_RANDOM_SEED");
-    if(!grass_random_seed) grass_random_seed = getenv("SOURCE_DATE_EPOCH");
-    if(grass_random_seed) {
+
+    if (!grass_random_seed)
+        grass_random_seed = getenv("SOURCE_DATE_EPOCH");
+    if (grass_random_seed) {
         seed = strtoull(grass_random_seed, NULL, 10);
-    } else {  
-        seed = (unsigned long) getpid();
+    }
+    else {
+        seed = (unsigned long)getpid();
 
 #ifdef HAVE_GETTIMEOFDAY
-    {
-	struct timeval tv;
-	if (gettimeofday(&tv, NULL) < 0)
-	    G_fatal_error(_("gettimeofday failed: %s"), strerror(errno));
-	seed += (unsigned long) tv.tv_sec;
-	seed += (unsigned long) tv.tv_usec;
-    }
+        {
+            struct timeval tv;
+
+            if (gettimeofday(&tv, NULL) < 0)
+                G_fatal_error(_("gettimeofday failed: %s"), strerror(errno));
+            seed += (unsigned long)tv.tv_sec;
+            seed += (unsigned long)tv.tv_usec;
+        }
 #else
-    {
-	time_t t = time(NULL);
-	seed += (unsigned long) t;
-    }
+        {
+            time_t t = time(NULL);
+
+            seed += (unsigned long)t;
+        }
 #endif
     }
 
-    G_srand48((long) seed);
-    return (long) seed;
+    G_srand48((long)seed);
+    return (long)seed;
 }
 
 static void G__next(void)
@@ -112,13 +118,13 @@ static void G__next(void)
     uint32 y2 = LO(a0x2) + LO(a1x1) + LO(a2x0) + HI(a0x1) + HI(a1x0);
 
     if (!seeded)
-	G_fatal_error(_("Pseudo-random number generator not seeded"));
+        G_fatal_error(_("Pseudo-random number generator not seeded"));
 
-    x0 = (uint16) LO(y0);
+    x0 = (uint16)LO(y0);
     y1 += HI(y0);
-    x1 = (uint16) LO(y1);
+    x1 = (uint16)LO(y1);
     y2 += HI(y1);
-    x2 = (uint16) LO(y2);
+    x2 = (uint16)LO(y2);
 }
 
 /*!
@@ -130,9 +136,10 @@ static void G__next(void)
 long G_lrand48(void)
 {
     uint32 r;
+
     G__next();
-    r = ((uint32) x2 << 15) | ((uint32) x1 >> 1);
-    return (long) r;
+    r = ((uint32)x2 << 15) | ((uint32)x1 >> 1);
+    return (long)r;
 }
 
 /*!
@@ -144,9 +151,10 @@ long G_lrand48(void)
 long G_mrand48(void)
 {
     uint32 r;
+
     G__next();
-    r = ((uint32) x2 << 16) | ((uint32) x1);
-    return (long) (int32) r;
+    r = ((uint32)x2 << 16) | ((uint32)x1);
+    return (long)(int32)r;
 }
 
 /*!
@@ -158,6 +166,7 @@ long G_mrand48(void)
 double G_drand48(void)
 {
     double r = 0.0;
+
     G__next();
     r += x2;
     r *= 0x10000;
@@ -170,23 +179,23 @@ double G_drand48(void)
 
 /*
 
-Test program
+   Test program
 
-int main(int argc, char **argv)
-{
-    long s = (argc > 1) ? atol(argv[1]) : 0;
-    int i;
+   int main(int argc, char **argv)
+   {
+   long s = (argc > 1) ? atol(argv[1]) : 0;
+   int i;
 
-    srand48(s);
-    G_srand48(s);
+   srand48(s);
+   G_srand48(s);
 
-    for (i = 0; i < 100; i++) {
-	printf("%.50f %.50f\n", drand48(), G_drand48());
-	printf("%lu %lu\n", lrand48(), G_lrand48());
-	printf("%ld %ld\n", mrand48(), G_mrand48());
-    }
+   for (i = 0; i < 100; i++) {
+   printf("%.50f %.50f\n", drand48(), G_drand48());
+   printf("%lu %lu\n", lrand48(), G_lrand48());
+   printf("%ld %ld\n", mrand48(), G_mrand48());
+   }
 
-    return 0;
-}
+   return 0;
+   }
 
-*/
+ */

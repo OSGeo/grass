@@ -1,9 +1,10 @@
 /*!
    \file lib/ogsf/gs2.c
 
-   \brief OGSF library - loading and manipulating surfaces (higher level functions)
+   \brief OGSF library - loading and manipulating surfaces (higher level
+   functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    Plans for handling color maps:
    NOW:
@@ -18,8 +19,8 @@
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -107,22 +108,21 @@ void GS_libinit(void)
 
     /* scale largest dimension to GS_UNIT_SIZE */
     if ((wind.east - wind.west) > (wind.north - wind.south)) {
-	Longdim = (wind.east - wind.west);
+        Longdim = (wind.east - wind.west);
     }
     else {
-	Longdim = (wind.north - wind.south);
+        Longdim = (wind.north - wind.south);
     }
 
     Gv.scale = GS_UNIT_SIZE / Longdim;
 
-    G_debug(1, "GS_libinit(): n=%f s=%f w=%f e=%f scale=%f first=%d",
-	    Region[0], Region[1], Region[2], Region[3], Gv.scale, first);
-    
+    G_debug(1, "GS_libinit(): n=%f s=%f w=%f e=%f scale=%f first=%d", Region[0],
+            Region[1], Region[2], Region[3], Gv.scale, first);
+
     Cxl_func = void_func;
 
-    
     if (first) {
-	gs_init();
+        gs_init();
     }
 
     first = 0;
@@ -176,8 +176,8 @@ void GS_set_att_defaults(float *defs, float *null_defs)
     G_debug(3, "GS_set_att_defaults");
 
     for (i = 0; i < MAX_ATTS; i++) {
-	Default_const[i] = defs[i];
-	Default_nulls[i] = null_defs[i];
+        Default_const[i] = defs[i];
+        Default_nulls[i] = null_defs[i];
     }
 
     return;
@@ -197,15 +197,14 @@ int GS_surf_exists(int id)
 
     G_debug(3, "GS_surf_exists(): id=%d", id);
 
-
     if (NULL == gs_get_surf(id)) {
-	return (0);
+        return (0);
     }
 
     for (i = 0; i < Next_surf && !found; i++) {
-	if (Surf_ID[i] == id) {
-	    found = 1;
-	}
+        if (Surf_ID[i] == id) {
+            found = 1;
+        }
     }
 
     return (found);
@@ -219,7 +218,7 @@ int GS_surf_exists(int id)
    since left and right columns are on the edges.
 
    \return surface id
-   \return -1 on error (MAX_SURFS exceded)
+   \return -1 on error (MAX_SURFS exceeded)
  */
 int GS_new_surface(void)
 {
@@ -228,42 +227,43 @@ int GS_new_surface(void)
     G_debug(3, "GS_new_surface():");
 
     if (Next_surf < MAX_SURFS) {
-	ns = gs_get_new_surface();
-	gs_init_surf(ns, wind.west + wind.ew_res / 2.,
-		     wind.south + wind.ns_res / 2., wind.rows, wind.cols,
-		     wind.ew_res, wind.ns_res);
-	gs_set_defaults(ns, Default_const, Default_nulls);
+        ns = gs_get_new_surface();
+        gs_init_surf(ns, wind.west + wind.ew_res / 2.,
+                     wind.south + wind.ns_res / 2., wind.rows, wind.cols,
+                     wind.ew_res, wind.ns_res);
+        gs_set_defaults(ns, Default_const, Default_nulls);
 
-	/* make default shine current */
-	gs_set_att_src(ns, ATT_SHINE, CONST_ATT);
+        /* make default shine current */
+        gs_set_att_src(ns, ATT_SHINE, CONST_ATT);
 
-	Surf_ID[Next_surf] = ns->gsurf_id;
-	++Next_surf;
+        Surf_ID[Next_surf] = ns->gsurf_id;
+        ++Next_surf;
 
-	G_debug(3, "    id=%d", ns->gsurf_id);
+        G_debug(3, "    id=%d", ns->gsurf_id);
 
-	return (ns->gsurf_id);
+        return (ns->gsurf_id);
     }
-
-
 
     return (-1);
 }
+
 void GS_set_light_reset(int i)
 {
     Resetlight = i;
     if (i)
-	Numlights = 0;
+        Numlights = 0;
 }
+
 int GS_get_light_reset(void)
 {
     return Resetlight;
 }
+
 /*!
    \brief Add new model light
 
    \return light model id
-   \return -1 on error (MAX_LIGHTS exceded)
+   \return -1 on error (MAX_LIGHTS exceeded)
  */
 int GS_new_light(void)
 {
@@ -271,27 +271,27 @@ int GS_new_light(void)
 
     if (GS_get_light_reset()) {
 
-	GS_set_light_reset(0);
+        GS_set_light_reset(0);
 
-	for (i = 0; i < MAX_LIGHTS; i++) {
-	    Gv.lights[i].position[X] = Gv.lights[i].position[Y] = 0.0;
-	    Gv.lights[i].position[Z] = 1.0;
-	    Gv.lights[i].position[W] = 0.0;	/* infinite */
-	    Gv.lights[i].color[0] = Gv.lights[i].color[1] =
-		Gv.lights[i].color[2] = 1.0;
-	    Gv.lights[i].ambient[0] = Gv.lights[i].ambient[1] =
-		Gv.lights[i].ambient[2] = 0.2;
-	    Gv.lights[i].shine = 32.0;
-	}
+        for (i = 0; i < MAX_LIGHTS; i++) {
+            Gv.lights[i].position[X] = Gv.lights[i].position[Y] = 0.0;
+            Gv.lights[i].position[Z] = 1.0;
+            Gv.lights[i].position[W] = 0.0; /* infinite */
+            Gv.lights[i].color[0] = Gv.lights[i].color[1] =
+                Gv.lights[i].color[2] = 1.0;
+            Gv.lights[i].ambient[0] = Gv.lights[i].ambient[1] =
+                Gv.lights[i].ambient[2] = 0.2;
+            Gv.lights[i].shine = 32.0;
+        }
 
-	gsd_init_lightmodel();
+        gsd_init_lightmodel();
     }
 
     if (Numlights < MAX_LIGHTS) {
-	gsd_deflight(Numlights + 1, &(Gv.lights[Numlights]));
-	gsd_switchlight(Numlights + 1, 1);
+        gsd_deflight(Numlights + 1, &(Gv.lights[Numlights]));
+        gsd_switchlight(Numlights + 1, 1);
 
-	return ++Numlights;
+        return ++Numlights;
     }
 
     return -1;
@@ -307,23 +307,22 @@ int GS_new_light(void)
    \param local local coordinate (for viewport)
  */
 void GS_setlight_position(int num, float xpos, float ypos, float zpos,
-			  int local)
+                          int local)
 {
     if (num) {
-	num -= 1;
-	if (num < Numlights) {
-	    Gv.lights[num].position[X] = xpos;
-	    Gv.lights[num].position[Y] = ypos;
-	    Gv.lights[num].position[Z] = zpos;
-	    Gv.lights[num].position[W] = (float)local;
+        num -= 1;
+        if (num < Numlights) {
+            Gv.lights[num].position[X] = xpos;
+            Gv.lights[num].position[Y] = ypos;
+            Gv.lights[num].position[Z] = zpos;
+            Gv.lights[num].position[W] = (float)local;
 
-	    gsd_deflight(num + 1, &(Gv.lights[num]));
-	}
+            gsd_deflight(num + 1, &(Gv.lights[num]));
+        }
     }
 
     return;
 }
-
 
 /*!
    \brief Get light position
@@ -333,17 +332,16 @@ void GS_setlight_position(int num, float xpos, float ypos, float zpos,
    \param[out] local ?
  */
 void GS_getlight_position(int num, float *xpos, float *ypos, float *zpos,
-			  int *local)
+                          int *local)
 {
     if (num) {
-	num -= 1;
-	if (num < Numlights) {
-	    *xpos = Gv.lights[num].position[X];
-	    *ypos = Gv.lights[num].position[Y];
-	    *zpos = Gv.lights[num].position[Z];
-	    *local = (int)Gv.lights[num].position[W];
-
-	}
+        num -= 1;
+        if (num < Numlights) {
+            *xpos = Gv.lights[num].position[X];
+            *ypos = Gv.lights[num].position[Y];
+            *zpos = Gv.lights[num].position[Z];
+            *local = (int)Gv.lights[num].position[W];
+        }
     }
 
     return;
@@ -358,14 +356,14 @@ void GS_getlight_position(int num, float *xpos, float *ypos, float *zpos,
 void GS_setlight_color(int num, float red, float green, float blue)
 {
     if (num) {
-	num -= 1;
-	if (num < Numlights) {
-	    Gv.lights[num].color[0] = red;
-	    Gv.lights[num].color[1] = green;
-	    Gv.lights[num].color[2] = blue;
+        num -= 1;
+        if (num < Numlights) {
+            Gv.lights[num].color[0] = red;
+            Gv.lights[num].color[1] = green;
+            Gv.lights[num].color[2] = blue;
 
-	    gsd_deflight(num + 1, &(Gv.lights[num]));
-	}
+            gsd_deflight(num + 1, &(Gv.lights[num]));
+        }
     }
 
     return;
@@ -380,12 +378,12 @@ void GS_setlight_color(int num, float red, float green, float blue)
 void GS_getlight_color(int num, float *red, float *green, float *blue)
 {
     if (num) {
-	num -= 1;
-	if (num < Numlights) {
-	    *red = Gv.lights[num].color[0];
-	    *green = Gv.lights[num].color[1];
-	    *blue = Gv.lights[num].color[2];
-	}
+        num -= 1;
+        if (num < Numlights) {
+            *red = Gv.lights[num].color[0];
+            *green = Gv.lights[num].color[1];
+            *blue = Gv.lights[num].color[2];
+        }
     }
 
     return;
@@ -402,14 +400,14 @@ void GS_getlight_color(int num, float *red, float *green, float *blue)
 void GS_setlight_ambient(int num, float red, float green, float blue)
 {
     if (num) {
-	num -= 1;
-	if (num < Numlights) {
-	    Gv.lights[num].ambient[0] = red;
-	    Gv.lights[num].ambient[1] = green;
-	    Gv.lights[num].ambient[2] = blue;
+        num -= 1;
+        if (num < Numlights) {
+            Gv.lights[num].ambient[0] = red;
+            Gv.lights[num].ambient[1] = green;
+            Gv.lights[num].ambient[2] = blue;
 
-	    gsd_deflight(num + 1, &(Gv.lights[num]));
-	}
+            gsd_deflight(num + 1, &(Gv.lights[num]));
+        }
     }
 
     return;
@@ -424,17 +422,16 @@ void GS_setlight_ambient(int num, float red, float green, float blue)
 void GS_getlight_ambient(int num, float *red, float *green, float *blue)
 {
     if (num) {
-	num -= 1;
-	if (num < Numlights) {
-	    *red = Gv.lights[num].ambient[0];
-	    *green = Gv.lights[num].ambient[1];
-	    *blue = Gv.lights[num].ambient[2];
-	}
+        num -= 1;
+        if (num < Numlights) {
+            *red = Gv.lights[num].ambient[0];
+            *green = Gv.lights[num].ambient[1];
+            *blue = Gv.lights[num].ambient[2];
+        }
     }
 
     return;
 }
-
 
 /*!
    \brief Switch off all lights
@@ -444,7 +441,7 @@ void GS_lights_off(void)
     int i;
 
     for (i = 0; i < Numlights; i++) {
-	gsd_switchlight(i + 1, 0);
+        gsd_switchlight(i + 1, 0);
     }
 
     return;
@@ -458,7 +455,7 @@ void GS_lights_on(void)
     int i;
 
     for (i = 0; i < Numlights; i++) {
-	gsd_switchlight(i + 1, 1);
+        gsd_switchlight(i + 1, 1);
     }
 
     return;
@@ -473,11 +470,11 @@ void GS_lights_on(void)
 void GS_switchlight(int num, int on)
 {
     if (num) {
-	num -= 1;
+        num -= 1;
 
-	if (num < Numlights) {
-	    gsd_switchlight(num + 1, on);
-	}
+        if (num < Numlights) {
+            gsd_switchlight(num + 1, on);
+        }
     }
 
     return;
@@ -512,8 +509,8 @@ void GS_get_modelposition1(float pos[])
     gs_get_datacenter(pos);
     gs_get_data_avg_zmax(&(pos[Z]));
 
-    G_debug(1, "GS_get_modelposition1(): model position: %f %f %f",
-	    pos[X], pos[Y], pos[Z]);
+    G_debug(1, "GS_get_modelposition1(): model position: %f %f %f", pos[X],
+            pos[Y], pos[Z]);
 
     return;
 }
@@ -541,7 +538,7 @@ void GS_get_modelposition(float *siz, float *pos)
        fov = 2.0 * atan(2.0) */
 
     if (*siz > Gd.nearclip) {
-	*siz = Gd.nearclip;
+        *siz = Gd.nearclip;
     }
 
     GS_v3dir(Gv.from_to[FROM], Gv.from_to[TO], dir);
@@ -552,7 +549,6 @@ void GS_get_modelposition(float *siz, float *pos)
 
     return;
 }
-
 
 /*!
    \brief Set decoration, north arrow ??
@@ -573,57 +569,56 @@ void GS_set_Narrow(int *pt, int id, float *pos2)
     GLint viewport[4];
 
     if (GS_get_selected_point_on_surface(pt[X], pt[Y], &id, &x, &y, &z)) {
-	gs = gs_get_surf(id);
-	if (gs) {
-	    z = gs->zmax;
-	    pos2[X] = (float)x - gs->ox + gs->x_trans;
-	    pos2[Y] = (float)y - gs->oy + gs->y_trans;
-	    pos2[Z] = (float)z + gs->z_trans;
+        gs = gs_get_surf(id);
+        if (gs) {
+            z = gs->zmax;
+            pos2[X] = (float)x - gs->ox + gs->x_trans;
+            pos2[Y] = (float)y - gs->oy + gs->y_trans;
+            pos2[Z] = (float)z + gs->z_trans;
 
-	    return;
-	}
+            return;
+        }
     }
     else {
-	gs = gs_get_surf(id);
+        gs = gs_get_surf(id);
 
-	/* Need to get model matrix, etc 
-	 * to run gluUnProject
-	 */
-	gsd_pushmatrix();
-	gsd_do_scale(1);
-	glGetDoublev(GL_MODELVIEW_MATRIX, modelMatrix);
-	glGetDoublev(GL_PROJECTION_MATRIX, projMatrix);
-	glGetIntegerv(GL_VIEWPORT, viewport);
+        /* Need to get model matrix, etc
+         * to run gluUnProject
+         */
+        gsd_pushmatrix();
+        gsd_do_scale(1);
+        glGetDoublev(GL_MODELVIEW_MATRIX, modelMatrix);
+        glGetDoublev(GL_PROJECTION_MATRIX, projMatrix);
+        glGetIntegerv(GL_VIEWPORT, viewport);
 
-	if (gs) {
-	    GLdouble out_near[3], out_far[3];
-	    GLdouble factor;
-	    GLdouble out[3];
+        if (gs) {
+            GLdouble out_near[3], out_far[3];
+            GLdouble factor;
+            GLdouble out[3];
 
-	    z = (float)gs->zmax + gs->z_trans;
+            z = (float)gs->zmax + gs->z_trans;
 
-	    gluUnProject((GLdouble) pt[X], (GLdouble) pt[Y], (GLdouble) 0.,
-			 modelMatrix, projMatrix, viewport,
-			 &out_near[X], &out_near[Y], &out_near[Z]);
-	    gluUnProject((GLdouble) pt[X], (GLdouble) pt[Y], (GLdouble) 1.,
-			 modelMatrix, projMatrix, viewport,
-			 &out_far[X], &out_far[Y], &out_far[Z]);
+            gluUnProject((GLdouble)pt[X], (GLdouble)pt[Y], (GLdouble)0.,
+                         modelMatrix, projMatrix, viewport, &out_near[X],
+                         &out_near[Y], &out_near[Z]);
+            gluUnProject((GLdouble)pt[X], (GLdouble)pt[Y], (GLdouble)1.,
+                         modelMatrix, projMatrix, viewport, &out_far[X],
+                         &out_far[Y], &out_far[Z]);
 
-	    glPopMatrix();
+            glPopMatrix();
 
-	    factor = (out_near[Z] - z) / (out_near[Z] - out_far[Z]);
+            factor = (out_near[Z] - z) / (out_near[Z] - out_far[Z]);
 
-	    out[X] = out_near[X] - ((out_near[X] - out_far[X]) * factor);
-	    out[Y] = out_near[Y] - ((out_near[Y] - out_far[Y]) * factor);
-	    out[Z] = z;
+            out[X] = out_near[X] - ((out_near[X] - out_far[X]) * factor);
+            out[Y] = out_near[Y] - ((out_near[Y] - out_far[Y]) * factor);
+            out[Z] = z;
 
-	    pos2[X] = (float)out[X];
-	    pos2[Y] = (float)out[Y];
-	    pos2[Z] = (float)out[Z];
+            pos2[X] = (float)out[X];
+            pos2[Y] = (float)out[Y];
+            pos2[Z] = (float)out[Z];
 
-	    return;
-
-	}
+            return;
+        }
     }
     return;
 }
@@ -644,28 +639,28 @@ void GS_draw_X(int id, float *pt)
     gvstyle style;
 
     if ((gs = gs_get_surf(id))) {
-	GS_get_longdim(&siz);
-	style.size = siz / 200.;
-	pos[X] = pt[X] - gs->ox;
-	pos[Y] = pt[Y] - gs->oy;
-	_viewcell_tri_interp(gs, pos);
+        GS_get_longdim(&siz);
+        style.size = siz / 200.;
+        pos[X] = pt[X] - gs->ox;
+        pos[Y] = pt[Y] - gs->oy;
+        _viewcell_tri_interp(gs, pos);
 
-	gsd_pushmatrix();
+        gsd_pushmatrix();
 
-	gsd_do_scale(1);
-	gsd_translate(gs->x_trans, gs->y_trans, gs->z_trans);
-	gsd_linewidth(1);
+        gsd_do_scale(1);
+        gsd_translate(gs->x_trans, gs->y_trans, gs->z_trans);
+        gsd_linewidth(1);
 
-	if (CONST_ATT == gs_get_att_src(gs, ATT_TOPO)) {
-	    pos[Z] = gs->att[ATT_TOPO].constant;
-	    gs = NULL;		/* tells gpd_obj to use given Z val */
-	}
-	style.color = Gd.bgcol;
-	style.symbol = ST_GYRO;
-	gpd_obj(gs, &style, pos);
-	gsd_flush();
+        if (CONST_ATT == gs_get_att_src(gs, ATT_TOPO)) {
+            pos[Z] = gs->att[ATT_TOPO].constant;
+            gs = NULL; /* tells gpd_obj to use given Z val */
+        }
+        style.color = Gd.bgcol;
+        style.symbol = ST_GYRO;
+        gpd_obj(gs, &style, pos);
+        gsd_flush();
 
-	gsd_popmatrix();
+        gsd_popmatrix();
     }
 
     return;
@@ -683,22 +678,22 @@ void GS_draw_line_onsurf(int id, float x1, float y1, float x2, float y2)
     geosurf *gs;
 
     if ((gs = gs_get_surf(id))) {
-	p1[X] = x1 - gs->ox;
-	p1[Y] = y1 - gs->oy;
-	p2[X] = x2 - gs->ox;
-	p2[Y] = y2 - gs->oy;
+        p1[X] = x1 - gs->ox;
+        p1[Y] = y1 - gs->oy;
+        p2[X] = x2 - gs->ox;
+        p2[Y] = y2 - gs->oy;
 
-	gsd_pushmatrix();
+        gsd_pushmatrix();
 
-	gsd_do_scale(1);
-	gsd_translate(gs->x_trans, gs->y_trans, gs->z_trans);
-	gsd_linewidth(1);
+        gsd_do_scale(1);
+        gsd_translate(gs->x_trans, gs->y_trans, gs->z_trans);
+        gsd_linewidth(1);
 
-	gsd_color_func(GS_default_draw_color());
-	gsd_line_onsurf(gs, p1, p2);
+        gsd_color_func(GS_default_draw_color());
+        gsd_line_onsurf(gs, p1, p2);
 
-	gsd_popmatrix();
-	gsd_flush();
+        gsd_popmatrix();
+        gsd_flush();
     }
 
     return;
@@ -716,29 +711,29 @@ void GS_draw_line_onsurf(int id, float x1, float y1, float x2, float y2)
    \return number of points used
  */
 int GS_draw_nline_onsurf(int id, float x1, float y1, float x2, float y2,
-			 float *lasp, int n)
+                         float *lasp, int n)
 {
     float p1[2], p2[2];
     geosurf *gs;
     int ret = 0;
 
     if ((gs = gs_get_surf(id))) {
-	p1[X] = x1 - gs->ox;
-	p1[Y] = y1 - gs->oy;
-	p2[X] = x2 - gs->ox;
-	p2[Y] = y2 - gs->oy;
+        p1[X] = x1 - gs->ox;
+        p1[Y] = y1 - gs->oy;
+        p2[X] = x2 - gs->ox;
+        p2[Y] = y2 - gs->oy;
 
-	gsd_pushmatrix();
+        gsd_pushmatrix();
 
-	gsd_do_scale(1);
-	gsd_translate(gs->x_trans, gs->y_trans, gs->z_trans);
-	gsd_linewidth(1);
-	gsd_color_func(GS_default_draw_color());
-	ret = gsd_nline_onsurf(gs, p1, p2, lasp, n);
-	gsd_surf2real(gs, lasp);
+        gsd_do_scale(1);
+        gsd_translate(gs->x_trans, gs->y_trans, gs->z_trans);
+        gsd_linewidth(1);
+        gsd_color_func(GS_default_draw_color());
+        ret = gsd_nline_onsurf(gs, p1, p2, lasp, n);
+        gsd_surf2real(gs, lasp);
 
-	gsd_popmatrix();
-	gsd_flush();
+        gsd_popmatrix();
+        gsd_flush();
     }
 
     return (ret);
@@ -761,52 +756,52 @@ void GS_draw_flowline_at_xy(int id, float x, float y)
     int i = 0;
 
     if ((gs = gs_get_surf(id))) {
-	p1[X] = x;
-	p1[Y] = y;
-	/* multiply by 1.5 resolutions to ensure a crossing ? */
-	mult = .1 * (VXRES(gs) > VYRES(gs) ? VXRES(gs) : VYRES(gs));
+        p1[X] = x;
+        p1[Y] = y;
+        /* multiply by 1.5 resolutions to ensure a crossing ? */
+        mult = .1 * (VXRES(gs) > VYRES(gs) ? VXRES(gs) : VYRES(gs));
 
-	GS_coordpair_repeats(p1, p1, 50);
+        GS_coordpair_repeats(p1, p1, 50);
 
-	while (1 == GS_get_norm_at_xy(id, p1[X], p1[Y], nv)) {
-	    if (nv[Z] == 1.0) {
-		if (pdir[X] == 0.0 && pdir[Y] == 0.0) {
-		    break;
-		}
+        while (1 == GS_get_norm_at_xy(id, p1[X], p1[Y], nv)) {
+            if (nv[Z] == 1.0) {
+                if (pdir[X] == 0.0 && pdir[Y] == 0.0) {
+                    break;
+                }
 
-		p2[X] = p1[X] + (pdir[X] * mult);
-		p2[Y] = p1[Y] + (pdir[Y] * mult);
-	    }
-	    else {
-		/* use previous direction */
-		GS_v2norm(nv);
-		p2[X] = p1[X] + (nv[X] * mult);
-		p2[Y] = p1[Y] + (nv[Y] * mult);
-		pdir[X] = nv[X];
-		pdir[Y] = nv[Y];
-	    }
+                p2[X] = p1[X] + (pdir[X] * mult);
+                p2[Y] = p1[Y] + (pdir[Y] * mult);
+            }
+            else {
+                /* use previous direction */
+                GS_v2norm(nv);
+                p2[X] = p1[X] + (nv[X] * mult);
+                p2[Y] = p1[Y] + (nv[Y] * mult);
+                pdir[X] = nv[X];
+                pdir[Y] = nv[Y];
+            }
 
-	    if (i > 2000) {
-		break;
-	    }
+            if (i > 2000) {
+                break;
+            }
 
-	    if (GS_coordpair_repeats(p1, p2, 0)) {
-		break;
-	    }
+            if (GS_coordpair_repeats(p1, p2, 0)) {
+                break;
+            }
 
-	    /* Think about this: */
-	    /* degenerate line means edge or level edge ? */
-	    /* next is filled with last point drawn */
-	    if (2 > GS_draw_nline_onsurf(id, p1[X], p1[Y],
-					 p2[X], p2[Y], next, 3)) {
-		break;
-	    }
+            /* Think about this: */
+            /* degenerate line means edge or level edge ? */
+            /* next is filled with last point drawn */
+            if (2 >
+                GS_draw_nline_onsurf(id, p1[X], p1[Y], p2[X], p2[Y], next, 3)) {
+                break;
+            }
 
-	    p1[X] = next[X];
-	    p1[Y] = next[Y];
-	}
+            p1[X] = next[X];
+            p1[Y] = next[Y];
+        }
 
-	G_debug(3, "GS_draw_flowline_at_xy(): dir: %f %f", nv[X], nv[Y]);
+        G_debug(3, "GS_draw_flowline_at_xy(): dir: %f %f", nv[X], nv[Y]);
     }
 
     return;
@@ -825,12 +820,10 @@ void GS_draw_fringe(int id, unsigned long clr, float elev, int *where)
     geosurf *gs;
 
     G_debug(3, "GS_draw_fringe(): id: %d clr: %ld elev %f edges: %d %d %d %d",
-	    id, clr, elev, where[0], where[1], where[2], where[3]);
+            id, clr, elev, where[0], where[1], where[2], where[3]);
     if ((gs = gs_get_surf(id)))
-	gsd_display_fringe(gs, clr, elev, where);
-
+        gsd_display_fringe(gs, clr, elev, where);
 }
-
 
 /*!
    \brief Draw legend
@@ -840,13 +833,13 @@ void GS_draw_fringe(int id, unsigned long clr, float elev, int *where)
 
    \param name legend name
    \param fontbase font-base
-   \param size ? 
+   \param size ?
    \param flags legend flags
    \param range values range
    \param pt ?
  */
 int GS_draw_legend(const char *name, GLuint fontbase, int size, int *flags,
-		   float *range, int *pt)
+                   float *range, int *pt)
 {
     int list_no;
 
@@ -878,7 +871,7 @@ void GS_draw_list(GLuint list_id)
  */
 void GS_draw_all_list(void)
 {
-    gsd_calllists(0);		/* not sure if 0 is right - MN */
+    gsd_calllists(0); /* not sure if 0 is right - MN */
     glFlush();
     return;
 }
@@ -904,7 +897,7 @@ void GS_draw_lighting_model1(void)
     float tcenter[3];
 
     if (!Modelshowing) {
-	GS_get_modelposition1(center);
+        GS_get_modelposition1(center);
     }
 
     GS_v3eq(tcenter, center);
@@ -918,8 +911,8 @@ void GS_draw_lighting_model1(void)
     gsd_do_scale(1);
 
     if (Gv.vert_exag) {
-	tcenter[Z] *= Gv.vert_exag;
-	gsd_scale(1.0, 1.0, 1. / Gv.vert_exag);
+        tcenter[Z] *= Gv.vert_exag;
+        gsd_scale(1.0, 1.0, 1. / Gv.vert_exag);
     }
 
     gsd_drawsphere(tcenter, 0xDDDDDD, (float)(Longdim / 10.));
@@ -947,14 +940,13 @@ void GS_draw_lighting_model(void)
     gsd_get_cplanes_state(wason);
 
     for (i = 0; i < MAX_CPLANES; i++) {
-	if (wason[i]) {
-	    gsd_cplane_off(i);
-	}
+        if (wason[i]) {
+            gsd_cplane_off(i);
+        }
     }
 
-
     if (!Modelshowing) {
-	GS_get_modelposition(&size, center);
+        GS_get_modelposition(&size, center);
     }
 
     GS_v3eq(tcenter, center);
@@ -974,9 +966,9 @@ void GS_draw_lighting_model(void)
     gsd_zwritemask(0xffffffff);
 
     for (i = 0; i < MAX_CPLANES; i++) {
-	if (wason[i]) {
-	    gsd_cplane_on(i);
-	}
+        if (wason[i]) {
+            gsd_cplane_on(i);
+        }
     }
 
     gsd_flush();
@@ -1018,10 +1010,10 @@ int GS_is_masked(int id, float *pt)
     Point3 tmp;
 
     if ((gs = gs_get_surf(id))) {
-	tmp[X] = pt[X] - gs->ox;
-	tmp[Y] = pt[Y] - gs->oy;
+        tmp[X] = pt[X] - gs->ox;
+        tmp[Y] = pt[Y] - gs->oy;
 
-	return (gs_point_is_masked(gs, tmp));
+        return (gs_point_is_masked(gs, tmp));
     }
 
     return (-1);
@@ -1051,10 +1043,10 @@ int GS_set_SDsurf(int id)
     geosurf *gs;
 
     if ((gs = gs_get_surf(id))) {
-	gsdiff_set_SDref(gs);
-	SDref_surf = id;
+        gsdiff_set_SDref(gs);
+        SDref_surf = id;
 
-	return (1);
+        return (1);
     }
 
     return (0);
@@ -1087,9 +1079,9 @@ int GS_get_SDsurf(int *id)
     geosurf *gs;
 
     if ((gs = gsdiff_get_SDref())) {
-	*id = SDref_surf;
+        *id = SDref_surf;
 
-	return (1);
+        return (1);
     }
 
     return (0);
@@ -1144,20 +1136,20 @@ int GS_get_att(int id, int att, int *set, float *constant, char *mapname)
 
     gs = gs_get_surf(id);
     if (gs) {
-	if (-1 != (src = gs_get_att_src(gs, att))) {
-	    *set = src;
+        if (-1 != (src = gs_get_att_src(gs, att))) {
+            *set = src;
 
-	    if (src == CONST_ATT) {
-		*constant = gs->att[att].constant;
-	    }
-	    else if (src == MAP_ATT) {
-		strcpy(mapname, gsds_get_name(gs->att[att].hdata));
-	    }
+            if (src == CONST_ATT) {
+                *constant = gs->att[att].constant;
+            }
+            else if (src == MAP_ATT) {
+                strcpy(mapname, gsds_get_name(gs->att[att].hdata));
+            }
 
-	    return (1);
-	}
+            return (1);
+        }
 
-	return (-1);
+        return (-1);
     }
 
     return (-1);
@@ -1171,7 +1163,7 @@ int GS_get_att(int id, int att, int *set, float *constant, char *mapname)
    Define <i>att</i> as MAP_ATT
 
    \todo Allocate catstr using G_store()
-   
+
    \param id surface id
    \param att attribute id (MAP_ATT)
    \param catstr cat string (must be allocated, dim?)
@@ -1179,7 +1171,7 @@ int GS_get_att(int id, int att, int *set, float *constant, char *mapname)
 
    \return -1 if no category info or point outside of window
    \return 1 on success
-*/
+ */
 int GS_get_cat_at_xy(int id, int att, char *catstr, float x, float y)
 {
     int offset, drow, dcol, vrow, vcol;
@@ -1191,7 +1183,7 @@ int GS_get_cat_at_xy(int id, int att, char *catstr, float x, float y)
     gs = gs_get_surf(id);
 
     if (NULL == gs) {
-	return -1;
+        return -1;
     }
 
     pt[X] = x;
@@ -1199,16 +1191,16 @@ int GS_get_cat_at_xy(int id, int att, char *catstr, float x, float y)
 
     gsd_real2surf(gs, pt);
     if (gs_point_is_masked(gs, pt)) {
-	return -1;
+        return -1;
     }
 
     if (!in_vregion(gs, pt)) {
-	return -1;
+        return -1;
     }
 
     if (MAP_ATT != gs_get_att_src(gs, att)) {
-	sprintf(catstr, _("no category info"));
-	return -1;
+        sprintf(catstr, _("no category info"));
+        return -1;
     }
 
     buff = gs_get_att_typbuff(gs, att, 0);
@@ -1219,11 +1211,10 @@ int GS_get_cat_at_xy(int id, int att, char *catstr, float x, float y)
     dcol = VCOL2DCOL(gs, vcol);
 
     offset = DRC2OFF(gs, drow, dcol);
-    
+
     if (GET_MAPATT(buff, offset, ftmp)) {
-	return
-	    (Gs_get_cat_label(gsds_get_name(gs->att[att].hdata),
-			      drow, dcol, catstr));
+        return (Gs_get_cat_label(gsds_get_name(gs->att[att].hdata), drow, dcol,
+                                 catstr));
     }
 
     sprintf(catstr, _("no data"));
@@ -1252,11 +1243,11 @@ int GS_get_norm_at_xy(int id, float x, float y, float *nv)
     gs = gs_get_surf(id);
 
     if (NULL == gs) {
-	return (-1);
+        return (-1);
     }
 
     if (gs->norm_needupdate) {
-	gs_calc_normals(gs);
+        gs_calc_normals(gs);
     }
 
     pt[X] = x;
@@ -1264,11 +1255,11 @@ int GS_get_norm_at_xy(int id, float x, float y, float *nv)
 
     gsd_real2surf(gs, pt);
     if (gs_point_is_masked(gs, pt)) {
-	return (-1);
+        return (-1);
     }
 
     if (!in_vregion(gs, pt)) {
-	return (-1);
+        return (-1);
     }
 
     vrow = Y2VROW(gs, pt[Y]);
@@ -1279,13 +1270,13 @@ int GS_get_norm_at_xy(int id, float x, float y, float *nv)
     offset = DRC2OFF(gs, drow, dcol);
 
     if (gs->norms) {
-	FNORM(gs->norms[offset], nv);
+        FNORM(gs->norms[offset], nv);
     }
     else {
-	/* otherwise must be a constant */
-	nv[0] = 0.0;
-	nv[1] = 0.0;
-	nv[2] = 1.0;
+        /* otherwise must be a constant */
+        nv[0] = 0.0;
+        nv[1] = 0.0;
+        nv[2] = 1.0;
     }
 
     return (1);
@@ -1303,7 +1294,7 @@ int GS_get_norm_at_xy(int id, float x, float y, float *nv)
    \param att attribute id
    \param[out] valstr value string (allocated, dim?)
    \param x,y real coordinates
-   
+
    \return -1 if point outside of window or masked
    \return 1 on success
  */
@@ -1316,9 +1307,9 @@ int GS_get_val_at_xy(int id, int att, char *valstr, float x, float y)
 
     *valstr = '\0';
     gs = gs_get_surf(id);
-    
+
     if (NULL == gs) {
-	return -1;
+        return -1;
     }
 
     pt[X] = x;
@@ -1327,29 +1318,29 @@ int GS_get_val_at_xy(int id, int att, char *valstr, float x, float y)
     gsd_real2surf(gs, pt);
 
     if (gs_point_is_masked(gs, pt)) {
-	return -1;
+        return -1;
     }
 
     if (!in_vregion(gs, pt)) {
-	return (-1);
+        return (-1);
     }
 
     if (CONST_ATT == gs_get_att_src(gs, att)) {
-	if (att == ATT_COLOR) {
-	    int r, g, b, i;
+        if (att == ATT_COLOR) {
+            int r, g, b, i;
 
-	    i = gs->att[att].constant;
-	    sprintf(valstr, "R%d G%d B%d",
-		    INT_TO_RED(i, r), INT_TO_GRN(i, g), INT_TO_BLU(i, b));
-	}
-	else {
-	    sprintf(valstr, "%f", gs->att[att].constant);
-	}
+            i = gs->att[att].constant;
+            sprintf(valstr, "R%d G%d B%d", INT_TO_RED(i, r), INT_TO_GRN(i, g),
+                    INT_TO_BLU(i, b));
+        }
+        else {
+            sprintf(valstr, "%f", gs->att[att].constant);
+        }
 
-	return 1;
+        return 1;
     }
     else if (MAP_ATT != gs_get_att_src(gs, att)) {
-	return -1;
+        return -1;
     }
 
     buff = gs_get_att_typbuff(gs, att, 0);
@@ -1362,19 +1353,19 @@ int GS_get_val_at_xy(int id, int att, char *valstr, float x, float y)
     offset = DRC2OFF(gs, drow, dcol);
 
     if (GET_MAPATT(buff, offset, ftmp)) {
-	if (att == ATT_COLOR) {
-	    int r, g, b, i;
+        if (att == ATT_COLOR) {
+            int r, g, b, i;
 
-	    i = gs_mapcolor(gs_get_att_typbuff(gs, ATT_COLOR, 0),
-			    &(gs->att[ATT_COLOR]), offset);
-	    sprintf(valstr, "R%d G%d B%d",
-		    INT_TO_RED(i, r), INT_TO_GRN(i, g), INT_TO_BLU(i, b));
-	}
-	else {
-	    sprintf(valstr, "%f", ftmp);
-	}
+            i = gs_mapcolor(gs_get_att_typbuff(gs, ATT_COLOR, 0),
+                            &(gs->att[ATT_COLOR]), offset);
+            sprintf(valstr, "R%d G%d B%d", INT_TO_RED(i, r), INT_TO_GRN(i, g),
+                    INT_TO_BLU(i, b));
+        }
+        else {
+            sprintf(valstr, "%f", ftmp);
+        }
 
-	return (1);
+        return (1);
     }
 
     sprintf(valstr, "NULL");
@@ -1440,10 +1431,10 @@ int GS_set_maskmode(int id, int mode)
     gs = gs_get_surf(id);
 
     if (gs) {
-	gs->att[ATT_MASK].constant = mode;
-	gs->mask_needupdate = 1;
+        gs->att[ATT_MASK].constant = mode;
+        gs->mask_needupdate = 1;
 
-	return (mode);
+        return (mode);
     }
 
     return (-1);
@@ -1465,9 +1456,9 @@ int GS_get_maskmode(int id, int *mode)
     gs = gs_get_surf(id);
 
     if (gs) {
-	*mode = gs->att[ATT_MASK].constant;
+        *mode = gs->att[ATT_MASK].constant;
 
-	return (1);
+        return (1);
     }
 
     return (-1);
@@ -1488,9 +1479,9 @@ int GS_Set_ClientData(int id, void *clientd)
 
     gs = gs_get_surf(id);
     if (gs) {
-	gs->clientdata = clientd;
+        gs->clientdata = clientd;
 
-	return (1);
+        return (1);
     }
 
     return (-1);
@@ -1510,7 +1501,7 @@ void *GS_Get_ClientData(int id)
 
     gs = gs_get_surf(id);
     if (gs) {
-	return (gs->clientdata);
+        return (gs->clientdata);
     }
 
     return (NULL);
@@ -1529,7 +1520,7 @@ int GS_num_surfs(void)
 /*!
    \brief Get surface list
 
-   Must be freed when not neeed!
+   Must be freed when not needed!
 
    \param[out] numsurf number of available surfaces
 
@@ -1543,13 +1534,13 @@ int *GS_get_surf_list(int *numsurfs)
     *numsurfs = Next_surf;
 
     if (Next_surf) {
-	ret = (int *)G_malloc(Next_surf * sizeof(int));
+        ret = (int *)G_malloc(Next_surf * sizeof(int));
 
-	for (i = 0; i < Next_surf; i++) {
-	    ret[i] = Surf_ID[i];
-	}
+        for (i = 0; i < Next_surf; i++) {
+            ret[i] = Surf_ID[i];
+        }
 
-	return (ret);
+        return (ret);
     }
 
     return (NULL);
@@ -1566,34 +1557,33 @@ int *GS_get_surf_list(int *numsurfs)
 int GS_delete_surface(int id)
 {
     int i, j, found;
-    
+
     found = FALSE;
-    
+
     G_debug(1, "GS_delete_surface(): id=%d", id);
-    
+
     if (GS_surf_exists(id)) {
-	gs_delete_surf(id);
-	for (i = 0; i < Next_surf && !found; i++) {
-	    if (Surf_ID[i] == id) {
-		found = TRUE;
+        gs_delete_surf(id);
+        for (i = 0; i < Next_surf && !found; i++) {
+            if (Surf_ID[i] == id) {
+                found = TRUE;
 
-		for (j = i; j < Next_surf; j++) {
-		    Surf_ID[j] = Surf_ID[j + 1];
-		}
-	    }
-	}
-	
-	gv_update_drapesurfs();
+                for (j = i; j < Next_surf; j++) {
+                    Surf_ID[j] = Surf_ID[j + 1];
+                }
+            }
+        }
 
-	if (found) {
-	    --Next_surf;
-	    return 1;
-	}
+        gv_update_drapesurfs();
+
+        if (found) {
+            --Next_surf;
+            return 1;
+        }
     }
 
     return -1;
 }
-
 
 /*!
    \brief Load raster map as attribute
@@ -1621,12 +1611,12 @@ int GS_load_att_map(int id, const char *filename, int att)
     gs = gs_get_surf(id);
 
     if (NULL == gs) {
-	return -1;
+        return -1;
     }
 
     gs->mask_needupdate = (ATT_MASK == att || ATT_TOPO == att ||
-			   (gs->nz_topo && ATT_TOPO == att) ||
-			   (gs->nz_color && ATT_COLOR == att));
+                           (gs->nz_topo && ATT_TOPO == att) ||
+                           (gs->nz_color && ATT_COLOR == att));
 
     gs_set_att_src(gs, att, MAP_ATT);
 
@@ -1640,217 +1630,225 @@ int GS_load_att_map(int id, const char *filename, int att)
     /* Get MAPSET to ensure names are fully qualified */
     mapset = G_find_raster2(filename, "");
     if (mapset == NULL) {
-	/* Check for valid filename */
-	G_warning("Raster map <%s> not found", filename);
-	return -1;
+        /* Check for valid filename */
+        G_warning("Raster map <%s> not found", filename);
+        return -1;
     }
-    
+
     /* Check to see if map is in Region */
     Rast_get_cellhd(filename, mapset, &rast_head);
-    if (rast_head.north <= wind.south ||
-	rast_head.south >= wind.north ||
-	rast_head.east <= wind.west || rast_head.west >= wind.east) {
+    if (rast_head.north <= wind.south || rast_head.south >= wind.north ||
+        rast_head.east <= wind.west || rast_head.west >= wind.east) {
 
-	G_warning(_("Raster map <%s> is outside of current region. Load failed."),
-		  G_fully_qualified_name(filename, mapset));
+        G_warning(
+            _("Raster map <%s> is outside of current region. Load failed."),
+            G_fully_qualified_name(filename, mapset));
     }
 
     while (!reuse && (0 < hdata)) {
-	changed = CF_COLOR_PACKED;
-	atty = ATTY_FLOAT | ATTY_CHAR | ATTY_INT | ATTY_SHORT | ATTY_MASK;
+        changed = CF_COLOR_PACKED;
+        atty = ATTY_FLOAT | ATTY_CHAR | ATTY_INT | ATTY_SHORT | ATTY_MASK;
 
-	if (0 < (hdata = gsds_findh(filename, &changed, &atty, begin))) {
+        if (0 < (hdata = gsds_findh(filename, &changed, &atty, begin))) {
 
-	    G_debug(3, "GS_load_att_map(): %s already has data handle %d.CF=%x",
-		    filename, hdata, changed);
+            G_debug(3, "GS_load_att_map(): %s already has data handle %d.CF=%x",
+                    filename, hdata, changed);
 
-	    /* handle found */
-	    if (ATT_COLOR == att) {
-		if ((changed == CF_COLOR_PACKED) ||
-		    (!changed && atty == ATTY_CHAR)) {
-		    reuse = 1;
-		}
-	    }
-	    else if (atty == ATTY_MASK && att != ATT_MASK) {
-		reuse = 0;
-		/* should also free mask data & share new - but need backward
-		   reference? */
-	    }
-	    else if (!changed) {
-		reuse = 1;
-	    }
-	}
+            /* handle found */
+            if (ATT_COLOR == att) {
+                if ((changed == CF_COLOR_PACKED) ||
+                    (!changed && atty == ATTY_CHAR)) {
+                    reuse = 1;
+                }
+            }
+            else if (atty == ATTY_MASK && att != ATT_MASK) {
+                reuse = 0;
+                /* should also free mask data & share new - but need backward
+                   reference? */
+            }
+            else if (!changed) {
+                reuse = 1;
+            }
+        }
 
-	begin = 0;
+        begin = 0;
     }
 
     if (reuse) {
-	gs->att[att].hdata = hdata;
-	gs_set_att_type(gs, att, atty);	/* ?? */
+        gs->att[att].hdata = hdata;
+        gs_set_att_type(gs, att, atty); /* ?? */
 
-	/* free lookup  & set to NULL! */
-	if (atty == ATTY_INT) {
-	    if (gs->att[att].lookup) {
-		free(gs->att[att].lookup);
-		gs->att[att].lookup = NULL;
-	    }
-	}
-	/* TODO: FIX THIS stuff with lookup sharing! */
+        /* free lookup  & set to NULL! */
+        if (atty == ATTY_INT) {
+            if (gs->att[att].lookup) {
+                free(gs->att[att].lookup);
+                gs->att[att].lookup = NULL;
+            }
+        }
+        /* TODO: FIX THIS stuff with lookup sharing! */
 
-	G_debug(3, "GS_load_att_map(): %s is being reused. hdata=%d",
-		filename, hdata);
+        G_debug(3, "GS_load_att_map(): %s is being reused. hdata=%d", filename,
+                hdata);
     }
     else {
-	G_debug(3, "GS_load_att_map(): %s not loaded in correct form - loading now",
-		filename);
+        G_debug(
+            3, "GS_load_att_map(): %s not loaded in correct form - loading now",
+            filename);
 
-	/* not loaded - need to get new dataset handle */
-	gs->att[att].hdata = gsds_newh(filename);
+        /* not loaded - need to get new dataset handle */
+        gs->att[att].hdata = gsds_newh(filename);
 
-	tbuff = gs_get_att_typbuff(gs, att, 1);
+        tbuff = gs_get_att_typbuff(gs, att, 1);
 
-	/* TODO: Provide mechanism for loading certain attributes at
-	   specified sizes, allow scaling or capping, or scale non-zero */
-	if (ATT_MASK == att) {
-	    atty = ATTY_MASK;
-	}
-	else {
-	    atty = Gs_numtype(filename, &neg);
-	}
+        /* TODO: Provide mechanism for loading certain attributes at
+           specified sizes, allow scaling or capping, or scale non-zero */
+        if (ATT_MASK == att) {
+            atty = ATTY_MASK;
+        }
+        else {
+            atty = Gs_numtype(filename, &neg);
+        }
 
 #ifdef MAYBE_LATER
-	if (att == ATT_COLOR && atty == ATTY_SHORT) {
-	    atty = (neg ? ATTY_INT : ATTY_SHORT);
-	}
+        if (att == ATT_COLOR && atty == ATTY_SHORT) {
+            atty = (neg ? ATTY_INT : ATTY_SHORT);
+        }
 #endif
 
-	if (att == ATT_COLOR && atty == ATTY_SHORT) {
-	    atty = ATTY_INT;
-	}
+        if (att == ATT_COLOR && atty == ATTY_SHORT) {
+            atty = ATTY_INT;
+        }
 
-	if (0 == gs_malloc_att_buff(gs, att, ATTY_NULL)) {
-	    G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
-	}
+        if (0 == gs_malloc_att_buff(gs, att, ATTY_NULL)) {
+            G_fatal_error(
+                _("GS_load_att_map(): Out of memory. Unable to load map"));
+        }
 
-	switch (atty) {
-	case ATTY_MASK:
-	    if (0 == gs_malloc_att_buff(gs, att, ATTY_MASK)) {
-		G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
-	    }
+        switch (atty) {
+        case ATTY_MASK:
+            if (0 == gs_malloc_att_buff(gs, att, ATTY_MASK)) {
+                G_fatal_error(
+                    _("GS_load_att_map(): Out of memory. Unable to load map"));
+            }
 
-	    ret = Gs_loadmap_as_bitmap(&wind, filename, tbuff->bm);
-	    
-	    break;
-	case ATTY_CHAR:
-	    if (0 == gs_malloc_att_buff(gs, att, ATTY_CHAR)) {
-		G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
-	    }
+            ret = Gs_loadmap_as_bitmap(&wind, filename, tbuff->bm);
 
-	    ret = Gs_loadmap_as_char(&wind, filename, tbuff->cb,
-				     tbuff->nm, &has_null);
+            break;
+        case ATTY_CHAR:
+            if (0 == gs_malloc_att_buff(gs, att, ATTY_CHAR)) {
+                G_fatal_error(
+                    _("GS_load_att_map(): Out of memory. Unable to load map"));
+            }
 
-	    break;
-	case ATTY_SHORT:
-	    if (0 == gs_malloc_att_buff(gs, att, ATTY_SHORT)) {
-		G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
-	    }
+            ret = Gs_loadmap_as_char(&wind, filename, tbuff->cb, tbuff->nm,
+                                     &has_null);
 
-	    ret = Gs_loadmap_as_short(&wind, filename, tbuff->sb,
-				      tbuff->nm, &has_null);
-	    break;
-	case ATTY_FLOAT:
-	    if (0 == gs_malloc_att_buff(gs, att, ATTY_FLOAT)) {
-		G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
-	    }
+            break;
+        case ATTY_SHORT:
+            if (0 == gs_malloc_att_buff(gs, att, ATTY_SHORT)) {
+                G_fatal_error(
+                    _("GS_load_att_map(): Out of memory. Unable to load map"));
+            }
 
-	    ret = Gs_loadmap_as_float(&wind, filename, tbuff->fb,
-				      tbuff->nm, &has_null);
+            ret = Gs_loadmap_as_short(&wind, filename, tbuff->sb, tbuff->nm,
+                                      &has_null);
+            break;
+        case ATTY_FLOAT:
+            if (0 == gs_malloc_att_buff(gs, att, ATTY_FLOAT)) {
+                G_fatal_error(
+                    _("GS_load_att_map(): Out of memory. Unable to load map"));
+            }
 
-	    break;
-	case ATTY_INT:
-	default:
-	    if (0 == gs_malloc_att_buff(gs, att, ATTY_INT)) {
-		G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
-	    }
+            ret = Gs_loadmap_as_float(&wind, filename, tbuff->fb, tbuff->nm,
+                                      &has_null);
 
-	    ret = Gs_loadmap_as_int(&wind, filename, tbuff->ib,
-				    tbuff->nm, &has_null);
-	    break;
+            break;
+        case ATTY_INT:
+        default:
+            if (0 == gs_malloc_att_buff(gs, att, ATTY_INT)) {
+                G_fatal_error(
+                    _("GS_load_att_map(): Out of memory. Unable to load map"));
+            }
 
-	}			/* Done with switch */
+            ret = Gs_loadmap_as_int(&wind, filename, tbuff->ib, tbuff->nm,
+                                    &has_null);
+            break;
 
-	if (ret == -1) {
-	    gsds_free_data_buff(gs->att[att].hdata, ATTY_NULL);
-	    return -1;
-	}
+        } /* Done with switch */
 
-	G_debug(4, "  has_null=%d", has_null);
+        if (ret == -1) {
+            gsds_free_data_buff(gs->att[att].hdata, ATTY_NULL);
+            return -1;
+        }
 
-	if (!has_null) {
-	    gsds_free_data_buff(gs->att[att].hdata, ATTY_NULL);
-	}
-	else {
-	    gs_update_curmask(gs);
-	}
+        G_debug(4, "  has_null=%d", has_null);
 
-    }				/* end if not reuse */
+        if (!has_null) {
+            gsds_free_data_buff(gs->att[att].hdata, ATTY_NULL);
+        }
+        else {
+            gs_update_curmask(gs);
+        }
+
+    } /* end if not reuse */
 
     if (ATT_COLOR == att) {
 #ifdef MAYBE_LATER
-	if (ATTY_INT == atty) {
-	    Gs_pack_colors(filename, tbuff->ib, gs->rows, gs->cols);
-	    gsds_set_changed(gs->att[att].hdata, CF_COLOR_PACKED);
-	    gs->att[att].lookup = NULL;
-	}
-	else {
-	    gs_malloc_lookup(gs, att);
-	    Gs_build_lookup(filename, gs->att[att].lookup);
-	}
+        if (ATTY_INT == atty) {
+            Gs_pack_colors(filename, tbuff->ib, gs->rows, gs->cols);
+            gsds_set_changed(gs->att[att].hdata, CF_COLOR_PACKED);
+            gs->att[att].lookup = NULL;
+        }
+        else {
+            gs_malloc_lookup(gs, att);
+            Gs_build_lookup(filename, gs->att[att].lookup);
+        }
 #else
 
-	if (ATTY_CHAR == atty) {
-	    if (!gs->att[att].lookup) {
-		/* might already exist if reusing */
-		gs_malloc_lookup(gs, att);
-		Gs_build_256lookup(filename, gs->att[att].lookup);
-	    }
-	}
-	else if (ATTY_FLOAT == atty) {
-	    if (!reuse) {
-		if (0 == gs_malloc_att_buff(gs, att, ATTY_INT)) {
-		    G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
-		}
+        if (ATTY_CHAR == atty) {
+            if (!gs->att[att].lookup) {
+                /* might already exist if reusing */
+                gs_malloc_lookup(gs, att);
+                Gs_build_256lookup(filename, gs->att[att].lookup);
+            }
+        }
+        else if (ATTY_FLOAT == atty) {
+            if (!reuse) {
+                if (0 == gs_malloc_att_buff(gs, att, ATTY_INT)) {
+                    G_fatal_error(_("GS_load_att_map(): Out of memory. Unable "
+                                    "to load map"));
+                }
 
-		Gs_pack_colors_float(filename, tbuff->fb, tbuff->ib,
-				     gs->rows, gs->cols);
-		gsds_set_changed(gs->att[att].hdata, CF_COLOR_PACKED);
-		gsds_free_data_buff(gs->att[att].hdata, ATTY_FLOAT);
-		gs->att[att].lookup = NULL;
-	    }
-	}
-	else {
-	    if (!reuse) {
-		Gs_pack_colors(filename, tbuff->ib, gs->rows, gs->cols);
-		gsds_set_changed(gs->att[att].hdata, CF_COLOR_PACKED);
-		gs->att[att].lookup = NULL;
-	    }
-	}
+                Gs_pack_colors_float(filename, tbuff->fb, tbuff->ib, gs->rows,
+                                     gs->cols);
+                gsds_set_changed(gs->att[att].hdata, CF_COLOR_PACKED);
+                gsds_free_data_buff(gs->att[att].hdata, ATTY_FLOAT);
+                gs->att[att].lookup = NULL;
+            }
+        }
+        else {
+            if (!reuse) {
+                Gs_pack_colors(filename, tbuff->ib, gs->rows, gs->cols);
+                gsds_set_changed(gs->att[att].hdata, CF_COLOR_PACKED);
+                gs->att[att].lookup = NULL;
+            }
+        }
 #endif
     }
 
     if (ATT_TOPO == att) {
-	gs_init_normbuff(gs);
-	/* S_DIFF: should also check here to see if this surface is a
-	   reference surface for scaled differences, if so update references
-	   to it */
+        gs_init_normbuff(gs);
+        /* S_DIFF: should also check here to see if this surface is a
+           reference surface for scaled differences, if so update references
+           to it */
     }
 
     if (ret < 0) {
-	G_warning(_("Loading failed"));
+        G_warning(_("Loading failed"));
     }
 
     if (-1 == Gs_update_attrange(gs, att)) {
-	G_warning(_("Error finding range"));
+        G_warning(_("Error finding range"));
     }
 
     return ret;
@@ -1869,21 +1867,21 @@ void GS_draw_surf(int id)
 
     gs = gs_get_surf(id);
     if (gs) {
-	gsd_shademodel(gs->draw_mode & DM_GOURAUD);
+        gsd_shademodel(gs->draw_mode & DM_GOURAUD);
 
-	if (gs->draw_mode & DM_POLY) {
-	    gsd_surf(gs);
-	}
+        if (gs->draw_mode & DM_POLY) {
+            gsd_surf(gs);
+        }
 
-	if (gs->draw_mode & DM_WIRE) {
-	    gsd_wire_surf(gs);
-	}
+        if (gs->draw_mode & DM_WIRE) {
+            gsd_wire_surf(gs);
+        }
 
-	/* TODO: write wire/poly draw routines */
-	if (gs->draw_mode & DM_WIRE_POLY) {
-	    gsd_surf(gs);
-	    gsd_wire_surf(gs);
-	}
+        /* TODO: write wire/poly draw routines */
+        if (gs->draw_mode & DM_WIRE_POLY) {
+            gsd_surf(gs);
+            gsd_wire_surf(gs);
+        }
     }
 
     return;
@@ -1905,7 +1903,7 @@ void GS_draw_wire(int id)
     gs = gs_get_surf(id);
 
     if (gs) {
-	gsd_wire_surf(gs);
+        gsd_wire_surf(gs);
     }
 
     return;
@@ -1922,9 +1920,9 @@ void GS_alldraw_wire(void)
     int i;
 
     for (i = 0; i < Next_surf; i++) {
-	if ((gs = gs_get_surf(Surf_ID[i]))) {
-	    gsd_wire_surf(gs);
-	}
+        if ((gs = gs_get_surf(Surf_ID[i]))) {
+            gsd_wire_surf(gs);
+        }
     }
 
     return;
@@ -1938,7 +1936,7 @@ void GS_alldraw_surf(void)
     int i;
 
     for (i = 0; i < Next_surf; i++) {
-	GS_draw_surf(Surf_ID[i]);
+        GS_draw_surf(Surf_ID[i]);
     }
 
     return;
@@ -1959,11 +1957,11 @@ void GS_set_exag(int id, float exag)
     gs = gs_get_surf(id);
 
     if (gs) {
-	if (gs->z_exag != exag) {
-	    gs->norm_needupdate = 1;
-	}
+        if (gs->z_exag != exag) {
+            gs->norm_needupdate = 1;
+        }
 
-	gs->z_exag = exag;
+        gs->z_exag = exag;
     }
 
     return;
@@ -2020,7 +2018,7 @@ void GS_set_wire_color(int id, int colr)
     gs = gs_get_surf(id);
 
     if (gs) {
-	gs->wire_color = colr;
+        gs->wire_color = colr;
     }
 
     return;
@@ -2042,9 +2040,9 @@ int GS_get_wire_color(int id, int *colr)
     gs = gs_get_surf(id);
 
     if (gs) {
-	*colr = gs->wire_color;
+        *colr = gs->wire_color;
 
-	return (1);
+        return (1);
     }
 
     return (-1);
@@ -2063,9 +2061,9 @@ int GS_setall_drawmode(int mode)
     int i;
 
     for (i = 0; i < Next_surf; i++) {
-	if (0 != GS_set_drawmode(Surf_ID[i], mode)) {
-	    return (-1);
-	}
+        if (0 != GS_set_drawmode(Surf_ID[i], mode)) {
+            return (-1);
+        }
     }
 
     return (0);
@@ -2089,9 +2087,9 @@ int GS_set_drawmode(int id, int mode)
     gs = gs_get_surf(id);
 
     if (gs) {
-	gs->draw_mode = mode;
+        gs->draw_mode = mode;
 
-	return (0);
+        return (0);
     }
 
     return (-1);
@@ -2113,9 +2111,9 @@ int GS_get_drawmode(int id, int *mode)
     gs = gs_get_surf(id);
 
     if (gs) {
-	*mode = gs->draw_mode;
+        *mode = gs->draw_mode;
 
-	return (1);
+        return (1);
     }
 
     return (-1);
@@ -2137,15 +2135,15 @@ void GS_set_nozero(int id, int att, int mode)
     gs = gs_get_surf(id);
 
     if (gs) {
-	if (att == ATT_TOPO) {
-	    gs->nz_topo = mode;
-	    gs->mask_needupdate = 1;
-	}
+        if (att == ATT_TOPO) {
+            gs->nz_topo = mode;
+            gs->mask_needupdate = 1;
+        }
 
-	if (att == ATT_COLOR) {
-	    gs->nz_color = mode;
-	    gs->mask_needupdate = 1;
-	}
+        if (att == ATT_COLOR) {
+            gs->nz_color = mode;
+            gs->mask_needupdate = 1;
+        }
     }
 
     return;
@@ -2170,17 +2168,17 @@ int GS_get_nozero(int id, int att, int *mode)
     gs = gs_get_surf(id);
 
     if (gs) {
-	if (att == ATT_TOPO) {
-	    *mode = gs->nz_topo;
-	}
-	else if (att == ATT_COLOR) {
-	    *mode = gs->nz_color;
-	}
-	else {
-	    return (-1);
-	}
+        if (att == ATT_TOPO) {
+            *mode = gs->nz_topo;
+        }
+        else if (att == ATT_COLOR) {
+            *mode = gs->nz_color;
+        }
+        else {
+            return (-1);
+        }
 
-	return (1);
+        return (1);
     }
 
     return (-1);
@@ -2200,9 +2198,9 @@ int GS_setall_drawres(int xres, int yres, int xwire, int ywire)
     int i;
 
     for (i = 0; i < Next_surf; i++) {
-	if (0 != GS_set_drawres(Surf_ID[i], xres, yres, xwire, ywire)) {
-	    return (-1);
-	}
+        if (0 != GS_set_drawres(Surf_ID[i], xres, yres, xwire, ywire)) {
+            return (-1);
+        }
     }
 
     return (0);
@@ -2222,24 +2220,24 @@ int GS_set_drawres(int id, int xres, int yres, int xwire, int ywire)
 {
     geosurf *gs;
 
-    G_debug(3, "GS_set_drawres() id=%d xyres=%d/%d xywire=%d/%d",
-	    id, xres, yres, xwire, ywire);
+    G_debug(3, "GS_set_drawres() id=%d xyres=%d/%d xywire=%d/%d", id, xres,
+            yres, xwire, ywire);
 
     if (xres < 1 || yres < 1 || xwire < 1 || ywire < 1) {
-	return (-1);
+        return (-1);
     }
 
     gs = gs_get_surf(id);
 
     if (gs) {
-	if (gs->x_mod != xres || gs->y_mod != yres) {
-	    gs->norm_needupdate = 1;
-	}
+        if (gs->x_mod != xres || gs->y_mod != yres) {
+            gs->norm_needupdate = 1;
+        }
 
-	gs->x_mod = xres;
-	gs->y_mod = yres;
-	gs->x_modw = xwire;
-	gs->y_modw = ywire;
+        gs->x_mod = xres;
+        gs->y_mod = yres;
+        gs->x_modw = xwire;
+        gs->y_modw = ywire;
     }
 
     return (0);
@@ -2261,10 +2259,10 @@ void GS_get_drawres(int id, int *xres, int *yres, int *xwire, int *ywire)
     gs = gs_get_surf(id);
 
     if (gs) {
-	*xres = gs->x_mod;
-	*yres = gs->y_mod;
-	*xwire = gs->x_modw;
-	*ywire = gs->y_modw;
+        *xres = gs->x_mod;
+        *yres = gs->y_mod;
+        *xwire = gs->x_modw;
+        *ywire = gs->y_modw;
     }
 
     return;
@@ -2283,8 +2281,8 @@ void GS_get_dims(int id, int *rows, int *cols)
     gs = gs_get_surf(id);
 
     if (gs) {
-	*rows = gs->rows;
-	*cols = gs->cols;
+        *rows = gs->rows;
+        *cols = gs->cols;
     }
 
     return;
@@ -2313,34 +2311,34 @@ int GS_get_exag_guess(int id, float *exag)
 
     /* if gs is type const return guess = 1.0 */
     if (CONST_ATT == gs_get_att_src(gs, ATT_TOPO)) {
-	*exag = guess;
-	return (1);
+        *exag = guess;
+        return (1);
     }
 
     if (gs) {
-	if (gs->zrange_nz == 0.0) {
-	    *exag = 0.0;
+        if (gs->zrange_nz == 0.0) {
+            *exag = 0.0;
 
-	    return (1);
-	}
+            return (1);
+        }
 
-	G_debug(3, "GS_get_exag_guess(): %f %f", gs->zrange_nz, Longdim);
+        G_debug(3, "GS_get_exag_guess(): %f %f", gs->zrange_nz, Longdim);
 
-	while (gs->zrange_nz * guess / Longdim >= .25) {
-	    guess *= .1;
+        while (gs->zrange_nz * guess / Longdim >= .25) {
+            guess *= .1;
 
-	    G_debug(3, "GS_get_exag_guess(): %f", guess);
-	}
+            G_debug(3, "GS_get_exag_guess(): %f", guess);
+        }
 
-	while (gs->zrange_nz * guess / Longdim < .025) {
-	    guess *= 10.;
+        while (gs->zrange_nz * guess / Longdim < .025) {
+            guess *= 10.;
 
-	    G_debug(3, "GS_get_exag_guess(): %f", guess);
-	}
+            G_debug(3, "GS_get_exag_guess(): %f", guess);
+        }
 
-	*exag = guess;
+        *exag = guess;
 
-	return (1);
+        return (1);
     }
 
     return (-1);
@@ -2360,21 +2358,21 @@ void GS_get_zrange_nz(float *min, float *max)
     geosurf *gs;
 
     for (i = 0; i < Next_surf; i++) {
-	if ((gs = gs_get_surf(Surf_ID[i]))) {
-	    if (first) {
-		first = 0;
-		*min = gs->zmin_nz;
-		*max = gs->zmax_nz;
-	    }
+        if ((gs = gs_get_surf(Surf_ID[i]))) {
+            if (first) {
+                first = 0;
+                *min = gs->zmin_nz;
+                *max = gs->zmax_nz;
+            }
 
-	    if (gs->zmin_nz < *min) {
-		*min = gs->zmin_nz;
-	    }
+            if (gs->zmin_nz < *min) {
+                *min = gs->zmin_nz;
+            }
 
-	    if (gs->zmax_nz > *max) {
-		*max = gs->zmax_nz;
-	    }
-	}
+            if (gs->zmax_nz > *max) {
+                *max = gs->zmax_nz;
+            }
+        }
     }
 
     G_debug(3, "GS_get_zrange_nz(): min=%g max=%g", *min, *max);
@@ -2395,13 +2393,13 @@ void GS_set_trans(int id, float xtrans, float ytrans, float ztrans)
     gs = gs_get_surf(id);
 
     if (gs) {
-	gs->x_trans = xtrans;
-	gs->y_trans = ytrans;
-	gs->z_trans = ztrans;
+        gs->x_trans = xtrans;
+        gs->y_trans = ytrans;
+        gs->z_trans = ztrans;
     }
 
-    G_debug(3, "GS_set_trans(): id=%d, x=%f, y=%f, z=%f",
-	    id, xtrans, ytrans, ztrans);
+    G_debug(3, "GS_set_trans(): id=%d, x=%f, y=%f, z=%f", id, xtrans, ytrans,
+            ztrans);
 
     return;
 }
@@ -2419,17 +2417,16 @@ void GS_get_trans(int id, float *xtrans, float *ytrans, float *ztrans)
     gs = gs_get_surf(id);
 
     if (gs) {
-	*xtrans = gs->x_trans;
-	*ytrans = gs->y_trans;
-	*ztrans = gs->z_trans;
+        *xtrans = gs->x_trans;
+        *ytrans = gs->y_trans;
+        *ztrans = gs->z_trans;
     }
 
-    G_debug(3, "GS_get_trans: id=%d, x=%f, y=%f, z=%f",
-	    id, *xtrans, *ytrans, *ztrans);
+    G_debug(3, "GS_get_trans: id=%d, x=%f, y=%f, z=%f", id, *xtrans, *ytrans,
+            *ztrans);
 
     return;
 }
-
 
 /*!
    \brief Get default draw color
@@ -2465,18 +2462,18 @@ void GS_set_draw(int where)
 
     switch (where) {
     case GSD_BOTH:
-	gsd_bothbuffers();
+        gsd_bothbuffers();
 
-	break;
+        break;
     case GSD_FRONT:
-	gsd_frontbuffer();
+        gsd_frontbuffer();
 
-	break;
+        break;
     case GSD_BACK:
     default:
-	gsd_backbuffer();
+        gsd_backbuffer();
 
-	break;
+        break;
     }
 
     return;
@@ -2504,7 +2501,7 @@ void GS_done_draw(void)
     G_debug(3, "GS_done_draw");
 
     if (GSD_BACK == Buffermode) {
-	gsd_swapbuffers();
+        gsd_swapbuffers();
     }
 
     gsd_flush();
@@ -2550,7 +2547,6 @@ void GS_set_focus_real(float *realto)
     return;
 }
 
-
 /*!
    \brief Get focus
 
@@ -2566,9 +2562,9 @@ int GS_get_focus(float *realto)
     G_debug(3, "GS_get_focus");
 
     if (Gv.infocus) {
-	if (realto) {
-	    GS_v3eq(realto, Gv.real_to);
-	}
+        if (realto) {
+            GS_v3eq(realto, Gv.real_to);
+        }
     }
 
     return (Gv.infocus);
@@ -2589,28 +2585,28 @@ void GS_set_focus_center_map(int id)
     gs = gs_get_surf(id);
 
     if (gs) {
-	center[X] = (gs->xmax - gs->xmin) / 2.;
-	center[Y] = (gs->ymax - gs->ymin) / 2.;
-	center[Z] = (gs->zmax_nz + gs->zmin_nz) / 2.;
+        center[X] = (gs->xmax - gs->xmin) / 2.;
+        center[Y] = (gs->ymax - gs->ymin) / 2.;
+        center[Z] = (gs->zmax_nz + gs->zmin_nz) / 2.;
 
-	/* not yet working
-	   buff = gs_get_att_typbuff(gs, ATT_TOPO, 0);
-	   offset = gs->rows*gs->cols/2 + gs->cols/2;
-	   if (buff)
-	   {
-	   if (GET_MAPATT(buff, offset, tmp))
-	   {
-	   center[Z] = tmp;
-	   }
-	   }
-	 */
+        /* not yet working
+           buff = gs_get_att_typbuff(gs, ATT_TOPO, 0);
+           offset = gs->rows*gs->cols/2 + gs->cols/2;
+           if (buff)
+           {
+           if (GET_MAPATT(buff, offset, tmp))
+           {
+           center[Z] = tmp;
+           }
+           }
+         */
 
-	GS_set_focus(center);
+        GS_set_focus(center);
     }
 }
 
 /*!
-   \brief Move viewpoint 
+   \brief Move viewpoint
 
    \param pt 'from' model coordinates
  */
@@ -2621,19 +2617,19 @@ void GS_moveto(float *pt)
     G_debug(3, "GS_moveto(): %f,%f,%f", pt[0], pt[1], pt[2]);
 
     if (Gv.infocus) {
-	GS_v3eq(Gv.from_to[FROM], pt);
-	/*
-	   GS_v3eq(Gv.from_to[TO], Gv.real_to);
-	 */
-	GS_v3normalize(Gv.from_to[FROM], Gv.from_to[TO]);
-	/* update inclination, look_dir if we're keeping these */
+        GS_v3eq(Gv.from_to[FROM], pt);
+        /*
+           GS_v3eq(Gv.from_to[TO], Gv.real_to);
+         */
+        GS_v3normalize(Gv.from_to[FROM], Gv.from_to[TO]);
+        /* update inclination, look_dir if we're keeping these */
     }
     else {
-	GS_v3eq(ft, Gv.from_to[TO]);
-	GS_v3sub(ft, Gv.from_to[FROM]);
-	GS_v3eq(Gv.from_to[FROM], pt);
-	GS_v3eq(Gv.from_to[TO], pt);
-	GS_v3add(Gv.from_to[TO], ft);
+        GS_v3eq(ft, Gv.from_to[TO]);
+        GS_v3sub(ft, Gv.from_to[FROM]);
+        GS_v3eq(Gv.from_to[FROM], pt);
+        GS_v3eq(Gv.from_to[TO], pt);
+        GS_v3add(Gv.from_to[TO], ft);
     }
 
     return;
@@ -2668,7 +2664,7 @@ int GS_get_zextents(int id, float *min, float *max, float *mid)
     geosurf *gs;
 
     if (NULL == (gs = gs_get_surf(id))) {
-	return (-1);
+        return (-1);
     }
 
     G_debug(3, "GS_get_zextents(): id=%d", id);
@@ -2696,21 +2692,21 @@ int GS_get_zrange(float *min, float *max, int doexag)
     ret_vol = gvl_get_zrange(&vol_min, &vol_max);
 
     if (ret_surf > 0 && ret_vol > 0) {
-	*min = (surf_min < vol_min) ? surf_min : vol_min;
-	*max = (surf_max < vol_max) ? surf_max : vol_max;
+        *min = (surf_min < vol_min) ? surf_min : vol_min;
+        *max = (surf_max < vol_max) ? surf_max : vol_max;
     }
     else if (ret_surf > 0) {
-	*min = surf_min;
-	*max = surf_max;
+        *min = surf_min;
+        *max = surf_max;
     }
     else if (ret_vol > 0) {
-	*min = vol_min;
-	*max = vol_max;
+        *min = vol_min;
+        *max = vol_max;
     }
 
     if (doexag) {
-	*min *= Gv.vert_exag;
-	*max *= Gv.vert_exag;
+        *min *= Gv.vert_exag;
+        *max *= Gv.vert_exag;
     }
 
     G_debug(3, "GS_get_zrange(): min=%g max=%g", *min, *max);
@@ -2761,7 +2757,6 @@ void GS_get_to_real(float *to)
 
     return;
 }
-
 
 /*!
    \brief Get zoom setup
@@ -2848,7 +2843,7 @@ void GS_set_fov(int fov)
 }
 
 /*!
-   \brief Get fied of view
+   \brief Get field of view
 
    \return field of view, in 10ths of degrees
  */
@@ -2911,39 +2906,39 @@ void GS_init_rotation(void)
     int i;
 
     for (i = 0; i < 16; i++) {
-	if (i == 0 || i == 5 || i == 10 || i == 15)
-	    Gv.rotate.rotMatrix[i] = 1.0;
-	else
-	    Gv.rotate.rotMatrix[i] = 0.0;
+        if (i == 0 || i == 5 || i == 10 || i == 15)
+            Gv.rotate.rotMatrix[i] = 1.0;
+        else
+            Gv.rotate.rotMatrix[i] = 0.0;
     }
     Gv.rotate.rot_angle = 0.0;
     Gv.rotate.rot_axes[0] = 0.0;
     Gv.rotate.rot_axes[1] = 0.0;
     Gv.rotate.rot_axes[2] = 0.0;
     Gv.rotate.do_rot = 0;
-    
 }
+
 /*!
  * \brief Get rotation matrix
- */ 
+ */
 void GS_get_rotation_matrix(double *matrix)
 {
     int i;
 
     for (i = 0; i < 16; i++) {
-	matrix[i] = Gv.rotate.rotMatrix[i];
+        matrix[i] = Gv.rotate.rotMatrix[i];
     }
 }
 
 /*!
  * \brief Set rotation matrix
- */ 
+ */
 void GS_set_rotation_matrix(double *matrix)
 {
     int i;
 
     for (i = 0; i < 16; i++) {
-	Gv.rotate.rotMatrix[i] = matrix[i];
+        Gv.rotate.rotMatrix[i] = matrix[i];
     }
 }
 
@@ -2980,8 +2975,10 @@ void GS_set_infocus(void)
  */
 void GS_set_viewport(int left, int right, int bottom, int top)
 {
-    G_debug(3, "GS_set_viewport(): left=%d, right=%d, "
-	    "bottom=%d, top=%d", left, right, bottom, top);
+    G_debug(3,
+            "GS_set_viewport(): left=%d, right=%d, "
+            "bottom=%d, top=%d",
+            left, right, bottom, top);
 
     gsd_viewport(left, right, bottom, top);
 
@@ -3010,28 +3007,28 @@ int GS_look_here(int sx, int sy)
     geosurf *gs;
 
     if (GS_get_selected_point_on_surface(sx, sy, &id, &x, &y, &z)) {
-	gs = gs_get_surf(id);
-	if (gs) {
-	    realto[X] = x - gs->ox + gs->x_trans;
-	    realto[Y] = y - gs->oy + gs->y_trans;
-	    realto[Z] = z + gs->z_trans;
-	    GS_set_focus(realto);
+        gs = gs_get_surf(id);
+        if (gs) {
+            realto[X] = x - gs->ox + gs->x_trans;
+            realto[Y] = y - gs->oy + gs->y_trans;
+            realto[Z] = z + gs->z_trans;
+            GS_set_focus(realto);
 
-	    return (1);
-	}
+            return (1);
+        }
     }
     else {
-	if (gsd_get_los(los, (short)sx, (short)sy)) {
-	    len = GS_distance(Gv.from_to[FROM], Gv.real_to);
-	    GS_v3dir(los[FROM], los[TO], dir);
-	    GS_v3mult(dir, len);
-	    realto[X] = Gv.from_to[FROM][X] + dir[X];
-	    realto[Y] = Gv.from_to[FROM][Y] + dir[Y];
-	    realto[Z] = Gv.from_to[FROM][Z] + dir[Z];
-	    GS_set_focus(realto);
+        if (gsd_get_los(los, (short)sx, (short)sy)) {
+            len = GS_distance(Gv.from_to[FROM], Gv.real_to);
+            GS_v3dir(los[FROM], los[TO], dir);
+            GS_v3mult(dir, len);
+            realto[X] = Gv.from_to[FROM][X] + dir[X];
+            realto[Y] = Gv.from_to[FROM][Y] + dir[Y];
+            realto[Z] = Gv.from_to[FROM][Z] + dir[Z];
+            GS_set_focus(realto);
 
-	    return (1);
-	}
+            return (1);
+        }
     }
 
     return (0);
@@ -3052,7 +3049,7 @@ int GS_look_here(int sx, int sy)
    \return number of intersections
  */
 int GS_get_selected_point_on_surface(int sx, int sy, int *id, float *x,
-				     float *y, float *z)
+                                     float *y, float *z)
 {
     float los[2][3], find_dist[MAX_SURFS], closest;
     Point3 point, tmp, finds[MAX_SURFS];
@@ -3063,49 +3060,49 @@ int GS_get_selected_point_on_surface(int sx, int sy, int *id, float *x,
     gsd_get_los(los, (short)sx, (short)sy);
 
     if (!gs_setlos_enterdata(los)) {
-	G_debug(3, "gs_setlos_enterdata(los): returns false");
-	return (0);
+        G_debug(3, "gs_setlos_enterdata(los): returns false");
+        return (0);
     }
 
     for (i = 0; i < Next_surf; i++) {
-	G_debug(3, "id=%d", i);
+        G_debug(3, "id=%d", i);
 
-	gs = gs_get_surf(Surf_ID[i]);
+        gs = gs_get_surf(Surf_ID[i]);
 
-	/* los_intersect expects surf-world coords (xy transl, no scaling) */
+        /* los_intersect expects surf-world coords (xy transl, no scaling) */
 
 #if NVIZ_HACK
-	if (gs_los_intersect1(Surf_ID[i], los, point)) {
+        if (gs_los_intersect1(Surf_ID[i], los, point)) {
 #else
-	if (gs_los_intersect(Surf_ID[i], los, point)) {
+        if (gs_los_intersect(Surf_ID[i], los, point)) {
 #endif
-	    if (!gs_point_is_masked(gs, point)) {
-		GS_v3eq(tmp, point);
-		tmp[X] += gs->x_trans;
-		tmp[Y] += gs->y_trans;
-		tmp[Z] += gs->z_trans;
-		find_dist[numhits] = GS_distance(los[FROM], tmp);
-		gsd_surf2real(gs, point);
-		GS_v3eq(finds[numhits], point);
-		surfs[numhits] = Surf_ID[i];
-		numhits++;
-	    }
-	}
+            if (!gs_point_is_masked(gs, point)) {
+                GS_v3eq(tmp, point);
+                tmp[X] += gs->x_trans;
+                tmp[Y] += gs->y_trans;
+                tmp[Z] += gs->z_trans;
+                find_dist[numhits] = GS_distance(los[FROM], tmp);
+                gsd_surf2real(gs, point);
+                GS_v3eq(finds[numhits], point);
+                surfs[numhits] = Surf_ID[i];
+                numhits++;
+            }
+        }
     }
 
     for (i = iclose = 0; i < numhits; i++) {
-	closest = find_dist[iclose];
+        closest = find_dist[iclose];
 
-	if (find_dist[i] < closest) {
-	    iclose = i;
-	}
+        if (find_dist[i] < closest) {
+            iclose = i;
+        }
     }
 
     if (numhits) {
-	*x = finds[iclose][X];
-	*y = finds[iclose][Y];
-	*z = finds[iclose][Z];
-	*id = surfs[iclose];
+        *x = finds[iclose][X];
+        *y = finds[iclose][Y];
+        *z = finds[iclose][Z];
+        *id = surfs[iclose];
     }
 
     G_debug(3, "NumHits %d, next %d", numhits, Next_surf);
@@ -3139,7 +3136,6 @@ void GS_set_cplane_trans(int num, float dx, float dy, float dz)
     return;
 }
 
-
 /*!
    \brief Draw cplace
 
@@ -3152,12 +3148,12 @@ void GS_draw_cplane(int num)
 
     nsurfs = gs_num_surfaces();
     if (2 == nsurfs) {
-	/* testing */
-	gs_getall_surfaces(gsurfs);
-	gsd_draw_cplane_fence(gsurfs[0], gsurfs[1], num);
+        /* testing */
+        gs_getall_surfaces(gsurfs);
+        gsd_draw_cplane_fence(gsurfs[0], gsurfs[1], num);
     }
     else {
-	gsd_draw_cplane(num);
+        gsd_draw_cplane(num);
     }
 
     return;
@@ -3177,11 +3173,11 @@ int GS_draw_cplane_fence(int hs1, int hs2, int num)
     geosurf *gs1, *gs2;
 
     if (NULL == (gs1 = gs_get_surf(hs1))) {
-	return (0);
+        return (0);
     }
 
     if (NULL == (gs2 = gs_get_surf(hs2))) {
-	return (0);
+        return (0);
     }
 
     gsd_draw_cplane_fence(gs1, gs2, num);
@@ -3199,9 +3195,9 @@ void GS_alldraw_cplane_fences(void)
     gsd_get_cplanes_state(onstate);
 
     for (i = 0; i < MAX_CPLANES; i++) {
-	if (onstate[i]) {
-	    GS_draw_cplane_fence(Surf_ID[0], Surf_ID[1], i);
-	}
+        if (onstate[i]) {
+            GS_draw_cplane_fence(Surf_ID[0], Surf_ID[1], i);
+        }
     }
 
     return;
@@ -3283,16 +3279,16 @@ int GS_get_fencecolor(void)
    \return distance following terrain
  */
 int GS_get_distance_alongsurf(int hs, float x1, float y1, float x2, float y2,
-			      float *dist, int use_exag)
+                              float *dist, int use_exag)
 {
     geosurf *gs;
-    float p1[2], p2[2];
-    
+    Point3 p1, p2;
+
     gs = gs_get_surf(hs);
     if (gs == NULL) {
-	return 0;
+        return 0;
     }
-    
+
     p1[X] = x1;
     p1[Y] = y1;
     p2[X] = x2;
@@ -3300,8 +3296,8 @@ int GS_get_distance_alongsurf(int hs, float x1, float y1, float x2, float y2,
     gsd_real2surf(gs, p1);
     gsd_real2surf(gs, p2);
 
-    G_debug(3, "GS_get_distance_alongsurf(): hs=%d p1=%f,%f p2=%f,%f",
-	    hs, x1, y1, x2, y2);
+    G_debug(3, "GS_get_distance_alongsurf(): hs=%d p1=%f,%f p2=%f,%f", hs, x1,
+            y1, x2, y2);
     return gs_distance_onsurf(gs, p1, p2, dist, use_exag);
 }
 
@@ -3336,8 +3332,8 @@ int GS_load_3dview(const char *vname, int surfid)
 }
 
 /************************************************************************
-* Following routines use Graphics Library
-************************************************************************/
+ * Following routines use Graphics Library
+ ************************************************************************/
 
 /*!
    \brief Init viewpoint
@@ -3351,60 +3347,60 @@ void GS_init_view(void)
     G_debug(3, "GS_init_view");
 
     if (first) {
-	first = 0;
-	glMatrixMode(GL_MODELVIEW);
+        first = 0;
+        glMatrixMode(GL_MODELVIEW);
 
-	/* OGLXXX doublebuffer: use GLX_DOUBLEBUFFER in attriblist */
-	/* glxChooseVisual(*dpy, screen, *attriblist); */
-	/* OGLXXX
-	 * ZMIN not needed -- always 0.
-	 * ZMAX not needed -- always 1.
-	 * getgdesc other posiblilties:
-	 *      glxGetConfig();
-	 *      glxGetCurrentContext();
-	 *      glxGetCurrentDrawable();
-	 * GLint gdtmp;
-	 * getgdesc other posiblilties:
-	 *      glxGetConfig();
-	 *      glxGetCurrentContext();
-	 *      glxGetCurrentDrawable();
-	 * GLint gdtmp;
-	 * glDepthRange params must be scaled to [0, 1]
-	 */
-	glDepthRange(0.0, 1.0);
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
-	/* } */
+        /* OGLXXX doublebuffer: use GLX_DOUBLEBUFFER in attriblist */
+        /* glxChooseVisual(*dpy, screen, *attriblist); */
+        /* OGLXXX
+         * ZMIN not needed -- always 0.
+         * ZMAX not needed -- always 1.
+         * getgdesc other posiblilties:
+         *      glxGetConfig();
+         *      glxGetCurrentContext();
+         *      glxGetCurrentDrawable();
+         * GLint gdtmp;
+         * getgdesc other posiblilties:
+         *      glxGetConfig();
+         *      glxGetCurrentContext();
+         *      glxGetCurrentDrawable();
+         * GLint gdtmp;
+         * glDepthRange params must be scaled to [0, 1]
+         */
+        glDepthRange(0.0, 1.0);
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LEQUAL);
+        /* } */
 
-	/* replace these with something meaningful */
-	Gv.fov = 450;
-	Gv.twist = 0;
+        /* replace these with something meaningful */
+        Gv.fov = 450;
+        Gv.twist = 0;
 
-	GS_init_rotation();
+        GS_init_rotation();
 
-	Gv.from_to[FROM][X] = Gv.from_to[FROM][Y] =
-	    Gv.from_to[FROM][Z] = GS_UNIT_SIZE / 2.;
+        Gv.from_to[FROM][X] = Gv.from_to[FROM][Y] = Gv.from_to[FROM][Z] =
+            GS_UNIT_SIZE / 2.;
 
-	Gv.from_to[TO][X] = GS_UNIT_SIZE / 2.;
-	Gv.from_to[TO][Y] = GS_UNIT_SIZE / 2.;
-	Gv.from_to[TO][Z] = 0.;
-	Gv.from_to[TO][W] = Gv.from_to[FROM][W] = 1.;
+        Gv.from_to[TO][X] = GS_UNIT_SIZE / 2.;
+        Gv.from_to[TO][Y] = GS_UNIT_SIZE / 2.;
+        Gv.from_to[TO][Z] = 0.;
+        Gv.from_to[TO][W] = Gv.from_to[FROM][W] = 1.;
 
-	Gv.real_to[W] = 1.;
-	Gv.vert_exag = 1.;
+        Gv.real_to[W] = 1.;
+        Gv.vert_exag = 1.;
 
-	GS_v3eq(Gv.real_to, Gv.from_to[TO]);
-	GS_v3normalize(Gv.from_to[FROM], Gv.from_to[TO]);
+        GS_v3eq(Gv.real_to, Gv.from_to[TO]);
+        GS_v3normalize(Gv.from_to[FROM], Gv.from_to[TO]);
 
-	/*
-	   Gd.nearclip = 50;
-	   Gd.farclip = 10000.;
-	 */
-	Gd.nearclip = 10.;
-	Gd.farclip = 10000.;
-	Gd.aspect = (float)GS_get_aspect();
+        /*
+           Gd.nearclip = 50;
+           Gd.farclip = 10000.;
+         */
+        Gd.nearclip = 10.;
+        Gd.farclip = 10000.;
+        Gd.aspect = (float)GS_get_aspect();
 
-	GS_set_focus(Gv.real_to);
+        GS_set_focus(Gv.real_to);
     }
 
     return;
@@ -3431,10 +3427,9 @@ void GS_clear(int col)
      * GLint gdtmp;
      */
     glClearDepth(1.0);
-    glClearColor(((float)((col) & 0xff)) / 255.,
-		 (float)((col) >> 8 & 0xff) / 255.,
-		 (float)((col) >> 16 & 0xff) / 255.,
-		 (float)((col) >> 24 & 0xff) / 255.);
+    glClearColor(
+        ((float)((col) & 0xff)) / 255., (float)((col) >> 8 & 0xff) / 255.,
+        (float)((col) >> 16 & 0xff) / 255., (float)((col) >> 24 & 0xff) / 255.);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
     Gd.bgcol = col;
@@ -3464,8 +3459,8 @@ double GS_get_aspect(void)
     bottom = tmp[1];
     top = tmp[1] + tmp[3] - 1;
 
-    G_debug(3, "GS_get_aspect(): left=%d, right=%d, top=%d, bottom=%d",
-	    left, right, top, bottom);
+    G_debug(3, "GS_get_aspect(): left=%d, right=%d, top=%d, bottom=%d", left,
+            right, top, bottom);
 
     return ((double)(right - left) / (top - bottom));
 }

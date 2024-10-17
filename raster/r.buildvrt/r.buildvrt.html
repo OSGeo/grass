@@ -1,28 +1,28 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.buildvrt</em> builds a virtual raster (VRT) that is a mosaic of 
-the list of input raster maps. The purpose of such a VRT is to provide 
-fast access to small subsets of the VRT, also with multiple simultaneous 
+<em>r.buildvrt</em> builds a virtual raster (VRT) that is a mosaic of
+the list of input raster maps. The purpose of such a VRT is to provide
+fast access to small subsets of the VRT, also with multiple simultaneous
 read requests.
 
 <h2>NOTES</h2>
 
-<em>r.buildvrt</em> creates a list of raster maps that can be 
-located in different mapsets. The output is a read-only link to 
-the original raster maps which is only valid if the original raster 
-maps remain in the originally indicated mapset. A VRT can also be built 
+<em>r.buildvrt</em> creates a list of raster maps that can be
+located in different mapsets. The output is a read-only link to
+the original raster maps which is only valid if the original raster
+maps remain in the originally indicated mapset. A VRT can also be built
 from raster maps registered with <em><a href="r.external.html">r.external</a></em>.
 
 <p>
-Reading the whole VRT is slower than reading the equivalent single 
-raster map. Only reading small parts of the VRT provides a performance 
+Reading the whole VRT is slower than reading the equivalent single
+raster map. Only reading small parts of the VRT provides a performance
 benefit.
 
 <p>
-A GRASS virtual raster can be regarded as a simplified version of GDAL's 
-<a href="http://gdal.org/gdal_vrttut.html">virtual raster format</a>. 
-The GRASS equivalent is simpler because issues like nodata, projection, 
-resolution, resampling, masking are already handled by native GRASS 
+A GRASS virtual raster can be regarded as a simplified version of GDAL's
+<a href="http://gdal.org/gdal_vrttut.html">virtual raster format</a>.
+The GRASS equivalent is simpler because issues like nodata, projection,
+resolution, resampling, masking are already handled by native GRASS
 raster routines.
 
 <h2>EXAMPLES</h2>
@@ -43,9 +43,9 @@ r.resamp.interp input=elev_state_500m output=elev_state_50m method=bilinear
 # create tiles from resulting large 50 m elevation map
 r.tile input=elev_state_50m output=elev_state_50m_tile_ width=1000 height=1000 overlap=0
 # for convenience, dump list of tile names to a file
-g.list type=raster pattern=elev_state_50m_tile_* output=tilelist
+g.list type=raster pattern=elev_state_50m_tile_* output=tilelist.csv
 # build a mosaik as VRT from tile list
-r.buildvrt file=tilelist output=elev_state_50m_vrt
+r.buildvrt file=tilelist.csv output=elev_state_50m_vrt
 </pre></div>
 
 <h2>SEE ALSO</h2>
@@ -57,7 +57,7 @@ r.buildvrt file=tilelist output=elev_state_50m_vrt
 </em>
 
 <p>
-The equivalent GDAL utility 
+The equivalent GDAL utility
 <em>
 <a href="http://gdal.org/gdalbuildvrt.html">gdalbuildvrt</a>
 </em>
@@ -66,8 +66,3 @@ The equivalent GDAL utility
 
 Markus Metz<br>
 Sponsored by <a href="https://www.mundialis.de">mundialis</a>
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
