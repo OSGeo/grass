@@ -3,9 +3,9 @@ This module provides common variables and functions for other ProjPicker
 modules.
 """
 
+import collections
 import os
 import re
-import collections
 
 _PROJPICKER_VERBOSE_ENV = "PROJPICKER_VERBOSE"
 

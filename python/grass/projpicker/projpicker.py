@@ -34,27 +34,25 @@ This module implements the CLI and API of ProjPicker.
 # pylint: disable=unpacking-non-sequence
 
 import collections
-import os
-import sys
-import sqlite3
-import re
-import math
 import json
+import math
+import os
 import pprint
+import re
+import sqlite3
+import sys
 from pathlib import Path
 
+from . import coor_latlon, coor_xy
 from .common import (
-    BBox,
+    _BBOX_COLUMNS,
+    _BBOX_SCHEMA,
     _COOR_SEP,
     _POS_FLOAT_PAT,
-    _BBOX_SCHEMA,
-    _BBOX_COLUMNS,
-    is_verbose,
+    BBox,
     get_float,
+    is_verbose,
 )
-from . import coor_latlon
-from . import coor_xy
-
 
 has_gui = True  # pylint: disable=invalid-name
 try:

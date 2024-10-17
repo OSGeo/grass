@@ -2,24 +2,20 @@
 This module implements the ProjPickerPanel widget for wxPython.
 """
 
-import wx.lib.newevent
-import wx.lib.statbmp
 import io
-import threading
 import queue
 import sys
+import threading
 
-import grass.projpicker as ppik
-from grass.getosm import OpenStreetMap
+import wx.lib.newevent
+import wx.lib.statbmp
 from gui_core.toolbars import BaseToolbar, ToolSwitcher
 from icons.icon import MetaIcon
 
-from .gui_common import (
-    get_latlon,
-    get_zoom,
-    get_dzoom,
-    find_bbox,
-)
+import grass.projpicker as ppik
+from grass.getosm import OpenStreetMap
+
+from .gui_common import find_bbox, get_dzoom, get_latlon, get_zoom
 
 ItemSelectedEvent, EVT_ITEM_SELECTED = wx.lib.newevent.NewEvent()
 ItemDeselectedEvent, EVT_ITEM_DESELECTED = wx.lib.newevent.NewEvent()

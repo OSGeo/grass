@@ -4,27 +4,28 @@ This module implements the ProjPicker GUI using wxPython.
 
 # pylint: disable=too-many-locals, too-many-statements, no-member
 
-import wx.lib.statbmp
 import io
-import threading
 import queue
-import textwrap
-import webbrowser
 import sys
+import textwrap
+import threading
+import webbrowser
 from pathlib import Path
+
+import wx.lib.statbmp
 
 import grass.projpicker as ppik
 from grass.getosm import OpenStreetMap
 
 from .gui_common import (
-    get_latlon,
-    get_zoom,
-    get_dzoom,
-    parse_geoms,
     adjust_lon,
     calc_geoms_bbox,
     create_crs_info,
     find_bbox,
+    get_dzoom,
+    get_latlon,
+    get_zoom,
+    parse_geoms,
 )
 
 

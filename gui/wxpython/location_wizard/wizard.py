@@ -39,7 +39,6 @@ import os
 import locale
 import functools
 import socket
-
 from pathlib import Path
 
 import wx
@@ -73,12 +72,7 @@ from gui_core.wrap import (
     HyperlinkCtrl,
 )
 from location_wizard.dialogs import SelectTransformDialog
-
-from projpicker_gui.panel import (
-    ProjPickerPanel,
-    EVT_ITEM_SELECTED,
-    EVT_ITEM_DESELECTED,
-)
+from projpicker_gui.panel import EVT_ITEM_DESELECTED, EVT_ITEM_SELECTED, ProjPickerPanel
 
 from grass.grassdb.checks import location_exists
 from grass.script import decode

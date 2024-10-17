@@ -5,7 +5,7 @@ the ProjPicker API.
 
 import re
 
-from .common import _POS_FLOAT_PAT, _COOR_SEP_PAT, get_float, query_using_cursor
+from .common import _COOR_SEP_PAT, _POS_FLOAT_PAT, get_float, query_using_cursor
 
 # x,y
 _XY_PAT = f"([+-]?{_POS_FLOAT_PAT}){_COOR_SEP_PAT}([+-]?{_POS_FLOAT_PAT})"

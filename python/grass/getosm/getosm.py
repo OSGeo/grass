@@ -26,8 +26,8 @@ This module provides an OpenStreetMap tile downloader.
 # pylint: disable=too-many-instance-attributes, too-many-arguments
 # pylint: disable=too-many-locals
 
-import sys
 import math
+import sys
 import urllib.request
 
 
