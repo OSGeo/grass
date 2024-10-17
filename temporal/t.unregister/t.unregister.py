@@ -108,17 +108,16 @@ def main():
 
     # Read the map list from file
     if file:
-        fd = open(file)
-
         line = True
-        while True:
-            line = fd.readline()
-            if not line:
-                break
+        with open(file) as fd:
+            while True:
+                line = fd.readline()
+                if not line:
+                    break
 
-            mapname = line.strip()
-            mapid = dummy.build_id(mapname, mapset)
-            maplist.append(mapid)
+                mapname = line.strip()
+                mapid = dummy.build_id(mapname, mapset)
+                maplist.append(mapid)
 
     num_maps = len(maplist)
     update_dict = {}
