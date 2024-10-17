@@ -450,7 +450,8 @@ void os(const double tamoy, const double trmoy, const double pizmoy,
                 iplane = i;
         }
         if (iplane == -1) {
-            G_fatal_error(_("Position of the plane layer could not be determined"));
+            G_fatal_error(
+                _("Position of the plane layer could not be determined"));
         }
 
         /* update the layer from the end to the position to update if necessary
@@ -1015,7 +1016,8 @@ void iso(const double tamoy, const double trmoy, const double pizmoy,
                 iplane = i;
         }
         if (iplane == -1) {
-            G_fatal_error(_("Position of the plane layer could not be determined"));
+            G_fatal_error(
+                _("Position of the plane layer could not be determined"));
         }
 
         /* update the layer from the end to the position to update if necessary
