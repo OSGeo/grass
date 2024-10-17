@@ -157,9 +157,9 @@ def tidy_lines(lines):
     """
     # pylint: disable=invalid-name
     for i in reversed(range(len(lines))):
-        if lines[i].startswith("#"):
-            del lines[i]
-        elif i > 0 and lines[i].strip() == lines[i - 1].strip() == "":
+        if lines[i].startswith("#") or (
+            i > 0 and lines[i].strip() == lines[i - 1].strip() == ""
+        ):
             del lines[i]
         else:
             commented = False
