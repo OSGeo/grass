@@ -9,7 +9,7 @@ related (boxes, etc).
 <p>Upon initialization of the program, two graphics windows are
 opened, one for the color table and the other for data display. The
 display window initially contains a red bounding box. Command options
-are then printed to the terminal and user is prompted for drawing 
+are then printed to the terminal and user is prompted for drawing
 instructions:
 
 <p><pre>
@@ -22,17 +22,17 @@ THE INTERACTIVE OPTIONS ARE:
  USAGE AND MEANING:
 
  <b>?</b>         lists available thresholds
- <b>l index# [index#...]</b>  add threshold to display list 
+ <b>l index# [index#...]</b>  add threshold to display list
  <b>L</b>         draw current display list
  <b>t index#</b>  reset so only this threshold is displayed
- <b>T index# index#</b>   show thresholds between hi &amp; lo 
+ <b>T index# index#</b>   show thresholds between hi &amp; lo
  <b>I</b>         toggle thresholds INSIDE hi/lo or OUTSIDE hi/lo
  <b>+(+++)</b>    display thresholds with consecutively increasing index#
  <b>-(---)</b>    display thresholds with consecutively decreasing index#
 
- <b>x int#</b>  absolute rotation around x-axis in degrees(int) 
- <b>y int#</b>  absolute rotation around y-axis in degrees(int) 
- <b>z int#</b>  absolute rotation around z-axis in degrees(int) 
+ <b>x int#</b>  absolute rotation around x-axis in degrees(int)
+ <b>y int#</b>  absolute rotation around y-axis in degrees(int)
+ <b>z int#</b>  absolute rotation around z-axis in degrees(int)
  <b>r</b>       rotate_model
  <b>X int#</b>  scale model in x
  <b>Y int#</b>  scale model in y
@@ -69,7 +69,7 @@ THE INTERACTIVE OPTIONS ARE:
 <h3>Hints:</h3>
 <ul>
 <li>To navigate around the data, use the <em>r</em> command, then place
-the mouse pointer in the graphics window and drag with the left mouse 
+the mouse pointer in the graphics window and drag with the left mouse
 to rotate the bounding box.  To zoom in and out, drag right or left
 with the middle mouse. When satisfied with the new viewing
 position, click with the right mouse.
@@ -77,12 +77,12 @@ position, click with the right mouse.
 <li>To quickly view a series of isosurfaces, enter a series of <em>+</em> or <em>-</em>
 characters, i.e. <em>+++++++</em>
 
-<li>Scripts using above commands on separate lines may be 
-directed to <em>r3.showdspf</em> as standard input. 
+<li>Scripts using above commands on separate lines may be
+directed to <em>r3.showdspf</em> as standard input.
 Use the <em>#</em> sign as the first character on a line to indicate a comment.
 </ul>
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
 After generating a "dspf" control file with <em>r3.mkdspf</em> start
 <em>r3.showdspf</em>. Display/add the layers using <em>+</em>.
@@ -90,7 +90,7 @@ After generating a "dspf" control file with <em>r3.mkdspf</em> start
 <p>List available thresholds with <em>?</em>. Use <em>l</em> to select isosurfaces (available
 number can be adjusted with <em>r3.mkdspf</em>) and <em>L</em> to display:
 <br>
-<tt>l 1 2 3 4 5<br> L </tt> 
+<tt>l 1 2 3 4 5<br> L </tt>
 
 <p>To select and display a single threshold (here: 2), use:<br>
 <tt>t 2</tt>
@@ -134,18 +134,14 @@ p6<br>
 Bx15<br>
 p6<br>
 Bx20<br>
-p6</tt> 
+p6</tt>
 
 <p>The <em>p</em> is needed for the fence diagram, solids and boxes.
 
 <h2>SEE ALSO</h2>
-<em><a href="r3.mkdspf.html">r3.mkdspf</a></em>
-<h2>AUTHORS</h2>
-<signature>Bill Brown,
-<a href="mailto:brown@gis.uiuc.edu">brown@gis.uiuc.edu</a>
-</signature>
 
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+<em><a href="r3.mkdspf.html">r3.mkdspf</a></em>
+
+<h2>AUTHOR</h2>
+
+Bill Brown, <a href="mailto:brown@gis.uiuc.edu">brown@gis.uiuc.edu</a>

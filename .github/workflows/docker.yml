@@ -1,0 +1,87 @@
+---
+name: Docker
+
+# This workflow builds and pushes docker images to dockerhub
+#
+# Summary
+#
+# job docker-os-matrix:
+# * creates tags <version>-alpine, <version>-debian and <version>-ubuntu for each release
+# * creates tags <branch_name>-alpine, <branch_name>-debian and <branch_name>-ubuntu for all triggered branches
+# * creates tags current-alpine, current-debian and current-ubuntu for releasebranch_8_3
+# * creates tag latest for last stable release with ubuntu os
+
+on:
+  push:
+    branches:
+      - main
+      - releasebranch_*
+      - '!releasebranch_7_*'
+    # tags: ['*.*.*']
+    paths-ignore: [doc/**]
+  release:
+    types: [published]
+
+jobs:
+
+  # Run for push to configured branches and all published releases.
+  # Take care of different os.
+  # For main branch, created tags are:
+  #     main-alpine, main-debian, main-ubuntu
+  # For releasebranch_8_3, created tags are:
+  #     current-alpine, current-debian, current-ubuntu,
+  #     releasebranch_8_3-alpine, releasebranch_8_3-debian, releasebranch_8_3-ubuntu
+  # For a release, e.g. 8.3.0, created tags are:
+  #     8.3.0-alpine, 8.3.0-debian, 8.3.0-ubuntu and latest (with ubuntu)
+  docker-os-matrix:
+    name: build and push ${{ matrix.os }} for ${{ github.ref }}
+    if: github.repository_owner == 'OSGeo'
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        os:
+          - alpine
+          - debian
+          - ubuntu
+          - ubuntu_wxgui
+      fail-fast: false
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
+        with:
+          fetch-depth: 0
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81 # v5.5.1
+        with:
+          images: osgeo/grass-gis
+          tags: |
+            type=ref,event=tag
+            type=ref,event=branch
+            type=raw,value=current,enable=${{ github.ref == format('refs/heads/{0}', 'releasebranch_8_3') }}
+            type=raw,value=latest,enable=${{ startsWith(github.ref, 'refs/tags/8.3') && matrix.os == 'ubuntu' }},suffix=
+          flavor: |
+            latest=false
+            suffix=-${{ matrix.os }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@49b3bc8e6bdd4a60e6116a5414239cba5943d3cf # v3.2.0
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@c47758b77c9736f4b2ef4073d4d51994fabfe349 # v3.7.1
+      - name: Login to DockerHub
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN  }}
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6.9.0
+        with:
+          push: true
+          pull: true
+          context: .
+          tags: ${{ steps.meta.outputs.tags }}
+          file: docker/${{ matrix.os }}/Dockerfile
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}

@@ -1,19 +1,25 @@
-
 /****************************************************************************
  *
  * MODULE:       r.mfilter
  * AUTHOR(S):    Michael Shapiro, CERL (original contributor)
- *               Roberto Flor <flor itc.it>, Markus Neteler <neteler itc.it>
- *               Glynn Clements <glynn gclements.plus.com>, Jachym Cepicky <jachym les-ejk.cz>,
- *               Jan-Oliver Wagner <jan intevation.de>
- * PURPOSE:      
- * COPYRIGHT:    (C) 1999-2006, 2010 by the GRASS Development Team
+ *               Roberto Flor <flor itc.it>,
+ *               Markus Neteler <neteler itc.it>
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Jachym Cepicky <jachym les-ejk.cz>,
+ *               Jan-Oliver Wagner <jan intevation.de>,
+ *               Aaron Saw Min Sern
+ * PURPOSE:      Performs raster map matrix filter
+ * COPYRIGHT:    (C) 1999-2022 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
  *****************************************************************************/
+
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 
 #include <stdlib.h>
 #include <string.h>
@@ -25,7 +31,9 @@
 #include "filter.h"
 #include "glob.h"
 
+const int MASTER = 0;
 int nrows, ncols;
+int nprocs;
 int buflen;
 int direction;
 int null_only;
@@ -49,6 +57,7 @@ int main(int argc, char **argv)
     struct Option *opt3;
     struct Option *opt4;
     struct Option *opt5;
+    struct Option *opt6;
 
     G_gisinit(argv[0]);
 
@@ -57,6 +66,8 @@ int main(int argc, char **argv)
     G_add_keyword(_("algebra"));
     G_add_keyword(_("statistics"));
     G_add_keyword(_("filter"));
+    G_add_keyword(_("parallel"));
+
     module->description = _("Performs raster map matrix filter.");
 
     /* Define the different options */
@@ -78,16 +89,18 @@ int main(int argc, char **argv)
     opt4->answer = "1";
     opt4->description = _("Number of times to repeat the filter");
     opt4->guisection = _("Filter");
-    
+
     opt5 = G_define_option();
     opt5->key = "title";
     opt5->type = TYPE_STRING;
     opt5->required = NO;
     opt5->description = _("Output raster map title");
 
+    opt6 = G_define_standard_option(G_OPT_M_NPROCS);
+
     /* Define the different flags */
 
-    /* this isn't implemented at all 
+    /* this isn't implemented at all
        flag3 = G_define_flag() ;
        flag3->key         = 'p' ;
        flag3->description = _("Preserved edge") ;
@@ -99,7 +112,7 @@ int main(int argc, char **argv)
     flag2->guisection = _("Filter");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     /*
        preserve_edges = flag3->answer;
@@ -107,6 +120,22 @@ int main(int argc, char **argv)
     null_only = flag2->answer;
 
     sscanf(opt4->answer, "%d", &repeat);
+    sscanf(opt6->answer, "%d", &nprocs);
+    if (nprocs < 1) {
+        G_fatal_error(_("<%d> is not valid number of threads."), nprocs);
+    }
+#if defined(_OPENMP)
+    omp_set_num_threads(nprocs);
+#else
+    if (nprocs != 1)
+        G_warning(_("GRASS is compiled without OpenMP support. Ignoring "
+                    "threads setting."));
+    nprocs = 1;
+#endif
+    if (nprocs > 1 && Rast_mask_is_present()) {
+        G_warning(_("Parallel processing disabled due to active mask."));
+        nprocs = 1;
+    }
     out_name = opt2->answer;
     filt_name = opt3->answer;
 
@@ -121,18 +150,17 @@ int main(int argc, char **argv)
 
     /* make sure filter matrix won't extend outside the raster map */
     for (i = 0; i < nfilters; i++) {
-	if (filter[i].size > ncols || filter[i].size > nrows)
-	    G_fatal_error(_("Raster map too small for the size of the filter"));
+        if (filter[i].size > ncols || filter[i].size > nrows)
+            G_fatal_error(_("Raster map too small for the size of the filter"));
     }
-
 
     /* make a title for result */
     if (opt5->answer)
-	strcpy(title, opt5->answer);
+        strcpy(title, opt5->answer);
     else {
-	if (*temp == 0)
-	    strcpy(temp, "unknown filter");
-	sprintf(title, "%s filtered using %s", in_name, temp);
+        if (*temp == 0)
+            strcpy(temp, "unknown filter");
+        sprintf(title, "%s filtered using %s", in_name, temp);
     }
 
     perform_filter(in_name, out_name, filter, nfilters, repeat);

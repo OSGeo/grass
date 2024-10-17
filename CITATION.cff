@@ -1,0 +1,121 @@
+cff-version: 1.2.0
+title: GRASS GIS
+message: If you use this software, please cite it using the metadata from this file.
+version: 8.4.0
+abstract: GRASS GIS (Geographic Resources Analysis Support System) is a free and open source Geographic Information System (GIS) software used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization.
+type: software
+authors:
+  - family-names: GRASS Development Team
+    email: grass-dev@lists.osgeo.org
+    affiliation: Open Source Geospatial Foundation (OSGeo)
+  - given-names: Martin
+    family-names: Landa
+    affiliation: Czech Technical University in Prague
+    orcid: https://orcid.org/0000-0001-6869-3542
+  - given-names: Markus
+    family-names: Neteler
+    affiliation: mundialis GmbH & Co. KG
+    orcid: https://orcid.org/0000-0003-1916-1966
+  - given-names: Markus
+    family-names: Metz
+    email: metz@mundialis.de
+    affiliation: mundialis GmbH & Co. KG
+    orcid: https://orcid.org/0000-0002-4038-8754
+  - given-names: Anna
+    family-names: Petrášová
+    affiliation: North Carolina State University
+    orcid: https://orcid.org/0000-0002-5120-5538
+  - given-names: Vaclav
+    family-names: Petráš
+    affiliation: North Carolina State University
+    orcid: https://orcid.org/0000-0001-5566-9236
+  - given-names: Glynn
+    family-names: Clements
+    email: glynn@gclements.plus.com
+  - given-names: Tomáš
+    family-names: Zigo
+    email: tomas.zigo@slovanet.sk
+  - given-names: Nicklas
+    family-names: Larsson
+    email: n_larsson@yahoo.com
+  - given-names: Linda
+    family-names: Kladivová
+    email: L.Kladivova@seznam.cz
+  - given-names: Caitlin
+    family-names: Haedrich
+    email: caitlin.haedrich@gmail.com
+    affiliation: North Carolina State University
+    orcid: https://orcid.org/0000-0003-4373-5691
+  - given-names: Stefan
+    family-names: Blumentrath
+    email: stefan.blumentrath@gmx.de
+    orcid: https://orcid.org/0000-0001-6675-1331
+  - given-names: Veronica
+    family-names: Andreo
+    email: veroandreo@gmail.com
+    orcid: https://orcid.org/0000-0002-4633-2161
+  - given-names: Huidae
+    family-names: Cho
+    email: grass4u@gmail.com
+    orcid: https://orcid.org/0000-0003-1878-1274
+  - given-names: Sören
+    family-names: Gebbert
+    email: soerengebbert@gmail.com
+  - given-names: Māris
+    family-names: Nartišs
+    email: maris.gis@gmail.com
+    orcid: https://orcid.org/0000-0002-3875-740X
+  - given-names: Helmut
+    family-names: Kudrnovsky
+    email: hellik@web.de
+    orcid: https://orcid.org/0000-0001-6622-7169
+  - given-names: Luca
+    family-names: Delucchi
+    affiliation: Fondazione Edmund Mach
+    email: lucadeluge@gmail.com
+    orcid: https://orcid.org/0000-0002-0493-3516
+  - given-names: Pietro
+    family-names: Zambelli
+    email: peter.zamb@gmail.com
+    orcid: https://orcid.org/0000-0002-6187-3572
+  - given-names: Moritz
+    family-names: Lennert
+    email: mlennert@club.worldonline.be
+    orcid: https://orcid.org/0000-0002-2870-4515
+  - given-names: Helena
+    family-names: Mitášová
+    affiliation: North Carolina State University
+    orcid: https://orcid.org/0000-0002-6906-3398
+  - given-names: Yann
+    family-names: Chemin
+    email: dr.yann.chemin@gmail.com
+    orcid: https://orcid.org/0000-0001-9232-5512
+  - given-names: Ondřej
+    family-names: Pešek
+    email: pesej.ondrek@gmail.com
+    orcid: https://orcid.org/0000-0002-2363-8002
+  - given-names: Michael
+    family-names: Barton
+    email: michael.barton@asu.edu
+    orcid: https://orcid.org/0000-0003-2561-1927
+  - given-names: Carmen
+    family-names: Tawalika
+    email: tawalika@mundialis.de
+  - given-names: Denis
+    family-names: Ovsienko
+    email: denis@ovsienko.info
+  - given-names: Hamish
+    family-names: Bowman
+    email: hamish_b@yahoo.com
+repository-code: https://github.com/OSGeo/grass
+license: GPL-2.0-or-later
+doi: 10.5281/zenodo.4621728
+keywords:
+  - GIS
+  - geospatial
+  - spatial analysis
+  - data management
+  - visualization
+  - open source
+  - free software
+  - GNU GPL v2

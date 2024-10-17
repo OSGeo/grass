@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.grow.distance
@@ -6,10 +5,10 @@
  * AUTHOR(S):    Marjorie Larson - CERL
  *               Glynn Clements
  *
- * PURPOSE:      Generates a raster map layer with contiguous areas 
+ * PURPOSE:      Generates a raster map layer with contiguous areas
  *               grown by one cell.
  *
- * COPYRIGHT:    (C) 2006-2013 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006-2021 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -23,6 +22,7 @@
 #include <math.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <errno.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
@@ -34,11 +34,8 @@ static CELL *old_x_row, *old_y_row;
 static CELL *new_x_row, *new_y_row;
 static DCELL *dist_row;
 static DCELL *old_val_row, *new_val_row;
-static double (*distance) (double dx, double dy);
+static double (*distance)(double dx, double dy);
 static double xres, yres;
-
-#undef MAX
-#define MAX(a, b)	((a) > (b) ? (a) : (b))
 
 static double distance_euclidean_squared(double dx, double dy)
 {
@@ -47,12 +44,12 @@ static double distance_euclidean_squared(double dx, double dy)
 
 static double distance_maximum(double dx, double dy)
 {
-    return MAX(abs(dx), abs(dy));
+    return MAX(fabs(dx), fabs(dy));
 }
 
 static double distance_manhattan(double dx, double dy)
 {
-    return abs(dx) + abs(dy);
+    return fabs(dx) + fabs(dy);
 }
 
 static double geodesic_distance(int x1, int y1, int x2, int y2)
@@ -92,26 +89,25 @@ static void check(int row, int col, int dx, int dy)
     double d, v;
 
     if (dist_row[col] == 0)
-	return;
+        return;
 
     if (col + dx < 0)
-	return;
+        return;
 
     if (col + dx >= ncols)
-	return;
+        return;
 
     if (Rast_is_c_null_value(&xrow[col + dx]))
-	return;
+        return;
 
     x = xrow[col + dx] + dx;
     y = yrow[col + dx] + dy;
     v = vrow[col + dx];
-    d = distance
-	? (*distance) (xres * x, yres * y)
-	: geodesic_distance(col, row, col + x, row + y);
+    d = distance ? (*distance)(xres * x, yres * y)
+                 : geodesic_distance(col, row, col + x, row + y);
 
     if (!Rast_is_d_null_value(&dist_row[col]) && dist_row[col] < d)
-	return;
+        return;
 
     dist_row[col] = d;
     new_val_row[col] = v;
@@ -122,13 +118,11 @@ static void check(int row, int col, int dx, int dy)
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct
-    {
-	struct Option *in, *dist, *val, *met;
+    struct {
+        struct Option *in, *dist, *val, *met, *min, *max;
     } opt;
-    struct
-    {
-	struct Flag *m, *n;
+    struct {
+        struct Flag *m, *n;
     } flag;
     const char *in_name;
     const char *dist_name;
@@ -140,8 +134,9 @@ int main(int argc, char **argv)
     int row, col;
     struct Colors colors;
     struct History hist;
-    DCELL *out_row;
+    DCELL *out_row, *dist_row_max, *val_row_max;
     double scale = 1.0;
+    double mindist, maxdist;
     int invert;
 
     G_gisinit(argv[0]);
@@ -151,7 +146,8 @@ int main(int argc, char **argv)
     G_add_keyword(_("distance"));
     G_add_keyword(_("proximity"));
     module->description =
-	_("Generates a raster map containing distances to nearest raster features.");
+        _("Generates a raster map containing distances to nearest raster "
+          "features and/or the value of the nearest non-null cell.");
 
     opt.in = G_define_standard_option(G_OPT_R_INPUT);
 
@@ -175,6 +171,18 @@ int main(int argc, char **argv)
     opt.met->options = "euclidean,squared,maximum,manhattan,geodesic";
     opt.met->answer = "euclidean";
 
+    opt.min = G_define_option();
+    opt.min->key = "minimum_distance";
+    opt.min->type = TYPE_DOUBLE;
+    opt.min->required = NO;
+    opt.min->description = _("Minimum distance threshold");
+
+    opt.max = G_define_option();
+    opt.max->key = "maximum_distance";
+    opt.max->type = TYPE_DOUBLE;
+    opt.max->required = NO;
+    opt.max->description = _("Maximum distance threshold");
+
     flag.m = G_define_flag();
     flag.m->key = 'm';
     flag.m->description = _("Output distances in meters instead of map units");
@@ -184,69 +192,109 @@ int main(int argc, char **argv)
     flag.n->description = _("Calculate distance to nearest NULL cell");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     in_name = opt.in->answer;
     dist_name = opt.dist->answer;
     val_name = opt.val->answer;
 
-    if ((invert = flag.n->answer)) {
-	if (!dist_name)
-	    G_fatal_error(_("Distance output is required for distance to NULL cells"));
-	if (val_name) {
-	    G_warning(_("Value output is meaningless for distance to NULL cells"));
-	    val_name = NULL;
-	}
+    dist_row_max = val_row_max = NULL;
+    mindist = -1;
+    if (opt.min->answer) {
+        if (sscanf(opt.min->answer, "%lf", &mindist) != 1) {
+            G_warning(_("Invalid %s value '%s', ignoring."), opt.min->key,
+                      opt.min->answer);
+
+            mindist = -1;
+        }
+    }
+
+    maxdist = -1;
+    if (opt.max->answer) {
+        if (sscanf(opt.max->answer, "%lf", &maxdist) != 1) {
+            G_warning(_("Invalid %s value '%s', ignoring."), opt.max->key,
+                      opt.max->answer);
+
+            maxdist = -1;
+        }
+    }
+
+    if (mindist > 0 && maxdist > 0 && mindist >= maxdist) {
+        /* GTC error because given minimum_distance is not smaller than
+         * given maximum_distance */
+        G_fatal_error(_("'%s' must be smaller than '%s'."), opt.min->key,
+                      opt.max->key);
+    }
+
+    if (mindist > 0 || maxdist > 0) {
+        dist_row_max = Rast_allocate_d_buf();
+        val_row_max = Rast_allocate_d_buf();
+    }
+
+    invert = flag.n->answer;
+    if (mindist <= 0 && maxdist <= 0 && invert) {
+        /* value output for distance to NULL cells makes sense
+         * if mindist or maxdist is given */
+        if (!dist_name)
+            G_fatal_error(
+                _("Distance output is required for distance to NULL cells"));
+        if (val_name) {
+            G_warning(
+                _("Value output is meaningless for distance to NULL cells"));
+            val_name = NULL;
+        }
     }
 
     if (!dist_name && !val_name)
-	G_fatal_error(_("At least one of distance= and value= must be given"));
+        G_fatal_error(_("At least one of distance= and value= must be given"));
 
     G_get_window(&window);
 
     if (strcmp(opt.met->answer, "euclidean") == 0)
-	distance = &distance_euclidean_squared;
+        distance = &distance_euclidean_squared;
     else if (strcmp(opt.met->answer, "squared") == 0)
-	distance = &distance_euclidean_squared;
+        distance = &distance_euclidean_squared;
     else if (strcmp(opt.met->answer, "maximum") == 0)
-	distance = &distance_maximum;
+        distance = &distance_maximum;
     else if (strcmp(opt.met->answer, "manhattan") == 0)
-	distance = &distance_manhattan;
+        distance = &distance_manhattan;
     else if (strcmp(opt.met->answer, "geodesic") == 0) {
-	double a, e2;
-	if (window.proj != PROJECTION_LL)
-	    G_fatal_error(_("metric=geodesic is only valid for lat/lon"));
-	distance = NULL;
-	G_get_ellipsoid_parameters(&a, &e2);
-	G_begin_geodesic_distance(a, e2);
+        double a, e2;
+
+        if (window.proj != PROJECTION_LL)
+            G_fatal_error(_("metric=geodesic is only valid for lat/lon"));
+        distance = NULL;
+        G_get_ellipsoid_parameters(&a, &e2);
+        G_begin_geodesic_distance(a, e2);
     }
     else
-	G_fatal_error(_("Unknown metric: '%s'"), opt.met->answer);
+        G_fatal_error(_("Unknown metric: '%s'"), opt.met->answer);
 
     if (flag.m->answer) {
-	if (window.proj == PROJECTION_LL && 
-	    strcmp(opt.met->answer, "geodesic") != 0) {
-	    G_fatal_error(_("Output distance in meters for lat/lon is only possible with '%s=%s'"),
-	                  opt.met->key, "geodesic");
-	}
+        if (window.proj == PROJECTION_LL &&
+            strcmp(opt.met->answer, "geodesic") != 0) {
+            G_fatal_error(_("Output distance in meters for lat/lon is only "
+                            "possible with '%s=%s'"),
+                          opt.met->key, "geodesic");
+        }
 
-	scale = G_database_units_to_meters_factor();
-	if (strcmp(opt.met->answer, "squared") == 0)
-	    scale *= scale;
+        scale = G_database_units_to_meters_factor();
+        if (strcmp(opt.met->answer, "squared") == 0)
+            scale *= scale;
     }
 
     in_fd = Rast_open_old(in_name, "");
 
     if (dist_name)
-	dist_fd = Rast_open_new(dist_name, DCELL_TYPE);
+        dist_fd = Rast_open_new(dist_name, DCELL_TYPE);
 
     if (val_name)
-	val_fd = Rast_open_new(val_name, DCELL_TYPE);
+        val_fd = Rast_open_new(val_name, DCELL_TYPE);
 
     temp_name = G_tempfile();
     temp_fd = open(temp_name, O_RDWR | O_CREAT | O_EXCL, 0700);
     if (temp_fd < 0)
-	G_fatal_error(_("Unable to create temporary file <%s>"), temp_name);
+        G_fatal_error(_("Unable to create temporary file <%s>"), temp_name);
 
     nrows = window.rows;
     ncols = window.cols;
@@ -265,54 +313,63 @@ int main(int argc, char **argv)
 
     dist_row = Rast_allocate_d_buf();
 
-    if (dist_name && strcmp(opt.met->answer, "euclidean") == 0)
-	out_row = Rast_allocate_d_buf();
+    if ((mindist > 0 || maxdist > 0 || dist_name) &&
+        strcmp(opt.met->answer, "euclidean") == 0)
+        out_row = Rast_allocate_d_buf();
     else
-	out_row = dist_row;
+        out_row = dist_row;
 
     Rast_set_c_null_value(old_x_row, ncols);
     Rast_set_c_null_value(old_y_row, ncols);
 
     G_message(_("Reading raster map <%s>..."), opt.in->answer);
     for (row = 0; row < nrows; row++) {
-	int irow = nrows - 1 - row;
+        int irow = nrows - 1 - row;
 
-	G_percent(row, nrows, 2);
+        G_percent(row, nrows, 2);
 
-	Rast_set_c_null_value(new_x_row, ncols);
-	Rast_set_c_null_value(new_y_row, ncols);
+        Rast_set_c_null_value(new_x_row, ncols);
+        Rast_set_c_null_value(new_y_row, ncols);
 
-	Rast_set_d_null_value(dist_row, ncols);
+        Rast_set_d_null_value(dist_row, ncols);
 
-	Rast_get_d_row(in_fd, in_row, irow);
+        Rast_get_d_row(in_fd, in_row, irow);
 
-	for (col = 0; col < ncols; col++) {
-	    if (Rast_is_d_null_value(&in_row[col]) == invert) {
-		new_x_row[col] = 0;
-		new_y_row[col] = 0;
-		dist_row[col] = 0;
-		new_val_row[col] = in_row[col];
-	    }
-	}
+        for (col = 0; col < ncols; col++) {
+            if (Rast_is_d_null_value(&in_row[col]) == invert) {
+                new_x_row[col] = 0;
+                new_y_row[col] = 0;
+                dist_row[col] = 0;
+                new_val_row[col] = in_row[col];
+            }
+        }
 
-	for (col = 0; col < ncols; col++)
-	    check(irow, col, -1, 0);
+        for (col = 0; col < ncols; col++)
+            check(irow, col, -1, 0);
 
-	for (col = ncols - 1; col >= 0; col--)
-	    check(irow, col, 1, 0);
+        for (col = ncols - 1; col >= 0; col--)
+            check(irow, col, 1, 0);
 
-	for (col = 0; col < ncols; col++) {
-	    check(irow, col, -1, 1);
-	    check(irow, col, 0, 1);
-	    check(irow, col, 1, 1);
-	}
+        for (col = 0; col < ncols; col++) {
+            check(irow, col, -1, 1);
+            check(irow, col, 0, 1);
+            check(irow, col, 1, 1);
+        }
 
-	write(temp_fd, new_x_row, ncols * sizeof(CELL));
-	write(temp_fd, new_y_row, ncols * sizeof(CELL));
-	write(temp_fd, dist_row, ncols * sizeof(DCELL));
-	write(temp_fd, new_val_row, ncols * sizeof(DCELL));
+        if (write(temp_fd, new_x_row, ncols * sizeof(CELL)) < 0)
+            G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
+        if (write(temp_fd, new_y_row, ncols * sizeof(CELL)) < 0)
+            G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
+        if (write(temp_fd, dist_row, ncols * sizeof(DCELL)) < 0)
+            G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
+        if (write(temp_fd, new_val_row, ncols * sizeof(DCELL)) < 0)
+            G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
 
-	swap_rows();
+        swap_rows();
     }
 
     G_percent(row, nrows, 2);
@@ -324,47 +381,89 @@ int main(int argc, char **argv)
 
     G_message(_("Writing output raster maps..."));
     for (row = 0; row < nrows; row++) {
-	int irow = nrows - 1 - row;
-	off_t offset =
-	    (off_t) irow * ncols * (2 * sizeof(CELL) + 2 * sizeof(DCELL));
+        int irow = nrows - 1 - row;
+        off_t offset =
+            (off_t)irow * ncols * (2 * sizeof(CELL) + 2 * sizeof(DCELL));
 
-	G_percent(row, nrows, 2);
+        G_percent(row, nrows, 2);
 
-	lseek(temp_fd, offset, SEEK_SET);
+        lseek(temp_fd, offset, SEEK_SET);
 
-	read(temp_fd, new_x_row, ncols * sizeof(CELL));
-	read(temp_fd, new_y_row, ncols * sizeof(CELL));
-	read(temp_fd, dist_row, ncols * sizeof(DCELL));
-	read(temp_fd, new_val_row, ncols * sizeof(DCELL));
+        if (read(temp_fd, new_x_row, ncols * sizeof(CELL)) < 0)
+            G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
+        if (read(temp_fd, new_y_row, ncols * sizeof(CELL)) < 0)
+            G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
+        if (read(temp_fd, dist_row, ncols * sizeof(DCELL)) < 0)
+            G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
+        if (read(temp_fd, new_val_row, ncols * sizeof(DCELL)) < 0)
+            G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
 
-	for (col = 0; col < ncols; col++) {
-	    check(row, col, -1, -1);
-	    check(row, col, 0, -1);
-	    check(row, col, 1, -1);
-	}
+        for (col = 0; col < ncols; col++) {
+            check(row, col, -1, -1);
+            check(row, col, 0, -1);
+            check(row, col, 1, -1);
+        }
 
-	for (col = 0; col < ncols; col++)
-	    check(row, col, -1, 0);
+        for (col = 0; col < ncols; col++)
+            check(row, col, -1, 0);
 
-	for (col = ncols - 1; col >= 0; col--)
-	    check(row, col, 1, 0);
+        for (col = ncols - 1; col >= 0; col--)
+            check(row, col, 1, 0);
 
-	if (dist_name) {
-	    if (out_row != dist_row)
-		for (col = 0; col < ncols; col++)
-		    out_row[col] = sqrt(dist_row[col]);
+        if (mindist > 0 || maxdist > 0) {
+            /* do not modify dist_row or new_val_row,
+             * thus copy */
+            if (out_row != dist_row) {
+                for (col = 0; col < ncols; col++) {
+                    dist_row_max[col] = sqrt(dist_row[col]);
+                }
+            }
+            else {
+                for (col = 0; col < ncols; col++) {
+                    dist_row_max[col] = dist_row[col];
+                }
+            }
+            for (col = 0; col < ncols; col++) {
+                if (scale != 1.0)
+                    dist_row_max[col] *= scale;
 
-	    if (scale != 1.0)
-		for (col = 0; col < ncols; col++)
-		    out_row[col] *= scale;
+                val_row_max[col] = new_val_row[col];
 
-	    Rast_put_d_row(dist_fd, out_row);
-	}
+                if (mindist > 0 && dist_row_max[col] < mindist) {
+                    Rast_set_d_null_value(&dist_row_max[col], 1);
+                    Rast_set_d_null_value(&val_row_max[col], 1);
+                }
+                if (maxdist > 0 && dist_row_max[col] > maxdist) {
+                    Rast_set_d_null_value(&dist_row_max[col], 1);
+                    Rast_set_d_null_value(&val_row_max[col], 1);
+                }
+            }
+            if (dist_name)
+                Rast_put_d_row(dist_fd, dist_row_max);
+            if (val_name)
+                Rast_put_d_row(val_fd, val_row_max);
+        }
+        else {
+            if (dist_name) {
+                if (out_row != dist_row)
+                    for (col = 0; col < ncols; col++)
+                        out_row[col] = sqrt(dist_row[col]);
 
-	if (val_name)
-	    Rast_put_d_row(val_fd, new_val_row);
+                if (scale != 1.0)
+                    for (col = 0; col < ncols; col++)
+                        out_row[col] *= scale;
 
-	swap_rows();
+                Rast_put_d_row(dist_fd, out_row);
+            }
+            if (val_name)
+                Rast_put_d_row(val_fd, new_val_row);
+        }
+
+        swap_rows();
     }
 
     G_percent(row, nrows, 2);
@@ -373,28 +472,30 @@ int main(int argc, char **argv)
     remove(temp_name);
 
     if (dist_name)
-	Rast_close(dist_fd);
+        Rast_close(dist_fd);
     if (val_name)
-	Rast_close(val_fd);
+        Rast_close(val_fd);
 
     if (val_name) {
-	if (Rast_read_colors(in_name, "", &colors) < 0)
-	    G_fatal_error(_("Unable to read color table for raster map <%s>"), in_name);
-	Rast_write_colors(val_name, G_mapset(), &colors);
+        if (Rast_read_colors(in_name, "", &colors) < 0)
+            G_fatal_error(_("Unable to read color table for raster map <%s>"),
+                          in_name);
+        Rast_write_colors(val_name, G_mapset(), &colors);
 
-	Rast_short_history(val_name, "raster", &hist);
-	Rast_set_history(&hist, HIST_DATSRC_1, in_name);
-	Rast_append_format_history(&hist, "value of nearest feature");
-	Rast_command_history(&hist);
-	Rast_write_history(val_name, &hist);
+        Rast_short_history(val_name, "raster", &hist);
+        Rast_set_history(&hist, HIST_DATSRC_1, in_name);
+        Rast_append_format_history(&hist, "value of nearest feature");
+        Rast_command_history(&hist);
+        Rast_write_history(val_name, &hist);
     }
 
     if (dist_name) {
-	Rast_short_history(dist_name, "raster", &hist);
-	Rast_set_history(&hist, HIST_DATSRC_1, in_name);
-	Rast_append_format_history(&hist, "%s distance to nearest feature", opt.met->answer);
-	Rast_command_history(&hist);
-	Rast_write_history(dist_name, &hist);
+        Rast_short_history(dist_name, "raster", &hist);
+        Rast_set_history(&hist, HIST_DATSRC_1, in_name);
+        Rast_append_format_history(&hist, "%s distance to nearest feature",
+                                   opt.met->answer);
+        Rast_command_history(&hist);
+        Rast_write_history(dist_name, &hist);
     }
 
     return EXIT_SUCCESS;

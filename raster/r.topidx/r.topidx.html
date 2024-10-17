@@ -1,24 +1,35 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.topidx</em> creates topographic index (wetness index), ln(a/tan(beta)), map from
-elevation map
-<p>where
+<em>r.topidx</em> creates topographic index (wetness index), ln(a/tan(beta)),
+map from elevation map where
 <dl>
-<dd>a: the area of the hillslope per unit contour length that drains through any point,
-<p><dd>tan(beta): the local surface topographic slope (delta vertical) / (delta horizontal).
+<dt>a</dt>
+  <dd>the area of the hillslope per unit contour length that drains through any
+      point,</dd>
+<dt>tan(beta)</dt>
+  <dd>the local surface topographic slope (delta vertical) / (delta
+      horizontal).</dd>
 </dl>
-<p>Input maps may have NULL values.  For example, if you have a MASK for
-a watershed (basin map from <em>r.water.outlet</em>), the
-following command will create a masked elevation map (belev):
+<p>Input maps may have NULL values. For example, if you have a raster mask set
+for a watershed (using basin map from <em>r.water.outlet</em>), the following
+command will create a masked elevation map (belev):
+
 <div class="code"><pre>
 r.mapcalc "belev = if(isnull(basin), basin, elev)"
 </pre></div>
+
 <p>
 <em>r.stats -Anc</em> prints out averaged statistics for topographic index.
 
+<p>Lat/long projects are not supported. If data is not projected,
+please create a new project with a projected coordinate reference
+system and reproject the data there. Please run
+<em>r.topidx</em> from that project.
+
 <h2>EXAMPLE</h2>
 
-Running the command below will generate the topographic index map shown in the figure:
+Running the command below will generate the topographic index map shown in the
+figure:
 
 <div class="code"><pre>
 g.region raster=elevation -p
@@ -31,15 +42,6 @@ r.topidx input=elevation output=topidx_elevation
 <i>Figure: topographic index map derived from elevation map</i>
 </div>
 
-<h2>SEE ALSO</h2>
-<em>
-<a href="r.topmodel.html">r.topmodel</a>,
-<a href="r.water.outlet.html">r.water.outlet</a>,
-<a href="r.mapcalc.html">r.mapcalc</a>
-</em>
-<br>
-<a href="http://idea.isnew.info/r.topidx.html">Known issues</a>
-
 <h2>REFERENCES</h2>
 
 Cho, H., 2000. GIS Hydrological Modeling System by Using Programming Interface
@@ -50,14 +52,19 @@ Moore, I.D., R.B. Grayson, and A.R. Ladson, 1991. Digital Terrain Modeling: A
 Review of Hydrological, Geomorphological, and Biological Applications.
 Hydrological Processes 5:3-30.
 
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.topmodel.html">r.topmodel</a>,
+<a href="r.water.outlet.html">r.water.outlet</a>,
+<a href="r.mapcalc.html">r.mapcalc</a>
+</em>
+<br>
+<a href="http://idea.isnew.info/r.topidx.html">Known issues</a>
+
 <h2>AUTHORS</h2>
 
 <a href="mailto:grass4u@gmail com">Huidae Cho</a><br>
 Hydro Laboratory, Kyungpook National University, South Korea
 <p>
 Based on GRIDATB.FOR by Keith Beven.
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

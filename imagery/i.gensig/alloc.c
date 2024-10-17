@@ -18,25 +18,25 @@ double **matrix(int nrl, int nrh, int ncl, int nch)
     m -= nrl;
 
     for (i = nrl; i <= nrh; i++) {
-	m[i] = (double *)G_malloc((unsigned)(nch - ncl + 1) * sizeof(double));
-	m[i] -= ncl;
+        m[i] = (double *)G_malloc((unsigned)(nch - ncl + 1) * sizeof(double));
+        m[i] -= ncl;
     }
     return m;
 }
 
-int free_vector(double *v, int nl, int nh)
+int free_vector(double *v, int nl, int nh UNUSED)
 {
     G_free((char *)(v + nl));
 
     return 0;
 }
 
-int free_matrix(double **m, int nrl, int nrh, int ncl, int nch)
+int free_matrix(double **m, int nrl, int nrh, int ncl, int nch UNUSED)
 {
     int i;
 
     for (i = nrh; i >= nrl; i--)
-	G_free((char *)(m[i] + ncl));
+        G_free((char *)(m[i] + ncl));
     G_free((char *)(m + nrl));
 
     return 0;

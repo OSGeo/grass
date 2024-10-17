@@ -1,0 +1,159 @@
+{
+    "Landsat5": {
+        "description": "The Landsat 5 bands",
+        "shortcut": "L5",
+        "instruments": "Thematic Mapper (TM) optical and infrared",
+        "launched": "March 1, 1984",
+        "source": "https://www.usgs.gov/land-resources/nli/landsat/landsat-5",
+        "bands": {
+            "1": {
+                "wavelength (µm)": "0.45-0.52",
+                "spatial resolution (meters)": 30,
+                "tag": "Visible (Blue)"
+            },
+            "2": {
+                "wavelength (µm)": "0.52-0.60",
+                "spatial resolution (meters)": 30,
+                "tag": "Visible (Green)"
+            },
+            "3": {
+                "wavelength (µm)": "0.63-0.69",
+                "spatial resolution (meters)": 30,
+                "tag": "Visible (Red)"
+            },
+            "4": {
+                "wavelength (µm)": "0.76-0.90",
+                "spatial resolution (meters)": 30,
+                "tag": "Near-Infrared"
+            },
+            "5": {
+                "wavelength (µm)": "1.55-1.75",
+                "spatial resolution (meters)": 30,
+                "tag": "Short-wave infrared"
+            },
+            "6": {
+                "wavelength (µm)": "10.40-12.50",
+                "spatial resolution (meters)": 60,
+                "tag": "Thermal"
+            },
+            "7": {
+                "wavelength (µm)": "2.08-2.35",
+                "spatial resolution (meters)": 30,
+                "tag": "Short-wave infrared"
+            }
+        }
+    },
+    "Landsat7": {
+        "description": "The Landsat 7 bands",
+        "shortcut": "L7",
+        "instruments": "Enhanced Thematic Mapper (ETM+) optical and infrared",
+        "launched": "April 15, 1999",
+        "source": "https://www.usgs.gov/land-resources/nli/landsat/landsat-7",
+        "bands": {
+            "1": {
+                "wavelength (µm)": "0.45-0.52",
+                "spatial resolution (meters)": 30,
+                "tag": "Visible (Blue)"
+            },
+            "2": {
+                "wavelength (µm)": "0.52-0.60",
+                "spatial resolution (meters)": 30,
+                "tag": "Visible (Green)"
+            },
+            "3": {
+                "wavelength (µm)": "0.63-0.69",
+                "spatial resolution (meters)": 30,
+                "tag": "Visible (Red)"
+            },
+            "4": {
+                "wavelength (µm)": "0.77-0.90",
+                "spatial resolution (meters)": 30,
+                "tag": "Near-Infrared"
+            },
+            "5": {
+                "wavelength (µm)": "1.55-1.75",
+                "spatial resolution (meters)": 30,
+                "tag": "Near-Infrared"
+            },
+            "6": {
+                "wavelength (µm)": "10.40-12.50",
+                "spatial resolution (meters)": 60,
+                "tag": "Thermal"
+            },
+            "7": {
+                "wavelength (µm)": "2.09-2.35",
+                "spatial resolution (meters)": 30,
+                "tag": "Mid-Infrared"
+            },
+            "8": {
+                "wavelength (µm)": "52-90",
+                "spatial resolution (meters)": 15,
+                "tag": "Panchromatic"
+            }
+        }
+    },
+    "Landsat8": {
+        "description": "The Landsat 8 bands",
+        "shortcut": "L8",
+        "instruments": "Operational Land Imager (OLI) and the Thermal Infrared Sensor (TIRS)",
+        "launched": "February 11, 2013",
+        "source": "https://www.usgs.gov/land-resources/nli/landsat/landsat-8",
+        "bands": {
+            "1": {
+                "wavelength (µm)": "0.43-0.45",
+                "spatial resolution (meters)": 30,
+                "tag": "Visible (Coastal/Aerosol)"
+            },
+            "2": {
+                "wavelength (µm)": "0.45-0.51",
+                "spatial resolution (meters)": 30,
+                "tag": "Visible (Blue)"
+            },
+            "3": {
+                "wavelength (µm)": "0.53-0.59",
+                "spatial resolution (meters)": 30,
+                "tag": "Visible (Green)"
+            },
+            "4": {
+                "wavelength (µm)": "0.64-0.67",
+                "spatial resolution (meters)": 30,
+                "tag": "Visible (Red)"
+            },
+            "5": {
+                "wavelength (µm)": "0.85-0.88",
+                "spatial resolution (meters)": 30,
+                "tag": "Near-Infrared"
+            },
+            "6": {
+                "wavelength (µm)": "1.57-1.65",
+                "spatial resolution (meters)": 30,
+                "tag": "SWIR 1"
+            },
+            "7": {
+                "wavelength (µm)": "2.11-2.29",
+                "spatial resolution (meters)": 30,
+                "tag": "SWIR 2"
+            },
+            "8": {
+                "wavelength (µm)": "0.50-0.68",
+                "spatial resolution (meters)": 15,
+                "tag": "Panchromatic"
+            },
+            "9": {
+                "wavelength (µm)": "1.36-1.38",
+                "spatial resolution (meters)": 30,
+                "tag": "Cirrus"
+            },
+            "10": {
+                "wavelength (µm)": "10.6-11.19",
+                "spatial resolution (meters)": 100,
+                "tag": "TIRS 1"
+            },
+            "11": {
+                "wavelength (µm)": "11.5-12.51",
+                "spatial resolution (meters)": 100,
+                "tag": "TIRS 1"
+            }
+        }
+    }
+}

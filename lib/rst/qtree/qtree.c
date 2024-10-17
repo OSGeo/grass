@@ -29,20 +29,18 @@
 #include <grass/qtree.h>
 
 /*! Initializes multfunc structure with given arguments */
-struct multfunc
-    *MT_functions_new(int (*compare) (struct triple *, struct quaddata *),
-		      struct quaddata **(*divide_data) (struct quaddata *,
-							int, double),
-		      int (*add_data) (struct triple *, struct quaddata *,
-				       double),
-		      int (*intersect) (struct quaddata *, struct quaddata *),
-		      int (*division_check) (struct quaddata *, int),
-		      int (*get_points) (struct quaddata *, struct quaddata *,
-					 int))
+struct multfunc *MT_functions_new(
+    int (*compare)(struct triple *, struct quaddata *),
+    struct quaddata **(*divide_data)(struct quaddata *, int, double),
+    int (*add_data)(struct triple *, struct quaddata *, double),
+    int (*intersect)(struct quaddata *, struct quaddata *),
+    int (*division_check)(struct quaddata *, int),
+    int (*get_points)(struct quaddata *, struct quaddata *, int))
 {
     struct multfunc *functions;
+
     if (!(functions = (struct multfunc *)malloc(sizeof(struct multfunc)))) {
-	return NULL;
+        return NULL;
     }
     functions->compare = compare;
     functions->divide_data = divide_data;
@@ -55,12 +53,13 @@ struct multfunc
 
 /*! Initializes tree_info using given arguments */
 struct tree_info *MT_tree_info_new(struct multtree *root,
-				   struct multfunc *functions, double dmin,
-				   int kmax)
+                                   struct multfunc *functions, double dmin,
+                                   int kmax)
 {
     struct tree_info *info;
+
     if (!(info = (struct tree_info *)malloc(sizeof(struct tree_info)))) {
-	return NULL;
+        return NULL;
     }
     info->root = root;
     info->functions = functions;
@@ -70,13 +69,13 @@ struct tree_info *MT_tree_info_new(struct multtree *root,
 }
 
 /** Initializes multtree using given arguments */
-struct multtree *MT_tree_new(struct quaddata *data,
-			     struct multtree **leafs, struct multtree *parent,
-			     int multant)
+struct multtree *MT_tree_new(struct quaddata *data, struct multtree **leafs,
+                             struct multtree *parent, int multant)
 {
     struct multtree *tree;
+
     if (!(tree = (struct multtree *)malloc(sizeof(struct multtree)))) {
-	return NULL;
+        return NULL;
     }
     tree->data = data;
     tree->leafs = leafs;
@@ -84,7 +83,6 @@ struct multtree *MT_tree_new(struct quaddata *data,
     tree->multant = multant;
     return tree;
 }
-
 
 /*!
  * First checks for dividing cond. (if n_points>=KMAX) and tree
@@ -102,56 +100,54 @@ struct multtree *MT_tree_new(struct quaddata *data,
  * MT_insert() to insert the point into divided tree and returns the
  * result of MT_divide().
  */
-int MT_insert(struct triple *point,
-	      struct tree_info *info, struct multtree *tree, int n_leafs)
+int MT_insert(struct triple *point, struct tree_info *info,
+              struct multtree *tree, int n_leafs)
 {
     int j = 0, i, k, comp;
 
     if (tree == NULL) {
-	fprintf(stderr, "insert: tree is NULL\n");
-	return -5;
+        fprintf(stderr, "insert: tree is NULL\n");
+        return -5;
     }
     if (tree->data == NULL) {
-	fprintf(stderr, "insert: tree->data is NULL\n");
-	return -5;
+        fprintf(stderr, "insert: tree->data is NULL\n");
+        return -5;
     }
     i = info->functions->division_check(tree->data, info->kmax);
     if (i <= 0) {
-	if (i == -1) {
-	    comp = info->functions->compare(point, tree->data);
-	    if ((comp < 1) || (comp > n_leafs))
-		return -3;
-	    j = MT_insert(point, info, tree->leafs[comp - 1], n_leafs);
-	}
-	else {
-	    if (i == 0) {
-		j = info->functions->add_data(point, tree->data, info->dmin);
-	    }
-	}
+        if (i == -1) {
+            comp = info->functions->compare(point, tree->data);
+            if ((comp < 1) || (comp > n_leafs))
+                return -3;
+            j = MT_insert(point, info, tree->leafs[comp - 1], n_leafs);
+        }
+        else {
+            if (i == 0) {
+                j = info->functions->add_data(point, tree->data, info->dmin);
+            }
+        }
     }
     else {
-	k = MT_divide(info, tree, n_leafs);
-	if (k == 1)
-	    j = MT_insert(point, info, tree, n_leafs);
-	if (k == -3) {
-	    static int once = 0;
+        k = MT_divide(info, tree, n_leafs);
+        if (k == 1)
+            j = MT_insert(point, info, tree, n_leafs);
+        if (k == -3) {
+            static int once = 0;
 
-	    if (!once) {
-		fprintf(stderr, "Point out of range!\n");
-		once = 1;
-	    }
-	}
-	if (k < 0)
-	    return k;
-
+            if (!once) {
+                fprintf(stderr, "Point out of range!\n");
+                once = 1;
+            }
+        }
+        if (k < 0)
+            return k;
     }
     return j;
 }
 
-
 /*!
  * Divide a tree
- * 
+ *
  * Divides the tree by calling one of tree's functions (divide_data())
  * and returns the result of divide_data()
  */
@@ -164,21 +160,17 @@ int MT_divide(struct tree_info *info, struct multtree *tree, int n_leafs)
 
     datas = info->functions->divide_data(tree->data, info->kmax, info->dmin);
     if (datas == NULL) {
-	fprintf(stderr, "datas is NULL\n");
-	return -7;
+        fprintf(stderr, "datas is NULL\n");
+        return -7;
     }
     par = tree;
     leafs = (struct multtree **)malloc(sizeof(struct multtree *) * n_leafs);
     for (i = 1; i <= n_leafs; i++) {
-	leafs[i - 1] = MT_tree_new(datas[i], NULL, par, i);
+        leafs[i - 1] = MT_tree_new(datas[i], NULL, par, i);
     }
     tree->leafs = leafs;
     return 1;
 }
-
-
-
-
 
 /*!
  * Get points inside a region from a tree
@@ -193,33 +185,31 @@ int MT_divide(struct tree_info *info, struct multtree *tree, int n_leafs)
  */
 int MT_region_data(struct tree_info *info, struct multtree *tree,
                    struct quaddata *data,
-                   int MAX,  /*!< max number of points we can add (KMAX2) */
-                   int n_leafs
-                   )
+                   int MAX, /*!< max number of points we can add (KMAX2) */
+                   int n_leafs)
 {
     int n = 0, j;
 
     if (tree == NULL) {
-	fprintf(stderr, "MT_region_data: tree is NULL\n");
-	return n;
+        fprintf(stderr, "MT_region_data: tree is NULL\n");
+        return n;
     }
     if (tree->data == NULL) {
-	fprintf(stderr, "MT_region_data: data is NULL\n");
-	return n;
+        fprintf(stderr, "MT_region_data: data is NULL\n");
+        return n;
     }
     if (info->functions->intersect(data, tree->data)) {
-	if (tree->leafs != NULL) {
-	    for (j = 0; j < n_leafs; j++) {
-		if ((n =
-		     n + MT_region_data(info, tree->leafs[j], data, MAX - n,
-					n_leafs)) > MAX)
-		    return n;
-	    }
-	}
-	else {
-	    n = info->functions->get_points(data, tree->data, MAX);
-	}
-	return n;
+        if (tree->leafs != NULL) {
+            for (j = 0; j < n_leafs; j++) {
+                if ((n = n + MT_region_data(info, tree->leafs[j], data, MAX - n,
+                                            n_leafs)) > MAX)
+                    return n;
+            }
+        }
+        else {
+            n = info->functions->get_points(data, tree->data, MAX);
+        }
+        return n;
     }
     return 0;
 }

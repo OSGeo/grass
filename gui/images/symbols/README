@@ -10,7 +10,7 @@ run script in symbol group directory (e.g. ./lib/symbol/symbol/basic)
 within a GRASS session. ImageMagic should take care of compressing the
 image as much as possible.
 
-    tools/symbol_to_img.sh
+    utils/symbol_to_img.sh
 
 Image should have 30x30 px to be displayed correctly in GUI dialog. If the symbol
 has different width and height, you are supposed to correct it (for example

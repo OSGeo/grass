@@ -1,12 +1,11 @@
-# -*- coding: utf-8 -*-
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
 
-out1 = u"""East: 634243
+out1 = """East: 634243
 North: 226193
 ------------------------------------------------------------------
-Map: test_vector 
+Map: test_vector
 Mapset: ...
 Type: Area
 Sq Meters: 633834.281
@@ -24,10 +23,10 @@ Category: 4
 """
 
 
-out2 = u"""East: 634243
+out2 = """East: 634243
 North: 226193
 ------------------------------------------------------------------
-Map: test_vector 
+Map: test_vector
 Mapset: ...
 Type: Area
 Sq Meters: 633834.281
@@ -70,7 +69,7 @@ text : yyy
 number : 8.09
 """
 
-out3 = u"""East=634243
+out3 = """East=634243
 North=226193
 
 Map=test_vector
@@ -112,7 +111,7 @@ text=yyy
 number=8.09
 """
 
-out4 = u"""East=634243
+out4 = """East=634243
 North=226193
 
 Map=test_vector
@@ -139,7 +138,7 @@ text=Petrášová
 number=6
 """
 
-out5 = u"""East=634243
+out5 = """East=634243
 North=226193
 
 Map=test_vector
@@ -157,52 +156,63 @@ Category=4
 
 
 class TestMultiLayerMap(TestCase):
-
     @classmethod
     def setUpClass(cls):
-        cls.runModule('v.in.ascii', input='./data/testing.ascii', output='test_vector',
-                      format='standard')
-        cls.runModule('db.connect', flags='c')
-        cls.runModule('db.in.ogr', input='./data/table1.csv', output='t1')
-        cls.runModule('db.in.ogr', input='./data/table2.csv', output='t2')
-        cls.runModule('v.db.connect', map='test_vector', table='t1', key='cat_', layer=1)
-        cls.runModule('v.db.connect', map='test_vector', table='t2', key='cat_', layer=2)
+        cls.runModule(
+            "v.in.ascii",
+            input="./data/testing.ascii",
+            output="test_vector",
+            format="standard",
+        )
+        cls.runModule("db.connect", flags="c")
+        cls.runModule("db.in.ogr", input="./data/table1.csv", output="t1")
+        cls.runModule("db.in.ogr", input="./data/table2.csv", output="t2")
+        cls.runModule(
+            "v.db.connect", map="test_vector", table="t1", key="cat_", layer=1
+        )
+        cls.runModule(
+            "v.db.connect", map="test_vector", table="t2", key="cat_", layer=2
+        )
 
     @classmethod
     def tearDownClass(cls):
-        cls.runModule('g.remove', type='vector', name='test_vector', flags='f')
+        cls.runModule("g.remove", type="vector", name="test_vector", flags="f")
 
     def setUp(self):
-        self.vwhat = SimpleModule('v.what', map='test_vector',
-                                  coordinates=[634243, 226193], distance=10)
+        self.vwhat = SimpleModule(
+            "v.what", map="test_vector", coordinates=[634243, 226193], distance=10
+        )
 
     def test_run(self):
         self.assertModule(self.vwhat)
         self.assertLooksLike(reference=out1, actual=self.vwhat.outputs.stdout)
 
     def test_print_options(self):
-        self.vwhat.flags['a'].value = True
+        self.vwhat.flags["a"].value = True
         self.assertModule(self.vwhat)
         self.assertLooksLike(reference=out2, actual=self.vwhat.outputs.stdout)
 
-        self.vwhat.flags['g'].value = True
+        self.vwhat.flags["g"].value = True
         self.assertModule(self.vwhat)
         self.assertLooksLike(reference=out3, actual=self.vwhat.outputs.stdout)
 
     def test_print_options_json(self):
         import json
-        self.vwhat.flags['j'].value = True
-        self.vwhat.flags['a'].value = True
+
+        self.vwhat.flags["j"].value = True
+        self.vwhat.flags["a"].value = True
         self.assertModule(self.vwhat)
         try:
             json.loads(self.vwhat.outputs.stdout)
         except ValueError:
-            self.fail(msg="No JSON object could be decoded:\n" + self.vwhat.outputs.stdout)
+            self.fail(
+                msg="No JSON object could be decoded:\n" + self.vwhat.outputs.stdout
+            )
 
     def test_selected_layers(self):
         self.vwhat.inputs.layer = -1
-        self.vwhat.flags['g'].value = True
-        self.vwhat.flags['a'].value = True
+        self.vwhat.flags["g"].value = True
+        self.vwhat.flags["a"].value = True
         self.assertModule(self.vwhat)
         self.assertLooksLike(reference=out3, actual=self.vwhat.outputs.stdout)
 
@@ -211,9 +221,10 @@ class TestMultiLayerMap(TestCase):
         self.assertLooksLike(reference=out4, actual=self.vwhat.outputs.stdout)
 
         self.vwhat.inputs.layer = 2
-        self.vwhat.flags['a'].value = False
+        self.vwhat.flags["a"].value = False
         self.assertModule(self.vwhat)
         self.assertLooksLike(reference=out5, actual=self.vwhat.outputs.stdout)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     test()

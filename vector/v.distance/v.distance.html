@@ -6,7 +6,7 @@ the vectors' relationships (distance, category, etc.) may be uploaded to
 the attribute table attached to the first vector map, or printed to
 'stdout'. A new vector map may be created where lines connecting
 nearest points on features are written. <b>dmin</b> and/or
-<b>dmax</b> can be used to limit the search radius (in lat-long locations
+<b>dmax</b> can be used to limit the search radius (in lat-long projects
 to be given in meters since they are calculated as geodesic distances on
 a sphere).
 
@@ -47,7 +47,6 @@ polygon. For example, if a vertex of the boundary of the 'to' area is
 inside the 'from' area, it is a common location. For speed reasons,
 the distance is then set to zero and no further tests are done.
 
-
 <h2>NOTES</h2>
 
 If a nearest feature does not have a category, the attribute column is
@@ -56,7 +55,7 @@ updated to NULL.
 <p>The upload <b>column</b>(s) must already exist. Create one with
 <em><a href="v.db.addcolumn.html">v.db.addcolumn</a></em>.
 
-<p>In lat-long locations <em>v.distance</em> gives distances
+<p>In lat-long projects <em>v.distance</em> gives distances
 (<em>dist</em>, <em>from_along</em>, and <em>to_along</em>) not in
 degrees but in meters calculated as geodesic distances on a sphere.
 
@@ -65,7 +64,7 @@ If one or both of the input vector maps are 3D, the user is notified
 accordingly.
 
 <p>The <em>-p</em> flag prints the results to standard output. By default the
-output is in form of a linear matrix. If only only variable is upploaded and 
+output is in form of a linear matrix. If only only variable is upploaded and
 a square matrix is desired, the user can set the <em>-s</em> flag.
 
 <h2>EXAMPLES</h2>
@@ -182,7 +181,7 @@ v.univar vdistance_vectors column=length
 
 <h3>Print distance between points</h3>
 
-Example for a Latitude-longitude location (EPSG 4326):
+Example for a Latitude-longitude project (EPSG 4326):
 <div class="code"><pre>
 # points along the equator
 echo "0|-61|1" | v.in.ascii output=pnt1 input=-
@@ -196,7 +195,7 @@ from_cat|distance
 
 <h3>Print distance matrix</h3>
 
-North Carolina sample data location
+North Carolina sample data
 
 <p>As linear matrix:
 <div class="code"><pre>
@@ -222,7 +221,6 @@ from_cat to_cat       dist
 ...
 </pre></div>
 
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -230,7 +228,6 @@ from_cat to_cat       dist
 <a href="v.db.addcolumn.html">v.db.addcolumn</a>,
 <a href="v.what.vect.html">v.what.vect</a>
 </em>
-
 
 <h2>AUTHORS</h2>
 
@@ -242,8 +239,3 @@ Improved processing speed: Markus Metz<br>
 Distance from any feature to any feature: Markus Metz<br>
 New table without the -p flag: Huidae Cho
 Make linear matrix the default for all outputs: Moritz Lennert
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

@@ -1,6 +1,6 @@
 i.segment basically works in three steps:
 
-[Note: the word "segment" has two meanings here - data segments which are like data tiles (SEGMENT library) and image objects that are the result of the segmentation algorithm. In following, an attemps is made to systematically use 'segment' for the former and 'object' for the latter.]
+[Note: the word "segment" has two meanings here - data segments which are like data tiles (SEGMENT library) and image objects that are the result of the segmentation algorithm. In following, an attempts is made to systematically use 'segment' for the former and 'object' for the latter.]
 
 1) open input files and put the data in data segments: open_files(), implemented in open_files.c
    Pre-defined boundaries can be supplied with the "bounds" option. The meaning of these boundaries is that objects will not cross these boundaries.
@@ -12,7 +12,7 @@ i.segment basically works in three steps:
 
 Variables and structures used in all functions are passed around using a structure called globals, defined in iseg.h.
 
-All module parameters and flags are defined in parse_args.c 
+All module parameters and flags are defined in parse_args.c
 
 There are two generic balanced binary search tree (Red Black Tree) implementations used in the region-growing algorithm, one for keeping track of the object pixels belong to (regtree.c/h) and the other for keeping track of the neighbors (ngbrtree.c/h). There is a also a small library of routines allowing to "flag" pixels in raster maps (flag.c/h), used to flag null cells in the input maps.
 

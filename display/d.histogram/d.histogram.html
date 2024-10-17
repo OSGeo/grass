@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 <em>d.histogram</em> displays the category-value distribution for a
-user-specified raster map layer, in the form of a bar chart or a pie chart. 
+user-specified raster map layer, in the form of a bar chart or a pie chart.
 The display will be displayed in the active display frame on the graphics
 monitor, using the colors in the raster map layer's color table.  The
 program determines the raster map's category value distribution by counting
@@ -9,8 +9,8 @@ cells.
 
 <h2>NOTES</h2>
 
-<em>d.histogram</em> respects the current geographic region settings 
-and the current MASK (if one exists). 
+<em>d.histogram</em> respects the current geographic region settings
+and the current raster mask (if mask is active).
 
 <p><em>d.histogram</em> uses the colors in the map's color look-up table
 (i.e., the map's <em>colr</em> or <em>colr2</em> file).
@@ -36,7 +36,7 @@ Running the command below will generate the pie graph shown in the figure:
 
 <div class="code"><pre>
 g.region raster=landuse96_28m -p
-d.histogram map=landuse96_28m style=pie  
+d.histogram map=landuse96_28m style=pie
 </pre></div>
 
 <div align="center" style="margin: 10px">
@@ -61,11 +61,6 @@ d.histogram map=landuse96_28m style=pie
 <h2>AUTHOR</h2>
 
 Dave Johnson
-<br> DBA Systems, Inc. 
-<br> 10560 Arrowhead Drive 
+<br> DBA Systems, Inc.
+<br> 10560 Arrowhead Drive
 <br> Fairfax, Virginia 22030
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

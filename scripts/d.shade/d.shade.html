@@ -17,17 +17,15 @@ The input for this module can be created for example using
 <a href="r.slope.aspect.html">r.slope.aspect</a> or
 <a href="r.relief.html">r.relief</a><br>.
 
-
 <h2>NOTES</h2>
 
 Refer to the <em><a href="d.his.html">d.his</a></em> help page for more details;
 <em>d.shade</em> is simply a frontend to that module.
 
-
 <h2>EXAMPLES</h2>
 
 In this example, the <tt>aspect</tt> map in the North Carolina sample
-dataset location is used to hillshade the <tt>elevation</tt> map:
+dataset is used to hillshade the <tt>elevation</tt> map:
 
 <div class="code"><pre>
 g.region raster=aspect -p
@@ -68,7 +66,6 @@ d.shade shade=elevation_shaded_relief color=elevation
 Interesting visualizations can be created using different color tables for
 elevation raster map, for example using <tt>haxby</tt> color table.
 
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -80,12 +77,6 @@ elevation raster map, for example using <tt>haxby</tt> color table.
 <a href="wxGUI.nviz.html">wxGUI 3D viewer (NVIZ)</a>
 </em>
 
-
 <h2>AUTHORS</h2>
 
 Unknown; updated to GRASS 5.7 by Michael Barton
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

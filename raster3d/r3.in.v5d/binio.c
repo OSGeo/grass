@@ -1,4 +1,3 @@
-
 /* Vis5D version 5.0 */
 
 /*
@@ -37,7 +36,6 @@
  * be done as needed.
  */
 
-
 /*
  * Updates:
  *
@@ -47,19 +45,14 @@
  *
  */
 
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #ifdef _CRAY
-#  include <string.h>
+#include <string.h>
 #include <grass/gis.h>
 #endif
 #include "binio.h"
-
-
-
 
 /**********************************************************************/
 
@@ -67,16 +60,11 @@
 
 /**********************************************************************/
 
+#define FLIP4(n)                                                              \
+    ((n & 0xff000000) >> 24 | (n & 0x00ff0000) >> 8 | (n & 0x0000ff00) << 8 | \
+     (n & 0x000000ff) << 24)
 
-#define FLIP4( n )  (  (n & 0xff000000) >> 24     \
-                     | (n & 0x00ff0000) >> 8      \
-                     | (n & 0x0000ff00) << 8      \
-                     | (n & 0x000000ff) << 24  )
-
-
-#define FLIP2( n )  (((unsigned short) (n & 0xff00)) >> 8  |  (n & 0x00ff) << 8)
-
-
+#define FLIP2(n) (((unsigned short)(n & 0xff00)) >> 8 | (n & 0x00ff) << 8)
 
 /*
  * Flip the order of the 4 bytes in an array of 4-byte words.
@@ -86,13 +74,11 @@ void flip4(const unsigned int *src, unsigned int *dest, int n)
     int i;
 
     for (i = 0; i < n; i++) {
-	unsigned int tmp = src[i];
+        unsigned int tmp = src[i];
 
-	dest[i] = FLIP4(tmp);
+        dest[i] = FLIP4(tmp);
     }
 }
-
-
 
 /*
  * Flip the order of the 2 bytes in an array of 2-byte words.
@@ -102,32 +88,31 @@ void flip2(const unsigned short *src, unsigned short *dest, int n)
     int i;
 
     for (i = 0; i < n; i++) {
-	unsigned short tmp = src[i];
+        unsigned short tmp = src[i];
 
-	dest[i] = FLIP2(tmp);
+        dest[i] = FLIP2(tmp);
     }
 }
-
 
 #ifdef _CRAY
 
 /*****************************************************************************
-*
-* The following source code is in the public domain.
-* Specifically, we give to the public domain all rights for future licensing
-* of the source code, all resale rights, and all publishing rights.
-*
-* We ask, but do not require, that the following message be included in all
-* derived works:
-*
-* Portions developed at the National Center for Supercomputing Applications at
-* the University of Illinois at Urbana-Champaign.
-*
-* THE UNIVERSITY OF ILLINOIS GIVES NO WARRANTY, EXPRESSED OR IMPLIED, FOR THE
-* SOFTWARE AND/OR DOCUMENTATION PROVIDED, INCLUDING, WITHOUT LIMITATION,
-* WARRANTY OF MERCHANTABILITY AND WARRANTY OF FITNESS FOR A PARTICULAR PURPOSE
-*
-****************************************************************************/
+ *
+ * The following source code is in the public domain.
+ * Specifically, we give to the public domain all rights for future licensing
+ * of the source code, all resale rights, and all publishing rights.
+ *
+ * We ask, but do not require, that the following message be included in all
+ * derived works:
+ *
+ * Portions developed at the National Center for Supercomputing Applications at
+ * the University of Illinois at Urbana-Champaign.
+ *
+ * THE UNIVERSITY OF ILLINOIS GIVES NO WARRANTY, EXPRESSED OR IMPLIED, FOR THE
+ * SOFTWARE AND/OR DOCUMENTATION PROVIDED, INCLUDING, WITHOUT LIMITATION,
+ * WARRANTY OF MERCHANTABILITY AND WARRANTY OF FITNESS FOR A PARTICULAR PURPOSE
+ *
+ ****************************************************************************/
 
 /** THESE ROUTINES MUST BE COMPILED ON THE CRAY ONLY SINCE THEY **/
 
@@ -137,58 +122,52 @@ void flip2(const unsigned short *src, unsigned short *dest, int n)
 static void c_to_if(long *t, const long *f)
 {
     if (*f != 0) {
-	*t = (((*f & 0x8000000000000000) |	/* sign bit */
-	       ((((*f & 0x7fff000000000000) >> 48) - 16258) << 55)) +	/* exp */
-	      (((*f & 0x00007fffff000000) + ((*f & 0x0000000000800000) << 1)) << 8));	/* mantissa */
+        *t = (((*f & 0x8000000000000000) | /* sign bit */
+               ((((*f & 0x7fff000000000000) >> 48) - 16258) << 55)) + /* exp */
+              (((*f & 0x00007fffff000000) + ((*f & 0x0000000000800000) << 1))
+               << 8)); /* mantissa */
     }
     else
-	*t = *f;
+        *t = *f;
 }
 
+#define C_TO_IF(T, F)                                                      \
+    if (F != 0) {                                                          \
+        T = (((F & 0x8000000000000000) |                                   \
+              ((((F & 0x7fff000000000000) >> 48) - 16258) << 55)) +        \
+             (((F & 0x00007fffff000000) + ((F & 0x0000000000800000) << 1)) \
+              << 8));                                                      \
+    }                                                                      \
+    else {                                                                 \
+        T = F;                                                             \
+    }
 
-#define C_TO_IF( T, F )							\
-	if (F != 0) {							\
-		T = (((F & 0x8000000000000000) |			\
-		((((F & 0x7fff000000000000) >> 48)-16258) << 55)) +	\
-		(((F & 0x00007fffff000000) +				\
-		((F & 0x0000000000800000) << 1)) << 8));		\
-	}								\
-	else {								\
-		T = F;							\
-	}
-
-
-
-/* IEEE single precison to Cray */
+/* IEEE single precision to Cray */
 static void if_to_c(long *t, const long *f)
 {
     if (*f != 0) {
-	*t = (((*f & 0x8000000000000000) |
-	       ((*f & 0x7f80000000000000) >> 7) +
-	       (16258 << 48)) |
-	      (((*f & 0x007fffff00000000) >> 8) | (0x0000800000000000)));
-	if ((*f << 1) == 0)
-	    *t = 0;
+        *t = (((*f & 0x8000000000000000) |
+               ((*f & 0x7f80000000000000) >> 7) + (16258L << 48)) |
+              (((*f & 0x007fffff00000000) >> 8) | (0x0000800000000000)));
+        if ((*f << 1) == 0)
+            *t = 0;
     }
     else
-	*t = *f;
+        *t = *f;
 }
 
 /* T and F must be longs! */
-#define IF_TO_C( T, F )							\
-	if (F != 0) {							\
-		T = (((F & 0x8000000000000000) |			\
-		((F & 0x7f80000000000000) >> 7) +			\
-		(16258 << 48)) |					\
-		(((F & 0x007fffff00000000) >> 8) | (0x0000800000000000)));  \
-		if ((F << 1) == 0) T = 0;				\
-	}								\
-	else {								\
-		T = F;							\
-	}
-
-
-
+#define IF_TO_C(T, F)                                                   \
+    if (F != 0) {                                                       \
+        T = (((F & 0x8000000000000000) |                                \
+              ((F & 0x7f80000000000000) >> 7) + (16258L << 48)) |       \
+             (((F & 0x007fffff00000000) >> 8) | (0x0000800000000000))); \
+        if ((F << 1) == 0)                                              \
+            T = 0;                                                      \
+    }                                                                   \
+    else {                                                              \
+        T = F;                                                          \
+    }
 
 /*
  * Convert an array of Cray 8-byte floats to an array of IEEE 4-byte floats.
@@ -203,15 +182,13 @@ void cray_to_ieee_array(long *dest, const float *source, int n)
     dst = dest;
     src = (const long *)source;
 
-    for (i = 0; i < n; i += 2) {	/* add 1 in case n is odd */
-	c_to_if(&tmp1, &src[i]);
-	c_to_if(&tmp2, &src[i + 1]);
-	*dst = (tmp1 & 0xffffffff00000000) | (tmp2 >> 32);
-	dst++;
+    for (i = 0; i < n; i += 2) { /* add 1 in case n is odd */
+        c_to_if(&tmp1, &src[i]);
+        c_to_if(&tmp2, &src[i + 1]);
+        *dst = (tmp1 & 0xffffffff00000000) | (tmp2 >> 32);
+        dst++;
     }
 }
-
-
 
 /*
  * Convert an array of IEEE 4-byte floats to an array of 8-byte Cray floats.
@@ -227,31 +204,27 @@ void ieee_to_cray_array(float *dest, const long *source, int n)
     dst = (long *)dest;
 
     for (i = 0; i < n; i++) {
-	/* most significant 4-bytes of ieee contain bit pattern to convert */
-	if ((i & 1) == 0) {
-	    /* get upper half */
-	    ieee = src[i / 2] & 0xffffffff00000000;
-	}
-	else {
-	    /* get lower half */
-	    ieee = src[i / 2] << 32;
-	}
-	if_to_c(dst, &ieee);
-	dst++;
+        /* most significant 4-bytes of ieee contain bit pattern to convert */
+        if ((i & 1) == 0) {
+            /* get upper half */
+            ieee = src[i / 2] & 0xffffffff00000000;
+        }
+        else {
+            /* get lower half */
+            ieee = src[i / 2] << 32;
+        }
+        if_to_c(dst, &ieee);
+        dst++;
     }
 }
 
-
 #endif /*_CRAY*/
-
-
 
 /**********************************************************************/
 
 /*****                     Read Functions                         *****/
 
 /**********************************************************************/
-
 
 /*
  * Read a block of bytes.
@@ -264,8 +237,6 @@ int read_bytes(int f, void *b, int n)
 {
     return read(f, b, n);
 }
-
-
 
 /*
  * Read an array of 2-byte integers.
@@ -283,14 +254,14 @@ int read_int2_array(int f, short *iarray, int n)
 
     buffer = (signed char *)G_malloc(n * 2);
     if (!buffer)
-	return 0;
+        return 0;
     nread = read(f, buffer, n * 2);
     if (nread <= 0)
-	return 0;
+        return 0;
     nread /= 2;
     for (i = 0; i < nread; i++) {
-	/* don't forget about sign extension! */
-	iarray[i] = (buffer[i * 2] * 256) | buffer[i * 2 + 1];
+        /* don't forget about sign extension! */
+        iarray[i] = (buffer[i * 2] * 256) | buffer[i * 2 + 1];
     }
     G_free(buffer);
     return nread;
@@ -298,16 +269,13 @@ int read_int2_array(int f, short *iarray, int n)
     int nread = read(f, iarray, n * 2);
 
     if (nread <= 0)
-	return 0;
+        return 0;
 #ifdef LITTLE
-    flip2((const unsigned short *)iarray, (unsigned short *)iarray,
-	  nread / 2);
+    flip2((const unsigned short *)iarray, (unsigned short *)iarray, nread / 2);
 #endif
     return nread / 2;
 #endif
 }
-
-
 
 /*
  * Read an array of unsigned 2-byte integers.
@@ -325,13 +293,13 @@ int read_uint2_array(int f, unsigned short *iarray, int n)
 
     buffer = (unsigned char *)G_malloc(n * 2);
     if (!buffer)
-	return 0;
+        return 0;
     nread = read(f, buffer, n * 2);
     if (nread <= 0)
-	return 0;
+        return 0;
     nread /= 2;
     for (i = 0; i < nread; i++) {
-	iarray[i] = (buffer[i * 2] << 8) | buffer[i * 2 + 1];
+        iarray[i] = (buffer[i * 2] << 8) | buffer[i * 2 + 1];
     }
     G_free(buffer);
     return nread;
@@ -339,15 +307,13 @@ int read_uint2_array(int f, unsigned short *iarray, int n)
     int nread = read(f, iarray, n * 2);
 
     if (nread <= 0)
-	return 0;
+        return 0;
 #ifdef LITTLE
     flip2(iarray, iarray, nread / 2);
 #endif
     return nread / 2;
 #endif
 }
-
-
 
 /*
  * Read a 4-byte integer.
@@ -362,26 +328,24 @@ int read_int4(int f, int *i)
     unsigned int n;
 
     if (read(f, &n, 4) == 4) {
-	*i = FLIP4(n);
-	return 1;
+        *i = FLIP4(n);
+        return 1;
     }
     else {
-	return 0;
+        return 0;
     }
 #else
     if (read(f, i, 4) == 4) {
-#  ifdef _CRAY
-	*i = *i >> 32;
-#  endif
-	return 1;
+#ifdef _CRAY
+        *i = *i >> 32;
+#endif
+        return 1;
     }
     else {
-	return 0;
+        return 0;
     }
 #endif
 }
-
-
 
 /*
  * Read an array of 4-byte integers.
@@ -398,20 +362,20 @@ int read_int4_array(int f, int *iarray, int n)
 
     buffer = (int *)G_malloc((n + 1) * 4);
     if (!buffer)
-	return 0;
+        return 0;
     nread = read(f, buffer, 4 * n);
     if (nread <= 0) {
-	return 0;
+        return 0;
     }
     nread /= 4;
 
     for (j = 0; j < nread; j++) {
-	if ((j & 1) == 0) {
-	    iarray[j] = buffer[j / 2] >> 32;
-	}
-	else {
-	    iarray[j] = buffer[j / 2] & 0xffffffff;
-	}
+        if ((j & 1) == 0) {
+            iarray[j] = buffer[j / 2] >> 32;
+        }
+        else {
+            iarray[j] = buffer[j / 2] & 0xffffffff;
+        }
     }
     G_free(buffer);
     return nread;
@@ -419,15 +383,13 @@ int read_int4_array(int f, int *iarray, int n)
     int nread = read(f, iarray, 4 * n);
 
     if (nread <= 0)
-	return 0;
-#  ifdef LITTLE
+        return 0;
+#ifdef LITTLE
     flip4((const unsigned int *)iarray, (unsigned int *)iarray, nread / 4);
-#  endif
+#endif
     return nread / 4;
 #endif
 }
-
-
 
 /*
  * Read a 4-byte IEEE float.
@@ -441,35 +403,33 @@ int read_float4(int f, float *x)
     long buffer = 0;
 
     if (read(f, &buffer, 4) == 4) {
-	/* convert IEEE float (buffer) to Cray float (x) */
-	if_to_c((long *)x, &buffer);
-	return 1;
+        /* convert IEEE float (buffer) to Cray float (x) */
+        if_to_c((long *)x, &buffer);
+        return 1;
     }
     return 0;
 #else
-#  ifdef LITTLE
+#ifdef LITTLE
     unsigned int n, *iptr;
 
     if (read(f, &n, 4) == 4) {
-	iptr = (unsigned int *)x;
-	*iptr = FLIP4(n);
-	return 1;
+        iptr = (unsigned int *)x;
+        *iptr = FLIP4(n);
+        return 1;
     }
     else {
-	return 0;
+        return 0;
     }
-#  else
+#else
     if (read(f, x, 4) == 4) {
-	return 1;
+        return 1;
     }
     else {
-	return 0;
+        return 0;
     }
-#  endif
+#endif
 #endif
 }
-
-
 
 /*
  * Read an array of 4-byte IEEE floats.
@@ -487,10 +447,10 @@ int read_float4_array(int f, float *x, int n)
 
     buffer = (long *)G_malloc((n + 1) * 4);
     if (!buffer)
-	return 0;
+        return 0;
     nread = read(f, buffer, n * 4);
     if (nread <= 0)
-	return 0;
+        return 0;
     nread /= 4;
     ieee_to_cray_array(x, buffer, nread);
     G_free(buffer);
@@ -499,15 +459,13 @@ int read_float4_array(int f, float *x, int n)
     int nread = read(f, x, 4 * n);
 
     if (nread <= 0)
-	return 0;
+        return 0;
 #ifdef LITTLE
     flip4((const unsigned int *)x, (unsigned int *)x, nread / 4);
 #endif
     return nread / 4;
 #endif
 }
-
-
 
 /*
  * Read a block of memory.
@@ -520,52 +478,47 @@ int read_float4_array(int f, float *x, int n)
 int read_block(int f, void *data, int elements, int elsize)
 {
     if (elsize == 1) {
-	return read(f, data, elements);
+        return read(f, data, elements);
     }
     else if (elsize == 2) {
 #ifdef LITTLE
-	int n;
+        int n;
 
-	n = read(f, data, elements * 2) / 2;
-	if (n == elements) {
-	    flip2((const unsigned short *)data, (unsigned short *)data,
-		  elements);
-	}
-	return n;
+        n = read(f, data, elements * 2) / 2;
+        if (n == elements) {
+            flip2((const unsigned short *)data, (unsigned short *)data,
+                  elements);
+        }
+        return n;
 #else
-	return read(f, data, elements * 2) / 2;
+        return read(f, data, elements * 2) / 2;
 #endif
     }
     else if (elsize == 4) {
 #ifdef LITTLE
-	int n;
+        int n;
 
-	n = read(f, data, elements * 4) / 4;
-	if (n == elements) {
-	    flip4((const unsigned int *)data, (unsigned int *)data, elements);
-	}
-	return n;
+        n = read(f, data, elements * 4) / 4;
+        if (n == elements) {
+            flip4((const unsigned int *)data, (unsigned int *)data, elements);
+        }
+        return n;
 #else
-	return read(f, data, elements * 4) / 4;
+        return read(f, data, elements * 4) / 4;
 #endif
     }
     else {
-	printf("Fatal error in read_block(): bad elsize (%d)\n", elsize);
-	abort();
+        printf("Fatal error in read_block(): bad elsize (%d)\n", elsize);
+        abort();
     }
     return 0;
 }
-
-
-
 
 /**********************************************************************/
 
 /*****                         Write Functions                    *****/
 
 /**********************************************************************/
-
-
 
 /*
  * Write a block of bytes.
@@ -578,9 +531,6 @@ int write_bytes(int f, const void *b, int n)
 {
     return write(f, b, n);
 }
-
-
-
 
 /*
  * Write an array of 2-byte integers.
@@ -605,12 +555,10 @@ int write_int2_array(int f, const short *iarray, int n)
     flip2((const unsigned short *)iarray, (unsigned short *)iarray, n);
 #endif
     if (nwritten <= 0)
-	return 0;
+        return 0;
     return nwritten / 2;
 #endif
 }
-
-
 
 /*
  * Write an array of 2-byte unsigned integers.
@@ -627,17 +575,17 @@ int write_uint2_array(int f, const unsigned short *iarray, int n)
 
     buffer = (unsigned char *)G_malloc(2 * n);
     if (!buffer)
-	return 0;
+        return 0;
     for (i = 0; i < n; i++) {
-	buffer[i * 2] = (iarray[i] >> 8) & 0xff;
-	buffer[i * 2 + 1] = iarray[i] & 0xff;
+        buffer[i * 2] = (iarray[i] >> 8) & 0xff;
+        buffer[i * 2 + 1] = iarray[i] & 0xff;
     }
     nwritten = write(f, buffer, 2 * n);
     G_free(buffer);
     if (nwritten <= 0)
-	return 0;
+        return 0;
     else
-	return nwritten / 2;
+        return nwritten / 2;
 #else
     int nwritten;
 
@@ -649,13 +597,11 @@ int write_uint2_array(int f, const unsigned short *iarray, int n)
     flip2(iarray, (unsigned short *)iarray, n);
 #endif
     if (nwritten <= 0)
-	return 0;
+        return 0;
     else
-	return nwritten / 2;
+        return nwritten / 2;
 #endif
 }
-
-
 
 /*
  * Write a 4-byte integer.
@@ -669,14 +615,12 @@ int write_int4(int f, int i)
     i = i << 32;
     return write(f, &i, 4) > 0;
 #else
-#  ifdef LITTLE
+#ifdef LITTLE
     i = FLIP4(i);
-#  endif
+#endif
     return write(f, &i, 4) > 0;
 #endif
 }
-
-
 
 /*
  * Write an array of 4-byte integers.
@@ -693,39 +637,37 @@ int write_int4_array(int f, const int *i, int n)
 
     b = buf = (char *)G_malloc(n * 4 + 8);
     if (!b)
-	return 0;
+        return 0;
     ptr = (char *)i;
     for (j = 0; j < n; j++) {
-	ptr += 4;		/* skip upper 4 bytes */
-	*b++ = *ptr++;
-	*b++ = *ptr++;
-	*b++ = *ptr++;
-	*b++ = *ptr++;
+        ptr += 4; /* skip upper 4 bytes */
+        *b++ = *ptr++;
+        *b++ = *ptr++;
+        *b++ = *ptr++;
+        *b++ = *ptr++;
     }
     nwritten = write(f, buf, 4 * n);
     G_free(buf);
     if (nwritten <= 0)
-	return 0;
+        return 0;
     else
-	return nwritten / 4;
+        return nwritten / 4;
 #else
-#  ifdef LITTLE
+#ifdef LITTLE
     int nwritten;
 
     flip4((const unsigned int *)i, (unsigned int *)i, n);
     nwritten = write(f, i, 4 * n);
     flip4((const unsigned int *)i, (unsigned int *)i, n);
     if (nwritten <= 0)
-	return 0;
+        return 0;
     else
-	return nwritten / 4;
-#  else
+        return nwritten / 4;
+#else
     return write(f, i, 4 * n) / 4;
-#  endif
+#endif
 #endif
 }
-
-
 
 /*
  * Write a 4-byte IEEE float.
@@ -741,23 +683,21 @@ int write_float4(int f, float x)
     c_to_if((long *)buffer, (const long *)&x);
     return write(f, buffer, 4) > 0;
 #else
-#  ifdef LITTLE
+#ifdef LITTLE
     float y;
     unsigned int *iptr = (unsigned int *)&y, temp;
 
     y = (float)x;
     temp = FLIP4(*iptr);
     return write(f, &temp, 4) > 0;
-#  else
+#else
     float y;
 
     y = (float)x;
     return write(f, &y, 4) > 0;
-#  endif
+#endif
 #endif
 }
-
-
 
 /*
  * Write an array of 4-byte IEEE floating point numbers.
@@ -775,32 +715,30 @@ int write_float4_array(int f, const float *x, int n)
 
     buffer = (long *)G_malloc(n * 4 + 8);
     if (!buffer)
-	return 0;
+        return 0;
     cray_to_ieee_array(buffer, x, n);
     nwritten = write(f, buffer, 4 * n);
     G_free(buffer);
     if (nwritten <= 0)
-	return 0;
+        return 0;
     else
-	return nwritten / 4;
+        return nwritten / 4;
 #else
-#  ifdef LITTLE
+#ifdef LITTLE
     int nwritten;
 
     flip4((const unsigned int *)x, (unsigned int *)x, n);
     nwritten = write(f, x, 4 * n);
     flip4((const unsigned int *)x, (unsigned int *)x, n);
     if (nwritten <= 0)
-	return 0;
+        return 0;
     else
-	return nwritten / 4;
-#  else
+        return nwritten / 4;
+#else
     return write(f, x, 4 * n) / 4;
-#  endif
+#endif
 #endif
 }
-
-
 
 /*
  * Write a block of memory.
@@ -813,35 +751,35 @@ int write_float4_array(int f, const float *x, int n)
 int write_block(int f, const void *data, int elements, int elsize)
 {
     if (elsize == 1) {
-	return write(f, data, elements);
+        return write(f, data, elements);
     }
     else if (elsize == 2) {
 #ifdef LITTLE
-	int n;
+        int n;
 
-	flip2((const unsigned short *)data, (unsigned short *)data, elements);
-	n = write(f, data, elements * 2) / 2;
-	flip2((const unsigned short *)data, (unsigned short *)data, elements);
-	return n;
+        flip2((const unsigned short *)data, (unsigned short *)data, elements);
+        n = write(f, data, elements * 2) / 2;
+        flip2((const unsigned short *)data, (unsigned short *)data, elements);
+        return n;
 #else
-	return write(f, data, elements * 2) / 2;
+        return write(f, data, elements * 2) / 2;
 #endif
     }
     else if (elsize == 4) {
 #ifdef LITTLE
-	int n;
+        int n;
 
-	flip4((const unsigned int *)data, (unsigned int *)data, elements);
-	n = write(f, data, elements * 4) / 4;
-	flip4((const unsigned int *)data, (unsigned int *)data, elements);
-	return n;
+        flip4((const unsigned int *)data, (unsigned int *)data, elements);
+        n = write(f, data, elements * 4) / 4;
+        flip4((const unsigned int *)data, (unsigned int *)data, elements);
+        return n;
 #else
-	return write(f, data, elements * 4) / 4;
+        return write(f, data, elements * 4) / 4;
 #endif
     }
     else {
-	printf("Fatal error in write_block(): bad elsize (%d)\n", elsize);
-	abort();
+        printf("Fatal error in write_block(): bad elsize (%d)\n", elsize);
+        abort();
     }
     return 0;
 }

@@ -1,16 +1,16 @@
 <h2>DESCRIPTION</h2>
 
-This module is designed to register the maps of several input space 
-time datasets in a single output dataset. The datasets to merge can be 
-either space time raster, 3D raster or vector datasets and must have 
+This module is designed to register the maps of several input space
+time datasets in a single output dataset. The datasets to merge can be
+either space time raster, 3D raster or vector datasets and must have
 the same temporal type (absolute or relative).
 <p>
-Existing space time datasets located in the current mapset can be 
-specified as output as well. The maps from the input space time 
+Existing space time datasets located in the current mapset can be
+specified as output as well. The maps from the input space time
 datasets will be added to the output.
 <p>
-Maps from the input space time datasets will be registered only once in 
-the output space time dataset, hence the same maps can be registered in 
+Maps from the input space time datasets will be registered only once in
+the output space time dataset, hence the same maps can be registered in
 different input space time datasets.
 
 <h2>NOTES</h2>
@@ -19,10 +19,10 @@ Temporal databases stored in other mapsets can be used as long as they
 are in the user's current mapset search path (managed with
 <a href="g.mapsets.html">g.mapsets</a>).
 
-<h2>Examples</h2>
+<h2>EXAMPLES</h2>
 
-In this example we will create two space time raster datasets and 
-register two unique maps in each of it. Then we merge the two space 
+In this example we will create two space time raster datasets and
+register two unique maps in each of it. Then we merge the two space
 time raster datasets together.
 
 <div class="code"><pre>
@@ -80,15 +80,15 @@ t.info precipitation_daily_1
  | Description:
  | Test dataset with daily precipitation
  | Command history:
- | # 2014-11-23 15:26:57 
+ | # 2014-11-23 15:26:57
  | t.create type="strds" temporaltype="absolute"
  |     output="precipitation_daily_1" title="Daily precipitation"
  |     description="Test dataset with daily precipitation"
- | # 2014-11-23 15:26:57 
+ | # 2014-11-23 15:26:57
  | t.register -i type="rast"
  |     input="precipitation_daily_1" maps="map1,map2" start="2012-08-20"
  |     increment="1 days"
- | 
+ |
  +----------------------------------------------------------------------------+
 
 
@@ -146,15 +146,15 @@ t.info precipitation_daily_2
  | Description:
  | Test dataset with daily precipitation
  | Command history:
- | # 2014-11-23 15:27:20 
+ | # 2014-11-23 15:27:20
  | t.create type="strds" temporaltype="absolute"
  |     output="precipitation_daily_2" title="Daily precipitation"
  |     description="Test dataset with daily precipitation"
- | # 2014-11-23 15:27:20 
+ | # 2014-11-23 15:27:20
  | t.register -i type="rast"
  |     input="precipitation_daily_2" maps="map3,map4" start="2012-08-22"
  |     increment="1 days"
- | 
+ |
  +----------------------------------------------------------------------------+
 
 
@@ -204,11 +204,11 @@ t.info precipitation_daily_3
  | Description:
  | Merged space time dataset
  | Command history:
- | # 2014-11-23 15:27:44 
+ | # 2014-11-23 15:27:44
  | t.merge
  |     input="precipitation_daily_1,precipitation_daily_2"
  |     output="precipitation_daily_3"
- | 
+ |
  +----------------------------------------------------------------------------+
 </pre></div>
 
@@ -223,9 +223,3 @@ t.info precipitation_daily_3
 <h2>AUTHOR</h2>
 
 S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
-

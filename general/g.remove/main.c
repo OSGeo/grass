@@ -1,12 +1,11 @@
-
 /****************************************************************************
  *
  * MODULE:       g.remove
  *
  * AUTHOR(S):    Huidae Cho <grass4u gmail.com>
  *
- * 		 Based on general/manage/cmd/remove.c by
- *               CERL (original contributor),
+ *               Based on general/manage/cmd/remove.c by
+ *                 CERL (original contributor),
  *               Radim Blazek <radim.blazek gmail.com>,
  *               Cedric Shock <cedricgrass shockfamily.net>,
  *               Glynn Clements <glynn gclements.plus.com>,
@@ -33,27 +32,26 @@
 
 /* construct_pattern.c */
 char *construct_pattern(char **);
+
 /* check_reclass.c */
 int check_reclass(const char *, const char *, int);
 
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
-	struct Option *type;
-	struct Option *pattern;
-	struct Option *exclude;
-	struct Option *name;
-	struct Option *ignore;
+    struct {
+        struct Option *type;
+        struct Option *pattern;
+        struct Option *exclude;
+        struct Option *name;
+        struct Option *ignore;
     } opt;
-    struct
-    {
-	struct Flag *ignorecase;
-	struct Flag *regex;
-	struct Flag *extended;
-	struct Flag *force;
-	struct Flag *basemap;
+    struct {
+        struct Flag *ignorecase;
+        struct Flag *regex;
+        struct Flag *extended;
+        struct Flag *force;
+        struct Flag *basemap;
     } flag;
     char *pattern, *exclude;
     const char *mapset;
@@ -70,8 +68,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("map management"));
     G_add_keyword(_("remove"));
     module->description =
-	_("Removes data base element files from "
-	  "the user's current mapset using the search pattern.");
+        _("Removes data base element files from "
+          "the user's current mapset using the search pattern.");
 
     M_read_list(FALSE, &nlist);
 
@@ -95,8 +93,7 @@ int main(int argc, char *argv[])
     opt.ignore->type = TYPE_STRING;
     opt.ignore->multiple = YES;
     opt.ignore->gisprompt = "old,element,element";
-    opt.ignore->description =
-	_("Name of file(s) to ignore (default: none)");
+    opt.ignore->description = _("Name of file(s) to ignore (default: none)");
     opt.ignore->guisection = _("Pattern");
 
     opt.pattern = G_define_option();
@@ -119,20 +116,20 @@ int main(int argc, char *argv[])
     flag.regex = G_define_flag();
     flag.regex->key = 'r';
     flag.regex->description =
-	_("Use basic regular expressions instead of wildcards");
+        _("Use basic regular expressions instead of wildcards");
     flag.regex->guisection = _("Pattern");
 
     flag.extended = G_define_flag();
     flag.extended->key = 'e';
     flag.extended->description =
-	_("Use extended regular expressions instead of wildcards");
+        _("Use extended regular expressions instead of wildcards");
     flag.extended->guisection = _("Pattern");
 
     flag.force = G_define_flag();
     flag.force->key = 'f';
     flag.force->guisection = _("Basic");
     flag.force->description =
-	_("Force removal (required for actual deletion of files)");
+        _("Force removal (required for actual deletion of files)");
 
     flag.basemap = G_define_flag();
     flag.basemap->key = 'b';
@@ -144,128 +141,130 @@ int main(int argc, char *argv[])
     G_option_required(opt.pattern, opt.name, NULL);
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     if (opt.pattern->answer)
-	pattern = opt.pattern->answer;
+        pattern = opt.pattern->answer;
     else
-	pattern = construct_pattern(opt.name->answers);
+        pattern = construct_pattern(opt.name->answers);
 
     if (opt.exclude->answer)
-	exclude = opt.exclude->answer;
+        exclude = opt.exclude->answer;
     else if (opt.ignore->answer)
-	exclude = construct_pattern(opt.ignore->answers);
+        exclude = construct_pattern(opt.ignore->answers);
     else
-	exclude = NULL;
+        exclude = NULL;
 
     if ((flag.regex->answer || flag.extended->answer) && opt.pattern->answer)
-	filter = G_ls_regex_filter(pattern, 0, (int)flag.extended->answer,
-				   (int)flag.ignorecase->answer);
+        filter = G_ls_regex_filter(pattern, 0, (int)flag.extended->answer,
+                                   (int)flag.ignorecase->answer);
     else {
-	/* handle individual map names */
-	if (strchr(pattern, ',')) {
-	    char *buf;
+        /* handle individual map names */
+        if (strchr(pattern, ',')) {
+            char *buf;
 
-	    buf = (char *)G_malloc(strlen(pattern) + 3);
-	    sprintf(buf, "{%s}", pattern);
+            buf = (char *)G_malloc(strlen(pattern) + 3);
+            sprintf(buf, "{%s}", pattern);
 
-	    filter = G_ls_glob_filter(buf, 0, (int)flag.ignorecase->answer);
-	}
-	else
-	    filter = G_ls_glob_filter(pattern, 0, (int)flag.ignorecase->answer);
+            filter = G_ls_glob_filter(buf, 0, (int)flag.ignorecase->answer);
+        }
+        else
+            filter = G_ls_glob_filter(pattern, 0, (int)flag.ignorecase->answer);
     }
     if (!filter)
-	G_fatal_error(_("Unable to compile pattern <%s>"), pattern);
+        G_fatal_error(_("Unable to compile pattern <%s>"), pattern);
 
     if (exclude) {
-	if ((flag.regex->answer || flag.extended->answer) &&
-	    opt.exclude->answer)
-	    exclude_filter = G_ls_regex_filter(exclude, 1,
-					       (int)flag.extended->answer,
-					       (int)flag.ignorecase->answer);
-	else {
-	    /* handle individual map names */
-	    if (strchr(exclude, ',')) {
-		char *buf;
+        if ((flag.regex->answer || flag.extended->answer) &&
+            opt.exclude->answer)
+            exclude_filter =
+                G_ls_regex_filter(exclude, 1, (int)flag.extended->answer,
+                                  (int)flag.ignorecase->answer);
+        else {
+            /* handle individual map names */
+            if (strchr(exclude, ',')) {
+                char *buf;
 
-		buf = (char *)G_malloc(strlen(exclude) + 3);
-		sprintf(buf, "{%s}", exclude);
+                buf = (char *)G_malloc(strlen(exclude) + 3);
+                sprintf(buf, "{%s}", exclude);
 
-		exclude_filter = G_ls_glob_filter(buf, 1,
-						  (int)flag.ignorecase->answer);
-	    }
-	    else
-		exclude_filter = G_ls_glob_filter(exclude, 1,
-						  (int)flag.ignorecase->answer);
-	}
-	if (!exclude_filter)
-	    G_fatal_error(_("Unable to compile pattern <%s>"), exclude);
+                exclude_filter =
+                    G_ls_glob_filter(buf, 1, (int)flag.ignorecase->answer);
+            }
+            else
+                exclude_filter =
+                    G_ls_glob_filter(exclude, 1, (int)flag.ignorecase->answer);
+        }
+        if (!exclude_filter)
+            G_fatal_error(_("Unable to compile pattern <%s>"), exclude);
     }
     else
-	exclude_filter = NULL;
+        exclude_filter = NULL;
 
     if (!flag.force->answer)
-	G_message(_("The following data base element files would be deleted:"));
+        G_message(_("The following data base element files would be deleted:"));
 
     mapset = G_mapset();
 
     for (i = 0; opt.type->answers[i]; i++) {
-	if (strcmp(opt.type->answers[i], "all") == 0)
-	    break;
+        if (strcmp(opt.type->answers[i], "all") == 0)
+            break;
     }
     if (opt.type->answers[i]) {
-	all = 1;
-	num_types = nlist;
+        all = 1;
+        num_types = nlist;
     }
     else {
-	all = 0;
-	num_types = i;
+        all = 0;
+        num_types = i;
     }
 
     num_removed = 0;
     for (i = 0; i < num_types; i++) {
-	int n, rast, num_files, j;
-	const struct list *elem;
-    	char path[GPATH_MAX];
-	char **files;
+        int n, rast, num_files, j;
+        const struct list *elem;
+        char path[GPATH_MAX];
+        char **files;
 
-	n = all ? i : M_get_element(opt.type->answers[i]);
-	elem = M_get_list(n);
+        n = all ? i : M_get_element(opt.type->answers[i]);
+        elem = M_get_list(n);
 
-	G_file_name(path, elem->element[0], "", mapset);
-	if (access(path, 0) != 0)
-	    continue;
+        G_file_name(path, elem->element[0], "", mapset);
+        if (access(path, 0) != 0)
+            continue;
 
-	rast = !G_strcasecmp(elem->alias, "raster");
-	files = G_ls2(path, &num_files);
+        rast = !G_strcasecmp(elem->alias, "raster");
+        files = G_ls2(path, &num_files);
 
-	for (j = 0; j < num_files; j++) {
-	    if (!flag.force->answer) {
-		fprintf(stdout, "%s/%s@%s\n", elem->alias, files[j], mapset);
+        for (j = 0; j < num_files; j++) {
+            if (!flag.force->answer) {
+                fprintf(stdout, "%s/%s@%s\n", elem->alias, files[j], mapset);
                 num_removed++;
-		continue;
-	    }
+                continue;
+            }
 
-	    if (rast && check_reclass(files[j], mapset, flag.basemap->answer))
-		continue;
+            if (rast && check_reclass(files[j], mapset, flag.basemap->answer))
+                continue;
 
-	    if (M_do_remove(n, (char *)files[j]) == 1)
-		result = EXIT_FAILURE;
+            if (M_do_remove(n, (char *)files[j]) == 1)
+                result = EXIT_FAILURE;
             num_removed++;
-	}
+        }
     }
 
     if (num_removed < 1)
         G_warning(_("No data base element files found"));
-    
+
     G_free_ls_filter(filter);
 
     if (exclude_filter)
-	G_free_ls_filter(exclude_filter);
+        G_free_ls_filter(exclude_filter);
 
     if (!flag.force->answer && num_removed > 0)
-	G_warning(_("Nothing removed. You must use the force flag (-%c) to actually "
-                    "remove them. Exiting."), flag.force->key);
+        G_warning(
+            _("Nothing removed. You must use the force flag (-%c) to actually "
+              "remove them. Exiting."),
+            flag.force->key);
 
     exit(result);
 }
