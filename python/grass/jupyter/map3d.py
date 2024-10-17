@@ -234,4 +234,15 @@ class Map3D:
         # Lazy import to avoid an import-time dependency on IPython.
         from IPython.display import Image,display  # pylint: disable=import-outside-toplevel
 
-        return display(Image(self._filename))
+        return Image(self._filename)
+    
+    def _repr_pretty_(self, p, cycle):
+        """Pretty representation of the object in IPython/Jupyter."""
+        # Lazy import to avoid an import-time dependency on IPython.
+        from IPython.display import Image, display  # pylint: disable=import-outside-toplevel
+
+        if cycle:
+            p.text("Map(...)")
+        else:
+            display(Image(self._filename))
+
