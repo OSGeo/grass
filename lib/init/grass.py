@@ -1667,8 +1667,8 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
             )
         )
 
+    mask2d_test = "r.mask.status -t"
     # TODO: have a function and/or module to test this
-    mask2d_test = 'test -f "$MAPSET_PATH/cell/MASK"'
     mask3d_test = 'test -d "$MAPSET_PATH/grid3/RASTER3D_MASK"'
 
     specific_addition = ""
