@@ -3420,8 +3420,7 @@ class NvizToolWindow(GNotebook):
         name = event.GetString()
         try:
             data = self._getLayerPropertiesByName(name, mapType="raster")["surface"]
-        except TypeError as e:
-            Debug.msg(2, f"TypeError in OnSetRaster: {e}")
+        except TypeError:
             self.EnablePage("surface", False)
             return
 
