@@ -25,7 +25,7 @@ class TestReport(TestCase):
         map_output1 = "test1"
         map_output2 = "test2"
         cls.runModule(
-            "g.remove", flags="f", type="raster", name=map_output1 + "," + map_output2
+            "g.remove", flags="f", type="raster", name=(map_output1, map_output2)
         )
         cls.del_temp_region()
 

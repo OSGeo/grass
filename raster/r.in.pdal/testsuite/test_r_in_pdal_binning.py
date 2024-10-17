@@ -72,7 +72,7 @@ class BinningTest(TestCase):
             "g.remove",
             flags="f",
             type="raster",
-            name=self.bin_raster + "," + self.ref_raster,
+            name=(self.bin_raster, self.ref_raster),
         )
 
     @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")

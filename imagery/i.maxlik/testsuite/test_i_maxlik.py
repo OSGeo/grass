@@ -167,7 +167,7 @@ class SuccessTest(TestCase):
             "g.remove",
             flags="f",
             type="raster",
-            name=cls.b1 + "," + cls.b2 + "," + cls.v1_class + "," + cls.v2_class,
+            name=(cls.b1, cls.b2, cls.v1_class, cls.v2_class),
             quiet=True,
         )
         cls.runModule("g.remove", flags="f", type="group", name=cls.group, quiet=True)

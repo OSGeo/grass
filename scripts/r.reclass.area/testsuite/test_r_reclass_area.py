@@ -30,7 +30,7 @@ class TestReclassArea(TestCase):
             "g.remove",
             type="raster",
             flags="f",
-            name=(cls.output + "Greater") + "," + (cls.output + "Lesser"),
+            name=(cls.output + "Greater", cls.output + "Lesser"),
         )
 
     def test_reclassaeaGreater(self):

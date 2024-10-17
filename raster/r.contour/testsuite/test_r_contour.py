@@ -36,11 +36,7 @@ class TestRasterWhat(TestCase):
             "g.remove",
             type="vector",
             flags="f",
-            name=cls.output
-            + ","
-            + (cls.output + "_cut")
-            + ","
-            + (cls.output + "_cut_flag_t"),
+            name=(cls.output, cls.output + "_cut", cls.output + "_cut_flag_t"),
         )
 
         if os.path.isfile("testReport"):

@@ -96,7 +96,7 @@ class SuccessTest(TestCase):
             "g.remove",
             flags="f",
             type="raster",
-            name=cls.b1 + "," + cls.b2 + "," + cls.train,
+            name=(cls.b1, cls.b2, cls.train),
             quiet=True,
         )
 

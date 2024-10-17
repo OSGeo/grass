@@ -353,7 +353,7 @@ class SortSignaturesBysemantic_labelTest(TestCase):
             "g.remove",
             flags="f",
             type="raster",
-            name=cls.map1 + "," + cls.map2 + "," + cls.map3,
+            name=(cls.map1, cls.map2, cls.map3),
         )
 
     def test_symmetric_complete_difference(self):

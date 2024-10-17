@@ -52,7 +52,7 @@ class MatrixCorrectnessTest(TestCase):
         """Remove temporary data"""
         cls.del_temp_region()
         cls.runModule(
-            "g.remove", flags="f", type="raster", name=cls.ref_1 + "," + cls.class_1
+            "g.remove", flags="f", type="raster", name=(cls.ref_1, cls.class_1)
         )
 
     def test_m(self):
@@ -121,7 +121,7 @@ class CalculationCorrectness1Test(TestCase):
         """Remove temporary data"""
         cls.del_temp_region()
         cls.runModule(
-            "g.remove", flags="f", type="raster", name=cls.ref_1 + "," + cls.class_1
+            "g.remove", flags="f", type="raster", name=(cls.ref_1, cls.class_1)
         )
 
     def match(self, pat, ref):
@@ -236,7 +236,7 @@ class CalculationCorrectness2Test(TestCase):
         """Remove temporary data"""
         cls.del_temp_region()
         cls.runModule(
-            "g.remove", flags="f", type="raster", name=cls.ref_1 + "," + cls.class_1
+            "g.remove", flags="f", type="raster", name=(cls.ref_1, cls.class_1)
         )
 
     def match(self, pat, ref):

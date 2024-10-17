@@ -71,7 +71,7 @@ class SelectionTest(TestCase):
             "g.remove",
             flags="f",
             type="raster",
-            name=self.imp_raster + "," + self.ref_raster,
+            name=(self.imp_raster, self.ref_raster),
         )
         try:
             self.runModule("g.remove", flags="f", type="raster", name=self.base_raster)

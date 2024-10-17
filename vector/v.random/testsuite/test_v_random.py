@@ -32,7 +32,7 @@ class TestVRandom(TestCase):
 
     def tearDown(cls):
         cls.runModule(
-            "g.remove", type="vector", flags="f", name=cls.output + "," + cls.output2
+            "g.remove", type="vector", flags="f", name=(cls.output, cls.output2)
         )
 
     def test_num_points(self):

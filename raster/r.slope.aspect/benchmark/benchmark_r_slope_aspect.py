@@ -47,7 +47,7 @@ def benchmark(size, label, results):
         quiet=True,
         flags="f",
         type="raster",
-        name=reference + "," + slope + "," + aspect + "," + pcurv + "," + tcurv,
+        name=(reference, slope, aspect, pcurv, tcurv),
     )
 
 
