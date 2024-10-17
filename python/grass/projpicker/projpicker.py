@@ -41,6 +41,7 @@ import re
 import math
 import json
 import pprint
+from pathlib import Path
 
 from .common import (
     BBox,
@@ -422,8 +423,9 @@ def get_version():
         str: ProjPicker version.
     """
     # pylint: disable=invalid-name
-    with open(os.path.join(_module_path, "VERSION"), encoding="utf-8") as f:
-        version = f.read().strip()
+    version = (
+        Path(os.path.join(_module_path, "VERSION")).read_text(encoding="utf-8").strip()
+    )
     return version
 
 
@@ -2862,11 +2864,14 @@ def start(
             bbox_dict.extend(dictify_bbox(bbox))
             bbox_json = json.dumps(bbox_dict)
         elif fmt == "pretty":
-            with open(outfile, encoding="utf-8") as f:
-                # https://stackoverflow.com/a/65647108
-                lcls = locals()
-                exec("bbox_dict = " + f.read(), globals(), lcls)
-                bbox_dict = lcls["bbox_dict"]
+            # https://stackoverflow.com/a/65647108
+            lcls = locals()
+            exec(
+                "bbox_dict = " + Path(outfile).read_text(encoding="utf-8"),
+                globals(),
+                lcls,
+            )
+            bbox_dict = lcls["bbox_dict"]
             bbox_dict.extend(dictify_bbox(bbox))
         elif fmt == "sqlite":
             bbox_merged = read_bbox_db(outfile)

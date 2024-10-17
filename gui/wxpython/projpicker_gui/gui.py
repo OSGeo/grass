@@ -11,6 +11,7 @@ import queue
 import textwrap
 import webbrowser
 import sys
+from pathlib import Path
 
 import grass.projpicker as ppik
 from grass.getosm import OpenStreetMap
@@ -461,8 +462,7 @@ def start(
             if fd.ShowModal() != wx.ID_CANCEL:
                 query_to_export = query_text.Value
                 try:
-                    with open(fd.Path, "w") as f:
-                        f.write(query_to_export)
+                    Path(fd.Path).write_text(query_to_export)
                 except Exception as e:
                     wx.MessageDialog(
                         query_text, str(e), "Export query error"
