@@ -563,7 +563,7 @@ class OpenStreetMap:
 
             # pinned zoom at x,y
             xc, yc = self.width / 2, self.height / 2
-            for i in range(0, abs(dz)):  # pylint: disable=unused-variable
+            for i in range(abs(dz)):  # pylint: disable=unused-variable
                 if dz > 0:
                     # each zoom-in doubles
                     xc = (x + xc) / 2
@@ -694,7 +694,7 @@ class OpenStreetMap:
 
             # pinned rescale at x,y
             xc, yc = self.width / 2, self.height / 2
-            for i in range(0, abs(dz)):
+            for i in range(abs(dz)):
                 if dz > 0:
                     # each zoom-in doubles
                     xc = (x + xc) / 2
