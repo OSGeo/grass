@@ -29,41 +29,19 @@ class TestRasterTile(TestCase):
     def tearDownClass(cls):
         cls.del_temp_region()
         cls.runModule(
-            "g.remove", type="raster", flags="f", name=cls.output_prefix + "-000-000"
-        )
-        cls.runModule(
-            "g.remove", type="raster", flags="f", name=cls.output_prefix + "-000-001"
-        )
-        cls.runModule(
-            "g.remove", type="raster", flags="f", name=cls.output_prefix + "-001-000"
-        )
-        cls.runModule(
-            "g.remove", type="raster", flags="f", name=cls.output_prefix + "-001-001"
-        )
-
-        cls.runModule(
             "g.remove",
             type="raster",
             flags="f",
-            name=cls.output_prefix + "overlap" + "-000-000",
-        )
-        cls.runModule(
-            "g.remove",
-            type="raster",
-            flags="f",
-            name=cls.output_prefix + "overlap" + "-000-001",
-        )
-        cls.runModule(
-            "g.remove",
-            type="raster",
-            flags="f",
-            name=cls.output_prefix + "overlap" + "-001-000",
-        )
-        cls.runModule(
-            "g.remove",
-            type="raster",
-            flags="f",
-            name=cls.output_prefix + "overlap" + "-001-001",
+            name=(
+                cls.output_prefix + "-000-000",
+                cls.output_prefix + "-000-001",
+                cls.output_prefix + "-001-000",
+                cls.output_prefix + "-001-001",
+                cls.output_prefix + "overlap" + "-000-000",
+                cls.output_prefix + "overlap" + "-000-001",
+                cls.output_prefix + "overlap" + "-001-000",
+                cls.output_prefix + "overlap" + "-001-001",
+            ),
         )
 
     def test_raster_tile(self):

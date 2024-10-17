@@ -92,9 +92,13 @@ class SuccessTest(TestCase):
         """Remove the temporary region and generated data"""
         cls.del_temp_region()
         shutil.rmtree(cls.sig_dir1, ignore_errors=True)
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.b1, quiet=True)
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.b2, quiet=True)
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.train, quiet=True)
+        cls.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name=(cls.b1, cls.b2, cls.train),
+            quiet=True,
+        )
 
     def test_creation(self):
         """Test creating a signature"""
