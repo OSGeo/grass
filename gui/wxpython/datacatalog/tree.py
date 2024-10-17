@@ -133,7 +133,7 @@ def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
             ltype, wholename = each.split("/")
             name, mapset = wholename.split("@", maxsplit=1)
             if ltype == "vector":
-                p = gscript.pipe_command(
+                p = gs.pipe_command(
                     "v.info",
                     flags="t",
                     map=wholename,
@@ -143,8 +143,8 @@ def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
                     env=env,
                 )
                 stdout, stderr = p.communicate()
-                stdout = gscript.decode(stdout)
-                stderr = gscript.decode(stderr)
+                stdout = gs.decode(stdout)
+                stderr = gs.decode(stderr)
 
                 if not stderr:
                     map_info = dict(
