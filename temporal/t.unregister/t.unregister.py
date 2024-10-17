@@ -108,8 +108,8 @@ def main():
 
     # Read the map list from file
     if file:
+        line = True
         with open(file) as fd:
-            line = True
             while True:
                 line = fd.readline()
                 if not line:

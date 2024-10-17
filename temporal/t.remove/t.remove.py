@@ -101,8 +101,8 @@ def main():
             dataset_list = tuple(datasets.split(","))
 
     if file:
+        line = True
         with open(file) as fd:
-            line = True
             while True:
                 line = fd.readline()
                 if not line:
