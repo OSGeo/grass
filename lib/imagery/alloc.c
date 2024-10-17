@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <grass/imagery.h>
 
-
 void *I_malloc(size_t n)
 {
     void *b;
@@ -12,14 +11,12 @@ void *I_malloc(size_t n)
     return b;
 }
 
-
 void *I_realloc(void *b, size_t n)
 {
     b = G_realloc(b, n);
 
     return b;
 }
-
 
 int I_free(void *b)
 {
@@ -28,7 +25,6 @@ int I_free(void *b)
 
     return 0;
 }
-
 
 double **I_alloc_double2(int a, int b)
 {
@@ -49,7 +45,6 @@ double **I_alloc_double2(int a, int b)
 
     return x;
 }
-
 
 int *I_alloc_int(int a)
 {
@@ -82,7 +77,6 @@ int **I_alloc_int2(int a, int b)
     return x;
 }
 
-
 int I_free_int2(int **x)
 {
     int i;
@@ -96,7 +90,6 @@ int I_free_int2(int **x)
     return 0;
 }
 
-
 int I_free_double2(double **x)
 {
     int i;
@@ -109,7 +102,6 @@ int I_free_double2(double **x)
 
     return 0;
 }
-
 
 double ***I_alloc_double3(int a, int b, int c)
 {
@@ -132,7 +124,6 @@ double ***I_alloc_double3(int a, int b, int c)
 
     return x;
 }
-
 
 int I_free_double3(double ***x)
 {

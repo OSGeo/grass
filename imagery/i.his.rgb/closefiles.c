@@ -7,8 +7,8 @@
    use a less than perfect way of setting the color maps for the output
    to grey scale.  */
 
-int closefiles(char *r_name, char *g_name, char *b_name,
-               int fd_output[3], CELL * rowbuf[3])
+int closefiles(char *r_name, char *g_name, char *b_name, int fd_output[3],
+               CELL *rowbuf[3])
 {
     int i;
     struct Colors colors;

@@ -1,14 +1,13 @@
-
 /*-
  * Written by H. Mitasova, L. Mitas, I. Kosinovsky, D. Gerdes Fall 1994
  * University of Illinois
- * US Army Construction Engineering Research Lab  
+ * US Army Construction Engineering Research Lab
  * Copyright 1994, H. Mitasova (University of Illinois),
  * L. Mitas (University of Illinois),
- * I. Kosinovsky, (USA-CERL), and D.Gerdes (USA-CERL)   
+ * I. Kosinovsky, (USA-CERL), and D.Gerdes (USA-CERL)
  *
  * modified by McCauley in August 1995
- * modified by Mitasova in August 1995  
+ * modified by Mitasova in August 1995
  *
  */
 
@@ -28,17 +27,16 @@ int min1(int arg1, int arg2)
     return res;
 }
 
-
 int max1(
-            /*
-             * L. Mitas (University of Illinois),
-             * I. Kosinovsky, (USA-CERL), and D.Gerdes (USA-CERL)   
-             *
-             * modified by McCauley in August 1995
-             * modified by Mitasova in August 1995  
-             *
-             */
-            int arg1, int arg2)
+    /*
+     * L. Mitas (University of Illinois),
+     * I. Kosinovsky, (USA-CERL), and D.Gerdes (USA-CERL)
+     *
+     * modified by McCauley in August 1995
+     * modified by Mitasova in August 1995
+     *
+     */
+    int arg1, int arg2)
 {
     int res;
 

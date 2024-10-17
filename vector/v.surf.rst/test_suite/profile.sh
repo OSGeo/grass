@@ -36,5 +36,3 @@ user    1m1.312s
 sys     0m0.080s
 
 --raster map not found?
-
-

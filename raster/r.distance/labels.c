@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.distance
@@ -6,7 +5,7 @@
  * AUTHOR(S):    Michael Shapiro - CERL
  *               Sort/reverse sort by distance by Huidae Cho
  *
- * PURPOSE:      Locates the closest points between objects in two 
+ * PURPOSE:      Locates the closest points between objects in two
  *               raster maps.
  *
  * COPYRIGHT:    (C) 2003-2014 by the GRASS Development Team

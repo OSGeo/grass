@@ -1,13 +1,12 @@
-
 /****************************************************************************
  *
  * MODULE:       d.fontlist
  * AUTHOR(S):    James Westervelt (CERL) (original contributor)
  *               Markus Neteler <neteler itc.it>,
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Huidae Cho <grass4u gmail.com>, 
- *               Eric G. Miller <egm2 jps.net>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Huidae Cho <grass4u gmail.com>,
+ *               Eric G. Miller <egm2 jps.net>,
+ *               Glynn Clements <glynn gclements.plus.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      user selection of font for graphics monitor text
  * COPYRIGHT:    (C) 1999-2008 by the GRASS Development Team
@@ -22,8 +21,9 @@
  *  (falling back to $GISBASE/etc/fontcap), then adds any fonts obtained by
  *  the driver's Font_list method if provided (currently, only the cairo
  *  driver implements this method).
- * 
+ *
  *****************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

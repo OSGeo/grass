@@ -19,8 +19,8 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-static int read_line_nat(struct Map_info *,
-                         struct line_pnts *, struct line_cats *, off_t);
+static int read_line_nat(struct Map_info *, struct line_pnts *,
+                         struct line_cats *, off_t);
 
 /*! \brief Read vector feature on non-topological level (level 1) -
    native format - internal use only
@@ -28,20 +28,19 @@ static int read_line_nat(struct Map_info *,
    This function implements random access for native format,
    constraints are ignored!
 
-   \param Map pointer to Map_info struct 
+   \param Map pointer to Map_info struct
    \param[out] Points container used to store line points within
    (pointer to line_pnts struct)
    \param[out] Cats container used to store line categories within
    (pointer to line_cats struct)
-   \param offset given offset 
+   \param offset given offset
 
    \return feature type (GV_POINT, GV_LINE, ...)
    \return 0 dead line
    \return -2 nothing to read
    \return -1 on failure
  */
-int V1_read_line_nat(struct Map_info *Map,
-                     struct line_pnts *Points,
+int V1_read_line_nat(struct Map_info *Map, struct line_pnts *Points,
                      struct line_cats *Cats, off_t offset)
 {
     return read_line_nat(Map, Points, Cats, offset);
@@ -69,8 +68,8 @@ int V1_read_line_nat(struct Map_info *Map,
    \return -2 nothing to read
    \return -1 on failure
  */
-int V1_read_next_line_nat(struct Map_info *Map,
-                          struct line_pnts *line_p, struct line_cats *line_c)
+int V1_read_next_line_nat(struct Map_info *Map, struct line_pnts *line_p,
+                          struct line_cats *line_c)
 {
     int itype;
     off_t offset;
@@ -85,9 +84,9 @@ int V1_read_next_line_nat(struct Map_info *Map,
         offset = dig_ftell(&(Map->dig_fp));
         itype = read_line_nat(Map, line_p, line_c, offset);
         if (itype < 0)
-            return itype;       /* nothing to read or failure */
+            return itype; /* nothing to read or failure */
 
-        if (itype == 0)         /* skip dead line */
+        if (itype == 0) /* skip dead line */
             continue;
 
         if (Map->constraint.type_flag) {
@@ -113,7 +112,7 @@ int V1_read_next_line_nat(struct Map_info *Map,
         return itype;
     }
 
-    return -1;                  /* NOTREACHED */
+    return -1; /* NOTREACHED */
 }
 
 /*! \brief Read vector feature on topological level (level 2) -
@@ -124,18 +123,18 @@ int V1_read_next_line_nat(struct Map_info *Map,
 
    Note: Topology must be built at level >= GV_BUILD_BASE
 
-   \param Map pointer to Map_info struct 
-   \param[out] Points container used to store line points within (pointer to line_pnts struct)
-   \param[out] Cats container used to store line categories within (pointer to line_cats struct)
-   \param line feature id to read (starts at 1)
+   \param Map pointer to Map_info struct
+   \param[out] Points container used to store line points within (pointer to
+   line_pnts struct) \param[out] Cats container used to store line categories
+   within (pointer to line_cats struct) \param line feature id to read (starts
+   at 1)
 
    \return feature type (GV_POINT, GV_LINE, ...)
    \return -2 nothing to read
    \return -1 on failure
  */
-int V2_read_line_nat(struct Map_info *Map,
-                     struct line_pnts *line_p, struct line_cats *line_c,
-                     int line)
+int V2_read_line_nat(struct Map_info *Map, struct line_pnts *line_p,
+                     struct line_cats *line_c, int line)
 {
     struct P_line *Line;
 
@@ -176,8 +175,8 @@ int V2_read_line_nat(struct Map_info *Map,
    \return -2 nothing to read
    \return -1 on error
  */
-int V2_read_next_line_nat(struct Map_info *Map,
-                          struct line_pnts *line_p, struct line_cats *line_c)
+int V2_read_next_line_nat(struct Map_info *Map, struct line_pnts *line_p,
+                          struct line_cats *line_c)
 {
     int line, ret;
     struct P_line *Line;
@@ -192,7 +191,7 @@ int V2_read_next_line_nat(struct Map_info *Map,
         line = Map->next_line;
 
         if (line > Map->plus.n_lines)
-            return -2;          /* nothing to read */
+            return -2; /* nothing to read */
 
         Line = Map->plus.Line[line];
         if (Line == NULL) {
@@ -231,11 +230,11 @@ int V2_read_next_line_nat(struct Map_info *Map,
         return ret;
     }
 
-    return -1;                  /* NOTREACHED */
+    return -1; /* NOTREACHED */
 }
 
-/*!  
-   \brief Read line from coor file 
+/*!
+   \brief Read line from coor file
 
    \param Map vector map layer
    \param[out] p container used to store line points within
@@ -247,8 +246,8 @@ int V2_read_next_line_nat(struct Map_info *Map,
    \return -1 out of memory
    \return -2 end of file
  */
-int read_line_nat(struct Map_info *Map,
-                  struct line_pnts *p, struct line_cats *c, off_t offset)
+int read_line_nat(struct Map_info *Map, struct line_pnts *p,
+                  struct line_cats *c, off_t offset)
 {
     register int i, dead = 0;
     int n_points;
@@ -270,12 +269,13 @@ int read_line_nat(struct Map_info *Map,
     if (0 >= dig__fread_port_C(&rhead, 1, &(Map->dig_fp)))
         return (-2);
 
-    if (!(rhead & 0x01))        /* dead line */
+    if (!(rhead & 0x01)) /* dead line */
         dead = 1;
 
-    if (rhead & 0x02)           /* categories exists */
-        do_cats = 1;            /* do not return here let file offset moves forward to next */
-    else                        /* line */
+    if (rhead & 0x02) /* categories exists */
+        do_cats =
+            1; /* do not return here let file offset moves forward to next */
+    else       /* line */
         do_cats = 0;
 
     rhead >>= 2;
@@ -287,11 +287,11 @@ int read_line_nat(struct Map_info *Map,
         c->n_cats = 0;
 
     if (do_cats) {
-        if (Map->head.coor_version.minor == 1) {        /* coor format 5.1 */
+        if (Map->head.coor_version.minor == 1) { /* coor format 5.1 */
             if (0 >= dig__fread_port_I(&n_cats, 1, &(Map->dig_fp)))
                 return (-2);
         }
-        else {                  /* coor format 5.0 */
+        else { /* coor format 5.0 */
             if (0 >= dig__fread_port_C(&nc, 1, &(Map->dig_fp)))
                 return (-2);
             n_cats = (int)nc;
@@ -304,12 +304,12 @@ int read_line_nat(struct Map_info *Map,
                 if (0 > dig_alloc_cats(c, (int)n_cats + 1))
                     return -1;
 
-                if (Map->head.coor_version.minor == 1) {        /* coor format 5.1 */
+                if (Map->head.coor_version.minor == 1) { /* coor format 5.1 */
                     if (0 >=
                         dig__fread_port_I(c->field, n_cats, &(Map->dig_fp)))
                         return (-2);
                 }
-                else {          /* coor format 5.0 */
+                else { /* coor format 5.0 */
                     for (i = 0; i < n_cats; i++) {
                         if (0 >= dig__fread_port_S(&field, 1, &(Map->dig_fp)))
                             return (-2);
@@ -318,15 +318,14 @@ int read_line_nat(struct Map_info *Map,
                 }
                 if (0 >= dig__fread_port_I(c->cat, n_cats, &(Map->dig_fp)))
                     return (-2);
-
             }
         }
         else {
-            if (Map->head.coor_version.minor == 1) {    /* coor format 5.1 */
-                size = (off_t) (2 * PORT_INT) * n_cats;
+            if (Map->head.coor_version.minor == 1) { /* coor format 5.1 */
+                size = (off_t)(2 * PORT_INT) * n_cats;
             }
-            else {              /* coor format 5.0 */
-                size = (off_t) (PORT_SHORT + PORT_INT) * n_cats;
+            else { /* coor format 5.0 */
+                size = (off_t)(PORT_SHORT + PORT_INT) * n_cats;
             }
 
             dig_fseek(&(Map->dig_fp), size, SEEK_CUR);
@@ -364,10 +363,10 @@ int read_line_nat(struct Map_info *Map,
     }
     else {
         if (Map->head.with_z)
-            size = (off_t) n_points *3 * PORT_DOUBLE;
+            size = (off_t)n_points * 3 * PORT_DOUBLE;
 
         else
-            size = (off_t) n_points *2 * PORT_DOUBLE;
+            size = (off_t)n_points * 2 * PORT_DOUBLE;
 
         dig_fseek(&(Map->dig_fp), size, SEEK_CUR);
     }

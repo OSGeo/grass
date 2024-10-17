@@ -1,6 +1,6 @@
 /*!
  * \file lib/gis/open.c
- * 
+ *
  * \brief GIS Library - Open file functions
  *
  * (C) 1999-2015 by the GRASS Development Team
@@ -27,8 +27,8 @@
 /*!
    \brief Lowest level open routine.
 
-   Opens the file <i>name</i> in <i>element</i> ("cell", etc.) in mapset <i>mapset</i>
-   according to the i/o <i>mode</i>.
+   Opens the file <i>name</i> in <i>element</i> ("cell", etc.) in mapset
+   <i>mapset</i> according to the i/o <i>mode</i>.
 
    - mode = 0 (read) will look for <i>name</i> in <i>mapset</i> and
    open the file for read only the file must exist
@@ -49,8 +49,8 @@
    \return open file descriptor (int)
    \return -1 could not open
  */
-static int G__open(const char *element,
-                   const char *name, const char *mapset, int mode)
+static int G__open(const char *element, const char *name, const char *mapset,
+                   int mode)
 {
     int fd;
     int is_tmp;
@@ -65,8 +65,9 @@ static int G__open(const char *element,
     if (mode == 0) {
         if (G_name_is_fully_qualified(name, xname, xmapset)) {
             if (*mapset && strcmp(xmapset, mapset) != 0) {
-                G_warning(_("G__open(read): mapset <%s> doesn't match xmapset <%s>"),
-                          mapset, xmapset);
+                G_warning(
+                    _("G__open(read): mapset <%s> doesn't match xmapset <%s>"),
+                    mapset, xmapset);
                 return -1;
             }
             name = xname;
@@ -86,8 +87,8 @@ static int G__open(const char *element,
         }
 
         if ((fd = open(path, 0)) < 0)
-            G_warning(_("G__open(read): Unable to open '%s': %s"),
-                      path, strerror(errno));
+            G_warning(_("G__open(read): Unable to open '%s': %s"), path,
+                      strerror(errno));
         return fd;
     }
     /* WRITE */
@@ -119,8 +120,8 @@ static int G__open(const char *element,
         }
 
         if ((fd = open(path, mode)) < 0)
-            G_warning(_("G__open(write): Unable to open '%s': %s"),
-                      path, strerror(errno));
+            G_warning(_("G__open(write): Unable to open '%s': %s"), path,
+                      strerror(errno));
         return fd;
     }
     return -1;
@@ -149,7 +150,6 @@ int G_open_new(const char *element, const char *name)
 {
     return G__open(element, name, G_mapset(), 1);
 }
-
 
 /*!
    \brief Open a database file for reading
@@ -199,7 +199,6 @@ int G_open_update(const char *element, const char *name)
     return fd;
 }
 
-
 /*!
    \brief Open a new database file
 
@@ -223,15 +222,14 @@ FILE *G_fopen_new(const char *element, const char *name)
 
     fd = G__open(element, name, G_mapset(), 1);
     if (fd < 0) {
-        G_debug(1, "G_fopen_new(): element = %s, name = %s : NULL",
-                element, name);
-        return (FILE *) 0;
+        G_debug(1, "G_fopen_new(): element = %s, name = %s : NULL", element,
+                name);
+        return (FILE *)0;
     }
 
     G_debug(2, "\tfile open: new (mode = w)");
     return fdopen(fd, "w");
 }
-
 
 /*!
    \brief Open a database file for reading
@@ -256,7 +254,7 @@ FILE *G_fopen_old(const char *element, const char *name, const char *mapset)
 
     fd = G__open(element, name, mapset, 0);
     if (fd < 0)
-        return (FILE *) NULL;
+        return (FILE *)NULL;
 
     G_debug(2, "\tfile open: read (mode = r)");
     return fdopen(fd, "r");
@@ -283,7 +281,7 @@ FILE *G_fopen_append(const char *element, const char *name)
 
     fd = G__open(element, name, G_mapset(), 2);
     if (fd < 0)
-        return (FILE *) 0;
+        return (FILE *)0;
     lseek(fd, 0L, SEEK_END);
 
     G_debug(2, "\tfile open: append (mode = a)");
@@ -311,7 +309,7 @@ FILE *G_fopen_modify(const char *element, const char *name)
 
     fd = G__open(element, name, G_mapset(), 2);
     if (fd < 0)
-        return (FILE *) 0;
+        return (FILE *)0;
     lseek(fd, 0L, SEEK_END);
 
     G_debug(2, "\tfile open: modify (mode = r+)");

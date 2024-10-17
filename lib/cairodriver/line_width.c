@@ -8,8 +8,8 @@
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
-   \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
-   \author Glynn Clements  
+   \author Lars Ahlzen <lars ahlzen.com> (original contributor)
+   \author Glynn Clements
  */
 
 #include <grass/gis.h>

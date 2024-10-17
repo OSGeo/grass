@@ -7,7 +7,7 @@
 #include "local_proto.h"
 
 int input(char *blank1, char *word1, char *blank2, char *word2, char *rest,
-          FILE * infile)
+          FILE *infile)
 {
     char buf[1024];
     char *b, *w1, *w2;
@@ -60,9 +60,10 @@ int input(char *blank1, char *word1, char *blank2, char *word2, char *rest,
         G_fatal_error(_("One coordinate pair per line, please"));
 
     /* bug? really = and not ==? */
-    /* not a bug: we are filling "rest" with the remaining fgets buffer. 
+    /* not a bug: we are filling "rest" with the remaining fgets buffer.
        This goes unused though so could be ripped out if a worry */
-    while ((*rest++ = *b++)) ;
+    while ((*rest++ = *b++))
+        ;
 
     if (isatty(0) && strcmp("end", w1) == 0 && *w2 == 0)
         return 0;

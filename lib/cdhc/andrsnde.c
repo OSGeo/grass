@@ -3,19 +3,16 @@
 #include <math.h>
 #include "local_proto.h"
 
-
 double *Cdhc_anderson_darling_exp(double *x, int n)
 {
     static double y[2];
-    double sqrt2, mean = 0.0, *xcopy, fx, sum3 = 0.0;
+    double mean = 0.0, *xcopy, fx, sum3 = 0.0;
     int i;
 
     if ((xcopy = (double *)malloc(n * sizeof(double))) == NULL) {
         fprintf(stderr, "Memory error in Cdhc_anderson_darling\n");
         exit(EXIT_FAILURE);
     }
-
-    sqrt2 = sqrt((double)2.0);
 
     for (i = 0; i < n; ++i) {
         xcopy[i] = x[i];

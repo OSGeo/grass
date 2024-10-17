@@ -1,4 +1,3 @@
-
 /*!
  * \file lib/gis/spawn.c
  *
@@ -41,16 +40,15 @@
 /** \def MAX_SIGNALS Maximum number of signals */
 
 /** \def MAX_REDIRECTS Maximum number of redirects */
-#define MAX_ARGS 256
-#define MAX_BINDINGS 256
-#define MAX_SIGNALS 32
+#define MAX_ARGS      256
+#define MAX_BINDINGS  256
+#define MAX_SIGNALS   32
 #define MAX_REDIRECTS 32
-
 
 /**
  * \brief Spawns a new process.
  *
- * A more useful alternative to G_system(), which takes the 
+ * A more useful alternative to G_system(), which takes the
  * arguments of <b>command</b> as parameters.
  *
  * \param[in] command command to execute
@@ -58,16 +56,14 @@
  * \return process status on success
  */
 
-struct redirect
-{
+struct redirect {
     int dst_fd;
     int src_fd;
     const char *file;
     int mode;
 };
 
-struct signal
-{
+struct signal {
     int which;
     int action;
     int signum;
@@ -78,14 +74,12 @@ struct signal
 #endif
 };
 
-struct binding
-{
+struct binding {
     const char *var;
     const char *val;
 };
 
-struct spawn
-{
+struct spawn {
     const char *args[MAX_ARGS];
     int num_args;
     struct redirect redirects[MAX_REDIRECTS];
@@ -103,8 +97,7 @@ static void parse_argvec(struct spawn *sp, const char **va);
 
 #ifdef __MINGW32__
 
-struct buffer
-{
+struct buffer {
     char *str;
     size_t len;
     size_t size;
@@ -220,12 +213,10 @@ static char *check_program(const char *pgm, const char *dir, const char *ext)
     char pathname[GPATH_MAX];
 
     sprintf(pathname, "%s%s%s%s", dir, *dir ? "\\" : "", pgm, ext);
-    return access(pathname, 0) == 0 ? G_store(pathname)
-        : NULL;
+    return access(pathname, 0) == 0 ? G_store(pathname) : NULL;
 }
 
-static char *find_program_ext(const char *pgm, const char *dir,
-                              char **pathext)
+static char *find_program_ext(const char *pgm, const char *dir, char **pathext)
 {
     char *result;
     int i;
@@ -243,8 +234,7 @@ static char *find_program_ext(const char *pgm, const char *dir,
     return NULL;
 }
 
-static char *find_program_dir_ext(const char *pgm, char **path,
-                                  char **pathext)
+static char *find_program_dir_ext(const char *pgm, char **path, char **pathext)
 {
     char *result = NULL;
     int i;
@@ -329,10 +319,9 @@ static HANDLE get_handle(int fd)
     if (fd < 0)
         return INVALID_HANDLE_VALUE;
 
-    h1 = (HANDLE) _get_osfhandle(fd);
-    if (!DuplicateHandle(GetCurrentProcess(), h1,
-                         GetCurrentProcess(), &h2,
-                         0, TRUE, DUPLICATE_SAME_ACCESS))
+    h1 = (HANDLE)_get_osfhandle(fd);
+    if (!DuplicateHandle(GetCurrentProcess(), h1, GetCurrentProcess(), &h2, 0,
+                         TRUE, DUPLICATE_SAME_ACCESS))
         return INVALID_HANDLE_VALUE;
 
     return h2;
@@ -371,17 +360,17 @@ static int win_spawn(const char *cmd, const char **argv, const char **envp,
     si.hStdOutput = handles[1];
     si.hStdError = handles[2];
 
-    result = CreateProcess(program,     /* lpApplicationName */
-                           args,        /* lpCommandLine */
-                           NULL,        /* lpProcessAttributes */
-                           NULL,        /* lpThreadAttributes */
-                           1,   /* bInheritHandles */
-                           0,   /* dwCreationFlags */
-                           env, /* lpEnvironment */
-                           cwd, /* lpCurrentDirectory */
-                           &si, /* lpStartupInfo */
-                           &pi  /* lpProcessInformation */
-        );
+    result = CreateProcess(program, /* lpApplicationName */
+                           args,    /* lpCommandLine */
+                           NULL,    /* lpProcessAttributes */
+                           NULL,    /* lpThreadAttributes */
+                           1,       /* bInheritHandles */
+                           0,       /* dwCreationFlags */
+                           env,     /* lpEnvironment */
+                           cwd,     /* lpCurrentDirectory */
+                           &si,     /* lpStartupInfo */
+                           &pi      /* lpProcessInformation */
+    );
 
     G_free(args);
     G_free(env);
@@ -440,7 +429,6 @@ static void do_redirects(struct redirect *redirects, int num_redirects,
             handles[r->dst_fd] = get_handle(r->src_fd);
 
             close(r->src_fd);
-
         }
         else if (r->src_fd >= 0) {
             handles[r->dst_fd] = get_handle(r->src_fd);
@@ -479,7 +467,8 @@ static const char **do_bindings(const struct binding *bindings,
     const char **newenv;
     int i, n;
 
-    for (i = 0; _environ[i]; i++) ;
+    for (i = 0; _environ[i]; i++)
+        ;
     n = i;
 
     newenv = G_malloc((num_bindings + n + 1) * sizeof(char *));
@@ -504,9 +493,8 @@ static int do_spawn(struct spawn *sp, const char *command)
     do_redirects(sp->redirects, sp->num_redirects, handles);
     env = do_bindings(sp->bindings, sp->num_bindings);
 
-    status =
-        win_spawn(command, sp->args, env, sp->directory, handles,
-                  sp->background, 1);
+    status = win_spawn(command, sp->args, env, sp->directory, handles,
+                       sp->background, 1);
 
     if (!sp->background && status < 0)
         G_warning(_("G_spawn: unable to execute command"));
@@ -535,16 +523,14 @@ static int undo_signals(const struct signal *signals, int num_signals,
         case SSA_IGNORE:
         case SSA_DEFAULT:
             if (sigaction(s->signum, &s->old_act, NULL) < 0) {
-                G_warning(_("G_spawn: unable to restore signal %d"),
-                          s->signum);
+                G_warning(_("G_spawn: unable to restore signal %d"), s->signum);
                 error = 1;
             }
             break;
         case SSA_BLOCK:
         case SSA_UNBLOCK:
             if (sigprocmask(SIG_UNBLOCK, &s->old_mask, NULL) < 0) {
-                G_warning(_("G_spawn: unable to restore signal %d"),
-                          s->signum);
+                G_warning(_("G_spawn: unable to restore signal %d"), s->signum);
                 error = 1;
             }
             break;
@@ -583,8 +569,7 @@ static int do_signals(struct signal *signals, int num_signals, int which)
         case SSA_DEFAULT:
             act.sa_handler = SIG_DFL;
             if (sigaction(s->signum, &act, &s->old_act) < 0) {
-                G_warning(_("G_spawn: unable to ignore signal %d"),
-                          s->signum);
+                G_warning(_("G_spawn: unable to ignore signal %d"), s->signum);
                 error = 1;
             }
             else
@@ -602,8 +587,7 @@ static int do_signals(struct signal *signals, int num_signals, int which)
             sigemptyset(&mask);
             sigaddset(&mask, s->signum);
             if (sigprocmask(SIG_UNBLOCK, &mask, &s->old_mask) < 0) {
-                G_warning(_("G_spawn: unable to unblock signal %d"),
-                          s->signum);
+                G_warning(_("G_spawn: unable to unblock signal %d"), s->signum);
                 error = 1;
             }
             else
@@ -688,8 +672,7 @@ static int do_spawn(struct spawn *sp, const char *command)
 
         if (sp->directory)
             if (chdir(sp->directory) < 0) {
-                G_warning(_("Unable to change directory to %s"),
-                          sp->directory);
+                G_warning(_("Unable to change directory to %s"), sp->directory);
                 _exit(127);
             }
 
@@ -711,7 +694,7 @@ static int do_spawn(struct spawn *sp, const char *command)
 
         do
             n = waitpid(pid, &status, 0);
-        while (n == (pid_t) - 1 && errno == EINTR);
+        while (n == (pid_t)-1 && errno == EINTR);
 
         if (n != pid)
             status = -1;
@@ -743,8 +726,8 @@ static void begin_spawn(struct spawn *sp)
     sp->directory = NULL;
 }
 
-#define NEXT_ARG(var, type) ((type) *(var)++)
-#define NEXT_ARG_INT(var) (int)((intptr_t) *(var)++)
+#define NEXT_ARG(var, type) ((type) * (var)++)
+#define NEXT_ARG_INT(var)   (int)((intptr_t) * (var)++)
 
 static void parse_argvec(struct spawn *sp, const char **va)
 {
@@ -761,8 +744,7 @@ static void parse_argvec(struct spawn *sp, const char **va)
 
             sp->redirects[sp->num_redirects].src_fd = -1;
             sp->redirects[sp->num_redirects].mode = NEXT_ARG_INT(va);
-            sp->redirects[sp->num_redirects].file =
-                NEXT_ARG(va, const char *);
+            sp->redirects[sp->num_redirects].file = NEXT_ARG(va, const char *);
 
             sp->num_redirects++;
         }
@@ -805,7 +787,6 @@ static void parse_argvec(struct spawn *sp, const char **va)
         }
         else if (arg == SF_DIRECTORY) {
             sp->directory = NEXT_ARG(va, const char *);
-
         }
         else if (arg == SF_ARGVEC) {
             parse_argvec(sp, NEXT_ARG(va, const char **));
@@ -938,13 +919,13 @@ int G_spawn_ex(const char *command, ...)
 int G_spawn(const char *command, ...)
 {
     const char *args[MAX_ARGS];
-    int num_args = 0, i;
+    int num_args = 0;
     va_list va;
     int status = -1;
 
     va_start(va, command);
 
-    for (i = 0;; i++) {
+    for (;;) {
         const char *arg = va_arg(va, const char *);
 
         args[num_args++] = arg;
@@ -954,13 +935,13 @@ int G_spawn(const char *command, ...)
 
     va_end(va);
 
-    status = G_spawn_ex(command,
+    status =
+        G_spawn_ex(command,
 #ifndef __MINGW32__
-                        SF_SIGNAL, SST_PRE, SSA_IGNORE, SIGINT,
-                        SF_SIGNAL, SST_PRE, SSA_IGNORE, SIGQUIT,
-                        SF_SIGNAL, SST_PRE, SSA_BLOCK, SIGCHLD,
+                   SF_SIGNAL, SST_PRE, SSA_IGNORE, SIGINT, SF_SIGNAL, SST_PRE,
+                   SSA_IGNORE, SIGQUIT, SF_SIGNAL, SST_PRE, SSA_BLOCK, SIGCHLD,
 #endif
-                        SF_ARGVEC, args, NULL);
+                   SF_ARGVEC, args, NULL);
 
     return status;
 }
@@ -969,7 +950,7 @@ int G_wait(int i_pid)
 {
 #ifdef __MINGW32__
     DWORD rights = PROCESS_QUERY_INFORMATION | SYNCHRONIZE;
-    HANDLE hProcess = OpenProcess(rights, FALSE, (DWORD) i_pid);
+    HANDLE hProcess = OpenProcess(rights, FALSE, (DWORD)i_pid);
     DWORD exitcode;
 
     if (!hProcess)
@@ -977,19 +958,19 @@ int G_wait(int i_pid)
 
     WaitForSingleObject(hProcess, INFINITE);
     if (!GetExitCodeProcess(hProcess, &exitcode))
-        exitcode = (DWORD) - 1;
+        exitcode = (DWORD)-1;
 
     CloseHandle(hProcess);
 
     return (int)exitcode;
 #else
-    pid_t pid = (pid_t) i_pid;
+    pid_t pid = (pid_t)i_pid;
     int status = -1;
     pid_t n;
 
     do
         n = waitpid(pid, &status, 0);
-    while (n == (pid_t) - 1 && errno == EINTR);
+    while (n == (pid_t)-1 && errno == EINTR);
 
     if (n != pid)
         return -1;

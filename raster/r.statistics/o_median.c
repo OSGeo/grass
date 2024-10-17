@@ -7,7 +7,6 @@
 /* function prototypes */
 static long median(struct stats *);
 
-
 int o_median(const char *basemap, const char *covermap, const char *outputmap,
              int usecats, struct Categories *cats)
 {
@@ -26,27 +25,25 @@ int o_median(const char *basemap, const char *covermap, const char *outputmap,
         if (first) {
             stats.n = 0;
             stats.nalloc = 16;
-            stats.cat = (long *)
-                G_calloc(stats.nalloc, sizeof(long));
-            stats.area = (double *)
-                G_calloc(stats.nalloc, sizeof(double));
+            stats.cat = (long *)G_calloc(stats.nalloc, sizeof(long));
+            stats.area = (double *)G_calloc(stats.nalloc, sizeof(double));
             first = 0;
             catb = basecat;
         }
         if (basecat != catb) {
             catc = median(&stats);
             write_reclass(reclass_fp, catb, catc,
-                          Rast_get_c_cat((CELL *) & catc, cats), usecats);
+                          Rast_get_c_cat((CELL *)&catc, cats), usecats);
             catb = basecat;
             stats.n = 0;
         }
         stats.n++;
         if (stats.n > stats.nalloc) {
             stats.nalloc *= 2;
-            stats.cat = (long *)
-                G_realloc(stats.cat, stats.nalloc * sizeof(long));
-            stats.area = (double *)
-                G_realloc(stats.area, stats.nalloc * sizeof(double));
+            stats.cat =
+                (long *)G_realloc(stats.cat, stats.nalloc * sizeof(long));
+            stats.area =
+                (double *)G_realloc(stats.area, stats.nalloc * sizeof(double));
         }
         stats.cat[stats.n - 1] = covercat;
         stats.area[stats.n - 1] = area;
@@ -54,7 +51,7 @@ int o_median(const char *basemap, const char *covermap, const char *outputmap,
     if (!first) {
         catc = median(&stats);
         write_reclass(reclass_fp, catb, catc,
-                      Rast_get_c_cat((CELL *) & catc, cats), usecats);
+                      Rast_get_c_cat((CELL *)&catc, cats), usecats);
     }
 
     G_popen_close(&stats_child);
@@ -62,7 +59,6 @@ int o_median(const char *basemap, const char *covermap, const char *outputmap,
 
     return 0;
 }
-
 
 static long median(struct stats *stats)
 {

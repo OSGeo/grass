@@ -38,4 +38,4 @@ int normalsv(double *svbox)
         svbox[i + k] = klotz1_1.xbuff[i];
 
     return 0;
-}                               /* normalsv */
+} /* normalsv */

@@ -103,7 +103,6 @@ void db_syserror(const char *s)
     char lead[1024];
     char msg[2048];
 
-
     err_flag = 0;
     if (errno <= 0)
         return;
@@ -172,7 +171,7 @@ void db_clear_error(void)
 {
     err_flag = 0;
     err_code = DB_OK;
-    errno = 0;                  /* clearn system errno as well */
+    errno = 0; /* clearn system errno as well */
 }
 
 /*!
@@ -200,7 +199,6 @@ void db_print_error(void)
     else
         fprintf(stderr, "%s%s\n", lead, err_msg);
 }
-
 
 static int debug_on = 0;
 

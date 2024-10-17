@@ -4,7 +4,6 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-
 int make_support(struct rr_state *theState, int percent, double percentage,
                  long seed_value)
 {
@@ -15,7 +14,7 @@ int make_support(struct rr_state *theState, int percent, double percentage,
     char *inraster;
     struct RASTER_MAP_PTR nulls;
 
-    /* write categories for output raster 
+    /* write categories for output raster
        use values from input or cover map
      */
     if (theState->docover == 1) {
@@ -30,10 +29,9 @@ int make_support(struct rr_state *theState, int percent, double percentage,
         sprintf(title, "Random points on <%s>", inraster);
         Rast_set_cats_title(title, &cats);
         if (theState->use_nulls)
-            Rast_set_cat(nulls.data.v,
-                         nulls.data.v,
-                         "Points with NULL values in original",
-                         &cats, nulls.type);
+            Rast_set_cat(nulls.data.v, nulls.data.v,
+                         "Points with NULL values in original", &cats,
+                         nulls.type);
         Rast_write_cats(theState->outraster, &cats);
     }
 
@@ -44,7 +42,8 @@ int make_support(struct rr_state *theState, int percent, double percentage,
                             inraster);
         if (percent)
             Rast_format_history(&hist, HIST_DATSRC_2,
-                                "Random points for %.2f percent of input cells with random seed %ld",
+                                "Random points for %.2f percent of input cells "
+                                "with random seed %ld",
                                 percentage, seed_value);
         else
             Rast_format_history(&hist, HIST_DATSRC_2,
@@ -73,9 +72,8 @@ int make_support(struct rr_state *theState, int percent, double percentage,
     /* set colors for output raster */
     if (Rast_read_colors(inraster, "", &clr) >= 0) {
         if (theState->use_nulls) {
-            Rast_add_color_rule(nulls.data.v, 127, 127, 127,
-                                nulls.data.v, 127, 127, 127, &clr,
-                                nulls.type);
+            Rast_add_color_rule(nulls.data.v, 127, 127, 127, nulls.data.v, 127,
+                                127, 127, &clr, nulls.type);
         }
         Rast_write_colors(theState->outraster, G_mapset(), &clr);
     }

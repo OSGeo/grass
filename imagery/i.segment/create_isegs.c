@@ -10,8 +10,8 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/raster.h>
-#include <grass/segment.h>      /* segmentation library */
-#include <grass/rbtree.h>       /* Red Black Tree library functions */
+#include <grass/segment.h> /* segmentation library */
+#include <grass/rbtree.h>  /* Red Black Tree library functions */
 #include "iseg.h"
 
 int create_isegs(struct globals *globals)
@@ -44,8 +44,8 @@ int create_isegs(struct globals *globals)
                     FLAG_SET(globals->null_flag, row, col);
                     Segment_get(&globals->bounds_seg, &bounds_val, row, col);
 
-                    if (!Rast_is_c_null_value(&bounds_val)
-                        && bounds_val == current_bound) {
+                    if (!Rast_is_c_null_value(&bounds_val) &&
+                        bounds_val == current_bound) {
 
                         Segment_get(&globals->rid_seg, &rid, row, col);
                         if (!Rast_is_c_null_value(&rid)) {
@@ -70,7 +70,7 @@ int create_isegs(struct globals *globals)
 
             if (have_bound)
                 successflag = globals->method_fn(globals);
-        }                       /* end outer loop for processing polygons */
+        } /* end outer loop for processing polygons */
 
         /* restore NULL flag */
         flag_clear_all(globals->null_flag);
@@ -164,9 +164,12 @@ void find_eight_neighbors(int p_row, int p_col, int neighbors[8][2])
     return;
 }
 
-/* similarity / distance between two points based on their input raster values */
-/* assumes first point values already saved in files->bands_seg - only run Segment_get once for that value... */
-/* TODO: Segment_get already happened for a[] values in the main function.  Could remove a[] from these parameters */
+/* similarity / distance between two points based on their input raster values
+ */
+/* assumes first point values already saved in files->bands_seg - only run
+ * Segment_get once for that value... */
+/* TODO: Segment_get already happened for a[] values in the main function. Could
+ * remove a[] from these parameters */
 double calculate_euclidean_similarity(struct ngbr_stats *Ri,
                                       struct ngbr_stats *Rk,
                                       struct globals *globals)
@@ -174,7 +177,8 @@ double calculate_euclidean_similarity(struct ngbr_stats *Ri,
     double val = 0., diff;
     int n = globals->nbands - 1;
 
-    /* squared euclidean distance, sum the square differences for each dimension */
+    /* squared euclidean distance, sum the square differences for each dimension
+     */
     do {
         diff = Ri->mean[n] - Rk->mean[n];
 
@@ -189,8 +193,9 @@ double calculate_euclidean_similarity(struct ngbr_stats *Ri,
 
 #ifdef _OR_SHAPE_
     if (globals->shape_weight < 1)
-        val = val * globals->shape_weight + (1 - globals->shape_weight) *
-            calculate_shape(rsi, rsk, nshared, globals);
+        val = val * globals->shape_weight +
+              (1 - globals->shape_weight) *
+                  calculate_shape(rsi, rsk, nshared, globals);
 #endif
 
     return val;
@@ -216,8 +221,9 @@ double calculate_manhattan_similarity(struct ngbr_stats *Ri,
 
 #ifdef _OR_SHAPE_
     if (globals->shape_weight < 1)
-        val = val * globals->shape_weight + (1 - globals->shape_weight) *
-            calculate_shape(rsi, rsk, nshared, globals);
+        val = val * globals->shape_weight +
+              (1 - globals->shape_weight) *
+                  calculate_shape(rsi, rsk, nshared, globals);
 #endif
 
     return val;

@@ -48,8 +48,7 @@ int convexHull(struct Point *P, int numPoints, int **hull)
         upHull[upPoints] = pointIdx;
         while (upPoints > 1 &&
                !rightTurn(P, upHull[upPoints], upHull[upPoints - 1],
-                          upHull[upPoints - 2])
-            ) {
+                          upHull[upPoints - 2])) {
             upHull[upPoints - 1] = upHull[upPoints];
             upPoints--;
         }
@@ -65,22 +64,19 @@ int convexHull(struct Point *P, int numPoints, int **hull)
         loHull[loPoints] = pointIdx;
         while (loPoints > 1 &&
                !rightTurn(P, loHull[loPoints], loHull[loPoints - 1],
-                          loHull[loPoints - 2])
-            ) {
+                          loHull[loPoints - 2])) {
             loHull[loPoints - 1] = loHull[loPoints];
             loPoints--;
         }
     }
 
-    G_debug(3, "numPoints:%d loPoints:%d upPoints:%d",
-            numPoints, loPoints, upPoints);
+    G_debug(3, "numPoints:%d loPoints:%d upPoints:%d", numPoints, loPoints,
+            upPoints);
 
     /* reclaim unneeded memory */
     *hull = (int *)G_realloc(*hull, (loPoints + upPoints) * sizeof(int));
     return loPoints + upPoints;
 }
-
-
 
 void convexHull3d(struct Point *P, const int numPoints, struct Map_info *Map)
 {
@@ -110,5 +106,4 @@ void convexHull3d(struct Point *P, const int numPoints, struct Map_info *Map)
     G_free(px);
     G_free(py);
     G_free(pz);
-
 }

@@ -25,7 +25,7 @@
 
 #include "raster3d_intern.h"
 
-static int close_new(RASTER3D_Map * map)
+static int close_new(RASTER3D_Map *map)
 {
     char path[GPATH_MAX];
     struct Categories cats;
@@ -60,8 +60,9 @@ static int close_new(RASTER3D_Map * map)
     if (link(map->tempName, path) < 0) {
 #endif
         if (rename(map->tempName, path)) {
-            G_warning(_("Unable to move temp raster map <%s> to 3D raster map <%s>"),
-                      map->tempName, path);
+            G_warning(
+                _("Unable to move temp raster map <%s> to 3D raster map <%s>"),
+                map->tempName, path);
             return 0;
         }
     }
@@ -71,7 +72,7 @@ static int close_new(RASTER3D_Map * map)
     return 1;
 }
 
-static int close_cell_new(RASTER3D_Map * map)
+static int close_cell_new(RASTER3D_Map *map)
 {
     long ltmp;
 
@@ -89,15 +90,14 @@ static int close_cell_new(RASTER3D_Map * map)
     /* write the header info which was filled with dummy values at the */
     /* opening time */
 
-    if (lseek(map->data_fd,
-              (long)(map->offset - sizeof(int) - sizeof(long)),
+    if (lseek(map->data_fd, (long)(map->offset - sizeof(int) - sizeof(long)),
               SEEK_SET) == -1) {
         G_warning(_("Unable to position file"));
         return 0;
     }
 
-    if (!Rast3d_write_ints
-        (map->data_fd, map->useXdr, &(map->indexNbytesUsed), 1)) {
+    if (!Rast3d_write_ints(map->data_fd, map->useXdr, &(map->indexNbytesUsed),
+                           1)) {
         G_warning(_("Unable to write header for 3D raster map <%s>"),
                   map->fileName);
         return 0;
@@ -118,7 +118,7 @@ static int close_cell_new(RASTER3D_Map * map)
     return 1;
 }
 
-static int close_old(RASTER3D_Map * map)
+static int close_old(RASTER3D_Map *map)
 {
     if (close(map->data_fd) != 0) {
         G_warning(_("Unable to close 3D raster map <%s>"), map->fileName);
@@ -128,7 +128,7 @@ static int close_old(RASTER3D_Map * map)
     return 1;
 }
 
-static int close_cell_old(RASTER3D_Map * map)
+static int close_cell_old(RASTER3D_Map *map)
 {
     if (!close_old(map)) {
         G_warning(_("Unable to close 3D raster map <%s>"), map->fileName);
@@ -150,12 +150,11 @@ static int close_cell_old(RASTER3D_Map * map)
    \return 1 success
    \return 0 failure
  */
-int Rast3d_close(RASTER3D_Map * map)
+int Rast3d_close(RASTER3D_Map *map)
 {
     if (map->operation == RASTER3D_WRITE_DATA) {
         if (!close_cell_new(map)) {
-            G_warning(_("Unable to create 3D raster map <%s>"),
-                      map->fileName);
+            G_warning(_("Unable to create 3D raster map <%s>"), map->fileName);
             return 0;
         }
     }
@@ -179,21 +178,15 @@ int Rast3d_close(RASTER3D_Map * map)
         Rast3d_free(map->data);
 
     if (map->operation == RASTER3D_WRITE_DATA)
-        if (!Rast3d_write_header(map,
-                                 map->region.proj, map->region.zone,
-                                 map->region.north, map->region.south,
-                                 map->region.east, map->region.west,
-                                 map->region.top, map->region.bottom,
-                                 map->region.rows, map->region.cols,
-                                 map->region.depths,
-                                 map->region.ew_res, map->region.ns_res,
-                                 map->region.tb_res,
-                                 map->tileX, map->tileY, map->tileZ,
-                                 map->type,
-                                 map->compression, map->useRle, map->useLzw,
-                                 map->precision, map->offset, map->useXdr,
-                                 map->hasIndex, map->unit, map->vertical_unit,
-                                 map->version)) {
+        if (!Rast3d_write_header(
+                map, map->region.proj, map->region.zone, map->region.north,
+                map->region.south, map->region.east, map->region.west,
+                map->region.top, map->region.bottom, map->region.rows,
+                map->region.cols, map->region.depths, map->region.ew_res,
+                map->region.ns_res, map->region.tb_res, map->tileX, map->tileY,
+                map->tileZ, map->type, map->compression, map->useRle,
+                map->useLzw, map->precision, map->offset, map->useXdr,
+                map->hasIndex, map->unit, map->vertical_unit, map->version)) {
             G_warning(_("Unable to write header for 3D raster map <%s>"),
                       map->fileName);
             return 0;

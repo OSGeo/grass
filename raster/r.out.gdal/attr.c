@@ -6,9 +6,8 @@
 #include "gdal.h"
 #include "local_proto.h"
 
-
-int export_attr(GDALDatasetH hMEMDS, int band,
-                const char *name, const char *mapset, RASTER_MAP_TYPE maptype)
+int export_attr(GDALDatasetH hMEMDS, int band, const char *name,
+                const char *mapset, RASTER_MAP_TYPE maptype)
 {
     struct Categories cats;
     CELL CellMin;
@@ -161,9 +160,8 @@ int export_attr(GDALDatasetH hMEMDS, int band,
 
         for (i = 0; i < rcount; i++) {
 
-            Rast_get_fp_color_rule(&dfCellMin, &r1, &g1, &b1,
-                                   &dfCellMax, &r2, &g2, &b2,
-                                   &sGrassColors, i);
+            Rast_get_fp_color_rule(&dfCellMin, &r1, &g1, &b1, &dfCellMax, &r2,
+                                   &g2, &b2, &sGrassColors, i);
 
             GDALRATSetValueAsDouble(hrat, i, 0, dfCellMin);
             GDALRATSetValueAsDouble(hrat, i, 1, dfCellMax);

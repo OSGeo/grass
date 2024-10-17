@@ -12,8 +12,7 @@
 double simwe_rand(void)
 {
     return G_drand48();
-}                               /* ulec */
-
+} /* ulec */
 
 double gasdev(void)
 {
@@ -26,7 +25,7 @@ double gasdev(void)
     double ret_val;
 
     /* Local variables */
-    double r = 0., vv1, vv2, fac;
+    double r = 0.0, vv1 = 0.0, vv2 = 0.0, fac = 0.0;
 
     if (iset == 0) {
         while (r >= 1. || r == 0.) {
@@ -44,11 +43,11 @@ double gasdev(void)
         iset = 0;
     }
     return ret_val;
-}                               /* gasdev */
+} /* gasdev */
 
 void gasdev_for_paralel(double *x, double *y)
 {
-    double r = 0., vv1, vv2, fac;
+    double r = 0.0, vv1 = 0.0, vv2 = 0.0, fac = 0.0;
 
     while (r >= 1. || r == 0.) {
         vv1 = simwe_rand() * 2. - 1.;

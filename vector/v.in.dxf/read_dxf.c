@@ -49,8 +49,7 @@ int dxf_find_header(struct dxf_file *dxf)
 {
     while (dxf_get_code(dxf) != -2) {
         /* some dxf files will not have header information */
-        if (strcmp(dxf_buf, "HEADER") == 0 ||
-            strcmp(dxf_buf, "ENTITIES") == 0)
+        if (strcmp(dxf_buf, "HEADER") == 0 || strcmp(dxf_buf, "ENTITIES") == 0)
             return strcmp(dxf_buf, "HEADER") == 0;
     }
 
@@ -77,7 +76,7 @@ int dxf_read_code(struct dxf_file *dxf, char *buf, int size)
         return code;
     }
 
-    return -1;                  /* not numeric */
+    return -1; /* not numeric */
 }
 
 static char *dxf_fgets(char *buf, int size, struct dxf_file *dxf)

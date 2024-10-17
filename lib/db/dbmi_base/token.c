@@ -14,7 +14,7 @@
 #include <grass/dbmi.h>
 
 /* these routines manage a mapping between tokens (ints) and memory addresses */
-#define NONE ( (dbAddress) NULL )
+#define NONE ((dbAddress)NULL)
 
 static dbAddress *list = NONE;
 static dbToken count = 0;
@@ -63,7 +63,7 @@ dbToken db_new_token(dbAddress address)
             return token;
         }
 
-    p = (dbAddress *) db_realloc((void *)list, sizeof(*list) * (count + 1));
+    p = (dbAddress *)db_realloc((void *)list, sizeof(*list) * (count + 1));
     if (p == NULL)
         return -1;
 

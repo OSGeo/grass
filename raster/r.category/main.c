@@ -1,13 +1,12 @@
-
 /****************************************************************************
  *
  * MODULE:       r.category (formerly r.cats)
  *
  * AUTHOR(S):    Michael Shapiro - CERL
- *		 Hamish Bowman, Dunedin, New Zealand  (label creation opts)
+ *                 Hamish Bowman, Dunedin, New Zealand  (label creation opts)
  *
  * PURPOSE:      Prints category values and labels associated with
- *		 user-specified raster map layers.
+ *                 user-specified raster map layers.
  *
  * COPYRIGHT:    (C) 2006-2019 by the GRASS Development Team
  *
@@ -23,6 +22,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
+#include <grass/parson.h>
 #include "local_proto.h"
 
 static struct Categories cats;
@@ -40,10 +40,13 @@ int main(int argc, char *argv[])
     int from_stdin = FALSE;
     struct GModule *module;
 
-    struct
-    {
+    enum OutputFormat format;
+    JSON_Value *root_value;
+    JSON_Array *root_array;
+
+    struct {
         struct Option *map, *fs, *cats, *vals, *raster, *file, *fmt_str,
-            *fmt_coeff;
+            *fmt_coeff, *format;
     } parm;
 
     G_gisinit(argv[0]);
@@ -51,9 +54,8 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("category"));
-    module->description =
-        _("Manages category values and labels associated "
-          "with user-specified raster map layers.");
+    module->description = _("Manages category values and labels associated "
+                            "with user-specified raster map layers.");
 
     parm.map = G_define_standard_option(G_OPT_R_MAP);
 
@@ -106,9 +108,24 @@ int main(int argc, char *argv[])
     parm.fmt_coeff->description =
         _("Two pairs of category multiplier and offsets, for $1 and $2");
 
+    parm.format = G_define_standard_option(G_OPT_F_FORMAT);
+    parm.format->key = "output_format";
+    parm.format->guisection = _("Print");
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
+    if (strcmp(parm.format->answer, "json") == 0) {
+        format = JSON;
+        root_value = json_value_init_array();
+        if (root_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
+        root_array = json_array(root_value);
+    }
+    else {
+        format = PLAIN;
+    }
 
     name = parm.map->answer;
 
@@ -120,10 +137,9 @@ int main(int argc, char *argv[])
 
     map_type = Rast_map_type(name, mapset);
 
-
     /* create category labels */
-    if (parm.raster->answer || parm.file->answer ||
-        parm.fmt_str->answer || parm.fmt_coeff->answer) {
+    if (parm.raster->answer || parm.file->answer || parm.fmt_str->answer ||
+        parm.fmt_coeff->answer) {
 
         /* restrict editing to current mapset */
         if (strcmp(mapset, G_mapset()) != 0)
@@ -145,12 +161,13 @@ int main(int argc, char *argv[])
             Rast_init_cats("", &cats);
 
             if (0 > Rast_read_cats(parm.raster->answer, cmapset, &cats))
-                G_fatal_error(_("Unable to read category file of raster map <%s@%s>"),
-                              parm.raster->answer, cmapset);
+                G_fatal_error(
+                    _("Unable to read category file of raster map <%s@%s>"),
+                    parm.raster->answer, cmapset);
 
             Rast_write_cats(name, &cats);
-            G_message(_("Category table for <%s> set from <%s>"),
-                      name, parm.raster->answer);
+            G_message(_("Category table for <%s> set from <%s>"), name,
+                      parm.raster->answer);
 
             Rast_close(fd);
         }
@@ -192,9 +209,10 @@ int main(int argc, char *argv[])
                 if (ntokens == 3) {
                     d1 = strtod(tokens[0], &e1);
                     d2 = strtod(tokens[1], &e2);
-                    G_debug(1,
-                            "d1: <%f>, d2: <%f>, tokens[0]: <%s>, tokens[1]: <%s>",
-                            d1, d2, tokens[0], tokens[1]);
+                    G_debug(
+                        1,
+                        "d1: <%f>, d2: <%f>, tokens[0]: <%s>, tokens[1]: <%s>",
+                        d1, d2, tokens[0], tokens[1]);
                     if (*e1 == 0 && *e2 == 0)
                         Rast_set_d_cat(&d1, &d2, tokens[2], &cats);
                     else
@@ -202,8 +220,8 @@ int main(int argc, char *argv[])
                 }
                 else if (ntokens == 2) {
                     d1 = strtod(tokens[0], &e1);
-                    G_debug(1, "d1: <%f>, tokens[0]: <%s>, tokens[1]: <%s>",
-                            d1, tokens[0], tokens[1]);
+                    G_debug(1, "d1: <%f>, tokens[0]: <%s>, tokens[1]: <%s>", d1,
+                            tokens[0], tokens[1]);
                     if (*e1 == 0)
                         Rast_set_d_cat(&d1, &d1, tokens[1], &cats);
                     else
@@ -216,7 +234,8 @@ int main(int argc, char *argv[])
 
                 if (parse_error)
                     G_fatal_error(_("Incorrect format of input rules. "
-                                    "Is the first column numeric? Or check separators. Invalid line is:\n%s"),
+                                    "Is the first column numeric? Or check "
+                                    "separators. Invalid line is:\n%s"),
                                   buf);
             }
             G_free_tokens(tokens);
@@ -235,14 +254,15 @@ int main(int argc, char *argv[])
             Rast_init_cats("", &cats);
 
             if (0 > Rast_read_cats(name, G_mapset(), &cats))
-                G_warning(_("Unable to read category file of raster map <%s@%s>"),
-                          name, G_mapset());
+                G_warning(
+                    _("Unable to read category file of raster map <%s@%s>"),
+                    name, G_mapset());
 
             if (parm.fmt_str->answer) {
                 fmt_str =
                     G_malloc(strlen(parm.fmt_str->answer) > strlen(cats.fmt)
-                             ? strlen(parm.fmt_str->answer) +
-                             1 : strlen(cats.fmt) + 1);
+                                 ? strlen(parm.fmt_str->answer) + 1
+                                 : strlen(cats.fmt) + 1);
                 strcpy(fmt_str, parm.fmt_str->answer);
             }
             else {
@@ -272,8 +292,9 @@ int main(int argc, char *argv[])
     }
     else {
         if (Rast_read_cats(name, mapset, &cats) < 0)
-            G_fatal_error(_("Unable to read category file of raster map <%s> in <%s>"),
-                          name, mapset);
+            G_fatal_error(
+                _("Unable to read category file of raster map <%s> in <%s>"),
+                name, mapset);
     }
 
     /* describe the category labels */
@@ -282,14 +303,18 @@ int main(int argc, char *argv[])
         if (map_type == CELL_TYPE) {
             get_cats(name, mapset);
             while (next_cat(&x))
-                print_label(x);
+                print_label(x, format, root_array);
+            if (format == JSON) {
+                print_json(root_value);
+            }
             exit(EXIT_SUCCESS);
         }
     }
     else {
         if (map_type != CELL_TYPE)
-            G_warning(_("The map is floating point! Ignoring cats list, using values list"));
-        else {                  /* integer map */
+            G_warning(_("The map is floating point! Ignoring cats list, using "
+                        "values list"));
+        else { /* integer map */
 
             for (i = 0; parm.cats->answers[i]; i++)
                 if (!scan_cats(parm.cats->answers[i], &x, &y)) {
@@ -299,13 +324,17 @@ int main(int argc, char *argv[])
             for (i = 0; parm.cats->answers[i]; i++) {
                 scan_cats(parm.cats->answers[i], &x, &y);
                 while (x <= y)
-                    print_label(x++);
+                    print_label(x++, format, root_array);
+            }
+            if (format == JSON) {
+                print_json(root_value);
             }
             exit(EXIT_SUCCESS);
         }
     }
     if (parm.vals->answer == NULL)
-        G_fatal_error(_("Parameter 'values' is required for floating point map!"));
+        G_fatal_error(
+            _("Parameter 'values' is required for floating point map!"));
     for (i = 0; parm.vals->answers[i]; i++)
         if (!scan_vals(parm.vals->answers[i], &dx)) {
             G_usage();
@@ -313,33 +342,76 @@ int main(int argc, char *argv[])
         }
     for (i = 0; parm.vals->answers[i]; i++) {
         scan_vals(parm.vals->answers[i], &dx);
-        print_d_label(dx);
+        print_d_label(dx, format, root_array);
     }
+
+    if (format == JSON) {
+        print_json(root_value);
+    }
+
     exit(EXIT_SUCCESS);
 }
 
+void print_json(JSON_Value *root_value)
+{
+    char *serialized_string = NULL;
+    serialized_string = json_serialize_to_string_pretty(root_value);
+    if (serialized_string == NULL) {
+        G_fatal_error(_("Failed to initialize pretty JSON string."));
+    }
+    puts(serialized_string);
+    json_free_serialized_string(serialized_string);
+    json_value_free(root_value);
+}
 
-
-int print_label(long x)
+int print_label(long x, enum OutputFormat format, JSON_Array *root_array)
 {
     char *label;
+    JSON_Value *category_value;
+    JSON_Object *category;
 
-    G_squeeze(label = Rast_get_c_cat((CELL *) & x, &cats));
-    fprintf(stdout, "%ld%s%s\n", x, fs, label);
+    G_squeeze(label = Rast_get_c_cat((CELL *)&x, &cats));
+
+    switch (format) {
+    case PLAIN:
+        fprintf(stdout, "%ld%s%s\n", x, fs, label);
+        break;
+    case JSON:
+        category_value = json_value_init_object();
+        category = json_object(category_value);
+        json_object_set_number(category, "category", x);
+        json_object_set_string(category, "description", label);
+        json_array_append_value(root_array, category_value);
+        break;
+    }
 
     return 0;
 }
 
-int print_d_label(double x)
+int print_d_label(double x, enum OutputFormat format, JSON_Array *root_array)
 {
     char *label, tmp[40];
     DCELL dtmp;
+    JSON_Value *category_value;
+    JSON_Object *category;
 
     dtmp = x;
     G_squeeze(label = Rast_get_d_cat(&dtmp, &cats));
-    sprintf(tmp, "%.10f", x);
-    G_trim_decimal(tmp);
-    fprintf(stdout, "%s%s%s\n", tmp, fs, label);
+
+    switch (format) {
+    case PLAIN:
+        sprintf(tmp, "%.10f", x);
+        G_trim_decimal(tmp);
+        fprintf(stdout, "%s%s%s\n", tmp, fs, label);
+        break;
+    case JSON:
+        category_value = json_value_init_object();
+        category = json_object(category_value);
+        json_object_set_number(category, "category", x);
+        json_object_set_string(category, "description", label);
+        json_array_append_value(root_array, category_value);
+        break;
+    }
 
     return 0;
 }

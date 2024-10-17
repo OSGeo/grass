@@ -1,5 +1,4 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       r.out.png
  * AUTHOR(S):    Bill Brown - USA-CERL
@@ -14,11 +13,11 @@
  *
  *****************************************************************************/
 
-/* 
- * Alex Shevlakov, sixote@yahoo.com, 03/2000 
+/*
+ * Alex Shevlakov, sixote@yahoo.com, 03/2000
  * based on r.out.ppm by
  * Written by Bill Brown, USA-CERL March 21, 1994
- * 
+ *
  * Use to convert grass raster map to PNG
  * uses currently selected region
  *
@@ -40,19 +39,18 @@
 #include <grass/colors.h>
 #include <grass/glocale.h>
 
-
 typedef int FILEDESC;
 
 /* global functions */
 static int write_wld(const char *, const struct Cell_head *);
 
-
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct Option *rast, *png_file, *compr;     /* , *bgcolor; */
+    struct Option *rast, *png_file, *compr; /* , *bgcolor; */
     struct Flag *alpha, *wld_flag;
-    char *rastermap;
+
+    /* char *rastermap; */
     char *basename = NULL, *outfile = NULL;
     unsigned char *set, *ored, *ogrn, *oblu;
     int def_red, def_grn, def_blu;
@@ -62,10 +60,10 @@ int main(int argc, char *argv[])
     void *voidc;
     int rtype, row, col, do_stdout = 0;
     size_t rsize;
-    int png_compr, ret, do_alpha;
+    int png_compr, /* ret, */ do_alpha;
     struct Cell_head win;
     FILEDESC cellfile = 0;
-    FILE *fp;
+    FILE *fp = NULL;
 
     /* now goes from pnmtopng.c* -A.Sh */
     /*
@@ -97,13 +95,13 @@ int main(int argc, char *argv[])
      * about "variable XXX might be clobbered by `longjmp' or `vfork'"
      * (stack corruption observed on Solaris 2.6 with gcc 2.8.1, even
      * in the absence of any other error condition) */
-    static xelval maxmaxval;
+    /* static xelval maxmaxval; */
 
     static int depth;
     static int filter;
 
     /* these guys are initialized to quiet compiler warnings: */
-    maxmaxval = 255;
+    /* maxmaxval = 255; */
     depth = 0;
 
     G_gisinit(argv[0]);
@@ -151,8 +149,7 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-
-    rastermap = rast->answer;
+    /* rastermap = rast->answer; */
 
     do_alpha = alpha->answer ? TRUE : FALSE;
 
@@ -171,18 +168,19 @@ int main(int argc, char *argv[])
 
 #ifdef MAYBE_LATER
     /* ... if at all */
+    int ret;
     ret = G_str_to_color(bgcolor->answer, &def_red, &def_grn, &def_blu);
     if (ret == 0)
         G_fatal_error(_("[%s]: No such color"), bgcolor->answer);
-    else if (ret == 2) {        /* (ret==2) is "none" */
+    else if (ret == 2) { /* (ret==2) is "none" */
         if (!do_alpha)
             do_alpha = TRUE;
     }
 #else
-    ret = G_str_to_color(DEFAULT_BG_COLOR, &def_red, &def_grn, &def_blu);
+    G_str_to_color(DEFAULT_BG_COLOR, &def_red, &def_grn, &def_blu);
 #endif
 
-    /*G_get_set_window (&win); *//* 10/99 MN: check for current region */
+    /*G_get_set_window (&win); */ /* 10/99 MN: check for current region */
     G_get_window(&win);
 
     G_debug(1, "rows = %d, cols = %d", win.rows, win.cols);
@@ -205,29 +203,37 @@ int main(int argc, char *argv[])
     else if (NULL == (fp = fopen(outfile, "w")))
         G_fatal_error(_("Unable to open output file <%s>"), outfile);
 
-
-    png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING,
-                                      &pnmtopng_jmpbuf_struct,
-                                      pnmtopng_error_handler, NULL);
+    png_ptr =
+        png_create_write_struct(PNG_LIBPNG_VER_STRING, &pnmtopng_jmpbuf_struct,
+                                pnmtopng_error_handler, NULL);
     if (png_ptr == NULL) {
-        fclose(fp);
+        if (fp) {
+            fclose(fp);
+            fp = NULL;
+        }
         G_fatal_error("cannot allocate LIBPNG structure");
     }
 
     info_ptr = png_create_info_struct(png_ptr);
     if (info_ptr == NULL) {
-        png_destroy_write_struct(&png_ptr, (png_infopp) NULL);
-        fclose(fp);
+        png_destroy_write_struct(&png_ptr, (png_infopp)NULL);
+        if (fp) {
+            fclose(fp);
+            fp = NULL;
+        }
         G_fatal_error("cannot allocate LIBPNG structure");
     }
 
     if (setjmp(pnmtopng_jmpbuf_struct.jmpbuf)) {
         png_destroy_write_struct(&png_ptr, &info_ptr);
-        fclose(fp);
+        if (fp) {
+            fclose(fp);
+            fp = NULL;
+        }
         G_fatal_error("setjmp returns error condition (1)");
     }
 
-    depth = 8;                  /*really??? */
+    depth = 8; /*really??? */
 
 #ifdef OLDPNG
     png_write_init(png_ptr);
@@ -250,9 +256,9 @@ int main(int argc, char *argv[])
     if (do_alpha) {
         png_color_16 background_color;
 
-        background_color.red = (png_uint_16) def_red;
-        background_color.green = (png_uint_16) def_grn;
-        background_color.blue = (png_uint_16) def_blu;
+        background_color.red = (png_uint_16)def_red;
+        background_color.green = (png_uint_16)def_grn;
+        background_color.blue = (png_uint_16)def_blu;
         png_set_bKGD(png_ptr, info_ptr, &background_color);
     }
 
@@ -265,17 +271,17 @@ int main(int argc, char *argv[])
 
         rtype = Rast_get_map_type(cellfile);
         if (rtype == CELL_TYPE)
-            voidc = (CELL *) cell_buf;
+            voidc = (CELL *)cell_buf;
         else if (rtype == FCELL_TYPE)
-            voidc = (FCELL *) fcell_buf;
+            voidc = (FCELL *)fcell_buf;
         else if (rtype == DCELL_TYPE)
-            voidc = (DCELL *) dcell_buf;
+            voidc = (DCELL *)dcell_buf;
         else
             G_fatal_error(_("Raster <%s> type mismatch"), rast->answer);
 
         rsize = Rast_cell_size(rtype);
 
-        /*if(!gscale->answer){ *//* 24BIT COLOR IMAGE */
+        /*if(!gscale->answer){ */ /* 24BIT COLOR IMAGE */
 
         if (TRUE) {
             /* write the png-info struct */
@@ -285,7 +291,7 @@ int main(int argc, char *argv[])
             png_set_packing(png_ptr);
 
             /* max: 3 color channels, one alpha channel, 16-bit */
-            line = (png_byte *) G_malloc(win.cols * 8 * sizeof(char));
+            line = (png_byte *)G_malloc(win.cols * 8 * sizeof(char));
 
             for (row = 0; row < win.rows; row++) {
 
@@ -303,8 +309,8 @@ int main(int argc, char *argv[])
                         *pp++ = ogrn[col];
                         *pp++ = oblu[col];
                         if (do_alpha) {
-                            if (Rast_is_null_value
-                                (G_incr_void_ptr(voidc, col * rsize), rtype))
+                            if (Rast_is_null_value(
+                                    G_incr_void_ptr(voidc, col * rsize), rtype))
                                 *pp++ = 0;
                             else
                                 *pp++ = 255;
@@ -326,24 +332,21 @@ int main(int argc, char *argv[])
                 }
 
                 png_write_row(png_ptr, line);
-
             }
-            G_percent(row, win.rows, 5);        /* finish it off */
+            G_percent(row, win.rows, 5); /* finish it off */
         }
-        else {                  /* GREYSCALE IMAGE */
+        else { /* GREYSCALE IMAGE */
 
-            /*    
+            /*
              * info_ptr->color_type = PNG_COLOR_TYPE_GRAY;
-             * 
+             *
              */
-
 
             /* pm_message ("don't know yet how to write grey - yumm!!"); */
             G_warning("don't know how to write grey scale!");
         }
 
         Rast_free_colors(&colors);
-
     }
 
     G_free(cell_buf);
@@ -356,16 +359,20 @@ int main(int argc, char *argv[])
     Rast_close(cellfile);
 
     png_write_end(png_ptr, info_ptr);
-    /* png_write_destroy (png_ptr); this is no longer supported with libpng, al 11/2000 */
+    /* png_write_destroy (png_ptr); this is no longer supported with libpng, al
+     * 11/2000 */
     /* flush first because G_free (png_ptr) can segfault due to jmpbuf problems
      * in png_write_destroy */
 
     fflush(stdout);
     /* G_free (png_ptr); */
     /* G_free (info_ptr); */
-    png_destroy_write_struct(&png_ptr, &info_ptr);      /* al 11/2000 */
+    png_destroy_write_struct(&png_ptr, &info_ptr); /* al 11/2000 */
 
-    fclose(fp);
+    if (fp) {
+        fclose(fp);
+        fp = NULL;
+    }
 
     if (wld_flag->answer) {
         if (do_stdout)
@@ -384,13 +391,11 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
-
 #ifdef __STDC__
 static void pnmtopng_error_handler(png_structp png_ptr, png_const_charp msg)
 #else
-static void pnmtopng_error_handler(png_ptr, msg)
-     png_structp png_ptr;
-     png_const_charp msg;
+static void pnmtopng_error_handler(png_ptr, msg) png_structp png_ptr;
+png_const_charp msg;
 #endif
 {
     jmpbuf_wrapper *jmpbuf_ptr;
@@ -407,14 +412,13 @@ static void pnmtopng_error_handler(png_ptr, msg)
     G_warning("pnmtopng:  fatal libpng error: [%s]", msg);
 
     jmpbuf_ptr = png_get_error_ptr(png_ptr);
-    if (jmpbuf_ptr == NULL) {   /* we are completely hosed now */
-        G_fatal_error
-            ("pnmtopng:  EXTREMELY fatal error: jmpbuf unrecoverable; terminating.");
+    if (jmpbuf_ptr == NULL) { /* we are completely hosed now */
+        G_fatal_error("pnmtopng:  EXTREMELY fatal error: jmpbuf unrecoverable; "
+                      "terminating.");
     }
 
     longjmp(jmpbuf_ptr->jmpbuf, 1);
 }
-
 
 static int write_wld(const char *fname, const struct Cell_head *win)
 {

@@ -1,4 +1,3 @@
-
 /**********************************************************************
  *
  * flat area beautification after Garbrecht and Martz (1997)
@@ -9,28 +8,26 @@
  *
  * the method is modified for speed, only one pass is necessary to get
  * the gradient away from higher terrain
- * 
+ *
  *********************************************************************/
-
 
 #include <limits.h>
 #include <assert.h>
+#include <stdint.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/rbtree.h>
 #include "Gwater.h"
 #include "do_astar.h"
 
-struct pq_node
-{
-    int idx;
+struct pq_node {
+    size_t idx;
     struct pq_node *next;
 };
 
-struct pq
-{
+struct pq {
     struct pq_node *first, *last;
-    int size;
+    size_t size;
 };
 
 struct pq *pq_create(void)
@@ -39,7 +36,7 @@ struct pq *pq_create(void)
 
     q->first = G_malloc(sizeof(struct pq_node));
     q->first->next = NULL;
-    q->first->idx = -1;
+    q->first->idx = SIZE_MAX;
     q->last = q->first;
     q->size = 0;
 
@@ -47,10 +44,10 @@ struct pq *pq_create(void)
 }
 
 /* dummy end must always be allocated and empty */
-int pq_add(int idx, struct pq *q)
+int pq_add(size_t idx, struct pq *q)
 {
     assert(q->last);
-    assert(q->last->idx == -1);
+    assert(q->last->idx == SIZE_MAX);
 
     q->last->idx = idx;
     if (q->last->next != NULL) {
@@ -60,7 +57,7 @@ int pq_add(int idx, struct pq *q)
     struct pq_node *n = (struct pq_node *)G_malloc(sizeof(struct pq_node));
 
     n->next = NULL;
-    n->idx = -1;
+    n->idx = SIZE_MAX;
     q->last->next = n;
     q->last = q->last->next;
 
@@ -102,9 +99,9 @@ int pq_destroy(struct pq *q)
     return 0;
 }
 
-struct orders
-{
-    int index, uphill, downhill;
+struct orders {
+    size_t index;
+    int uphill, downhill;
     char flag;
 };
 
@@ -120,11 +117,11 @@ int cmp_orders(const void *a, const void *b)
  * return 0 if nothing was modidied
  * return 1 if elevation was modified
  */
-int do_flatarea(int index, CELL ele, CELL * alt_org, CELL * alt_new)
+int do_flatarea(size_t index, CELL ele, CELL *alt_org, CELL *alt_new)
 {
     int upr, upc, r, c, ct_dir;
     CELL is_in_list, is_worked, this_in_list;
-    int index_doer, index_up;
+    size_t index_doer, index_up;
     int n_flat_cells = 0, counter;
     CELL ele_nbr, min_ele_diff;
     int uphill_order, downhill_order, max_uphill_order, max_downhill_order;
@@ -154,7 +151,7 @@ int do_flatarea(int index, CELL ele, CELL * alt_org, CELL * alt_new)
     G_debug(2, "get uphill start points");
     counter = 0;
     while (down_pq->size) {
-        if ((index_doer = pq_drop(down_pq)) == -1)
+        if ((index_doer = pq_drop(down_pq)) == SIZE_MAX)
             G_fatal_error("get start points: no more points in down queue");
 
         seg_index_rc(alt_seg, index_doer, &r, &c);
@@ -180,8 +177,8 @@ int do_flatarea(int index, CELL ele, CELL * alt_org, CELL * alt_new)
                     inc_order.index = index_up;
                     inc_order.flag = 0;
                     /* not yet added to queue */
-                    if ((order_found =
-                         rbtree_find(order_tree, &inc_order)) == NULL) {
+                    if ((order_found = rbtree_find(order_tree, &inc_order)) ==
+                        NULL) {
                         n_flat_cells++;
 
                         /* add to down queue if not yet in there */
@@ -210,8 +207,8 @@ int do_flatarea(int index, CELL ele, CELL * alt_org, CELL * alt_new)
         return 0;
     }
 
-    G_debug(2, "%d flat cells, %d cells in tree, %d start cells",
-            n_flat_cells, (int)order_tree->count, counter);
+    G_debug(2, "%d flat cells, %d cells in tree, %d start cells", n_flat_cells,
+            (int)order_tree->count, counter);
 
     pq_destroy(down_pq);
     down_pq = pq_create();
@@ -223,7 +220,7 @@ int do_flatarea(int index, CELL ele, CELL * alt_org, CELL * alt_new)
     while (up_pq->size) {
         int is_in_down_queue = 0;
 
-        if ((index_doer = pq_drop(up_pq)) == -1)
+        if ((index_doer = pq_drop(up_pq)) == SIZE_MAX)
             G_fatal_error("uphill order: no more points in up queue");
 
         seg_index_rc(alt_seg, index_doer, &r, &c);
@@ -238,7 +235,8 @@ int do_flatarea(int index, CELL ele, CELL * alt_org, CELL * alt_new)
         uphill_order = order_found->uphill;
 
         if (last_order > uphill_order)
-            G_warning(_("queue error: last uphill order %d > current uphill order %d"),
+            G_warning(_("queue error: last uphill order %d > current uphill "
+                        "order %d"),
                       last_order, uphill_order);
 
         /* debug */
@@ -269,8 +267,9 @@ int do_flatarea(int index, CELL ele, CELL * alt_org, CELL * alt_new)
 
                     inc_order.index = index_up;
                     if ((nbr_order_found =
-                         rbtree_find(order_tree, &inc_order)) == NULL) {
-                        G_fatal_error(_("flat cell escaped in uphill correction"));
+                             rbtree_find(order_tree, &inc_order)) == NULL) {
+                        G_fatal_error(
+                            _("flat cell escaped in uphill correction"));
                     }
 
                     /* not yet added to queue */
@@ -284,8 +283,8 @@ int do_flatarea(int index, CELL ele, CELL * alt_org, CELL * alt_new)
                     }
                 }
                 /* add focus cell to down queue */
-                if (!this_in_list && !is_in_down_queue &&
-                    ele_nbr != ele && !is_in_list && !is_worked) {
+                if (!this_in_list && !is_in_down_queue && ele_nbr != ele &&
+                    !is_in_list && !is_worked) {
                     pq_add(index_doer, down_pq);
                     /* set downhill order to 0 */
                     order_found->downhill = 0;
@@ -305,7 +304,7 @@ int do_flatarea(int index, CELL ele, CELL * alt_org, CELL * alt_new)
     G_debug(2, "got downhill start points, do downhill correction");
     downhill_order = 1;
     while (down_pq->size) {
-        if ((index_doer = pq_drop(down_pq)) == -1)
+        if ((index_doer = pq_drop(down_pq)) == SIZE_MAX)
             G_fatal_error(_("downhill order: no more points in down queue"));
 
         seg_index_rc(alt_seg, index_doer, &r, &c);
@@ -320,7 +319,8 @@ int do_flatarea(int index, CELL ele, CELL * alt_org, CELL * alt_new)
         downhill_order = order_found->downhill;
 
         if (last_order > downhill_order)
-            G_warning(_("queue error: last downhill order %d > current downhill order %d"),
+            G_warning(_("queue error: last downhill order %d > current "
+                        "downhill order %d"),
                       last_order, downhill_order);
 
         /* debug */
@@ -348,15 +348,17 @@ int do_flatarea(int index, CELL ele, CELL * alt_org, CELL * alt_new)
 
                     inc_order.index = index_up;
                     if ((nbr_order_found =
-                         rbtree_find(order_tree, &inc_order)) == NULL)
-                        G_fatal_error(_("flat cell escaped in downhill correction"));
+                             rbtree_find(order_tree, &inc_order)) == NULL)
+                        G_fatal_error(
+                            _("flat cell escaped in downhill correction"));
 
                     /* not yet added to queue */
                     if (nbr_order_found->downhill == -1) {
 
                         /* add to down queue */
                         pq_add(index_up, down_pq);
-                        /* set nbr downhill order = current downhill order + 1 */
+                        /* set nbr downhill order = current downhill order + 1
+                         */
                         nbr_order_found->downhill = downhill_order;
 
                         /* add to up queue */
@@ -378,7 +380,7 @@ int do_flatarea(int index, CELL ele, CELL * alt_org, CELL * alt_new)
 
     G_debug(2, "adjust ele");
     while (up_pq->size) {
-        if ((index_doer = pq_drop(up_pq)) == -1)
+        if ((index_doer = pq_drop(up_pq)) == SIZE_MAX)
             G_fatal_error("no more points in up queue");
 
         seg_index_rc(alt_seg, index_doer, &r, &c);
@@ -405,8 +407,9 @@ int do_flatarea(int index, CELL ele, CELL * alt_org, CELL * alt_new)
         }
         alt_new[index_doer] +=
             (uphill_order +
-             (double)(max_downhill_order - downhill_order) / 2.0 +
-             0.5) / 2.0 + 0.5;
+             (double)(max_downhill_order - downhill_order) / 2.0 + 0.5) /
+                2.0 +
+            0.5;
 
         /* check all neighbours, breadth first search */
         for (ct_dir = 0; ct_dir < sides; ct_dir++) {
@@ -424,14 +427,14 @@ int do_flatarea(int index, CELL ele, CELL * alt_org, CELL * alt_new)
 
                     inc_order.index = index_up;
                     if ((nbr_order_found =
-                         rbtree_find(order_tree, &inc_order)) == NULL)
+                             rbtree_find(order_tree, &inc_order)) == NULL)
                         G_fatal_error(_("flat cell escaped in adjustment"));
 
                     /* not yet added to queue */
                     if (nbr_order_found->flag == 0) {
                         if (is_in_list)
-                            G_warning
-                                ("adjustment: in_list cell should be in queue");
+                            G_warning(
+                                "adjustment: in_list cell should be in queue");
                         /* add to up queue */
                         pq_add(index_up, up_pq);
                         nbr_order_found->flag = 1;

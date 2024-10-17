@@ -9,17 +9,17 @@
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Per Henrik Johansen (original contributor)
-   \author Glynn Clements  
+   \author Glynn Clements
  */
 
 #include <math.h>
 #include "pngdriver.h"
 
 #ifndef min
-#define min(a,b) ((a)<(b)?(a):(b))
+#define min(a, b) ((a) < (b) ? (a) : (b))
 #endif
 #ifndef max
-#define max(a,b) ((a)>(b)?(a):(b))
+#define max(a, b) ((a) > (b) ? (a) : (b))
 #endif
 
 /*!
@@ -49,7 +49,7 @@ void PNG_draw_bitmap(int ncols, int nrows, int threshold,
                 unsigned int k = buf[j * ncols + i];
                 unsigned int *p = &png.grid[y * png.width + x];
 
-                if (k > threshold)
+                if (k > (unsigned int)threshold)
                     *p = png.current_color;
             }
         }

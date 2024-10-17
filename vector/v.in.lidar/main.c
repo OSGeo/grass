@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:       v.in.lidar
@@ -15,7 +14,7 @@
  *               GNU General Public License (>=v2).
  *               Read the file COPYING that comes with GRASS
  *               for details.
-**************************************************************/
+ **************************************************************/
 
 #include <stdlib.h>
 #include <string.h>
@@ -36,8 +35,8 @@
 #include "filters.h"
 
 #ifndef MAX
-#define MIN(a,b)      ((a<b) ? a : b)
-#define MAX(a,b)      ((a>b) ? a : b)
+#define MIN(a, b) ((a < b) ? a : b)
+#define MAX(a, b) ((a > b) ? a : b)
 #endif
 
 static void check_layers_not_equal(int primary, int secondary,
@@ -47,27 +46,25 @@ static void check_layers_not_equal(int primary, int secondary,
     if (primary && primary == secondary)
         G_fatal_error(_("Values of %s and %s are the same."
                         " All categories would be stored only"
-                        " in layer number <%d>"), primary_name,
-                      secondary_name, primary);
+                        " in layer number <%d>"),
+                      primary_name, secondary_name, primary);
 }
 
-static void check_layers_in_list_not_equal(struct Option **options,
-                                           int *values, size_t size)
+static void check_layers_in_list_not_equal(struct Option **options, int *values,
+                                           size_t size)
 {
     size_t layer_index_1, layer_index_2;
 
     for (layer_index_1 = 0; layer_index_1 < size; layer_index_1++) {
         for (layer_index_2 = 0; layer_index_2 < size; layer_index_2++) {
             if (layer_index_1 != layer_index_2) {
-                check_layers_not_equal(values[layer_index_1],
-                                       values[layer_index_2],
-                                       options[layer_index_1]->key,
-                                       options[layer_index_2]->key);
+                check_layers_not_equal(
+                    values[layer_index_1], values[layer_index_2],
+                    options[layer_index_1]->key, options[layer_index_2]->key);
             }
         }
     }
 }
-
 
 int main(int argc, char *argv[])
 {
@@ -125,8 +122,8 @@ int main(int argc, char *argv[])
 #else
     unsigned long n_features;
     unsigned long points_imported;
-    unsigned long feature_count, n_outside, zrange_filtered,
-        n_outside_mask, n_filtered, n_class_filtered, not_valid;
+    unsigned long feature_count, n_outside, zrange_filtered, n_outside_mask,
+        n_filtered, n_class_filtered, not_valid;
 #endif
 
     int overwrite;
@@ -144,8 +141,7 @@ int main(int argc, char *argv[])
 
     in_opt = G_define_standard_option(G_OPT_F_BIN_INPUT);
     in_opt->label = _("LAS input file");
-    in_opt->description =
-        _("LiDAR input files in LAS format (*.las or *.laz)");
+    in_opt->description = _("LiDAR input files in LAS format (*.las or *.laz)");
 
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
 
@@ -190,8 +186,7 @@ int main(int argc, char *argv[])
     spat_opt->key_desc = "xmin,ymin,xmax,ymax";
     spat_opt->label = _("Import subregion only");
     spat_opt->guisection = _("Selection");
-    spat_opt->description =
-        _("Format: xmin,ymin,xmax,ymax - usually W,S,E,N");
+    spat_opt->description = _("Format: xmin,ymin,xmax,ymax - usually W,S,E,N");
 
     zrange_opt = G_define_option();
     zrange_opt->key = "zrange";
@@ -275,10 +270,10 @@ int main(int argc, char *argv[])
     limit_opt->guisection = _("Decimation");
 
     outloc_opt = G_define_option();
-    outloc_opt->key = "location";
+    outloc_opt->key = "project";
     outloc_opt->type = TYPE_STRING;
     outloc_opt->required = NO;
-    outloc_opt->description = _("Name for new location to create");
+    outloc_opt->description = _("Name for new project (location) to create");
     outloc_opt->key_desc = "name";
 
     print_flag = G_define_flag();
@@ -306,8 +301,7 @@ int main(int argc, char *argv[])
 
     extend_flag = G_define_flag();
     extend_flag->key = 'e';
-    extend_flag->description =
-        _("Extend region extents based on new dataset");
+    extend_flag->description = _("Extend region extents based on new dataset");
 
     notab_flag = G_define_standard_flag(G_FLG_V_TABLE);
     notab_flag->guisection = _("Speed");
@@ -316,8 +310,7 @@ int main(int argc, char *argv[])
     nocats_flag->key = 'c';
     nocats_flag->label =
         _("Do not automatically add unique ID as category to each point");
-    nocats_flag->description =
-        _("Create only requested layers and categories");
+    nocats_flag->description = _("Create only requested layers and categories");
     nocats_flag->guisection = _("Speed");
 
     notopo_flag = G_define_standard_flag(G_FLG_V_TOPO);
@@ -326,15 +319,16 @@ int main(int argc, char *argv[])
     over_flag = G_define_flag();
     over_flag->key = 'o';
     over_flag->label =
-        _("Override projection check (use current location's projection)");
+        _("Override projection check (use current project's CRS)");
     over_flag->description =
-        _("Assume that the dataset has same projection as the current location");
+        _("Assume that the dataset has the same coordinate reference system as "
+          "the current project");
 
     no_import_flag = G_define_flag();
     no_import_flag->key = 'i';
     no_import_flag->description =
-        _("Create the location specified by the \"location\" parameter and exit."
-         " Do not import the vector data.");
+        _("Create the project specified by the \"project\" parameter and exit."
+          " Do not import the vector data.");
     no_import_flag->suppress_required = YES;
 
     G_option_exclusive(skip_opt, preserve_opt, NULL);
@@ -400,8 +394,7 @@ int main(int argc, char *argv[])
 
     struct ReturnFilter return_filter_struct;
 
-    return_filter_create_from_string(&return_filter_struct,
-                                     filter_opt->answer);
+    return_filter_create_from_string(&return_filter_struct, filter_opt->answer);
     struct ClassFilter class_filter;
 
     class_filter_create_from_strings(&class_filter, class_opt->answers);
@@ -430,10 +423,9 @@ int main(int argc, char *argv[])
         G_fatal_error(_("ID layer is required to store attribute table"));
     }
 
-    struct Option *layer_options[4] = { id_layer_opt, return_layer_opt,
-        class_layer_opt, rgb_layer_opt
-    };
-    int layer_values[4] = { id_layer, return_layer, class_layer, rgb_layer };
+    struct Option *layer_options[4] = {id_layer_opt, return_layer_opt,
+                                       class_layer_opt, rgb_layer_opt};
+    int layer_values[4] = {id_layer, return_layer, class_layer, rgb_layer};
     check_layers_in_list_not_equal(layer_options, layer_values, 4);
 
     if (id_layer)
@@ -462,7 +454,8 @@ int main(int argc, char *argv[])
 
     if (region_flag->answer) {
         if (spat_opt->answer)
-            G_fatal_error(_("Select either the current region flag or the spatial option, not both"));
+            G_fatal_error(_("Select either the current region flag or the "
+                            "spatial option, not both"));
 
         G_get_window(&cur_wind);
         xmin = cur_wind.west;
@@ -504,7 +497,7 @@ int main(int argc, char *argv[])
     cellhd.south = ymin;
     cellhd.west = xmin;
     cellhd.east = xmax;
-    cellhd.rows = 20;           /* TODO - calculate useful values */
+    cellhd.rows = 20; /* TODO - calculate useful values */
     cellhd.cols = 20;
     cellhd.ns_res = (cellhd.north - cellhd.south) / cellhd.rows;
     cellhd.ew_res = (cellhd.east - cellhd.west) / cellhd.cols;
@@ -518,18 +511,18 @@ int main(int argc, char *argv[])
     if (outloc_opt->answer != NULL) {
         /* Convert projection information non-interactively as we can't
          * assume the user has a terminal open */
-        if (GPJ_wkt_to_grass(&cellhd, &proj_info,
-                             &proj_units, projstr, 0) < 0) {
-            G_fatal_error(_("Unable to convert input map projection to GRASS "
-                            "format; cannot create new location."));
+        if (GPJ_wkt_to_grass(&cellhd, &proj_info, &proj_units, projstr, 0) <
+            0) {
+            G_fatal_error(_("Unable to convert input map CRS to GRASS "
+                            "format; cannot create new project."));
         }
         else {
-            if (0 != G_make_location(outloc_opt->answer, &cellhd,
-                                     proj_info, proj_units)) {
-                G_fatal_error(_("Unable to create new location <%s>"),
+            if (0 != G_make_location(outloc_opt->answer, &cellhd, proj_info,
+                                     proj_units)) {
+                G_fatal_error(_("Unable to create new project <%s>"),
                               outloc_opt->answer);
             }
-            G_message(_("Location <%s> created"), outloc_opt->answer);
+            G_message(_("Project <%s> created"), outloc_opt->answer);
         }
 
         /* If the i flag is set, clean up? and exit here */
@@ -537,14 +530,15 @@ int main(int argc, char *argv[])
             exit(EXIT_SUCCESS);
 
         /*  TODO: */
-        G_warning("Import into new location not yet implemented");
+        G_warning("Import into new project not yet implemented");
         /* at this point the module should be using G_create_alt_env()
            to change context to the newly created location; once done
            it should switch back with G_switch_env(). See r.in.gdal */
     }
     else {
         /* Does the projection of the current location match the dataset? */
-        /* G_get_window seems to be unreliable if the location has been changed */
+        /* G_get_window seems to be unreliable if the location has been changed
+         */
         G_get_default_window(&loc_wind);
         projstr = LASSRS_GetWKT_CompoundOK(LAS_srs);
         /* we are printing the non-warning messages only for first file */
@@ -552,11 +546,12 @@ int main(int argc, char *argv[])
                              TRUE);
     }
 
-    if (!outloc_opt->answer) {  /* Check if the map exists */
+    if (!outloc_opt->answer) { /* Check if the map exists */
         if (G_find_vector2(out_opt->answer, G_mapset())) {
             if (overwrite)
-                G_warning(_("Vector map <%s> already exists and will be overwritten"),
-                          out_opt->answer);
+                G_warning(
+                    _("Vector map <%s> already exists and will be overwritten"),
+                    out_opt->answer);
             else
                 G_fatal_error(_("Vector map <%s> already exists"),
                               out_opt->answer);
@@ -588,8 +583,8 @@ int main(int argc, char *argv[])
 
     /* Add DB link */
     if (!notab_flag->answer) {
-        create_table_for_lidar(&Map, out_opt->answer, id_layer, &driver,
-                               &Fi, have_time, have_color);
+        create_table_for_lidar(&Map, out_opt->answer, id_layer, &driver, &Fi,
+                               have_time, have_color);
     }
 
     struct VectorMask vector_mask;
@@ -616,12 +611,12 @@ int main(int argc, char *argv[])
 
     struct CountDecimationControl count_decimation_control;
 
-    count_decimation_init_from_str(&count_decimation_control,
-                                   skip_opt->answer, preserve_opt->answer,
-                                   offset_opt->answer, limit_opt->answer);
+    count_decimation_init_from_str(&count_decimation_control, skip_opt->answer,
+                                   preserve_opt->answer, offset_opt->answer,
+                                   limit_opt->answer);
     if (!count_decimation_is_valid(&count_decimation_control))
         G_fatal_error(_("Settings for count-based decimation are not valid"));
-    /* we don't check if the decimation is noop */
+        /* we don't check if the decimation is noop */
 
 #ifdef HAVE_LONG_LONG_INT
     G_important_message(_("Scanning %llu points..."), n_features);
@@ -631,7 +626,7 @@ int main(int argc, char *argv[])
     while ((LAS_point = LASReader_GetNextPoint(LAS_reader)) != NULL) {
         double x, y, z;
 
-        G_percent(feature_count++, n_features, 1);      /* show something happens */
+        G_percent(feature_count++, n_features, 1); /* show something happens */
 
         /* We always count them and report because r.in.lidar behavior
          * changed in between 7.0 and 7.2 from undefined (but skipping
@@ -710,7 +705,7 @@ int main(int argc, char *argv[])
 
                 rgb = (rgb << 8) + green;
                 rgb = (rgb << 8) + blue;
-                rgb++;          /* cat 0 is not valid, add one */
+                rgb++; /* cat 0 is not valid, add one */
                 Vect_cat_set(Cats, rgb_layer, rgb);
             }
         }
@@ -731,7 +726,7 @@ int main(int argc, char *argv[])
         cat++;
         points_imported++;
     }
-    G_percent(n_features, n_features, 1);       /* finish it */
+    G_percent(n_features, n_features, 1); /* finish it */
 
     if (!notab_flag->answer) {
         db_commit_transaction(driver);
@@ -760,11 +755,12 @@ int main(int argc, char *argv[])
         not_valid_filtered = not_valid;
 
     /* can be easily determined only when iterated over all points */
-    if (!count_decimation_control.limit_n && !cat_max_reached
-        && points_imported != n_features
-        - not_valid_filtered - n_outside - n_filtered - n_class_filtered
-        - n_outside_mask - count_decimation_control.offset_n_counter
-        - count_decimation_control.n_count_filtered - zrange_filtered)
+    if (!count_decimation_control.limit_n && !cat_max_reached &&
+        points_imported != n_features - not_valid_filtered - n_outside -
+                               n_filtered - n_class_filtered - n_outside_mask -
+                               count_decimation_control.offset_n_counter -
+                               count_decimation_control.n_count_filtered -
+                               zrange_filtered)
         G_warning(_("The underlying libLAS library is at its limits."
                     " Previously reported counts might have been distorted."
                     " However, the import itself should be unaffected."));
@@ -785,8 +781,9 @@ int main(int argc, char *argv[])
         G_message(_("%llu input points were outside of the selected area"),
                   n_outside);
     if (n_outside_mask)
-        G_message(_("%llu input points were outside of the area specified by mask"),
-                  n_outside_mask);
+        G_message(
+            _("%llu input points were outside of the area specified by mask"),
+            n_outside_mask);
     if (n_filtered)
         G_message(_("%llu input points were filtered out by return number"),
                   n_filtered);
@@ -794,11 +791,13 @@ int main(int argc, char *argv[])
         G_message(_("%llu input points were filtered out by class number"),
                   n_class_filtered);
     if (zrange_filtered)
-        G_message(_("%llu input points were filtered outsite the range for z coordinate"),
+        G_message(_("%llu input points were filtered outsite the range for z "
+                    "coordinate"),
                   zrange_filtered);
     if (count_decimation_control.offset_n_counter)
-        G_message(_("%llu input points were skipped at the begging using offset"),
-                  count_decimation_control.offset_n_counter);
+        G_message(
+            _("%llu input points were skipped at the begging using offset"),
+            count_decimation_control.offset_n_counter);
     if (count_decimation_control.n_count_filtered)
         G_message(_("%llu input points were skipped by count-based decimation"),
                   count_decimation_control.n_count_filtered);
@@ -816,8 +815,9 @@ int main(int argc, char *argv[])
         G_message(_("%lu input points were outside of the selected area"),
                   n_outside);
     if (n_outside_mask)
-        G_message(_("%lu input points were outside of the area specified by mask"),
-                  n_outside_mask);
+        G_message(
+            _("%lu input points were outside of the area specified by mask"),
+            n_outside_mask);
     if (n_filtered)
         G_message(_("%lu input points were filtered out by return number"),
                   n_filtered);
@@ -825,15 +825,18 @@ int main(int argc, char *argv[])
         G_message(_("%lu input points were filtered out by class number"),
                   n_class_filtered);
     if (zrange_filtered)
-        G_message(_("%lu input points were filtered outsite the range for z coordinate"),
+        G_message(_("%lu input points were filtered outsite the range for z "
+                    "coordinate"),
                   zrange_filtered);
     if (count_decimation_control.offset_n_counter)
-        G_message(_("%lu input points were skipped at the begging using offset"),
-                  count_decimation_control.offset_n_counter);
+        G_message(
+            _("%lu input points were skipped at the begging using offset"),
+            count_decimation_control.offset_n_counter);
     if (count_decimation_control.n_count_filtered)
         G_message(_("%lu input points were skipped by count-based decimation"),
                   count_decimation_control.n_count_filtered);
-    G_message(_("Accuracy of the printed point counts might be limited by your computer architecture."));
+    G_message(_("Accuracy of the printed point counts might be limited by your "
+                "computer architecture."));
 #endif
     if (count_decimation_control.limit_n)
         G_message(_("The rest of points was ignored"));
@@ -841,16 +844,19 @@ int main(int argc, char *argv[])
 #ifdef HAVE_LONG_LONG_INT
     if (not_valid && !only_valid)
         G_message(_("%llu input points were not valid, use -%c flag to filter"
-                    " them out"), not_valid, only_valid_flag->key);
+                    " them out"),
+                  not_valid, only_valid_flag->key);
 #else
     if (not_valid && !only_valid)
         G_message(_("%lu input points were not valid, use -%c flag to filter"
-                    " them out"), not_valid, only_valid_flag->key);
+                    " them out"),
+                  not_valid, only_valid_flag->key);
 #endif
 
     if (cat_max_reached)
-        G_warning(_("Maximum number of categories reached (%d). Import ended prematurely."
-                   " Try to import without using category as an ID."),
+        G_warning(_("Maximum number of categories reached (%d). Import ended "
+                    "prematurely."
+                    " Try to import without using category as an ID."),
                   GV_CAT_MAX);
 
     /* -------------------------------------------------------------------- */
@@ -864,12 +870,12 @@ int main(int argc, char *argv[])
         loc_wind.west = MIN(loc_wind.west, cellhd.west);
         loc_wind.east = MAX(loc_wind.east, cellhd.east);
 
-        loc_wind.rows = (int)ceil((loc_wind.north - loc_wind.south)
-                                  / loc_wind.ns_res);
+        loc_wind.rows =
+            (int)ceil((loc_wind.north - loc_wind.south) / loc_wind.ns_res);
         loc_wind.south = loc_wind.north - loc_wind.rows * loc_wind.ns_res;
 
-        loc_wind.cols = (int)ceil((loc_wind.east - loc_wind.west)
-                                  / loc_wind.ew_res);
+        loc_wind.cols =
+            (int)ceil((loc_wind.east - loc_wind.west) / loc_wind.ew_res);
         loc_wind.east = loc_wind.west + loc_wind.cols * loc_wind.ew_res;
 
         G_put_window(&loc_wind);

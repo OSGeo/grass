@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
@@ -6,8 +7,8 @@ int init_search(int depr_fd)
 {
     int r, c, r_nbr, c_nbr, ct_dir;
     CELL *depr_buf, ele_value;
-    int nextdr[8] = { 1, -1, 0, 0, -1, 1, 1, -1 };
-    int nextdc[8] = { 0, 0, -1, 1, 1, -1, 1, -1 };
+    int nextdr[8] = {1, -1, 0, 0, -1, 1, 1, -1};
+    int nextdc[8] = {0, 0, -1, 1, 1, -1, 1, -1};
     char asp_value, is_null;
     WAT_ALT wa;
     ASP_FLAG af, af_nbr;
@@ -89,7 +90,7 @@ int init_search(int depr_fd)
                     break;
                 }
             }
-            if (asp_value)      /* some neighbour was NULL, point added to list */
+            if (asp_value) /* some neighbour was NULL, point added to list */
                 continue;
 
             /* real depression ? */
@@ -114,9 +115,9 @@ int init_search(int depr_fd)
         G_free(depr_buf);
     }
 
-    G_debug(1, "%" PRI_OFF_T " edge cells", heap_size - n_depr_cells);
+    G_debug(1, "%" PRId64 " edge cells", heap_size - n_depr_cells);
     if (n_depr_cells)
-        G_debug(1, "%" PRI_OFF_T " cells in depressions", n_depr_cells);
+        G_debug(1, "%" PRId64 " cells in depressions", n_depr_cells);
 
     return 1;
 }

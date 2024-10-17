@@ -14,7 +14,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_create_table(dbTable * table)
+int db__driver_create_table(dbTable *table)
 {
     int col, ncols;
     dbColumn *column;
@@ -93,14 +93,12 @@ int db__driver_create_table(dbTable * table)
     }
     db_append_string(&sql, " )");
 
-
     G_debug(3, " SQL: %s", db_get_string(&sql));
 
     res = PQexec(pg_conn, db_get_string(&sql));
 
     if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-        db_d_append_error("%s\n%s\n%s",
-                          _("Unable to create table:"),
+        db_d_append_error("%s\n%s\n%s", _("Unable to create table:"),
                           db_get_string(&sql), PQerrorMessage(pg_conn));
         db_d_report_error();
         PQclear(res);
@@ -127,8 +125,7 @@ int db__driver_create_table(dbTable * table)
     res = PQexec(pg_conn, db_get_string(&sql));
 
     if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-        db_d_append_error("%s\n%s\n%s",
-                          _("Unable to grant select on table:"),
+        db_d_append_error("%s\n%s\n%s", _("Unable to grant select on table:"),
                           db_get_string(&sql), PQerrorMessage(pg_conn));
         db_d_report_error();
         PQclear(res);

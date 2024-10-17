@@ -8,11 +8,9 @@
 #include "global.h"
 
 /* Returns 0 - ok , 1 - error */
-int
-plot(int ctype, struct Map_info *Map, int type, int field,
-     char *columns, int ncols, char *sizecol, int size, double scale,
-     COLOR * ocolor, COLOR * colors, int y_center, double *max_reference,
-     int do3d)
+int plot(int ctype, struct Map_info *Map, int type, int field, char *columns,
+         int ncols, char *sizecol, int size, double scale, COLOR *ocolor,
+         COLOR *colors, int y_center, double *max_reference, int do3d)
 {
     int ltype, nlines, line, col, more, coltype, nselcols;
     double x, y, csize, len;
@@ -35,8 +33,7 @@ plot(int ctype, struct Map_info *Map, int type, int field,
 
     Fi = Vect_get_field(Map, field);
     if (Fi == NULL)
-        G_fatal_error(_("Database connection not defined for layer %d"),
-                      field);
+        G_fatal_error(_("Database connection not defined for layer %d"), field);
 
     /* Open driver */
     driver = db_start_driver_open_database(Fi->driver, Fi->database);
@@ -47,7 +44,8 @@ plot(int ctype, struct Map_info *Map, int type, int field,
     }
     db_set_error_handler_driver(driver);
 
-    val = (double *)G_malloc((ncols + 1) * sizeof(double));     /* + 1 for sizecol */
+    val =
+        (double *)G_malloc((ncols + 1) * sizeof(double)); /* + 1 for sizecol */
 
     Vect_rewind(Map);
 
@@ -72,8 +70,8 @@ plot(int ctype, struct Map_info *Map, int type, int field,
             nselcols = ncols + 1;
         }
         else {
-            sprintf(buf, "select %s from %s where %s = %d", columns,
-                    Fi->table, Fi->key, cat);
+            sprintf(buf, "select %s from %s where %s = %d", columns, Fi->table,
+                    Fi->key, cat);
             nselcols = ncols;
         }
 

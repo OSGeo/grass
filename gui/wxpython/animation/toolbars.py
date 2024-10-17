@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
+
 import wx
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from icons.icon import MetaIcon
@@ -245,7 +246,7 @@ class AnimationToolbar(BaseToolbar):
         self.ToggleTool(self.bothDirectionReplay, both)
 
     def EnableAnimTools(self, enable):
-        """Enable or diable animation tools"""
+        """Enable or disable animation tools"""
         self.EnableTool(self.playForward, enable)
         self.EnableTool(self.playBack, enable)
         self.EnableTool(self.pause, enable)

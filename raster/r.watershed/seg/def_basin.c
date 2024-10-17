@@ -1,8 +1,7 @@
 #include "Gwater.h"
 
-CELL
-def_basin(int row, int col, CELL basin_num, double stream_length,
-          CELL old_elev)
+CELL def_basin(int row, int col, CELL basin_num, double stream_length,
+               CELL old_elev)
 {
     int r, rr, c, cc, ct, new_r[9], new_c[9];
     CELL value, new_elev;
@@ -36,8 +35,8 @@ def_basin(int row, int col, CELL basin_num, double stream_length,
             return (basin_num);
         }
         if (ct >= 2) {
-            basin_num = split_stream(row, col, new_r, new_c, ct,
-                                     basin_num, stream_length, old_elev);
+            basin_num = split_stream(row, col, new_r, new_c, ct, basin_num,
+                                     stream_length, old_elev);
             return (basin_num);
         }
         oldupdir = drain[row - new_r[1] + 1][col - new_c[1] + 1];
@@ -55,8 +54,8 @@ def_basin(int row, int col, CELL basin_num, double stream_length,
                     direction = af.asp;
                     if (direction == drain[rr][cc]) {
                         thisdir = updrain[rr][cc];
-                        switch (haf_basin_side
-                                (oldupdir, (int)downdir, thisdir)) {
+                        switch (
+                            haf_basin_side(oldupdir, (int)downdir, thisdir)) {
                         case LEFT:
                             overland_cells(r, c, basin_num, basin_num - 1,
                                            &new_elev);
@@ -88,7 +87,7 @@ def_basin(int row, int col, CELL basin_num, double stream_length,
                 else
                     stream_length += window.ew_res;
             }
-            else {              /* sides == 4 */
+            else { /* sides == 4 */
 
                 seg_get(&aspflag, (char *)&af, row, col);
                 asp_value = af.asp;
@@ -100,7 +99,7 @@ def_basin(int row, int col, CELL basin_num, double stream_length,
                     else
                         stream_length += diag;
                 }
-                else {          /* asp_value == 4, 8 */
+                else { /* asp_value == 4, 8 */
 
                     if (new_c[1] != col)
                         stream_length += window.ew_res;

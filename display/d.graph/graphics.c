@@ -4,7 +4,7 @@
 
 #include "local_proto.h"
 
-int graphics(FILE * infile)
+int graphics(FILE *infile)
 {
     char buff[128 + 1];
     int got_new;
@@ -53,7 +53,7 @@ int graphics(FILE * infile)
             got_new = G_getl2(buff, 128, infile);
             break;
         case '#':
-        case 0:                /* skip blank lines */
+        case 0: /* skip blank lines */
             got_new = G_getl2(buff, 128, infile);
             break;
         default:

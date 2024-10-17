@@ -1,6 +1,6 @@
 /*!
  * \file lib/raster/quant_io.c
- * 
+ *
  * \brief Raster Library - Quantization rules (input / output)
  *
  * (C) 1999-2010 by the GRASS Development Team
@@ -69,10 +69,10 @@ static int quant_load_range(struct Quant *quant, const char *name,
    in another mapset, first checks for quant2 table for this map in
    current mapset.
 
-   Note: in the case of negative return value, the result of using the 
+   Note: in the case of negative return value, the result of using the
    quantization structure is not defined.
-   in case of return value 0, calls to Rast_quant_perform_d() 
-   and Rast_quant_perform_f() return NO_DATA (see description of 
+   in case of return value 0, calls to Rast_quant_perform_d()
+   and Rast_quant_perform_f() return NO_DATA (see description of
    Rast_quant_perform_d() for more details). in case of
    return values 2 and 3, the explicit rule for quant is set:
    floating range is mapped to integer range.
@@ -89,7 +89,7 @@ static int quant_load_range(struct Quant *quant, const char *name,
 
    \return -2 if raster map is of type integer.
    \return -1 if map name is fully qualified and mapset is not the current one
-   \return 0 if quantization file does not exist, or the file is empty, 
+   \return 0 if quantization file does not exist, or the file is empty,
    \return 1 if non-empty quantization file exists.
  */
 int Rast__quant_import(const char *name, const char *mapset,
@@ -124,15 +124,15 @@ int Rast__quant_import(const char *name, const char *mapset,
         fclose(fd);
         if (parsStat)
             return 1;
-        sprintf(buf,
-                "quantization file in quant2 for raster map <%s> is empty",
+        sprintf(buf, "quantization file in quant2 for raster map <%s> is empty",
                 G_fully_qualified_name(name, mapset));
     }
 
     /* now try reading regular : cell_misc/name/quant file */
     if (!(fd = G_fopen_old_misc("cell_misc", QUANT_FILE_NAME, name, mapset))) {
 
-        /* int range doesn't exist anymore if (quant_load_range (quant, name, mapset)>0) return 3; */
+        /* int range doesn't exist anymore if (quant_load_range (quant, name,
+         * mapset)>0) return 3; */
         G_warning(_("Quantization file for raster map <%s> is missing"),
                   G_fully_qualified_name(name, mapset));
     }
@@ -142,7 +142,8 @@ int Rast__quant_import(const char *name, const char *mapset,
 
         if (parsStat)
             return 1;
-        /* int range doesn't exist anymore if (quant_load_range (quant, name, mapset)>0) return 2; */
+        /* int range doesn't exist anymore if (quant_load_range (quant, name,
+         * mapset)>0) return 2; */
         G_warning(_("Quantization file for raster map <%s> is empty"),
                   G_fully_qualified_name(name, mapset));
     }
@@ -164,7 +165,7 @@ int Rast__quant_import(const char *name, const char *mapset,
 
    (**) only the first appearances in the file are considered.
  */
-static int quant_parse_file(FILE * fd, struct Quant *quant)
+static int quant_parse_file(FILE *fd, struct Quant *quant)
 {
     CELL cLow, cHigh;
     DCELL dLow, dHigh;
@@ -204,7 +205,7 @@ static int quant_parse_file(FILE * fd, struct Quant *quant)
                     }
                     break;
                 default:
-                    continue;   /* other lines are ignored */
+                    continue; /* other lines are ignored */
                 }
             }
         }
@@ -218,7 +219,7 @@ static int quant_parse_file(FILE * fd, struct Quant *quant)
             (Rast_quant_get_pos_infinite_rule(quant, &dLow, &cLow) > 0));
 }
 
-static void quant_write(FILE * fd, const struct Quant *quant)
+static void quant_write(FILE *fd, const struct Quant *quant)
 {
     DCELL dLow, dHigh;
     CELL cLow, cHigh;
@@ -257,7 +258,7 @@ static void quant_write(FILE * fd, const struct Quant *quant)
    another mapset.  The rules are written in decreasing order of
    priority (i.e. rules added earlier are written later).
 
-   Note: if no rules are defined an empty file is created. 
+   Note: if no rules are defined an empty file is created.
 
    \param name map name
    \param mapset mapset name

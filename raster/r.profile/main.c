@@ -1,13 +1,14 @@
 /*
  * Copyright (C) 2000 by the GRASS Development Team
  * Author: Bob Covill <bcovill@tekmap.ns.ca>
- * 
+ *
  * This Program is free software under the GPL (>=v2)
  * Read the file COPYING coming with GRASS for details
  *
  */
 
 #include <stdlib.h>
+#include <grass/parson.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
@@ -18,7 +19,6 @@ int clr;
 struct Colors colors;
 
 static double dist, e, n;
-
 
 int main(int argc, char *argv[])
 {
@@ -38,14 +38,15 @@ int main(int argc, char *argv[])
     double e1, e2, n1, n2;
     RASTER_MAP_TYPE data_type;
     struct Cell_head window;
-    struct
-    {
+    struct {
         struct Option *opt1, *profile, *res, *output, *null_str, *coord_file,
-            *units;
+            *units, *format;
         struct Flag *g, *c, *m;
-    }
-    parm;
+    } parm;
     struct GModule *module;
+    enum OutputFormat format;
+    JSON_Value *array_value;
+    JSON_Array *array;
 
     G_gisinit(argv[0]);
 
@@ -75,9 +76,8 @@ int main(int argc, char *argv[])
     parm.coord_file->required = NO;
     parm.coord_file->label =
         _("Name of input file containing coordinate pairs");
-    parm.coord_file->description =
-        _("Use instead of the 'coordinates' option. "
-          "\"-\" reads from stdin.");
+    parm.coord_file->description = _("Use instead of the 'coordinates' option. "
+                                     "\"-\" reads from stdin.");
 
     parm.res = G_define_option();
     parm.res->key = "resolution";
@@ -91,8 +91,8 @@ int main(int argc, char *argv[])
 
     parm.g = G_define_flag();
     parm.g->key = 'g';
-    parm.g->description =
-        _("Output easting and northing in first two columns of four column output");
+    parm.g->description = _("Output easting and northing in first two columns "
+                            "of four column output");
 
     parm.c = G_define_flag();
     parm.c->key = 'c';
@@ -103,15 +103,18 @@ int main(int argc, char *argv[])
     parm.units->options = "meters,kilometers,feet,miles";
     parm.units->label = parm.units->description;
     parm.units->description =
-        _("If units are not specified, current location units are used. "
-          "Meters are used by default in geographic (latlon) locations.");
+        _("If units are not specified, current project units are used. "
+          "Meters are used by default in geographic (latlon) projects.");
+
+    parm.format = G_define_standard_option(G_OPT_F_FORMAT);
+    parm.units->guisection = _("Print");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
     clr = 0;
     if (parm.c->answer)
-        clr = 1;                /* color output */
+        clr = 1; /* color output */
 
     null_string = parm.null_str->answer;
 
@@ -144,12 +147,20 @@ int main(int argc, char *argv[])
         res = atof(parm.res->answer);
         /* Catch bad resolution ? */
         if (res <= 0)
-            G_fatal_error(_("Illegal resolution %g [%s]"), res / factor,
-                          unit);
+            G_fatal_error(_("Illegal resolution %g [%s]"), res / factor, unit);
     }
     else {
         /* Do average of EW and NS res */
         res = (window.ew_res + window.ns_res) / 2;
+    }
+
+    if (strcmp(parm.format->answer, "json") == 0) {
+        format = JSON;
+        array_value = json_value_init_array();
+        array = json_array(array_value);
+    }
+    else {
+        format = PLAIN;
     }
 
     G_message(_("Using resolution: %g [%s]"), res / factor, unit);
@@ -182,17 +193,19 @@ int main(int argc, char *argv[])
     data_type = Rast_get_map_type(fd);
     /* Done with file */
 
-    /* Show message giving output format */
-    G_message(_("Output columns:"));
-    if (coords == 1)
-        sprintf(formatbuff,
-                _("Easting, Northing, Along track dist. [%s], Elevation"),
-                unit);
-    else
-        sprintf(formatbuff, _("Along track dist. [%s], Elevation"), unit);
-    if (clr)
-        strcat(formatbuff, _(" RGB color"));
-    G_message("%s", formatbuff);
+    if (format == PLAIN) {
+        /* Show message giving output format */
+        G_message(_("Output columns:"));
+        if (coords == 1)
+            sprintf(formatbuff,
+                    _("Easting, Northing, Along track dist. [%s], Elevation"),
+                    unit);
+        else
+            sprintf(formatbuff, _("Along track dist. [%s], Elevation"), unit);
+        if (clr)
+            strcat(formatbuff, _(" RGB color"));
+        G_message("%s", formatbuff);
+    }
 
     /* Get Profile Start Coords */
     if (parm.coord_file->answer) {
@@ -204,7 +217,6 @@ int main(int argc, char *argv[])
         if (coor_fp == NULL)
             G_fatal_error(_("Could not open <%s>"), parm.coord_file->answer);
 
-
         for (n = 1; input(b1, ebuf, b2, nbuf, label, coor_fp); n++) {
             G_debug(4, "stdin line %d: ebuf=[%s]  nbuf=[%s]", n, ebuf, nbuf);
             if (!G_scan_easting(ebuf, &e2, G_projection()) ||
@@ -212,8 +224,8 @@ int main(int argc, char *argv[])
                 G_fatal_error(_("Invalid coordinates %s %s"), ebuf, nbuf);
 
             if (havefirst)
-                do_profile(e1, e2, n1, n2, coords, res, fd, data_type,
-                           fp, null_string, unit, factor);
+                do_profile(e1, e2, n1, n2, coords, res, fd, data_type, fp,
+                           null_string, unit, factor, format, name, array);
             e1 = e2;
             n1 = n2;
             havefirst = TRUE;
@@ -238,7 +250,7 @@ int main(int argc, char *argv[])
 
             /* Get profile info */
             do_profile(e1, e2, n1, n2, coords, res, fd, data_type, fp,
-                       null_string, unit, factor);
+                       null_string, unit, factor, format, name, array);
         }
         else {
             for (i = 0; i <= k - 2; i += 2) {
@@ -251,11 +263,20 @@ int main(int argc, char *argv[])
                                 G_projection());
 
                 /* Get profile info */
-                do_profile(e1, e2, n1, n2, coords, res, fd, data_type,
-                           fp, null_string, unit, factor);
-
+                do_profile(e1, e2, n1, n2, coords, res, fd, data_type, fp,
+                           null_string, unit, factor, format, name, array);
             }
         }
+    }
+
+    if (format == JSON) {
+        char *serialized_string = json_serialize_to_string_pretty(array_value);
+        if (serialized_string == NULL) {
+            G_fatal_error(_("Failed to initialize pretty JSON string."));
+        }
+        puts(serialized_string);
+        json_free_serialized_string(serialized_string);
+        json_value_free(array_value);
     }
 
     Rast_close(fd);
@@ -265,13 +286,14 @@ int main(int argc, char *argv[])
         Rast_free_colors(&colors);
 
     exit(EXIT_SUCCESS);
-}                               /* Done with main */
+} /* Done with main */
 
 /* Calculate the Profile Now */
 /* Establish parameters */
-int do_profile(double e1, double e2, double n1, double n2,
-               int coords, double res, int fd, int data_type, FILE * fp,
-               char *null_string, const char *unit, double factor)
+int do_profile(double e1, double e2, double n1, double n2, int coords,
+               double res, int fd, int data_type, FILE *fp, char *null_string,
+               const char *unit, double factor, enum OutputFormat format,
+               char *name, JSON_Array *array)
 {
     double rows, cols, LEN;
     double Y, X, k;
@@ -283,15 +305,16 @@ int do_profile(double e1, double e2, double n1, double n2,
     G_message(_("Approx. transect length: %f [%s]"), LEN / factor, unit);
 
     if (!G_point_in_region(e2, n2))
-        G_warning(_("Endpoint coordinates are outside of current region settings"));
+        G_warning(
+            _("Endpoint coordinates are outside of current region settings"));
 
     /* Calculate Azimuth of Line */
     if (rows == 0 && cols == 0) {
         /* Special case for no movement */
         e = e1;
         n = n1;
-        read_rast(e, n, dist / factor, fd, coords, data_type, fp,
-                  null_string);
+        read_rast(e, n, dist / factor, fd, coords, data_type, fp, null_string,
+                  format, name, array);
     }
 
     k = res / hypot(rows, cols);
@@ -310,7 +333,7 @@ int do_profile(double e1, double e2, double n1, double n2,
         /* SE Quad or due east */
         for (e = e1, n = n1; e < e2 || n > n2; e += X, n -= Y) {
             read_rast(e, n, dist / factor, fd, coords, data_type, fp,
-                      null_string);
+                      null_string, format, name, array);
             /* d+=res; */
             dist += G_distance(e - X, n + Y, e, n);
         }
@@ -320,7 +343,7 @@ int do_profile(double e1, double e2, double n1, double n2,
         /* NE Quad  or due north */
         for (e = e1, n = n1; e < e2 || n < n2; e += X, n += Y) {
             read_rast(e, n, dist / factor, fd, coords, data_type, fp,
-                      null_string);
+                      null_string, format, name, array);
             /* d+=res; */
             dist += G_distance(e - X, n - Y, e, n);
         }
@@ -330,7 +353,7 @@ int do_profile(double e1, double e2, double n1, double n2,
         /* SW Quad or due south */
         for (e = e1, n = n1; e > e2 || n > n2; e -= X, n -= Y) {
             read_rast(e, n, dist / factor, fd, coords, data_type, fp,
-                      null_string);
+                      null_string, format, name, array);
             /* d+=res; */
             dist += G_distance(e + X, n + Y, e, n);
         }
@@ -340,7 +363,7 @@ int do_profile(double e1, double e2, double n1, double n2,
         /* NW Quad  or due west */
         for (e = e1, n = n1; e > e2 || n < n2; e -= X, n += Y) {
             read_rast(e, n, dist / factor, fd, coords, data_type, fp,
-                      null_string);
+                      null_string, format, name, array);
             /* d+=res; */
             dist += G_distance(e + X, n - Y, e, n);
         }
@@ -349,4 +372,4 @@ int do_profile(double e1, double e2, double n1, double n2,
      * return dist;
      */
     return 0;
-}                               /* done with do_profile */
+} /* done with do_profile */

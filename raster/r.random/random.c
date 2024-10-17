@@ -6,13 +6,10 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-
 /* function prototypes */
-static void cpvalue(struct RASTER_MAP_PTR *, int, struct RASTER_MAP_PTR *,
-                    int);
+static void cpvalue(struct RASTER_MAP_PTR *, int, struct RASTER_MAP_PTR *, int);
 static double cell_as_dbl(struct RASTER_MAP_PTR *, int);
 static void set_to_null(struct RASTER_MAP_PTR *, int);
-
 
 int execute_random(struct rr_state *theState)
 {
@@ -40,8 +37,7 @@ int execute_random(struct rr_state *theState)
 
     /* open the data files, input raster should be set-up already */
     if ((infd = theState->fd_old) < 0)
-        G_fatal_error(_("Unable to open raster map <%s>"),
-                      theState->inraster);
+        G_fatal_error(_("Unable to open raster map <%s>"), theState->inraster);
     if (theState->docover == TRUE) {
         if ((cinfd = theState->fd_cold) < 0)
             G_fatal_error(_("Unable to open raster map <%s>"),
@@ -55,21 +51,18 @@ int execute_random(struct rr_state *theState)
             type = theState->buf.type;
         outfd = Rast_open_new(theState->outraster, type);
         theState->fd_new = outfd;
-
     }
 
     if (theState->outvector) {
-        if (Vect_open_new(&Out, theState->outvector, theState->z_geometry) <
-            0)
+        if (Vect_open_new(&Out, theState->outvector, theState->z_geometry) < 0)
             G_fatal_error(_("Unable to create vector map <%s>"),
                           theState->outvector);
         Vect_hist_command(&Out);
 
         fi = Vect_default_field_info(&Out, 1, NULL, GV_1TABLE);
 
-        driver =
-            db_start_driver_open_database(fi->driver,
-                                          Vect_subst_var(fi->database, &Out));
+        driver = db_start_driver_open_database(
+            fi->driver, Vect_subst_var(fi->database, &Out));
         if (!driver)
             G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                           Vect_subst_var(fi->database, &Out), fi->driver);
@@ -117,9 +110,9 @@ int execute_random(struct rr_state *theState)
 
     G_percent(0, theState->nRand, 2);
 
-    nc = (theState->use_nulls) ? theState->nCells :
-        theState->nCells - theState->nNulls;
-    nt = theState->nRand;       /* Number of points to generate */
+    nc = (theState->use_nulls) ? theState->nCells
+                               : theState->nCells - theState->nNulls;
+    nt = theState->nRand; /* Number of points to generate */
     cat = 1;
 
     /* Execute for loop for every row if nt>1 */
@@ -135,9 +128,9 @@ int execute_random(struct rr_state *theState)
 
             if (theState->use_nulls || !is_null_value(theState->buf, col))
                 do_check = 1;
-            if (do_check && theState->docover == TRUE) {        /* skip no data cover points */
-                if (!theState->use_nulls &&
-                    is_null_value(theState->cover, col))
+            if (do_check &&
+                theState->docover == TRUE) { /* skip no data cover points */
+                if (!theState->use_nulls && is_null_value(theState->cover, col))
                     do_check = 0;
             }
 
@@ -178,8 +171,7 @@ int execute_random(struct rr_state *theState)
                                     "insert into %s values ( %d, %f, NULL )",
                                     fi->table, cat, val);
                         else
-                            sprintf(buf,
-                                    "insert into %s values ( %d, %f, %f )",
+                            sprintf(buf, "insert into %s values ( %d, %f, %f )",
                                     fi->table, cat, val, coverval);
                     else
                         sprintf(buf, "insert into %s values ( %d, %f )",
@@ -239,11 +231,9 @@ int execute_random(struct rr_state *theState)
 
     if (nt > 0)
 #ifdef HAVE_LONG_LONG_INT
-        G_warning(_("Only [%llu] random points created"),
-                  theState->nRand - nt);
+        G_warning(_("Only [%llu] random points created"), theState->nRand - nt);
 #else
-        G_warning(_("Only [%lu] random points created"),
-                  theState->nRand - nt);
+        G_warning(_("Only [%lu] random points created"), theState->nRand - nt);
 #endif
 
     /* close files */
@@ -254,9 +244,8 @@ int execute_random(struct rr_state *theState)
         db_commit_transaction(driver);
         if (db_create_index2(driver, fi->table, GV_KEY_COLUMN) != DB_OK)
             G_warning(_("Unable to create index"));
-        if (db_grant_on_table
-            (driver, fi->table, DB_PRIV_SELECT,
-             DB_GROUP | DB_PUBLIC) != DB_OK) {
+        if (db_grant_on_table(driver, fi->table, DB_PRIV_SELECT,
+                              DB_GROUP | DB_PUBLIC) != DB_OK) {
             G_fatal_error(_("Unable to grant privileges on table <%s>"),
                           fi->table);
         }
@@ -269,8 +258,7 @@ int execute_random(struct rr_state *theState)
         Rast_close(outfd);
 
     return 0;
-}                               /* execute_random() */
-
+} /* execute_random() */
 
 static void cpvalue(struct RASTER_MAP_PTR *from, int fcol,
                     struct RASTER_MAP_PTR *to, int tcol)
@@ -288,7 +276,6 @@ static void cpvalue(struct RASTER_MAP_PTR *from, int fcol,
     }
 }
 
-
 static double cell_as_dbl(struct RASTER_MAP_PTR *buf, int col)
 {
     switch (buf->type) {
@@ -302,7 +289,6 @@ static double cell_as_dbl(struct RASTER_MAP_PTR *buf, int col)
 
     return 0.;
 }
-
 
 static void set_to_null(struct RASTER_MAP_PTR *buf, int col)
 {
@@ -318,7 +304,6 @@ static void set_to_null(struct RASTER_MAP_PTR *buf, int col)
         break;
     }
 }
-
 
 int is_null_value(struct RASTER_MAP_PTR buf, int col)
 {

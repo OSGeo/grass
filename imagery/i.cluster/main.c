@@ -1,14 +1,13 @@
-
 /****************************************************************************
  *
  * MODULE:       i.cluster
  * AUTHOR(S):    Michael Shapiro (USACERL) and Tao Wen (UIUC)
  *                    (original contributors)
- *               Markus Neteler <neteler itc.it>, 
- *               Roberto Flor <flor itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Brad Douglas <rez touchofmadness.com>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
+ *               Markus Neteler <neteler itc.it>,
+ *               Roberto Flor <flor itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Brad Douglas <rez touchofmadness.com>,
+ *               Glynn Clements <glynn gclements.plus.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      builds pixel clusters based on multi-image pixel values
  * COPYRIGHT:    (C) 1999-2008 by the GRASS Development Team
@@ -18,6 +17,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <time.h>
 #include <grass/gis.h>
@@ -26,7 +26,6 @@
 #define GLOBAL
 #include "global.h"
 #include "local_proto.h"
-
 
 struct Cluster C;
 struct Signature in_sig;
@@ -51,7 +50,6 @@ time_t start_time;
 
 static int interrupted = 0;
 
-
 int main(int argc, char *argv[])
 {
     int count;
@@ -64,11 +62,10 @@ int main(int argc, char *argv[])
     char xmapset[GMAPSET_MAX];
 
     struct GModule *module;
-    struct
-    {
-        struct Option *group_name, *subgroup_name, *out_sig, *seed_sig,
-            *class, *sample_interval, *iterations, *separation,
-            *convergence, *min_size, *report_file;
+    struct {
+        struct Option *group_name, *subgroup_name, *out_sig, *seed_sig, *class,
+            *sample_interval, *iterations, *separation, *convergence, *min_size,
+            *report_file;
     } parm;
 
     G_gisinit(argv[0]);
@@ -77,9 +74,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("imagery"));
     G_add_keyword(_("classification"));
     G_add_keyword(_("signatures"));
-    module->label =
-        _("Generates spectral signatures for land cover "
-          "types in an image using a clustering algorithm.");
+    module->label = _("Generates spectral signatures for land cover "
+                      "types in an image using a clustering algorithm.");
     module->description =
         _("The resulting signature file is used as input for i.maxlik, "
           "to generate an unsupervised image classification.");
@@ -165,8 +161,8 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    group = parm.group_name->answer;    /* a required parameter */
-    subgroup = parm.subgroup_name->answer;      /* required */
+    group = parm.group_name->answer;       /* a required parameter */
+    subgroup = parm.subgroup_name->answer; /* required */
 
     /* check all the inputs */
     if (!I_find_group(group)) {
@@ -177,8 +173,8 @@ int main(int argc, char *argv[])
                       group);
     }
 
-    if (G_unqualified_name
-        (parm.out_sig->answer, G_mapset(), outsigfile, xmapset) < 0)
+    if (G_unqualified_name(parm.out_sig->answer, G_mapset(), outsigfile,
+                           xmapset) < 0)
         G_fatal_error(_("<%s> does not match the current mapset"), xmapset);
 
     if (G_legal_filename(outsigfile) < 0)
@@ -190,9 +186,8 @@ int main(int argc, char *argv[])
 
     I_cluster_clear(&C);
 
-
-    if (sscanf(parm.class->answer, "%d", &maxclass) != 1 || maxclass < 1
-        || maxclass > 255) {
+    if (sscanf(parm.class->answer, "%d", &maxclass) != 1 || maxclass < 1 ||
+        maxclass > 255) {
         G_fatal_error(_("Illegal number of initial classes (%s)"),
                       parm.class->answer);
     }
@@ -200,10 +195,10 @@ int main(int argc, char *argv[])
     insigfile = parm.seed_sig->answer;
 
     if (parm.sample_interval->answer) {
-        if (sscanf
-            (parm.sample_interval->answer, "%d,%d", &sample_rows,
-             &sample_cols) != 2 || sample_rows < 1 || sample_cols < 1 ||
-            sample_rows > nrows || sample_cols > ncols) {
+        if (sscanf(parm.sample_interval->answer, "%d,%d", &sample_rows,
+                   &sample_cols) != 2 ||
+            sample_rows < 1 || sample_cols < 1 || sample_rows > nrows ||
+            sample_cols > ncols) {
             G_fatal_error(_("Illegal value(s) of sample intervals (%s)"),
                           parm.sample_interval->answer);
         }
@@ -248,7 +243,6 @@ int main(int argc, char *argv[])
 
     open_files();
 
-
     fprintf(report,
             _("#################### CLUSTER (%s) ####################%s%s"),
             G_date(), HOST_NEWLINE, HOST_NEWLINE);
@@ -261,8 +255,7 @@ int main(int argc, char *argv[])
                 G_fully_qualified_name(ref.file[n].name, ref.file[n].mapset),
                 HOST_NEWLINE);
     }
-    fprintf(report, _("Result signature file: %s%s"), outsigfile,
-            HOST_NEWLINE);
+    fprintf(report, _("Result signature file: %s%s"), outsigfile, HOST_NEWLINE);
     fprintf(report, "%s", HOST_NEWLINE);
     fprintf(report, _("Region%s"), HOST_NEWLINE);
     fprintf(report, _("  North: %12.2f  East: %12.2f%s"), window.north,
@@ -296,7 +289,7 @@ int main(int argc, char *argv[])
     fprintf(report, "%s", HOST_NEWLINE);
     fflush(report);
 
-    x = (DCELL *) G_malloc(ref.nfiles * sizeof(DCELL));
+    x = (DCELL *)G_malloc(ref.nfiles * sizeof(DCELL));
 
     I_cluster_begin(&C, ref.nfiles);
 
@@ -312,7 +305,7 @@ int main(int argc, char *argv[])
                 x[n] = cell[n][col];
             if (I_cluster_point(&C, x) < 0)
                 G_fatal_error(_("Out of Memory. Please run again and choose a "
-                               "smaller sample size."));
+                                "smaller sample size."));
         }
     }
     G_percent(nrows, nrows, 2);
@@ -353,15 +346,15 @@ int main(int argc, char *argv[])
     }
     else {
         G_fatal_error(_("Unable to create signature file <%s> for group "
-                        "<%s>, subsgroup <%s>"), outsigfile, group, subgroup);
+                        "<%s>, subsgroup <%s>"),
+                      outsigfile, group, subgroup);
     }
 
     fprintf(report,
             _("%s%s#################### CLASSES ####################%s"),
             HOST_NEWLINE, HOST_NEWLINE, HOST_NEWLINE);
-    fprintf(report, _("%s%d classes, %.2f%% points stable%s"),
-            HOST_NEWLINE, I_cluster_nclasses(&C, 1), (double)C.percent_stable,
-            HOST_NEWLINE);
+    fprintf(report, _("%s%d classes, %.2f%% points stable%s"), HOST_NEWLINE,
+            I_cluster_nclasses(&C, 1), (double)C.percent_stable, HOST_NEWLINE);
     fprintf(report, _("%s######## CLUSTER END (%s) ########%s"), HOST_NEWLINE,
             G_date(), HOST_NEWLINE);
     fclose(report);
@@ -369,5 +362,4 @@ int main(int argc, char *argv[])
     G_done_msg(_("File <%s> created."), outsigfile);
 
     exit(EXIT_SUCCESS);
-
 }

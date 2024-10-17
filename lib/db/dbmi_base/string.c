@@ -18,16 +18,16 @@
 #include <grass/dbmi.h>
 
 /*!
-   \brief Initialize dbString 
+   \brief Initialize dbString
 
    \param[out] x pointer to dbString
  */
-void db_init_string(dbString * x)
+void db_init_string(dbString *x)
 {
     G_zero(x, sizeof(dbString));
 }
 
-static int set_string(dbString * x, char *s, int copy);
+static int set_string(dbString *x, char *s, int copy);
 
 /*!
    \brief Inserts string to dbString (enlarge string)
@@ -38,7 +38,7 @@ static int set_string(dbString * x, char *s, int copy);
    \return DB_OK on success
    \return DB_MEMORY_ERR on error
  */
-int db_set_string(dbString * x, const char *s)
+int db_set_string(dbString *x, const char *s)
 {
     return set_string(x, (char *)s, 1);
 }
@@ -52,7 +52,7 @@ int db_set_string(dbString * x, const char *s)
    \return DB_OK on success
    \return DB_MEMORY_ERR on error
  */
-int db_set_string_no_copy(dbString * x, char *s)
+int db_set_string_no_copy(dbString *x, char *s)
 {
     return set_string(x, s, 0);
 }
@@ -64,7 +64,7 @@ int db_set_string_no_copy(dbString * x, char *s)
 
    \return string size
  */
-unsigned int db_sizeof_string(const dbString * x)
+unsigned int db_sizeof_string(const dbString *x)
 {
     if (x->nalloc < 0)
         return 0;
@@ -76,13 +76,13 @@ unsigned int db_sizeof_string(const dbString * x)
 
    \param x pointer to dbString
  */
-void db_zero_string(dbString * x)
+void db_zero_string(dbString *x)
 {
     if (db_get_string(x) && x->nalloc > 0)
         db_zero((void *)db_get_string(x), x->nalloc);
 }
 
-static int set_string(dbString * x, char *s, int copy)
+static int set_string(dbString *x, char *s, int copy)
 {
     int len;
     int stat;
@@ -117,7 +117,7 @@ static int set_string(dbString * x, char *s, int copy)
    \return DB_OK on success
    \return DB_MEMORY_ERR on error
  */
-int db_enlarge_string(dbString * x, int len)
+int db_enlarge_string(dbString *x, int len)
 {
     if (x->nalloc < len) {
         if (x->nalloc < 0)
@@ -137,7 +137,7 @@ int db_enlarge_string(dbString * x, int len)
 
    \return pointer to buffer containing string
  */
-char *db_get_string(const dbString * x)
+char *db_get_string(const dbString *x)
 {
     return x->string;
 }
@@ -147,7 +147,7 @@ char *db_get_string(const dbString * x)
 
    \param x pointer to dbString
  */
-void db_free_string(dbString * x)
+void db_free_string(dbString *x)
 {
     if (x->nalloc > 0)
         db_free(x->string);
@@ -160,7 +160,7 @@ void db_free_string(dbString * x)
    \param a pointer to 1st dbString in the array
    \param n number of items in array
  */
-void db_free_string_array(dbString * a, int n)
+void db_free_string_array(dbString *a, int n)
 {
     int i;
 
@@ -185,7 +185,7 @@ dbString *db_alloc_string_array(int count)
 
     if (count < 0)
         count = 0;
-    a = (dbString *) db_calloc(count, sizeof(dbString));
+    a = (dbString *)db_calloc(count, sizeof(dbString));
     if (a) {
         for (i = 0; i < count; i++)
             db_init_string(&a[i]);
@@ -202,7 +202,7 @@ dbString *db_alloc_string_array(int count)
    \return DB_OK on success
    \return otherwise error code is returned
  */
-int db_append_string(dbString * x, const char *s)
+int db_append_string(dbString *x, const char *s)
 {
     int len;
     int stat;
@@ -227,7 +227,7 @@ int db_append_string(dbString * x, const char *s)
    \return DB_OK on success
    \return DB_ERR code on error
  */
-int db_copy_string(dbString * dst, const dbString * src)
+int db_copy_string(dbString *dst, const dbString *src)
 {
     return db_set_string(dst, db_get_string(src));
 }
@@ -237,7 +237,7 @@ int db_copy_string(dbString * dst, const dbString * src)
 
    \param src pointer to dbString
  */
-void db_double_quote_string(dbString * src)
+void db_double_quote_string(dbString *src)
 {
     char *ptra, *ptrb, buf[2];
     dbString tmp;

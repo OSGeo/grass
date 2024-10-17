@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_client/c_finddb.c
- * 
+ *
  * \brief DBMI Library (client) - find database
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -26,7 +26,7 @@
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db_find_database(dbDriver * driver, dbHandle * handle, int *found)
+int db_find_database(dbDriver *driver, dbHandle *handle, int *found)
 {
     int ret_code;
     int stat;
@@ -43,7 +43,7 @@ int db_find_database(dbDriver * driver, dbHandle * handle, int *found)
     DB_RECV_RETURN_CODE(&ret_code);
 
     if (ret_code != DB_OK)
-        return ret_code;        /* ret_code SHOULD == DB_FAILED */
+        return ret_code; /* ret_code SHOULD == DB_FAILED */
 
     /* get results */
     DB_RECV_INT(found);
@@ -51,10 +51,8 @@ int db_find_database(dbDriver * driver, dbHandle * handle, int *found)
     stat = DB_OK;
     if (*found) {
         DB_RECV_HANDLE(&temp);
-        stat = db_set_handle(handle,
-                             db_get_handle_dbname(&temp),
-                             db_get_handle_dbschema(&temp)
-            );
+        stat = db_set_handle(handle, db_get_handle_dbname(&temp),
+                             db_get_handle_dbschema(&temp));
         db_free_handle(&temp);
     }
     return stat;

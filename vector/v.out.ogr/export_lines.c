@@ -3,48 +3,45 @@
 #include "local_proto.h"
 
 static int export_lines_single(struct Map_info *, int, int, int, int,
-                               OGRFeatureDefnH, OGRLayerH,
-                               struct field_info *, dbDriver *, int, int *,
-                               const char **, int, int, int *, int *);
+                               OGRFeatureDefnH, OGRLayerH, struct field_info *,
+                               dbDriver *, int, int *, const char **, int, int,
+                               int *, int *);
 static int export_lines_multi(struct Map_info *, int, int, int, int,
-                              OGRFeatureDefnH, OGRLayerH,
-                              struct field_info *, dbDriver *, int, int *,
-                              const char **, int, int, int *, int *);
+                              OGRFeatureDefnH, OGRLayerH, struct field_info *,
+                              dbDriver *, int, int *, const char **, int, int,
+                              int *, int *);
 
 static void line_to_polygon(OGRGeometryH, const struct line_pnts *);
 
-static void add_part(OGRGeometryH, OGRwkbGeometryType,
-                     int, struct line_pnts *);
+static void add_part(OGRGeometryH, OGRwkbGeometryType, int, struct line_pnts *);
 
 /* export primitives as single/multi-features */
 int export_lines(struct Map_info *In, int field, int otype, int multi,
                  int donocat, int force_poly, OGRFeatureDefnH Ogr_featuredefn,
-                 OGRLayerH Ogr_layer, struct field_info *Fi,
-                 dbDriver * driver, int ncol, int *colctype,
-                 const char **colname, int doatt, int nocat, int *n_noatt,
-                 int *n_nocat)
+                 OGRLayerH Ogr_layer, struct field_info *Fi, dbDriver *driver,
+                 int ncol, int *colctype, const char **colname, int doatt,
+                 int nocat, int *n_noatt, int *n_nocat)
 {
     if (multi)
         /* export as multi-features */
         return export_lines_multi(In, field, otype, donocat, force_poly,
-                                  Ogr_featuredefn, Ogr_layer,
-                                  Fi, driver, ncol, colctype,
-                                  colname, doatt, nocat, n_noatt, n_nocat);
+                                  Ogr_featuredefn, Ogr_layer, Fi, driver, ncol,
+                                  colctype, colname, doatt, nocat, n_noatt,
+                                  n_nocat);
 
     /* export as single features */
-    return export_lines_single(In, field, otype, donocat, force_poly,
-                               Ogr_featuredefn, Ogr_layer,
-                               Fi, driver, ncol, colctype,
-                               colname, doatt, nocat, n_noatt, n_nocat);
+    return export_lines_single(
+        In, field, otype, donocat, force_poly, Ogr_featuredefn, Ogr_layer, Fi,
+        driver, ncol, colctype, colname, doatt, nocat, n_noatt, n_nocat);
 }
 
 /* export line as single feature */
-int export_lines_single(struct Map_info *In, int field, int otype,
-                        int donocat, int force_poly,
-                        OGRFeatureDefnH Ogr_featuredefn, OGRLayerH Ogr_layer,
-                        struct field_info *Fi, dbDriver * driver, int ncol,
-                        int *colctype, const char **colname, int doatt,
-                        int nocat, int *n_noatt, int *n_nocat)
+int export_lines_single(struct Map_info *In, int field, int otype, int donocat,
+                        int force_poly, OGRFeatureDefnH Ogr_featuredefn,
+                        OGRLayerH Ogr_layer, struct field_info *Fi,
+                        dbDriver *driver, int ncol, int *colctype,
+                        const char **colname, int doatt, int nocat,
+                        int *n_noatt, int *n_nocat)
 {
     int i, j, n_exported, n_lines;
     int cat, type;
@@ -77,13 +74,13 @@ int export_lines_single(struct Map_info *In, int field, int otype,
         Vect_cat_get(Cats, field, &cat);
         if (cat < 0 && !donocat) {
             (*n_nocat)++;
-            continue;           /* skip lines without category, do not export
-                                 * not labeled */
+            continue; /* skip lines without category, do not export
+                       * not labeled */
         }
 
         /* build simple features geometry */
         if ((type == GV_LINE && force_poly) || type == GV_FACE) {
-            /* lines to polygons 
+            /* lines to polygons
                faces to 2.5D polygons */
             Ogr_geometry = OGR_G_CreateGeometry(wkbPolygon);
             line_to_polygon(Ogr_geometry, Points);
@@ -96,14 +93,13 @@ int export_lines_single(struct Map_info *In, int field, int otype,
                     OGR_G_AddPoint(Ogr_geometry, Points->x[0], Points->y[0],
                                    Points->z[0]);
                 else
-                    OGR_G_AddPoint_2D(Ogr_geometry, Points->x[0],
-                                      Points->y[0]);
+                    OGR_G_AddPoint_2D(Ogr_geometry, Points->x[0], Points->y[0]);
             }
-            else {              /* GV_LINES -> wkbLinestring */
+            else { /* GV_LINES -> wkbLinestring */
                 for (j = 0; j < Points->n_points; j++) {
                     if (Vect_is_3d(In))
-                        OGR_G_AddPoint(Ogr_geometry, Points->x[j],
-                                       Points->y[j], Points->z[j]);
+                        OGR_G_AddPoint(Ogr_geometry, Points->x[j], Points->y[j],
+                                       Points->z[j]);
                     else
                         OGR_G_AddPoint_2D(Ogr_geometry, Points->x[j],
                                           Points->y[j]);
@@ -116,7 +112,7 @@ int export_lines_single(struct Map_info *In, int field, int otype,
         for (j = -1; j < Cats->n_cats; j++) {
             if (j == -1) {
                 if (cat >= 0)
-                    continue;   /* cat(s) exists */
+                    continue; /* cat(s) exists */
                 (*n_nocat)++;
             }
             else {
@@ -152,9 +148,9 @@ int export_lines_single(struct Map_info *In, int field, int otype,
 int export_lines_multi(struct Map_info *In, int field, int otype, int donocat,
                        int force_poly, OGRFeatureDefnH Ogr_featuredefn,
                        OGRLayerH Ogr_layer, struct field_info *Fi,
-                       dbDriver * driver, int ncol, int *colctype,
-                       const char **colname, int doatt, int nocat,
-                       int *n_noatt, int *n_nocat)
+                       dbDriver *driver, int ncol, int *colctype,
+                       const char **colname, int doatt, int nocat, int *n_noatt,
+                       int *n_nocat)
 {
     int i, n_exported;
     int cat, ncats_field, line, type, findex, ipart;
@@ -178,11 +174,12 @@ int export_lines_multi(struct Map_info *In, int field, int otype, int donocat,
     /* check if category index is available for given field */
     findex = Vect_cidx_get_field_index(In, field);
     if (findex == -1)
-        G_fatal_error(_("Unable to export multi-features. No category index for layer %d."),
+        G_fatal_error(_("Unable to export multi-features. No category index "
+                        "for layer %d."),
                       field);
 
     /* determine type */
-    type = -1;                  /* unknown -> GeometryCollection */
+    type = -1; /* unknown -> GeometryCollection */
     if (Vect_cidx_get_num_types_by_index(In, findex) == 1)
         Vect_cidx_get_type_count_by_index(In, findex, 0, &type, NULL);
     if (force_poly)
@@ -217,8 +214,8 @@ int export_lines_multi(struct Map_info *In, int field, int otype, int donocat,
                               cat, line, field);
 
             /* add part */
-            add_part(Ogr_geometry, wkbtype_part,
-                     type == GV_LINE && force_poly, Points);
+            add_part(Ogr_geometry, wkbtype_part, type == GV_LINE && force_poly,
+                     Points);
         }
 
         if (!OGR_G_IsEmpty(Ogr_geometry)) {
@@ -256,16 +253,16 @@ int export_lines_multi(struct Map_info *In, int field, int otype, int donocat,
 
         Vect_cat_get(Cats, field, &cat);
         if (cat > 0)
-            continue;           /* skip features with category */
+            continue; /* skip features with category */
         if (cat < 0 && !donocat) {
             (*n_nocat)++;
-            continue;           /* skip lines without category, do not export
-                                 * not labeled */
+            continue; /* skip lines without category, do not export
+                       * not labeled */
         }
 
         /* add part */
-        add_part(Ogr_geometry, wkbtype_part,
-                 type == GV_LINE && force_poly, Points);
+        add_part(Ogr_geometry, wkbtype_part, type == GV_LINE && force_poly,
+                 Points);
 
         (*n_nocat)++;
     }
@@ -302,8 +299,7 @@ int export_lines_multi(struct Map_info *In, int field, int otype, int donocat,
 }
 
 /* build polygon for closed line */
-void line_to_polygon(OGRGeometryH Ogr_geometry,
-                     const struct line_pnts *Points)
+void line_to_polygon(OGRGeometryH Ogr_geometry, const struct line_pnts *Points)
 {
     int j;
     OGRGeometryH ring;
@@ -341,7 +337,7 @@ void add_part(OGRGeometryH Ogr_geometry, OGRwkbGeometryType wkbtype_part,
             OGR_G_AddPoint(Ogr_geometry_part, Points->x[0], Points->y[0],
                            Points->z[0]);
         }
-        else {                  /* GV_LINES -> wkbLinestring */
+        else { /* GV_LINES -> wkbLinestring */
             for (j = 0; j < Points->n_points; j++) {
                 OGR_G_AddPoint(Ogr_geometry_part, Points->x[j], Points->y[j],
                                Points->z[j]);

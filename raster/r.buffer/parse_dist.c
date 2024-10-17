@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.buffer
@@ -17,7 +16,7 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
-****************************************************************************/
+ ****************************************************************************/
 
 #include <stdlib.h>
 #include "distance.h"
@@ -26,7 +25,6 @@
 static int cmp(const void *, const void *);
 static int scan_dist(char *, double *);
 
-
 int parse_distances(char **zone_list, double to_meters)
 {
     double dist;
@@ -34,7 +32,8 @@ int parse_distances(char **zone_list, double to_meters)
     int i;
     int count;
 
-    for (count = 0; zone_list[count]; count++) ;
+    for (count = 0; zone_list[count]; count++)
+        ;
     if (count <= 0)
         return 0;
 
@@ -51,8 +50,8 @@ int parse_distances(char **zone_list, double to_meters)
 
     for (i = 0; i < count; i++) {
         if (!scan_dist(zone_list[i], &dist)) {
-            G_warning(_("%s: %s - illegal distance specification"),
-                      pgm_name, zone_list[i]);
+            G_warning(_("%s: %s - illegal distance specification"), pgm_name,
+                      zone_list[i]);
             return 0;
         }
         else {

@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #include <stdlib.h>
 #include <math.h>
 #include <grass/raster.h>
@@ -5,7 +6,7 @@
 #include "local_proto.h"
 
 #define GET_PARENT(c) ((((GW_LARGE_INT)(c) - 2) >> 3) + 1)
-#define GET_CHILD(p) (((GW_LARGE_INT)(p) << 3) - 6)
+#define GET_CHILD(p)  (((GW_LARGE_INT)(p) << 3) - 6)
 
 HEAP_PNT heap_drop(void);
 static double get_slope(CELL, CELL, double);
@@ -14,8 +15,8 @@ int do_astar(void)
 {
     int r, c, r_nbr, c_nbr, ct_dir;
     GW_LARGE_INT first_cum, count;
-    int nextdr[8] = { 1, -1, 0, 0, -1, 1, 1, -1 };
-    int nextdc[8] = { 0, 0, -1, 1, 1, -1, 1, -1 };
+    int nextdr[8] = {1, -1, 0, 0, -1, 1, 1, -1};
+    int nextdc[8] = {0, 0, -1, 1, 1, -1, 1, -1};
     CELL ele_val, ele_up, ele_nbr[8];
     WAT_ALT wa;
     ASP_FLAG af;
@@ -27,8 +28,8 @@ int do_astar(void)
      * |2| |3|
      * |5|0|6|
      */
-    int nbr_ew[8] = { 0, 1, 2, 3, 1, 0, 0, 1 };
-    int nbr_ns[8] = { 0, 1, 2, 3, 3, 2, 3, 2 };
+    int nbr_ew[8] = {0, 1, 2, 3, 1, 0, 0, 1};
+    int nbr_ns[8] = {0, 1, 2, 3, 3, 2, 3, 2};
     double dx, dy, dist_to_nbr[8], ew_res, ns_res;
     double slope[8];
     struct Cell_head window;
@@ -60,12 +61,12 @@ int do_astar(void)
     while (heap_size > 0) {
         G_percent(count++, n_points, 1);
         if (count > n_points)
-            G_fatal_error(_("%" PRI_OFF_T " surplus points"), heap_size);
+            G_fatal_error(_("%" PRId64 " surplus points"), heap_size);
 
         if (heap_size > n_points)
-            G_fatal_error
-                (_("Too many points in heap %" PRI_OFF_T ", should be %"
-                  PRI_OFF_T ""), heap_size, n_points);
+            G_fatal_error(
+                _("Too many points in heap %" PRId64 ", should be %" PRId64 ""),
+                heap_size, n_points);
 
         heap_p = heap_drop();
 
@@ -92,24 +93,22 @@ int do_astar(void)
             if (!is_worked) {
                 seg_get(&watalt, (char *)&wa, r_nbr, c_nbr);
                 ele_nbr[ct_dir] = wa.ele;
-                slope[ct_dir] = get_slope(ele_val, ele_nbr[ct_dir],
-                                          dist_to_nbr[ct_dir]);
+                slope[ct_dir] =
+                    get_slope(ele_val, ele_nbr[ct_dir], dist_to_nbr[ct_dir]);
             }
             /* avoid diagonal flow direction bias */
             if (!is_in_list || (!is_worked && af.asp < 0)) {
                 if (ct_dir > 3 && slope[ct_dir] > 0) {
                     if (slope[nbr_ew[ct_dir]] >= 0) {
                         /* slope to ew nbr > slope to center */
-                        if (slope[ct_dir] <
-                            get_slope(ele_nbr[nbr_ew[ct_dir]],
-                                      ele_nbr[ct_dir], ew_res))
+                        if (slope[ct_dir] < get_slope(ele_nbr[nbr_ew[ct_dir]],
+                                                      ele_nbr[ct_dir], ew_res))
                             skip_diag = 1;
                     }
                     if (!skip_diag && slope[nbr_ns[ct_dir]] >= 0) {
                         /* slope to ns nbr > slope to center */
-                        if (slope[ct_dir] <
-                            get_slope(ele_nbr[nbr_ns[ct_dir]],
-                                      ele_nbr[ct_dir], ns_res))
+                        if (slope[ct_dir] < get_slope(ele_nbr[nbr_ns[ct_dir]],
+                                                      ele_nbr[ct_dir], ns_res))
                             skip_diag = 1;
                     }
                 }
@@ -134,7 +133,8 @@ int do_astar(void)
                     }
                     else if (FLAG_GET(af.flag, DEPRFLAG)) {
                         G_debug(3, "real depression");
-                        /* neighbour is inside real depression, not yet worked */
+                        /* neighbour is inside real depression, not yet worked
+                         */
                         if (af.asp == 0 && ele_val <= ele_nbr[ct_dir]) {
                             af.asp = drain[r_nbr - r + 1][c_nbr - c + 1];
                             FLAG_UNSET(af.flag, DEPRFLAG);
@@ -143,16 +143,17 @@ int do_astar(void)
                     }
                 }
             }
-        }                       /* end neighbours */
-        /* add astar points to sorted list for flow accumulation and stream extraction */
+        } /* end neighbours */
+        /* add astar points to sorted list for flow accumulation and stream
+         * extraction */
         first_cum--;
         seg_put(&astar_pts, (char *)&heap_p.pnt, 0, first_cum);
         seg_get(&aspflag, (char *)&af, r, c);
         FLAG_SET(af.flag, WORKEDFLAG);
         seg_put(&aspflag, (char *)&af, r, c);
-    }                           /* end A* search */
+    } /* end A* search */
 
-    G_percent(n_points, n_points, 1);   /* finish it */
+    G_percent(n_points, n_points, 1); /* finish it */
 
     return 1;
 }
@@ -161,7 +162,7 @@ int do_astar(void)
  * compare function for heap
  * returns 1 if point1 < point2 else 0
  */
-static int heap_cmp(HEAP_PNT * a, HEAP_PNT * b)
+static int heap_cmp(HEAP_PNT *a, HEAP_PNT *b)
 {
     if (a->ele < b->ele)
         return 1;

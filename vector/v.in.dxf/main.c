@@ -41,8 +41,7 @@ int main(int argc, char *argv[])
     int ret;
 
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Flag *list;
         struct Flag *extent;
         struct Flag *table;
@@ -51,8 +50,7 @@ int main(int argc, char *argv[])
         struct Flag *one_layer;
         struct Flag *frame;
     } flag;
-    struct
-    {
+    struct {
         struct Option *input;
         struct Option *output;
         struct Option *layers;
@@ -66,8 +64,7 @@ int main(int argc, char *argv[])
     G_add_keyword("DXF");
     G_add_keyword(_("level1"));
 
-    module->description =
-        _("Converts file in DXF format to GRASS vector map.");
+    module->description = _("Converts file in DXF format to GRASS vector map.");
 
     flag.extent = G_define_flag();
     flag.extent->key = 'e';
@@ -108,8 +105,7 @@ int main(int argc, char *argv[])
     opt.layers->type = TYPE_STRING;
     opt.layers->required = NO;
     opt.layers->multiple = YES;
-    opt.layers->description =
-        _("List of DXF layers to import (default: all)");
+    opt.layers->description = _("List of DXF layers to import (default: all)");
     opt.layers->guisection = _("DXF layers");
 
     if (G_parser(argc, argv))

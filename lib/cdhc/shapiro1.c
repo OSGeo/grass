@@ -3,7 +3,6 @@
 #include <math.h>
 #include "local_proto.h"
 
-
 double *Cdhc_shapiro_wilk(double *x, int n)
 {
     static double y[2];
@@ -749,10 +748,8 @@ double *Cdhc_shapiro_wilk(double *x, int n)
 
     if (n > 50 || n < 3) {
 #ifdef NOISY
-        fprintf(stdout,
-                "  THIS IS THE SHAPIRO-WILK TEST FOR SMALL SAMPLES\n");
-        fprintf(stdout,
-                "  THE SAMPLE SIZE MUST BE LESS THAN OR EQUAL TO 50\n");
+        fprintf(stdout, "  THIS IS THE SHAPIRO-WILK TEST FOR SMALL SAMPLES\n");
+        fprintf(stdout, "  THE SAMPLE SIZE MUST BE LESS THAN OR EQUAL TO 50\n");
 #endif /* NOISY */
 
         y[0] = y[1] = 0.0;

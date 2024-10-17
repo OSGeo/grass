@@ -18,7 +18,6 @@ for details.
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 .. sectionauthor:: Soeren Gebbert <soeren.gebbert gmail.com>
 """
-from __future__ import absolute_import
 
 import os
 import time
@@ -48,8 +47,7 @@ def raster3d_info(map, env=None):
     def float_or_null(s):
         if s == "NULL":
             return None
-        else:
-            return float(s)
+        return float(s)
 
     s = read_command("r3.info", flags="rg", map=map, env=env)
     kv = parse_key_val(s)
@@ -69,12 +67,20 @@ def raster3d_info(map, env=None):
 
 
 def mapcalc3d(
-    exp, quiet=False, verbose=False, overwrite=False, seed=None, env=None, **kwargs
+    exp,
+    quiet=False,
+    superquiet=False,
+    verbose=False,
+    overwrite=False,
+    seed=None,
+    env=None,
+    **kwargs,
 ):
     """Interface to r3.mapcalc.
 
     :param str exp: expression
     :param bool quiet: True to run quietly (<tt>--q</tt>)
+    :param bool superquiet: True to run extra quietly (<tt>--qq</tt>)
     :param bool verbose: True to run verbosely (<tt>--v</tt>)
     :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
     :param seed: an integer used to seed the random-number generator for the
@@ -97,10 +103,9 @@ def mapcalc3d(
             env=env,
             seed=seed,
             quiet=quiet,
+            superquiet=superquiet,
             verbose=verbose,
             overwrite=overwrite,
         )
     except CalledModuleError:
-        fatal(
-            _("An error occurred while running r3.mapcalc" " with expression: %s") % e
-        )
+        fatal(_("An error occurred while running r3.mapcalc with expression: %s") % e)

@@ -1,16 +1,15 @@
-
 /****************************************************************************
  *
  * MODULE:       i.eb.evapfr
  * AUTHOR(S):    Yann Chemin - yann.chemin@gmail.com
  * PURPOSE:      Calculates the evaporative fraction
- *               as seen in Bastiaanssen (1995) 
+ *               as seen in Bastiaanssen (1995)
  *
  * COPYRIGHT:    (C) 2002-2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	 for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
 
@@ -28,12 +27,12 @@ int main(int argc, char *argv[])
 {
     int nrows, ncols;
     int row, col;
-    int makin = 0;              /*Makin Flag for root zone soil moisture output */
+    int makin = 0; /*Makin Flag for root zone soil moisture output */
     struct GModule *module;
     struct Option *input1, *input2, *input3, *output1, *output2;
     struct Flag *flag1;
-    struct History history;     /*metadata */
-    char *result1, *result2;    /*output raster name */
+    struct History history;  /*metadata */
+    char *result1, *result2; /*output raster name */
 
     int infd_rnet, infd_g0, infd_h0;
     int outfd1, outfd2;
@@ -68,8 +67,7 @@ int main(int argc, char *argv[])
 
     output1 = G_define_standard_option(G_OPT_R_OUTPUT);
     output1->key = "evaporativefraction";
-    output1->description =
-        _("Name for output evaporative fraction raster map");
+    output1->description = _("Name for output evaporative fraction raster map");
 
     output2 = G_define_standard_option(G_OPT_R_OUTPUT);
     output2->key = "soilmoisture";
@@ -79,8 +77,8 @@ int main(int argc, char *argv[])
 
     flag1 = G_define_flag();
     flag1->key = 'm';
-    flag1->description =
-        _("Root zone soil moisture output (Makin, Molden and Bastiaanssen, 2001)");
+    flag1->description = _("Root zone soil moisture output (Makin, Molden and "
+                           "Bastiaanssen, 2001)");
 
     /********************/
     if (G_parser(argc, argv))
@@ -134,11 +132,11 @@ int main(int argc, char *argv[])
 
         /*process the data */
         for (col = 0; col < ncols; col++) {
-            d_rnet = ((DCELL *) inrast_rnet)[col];
-            d_g0 = ((DCELL *) inrast_g0)[col];
-            d_h0 = ((DCELL *) inrast_h0)[col];
-            if (Rast_is_d_null_value(&d_rnet) ||
-                Rast_is_d_null_value(&d_g0) || Rast_is_d_null_value(&d_h0)) {
+            d_rnet = ((DCELL *)inrast_rnet)[col];
+            d_g0 = ((DCELL *)inrast_g0)[col];
+            d_h0 = ((DCELL *)inrast_h0)[col];
+            if (Rast_is_d_null_value(&d_rnet) || Rast_is_d_null_value(&d_g0) ||
+                Rast_is_d_null_value(&d_h0)) {
                 Rast_set_d_null_value(&outrast1[col], 1);
                 if (makin)
                     Rast_set_d_null_value(&outrast2[col], 1);

@@ -1,20 +1,17 @@
 #include <stdio.h>
 #include <math.h>
 
-
 double *Cdhc_kotz_families(double *x, int n)
 {
     static double y[2];
     int i;
-    double a1, b1, a2, b3, c1, c2, c3, c4, c5, c6, lx;
-    double sum1 = 0.0, sum2 = 0.0, sum4 = 0.0;
+    double a1, a2, b3, c1, c2, c3, c4, c5, c6, lx;
+    double sum2 = 0.0, sum4 = 0.0;
 
     for (i = 0; i < n; ++i) {
-        sum1 += x[i];
         sum2 += log(x[i]);
     }
 
-    b1 = sum1 / n;
     a1 = sum2 / n;
 
     for (i = 0; i < n; ++i) {

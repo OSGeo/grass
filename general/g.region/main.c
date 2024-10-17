@@ -1,16 +1,16 @@
-
 /***************************************************************************
  *
- * MODULE: 	g.region (commandline)
- * AUTHOR(S):	Michael Shapiro, CERL
- *              datum added by Andreas Lange <andreas.lange@rhein-main.de>
- * PURPOSE: 	Program to manage and print the boundary definitions for the
- *              geographic region.
+ * MODULE:       g.region (commandline)
+ * AUTHOR(S):    Michael Shapiro, CERL
+ *               datum added by Andreas Lange <andreas.lange@rhein-main.de>
+ * PURPOSE:      Program to manage and print the boundary definitions for the
+ *               geographic region.
  *
- * COPYRIGHT:  	(C) 2000-2021 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2000-2021 by the GRASS Development Team
  *
- *   	    	This program is free software under the GPL (>=v2)
- *   	    	Read the file COPYING that comes with GRASS for details.
+ *               This program is free software under the GPL (>=v2)
+ *               Read the file COPYING that comes with GRASS for
+ *               details.
  ****************************************************************************/
 
 #include <string.h>
@@ -20,6 +20,7 @@
 #include <grass/raster.h>
 #include <grass/raster3d.h>
 #include <grass/vector.h>
+#include <grass/parson.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
@@ -41,21 +42,20 @@ int main(int argc, char *argv[])
     char **rast_ptr, **vect_ptr;
     int pix;
     bool update_file = false;
+    enum OutputFormat format;
+    JSON_Value *root_value;
+    JSON_Object *root_object;
 
     struct GModule *module;
-    struct
-    {
-        struct Flag
-            *noupdate, *force, *print, *gprint, *flprint, *lprint, *eprint,
-            *nangle, *center, *res_set, *dist_res, *dflt, *z, *savedefault,
-            *bbox, *gmt_style, *wms_style;
+    struct {
+        struct Flag *noupdate, *force, *print, *gprint, *flprint, *lprint,
+            *eprint, *nangle, *center, *res_set, *dist_res, *dflt, *z,
+            *savedefault, *bbox, *gmt_style, *wms_style;
     } flag;
-    struct
-    {
-        struct Option
-            *north, *south, *east, *west, *top, *bottom,
-            *res, *nsres, *ewres, *res3, *tbres, *rows, *cols,
-            *save, *region, *raster, *raster3d, *align, *zoom, *vect, *grow;
+    struct {
+        struct Option *north, *south, *east, *west, *top, *bottom, *res, *nsres,
+            *ewres, *res3, *tbres, *rows, *cols, *save, *region, *raster,
+            *raster3d, *align, *zoom, *vect, *grow, *format;
     } parm;
 
     G_gisinit(argv[0]);
@@ -67,8 +67,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("extent"));
     G_add_keyword(_("resolution"));
     G_add_keyword(_("level1"));
-    module->description =
-        _("Manages the boundary definitions for the " "geographic region.");
+    module->description = _("Manages the boundary definitions for the "
+                            "geographic region.");
 
     /* flags */
 
@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
     flag.nangle->label = _("Print the convergence angle (degrees CCW)");
     flag.nangle->description =
         _("The difference between the projection's grid north and true north, "
-         "measured at the center coordinates of the current region.");
+          "measured at the center coordinates of the current region.");
     flag.nangle->guisection = _("Print");
 
     flag.z = G_define_flag();
@@ -187,7 +187,8 @@ int main(int argc, char *argv[])
     parm.raster3d->required = NO;
     parm.raster3d->multiple = NO;
     parm.raster3d->description =
-        _("Set region to match 3D raster map(s) (both 2D and 3D " "values)");
+        _("Set region to match 3D raster map(s) (both 2D and 3D "
+          "values)");
     parm.raster3d->guisection = _("Existing");
 
     parm.vect = G_define_standard_option(G_OPT_V_MAP);
@@ -276,8 +277,7 @@ int main(int argc, char *argv[])
     parm.res->required = NO;
     parm.res->multiple = NO;
     parm.res->type = TYPE_STRING;
-    parm.res->description =
-        _("2D grid resolution (north-south and east-west)");
+    parm.res->description = _("2D grid resolution (north-south and east-west)");
     parm.res->guisection = _("Resolution");
 
     parm.res3 = G_define_option();
@@ -362,20 +362,27 @@ int main(int argc, char *argv[])
     parm.save->gisprompt = "new,windows,region";
     parm.save->guisection = _("Effects");
 
-    G_option_required(flag.dflt, flag.savedefault, flag.print, flag.lprint,
-                      flag.eprint, flag.center, flag.gmt_style,
-                      flag.wms_style, flag.dist_res, flag.nangle, flag.z,
-                      flag.bbox, flag.gprint, flag.res_set, flag.noupdate,
-                      parm.region, parm.raster, parm.raster3d, parm.vect,
-                      parm.north, parm.south, parm.east, parm.west, parm.top,
-                      parm.bottom, parm.rows, parm.cols, parm.res, parm.res3,
-                      parm.nsres, parm.ewres, parm.tbres, parm.zoom,
-                      parm.align, parm.save, parm.grow, NULL);
+    parm.format = G_define_standard_option(G_OPT_F_FORMAT);
+    parm.format->options = "plain,shell,json";
+    parm.format->descriptions = _("plain;Plain text output;"
+                                  "shell;shell script style output;"
+                                  "json;JSON (JavaScript Object Notation);");
+    parm.format->guisection = _("Print");
+
+    G_option_required(
+        flag.dflt, flag.savedefault, flag.print, flag.lprint, flag.eprint,
+        flag.center, flag.gmt_style, flag.wms_style, flag.dist_res, flag.nangle,
+        flag.z, flag.bbox, flag.gprint, flag.res_set, flag.noupdate,
+        parm.region, parm.raster, parm.raster3d, parm.vect, parm.north,
+        parm.south, parm.east, parm.west, parm.top, parm.bottom, parm.rows,
+        parm.cols, parm.res, parm.res3, parm.nsres, parm.ewres, parm.tbres,
+        parm.zoom, parm.align, parm.save, parm.grow, NULL);
     G_option_exclusive(flag.noupdate, flag.force, NULL);
-    G_option_requires(flag.noupdate, flag.savedefault, flag.print,
-                      flag.lprint, flag.eprint, flag.center, flag.gmt_style,
-                      flag.wms_style, flag.dist_res, flag.nangle, flag.z,
-                      flag.bbox, flag.gprint, parm.save, NULL);
+    G_option_requires(flag.noupdate, flag.savedefault, flag.print, flag.lprint,
+                      flag.eprint, flag.center, flag.gmt_style, flag.wms_style,
+                      flag.dist_res, flag.nangle, flag.z, flag.bbox,
+                      flag.gprint, parm.save, NULL);
+    G_option_requires(flag.flprint, flag.gprint, NULL);
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -420,9 +427,27 @@ int main(int argc, char *argv[])
     if (print_flag == PRINT_METERS)
         print_flag |= PRINT_SH;
 
-    if (print_flag == PRINT_SH ||
-        print_flag & PRINT_3D || print_flag == PRINT_METERS + PRINT_SH) {
+    if (print_flag == PRINT_SH || print_flag & PRINT_3D ||
+        print_flag == PRINT_METERS + PRINT_SH) {
         print_flag |= PRINT_REG;
+    }
+
+    if (strcmp(parm.format->answer, "json") == 0) {
+        format = JSON;
+        root_value = json_value_init_object();
+        if (root_value == NULL) {
+            G_fatal_error(
+                _("Failed to initialize JSON object. Out of memory?"));
+        }
+        root_object = json_object(root_value);
+    }
+    else if (strcmp(parm.format->answer, "shell") == 0 ||
+             (print_flag & PRINT_SH)) {
+        format = SHELL;
+        print_flag |= PRINT_SH;
+    }
+    else {
+        format = PLAIN;
     }
 
     if (flag.dflt->answer)
@@ -458,19 +483,22 @@ int main(int argc, char *argv[])
                 first = 1;
             }
             else {
-                window.north = (window.north > temp_window.north) ?
-                    window.north : temp_window.north;
-                window.south = (window.south < temp_window.south) ?
-                    window.south : temp_window.south;
-                window.east = (window.east > temp_window.east) ?
-                    window.east : temp_window.east;
-                window.west = (window.west < temp_window.west) ?
-                    window.west : temp_window.west;
+                window.north = (window.north > temp_window.north)
+                                   ? window.north
+                                   : temp_window.north;
+                window.south = (window.south < temp_window.south)
+                                   ? window.south
+                                   : temp_window.south;
+                window.east = (window.east > temp_window.east)
+                                  ? window.east
+                                  : temp_window.east;
+                window.west = (window.west < temp_window.west)
+                                  ? window.west
+                                  : temp_window.west;
             }
         }
         G_adjust_Cell_head3(&window, 0, 0, 0);
     }
-
 
     /* raster3d= */
     if ((name = parm.raster3d->answer)) {
@@ -518,9 +546,9 @@ int main(int argc, char *argv[])
             }
 
             ret = 0;
-            if (Vect_level(&Map) > 1)   /* level 2 - topology available */
+            if (Vect_level(&Map) > 1) /* level 2 - topology available */
                 ret = Vect_get_map_box(&Map, &box);
-            else                /* level 1 */
+            else /* level 1 */
                 ret = Vect_get_map_box1(&Map, &box);
             if (ret != 1)
                 G_fatal_error(_("Unable to get map bounding box"));
@@ -538,14 +566,16 @@ int main(int argc, char *argv[])
                 first = 1;
             }
             else {
-                window.north = (window.north > map_window.north) ?
-                    window.north : map_window.north;
-                window.south = (window.south < map_window.south) ?
-                    window.south : map_window.south;
-                window.east = (window.east > map_window.east) ?
-                    window.east : map_window.east;
-                window.west = (window.west < map_window.west) ?
-                    window.west : map_window.west;
+                window.north = (window.north > map_window.north)
+                                   ? window.north
+                                   : map_window.north;
+                window.south = (window.south < map_window.south)
+                                   ? window.south
+                                   : map_window.south;
+                window.east = (window.east > map_window.east) ? window.east
+                                                              : map_window.east;
+                window.west = (window.west < map_window.west) ? window.west
+                                                              : map_window.west;
                 if (map_window.top > window.top)
                     window.top = map_window.top;
                 if (map_window.bottom < window.bottom)
@@ -623,8 +653,7 @@ int main(int argc, char *argv[])
             die(parm.south);
 
         if (flag.res_set->answer)
-            window.south =
-                floor(window.south / window.ns_res) * window.ns_res;
+            window.south = floor(window.south / window.ns_res) * window.ns_res;
     }
 
     /* e= */
@@ -840,7 +869,8 @@ int main(int argc, char *argv[])
                 if (G_projection() == PROJECTION_LL &&
                     (window.north + xs <= 90.0 + 0.5 * window.ns_res ||
                      window.south - xs >= -90.0 - 0.5 * window.ns_res)) {
-                    G_warning(_("'%s' option not used with <%s> because a coordinate would become invalid"),
+                    G_warning(_("'%s' option not used with <%s> because a "
+                                "coordinate would become invalid"),
                               parm.grow->key, "latitude");
                 }
                 else {
@@ -849,7 +879,8 @@ int main(int argc, char *argv[])
                 }
             }
             else {
-                G_warning(_("'%s' option not used with <%s> because <%s> would become minor than <%s>"),
+                G_warning(_("'%s' option not used with <%s> because <%s> would "
+                            "become minor than <%s>"),
                           parm.grow->key, "latitude", "north", "south");
             }
             ys = window.ew_res * pix;
@@ -858,7 +889,8 @@ int main(int argc, char *argv[])
                 window.east += ys;
             }
             else {
-                G_warning(_("'%s' option not used with <%s> because <%s> would become minor than <%s>"),
+                G_warning(_("'%s' option not used with <%s> because <%s> would "
+                            "become minor than <%s>"),
                           parm.grow->key, "longitude", "east", "west");
             }
             zs = window.tb_res * pix;
@@ -867,7 +899,8 @@ int main(int argc, char *argv[])
                 window.bottom -= zs;
             }
             else {
-                G_warning(_("'%s' option not used with <%s> because <%s> would become minor than <%s>"),
+                G_warning(_("'%s' option not used with <%s> because <%s> would "
+                            "become minor than <%s>"),
                           parm.grow->key, "3D", "top", "bottom");
             }
         }
@@ -896,11 +929,21 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Unable to change default region. "
                             "The current mapset is not <PERMANENT>."));
         }
-    }                           /* / flag.savedefault->answer */
-
+    } /* / flag.savedefault->answer */
 
     if (print_flag)
-        print_window(&window, print_flag, flat_flag);
+        print_window(&window, print_flag, flat_flag, format, root_object);
+
+    if (format == JSON) {
+        char *serialized_string = NULL;
+        serialized_string = json_serialize_to_string_pretty(root_value);
+        if (serialized_string == NULL) {
+            G_fatal_error(_("Failed to initialize pretty JSON string."));
+        }
+        puts(serialized_string);
+        json_free_serialized_string(serialized_string);
+        json_value_free(root_value);
+    }
 
     exit(EXIT_SUCCESS);
 }
@@ -913,8 +956,7 @@ static void die(struct Option *parm)
     G_fatal_error(_("Invalid input <%s=%s>"), parm->key, parm->answer);
 }
 
-static int nsew(const char *value, const char *a, const char *b,
-                const char *c)
+static int nsew(const char *value, const char *a, const char *b, const char *c)
 {
     if (strncmp(value, a, strlen(a)) == 0)
         return 1;

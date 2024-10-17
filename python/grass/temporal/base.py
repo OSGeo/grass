@@ -24,19 +24,20 @@ for details.
 
 :author: Soeren Gebbert
 """
-from __future__ import print_function
+
 from datetime import datetime
+
 from .core import (
-    get_tgis_message_interface,
-    get_tgis_dbmi_paramstyle,
     SQLDatabaseInterfaceConnection,
     get_current_mapset,
+    get_tgis_dbmi_paramstyle,
+    get_tgis_message_interface,
 )
 
 ###############################################################################
 
 
-class DictSQLSerializer(object):
+class DictSQLSerializer:
     def __init__(self):
         self.D = {}
         self.dbmi_paramstyle = get_tgis_dbmi_paramstyle()
@@ -56,8 +57,8 @@ class DictSQLSerializer(object):
             >>> t.D["name"] = "soil"
             >>> t.D["mapset"] = "PERMANENT"
             >>> t.D["creator"] = "soeren"
-            >>> t.D["creation_time"] = datetime(2001,1,1)
-            >>> t.D["modification_time"] = datetime(2001,1,1)
+            >>> t.D["creation_time"] = datetime(2001, 1, 1)
+            >>> t.D["modification_time"] = datetime(2001, 1, 1)
             >>> t.serialize(type="SELECT", table="raster_base")
             ('SELECT  name  , creator  , creation_time  , modification_time  , mapset  , id  FROM raster_base ;\\n', ())
             >>> t.serialize(type="INSERT", table="raster_base")
@@ -72,7 +73,7 @@ class DictSQLSerializer(object):
             :param where: The optional where statement
             :return: a tuple containing the SQL string and the arguments
 
-        """
+        """  # noqa: E501
 
         sql = ""
         args = []
@@ -111,11 +112,10 @@ class DictSQLSerializer(object):
                         sql += "?"
                     else:
                         sql += "%s"
+                elif self.dbmi_paramstyle == "qmark":
+                    sql += " ,?"
                 else:
-                    if self.dbmi_paramstyle == "qmark":
-                        sql += " ,?"
-                    else:
-                        sql += " ,%s"
+                    sql += " ,%s"
                 count += 1
                 args.append(self.D[key])
             sql += ") "
@@ -137,7 +137,7 @@ class DictSQLSerializer(object):
                         else:
                             sql += " %s " % key
                             sql += "= %s "
-                    else:
+                    else:  # noqa: PLR5501
                         if self.dbmi_paramstyle == "qmark":
                             sql += " ,%s = ? " % key
                         else:
@@ -160,7 +160,7 @@ class DictSQLSerializer(object):
                     else:
                         sql += " %s " % key
                         sql += "= %s "
-                else:
+                else:  # noqa: PLR5501
                     if self.dbmi_paramstyle == "qmark":
                         sql += " ,%s = ? " % key
                     else:
@@ -219,7 +219,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
          >>> t.D["name"] = "soil"
          >>> t.D["mapset"] = "PERMANENT"
          >>> t.D["creator"] = "soeren"
-         >>> t.D["creation_time"] = datetime(2001,1,1)
+         >>> t.D["creation_time"] = datetime(2001, 1, 1)
          >>> t.get_delete_statement()
          "DELETE FROM raster WHERE id = 'soil@PERMANENT';\\n"
          >>> t.get_is_in_db_statement()
@@ -241,7 +241,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
          >>> t.get_update_all_statement_mogrified()
          "UPDATE raster SET  creation_time = '2001-01-01 00:00:00'  ,mapset = 'PERMANENT'  ,name = 'soil'  ,creator = 'soeren' WHERE id = 'soil@PERMANENT';\\n"
 
-    """
+    """  # noqa: E501
 
     def __init__(self, table=None, ident=None):
         """Constructor of this class
@@ -257,7 +257,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
         self.msgr = get_tgis_message_interface()
 
         if self.ident and self.ident.find("@") >= 0:
-            self.mapset = self.ident.split("@" "")[1]
+            self.mapset = self.ident.split("@")[1]
         else:
             self.mapset = None
 
@@ -313,7 +313,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
             + "';\n"
         )
 
-    def is_in_db(self, dbif=None, mapset=None):
+    def is_in_db(self, dbif=None, mapset=None) -> bool:
         """Check if this object is present in the temporal database
 
         :param dbif: The database interface to be used,
@@ -342,10 +342,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
             dbif.close()
 
         # Nothing found
-        if row is None:
-            return False
-
-        return True
+        return row is not None
 
     def get_select_statement(self):
         """Return the sql statement and the argument list in
@@ -469,10 +466,9 @@ class SQLDatabaseInterface(DictSQLSerializer):
             return self.serialize(
                 "UPDATE", self.get_table_name(), "WHERE id = '" + str(ident) + "'"
             )
-        else:
-            return self.serialize(
-                "UPDATE", self.get_table_name(), "WHERE id = '" + str(self.ident) + "'"
-            )
+        return self.serialize(
+            "UPDATE", self.get_table_name(), "WHERE id = '" + str(self.ident) + "'"
+        )
 
     def get_update_statement_mogrified(self, dbif=None, ident=None):
         """Return the update statement as mogrified string
@@ -532,12 +528,11 @@ class SQLDatabaseInterface(DictSQLSerializer):
             return self.serialize(
                 "UPDATE ALL", self.get_table_name(), "WHERE id = '" + str(ident) + "'"
             )
-        else:
-            return self.serialize(
-                "UPDATE ALL",
-                self.get_table_name(),
-                "WHERE id = '" + str(self.ident) + "'",
-            )
+        return self.serialize(
+            "UPDATE ALL",
+            self.get_table_name(),
+            "WHERE id = '" + str(self.ident) + "'",
+        )
 
     def get_update_all_statement_mogrified(self, dbif=None, ident=None):
         """Return the update all statement as mogrified string
@@ -591,7 +586,13 @@ class DatasetBase(SQLDatabaseInterface):
     .. code-block:: python
 
         >>> init()
-        >>> t = DatasetBase("raster", "soil@PERMANENT", creator="soeren", ctime=datetime(2001,1,1), ttype="absolute")
+        >>> t = DatasetBase(
+        ...     "raster",
+        ...     "soil@PERMANENT",
+        ...     creator="soeren",
+        ...     ctime=datetime(2001, 1, 1),
+        ...     ttype="absolute",
+        ... )
         >>> t.id
         'soil@PERMANENT'
         >>> t.name
@@ -734,7 +735,7 @@ class DatasetBase(SQLDatabaseInterface):
 
         :param ttype: The temporal type of the dataset "absolute or relative"
         """
-        if ttype is None or (ttype != "absolute" and ttype != "relative"):
+        if ttype is None or (ttype not in {"absolute", "relative"}):
             self.D["temporal_type"] = "absolute"
         else:
             self.D["temporal_type"] = ttype
@@ -746,8 +747,7 @@ class DatasetBase(SQLDatabaseInterface):
         """
         if "id" in self.D:
             return self.D["id"]
-        else:
-            return None
+        return None
 
     def get_map_id(self):
         """Convenient method to get the unique map identifier
@@ -760,10 +760,8 @@ class DatasetBase(SQLDatabaseInterface):
             if self.id.find(":") >= 0:
                 # Remove the layer identifier from the id
                 return self.id.split("@")[0].split(":")[0] + "@" + self.id.split("@")[1]
-            else:
-                return self.id
-        else:
-            return None
+            return self.id
+        return None
 
     def get_layer(self):
         """Convenient method to get the layer of the map (part of primary key)
@@ -774,48 +772,42 @@ class DatasetBase(SQLDatabaseInterface):
         """
         if "layer" in self.D:
             return self.D["layer"]
-        else:
-            return None
+        return None
 
     def get_name(self):
         """Get the name of the dataset
         :return: None if not found"""
         if "name" in self.D:
             return self.D["name"]
-        else:
-            return None
+        return None
 
     def get_mapset(self):
         """Get the name of mapset of this dataset
         :return: None if not found"""
         if "mapset" in self.D:
             return self.D["mapset"]
-        else:
-            return None
+        return None
 
     def get_creator(self):
         """Get the creator of the dataset
         :return: None if not found"""
         if "creator" in self.D:
             return self.D["creator"]
-        else:
-            return None
+        return None
 
     def get_ctime(self):
         """Get the creation time of the dataset, datatype is datetime
         :return: None if not found"""
         if "creation_time" in self.D:
             return self.D["creation_time"]
-        else:
-            return None
+        return None
 
     def get_ttype(self):
         """Get the temporal type of the map
         :return: None if not found"""
         if "temporal_type" in self.D:
             return self.D["temporal_type"]
-        else:
-            return None
+        return None
 
     # Properties of this class
     id = property(fget=get_id, fset=set_id)
@@ -830,7 +822,7 @@ class DatasetBase(SQLDatabaseInterface):
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print(
-            " +-------------------- Basic information -------------------------------------+"
+            " +-------------------- Basic information -------------------------------------+"  # noqa: E501
         )
         print(" | Id: ........................ " + str(self.get_id()))
         print(" | Name: ...................... " + str(self.get_name()))
@@ -955,7 +947,15 @@ class STDSBase(DatasetBase):
     .. code-block:: python
 
         >>> init()
-        >>> t = STDSBase("stds", "soil@PERMANENT", semantic_type="average", creator="soeren", ctime=datetime(2001,1,1), ttype="absolute", mtime=datetime(2001,1,1))
+        >>> t = STDSBase(
+        ...     "stds",
+        ...     "soil@PERMANENT",
+        ...     semantic_type="average",
+        ...     creator="soeren",
+        ...     ctime=datetime(2001, 1, 1),
+        ...     ttype="absolute",
+        ...     mtime=datetime(2001, 1, 1),
+        ... )
         >>> t.semantic_type
         'average'
         >>> t.print_info()
@@ -1016,8 +1016,7 @@ class STDSBase(DatasetBase):
         """
         if "semantic_type" in self.D:
             return self.D["semantic_type"]
-        else:
-            return None
+        return None
 
     def get_mtime(self):
         """Get the modification time of the space time dataset, datatype is
@@ -1027,8 +1026,7 @@ class STDSBase(DatasetBase):
         """
         if "modification_time" in self.D:
             return self.D["modification_time"]
-        else:
-            return None
+        return None
 
     semantic_type = property(fget=get_semantic_type, fset=set_semantic_type)
 
@@ -1190,8 +1188,7 @@ class AbstractSTDSRegister(SQLDatabaseInterface):
         """
         if "id" in self.D:
             return self.D["id"]
-        else:
-            return None
+        return None
 
     def get_registered_stds(self):
         """Get the comma separated list of space time datasets ids
@@ -1201,8 +1198,7 @@ class AbstractSTDSRegister(SQLDatabaseInterface):
         """
         if "registered_stds" in self.D:
             return self.D["registered_stds"]
-        else:
-            return None
+        return None
 
     # Properties of this class
     id = property(fget=get_id, fset=set_id)

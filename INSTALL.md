@@ -15,24 +15,22 @@ Please read _all_ text below.
 - (H) COMPILING INDIVIDUAL MODULES - OWN MODULES
 - (I) CODE OPTIMIZATION
 - (J) DEBUGGING OPTIONS
-- (K) LARGE FILE SUPPORT (for raster maps)
-- (L) SUPPORT
-- (M) GRASS GIS PROGRAMMER'S MANUAL
-- (N) CONTRIBUTING CODE AND PATCHES
-- (O) DRAFT TUTORIAL
+- (K) SUPPORT
+- (L) GRASS GIS PROGRAMMER'S MANUAL
+- (M) CONTRIBUTING CODE AND PATCHES
 
 ## PREREQUISITES
 
 The install order matters. GRASS needs at least two libraries
 which have to be installed before installing/compiling GRASS:
-For links to the software, see ./REQUIREMENTS.html in this
-directory:
+For links to the software, see [REQUIREMENTS.md](REQUIREMENTS.md) in this
+directory.
 
 Installation order:
 
 1. PROJ
-2. GDAL-OGR (compiled without GRASS support)
-3. optionally: databases such as PostgreSQL, MySQL, sqlite
+2. GDAL/OGR (compiled without GRASS support)
+3. optionally: databases such as PostgreSQL, MySQL, SQLite
 4. GRASS GIS
 5. optionally: GDAL-OGR-GRASS plugin
 
@@ -43,7 +41,7 @@ GRASS source code is currently distributed in 2 forms:
 ### Officially released source code
 
 The full source code version contains all the GRASS source code
-required for compilation. It is distributed as one file (*.tar.gz
+required for compilation. It is distributed as one file (`*.tar.gz`
 package) and the version is composed of 3 numbers, e.g. 3.7.0, 3.7.1
 etc. See
 <https://github.com/OSGeo/grass/releases>.
@@ -54,9 +52,8 @@ This version of the source code can be acquired either from the GitHub
 repository (<https://github.com/OSGeo/grass/>) or as a auto-generated snapshot
 (`*.tar.gz` package) of the GitHub repository. The snapshot name
 contains the date when the snapshot was created (checked out from
-the GitHub repository), e.g. grass-3.7.git_src_snapshot_2022_04_27.tar.gz
+the GitHub repository), e.g. `grass-3.7.git_src_snapshot_2022_04_27.tar.gz`
 from <https://grass.osgeo.org/grass-devel/source/snapshot/>
-Further instructions at <https://trac.osgeo.org/grass/wiki/DownloadSource>
 
 ## (B) COMPILATION
 
@@ -65,25 +62,25 @@ For Solaris, see hints below.
 
 The command,
 
-```
+```bash
 ./configure --help
 ```
 
 explains the options used to disable the compilation of non-mandatory
-GRASS modules. See REQUIREMENTS.html for details on dependencies.
+GRASS modules. See [REQUIREMENTS.md](REQUIREMENTS.md) for details on dependencies.
 Detailed Wiki notes for various operating systems (MS-Windows, GNU/Linux
 distributions, FreeBSD, AIX, etc) are available at:
 <https://grasswiki.osgeo.org/wiki/Compile_and_Install>
 
-First step of the compilation (-g for debugging, or -O2 for optimization):
+First step of the compilation (`-g` for debugging, or `-O2` for optimization):
 
-```
+```bash
 CFLAGS="-g -Wall" ./configure
 ```
 
 Explanation of make targets:
 
-```
+```text
 make install       - installs the binary
 
 make bindist       - make a binary package with install script
@@ -104,24 +101,24 @@ make pdfdocs       - generate programmer's documentation as PDF files
 
 Next step is the compilation itself:
 
-```
+```bash
 make
 ```
 
 Note for Solaris users (see also Wiki page above):
 
 To configure GRASS correctly on a system which doesn't have a suitable
-install program (AC_PROG_INSTALL ignores versions which are known to
+install program (`AC_PROG_INSTALL` ignores versions which are known to
 have problems), you need to ensure that $srcdir is an absolute path,
 by using e.g.:
 
-```
+```bash
 `pwd`/configure ...
 ```
 
 or:
 
-```
+```bash
 ./configure --srcdir=`pwd` ...
 ```
 
@@ -132,16 +129,16 @@ Note when using a compiler different from "gcc":
 By setting environment variables, the compiler
 names can be defined (C and C++):
 
-```
+```bash
 CC=cc CPP=cpp ./configure ...
 ```
 
 ## (C) COMPILATION NOTES for 64bit platforms
 
 To successfully compile GRASS on 64bit platforms, the required
-FFTW2 library has to be compiled with -fPIC flag:
+FFTW library has to be compiled with `-fPIC` flag:
 
-```
+```bash
 #this applies to FFTW3, not to GRASS GIS:
 cd fftw-3.3.4/
 CFLAGS="-fPIC" ./configure
@@ -149,48 +146,36 @@ make
 make install
 ```
 
-To fully enable 64bit library usage for GRASS on 64bit platforms,
-the following additional parameters are recommended/required:
-
-```
-./configure \
-   --enable-64bit \
-   --with-libs=/usr/lib64 \
-   ...
-```
-
-See also CODE OPTIMIZATION below.
-
 ## (D) INSTALLATION (first time)
 
 After compilation, the resulting code is stored in the directory
 
-```
-./dist.$ARCH
+```bash
+./dist.$ARCH/
 ```
 
-and the scripts (grass, ...) in
+and the script (`grass`) in
 
-```
-./bin.$ARCH
+```bash
+./bin.$ARCH/
 ```
 
 To run GRASS, simply start
 
-```
+```bash
 ./bin.$ARCH/grass
 ```
 
 or run
 
-```
+```bash
 make install
 grass
 ```
 
 ## (E) INSTALLATION ON MACOSX
 
-See the ReadMe.rtf in the ./macosx/ folder and the Wiki page above.
+See the `ReadMe.rtf` in the `./macosx/` folder and the Wiki page above.
 
 ## (F) RUNNING GRASS GIS
 
@@ -212,7 +197,7 @@ GitHub, you have to perform a few steps. In general:
 
 In detail:
 
-```
+```bash
 cd /where/your/grass-source-code/lives/
 git fetch --all
 git merge upstream/main
@@ -221,7 +206,7 @@ make
 make install
 ```
 
-For details, see <https://trac.osgeo.org/grass/wiki/HowToGit>
+For details, see [Guide to contributing on GitHub](./doc/development/github_guide.md).
 
 ## (H) COMPILING INDIVIDUAL MODULES - OWN MODULES
 
@@ -229,7 +214,7 @@ To compile (self-made) GRASS modules or to compile modified modules
 at least the GRASS libraries have to be compiled locally. This is
 done by launching:
 
-```
+```bash
 make libs
 ```
 
@@ -237,71 +222,72 @@ Then change into the module's directory and launch the "make"
 command. The installation can be either done with "make install" from
 the main source code directory or locally with
 
-```
+```bash
 "INST_NOW=y make"
 ```
 
 You may want to define an alias for this:
 
-```
+```bash
 alias gmake='INST_NOW=y make'
 ```
 
 Then simply compile/install the current module with
 
-```
+```bash
 gmake
 ```
 
 Note: If you keep your module source code outside the standard GRASS
 source code directory structure, you will have to change the relative
-path(s) in the Makefile to absolute path(s).
+path(s) in the `Makefile` to absolute path(s).
 
 ## (I) CODE OPTIMIZATION
 
 If you would like to set compiler optimisations, for a possibly faster
 binary, type (don't enter a ";" anywhere):
 
-```
+```bash
 CFLAGS=-O ./configure
 ```
 
 or,
 
-```
+```bash
 setenv CFLAGS -O
 ./configure
 ```
 
-whichever works on your shell. Use -O2 instead of -O if your compiler
-supports this (note: O is the letter, not zero). Using the "gcc" compiler,
+whichever works on your shell. Use `-O2` instead of `-O` if your compiler
+supports this (note: `O` is the letter, not zero). Using the "gcc" compiler,
 you can also specify processor specific flags (examples, please suggest
 better settings to us):
 
-```
+```bash
 CFLAGS="-mcpu=athlon -O2" # AMD Athlon processor with code optimisations
 CFLAGS="-mcpu=pentium" # Intel Pentium processor
 CFLAGS="-mcpu=pentium4" # Intel Pentium4 processor
-CFLAGS="-O2 -msse -msse2 -mfpmath=sse -minline-all-stringops" # Intel XEON 64bit processor
+CFLAGS="-O2 -msse -msse2 -mfpmath=sse \
+        -minline-all-stringops" # Intel XEON 64bit processor
 CFLAGS="-mtune=nocona -m64 -minline-all-stringops" # Intel Pentium 64bit processor
 ```
 
-Note: As of version 4.3.0, GCC offers the -march=native switch that
+Note: As of version 4.3.0, GCC offers the `-march=native` switch that
 enables CPU auto-detection and automatically selects optimizations supported
-by the local machine at GCC runtime including -mtune.
+by the local machine at GCC runtime including `-mtune`.
 
-To find out optional CFLAGS for your platform, enter:
+To find out optional `CFLAGS` for your platform, enter:
 
-```
+```bash
 gcc -dumpspecs
 ```
 
 See also: <https://gcc.gnu.org/>
 
 A real fast GRASS version (and small binaries) will be created with
-LDFLAGS set to "stripping" (but this disables debugging):
+`LDFLAGS` set to "stripping" (but this disables debugging):
 
-```
+```bash
 CFLAGS="-O2 -mcpu=<cpu_see_above> -Wall" LDFLAGS="-s" ./configure
 ```
 
@@ -310,39 +296,21 @@ CFLAGS="-O2 -mcpu=<cpu_see_above> -Wall" LDFLAGS="-s" ./configure
 The `LDFLAGS=""` part must be undefined as `-s` will strip the debugging
 information.
 
-Don't use `-O` for CFLAGS if you want to be able to step through function
+Don't use `-O` for `CFLAGS` if you want to be able to step through function
 bodies. When optimisation is enabled, the compiler will re-order statements
 and re-arrange expressions, resulting in object code which barely resembles
 the source code.
 
 The `-g` and `-Wall` compiler flags are often useful for assisting debugging:
 
-```
+```bash
 CFLAGS="-g -Wall" ./configure
 ```
 
-See also the file ./doc/debugging.txt and the Wiki page
+See also the file `./doc/debugging.txt` and the Wiki page
 <https://grasswiki.osgeo.org/wiki/GRASS_Debugging>
 
-## (K) LARGE FILE SUPPORT (for raster maps)
-
-GRASS GIS includes improved support for reading and writing large files
-(> 2GB) if it is possible in your operating system. If you compile with
-
-```
-configure [...] --enable-largefile
-```
-
-you should be able to have raster and vector maps which are larger than 2GB.
-
-While most code has been updated, individual programs may not yet work with
-large files - please report.
-
-See also
-<https://grasswiki.osgeo.org/wiki/GRASS_GIS_Performance>
-<https://grasswiki.osgeo.org/wiki/Software_requirements_specification>
-
-## (L) SUPPORT
+## (K) SUPPORT
 
 Note that this code is still actively being developed and errors inevitably
 turn up. If you find a bug, please report it to the GRASS bug tracking system
@@ -351,20 +319,44 @@ so we can fix it. See <https://grass.osgeo.org/contribute/>
 If you are interested in helping to develop GRASS, please join the GRASS
 developers mailing list. See <https://grass.osgeo.org/development/>
 
-## (M) GRASS PROGRAMMER'S MANUAL
+## (L) GRASS PROGRAMMER'S MANUAL
 
-The Programmer's manual is generated with doxygen from the source code.
-Please see the README file and the files at:
-<https://grass.osgeo.org/programming8/>
+The Programmer's manual <https://grass.osgeo.org/programming8/> is
+generated from the source code. This requires the installation of
+`doxygen` (<http://www.doxygen.nl>) and optionally Graphviz `dot`
+(<https://graphviz.org/doc/info/command.html>).
 
-## (N) CONTRIBUTING CODE AND PATCHES
+The main file is: `./grasslib.dox` where all sub-documents have
+to be linked to.
 
-Please see ./SUBMITTING in this directory, or better,
-<https://trac.osgeo.org/grass/wiki/Submitting>
+To locally generate the 'Programmer's Manual', run
 
-## (O) TUTORIALS
+```sh
+make htmldocs
+```
 
-<https://grass.osgeo.org/learn/newcomers/>
+To generate documentation as a single html file
+(recommended for simple reading)
+
+```sh
+make htmldocs-single
+```
+
+This process takes some time. The result will be found in
+the file `lib/html/index.html`.
+
+To generate the 'Programmer's Manual' in PDF format, run
+
+```sh
+make pdfdocs
+```
+
+## (M) CONTRIBUTING CODE AND PATCHES
+
+Please see
+
+- [GRASS Programming Style Guide](./doc/development/style_guide.md)
+- [Guide to contributing on GitHub](./doc/development/github_guide.md)
 
 ## Authors
 

@@ -1,9 +1,9 @@
-
 /****************************************************************************
  *
  * MODULE:       r.tile
  * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com>
- * PURPOSE:      Retiles an existing raster map with user defined x and y tile size
+ * PURPOSE:      Retiles an existing raster map with user defined x and y tile
+ *               size
  * COPYRIGHT:    (C) 2013 by Glynn Clements and the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -17,8 +17,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-static struct
-{
+static struct {
     struct Option *rastin, *rastout, *width, *height, *overlap;
 } parm;
 static struct Cell_head dst_w, src_w, ovl_w;
@@ -94,8 +93,8 @@ int main(int argc, char *argv[])
     xtiles = (src_w.cols + dst_w.cols - 1) / dst_w.cols;
     ytiles = (src_w.rows + dst_w.rows - 1) / dst_w.rows;
 
-    G_debug(1, "X: %d * %d, Y: %d * %d",
-            xtiles, dst_w.cols, ytiles, dst_w.rows);
+    G_debug(1, "X: %d * %d, Y: %d * %d", xtiles, dst_w.cols, ytiles,
+            dst_w.rows);
 
     src_w.cols = xtiles * dst_w.cols + 2 * overlap;
     src_w.rows = ytiles * dst_w.rows + 2 * overlap;
@@ -122,8 +121,8 @@ int main(int argc, char *argv[])
 
     outfiles = G_malloc(xtiles * sizeof(int));
 
-    G_debug(1, "X: %d * %d, Y: %d * %d",
-            xtiles, dst_w.cols, ytiles, dst_w.rows);
+    G_debug(1, "X: %d * %d, Y: %d * %d", xtiles, dst_w.cols, ytiles,
+            dst_w.rows);
 
     G_message(_("Generating %d x %d = %d tiles..."), xtiles, ytiles,
               xtiles * ytiles);

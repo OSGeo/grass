@@ -19,9 +19,9 @@ int allocate_bufs(void)
 
     ncb.buf = G_malloc(ncb.threads * sizeof(DCELL **));
     for (t = 0; t < ncb.threads; t++) {
-        ncb.buf[t] = (DCELL **) G_malloc(ncb.nsize * sizeof(DCELL *));
+        ncb.buf[t] = (DCELL **)G_malloc(ncb.nsize * sizeof(DCELL *));
         for (i = 0; i < ncb.nsize; i++) {
-            ncb.buf[t][i] = (DCELL *) G_malloc(bufsize);
+            ncb.buf[t][i] = (DCELL *)G_malloc(bufsize);
             Rast_set_d_null_value(ncb.buf[t][i],
                                   Rast_window_cols() + 2 * ncb.dist);
         }

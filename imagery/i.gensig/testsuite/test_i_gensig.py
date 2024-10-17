@@ -13,6 +13,7 @@ import os
 import stat
 import ctypes
 import shutil
+from pathlib import Path
 
 from grass.pygrass import utils
 from grass.pygrass.gis import Mapset
@@ -107,7 +108,7 @@ class SuccessTest(TestCase):
         )
 
         # File must be present
-        sig_stat = os.stat(f"{self.sig_dir1}/sig")
+        sig_stat = Path(self.sig_dir1, "sig").stat()
         self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
 
         # Compare values within sig file

@@ -3,19 +3,11 @@ Created on Fri May 25 12:57:10 2012
 
 @author: Pietro Zambelli
 """
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
+
 import ctypes
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
-import grass.script as grass
+import grass.script as gs
 
 from grass.pygrass.errors import GrassError
 from grass.pygrass.shell.conversion import dict2html
@@ -25,7 +17,7 @@ test_vector_name = "Region_test_vector"
 test_raster_name = "Region_test_raster"
 
 
-class Region(object):
+class Region:
     """This class is design to easily access and modify GRASS computational
     region. ::
 
@@ -121,7 +113,7 @@ class Region(object):
         return ctypes.pointer(self.c_region)
 
     def _set_param(self, key, value):
-        grass.run_command("g.region", **{key: value})
+        gs.run_command("g.region", **{key: value})
 
     # ----------LIMITS----------
     def _get_n(self):
@@ -339,22 +331,19 @@ class Region(object):
             "zone",
             "proj",
         ]
-        for attr in attrs:
-            if getattr(self, attr) != getattr(reg, attr):
-                return False
-        return True
+        return all(getattr(self, attr) == getattr(reg, attr) for attr in attrs)
 
     def __ne__(self, other):
         return not self == other
 
-    # Restore Python 2 hashing beaviour on Python 3
+    # Restore Python 2 hashing behaviour on Python 3
     __hash__ = object.__hash__
 
     def keys(self):
         """Return a list of valid keys. ::
 
             >>> reg = Region()
-            >>> reg.keys()                               # doctest: +ELLIPSIS
+            >>> reg.keys()  # doctest: +ELLIPSIS
             ['proj', 'zone', ..., 'cols', 'cells']
 
         ..
@@ -378,7 +367,7 @@ class Region(object):
 
     def items(self):
         """Return a list of tuple with key and value."""
-        return [(k, self.__getattribute__(k)) for k in self.keys()]
+        return [(k, getattr(self, k)) for k in self.keys()]
 
     # ----------METHODS----------
     def zoom(self, raster_name):
@@ -467,7 +456,8 @@ class Region(object):
             libraster.Rast_get_cellhd(raster_name, mapset, self.byref())
 
     def set_raster_region(self):
-        """Set the computational region (window) for all raster maps in the current process.
+        """Set the computational region (window) for all raster maps in the current
+        process.
 
         Attention: All raster objects must be closed or the
                    process will be terminated.
@@ -671,7 +661,6 @@ class Region(object):
 
 
 if __name__ == "__main__":
-
     import doctest
     from grass.pygrass import utils
     from grass.script.core import run_command

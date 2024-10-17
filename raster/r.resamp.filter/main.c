@@ -1,16 +1,19 @@
-
 /****************************************************************************
  *
  * MODULE:       r.resamp.filter
  * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com>
- * PURPOSE:      
- * COPYRIGHT:    (C) 2010 by Glynn Clements and the GRASS Development Team
+ *               Aaron Saw Min Sern (OpenMP parallelization)
+ * PURPOSE:
+ * COPYRIGHT:    (C) 2010-2023 by Glynn Clements and the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
  *****************************************************************************/
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 
 #include <stdlib.h>
 #include <string.h>
@@ -80,14 +83,12 @@ static double f_hamming(double x)
     return 0.46 * cos(M_PI * x) + 0.54;
 }
 
-
 static double f_blackman(double x)
 {
     return cos(M_PI * x) / 2 + 0.08 * cos(2 * M_PI * x) + 0.42;
 }
 
-struct filter_type
-{
+struct filter_type {
     const char *name;
     double (*func)(double);
     int radius;
@@ -106,7 +107,7 @@ static const struct filter_type menu[] = {
     {"hann", f_hann, 0},
     {"hamming", f_hamming, 0},
     {"blackman", f_blackman, 0},
-    {NULL},
+    {NULL, NULL, 0},
 };
 
 static char *build_filter_list(void)
@@ -141,8 +142,7 @@ static const struct filter_type *find_method(const char *name)
     return NULL;
 }
 
-struct filter
-{
+struct filter {
     double (*func)(double);
     double x_radius;
     double y_radius;
@@ -150,16 +150,17 @@ struct filter
 
 #define MAX_FILTERS 8
 
-static int infile, outfile;
+static int *infile, outfile;
 static struct filter filters[MAX_FILTERS];
 static int num_filters;
 static int nulls;
 static struct Cell_head dst_w, src_w;
 static double f_x_radius, f_y_radius;
 static int row_scale, col_scale;
-static DCELL *inbuf;
+static DCELL **inbuf;
 static DCELL *outbuf;
-static DCELL **bufs;
+static DCELL ***bufs;
+static int bufrows;
 static double *h_weights;
 static double *v_weights;
 static int *mapcol0, *mapcol1;
@@ -198,7 +199,7 @@ static void make_h_weights(void)
             int k;
 
             for (k = 0; k < num_filters; k++)
-                w *= (*filters[k].func) (r / filters[k].x_radius);
+                w *= (*filters[k].func)(r / filters[k].x_radius);
 
             h_weights[col * col_scale + j] = w;
         }
@@ -235,7 +236,7 @@ static void make_v_weights(void)
             int k;
 
             for (k = 0; k < num_filters; k++)
-                w *= (*filters[k].func) (r / filters[k].y_radius);
+                w *= (*filters[k].func)(r / filters[k].y_radius);
 
             v_weights[row * row_scale + i] = w;
         }
@@ -245,7 +246,7 @@ static void make_v_weights(void)
     }
 }
 
-static void h_filter(DCELL * dst, const DCELL * src)
+static void h_filter(DCELL *dst, const DCELL *src)
 {
     int col;
 
@@ -281,7 +282,7 @@ static void h_filter(DCELL * dst, const DCELL * src)
     }
 }
 
-static void v_filter(DCELL * dst, DCELL ** src, int row, int rows)
+static void v_filter(DCELL *dst, DCELL **src, int row, int rows)
 {
     int col;
 
@@ -316,77 +317,104 @@ static void v_filter(DCELL * dst, DCELL ** src, int row, int rows)
 
 static void filter(void)
 {
-    int cur_row = 0;
-    int num_rows = 0;
+    int written_row = 0;
+    int computed_row = 0;
     int row;
 
     make_h_weights();
     make_v_weights();
 
-    for (row = 0; row < dst_w.rows; row++) {
-        int row0 = maprow0[row];
-        int row1 = maprow1[row];
-        int rows = row1 - row0;
-        int i;
+    while (written_row < dst_w.rows) {
+        int range = bufrows;
 
-        G_percent(row, dst_w.rows, 2);
+        if (range > dst_w.rows - written_row) {
+            range = dst_w.rows - written_row;
+        }
+        int start = written_row;
+        int end = written_row + range;
 
-        if (row0 >= cur_row && row0 < cur_row + num_rows) {
-            int m = row0 - cur_row;
-            int n = cur_row + num_rows - row0;
-            int i;
+#pragma omp parallel private(row)
+        {
+            int read_row = 0;
+            int num_rows = 0;
+            int t_id = 0;
 
-            for (i = 0; i < n; i++) {
-                DCELL *tmp = bufs[i];
+#if defined(_OPENMP)
+            t_id = omp_get_thread_num();
+#endif
 
-                bufs[i] = bufs[m + i];
-                bufs[m + i] = tmp;
+#pragma omp for schedule(static, 1)
+            for (row = start; row < end; row++) {
+                int row0 = maprow0[row];
+                int row1 = maprow1[row];
+                int rows = row1 - row0;
+                int i;
+
+                G_percent(computed_row, dst_w.rows, 2);
+
+                if (row0 >= read_row && row0 < read_row + num_rows) {
+                    int m = row0 - read_row;
+                    int n = read_row + num_rows - row0;
+
+                    for (i = 0; i < n; i++) {
+                        DCELL *tmp = bufs[t_id][i];
+
+                        bufs[t_id][i] = bufs[t_id][m + i];
+                        bufs[t_id][m + i] = tmp;
+                    }
+
+                    read_row = row0;
+                    num_rows = n;
+                }
+                else {
+                    read_row = row0;
+                    num_rows = 0;
+                }
+
+                for (i = num_rows; i < rows; i++) {
+                    G_debug(5, "read: %p = %d", (void *)bufs[t_id][i],
+                            row0 + i);
+                    /* enlarging the source window to the North and South is
+                     * not possible for global maps in ll */
+                    if (row0 + i >= 0 && row0 + i < src_w.rows)
+                        Rast_get_d_row(infile[t_id], inbuf[t_id], row0 + i);
+                    else
+                        Rast_set_d_null_value(inbuf[t_id], src_w.cols);
+                    h_filter(bufs[t_id][i], inbuf[t_id]);
+                }
+
+                num_rows = rows;
+
+                v_filter(&outbuf[(size_t)(row - start) * dst_w.cols],
+                         bufs[t_id], row, rows);
+#pragma omp atomic update
+                computed_row++;
             }
-
-            cur_row = row0;
-            num_rows = n;
-        }
-        else {
-            cur_row = row0;
-            num_rows = 0;
         }
 
-        for (i = num_rows; i < rows; i++) {
-            G_debug(5, "read: %p = %d", bufs[i], row0 + i);
-            /* enlarging the source window to the North and South is 
-             * not possible for global maps in ll */
-            if (row0 + i >= 0 && row0 + i < src_w.rows)
-                Rast_get_d_row(infile, inbuf, row0 + i);
-            else
-                Rast_set_d_null_value(inbuf, src_w.cols);
-            h_filter(bufs[i], inbuf);
+        for (row = start; row < end; row++) {
+            Rast_put_d_row(outfile, &outbuf[(row - start) * dst_w.cols]);
+            G_debug(5, "write: %d", row);
         }
-
-        num_rows = rows;
-
-        v_filter(outbuf, bufs, row, rows);
-
-        Rast_put_d_row(outfile, outbuf);
-        G_debug(5, "write: %d", row);
+        written_row = end;
     }
-
     G_percent(dst_w.rows, dst_w.rows, 2);
 }
 
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
-        struct Option *rastin, *rastout, *method,
-            *radius, *x_radius, *y_radius;
+    struct {
+        struct Option *rastin, *rastout, *method, *radius, *x_radius, *y_radius,
+            *memory, *nprocs;
     } parm;
-    struct
-    {
+    struct {
         struct Flag *nulls;
     } flag;
     char title[64];
-    int i;
+    int i, t;
+    int nprocs;
+    size_t in_buf_size, out_buf_size;
 
     G_gisinit(argv[0]);
 
@@ -406,6 +434,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("hermite"));
     G_add_keyword(_("lanczos"));
     G_add_keyword(_("sinc"));
+    G_add_keyword(_("parallel"));
 
     module->description =
         _("Resamples raster map layers using an analytic kernel.");
@@ -443,6 +472,9 @@ int main(int argc, char *argv[])
     parm.y_radius->multiple = YES;
     parm.y_radius->description = _("Filter radius (vertical)");
 
+    parm.memory = G_define_standard_option(G_OPT_MEMORYMB);
+    parm.nprocs = G_define_standard_option(G_OPT_M_NPROCS);
+
     flag.nulls = G_define_flag();
     flag.nulls->key = 'n';
     flag.nulls->description = _("Propagate NULLs");
@@ -450,6 +482,22 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
+    sscanf(parm.nprocs->answer, "%d", &nprocs);
+    if (nprocs < 1) {
+        G_fatal_error(_("<%d> is not valid number of threads."), nprocs);
+    }
+#if defined(_OPENMP)
+    omp_set_num_threads(nprocs);
+#else
+    if (nprocs != 1)
+        G_warning(_("GRASS is compiled without OpenMP support. Ignoring "
+                    "threads setting."));
+    nprocs = 1;
+#endif
+    if (nprocs > 1 && Rast_mask_is_present()) {
+        G_warning(_("Parallel processing disabled due to active make."));
+        nprocs = 1;
+    }
     if (parm.radius->answer) {
         if (parm.x_radius->answer || parm.y_radius->answer)
             G_fatal_error(_("%s= and %s=/%s= are mutually exclusive"),
@@ -458,12 +506,11 @@ int main(int argc, char *argv[])
     }
     else {
         if (!parm.x_radius->answer && !parm.y_radius->answer)
-            G_fatal_error(_("Either %s= or %s=/%s= required"),
-                          parm.radius->key, parm.x_radius->key,
-                          parm.y_radius->key);
-        if (!parm.x_radius->answer || !parm.y_radius->answer)
-            G_fatal_error(_("Both %s= and %s= required"),
+            G_fatal_error(_("Either %s= or %s=/%s= required"), parm.radius->key,
                           parm.x_radius->key, parm.y_radius->key);
+        if (!parm.x_radius->answer || !parm.y_radius->answer)
+            G_fatal_error(_("Both %s= and %s= required"), parm.x_radius->key,
+                          parm.y_radius->key);
     }
 
     nulls = flag.nulls->answer;
@@ -473,11 +520,11 @@ int main(int argc, char *argv[])
     for (i = 0;; i++) {
         const char *filter_arg = parm.method->answers[i];
         const char *x_radius_arg = parm.radius->answer
-            ? parm.radius->answers[i]
-            : parm.x_radius->answers[i];
+                                       ? parm.radius->answers[i]
+                                       : parm.x_radius->answers[i];
         const char *y_radius_arg = parm.radius->answer
-            ? parm.radius->answers[i]
-            : parm.y_radius->answers[i];
+                                       ? parm.radius->answers[i]
+                                       : parm.y_radius->answers[i];
         const struct filter_type *type;
         struct filter *filter;
 
@@ -485,7 +532,8 @@ int main(int argc, char *argv[])
             break;
 
         if (!filter_arg || !x_radius_arg || !y_radius_arg)
-            G_fatal_error(_("Differing number of values for filter= and [xy_]radius="));
+            G_fatal_error(
+                _("Differing number of values for filter= and [xy_]radius="));
 
         if (num_filters >= MAX_FILTERS)
             G_fatal_error(_("Too many filters (max: %d)"), MAX_FILTERS);
@@ -534,17 +582,16 @@ int main(int argc, char *argv[])
         double x1 = Rast_col_to_easting(dst_w.cols - 0.5, &dst_w);
         int r0 =
             (int)floor(Rast_northing_to_row(y0 + f_y_radius, &src_w) - 0.1);
-        int r1 =
-            (int)ceil(Rast_northing_to_row(y1 - f_y_radius, &src_w) + 0.1);
+        int r1 = (int)ceil(Rast_northing_to_row(y1 - f_y_radius, &src_w) + 0.1);
         /* do not use Rast_easting_to_col() because it does ll wrap */
         /*
-           int c0 = (int)floor(Rast_easting_to_col(x0 - f_x_radius, &src_w) - 0.1);
-           int c1 = (int)ceil(Rast_easting_to_col(x1 + f_x_radius, &src_w) + 0.1);
+           int c0 = (int)floor(Rast_easting_to_col(x0 - f_x_radius, &src_w) -
+           0.1); int c1 = (int)ceil(Rast_easting_to_col(x1 + f_x_radius, &src_w)
+           + 0.1);
          */
         int c0 =
             (int)floor((x0 - f_x_radius - src_w.west) / src_w.ew_res - 0.1);
-        int c1 =
-            (int)ceil((x1 + f_x_radius - src_w.west) / src_w.ew_res + 0.1);
+        int c1 = (int)ceil((x1 + f_x_radius - src_w.west) / src_w.ew_res + 0.1);
 
         if (G_projection() == PROJECTION_LL) {
             while (src_w.north + src_w.ns_res * (-r0) >
@@ -569,22 +616,50 @@ int main(int argc, char *argv[])
     col_scale = 2 + 2 * ceil(f_x_radius / src_w.ew_res);
 
     /* allocate buffers for intermediate rows */
-    bufs = G_malloc(row_scale * sizeof(DCELL *));
-    for (i = 0; i < row_scale; i++)
-        bufs[i] = Rast_allocate_d_buf();
+    bufs = G_malloc(nprocs * sizeof(DCELL **));
+    for (t = 0; t < nprocs; t++) {
+        bufs[t] = G_malloc(row_scale * sizeof(DCELL *));
+        for (i = 0; i < row_scale; i++)
+            bufs[t][i] = Rast_allocate_d_buf();
+    }
 
     Rast_set_input_window(&src_w);
     Rast_set_output_window(&dst_w);
 
-    inbuf = Rast_allocate_d_input_buf();
-    outbuf = Rast_allocate_d_output_buf();
+    /* memory reserved for input */
+    in_buf_size = dst_w.cols * sizeof(DCELL) * row_scale * nprocs;
+    /* memory available for output buffer */
+    out_buf_size = (size_t)atoi(parm.memory->answer) * (1 << 20);
+    /* size_t is unsigned, check if any memory is left for output buffer */
+    if (out_buf_size <= in_buf_size)
+        out_buf_size = 0;
+    else
+        out_buf_size -= in_buf_size;
+    /* number of buffered output rows */
+    bufrows = out_buf_size / (sizeof(DCELL) * dst_w.cols);
+    /* set the output buffer rows to be at most covering the entire map */
+    if (bufrows > dst_w.rows) {
+        bufrows = dst_w.rows;
+    }
+    /* but at least the number of threads */
+    if (bufrows < nprocs) {
+        bufrows = nprocs;
+    }
 
-    infile = Rast_open_old(parm.rastin->answer, "");
+    inbuf = G_malloc(nprocs * sizeof(DCELL *));
+    for (t = 0; t < nprocs; t++)
+        inbuf[t] = Rast_allocate_d_input_buf();
+    outbuf = G_calloc((size_t)bufrows * dst_w.cols, sizeof(DCELL));
+
+    infile = G_malloc(nprocs * sizeof(int));
+    for (t = 0; t < nprocs; t++)
+        infile[t] = Rast_open_old(parm.rastin->answer, "");
     outfile = Rast_open_new(parm.rastout->answer, DCELL_TYPE);
 
     filter();
 
-    Rast_close(infile);
+    for (t = 0; t < nprocs; t++)
+        Rast_close(infile[t]);
     Rast_close(outfile);
 
     /* record map metadata/history info */
@@ -600,8 +675,8 @@ int main(int argc, char *argv[])
         G_format_resolution(src_w.ns_res, buf_nsres, src_w.proj);
         G_format_resolution(src_w.ew_res, buf_ewres, src_w.proj);
         Rast_format_history(&history, HIST_DATSRC_2,
-                            "Source map NS res: %s   EW res: %s",
-                            buf_nsres, buf_ewres);
+                            "Source map NS res: %s   EW res: %s", buf_nsres,
+                            buf_ewres);
         Rast_command_history(&history);
         Rast_write_history(parm.rastout->answer, &history);
     }

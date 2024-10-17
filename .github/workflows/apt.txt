@@ -7,12 +7,13 @@ libfftw3-dev
 libgdal-dev
 libgl1-mesa-dev
 libglu1-mesa-dev
+liblapacke-dev
 libnetcdf-dev
-libopenblas-dev
 libpdal-dev
 libpng-dev
 libproj-dev
 libreadline-dev
+libsvm-dev
 libzstd-dev
 pdal
 proj-bin
@@ -22,7 +23,6 @@ python3-numpy
 python3-pil
 python3-ply
 python3-pyvirtualdisplay
-python3-six
 python3-termcolor
 sqlite3
 zlib1g-dev

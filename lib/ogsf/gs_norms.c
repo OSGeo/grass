@@ -3,12 +3,12 @@
 
    \brief OGSF library - calculation normals (lower level functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -39,18 +39,19 @@
 /*!
    \brief This macro is only used in the function calc_norm()
  */
-#define SET_NORM(i) \
-       dz1 = z1 - z2; \
-       dz2 = z3 - z4; \
-       temp[0] = (float) -dz1 * y_res_z2; \
-       temp[1] = (float) dz2 * x_res_z2; \
-       temp[2] = c_z2; \
-       normalizer = sqrt(temp[0] * temp[0] + temp[1] * temp[1] + c_z2_sq); \
-       if (!normalizer) normalizer= 1.0; \
-       temp[X] /= normalizer; \
-       temp[Y] /= normalizer; \
-       temp[Z] /= normalizer; \
-       PNORM(i,temp);
+#define SET_NORM(i)                                                     \
+    dz1 = z1 - z2;                                                      \
+    dz2 = z3 - z4;                                                      \
+    temp[0] = (float)-dz1 * y_res_z2;                                   \
+    temp[1] = (float)dz2 * x_res_z2;                                    \
+    temp[2] = c_z2;                                                     \
+    normalizer = sqrt(temp[0] * temp[0] + temp[1] * temp[1] + c_z2_sq); \
+    if (!normalizer)                                                    \
+        normalizer = 1.0;                                               \
+    temp[X] /= normalizer;                                              \
+    temp[Y] /= normalizer;                                              \
+    temp[Z] /= normalizer;                                              \
+    PNORM(i, temp);
 
 static long slice;
 static float x_res_z2, y_res_z2;
@@ -69,15 +70,14 @@ static unsigned long *norm;
 
    \param gs surface (geosurf)
  */
-void init_vars(geosurf * gs)
+void init_vars(geosurf *gs)
 {
     /* optimized - these are static - global to this file */
     norm = gs->norms;
     elbuf = gs_get_att_typbuff(gs, ATT_TOPO, 0);
 
 #ifdef USE_GL_NORMALIZE
-    c_z2 =
-        2.0 * gs->xres * gs->yres * gs->x_mod * gs->y_mod / GS_global_exag();
+    c_z2 = 2.0 * gs->xres * gs->yres * gs->x_mod * gs->y_mod / GS_global_exag();
     c_z2_sq = c_z2 * c_z2;
     x_res_z2 = 2.0 * gs->xres * gs->z_exag * gs->x_mod;
     y_res_z2 = 2.0 * gs->yres * gs->z_exag * gs->y_mod;
@@ -113,7 +113,7 @@ void init_vars(geosurf * gs)
 
    \todo fix to correctly calculate norms when mapped to sphere!
 
-   Uses the previous and next cells (when available) for normal 
+   Uses the previous and next cells (when available) for normal
    calculations to produce smoother normals
 
    \param gs surface (geosurf)
@@ -121,7 +121,7 @@ void init_vars(geosurf * gs)
    \return 1 on success
    \return 0 on failure
  */
-int gs_calc_normals(geosurf * gs)
+int gs_calc_normals(geosurf *gs)
 {
     int row, col;
     int xcnt, ycnt;
@@ -203,7 +203,7 @@ int gs_calc_normals(geosurf * gs)
    \return 0 no normals
    \return 1 on success
  */
-int calc_norm(geosurf * gs, int drow, int dcol, unsigned int neighbors)
+int calc_norm(geosurf *gs, int drow, int dcol, unsigned int neighbors)
 {
     long noffset;
     float temp[3], normalizer, dz1, dz2, z0, z1, z2, z3, z4;

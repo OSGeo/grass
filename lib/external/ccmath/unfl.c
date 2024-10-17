@@ -7,7 +7,7 @@
  */
 static unsigned int a = 69069U, c = 244045795U;
 static unsigned int s, h, sbuf[256];
-double unfl()
+double unfl(void)
 {
     int i;
 

@@ -4,8 +4,8 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_list_databases(dbString * dbpath, int npaths,
-                              dbHandle ** dblist, int *dbcount)
+int db__driver_list_databases(dbString *dbpath, int npaths, dbHandle **dblist,
+                              int *dbcount)
 {
     int i, count = 0;
     dbHandle *list;
@@ -19,8 +19,8 @@ int db__driver_list_databases(dbString * dbpath, int npaths,
         return DB_FAILED;
 
     next = SQL_FETCH_FIRST;
-    while (SQLDataSources(ODenvi, next, dsn, sizeof(dsn),
-                          NULL, desc, sizeof(desc), NULL) == SQL_SUCCESS) {
+    while (SQLDataSources(ODenvi, next, dsn, sizeof(dsn), NULL, desc,
+                          sizeof(desc), NULL) == SQL_SUCCESS) {
         next = SQL_FETCH_NEXT;
         count++;
     }
@@ -34,8 +34,8 @@ int db__driver_list_databases(dbString * dbpath, int npaths,
 
     i = 0;
     next = SQL_FETCH_FIRST;
-    while (SQLDataSources(ODenvi, next, dsn, sizeof(dsn),
-                          NULL, desc, sizeof(desc), NULL) == SQL_SUCCESS) {
+    while (SQLDataSources(ODenvi, next, dsn, sizeof(dsn), NULL, desc,
+                          sizeof(desc), NULL) == SQL_SUCCESS) {
         db_init_handle(&list[i]);
         if (db_set_handle(&list[i], (const char *)dsn, (const char *)desc) !=
             DB_OK) {

@@ -7,7 +7,7 @@
    Performance suffers if they are wrong; better to make nsites,
    deltax, and deltay too big than too small.  (?) */
 
-int voronoi(struct Site *(*nextsite) (void))
+int voronoi(struct Site *(*nextsite)(void))
 {
     struct Site *newsite, *bot, *top, *temp, *p;
     struct Site *v;
@@ -18,15 +18,18 @@ int voronoi(struct Site *(*nextsite) (void))
     int counter = 0;
 
     PQinitialize();
-    bottomsite = (*nextsite) ();
+    bottomsite = (*nextsite)();
     ELinitialize();
 
-    newsite = (*nextsite) ();
+    newsite = (*nextsite)();
     while (1) {
         if (!PQempty())
             newintstar = PQ_min();
 
-        if (newsite != (struct Site *)NULL && (PQempty() || newsite->coord.y < newintstar.y || (newsite->coord.y == newintstar.y && newsite->coord.x < newintstar.x))) {        /* new site is smallest */
+        if (newsite != (struct Site *)NULL &&
+            (PQempty() || newsite->coord.y < newintstar.y ||
+             (newsite->coord.y == newintstar.y &&
+              newsite->coord.x < newintstar.x))) { /* new site is smallest */
 
             G_percent(counter++, nsites, 2);
 
@@ -50,7 +53,7 @@ int voronoi(struct Site *(*nextsite) (void))
                coordinates as the previous. If so, step over to the following
                site. Andrea Aime 4/7/2001 */
             do
-                temp = (*nextsite) ();
+                temp = (*nextsite)();
             while (temp != (struct Site *)NULL &&
                    temp->coord.x == newsite->coord.x &&
                    temp->coord.y == newsite->coord.y);

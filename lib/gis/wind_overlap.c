@@ -1,4 +1,3 @@
-
 /*!
  * \file lib/gis/wind_overlap.c
  *
@@ -15,7 +14,6 @@
  */
 
 #include <grass/gis.h>
-
 
 /**
  * \brief Determines if a box overlays a map window.
@@ -34,8 +32,8 @@
  * \return 0 if box does not overlap window
  */
 
-int G_window_overlap(const struct Cell_head *window,
-                     double N, double S, double E, double W)
+int G_window_overlap(const struct Cell_head *window, double N, double S,
+                     double E, double W)
 {
     if (window->north <= S)
         return 0;
@@ -61,11 +59,10 @@ int G_window_overlap(const struct Cell_head *window,
     return 1;
 }
 
-
 /**
  * \brief Determines percentage of box is contained in the <b>window</b>.
  *
- * This version returns the percentage (from 0 to 1) of the box 
+ * This version returns the percentage (from 0 to 1) of the box
  * contained in the window. This feature can be used during vector
  * plotting to decide if it is more efficient to do a level-one
  * read of the whole vector map, or to pay the price of a
@@ -80,8 +77,8 @@ int G_window_overlap(const struct Cell_head *window,
  * \return percentage of overlap
  */
 
-double G_window_percentage_overlap(const struct Cell_head *window,
-                                   double N, double S, double E, double W)
+double G_window_percentage_overlap(const struct Cell_head *window, double N,
+                                   double S, double E, double W)
 {
     double V, H;
     double n, s, e, w;

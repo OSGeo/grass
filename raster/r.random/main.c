@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.random
@@ -41,12 +40,10 @@ int main(int argc, char *argv[])
     long seed_value;
 
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *input, *cover, *raster, *sites, *npoints, *seed;
     } parm;
-    struct
-    {
+    struct {
         struct Flag *gen_seed, *zero, *z_geometry, *notopol_flag;
     } flag;
 
@@ -59,11 +56,9 @@ int main(int argc, char *argv[])
     G_add_keyword(_("random"));
     G_add_keyword(_("level1"));
 
-    module->label =
-        _("Creates randomly placed raster cells or vector points");
-    module->description =
-        _("Creates a raster map and vector point map "
-          "containing randomly located cells and points.");
+    module->label = _("Creates randomly placed raster cells or vector points");
+    module->description = _("Creates a raster map and vector point map "
+                            "containing randomly located cells and points.");
 
     parm.input = G_define_standard_option(G_OPT_R_INPUT);
     parm.input->description = _("Name of input raster map");
@@ -154,10 +149,10 @@ int main(int argc, char *argv[])
     /* look for n[%] */
     percent = has_percent(parm.npoints->answer);
     if (percent) {
-        if (sscanf(parm.npoints->answer, "%lf", &percentage) != 1
-            || percentage <= 0.0 || percentage > 100.0) {
-            G_fatal_error(_("<%s=%s> invalid percentage"),
-                          parm.npoints->key, parm.npoints->answer);
+        if (sscanf(parm.npoints->answer, "%lf", &percentage) != 1 ||
+            percentage <= 0.0 || percentage > 100.0) {
+            G_fatal_error(_("<%s=%s> invalid percentage"), parm.npoints->key,
+                          parm.npoints->answer);
         }
     }
     else {
@@ -176,32 +171,37 @@ int main(int argc, char *argv[])
        we need to check the provided number of points. */
     get_stats(&myState);
 
-    count = (myState.use_nulls) ? myState.nCells :
-        myState.nCells - myState.nNulls;
+    count =
+        (myState.use_nulls) ? myState.nCells : myState.nCells - myState.nNulls;
 
     if (percent)
-        myState.nRand = (gcell_count) (count * percentage / 100.0 + .5);
+        myState.nRand = (gcell_count)(count * percentage / 100.0 + .5);
     else {
         if (targets > count) {
 #ifdef HAVE_LONG_LONG_INT
             if (myState.use_nulls)
-                G_fatal_error(_("There aren't [%llu] cells in the current region"),
-                              targets);
+                G_fatal_error(
+                    _("There aren't [%llu] cells in the current region"),
+                    targets);
             else
-                G_fatal_error(_("There aren't [%llu] non-NULL cells in the current region"),
+                G_fatal_error(_("There aren't [%llu] non-NULL cells in the "
+                                "current region"),
                               targets);
 #else
             if (myState.use_nulls)
-                G_fatal_error(_("There aren't [%lu] cells in the current region"),
-                              targets);
+                G_fatal_error(
+                    _("There aren't [%lu] cells in the current region"),
+                    targets);
             else
-                G_fatal_error(_("There aren't [%lu] non-NULL cells in the current region"),
+                G_fatal_error(_("There aren't [%lu] non-NULL cells in the "
+                                "current region"),
                               targets);
 #endif
         }
 
         if (targets <= 0)
-            G_fatal_error(_("There are no valid locations in the current region"));
+            G_fatal_error(
+                _("There are no valid locations in the current region"));
 
         myState.nRand = targets;
     }
@@ -223,7 +223,6 @@ int main(int argc, char *argv[])
 
     return EXIT_SUCCESS;
 }
-
 
 static int has_percent(char *s)
 {

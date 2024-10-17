@@ -3,7 +3,7 @@
 
    \brief GIS Library - Argument parsing functions (HTML output)
 
-   (C) 2001-2009, 2011-2020 by the GRASS Development Team
+   (C) 2001-2024 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -35,16 +35,23 @@ void G__usage_html(void)
 
     new_prompt = G__uses_new_gisprompt();
 
-    if (!st->pgm_name)          /* v.dave && r.michael */
+    if (!st->pgm_name) /* v.dave && r.michael */
         st->pgm_name = G_program_name();
     if (!st->pgm_name)
         st->pgm_name = "??";
 
-    fprintf(stdout,
-            "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n");
+    fprintf(
+        stdout,
+        "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n");
     fprintf(stdout, "<html>\n<head>\n");
+    fprintf(stdout, " <meta http-equiv=\"Content-Type\" content=\"text/html; "
+                    "charset=utf-8\">\n");
     fprintf(stdout,
-            " <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n");
+            " <meta name=\"Author\" content=\"GRASS Development Team\">\n");
+    fprintf(stdout,
+            " <meta http-equiv=\"content-language\" content=\"en-us\">\n");
+    fprintf(stdout, " <meta name=\"viewport\" content=\"width=device-width, "
+                    "initial-scale=1\">\n");
     fprintf(stdout, " <title>%s - GRASS GIS manual</title>\n", st->pgm_name);
     fprintf(stdout, " <meta name=\"description\" content=\"%s", st->pgm_name);
     if (st->module_info.description)
@@ -54,17 +61,17 @@ void G__usage_html(void)
     fprintf(stdout, "\n");
     if (st->module_info.keywords) {
         fprintf(stdout, " <meta name=\"keywords\" content=\"");
-        G__print_keywords(stdout, NULL);
+        G__print_keywords(stdout, NULL, FALSE);
         fprintf(stdout, "\">");
         fprintf(stdout, "\n");
     }
-    fprintf(stdout,
-            " <link rel=\"stylesheet\" href=\"grassdocs.css\" type=\"text/css\">\n");
+    fprintf(stdout, " <link rel=\"stylesheet\" href=\"grassdocs.css\" "
+                    "type=\"text/css\">\n");
     fprintf(stdout, "</head>\n");
     fprintf(stdout, "<body bgcolor=\"white\">\n");
     fprintf(stdout, "<div id=\"container\">\n\n");
-    fprintf(stdout,
-            "<a href=\"index.html\"><img src=\"grass_logo.png\" alt=\"GRASS logo\"></a>\n");
+    fprintf(stdout, "<a href=\"index.html\"><img src=\"grass_logo.png\" "
+                    "alt=\"GRASS logo\"></a>\n");
     fprintf(stdout, "<hr class=\"header\">\n\n");
     fprintf(stdout, "<h2>%s</h2>\n", _("NAME"));
     fprintf(stdout, "<em><b>%s</b></em> ", st->pgm_name);
@@ -78,10 +85,9 @@ void G__usage_html(void)
     if (st->module_info.description)
         fprintf(stdout, "%s\n", st->module_info.description);
 
-
     fprintf(stdout, "<h2>%s</h2>\n", _("KEYWORDS"));
     if (st->module_info.keywords) {
-        G__print_keywords(stdout, print_escaped_for_html_keywords);
+        G__print_keywords(stdout, print_escaped_for_html_keywords, FALSE);
         fprintf(stdout, "\n");
     }
     fprintf(stdout, "<h2>%s</h2>\n", _("SYNOPSIS"));
@@ -273,11 +279,11 @@ void G__usage_html(void)
                                 thumbnails = "northarrows";
 
                             if (thumbnails)
-                                fprintf(stdout, "<img height=\"12\" "
+                                fprintf(stdout,
+                                        "<img height=\"12\" "
                                         "style=\"max-width: 80;\" "
                                         "src=\"%s/%s.png\" alt=\"%s\"> ",
-                                        thumbnails, opt->opts[i],
-                                        opt->opts[i]);
+                                        thumbnails, opt->opts[i], opt->opts[i]);
                         }
                         print_escaped_for_html(stdout, opt->opts[i]);
                         fprintf(stdout, "</b>: ");
@@ -299,12 +305,14 @@ void G__usage_html(void)
     fprintf(stdout, "</body>\n</html>\n");
 }
 
-
 /*!
  * \brief Format text for HTML output
  */
-#define do_escape(c,escaped) case c: fputs(escaped,f);break
-void print_escaped_for_html(FILE * f, const char *str)
+#define do_escape(c, escaped) \
+    case c:                   \
+        fputs(escaped, f);    \
+        break
+void print_escaped_for_html(FILE *f, const char *str)
 {
     const char *s;
 
@@ -321,7 +329,7 @@ void print_escaped_for_html(FILE * f, const char *str)
     }
 }
 
-void print_escaped_for_html_options(FILE * f, const char *str)
+void print_escaped_for_html_options(FILE *f, const char *str)
 {
     const char *s;
 
@@ -339,7 +347,7 @@ void print_escaped_for_html_options(FILE * f, const char *str)
     }
 }
 
-void print_escaped_for_html_keywords(FILE * f, const char *str)
+void print_escaped_for_html_keywords(FILE *f, const char *str)
 {
     /* generate HTML links */
 
@@ -359,7 +367,7 @@ void print_escaped_for_html_keywords(FILE * f, const char *str)
         }
         fprintf(f, ".html\">%s</a>", str);
     }
-    else {                      /* first and other than second keyword */
+    else { /* first and other than second keyword */
         if (st->n_keys > 0 && strcmp(st->module_info.keywords[0], str) == 0) {
             /* command family */
             const char *s;

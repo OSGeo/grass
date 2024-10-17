@@ -25,13 +25,12 @@
 #include <grass/glocale.h>
 
 /* printf(3) man page */
-#define CONVS "diouxXeEfFgGaAcsCSpnm%"
+#define CONVS         "diouxXeEfFgGaAcsCSpnm%"
 
 /* % + flags + width + precision + length + conversion + NULL */
 #define SPEC_BUF_SIZE 16
 
-struct options
-{
+struct options {
     FILE *stream;
     char *str, *_str;
     size_t size, _size;
@@ -197,13 +196,14 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
             while (*++q) {
                 char *c = CONVS - 1;
 
-                while (*++c && *q != *c) ;
+                while (*++c && *q != *c)
+                    ;
                 if (*c) {
-                    va_list ap_copy;
+                    va_list aq;
                     char tmp;
 
                     /* copy ap for ovprintf() */
-                    va_copy(ap_copy, ap);
+                    va_copy(aq, ap);
 
                     /* found a conversion specifier */
                     if (*c == 's') {
@@ -254,10 +254,10 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
                         }
                         if (*p_spec) {
                             /* illegal string specifier? */
-                            va_end(ap_copy);
+                            va_end(aq);
                             *(q + 1) = 0;
-                            G_fatal_error(_("Failed to parse string specifier: %s"),
-                                          p);
+                            G_fatal_error(
+                                _("Failed to parse string specifier: %s"), p);
                         }
 
                         s = va_arg(ap, char *);
@@ -274,9 +274,9 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
                                 else if (prec < 0)
                                     width += wcount;
                                 p_spec = spec;
-                                p_spec += sprintf(p_spec, "%%%s%d",
-                                                  spec[0] == '-' ? "-" : "",
-                                                  width);
+                                p_spec +=
+                                    sprintf(p_spec, "%%%s%d",
+                                            spec[0] == '-' ? "-" : "", width);
                                 if (prec >= 0)
                                     p_spec += sprintf(p_spec, ".%d", prec);
                                 *p_spec++ = 's';
@@ -290,7 +290,7 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
                         if (use_ovprintf) {
                             tmp = *(q + 1);
                             *(q + 1) = 0;
-                            nbytes += ovprintf(opts, p, ap_copy);
+                            nbytes += ovprintf(opts, p, aq);
                             *(q + 1) = tmp;
                         }
                     }
@@ -298,7 +298,7 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
                         /* else use ovprintf() for non-string specifiers */
                         tmp = *(q + 1);
                         *(q + 1) = 0;
-                        nbytes += ovprintf(opts, p, ap_copy);
+                        nbytes += ovprintf(opts, p, aq);
                         *(q + 1) = tmp;
 
                         /* once ap is passed to another function that calls
@@ -345,15 +345,16 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
                             /* otherwise, no argument is required for m% */
                         }
                     }
-                    va_end(ap_copy);
+                    va_end(aq);
                     break;
                 }
                 else if (p_spec - spec < SPEC_BUF_SIZE - 2)
                     /* 2 reserved for % and NULL */
                     *p_spec++ = *q;
                 else
-                    G_fatal_error(_("Format specifier exceeds the buffer size (%d)"),
-                                  SPEC_BUF_SIZE);
+                    G_fatal_error(
+                        _("Format specifier exceeds the buffer size (%d)"),
+                        SPEC_BUF_SIZE);
             }
             asis = (p = q) + 1;
         }
@@ -388,7 +389,7 @@ int G_vaprintf(const char *format, va_list ap)
  * \param[in] ap variable argument list for the format string
  * \return number of bytes printed or fatal error on error
  */
-int G_vfaprintf(FILE * stream, const char *format, va_list ap)
+int G_vfaprintf(FILE *stream, const char *format, va_list ap)
 {
     struct options opts;
 
@@ -481,7 +482,7 @@ int G_aprintf(const char *format, ...)
  * \param[in] ... arguments for the format string
  * \return number of bytes printed or fatal error on error
  */
-int G_faprintf(FILE * stream, const char *format, ...)
+int G_faprintf(FILE *stream, const char *format, ...)
 {
     va_list ap;
     int nbytes;

@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.sim.sediment: main program for sediment transport
@@ -51,10 +50,10 @@
 /* DEFINE GLOB VAR              */
 
 /********************************/
-#define DIFFC	"0.8"
-#define NITER   "10"
-#define ITEROUT "2"
-#define DENSITY "200"
+#define DIFFC    "0.8"
+#define NITER    "10"
+#define ITEROUT  "2"
+#define DENSITY  "200"
 #define MANINVAL "0.1"
 
 /********************************/
@@ -71,6 +70,7 @@
 #endif
 #include <grass/gis.h>
 #include <grass/vector.h>
+#include <grass/raster.h>
 #include <grass/linkm.h>
 #include <grass/bitmap.h>
 #include <grass/glocale.h>
@@ -169,8 +169,7 @@ int main(int argc, char *argv[])
     parm.observation = G_define_standard_option(G_OPT_V_INPUT);
     parm.observation->key = "observation";
     parm.observation->required = NO;
-    parm.observation->label =
-        _("Name of sampling locations vector points map");
+    parm.observation->label = _("Name of sampling locations vector points map");
     parm.observation->guisection = _("Input");
 
     parm.tc = G_define_standard_option(G_OPT_R_OUTPUT);
@@ -183,8 +182,8 @@ int main(int argc, char *argv[])
     parm.et = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.et->key = "tlimit_erosion_deposition";
     parm.et->required = NO;
-    parm.et->description =
-        _("Name for output transport limited erosion-deposition raster map [kg/m2s]");
+    parm.et->description = _("Name for output transport limited "
+                             "erosion-deposition raster map [kg/m2s]");
     parm.et->guisection = _("Output");
 
     parm.conc = G_define_standard_option(G_OPT_R_OUTPUT);
@@ -212,7 +211,8 @@ int main(int argc, char *argv[])
     parm.logfile->key = "logfile";
     parm.logfile->required = NO;
     parm.logfile->description =
-        _("Name for sampling points output text file. For each observation vector point the time series of sediment transport is stored.");
+        _("Name for sampling points output text file. For each observation "
+          "vector point the time series of sediment transport is stored.");
     parm.logfile->guisection = _("Output");
 
     parm.outwalk = G_define_standard_option(G_OPT_V_OUTPUT);
@@ -263,7 +263,6 @@ int main(int argc, char *argv[])
     parm.diffc->required = NO;
     parm.diffc->description = _("Water diffusion constant");
     parm.diffc->guisection = _("Parameters");
-
 
     parm.seed = G_define_option();
     parm.seed->key = "random_seed";
@@ -372,7 +371,8 @@ int main(int argc, char *argv[])
 
     sscanf(parm.threads->answer, "%d", &threads);
     if (threads < 1) {
-        G_warning(_("<%d> is not valid number of threads. Number of threads will be set on <%d>"),
+        G_warning(_("<%d> is not valid number of threads. Number of threads "
+                    "will be set on <%d>"),
                   threads, abs(threads));
         threads = abs(threads);
     }
@@ -381,6 +381,10 @@ int main(int argc, char *argv[])
 #else
     threads = 1;
 #endif
+    if (threads > 1 && Rast_mask_is_present()) {
+        G_warning(_("Parallel processing disabled due to active mask."));
+        threads = 1;
+    }
     G_message(_("Number of threads: %d"), threads);
 
     /*      sscanf(parm.nwalk->answer, "%d", &wp.maxwa); */
@@ -413,6 +417,8 @@ int main(int argc, char *argv[])
         G_message(_("Using metric conversion factor %f, step=%f"), wp.conv,
                   wp.step);
 
+    wp.observation = parm.observation->answer;
+    wp.logfile = parm.logfile->answer;
     init_library_globals(&wp);
 
     if ((wp.tc == NULL) && (wp.et == NULL) && (wp.conc == NULL) &&

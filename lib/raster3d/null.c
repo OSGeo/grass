@@ -19,9 +19,8 @@ int Rast3d_is_null_value_num(const void *n, int type)
 
 /*---------------------------------------------------------------------------*/
 
-
 /*!
- * \brief 
+ * \brief
  *
  * Fills the vector pointed to by <em>c</em> with <em>nofElts</em> NULL-values
  * of <em>type</em>.

@@ -1,4 +1,3 @@
-
 #include <grass/gis.h>
 #include "psdriver.h"
 

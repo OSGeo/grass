@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #include <stdlib.h>
 #include <math.h>
 #include <grass/raster.h>
@@ -15,13 +16,12 @@ double mfd_pow(double base)
     return result;
 }
 
-static int continue_stream(CELL stream_id, int r_max, int c_max,
-                           int *stream_no)
+static int continue_stream(CELL stream_id, int r_max, int c_max, int *stream_no)
 {
     CELL curr_stream, stream_nbr, old_stream;
     int r_nbr, c_nbr;
-    int asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
-    int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
+    int asp_r[9] = {0, -1, -1, -1, 0, 1, 1, 1, 0};
+    int asp_c[9] = {0, 1, 0, -1, -1, -1, 0, 1, 1};
     int stream_node_step = 1000;
     ASP_FLAG af;
 
@@ -53,10 +53,8 @@ static int continue_stream(CELL stream_id, int r_max, int c_max,
         /* add stream node */
         if (*stream_no >= n_alloc_nodes - 1) {
             n_alloc_nodes += stream_node_step;
-            stream_node =
-                (struct snode *)G_realloc(stream_node,
-                                          n_alloc_nodes *
-                                          sizeof(struct snode));
+            stream_node = (struct snode *)G_realloc(
+                stream_node, n_alloc_nodes * sizeof(struct snode));
         }
         stream_node[*stream_no].r = r_max;
         stream_node[*stream_no].c = c_max;
@@ -69,8 +67,9 @@ static int continue_stream(CELL stream_id, int r_max, int c_max,
 
         /* debug */
         if (n_stream_nodes != *stream_no)
-            G_warning(_("Stream_no %d and n_stream_nodes %" PRI_OFF_T
-                       " out of sync"), *stream_no, n_stream_nodes);
+            G_warning(
+                _("Stream_no %d and n_stream_nodes %" PRId64 " out of sync"),
+                *stream_no, n_stream_nodes);
 
         stream_node[*stream_no].n_alloc += 2;
         new_size = stream_node[*stream_no].n_alloc * sizeof(int);
@@ -147,11 +146,11 @@ int do_accum(double d8cut)
     int is_worked;
     double prop;
     int edge;
-    int asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
-    int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
-    int nextdr[8] = { 1, -1, 0, 0, -1, 1, 1, -1 };
-    int nextdc[8] = { 0, 0, -1, 1, 1, -1, 1, -1 };
-    GW_LARGE_INT workedon, killer;
+    int asp_r[9] = {0, -1, -1, -1, 0, 1, 1, 1, 0};
+    int asp_c[9] = {0, 1, 0, -1, -1, -1, 0, 1, 1};
+    int nextdr[8] = {1, -1, 0, 0, -1, 1, 1, -1};
+    int nextdc[8] = {0, 0, -1, 1, 1, -1, 1, -1};
+    GW_LARGE_INT killer;
     char *flag_nbr;
     POINT astarpoint;
     WAT_ALT wa;
@@ -163,8 +162,8 @@ int do_accum(double d8cut)
     dist_to_nbr = (double *)G_malloc(sides * sizeof(double));
     weight = (double *)G_malloc(sides * sizeof(double));
     flag_nbr = (char *)G_malloc(sides * sizeof(char));
-    wat_nbr = (DCELL *) G_malloc(sides * sizeof(DCELL));
-    ele_nbr = (CELL *) G_malloc(sides * sizeof(CELL));
+    wat_nbr = (DCELL *)G_malloc(sides * sizeof(DCELL));
+    ele_nbr = (CELL *)G_malloc(sides * sizeof(CELL));
 
     G_get_set_window(&window);
 
@@ -251,13 +250,11 @@ int do_accum(double d8cut)
                     if (ele_nbr[ct_dir] <= ele_val) {
                         if (ele_nbr[ct_dir] < ele_val) {
                             weight[ct_dir] =
-                                mfd_pow((ele_val -
-                                         ele_nbr[ct_dir]) /
+                                mfd_pow((ele_val - ele_nbr[ct_dir]) /
                                         dist_to_nbr[ct_dir]);
                         }
                         if (ele_nbr[ct_dir] == ele_val) {
-                            weight[ct_dir] =
-                                mfd_pow(0.5 / dist_to_nbr[ct_dir]);
+                            weight[ct_dir] = mfd_pow(0.5 / dist_to_nbr[ct_dir]);
                         }
                         sum_weight += weight[ct_dir];
                         mfd_cells++;
@@ -286,10 +283,11 @@ int do_accum(double d8cut)
             continue;
         }
 
-        /* honour A * path 
+        /* honour A * path
          * mfd_cells == 0: fine, SFD along A * path
          * mfd_cells == 1 && astar_not_set == 0: fine, SFD along A * path
-         * mfd_cells > 0 && astar_not_set == 1: A * path not included, add to mfd_cells
+         * mfd_cells > 0 && astar_not_set == 1: A * path not included, add to
+         * mfd_cells
          */
 
         /************************************/
@@ -331,12 +329,12 @@ int do_accum(double d8cut)
                     }
                     else if (ct_dir == np_side) {
                         /* check for consistency with A * path */
-                        workedon++;
                     }
                 }
             }
             if (fabs(prop - 1.0) > 5E-6f) {
-                G_warning(_("MFD: cumulative proportion of flow distribution not 1.0 but %f"),
+                G_warning(_("MFD: cumulative proportion of flow distribution "
+                            "not 1.0 but %f"),
                           prop);
             }
         }
@@ -374,10 +372,10 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
     int is_worked;
     double max_acc;
     int edge, flat;
-    int asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
-    int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
-    int nextdr[8] = { 1, -1, 0, 0, -1, 1, 1, -1 };
-    int nextdc[8] = { 0, 0, -1, 1, 1, -1, 1, -1 };
+    int asp_r[9] = {0, -1, -1, -1, 0, 1, 1, 1, 0};
+    int asp_c[9] = {0, 1, 0, -1, -1, -1, 0, 1, 1};
+    int nextdr[8] = {1, -1, 0, 0, -1, 1, 1, -1};
+    int nextdc[8] = {0, 0, -1, 1, 1, -1, 1, -1};
     /* sides */
     /*
      *  | 7 | 1 | 4 |
@@ -402,14 +400,14 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
 
     /* init outlet nodes */
     n_alloc_outlets = stream_node_step;
-    outlets = (POINT *) G_malloc(n_alloc_outlets * sizeof(POINT));
+    outlets = (POINT *)G_malloc(n_alloc_outlets * sizeof(POINT));
     n_outlets = 0;
 
     /* distances to neighbours */
     dist_to_nbr = (double *)G_malloc(sides * sizeof(double));
     flag_nbr = (char *)G_malloc(sides * sizeof(char));
-    wat_nbr = (DCELL *) G_malloc(sides * sizeof(DCELL));
-    ele_nbr = (CELL *) G_malloc(sides * sizeof(CELL));
+    wat_nbr = (DCELL *)G_malloc(sides * sizeof(DCELL));
+    ele_nbr = (CELL *)G_malloc(sides * sizeof(CELL));
 
     G_get_set_window(&window);
 
@@ -455,9 +453,8 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
                 /* add outlet point */
                 if (n_outlets >= n_alloc_outlets) {
                     n_alloc_outlets += stream_node_step;
-                    outlets =
-                        (POINT *) G_realloc(outlets,
-                                            n_alloc_outlets * sizeof(POINT));
+                    outlets = (POINT *)G_realloc(outlets, n_alloc_outlets *
+                                                              sizeof(POINT));
                 }
                 outlets[n_outlets].r = r;
                 outlets[n_outlets].c = c;
@@ -579,9 +576,8 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
                 /* add outlet point */
                 if (n_outlets >= n_alloc_outlets) {
                     n_alloc_outlets += stream_node_step;
-                    outlets =
-                        (POINT *) G_realloc(outlets,
-                                            n_alloc_outlets * sizeof(POINT));
+                    outlets = (POINT *)G_realloc(outlets, n_alloc_outlets *
+                                                              sizeof(POINT));
                 }
                 outlets[n_outlets].r = r;
                 outlets[n_outlets].c = c;
@@ -621,8 +617,8 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
         /* uses whatever unit is accumulation */
         if (mont_exp > 0) {
             if (r_max == r && c_max == c)
-                G_warning
-                    (_("Can't use Montgomery's method, no stream direction found"));
+                G_warning(_("Can't use Montgomery's method, no stream "
+                            "direction found"));
             else {
                 slope = (double)(ele_val - ele_nbr[max_side]) / ele_scale;
 
@@ -643,10 +639,8 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
             /* add stream node */
             if (stream_no >= n_alloc_nodes - 1) {
                 n_alloc_nodes += stream_node_step;
-                stream_node =
-                    (struct snode *)G_realloc(stream_node,
-                                              n_alloc_nodes *
-                                              sizeof(struct snode));
+                stream_node = (struct snode *)G_realloc(
+                    stream_node, n_alloc_nodes * sizeof(struct snode));
             }
             stream_node[stream_no].r = r;
             stream_node[stream_no].c = c;
@@ -659,8 +653,9 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
 
             /* debug */
             if (n_stream_nodes != stream_no)
-                G_warning(_("Stream_no %d and n_stream_nodes %" PRI_OFF_T
-                           " out of sync"), stream_no, n_stream_nodes);
+                G_warning(_("Stream_no %d and n_stream_nodes %" PRId64
+                            " out of sync"),
+                          stream_no, n_stream_nodes);
         }
 
         /*********************/
@@ -678,7 +673,7 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
                 if (n_outlets >= n_alloc_outlets) {
                     n_alloc_outlets += stream_node_step;
                     outlets =
-                        (POINT *) G_malloc(n_alloc_outlets * sizeof(POINT));
+                        (POINT *)G_malloc(n_alloc_outlets * sizeof(POINT));
                 }
                 outlets[n_outlets].r = r;
                 outlets[n_outlets].c = c;
@@ -691,16 +686,17 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
     }
     G_percent(1, 1, 2);
     if (workedon)
-        G_warning(_("MFD: A * path already processed when setting drainage direction: %"
-                   PRI_OFF_T " of %" PRI_OFF_T " cells"), workedon, n_points);
+        G_warning(_("MFD: A * path already processed when setting drainage "
+                    "direction: %" PRId64 " of %" PRId64 " cells"),
+                  workedon, n_points);
 
     G_free(dist_to_nbr);
     G_free(wat_nbr);
     G_free(ele_nbr);
     G_free(flag_nbr);
 
-    G_debug(1, "%" PRI_OFF_T " outlets", n_outlets);
-    G_debug(1, "%" PRI_OFF_T " nodes", n_stream_nodes);
+    G_debug(1, "%" PRId64 " outlets", n_outlets);
+    G_debug(1, "%" PRId64 " nodes", n_stream_nodes);
     G_debug(1, "%d streams", stream_no);
 
     return 1;

@@ -1,17 +1,16 @@
-
 /******************************************************************************
-NAME:                         HIS2RGB
- 
-PURPOSE    To process hue,intensity,saturation bands to red,green,blue.
- 
+NAME:            HIS2RGB
+
+PURPOSE          To process hue,intensity,saturation bands to red,green,blue.
+
 ALGORITHM:
-   Get hue, intensity, saturation from input buffer
-   Create the RGB bands
-   Write to output buffer
- 
+                 Get hue, intensity, saturation from input buffer
+                 Create the RGB bands
+                 Write to output buffer
+
 ASSUMPTION:
-   The input images are read to the input buffer.
- 
+                 The input images are read to the input buffer.
+
 ******************************************************************************/
 /* For GRASS one row from each cell map is passed in and each cell in
    each band is processed and written out.   CWU GIS Lab: DBS 8/90 */
@@ -19,22 +18,21 @@ ASSUMPTION:
 #include <grass/gis.h>
 #include "globals.h"
 
-void his2rgb(CELL * rowbuffer[3], int columns)
+void his2rgb(CELL *rowbuffer[3], int columns)
 {
-    long sample;                /* sample indicator                          */
-    double red;                 /* the red band output                       */
-    double red255;              /* the red band output                       */
-    double green;               /* the green band output                     */
-    double green255;            /* the green band output                     */
-    double blue;                /* the blue band output                      */
-    double blue255;             /* the blue band output                      */
-    double m1;                  /* value used for determining RGB            */
-    double m2;                  /* value used for determining RGB            */
-    double scalei;              /* intensity value                           */
-    double scales;              /* saturation value                          */
-    double hue;                 /* hue                                       */
-    double savehue;             /* save the hue for future processing        */
-
+    long sample;     /* sample indicator                          */
+    double red;      /* the red band output                       */
+    double red255;   /* the red band output                       */
+    double green;    /* the green band output                     */
+    double green255; /* the green band output                     */
+    double blue;     /* the blue band output                      */
+    double blue255;  /* the blue band output                      */
+    double m1;       /* value used for determining RGB            */
+    double m2;       /* value used for determining RGB            */
+    double scalei;   /* intensity value                           */
+    double scales;   /* saturation value                          */
+    double hue;      /* hue                                       */
+    double savehue;  /* save the hue for future processing        */
 
     for (sample = 0; sample < columns; sample++) {
         if (Rast_is_c_null_value(&rowbuffer[0][sample]) ||
@@ -58,7 +56,7 @@ void his2rgb(CELL * rowbuffer[3], int columns)
             m2 = scalei + scales - (scalei * scales);
         m1 = 2.0 * scalei - m2;
 
-        hue = (double)360.0 *rowbuffer[0][sample] / 255.0;
+        hue = (double)360.0 * rowbuffer[0][sample] / 255.0;
 
         if (scales == 0.0) {
             if (hue == -1.0) {

@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       i.landsat.acca
@@ -11,8 +10,8 @@
  * COPYRIGHT:    (C) 2008, 2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	 for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
 
@@ -91,8 +90,8 @@ int main(int argc, char *argv[])
     char *in_name, *out_name;
     struct Categories cats;
 
-    CELL cell_shadow = IS_SHADOW, cell_cold_cloud =
-        IS_COLD_CLOUD, cell_warm_cloud = IS_WARM_CLOUD;
+    CELL cell_shadow = IS_SHADOW, cell_cold_cloud = IS_COLD_CLOUD,
+         cell_warm_cloud = IS_WARM_CLOUD;
     Gfile band[5], out;
 
     char title[1024];
@@ -156,8 +155,8 @@ int main(int argc, char *argv[])
 
     pass2 = G_define_flag();
     pass2->key = '2';
-    pass2->description =
-        _("Bypass second-pass processing, and merge warm (not ambiguous) and cold clouds");
+    pass2->description = _("Bypass second-pass processing, and merge warm (not "
+                           "ambiguous) and cold clouds");
     pass2->guisection = _("Cloud settings");
 
     shadow = G_define_flag();
@@ -177,6 +176,7 @@ int main(int argc, char *argv[])
     in_name = band_prefix->answer;
 
     for (i = BAND2; i <= BAND6; i++) {
+        band[i].name[0] = '\0';
         sprintf(band[i].name, "%s%d%c", in_name, i + 2,
                 (i == BAND6 && !sat5->answer ? '1' : '\0'));
         band[i].fd = check_raster(band[i].name);

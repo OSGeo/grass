@@ -18,40 +18,36 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-static int rew_dummy()
+static int rew_dummy(struct Map_info *Map UNUSED)
 {
     return -1;
 }
 
 #if !defined HAVE_OGR || !defined HAVE_POSTGRES
-static int format()
+static int format(struct Map_info *Map UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 #endif
 
-
-static int (*Rewind_array[][4])() = {
-    {
-     rew_dummy, V1_rewind_nat, V2_rewind_nat, rew_dummy}
+static int (*Rewind_array[][4])(struct Map_info *) = {
+    {rew_dummy, V1_rewind_nat, V2_rewind_nat, rew_dummy}
 #ifdef HAVE_OGR
-    , {
-       rew_dummy, V1_rewind_ogr, V2_rewind_ogr, rew_dummy}
-    , {
-       rew_dummy, V1_rewind_ogr, V2_rewind_ogr, rew_dummy}
+    ,
+    {rew_dummy, V1_rewind_ogr, V2_rewind_ogr, rew_dummy},
+    {rew_dummy, V1_rewind_ogr, V2_rewind_ogr, rew_dummy}
 #else
-    , {
-       rew_dummy, format, format, rew_dummy}
-    , {
-       rew_dummy, format, format, rew_dummy}
+    ,
+    {rew_dummy, format, format, rew_dummy},
+    {rew_dummy, format, format, rew_dummy}
 #endif
 #ifdef HAVE_POSTGRES
-    , {
-       rew_dummy, V1_rewind_pg, V2_rewind_pg, V2_rewind_pg}
+    ,
+    {rew_dummy, V1_rewind_pg, V2_rewind_pg, V2_rewind_pg}
 #else
-    , {
-       rew_dummy, format, format, rew_dummy}
+    ,
+    {rew_dummy, format, format, rew_dummy}
 #endif
 };
 
@@ -70,5 +66,5 @@ int Vect_rewind(struct Map_info *Map)
 
     G_debug(1, "Vect_Rewind(): name = %s level = %d", Map->name, Map->level);
 
-    return (*Rewind_array[Map->format][Map->level]) (Map);
+    return (*Rewind_array[Map->format][Map->level])(Map);
 }

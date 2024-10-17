@@ -2,7 +2,7 @@
 
 #include <grass/btree.h>
 
-int btree_free(BTREE * B)
+int btree_free(BTREE *B)
 {
     void *data, *key;
 

@@ -1,12 +1,14 @@
-
 /****************************************************************************
  *
  * MODULE:       r.what
  * AUTHOR(S):    Michael Shapiro, CERL (original contributor)
- *               Markus Neteler <neteler itc.it>,Brad Douglas <rez touchofmadness.com>,
- *               Huidae Cho <grass4u gmail.com>, Glynn Clements <glynn gclements.plus.com>,
- *               Hamish Bowman <hamish_b yahoo.com>, Soeren Gebbert <soeren.gebbert gmx.de>
- * PURPOSE:      
+ *               Markus Neteler <neteler itc.it>,
+ *               Brad Douglas <rez touchofmadness.com>,
+ *               Huidae Cho <grass4u gmail.com>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
+ *               Soeren Gebbert <soeren.gebbert gmx.de>
+ * PURPOSE:
  * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -70,12 +72,10 @@ static int do_value(const char *buf, RASTER_MAP_TYPE type,
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *input, *value, *format;
     } opt;
-    struct
-    {
+    struct {
         struct Flag *i;
     } flag;
     const char *name;

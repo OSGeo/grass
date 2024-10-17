@@ -71,8 +71,8 @@ struct Site *nextone(void)
         return ((struct Site *)NULL);
 }
 
-/* removes duplicate sites that would break the voronoi alghoritm */
-void removeDuplicates()
+/* removes duplicate sites that would break the voronoi algorithm */
+void removeDuplicates(void)
 {
     int i, j;
 
@@ -87,7 +87,8 @@ void removeDuplicates()
                 if (i != j)
                     sites[j] = sites[i];
                 i++;
-                j++;;
+                j++;
+                ;
             }
         }
         else {
@@ -98,7 +99,8 @@ void removeDuplicates()
                 if (i != j)
                     sites[j] = sites[i];
                 i++;
-                j++;;
+                j++;
+                ;
             }
         }
 
@@ -106,16 +108,14 @@ void removeDuplicates()
         nsites = j;
         sites = (struct Site *)G_realloc(sites, nsites * sizeof(struct Site));
     }
-
 }
 
 int addsite(double x, double y, double z, int id)
 {
     if (nsites >= nsites_alloc) {
         nsites_alloc += 100;
-        sites =
-            (struct Site *)G_realloc(sites,
-                                     (nsites_alloc) * sizeof(struct Site));
+        sites = (struct Site *)G_realloc(sites,
+                                         (nsites_alloc) * sizeof(struct Site));
     }
     sites[nsites].coord.x = x;
     sites[nsites].coord.y = y;
@@ -190,17 +190,19 @@ int readsites(void)
         const char *name = Vect_get_full_name(&In);
 
         Vect_close(&In);
-        G_fatal_error(n_
-                      ("Found %d point/centroid in <%s>, but at least 2 are needed. "
-                       "Are the current region extents covering at least parts of the input map?",
-                       "Found %d points/centroids in <%s>, but at least 2 are needed. "
-                       "Are the current region extents covering at least parts of the input map?",
-                       nsites), nsites, name);
+        G_fatal_error(
+            n_("Found %d point/centroid in <%s>, but at least 2 are needed. "
+               "Are the current region extents covering at least parts of the "
+               "input map?",
+               "Found %d points/centroids in <%s>, but at least 2 are needed. "
+               "Are the current region extents covering at least parts of the "
+               "input map?",
+               nsites),
+            nsites, name);
     }
 
     if (nsites < nlines)
-        sites =
-            (struct Site *)G_realloc(sites, (nsites) * sizeof(struct Site));
+        sites = (struct Site *)G_realloc(sites, (nsites) * sizeof(struct Site));
 
     qsort(sites, nsites, sizeof(struct Site), scomp);
     removeDuplicates();
@@ -249,7 +251,6 @@ int readbounds(void)
     int area_id;
     double x, y, z, x1, y1, z1;
     double maxdist, sdist, l, dx, dy, dz;
-    int nconnected;
     struct ilist *linelist, *arealist;
 
     Points = Vect_new_line_struct();
@@ -317,10 +318,8 @@ int readbounds(void)
 
         if (nsites + Points->n_points > nsites_alloc) {
             nsites_alloc = nsites + Points->n_points;
-            sites =
-                (struct Site *)G_realloc(sites,
-                                         (nsites_alloc) *
-                                         sizeof(struct Site));
+            sites = (struct Site *)G_realloc(sites, (nsites_alloc) *
+                                                        sizeof(struct Site));
         }
 
         for (i = 0; i < Points->n_points; i++) {
@@ -380,7 +379,6 @@ int readbounds(void)
          * must be >= 2 */
         /* count number of valid boundaries */
         nlines = Vect_get_node_n_lines(&In, node);
-        nconnected = 0;
         Vect_reset_list(linelist);
         Vect_reset_list(arealist);
 
@@ -395,7 +393,6 @@ int readbounds(void)
             if (n_areas(abs(line), &area_id) == 1) {
                 Vect_list_append(linelist, line);
                 Vect_list_append(arealist, area_id);
-                nconnected++;
             }
         }
 
@@ -420,7 +417,8 @@ int readbounds(void)
                 line = linelist->value[i];
 
                 if (n_areas(abs(line), &area_id) != 1)
-                    G_fatal_error(_("All boundaries in the list should be valid"));
+                    G_fatal_error(
+                        _("All boundaries in the list should be valid"));
 
                 Vect_read_line(&In, Points, Cats, abs(line));
                 Vect_line_prune(Points);
@@ -430,9 +428,9 @@ int readbounds(void)
 
                 if (line < 0) {
                     dx = Points->x[Points->n_points - 2] -
-                        Points->x[Points->n_points - 1];
+                         Points->x[Points->n_points - 1];
                     dy = Points->y[Points->n_points - 2] -
-                        Points->y[Points->n_points - 1];
+                         Points->y[Points->n_points - 1];
                 }
                 else {
                     dx = Points->x[1] - Points->x[0];
@@ -448,7 +446,8 @@ int readbounds(void)
                 line = linelist->value[i];
 
                 if (n_areas(abs(line), &area_id) != 1)
-                    G_fatal_error(_("All boundaries in the list should be valid"));
+                    G_fatal_error(
+                        _("All boundaries in the list should be valid"));
 
                 Vect_read_line(&In, Points, Cats, abs(line));
                 Vect_line_prune(Points);
@@ -458,9 +457,9 @@ int readbounds(void)
 
                 if (line < 0) {
                     dx = Points->x[Points->n_points - 2] -
-                        Points->x[Points->n_points - 1];
+                         Points->x[Points->n_points - 1];
                     dy = Points->y[Points->n_points - 2] -
-                        Points->y[Points->n_points - 1];
+                         Points->y[Points->n_points - 1];
                 }
                 else {
                     dx = Points->x[1] - Points->x[0];
@@ -485,9 +484,9 @@ int readbounds(void)
         Vect_close(&In);
         G_fatal_error(n_("Found %d vertex in <%s>, but at least 2 are needed",
                          "Found %d vertices in <%s>, but at least 2 are needed",
-                         nsites), nsites, name);
+                         nsites),
+                      nsites, name);
     }
-
 
     qsort(sites, nsites, sizeof(struct Site), scomp);
     removeDuplicates();

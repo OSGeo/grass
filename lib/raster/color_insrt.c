@@ -6,13 +6,16 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-#define umalloc(n) (unsigned char *) G_malloc((size_t)n)
-#define urealloc(s,n) (unsigned char *) G_realloc(s,(size_t)n)
+#define umalloc(n)     (unsigned char *)G_malloc((size_t)n)
+#define urealloc(s, n) (unsigned char *)G_realloc(s, (size_t)n)
 
-#define LIMIT(x) if (x < 0) x = 0; else if (x > 255) x = 255;
+#define LIMIT(x)      \
+    if (x < 0)        \
+        x = 0;        \
+    else if (x > 255) \
+        x = 255;
 
-int Rast__insert_color_into_lookup(CELL cat,
-                                   int red, int grn, int blu,
+int Rast__insert_color_into_lookup(CELL cat, int red, int grn, int blu,
                                    struct _Color_Info_ *cp)
 {
     long nalloc;
@@ -39,7 +42,7 @@ int Rast__insert_color_into_lookup(CELL cat,
         curlen = cp->max - cp->min + 1;
         newlen = cat - cp->min + 1;
         nalloc = newlen;
-        if (nalloc != (int)nalloc)      /* check for int overflow */
+        if (nalloc != (int)nalloc) /* check for int overflow */
             return -1;
 
         if (nalloc > cp->lookup.nalloc) {
@@ -67,7 +70,7 @@ int Rast__insert_color_into_lookup(CELL cat,
         newlen = cp->max - cat + 1;
         gap = newlen - curlen;
         nalloc = newlen;
-        if (nalloc != (int)nalloc)      /* check for int overflow */
+        if (nalloc != (int)nalloc) /* check for int overflow */
             return -1;
 
         if (nalloc > cp->lookup.nalloc) {

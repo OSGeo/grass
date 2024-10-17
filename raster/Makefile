@@ -45,6 +45,7 @@ SUBDIRS = \
 	r.lake \
 	r.li \
 	r.mapcalc \
+	r.mask.status \
 	r.mfilter \
 	r.mode \
 	r.neighbors \
@@ -140,7 +141,7 @@ include $(MODULE_TOPDIR)/include/Make/Dir.make
 
 default:
 	$(MAKE) -C r.mapcalc
-	$(MAKE) htmldir 
+	$(MAKE) htmldir
 
 htmldir: parsubdirs
 

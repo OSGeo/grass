@@ -1,21 +1,21 @@
-
 /****************************************************************************
-*
-* MODULE:       test.gpde.lib
-*   	    	
-* AUTHOR(S):    Original author 
-*               Soeren Gebbert soerengebbert <at> gmx <dot> de
-* 		27 11 2006 Berlin
-*
-* PURPOSE:      Unit and integration tests for the gpde library
-*
-* COPYRIGHT:    (C) 2006 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       test.gpde.lib
+ *
+ * AUTHOR(S):    Original author
+ *               Soeren Gebbert soerengebbert <at> gmx <dot> de
+ *                 27 11 2006 Berlin
+ *
+ * PURPOSE:      Unit and integration tests for the gpde library
+ *
+ * COPYRIGHT:    (C) 2006 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with
+ *               GRASS for details.
+ *
+ *****************************************************************************/
+
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
@@ -23,18 +23,16 @@
 #include <grass/gmath.h>
 #include "test_gpde_lib.h"
 
-
 /*- Parameters and global variables -----------------------------------------*/
-typedef struct
-{
+typedef struct {
     struct Option *unit, *integration;
     struct Flag *full, *testunit, *testint;
 } paramType;
 
-paramType param;                /*Parameters */
+paramType param; /*Parameters */
 
 /*- prototypes --------------------------------------------------------------*/
-static void set_params(void);   /*Fill the paramType structure */
+static void set_params(void); /*Fill the paramType structure */
 
 /* ************************************************************************* */
 /* Set up the arguments we are expecting ********************************** */
@@ -55,7 +53,6 @@ void set_params(void)
     param.integration->options = "gwflow,heatflow,transport";
     param.integration->description = "Choose the integration tests to run";
 
-
     param.testunit = G_define_flag();
     param.testunit->key = 'u';
     param.testunit->description = "Run all unit tests";
@@ -67,11 +64,11 @@ void set_params(void)
     param.full = G_define_flag();
     param.full->key = 'a';
     param.full->description = "Run all unit and integration tests";
-
 }
 
 /* ************************************************************************* */
-/* Main function, open the RASTER3D map and create the raster maps ************** */
+/* Main function, open the RASTER3D map and create the raster maps
+ * ************** */
 /* ************************************************************************* */
 int main(int argc, char *argv[])
 {
@@ -93,7 +90,6 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-
     /*Run the unit tests */
     if (param.testunit->answer || param.full->answer) {
         returnstat += unit_test_arrays();
@@ -102,7 +98,6 @@ int main(int argc, char *argv[])
         returnstat += unit_test_geom_data();
         returnstat += unit_test_les_creation();
         returnstat += unit_test_tools();
-
     }
 
     /*Run the integration tests */
@@ -147,15 +142,14 @@ int main(int argc, char *argv[])
                     if (strcmp(param.integration->answers[i], "gwflow") == 0)
                         returnstat += integration_test_gwflow();
 
-                    if (strcmp(param.integration->answers[i], "heatflow") == 0) ;       /*nothing to do for now */
+                    if (strcmp(param.integration->answers[i], "heatflow") == 0)
+                        ; /*nothing to do for now */
 
-                    if (strcmp(param.integration->answers[i], "transport") ==
-                        0)
+                    if (strcmp(param.integration->answers[i], "transport") == 0)
                         returnstat += integration_test_solute_transport();
 
                     i++;
                 }
-
         }
     }
 

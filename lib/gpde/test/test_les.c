@@ -1,25 +1,23 @@
-
 /*****************************************************************************
-*
-* MODULE:       Grass PDE Numerical Library
-* AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
-* 		soerengebbert <at> gmx <dot> de
-*               
-* PURPOSE:      Unit tests for les creation
-*
-* COPYRIGHT:    (C) 2000 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       Grass PDE Numerical Library
+ * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
+ *                 soerengebbert <at> gmx <dot> de
+ *
+ * PURPOSE:      Unit tests for les creation
+ *
+ * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #include <grass/gis.h>
 #include <grass/gmath.h>
 #include <grass/N_pde.h>
 #include "test_gpde_lib.h"
-
 
 /* prototypes */
 static int test_les(void);
@@ -43,7 +41,6 @@ int unit_test_les_creation(void)
     return sum;
 }
 
-
 /* *************************************************************** */
 /* test the les creation of normal and sparse matirces *********** */
 /* *************************************************************** */
@@ -53,7 +50,6 @@ int test_les(void)
     N_les *les = NULL;
     N_les *sples = NULL;
     int i, j;
-
 
     les = N_alloc_les(TEST_N_NUM_ROWS, N_NORMAL_LES);
     N_print_les(les);
@@ -87,10 +83,8 @@ int test_les(void)
     N_print_les(les);
     N_free_les(les);
 
-
     les = N_alloc_les(TEST_N_NUM_ROWS, N_NORMAL_LES);
     sples = N_alloc_les(TEST_N_NUM_ROWS, N_SPARSE_LES);
-
 
     G_message("\t * testing les creation in parallel\n");
 #pragma omp parallel for private(i, j) shared(les)

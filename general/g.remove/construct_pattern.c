@@ -21,7 +21,7 @@ char *construct_pattern(char **names)
         for (j = 0; names[i][j]; j++)
             len += !isalnum(names[i][j]);
     }
-    len += i;                   /* # names - 1 commas + \0 */
+    len += i; /* # names - 1 commas + \0 */
 
     pattern = p = (char *)G_malloc(len);
 
@@ -35,7 +35,8 @@ char *construct_pattern(char **names)
         if (G_name_is_fully_qualified(name, xname, xmapset)) {
             if (strcmp(xmapset, mapset) != 0)
                 G_fatal_error(_("%s: Cannot remove or exclude files not in "
-                                "the current mapset."), name);
+                                "the current mapset."),
+                              name);
             name = xname;
         }
 

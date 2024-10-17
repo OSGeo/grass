@@ -16,8 +16,8 @@
 /*!
  * \brief Bresenham line algorithm.
  *
- * Draws a line from <i>x1,y1</i> to <i>x2,y2</i> using Bresenham's 
- * algorithm. A routine to plot points must be provided, as is defined 
+ * Draws a line from <i>x1,y1</i> to <i>x2,y2</i> using Bresenham's
+ * algorithm. A routine to plot points must be provided, as is defined
  * as: point(x, y) plot a point at x,y.
  *
  * This routine does not require a previous call to G_setup_plot() to

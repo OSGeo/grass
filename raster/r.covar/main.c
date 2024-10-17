@@ -1,11 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       r.covar
  *
  * AUTHOR(S):    Michael Shapiro - CERL
  *
- * PURPOSE:      Outputs a covariance/correlation matrix for 
+ * PURPOSE:      Outputs a covariance/correlation matrix for
  *               user-specified raster map layer(s).
  *
  * COPYRIGHT:    (C) 2006 by the GRASS Development Team
@@ -24,7 +23,6 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-
 int main(int argc, char *argv[])
 {
     int nrows, ncols;
@@ -40,8 +38,7 @@ int main(int argc, char *argv[])
     int correlation;
     struct GModule *module;
     struct Option *maps;
-    struct
-    {
+    struct {
         struct Flag *r;
     } flag;
 
@@ -50,9 +47,8 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("statistics"));
-    module->description =
-        _("Outputs a covariance/correlation matrix "
-          "for user-specified raster map layer(s).");
+    module->description = _("Outputs a covariance/correlation matrix "
+                            "for user-specified raster map layer(s).");
 
     maps = G_define_standard_option(G_OPT_R_MAPS);
 
@@ -67,10 +63,11 @@ int main(int argc, char *argv[])
     correlation = flag.r->answer;
 
     /* count the number of raster maps */
-    for (nfiles = 0; maps->answers[nfiles]; nfiles++) ;
+    for (nfiles = 0; maps->answers[nfiles]; nfiles++)
+        ;
 
     fd = (int *)G_malloc(nfiles * sizeof(int));
-    dcell = (DCELL **) G_malloc(nfiles * sizeof(DCELL *));
+    dcell = (DCELL **)G_malloc(nfiles * sizeof(DCELL *));
     sum = (double *)G_calloc(nfiles, sizeof(double));
     sum2 = (double **)G_malloc(nfiles * sizeof(double *));
     for (i = 0; i < nfiles; i++) {
@@ -117,19 +114,17 @@ int main(int argc, char *argv[])
             ii = sqrt((sum2[i][i] - sum[i] * sum[i] / count) / (count - 1));
         for (j = 0; j <= i; j++) {
             if (correlation)
-                jj = sqrt((sum2[j][j] - sum[j] * sum[j] / count) / (count -
-                                                                    1));
+                jj = sqrt((sum2[j][j] - sum[j] * sum[j] / count) / (count - 1));
             fprintf(stdout, "%f ",
-                    (sum2[j][i] -
-                     sum[i] * sum[j] / count) / (ii * jj * (count - 1)));
+                    (sum2[j][i] - sum[i] * sum[j] / count) /
+                        (ii * jj * (count - 1)));
         }
         for (j = i + 1; j < nfiles; j++) {
             if (correlation)
-                jj = sqrt((sum2[j][j] - sum[j] * sum[j] / count) / (count -
-                                                                    1));
+                jj = sqrt((sum2[j][j] - sum[j] * sum[j] / count) / (count - 1));
             fprintf(stdout, "%f ",
-                    (sum2[i][j] -
-                     sum[i] * sum[j] / count) / (ii * jj * (count - 1)));
+                    (sum2[i][j] - sum[i] * sum[j] / count) /
+                        (ii * jj * (count - 1)));
         }
         fprintf(stdout, "\n");
     }

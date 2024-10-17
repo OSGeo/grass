@@ -14,13 +14,13 @@ static void field2n(struct line_cats *, int);
  * \param file input file defining arcs
  * \param Points input vector point map
  * \param Out output vector map
- * \param afield arcs layer 
- * \param nfield nodes layer 
+ * \param afield arcs layer
+ * \param nfield nodes layer
  *
  * \return number of new arcs
  */
-int create_arcs(FILE * file, struct Map_info *Pnts,
-                struct Map_info *Out, int afield, int nfield)
+int create_arcs(FILE *file, struct Map_info *Pnts, struct Map_info *Out,
+                int afield, int nfield)
 {
     char buff[1024];
     int lcat, fcat, tcat;

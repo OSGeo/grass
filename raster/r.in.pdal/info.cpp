@@ -1,6 +1,6 @@
 /*
  * r.in.pdal Functions printing out various information on input LAS files
- *  
+ *
  *   Copyright 2021 by Maris Nartiss, and The GRASS Development Team
  *   Author: Maris Nartiss
  *
@@ -10,7 +10,7 @@
  */
 
 #include "info.h"
-
+#include <cmath>
 
 void get_extent(struct StringList *infiles, double *min_x, double *max_x,
                 double *min_y, double *max_y, double *min_z, double *max_z)
@@ -18,7 +18,7 @@ void get_extent(struct StringList *infiles, double *min_x, double *max_x,
     pdal::StageFactory factory;
     bool first = 1;
 
-    *min_x = *max_x = *min_y = *max_y = *min_z = *max_z = 0.0 / 0.0;
+    *min_x = *max_x = *min_y = *max_y = *min_z = *max_z = NAN;
 
     for (int i = 0; i < infiles->num_items; i++) {
         const char *infile = infiles->items[i];
@@ -34,7 +34,7 @@ void get_extent(struct StringList *infiles, double *min_x, double *max_x,
         pdal::LasReader las_reader;
         las_reader.setOptions(las_opts);
         las_reader.prepare(table);
-        const pdal::LasHeader& las_header = las_reader.header();
+        const pdal::LasHeader &las_header = las_reader.header();
         if (first) {
             *min_x = las_header.minX();
             *min_y = las_header.minY();
@@ -62,24 +62,24 @@ void get_extent(struct StringList *infiles, double *min_x, double *max_x,
     }
 }
 
-
 void print_extent(struct StringList *infiles)
 {
     double min_x, max_x, min_y, max_y, min_z, max_z;
 
     get_extent(infiles, &min_x, &max_x, &min_y, &max_y, &min_z, &max_z);
-    fprintf(stdout, "n=%f s=%f e=%f w=%f b=%f t=%f\n",
-            max_y, min_y, max_x, min_x, min_z, max_z);
+    fprintf(stdout, "n=%f s=%f e=%f w=%f b=%f t=%f\n", max_y, min_y, max_x,
+            min_x, min_z, max_z);
 }
-
 
 void print_lasinfo(struct StringList *infiles)
 {
     pdal::StageFactory factory;
     pdal::MetadataNode meta_node;
 
-    std::cout << std::endl << "Using PDAL library version '" <<
-        pdal::Config::fullVersionString() << "'" << std::endl << std::endl;
+    std::cout << std::endl
+              << "Using PDAL library version '"
+              << pdal::Config::fullVersionString() << "'" << std::endl
+              << std::endl;
 
     for (int i = 0; i < infiles->num_items; i++) {
         const char *infile = infiles->items[i];
@@ -95,12 +95,44 @@ void print_lasinfo(struct StringList *infiles)
         pdal::LasReader las_reader;
         las_reader.setOptions(las_opts);
         las_reader.prepare(table);
-        const pdal::LasHeader& las_header = las_reader.header();
+        const pdal::LasHeader &h = las_reader.header();
         pdal::PointLayoutPtr point_layout = table.layout();
-        const pdal::Dimension::IdList & dims = point_layout->dims();
+        const pdal::Dimension::IdList &dims = point_layout->dims();
 
         std::cout << "File: " << infile << std::endl;
-        std::cout << las_header;
+        std::cout << "File version = "
+                  << "1." << (int)h.versionMinor() << "\n";
+        std::cout << "File signature: " << h.fileSignature() << "\n";
+        std::cout << "File source ID: " << h.fileSourceId() << "\n";
+        std::cout << "Global encoding: " << h.globalEncoding() << "\n";
+        std::cout << "Project UUID: " << h.projectId() << "\n";
+        std::cout << "System ID: " << h.getSystemIdentifier() << "\n";
+        std::cout << "Software ID: " << h.softwareId() << "\n";
+        std::cout << "Creation DOY: " << h.creationDOY() << "\n";
+        std::cout << "Creation Year: " << h.creationYear() << "\n";
+        std::cout << "VLR offset (header size): " << h.vlrOffset() << "\n";
+        std::cout << "VLR Count: " << h.vlrCount() << "\n";
+        std::cout << "Point format: " << (int)h.pointFormat() << "\n";
+        std::cout << "Point offset: " << h.pointOffset() << "\n";
+        std::cout << "Point count: " << h.pointCount() << "\n";
+        for (size_t i = 0; i < pdal::LasHeader::RETURN_COUNT; ++i)
+            std::cout << "Point count by return[" << i + 1 << "]: "
+                      << const_cast<pdal::LasHeader &>(h).pointCountByReturn(i)
+                      << "\n";
+        std::cout << "Scales X/Y/Z: " << h.scaleX() << "/" << h.scaleY() << "/"
+                  << h.scaleZ() << "\n";
+        std::cout << "Offsets X/Y/Z: " << h.offsetX() << "/" << h.offsetY()
+                  << "/" << h.offsetZ() << "\n";
+        std::cout << "Max X/Y/Z: " << h.maxX() << "/" << h.maxY() << "/"
+                  << h.maxZ() << "\n";
+        std::cout << "Min X/Y/Z: " << h.minX() << "/" << h.minY() << "/"
+                  << h.minZ() << "\n";
+        if (h.versionAtLeast(1, 4)) {
+            std::cout << "Ext. VLR offset: " << h.eVlrOffset() << "\n";
+            std::cout << "Ext. VLR count: " << h.eVlrCount() << "\n";
+        }
+        std::cout << "Compressed: " << (h.compressed() ? "true" : "false")
+                  << "\n";
 
         bool first = 1;
 

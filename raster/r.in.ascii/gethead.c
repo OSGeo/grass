@@ -6,21 +6,20 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-
-#define DOT 	   "."          /* for determining data type -tw */
-#define INT	   "int"
+#define DOT        "." /* for determining data type -tw */
+#define INT        "int"
 #define FLOAT      "float"
 #define DOUBLE     "double"
 #define TMPBUFSIZE 8192
 
 static int missing(int, char *);
-static int extract(int, char *, char *, void *, int, int (*)());
-static int scan_int(char *, int *, int);
+static int extract(int, char *, char *, void *, int,
+                   int (*)(const char *, double *, int));
+static int scan_int(const char *, double *, int);
 
-const char gs_ascii_flag[5] = { "DSAA" };
+const char gs_ascii_flag[5] = {"DSAA"};
 
-
-int getgrdhead(FILE * fd, struct Cell_head *cellhd)
+int getgrdhead(FILE *fd, struct Cell_head *cellhd)
 {
     char grd_flag[6];
     int nc, nr;
@@ -30,7 +29,10 @@ int getgrdhead(FILE * fd, struct Cell_head *cellhd)
     rewind(fd);
 
     /* read and check the flag on the first line */
-    fgets(grd_flag, sizeof(grd_flag), fd);
+    if (fgets(grd_flag, sizeof(grd_flag), fd) == NULL) {
+        G_warning(_("failed to read the input file"));
+        return 0;
+    }
     if (strncmp(gs_ascii_flag, grd_flag, strlen(gs_ascii_flag))) {
         G_warning(_("input file is not a Surfer ascii grid file"));
         return 0;
@@ -38,7 +40,8 @@ int getgrdhead(FILE * fd, struct Cell_head *cellhd)
 
     /* read the row and column dimensions */
     if (fscanf(fd, "%d %d \n", &nc, &nr) != 2) {
-        G_warning(_("error reading the column and row dimension from the Surfer grid file"));
+        G_warning(_("error reading the column and row dimension from the "
+                    "Surfer grid file"));
         return 0;
     }
 
@@ -68,26 +71,24 @@ int getgrdhead(FILE * fd, struct Cell_head *cellhd)
 
     cellhd->ew_res = (double)(xmax - xmin) / (nc - 1);
     cellhd->ns_res = (double)(ymax - ymin) / (nr - 1);
-    /* the Surfer grid specifies x,y locations of gridded points.  The GRASS raster
-       specifies an area covered by rectangular cells centerd at gridded points.
-       That difference requires an adjustment */
+    /* the Surfer grid specifies x,y locations of gridded points.  The GRASS
+       raster specifies an area covered by rectangular cells centered at gridded
+       points. That difference requires an adjustment */
     cellhd->north = ymax + cellhd->ns_res / 2.;
     cellhd->south = ymin - cellhd->ns_res / 2.;
     cellhd->east = xmax + cellhd->ew_res / 2.;
     cellhd->west = xmin - cellhd->ew_res / 2.;
 
     return 1;
-
 }
 
-int gethead(FILE * fd,
-            struct Cell_head *cellhd,
-            RASTER_MAP_TYPE * d_type, DCELL * mult, char **nval)
+int gethead(FILE *fd, struct Cell_head *cellhd, RASTER_MAP_TYPE *d_type,
+            DCELL *mult, char **nval)
 {
     int n, s, e, w, r, c;
     char label[100], value[100];
     char buf[1024];
-    int ret, len;
+    int ret;
 
     /* rsb fix */
     fpos_t p;
@@ -107,15 +108,13 @@ int gethead(FILE * fd,
         if (!G_getl2(buf, sizeof(buf), fd))
             break;
 
-        len = strlen(buf);
-
         *label = *value = '\0';
         if (NULL == strstr(buf, ":"))
             break;
         if (sscanf(buf, "%[^:]:%s", label, value) != 2)
             break;
         if (*label == '\0')
-            continue;           /* ignore blank lines */
+            continue; /* ignore blank lines */
 
         if (strcmp(label, "north") == 0) {
             extract(n++, label, value, &cellhd->north, cellhd->proj,
@@ -152,8 +151,8 @@ int gethead(FILE * fd,
         }
         /* try to read optional header fields */
 
-        if (strcmp(label, "type") == 0) {       /* if not exist then the file scan */
-            if (*d_type < 0) {  /* if data type not set on command line */
+        if (strcmp(label, "type") == 0) { /* if not exist then the file scan */
+            if (*d_type < 0) { /* if data type not set on command line */
                 if (!strncmp(value, INT, strlen(INT)))
                     *d_type = CELL_TYPE;
                 else if (!strncmp(value, FLOAT, strlen(FLOAT)))
@@ -166,31 +165,35 @@ int gethead(FILE * fd,
                 }
             }
             else
-                G_warning(_("ignoring type filed in header, type is set on command line"));
+                G_warning(_("ignoring type filed in header, type is set on "
+                            "command line"));
             continue;
         }
 
         if (strcmp(label, "multiplier") == 0) {
-            if (Rast_is_d_null_value(mult)) {   /* if mult not set on commant line */
+            if (Rast_is_d_null_value(
+                    mult)) { /* if mult not set on commant line */
                 if (sscanf(value, "%lf", mult) != 1) {
                     G_warning(_("illegal multiplier field: using 1.0"));
                     *mult = 1.0;
                 }
             }
             else
-                G_warning(_("ignoring multiplier filed in header, multiplier is set on command line"));
+                G_warning(_("ignoring multiplier filed in header, multiplier "
+                            "is set on command line"));
             continue;
         }
 
         if (strcmp(label, "null") == 0) {
-            if (!(*nval))       /* if null val string not set on command line */
+            if (!(*nval)) /* if null val string not set on command line */
                 *nval = G_store(value);
             else
-                G_warning(_("ignoring null filed in header, null string is set on command line"));
+                G_warning(_("ignoring null filed in header, null string is set "
+                            "on command line"));
             continue;
         }
 
-    }                           /* while */
+    } /* while */
     /* the line read was not a header line, but actually
        the first data line, so put it back on the stack and break */
     /* rsb fix */
@@ -225,26 +228,26 @@ int gethead(FILE * fd,
     return 1;
 }
 
-static int scan_int(char *s, int *i, int proj)
+static int scan_int(const char *s, double *i, int proj UNUSED)
 {
     char dummy[3];
+    int *i_loc = (int *)i;
 
     *dummy = 0;
 
-    if (sscanf(s, "%d%1s", i, dummy) != 1)
+    if (sscanf(s, "%d%1s", i_loc, dummy) != 1)
         return 0;
     if (*dummy)
         return 0;
-    if (*i <= 0)
+    if (*i_loc <= 0)
         return 0;
     return 1;
 }
 
-static int extract(int count,
-                   char *label, char *value,
-                   void *data, int proj, int (*scanner)())
+static int extract(int count, char *label, char *value, void *data, int proj,
+                   int (*scanner)(const char *, double *, int))
 {
-    if(count) {
+    if (count) {
         G_warning(_("Duplicate \"%s\" field in header"), label);
         return 0;
     }
@@ -263,7 +266,7 @@ static int missing(int count, char *label)
 }
 
 /* file_scan(): determine data type in ascii format */
-int file_scan(FILE * fd)
+int file_scan(FILE *fd)
 {
     long curpos;
     char tmpbuf[TMPBUFSIZE];

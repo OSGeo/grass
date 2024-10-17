@@ -6,8 +6,7 @@
  * of points on the hull is guaranteed to be inside the hull, follow from the
  * definition of convex polygon)
  */
-int outputHull(struct Map_info *Map, struct Point *P, int *hull,
-               int numPoints)
+int outputHull(struct Map_info *Map, struct Point *P, int *hull, int numPoints)
 {
     struct line_pnts *Points;
     struct line_cats *Cats;

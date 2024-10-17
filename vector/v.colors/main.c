@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:       v.colors
@@ -30,13 +29,11 @@
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Flag *r, *w, *l, *d, *g, *a, *n, *c;
     } flag;
 
-    struct
-    {
+    struct {
         struct Option *map, *field, *colr, *rast, *volume, *rules, *attrcol,
             *rgbcol, *range, *use;
     } opt;
@@ -73,8 +70,7 @@ int main(int argc, char *argv[])
     opt.use->multiple = NO;
     opt.use->options = "attr,cat,z";
     opt.use->description = _("Source values");
-    G_asprintf((char **)&(opt.use->descriptions),
-               "attr;%s;cat;%s;z;%s",
+    G_asprintf((char **)&(opt.use->descriptions), "attr;%s;cat;%s;z;%s",
                _("read values from attribute table (requires <column> option)"),
                _("use category values"),
                _("use z coordinate (3D points or centroids only)"));
@@ -105,8 +101,7 @@ int main(int argc, char *argv[])
     opt.volume = G_define_standard_option(G_OPT_R3_INPUT);
     opt.volume->key = "raster_3d";
     opt.volume->required = NO;
-    opt.volume->description =
-        _("3D raster map from which to copy color table");
+    opt.volume->description = _("3D raster map from which to copy color table");
     opt.volume->guisection = _("Define");
 
     opt.rules = G_define_standard_option(G_OPT_F_INPUT);
@@ -224,8 +219,8 @@ int main(int argc, char *argv[])
     }
 
     if (opt.rast->answer && opt.volume->answer)
-        G_fatal_error(_("%s= and %s= are mutually exclusive"),
-                      opt.rast->key, opt.volume->key);
+        G_fatal_error(_("%s= and %s= are mutually exclusive"), opt.rast->key,
+                      opt.volume->key);
 
     cmap = NULL;
     if (opt.rast->answer)
@@ -235,20 +230,20 @@ int main(int argc, char *argv[])
 
     if (!cmap && !style && !rules && !remove && !convert)
         G_fatal_error(_("One of -%c, -%c or %s=, %s= or %s= "
-                        "must be specified"), flag.r->key, flag.c->key,
-                      opt.colr->key, opt.rast->key, opt.rules->key);
+                        "must be specified"),
+                      flag.r->key, flag.c->key, opt.colr->key, opt.rast->key,
+                      opt.rules->key);
 
     if (!!style + !!cmap + !!rules > 1)
         G_fatal_error(_("%s=, %s= and %s= are mutually exclusive"),
                       opt.colr->key, opt.rules->key, opt.rast->key);
 
     if (flag.g->answer && flag.a->answer)
-        G_fatal_error(_("-%c and -%c are mutually exclusive"),
-                      flag.g->key, flag.a->key);
+        G_fatal_error(_("-%c and -%c are mutually exclusive"), flag.g->key,
+                      flag.a->key);
 
     if (flag.c->answer && !rgbcolumn)
-        G_fatal_error(_("%s= required for -%c"),
-                      opt.rgbcol->key, flag.c->key);
+        G_fatal_error(_("%s= required for -%c"), opt.rgbcol->key, flag.c->key);
 
     is_from_stdin = rules && strcmp(rules, "-") == 0;
 
@@ -276,14 +271,13 @@ int main(int argc, char *argv[])
     G_suppress_warnings(FALSE);
 
     /* open map and get min/max values */
-    Vect_set_open_level(1);     /* no topology required */
+    Vect_set_open_level(1); /* no topology required */
     if (Vect_open_old2(&Map, name, mapset, opt.field->answer) < 0)
         G_fatal_error(_("Unable to open vector map <%s>"), name);
 
     Vect_set_error_handler_io(&Map, NULL);
     if (use == USE_Z && !Vect_is_3d(&Map))
-        G_fatal_error(_("Vector map <%s> is not 3D"),
-                      Vect_get_full_name(&Map));
+        G_fatal_error(_("Vector map <%s> is not 3D"), Vect_get_full_name(&Map));
 
     layer = Vect_get_field_number(&Map, opt.field->answer);
     if (layer < 1)
@@ -307,13 +301,12 @@ int main(int argc, char *argv[])
                       opt.range->answer ? &range : NULL, &colors);
         }
         else if (use == USE_Z) {
-            scan_z(&Map, layer, style, rules,
-                   opt.range->answer ? &range : NULL, &colors, invert);
+            scan_z(&Map, layer, style, rules, opt.range->answer ? &range : NULL,
+                   &colors, invert);
         }
         else {
             scan_attr(&Map, layer, attrcolumn, style, rules,
-                      opt.range->answer ? &range : NULL,
-                      &colors, NULL, invert);
+                      opt.range->answer ? &range : NULL, &colors, NULL, invert);
         }
     }
     else {
@@ -324,8 +317,8 @@ int main(int argc, char *argv[])
                 G_fatal_error(_("Raster map <%s> not found"), cmap);
 
             if (Rast_read_colors(cmap, cmapset, &colors) < 0)
-                G_fatal_error(_("Unable to read color table for raster map <%s>"),
-                              cmap);
+                G_fatal_error(
+                    _("Unable to read color table for raster map <%s>"), cmap);
         }
         else if (opt.volume->answer) {
             cmapset = G_find_raster3d(cmap, "");
@@ -333,15 +326,16 @@ int main(int argc, char *argv[])
                 G_fatal_error(_("3D raster map <%s> not found"), cmap);
 
             if (Rast3d_read_colors(cmap, cmapset, &colors) < 0)
-                G_fatal_error(_("Unable to read color table for 3D raster map <%s>"),
-                              cmap);
+                G_fatal_error(
+                    _("Unable to read color table for 3D raster map <%s>"),
+                    cmap);
         }
 
         if (use == USE_ATTR && attrcolumn) {
             colors_tmp = colors;
             scan_attr(&Map, layer, attrcolumn, style, rules,
-                      opt.range->answer ? &range : NULL,
-                      &colors, &colors_tmp, invert);
+                      opt.range->answer ? &range : NULL, &colors, &colors_tmp,
+                      invert);
         }
     }
 
@@ -384,8 +378,9 @@ int main(int argc, char *argv[])
 
     G_message(_("Color table for vector map <%s> set to '%s'"),
               G_fully_qualified_name(name, mapset),
-              is_from_stdin || convert ? "rules" :
-              (style ? style : (rules ? rules : cmap)));
+              is_from_stdin || convert
+                  ? "rules"
+                  : (style ? style : (rules ? rules : cmap)));
 
     exit(EXIT_SUCCESS);
 }

@@ -7,7 +7,7 @@
  *
  * The timestamp values must use the format as described in the GRASS
  * datetime library. The source tree for this library should have a
- * description of the format. For convience, the formats as of Feb, 1996
+ * description of the format. For convenience, the formats as of Feb, 1996
  * are reproduced here:
  *
  * There are two types of datetime values: absolute and relative. Absolute
@@ -76,14 +76,16 @@
  * \author Soeren Gebbert, vector timestamp implementation update
  */
 
+#include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+
 #include <grass/gis.h>
 #include <grass/vect/dig_defines.h>
 #include <grass/glocale.h>
 
 #define RAST_MISC "cell_misc"
-#define GRID3	  "grid3"
+#define GRID3     "grid3"
 
 /*!
    \brief Initialize timestamp structure
@@ -101,7 +103,7 @@ void G_init_timestamp(struct TimeStamp *ts)
    \param ts pointer to TimeStamp structure
    \param dt pointer to DateTime structure (date/time to be set)
  */
-void G_set_timestamp(struct TimeStamp *ts, const DateTime * dt)
+void G_set_timestamp(struct TimeStamp *ts, const DateTime *dt)
 {
     datetime_copy(&ts->dt[0], dt);
     ts->count = 1;
@@ -113,8 +115,8 @@ void G_set_timestamp(struct TimeStamp *ts, const DateTime * dt)
    \param ts pointer to TimeStamp structure
    \param dt1,dt2 pointer to DateTime structures
  */
-void G_set_timestamp_range(struct TimeStamp *ts,
-                           const DateTime * dt1, const DateTime * dt2)
+void G_set_timestamp_range(struct TimeStamp *ts, const DateTime *dt1,
+                           const DateTime *dt2)
 {
     datetime_copy(&ts->dt[0], dt1);
     datetime_copy(&ts->dt[1], dt2);
@@ -131,7 +133,7 @@ void G_set_timestamp_range(struct TimeStamp *ts,
    \return -1 on error
    \return 0 on success
  */
-int G__read_timestamp(FILE * fd, struct TimeStamp *ts)
+int G__read_timestamp(FILE *fd, struct TimeStamp *ts)
 {
     char buf[1024];
     char comment[2];
@@ -141,7 +143,7 @@ int G__read_timestamp(FILE * fd, struct TimeStamp *ts)
             continue;
         return (G_scan_timestamp(ts, buf) > 0 ? 0 : -1);
     }
-    return -2;                  /* nothing in the file */
+    return -2; /* nothing in the file */
 }
 
 /*!
@@ -155,7 +157,7 @@ int G__read_timestamp(FILE * fd, struct TimeStamp *ts)
    \return 0 on success
    \return -1 on error
  */
-int G_write_timestamp(FILE * fd, const struct TimeStamp *ts)
+int G_write_timestamp(FILE *fd, const struct TimeStamp *ts)
 {
     char buf[1024];
 
@@ -255,8 +257,8 @@ int G_scan_timestamp(struct TimeStamp *ts, const char *buf)
    \param[out] dt2    second DateTime struct to be filled
    \param[out] count  return code
  */
-void G_get_timestamps(const struct TimeStamp *ts,
-                      DateTime * dt1, DateTime * dt2, int *count)
+void G_get_timestamps(const struct TimeStamp *ts, DateTime *dt1, DateTime *dt2,
+                      int *count)
 {
     *count = 0;
     if (ts->count > 0) {
@@ -298,8 +300,8 @@ static int write_timestamp(const char *maptype, const char *dir,
     fclose(fd);
     if (stat == 0)
         return 1;
-    G_warning(_("Invalid timestamp specified for %s map <%s@%s>"),
-              maptype, name, G_mapset());
+    G_warning(_("Invalid timestamp specified for %s map <%s@%s>"), maptype,
+              name, G_mapset());
     return -2;
 }
 
@@ -337,8 +339,8 @@ static int read_timestamp(const char *maptype, const char *dir,
     fclose(fd);
     if (stat == 0)
         return 1;
-    G_warning(_("Invalid timestamp file for %s map <%s@%s>"),
-              maptype, name, mapset);
+    G_warning(_("Invalid timestamp file for %s map <%s@%s>"), maptype, name,
+              mapset);
     return -2;
 }
 
@@ -425,11 +427,11 @@ int G_has_vector_timestamp(const char *name, const char *layer,
     char ele[GNAME_MAX];
 
     if (layer != NULL)
-        G_snprintf(ele, GNAME_MAX, "%s_%s", GV_TIMESTAMP_ELEMENT, layer);
+        snprintf(ele, GNAME_MAX, "%s_%s", GV_TIMESTAMP_ELEMENT, layer);
     else
-        G_snprintf(ele, GNAME_MAX, "%s_1", GV_TIMESTAMP_ELEMENT);
+        snprintf(ele, GNAME_MAX, "%s_1", GV_TIMESTAMP_ELEMENT);
 
-    G_snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
+    snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
     G_file_name(path, dir, ele, mapset);
 
     G_debug(1, "Check for timestamp <%s>", path);
@@ -450,7 +452,7 @@ int G_has_vector_timestamp(const char *name, const char *layer,
 
    \return 1 on success
    \return 0 no timestamp present
-   \return -1 Unable to open file 
+   \return -1 Unable to open file
    \return -2 invalid time stamp
  */
 int G_read_vector_timestamp(const char *name, const char *layer,
@@ -466,11 +468,11 @@ int G_read_vector_timestamp(const char *name, const char *layer,
         return 0;
 
     if (layer != NULL)
-        G_snprintf(ele, GNAME_MAX, "%s_%s", GV_TIMESTAMP_ELEMENT, layer);
+        snprintf(ele, GNAME_MAX, "%s_%s", GV_TIMESTAMP_ELEMENT, layer);
     else
-        G_snprintf(ele, GNAME_MAX, "%s_1", GV_TIMESTAMP_ELEMENT);
+        snprintf(ele, GNAME_MAX, "%s_1", GV_TIMESTAMP_ELEMENT);
 
-    G_snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
+    snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
 
     G_debug(1, "Read timestamp <%s/%s>", dir, ele);
 
@@ -486,8 +488,7 @@ int G_read_vector_timestamp(const char *name, const char *layer,
     fclose(fd);
     if (stat == 0)
         return 1;
-    G_warning(_("Invalid timestamp file for vector map <%s@%s>"),
-              name, mapset);
+    G_warning(_("Invalid timestamp file for vector map <%s@%s>"), name, mapset);
     return -2;
 }
 
@@ -512,11 +513,11 @@ int G_write_vector_timestamp(const char *name, const char *layer,
     char ele[GNAME_MAX];
 
     if (layer != NULL)
-        G_snprintf(ele, GNAME_MAX, "%s_%s", GV_TIMESTAMP_ELEMENT, layer);
+        snprintf(ele, GNAME_MAX, "%s_%s", GV_TIMESTAMP_ELEMENT, layer);
     else
-        G_snprintf(ele, GNAME_MAX, "%s_1", GV_TIMESTAMP_ELEMENT);
+        snprintf(ele, GNAME_MAX, "%s_1", GV_TIMESTAMP_ELEMENT);
 
-    G_snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
+    snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
 
     G_debug(1, "Write timestamp <%s/%s>", dir, ele);
 
@@ -532,8 +533,8 @@ int G_write_vector_timestamp(const char *name, const char *layer,
     fclose(fd);
     if (stat == 0)
         return 1;
-    G_warning(_("Invalid timestamp specified for vector map <%s@%s>"),
-              name, G_mapset());
+    G_warning(_("Invalid timestamp specified for vector map <%s@%s>"), name,
+              G_mapset());
     return -2;
 }
 
@@ -555,11 +556,11 @@ int G_remove_vector_timestamp(const char *name, const char *layer)
     char ele[GNAME_MAX];
 
     if (layer)
-        G_snprintf(ele, GNAME_MAX, "%s_%s", GV_TIMESTAMP_ELEMENT, layer);
+        snprintf(ele, GNAME_MAX, "%s_%s", GV_TIMESTAMP_ELEMENT, layer);
     else
-        G_snprintf(ele, GNAME_MAX, "%s_1", GV_TIMESTAMP_ELEMENT);
+        snprintf(ele, GNAME_MAX, "%s_1", GV_TIMESTAMP_ELEMENT);
 
-    G_snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
+    snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
     return G_remove(dir, ele);
 }
 

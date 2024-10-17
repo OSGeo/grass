@@ -3,11 +3,9 @@
 #include <string.h>
 #include "growing.h"
 
-void P_Aux_to_Coor(struct Map_info *In, struct Map_info *Out,
-                   dbDriver * driver, FILE * fsite)
+void P_Aux_to_Coor(struct Map_info *In, struct Map_info *Out, dbDriver *driver,
+                   FILE *fsite UNUSED)
 {
-
-    int cont = 0;
     int more, ltype, line_num, ID_type, Interp_type;
     double quotaZ;
 
@@ -29,16 +27,13 @@ void P_Aux_to_Coor(struct Map_info *In, struct Map_info *Out,
     db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL);
 
     while (db_fetch(&cursor, DB_NEXT, &more) == DB_OK && more) {
-        cont++;
-
         table = db_get_cursor_table(&cursor);
 
         ID_column = db_get_table_column(table, 0);
         Interp_column = db_get_table_column(table, 1);
 
         ID_type = db_sqltype_to_Ctype(db_get_column_sqltype(ID_column));
-        Interp_type =
-            db_sqltype_to_Ctype(db_get_column_sqltype(Interp_column));
+        Interp_type = db_sqltype_to_Ctype(db_get_column_sqltype(Interp_column));
 
         if (ID_type == DB_C_TYPE_INT)
             ID_value = db_get_column_value(ID_column);

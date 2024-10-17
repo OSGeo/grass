@@ -26,12 +26,12 @@
    \return file position
    \return -1 on failure
  */
-off_t G_ftell(FILE * fp)
+off_t G_ftell(FILE *fp)
 {
 #ifdef HAVE_FSEEKO
     return ftello(fp);
 #else
-    return (off_t) ftell(fp);
+    return (off_t)ftell(fp);
 #endif
 }
 
@@ -47,7 +47,7 @@ off_t G_ftell(FILE * fp)
    \param offset offset
    \param whence
  */
-void G_fseek(FILE * fp, off_t offset, int whence)
+void G_fseek(FILE *fp, off_t offset, int whence)
 {
 #ifdef HAVE_FSEEKO
     if (fseeko(fp, offset, whence) != 0)
@@ -55,7 +55,7 @@ void G_fseek(FILE * fp, off_t offset, int whence)
 #else
     long loff = (long)offset;
 
-    if ((off_t) loff != offset)
+    if ((off_t)loff != offset)
         G_fatal_error(_("Seek offset out of range"));
     if (fseek(fp, loff, whence) != 0)
         G_fatal_error(_("Unable to seek: %s"), strerror(errno));

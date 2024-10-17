@@ -1,5 +1,5 @@
 /*
- * r3.in.v5d - program for data conversion from the V5D format 
+ * r3.in.v5d - program for data conversion from the V5D format
  * of the VIS5D visualization software to 3D raster GRASS
  * data format.
  *
@@ -50,14 +50,13 @@ static void fatalError(char *errorMsg)
 
 /*---------------------------------------------------------------------------*/
 
-typedef struct
-{
+typedef struct {
     struct Option *input, *output, *nv;
 } paramType;
 
 static paramType param;
 
-static void setParams()
+static void setParams(void)
 {
     param.input = G_define_standard_option(G_OPT_F_INPUT);
     param.input->description = _("Name of V5D raster file to be imported");
@@ -70,8 +69,8 @@ static void setParams()
 
 /*---------------------------------------------------------------------------*/
 
-static void
-getParams(char **input, char **output, int *convertNull, double *nullValue)
+static void getParams(char **input, char **output, int *convertNull,
+                      double *nullValue)
 {
     *input = param.input->answer;
     *output = param.output->answer;
@@ -83,8 +82,8 @@ getParams(char **input, char **output, int *convertNull, double *nullValue)
 
 /*---------------------------------------------------------------------------*/
 
-void convert(char *openFile, RASTER3D_Region * region, int convertNull,
-             double nullValue)
+void convert(char *openFile, RASTER3D_Region *region, int convertNull,
+             double nullValue UNUSED)
 {
     v5dstruct v5d;
     int time, var;
@@ -99,8 +98,8 @@ void convert(char *openFile, RASTER3D_Region * region, int convertNull,
         exit(0);
     }
 
-
-    /* Eventually change to write the time and/or vars series of 3d raster maps.. */
+    /* Eventually change to write the time and/or vars series of 3d raster
+     * maps.. */
     /*   for (time=0; time<v5d.NumTimes; time++) {
 
        for (var=0; var<v5d.NumVars; var++) {
@@ -129,8 +128,8 @@ void convert(char *openFile, RASTER3D_Region * region, int convertNull,
                 G_fatal_error("Not enough memory for data1");
 
             if (!v5dReadGrid(&v5d, time, var, data1)) {
-                printf("Error while reading grid (time=%d,var=%s)\n",
-                       time + 1, v5d.VarName[var]);
+                printf("Error while reading grid (time=%d,var=%s)\n", time + 1,
+                       v5d.VarName[var]);
                 exit(0);
             }
             cnt = 0;
@@ -139,7 +138,7 @@ void convert(char *openFile, RASTER3D_Region * region, int convertNull,
                 for (y = 0; y < region->rows; y++) {
                     for (x = 0; x < region->cols; x++) {
                         value = data1[cnt++];
-                        if (convertNull && (value == MISSING))
+                        if (convertNull && IS_MISSING(value))
                             Rast3d_set_null_value(&value, 1, FCELL_TYPE);
                         Rast3d_put_float(map, x, y, z, value);
                     }
@@ -147,10 +146,8 @@ void convert(char *openFile, RASTER3D_Region * region, int convertNull,
             }
 
             G_free(data1);
-
         }
     }
-
 
     v5dCloseFile(&v5d);
 }
@@ -184,17 +181,15 @@ int main(int argc, char *argv[])
         exit(1);
 
     getParams(&input, &output, &convertNull, &nullValue);
-    if (!Rast3d_get_standard3d_params(&useTypeDefault, &type,
-                                      &useCompressionDefault, &doCompression,
-                                      &usePrecisionDefault, &precision,
-                                      &useDimensionDefault, &tileX, &tileY,
-                                      &tileZ))
+    if (!Rast3d_get_standard3d_params(
+            &useTypeDefault, &type, &useCompressionDefault, &doCompression,
+            &usePrecisionDefault, &precision, &useDimensionDefault, &tileX,
+            &tileY, &tileZ))
         fatalError("main: error getting standard parameters");
 
     Rast3d_get_window(&region);
-    map =
-        Rast3d_open_cell_new(output, FCELL_TYPE, RASTER3D_USE_CACHE_XY,
-                             &region);
+    map = Rast3d_open_cell_new(output, FCELL_TYPE, RASTER3D_USE_CACHE_XY,
+                               &region);
     if (map == NULL)
         fatalError(_("Unable to open 3D raster map"));
 

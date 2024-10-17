@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.support
@@ -48,8 +47,7 @@ int main(int argc, char *argv[])
     organization->key_desc = "phrase";
     organization->type = TYPE_STRING;
     organization->required = NO;
-    organization->description =
-        _("Organization where vector map was created");
+    organization->description = _("Organization where vector map was created");
 
     /* don't predefine answers to not overwrite existing information */
     date = G_define_option();
@@ -114,8 +112,8 @@ int main(int argc, char *argv[])
     cmdhist->key_desc = "command";
     cmdhist->type = TYPE_STRING;
     cmdhist->required = NO;
-    cmdhist->description =
-        _("Command line to store into vector map history file (used for vector scripts)");
+    cmdhist->description = _("Command line to store into vector map history "
+                             "file (used for vector scripts)");
 
     r_flag = G_define_flag();
     r_flag->key = 'r';
@@ -161,25 +159,25 @@ int main(int argc, char *argv[])
     if (thresh->answer)
         Vect_set_thresh(&Map, atof(thresh->answer));
 
-    if (comment->answer) {      /* apparently only one line comments allowed, so we use space to delimit */
+    if (comment->answer) { /* apparently only one line comments allowed, so we
+                              use space to delimit */
         char *temp;
 
-        if (r_flag->answer || strlen(Vect_get_comment(&Map)) == 0) {    /* check if new/replacing or adding */
+        if (r_flag->answer || strlen(Vect_get_comment(&Map)) ==
+                                  0) { /* check if new/replacing or adding */
             G_asprintf(&temp, "%s", comment->answer);
         }
         else {
-            G_asprintf(&temp, "%s %s", Vect_get_comment(&Map),
-                       comment->answer);
+            G_asprintf(&temp, "%s %s", Vect_get_comment(&Map), comment->answer);
         }
         Vect_set_comment(&Map, temp);
     }
 
     Vect_write_header(&Map);
 
-
     /* modify 'hist' file */
     if (cmdhist->answer) {
-        char buf[2000];         /* derived from Vect_hist_command() */
+        char buf[2000]; /* derived from Vect_hist_command() */
 
         /* Open history file for modification */
         sprintf(buf, "%s/%s", GV_DIRECTORY, Map.name);
@@ -195,8 +193,8 @@ int main(int argc, char *argv[])
         }
         if (!h_flag->answer) {
             G_fseek(Map.hist_fp, (long)0, SEEK_END);
-            Vect_hist_write(&Map,
-                            "---------------------------------------------------------------------------------\n");
+            Vect_hist_write(&Map, "--------------------------------------------"
+                                  "-------------------------------------\n");
         }
         Vect_hist_write(&Map, "COMMAND: ");
         Vect_hist_write(&Map, cmdhist->answer);

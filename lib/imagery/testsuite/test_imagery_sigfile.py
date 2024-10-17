@@ -8,10 +8,11 @@
 Read the file COPYING that comes with GRASS
 for details
 """
-import os
+
 import stat
 import ctypes
 import shutil
+from pathlib import Path
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -58,7 +59,7 @@ class SignatureFileTestCase(TestCase):
 
     def test_roundtrip_signature_v1_norgb_one_label(self):
         """Test writing and reading back signature file (v1)
-        wiht a single label"""
+        with a single label"""
 
         # Create signature struct
         So = Signature()
@@ -79,7 +80,7 @@ class SignatureFileTestCase(TestCase):
 
         # Write signatures to file
         p_new_sigfile = I_fopen_signature_file_new(self.sig_name)
-        sig_stat = os.stat(f"{self.sig_dir}/sig")
+        sig_stat = Path(self.sig_dir, "sig").stat()
         self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
         I_write_signatures(p_new_sigfile, ctypes.byref(So))
         self.libc.fclose(p_new_sigfile)
@@ -135,7 +136,7 @@ class SignatureFileTestCase(TestCase):
 
         # Write signatures to file
         p_new_sigfile = I_fopen_signature_file_new(self.sig_name)
-        sig_stat = os.stat(f"{self.sig_dir}/sig")
+        sig_stat = Path(self.sig_dir, "sig").stat()
         self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
         I_write_signatures(p_new_sigfile, ctypes.byref(So))
         self.libc.fclose(p_new_sigfile)
@@ -187,7 +188,7 @@ class SignatureFileTestCase(TestCase):
 
         # Write signatures to file
         p_new_sigfile = I_fopen_signature_file_new(self.sig_name)
-        sig_stat = os.stat(f"{self.sig_dir}/sig")
+        sig_stat = Path(self.sig_dir, "sig").stat()
         self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
         I_write_signatures(p_new_sigfile, ctypes.byref(So))
         self.libc.fclose(p_new_sigfile)
@@ -276,7 +277,7 @@ class SignatureFileTestCase(TestCase):
 
         # Write signatures to file
         p_new_sigfile = I_fopen_signature_file_new(self.sig_name)
-        sig_stat = os.stat(f"{self.sig_dir}/sig")
+        sig_stat = Path(self.sig_dir, "sig").stat()
         self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
         I_write_signatures(p_new_sigfile, ctypes.byref(So))
         self.libc.fclose(p_new_sigfile)
@@ -383,9 +384,9 @@ class SortSignaturesBysemantic_labelTest(TestCase):
         self.assertEqual(ref_err, "The_Doors")
 
         # Clean up memory to help track memory leaks when run by valgrind
-        S.semantic_labels[
-            0
-        ] = None  # C should not call free() on memory allocated by python
+        S.semantic_labels[0] = (
+            None  # C should not call free() on memory allocated by python
+        )
         I_free_signatures(ctypes.byref(S))
         I_free_group_ref(ctypes.byref(R))
         if ret:

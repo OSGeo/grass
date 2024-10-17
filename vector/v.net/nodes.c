@@ -64,7 +64,7 @@ int nodes(struct Map_info *In, struct Map_info *Out, int add_cats, int nfield)
             add_point = List->n_values == 0;
         }
 
-        if (add_point) {        /* Write new point */
+        if (add_point) { /* Write new point */
             Vect_reset_line(Pout);
             Vect_append_point(Pout, x, y, z);
             Vect_reset_cats(Cats);

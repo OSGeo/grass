@@ -1,7 +1,7 @@
 /*!
  * \file rbtree.c
  *
- * \brief binary search tree 
+ * \brief binary search tree
  *
  * Generic balanced binary search tree (Red Black Tree) implementation
  *
@@ -15,7 +15,7 @@
  */
 
 /* balanced binary search tree implementation
- * 
+ *
  * this one is a Red Black Tree, no parent pointers, no threads
  * The core code comes from Julienne Walker's tutorials on binary search trees
  * original license: public domain
@@ -41,12 +41,10 @@ static struct reg_stats *rgtree_next(struct RG_TRAV *);
 static struct RG_NODE *rgtree_make_node(size_t, struct reg_stats *);
 static int is_red(struct RG_NODE *);
 
-
 int compare_regstat(struct reg_stats *a, struct reg_stats *b)
 {
     return (a->id - b->id);
 }
-
 
 /* create new tree and initialize
  * returns pointer to new tree, NULL for memory allocation error
@@ -71,8 +69,8 @@ struct RG_TREE *rgtree_create(int nbands, size_t rb_datasize)
 
 /* add an item to a tree
  * non-recursive top-down insertion
- * the algorithm does not allow duplicates and also does not warn about a duplicate
- * returns 1 on success, 0 on failure
+ * the algorithm does not allow duplicates and also does not warn about a
+ * duplicate returns 1 on success, 0 on failure
  */
 int rgtree_insert(struct RG_TREE *tree, struct reg_stats *data)
 {
@@ -86,9 +84,9 @@ int rgtree_insert(struct RG_TREE *tree, struct reg_stats *data)
             return 0;
     }
     else {
-        struct RG_NODE head = { 0, {0, 0}, {0, 0, 0, 0} };      /* False tree root */
-        struct RG_NODE *g, *t;  /* Grandparent & parent */
-        struct RG_NODE *p, *q;  /* Iterator & parent */
+        struct RG_NODE head = {0, {0, 0}, {0, 0, 0, 0}}; /* False tree root */
+        struct RG_NODE *g, *t; /* Grandparent & parent */
+        struct RG_NODE *p, *q; /* Iterator & parent */
         int dir = 0, last = 0;
 
         /* Set up helpers */
@@ -124,7 +122,8 @@ int rgtree_insert(struct RG_TREE *tree, struct reg_stats *data)
             last = dir;
             dir = tree->cmp(&(q->data), data);
 
-            /* Stop if found. This check also disallows duplicates in the tree */
+            /* Stop if found. This check also disallows duplicates in the tree
+             */
             if (dir == 0)
                 break;
 
@@ -157,15 +156,15 @@ int rgtree_insert(struct RG_TREE *tree, struct reg_stats *data)
  */
 int rgtree_remove(struct RG_TREE *tree, struct reg_stats *data)
 {
-    struct RG_NODE head = { 0, {0, 0}, {0, 0, 0, 0} };  /* False tree root */
-    struct RG_NODE *q, *p, *g;  /* Helpers */
-    struct RG_NODE *f = NULL;   /* Found item */
+    struct RG_NODE head = {0, {0, 0}, {0, 0, 0, 0}}; /* False tree root */
+    struct RG_NODE *q, *p, *g;                       /* Helpers */
+    struct RG_NODE *f = NULL;                        /* Found item */
     int dir = 1, removed = 0;
 
     assert(tree && data);
 
     if (tree->root == NULL) {
-        return 0;               /* empty tree, nothing to remove */
+        return 0; /* empty tree, nothing to remove */
     }
 
     /* Set up helpers */
@@ -269,7 +268,7 @@ struct reg_stats *rgtree_find(struct RG_TREE *tree, struct reg_stats *data)
     while (curr_node != NULL) {
         cmp = tree->cmp(&(curr_node->data), data);
         if (cmp == 0)
-            return &curr_node->data;    /* found */
+            return &curr_node->data; /* found */
 
         curr_node = curr_node->link[cmp < 0];
     }
@@ -367,7 +366,7 @@ struct reg_stats *rgtree_traverse_start(struct RG_TRAV *trav,
         }
     }
 
-    return NULL;                /* should not happen */
+    return NULL; /* should not happen */
 }
 
 /* two functions needed to fully traverse the tree: initialize and continue
@@ -389,7 +388,7 @@ static struct reg_stats *rgtree_first(struct RG_TRAV *trav)
         trav->curr_node = trav->curr_node->link[0];
     }
 
-    return &(trav->curr_node->data);    /* return smallest item */
+    return &(trav->curr_node->data); /* return smallest item */
 }
 
 /* continue traversing the tree in ascending order
@@ -426,7 +425,7 @@ static struct reg_stats *rgtree_next(struct RG_TRAV *trav)
         return &(trav->curr_node->data);
     }
     else
-        return NULL;            /* finished traversing */
+        return NULL; /* finished traversing */
 }
 
 /* destroy the tree */
@@ -495,8 +494,7 @@ int rgtree_debug(struct RG_TREE *tree, struct RG_NODE *root)
 
         /* Invalid binary search tree:
          * left node >= parent or right node <= parent */
-        if ((ln != NULL && lcmp > -1)
-            || (rn != NULL && rcmp < 1)) {
+        if ((ln != NULL && lcmp > -1) || (rn != NULL && rcmp < 1)) {
             G_warning("Red Black Tree debugging: Binary tree violation");
             return 0;
         }
@@ -522,8 +520,7 @@ int rgtree_debug(struct RG_TREE *tree, struct RG_NODE *root)
  *******************************************************/
 
 /* add a new node to the tree */
-static struct RG_NODE *rgtree_make_node(size_t datasize,
-                                        struct reg_stats *data)
+static struct RG_NODE *rgtree_make_node(size_t datasize, struct reg_stats *data)
 {
     struct RG_NODE *new_node = (struct RG_NODE *)malloc(sizeof(*new_node));
 
@@ -541,7 +538,6 @@ static struct RG_NODE *rgtree_make_node(size_t datasize,
        G_fatal_error("RB Search Tree: Out of memory!");
      */
 
-
     new_node->data.id = data->id;
     new_node->data.count = data->count;
     memcpy(new_node->data.sum, data->sum, datasize);
@@ -551,7 +547,7 @@ static struct RG_NODE *rgtree_make_node(size_t datasize,
        memcpy(new_node->data.max, data->max, datasize);
      */
 
-    new_node->red = 1;          /* 1 is red, 0 is black */
+    new_node->red = 1; /* 1 is red, 0 is black */
     new_node->link[0] = NULL;
     new_node->link[1] = NULL;
 

@@ -14,11 +14,13 @@ char *get_path(const char *name, int fpath)
     char tmpdir[GPATH_MAX];
 
     G_temp_element(tmpdir);
-    strcat(tmpdir, "/");
-    strcat(tmpdir, "MONITORS");
+    (void)G_strlcat(tmpdir, "/", sizeof(tmpdir));
+    (void)G_strlcat(tmpdir, "MONITORS", sizeof(tmpdir));
     if (name) {
-        strcat(tmpdir, "/");
-        strcat(tmpdir, name);
+        (void)G_strlcat(tmpdir, "/", sizeof(tmpdir));
+        if (G_strlcat(tmpdir, name, sizeof(tmpdir)) >= sizeof(tmpdir)) {
+            G_fatal_error(_("Failed to append <%s> to path"), name);
+        }
     }
 
     if (fpath) {
@@ -70,7 +72,7 @@ void list_mon(char ***list, int *n)
 }
 
 /* print list of running monitors */
-void print_list(FILE * fd)
+void print_list(FILE *fd)
 {
     char **list;
     int i, n;
@@ -103,7 +105,7 @@ int check_mon(const char *name)
 }
 
 /* list related commands for given monitor */
-void list_cmd(const char *name, FILE * fd_out)
+void list_cmd(const char *name, FILE *fd_out)
 {
     char *mon_path;
     char cmd_file[GPATH_MAX], buf[4096];
@@ -124,7 +126,7 @@ void list_cmd(const char *name, FILE * fd_out)
     G_free(mon_path);
 }
 
-void list_files(const char *name, FILE * fd_out)
+void list_files(const char *name, FILE *fd_out)
 {
     char *p;
     char tmpdir[GPATH_MAX], mon_path[GPATH_MAX];
@@ -132,10 +134,13 @@ void list_files(const char *name, FILE * fd_out)
     DIR *dirp;
 
     G_temp_element(tmpdir);
-    strcat(tmpdir, "/");
-    strcat(tmpdir, "MONITORS");
-    strcat(tmpdir, "/");
-    strcat(tmpdir, name);
+    (void)G_strlcat(tmpdir, "/", sizeof(tmpdir));
+    (void)G_strlcat(tmpdir, "MONITORS", sizeof(tmpdir));
+    (void)G_strlcat(tmpdir, "/", sizeof(tmpdir));
+
+    if (G_strlcat(tmpdir, name, sizeof(tmpdir)) >= sizeof(tmpdir)) {
+        G_fatal_error(_("Failed to append <%s> to path"), name);
+    }
 
     G_file_name(mon_path, tmpdir, NULL, G_mapset());
     fprintf(fd_out, "path=%s\n", mon_path);
@@ -152,7 +157,7 @@ void list_files(const char *name, FILE * fd_out)
         if (!p)
             p = dp->d_name;
         else
-            p++;                /* skip '.' */
+            p++; /* skip '.' */
 
         fprintf(fd_out, "%s=%s%c%s\n", p, mon_path, HOST_DIRSEP, dp->d_name);
     }

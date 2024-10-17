@@ -21,16 +21,15 @@
    \param Map pointer to vector map
    \param tx,ty point coordinates
    \param[out] tz z-coordinate of point
-   \param[out] angle angle
-   \param[out] slope slope
+   \param[out] angle angle (unsupported)
+   \param[out] slope slope (unsupported)
 
    \return 1 on success,
    \return 0 point is not in area,
    \return -1 area has not 4 points or has island
  */
-int
-Vect_tin_get_z(struct Map_info *Map,
-               double tx, double ty, double *tz, double *angle, double *slope)
+int Vect_tin_get_z(struct Map_info *Map, double tx, double ty, double *tz,
+                   double *angle UNUSED, double *slope UNUSED)
 {
     int i, area, n_points;
     struct Plus_head *Plus;

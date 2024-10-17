@@ -1,8 +1,8 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       d.rast.num
- * AUTHOR(S):    Raghavan Srinivasan, Agricultural Engineering, Purdue University
+ * AUTHOR(S):    Raghavan Srinivasan, Agricultural Engineering, Purdue
+ *                 University
  * PURPOSE:      Print numbers of category for raster cells
  * COPYRIGHT:    (C) 2000, 2012 by the GRASS Development Team
  *
@@ -12,7 +12,7 @@
  *
  *****************************************************************************/
 
-/* updated by Andreas Lange, andreas.lange@rhein-main.de 
+/* updated by Andreas Lange, andreas.lange@rhein-main.de
  * for text color support.
  * updated 2004 my MN for FP support
  */
@@ -24,14 +24,14 @@
  *   d.rast.num
  *
  *   Usage:  d.rast.num
- * 
+ *
  *   This program used Dgrid's sources as a beginning. Purpose of Dnumber
  *   is to read the cell layer displayed on the graphics monitor and number
- *   them, if the cell value is other than 0 in an acending order.
+ *   them, if the cell value is other than 0 in an ascending order.
  *   d.rast.num draws a number on the graphic display
  *   of each cell, so the cell number could be identified when using hydrologic
- *   models such AGNPS which uses the cell number for all its correspondance.
- *   
+ *   models such AGNPS which uses the cell number for all its correspondence.
+ *
  */
 
 #include <stdlib.h>
@@ -59,13 +59,11 @@ int main(int argc, char **argv)
     struct Cell_head window;
     struct Colors colors;
     struct GModule *module;
-    struct _opt
-    {
-        struct Option *map, *grid_color, *text_color, *prec,
-            *font, *path, *charset;
+    struct _opt {
+        struct Option *map, *grid_color, *text_color, *prec, *font, *path,
+            *charset;
     } opt;
-    struct _flg
-    {
+    struct _flg {
         struct Flag *text_color, *align;
     } flg;
     RASTER_MAP_TYPE map_type, inmap_type;
@@ -79,9 +77,8 @@ int main(int argc, char **argv)
     G_add_keyword(_("display"));
     G_add_keyword(_("map annotations"));
     G_add_keyword(_("raster"));
-    module->description =
-        _("Overlays cell category values on a raster map "
-          "displayed in the active graphics frame.");
+    module->description = _("Overlays cell category values on a raster map "
+                            "displayed in the active graphics frame.");
 
     opt.map = G_define_standard_option(G_OPT_R_MAP);
 
@@ -140,6 +137,9 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
+    /* Setup driver and check important information */
+    D_open_driver();
+
     map_name = opt.map->answer;
 
     if (strcmp("none", opt.grid_color->answer) == 0)
@@ -184,8 +184,8 @@ int main(int argc, char **argv)
         ncols = wind.cols;
 
         t = (wind.north - window.north) * nrows / (wind.north - wind.south);
-        b = t + (window.north - window.south) * nrows / (wind.north -
-                                                         wind.south);
+        b = t +
+            (window.north - window.south) * nrows / (wind.north - wind.south);
         l = (window.west - wind.west) * ncols / (wind.east - wind.west);
         r = l + (window.east - window.west) * ncols / (wind.east - wind.west);
     }
@@ -218,15 +218,11 @@ int main(int argc, char **argv)
                   tmpstr1, tmpstr2);
         G_free(tmpstr1);
         G_free(tmpstr2);
-
     }
     if ((nrows > 200) || (ncols > 200)) {
-        G_fatal_error(_("Aborting (region larger then 200 rows X 200 cols is not allowed)"));
+        G_fatal_error(_("Aborting (region larger then 200 rows X 200 cols is "
+                        "not allowed)"));
     }
-
-    /* Setup driver and check important information */
-
-    D_open_driver();
 
     if (opt.font->answer)
         D_font(opt.font->answer);
@@ -244,7 +240,7 @@ int main(int argc, char **argv)
     /*set the number of significant digits */
     sscanf(opt.prec->answer, "%i", &digits);
 
-    if (grid_color > 0) {       /* ie not "none" */
+    if (grid_color > 0) { /* ie not "none" */
         /* Set grid color */
         D_use_color(grid_color);
 
@@ -292,7 +288,6 @@ int main(int argc, char **argv)
 }
 
 /* --- end of main --- */
-
 
 int draw_number(int row, int col, double number, int prec,
                 RASTER_MAP_TYPE map_type)

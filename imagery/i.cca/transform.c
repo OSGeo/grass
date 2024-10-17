@@ -6,17 +6,15 @@
 
 #include "local_proto.h"
 
-int
-transform(int *datafds, int *outfds, int rows, int cols,
-          double **eigmat, int bands, CELL * mins, CELL * maxs)
+int transform(int *datafds, int *outfds, int rows, int cols, double **eigmat,
+              int bands, CELL *mins, CELL *maxs)
 {
     int i, j, k, l;
     double *sum;
     CELL **rowbufs;
 
     sum = G_alloc_vector(bands);
-    rowbufs = (CELL **) G_calloc(bands, sizeof(CELL *));
-
+    rowbufs = (CELL **)G_calloc(bands, sizeof(CELL *));
 
     /* allocate row buffers for each band */
     for (i = 0; i < bands; i++)
@@ -37,7 +35,7 @@ transform(int *datafds, int *outfds, int rows, int cols,
                 }
             }
             for (j = 0; j < bands; j++) {
-                rowbufs[j][l] = (CELL) (sum[j] + 0.5);
+                rowbufs[j][l] = (CELL)(sum[j] + 0.5);
                 if (rowbufs[j][l] > maxs[j])
                     maxs[j] = rowbufs[j][l];
                 if (rowbufs[j][l] < mins[j])

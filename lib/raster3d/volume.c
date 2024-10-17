@@ -30,7 +30,6 @@ static int verifyVolumeVertices(void *map, double v[2][2][2][3])
     return 0;
 }
 
-
 /*---------------------------------------------------------------------------*/
 
 static int verifyVolumeEdges(int nx, int ny, int nz)
@@ -42,9 +41,8 @@ static int verifyVolumeEdges(int nx, int ny, int nz)
 
 /*---------------------------------------------------------------------------*/
 
-void
-Rast3d_get_volume_a(void *map, double u[2][2][2][3], int nx, int ny, int nz,
-                    void *volumeBuf, int type)
+void Rast3d_get_volume_a(void *map, double u[2][2][2][3], int nx, int ny,
+                         int nz, void *volumeBuf, int type)
 {
     typedef double doubleArray[3];
 
@@ -69,14 +67,14 @@ Rast3d_get_volume_a(void *map, double u[2][2][2][3], int nx, int ny, int nz,
     nyp = ny * 2 + 1;
     nzp = nz * 2 + 1;
 
-    u000 = (doubleArray *) u[0][0][0];
-    u001 = (doubleArray *) u[0][0][1];
-    u010 = (doubleArray *) u[0][1][0];
-    u011 = (doubleArray *) u[0][1][1];
-    u100 = (doubleArray *) u[1][0][0];
-    u101 = (doubleArray *) u[1][0][1];
-    u110 = (doubleArray *) u[1][1][0];
-    u111 = (doubleArray *) u[1][1][1];
+    u000 = (doubleArray *)u[0][0][0];
+    u001 = (doubleArray *)u[0][0][1];
+    u010 = (doubleArray *)u[0][1][0];
+    u011 = (doubleArray *)u[0][1][1];
+    u100 = (doubleArray *)u[1][0][0];
+    u101 = (doubleArray *)u[1][0][1];
+    u110 = (doubleArray *)u[1][1][0];
+    u111 = (doubleArray *)u[1][1][1];
 
     for (dz = 1; dz < nzp; dz += 2) {
         r = 1. - (rp = dz / nz / 2.);
@@ -114,20 +112,18 @@ Rast3d_get_volume_a(void *map, double u[2][2][2][3], int nx, int ny, int nz,
 
                 Rast3d_location2coord2(map, v[0], v[1], v[2], &x, &y, &z);
                 /* DEBUG
-                   printf ("(%d %d %d) (%lf %lf %lf) (%d %d %d) %lf\n", 
+                   printf ("(%d %d %d) (%lf %lf %lf) (%d %d %d) %lf\n",
                    (int) dx / 2, (int) dy / 2, (int) dz / 2,
                    v[0], v[1], v[2],
-                   x, y, z, 
+                   x, y, z,
                    Rast3d_get_double_region (map, x, y, z));
                  */
                 if (type == DCELL_TYPE)
-                    *(doubleBuf + ((int)dz / 2) * nx * ny +
-                      ((int)dy / 2) * nx + (int)dx / 2) =
-Rast3d_get_double_region(map, x, y, z);
+                    *(doubleBuf + ((int)dz / 2) * nx * ny + ((int)dy / 2) * nx +
+                      (int)dx / 2) = Rast3d_get_double_region(map, x, y, z);
                 else
-                    *(floatBuf + ((int)dz / 2) * nx * ny +
-                      ((int)dy / 2) * nx + (int)dx / 2) =
-Rast3d_get_float_region(map, x, y, z);
+                    *(floatBuf + ((int)dz / 2) * nx * ny + ((int)dy / 2) * nx +
+                      (int)dx / 2) = Rast3d_get_float_region(map, x, y, z);
             }
         }
     }
@@ -135,13 +131,12 @@ Rast3d_get_float_region(map, x, y, z);
 
 /*---------------------------------------------------------------------------*/
 
-void
-Rast3d_get_volume(void *map,
-                  double originNorth, double originWest, double originBottom,
-                  double vxNorth, double vxWest, double vxBottom,
-                  double vyNorth, double vyWest, double vyBottom,
-                  double vzNorth, double vzWest, double vzBottom,
-                  int nx, int ny, int nz, void *volumeBuf, int type)
+void Rast3d_get_volume(void *map, double originNorth, double originWest,
+                       double originBottom, double vxNorth, double vxWest,
+                       double vxBottom, double vyNorth, double vyWest,
+                       double vyBottom, double vzNorth, double vzWest,
+                       double vzBottom, int nx, int ny, int nz, void *volumeBuf,
+                       int type)
 {
     double u[2][2][2][3];
 
@@ -182,29 +177,25 @@ Rast3d_get_volume(void *map,
 
 /*---------------------------------------------------------------------------*/
 
-void
-Rast3d_get_aligned_volume(void *map,
-                          double originNorth, double originWest,
-                          double originBottom, double lengthNorth,
-                          double lengthWest, double lengthBottom, int nx,
-                          int ny, int nz, void *volumeBuf, int type)
+void Rast3d_get_aligned_volume(void *map, double originNorth, double originWest,
+                               double originBottom, double lengthNorth,
+                               double lengthWest, double lengthBottom, int nx,
+                               int ny, int nz, void *volumeBuf, int type)
 {
-    Rast3d_get_volume(map,
-                      originNorth, originWest, originBottom,
+    Rast3d_get_volume(map, originNorth, originWest, originBottom,
                       originNorth + lengthNorth, originWest, originBottom,
                       originNorth, originWest + lengthWest, originBottom,
-                      originNorth, originWest, originBottom + lengthBottom,
-                      nx, ny, nz, volumeBuf, type);
+                      originNorth, originWest, originBottom + lengthBottom, nx,
+                      ny, nz, volumeBuf, type);
 }
 
 /*---------------------------------------------------------------------------*/
 
-void
-Rast3d_make_aligned_volume_file(void *map, const char *fileName,
-                                double originNorth, double originWest,
-                                double originBottom, double lengthNorth,
-                                double lengthWest, double lengthBottom,
-                                int nx, int ny, int nz)
+void Rast3d_make_aligned_volume_file(void *map, const char *fileName,
+                                     double originNorth, double originWest,
+                                     double originBottom, double lengthNorth,
+                                     double lengthWest, double lengthBottom,
+                                     int nx, int ny, int nz)
 {
     void *volumeBuf;
     void *mapVolume;
@@ -213,13 +204,12 @@ Rast3d_make_aligned_volume_file(void *map, const char *fileName,
 
     volumeBuf = Rast3d_malloc(nx * ny * nz * sizeof(Rast3d_get_file_type()));
     if (volumeBuf == NULL)
-        Rast3d_fatal_error
-            ("Rast3d_make_aligned_volume_file: error in Rast3d_malloc");
+        Rast3d_fatal_error(
+            "Rast3d_make_aligned_volume_file: error in Rast3d_malloc");
 
-    Rast3d_get_aligned_volume(map,
-                              originNorth, originWest, originBottom,
-                              lengthNorth, lengthWest, lengthBottom,
-                              nx, ny, nz, volumeBuf, Rast3d_get_file_type());
+    Rast3d_get_aligned_volume(map, originNorth, originWest, originBottom,
+                              lengthNorth, lengthWest, lengthBottom, nx, ny, nz,
+                              volumeBuf, Rast3d_get_file_type());
 
     region.north = originNorth;
     region.south = originNorth + lengthNorth;
@@ -235,8 +225,8 @@ Rast3d_make_aligned_volume_file(void *map, const char *fileName,
     mapVolume = Rast3d_open_cell_new(fileName, Rast3d_get_file_type(),
                                      RASTER3D_USE_CACHE_DEFAULT, &region);
     if (mapVolume == NULL)
-        Rast3d_fatal_error
-            ("Rast3d_make_aligned_volume_file: error in Rast3d_open_cell_new");
+        Rast3d_fatal_error(
+            "Rast3d_make_aligned_volume_file: error in Rast3d_open_cell_new");
 
     eltLength = Rast3d_length(Rast3d_get_file_type());
 
@@ -244,20 +234,20 @@ Rast3d_make_aligned_volume_file(void *map, const char *fileName,
         for (y = 0; y < ny; y++) {
             for (x = 0; x < nx; x++) {
                 /* Rast3d_putValueRegion? */
-                if (!Rast3d_put_value(mapVolume, x, y, z,
-                                      G_incr_void_ptr(volumeBuf,
-                                                      (z * ny * nx + y * nx +
-                                                       x) * eltLength),
-                                      Rast3d_file_type_map(mapVolume)))
-                    Rast3d_fatal_error
-                        ("Rast3d_make_aligned_volume_file: error in Rast3d_put_value");
+                if (!Rast3d_put_value(
+                        mapVolume, x, y, z,
+                        G_incr_void_ptr(volumeBuf,
+                                        (z * ny * nx + y * nx + x) * eltLength),
+                        Rast3d_file_type_map(mapVolume)))
+                    Rast3d_fatal_error("Rast3d_make_aligned_volume_file: error "
+                                       "in Rast3d_put_value");
             }
         }
     }
 
     if (!Rast3d_close(mapVolume))
-        Rast3d_fatal_error
-            ("Rast3d_make_aligned_volume_file: error in Rast3d_close");
+        Rast3d_fatal_error(
+            "Rast3d_make_aligned_volume_file: error in Rast3d_close");
 
     Rast3d_free(volumeBuf);
 }

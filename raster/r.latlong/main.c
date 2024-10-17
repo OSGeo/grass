@@ -1,15 +1,14 @@
-
 /****************************************************************************
  *
  * MODULE:       r.latlong
  * AUTHOR(S):    Yann Chemin - yann.chemin@gmail.com
- * PURPOSE:      Calculates the longitude of the pixels in the map. 
+ * PURPOSE:      Calculates the longitude of the pixels in the map.
  *
  * COPYRIGHT: (C) 2002-2008, 2012 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
- *   	    	 Public License (>=v2). Read the file COPYING that
- *   	    	 comes with GRASS for details.
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  *****************************************************************************/
 
@@ -23,20 +22,20 @@
 
 int main(int argc, char *argv[])
 {
-    struct Cell_head cellhd;    /*region+header info */
+    struct Cell_head cellhd; /*region+header info */
     int nrows, ncols;
     int row, col;
-    int not_ll = 0;             /*if proj is not lat/long, it will be 1. */
+    int not_ll = 0; /*if proj is not lat/long, it will be 1. */
 
     struct GModule *module;
     struct Option *input1, *output1;
     struct Flag *flag1;
-    struct History history;     /*metadata */
+    struct History history; /*metadata */
     struct pj_info iproj, oproj, tproj;
     struct Key_Value *in_proj_info, *in_unit_info;
 
     /************************************/
-    char *result1;              /*output raster name */
+    char *result1; /*output raster name */
 
     int infd;
     int outfd1;
@@ -98,11 +97,14 @@ int main(int argc, char *argv[])
         not_ll = 1;
 
         if ((in_proj_info = G_get_projinfo()) == NULL)
-            G_fatal_error(_("Unable to get projection info of current location"));
+            G_fatal_error(
+                _("Unable to get projection info of current location"));
         if ((in_unit_info = G_get_projunits()) == NULL)
-            G_fatal_error(_("Unable to get projection units of current location"));
+            G_fatal_error(
+                _("Unable to get projection units of current location"));
         if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
-            G_fatal_error(_("Unable to get projection key values of current location"));
+            G_fatal_error(
+                _("Unable to get projection key values of current location"));
         G_free_key_value(in_proj_info);
         G_free_key_value(in_unit_info);
 
@@ -111,7 +113,7 @@ int main(int argc, char *argv[])
 
         if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
             G_fatal_error(_("Unable to initialize coordinate transformation"));
-    }                           /* End of stolen from r.sun */
+    } /* End of stolen from r.sun */
 
     outrast1 = Rast_allocate_d_buf();
 
@@ -126,10 +128,11 @@ int main(int argc, char *argv[])
             latitude = ymax - ((double)row * stepy);
             longitude = xmin + ((double)col * stepx);
             if (not_ll) {
-                if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
-                                  &longitude, &latitude, NULL) < 0)
-                    G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
-                                  "GPJ_transform()");
+                if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD, &longitude,
+                                  &latitude, NULL) < 0)
+                    G_fatal_error(
+                        _("Error in %s (projection of input coordinate pair)"),
+                        "GPJ_transform()");
             }
             if (flag1->answer)
                 d = longitude;

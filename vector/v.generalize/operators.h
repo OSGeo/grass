@@ -24,9 +24,9 @@ int snakes(struct line_pnts *Points, double alpha, double beta,
            int loop_support, int with_z);
 
 /* network.c */
-int graph_generalization(struct Map_info *In, struct Map_info *Out,
-                         int type, double degree_thresh,
-                         double closeness_thresh, double betweeness_thresh);
+int graph_generalization(struct Map_info *In, struct Map_info *Out, int type,
+                         double degree_thresh, double closeness_thresh,
+                         double betweeness_thresh);
 
 /* displacement.c */
 int snakes_displacement(struct Map_info *In, struct Map_info *Out,

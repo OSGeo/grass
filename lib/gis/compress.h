@@ -31,8 +31,7 @@ typedef int expand_fn(unsigned char *src, int src_sz, unsigned char *dst,
                       int dst_sz);
 typedef int bound_fn(int src_sz);
 
-struct compressor_list
-{
+struct compressor_list {
     int available;
     compress_fn *compress;
     expand_fn *expand;
@@ -66,5 +65,4 @@ struct compressor_list compressor[] = {
 #else
     {0, G_zstd_compress, G_zstd_expand, G_zstd_compress_bound, "ZSTD"},
 #endif
-    {0, NULL, NULL, NULL, NULL}
-};
+    {0, NULL, NULL, NULL, NULL}};

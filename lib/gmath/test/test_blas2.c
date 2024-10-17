@@ -1,19 +1,18 @@
-
 /*****************************************************************************
-*
-* MODULE:       Grass PDE Numerical Library
-* AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
-* 		soerengebbert <at> gmx <dot> de
-*               
-* PURPOSE:      Unit tests for les creation
-*
-* COPYRIGHT:    (C) 2000 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       Grass PDE Numerical Library
+ * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
+ *                 soerengebbert <at> gmx <dot> de
+ *
+ * PURPOSE:      Unit tests for les creation
+ *
+ * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -26,7 +25,6 @@
 /* prototypes */
 static int test_blas_level_2_double(void);
 static int test_blas_level_2_float(void);
-
 
 /* *************************************************************** */
 /* Perfrome the blas level 2 unit tests ************************** */
@@ -56,8 +54,9 @@ int test_blas_level_2_double(void)
 
     int sum = 0;
     int rows = TEST_NUM_ROWS;
-    double **A, **B, **C, *x, *y, *z, a = 0.0, b = 0.0, c = 0.0, d = 0.0, e =
-        0.0, f = 0.0, g = 0.0, h = 0.0, i = 0.0, j = 0.0;
+    double **A, **B, **C, *x, *y, *z, a = 0.0, b = 0.0, c = 0.0, d = 0.0,
+                                      e = 0.0, f = 0.0, g = 0.0, h = 0.0,
+                                      i = 0.0, j = 0.0;
 
     G_math_les *les;
 
@@ -79,7 +78,6 @@ int test_blas_level_2_double(void)
 
     fill_d_vector_scalar(x, 1, rows);
     fill_d_vector_scalar(y, 0, rows);
-
 
 #pragma omp parallel default(shared)
     {
@@ -199,7 +197,6 @@ int test_blas_level_2_double(void)
     return sum;
 }
 
-
 /* *************************************************************** */
 /* ************** F L O A T ************************************** */
 /* *************************************************************** */
@@ -208,8 +205,8 @@ int test_blas_level_2_float(void)
 
     int sum = 0;
     int rows = TEST_NUM_ROWS;
-    float **A, **B, **C, *x, *y, *z, b = 0.0, c = 0.0, d = 0.0, e = 0.0, f =
-        0.0, g = 0.0, h = 0.0, i = 0.0;
+    float **A, **B, **C, *x, *y, *z, b = 0.0, c = 0.0, d = 0.0, e = 0.0,
+                                     f = 0.0, g = 0.0, h = 0.0, i = 0.0;
 
     G_math_f_les *les;
 
@@ -225,7 +222,6 @@ int test_blas_level_2_float(void)
 
     fill_f_vector_scalar(x, 1, rows);
     fill_f_vector_scalar(y, 0, rows);
-
 
 #pragma omp parallel default(shared)
     {
@@ -264,8 +260,6 @@ int test_blas_level_2_float(void)
         G_math_f_Ax(A, x, z, rows, rows);
     }
     G_math_f_asum_norm(z, &h, rows);
-
-
 
     G_math_f_asum_norm(les->b, &i, rows);
 

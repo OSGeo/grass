@@ -29,7 +29,7 @@
    \return DB_FAILED on error
  */
 int db_convert_Cstring_to_value(const char *Cstring, int sqltype,
-                                dbValue * value)
+                                dbValue *value)
 {
     int i;
     double d;
@@ -65,8 +65,7 @@ int db_convert_Cstring_to_value(const char *Cstring, int sqltype,
 
    \return DB_OK on success
  */
-int db_convert_value_to_string(dbValue * value, int sqltype,
-                               dbString * string)
+int db_convert_value_to_string(dbValue *value, int sqltype, dbString *string)
 {
     char buf[64];
     const char *bp = buf;
@@ -90,7 +89,8 @@ int db_convert_value_to_string(dbValue * value, int sqltype,
             return db_convert_value_datetime_into_string(value, sqltype,
                                                          string);
         default:
-            db_error(_("db_convert_value_into_string(): unrecongized sqltype-type"));
+            db_error(
+                _("db_convert_value_into_string(): unrecongized sqltype-type"));
             return DB_FAILED;
         }
     }

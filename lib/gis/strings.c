@@ -23,7 +23,7 @@
 #include <grass/gis.h>
 
 #ifndef NULL
-#define NULL		0
+#define NULL 0
 #endif
 
 static void *G__memccpy(void *, const void *, int, size_t);
@@ -176,7 +176,7 @@ char *G_strchg(char *bug, char character, char new)
    \code
    char *name;
    name = G_str_replace ( inbuf, ".exe", "" );
-   ... 
+   ...
    G_free (name);
    \endcode
 
@@ -184,7 +184,7 @@ char *G_strchg(char *bug, char character, char new)
    \param old_str string to be replaced
    \param new_str new string
 
-   \return the newly allocated string, input buffer is unchanged 
+   \return the newly allocated string, input buffer is unchanged
  */
 char *G_str_replace(const char *buffer, const char *old_str,
                     const char *new_str)
@@ -220,9 +220,7 @@ char *G_str_replace(const char *buffer, const char *old_str,
             }
         }
 
-        len = count * (strlen(new_str) - strlen(old_str))
-            + strlen(buffer);
-
+        len = count * (strlen(new_str) - strlen(old_str)) + strlen(buffer);
     }
     else
         len = strlen(buffer);
@@ -266,20 +264,19 @@ char *G_str_replace(const char *buffer, const char *old_str,
 
    \return the concatenated string (allocated)
  */
-char *G_str_concat(const char **src_strings, int num_strings,
-                   const char *sep, int maxsize)
+char *G_str_concat(const char **src_strings, int num_strings, const char *sep,
+                   int maxsize)
 {
-    char buffer[maxsize];
-    int i;
-    char *end = buffer + maxsize;
-    char *p = NULL;
-
     if (maxsize < 1 || num_strings < 1)
         return NULL;
 
-    memset(buffer, 0, sizeof(buffer));
+    char *concat_str = NULL;
+    char *p = NULL;
+    char *buffer = G_malloc(maxsize * sizeof(char));
+    char *end = buffer + maxsize;
 
-    for (i = 0; i < num_strings; i++) {
+    memset(buffer, 0, maxsize);
+    for (int i = 0; i < num_strings; i++) {
         if (i == 0)
             p = (char *)G__memccpy(buffer, src_strings[i], '\0', maxsize);
         else {
@@ -289,8 +286,10 @@ char *G_str_concat(const char **src_strings, int num_strings,
                 p = (char *)G__memccpy(p - 1, src_strings[i], '\0', end - p);
         }
     }
+    concat_str = G_store(buffer);
+    G_free(buffer);
 
-    return G_store(buffer);
+    return concat_str;
 }
 
 /*!
@@ -303,13 +302,17 @@ void G_strip(char *buf)
     char *a, *b;
 
     /* remove leading white space */
-    for (a = b = buf; *a == ' ' || *a == '\t'; a++) ;
+    for (a = b = buf; *a == ' ' || *a == '\t'; a++)
+        ;
     if (a != b)
-        while ((*b++ = *a++)) ;
+        while ((*b++ = *a++))
+            ;
     /* remove trailing white space */
-    for (a = buf; *a; a++) ;
+    for (a = buf; *a; a++)
+        ;
     if (a != buf) {
-        for (a--; *a == ' ' || *a == '\t'; a--) ;
+        for (a--; *a == ' ' || *a == '\t'; a--)
+            ;
         a++;
         *a = 0;
     }
@@ -330,22 +333,23 @@ char *G_chop(char *line)
 {
     char *f = line, *t = line;
 
-    while (isspace(*f))         /* go to first non white-space char */
+    while (isspace(*f)) /* go to first non white-space char */
         f++;
 
-    if (!*f) {                  /* no more chars in string */
+    if (!*f) { /* no more chars in string */
         *t = '\0';
         return (line);
     }
 
-    for (t = f; *t; t++)        /* go from first non white-space char to end */
+    for (t = f; *t; t++) /* go from first non white-space char to end */
         ;
-    while (isspace(*--t)) ;
-    *++t = '\0';                /* remove trailing white-spaces */
+    while (isspace(*--t))
+        ;
+    *++t = '\0'; /* remove trailing white-spaces */
 
     if (f != line) {
         t = line;
-        while (*f)              /* leading white spaces, shift */
+        while (*f) /* leading white spaces, shift */
             *t++ = *f++;
         *t = '\0';
     }
@@ -430,9 +434,9 @@ int G_str_to_sql(char *str)
 /*!
    \brief Remove superfluous white space.
 
-   Leading and trailing white space is removed from the string 
-   <b>line</b> and internal white space which is more than one character 
-   is reduced to a single space character. White space here means 
+   Leading and trailing white space is removed from the string
+   <b>line</b> and internal white space which is more than one character
+   is reduced to a single space character. White space here means
    spaces, tabs, linefeeds, newlines, and formfeeds.
 
    \param[in,out] line

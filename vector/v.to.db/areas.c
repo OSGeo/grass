@@ -2,12 +2,14 @@
 #include <stdlib.h>
 #include <math.h>
 #include <grass/glocale.h>
+#include <grass/vector.h>
 
 #include "global.h"
 
 /* This function now does one of 3 things:
  * 1) It reads the areas of the areas.
- * 2) It reads the perimeter lengths of the areas. If projection is LL, the geodesic distance is used.
+ * 2) It reads the perimeter lengths of the areas. If projection is LL,
+ *    the geodesic distance is used.
  * 3) It calculates the compactness using this formula:
  *    compactness = perimeter / (2 * sqrt(M_PI * area))
  * 4) It calculates the fractal dimension of the bounding curve:
@@ -79,7 +81,8 @@ int read_areas(struct Map_info *Map)
                 }
             }
 
-            if (!found) {       /* Values for no category (cat = -1) are reported at the end */
+            if (!found) { /* Values for no category (cat = -1) are reported at
+                             the end */
                 idx = find_cat(-1, 1);
                 switch (options.option) {
                 case O_AREA:
@@ -109,5 +112,6 @@ int read_areas(struct Map_info *Map)
         G_percent(area_num, nareas, 2);
     }
 
+    Vect_destroy_cats_struct(Cats);
     return 0;
 }

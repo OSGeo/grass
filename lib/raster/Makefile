@@ -1,7 +1,7 @@
 MODULE_TOPDIR = ../..
 
 LIB = RASTER
-EXTRA_INC = 
+EXTRA_INC =
 
 include $(MODULE_TOPDIR)/include/Make/Vars.make
 include $(MODULE_TOPDIR)/include/Make/Lib.make

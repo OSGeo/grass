@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       i.eb.soilheatflux
@@ -10,8 +9,8 @@
  * COPYRIGHT:    (C) 2006-2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	 for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
 
@@ -22,20 +21,20 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-double g_0(double bbalb, double ndvi, double tempk, double rnet,
-           double time, int roerink);
+double g_0(double bbalb, double ndvi, double tempk, double rnet, double time,
+           int roerink);
 
 int main(int argc, char *argv[])
 {
     int nrows, ncols;
     int row, col;
-    int roerink = 0;            /*Roerink Flag for HAPEX-Sahel conditions */
+    int roerink = 0; /*Roerink Flag for HAPEX-Sahel conditions */
     struct GModule *module;
     struct Option *input1, *input2, *input3, *input4, *input5, *output1;
     struct Flag *flag1;
-    struct History history;     /*metadata */
-    struct Colors colors;       /*metadata */
-    char *result;               /*output raster name */
+    struct History history; /*metadata */
+    struct Colors colors;   /*metadata */
+    char *result;           /*output raster name */
     int infd_albedo, infd_ndvi, infd_tempk, infd_rnet, infd_time;
     int outfd;
     char *albedo, *ndvi, *tempk, *rnet, *time;
@@ -80,8 +79,7 @@ int main(int argc, char *argv[])
 
     flag1 = G_define_flag();
     flag1->key = 'r';
-    flag1->description =
-        _("HAPEX-Sahel empirical correction (Roerink, 1995)");
+    flag1->description = _("HAPEX-Sahel empirical correction (Roerink, 1995)");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -134,11 +132,11 @@ int main(int argc, char *argv[])
         Rast_get_d_row(infd_time, inrast_time, row);
         /*process the data */
         for (col = 0; col < ncols; col++) {
-            d_albedo = ((DCELL *) inrast_albedo)[col];
-            d_ndvi = ((DCELL *) inrast_ndvi)[col];
-            d_tempk = ((DCELL *) inrast_tempk)[col];
-            d_rnet = ((DCELL *) inrast_rnet)[col];
-            d_time = ((DCELL *) inrast_time)[col];
+            d_albedo = ((DCELL *)inrast_albedo)[col];
+            d_ndvi = ((DCELL *)inrast_ndvi)[col];
+            d_tempk = ((DCELL *)inrast_tempk)[col];
+            d_rnet = ((DCELL *)inrast_rnet)[col];
+            d_time = ((DCELL *)inrast_time)[col];
             if (Rast_is_d_null_value(&d_albedo) ||
                 Rast_is_d_null_value(&d_ndvi) ||
                 Rast_is_d_null_value(&d_tempk) ||

@@ -1,16 +1,15 @@
-/*
- **************************************************************
+/***************************************************************
  *
  * MODULE:       v.in.region
- * 
+ *
  * AUTHOR(S):    Radim Blazek
- *               
- * PURPOSE:      Create a new vector from current region 
- *               
+ *
+ * PURPOSE:      Create a new vector from current region
+ *
  * COPYRIGHT:    (C) 2002 by the GRASS Development Team
  *
- *               This program is free software under the 
- *               GNU General Public License (>=v2). 
+ *               This program is free software under the
+ *               GNU General Public License (>=v2).
  *               Read the file COPYING that comes with GRASS
  *               for details.
  *
@@ -128,7 +127,7 @@ int main(int argc, char **argv)
         Vect_cat_set(Cats, 1, cat);
         Vect_write_line(&Out, GV_CENTROID, Points, Cats);
     }
-    else {                      /* GV_LINE */
+    else { /* GV_LINE */
         Vect_cat_set(Cats, 1, cat);
         Vect_write_line(&Out, GV_LINE, Points, Cats);
     }

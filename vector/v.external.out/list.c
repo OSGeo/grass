@@ -49,11 +49,12 @@ char **format_list(int *count, size_t *len)
         G_strchg(buf, ' ', '_');
         list[(*count)++] = G_store(buf);
         if (len)
-            *len += strlen(buf) + 1;    /* + ',' */
+            *len += strlen(buf) + 1; /* + ',' */
     }
 
     /* order formats by name */
-    qsort(list, *count, sizeof(char *), cmp);
+    if (list)
+        qsort(list, *count, sizeof(char *), cmp);
 #endif
 #if defined HAVE_POSTGRES && !defined HAVE_OGR
     list = G_realloc(list, ((*count) + 1) * sizeof(char *));
@@ -65,7 +66,7 @@ char **format_list(int *count, size_t *len)
     return list;
 }
 
-char *format_options()
+char *format_options(void)
 {
     int i, count;
     char **list, *ret;
@@ -75,7 +76,7 @@ char *format_options()
     list = format_list(&count, &len);
 
     if (len > 0) {
-        ret = G_malloc((len + 1) * sizeof(char));       /* \0 */
+        ret = G_malloc((len + 1) * sizeof(char)); /* \0 */
         *ret = '\0';
         for (i = 0; i < count; i++) {
             if (i > 0)

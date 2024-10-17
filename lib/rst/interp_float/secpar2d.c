@@ -1,14 +1,11 @@
-
 /*!
  * \file secpar2d.c
  *
- * \author H. Mitasova, L. Mitas, I. Kosinovsky, D. Gerdes Fall 1994 (original authors)
- * \author modified by McCauley in August 1995
- * \author modified by Mitasova in August 1995
- * \author H. Mitasova (University of Illinois)
- * \author L. Mitas (University of Illinois)
- * \author I. Kosinovsky, (USA-CERL)
- * \author D.Gerdes (USA-CERL)   
+ * \author H. Mitasova, L. Mitas, I. Kosinovsky, D. Gerdes Fall 1994 (original
+ * authors) \author modified by McCauley in August 1995 \author modified by
+ * Mitasova in August 1995 \author H. Mitasova (University of Illinois) \author
+ * L. Mitas (University of Illinois) \author I. Kosinovsky, (USA-CERL) \author
+ * D.Gerdes (USA-CERL)
  *
  * \copyright
  * (C) 1994-1995 by Helena Mitasova and the GRASS Development Team
@@ -21,7 +18,6 @@
  *
  */
 
-
 #include <stdio.h>
 #include <math.h>
 #include <unistd.h>
@@ -29,29 +25,31 @@
 #include <grass/bitmap.h>
 #include <grass/interpf.h>
 
-
 /*!
  * Compute slope aspect and curvatures
  *
  * Computes slope, aspect and curvatures (depending on cond1, cond2) for
  * derivative arrays adx,...,adxy between columns ngstc and nszc.
  */
-int IL_secpar_loop_2d(struct interp_params *params, int ngstc,  /*!< starting column */
-                      int nszc, /*!< ending column */
-                      int k,    /*!< current row */
-                      struct BM *bitmask, double *gmin, double *gmax, double *c1min, double *c1max, double *c2min, double *c2max,       /*!< min,max interp. values */
-                      int cond1, int cond2      /*!< determine if particular values need to be computed */
-    )
+int IL_secpar_loop_2d(
+    struct interp_params *params, int ngstc, /*!< starting column */
+    int nszc,                                /*!< ending column */
+    int k,                                   /*!< current row */
+    struct BM *bitmask, double *gmin, double *gmax, double *c1min,
+    double *c1max, double *c2min, double *c2max, /*!< min,max interp. values */
+    int cond1,
+    int cond2 /*!< determine if particular values need to be computed */
+)
 {
-    double dnorm1, ro,          /* rad to deg conv */
-      dx2 = 0, dy2 = 0, grad2 = 0,      /* gradient squared */
-        slp = 0, grad,          /* gradient */
-        oor = 0,                /* aspect  (orientation) */
-        curn = 0,               /* profile curvature */
-        curh = 0,               /* tangential curvature */
-        curm = 0,               /* mean curvature */
-        temp,                   /* temp  variable */
-        dxy2;                   /* temp variable   square of part diriv. */
+    double dnorm1, ro,               /* rad to deg conv */
+        dx2 = 0, dy2 = 0, grad2 = 0, /* gradient squared */
+        slp = 0, grad,               /* gradient */
+        oor = 0,                     /* aspect  (orientation) */
+        curn = 0,                    /* profile curvature */
+        curh = 0,                    /* tangential curvature */
+        curm = 0,                    /* mean curvature */
+        temp,                        /* temp  variable */
+        dxy2;                        /* temp variable   square of part diriv. */
 
     double gradmin;
     int i, got, bmask = 1;
@@ -59,7 +57,6 @@ int IL_secpar_loop_2d(struct interp_params *params, int ngstc,  /*!< starting co
 
     ro = M_R2D;
     gradmin = 0.001;
-
 
     for (i = ngstc; i <= nszc; i++) {
         if (bitmask != NULL) {
@@ -88,8 +85,9 @@ int IL_secpar_loop_2d(struct interp_params *params, int ngstc,  /*!< starting co
                 if (got == 3)
                     break;
 
-        /***********aspect from r.slope.aspect, with adx, ady computed
-	            from interpol. function RST **************************/
+                /***********aspect from r.slope.aspect, with adx, ady computed
+                            from interpol. function RST
+                   **************************/
 
                 if (params->adx[i] == 0.) {
                     if (params->ady[i] > 0.)
@@ -104,28 +102,26 @@ int IL_secpar_loop_2d(struct interp_params *params, int ngstc,  /*!< starting co
                 }
 
                 got = 1;
-            }                   /* while */
+            } /* while */
             if ((got != 3) && (cond2)) {
 
                 dnorm1 = sqrt(grad2 + 1.);
-                dxy2 =
-                    2. * (double)(params->adxy[i] * params->adx[i] *
-                                  params->ady[i]);
+                dxy2 = 2. * (double)(params->adxy[i] * params->adx[i] *
+                                     params->ady[i]);
 
+                curn = (double)(params->adxx[i] * dx2 + dxy2 +
+                                params->adyy[i] * dy2) /
+                       (grad2 * dnorm1 * dnorm1 * dnorm1);
 
-                curn =
-                    (double)(params->adxx[i] * dx2 + dxy2 +
-                             params->adyy[i] * dy2) / (grad2 * dnorm1 *
-                                                       dnorm1 * dnorm1);
-
-                curh =
-                    (double)(params->adxx[i] * dy2 - dxy2 +
-                             params->adyy[i] * dx2) / (grad2 * dnorm1);
+                curh = (double)(params->adxx[i] * dy2 - dxy2 +
+                                params->adyy[i] * dx2) /
+                       (grad2 * dnorm1);
 
                 temp = grad2 + 1.;
-                curm =
-                    .5 * ((1. + dy2) * params->adxx[i] - dxy2 +
-                          (1. + dx2) * params->adyy[i]) / (temp * dnorm1);
+                curm = .5 *
+                       ((1. + dy2) * params->adxx[i] - dxy2 +
+                        (1. + dx2) * params->adyy[i]) /
+                       (temp * dnorm1);
             }
             if (first_time_g) {
                 first_time_g = 0;
@@ -140,15 +136,15 @@ int IL_secpar_loop_2d(struct interp_params *params, int ngstc,  /*!< starting co
             *c2min = amin1(*c2min, curh);
             *c2max = amax1(*c2max, curh);
             if (cond1) {
-                params->adx[i] = (FCELL) slp;
-                params->ady[i] = (FCELL) oor;
+                params->adx[i] = (FCELL)slp;
+                params->ady[i] = (FCELL)oor;
                 if (cond2) {
-                    params->adxx[i] = (FCELL) curn;
-                    params->adyy[i] = (FCELL) curh;
-                    params->adxy[i] = (FCELL) curm;
+                    params->adxx[i] = (FCELL)curn;
+                    params->adyy[i] = (FCELL)curh;
+                    params->adxy[i] = (FCELL)curm;
                 }
             }
-        }                       /* bmask == 1 */
+        } /* bmask == 1 */
     }
     return 1;
 }

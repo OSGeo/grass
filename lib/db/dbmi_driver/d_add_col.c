@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_add_col.c
- * 
+ *
  * \brief DBMI Library (driver) - add column to table
  *
  * (C) 1999-2008 by the GRASS Development Team

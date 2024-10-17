@@ -9,20 +9,19 @@ int get_control_points(struct Image_Group *group, int order)
     if (!I_get_control_points(group->name, &group->control_points))
         exit(0);
 
-    sprintf(msg, _("Control Point file for group <%s@%s> - "),
-            group->name, G_mapset());
+    sprintf(msg, _("Control Point file for group <%s@%s> - "), group->name,
+            G_mapset());
 
     G_verbose_message(_("Computing equations..."));
 
     if (order == 0) {
         switch (I_compute_georef_equations_tps(&group->control_points,
-                                               &group->E12_t,
-                                               &group->N12_t,
-                                               &group->E21_t,
-                                               &group->N21_t)) {
+                                               &group->E12_t, &group->N12_t,
+                                               &group->E21_t, &group->N21_t)) {
         case 0:
-            strcat(msg,
-                   _("Not enough active control points for thin plate spline."));
+            strcat(
+                msg,
+                _("Not enough active control points for thin plate spline."));
             break;
         case -1:
             strcat(msg, _("Poorly placed control points."));
@@ -40,12 +39,13 @@ int get_control_points(struct Image_Group *group, int order)
         }
     }
     else {
-        switch (I_compute_georef_equations(&group->control_points,
-                                           group->E12, group->N12,
-                                           group->E21, group->N21, order)) {
+        switch (I_compute_georef_equations(&group->control_points, group->E12,
+                                           group->N12, group->E21, group->N21,
+                                           order)) {
         case 0:
             sprintf(&msg[strlen(msg)],
-                    _("Not enough active control points for current order, %d are required."),
+                    _("Not enough active control points for current order, %d "
+                      "are required."),
                     (order + 1) * (order + 2) / 2);
             break;
         case -1:

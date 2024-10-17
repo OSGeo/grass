@@ -64,7 +64,8 @@
  *    that the "map" option is required and also that the number 12 is
  *    out of range.  The acceptable range (or list) will be printed.
  *
- * Overview table: <a href="parser_standard_options.html">Parser standard options</a>
+ * Overview table: <a href="parser_standard_options.html">Parser standard
+ options</a>
  *
  * (C) 2001-2015 by the GRASS Development Team
  *
@@ -87,8 +88,7 @@
 
 #include "parser_local_proto.h"
 
-enum opt_error
-{
+enum opt_error {
     BAD_SYNTAX = 1,
     OUT_OF_RANGE = 2,
     MISSING_VALUE = 3,
@@ -96,7 +96,6 @@ enum opt_error
     AMBIGUOUS = 5,
     REPLACED = 6
 };
-
 
 #define MAX_MATCHES 50
 
@@ -363,8 +362,9 @@ int G_parser(int argc, char **argv)
             G_warning(_("Bug in UI description. Option key <%s> is not valid"),
                       opt->key);
         if (!opt->label && !opt->description)
-            G_warning(_("Bug in UI description. Description for option <%s> missing"),
-                      opt->key ? opt->key : "?");
+            G_warning(
+                _("Bug in UI description. Description for option <%s> missing"),
+                opt->key ? opt->key : "?");
 
         /* Parse options */
         if (opt->options) {
@@ -416,7 +416,8 @@ int G_parser(int argc, char **argv)
                         j++;
                     }
                     if (!found) {
-                        G_warning(_("Bug in UI description. Option '%s' in <%s> does not exist"),
+                        G_warning(_("Bug in UI description. Option '%s' in "
+                                    "<%s> does not exist"),
                                   tokens[i], opt->key);
                     }
                     else {
@@ -434,9 +435,9 @@ int G_parser(int argc, char **argv)
             opt->answer = G_malloc(strlen(opt->answers[0]) + 1);
             strcpy(opt->answer, opt->answers[0]);
             for (i = 1; opt->answers[i]; i++) {
-                opt->answer = G_realloc(opt->answer,
-                                        strlen(opt->answer) +
-                                        strlen(opt->answers[i]) + 2);
+                opt->answer =
+                    G_realloc(opt->answer, strlen(opt->answer) +
+                                               strlen(opt->answers[i]) + 2);
                 strcat(opt->answer, ",");
                 strcat(opt->answer, opt->answers[i]);
             }
@@ -447,8 +448,8 @@ int G_parser(int argc, char **argv)
 
     /* If there are NO arguments, go interactive */
     gui_envvar = G_getenv_nofatal("GUI");
-    if (argc < 2 && (st->has_required || G__has_required_rule())
-        && !st->no_interactive && isatty(0) &&
+    if (argc < 2 && (st->has_required || G__has_required_rule()) &&
+        !st->no_interactive && isatty(0) &&
         (gui_envvar && G_strcasecmp(gui_envvar, "text") != 0)) {
         if (module_gui_wx() == 0)
             return -1;
@@ -461,8 +462,8 @@ int G_parser(int argc, char **argv)
     else if (argc >= 2) {
 
         /* If first arg is "help" give a usage/syntax message */
-        if (strcmp(argv[1], "help") == 0 ||
-            strcmp(argv[1], "-help") == 0 || strcmp(argv[1], "--help") == 0) {
+        if (strcmp(argv[1], "help") == 0 || strcmp(argv[1], "-help") == 0 ||
+            strcmp(argv[1], "--help") == 0) {
             G_usage();
             exit(EXIT_SUCCESS);
         }
@@ -492,6 +493,13 @@ int G_parser(int argc, char **argv)
          * a reStructuredText description of the task */
         if (strcmp(argv[1], "--rst-description") == 0) {
             G__usage_rest();
+            exit(EXIT_SUCCESS);
+        }
+
+        /* If first arg is "--md-description" then print out
+         * a Markdown description of the task */
+        if (strcmp(argv[1], "--md-description") == 0) {
+            G__usage_markdown();
             exit(EXIT_SUCCESS);
         }
 
@@ -540,7 +548,8 @@ int G_parser(int argc, char **argv)
                 sprintf(buff, "GRASS_VERBOSE=%d", G_verbose_max());
                 putenv(G_store(buff));
                 if (st->quiet == 1) {
-                    G_warning(_("Use either --quiet or --verbose flag, not both. Assuming --verbose."));
+                    G_warning(_("Use either --quiet or --verbose flag, not "
+                                "both. Assuming --verbose."));
                 }
                 st->quiet = -1;
             }
@@ -554,9 +563,10 @@ int G_parser(int argc, char **argv)
                 sprintf(buff, "GRASS_VERBOSE=%d", G_verbose_min());
                 putenv(G_store(buff));
                 if (st->quiet == -1) {
-                    G_warning(_("Use either --quiet or --verbose flag, not both. Assuming --quiet."));
+                    G_warning(_("Use either --quiet or --verbose flag, not "
+                                "both. Assuming --quiet."));
                 }
-                st->quiet = 1;  /* for passing to gui init */
+                st->quiet = 1; /* for passing to gui init */
             }
 
             /* Super quiet option */
@@ -569,9 +579,10 @@ int G_parser(int argc, char **argv)
                 putenv(G_store(buff));
                 G_suppress_warnings(TRUE);
                 if (st->quiet == -1) {
-                    G_warning(_("Use either --qq or --verbose flag, not both. Assuming --qq."));
+                    G_warning(_("Use either --qq or --verbose flag, not both. "
+                                "Assuming --qq."));
                 }
-                st->quiet = 1;  /* for passing to gui init */
+                st->quiet = 1; /* for passing to gui init */
             }
 
             /* Force gui to come up */
@@ -583,7 +594,6 @@ int G_parser(int argc, char **argv)
             else if (*ptr == '-') {
                 while (*(++ptr))
                     set_flag(*ptr);
-
             }
             /* If we see standard option format (option=val) */
             else if (is_option(ptr)) {
@@ -603,7 +613,6 @@ int G_parser(int argc, char **argv)
                 G_asprintf(&err, _("Sorry <%s> is not a valid option"), ptr);
                 append_error(err);
             }
-
         }
     }
 
@@ -750,8 +759,8 @@ char *recreate_command(int original_path)
 
     opt = &st->first_option;
     while (st->n_opts && opt) {
-        if (opt->answer && opt->answer[0] == '\0') {    /* answer = "" */
-            slen = strlen(opt->key) + 4;        /* +4 for: ' ' = " " */
+        if (opt->answer && opt->answer[0] == '\0') { /* answer = "" */
+            slen = strlen(opt->key) + 4;             /* +4 for: ' ' = " " */
             if (len + slen >= nalloced) {
                 nalloced += (nalloced + 1024 > len + slen) ? 1024 : slen + 1;
                 buff = G_realloc(buff, nalloced);
@@ -770,7 +779,8 @@ char *recreate_command(int original_path)
             len = cur - buff;
         }
         else if (opt->answer && opt->answers && opt->answers[0]) {
-            slen = strlen(opt->key) + strlen(opt->answers[0]) + 4;      /* +4 for: ' ' = " " */
+            slen = strlen(opt->key) + strlen(opt->answers[0]) +
+                   4; /* +4 for: ' ' = " " */
             if (len + slen >= nalloced) {
                 nalloced += (nalloced + 1024 > len + slen) ? 1024 : slen + 1;
                 buff = G_realloc(buff, nalloced);
@@ -792,7 +802,7 @@ char *recreate_command(int original_path)
             for (n = 1; opt->answers[n]; n++) {
                 if (!opt->answers[n])
                     break;
-                slen = strlen(opt->answers[n]) + 2;     /* +2 for , " */
+                slen = strlen(opt->answers[n]) + 2; /* +2 for , " */
                 if (len + slen >= nalloced) {
                     nalloced +=
                         (nalloced + 1024 > len + slen) ? 1024 : slen + 1;
@@ -858,8 +868,7 @@ void G_add_keyword(const char *keyword)
     if (st->n_keys >= st->n_keys_alloc) {
         st->n_keys_alloc += 10;
         st->module_info.keywords = G_realloc(st->module_info.keywords,
-                                             st->n_keys_alloc *
-                                             sizeof(char *));
+                                             st->n_keys_alloc * sizeof(char *));
     }
 
     st->module_info.keywords[st->n_keys++] = G_store(keyword);
@@ -877,7 +886,6 @@ void G_set_keywords(const char *keywords)
     st->module_info.keywords = (const char **)tokens;
     st->n_keys = st->n_keys_alloc = G_number_of_tokens(tokens);
 }
-
 
 int G__uses_new_gisprompt(void)
 {
@@ -914,8 +922,10 @@ int G__uses_new_gisprompt(void)
 
    \param[out] fd file where to print
    \param format pointer to print function
+   \param newline TRUE to include newline
  */
-void G__print_keywords(FILE * fd, void (*format)(FILE *, const char *))
+void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *),
+                       int newline)
 {
     int i;
 
@@ -926,8 +936,13 @@ void G__print_keywords(FILE * fd, void (*format)(FILE *, const char *))
         else {
             format(fd, st->module_info.keywords[i]);
         }
-        if (i < st->n_keys - 1)
-            fprintf(fd, ", ");
+        if (i < st->n_keys - 1) {
+            fprintf(fd, ",");
+            if (!newline)
+                fprintf(fd, " ");
+        }
+        if (newline)
+            fprintf(fd, "\n");
     }
 
     fflush(fd);
@@ -939,7 +954,7 @@ void G__print_keywords(FILE * fd, void (*format)(FILE *, const char *))
    \return 1 overwrite enabled
    \return 0 overwrite disabled
  */
-int G_get_overwrite()
+int G_get_overwrite(void)
 {
     return st->module_info.overwrite;
 }
@@ -972,8 +987,8 @@ int module_gui_wx(void)
 
     sprintf(script, "%s/gui/wxpython/gui_core/forms.py", getenv("GISBASE"));
     if (access(script, F_OK) != -1)
-        G_spawn(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"),
-                script, G_recreate_command_original_path(), NULL);
+        G_spawn(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), script,
+                G_recreate_command_original_path(), NULL);
     else
         return -1;
 
@@ -983,7 +998,8 @@ int module_gui_wx(void)
 void set_flag(int f)
 {
     struct Flag *flag;
-    char *err;
+    char *key, *err;
+    const char *renamed_key;
 
     err = NULL;
 
@@ -995,7 +1011,7 @@ void set_flag(int f)
         return;
     }
 
-    /* Find flag with corrrect keyword */
+    /* Find flag with correct keyword */
     flag = &st->first_flag;
     while (flag) {
         if (flag->key == f) {
@@ -1009,8 +1025,69 @@ void set_flag(int f)
         flag = flag->next_flag;
     }
 
-    G_asprintf(&err, _("%s: Sorry, <%c> is not a valid flag"),
-               G_program_name(), f);
+    /* First, check if key has been renamed */
+    G_asprintf(&key, "-%c", f);
+    renamed_key = get_renamed_option(key);
+    G_free(key);
+
+    if (renamed_key) {
+        /* if renamed to a new flag */
+        if (*renamed_key == '-') {
+            /* if renamed to a long flag */
+            if (renamed_key[1] == '-') {
+                if (strcmp(renamed_key, "--overwrite") == 0) {
+                    /* this is a special case for -? to --overwrite */
+                    G_warning(_("Please update the usage of <%s>: "
+                                "flag <%c> has been renamed to <%s>"),
+                              G_program_name(), f, renamed_key);
+                    st->overwrite = 1;
+                }
+                else {
+                    /* long flags other than --overwrite are usually specific to
+                     * GRASS internals, just print an error and let's not
+                     * support them */
+                    G_asprintf(&err,
+                               _("Please update the usage of <%s>: "
+                                 "flag <%c> has been renamed to <%s>"),
+                               G_program_name(), f, renamed_key);
+                    append_error(err);
+                }
+                return;
+            }
+            /* if renamed to a short flag */
+            for (flag = &st->first_flag; flag; flag = flag->next_flag) {
+                if (renamed_key[1] == flag->key) {
+                    G_warning(_("Please update the usage of <%s>: "
+                                "flag <%c> has been renamed to <%s>"),
+                              G_program_name(), f, renamed_key);
+                    flag->answer = 1;
+                    if (flag->suppress_required)
+                        st->suppress_required = 1;
+                    if (flag->suppress_overwrite)
+                        st->suppress_overwrite = 1;
+                    return;
+                }
+            }
+        }
+        else {
+            /* if renamed to a new option (no option value given but will be
+             * required), fatal error */
+            struct Option *opt = NULL;
+            for (opt = &st->first_option; opt; opt = opt->next_opt) {
+                if (strcmp(renamed_key, opt->key) == 0) {
+                    G_asprintf(&err,
+                               _("Please update the usage of <%s>: "
+                                 "flag <%c> has been renamed to option <%s>"),
+                               G_program_name(), f, renamed_key);
+                    append_error(err);
+                    return;
+                }
+            }
+        }
+    }
+
+    G_asprintf(&err, _("%s: Sorry, <%c> is not a valid flag"), G_program_name(),
+               f);
     append_error(err);
 }
 
@@ -1049,7 +1126,7 @@ int is_option(const char *string)
     int n = strspn(string, "abcdefghijklmnopqrstuvwxyz0123456789_");
 
     return n > 0 && string[n] == '=' && string[0] != '_' &&
-        string[n - 1] != '_';
+           string[n - 1] != '_';
 }
 
 int match_option_1(const char *string, const char *option)
@@ -1080,8 +1157,7 @@ int match_option_1(const char *string, const char *option)
 
 int match_option(const char *string, const char *option)
 {
-    return (*string == *option)
-        && match_option_1(string + 1, option + 1);
+    return (*string == *option) && match_option_1(string + 1, option + 1);
 }
 
 void set_option(const char *string)
@@ -1161,12 +1237,29 @@ void set_option(const char *string)
     if (found)
         opt = matches[0];
 
-    /* First, check if key has been renamed in GRASS 7 */
+    /* First, check if key has been renamed */
     if (found == 0) {
-        const char *renamed_key = NULL;
+        const char *renamed_key = get_renamed_option(the_key);
 
-        renamed_key = get_renamed_option(the_key);
         if (renamed_key) {
+            /* if renamed to a new flag (option value given but will be lost),
+             * fatal error */
+            if (*renamed_key == '-') {
+                if (renamed_key[1] == '-')
+                    G_asprintf(&err,
+                               _("Please update the usage of <%s>: "
+                                 "option <%s> has been renamed to flag <%s>"),
+                               G_program_name(), the_key, renamed_key);
+                else
+                    G_asprintf(&err,
+                               _("Please update the usage of <%s>: "
+                                 "option <%s> has been renamed to flag <%c>"),
+                               G_program_name(), the_key, renamed_key[1]);
+                append_error(err);
+                return;
+            }
+
+            /* if renamed to a new option */
             for (at_opt = &st->first_option; at_opt;
                  at_opt = at_opt->next_opt) {
                 if (strcmp(renamed_key, at_opt->key) == 0) {
@@ -1195,13 +1288,12 @@ void set_option(const char *string)
     /* Allocate memory where answer is stored */
     if (opt->count++) {
         if (!opt->multiple) {
-            G_asprintf(&err,
-                       _("Option <%s> does not accept multiple answers"),
+            G_asprintf(&err, _("Option <%s> does not accept multiple answers"),
                        opt->key);
             append_error(err);
         }
-        opt->answer = G_realloc(opt->answer,
-                                strlen(opt->answer) + strlen(string) + 2);
+        opt->answer =
+            G_realloc(opt->answer, strlen(opt->answer) + strlen(string) + 2);
         strcat(opt->answer, ",");
         strcat(opt->answer, string);
     }
@@ -1223,12 +1315,12 @@ void check_opts(void)
 
         if (opt->answer) {
             if (opt->multiple == 0)
-                check_an_opt(opt->key, opt->type,
-                             opt->options, opt->opts, &opt->answer);
+                check_an_opt(opt->key, opt->type, opt->options, opt->opts,
+                             &opt->answer);
             else {
                 for (ans = 0; opt->answers[ans] != NULL; ans++)
-                    check_an_opt(opt->key, opt->type,
-                                 opt->options, opt->opts, &opt->answers[ans]);
+                    check_an_opt(opt->key, opt->type, opt->options, opt->opts,
+                                 &opt->answers[ans]);
             }
         }
 
@@ -1270,13 +1362,15 @@ void check_an_opt(const char *key, int type, const char *options,
     case BAD_SYNTAX:
         G_asprintf(&err,
                    _("Illegal range syntax for parameter <%s>\n"
-                     "\tPresented as: %s"), key, options);
+                     "\tPresented as: %s"),
+                   key, options);
         append_error(err);
         break;
     case OUT_OF_RANGE:
         G_asprintf(&err,
                    _("Value <%s> out of range for parameter <%s>\n"
-                     "\tLegal range: %s"), answer, key, options);
+                     "\tLegal range: %s"),
+                   answer, key, options);
         append_error(err);
         break;
     case MISSING_VALUE:
@@ -1284,14 +1378,15 @@ void check_an_opt(const char *key, int type, const char *options,
         append_error(err);
         break;
     case INVALID_VALUE:
-        G_asprintf(&err,
-                   _("Invalid value <%s> for parameter <%s>"), answer, key);
+        G_asprintf(&err, _("Invalid value <%s> for parameter <%s>"), answer,
+                   key);
         append_error(err);
         break;
     case AMBIGUOUS:
         G_asprintf(&err,
                    _("Value <%s> ambiguous for parameter <%s>\n"
-                     "\tValid options: %s"), answer, key, options);
+                     "\tValid options: %s"),
+                   answer, key, options);
         append_error(err);
         break;
     case REPLACED:
@@ -1436,8 +1531,7 @@ int check_string(const char *ans, const char **opts, int *result)
             }
         }
         for (i = 0; prefix && i < found; i++)
-            if (strncmp(opts[matches[i]], opts[matches[shortest]], length) !=
-                0)
+            if (strncmp(opts[matches[i]], opts[matches[shortest]], length) != 0)
                 prefix = 0;
         if (prefix) {
             matches[0] = matches[shortest];
@@ -1450,8 +1544,7 @@ int check_string(const char *ans, const char **opts, int *result)
 
     if (found > 0 && getenv("GRASS_FULL_OPTION_NAMES") &&
         strcmp(ans, opts[matches[0]]) != 0)
-        G_warning(_("<%s> is an abbreviation for <%s>"), ans,
-                  opts[matches[0]]);
+        G_warning(_("<%s> is an abbreviation for <%s>"), ans, opts[matches[0]]);
 
     switch (found) {
     case 0:
@@ -1476,10 +1569,10 @@ void check_required(void)
     opt = &st->first_option;
     while (opt) {
         if (opt->required && !opt->answer) {
-            G_asprintf(&err, _("Required parameter <%s> not set:\n"
-                               "\t(%s)"),
-                       opt->key,
-                       (opt->label ? opt->label : opt->description));
+            G_asprintf(&err,
+                       _("Required parameter <%s> not set:\n"
+                         "\t(%s)"),
+                       opt->key, (opt->label ? opt->label : opt->description));
             append_error(err);
         }
         opt = opt->next_opt;
@@ -1495,13 +1588,12 @@ void split_opts(void)
     int ans_num;
     int len;
 
-
     if (!st->n_opts)
         return;
 
     opt = &st->first_option;
     while (opt) {
-        if ( /*opt->multiple && */ opt->answer) {
+        if (/*opt->multiple && */ opt->answer) {
             /* Allocate some memory to store array of pointers */
             allocated = 10;
             opt->answers = G_malloc(allocated * sizeof(char *));
@@ -1512,9 +1604,10 @@ void split_opts(void)
 
             for (;;) {
                 for (len = 0, ptr2 = ptr1; *ptr2 != '\0' && *ptr2 != ',';
-                     ptr2++, len++) ;
+                     ptr2++, len++)
+                    ;
 
-                if (len > 0) {  /* skip ,, */
+                if (len > 0) { /* skip ,, */
                     opt->answers[ans_num] = G_malloc(len + 1);
                     memcpy(opt->answers[ans_num], ptr1, len);
                     opt->answers[ans_num][len] = 0;
@@ -1523,8 +1616,8 @@ void split_opts(void)
 
                     if (ans_num >= allocated) {
                         allocated += 10;
-                        opt->answers = G_realloc(opt->answers,
-                                                 allocated * sizeof(char *));
+                        opt->answers =
+                            G_realloc(opt->answers, allocated * sizeof(char *));
                     }
 
                     opt->answers[ans_num] = NULL;
@@ -1565,15 +1658,15 @@ void check_multiple_opts(void)
                 if (*ptr == ',')
                     n_commas++;
             /* count items */
-            for (n = 0; opt->answers[n] != NULL; n++) ;
+            for (n = 0; opt->answers[n] != NULL; n++)
+                ;
             /* if not correct multiple of items */
             if (n % n_commas) {
                 G_asprintf(&err,
                            _("Option <%s> must be provided in multiples of %d\n"
-                            "\tYou provided %d item(s): %s"), opt->key,
-                           n_commas, n, opt->answer);
+                             "\tYou provided %d item(s): %s"),
+                           opt->key, n_commas, n, opt->answer);
                 append_error(err);
-
             }
         }
         opt = opt->next_opt;
@@ -1639,22 +1732,25 @@ int check_overwrite(void)
                         }
                     }
 
-                    if (found) {        /* found */
+                    if (found) { /* found */
                         if (!st->overwrite && !over) {
                             if (G_verbose() > -1) {
                                 if (G_info_format() != G_INFO_FORMAT_GUI) {
                                     fprintf(stderr, _("ERROR: "));
                                     fprintf(stderr,
-                                            _("option <%s>: <%s> exists. To overwrite, use the --overwrite flag"),
+                                            _("option <%s>: <%s> exists. To "
+                                              "overwrite, use the --overwrite "
+                                              "flag"),
                                             opt->key, opt->answers[i]);
                                     fprintf(stderr, "\n");
                                 }
                                 else {
-                                    fprintf(stderr,
-                                            "GRASS_INFO_ERROR(%d,1): ",
+                                    fprintf(stderr, "GRASS_INFO_ERROR(%d,1): ",
                                             getpid());
                                     fprintf(stderr,
-                                            _("option <%s>: <%s> exists. To overwrite, use the --overwrite flag"),
+                                            _("option <%s>: <%s> exists. To "
+                                              "overwrite, use the --overwrite "
+                                              "flag"),
                                             opt->key, opt->answers[i]);
                                     fprintf(stderr, "\n");
                                     fprintf(stderr, "GRASS_INFO_END(%d,1)\n",
@@ -1716,7 +1812,7 @@ const char *get_renamed_option(const char *key)
         /* read renamed options from file (renamed_options) */
         char path[GPATH_MAX];
 
-        G_snprintf(path, GPATH_MAX, "%s/etc/renamed_options", G_gisbase());
+        snprintf(path, GPATH_MAX, "%s/etc/renamed_options", G_gisbase());
         st->renamed_options = G_read_key_value_file(path);
     }
 
@@ -1784,8 +1880,8 @@ char *G_option_to_separator(const struct Option *option)
     else
         sep = G_store(option->answer);
 
-    G_debug(3, "G_option_to_separator(): key = %s -> sep = '%s'",
-            option->key, sep);
+    G_debug(3, "G_option_to_separator(): key = %s -> sep = '%s'", option->key,
+            sep);
 
     return sep;
 }
@@ -1826,7 +1922,7 @@ FILE *G_open_option_file(const struct Option *option)
     FILE *fp;
 
     stdinout = !option->answer || !*(option->answer) ||
-        strcmp(option->answer, "-") == 0;
+               strcmp(option->answer, "-") == 0;
 
     if (option->gisprompt == NULL)
         G_fatal_error(_("%s= is not a file option"), option->key);
@@ -1837,15 +1933,15 @@ FILE *G_open_option_file(const struct Option *option)
         if (stdinout)
             fp = stdin;
         else if ((fp = fopen(option->answer, "r")) == NULL)
-            G_fatal_error(_("Unable to open %s file <%s>: %s"),
-                          option->key, option->answer, strerror(errno));
+            G_fatal_error(_("Unable to open %s file <%s>: %s"), option->key,
+                          option->answer, strerror(errno));
     }
     else if (strcmp(option->gisprompt, "new,file,file") == 0) {
         if (stdinout)
             fp = stdout;
         else if ((fp = fopen(option->answer, "w")) == NULL)
-            G_fatal_error(_("Unable to create %s file <%s>: %s"),
-                          option->key, option->answer, strerror(errno));
+            G_fatal_error(_("Unable to create %s file <%s>: %s"), option->key,
+                          option->answer, strerror(errno));
     }
     else
         G_fatal_error(_("%s= is not a file option"), option->key);
@@ -1859,7 +1955,7 @@ FILE *G_open_option_file(const struct Option *option)
 
    \param file pointer
  */
-void G_close_option_file(FILE * fp)
+void G_close_option_file(FILE *fp)
 {
     if (fp != stdin && fp != stdout && fp != stderr)
         fclose(fp);

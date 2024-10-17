@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_update.c
- * 
+ *
  * \brief DBMI Library (driver) - update statemets
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -30,7 +30,7 @@ int db_d_update(void)
 
     /* get the arg(s) */
     DB_RECV_TOKEN(&token);
-    cursor = (dbCursor *) db_find_token(token);
+    cursor = (dbCursor *)db_find_token(token);
     if (cursor == NULL || !db_test_cursor_type_update(cursor)) {
         db_error("** not an update cursor **");
         DB_SEND_FAILURE();

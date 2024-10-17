@@ -47,9 +47,9 @@ static int cmp(const void *pa, const void *pb)
    \param to_dbname name of copied table
    \param where WHERE SQL condition (without where key word) or NULL
    \param select full select statement
-   \param selcol name of column used to select records by values in ivals or NULL
-   \param ivals pointer to array of integer values or NULL
-   \param nvals number of values in ivals
+   \param selcol name of column used to select records by values in ivals or
+   NULL \param ivals pointer to array of integer values or NULL \param nvals
+   number of values in ivals
 
    \return DB_OK on success
    \return DB_FAILED on failure
@@ -57,8 +57,8 @@ static int cmp(const void *pa, const void *pb)
 static int copy_table(const char *from_drvname, const char *from_dbname,
                       const char *from_tblname, const char *to_drvname,
                       const char *to_dbname, const char *to_tblname,
-                      const char *where, const char *select,
-                      const char *selcol, int *ivals, int nvals)
+                      const char *where, const char *select, const char *selcol,
+                      int *ivals, int nvals)
 {
     int col, ncols, sqltype, ctype, more, selcol_found;
     char buf[1000];
@@ -75,7 +75,8 @@ static int copy_table(const char *from_drvname, const char *from_dbname,
     dbDriver *from_driver, *to_driver;
     int count, i;
 
-    G_debug(3, "db_copy_table():\n  from driver = %s, db = %s, table = %s\n"
+    G_debug(3,
+            "db_copy_table():\n  from driver = %s, db = %s, table = %s\n"
             "  to driver = %s, db = %s, table = %s, where = %s, select = %s",
             from_drvname, from_dbname, from_tblname, to_drvname, to_dbname,
             to_tblname, where, select);
@@ -110,15 +111,15 @@ static int copy_table(const char *from_drvname, const char *from_dbname,
     }
     db_set_handle(&from_handle, from_dbname, NULL);
     if (db_open_database(from_driver, &from_handle) != DB_OK) {
-        G_warning(_("Unable to open database <%s> by driver <%s>"),
-                  from_dbname, from_drvname);
+        G_warning(_("Unable to open database <%s> by driver <%s>"), from_dbname,
+                  from_drvname);
         db_close_database_shutdown_driver(from_driver);
         return DB_FAILED;
     }
 
     /* Open output driver and database */
-    if (strcmp(from_drvname, to_drvname) == 0
-        && strcmp(from_dbname, to_dbname) == 0) {
+    if (strcmp(from_drvname, to_drvname) == 0 &&
+        strcmp(from_dbname, to_dbname) == 0) {
         G_debug(3, "Use the same driver");
         to_driver = from_driver;
     }
@@ -174,8 +175,9 @@ static int copy_table(const char *from_drvname, const char *from_dbname,
                 char buf[GNAME_MAX];
 
                 sprintf(buf, "%s.%s",
-                        connection.schemaName ? connection.
-                        schemaName : "public", to_tblname);
+                        connection.schemaName ? connection.schemaName
+                                              : "public",
+                        to_tblname);
                 if (strcmp(buf, tbl) == 0)
                     tblname_i = G_store(p + 1); /* skip dot */
             }
@@ -187,7 +189,8 @@ static int copy_table(const char *from_drvname, const char *from_dbname,
         ret = DB_FAILED;
         if (strcmp(to_tblname, tblname_i) == 0) {
             if (G_get_overwrite()) {
-                G_warning(_("Table <%s> already exists in database and will be overwritten"),
+                G_warning(_("Table <%s> already exists in database and will be "
+                            "overwritten"),
                           to_tblname);
                 ret = db_drop_table(to_driver, &tblnames[i]);
             }
@@ -213,7 +216,7 @@ static int copy_table(const char *from_drvname, const char *from_dbname,
     if (select) {
         db_set_string(&sql, select);
 
-        /* TODO!: cannot use this because it will not work if a query 
+        /* TODO!: cannot use this because it will not work if a query
          *         ends with 'group by' for example */
         /*
            tmp = strdup ( select );
@@ -240,8 +243,7 @@ static int copy_table(const char *from_drvname, const char *from_dbname,
     G_debug(3, "db__copy_table: %s", db_get_string(&sql));
     if (db_open_select_cursor(from_driver, &sql, &cursor, DB_SEQUENTIAL) !=
         DB_OK) {
-        G_warning(_("Unable to open select cursor: '%s'"),
-                  db_get_string(&sql));
+        G_warning(_("Unable to open select cursor: '%s'"), db_get_string(&sql));
         db_close_database_shutdown_driver(to_driver);
         if (from_driver != to_driver) {
             db_close_database_shutdown_driver(from_driver);
@@ -315,8 +317,7 @@ static int copy_table(const char *from_drvname, const char *from_dbname,
     G_debug(3, "db__copy_table: %s", db_get_string(&sql));
     if (db_open_select_cursor(from_driver, &sql, &cursor, DB_SEQUENTIAL) !=
         DB_OK) {
-        G_warning(_("Unable to open select cursor: '%s'"),
-                  db_get_string(&sql));
+        G_warning(_("Unable to open select cursor: '%s'"), db_get_string(&sql));
         db_close_database_shutdown_driver(to_driver);
         if (from_driver != to_driver) {
             db_close_database_shutdown_driver(from_driver);
@@ -334,8 +335,7 @@ static int copy_table(const char *from_drvname, const char *from_dbname,
         int select;
 
         if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK) {
-            G_warning(_("Unable to fetch data from table <%s>"),
-                      from_tblname);
+            G_warning(_("Unable to fetch data from table <%s>"), from_tblname);
             db_close_cursor(&cursor);
             db_close_database_shutdown_driver(to_driver);
             if (from_driver != to_driver) {
@@ -404,8 +404,7 @@ static int copy_table(const char *from_drvname, const char *from_dbname,
         db_append_string(&sql, ")");
         G_debug(3, "db__copy_table: %s", db_get_string(&sql));
         if (db_execute_immediate(to_driver, &sql) != DB_OK) {
-            G_warning("Unable to insert new record: '%s'",
-                      db_get_string(&sql));
+            G_warning("Unable to insert new record: '%s'", db_get_string(&sql));
             db_close_cursor(&cursor);
             db_close_database_shutdown_driver(to_driver);
             if (from_driver != to_driver) {
@@ -445,9 +444,8 @@ int db_copy_table(const char *from_drvname, const char *from_dbname,
                   const char *from_tblname, const char *to_drvname,
                   const char *to_dbname, const char *to_tblname)
 {
-    return copy_table(from_drvname, from_dbname, from_tblname,
-                      to_drvname, to_dbname, to_tblname,
-                      NULL, NULL, NULL, NULL, 0);
+    return copy_table(from_drvname, from_dbname, from_tblname, to_drvname,
+                      to_dbname, to_tblname, NULL, NULL, NULL, NULL, 0);
 }
 
 /*!
@@ -469,9 +467,8 @@ int db_copy_table_where(const char *from_drvname, const char *from_dbname,
                         const char *to_dbname, const char *to_tblname,
                         const char *where)
 {
-    return copy_table(from_drvname, from_dbname, from_tblname,
-                      to_drvname, to_dbname, to_tblname,
-                      where, NULL, NULL, NULL, 0);
+    return copy_table(from_drvname, from_dbname, from_tblname, to_drvname,
+                      to_dbname, to_tblname, where, NULL, NULL, NULL, 0);
 }
 
 /*!
@@ -493,9 +490,8 @@ int db_copy_table_select(const char *from_drvname, const char *from_dbname,
                          const char *to_dbname, const char *to_tblname,
                          const char *select)
 {
-    return copy_table(from_drvname, from_dbname, from_tblname,
-                      to_drvname, to_dbname, to_tblname,
-                      NULL, select, NULL, NULL, 0);
+    return copy_table(from_drvname, from_dbname, from_tblname, to_drvname,
+                      to_dbname, to_tblname, NULL, select, NULL, NULL, 0);
 }
 
 /*!
@@ -507,9 +503,9 @@ int db_copy_table_select(const char *from_drvname, const char *from_dbname,
    \param to_drvname name of driver to - where table is copied to
    \param to_dbname name of database to - where table is copied to
    \param to_tblname name of copied table
-   \param selcol name of column used to select records by values in ivals or NULL
-   \param ivals pointer to array of integer values or NULL
-   \param nvals number of values in ivals
+   \param selcol name of column used to select records by values in ivals or
+   NULL \param ivals pointer to array of integer values or NULL \param nvals
+   number of values in ivals
 
    \return DB_OK on success
    \return DB_FAILED on failure
@@ -519,7 +515,6 @@ int db_copy_table_by_ints(const char *from_drvname, const char *from_dbname,
                           const char *to_dbname, const char *to_tblname,
                           const char *selcol, int *ivals, int nvals)
 {
-    return copy_table(from_drvname, from_dbname, from_tblname,
-                      to_drvname, to_dbname, to_tblname,
-                      NULL, NULL, selcol, ivals, nvals);
+    return copy_table(from_drvname, from_dbname, from_tblname, to_drvname,
+                      to_dbname, to_tblname, NULL, NULL, selcol, ivals, nvals);
 }

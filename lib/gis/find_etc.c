@@ -47,7 +47,6 @@ static char *G__find_etc(const char *name)
     return NULL;
 }
 
-
 /*!
  * \brief searches for a file from the etc search list in GRASS_ADDON_ETC
  *      returns the full path to where the file was found.

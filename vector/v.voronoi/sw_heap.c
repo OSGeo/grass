@@ -2,7 +2,6 @@
 #include <grass/gis.h>
 #include "sw_defs.h"
 
-
 int PQinsert(struct Halfedge *he, struct Site *v, double offset)
 {
     struct Halfedge *last, *next;
@@ -13,8 +12,7 @@ int PQinsert(struct Halfedge *he, struct Site *v, double offset)
     last = &PQhash[PQbucket(he)];
     while ((next = last->PQnext) != (struct Halfedge *)NULL &&
            (he->ystar > next->ystar ||
-            (he->ystar == next->ystar && v->coord.x > next->vertex->coord.x)))
-    {
+            (he->ystar == next->ystar && v->coord.x > next->vertex->coord.x))) {
         last = next;
     }
     he->PQnext = last->PQnext;
@@ -53,13 +51,10 @@ int PQbucket(struct Halfedge *he)
     return (bucket);
 }
 
-
-
 int PQempty(void)
 {
     return (PQcount == 0);
 }
-
 
 struct Point PQ_min(void)
 {
@@ -84,7 +79,6 @@ struct Halfedge *PQextractmin(void)
     return (curr);
 }
 
-
 int PQinitialize(void)
 {
     int i;
@@ -92,8 +86,7 @@ int PQinitialize(void)
     PQcount = 0;
     PQmin = 0;
     PQhashsize = 4 * sqrt_nsites;
-    PQhash =
-        (struct Halfedge *)G_malloc(PQhashsize * sizeof(struct Halfedge));
+    PQhash = (struct Halfedge *)G_malloc(PQhashsize * sizeof(struct Halfedge));
     for (i = 0; i < PQhashsize; i++)
         PQhash[i].PQnext = (struct Halfedge *)NULL;
 

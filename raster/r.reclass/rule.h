@@ -2,7 +2,8 @@
 #include <grass/raster.h>
 
 #define RULE struct _rule_
-RULE {
+RULE
+{
     CELL new;
     CELL lo;
     CELL hi;

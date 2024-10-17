@@ -23,7 +23,7 @@
 
    \return
  */
-int db__send_string_array(dbString * a, int count)
+int db__send_string_array(dbString *a, int count)
 {
     int i;
     int stat;
@@ -43,7 +43,7 @@ int db__send_string_array(dbString * a, int count)
 
    \return
  */
-int db__recv_string_array(dbString ** a, int *n)
+int db__recv_string_array(dbString **a, int *n)
 {
     int i, count;
     int stat;
@@ -83,14 +83,14 @@ int db__recv_string_array(dbString ** a, int *n)
 
    \return
  */
-int db__send_string(dbString * x)
+int db__send_string(dbString *x)
 {
     int stat = DB_OK;
     const char *s = db_get_string(x);
     int len = s ? strlen(s) + 1 : 1;
 
     if (!s)
-        s = "";                 /* don't send a NULL string */
+        s = ""; /* don't send a NULL string */
 
     if (!db__send(&len, sizeof(len)))
         stat = DB_PROTOCOL_ERR;
@@ -114,7 +114,7 @@ int db__send_string(dbString * x)
    \return DB_OK, DB_MEMORY_ERR, or DB_PROTOCOL_ERR
    \return NULL if error
  */
-int db__recv_string(dbString * x)
+int db__recv_string(dbString *x)
 {
     int stat = DB_OK;
     int len;
@@ -123,7 +123,7 @@ int db__recv_string(dbString * x)
     if (!db__recv(&len, sizeof(len)))
         stat = DB_PROTOCOL_ERR;
 
-    if (len <= 0)               /* len will include the null byte */
+    if (len <= 0) /* len will include the null byte */
         stat = DB_PROTOCOL_ERR;
 
     if (db_enlarge_string(x, len) != DB_OK)

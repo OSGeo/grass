@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_create_idx.c
- * 
+ *
  * \brief DBMI Library (driver) - create index
  *
  * (C) 1999-2008 by the GRASS Development Team

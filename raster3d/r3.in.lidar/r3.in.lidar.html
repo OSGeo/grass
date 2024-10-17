@@ -29,8 +29,7 @@ its documentation apply also for <em>r3.in.lidar</em>.
         Please report issues on the mailing list or in the bug tracker.
     <li>
         No reprojection is performed, you need to reproject ahead or
-        use GRASS Location which has the right coordinate system
-        which fits with the data.
+        use a GRASS project with the coordinate system that matches that of the data.
     <li>
         Some temporary maps are created but not cleaned up. Use of
         <b>--overwrite</b> might be necessary even when not desired.
@@ -115,7 +114,7 @@ computational region extent and resolution:
 g.region raster=points_n -p3
 </pre></div>
 
-<tt>class_filter=2</tt> is used to limit 
+<tt>class_filter=2</tt> is used to limit
 
 <div class="code"><pre>
 r.in.lidar input=points.las output=ground_mean method=mean class_filter=2

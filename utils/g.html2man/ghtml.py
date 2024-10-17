@@ -1,37 +1,8 @@
-from __future__ import (
-    absolute_import,
-    division,
-    generators,
-    nested_scopes,
-    print_function,
-    unicode_literals,
-    with_statement,
-)
+import html.parser as base
 import sys
+from html.entities import entitydefs
 
-try:
-    # Python 2 import
-    import HTMLParser as base
-
-    HTMLParseError = base.HTMLParseError
-except ImportError:
-    # Python 3 import
-    import html.parser as base
-
-    # TODO: this needs a better fix since HTMLParseError is actually
-    # used including its attributes, so that actually fails
-    # HTMLParseError is deprecated, parsing is not strict
-    HTMLParseError = Exception
-
-try:
-    # Python 3
-    from html.entities import entitydefs
-except ImportError:
-    # Python 2
-    from htmlentitydefs import entitydefs
-
-
-__all__ = ["HTMLParser", "HTMLParseError"]
+__all__ = ["HTMLParser"]
 
 omit_start = ["body", "tbody", "head", "html"]
 
@@ -124,7 +95,7 @@ head_content = ["title", "isindex", "base"]
 
 
 def setify(d):
-    return dict([(key, frozenset(val)) for key, val in d.items()])
+    return {key: frozenset(val) for key, val in d.items()}
 
 
 def omit(allowed, tags):
@@ -233,6 +204,9 @@ excluded = {
 
 excluded = setify(excluded)
 
+# Don't show mobile TOC menu JS code among <script> tag on cli man page
+masked = ["script"]
+
 
 class HTMLParser(base.HTMLParser):
     def __init__(self, entities=None):
@@ -251,15 +225,15 @@ class HTMLParser(base.HTMLParser):
     def top(self):
         if self.tag_stack == []:
             return None
-        else:
-            return self.tag_stack[-1][0]
+        return self.tag_stack[-1][0]
 
     def pop(self):
         self.excluded = self.excluded_stack.pop()
         data = self.data
         self.data = self.data_stack.pop()
         (tag, attrs) = self.tag_stack.pop()
-        self.append((tag, attrs, data))
+        if tag not in masked:
+            self.append((tag, attrs, data))
         return tag
 
     def push(self, tag, attrs):

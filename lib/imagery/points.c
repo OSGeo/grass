@@ -3,7 +3,7 @@
 
 #define POINT_FILE "POINTS"
 
-static int I_read_control_points(FILE * fd, struct Control_Points *cp)
+static int I_read_control_points(FILE *fd, struct Control_Points *cp)
 {
     char buf[100];
     double e1, e2, n1, n2;
@@ -33,7 +33,6 @@ static int I_read_control_points(FILE * fd, struct Control_Points *cp)
     return 1;
 }
 
-
 /*!
  * \brief add new control point
  *
@@ -54,9 +53,8 @@ static int I_read_control_points(FILE * fd, struct Control_Points *cp)
  *  \return int
  */
 
-int I_new_control_point(struct Control_Points *cp,
-                        double e1, double n1, double e2, double n2,
-                        int status)
+int I_new_control_point(struct Control_Points *cp, double e1, double n1,
+                        double e2, double n2, int status)
 {
     int i;
     unsigned int size;
@@ -81,24 +79,22 @@ int I_new_control_point(struct Control_Points *cp,
     return 0;
 }
 
-static int I_write_control_points(FILE * fd, const struct Control_Points *cp)
+static int I_write_control_points(FILE *fd, const struct Control_Points *cp)
 {
     int i;
 
-    fprintf(fd, "# %7s %15s %15s %15s %9s status\n", "", "image", "",
-            "target", "");
+    fprintf(fd, "# %7s %15s %15s %15s %9s status\n", "", "image", "", "target",
+            "");
     fprintf(fd, "# %15s %15s %15s %15s   (1=ok)\n", "east", "north", "east",
             "north");
     fprintf(fd, "#\n");
     for (i = 0; i < cp->count; i++)
         if (cp->status[i] >= 0)
-            fprintf(fd, "  %15f %15f %15f %15f %4d\n",
-                    cp->e1[i], cp->n1[i], cp->e2[i], cp->n2[i],
-                    cp->status[i]);
+            fprintf(fd, "  %15f %15f %15f %15f %4d\n", cp->e1[i], cp->n1[i],
+                    cp->e2[i], cp->n2[i], cp->status[i]);
 
     return 0;
 }
-
 
 /*!
  * \brief read group control points
@@ -135,7 +131,6 @@ int I_get_control_points(const char *group, struct Control_Points *cp)
     }
     return 1;
 }
-
 
 /*!
  * \brief write group control points

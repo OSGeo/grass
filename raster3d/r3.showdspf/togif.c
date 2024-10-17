@@ -1,86 +1,84 @@
-
 /**********************************************************************
- *	togif - 
- *		Convert an IRIS image to GIF format.  Converts b/w and 
- *	color images to 8 bit per pixel GIF format.  Color images
- *	are dithered with a 4 by 4 dither matrix.  GIF image files 
- *	may be uuencoded, and sent over the network.
+ *        togif -
+ *                Convert an IRIS image to GIF format.  Converts b/w and
+ *        color images to 8 bit per pixel GIF format.  Color images
+ *        are dithered with a 4 by 4 dither matrix.  GIF image files
+ *        may be uuencoded, and sent over the network.
  *
- *			Paul Haeberli @ Silicon Graphics - 1989
+ *                        Paul Haeberli @ Silicon Graphics - 1989
  *
  *    * Modified Jan 1995 - Made parallelizable via elimination of
  *    * global variables.
  **********************************************************************
  */
+
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
 #include <grass/gis.h>
 #include "togif.h"
-#define GIFGAMMA	(1.5)   /* smaller makes output image darker */
+#define GIFGAMMA  (1.5) /* smaller makes output image darker */
 #define MAXCOLORS 256
-#define CBITS    12
+#define CBITS     12
 
-typedef int (*ifunptr)(int x, int y, vgl_GIFWriter * dataPtr);
-
+typedef int (*ifunptr)(int x, int y, vgl_GIFWriter *dataPtr);
 
 /***************************************************************************
  * These routines interface the non-GIF data to the GIF black box (GIFENCOD)
  ***************************************************************************
  */
-static int getgifpix2(int x, int y, vgl_GIFWriter * dataPtr);
+static int getgifpix2(int x, int y, vgl_GIFWriter *dataPtr);
 static void getrow2(unsigned long *buffer, short *row, unsigned short width,
                     unsigned short rownum, unsigned short comp);
-static void gammawarp(short *sbuf, float gam, int n, vgl_GIFWriter * dataPtr);
+static void gammawarp(short *sbuf, float gam, int n, vgl_GIFWriter *dataPtr);
 static short **makedittab(int levels, int mult, int add);
 static int ditherrow(unsigned short *r, unsigned short *g, unsigned short *b,
-                     short *wp, int n, int y, vgl_GIFWriter * dataPtr);
+                     short *wp, int n, int y, vgl_GIFWriter *dataPtr);
 
 /******************************************************************************
  * GIF black box routines
  ******************************************************************************
  */
-static void BumpPixel(vgl_GIFWriter * dataPtr);
-static int GIFNextPixel(ifunptr getpixel, vgl_GIFWriter * dataPtr);
-static int GIFEncode(FILE * fp, int GWidth, int GHeight, int GInterlace,
+static void BumpPixel(vgl_GIFWriter *dataPtr);
+static int GIFNextPixel(ifunptr getpixel, vgl_GIFWriter *dataPtr);
+static int GIFEncode(FILE *fp, int GWidth, int GHeight, int GInterlace,
                      int Background, int BitsPerPixel, int Red[], int Green[],
-                     int Blue[], ifunptr GetPixel, vgl_GIFWriter * dataPtr);
-static void Putword(int w, FILE * fp);
+                     int Blue[], ifunptr GetPixel, vgl_GIFWriter *dataPtr);
+static void Putword(int w, FILE *fp);
 
 /******************************************************************************
  * GIF compression black box routines
  ******************************************************************************
  */
-static void compress(int init_bits, FILE * outfile, ifunptr ReadValue,
-                     vgl_GIFWriter * dataPtr);
-static void output(code_int code, vgl_GIFWriter * dataPtr);
-static void cl_block(vgl_GIFWriter * dataPtr);
-static void cl_hash(register count_int hsize, vgl_GIFWriter * dataPtr);
+static void compress(int init_bits, FILE *outfile, ifunptr ReadValue,
+                     vgl_GIFWriter *dataPtr);
+static void output(code_int code, vgl_GIFWriter *dataPtr);
+static void cl_block(vgl_GIFWriter *dataPtr);
+static void cl_hash(register count_int hsize, vgl_GIFWriter *dataPtr);
 static void writeerr();
-static void flush_char(vgl_GIFWriter * dataPtr);
-static void char_out(int c, vgl_GIFWriter * dataPtr);
-static void char_init(vgl_GIFWriter * dataPtr);
+static void flush_char(vgl_GIFWriter *dataPtr);
+static void char_out(int c, vgl_GIFWriter *dataPtr);
+static void char_init(vgl_GIFWriter *dataPtr);
 
-/************************ vgl_GIFWriterBegin() ******************************/
+/************************ vgl_GIFWriterBegin() *****************************/
 vgl_GIFWriter *vgl_GIFWriterBegin(void)
 {
     vgl_GIFWriter *gifwriter;
 
-    gifwriter = (vgl_GIFWriter *) G_malloc(sizeof(vgl_GIFWriter));
+    gifwriter = (vgl_GIFWriter *)G_malloc(sizeof(vgl_GIFWriter));
     return gifwriter;
 }
 
-/************************** vgl_GIFWriterEnd() ********************************/
-void vgl_GIFWriterEnd(vgl_GIFWriter * gifwriter)
+/************************** vgl_GIFWriterEnd() *****************************/
+void vgl_GIFWriterEnd(vgl_GIFWriter *gifwriter)
 {
     G_free(gifwriter);
 }
 
-/********************** vgl_GIFWriterWriteGIFFile() ****************************/
-void vgl_GIFWriterWriteGIFFile(vgl_GIFWriter * gifwriter,
-                               unsigned long *buffer, int xsize, int ysize,
-                               int bwflag, FILE * outf)
+/********************** vgl_GIFWriterWriteGIFFile() ************************/
+void vgl_GIFWriterWriteGIFFile(vgl_GIFWriter *gifwriter, unsigned long *buffer,
+                               int xsize, int ysize, int bwflag, FILE *outf)
 {
     short r, g, b;
     int i;
@@ -92,7 +90,8 @@ void vgl_GIFWriterWriteGIFFile(vgl_GIFWriter * gifwriter,
 
     memset(gifwriter, '\0', sizeof(vgl_GIFWriter));
     gifwriter->maxbits = CBITS; /* user settable max # bits/code */
-    gifwriter->maxmaxcode = (code_int) 1 << CBITS;      /* should NEVER generate this code */
+    gifwriter->maxmaxcode = (code_int)1
+                            << CBITS; /* should NEVER generate this code */
     gifwriter->hsize = HSIZE;
     gifwriter->in_count = 1;
 
@@ -122,15 +121,13 @@ void vgl_GIFWriterWriteGIFFile(vgl_GIFWriter * gifwriter,
         }
     }
 
-
     gifwriter->currow = -1;
     GIFEncode(outf, xsize, ysize, 1, 0, bpp, rmap, gmap, bmap, getgifpix2,
               gifwriter);
-
 }
 
 /************************** getgifpix2() ********************************/
-static int getgifpix2(int x, int y, vgl_GIFWriter * dataPtr)
+static int getgifpix2(int x, int y, vgl_GIFWriter *dataPtr)
 {
     int pix;
 
@@ -199,7 +196,7 @@ static void getrow2(unsigned long *buffer, short *row, unsigned short width,
 }
 
 /********************** gammawarp() ***************************/
-static void gammawarp(short *sbuf, float gam, int n, vgl_GIFWriter * dataPtr)
+static void gammawarp(short *sbuf, float gam, int n, vgl_GIFWriter *dataPtr)
 {
     int i;
     float f;
@@ -216,19 +213,16 @@ static void gammawarp(short *sbuf, float gam, int n, vgl_GIFWriter * dataPtr)
 }
 
 /***************************************************************************
- *  	dithering code follows
+ *          dithering code follows
  */
-#define XSIZE	4
-#define YSIZE	4
-#define TOTAL		(XSIZE*YSIZE)
-#define WRAPY(y)	((y)%YSIZE)
-#define WRAPX(x)	((x)%XSIZE)
+#define XSIZE    4
+#define YSIZE    4
+#define TOTAL    (XSIZE * YSIZE)
+#define WRAPY(y) ((y) % YSIZE)
+#define WRAPX(x) ((x) % XSIZE)
 
 static short dithmat[YSIZE][XSIZE] = {
-    0, 8, 2, 10,
-    12, 4, 14, 6,
-    3, 11, 1, 9,
-    15, 7, 13, 5,
+    0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5,
 };
 
 /************************** makedittab() ********************************/
@@ -265,7 +259,7 @@ static short **makedittab(int levels, int mult, int add)
 
 /************************** ditherrow() ********************************/
 static int ditherrow(unsigned short *r, unsigned short *g, unsigned short *b,
-                     short *wp, int n, int y, vgl_GIFWriter * dataPtr)
+                     short *wp, int n, int y, vgl_GIFWriter *dataPtr)
 {
     short *rbase;
     short *gbase;
@@ -305,7 +299,6 @@ static int ditherrow(unsigned short *r, unsigned short *g, unsigned short *b,
     return 1;
 }
 
-
 /*****************************************************************************
  * SCARY GIF code follows . . . . sorry.
  *
@@ -324,12 +317,11 @@ static int ditherrow(unsigned short *r, unsigned short *g, unsigned short *b,
  *
  *****************************************************************************/
 
-
 /************************** BumpPixel() ********************************/
 /*
  * Bump the 'curx' and 'cury' to point to the next pixel
  */
-static void BumpPixel(vgl_GIFWriter * dataPtr)
+static void BumpPixel(vgl_GIFWriter *dataPtr)
 {
     dataPtr->curx++;
     if (dataPtr->curx == dataPtr->xsize) {
@@ -372,14 +364,14 @@ static void BumpPixel(vgl_GIFWriter * dataPtr)
 /*
  * Return the next pixel from the image
  */
-static int GIFNextPixel(ifunptr getpixel, vgl_GIFWriter * dataPtr)
+static int GIFNextPixel(ifunptr getpixel, vgl_GIFWriter *dataPtr)
 {
     int r;
 
     if (dataPtr->countDown == 0)
         return EOF;
     dataPtr->countDown--;
-    r = (*getpixel) (dataPtr->curx, dataPtr->cury, dataPtr);
+    r = (*getpixel)(dataPtr->curx, dataPtr->cury, dataPtr);
     BumpPixel(dataPtr);
     return r;
 }
@@ -388,9 +380,9 @@ static int GIFNextPixel(ifunptr getpixel, vgl_GIFWriter * dataPtr)
 /*
  * public GIFEncode
  */
-static int GIFEncode(FILE * fp, int GWidth, int GHeight, int GInterlace,
+static int GIFEncode(FILE *fp, int GWidth, int GHeight, int GInterlace,
                      int Background, int BitsPerPixel, int Red[], int Green[],
-                     int Blue[], ifunptr GetPixel, vgl_GIFWriter * dataPtr)
+                     int Blue[], ifunptr GetPixel, vgl_GIFWriter *dataPtr)
 {
     int B;
     int RWidth, RHeight;
@@ -419,7 +411,7 @@ static int GIFEncode(FILE * fp, int GWidth, int GHeight, int GInterlace,
     fwrite("GIF87a", 1, 6, fp);
     Putword(RWidth, fp);
     Putword(RHeight, fp);
-    B = 0x80;                   /* Yes, there is a color map */
+    B = 0x80; /* Yes, there is a color map */
     B |= (Resolution - 1) << 5;
     B |= (BitsPerPixel - 1);
     fputc(B, fp);
@@ -451,13 +443,12 @@ static int GIFEncode(FILE * fp, int GWidth, int GHeight, int GInterlace,
 /*
  * Write out a word to the GIF file
  */
-static void Putword(int w, FILE * fp)
+static void Putword(int w, FILE *fp)
 {
 
     fputc(w & 0xff, fp);
     fputc((w / 256) & 0xff, fp);
 }
-
 
 /***************************************************************************
  *
@@ -467,7 +458,6 @@ static void Putword(int w, FILE * fp)
  *  David Rowley (mgardi@watdcsu.waterloo.edu)
  *
  ***************************************************************************/
-
 
 /*
  *
@@ -486,13 +476,12 @@ static void Putword(int w, FILE * fp)
 #include <ctype.h>
 #include <grass/gis.h>
 
-#define ARGVAL() (*++(*argv) || (--argc && *++argv))
+#define ARGVAL()        (*++(*argv) || (--argc && *++argv))
 
-#define MAXCODE(n_bits)        (((code_int) 1 << (n_bits)) - 1)
+#define MAXCODE(n_bits) (((code_int)1 << (n_bits)) - 1)
 
 #define HashTabOf(i)    dataPtr->htab[i]
 #define CodeTabOf(i)    dataPtr->codetab[i]
-
 
 /*
  * To save much memory, we overlay the table used by compress() with those
@@ -503,10 +492,8 @@ static void Putword(int w, FILE * fp)
  * possible stack (stack used to be 8000 characters).
  */
 #define tab_prefixof(i) CodeTabOf(i)
-#define tab_suffixof(i)        ((char_type *)(dataPtr->htab))[i]
-#define de_stack               ((char_type *)&tab_suffixof((code_int)1<<CBITS))
-
-
+#define tab_suffixof(i) ((char_type *)(dataPtr->htab))[i]
+#define de_stack        ((char_type *)&tab_suffixof((code_int)1 << CBITS))
 
 /************************** compress () ********************************
  * compress stdin to stdout
@@ -523,8 +510,8 @@ static void Putword(int w, FILE * fp)
  * file size for noticeable speed improvement on small files.  Please direct
  * questions about this implementation to ames!jaw.
  */
-static void compress(int init_bits, FILE * outfile, ifunptr ReadValue,
-                     vgl_GIFWriter * dataPtr)
+static void compress(int init_bits, FILE *outfile, ifunptr ReadValue,
+                     vgl_GIFWriter *dataPtr)
 {
     register long fcode;
     register code_int i = 0;
@@ -556,25 +543,25 @@ static void compress(int init_bits, FILE * outfile, ifunptr ReadValue,
     hshift = 0;
     for (fcode = (long)(dataPtr->hsize); fcode < 65536L; fcode *= 2L)
         hshift++;
-    hshift = 8 - hshift;        /* set hash code range bound */
+    hshift = 8 - hshift; /* set hash code range bound */
     hsize_reg = dataPtr->hsize;
-    cl_hash((count_int) hsize_reg, dataPtr);    /* clear hash table */
-    output((code_int) (dataPtr->clearCode), dataPtr);
+    cl_hash((count_int)hsize_reg, dataPtr); /* clear hash table */
+    output((code_int)(dataPtr->clearCode), dataPtr);
     while ((c = GIFNextPixel(ReadValue, dataPtr)) != EOF) {
         dataPtr->in_count++;
         fcode = (long)(((long)c << dataPtr->maxbits) + ent);
         /* i = (((code_int)c << hshift) ~ ent);  */
-        i = (((code_int) c << hshift) ^ ent);   /* xor hashing */
+        i = (((code_int)c << hshift) ^ ent); /* xor hashing */
         if (HashTabOf(i) == fcode) {
             ent = CodeTabOf(i);
             continue;
         }
-        else if ((long)HashTabOf(i) < 0)        /* empty slot */
+        else if ((long)HashTabOf(i) < 0) /* empty slot */
             goto nomatch;
-        disp = hsize_reg - i;   /* secondary hash (after G. Knott) */
+        disp = hsize_reg - i; /* secondary hash (after G. Knott) */
         if (i == 0)
             disp = 1;
-      probe:
+    probe:
         if ((i -= disp) < 0)
             i += hsize_reg;
         if (HashTabOf(i) == fcode) {
@@ -583,8 +570,8 @@ static void compress(int init_bits, FILE * outfile, ifunptr ReadValue,
         }
         if ((long)HashTabOf(i) > 0)
             goto probe;
-      nomatch:
-        output((code_int) ent, dataPtr);
+    nomatch:
+        output((code_int)ent, dataPtr);
         dataPtr->out_count++;
         ent = c;
         if (dataPtr->free_ent < dataPtr->maxmaxcode) {
@@ -597,9 +584,9 @@ static void compress(int init_bits, FILE * outfile, ifunptr ReadValue,
     /*
      * Put out the final code.
      */
-    output((code_int) ent, dataPtr);
+    output((code_int)ent, dataPtr);
     dataPtr->out_count++;
-    output((code_int) (dataPtr->EOFCode), dataPtr);
+    output((code_int)(dataPtr->EOFCode), dataPtr);
     return;
 }
 
@@ -620,13 +607,11 @@ static void compress(int init_bits, FILE * outfile, ifunptr ReadValue,
  * code in turn.  When the buffer fills up empty it and start over.
  */
 
-static unsigned long masks[] = { 0x0000, 0x0001, 0x0003, 0x0007, 0x000F,
-    0x001F, 0x003F, 0x007F, 0x00FF,
-    0x01FF, 0x03FF, 0x07FF, 0x0FFF,
-    0x1FFF, 0x3FFF, 0x7FFF, 0xFFFF
-};
+static unsigned long masks[] = {0x0000, 0x0001, 0x0003, 0x0007, 0x000F, 0x001F,
+                                0x003F, 0x007F, 0x00FF, 0x01FF, 0x03FF, 0x07FF,
+                                0x0FFF, 0x1FFF, 0x3FFF, 0x7FFF, 0xFFFF};
 
-static void output(code_int code, vgl_GIFWriter * dataPtr)
+static void output(code_int code, vgl_GIFWriter *dataPtr)
 {
     dataPtr->cur_accum &= masks[dataPtr->cur_bits];
     if (dataPtr->cur_bits > 0)
@@ -646,8 +631,7 @@ static void output(code_int code, vgl_GIFWriter * dataPtr)
      */
     if (dataPtr->free_ent > dataPtr->maxcode || dataPtr->clear_flg) {
         if (dataPtr->clear_flg) {
-            dataPtr->maxcode = MAXCODE(dataPtr->n_bits =
-                                       dataPtr->g_init_bits);
+            dataPtr->maxcode = MAXCODE(dataPtr->n_bits = dataPtr->g_init_bits);
             dataPtr->clear_flg = 0;
         }
         else {
@@ -678,17 +662,17 @@ static void output(code_int code, vgl_GIFWriter * dataPtr)
 /*
  * table clear for block compress
  */
-static void cl_block(vgl_GIFWriter * dataPtr)
+static void cl_block(vgl_GIFWriter *dataPtr)
 {
-    cl_hash((count_int) (dataPtr->hsize), dataPtr);
+    cl_hash((count_int)(dataPtr->hsize), dataPtr);
     dataPtr->free_ent = dataPtr->clearCode + 2;
     dataPtr->clear_flg = 1;
-    output((code_int) (dataPtr->clearCode), dataPtr);
+    output((code_int)(dataPtr->clearCode), dataPtr);
 }
 
 /********************** cl_hash() ***************************/
 /* reset code table */
-static void cl_hash(register count_int hsize, vgl_GIFWriter * dataPtr)
+static void cl_hash(register count_int hsize, vgl_GIFWriter *dataPtr)
 {
     register count_int *htab_p;
     register long i;
@@ -697,7 +681,7 @@ static void cl_hash(register count_int hsize, vgl_GIFWriter * dataPtr)
     htab_p = dataPtr->htab + hsize;
 
     i = hsize - 16;
-    do {                        /* might use Sys V memset(3) here */
+    do { /* might use Sys V memset(3) here */
         *(htab_p - 16) = m1;
         *(htab_p - 15) = m1;
         *(htab_p - 14) = m1;
@@ -735,7 +719,7 @@ static void writeerr()
 /*
  * Set up the 'byte output' routine
  */
-static void char_init(vgl_GIFWriter * dataPtr)
+static void char_init(vgl_GIFWriter *dataPtr)
 {
     dataPtr->a_count = 0;
 }
@@ -749,7 +733,7 @@ static void char_init(vgl_GIFWriter * dataPtr)
  * Add a character to the end of the current packet, and if it is 254
  * characters, flush the packet to disk.
  */
-static void char_out(int c, vgl_GIFWriter * dataPtr)
+static void char_out(int c, vgl_GIFWriter *dataPtr)
 {
     dataPtr->accum[dataPtr->a_count++] = c;
     if (dataPtr->a_count >= 254)
@@ -760,7 +744,7 @@ static void char_out(int c, vgl_GIFWriter * dataPtr)
 /*
  * Flush the packet to disk, and reset the accumulator
  */
-static void flush_char(vgl_GIFWriter * dataPtr)
+static void flush_char(vgl_GIFWriter *dataPtr)
 {
     if (dataPtr->a_count > 0) {
         fputc(dataPtr->a_count, dataPtr->g_outfile);

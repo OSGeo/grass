@@ -5,7 +5,6 @@
 
 static int egcmp(const void *pa, const void *pb);
 
-
 int G_math_egvorder(double *d, double **z, long bands)
 {
     double *buff;

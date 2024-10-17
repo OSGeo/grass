@@ -16,7 +16,6 @@
 #include <stdlib.h>
 #include <grass/vector.h>
 
-
 /*!
    \brief Select lines with bounding boxes by box.
 
@@ -30,9 +29,8 @@
 
    \return number of lines
  */
-int
-Vect_select_lines_by_box(struct Map_info *Map, const struct bound_box *Box,
-                         int type, struct boxlist *list)
+int Vect_select_lines_by_box(struct Map_info *Map, const struct bound_box *Box,
+                             int type, struct boxlist *list)
 {
     int i, line, nlines, ntypes, mtype;
     struct Plus_head *plus;
@@ -96,7 +94,7 @@ Vect_select_lines_by_box(struct Map_info *Map, const struct bound_box *Box,
     for (i = 0; i < nlines; i++) {
         line = LocList->id[i];
         if (plus->Line[line] == NULL)
-            continue;           /* Should not happen */
+            continue; /* Should not happen */
         Line = plus->Line[line];
         if (!(Line->type & type))
             continue;
@@ -107,7 +105,6 @@ Vect_select_lines_by_box(struct Map_info *Map, const struct bound_box *Box,
 
     return list->n_values;
 }
-
 
 /*!
    \brief Select areas with bounding boxes by box.
@@ -121,9 +118,8 @@ Vect_select_lines_by_box(struct Map_info *Map, const struct bound_box *Box,
 
    \return number of areas
  */
-int
-Vect_select_areas_by_box(struct Map_info *Map, const struct bound_box *Box,
-                         struct boxlist *list)
+int Vect_select_areas_by_box(struct Map_info *Map, const struct bound_box *Box,
+                             struct boxlist *list)
 {
     int i;
     static int debug_level = -1;
@@ -154,7 +150,6 @@ Vect_select_areas_by_box(struct Map_info *Map, const struct bound_box *Box,
     return list->n_values;
 }
 
-
 /*!
    \brief Select isles with bounding boxes by box.
 
@@ -167,9 +162,8 @@ Vect_select_areas_by_box(struct Map_info *Map, const struct bound_box *Box,
 
    \return number of isles
  */
-int
-Vect_select_isles_by_box(struct Map_info *Map, const struct bound_box *Box,
-                         struct boxlist *list)
+int Vect_select_isles_by_box(struct Map_info *Map, const struct bound_box *Box,
+                             struct boxlist *list)
 {
     G_debug(3, "Vect_select_isles_by_box()");
     G_debug(3, "Box(N,S,E,W,T,B): %e, %e, %e, %e, %e, %e", Box->N, Box->S,
@@ -190,9 +184,8 @@ Vect_select_isles_by_box(struct Map_info *Map, const struct bound_box *Box,
 
    \return number of nodes
  */
-int
-Vect_select_nodes_by_box(struct Map_info *Map, const struct bound_box *Box,
-                         struct ilist *list)
+int Vect_select_nodes_by_box(struct Map_info *Map, const struct bound_box *Box,
+                             struct ilist *list)
 {
     struct Plus_head *plus;
 
@@ -211,7 +204,7 @@ Vect_select_nodes_by_box(struct Map_info *Map, const struct bound_box *Box,
 }
 
 /*!
-   \brief Select lines by Polygon with optional isles. 
+   \brief Select lines by Polygon with optional isles.
 
    Polygons should be closed, i.e. first and last points must be identical.
 
@@ -224,10 +217,10 @@ Vect_select_nodes_by_box(struct Map_info *Map, const struct bound_box *Box,
 
    \return number of lines
  */
-int
-Vect_select_lines_by_polygon(struct Map_info *Map, struct line_pnts *Polygon,
-                             int nisles, struct line_pnts **Isles, int type,
-                             struct ilist *List)
+int Vect_select_lines_by_polygon(struct Map_info *Map,
+                                 struct line_pnts *Polygon, int nisles,
+                                 struct line_pnts **Isles, int type,
+                                 struct ilist *List)
 {
     int i;
     struct bound_box box;
@@ -261,17 +254,19 @@ Vect_select_lines_by_polygon(struct Map_info *Map, struct line_pnts *Polygon,
 
         /* Check if any of line vertices is within polygon */
         for (j = 0; j < LPoints->n_points; j++) {
-            if (Vect_point_in_poly(LPoints->x[j], LPoints->y[j], Polygon) >= 1) {       /* inside polygon */
+            if (Vect_point_in_poly(LPoints->x[j], LPoints->y[j], Polygon) >=
+                1) { /* inside polygon */
                 int k, inisle = 0;
 
                 for (k = 0; k < nisles; k++) {
-                    if (Vect_point_in_poly(LPoints->x[j], LPoints->y[j], Isles[k]) >= 1) {      /* in isle */
+                    if (Vect_point_in_poly(LPoints->x[j], LPoints->y[j],
+                                           Isles[k]) >= 1) { /* in isle */
                         inisle = 1;
                         break;
                     }
                 }
 
-                if (!inisle) {  /* inside polygon, outside isles -> select */
+                if (!inisle) { /* inside polygon, outside isles -> select */
                     intersect = 1;
                     break;
                 }
@@ -306,9 +301,8 @@ Vect_select_lines_by_polygon(struct Map_info *Map, struct line_pnts *Polygon,
     return List->n_values;
 }
 
-
 /*!
-   \brief Select areas by Polygon with optional isles. 
+   \brief Select areas by Polygon with optional isles.
 
    Polygons should be closed, i.e. first and last points must be identical.
 
@@ -320,10 +314,9 @@ Vect_select_lines_by_polygon(struct Map_info *Map, struct line_pnts *Polygon,
 
    \return number of areas
  */
-int
-Vect_select_areas_by_polygon(struct Map_info *Map, struct line_pnts *Polygon,
-                             int nisles, struct line_pnts **Isles,
-                             struct ilist *List)
+int Vect_select_areas_by_polygon(struct Map_info *Map,
+                                 struct line_pnts *Polygon, int nisles,
+                                 struct line_pnts **Isles, struct ilist *List)
 {
     int i, area;
     static struct ilist *BoundList = NULL;
@@ -351,7 +344,7 @@ Vect_select_areas_by_polygon(struct Map_info *Map, struct line_pnts *Polygon,
         if (left > 0) {
             Vect_list_append(List, left);
         }
-        else if (left < 0) {    /* island */
+        else if (left < 0) { /* island */
             area = Vect_get_isle_area(Map, abs(left));
             G_debug(4, "  left island -> area = %d", area);
             if (area > 0)
@@ -361,7 +354,7 @@ Vect_select_areas_by_polygon(struct Map_info *Map, struct line_pnts *Polygon,
         if (right > 0) {
             Vect_list_append(List, right);
         }
-        else if (right < 0) {   /* island */
+        else if (right < 0) { /* island */
             area = Vect_get_isle_area(Map, abs(right));
             G_debug(4, "  right island -> area = %d", area);
             if (area > 0)
@@ -369,8 +362,8 @@ Vect_select_areas_by_polygon(struct Map_info *Map, struct line_pnts *Polygon,
         }
     }
 
-    /* But the Polygon may be completely inside the area (only one), in that case 
-     * we find the area by one polygon point and add it to the list */
+    /* But the Polygon may be completely inside the area (only one), in that
+     * case we find the area by one polygon point and add it to the list */
     area = Vect_find_area(Map, Polygon->x[0], Polygon->y[0]);
     if (area > 0)
         Vect_list_append(List, area);

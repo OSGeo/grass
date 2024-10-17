@@ -2,26 +2,24 @@
 #include "clr.h"
 
 /* Font sizes */
-#define PS_FONT_MAX_SIZE      50
-#define PS_FONT_MIN_SIZE       1
-#define PS_FONT_DEFAULT_SIZE   8
+#define PS_FONT_MAX_SIZE     50
+#define PS_FONT_MIN_SIZE     1
+#define PS_FONT_DEFAULT_SIZE 8
 
-#define DELTA_Y                0.05
-#define MAX_PSFILES       20
+#define DELTA_Y              0.05
+#define MAX_PSFILES          20
 
-#define PAGE_PORTRAIT 1
-#define PAGE_LANDSCAPE 2
+#define PAGE_PORTRAIT        1
+#define PAGE_LANDSCAPE       2
 
 /* Following XCONV, YCONV were commented because of using G_plot_where_xy()
- * and uncommented again because G_adjust_easting 
- * in it is not best for each case,  RB Jan 2000 
+ * and uncommented again because G_adjust_easting
+ * in it is not best for each case,  RB Jan 2000
  */
-#define XCONV(E_COORD)	(PS.map_left + PS.ew_to_x * ((E_COORD) - PS.w.west))
-#define YCONV(N_COORD)	(PS.map_bot  + PS.ns_to_y * ((N_COORD) - PS.w.south))
+#define XCONV(E_COORD)       (PS.map_left + PS.ew_to_x * ((E_COORD) - PS.w.west))
+#define YCONV(N_COORD)       (PS.map_bot + PS.ns_to_y * ((N_COORD) - PS.w.south))
 
-
-struct PS_data
-{
+struct PS_data {
     struct Cell_head w;
     struct Colors colors;
     struct Categories cats;

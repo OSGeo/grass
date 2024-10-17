@@ -15,13 +15,12 @@ int poly_to_rast(char *input_file, char *raster_map, char *title, int nrows,
     double cat_double;
     int type;
     struct Categories labels;
-    FILE *ifd;                  /* for input file */
-    int rfd;                    /* for raster map */
+    FILE *ifd; /* for input file */
+    int rfd;   /* for raster map */
     int format;
     int stat;
     int pass, npasses;
     struct History history;
-
 
     /* open input file */
     if (strcmp("-", input_file) == 0)
@@ -57,9 +56,8 @@ int poly_to_rast(char *input_file, char *raster_map, char *title, int nrows,
             G_message(_("Pass #%d (of %d) ..."), pass, npasses);
 
         G_fseek(ifd, 0L, 0);
-        while (get_item
-               (ifd, format, &type, &cat_int, &cat_double, &x, &y, &count,
-                &labels)) {
+        while (get_item(ifd, format, &type, &cat_int, &cat_double, &x, &y,
+                        &count, &labels)) {
             if (format == USE_FCELL || format == USE_DCELL)
                 set_cat_double(cat_double);
             else

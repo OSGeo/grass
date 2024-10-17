@@ -1,9 +1,8 @@
-
 /****************************************************************
  * MODULE:     v.path.obstacles
  *
  * AUTHOR(S):  Maximilian Maldacker
- *  
+ *
  *
  * COPYRIGHT:  (C) 2002-2005 by the GRASS Development Team
  *
@@ -15,7 +14,6 @@
  ****************************************************************/
 
 #include "rotation_tree.h"
-
 
 void add_rightmost(struct Point *p, struct Point *q)
 {
@@ -37,8 +35,6 @@ void add_rightmost(struct Point *p, struct Point *q)
     }
 
     p->father = q;
-
-
 }
 
 void add_leftof(struct Point *p, struct Point *q)
@@ -60,7 +56,6 @@ void add_leftof(struct Point *p, struct Point *q)
         q->left_brother = p;
     }
 
-
     p->father = q->father;
 }
 
@@ -81,7 +76,6 @@ void remove_point(struct Point *p)
     p->father = NULL;
     p->left_brother = NULL;
     p->right_brother = NULL;
-
 }
 
 struct Point *right_brother(struct Point *p)
@@ -108,7 +102,6 @@ struct Line *segment1(struct Point *p)
 {
     return p->line1;
 }
-
 
 struct Line *segment2(struct Point *p)
 {

@@ -7,11 +7,14 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 import os
+
 import grass.pygrass.modules as pymod
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
+from grass.gunittest.utils import xfail_windows
 
 
 class TestSnapAbsoluteSTRDS(TestCase):
@@ -144,6 +147,7 @@ class TestSnapAbsoluteSTRDS(TestCase):
             map="series_minimum_2", refmin=300, refmax=300, msg="Minimum must be 300"
         )
 
+    @xfail_windows
     def test_quantile(self):
         self.assertModule(
             "t.rast.series",

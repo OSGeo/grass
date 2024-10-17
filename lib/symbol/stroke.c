@@ -1,19 +1,18 @@
-
 /****************************************************************************
-*
-* MODULE:       Symbol library 
-*   	    	
-* AUTHOR(S):    Radim Blazek
-*
-* PURPOSE:      Stroke symbol
-*
-* COPYRIGHT:    (C) 2001 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       Symbol library
+ *
+ * AUTHOR(S):    Radim Blazek
+ *
+ * PURPOSE:      Stroke symbol
+ *
+ * COPYRIGHT:    (C) 2001 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with
+ *               GRASS for details.
+ *
+ *****************************************************************************/
 
 #include <stdlib.h>
 #include <math.h>
@@ -22,8 +21,7 @@
 
 #define PI M_PI
 
-
-void add_coor(SYMBCHAIN * chain, double x, double y)
+void add_coor(SYMBCHAIN *chain, double x, double y)
 {
     G_debug(5, "    add_coor %f, %f", x, y);
     if (chain->scount == chain->salloc) {
@@ -40,10 +38,10 @@ void add_coor(SYMBCHAIN * chain, double x, double y)
 
 /* draw chain
  *   s - scale
- *   ch - chain number 
+ *   ch - chain number
  *   rotation - degrees CCW from East
  */
-int stroke_chain(SYMBPART * part, int ch, double s, double rotation)
+int stroke_chain(SYMBPART *part, int ch, double s, double rotation)
 {
     int k, l, first;
     SYMBEL *elem;
@@ -79,7 +77,7 @@ int stroke_chain(SYMBPART * part, int ch, double s, double rotation)
             break;
         case S_ARC:
             if (s >= 50)
-                da = 1 * PI / 180;      /* later calc from size and tolerance */
+                da = 1 * PI / 180; /* later calc from size and tolerance */
             else
                 da = 10 * PI / 180;
 
@@ -114,7 +112,6 @@ int stroke_chain(SYMBPART * part, int ch, double s, double rotation)
                     if (a1 < a2)
                         a1 = a2;
                 }
-
             }
             else {
                 while (1) {
@@ -141,7 +138,7 @@ int stroke_chain(SYMBPART * part, int ch, double s, double rotation)
         }
     }
     if (part->type == S_POLYGON) {
-        add_coor(chain, x0, y0);        /* Close ring */
+        add_coor(chain, x0, y0); /* Close ring */
     }
 
     return 0;
@@ -152,20 +149,20 @@ int stroke_chain(SYMBPART * part, int ch, double s, double rotation)
  *
  *  tolerance currently not supported
  *
- * \param Symb  pointer to 
+ * \param Symb  pointer to
  * \param size  symbol size
  * \param rotation  symbol rotation, degrees CCW from East
  * \param tolerance  currently not supported
  *
  */
-void S_stroke(SYMBOL * Symb, double size, double rotation, int tolerance)
+void S_stroke(SYMBOL *Symb, double size, double rotation, int tolerance)
 {
     int i, j;
     double s;
     SYMBPART *part;
 
-    G_debug(3, "S_stroke(): size = %.2f, rotation = %.2f, tolerance = %d",
-            size, rotation, tolerance);
+    G_debug(3, "S_stroke(): size = %.2f, rotation = %.2f, tolerance = %d", size,
+            rotation, tolerance);
 
     /* TODO: support for tolerance */
 
@@ -180,7 +177,7 @@ void S_stroke(SYMBOL * Symb, double size, double rotation, int tolerance)
                 stroke_chain(part, j, s, rotation);
             }
             break;
-        case S_STRING:         /* string has 1 chain */
+        case S_STRING: /* string has 1 chain */
             stroke_chain(part, 0, s, rotation);
             break;
         }

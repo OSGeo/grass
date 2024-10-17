@@ -22,9 +22,9 @@ This program is free software under the GNU General Public License
 @author Lukas Bocan <silent_bob centrum.cz> (turn costs support)
 @author Eliska Kyzlikova <eliska.kyzlikova gmail.com> (turn costs support)
 """
+
 import os
 import math
-import six
 from copy import deepcopy
 
 from grass.script.utils import try_remove
@@ -48,7 +48,6 @@ from vnet.vnet_utils import DegreesToRadians
 
 class VNETData:
     def __init__(self, guiparent, mapWin):
-
         # setting initialization
         self._initSettings()
 
@@ -79,16 +78,14 @@ class VNETData:
     def GetRelevantParams(self, analysis=None):
         if analysis:
             return self.an_props.GetRelevantParams(analysis)
-        else:
-            analysis, valid = self.an_params.GetParam("analysis")
-            return self.an_props.GetRelevantParams(analysis)
+        analysis, valid = self.an_params.GetParam("analysis")
+        return self.an_props.GetRelevantParams(analysis)
 
     def GetAnalysisProperties(self, analysis=None):
         if analysis:
             return self.an_props[analysis]
-        else:
-            analysis, valid = self.an_params.GetParam("analysis")
-            return self.an_props[analysis]
+        analysis, valid = self.an_params.GetParam("analysis")
+        return self.an_props[analysis]
 
     def GetParam(self, param):
         return self.an_params.GetParam(param)
@@ -144,7 +141,8 @@ class VNETData:
     def InputsErrorMsgs(
         self, msg, analysis, params, flags, inv_params, relevant_params
     ):
-        """Checks input data in Parameters tab and shows messages if some value is not valid
+        """Checks input data in Parameters tab and shows messages if some value is
+        not valid
 
         :param str msg: message added to start of message string
         :return: True if checked inputs are OK
@@ -154,7 +152,7 @@ class VNETData:
         if flags["t"] and "turn_layer" not in relevant_params:
             GMessage(
                 parent=self.guiparent,
-                message=_("Module <%s> does not support turns costs." % analysis),
+                message=_("Module <%s> does not support turns costs.") % analysis,
             )
             return False
 
@@ -176,9 +174,8 @@ class VNETData:
             "turn_layer": _("turntable layer"),
             "turn_cat_layer": _("unique categories layer"),
         }
-        for layer, layerLabel in six.iteritems(vals):
-
-            if layer in ["turn_layer", "turn_cat_layer"] and not flags["t"]:
+        for layer, layerLabel in vals.items():
+            if layer in {"turn_layer", "turn_cat_layer"} and not flags["t"]:
                 continue
             if layer in inv_params:
                 if params[layer]:
@@ -195,7 +192,8 @@ class VNETData:
         for col in ["arc_column", "arc_backward_column", "node_column"]:
             if params[col] and col in inv_params and col in relevant_params:
                 errColStr += _(
-                    "Chosen column '%s' does not exist in attribute table of layer '%s' of vector map '%s'.\n"
+                    "Chosen column '%s' does not exist in attribute table of layer "
+                    "'%s' of vector map '%s'.\n"
                 ) % (params[col], params[layer], params["input"])
 
         if errColStr:
@@ -236,7 +234,6 @@ class VNETData:
 
 class VNETPointsData:
     def __init__(self, mapWin, an_data, an_params):
-
         self.mapWin = mapWin
         self.an_data = an_data
         self.an_params = an_params
@@ -291,7 +288,6 @@ class VNETPointsData:
         return self.snapping
 
     def AddPoint(self):
-
         self.pointsToDraw.AddItem(
             coords=(self.cols["def_vals"][3], self.cols["def_vals"][4])
         )
@@ -308,7 +304,6 @@ class VNETPointsData:
         self.pointsChanged.emit(method="DeletePoint", kwargs={"pt_id": pt_id})
 
     def SetPoints(self, pts_data):
-
         for item in self.pointsToDraw.GetAllItems():
             self.pointsToDraw.DeleteItem(item)
 
@@ -321,7 +316,7 @@ class VNETPointsData:
         self.pointsChanged.emit(method="SetPoints", kwargs={"pts_data": pts_data})
 
     def SetPointData(self, pt_id, data):
-        for col, v in six.iteritems(data):
+        for col, v in data.items():
             if col == "use":
                 continue
 
@@ -392,7 +387,7 @@ class VNETPointsData:
         textProp = self.pointsToDraw.GetPropertyVal("text")
         textProp["font"].SetPointSize(ptSize + 2)
 
-        for colKey, col in six.iteritems(colors):
+        for colKey, col in colors.items():
             pen = self.pointsToDraw.GetPen(colKey)
             if pen:
                 pen.SetColour(wx.Colour(col[0], col[1], col[2], 255))
@@ -413,7 +408,8 @@ class VNETPointsData:
                 self._vnetPathUpdateUsePoints(None)
 
     def _updateTypeCol(self):
-        """Rename category values when module is changed. Expample: Start point -> Sink point"""
+        """Rename category values when module is changed. Example: Start point
+        -> Sink point"""
         colValues = [""]
         analysis, valid = self.an_params.GetParam("analysis")
         anParamsCats = self.an_data[analysis]["cmdParams"]["cats"]
@@ -425,16 +421,14 @@ class VNETPointsData:
         self.cols["type"][type_idx] = colValues
 
     def _ptDataToList(self, pt_data):
-
         pt_list_data = [None] * len(self.cols["name"])
 
-        for k, val in six.iteritems(pt_data):
+        for k, val in pt_data.items():
             pt_list_data[self.cols["name"].index(k)] = val
 
         return pt_list_data
 
     def _ptListDataToPtData(self, pt_list_data):
-
         pt_data = {}
         for i, val in enumerate(pt_list_data):
             pt_data[self.cols["name"][i]] = val
@@ -468,7 +462,6 @@ class VNETPointsData:
             self._vnetPathUpdateUsePoints(pt_id)
 
     def _vnetPathUpdateUsePoints(self, checked_pt_id):
-
         alreadyChecked = []
 
         type_idx = self.cols["name"].index("type")
@@ -529,7 +522,6 @@ class VNETPointsData:
         e, n = self.mapWin.GetLastEN()
 
         if self.snapping:
-
             # compute threshold
             snapTreshPix = int(
                 UserSettings.Get(group="vnet", key="other", subkey="snap_tresh")
@@ -565,12 +557,10 @@ class VNETPointsData:
             self.SetSelected(self.GetSelected() + 1)
 
     def GetColumns(self, only_relevant=True):
-
         cols_data = deepcopy(self.cols)
 
         hidden_cols = []
-        hidden_cols.append(self.cols["name"].index("e"))
-        hidden_cols.append(self.cols["name"].index("n"))
+        hidden_cols.extend((self.cols["name"].index("e"), self.cols["name"].index("n")))
 
         analysis, valid = self.an_params.GetParam("analysis")
         if only_relevant and len(self.an_data[analysis]["cmdParams"]["cats"]) <= 1:
@@ -579,7 +569,7 @@ class VNETPointsData:
         i_red = 0
         hidden_cols.sort()
         for idx in hidden_cols:
-            for dt in six.itervalues(cols_data):
+            for dt in cols_data.values():
                 dt.pop(idx - i_red)
             i_red += 1
 
@@ -588,7 +578,6 @@ class VNETPointsData:
 
 class VNETAnalysisParameters:
     def __init__(self, an_props):
-
         self.an_props = an_props
 
         self.params = {
@@ -610,9 +599,8 @@ class VNETAnalysisParameters:
         self.parametersChanged = Signal("VNETAnalysisParameters.parametersChanged")
 
     def SetParams(self, params, flags):
-
         changed_params = {}
-        for p, v in six.iteritems(params):
+        for p, v in params.items():
             if p == "analysis" and v not in self.an_props.used_an:
                 continue
 
@@ -628,7 +616,7 @@ class VNETAnalysisParameters:
                 changed_params[p] = v
 
         changed_flags = {}
-        for p, v in six.iteritems(flags):
+        for p, v in flags.items():
             if p in self.flags:
                 self.flags[p] = v
                 changed_flags[p] = v
@@ -641,9 +629,8 @@ class VNETAnalysisParameters:
         return changed_params, changed_flags
 
     def GetParam(self, param):
-
         invParams = []
-        if param in [
+        if param in {
             "input",
             "arc_layer",
             "node_layer",
@@ -652,7 +639,7 @@ class VNETAnalysisParameters:
             "node_column",
             "turn_layer",
             "turn_cat_layer",
-        ]:
+        }:
             invParams = self._getInvalidParams(self.params)
 
         if invParams:
@@ -661,7 +648,6 @@ class VNETAnalysisParameters:
         return self.params[param], True
 
     def GetParams(self):
-
         invParams = self._getInvalidParams(self.params)
         return self.params, invParams, self.flags
 
@@ -678,8 +664,7 @@ class VNETAnalysisParameters:
                 vectMaps = grass.list_grouped("vector")[mapSet]
 
         if not params["input"] or mapName not in vectMaps:
-            invParams = list(params.keys())[:]
-            return invParams
+            return list(params.keys())[:]
 
         # check arc/node layer
         layers = utils.GetVectorNumberOfLayers(params["input"])
@@ -698,7 +683,6 @@ class VNETAnalysisParameters:
 
         # check costs columns
         for col in ["arc_column", "arc_backward_column", "node_column"]:
-
             if col == "node_column":
                 try:
                     table = dbInfo.GetTable(int(params["node_layer"]))
@@ -706,14 +690,14 @@ class VNETAnalysisParameters:
                 except (KeyError, ValueError):
                     table = None
 
-            if not table or not params[col] in list(columnchoices.keys()):
+            if not table or params[col] not in list(columnchoices.keys()):
                 invParams.append(col)
                 continue
 
-            if columnchoices[params[col]]["type"] not in [
+            if columnchoices[params[col]]["type"] not in {
                 "integer",
                 "double precision",
-            ]:
+            }:
                 invParams.append(col)
                 continue
 
@@ -752,7 +736,8 @@ class VNETAnalysesProperties:
                 },
                 "resultProps": {
                     "singleColor": None,
-                    "dbMgr": True,  # TODO delete this property, this information can be get from result
+                    "dbMgr": True,  # TODO delete this property, this information can
+                    # be get from result
                 },
                 "turns_support": True,
             },
@@ -845,7 +830,6 @@ class VNETAnalysesProperties:
         return self.vnetProperties[key]
 
     def GetRelevantParams(self, analysis):
-
         if analysis not in self.vnetProperties:
             return None
 
@@ -856,7 +840,7 @@ class VNETAnalysesProperties:
 
         cols = self.vnetProperties[analysis]["cmdParams"]["cols"]
 
-        for col, v in six.iteritems(cols):
+        for col, v in cols.items():
             if "inputField" in col:
                 colInptF = v["inputField"]
             else:
@@ -886,7 +870,7 @@ class VNETTmpVectMaps:
         # map already exists
         if fullName:
             # TODO move dialog out of class, AddTmpVectMap(self, mapName,
-            # overvrite = False)
+            # overwrite = False)
             dlg = wx.MessageDialog(
                 parent=self.parent,
                 message=msg,
@@ -990,7 +974,6 @@ class VectMap:
         self.modifTime = None  # time, for modification check
 
     def __del__(self):
-
         self.DeleteRenderLayer()
 
     def AddRenderLayer(self, cmd=None, colorsCmd=None):
@@ -1085,8 +1068,8 @@ class VectMap:
             "head",
         )
         try:
-            head = open(headPath, "r")
-            for line in head.readlines():
+            head = open(headPath)
+            for line in head:
                 i = line.find(
                     "MAP DATE:",
                 )
@@ -1096,19 +1079,19 @@ class VectMap:
 
             head.close()
             return ""
-        except IOError:
+        except OSError:
             return ""
 
 
 class History:
-    """Class which reads and saves history data (based on gui.core.settings Settings class file save/load)
+    """Class which reads and saves history data (based on gui.core.settings Settings
+    class file save/load)
 
     .. todo::
         Maybe it could be useful for other GRASS wxGUI tools.
     """
 
     def __init__(self):
-
         # max number of steps in history (zero based)
         self.maxHistSteps = 3
         # current history step
@@ -1215,11 +1198,10 @@ class History:
                 else:
                     newHist.write("%s%s%s" % ("\n", line, "\n"))
                     self.histStepsNum = newHistStepsNum
+            elif newHistStepsNum >= self.maxHistSteps:
+                self._parseLine(line, removedHistStep)
             else:
-                if newHistStepsNum >= self.maxHistSteps:
-                    self._parseLine(line, removedHistStep)
-                else:
-                    newHist.write("%s" % line)
+                newHist.write("%s" % line)
 
         return removedHistData
 
@@ -1261,14 +1243,12 @@ class History:
     def _parseValue(self, value, read=False):
         """Parse value"""
         if read:  # -> read data (cast values)
-
             if value:
                 if (
                     value[0] == "[" and value[-1] == "]"
                 ):  # TODO, possible wrong interpretation
                     value = value[1:-1].split(",")
-                    value = map(self._castValue, value)
-                    return value
+                    return map(self._castValue, value)
 
             if value == "True":
                 value = True
@@ -1289,9 +1269,9 @@ class History:
                         value = float(value)
                     except ValueError:
                         pass
-        else:  # -> write data
-            if isinstance(value, type(())):  # -> color
-                value = str(value[0]) + ":" + str(value[1]) + ":" + str(value[2])
+        # -> write data
+        elif isinstance(value, type(())):  # -> color
+            value = str(value[0]) + ":" + str(value[1]) + ":" + str(value[2])
 
         return value
 
@@ -1314,8 +1294,7 @@ class History:
 
         newHistStep = False
         isSearchedHistStep = False
-        for line in hist.readlines():
-
+        for line in hist:
             if not line.strip() and isSearchedHistStep:
                 break
             elif not line.strip():
@@ -1413,7 +1392,7 @@ class VNETGlobalTurnsData:
     def DataValidator(self, row, col, value):
         """Angle recalculation due to value changing"""
 
-        if col not in [1, 2]:
+        if col not in {1, 2}:
             return
 
         if col == 1:
@@ -1421,7 +1400,6 @@ class VNETGlobalTurnsData:
             old_from_angle = self.turn_data[row][1]
             new_to_angle = self.turn_data[row][2]
             if self.IsInInterval(old_from_angle, new_to_angle, new_from_angle):
-
                 prev_row = row - 1
                 if prev_row == -1:
                     prev_row = len(self.turn_data) - 1
@@ -1433,7 +1411,6 @@ class VNETGlobalTurnsData:
             old_to_angle = self.turn_data[row][2]
             new_from_angle = self.turn_data[row][1]
             if self.IsInInterval(new_from_angle, old_to_angle, new_to_angle):
-
                 next_row = row + 1
                 if len(self.turn_data) == next_row:
                     next_row = 0
@@ -1485,13 +1462,11 @@ class VNETGlobalTurnsData:
         remove_to_angle = self.turn_data[row][2]
         self.turn_data[prev_row][2] = remove_to_angle
 
-    def IsInInterval(self, from_angle, to_angle, angle):
+    def IsInInterval(self, from_angle, to_angle, angle) -> bool:
         """Test if a direction includes or not includes a value"""
         if to_angle < from_angle:
             to_angle = math.pi * 2 + to_angle
         if angle < from_angle:
             angle = math.pi * 2 + angle
 
-        if angle > from_angle and angle < to_angle:
-            return True
-        return False
+        return bool(angle > from_angle and angle < to_angle)

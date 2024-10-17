@@ -40,8 +40,8 @@ int M_do_copy(int n, const char *old, const char *mapset, const char *new)
 
     G_debug(3, "Copy %s", list[n].alias);
 
-    G_message(_("Copying %s <%s> to current mapset as <%s>"),
-              list[n].maindesc, G_fully_qualified_name(old, mapset), new);
+    G_message(_("Copying %s <%s> to current mapset as <%s>"), list[n].maindesc,
+              G_fully_qualified_name(old, mapset), new);
 
     M__hold_signals(1);
     if (G_strcasecmp(list[n].alias, "vector") == 0) {
@@ -74,7 +74,8 @@ int M_do_copy(int n, const char *old, const char *mapset, const char *new)
         }
     }
 
-    /* special case: remove (yes, remove) the secondary color table, if it exists */
+    /* special case: remove (yes, remove) the secondary color table, if it
+     * exists */
     if (G_strcasecmp(list[n].element[0], "cell") == 0) {
         char colr2[6 + GMAPSET_MAX];
 

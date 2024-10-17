@@ -17,15 +17,13 @@
 
 #include "R.h"
 
-
-#define alloc_index(n) (COLUMN_MAPPING *) G_malloc((n)*sizeof(COLUMN_MAPPING))
-
+#define alloc_index(n) (COLUMN_MAPPING *)G_malloc((n) * sizeof(COLUMN_MAPPING))
 
 /*!
  * \brief Create window mapping.
  *
- * Creates mapping from cell header into window. The boundaries and 
- * resolution of the two spaces do not have to be the same or aligned in 
+ * Creates mapping from cell header into window. The boundaries and
+ * resolution of the two spaces do not have to be the same or aligned in
  * any way.
  *
  * \param fd file descriptor
@@ -39,9 +37,9 @@ void Rast__create_window_mapping(int fd)
     double C1, C2;
     double west, east;
 
-    if (fcb->open_mode >= 0 && fcb->open_mode != OPEN_OLD)      /* open for write? */
+    if (fcb->open_mode >= 0 && fcb->open_mode != OPEN_OLD) /* open for write? */
         return;
-    if (fcb->open_mode == OPEN_OLD)     /* already open ? */
+    if (fcb->open_mode == OPEN_OLD) /* already open ? */
         G_free(fcb->col_map);
 
     col = fcb->col_map = alloc_index(R__.rd_window.cols);
@@ -68,13 +66,13 @@ void Rast__create_window_mapping(int fd)
     }
 
     C1 = R__.rd_window.ew_res / fcb->cellhd.ew_res;
-    C2 = (west - fcb->cellhd.west +
-          R__.rd_window.ew_res / 2.0) / fcb->cellhd.ew_res;
+    C2 = (west - fcb->cellhd.west + R__.rd_window.ew_res / 2.0) /
+         fcb->cellhd.ew_res;
     for (i = 0; i < R__.rd_window.cols; i++) {
         x = C2;
-        if (C2 < x)             /* adjust for rounding of negatives */
+        if (C2 < x) /* adjust for rounding of negatives */
             x--;
-        if (x < 0 || x >= fcb->cellhd.cols)     /* not in data file */
+        if (x < 0 || x >= fcb->cellhd.cols) /* not in data file */
             x = -1;
         *col++ = x + 1;
         C2 += C1;
@@ -88,15 +86,15 @@ void Rast__create_window_mapping(int fd)
             west -= 360.0;
 
             col = fcb->col_map;
-            C2 = (west - fcb->cellhd.west +
-                  R__.rd_window.ew_res / 2.0) / fcb->cellhd.ew_res;
+            C2 = (west - fcb->cellhd.west + R__.rd_window.ew_res / 2.0) /
+                 fcb->cellhd.ew_res;
             for (i = 0; i < R__.rd_window.cols; i++) {
                 x = C2;
-                if (C2 < x)     /* adjust for rounding of negatives */
+                if (C2 < x) /* adjust for rounding of negatives */
                     x--;
-                if (x < 0 || x >= fcb->cellhd.cols)     /* not in data file */
+                if (x < 0 || x >= fcb->cellhd.cols) /* not in data file */
                     x = -1;
-                if (*col == 0)  /* only change those not already set */
+                if (*col == 0) /* only change those not already set */
                     *col = x + 1;
                 col++;
                 C2 += C1;
@@ -113,10 +111,9 @@ void Rast__create_window_mapping(int fd)
     /* compute C1,C2 for row window mapping */
     fcb->C1 = R__.rd_window.ns_res / fcb->cellhd.ns_res;
     fcb->C2 =
-        (fcb->cellhd.north - R__.rd_window.north +
-         R__.rd_window.ns_res / 2.0) / fcb->cellhd.ns_res;
+        (fcb->cellhd.north - R__.rd_window.north + R__.rd_window.ns_res / 2.0) /
+        fcb->cellhd.ns_res;
 }
-
 
 /*!
  * \brief Loops rows until mismatch?.

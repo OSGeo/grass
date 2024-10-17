@@ -1,11 +1,10 @@
-
 /**********************************************************
  * MODULE:    mysql
  * AUTHOR(S): Radim Blazek (radim.blazek@gmail.com)
  * PURPOSE:   MySQL database driver
  * COPYRIGHT: (C) 2001 by the GRASS Development Team
- *            This program is free software under the 
- *            GNU General Public License (>=v2). 
+ *            This program is free software under the
+ *            GNU General Public License (>=v2).
  *            Read the file COPYING that comes with GRASS
  *            for details.
  **********************************************************/
@@ -16,7 +15,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_create_table(dbTable * table)
+int db__driver_create_table(dbTable *table)
 {
     int col, ncols;
     dbColumn *column;
@@ -114,14 +113,14 @@ int db__driver_create_table(dbTable * table)
     /* Grant privileges */
 
     /*
-     * 1) MySQL does not support user groups but it is possible 
-     *    to specify list of users. 
+     * 1) MySQL does not support user groups but it is possible
+     *    to specify list of users.
      * 2) Only root can grant privileges.
      */
     /*
        db_get_connection(&conn_par);
 
-       if ( conn_par.group ) 
+       if ( conn_par.group )
        {
        db_set_string ( &sql, "GRANT SELECT ON on " );
        db_append_string ( &sql, db_get_table_name ( table ) );

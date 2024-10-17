@@ -40,9 +40,8 @@ class ViewFrame(wx.Frame):
         self.confilesBox = StaticBox(
             parent=self.panel,
             id=wx.ID_ANY,
-            label=_(
-                "View and modify the "
-                "configuration file '{name}'".format(name=self.confile)
+            label=_("View and modify the configuration file '{name}'").format(
+                name=self.confile
             ),
         )
         self.textCtrl = TextCtrl(
@@ -58,7 +57,11 @@ class ViewFrame(wx.Frame):
         self.btn_close.Bind(wx.EVT_BUTTON, self.OnClose)
         self.btn_ok.Bind(wx.EVT_BUTTON, self.OnOk)
         self._layout()
-        self.enc = locale.getdefaultlocale()[1]
+        try:
+            # Python >= 3.11
+            self.enc = locale.getencoding()
+        except AttributeError:
+            self.enc = locale.getdefaultlocale()[1]
 
     def _layout(self):
         """Set the layout"""
@@ -213,9 +216,9 @@ class RLiSetupFrame(wx.Frame):
         listfiles = []
         # return all the configuration files in self.rlipath, check if there are
         # link or directory and doesn't add them
-        for l in os.listdir(self.rlipath):
-            if os.path.isfile(os.path.join(self.rlipath, l)):
-                listfiles.append(l)
+        for rli_conf in os.listdir(self.rlipath):
+            if os.path.isfile(os.path.join(self.rlipath, rli_conf)):
+                listfiles.append(rli_conf)
         return sorted(listfiles)
 
     def OnClose(self, event):
@@ -237,7 +240,7 @@ class RLiSetupFrame(wx.Frame):
             return
         dlg = wx.MessageDialog(
             parent=self.parent,
-            message=_("Do you want remove r.li " "configuration file <%s>?") % confile,
+            message=_("Do you want remove r.li configuration file <%s>?") % confile,
             caption=_("Remove new r.li configuration file?"),
             style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
         )

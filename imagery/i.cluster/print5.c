@@ -3,17 +3,15 @@
 #include <grass/imagery.h>
 #include <grass/cluster.h>
 
-
-int print_separability(FILE * fd, struct Cluster *C)
+int print_separability(FILE *fd, struct Cluster *C)
 {
     int c1, c2;
     int first, last;
-    double I_cluster_separation();
     double q;
 
     I_cluster_sum2(C);
-    fprintf(fd, _("%sclass separability matrix%s%s"),
-            HOST_NEWLINE, HOST_NEWLINE, HOST_NEWLINE);
+    fprintf(fd, _("%sclass separability matrix%s%s"), HOST_NEWLINE,
+            HOST_NEWLINE, HOST_NEWLINE);
     for (first = 0; first < C->nclasses; first = last) {
         last = first + 10;
         if (last > C->nclasses)

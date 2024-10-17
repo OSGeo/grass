@@ -1,14 +1,15 @@
 /*!
    \file lib/ogsf/gvl.c
 
-   \brief OGSF library - loading and manipulating volumes (lower level functions)
+   \brief OGSF library - loading and manipulating volumes (lower level
+   functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -82,7 +83,7 @@ geovol *gvl_get_prev_vol(int id)
 
    \return number of available volume sets
  */
-int gvl_getall_vols(geovol ** gvols)
+int gvl_getall_vols(geovol **gvols)
 {
     geovol *gvl;
     int i;
@@ -106,7 +107,8 @@ int gvl_num_vols(void)
     geovol *gvl;
     int i;
 
-    for (i = 0, gvl = Vol_top; gvl; gvl = gvl->next, i++) ;
+    for (i = 0, gvl = Vol_top; gvl; gvl = gvl->next, i++)
+        ;
 
     G_debug(5, "gvl_num_vols(): num=%d", i);
 
@@ -129,7 +131,8 @@ geovol *gvl_get_last_vol(void)
         return (NULL);
     }
 
-    for (lvl = Vol_top; lvl->next; lvl = lvl->next) ;
+    for (lvl = Vol_top; lvl->next; lvl = lvl->next)
+        ;
 
     G_debug(5, "  last vol id: %d", lvl->gvol_id);
 
@@ -148,7 +151,7 @@ geovol *gvl_get_new_vol(void)
 
     G_debug(5, "gvl_get_new_vol()");
 
-    nvl = (geovol *) G_malloc(sizeof(geovol));  /* G_fatal_error */
+    nvl = (geovol *)G_malloc(sizeof(geovol)); /* G_fatal_error */
     if (!nvl) {
         return (NULL);
     }
@@ -181,9 +184,8 @@ geovol *gvl_get_new_vol(void)
    \return -1 on failure
    \return 1 on success
  */
-int gvl_init_vol(geovol * gvl, double ox, double oy, double oz,
-                 int rows, int cols, int depths, double xres, double yres,
-                 double zres)
+int gvl_init_vol(geovol *gvl, double ox, double oy, double oz, int rows,
+                 int cols, int depths, double xres, double yres, double zres)
 {
     G_debug(5, "gvl_init_vol() id=%d", gvl->gvol_id);
 
@@ -262,7 +264,7 @@ void gvl_delete_vol(int id)
    \return -1 on failure
    \return 1 on success
  */
-int gvl_free_vol(geovol * fvl)
+int gvl_free_vol(geovol *fvl)
 {
     geovol *gvl;
     int found = 0;
@@ -311,7 +313,7 @@ int gvl_free_vol(geovol * fvl)
 
    \param fvl pointer to geovol struct
  */
-void gvl_free_volmem(geovol * fvl)
+void gvl_free_volmem(geovol *fvl)
 {
     if (0 < fvl->hfile)
         gvl_file_free_datah(fvl->hfile);
@@ -324,7 +326,7 @@ void gvl_free_volmem(geovol * fvl)
 
    \param gvl pointer to geovol struct
  */
-void print_vol_fields(geovol * gvl)
+void print_vol_fields(geovol *gvl)
 {
     G_debug(5, "ID: %d", gvl->gvol_id);
     G_debug(5, "cols: %d rows: %d depths: %d", gvl->cols, gvl->rows,
@@ -349,7 +351,7 @@ void print_vol_fields(geovol * gvl)
 
    \return 1
  */
-int gvl_get_xextents(geovol * gvl, float *min, float *max)
+int gvl_get_xextents(geovol *gvl, float *min, float *max)
 {
     *min = gvl->xmin + gvl->x_trans;
     *max = gvl->xmax + gvl->x_trans;
@@ -366,7 +368,7 @@ int gvl_get_xextents(geovol * gvl, float *min, float *max)
 
    \return 1
  */
-int gvl_get_yextents(geovol * gvl, float *min, float *max)
+int gvl_get_yextents(geovol *gvl, float *min, float *max)
 {
     *min = gvl->ymin + gvl->y_trans;
     *max = gvl->ymax + gvl->y_trans;
@@ -383,7 +385,7 @@ int gvl_get_yextents(geovol * gvl, float *min, float *max)
 
    \return 1
  */
-int gvl_get_zextents(geovol * gvl, float *min, float *max)
+int gvl_get_zextents(geovol *gvl, float *min, float *max)
 {
     *min = gvl->zmin + gvl->z_trans;
     *max = gvl->zmax + gvl->z_trans;
@@ -515,7 +517,7 @@ int gvl_get_zrange(float *min, float *max)
    \return -1 on failure
    \return 1 on success
  */
-int gvl_isosurf_init(geovol_isosurf * isosurf)
+int gvl_isosurf_init(geovol_isosurf *isosurf)
 {
     int i;
 
@@ -548,7 +550,7 @@ int gvl_isosurf_init(geovol_isosurf * isosurf)
    \return -1 on failure
    \return 1 on success
  */
-int gvl_isosurf_freemem(geovol_isosurf * isosurf)
+int gvl_isosurf_freemem(geovol_isosurf *isosurf)
 {
     int i;
 
@@ -602,7 +604,7 @@ geovol_isosurf *gvl_isosurf_get_isosurf(int id, int isosurf_id)
    \return -1 on failure
    \return attribute value
  */
-int gvl_isosurf_get_att_src(geovol_isosurf * isosurf, int desc)
+int gvl_isosurf_get_att_src(geovol_isosurf *isosurf, int desc)
 {
     G_debug(5, "isosurf_get_att_src");
 
@@ -627,7 +629,7 @@ int gvl_isosurf_get_att_src(geovol_isosurf * isosurf, int desc)
    \return -1 on failure
    \return 1 on success
  */
-int gvl_isosurf_set_att_src(geovol_isosurf * isosurf, int desc, int src)
+int gvl_isosurf_set_att_src(geovol_isosurf *isosurf, int desc, int src)
 {
     G_debug(5, "gvl_isosurf_set_att_src");
 
@@ -660,11 +662,9 @@ int gvl_isosurf_set_att_src(geovol_isosurf * isosurf, int desc, int src)
    \return -1 on failure
    \return 1 on success
  */
-int gvl_isosurf_set_att_const(geovol_isosurf * isosurf, int desc,
-                              float constant)
+int gvl_isosurf_set_att_const(geovol_isosurf *isosurf, int desc, float constant)
 {
-    G_debug(5, "gvl_isosurf_set_att_const(): att=%d, const=%f",
-            desc, constant);
+    G_debug(5, "gvl_isosurf_set_att_const(): att=%d, const=%f", desc, constant);
 
     if (isosurf) {
         isosurf->att[desc].constant = constant;
@@ -687,7 +687,7 @@ int gvl_isosurf_set_att_const(geovol_isosurf * isosurf, int desc,
    \return -1 on failure
    \return 1 on success
  */
-int gvl_isosurf_set_att_map(geovol_isosurf * isosurf, int desc,
+int gvl_isosurf_set_att_map(geovol_isosurf *isosurf, int desc,
                             const char *filename)
 {
     int hfile;
@@ -720,7 +720,7 @@ int gvl_isosurf_set_att_map(geovol_isosurf * isosurf, int desc,
    \return -1 on failure
    \return 1 on success
  */
-int gvl_isosurf_set_att_changed(geovol_isosurf * isosurf, int desc)
+int gvl_isosurf_set_att_changed(geovol_isosurf *isosurf, int desc)
 {
     int i;
 
@@ -753,7 +753,7 @@ int gvl_isosurf_set_att_changed(geovol_isosurf * isosurf, int desc)
    \return -1 on failure
    \return 1 on success
  */
-int gvl_slice_init(geovol_slice * slice)
+int gvl_slice_init(geovol_slice *slice)
 {
     G_debug(5, "gvl_slice_init");
 
@@ -779,7 +779,7 @@ int gvl_slice_init(geovol_slice * slice)
    \return -1 on failure
    \return 1 on success
  */
-int gvl_slice_freemem(geovol_slice * slice)
+int gvl_slice_freemem(geovol_slice *slice)
 {
     G_debug(5, "gvl_slice_freemem");
 

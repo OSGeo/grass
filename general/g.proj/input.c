@@ -1,5 +1,4 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       g.proj
  * AUTHOR(S):    Paul Kelly - paul-grass@stjohnspoint.co.uk
@@ -82,7 +81,6 @@ static void set_default_region(void)
 
     return;
 }
-
 
 #ifdef HAVE_OGR
 static void set_gdal_region(GDALDatasetH);
@@ -229,10 +227,15 @@ int input_proj4(char *proj4params)
      *       OSRImportFromWkt  */
     if (strcmp(proj4params, "-") == 0) {
         infd = stdin;
-        fgets(buff, sizeof(buff), infd);
+        if (fgets(buff, sizeof(buff), infd) == NULL)
+            G_warning(_("Failed to read PROJ.4 parameter from stdin"));
     }
-    else
-        strcpy(buff, proj4params);
+    else {
+        if (G_strlcpy(buff, proj4params, sizeof(buff)) >= sizeof(buff)) {
+            G_fatal_error(_("PROJ.4 parameter string is too long: %s"),
+                          proj4params);
+        }
+    }
 
 #if PROJ_VERSION_MAJOR >= 6
     if (!strstr(buff, "+type=crs"))
@@ -419,8 +422,8 @@ int input_georef(char *geofile)
 
     /* Try opening as vector */
     G_debug(1, "Trying to open <%s> as vector...", geofile);
-    if ((hDS = GDALOpenEx(geofile, GDAL_OF_VECTOR, NULL, NULL, NULL))
-        && GDALDatasetGetLayerCount(hDS) > 0) {
+    if ((hDS = GDALOpenEx(geofile, GDAL_OF_VECTOR, NULL, NULL, NULL)) &&
+        GDALDatasetGetLayerCount(hDS) > 0) {
 
         OGRLayerH ogr_layer;
 
@@ -441,7 +444,8 @@ int input_georef(char *geofile)
             sds = GDALGetMetadata(hDS, "SUBDATASETS");
             if (sds && *sds) {
                 G_warning(_("Input dataset <%s> contains subdatasets. "
-                            "Please select a subdataset."), geofile);
+                            "Please select a subdataset."),
+                          geofile);
             }
             else {
                 hSRS = GDALGetSpatialRef(hDS);
@@ -456,14 +460,16 @@ int input_georef(char *geofile)
             namelen = strlen(geofile);
             if (namelen > 4 &&
                 G_strcasecmp(geofile + (namelen - 4), ".prj") == 0) {
-                G_warning(_("<%s> is not a GDAL dataset, trying to open it as ESRI WKT"),
+                G_warning(_("<%s> is not a GDAL dataset, trying to open it as "
+                            "ESRI WKT"),
                           geofile);
 
                 return input_wkt(geofile);
             }
             else {
                 G_fatal_error(_("Unable to read georeferenced file <%s> using "
-                               "GDAL library"), geofile);
+                                "GDAL library"),
+                              geofile);
             }
         }
     }
@@ -473,9 +479,10 @@ int input_georef(char *geofile)
         ret = GPJ_osr_to_grass(&cellhd, &projinfo, &projunits, hSRS, 0);
 
         if (cellhd.proj == PROJECTION_XY)
-            G_warning(_("Read of file %s was successful, but it did not contain "
-                       "projection information. 'XY (unprojected)' will be used"),
-                      geofile);
+            G_warning(
+                _("Read of file %s was successful, but it did not contain "
+                  "projection information. 'XY (unprojected)' will be used"),
+                geofile);
 
         papszOptions = G_calloc(3, sizeof(char *));
         papszOptions[0] = G_store("MULTILINE=YES");
@@ -506,8 +513,8 @@ int input_georef(char *geofile)
     ogr_ds = NULL;
     hSRS = NULL;
     /* Try opening with OGR */
-    if ((ogr_ds = OGROpen(geofile, FALSE, NULL))
-        && (OGR_DS_GetLayerCount(ogr_ds) > 0)) {
+    if ((ogr_ds = OGROpen(geofile, FALSE, NULL)) &&
+        (OGR_DS_GetLayerCount(ogr_ds) > 0)) {
         OGRLayerH ogr_layer;
 
         G_debug(1, "...succeeded.");
@@ -532,8 +539,7 @@ int input_georef(char *geofile)
             /* TODO: change for GDAL 3+ */
             wktstring = (char *)GDALGetProjectionRef(gdal_ds);
             projwkt = G_store(wktstring);
-            ret =
-                GPJ_wkt_to_grass(&cellhd, &projinfo, &projunits, projwkt, 0);
+            ret = GPJ_wkt_to_grass(&cellhd, &projinfo, &projunits, projwkt, 0);
 
             set_gdal_region(gdal_ds);
             hSRS = OSRNewSpatialReference(projwkt);
@@ -545,14 +551,16 @@ int input_georef(char *geofile)
             namelen = strlen(geofile);
             if (namelen > 4 &&
                 G_strcasecmp(geofile + (namelen - 4), ".prj") == 0) {
-                G_warning(_("<%s> is not a GDAL dataset, trying to open it as ESRI WKT"),
+                G_warning(_("<%s> is not a GDAL dataset, trying to open it as "
+                            "ESRI WKT"),
                           geofile);
 
                 return input_wkt(geofile);
             }
             else {
                 G_fatal_error(_("Unable to read georeferenced file <%s> using "
-                               "GDAL library"), geofile);
+                                "GDAL library"),
+                              geofile);
             }
         }
     }
@@ -594,8 +602,8 @@ static void set_gdal_region(GDALDatasetH hDS)
     cellhd.rows3 = cellhd.rows;
     cellhd.cols3 = cellhd.cols;
 
-    if (GDALGetGeoTransform(hDS, adfGeoTransform) == CE_None
-        && adfGeoTransform[5] < 0.0) {
+    if (GDALGetGeoTransform(hDS, adfGeoTransform) == CE_None &&
+        adfGeoTransform[5] < 0.0) {
         if (adfGeoTransform[2] != 0.0 || adfGeoTransform[4] != 0.0) {
             /* Map is rotated. Calculation of north/south extents and
              * resolution more complicated.

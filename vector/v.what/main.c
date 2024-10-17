@@ -1,5 +1,4 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       v.what
  *
@@ -30,15 +29,12 @@
 #include <grass/glocale.h>
 #include "what.h"
 
-
 int main(int argc, char **argv)
 {
-    struct
-    {
+    struct {
         struct Flag *print, *topo, *shell, *json, *multiple;
     } flag;
-    struct
-    {
+    struct {
         struct Option *map, *field, *coords, *maxdist, *type, *cols;
     } opt;
     struct Cell_head window;
@@ -157,8 +153,9 @@ int main(int argc, char **argv)
 
     maxd = atof(opt.maxdist->answer);
     type = Vect_option_to_types(opt.type);
-    output = flag.shell->answer ? OUTPUT_SCRIPT :
-        (flag.json->answer ? OUTPUT_JSON : OUTPUT_TEXT);
+    output = flag.shell->answer
+                 ? OUTPUT_SCRIPT
+                 : (flag.json->answer ? OUTPUT_JSON : OUTPUT_TEXT);
 
     if (maxd == 0.0) {
         /* this code is a translation from d.what.vect which uses display
@@ -193,21 +190,23 @@ int main(int argc, char **argv)
 
     /* Look at maps given on command line */
     if (vect) {
-        for (i = 0; vect[i]; i++) ;
+        for (i = 0; vect[i]; i++)
+            ;
         nvects = i;
 
-        for (i = 0; opt.field->answers[i]; i++) ;
+        for (i = 0; opt.field->answers[i]; i++)
+            ;
 
         if (nvects != i)
-            G_fatal_error(_("Number of given vector maps (%d) differs from number of layers (%d)"),
+            G_fatal_error(_("Number of given vector maps (%d) differs from "
+                            "number of layers (%d)"),
                           nvects, i);
 
         Map = (struct Map_info *)G_malloc(nvects * sizeof(struct Map_info));
         field = (int *)G_malloc(nvects * sizeof(int));
 
         for (i = 0; i < nvects; i++) {
-            level =
-                Vect_open_old2(&Map[i], vect[i], "", opt.field->answers[i]);
+            level = Vect_open_old2(&Map[i], vect[i], "", opt.field->answers[i]);
             if (level < 2)
                 G_fatal_error(_("You must build topology on vector map <%s>"),
                               vect[i]);

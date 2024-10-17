@@ -37,6 +37,8 @@ import shutil
 import atexit
 import tarfile
 
+from pathlib import Path
+
 from grass.script.utils import try_rmdir, try_remove
 from grass.script import core as grass
 
@@ -80,7 +82,7 @@ def main():
 
     grass.message(_("Packing <%s> to <%s>...") % (gfile["fullname"], outfile))
     basedir = os.path.sep.join(os.path.normpath(gfile["file"]).split(os.path.sep)[:-2])
-    olddir = os.getcwd()
+    olddir = Path.cwd()
 
     # copy elements
     info = grass.parse_command("r.info", flags="e", map=infile)
@@ -93,11 +95,13 @@ def main():
         if map_file["file"]:
             vrt = os.path.join(map_file["file"], "vrt")
             if os.path.exists(vrt):
-                with open(vrt, "r") as f:
-                    for r in f.readlines():
+                with open(vrt) as f:
+                    for r in f:
                         map, mapset = r.split("@")
                         map_basedir = os.path.sep.join(
-                            os.path.normpath(map_file["file"],).split(
+                            os.path.normpath(
+                                map_file["file"],
+                            ).split(
                                 os.path.sep
                             )[:-2],
                         )
@@ -128,11 +132,11 @@ def main():
 
         # Copy vrt files
         if vrt_files:
-            for f in vrt_files.keys():
+            for f, value in vrt_files.items():
                 f_tmp_dir = os.path.join(tmp, f)
                 if not os.path.exists(f_tmp_dir):
                     os.mkdir(f_tmp_dir)
-                path = os.path.join(vrt_files[f], element, f)
+                path = os.path.join(value, element, f)
                 if os.path.exists(path):
                     grass.debug("copying vrt file {}".format(path))
                     if os.path.isfile(path):
@@ -178,7 +182,7 @@ def main():
 
     os.chdir(olddir)
 
-    grass.verbose(_("Raster map saved to '%s'" % outfile))
+    grass.verbose(_("Raster map saved to '%s'") % outfile)
 
 
 if __name__ == "__main__":

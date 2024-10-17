@@ -2,9 +2,9 @@
 #include <grass/glocale.h>
 
 void write_lines(struct Map_info *In, struct field_info *IFi, int *ALines,
-                 int *AAreas,
-                 struct Map_info *Out, int table_flag, int reverse_flag,
-                 int nfields, int *fields, int *ncats, int **cats)
+                 int *AAreas, struct Map_info *Out, int table_flag,
+                 int reverse_flag, int nfields, int *fields, int *ncats,
+                 int **cats)
 {
     int i, f, j, aline, nalines;
     int atype;
@@ -17,9 +17,8 @@ void write_lines(struct Map_info *In, struct field_info *IFi, int *ALines,
 
     for (i = 0; i < nfields; i++) {
         ncats[i] = 0;
-        cats[i] =
-            (int *)G_malloc(Vect_cidx_get_num_cats_by_index(&(In[0]), i) *
-                            sizeof(int));
+        cats[i] = (int *)G_malloc(Vect_cidx_get_num_cats_by_index(&(In[0]), i) *
+                                  sizeof(int));
         fields[i] = Vect_cidx_get_field_number(&(In[0]), i);
     }
 
@@ -53,7 +52,6 @@ void write_lines(struct Map_info *In, struct field_info *IFi, int *ALines,
             else
                 continue;
         }
-
 
         Vect_write_line(Out, atype, APoints, ACats);
 

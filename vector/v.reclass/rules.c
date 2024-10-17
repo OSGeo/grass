@@ -2,14 +2,13 @@
 #include <stdlib.h>
 #include <grass/gis.h>
 
-int inpt(FILE * rulefd, char *buf)
+int inpt(FILE *rulefd, char *buf)
 {
     do {
         if (!G_getl2(buf, 1024, rulefd))
             return 0;
         G_strip(buf);
-    }
-    while (*buf == '#');
+    } while (*buf == '#');
     return 1;
 }
 

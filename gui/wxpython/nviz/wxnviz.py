@@ -22,8 +22,6 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <KratochAnna seznam.cz> (Google SoC 2011)
 """
 
-from __future__ import print_function
-
 import sys
 import locale
 import struct
@@ -49,17 +47,13 @@ except KeyError as e:
     print("wxnviz.py: {}".format(e), file=sys.stderr)
 
 try:
-    WindowsError
-except NameError:
-    WindowsError = OSError
-try:
     from grass.lib.gis import *
     from grass.lib.raster3d import *
     from grass.lib.vector import *
     from grass.lib.ogsf import *
     from grass.lib.nviz import *
     from grass.lib.raster import *
-except (ImportError, WindowsError, TypeError) as e:
+except (ImportError, OSError, TypeError) as e:
     print("wxnviz.py: {}".format(e), file=sys.stderr)
 
 from core.debug import Debug
@@ -67,7 +61,7 @@ from core.utils import autoCropImageFromFile
 from core.gcmd import DecodeString
 from core.globalvar import wxPythonPhoenix
 from gui_core.wrap import Rect
-import grass.script as grass
+import grass.script as gs
 
 log = None
 progress = None
@@ -77,8 +71,7 @@ def print_error(msg, type):
     """Redirect stderr"""
     global log
     if log:
-        if sys.version_info.major >= 3:
-            msg = DecodeString(msg.data)
+        msg = DecodeString(msg.data)
         log.write(msg)
     else:
         print(msg)
@@ -90,7 +83,7 @@ def print_progress(value):
     """Redirect progress info"""
     global progress
     if progress:
-        if not progress.GetRange() == 100:
+        if progress.GetRange() != 100:
             progress.SetRange(100)
         progress.SetValue(value)
     else:
@@ -108,7 +101,7 @@ except NameError:
     pass
 
 
-class Nviz(object):
+class Nviz:
     def __init__(self, glog, gprogress):
         """Initialize Nviz class instance
 
@@ -253,8 +246,7 @@ class Nviz(object):
             z = c_float()
             Nviz_get_focus(self.data, byref(x), byref(y), byref(z))
             return x.value, y.value, z.value
-        else:
-            return -1, -1, -1
+        return -1, -1, -1
 
     def SetFocus(self, x, y, z):
         """Set focus"""
@@ -1107,7 +1099,7 @@ class Nviz(object):
         return 1
 
     def ReadVectorColors(self, name, mapset):
-        """Read vector colors
+        r"""Read vector colors
 
         :param name: vector map name
         :param mapset: mapset name (empty string (\c "") for search path)
@@ -1880,8 +1872,7 @@ class Nviz(object):
             Nviz_draw_cplane(self.data, -1, -1)
             x, y, z = self.GetCPlaneTranslation()
             return x, y, z
-        else:
-            return None, None, None
+        return None, None, None
 
     def SelectCPlane(self, index):
         """Select cutting plane
@@ -2130,7 +2121,7 @@ class Nviz(object):
         Nviz_flythrough(self.data, fly, exag, mode)
 
 
-class Texture(object):
+class Texture:
     """Class representing OpenGL texture"""
 
     def __init__(self, filepath, overlayId, coords):
@@ -2169,7 +2160,7 @@ class Texture(object):
         """Delete texture"""
         if self.textureId:
             Nviz_del_texture(self.textureId)
-        grass.try_remove(self.path)
+        gs.try_remove(self.path)
 
     def Resize(self):
         """Resize image to match 2^n"""
@@ -2219,9 +2210,7 @@ class Texture(object):
                     ]
         wx.EndBusyCursor()
 
-        id = Nviz_load_image(im, self.width, self.height, self.image.HasAlpha())
-
-        return id
+        return Nviz_load_image(im, self.width, self.height, self.image.HasAlpha())
 
     def Draw(self):
         """Draw texture as an image"""

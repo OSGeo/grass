@@ -1,4 +1,3 @@
-
 /**
  * \file db.c
  *
@@ -22,7 +21,6 @@
 #include "globals.h"
 #include "proto.h"
 
-
 /**
  * \brief Open SQLite database.
  *
@@ -31,7 +29,7 @@
  * \return DB_FAILED on error
  * \return DB_OK on success
  */
-int db__driver_open_database(dbHandle * handle)
+int db__driver_open_database(dbHandle *handle)
 {
     char name2[GPATH_MAX], *path;
     const char *name;
@@ -80,7 +78,11 @@ int db__driver_open_database(dbHandle * handle)
         G_free_tokens(tokens);
     }
     else {
-        strcpy(name2, name);
+        if (G_strlcpy(name2, name, sizeof(name2)) >= sizeof(name2)) {
+            db_d_append_error(_("Database name <%s> is too long"), name);
+            db_d_report_error();
+            return DB_FAILED;
+        }
     }
 
     G_debug(2, "name2 = '%s'", name2);
@@ -98,8 +100,9 @@ int db__driver_open_database(dbHandle * handle)
         /* create directory if not existing */
         if (access(path, 0) != 0) {
             if (G_mkdir(path) != 0)
-                G_fatal_error(_("Unable to create directory '%s' for sqlite database"),
-                              path);
+                G_fatal_error(
+                    _("Unable to create directory '%s' for sqlite database"),
+                    path);
         }
     }
     G_free(path);
@@ -115,15 +118,23 @@ int db__driver_open_database(dbHandle * handle)
         else {
             G_warning(_("The sqlite config option '%s' is not supported"),
                       "SQLITE_CONFIG_URI");
-            strcpy(name3, name2);
+            if (G_strlcpy(name3, name2, sizeof(name3)) >= sizeof(name3)) {
+                db_d_append_error(_("Database name <%s> is too long"), name2);
+                db_d_report_error();
+                return DB_FAILED;
+            }
         }
     }
-    else
-        strcpy(name3, name2);
+    else {
+        if (G_strlcpy(name3, name2, sizeof(name3)) >= sizeof(name3)) {
+            db_d_append_error(_("Database name <%s> is too long"), name2);
+            db_d_report_error();
+            return DB_FAILED;
+        }
+    }
     if (sqlite3_open(name3, &sqlite) != SQLITE_OK) {
-        db_d_append_error("%s %s\n%s",
-                          _("Unable to open database:"),
-                          name3, (char *)sqlite3_errmsg(sqlite));
+        db_d_append_error("%s %s\n%s", _("Unable to open database:"), name3,
+                          (char *)sqlite3_errmsg(sqlite));
         db_d_report_error();
         return DB_FAILED;
     }
@@ -136,7 +147,6 @@ int db__driver_open_database(dbHandle * handle)
 
     return DB_OK;
 }
-
 
 /**
  * \brief Close SQLite database.
@@ -161,7 +171,7 @@ int db__driver_close_database(void)
  * \return DB_OK on success
  * \return DB_FAILED on failure
  */
-int db__driver_create_database(dbHandle * handle)
+int db__driver_create_database(dbHandle *handle)
 {
     const char *name;
     char name2[GPATH_MAX], *env_nolock;
@@ -187,15 +197,23 @@ int db__driver_create_database(dbHandle * handle)
         else {
             G_warning(_("The sqlite config option '%s' is not supported"),
                       "SQLITE_CONFIG_URI");
-            strcpy(name2, name);
+            if (G_strlcpy(name2, name, sizeof(name2)) >= sizeof(name2)) {
+                db_d_append_error(_("Database name <%s> is too long"), name);
+                db_d_report_error();
+                return DB_FAILED;
+            }
         }
     }
-    else
-        strcpy(name2, name);
+    else {
+        if (G_strlcpy(name2, name, sizeof(name2)) >= sizeof(name2)) {
+            db_d_append_error(_("Database name <%s> is too long"), name);
+            db_d_report_error();
+            return DB_FAILED;
+        }
+    }
     if (sqlite3_open(name2, &sqlite) != SQLITE_OK) {
-        db_d_append_error("%s %s\n%s",
-                          _("Unable to create database:"),
-                          name, (char *)sqlite3_errmsg(sqlite));
+        db_d_append_error("%s %s\n%s", _("Unable to create database:"), name,
+                          (char *)sqlite3_errmsg(sqlite));
         db_d_report_error();
         return DB_FAILED;
     }
@@ -211,7 +229,7 @@ int db__driver_create_database(dbHandle * handle)
  * \return DB_OK on success
  * \return DB_FAILED on failure
  */
-int db__driver_delete_database(dbHandle * handle)
+int db__driver_delete_database(dbHandle *handle)
 {
     const char *name;
 

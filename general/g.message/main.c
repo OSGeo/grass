@@ -1,7 +1,6 @@
-/*  
- ****************************************************************************
+/*****************************************************************************
  *
- * MODULE:       g.message 
+ * MODULE:       g.message
  * AUTHOR(S):    Jachym Cepicky - jachym AT les-ejk cz
  *               Hamish Bowman - hamish_b AT yahoo com
  *               Martin Landa - landa.martin AT gmail.com
@@ -27,14 +26,19 @@ int main(int argc, char *argv[])
     struct GModule *module;
     int debug_level;
 
-    G_gisinit(argv[0]);
+    /* We don't call G_gisinit() here because it validates the
+     * mapset, whereas this module may legitimately be even
+     * without a valid mapset. */
+    G_set_program_name(argv[0]);
+    G_no_gisinit();
+    G_set_gisrc_mode(G_GISRC_MODE_MEMORY);
 
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("support"));
     G_add_keyword(_("scripts"));
-    module->label =
-        _("Prints a message, warning, progress info, or fatal error in the GRASS way.");
+    module->label = _("Prints a message, warning, progress info, or fatal "
+                      "error in the GRASS way.");
     module->description =
         _("This module should be used in scripts for messages served to user.");
 
@@ -90,8 +94,8 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    if (fatal->answer + warning->answer + debug_flag->answer +
-        verbose->answer > 1)
+    if (fatal->answer + warning->answer + debug_flag->answer + verbose->answer >
+        1)
         G_fatal_error(_("Select only one message level"));
 
     debug_level = atoi(debug_opt->answer);

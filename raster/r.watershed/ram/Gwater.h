@@ -1,7 +1,6 @@
 #ifndef __G_WATER_H__
 #define __G_WATER_H__
 
-
 /* program to map out drainage basin structure  */
 /* this one uses the A * search algorithm       */
 /* written by Chuck Ehlschlaeger                */
@@ -16,39 +15,41 @@
 /* program that memory runs out */
 /* #define G_malloc malloc */
 
-#define AR_SIZE			16
-#define AR_INCR			16
-#define NOMASK			1
-#define MIN_SLOPE		.00001
-#define MIN_GRADIENT_DEGREES	1
-#define DEG_TO_RAD		((2 * M_PI) / 360.)
-#define METER_TO_FOOT		(1 / 0.3048)
-#define MAX_BYTES		2000000
-#define PAGE_BLOCK		512
-#define RITE			1
-#define LEFT			2
-#define NEITHER			0
-#define ABS(x)	(((x) < 0) ? -(x) : (x))
-#define TSTSTR(a)	(fprintf (stderr, "%s\n", a))
-#define TST(a)		(fprintf (stderr, "%e\n", (double) (a)))
+#define AR_SIZE              16
+#define AR_INCR              16
+#define NOMASK               1
+#define MIN_SLOPE            .00001
+#define MIN_GRADIENT_DEGREES 1
+#define DEG_TO_RAD           ((2 * M_PI) / 360.)
+#define METER_TO_FOOT        (1 / 0.3048)
+#define MAX_BYTES            2000000
+#define PAGE_BLOCK           512
+#define RITE                 1
+#define LEFT                 2
+#define NEITHER              0
+#define ABS(x)               (((x) < 0) ? -(x) : (x))
+#define TSTSTR(a)            (fprintf(stderr, "%s\n", a))
+#define TST(a)               (fprintf(stderr, "%e\n", (double)(a)))
 
-#define POINT       struct points
-POINT {
-    int r, c;                   /* , downr, downc */
+#define POINT                struct points
+POINT
+{
+    int r, c; /* , downr, downc */
 
     /* int nxt; */
 };
 
 #define OC_STACK struct overland_cells_stack
-OC_STACK {
+OC_STACK
+{
     int row, col;
 };
 
 extern struct Cell_head window;
 
 extern int mfd, c_fac, abs_acc, ele_scale;
-extern int *heap_index, heap_size;
-extern int first_astar, first_cum, nxt_avail_pt, total_cells, do_points;
+extern size_t *heap_index, heap_size;
+extern size_t first_astar, first_cum, nxt_avail_pt, total_cells, do_points;
 extern int nrows, ncols;
 extern double half_res, diag, max_length, dep_slope;
 extern int bas_thres, tot_parts;
@@ -59,7 +60,7 @@ extern FLAG *worked, *in_list, *s_b, *swale, *flat_done;
 extern RAMSEG dis_seg, alt_seg, wat_seg, asp_seg, bas_seg, haf_seg;
 extern RAMSEG r_h_seg, dep_seg, rtn_seg;
 extern RAMSEG slp_seg, s_l_seg, s_g_seg, l_s_seg;
-extern int *astar_pts;
+extern size_t *astar_pts;
 extern CELL *dis, *alt, *asp, *bas, *haf, *r_h, *dep;
 extern char *rtn;
 extern DCELL *wat, *sca, *tanb;
@@ -107,7 +108,7 @@ int drop_pt(void);
 double get_slope(int, int, int, int, CELL, CELL);
 
 /* do_flatarea.c */
-int do_flatarea(int, CELL, CELL *, CELL *);
+int do_flatarea(size_t, CELL, CELL *, CELL *);
 
 /* do_cum.c */
 int do_cum(void);
@@ -130,8 +131,8 @@ int no_stream(int, int, CELL, double, CELL);
 int overland_cells(int, int, CELL, CELL, CELL *);
 
 /* ramseg.c */
-int size_array(int *, int, int);
-int seg_index_rc(int, int, int *, int *);
+size_t size_array(int *, int, int);
+size_t seg_index_rc(int, size_t, int *, int *);
 
 /* sg_factor.c */
 int sg_factor(void);
@@ -145,6 +146,5 @@ CELL split_stream(int, int, int[], int[], int, CELL, double, CELL);
 
 /* usage.c */
 void usage(char *);
-
 
 #endif /* __G_WATER_H__ */

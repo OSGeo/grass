@@ -1,0 +1,65 @@
+[run]
+; branch = True
+; dynamic_context = test_function
+concurrency = multiprocessing,thread
+parallel = True
+data_file = ${INITIAL_PWD-.}/.coverage
+omit =
+    ${INITIAL_PWD-.}/testreport
+    ${INITIAL_PWD-.}/.github/*
+    ${INITIAL_PWD-.}/bin.*/*
+    ${INITIAL_PWD-.}/dist.*/*
+    **/gui/wxpython/*/**
+    **/OBJ.*/*
+source =
+    .
+    ${INITIAL_PWD-.}/
+    ${INITIAL_GISBASE-/usr/local/grass??}/
+
+[paths]
+root =
+    ./
+    ${INITIAL_GISBASE-/usr/local/grass??}/
+    /home/*/install/grass??/
+python =
+    ./python/
+    ${INITIAL_GISBASE-/usr/local/grass??}/etc/python/
+    /home/*/install/grass??/etc/python/
+special_d_mon =
+    ./display/d.mon/
+    ${INITIAL_GISBASE-/usr/local/grass??}/etc/d.mon/
+    /home/*/install/grass??/etc/d.mon/
+special_r_in_wms =
+    ./scripts/r.in.wms/
+    ${INITIAL_GISBASE-/usr/local/grass??}/etc/r.in.wms/
+    /home/*/install/grass??/etc/r.in.wms/
+
+
+[report]
+; Since our file structure isn't an importable package, not all files are found
+; This allows to find python files even if there is missing __init__.py files, but is slow
+include_namespace_packages = True
+skip_covered = False
+; Regexes for lines to exclude from consideration
+exclude_also =
+    ; Don't complain about missing debug-only code:
+    def __repr__
+    if self\.debug
+
+    ; Don't complain if tests don't hit defensive assertion code:
+    raise AssertionError
+    raise NotImplementedError
+
+    ; Don't complain if non-runnable code isn't run:
+    ; if 0:
+    ; if __name__ == .__main__.:
+
+    ; Don't complain about abstract methods, they aren't run:
+    @(abc\.)?abstractmethod
+
+ignore_errors = True
+precision = 2
+
+[html]
+directory = coverage_html_report
+show_contexts = true

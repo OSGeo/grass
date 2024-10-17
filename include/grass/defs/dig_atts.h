@@ -4,14 +4,14 @@
    #define              WRITE_ATT_FORMAT        "%c  %12.2lf  %12.2lf  %8d"
    #define              WRITE_ATT_FORMAT        "%c %14.2lf %14.2lf %7d"
  */
-#define		WRITE_ATT_FORMAT	"%c %14s %14s %10d"
-#define FlSIZ 14
-#define		READ_ATT_FORMAT		"%c %lf %lf %d"
+#define WRITE_ATT_FORMAT "%c %14s %14s %10d"
+#define FlSIZ            14
+#define READ_ATT_FORMAT  "%c %lf %lf %d"
 
-/*  only types allowed in atts file 
+/*  only types allowed in atts file
  *      A - area, L - line, P - point
  */
-#define		ATT_TYPES		"LAP"
+#define ATT_TYPES        "LAP"
 
 /*      removed Jun 25 1991  dpg
    #define LINE 0
@@ -22,8 +22,7 @@
    #define DEAD_DOT 6
  */
 
-struct attribute
-{
+struct attribute {
     char type;
     double x;
     double y;
@@ -31,9 +30,7 @@ struct attribute
     long offset;
 };
 
-
-struct atts_index
-{
+struct atts_index {
     long *area_off;
     long *line_off;
     long *point_off;

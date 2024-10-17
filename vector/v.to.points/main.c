@@ -1,13 +1,12 @@
-
 /***************************************************************
  *
  * MODULE:       v.to.points
- * 
+ *
  * AUTHOR(S):    Radim Blazek
  *               OGR support by Martin Landa <landa.martin gmail.com>
- *               
- * PURPOSE:      Create points along lines 
- *               
+ *
+ * PURPOSE:      Create points along lines
+ *
  * COPYRIGHT:    (C) 2002-2019 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -31,12 +30,10 @@ int main(int argc, char **argv)
     double dmax;
     char buf[DB_SQL_MAX];
 
-    struct
-    {
+    struct {
         struct Option *input, *output, *type, *dmax, *lfield, *use;
     } opt;
-    struct
-    {
+    struct {
         struct Flag *table, *inter, *percent, *reverse;
     } flag;
     struct GModule *module;
@@ -175,7 +172,7 @@ int main(int argc, char **argv)
 
         /* copy input table */
         Fin = Vect_get_field(&In, field);
-        if (Fin) {              /* table defined */
+        if (Fin) { /* table defined */
             int ret;
 
             Fi = Vect_default_field_info(&Out, 1, NULL, GV_MTABLE);
@@ -183,8 +180,8 @@ int main(int argc, char **argv)
                                 Fi->database, Fi->driver);
 
             ret = db_copy_table(Fin->driver, Fin->database, Fin->table,
-                                Fi->driver, Vect_subst_var(Fi->database,
-                                                           &Out), Fi->table);
+                                Fi->driver, Vect_subst_var(Fi->database, &Out),
+                                Fi->table);
 
             if (ret == DB_FAILED) {
                 G_fatal_error(_("Unable to copy table <%s>"), Fin->table);
@@ -203,13 +200,13 @@ int main(int argc, char **argv)
         db_set_error_handler_driver(driver);
 
         if (field == -1)
-            sprintf(buf,
-                    "create table %s ( cat int, along double precision )",
+            sprintf(buf, "create table %s ( cat int, along double precision )",
                     Fi->table);
         else
-            sprintf(buf,
-                    "create table %s ( cat int, lcat int, along double precision )",
-                    Fi->table);
+            sprintf(
+                buf,
+                "create table %s ( cat int, lcat int, along double precision )",
+                Fi->table);
         db_append_string(&stmt, buf);
 
         if (db_execute_immediate(driver, &stmt) != DB_OK) {
@@ -256,23 +253,22 @@ int main(int argc, char **argv)
                 write_point(&Out, LPoints->x[0], LPoints->y[0], LPoints->z[0],
                             cat, 0.0, driver, Fi);
             }
-            else if (flag.percent->answer) {    /* lines */
+            else if (flag.percent->answer) { /* lines */
                 double dmaxlen = Vect_line_length(LPoints) * dmax / 100.0;
 
-                write_line(&Out, LPoints, cat, vertex_type,
-                           flag.inter->answer, flag.reverse->answer, dmaxlen,
-                           driver, Fi);
+                write_line(&Out, LPoints, cat, vertex_type, flag.inter->answer,
+                           flag.reverse->answer, dmaxlen, driver, Fi);
             }
             else {
-                write_line(&Out, LPoints, cat, vertex_type,
-                           flag.inter->answer, flag.reverse->answer, dmax,
-                           driver, Fi);
+                write_line(&Out, LPoints, cat, vertex_type, flag.inter->answer,
+                           flag.reverse->answer, dmax, driver, Fi);
             }
         }
 
         if (nskipped > 0)
             G_warning(_("%d features without category in layer <%d> skipped. "
-                        "Note that features without category (usually boundaries) are not "
+                        "Note that features without category (usually "
+                        "boundaries) are not "
                         "skipped when '%s=-1' is given."),
                       nskipped, field, opt.lfield->key);
     }
@@ -299,14 +295,12 @@ int main(int argc, char **argv)
             if (flag.percent->answer) {
                 double dmaxlen = Vect_line_length(LPoints) * dmax / 100.0;
 
-                write_line(&Out, LPoints, cat, vertex_type,
-                           flag.inter->answer, flag.reverse->answer, dmaxlen,
-                           driver, Fi);
+                write_line(&Out, LPoints, cat, vertex_type, flag.inter->answer,
+                           flag.reverse->answer, dmaxlen, driver, Fi);
             }
             else {
-                write_line(&Out, LPoints, cat, vertex_type,
-                           flag.inter->answer, flag.reverse->answer, dmax,
-                           driver, Fi);
+                write_line(&Out, LPoints, cat, vertex_type, flag.inter->answer,
+                           flag.reverse->answer, dmax, driver, Fi);
             }
 
             nisles = Vect_get_area_num_isles(&In, area);

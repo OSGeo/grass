@@ -5,6 +5,14 @@ import multiprocessing
 import pytest
 
 import grass.script as gs
+from grass.pygrass.modules.grid import GridModule
+
+xfail_mp_spawn = pytest.mark.xfail(
+    multiprocessing.get_start_method() == "spawn",
+    reason="Multiprocessing using 'spawn' start method requires pickable functions",
+    raises=AttributeError,
+    strict=True,
+)
 
 
 def max_processes():
@@ -22,6 +30,8 @@ def run_in_subprocess(function):
     process.join()
 
 
+@xfail_mp_spawn
+@pytest.mark.needs_solo_run
 @pytest.mark.parametrize("processes", list(range(1, max_processes() + 1)) + [None])
 def test_processes(tmp_path, processes):
     """Check that running with multiple processes works"""
@@ -34,10 +44,6 @@ def test_processes(tmp_path, processes):
         gs.run_command("r.surf.fractal", output=surface)
 
         def run_grid_module():
-            # modules/shortcuts calls get_commands which requires GISBASE.
-            # pylint: disable=import-outside-toplevel
-            from grass.pygrass.modules.grid import GridModule
-
             grid = GridModule(
                 "r.slope.aspect",
                 width=10,
@@ -59,6 +65,7 @@ def test_processes(tmp_path, processes):
 # @pytest.mark.parametrize("split", [False])  # True does not work.
 
 
+@xfail_mp_spawn
 @pytest.mark.parametrize("width", [5, 10, 50])  # None does not work.
 @pytest.mark.parametrize("height", [5, 10, 50])
 def test_tiling_schemes(tmp_path, width, height):
@@ -72,10 +79,6 @@ def test_tiling_schemes(tmp_path, width, height):
         gs.run_command("r.surf.fractal", output=surface)
 
         def run_grid_module():
-            # modules/shortcuts calls get_commands which requires GISBASE.
-            # pylint: disable=import-outside-toplevel
-            from grass.pygrass.modules.grid import GridModule
-
             grid = GridModule(
                 "r.slope.aspect",
                 width=width,
@@ -94,6 +97,7 @@ def test_tiling_schemes(tmp_path, width, height):
         assert info["min"] > 0
 
 
+@xfail_mp_spawn
 @pytest.mark.parametrize("overlap", [0, 1, 2, 5])
 def test_overlaps(tmp_path, overlap):
     """Check that overlap accepts different values"""
@@ -105,10 +109,6 @@ def test_overlaps(tmp_path, overlap):
         gs.run_command("r.surf.fractal", output=surface)
 
         def run_grid_module():
-            # modules/shortcuts calls get_commands which requires GISBASE.
-            # pylint: disable=import-outside-toplevel
-            from grass.pygrass.modules.grid import GridModule
-
             grid = GridModule(
                 "r.slope.aspect",
                 width=10,
@@ -127,22 +127,20 @@ def test_overlaps(tmp_path, overlap):
         assert info["min"] > 0
 
 
+@xfail_mp_spawn
 @pytest.mark.parametrize("clean", [True, False])
-def test_cleans(tmp_path, clean):
+@pytest.mark.parametrize("surface", ["surface", "non_exist_surface"])
+def test_cleans(tmp_path, clean, surface):
     """Check that temporary mapsets are cleaned when appropriate"""
     location = "test"
     mapset_prefix = "abc"
     gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
     with gs.setup.init(tmp_path / location):
         gs.run_command("g.region", s=0, n=50, w=0, e=50, res=1)
-        surface = "surface"
-        gs.run_command("r.surf.fractal", output=surface)
+        if surface == "surface":
+            gs.run_command("r.surf.fractal", output=surface)
 
         def run_grid_module():
-            # modules/shortcuts calls get_commands which requires GISBASE.
-            # pylint: disable=import-outside-toplevel
-            from grass.pygrass.modules.grid import GridModule
-
             grid = GridModule(
                 "r.slope.aspect",
                 width=10,
@@ -172,6 +170,7 @@ def test_cleans(tmp_path, clean):
             assert prefixed, "Not even one prefixed mapset"
 
 
+@xfail_mp_spawn
 @pytest.mark.parametrize("patch_backend", [None, "r.patch", "RasterRow"])
 def test_patching_backend(tmp_path, patch_backend):
     """Check patching backend works"""
@@ -188,10 +187,6 @@ def test_patching_backend(tmp_path, patch_backend):
         )
 
         def run_grid_module():
-            # modules/shortcuts calls get_commands which requires GISBASE.
-            # pylint: disable=import-outside-toplevel
-            from grass.pygrass.modules.grid import GridModule
-
             grid = GridModule(
                 "v.to.rast",
                 width=10,
@@ -213,8 +208,9 @@ def test_patching_backend(tmp_path, patch_backend):
         assert abs(mean - mean_ref) < 0.0001
 
 
+@xfail_mp_spawn
 @pytest.mark.parametrize(
-    "width, height, processes",
+    ("width", "height", "processes"),
     [
         (None, None, max_processes()),
         (10, None, max_processes()),
@@ -232,10 +228,6 @@ def test_tiling(tmp_path, width, height, processes):
         gs.run_command("r.surf.fractal", output=surface)
 
         def run_grid_module():
-            # modules/shortcuts calls get_commands which requires GISBASE.
-            # pylint: disable=import-outside-toplevel
-            from grass.pygrass.modules.grid import GridModule
-
             grid = GridModule(
                 "r.slope.aspect",
                 width=width,
@@ -252,3 +244,40 @@ def test_tiling(tmp_path, width, height, processes):
 
         info = gs.raster_info("slope")
         assert info["min"] > 0
+
+
+@xfail_mp_spawn
+@pytest.mark.needs_solo_run
+@pytest.mark.parametrize(
+    ("processes", "backend"),
+    [
+        (1, "RasterRow"),
+        (9, "RasterRow"),
+        (9, "r.patch"),
+        (10, "RasterRow"),
+        (10, "r.patch"),
+    ],
+)
+def test_patching_error(tmp_path, processes, backend):
+    """Check auto adjusted tile size based on processes"""
+    location = "test"
+    gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
+    with gs.setup.init(tmp_path / location):
+        gs.run_command("g.region", s=0, n=10, w=0, e=10, res=0.1)
+        surface = "fractal"
+
+        def run_grid_module():
+            grid = GridModule(
+                "r.surf.fractal",
+                overlap=0,
+                processes=processes,
+                output=surface,
+                patch_backend=backend,
+                debug=True,
+            )
+            grid.run()
+
+        run_in_subprocess(run_grid_module)
+
+        info = gs.parse_command("r.univar", flags="g", map=surface)
+        assert int(info["null_cells"]) == 0

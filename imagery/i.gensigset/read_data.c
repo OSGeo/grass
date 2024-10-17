@@ -17,7 +17,7 @@ int read_data(struct files *files, struct SigSet *S)
 
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
-    class = (CELL *) G_calloc(ncols, sizeof(CELL));
+    class = (CELL *)G_calloc(ncols, sizeof(CELL));
 
     G_message(_("Reading raster maps..."));
 

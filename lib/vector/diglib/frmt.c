@@ -1,8 +1,7 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
- * MODULE:       Vector library 
- *              
+ * MODULE:       Vector library
+ *
  * AUTHOR(S):    Radim Blazek
  *
  * PURPOSE:      Lower level functions for reading/writing/manipulating vectors.
@@ -14,11 +13,13 @@
  *               comes with GRASS for details.
  *
  *****************************************************************************/
+
 #include <string.h>
 #include <stdio.h>
 
 #include <grass/vector.h>
 #include <grass/glocale.h>
+#include <grass/gis.h>
 
 /*!
    \brief Read external vector format file
@@ -29,11 +30,12 @@
    \return format code
    \return -1 on error
  */
-int dig_read_frmt_ascii(FILE * dascii, struct Format_info *finfo)
+int dig_read_frmt_ascii(FILE *dascii, struct Format_info *finfo)
 {
     char buff[2001], buf1[2001];
     char *ptr;
     int frmt = -1;
+    size_t len;
 
     G_debug(3, "dig_read_frmt_ascii()");
 
@@ -46,10 +48,14 @@ int dig_read_frmt_ascii(FILE * dascii, struct Format_info *finfo)
             return -1;
         }
 
-        strcpy(buf1, buff);
+        len = G_strlcpy(buf1, buff, sizeof(buf1));
+        if (len >= sizeof(buf1)) {
+            G_warning(_("Line <%s> is too long"), buff);
+            return -1;
+        }
         buf1[ptr - buff] = '\0';
 
-        ptr++;                  /* Search for the start of text */
+        ptr++; /* Search for the start of text */
         while (*ptr == ' ')
             ptr++;
 
@@ -98,10 +104,14 @@ int dig_read_frmt_ascii(FILE * dascii, struct Format_info *finfo)
             continue;
         }
 
-        strcpy(buf1, buff);
+        len = G_strlcpy(buf1, buff, sizeof(buf1));
+        if (len >= sizeof(buf1)) {
+            G_warning(_("Line <%s> is too long"), buff);
+            return -1;
+        }
         buf1[ptr - buff] = '\0';
 
-        ptr++;                  /* Search for the start of text */
+        ptr++; /* Search for the start of text */
         while (*ptr == ' ')
             ptr++;
 
@@ -152,7 +162,8 @@ int dig_read_frmt_ascii(FILE * dascii, struct Format_info *finfo)
  *  Returns: 0 OK
  *           -1 on error
  */
-int dig_write_frmt_ascii(FILE * dascii, struct Format_info *finfo, int format)
+int dig_write_frmt_ascii(FILE *dascii UNUSED, struct Format_info *finfo UNUSED,
+                         int format UNUSED)
 {
     G_debug(3, "dig_write_frmt_ascii()");
 

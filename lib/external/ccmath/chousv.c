@@ -5,9 +5,11 @@
  *  public license (LGPL). ( See the lgpl.license file for details.)
  * ------------------------------------------------------------------------
  */
+
 #include <stdlib.h>
 #include "ccmath.h"
-void chousv(Cpx * a, double *d, double *dp, int n)
+
+void chousv(Cpx *a, double *d, double *dp, int n)
 {
     double sc, x, y;
 
@@ -17,7 +19,7 @@ void chousv(Cpx * a, double *d, double *dp, int n)
 
     Cpx *qw, *pc, *p, *q;
 
-    qs = (Cpx *) calloc(2 * n, sizeof(Cpx));
+    qs = (Cpx *)calloc(2 * n, sizeof(Cpx));
     q = qs + n;
     for (j = 0, pc = a; j < n - 2; ++j, pc += n + 1, ++q) {
         m = n - j - 1;
@@ -52,8 +54,8 @@ void chousv(Cpx * a, double *d, double *dp, int n)
             }
             for (i = 0, e = j + 2, p = pc + n + 1, y = 0.; i < m;
                  ++i, p += e++) {
-                qs[i].re += (u.re = qw[i].re) * p->re - (u.im =
-                                                         qw[i].im) * p->im;
+                qs[i].re +=
+                    (u.re = qw[i].re) * p->re - (u.im = qw[i].im) * p->im;
                 qs[i].im += u.re * p->im + u.im * p->re;
                 ++p;
                 for (k = i + 1; k < m; ++k, ++p) {
@@ -72,10 +74,10 @@ void chousv(Cpx * a, double *d, double *dp, int n)
             }
             for (i = 0, e = j + 2, p = pc + n + 1; i < m; ++i, p += e++) {
                 for (k = i; k < m; ++k, ++p) {
-                    p->re -= qw[i].re * qs[k].re + qw[i].im * qs[k].im
-                        + qs[i].re * qw[k].re + qs[i].im * qw[k].im;
-                    p->im -= qw[i].im * qs[k].re - qw[i].re * qs[k].im
-                        + qs[i].im * qw[k].re - qs[i].re * qw[k].im;
+                    p->re -= qw[i].re * qs[k].re + qw[i].im * qs[k].im +
+                             qs[i].re * qw[k].re + qs[i].im * qw[k].im;
+                    p->im -= qw[i].im * qs[k].re - qw[i].re * qs[k].im +
+                             qs[i].im * qw[k].re - qs[i].re * qw[k].im;
                 }
             }
         }

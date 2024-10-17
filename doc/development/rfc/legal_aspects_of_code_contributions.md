@@ -42,30 +42,28 @@ Committers should adhere to the following guidelines, and may be
 personally legally liable for improperly contributing code to the
 source repository:
 
- * Make sure the contributor (and possibly employer) is aware of the
-  contribution terms.
- * Code coming from a source other than the contributor (such as
-  adapted from another project) should be clearly marked as to the
-  original source, copyright holders, license terms and so forth. This
-  information can be in the file headers, but should also be added to
-  the project licensing file if not exactly matching normal project
-  licensing (grass/COPYRIGHT.txt).
- * Existing copyright headers and license text should never be stripped
-  from a file. If a copyright holder wishes to give up copyright they
-  must do so in writing to the GRASS [PSC](https://trac.osgeo.org/grass/wiki/PSC) before copyright messages
-  are removed. If license terms are changed, it has to be by agreement
-  (written in email is ok) of the copyright holders.
- * When substantial contributions are added to a file (such as
-  substantial patches) the author/contributor should be added to the
-  list of copyright holders for the file in the file header.
- * If there is uncertainty about whether a change is proper to
-  contribute to the code base, please seek more information from the
-  Project Steering Committee, other GRASS developers or the OSGeo
-  foundation legal counsel.
+* Make sure the contributor (and possibly employer) is aware of the
+ contribution terms.
+* Code coming from a source other than the contributor (such as
+ adapted from another project) should be clearly marked as to the
+ original source, copyright holders, license terms and so forth. This
+ information can be in the file headers, but should also be added to
+ the project licensing file if not exactly matching normal project
+ licensing (grass/COPYRIGHT.txt).
+* Existing copyright headers and license text should never be stripped
+ from a file. If a copyright holder wishes to give up copyright they
+ must do so in writing to the GRASS [PSC](https://trac.osgeo.org/grass/wiki/PSC)
+ before copyright messages are removed. If license terms are changed, it has to
+ be by agreement (written in email is ok) of the copyright holders.
+* When substantial contributions are added to a file (such as
+ substantial patches) the author/contributor should be added to the
+ list of copyright holders for the file in the file header.
+* If there is uncertainty about whether a change is proper to
+ contribute to the code base, please seek more information from the
+ Project Steering Committee, other GRASS developers or the OSGeo
+ foundation legal counsel.
 
 Questions regarding GRASS GIS should be directed to the
 GRASS Development Team at the following address:
 
-Internet:
-  http://grass.osgeo.org/home/contact-us/
-
+Internet: <http://grass.osgeo.org/home/contact-us/>

@@ -5,9 +5,9 @@
 
 #include "global.h"
 
-/* Read area cats for one side 
+/* Read area cats for one side
  *  val - pointer where value is stored
- *  count - pointer to count of cats read 
+ *  count - pointer to count of cats read
  *  ACats - area categories
  */
 void read_side_cats(struct line_cats *ACats, int *val, int *count)
@@ -18,32 +18,32 @@ void read_side_cats(struct line_cats *ACats, int *val, int *count)
             ACats->n_cats, *val, *count);
 
     if (*count > 1)
-        return;                 /* it doesn't make sense to read/check more cats */
+        return; /* it doesn't make sense to read/check more cats */
 
     found = 0;
 
     for (i = 0; i < ACats->n_cats; i++) {
         if (ACats->field[i] == options.qfield) {
             found = 1;
-            if (*count == 0) {  /* first */
-                *val = ACats->cat[i];   /* set value to first found cat */
+            if (*count == 0) {        /* first */
+                *val = ACats->cat[i]; /* set value to first found cat */
                 (*count)++;
             }
-            else {              /* *count == 1 */
+            else { /* *count == 1 */
                 /* Check if it is the same category */
                 if (*val != ACats->cat[i]) {
                     *count = 2;
-                    break;      /* no need to read more */
+                    break; /* no need to read more */
                 }
             }
         }
     }
-    if (!found) {               /* i.e. area cat is NULL (-1) */
-        if (*count == 0) {      /* first */
+    if (!found) {          /* i.e. area cat is NULL (-1) */
+        if (*count == 0) { /* first */
             *val = -1;
             (*count)++;
         }
-        else {                  /* *count == 1 */
+        else { /* *count == 1 */
             /* Check if it is the same category */
             if (*val != -1) {
                 *count = 2;
@@ -52,7 +52,7 @@ void read_side_cats(struct line_cats *ACats, int *val, int *count)
     }
 }
 
-/* 
+/*
  * Read: - points/centroids : cat,count,coor
  *       - lines/boundaries : cat,count,length,slope,sinuous
  */
@@ -160,8 +160,7 @@ int read_lines(struct Map_info *Map)
                     /* Calculate line slope */
                     len = length(Points->n_points, Points->x, Points->y);
                     slope =
-                        (Points->z[Points->n_points - 1] -
-                         Points->z[0]) / len;
+                        (Points->z[Points->n_points - 1] - Points->z[0]) / len;
                     Values[idx].d1 += slope;
                 }
                 else if (options.option == O_SINUOUS && (type & GV_LINES)) {
@@ -178,7 +177,8 @@ int read_lines(struct Map_info *Map)
                     Values[idx].d1 = len / dist;
                 }
                 else if (options.option == O_AZIMUTH && (type & GV_LINES)) {
-                    /* Calculate azimuth between line start and end points in degrees */
+                    /* Calculate azimuth between line start and end points in
+                     * degrees */
                     dx = (Points->x[Points->n_points - 1] - Points->x[0]);
                     dy = (Points->y[Points->n_points - 1] - Points->y[0]);
                     /* If line is closed... */
@@ -196,7 +196,8 @@ int read_lines(struct Map_info *Map)
             }
         }
 
-        if (!found) {           /* Values for no category (cat = -1) are reported at the end */
+        if (!found) { /* Values for no category (cat = -1) are reported at the
+                         end */
             idx = find_cat(-1, 1);
             if (options.option == O_COUNT) {
                 Values[idx].count1++;
@@ -224,16 +225,13 @@ int read_lines(struct Map_info *Map)
                 Values[idx].count1++;
             }
             else if (options.option == O_SIDES && type == GV_BOUNDARY) {
-                read_side_cats(LCats, &(Values[idx].i1),
-                               &(Values[idx].count1));
-                read_side_cats(RCats, &(Values[idx].i2),
-                               &(Values[idx].count2));
+                read_side_cats(LCats, &(Values[idx].i1), &(Values[idx].count1));
+                read_side_cats(RCats, &(Values[idx].i2), &(Values[idx].count2));
             }
             else if (options.option == O_SLOPE && (type & GV_LINES)) {
                 /* Calculate line slope */
                 len = length(Points->n_points, Points->x, Points->y);
-                slope =
-                    (Points->z[Points->n_points - 1] - Points->z[0]) / len;
+                slope = (Points->z[Points->n_points - 1] - Points->z[0]) / len;
                 Values[idx].d1 += slope;
             }
             else if (options.option == O_SINUOUS && (type & GV_LINES)) {
@@ -249,7 +247,8 @@ int read_lines(struct Map_info *Map)
                 Values[idx].d1 = len / dist;
             }
             else if (options.option == O_AZIMUTH && (type & GV_LINES)) {
-                /* Calculate azimuth between line start and end points in degrees */
+                /* Calculate azimuth between line start and end points in
+                 * degrees */
                 dx = (Points->x[Points->n_points - 1] - Points->x[0]);
                 dy = (Points->y[Points->n_points - 1] - Points->y[0]);
                 /* If line is closed... */

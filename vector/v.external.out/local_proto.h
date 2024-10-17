@@ -1,13 +1,11 @@
 #ifndef V_EXTERNAL_OUT_LOCAL_PROTO_H
 #define V_EXTERNAL_OUT_LOCAL_PROTO_H
 
-struct _options
-{
+struct _options {
     struct Option *dsn, *format, *opts, *input, *output;
 };
 
-struct _flags
-{
+struct _flags {
     struct Flag *f, *p, *r, *g;
 };
 

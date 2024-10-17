@@ -1,13 +1,13 @@
 #include <grass/gis.h>
 
 /******************************************************
-* I_fopen_cam_file_new()
-* I_fopen_cam_file_append()
-* I_fopen_cam_file_old()
-*
-* fopen new camera files in the current mapset
-* fopen old camera files anywhere
-*******************************************************/
+ * I_fopen_cam_file_new()
+ * I_fopen_cam_file_append()
+ * I_fopen_cam_file_old()
+ *
+ * fopen new camera files in the current mapset
+ * fopen old camera files anywhere
+ *******************************************************/
 static int error(char *, char *, char *);
 
 FILE *I_fopen_cam_file_new(char *camera)
@@ -44,8 +44,8 @@ static int error(char *camera, char *msga, char *msgb)
 {
     char buf[100];
 
-    sprintf(buf, "%s camera file [%s] in [%s %s] %s",
-            msga, camera, G_location(), G_mapset(), msgb);
+    sprintf(buf, "%s camera file [%s] in [%s %s] %s", msga, camera,
+            G_location(), G_mapset(), msgb);
     G_warning("%s", buf);
 
     return 0;

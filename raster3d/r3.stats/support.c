@@ -13,7 +13,6 @@
 #include <grass/gis.h>
 #include "local_proto.h"
 
-
 /* *************************************************************** */
 /* ***** allocate equal_val_array structure ********************* */
 /* *************************************************************** */
@@ -22,15 +21,13 @@ equal_val_array *alloc_equal_val_array(int count)
     equal_val_array *p;
     int i;
 
-
-    p = (equal_val_array *) G_calloc(1, sizeof(equal_val_array));
+    p = (equal_val_array *)G_calloc(1, sizeof(equal_val_array));
     p->count = count;
 
-    p->values = (equal_val **) G_calloc(p->count, sizeof(equal_val *));
+    p->values = (equal_val **)G_calloc(p->count, sizeof(equal_val *));
 
     for (i = 0; i < p->count; i++)
-        p->values[i] = (equal_val *) G_calloc(1, sizeof(equal_val));
-
+        p->values[i] = (equal_val *)G_calloc(1, sizeof(equal_val));
 
     return p;
 }
@@ -38,7 +35,7 @@ equal_val_array *alloc_equal_val_array(int count)
 /* *************************************************************** */
 /* ***** add an equal_val to the equal_val_array structure ******* */
 /* *************************************************************** */
-equal_val_array *add_equal_val_to_array(equal_val_array * array, double val)
+equal_val_array *add_equal_val_to_array(equal_val_array *array, double val)
 {
     equal_val_array *p = array;
     int count;
@@ -56,8 +53,8 @@ equal_val_array *add_equal_val_to_array(equal_val_array * array, double val)
 
         /*new memory */
         p->values =
-            (equal_val **) G_realloc(p->values, count * sizeof(equal_val *));
-        p->values[count - 1] = (equal_val *) G_calloc(1, sizeof(equal_val));
+            (equal_val **)G_realloc(p->values, count * sizeof(equal_val *));
+        p->values[count - 1] = (equal_val *)G_calloc(1, sizeof(equal_val));
         /*set the new value */
         p->values[count - 1]->val = val;
         p->values[count - 1]->count = 1;
@@ -72,7 +69,7 @@ equal_val_array *add_equal_val_to_array(equal_val_array * array, double val)
 /* *************************************************************** */
 /* ***** check if a value exists in the equal_val_array ********* */
 /* *************************************************************** */
-int check_equal_value(equal_val_array * array, double val)
+int check_equal_value(equal_val_array *array, double val)
 {
     int i;
 
@@ -94,11 +91,10 @@ int check_equal_value(equal_val_array * array, double val)
     return 0;
 }
 
-
 /* *************************************************************** */
 /* ***** Release the memory of a equal_val_array structure ****** */
 /* *************************************************************** */
-void free_equal_val_array(equal_val_array * uvals)
+void free_equal_val_array(equal_val_array *uvals)
 {
     int i;
 
@@ -117,21 +113,21 @@ void free_equal_val_array(equal_val_array * uvals)
 /* **** Create the structure which manages the statistical ******* */
 /* **** values for a value range or equal values **************** */
 /* *************************************************************** */
-stat_table *create_stat_table(int nsteps, equal_val_array * eqvals,
-                              double min, double max)
+stat_table *create_stat_table(int nsteps, equal_val_array *eqvals, double min,
+                              double max)
 {
     stat_table *p;
     int i;
     double step;
 
     /* Memory */
-    p = (stat_table *) G_calloc(1, sizeof(stat_table));
+    p = (stat_table *)G_calloc(1, sizeof(stat_table));
 
-    p->null = (stat_row *) G_calloc(nsteps, sizeof(stat_row));
-    p->table = (stat_row **) G_calloc(nsteps, sizeof(stat_row *));
+    p->null = (stat_row *)G_calloc(nsteps, sizeof(stat_row));
+    p->table = (stat_row **)G_calloc(nsteps, sizeof(stat_row *));
 
     for (i = 0; i < nsteps; i++)
-        p->table[i] = (stat_row *) G_calloc(1, sizeof(stat_row));
+        p->table[i] = (stat_row *)G_calloc(1, sizeof(stat_row));
 
     /* Some value initializing */
     p->null->min = 0;
@@ -147,7 +143,8 @@ stat_table *create_stat_table(int nsteps, equal_val_array * eqvals,
     p->sum_perc = 0;
     p->equal = 0;
 
-    /*if no equal values are provided, calculate the range and the length of each step */
+    /*if no equal values are provided, calculate the range and the length of
+     * each step */
     if (!eqvals) {
 
         /*calculate the steplength */
@@ -177,19 +174,22 @@ stat_table *create_stat_table(int nsteps, equal_val_array * eqvals,
         /* the last value must be a bit larger */
         p->table[nsteps - 1]->max += COMPARE_PRECISION;
     }
-    else {                      /* Create equal value statistic */
+    else { /* Create equal value statistic */
         p->equal = 1;
         for (i = 0; i < eqvals->count; i++) {
-            p->table[i]->min = eqvals->values[i]->val;  /* equal values have no range, set min and max to the same value */
+            p->table[i]->min =
+                eqvals->values[i]->val; /* equal values have no range, set min
+                                           and max to the same value */
             p->table[i]->max = eqvals->values[i]->val;
             p->table[i]->num = i + 1;
-            p->table[i]->count = eqvals->values[i]->count;      /* the appearance count for each equal value */
+            p->table[i]->count =
+                eqvals->values[i]
+                    ->count; /* the appearance count for each equal value */
             p->table[i]->vol = 0;
             p->table[i]->perc = 0;
             G_debug(5, "Unique value %i = %g count %i\n", p->table[i]->num,
                     p->table[i]->min, p->table[i]->count);
         }
-
     }
 
     return p;
@@ -198,7 +198,7 @@ stat_table *create_stat_table(int nsteps, equal_val_array * eqvals,
 /* *************************************************************** */
 /* ***** Release the memory of a stat_table structure ************ */
 /* *************************************************************** */
-void free_stat_table(stat_table * stats)
+void free_stat_table(stat_table *stats)
 {
     int i;
 
@@ -218,18 +218,18 @@ void free_stat_table(stat_table * stats)
 /* *************************************************************** */
 /* **** Compute the volume, percentage and sums ****************** */
 /* *************************************************************** */
-void update_stat_table(stat_table * stats, RASTER3D_Region * region)
+void update_stat_table(stat_table *stats, RASTER3D_Region *region)
 {
     int i;
     double vol = region->ns_res * region->ew_res * region->tb_res;
     int cellnum = region->rows * region->cols * region->depths;
 
-    /*Calculate volume and percentage for each range or equal value and the sum stats */
+    /*Calculate volume and percentage for each range or equal value and the sum
+     * stats */
     for (i = 0; i < stats->nsteps; i++) {
         stats->table[i]->vol = stats->table[i]->count * vol;
         stats->table[i]->perc =
-            (double)(100.0 * (double)stats->table[i]->count /
-                     (double)cellnum);
+            (double)(100.0 * (double)stats->table[i]->count / (double)cellnum);
         stats->sum_count += stats->table[i]->count;
         stats->sum_vol += stats->table[i]->vol;
         stats->sum_perc += stats->table[i]->perc;
@@ -246,14 +246,15 @@ void update_stat_table(stat_table * stats, RASTER3D_Region * region)
 /* *************************************************************** */
 /* *************************************************************** */
 /* *************************************************************** */
-void print_stat_table(stat_table * stats, int counts_only)
+void print_stat_table(stat_table *stats, int counts_only)
 {
     int i;
 
     if (stats->equal) {
-        /*       1234567   012345678901234567   0123456789012   0123456   0123456789 */
-        fprintf(stdout,
-                "  num   |        value       |     volume    |   perc  | cell count\n");
+        /*       1234567   012345678901234567   0123456789012   0123456
+         * 0123456789 */
+        fprintf(stdout, "  num   |        value       |     volume    |   perc "
+                        " | cell count\n");
 
         for (i = 0; i < stats->nsteps; i++) {
             fprintf(stdout, "%7i   %18.6lf   %13.3lf   %7.5lf   %10i\n",
@@ -261,8 +262,7 @@ void print_stat_table(stat_table * stats, int counts_only)
                     stats->table[i]->vol, stats->table[i]->perc,
                     stats->table[i]->count);
         }
-        fprintf(stdout,
-                "%7i                    *   %13.3lf   %7.5lf   %10i\n",
+        fprintf(stdout, "%7i                    *   %13.3lf   %7.5lf   %10i\n",
                 stats->null->num, stats->null->vol, stats->null->perc,
                 stats->null->count);
 
@@ -271,15 +271,16 @@ void print_stat_table(stat_table * stats, int counts_only)
     }
     else if (counts_only) {
         for (i = 0; i < stats->nsteps; i++) {
-            fprintf(stdout, "%d %d\n",
-                    stats->table[i]->num, stats->table[i]->count);
+            fprintf(stdout, "%d %d\n", stats->table[i]->num,
+                    stats->table[i]->count);
         }
         fprintf(stdout, "* %d\n", stats->null->count);
     }
     else {
-        /*       1234567   012345678901234567   012345678901234567   0123456789012   0123456   0123456789 */
-        fprintf(stdout,
-                "  num   | minimum <= value   | value < maximum    |     volume    |   perc  | cell count\n");
+        /*       1234567   012345678901234567   012345678901234567 0123456789012
+         * 0123456   0123456789 */
+        fprintf(stdout, "  num   | minimum <= value   | value < maximum    |   "
+                        "  volume    |   perc  | cell count\n");
 
         for (i = 0; i < stats->nsteps; i++) {
             fprintf(stdout,
@@ -287,21 +288,23 @@ void print_stat_table(stat_table * stats, int counts_only)
                     stats->table[i]->num, stats->table[i]->min,
                     stats->table[i]->max, stats->table[i]->vol,
                     stats->table[i]->perc, stats->table[i]->count);
-
         }
         fprintf(stdout,
-                "%7i                    *                    *   %13.3lf   %7.5lf   %10i\n",
+                "%7i                    *                    *   %13.3lf   "
+                "%7.5lf   %10i\n",
                 stats->null->num, stats->null->vol, stats->null->perc,
                 stats->null->count);
     }
 
     if (!counts_only) {
         fprintf(stdout,
-                "\nSum of non Null cells: \n\tVolume = %13.3lf \n\tPercentage = %7.3lf  \n\tCell count = %i\n",
+                "\nSum of non Null cells: \n\tVolume = %13.3lf \n\tPercentage "
+                "= %7.3lf  \n\tCell count = %i\n",
                 stats->sum_vol, stats->sum_perc, stats->sum_count);
 
         fprintf(stdout,
-                "\nSum of all cells: \n\tVolume = %13.3lf \n\tPercentage = %7.3lf  \n\tCell count = %i\n",
+                "\nSum of all cells: \n\tVolume = %13.3lf \n\tPercentage = "
+                "%7.3lf  \n\tCell count = %i\n",
                 stats->sum_vol + stats->null->vol,
                 stats->sum_perc + stats->null->perc,
                 stats->sum_count + stats->null->count);
@@ -313,7 +316,7 @@ void print_stat_table(stat_table * stats, int counts_only)
 /* *************************************************************** */
 /*  Make an entry in the statistic table based on range value check */
 /* *************************************************************** */
-void check_range_value(stat_table * stats, double value)
+void check_range_value(stat_table *stats, double value)
 {
 
     /* this is very expensive for large range arrays! */
@@ -342,7 +345,7 @@ void check_range_value(stat_table * stats, double value)
  * It divides therefor the range array in smaller pices.
  *
  * e.g:
- *    0     1     2     3     4     5     6     7     8 
+ *    0     1     2     3     4     5     6     7     8
  * [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9]]
  *                         /   \
  * [[0,1],[1,2],[2,3],[3,4]]   [[4,5],[5,6],[6,7],[7,8],[8,9]]
@@ -350,8 +353,8 @@ void check_range_value(stat_table * stats, double value)
  * [[0,1],[1,2]]   [[2,3],[3,4]]   [[4,5],[5,6]]   [[6,7],[7,8],[8,9]]
  *       /  \             /  \               / \               /  \
  * [[0,1]]  [[1,2]]  [[2,3]]  [[3,4]]  [[4,5]]  [[5,6]]  [[6,7]]  [[7,8],[8,9]]
- *                                                                     / \ 
- *                                                               [[7,8]]  [[8,9]]
+ *                                                                     / \
+ *                                                               [[7,8]] [[8,9]]
  *
  * Searching the value 5.5 will result in the following steps:
  *
@@ -363,12 +366,13 @@ void check_range_value(stat_table * stats, double value)
  * 5.) now increase the value range counter of range array with index 5
  *
  * */
-void tree_search_range(stat_table * stats, int left, int right, double value)
+void tree_search_range(stat_table *stats, int left, int right, double value)
 {
     int size = right - left;
 
     G_debug(5,
-            "Search value %g in array size %i left border index %i right border index %i\n",
+            "Search value %g in array size %i left border index %i right "
+            "border index %i\n",
             value, size, left, right);
 
     /*if left and right are equal */
@@ -376,7 +380,7 @@ void tree_search_range(stat_table * stats, int left, int right, double value)
         stats->table[left]->count++;
         return;
     }
-    else if (size == 1) {       /* if the size is one, check directly */
+    else if (size == 1) { /* if the size is one, check directly */
 
         if (value >= stats->table[left]->min &&
             value < stats->table[left]->max) {
@@ -389,7 +393,7 @@ void tree_search_range(stat_table * stats, int left, int right, double value)
         return;
     }
     else {
-        if ((size % 2 == 0)) {  /*even */
+        if ((size % 2 == 0)) { /*even */
             /*left side */
             right = left + (size) / 2;
 
@@ -409,7 +413,7 @@ void tree_search_range(stat_table * stats, int left, int right, double value)
                 return;
             }
         }
-        else {                  /*odd */
+        else { /*odd */
             /*left side */
             right = left + (size - 1) / 2;
 
@@ -421,7 +425,8 @@ void tree_search_range(stat_table * stats, int left, int right, double value)
 
             /*right side */
             left += (size - 1) / 2;
-            right = left + (size - 1) / 2 + 1;  /*the right array is one col larger */
+            right = left + (size - 1) / 2 +
+                    1; /*the right array is one col larger */
 
             if (value >= stats->table[left]->min &&
                 value < stats->table[right]->max) {
@@ -438,7 +443,7 @@ void tree_search_range(stat_table * stats, int left, int right, double value)
 /* ****** heapsort for equal value arrays of size n ************** */
 /* ** Code based on heapsort from Sebastian Cyris **************** */
 /* *************************************************************** */
-void heapsort_eqvals(equal_val_array * e, int n)
+void heapsort_eqvals(equal_val_array *e, int n)
 {
     int k;
     double t;
@@ -461,11 +466,10 @@ void heapsort_eqvals(equal_val_array * e, int n)
     return;
 }
 
-
 /* *************************************************************** */
 /* ** Code based on heapsort from Sebastian Cyris **************** */
 /* ** ************************************************************ */
-void downheap_eqvals(equal_val_array * e, int n, int k)
+void downheap_eqvals(equal_val_array *e, int n, int k)
 {
     int j;
     double v;

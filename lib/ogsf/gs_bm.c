@@ -3,12 +3,12 @@
 
    \brief OGSF library - manipulating bitmaps (lower level functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -32,8 +32,7 @@
 
    \return pointer to BM struct
  */
-struct BM *gsbm_make_mask(typbuff * frombuff, float maskval, int rows,
-                          int cols)
+struct BM *gsbm_make_mask(typbuff *frombuff, float maskval, int rows, int cols)
 {
     int i, j, ioff;
     struct BM *bm;
@@ -60,7 +59,7 @@ struct BM *gsbm_make_mask(typbuff * frombuff, float maskval, int rows,
                         BM_set(bm, j, i, (curval == maskval));
                     }
                     else {
-                        BM_set(bm, j, i, 0);    /* doesn't mask nulls */
+                        BM_set(bm, j, i, 0); /* doesn't mask nulls */
                     }
                 }
             }
@@ -93,10 +92,10 @@ void gsbm_zero_mask(struct BM *map)
 /*!
    \brief mask types
  */
-#define MASK_OR		1
-#define MASK_ORNOT	2
-#define MASK_AND	3
-#define MASK_XOR	4
+#define MASK_OR    1
+#define MASK_ORNOT 2
+#define MASK_AND   3
+#define MASK_XOR   4
 
 /*!
    \brief Mask bitmap
@@ -229,7 +228,7 @@ int gsbm_xor_masks(struct BM *bmvar, struct BM *bmcon)
    \return 0
    \return 1
  */
-int gs_update_curmask(geosurf * surf)
+int gs_update_curmask(geosurf *surf)
 {
     struct BM *b_mask, *b_topo, *b_color;
     typbuff *t_topo, *t_mask, *t_color;
@@ -240,7 +239,7 @@ int gs_update_curmask(geosurf * surf)
 
     if (surf->mask_needupdate) {
         surf->mask_needupdate = 0;
-        surf->norm_needupdate = 1;      /* edges will need to be recalculated */
+        surf->norm_needupdate = 1; /* edges will need to be recalculated */
 
         t_topo = gs_get_att_typbuff(surf, ATT_TOPO, 0);
 
@@ -250,8 +249,8 @@ int gs_update_curmask(geosurf * surf)
             return (0);
         }
 
-        if (surf->nz_topo || surf->nz_color ||
-            gs_mask_defined(surf) || t_topo->nm) {
+        if (surf->nz_topo || surf->nz_color || gs_mask_defined(surf) ||
+            t_topo->nm) {
             b_mask = b_topo = b_color = NULL;
 
             if (!surf->curmask) {
@@ -349,7 +348,6 @@ int gs_update_curmask(geosurf * surf)
             surf->curmask = NULL;
             surf->zminmasked = surf->zmin;
         }
-
     }
 
     return (0);

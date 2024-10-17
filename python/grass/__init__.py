@@ -13,7 +13,7 @@
 """Top-level GRASS GIS Python package
 
 Importing the package (or any subpackage) initializes translation functions
-so that the function ``_`` appears in the global namespace (as an additional build-in).
+so that the function ``_`` appears in the global namespace (as an additional built-in).
 """
 
 import builtins as _builtins
@@ -58,7 +58,7 @@ def _translate(text):
     """Get translated version of text
 
     The first call to this function initializes translations, i.e., simply importing
-    the package does not require the translations to be availabe. However, a first
+    the package does not require the translations to be available. However, a first
     call to translate a message will do the initialization first before translating
     the message.
     """

@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
+from pathlib import Path
 import sys
 import re
-from ghtml import HTMLParser, HTMLParseError
+from ghtml import HTMLParser
 from ggroff import Formatter
 
-try:
-    # Python 2 str - bytes version
-    from StringIO import StringIO
-except ImportError:
-    # Python 3 str - unicode version
-    from io import StringIO
+from io import StringIO
 
 entities = {"nbsp": " ", "bull": "*"}
 
@@ -21,12 +17,10 @@ def fix(content):
         tag, attrs, body = content
         if tag == "div" and ("class", "toc") in attrs:
             return None
-        else:
-            return (tag, attrs, fix(body))
-    elif isinstance(content, list):
+        return (tag, attrs, fix(body))
+    if isinstance(content, list):
         return [fixed for item in content for fixed in [fix(item)] if fixed is not None]
-    else:
-        return content
+    return content
 
 
 def main():
@@ -37,12 +31,6 @@ def main():
     for n, line in enumerate(inf):
         try:
             p.feed(line)
-        except HTMLParseError as err:
-            sys.stderr.write(
-                "%s:%d:%d: Parse error: %s\n"
-                % (infile, err.lineno, err.offset, err.msg)
-            )
-            sys.exit(1)
         except Exception as err:
             sys.stderr.write(
                 "%s:%d:0: Error (%s): %s\n" % (infile, n + 1, repr(err), line)
@@ -64,10 +52,8 @@ def main():
     s = s.lstrip()
 
     # write groff
-    with open(sys.argv[2], "wb") as outf:
-        if sys.version_info.major >= 3:
-            s = s.encode("UTF-8")
-        outf.write(s)
+    s = s.encode("UTF-8")
+    Path(sys.argv[2]).write_bytes(s)
 
 
 if __name__ == "__main__":

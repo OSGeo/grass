@@ -1,19 +1,18 @@
-
 /*****************************************************************************
-*
-* MODULE:       Grass PDE Numerical Library
-* AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
-* 		soerengebbert <at> gmx <dot> de
-*               
-* PURPOSE:      Unit tests for les creation
-*
-* COPYRIGHT:    (C) 2000 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       Grass PDE Numerical Library
+ * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
+ *                 soerengebbert <at> gmx <dot> de
+ *
+ * PURPOSE:      Unit tests for les creation
+ *
+ * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -23,12 +22,10 @@
 
 #define EPSILON 0.000001
 
-
 /* prototypes */
 static int test_blas_level_1_double(void);
 static int test_blas_level_1_float(void);
 static int test_blas_level_1_int(void);
-
 
 /* *************************************************************** */
 /* Perfrome the blas level 1 unit tests ************************** */
@@ -51,7 +48,6 @@ int unit_test_blas_level_1(void)
     return sum;
 }
 
-
 /* *************************************************************** */
 /* ************** D O U B L E ************************************ */
 /* *************************************************************** */
@@ -73,7 +69,6 @@ int test_blas_level_1_double(void)
     G_math_d_x_dot_y(x, y, &a, rows);
     G_math_d_asum_norm(x, &b, rows);
     G_math_d_euclid_norm(x, &c, rows);
-
 
     if (a != 2.0 * rows) {
         G_message("Error in G_math_d_x_dot_y %f != %f", 2.0 * rows, a);
@@ -125,8 +120,8 @@ int test_blas_level_1_double(void)
     }
 
     if (b != 1.0 * (rows - 1)) {
-        G_message("Error in G_math_idamax: %f != %f",
-                  (double)1.0 * (rows - 1), b);
+        G_message("Error in G_math_idamax: %f != %f", (double)1.0 * (rows - 1),
+                  b);
         sum++;
     }
 
@@ -148,7 +143,6 @@ int test_blas_level_1_double(void)
     }
     G_math_d_asum_norm(z, &c, rows);
 
-
     if (a != 1.0 * (rows - 1) * rows) {
         G_message("Error in G_math_d_ax_by: %f != %f",
                   (double)1.0 * (rows - 1) * rows, a);
@@ -166,8 +160,7 @@ int test_blas_level_1_double(void)
         sum++;
     }
 
-
-#pragma omp parallel  default(shared)
+#pragma omp parallel default(shared)
     {
         /*scale x with 1 */
         G_math_d_ax_by(x, z, z, 1.0, 0.0, rows);
@@ -175,7 +168,7 @@ int test_blas_level_1_double(void)
     G_math_d_asum_norm(x, &a, rows);
     G_math_d_asum_norm(z, &b, rows);
     /*scale x with -1 */
-#pragma omp parallel  default(shared)
+#pragma omp parallel default(shared)
     {
         G_math_d_ax_by(x, z, z, -1.0, 0.0, rows);
     }
@@ -190,7 +183,6 @@ int test_blas_level_1_double(void)
     fill_d_vector_scalar(z, 0.0, rows);
     G_math_daxpy(x, z, 1.0, rows);
     G_math_d_asum_norm(z, &e, rows);
-
 
     if (a != 49995000 || a != b || b != c) {
         G_message("Error in G_math_d_ax: 49995000 != %f", a);
@@ -231,7 +223,6 @@ int test_blas_level_1_double(void)
     return sum;
 }
 
-
 /* *************************************************************** */
 /* ************** F L O A T ************************************** */
 /* *************************************************************** */
@@ -253,7 +244,6 @@ int test_blas_level_1_float(void)
     G_math_f_x_dot_y(x, y, &a, rows);
     G_math_f_asum_norm(x, &b, rows);
     G_math_f_euclid_norm(x, &c, rows);
-
 
     if (a != 2.0 * rows) {
         G_message("Error in G_math_f_x_dot_y %f != %f", 2.0 * rows, a);
@@ -310,22 +300,21 @@ int test_blas_level_1_float(void)
         sum++;
     }
 
-#pragma omp parallel  default(shared)
+#pragma omp parallel default(shared)
     {
         G_math_f_ax_by(x, y, z, 1.0, 1.0, rows);
     }
     G_math_f_asum_norm(z, &a, rows);
-#pragma omp parallel  default(shared)
+#pragma omp parallel default(shared)
     {
         G_math_f_ax_by(x, y, z, 1.0, -1.0, rows);
     }
     G_math_f_asum_norm(z, &b, rows);
-#pragma omp parallel  default(shared)
+#pragma omp parallel default(shared)
     {
         G_math_f_ax_by(x, y, z, 2.0, 1.0, rows);
     }
     G_math_f_asum_norm(z, &c, rows);
-
 
     if (fabs(a - 1.0 * (rows - 1) * rows) > EPSILON) {
         G_message("Error in G_math_f_ax_by 1: %f != %f",
@@ -343,7 +332,6 @@ int test_blas_level_1_float(void)
         G_message("Error in G_math_f_ax_by 3: 14998500 != %f", c);
         sum++;
     }
-
 
 #pragma omp parallel default(shared)
     {
@@ -368,7 +356,6 @@ int test_blas_level_1_float(void)
     fill_f_vector_scalar(z, 0.0, rows);
     G_math_saxpy(x, z, 1.0, rows);
     G_math_f_asum_norm(z, &e, rows);
-
 
     if (fabs(a - 499500) > EPSILON) {
         G_message("Error in G_math_f_ax_by 4: 4999500 != %f", a);
@@ -417,7 +404,6 @@ int test_blas_level_1_float(void)
     return sum;
 }
 
-
 /* *************************************************************** */
 /* ************** I N T E G E R ********************************** */
 /* *************************************************************** */
@@ -436,11 +422,9 @@ int test_blas_level_1_int(void)
     fill_i_vector_scalar(x, 1, rows);
     fill_i_vector_scalar(y, 2, rows);
 
-
     G_math_i_x_dot_y(x, y, &a, rows);
     G_math_i_asum_norm(x, &b, rows);
     G_math_i_euclid_norm(x, &c, rows);
-
 
     if (a != 2 * rows) {
         G_message("Error in G_math_i_x_dot_y");
@@ -483,10 +467,9 @@ int test_blas_level_1_int(void)
     }
     G_math_i_asum_norm(z, &c, rows);
 
-
     if (a != 1.0 * (rows - 1) * rows) {
-        G_message("Error in G_math_i_ax_by: %f != %f",
-                  1.0 * (rows - 1) * rows, a);
+        G_message("Error in G_math_i_ax_by: %f != %f", 1.0 * (rows - 1) * rows,
+                  a);
         sum++;
     }
 
@@ -500,7 +483,6 @@ int test_blas_level_1_int(void)
         G_message("Error in G_math_i_ax_by: 149985000 != %f", c);
         sum++;
     }
-
 
 #pragma omp parallel default(shared)
     {
@@ -516,7 +498,6 @@ int test_blas_level_1_int(void)
         G_math_i_ax_by(x, z, z, -1, 0, rows);
     }
     G_math_i_asum_norm(z, &c, rows);
-
 
     if (a != 49995000 || a != b || b != c) {
         G_message("Error in G_math_i_ax_by: 49995000 != %f", a);

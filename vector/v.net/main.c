@@ -1,19 +1,18 @@
-
 /***************************************************************
  *
  * MODULE:       v.net
- * 
+ *
  * AUTHOR(S):    Radim Blazek
  *               Martin Landa <landa.martin gmail.com> (connect/arcs)
  *               Stepan Turek <stepan.turek seznam.cz> (turns support)
  *
- *               
+ *
  * PURPOSE:      Network maintenance
- *               
+ *
  * COPYRIGHT:    (C) 2001-2009,2014,2016 by the GRASS Development Team
  *
- *               This program is free software under the 
- *               GNU General Public License (>=v2). 
+ *               This program is free software under the
+ *               GNU General Public License (>=v2).
  *               Read the file COPYING that comes with GRASS
  *               for details.
  *
@@ -75,8 +74,8 @@ int main(int argc, char **argv)
         /* non-report operations */
         if (act != TOOL_ARCS) {
             /* check input-output */
-            Vect_check_input_output_name(opt.input->answer,
-                                         opt.output->answer, G_FATAL_EXIT);
+            Vect_check_input_output_name(opt.input->answer, opt.output->answer,
+                                         G_FATAL_EXIT);
         }
 
         if (act == TOOL_CONNECT || act == TOOL_ARCS) {
@@ -118,8 +117,9 @@ int main(int argc, char **argv)
         if (Vect_open_new(Out, opt.output->answer, is3d) == -1) {
             if (In)
                 Vect_close(In);
-            G_fatal_error(_("Unable to open vector map <%s> at topology level %d"),
-                          opt.output->answer, 2);
+            G_fatal_error(
+                _("Unable to open vector map <%s> at topology level %d"),
+                opt.output->answer, 2);
         }
 
         /* copy header */
@@ -138,12 +138,12 @@ int main(int argc, char **argv)
             sprintf(message, _("%d new points (nodes) written to output."),
                     nnodes);
         }
-        else {                  /* connect or arcs */
+        else { /* connect or arcs */
             int narcs;
 
             if (act == TOOL_CONNECT)
-                narcs = connect_arcs(In, Points, Out, afield, nfield,
-                                     thresh, opt.snap_flag->answer);
+                narcs = connect_arcs(In, Points, Out, afield, nfield, thresh,
+                                     opt.snap_flag->answer);
             else
                 narcs = create_arcs(file_arcs, Points, Out, afield, nfield);
 
@@ -169,7 +169,7 @@ int main(int argc, char **argv)
     else if (act == TOOL_TURNTABLE) {
         turntable(&opt);
     }
-    else {                      /* report */
+    else { /* report */
         report(In, afield, nfield, act);
     }
 

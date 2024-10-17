@@ -25,7 +25,8 @@
    \param s filename to be checked
 
    \return 1 OK
-   \return -1 if name does not start with letter A..Za..z or if name does not continue with A..Za..z0..9_
+   \return -1 if name does not start with letter A..Za..z or if name does not
+   continue with A..Za..z0..9_
  */
 
 int Vect_legal_filename(const char *s)
@@ -33,15 +34,16 @@ int Vect_legal_filename(const char *s)
     /* full list of SQL keywords available at
        http://www.postgresql.org/docs/8.2/static/sql-keywords-appendix.html
      */
-    static const char *keywords[] = { "and", "or", "not", NULL };
+    static const char *keywords[] = {"and", "or", "not", NULL};
     char buf[GNAME_MAX];
     int i;
 
     sprintf(buf, "%s", s);
 
     if (*s == '.' || *s == 0) {
-        G_warning(_("Illegal vector map name <%s>. May not contain '.' or 'NULL'."),
-                  buf);
+        G_warning(
+            _("Illegal vector map name <%s>. May not contain '.' or 'NULL'."),
+            buf);
         return -1;
     }
 
@@ -55,14 +57,16 @@ int Vect_legal_filename(const char *s)
     for (s++; *s; s++)
         if (!((*s >= 'A' && *s <= 'Z') || (*s >= 'a' && *s <= 'z') ||
               (*s >= '0' && *s <= '9') || *s == '_')) {
-            G_warning(_("Illegal vector map name <%s>. Character '%c' not allowed."),
-                      buf, *s);
+            G_warning(
+                _("Illegal vector map name <%s>. Character '%c' not allowed."),
+                buf, *s);
             return -1;
         }
 
     for (i = 0; keywords[i]; i++)
         if (G_strcasecmp(buf, keywords[i]) == 0) {
-            G_warning(_("Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."),
+            G_warning(_("Illegal vector map name <%s>. SQL keyword cannot be "
+                        "used as vector map name."),
                       buf);
             return -1;
         }
@@ -97,15 +101,17 @@ int Vect_check_input_output_name(const char *input, const char *output,
     if (G_name_is_fully_qualified(output, onm, oms)) {
         if (strcmp(oms, G_mapset()) != 0) {
             if (error == G_FATAL_EXIT) {
-                G_fatal_error(_("Output vector map name <%s> is not in the current mapset (%s)"),
+                G_fatal_error(_("Output vector map name <%s> is not in the "
+                                "current mapset (%s)"),
                               output, G_mapset());
             }
             else if (error == G_FATAL_PRINT) {
-                G_warning(_("Output vector map name <%s> is not in the current mapset (%s)"),
+                G_warning(_("Output vector map name <%s> is not in the current "
+                            "mapset (%s)"),
                           output, G_mapset());
                 return 1;
             }
-            else {              /* GV_FATAL_RETURN */
+            else { /* GV_FATAL_RETURN */
                 return 1;
             }
         }
@@ -122,7 +128,7 @@ int Vect_check_input_output_name(const char *input, const char *output,
                       output);
             return 1;
         }
-        else {                  /* GV_FATAL_RETURN */
+        else { /* GV_FATAL_RETURN */
             return 1;
         }
     }
@@ -144,7 +150,7 @@ int Vect_check_input_output_name(const char *input, const char *output,
             G_warning(_("Vector map <%s> not found"), input);
             return 1;
         }
-        else {                  /* GV_FATAL_RETURN */
+        else { /* GV_FATAL_RETURN */
             return 1;
         }
     }
@@ -160,11 +166,10 @@ int Vect_check_input_output_name(const char *input, const char *output,
                               output);
             }
             else if (error == G_FATAL_PRINT) {
-                G_warning(_("Output vector map <%s> is used as input"),
-                          output);
+                G_warning(_("Output vector map <%s> is used as input"), output);
                 return 1;
             }
-            else {              /* GV_FATAL_RETURN */
+            else { /* GV_FATAL_RETURN */
                 return 1;
             }
         }

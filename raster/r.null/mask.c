@@ -3,18 +3,18 @@
 #include "mask.h"
 #include "local_proto.h"
 
-int init_d_mask_rules(d_Mask * d_mask)
+int init_d_mask_rules(d_Mask *d_mask)
 {
     d_mask->list = NULL;
 
     return 0;
 }
 
-int add_d_mask_rule(d_Mask * d_mask, double a, double b, int inf)
+int add_d_mask_rule(d_Mask *d_mask, double a, double b, int inf)
 {
     d_Interval *I;
 
-    I = (d_Interval *) G_malloc(sizeof(d_Interval));
+    I = (d_Interval *)G_malloc(sizeof(d_Interval));
     I->low = a <= b ? a : b;
     I->high = a >= b ? a : b;
     I->inf = inf;
@@ -24,8 +24,8 @@ int add_d_mask_rule(d_Mask * d_mask, double a, double b, int inf)
     return 0;
 }
 
-int mask_raster_array(void *rast, int ncols,
-                      int change_null, RASTER_MAP_TYPE data_type)
+int mask_raster_array(void *rast, int ncols, int change_null,
+                      RASTER_MAP_TYPE data_type)
 {
     DCELL x;
 
@@ -41,7 +41,7 @@ int mask_raster_array(void *rast, int ncols,
     return 0;
 }
 
-int mask_d_select(DCELL * x, d_Mask * mask)
+int mask_d_select(DCELL *x, d_Mask *mask)
 {
     d_Interval *I;
 
@@ -54,7 +54,7 @@ int mask_d_select(DCELL * x, d_Mask * mask)
     return 0;
 }
 
-int mask_match_d_interval(DCELL x, d_Interval * I)
+int mask_match_d_interval(DCELL x, d_Interval *I)
 {
     if (Rast_is_d_null_value(&x))
         return 0;

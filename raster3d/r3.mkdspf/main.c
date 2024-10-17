@@ -1,12 +1,14 @@
-
 /****************************************************************************
  *
  * MODULE:       r3.mkdspf
- * AUTHOR(S):    Helena Mitasova and Bill Brown  (original contributor)
- *               Roberto Flor <flor itc.it>, Bernhard Reiter <bernhard intevation.de>, 
- *               Brad Douglas <rez touchofmadness.com>, Glynn Clements <glynn gclements.plus.com>,
- *               Radim Blazek <radim.blazek gmail.com>, Markus Neteler <neteler itc.it>
- * PURPOSE:      
+ * AUTHOR(S):    Helena Mitasova and Bill Brown (original contributor)
+ *               Roberto Flor <flor itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Brad Douglas <rez touchofmadness.com>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Radim Blazek <radim.blazek gmail.com>,
+ *               Markus Neteler <neteler itc.it>
+ * PURPOSE:
  * COPYRIGHT:    (C) 2000-2006 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -18,17 +20,17 @@
  * Lorenson & Cline in the Siggraph 87 Conference Proceedings.
  *
  * This program reads in data from a grid3 formatted file containing 3D data
- * and creates a display file.  
- * 
+ * and creates a display file.
+ *
  * The display file consists of cell_info structures.
  * The cell_info structure:
  *      threshold (specified on commandline)
- *      number of polygons 
+ *      number of polygons
  *      polygon vertice coordinates
  *      surface or vertex normals (depending on lighting model specified)
- * 
+ *
  * The user must specify the data file name and the thresholds and lighting
- * model desired.  
+ * model desired.
  *
  * Based on a program outline written by Mike Krogh, NCSA, Feb.,1990
  *
@@ -48,8 +50,8 @@
 #include "local_proto.h"
 #include <grass/glocale.h>
 
-file_info Headfax;              /* contains info about command line */
-Cube_data CUBE;                 /* and the data for a single cube */
+file_info Headfax; /* contains info about command line */
+Cube_data CUBE;    /* and the data for a single cube */
 int NTHRESH;
 
 int main(int argc, char *argv[])
@@ -79,8 +81,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster3d"));
     G_add_keyword(_("display"));
     G_add_keyword(_("voxel"));
-    module->description =
-        _("Creates a display file from an existing 3D raster map according to specified threshold levels.");
+    module->description = _("Creates a display file from an existing 3D raster "
+                            "map according to specified threshold levels.");
 
     name = G_define_option();
     name->key = "input";
@@ -141,27 +143,25 @@ int main(int argc, char *argv[])
     Rast3d_init_defaults();
 
     Rast3d_get_window(&g3reg);
-    G_message(_("Region from getWindow: %d %d %d"),
-              g3reg.rows, g3reg.cols, g3reg.depths);
+    G_message(_("Region from getWindow: %d %d %d"), g3reg.rows, g3reg.cols,
+              g3reg.depths);
 
     if (NULL ==
-        (dspout =
-         check_get_any_dspname(out->answer, name->answer, G_mapset())))
+        (dspout = check_get_any_dspname(out->answer, name->answer, G_mapset())))
         exit(EXIT_FAILURE);
 
     Rast3d_set_error_fun(Rast3d_print_error);
 
     /* open g3 file for reading and writing */
     if (NULL == (mapset = G_find_file2("grid3", name->answer, "")))
-        G_fatal_error(_("Not able to find grid3 file for [%s]"),
-                      name->answer);
+        G_fatal_error(_("Not able to find grid3 file for [%s]"), name->answer);
 
     g3map = Rast3d_open_cell_old(name->answer, mapset, &g3reg,
                                  RASTER3D_TILE_SAME_AS_FILE,
                                  RASTER3D_USE_CACHE_DEFAULT);
     /*
-       g3map = Rast3d_open_cell_old (name->answer, mapset, RASTER3D_DEFAULT_WINDOW,
-       RASTER3D_TILE_SAME_AS_FILE,
+       g3map = Rast3d_open_cell_old (name->answer, mapset,
+       RASTER3D_DEFAULT_WINDOW, RASTER3D_TILE_SAME_AS_FILE,
        RASTER3D_USE_CACHE_DEFAULT);
      */
 
@@ -186,15 +186,14 @@ int main(int argc, char *argv[])
 
     /* puts command line options into cmndln_info structure */
     /* need to send it answers */
-    viz_calc_tvals(&Headfax.linefax, levels->answers, min->answer,
-                   max->answer, step->answer, tnum->answer,
-                   quiet->answer ? 1 : 0);
+    viz_calc_tvals(&Headfax.linefax, levels->answers, min->answer, max->answer,
+                   step->answer, tnum->answer, quiet->answer ? 1 : 0);
 
     if (shade->answer) {
-        Headfax.linefax.litmodel = 1;   /* flat */
+        Headfax.linefax.litmodel = 1; /* flat */
     }
     else
-        Headfax.linefax.litmodel = 2;   /* gradient */
+        Headfax.linefax.litmodel = 2; /* gradient */
 
     /* open display file for writing */
     sprintf(element, "grid3/%s/dsp", name->answer);

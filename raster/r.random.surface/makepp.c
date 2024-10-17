@@ -2,8 +2,7 @@
 #include "ransurf.h"
 #include "local_proto.h"
 
-
-double MakePP(int Row, int Col, int OutRows, int OutCols,
+double MakePP(int Row, int Col, int OutRows UNUSED, int OutCols UNUSED,
               double **Randoms, BIGF BigF)
 {
     int DRow, DCol;

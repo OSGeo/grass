@@ -79,7 +79,7 @@ int stop_wx(const char *name)
 #ifdef __MINGW32__
     /* TODO */
 #else
-    if (kill((pid_t) atoi(pid), SIGTERM) != 0) {
+    if (kill((pid_t)atoi(pid), SIGTERM) != 0) {
         /* G_fatal_error(_("Unable to stop monitor <%s>"), name); */
     }
 #endif

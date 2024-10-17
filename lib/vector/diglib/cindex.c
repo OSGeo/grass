@@ -1,30 +1,30 @@
-
 /*****************************************************************************
-*
-* MODULE:       Vector library 
-*   	    	
-* AUTHOR(S):    Radim Blazek
-*
-* PURPOSE:      Lower level functions for reading/writing/manipulating vectors.
-*
-* COPYRIGHT:    (C) 2001 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       Vector library
+ *
+ * AUTHOR(S):    Radim Blazek
+ *
+ * PURPOSE:      Lower level functions for reading/writing/manipulating vectors.
+ *
+ * COPYRIGHT:    (C) 2001 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with
+ *               GRASS for details.
+ *
+ *****************************************************************************/
+
 #include <stdlib.h>
 #include <string.h>
 #include <grass/vector.h>
 
-/*! 
+/*!
  * \brief Initialize Plus_head structure (cidx)
  *
  * \param Plus pointer to Plus_head structure
  *
  * \return 1 OK
- * \return 0 on error      
+ * \return 0 on error
  */
 int dig_cidx_init(struct Plus_head *Plus)
 {
@@ -62,16 +62,15 @@ void dig_cidx_free(struct Plus_head *Plus)
     Plus->cidx_up_to_date = 0;
 }
 
-/* 
+/*
  *  dig_cidx_add_cat ()
- *  add new field - cat - line record, space is allocated if necessary 
+ *  add new field - cat - line record, space is allocated if necessary
  *
  *  returns 1 OK
- *          0 on error      
+ *          0 on error
  */
-int
-dig_cidx_add_cat(struct Plus_head *Plus, int field, int cat, int line,
-                 int type)
+int dig_cidx_add_cat(struct Plus_head *Plus, int field, int cat, int line,
+                     int type)
 {
     int i, si, found;
     struct Cat_index *ci;
@@ -86,13 +85,11 @@ dig_cidx_add_cat(struct Plus_head *Plus, int field, int cat, int line,
             si = i;
         }
     }
-    if (si == -1) {             /* not found add new */
+    if (si == -1) { /* not found add new */
         if (Plus->n_cidx == Plus->a_cidx) {
             Plus->a_cidx += 10;
-            Plus->cidx =
-                (struct Cat_index *)G_realloc(Plus->cidx,
-                                              Plus->a_cidx *
-                                              sizeof(struct Cat_index));
+            Plus->cidx = (struct Cat_index *)G_realloc(
+                Plus->cidx, Plus->a_cidx * sizeof(struct Cat_index));
             if (!Plus->cidx)
                 return 0;
         }
@@ -169,23 +166,23 @@ static int cmp_field(const void *pa, const void *pb)
     return 0;
 }
 
-/* 
+/*
  *  dig_cidx_add_cat_sorted ()
- *  add new field - cat - line record to sorted category index, space is allocated if necessary 
- *  
+ *  add new field - cat - line record to sorted category index, space is
+ * allocated if necessary
+ *
  *  returns 1 OK
- *          0 on error      
+ *          0 on error
  */
-int
-dig_cidx_add_cat_sorted(struct Plus_head *Plus, int field, int cat, int line,
-                        int type)
+int dig_cidx_add_cat_sorted(struct Plus_head *Plus, int field, int cat,
+                            int line, int type)
 {
     int i, si, found, position;
     struct Cat_index *ci;
 
-    G_debug(3,
-            "dig_cidx_add_cat_sorted(): field = %d cat = %d line = %d type = %d",
-            field, cat, line, type);
+    G_debug(
+        3, "dig_cidx_add_cat_sorted(): field = %d cat = %d line = %d type = %d",
+        field, cat, line, type);
 
     /* Find field or add new */
     si = -1;
@@ -194,13 +191,11 @@ dig_cidx_add_cat_sorted(struct Plus_head *Plus, int field, int cat, int line,
             si = i;
         }
     }
-    if (si == -1) {             /* not found add new */
+    if (si == -1) { /* not found add new */
         if (Plus->n_cidx == Plus->a_cidx) {
             Plus->a_cidx += 10;
-            Plus->cidx =
-                (struct Cat_index *)G_realloc(Plus->cidx,
-                                              Plus->a_cidx *
-                                              sizeof(struct Cat_index));
+            Plus->cidx = (struct Cat_index *)G_realloc(
+                Plus->cidx, Plus->a_cidx * sizeof(struct Cat_index));
             if (!Plus->cidx)
                 return 0;
         }
@@ -262,22 +257,21 @@ dig_cidx_add_cat_sorted(struct Plus_head *Plus, int field, int cat, int line,
     return 1;
 }
 
-/* 
+/*
  *  dig_cidx_del_cat ()
  *  delete old field - cat - line record from _sorted_ category index
  *
  *  returns 1 OK
- *          0 on error      
+ *          0 on error
  */
-int
-dig_cidx_del_cat(struct Plus_head *Plus, int field, int cat, int line,
-                 int type)
+int dig_cidx_del_cat(struct Plus_head *Plus, int field, int cat, int line,
+                     int type)
 {
     int i, position;
     struct Cat_index *ci;
 
-    G_debug(3, "dig_cidx_del_cat(): field = %d cat = %d line = %d", field,
-            cat, line);
+    G_debug(3, "dig_cidx_del_cat(): field = %d cat = %d line = %d", field, cat,
+            line);
 
     /* Find field or add new */
     ci = NULL;
@@ -286,7 +280,7 @@ dig_cidx_del_cat(struct Plus_head *Plus, int field, int cat, int line,
             ci = &(Plus->cidx[i]);
         }
     }
-    if (ci == NULL) {           /* should not happen */
+    if (ci == NULL) { /* should not happen */
         G_warning("BUG: Category index not found for field %d.", field);
         return 0;
     }
@@ -326,9 +320,9 @@ dig_cidx_del_cat(struct Plus_head *Plus, int field, int cat, int line,
     return 1;
 }
 
-/* 
+/*
  *  dig_cidx_sort ()
- *  sort all records in cat index  
+ *  sort all records in cat index
  *
  */
 void dig_cidx_sort(struct Plus_head *Plus)

@@ -13,8 +13,7 @@
 
 #include <grass/gis.h>
 
-static struct state
-{
+static struct state {
     struct Cell_head window;
     double square_meters;
     int projection;
@@ -78,7 +77,7 @@ int G_begin_cell_area_calculations(void)
  * \brief Cell area in specified row.
  *
  * This routine returns the area in square meters of a cell in the
- * specified <i>row</i>. This value is constant for planimetric grids 
+ * specified <i>row</i>. This value is constant for planimetric grids
  * and varies with the row if the projection is latitude-longitude.
  *
  * \param row row number
@@ -140,15 +139,15 @@ int G_begin_polygon_area_calculations(void)
 /*!
  * \brief Area in square meters of polygon.
  *
- * Returns the area in square meters of the polygon described by the 
- * <i>n</i> pairs of <i>x,y</i> coordinate vertices. It is used both for 
+ * Returns the area in square meters of the polygon described by the
+ * <i>n</i> pairs of <i>x,y</i> coordinate vertices. It is used both for
  * planimetric and latitude-longitude projections.
- * 
+ *
  * You should call G_begin_polygon_area_calculations() function before
  * calling this function.
  *
- * <b>Note:</b> If the database is planimetric with the non-meter grid, 
- * this routine performs the required unit conversion to produce square 
+ * <b>Note:</b> If the database is planimetric with the non-meter grid,
+ * this routine performs the required unit conversion to produce square
  * meters.
  *
  * \param x array of x coordinates

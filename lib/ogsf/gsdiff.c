@@ -3,7 +3,7 @@
 
    \brief OGSF library - manipulating surfaces (lower level functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    Routines to set up automatic on-the-fly recalculation
    of surface elevations, doing a "scaled difference" using another
@@ -18,8 +18,8 @@
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -61,7 +61,7 @@ float gsdiff_get_SDscale(void)
 
    \param gsref
  */
-void gsdiff_set_SDref(geosurf * gsref)
+void gsdiff_set_SDref(geosurf *gsref)
 {
     Refsurf = gsref;
     Refbuff = gs_get_att_typbuff(gsref, ATT_TOPO, 0);

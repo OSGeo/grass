@@ -1,19 +1,18 @@
-
 /***************************************************************************
-* MODULE:       r3.mask
-*
-* AUTHOR(S):    Roman Waupotitsch, Michael Shapiro, Helena Mitasova,
-*		Bill Brown, Lubos Mitas, Jaro Hofierka
-*
-* PURPOSE:      Establishes the current working 3D raster mask.
-*
-* COPYRIGHT:    (C) 2005 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*
-*****************************************************************************/
+ * MODULE:       r3.mask
+ *
+ * AUTHOR(S):    Roman Waupotitsch, Michael Shapiro, Helena Mitasova,
+ *               Bill Brown, Lubos Mitas, Jaro Hofierka
+ *
+ * PURPOSE:      Establishes the current working 3D raster mask.
+ *
+ * COPYRIGHT:    (C) 2005 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,8 +23,7 @@
 
 /*--------------------------------------------------------------------------*/
 
-typedef struct
-{
+typedef struct {
     struct Option *map, *maskVals;
 } paramType;
 
@@ -33,7 +31,7 @@ static paramType params;
 
 /*--------------------------------------------------------------------------*/
 
-void getParams(char **name, d_Mask ** maskRules)
+void getParams(char **name, d_Mask **maskRules)
 {
     *name = params.map->answer;
     Rast3d_parse_vallist(params.maskVals->answers, maskRules);
@@ -41,7 +39,7 @@ void getParams(char **name, d_Mask ** maskRules)
 
 /*-------------------------------------------------------------------------*/
 
-static void makeMask(char *name, d_Mask * maskRules)
+static void makeMask(char *name, d_Mask *maskRules)
 {
     void *map, *mask;
     RASTER3D_Region region;
@@ -86,18 +84,21 @@ static void makeMask(char *name, d_Mask * maskRules)
             Rast3d_unlock_all(mask);
         }
 
-        for (y = 0; y < region.rows; y++)       /* We count from north to south in the cube coordinate system */
+        for (y = 0; y < region.rows; y++) /* We count from north to south in the
+                                             cube coordinate system */
             for (x = 0; x < region.cols; x++) {
                 value = Rast3d_get_double_region(map, x, y, z);
-                if (Rast3d_mask_d_select((DCELL *) & value, maskRules))
-                    Rast3d_put_float(mask, x, y, z, (float)floatNull);  /* mask-out value */
+                if (Rast3d_mask_d_select((DCELL *)&value, maskRules))
+                    Rast3d_put_float(mask, x, y, z,
+                                     (float)floatNull); /* mask-out value */
                 else
-                    Rast3d_put_float(mask, x, y, z, (float)0.0);        /* not mask-out value */
+                    Rast3d_put_float(mask, x, y, z,
+                                     (float)0.0); /* not mask-out value */
             }
         if ((z % tileZ) == 0) {
-            if (!Rast3d_flush_tiles_in_cube
-                (mask, 0, 0, MAX(0, z - tileZ), region.rows - 1,
-                 region.cols - 1, z))
+            if (!Rast3d_flush_tiles_in_cube(mask, 0, 0, MAX(0, z - tileZ),
+                                            region.rows - 1, region.cols - 1,
+                                            z))
                 Rast3d_fatal_error(_("makeMask: error flushing tiles in cube"));
         }
     }
@@ -132,8 +133,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("null data"));
     G_add_keyword(_("no-data"));
     G_add_keyword(_("voxel"));
-    module->description =
-        _("Establishes the current working 3D raster mask.");
+    module->description = _("Establishes the current working 3D raster mask.");
 
     params.map = G_define_option();
     params.map->key = "map";
@@ -155,7 +155,8 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
 
     if (Rast3d_mask_file_exists())
-        G_fatal_error(_("Cannot create mask file: RASTER3D_MASK already exists"));
+        G_fatal_error(
+            _("Cannot create mask file: RASTER3D_MASK already exists"));
 
     getParams(&name, &maskRules);
 

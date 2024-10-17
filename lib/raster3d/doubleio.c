@@ -15,7 +15,8 @@ int Rast3d_write_doubles(int fd, int useXdr, const double *i, int nofNum)
         Rast3d_fatal_error("Rast3d_write_doubles: nofNum out of range");
 
     if (useXdr == RASTER3D_NO_XDR) {
-        if (write(fd, i, sizeof(double) * nofNum) != sizeof(double) * nofNum) {
+        if (write(fd, i, sizeof(double) * nofNum) !=
+            (int)sizeof(double) * nofNum) {
             Rast3d_error("Rast3d_write_doubles: writing to file failed");
             return 0;
         }
@@ -25,15 +26,14 @@ int Rast3d_write_doubles(int fd, int useXdr, const double *i, int nofNum)
     }
 
     do {
-        int j;
+        unsigned int j;
 
         n = nofNum % 1024;
         if (n == 0)
             n = 1024;
 
         for (j = 0; j < n; j++)
-            G_xdr_put_double(&xdrDoubleBuf[RASTER3D_XDR_DOUBLE_LENGTH * j],
-                             i);
+            G_xdr_put_double(&xdrDoubleBuf[RASTER3D_XDR_DOUBLE_LENGTH * j], i);
 
         if (write(fd, xdrDoubleBuf, RASTER3D_XDR_DOUBLE_LENGTH * n) !=
             RASTER3D_XDR_DOUBLE_LENGTH * n) {
@@ -59,7 +59,8 @@ int Rast3d_read_doubles(int fd, int useXdr, double *i, int nofNum)
         Rast3d_fatal_error("Rast3d_read_doubles: nofNum out of range");
 
     if (useXdr == RASTER3D_NO_XDR) {
-        if (read(fd, i, sizeof(double) * nofNum) != sizeof(double) * nofNum) {
+        if (read(fd, i, sizeof(double) * nofNum) !=
+            (int)sizeof(double) * nofNum) {
             Rast3d_error("Rast3d_read_doubles: reading from file failed");
             return 0;
         }
@@ -69,7 +70,7 @@ int Rast3d_read_doubles(int fd, int useXdr, double *i, int nofNum)
     }
 
     do {
-        int j;
+        unsigned int j;
 
         n = nofNum % 1024;
         if (n == 0)
@@ -82,8 +83,7 @@ int Rast3d_read_doubles(int fd, int useXdr, double *i, int nofNum)
         }
 
         for (j = 0; j < n; j++)
-            G_xdr_get_double(i,
-                             &xdrDoubleBuf[RASTER3D_XDR_DOUBLE_LENGTH * j]);
+            G_xdr_get_double(i, &xdrDoubleBuf[RASTER3D_XDR_DOUBLE_LENGTH * j]);
 
         nofNum -= n;
         i += n;

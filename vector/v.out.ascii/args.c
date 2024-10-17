@@ -7,11 +7,10 @@
 
 #include "local_proto.h"
 
-void parse_args(int argc, char **argv,
-                char **input, char **output, int *format, int *dp,
-                char **delim, char **field, char ***columns, char **where,
-                int *region, int *old_format, int *header, char **cats,
-                int *type)
+void parse_args(int argc, char **argv, char **input, char **output, int *format,
+                int *dp, char **delim, char **field, char ***columns,
+                char **where, int *region, int *old_format, int *header,
+                char **cats, int *type)
 {
     struct Option *input_opt, *output_opt, *format_opt, *dp_opt, *delim_opt,
         *field_opt, *column_opt, *where_opt, *cats_opt, *type_opt;
@@ -56,8 +55,7 @@ void parse_args(int argc, char **argv,
     format_opt->answer = "point";
     format_opt->description = _("Output format");
     desc = NULL;
-    G_asprintf(&desc,
-               "point;%s;standard;%s;wkt;%s",
+    G_asprintf(&desc, "point;%s;standard;%s;wkt;%s",
                _("Simple point format (point per row)"),
                _("GRASS ASCII vector format"), _("OGC well-known text"));
     format_opt->descriptions = desc;
@@ -71,7 +69,8 @@ void parse_args(int argc, char **argv,
     dp_opt->type = TYPE_INTEGER;
     dp_opt->required = NO;
     dp_opt->options = "0-32";
-    dp_opt->answer = "8";       /* This value is taken from the lib settings in G_format_easting() */
+    dp_opt->answer = "8"; /* This value is taken from the lib settings in
+                             G_format_easting() */
     dp_opt->description =
         _("Number of significant digits (floating point only)");
     dp_opt->guisection = _("Points");
@@ -124,7 +123,8 @@ void parse_args(int argc, char **argv,
         int i, nopt;
 
         nopt = 0;
-        while (column_opt->answers[nopt++]) ;
+        while (column_opt->answers[nopt++])
+            ;
         *columns = (char **)G_malloc(nopt * sizeof(char *));
         for (i = 0; i < nopt - 1; i++)
             (*columns)[i] = G_store(column_opt->answers[i]);

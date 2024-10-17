@@ -9,17 +9,19 @@
 /*      by locating the two data closest to the specified column in     */
 /*      a linked list of row data                                       */
 
-int first_west_LL(EW * ewptr, SHORT col)
+int first_west_LL(EW *ewptr, SHORT col)
 {
-    if (ewptr->start == NULL)   /* no data in this row */
+    if (ewptr->start == NULL) /* no data in this row */
         ewptr->walive = ewptr->ealive = FALSE;
-    else if (ewptr->start == ewptr->start->prior) {     /* single datum */
+    else if (ewptr->start == ewptr->start->prior) { /* single datum */
         ewptr->west = ewptr->east = ewptr->start;
         ewptr->walive = FALSE;
         ewptr->ealive = TRUE;
     }
-    else {                      /* two or more data in this row */
-        while (col > ewptr->start->x && ewptr->start->x < ewptr->start->next->x)        /* start is west of col */
+    else { /* two or more data in this row */
+        while (col > ewptr->start->x &&
+               ewptr->start->x <
+                   ewptr->start->next->x) /* start is west of col */
             ewptr->start = ewptr->start->next;
         ewptr->east = ewptr->start;
         ewptr->west = ewptr->start->prior;
@@ -29,7 +31,6 @@ int first_west_LL(EW * ewptr, SHORT col)
     return 0;
 }
 
-
 double offset_distance_LL(SHORT offset)
 {
     extern double *lat_diff;
@@ -37,26 +38,24 @@ double offset_distance_LL(SHORT offset)
     return (*(lat_diff + abs((int)offset)));
 }
 
-
 /************************************************************************/
 /*      Return TRUE if search is exhausted both west and east in a row  */
 
-int completed_row_LL(EW * ewptr)
+int completed_row_LL(EW *ewptr)
 {
     return (!ewptr->walive && !ewptr->ealive);
 }
 
-
-int find_neighbors_LL(EW * ewptr, NEIGHBOR * nbr_head, SHORT row, SHORT col,
-                      int npoints, SHORT * neighbors)
+int find_neighbors_LL(EW *ewptr, NEIGHBOR *nbr_head, SHORT row, SHORT col,
+                      int npoints, SHORT *neighbors)
 {
-    MELEMENT **Mptr;            /* double indirection !! */
-    int westward = 1;           /* 1 if west of interpolation point */
+    MELEMENT **Mptr;  /* double indirection !! */
+    int westward = 1; /* 1 if west of interpolation point */
     double distance;
-    short *active;              /* TRUE if active search in this direction */
+    short *active; /* TRUE if active search in this direction */
 
-    active = &ewptr->walive;    /* TRUE if searching west in this row */
-    Mptr = &ewptr->west;        /* process search west first, then east */
+    active = &ewptr->walive; /* TRUE if searching west in this row */
+    Mptr = &ewptr->west;     /* process search west first, then east */
     do {
         if (*active) {
             distance = distance_LL(row, col, *Mptr);
@@ -64,7 +63,7 @@ int find_neighbors_LL(EW * ewptr, NEIGHBOR * nbr_head, SHORT row, SHORT col,
             if (*neighbors < npoints)
                 add_neighbor(Mptr, nbr_head, distance, ++(*neighbors));
             else if (!replace_neighbor(Mptr, nbr_head, distance))
-                *active = FALSE;        /* curtail search in this direction */
+                *active = FALSE; /* curtail search in this direction */
 
             if (*active) {
                 if (westward)
@@ -76,34 +75,33 @@ int find_neighbors_LL(EW * ewptr, NEIGHBOR * nbr_head, SHORT row, SHORT col,
 
         active = &ewptr->ealive;
         Mptr = &ewptr->east;
-    } while (westward--);       /* repeat loop for east and quit */
+    } while (westward--); /* repeat loop for east and quit */
 
     return 0;
 }
-
 
 /************************************************************************/
 /*      This function exhausts all possible nearest neighhbors          */
 /*      within the row indexed by the ew search pointer                 */
 
-int exhaust_search_LL(EW * ewptr, NEIGHBOR * nbr_head, SHORT row, SHORT col)
+int exhaust_search_LL(EW *ewptr, NEIGHBOR *nbr_head, SHORT row, SHORT col)
 {
     double distance;
 
-    while (ewptr->walive) {     /* search active */
+    while (ewptr->walive) { /* search active */
         distance = distance_LL(row, col, ewptr->west);
 
         if (!replace_neighbor(&ewptr->west, nbr_head, distance))
-            break;              /* curtail search in this direction */
+            break; /* curtail search in this direction */
         else
             extend_west(ewptr);
     }
 
-    while (ewptr->ealive) {     /* search active */
+    while (ewptr->ealive) { /* search active */
         distance = distance_LL(row, col, ewptr->east);
 
         if (!replace_neighbor(&ewptr->east, nbr_head, distance))
-            break;              /* curtail search in this direction */
+            break; /* curtail search in this direction */
         else
             extend_east(ewptr);
     }
@@ -111,8 +109,7 @@ int exhaust_search_LL(EW * ewptr, NEIGHBOR * nbr_head, SHORT row, SHORT col)
     return 0;
 }
 
-
-int extend_west(EW * ewptr)
+int extend_west(EW *ewptr)
 {
     if (ewptr->west->prior != ewptr->east)
         ewptr->west = ewptr->west->prior;
@@ -122,8 +119,7 @@ int extend_west(EW * ewptr)
     return 0;
 }
 
-
-int extend_east(EW * ewptr)
+int extend_east(EW *ewptr)
 {
     if (ewptr->east->next != ewptr->west)
         ewptr->east = ewptr->east->next;
@@ -133,8 +129,7 @@ int extend_east(EW * ewptr)
     return 0;
 }
 
-
-double distance_LL(SHORT row, SHORT col, MELEMENT * Mptr)
+double distance_LL(SHORT row, SHORT col, MELEMENT *Mptr)
 {
     extern double *rowlook, *collook;
 
@@ -142,7 +137,6 @@ double distance_LL(SHORT row, SHORT col, MELEMENT * Mptr)
     LL_set_geodesic_distance(rowlook, row, Mptr->y);
     return (LL_geodesic_distance(*(collook + abs((int)(col - Mptr->x)))));
 }
-
 
 /************************************************************************/
 /*      Lookup tables storing pre-processed latitude and longitude data */

@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       v.to.db
@@ -51,8 +50,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("sides"));
     G_add_keyword(_("sinuous"));
     G_add_keyword(_("slope"));
-    module->description =
-        _("Populates attribute values from vector features.");
+    module->description = _("Populates attribute values from vector features.");
     module->overwrite = 1;
 
     parse_command_line(argc, argv);
@@ -62,9 +60,10 @@ int main(int argc, char *argv[])
 
         mapset = G_find_vector2(options.name, "");
         if (!mapset || (strcmp(mapset, G_mapset()) != 0))
-            G_fatal_error(_("Vector map <%s> not found in the current mapset. "
-                           "Unable to modify vector maps from different mapsets."),
-                          options.name);
+            G_fatal_error(
+                _("Vector map <%s> not found in the current mapset. "
+                  "Unable to modify vector maps from different mapsets."),
+                options.name);
     }
 
     G_begin_distance_calculations();
@@ -80,12 +79,14 @@ int main(int argc, char *argv[])
 
     if (!options.print && Fi == NULL) {
         G_fatal_error(_("Database connection not defined for layer %d. "
-                        "Use v.db.connect first."), options.field);
+                        "Use v.db.connect first."),
+                      options.field);
     }
 
     qFi = Vect_get_field(&Map, options.qfield);
     if (options.option == O_QUERY && qFi == NULL)
-        G_fatal_error(_("Database connection not defined for layer %d. Use v.db.connect first."),
+        G_fatal_error(_("Database connection not defined for layer %d. Use "
+                        "v.db.connect first."),
                       options.qfield);
 
     if (!options.print) {
@@ -100,8 +101,7 @@ int main(int argc, char *argv[])
         int qlength;
 
         /* get required column types */
-        col_sqltype[0] = col_sqltype[1] = col_sqltype[2] = col_sqltype[3] =
-            -1;
+        col_sqltype[0] = col_sqltype[1] = col_sqltype[2] = col_sqltype[3] = -1;
         ncols = 1;
         qlength = 0;
 
@@ -123,8 +123,8 @@ int main(int argc, char *argv[])
             break;
 
         case O_BBOX:
-            col_sqltype[0] = col_sqltype[1] = col_sqltype[2] =
-                col_sqltype[3] = DB_SQL_TYPE_DOUBLE_PRECISION;
+            col_sqltype[0] = col_sqltype[1] = col_sqltype[2] = col_sqltype[3] =
+                DB_SQL_TYPE_DOUBLE_PRECISION;
             ncols = 4;
             break;
 
@@ -144,8 +144,7 @@ int main(int argc, char *argv[])
             break;
 
         case O_QUERY:
-            driver =
-                db_start_driver_open_database(qFi->driver, qFi->database);
+            driver = db_start_driver_open_database(qFi->driver, qFi->database);
             db_init_string(&table_name);
             db_set_string(&table_name, qFi->table);
             if (db_describe_table(driver, &table_name, &table) != DB_OK)
@@ -184,15 +183,17 @@ int main(int argc, char *argv[])
                 int col_exists = 0;
 
                 if (options.col[col] == NULL)
-                    G_fatal_error(_("Missing column name for input column number %d"),
-                                  col + 1);
+                    G_fatal_error(
+                        _("Missing column name for input column number %d"),
+                        col + 1);
 
                 for (icol = 0; icol < fncols; icol++) {
                     column = db_get_table_column(table, icol);
                     colname = db_get_column_name(column);
                     if (colname == NULL)
-                        G_fatal_error(_("Missing column name for table column number %d"),
-                                      col + 1);
+                        G_fatal_error(
+                            _("Missing column name for table column number %d"),
+                            col + 1);
                     if (strcmp(options.col[col], colname) == 0) {
                         int isqltype;
 
@@ -206,20 +207,25 @@ int main(int argc, char *argv[])
                             ctype2 = db_sqltype_to_Ctype(col_sqltype[col]);
 
                             if (ctype1 == ctype2) {
-                                G_warning(_("Existing column <%s> has a different but maybe compatible type"),
-                                          options.col[col]);
+                                G_warning(
+                                    _("Existing column <%s> has a different "
+                                      "but maybe compatible type"),
+                                    options.col[col]);
                             }
                             else {
-                                G_fatal_error(_("Existing column <%s> has the wrong type"),
+                                G_fatal_error(_("Existing column <%s> has the "
+                                                "wrong type"),
                                               options.col[col]);
                             }
                         }
 
                         if (G_get_overwrite())
-                            G_warning(_("Values in column <%s> will be overwritten"),
-                                      options.col[col]);
+                            G_warning(
+                                _("Values in column <%s> will be overwritten"),
+                                options.col[col]);
                         else
-                            G_fatal_error(_("Column <%s> exists. To overwrite, use the --overwrite flag"),
+                            G_fatal_error(_("Column <%s> exists. To overwrite, "
+                                            "use the --overwrite flag"),
                                           options.col[col]);
 
                         break;
@@ -313,7 +319,7 @@ int main(int argc, char *argv[])
     if (findex > -1)
         n = Vect_cidx_get_num_cats_by_index(&Map, findex);
     i = 0;
-    Values[i].cat = -1;         /* features without category */
+    Values[i].cat = -1; /* features without category */
     Values[i].used = 0;
     Values[i].count1 = 0;
     Values[i].count2 = 0;

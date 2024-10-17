@@ -25,7 +25,7 @@ int o_divr(const char *basemap, const char *covermap, const char *outputmap,
         }
         if (basecat != catb) {
             write_reclass(reclass_fp, catb, catc,
-                          Rast_get_c_cat((CELL *) & catc, cats), usecats);
+                          Rast_get_c_cat((CELL *)&catc, cats), usecats);
             catb = basecat;
             catc = 0;
         }
@@ -33,7 +33,7 @@ int o_divr(const char *basemap, const char *covermap, const char *outputmap,
     }
     if (!first)
         write_reclass(reclass_fp, catb, catc,
-                      Rast_get_c_cat((CELL *) & catc, cats), usecats);
+                      Rast_get_c_cat((CELL *)&catc, cats), usecats);
 
     G_popen_close(&stats_child);
     G_popen_close(&reclass_child);

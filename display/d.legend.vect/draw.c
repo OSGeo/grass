@@ -1,11 +1,13 @@
 /* draw.c:
  *
- *    With do_bg=1 compute position of all legend graphic item and draw only background.
- *    Eith do_bg=0 compute position of all legend graphic item and draw all.
+ * With do_bg=1 compute position of all legend graphic item and draw only
+ * background. With do_bg=0 compute position of all legend graphic item and draw
+ * all.
  *
- *    Copyright (C) 2016 by Adam Laza, GSoC 2016, and the GRASS Development Team*
- *    This program is free software under the GPL (>=v2)
- *    Read the COPYING file that comes with GRASS for details.
+ * Copyright (C) 2016 by Adam Laza, GSoC 2016, and the GRASS Development Team
+ *
+ * This program is free software under the GPL (>=v2) Read the COPYING
+ * file that comes with GRASS for details.
  */
 
 #include <string.h>
@@ -18,8 +20,8 @@
 
 void draw(char *file_name, double LL, double LT, char *title, int cols,
           int bgcolor, int bcolor, int bg_width, int do_bg, char *tit_font,
-          int tit_size, char *sub_font, int sub_size, char *font,
-          int fontsize, int fontcolor, int symb_size, char *sep)
+          int tit_size, char *sub_font, int sub_size, char *font, int fontsize,
+          int fontcolor, int symb_size, char *sep)
 {
     double db, dt, dl, dr;
     double bb, bt, bl, br;
@@ -41,9 +43,8 @@ void draw(char *file_name, double LL, double LT, char *title, int cols,
     double symb_h, symb_w, def_symb_h, def_symb_w;
     int item_count, item;
     double it_per_col;
-    double margin, bg_h, bg_w;
+    double margin, bg_h;
     char **tokens;
-
 
     D_get_src(&dt, &db, &dl, &dr);
     x0 = dl + (int)((dr - dl) * LL / 100.);
@@ -51,6 +52,7 @@ void draw(char *file_name, double LL, double LT, char *title, int cols,
 
     /* Draw title */
     title_h = 0;
+    title_w = 0;
     if (strlen(title) > 0) {
         D_font(tit_font);
         D_text_size(tit_size, tit_size);
@@ -84,14 +86,14 @@ void draw(char *file_name, double LL, double LT, char *title, int cols,
         if (strstr(buf, sub_delim) == NULL) {
             /* Get the maximum symbol size */
             tokens = G_tokenize(buf, sep);
-            symb_name = G_store(tokens[1]);
             size = atof(tokens[2]);
             type_str = G_store(tokens[7]);
             G_free_tokens(tokens);
 
             /* Symbol */
             if (((strcmp(type_str, "point") != 0) &&
-                 (strcmp(type_str, "centroid") != 0)) || size < 0) {
+                 (strcmp(type_str, "centroid") != 0)) ||
+                size < 0) {
                 size = symb_size;
             }
             symb_w = size;
@@ -134,7 +136,6 @@ void draw(char *file_name, double LL, double LT, char *title, int cols,
         }
         if (strstr(buf, sub_delim) != NULL) {
             /* Group subtitle */
-            label = G_malloc(GNAME_MAX);
             part = strtok(buf, sep);
             label = G_store(part);
 
@@ -175,7 +176,8 @@ void draw(char *file_name, double LL, double LT, char *title, int cols,
 
             /* Symbol */
             if (((strcmp(type_str, "point") != 0) &&
-                 (strcmp(type_str, "centroid") != 0)) || size < 0) {
+                 (strcmp(type_str, "centroid") != 0)) ||
+                size < 0) {
                 size = symb_size;
             }
             Symb = S_read(symb_name);
@@ -190,7 +192,8 @@ void draw(char *file_name, double LL, double LT, char *title, int cols,
             line_color->g = (unsigned char)G;
             line_color->b = (unsigned char)B;
             if (ret == 1)
-                /* here alpha is only used as an on/off switch, otherwise unused by the display drivers */
+                /* here alpha is only used as an on/off switch, otherwise unused
+                 * by the display drivers */
                 line_color->a = RGBA_COLOR_OPAQUE;
             else if (ret == 2)
                 line_color->a = RGBA_COLOR_NONE;
@@ -241,7 +244,7 @@ void draw(char *file_name, double LL, double LT, char *title, int cols,
                     D_symbol2(Symb, x, y, line_color, fill_color);
                 else {
                     G_warning(_("Invalid value for color type in legend file. "
-                               "Use one of 'lf' or 'ps'."));
+                                "Use one of 'lf' or 'ps'."));
                     D_symbol(Symb, x, y, line_color, fill_color);
                 }
                 x = x0 + offs_x + def_symb_w + sym_lbl_space;
@@ -261,7 +264,7 @@ void draw(char *file_name, double LL, double LT, char *title, int cols,
     /* Draw background */
     if (do_bg) {
         double x0bg, y0bg, x1bg, y1bg;
-
+        double bg_w;
         if (title_w > offs_x + maxlblw)
             bg_w = title_w;
         else
