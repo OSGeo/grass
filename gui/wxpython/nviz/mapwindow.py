@@ -412,7 +412,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         Debug.msg(1, "GLCanvas.OnPaint()")
 
         self.render["overlays"] = True
-        _ = wx.PaintDC(self)
+        wx.PaintDC(self)
         self.DoPaint()
 
     def DoPaint(self):
