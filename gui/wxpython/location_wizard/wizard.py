@@ -1699,7 +1699,7 @@ class EPSGPage(TitledPage):
             self.EnableNext(False)
         else:
             self.tlink.SetURL(
-                str("https://spatialreference.org/ref/epsg/?q={0}/".format(value))
+                f"https://spatialreference.org/ref/?&search={value}"
             )
             data = self.epsglist.Search(index=[0, 1, 2], pattern=value, firstOnly=False)
             if data:
