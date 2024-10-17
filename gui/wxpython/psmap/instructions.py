@@ -1217,9 +1217,9 @@ class Image(InstructionObject):
                     break
             file.close()
             return float(w), float(h)
-        else:  # we can use wx.Image
-            img = wx.Image(fileName, type=wx.BITMAP_TYPE_ANY)
-            return img.GetWidth(), img.GetHeight()
+        # we can use wx.Image
+        img = wx.Image(fileName, type=wx.BITMAP_TYPE_ANY)
+        return img.GetWidth(), img.GetHeight()
 
 
 class NorthArrow(Image):

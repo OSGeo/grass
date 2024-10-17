@@ -236,15 +236,15 @@ class ImportDialog(wx.Dialog):
 
     def _getCommand(self):
         """Get command"""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def _getBlackListedParameters(self):
         """Get parameters which will not be showed in Settings page"""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def _getBlackListedFlags(self):
         """Get flags which will not be showed in Settings page"""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def _nameValidationFailed(self, layers_list):
         """Output map name validation callback
@@ -538,8 +538,7 @@ class GdalImportDialog(ImportDialog):
         """Get command"""
         if self.link:
             return "r.external"
-        else:
-            return "r.import"
+        return "r.import"
 
     def _getBlackListedParameters(self):
         """Get flags which will not be showed in Settings page"""
@@ -693,8 +692,7 @@ class OgrImportDialog(ImportDialog):
         """Get command"""
         if self.link:
             return "v.external"
-        else:
-            return "v.import"
+        return "v.import"
 
     def _getBlackListedParameters(self):
         """Get parametrs which will not be showed in Settings page"""

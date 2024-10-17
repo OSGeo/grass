@@ -736,10 +736,9 @@ class TestCase(unittest.TestCase):
         # and ensure uniqueness by add UUID
         if self.readable_names:
             return "tmp_" + self.id().replace(".", "_") + "_" + name
-        else:
-            # UUID might be overkill (and expensive) but it's safe and simple
-            # alternative is to create hash from the readable name
-            return "tmp_" + str(uuid.uuid4()).replace("-", "")
+        # UUID might be overkill (and expensive) but it's safe and simple
+        # alternative is to create hash from the readable name
+        return "tmp_" + str(uuid.uuid4()).replace("-", "")
 
     def _compute_difference_raster(self, first, second, name_part):
         """Compute difference of two rasters (first - second)

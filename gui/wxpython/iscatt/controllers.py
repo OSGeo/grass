@@ -238,7 +238,7 @@ class ScattsManager:
                 )
             )
             return
-        elif ncells > WARN_NCELLS:
+        if ncells > WARN_NCELLS:
             dlg = wx.MessageDialog(
                 parent=self.guiparent,
                 message=_(
@@ -344,7 +344,7 @@ class ScattsManager:
                 ),
             )
             return False
-        elif mrange > WARN_SCATT_SIZE:
+        if mrange > WARN_SCATT_SIZE:
             dlg = wx.MessageDialog(
                 parent=self.guiparent,
                 message=_(

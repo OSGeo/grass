@@ -104,8 +104,7 @@ def plot_percent_successful(x, xticks, xlabels, successes, filename, style):
         sorted_values = sorted(values)
         if n % 2 == 0:
             return (sorted_values[n / 2 - 1] + sorted_values[n / 2]) / 2
-        else:
-            return sorted_values[n / 2]
+        return sorted_values[n / 2]
 
     # this is useful for debugging or some other stat
     # cmeans = []

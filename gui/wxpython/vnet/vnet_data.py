@@ -78,16 +78,14 @@ class VNETData:
     def GetRelevantParams(self, analysis=None):
         if analysis:
             return self.an_props.GetRelevantParams(analysis)
-        else:
-            analysis, valid = self.an_params.GetParam("analysis")
-            return self.an_props.GetRelevantParams(analysis)
+        analysis, valid = self.an_params.GetParam("analysis")
+        return self.an_props.GetRelevantParams(analysis)
 
     def GetAnalysisProperties(self, analysis=None):
         if analysis:
             return self.an_props[analysis]
-        else:
-            analysis, valid = self.an_params.GetParam("analysis")
-            return self.an_props[analysis]
+        analysis, valid = self.an_params.GetParam("analysis")
+        return self.an_props[analysis]
 
     def GetParam(self, param):
         return self.an_params.GetParam(param)

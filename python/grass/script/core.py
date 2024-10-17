@@ -127,8 +127,7 @@ def _make_unicode(val, enc):
 
     if enc == "default":
         return decode(val)
-    else:
-        return decode(val, encoding=enc)
+    return decode(val, encoding=enc)
 
 
 def get_commands(*, env=None):
@@ -349,7 +348,7 @@ def handle_errors(returncode, result, args, kwargs):
         return result
     if handler.lower() == "ignore":
         return result
-    elif handler.lower() == "fatal":
+    if handler.lower() == "fatal":
         module, code = get_module_and_code(args, kwargs)
         fatal(
             _(
@@ -1650,8 +1649,7 @@ def verbosity():
     vbstr = os.getenv("GRASS_VERBOSE")
     if vbstr:
         return int(vbstr)
-    else:
-        return 2
+    return 2
 
 
 # Various utilities, not specific to GRASS

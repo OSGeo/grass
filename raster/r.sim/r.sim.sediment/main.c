@@ -417,6 +417,8 @@ int main(int argc, char *argv[])
         G_message(_("Using metric conversion factor %f, step=%f"), wp.conv,
                   wp.step);
 
+    wp.observation = parm.observation->answer;
+    wp.logfile = parm.logfile->answer;
     init_library_globals(&wp);
 
     if ((wp.tc == NULL) && (wp.et == NULL) && (wp.conc == NULL) &&

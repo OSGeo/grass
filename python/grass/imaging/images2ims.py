@@ -93,8 +93,7 @@ def checkImages(images):
 def _getFilenameParts(filename):
     if "*" in filename:
         return tuple(filename.split("*", 1))
-    else:
-        return os.path.splitext(filename)
+    return os.path.splitext(filename)
 
 
 def _getFilenameWithFormatter(filename, N):

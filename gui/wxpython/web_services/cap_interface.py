@@ -49,8 +49,7 @@ class CapabilitiesBase:
         """Get children layers"""
         if self.layers_by_id:
             return self.layers_by_id[0]
-        else:
-            return None
+        return None
 
 
 class LayerBase:
@@ -137,15 +136,13 @@ class WMSLayer(LayerBase):
             title_node = self.layer_node.find(title)
             if title_node is not None:
                 return title_node.text
-            else:
-                return None
+            return None
 
         if param == "name":
             name_node = self.layer_node.find(name)
             if name_node is not None:
                 return name_node.text
-            else:
-                return None
+            return None
 
         if param == "format":
             return self.cap.GetFormats()
@@ -228,22 +225,20 @@ class WMTSLayer(LayerBase):
 
         if self.layer_node is None and param in {"title", "name"}:
             return None
-        elif self.layer_node is None:
+        if self.layer_node is None:
             return []
 
         if param == "title":
             title_node = self.layer_node.find(title)
             if title_node is not None:
                 return title_node.text
-            else:
-                return None
+            return None
 
         if param == "name":
             name_node = self.layer_node.find(name)
             if name_node is not None:
                 return name_node.text
-            else:
-                return None
+            return None
 
         if param == "styles":
             styles = []
@@ -366,22 +361,20 @@ class OnEarthLayer(LayerBase):
         """Get layer data"""
         if self.layer_node is None and param in {"title", "name"}:
             return None
-        elif self.layer_node is None:
+        if self.layer_node is None:
             return []
 
         if param == "title":
             title_node = self.layer_node.find("Title")
             if title_node is not None:
                 return title_node.text
-            else:
-                return None
+            return None
 
         if param == "name":
             name_node = self.layer_node.find("Name")
             if name_node is not None:
                 return name_node.text
-            else:
-                return None
+            return None
 
         if param == "styles":
             return []

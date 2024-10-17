@@ -737,22 +737,21 @@ def cannot_create_location_reason(gisdbase, location):
             " the project <{location}>"
             " already exists."
         ).format(**locals())
-    elif os.path.isfile(path):
+    if os.path.isfile(path):
         return _(
             "Unable to create new project <{location}> because <{path}> is a file."
         ).format(**locals())
-    elif os.path.isdir(path):
+    if os.path.isdir(path):
         return _(
             "Unable to create new project <{location}> because"
             " the directory <{path}>"
             " already exists."
         ).format(**locals())
-    else:
-        return _(
-            "Unable to create new project in"
-            " the directory <{path}>"
-            " for an unknown reason."
-        ).format(**locals())
+    return _(
+        "Unable to create new project in"
+        " the directory <{path}>"
+        " for an unknown reason."
+    ).format(**locals())
 
 
 def set_mapset(
@@ -1419,7 +1418,7 @@ def run_batch_job(batch_job: list):
         if script_in_addon_path and os.path.exists(script_in_addon_path):
             batch_job[0] = script_in_addon_path
             return script_in_addon_path
-        elif os.path.exists(batch_job[0]):
+        if os.path.exists(batch_job[0]):
             return batch_job[0]
 
     try:
@@ -1668,8 +1667,8 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
             )
         )
 
+    mask2d_test = "r.mask.status -t"
     # TODO: have a function and/or module to test this
-    mask2d_test = 'test -f "$MAPSET_PATH/cell/MASK"'
     mask3d_test = 'test -d "$MAPSET_PATH/grid3/RASTER3D_MASK"'
 
     specific_addition = ""

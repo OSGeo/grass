@@ -318,7 +318,9 @@ class RulesPanel:
                             int, self.ruleslines[item][self.attributeType].split(":")
                         )
                     except ValueError as e:
-                        message = _("Bad color format. Use color format '0:0:0'")
+                        message = (
+                            _("Bad color format '%s'. Use color format '0:0:0'") % e
+                        )
                     self.mainPanel.FindWindowById(item + 2000).SetValue((r, g, b))
                 else:
                     value = float(self.ruleslines[item][self.attributeType])
@@ -410,7 +412,6 @@ class ColorTable(wx.Frame):
         if layer:
             mapLayer = self.layerTree.GetLayerInfo(layer, key="maplayer")
             name = mapLayer.GetName()
-            type = mapLayer.GetType()
             self.selectionInput.SetValue(name)
             self.inmap = name
 
@@ -1412,7 +1413,7 @@ class VectorColorTable(ColorTable):
             modul = "v.db.addcolumn"
         else:
             modul = "v.db.addcol"
-        ret = RunCommand(
+        RunCommand(
             modul,
             parent=self,
             map=self.inmap,
@@ -1430,7 +1431,7 @@ class VectorColorTable(ColorTable):
                 modul = "v.db.dropcolumn"
             else:
                 modul = "v.db.dropcol"
-            ret = RunCommand(
+            RunCommand(
                 modul,
                 map=self.inmap,
                 layer=self.properties["layer"],
@@ -1505,7 +1506,7 @@ class VectorColorTable(ColorTable):
                 modul = "v.db.addcolumn"
             else:
                 modul = "v.db.addcol"
-            ret = RunCommand(
+            RunCommand(
                 modul,
                 map=self.inmap,
                 layer=self.properties["layer"],

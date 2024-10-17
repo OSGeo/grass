@@ -421,28 +421,26 @@ class RDigitController(wx.EvtHandler):
                 )
                 return False
             return True
-        else:
-            dlg = NewRasterDialog(parent=self._mapWindow)
-            dlg.CenterOnParent()
-            if dlg.ShowModal() == wx.ID_OK:
-                try:
-                    self._createNewMap(
-                        mapName=dlg.GetMapName(),
-                        backgroundMap=dlg.GetBackgroundMapName(),
-                        mapType=dlg.GetMapType(),
-                    )
-                except ScriptError:
-                    GError(
-                        parent=self._mapWindow,
-                        message=_("Failed to create new raster map."),
-                    )
-                    return False
-                finally:
-                    dlg.Destroy()
-                return True
-            else:
-                dlg.Destroy()
+        dlg = NewRasterDialog(parent=self._mapWindow)
+        dlg.CenterOnParent()
+        if dlg.ShowModal() == wx.ID_OK:
+            try:
+                self._createNewMap(
+                    mapName=dlg.GetMapName(),
+                    backgroundMap=dlg.GetBackgroundMapName(),
+                    mapType=dlg.GetMapType(),
+                )
+            except ScriptError:
+                GError(
+                    parent=self._mapWindow,
+                    message=_("Failed to create new raster map."),
+                )
                 return False
+            finally:
+                dlg.Destroy()
+            return True
+        dlg.Destroy()
+        return False
 
     def _createNewMap(self, mapName, backgroundMap, mapType):
         """Creates a new raster map based on specified background and type."""

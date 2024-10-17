@@ -22,15 +22,9 @@ per-file-ignores =
     __init__.py: F401, F403
     man/build_html.py: E501
     man/build_md.py: E501
-    imagery/i.atcorr/create_iwave.py: F632, F821, W293
     doc/python/m.distance.py: E501
-    doc/gui/wxpython/example/dialogs.py: F401
     gui/scripts/d.wms.py: E501
-    gui/wxpython/image2target/*: F841, E722
-    gui/wxpython/image2target/g.gui.image2target.py: E501, F841
-    gui/wxpython/lmgr/frame.py: E722
-    # layertree still includes some formatting issues (it is ignored by Black)
-    gui/wxpython/lmgr/layertree.py: E722
+    gui/wxpython/image2target/g.gui.image2target.py: E501
     gui/wxpython/modules/*: F841, E722
     gui/wxpython/nviz/*: F841, E266, E722, F403, F405
     gui/wxpython/photo2image/*: F841, E722, E265
@@ -122,7 +116,7 @@ per-file-ignores =
     scripts/r.in.srtm/r.in.srtm.py: E722
     scripts/r.fillnulls/r.fillnulls.py: E722
     scripts/d.rast.edit/d.rast.edit.py: E722
-    scripts/v.what.strds/v.what.strds.py: E722, E501
+    scripts/v.what.strds/v.what.strds.py: E501
     # Line too long (esp. module interface definitions)
     scripts/*/*.py: E501
     temporal/t.rast.to.vect/t.rast.to.vect.py: E501

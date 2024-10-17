@@ -184,13 +184,13 @@ class DataCatalogNode(DictFilterNode):
             owner = data["owner"] or _("name unknown")
             if data["current"]:
                 return _("{name}  (current)").format(**data)
-            elif data["is_different_owner"] and data["lock"]:
+            if data["is_different_owner"] and data["lock"]:
                 return _("{name}  (in use, owner: {owner})").format(
                     name=data["name"], owner=owner
                 )
-            elif data["lock"]:
+            if data["lock"]:
                 return _("{name}  (in use)").format(**data)
-            elif data["is_different_owner"]:
+            if data["is_different_owner"]:
                 return _("{name}  (owner: {owner})").format(
                     name=data["name"], owner=owner
                 )
@@ -957,7 +957,7 @@ class DataCatalogTree(TreeView):
         if node.data["type"] == "mapset":
             if node.data["current"]:
                 return wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
-            elif node.data["lock"] or node.data["is_different_owner"]:
+            if node.data["lock"] or node.data["is_different_owner"]:
                 return wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT)
         return wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
 
@@ -2052,8 +2052,7 @@ class DataCatalogTree(TreeView):
                         currentMapset = False
                         break
             return currentGrassDb, currentLocation, currentMapset
-        else:
-            return True, True, True
+        return True, True, True
 
     def _popupMenuLayer(self):
         """Create popup menu for layers"""
