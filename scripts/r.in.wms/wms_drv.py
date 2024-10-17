@@ -24,7 +24,7 @@ from time import sleep
 
 try:
     from osgeo import gdal
-except:
+except ImportError:
     gs.fatal(
         _(
             "Unable to load GDAL Python bindings (requires package 'python-gdal' "

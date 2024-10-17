@@ -204,7 +204,7 @@ class BasePlotFrame(wx.Frame):
 
             try:
                 ret = gs.raster_info(r)
-            except:
+            except Exception:
                 continue
                 # if r.info cannot parse map, skip it
 
@@ -270,7 +270,7 @@ class BasePlotFrame(wx.Frame):
                 ret0 = gs.raster_info(rpair[0])
                 ret1 = gs.raster_info(rpair[1])
 
-            except:
+            except Exception:
                 continue
                 # if r.info cannot parse map, skip it
 

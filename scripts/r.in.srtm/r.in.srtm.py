@@ -230,7 +230,7 @@ def main():
         try:
             zf = zfile.ZipFile(zipfile)
             zf.extractall()
-        except:
+        except (FileNotFoundError, PermissionError, OSError, zipfile.BadZipFile):
             gs.fatal(_("Unable to unzip file."))
 
     gs.message(_("Converting input file to BIL..."))
@@ -276,7 +276,7 @@ def main():
     outf.close()
 
     try:
-        gs.run_command("r.in.gdal", input=bilfile, out=tileout)
+        gs.run_command("r.in.gdal", input=bilfile, out=tileout, errors="fatal")
     except:
         gs.fatal(_("Unable to import data"))
 

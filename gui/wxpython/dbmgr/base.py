@@ -3095,6 +3095,7 @@ class LayerBook(wx.Notebook):
     def __init__(self, parent, id, parentDialog, style=wx.BK_DEFAULT):
         wx.Notebook.__init__(self, parent, id, style=style)
 
+        self.delet6yeLayer = None
         self.parent = parent
         self.parentDialog = parentDialog
         self.mapDBInfo = self.parentDialog.dbMgrData["mapDBInfo"]
@@ -3862,7 +3863,7 @@ class LayerBook(wx.Notebook):
         except ValueError:
             try:
                 layer = list(self.mapDBInfo.layers.keys())[0]
-            except IndexError:
+            except (TypeError, IndexError, AttributeError):
                 return
 
         if self.GetCurrentPage() == self.modifyPanel:

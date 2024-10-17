@@ -23,6 +23,7 @@ import operator
 
 from grass.script import core as grass
 from grass.script import task as gtask
+from grass.exceptions import CalledModuleError
 from grass.app.runtime import get_grass_config_dir
 
 from core.gcmd import RunCommand
@@ -75,7 +76,7 @@ def GetTempfile(pref=None):
         if pref:
             return os.path.join(pref, file)
         return tempfile
-    except Exception:
+    except TypeError:
         return None
 
 
@@ -253,7 +254,7 @@ def ListOfCatsToRange(cats):
 
     try:
         cats = list(map(int, cats))
-    except ValueError:
+    except (TypeError, ValueError):
         return catstr
 
     i = 0
@@ -574,7 +575,7 @@ def GetListOfLocations(dbase):
                 os.path.join(location, "*")
             ):
                 listOfLocations.append(os.path.basename(location))
-        except OSError:
+        except (TypeError, FileNotFoundError, PermissionError, NotADirectoryError):
             pass
 
     ListSortLower(listOfLocations)
@@ -627,7 +628,7 @@ def _getGDALFormats():
     """Get dictionary of available GDAL drivers"""
     try:
         ret = grass.read_command("r.in.gdal", quiet=True, flags="f")
-    except grass.CalledModuleError:
+    except CalledModuleError:
         ret = None
 
     return _parseFormats(ret), _parseFormats(ret, writableOnly=True)
@@ -637,7 +638,7 @@ def _getOGRFormats():
     """Get dictionary of available OGR drivers"""
     try:
         ret = grass.read_command("v.in.ogr", quiet=True, flags="f")
-    except grass.CalledModuleError:
+    except CalledModuleError:
         ret = None
 
     return _parseFormats(ret), _parseFormats(ret, writableOnly=True)

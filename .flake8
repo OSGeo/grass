@@ -13,7 +13,6 @@ per-file-ignores =
     # F405 variable may be undefined, or defined from star imports
     # E402 module level import not at top of file
     # E501 line too long
-    # E722 do not use bare 'except'
     # W605 invalid escape sequence
     # F401 imported but unused
     # F821 undefined name 'unicode'
@@ -24,41 +23,34 @@ per-file-ignores =
     doc/python/m.distance.py: E501
     gui/scripts/d.wms.py: E501
     gui/wxpython/image2target/g.gui.image2target.py: E501
-    gui/wxpython/modules/*: F841, E722
-    gui/wxpython/nviz/*: F841, E266, E722, F403, F405
-    gui/wxpython/photo2image/*: F841, E722, E265
+    gui/wxpython/modules/*: F841
+    gui/wxpython/nviz/*: F841, E266, F403, F405
+    gui/wxpython/photo2image/*: F841, E265
     gui/wxpython/photo2image/g.gui.photo2image.py: E501, F841
-    gui/wxpython/psmap/*: F841, E266, E722, F405, F403
-    gui/wxpython/vdigit/*: F841, E722, F405, F403
+    gui/wxpython/psmap/*: F841, E266, F405, F403
+    gui/wxpython/vdigit/*: F841, F405, F403
     gui/wxpython/vnet/*: F841
     gui/wxpython/wxgui.py: F841
     gui/wxpython/animation/g.gui.animation.py: E501
-    gui/wxpython/tplot/frame.py: F841, E722
+    gui/wxpython/tplot/frame.py: F841
     gui/wxpython/tplot/g.gui.tplot.py: E501
     gui/wxpython/rdigit/g.gui.rdigit.py: F841
     gui/wxpython/iclass/digit.py: F405, F403
     gui/wxpython/iclass/frame.py: F405, F403
     gui/wxpython/iclass/g.gui.iclass.py: E501
     gui/wxpython/iclass/statistics.py: F841, F405, F403
-    gui/wxpython/wxplot/histogram.py: E722
-    gui/wxpython/wxplot/profile.py: F841, E722
-    gui/wxpython/wxplot/base.py: F841, E722
+    gui/wxpython/wxplot/profile.py: F841
+    gui/wxpython/wxplot/base.py: F841
     gui/wxpython/location_wizard/dialogs.py: F841
-    gui/wxpython/location_wizard/wizard.py: E722
-    gui/wxpython/mapdisp/main.py: E722
     gui/wxpython/mapdisp/test_mapdisp.py: E501
     gui/wxpython/mapdisp/statusbar.py: F841
     gui/wxpython/mapswipe/g.gui.mapswipe.py: E501
-    gui/wxpython/mapwin/base.py: E722
-    gui/wxpython/mapwin/buffered.py: E722
-    gui/wxpython/mapwin/graphics.py: E722
-    gui/wxpython/startup/locdownload.py: E722, E402
+    gui/wxpython/startup/locdownload.py: E402
     gui/wxpython/timeline/g.gui.timeline.py: E501
-    gui/wxpython/tools/build_modules_xml.py: E722
     gui/wxpython/web_services/cap_interface.py: E501
     gui/wxpython/web_services/widgets.py: F841, E402
     gui/wxpython/rlisetup/sampling_frame.py: F841
-    gui/wxpython/rlisetup/wizard.py: E722
+    gui/wxpython/rlisetup/wizard.py: E741
     # Generated file
     gui/wxpython/menustrings.py: E501
     # F821 undefined name 'cmp'
@@ -75,15 +67,6 @@ per-file-ignores =
     python/grass/pygrass/raster/category.py: E721
     python/grass/pygrass/rpc/__init__.py: F401, F403
     python/grass/pygrass/utils.py: E402
-    python/grass/temporal/abstract_space_time_dataset.py: E722
-    python/grass/temporal/c_libraries_interface.py: E722
-    python/grass/temporal/core.py: E722
-    python/grass/temporal/datetime_math.py: E722
-    python/grass/temporal/spatial_topology_dataset_connector.py: E722
-    python/grass/temporal/temporal_algebra.py: E722
-    python/grass/temporal/temporal_granularity.py: E722
-    python/grass/temporal/temporal_raster_base_algebra.py: E722
-    python/grass/temporal/temporal_topology_dataset_connector.py: E722
     python/grass/temporal/univar_statistics.py: E231
     # Current benchmarks/tests are changing sys.path before import.
     # Possibly, a different approach should be taken there anyway.
@@ -100,21 +83,17 @@ per-file-ignores =
     python/grass/*/*/__init__.py: F401, F403
     python/grass/*/*/*/__init__.py: F401, F403
     # E402 module level import not at top of file
-    scripts/r.in.wms/wms_gdal_drv.py: E722
-    scripts/r.in.wms/wms_drv.py: E402, E722
-    scripts/r.in.wms/srs.py: E722
-    scripts/r.semantic.label/r.semantic.label.py: E501
-    scripts/v.report/v.report.py: E721
+    scripts/d.polar/d.polar.py: F841
+    scripts/r.in.wms/wms_cap_parsers.py: F841, E741
+    scripts/r.in.wms/wms_drv.py: E402
+    scripts/r.semantic.label/r.semantic.label.py: F841, E501
+    scripts/v.report/v.report.py: F841, E721
     scripts/db.out.ogr/db.out.ogr.py: F841
-    scripts/g.extension/g.extension.py: F841, E722, E501
-    scripts/v.unpack/v.unpack.py: E722, E501
-    scripts/v.import/v.import.py: E722, E501
+    scripts/g.extension/g.extension.py: F841, E501
+    scripts/v.unpack/v.unpack.py: E501
+    scripts/v.import/v.import.py: E501
     scripts/db.univar/db.univar.py: E501
-    scripts/d.frame/d.frame.py: E722
-    scripts/i.pansharpen/i.pansharpen.py: E722, E501
-    scripts/r.in.srtm/r.in.srtm.py: E722
-    scripts/r.fillnulls/r.fillnulls.py: E722
-    scripts/d.rast.edit/d.rast.edit.py: E722
+    scripts/i.pansharpen/i.pansharpen.py: E501
     scripts/v.what.strds/v.what.strds.py: E501
     # Line too long (esp. module interface definitions)
     scripts/*/*.py: E501

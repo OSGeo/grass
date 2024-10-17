@@ -1042,7 +1042,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             for item in self.graphicsSetList:
                 try:
                     item.Draw()
-                except:
+                except Exception:
                     GError(
                         parent=self,
                         message=_(
@@ -1194,7 +1194,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             r.Inflate(4, 4)
             try:
                 pdc.ClearId(boxid)
-            except:
+            except Exception:
                 pass
             self.RefreshRect(r, False)
             pdc.SetId(boxid)
@@ -1211,7 +1211,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             r.Inflate(4, 4)
             try:
                 pdc.ClearId(self.lineid)
-            except:
+            except Exception:
                 pass
             self.RefreshRect(r, False)
             pdc.SetId(self.lineid)
@@ -1759,13 +1759,13 @@ class BufferedMapWindow(MapWindowBase, Window):
         try:
             pdc.ClearId(self.lineid)
             pdc.RemoveId(self.lineid)
-        except:
+        except Exception:
             pass
 
         try:
             pdc.ClearId(self.plineid)
             pdc.RemoveId(self.plineid)
-        except:
+        except Exception:
             pass
 
         Debug.msg(
@@ -1787,7 +1787,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         try:
             x = int(xyCoords[0])
             y = int(xyCoords[1])
-        except:
+        except (TypeError, ValueError, IndexError):
             return None
 
         if self.Map.region["ewres"] > self.Map.region["nsres"]:
@@ -1808,7 +1808,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         try:
             east = float(enCoords[0])
             north = float(enCoords[1])
-        except:
+        except (TypeError, ValueError, IndexError):
             return None
 
         if self.Map.region["ewres"] > self.Map.region["nsres"]:

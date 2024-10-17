@@ -2459,7 +2459,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             try:
                 dbif.execute(sql, (map_id,), mapset=self.base.mapset)
                 row = dbif.fetchone(mapset=self.base.mapset)
-            except:
+            except Exception:
                 self.msgr.warning(_("Error in register table request"))
                 raise
 

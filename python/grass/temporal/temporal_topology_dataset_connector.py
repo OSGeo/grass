@@ -160,47 +160,47 @@ class TemporalTopologyDatasetConnector:
         relations = {}
         try:
             relations["equal"] = len(self._temporal_topology["EQUAL"])
-        except:
+        except (KeyError, TypeError):
             relations["equal"] = 0
         try:
             relations["follows"] = len(self._temporal_topology["FOLLOWS"])
-        except:
+        except (KeyError, TypeError):
             relations["follows"] = 0
         try:
             relations["precedes"] = len(self._temporal_topology["PRECEDES"])
-        except:
+        except (KeyError, TypeError):
             relations["precedes"] = 0
         try:
             relations["overlaps"] = len(self._temporal_topology["OVERLAPS"])
-        except:
+        except (KeyError, TypeError):
             relations["overlaps"] = 0
         try:
             relations["overlapped"] = len(self._temporal_topology["OVERLAPPED"])
-        except:
+        except (KeyError, TypeError):
             relations["overlapped"] = 0
         try:
             relations["during"] = len(self._temporal_topology["DURING"])
-        except:
+        except (KeyError, TypeError):
             relations["during"] = 0
         try:
             relations["contains"] = len(self._temporal_topology["CONTAINS"])
-        except:
+        except (KeyError, TypeError):
             relations["contains"] = 0
         try:
             relations["starts"] = len(self._temporal_topology["STARTS"])
-        except:
+        except (KeyError, TypeError):
             relations["starts"] = 0
         try:
             relations["started"] = len(self._temporal_topology["STARTED"])
-        except:
+        except (KeyError, TypeError):
             relations["started"] = 0
         try:
             relations["finishes"] = len(self._temporal_topology["FINISHES"])
-        except:
+        except (KeyError, TypeError):
             relations["finishes"] = 0
         try:
             relations["finished"] = len(self._temporal_topology["FINISHED"])
-        except:
+        except (KeyError, TypeError):
             relations["finished"] = 0
 
         return relations
