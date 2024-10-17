@@ -19,24 +19,37 @@ to a different resolution rather than for interpolation from scattered data
 (use the <em>v.surf.*</em> modules for that purpose).
 
 
-
 <h2>NOTES</h2>
 
 <p>Resampling modules (<em>r.resample, r.resamp.stats, r.resamp.interp,
 r.resamp.rst</em>) resample the map to match the current region settings.
 
- 
+
 <p>Note that for bilinear, bicubic and lanczos interpolation,
 cells of the output raster that cannot be bounded by the appropriate number
 of input cell centers are set to NULL (NULL propagation). This could occur
-due to the input cells being outside the current region, being NULL or MASKed.
+due to the input cells being outside the current region, being NULL or masked.
 
 
-<p>For longitude-latitude locations, the interpolation algorithm is based on
+<p>For longitude-latitude coordinate reference systems,
+the interpolation algorithm is based on
 degree fractions, not on the absolute distances between cell centers.  Any
 attempt to implement the latter would violate the integrity of the
 interpolation method.
 
+<h3>PERFORMANCE</h3>
+<p>By specifying the number of parallel processes with <b>nprocs</b> option,
+<em>r.resamp.interp</em> can run significantly faster, see benchmarks below.
+
+<div align="center" style="margin: 10px">
+     <img src="r_resamp_interp_benchmark_size.png" alt="benchmark for number of cells" border="0">
+     <br>
+     <i>Figure: Benchmark shows execution time for different
+     number of cells. See benchmark scripts in source code.</i>
+     </div>
+<p>To reduce the memory requirements to minimum, set option <b>memory</b> to zero.
+To take advantage of the parallelization, GRASS GIS
+needs to compiled with OpenMP enabled.
 
 <h2>EXAMPLE</h2>
 
@@ -74,8 +87,3 @@ Overview: <a href="https://grasswiki.osgeo.org/wiki/Interpolation">Interpolation
 <h2>AUTHOR</h2>
 
 Glynn Clements
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

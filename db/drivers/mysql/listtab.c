@@ -1,11 +1,10 @@
-
 /**********************************************************
  * MODULE:    mysql
  * AUTHOR(S): Radim Blazek (radim.blazek@gmail.com)
  * PURPOSE:   MySQL database driver
  * COPYRIGHT: (C) 2001 by the GRASS Development Team
- *            This program is free software under the 
- *            GNU General Public License (>=v2). 
+ *            This program is free software under the
+ *            GNU General Public License (>=v2).
  *            Read the file COPYING that comes with GRASS
  *            for details.
  **********************************************************/
@@ -19,7 +18,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
+int db__driver_list_tables(dbString **tlist, int *tcount, int system UNUSED)
 {
     int i;
     dbString *list;
@@ -33,11 +32,10 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
     res = mysql_list_tables(connection, NULL);
 
     if (res == NULL) {
-	db_d_append_error("%s\%s",
-			  _("Unable get list of tables:"),
-			  mysql_error(connection));
-	db_d_report_error();
-	return DB_FAILED;
+        db_d_append_error("%s\n%s", _("Unable get list of tables:"),
+                          mysql_error(connection));
+        db_d_report_error();
+        return DB_FAILED;
     }
     mysql_store_result(connection);
 
@@ -46,8 +44,8 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
 
     i = 0;
     while ((row = mysql_fetch_row(res)) != NULL) {
-	db_set_string(&list[i], row[0]);
-	i++;
+        db_set_string(&list[i], row[0]);
+        i++;
     }
 
     mysql_free_result(res);

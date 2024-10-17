@@ -6,7 +6,7 @@ values into an ASCII text file.
 <h2>NOTES</h2>
 
 This module will by default not export x,y coordinates for raster cells
-containing a NULL value. This includes cells masked by a raster MASK.
+containing a NULL value. This includes cells masked by a raster mask.
 Using the flag <b>-i</b> also these raster cells will be included in the
 exported data.
 <p>
@@ -16,7 +16,7 @@ current region settings. See the <em>g.region</em> module for details.
 The <em>r.out.ascii</em> module should be used to export an array (of
 size row x column) containing z values.
 <p>
-<em>r.out.xyz</em> can combine several input raster maps, which can be 
+<em>r.out.xyz</em> can combine several input raster maps, which can be
 convenient when it comes to e.g. produce ASCII point cloud files.
 <p>
 <em>r.out.xyz</em> is simply a front-end to "<tt>r.stats -1g[n]</tt>".
@@ -24,7 +24,7 @@ convenient when it comes to e.g. produce ASCII point cloud files.
 <h2>EXAMPLES</h2>
 
 In this example, a LiDAR elevation map in the
-North Carolina sample dataset location is exported to CSV format.
+North Carolina sample dataset is exported to CSV format.
 
 <div class="code"><pre>
 g.region raster=elev_lid792_1m -p
@@ -53,7 +53,6 @@ head -n 3 pointcloud.asc
 
 Implement this script as a <em>r.out.ascii</em> option?
 
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -68,8 +67,3 @@ Implement this script as a <em>r.out.ascii</em> option?
 M. Hamish Bowman<br>
 <i>Dept. Marine Science<br>
 Otago University, New Zealand</i>
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

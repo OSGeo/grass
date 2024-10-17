@@ -1,20 +1,20 @@
 #include <stdio.h>
 #include <math.h>
 
-
 double *Cdhc_shapiro_wilk_exp(double *x, int n)
 {
     static double y[2];
     double mean, b, s1, xs, sum1 = 0.0, sum2 = 0.0;
     int i;
+    xs = x[0];
 
     for (i = 0; i < n; ++i)
-	if (i == 0 || xs > x[i])
-	    xs = x[i];
+        if (i == 0 || xs > x[i])
+            xs = x[i];
 
     for (i = 0; i < n; ++i) {
-	sum1 += x[i];
-	sum2 += x[i] * x[i];
+        sum1 += x[i];
+        sum2 += x[i] * x[i];
     }
 
     s1 = sum2 - sum1 * sum1 / n;

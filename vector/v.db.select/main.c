@@ -1,5 +1,4 @@
-
-/*******************************************************************************
+/******************************************************************************
  *
  * MODULE:       v.db.select
  *
@@ -7,16 +6,17 @@
  *               OGR support by Martin Landa <landa.martin gmail.com>
  *               -e, -j, and -f flags by Huidae Cho <grass4u gmail.com>
  *               group option by Luca Delucchi <lucadeluge gmail.com>
+ *               CSV and format option by Vaclav Petras <wenzeslaus gmail com>
  *
  * PURPOSE:      Print vector attributes
  *
- * COPYRIGHT:    (C) 2005-2020 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2005-2021 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
  *               comes with GRASS for details.
  *
- ******************************************************************************/
+ *****************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,13 +29,35 @@
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 
+enum OutputFormat { PLAIN, JSON, CSV, VERTICAL };
+
+void fatal_error_option_value_excludes_flag(struct Option *option,
+                                            struct Flag *excluded,
+                                            const char *because)
+{
+    if (!excluded->answer)
+        return;
+    G_fatal_error(_("The flag -%c is not allowed with %s=%s. %s"),
+                  excluded->key, option->key, option->answer, because);
+}
+
+void fatal_error_option_value_excludes_option(struct Option *option,
+                                              struct Option *excluded,
+                                              const char *because)
+{
+    if (!excluded->answer)
+        return;
+    G_fatal_error(_("The option %s is not allowed with %s=%s. %s"),
+                  excluded->key, option->key, option->answer, because);
+}
+
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *map;
         struct Option *field;
+        struct Option *format;
         struct Option *fsep;
         struct Option *vsep;
         struct Option *nullval;
@@ -44,13 +66,11 @@ int main(int argc, char **argv)
         struct Option *file;
         struct Option *group;
     } options;
-    struct
-    {
+    struct {
         struct Flag *region;
         struct Flag *colnames;
         struct Flag *vertical;
         struct Flag *escape;
-        struct Flag *json;
         struct Flag *features;
     } flags;
     dbDriver *driver;
@@ -60,19 +80,24 @@ int main(int argc, char **argv)
     dbColumn *column;
     dbValue *value;
     struct field_info *Fi;
-    int ncols, col, more, first_rec;
+    int ncols, col, more;
+    bool first_rec;
     struct Map_info Map;
     char query[DB_SQL_MAX];
     struct ilist *list_lines;
     char *fsep, *vsep;
     struct bound_box *min_box, *line_box;
-    int i, line, area, init_box, cat, field_number;
+    int i, line, area, cat, field_number;
+    bool init_box;
+    enum OutputFormat format;
+    bool vsep_needs_newline;
 
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("attribute table"));
     G_add_keyword(_("database"));
     G_add_keyword(_("SQL"));
+    G_add_keyword(_("export"));
     module->description = _("Prints vector map attributes.");
 
     options.map = G_define_standard_option(G_OPT_V_MAP);
@@ -94,8 +119,18 @@ int main(int argc, char **argv)
         _("GROUP BY conditions of SQL statement without 'group by' keyword");
     options.group->guisection = _("Selection");
 
+    options.format = G_define_standard_option(G_OPT_F_FORMAT);
+    options.format->options = "plain,csv,json,vertical";
+    options.format->descriptions =
+        "plain;Configurable plain text output;"
+        "csv;CSV (Comma Separated Values);"
+        "json;JSON (JavaScript Object Notation);"
+        "vertical;Plain text vertical output (instead of horizontal)";
+    options.format->guisection = _("Format");
+
     options.fsep = G_define_standard_option(G_OPT_F_SEP);
-    options.fsep->guisection = _("Main");
+    options.fsep->answer = NULL;
+    options.fsep->guisection = _("Format");
 
     options.vsep = G_define_standard_option(G_OPT_F_SEP);
     options.vsep->key = "vertical_separator";
@@ -115,8 +150,8 @@ int main(int argc, char **argv)
 
     flags.region = G_define_flag();
     flags.region->key = 'r';
-    flags.region->description =
-        _("Print minimal region extent of selected vector features instead of attributes");
+    flags.region->description = _("Print minimal region extent of selected "
+                                  "vector features instead of attributes");
     flags.region->guisection = _("Region");
 
     flags.colnames = G_define_flag();
@@ -124,21 +159,10 @@ int main(int argc, char **argv)
     flags.colnames->description = _("Do not include column names in output");
     flags.colnames->guisection = _("Format");
 
-    flags.vertical = G_define_flag();
-    flags.vertical->key = 'v';
-    flags.vertical->description =
-        _("Vertical output (instead of horizontal)");
-    flags.vertical->guisection = _("Format");
-
     flags.escape = G_define_flag();
     flags.escape->key = 'e';
     flags.escape->description = _("Escape newline and backslash characters");
     flags.escape->guisection = _("Format");
-
-    flags.json = G_define_flag();
-    flags.json->key = 'j';
-    flags.json->description = _("JSON output");
-    flags.json->guisection = _("Format");
 
     flags.features = G_define_flag();
     flags.features->key = 'f';
@@ -148,9 +172,6 @@ int main(int argc, char **argv)
 
     G_gisinit(argv[0]);
 
-    G_option_excludes(flags.json, flags.colnames, flags.vertical,
-                      flags.escape, NULL);
-
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
@@ -159,6 +180,32 @@ int main(int argc, char **argv)
         if (NULL == freopen(options.file->answer, "w", stdout))
             G_fatal_error(_("Unable to open file <%s> for writing"),
                           options.file->answer);
+    }
+
+    if (strcmp(options.format->answer, "csv") == 0)
+        format = CSV;
+    else if (strcmp(options.format->answer, "json") == 0)
+        format = JSON;
+    else if (strcmp(options.format->answer, "vertical") == 0)
+        format = VERTICAL;
+    else
+        format = PLAIN;
+    if (format == JSON) {
+        fatal_error_option_value_excludes_flag(
+            options.format, flags.escape, _("Escaping is based on the format"));
+        fatal_error_option_value_excludes_flag(
+            options.format, flags.colnames,
+            _("Column names are always included"));
+        fatal_error_option_value_excludes_option(
+            options.format, options.fsep, _("Separator is part of the format"));
+        fatal_error_option_value_excludes_option(
+            options.format, options.nullval,
+            _("Null value is part of the format"));
+    }
+    if (format != VERTICAL) {
+        fatal_error_option_value_excludes_option(
+            options.format, options.vsep,
+            _("Only vertical output can use vertical separator"));
     }
 
     min_box = line_box = NULL;
@@ -175,11 +222,30 @@ int main(int argc, char **argv)
         list_lines = Vect_new_list();
 
     /* the field separator */
-    fsep = G_option_to_separator(options.fsep);
+    if (options.fsep->answer) {
+        fsep = G_option_to_separator(options.fsep);
+    }
+    else {
+        /* A different separator is needed to for each format and output. */
+        if (format == CSV) {
+            fsep = G_store(",");
+        }
+        else if (format == PLAIN || format == VERTICAL) {
+            if (flags.region->answer)
+                fsep = G_store("=");
+            else
+                fsep = G_store("|");
+        }
+        else
+            fsep = NULL; /* Something like a separator is part of the format. */
+    }
     if (options.vsep->answer)
         vsep = G_option_to_separator(options.vsep);
     else
         vsep = NULL;
+    vsep_needs_newline = true;
+    if (vsep && !strcmp(vsep, "\n"))
+        vsep_needs_newline = false;
 
     db_init_string(&sql);
     db_init_string(&value_string);
@@ -190,7 +256,7 @@ int main(int argc, char **argv)
                                options.field->answer)) {
             Vect_close(&Map);
             G_fatal_error(_("Unable to open vector map <%s> at topology level. "
-                           "Flag '%c' requires topology level."),
+                            "Flag '%c' requires topology level."),
                           options.map->answer, flags.region->key);
         }
         field_number = Vect_get_field_number(&Map, options.field->answer);
@@ -248,9 +314,9 @@ int main(int argc, char **argv)
     table = db_get_cursor_table(&cursor);
     ncols = db_get_table_number_of_columns(table);
 
-    /* column names if horizontal output (ignore for -r, -c, -v, -j) */
-    if (!flags.region->answer && !flags.colnames->answer &&
-        !flags.vertical->answer && !flags.json->answer) {
+    /* column names if horizontal output (ignore for -r, -c, JSON, vertical) */
+    if (!flags.region->answer && !flags.colnames->answer && format != JSON &&
+        format != VERTICAL) {
         for (col = 0; col < ncols; col++) {
             column = db_get_table_column(table, col);
             if (col)
@@ -260,24 +326,51 @@ int main(int argc, char **argv)
         fprintf(stdout, "\n");
     }
 
-    init_box = TRUE;
-    first_rec = TRUE;
+    init_box = true;
+    first_rec = true;
 
-    if (!flags.region->answer && flags.json->answer)
-        fprintf(stdout, "[");
+    if (format == JSON) {
+        if (flags.region->answer)
+            fprintf(stdout, "{\"extent\":\n");
+        else {
+            fprintf(stdout, "{\"info\":\n{\"columns\":[\n");
+            for (col = 0; col < ncols; col++) {
+                column = db_get_table_column(table, col);
+                if (col)
+                    fprintf(stdout, "},\n");
+                fprintf(stdout, "{\"name\":\"%s\",",
+                        db_get_column_name(column));
+                int sql_type = db_get_column_sqltype(column);
+                fprintf(stdout, "\"sql_type\":\"%s\",",
+                        db_sqltype_name(sql_type));
+
+                int c_type = db_sqltype_to_Ctype(sql_type);
+                fprintf(stdout, "\"is_number\":");
+                /* Same rules as for quoting, i.e., number only as
+                 * JSON or Python would see it and not numeric which may
+                 * include, e.g., date. */
+                if (c_type == DB_C_TYPE_INT || c_type == DB_C_TYPE_DOUBLE)
+                    fprintf(stdout, "true");
+                else
+                    fprintf(stdout, "false");
+            }
+
+            fprintf(stdout, "}\n]},\n");
+            fprintf(stdout, "\"records\":[\n");
+        }
+    }
 
     /* fetch the data */
     while (1) {
         if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
-            G_fatal_error(_("Unable to fetch data from table <%s>"),
-                          Fi->table);
+            G_fatal_error(_("Unable to fetch data from table <%s>"), Fi->table);
 
         if (!more)
             break;
 
         if (first_rec)
-            first_rec = FALSE;
-        else if (!flags.region->answer && flags.json->answer)
+            first_rec = false;
+        else if (!flags.region->answer && format == JSON)
             fprintf(stdout, ",\n");
 
         cat = -1;
@@ -305,44 +398,61 @@ int main(int argc, char **argv)
 
             db_convert_column_value_to_string(column, &value_string);
 
-            if (!flags.colnames->answer && flags.vertical->answer)
+            if (!flags.colnames->answer && format == VERTICAL)
                 fprintf(stdout, "%s%s", db_get_column_name(column), fsep);
 
-            if (col && !flags.vertical->answer && !flags.json->answer)
+            if (col && format != JSON && format != VERTICAL)
                 fprintf(stdout, "%s", fsep);
 
-            if (flags.json->answer) {
+            if (format == JSON) {
                 if (!col)
                     fprintf(stdout, "{");
                 fprintf(stdout, "\"%s\":", db_get_column_name(column));
             }
 
-            if (options.nullval->answer && db_test_value_isnull(value)) {
-                if (flags.json->answer)
-                    fprintf(stdout, "\"%s\"", db_get_column_name(column));
-                else
+            if (db_test_value_isnull(value)) {
+                if (format == JSON)
+                    fprintf(stdout, "null");
+                else if (options.nullval->answer)
                     fprintf(stdout, "%s", options.nullval->answer);
             }
             else {
                 char *str = db_get_string(&value_string);
 
-                if (flags.escape->answer || flags.json->answer) {
+                /* Escaped characters in different formats
+                 * JSON (mandatory): \" \\ \r \n \t \f \b
+                 * CSV (usually none, here optional): \\ \r \n \t \f \b
+                 * Plain, vertical (optional): v7: \\ \r \n, v8 also: \t \f \b
+                 */
+                if (flags.escape->answer || format == JSON) {
                     if (strchr(str, '\\'))
                         str = G_str_replace(str, "\\", "\\\\");
                     if (strchr(str, '\r'))
                         str = G_str_replace(str, "\r", "\\r");
                     if (strchr(str, '\n'))
                         str = G_str_replace(str, "\n", "\\n");
-                    if (flags.json->answer && strchr(str, '"'))
+                    if (strchr(str, '\t'))
+                        str = G_str_replace(str, "\t", "\\t");
+                    if (format == JSON && strchr(str, '"'))
                         str = G_str_replace(str, "\"", "\\\"");
+                    if (strchr(str, '\f')) /* form feed, somewhat unlikely */
+                        str = G_str_replace(str, "\f", "\\f");
+                    if (strchr(str, '\b')) /* backspace, quite unlikely */
+                        str = G_str_replace(str, "\b", "\\b");
+                }
+                /* Common CSV does not escape, but doubles quotes (and we quote
+                 * all text fields which takes care of a separator character in
+                 * text). */
+                if (format == CSV && strchr(str, '"')) {
+                    str = G_str_replace(str, "\"", "\"\"");
                 }
 
-                if (flags.json->answer) {
-                    int sqltype = db_get_column_sqltype(column);
+                if (format == JSON || format == CSV) {
+                    int type =
+                        db_sqltype_to_Ctype(db_get_column_sqltype(column));
 
-                    if (sqltype == DB_SQL_TYPE_INTEGER ||
-                        sqltype == DB_SQL_TYPE_DOUBLE_PRECISION ||
-                        sqltype == DB_SQL_TYPE_REAL)
+                    /* Don't quote numbers, quote text and datetime. */
+                    if (type == DB_C_TYPE_INT || type == DB_C_TYPE_DOUBLE)
                         fprintf(stdout, "%s", str);
                     else
                         fprintf(stdout, "\"%s\"", str);
@@ -351,9 +461,9 @@ int main(int argc, char **argv)
                     fprintf(stdout, "%s", str);
             }
 
-            if (flags.vertical->answer)
+            if (format == VERTICAL)
                 fprintf(stdout, "\n");
-            else if (flags.json->answer) {
+            else if (format == JSON) {
                 if (col < ncols - 1)
                     fprintf(stdout, ",");
                 else
@@ -372,52 +482,70 @@ int main(int argc, char **argv)
                 if (Vect_get_line_type(&Map, line) == GV_CENTROID) {
                     area = Vect_get_centroid_area(&Map, line);
                     if (area > 0 && !Vect_get_area_box(&Map, area, line_box))
-                        G_fatal_error(_("Unable to get bounding box of area %d"),
-                                      area);
+                        G_fatal_error(
+                            _("Unable to get bounding box of area %d"), area);
                 }
                 else if (!Vect_get_line_box(&Map, line, line_box))
                     G_fatal_error(_("Unable to get bounding box of line %d"),
                                   line);
                 if (init_box) {
                     Vect_box_copy(min_box, line_box);
-                    init_box = FALSE;
+                    init_box = false;
                 }
                 else
                     Vect_box_extend(min_box, line_box);
             }
         }
         else {
-            if (!flags.vertical->answer && !flags.json->answer)
+            /* End of record in attribute printing */
+            if (format != JSON && format != VERTICAL)
                 fprintf(stdout, "\n");
-            else if (vsep)
-                fprintf(stdout, "%s\n", vsep);
+            else if (vsep) {
+                if (vsep_needs_newline)
+                    fprintf(stdout, "%s\n", vsep);
+                else
+                    fprintf(stdout, "%s", vsep);
+            }
         }
     }
 
-    if (!flags.region->answer && flags.json->answer)
-        fprintf(stdout, "]\n");
+    if (!flags.region->answer && format == JSON)
+        fprintf(stdout, "\n]}\n");
 
     if (flags.region->answer) {
-        if (flags.json->answer) {
+        if (format == CSV) {
+            fprintf(stdout, "n%ss%sw%se", fsep, fsep, fsep);
+            if (Vect_is_3d(&Map)) {
+                fprintf(stdout, "%st%sb", fsep, fsep);
+            }
+            fprintf(stdout, "\n");
+            fprintf(stdout, "%f%s%f%s%f%s%f", min_box->N, fsep, min_box->S,
+                    fsep, min_box->W, fsep, min_box->E);
+            if (Vect_is_3d(&Map)) {
+                fprintf(stdout, "%s%f%s%f", fsep, min_box->T, fsep, min_box->B);
+            }
+            fprintf(stdout, "\n");
+        }
+        else if (format == JSON) {
             fprintf(stdout, "{");
             fprintf(stdout, "\"n\":%f,", min_box->N);
             fprintf(stdout, "\"s\":%f,", min_box->S);
             fprintf(stdout, "\"w\":%f,", min_box->W);
             fprintf(stdout, "\"e\":%f", min_box->E);
             if (Vect_is_3d(&Map)) {
-                fprintf(stdout, ",\"t\":%f,\n", min_box->T);
-                fprintf(stdout, "\"b\":%f\n", min_box->B);
+                fprintf(stdout, ",\"t\":%f,", min_box->T);
+                fprintf(stdout, "\"b\":%f", min_box->B);
             }
-            fprintf(stdout, "}\n");
+            fprintf(stdout, "\n}}\n");
         }
         else {
-            fprintf(stdout, "n=%f\n", min_box->N);
-            fprintf(stdout, "s=%f\n", min_box->S);
-            fprintf(stdout, "w=%f\n", min_box->W);
-            fprintf(stdout, "e=%f\n", min_box->E);
+            fprintf(stdout, "n%s%f\n", fsep, min_box->N);
+            fprintf(stdout, "s%s%f\n", fsep, min_box->S);
+            fprintf(stdout, "w%s%f\n", fsep, min_box->W);
+            fprintf(stdout, "e%s%f\n", fsep, min_box->E);
             if (Vect_is_3d(&Map)) {
-                fprintf(stdout, "t=%f\n", min_box->T);
-                fprintf(stdout, "b=%f\n", min_box->B);
+                fprintf(stdout, "t%s%f\n", fsep, min_box->T);
+                fprintf(stdout, "b%s%f\n", fsep, min_box->B);
             }
         }
         fflush(stdout);

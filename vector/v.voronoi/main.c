@@ -1,12 +1,11 @@
-
 /****************************************************************************
  *
  * MODULE:       v.voronoi
  * AUTHOR(S):    James McCauley <mccauley ecn.purdue.edu>, s.voronoi, based
  *                     on netlib code (see README) (original contributor)
  *               Andrea Aime <aaime libero.it>
- *               Radim Blazek <radim.blazek gmail.com> (GRASS 5.1 v.voronoi) 
- *               Glynn Clements <glynn gclements.plus.com>,  
+ *               Radim Blazek <radim.blazek gmail.com> (GRASS 5.1 v.voronoi)
+ *               Glynn Clements <glynn gclements.plus.com>,
  *               Markus Neteler <neteler itc.it>,
  *               Markus Metz
  * PURPOSE:      produce a Voronoi diagram using vector points
@@ -47,53 +46,49 @@
 #include "sw_defs.h"
 #include "defs.h"
 
-typedef struct
-{
+typedef struct {
     double x, y;
 } COOR;
 
-
-
 int cmp(const void *a, const void *b)
 {
-    COOR *ca = (COOR *) a;
-    COOR *cb = (COOR *) b;
+    COOR *ca = (COOR *)a;
+    COOR *cb = (COOR *)b;
     double ma, mb;
 
     /* calculate measure */
     ma = mb = 0.0;
 
-    if (fabs(ca->y - Box.S) < GRASS_EPSILON) {	/* bottom */
-	ma = ca->x - Box.W;
+    if (fabs(ca->y - Box.S) < GRASS_EPSILON) { /* bottom */
+        ma = ca->x - Box.W;
     }
-    else if (fabs(ca->x - Box.E) < GRASS_EPSILON) {	/* right */
-	ma = (Box.E - Box.W) + (ca->y - Box.S);
+    else if (fabs(ca->x - Box.E) < GRASS_EPSILON) { /* right */
+        ma = (Box.E - Box.W) + (ca->y - Box.S);
     }
-    else if (fabs(ca->y - Box.N) < GRASS_EPSILON) {	/* top */
-	ma = (Box.E - Box.W) + (Box.N - Box.S) + (Box.E - ca->x);
+    else if (fabs(ca->y - Box.N) < GRASS_EPSILON) { /* top */
+        ma = (Box.E - Box.W) + (Box.N - Box.S) + (Box.E - ca->x);
     }
-    else {			/* left */
-	ma = 2 * (Box.E - Box.W) + (Box.N - Box.S) + (Box.N - ca->y);
+    else { /* left */
+        ma = 2 * (Box.E - Box.W) + (Box.N - Box.S) + (Box.N - ca->y);
     }
 
-
-    if (fabs(cb->y - Box.S) < GRASS_EPSILON) {	/* bottom */
-	mb = cb->x - Box.W;
+    if (fabs(cb->y - Box.S) < GRASS_EPSILON) { /* bottom */
+        mb = cb->x - Box.W;
     }
-    else if (fabs(cb->x - Box.E) < GRASS_EPSILON) {	/* right */
-	mb = (Box.E - Box.W) + (cb->y - Box.S);
+    else if (fabs(cb->x - Box.E) < GRASS_EPSILON) { /* right */
+        mb = (Box.E - Box.W) + (cb->y - Box.S);
     }
-    else if (fabs(cb->y - Box.N) < GRASS_EPSILON) {	/* top */
-	mb = (Box.E - Box.W) + (Box.N - Box.S) + (Box.E - cb->x);
+    else if (fabs(cb->y - Box.N) < GRASS_EPSILON) { /* top */
+        mb = (Box.E - Box.W) + (Box.N - Box.S) + (Box.E - cb->x);
     }
-    else {			/* left */
-	mb = 2 * (Box.E - Box.W) + (Box.N - Box.S) + (Box.N - cb->y);
+    else { /* left */
+        mb = 2 * (Box.E - Box.W) + (Box.N - Box.S) + (Box.N - cb->y);
     }
 
     if (ma < mb)
-	return -1;
+        return -1;
     if (ma > mb)
-	return 1;
+        return 1;
     return 0;
 }
 
@@ -102,10 +97,10 @@ int main(int argc, char **argv)
     int i;
     int **cats, *ncats, nfields, *fields;
     struct {
-	struct Option *in, *out, *field, *smooth, *thin;
+        struct Option *in, *out, *field, *smooth, *thin;
     } opt;
     struct {
-	struct Flag *line, *table, *area, *skeleton;
+        struct Flag *line, *table, *area, *skeleton;
     } flag;
     struct GModule *module;
     struct line_pnts *Points;
@@ -124,14 +119,16 @@ int main(int argc, char **argv)
     G_add_keyword(_("geometry"));
     G_add_keyword(_("triangulation"));
     G_add_keyword(_("skeleton"));
-    module->description = _("Creates a Voronoi diagram constrained to the extents of the current region from "
-			    "an input vector map containing points or centroids.");
+    module->description =
+        _("Creates a Voronoi diagram constrained to the extents of the current "
+          "region from "
+          "an input vector map containing points or centroids.");
 
     opt.in = G_define_standard_option(G_OPT_V_INPUT);
     opt.in->label = _("Name of input vector map");
-    
+
     opt.field = G_define_standard_option(G_OPT_V_FIELD_ALL);
-    
+
     opt.out = G_define_standard_option(G_OPT_V_OUTPUT);
 
     opt.smooth = G_define_option();
@@ -140,7 +137,8 @@ int main(int argc, char **argv)
     opt.smooth->answer = "0.25";
     opt.smooth->label = _("Factor for output smoothness");
     opt.smooth->description = _("Applies to input areas only. "
-                                "Smaller values produce smoother output but can cause numerical instability.");
+                                "Smaller values produce smoother output but "
+                                "can cause numerical instability.");
 
     opt.thin = G_define_option();
     opt.thin->type = TYPE_DOUBLE;
@@ -148,44 +146,43 @@ int main(int argc, char **argv)
     opt.thin->answer = "-1";
     opt.thin->label = _("Maximum dangle length of skeletons");
     opt.thin->description = _("Applies only to skeleton extraction. "
-                                "Default = -1 will extract the center line.");
+                              "Default = -1 will extract the center line.");
 
     flag.area = G_define_flag();
     flag.area->key = 'a';
-    flag.area->description =
-	_("Create Voronoi diagram for input areas");
+    flag.area->description = _("Create Voronoi diagram for input areas");
 
     flag.skeleton = G_define_flag();
     flag.skeleton->key = 's';
-    flag.skeleton->description =
-	_("Extract skeletons for input areas");
+    flag.skeleton->description = _("Extract skeletons for input areas");
 
     flag.line = G_define_flag();
     flag.line->key = 'l';
     flag.line->description =
-	_("Output tessellation as a graph (lines), not areas");
+        _("Output tessellation as a graph (lines), not areas");
 
     flag.table = G_define_standard_flag(G_FLG_V_TABLE);
-    
+
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
-    
+        exit(EXIT_FAILURE);
+
     if (flag.line->answer)
-	Type = GV_LINE;
+        Type = GV_LINE;
     else
-	Type = GV_BOUNDARY;
+        Type = GV_BOUNDARY;
 
     in_area = flag.area->answer;
     segf = atof(opt.smooth->answer);
     if (segf < GRASS_EPSILON) {
-	segf = 0.25;
-	G_warning(_("Option '%s' is too small, set to %g"), opt.smooth->key, segf);
+        segf = 0.25;
+        G_warning(_("Option '%s' is too small, set to %g"), opt.smooth->key,
+                  segf);
     }
     thresh = atof(opt.thin->answer);
-    
+
     skeleton = flag.skeleton->answer;
     if (skeleton)
-	Type = GV_LINE;
+        Type = GV_LINE;
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
@@ -193,10 +190,10 @@ int main(int argc, char **argv)
     /* open files */
     Vect_set_open_level(2);
     if (Vect_open_old2(&In, opt.in->answer, "", opt.field->answer) < 0)
-	G_fatal_error(_("Unable to open vector map <%s>"), opt.in->answer);
+        G_fatal_error(_("Unable to open vector map <%s>"), opt.in->answer);
 
     Field = Vect_get_field_number(&In, opt.field->answer);
-    
+
     /* initialize working region */
     G_get_window(&Window);
     Vect_region_box(&Window, &Box);
@@ -209,25 +206,27 @@ int main(int argc, char **argv)
 
     G_message(_("Reading features..."));
     if (in_area || skeleton)
-	readbounds();
+        readbounds();
     else
-	readsites();
+        readsites();
 
     if (in_area) {
-	if (Vect_open_tmp_new(&Out, NULL, 0) < 0)
-	    G_fatal_error(_("Unable to create temporary vector map"));
+        if (Vect_open_tmp_new(&Out, NULL, 0) < 0)
+            G_fatal_error(_("Unable to create temporary vector map"));
 
-	if (Vect_open_new(&Out2, opt.out->answer, 0) < 0)
-	    G_fatal_error(_("Unable to create vector map <%s>"), opt.out->answer);
+        if (Vect_open_new(&Out2, opt.out->answer, 0) < 0)
+            G_fatal_error(_("Unable to create vector map <%s>"),
+                          opt.out->answer);
     }
     else {
-	if (Vect_open_new(&Out, opt.out->answer, 0) < 0)
-	    G_fatal_error(_("Unable to create vector map <%s>"), opt.out->answer);
+        if (Vect_open_new(&Out, opt.out->answer, 0) < 0)
+            G_fatal_error(_("Unable to create vector map <%s>"),
+                          opt.out->answer);
     }
 
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
-    
+
     siteidx = 0;
     geominit();
 
@@ -235,8 +234,8 @@ int main(int argc, char **argv)
     debug = 0;
 
     G_message(n_("Voronoi triangulation for %d point...",
-                 "Voronoi triangulation for %d points...",
-                 nsites), nsites);
+                 "Voronoi triangulation for %d points...", nsites),
+              nsites);
     voronoi(nextone);
     G_message(_("Writing edges..."));
     vo_write();
@@ -247,164 +246,165 @@ int main(int argc, char **argv)
     G_set_verbose(verbose);
 
     if (skeleton) {
-	G_message(_("Thin skeletons ..."));
-	thin_skeleton(thresh);
-	tie_up();
+        G_message(_("Thin skeletons ..."));
+        thin_skeleton(thresh);
+        tie_up();
     }
     else {
-	/* Close free ends by current region */
-	ncoor = 0;
-	acoor = 100;
-	coor = (COOR *) G_malloc(sizeof(COOR) * acoor);
+        /* Close free ends by current region */
+        ncoor = 0;
+        acoor = 100;
+        coor = (COOR *)G_malloc(sizeof(COOR) * acoor);
 
-	nnodes = Vect_get_num_nodes(&Out);
-	for (node = 1; node <= nnodes; node++) {
-	    double x, y;
+        nnodes = Vect_get_num_nodes(&Out);
+        for (node = 1; node <= nnodes; node++) {
+            double x, y;
 
-	    if (Vect_get_node_n_lines(&Out, node) < 2) {	/* add coordinates */
-		Vect_get_node_coor(&Out, node, &x, &y, NULL);
+            if (Vect_get_node_n_lines(&Out, node) < 2) { /* add coordinates */
+                Vect_get_node_coor(&Out, node, &x, &y, NULL);
 
-		if (ncoor == acoor - 5) {	/* always space for 5 region corners */
-		    acoor += 100;
-		    coor = (COOR *) G_realloc(coor, sizeof(COOR) * acoor);
-		}
+                if (ncoor ==
+                    acoor - 5) { /* always space for 5 region corners */
+                    acoor += 100;
+                    coor = (COOR *)G_realloc(coor, sizeof(COOR) * acoor);
+                }
 
-		coor[ncoor].x = x;
-		coor[ncoor].y = y;
-		ncoor++;
-	    }
-	}
+                coor[ncoor].x = x;
+                coor[ncoor].y = y;
+                ncoor++;
+            }
+        }
 
-	/* Add region corners */
-	coor[ncoor].x = Box.W;
-	coor[ncoor].y = Box.S;
-	ncoor++;
-	coor[ncoor].x = Box.E;
-	coor[ncoor].y = Box.S;
-	ncoor++;
-	coor[ncoor].x = Box.E;
-	coor[ncoor].y = Box.N;
-	ncoor++;
-	coor[ncoor].x = Box.W;
-	coor[ncoor].y = Box.N;
-	ncoor++;
+        /* Add region corners */
+        coor[ncoor].x = Box.W;
+        coor[ncoor].y = Box.S;
+        ncoor++;
+        coor[ncoor].x = Box.E;
+        coor[ncoor].y = Box.S;
+        ncoor++;
+        coor[ncoor].x = Box.E;
+        coor[ncoor].y = Box.N;
+        ncoor++;
+        coor[ncoor].x = Box.W;
+        coor[ncoor].y = Box.N;
+        ncoor++;
 
-	/* Sort */
-	qsort(coor, ncoor, sizeof(COOR), cmp);
+        /* Sort */
+        qsort(coor, ncoor, sizeof(COOR), cmp);
 
-	/* add last (first corner) */
-	coor[ncoor].x = Box.W;
-	coor[ncoor].y = Box.S;
-	ncoor++;
+        /* add last (first corner) */
+        coor[ncoor].x = Box.W;
+        coor[ncoor].y = Box.S;
+        ncoor++;
 
-	for (i = 1; i < ncoor; i++) {
-	    if (coor[i].x == coor[i - 1].x && coor[i].y == coor[i - 1].y)
-		continue;		/* duplicate */
+        for (i = 1; i < ncoor; i++) {
+            if (coor[i].x == coor[i - 1].x && coor[i].y == coor[i - 1].y)
+                continue; /* duplicate */
 
-	    Vect_reset_line(Points);
-	    Vect_append_point(Points, coor[i].x, coor[i].y, 0.0);
-	    Vect_append_point(Points, coor[i - 1].x, coor[i - 1].y, 0.0);
-	    Vect_write_line(&Out, Type, Points, Cats);
-	}
+            Vect_reset_line(Points);
+            Vect_append_point(Points, coor[i].x, coor[i].y, 0.0);
+            Vect_append_point(Points, coor[i - 1].x, coor[i - 1].y, 0.0);
+            Vect_write_line(&Out, Type, Points, Cats);
+        }
 
-	G_free(coor);
+        G_free(coor);
     }
 
     if (in_area) {
-	int ltype;
+        int ltype;
 
-	/* Voronoi diagrams for areas */
-	/* write input boundaries with an area on both sides to output */
-	if (copybounds() > 0) {
-	    int cat;
-	    double x, y;
-	    double snap_thresh;
-	    int nmod;
+        /* Voronoi diagrams for areas */
+        /* write input boundaries with an area on both sides to output */
+        if (copybounds() > 0) {
+            int cat;
+            double x, y;
+            double snap_thresh;
+            int nmod;
 
-	    /* snap Voronoi edges to boundaries */
-	    snap_thresh = fabs(Box.W);
-	    if (snap_thresh < fabs(Box.E))
-		snap_thresh = fabs(Box.E);
-	    if (snap_thresh < fabs(Box.N))
-		snap_thresh = fabs(Box.N);
-	    if (snap_thresh < fabs(Box.S))
-		snap_thresh = fabs(Box.S);
-	    snap_thresh = 2 * d_ulp(snap_thresh);
+            /* snap Voronoi edges to boundaries */
+            snap_thresh = fabs(Box.W);
+            if (snap_thresh < fabs(Box.E))
+                snap_thresh = fabs(Box.E);
+            if (snap_thresh < fabs(Box.N))
+                snap_thresh = fabs(Box.N);
+            if (snap_thresh < fabs(Box.S))
+                snap_thresh = fabs(Box.S);
+            snap_thresh = 2 * d_ulp(snap_thresh);
 
-	    /* TODO: snap only Voronoi edges */
-	    Vect_snap_lines(&Out, GV_BOUNDARY, snap_thresh, NULL);
-	    do {
-		Vect_break_lines(&Out, GV_BOUNDARY, NULL);
-		Vect_remove_duplicates(&Out, GV_BOUNDARY, NULL);
-		nmod =
-		    Vect_clean_small_angles_at_nodes(&Out, GV_BOUNDARY, NULL);
-	    } while (nmod > 0);
+            /* TODO: snap only Voronoi edges */
+            Vect_snap_lines(&Out, GV_BOUNDARY, snap_thresh, NULL);
+            do {
+                Vect_break_lines(&Out, GV_BOUNDARY, NULL);
+                Vect_remove_duplicates(&Out, GV_BOUNDARY, NULL);
+                nmod =
+                    Vect_clean_small_angles_at_nodes(&Out, GV_BOUNDARY, NULL);
+            } while (nmod > 0);
 
-	    /* break lines */
-	    Vect_break_lines(&Out, GV_BOUNDARY, NULL);
+            /* break lines */
+            Vect_break_lines(&Out, GV_BOUNDARY, NULL);
 
-	    /* remove edge parts that are within an input area */
-	    nlines = Vect_get_num_lines(&Out);
-	    for (line = 1; line <= nlines; line++) {
-		if (!Vect_line_alive(&Out, line))
-		    continue;
+            /* remove edge parts that are within an input area */
+            nlines = Vect_get_num_lines(&Out);
+            for (line = 1; line <= nlines; line++) {
+                if (!Vect_line_alive(&Out, line))
+                    continue;
 
-		ltype = Vect_get_line_type(&Out, line);
-		if (!(ltype & GV_BOUNDARY))
-		    continue;
+                ltype = Vect_get_line_type(&Out, line);
+                if (!(ltype & GV_BOUNDARY))
+                    continue;
 
-		Vect_read_line(&Out, Points, Cats, line);
-		cat = 0;
-		Vect_cat_get(Cats, 1, &cat);
-		if (cat != 1)
-		    continue;
+                Vect_read_line(&Out, Points, Cats, line);
+                cat = 0;
+                Vect_cat_get(Cats, 1, &cat);
+                if (cat != 1)
+                    continue;
 
-		Vect_line_prune(Points);
-		if (Points->n_points == 2) {
-		    x = (Points->x[0] + Points->x[1]) / 2.0;
-		    y = (Points->y[0] + Points->y[1]) / 2.0;
-		}
-		else {
-		    i = 1;
-		    while (Points->x[0] == Points->x[i] &&
-		           Points->y[0] == Points->y[i] &&
-			   i < Points->n_points - 1) {
-			i++;
-		    }
-		    i = Points->n_points / 2.;
-		    x = Points->x[i];
-		    y = Points->y[i];
-		}
-		if (Vect_find_area(&In, x, y) > 0)
-		    Vect_delete_line(&Out, line);
-	    }
-	}
+                Vect_line_prune(Points);
+                if (Points->n_points == 2) {
+                    x = (Points->x[0] + Points->x[1]) / 2.0;
+                    y = (Points->y[0] + Points->y[1]) / 2.0;
+                }
+                else {
+                    i = 1;
+                    while (Points->x[0] == Points->x[i] &&
+                           Points->y[0] == Points->y[i] &&
+                           i < Points->n_points - 1) {
+                        i++;
+                    }
+                    i = Points->n_points / 2.;
+                    x = Points->x[i];
+                    y = Points->y[i];
+                }
+                if (Vect_find_area(&In, x, y) > 0)
+                    Vect_delete_line(&Out, line);
+            }
+        }
 
-	/* copy result to final output */
-	Vect_reset_cats(Cats);
+        /* copy result to final output */
+        Vect_reset_cats(Cats);
 
-	nlines = Vect_get_num_lines(&Out);
+        nlines = Vect_get_num_lines(&Out);
 
-	for (line = 1; line <= nlines; line++) {
+        for (line = 1; line <= nlines; line++) {
 
-	    if (!Vect_line_alive(&Out, line))
-		continue;
+            if (!Vect_line_alive(&Out, line))
+                continue;
 
-	    ltype = Vect_get_line_type(&Out, line);
-	    if (!(ltype & GV_BOUNDARY))
-		continue;
+            ltype = Vect_get_line_type(&Out, line);
+            if (!(ltype & GV_BOUNDARY))
+                continue;
 
-	    Vect_read_line(&Out, Points, NULL, line);
-	    Vect_line_prune(Points);
+            Vect_read_line(&Out, Points, NULL, line);
+            Vect_line_prune(Points);
 
-	    Vect_write_line(&Out2, GV_BOUNDARY, Points, Cats);
-	}
+            Vect_write_line(&Out2, GV_BOUNDARY, Points, Cats);
+        }
 
-	/* close temporary vector */
-	Vect_close(&Out);
-	/* is this a dirty hack ? */
-	Out = Out2;
-	Vect_build_partial(&Out, GV_BUILD_BASE);
+        /* close temporary vector */
+        Vect_close(&Out);
+        /* is this a dirty hack ? */
+        Out = Out2;
+        Vect_build_partial(&Out, GV_BUILD_BASE);
     }
 
     nfields = Vect_cidx_get_num_fields(&In);
@@ -412,18 +412,17 @@ int main(int argc, char **argv)
     ncats = (int *)G_malloc(nfields * sizeof(int));
     fields = (int *)G_malloc(nfields * sizeof(int));
     for (i = 0; i < nfields; i++) {
-	ncats[i] = 0;
-	cats[i] =
-	    (int *)G_malloc(Vect_cidx_get_num_cats_by_index(&In, i) *
-			    sizeof(int));
-	fields[i] = Vect_cidx_get_field_number(&In, i);
+        ncats[i] = 0;
+        cats[i] = (int *)G_malloc(Vect_cidx_get_num_cats_by_index(&In, i) *
+                                  sizeof(int));
+        fields[i] = Vect_cidx_get_field_number(&In, i);
     }
 
     /* Copy input points */
     if (Type == GV_LINE)
-	ctype = GV_POINT;
+        ctype = GV_POINT;
     else
-	ctype = GV_CENTROID;
+        ctype = GV_CENTROID;
 
     nlines = Vect_get_num_lines(&In);
 
@@ -431,104 +430,102 @@ int main(int argc, char **argv)
 
     for (line = 1; line <= nlines; line++) {
 
-	G_percent(line, nlines, 2);
+        G_percent(line, nlines, 2);
 
-	type = Vect_read_line(&In, Points, Cats, line);
-	if (!(type & GV_POINTS))
-	    continue;
+        type = Vect_read_line(&In, Points, Cats, line);
+        if (!(type & GV_POINTS))
+            continue;
 
-	if (!skeleton) {
-	    if (!Vect_point_in_box(Points->x[0], Points->y[0], 0.0, &Box))
-		continue;
+        if (!skeleton) {
+            if (!Vect_point_in_box(Points->x[0], Points->y[0], 0.0, &Box))
+                continue;
 
-	    Vect_write_line(&Out, ctype, Points, Cats);
-	}
+            Vect_write_line(&Out, ctype, Points, Cats);
+        }
 
-	for (i = 0; i < Cats->n_cats; i++) {
-	    int f, j;
+        for (i = 0; i < Cats->n_cats; i++) {
+            int f, j;
 
-	    f = -1;
-	    for (j = 0; j < nfields; j++) {	/* find field */
-		if (fields[j] == Cats->field[i]) {
-		    f = j;
-		    break;
-		}
-	    }
-	    if (f > -1) {
-		cats[f][ncats[f]] = Cats->cat[i];
-		ncats[f]++;	    }
-	}
+            f = -1;
+            for (j = 0; j < nfields; j++) { /* find field */
+                if (fields[j] == Cats->field[i]) {
+                    f = j;
+                    break;
+                }
+            }
+            if (f > -1) {
+                cats[f][ncats[f]] = Cats->cat[i];
+                ncats[f]++;
+            }
+        }
     }
 
     /* Copy tables */
     if (!(flag.table->answer)) {
-	int ttype, ntabs = 0;
-	struct field_info *IFi, *OFi;
+        int ttype, ntabs = 0;
+        struct field_info *IFi, *OFi;
 
-	/* Number of output tabs */
-	for (i = 0; i < Vect_get_num_dblinks(&In); i++) {
-	    int f, j;
+        /* Number of output tabs */
+        for (i = 0; i < Vect_get_num_dblinks(&In); i++) {
+            int f, j;
 
-	    IFi = Vect_get_dblink(&In, i);
+            IFi = Vect_get_dblink(&In, i);
 
-	    f = -1;
-	    for (j = 0; j < nfields; j++) {	/* find field */
-		if (fields[j] == IFi->number) {
-		    f = j;
-		    break;
-		}
-	    }
-	    if (f > -1) {
-		if (ncats[f] > 0)
-		    ntabs++;
-	    }
-	}
+            f = -1;
+            for (j = 0; j < nfields; j++) { /* find field */
+                if (fields[j] == IFi->number) {
+                    f = j;
+                    break;
+                }
+            }
+            if (f > -1) {
+                if (ncats[f] > 0)
+                    ntabs++;
+            }
+        }
 
-	if (ntabs > 1)
-	    ttype = GV_MTABLE;
-	else
-	    ttype = GV_1TABLE;
+        if (ntabs > 1)
+            ttype = GV_MTABLE;
+        else
+            ttype = GV_1TABLE;
 
-	G_message(_("Writing attributes..."));
-	for (i = 0; i < nfields; i++) {
-	    int ret;
+        G_message(_("Writing attributes..."));
+        for (i = 0; i < nfields; i++) {
+            int ret;
 
-	    if (fields[i] == 0)
-		continue;
+            if (fields[i] == 0)
+                continue;
 
-	    G_debug(1, "Layer %d", fields[i]);
+            G_debug(1, "Layer %d", fields[i]);
 
-	    /* Make a list of categories */
-	    IFi = Vect_get_field(&In, fields[i]);
-	    if (!IFi) {		/* no table */
-		G_message(_("No table"));
-		continue;
-	    }
+            /* Make a list of categories */
+            IFi = Vect_get_field(&In, fields[i]);
+            if (!IFi) { /* no table */
+                G_message(_("No table"));
+                continue;
+            }
 
-	    OFi =
-		Vect_default_field_info(&Out, IFi->number, IFi->name, ttype);
+            OFi = Vect_default_field_info(&Out, IFi->number, IFi->name, ttype);
 
-	    ret =
-		db_copy_table_by_ints(IFi->driver, IFi->database, IFi->table,
-				      OFi->driver,
-				      Vect_subst_var(OFi->database, &Out),
-				      OFi->table, IFi->key, cats[i],
-				      ncats[i]);
+            ret = db_copy_table_by_ints(
+                IFi->driver, IFi->database, IFi->table, OFi->driver,
+                Vect_subst_var(OFi->database, &Out), OFi->table, IFi->key,
+                cats[i], ncats[i]);
 
-	    if (ret == DB_FAILED) {
-		G_warning(_("Cannot copy table"));
-	    }
-	    else {
-		Vect_map_add_dblink(&Out, OFi->number, OFi->name, OFi->table,
-				    IFi->key, OFi->database, OFi->driver);
-	    }
-	}
+            if (ret == DB_FAILED) {
+                G_warning(_("Cannot copy table"));
+            }
+            else {
+                Vect_map_add_dblink(&Out, OFi->number, OFi->name, OFi->table,
+                                    IFi->key, OFi->database, OFi->driver);
+            }
+        }
     }
 
     Vect_close(&In);
-    
+
     if (Type == GV_BOUNDARY)
-	clean_topo();
+        clean_topo();
 
     /* build clean topology */
     Vect_build_partial(&Out, GV_BUILD_NONE);

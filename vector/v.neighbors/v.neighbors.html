@@ -1,10 +1,10 @@
 <h2>DESCRIPTION</h2>
 
-This module makes each cell value a function of the attribute values assigned 
-to the vector points or centroids in an area around the cell with a diameter of 
+This module makes each cell value a function of the attribute values assigned
+to the vector points or centroids in an area around the cell with a diameter of
 <em>size</em> around it, and stores the new cell values in the <em>output</em>
 raster map layer. By default, the module just counts the number of points. The
-user can also choose amongst a variety of aggregate statistics using the 
+user can also choose amongst a variety of aggregate statistics using the
 parameter <em>method</em>. These statistics are calculated on the attributes in
 the <em>point_column</em>. Using the usual <em>cats</em> and <em>where</em>
 parameters the user can chose to take only a subset of the points into account.
@@ -13,7 +13,7 @@ parameters the user can chose to take only a subset of the points into account.
 Note that <em>size</em> is defined as the diameter, and so has to be twice the
 wanted search radius, and that the module works within the current computational
 region which can be adjusted using <a href="g.region.html">g.region</a>. If the
-vector map falls completely outside the current region, the module will stop 
+vector map falls completely outside the current region, the module will stop
 with an error.
 
 <h2>EXAMPLE</h2>
@@ -45,16 +45,11 @@ v.neighbors input=schools_wake output=schools_capacity point_column=CAPACITYTO \
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="r.neighbors.html">r.neighbors</a>, 
+<a href="r.neighbors.html">r.neighbors</a>,
 <a href="v.vect.stats.html">v.vect.stats</a>
 </em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
-Radim Blazek, 
+Radim Blazek,<br>
 Moritz Lennert
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

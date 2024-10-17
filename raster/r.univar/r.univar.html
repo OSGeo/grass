@@ -18,7 +18,7 @@ that was rasterized to create the <b>zones</b> input raster.
 When multiple input maps are given to <em>r.univar</em>, the overall statistics
 are calculated. This is useful for a time series of the same variable, as well as
 for the case of a segmented/tiled dataset. Allowing multiple raster maps to be
-specified saves the user from using a temporary raster map for the result of 
+specified saves the user from using a temporary raster map for the result of
 <em>r.series</em> or <em>r.patch</em>.
 
 <h2>NOTES</h2>
@@ -26,9 +26,9 @@ specified saves the user from using a temporary raster map for the result of
 As with most GRASS raster modules, <em>r.univar</em> operates on the raster
 array defined by the current region settings, not the original extent and
 resolution of the input map. See <em><a href="g.region.html">g.region</a></em>,
-but also 
+but also
 <a href="https://grasswiki.osgeo.org/wiki/Computational_region#Understanding_the_impact_of_region_settings">
-the wiki page on the computational region</a> to understand the impact of the 
+the wiki page on the computational region</a> to understand the impact of the
 region settings on the calculations.
 
 <p>
@@ -48,12 +48,33 @@ For calculating univariate statistics from a raster map based on vector polygon
 map and uploads statistics to new attribute columns, see
 <em><a href="v.rast.stats.html">v.rast.stats</a></em>.
 
+<h3>PERFORMANCE</h3>
+
+<p>
+<em>r.univar</em> supports parallel processing using OpenMP. The user
+can specify the number of threads to be used with the <b>nprocs</b> parameter.
+However, parallelization is disabled when the raster mask is set.
+
+<p>
+Due to the differences in summation order, users may encounter small floating points
+discrepancies when <em>r.univar</em> is run on very large raster files when different
+<b>nprocs</b> parameters are used. However, since the work allocation among threads
+is static, users should expect to have the same results when run with the same
+number of threads.
+
+<div align="center" style="margin: 10px">
+    <img src="r_univar_benchmark_size.png" alt="benchmark for number of cells" border="0">
+    <br>
+    <i>Figure: Benchmark shows execution time for different
+    number of cells and cores. See benchmark scripts in source code. </i>
+    </div>
+
 <h2>EXAMPLES</h2>
 
 <h3>Univariate statistics</h3>
 
-In this example, the raster map <tt>elevation</tt> in the North 
-Carolina sample dataset is used to calculate univariate statistics: 
+In this example, the raster map <tt>elevation</tt> in the North
+Carolina sample dataset is used to calculate univariate statistics:
 
 <div class="code"><pre>
 g.region raster=elevation -p
@@ -102,9 +123,9 @@ percentile_98=147.727
 </pre></div>
 
 <h3>Zonal statistics</h3>
-In this example, the raster polygon map <tt>basins</tt> in the North 
+In this example, the raster polygon map <tt>basins</tt> in the North
 Carolina sample dataset is used to calculate raster statistics for zones
-for <tt>elevation</tt> raster map: 
+for <tt>elevation</tt> raster map:
 
 <div class="code"><pre>
 g.region raster=basins -p
@@ -137,21 +158,21 @@ r.category basins
 This will print them in the format:
 
 <div class="code"><pre>
-2	
-4	
-6	
-8	
-10	
-12	
-14	
-16	
-18	
-20	
-22	
-24	
-26	
-28	
-30	
+2
+4
+6
+8
+10
+12
+14
+16
+18
+20
+22
+24
+26
+28
+30
 </pre></div>
 
 Visualization of them underlying elevation map can be created as:
@@ -159,16 +180,16 @@ Visualization of them underlying elevation map can be created as:
 <div class="code"><pre>
 d.mon wx0
 d.rast map=elevation
-r.colors map=elevation color=grey 
+r.colors map=elevation color=grey
 d.rast map=basins
-r.colors map=basins color=bgyr 
+r.colors map=basins color=bgyr
 d.legend raster=basins use=2,4,6,8,10,12,14,16,18,20,22,24,26,28,30
-d.barscale 
+d.barscale
 </pre></div>
 
 <!--
 g.region -a n=227228 s=220895 w=631362 e=641170
-d.out.file runivar_basins.png 
+d.out.file runivar_basins.png
 optipng -o5 runivar_basins.png width=200px
 -->
 
@@ -177,7 +198,7 @@ optipng -o5 runivar_basins.png width=200px
 <a href="runivar_basins.png">
 <img src="runivar_basins.png" width="600" height="446" alt="r.univar basins and their IDs" border=0><br>
 </a>
-<i>Figure: Zones (basins, opacity: 60%) with underlying elevation map 
+<i>Figure: Zones (basins, opacity: 60%) with underlying elevation map
 for North Carolina sample dataset.</i>
 </div>
 
@@ -206,16 +227,54 @@ stddev,variance,coeff_var,sum,sum_abs2,,116975,0,55.5787925720215,
 0,67.4670791625977,147.161514282227, ...
 </pre></div>
 
-Comma Separated Values (CSV) file is best viewed through a spreadsheet 
+Comma Separated Values (CSV) file is best viewed through a spreadsheet
 program such as Microsoft Excel, Libre/Open Office Calc or Google Docs:
 
 <div align="center" style="margin: 10px">
 <a href="runivar_basins_elev_zonal.png">
 <img src="runivar_basins_elev_zonal.png" width="600" height="121" alt="r.univar raster statistics" border=0><br>
 </a>
-<i>Figure: Raster statistics for zones (basins, North Carolina sample 
+<i>Figure: Raster statistics for zones (basins, North Carolina sample
 dataset) viewed through Libre/Open Office Calc.</i>
 </div>
+
+<h3>JSON Output</h3>
+<div class="code"><pre>
+r.univar -e elevation percentile=98 format=json
+</pre></div>
+will output the results in JSON format:
+
+<div class="code"><pre>
+[
+    {
+        "n": 2025000,
+        "null_cells": 0,
+        "cells": 2025000,
+        "min": 55.578792572021484,
+        "max": 156.32986450195312,
+        "range": 100.75107192993164,
+        "mean": 110.37544027560575,
+        "mean_of_abs": 110.37544027560575,
+        "stddev": 20.315323320598083,
+        "variance": 412.7123616204363,
+        "coeff_var": 18.40565552433679,
+        "sum": 223510266.55810165,
+        "first_quartile": 94.789985656738281,
+        "median": 108.87990570068359,
+        "third_quartile": 126.79196929931641,
+         "percentiles": [
+            {
+                "percentile": 98,
+                "value": 147.7265625
+            },
+            {
+                "percentile": 9,
+                "value": 83.494270324707031
+            }
+        ]
+    }
+]
+</pre></div>
 
 <h2>TODO</h2>
 
@@ -237,15 +296,9 @@ To be implemented <i>mode, skewness, kurtosis</i>.
 <a href="v.univar.html">v.univar</a>
 </em>
 
-
 <h2>AUTHORS</h2>
 
 Hamish Bowman, Otago University, New Zealand<br>
 Extended statistics by Martin Landa<br>
 Multiple input map support by Ivan Shmakov<br>
 Zonal loop by Markus Metz
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

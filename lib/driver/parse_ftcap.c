@@ -43,17 +43,17 @@ int parse_fontcap_entry(struct GFONT_CAP *e, const char *str)
     char name[GNAME_MAX], longname[GNAME_MAX], path[GPATH_MAX], encoding[128];
     int type, index;
 
-    if (sscanf(str, "%[^|]|%[^|]|%d|%[^|]|%d|%[^|]|",
-	       name, longname, &type, path, &index, encoding) == 6) {
+    if (sscanf(str, "%[^|]|%[^|]|%d|%[^|]|%d|%[^|]|", name, longname, &type,
+               path, &index, encoding) == 6) {
         if (!font_exists(path))
-	    return 0;
+            return 0;
     }
     /* GFONT_DRIVER type fonts do not have path. */
-    else if (sscanf(str, "%[^|]|%[^|]|%d||%d|%[^|]|",
-	       name, longname, &type, &index, encoding) == 5)
-	path[0] = '\0';
+    else if (sscanf(str, "%[^|]|%[^|]|%d||%d|%[^|]|", name, longname, &type,
+                    &index, encoding) == 5)
+        path[0] = '\0';
     else
-	return 0;
+        return 0;
 
     e->name = G_store(name);
     e->longname = G_store(longname);
@@ -80,33 +80,35 @@ struct GFONT_CAP *parse_fontcap(void)
 
     fp = NULL;
     if ((capfile = getenv("GRASS_FONT_CAP"))) {
-	if ((fp = fopen(capfile, "r")) == NULL)
-	    G_warning(_("%s: Unable to read font definition file; use the default"),
-		      capfile);
+        if ((fp = fopen(capfile, "r")) == NULL)
+            G_warning(
+                _("%s: Unable to read font definition file; use the default"),
+                capfile);
     }
     if (fp == NULL) {
-	sprintf(file, "%s/etc/fontcap", G_gisbase());
-	if ((fp = fopen(file, "r")) == NULL)
-	    G_warning(_("%s: No font definition file"), file);
+        sprintf(file, "%s/etc/fontcap", G_gisbase());
+        if ((fp = fopen(file, "r")) == NULL)
+            G_warning(_("%s: No font definition file"), file);
     }
 
     if (fp != NULL) {
-	while (fgets(buf, sizeof(buf), fp) && !feof(fp)) {
-	    struct GFONT_CAP cap;
-	    char *p;
+        while (fgets(buf, sizeof(buf), fp) && !feof(fp)) {
+            struct GFONT_CAP cap;
+            char *p;
 
-	    p = strchr(buf, '#');
-	    if (p)
-		*p = 0;
+            p = strchr(buf, '#');
+            if (p)
+                *p = 0;
 
-	    if (!parse_fontcap_entry(&cap, buf))
-		continue;
+            if (!parse_fontcap_entry(&cap, buf))
+                continue;
 
-	    fonts = G_realloc(fonts, (fonts_count + 1) * sizeof(struct GFONT_CAP));
-	    fonts[fonts_count++] = cap;
-	}
+            fonts =
+                G_realloc(fonts, (fonts_count + 1) * sizeof(struct GFONT_CAP));
+            fonts[fonts_count++] = cap;
+        }
 
-	fclose(fp);
+        fclose(fp);
     }
 
     fonts = G_realloc(fonts, (fonts_count + 1) * sizeof(struct GFONT_CAP));
@@ -126,13 +128,13 @@ void free_fontcap(struct GFONT_CAP *ftcap)
     int i;
 
     if (ftcap == NULL)
-	return;
+        return;
 
     for (i = 0; ftcap[i].name; i++) {
-	G_free(ftcap[i].name);
-	G_free(ftcap[i].longname);
-	G_free(ftcap[i].path);
-	G_free(ftcap[i].encoding);
+        G_free(ftcap[i].name);
+        G_free(ftcap[i].longname);
+        G_free(ftcap[i].path);
+        G_free(ftcap[i].encoding);
     }
 
     G_free(ftcap);

@@ -5,16 +5,18 @@
  *  public license (LGPL). ( See the lgpl.license file for details.)
  * ------------------------------------------------------------------------
  */
+
 #include "ccmath.h"
-void cmprt(Cpx * a, int m, int n, char *f)
+
+void cmprt(Cpx *a, int m, int n, char *f)
 {
     int i, j;
 
     Cpx *p;
 
     for (i = 0, p = a; i < m; ++i) {
-	for (j = 0; j < n; ++j, ++p)
-	    printf(f, p->re, p->im);
-	printf("\n");
+        for (j = 0; j < n; ++j, ++p)
+            printf(f, p->re, p->im);
+        printf("\n");
     }
 }

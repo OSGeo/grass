@@ -50,13 +50,17 @@ class TestPointInBoundingBox(TestCase):
 
     def check_point_in_3d(self, x, y, z):
         """Wraps Vect_point_in_box() with assert and a message"""
-        self.assertTrue(libvect.Vect_point_in_box(x, y, z, self.c_bbox),
-                        msg="Point should be inside the bbox")
+        self.assertTrue(
+            libvect.Vect_point_in_box(x, y, z, self.c_bbox),
+            msg="Point should be inside the bbox",
+        )
 
     def check_point_out_3d(self, x, y, z):
         """Wraps Vect_point_in_box() with assert and a message"""
-        self.assertFalse(libvect.Vect_point_in_box(x, y, z, self.c_bbox),
-                         msg="Point should be outside the bbox")
+        self.assertFalse(
+            libvect.Vect_point_in_box(x, y, z, self.c_bbox),
+            msg="Point should be outside the bbox",
+        )
 
     def test_bbox_2d_in(self):
         """Check Vect_point_in_box_2d() function with 2D points inside bbox"""
@@ -73,14 +77,18 @@ class TestPointInBoundingBox(TestCase):
 
     def check_point_in_2d(self, x, y):
         """Wraps Vect_point_in_box_2d() with assert, message and bbox"""
-        self.assertTrue(libvect.Vect_point_in_box_2d(x, y, self.c_bbox),
-                        msg="Point should be inside the bbox")
+        self.assertTrue(
+            libvect.Vect_point_in_box_2d(x, y, self.c_bbox),
+            msg="Point should be inside the bbox",
+        )
 
     def check_point_out_2d(self, x, y):
         """Wraps Vect_point_in_box_2d() with assert, message and bbox"""
-        self.assertFalse(libvect.Vect_point_in_box_2d(x, y, self.c_bbox),
-                         msg="Point should be outside the bbox")
+        self.assertFalse(
+            libvect.Vect_point_in_box_2d(x, y, self.c_bbox),
+            msg="Point should be outside the bbox",
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()

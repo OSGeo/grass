@@ -17,11 +17,11 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-int Vect_remove_small_areas_nat(struct Map_info *, double,
-                                struct Map_info *, double *);
+int Vect_remove_small_areas_nat(struct Map_info *, double, struct Map_info *,
+                                double *);
 
-int Vect_remove_small_areas_ext(struct Map_info *, double,
-                                struct Map_info *, double *);
+int Vect_remove_small_areas_ext(struct Map_info *, double, struct Map_info *,
+                                double *);
 
 /*!
    \brief Remove small areas from the map map.
@@ -32,25 +32,24 @@ int Vect_remove_small_areas_ext(struct Map_info *, double,
    \param[in,out] Map vector map
    \param thresh maximum area size for removed areas
    \param[out] Err vector map where removed lines and centroids are written
-   \param removed_area  pointer to where total size of removed area is stored or NULL
+   \param removed_area  pointer to where total size of removed area is stored or
+   NULL
 
-   \return number of removed areas 
+   \return number of removed areas
  */
 
-int
-Vect_remove_small_areas(struct Map_info *Map, double thresh,
-			struct Map_info *Err, double *removed_area)
+int Vect_remove_small_areas(struct Map_info *Map, double thresh,
+                            struct Map_info *Err, double *removed_area)
 {
 
     if (Map->format == GV_FORMAT_NATIVE)
-	return Vect_remove_small_areas_nat(Map, thresh, Err, removed_area);
+        return Vect_remove_small_areas_nat(Map, thresh, Err, removed_area);
     else
-	return Vect_remove_small_areas_ext(Map, thresh, Err, removed_area);
+        return Vect_remove_small_areas_ext(Map, thresh, Err, removed_area);
 }
 
-int
-Vect_remove_small_areas_ext(struct Map_info *Map, double thresh,
-			struct Map_info *Err, double *removed_area)
+int Vect_remove_small_areas_ext(struct Map_info *Map, double thresh,
+                                struct Map_info *Err, double *removed_area)
 {
     int area, nareas;
     int nremoved = 0;
@@ -67,141 +66,139 @@ Vect_remove_small_areas_ext(struct Map_info *Map, double thresh,
 
     nareas = Vect_get_num_areas(Map);
     for (area = 1; area <= nareas; area++) {
-	int i, j, centroid, dissolve_neighbour;
-	double length, size;
+        int i, j, centroid, dissolve_neighbour;
+        double length, size;
 
-	G_percent(area, nareas, 1);
-	G_debug(3, "area = %d", area);
-	if (!Vect_area_alive(Map, area))
-	    continue;
+        G_percent(area, nareas, 1);
+        G_debug(3, "area = %d", area);
+        if (!Vect_area_alive(Map, area))
+            continue;
 
-	size = Vect_get_area_area(Map, area);
-	if (size > thresh)
-	    continue;
-	size_removed += size;
+        size = Vect_get_area_area(Map, area);
+        if (size > thresh)
+            continue;
+        size_removed += size;
 
-	/* The area is smaller than the limit -> remove */
+        /* The area is smaller than the limit -> remove */
 
-	/* Remove centroid */
-	centroid = Vect_get_area_centroid(Map, area);
-	if (centroid > 0) {
-	    if (Err) {
-		Vect_read_line(Map, Points, Cats, centroid);
-		Vect_write_line(Err, GV_CENTROID, Points, Cats);
-	    }
-	    Vect_delete_line(Map, centroid);
-	}
+        /* Remove centroid */
+        centroid = Vect_get_area_centroid(Map, area);
+        if (centroid > 0) {
+            if (Err) {
+                Vect_read_line(Map, Points, Cats, centroid);
+                Vect_write_line(Err, GV_CENTROID, Points, Cats);
+            }
+            Vect_delete_line(Map, centroid);
+        }
 
-	/* Find the adjacent area with which the longest boundary is shared */
+        /* Find the adjacent area with which the longest boundary is shared */
 
-	Vect_get_area_boundaries(Map, area, List);
+        Vect_get_area_boundaries(Map, area, List);
 
-	/* Create a list of neighbour areas */
-	Vect_reset_list(AList);
-	for (i = 0; i < List->n_values; i++) {
-	    int line, left, right, neighbour;
+        /* Create a list of neighbour areas */
+        Vect_reset_list(AList);
+        for (i = 0; i < List->n_values; i++) {
+            int line, left, right, neighbour;
 
-	    line = List->value[i];
+            line = List->value[i];
 
-	    if (!Vect_line_alive(Map, abs(line)))	/* Should not happen */
-		G_fatal_error(_("Area is composed of dead boundary"));
+            if (!Vect_line_alive(Map, abs(line))) /* Should not happen */
+                G_fatal_error(_("Area is composed of dead boundary"));
 
-	    Vect_get_line_areas(Map, abs(line), &left, &right);
-	    if (line > 0)
-		neighbour = left;
-	    else
-		neighbour = right;
+            Vect_get_line_areas(Map, abs(line), &left, &right);
+            if (line > 0)
+                neighbour = left;
+            else
+                neighbour = right;
 
-	    G_debug(4, "  line = %d left = %d right = %d neighbour = %d",
-		    line, left, right, neighbour);
+            G_debug(4, "  line = %d left = %d right = %d neighbour = %d", line,
+                    left, right, neighbour);
 
-	    Vect_list_append(AList, neighbour);	/* this checks for duplicity */
-	}
-	G_debug(3, "num neighbours = %d", AList->n_values);
+            Vect_list_append(AList, neighbour); /* this checks for duplicity */
+        }
+        G_debug(3, "num neighbours = %d", AList->n_values);
 
-	/* Go through the list of neighbours and find that with the longest boundary */
-	dissolve_neighbour = 0;
-	length = -1.0;
-	for (i = 0; i < AList->n_values; i++) {
-	    int neighbour1;
-	    double l = 0.0;
+        /* Go through the list of neighbours and find that with the longest
+         * boundary */
+        dissolve_neighbour = 0;
+        length = -1.0;
+        for (i = 0; i < AList->n_values; i++) {
+            int neighbour1;
+            double l = 0.0;
 
-	    neighbour1 = AList->value[i];
-	    G_debug(4, "   neighbour1 = %d", neighbour1);
+            neighbour1 = AList->value[i];
+            G_debug(4, "   neighbour1 = %d", neighbour1);
 
-	    for (j = 0; j < List->n_values; j++) {
-		int line, left, right, neighbour2;
+            for (j = 0; j < List->n_values; j++) {
+                int line, left, right, neighbour2;
 
-		line = List->value[j];
-		Vect_get_line_areas(Map, abs(line), &left, &right);
-		if (line > 0)
-		    neighbour2 = left;
-		else
-		    neighbour2 = right;
+                line = List->value[j];
+                Vect_get_line_areas(Map, abs(line), &left, &right);
+                if (line > 0)
+                    neighbour2 = left;
+                else
+                    neighbour2 = right;
 
-		if (neighbour2 == neighbour1) {
-		    Vect_read_line(Map, Points, NULL, abs(line));
-		    l += Vect_line_length(Points);
-		}
-	    }
-	    if (l > length) {
-		length = l;
-		dissolve_neighbour = neighbour1;
-	    }
-	}
+                if (neighbour2 == neighbour1) {
+                    Vect_read_line(Map, Points, NULL, abs(line));
+                    l += Vect_line_length(Points);
+                }
+            }
+            if (l > length) {
+                length = l;
+                dissolve_neighbour = neighbour1;
+            }
+        }
 
-	G_debug(3, "dissolve_neighbour = %d", dissolve_neighbour);
+        G_debug(3, "dissolve_neighbour = %d", dissolve_neighbour);
 
-	/* Make list of boundaries to be removed */
-	Vect_reset_list(AList);
-	for (i = 0; i < List->n_values; i++) {
-	    int line, left, right, neighbour;
+        /* Make list of boundaries to be removed */
+        Vect_reset_list(AList);
+        for (i = 0; i < List->n_values; i++) {
+            int line, left, right, neighbour;
 
-	    line = List->value[i];
-	    Vect_get_line_areas(Map, abs(line), &left, &right);
-	    if (line > 0)
-		neighbour = left;
-	    else
-		neighbour = right;
+            line = List->value[i];
+            Vect_get_line_areas(Map, abs(line), &left, &right);
+            if (line > 0)
+                neighbour = left;
+            else
+                neighbour = right;
 
-	    G_debug(3, "   neighbour = %d", neighbour);
+            G_debug(3, "   neighbour = %d", neighbour);
 
-	    if (neighbour == dissolve_neighbour) {
-		Vect_list_append(AList, abs(line));
-	    }
-	}
+            if (neighbour == dissolve_neighbour) {
+                Vect_list_append(AList, abs(line));
+            }
+        }
 
-	/* Remove boundaries */
-	for (i = 0; i < AList->n_values; i++) {
-	    int line;
+        /* Remove boundaries */
+        for (i = 0; i < AList->n_values; i++) {
+            int line;
 
-	    line = AList->value[i];
+            line = AList->value[i];
 
-	    if (Err) {
-		Vect_read_line(Map, Points, Cats, line);
-		Vect_write_line(Err, GV_BOUNDARY, Points, Cats);
-	    }
-	    Vect_delete_line(Map, line);
-	}
+            if (Err) {
+                Vect_read_line(Map, Points, Cats, line);
+                Vect_write_line(Err, GV_BOUNDARY, Points, Cats);
+            }
+            Vect_delete_line(Map, line);
+        }
 
-	nremoved++;
-	nareas = Vect_get_num_areas(Map);
+        nremoved++;
+        nareas = Vect_get_num_areas(Map);
     }
 
     if (removed_area)
-	*removed_area = size_removed;
+        *removed_area = size_removed;
 
-    G_message(_("%d areas of total size %g removed"), nremoved,
-              size_removed);
+    G_message(_("%d areas of total size %g removed"), nremoved, size_removed);
 
     return (nremoved);
 }
 
-
 /* much faster version */
-int
-Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
-			struct Map_info *Err, double *removed_area)
+int Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
+                                struct Map_info *Err, double *removed_area)
 {
     int area, nareas;
     int nremoved = 0;
@@ -227,380 +224,397 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
 
     nareas = Vect_get_num_areas(Map);
     for (area = 1; area <= nareas; area++) {
-	int i, j, centroid, ncentroid;
-	double length, l, size;
-	int outer_area = -1;
-	int narea, same_atype = 0;
+        int i, j, centroid, ncentroid;
+        double length, l, size;
+        int outer_area = -1;
+        int narea, same_atype = 0;
 
-	G_percent(area, nareas, 1);
-	G_debug(3, "area = %d", area);
-	if (!Vect_area_alive(Map, area))
-	    continue;
+        G_percent(area, nareas, 1);
+        G_debug(3, "area = %d", area);
+        if (!Vect_area_alive(Map, area))
+            continue;
 
-	size = Vect_get_area_area(Map, area);
-	if (size > thresh)
-	    continue;
-	size_removed += size;
+        size = Vect_get_area_area(Map, area);
+        if (size > thresh)
+            continue;
+        size_removed += size;
 
-	/* The area is smaller than the limit -> remove */
+        /* The area is smaller than the limit -> remove */
 
-	/* Remove centroid */
-	centroid = Vect_get_area_centroid(Map, area);
-	if (centroid > 0) {
-	    if (Err) {
-		Vect_read_line(Map, Points, Cats, centroid);
-		Vect_write_line(Err, GV_CENTROID, Points, Cats);
-	    }
-	    Vect_delete_line(Map, centroid);
-	}
+        /* Remove centroid */
+        centroid = Vect_get_area_centroid(Map, area);
+        if (centroid > 0) {
+            if (Err) {
+                Vect_read_line(Map, Points, Cats, centroid);
+                Vect_write_line(Err, GV_CENTROID, Points, Cats);
+            }
+            Vect_delete_line(Map, centroid);
+        }
 
-	/* Find the adjacent area with which the longest boundary is shared */
+        /* Find the adjacent area with which the longest boundary is shared */
 
-	Vect_get_area_boundaries(Map, area, List);
+        Vect_get_area_boundaries(Map, area, List);
 
-	/* Create a list of neighbour areas */
-	Vect_reset_list(AList);
-	for (i = 0; i < List->n_values; i++) {
+        /* Create a list of neighbour areas */
+        Vect_reset_list(AList);
+        for (i = 0; i < List->n_values; i++) {
 
-	    line = List->value[i];
+            line = List->value[i];
 
-	    if (!Vect_line_alive(Map, abs(line)))	/* Should not happen */
-		G_fatal_error(_("Area is composed of dead boundary"));
+            if (!Vect_line_alive(Map, abs(line))) /* Should not happen */
+                G_fatal_error(_("Area is composed of dead boundary"));
 
-	    Vect_get_line_areas(Map, abs(line), &left, &right);
-	    if (line > 0)
-		neighbour = left;
-	    else
-		neighbour = right;
+            Vect_get_line_areas(Map, abs(line), &left, &right);
+            if (line > 0)
+                neighbour = left;
+            else
+                neighbour = right;
 
-	    G_debug(4, "  line = %d left = %d right = %d neighbour = %d",
-		    line, left, right, neighbour);
+            G_debug(4, "  line = %d left = %d right = %d neighbour = %d", line,
+                    left, right, neighbour);
 
-	    ncentroid = 0;
-	    if (neighbour > 0) {
-		ncentroid = Vect_get_area_centroid(Map, neighbour);
-	    }
-	    if (neighbour < 0) {
-		narea = Vect_get_isle_area(Map, -neighbour);
-		if (narea > 0)
-		    ncentroid = Vect_get_area_centroid(Map, narea);
-	    }
-	    if ((centroid != 0) + (ncentroid != 0) != 1)
-		same_atype = 1;
+            ncentroid = 0;
+            if (neighbour > 0) {
+                ncentroid = Vect_get_area_centroid(Map, neighbour);
+            }
+            if (neighbour < 0) {
+                narea = Vect_get_isle_area(Map, -neighbour);
+                if (narea > 0)
+                    ncentroid = Vect_get_area_centroid(Map, narea);
+            }
+            if ((centroid != 0) + (ncentroid != 0) != 1)
+                same_atype = 1;
 
-	    Vect_list_append(AList, neighbour);	/* this checks for duplicity */
-	}
-	G_debug(3, "num neighbours = %d", AList->n_values);
+            Vect_list_append(AList, neighbour); /* this checks for duplicity */
+        }
+        G_debug(3, "num neighbours = %d", AList->n_values);
 
-	if (AList->n_values == 1)
-	    same_atype = 0;
+        if (AList->n_values == 1)
+            same_atype = 0;
 
-	/* Go through the list of neighbours and find the one with the longest boundary */
-	dissolve_neighbour = 0;
-	length = -1.0;
-	for (i = 0; i < AList->n_values; i++) {
-	    int neighbour1;
+        /* Go through the list of neighbours and find the one with the longest
+         * boundary */
+        dissolve_neighbour = 0;
+        length = -1.0;
+        for (i = 0; i < AList->n_values; i++) {
+            int neighbour1;
 
-	    l = 0.0;
-	    neighbour1 = AList->value[i];
-	    G_debug(4, "   neighbour1 = %d", neighbour1);
-	    
-	    if (same_atype) {
-		ncentroid = 0;
-		if (neighbour1 > 0) {
-		    ncentroid = Vect_get_area_centroid(Map, neighbour1);
-		}
-		if (neighbour1 < 0) {
-		    narea = Vect_get_isle_area(Map, -neighbour1);
-		    if (narea > 0)
-			ncentroid = Vect_get_area_centroid(Map, narea);
-		}
-		if ((centroid != 0) + (ncentroid != 0) == 1)
-		    continue;
-	    }
+            l = 0.0;
+            neighbour1 = AList->value[i];
+            G_debug(4, "   neighbour1 = %d", neighbour1);
 
-	    for (j = 0; j < List->n_values; j++) {
-		int neighbour2;
+            if (same_atype) {
+                ncentroid = 0;
+                if (neighbour1 > 0) {
+                    ncentroid = Vect_get_area_centroid(Map, neighbour1);
+                }
+                if (neighbour1 < 0) {
+                    narea = Vect_get_isle_area(Map, -neighbour1);
+                    if (narea > 0)
+                        ncentroid = Vect_get_area_centroid(Map, narea);
+                }
+                if ((centroid != 0) + (ncentroid != 0) == 1)
+                    continue;
+            }
 
-		line = List->value[j];
-		Vect_get_line_areas(Map, abs(line), &left, &right);
-		if (line > 0)
-		    neighbour2 = left;
-		else
-		    neighbour2 = right;
+            for (j = 0; j < List->n_values; j++) {
+                int neighbour2;
 
-		if (neighbour2 == neighbour1) {
-		    Vect_read_line(Map, Points, NULL, abs(line));
-		    l += Vect_line_length(Points);
-		}
-	    }
-	    if (l > length) {
-		length = l;
-		dissolve_neighbour = neighbour1;
-	    }
-	}
+                line = List->value[j];
+                Vect_get_line_areas(Map, abs(line), &left, &right);
+                if (line > 0)
+                    neighbour2 = left;
+                else
+                    neighbour2 = right;
 
-	G_debug(3, "dissolve_neighbour = %d", dissolve_neighbour);
+                if (neighbour2 == neighbour1) {
+                    Vect_read_line(Map, Points, NULL, abs(line));
+                    l += Vect_line_length(Points);
+                }
+            }
+            if (l > length) {
+                length = l;
+                dissolve_neighbour = neighbour1;
+            }
+        }
 
-	if (dissolve_neighbour == 0) {
-	    G_fatal_error("could not find neighbour to dissolve");
-	}
+        G_debug(3, "dissolve_neighbour = %d", dissolve_neighbour);
 
-	/* Make list of boundaries to be removed */
-	Vect_reset_list(AList);
-	Vect_reset_list(BList);
-	for (i = 0; i < List->n_values; i++) {
+        if (dissolve_neighbour == 0) {
+            G_fatal_error("could not find neighbour to dissolve");
+        }
 
-	    line = List->value[i];
-	    Vect_get_line_areas(Map, abs(line), &left, &right);
-	    if (line > 0)
-		neighbour = left;
-	    else
-		neighbour = right;
+        /* Make list of boundaries to be removed */
+        Vect_reset_list(AList);
+        Vect_reset_list(BList);
+        for (i = 0; i < List->n_values; i++) {
 
-	    G_debug(3, "   neighbour = %d", neighbour);
+            line = List->value[i];
+            Vect_get_line_areas(Map, abs(line), &left, &right);
+            if (line > 0)
+                neighbour = left;
+            else
+                neighbour = right;
 
-	    if (neighbour == dissolve_neighbour) {
-		Vect_list_append(AList, abs(line));
-	    }
-	    else
-		Vect_list_append(BList, line);
-	}
-	G_debug(3, "remove %d of %d boundaries", AList->n_values, List->n_values);
+            G_debug(3, "   neighbour = %d", neighbour);
 
-	/* Get isles inside area */
-	Vect_reset_list(IList);
-	if ((nisles = Vect_get_area_num_isles(Map, area)) > 0) {
-	    for (i = 0; i < nisles; i++) {
-		Vect_list_append(IList, Vect_get_area_isle(Map, area, i));
-	    }
-	}
+            if (neighbour == dissolve_neighbour) {
+                Vect_list_append(AList, abs(line));
+            }
+            else
+                Vect_list_append(BList, line);
+        }
+        G_debug(3, "remove %d of %d boundaries", AList->n_values,
+                List->n_values);
 
-	/* Remove boundaries */
-	for (i = 0; i < AList->n_values; i++) {
-	    int ret;
+        /* Get isles inside area */
+        Vect_reset_list(IList);
+        if ((nisles = Vect_get_area_num_isles(Map, area)) > 0) {
+            for (i = 0; i < nisles; i++) {
+                Vect_list_append(IList, Vect_get_area_isle(Map, area, i));
+            }
+        }
 
-	    line = AList->value[i];
+        /* Remove boundaries */
+        for (i = 0; i < AList->n_values; i++) {
+            int ret;
 
-	    if (Err) {
-		Vect_read_line(Map, Points, Cats, line);
-		Vect_write_line(Err, GV_BOUNDARY, Points, Cats);
-	    }
-	    /* Vect_delete_line(Map, line); */
+            line = AList->value[i];
 
-	    /* delete the line from coor */
-	    ret = V1_delete_line_nat(Map, Map->plus.Line[line]->offset);
+            if (Err) {
+                Vect_read_line(Map, Points, Cats, line);
+                Vect_write_line(Err, GV_BOUNDARY, Points, Cats);
+            }
+            /* Vect_delete_line(Map, line); */
 
-	    if (ret == -1) {
-		G_fatal_error(_("Could not delete line from coor"));
-	    }
-	}
+            /* delete the line from coor */
+            ret = V1_delete_line_nat(Map, Map->plus.Line[line]->offset);
 
-	/* update topo */
-	if (dissolve_neighbour > 0) {
+            if (ret == -1) {
+                G_fatal_error(_("Could not delete line from coor"));
+            }
+        }
 
-	    G_debug(3, "dissolve with neighbour area");
+        /* update topo */
+        if (dissolve_neighbour > 0) {
 
-	    /* get neighbour centroid */
-	    centroid = Vect_get_area_centroid(Map, dissolve_neighbour);
-	    /* get neighbour isles */
-	    if ((nnisles = Vect_get_area_num_isles(Map, dissolve_neighbour)) > 0) {
-		for (i = 0; i < nnisles; i++) {
-		    Vect_list_append(IList, Vect_get_area_isle(Map, dissolve_neighbour, i));
-		}
-	    }
+            G_debug(3, "dissolve with neighbour area");
 
-	    /* get neighbour boundaries */
-	    Vect_get_area_boundaries(Map, dissolve_neighbour, NList);
+            /* get neighbour centroid */
+            centroid = Vect_get_area_centroid(Map, dissolve_neighbour);
+            /* get neighbour isles */
+            if ((nnisles = Vect_get_area_num_isles(Map, dissolve_neighbour)) >
+                0) {
+                for (i = 0; i < nnisles; i++) {
+                    Vect_list_append(
+                        IList, Vect_get_area_isle(Map, dissolve_neighbour, i));
+                }
+            }
 
-	    /* delete area from topo */
-	    dig_del_area(&(Map->plus), area);
-	    /* delete neighbour area from topo */
-	    dig_del_area(&(Map->plus), dissolve_neighbour);
-	    /* delete boundaries from topo */
-	    for (i = 0; i < AList->n_values; i++) {
-		struct P_topo_b *topo;
-		struct P_node *Node;
+            /* get neighbour boundaries */
+            Vect_get_area_boundaries(Map, dissolve_neighbour, NList);
 
-		line = AList->value[i];
-		topo = (struct P_topo_b *)Map->plus.Line[line]->topo;
-		Node = Map->plus.Node[topo->N1];
-		dig_del_line(&(Map->plus), line, Node->x, Node->y, Node->z);
-	    }
-	    /* build new area from leftover boundaries of deleted area */
-	    for (i = 0; i < BList->n_values; i++) {
-		struct P_topo_b *topo;
-		int new_isle;
+            /* delete area from topo */
+            dig_del_area(&(Map->plus), area);
+            /* delete neighbour area from topo */
+            dig_del_area(&(Map->plus), dissolve_neighbour);
+            /* delete boundaries from topo */
+            for (i = 0; i < AList->n_values; i++) {
+                struct P_topo_b *topo;
+                struct P_node *Node;
 
-		line = BList->value[i];
-		topo = Map->plus.Line[abs(line)]->topo;
+                line = AList->value[i];
+                topo = (struct P_topo_b *)Map->plus.Line[line]->topo;
+                Node = Map->plus.Node[topo->N1];
+                dig_del_line(&(Map->plus), line, Node->x, Node->y, Node->z);
+            }
+            /* build new area from leftover boundaries of deleted area */
+            for (i = 0; i < BList->n_values; i++) {
+                struct P_topo_b *topo;
+                int new_isle;
 
-		if (topo->left == 0 || topo->right == 0) {
-		    new_isle = Vect_build_line_area(Map, abs(line), (line > 0 ? GV_RIGHT : GV_LEFT));
-		    if (new_isle > 0) {
-			if (outer_area > 0)
-			    G_fatal_error("dissolve_neighbour > 0, new area has already been created");
-			outer_area = new_isle;
-			/* reattach centroid */
-			Map->plus.Area[outer_area]->centroid = centroid;
-			if (centroid > 0) {
-			    struct P_topo_c *ctopo = Map->plus.Line[centroid]->topo;
+                line = BList->value[i];
+                topo = Map->plus.Line[abs(line)]->topo;
 
-			    ctopo->area = outer_area;
-			}
-		    }
-		    else if (new_isle < 0) {
-			/* leftover boundary creates a new isle */
-			Vect_list_append(IList, -new_isle);
-		    }
-		    else {
-			/* neither area nor isle, should not happen */
-			G_fatal_error(_("dissolve_neighbour > 0, failed to build new area"));
-		    }
-		}
-		/* check */
-		if (topo->left == 0 || topo->right == 0)
-		    G_fatal_error(_("Dissolve with neighbour area: corrupt topology"));
-	    }
-	    /* build new area from neighbour's boundaries */
-	    for (i = 0; i < NList->n_values; i++) {
-		struct P_topo_b *topo;
+                if (topo->left == 0 || topo->right == 0) {
+                    new_isle = Vect_build_line_area(
+                        Map, abs(line), (line > 0 ? GV_RIGHT : GV_LEFT));
+                    if (new_isle > 0) {
+                        if (outer_area > 0)
+                            G_fatal_error("dissolve_neighbour > 0, new area "
+                                          "has already been created");
+                        outer_area = new_isle;
+                        /* reattach centroid */
+                        Map->plus.Area[outer_area]->centroid = centroid;
+                        if (centroid > 0) {
+                            struct P_topo_c *ctopo =
+                                Map->plus.Line[centroid]->topo;
 
-		line = NList->value[i];
-		if (!Vect_line_alive(Map, abs(line)))
-		    continue;
+                            ctopo->area = outer_area;
+                        }
+                    }
+                    else if (new_isle < 0) {
+                        /* leftover boundary creates a new isle */
+                        Vect_list_append(IList, -new_isle);
+                    }
+                    else {
+                        /* neither area nor isle, should not happen */
+                        G_fatal_error(_("dissolve_neighbour > 0, failed to "
+                                        "build new area"));
+                    }
+                }
+                /* check */
+                if (topo->left == 0 || topo->right == 0)
+                    G_fatal_error(
+                        _("Dissolve with neighbour area: corrupt topology"));
+            }
+            /* build new area from neighbour's boundaries */
+            for (i = 0; i < NList->n_values; i++) {
+                struct P_topo_b *topo;
 
-		topo = Map->plus.Line[abs(line)]->topo;
+                line = NList->value[i];
+                if (!Vect_line_alive(Map, abs(line)))
+                    continue;
 
-		if (topo->left == 0 || topo->right == 0) {
-		    int new_isle;
+                topo = Map->plus.Line[abs(line)]->topo;
 
-		    new_isle = Vect_build_line_area(Map, abs(line), (line > 0 ? GV_RIGHT : GV_LEFT));
-		    if (new_isle > 0) {
-			if (outer_area > 0)
-			    G_fatal_error("dissolve_neighbour > 0, new area has already been created");
-			outer_area = new_isle;
-			/* reattach centroid */
-			Map->plus.Area[outer_area]->centroid = centroid;
-			if (centroid > 0) {
-			    struct P_topo_c *ctopo = Map->plus.Line[centroid]->topo;
+                if (topo->left == 0 || topo->right == 0) {
+                    int new_isle;
 
-			    ctopo->area = outer_area;
-			}
-		    }
-		    else if (new_isle < 0) {
-			/* Neigbour's boundary creates a new isle */
-			Vect_list_append(IList, -new_isle);
-		    }
-		    else {
-			/* neither area nor isle, should not happen */
-			G_fatal_error(_("Failed to build new area"));
-		    }
-		}
-		if (topo->left == 0 || topo->right == 0)
-		    G_fatal_error(_("Dissolve with neighbour area: corrupt topology"));
-	    }
-	}
-	/* dissolve with outer isle */
-	else if (dissolve_neighbour < 0) {
+                    new_isle = Vect_build_line_area(
+                        Map, abs(line), (line > 0 ? GV_RIGHT : GV_LEFT));
+                    if (new_isle > 0) {
+                        if (outer_area > 0)
+                            G_fatal_error("dissolve_neighbour > 0, new area "
+                                          "has already been created");
+                        outer_area = new_isle;
+                        /* reattach centroid */
+                        Map->plus.Area[outer_area]->centroid = centroid;
+                        if (centroid > 0) {
+                            struct P_topo_c *ctopo =
+                                Map->plus.Line[centroid]->topo;
 
-	    G_debug(3, "dissolve with outer isle");
+                            ctopo->area = outer_area;
+                        }
+                    }
+                    else if (new_isle < 0) {
+                        /* Neigbour's boundary creates a new isle */
+                        Vect_list_append(IList, -new_isle);
+                    }
+                    else {
+                        /* neither area nor isle, should not happen */
+                        G_fatal_error(_("Failed to build new area"));
+                    }
+                }
+                if (topo->left == 0 || topo->right == 0)
+                    G_fatal_error(
+                        _("Dissolve with neighbour area: corrupt topology"));
+            }
+        }
+        /* dissolve with outer isle */
+        else if (dissolve_neighbour < 0) {
 
-	    outer_area = Vect_get_isle_area(Map, -dissolve_neighbour);
+            G_debug(3, "dissolve with outer isle");
 
-	    /* get isle boundaries */
-	    Vect_get_isle_boundaries(Map, -dissolve_neighbour, NList);
+            outer_area = Vect_get_isle_area(Map, -dissolve_neighbour);
 
-	    /* delete area from topo */
-	    dig_del_area(&(Map->plus), area);
-	    /* delete isle from topo */
-	    dig_del_isle(&(Map->plus), -dissolve_neighbour);
-	    /* delete boundaries from topo */
-	    for (i = 0; i < AList->n_values; i++) {
-		struct P_topo_b *topo;
-		struct P_node *Node;
+            /* get isle boundaries */
+            Vect_get_isle_boundaries(Map, -dissolve_neighbour, NList);
 
-		line = AList->value[i];
-		topo = (struct P_topo_b *)Map->plus.Line[line]->topo;
-		Node = Map->plus.Node[topo->N1];
-		dig_del_line(&(Map->plus), line, Node->x, Node->y, Node->z);
-	    }
-	    /* build new isle(s) from leftover boundaries */
-	    for (i = 0; i < BList->n_values; i++) {
-		struct P_topo_b *topo;
+            /* delete area from topo */
+            dig_del_area(&(Map->plus), area);
+            /* delete isle from topo */
+            dig_del_isle(&(Map->plus), -dissolve_neighbour);
+            /* delete boundaries from topo */
+            for (i = 0; i < AList->n_values; i++) {
+                struct P_topo_b *topo;
+                struct P_node *Node;
 
-		line = BList->value[i];
-		topo = Map->plus.Line[abs(line)]->topo;
+                line = AList->value[i];
+                topo = (struct P_topo_b *)Map->plus.Line[line]->topo;
+                Node = Map->plus.Node[topo->N1];
+                dig_del_line(&(Map->plus), line, Node->x, Node->y, Node->z);
+            }
+            /* build new isle(s) from leftover boundaries */
+            for (i = 0; i < BList->n_values; i++) {
+                struct P_topo_b *topo;
 
-		if (topo->left == 0 || topo->right == 0) {
-		    int new_isle;
+                line = BList->value[i];
+                topo = Map->plus.Line[abs(line)]->topo;
 
-		    new_isle = Vect_build_line_area(Map, abs(line), (line > 0 ? GV_RIGHT : GV_LEFT));
-		    if (new_isle < 0) {
-			Vect_list_append(IList, -new_isle);
-		    }
-		    else {
-			/* area or nothing should not happen */
-			G_fatal_error(_("Failed to build new isle"));
-		    }
-		}
-		/* check */
-		if (topo->left == 0 || topo->right == 0)
-		    G_fatal_error(_("Dissolve with outer isle: corrupt topology"));
-	    }
+                if (topo->left == 0 || topo->right == 0) {
+                    int new_isle;
 
-	    /* build new isle(s) from old isle's boundaries */
-	    for (i = 0; i < NList->n_values; i++) {
-		struct P_topo_b *topo;
+                    new_isle = Vect_build_line_area(
+                        Map, abs(line), (line > 0 ? GV_RIGHT : GV_LEFT));
+                    if (new_isle < 0) {
+                        Vect_list_append(IList, -new_isle);
+                    }
+                    else {
+                        /* area or nothing should not happen */
+                        G_fatal_error(_("Failed to build new isle"));
+                    }
+                }
+                /* check */
+                if (topo->left == 0 || topo->right == 0)
+                    G_fatal_error(
+                        _("Dissolve with outer isle: corrupt topology"));
+            }
 
-		line = NList->value[i];
-		if (!Vect_line_alive(Map, abs(line)))
-		    continue;
+            /* build new isle(s) from old isle's boundaries */
+            for (i = 0; i < NList->n_values; i++) {
+                struct P_topo_b *topo;
 
-		topo = Map->plus.Line[abs(line)]->topo;
+                line = NList->value[i];
+                if (!Vect_line_alive(Map, abs(line)))
+                    continue;
 
-		if (topo->left == 0 || topo->right == 0) {
-		    int new_isle;
+                topo = Map->plus.Line[abs(line)]->topo;
 
-		    new_isle = Vect_build_line_area(Map, abs(line), (line > 0 ? GV_RIGHT : GV_LEFT));
-		    if (new_isle < 0) {
-			Vect_list_append(IList, -new_isle);
-		    }
-		    else {
-			/* area or nothing should not happen */
-			G_fatal_error(_("Failed to build new isle"));
-		    }
-		}
-		/* check */
-		if (topo->left == 0 || topo->right == 0)
-		    G_fatal_error(_("Dissolve with outer isle: corrupt topology"));
-	    }
-	}
+                if (topo->left == 0 || topo->right == 0) {
+                    int new_isle;
 
-	if (dissolve_neighbour > 0 && outer_area <= 0) {
-	    G_fatal_error(_("Area merging failed"));
-	}
+                    new_isle = Vect_build_line_area(
+                        Map, abs(line), (line > 0 ? GV_RIGHT : GV_LEFT));
+                    if (new_isle < 0) {
+                        Vect_list_append(IList, -new_isle);
+                    }
+                    else {
+                        /* area or nothing should not happen */
+                        G_fatal_error(_("Failed to build new isle"));
+                    }
+                }
+                /* check */
+                if (topo->left == 0 || topo->right == 0)
+                    G_fatal_error(
+                        _("Dissolve with outer isle: corrupt topology"));
+            }
+        }
 
-	/* attach all isles to outer or new area */
-	if (outer_area >= 0) {
-	    for (i = 0; i < IList->n_values; i++) {
-		if (!Map->plus.Isle[IList->value[i]])
-		    continue;
-		Map->plus.Isle[IList->value[i]]->area = outer_area;
-		if (outer_area > 0)
-		    dig_area_add_isle(&(Map->plus), outer_area, IList->value[i]);
-	    }
-	}
+        if (dissolve_neighbour > 0 && outer_area <= 0) {
+            G_fatal_error(_("Area merging failed"));
+        }
 
-	nremoved++;
-	nareas = Vect_get_num_areas(Map);
+        /* attach all isles to outer or new area */
+        if (outer_area >= 0) {
+            for (i = 0; i < IList->n_values; i++) {
+                if (!Map->plus.Isle[IList->value[i]])
+                    continue;
+                Map->plus.Isle[IList->value[i]]->area = outer_area;
+                if (outer_area > 0)
+                    dig_area_add_isle(&(Map->plus), outer_area,
+                                      IList->value[i]);
+            }
+        }
+
+        nremoved++;
+        nareas = Vect_get_num_areas(Map);
     }
 
     if (removed_area)
-	*removed_area = size_removed;
+        *removed_area = size_removed;
 
-    G_message(_("%d areas of total size %g removed"), nremoved,
-              size_removed);
+    G_message(_("%d areas of total size %g removed"), nremoved, size_removed);
 
     Vect_destroy_list(List);
     Vect_destroy_list(AList);

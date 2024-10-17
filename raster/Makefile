@@ -35,6 +35,7 @@ SUBDIRS = \
 	r.in.gridatb \
 	r.in.lidar \
 	r.in.mat \
+	r.in.pdal \
 	r.in.png \
 	r.in.poly \
 	r.in.xyz \
@@ -44,10 +45,12 @@ SUBDIRS = \
 	r.lake \
 	r.li \
 	r.mapcalc \
+	r.mask.status \
 	r.mfilter \
 	r.mode \
 	r.neighbors \
 	r.null \
+	r.object.geometry \
 	r.out.ascii \
 	r.out.bin \
 	r.out.gdal \
@@ -138,7 +141,7 @@ include $(MODULE_TOPDIR)/include/Make/Dir.make
 
 default:
 	$(MAKE) -C r.mapcalc
-	$(MAKE) htmldir 
+	$(MAKE) htmldir
 
 htmldir: parsubdirs
 

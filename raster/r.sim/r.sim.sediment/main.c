@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.sim.sediment: main program for sediment transport
@@ -51,10 +50,10 @@
 /* DEFINE GLOB VAR              */
 
 /********************************/
-#define DIFFC	"0.8"
-#define NITER   "10"
-#define ITEROUT "2"
-#define DENSITY "200"
+#define DIFFC    "0.8"
+#define NITER    "10"
+#define ITEROUT  "2"
+#define DENSITY  "200"
 #define MANINVAL "0.1"
 
 /********************************/
@@ -71,6 +70,7 @@
 #endif
 #include <grass/gis.h>
 #include <grass/vector.h>
+#include <grass/raster.h>
 #include <grass/linkm.h>
 #include <grass/bitmap.h>
 #include <grass/glocale.h>
@@ -118,12 +118,13 @@ int main(int argc, char *argv[])
     G_add_keyword(_("erosion"));
     G_add_keyword(_("deposition"));
     G_add_keyword(_("model"));
+    G_add_keyword(_("parallel"));
     module->description =
-	_("Sediment transport and erosion/deposition simulation "
-	  "using path sampling method (SIMWE).");
+        _("Sediment transport and erosion/deposition simulation "
+          "using path sampling method (SIMWE).");
 
     parm.elevin = G_define_standard_option(G_OPT_R_ELEV);
-    
+
     parm.wdepth = G_define_standard_option(G_OPT_R_INPUT);
     parm.wdepth->key = "water_depth";
     parm.wdepth->description = _("Name of water depth raster map [m]");
@@ -135,21 +136,21 @@ int main(int argc, char *argv[])
     parm.dyin = G_define_standard_option(G_OPT_R_INPUT);
     parm.dyin->key = "dy";
     parm.dyin->description = _("Name of y-derivatives raster map [m/m]");
-    
+
     parm.detin = G_define_standard_option(G_OPT_R_INPUT);
     parm.detin->key = "detachment_coeff";
     parm.detin->description =
-	_("Name of detachment capacity coefficient raster map [s/m]");
+        _("Name of detachment capacity coefficient raster map [s/m]");
 
     parm.tranin = G_define_standard_option(G_OPT_R_INPUT);
     parm.tranin->key = "transport_coeff";
     parm.tranin->description =
-	_("Name of transport capacity coefficient raster map [s]");
-    
+        _("Name of transport capacity coefficient raster map [s]");
+
     parm.tauin = G_define_standard_option(G_OPT_R_INPUT);
     parm.tauin->key = "shear_stress";
     parm.tauin->description =
-	_("Name of critical shear stress raster map [Pa]");
+        _("Name of critical shear stress raster map [Pa]");
 
     parm.manin = G_define_standard_option(G_OPT_R_INPUT);
     parm.manin->key = "man";
@@ -168,55 +169,57 @@ int main(int argc, char *argv[])
     parm.observation = G_define_standard_option(G_OPT_V_INPUT);
     parm.observation->key = "observation";
     parm.observation->required = NO;
-    parm.observation->label =
-	_("Name of sampling locations vector points map");
+    parm.observation->label = _("Name of sampling locations vector points map");
     parm.observation->guisection = _("Input");
 
     parm.tc = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.tc->key = "transport_capacity";
     parm.tc->required = NO;
-    parm.tc->description = _("Name for output transport capacity raster map [kg/ms]");
+    parm.tc->description =
+        _("Name for output transport capacity raster map [kg/ms]");
     parm.tc->guisection = _("Output");
 
     parm.et = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.et->key = "tlimit_erosion_deposition";
     parm.et->required = NO;
-    parm.et->description =
-	_("Name for output transport limited erosion-deposition raster map [kg/m2s]");
+    parm.et->description = _("Name for output transport limited "
+                             "erosion-deposition raster map [kg/m2s]");
     parm.et->guisection = _("Output");
 
     parm.conc = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.conc->key = "sediment_concentration";
     parm.conc->required = NO;
     parm.conc->description =
-	_("Name for output sediment concentration raster map [particle/m3]");
+        _("Name for output sediment concentration raster map [particle/m3]");
     parm.conc->guisection = _("Output");
 
     parm.flux = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.flux->key = "sediment_flux";
     parm.flux->required = NO;
-    parm.flux->description = _("Name for output sediment flux raster map [kg/ms]");
+    parm.flux->description =
+        _("Name for output sediment flux raster map [kg/ms]");
     parm.flux->guisection = _("Output");
 
     parm.erdep = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.erdep->key = "erosion_deposition";
     parm.erdep->required = NO;
     parm.erdep->description =
-	_("Name for output erosion-deposition raster map [kg/m2s]");
+        _("Name for output erosion-deposition raster map [kg/m2s]");
     parm.erdep->guisection = _("Output");
 
     parm.logfile = G_define_standard_option(G_OPT_F_OUTPUT);
     parm.logfile->key = "logfile";
     parm.logfile->required = NO;
     parm.logfile->description =
-	_("Name for sampling points output text file. For each observation vector point the time series of sediment transport is stored.");
+        _("Name for sampling points output text file. For each observation "
+          "vector point the time series of sediment transport is stored.");
     parm.logfile->guisection = _("Output");
 
     parm.outwalk = G_define_standard_option(G_OPT_V_OUTPUT);
     parm.outwalk->key = "walkers_output";
     parm.outwalk->required = NO;
     parm.outwalk->description =
-	_("Base name of the output walkers vector points map");
+        _("Base name of the output walkers vector points map");
     parm.outwalk->guisection = _("Output");
 
     parm.nwalk = G_define_option();
@@ -240,18 +243,18 @@ int main(int argc, char *argv[])
     parm.outiter->answer = ITEROUT;
     parm.outiter->required = NO;
     parm.outiter->description =
-	_("Time interval for creating output maps [minutes]");
+        _("Time interval for creating output maps [minutes]");
     parm.outiter->guisection = _("Parameters");
 
-/*
-    parm.density = G_define_option();
-    parm.density->key = "density";
-    parm.density->type = TYPE_INTEGER;
-    parm.density->answer = DENSITY;
-    parm.density->required = NO;
-    parm.density->description = _("Density of output walkers");
-    parm.density->guisection = _("Parameters");
-*/
+    /*
+       parm.density = G_define_option();
+       parm.density->key = "density";
+       parm.density->type = TYPE_INTEGER;
+       parm.density->answer = DENSITY;
+       parm.density->required = NO;
+       parm.density->description = _("Density of output walkers");
+       parm.density->guisection = _("Parameters");
+     */
 
     parm.diffc = G_define_option();
     parm.diffc->key = "diffusion_coeff";
@@ -261,7 +264,6 @@ int main(int argc, char *argv[])
     parm.diffc->description = _("Water diffusion constant");
     parm.diffc->guisection = _("Parameters");
 
-    
     parm.seed = G_define_option();
     parm.seed->key = "random_seed";
     parm.seed->type = TYPE_INTEGER;
@@ -273,8 +275,7 @@ int main(int argc, char *argv[])
 
     flag.generateSeed = G_define_flag();
     flag.generateSeed->key = 's';
-    flag.generateSeed->label =
-        _("Generate random seed");
+    flag.generateSeed->label = _("Generate random seed");
     flag.generateSeed->description =
         _("Automatically generates random seed for random number"
           " generator (use when you don't want to provide the seed option)");
@@ -285,11 +286,11 @@ int main(int argc, char *argv[])
     parm.threads->answer = NUM_THREADS;
     parm.threads->required = NO;
     parm.threads->description =
-    _("Number of threads which will be used for parallel compute");
+        _("Number of threads which will be used for parallel compute");
     parm.threads->guisection = _("Parameters");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     if (flag.generateSeed->answer) {
         seed_value = G_srand48_auto();
@@ -366,26 +367,30 @@ int main(int argc, char *argv[])
     wp.conc = parm.conc->answer;
     wp.flux = parm.flux->answer;
     wp.erdep = parm.erdep->answer;
-    wp.outwalk = parm.outwalk->answer; 
+    wp.outwalk = parm.outwalk->answer;
 
     sscanf(parm.threads->answer, "%d", &threads);
-    if (threads < 1)
-    {
-      G_warning(_("<%d> is not valid number of threads. Number of threads will be set on <%d>"),
-      threads, abs(threads));
-      threads = abs(threads);
+    if (threads < 1) {
+        G_warning(_("<%d> is not valid number of threads. Number of threads "
+                    "will be set on <%d>"),
+                  threads, abs(threads));
+        threads = abs(threads);
     }
 #if defined(_OPENMP)
     omp_set_num_threads(threads);
 #else
     threads = 1;
 #endif
+    if (threads > 1 && Rast_mask_is_present()) {
+        G_warning(_("Parallel processing disabled due to active mask."));
+        threads = 1;
+    }
     G_message(_("Number of threads: %d"), threads);
 
     /*      sscanf(parm.nwalk->answer, "%d", &wp.maxwa); */
     sscanf(parm.niter->answer, "%d", &wp.timesec);
     sscanf(parm.outiter->answer, "%d", &wp.iterout);
-/*    sscanf(parm.density->answer, "%d", &wp.ldemo); */
+    /*    sscanf(parm.density->answer, "%d", &wp.ldemo); */
     sscanf(parm.diffc->answer, "%lf", &wp.frac);
     sscanf(parm.maninval->answer, "%lf", &wp.manin_val);
 
@@ -394,32 +399,34 @@ int main(int argc, char *argv[])
     wp.timesec = wp.timesec * 60;
     wp.iterout = wp.iterout * 60;
     if ((wp.timesec / wp.iterout) > 100)
-	G_message(_("More than 100 files are going to be created !!!!!"));
+        G_message(_("More than 100 files are going to be created !!!!!"));
 
     /* compute how big the raster is and set this to appr 2 walkers per cell */
     if (parm.nwalk->answer == NULL) {
-	wp.maxwa = wp.mx * wp.my * 2;
-	wp.rwalk = (double)(wp.mx * wp.my * 2.);
-	G_message(_("default nwalk=%d, rwalk=%f"), wp.maxwa, wp.rwalk);
+        wp.maxwa = wp.mx * wp.my * 2;
+        wp.rwalk = (double)(wp.mx * wp.my * 2.);
+        G_message(_("default nwalk=%d, rwalk=%f"), wp.maxwa, wp.rwalk);
     }
     else {
-	sscanf(parm.nwalk->answer, "%d", &wp.maxwa);
-	wp.rwalk = (double)wp.maxwa;
+        sscanf(parm.nwalk->answer, "%d", &wp.maxwa);
+        wp.rwalk = (double)wp.maxwa;
     }
     /*rwalk = (double) maxwa; */
 
     if (wp.conv != 1.0)
-	G_message(_("Using metric conversion factor %f, step=%f"), wp.conv,
-		  wp.step);
+        G_message(_("Using metric conversion factor %f, step=%f"), wp.conv,
+                  wp.step);
 
+    wp.observation = parm.observation->answer;
+    wp.logfile = parm.logfile->answer;
     init_library_globals(&wp);
 
-    if ((wp.tc == NULL) && (wp.et == NULL) && (wp.conc == NULL) && (wp.flux == NULL) &&
-	(wp.erdep == NULL))
-	G_warning(_("You are not outputting any raster or site files"));
+    if ((wp.tc == NULL) && (wp.et == NULL) && (wp.conc == NULL) &&
+        (wp.flux == NULL) && (wp.erdep == NULL))
+        G_warning(_("You are not outputting any raster or site files"));
     ret_val = input_data();
     if (ret_val != 1)
-	G_fatal_error(_("Input failed"));
+        G_fatal_error(_("Input failed"));
 
     alloc_grids_sediment();
 
@@ -430,9 +437,9 @@ int main(int argc, char *argv[])
 
     /* always true for sediment? */
     if (wp.tserie == NULL) {
-	ii = output_data(0, 1.);
-	if (ii != 1)
-	    G_fatal_error(_("Cannot write raster maps"));
+        ii = output_data(0, 1.);
+        if (ii != 1)
+            G_fatal_error(_("Cannot write raster maps"));
     }
     free_walkers();
 

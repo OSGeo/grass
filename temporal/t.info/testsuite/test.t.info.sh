@@ -82,4 +82,3 @@ t.remove type=strds input=precip_abs1,precip_abs2
 
 t.unregister type=raster_3d maps=prec_1,prec_2
 t.remove type=str3ds input=precip_abs1,precip_abs2
-

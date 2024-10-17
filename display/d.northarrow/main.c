@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       d.northarrow
@@ -26,13 +25,15 @@
 #include "options.h"
 
 int fg_color, bg_color, text_color;
-//int do_background = TRUE;
+
+// int do_background = TRUE;
 
 int main(int argc, char **argv)
 {
     struct GModule *module;
     struct Option *bg_color_opt, *fg_color_opt, *coords, *n_arrow, *fsize,
-        *width_opt, *rotation_opt, *lbl_opt, *text_color_opt, *font, *path, *charset;
+        *width_opt, *rotation_opt, *lbl_opt, *text_color_opt, *font, *path,
+        *charset;
     struct Flag *no_text, *rotate_text, *rads;
     double east, north;
     double rotation;
@@ -47,21 +48,33 @@ int main(int argc, char **argv)
     G_add_keyword(_("cartography"));
     G_add_keyword(_("map annotations"));
     G_add_keyword(_("arrow"));
-    module->description =
-        _("Displays a north arrow on the graphics monitor.");
+    module->description = _("Displays a north arrow on the graphics monitor.");
 
     n_arrow = G_define_option();
     n_arrow->key = "style";
     n_arrow->description = _("North arrow style");
-    n_arrow->options =
-        "1a,1b,2,3,4,5,6,7a,7b,8a,8b,9,fancy_compass,basic_compass,arrow1,arrow2,arrow3,star";
+    n_arrow->options = "1a,1b,2,3,4,5,6,7a,7b,8a,8b,9,fancy_compass,basic_"
+                       "compass,arrow1,arrow2,arrow3,star";
     G_asprintf((char **)&(n_arrow->descriptions),
-               "1a;%s;" "1b;%s;" "2;%s;" "3;%s;" "4;%s;" "5;%s;" "6;%s;"
-               "7a;%s;" "7b;%s;" "8a;%s;" "8b;%s;" "9;%s;" "fancy_compass;%s;"
-               "basic_compass;%s;" "arrow1;%s;" "arrow2;%s;" "arrow3;%s;"
+               "1a;%s;"
+               "1b;%s;"
+               "2;%s;"
+               "3;%s;"
+               "4;%s;"
+               "5;%s;"
+               "6;%s;"
+               "7a;%s;"
+               "7b;%s;"
+               "8a;%s;"
+               "8b;%s;"
+               "9;%s;"
+               "fancy_compass;%s;"
+               "basic_compass;%s;"
+               "arrow1;%s;"
+               "arrow2;%s;"
+               "arrow3;%s;"
                "star;%s;",
-               _("Two color arrowhead"),
-               _("Two color arrowhead with circle"),
+               _("Two color arrowhead"), _("Two color arrowhead with circle"),
                _("Narrow with blending N"), _("Long with small arrowhead"),
                _("Inverted narrow inside a circle"),
                _("Triangle and N inside a circle"),
@@ -81,8 +94,7 @@ int main(int argc, char **argv)
     coords->type = TYPE_DOUBLE;
     coords->answer = "85.0,15.0";
     coords->options = "0-100";
-    coords->label =
-        _("Screen coordinates of the rectangle's top-left corner");
+    coords->label = _("Screen coordinates of the rectangle's top-left corner");
     coords->description = _("(0,0) is lower-left of the display frame");
 
     rotation_opt = G_define_option();
@@ -97,8 +109,7 @@ int main(int argc, char **argv)
     lbl_opt->key = "label";
     lbl_opt->required = NO;
     lbl_opt->answer = "N";
-    lbl_opt->description =
-        _("Displayed letter on the top of arrow");
+    lbl_opt->description = _("Displayed letter on the top of arrow");
     lbl_opt->guisection = _("Text");
 
     fg_color_opt = G_define_standard_option(G_OPT_CN);
@@ -155,7 +166,7 @@ int main(int argc, char **argv)
     charset->type = TYPE_STRING;
     charset->required = NO;
     charset->description =
-	_("Text encoding (only applicable to TrueType fonts)");
+        _("Text encoding (only applicable to TrueType fonts)");
     charset->guisection = _("Text");
 
     rotate_text = G_define_flag();
@@ -172,7 +183,6 @@ int main(int argc, char **argv)
        Similar to 'g.region -n' but use the at=x,y coord for the convergence
        angle calc. (assuming that's the center of the icon)
      */
-
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -221,11 +231,11 @@ int main(int argc, char **argv)
     D_open_driver();
 
     if (font->answer)
-	D_font(font->answer);
+        D_font(font->answer);
     else if (path->answer)
-	D_font(path->answer);
+        D_font(path->answer);
     if (charset->answer)
-	D_encoding(charset->answer);
+        D_encoding(charset->answer);
 
     draw_n_arrow(east, north, rotation, lbl_opt->answer, rot_with_text,
                  fontsize, n_arrow->answer, line_width);

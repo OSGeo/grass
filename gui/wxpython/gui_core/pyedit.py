@@ -10,31 +10,32 @@ for details.
 :authors: Martin Landa
 """
 
+from pathlib import Path
 import sys
 import os
 import stat
-try:
-    from StringIO import StringIO
-except ImportError:
-    from io import StringIO
+
+from io import StringIO
 import time
 
 import wx
 
-import grass.script as gscript
+import grass.script as gs
 from grass.script.utils import try_remove
 
 # needed just for testing
-if __name__ == '__main__':
+if __name__ == "__main__":
     from grass.script.setup import set_gui_path
+
     set_gui_path()
 
 from core.gcmd import GError
-from gui_core.pystc import PyStc
+from gui_core.pystc import PyStc, SetDarkMode
 from core import globalvar
 from core.menutree import MenuTreeModelBuilder
 from gui_core.menu import RecentFilesMenu, Menu
 from gui_core.toolbars import BaseToolbar, BaseIcons
+from gui_core.wrap import IsDark
 from icons.icon import MetaIcon
 from core.debug import Debug
 
@@ -65,12 +66,13 @@ if __name__ == '__main__':
 def module_template():
     """Template from which to start writing GRASS module"""
     import getpass
+
     author = getpass.getuser()
 
     properties = {}
-    properties['name'] = 'module name'
-    properties['author'] = author
-    properties['description'] = 'Module description'
+    properties["name"] = "module name"
+    properties["author"] = author
+    properties["description"] = "Module description"
 
     output = StringIO()
     # header
@@ -88,20 +90,26 @@ def module_template():
 # DATE:         %s
 #
 #%s
-""" % ('#' * 72,
-            properties['name'],
-            properties['author'],
-            '\n# '.join(properties['description'].splitlines()),
+"""
+        % (
+            "#" * 72,
+            properties["name"],
+            properties["author"],
+            "\n# ".join(properties["description"].splitlines()),
             time.asctime(),
-            '#' * 72))
+            "#" * 72,
+        )
+    )
 
     # UI
     output.write(
         r"""
-#%%module
-#%% description: %s
-#%%end
-""" % (' '.join(properties['description'].splitlines())))
+# %%module
+# %% description: %s
+# %%end
+"""
+        % (" ".join(properties["description"].splitlines()))
+    )
 
     # import modules
     output.write(
@@ -111,7 +119,8 @@ import os
 import atexit
 
 import grass.script as gs
-""")
+"""
+    )
 
     # cleanup()
     output.write(
@@ -119,17 +128,20 @@ import grass.script as gs
 RAST_REMOVE = []
 
 def cleanup():
-""")
+"""
+    )
     output.write(
         r"""    gs.run_command('g.remove', flags='f', type='raster',
                    name=RAST_REMOVE)
-""")
+"""
+    )
     output.write("\ndef main():\n")
     output.write(
         r"""    options, flags = gs.parser()
     gs.run_command('g.remove', flags='f', type='raster',
                    name=RAST_REMOVE)
-""")
+"""
+    )
 
     output.write("\n    return 0\n")
 
@@ -138,7 +150,8 @@ def cleanup():
 if __name__ == "__main__":
     atexit.register(cleanup)
     sys.exit(main())
-""")
+"""
+    )
     return output.getvalue()
 
 
@@ -167,22 +180,22 @@ def module_example():
     """Example of a GRASS module"""
     return r"""#!/usr/bin/env python3
 
-#%module
-#% description: Adds the values of two rasters (A + B)
-#% keyword: raster
-#% keyword: algebra
-#% keyword: sum
-#%end
-#%option G_OPT_R_INPUT
-#% key: araster
-#% description: Name of input raster A in an expression A + B
-#%end
-#%option G_OPT_R_INPUT
-#% key: braster
-#% description: Name of input raster B in an expression A + B
-#%end
-#%option G_OPT_R_OUTPUT
-#%end
+# %module
+# % description: Adds the values of two rasters (A + B)
+# % keyword: raster
+# % keyword: algebra
+# % keyword: sum
+# %end
+# %option G_OPT_R_INPUT
+# % key: araster
+# % description: Name of input raster A in an expression A + B
+# %end
+# %option G_OPT_R_INPUT
+# % key: braster
+# % description: Name of input raster B in an expression A + B
+# %end
+# %option G_OPT_R_OUTPUT
+# %end
 
 
 import sys
@@ -210,16 +223,16 @@ def module_error_handling_example():
     """Example of a GRASS module"""
     return r"""#!/usr/bin/env python3
 
-#%module
-#% description: Selects values from raster above value of mean plus standard deviation
-#% keyword: raster
-#% keyword: select
-#% keyword: standard deviation
-#%end
-#%option G_OPT_R_INPUT
-#%end
-#%option G_OPT_R_OUTPUT
-#%end
+# %module
+# % description: Selects values from raster above value of mean plus standard deviation
+# % keyword: raster
+# % keyword: select
+# % keyword: standard deviation
+# %end
+# %option G_OPT_R_INPUT
+# %end
+# %option G_OPT_R_OUTPUT
+# %end
 
 
 import sys
@@ -252,10 +265,11 @@ if __name__ == "__main__":
 
 def open_url(url):
     import webbrowser
+
     webbrowser.open(url)
 
 
-class PyEditController(object):
+class PyEditController:
     # using the naming GUI convention, change for controller?
     # pylint: disable=invalid-name
 
@@ -272,8 +286,10 @@ class PyEditController(object):
         # Get first (File) menu
         menu = guiparent.menubar.GetMenu(0)
         self.recent_files = RecentFilesMenu(
-            app_name='pyedit', parent_menu=menu, pos=1,
-        ) # pos=1 recent files menu position (index) in the parent (File) menu
+            app_name="pyedit",
+            parent_menu=menu,
+            pos=1,
+        )  # pos=1 recent files menu position (index) in the parent (File) menu
 
         self.recent_files.file_requested.connect(self.OpenRecentFile)
 
@@ -285,25 +301,23 @@ class PyEditController(object):
         :return str or None: file content or None
         """
         try:
-            with open(file_path, 'r') as f:
-                content = f.read()
-                return content
+            return Path(file_path).read_text()
         except PermissionError:
             GError(
                 message=_(
                     "Permission denied <{}>. Please change file "
-                    "permission for reading.".format(file_path)
-                ),
+                    "permission for reading."
+                ).format(file_path),
                 parent=self.guiparent,
                 showTraceback=False,
             )
-        except IOError:
+        except OSError:
             GError(
-                message=_("Couldn't read file <{}>.".format(file_path)),
+                message=_("Couldn't read file <{}>.").format(file_path),
                 parent=self.guiparent,
             )
 
-    def _writeFile(self, file_path, content, additional_err_message=''):
+    def _writeFile(self, file_path, content, additional_err_message=""):
         """Try open file and write content
 
         :param str file_path: file path
@@ -313,25 +327,24 @@ class PyEditController(object):
         :return None or True: file written or None
         """
         try:
-            with open(file_path, 'w') as f:
-                f.write(content)
-                return True
+            Path(file_path).write_text(content)
+            return True
         except PermissionError:
             GError(
                 message=_(
                     "Permission denied <{}>. Please change file "
-                    "permission for writting.{}".format(
-                        file_path, additional_err_message,
-                    ),
+                    "permission for writing.{}"
+                ).format(
+                    file_path,
+                    additional_err_message,
                 ),
                 parent=self.guiparent,
                 showTraceback=False,
             )
-        except IOError:
+        except OSError:
             GError(
-                message=_(
-                    "Couldn't write file <{}>.{}".
-                    format(file_path, additional_err_message),
+                message=_("Couldn't write file <{}>.{}").format(
+                    file_path, additional_err_message
                 ),
                 parent=self.guiparent,
             )
@@ -339,12 +352,12 @@ class PyEditController(object):
     def OnRun(self, event):
         """Run Python script"""
         if not self.filename:
-            self.filename = gscript.tempfile() + '.py'
+            self.filename = gs.tempfile() + ".py"
             self.tempfile = True
             file_is_written = self._writeFile(
-                file_path=self.filename, content=self.body.GetText(),
-                additional_err_message=" Unable to launch Python script.",
-
+                file_path=self.filename,
+                content=self.body.GetText(),
+                additional_err_message=_(" Unable to launch Python script."),
             )
             if file_is_written:
                 mode = stat.S_IMODE(os.lstat(self.filename)[stat.ST_MODE])
@@ -352,8 +365,9 @@ class PyEditController(object):
         else:
             # always save automatically before running
             file_is_written = self._writeFile(
-                file_path=self.filename, content=self.body.GetText(),
-                additional_err_message=" Unable to launch Python script.",
+                file_path=self.filename,
+                content=self.body.GetText(),
+                additional_err_message=_(" Unable to launch Python script."),
             )
             if file_is_written:
                 # set executable file
@@ -365,7 +379,7 @@ class PyEditController(object):
             # carries variables over to the next execution
             env = os.environ.copy()
             if self.overwrite:
-                env['GRASS_OVERWRITE'] = '1'
+                env["GRASS_OVERWRITE"] = "1"
             cmd = [self.filename]
             if self.parameters:
                 cmd.extend(self.parameters)
@@ -378,11 +392,13 @@ class PyEditController(object):
             self.tempfile = False
 
         filename = None
-        dlg = wx.FileDialog(parent=self.guiparent,
-                            message=_("Choose file to save"),
-                            defaultDir=os.getcwd(),
-                            wildcard=_("Python script (*.py)|*.py"),
-                            style=wx.FD_SAVE)
+        dlg = wx.FileDialog(
+            parent=self.guiparent,
+            message=_("Choose file to save"),
+            defaultDir=str(Path.cwd()),
+            wildcard=_("Python script (*.py)|*.py"),
+            style=wx.FD_SAVE,
+        )
 
         if dlg.ShowModal() == wx.ID_OK:
             filename = dlg.GetPath()
@@ -397,10 +413,13 @@ class PyEditController(object):
         if os.path.exists(filename):
             dlg = wx.MessageDialog(
                 parent=self.guiparent,
-                message=_("File <%s> already exists. "
-                          "Do you want to overwrite this file?") % filename,
+                message=_(
+                    "File <%s> already exists. Do you want to overwrite this file?"
+                )
+                % filename,
                 caption=_("Save file"),
-                style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+                style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
+            )
             if dlg.ShowModal() == wx.ID_NO:
                 dlg.Destroy()
                 return
@@ -415,8 +434,9 @@ class PyEditController(object):
         """Save current content to a file and set executable permissions"""
         assert self.filename
         file_is_written = self._writeFile(
-                 file_path=self.filename, content=self.body.GetText(),
-             )
+            file_path=self.filename,
+            content=self.body.GetText(),
+        )
         if file_is_written:
             # executable file
             os.chmod(self.filename, stat.S_IRWXU | stat.S_IWUSR)
@@ -442,12 +462,14 @@ class PyEditController(object):
 
     def Open(self):
         """Ask for a filename and load its content"""
-        filename = ''
-        dlg = wx.FileDialog(parent=self.guiparent,
-                            message=_("Open file"),
-                            defaultDir=os.getcwd(),
-                            wildcard=_("Python script (*.py)|*.py"),
-                            style=wx.FD_OPEN)
+        filename = ""
+        dlg = wx.FileDialog(
+            parent=self.guiparent,
+            message=_("Open file"),
+            defaultDir=str(Path.cwd()),
+            wildcard=_("Python script (*.py)|*.py"),
+            style=wx.FD_OPEN,
+        )
 
         if dlg.ShowModal() == wx.ID_OK:
             filename = dlg.GetPath()
@@ -466,7 +488,7 @@ class PyEditController(object):
 
     def OnOpen(self, event):
         """Handle open event but ask about replacing content first"""
-        if self.CanReplaceContent('file'):
+        if self.CanReplaceContent("file"):
             self.Open()
             if self.filename:
                 self.recent_files.AddFileToHistory(
@@ -485,19 +507,19 @@ class PyEditController(object):
         if not file_exists:
             GError(
                 _(
-                    "File <{}> doesn't exist."
-                    "It was probably moved or deleted.".format(path)
-                ),
+                    "File <{path}> doesn't exist. It was probably moved or deleted."
+                ).format(path=path),
                 parent=self.guiparent,
             )
-        else:
-            if self.CanReplaceContent(by_message='file'):
-                self.filename = path
-                content = self._openFile(file_path=path)
-                if content:
-                    self.body.SetText(content)
-                    file_history.AddFileToHistory(filename=path)  # move up the list
-                    self.tempfile = False
+            return
+
+        if self.CanReplaceContent(by_message="file"):
+            self.filename = path
+            content = self._openFile(file_path=path)
+            if content:
+                self.body.SetText(content)
+                file_history.AddFileToHistory(filename=path)  # move up the list
+                self.tempfile = False
 
     def IsEmpty(self):
         """Check if python script is empty"""
@@ -509,32 +531,35 @@ class PyEditController(object):
         Used for example to check if content should be saved before closing.
         The content is not valuable for example if it already saved in a file.
         """
-        Debug.msg(2, "pyedit IsContentValuable? empty=%s, modified=%s" % (
-                  self.IsEmpty(), self.IsModified()))
+        Debug.msg(
+            2,
+            "pyedit IsContentValuable? empty=%s, modified=%s"
+            % (self.IsEmpty(), self.IsModified()),
+        )
         return not self.IsEmpty() and self.IsModified()
 
     def SetScriptTemplate(self, event):
-        if self.CanReplaceContent('template'):
+        if self.CanReplaceContent("template"):
             self.body.SetText(script_template())
             self.filename = None
 
     def SetModuleTemplate(self, event):
-        if self.CanReplaceContent('template'):
+        if self.CanReplaceContent("template"):
             self.body.SetText(module_template())
             self.filename = None
 
     def SetScriptExample(self, event):
-        if self.CanReplaceContent('example'):
+        if self.CanReplaceContent("example"):
             self.body.SetText(script_example())
             self.filename = None
 
     def SetModuleExample(self, event):
-        if self.CanReplaceContent('example'):
+        if self.CanReplaceContent("example"):
             self.body.SetText(module_example())
             self.filename = None
 
     def SetModuleErrorHandlingExample(self, event):
-        if self.CanReplaceContent('example'):
+        if self.CanReplaceContent("example"):
             self.body.SetText(module_error_handling_example())
             self.filename = None
 
@@ -549,19 +574,21 @@ class PyEditController(object):
             'example' and 'file' which will use predefined messages, otherwise
             a translatable, user visible string should be used.
         """
-        if by_message == 'template':
+        if by_message == "template":
             message = _("Replace the content by the template?")
-        elif by_message == 'example':
+        elif by_message == "example":
             message = _("Replace the content by the example?")
-        elif by_message == 'file':
+        elif by_message == "file":
             message = _("Replace the current content by the file content?")
         else:
             message = by_message
         if self.IsContentValuable():
             dlg = wx.MessageDialog(
-                parent=self.guiparent, message=message,
+                parent=self.guiparent,
+                message=message,
                 caption=_("Replace content"),
-                style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+                style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
+            )
             if dlg.ShowModal() == wx.ID_NO:
                 dlg.Destroy()
                 return False
@@ -573,8 +600,10 @@ class PyEditController(object):
         dlg = wx.TextEntryDialog(
             parent=self.guiparent,
             caption=_("Set parameters for the script"),
-            message=_("Specify command line parameters for the script separated by spaces:"),
-            )
+            message=_(
+                "Specify command line parameters for the script separated by spaces:"
+            ),
+        )
         if self.parameters:
             dlg.SetValue(" ".join(self.parameters))
         # TODO: modality might not be needed here if we bind the events
@@ -589,27 +618,30 @@ class PyEditController(object):
     def OnHelp(self, event):
         # inspired by g.manual but simple not using GRASS_HTML_BROWSER
         # not using g.manual because it does not show
-        entry = 'libpython/script_intro.html'
-        major, minor, patch = gscript.version()['version'].split('.')
-        url = 'https://grass.osgeo.org/grass%s%s/manuals/%s' % (
-            major, minor, entry)
+        entry = "libpython/script_intro.html"
+        major, minor, patch = gs.version()["version"].split(".")
+        url = "https://grass.osgeo.org/grass%s%s/manuals/%s" % (major, minor, entry)
         open_url(url)
 
     def OnPythonHelp(self, event):
-        url = 'https://docs.python.org/%s/tutorial/' % sys.version_info[0]
+        url = "https://docs.python.org/%s/tutorial/" % sys.version_info[0]
         open_url(url)
 
     def OnModulesHelp(self, event):
-        self.giface.Help('full_index')
+        self.giface.Help("full_index")
 
     def OnSubmittingHelp(self, event):
-        open_url('https://trac.osgeo.org/grass/wiki/Submitting/Python')
+        open_url(
+            "https://github.com/OSGeo/grass/blob/main/doc/development/style_guide.md#python"  # noqa: E501
+        )
 
     def OnAddonsHelp(self, event):
-        open_url('https://grass.osgeo.org/development/code-submission/')
+        open_url(
+            "https://github.com/OSGeo/grass/blob/main/doc/development/style_guide.md#developing-grass-addons"  # noqa: E501
+        )
 
     def OnSupport(self, event):
-        open_url('https://grass.osgeo.org/support/')
+        open_url("https://grass.osgeo.org/support/")
 
 
 class PyEditToolbar(BaseToolbar):
@@ -622,23 +654,18 @@ class PyEditToolbar(BaseToolbar):
         BaseToolbar.__init__(self, parent)
 
         self.icons = {
-            'open': MetaIcon(img='open',
-                             label=_('Open (Ctrl+O)')),
-            'save': MetaIcon(img='save',
-                             label=_('Save (Ctrl+S)')),
-            'run': MetaIcon(img='execute',
-                            label=_('Run (Ctrl+R)')),
+            "open": MetaIcon(img="open", label=_("Open (Ctrl+O)")),
+            "save": MetaIcon(img="save", label=_("Save (Ctrl+S)")),
+            "run": MetaIcon(img="execute", label=_("Run (Ctrl+R)")),
             # TODO: better icons for overwrite modes
-            'overwriteTrue': MetaIcon(img='locked',
-                                      label=_('Activate overwrite')),
-            'overwriteFalse': MetaIcon(img='unlocked',
-                                       label=_('Deactive overwrite')),
-            'quit': MetaIcon(img='quit',
-                             label=_('Quit Simple Python Editor')),
+            "overwriteTrue": MetaIcon(img="locked", label=_("Activate overwrite")),
+            "overwriteFalse": MetaIcon(img="unlocked", label=_("Deactivate overwrite")),
+            "help": BaseIcons["help"],
+            "quit": BaseIcons["quit"],
         }
 
         # workaround for http://trac.wxwidgets.org/ticket/13888
-        if sys.platform == 'darwin':
+        if sys.platform == "darwin":
             parent.SetToolBar(self)
 
         self.InitToolbar(self._toolbarData())
@@ -648,35 +675,61 @@ class PyEditToolbar(BaseToolbar):
 
     def _toolbarData(self):
         """Toolbar data"""
-        return self._getToolbarData((('open', self.icons['open'],
-                                      self.parent.OnOpen),
-                                     ('save', self.icons['save'],
-                                      self.parent.OnSave),
-                                     (None, ),
-                                     ('run', self.icons['run'],
-                                      self.parent.OnRun),
-                                     ('overwrite', self.icons['overwriteTrue'],
-                                      self.OnSetOverwrite, wx.ITEM_CHECK),
-                                     (None, ),
-                                     ("help", BaseIcons['help'],
-                                      self.parent.OnHelp),
-                                     ('quit', self.icons['quit'],
-                                      self.parent.OnClose),
-                                     ))
+        return self._getToolbarData(
+            (
+                (
+                    ("open", self.icons["open"].label.rsplit(" ", 1)[0]),
+                    self.icons["open"],
+                    self.parent.OnOpen,
+                ),
+                (
+                    ("save", self.icons["save"].label.rsplit(" ", 1)[0]),
+                    self.icons["save"],
+                    self.parent.OnSave,
+                ),
+                (None,),
+                (
+                    ("run", self.icons["run"].label.rsplit(" ", 1)[0]),
+                    self.icons["run"],
+                    self.parent.OnRun,
+                ),
+                (
+                    ("overwrite", self.icons["overwriteTrue"].label),
+                    self.icons["overwriteTrue"],
+                    self.OnSetOverwrite,
+                    wx.ITEM_CHECK,
+                ),
+                (None,),
+                (
+                    ("help", self.icons["help"].label),
+                    self.icons["help"],
+                    self.parent.OnHelp,
+                ),
+                (
+                    ("quit", self.icons["quit"].label),
+                    self.icons["quit"],
+                    self.parent.OnClose,
+                ),
+            )
+        )
 
     # TODO: add overwrite also to the menu and sync with toolbar
     def OnSetOverwrite(self, event):
         if self.GetToolState(self.overwrite):
-            self.SetToolNormalBitmap(self.overwrite,
-                                     self.icons['overwriteFalse'].GetBitmap())
-            self.SetToolShortHelp(self.overwrite,
-                                  self.icons['overwriteFalse'].GetLabel())
+            self.SetToolNormalBitmap(
+                self.overwrite, self.icons["overwriteFalse"].GetBitmap()
+            )
+            self.SetToolShortHelp(
+                self.overwrite, self.icons["overwriteFalse"].GetLabel()
+            )
             self.parent.overwrite = True
         else:
-            self.SetToolNormalBitmap(self.overwrite,
-                                     self.icons['overwriteTrue'].GetBitmap())
-            self.SetToolShortHelp(self.overwrite,
-                                  self.icons['overwriteTrue'].GetLabel())
+            self.SetToolNormalBitmap(
+                self.overwrite, self.icons["overwriteTrue"].GetBitmap()
+            )
+            self.SetToolShortHelp(
+                self.overwrite, self.icons["overwriteTrue"].GetLabel()
+            )
             self.parent.overwrite = False
 
 
@@ -686,35 +739,36 @@ class PyEditFrame(wx.Frame):
     # pylint: disable=too-many-public-methods
     # pylint: disable=invalid-name
 
-    def __init__(self, parent, giface, id=wx.ID_ANY,
-                 title=_("GRASS GIS Simple Python Editor"),
-                 **kwargs):
+    def __init__(
+        self, parent, giface, id=wx.ID_ANY, title=_("Simple Python Editor"), **kwargs
+    ):
         wx.Frame.__init__(self, parent=parent, id=id, title=title, **kwargs)
         self.parent = parent
 
-        filename = os.path.join(
-            globalvar.WXGUIDIR, 'xml', 'menudata_pyedit.xml')
+        filename = os.path.join(globalvar.WXGUIDIR, "xml", "menudata_pyedit.xml")
         self.menubar = Menu(
-            parent=self,
-            model=MenuTreeModelBuilder(filename).GetModel(separators=True))
+            parent=self, model=MenuTreeModelBuilder(filename).GetModel(separators=True)
+        )
         self.SetMenuBar(self.menubar)
 
         self.toolbar = PyEditToolbar(parent=self)
         # workaround for http://trac.wxwidgets.org/ticket/13888
         # TODO: toolbar is set in toolbar and here
-        if sys.platform != 'darwin':
+        if sys.platform != "darwin":
             self.SetToolBar(self.toolbar)
 
         self.panel = PyStc(parent=self)
+        if IsDark():
+            SetDarkMode(self.panel)
         self.controller = PyEditController(
-            panel=self.panel, guiparent=self, giface=giface)
+            panel=self.panel, guiparent=self, giface=giface
+        )
 
         # don't start with an empty page
         self.panel.SetText(script_template())
 
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self.panel, proportion=1,
-                  flag=wx.EXPAND)
+        sizer.Add(self.panel, proportion=1, flag=wx.EXPAND)
         sizer.Fit(self)
         sizer.SetSizeHints(self)
         self.SetSizer(sizer)
@@ -782,8 +836,9 @@ class PyEditFrame(wx.Frame):
     def _set_overwrite(self, overwrite):
         self.controller.overwrite = overwrite
 
-    overwrite = property(_get_overwrite, _set_overwrite,
-                         doc="Tells if overwrite should be used")
+    overwrite = property(
+        _get_overwrite, _set_overwrite, doc="Tells if overwrite should be used"
+    )
 
     def OnSetParameters(self, *args, **kwargs):
         self.controller.OnSetParameters(*args, **kwargs)
@@ -801,5 +856,5 @@ def main():
     app.MainLoop()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
