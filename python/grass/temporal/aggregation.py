@@ -324,20 +324,15 @@ def aggregate_by_topology(
             aggregation_weights = []
             set_list = set()
             if granule.overlaps:
-                for map_layer in granule.overlaps:
-                    set_list.add(map_layer)
+                set_list.update(granule.overlaps)
             if granule.overlapped:
-                for map_layer in granule.overlapped:
-                    set_list.add(map_layer)
+                set_list.update(granule.overlapped)
             if granule.contains:
-                for map_layer in granule.contains:
-                    set_list.add(map_layer)
+                set_list.update(granule.contains)
             if granule.equal:
-                for map_layer in granule.equal:
-                    set_list.add(map_layer)
+                set_list.update(granule.equal)
             if granule.during:
-                for map_layer in granule.during:
-                    set_list.add(map_layer)
+                set_list.update(granule.during)
             if len(set_list) > 0:
                 for map_layer in set_list:
                     aggregation_list.append(map_layer.get_name())
