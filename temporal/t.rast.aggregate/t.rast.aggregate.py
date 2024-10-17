@@ -140,7 +140,7 @@ def main():
     file_limit = options["file_limit"]
     time_suffix = options["suffix"]
 
-    if weighting and not sampling == "related":
+    if weighting and sampling != "related":
         gcore.fatal(_("Weighting only works with sampling: 'related'"))
 
     topo_list = sampling.split(",")
