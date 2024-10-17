@@ -2261,29 +2261,28 @@ class ProjPickerPage(TitledPage):
             if not self.epsgcode:
                 event.Veto()
                 return
-            else:
-                # check for datum transforms
-                ret = RunCommand(
-                    "g.proj", read=True, epsg=self.epsgcode, datum_trans="-1", flags="t"
-                )
+            # check for datum transforms
+            ret = RunCommand(
+                "g.proj", read=True, epsg=self.epsgcode, datum_trans="-1", flags="t"
+            )
 
-                if ret != "":
-                    dtrans = ""
-                    # open a dialog to select datum transform number
-                    dlg = SelectTransformDialog(self.parent.parent, transforms=ret)
+            if ret != "":
+                dtrans = ""
+                # open a dialog to select datum transform number
+                dlg = SelectTransformDialog(self.parent.parent, transforms=ret)
 
-                    if dlg.ShowModal() == wx.ID_OK:
-                        dtrans = dlg.GetTransform()
-                        if dtrans == "":
-                            dlg.Destroy()
-                            event.Veto()
-                            return "Datum transform is required."
-                    else:
+                if dlg.ShowModal() == wx.ID_OK:
+                    dtrans = dlg.GetTransform()
+                    if dtrans == "":
                         dlg.Destroy()
                         event.Veto()
                         return "Datum transform is required."
+                else:
+                    dlg.Destroy()
+                    event.Veto()
+                    return "Datum transform is required."
 
-                    self.parent.datum_trans = dtrans
+                self.parent.datum_trans = dtrans
             self.GetNext().SetPrev(self)
 
     def EnableNext(self, enable=True):
