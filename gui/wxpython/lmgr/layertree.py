@@ -2399,7 +2399,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         while item and item.IsOk():
             try:
                 itemLayer = self.GetLayerInfo(item, key="maplayer")
-            except KeyError:
+            except (KeyError, TypeError):
                 return None
 
             if itemLayer and value == itemLayer.GetName():
