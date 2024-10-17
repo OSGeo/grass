@@ -1135,7 +1135,7 @@ class GMFrame(wx.Frame):
             layer = self.GetLayerTree().layer_selected
             name = self.GetLayerTree().GetLayerInfo(layer, key="maplayer").name
             type = self.GetLayerTree().GetLayerInfo(layer, key="type")
-        except AttributeError:
+        except (AttributeError, TypeError):
             layer = None
 
         if layer and len(cmdlist) == 1:  # only if no parameters given
@@ -1183,7 +1183,7 @@ class GMFrame(wx.Frame):
         # available only for vector map layers
         try:
             mapLayer = tree.GetLayerInfo(layer, key="maplayer")
-        except AttributeError:
+        except (AttributeError, TypeError):
             mapLayer = None
 
         if not mapLayer or mapLayer.GetType() != "vector":
@@ -1860,7 +1860,7 @@ class GMFrame(wx.Frame):
         # available only for vector map layers
         try:
             maptype = tree.GetLayerInfo(layer, key="maplayer").type
-        except AttributeError:
+        except (AttributeError, TypeError):
             maptype = None
 
         if not maptype or maptype != "vector":

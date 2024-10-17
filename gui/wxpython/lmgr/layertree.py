@@ -1758,7 +1758,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         try:
             if self.GetLayerInfo(item, key="type") != "group":
                 self.Map.DeleteLayer(self.GetLayerInfo(item, key="maplayer"))
-        except AttributeError:
+        except (AttributeError, TypeError):
             pass
 
         # redraw map if auto-rendering is enabled
@@ -2399,7 +2399,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         while item and item.IsOk():
             try:
                 itemLayer = self.GetLayerInfo(item, key="maplayer")
-            except KeyError:
+            except (KeyError, TypeError):
                 return None
 
             if itemLayer and value == itemLayer.GetName():
