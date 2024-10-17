@@ -393,7 +393,7 @@ def check_for_desc_override(basename):
 
 
 def read_file(name):
-    f = open(name, "r")
+    f = open(name)
     s = f.read()
     f.close()
     return s
@@ -476,7 +476,7 @@ def write_html_footer(f, index_url, year=None):
 
 
 def get_desc(cmd):
-    f = open(cmd, "r")
+    f = open(cmd)
     while True:
         line = f.readline()
         if not line:
@@ -494,8 +494,7 @@ def get_desc(cmd):
             sp = line.split("-", 1)
             if len(sp) > 1:
                 return sp[1].strip()
-            else:
-                return None
+            return None
 
     return ""
 

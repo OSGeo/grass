@@ -222,10 +222,11 @@ class DisplayAttributesDialog(wx.Dialog):
                     ctype = columns[name]["ctype"]
                     value = columns[name]["values"][idx]
                     id = columns[name]["ids"][idx]
+                    widget = self.FindWindowById(id)
                     try:
-                        newvalue = self.FindWindowById(id).GetValue()
-                    except:
-                        newvalue = self.FindWindowById(id).GetLabel()
+                        newvalue = widget.GetValue()
+                    except AttributeError:
+                        newvalue = widget.GetLabel()
 
                     if newvalue:
                         try:

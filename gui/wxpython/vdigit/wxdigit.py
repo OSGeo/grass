@@ -294,10 +294,8 @@ class IVDigit:
         if threshold > 0.0:
             if UserSettings.Get(group="vdigit", key="snapToVertex", subkey="enabled"):
                 return SNAPVERTEX
-            else:
-                return SNAP
-        else:
-            return NO_SNAP
+            return SNAP
+        return NO_SNAP
 
     def _getNewFeaturesLayer(self):
         """Returns layer of new feature (from settings)"""
@@ -672,8 +670,7 @@ class IVDigit:
             # TODO centroid opttimization, can be edited also its area -> it
             # will appear two times in new_ lists
             return self._getCentroidAreaBboxCats(ln_id)
-        else:
-            return [self._getBbox(ln_id)], [self._getLineAreasCategories(ln_id)]
+        return [self._getBbox(ln_id)], [self._getLineAreasCategories(ln_id)]
 
     def _getCentroidAreaBboxCats(self, centroid):
         """Helper function
@@ -688,8 +685,7 @@ class IVDigit:
         area = Vect_get_centroid_area(self.poMapInfo, centroid)
         if area > 0:
             return self._getaAreaBboxCats(area)
-        else:
-            return None
+        return None
 
     def _getaAreaBboxCats(self, area):
         """Helper function
@@ -1084,7 +1080,7 @@ class IVDigit:
         # apply snapping (node or vertex)
         snap = self._getSnapMode()
         if snap != NO_SNAP:
-            modeSnap = not (snap == SNAP)
+            modeSnap = snap != SNAP
             Vedit_snap_line(
                 self.poMapInfo,
                 self.popoBgMapInfo,
@@ -1889,7 +1885,7 @@ class IVDigit:
 
         if snap != NO_SNAP:
             # apply snapping (node or vertex)
-            modeSnap = not (snap == SNAP)
+            modeSnap = snap != SNAP
             Vedit_snap_line(
                 self.poMapInfo,
                 self.popoBgMapInfo,
@@ -1946,8 +1942,7 @@ class IVDigit:
                     if newc < 0:
                         self._error.WriteLine()
                         return (len(fids), fids)
-                    else:
-                        fids.append(newc)
+                    fids.append(newc)
 
             if right > 0 and Vect_get_area_centroid(self.poMapInfo, right) == 0:
                 # if Vect_get_area_points(byref(self.poMapInfo), right, bpoints) > 0 and
@@ -1964,8 +1959,7 @@ class IVDigit:
                     if newc < 0:
                         self._error.WriteLine()
                         return len(fids, fids)
-                    else:
-                        fids.append(newc)
+                    fids.append(newc)
 
             Vect_destroy_line_struct(bpoints)
 

@@ -225,7 +225,7 @@ def main():
     pymap = Vector(output)
     try:
         pymap.open("r")
-    except:
+    except Exception:
         dbif.close()
         gs.fatal(_("Unable to create vector map <%s>") % output)
 

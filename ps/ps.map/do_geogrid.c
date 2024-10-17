@@ -300,6 +300,7 @@ void get_ll_bounds(double *w, double *e, double *s, double *n)
     double ew, ns;
     int first;
 
+    east = west = north = south = 0.0;
     e1 = PS.w.east;
     w1 = PS.w.west;
     n1 = PS.w.north;

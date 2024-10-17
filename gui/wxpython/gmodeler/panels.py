@@ -25,6 +25,8 @@ import tempfile
 import random
 import math
 
+from pathlib import Path
+
 import wx
 
 from wx.lib import ogl
@@ -834,7 +836,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
         dlg = wx.FileDialog(
             parent=self,
             message=_("Choose model file"),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             wildcard=_("GRASS Model File (*.gxm)|*.gxm"),
         )
         if dlg.ShowModal() == wx.ID_OK:
@@ -892,7 +894,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
         dlg = wx.FileDialog(
             parent=self,
             message=_("Choose file to save current model"),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             wildcard=_("GRASS Model File (*.gxm)|*.gxm"),
             style=wx.FD_SAVE,
         )
@@ -1740,7 +1742,7 @@ class PythonPanel(wx.Panel):
             parent=self,
             message=_("Choose file to save"),
             defaultFile=os.path.basename(self.parent.GetModelFile(ext=False)),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             wildcard=fn_wildcard,
             style=wx.FD_SAVE,
         )

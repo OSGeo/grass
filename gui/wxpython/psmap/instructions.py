@@ -86,10 +86,7 @@ class Instruction:
 
     def __contains__(self, id):
         """Test if instruction is included"""
-        for each in self.instruction:
-            if each.id == id:
-                return True
-        return False
+        return any(each.id == id for each in self.instruction)
 
     def __delitem__(self, id):
         """Delete instruction"""
@@ -1211,7 +1208,7 @@ class Image(InstructionObject):
         # if eps, read info from header
         if os.path.splitext(fileName)[1].lower() == ".eps":
             bbInfo = "%%BoundingBox"
-            file = open(imagePath, "r")
+            file = open(imagePath)
             w = h = 0
             while file:
                 line = file.readline()
@@ -1220,9 +1217,9 @@ class Image(InstructionObject):
                     break
             file.close()
             return float(w), float(h)
-        else:  # we can use wx.Image
-            img = wx.Image(fileName, type=wx.BITMAP_TYPE_ANY)
-            return img.GetWidth(), img.GetHeight()
+        # we can use wx.Image
+        img = wx.Image(fileName, type=wx.BITMAP_TYPE_ANY)
+        return img.GetWidth(), img.GetHeight()
 
 
 class NorthArrow(Image):
@@ -1936,11 +1933,7 @@ class Vector(InstructionObject):
         instr = {}
 
         for line in text:
-            if (
-                line.startswith("vpoints")
-                or line.startswith("vlines")
-                or line.startswith("vareas")
-            ):
+            if line.startswith(("vpoints", "vlines", "vareas")):
                 # subtype
                 if line.startswith("vpoints"):
                     subType = "points"

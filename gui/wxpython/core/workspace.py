@@ -123,7 +123,7 @@ class ProcessWorkspaceFile:
                 try:
                     self.layerManager["pos"] = (posVal[0], posVal[1])
                     self.layerManager["size"] = (posVal[2], posVal[3])
-                except:
+                except IndexError:
                     pass
             # current working directory
             cwdPath = self.__getNodeText(node_lm, "cwd")
@@ -155,7 +155,7 @@ class ProcessWorkspaceFile:
                 try:
                     pos = (posVal[0], posVal[1])
                     size = (posVal[2], posVal[3])
-                except:
+                except IndexError:
                     pos = None
                     size = None
                 # this happens on Windows when mapwindow is minimized when
@@ -933,7 +933,7 @@ class WriteWorkspaceFile:
             file.write("{indent}</layout>\n".format(indent=" " * self.indent))
 
         # list of displays
-        for page in range(0, self.lmgr.GetLayerNotebook().GetPageCount()):
+        for page in range(self.lmgr.GetLayerNotebook().GetPageCount()):
             dispName = self.lmgr.GetLayerNotebook().GetPageText(page)
             mapTree = self.lmgr.GetLayerNotebook().GetPage(page).maptree
             region = mapTree.GetMap().GetCurrentRegion()
@@ -1742,7 +1742,7 @@ class ProcessGrcFile:
         :return: list of map layers
         """
         try:
-            file = open(self.filename, "r")
+            file = open(self.filename)
         except OSError:
             wx.MessageBox(
                 parent=parent,
@@ -2019,7 +2019,7 @@ class ProcessGrcFile:
         """Get value of element"""
         try:
             return line.strip(" ").split(" ")[1].strip(" ")
-        except:
+        except IndexError:
             return ""
 
     def _get_element(self, line):

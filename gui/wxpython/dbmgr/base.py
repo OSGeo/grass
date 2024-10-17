@@ -208,7 +208,7 @@ class VirtualAttributeList(
         try:
             # for maps connected via v.external
             keyId = columns.index(keyColumn)
-        except:
+        except ValueError:
             keyId = -1
 
         # read data
@@ -706,8 +706,7 @@ class VirtualAttributeList(
 
         if ascending:
             return cmpVal
-        else:
-            return -cmpVal
+        return -cmpVal
 
     def GetSortImages(self):
         """Used by the ColumnSorterMixin, see wx/lib/mixins/listctrl.py"""
@@ -961,7 +960,7 @@ class DbMgrNotebookBase(GNotebook):
                     self.layerPage[self.selLayer]["data"]
                 ).GetItemCount()
             )
-        except:
+        except Exception:
             pass
 
         if idCol:
@@ -1640,7 +1639,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         if dlg.ShowModal() == wx.ID_OK:
             try:  # get category number
                 cat = int(dlg.GetValues(columns=[keyColumn])[0])
-            except:
+            except ValueError:
                 cat = -1
 
             try:
@@ -1672,12 +1671,19 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                             values[i] = int(float(values[i]))
                         elif tlist.columns[columnName[i]]["ctype"] == float:
                             values[i] = float(values[i])
-                    except:
+                    except ValueError:
                         raise ValueError(
                             _("Value '%(value)s' needs to be entered as %(type)s.")
                             % {
                                 "value": values[i],
                                 "type": tlist.columns[columnName[i]]["type"],
+                            }
+                        )
+                    except KeyError:
+                        raise KeyError(
+                            _("Column '%(column)s' does not exist.")
+                            % {
+                                "column": columnName[i],
                             }
                         )
                     columnsString += "%s," % columnName[i]
@@ -1997,37 +2003,36 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         if len(cats) == 0:
             GMessage(parent=self, message=_("Nothing to extract."))
             return
-        else:
-            # dialog to get file name
-            dlg = CreateNewVector(
-                parent=self,
-                title=_("Extract selected features"),
-                giface=self.giface,
-                cmd=(
-                    (
-                        "v.extract",
-                        {
-                            "input": self.dbMgrData["vectName"],
-                            "cats": ListOfCatsToRange(cats),
-                        },
-                        "output",
-                    )
-                ),
-                disableTable=True,
-            )
-            if not dlg:
-                return
-
-            name = dlg.GetName(full=True)
-
-            if not self.mapdisplay and self.mapdisplay.tree:
-                pass
-            elif name and dlg.IsChecked("add"):
-                # add layer to map layer tree
-                self.mapdisplay.tree.AddLayer(
-                    ltype="vector", lname=name, lcmd=["d.vect", "map=%s" % name]
+        # dialog to get file name
+        dlg = CreateNewVector(
+            parent=self,
+            title=_("Extract selected features"),
+            giface=self.giface,
+            cmd=(
+                (
+                    "v.extract",
+                    {
+                        "input": self.dbMgrData["vectName"],
+                        "cats": ListOfCatsToRange(cats),
+                    },
+                    "output",
                 )
-            dlg.Destroy()
+            ),
+            disableTable=True,
+        )
+        if not dlg:
+            return
+
+        name = dlg.GetName(full=True)
+
+        if not self.mapdisplay and self.mapdisplay.tree:
+            pass
+        elif name and dlg.IsChecked("add"):
+            # add layer to map layer tree
+            self.mapdisplay.tree.AddLayer(
+                ltype="vector", lname=name, lcmd=["d.vect", "map=%s" % name]
+            )
+        dlg.Destroy()
 
     def OnDeleteSelected(self, event):
         """Delete vector objects selected in attribute browse window
@@ -2599,43 +2604,41 @@ class DbMgrTablesPage(DbMgrNotebookBase):
                 message=_("Unable to rename column. No column name defined."),
             )
             return
-        else:
-            item = tlist.FindItem(start=-1, str=name)
-            if item > -1:
-                if tlist.FindItem(start=-1, str=nameTo) > -1:
-                    GError(
-                        parent=self,
-                        message=_(
-                            "Unable to rename column <%(column)s> to "
-                            "<%(columnTo)s>. Column already exists "
-                            "in the table <%(table)s>."
-                        )
-                        % {"column": name, "columnTo": nameTo, "table": table},
-                    )
-                    return
-                else:
-                    tlist.SetItemText(item, nameTo)
-
-                    self.listOfCommands.append(
-                        (
-                            "v.db.renamecolumn",
-                            {
-                                "map": self.dbMgrData["vectName"],
-                                "layer": self.selLayer,
-                                "column": "%s,%s" % (name, nameTo),
-                            },
-                        )
-                    )
-            else:
+        item = tlist.FindItem(start=-1, str=name)
+        if item > -1:
+            if tlist.FindItem(start=-1, str=nameTo) > -1:
                 GError(
                     parent=self,
                     message=_(
-                        "Unable to rename column. "
-                        "Column <%(column)s> doesn't exist in the table <%(table)s>."
+                        "Unable to rename column <%(column)s> to "
+                        "<%(columnTo)s>. Column already exists "
+                        "in the table <%(table)s>."
                     )
-                    % {"column": name, "table": table},
+                    % {"column": name, "columnTo": nameTo, "table": table},
                 )
                 return
+            tlist.SetItemText(item, nameTo)
+
+            self.listOfCommands.append(
+                (
+                    "v.db.renamecolumn",
+                    {
+                        "map": self.dbMgrData["vectName"],
+                        "layer": self.selLayer,
+                        "column": "%s,%s" % (name, nameTo),
+                    },
+                )
+            )
+        else:
+            GError(
+                parent=self,
+                message=_(
+                    "Unable to rename column. "
+                    "Column <%(column)s> doesn't exist in the table <%(table)s>."
+                )
+                % {"column": name, "table": table},
+            )
+            return
 
         # apply changes
         self.ApplyCommands(self.listOfCommands, self.listOfSQLStatements)
@@ -3809,7 +3812,7 @@ class LayerBook(wx.Notebook):
         """Delete layer"""
         try:
             layer = int(self.deleteLayer.GetValue())
-        except:
+        except ValueError:
             return
 
         RunCommand(
@@ -3856,10 +3859,10 @@ class LayerBook(wx.Notebook):
         """Layer number of layer to be deleted is changed"""
         try:
             layer = int(event.GetString())
-        except:
+        except ValueError:
             try:
-                layer = self.mapDBInfo.layers.keys()[0]
-            except:
+                layer = list(self.mapDBInfo.layers.keys())[0]
+            except IndexError:
                 return
 
         if self.GetCurrentPage() == self.modifyPanel:

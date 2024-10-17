@@ -13,7 +13,7 @@ from grass.script import core as grasscore
 
 
 def read_gisrc(gisrcpath):
-    gisrc = open(gisrcpath, "r")
+    gisrc = open(gisrcpath)
     diz = {}
     for row in gisrc:
         key, val = row.split(":")

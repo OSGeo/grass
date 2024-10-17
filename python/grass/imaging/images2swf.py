@@ -392,7 +392,7 @@ class Tag:
 
     def ProcessTag(self):
         """Implement this to create the tag."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def GetTag(self):
         """Calls processTag and attaches the header."""
@@ -796,7 +796,7 @@ def writeSwf(filename, images, duration=0.1, repeat=True):
     # Check duration
     if hasattr(duration, "__len__"):
         if len(duration) == len(images2):
-            duration = [d for d in duration]
+            duration = list(duration)
         else:
             raise ValueError("len(duration) doesn't match amount of images.")
     else:
