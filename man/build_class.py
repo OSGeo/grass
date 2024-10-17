@@ -13,6 +13,23 @@ no_intro_page_classes = ["display", "general", "miscellaneous", "postscript"]
 
 
 def build_class(ext):
+    if ext == "html":
+        from build_html import (
+            modclass_tmpl,
+            get_desc,
+            desc2_tmpl,
+            modclass_intro_tmpl,
+            man_dir,
+        )
+    else:
+        from build_md import (
+            modclass_tmpl,
+            get_desc,
+            desc2_tmpl,
+            modclass_intro_tmpl,
+            man_dir,
+        )
+
     os.chdir(man_dir)
 
     filename = modclass + f".{ext}"
@@ -71,22 +88,7 @@ if __name__ == "__main__":
         write_header,
         write_footer,
     )
-    from build_html import (
-        modclass_tmpl,
-        get_desc,
-        desc2_tmpl,
-        modclass_intro_tmpl,
-        man_dir,
-    )
 
     build_class("html")
-
-    from build_md import (
-        modclass_tmpl,
-        get_desc,
-        desc2_tmpl,
-        modclass_intro_tmpl,
-        man_dir,
-    )
 
     build_class("md")

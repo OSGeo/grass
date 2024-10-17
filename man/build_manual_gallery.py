@@ -15,7 +15,6 @@
 
 import os
 from pathlib import Path
-import sys
 import fnmatch
 import re
 
@@ -140,6 +139,17 @@ def get_module_name(filename, ext):
 
 
 def main(ext):
+    if ext == "html":
+        from build_html import (
+            header1_tmpl,
+            man_dir,
+        )
+    else:
+        from build_md import (
+            header1_tmpl,
+            man_dir,
+        )
+
     output_name = f"manual_gallery.{ext}"
 
     man_files = get_files(
@@ -193,17 +203,8 @@ if __name__ == "__main__":
         write_footer,
         grass_version,
     )
-    from build_html import (
-        header1_tmpl,
-        man_dir,
-    )
 
     img_files_html = main("html")
-
-    from build_md import (
-        header1_tmpl,
-        man_dir,
-    )
 
     img_files_md = main("md")
 

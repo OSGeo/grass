@@ -13,6 +13,24 @@ from operator import itemgetter
 
 
 def build_full_index(ext):
+    if ext == "html":
+        from build_html import (
+            man_dir,
+            full_index_header,
+            cmd2_tmpl,
+            desc1_tmpl,
+            get_desc,
+            toc,
+        )
+    else:
+        from build_md import (
+            man_dir,
+            full_index_header,
+            cmd2_tmpl,
+            desc1_tmpl,
+            get_desc,
+        )
+
     os.chdir(man_dir)
 
     # TODO: create some master function/dict somewhere
@@ -87,23 +105,6 @@ if __name__ == "__main__":
         replace_file,
     )
 
-    from build_html import (
-        man_dir,
-        full_index_header,
-        cmd2_tmpl,
-        desc1_tmpl,
-        get_desc,
-        toc,
-    )
-
-    # build_full_index("html")
-
-    from build_md import (
-        man_dir,
-        full_index_header,
-        cmd2_tmpl,
-        desc1_tmpl,
-        get_desc,
-    )
+    build_full_index("html")
 
     build_full_index("md")

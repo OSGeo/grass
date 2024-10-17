@@ -168,7 +168,9 @@ class OptTable:
 
 
 if __name__ == "__main__":
-    URL = "https://raw.githubusercontent.com/OSGeo/grass/main/lib/gis/parser_standard_options.c"
+    URL = "https://raw.githubusercontent.com/OSGeo/grass/main/"\
+        "lib/gis/parser_standard_options.c"
+
     parser = argparse.ArgumentParser(
         description="Extract GRASS default options from link."
     )
@@ -237,7 +239,8 @@ if __name__ == "__main__":
             with open(name, "w") as outfile:
                 outfile.write(
                     header1_tmpl.substitute(
-                        title=f"GRASS GIS {grass_version} Reference Manual: Parser standard options index"
+                        title=f"GRASS GIS {grass_version} Reference Manual: "
+                        "Parser standard options index"
                     )
                 )
                 outfile.write(headerpso_tmpl)

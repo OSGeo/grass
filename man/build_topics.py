@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # generates topics.html and topic_*.html
-# (c) 2012-2024 by the GRASS Development Team, Markus Neteler, Luca Delucchi, Martin Landa
+# (c) 2012-2024 by the GRASS Development Team
 
 import os
 import glob
@@ -12,6 +12,25 @@ min_num_modules_for_topic = 3
 
 
 def build_topics(ext):
+    if ext == "html":
+        from build_html import (
+            header1_tmpl,
+            headertopics_tmpl,
+            headerkey_tmpl,
+            desc1_tmpl,
+            moduletopics_tmpl,
+            man_dir,
+        )
+    else:
+        from build_md import (
+            header1_tmpl,
+            headertopics_tmpl,
+            headerkey_tmpl,
+            desc1_tmpl,
+            moduletopics_tmpl,
+            man_dir,
+        )
+
     keywords = {}
 
     files = glob.glob1(man_dir, f"*.{ext}")
@@ -27,7 +46,7 @@ def build_topics(ext):
                 # expecting markdown
                 index_keys = lines.index("### KEYWORDS\n") + 3
                 index_desc = lines.index("## NAME\n") + 2
-        except:
+        except Exception:
             continue
         try:
             if ext == "html":
@@ -36,11 +55,11 @@ def build_topics(ext):
             else:
                 # expecting markdown
                 key = lines[index_keys].split("]")[0].lstrip("[")
-        except:
+        except Exception:
             continue
         try:
             desc = lines[index_desc].split("-", 1)[1].strip()
-        except:
+        except Exception:
             desc.strip()
 
         if key not in keywords.keys():
@@ -114,24 +133,6 @@ if __name__ == "__main__":
         write_footer,
     )
 
-    from build_html import (
-        header1_tmpl,
-        headertopics_tmpl,
-        headerkey_tmpl,
-        desc1_tmpl,
-        moduletopics_tmpl,
-        man_dir,
-    )
-
     build_topics("html")
-
-    from build_md import (
-        header1_tmpl,
-        headertopics_tmpl,
-        headerkey_tmpl,
-        desc1_tmpl,
-        moduletopics_tmpl,
-        man_dir,
-    )
 
     build_topics("md")

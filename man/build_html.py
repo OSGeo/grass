@@ -1,8 +1,6 @@
 import os
 import string
 
-from build import arch_dist_dir
-
 # File template pieces follow
 
 header1_tmpl = string.Template(

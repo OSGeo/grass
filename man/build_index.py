@@ -23,6 +23,15 @@ if len(sys.argv) > 1:
 
 
 def build_index(ext):
+    if ext == "html":
+        from build_html import (
+            man_dir,
+        )
+    else:
+        from build_md import (
+            man_dir,
+        )
+
     filename = f"index.{ext}"
     os.chdir(man_dir)
     with open(filename + ".tmp", "w") as f:
@@ -35,14 +44,7 @@ def build_index(ext):
 
 
 if __name__ == "__main__":
-    from build_html import (
-        man_dir,
-    )
 
     build_index("html")
-
-    from build_md import (
-        man_dir,
-    )
 
     build_index("md")

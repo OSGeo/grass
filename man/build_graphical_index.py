@@ -14,7 +14,6 @@
 #############################################################################
 
 import os
-import sys
 
 output_name = "graphical_index"
 
@@ -54,6 +53,19 @@ index_items = [
 
 
 def main(ext):
+    if ext == "html":
+        from build_html import (
+            header1_tmpl,
+            header_graphical_index_tmpl,
+            man_dir,
+        )
+    else:
+        from build_md import (
+            header1_tmpl,
+            header_graphical_index_tmpl,
+            man_dir,
+        )
+
     with open(os.path.join(man_dir, output_name + f".{ext}"), "w") as output:
         output.write(
             header1_tmpl.substitute(
@@ -91,18 +103,6 @@ if __name__ == "__main__":
         grass_version,
     )
 
-    from build_html import (
-        header1_tmpl,
-        header_graphical_index_tmpl,
-        man_dir,
-    )
-
     main("html")
-
-    from build_md import (
-        header1_tmpl,
-        header_graphical_index_tmpl,
-        man_dir,
-    )
 
     main("md")

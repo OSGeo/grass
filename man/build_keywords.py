@@ -42,7 +42,7 @@ if len(sys.argv) >= 2:
 year = os.getenv("VERSION_DATE")
 
 
-def get_module_man_file_path(module, addons_man_files):
+def get_module_man_file_path(man_dir, module, addons_man_files):
     """Get module manual HTML file path
 
     :param str module: module manual HTML file name e.g. v.surf.rst.html
@@ -53,7 +53,7 @@ def get_module_man_file_path(module, addons_man_files):
     if addons_path and module in ",".join(addons_man_files):
         module_path = os.path.join(addons_path, module)
         module_path = module_path.replace(
-            os.path.commonpath([path, module_path]),
+            os.path.commonpath([man_dir, module_path]),
             ".",
         )
     else:
@@ -62,6 +62,19 @@ def get_module_man_file_path(module, addons_man_files):
 
 
 def build_keywords(ext):
+    if ext == "html":
+        from build_html import (
+            header1_tmpl,
+            headerkeywords_tmpl,
+            man_dir
+        )
+    else:
+        from build_md import (
+            header1_tmpl,
+            headerkeywords_tmpl,
+            man_dir,
+        )
+
     keywords = {}
 
     files = glob.glob(os.path.join(man_dir, f"*.{ext}"))
@@ -145,7 +158,7 @@ def build_keywords(ext):
         else:
             keyword_line = f"### **{key}**\n"
         for value in sorted(keywords[key]):
-            man_file_path = get_module_man_file_path(value, addons_man_files)
+            man_file_path = get_module_man_file_path(man_dir, value, addons_man_files)
             if ext == "html":
                 keyword_line += (
                     f' <a href="{man_file_path}">{value.replace(".{ext}", "")}</a>,'
@@ -188,14 +201,6 @@ if __name__ == "__main__":
         write_footer,
     )
 
-    from build_html import header1_tmpl, headerkeywords_tmpl, man_dir
-
     build_keywords("html")
-
-    from build_md import (
-        header1_tmpl,
-        headerkeywords_tmpl,
-        man_dir,
-    )
 
     build_keywords("md")
