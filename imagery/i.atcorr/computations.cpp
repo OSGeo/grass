@@ -444,10 +444,14 @@ void os(const double tamoy, const double trmoy, const double pizmoy,
     if (ntp == (snt - 1)) {
         /* compute position of the plane layer */
         double taup = tap + trp;
-        iplane = 0;
-        for (int i = 0; i <= ntp; i++)
+        iplane = -1;
+        for (int i = 0; i <= ntp; i++) {
             if (taup >= h[i])
                 iplane = i;
+        }
+        if (iplane == -1) {
+            G_fatal_error(_("Position of the plane layer could not be determined"));
+        }
 
         /* update the layer from the end to the position to update if necessary
          */
