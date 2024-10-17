@@ -127,12 +127,7 @@ def get_wxgui_components_app_names():
 
     :return list: wxGUI components app names
     """
-    return list(
-        map(
-            lambda x: x["name"],
-            globalvar.RECENT_FILES_WXGUI_APP_NAMES.values(),
-        )
-    )
+    return [x["name"] for x in globalvar.RECENT_FILES_WXGUI_APP_NAMES.values()]
 
 
 def printHelp():
