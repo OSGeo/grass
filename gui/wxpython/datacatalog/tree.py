@@ -132,41 +132,44 @@ def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
         for each in listOfMaps:
             ltype, wholename = each.split("/")
             name, mapset = wholename.split("@", maxsplit=1)
-            if ltype == 'vector':
+            if ltype == "vector":
                 p = gscript.pipe_command(
-                    'v.info', flags='t', map=wholename, layer=1,
-                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
+                    "v.info",
+                    flags="t",
+                    map=wholename,
+                    layer=1,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    env=env,
+                )
                 stdout, stderr = p.communicate()
                 stdout = gscript.decode(stdout)
                 stderr = gscript.decode(stderr)
 
                 if not stderr:
                     map_info = dict(
-                        [
-                            (kv.split('=')) for kv in stdout.split('\n')
-                            if kv
-                        ]
+                        [(kv.split("=")) for kv in stdout.split("\n") if kv]
                     )
-                    if map_info and int(map_info['map3d']):
+                    if map_info and int(map_info["map3d"]):
                         maps_dict[mapset].append(
-                            {'name': name, 'type': 'vector_3d'},
+                            {"name": name, "type": "vector_3d"},
                         )
                     elif map_info:
                         maps_dict[mapset].append(
-                            {'name': name, 'type': 'vector'},
+                            {"name": name, "type": "vector"},
                         )
                 # Vector map layer is stored in the db
-                elif 'Connection refused' in stderr:
+                elif "Connection refused" in stderr:
                     maps_dict[mapset].append(
-                        {'name': name, 'type': 'vector_db_disconnect'},
+                        {"name": name, "type": "vector_db_disconnect"},
                     )
                 # Link external vector map layer
-                elif 'Unable to open OGR data source' in stderr:
+                elif "Unable to open OGR data source" in stderr:
                     maps_dict[mapset].append(
-                        {'name': name, 'type': 'vector_link_without_src'},
+                        {"name": name, "type": "vector_link_without_src"},
                     )
                 else:
-                    maps_dict[mapset].append({'name': name, 'type': ltype})
+                    maps_dict[mapset].append({"name": name, "type": ltype})
             else:
                 maps_dict[mapset].append({"name": name, "type": ltype})
 
@@ -266,8 +269,10 @@ class DataCatalogTree(TreeView):
         self._giface = giface
         self._restricted = True
         self.vector = [
-            'vector', 'vector_3d', 'vector_db_disconnect',
-            'vector_link_without_src',
+            "vector",
+            "vector_3d",
+            "vector_db_disconnect",
+            "vector_link_without_src",
         ]
 
         self.showNotification = Signal("Tree.showNotification")
@@ -284,7 +289,7 @@ class DataCatalogTree(TreeView):
             "mapset",
             "raster",
             "raster_3d",
-            *self.vector
+            *self.vector,
         ]
         self._initImages()
         self.thread = gThread()
@@ -810,11 +815,13 @@ class DataCatalogTree(TreeView):
             "raster": MetaIcon(img="raster").GetBitmap(bmpsize),
             "vector": MetaIcon(img="vector").GetBitmap(bmpsize),
             "raster_3d": MetaIcon(img="raster3d").GetBitmap(bmpsize),
-            'vector_3d': MetaIcon(img='vector3d').GetBitmap(bmpsize),
-            'vector_db_disconnect': MetaIcon(
-                img='vector_db_disconnect').GetBitmap(bmpsize),
-            'vector_link_without_src': MetaIcon(
-                img='vector_link_without_src').GetBitmap(bmpsize),
+            "vector_3d": MetaIcon(img="vector3d").GetBitmap(bmpsize),
+            "vector_db_disconnect": MetaIcon(img="vector_db_disconnect").GetBitmap(
+                bmpsize
+            ),
+            "vector_link_without_src": MetaIcon(
+                img="vector_link_without_src"
+            ).GetBitmap(bmpsize),
         }
         il = wx.ImageList(bmpsize[0], bmpsize[1], mask=False)
         for each in self._iconTypes:
@@ -831,7 +838,7 @@ class DataCatalogTree(TreeView):
         mixed = []
         for item in selected:
             type = item.data["type"]
-            if type in {"raster", "raster_3d",  *self.vector}:
+            if type in {"raster", "raster_3d", *self.vector}:
                 self.selected_layer.append(item)
                 self.selected_mapset.append(item.parent)
                 self.selected_location.append(item.parent.parent)
@@ -1371,12 +1378,12 @@ class DataCatalogTree(TreeView):
                 else:
                     label = _("Moving <{name}>...").format(name=string)
                 self.showNotification.emit(message=label)
-                if self.copy_layer[i].data['type'] in self.vector:
-                    pasted, cmd = self._runCommand('g.copy', vector=string, env=env)
-                    node = self.copy_layer[i].data['type']
-                elif self.copy_layer[i].data['type'] == 'raster':
-                    pasted, cmd = self._runCommand('g.copy', raster=string, env=env)
-                    node = 'raster'
+                if self.copy_layer[i].data["type"] in self.vector:
+                    pasted, cmd = self._runCommand("g.copy", vector=string, env=env)
+                    node = self.copy_layer[i].data["type"]
+                elif self.copy_layer[i].data["type"] == "raster":
+                    pasted, cmd = self._runCommand("g.copy", raster=string, env=env)
+                    node = "raster"
                 else:
                     pasted, cmd = self._runCommand("g.copy", raster_3d=string, env=env)
                     node = "raster_3d"
@@ -1479,7 +1486,7 @@ class DataCatalogTree(TreeView):
     def _removeMapAfterCopy(self, cLayer, cMapset, env):
         removed, cmd = self._runCommand(
             "g.remove",
-            type=self._getMapLayerType(cLayer.data['type']),
+            type=self._getMapLayerType(cLayer.data["type"]),
             name=cLayer.data["name"],
             flags="f",
             env=env,
@@ -1584,7 +1591,7 @@ class DataCatalogTree(TreeView):
                     "g.remove",
                     flags="f",
                     type=self._getMapLayerType(
-                        self.selected_layer[i].data['type'],
+                        self.selected_layer[i].data["type"],
                     ),
                     name=self.selected_layer[i].data["name"],
                     env=env,
@@ -1726,9 +1733,11 @@ class DataCatalogTree(TreeView):
                 + "@"
                 + self.selected_mapset[i].data["name"]
             )
-            names[self._getMapLayerType(
-                    self.selected_layer[i].data['type'],
-                )].append(name)
+            names[
+                self._getMapLayerType(
+                    self.selected_layer[i].data["type"],
+                )
+            ].append(name)
             all_names.append(name)
         # if self.selected_location[0].data['name'] == gisenv()['LOCATION_NAME'] and
         # self.selected_mapset[0]:
@@ -2322,5 +2331,5 @@ class DataCatalogTree(TreeView):
     def _getMapLayerType(self, ltype):
         """Get map layer type"""
         if ltype in self.vector:
-            return 'vector'
+            return "vector"
         return ltype
