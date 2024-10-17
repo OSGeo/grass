@@ -28,7 +28,7 @@ per-file-ignores =
     gui/wxpython/nviz/*: F841, E266, E722, F403, F405
     gui/wxpython/photo2image/*: F841, E722, E265
     gui/wxpython/photo2image/g.gui.photo2image.py: E501, F841
-    gui/wxpython/psmap/*: F841, E266, E722, F403
+    gui/wxpython/psmap/*: F841, E266, E722
     gui/wxpython/vdigit/*: F841, E722, F405, F403
     gui/wxpython/vnet/*: F841
     gui/wxpython/wxgui.py: F841
