@@ -611,10 +611,6 @@ class OgrImportDialog(ImportDialog):
         if data is None:
             return
 
-        # Error: local variable '_' defined as a builtin referenced before assignment
-        # This error is only coming up in this file.
-        _ = ""
-
         if not data:
             GMessage(parent=self, message=_("No layers selected. Operation canceled."))
             return
