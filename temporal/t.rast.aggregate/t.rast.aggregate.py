@@ -141,7 +141,7 @@ def main():
     time_suffix = options["suffix"]
 
     if weighting and sampling != "related":
-        gcore.fatal(_("Weighting only works with sampling: 'related'"))
+        gs.fatal(_("Weighting only works with sampling: 'related'"))
 
     topo_list = sampling.split(",")
 
