@@ -235,4 +235,18 @@ class GrassTestLoader(unittest.TestLoader):
 
 
 if __name__ == "__main__":
-    GrassTestLoader().discover()
+    for expression in [r".*\.py$", r".*\.sh$"]:
+        modules = discover_modules(
+            start_dir=".",
+            grass_location="all",
+            file_regexp=expression,
+            skip_dirs=GrassTestLoader.skip_dirs,
+            testsuite_dir=GrassTestLoader.testsuite_dir,
+            all_locations_value=GrassTestLoader.all_tests_value,
+            universal_location_value=GrassTestLoader.universal_tests_value,
+            import_modules=False,
+            exclude=None,
+        )
+        print("Expression:", expression)
+        print(len(modules))
+        print([module.file_path for module in modules])
