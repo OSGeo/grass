@@ -351,10 +351,9 @@ def calc_radius_at_lat(lat):
 
     # (x/_RX)**2+(y/_RY)**2 = (r*cos(theta)/_RX)**2+(r*sin(theta)/_RY)**2 = 1
     theta = lat / 180 * math.pi
-    r = math.sqrt(
+    return math.sqrt(
         (_RX * _RY) ** 2 / ((math.cos(theta) * _RY) ** 2 + (math.sin(theta) * _RX) ** 2)
     )
-    return r
 
 
 def calc_area(bbox):
@@ -423,10 +422,9 @@ def get_version():
         str: ProjPicker version.
     """
     # pylint: disable=invalid-name
-    version = (
+    return (
         Path(os.path.join(_module_path, "VERSION")).read_text(encoding="utf-8").strip()
     )
-    return version
 
 
 def get_projpicker_db(projpicker_db=None):
@@ -557,7 +555,7 @@ def find_unit(proj_table, crs_auth, crs_code, proj_cur):
         raise RuntimeError(f"{crs_auth}:{crs_code}: Multiple units?")
 
     # use GRASS unit names
-    unit = (
+    return (
         unit.replace("Meter", "meter")
         .replace("metre", "meter")
         .replace("Foot_US", "US foot")
@@ -565,8 +563,6 @@ def find_unit(proj_table, crs_auth, crs_code, proj_cur):
         .replace("_Kilo", " kilo")
         .replace(" (supplier to define representation)", "")
     )
-
-    return unit
 
 
 def transform_xy_point(point, from_crs):
@@ -1599,8 +1595,7 @@ def query_point(point, unit="any", proj_table="any", projpicker_db=None):
 
     with sqlite3.connect(projpicker_db) as projpicker_con:
         projpicker_cur = projpicker_con.cursor()
-        outbbox = query_point_using_cursor(projpicker_cur, point, unit, proj_table)
-    return outbbox
+        return query_point_using_cursor(projpicker_cur, point, unit, proj_table)
 
 
 def query_point_using_bbox(prevbbox, point, unit="any", proj_table="any"):
@@ -1632,8 +1627,7 @@ def query_point_using_bbox(prevbbox, point, unit="any", proj_table="any"):
             and proj_table in ("any", prevbbox[i].proj_table)
         ):
             idx.append(i)
-    outbbox = [prevbbox[i] for i in idx]
-    return outbbox
+    return [prevbbox[i] for i in idx]
 
 
 def query_points(
@@ -1878,8 +1872,7 @@ def query_bbox(bbox, unit="any", proj_table="any", projpicker_db=None):
 
     with sqlite3.connect(projpicker_db) as projpicker_con:
         projpicker_cur = projpicker_con.cursor()
-        outbbox = query_bbox_using_cursor(projpicker_cur, bbox, unit, proj_table)
-    return outbbox
+        return query_bbox_using_cursor(projpicker_cur, bbox, unit, proj_table)
 
 
 def query_bbox_using_bbox(prevbbox, bbox, unit="any", proj_table="any"):
@@ -2241,8 +2234,7 @@ def query_all_using_bbox(prevbbox, unit="any", proj_table="any"):
             proj_table in ("any", prevbbox[i].proj_table)
         ):
             idx.append(i)
-    outbbox = [prevbbox[i] for i in idx]
-    return outbbox
+    return [prevbbox[i] for i in idx]
 
 
 def query_mixed_geoms(geoms, projpicker_db=None):
