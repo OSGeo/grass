@@ -319,8 +319,7 @@ def is_bbox_within_bbox(bbox1, bbox2):
                         w <= e
                         and (
                             (-180 <= w <= r and -180 <= e <= r)
-                            or l <= w <= 180
-                            and l <= e <= 180
+                            or (l <= w <= 180 and l <= e <= 180)
                         )
                     )
                     or (w > e and -180 <= e <= r and l <= w <= 180)
