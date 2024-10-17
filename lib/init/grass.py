@@ -1510,7 +1510,7 @@ def say_hello():
 
             revision = linerev.split(" ")[1]
             sys.stderr.write(" (" + revision + ")")
-        except (FileNotFoundError, PermissionError, IndexError, IOError):
+        except (OSError, FileNotFoundError, PermissionError, IndexError):
             pass
 
 
