@@ -184,14 +184,10 @@ def calc_geoms_bbox(geoms):
                     w = l
                     e = r
                 else:
-                    if b < s:
-                        s = b
-                    if t > n:
-                        n = t
-                    if l < w:
-                        w = l
-                    if r > e:
-                        e = r
+                    s = min(b, s)
+                    n = max(t, n)
+                    w = min(l, w)
+                    e = max(r, e)
         g += 1
     if None not in (s, n, w, e):
         if s == n:
@@ -219,8 +215,7 @@ def create_crs_info(bbox, format_crs_info=None):
         dic = bbox._asdict()
         n = 0
         for key in dic.keys():
-            if len(key) > n:
-                n = len(key)
+            n = max(len(key), n)
         n += 1
         txt = ""
         for key in dic.keys():
