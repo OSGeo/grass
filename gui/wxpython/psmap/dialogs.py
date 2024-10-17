@@ -42,9 +42,8 @@ from pathlib import Path
 
 import wx
 import wx.lib.agw.floatspin as fs
-from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
-
 from core import globalvar
+from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
 
 if globalvar.wxPythonPhoenix:
     from wx import Validator
@@ -52,24 +51,25 @@ else:
     from wx import PyValidator as Validator
 
 import grass.script as gs
-
+from core.gcmd import GError, GMessage, RunCommand
 from core.utils import PilImageToWxImage
 from dbmgr.vinfo import VectorDBInfo
-from gui_core.gselect import Select
-from core.gcmd import RunCommand, GError, GMessage
 from gui_core.dialogs import SymbolDialog
+from gui_core.gselect import Select
 from gui_core.wrap import (
     BitmapButton,
     BitmapComboBox,
     BitmapFromImage,
     Button,
     CheckBox,
+    CheckListCtrlMixin,
     Choice,
     ClientDC,
     ColourPickerCtrl,
     Dialog,
     DirBrowseButton,
     EmptyBitmap,
+    EmptyImage,
     ExpandoTextCtrl,
     FileBrowseButton,
     FloatSpin,
@@ -86,11 +86,44 @@ from gui_core.wrap import (
     StaticText,
     TextCtrl,
     TextEntryDialog,
-    EmptyImage,
-    CheckListCtrlMixin,
 )
-from psmap.utils import *
-from psmap.instructions import *
+
+# Explicit imports from psmap.instructions
+from psmap.instructions import (
+    Image,
+    Labels,
+    Line,
+    MapFrame,
+    Mapinfo,
+    NewId,
+    NorthArrow,
+    Point,
+    Raster,
+    RasterLegend,
+    Rectangle,
+    Scalebar,
+    Text,
+    Vector,
+    VectorLegend,
+    VProperties,
+)
+
+# Explicit imports from psmap.utils
+from psmap.utils import (
+    AutoAdjust,
+    BBoxAfterRotation,
+    ComputeSetRegion,
+    PaperMapCoordinates,
+    PILImage,
+    Rect2D,
+    Rect2DPP,
+    SetResolution,
+    UnitConversion,
+    convertRGB,
+    getRasterType,
+    havePILImage,
+    projInfo,
+)
 
 # grass.set_raise_on_error(True)
 
@@ -4082,6 +4115,26 @@ class LegendDialog(PsmapDialog):
             self.minText.Enable()
             self.maxText.Enable()
 
+    def Cmp(self, item1, item2):
+        """
+        Args:
+            item1 (int): ID of the first item.
+            item2 (int): ID of the second item.
+
+        Returns:
+            int: -1 if item1 < item2, 1 if item1 > item2, 0 if equal.
+        """
+        # Retrieve the data associated with each item
+        data1 = self.vectorListCtrl.GetItemData(item1)
+        data2 = self.vectorListCtrl.GetItemData(item2)
+
+        # Compare the data
+        if data1 < data2:
+            return -1
+        if data1 > data2:
+            return 1
+        return 0
+
     def OnUp(self, event):
         """Moves selected map up, changes order in vector legend"""
         if self.vectorListCtrl.GetFirstSelected() != -1:
@@ -4091,7 +4144,7 @@ class LegendDialog(PsmapDialog):
                 idx2 = self.vectorListCtrl.GetItemData(pos - 1) + 1
                 self.vectorListCtrl.SetItemData(pos, idx1)
                 self.vectorListCtrl.SetItemData(pos - 1, idx2)
-                self.vectorListCtrl.SortItems(cmp)
+                self.vectorListCtrl.SortItems(self.Cmp)
                 if pos > 0:
                     selected = pos - 1
                 else:
@@ -4108,7 +4161,7 @@ class LegendDialog(PsmapDialog):
                 idx2 = self.vectorListCtrl.GetItemData(pos + 1) - 1
                 self.vectorListCtrl.SetItemData(pos, idx1)
                 self.vectorListCtrl.SetItemData(pos + 1, idx2)
-                self.vectorListCtrl.SortItems(cmp)
+                self.vectorListCtrl.SortItems(self.Cmp)
                 if pos < self.vectorListCtrl.GetItemCount() - 1:
                     selected = pos + 1
                 else:
