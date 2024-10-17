@@ -1564,11 +1564,10 @@ def match_geoms(gbbox1, gbbox2, match_max=0, match_tol=1):
                 outbbox = find_matching_bbox(g2, g1, outbbox)
             if len(outbbox) >= match_max > 0:
                 break
+    elif gbbox1.is_latlon:
+        outbbox = find_matching_bbox(geom1, geom2, outbbox)
     else:
-        if gbbox1.is_latlon:
-            outbbox = find_matching_bbox(geom1, geom2, outbbox)
-        else:
-            outbbox = find_matching_bbox(geom2, geom1, outbbox)
+        outbbox = find_matching_bbox(geom2, geom1, outbbox)
 
     return outbbox
 

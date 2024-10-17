@@ -228,9 +228,8 @@ class ProjPickerPanel(wx.Panel):
                 if self.prev_xy:
                     self.prev_xy[0] += dx
                     self.prev_xy[1] += dy
-            else:
-                if self.curr_geom:
-                    self.draw_map(event.x, event.y)
+            elif self.curr_geom:
+                self.draw_map(event.x, event.y)
 
         latlon = self.osm.canvas_to_latlon(event.x, event.y)
         self.coor_label.SetLabel(f"{latlon[0]:.4f}, {latlon[1]:.4f}")
