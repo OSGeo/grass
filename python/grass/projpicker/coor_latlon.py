@@ -22,9 +22,7 @@ _DMS_PAT = (
     f":(?:({_POS_FLOAT_PAT})|([0-9]+):({_POS_FLOAT_PAT})))"
 )
 # coordinate without [SNWE]
-_COOR_PAT = (
-    f"{_DD_PAT}|([+-])?{_DMS_PAT}|" f"(?:({_POS_FLOAT_PAT})[°od]?|{_DMS_PAT})[ \t]*"
-)
+_COOR_PAT = f"{_DD_PAT}|([+-])?{_DMS_PAT}|(?:({_POS_FLOAT_PAT})[°od]?|{_DMS_PAT})[ \t]*"
 # latitude
 _LAT_PAT = f"(?:{_COOR_PAT}([SN])?)"
 # longitude

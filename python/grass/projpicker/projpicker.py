@@ -82,7 +82,7 @@ _RY = 6356.7523
 
 _GEOM_VAR_CHARS = r"([a-zA-Z0-9_]+)"
 _geom_var_re = re.compile(
-    rf"^(?:{_GEOM_VAR_CHARS}:|:{_GEOM_VAR_CHARS}:|" f":{_GEOM_VAR_CHARS})$"
+    rf"^(?:{_GEOM_VAR_CHARS}:|:{_GEOM_VAR_CHARS}:|:{_GEOM_VAR_CHARS})$"
 )
 
 coor_mod = point_re = parse_point = parse_bbox = None  # pylint: disable=invalid-name
@@ -1314,7 +1314,7 @@ def parse_mixed_geoms(geoms):
                         outgeoms.append(geom)
                     if use:
                         if name not in geom_vars:
-                            raise SyntaxError(f"{name}: Undefined geometry " "variable")
+                            raise SyntaxError(f"{name}: Undefined geometry variable")
                         stack_size += 1
                         if not sav:
                             outgeoms.append(geom)
@@ -1334,7 +1334,7 @@ def parse_mixed_geoms(geoms):
                 raise SyntaxError("Nothing to return from postfix stack")
             if stack_size > 1:
                 raise SyntaxError(
-                    f"{stack_size}: Excessive stack size for " "postfix operations"
+                    f"{stack_size}: Excessive stack size for postfix operations"
                 )
     finally:
         if was_latlon and not is_latlon():
@@ -1546,9 +1546,7 @@ def match_geoms(gbbox1, gbbox2, match_max=0, match_tol=1):
         raise SyntaxError("Geometries in different types cannot be matched")
 
     if gbbox1.is_latlon == gbbox2.is_latlon:
-        raise SyntaxError(
-            "Geometries in the same coordinate system cannot be " "matched"
-        )
+        raise SyntaxError("Geometries in the same coordinate system cannot be matched")
 
     geom1 = gbbox1.geom
     geom2 = gbbox2.geom
@@ -2332,18 +2330,18 @@ def query_mixed_geoms(geoms, projpicker_db=None):
                     geom_vars[name] = Geom(is_latlon(), geom_type, geoms[g])
                 if use:
                     if name not in geom_vars:
-                        raise SyntaxError(f"{name}: Undefined geometry " "variable")
+                        raise SyntaxError(f"{name}: Undefined geometry variable")
                     nam = name
                     while True:
                         if nam not in geom_vars:
-                            raise SyntaxError(f"{nam}: Undefined geometry " "variable")
+                            raise SyntaxError(f"{nam}: Undefined geometry variable")
                         geom = geom_vars[nam]
                         typ = type(geom.geom)
                         if not (typ == str and geom.geom.startswith(":")):
                             break
                         nam = geom.geom[1:]
                         if nam == name:
-                            raise SyntaxError(f"{name}: Recursive geometry " "variable")
+                            raise SyntaxError(f"{name}: Recursive geometry variable")
                     if geom.is_latlon != is_latlon():
                         sav_is_latlon = is_latlon()
                         if geom.is_latlon:
@@ -2390,7 +2388,7 @@ def query_mixed_geoms(geoms, projpicker_db=None):
                     gbbox1 = geombbox_stack.pop()
                     if geom == "match":
                         if None in (gbbox1.type, gbbox2.type):
-                            raise SyntaxError("Non-raw geometries cannot be " "matched")
+                            raise SyntaxError("Non-raw geometries cannot be matched")
                         obbox = bbox_binary_operator(gbbox1.bbox, gbbox2.bbox, "and")
                         gbbox1 = GeomBBox(
                             gbbox1.is_latlon, gbbox1.type, gbbox1.geom, obbox
