@@ -11,7 +11,6 @@ Licence:    This program is free software under the GNU General Public
 
 import os
 from grass.gunittest.case import TestCase
-from grass.gunittest.gmodules import SimpleModule
 from grass.script.core import read_command
 
 TABLE_1 = """cat|MAJORRDS_|ROAD_NAME|MULTILANE|PROPYEAR|OBJECTID|SHAPE_LEN
