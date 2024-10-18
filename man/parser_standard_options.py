@@ -168,8 +168,10 @@ class OptTable:
 
 
 if __name__ == "__main__":
-    URL = "https://raw.githubusercontent.com/OSGeo/grass/main/"\
+    URL = (
+        "https://raw.githubusercontent.com/OSGeo/grass/main/"
         "lib/gis/parser_standard_options.c"
+    )
 
     parser = argparse.ArgumentParser(
         description="Extract GRASS default options from link."
