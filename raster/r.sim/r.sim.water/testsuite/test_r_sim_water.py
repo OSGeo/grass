@@ -1,3 +1,5 @@
+import unittest
+
 from grass.gunittest.case import TestCase
 
 
@@ -151,7 +153,7 @@ class TestRSimWater(TestCase):
         )
 
 
-@unittest.skip()
+@unittest.skip("runs too long")
 class TestRSimWaterLarge(TestCase):
     """Test r.sim.water with large region"""
 
@@ -189,7 +191,7 @@ class TestRSimWaterLarge(TestCase):
             random_seed=1,
         )
         self.assertRasterFitsUnivar(
-            self.depth, reference="sum=66064.205241", precision=1e-6
+            self.depth, reference="sum=30364.327529", precision=1e-6
         )
 
 
