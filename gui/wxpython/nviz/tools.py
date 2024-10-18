@@ -1201,27 +1201,27 @@ class NvizToolWindow(GNotebook):
         #
         # box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
         # label = " %s " % (_("Mask")))
-        ##        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        ##        gridSizer = wx.GridBagSizer(vgap = 5, hgap = 5)
-        ##
+        #        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        #        gridSizer = wx.GridBagSizer(vgap = 5, hgap = 5)
+        #
         # gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
         # label = _("Mask zeros:")),
         # pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
-        ##
+        #
         # elev = wx.CheckBox(parent = panel, id = wx.ID_ANY,
         # label = _("by elevation"))
         # elev.Enable(False) # TODO: not implemented yet
-        ##        gridSizer.Add(item = elev, pos = (0, 1))
-        ##
+        #        gridSizer.Add(item = elev, pos = (0, 1))
+        #
         # color = wx.CheckBox(parent = panel, id = wx.ID_ANY,
         # label = _("by color"))
         # color.Enable(False) # TODO: not implemented yet
-        ##        gridSizer.Add(item = color, pos = (0, 2))
-        ##
+        #        gridSizer.Add(item = color, pos = (0, 2))
+        #
         # boxSizer.Add(item = gridSizer, proportion = 1,
         # flag = wx.ALL | wx.EXPAND, border = 3)
         # pageSizer.Add(item = boxSizer, proportion = 0,
-        ##                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
+        #                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
         # border = 3)
 
         panel.SetSizer(pageSizer)
@@ -1857,16 +1857,16 @@ class NvizToolWindow(GNotebook):
         # label = _("width")),
         # pos = (1, 1), flag = wx.ALIGN_CENTER_VERTICAL |
         # wx.ALIGN_RIGHT)
-        ##
+        #
         # iwidth = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
-        ##                             initial = 1,
-        ##                             min = 1,
+        #                             initial = 1,
+        #                             min = 1,
         # max = 1e6)
         # iwidth.SetName('value')
         # iwidth.SetValue(100)
-        ##        self.win['vector']['points']['width'] = iwidth.GetId()
-        ##        iwidth.Bind(wx.EVT_SPINCTRL, self.OnVectorPoints)
-        ##        iwidth.Bind(wx.EVT_TEXT, self.OnVectorPoints)
+        #        self.win['vector']['points']['width'] = iwidth.GetId()
+        #        iwidth.Bind(wx.EVT_SPINCTRL, self.OnVectorPoints)
+        #        iwidth.Bind(wx.EVT_TEXT, self.OnVectorPoints)
         # gridSizer.Add(item = iwidth, pos = (1, 2),
         # flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
         # icon symbol
@@ -3084,7 +3084,7 @@ class NvizToolWindow(GNotebook):
                 )
                 value.Bind(wx.EVT_TEXT_ENTER, self.OnVolumeIsosurfMap)
                 value.Bind(wx.EVT_KILL_FOCUS, self.OnVolumeIsosurfMap)
-            ##                value.Bind(wx.EVT_TEXT, self.OnVolumeIsosurfMap)
+            #                value.Bind(wx.EVT_TEXT, self.OnVolumeIsosurfMap)
             else:
                 size = (65, -1)
                 value = SpinCtrl(parent=panel, id=wx.ID_ANY, size=size, initial=0)
