@@ -66,7 +66,6 @@ per-file-ignores =
     # TODO: Is this really needed?
     python/grass/pygrass/vector/__init__.py: E402
     python/grass/pygrass/raster/__init__.py: E402
-    python/grass/gunittest/invoker.py: E721
     python/grass/pygrass/vector/__init__.py: E402
     python/grass/pygrass/modules/interface/*.py: F401
     python/grass/pygrass/modules/grid/*.py: F401
@@ -82,13 +81,11 @@ per-file-ignores =
     python/grass/temporal/temporal_granularity.py: E722
     python/grass/temporal/temporal_raster_base_algebra.py: E722
     python/grass/temporal/temporal_topology_dataset_connector.py: E722
-    python/grass/temporal/univar_statistics.py: E231
     # Current benchmarks/tests are changing sys.path before import.
     # Possibly, a different approach should be taken there anyway.
     python/grass/pygrass/tests/benchmark.py: E402, F401, F821
     # Configuration file for Sphinx:
     # Ignoring import/code mix and line length.
-    python/grass/docs/conf.py: E402
     # Files not managed by Black
     python/grass/imaging/images2gif.py: E226
     # Unused imports in init files
