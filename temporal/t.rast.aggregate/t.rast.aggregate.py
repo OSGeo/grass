@@ -99,7 +99,7 @@
 # %end
 
 # %option G_OPT_T_SAMPLE
-# % options: equal,overlaps,overlapped,starts,started,finishes,finished,during,contains
+# % options: equal,overlaps,overlapped,starts,started,finishes,finished,during,contains,related
 # % answer: contains
 # %end
 
@@ -109,6 +109,11 @@
 # %flag
 # % key: n
 # % description: Register Null maps
+# %end
+
+# %flag
+# % key: w
+# % description: Aggregation weighted by temporal overlap between input rasters and rasters of defined granularity
 # %end
 
 import grass.script as gs
@@ -127,12 +132,16 @@ def main():
     gran = options["granularity"]
     base = options["basename"]
     register_null = flags["n"]
+    weighting = flags["w"]
     method = options["method"]
     sampling = options["sampling"]
     offset = options["offset"]
     nprocs = options["nprocs"]
     file_limit = options["file_limit"]
     time_suffix = options["suffix"]
+
+    if weighting and sampling != "related":
+        gs.fatal(_("Weighting only works with sampling: 'related'"))
 
     topo_list = sampling.split(",")
 
@@ -202,6 +211,7 @@ def main():
         method=method,
         nprocs=nprocs,
         spatial=None,
+        weighting=weighting,
         overwrite=gs.overwrite(),
         file_limit=file_limit,
     )
