@@ -63,11 +63,7 @@ def get_module_man_file_path(man_dir, module, addons_man_files):
 
 def build_keywords(ext):
     if ext == "html":
-        from build_html import (
-            header1_tmpl,
-            headerkeywords_tmpl,
-            man_dir
-        )
+        from build_html import header1_tmpl, headerkeywords_tmpl, man_dir
     else:
         from build_md import (
             header1_tmpl,
