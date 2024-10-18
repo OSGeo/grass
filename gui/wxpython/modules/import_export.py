@@ -18,6 +18,7 @@ This program is free software under the GNU General Public License
 
 @author Martin Landa <landa.martin gmail.com>
 @author Anna Kratochvilova <kratochanna gmail.com> (GroupDialog, SymbolDialog)
+@author William Welch <ww.dev icloud.com> (commands running queue)
 """
 
 import os
