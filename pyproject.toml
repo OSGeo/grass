@@ -175,6 +175,7 @@ ignore = [
     "PLW1641", # eq-without-hash
     "PLW2901", # redefined-loop-name
     "PLW3201", # bad-dunder-method-name
+    "PT004",   # pytest-missing-fixture-name-underscore # deprecated, so doesn't appear with --preview
     "PTH100",  # os-path-abspath
     "PTH101",  # os-chmod
     "PTH102",  # os-mkdir

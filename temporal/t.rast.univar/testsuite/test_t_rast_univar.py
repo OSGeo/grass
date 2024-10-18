@@ -148,8 +148,7 @@ class TestRasterUnivar(TestCase):
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region"""
-        cls.runModule("t.remove", flags="df", type="strds", inputs="A")
-        cls.runModule("t.remove", flags="df", type="strds", inputs="B")
+        cls.runModule("t.remove", flags="df", type="strds", inputs="A,B")
         cls.runModule("g.remove", flags="f", type="raster", name="zones")
 
         cls.del_temp_region()

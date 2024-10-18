@@ -244,7 +244,7 @@ class GrassTestFilesInvoker:
 
         Path(stdout_path).write_text(stdout)
         with open(stderr_path, "w") as stderr_file:
-            if type(stderr) == "bytes":
+            if isinstance(stderr, bytes):
                 stderr_file.write(decode(stderr))
             elif isinstance(stderr, str):
                 stderr_file.write(stderr)

@@ -77,6 +77,8 @@
 import sys
 import math
 import atexit
+from string import digits
+
 import grass.script as gs
 
 from grass.script.setup import set_gui_path
@@ -448,7 +450,7 @@ def wxGUI():
 
         def OnReturn(self, ev):
             self.app.brush = self.newval.GetValue()
-            if self.app.brush != "*" and self.app.brush.strip("0123456789") != "":
+            if self.app.brush != "*" and self.app.brush.strip(digits) != "":
                 self.app.brush = "*"
             self.brush_update()
 
