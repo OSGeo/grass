@@ -42,9 +42,8 @@ from pathlib import Path
 
 import wx
 import wx.lib.agw.floatspin as fs
-from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
-
 from core import globalvar
+from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
 
 if globalvar.wxPythonPhoenix:
     from wx import Validator
@@ -52,24 +51,25 @@ else:
     from wx import PyValidator as Validator
 
 import grass.script as gs
-
-from core.utils import PilImageToWxImage
+from core.gcmd import GError, GMessage, RunCommand
+from core.utils import PilImageToWxImage, cmp
 from dbmgr.vinfo import VectorDBInfo
-from gui_core.gselect import Select
-from core.gcmd import RunCommand, GError, GMessage
 from gui_core.dialogs import SymbolDialog
+from gui_core.gselect import Select
 from gui_core.wrap import (
     BitmapButton,
     BitmapComboBox,
     BitmapFromImage,
     Button,
     CheckBox,
+    CheckListCtrlMixin,
     Choice,
     ClientDC,
     ColourPickerCtrl,
     Dialog,
     DirBrowseButton,
     EmptyBitmap,
+    EmptyImage,
     ExpandoTextCtrl,
     FileBrowseButton,
     FloatSpin,
@@ -86,11 +86,44 @@ from gui_core.wrap import (
     StaticText,
     TextCtrl,
     TextEntryDialog,
-    EmptyImage,
-    CheckListCtrlMixin,
 )
-from psmap.utils import *
-from psmap.instructions import *
+
+# Explicit imports from psmap.instructions
+from psmap.instructions import (
+    Image,
+    Labels,
+    Line,
+    MapFrame,
+    Mapinfo,
+    NewId,
+    NorthArrow,
+    Point,
+    Raster,
+    RasterLegend,
+    Rectangle,
+    Scalebar,
+    Text,
+    Vector,
+    VectorLegend,
+    VProperties,
+)
+
+# Explicit imports from psmap.utils
+from psmap.utils import (
+    AutoAdjust,
+    BBoxAfterRotation,
+    ComputeSetRegion,
+    PaperMapCoordinates,
+    PILImage,
+    Rect2D,
+    Rect2DPP,
+    SetResolution,
+    UnitConversion,
+    convertRGB,
+    getRasterType,
+    havePILImage,
+    projInfo,
+)
 
 # grass.set_raise_on_error(True)
 

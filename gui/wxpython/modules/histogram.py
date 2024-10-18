@@ -496,7 +496,6 @@ class HistogramFrame(wx.Frame):
 
     def PrintMenu(self, event):
         """Print options and output menu"""
-        point = wx.GetMousePosition()
         printmenu = Menu()
         # Add items to the menu
         setup = wx.MenuItem(printmenu, id=wx.ID_ANY, text=_("Page setup"))
