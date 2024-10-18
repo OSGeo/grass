@@ -164,7 +164,7 @@ def main(argv=None):
     app = GMApp(workspaceFile)
 
     # suppress wxPython logs
-    q = wx.LogNull()
+    wx.LogNull()
     set_raise_on_error(True)
 
     # register GUI PID
