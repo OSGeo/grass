@@ -667,7 +667,6 @@ class NvizToolWindow(GNotebook):
             parent=panel, id=wx.ID_ANY, label=" %s " % (_("Save image sequence"))
         )
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        vSizer = wx.BoxSizer(wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap=5, hgap=10)
 
         pwd = str(Path.cwd())
@@ -2817,7 +2816,6 @@ class NvizToolWindow(GNotebook):
         self.UpdateFrameIndex(index=0)
 
         slider = self.FindWindowById(self.win["anim"]["frameIndex"]["slider"])
-        text = self.FindWindowById(self.win["anim"]["frameIndex"]["text"])
 
         if mode == "record":
             count = anim.GetFrameCount()
@@ -2922,7 +2920,7 @@ class NvizToolWindow(GNotebook):
         layerIdx = self.FindWindowById(self.win["constant"]["surface"]).GetSelection()
         if layerIdx == wx.NOT_FOUND:
             return
-        name = _("constant#") + str(layerIdx + 1)
+
         data = self.mapWindow.constants[layerIdx]
         for attr, value in data["constant"].items():
             if attr == "color":
@@ -3122,8 +3120,6 @@ class NvizToolWindow(GNotebook):
 
     def _createSlicePanel(self, parent):
         panel = wx.Panel(parent=parent, id=wx.ID_ANY)
-
-        vSizer = wx.BoxSizer(wx.HORIZONTAL)
 
         box = StaticBox(
             parent=panel, id=wx.ID_ANY, label=" %s " % (_("Slice attributes"))
@@ -3412,12 +3408,11 @@ class NvizToolWindow(GNotebook):
         """Surface selected, currently used for fringes"""
         name = event.GetString()
         try:
-            data = self._getLayerPropertiesByName(name, mapType="raster")["surface"]
+            self._getLayerPropertiesByName(name, mapType="raster")["surface"]
         except:
             self.EnablePage("fringe", False)
             return
 
-        layer = self._getMapLayerByName(name, mapType="raster")
         self.EnablePage("fringe", True)
 
     def OnSetRaster(self, event):
@@ -3425,7 +3420,7 @@ class NvizToolWindow(GNotebook):
         name = event.GetString()
         try:
             data = self._getLayerPropertiesByName(name, mapType="raster")["surface"]
-        except TypeError as e:
+        except TypeError:
             self.EnablePage("surface", False)
             return
 
@@ -4590,10 +4585,6 @@ class NvizToolWindow(GNotebook):
             if not winUp.IsEnabled():
                 winUp.Enable()
 
-        # update dialog
-        name = self.FindWindowById(self.win["volume"]["map"]).GetValue()
-        layer = self._getMapLayerByName(name, mapType="raster_3d")
-
         if mode == "isosurf":
             data = self.GetLayerData("volume")["volume"]["isosurface"][selection]
             self.UpdateVolumeIsosurfPage(data)
@@ -4694,8 +4685,6 @@ class NvizToolWindow(GNotebook):
         if list.GetCount() > 0:
             list.SetSelection(list.GetCount() - 1)
 
-        name = self.FindWindowById(self.win["volume"]["map"]).GetValue()
-        layer = self._getMapLayerByName(name, mapType="raster_3d")
         data = self.GetLayerData("volume")["volume"]
 
         vid = data["object"]["id"]
@@ -4736,8 +4725,6 @@ class NvizToolWindow(GNotebook):
         if sel < 1:
             return  # this should not happen
 
-        name = self.FindWindowById(self.win["volume"]["map"]).GetValue()
-        layer = self._getMapLayerByName(name, mapType="raster_3d")
         data = self.GetLayerData("volume")["volume"]
 
         id = data["object"]["id"]
@@ -4776,8 +4763,6 @@ class NvizToolWindow(GNotebook):
         if sel >= list.GetCount() - 1:
             return  # this should not happen
 
-        name = self.FindWindowById(self.win["volume"]["map"]).GetValue()
-        layer = self._getMapLayerByName(name, mapType="raster_3d")
         data = self.GetLayerData("volume")["volume"]
 
         id = data["object"]["id"]
