@@ -11,6 +11,9 @@
    \author Lars Ahlzen <lars ahlzen.com> (original contributor)
    \author Glynn Clements
  */
+#if defined(_MSC_VER)
+#include <math.h>
+#endif
 
 #include <grass/glocale.h>
 #include "cairodriver.h"

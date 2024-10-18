@@ -264,7 +264,7 @@ int G__make_mapset_element_misc(const char *dir, const char *name)
 
 static int check_owner(const struct stat *info)
 {
-#if defined(__MINGW32__) || defined(SKIP_MAPSET_OWN_CHK)
+#if defined(_WIN32) || defined(SKIP_MAPSET_OWN_CHK)
     return 1;
 #else
     const char *check = getenv("GRASS_SKIP_MAPSET_OWNER_CHECK");
