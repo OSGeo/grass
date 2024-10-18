@@ -608,7 +608,7 @@ class MapCalcFrame(wx.Frame):
             if newmcalcstr[-1] != " ":
                 newmcalcstr += " "
                 position_offset += 1
-        except:
+        except IndexError:
             pass
 
         newmcalcstr += what
@@ -617,7 +617,7 @@ class MapCalcFrame(wx.Frame):
         try:
             if newmcalcstr[-1] != " " and mcalcstr[position] != " ":
                 newmcalcstr += " "
-        except:
+        except IndexError:
             newmcalcstr += " "
 
         newmcalcstr += mcalcstr[position:]
@@ -632,7 +632,7 @@ class MapCalcFrame(wx.Frame):
                 try:
                     if newmcalcstr[position + position_offset] == " ":
                         position_offset += 1
-                except:
+                except IndexError:
                     pass
 
         self.text_mcalc.SetInsertionPoint(position + position_offset)
