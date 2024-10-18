@@ -687,16 +687,18 @@ void CleanEdges(void)
         e = edges;
         DELETE(edges, e);
     }
-    e = edges->next;
-    do {
-        if (e->delete) {
-            t = e;
-            e = e->next;
-            DELETE(edges, t);
-        }
-        else
-            e = e->next;
-    } while (e != edges);
+    if (edges) {
+        e = edges->next;
+        do {
+            if (e->delete) {
+                t = e;
+                e = e->next;
+                DELETE(edges, t);
+            }
+            else
+                e = e->next;
+        } while (e != edges);
+    }
 }
 
 /*---------------------------------------------------------------------
