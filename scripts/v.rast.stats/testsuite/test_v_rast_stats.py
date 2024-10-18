@@ -24,11 +24,12 @@ class TestRastStats(TestCase):
         cls.del_temp_region()
 
     def tearDown(self):
-        self.runModule("g.remove", flags="f", type="raster", name="map_a")
-        self.runModule("g.remove", flags="f", type="raster", name="map_b")
-        self.runModule("g.remove", flags="f", type="raster", name="zone_map")
-        self.runModule("g.remove", flags="f", type="raster", name="row_map")
-        self.runModule("g.remove", flags="f", type="raster", name="test_line")
+        self.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name="map_a,map_b,zone_map,row_map,test_line",
+        )
 
     def setUp(self):
         """Create input data"""

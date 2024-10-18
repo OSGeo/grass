@@ -349,9 +349,12 @@ class SortSignaturesBysemantic_labelTest(TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.map1)
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.map2)
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.map3)
+        cls.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name=(cls.map1, cls.map2, cls.map3),
+        )
 
     def test_symmetric_complete_difference(self):
         # Prepare imagery group reference struct
