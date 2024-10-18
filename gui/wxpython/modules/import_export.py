@@ -274,9 +274,10 @@ class ImportDialog(wx.Dialog):
                 return False
         return True
 
-    def _handleCloseEvent(self, *args, **kwargs):
-        if len(self._commands_running) > 0:
+    def _handleCloseEvent(self, event: wx.CloseEvent):
+        if event.CanVeto() and len(self._commands_running) > 0:
             # prevent dialog close while async commands are running
+            event.Veto()
             return
         self.Destroy()
 
