@@ -67,7 +67,7 @@ def main():
     layer = options["layer"]
     format = options["format"]
     output = options["output"]
-    table = options["table"]
+    table = options["table"]  # noqa: F841
 
     if format.lower() == "dbf":
         format = "ESRI_Shapefile"
