@@ -133,7 +133,6 @@ def GetNearestNodeCat(e, n, layer, tresh, vectMap):
     vectlib.Vect_select_lines_by_box(openedMap, byref(box), vectlib.GV_POINT, List)
 
     found = 0
-    dcost = 0
 
     Cats = POINTER(vectlib.line_cats)
     Cats = vectlib.Vect_new_cats_struct()
