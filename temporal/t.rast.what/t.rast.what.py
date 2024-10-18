@@ -98,21 +98,21 @@
 # % description: Use stdin as input and ignore coordinates and point option
 # %end
 
-## Temporary disabled the r.what flags due to test issues
-##%flag
-##% key: f
-##% description: Show the category labels of the grid cell(s)
-##%end
+# Temporary disabled the r.what flags due to test issues
+# %flag
+# % key: f
+# % description: Show the category labels of the grid cell(s)
+# %end
 
-##%flag
-##% key: r
-##% description: Output color values as RRR:GGG:BBB
-##%end
+# %flag
+# % key: r
+# % description: Output color values as RRR:GGG:BBB
+# %end
 
-##%flag
-##% key: i
-##% description: Output integer category values, not cell values
-##%end
+# %flag
+# % key: i
+# % description: Output integer category values, not cell values
+# %end
 
 # %flag
 # % key: v
