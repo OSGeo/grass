@@ -235,4 +235,3 @@ class Map3D:
         from IPython.display import Image, display  # pylint: disable=import-outside-toplevel
 
         display(Image(self._filename))
-    
