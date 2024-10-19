@@ -23,13 +23,14 @@ tmp_grad_rel = None
 
 
 def cleanup():
+    names = []
     if tmp_grad_rel:
-        gs.run_command(
-            "g.remove", flags="f", type="raster", name=tmp_grad_rel, quiet=True
-        )
+        names.append(tmp_grad_rel)
     if tmp_grad_abs:
+        names.append(tmp_grad_abs)
+    if len(names) > 0:
         gs.run_command(
-            "g.remove", flags="f", type="raster", name=tmp_grad_abs, quiet=True
+            "g.remove", flags="f", type="raster", name=",".join(names), quiet=True
         )
 
 
