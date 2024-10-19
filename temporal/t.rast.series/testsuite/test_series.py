@@ -61,11 +61,15 @@ class TestSnapAbsoluteSTRDS(TestCase):
             type="raster",
             maps="series_average,series_maximum,series_minimum,series_minimum_2",
         )
-        cls.runModule("g.remove", flags="f", type="raster", name="series_average")
-        cls.runModule("g.remove", flags="f", type="raster", name="series_maximum")
-        cls.runModule("g.remove", flags="f", type="raster", name="series_minimum")
-        cls.runModule("g.remove", flags="f", type="raster", name="series_minimum_2")
-        cls.runModule("g.remove", flags="f", type="raster", name="series_quantile")
+        cls.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name=(
+                "series_average,series_maximum"
+                + ",series_minimum,series_minimum_2,series_quantile"
+            ),
+        )
 
     def test_time_stamp(self):
         self.assertModule(
@@ -206,10 +210,12 @@ class TestSnapRelativeSTRDS(TestCase):
             type="raster",
             maps="series_average,series_maximum,series_minimum,series_minimum_2",
         )
-        cls.runModule("g.remove", flags="f", type="raster", name="series_average")
-        cls.runModule("g.remove", flags="f", type="raster", name="series_maximum")
-        cls.runModule("g.remove", flags="f", type="raster", name="series_minimum")
-        cls.runModule("g.remove", flags="f", type="raster", name="series_minimum_2")
+        cls.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name="series_average,series_maximum,series_minimum,series_minimum_2",
+        )
 
     def test_average(self):
         self.assertModule(

@@ -1245,8 +1245,6 @@ class SettingsDialog(wx.Dialog):
         wx.Dialog.__init__(self, parent, id, title, pos, size, style)
 
         self.vnet_mgr = vnet_mgr
-
-        maxValue = 1e8
         self.parent = parent
         self.settings = {}
 
