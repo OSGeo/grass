@@ -188,19 +188,9 @@ class Map:
     def show(self):
         """Displays a PNG image of map"""
         # Lazy import to avoid an import-time dependency on IPython.
-        from IPython.display import Image  # pylint: disable=import-outside-toplevel
+        from IPython.display import Image,display  # pylint: disable=import-outside-toplevel
 
-        return Image(self._filename)
-    def _repr_pretty_(self, p, cycle):
-        """Pretty representation of the object in IPython/Jupyter."""
-        # Lazy import to avoid an import-time dependency on IPython.
-        from IPython.display import Image, display  # pylint: disable=import-outside-toplevel
-
-        if cycle:
-            p.text("Map(...)")
-        else:
-            display(Image(self._filename))
-
+        display(Image(self._filename))
 
     def save(self, filename):
         """Saves a PNG image of map to the specified *filename*"""
