@@ -118,7 +118,6 @@ per-file-ignores =
     scripts/*/*.py: E501
     temporal/t.rast.to.vect/t.rast.to.vect.py: E501
     temporal/t.vect.algebra/t.vect.algebra.py: E501
-    # ## used (##% key: r etc)
     temporal/t.rast.what/t.rast.what.py: E501
     # Line too long (esp. module interface definitions)
     temporal/*/*.py: E501
