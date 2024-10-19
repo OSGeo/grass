@@ -32,6 +32,7 @@ Use PIL to create a series of images.
 
 import os
 from operator import itemgetter
+from string import digits
 
 try:
     import numpy as np
@@ -117,7 +118,7 @@ def _getSequenceNumber(filename, part1, part2):
     # Get all numeric chars
     seq2 = ""
     for c in seq:
-        if c in "0123456789":
+        if c in digits:
             seq2 += c
         else:
             break
