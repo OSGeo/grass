@@ -21,13 +21,16 @@
 #include <grass/raster.h>
 #include <grass/raster3d.h>
 #include <grass/glocale.h>
+#include <grass/parson.h>
+
+#include "local_proto.h"
 
 /* Run in raster3d mode */
 int main(int argc, char **argv)
 {
     struct GModule *module;
     struct {
-        struct Option *map, *file;
+        struct Option *map, *file, *format;
     } opt;
     struct {
         struct Flag *p;
@@ -37,6 +40,8 @@ int main(int argc, char **argv)
     FILE *fp;
     struct Colors colors;
     struct FPRange range;
+
+    enum OutputFormat format;
 
     G_gisinit(argv[0]);
 
@@ -54,6 +59,9 @@ int main(int argc, char **argv)
     opt.file->label = _("Path to output rules file");
     opt.file->description = _("If not given write to standard output");
     opt.file->required = NO;
+
+    opt.format = G_define_standard_option(G_OPT_F_FORMAT);
+    opt.format->guisection = _("Print");
 
     flag.p = G_define_flag();
     flag.p->key = 'p';
@@ -78,8 +86,21 @@ int main(int argc, char **argv)
             G_fatal_error(_("Unable to open output file <%s>"), file);
     }
 
-    Rast_print_colors(&colors, range.min, range.max, fp,
-                      flag.p->answer ? 1 : 0);
+    if (strcmp(opt.format->answer, "json") == 0) {
+        format = JSON;
+    }
+    else {
+        format = PLAIN;
+    }
+
+    if (format == JSON) {
+        Rast_json_print_colors(&colors, range.min, range.max, fp,
+                               flag.p->answer ? 1 : 0);
+    }
+    else {
+        Rast_print_colors(&colors, range.min, range.max, fp,
+                          flag.p->answer ? 1 : 0);
+    }
 
     exit(EXIT_SUCCESS);
 }
