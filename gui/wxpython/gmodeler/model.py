@@ -2285,7 +2285,6 @@ class ProcessModelFile:
                     "size": size,
                     "text": text,
                     "id": int(node.get("id", -1)),
-                    "text": text,
                 }
             )
 

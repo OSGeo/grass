@@ -66,7 +66,7 @@ def raster_history(map, overwrite=False, env=None):
             "Unable to write history for <%(map)s>. "
             "Raster map <%(map)s> not found in current mapset."
         )
-        % {"map": map, "map": map}
+        % {"map": map}
     )
     return False
 
