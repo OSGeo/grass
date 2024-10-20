@@ -131,9 +131,9 @@ ARG GRASS_CONFIG="\
   "
 
 ARG GRASS_PYTHON_PACKAGES="\
-    Pillow \
     matplotlib \
     numpy \
+    Pillow \
     pip \
     ply \
     psycopg2 \
