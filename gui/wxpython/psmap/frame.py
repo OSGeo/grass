@@ -780,8 +780,6 @@ class PsMapFrame(wx.Frame):
         if not self._checkMapFrameExists(type_id=id):
             return
 
-        ##        dlg = RasterDialog(self, id = id, settings = self.instruction)
-        # dlg.ShowModal()
         if "mapNotebook" in self.openDialogs:
             self.openDialogs["mapNotebook"].notebook.ChangeSelection(1)
         else:
@@ -800,8 +798,6 @@ class PsMapFrame(wx.Frame):
         if not self._checkMapFrameExists(type_id=id):
             return
 
-        ##        dlg = MainVectorDialog(self, id = id, settings = self.instruction)
-        # dlg.ShowModal()
         if "mapNotebook" in self.openDialogs:
             self.openDialogs["mapNotebook"].notebook.ChangeSelection(2)
         else:

@@ -125,8 +125,6 @@ ignore = [
     "DTZ006",  # call-datetime-fromtimestamp
     "DTZ007",  # call-datetime-strptime-without-zone
     "DTZ011",  # call-date-today
-    "E265",    # no-space-after-block-comment
-    "E266",    # multiple-leading-hashes-for-block-comment
     "E402",    # module-import-not-at-top-of-file
     "E501",    # line-too-long
     "E721",    # type-comparison
@@ -367,7 +365,7 @@ ignore = [
 "temporal/t.rast.algebra/testsu*/*_algebra_arithmetic.py" = ["FLY002"]
 "temporal/t.rast.colors/t.rast.colors.py" = ["SIM115"]
 "temporal/t.rast.series/t.rast.series.py" = ["SIM115"]
-"temporal/t.rast.what/t.rast.what.py" = ["SIM115"]
+"temporal/t.rast.what/t.rast.what.py" = ["E265", "E266", "SIM115"]
 "temporal/t.register/testsu*/*_raster_different_local.py" = ["FLY002"]
 "temporal/t.register/testsu*/*_raster_mapmetadata.py" = ["FLY002"]
 "temporal/t.register/testsuite/test_t_register_raster.py" = ["FLY002"]
