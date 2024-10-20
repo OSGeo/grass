@@ -417,10 +417,7 @@ class DisplayAttributesDialog(wx.Dialog):
                 idx = 0
                 for layer in data["Layer"]:
                     layer = int(layer)
-                    if data["Id"][idx] is not None:
-                        tfid = int(data["Id"][idx])
-                    else:
-                        tfid = 0  # Area / Volume
+                    tfid = int(data["Id"][idx]) if data["Id"][idx] is not None else 0
                     if tfid not in self.cats:
                         self.cats[tfid] = {}
                     if layer not in self.cats[tfid]:

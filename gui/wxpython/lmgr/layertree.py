@@ -2053,12 +2053,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         # decide where to put recreated item
         if dropTarget is not None and dropTarget != self.GetRootItem():
-            if parent:
-                # new item is a group
-                afteritem = parent
-            else:
-                # new item is a single layer
-                afteritem = dropTarget
+            # new item is a group (parent is truthy) or else new item is a single layer
+            afteritem = parent or dropTarget
 
             # dragItem dropped on group
             if self.GetLayerInfo(afteritem, key="type") == "group":

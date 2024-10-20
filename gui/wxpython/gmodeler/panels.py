@@ -1660,13 +1660,8 @@ class PythonPanel(wx.Panel):
         """Get extension for script exporting.
         :return: script extension
         """
-        if self.write_object == WriteActiniaFile:
-            ext = "json"
-        else:
-            # Python, PyWPS
-            ext = "py"
-
-        return ext
+        # return "py" for Python, PyWPS
+        return "json" if self.write_object == WriteActiniaFile else "py"
 
     def SetWriteObject(self, script_type):
         """Set correct self.write_object depending on the script type.

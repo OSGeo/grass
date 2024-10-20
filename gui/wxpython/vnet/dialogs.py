@@ -458,7 +458,7 @@ class VNETDialog(wx.Dialog):
 
         # , 'turn_layer', 'turn_cat_layer']:
         for sel in ["input", "arc_layer", "node_layer"]:
-            if sel == "input":
+            if sel == "input":  # noqa: SIM108
                 btn = self.addToTreeBtn
             # elif sel == "turn_layer":
             #    btn = self.createTtbBtn

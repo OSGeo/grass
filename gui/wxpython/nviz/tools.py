@@ -3419,10 +3419,8 @@ class NvizToolWindow(GNotebook):
 
         self.AdjustSliderRange(slider=slider, value=value)
 
-        if winName == "height":
-            view = self.mapWindow.iview  # internal
-        else:
-            view = self.mapWindow.view
+        # iview is internal
+        view = self.mapWindow.iview if winName == "height" else self.mapWindow.view
 
         if winName == "z-exag" and value >= 0:
             self.PostViewEvent(zExag=True)
@@ -3644,10 +3642,8 @@ class NvizToolWindow(GNotebook):
 
     def SetMapObjUseMap(self, nvizType, attrb, map=None):
         """Update dialog widgets when attribute type changed"""
-        if attrb in {"topo", "color", "shine"}:
-            incSel = -1  # decrement selection (no 'unset')
-        else:
-            incSel = 0
+        # decrement selection (no 'unset')
+        incSel = -1 if attrb in {"topo", "color", "shine"} else 0
         if nvizType == "volume" and attrb == "topo":
             return
         if map is True:  # map

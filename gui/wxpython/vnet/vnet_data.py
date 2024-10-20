@@ -355,10 +355,8 @@ class VNETPointsData:
             item.hide = False
         elif len(cats) > 1:
             idx = self.data[itemIndex][1]
-            if idx == 2:  # End/To/Sink point
-                wxPen = "used2cat"
-            else:
-                wxPen = "used1cat"
+            # End/To/Sink point
+            wxPen = "used2cat" if idx == 2 else "used1cat"
         else:
             wxPen = "used1cat"
 

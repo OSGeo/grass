@@ -169,11 +169,8 @@ class ProcessWorkspaceFile:
                 size = None
 
             extentAttr = display.get("extent", "")
-            if extentAttr:
-                # w, s, e, n
-                extent = map(float, extentAttr.split(","))
-            else:
-                extent = None
+            # w, s, e, n
+            extent = map(float, extentAttr.split(",")) if extentAttr else None
 
             # projection
             node_projection = display.find("projection")
