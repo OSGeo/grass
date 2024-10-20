@@ -152,7 +152,6 @@ ignore = [
     "N805",    # invalid-first-argument-name-for-method
     "N806",    # non-lowercase-variable-in-function
     "N812",    # lowercase-imported-as-non-lowercase
-    "N813",    # camelcase-imported-as-lowercase
     "N814",    # camelcase-imported-as-constant
     "N815",    # mixed-case-variable-in-class-scope
     "N816",    # mixed-case-variable-in-global-scope
