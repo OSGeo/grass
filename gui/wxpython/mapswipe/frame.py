@@ -545,15 +545,15 @@ class SwipeMapPanel(DoubleMapPanel):
             we are pasting together 2 rendered images, so
             we need to know when both are finished."""
 
-            def __init__(self2):
+            def __init__(self2):  # noqa: N805
                 self2.called = 0
 
-            def __call__(self2):
+            def __call__(self2):  # noqa: N805
                 self2.called += 1
                 if self2.called == 2:
                     self2.process()
 
-            def process(self2):
+            def process(self2):  # noqa: N805
                 # create empty white image  - needed for line
                 im = wx.Image(width, height)
                 im.Replace(0, 0, 0, 255, 255, 255)

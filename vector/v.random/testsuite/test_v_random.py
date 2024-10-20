@@ -30,9 +30,9 @@ class TestVRandom(TestCase):
     def tearDownClass(cls):
         cls.del_temp_region()
 
-    def tearDown(cls):
-        cls.runModule(
-            "g.remove", type="vector", flags="f", name=(cls.output, cls.output2)
+    def tearDown(self):
+        self.runModule(
+            "g.remove", type="vector", flags="f", name=(self.output, self.output2)
         )
 
     def test_num_points(self):

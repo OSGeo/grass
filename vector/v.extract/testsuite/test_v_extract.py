@@ -54,8 +54,8 @@ class TestRasterreport(TestCase):
     def tearDownClass(cls):
         cls.del_temp_region()
 
-    def tearDown(cls):
-        cls.runModule("g.remove", flags="f", type="vector", name=cls.output)
+    def tearDown(self):
+        self.runModule("g.remove", flags="f", type="vector", name=self.output)
 
     def test_flagd(self):
         """Testing flag d"""
