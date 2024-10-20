@@ -104,7 +104,7 @@ disable=raw-checker-failed,
         expression-not-assigned,
         self-assigning-variable,
         unspecified-encoding,
-        #no-self-use,
+        no-self-use,
         inconsistent-return-statements,
         invalid-name,
         broad-except,
@@ -652,6 +652,6 @@ min-public-methods=1
 
 # Exceptions that will emit a warning when being caught. Defaults to
 # "BaseException, Exception".
-overgeneral-exceptions=builtins.BaseException,
-                        builtins.Exception
+overgeneral-exceptions=BaseException,Exception
+
 

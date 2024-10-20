@@ -192,6 +192,7 @@ class Map:
             Image,
             display,  # pylint: disable=import-outside-toplevel
         )
+        
         display(Image(self._filename))
 
     def save(self, filename):
