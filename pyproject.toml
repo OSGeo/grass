@@ -249,7 +249,6 @@ ignore = [
     "SIM116",  # if-else-block-instead-of-dict-lookup
     "SIM118",  # in-dict-keys
     "SIM223",  # expr-and-false
-    "SIM401",  # if-else-block-instead-of-dict-get
     "SLF001",  # private-member-access
     "TRY002",  # raise-vanilla-class
     "TRY003",  # raise-vanilla-args

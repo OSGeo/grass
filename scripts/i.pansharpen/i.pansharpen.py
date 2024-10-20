@@ -750,10 +750,7 @@ def matchhist(original, target, matched):
         )
 
         for n in range(256):
-            if str(n) in stats_dict:
-                num_cells = stats_dict[str(n)]
-            else:
-                num_cells = 0
+            num_cells = stats_dict.get(str(n), 0)
 
             cum_cells += num_cells
 
