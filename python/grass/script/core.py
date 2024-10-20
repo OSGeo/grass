@@ -1898,7 +1898,7 @@ def _create_location_xy(database, location):
         permanent_dir = Path(location, "PERMANENT")
         default_wind_path = permanent_dir / "DEFAULT_WIND"
         wind_path = permanent_dir / "WIND"
-        location.mkdir()
+        os.mkdir(location)
         permanent_dir.mkdir()
 
         # create DEFAULT_WIND and WIND files
