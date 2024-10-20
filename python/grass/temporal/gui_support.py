@@ -40,10 +40,7 @@ def tlist_grouped(type, group_type=False, dbif=None):
     dbif, connection_state_changed = init_dbif(dbif)
 
     mapset = None
-    if type == "stds":
-        types = ["strds", "str3ds", "stvds"]
-    else:
-        types = [type]
+    types = ["strds", "str3ds", "stvds"] if type == "stds" else [type]
     for type in types:
         try:
             tlist_result = tlist(type=type, dbif=dbif)

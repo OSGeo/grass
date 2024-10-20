@@ -691,10 +691,7 @@ class TestCase(unittest.TestCase):
             at the end of file (as for example, Git or PEP8 requires).
         """
         self.assertFileExists(filename, msg=msg)
-        if text:
-            actual = text_file_md5(filename)
-        else:
-            actual = file_md5(filename)
+        actual = text_file_md5(filename) if text else file_md5(filename)
         if actual != md5:
             standardMsg = (
                 "File <{name}> does not have the right MD5 sum.\n"
